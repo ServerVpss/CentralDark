@@ -14,6 +14,7 @@ const FULL_HEADERS = Object.freeze([
   '⚠️ PENDÊNCIAS NÃO BLOQUEANTES=',
   '🩺 DIAGNÓSTICO TÉCNICO E CICATRIZ=',
   '🔎 PROVA=',
+  '🧭 FLUXO VISUAL=',
   '🗣️ PAPO RETO DO PIVETE=',
   '➡️ PRÓXIMO GATE=',
   '🧰 COMANDO CIRÚRGICO=',
@@ -29,6 +30,9 @@ const SHORT_HEADERS = Object.freeze([
   '➡️ PRÓXIMO GATE=',
   '👑 AÇÃO DO CHEFE=',
 ]);
+
+const SHA40 = /^[0-9a-f]{40}$/i;
+const PLACEHOLDER = /^(?:<[^>]+>|NÃO_INFORMAD[OA]|PREENCHER|TODO|TBD|UNKNOWN|UNRESOLVED|.*A DEFINIR.*)$/i;
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -51,7 +55,7 @@ function requireOrderedHeaders(text, headers) {
 function parseMeasuredProgress(text, mode) {
   const full = text.match(/PERCENTUAL_MEDIDO\s*=\s*(\d+(?:\.\d+)?)\s*\/\s*(\d+(?:\.\d+)?)\s*=\s*(\d+(?:\.\d+)?)%/i);
   const compact = text.match(/MEDIDO\s*:\s*(\d+(?:\.\d+)?)\s*\/\s*(\d+(?:\.\d+)?)\s*=\s*(\d+(?:\.\d+)?)%/i);
-  const match = mode === 'full' ? full : (compact || full);
+  const match = mode === 'short' ? (compact || full) : full;
   assert(match, 'REPORT_MEASURED_PERCENT_MISSING');
   const earned = Number(match[1]);
   const total = Number(match[2]);
@@ -63,49 +67,85 @@ function parseMeasuredProgress(text, mode) {
   return { earned, total, percent };
 }
 
+function fieldValue(text, field) {
+  const match = text.match(new RegExp(`^${field}\\s*=\\s*(.+)$`, 'im'));
+  return match ? match[1].trim() : null;
+}
+
 function validateEstimate(text, mode) {
-  if (mode !== 'full') return;
-  const estimate = text.match(/ESTIMATIVA\s*=\s*([^\n]+)/i);
-  assert(estimate, 'REPORT_ESTIMATE_FIELD_MISSING');
-  const value = estimate[1].trim();
-  const scope = text.match(/ESCOPO_DA_ESTIMATIVA\s*=\s*([^\n]+)/i);
+  if (mode === 'short') return;
+  const value = fieldValue(text, 'ESTIMATIVA');
+  const scope = fieldValue(text, 'ESCOPO_DA_ESTIMATIVA');
+  assert(value, 'REPORT_ESTIMATE_FIELD_MISSING');
   assert(scope, 'REPORT_ESTIMATE_SCOPE_MISSING');
   if (value !== 'NÃO_CALCULADA') {
     assert(/^\d+(?:\.\d+)?%$/.test(value), 'REPORT_ESTIMATE_INVALID');
-    assert(scope[1].trim() !== 'NÃO_APLICÁVEL', 'REPORT_ESTIMATE_SCOPE_NOT_DECLARED');
+    assert(scope !== 'NÃO_APLICÁVEL', 'REPORT_ESTIMATE_SCOPE_NOT_DECLARED');
   }
 }
 
-function validateFullSemantics(text, progress) {
-  const measuredScope = text.match(/ESCOPO_MEDIDO\s*=\s*([^\n]+)/i);
-  assert(measuredScope && measuredScope[1].trim().length > 3, 'REPORT_MEASURED_SCOPE_MISSING');
+function validateVisualFlow(text, mode) {
+  if (mode === 'short') return;
+  const required = fieldValue(text, 'DIAGRAMA_OBRIGATÓRIO');
+  const reason = fieldValue(text, 'MOTIVO');
+  assert(required && /^(SIM|NÃO)$/i.test(required), 'REPORT_DIAGRAM_REQUIRED_INVALID');
+  assert(reason && reason.length >= 5, 'REPORT_DIAGRAM_REASON_MISSING');
 
-  const situation = text.match(/SITUAÇÃO\s*=\s*(PASS|PARTIAL_COM_PROVA|BLOCKED|UNKNOWN)/i);
-  assert(situation, 'REPORT_SITUATION_INVALID');
-  const operational = text.match(/OPERACIONAL\s*=\s*(SIM|NÃO)/i);
-  const complete = text.match(/COMPLETO\s*=\s*(SIM|NÃO)/i);
-  assert(operational, 'REPORT_OPERATIONAL_INVALID');
-  assert(complete, 'REPORT_COMPLETE_INVALID');
-  if (situation[1].toUpperCase() === 'PASS') assert(progress.percent === 100, 'REPORT_PASS_WITHOUT_100_PERCENT');
-  if (complete[1].toUpperCase() === 'SIM') assert(progress.percent === 100, 'REPORT_COMPLETE_WITHOUT_100_PERCENT');
+  const flowStart = text.indexOf('🧭 FLUXO VISUAL=');
+  const flowEnd = text.indexOf('🗣️ PAPO RETO DO PIVETE=', flowStart);
+  assert(flowStart >= 0 && flowEnd > flowStart, 'REPORT_DIAGRAM_SECTION_INVALID');
+  const section = text.slice(flowStart, flowEnd);
+
+  if (required.toUpperCase() === 'SIM') {
+    assert(/```mermaid[\s\S]*?sequenceDiagram[\s\S]*?```/i.test(section), 'REPORT_MERMAID_SEQUENCE_MISSING');
+    assert(!/(TOKEN|PASSWORD|SECRET|AUTHORIZATION|COOKIE|PRIVATE[_ -]?KEY)\s*[:=]/i.test(section), 'REPORT_DIAGRAM_SECRET_PATTERN');
+  } else {
+    assert(/NÃO_APLICÁVEL/i.test(section), 'REPORT_DIAGRAM_NOT_APPLICABLE_MISSING');
+  }
+}
+
+function validateFullSemantics(text, progress, mode) {
+  const measuredScope = fieldValue(text, 'ESCOPO_MEDIDO');
+  assert(measuredScope && measuredScope.length > 3, 'REPORT_MEASURED_SCOPE_MISSING');
+
+  const situation = fieldValue(text, 'SITUAÇÃO');
+  assert(situation && /^(PASS|PARTIAL_COM_PROVA|BLOCKED|UNKNOWN)$/i.test(situation), 'REPORT_SITUATION_INVALID');
+  const operational = fieldValue(text, 'OPERACIONAL');
+  const complete = fieldValue(text, 'COMPLETO');
+  assert(operational && /^(SIM|NÃO)$/i.test(operational), 'REPORT_OPERATIONAL_INVALID');
+  assert(complete && /^(SIM|NÃO)$/i.test(complete), 'REPORT_COMPLETE_INVALID');
+  if (situation.toUpperCase() === 'PASS') assert(progress.percent === 100, 'REPORT_PASS_WITHOUT_100_PERCENT');
+  if (complete.toUpperCase() === 'SIM') assert(progress.percent === 100, 'REPORT_COMPLETE_WITHOUT_100_PERCENT');
 
   for (const field of ['ERRO', 'CAUSA', 'CORREÇÃO', 'TESTE_DA_CICATRIZ', 'REGRESSÃO']) {
-    assert(new RegExp(`${field}\\s*=`, 'i').test(text), `REPORT_TECH_FIELD_MISSING:${field}`);
+    assert(fieldValue(text, field) !== null, `REPORT_TECH_FIELD_MISSING:${field}`);
   }
   for (const field of ['REPOSITÓRIO', 'PR_OU_ISSUE', 'BRANCH', 'HEAD', 'CHECKS', 'TESTES', 'RECEIPT', 'FONTE_DA_PROVA']) {
-    assert(new RegExp(`${field}\\s*=`, 'i').test(text), `REPORT_PROOF_FIELD_MISSING:${field}`);
+    assert(fieldValue(text, field) !== null, `REPORT_PROOF_FIELD_MISSING:${field}`);
   }
   assert(/AUTORIA_DO_PADRÃO\s*=\s*SEGREDO\/CHEFE/i.test(text), 'REPORT_AUTHORSHIP_MISSING');
+
+  if (mode === 'pr') {
+    const repository = fieldValue(text, 'REPOSITÓRIO');
+    const pr = fieldValue(text, 'PR_OU_ISSUE');
+    const branch = fieldValue(text, 'BRANCH');
+    const head = fieldValue(text, 'HEAD');
+    assert(repository === 'ServerVpss/CentralDark', 'PR_REPORT_REPOSITORY_INVALID');
+    assert(pr && !PLACEHOLDER.test(pr), 'PR_REPORT_REFERENCE_PLACEHOLDER');
+    assert(branch && !PLACEHOLDER.test(branch), 'PR_REPORT_BRANCH_PLACEHOLDER');
+    assert(head && SHA40.test(head) && head !== '0'.repeat(40), 'PR_REPORT_HEAD_INVALID');
+  }
 }
 
 export function validateReport(text, mode = 'full') {
   const normalized = normalize(text);
-  assert(['full', 'short'].includes(mode), `REPORT_MODE_INVALID:${mode}`);
+  assert(['full', 'short', 'pr'].includes(mode), `REPORT_MODE_INVALID:${mode}`);
   assert(normalized.length > 0, 'REPORT_EMPTY');
-  requireOrderedHeaders(normalized, mode === 'full' ? FULL_HEADERS : SHORT_HEADERS);
+  requireOrderedHeaders(normalized, mode === 'short' ? SHORT_HEADERS : FULL_HEADERS);
   const progress = parseMeasuredProgress(normalized, mode);
   validateEstimate(normalized, mode);
-  if (mode === 'full') validateFullSemantics(normalized, progress);
+  validateVisualFlow(normalized, mode);
+  if (mode !== 'short') validateFullSemantics(normalized, progress, mode);
   return { valid: true, mode, progress };
 }
 
