@@ -3,6 +3,8 @@
   "school_id": "CENTRALDARK-AGENTIC-SCHOOL",
   "source_of_truth": "ServerVpss/CentralDark",
   "core_skill": ".agents/skills/agentic-ci-loop/SKILL.md",
+  "output_contract": ".agents/skills/agentic-ci-loop/references/CONTRATO-UNIFICADO-RELATO-PIVETE.md",
+  "report_validator": "scripts/lupa/validar-relato-pivete.mjs",
   "course": ".agents/skills/agentic-ci-loop/references/ESCOLA-OPERACIONAL-DE-SKILLS.md",
   "lessons_ledger": ".agents/skills/agentic-ci-loop/references/learning-ledger.jsonl",
   "source_artifacts": {
