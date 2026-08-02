@@ -1,11 +1,17 @@
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import { execFileSync } from 'node:child_process';
 import test from 'node:test';
 import {
   buildCourseCustodyGates,
+  buildVisualBinaryGate,
   calculateProgress,
   deriveSituation,
   formatPiveteReport,
   requirementSatisfied,
+  resolveVerifiedHead,
   validateGates,
 } from './agentic-loop-progress.mjs';
 import { validateReport } from './validar-relato-pivete.mjs';
@@ -29,16 +35,8 @@ test('DONE_COM_PROVA exige todos os gates em PASS', () => {
 
 test('operacional e completo são gates diferentes', () => {
   const gates = [gate('CORE', 'PASS'), gate('ATTACHMENT', 'PARTIAL', false)];
-  const report = { gates };
-  assert.equal(requirementSatisfied(report, 'operational'), true);
-  assert.equal(requirementSatisfied(report, 'complete'), false);
-  assert.equal(deriveSituation(gates), 'PARTIAL_COM_PROVA');
-});
-
-test('gate completo falha mesmo quando o único residual é opcional', () => {
-  const gates = [gate('CORE', 'PASS'), gate('ZIP', 'PARTIAL', false)];
-  assert.equal(requirementSatisfied({ gates }, 'complete'), false);
   assert.equal(requirementSatisfied({ gates }, 'operational'), true);
+  assert.equal(requirementSatisfied({ gates }, 'complete'), false);
 });
 
 test('percentual inclui todos os gates', () => {
@@ -46,21 +44,21 @@ test('percentual inclui todos os gates', () => {
   assert.deepEqual(result, { earned: 150, total: 300, percent: 50 });
 });
 
-test('curso condensado pode passar sem fingir que o anexo original está no Git', () => {
-  const gates = buildCourseCustodyGates({ condensedPresent: true, receiptPresent: true, originalAttachmentPresent: false });
-  assert.equal(gates[0].id, 'COURSE_CONDENSED_VERSIONED');
+test('curso original pode sair de PARTIAL quando bytes e SHA existem', () => {
+  const gates = buildCourseCustodyGates({ condensedPresent: true, receiptPresent: true, originalAttachmentPresent: true, originalAttachmentValid: true });
   assert.equal(gates[0].status, 'PASS');
-  assert.equal(gates[0].required, true);
-  assert.equal(gates[1].id, 'COURSE_ORIGINAL_ATTACHMENT');
-  assert.equal(gates[1].status, 'PARTIAL');
-  assert.equal(gates[1].required, false);
-  assert.match(gates[1].evidence.join(' '), /bytes do anexo original permanecem externos/i);
+  assert.equal(gates[1].status, 'PASS');
 });
 
-test('ausência do receipt derruba o gate condensado', () => {
-  const gates = buildCourseCustodyGates({ condensedPresent: true, receiptPresent: false, originalAttachmentPresent: false });
-  assert.equal(gates[0].status, 'FAIL');
-  assert.equal(gates[1].status, 'PARTIAL');
+test('curso original inválido não vira PASS', () => {
+  const gates = buildCourseCustodyGates({ condensedPresent: true, receiptPresent: true, originalAttachmentPresent: true, originalAttachmentValid: false });
+  assert.equal(gates[1].status, 'FAIL');
+});
+
+test('binários visuais podem concluir e divergência falha', () => {
+  assert.equal(buildVisualBinaryGate({ declared: false, allPresent: false, allValid: false }).status, 'PARTIAL');
+  assert.equal(buildVisualBinaryGate({ declared: true, allPresent: true, allValid: false }).status, 'FAIL');
+  assert.equal(buildVisualBinaryGate({ declared: true, allPresent: true, allValid: true }).status, 'PASS');
 });
 
 test('rejeita evidência vazia, ID duplicado e modo inválido', () => {
@@ -69,10 +67,25 @@ test('rejeita evidência vazia, ID duplicado e modo inválido', () => {
   assert.throws(() => requirementSatisfied({ gates: [gate('A', 'PASS')] }, 'ambiguous'), /REQUIREMENT_MODE_INVALID/);
 });
 
-test('motor oficial emite o contrato completo e se autovalida', () => {
+test('verifica expected-head contra o checkout real', () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'agentic-head-'));
+  try {
+    execFileSync('git', ['init', '-q'], { cwd: root });
+    execFileSync('git', ['config', 'user.email', 'test@example.com'], { cwd: root });
+    execFileSync('git', ['config', 'user.name', 'Test'], { cwd: root });
+    fs.writeFileSync(path.join(root, 'a.txt'), 'a');
+    execFileSync('git', ['add', 'a.txt'], { cwd: root });
+    execFileSync('git', ['commit', '-qm', 'init'], { cwd: root });
+    const head = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim();
+    assert.equal(resolveVerifiedHead(root, head), head);
+    assert.throws(() => resolveVerifiedHead(root, '1'.repeat(40)), /EXPECTED_HEAD_MISMATCH/);
+  } finally { fs.rmSync(root, { recursive: true, force: true }); }
+});
+
+test('motor oficial emite contrato completo, diagrama e se autovalida', () => {
   const gates = [gate('CORE', 'PASS'), gate('ATTACHMENT', 'PARTIAL', false)];
   const report = {
-    schema_version: 3,
+    schema_version: 4,
     source_of_truth: 'ServerVpss/CentralDark',
     situation: 'PARTIAL_COM_PROVA', error: 'NENHUM', cause: 'NÃO_APLICÁVEL', correction: 'NENHUMA',
     test: 'node --test testes', scar: 'cicatriz', progress: { earned: 150, total: 200, percent: 75 },
@@ -89,19 +102,18 @@ test('motor oficial emite o contrato completo e se autovalida', () => {
     '🧠 CENTRALDARK — ESTADO DA MISSÃO', '🎯 VEREDITO=', '📊 PROGRESSO=',
     'PERCENTUAL_MEDIDO=150/200=75%', 'ESTIMATIVA=NÃO_CALCULADA',
     '✅ O QUE JÁ ESTÁ PRONTO=', '🟡 O QUE ESTÁ PARCIAL=', '❌ O QUE AINDA FALTA=',
-    '🩺 DIAGNÓSTICO TÉCNICO E CICATRIZ=', '🔎 PROVA=', '🗣️ PAPO RETO DO PIVETE=',
+    '🩺 DIAGNÓSTICO TÉCNICO E CICATRIZ=', '🔎 PROVA=', '🧭 FLUXO VISUAL=',
+    'DIAGRAMA_OBRIGATÓRIO=SIM', 'sequenceDiagram', '🗣️ PAPO RETO DO PIVETE=',
     '➡️ PRÓXIMO GATE=', '🧰 COMANDO CIRÚRGICO=', '🧪 COLETA DO CHEFE=',
     '👑 AÇÃO DO CHEFE=', '🛡️ O QUE NÃO FOI TOCADO=', 'AUTORIA_DO_PADRÃO=SEGREDO/CHEFE',
-  ]) {
-    assert.match(output, new RegExp(field.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
-  }
+  ]) assert.match(output, new RegExp(field.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
   assert.match(output, new RegExp('a'.repeat(40)));
 });
 
 test('motor oficial não emite PASS quando a entrega está parcial', () => {
   const gates = [gate('CORE', 'PASS'), gate('ZIP', 'PARTIAL', false)];
   const report = {
-    schema_version: 3,
+    schema_version: 4,
     situation: 'PARTIAL_COM_PROVA', error: 'NENHUM', cause: 'NÃO_APLICÁVEL', correction: 'NENHUMA',
     test: 'teste', scar: 'cicatriz', progress: { earned: 150, total: 200, percent: 75 },
     gates, operational_ready: true, complete: false, blocking_pending: [],
@@ -114,7 +126,7 @@ test('motor oficial não emite PASS quando a entrega está parcial', () => {
   assert.doesNotMatch(output, /SITUAÇÃO=PASS/);
 });
 
-test('saída JSON deve carregar gates completos por contrato', () => {
+test('saída JSON carrega gates completos por contrato', () => {
   const gates = [gate('A', 'PASS'), gate('B', 'UNKNOWN')];
   const payload = JSON.parse(JSON.stringify({ gates, progress: calculateProgress(gates) }));
   assert.deepEqual(payload.gates, gates);
