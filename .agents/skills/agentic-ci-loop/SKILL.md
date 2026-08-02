@@ -1,6 +1,6 @@
 ---
 name: agentic-ci-loop
-description: Use before any code change, debugging, critical refactor, PR repair, CI failure, review, mission status, percentage report, or skill evolution in CentralDark. Boot the deterministic school, classify the task, load the unified Pivete reporting contract, preserve one Writer, require evidence before claims, create a regression scar for every proven defect, and report verdict, measured progress, diagnosis, proof, Papo Reto, next gate, command, Chief action, and untouched surfaces.
+description: Use before any code change, commit, push, PR, debugging, critical refactor, CI failure, review, mission status, percentage report, or skill evolution in CentralDark. Boot the deterministic school, load the unified Pivete reporting contract, preserve one Writer, require evidence, create a regression scar for every proven defect, and report verdict, measured progress, diagnosis, proof, visual flow, Papo Reto, next gate, Chief action, and untouched surfaces.
 trigger: /agentic-ci-loop
 ---
 
@@ -10,13 +10,13 @@ Esta skill é a porta curta. O conteúdo detalhado vive em módulos subordinados
 
 ## Boot obrigatório
 
-Antes de alterar código ou emitir relatório técnico:
+Antes de alterar código, criar commit/PR ou emitir relatório técnico:
 
 ```text
 node scripts/lupa/agentic-school-loader.mjs --task <critical-refactor|debug|feature|review|skill-evolution> --json
 ```
 
-O comando deve retornar `BOOT_STATUS=PASS`, `OUTPUT_CONTRACT` e `REPORT_VALIDATOR`. Se faltar manifesto, módulo, adaptador, contrato de relato, lição válida ou contrato de segurança, pare com `STATUS=BLOCKED_AGENTIC_SCHOOL`.
+O comando deve retornar `BOOT_STATUS=PASS`, `OUTPUT_CONTRACT` e `REPORT_VALIDATOR`. Se faltar manifesto, módulo, adaptador, contrato de relato, lição válida, configuração de revisor, template de PR ou workflow global, pare com `STATUS=BLOCKED_AGENTIC_SCHOOL`.
 
 ## Invariantes
 
@@ -34,6 +34,9 @@ O comando deve retornar `BOOT_STATUS=PASS`, `OUTPUT_CONTRACT` e `REPORT_VALIDATO
 12. O CHEFE não transporta logs, HEADs ou erros que o agente consegue medir diretamente.
 13. Quando faltar acesso humano real, entregar um único script cirúrgico completo que salva a coleta em `E:\CentralDark\Pivete\TEMP`.
 14. Melhorar o coletor existente antes de criar outro; menos é mais quando resolve com prova.
+15. Todo commit/push passa pela escola; todo PR nasce no template e tem o relato validado.
+16. Fluxo multi-etapa usa Mermaid `sequenceDiagram` em português; mudança local declara `NÃO_APLICÁVEL` com motivo.
+17. Nenhum adaptador copia o contrato; todos apontam para a mesma fonte.
 
 ## Ciclo obrigatório
 
@@ -46,7 +49,8 @@ CLASSIFICAR
 → TESTE VERMELHO OU CARACTERIZAÇÃO
 → CIRURGIA MÍNIMA
 → TESTES LOCAIS
-→ CI NO HEAD EXATO
+→ COMMIT/PR NO HEAD EXATO
+→ CI GLOBAL
 → JUDGE ADVERSARIAL
 → CICATRIZ DE REGRESSÃO
 → RECEIPT
@@ -63,7 +67,7 @@ A fonte única é:
 .agents/skills/agentic-ci-loop/references/CONTRATO-UNIFICADO-RELATO-PIVETE.md
 ```
 
-Use `MODO_COMPLETO` para matéria técnica, auditoria, porcentagem, mudança, bloqueio ou fechamento. Use `MODO_CURTO` somente para atualização sem mutação e sem novo finding.
+Use `MODO_COMPLETO` para matéria técnica, auditoria, porcentagem, mudança, bloqueio, fechamento e corpo de PR. Use `MODO_CURTO` somente para atualização sem mutação e sem novo finding.
 
 Antes de publicar um relato gerado em arquivo, valide:
 
@@ -80,6 +84,7 @@ VEREDITO
 → BLOQUEADORES
 → DIAGNÓSTICO E CICATRIZ
 → PROVA
+→ FLUXO VISUAL
 → PAPO RETO DO PIVETE
 → PRÓXIMO GATE
 → COMANDO/COLETA
