@@ -21,6 +21,8 @@ function write(root, relative, content) {
 function fixture() {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'agentic-school-'));
   const skill = '.agents/skills/agentic-ci-loop/SKILL.md';
+  const contract = '.agents/skills/agentic-ci-loop/references/CONTRATO.md';
+  const validator = 'scripts/lupa/validar-relato-pivete.mjs';
   const course = '.agents/skills/agentic-ci-loop/references/ESCOLA.md';
   const zero = '.agents/skills/agentic-ci-loop/references/ZERO.md';
   const ledger = '.agents/skills/agentic-ci-loop/references/learning-ledger.jsonl';
@@ -31,6 +33,14 @@ function fixture() {
   for (const adapter of adapters) write(root, adapter, 'LEIA-ME-IA.md\n');
   write(root, skill, '---\nname: agentic-ci-loop\ndescription: test\n---\n');
   write(root, '.agents/skills/meta-lupa/SKILL.md', '---\nname: meta-lupa\ndescription: test\n---\n');
+  write(root, contract, [
+    'PR #499', 'PR #554', 'PR #585', 'PR #611',
+    '🧠 CENTRALDARK — ESTADO DA MISSÃO', '🎯 VEREDITO=', 'PERCENTUAL_MEDIDO=', 'ESTIMATIVA=',
+    '🩺 DIAGNÓSTICO TÉCNICO E CICATRIZ=', '🗣️ PAPO RETO DO PIVETE=', '➡️ PRÓXIMO GATE=',
+    '🧰 COMANDO CIRÚRGICO=', '🧪 COLETA DO CHEFE=', '👑 AÇÃO DO CHEFE=',
+    'AUTORIA_DO_PADRÃO=SEGREDO/CHEFE', 'E:\\CentralDark\\Pivete\\TEMP',
+  ].join('\n'));
+  write(root, validator, 'REPORT_PERCENT_MISMATCH\nREPORT_HEADER_ORDER_INVALID\n');
   write(root, course, `---\nsource_sha256: "${courseSha}"\n---\n# Escola\n`);
   write(root, zero, '# Zero\n');
   const receiptText = `SOURCE_EXTERNAL_ATTACHMENT\nSHA256=${courseSha}\nSTATUS=RECEIPT_ONLY_NOT_BOOT_CONTEXT\n`;
@@ -55,6 +65,8 @@ function fixture() {
     school_id: 'CENTRALDARK-AGENTIC-SCHOOL',
     source_of_truth: 'ServerVpss/CentralDark',
     core_skill: skill,
+    output_contract: contract,
+    report_validator: validator,
     course,
     lessons_ledger: ledger,
     source_artifacts: {
@@ -75,17 +87,19 @@ function fixture() {
     adapters,
     required_boot_tokens: ['LEIA-ME-IA.md'],
   }, null, 2));
-  return { root, skill, course, zero, ledger };
+  return { root, skill, contract, validator, course, zero, ledger };
 }
 
 function cleanup(root) { fs.rmSync(root, { recursive: true, force: true }); }
 
-test('carrega somente núcleo e módulo da tarefa', () => {
+test('carrega núcleo, contrato de relato e módulo da tarefa', () => {
   const fx = fixture();
   try {
     const result = loadSchool({ root: fx.root, task: 'critical-refactor', expectedHead: 'd'.repeat(40) });
     assert.equal(result.boot_status, 'PASS');
-    assert.deepEqual(result.load_order, [fx.skill, fx.zero]);
+    assert.deepEqual(result.load_order, [fx.skill, fx.contract, fx.zero]);
+    assert.equal(result.output_contract, fx.contract);
+    assert.equal(result.report_validator, fx.validator);
     assert.equal(result.approved_lessons.length, 1);
   } finally { cleanup(fx.root); }
 });
@@ -109,6 +123,22 @@ test('bloqueia skill duplicada', () => {
   try {
     write(fx.root, '.claude/skills/copia.md', '---\nname: agentic-ci-loop\ndescription: copia\n---\n');
     assert.throws(() => loadSchool({ root: fx.root, task: 'debug' }), /SCHOOL_SKILL_DUPLICATED/);
+  } finally { cleanup(fx.root); }
+});
+
+test('bloqueia contrato de relato ausente', () => {
+  const fx = fixture();
+  try {
+    fs.rmSync(path.join(fx.root, fx.contract));
+    assert.throws(() => loadSchool({ root: fx.root, task: 'review' }), /SCHOOL_PATH_MISSING/);
+  } finally { cleanup(fx.root); }
+});
+
+test('bloqueia contrato sem autoria do CHEFE', () => {
+  const fx = fixture();
+  try {
+    write(fx.root, fx.contract, fs.readFileSync(path.join(fx.root, fx.contract), 'utf8').replace('AUTORIA_DO_PADRÃO=SEGREDO/CHEFE', 'AUTORIA=AGENTE'));
+    assert.throws(() => loadSchool({ root: fx.root, task: 'review' }), /REPORT_CONTRACT_TOKEN_MISSING/);
   } finally { cleanup(fx.root); }
 });
 
