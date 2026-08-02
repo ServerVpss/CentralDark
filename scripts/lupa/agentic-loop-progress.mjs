@@ -4,6 +4,7 @@ import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { loadSchool } from './agentic-school-loader.mjs';
+import { validateReport } from './validar-relato-pivete.mjs';
 
 export const STATUS_POINTS = Object.freeze({ PASS: 100, PARTIAL: 50, FAIL: 0, BLOCKED: 0, PENDING: 0, UNKNOWN: 0, SKIPPED: 0, TIMEOUT: 0 });
 const SHA40 = /^[0-9a-f]{40}$/;
@@ -98,11 +99,11 @@ export function buildRuntimeReport({ root, expectedHead }) {
 
   const gates = [
     ...courseGates,
-    gate('SCHOOL_MANIFEST_VALID', 'Manifesto da escola válido', school ? 'PASS' : 'BLOCKED', [school ? `school_id=${school.school_id}` : `erro=${schoolError}`], 'corrigir manifesto, módulos ou adaptadores'),
+    gate('SCHOOL_MANIFEST_VALID', 'Manifesto da escola e contrato de relato válidos', school ? 'PASS' : 'BLOCKED', [school ? `school_id=${school.school_id}; output_contract=${school.output_contract}` : `erro=${schoolError}`], 'corrigir manifesto, módulos, contrato ou adaptadores'),
     gate('UNIVERSAL_BOOT_REACHABLE', 'Escola alcançável pelo boot universal', boot.includes('.agents/skills/agentic-ci-loop/SKILL.md') && boot.includes('agentic-school-loader.mjs') ? 'PASS' : 'FAIL', ['LEIA-ME-IA.md deve apontar para skill e loader'], 'conectar a escola à porta universal'),
     gate('ZERO_REGRESSION_MODULE', 'Refatoração crítica com zero regressão', exists(root, '.agents/skills/agentic-ci-loop/references/REFATORACAO-CRITICA-ZERO-REGRESSAO.md') ? 'PASS' : 'FAIL', ['Módulo de baseline, vermelho, cirurgia, matriz, CI, Judge e cicatriz'], 'criar ou restaurar módulo'),
     gate('SELF_LEARNING_GATED', 'Autoaprendizado com promoção segura', school ? 'PASS' : 'BLOCKED', [school ? `approved=${school.approved_lessons.length}; candidates=${school.candidate_lessons.length}; candidatos não entram no boot` : 'loader bloqueado'], 'corrigir o ledger; aprovação exige regressão, Judge independente e decisão do CHEFE'),
-    gate('DETERMINISTIC_TESTS', 'Loader, pacote e progresso testados', workflow.includes('agentic-school-loader.test.mjs') && workflow.includes('agentic-loop-progress.test.mjs') && workflow.includes('test_validar_agentic_visual_package.py') ? 'PASS' : 'FAIL', ['Workflow deve executar Node + Python sem dependência externa'], 'ligar as três suítes no CI'),
+    gate('DETERMINISTIC_TESTS', 'Loader, relato, pacote e progresso testados', workflow.includes('agentic-school-loader.test.mjs') && workflow.includes('agentic-loop-progress.test.mjs') && workflow.includes('validar-relato-pivete.test.mjs') && workflow.includes('test_validar_agentic_visual_package.py') ? 'PASS' : 'FAIL', ['Workflow deve executar loader, validador de relato, progresso e pacote sem dependência externa'], 'ligar as quatro suítes no CI'),
     gate('CI_BOOT_EXECUTION', 'Boot da escola executado no CI', workflow.includes('agentic-school-loader.mjs --task critical-refactor') ? 'PASS' : 'FAIL', ['porta-de-entrada executa loader preso ao PR_HEAD'], 'adicionar execução do loader ao workflow'),
     gate('VISUAL_SOURCE_VERSIONED', 'Fonte visual 4K editável versionada', exists(root, VISUAL_SVG_PATH) && exists(root, VISUAL_README_PATH) && workflow.includes('validar_agentic_visual_package.py') ? 'PASS' : 'FAIL', ['SVG e LEIA-ME presos aos hashes do manifesto; ZIP pode ser validado quando fornecido'], 'versionar SVG, LEIA-ME e guardrail'),
     gate('VISUAL_BINARY_IN_GIT', 'ZIP/PNGs binários armazenados no Git', 'PARTIAL', ['ZIP original validado localmente pelo SHA-256 455071e3e6e6c3bfef27a8257ed5405e9387706a39cee978fdbfd87eaba49a2b; conector desta sessão publica apenas texto UTF-8'], 'publicar o ZIP por canal binário autorizado e rerodar --require-zip', false),
@@ -113,7 +114,7 @@ export function buildRuntimeReport({ root, expectedHead }) {
   const blockers = gates.filter((item) => item.required !== false && item.status !== 'PASS');
   const nonBlockers = gates.filter((item) => item.required === false && item.status !== 'PASS');
   return {
-    schema_version: 2,
+    schema_version: 3,
     source_of_truth: 'ServerVpss/CentralDark',
     measured_head: expectedHead,
     situation,
@@ -122,9 +123,9 @@ export function buildRuntimeReport({ root, expectedHead }) {
     progress,
     gates,
     error: blockers.map((item) => item.label).join(' | ') || 'NENHUM',
-    cause: blockers.map((item) => `${item.id}:${item.evidence.join('; ')}`).join(' | ') || 'NENHUMA',
+    cause: blockers.map((item) => `${item.id}:${item.evidence.join('; ')}`).join(' | ') || 'NÃO_APLICÁVEL',
     correction: blockers.map((item) => item.next_step).join(' | ') || 'NENHUMA',
-    test: 'node --test scripts/lupa/agentic-school-loader.test.mjs scripts/lupa/agentic-loop-progress.test.mjs',
+    test: 'node --test scripts/lupa/agentic-school-loader.test.mjs scripts/lupa/agentic-loop-progress.test.mjs scripts/lupa/validar-relato-pivete.test.mjs',
     scar: 'Toda falha provada exige teste vermelho antes, verde depois e lição somente após Judge + CHEFE.',
     blocking_pending: blockers.map((item) => `${item.label}: ${item.next_step}`),
     non_blocking_pending: nonBlockers.map((item) => `${item.label}: ${item.next_step}`),
@@ -134,26 +135,110 @@ export function buildRuntimeReport({ root, expectedHead }) {
   };
 }
 
+function publicSituation(report) {
+  if (report.situation === 'DONE_COM_PROVA') return 'PASS';
+  if (report.situation === 'PARTIAL_COM_PROVA') return 'PARTIAL_COM_PROVA';
+  if (report.situation === 'BLOCKED' || report.situation === 'PARTIAL_BLOQUEADO') return 'BLOCKED';
+  return 'UNKNOWN';
+}
+
+function bulletLines(items, fallback) {
+  return items.length ? items.map((item) => `- ${item}`).join('\n') : `- ${fallback}`;
+}
+
 export function formatPiveteReport(report) {
-  const join = (items) => items.length ? items.join(' | ') : 'NENHUMA';
-  return [
-    `SITUAÇÃO=${report.situation}`,
+  const ready = report.gates.filter((item) => item.status === 'PASS').map((item) => `${item.label} — ${item.evidence.join('; ')}`);
+  const partial = report.gates.filter((item) => item.status === 'PARTIAL').map((item) => `${item.label} — falta: ${item.next_step}`);
+  const missing = report.gates.filter((item) => item.status !== 'PASS' && item.status !== 'PARTIAL').map((item) => `${item.label} — condição: ${item.next_step}`);
+  const blockers = report.blocking_pending;
+  const nonBlockers = report.non_blocking_pending;
+  const verdict = report.operational_ready
+    ? (report.complete ? 'A escola agentic está completa e provada no HEAD medido.' : 'A escola agentic está operacional e provada, mas ainda não está completa.')
+    : 'A escola agentic não pode avançar porque existe gate obrigatório sem prova.';
+  const source = process.env.CI ? 'GitHub' : 'arquivo local';
+  const branch = process.env.GITHUB_HEAD_REF || process.env.GITHUB_REF_NAME || 'NÃO_INFORMADA';
+  const context = process.env.GITHUB_EVENT_NAME === 'pull_request' ? 'PR_DO_WORKFLOW' : 'NÃO_INFORMADO';
+  const regression = report.operational_ready ? 'PASS' : 'FAIL';
+  const checkState = process.env.CI ? 'porta-de-entrada em execução no HEAD informado' : 'validação local';
+
+  const output = [
+    '╔════════════════════════════════════════════╗',
+    '║ 🧠 CENTRALDARK — ESTADO DA MISSÃO         ║',
+    '╚════════════════════════════════════════════╝',
+    '',
+    '🎯 VEREDITO=',
+    verdict,
+    '',
+    '📊 PROGRESSO=',
+    `ESCOPO_MEDIDO=${report.gates.length} gates declarados do Agentic Loop 4K`,
+    `PERCENTUAL_MEDIDO=${report.progress.earned}/${report.progress.total}=${report.progress.percent}%`,
+    'ESTIMATIVA=NÃO_CALCULADA',
+    'ESCOPO_DA_ESTIMATIVA=NÃO_APLICÁVEL',
+    `SITUAÇÃO=${publicSituation(report)}`,
+    `OPERACIONAL=${report.operational_ready ? 'SIM' : 'NÃO'}`,
+    `COMPLETO=${report.complete ? 'SIM' : 'NÃO'}`,
+    '',
+    '✅ O QUE JÁ ESTÁ PRONTO=',
+    bulletLines(ready, 'NENHUM'),
+    '',
+    '🟡 O QUE ESTÁ PARCIAL=',
+    bulletLines(partial, 'NENHUM'),
+    '',
+    '❌ O QUE AINDA FALTA=',
+    bulletLines(missing, 'NENHUM GATE OBRIGATÓRIO'),
+    '',
+    '🚫 BLOQUEADORES=',
+    bulletLines(blockers, 'NENHUM'),
+    '',
+    '⚠️ PENDÊNCIAS NÃO BLOQUEANTES=',
+    bulletLines(nonBlockers, 'NENHUMA'),
+    '',
+    '🩺 DIAGNÓSTICO TÉCNICO E CICATRIZ=',
     `ERRO=${report.error}`,
     `CAUSA=${report.cause}`,
     `CORREÇÃO=${report.correction}`,
-    `TESTE=${report.test}`,
-    `CICATRIZ=${report.scar}`,
-    `PERCENTUAL=${report.progress.earned}/${report.progress.total}=${report.progress.percent}%`,
-    `OPERACIONAL=${report.operational_ready ? 'SIM' : 'NÃO'}`,
-    `COMPLETO=${report.complete ? 'SIM' : 'NÃO'}`,
-    `PENDÊNCIAS_BLOQUEANTES=${join(report.blocking_pending)}`,
-    `PENDÊNCIAS_NÃO_BLOQUEANTES=${join(report.non_blocking_pending)}`,
-    `ANTECIPAÇÃO=${report.anticipation}`,
-    `PRÓXIMO_MOVIMENTO=${report.next_movement}`,
-    `HEAD_PROVADO=${report.measured_head}`,
-    `CI_NO_HEAD=${process.env.CI ? 'EXECUTANDO_NO_CI' : 'VALIDAÇÃO_LOCAL'}`,
-    `O_QUE_O_CHEFE_PRECISA_FAZER=${report.chief_action}`,
+    `TESTE_DA_CICATRIZ=${report.test}`,
+    `REGRESSÃO=${regression}`,
+    '',
+    '🔎 PROVA=',
+    'REPOSITÓRIO=ServerVpss/CentralDark',
+    `PR_OU_ISSUE=${context}`,
+    `BRANCH=${branch}`,
+    `HEAD=${report.measured_head}`,
+    `CHECKS=${checkState}`,
+    `TESTES=${report.test}`,
+    `RECEIPT=agentic-loop-progress schema_version=${report.schema_version}`,
+    `FONTE_DA_PROVA=${source}`,
+    '',
+    '🗣️ PAPO RETO DO PIVETE=',
+    report.operational_ready
+      ? 'O motor já trabalha sozinho e o formato não depende mais de texto bonito: a porcentagem, a ordem e a prova são verificadas por código.'
+      : 'Ainda existe porta sem prova. O sistema não chama isso de verde e entrega diretamente o próximo ponto que precisa ser fechado.',
+    '',
+    '➡️ PRÓXIMO GATE=',
+    report.next_movement,
+    '',
+    '🧰 COMANDO CIRÚRGICO=',
+    'NENHUM',
+    '',
+    '🧪 COLETA DO CHEFE=',
+    'NENHUMA',
+    '',
+    '👑 AÇÃO DO CHEFE=',
+    report.chief_action,
+    '',
+    '🛡️ O QUE NÃO FOI TOCADO=',
+    '- main',
+    '- VPS',
+    '- produção',
+    '- segredo',
+    '- deploy',
+    '',
+    'AUTORIA_DO_PADRÃO=SEGREDO/CHEFE',
   ].join('\n');
+
+  validateReport(output, 'full');
+  return output;
 }
 
 function argValue(args, name, fallback = null) {
