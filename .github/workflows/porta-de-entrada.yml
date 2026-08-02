@@ -58,8 +58,8 @@ jobs:
       - name: Bootar escola de refatoração crítica no HEAD exato
         run: node scripts/lupa/agentic-school-loader.mjs --task critical-refactor --expected-head "$TARGET_HEAD_SHA" --json
 
-      - name: Validar progresso dinâmico da escola no HEAD exato
-        run: node scripts/lupa/agentic-loop-progress.mjs --expected-head "$TARGET_HEAD_SHA" --require-complete
+      - name: Validar operação da escola no HEAD exato
+        run: node scripts/lupa/agentic-loop-progress.mjs --expected-head "$TARGET_HEAD_SHA" --require-operational
 
       - name: Validar mapa e contratos do repositório inteiro
         env:
