@@ -1,12 +1,7 @@
 # yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
 inheritance: true
 language: "pt-BR"
-tone_instructions: >-
-  Direto, técnico e orientado a evidência. Use o Contrato Unificado de Relato
-  Pivete em .agents/skills/agentic-ci-loop/references/CONTRATO-UNIFICADO-RELATO-PIVETE.md:
-  veredito primeiro, progresso medido separado de estimativa, diagnóstico antes
-  do Papo Reto do Pivete, prova presa ao HEAD, próximo gate e ação exata do CHEFE.
-  Não transforme UNKNOWN, SKIPPED, PENDING, silêncio ou ausência de prova em PASS.
+tone_instructions: "PT-BR, direto e baseado em prova. Feche pelo Contrato Unificado de Relato Pivete: veredito, progresso medido, diagnóstico, prova, fluxo visual, próximo gate e ação do CHEFE. Estado incerto nunca vira PASS."
 early_access: true
 enable_free_tier: true
 
@@ -48,48 +43,47 @@ reviews:
   path_instructions:
     - path: ".agents/skills/agentic-ci-loop/references/CONTRATO-UNIFICADO-RELATO-PIVETE.md"
       instructions: >-
-        Trate este arquivo como fonte única do formato de relato. Verifique ordem,
-        campos, separação entre percentual medido e estimativa, regra de um único
-        comando/script e autoria SEGREDO/CHEFE. Bloqueie padrões paralelos.
+        Trate este arquivo como fonte única do relato. Verifique ordem, campos,
+        percentual medido separado de estimativa, fluxo visual Mermaid em PT-BR,
+        comando/coleta únicos e autoria SEGREDO/CHEFE. Bloqueie padrão paralelo.
     - path: ".agents/skills/agentic-ci-loop/**"
       instructions: >-
-        Confirme que todo boot carrega o contrato unificado, que o validador falha
-        fechado e que modo curto não esconde finding, causa, risco ou pendência.
+        Confirme que todo boot carrega o contrato, o validador falha fechado,
+        tarefas não ficam sem módulo e modo curto não esconde finding ou risco.
+    - path: ".github/pull_request_template.md"
+      instructions: >-
+        Exija o mesmo Contrato Unificado em todo PR, com prova presa ao HEAD,
+        fluxo visual ou NÃO_APLICÁVEL justificado e todos os campos em português.
     - path: "AGENTS.md"
       instructions: >-
-        Verifique autoridade, ordem de boot, escritor único por escopo,
-        separação Writer/Judge/Promotor, fail-closed e compatibilidade com
-        LEIA-ME-IA.md. Não aceite UNKNOWN, SKIPPED ou ausência de prova como PASS.
+        Verifique autoridade, ordem de boot, escritor único, Writer/Judge/Promotor,
+        fail-closed e compatibilidade com LEIA-ME-IA.md e a escola agentic.
     - path: "LEIA-ME-IA.md"
       instructions: >-
-        Trate como contrato canônico de entrada. Sinalize qualquer mudança que
-        crie autoridade concorrente, fallback silencioso ou desvio do mapa atual.
+        Trate como porta canônica. Sinalize autoridade concorrente, fallback
+        silencioso, estado antigo como atual ou desvio da escola e do mapa.
     - path: "docs/ARQUITETURA/**"
       instructions: >-
-        Confronte a documentação com AGENTS.md, LEIA-ME-IA.md e o mapa canônico.
-        Sinalize contradições de autoridade, entrypoints concorrentes e versões
-        paralelas V2/V3/NOVO/FINAL/COPY/BACKUP.
+        Confronte com AGENTS.md, LEIA-ME-IA.md e o mapa canônico. Sinalize
+        contradições, entrypoints concorrentes e versões V2/V3/NOVO/FINAL/COPY.
     - path: ".github/workflows/**"
       instructions: >-
-        Verifique menor privilégio, separação de credenciais entre Writer, Judge
-        e Promotor, checkout preso ao SHA esperado, ausência de código não
-        confiável com token privilegiado e nenhum fallback silencioso.
+        Verifique menor privilégio, checkout no SHA esperado, execução em todo
+        commit/PR, validação do corpo do PR e ausência de fallback silencioso.
     - path: "scripts/**"
       instructions: >-
-        Exija evidência reproduzível, timeout explícito, erro fail-closed,
-        sanitização de secrets, dry-run, rollback e receipt preso ao HEAD testado.
+        Exija prova reproduzível, timeout, erro fail-closed, sanitização, rollback,
+        receipt no HEAD e teste que mate a regressão antes da conclusão.
     - path: "apps/**"
       instructions: >-
         Sinalize duplicação de módulos ou entrypoints, mudança fora do mapa,
         efeitos colaterais sem autorização e regressões de compatibilidade.
     - path: "**/*"
       instructions: >-
-        Antes de concluir, confronte Learnings, issues, PRs anteriores e guidelines
-        canônicas. Classifique achados como FACT, INFERENCE ou UNKNOWN. No resumo
-        final, use MODO_CURTO quando não houver mutação/finding novo e MODO_COMPLETO
-        para auditoria, porcentagem, bloqueio ou fechamento. Se o CHEFE puder
-        resolver mais rápido por acesso local, entregue somente um script completo,
-        read-only por padrão, salvando saída em E:\CentralDark\Pivete\TEMP.
+        Classifique achados como FACT, INFERENCE ou UNKNOWN. Feche no Contrato
+        Unificado. Para fluxo multi-etapa, gere sequenceDiagram em português.
+        Se faltar acesso humano, entregue um único coletor read-only em
+        E:\CentralDark\Pivete\TEMP. Nunca converta SKIPPED/UNKNOWN em PASS.
 
 chat:
   allow_non_org_members: false
@@ -104,6 +98,7 @@ knowledge_base:
     filePatterns:
       - "LEIA-ME-IA.md"
       - ".agents/skills/agentic-ci-loop/**/*.md"
+      - ".github/pull_request_template.md"
       - "docs/ARQUITETURA/**/*.md"
       - "docs/PLANO-MESTRE-RETOMADA-CASA-METALUPA-APIS-NEGOCIOS.md"
   learnings:
@@ -136,21 +131,20 @@ issue_enrichment:
           e plano agent-ready antes da escrita.
       - label: "blocked"
         instructions: >-
-          Existe dependência, colisão de Writer, ausência de prova crítica ou gate
-          humano obrigatório que impede avanço seguro.
+          Dependência, colisão de Writer, ausência de prova crítica ou gate humano
+          obrigatório impede avanço seguro.
       - label: "security"
         instructions: >-
-          Mudança relacionada a credenciais, permissões, exposição, autenticação,
-          sandbox, secret scan ou menor privilégio.
+          Mudança de credenciais, permissões, exposição, autenticação, sandbox,
+          secret scan ou menor privilégio.
       - label: "sol"
         instructions: >-
-          Mudança relacionada ao SOL Desktop, voz, bridge, interface ou experiência
-          voice-first.
+          Mudança do SOL Desktop, voz, bridge, interface ou experiência voice-first.
       - label: "vps"
         instructions: >-
-          Mudança relacionada a Linux, Docker, PM2, systemd, Caddy, firewall,
-          Portainer, observabilidade ou execução na VPS.
+          Mudança de Linux, Docker, PM2, systemd, Caddy, firewall, Portainer,
+          observabilidade ou execução na VPS.
       - label: "delta"
         instructions: >-
-          Mudança relacionada ao contrato Delta, ledger append-only, handoff,
-          receipts, memória ou reverificação independente.
+          Mudança de Delta, ledger append-only, handoff, receipts, memória ou
+          reverificação independente.
