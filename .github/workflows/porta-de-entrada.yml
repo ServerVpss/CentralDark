@@ -23,9 +23,12 @@ jobs:
     name: Porta, escola e governança canônica estão íntegras?
     runs-on: ubuntu-latest
     timeout-minutes: 8
+    env:
+      TARGET_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 0
 
       - uses: actions/setup-node@v4
@@ -53,10 +56,10 @@ jobs:
         run: python3 scripts/lupa/validar_agentic_visual_package.py --json
 
       - name: Bootar escola de refatoração crítica no HEAD exato
-        run: node scripts/lupa/agentic-school-loader.mjs --task critical-refactor --expected-head "$GITHUB_SHA" --json
+        run: node scripts/lupa/agentic-school-loader.mjs --task critical-refactor --expected-head "$TARGET_HEAD_SHA" --json
 
       - name: Validar progresso dinâmico da escola no HEAD exato
-        run: node scripts/lupa/agentic-loop-progress.mjs --expected-head "$GITHUB_SHA" --require-complete
+        run: node scripts/lupa/agentic-loop-progress.mjs --expected-head "$TARGET_HEAD_SHA" --require-complete
 
       - name: Validar mapa e contratos do repositório inteiro
         env:
@@ -88,4 +91,4 @@ jobs:
             --head-sha "$HEAD_SHA" \
             --approved "$PIVETE_APPROVED"
           node scripts/lupa/validar-porta-de-entrada.mjs --json
-          node scripts/lupa/agentic-loop-progress.mjs --expected-head "$GITHUB_SHA" --json
+          node scripts/lupa/agentic-loop-progress.mjs --expected-head "$TARGET_HEAD_SHA" --json
