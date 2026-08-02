@@ -28,6 +28,12 @@ class VisualPackageTests(unittest.TestCase):
    (r/'src/LEIA-ME.txt').write_text('mudou')
    with self.assertRaisesRegex(ValueError,'VISUAL_README_SHA_MISMATCH'):validate_package(r,Path('manifest.json'))
   finally:t.cleanup()
+ def test_source_and_zip_member_must_match(self):
+  t,r,z=self.fixture()
+  try:
+   data=json.loads((r/'manifest.json').read_text()); data['source_artifacts']['svg_sha256']='0'*64; (r/'manifest.json').write_text(json.dumps(data))
+   with self.assertRaisesRegex(ValueError,'VISUAL_SVG_SOURCE_MEMBER_MISMATCH'):validate_package(r,Path('manifest.json'))
+  finally:t.cleanup()
  def test_wrong_dimensions_are_blocked(self):
   t,r,z=self.fixture()
   try:
