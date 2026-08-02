@@ -7,6 +7,9 @@
   "report_validator": "scripts/lupa/validar-relato-pivete.mjs",
   "course": ".agents/skills/agentic-ci-loop/references/ESCOLA-OPERACIONAL-DE-SKILLS.md",
   "lessons_ledger": ".agents/skills/agentic-ci-loop/references/learning-ledger.jsonl",
+  "review_adapter": ".coderabbit.yaml",
+  "pr_template": ".github/pull_request_template.md",
+  "global_workflow": ".github/workflows/porta-de-entrada.yml",
   "source_artifacts": {
     "course_txt_sha256": "5c6278447f026af115f940a5c5b3e55ebe2a6b1a7bc0a116a78872142005ad62",
     "course_source_receipt_gzip_base64_path": ".agents/skills/agentic-ci-loop/references/SOURCE-CURSO-SKILLS-ORIGINAL.txt.gz.base64",
