@@ -8,6 +8,7 @@ import {
   requirementSatisfied,
   validateGates,
 } from './agentic-loop-progress.mjs';
+import { validateReport } from './validar-relato-pivete.mjs';
 
 const gate = (id, status, required = true) => ({ id, label: id, status, required, evidence: [`proof:${id}`], next_step: status === 'PASS' ? '' : `fix:${id}` });
 
@@ -68,19 +69,49 @@ test('rejeita evidência vazia, ID duplicado e modo inválido', () => {
   assert.throws(() => requirementSatisfied({ gates: [gate('A', 'PASS')] }, 'ambiguous'), /REQUIREMENT_MODE_INVALID/);
 });
 
-test('relatório emite todos os campos obrigatórios e HEAD runtime', () => {
+test('motor oficial emite o contrato completo e se autovalida', () => {
+  const gates = [gate('CORE', 'PASS'), gate('ATTACHMENT', 'PARTIAL', false)];
   const report = {
-    situation: 'PARTIAL_COM_PROVA', error: 'erro', cause: 'causa', correction: 'corrigir',
-    test: 'teste', scar: 'cicatriz', progress: { earned: 150, total: 200, percent: 75 },
-    operational_ready: true, complete: false,
-    blocking_pending: [], non_blocking_pending: ['anexo externo'], anticipation: 'antecipar', next_movement: 'mover',
-    measured_head: 'a'.repeat(40), chief_action: 'NADA_AGORA',
+    schema_version: 3,
+    source_of_truth: 'ServerVpss/CentralDark',
+    situation: 'PARTIAL_COM_PROVA', error: 'NENHUM', cause: 'NÃO_APLICÁVEL', correction: 'NENHUMA',
+    test: 'node --test testes', scar: 'cicatriz', progress: { earned: 150, total: 200, percent: 75 },
+    gates, operational_ready: true, complete: false,
+    blocking_pending: [], non_blocking_pending: ['ATTACHMENT: fix:ATTACHMENT'],
+    anticipation: 'antecipar', next_movement: 'mover', measured_head: 'a'.repeat(40),
+    chief_action: 'NADA_AGORA',
   };
   const output = formatPiveteReport(report);
-  for (const field of ['SITUAÇÃO=', 'ERRO=', 'CAUSA=', 'CORREÇÃO=', 'TESTE=', 'CICATRIZ=', 'PERCENTUAL=', 'OPERACIONAL=SIM', 'COMPLETO=NÃO', 'PENDÊNCIAS_BLOQUEANTES=', 'PENDÊNCIAS_NÃO_BLOQUEANTES=', 'ANTECIPAÇÃO=', 'PRÓXIMO_MOVIMENTO=', 'HEAD_PROVADO=', 'CI_NO_HEAD=', 'O_QUE_O_CHEFE_PRECISA_FAZER=']) {
-    assert.match(output, new RegExp(field));
+  const validation = validateReport(output, 'full');
+  assert.equal(validation.valid, true);
+  assert.deepEqual(validation.progress, { earned: 150, total: 200, percent: 75 });
+  for (const field of [
+    '🧠 CENTRALDARK — ESTADO DA MISSÃO', '🎯 VEREDITO=', '📊 PROGRESSO=',
+    'PERCENTUAL_MEDIDO=150/200=75%', 'ESTIMATIVA=NÃO_CALCULADA',
+    '✅ O QUE JÁ ESTÁ PRONTO=', '🟡 O QUE ESTÁ PARCIAL=', '❌ O QUE AINDA FALTA=',
+    '🩺 DIAGNÓSTICO TÉCNICO E CICATRIZ=', '🔎 PROVA=', '🗣️ PAPO RETO DO PIVETE=',
+    '➡️ PRÓXIMO GATE=', '🧰 COMANDO CIRÚRGICO=', '🧪 COLETA DO CHEFE=',
+    '👑 AÇÃO DO CHEFE=', '🛡️ O QUE NÃO FOI TOCADO=', 'AUTORIA_DO_PADRÃO=SEGREDO/CHEFE',
+  ]) {
+    assert.match(output, new RegExp(field.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
   }
   assert.match(output, new RegExp('a'.repeat(40)));
+});
+
+test('motor oficial não emite PASS quando a entrega está parcial', () => {
+  const gates = [gate('CORE', 'PASS'), gate('ZIP', 'PARTIAL', false)];
+  const report = {
+    schema_version: 3,
+    situation: 'PARTIAL_COM_PROVA', error: 'NENHUM', cause: 'NÃO_APLICÁVEL', correction: 'NENHUMA',
+    test: 'teste', scar: 'cicatriz', progress: { earned: 150, total: 200, percent: 75 },
+    gates, operational_ready: true, complete: false, blocking_pending: [],
+    non_blocking_pending: ['ZIP: fix:ZIP'], anticipation: 'antecipar', next_movement: 'mover',
+    measured_head: 'b'.repeat(40), chief_action: 'NADA_AGORA',
+  };
+  const output = formatPiveteReport(report);
+  assert.match(output, /SITUAÇÃO=PARTIAL_COM_PROVA/);
+  assert.match(output, /COMPLETO=NÃO/);
+  assert.doesNotMatch(output, /SITUAÇÃO=PASS/);
 });
 
 test('saída JSON deve carregar gates completos por contrato', () => {
