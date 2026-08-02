@@ -9,6 +9,19 @@ const DEFAULT_MANIFEST = '.agents/skills/agentic-ci-loop/references/school.manif
 const CORE_BOOT = 'LEIA-ME-IA.md';
 const SHA40 = /^[0-9a-f]{40}$/;
 const SHA256 = /^[0-9a-f]{64}$/;
+const REQUIRED_REPORT_TOKENS = Object.freeze([
+  '🧠 CENTRALDARK — ESTADO DA MISSÃO',
+  '🎯 VEREDITO=',
+  'PERCENTUAL_MEDIDO=',
+  'ESTIMATIVA=',
+  '🩺 DIAGNÓSTICO TÉCNICO E CICATRIZ=',
+  '🗣️ PAPO RETO DO PIVETE=',
+  '➡️ PRÓXIMO GATE=',
+  '🧰 COMANDO CIRÚRGICO=',
+  '🧪 COLETA DO CHEFE=',
+  '👑 AÇÃO DO CHEFE=',
+  'AUTORIA_DO_PADRÃO=SEGREDO/CHEFE',
+]);
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -46,6 +59,21 @@ function parseSkillName(content, relativePath) {
   const match = content.match(/^---\s*\n[\s\S]*?^name:\s*([^\n#]+)\s*$/m);
   assert(match, `SKILL_NAME_MISSING:${relativePath}`);
   return match[1].trim().replace(/^['"]|['"]$/g, '');
+}
+
+function validateReportContract(root, contractPath, validatorPath) {
+  const contract = readText(root, contractPath);
+  for (const token of REQUIRED_REPORT_TOKENS) {
+    assert(contract.includes(token), `REPORT_CONTRACT_TOKEN_MISSING:${token}`);
+  }
+  assert(contract.includes('PR #499'), 'REPORT_CONTRACT_SOURCE_MISSING:499');
+  assert(contract.includes('PR #554'), 'REPORT_CONTRACT_SOURCE_MISSING:554');
+  assert(contract.includes('PR #585'), 'REPORT_CONTRACT_SOURCE_MISSING:585');
+  assert(contract.includes('PR #611'), 'REPORT_CONTRACT_SOURCE_MISSING:611');
+  assert(contract.includes('E:\\CentralDark\\Pivete\\TEMP'), 'REPORT_CONTRACT_TEMP_PATH_MISSING');
+  const validator = readText(root, validatorPath);
+  assert(validator.includes('REPORT_PERCENT_MISMATCH'), 'REPORT_VALIDATOR_PERCENT_GATE_MISSING');
+  assert(validator.includes('REPORT_HEADER_ORDER_INVALID'), 'REPORT_VALIDATOR_ORDER_GATE_MISSING');
 }
 
 export function validateLessonLedger(content) {
@@ -94,13 +122,21 @@ export function validateManifest(root, manifest) {
   assert(manifest.school_id === 'CENTRALDARK-AGENTIC-SCHOOL', 'SCHOOL_ID_INVALID');
   assert(manifest.source_of_truth === 'ServerVpss/CentralDark', 'SCHOOL_SOURCE_INVALID');
   assert(typeof manifest.core_skill === 'string', 'SCHOOL_CORE_SKILL_INVALID');
+  assert(typeof manifest.output_contract === 'string', 'SCHOOL_OUTPUT_CONTRACT_INVALID');
+  assert(typeof manifest.report_validator === 'string', 'SCHOOL_REPORT_VALIDATOR_INVALID');
   assert(typeof manifest.course === 'string', 'SCHOOL_COURSE_INVALID');
   assert(typeof manifest.lessons_ledger === 'string', 'SCHOOL_LEDGER_INVALID');
   assert(manifest.tasks && typeof manifest.tasks === 'object', 'SCHOOL_TASKS_INVALID');
   assert(Array.isArray(manifest.adapters) && manifest.adapters.length > 0, 'SCHOOL_ADAPTERS_INVALID');
   assert(Array.isArray(manifest.required_boot_tokens), 'SCHOOL_BOOT_TOKENS_INVALID');
 
-  const requiredPaths = new Set([manifest.core_skill, manifest.course, manifest.lessons_ledger]);
+  const requiredPaths = new Set([
+    manifest.core_skill,
+    manifest.output_contract,
+    manifest.report_validator,
+    manifest.course,
+    manifest.lessons_ledger,
+  ]);
   for (const modules of Object.values(manifest.tasks)) {
     assert(Array.isArray(modules), 'SCHOOL_TASK_MODULES_INVALID');
     for (const modulePath of modules) requiredPaths.add(modulePath);
@@ -108,6 +144,7 @@ export function validateManifest(root, manifest) {
   for (const relativePath of requiredPaths) {
     assert(fs.existsSync(path.join(root, relativePath)), `SCHOOL_PATH_MISSING:${relativePath}`);
   }
+  validateReportContract(root, manifest.output_contract, manifest.report_validator);
 
   const artifacts = manifest.source_artifacts || {};
   for (const [key, value] of Object.entries(artifacts)) {
@@ -166,7 +203,7 @@ export function loadSchool({ root, task, expectedHead = null, manifestPath = DEF
   assert(Object.hasOwn(manifest.tasks, task), `SCHOOL_TASK_UNKNOWN:${task}`);
   if (expectedHead !== null) assert(SHA40.test(expectedHead), 'SCHOOL_EXPECTED_HEAD_INVALID');
 
-  const loadOrder = [...new Set([manifest.core_skill, ...manifest.tasks[task]])];
+  const loadOrder = [...new Set([manifest.core_skill, manifest.output_contract, ...manifest.tasks[task]])];
   return {
     schema_version: 1,
     boot_status: 'PASS',
@@ -174,6 +211,8 @@ export function loadSchool({ root, task, expectedHead = null, manifestPath = DEF
     task,
     expected_head: expectedHead,
     load_order: loadOrder,
+    output_contract: manifest.output_contract,
+    report_validator: manifest.report_validator,
     approved_lessons: validation.lessons.approved.map((lesson) => ({
       lesson_id: lesson.lesson_id,
       trigger: lesson.trigger,
@@ -207,6 +246,8 @@ function main() {
     console.log(`TASK=${result.task}`);
     console.log(`EXPECTED_HEAD=${result.expected_head || 'UNSET'}`);
     console.log(`LOAD_ORDER=${result.load_order.join(',')}`);
+    console.log(`OUTPUT_CONTRACT=${result.output_contract}`);
+    console.log(`REPORT_VALIDATOR=${result.report_validator}`);
     console.log(`APPROVED_LESSONS=${result.approved_lessons.length}`);
     console.log(`CANDIDATE_LESSONS=${result.candidate_lessons.length}`);
   }
