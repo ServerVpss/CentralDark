@@ -1,9 +1,6 @@
 import assert from 'node:assert/strict';
-import fs from 'node:fs';
-import os from 'node:os';
-import path from 'node:path';
 import test from 'node:test';
-import { calculateProgress, deriveSituation, formatPiveteReport, validateGates } from './agentic-loop-progress.mjs';
+import { buildCourseCustodyGates, calculateProgress, deriveSituation, formatPiveteReport, validateGates } from './agentic-loop-progress.mjs';
 
 const gate = (id, status, required = true) => ({ id, label: id, status, required, evidence: [`proof:${id}`], next_step: status === 'PASS' ? '' : `fix:${id}` });
 
@@ -24,6 +21,23 @@ test('conclusão só existe com todos os gates obrigatórios em PASS', () => {
 test('percentual inclui todos os gates', () => {
   const result = calculateProgress([gate('A', 'PASS'), gate('B', 'PARTIAL'), gate('C', 'UNKNOWN')]);
   assert.deepEqual(result, { earned: 150, total: 300, percent: 50 });
+});
+
+test('curso condensado pode passar sem fingir que o anexo original está no Git', () => {
+  const gates = buildCourseCustodyGates({ condensedPresent: true, receiptPresent: true, originalAttachmentPresent: false });
+  assert.equal(gates[0].id, 'COURSE_CONDENSED_VERSIONED');
+  assert.equal(gates[0].status, 'PASS');
+  assert.equal(gates[0].required, true);
+  assert.equal(gates[1].id, 'COURSE_ORIGINAL_ATTACHMENT');
+  assert.equal(gates[1].status, 'PARTIAL');
+  assert.equal(gates[1].required, false);
+  assert.match(gates[1].evidence.join(' '), /bytes do anexo original permanecem externos/i);
+});
+
+test('ausência do receipt derruba o gate condensado', () => {
+  const gates = buildCourseCustodyGates({ condensedPresent: true, receiptPresent: false, originalAttachmentPresent: false });
+  assert.equal(gates[0].status, 'FAIL');
+  assert.equal(gates[1].status, 'PARTIAL');
 });
 
 test('rejeita evidência vazia e ID duplicado', () => {
