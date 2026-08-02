@@ -1,9 +1,14 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "package_id": "CENTRALDARK-AGENTIC-LOOP-4K",
   "source_of_truth": "ServerVpss/CentralDark",
   "static_snapshot": false,
-  "live_status_command": "node scripts/lupa/agentic-loop-progress.mjs --expected-head <GITHUB_SHA> --json",
-  "completion_command": "node scripts/lupa/agentic-loop-progress.mjs --expected-head <GITHUB_SHA> --require-complete",
-  "note": "Este arquivo define como medir. O estado atual é derivado do checkout e preso ao HEAD em runtime; não armazena percentual estático."
+  "live_status_command": "node scripts/lupa/agentic-loop-progress.mjs --expected-head <PR_HEAD> --json",
+  "operational_command": "node scripts/lupa/agentic-loop-progress.mjs --expected-head <PR_HEAD> --require-operational",
+  "completion_command": "node scripts/lupa/agentic-loop-progress.mjs --expected-head <PR_HEAD> --require-complete",
+  "semantics": {
+    "operational": "todos os gates obrigatórios estão em PASS",
+    "complete": "todos os gates, inclusive custódia dos anexos opcionais, estão em PASS"
+  },
+  "note": "O estado é derivado do checkout preso ao PR_HEAD. OPERACIONAL não significa COMPLETO e nenhum PARTIAL é convertido em PASS."
 }
