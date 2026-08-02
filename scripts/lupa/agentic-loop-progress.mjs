@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
@@ -13,35 +14,54 @@ const VISUAL_README_PATH = 'docs/ARQUITETURA/artefatos/CENTRALDARK-AGENTIC-LOOP-
 const COURSE_RECEIPT_PATH = '.agents/skills/agentic-ci-loop/references/SOURCE-CURSO-SKILLS-ORIGINAL.txt.gz.base64';
 const COURSE_CONDENSED_PATH = '.agents/skills/agentic-ci-loop/references/ESCOLA-OPERACIONAL-DE-SKILLS.md';
 
-function exists(root, relativePath) { return fs.existsSync(path.join(root, relativePath)); }
+function exists(root, relativePath) { return typeof relativePath === 'string' && relativePath.length > 0 && fs.existsSync(path.join(root, relativePath)); }
 function text(root, relativePath) { return fs.readFileSync(path.join(root, relativePath), 'utf8'); }
-function gate(id, label, status, evidence, nextStep, required = true) {
-  return { id, label, status, required, evidence, next_step: nextStep };
-}
+function sha256(root, relativePath) { return crypto.createHash('sha256').update(fs.readFileSync(path.join(root, relativePath))).digest('hex'); }
+function gate(id, label, status, evidence, nextStep, required = true) { return { id, label, status, required, evidence, next_step: nextStep }; }
 function assert(condition, message) { if (!condition) throw new Error(message); }
 
-export function buildCourseCustodyGates({ condensedPresent, receiptPresent, originalAttachmentPresent = false }) {
+function optionalArtifactState(root, relativePath, expectedSha) {
+  if (!relativePath) return { declared: false, present: false, valid: false, detail: 'caminho não declarado no manifesto' };
+  if (!exists(root, relativePath)) return { declared: true, present: false, valid: false, detail: `arquivo ausente: ${relativePath}` };
+  const actual = sha256(root, relativePath);
+  if (actual !== expectedSha) return { declared: true, present: true, valid: false, detail: `SHA-256 divergente: ${relativePath}` };
+  return { declared: true, present: true, valid: true, detail: `SHA-256 válido: ${relativePath}` };
+}
+
+export function buildCourseCustodyGates({ condensedPresent, receiptPresent, originalAttachmentPresent = false, originalAttachmentValid = originalAttachmentPresent }) {
   return [
     gate(
       'COURSE_CONDENSED_VERSIONED',
       'Curso operacional condensado e receipt versionados',
       condensedPresent && receiptPresent ? 'PASS' : 'FAIL',
       [condensedPresent && receiptPresent
-        ? 'Contrato acionável está no Git e o receipt preserva somente o identificador SHA-256 da fonte externa'
+        ? 'Contrato acionável está no Git e o receipt preserva o identificador SHA-256 da fonte externa'
         : 'Curso condensado ou receipt ausente'],
       'versionar o curso condensado e o receipt de custódia',
     ),
     gate(
       'COURSE_ORIGINAL_ATTACHMENT',
       'Anexo original do curso disponível no repositório',
-      originalAttachmentPresent ? 'PASS' : 'PARTIAL',
+      originalAttachmentPresent ? (originalAttachmentValid ? 'PASS' : 'FAIL') : 'PARTIAL',
       [originalAttachmentPresent
-        ? 'Bytes do anexo original estão disponíveis e verificáveis'
+        ? (originalAttachmentValid ? 'Bytes do anexo original estão disponíveis e o SHA-256 confere' : 'Anexo original existe, mas sua integridade não confere')
         : 'Somente o SHA-256 e o receipt estão versionados; os bytes do anexo original permanecem externos'],
       'publicar o anexo original por canal de arquivo autorizado e verificar o SHA-256',
       false,
     ),
   ];
+}
+
+export function buildVisualBinaryGate({ declared, allPresent, allValid, evidence = [] }) {
+  const status = allValid ? 'PASS' : (declared ? 'FAIL' : 'PARTIAL');
+  return gate(
+    'VISUAL_BINARY_IN_GIT',
+    'ZIP/PNGs binários armazenados e verificáveis no Git',
+    status,
+    evidence.length ? evidence : [declared ? 'Artefatos declarados, mas incompletos ou inválidos' : 'Caminhos binários ainda não declarados no manifesto'],
+    'publicar ZIP e PNGs por canal binário autorizado, declarar caminhos no manifesto e verificar SHA-256',
+    false,
+  );
 }
 
 export function deriveSituation(gates) {
@@ -54,9 +74,7 @@ export function deriveSituation(gates) {
 
 export function requirementSatisfied(report, mode) {
   if (mode === 'complete') return report.gates.every((item) => item.status === 'PASS');
-  if (mode === 'operational') {
-    return report.gates.filter((item) => item.required !== false).every((item) => item.status === 'PASS');
-  }
+  if (mode === 'operational') return report.gates.filter((item) => item.required !== false).every((item) => item.status === 'PASS');
   throw new Error(`REQUIREMENT_MODE_INVALID:${mode}`);
 }
 
@@ -81,6 +99,18 @@ export function calculateProgress(gates) {
   return { earned, total, percent: Number(((earned / total) * 100).toFixed(1)) };
 }
 
+export function resolveVerifiedHead(root, supplied = null) {
+  let actual;
+  try { actual = execFileSync('git', ['-C', root, 'rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(); }
+  catch { throw new Error('GIT_HEAD_UNAVAILABLE'); }
+  assert(SHA40.test(actual), 'GIT_HEAD_INVALID');
+  if (supplied !== null) {
+    assert(SHA40.test(supplied), 'EXPECTED_HEAD_INVALID');
+    assert(supplied === actual, `EXPECTED_HEAD_MISMATCH:${supplied}:${actual}`);
+  }
+  return actual;
+}
+
 export function buildRuntimeReport({ root, expectedHead }) {
   assert(SHA40.test(expectedHead), 'EXPECTED_HEAD_INVALID');
   let school;
@@ -91,22 +121,42 @@ export function buildRuntimeReport({ root, expectedHead }) {
   const workflowPath = '.github/workflows/porta-de-entrada.yml';
   const workflow = exists(root, workflowPath) ? text(root, workflowPath) : '';
   const boot = exists(root, 'LEIA-ME-IA.md') ? text(root, 'LEIA-ME-IA.md') : '';
+  const artifacts = school?.source_artifacts || {};
+
+  const courseOriginal = optionalArtifactState(root, artifacts.course_original_path, artifacts.course_txt_sha256);
   const courseGates = buildCourseCustodyGates({
     condensedPresent: exists(root, COURSE_CONDENSED_PATH),
     receiptPresent: exists(root, COURSE_RECEIPT_PATH),
-    originalAttachmentPresent: false,
+    originalAttachmentPresent: courseOriginal.present,
+    originalAttachmentValid: courseOriginal.valid,
   });
+
+  const binaryStates = [
+    optionalArtifactState(root, artifacts.visual_zip_path, artifacts.visual_zip_sha256),
+    optionalArtifactState(root, artifacts.png_complete_path, artifacts.png_complete_sha256),
+    optionalArtifactState(root, artifacts.png_clean_path, artifacts.png_clean_sha256),
+  ];
+  const visualBinaryGate = buildVisualBinaryGate({
+    declared: binaryStates.some((item) => item.declared),
+    allPresent: binaryStates.every((item) => item.present),
+    allValid: binaryStates.every((item) => item.valid),
+    evidence: binaryStates.map((item) => item.detail),
+  });
+
+  const globalWorkflow = workflow.includes('branches: ["**"]')
+    && workflow.includes('validar-relato-pivete.mjs --mode pr')
+    && /^\s{2}pull_request:\s*$/m.test(workflow);
 
   const gates = [
     ...courseGates,
-    gate('SCHOOL_MANIFEST_VALID', 'Manifesto da escola e contrato de relato válidos', school ? 'PASS' : 'BLOCKED', [school ? `school_id=${school.school_id}; output_contract=${school.output_contract}` : `erro=${schoolError}`], 'corrigir manifesto, módulos, contrato ou adaptadores'),
+    gate('SCHOOL_MANIFEST_VALID', 'Manifesto, contrato, template e adaptadores válidos', school ? 'PASS' : 'BLOCKED', [school ? `school_id=${school.school_id}; superfícies=${school.checked_global_surfaces.join(',')}` : `erro=${schoolError}`], 'corrigir manifesto, módulos, contrato ou adaptadores'),
     gate('UNIVERSAL_BOOT_REACHABLE', 'Escola alcançável pelo boot universal', boot.includes('.agents/skills/agentic-ci-loop/SKILL.md') && boot.includes('agentic-school-loader.mjs') ? 'PASS' : 'FAIL', ['LEIA-ME-IA.md deve apontar para skill e loader'], 'conectar a escola à porta universal'),
-    gate('ZERO_REGRESSION_MODULE', 'Refatoração crítica com zero regressão', exists(root, '.agents/skills/agentic-ci-loop/references/REFATORACAO-CRITICA-ZERO-REGRESSAO.md') ? 'PASS' : 'FAIL', ['Módulo de baseline, vermelho, cirurgia, matriz, CI, Judge e cicatriz'], 'criar ou restaurar módulo'),
+    gate('ZERO_REGRESSION_MODULE', 'Refatoração crítica com zero regressão conhecida', exists(root, '.agents/skills/agentic-ci-loop/references/REFATORACAO-CRITICA-ZERO-REGRESSAO.md') ? 'PASS' : 'FAIL', ['Módulo de baseline, vermelho, cirurgia, matriz, CI, Judge e cicatriz'], 'criar ou restaurar módulo'),
     gate('SELF_LEARNING_GATED', 'Autoaprendizado com promoção segura', school ? 'PASS' : 'BLOCKED', [school ? `approved=${school.approved_lessons.length}; candidates=${school.candidate_lessons.length}; candidatos não entram no boot` : 'loader bloqueado'], 'corrigir o ledger; aprovação exige regressão, Judge independente e decisão do CHEFE'),
-    gate('DETERMINISTIC_TESTS', 'Loader, relato, pacote e progresso testados', workflow.includes('agentic-school-loader.test.mjs') && workflow.includes('agentic-loop-progress.test.mjs') && workflow.includes('validar-relato-pivete.test.mjs') && workflow.includes('test_validar_agentic_visual_package.py') ? 'PASS' : 'FAIL', ['Workflow deve executar loader, validador de relato, progresso e pacote sem dependência externa'], 'ligar as quatro suítes no CI'),
-    gate('CI_BOOT_EXECUTION', 'Boot da escola executado no CI', workflow.includes('agentic-school-loader.mjs --task critical-refactor') ? 'PASS' : 'FAIL', ['porta-de-entrada executa loader preso ao PR_HEAD'], 'adicionar execução do loader ao workflow'),
+    gate('DETERMINISTIC_TESTS', 'Loader, relato visual, pacote e progresso testados', workflow.includes('agentic-school-loader.test.mjs') && workflow.includes('agentic-loop-progress.test.mjs') && workflow.includes('validar-relato-pivete.test.mjs') && workflow.includes('test_validar_agentic_visual_package.py') ? 'PASS' : 'FAIL', ['Workflow deve executar loader, validador de relato, progresso e pacote sem dependência externa'], 'ligar as quatro suítes no CI'),
+    gate('CI_BOOT_EXECUTION', 'Escola aplicada em todo commit e todo PR', globalWorkflow && workflow.includes('agentic-school-loader.mjs --task critical-refactor') ? 'PASS' : 'FAIL', ['porta-de-entrada executa em todo push/PR, valida corpo do PR e boota o loader preso ao HEAD'], 'tornar o workflow global para todo push/PR e validar o corpo do PR'),
     gate('VISUAL_SOURCE_VERSIONED', 'Fonte visual 4K editável versionada', exists(root, VISUAL_SVG_PATH) && exists(root, VISUAL_README_PATH) && workflow.includes('validar_agentic_visual_package.py') ? 'PASS' : 'FAIL', ['SVG e LEIA-ME presos aos hashes do manifesto; ZIP pode ser validado quando fornecido'], 'versionar SVG, LEIA-ME e guardrail'),
-    gate('VISUAL_BINARY_IN_GIT', 'ZIP/PNGs binários armazenados no Git', 'PARTIAL', ['ZIP original validado localmente pelo SHA-256 455071e3e6e6c3bfef27a8257ed5405e9387706a39cee978fdbfd87eaba49a2b; conector desta sessão publica apenas texto UTF-8'], 'publicar o ZIP por canal binário autorizado e rerodar --require-zip', false),
+    visualBinaryGate,
   ];
 
   const progress = calculateProgress(gates);
@@ -114,7 +164,7 @@ export function buildRuntimeReport({ root, expectedHead }) {
   const blockers = gates.filter((item) => item.required !== false && item.status !== 'PASS');
   const nonBlockers = gates.filter((item) => item.required === false && item.status !== 'PASS');
   return {
-    schema_version: 3,
+    schema_version: 4,
     source_of_truth: 'ServerVpss/CentralDark',
     measured_head: expectedHead,
     situation,
@@ -126,7 +176,7 @@ export function buildRuntimeReport({ root, expectedHead }) {
     cause: blockers.map((item) => `${item.id}:${item.evidence.join('; ')}`).join(' | ') || 'NÃO_APLICÁVEL',
     correction: blockers.map((item) => item.next_step).join(' | ') || 'NENHUMA',
     test: 'node --test scripts/lupa/agentic-school-loader.test.mjs scripts/lupa/agentic-loop-progress.test.mjs scripts/lupa/validar-relato-pivete.test.mjs',
-    scar: 'Toda falha provada exige teste vermelho antes, verde depois e lição somente após Judge + CHEFE.',
+    scar: 'Todo defeito provado exige teste vermelho antes, verde depois e lição somente após Judge + CHEFE.',
     blocking_pending: blockers.map((item) => `${item.label}: ${item.next_step}`),
     non_blocking_pending: nonBlockers.map((item) => `${item.label}: ${item.next_step}`),
     anticipation: blockers.length ? 'Não declarar escola operacional nem promover para main enquanto houver gate obrigatório fora de PASS.' : 'A escola está operacional na branch, mas a entrega não é completa enquanto existir gate opcional fora de PASS.',
@@ -142,16 +192,12 @@ function publicSituation(report) {
   return 'UNKNOWN';
 }
 
-function bulletLines(items, fallback) {
-  return items.length ? items.map((item) => `- ${item}`).join('\n') : `- ${fallback}`;
-}
+function bulletLines(items, fallback) { return items.length ? items.map((item) => `- ${item}`).join('\n') : `- ${fallback}`; }
 
 export function formatPiveteReport(report) {
   const ready = report.gates.filter((item) => item.status === 'PASS').map((item) => `${item.label} — ${item.evidence.join('; ')}`);
   const partial = report.gates.filter((item) => item.status === 'PARTIAL').map((item) => `${item.label} — falta: ${item.next_step}`);
   const missing = report.gates.filter((item) => item.status !== 'PASS' && item.status !== 'PARTIAL').map((item) => `${item.label} — condição: ${item.next_step}`);
-  const blockers = report.blocking_pending;
-  const nonBlockers = report.non_blocking_pending;
   const verdict = report.operational_ready
     ? (report.complete ? 'A escola agentic está completa e provada no HEAD medido.' : 'A escola agentic está operacional e provada, mas ainda não está completa.')
     : 'A escola agentic não pode avançar porque existe gate obrigatório sem prova.';
@@ -166,9 +212,7 @@ export function formatPiveteReport(report) {
     '║ 🧠 CENTRALDARK — ESTADO DA MISSÃO         ║',
     '╚════════════════════════════════════════════╝',
     '',
-    '🎯 VEREDITO=',
-    verdict,
-    '',
+    '🎯 VEREDITO=', verdict, '',
     '📊 PROGRESSO=',
     `ESCOPO_MEDIDO=${report.gates.length} gates declarados do Agentic Loop 4K`,
     `PERCENTUAL_MEDIDO=${report.progress.earned}/${report.progress.total}=${report.progress.percent}%`,
@@ -176,30 +220,18 @@ export function formatPiveteReport(report) {
     'ESCOPO_DA_ESTIMATIVA=NÃO_APLICÁVEL',
     `SITUAÇÃO=${publicSituation(report)}`,
     `OPERACIONAL=${report.operational_ready ? 'SIM' : 'NÃO'}`,
-    `COMPLETO=${report.complete ? 'SIM' : 'NÃO'}`,
-    '',
-    '✅ O QUE JÁ ESTÁ PRONTO=',
-    bulletLines(ready, 'NENHUM'),
-    '',
-    '🟡 O QUE ESTÁ PARCIAL=',
-    bulletLines(partial, 'NENHUM'),
-    '',
-    '❌ O QUE AINDA FALTA=',
-    bulletLines(missing, 'NENHUM GATE OBRIGATÓRIO'),
-    '',
-    '🚫 BLOQUEADORES=',
-    bulletLines(blockers, 'NENHUM'),
-    '',
-    '⚠️ PENDÊNCIAS NÃO BLOQUEANTES=',
-    bulletLines(nonBlockers, 'NENHUMA'),
-    '',
+    `COMPLETO=${report.complete ? 'SIM' : 'NÃO'}`, '',
+    '✅ O QUE JÁ ESTÁ PRONTO=', bulletLines(ready, 'NENHUM'), '',
+    '🟡 O QUE ESTÁ PARCIAL=', bulletLines(partial, 'NENHUM'), '',
+    '❌ O QUE AINDA FALTA=', bulletLines(missing, 'NENHUM GATE OBRIGATÓRIO'), '',
+    '🚫 BLOQUEADORES=', bulletLines(report.blocking_pending, 'NENHUM'), '',
+    '⚠️ PENDÊNCIAS NÃO BLOQUEANTES=', bulletLines(report.non_blocking_pending, 'NENHUMA'), '',
     '🩺 DIAGNÓSTICO TÉCNICO E CICATRIZ=',
     `ERRO=${report.error}`,
     `CAUSA=${report.cause}`,
     `CORREÇÃO=${report.correction}`,
     `TESTE_DA_CICATRIZ=${report.test}`,
-    `REGRESSÃO=${regression}`,
-    '',
+    `REGRESSÃO=${regression}`, '',
     '🔎 PROVA=',
     'REPOSITÓRIO=ServerVpss/CentralDark',
     `PR_OU_ISSUE=${context}`,
@@ -208,32 +240,34 @@ export function formatPiveteReport(report) {
     `CHECKS=${checkState}`,
     `TESTES=${report.test}`,
     `RECEIPT=agentic-loop-progress schema_version=${report.schema_version}`,
-    `FONTE_DA_PROVA=${source}`,
+    `FONTE_DA_PROVA=${source}`, '',
+    '🧭 FLUXO VISUAL=',
+    'DIAGRAMA_OBRIGATÓRIO=SIM',
+    'MOTIVO=O fechamento envolve CHEFE, agente, GitHub, CI e Judge.',
     '',
+    '```mermaid',
+    'sequenceDiagram',
+    '  participant Chefe as SEGREDO/CHEFE',
+    '  participant Agente as IA/Agente',
+    '  participant GitHub',
+    '  participant CI as CI/CD',
+    '  participant Juiz as Judge',
+    '  Chefe->>Agente: define intenção, escopo e autorização',
+    '  Agente->>GitHub: publica mudança no PR',
+    '  GitHub->>CI: executa gates no HEAD exato',
+    '  CI-->>Agente: devolve PASS ou falha reproduzível',
+    '  Agente->>Juiz: solicita revisão independente',
+    '  Juiz-->>Chefe: entrega veredito e próximo gate',
+    '```', '',
     '🗣️ PAPO RETO DO PIVETE=',
     report.operational_ready
-      ? 'O motor já trabalha sozinho e o formato não depende mais de texto bonito: a porcentagem, a ordem e a prova são verificadas por código.'
-      : 'Ainda existe porta sem prova. O sistema não chama isso de verde e entrega diretamente o próximo ponto que precisa ser fechado.',
-    '',
-    '➡️ PRÓXIMO GATE=',
-    report.next_movement,
-    '',
-    '🧰 COMANDO CIRÚRGICO=',
-    'NENHUM',
-    '',
-    '🧪 COLETA DO CHEFE=',
-    'NENHUMA',
-    '',
-    '👑 AÇÃO DO CHEFE=',
-    report.chief_action,
-    '',
-    '🛡️ O QUE NÃO FOI TOCADO=',
-    '- main',
-    '- VPS',
-    '- produção',
-    '- segredo',
-    '- deploy',
-    '',
+      ? 'O motor trabalha sozinho em todo commit e PR; a porcentagem, a ordem, o diagrama e a prova são verificadas por código.'
+      : 'Ainda existe porta sem prova. O sistema não chama isso de verde e entrega diretamente o próximo ponto que precisa ser fechado.', '',
+    '➡️ PRÓXIMO GATE=', report.next_movement, '',
+    '🧰 COMANDO CIRÚRGICO=', 'NENHUM', '',
+    '🧪 COLETA DO CHEFE=', 'NENHUMA', '',
+    '👑 AÇÃO DO CHEFE=', report.chief_action, '',
+    '🛡️ O QUE NÃO FOI TOCADO=', '- main', '- VPS', '- produção', '- segredo', '- deploy', '',
     'AUTORIA_DO_PADRÃO=SEGREDO/CHEFE',
   ].join('\n');
 
@@ -245,21 +279,19 @@ function argValue(args, name, fallback = null) {
   const index = args.indexOf(name);
   return index >= 0 && args[index + 1] ? args[index + 1] : fallback;
 }
-function resolveHead(root, supplied) {
-  if (supplied) return supplied;
-  try { return execFileSync('git', ['-C', root, 'rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(); }
-  catch { throw new Error('EXPECTED_HEAD_REQUIRED'); }
-}
+
 function main() {
   const args = process.argv.slice(2);
   const root = path.resolve(argValue(args, '--repo-root', process.cwd()));
-  const expectedHead = resolveHead(root, argValue(args, '--expected-head', process.env.GITHUB_SHA || null));
+  const supplied = argValue(args, '--expected-head', process.env.GITHUB_SHA || null);
+  const expectedHead = resolveVerifiedHead(root, supplied);
   const report = buildRuntimeReport({ root, expectedHead });
   if (args.includes('--json')) console.log(JSON.stringify(report, null, 2));
   else console.log(formatPiveteReport(report));
   if (args.includes('--require-complete') && !requirementSatisfied(report, 'complete')) process.exitCode = 1;
   if (args.includes('--require-operational') && !requirementSatisfied(report, 'operational')) process.exitCode = 1;
 }
+
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   try { main(); }
   catch (error) { console.error(`AGENTIC_LOOP_PROGRESS_BLOCKED=${error.message}`); process.exitCode = 1; }
