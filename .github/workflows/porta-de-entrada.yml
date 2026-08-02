@@ -25,8 +25,8 @@ jobs:
     timeout-minutes: 8
     env:
       TARGET_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
-      TEST_RECEIPT: ${{ runner.temp }}/agentic-tests.json
-      META_LUPA_RECEIPT: ${{ runner.temp }}/meta-lupa-gate.json
+      TEST_RECEIPT: ${{ github.workspace }}/.tmp/agentic-tests.json
+      META_LUPA_RECEIPT: ${{ github.workspace }}/.tmp/meta-lupa-gate.json
     steps:
       - uses: actions/checkout@v4
         with:
@@ -36,6 +36,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+
+      - name: Preparar diretório efêmero de receipts
+        run: mkdir -p "$GITHUB_WORKSPACE/.tmp"
 
       - name: Testar falsificadores do mapa global
         run: node --test apps/modulos/mapeamento/tests/validar-mapa.test.mjs
