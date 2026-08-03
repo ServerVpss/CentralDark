@@ -2,13 +2,12 @@
 /**
  * Varredura eventual da promoção autônoma.
  *
- * Reutiliza o juiz/promotor canônico em subprocessos separados:
- * - juiz recebe apenas GITHUB_TOKEN read-only;
- * - promotor recebe somente PROMOTION_TOKEN;
- * - cada decisão é presa a recibo SHA-256 e revalidada pelo motor canônico.
+ * Modos separados por capacidade:
+ * - judge: recebe token read-only e produz recibos SHA-256;
+ * - promote: recebe somente o token do promotor, revalida e promove.
  */
 import { spawnSync } from "node:child_process";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -41,14 +40,23 @@ async function api(token, method, path, body) {
       Authorization: `Bearer ${token}`,
       Accept: "application/vnd.github+json",
       "X-GitHub-Api-Version": "2022-11-28",
-      "User-Agent": "centraldark-autonomia-varredura/1.0",
+      "User-Agent": "centraldark-autonomia-varredura/2.0",
       ...(body === undefined ? {} : { "Content-Type": "application/json" }),
     },
     body: body === undefined ? undefined : JSON.stringify(body),
   });
   const text = await response.text();
-  const data = text ? JSON.parse(text) : {};
-  if (!response.ok) throw new Error(`GITHUB_${method}_${path}_${response.status}:${text.slice(0, 500)}`);
+  let data = {};
+  if (text) {
+    try {
+      data = JSON.parse(text);
+    } catch {
+      data = { message: text.slice(0, 500) };
+    }
+  }
+  if (!response.ok) {
+    throw new Error(`GITHUB_${method}_${path}_${response.status}:${String(data.message || "request failed").slice(0, 500)}`);
+  }
   return data;
 }
 
@@ -62,7 +70,7 @@ async function upsertDiagnostic(token, repository, number, code, detail) {
     "",
     String(detail || "sem detalhe").slice(0, 2500),
     "",
-    "Nenhuma promoção foi executada. O controlador continuará reavaliando após a correção.",
+    "Nenhuma promoção foi executada. O controlador continuará reavaliando automaticamente.",
   ].join("\n");
   const comments = await api(token, "GET", `/repos/${repository}/issues/${number}/comments?per_page=100`);
   const existing = comments.find((comment) => String(comment.body || "").includes(marker));
@@ -71,11 +79,11 @@ async function upsertDiagnostic(token, repository, number, code, detail) {
 }
 
 function runEngine(mode, env) {
-  // Build clean env excluding PROMOTION_TOKEN for judge subprocess security
   const baseEnv = { ...process.env };
-  if (mode === "judge") {
-    delete baseEnv.PROMOTION_TOKEN;
-  }
+  delete baseEnv.JUDGE_TOKEN;
+  delete baseEnv.PROMOTION_TOKEN;
+  delete baseEnv.PROMOTER_TOKEN;
+  delete baseEnv.GITHUB_TOKEN;
   return spawnSync(process.execPath, [ENGINE, mode], {
     cwd: ROOT,
     env: { ...baseEnv, ...env },
@@ -84,15 +92,20 @@ function runEngine(mode, env) {
   });
 }
 
-async function main() {
+function config() {
   const repository = process.env.GITHUB_REPOSITORY || "";
-  const judgeToken = process.env.JUDGE_TOKEN || process.env.GITHUB_TOKEN || "";
-  const promotionToken = process.env.PROMOTION_TOKEN || "";
   const trustedAuthors = String(process.env.BOT_TRUSTED_AUTHORS || "segredounlock")
-    .split(",").map((item) => item.trim()).filter(Boolean);
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean);
   const sweepDir = process.env.BOT_SWEEP_DIR || join(process.env.RUNNER_TEMP || "/tmp", "centraldark-autonomia");
-
   if (!repository.includes("/")) throw new Error("GITHUB_REPOSITORY_INVALID");
+  return { repository, trustedAuthors, sweepDir };
+}
+
+async function judgeSweep() {
+  const { repository, trustedAuthors, sweepDir } = config();
+  const judgeToken = process.env.JUDGE_TOKEN || process.env.GITHUB_TOKEN || "";
   if (!judgeToken) throw new Error("JUDGE_TOKEN_MISSING");
   await mkdir(sweepDir, { recursive: true });
 
@@ -103,7 +116,10 @@ async function main() {
   for (const pr of candidates) {
     const eventPath = join(sweepDir, `event-pr-${pr.number}.json`);
     const receiptPath = join(sweepDir, `receipt-pr-${pr.number}.json`);
-    await writeFile(eventPath, `${JSON.stringify({ pull_request: { number: pr.number } })}\n`, { mode: 0o600 });
+    await writeFile(eventPath, `${JSON.stringify({ pull_request: { number: pr.number } })}\n`, {
+      encoding: "utf8",
+      mode: 0o600,
+    });
 
     const judge = runEngine("judge", {
       GITHUB_TOKEN: judgeToken,
@@ -114,27 +130,38 @@ async function main() {
     process.stdout.write(judge.stdout || "");
     process.stderr.write(judge.stderr || "");
     if (judge.status !== 0) {
-      await upsertDiagnostic(judgeToken, repository, pr.number, "JUDGE_FAILED", judge.stderr || judge.stdout);
+      await writeFile(
+        join(sweepDir, `judge-failure-pr-${pr.number}.txt`),
+        String(judge.stderr || judge.stdout || "JUDGE_FAILED").slice(0, 4000),
+        { encoding: "utf8", mode: 0o600 },
+      );
       continue;
     }
 
     const sealed = JSON.parse(await readFile(receiptPath, "utf8"));
     const decision = sealed?.receipt?.candidates?.[0]?.decision || "UNKNOWN";
     console.log(`PR=${pr.number} SWEEP_DECISION=${decision}`);
+  }
+}
 
-    if (!promotionToken) {
-      await upsertDiagnostic(
-        judgeToken,
-        repository,
-        pr.number,
-        "PROMOTION_TOKEN_MISSING",
-        "O secret PROMOTION_TOKEN não está disponível para o workflow. O fallback com GITHUB_TOKEN é proibido porque suprimiria gatilhos pós-merge.",
-      );
-      continue;
-    }
+async function promoteSweep() {
+  const { repository, sweepDir } = config();
+  const promoterToken = process.env.PROMOTER_TOKEN || process.env.PROMOTION_TOKEN || process.env.GITHUB_TOKEN || "";
+  if (!promoterToken) throw new Error("PROMOTER_TOKEN_MISSING");
+  await mkdir(sweepDir, { recursive: true });
+
+  const files = (await readdir(sweepDir)).filter((name) => /^receipt-pr-\d+\.json$/.test(name)).sort();
+  console.log(`AUTONOMIA_PROMOTE_RECEIPTS=${files.join(",") || "none"}`);
+
+  for (const name of files) {
+    const match = name.match(/^receipt-pr-(\d+)\.json$/);
+    const number = Number(match?.[1]);
+    if (!Number.isInteger(number) || number <= 0) continue;
+    const eventPath = join(sweepDir, `event-pr-${number}.json`);
+    const receiptPath = join(sweepDir, name);
 
     const promote = runEngine("promote", {
-      GITHUB_TOKEN: promotionToken,
+      GITHUB_TOKEN: promoterToken,
       GITHUB_EVENT_PATH: eventPath,
       GITHUB_EVENT_NAME: "autonomy_sweep",
       BOT_RECEIPT_PATH: receiptPath,
@@ -142,9 +169,22 @@ async function main() {
     process.stdout.write(promote.stdout || "");
     process.stderr.write(promote.stderr || "");
     if (promote.status !== 0) {
-      await upsertDiagnostic(judgeToken, repository, pr.number, "PROMOTE_FAILED", promote.stderr || promote.stdout);
+      await upsertDiagnostic(
+        promoterToken,
+        repository,
+        number,
+        "PROMOTE_FAILED",
+        promote.stderr || promote.stdout || "falha sem detalhe",
+      );
     }
   }
+}
+
+export async function main(argv = process.argv.slice(2)) {
+  const mode = argv[0] || "";
+  if (mode === "judge") return judgeSweep();
+  if (mode === "promote") return promoteSweep();
+  throw new Error(`MODE_INVALID:${mode || "empty"}`);
 }
 
 const isMain = process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
