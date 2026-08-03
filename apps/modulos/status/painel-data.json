@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-03T23:22:42.511Z",
-  "updatedAtBR": "03/08/2026, 20:22:42 BRT",
+  "updatedAt": "2026-08-03T23:29:25.846Z",
+  "updatedAtBR": "03/08/2026, 20:29:25 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "fix(meta-lupa): endurecer receipts e fechar falsos verdes (#585)",
+    "lastCommit": "chore: habilitar reconciliação única do PR611",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-03T23:29:25.846Z",
+      "titulo": "Push na main · ab2ce07a447e5ba7f451e925bbe42eae17167f2b",
+      "detalhe": "chore: habilitar reconciliação única do PR611",
+      "area": "Repositório",
+      "sha": "ab2ce07",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-03T23:22:42.511Z",
       "titulo": "Push na main · 5c91ba8d3e597b3fb1d0e11f1d6e9b16b6d4e2b7",
       "detalhe": "fix(meta-lupa): endurecer receipts e fechar falsos verdes (#585)",
@@ -986,14 +994,6 @@
       "detalhe": "Merge pull request #385 from ServerVpss/promover-mae-meta-lupa-20260727",
       "area": "Repositório",
       "sha": "507dc62",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-26T23:14:38.311Z",
-      "titulo": "Push na main · cad7eb97443a75c4c8d536429ae4bee5e2acd605",
-      "detalhe": "Merge pull request #384 from ServerVpss/feat/bolt-lovable-bridge-2026-07-26",
-      "area": "Repositório",
-      "sha": "cad7eb9",
       "actor": "segredounlock"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-03T23:29:25.846Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · ab2ce07a447e5ba7f451e925bbe42eae17167f2b (ab2ce07)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-03T23:22:42.511Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 5c91ba8d3e597b3fb1d0e11f1d6e9b16b6d4e2b7 (5c91ba8)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-27T02:22:47.013Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 507dc621f666bce463f2bf7ade25d3aff1f79a73 (507dc62)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-26T23:14:38.311Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · cad7eb97443a75c4c8d536429ae4bee5e2acd605 (cad7eb9)",
       "area": "Repositório",
       "status": "sucesso"
     }
