@@ -30,7 +30,7 @@ jobs:
       - name: Buscar main vigente
         run: git fetch origin main
 
-      - uses: actions/setup-node@1e60f620b9541d209b8e7b0a1e8a2fcf5c9f4f9f
+      - uses: actions/setup-node@v4
         with:
           node-version: 22
 
