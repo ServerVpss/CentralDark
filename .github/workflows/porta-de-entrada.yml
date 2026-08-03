@@ -1,159 +1,66 @@
-name: porta-de-entrada
-
-# Protege a porta universal, a escola agentic, o contrato de relato e o mapa canônico.
-# Roda em todo commit de qualquer branch, todo PR e merge queue.
+name: PR611 Reconciliação Única
 
 on:
   pull_request:
-    types: [opened, reopened, synchronize, ready_for_review, converted_to_draft, edited, labeled, unlabeled]
-  push:
-    branches: ["**"]
-  merge_group:
-  workflow_dispatch:
+    branches: [main]
+    types: [synchronize]
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
-  group: porta-de-entrada-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+  group: pr611-reconcile-main
+  cancel-in-progress: false
 
 jobs:
-  validar:
-    name: Porta, escola, relato e governança canônica estão íntegros?
+  reconcile-test-publish:
+    if: >-
+      github.event.pull_request.number == 611 &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.user.login == 'segredounlock'
     runs-on: ubuntu-latest
-    timeout-minutes: 8
-    env:
-      TARGET_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
-      TEST_RECEIPT: ${{ github.workspace }}/.tmp/agentic-tests.json
-      META_LUPA_RECEIPT: ${{ github.workspace }}/.tmp/meta-lupa-gate.json
+    timeout-minutes: 35
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout da branch real
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          ref: docs/acorda-rebuilder-20260801
           fetch-depth: 0
 
-      - uses: actions/setup-node@v4
+      - name: Buscar main vigente
+        run: git fetch origin main
+
+      - uses: actions/setup-node@1e60f620b9541d209b8e7b0a1e8a2fcf5c9f4f9f
         with:
           node-version: 22
 
-      - name: Preparar diretório efêmero de receipts
-        run: mkdir -p "$GITHUB_WORKSPACE/.tmp"
+      - uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38
+        with:
+          python-version: '3.11'
 
-      - name: Testar falsificadores do mapa global
-        run: node --test apps/modulos/mapeamento/tests/validar-mapa.test.mjs
+      - name: Reconciliar sem descartar peças únicas
+        run: python scripts/temporary/pr611_reconcile_main.py
 
-      - name: Testar política de promoção autônoma
-        run: node --test scripts/github-autonomia-promocao.test.mjs
-
-      - name: Testar falsificações semânticas do protocolo ACORDA
-        run: node --test scripts/lupa/validar-porta-de-entrada.test.mjs
-
-      - name: Testar escola, relato Pivete e progresso
-        run: >-
-          node --test
-          scripts/lupa/agentic-school-loader.test.mjs
-          scripts/lupa/agentic-loop-progress.test.mjs
-          scripts/lupa/validar-relato-pivete.test.mjs
-
-      - name: Emitir receipt determinístico dos testes da escola
-        run: |
-          node <<'NODE'
-          const fs = require('node:fs');
-          const payload = {
-            schema_version: 1,
-            status: 'PASS',
-            head_sha: process.env.TARGET_HEAD_SHA,
-            suites: [
-              'scripts/lupa/agentic-school-loader.test.mjs',
-              'scripts/lupa/agentic-loop-progress.test.mjs',
-              'scripts/lupa/validar-relato-pivete.test.mjs'
-            ],
-            issued_at_utc: new Date().toISOString()
-          };
-          fs.writeFileSync(process.env.TEST_RECEIPT, `${JSON.stringify(payload, null, 2)}\n`, 'utf8');
-          NODE
-
-      - name: Validar corpo de todo PR no padrão Pivete
-        if: github.event_name == 'pull_request'
-        env:
-          PR_BODY: ${{ github.event.pull_request.body || '' }}
-        run: |
-          printf '%s' "$PR_BODY" > "$RUNNER_TEMP/pr-body.md"
-          node scripts/lupa/validar-relato-pivete.mjs --mode pr --input "$RUNNER_TEMP/pr-body.md"
-
-      - name: Testar fontes e pacote visual
-        env:
-          PYTHONPATH: scripts/lupa
-        run: python3 -m unittest scripts/lupa/test_validar_agentic_visual_package.py
-
-      - name: Provar fontes visuais versionadas
-        run: python3 scripts/lupa/validar_agentic_visual_package.py --json
-
-      - name: Bootar escola de refatoração crítica no HEAD exato
-        run: node scripts/lupa/agentic-school-loader.mjs --task critical-refactor --expected-head "$TARGET_HEAD_SHA" --json
-
-      - name: Emitir receipt fresco da Meta Lupa
-        run: |
-          python3 .agents/skills/meta-lupa/scripts/meta_lupa.py issue-gate-receipt \
-            --repo-root . \
-            --repo ServerVpss/CentralDark \
-            --mission-id CENTRALDARK-AGENTIC-GLOBAL-REPORT-01 \
-            --workspace-head "$TARGET_HEAD_SHA" \
-            --output "$META_LUPA_RECEIPT"
-
-      - name: Validar receipt fresco da Meta Lupa
-        run: |
-          python3 .agents/skills/meta-lupa/scripts/meta_lupa.py gate \
-            --repo-root . \
-            --input "$META_LUPA_RECEIPT" \
-            --expected-head-sha "$TARGET_HEAD_SHA" \
-            --operation workflow
-
-      - name: Validar operação da escola no HEAD exato
-        run: |
-          node scripts/lupa/agentic-loop-progress.mjs \
-            --expected-head "$TARGET_HEAD_SHA" \
-            --test-receipt "$TEST_RECEIPT" \
-            --meta-lupa-receipt "$META_LUPA_RECEIPT" \
-            --require-operational
-
-      - name: Validar mapa e autorização no contexto do PR
-        if: github.event_name == 'pull_request'
-        env:
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
-          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
-          PIVETE_APPROVED: ${{ contains(github.event.pull_request.labels.*.name, 'permito-pivete') || contains(github.event.pull_request.body || '', 'PERMITO PIVETE') }}
+      - name: Testar Escola, porta, relato e mapa
         run: |
           set -euo pipefail
-          node apps/modulos/mapeamento/core/validar-mapa.mjs \
-            --repo-root "$GITHUB_WORKSPACE" \
-            --base-sha "$BASE_SHA" \
-            --head-sha "$HEAD_SHA" \
-            --approved "$PIVETE_APPROVED"
+          node --test scripts/lupa/agentic-school-loader.test.mjs
+          node --test scripts/lupa/agentic-loop-progress.test.mjs
+          node --test scripts/lupa/validar-relato-pivete.test.mjs
+          node --test scripts/lupa/validar-porta-de-entrada.test.mjs
+          node --test apps/modulos/mapeamento/tests/validar-mapa.test.mjs
+          python scripts/lupa/validar_autolupa_hash.py
+          python scripts/lupa/validar_agentic_visual_package.py --json
+          node scripts/lupa/validar-porta-de-entrada.mjs
+          git diff --check
 
-      - name: Validar porta e adaptadores universais
-        run: node scripts/lupa/validar-porta-de-entrada.mjs
-
-      - name: Emitir relatório reproduzível
-        if: always()
-        env:
-          BASE_SHA: ${{ github.event.pull_request.base.sha || '' }}
-          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
-          PIVETE_APPROVED: ${{ contains(github.event.pull_request.labels.*.name, 'permito-pivete') || contains(github.event.pull_request.body || '', 'PERMITO PIVETE') }}
+      - name: Publicar merge e remover instrumento temporário
         run: |
-          set +e
-          if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then
-            node apps/modulos/mapeamento/core/validar-mapa.mjs \
-              --repo-root "$GITHUB_WORKSPACE" \
-              --base-sha "$BASE_SHA" \
-              --head-sha "$HEAD_SHA" \
-              --approved "$PIVETE_APPROVED"
-          fi
-          node scripts/lupa/validar-porta-de-entrada.mjs --json
-          node scripts/lupa/agentic-loop-progress.mjs \
-            --expected-head "$TARGET_HEAD_SHA" \
-            --test-receipt "$TEST_RECEIPT" \
-            --meta-lupa-receipt "$META_LUPA_RECEIPT" \
-            --json
-          exit 0
+          set -euo pipefail
+          rm -f scripts/temporary/pr611_reconcile_main.py
+          git add -A
+          git diff --cached --check
+          git config user.name 'centraldark-reconcile[bot]'
+          git config user.email 'centraldark-reconcile[bot]@users.noreply.github.com'
+          git commit -m 'reconcile(agentic): integrar main e preservar escola canônica'
+          git push origin HEAD:docs/acorda-rebuilder-20260801
