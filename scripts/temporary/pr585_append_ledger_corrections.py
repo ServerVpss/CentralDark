@@ -48,7 +48,7 @@ current_branch = git("branch", "--show-current")
 if not current_branch:
     raise SystemExit("LEDGER_CORRECTION_BRANCH_UNAVAILABLE")
 
-open_threads_target = "29c375c66d5bd3af3f6aa1dc064411e1d4a989b4ed064d32d8ed413475d4a33e"
+open_threads_target = "29c182099a564be16c1de31de985e26eb3765cd6d6b97bd515154a25d2956487"
 proof_head_target = "8ba63e268c922925ad7861e74ef000ba81339a4c878259fe3b119c6a6d19d7bd"
 
 corrections = [
