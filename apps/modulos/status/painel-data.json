@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-03T23:45:03.287Z",
-  "updatedAtBR": "03/08/2026, 20:45:03 BRT",
+  "updatedAt": "2026-08-03T23:48:32.578Z",
+  "updatedAtBR": "03/08/2026, 20:48:32 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "fix(pr611): configurar identidade Git antes do merge",
+    "lastCommit": "fix(pr611): carregar tarefa feature na Escola",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-03T23:48:32.578Z",
+      "titulo": "Push na main · 03fb3b9502730460edf01a90c5784ecf19058e58",
+      "detalhe": "fix(pr611): carregar tarefa feature na Escola",
+      "area": "Repositório",
+      "sha": "03fb3b9",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-03T23:45:03.287Z",
       "titulo": "Push na main · 9aa4d96ee7c0852432f20a3fb34edbb550a0d9eb",
       "detalhe": "fix(pr611): configurar identidade Git antes do merge",
@@ -986,14 +994,6 @@
       "detalhe": "Merge pull request #409 from ServerVpss/evol/meta-lupa-falso-verde-20260727",
       "area": "Repositório",
       "sha": "354f74d",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-27T07:14:32.556Z",
-      "titulo": "Push na main · 76daaf98e9e29422d922576fa7daeb8d25d813c7",
-      "detalhe": "docs(pendencias): fecha #53",
-      "area": "Repositório",
-      "sha": "76daaf9",
       "actor": "segredounlock"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-03T23:48:32.578Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 03fb3b9502730460edf01a90c5784ecf19058e58 (03fb3b9)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-03T23:45:03.287Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 9aa4d96ee7c0852432f20a3fb34edbb550a0d9eb (9aa4d96)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-27T17:30:53.653Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 354f74d70618bf57806bd451949aba292cac3e11 (354f74d)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-27T07:14:32.556Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 76daaf98e9e29422d922576fa7daeb8d25d813c7 (76daaf9)",
       "area": "Repositório",
       "status": "sucesso"
     }
