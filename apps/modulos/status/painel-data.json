@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-03T23:36:50.958Z",
-  "updatedAtBR": "03/08/2026, 20:36:50 BRT",
+  "updatedAt": "2026-08-03T23:38:36.982Z",
+  "updatedAtBR": "03/08/2026, 20:38:36 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "fix: observe PR611 reconciliation on synchronize",
+    "lastCommit": "chore(autonomia): remover recovery temporário após prova",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-03T23:38:36.982Z",
+      "titulo": "Push na main · 0ab6c429f8b6e0e14c08351369d56525e037c887",
+      "detalhe": "chore(autonomia): remover recovery temporário após prova",
+      "area": "Repositório",
+      "sha": "0ab6c42",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-03T23:36:50.958Z",
       "titulo": "Push na main · b2b45cef1a84e557a42c38115e2ddd0750a887c0",
       "detalhe": "fix: observe PR611 reconciliation on synchronize",
@@ -986,14 +994,6 @@
       "detalhe": "aprendizado(#2): git status limpo pode esconder pasta vazia: gitlink órfão entregava o Bolt vazio em todo clone",
       "area": "Repositório",
       "sha": "94f993c",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-27T06:35:52.977Z",
-      "titulo": "Push na main · 4d9f020a1f6f608bdc42b158bf722e6222fc3e0f",
-      "detalhe": "aprendizado(#1): Gate de CI bloqueia qualquer caminho .env.* pelo NOME, antes de olhar o conteúdo",
-      "area": "Repositório",
-      "sha": "4d9f020",
       "actor": "segredounlock"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-03T23:38:36.982Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 0ab6c429f8b6e0e14c08351369d56525e037c887 (0ab6c42)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-03T23:36:50.958Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · b2b45cef1a84e557a42c38115e2ddd0750a887c0 (b2b45ce)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-27T06:36:20.821Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 94f993c13069a82005b35cfcb27ca66f5adef67f (94f993c)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-27T06:35:52.977Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 4d9f020a1f6f608bdc42b158bf722e6222fc3e0f (4d9f020)",
       "area": "Repositório",
       "status": "sucesso"
     }
