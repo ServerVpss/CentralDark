@@ -38,23 +38,21 @@ jobs:
         with:
           node-version: 22
 
-      - uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Reconciliar sem descartar peças únicas
-        id: reconcile
-        run: python scripts/temporary/pr611_reconcile_main.py
-
-      - name: Testar Escola, porta, relato e mapa
+      - name: Reconciliar e testar
         run: |
           set -euo pipefail
+          python scripts/temporary/pr611_reconcile_main.py
           node --test scripts/lupa/agentic-school-loader.test.mjs
           node --test scripts/lupa/agentic-loop-progress.test.mjs
           node --test scripts/lupa/validar-relato-pivete.test.mjs
-          node --test scripts/lupa/validar-porta-de-entrada.test.mjs
           node --test apps/modulos/mapeamento/tests/validar-mapa.test.mjs
           python scripts/lupa/validar_autolupa_hash.py
+          python scripts/lupa/test_validar_agentic_visual_package.py
+          node scripts/lupa/agentic-school-loader.mjs --json
           python scripts/lupa/validar_agentic_visual_package.py --json
           node scripts/lupa/validar-porta-de-entrada.mjs
           git diff --check
@@ -70,10 +68,12 @@ jobs:
           git commit -m 'reconcile(agentic): integrar main e preservar escola canônica'
           git push origin HEAD:docs/acorda-rebuilder-20260801
 
-      - name: Registrar bloqueio real
+      - name: Registrar bloqueio real com run observável
         if: failure()
+        env:
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
-          gh pr comment 611 --body '<!-- pr611-reconcile-error -->
+          gh pr comment 611 --body "<!-- pr611-reconcile-error -->
           ## Reconciliação automática bloqueada
 
-          O executor falhou neste run. Nenhuma alteração parcial foi publicada. Consulte o log do workflow `PR611 Reconcile Runner`; a branch e a main permanecem preservadas.'
+          Nenhuma alteração parcial foi publicada. Run exato: ${RUN_URL}"
