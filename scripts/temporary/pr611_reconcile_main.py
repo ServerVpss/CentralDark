@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
-import re
 import subprocess
 from pathlib import Path
 
@@ -21,69 +20,78 @@ def show(ref: str, path: str) -> str:
     return git("show", f"{ref}:{path}").stdout
 
 
-def extract_calibration(text: str) -> str:
-    start = text.find("### 1.2 Recalibração canônica")
-    if start < 0:
-        raise SystemExit("CALIBRATION_SECTION_MISSING")
-    end = text.find("\n---\n\n## 2.", start)
-    if end < 0:
-        raise SystemExit("CALIBRATION_SECTION_END_MISSING")
-    return text[start:end].rstrip() + "\n"
+def final_porta_workflow(main_workflow: str) -> str:
+    setup_anchor = """      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+"""
+    if setup_anchor not in main_workflow:
+        raise SystemExit("PORTA_SETUP_NODE_ANCHOR_MISSING")
+    python_setup = setup_anchor + """
 
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+"""
+    result = main_workflow.replace(setup_anchor, python_setup, 1)
 
-def merge_leia(main_text: str, branch_text: str) -> str:
-    result = main_text
-    agentic_lines = (
-        "6. `.agents/skills/agentic-ci-loop/SKILL.md` para trabalho técnico, debugging, "
-        "feature, review, refatoração crítica ou evolução de skill;\n"
-        "7. `scripts/lupa/agentic-school-loader.mjs` para classificar a tarefa e carregar "
-        "somente o módulo necessário;\n"
-    )
-    if ".agents/skills/agentic-ci-loop/SKILL.md" not in result:
-        anchor = "6. o estado atual comprovado da branch, PR, HEAD e ferramentas aplicáveis.\n"
-        if anchor not in result:
-            raise SystemExit("LEIA_BOOT_ANCHOR_MISSING")
-        result = result.replace(anchor, agentic_lines + "8. o estado atual comprovado da branch, PR, HEAD e ferramentas aplicáveis.\n", 1)
-    if "agentic_school: LOADED" not in result:
-        result = result.replace("  delta_method: LOADED\n", "  delta_method: LOADED\n  agentic_school: LOADED\n", 1)
-    if "### 1.2 Recalibração canônica" not in result:
-        section = extract_calibration(branch_text)
-        anchor = "\n---\n\n## 2. As cinco coisas que não mudam"
-        if anchor not in result:
-            raise SystemExit("LEIA_SECTION_2_ANCHOR_MISSING")
-        result = result.replace(anchor, "\n\n" + section + anchor, 1)
-    return result
+    test_anchor = """      - name: Testar política de promoção autônoma
+        run: node --test scripts/github-autonomia-promocao.test.mjs
+"""
+    if test_anchor not in result:
+        raise SystemExit("PORTA_AUTONOMIA_TEST_ANCHOR_MISSING")
+    school_steps = test_anchor + """
+
+      - name: Testar Escola agentic sem impor texto ao CHEFE
+        run: |
+          set -euo pipefail
+          node --test scripts/lupa/agentic-school-loader.test.mjs
+          node --test scripts/lupa/agentic-loop-progress.test.mjs
+          node --test scripts/lupa/validar-relato-pivete.test.mjs
+          python scripts/lupa/test_validar_agentic_visual_package.py
+
+      - name: Validar manifesto e pacote visual da Escola
+        run: |
+          set -euo pipefail
+          node scripts/lupa/agentic-school-loader.mjs --json
+          python scripts/lupa/validar_agentic_visual_package.py --json
+"""
+    return result.replace(test_anchor, school_steps, 1)
 
 
 def main() -> None:
     branch_before = git("rev-parse", "HEAD").stdout.strip()
     main_head = git("rev-parse", "origin/main").stdout.strip()
-    branch_leia = show(branch_before, "LEIA-ME-IA.md")
-    branch_porta = show(branch_before + "^", ".github/workflows/porta-de-entrada.yml")
-    branch_template = show(branch_before, ".github/pull_request_template.md")
 
-    merge = git("merge", "--no-commit", "--no-ff", "origin/main", check=False)
+    # A versão atual desta branch já foi simplificada: preserva Escola e
+    # recalibração sem reintroduzir o template/relato burocrático.
+    branch_leia = show(branch_before, "LEIA-ME-IA.md")
+    main_porta = show("origin/main", ".github/workflows/porta-de-entrada.yml")
+
+    merge = git("merge", "--no-commit", "--no-ff", "-X", "theirs", "origin/main", check=False)
     if merge.returncode not in (0, 1):
-        raise SystemExit(f"MERGE_START_FAILED:{merge.stderr[-500:]}")
+        raise SystemExit(f"MERGE_START_FAILED:{merge.stderr[-1000:]}")
 
     conflicts = git("diff", "--name-only", "--diff-filter=U", check=False).stdout.splitlines()
     for path in conflicts:
         checkout = git("checkout", "--theirs", "--", path, check=False)
         if checkout.returncode != 0:
-            raise SystemExit(f"CONFLICT_RESOLUTION_FAILED:{path}:{checkout.stderr[-300:]}")
+            raise SystemExit(f"CONFLICT_RESOLUTION_FAILED:{path}:{checkout.stderr[-500:]}")
         git("add", "--", path)
 
-    main_leia = (ROOT / "LEIA-ME-IA.md").read_text(encoding="utf-8")
-    (ROOT / "LEIA-ME-IA.md").write_text(
-        merge_leia(main_leia, branch_leia), encoding="utf-8", newline="\n"
-    )
+    # Únicas sobreposições intencionais: a porta canônica atual da main ganha
+    # os testes internos da Escola; LEIA-ME mantém os gatilhos e o loader.
+    (ROOT / "LEIA-ME-IA.md").write_text(branch_leia, encoding="utf-8", newline="\n")
     (ROOT / ".github/workflows/porta-de-entrada.yml").write_text(
-        branch_porta, encoding="utf-8", newline="\n"
+        final_porta_workflow(main_porta), encoding="utf-8", newline="\n"
     )
-    (ROOT / ".github/pull_request_template.md").write_text(
-        branch_template, encoding="utf-8", newline="\n"
-    )
-    git("add", "LEIA-ME-IA.md", ".github/workflows/porta-de-entrada.yml", ".github/pull_request_template.md")
+    git("add", "LEIA-ME-IA.md", ".github/workflows/porta-de-entrada.yml")
+
+    # Instrumentos da reconciliação não pertencem ao produto final.
+    trigger = ROOT / "scripts/temporary/pr611-trigger.txt"
+    if trigger.exists():
+        trigger.unlink()
+        git("add", "-u", "--", "scripts/temporary/pr611-trigger.txt")
 
     unresolved = git("diff", "--name-only", "--diff-filter=U", check=False).stdout.strip()
     if unresolved:
@@ -92,8 +100,9 @@ def main() -> None:
     print(f"BRANCH_BEFORE={branch_before}")
     print(f"MAIN_INCORPORATED={main_head}")
     print(f"CONFLICTS_RESOLVED={len(conflicts)}")
-    for path in conflicts:
-        print(f"CONFLICT_MAIN_WON={path}")
+    print("HUMAN_PR_BODY_GATE=REMOVED")
+    print("AGENTIC_SCHOOL=KEPT")
+    print("ACORDA_CALIBRAR=KEPT")
 
 
 if __name__ == "__main__":
