@@ -183,7 +183,7 @@ class GitHubClient {
         Authorization: `Bearer ${this.token}`,
         Accept: "application/vnd.github+json",
         "X-GitHub-Api-Version": "2022-11-28",
-        "User-Agent": "centraldark-autonomia-promocao/1.0",
+        "User-Agent": "centraldark-autonomia-promocao/2.0",
         ...(body === undefined ? {} : { "Content-Type": "application/json" }),
       },
       body: body === undefined ? undefined : JSON.stringify(body),
@@ -204,7 +204,7 @@ class GitHubClient {
         Authorization: `Bearer ${this.token}`,
         Accept: "application/vnd.github+json",
         "Content-Type": "application/json",
-        "User-Agent": "centraldark-autonomia-promocao/1.0",
+        "User-Agent": "centraldark-autonomia-promocao/2.0",
       },
       body: JSON.stringify({ query, variables }),
     });
@@ -434,6 +434,17 @@ async function runPromote() {
     });
     if (!result.merged) throw new Error(`MERGE_REJECTED:${pr.number}:${result.message || "unknown"}`);
     console.log(`PR=${pr.number} MERGED_SHA=${result.sha}`);
+
+    await client.request("POST", `/repos/${repository}/dispatches`, {
+      event_type: "centraldark_post_merge",
+      client_payload: {
+        pr_number: pr.number,
+        merge_sha: result.sha,
+        validated_head: pr.head.sha,
+        judge_receipt_sha256: sealed.sha256,
+      },
+    });
+    console.log(`PR=${pr.number} POST_MERGE_DISPATCH=centraldark_post_merge`);
   }
 }
 
