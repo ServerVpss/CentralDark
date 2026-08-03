@@ -28,13 +28,30 @@ def replace_once(text: str, old: str, new: str, label: str) -> str:
 
 
 def final_porta_workflow(main_workflow: str) -> str:
+    old_events = """on:
+  pull_request:
+    branches: [main]
+    types: [opened, reopened, synchronize, ready_for_review, edited, labeled, unlabeled]
+  push:
+    branches: [main]
+  workflow_dispatch:
+"""
+    new_events = """on:
+  pull_request:
+  push:
+    branches: ["**"]
+  merge_group:
+  workflow_dispatch:
+"""
+    result = replace_once(main_workflow, old_events, new_events, "porta-global-events")
+
     setup_anchor = """      - uses: actions/setup-node@v4
         with:
           node-version: 22
 """
-    if setup_anchor not in main_workflow:
+    if setup_anchor not in result:
         raise SystemExit("PORTA_SETUP_NODE_ANCHOR_MISSING")
-    result = main_workflow.replace(
+    result = result.replace(
         setup_anchor,
         setup_anchor + """
 
