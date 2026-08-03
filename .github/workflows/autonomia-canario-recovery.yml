@@ -2,7 +2,7 @@ name: Autonomia Canário Recovery
 
 on:
   pull_request_target:
-    types: [labeled]
+    types: [synchronize]
     branches: [main]
 
 permissions:
@@ -20,7 +20,6 @@ jobs:
   prove:
     if: >-
       github.event.pull_request.number == 636 &&
-      github.event.label.name == 'autonomia-recheck' &&
       github.event.pull_request.head.repo.full_name == github.repository &&
       github.event.pull_request.user.login == 'segredounlock'
     runs-on: ubuntu-latest
