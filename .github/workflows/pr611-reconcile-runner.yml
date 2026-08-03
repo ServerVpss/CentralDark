@@ -55,7 +55,7 @@ jobs:
           node --test apps/modulos/mapeamento/tests/validar-mapa.test.mjs
           python scripts/lupa/validar_autolupa_hash.py
           python scripts/lupa/test_validar_agentic_visual_package.py
-          node scripts/lupa/agentic-school-loader.mjs --json
+          node scripts/lupa/agentic-school-loader.mjs --task feature --json
           python scripts/lupa/validar_agentic_visual_package.py --json
           node scripts/lupa/validar-porta-de-entrada.mjs
           git diff --check
