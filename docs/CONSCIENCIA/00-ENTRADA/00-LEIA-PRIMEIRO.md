@@ -2,16 +2,12 @@
 title: "00 LEIA PRIMEIRO"
 date: 2026-06-29
 tags: ["consciencia"]
-updated: 2026-08-01
+updated: 2026-07-18
 ---
 
 # 👋 LEIA PRIMEIRO — Porta de Entrada do CentralDark
 
 > Se você é uma IA (Lovable, Claude, Grok, Codex, etc.) abrindo este repositório, **leia este arquivo antes de qualquer ação**.
->
-> A definição comportamental única de `#ACORDA` e `!CALIBRAR` está em
-> [`LEIA-ME-IA.md`](../../../LEIA-ME-IA.md), seção 1.2. Esta porta delega os
-> gatilhos integralmente e não mantém uma segunda implementação.
 
 ---
 
@@ -33,14 +29,13 @@ updated: 2026-08-01
 
 ## ⚡ Comandos Gatilhos
 
+Quando eu usar qualquer um destes comandos, execute da seguinte forma:
+
 ### 🧭 Ponte de Continuidade
 
-- **`#ACORDA` / `!CALIBRAR`**
+- **`!CALIBRAR`**
 
-  Execute integralmente [`LEIA-ME-IA.md`](../../../LEIA-ME-IA.md), seção 1.2.
-  A consulta GitHub-first, o formato da resposta, o `STATE_DRIFT`, o bloqueio
-  `BLOCKED_GITHUB_UNAVAILABLE`, o Writer lock, a matriz de bots/autonomia e o
-  tratamento fail-closed de Casa/VPS são definidos somente naquela seção.
+  Interrompa novas ações, compare sessão e evidências reais, atualize somente os documentos canônicos que mudaram e devolva: `MISSION_ID`, missão, fase, última ação comprovada, evidência, próximo passo único, travas e divergências. Não crie arquivo de checkpoint.
 
 - **`!RELOAD`**
 
@@ -84,9 +79,8 @@ updated: 2026-08-01
 
 ## 📚 Documentos Importantes
 
-- [`LEIA-ME-IA.md`](../../../LEIA-ME-IA.md) — porta universal e protocolo canônico dos gatilhos.
 - [`ARQUITETURA-CENTRALDARK-2026.md`](./ARQUITETURA-CENTRALDARK-2026.md) — Arquitetura oficial do projeto.
-- [`REGRA-OFICIAL-MULTI-AGENTE-SEMANTICO.md`](../01-IDENTIDADE-E-REGRAS/REGRA-OFICIAL-MULTI-AGENTE-SEMANTICO.md) — **Regra-mãe.** Ler → Perguntar → Agir → Provar → Registrar. Vale pra toda IA e agente autônomo, em qualquer Hub.
+- [`REGRA-OFICIAL-MULTI-AGENTE-SEMANTICO.md`](../01-IDENTIDADE-E-REGRAS/REGRA-OFICIAL-MULTI-AGENTE-SEMANTICO.md) — **Regra-mãe.** Ler → Perguntar → Agir → Provar → Registrar. Vale pra toda IA e agente autônomo, em qualquer Hub. Contém a Ponte `!CALIBRAR` / `!RELOAD`.
 - [`PROTOCOLO-ORQUESTRACAO-PIVETE.md`](../PROTOCOLO-ORQUESTRACAO-PIVETE.md) — Estado de Bordo, handoff e continuidade entre agentes.
 - [`REGRA-OFICIAL-HIERARQUIA-MEMORIA.md`](../REGRA-OFICIAL-HIERARQUIA-MEMORIA.md) — Hierarquia de memória. **Leia a seção 5.1** para entender por que `mem://` é cache interno do Lovable, invisível para outras IAs/Hubs, e por que todo aprendizado/regra deve ser registrado em `docs/CONSCIENCIA/` (não em `mem://`).
 
@@ -101,7 +95,7 @@ updated: 2026-08-01
 
 ---
 
-*Atualizado em 01/08/2026.*
+*Atualizado em 18/07/2026.*
 
 ---
 
