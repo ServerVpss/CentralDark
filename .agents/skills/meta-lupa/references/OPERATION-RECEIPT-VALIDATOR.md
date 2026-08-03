@@ -1,43 +1,48 @@
-# Validador do OPERATION_RECEIPT (LOOP)
+# Validador e promotor do OPERATION_RECEIPT
 
-> Este arquivo fica em `references/` (não hash-pinned) de propósito: `SKILL.md`
-> tem identidade canônica travada em `AUTOLUPA_CANONICAL_SHA` e só pode mudar
-> com `PERMITO_PIVETE=1` explícito (`scripts/lupa/validar_autolupa_hash.py --update`).
-> Documentar aqui evita mexer nesse hash sem autorização do Chefe.
+O motor canônico continua em `.agents/skills/meta-lupa/scripts/meta_lupa.py`.
+Não existe engine paralelo.
 
-O contrato `OPERATION_RECEIPT` definido em
-`docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md` (seção 10) tem
-validador reutilizável no mesmo motor (`scripts/meta_lupa.py`), sem criar
-engine concorrente:
+## Validar forma
 
 ```bash
 python .agents/skills/meta-lupa/scripts/meta_lupa.py validate-operation-receipt \
-  --input <receipt>.json --repo-root .
+  --input receipt.json
 ```
 
-Rejeita enum inválido, `BLOCKED` sem `reason`, `target`/`writer` em branco,
-`head_sha`/`evidence_sha256` mal formados, autoaprovação (`writer == judge`) e
-conteúdo com padrão de segredo.
+A validação estrutural pode retornar `STATUS=ALLOWED` e, ao mesmo tempo,
+`approved_for_promotion=false`. Isso significa apenas que o JSON está bem
+formado; não autoriza promoção.
 
-`approved_for_promotion` só fica `true` quando **todas** as condições valem no
-mesmo receipt:
+## Gate obrigatório de promoção
 
-- `status: PASS`
-- `chief_decision: APPROVED`
-- `judge` presente e diferente de `writer`
-- `evidence_sha256` presente e válido (hex64)
-- `head_sha` verificado contra o Git real via `--repo-root` (sem
-  `--repo-root`, o `head_sha` só passa por checagem de formato — nunca de
-  existência — e `approved_for_promotion` nunca fica `true`)
+```bash
+python .agents/skills/meta-lupa/scripts/meta_lupa.py promote-operation-receipt \
+  --input receipt.json \
+  --repo-root . \
+  --expected-head "$HEAD" \
+  --expected-branch "$BRANCH" \
+  --expected-target "$TARGET" \
+  --expected-target-type GIT_PATH \
+  --evidence-root "$EVIDENCE_ROOT" \
+  --expected-authorization-reference "$AUTHORIZATION_REFERENCE"
+```
 
-Testes: `.agents/skills/meta-lupa/testes/test_operation_receipt_validator.py`.
+O comando retorna exit code `13` se qualquer prova faltar ou divergir.
+Promove apenas quando, no mesmo receipt fresco:
 
-Antes de promover qualquer receipt terminal do LOOP, rodar este validador e
-tratar `STATUS=BLOCKED` como gate falho, nunca como aviso.
+- HEAD e branch coincidem com o checkout vivo;
+- alvo e tipo do alvo coincidem com o contexto esperado;
+- `GIT_PATH` existe na árvore exata; `SERVICE`, `VPS`, `WORKTREE` e `SCOPE`
+  usam identidade operacional explícita, sem exigir arquivo Git fictício;
+- evidência está dentro da raiz autorizada e seu hash é recalculado dos bytes;
+- diretórios usam manifesto JSON canônico com caminho, tamanho, tipo e SHA-256;
+- Writer e Judge são identidades reais e diferentes;
+- `chief_decision=APPROVED` está preso à referência de autorização fornecida
+  pelo Promotor a partir de canal confiável;
+- impacto, testes, contraprova e rollback não estão vazios;
+- timestamp possui timezone, não está no futuro e tem no máximo 15 minutos;
+- nenhum campo sensível ou padrão de segredo aparece no receipt.
 
-## Pendência aberta
-
-Ainda não há hook automático que force esta validação antes de um `!REGISTRA`
-ou de uma promoção do documento LOOP a canônico — é chamada manual por quem
-fecha o ciclo. Automatizar isso (e decidir se `SKILL.md` deve referenciar este
-validador, o que exigiria `PERMITO_PIVETE=1`) fica para SEGREDO/CHEFE decidir.
+A suíte roda automaticamente em `.github/workflows/lupa-conformance.yml` para
+todo PR e em execução manual. O gate não depende mais de chamada informal.

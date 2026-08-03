@@ -1,6 +1,8 @@
+import hashlib
 import json
 import subprocess
 import sys
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import pytest
@@ -56,24 +58,26 @@ def _valid_receipt(**overrides) -> dict:
     receipt = {
         "mission_id": "CENTRALDARK-PR585-AND-UNIVERSAL-AGENT-GATE-01",
         "host": "worktree-pr585-findings",
-        "timestamp_utc": "2026-08-01T19:20:00Z",
+        "timestamp_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "repository": "ServerVpss/CentralDark",
         "target": "docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md",
+        "target_type": "GIT_PATH",
         "branch": "docs/modo-operacional-loop-evidencia-20260731",
         "head_sha": "8f5925f0abef0467f8204d327c97cebe152351d4",
         "evidence_path": "Pivete/TEMP/missions/CENTRALDARK-PR585-AND-UNIVERSAL-AGENT-GATE-01/PR585",
         "evidence_sha256": "a" * 64,
         "writer": "CLAUDE/SONNET",
         "judge": "OUTRO_AGENTE",
+        "authorization_reference": "chat:chief:" + "b" * 64,
         "status": "PASS",
         "reason": "",
-        "impact": "",
+        "impact": "impacto comprovado",
         "mutations": [],
-        "tests": [],
-        "counterproof": [],
-        "rollback": "",
+        "tests": ["pytest"],
+        "counterproof": ["mutante rejeitado"],
+        "rollback": "git revert",
         "chief_decision": "PENDING",
-        "next_step": "",
+        "next_step": "promover somente pelo gate",
     }
     receipt.update(overrides)
     return receipt
@@ -551,7 +555,9 @@ def test_full_promotion_requires_every_real_condition(tmp_path) -> None:
         expected_head=head,
         expected_branch=branch,
         expected_target=target,
+        expected_target_type="GIT_PATH",
         evidence_root=str(tmp_path),
+        expected_authorization_reference="chat:chief:" + "b" * 64,
     )
 
     assert ok is True
@@ -575,7 +581,17 @@ def test_promotion_denied_without_automatic_gate_context() -> None:
 # ---- promote-operation-receipt (unico caminho de codigo que promove) ------
 
 
-def _run_promote(receipt_path, *, repo_root, expected_head, expected_branch, expected_target, evidence_root):
+def _run_promote(
+    receipt_path: Path,
+    *,
+    repo_root: Path,
+    expected_head: str,
+    expected_branch: str,
+    expected_target: str,
+    evidence_root: Path,
+    expected_target_type: str = "GIT_PATH",
+    expected_authorization_reference: str = "chat:chief:" + "b" * 64,
+) -> subprocess.CompletedProcess:
     return subprocess.run(
         [
             sys.executable, str(SCRIPT_PATH), "promote-operation-receipt",
@@ -584,8 +600,11 @@ def _run_promote(receipt_path, *, repo_root, expected_head, expected_branch, exp
             "--expected-head", expected_head,
             "--expected-branch", expected_branch,
             "--expected-target", expected_target,
+            "--expected-target-type", expected_target_type,
             "--evidence-root", str(evidence_root),
+            "--expected-authorization-reference", expected_authorization_reference,
         ],
+        check=False,
         capture_output=True,
     )
 
@@ -685,3 +704,136 @@ def test_promote_cli_rejects_wrong_head(tmp_path) -> None:
     assert result.returncode == 13
     assert payload["REASON"] == "OPERATION_RECEIPT_HEAD_MISMATCH"
     assert "PROMOTED" not in payload
+
+
+# ---- regressões da revisão final ------------------------------------------
+
+@pytest.mark.parametrize("field", ["mission_id", "host", "branch", "evidence_path", "next_step"])
+def test_blank_required_text_fields_are_rejected(field: str) -> None:
+    ok, reason, _ = validate_operation_receipt(_valid_receipt(**{field: "   "}))
+    assert ok is False
+    assert reason == f"OPERATION_RECEIPT_{field.upper()}_MISSING"
+
+
+@pytest.mark.parametrize("field", ["status", "reason", "chief_decision"])
+def test_enum_values_must_be_scalar_strings(field: str) -> None:
+    ok, reason, _ = validate_operation_receipt(_valid_receipt(**{field: ["PASS"]}))
+    assert ok is False
+    assert reason == f"OPERATION_RECEIPT_{field.upper()}_INVALID"
+
+
+@pytest.mark.parametrize("placeholder", ["NONE", "TBD", "-", "UNKNOWN", "null"])
+def test_writer_placeholders_are_rejected(placeholder: str) -> None:
+    ok, reason, _ = validate_operation_receipt(_valid_receipt(writer=placeholder))
+    assert ok is False
+    assert reason == "OPERATION_RECEIPT_WRITER_MISSING"
+
+
+def test_uppercase_evidence_digest_is_rejected() -> None:
+    ok, reason, _ = validate_operation_receipt(_valid_receipt(evidence_sha256="A" * 64))
+    assert ok is False
+    assert reason == "OPERATION_RECEIPT_EVIDENCE_SHA_INVALID"
+
+
+def test_sensitive_json_key_is_rejected_even_when_value_is_redacted() -> None:
+    ok, reason, _ = validate_operation_receipt(
+        _valid_receipt(tests=[{"API_KEY": "<REDACTED>"}])
+    )
+    assert ok is False
+    assert reason == "OPERATION_RECEIPT_SECRET_FIELD_DETECTED"
+
+
+def test_expired_receipt_is_rejected() -> None:
+    old = (datetime.now(timezone.utc) - timedelta(minutes=16)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    ok, reason, _ = validate_operation_receipt(_valid_receipt(timestamp_utc=old))
+    assert ok is False
+    assert reason == "OPERATION_RECEIPT_EXPIRED"
+
+
+def test_future_receipt_is_rejected() -> None:
+    future = (datetime.now(timezone.utc) + timedelta(minutes=2)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    ok, reason, _ = validate_operation_receipt(_valid_receipt(timestamp_utc=future))
+    assert ok is False
+    assert reason == "OPERATION_RECEIPT_TIMESTAMP_FUTURE"
+
+
+def test_blank_expected_context_is_rejected() -> None:
+    ok, reason, _ = validate_operation_receipt(_valid_receipt(), expected_branch="")
+    assert ok is False
+    assert reason == "OPERATION_RECEIPT_EXPECTED_BRANCH_MISSING"
+
+
+def test_approved_receipt_requires_verified_authorization_reference() -> None:
+    ok, reason, _ = validate_operation_receipt(
+        _valid_receipt(chief_decision="APPROVED", authorization_reference="")
+    )
+    assert ok is False
+    assert reason == "OPERATION_RECEIPT_AUTHORIZATION_REFERENCE_MISSING"
+
+
+def test_authorization_reference_must_match_trusted_channel() -> None:
+    ok, reason, _ = validate_operation_receipt(
+        _valid_receipt(chief_decision="APPROVED"),
+        expected_authorization_reference="github:comment:" + "c" * 64,
+    )
+    assert ok is False
+    assert reason == "OPERATION_RECEIPT_AUTHORIZATION_REFERENCE_MISMATCH"
+
+
+def test_operational_target_does_not_require_git_path(tmp_path) -> None:
+    repo, _, head = _temporary_git_history(tmp_path)
+    evidence = tmp_path / "evidence.txt"
+    evidence.write_text("service health", encoding="utf-8")
+    digest = hashlib.sha256(evidence.read_bytes()).hexdigest()
+    ok, reason, details = validate_operation_receipt(
+        _valid_receipt(
+            target="centraldark-gateway.service",
+            target_type="SERVICE",
+            branch="main",
+            head_sha=head,
+            evidence_path="evidence.txt",
+            evidence_sha256=digest,
+            chief_decision="APPROVED",
+        ),
+        repo_root=str(repo),
+        expected_head=head,
+        expected_branch="main",
+        expected_target="centraldark-gateway.service",
+        expected_target_type="SERVICE",
+        evidence_root=str(tmp_path),
+        expected_authorization_reference="chat:chief:" + "b" * 64,
+    )
+    assert ok is True, reason
+    assert details["approved_for_promotion"] is True
+
+
+def test_directory_manifest_is_unambiguous_for_colon_like_names(tmp_path) -> None:
+    from meta_lupa import _compute_evidence_digest
+    first = tmp_path / "first"
+    second = tmp_path / "second"
+    first.mkdir()
+    second.mkdir()
+    (first / "a:b").write_text("c", encoding="utf-8")
+    (second / "a").write_text("b:c", encoding="utf-8")
+    assert _compute_evidence_digest(first) != _compute_evidence_digest(second)
+
+
+def test_promotion_requires_nonempty_impact_tests_counterproof_and_rollback(tmp_path) -> None:
+    repo, _, head = _temporary_git_history(tmp_path)
+    evidence = tmp_path / "evidence.txt"
+    evidence.write_text("proof", encoding="utf-8")
+    digest = hashlib.sha256(evidence.read_bytes()).hexdigest()
+    ok, reason, details = validate_operation_receipt(
+        _valid_receipt(
+            target="target.md", target_type="GIT_PATH", branch="main", head_sha=head,
+            evidence_path="evidence.txt", evidence_sha256=digest,
+            chief_decision="APPROVED", impact="", tests=[], counterproof=[], rollback="",
+        ),
+        repo_root=str(repo), expected_head=head, expected_branch="main",
+        expected_target="target.md", expected_target_type="GIT_PATH",
+        evidence_root=str(tmp_path),
+        expected_authorization_reference="chat:chief:" + "b" * 64,
+    )
+    assert ok is True, reason
+    assert details["proof_fields_complete"] is False
+    assert details["approved_for_promotion"] is False

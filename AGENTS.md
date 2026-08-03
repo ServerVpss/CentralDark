@@ -26,11 +26,14 @@ O nome comercial do modelo não concede papel, autoridade ou permissão especial
 Antes de responder ou agir:
 
 1. Ler `LEIA-ME-IA.md` integralmente.
-2. Ler `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md`.
-3. Ler `docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md` quando a missão referenciá-lo explicitamente ou quando ele estiver em validação. Enquanto marcado `CANDIDATO_CANONICO`, ele é referência operacional em avaliação — não substitui os contratos já promovidos dos itens 1 e 2.
-4. Identificar o papel atual: coordenador, executor, debugger, revisor, judge, Hermes ou somente leitura.
-5. Confirmar a fonte da verdade e o estado atual por ferramenta.
-6. Emitir uma vez o `CENTRALDARK_AI_BOOT` definido em `LEIA-ME-IA.md`.
+2. Ler `docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md`.
+3. Ler `docs/CONSCIENCIA/2026-06-20-padrao-resposta-pivete.md`.
+4. Ler `docs/CONSCIENCIA/DICIONARIO-PIVETE-GITHUB.md`.
+5. Ler `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md`.
+6. Ler `docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md` quando a missão referenciá-lo explicitamente ou quando ele estiver em validação. Enquanto marcado `CANDIDATO_CANONICO`, ele é referência operacional em avaliação — não substitui os contratos já promovidos dos itens anteriores.
+7. Identificar o papel atual: coordenador, executor, debugger, revisor, judge, Hermes ou somente leitura.
+8. Confirmar a fonte da verdade e o estado atual por ferramenta.
+9. Emitir uma vez o `CENTRALDARK_AI_BOOT` definido em `LEIA-ME-IA.md`.
 
 Regras automáticas:
 
@@ -122,7 +125,7 @@ Use somente placeholders como `<REDACTED>`, `<ENV_PROVIDER_KEY>` e `<INTERNAL_BA
 
 ### Evidência e falso verde
 
-- `UNKNOWN`, `BLOCKED` com `reason: SKIPPED`, timeout, ausência de log ou ausência de revisão nunca equivalem a PASS.
+- `UNKNOWN`, `ANOMALY`, `ACHADO_PENDENTE`, `BLOCKED` com `reason: SKIPPED`, timeout, ausência de log ou ausência de revisão nunca equivalem a PASS.
 - Exigir causa, impacto, teste, contraprova, rollback e receipt presos ao mesmo HEAD.
 - Sinalizar fallback silencioso, resultado simulado, lista estática tratada como disponibilidade real ou aprovação sem prova.
 
