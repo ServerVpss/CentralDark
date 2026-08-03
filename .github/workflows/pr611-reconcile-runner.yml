@@ -2,11 +2,13 @@ name: PR611 Reconcile Runner
 
 on:
   pull_request_target:
-    types: [labeled]
+    types: [synchronize]
     branches: [main]
 
 permissions:
   contents: write
+  issues: write
+  pull-requests: write
 
 concurrency:
   group: pr611-reconcile-runner
@@ -16,11 +18,12 @@ jobs:
   reconcile:
     if: >-
       github.event.pull_request.number == 611 &&
-      github.event.label.name == 'pr611-reconcile' &&
       github.event.pull_request.head.repo.full_name == github.repository &&
       github.event.pull_request.user.login == 'segredounlock'
     runs-on: ubuntu-latest
     timeout-minutes: 35
+    env:
+      GH_TOKEN: ${{ github.token }}
     steps:
       - name: Checkout da branch do PR
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
@@ -40,6 +43,7 @@ jobs:
           python-version: '3.11'
 
       - name: Reconciliar sem descartar peças únicas
+        id: reconcile
         run: python scripts/temporary/pr611_reconcile_main.py
 
       - name: Testar Escola, porta, relato e mapa
@@ -65,3 +69,11 @@ jobs:
           git config user.email 'centraldark-reconcile[bot]@users.noreply.github.com'
           git commit -m 'reconcile(agentic): integrar main e preservar escola canônica'
           git push origin HEAD:docs/acorda-rebuilder-20260801
+
+      - name: Registrar bloqueio real
+        if: failure()
+        run: |
+          gh pr comment 611 --body '<!-- pr611-reconcile-error -->
+          ## Reconciliação automática bloqueada
+
+          O executor falhou neste run. Nenhuma alteração parcial foi publicada. Consulte o log do workflow `PR611 Reconcile Runner`; a branch e a main permanecem preservadas.'
