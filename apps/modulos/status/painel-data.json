@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-03T23:02:16.745Z",
-  "updatedAtBR": "03/08/2026, 20:02:16 BRT",
+  "updatedAt": "2026-08-03T23:09:24.750Z",
+  "updatedAtBR": "03/08/2026, 20:09:24 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "fix: trigger PR585 runner by label",
+    "lastCommit": "chore: remove PR585 one-shot runner",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-03T23:09:24.750Z",
+      "titulo": "Push na main · b31eb15517f22840647391f9c7fcce441b177794",
+      "detalhe": "chore: remove PR585 one-shot runner",
+      "area": "Repositório",
+      "sha": "b31eb15",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-03T23:02:16.745Z",
       "titulo": "Push na main · 3780c85ebbf4d3824dab1b76c7e0383d57375358",
       "detalhe": "fix: trigger PR585 runner by label",
@@ -986,14 +994,6 @@
       "detalhe": "Merge pull request #377 from ServerVpss/test/desafio-omega-autolupa-2026-07-22",
       "area": "Repositório",
       "sha": "1da3aef",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-25T21:01:11.051Z",
-      "titulo": "Push na main · f577e4d5a7ce25c5f0cb0ed3b0f7bdaf6df5e253",
-      "detalhe": "Turno C — Nível 7: build determinístico + workflow CI (DRAFT) (#340)",
-      "area": "Repositório",
-      "sha": "f577e4d",
       "actor": "segredounlock"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-03T23:09:24.750Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · b31eb15517f22840647391f9c7fcce441b177794 (b31eb15)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-03T23:02:16.745Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 3780c85ebbf4d3824dab1b76c7e0383d57375358 (3780c85)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-26T16:11:36.153Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 1da3aef759f98f3fd80bf2829df3cac0b9daa826 (1da3aef)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-25T21:01:11.051Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · f577e4d5a7ce25c5f0cb0ed3b0f7bdaf6df5e253 (f577e4d)",
       "area": "Repositório",
       "status": "sucesso"
     }
