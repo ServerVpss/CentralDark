@@ -27,22 +27,27 @@ def final_porta_workflow(main_workflow: str) -> str:
 """
     if setup_anchor not in main_workflow:
         raise SystemExit("PORTA_SETUP_NODE_ANCHOR_MISSING")
-    python_setup = setup_anchor + """
+    result = main_workflow.replace(
+        setup_anchor,
+        setup_anchor + """
 
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-"""
-    result = main_workflow.replace(setup_anchor, python_setup, 1)
+""",
+        1,
+    )
 
     test_anchor = """      - name: Testar política de promoção autônoma
         run: node --test scripts/github-autonomia-promocao.test.mjs
 """
     if test_anchor not in result:
         raise SystemExit("PORTA_AUTONOMIA_TEST_ANCHOR_MISSING")
-    school_steps = test_anchor + """
+    return result.replace(
+        test_anchor,
+        test_anchor + """
 
-      - name: Testar Escola agentic sem impor texto ao CHEFE
+      - name: Testar Escola agentic internamente
         run: |
           set -euo pipefail
           node --test scripts/lupa/agentic-school-loader.test.mjs
@@ -55,16 +60,21 @@ def final_porta_workflow(main_workflow: str) -> str:
           set -euo pipefail
           node scripts/lupa/agentic-school-loader.mjs --json
           python scripts/lupa/validar_agentic_visual_package.py --json
-"""
-    return result.replace(test_anchor, school_steps, 1)
+""",
+        1,
+    )
+
+
+def remove_versioned(path: str) -> None:
+    target = ROOT / path
+    if target.exists():
+        target.unlink()
+        git("add", "-u", "--", path)
 
 
 def main() -> None:
     branch_before = git("rev-parse", "HEAD").stdout.strip()
     main_head = git("rev-parse", "origin/main").stdout.strip()
-
-    # A versão atual desta branch já foi simplificada: preserva Escola e
-    # recalibração sem reintroduzir o template/relato burocrático.
     branch_leia = show(branch_before, "LEIA-ME-IA.md")
     main_porta = show("origin/main", ".github/workflows/porta-de-entrada.yml")
 
@@ -79,19 +89,19 @@ def main() -> None:
             raise SystemExit(f"CONFLICT_RESOLUTION_FAILED:{path}:{checkout.stderr[-500:]}")
         git("add", "--", path)
 
-    # Únicas sobreposições intencionais: a porta canônica atual da main ganha
-    # os testes internos da Escola; LEIA-ME mantém os gatilhos e o loader.
+    # A main vence nos contratos compartilhados. Só estas duas superfícies
+    # recebem delta da Escola: entrada canônica e CI técnico automático.
     (ROOT / "LEIA-ME-IA.md").write_text(branch_leia, encoding="utf-8", newline="\n")
     (ROOT / ".github/workflows/porta-de-entrada.yml").write_text(
         final_porta_workflow(main_porta), encoding="utf-8", newline="\n"
     )
     git("add", "LEIA-ME-IA.md", ".github/workflows/porta-de-entrada.yml")
 
-    # Instrumentos da reconciliação não pertencem ao produto final.
-    trigger = ROOT / "scripts/temporary/pr611-trigger.txt"
-    if trigger.exists():
-        trigger.unlink()
-        git("add", "-u", "--", "scripts/temporary/pr611-trigger.txt")
+    # Não entram instrumentos temporários, status estático nem teste antigo
+    # que obrigava o formato humano de PR. A validação fica interna à Escola.
+    remove_versioned("scripts/temporary/pr611-trigger.txt")
+    remove_versioned("scripts/lupa/validar-porta-de-entrada.test.mjs")
+    remove_versioned("docs/ARQUITETURA/CENTRALDARK-AGENTIC-LOOP-4K-STATUS.json")
 
     unresolved = git("diff", "--name-only", "--diff-filter=U", check=False).stdout.strip()
     if unresolved:
@@ -101,6 +111,7 @@ def main() -> None:
     print(f"MAIN_INCORPORATED={main_head}")
     print(f"CONFLICTS_RESOLVED={len(conflicts)}")
     print("HUMAN_PR_BODY_GATE=REMOVED")
+    print("STATIC_PROGRESS_FILE=REMOVED")
     print("AGENTIC_SCHOOL=KEPT")
     print("ACORDA_CALIBRAR=KEPT")
 
