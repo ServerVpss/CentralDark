@@ -33,6 +33,7 @@ import sys
 import tempfile
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
+from pathlib import Path, PurePosixPath
 
 LEDGER_NAME = "references/uso-ledger.jsonl"
 SCHEMA_VERSION = 1
@@ -70,7 +71,7 @@ SECRET_PATTERNS = [
     re.compile(r"eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}"),
     re.compile(r"(pk|sk|rk)_(live|test)_[A-Za-z0-9]{10,}"),  # stripe-style
     re.compile(r"[a-z]+://[^:\s]+:[^@\s]+@"),  # url com credencial usuario:senha@
-    re.compile(r"(ghp_|github_pat_|glpat-|hf_)[A-Za-z0-9]{10,}"),  # pats comuns
+    re.compile(r"(ghp_|github_pat_|glpat-|hf_)[A-Za-z0-9]{10,}", re.I),  # pats comuns
 ]
 
 HOT_TRIGGERS = {
@@ -97,6 +98,28 @@ RECEIPT_REQUIRED_FIELDS = {
     "total_tokens", "timeout_seconds", "budget_sha", "test_manifest_sha", "arm", "seed",
 }
 HEX64 = re.compile(r"^[0-9a-f]{64}$", re.I)
+# minusculo estrito: convencao canonica do Git, nao a mesma tolerancia de HEX64
+# (usado pelo gate META_LUPA existente, que nao deve mudar de comportamento).
+HEAD_SHA_RE = re.compile(r"^[0-9a-f]{40}$")
+
+# Contrato definido em
+# docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md secao 10
+# (OPERATION_RECEIPT). Mudou junto do schema; nao duplicar em outro lugar.
+OPERATION_RECEIPT_REQUIRED_FIELDS = (
+    "mission_id", "host", "timestamp_utc", "repository", "target", "target_type",
+    "branch", "head_sha", "evidence_path", "evidence_sha256", "writer", "judge",
+    "authorization_reference", "status", "reason", "impact", "mutations", "tests",
+    "counterproof", "rollback", "chief_decision", "next_step",
+)
+OPERATION_RECEIPT_STATUS = {"PASS", "FAIL", "UNKNOWN", "ANOMALY", "ACHADO_PENDENTE", "BLOCKED"}
+OPERATION_RECEIPT_REASON = {
+    "", "CAPTURE_DEGRADED", "SECRET_EXPOSURE", "SANITIZE_FAILED", "SKIPPED",
+    "GATE_FAILED", "AUTH_MISSING",
+}
+OPERATION_RECEIPT_CHIEF_DECISION = {"PENDING", "APPROVED", "REJECTED"}
+OPERATION_RECEIPT_TARGET_TYPES = {"GIT_PATH", "SERVICE", "VPS", "WORKTREE", "SCOPE"}
+OPERATION_RECEIPT_MAX_AGE_SECONDS = 15 * 60
+OPERATION_RECEIPT_FUTURE_SKEW_SECONDS = 60
 
 
 def parse_stream_json(raw: str) -> tuple[list[dict], list[str]]:
@@ -1548,6 +1571,431 @@ def cmd_writer_attack(args) -> int:
     return 0
 
 
+def _operation_receipt_result(ok: bool, reason: str = "", **extra) -> dict:
+    result = {
+        "OPERATION_RECEIPT_VALID": "SIM" if ok else "NAO",
+        "STATUS": "ALLOWED" if ok else "BLOCKED",
+    }
+    if reason:
+        result["REASON"] = reason
+    result.update(extra)
+    return result
+
+
+def _git_commit_exists(repo_root: str, sha: str) -> bool:
+    try:
+        result = subprocess.run(
+            ["git", "-C", os.path.abspath(repo_root), "cat-file", "-e", f"{sha}^{{commit}}"],
+            check=False,
+            capture_output=True,
+        )
+    except OSError:
+        return False
+    return result.returncode == 0
+
+
+def _git_value_or_none(repo_root: str, *args: str) -> str | None:
+    """Leitura Git permissiva apenas para o validador operacional.
+
+    A funcao canônica `_git_value` permanece fail-closed e nao e sobrescrita.
+    Aqui `None` significa prova Git indisponível; string vazia significa estado
+    sem valor, como checkout detached ao consultar `branch --show-current`.
+    """
+    try:
+        result = subprocess.run(
+            ["git", "-C", os.path.abspath(repo_root), *args],
+            check=False,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="strict",
+        )
+    except (OSError, UnicodeError):
+        return None
+    if result.returncode != 0:
+        return None
+    return result.stdout.strip()
+
+
+def _git_target_exists(repo_root: str, target: str, treeish: str = "HEAD") -> bool:
+    normalized = target.replace("\\", "/")
+    target_path = PurePosixPath(normalized)
+    if target_path.is_absolute() or ".." in target_path.parts:
+        return False
+    try:
+        result = subprocess.run(
+            ["git", "-C", os.path.abspath(repo_root), "cat-file", "-e", f"{treeish}:{normalized}"],
+            check=False,
+            capture_output=True,
+        )
+    except OSError:
+        return False
+    return result.returncode == 0
+
+
+_DEFINITIVE_STATUSES = {"PASS", "FAIL"}
+_ACTOR_PLACEHOLDER_VALUES = {"none", "n/a", "na", "tbd", "pending", "-", "null", "unknown"}
+_SENSITIVE_JSON_KEYS = {
+    "authorization", "api_key", "apikey", "token", "secret", "password", "passwd",
+    "cookie", "cookies", "session", "sessions", "private_key", "connection_string",
+    "credential", "credentials",
+}
+
+
+def _real_actor_name(raw_actor) -> str:
+    value = str(raw_actor or "").strip()
+    if value.casefold() in _ACTOR_PLACEHOLDER_VALUES:
+        return ""
+    return value
+
+
+def _contains_sensitive_json_field(value) -> bool:
+    if isinstance(value, dict):
+        for key, child in value.items():
+            normalized = re.sub(r"[^a-z0-9]+", "_", str(key).casefold()).strip("_")
+            if (
+                normalized in _SENSITIVE_JSON_KEYS
+                or normalized.endswith(("_token", "_secret", "_password", "_api_key", "_cookie", "_session"))
+            ):
+                return True
+            if _contains_sensitive_json_field(child):
+                return True
+    elif isinstance(value, list):
+        return any(_contains_sensitive_json_field(item) for item in value)
+    return False
+
+
+def _resolve_within_root(root: str, candidate: str) -> Path | None:
+    root_real = Path(root).resolve()
+    raw = Path(candidate)
+    target = raw if raw.is_absolute() else root_real / raw
+    try:
+        target_real = target.resolve(strict=True)
+    except OSError:
+        return None
+    try:
+        target_real.relative_to(root_real)
+    except ValueError:
+        return None
+    return target_real
+
+
+def _compute_evidence_digest(path: Path) -> str:
+    """Hash da evidencia real usando manifesto JSON canônico e não ambíguo."""
+    path_real = path.resolve(strict=True)
+    if path_real.is_symlink():
+        raise ValueError("OPERATION_RECEIPT_EVIDENCE_PATH_ESCAPE")
+    if path_real.is_file():
+        return hashlib.sha256(path_real.read_bytes()).hexdigest()
+    if not path_real.is_dir():
+        raise ValueError("OPERATION_RECEIPT_EVIDENCE_UNSUPPORTED_ENTRY")
+
+    entries: list[dict] = []
+    candidates = sorted(path_real.rglob("*"), key=lambda item: item.relative_to(path_real).as_posix())
+    for candidate in candidates:
+        if candidate.is_symlink():
+            raise ValueError("OPERATION_RECEIPT_EVIDENCE_PATH_ESCAPE")
+        try:
+            candidate_real = candidate.resolve(strict=True)
+            candidate_real.relative_to(path_real)
+        except (OSError, ValueError) as exc:
+            raise ValueError("OPERATION_RECEIPT_EVIDENCE_PATH_ESCAPE") from exc
+        if candidate_real.is_dir():
+            continue
+        if not candidate_real.is_file():
+            raise ValueError("OPERATION_RECEIPT_EVIDENCE_UNSUPPORTED_ENTRY")
+        payload = candidate_real.read_bytes()
+        entries.append({
+            "path": candidate_real.relative_to(path_real).as_posix(),
+            "size": len(payload),
+            "sha256": hashlib.sha256(payload).hexdigest(),
+            "type": "file",
+        })
+    manifest = canonical_json({
+        "schema": "centraldark.evidence-manifest.v1",
+        "entries": entries,
+    })
+    return hashlib.sha256(manifest.encode("utf-8")).hexdigest()
+
+
+def _fresh_operation_timestamp(raw_timestamp, now: datetime | None) -> tuple[bool, str, dict]:
+    if not isinstance(raw_timestamp, str) or not raw_timestamp.strip():
+        return False, "OPERATION_RECEIPT_TIMESTAMP_MISSING", {}
+    try:
+        parsed = datetime.fromisoformat(raw_timestamp.replace("Z", "+00:00"))
+        if parsed.tzinfo is None:
+            raise ValueError
+        current = now or datetime.now(timezone.utc)
+        current = current.astimezone(timezone.utc)
+        parsed = parsed.astimezone(timezone.utc)
+        age = (current - parsed).total_seconds()
+    except (TypeError, ValueError, OverflowError):
+        return False, "OPERATION_RECEIPT_TIMESTAMP_INVALID", {}
+    if age < -OPERATION_RECEIPT_FUTURE_SKEW_SECONDS:
+        return False, "OPERATION_RECEIPT_TIMESTAMP_FUTURE", {"age_seconds": int(age)}
+    if age > OPERATION_RECEIPT_MAX_AGE_SECONDS:
+        return False, "OPERATION_RECEIPT_EXPIRED", {"age_seconds": int(age)}
+    return True, "", {"receipt_age_seconds": max(0, int(age))}
+
+
+def _nonempty_list(value) -> bool:
+    return isinstance(value, list) and any(str(item).strip() for item in value)
+
+
+def validate_operation_receipt(
+    receipt: dict,
+    *,
+    repo_root: str | None = None,
+    expected_head: str | None = None,
+    expected_branch: str | None = None,
+    expected_target: str | None = None,
+    expected_target_type: str | None = None,
+    evidence_root: str | None = None,
+    expected_authorization_reference: str | None = None,
+    now: datetime | None = None,
+) -> tuple[bool, str, dict]:
+    """Valida forma e prova viva do OPERATION_RECEIPT.
+
+    A validacao estrutural pode retornar `ok=True` sem autorizar promocao.
+    `approved_for_promotion=True` exige contexto externo completo, fresco e
+    exatamente igual: HEAD, branch, target, tipo do alvo, evidencia real,
+    Judge independente e referencia de autorizacao verificada pelo Promotor.
+    """
+    if not isinstance(receipt, dict):
+        return False, "OPERATION_RECEIPT_NOT_OBJECT", {}
+
+    missing = sorted(field for field in OPERATION_RECEIPT_REQUIRED_FIELDS if field not in receipt)
+    if missing:
+        return False, "OPERATION_RECEIPT_FIELD_MISSING", {"missing": missing}
+
+    for field in ("mission_id", "host", "branch", "evidence_path", "next_step"):
+        if not isinstance(receipt.get(field), str) or not receipt[field].strip():
+            return False, f"OPERATION_RECEIPT_{field.upper()}_MISSING", {}
+
+    if receipt.get("repository") != "ServerVpss/CentralDark":
+        return False, "OPERATION_RECEIPT_REPOSITORY_MISMATCH", {}
+    if not isinstance(receipt.get("target"), str) or not receipt["target"].strip():
+        return False, "OPERATION_RECEIPT_TARGET_MISSING", {}
+
+    target_type = receipt.get("target_type")
+    if not isinstance(target_type, str) or target_type not in OPERATION_RECEIPT_TARGET_TYPES:
+        return False, "OPERATION_RECEIPT_TARGET_TYPE_INVALID", {"target_type": target_type}
+
+    status = receipt.get("status")
+    if not isinstance(status, str) or status not in OPERATION_RECEIPT_STATUS:
+        return False, "OPERATION_RECEIPT_STATUS_INVALID", {"status": status}
+    reason = receipt.get("reason", "")
+    if not isinstance(reason, str) or reason not in OPERATION_RECEIPT_REASON:
+        return False, "OPERATION_RECEIPT_REASON_INVALID", {"reason": reason}
+    if status == "BLOCKED" and not reason:
+        return False, "OPERATION_RECEIPT_BLOCKED_WITHOUT_REASON", {}
+    if status != "BLOCKED" and reason:
+        return False, "OPERATION_RECEIPT_REASON_WITHOUT_BLOCKED", {"status": status, "reason": reason}
+
+    chief_decision = receipt.get("chief_decision")
+    if not isinstance(chief_decision, str) or chief_decision not in OPERATION_RECEIPT_CHIEF_DECISION:
+        return False, "OPERATION_RECEIPT_CHIEF_DECISION_INVALID", {"chief_decision": chief_decision}
+
+    timestamp_ok, timestamp_reason, timestamp_details = _fresh_operation_timestamp(receipt.get("timestamp_utc"), now)
+    if not timestamp_ok:
+        return False, timestamp_reason, timestamp_details
+
+    if not HEAD_SHA_RE.fullmatch(str(receipt.get("head_sha", ""))):
+        return False, "OPERATION_RECEIPT_HEAD_SHA_INVALID", {}
+
+    for field, value in (
+        ("HEAD", expected_head),
+        ("BRANCH", expected_branch),
+        ("TARGET", expected_target),
+        ("TARGET_TYPE", expected_target_type),
+        ("AUTHORIZATION_REFERENCE", expected_authorization_reference),
+    ):
+        if value is not None and (not isinstance(value, str) or not value.strip()):
+            return False, f"OPERATION_RECEIPT_EXPECTED_{field}_MISSING", {}
+
+    if expected_head is not None and receipt["head_sha"] != expected_head:
+        return False, "OPERATION_RECEIPT_HEAD_MISMATCH", {"expected": expected_head}
+    if expected_branch is not None and receipt["branch"] != expected_branch:
+        return False, "OPERATION_RECEIPT_BRANCH_MISMATCH", {"expected": expected_branch}
+    if expected_target is not None and receipt["target"] != expected_target:
+        return False, "OPERATION_RECEIPT_TARGET_MISMATCH", {"expected": expected_target}
+    if expected_target_type is not None and target_type != expected_target_type:
+        return False, "OPERATION_RECEIPT_TARGET_TYPE_MISMATCH", {"expected": expected_target_type}
+
+    authorization_reference = receipt.get("authorization_reference")
+    if not isinstance(authorization_reference, str):
+        return False, "OPERATION_RECEIPT_AUTHORIZATION_REFERENCE_INVALID", {}
+    if chief_decision == "APPROVED" and not authorization_reference.strip():
+        return False, "OPERATION_RECEIPT_AUTHORIZATION_REFERENCE_MISSING", {}
+    if (
+        expected_authorization_reference is not None
+        and authorization_reference != expected_authorization_reference
+    ):
+        return False, "OPERATION_RECEIPT_AUTHORIZATION_REFERENCE_MISMATCH", {}
+
+    head_sha_verified = False
+    if repo_root is not None:
+        if not _git_commit_exists(repo_root, receipt["head_sha"]):
+            return False, "OPERATION_RECEIPT_HEAD_SHA_NOT_FOUND", {}
+        head_sha_verified = True
+
+    if repo_root is not None and expected_head is not None:
+        current_head = _git_value_or_none(repo_root, "rev-parse", "HEAD")
+        if current_head is None:
+            return False, "OPERATION_RECEIPT_GIT_PROOF_UNAVAILABLE", {"proof": "HEAD"}
+        if current_head != expected_head:
+            return False, "OPERATION_RECEIPT_EXPECTED_HEAD_NOT_CURRENT", {"current": current_head}
+    if repo_root is not None and expected_branch is not None:
+        current_branch = _git_value_or_none(repo_root, "branch", "--show-current")
+        if not current_branch:
+            return False, "OPERATION_RECEIPT_GIT_BRANCH_UNAVAILABLE", {}
+        if current_branch != expected_branch:
+            return False, "OPERATION_RECEIPT_EXPECTED_BRANCH_NOT_CURRENT", {"current": current_branch}
+    if (
+        repo_root is not None
+        and expected_target is not None
+        and target_type == "GIT_PATH"
+        and not _git_target_exists(repo_root, expected_target, expected_head or "HEAD")
+    ):
+        return False, "OPERATION_RECEIPT_TARGET_NOT_FOUND", {"target": expected_target}
+
+    evidence_sha256 = receipt.get("evidence_sha256", "")
+    if evidence_sha256 and (
+        not isinstance(evidence_sha256, str)
+        or evidence_sha256 != evidence_sha256.lower()
+        or not HEX64.fullmatch(evidence_sha256)
+    ):
+        return False, "OPERATION_RECEIPT_EVIDENCE_SHA_INVALID", {}
+    if status in _DEFINITIVE_STATUSES and not evidence_sha256:
+        return False, "OPERATION_RECEIPT_EVIDENCE_SHA_MISSING", {"status": status}
+
+    evidence_verified = False
+    if evidence_root is not None:
+        resolved = _resolve_within_root(evidence_root, receipt["evidence_path"])
+        if resolved is None:
+            return False, "OPERATION_RECEIPT_EVIDENCE_PATH_NOT_FOUND", {}
+        try:
+            digest = _compute_evidence_digest(resolved)
+        except ValueError as exc:
+            code = str(exc)
+            if code in {
+                "OPERATION_RECEIPT_EVIDENCE_PATH_ESCAPE",
+                "OPERATION_RECEIPT_EVIDENCE_UNSUPPORTED_ENTRY",
+            }:
+                return False, code, {}
+            return False, "OPERATION_RECEIPT_EVIDENCE_UNREADABLE", {}
+        except (OSError, RuntimeError):
+            return False, "OPERATION_RECEIPT_EVIDENCE_UNREADABLE", {}
+        if digest != evidence_sha256:
+            return False, "OPERATION_RECEIPT_EVIDENCE_HASH_MISMATCH", {}
+        evidence_verified = True
+
+    writer = _real_actor_name(receipt.get("writer"))
+    judge = _real_actor_name(receipt.get("judge"))
+    if not writer:
+        return False, "OPERATION_RECEIPT_WRITER_MISSING", {}
+    if judge and judge.casefold() == writer.casefold():
+        return False, "OPERATION_RECEIPT_SELF_APPROVAL", {"writer": writer, "judge": judge}
+
+    if not isinstance(receipt.get("impact"), str):
+        return False, "OPERATION_RECEIPT_IMPACT_INVALID", {}
+    if not isinstance(receipt.get("rollback"), str):
+        return False, "OPERATION_RECEIPT_ROLLBACK_INVALID", {}
+    for field in ("mutations", "tests", "counterproof"):
+        if not isinstance(receipt.get(field), list):
+            return False, f"OPERATION_RECEIPT_{field.upper()}_INVALID", {}
+
+    if _contains_sensitive_json_field(receipt):
+        return False, "OPERATION_RECEIPT_SECRET_FIELD_DETECTED", {}
+    blob = json.dumps(receipt, ensure_ascii=False, sort_keys=True)
+    if any(pattern.search(blob) for pattern in SECRET_PATTERNS):
+        return False, "OPERATION_RECEIPT_SECRET_DETECTED", {}
+
+    proof_fields_complete = (
+        bool(receipt["impact"].strip())
+        and _nonempty_list(receipt["tests"])
+        and _nonempty_list(receipt["counterproof"])
+        and bool(receipt["rollback"].strip())
+    )
+    approved_for_promotion = (
+        status == "PASS"
+        and chief_decision == "APPROVED"
+        and bool(judge)
+        and expected_head is not None
+        and expected_branch is not None
+        and expected_target is not None
+        and expected_target_type is not None
+        and expected_authorization_reference is not None
+        and head_sha_verified
+        and evidence_verified
+        and proof_fields_complete
+    )
+
+    return True, "", {
+        "status": status,
+        "chief_decision": chief_decision,
+        "target_type": target_type,
+        "head_sha_verified": head_sha_verified,
+        "evidence_verified": evidence_verified,
+        "authorization_verified": (
+            expected_authorization_reference is not None
+            and authorization_reference == expected_authorization_reference
+        ),
+        "proof_fields_complete": proof_fields_complete,
+        "approved_for_promotion": approved_for_promotion,
+        **timestamp_details,
+    }
+
+
+def cmd_validate_operation_receipt(args) -> int:
+    try:
+        receipt = _read_gate_input(args.input)
+    except ValueError as exc:
+        print(json.dumps(_operation_receipt_result(False, str(exc)), ensure_ascii=False, sort_keys=True))
+        return 13
+    ok, reason, details = validate_operation_receipt(
+        receipt,
+        repo_root=args.repo_root,
+        expected_head=args.expected_head,
+        expected_branch=args.expected_branch,
+        expected_target=args.expected_target,
+        expected_target_type=args.expected_target_type,
+        evidence_root=args.evidence_root,
+        expected_authorization_reference=args.expected_authorization_reference,
+    )
+    print(json.dumps(_operation_receipt_result(ok, reason, **details), ensure_ascii=False, sort_keys=True))
+    return 0 if ok else 13
+
+
+def cmd_promote_operation_receipt(args) -> int:
+    try:
+        receipt = _read_gate_input(args.input)
+    except ValueError as exc:
+        print(json.dumps(_operation_receipt_result(False, str(exc)), ensure_ascii=False, sort_keys=True))
+        return 13
+    ok, reason, details = validate_operation_receipt(
+        receipt,
+        repo_root=args.repo_root,
+        expected_head=args.expected_head,
+        expected_branch=args.expected_branch,
+        expected_target=args.expected_target,
+        expected_target_type=args.expected_target_type,
+        evidence_root=args.evidence_root,
+        expected_authorization_reference=args.expected_authorization_reference,
+    )
+    if not ok:
+        print(json.dumps(_operation_receipt_result(False, reason, **details), ensure_ascii=False, sort_keys=True))
+        return 13
+    if not details.get("approved_for_promotion"):
+        print(json.dumps(
+            _operation_receipt_result(False, "OPERATION_RECEIPT_NOT_PROMOTABLE", **details),
+            ensure_ascii=False,
+            sort_keys=True,
+        ))
+        return 13
+    print(json.dumps(_operation_receipt_result(True, PROMOTED=True, **details), ensure_ascii=False, sort_keys=True))
+    return 0
+
 def main() -> None:
     ap = argparse.ArgumentParser(description="MetaLupa Bayesiana - calculo deterministico + auto-registro")
     ap.add_argument("--prior", type=float, help="probabilidade prior em (0,1)")
@@ -1652,6 +2100,31 @@ def main() -> None:
     g.add_argument("--canonical-ref", default="")
     g.add_argument("--operation", default="operation")
     g.set_defaults(func=cmd_gate)
+
+    orv = sub.add_parser("validate-operation-receipt")
+    orv.add_argument("--input", required=True)
+    orv.add_argument("--repo-root", default=None)
+    orv.add_argument("--expected-head", default=None)
+    orv.add_argument("--expected-branch", default=None)
+    orv.add_argument("--expected-target", default=None)
+    orv.add_argument("--expected-target-type", default=None)
+    orv.add_argument("--evidence-root", default=None)
+    orv.add_argument("--expected-authorization-reference", default=None)
+    orv.set_defaults(func=cmd_validate_operation_receipt)
+
+    porv = sub.add_parser(
+        "promote-operation-receipt",
+        help="gate fail-closed; retorna 13 se qualquer prova viva estiver ausente",
+    )
+    porv.add_argument("--input", required=True)
+    porv.add_argument("--repo-root", required=True)
+    porv.add_argument("--expected-head", required=True)
+    porv.add_argument("--expected-branch", required=True)
+    porv.add_argument("--expected-target", required=True)
+    porv.add_argument("--expected-target-type", required=True, choices=sorted(OPERATION_RECEIPT_TARGET_TYPES))
+    porv.add_argument("--evidence-root", required=True)
+    porv.add_argument("--expected-authorization-reference", required=True)
+    porv.set_defaults(func=cmd_promote_operation_receipt)
 
     w = sub.add_parser("writer-attack")
     w.add_argument(
