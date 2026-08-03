@@ -58,7 +58,7 @@ def final_porta_workflow(main_workflow: str) -> str:
       - name: Validar manifesto e pacote visual da Escola
         run: |
           set -euo pipefail
-          node scripts/lupa/agentic-school-loader.mjs --json
+          node scripts/lupa/agentic-school-loader.mjs --task feature --json
           python scripts/lupa/validar_agentic_visual_package.py --json
 """,
         1,
@@ -89,16 +89,12 @@ def main() -> None:
             raise SystemExit(f"CONFLICT_RESOLUTION_FAILED:{path}:{checkout.stderr[-500:]}")
         git("add", "--", path)
 
-    # A main vence nos contratos compartilhados. Só estas duas superfícies
-    # recebem delta da Escola: entrada canônica e CI técnico automático.
     (ROOT / "LEIA-ME-IA.md").write_text(branch_leia, encoding="utf-8", newline="\n")
     (ROOT / ".github/workflows/porta-de-entrada.yml").write_text(
         final_porta_workflow(main_porta), encoding="utf-8", newline="\n"
     )
     git("add", "LEIA-ME-IA.md", ".github/workflows/porta-de-entrada.yml")
 
-    # Não entram instrumentos temporários, status estático nem teste antigo
-    # que obrigava o formato humano de PR. A validação fica interna à Escola.
     remove_versioned("scripts/temporary/pr611-trigger.txt")
     remove_versioned("scripts/lupa/validar-porta-de-entrada.test.mjs")
     remove_versioned("docs/ARQUITETURA/CENTRALDARK-AGENTIC-LOOP-4K-STATUS.json")
