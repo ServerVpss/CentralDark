@@ -53,7 +53,6 @@ jobs:
         id: run
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_PAT_PERFIL: ${{ secrets.GITHUB_PAT_PERFIL }}
           DRY_RUN: ${{ inputs.dry_run || 'false' }}
           REPO_ALVO: ${{ github.repository }}
           VPS_REPO_PATH: ${{ secrets.CENTRALDARK_ROOT }}

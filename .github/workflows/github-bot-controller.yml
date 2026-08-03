@@ -19,51 +19,28 @@ on:
         description: "Lista de PRs substituídas. Exemplo: #14 #16 #11"
         required: false
         default: ""
-  push:
-    branches: [main]
   pull_request:
     types: [closed]
-  pull_request_target:
-    types: [opened, reopened, ready_for_review, synchronize, edited, labeled, unlabeled]
-  workflow_run:
-    workflows:
-      - porta-de-entrada
-      - codex-validate
-      - lupa-conformance
-      - Lupa Drift Guard
-      - PR auto-review (Codex + checklist)
-      - Pipeline — Telegram + Painel
-    types: [completed]
+  repository_dispatch:
+    types: [centraldark_post_merge]
   schedule:
-    - cron: "*/5 * * * *"
+    - cron: "17 9 * * *"
 
 permissions:
   contents: read
-  pull-requests: read
-  issues: read
+  pull-requests: write
+  issues: write
   actions: read
-  checks: read
 
 concurrency:
-  group: github-bot-controller-${{ github.event.pull_request.number || github.event.workflow_run.head_sha || github.ref }}
-  cancel-in-progress: true
-
-env:
-  BOT_EXPECTED_REPOSITORY: ServerVpss/CentralDark
-  BOT_TRUSTED_AUTHORS: segredounlock
-  BOT_REQUIRED_WORKFLOWS: porta-de-entrada,codex-validate,lupa-conformance,Lupa Drift Guard,PR auto-review (Codex + checklist),Pipeline — Telegram + Painel
+  group: github-bot-controller-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   controller:
     name: Auditar PRs e fechar substituídas com segurança
-    if: github.event_name == 'workflow_dispatch' || github.event_name == 'pull_request' || github.event_name == 'schedule'
     runs-on: [self-hosted, Linux]
     timeout-minutes: 10
-    permissions:
-      contents: read
-      pull-requests: write
-      issues: write
-      actions: read
 
     steps:
       - name: Checkout confiável da main
@@ -78,54 +55,9 @@ jobs:
       - name: Executar GitHub Bot Controller legado
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BOT_EXPECTED_REPOSITORY: ServerVpss/CentralDark
           BOT_EVENT_NAME: ${{ github.event_name }}
           DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.dry_run || 'auto' }}
           BOT_MERGED_PR: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.merged_pr || '' }}
           BOT_SUPERSEDES: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.supersedes || '' }}
         run: node scripts/github-bot-controller.mjs
-
-  autonomy-sweep:
-    name: Juiz + promotor autônomo com recibo
-    if: github.event_name == 'workflow_run' || github.event_name == 'pull_request_target' || github.event_name == 'schedule' || github.event_name == 'push'
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    permissions:
-      contents: read
-      pull-requests: write
-      issues: write
-      actions: read
-      checks: read
-
-    steps:
-      - name: Checkout exclusivo da main confiável
-        uses: actions/checkout@v4
-        with:
-          ref: main
-          fetch-depth: 1
-          persist-credentials: false
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-
-      - name: Testar juiz, promotor e filtro da varredura
-        run: |
-          set -euo pipefail
-          node --test scripts/github-autonomia-promocao.test.mjs
-          node --test scripts/github-autonomia-varredura.test.mjs
-
-      - name: Varrer PRs autorizados e promover somente estado comprovado
-        env:
-          JUDGE_TOKEN: ${{ github.token }}
-          PROMOTION_TOKEN: ${{ secrets.GITHUB_PAT_PERFIL }}
-          BOT_SWEEP_DIR: ${{ runner.temp }}/centraldark-autonomia
-        run: node scripts/github-autonomia-varredura.mjs
-
-      - name: Publicar recibos e eventos sanitizados
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: autonomia-sweep-${{ github.run_id }}
-          path: ${{ runner.temp }}/centraldark-autonomia
-          if-no-files-found: warn
-          retention-days: 14
