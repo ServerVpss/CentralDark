@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-03T23:32:30.857Z",
-  "updatedAtBR": "03/08/2026, 20:32:30 BRT",
+  "updatedAt": "2026-08-03T23:36:26.883Z",
+  "updatedAtBR": "03/08/2026, 20:36:26 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "test(autonomia): provar promoção end-to-end sem clique (#570)",
+    "lastCommit": "test(autonomia): canário final end-to-end (#636)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-03T23:36:26.883Z",
+      "titulo": "Push na main · fe21c794b39c00af51f98686c487f830429a22b8",
+      "detalhe": "test(autonomia): canário final end-to-end (#636)",
+      "area": "Repositório",
+      "sha": "fe21c79",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-03T23:32:30.857Z",
       "titulo": "Push na main · 141fef1170e6c5020dff0c76f3a1fdd8c078bd77",
       "detalhe": "test(autonomia): provar promoção end-to-end sem clique (#570)",
@@ -986,14 +994,6 @@
       "detalhe": "docs(pendencias): nova #53 Ligar o error-classifier ao ActionRunner do Bolt",
       "area": "Repositório",
       "sha": "aa901e2",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-27T06:30:21.921Z",
-      "titulo": "Push na main · 4c637f4d30f2c42f8d24e5c78899de5a8feae416",
-      "detalhe": "Merge pull request #395 from ServerVpss/feat/bolt-error-classifier-20260727",
-      "area": "Repositório",
-      "sha": "4c637f4",
       "actor": "segredounlock"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-03T23:36:26.883Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · fe21c794b39c00af51f98686c487f830429a22b8 (fe21c79)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-03T23:32:30.857Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 141fef1170e6c5020dff0c76f3a1fdd8c078bd77 (141fef1)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-27T06:31:03.878Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · aa901e220cf0cae28fd507bc1436c36255dd1577 (aa901e2)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-27T06:30:21.921Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 4c637f4d30f2c42f8d24e5c78899de5a8feae416 (4c637f4)",
       "area": "Repositório",
       "status": "sucesso"
     }
