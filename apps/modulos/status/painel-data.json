@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-03T22:45:09.569Z",
-  "updatedAtBR": "03/08/2026, 19:45:09 BRT",
+  "updatedAt": "2026-08-03T22:59:52.001Z",
+  "updatedAtBR": "03/08/2026, 19:59:52 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "fix(autonomia): separar juiz, promotor e eventos pós-merge (#584)",
+    "lastCommit": "chore: run PR585 autofix",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-03T22:59:52.001Z",
+      "titulo": "Push na main · 209173a590e630fcab3030e5e163c3f03dd3975b",
+      "detalhe": "chore: run PR585 autofix",
+      "area": "Repositório",
+      "sha": "209173a",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-03T22:45:09.569Z",
       "titulo": "Push na main · 18f6e54b99b1a6120eeec197c457b8a1645c2e22",
       "detalhe": "fix(autonomia): separar juiz, promotor e eventos pós-merge (#584)",
@@ -986,14 +994,6 @@
       "detalhe": "🔧 fix(ci): bump actions/checkout@v4→v5 + adiciona .gitmodules do Bolt/source (#341)",
       "area": "Repositório",
       "sha": "da64364",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-23T22:14:24.481Z",
-      "titulo": "Push na main · 6362c55443c7dc8ed4a74d5d682b7bdef0a7472b",
-      "detalhe": "docs(consciencia): registrar JEITO-CORRETO-DO-PIVETE canônico",
-      "area": "Repositório",
-      "sha": "6362c55",
       "actor": "segredounlock"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-03T22:59:52.001Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 209173a590e630fcab3030e5e163c3f03dd3975b (209173a)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-03T22:45:09.569Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 18f6e54b99b1a6120eeec197c457b8a1645c2e22 (18f6e54)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-24T23:30:25.846Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · da64364f14af83a79fb8d5e986ff1b4568359698 (da64364)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-23T22:14:24.481Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 6362c55443c7dc8ed4a74d5d682b7bdef0a7472b (6362c55)",
       "area": "Repositório",
       "status": "sucesso"
     }
