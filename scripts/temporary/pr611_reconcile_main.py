@@ -65,6 +65,35 @@ def final_porta_workflow(main_workflow: str) -> str:
     )
 
 
+def final_coderabbit(main_config: str) -> str:
+    contract = ".agents/skills/agentic-ci-loop/references/CONTRATO-UNIFICADO-RELATO-PIVETE.md"
+    result = main_config
+    if contract not in result:
+        path_anchor = "  path_instructions:\n"
+        if path_anchor not in result:
+            raise SystemExit("CODERABBIT_PATH_INSTRUCTIONS_ANCHOR_MISSING")
+        result = result.replace(
+            path_anchor,
+            path_anchor
+            + f'''    - path: "{contract}"
+      instructions: >-
+        Use como contrato técnico interno da Escola. Verifique provas, HEAD e
+        separação Writer/Judge sem exigir que o CHEFE preencha relato extenso.
+''',
+            1,
+        )
+
+        pattern_anchor = "    filePatterns:\n"
+        if pattern_anchor not in result:
+            raise SystemExit("CODERABBIT_FILE_PATTERNS_ANCHOR_MISSING")
+        result = result.replace(
+            pattern_anchor,
+            pattern_anchor + f'      - "{contract}"\n',
+            1,
+        )
+    return result
+
+
 def remove_versioned(path: str) -> None:
     target = ROOT / path
     if target.exists():
@@ -77,6 +106,7 @@ def main() -> None:
     main_head = git("rev-parse", "origin/main").stdout.strip()
     branch_leia = show(branch_before, "LEIA-ME-IA.md")
     main_porta = show("origin/main", ".github/workflows/porta-de-entrada.yml")
+    main_coderabbit = show("origin/main", ".coderabbit.yaml")
 
     merge = git("merge", "--no-commit", "--no-ff", "-X", "theirs", "origin/main", check=False)
     if merge.returncode not in (0, 1):
@@ -93,7 +123,10 @@ def main() -> None:
     (ROOT / ".github/workflows/porta-de-entrada.yml").write_text(
         final_porta_workflow(main_porta), encoding="utf-8", newline="\n"
     )
-    git("add", "LEIA-ME-IA.md", ".github/workflows/porta-de-entrada.yml")
+    (ROOT / ".coderabbit.yaml").write_text(
+        final_coderabbit(main_coderabbit), encoding="utf-8", newline="\n"
+    )
+    git("add", "LEIA-ME-IA.md", ".github/workflows/porta-de-entrada.yml", ".coderabbit.yaml")
 
     remove_versioned("scripts/temporary/pr611-trigger.txt")
     remove_versioned("scripts/lupa/validar-porta-de-entrada.test.mjs")
@@ -108,6 +141,7 @@ def main() -> None:
     print(f"CONFLICTS_RESOLVED={len(conflicts)}")
     print("HUMAN_PR_BODY_GATE=REMOVED")
     print("STATIC_PROGRESS_FILE=REMOVED")
+    print("CODERABBIT_SCHOOL_POINTER=KEPT_MINIMAL")
     print("AGENTIC_SCHOOL=KEPT")
     print("ACORDA_CALIBRAR=KEPT")
 
