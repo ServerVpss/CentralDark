@@ -30,7 +30,6 @@ concurrency:
 env:
   BOT_TRUSTED_AUTHORS: segredounlock
   BOT_REQUIRED_WORKFLOWS: porta-de-entrada,codex-validate,lupa-conformance,Lupa Drift Guard,PR auto-review (Codex + checklist),Pipeline — Telegram + Painel
-  BOT_SWEEP_DIR: ${{ runner.temp }}/centraldark-autonomia
 
 jobs:
   judge:
@@ -43,6 +42,8 @@ jobs:
       issues: read
       actions: read
       checks: read
+    env:
+      BOT_SWEEP_DIR: ${{ runner.temp }}/centraldark-autonomia
 
     steps:
       - name: Checkout exclusivo da main confiável
@@ -86,6 +87,8 @@ jobs:
       issues: write
       actions: write
       checks: read
+    env:
+      BOT_SWEEP_DIR: ${{ runner.temp }}/centraldark-autonomia
 
     steps:
       - name: Checkout exclusivo da main confiável
