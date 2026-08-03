@@ -16,29 +16,33 @@ on:
       - PR auto-review (Codex + checklist)
       - Pipeline — Telegram + Painel
     types: [completed]
+  repository_dispatch:
+    types: [centraldark_autonomia_recheck, centraldark_post_merge]
   schedule:
     - cron: "*/5 * * * *"
 
-permissions:
-  contents: read
-  pull-requests: write
-  issues: write
-  actions: read
-  checks: read
+permissions: {}
 
 concurrency:
-  group: autonomia-promocao-${{ github.event.pull_request.number || github.event.workflow_run.head_sha || github.ref }}
-  cancel-in-progress: true
+  group: autonomia-promocao-${{ github.event.pull_request.number || github.event.workflow_run.head_sha || github.event.client_payload.merge_sha || github.ref }}
+  cancel-in-progress: false
 
 env:
   BOT_TRUSTED_AUTHORS: segredounlock
   BOT_REQUIRED_WORKFLOWS: porta-de-entrada,codex-validate,lupa-conformance,Lupa Drift Guard,PR auto-review (Codex + checklist),Pipeline — Telegram + Painel
+  BOT_SWEEP_DIR: ${{ runner.temp }}/centraldark-autonomia
 
 jobs:
-  sweep:
-    name: Juiz + promotor com recibo SHA-256
+  judge:
+    name: Juiz read-only — gerar recibos
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    permissions:
+      contents: read
+      pull-requests: read
+      issues: read
+      actions: read
+      checks: read
 
     steps:
       - name: Checkout exclusivo da main confiável
@@ -58,19 +62,59 @@ jobs:
           node --test scripts/github-autonomia-promocao.test.mjs
           node --test scripts/github-autonomia-varredura.test.mjs
 
-      - name: Varrer PRs autorizados e promover somente estado comprovado
-        # Secret válido no Actions: PROMOTION_TOKEN. Prefixo GITHUB_ é reservado.
+      - name: Avaliar PRs autorizados sem capacidade de escrita
         env:
           JUDGE_TOKEN: ${{ github.token }}
-          PROMOTION_TOKEN: ${{ secrets.PROMOTION_TOKEN }}
-          BOT_SWEEP_DIR: ${{ runner.temp }}/centraldark-autonomia
-        run: node scripts/github-autonomia-varredura.mjs
+        run: node scripts/github-autonomia-varredura.mjs judge
 
-      - name: Publicar recibos e eventos sanitizados
+      - name: Publicar recibos do juiz
+        uses: actions/upload-artifact@v4
+        with:
+          name: autonomia-judge-${{ github.run_id }}
+          path: ${{ env.BOT_SWEEP_DIR }}
+          if-no-files-found: warn
+          retention-days: 14
+
+  promote:
+    name: Promotor — revalidar e promover
+    needs: judge
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      actions: write
+      checks: read
+
+    steps:
+      - name: Checkout exclusivo da main confiável
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Baixar recibos produzidos pelo juiz
+        uses: actions/download-artifact@v4
+        with:
+          name: autonomia-judge-${{ github.run_id }}
+          path: ${{ env.BOT_SWEEP_DIR }}
+
+      - name: Promover somente recibos válidos e estado vivo idêntico
+        env:
+          PROMOTER_TOKEN: ${{ secrets.PROMOTION_TOKEN || github.token }}
+        run: node scripts/github-autonomia-varredura.mjs promote
+
+      - name: Publicar resultado sanitizado
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: autonomia-sweep-${{ github.run_id }}
-          path: ${{ runner.temp }}/centraldark-autonomia
+          name: autonomia-promote-${{ github.run_id }}
+          path: ${{ env.BOT_SWEEP_DIR }}
           if-no-files-found: warn
           retention-days: 14
