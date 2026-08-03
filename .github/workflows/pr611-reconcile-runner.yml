@@ -31,8 +31,11 @@ jobs:
           ref: docs/acorda-rebuilder-20260801
           fetch-depth: 0
 
-      - name: Buscar main vigente
-        run: git fetch origin main
+      - name: Configurar identidade Git e buscar main vigente
+        run: |
+          git config user.name 'centraldark-reconcile[bot]'
+          git config user.email 'centraldark-reconcile[bot]@users.noreply.github.com'
+          git fetch origin main
 
       - uses: actions/setup-node@v4
         with:
@@ -63,8 +66,6 @@ jobs:
           rm -f scripts/temporary/pr611_reconcile_main.py
           git add -A
           git diff --cached --check
-          git config user.name 'centraldark-reconcile[bot]'
-          git config user.email 'centraldark-reconcile[bot]@users.noreply.github.com'
           git commit -m 'reconcile(agentic): integrar main e preservar escola canônica'
           git push origin HEAD:docs/acorda-rebuilder-20260801
 
