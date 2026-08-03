@@ -1,0 +1,67 @@
+name: PR611 Reconcile Runner
+
+on:
+  pull_request_target:
+    types: [labeled]
+    branches: [main]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pr611-reconcile-runner
+  cancel-in-progress: false
+
+jobs:
+  reconcile:
+    if: >-
+      github.event.pull_request.number == 611 &&
+      github.event.label.name == 'pr611-reconcile' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.user.login == 'segredounlock'
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - name: Checkout da branch do PR
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: docs/acorda-rebuilder-20260801
+          fetch-depth: 0
+
+      - name: Buscar main vigente
+        run: git fetch origin main
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38
+        with:
+          python-version: '3.11'
+
+      - name: Reconciliar sem descartar peças únicas
+        run: python scripts/temporary/pr611_reconcile_main.py
+
+      - name: Testar Escola, porta, relato e mapa
+        run: |
+          set -euo pipefail
+          node --test scripts/lupa/agentic-school-loader.test.mjs
+          node --test scripts/lupa/agentic-loop-progress.test.mjs
+          node --test scripts/lupa/validar-relato-pivete.test.mjs
+          node --test scripts/lupa/validar-porta-de-entrada.test.mjs
+          node --test apps/modulos/mapeamento/tests/validar-mapa.test.mjs
+          python scripts/lupa/validar_autolupa_hash.py
+          python scripts/lupa/validar_agentic_visual_package.py --json
+          node scripts/lupa/validar-porta-de-entrada.mjs
+          git diff --check
+
+      - name: Publicar merge na mesma branch
+        run: |
+          set -euo pipefail
+          rm -f scripts/temporary/pr611_reconcile_main.py
+          git add -A
+          git diff --cached --check
+          git config user.name 'centraldark-reconcile[bot]'
+          git config user.email 'centraldark-reconcile[bot]@users.noreply.github.com'
+          git commit -m 'reconcile(agentic): integrar main e preservar escola canônica'
+          git push origin HEAD:docs/acorda-rebuilder-20260801
