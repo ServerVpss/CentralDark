@@ -1,10 +1,9 @@
 name: PR585 One-Shot Runner
 
 on:
-  push:
+  pull_request_target:
+    types: [edited]
     branches: [main]
-    paths:
-      - .github/workflows/pr585-one-shot-runner.yml
 
 permissions:
   contents: write
@@ -15,14 +14,17 @@ concurrency:
 
 jobs:
   apply-test-publish:
-    if: github.event.head_commit.message == 'chore: run PR585 autofix'
+    if: >-
+      github.event.pull_request.number == 585 &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.user.login == 'segredounlock'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - name: Checkout da branch do PR
+      - name: Checkout do HEAD exato do PR
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
-          ref: docs/modo-operacional-loop-evidencia-20260731
+          ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
 
       - uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38
