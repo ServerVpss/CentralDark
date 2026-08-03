@@ -2,7 +2,7 @@
 title: "LEIA-ME-IA"
 status: "CANÔNICO"
 scope: "Porta de entrada única para qualquer IA que conectar no CentralDark"
-source_of_truth: "ServerVpss/CentralDark"
+source_of_truth: "Este arquivo"
 ---
 
 # LEIA-ME-IA — comece por aqui
@@ -41,8 +41,8 @@ Qualquer IA que receba contexto deste repositório deve carregar também, antes 
 3. `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` — método de coordenação;
 4. `.agents/skills/meta-lupa/SKILL.md` quando a tarefa for crítica;
 5. `.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA` para provar a identidade vigente da skill;
-6. `.agents/skills/agentic-ci-loop/SKILL.md` para qualquer trabalho técnico, debugging, feature, review, refatoração crítica ou evolução de skill;
-7. `scripts/lupa/agentic-school-loader.mjs` para classificar a tarefa e carregar somente o módulo necessário;
+6. `.agents/skills/agentic-ci-loop/SKILL.md` para trabalho técnico, debugging, feature, review ou refatoração crítica;
+7. `scripts/lupa/agentic-school-loader.mjs` para carregar somente o módulo necessário;
 8. o estado atual comprovado da branch, PR, HEAD e ferramentas aplicáveis.
 
 Nome de modelo não muda a regra. Claude, Sonnet, Opus, GPT, Codex, Gemini, Grok,
@@ -60,7 +60,7 @@ CENTRALDARK_AI_BOOT:
   agentic_school: LOADED
   history_preservation: ACTIVE
   source_of_truth: "ServerVpss/CentralDark"
-  observed_state: "evidência atual medida e separada da fonte canônica"
+  observed_evidence: "estado medido agora (branch, HEAD, PR, worktree) — insumo operacional, nunca autoridade canônica"
   alignment: "SEGREDO/CHEFE > SOL/COORDENADOR > PIVETE/HERMES + ESPECIALISTAS"
   role: "COORDINATOR|EXECUTOR|DEBUGGER|REVIEWER|JUDGE|HERMES|READ_ONLY"
   writer: "NONE|nome-do-escritor-atual"
@@ -72,227 +72,30 @@ concede permissão e não substitui teste, log, diff, check ou autorização de 
 Mensagens atrasadas são tratadas em delta: compare com o estado atual, aproveite
 somente o que ainda serve, não repita investigação concluída e não retroceda a missão.
 
-### 1.2 Recalibração canônica por gatilho (`#ACORDA` / `!CALIBRAR`)
+### 1.2 Recalibração por `#ACORDA` ou `!CALIBRAR`
 
-Esta seção é a única definição comportamental dos dois gatilhos. Outros arquivos
-podem apontar para ela, mas não podem repetir passos, saída ou exceções. O bloco
-JSON abaixo é o contrato executável; o texto posterior apenas o explica. A
-identidade da seção inteira é presa por
-`docs/CONSCIENCIA/00-ENTRADA/CALIBRATION-CONTRACT.sha256`.
+Quando uma mensagem começar com um desses gatilhos, ignorando maiúsculas e
+minúsculas, execute uma única passagem antes de responder:
 
-<!-- CENTRALDARK_CALIBRATION_CONTRACT_START -->
-```json
-{
-  "schema_version": 1,
-  "contract_id": "CENTRALDARK_CALIBRATION_CONTRACT",
-  "source_of_truth": "ServerVpss/CentralDark",
-  "triggers": ["#ACORDA", "!CALIBRAR"],
-  "case_insensitive_prefix_match": true,
-  "reentry_guard": "ONE_SHOT",
-  "github_first": true,
-  "github_unavailable": {
-    "mission_id": "UNRESOLVED",
-    "status": "BLOCKED_GITHUB_UNAVAILABLE",
-    "use_stale_state": false,
-    "continue_by_assumption": false
-  },
-  "drift": {
-    "status": "STATE_DRIFT",
-    "newest_proved_state_wins": true,
-    "compare": ["GITHUB_REMOTE", "CANONICAL_STATE", "LOCAL_EVIDENCE", "CONVERSATION"]
-  },
-  "writer_collision": {
-    "role": "READ_ONLY",
-    "statuses": ["WAITING_ACTIVE_WRITER", "BLOCKED_WRITER_COLLISION"],
-    "may_write": false
-  },
-  "unknown_states": {
-    "casa": "UNKNOWN_PENDING_LOCAL_EVIDENCE",
-    "vps": "UNKNOWN_PENDING_SANITIZED_CAPTURE"
-  },
-  "state_relations": [
-    "CHECK_SUCCESS != ZERO_FINDINGS",
-    "SKIPPED != PASS",
-    "BOT_COMMENTED != BOT_APPROVED",
-    "UNKNOWN != PASS",
-    "TIMEOUT != PASS",
-    "REVIEWED_HEAD_OLD != REVIEWED_HEAD_CURRENT"
-  ],
-  "pass_requires": [
-    "EXACT_HEAD",
-    "FRESH_TEST",
-    "VERIFIABLE_EVIDENCE",
-    "KNOWN_SCOPE",
-    "NO_WRITER_COLLISION",
-    "INDEPENDENT_JUDGE_WHEN_REQUIRED"
-  ],
-  "required_output_fields": [
-    "MISSION_ID",
-    "STATUS",
-    "THIS_CHAT_ROLE",
-    "WRITER",
-    "SCOPE",
-    "DEFAULT_BRANCH",
-    "MAIN_HEAD",
-    "LOCAL_HEAD",
-    "BRANCH",
-    "HEAD",
-    "REMOTE_BRANCH_HEAD",
-    "PR_HEAD",
-    "ACTIVE_PR",
-    "ACTIVE_ISSUE",
-    "MERGE_BASE",
-    "AHEAD_BY",
-    "BEHIND_BY",
-    "COMMITS_UNIQUE_TO_MAIN",
-    "COMMITS_UNIQUE_TO_BRANCH",
-    "COMMITS_SINCE_LAST_PROOF",
-    "RELATED_PRS",
-    "LAST_PROOF",
-    "WORKFLOW_STATUS",
-    "BOT_STATUS",
-    "AUTONOMY_STATUS",
-    "CASA_STATE",
-    "VPS_STATE",
-    "P0_OPEN",
-    "P1_OPEN",
-    "UNKNOWN_CRITICAL",
-    "BLOCKERS",
-    "NEXT_GATE",
-    "DRIFT",
-    "REENTRY_GUARD"
-  ]
-}
-```
-<!-- CENTRALDARK_CALIBRATION_CONTRACT_END -->
+1. consulte o GitHub remoto `ServerVpss/CentralDark`;
+2. descubra a branch padrão vigente;
+3. leia este arquivo diretamente dessa branch;
+4. compare remoto, evidência local e contexto da conversa;
+5. use o estado comprovado mais recente;
+6. preserve um único Writer por escopo;
+7. opere como `READ_ONLY` quando outro Writer estiver ativo;
+8. retome do último checkpoint — não reinicie a missão sem motivo.
 
-**Gatilho mínimo externo para qualquer chat, agente ou CLI:**
-
-```text
-Quando minha mensagem começar com #ACORDA ou !CALIBRAR, ignorando maiúsculas/minúsculas,
-consulte o GitHub remoto ServerVpss/CentralDark, leia LEIA-ME-IA.md na branch padrão vigente
-e execute integralmente a seção 1.2 antes de responder. Se o GitHub estiver indisponível,
-comece com MISSION_ID=UNRESOLVED e STATUS=BLOCKED_GITHUB_UNAVAILABLE. Não use estado
-antigo como atual e não continue por suposição.
-```
-
-O carregamento desta seção não dispara nova recalibração. Cada mensagem-gatilho
-executa uma única passagem com `REENTRY_GUARD=ONE_SHOT`.
-
-#### 1.2.1 Medir o remoto antes de confiar no contexto
-
-- Conversa, memória, resumo, screenshot ou relatório antigo são pistas, não estado atual.
-- Consulte branch padrão, `MAIN_HEAD`, missão, Writer, PR, issue, checks, reviews,
-  threads, workflows, bots, autonomia, bloqueadores e próximo gate.
-- Faça radar global leve e aprofunde somente missão ativa, branches relacionadas,
-  componentes capazes de alterar o resultado e áreas com drift ou prova vencida.
-- Não audite todo o histórico quando uma análise dirigida resolve.
-
-#### 1.2.2 GitHub indisponível falha fechado
-
-A resposta deve começar exatamente com:
+Se o GitHub estiver indisponível, comece exatamente com:
 
 ```text
 MISSION_ID=UNRESOLVED
 STATUS=BLOCKED_GITHUB_UNAVAILABLE
 ```
 
-Depois pare. Não apresente estado antigo como atual e não continue por suposição.
-
-#### 1.2.3 Reconciliar commits, PRs e reviews
-
-Meça `MAIN_HEAD`, `LOCAL_HEAD` quando houver acesso local, `REMOTE_BRANCH_HEAD`,
-`PR_HEAD`, `MERGE_BASE`, `AHEAD_BY`, `BEHIND_BY`, commits exclusivos de cada
-lado e commits desde a última prova. Review em SHA antigo é `STALE_REVIEW`,
-nunca `PASS` para o HEAD atual.
-
-Leia corpo, commits, checks, reviews e threads do PR ativo. Quando disponível,
-use `isResolved` e `isOutdated`. Classifique cada thread como `VALID_CURRENT`,
-`ALREADY_FIXED_UNRESOLVED`, `DUPLICATE`, `OUTDATED`, `INVALID_WITH_PROOF` ou
-`BLOCKED_NEEDS_SCOPE`. Não resolva thread sem contraprova no HEAD atual.
-
-#### 1.2.4 Bots, autonomia, Casa, VPS e Writer
-
-Para CodeRabbit, Codex, Actions, Meta Lupa, Writer, Judge, Promotor, Sentinela e
-controladores, informe se executou, conclusão, HEAD analisado, pendência,
-bloqueio e dependência humana. As relações de estado do contrato são
-obrigatórias; estado incerto nunca vira `PASS`.
-
-Sem prova viva, use:
-
-```text
-CASA_STATE=UNKNOWN_PENDING_LOCAL_EVIDENCE
-VPS_STATE=UNKNOWN_PENDING_SANITIZED_CAPTURE
-```
-
-Muitos leitores podem investigar; existe um Writer por escopo. Em colisão:
-
-```text
-THIS_CHAT_ROLE=READ_ONLY
-STATUS=WAITING_ACTIVE_WRITER|BLOCKED_WRITER_COLLISION
-```
-
-Nesse estado, não editar, commitar, publicar nem resolver threads.
-
-#### 1.2.5 Autorizações, drift e PASS
-
-Sem autorização específica para o alvo exato, não executar push, criação de PR,
-merge, Ready for Review, deploy, restart, exclusão, force-push, reset destrutivo,
-alteração direta da `main` nem mudança em produção.
-
-Compare GitHub remoto, estado canônico, prova local e conversa. O estado
-comprovado mais recente vence. Divergência produz `STATUS=STATE_DRIFT` com
-valor anterior, valor atual, fonte, impacto e próximo movimento seguro.
-
-Só use `PASS` com HEAD exato, teste fresco, prova verificável, escopo conhecido,
-sem colisão de Writer e Judge independente quando exigido. Texto bonito, verde
-isolado, grep vazio, relato do Writer, `SKIPPED`, `UNKNOWN`, timeout ou ausência
-de evidência não são `PASS`.
-
-#### 1.2.6 Saída obrigatória
-
-A resposta começa, sem introdução, com todos os campos e na ordem do contrato:
-
-```text
-MISSION_ID=
-STATUS=
-THIS_CHAT_ROLE=
-WRITER=
-SCOPE=
-DEFAULT_BRANCH=
-MAIN_HEAD=
-LOCAL_HEAD=
-BRANCH=
-HEAD=
-REMOTE_BRANCH_HEAD=
-PR_HEAD=
-ACTIVE_PR=
-ACTIVE_ISSUE=
-MERGE_BASE=
-AHEAD_BY=
-BEHIND_BY=
-COMMITS_UNIQUE_TO_MAIN=
-COMMITS_UNIQUE_TO_BRANCH=
-COMMITS_SINCE_LAST_PROOF=
-RELATED_PRS=
-LAST_PROOF=
-WORKFLOW_STATUS=
-BOT_STATUS=
-AUTONOMY_STATUS=
-CASA_STATE=
-VPS_STATE=
-P0_OPEN=
-P1_OPEN=
-UNKNOWN_CRITICAL=
-BLOCKERS=
-NEXT_GATE=
-DRIFT=
-REENTRY_GUARD=ONE_SHOT
-```
-
-Depois explique somente fatos que mudam decisão, separe `PROVADO`, `INFERÊNCIA`
-e `UNKNOWN`, informe o próximo movimento exato e continue somente nas
-pendências abertas.
+Não use estado antigo como atual. `UNKNOWN`, `SKIPPED`, timeout, silêncio ou
+ausência de prova nunca equivalem a `PASS`. O carregamento desta seção não
+dispara nova recalibração: `REENTRY_GUARD=ONE_SHOT`.
 
 ---
 
@@ -364,18 +167,15 @@ Para credencial, só validação de presença — nunca o valor.
 
 ---
 
-## 4. Quando a tarefa for crítica, use a lupa e a escola
+## 4. Quando a tarefa for crítica, use a lupa
 
 `.agents/skills/meta-lupa/SKILL.md` é o motor de auditoria da casa.
 A identidade vigente é declarada somente em `.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA`
 e deve coincidir com o blob Git real; adaptadores não copiam SHA.
+Ela vale para deploy, consolidação, merge, migração, segurança e regressão —
+não para toda conversa.
 
-`.agents/skills/agentic-ci-loop/SKILL.md` é a escola operacional do trabalho
-técnico. Ela usa divulgação progressiva: o loader carrega somente o módulo da
-tarefa, e lições candidatas não entram no boot até regressão, Judge independente
-e decisão do CHEFE.
-
-Duas extensões da Meta Lupa, para casos específicos, quando estiverem instaladas:
+Duas extensões dela, para casos específicos, quando estiverem instaladas:
 
 - **auditoria-pr** — antes de dar veredito sobre um PR;
 - **selo-xp** — antes de fechar missão e reivindicar XP.
@@ -387,10 +187,8 @@ Duas extensões da Meta Lupa, para casos específicos, quando estiverem instalad
 | Preciso de… | Vá para |
 |---|---|
 | vocabulário e permissões do GitHub no jeito da casa | `docs/CONSCIENCIA/DICIONARIO-PIVETE-GITHUB.md` |
+| escola operacional de skills | `.agents/skills/agentic-ci-loop/SKILL.md` |
 | método universal de coordenação em delta | `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` |
-| escola operacional de qualquer IA CLI | `.agents/skills/agentic-ci-loop/SKILL.md` |
-| curso integral fornecido pelo CHEFE | `.agents/skills/agentic-ci-loop/references/SOURCE-CURSO-SKILLS-ORIGINAL.txt.gz.base64` |
-| refatoração crítica sem regressão conhecida | `.agents/skills/agentic-ci-loop/references/REFATORACAO-CRITICA-ZERO-REGRESSAO.md` |
 | o que está pendente | `docs/PENDENCIAS.md` |
 | o que já aprendemos errando | `docs/CONSCIENCIA/APRENDIZADOS.md` |
 | o documento mestre | `docs/CONSCIENCIA/CONSCIENCIA.md` |
@@ -416,13 +214,14 @@ PENDÊNCIA=
 PRÓXIMO PASSO=
 ```
 
-Aprendizado que muda comportamento vira lição candidata no ledger da escola e
-só depois de regressão, Judge e decisão do CHEFE pode ser promovido. Conversa
-que não muda nada não polui o canônico.
+Aprendizado que muda comportamento vai para `docs/CONSCIENCIA/APRENDIZADOS.md`.
+Conversa que não muda nada não polui o canônico.
 
 ---
 
-> Esta porta é verificada por `scripts/lupa/validar-porta-de-entrada.mjs`, pela
-> escola em `scripts/lupa/agentic-school-loader.mjs` e pelo mapa global em
-> `apps/modulos/mapeamento/core/validar-mapa.mjs`.
-> Documento canônico que ninguém alcança não governa nada.
+> Esta porta é verificada por `scripts/lupa/validar-porta-de-entrada.mjs` e pelo mapa global em `apps/modulos/mapeamento/core/validar-mapa.mjs`.
+> Se algum caminho citado, contrato ou adaptador universal deixar de existir, o CI fica vermelho.
+> Como `docs/CONSCIENCIA/DICIONARIO-PIVETE-GITHUB.md` é canônico e agora é alcançado por esta porta,
+> removê-lo ou retirar seu vínculo volta a produzir caminho morto ou documento canônico órfão.
+> Documento canônico que ninguém alcança não governa nada — foi assim que o
+> JEITO-CORRETO-DO-PIVETE ficou meses escrito e ignorado.
