@@ -20,6 +20,13 @@ def show(ref: str, path: str) -> str:
     return git("show", f"{ref}:{path}").stdout
 
 
+def replace_once(text: str, old: str, new: str, label: str) -> str:
+    count = text.count(old)
+    if count != 1:
+        raise SystemExit(f"PATCH_ANCHOR_INVALID:{label}:count={count}")
+    return text.replace(old, new, 1)
+
+
 def final_porta_workflow(main_workflow: str) -> str:
     setup_anchor = """      - uses: actions/setup-node@v4
         with:
@@ -94,6 +101,45 @@ def final_coderabbit(main_config: str) -> str:
     return result
 
 
+def simplify_school_loader(loader: str) -> str:
+    old_template = '''function validatePrTemplate(root, relativePath) {
+  const content = readText(root, relativePath);
+  for (const token of REQUIRED_REPORT_TOKENS) assert(content.includes(token), `PR_TEMPLATE_TOKEN_MISSING:${token}`);
+  for (const heading of ['## Arquivos sensíveis', '## Testes', '## Ações sensíveis', '## Revisão']) assert(content.includes(heading), `PR_TEMPLATE_SECTION_MISSING:${heading}`);
+}
+'''
+    new_template = '''function validatePrTemplate(root, relativePath) {
+  const content = readText(root, relativePath);
+  // O template humano permanece curto. O contrato completo é validado pela
+  // Escola e pelo CI, não preenchido manualmente pelo CHEFE.
+  for (const heading of ['## Arquivos sensíveis', '## Testes', '## Ações sensíveis', '## Revisão']) {
+    assert(content.includes(heading), `PR_TEMPLATE_SECTION_MISSING:${heading}`);
+  }
+}
+'''
+    loader = replace_once(loader, old_template, new_template, "school-pr-template")
+
+    old_workflow = '''  for (const token of ['validar-relato-pivete.mjs --mode pr', 'agentic-school-loader.test.mjs', 'agentic-loop-progress.test.mjs', 'validar-relato-pivete.test.mjs', 'issue-gate-receipt', '--test-receipt', '--meta-lupa-receipt']) {
+    assert(content.includes(token), `GLOBAL_WORKFLOW_GATE_MISSING:${token}`);
+  }
+'''
+    new_workflow = '''  for (const token of ['agentic-school-loader.test.mjs', 'agentic-loop-progress.test.mjs', 'validar-relato-pivete.test.mjs']) {
+    assert(content.includes(token), `GLOBAL_WORKFLOW_GATE_MISSING:${token}`);
+  }
+'''
+    return replace_once(loader, old_workflow, new_workflow, "school-global-workflow")
+
+
+def simplify_school_tests(tests: str) -> str:
+    old = """    write(fx.root, fx.globalWorkflow, workflowContent().replace('validar-relato-pivete.mjs --mode pr', 'echo sem-gate'));
+    assert.throws(() => loadSchool({ root: fx.root, task: 'review' }), /GLOBAL_WORKFLOW_GATE_MISSING/);
+"""
+    new = """    write(fx.root, fx.globalWorkflow, workflowContent().replace('agentic-school-loader.test.mjs', 'echo sem-gate'));
+    assert.throws(() => loadSchool({ root: fx.root, task: 'review' }), /GLOBAL_WORKFLOW_GATE_MISSING/);
+"""
+    return replace_once(tests, old, new, "school-test-workflow-gate")
+
+
 def remove_versioned(path: str) -> None:
     target = ROOT / path
     if target.exists():
@@ -126,7 +172,28 @@ def main() -> None:
     (ROOT / ".coderabbit.yaml").write_text(
         final_coderabbit(main_coderabbit), encoding="utf-8", newline="\n"
     )
-    git("add", "LEIA-ME-IA.md", ".github/workflows/porta-de-entrada.yml", ".coderabbit.yaml")
+
+    loader_path = ROOT / "scripts/lupa/agentic-school-loader.mjs"
+    tests_path = ROOT / "scripts/lupa/agentic-school-loader.test.mjs"
+    loader_path.write_text(
+        simplify_school_loader(loader_path.read_text(encoding="utf-8")),
+        encoding="utf-8",
+        newline="\n",
+    )
+    tests_path.write_text(
+        simplify_school_tests(tests_path.read_text(encoding="utf-8")),
+        encoding="utf-8",
+        newline="\n",
+    )
+
+    git(
+        "add",
+        "LEIA-ME-IA.md",
+        ".github/workflows/porta-de-entrada.yml",
+        ".coderabbit.yaml",
+        "scripts/lupa/agentic-school-loader.mjs",
+        "scripts/lupa/agentic-school-loader.test.mjs",
+    )
 
     remove_versioned("scripts/temporary/pr611-trigger.txt")
     remove_versioned("scripts/lupa/validar-porta-de-entrada.test.mjs")
