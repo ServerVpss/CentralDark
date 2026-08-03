@@ -8,6 +8,7 @@ base_head: 9c8ba9281d3443f2fa125203ab35bcd62eee0ee6
 scope: documentation-only
 runtime_mutation: false
 secret_access: false
+recovery_probe: 2026-08-03T23:30:00Z
 expected_flow:
   - checks no HEAD exato
   - juiz somente leitura
