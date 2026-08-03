@@ -21,6 +21,8 @@ on:
         default: ""
   pull_request:
     types: [closed]
+  repository_dispatch:
+    types: [centraldark_post_merge]
   schedule:
     - cron: "17 9 * * *"
 
@@ -53,6 +55,7 @@ jobs:
       - name: Executar GitHub Bot Controller legado
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BOT_EXPECTED_REPOSITORY: ServerVpss/CentralDark
           BOT_EVENT_NAME: ${{ github.event_name }}
           DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.dry_run || 'auto' }}
           BOT_MERGED_PR: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.merged_pr || '' }}
