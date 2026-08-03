@@ -2,7 +2,7 @@ name: PR585 One-Shot Runner
 
 on:
   pull_request_target:
-    types: [edited]
+    types: [labeled]
     branches: [main]
 
 permissions:
@@ -16,6 +16,7 @@ jobs:
   apply-test-publish:
     if: >-
       github.event.pull_request.number == 585 &&
+      github.event.label.name == 'pr585-autofix' &&
       github.event.pull_request.head.repo.full_name == github.repository &&
       github.event.pull_request.user.login == 'segredounlock'
     runs-on: ubuntu-latest
