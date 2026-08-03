@@ -25,11 +25,31 @@ def git(*args: str) -> str:
     return subprocess.check_output(["git", "-C", str(ROOT), *args], text=True).strip()
 
 
+def final_record_hash(rows: list[dict], usage_id: str) -> str:
+    matches = [
+        row for row in rows
+        if row.get("usage_id") == usage_id
+        and row.get("event") == "FINAL"
+        and isinstance(row.get("record_hash"), str)
+        and row["record_hash"]
+    ]
+    if len(matches) != 1:
+        raise SystemExit(
+            f"LEDGER_TARGET_FINAL_INVALID:usage_id={usage_id}:matches={len(matches)}"
+        )
+    return matches[0]["record_hash"]
+
+
 rows = [json.loads(line) for line in LEDGER.read_text(encoding="utf-8").splitlines() if line.strip()]
 existing_ids = {row.get("usage_id") for row in rows}
 now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 current_head = git("rev-parse", "HEAD")
 current_branch = git("branch", "--show-current")
+if not current_branch:
+    raise SystemExit("LEDGER_CORRECTION_BRANCH_UNAVAILABLE")
+
+open_threads_target = "29c375c66d5bd3af3f6aa1dc064411e1d4a989b4ed064d32d8ed413475d4a33e"
+proof_head_target = "8ba63e268c922925ad7861e74ef000ba81339a4c878259fe3b119c6a6d19d7bd"
 
 corrections = [
     {
@@ -41,8 +61,8 @@ corrections = [
         "mission_id": "PR585-META-LUPA-CONFORMANCE-01",
         "workspace_branch": current_branch,
         "workspace_head": current_head,
-        "target_usage_id": "29c375c66d5bd3af3f6aa1dc064411e1d4a989b4ed064d32d8ed413475d4a33e",
-        "target_record_hash": "03f080a6dc10053017b39956d60d4d1bdf7b56e4a80c23ad567015e5c3d1ac71",
+        "target_usage_id": open_threads_target,
+        "target_record_hash": final_record_hash(rows, open_threads_target),
         "verdict": "CONDICIONAR",
         "result": "HISTORICAL_APPROVAL_REVOKED_PENDING_FRESH_CURRENT_HEAD_GATE",
         "error_found": "O FINAL corrigido declarava zero risco e ciclo fechado enquanto a própria evidência registrava 15 review threads não resolvidas.",
@@ -80,8 +100,8 @@ corrections = [
         "mission_id": "PR585-OPERATION-RECEIPT-HARDENING",
         "workspace_branch": current_branch,
         "workspace_head": current_head,
-        "target_usage_id": "8ba63e268c922925ad7861e74ef000ba81339a4c878259fe3b119c6a6d19d7bd",
-        "target_record_hash": "1ee53808e42f887ff7313e8d45b86fe4bc0de59fa2ed157f9cfbf66c43175e01",
+        "target_usage_id": proof_head_target,
+        "target_record_hash": final_record_hash(rows, proof_head_target),
         "verdict": "CONDICIONAR",
         "result": "HISTORICAL_PROOF_REBOUND_TO_COMMIT_CONTAINING_TEST_SUITE",
         "error_found": "O FINAL histórico citava uma suíte e 23 casos ausentes no head_sha registrado.",
