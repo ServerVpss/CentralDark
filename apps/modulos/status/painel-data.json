@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-01T00:39:59.896Z",
-  "updatedAtBR": "31/07/2026, 21:39:59 BRT",
+  "updatedAt": "2026-08-03T22:45:09.569Z",
+  "updatedAtBR": "03/08/2026, 19:45:09 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "docs(boot): tornar dicionário e menor movimento obrigatórios",
+    "lastCommit": "fix(autonomia): separar juiz, promotor e eventos pós-merge (#584)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-03T22:45:09.569Z",
+      "titulo": "Push na main · 18f6e54b99b1a6120eeec197c457b8a1645c2e22",
+      "detalhe": "fix(autonomia): separar juiz, promotor e eventos pós-merge (#584)",
+      "area": "Repositório",
+      "sha": "18f6e54",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-01T00:39:59.896Z",
       "titulo": "Push na main · 363b04909091ae24da8d4408effb60c7c3be777e",
       "detalhe": "docs(boot): tornar dicionário e menor movimento obrigatórios",
@@ -986,14 +994,6 @@
       "detalhe": "docs(consciencia): registrar JEITO-CORRETO-DO-PIVETE canônico",
       "area": "Repositório",
       "sha": "6362c55",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-22T20:17:32.850Z",
-      "titulo": "Push na main · a94cba6128f3c073207ef86e7e34f73da510dbb0",
-      "detalhe": "docs(consciencia): registrar valor de cada peca da arquitetura",
-      "area": "Repositório",
-      "sha": "a94cba6",
       "actor": "segredounlock"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-03T22:45:09.569Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 18f6e54b99b1a6120eeec197c457b8a1645c2e22 (18f6e54)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-01T00:39:59.896Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 363b04909091ae24da8d4408effb60c7c3be777e (363b049)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-23T22:14:24.481Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 6362c55443c7dc8ed4a74d5d682b7bdef0a7472b (6362c55)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-22T20:17:32.850Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · a94cba6128f3c073207ef86e7e34f73da510dbb0 (a94cba6)",
       "area": "Repositório",
       "status": "sucesso"
     }
