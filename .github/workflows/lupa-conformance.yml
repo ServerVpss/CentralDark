@@ -21,11 +21,16 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - name: Checkout do HEAD exato do PR
+      - name: Checkout da branch real do PR
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: docs/modo-operacional-loop-evidencia-20260731
           fetch-depth: 0
+
+      - name: Provar HEAD exato
+        env:
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
+        run: test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"
 
       - uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38
         with:
