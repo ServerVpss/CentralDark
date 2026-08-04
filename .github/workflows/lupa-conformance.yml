@@ -34,8 +34,9 @@ jobs:
         run: |
           set -euo pipefail
           BASE_DIR="$RUNNER_TEMP/meta-lupa-base"
+          BASE_BRANCH="meta-lupa-baseline-$GITHUB_RUN_ID"
           trap 'git worktree remove --force "$BASE_DIR" >/dev/null 2>&1 || true' EXIT
-          git worktree add --detach "$BASE_DIR" "$BASE_SHA"
+          git worktree add -b "$BASE_BRANCH" "$BASE_DIR" "$BASE_SHA"
           cd "$BASE_DIR"
           python scripts/lupa/validar_autolupa_hash.py
           AUTOLUPA_REPORT=.agents/skills/meta-lupa/testes/fixtures/exemplo_ok.md \
