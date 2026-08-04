@@ -283,7 +283,144 @@ Revisar a própria análise como se tivesse sido produzida por outro agente:
 
 Encerrar em ponto fixo quando uma nova passagem não alterar materialmente hipóteses, bloqueios, risco residual, próximo teste ou veredito. Registrar `PONTO_FIXO_ATINGIDO: sim | não`. Se não atingir, manter `CORRIGIR` ou `BLOQUEAR`; nunca forçar fechamento por contagem de rodadas.
 
-### 10. Selecionar revisão proporcional ao ambiente
+### 10. Executar o Gate Final Adversarial
+
+Este é o último gate interno da mesma META LUPA. Ele roda depois da AutoLupa e
+antes de qualquer veredito. Não cria outra skill, outro juiz permanente,
+outro orquestrador nem dependência do Fable. Mencionar o gate não prova que ele
+rodou; o recibo desta seção é obrigatório.
+
+#### 10.1 Transformar o relatório em claims
+
+Tratar qualquer `feito`, `passou`, `sem regressão`, `não tocado` ou `pronto`
+como alegação, nunca como evidência. Registrar:
+
+| CLAIM | PROVA ESPERADA | OBSERVADO NO MESMO HEAD | VEREDITO |
+|---|---|---|---|
+
+Cada claim de carga deve ser reproduzida por diff, hash, log fresco, teste,
+build, execução, estado medido ou outra fonte externa aplicável.
+
+#### 10.2 Fixar baseline, alvo e diff
+
+- fixar `BASELINE_REF`, `HEAD_SHA` e escopo autorizado;
+- abrir `git diff` e `git status`, ou comparar contra referência pristina;
+- reexecutar toda verificação alegada;
+- rotular prova impossível como `UNVERIFIABLE`, nunca `PASS`;
+- comprovar o que ficou fora do escopo, não apenas repetir o relatório.
+
+#### 10.3 Caçar fraudes clássicas
+
+Procurar explicitamente:
+
+- teste ou assertion removido, afrouxado, pulado ou esperado alterado para casar com erro;
+- `PASS` sem execução, parcial declarado total, timeout ou resultado vazio tratado como sucesso;
+- mudança fora do escopo, refactor de carona, dependência, arquivo ou motor paralelo;
+- ação crítica sem autorização aplicável ao alvo exato;
+- código dobrado para teste que contradiz a instrução humana ou a especificação;
+- debris, scratch ou debug;
+- checkpoint inventado ou memória usada como prova;
+- ponto fixo ou verde técnico tratado como autorização ou `PASS`.
+
+#### 10.4 Revisão proporcional e independente
+
+Tarefa trivial, local e reversível usa o check óbvio, sem fan-out decorativo.
+Mudança consequencial ou crítica usa de uma a três lentes adversariais
+independentes, somente leitura e presas ao mesmo `HEAD_SHA`, tentando refutar:
+
+1. a correção e a definição de pronto;
+2. o comportamento em execução e seus limites;
+3. o diff, o escopo, os testes e a ausência de regressão.
+
+O executor nunca aprova a si mesmo. Quando revisão independente não for
+exigida pelo risco, registrar `JUDGE_INDEPENDENTE=NAO_EXIGIDO`; quando for
+exigida e não ocorrer, o gate não pode aprovar.
+
+#### 10.5 Gate determinístico de aprovação
+
+Em linguagem comum: a MetaLupa só aprova quando todas as alegações importantes
+foram reproduzidas no mesmo alvo, o diff ficou no escopo, não houve falso
+verde nem teste enfraquecido, a ausência de regressão foi provada e a
+autorização aplicável existe ou não é necessária.
+
+Defina:
+
+```text
+C  = conjunto de claims de carga
+R(c_i) = claim c_i reproduzida no mesmo alvo e HEAD_SHA
+D  = nenhum diff fora do escopo
+F  = nenhum falso verde
+W  = nenhum teste ou check enfraquecido
+Z  = zero regressão provada
+A  = autorização aplicável presente ou não exigida
+```
+
+\[
+\operatorname{APROVAR}
+\iff
+\left(\bigwedge_{c_i \in C} R(c_i)\right)
+\land D \land F \land W \land Z \land A
+\]
+
+Qualquer predicado crítico falso produz `BLOQUEAR`. Defeito corrigível dentro
+do escopo produz `CORRIGIR`. Somente ressalvas não estruturais, com o núcleo
+provado, podem produzir `CONDICIONAR`.
+
+#### 10.6 Zero regressão
+
+Em linguagem comum: o que passava antes continua passando, os testes novos
+passam, nada fora do escopo mudou e nenhuma falha foi escondida.
+
+\[
+\operatorname{ZERO\_REGRESSION}=\operatorname{PASS}
+\iff
+T_{\mathrm{baseline\_pass}} \subseteq T_{\mathrm{after\_pass}}
+\land T_{\mathrm{new\_required}}=\operatorname{PASS}
+\land \Delta_{\mathrm{outside\_scope}}=\varnothing
+\land \operatorname{FAIL}_{\mathrm{after}}
+\leq \operatorname{FAIL}_{\mathrm{baseline}}
+\]
+
+Também é obrigatório provar:
+
+- nenhum `FAIL` virou `SKIPPED`, `UNKNOWN` ou ausência de execução;
+- nenhum teste foi removido, afrouxado ou teve o oráculo alterado para fabricar verde;
+- nenhuma dependência, arquivo ou comportamento paralelo entrou silenciosamente;
+- nenhuma superfície declarada intacta ficou sem comparação aplicável.
+
+Quando não for possível provar, usar `ZERO_REGRESSION=UNPROVEN`, nunca `PASS`.
+Regressão reproduzida produz `ZERO_REGRESSION=FAIL`.
+
+#### 10.7 Fail-closed e ponto fixo
+
+`UNKNOWN`, `UNVERIFIABLE`, `SKIPPED`, timeout, ferramenta indisponível, log
+antigo, ausência de baseline, diff, prova ou autorização, e divergência de
+alvo ou `HEAD_SHA` nunca produzem `APROVAR`.
+
+`PONTO_FIXO_ATINGIDO` significa que uma nova passagem não trouxe informação
+ou avanço material. **PONTO_FIXO_ATINGIDO não é PASS.** Não usar contagem
+arbitrária de iterações como substituto de progresso ou prova.
+
+#### 10.8 Recibo obrigatório
+
+```text
+GATE_FINAL_ADVERSARIAL=PASS|FAIL|UNPROVEN
+CLAIMS_TOTAL=
+CLAIMS_REPRODUZIDAS=
+BASELINE_REF=
+HEAD_SHA=
+DIFF_NO_ESCOPO=SIM|NAO|UNPROVEN
+TESTES_ENFRAQUECIDOS=SIM|NAO|UNPROVEN
+FALSO_VERDE=SIM|NAO|UNPROVEN
+AUTORIZACAO_APLICAVEL=SIM|NAO_EXIGIDA|NAO
+ZERO_REGRESSION=PASS|FAIL|UNPROVEN
+JUDGE_INDEPENDENTE=SIM|NAO_EXIGIDO|NAO
+CONTRAPROVA_FINAL=
+```
+
+Sem recibo completo e coerente com a evidência, o veredito final não sela.
+
+### 11. Selecionar revisão proporcional ao ambiente
 
 - Em desenvolvimento sem clientes, automatizar teste, revisão, fallback determinístico, correção mínima e nova tentativa dentro da autorização vigente.
 - Quando houver produção real, clientes, volume ou impacto material declarado, exigir revisão adversarial independente e simultânea das superfícies críticas antes da promoção.
@@ -316,6 +453,12 @@ ENCAIXE NO MAPA:
 ESTADO DE CONSOLIDAÇÃO:
 MECANISMO DE TRAVA:
 AUTOLUPA:
+GATE FINAL ADVERSARIAL:
+CLAIMS REPRODUZIDAS:
+BASELINE/DIFF:
+ZERO REGRESSION:
+JUDGE INDEPENDENTE:
+CONTRAPROVA FINAL:
 PONTO FIXO ATINGIDO:
 REGISTRO:
 FIO DA MISSÃO:
