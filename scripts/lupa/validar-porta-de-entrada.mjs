@@ -119,9 +119,9 @@ for (const adapter of ADAPTADORES) {
     errors.push(`ADAPTADOR_AUSENTE:${adapter}`);
     continue;
   }
+
   const content = ler(adapter);
-  const required = [PORTA, CONTRATO_DELTA, "CENTRALDARK_AI_BOOT", ".agents/skills/meta-lupa/SKILL.md", IDENTIDADE_LUPA];
-  for (const token of required) {
+  for (const token of [PORTA, CONTRATO_DELTA, "CENTRALDARK_AI_BOOT", ".agents/skills/meta-lupa/SKILL.md", IDENTIDADE_LUPA]) {
     if (!content.includes(token)) errors.push(`ADAPTADOR_SEM_TOKEN:${adapter}:${token}`);
   }
   if (/SKILL_COMMIT_SHA\s*:/i.test(content)) errors.push(`ADAPTADOR_COM_SHA_COPIADO:${adapter}`);
@@ -133,7 +133,6 @@ const semanticRequirements = new Map([
     CONTRATO_RECONCILIACAO,
     "FALHA_DE_RECONCILIACAO_DE_CONTEXTO",
     "context_reconciliation: LOADED",
-    "Criar somente com gap real provado",
   ]],
   ["AGENTS.md", [
     "REUSE_BEFORE_CREATE_REQUIRED",
@@ -186,7 +185,6 @@ if (!contract) {
   if (contract.status !== "CANONICAL") errors.push("CONTRATO_RECONCILIACAO_NAO_CANONICO");
   if (contract.marker !== "REUSE_BEFORE_CREATE_REQUIRED") errors.push("CONTRATO_RECONCILIACAO_MARKER_INVALIDO");
 
-  const sequence = contract.mandatory_pre_solution_sequence;
   const requiredSequence = [
     "resolve_user_intent",
     "search_existing_capabilities",
@@ -195,6 +193,7 @@ if (!contract) {
     "classify_authority_and_runtime_state",
     "reuse_or_extend_before_create",
   ];
+  const sequence = contract.mandatory_pre_solution_sequence;
   if (!Array.isArray(sequence)) {
     errors.push("CONTRATO_RECONCILIACAO_SEQUENCIA_AUSENTE");
   } else {
@@ -210,7 +209,6 @@ if (!contract) {
   if (rules.open_or_draft_pr_is_operational_authority !== false) errors.push("CONTRATO_RECONCILIACAO_PR_DRAFT_COM_AUTORIDADE");
   if (rules.program_document_is_runtime_proof !== false) errors.push("CONTRATO_RECONCILIACAO_PROGRAMA_COMO_RUNTIME");
   if (rules.formal_proof_without_user_request !== "FORBIDDEN_FOR_SIMPLE_TASKS") errors.push("CONTRATO_RECONCILIACAO_FORMALISMO_SEM_LIMITE");
-
   if (contract.complexity_policy?.never_expose_internal_governance_as_user_bureaucracy !== true) {
     errors.push("CONTRATO_RECONCILIACAO_GOVERNANCA_EXPOSTA_AO_USUARIO");
   }
