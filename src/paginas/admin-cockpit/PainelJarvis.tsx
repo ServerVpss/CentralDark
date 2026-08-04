@@ -87,7 +87,7 @@ export function PainelJarvis({ nos, links, atualizadoEm }: Props) {
             key={n.id}
             className={"jv-no " + cls(n.status)}
             // comprime as coordenadas pra dentro (12%–88%) e evita corte nas bordas
-            style={{ left: (12 + n.x * 0.76) + "%", top: (6 + n.y * 0.88) + "%" }}
+            style={{ left: px(n.x) + "%", top: py(n.y) + "%" }}
 
             title={n.detalhe || n.nome}
           >
