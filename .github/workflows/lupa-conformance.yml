@@ -113,3 +113,15 @@ jobs:
           echo "HEAD_EXISTING_SUITE=PASS"
           echo "NEW_GATE_CONTRACT=PASS"
           echo "ZERO_REGRESSION=PASS"
+      - name: Exportar fontes para correção adversarial
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: meta-lupa-fontes-${{ github.run_id }}
+          path: |
+            .agents/skills/meta-lupa/scripts/meta_lupa.py
+            .agents/skills/meta-lupa/testes/test_lupa.py
+            .agents/skills/meta-lupa/SKILL.md
+            .github/workflows/lupa-conformance.yml
+          if-no-files-found: error
+          retention-days: 1
