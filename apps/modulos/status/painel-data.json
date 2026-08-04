@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-04T00:02:00.691Z",
-  "updatedAtBR": "03/08/2026, 21:02:00 BRT",
+  "updatedAt": "2026-08-04T00:14:25.081Z",
+  "updatedAtBR": "03/08/2026, 21:14:25 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "fix(pr611): restaurar contrato validado antes dos testes",
+    "lastCommit": "chore: remover runner temporário do PR611",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-04T00:14:25.081Z",
+      "titulo": "Push na main · 3631caab564a2a0fad9b98f039815e5b4dd8ca0b",
+      "detalhe": "chore: remover runner temporário do PR611",
+      "area": "Repositório",
+      "sha": "3631caa",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-04T00:02:00.691Z",
       "titulo": "Push na main · 07690b9c3aea90db449d5d96ccd728b47618db06",
       "detalhe": "fix(pr611): restaurar contrato validado antes dos testes",
@@ -986,14 +994,6 @@
       "detalhe": "aprendizado(#4): Auditoria não vale sem HEAD_SHA declarado: 4 escopos, 3 lacunas falsas no PR #410",
       "area": "Repositório",
       "sha": "87d0395",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-27T18:16:08.455Z",
-      "titulo": "Push na main · bc8dd9ec6b2cb72bd210236793651d10538154cb",
-      "detalhe": "aprendizado(#3): Auditoria do gatilho de XP da META LUPA: motor correto, defeito era de exposição na saída",
-      "area": "Repositório",
-      "sha": "bc8dd9e",
       "actor": "segredounlock"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-04T00:14:25.081Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 3631caab564a2a0fad9b98f039815e5b4dd8ca0b (3631caa)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-04T00:02:00.691Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 07690b9c3aea90db449d5d96ccd728b47618db06 (07690b9)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-27T19:24:36.596Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 87d03951ca34d5f231f38329a05d30c85d4f66ee (87d0395)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-27T18:16:08.455Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · bc8dd9ec6b2cb72bd210236793651d10538154cb (bc8dd9e)",
       "area": "Repositório",
       "status": "sucesso"
     }
