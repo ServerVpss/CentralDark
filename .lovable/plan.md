@@ -1,112 +1,64 @@
+# Kit Casa (só Windows) + BOOT universal que obriga o Hermes a atualizar o painel
 
-# Auditoria — Motor de promoção `pivete/dev → pivete/auditoria → main → VPS`
+Objetivo: a pasta em `E:\CentralDark` vira um "posto de trabalho" temporário. Qualquer IA que abrir aquela pasta é obrigada a ler as regras e, ao terminar qualquer coisa, gravar o que fez e atualizar o painel — sem você precisar pedir.
 
-Read-only. Nenhum arquivo tocado, nenhum comando destrutivo, sem secrets no relatório.
+## O que muda no kit
 
-Repositório: `ServerVpss/CentralDark` (privado, id 1278858303)
-HEAD `main` no momento da coleta: **`b377921963b16622cb0e458a02fe1a5bd863498e`**
-Token usado: classic-pat `segredounlock` (permissão admin no repo — logo, se houvesse regras de proteção, a leitura teria retornado 200 com o objeto, não 404/403).
+1. Tirar tudo de Linux (`atualizar.sh` e afins). Fica só Windows: `.ps1` + `.bat` de dois cliques.
+2. Adicionar o BOOT universal — um arquivo de entrada que qualquer IA lê primeiro.
+3. Adicionar o "registrador": toda ação do Hermes vira uma linha no histórico e re-gera o painel.
 
----
+## Arquivos do kit final
 
-## Veredito
-
-**PAPER_ONLY.** O caminho `pivete/dev → pivete/auditoria → main → VPS` é **doutrina escrita** (`AGENTS.md`, `CLAUDE.md`, `docs/GOVERNANCA/FLUXO-PIVETE-DEV-AUDITORIA.md`, `CODEOWNERS`), **não** é imposto por código, por workflow ou por branch protection.
-
-Resposta direta à pergunta central: **o achado “caminho bonito no papel, mas porteira aberta para main/produção” é VERDADEIRO.**
-
----
-
-## Evidências reproduzíveis
-
-### 1. Zero workflows enforçam a sequência
-
-Busca por `pivete/auditoria` em `.github/workflows/` (via `github_search_code`, ref `b377921`): **1 único hit**, e nenhum é gate de promoção.
-
-- `.github/workflows/lupa-drift-guard.yml` (sha `7ed6317…`): só cita `pivete/auditoria` como uma das branches em que o guard de skills roda no `pull_request`. Não bloqueia merge, não valida promoção, não checa `expected_head_sha`.
-
-Nenhum workflow com nome tipo `promote-*`, `gate-audit-main`, `require-audit-before-main` existe. Os 36 workflows listados são operacionais (deploy, painel, sentinela, notify, wuzapi, obsidian, notion, farm, etc.).
-
-### 2. Deploy VPS dispara em push direto na `main`
-
-`.github/workflows/vps-exec-selfhosted.yml` (sha `052193d5…`):
-
-```yaml
-on:
-  push:
-    branches: [main]
-    paths:
-      - "apps/modulos/mcp/**"
-      - "apps/modulos/mapeamento/**"
-      - "apps/modulos/HERMES-CORE/agents/Log-Verificador/**"
-      - "scripts/vps/deploy-operational-guards.sh"
-      - ".github/workflows/vps-exec-selfhosted.yml"
-      - "scripts/webhook/github-webhook-deploy.mjs"
-  workflow_dispatch:
+```text
+E:\CentralDark\
+├─ LEIA-PRIMEIRO.md            → humano (você)
+├─ BOOT-IA.md                  → BOOT universal: regras + obrigações da IA
+├─ AGENTS.md / CLAUDE.md       → ponteiros curtos apontando pro BOOT-IA.md
+├─ ATUALIZAR.bat               → dois cliques: atualiza repo + painel
+├─ PAINEL.bat                  → dois cliques: abre o painel no navegador
+├─ scripts\
+│   ├─ atualizar.ps1           → git seguro (backup .bundle, ff-only, nunca reset)
+│   ├─ registrar.ps1           → grava 1 ação no histórico e regenera o painel
+│   └─ vigia.ps1               → modo watch opcional (re-gera a cada 30s)
+├─ paineis\
+│   ├─ PAINEL-ATUALIZACAO.html → UI Esmeralda (já feita)
+│   ├─ painel.css
+│   └─ dados.js                → gerado pelos scripts
+└─ historico\
+    └─ acoes.jsonl             → 1 linha por ação do Hermes (fonte da verdade local)
 ```
 
-Ou seja: qualquer commit que aterrisse em `main` (via PR **ou** via push direto) e toque nesses paths **vai para produção**. Não há job intermediário exigindo que o SHA tenha passado por `pivete/auditoria`, nem `expected_head_sha`, nem environment com `required reviewers`.
+## O BOOT universal (o coração do pedido)
 
-`vps-ssh-exec.yml` está tecnicamente DESATIVADO (`if: false`, comentário “duplicata”), então o único caminho de deploy vivo é o `vps-exec-selfhosted.yml` acima.
+`BOOT-IA.md` é curto e imperativo. Conteúdo:
 
-### 3. Branch protection da `main` — ausente
+- Quem manda: Pivete. Onde está: pasta local temporária, não é produção.
+- Antes de agir: ler este arquivo inteiro e olhar `historico\acoes.jsonl` (últimas 10 linhas) pra saber onde parou.
+- Durante: pode ler/escrever dentro desta pasta; nada destrutivo, nada de force-push, nada fora dela.
+- **Depois de QUALQUER ação (obrigatório):** rodar
+  `powershell -File scripts\registrar.ps1 -Acao "..." -Area "..." -Status ok|erro|andamento -Detalhe "..."`
+- Também registrar quando **começar** algo demorado (`-Status andamento`) para o painel mostrar "fazendo agora".
+- Fim de sessão: uma linha de resumo. Sem registro = tarefa não concluída.
 
-- `GET /repos/ServerVpss/CentralDark/branches/main` (não-autenticado, para não vazar): HTTP 404 (repo privado).
-- Contexto: relatórios anteriores desta mesma sessão registraram `403` na leitura de `branches/main/protection` mesmo com o token admin — comportamento típico de **branch sem regra de proteção configurada** (GitHub retorna 403/404 em `/protection` quando não existe registro).
-- Sinal forte independente: o HEAD atual da `main` é `b377921` — commit direto do bot `actions-user`, autor `CentralDark Sentinela`, mensagem `chore(sentinela): snapshot 30323841056`, **sem PR** (pai único, sem merge). Se houvesse `require pull request before merging`, esse push não teria entrado. O pai `b6f6b2b3…` é outro `chore` direto de `CentralDark Bot`. Padrão sistemático de escrita direta na `main`.
-- Actions permissions do repo: `allowed_actions: all`, `sha_pinning_required: false` — nenhuma trava adicional a nível organizacional visível daqui.
+Para pegar automaticamente: `AGENTS.md`, `CLAUDE.md` e `.cursorrules` ficam na raiz com 3 linhas cada, só dizendo "leia `BOOT-IA.md` e obedeça". Assim Claude Code, Codex, Cursor e o Hermes carregam sozinhos ao abrir a pasta.
 
-### 4. Documentação × realidade
+## Como o painel fica sempre atualizado
 
-- `docs/GOVERNANCA/FLUXO-PIVETE-DEV-AUDITORIA.md` descreve o fluxo `dev → PR → auditoria → PR → main` e diz “é proibido”, “nenhum deploy pode usar alteração não commitada”, “commit direto na main é proibido”. Puramente normativo.
-- `AGENTS.md` e `CLAUDE.md` repetem a regra.
-- `.github/CODEOWNERS` existe, mas CODEOWNERS **só** força revisão de owners **se** houver branch protection exigindo review — ausente essa proteção, é decorativo.
-- `pr-agent.yml` (revisor multi-IA) está `state: disabled_manually` — sequer roda em PR.
+- `registrar.ps1` faz três coisas: acrescenta a linha em `acoes.jsonl`, lê o estado do git (branch, último commit, se tem coisa não salva) e reescreve `dados.js`.
+- O painel lê `dados.js` — abre offline, sem servidor.
+- `vigia.ps1` (opcional) fica rodando e re-gera a cada 30s, então se o painel estiver aberto você vê o Hermes trabalhando quase ao vivo.
 
-### 5. Fluxo interno Lovable × Fluxo GitHub — separados
+## Painel — o que aparece
 
-- **Lovable (agente):** o sandbox trabalha em branch efêmera `edit/edt-…`, com `origin` apontando para storage interno do Lovable; a sync com GitHub é feita pela plataforma (opaca ao sandbox). Nenhum controle de promoção aqui — o agente escreve, a plataforma comita/pusha. Isso é o pipe de **edição**, não de **release**.
-- **GitHub (repo):** promoção deveria ser dev → auditoria → main. Na prática, qualquer ator com push (Lovable-bot, actions-user, humanos) grava direto na `main`, e o `vps-exec-selfhosted.yml` já executa o deploy. Não há ambiente `production` com `required reviewers` protegendo o deploy.
+- Veredito grande no topo: "Atualizado" / "Tem coisa nova pra puxar" / "Hermes trabalhando agora".
+- Linha do tempo das ações (mais recente em cima), com área, status e horário.
+- Bloco git: branch, último commit, arquivos mexidos e não salvos.
+- Aviso vermelho se tiver trabalho não salvo.
 
----
+## Detalhes técnicos
 
-## Ainda é possível pular tudo hoje?
-
-Sim.
-
-1. **Push direto na `main`** por qualquer colaborador com permissão de push (ou por bot com token `repo`) — comprovado pelos commits `b377921` e `b6f6b2b3` (bots gravando na `main` sem PR nos últimos minutos antes da coleta).
-2. **Deploy imediato para VPS** — o workflow `vps-exec-selfhosted.yml` reage a `push: main` nos paths listados; qualquer edição direta em `apps/modulos/mcp/**` etc. sobe.
-3. **`workflow_dispatch`** em `vps-exec-selfhosted.yml` — disparo manual pela API/UI Actions, sem passar por PR ou por `pivete/auditoria`.
-
----
-
-## Classificação por etapa
-
-| Etapa | Status | Evidência |
-|---|---|---|
-| `pivete/dev` como origem obrigatória | PAPER_ONLY | Nenhum workflow força; qualquer branch pode virar PR/merge |
-| PR obrigatório para `pivete/auditoria` | PAPER_ONLY | Nenhum gate de proteção citando `pivete/auditoria` além do `lupa-drift-guard` (que só roda, não bloqueia) |
-| Auditoria antes de `main` | PAPER_ONLY | Sem environment, sem required reviewers, sem status check obrigatório |
-| PR obrigatório para `main` | PAPER_ONLY | HEAD atual é push direto de bot, sem merge |
-| Deploy VPS só de SHA aprovado | PARTIAL | Workflow `vps-exec-selfhosted.yml` valida `TARGET_SHA` regex, checa `origin` do repo, lock com `flock`, e usa `expected_head_sha` implícito via `github.sha`; **mas** aceita qualquer SHA que a `main` tenha, sem exigir que tenha vindo de `pivete/auditoria` |
-| Rollback automático | AUSENTE (fora do escopo desta pergunta, mas anotado) | Nenhum workflow de rollback observado |
-
----
-
-## Conclusão executiva
-
-- **ENFORCED:** nada da sequência.
-- **PARTIAL:** só o passo VPS tem alguma higiene (lock, valida SHA e origem do repo), mas confia cegamente que qualquer commit em `main` é legítimo.
-- **PAPER_ONLY:** dev → auditoria → main. É doutrina, não código.
-
-A porteira está aberta. A trava real hoje é o hábito do Pivete e a boa-fé dos bots, não a plataforma.
-
-## Próximo passo sugerido (só quando o Pivete autorizar, fora desta auditoria)
-
-Ativar, em ordem de menor risco:
-1. Branch protection em `main` (require PR, require status checks: `lupa-conformance`, `nivel-7-tests`, `codex-validate`).
-2. GitHub Environment `production` no `vps-exec-selfhosted.yml` com `required reviewers` + wait timer.
-3. Workflow de promoção com `expected_head_sha` validando que o merge SHA em `main` tem ancestral em `pivete/auditoria`.
-4. Rollback automático no deploy VPS quando health falhar.
-
-Nada disso será executado sem ordem explícita.
+- PowerShell 5.1 (o que já vem no Windows), sem dependência externa; Git opcional — se não tiver, o painel mostra só o histórico.
+- `dados.js` é `window.DADOS = {...}` para funcionar em `file://` sem CORS.
+- `atualizar.ps1` mantém o comportamento seguro já definido: backup `.bundle`, `merge --ff-only`, nunca `reset --hard`, para sozinho se houver trabalho não salvo; se a pasta for cópia de ZIP, clona ao lado em vez de mexer.
+- Entrega: ZIP novo, só Windows.
