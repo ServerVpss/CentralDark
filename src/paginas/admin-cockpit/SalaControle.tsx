@@ -14,6 +14,8 @@ import { PainelOps } from "./PainelOps";
 import { JarvisOrb } from "./JarvisOrb";
 import { PainelNivel7 } from "./PainelNivel7";
 import { PainelAvanco } from "./painéis/PainelAvanco";
+import { PainelJarvis } from "./PainelJarvis";
+
 
 const ABAS = [
   { id: "avanco",label: "AVANÇO"},
@@ -157,29 +159,10 @@ export default function SalaControle() {
             </div>
           ) : aba === "ops" ? (
             <PainelOps />
-          ) : aba === "mapa" ? (
-            <>
-              <div className="sc-map-title">MAPA VIVO · <b>{state.nos.length} nós</b> · atualizado {new Date(state.atualizadoEm).toLocaleTimeString("pt-BR", { hour12: false })}</div>
-              <svg viewBox="0 0 100 100" preserveAspectRatio="none">
-                {state.links.map((l, i) => {
-                  const a = nosPorId[l.de];
-                  const b = nosPorId[l.para];
-                  if (!a || !b) return null;
-                  return (
-                    <line
-                      key={i}
-                      className="sc-link"
-                      x1={a.x} y1={a.y} x2={b.x} y2={b.y}
-                      vectorEffect="non-scaling-stroke"
-                    />
-                  );
-                })}
-              </svg>
-              {state.nos.map((n) => (
-                <NoCard key={n.id} no={n} />
-              ))}
-            </>
+          ) : aba === "jarvis" ? (
+            <PainelJarvis nos={state.nos} links={state.links} atualizadoEm={state.atualizadoEm} />
           ) : aba === "grok" ? (
+
             <div style={{ overflow: "auto", maxHeight: "100%" }}>
               <GrokMissoes />
             </div>
