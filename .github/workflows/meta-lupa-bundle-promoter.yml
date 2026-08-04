@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       TARGET_BRANCH: feat/meta-lupa-gate-final-adversarial-20260804
-      SOURCE_SHA: c823e397571adc4440be3cd3cc7b8698ab31ffe7
+      SOURCE_SHA: 2f86d4fdaee9fb987c963178c99473c69f0e9a09
       BUNDLE_SHA256: 6537702da2f1eb2ce4f328e739d39de11f2b81098a61c75556bc5bd2ba47787f
       PART_DIR: source/.tmp/meta-lupa-final-bundle
       TEMP_WORKFLOW: .github/workflows/meta-lupa-bundle-promoter.yml
@@ -38,12 +38,13 @@ jobs:
         run: |
           set -euo pipefail
           echo '12310293a51bd5990596cd1307919315888efdb32ba35fc3cfafd461f3123156  source/.tmp/meta-lupa-final-bundle/part00' | sha256sum -c -
-          echo 'cbd0195d188f3e1e9398451170e58b58233a6cb86a2f194141512328f631bdf0  source/.tmp/meta-lupa-final-bundle/part01' | sha256sum -c -
+          echo '26345740e5ef3187a97535f10660d6abadc20d01d222adda28de98b2cc8ed6e6  source/.tmp/meta-lupa-final-bundle/part01' | sha256sum -c -
+          echo '47b6721ad10667d2fe65eae6e3ed62b562d4551a162ebcdb431b0da188c02c1d  source/.tmp/meta-lupa-final-bundle/part01b' | sha256sum -c -
           echo '5781bc5432a097286bad2ca755c8f144cb57dac2597bc0cdff91bde78a036734  source/.tmp/meta-lupa-final-bundle/part02' | sha256sum -c -
           echo 'dc3aa8381fc380dc65c8619426b3d348c00e67d953533ba5d1cd19fa8955078e  source/.tmp/meta-lupa-final-bundle/part03' | sha256sum -c -
           echo '0321dc07aa38350094c931b7b9b6eea91a0e871fdef6aca61b68af5fe8334b18  source/.tmp/meta-lupa-final-bundle/part04' | sha256sum -c -
           echo '793f307c3fd494835859981b03f53ba1ed7a3920db300693e91986d2e84cd414  source/.tmp/meta-lupa-final-bundle/part05' | sha256sum -c -
-          cat "$PART_DIR"/part{00..05} > "$RUNNER_TEMP/meta-lupa-final-bundle.b64"
+          cat "$PART_DIR"/part00 "$PART_DIR"/part01 "$PART_DIR"/part01b "$PART_DIR"/part02 "$PART_DIR"/part03 "$PART_DIR"/part04 "$PART_DIR"/part05 > "$RUNNER_TEMP/meta-lupa-final-bundle.b64"
           base64 --decode "$RUNNER_TEMP/meta-lupa-final-bundle.b64" > "$RUNNER_TEMP/meta-lupa-final-bundle.zip"
           echo "$BUNDLE_SHA256  $RUNNER_TEMP/meta-lupa-final-bundle.zip" | sha256sum -c -
           mkdir -p "$RUNNER_TEMP/bundle"
