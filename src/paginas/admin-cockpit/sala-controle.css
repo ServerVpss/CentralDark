@@ -183,9 +183,107 @@
   stroke-dasharray: 4 6;
   animation: sc-flow 3s linear infinite;
 }
+.sc-link.alerta { stroke: var(--sc-warn, #eab308); opacity: .5; }
 @keyframes sc-flow {
   to { stroke-dashoffset: -20; }
 }
+
+/* ===== ABA JARVIS (antiga MAPA) ===== */
+.jv-wrap { position: absolute; inset: 0; display: flex; flex-direction: column; }
+
+.jv-bar {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--sc-line);
+  background: linear-gradient(180deg, #10b9810f, transparent);
+  font-size: 10.5px; letter-spacing: .1em;
+}
+.jv-badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 4px 10px; border-radius: 999px;
+  border: 1px solid #10b98155; background: #10b9811a;
+  color: var(--sc-em-hi); font-weight: 700; letter-spacing: .22em;
+}
+.jv-pulse {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--sc-em); box-shadow: 0 0 0 0 #10b98188;
+  animation: jv-halo 2s ease-out infinite;
+}
+.jv-pulse.warn { background: #eab308; box-shadow: 0 0 0 0 #eab30888; }
+.jv-pulse.down { background: #ef4444; box-shadow: 0 0 0 0 #ef444488; }
+@keyframes jv-halo {
+  70%  { box-shadow: 0 0 0 9px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+.jv-estado { color: var(--sc-em-hi); text-transform: uppercase; }
+.jv-estado.warn { color: #eab308; }
+.jv-estado.down { color: #ef4444; }
+.jv-sep { width: 1px; height: 14px; background: var(--sc-line-2); }
+.jv-metric { color: var(--sc-mut); }
+.jv-metric b { color: var(--sc-txt); font-weight: 600; }
+.jv-metric.ok b   { color: var(--sc-em-hi); }
+.jv-metric.warn b { color: #eab308; }
+.jv-metric.down b { color: #ef4444; }
+.jv-saude { display: inline-flex; align-items: center; gap: 7px; color: var(--sc-mut); }
+.jv-saude b { color: var(--sc-txt); }
+.jv-saude-trilho {
+  width: 74px; height: 4px; border-radius: 999px;
+  background: var(--sc-line-2); overflow: hidden;
+}
+.jv-saude-nivel {
+  display: block; height: 100%; border-radius: 999px;
+  background: var(--sc-em); transition: width .5s ease;
+}
+.jv-saude-nivel.warn { background: #eab308; }
+.jv-saude-nivel.down { background: #ef4444; }
+.jv-spacer { flex: 1; }
+.jv-tempo { color: var(--sc-mut); }
+
+.jv-mapa { position: relative; flex: 1; min-height: 0; overflow: hidden; }
+.jv-mapa svg { width: 100%; height: 100%; display: block; }
+
+.jv-no {
+  position: absolute; transform: translate(-50%, -50%);
+  display: flex; flex-direction: column; gap: 2px;
+  padding: 7px 11px; min-width: 118px;
+  border: 1px solid var(--sc-line-2);
+  border-left: 2px solid var(--sc-em);
+  background: #070b0fee;
+  border-radius: 7px; font-size: 11px;
+  cursor: pointer; backdrop-filter: blur(5px);
+  transition: transform .18s, border-color .18s, box-shadow .18s;
+}
+.jv-no.warn { border-left-color: #eab308; }
+.jv-no.down { border-left-color: #ef4444; }
+.jv-no:hover {
+  transform: translate(-50%, -50%) scale(1.05);
+  border-color: var(--sc-em);
+  box-shadow: 0 0 0 1px #10b98133, 0 8px 22px -8px #10b98188;
+  z-index: 3;
+}
+.jv-no-topo { display: flex; align-items: center; gap: 6px; }
+.jv-no-grp { font-size: 8px; letter-spacing: .18em; color: var(--sc-mut); }
+.jv-no-nome { color: var(--sc-txt); font-weight: 600; letter-spacing: .02em; }
+.jv-no-det { font-size: 9px; color: var(--sc-mut); line-height: 1.35; }
+
+.jv-legenda {
+  position: absolute; right: 12px; bottom: 10px;
+  display: flex; gap: 12px;
+  padding: 6px 10px; border-radius: 6px;
+  border: 1px solid var(--sc-line); background: #070b0fcc;
+  font-size: 9px; letter-spacing: .12em; color: var(--sc-mut);
+}
+.jv-legenda span { display: inline-flex; align-items: center; gap: 5px; }
+.jv-legenda i { display: inline-block; }
+
+@media (max-width: 860px) {
+  .jv-bar { gap: 8px; font-size: 10px; }
+  .jv-saude-trilho { width: 52px; }
+  .jv-mapa { min-height: 420px; }
+  .jv-no { min-width: 96px; font-size: 10px; padding: 6px 8px; }
+  .jv-legenda { left: 12px; right: auto; }
+}
+
 @keyframes sc-pulse {
   0%, 100% { opacity: 1; transform: scale(1); }
   50%      { opacity: .55; transform: scale(1.25); }
