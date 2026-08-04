@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "vault_root": "E:\\CentralDark\\Pivete\\CASA-VAULT",
+  "repo_root": "E:\\CentralDark\\Pivete\\CentralDark",
+  "canonical_mapping": {
+    "vault_path": "00-CANONICO",
+    "repo_path": "docs/BRAIN",
+    "mode": "bidirectional",
+    "delete_policy": "never-delete-automatically",
+    "conflict_policy": "preserve-both-and-stop"
+  },
+  "local_only": [
+    ".obsidian",
+    ".hermes-sync",
+    "10-MEMORIA-PRIVADA",
+    "20-INBOX-HERMES",
+    "30-ANEXOS",
+    "90-CONFLITOS"
+  ],
+  "behavior_sources": [
+    "LEIA-ME-IA.md",
+    "AGENTS.md",
+    "docs/CONSCIENCIA/APRENDIZADOS.md",
+    "docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md",
+    ".agents/skills"
+  ],
+  "rules": {
+    "private_content_never_enters_git": true,
+    "canonical_notes_require_git_sync": true,
+    "candidate_learning_stays_local_until_proven": true,
+    "approved_learning_updates_existing_canonical_file": true,
+    "obsidian_edit_changes_trajectory_only_after_sync_and_reload": true
+  }
+}
