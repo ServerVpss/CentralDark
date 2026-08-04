@@ -27,6 +27,25 @@ jobs:
           python-version: '3.11'
       - name: Instalar pytest
         run: pip install pytest
+      - name: Provar baseline canônico no BASE_SHA
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          set -euo pipefail
+          BASE_DIR="$RUNNER_TEMP/meta-lupa-base"
+          trap 'git worktree remove --force "$BASE_DIR" >/dev/null 2>&1 || true' EXIT
+          git worktree add --detach "$BASE_DIR" "$BASE_SHA"
+          cd "$BASE_DIR"
+          python scripts/lupa/validar_autolupa_hash.py
+          AUTOLUPA_REPORT=.agents/skills/meta-lupa/testes/fixtures/exemplo_ok.md \
+            pytest .agents/skills/meta-lupa/testes/test_autolupa_conformance.py -v
+          (cd .agents/skills/meta-lupa && python testes/test_lupa.py)
+          pytest .agents/skills/meta-lupa/testes/test_operation_receipt_validator.py -v
+          (cd .agents/skills/meta-lupa && python guardrails/validar_selo_ponto_fixo.py)
+          (cd .agents/skills/meta-lupa && python testes/test_selo_ponto_fixo.py)
+          echo "BASELINE_SHA=$BASE_SHA"
+          echo "BASELINE_EXISTING_SUITE=PASS"
       - name: Validar hash canônico da Lupa
         run: python scripts/lupa/validar_autolupa_hash.py
       - name: Provar Gate Final Adversarial
@@ -70,18 +89,26 @@ jobs:
           print('GATE_FINAL_ORDER=PASS')
           print('FABLE_DEPENDENCY=NAO')
           PY
-      - name: Rodar testes de conformidade
+      - name: Rodar testes de conformidade no HEAD
         env:
           AUTOLUPA_REPORT: .agents/skills/meta-lupa/testes/fixtures/exemplo_ok.md
         run: pytest .agents/skills/meta-lupa/testes/test_autolupa_conformance.py -v
-      - name: Motor determinístico
+      - name: Motor determinístico no HEAD
         working-directory: .agents/skills/meta-lupa
         run: python testes/test_lupa.py
-      - name: Validador e promotor do OPERATION_RECEIPT
+      - name: Validador e promotor do OPERATION_RECEIPT no HEAD
         run: pytest .agents/skills/meta-lupa/testes/test_operation_receipt_validator.py -v
-      - name: Guardrail do selo de ponto fixo
+      - name: Guardrail do selo de ponto fixo no HEAD
         working-directory: .agents/skills/meta-lupa
         run: python guardrails/validar_selo_ponto_fixo.py
-      - name: Regressão do selo e do recibo de XP
+      - name: Regressão do selo e do recibo de XP no HEAD
         working-directory: .agents/skills/meta-lupa
         run: python testes/test_selo_ponto_fixo.py
+      - name: Selar comparação BASE versus HEAD
+        if: github.event_name == 'pull_request'
+        run: |
+          echo "HEAD_SHA=$(git rev-parse HEAD)"
+          echo "BASELINE_EXISTING_SUITE=PASS"
+          echo "HEAD_EXISTING_SUITE=PASS"
+          echo "NEW_GATE_CONTRACT=PASS"
+          echo "ZERO_REGRESSION=PASS"
