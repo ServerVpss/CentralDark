@@ -100,7 +100,9 @@
   vertical-align: middle;
 }
 .sc-dot.warn { background: var(--sc-warn); box-shadow: 0 0 8px var(--sc-warn); }
-.sc-dot.err  { background: var(--sc-err);  box-shadow: 0 0 8px var(--sc-err); }
+.sc-dot.err,
+.sc-dot.down { background: var(--sc-err);  box-shadow: 0 0 8px var(--sc-err); }
+
 .sc-dot.idle { background: var(--sc-idle); box-shadow: none; animation: none; }
 .sc-head-right { margin-left: auto; display: flex; gap: 14px; align-items: center; color: var(--sc-mut); }
 .sc-head-close {
