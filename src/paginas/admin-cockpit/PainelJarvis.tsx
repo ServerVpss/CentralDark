@@ -70,7 +70,7 @@ export function PainelJarvis({ nos, links, atualizadoEm }: Props) {
               <line
                 key={i}
                 className={"sc-link" + (critico ? " alerta" : "")}
-                x1={a.x} y1={a.y} x2={b.x} y2={b.y}
+                x1={px(a.x)} y1={py(a.y)} x2={px(b.x)} y2={py(b.y)}
                 vectorEffect="non-scaling-stroke"
               />
             );
