@@ -18,7 +18,7 @@ import { PainelAvanco } from "./painéis/PainelAvanco";
 const ABAS = [
   { id: "avanco",label: "AVANÇO"},
   { id: "ops",   label: "OPS"   },
-  { id: "mapa",  label: "MAPA"  },
+  { id: "jarvis",label: "JARVIS"},
   { id: "mcp",   label: "MCP"   },
   { id: "hub",   label: "HUB"   },
   { id: "infra", label: "INFRA" },
