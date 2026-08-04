@@ -113,6 +113,8 @@ jobs:
           echo "HEAD_EXISTING_SUITE=PASS"
           echo "NEW_GATE_CONTRACT=PASS"
           echo "ZERO_REGRESSION=PASS"
+      - name: Expor identidade da árvore para commit atômico
+        run: echo "HEAD_TREE=$(git rev-parse 'HEAD^{tree}')"
       - name: Exportar fontes para correção adversarial
         if: always()
         uses: actions/upload-artifact@v4
