@@ -21,6 +21,7 @@
   "behavior_sources": [
     "LEIA-ME-IA.md",
     "AGENTS.md",
+    "docs/BRAIN/00 - Mapa do Sistema/DIRECAO-ATUAL-HERMES.md",
     "docs/CONSCIENCIA/APRENDIZADOS.md",
     "docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md",
     ".agents/skills"
