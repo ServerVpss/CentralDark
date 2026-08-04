@@ -2,6 +2,7 @@
   "schema_version": 1,
   "vault_root": "E:\\CentralDark\\Pivete\\CASA-VAULT",
   "repo_root": "E:\\CentralDark\\Pivete\\CentralDark",
+  "sync_schedule_minutes": 5,
   "canonical_mapping": {
     "vault_path": "00-CANONICO",
     "repo_path": "docs/BRAIN",
