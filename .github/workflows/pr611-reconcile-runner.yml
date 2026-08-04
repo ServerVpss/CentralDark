@@ -49,6 +49,7 @@ jobs:
         run: |
           set -euo pipefail
           python scripts/temporary/pr611_reconcile_main.py
+          python scripts/temporary/pr611_restore_calibration.py
           node --test scripts/lupa/agentic-school-loader.test.mjs
           node --test scripts/lupa/agentic-loop-progress.test.mjs
           node --test scripts/lupa/validar-relato-pivete.test.mjs
@@ -64,6 +65,7 @@ jobs:
         run: |
           set -euo pipefail
           rm -f scripts/temporary/pr611_reconcile_main.py
+          rm -f scripts/temporary/pr611_restore_calibration.py
           git add -A
           git diff --cached --check
           git commit -m 'reconcile(agentic): integrar main e preservar escola canônica'
