@@ -2,11 +2,12 @@
 // Adições P0 sobre a base viva: header operacional (VOL/PPM/CODE/UPTIME/SHA),
 // bloco de MISSÕES no nav, aba OPS com grid 2×2 e Jarvis flutuante.
 // Dados ainda mock — o plug real (Hermes-Core, HUB, Gateway) entra na Fase 3.
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./sala-controle.css";
 import "./hermes.css";
-import { useCockpitLive, type CockpitNo, type NoStatus } from "./hooks/useCockpitLive";
+import { useCockpitLive, type NoStatus } from "./hooks/useCockpitLive";
+
 import GrokMissoes from "@/components/GrokMissoes";
 import { MatrixRain } from "./MatrixRain";
 import { HermesMascote } from "./HermesMascote";
@@ -62,10 +63,6 @@ export default function SalaControle() {
     return () => clearInterval(t);
   }, []);
 
-  const nosPorId = useMemo(
-    () => Object.fromEntries(state.nos.map((n) => [n.id, n])),
-    [state.nos],
-  );
 
   const statusGeral: NoStatus = state.nos.some((n) => n.status === "down")
     ? "down"
@@ -217,17 +214,3 @@ export default function SalaControle() {
   );
 }
 
-function NoCard({ no }: { no: CockpitNo }) {
-  return (
-    <div
-      className="sc-no"
-      style={{ left: no.x + "%", top: no.y + "%" }}
-      title={no.detalhe}
-    >
-      <span className={"sc-dot " + statusClass(no.status)} />
-      <span className="sc-no-grp">{no.grupo}</span>
-      <span className="sc-no-nome">{no.nome}</span>
-      {no.detalhe && <span className="sc-no-det">{no.detalhe}</span>}
-    </div>
-  );
-}
