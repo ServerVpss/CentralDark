@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       TARGET_BRANCH: feat/meta-lupa-gate-final-adversarial-20260804
-      SOURCE_SHA: 96448fe0305beccc138080ad71994f860528129b
+      SOURCE_SHA: c823e397571adc4440be3cd3cc7b8698ab31ffe7
       BUNDLE_SHA256: 6537702da2f1eb2ce4f328e739d39de11f2b81098a61c75556bc5bd2ba47787f
       PART_DIR: source/.tmp/meta-lupa-final-bundle
       TEMP_WORKFLOW: .github/workflows/meta-lupa-bundle-promoter.yml
