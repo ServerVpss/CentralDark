@@ -281,7 +281,9 @@
 @media (max-width: 860px) {
   .jv-bar { gap: 8px; font-size: 10px; }
   .jv-saude-trilho { width: 52px; }
-  .jv-mapa { min-height: 420px; }
+  /* padding insere margem de segurança: % do absolute usa a caixa de padding */
+  .jv-mapa { min-height: 520px; padding: 14px 58px 28px; }
+
   .jv-no { min-width: 96px; font-size: 10px; padding: 6px 8px; }
   .jv-legenda { left: 12px; right: auto; }
 }
