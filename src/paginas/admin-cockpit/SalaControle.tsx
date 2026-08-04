@@ -2,11 +2,12 @@
 // Adições P0 sobre a base viva: header operacional (VOL/PPM/CODE/UPTIME/SHA),
 // bloco de MISSÕES no nav, aba OPS com grid 2×2 e Jarvis flutuante.
 // Dados ainda mock — o plug real (Hermes-Core, HUB, Gateway) entra na Fase 3.
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./sala-controle.css";
 import "./hermes.css";
-import { useCockpitLive, type CockpitNo, type NoStatus } from "./hooks/useCockpitLive";
+import { useCockpitLive, type NoStatus } from "./hooks/useCockpitLive";
+
 import GrokMissoes from "@/components/GrokMissoes";
 import { MatrixRain } from "./MatrixRain";
 import { HermesMascote } from "./HermesMascote";
@@ -14,11 +15,13 @@ import { PainelOps } from "./PainelOps";
 import { JarvisOrb } from "./JarvisOrb";
 import { PainelNivel7 } from "./PainelNivel7";
 import { PainelAvanco } from "./painéis/PainelAvanco";
+import { PainelJarvis } from "./PainelJarvis";
+
 
 const ABAS = [
   { id: "avanco",label: "AVANÇO"},
   { id: "ops",   label: "OPS"   },
-  { id: "mapa",  label: "MAPA"  },
+  { id: "jarvis",label: "JARVIS"},
   { id: "mcp",   label: "MCP"   },
   { id: "hub",   label: "HUB"   },
   { id: "infra", label: "INFRA" },
@@ -60,10 +63,6 @@ export default function SalaControle() {
     return () => clearInterval(t);
   }, []);
 
-  const nosPorId = useMemo(
-    () => Object.fromEntries(state.nos.map((n) => [n.id, n])),
-    [state.nos],
-  );
 
   const statusGeral: NoStatus = state.nos.some((n) => n.status === "down")
     ? "down"
@@ -157,29 +156,10 @@ export default function SalaControle() {
             </div>
           ) : aba === "ops" ? (
             <PainelOps />
-          ) : aba === "mapa" ? (
-            <>
-              <div className="sc-map-title">MAPA VIVO · <b>{state.nos.length} nós</b> · atualizado {new Date(state.atualizadoEm).toLocaleTimeString("pt-BR", { hour12: false })}</div>
-              <svg viewBox="0 0 100 100" preserveAspectRatio="none">
-                {state.links.map((l, i) => {
-                  const a = nosPorId[l.de];
-                  const b = nosPorId[l.para];
-                  if (!a || !b) return null;
-                  return (
-                    <line
-                      key={i}
-                      className="sc-link"
-                      x1={a.x} y1={a.y} x2={b.x} y2={b.y}
-                      vectorEffect="non-scaling-stroke"
-                    />
-                  );
-                })}
-              </svg>
-              {state.nos.map((n) => (
-                <NoCard key={n.id} no={n} />
-              ))}
-            </>
+          ) : aba === "jarvis" ? (
+            <PainelJarvis nos={state.nos} links={state.links} atualizadoEm={state.atualizadoEm} />
           ) : aba === "grok" ? (
+
             <div style={{ overflow: "auto", maxHeight: "100%" }}>
               <GrokMissoes />
             </div>
@@ -234,17 +214,3 @@ export default function SalaControle() {
   );
 }
 
-function NoCard({ no }: { no: CockpitNo }) {
-  return (
-    <div
-      className="sc-no"
-      style={{ left: no.x + "%", top: no.y + "%" }}
-      title={no.detalhe}
-    >
-      <span className={"sc-dot " + statusClass(no.status)} />
-      <span className="sc-no-grp">{no.grupo}</span>
-      <span className="sc-no-nome">{no.nome}</span>
-      {no.detalhe && <span className="sc-no-det">{no.detalhe}</span>}
-    </div>
-  );
-}
