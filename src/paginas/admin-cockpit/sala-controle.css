@@ -284,7 +284,7 @@
   /* no mobile o painel cresce em altura em vez de recortar o mapa */
   .jv-wrap { position: static; }
   /* padding insere margem de segurança: % do absolute usa a caixa de padding */
-  .jv-mapa { height: 560px; flex: none; padding: 18px 58px 34px; }
+  .jv-mapa { height: 560px; flex: none; padding: 18px 74px 34px 62px; }
 
 
   .jv-no { min-width: 96px; font-size: 10px; padding: 6px 8px; }
