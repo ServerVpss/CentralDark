@@ -29,6 +29,47 @@ jobs:
         run: pip install pytest
       - name: Validar hash canônico da Lupa
         run: python scripts/lupa/validar_autolupa_hash.py
+      - name: Provar Gate Final Adversarial
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          skill = Path('.agents/skills/meta-lupa/SKILL.md').read_text(encoding='utf-8')
+          required = (
+              '### 10. Executar o Gate Final Adversarial',
+              '### 11. Selecionar revisão proporcional ao ambiente',
+              'GATE_FINAL_ADVERSARIAL=PASS|FAIL|UNPROVEN',
+              'ZERO_REGRESSION=PASS|FAIL|UNPROVEN',
+              r'T_{\mathrm{baseline\_pass}}',
+              r'\Delta_{\mathrm{outside\_scope}}=\varnothing',
+              'PONTO_FIXO_ATINGIDO não é PASS.',
+              'O executor nunca aprova a si mesmo.',
+              'Não cria outra skill',
+              'GATE FINAL ADVERSARIAL:',
+              'CLAIMS REPRODUZIDAS:',
+              'BASELINE/DIFF:',
+              'ZERO REGRESSION:',
+              'JUDGE INDEPENDENTE:',
+              'CONTRAPROVA FINAL:',
+          )
+          missing = [token for token in required if token not in skill]
+          if missing:
+              raise SystemExit(f'Gate Final incompleto; tokens ausentes: {missing}')
+
+          autolupa = skill.index('### 9. Executar a AutoLupa')
+          gate = skill.index('### 10. Executar o Gate Final Adversarial')
+          review = skill.index('### 11. Selecionar revisão proporcional ao ambiente')
+          output = skill.index('## Saída obrigatória')
+          if not autolupa < gate < review < output:
+              raise SystemExit('Ordem canônica inválida: AutoLupa → Gate Final → revisão → saída')
+
+          if 'Fable permanece `EXPERIMENTAL_FAIL_CLOSED`, fora do\nroteamento padrão' not in skill:
+              raise SystemExit('Regressão: Fable deixou de permanecer experimental e fora do roteamento')
+
+          print('GATE_FINAL_ADVERSARIAL_CONTRACT=PASS')
+          print('GATE_FINAL_ORDER=PASS')
+          print('FABLE_DEPENDENCY=NAO')
+          PY
       - name: Rodar testes de conformidade
         env:
           AUTOLUPA_REPORT: .agents/skills/meta-lupa/testes/fixtures/exemplo_ok.md
