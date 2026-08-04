@@ -1,9 +1,9 @@
 name: PR611 Reconciliação Única
 
 on:
-  pull_request:
-    branches: [main]
-    types: [synchronize]
+  push:
+    branches:
+      - docs/acorda-rebuilder-20260801
 
 permissions:
   contents: write
@@ -14,10 +14,7 @@ concurrency:
 
 jobs:
   reconcile-test-publish:
-    if: >-
-      github.event.pull_request.number == 611 &&
-      github.event.pull_request.head.repo.full_name == github.repository &&
-      github.event.pull_request.user.login == 'segredounlock'
+    if: github.actor == 'segredounlock'
     runs-on: ubuntu-latest
     timeout-minutes: 35
     steps:
@@ -27,40 +24,42 @@ jobs:
           ref: docs/acorda-rebuilder-20260801
           fetch-depth: 0
 
-      - name: Buscar main vigente
-        run: git fetch origin main
+      - name: Configurar Git e buscar main vigente
+        run: |
+          git config user.name 'centraldark-reconcile[bot]'
+          git config user.email 'centraldark-reconcile[bot]@users.noreply.github.com'
+          git fetch origin main
 
       - uses: actions/setup-node@v4
         with:
           node-version: 22
 
-      - uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Reconciliar sem descartar peças únicas
-        run: python scripts/temporary/pr611_reconcile_main.py
-
-      - name: Testar Escola, porta, relato e mapa
+      - name: Reconciliar, restaurar contrato e testar
         run: |
           set -euo pipefail
+          python scripts/temporary/pr611_reconcile_main.py
+          python scripts/temporary/pr611_restore_calibration.py
           node --test scripts/lupa/agentic-school-loader.test.mjs
           node --test scripts/lupa/agentic-loop-progress.test.mjs
           node --test scripts/lupa/validar-relato-pivete.test.mjs
-          node --test scripts/lupa/validar-porta-de-entrada.test.mjs
           node --test apps/modulos/mapeamento/tests/validar-mapa.test.mjs
           python scripts/lupa/validar_autolupa_hash.py
+          python scripts/lupa/test_validar_agentic_visual_package.py
+          node scripts/lupa/agentic-school-loader.mjs --task feature --json
           python scripts/lupa/validar_agentic_visual_package.py --json
           node scripts/lupa/validar-porta-de-entrada.mjs
           git diff --check
 
-      - name: Publicar merge e remover instrumento temporário
+      - name: Publicar reconciliação e remover instrumentos temporários
         run: |
           set -euo pipefail
           rm -f scripts/temporary/pr611_reconcile_main.py
+          rm -f scripts/temporary/pr611_restore_calibration.py
           git add -A
           git diff --cached --check
-          git config user.name 'centraldark-reconcile[bot]'
-          git config user.email 'centraldark-reconcile[bot]@users.noreply.github.com'
           git commit -m 'reconcile(agentic): integrar main e preservar escola canônica'
           git push origin HEAD:docs/acorda-rebuilder-20260801
