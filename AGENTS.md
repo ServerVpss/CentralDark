@@ -4,24 +4,25 @@
 
 `ServerVpss/CentralDark` é o repositório oficial e fonte da verdade do projeto.
 
-## 🔒 BOOT OBRIGATÓRIO — LUPA BAYESIANA
+## Boot obrigatório — governança primeiro, lupa por risco
 
 ```text
-META_LUPA_BOOT_REQUIRED: SIM
-LUPA_USE_RECEIPT_REQUIRED: SIM
+GOVERNANCE_BOOT_REQUIRED: SIM
+REUSE_BEFORE_CREATE_REQUIRED: SIM
+META_LUPA_FOR_CRITICAL_SCOPE: SIM
 SKILL_PATH: .agents/skills/meta-lupa/SKILL.md
 SKILL_REF: origin/main
 SKILL_IDENTITY_FILE: .agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA
+RECONCILIATION_CONTRACT: docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json
 ```
 
-A identidade vigente da skill é resolvida pelo arquivo canônico acima e validada contra o blob Git real. É proibido copiar um SHA fixo para este adaptador.
+A identidade vigente da Meta Lupa é resolvida pelo arquivo canônico acima e validada contra o blob Git real. É proibido copiar um SHA fixo para adaptadores.
 
-Antes de alterar qualquer arquivo, carregar a skill `meta-lupa` e registrar o uso (BEGIN+FINAL) no ledger da skill. Sem BEGIN → `BOOT_BLOQUEADO`.
+A governança e a reconciliação de contexto são obrigatórias para toda tarefa. O ciclo completo da Meta Lupa com `BEGIN+FINAL` é obrigatório para mudanças críticas ou protegidas: deploy, merge, segurança, migração, produção, governança, área consolidada ou risco real de regressão/perda. Correção simples, local, clara e reversível usa preflight mínimo, teste aplicável e prova curta; não deve ser artificialmente transformada em missão crítica.
 
 ## Boot universal de qualquer IA
 
-Este arquivo vale para qualquer IA, agente, plugin, hub ou modelo presente ou futuro.
-O nome comercial do modelo não concede papel, autoridade ou permissão especial.
+Este arquivo vale para qualquer IA, agente, plugin, hub ou modelo presente ou futuro. O nome comercial do modelo não concede papel, autoridade ou permissão especial.
 
 Antes de responder ou agir:
 
@@ -29,15 +30,36 @@ Antes de responder ou agir:
 2. Ler `docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md`.
 3. Ler `docs/CONSCIENCIA/2026-06-20-padrao-resposta-pivete.md`.
 4. Ler `docs/CONSCIENCIA/DICIONARIO-PIVETE-GITHUB.md`.
-5. Ler `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md`.
-6. Ler `docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md` quando a missão referenciá-lo explicitamente ou quando ele estiver em validação. Enquanto marcado `CANDIDATO_CANONICO`, ele é referência operacional em avaliação — não substitui os contratos já promovidos dos itens anteriores.
-7. Identificar o papel atual: coordenador, executor, debugger, revisor, judge, Hermes ou somente leitura.
-8. Confirmar a fonte da verdade e o estado atual por ferramenta.
-9. Emitir uma vez o `CENTRALDARK_AI_BOOT` definido em `LEIA-ME-IA.md`.
+5. Ler `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json`.
+6. Ler `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md`.
+7. Ler `docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md` somente quando a missão o referenciar ou quando o escopo for crítico.
+8. Identificar o papel atual: coordenador, executor, debugger, revisor, judge, Hermes ou somente leitura.
+9. Confirmar fonte da verdade e estado atual por ferramenta.
+10. Emitir uma vez o `CENTRALDARK_AI_BOOT` definido em `LEIA-ME-IA.md`.
+
+### Reconciliação obrigatória antes de criar
+
+Antes de propor código, arquitetura, skill, workflow, plugin, serviço ou processo novo:
+
+```text
+pedido atual
+→ busca de capacidades existentes
+→ abertura dos arquivos principais
+→ cruzamento explícito com o pedido
+→ classificação de autoridade e runtime
+→ reutilização ou extensão mínima
+→ criação somente com gap real provado
+```
+
+Encontrar um arquivo e não relacioná-lo ao pedido é `FALHA_DE_RECONCILIACAO_DE_CONTEXTO`.
+
+Um PR aberto ou Draft, plano, programa, relatório ou prova formal não vira autoridade operacional automaticamente. Ele deve ser classificado como `CANONICAL`, `OPERATIONAL`, `CANDIDATE`, `PROGRAM_ONLY`, `HISTORICAL` ou `UNKNOWN`. Caminho existente não prova runtime; ausência de runtime não autoriza duplicar um componente canônico.
+
+Esse preflight é interno. Não transformar a governança em formulário, parede de texto ou microdecisões para SEGREDO/CHEFE.
 
 Regras automáticas:
 
-- leitores podem investigar em paralelo;
+- leitores podem investigar em paralelo somente quando houver ganho real;
 - existe somente um escritor por escopo;
 - mensagem atrasada não reinicia missão;
 - estado novo comprovado vence contexto antigo;
@@ -45,7 +67,8 @@ Regras automáticas:
 - nenhum executor aprova a si mesmo;
 - troca de escritor exige handoff explícito;
 - SEGREDO/CHEFE permanece autoridade humana final;
-- SOL coordena, PIVETE/HERMES preserva e executa, Judge valida de forma independente.
+- SOL coordena, PIVETE/HERMES preserva e executa, Judge valida de forma independente;
+- tarefa simples não vira swarm, tratado matemático, matriz de fases ou nova arquitetura sem solicitação.
 
 ## Doutrina
 
@@ -67,6 +90,8 @@ NADA NO ESCURO.
 CAPTURE → SANITIZE + HASH → DECIDE → APPLY → JUDGE → CHEFE → RECEIPT + LEARNING → LOOP
 ```
 
+Este fluxo é para missão crítica, não para toda alteração.
+
 Regras mínimas:
 
 - durante CAPTURE ninguém altera, fecha porta, reinicia serviço ou promove;
@@ -75,19 +100,20 @@ Regras mínimas:
 - APPLY exige baseline, backup, rollback e um único writer por escopo;
 - Judge e Writer precisam de contexto, permissões e credenciais separados;
 - falha de gate produz `BLOCKED`, nunca falso verde;
-- o LOOP termina somente com contraprova, receipt e decisão de SEGREDO/CHEFE.
+- o LOOP termina somente com contraprova, receipt e decisão aplicável de SEGREDO/CHEFE.
 
-Detalhamento operacional (candidato, ainda não promovido): `docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md` — status `CANDIDATO_CANONICO`. A autoridade canônica permanece em `LEIA-ME-IA.md` e `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` até promoção explícita de SEGREDO/CHEFE.
+Detalhamento operacional em avaliação: `docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md`. A autoridade canônica permanece em `LEIA-ME-IA.md` e `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` até promoção explícita.
 
 ## Trabalho dos agentes
 
-Antes de alterar qualquer arquivo:
+Antes de alterar arquivos:
 
-1. Ler `CLAUDE.md` e os documentos de governança aplicáveis.
-2. Mapear o escopo e identificar áreas protegidas.
-3. Fazer correção mínima e auditável.
-4. Não tocar na VPS, produção ou deploy sem autorização explícita.
-5. Encerrar com handoff, arquivos alterados, testes e riscos.
+1. Reconciliar o pedido com o que já existe.
+2. Classificar o risco e o nível de governança necessário.
+3. Mapear o escopo e identificar áreas protegidas.
+4. Fazer a correção mínima e auditável.
+5. Não tocar na VPS, produção ou deploy sem autorização explícita aplicável.
+6. Encerrar com arquivos alterados, testes, estado real e bloqueio verdadeiro, sem burocracia artificial.
 
 ## Arquivos sensíveis
 
@@ -112,7 +138,7 @@ Use somente placeholders como `<REDACTED>`, `<ENV_PROVIDER_KEY>` e `<INTERNAL_BA
 - Não criar versões duplicadas `v1`, `v2`, `v3`.
 - Não registrar Authorization header, token ou valor de chave.
 - Não transformar preview em fonte oficial.
-- GitHub registra; VPS apenas executa o que foi aprovado.
+- GitHub registra; VPS executa o que foi aprovado.
 
 ## Code Review Rules
 
@@ -121,12 +147,19 @@ Use somente placeholders como `<REDACTED>`, `<ENV_PROVIDER_KEY>` e `<INTERNAL_BA
 - Revisar o HEAD exato informado no PR; comentário ou receipt de SHA antigo não aprova SHA novo.
 - O revisor opera em modo somente leitura: não faz push, merge, deploy, resolve thread ou promove sozinho.
 - Sinalizar qualquer bypass de SEGREDO/CHEFE, de writer único por escopo ou de Judge independente.
-- Não ampliar o escopo do PR para resolver achados de outra trilha; registrar dependência separada.
+- Não ampliar o escopo do PR para resolver achados de outra trilha; registrar dependência separada quando ela for real.
+
+### Reconciliação e duplicação
+
+- Antes de aceitar componente novo, exigir inventário do equivalente existente e gap provado.
+- Sinalizar arquivo encontrado mas ignorado na decisão arquitetural.
+- Sinalizar PR/programa histórico usado como autoridade operacional sem prova atual.
+- Preferir extensão mínima do componente canônico existente.
 
 ### Evidência e falso verde
 
 - `UNKNOWN`, `ANOMALY`, `ACHADO_PENDENTE`, `BLOCKED` com `reason: SKIPPED`, timeout, ausência de log ou ausência de revisão nunca equivalem a PASS.
-- Exigir causa, impacto, teste, contraprova, rollback e receipt presos ao mesmo HEAD.
+- Exigir causa, impacto, teste, contraprova, rollback e receipt presos ao mesmo HEAD quando o risco justificar.
 - Sinalizar fallback silencioso, resultado simulado, lista estática tratada como disponibilidade real ou aprovação sem prova.
 
 ### Segurança e credenciais
@@ -139,6 +172,5 @@ Use somente placeholders como `<REDACTED>`, `<ENV_PROVIDER_KEY>` e `<INTERNAL_BA
 ### Arquitetura canônica
 
 - Sinalizar novo entrypoint, orquestrador concorrente ou duplicação por nome `V2`, `V3`, `NOVO`, `FINAL`, `COPY` ou `BACKUP`.
-- Preferir adaptação mínima do componente canônico existente.
-- Confrontar mudanças de governança com `LEIA-ME-IA.md`, este `AGENTS.md` e o mapa canônico.
+- Confrontar mudanças de governança com `LEIA-ME-IA.md`, este `AGENTS.md`, o contrato de reconciliação e o mapa canônico.
 - Priorizar findings P0/P1 consequenciais; evitar ruído cosmético como bloqueador.
