@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-08-01T00:39:39.632Z
+# 🧠 Notion Sync — 2026-08-04T09:47:49.635Z
 
-- **Commit fonte:** `363b04909091ae24da8d4408effb60c7c3be777e`
+- **Commit fonte:** `0eec53227763fb8a2a7740bd6fad302d5f12f16c`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 51 atualizadas · ❌ 331 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 51 atualizadas · ❌ 331 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
-| aprendizados | 7 | 0 | 7 | 0 | 0 |
+| aprendizados | 8 | 1 | 7 | 0 | 0 |
 | estrutura | 331 | 0 | 0 | 0 | 331 |
 
 ## Operações
@@ -73,6 +73,7 @@
 | aprendizados | atualizado | #5 — Workflow promovido sem o script que ele executa: o bot autônomo nunca rodou |
 | aprendizados | atualizado | #6 — A porta de entrada nunca existiu: por que nenhuma IA lia as regras da casa |
 | aprendizados | atualizado | #7 — github_commit (MCP) não deleta arquivo; duplicatas CONSCIENCIA/BRAIN nasceram do mesmo commit de bot |
+| aprendizados | criado | #8 — Nunca gerar -v2/-v3: refinar o arquivo que já existe |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
