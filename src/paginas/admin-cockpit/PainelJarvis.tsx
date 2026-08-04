@@ -10,7 +10,12 @@ type Props = {
   atualizadoEm: string | number;
 };
 
+// comprime as coordenadas pra dentro da moldura (evita corte nas bordas)
+const px = (x: number) => 12 + x * 0.76;
+const py = (y: number) => 6 + y * 0.88;
+
 function cls(s: NoStatus) {
+
   return s === "ok" ? "" : s;
 }
 
