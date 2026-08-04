@@ -14,7 +14,6 @@ concurrency:
 
 jobs:
   reconcile-test-publish:
-    if: github.actor == 'segredounlock'
     runs-on: ubuntu-latest
     timeout-minutes: 35
     steps:
