@@ -1,20 +1,16 @@
 # PRODUCTION GUARDRAILS CONTRACT — CentralDark
 
-**MISSÃO:** Fechar o contrato determinístico da proteção de produção sem transformar a VPS atual em fonte da verdade e sem devolver operação rotineira ao Pivete.
+**MISSÃO:** Definir a proteção determinística de produção sem transformar o runtime atual em fonte da verdade e sem devolver tarefas rotineiras ao Pivete.
 
 **BASE_SHA observado na abertura:** `26d92270da4d5707dd378b942a36b07d4ef097c8`
 
-**DATA:** 2026-08-05
+**STATUS:** `ACHADO_PENDENTE_IMPLEMENTACAO`
 
-**STATUS DO DOCUMENTO:** `CONTRATO_REVISADO_PARA_IMPLEMENTAÇÃO`
-
-> Este documento fecha o contrato. Ele não prova que a autonomia de produção já foi implementada.
+> Este PR fecha o contrato. Não prova que a autonomia de produção foi implementada.
 
 ---
 
-## 1. Autoridade e significado de autonomia
-
-A autonomia vale somente dentro de uma missão previamente autorizada e presa a escopo verificável.
+## 1. Autoridade e autonomia
 
 ```text
 PIVETE DEFINE INTENÇÃO + ESCOPO + CLASSE DE AÇÃO UMA VEZ
@@ -26,26 +22,13 @@ PIVETE DEFINE INTENÇÃO + ESCOPO + CLASSE DE AÇÃO UMA VEZ
 → GUARDRAILS CONGELAM OU REVERTEM
 ```
 
-O Pivete não deve:
+O Pivete não opera labels, reruns, merge ou deploy já autorizados e comprovados. Nova decisão humana só é necessária quando muda missão, escopo, ambiente, classe de risco ou aparece `UNKNOWN` insolúvel por código.
 
-- aplicar label rotineira;
-- reexecutar workflow;
-- vigiar créditos de provider;
-- apertar merge já autorizado e comprovado;
-- decidir novamente o que já está determinado no contrato da missão.
-
-A automação deve bloquear e notificar somente quando ocorrer:
-
-- expansão de escopo;
-- risco de segurança;
-- evidência contraditória;
-- `UNKNOWN` não solucionável por código;
-- ação destrutiva não autorizada;
-- ausência de artefato anterior comprovado.
+A autorização fica vinculada a missão, repositório, PR/HEAD, caminhos, ambiente, classe de ação e validade. Não existe autorização global transferível entre edição, merge, deploy e rollback.
 
 ---
 
-## 2. Fonte da verdade e limites do runtime
+## 2. Fonte da verdade
 
 ```text
 GITHUB_REPOSITORY=FONTE_DA_VERDADE
@@ -54,53 +37,50 @@ VPS=EXECUTOR_RUNTIME
 VPS_ATUAL=EVIDÊNCIA_HISTÓRICA, NÃO AUTORIDADE ARQUITETURAL
 ```
 
-A implantação futura deve substituir o estado divergente da VPS por um artefato reproduzível gerado a partir do repositório. O contrato não exige preservar nomes, snapshots ou processos antigos somente porque existem no runtime legado.
+O runtime executa o artefato reproduzível gerado pelo GitHub. Estado legado não vira requisito apenas por existir.
 
 ---
 
-## 3. Evidência observada no repositório
+## 3. Evidência observada
 
 | Componente | Estado comprovado | Limite real |
 |---|---|---|
-| Juiz e promotor | Existem em `scripts/github-autonomia-promocao.mjs` e no workflow de autonomia | Promoção ponta a ponta ainda precisa de prova no mesmo HEAD |
-| Health pós-deploy | `scripts/postdeploy-healthcheck.sh` valida MCP de forma pontual | Não valida SHA do artefato; o E2E público é não bloqueante |
-| Rollback MCP | `scripts/rollback-mcp.sh` possui snapshot e restauração manual | Snapshot não possui receipt/hash de artefato e usa estado local da VPS |
-| Health VPS | `.github/workflows/vps-healthcheck.yml` roda a cada 6 horas | Coleta estado e notifica; não fecha STOP_WRITE/rollback |
-| Notificação | Existem caminhos de notificação | Falta contrato de eventos, deduplicação e recibo `NOT_SENT` no fluxo de produção |
-| Provider health | Existe classificador sanitizado | Deve ser reutilizado; indisponibilidade de IA não pode paralisar gates determinísticos |
+| Juiz/promotor | Existem no motor de autonomia | Fluxo ponta a ponta permanece sem prova no mesmo HEAD |
+| Health pós-deploy | Existe validação pontual | Falta vincular saúde ao SHA do artefato |
+| Rollback | Existe restauração manual | Alvo ainda não é selecionado por receipt autoritativo |
+| Health runtime | Existe coleta periódica | Coleta e notifica, mas não fecha freeze/rollback |
+| Notificação | Existem canais | Falta contrato de eventos, deduplicação e `NOT_SENT` |
+| Provider health | Existe classificador sanitizado | Deve ser reutilizado fora do caminho crítico |
 
-### Lacunas correlatas confirmadas
-
-1. `.github/workflows/autonomia-promocao.yml` ainda usa fallback de `PROMOTION_TOKEN` para `github.token`. Isso é uma lacuna de separação de poderes, mas não deve ser escondido dentro do motor de produção.
-2. `.env` está rastreado na raiz apesar de `.gitignore` proibir `.env`. O conteúdo não deve ser lido nem reproduzido; remoção do tracking, scanner e rotação pertencem a uma trilha de segurança P0 separada.
-3. O PR documental não pode declarar autonomia concluída sem código, testes, deploy seguro e prova de rollback.
+Achados de segurança e separação de poderes identificados durante a revisão ficam em trilha P0 separada. O conteúdo sensível não é lido nem reproduzido neste contrato.
 
 ---
 
-## 4. Definição precisa de STOP_WRITE
-
-`STOP_WRITE` não significa interromper gravações dos clientes ou corromper tráfego de aplicação.
-
-Neste contrato:
+## 4. STOP_WRITE sem ambiguidade
 
 ```text
 STOP_WRITE_SCOPE=CI_PROMOTION_AND_DEPLOY
 ```
 
-Ao ativar:
+`STOP_WRITE` bloqueia novas promoções e deploys, congela o candidato, preserva evidência e impede segundo escritor no mesmo alvo. Não bloqueia gravações dos clientes.
 
-- bloquear novos merges promovidos pela autonomia;
-- bloquear novos deploys;
-- congelar o candidato atual;
-- preservar logs e receipts;
-- impedir que outro agente altere o mesmo alvo;
-- manter o serviço estável atual enquanto a causa é classificada.
+### Estado autoritativo
 
-Bloqueio de escrita funcional da aplicação somente pode existir em contrato específico do produto, nunca como efeito implícito deste guardrail.
+```text
+STATE_STORE=CANONICAL_DEPLOY_CONTROL_PLANE
+SINGLE_WRITER=PRODUCTION_GUARDRAILS_CONTROLLER
+UPDATE=ATOMIC_COMPARE_AND_SET
+VERSION=MONOTONIC
+TTL=VERSIONED_POLICY
+RELEASE=RECOVERY_GATE_PASS
+GUARD_UNAVAILABLE=FAIL_CLOSED_FOR_NEW_PROMOTION_AND_DEPLOY
+```
+
+Todos os escritores consultam o mesmo estado. Se nenhum armazenamento canônico existente satisfizer o contrato, a implementação fica `BLOCKED`; não se cria estado concorrente.
 
 ---
 
-## 5. Máquina de estados determinística
+## 5. Máquina de estados
 
 ```text
 OBSERVING
@@ -115,81 +95,78 @@ EVALUATING
 → VERIFYING_RECOVERY
 → RECOVERED
 
-QUALQUER ESTADO
+QUALQUER_ESTADO
+→ UNKNOWN
 → SECURITY_BLOCKED
 → PRODUCTION_BLOCKED
-→ UNKNOWN
 ```
 
-Regras:
+Timeout, métrica obsoleta, body inválido, coletor indisponível, SHA ausente e parse inválido geram `UNKNOWN` + `DEPLOY_FROZEN` + receipt. Nunca viram `PASS`.
 
-- cada transição possui entrada, regra, evidência e saída;
-- `SKIPPED`, ausência de medição e parse inválido nunca viram `HEALTHY`;
-- mudança de artefato ou SHA invalida evidência anterior;
-- execução concorrente usa lock atômico e idempotency key;
-- nenhum rollback começa sem alvo anterior comprovado.
+Retries exigem evidência nova. Mudança de HEAD ou artefato invalida prova anterior. Execução concorrente usa lock e idempotency key.
 
 ---
 
-## 6. Política de sinais: congelar não significa sempre reverter
+## 6. Sinais e causalidade
 
-O erro central do contrato anterior era usar `combine=ANY` seguido de rollback obrigatório. Nem toda falha é causada pelo deploy. Reverter durante falha externa pode piorar o incidente.
+Rollback por qualquer sinal isolado foi refutado.
 
-### Classe A — crítica e diretamente ligada ao artefato
+### Classe A — ligada diretamente ao artefato
 
-Ativa `DEPLOY_FROZEN` e torna rollback elegível imediatamente:
+Freeze e rollback elegível:
 
-- runtime SHA diferente do SHA promovido;
+- SHA esperado diferente do runtime;
 - artefato sem checksum/receipt válido;
-- health profundo com schema inválido após o deploy;
-- processo crítico do artefato recém-implantado parado;
-- scanner de segurança crítico ligado ao artefato;
-- canário falhou enquanto o artefato anterior estava saudável.
+- health com schema inválido após deploy;
+- processo crítico do novo artefato parado;
+- canário do novo artefato falhou com anterior saudável.
 
-### Classe B — degradação sustentada e correlacionada
+### Classe B — degradação sustentada
 
-Ativa `DEPLOY_FROZEN`. Rollback somente após correlação com o deploy:
+Freeze; rollback somente após correlação:
 
-- taxa de 5xx acima do limite com volume mínimo;
-- p99 acima do limite junto com queda do health profundo;
-- restart storm calculado por delta na janela, nunca por contador vitalício;
-- falhas consecutivas de endpoints críticos;
-- regressão de métrica contra baseline versionado.
+- taxa de erros acima do limite com volume mínimo;
+- latência p99 alta junto com health degradado;
+- restart storm por delta na janela;
+- falhas consecutivas de endpoint crítico;
+- regressão contra baseline versionado.
 
-### Classe C — dependência ou provider externo
+### Classe C — dependência externa
 
-Ativa congelamento, failover e notificação. Não autoriza rollback por padrão:
+Freeze, failover e notificação. Sem rollback por padrão.
 
-- banco, Redis ou API externa indisponível;
-- provider de IA sem crédito, limitado ou offline;
-- falha de DNS/rede externa;
-- indisponibilidade do canal de notificação.
-
-### Classe D — evidência insuficiente
+Cada dependência crítica vem de registro versionado:
 
 ```text
-MEDIÇÃO_AUSENTE
-PARSE_INVÁLIDO
-BASELINE_AUSENTE
-ARTEFATO_ANTERIOR_NÃO_PROVADO
-CAUSA_CONTRADITÓRIA
-→ UNKNOWN
-→ DEPLOY_FROZEN
-→ SEM ROLLBACK AUTOMÁTICO
+DEPENDENCY_ID=
+PROBE_SOURCE=
+PROBE_TYPE=
+TIMEOUT_MS=
+RETRIES=
+QUORUM=
+STALE_AFTER_SECONDS=
+AUTH_FAILURE_ACTION=
+PARTIAL_FAILURE_RULE=
+NEGATIVE_CONDITION=
+POSITIVE_RECOVERY_CONDITION=
+FAILOVER_TARGET=
+ROLLBACK_ELIGIBLE=false
 ```
+
+Dados obsoletos, ausência de quorum, autenticação inválida e probe não parseável geram `UNKNOWN` ou `SECURITY_BLOCKED`.
 
 ---
 
-## 7. Correlação obrigatória antes do rollback
+## 7. Correlação exigida para rollback
 
-Rollback automático é permitido somente quando pelo menos uma condição for verdadeira:
+Rollback automático somente quando ao menos uma condição for comprovada:
 
-1. existe divergência direta entre SHA esperado e runtime;
-2. o incidente começou dentro da janela pós-deploy e o artefato anterior possui prova de saúde;
-3. o canário do novo artefato falhou antes da promoção completa;
+1. SHA esperado diverge do runtime;
+2. incidente começou na janela pós-deploy e o anterior possui saúde comprovada;
+3. canário falhou antes da promoção completa;
 4. teste determinístico reproduz a regressão no novo artefato e não no anterior.
 
-Fora dessas condições:
+Caso contrário:
 
 ```text
 DEPLOY_FROZEN=true
@@ -200,10 +177,6 @@ ROLLBACK_ELIGIBLE=false
 
 ## 8. Política versionada
 
-A política deve ser versionada e validada por schema. Limites não podem nascer como números decorativos; devem vir de baseline, contrato do serviço ou teste de carga reproduzível.
-
-Estrutura mínima:
-
 ```json
 {
   "schema": "centraldark.production-guardrails.v1",
@@ -213,17 +186,14 @@ Estrutura mínima:
   "max_rollback_attempts": 1,
   "rollback_target": "PREVIOUS_PROVEN_ARTIFACT",
   "critical_processes_ref": "CANONICAL_RUNTIME_MANIFEST",
+  "critical_dependencies_ref": "CANONICAL_DEPENDENCY_REGISTRY",
   "thresholds_ref": "VERSIONED_BASELINE",
-  "actions": {
-    "freeze": true,
-    "rollback_requires_correlation": true,
-    "notify": true,
-    "emit_receipt": true
-  }
+  "state_store_ref": "CANONICAL_DEPLOY_CONTROL_PLANE",
+  "rollback_requires_correlation": true
 }
 ```
 
-A ativação deve começar em `SHADOW`, produzir evidência e somente depois migrar para `ENFORCE` no mesmo contrato canônico.
+Limites vêm de baseline, contrato do serviço ou teste reproduzível. Ativação começa em `SHADOW`; somente prova permite `ENFORCE`.
 
 ---
 
@@ -232,142 +202,114 @@ A ativação deve começar em `SHADOW`, produzir evidência e somente depois mig
 `PREVIOUS_PROVEN_ARTIFACT` exige:
 
 - commit SHA;
-- hash do artefato;
-- origem do workflow;
-- resultado de build;
-- resultado de health/canário;
-- timestamp;
-- ambiente;
+- SHA-256 do artefato;
+- hash da política;
+- workflow de origem;
+- build e testes;
+- health/canário;
+- ambiente e timestamp;
 - receipt íntegro;
 - localização recuperável;
-- compatibilidade de migração/rollback.
+- compatibilidade de rollback.
 
-Um diretório local criado por `cp` sem receipt e hash não é prova suficiente para rollback autônomo.
-
----
-
-## 10. Implementação mínima, melhorando o que existe
-
-1. Evoluir `scripts/postdeploy-healthcheck.sh`:
-   - validar JSON por parser real;
-   - validar schema;
-   - comparar SHA esperado com runtime;
-   - tornar todos os checks declaradamente bloqueantes ou não bloqueantes;
-   - emitir saída estruturada sanitizada.
-
-2. Evoluir `scripts/rollback-mcp.sh` ou substituí-lo internamente pelo executor canônico:
-   - aceitar somente artifact receipt válido;
-   - usar lock e idempotency key;
-   - não escolher snapshot apenas por data;
-   - validar compatibilidade antes da restauração;
-   - verificar saúde e SHA após rollback;
-   - executar no máximo uma tentativa automática.
-
-3. Evoluir `.github/workflows/vps-healthcheck.yml`:
-   - separar coleta de decisão;
-   - não publicar `pm2 jlist` bruto;
-   - calcular deltas de restart;
-   - produzir evento sanitizado;
-   - reduzir a dependência exclusiva do cron de 6 horas;
-   - manter execução periódica como fallback, não como único detector.
-
-4. Reutilizar `scripts/agent-notify.mjs` e o classificador de provider:
-   - eventos versionados;
-   - deduplicação por missão + artefato + evento + causa;
-   - `NOT_SENT` quando o canal falhar;
-   - zero segredo em log.
-
-5. Adicionar um único coordenador de guardrails somente se a busca provar que não existe equivalente canônico. Ele deve orquestrar os componentes acima, não duplicá-los.
-
-6. Tratar separadamente, mas no mesmo programa de fechamento:
-   - remover fallback silencioso do `PROMOTION_TOKEN`;
-   - retirar `.env` do tracking sem reproduzir conteúdo;
-   - rotacionar valores potencialmente expostos;
-   - provar que scanner e `.gitignore` impedem recorrência.
+O alvo é selecionado pelo receipt vinculado ao SHA, nunca apenas por data ou mtime.
 
 ---
 
-## 11. Eventos e receipts
+## 10. Implementação no canônico existente
 
-Eventos mínimos:
+1. Evoluir health pós-deploy com parser, schema, SHA e saída sanitizada.
+2. Evoluir rollback para aceitar somente receipt válido, lock, idempotência e verificação pós-rollback.
+3. Evoluir health periódico para separar coleta de decisão, calcular deltas e não publicar estado bruto.
+4. Reutilizar classificador de provider e notificador com eventos versionados, dedup e `NOT_SENT`.
+5. O destino de notificação deve ser o canal canônico do CentralDark; fallback para canal não autorizado é bloqueado.
+6. Criar um único coordenador apenas se busca provar ausência de equivalente. Sem V2/V3.
+7. Achados P0 correlatos são corrigidos em trilha separada, com scanner e prova de não recorrência.
 
-```text
-PRODUCTION_SIGNAL_OBSERVED
-DEPLOY_FROZEN
-ROLLBACK_ELIGIBLE
-ROLLBACK_NOT_ELIGIBLE
-ROLLBACK_STARTED
-ROLLBACK_SUCCEEDED
-ROLLBACK_FAILED
-RECOVERY_VERIFIED
-PRODUCTION_BLOCKED
-NOTIFICATION_NOT_SENT
-```
+---
 
-Receipt mínimo:
+## 11. Receipt completo
 
 ```text
+SCHEMA=
 MISSION_ID=
+AUTHORITY_DECISION_REF=
+AUTHORIZATION_RECEIPT_SHA256=
 REPOSITORY=
 ENVIRONMENT=
+ACTOR_ROLE=
+BASE_SHA=
+HEAD_SHA=
+POLICY_SHA256=
 DEPLOY_SHA=
+TARGET_ID=
 ARTIFACT_SHA256=
 PREVIOUS_ARTIFACT_SHA256=
 SIGNAL_CLASS=
 SIGNAL_VALUES=
 BASELINE_REF=
+EVIDENCE_REFS=
+TEST_RESULTS=
+IMPACT=
 DECISION_RULE=
 ACTION=
-RESULT=
+ROLLBACK_RESULT=
+RECOVERY_RESULT=
+SANITIZATION_PROFILE=
 TIMESTAMP_UTC=
 IDEMPOTENCY_KEY=
+RESULT=
 ```
 
----
-
-## 12. Testes de contrato obrigatórios
-
-1. 5xx abaixo do volume mínimo → nenhuma reversão.
-2. 5xx sustentado e correlacionado ao deploy → freeze + rollback elegível.
-3. p99 alto isolado → freeze/observação, sem rollback automático.
-4. p99 alto + health degradado após deploy → rollback elegível.
-5. SHA mismatch → freeze imediato + rollback elegível.
-6. restart storm usa delta de janela, não contador acumulado.
-7. dependência externa indisponível → failover/freeze, sem rollback padrão.
-8. provider sem crédito → fallback + notificação; gates determinísticos continuam.
-9. medição ausente ou inválida → `UNKNOWN`, nunca PASS.
-10. ausência de artifact receipt anterior → rollback bloqueado.
-11. duas execuções concorrentes → somente uma adquire lock.
-12. repetição do mesmo evento → ação idempotente e notificação deduplicada.
-13. rollback saudável → `RECOVERED` com SHA comprovado.
-14. rollback falho → `PRODUCTION_BLOCKED` e sem segunda tentativa automática.
-15. canal de notificação falho → `NOT_SENT`, sem falso relato.
-16. modo `SHADOW` → nenhuma mutação, somente receipts.
-17. modo `ENFORCE` → somente ações explicitamente autorizadas.
+Todos os campos ficam presos ao mesmo HEAD/artefato. `AUTHORITY_DECISION_REF` reutiliza a autorização prévia da missão; não exige repetição durante rotina já autorizada.
 
 ---
 
-## 13. Definition of Done da autonomia de produção
+## 12. Testes de contrato
 
-A autonomia de produção somente pode ser declarada `VERIFIED` quando o mesmo conjunto de SHAs provar:
+1. erro abaixo do volume mínimo → sem reversão;
+2. erro sustentado e correlacionado → freeze + rollback elegível;
+3. p99 alto isolado → sem rollback;
+4. p99 alto + health degradado após deploy → rollback elegível;
+5. SHA mismatch → freeze + rollback elegível;
+6. restart storm usa delta;
+7. dependência externa → failover/freeze;
+8. autenticação inválida → `SECURITY_BLOCKED`;
+9. probe sem quorum → `UNKNOWN`;
+10. medição inválida → nunca PASS;
+11. receipt anterior ausente → rollback bloqueado;
+12. duas execuções → um lock;
+13. evento repetido → idempotência e dedup;
+14. promoção após freeze → rejeitada;
+15. rollback saudável → `RECOVERED` com SHA;
+16. rollback falho → `PRODUCTION_BLOCKED`;
+17. canal falho → `NOT_SENT`;
+18. destino não autorizado → envio bloqueado;
+19. `SHADOW` → zero mutação;
+20. `ENFORCE` → somente ações autorizadas.
+
+---
+
+## 13. Definition of Done
 
 ```text
 POLICY_SCHEMA=PASS
+DEPENDENCY_REGISTRY=PASS
+STATE_STORE_ATOMICITY=PASS
 SHADOW_REPLAY=PASS
 CANARY_FAILURE=DETECTED
 DEPLOY_FREEZE=PROVED
+WRITE_AFTER_FREEZE=REJECTED
 ROLLBACK_ELIGIBILITY=PROVED
 ROLLBACK=PROVED_IN_SAFE_ENVIRONMENT
 POST_ROLLBACK_SHA=PROVED
 POST_ROLLBACK_HEALTH=PASS
 IDEMPOTENCY=PASS
 CONCURRENCY_LOCK=PASS
-TELEGRAM_OR_PANEL_RECEIPT=PROVED_OR_NOT_SENT_RECORDED
+NOTIFICATION=PROVED_OR_NOT_SENT_RECORDED
 ZERO_SECRET_OUTPUT=PASS
 ZERO_REGRESSION=PASS
 ```
-
-Este PR documental pode ser aprovado como contrato. Ele não deve receber o veredito de autonomia implementada.
 
 ---
 
@@ -375,7 +317,7 @@ Este PR documental pode ser aprovado como contrato. Ele não deve receber o vere
 
 ```text
 MISSION_ID=CENTRALDARK-AUTONOMIA-DETERMINISTICA-END-TO-END
-CONTRACT_STATUS=REVIEWED_FOR_IMPLEMENTATION
+CONTRACT_STATUS=REVIEWED_FOR_PIVETE
 PRODUCTION_AUTONOMY=NOT_IMPLEMENTED
 PROMOTION_AUTONOMY_END_TO_END=UNPROVEN
 VPS_LEGACY_AS_SOURCE_OF_TRUTH=REFUTED
@@ -384,7 +326,7 @@ ROLLBACK_ON_ANY_SIGNAL=REFUTED
 ROLLBACK_REQUIRES_CAUSAL_CORRELATION=YES
 AI_IN_CRITICAL_DECISION_PATH=NO
 PIVETE_ROUTINE_INTERVENTION=NO
-VERDICT=VERIFIED_WITH_CAVEATS
+VERDICT=ACHADO_PENDENTE
 ```
 
-**Pivete apresenta intenção e autoridade. Código carrega, executa, corrige e prova. IA trabalha no `UNKNOWN`; não substitui o gate determinístico.**
+**Pivete apresenta intenção e autoridade. Código carrega, executa, corrige e prova. IA trabalha no `UNKNOWN`; não substitui gate determinístico.**
