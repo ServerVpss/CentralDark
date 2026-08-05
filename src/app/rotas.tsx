@@ -2,6 +2,7 @@
 // arquivo dedicado dentro de ./rotas/*. Aqui só juntamos tudo.
 import { Routes, Route, Navigate } from "react-router-dom";
 import Docs from "@/funcionalidades/telepainel/pages/Docs";
+import OAuthConsent from "@/paginas/portal-publico/pages/OAuthConsent";
 import WebAppResult from "@/funcionalidades/telepainel/pages/WebAppResult";
 import NotFound from "@/funcionalidades/telepainel/pages/NotFound";
 import SecurityControl from "@/paginas/security-control/SecurityControl";
@@ -26,6 +27,7 @@ export function RotasApp() {
       <Route path="/docs" element={<Docs />} />
       <Route path="/result/:pathToken/:secretToken" element={<WebAppResult />} />
       <Route path="/security-control" element={<SecurityControl />} />
+      <Route path="/.lovable/oauth/consent" element={<OAuthConsent />} />
 
       {(ehModoPortal || ehModoFull) && rotasTelepainel()}
 

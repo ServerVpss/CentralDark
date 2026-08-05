@@ -1,0 +1,158 @@
+{
+  "version": 1,
+  "sdk_version": "0.26.1",
+  "path": "/functions/v1/mcp",
+  "auth": {
+    "type": "oauth",
+    "issuer": "https://kagejpghnwdfymddwxuf.supabase.co/auth/v1",
+    "accepted_audiences": [
+      "authenticated"
+    ]
+  },
+  "mcp": {
+    "server": {
+      "name": "centraldark",
+      "version": "0.1.0",
+      "title": "CentralDark"
+    },
+    "tools": [
+      {
+        "name": "meu_perfil",
+        "title": "Meu perfil",
+        "description": "Mostra o perfil e os papéis (roles) do usuário conectado no CentralDark.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "listar_roadmap",
+        "title": "Listar roadmap",
+        "description": "Lista os itens do roadmap do projeto (título, status, prioridade). Permite filtrar por status.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Filtro opcional de status, ex.: pendente, em_andamento, concluido."
+            },
+            "limite": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "description": "Quantidade máxima de itens."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "criar_item_roadmap",
+        "title": "Criar item no roadmap",
+        "description": "Cria um novo item no roadmap do projeto. Exige que o usuário conectado tenha permissão de admin.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "titulo": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200,
+              "description": "Título curto do item."
+            },
+            "descricao": {
+              "type": "string",
+              "maxLength": 2000,
+              "description": "Detalhe opcional do item."
+            },
+            "prioridade": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100,
+              "default": 50,
+              "description": "Menor número = maior prioridade."
+            },
+            "status": {
+              "type": "string",
+              "minLength": 1,
+              "default": "pendente",
+              "description": "Status inicial do item."
+            }
+          },
+          "required": [
+            "titulo"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "saude_dos_modulos",
+        "title": "Saúde dos módulos",
+        "description": "Mostra a saúde dos módulos nas últimas 24h: taxa de sucesso, erros e último check.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "modulo": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Chave de um módulo específico (module_key)."
+            },
+            "limite": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 30,
+              "description": "Quantidade máxima de módulos."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "listar_modulos_portal",
+        "title": "Listar módulos do portal",
+        "description": "Lista os módulos publicados no portal do CentralDark, na ordem de exibição.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
