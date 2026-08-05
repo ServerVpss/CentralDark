@@ -2,11 +2,14 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  DEFAULT_WAIT_TIMEOUT_MS,
   authorizationFor,
   evaluateCandidate,
   sealReceipt,
   selectLatestNonSkipped,
   verifySealedReceipt,
+  waitAgeMs,
+  waitTimeoutMsFromEnv,
   workflowVerdicts,
 } from "./github-autonomia-promocao.mjs";
 
@@ -164,4 +167,45 @@ test("recibo válido é preso ao hash e expira em 15 minutos", () => {
   const adulterated = structuredClone(sealed);
   adulterated.receipt.repository = "outro/repo";
   assert.throws(() => verifySealedReceipt(adulterated, generated.getTime()), /RECEIPT_HASH_INVALID/);
+});
+
+test("espera dentro da janela continua espera", () => {
+  const agora = Date.parse("2026-08-05T12:00:00.000Z");
+  const result = evaluateCandidate({
+    pr: prFixture({ updated_at: "2026-08-05T11:40:00.000Z" }),
+    repository: "ServerVpss/CentralDark",
+    trustedAuthors: ["segredounlock"],
+    requiredWorkflows: ["gate"],
+    workflowRuns: [],
+    unresolvedThreads: 0,
+    now: agora,
+  });
+  assert.equal(result.decision, "WAIT");
+  assert.match(result.waits.join(" "), /WORKFLOW_MISSING/);
+});
+
+test("espera parada além da janela vira bloqueio, nunca espera infinita muda", () => {
+  const agora = Date.parse("2026-08-05T12:00:00.000Z");
+  const result = evaluateCandidate({
+    pr: prFixture({ updated_at: "2026-08-05T10:00:00.000Z" }),
+    repository: "ServerVpss/CentralDark",
+    trustedAuthors: ["segredounlock"],
+    requiredWorkflows: ["gate"],
+    workflowRuns: [],
+    unresolvedThreads: 0,
+    now: agora,
+  });
+  assert.equal(result.decision, "BLOCKED");
+  assert.match(result.reasons.join(" "), /WAIT_TIMEOUT:120min/);
+});
+
+test("sem relógio o comportamento antigo é preservado", () => {
+  assert.equal(waitAgeMs(prFixture({ updated_at: "2026-08-05T10:00:00.000Z" })), null);
+  assert.equal(waitAgeMs({ updated_at: "data inválida" }, Date.now()), null);
+});
+
+test("janela de espera é configurável e cai no padrão quando inválida", () => {
+  assert.equal(waitTimeoutMsFromEnv({}), DEFAULT_WAIT_TIMEOUT_MS);
+  assert.equal(waitTimeoutMsFromEnv({ BOT_WAIT_TIMEOUT_MINUTES: "0" }), DEFAULT_WAIT_TIMEOUT_MS);
+  assert.equal(waitTimeoutMsFromEnv({ BOT_WAIT_TIMEOUT_MINUTES: "10" }), 600000);
 });

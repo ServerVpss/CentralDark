@@ -32,6 +32,18 @@ export const BLOCKING_LABELS = Object.freeze([
 const RECEIPT_MAX_AGE_MS = 15 * 60 * 1000;
 const API = "https://api.github.com";
 
+/**
+ * Espera não é estado terminal. Se o PR fica parado em WAIT além desta janela,
+ * o motor converte para BLOCKED e avisa, em vez de esperar para sempre em silêncio.
+ */
+export const DEFAULT_WAIT_TIMEOUT_MS = 45 * 60 * 1000;
+
+export function waitTimeoutMsFromEnv(env = process.env) {
+  const minutes = Number(env.BOT_WAIT_TIMEOUT_MINUTES);
+  if (!Number.isFinite(minutes) || minutes <= 0) return DEFAULT_WAIT_TIMEOUT_MS;
+  return Math.round(minutes * 60 * 1000);
+}
+
 export function parseCsv(value, fallback = []) {
   const items = String(value || "")
     .split(",")
@@ -79,6 +91,13 @@ export function workflowVerdicts(runs, requiredWorkflows) {
   });
 }
 
+export function waitAgeMs(pr, now = null) {
+  if (now == null) return null;
+  const stamp = Date.parse(pr?.updated_at || "");
+  if (!Number.isFinite(stamp)) return null;
+  return Math.max(0, now - stamp);
+}
+
 export function evaluateCandidate({
   pr,
   repository,
@@ -88,6 +107,8 @@ export function evaluateCandidate({
   unresolvedThreads,
   reviewThreadsOverflow = false,
   baseUpdateRequired = false,
+  now = null,
+  waitTimeoutMs = DEFAULT_WAIT_TIMEOUT_MS,
 }) {
   const reasons = [];
   const waits = [];
@@ -121,12 +142,20 @@ export function evaluateCandidate({
     }
   }
 
+  const stalledFor = waitAgeMs(pr, now);
+  const waitExpired = waits.length > 0 && stalledFor !== null && stalledFor > waitTimeoutMs;
+  if (waitExpired) {
+    reasons.push(`WAIT_TIMEOUT:${Math.round(stalledFor / 60000)}min:${waits.join("|")}`);
+  }
+
   let decision = "READY";
   if (reasons.length) decision = "BLOCKED";
   else if (baseUpdateRequired) decision = "UPDATE_REQUIRED";
   else if (waits.length) decision = "WAIT";
 
   return {
+    wait_age_ms: stalledFor,
+    wait_timeout_ms: waitTimeoutMs,
     pr_number: pr.number,
     title: pr.title,
     author: pr.user?.login || null,
@@ -309,6 +338,8 @@ async function inspectCandidate(client, repository, number, trustedAuthors, requ
     unresolvedThreads: threadState.unresolved,
     reviewThreadsOverflow: threadState.overflow,
     baseUpdateRequired: needsUpdate,
+    now: Date.now(),
+    waitTimeoutMs: waitTimeoutMsFromEnv(),
   });
 }
 
@@ -318,11 +349,11 @@ async function upsertBlockComment(client, repository, candidate) {
     marker,
     "## Promoção autônoma — bloqueada com segurança",
     "",
-    `HEAD: \`${candidate.head_sha}\``,
-    `Decisão: \`${candidate.decision}\``,
+    `HEAD: \\`${candidate.head_sha}\\``,
+    `Decisão: \\`${candidate.decision}\\``,
     "",
     "Bloqueios:",
-    ...(candidate.reasons.length ? candidate.reasons.map((reason) => `- \`${reason}\``) : ["- estado não elegível"]),
+    ...(candidate.reasons.length ? candidate.reasons.map((reason) => `- \\`${reason}\\``) : ["- estado não elegível"]),
     "",
     "Nenhum merge foi executado. Corrija a causa; o controlador reavalia automaticamente no próximo evento.",
   ];
@@ -409,6 +440,13 @@ async function runPromote() {
         { allow: [202] },
       );
       console.log(`PR=${pr.number} BRANCH_UPDATE_REQUESTED message=${String(result.message || "accepted")}`);
+      // Commits feitos com o token do Actions não disparam novos eventos.
+      // Sem este dispatch o PR fica esperando um gatilho que nunca chega.
+      await client.request("POST", `/repos/${repository}/dispatches`, {
+        event_type: "centraldark_autonomia_recheck",
+        client_payload: { pr_number: pr.number, reason: "branch_updated", previous_head: pr.head.sha },
+      });
+      console.log(`PR=${pr.number} RECHECK_DISPATCH=centraldark_autonomia_recheck`);
       continue;
     }
 
