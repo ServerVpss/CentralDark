@@ -27,6 +27,17 @@ DATA_DO_SNAPSHOT=2026-07-10
 
 O arquivo `MANIFEST.sha256` contém o hash SHA-256 de cada item interno.
 
+## Estado desta proposta
+
+Os documentos, a análise e o manifesto já estão nesta branch. O ZIP original permanece pendente de inclusão pelo Hermes/local Git, porque o conector usado nesta rodada grava texto, mas não recebeu um parâmetro de arquivo binário local.
+
+A proposta só pode sair de `DRAFT` depois que o arquivo abaixo existir no mesmo diretório e seu SHA-256 for reproduzido:
+
+```text
+PACOTAO-CENTRALDARK-2026-07-10.zip
+SHA256_ESPERADO=d9192ee1e690344a72b3d17554e0151a61d7761da814d0afa5291232cf880dc4
+```
+
 ## Conteúdo
 
 - desafios Staff para análise de performance e falsificação;
@@ -52,9 +63,9 @@ O arquivo `MANIFEST.sha256` contém o hash SHA-256 de cada item interno.
 ## Decisão de promoção
 
 ```text
-REGISTRO_NO_GITHUB=SIM, via PR
+REGISTRO_NO_GITHUB=EM_PR_DRAFT
 DEPLOY/VPS=NAO_APLICAVEL
 IMPORTACAO_DOS_SCRIPTS=NAO
 PROMOCAO_DAS_DOUTRINAS_ANTIGAS=NAO
-PACOTE_ORIGINAL_PRESERVADO=SIM
+PACOTE_ORIGINAL_PRESERVADO=PENDENTE_BINARIO
 ```
