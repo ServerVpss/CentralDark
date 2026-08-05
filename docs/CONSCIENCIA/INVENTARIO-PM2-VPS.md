@@ -15,6 +15,33 @@ updated: 2026-07-05
 
 ---
 
+> ⚠️ **Divergência conhecida, não resolvida — leia antes de confiar neste
+> inventário para renomear/reiniciar processos** (achado em investigação de
+> 05/08/2026):
+>
+> 1. Este arquivo e `mem/architecture/inventario-pm2-vps.md` (mesma data de
+>    auditoria, 05/07/2026) discordam sobre o processo id 14
+>    (`CentralDark-EliteHTTP`): aqui o script é
+>    `apps/modulos/elite-anthropic-proxy/start-fallback.sh` e o status é
+>    "errored"; lá o script é `apps/modulos/elite-gateway/` e o status é
+>    "PENDENTE — evolução agendada, NÃO ressuscitar no chute" (ver
+>    `docs/PENDENCIAS.md` #35). Não está decidido qual dos dois está certo.
+> 2. Este arquivo (e o citado acima) diz que `ecosystem.config.js` é o
+>    arquivo "principal" — mas o arquivo realmente versionado e referenciado
+>    hoje em dezenas de scripts/docs do repo é `ecosystem.config.cjs` (não
+>    existe `.js` puro na raiz, só backups `.bak`). O conteúdo desse `.cjs`
+>    também está desatualizado frente à frota ativa listada abaixo.
+> 3. Este arquivo nomeia o processo id 6 como `MCP-CentralDark`, mas a
+>    automação de CI ativa (`.github/workflows/vps-exec-selfhosted.yml`), o
+>    watchdog (`scripts/watchdog/mcp-watchdog.sh`) e o próprio código do MCP
+>    (`audit-logger.js`) usam `CentralDark-MCP` — não sabemos qual nome está
+>    de fato rodando na VPS.
+>
+> **Antes de renomear, reiniciar ou aplicar qualquer ecosystem contra a VPS:
+> rode `pm2 jlist` ao vivo e reconcilie contra os três pontos acima.**
+
+---
+
 ## 🟢 Processos ATIVOS no dump (14)
 
 Todos gerenciados via PM2, `pm2 save` obrigatório após mudança:

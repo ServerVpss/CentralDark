@@ -7,6 +7,31 @@
 
 ---
 
+> ⚠️ **DOCUMENTO HISTÓRICO — NÃO APLICAR SEM REVALIDAÇÃO AO VIVO.**
+>
+> Investigação de 05/08/2026 confirmou que os dois inventários mais recentes
+> (`mem/architecture/inventario-pm2-vps.md` e `docs/CONSCIENCIA/INVENTARIO-PM2-VPS.md`,
+> auditoria de 05/07/2026) já não batem com o mapa de renomeação abaixo: dos 7
+> processos listados, 6 já apareciam como "aposentados" três dias depois desta
+> auditoria — os IDs e nomes não correspondem a nenhuma frota posterior conhecida.
+>
+> O "Roteiro de aplicação" mais abaixo roda `pm2 delete all` seguido de
+> `pm2 start ecosystem.config.js`. Isso contradiz a Regra Absoluta #1 dos dois
+> inventários mais recentes ("PROIBIDO `pm2 delete all` sem ordem explícita") e,
+> se aplicado contra o `ecosystem.config.cjs` que hoje existe na raiz do repo,
+> subiria uma lista de processos majoritariamente obsoleta no lugar da frota
+> ativa real.
+>
+> **Antes de renomear, reiniciar ou aplicar qualquer ecosystem contra a VPS:
+> rode `pm2 jlist` ao vivo e reconcilie contra os dois inventários citados
+> acima.** Este documento fica preservado como registro histórico da tentativa
+> de padronização de 02/07/2026 — não é um procedimento a seguir hoje.
+>
+> O link abaixo para `docs/CONSCIENCIA/DARKAI/ECOSYSTEM-CANONICO.md` aponta
+> para um arquivo que nunca chegou a ser criado — não existe no repositório.
+
+---
+
 ## 📋 Mapa de renomeação
 
 | Nome atual (VPS) | ID PM2 | Nome canônico | Volume de refs hardcoded |
