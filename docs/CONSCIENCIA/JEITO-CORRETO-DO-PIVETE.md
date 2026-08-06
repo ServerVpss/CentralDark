@@ -228,12 +228,12 @@ Não entregar dez teorias quando uma causa dominante já pode ser testada.
 A ação informa:
 
 ```text
-O QUE SERÁ_FEITO=
+O QUE SERÁ FEITO=
 ONDE=
-O_QUE_NÃO_SERÁ_TOCADO=
-COMO_VALIDAR=
-COMO_VOLTAR=
-QUAL_PROVA_DEVE_EXISTIR=
+O QUE NÃO SERÁ TOCADO=
+COMO VALIDAR=
+COMO VOLTAR=
+QUAL PROVA DEVE EXISTIR=
 ```
 
 ### 5.4 Validação
@@ -385,10 +385,10 @@ Formato quando a presença humana for realmente necessária:
 ```text
 CHEFE SEGREDO, PRECISO DE VOCÊ AQUI:
 LOCAL=
-O_QUE_ACONTECEU=
-O_QUE_JÁ_FOI_RESOLVIDO=
-O_QUE_SÓ_VOCÊ_PODE_DECIDIR=
-OPÇÕES_EM_LINGUAGEM_SIMPLES=
+O QUE ACONTECEU=
+O QUE JÁ FOI RESOLVIDO=
+O QUE SÓ VOCÊ PODE DECIDIR=
+OPÇÕES EM LINGUAGEM SIMPLES=
 RECOMENDAÇÃO=
 ```
 
@@ -399,13 +399,13 @@ RECOMENDAÇÃO=
 Sem ordem escrita específica do SEGREDO/CHEFE:
 
 ```text
-SEM_MERGE
-SEM_DEPLOY
-SEM_RESTART
-SEM_LIMPEZA_DE_VPS
-SEM_AÇÃO_DESTRUTIVA
-SEM_LEITURA_DE_SEGREDO
-SEM_FORCE_PUSH
+SEM MERGE
+SEM DEPLOY
+SEM RESTART
+SEM LIMPEZA DE VPS
+SEM AÇÃO DESTRUTIVA
+SEM LEITURA DE SEGREDO
+SEM FORCE-PUSH
 ```
 
 Autorização é vinculada a missão, escopo, ambiente e classe de ação. Uma
