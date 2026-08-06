@@ -42,6 +42,28 @@ export function sanitizeText(value, maxLength = 12000) {
   return text.replaceAll('@', '@\u200b').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
 }
 
+/** Codifica um valor para uma única linha segura em Markdown inline. */
+export function escapeMarkdownInline(value) {
+  return String(value ?? '')
+    .replace(/[\r\n\t]+/g, ' ')
+    .replace(/\s{2,}/g, ' ')
+    .trim()
+    .replace(/([\\`*_{}\[\]()#+.!|>\-])/g, '\\$1');
+}
+
+/** Normaliza um número de PR sem coerção ampla de booleanos ou notação exponencial. */
+export function normalizePrNumber(value) {
+  if (typeof value === 'number') {
+    if (Number.isSafeInteger(value) && value > 0) return value;
+    throw new TypeError('PR_NUMBER_INVALID');
+  }
+  if (typeof value === 'string' && /^[1-9]\d*$/.test(value)) {
+    const parsed = Number(value);
+    if (Number.isSafeInteger(parsed)) return parsed;
+  }
+  throw new TypeError('PR_NUMBER_INVALID');
+}
+
 /** Extrai o contrato AI_CAPABILITIES da descrição do Pull Request. */
 export function parseCapabilities(body) {
   const result = {
@@ -96,25 +118,43 @@ export function classifyFiles(files = []) {
 
 /** Valida o envelope mínimo necessário para gerar um artefato reproduzível. */
 export function validateInput(input) {
-  if (!input || typeof input !== 'object') throw new TypeError('INPUT_NOT_OBJECT');
-  if (!Number.isInteger(Number(input.pr_number)) || Number(input.pr_number) <= 0) throw new TypeError('PR_NUMBER_INVALID');
-  if (!/^[a-f0-9]{7,64}$/i.test(String(input.head_sha ?? ''))) throw new TypeError('HEAD_SHA_INVALID');
+  if (!input || typeof input !== 'object' || Array.isArray(input)) throw new TypeError('INPUT_NOT_OBJECT');
+  normalizePrNumber(input.pr_number);
+  if (!/^[a-f0-9]{40}$/i.test(String(input.head_sha ?? ''))) throw new TypeError('HEAD_SHA_INVALID');
   if (!Array.isArray(input.files)) throw new TypeError('FILES_INVALID');
+
+  for (const [index, file] of input.files.entries()) {
+    if (!file || typeof file !== 'object' || Array.isArray(file)) {
+      throw new TypeError(`FILE_INVALID:${index}`);
+    }
+    if (typeof file.filename !== 'string' || file.filename.trim().length === 0) {
+      throw new TypeError(`FILE_NAME_INVALID:${index}`);
+    }
+    for (const field of ['additions', 'deletions']) {
+      const value = file[field];
+      if (typeof value !== 'number' || !Number.isFinite(value) || !Number.isInteger(value) || value < 0) {
+        throw new TypeError(`FILE_${field.toUpperCase()}_INVALID:${index}`);
+      }
+    }
+    if (file.status != null && typeof file.status !== 'string') {
+      throw new TypeError(`FILE_STATUS_INVALID:${index}`);
+    }
+  }
 }
 
 /** Produz uma representação estável e sanitizada para cálculo do digest. */
 function stableInput(input) {
   const files = [...input.files]
     .map((file) => ({
-      filename: String(file.filename ?? ''),
-      status: String(file.status ?? 'unknown'),
-      additions: Number(file.additions ?? 0),
-      deletions: Number(file.deletions ?? 0),
+      filename: file.filename,
+      status: file.status ?? 'unknown',
+      additions: file.additions,
+      deletions: file.deletions,
     }))
     .sort((a, b) => (a.filename < b.filename ? -1 : a.filename > b.filename ? 1 : 0));
   return {
     repository: String(input.repository ?? ''),
-    pr_number: Number(input.pr_number),
+    pr_number: normalizePrNumber(input.pr_number),
     head_sha: String(input.head_sha),
     base_sha: String(input.base_sha ?? ''),
     title: sanitizeText(input.title ?? '', 500),
@@ -253,7 +293,7 @@ export function buildArtifact(input) {
     '',
     `**PR:** #${stable.pr_number} · **HEAD:** \`${stable.head_sha}\` · **Estado:** \`${status}\``,
     '',
-    `**Título:** ${stable.title || '(sem título)'}`,
+    `**Título:** ${stable.title ? escapeMarkdownInline(stable.title) : '(sem título)'}`,
     '',
     '## Mapa visual (Mermaid)',
     '',
