@@ -22,6 +22,7 @@ jobs:
     steps:
 
       - name: Bloquear HEAD de fork no runner persistente
+        id: fork_guard
         if: github.event_name == 'pull_request' || github.event_name == 'pull_request_target'
         shell: bash
         env:
@@ -30,12 +31,16 @@ jobs:
         run: |
           set -euo pipefail
           if [ -z "${HEAD_REPO}" ] || [ "${HEAD_REPO}" != "${BASE_REPO}" ]; then
+            echo "blocked=true" >> "$GITHUB_OUTPUT"
+            echo "cause=FORK_HEAD" >> "$GITHUB_OUTPUT"
             echo "BLOCKED_FORK_HEAD repo=${HEAD_REPO:-empty}"
             exit 1
           fi
+          echo "blocked=false" >> "$GITHUB_OUTPUT"
           echo "FORK_GUARD_OK ${HEAD_REPO}"
+
       - name: Checkout exact PR HEAD
-        uses: actions/checkout@v6
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with:
           persist-credentials: false
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
@@ -70,6 +75,8 @@ jobs:
           JOB_STATUS: ${{ job.status }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
           EVENT_NAME: ${{ github.event_name }}
+          FORK_BLOCKED: ${{ steps.fork_guard.outputs.blocked }}
+          FORK_CAUSE: ${{ steps.fork_guard.outputs.cause }}
         run: |
           set -euo pipefail
           echo "HEAD_SHA=${HEAD_SHA}"
@@ -78,7 +85,10 @@ jobs:
           echo "ROTA_PRIMARIA=self-hosted-linux"
           echo "ROTA_FALLBACK=BLOCKED_NO_HOSTED"
           echo "JOB_STATUS=${JOB_STATUS}"
-          if [ "${JOB_STATUS}" = "cancelled" ]; then
+          if [ "${FORK_BLOCKED:-}" = "true" ]; then
+            echo "RESULTADO=BLOCKED"
+            echo "CAUSE=${FORK_CAUSE:-FORK_HEAD}"
+          elif [ "${JOB_STATUS}" = "cancelled" ]; then
             echo "RESULTADO=BLOCKED"
             echo "CAUSE=CANCELLED_OR_RUNNER_UNAVAILABLE"
           elif [ "${JOB_STATUS}" = "failure" ]; then
@@ -89,6 +99,8 @@ jobs:
             echo "RESULTADO=BLOCKED"
             echo "CAUSE=UNKNOWN_STATUS_${JOB_STATUS}"
           fi
+
+          fi
           # UNKNOWN/SKIPPED/empty never promoted as PASS by this receipt alone
   validate:
     name: Validate Codex operational kit
@@ -97,6 +109,7 @@ jobs:
     steps:
 
       - name: Bloquear HEAD de fork no runner persistente
+        id: fork_guard
         if: github.event_name == 'pull_request' || github.event_name == 'pull_request_target'
         shell: bash
         env:
@@ -105,10 +118,14 @@ jobs:
         run: |
           set -euo pipefail
           if [ -z "${HEAD_REPO}" ] || [ "${HEAD_REPO}" != "${BASE_REPO}" ]; then
+            echo "blocked=true" >> "$GITHUB_OUTPUT"
+            echo "cause=FORK_HEAD" >> "$GITHUB_OUTPUT"
             echo "BLOCKED_FORK_HEAD repo=${HEAD_REPO:-empty}"
             exit 1
           fi
+          echo "blocked=false" >> "$GITHUB_OUTPUT"
           echo "FORK_GUARD_OK ${HEAD_REPO}"
+
       - name: Prepare isolated checkout
         shell: bash
         run: |
@@ -121,7 +138,7 @@ jobs:
           rm -rf "$checkout_dir"
 
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with:
           path: .ci-codex-validate
           submodules: false
@@ -254,6 +271,8 @@ jobs:
           JOB_STATUS: ${{ job.status }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
           EVENT_NAME: ${{ github.event_name }}
+          FORK_BLOCKED: ${{ steps.fork_guard.outputs.blocked }}
+          FORK_CAUSE: ${{ steps.fork_guard.outputs.cause }}
         run: |
           set -euo pipefail
           echo "HEAD_SHA=${HEAD_SHA}"
@@ -262,7 +281,10 @@ jobs:
           echo "ROTA_PRIMARIA=self-hosted-linux"
           echo "ROTA_FALLBACK=BLOCKED_NO_HOSTED"
           echo "JOB_STATUS=${JOB_STATUS}"
-          if [ "${JOB_STATUS}" = "cancelled" ]; then
+          if [ "${FORK_BLOCKED:-}" = "true" ]; then
+            echo "RESULTADO=BLOCKED"
+            echo "CAUSE=${FORK_CAUSE:-FORK_HEAD}"
+          elif [ "${JOB_STATUS}" = "cancelled" ]; then
             echo "RESULTADO=BLOCKED"
             echo "CAUSE=CANCELLED_OR_RUNNER_UNAVAILABLE"
           elif [ "${JOB_STATUS}" = "failure" ]; then
@@ -273,6 +295,8 @@ jobs:
             echo "RESULTADO=BLOCKED"
             echo "CAUSE=UNKNOWN_STATUS_${JOB_STATUS}"
           fi
+
+          fi
           # UNKNOWN/SKIPPED/empty never promoted as PASS by this receipt alone
   validate-admin-guard:
     name: Validate MCP admin guard and runtime build
@@ -281,6 +305,7 @@ jobs:
     steps:
 
       - name: Bloquear HEAD de fork no runner persistente
+        id: fork_guard
         if: github.event_name == 'pull_request' || github.event_name == 'pull_request_target'
         shell: bash
         env:
@@ -289,12 +314,16 @@ jobs:
         run: |
           set -euo pipefail
           if [ -z "${HEAD_REPO}" ] || [ "${HEAD_REPO}" != "${BASE_REPO}" ]; then
+            echo "blocked=true" >> "$GITHUB_OUTPUT"
+            echo "cause=FORK_HEAD" >> "$GITHUB_OUTPUT"
             echo "BLOCKED_FORK_HEAD repo=${HEAD_REPO:-empty}"
             exit 1
           fi
+          echo "blocked=false" >> "$GITHUB_OUTPUT"
           echo "FORK_GUARD_OK ${HEAD_REPO}"
+
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with:
           submodules: false
 
@@ -343,6 +372,8 @@ jobs:
           JOB_STATUS: ${{ job.status }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
           EVENT_NAME: ${{ github.event_name }}
+          FORK_BLOCKED: ${{ steps.fork_guard.outputs.blocked }}
+          FORK_CAUSE: ${{ steps.fork_guard.outputs.cause }}
         run: |
           set -euo pipefail
           echo "HEAD_SHA=${HEAD_SHA}"
@@ -351,7 +382,10 @@ jobs:
           echo "ROTA_PRIMARIA=self-hosted-linux"
           echo "ROTA_FALLBACK=BLOCKED_NO_HOSTED"
           echo "JOB_STATUS=${JOB_STATUS}"
-          if [ "${JOB_STATUS}" = "cancelled" ]; then
+          if [ "${FORK_BLOCKED:-}" = "true" ]; then
+            echo "RESULTADO=BLOCKED"
+            echo "CAUSE=${FORK_CAUSE:-FORK_HEAD}"
+          elif [ "${JOB_STATUS}" = "cancelled" ]; then
             echo "RESULTADO=BLOCKED"
             echo "CAUSE=CANCELLED_OR_RUNNER_UNAVAILABLE"
           elif [ "${JOB_STATUS}" = "failure" ]; then
@@ -361,5 +395,7 @@ jobs:
           else
             echo "RESULTADO=BLOCKED"
             echo "CAUSE=UNKNOWN_STATUS_${JOB_STATUS}"
+          fi
+
           fi
           # UNKNOWN/SKIPPED/empty never promoted as PASS by this receipt alone

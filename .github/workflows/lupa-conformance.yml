@@ -20,6 +20,7 @@ jobs:
     steps:
 
       - name: Bloquear HEAD de fork no runner persistente
+        id: fork_guard
         if: github.event_name == 'pull_request' || github.event_name == 'pull_request_target'
         shell: bash
         env:
@@ -28,13 +29,17 @@ jobs:
         run: |
           set -euo pipefail
           if [ -z "${HEAD_REPO}" ] || [ "${HEAD_REPO}" != "${BASE_REPO}" ]; then
+            echo "blocked=true" >> "$GITHUB_OUTPUT"
+            echo "cause=FORK_HEAD" >> "$GITHUB_OUTPUT"
             echo "BLOCKED_FORK_HEAD repo=${HEAD_REPO:-empty}"
             exit 1
           fi
+          echo "blocked=false" >> "$GITHUB_OUTPUT"
           echo "FORK_GUARD_OK ${HEAD_REPO}"
+
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
-          ref: ${{ github.head_ref || github.ref_name }}
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 2
           persist-credentials: false
       - uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38
@@ -67,6 +72,8 @@ jobs:
           JOB_STATUS: ${{ job.status }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
           EVENT_NAME: ${{ github.event_name }}
+          FORK_BLOCKED: ${{ steps.fork_guard.outputs.blocked }}
+          FORK_CAUSE: ${{ steps.fork_guard.outputs.cause }}
         run: |
           set -euo pipefail
           echo "HEAD_SHA=${HEAD_SHA}"
@@ -75,7 +82,10 @@ jobs:
           echo "ROTA_PRIMARIA=self-hosted-linux"
           echo "ROTA_FALLBACK=BLOCKED_NO_HOSTED"
           echo "JOB_STATUS=${JOB_STATUS}"
-          if [ "${JOB_STATUS}" = "cancelled" ]; then
+          if [ "${FORK_BLOCKED:-}" = "true" ]; then
+            echo "RESULTADO=BLOCKED"
+            echo "CAUSE=${FORK_CAUSE:-FORK_HEAD}"
+          elif [ "${JOB_STATUS}" = "cancelled" ]; then
             echo "RESULTADO=BLOCKED"
             echo "CAUSE=CANCELLED_OR_RUNNER_UNAVAILABLE"
           elif [ "${JOB_STATUS}" = "failure" ]; then
@@ -85,5 +95,7 @@ jobs:
           else
             echo "RESULTADO=BLOCKED"
             echo "CAUSE=UNKNOWN_STATUS_${JOB_STATUS}"
+          fi
+
           fi
           # UNKNOWN/SKIPPED/empty never promoted as PASS by this receipt alone
