@@ -62,6 +62,12 @@ jobs:
       - name: Validar identidade SEGREDO → SOL → PIVETE/HERMES
         run: node scripts/lupa/validar-identidade-operacional.mjs
 
+      - name: Testar retomada fail-closed do Hermes
+        run: node --test apps/modulos/HERMES-CORE/core/continuity-guard.test.mjs
+
+      - name: Validar sintaxe do orquestrador Hermes
+        run: node --check apps/modulos/HERMES-CORE/core/orchestrator.mjs
+
       - name: Testar falsificadores do mapa global
         run: node --test apps/modulos/mapeamento/tests/validar-mapa.test.mjs
 
