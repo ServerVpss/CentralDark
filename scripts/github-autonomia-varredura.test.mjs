@@ -13,7 +13,7 @@ function pr(overrides = {}) {
     state: "open",
     draft: false,
     title: "fix: canário",
-    body: "PERMITO PIVETE",
+    body: "PERMITO SEGREDO",
     labels: [],
     user: { login: "segredounlock" },
     base: { ref: "main" },
@@ -29,7 +29,18 @@ test("aceita apenas PR autorizado, confiável e não draft", () => {
   assert.equal(eligibleSummary(pr({ user: { login: "intruso" } }), "ServerVpss/CentralDark"), false);
 });
 
-test("label permito-pivete também autoriza", () => {
+test("label canônica permito-segredo autoriza", () => {
+  assert.equal(
+    eligibleSummary(pr({ body: "sem marcador", labels: [{ name: "permito-segredo" }] }), "ServerVpss/CentralDark"),
+    true,
+  );
+});
+
+test("marcador antigo permanece compatível durante migração", () => {
+  assert.equal(
+    eligibleSummary(pr({ body: "PERMITO PIVETE" }), "ServerVpss/CentralDark"),
+    true,
+  );
   assert.equal(
     eligibleSummary(pr({ body: "sem marcador", labels: [{ name: "permito-pivete" }] }), "ServerVpss/CentralDark"),
     true,
