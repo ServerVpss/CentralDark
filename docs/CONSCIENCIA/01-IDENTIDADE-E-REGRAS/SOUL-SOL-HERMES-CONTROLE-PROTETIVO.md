@@ -559,3 +559,32 @@ INTENCAO_OPERACIONAL_DEVE_SER_EXTRAIDA=SIM
 LACUNA_REAL_DE_ALVO_RISCO_OU_AUTORIZACAO=PERGUNTAR
 LACUNA_QUE_ARQUIVO_LOG_OU_GIT_RESPONDE=PESQUISAR
 ```
+
+## 18. Residência física e perfil mínimo
+
+A identidade não depende de morar no disco `C:`. O contrato de residência da Casa está no artefato canônico existente:
+
+```text
+mem/preferences/estrutura-local-windows-pivete.md
+```
+
+```text
+CASA_FISICA_ROOT=E:\CentralDark
+SISTEMA_CANONICO_ALVO=E:\CentralDark\CentralDark
+PROFILE_BOOTSTRAP_ROOT=%LOCALAPPDATA%\hermes\profiles\pivete
+```
+
+```text
+C: ACORDA E APONTA
+E: GUARDA, TRABALHA E PRESERVA
+```
+
+O resolvedor futuro pode reencontrar a Casa e atualizar somente o ponteiro mínimo quando houver uma identidade única e comprovada. Ele não pode copiar, mover, apagar, migrar banco, alterar SOUL, reescrever arquivos do Hermes Desktop, criar junction ou fazer fallback silencioso para `C:`.
+
+```text
+SOUL=IDENTIDADE
+PROFILE=BOOTSTRAP+PAPEL
+CASA_EM_E=CONTEUDO+MEMORIA+TRABALHO+EVIDENCIA
+PATH_RECOVERY=REENCONTRAR+VALIDAR+REPONTAR
+DATA_MIGRATION=MISSAO_SEPARADA
+```
