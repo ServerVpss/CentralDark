@@ -18,9 +18,9 @@ Mostrar para o usuário, em uma página única:
 
 Arquivos principais:
 
-- `index.html` — estrutura da página.
-- `styles.css` — tema visual Netflix/CentralDark.
-- `app.js` — lógica de carregamento, cards, progresso e polling.
+- `index.html` — estrutura da página;
+- `styles.css` — tema visual Netflix/CentralDark;
+- `app.js` — lógica de carregamento, cards, progresso e polling;
 - `painel-data.json` — dados editáveis do painel.
 
 O painel carrega `painel-data.json` localmente e tenta consultar endpoints públicos como:
@@ -33,28 +33,42 @@ Se algum endpoint falhar, o painel continua funcionando com os dados locais.
 
 ## Cápsula Observável
 
-A rota `capsula.html` estende o mesmo Mega Painel para acompanhar o ciclo de mutação e aprendizado do Hermes sem criar outro painel ou outra fonte de verdade.
+A rota `capsula.html` estende o mesmo Mega Painel para acompanhar o ciclo de mutação e aprendizado do Hermes sem criar outro painel, outra MetaLupa ou outra fonte de verdade.
 
 Arquivos:
 
 - `capsula.html` — visualização read-only da cápsula;
 - `capsula-data.json` — snapshot derivado, nunca fonte primária;
-- `capsula-event.schema.json` — contrato de cada evento;
-- `capsula-observavel.mjs` — valida, agrega, grava ledger local de forma atômica e gera o snapshot;
+- `capsula-event.schema.json` — contrato público de cada evento;
+- `capsula-observavel.mjs` — valida, agrega, protege o ledger e gera o snapshot;
 - `capsula-observavel.test.mjs` — testes discriminativos contra falso verde;
-- `.github/workflows/capsula-observavel.yml` — prova o contrato no GitHub Actions.
+- `.github/workflows/capsula-observavel.yml` — reproduz contrato, diff e snapshot no GitHub Actions.
 
 Fluxo operacional:
 
 ```text
 Hermes/Writer emite evento JSON sanitizado
 → evento entra num ledger JSONL fora da main
-→ capsula-observavel.mjs valida e agrega
-→ capsula-data.json é gerado
-→ capsula.html mostra numerador, denominador, candidato e evidência
+→ agregador valida candidato, baseline, fixture, Writer, Judge e ator
+→ falha recebe fingerprint
+→ correção precisa sobreviver ao reteste
+→ decisão do Chefe exige recibo separado e hash
+→ capsula-data.json é derivado
+→ capsula.html mostra numerador, denominador, identidade e evidência
 ```
 
-Exemplo local, sem produção:
+### Papéis separados
+
+```text
+writer       = agente que materializa o candidato do run
+evaluator_ref = Judge read-only que tenta derrubar o resultado
+event_actor   = identidade que emite aquele evento
+SEGREDO/CHEFE = único ator aceito para APPROVED/REJECTED final
+```
+
+Uma decisão final do Chefe exige `chief_receipt_ref` e `chief_receipt_hash`. O Writer não consegue habilitar `ready_for_promotion` sozinho.
+
+### Exemplo local, sem produção
 
 ```bash
 node apps/modulos/status/capsula-observavel.mjs \
@@ -63,13 +77,27 @@ node apps/modulos/status/capsula-observavel.mjs \
   --output apps/modulos/status/capsula-data.json
 ```
 
-Regras:
+O append usa lock exclusivo por arquivo. O ledger é gravado com modo `0600`; o snapshot servido estaticamente usa `0644`.
 
-- sem eventos: `BLOCKED/NO_EVENTS`;
+### Códigos de saída
+
+```text
+0 = cápsula em PASS válido
+1 = evento, ledger ou contrato inválido
+2 = estado sem promoção: BLOCKED, RUNNING, UNKNOWN, ANOMALY ou ACHADO_PENDENTE
+```
+
+### Regras
+
+- sem eventos: `BLOCKED/NO_EVENTS` e código 2;
 - sem denominador: percentual `null`, nunca `0%` inventado;
 - teste pulado não conta como PASS;
 - Writer não pode ser o Judge do PASS final;
+- decisão do Chefe exige ator e recibo independentes;
 - identidade do candidato não muda dentro do mesmo `run_id`;
+- chave desconhecida ou valor com formato de credencial reprova o evento sem ecoar o valor;
+- garantias medidas usam `ENFORCED`, `VIOLATED` ou `UNKNOWN`;
+- falha de carregamento limpa métricas antigas da tela;
 - o snapshot nunca autoriza produção, merge, deploy ou restart;
 - telemetria viva deve usar artifact, storage operacional ou ledger local; não fazer push repetitivo na `main`.
 
