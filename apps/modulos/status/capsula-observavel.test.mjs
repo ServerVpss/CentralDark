@@ -110,6 +110,8 @@ test('métricas exatas usam denominador e não dão XP duplicado', () => {
       phase: 'DECIDE',
       status: 'PASS',
       tests: { total: 4, pass: 4, fail: 0, skipped: 0 },
+      failure_observed: false,
+      new_failure_class: false,
       correction_verified: true,
       retained_after_retest: true,
       generalization: { pass: 3, total: 4 },
@@ -120,15 +122,55 @@ test('métricas exatas usam denominador e não dão XP duplicado', () => {
   ];
   const snapshot = aggregateCapsule(events);
   assert.equal(snapshot.validation.verdict, 'PASS');
-  assert.equal(snapshot.learning.failures_observed, 3);
+  assert.equal(snapshot.learning.failures_observed, 2);
   assert.equal(snapshot.learning.unique_failure_classes, 1);
-  assert.equal(snapshot.learning.repeated_failures, 2);
+  assert.equal(snapshot.learning.repeated_failures, 1);
   assert.equal(snapshot.learning.xp_valid, 1);
   assert.equal(snapshot.learning.xp_rejected, 0);
   assert.equal(snapshot.learning.correction_rate.percent, 100);
-  assert.equal(snapshot.learning.recurrence_rate.percent, 66.67);
+  assert.equal(snapshot.learning.recurrence_rate.percent, 50);
   assert.equal(snapshot.capsule.current_run.generalization.percent, 75);
   assert.equal(snapshot.capsule.current_run.retention.percent, 100);
+  assert.equal(snapshot.capsule.ready_for_promotion, true);
+});
+
+test('um ciclo aceita fases diferentes na mesma iteração e rejeita fase duplicada', () => {
+  const valid = aggregateCapsule([
+    event({ phase: 'PLAN', status: 'UNKNOWN', failure_observed: false, failure_fingerprint: '', new_failure_class: false }),
+    event({ phase: 'ACT', status: 'UNKNOWN', failure_observed: false, failure_fingerprint: '', new_failure_class: false, evidence_hash: HASH_B }),
+    event({ phase: 'OBSERVE', iteration: 1, timestamp_utc: '2026-08-06T03:01:00Z', evidence_hash: 'c'.repeat(64) }),
+  ]);
+  assert.equal(valid.validation.verdict, 'PASS');
+
+  const duplicate = aggregateCapsule([
+    event({ phase: 'OBSERVE' }),
+    event({ phase: 'OBSERVE', timestamp_utc: '2026-08-06T03:01:00Z', evidence_hash: HASH_B }),
+  ]);
+  assert.equal(duplicate.validation.verdict, 'FAIL');
+  assert.match(duplicate.validation.problems.join(' '), /PHASE_DUPLICATE/);
+});
+
+test('falso verde histórico não bloqueia para sempre um run posterior corrigido', () => {
+  const oldRun = event({
+    run_id: 'run-antigo',
+    phase: 'DECIDE',
+    status: 'FAIL',
+    false_green_found: true,
+  });
+  const newRun = event({
+    run_id: 'run-novo',
+    timestamp_utc: '2026-08-06T04:00:00Z',
+    phase: 'DECIDE',
+    status: 'PASS',
+    tests: { total: 2, pass: 2, fail: 0, skipped: 0 },
+    failure_observed: false,
+    failure_fingerprint: '',
+    new_failure_class: false,
+    chief_decision: 'APPROVED',
+    evidence_hash: HASH_B,
+  });
+  const snapshot = aggregateCapsule([oldRun, newRun]);
+  assert.equal(snapshot.learning.false_green_count, 1);
   assert.equal(snapshot.capsule.ready_for_promotion, true);
 });
 
