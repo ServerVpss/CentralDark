@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-06T04:55:54.039Z",
-  "updatedAtBR": "06/08/2026, 01:55:54 BRT",
+  "updatedAt": "2026-08-06T04:59:39.217Z",
+  "updatedAtBR": "06/08/2026, 01:59:39 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "aprendizado(#10): Reconferir o blob na hora de publicar, não só na hora de auditar",
+    "lastCommit": "aprendizado(#15): Achado repetido é ruído, não reforço",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-06T04:59:39.217Z",
+      "titulo": "Push na main · d8e4a859c8e156ae1e00661b0f7aa0065c962f38",
+      "detalhe": "aprendizado(#15): Achado repetido é ruído, não reforço",
+      "area": "Repositório",
+      "sha": "d8e4a85",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-06T04:55:54.039Z",
       "titulo": "Push na main · 7913dab028a801e7ef9263f00ea3c2379a824e04",
       "detalhe": "aprendizado(#10): Reconferir o blob na hora de publicar, não só na hora de auditar",
@@ -986,14 +994,6 @@
       "detalhe": "Merge pull request #421 from ServerVpss/chore/eliminar-duplicatas-consciencia-brain-20260727",
       "area": "Repositório",
       "sha": "4171ccb",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-27T20:48:49.164Z",
-      "titulo": "Push na main · a5f27ec90b52564b0118117c37a2b08647eddd89",
-      "detalhe": "aprendizado(#7): github_commit (MCP) não deleta arquivo; duplicatas CONSCIENCIA/BRAIN nasceram do mesmo commit de bot",
-      "area": "Repositório",
-      "sha": "a5f27ec",
       "actor": "segredounlock"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-06T04:59:39.217Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · d8e4a859c8e156ae1e00661b0f7aa0065c962f38 (d8e4a85)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-06T04:55:54.039Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 7913dab028a801e7ef9263f00ea3c2379a824e04 (7913dab)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-28T02:18:58.788Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 4171ccb0c6fecf6b75bc32405e4d95ffa511042e (4171ccb)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-27T20:48:49.164Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · a5f27ec90b52564b0118117c37a2b08647eddd89 (a5f27ec)",
       "area": "Repositório",
       "status": "sucesso"
     }
