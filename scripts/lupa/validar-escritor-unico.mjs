@@ -72,7 +72,9 @@ export function parseWriterTrailers(message) {
  * Intervalo vazio sempre FAIL.
  */
 export function evaluateWriters(commits, options = {}) {
-  const mode = options.mode === "legacy" ? "legacy" : "enforce";
+  const mode = ["legacy", "migrate", "enforce"].includes(options.mode)
+    ? options.mode
+    : "enforce";
   const problems = [];
   const seen = new Set();
   const perCommit = [];
@@ -94,7 +96,7 @@ export function evaluateWriters(commits, options = {}) {
     const { writer, session } = parseWriterTrailers(commit?.message);
 
     if (!writer) {
-      if (mode === "legacy") {
+      if (mode === "legacy" || mode === "migrate") {
         unknownLegacy += 1;
         perCommit.push({ sha, writer: null, session: null, status: "UNKNOWN_LEGACY" });
       } else {
@@ -127,8 +129,13 @@ export function evaluateWriters(commits, options = {}) {
     if (unknownLegacy > 0 && writers.length === 0) verdict = "UNKNOWN_LEGACY";
     else if (unknownLegacy > 0 && writers.length >= 1) verdict = "PARTIAL_LEGACY";
     else verdict = "PASS";
+  } else if (mode === "migrate") {
+    // tip exige Writer; passado sem trailer = UNKNOWN_LEGACY (nao inventa autor)
+    if (unknownLegacy > 0 && writers.length === 0) verdict = "UNKNOWN_LEGACY";
+    else if (unknownLegacy > 0 && writers.length === 1) verdict = "MIGRATE_PARTIAL";
+    else if (unknownLegacy > 0 && writers.length > 1) verdict = "FAIL";
+    else verdict = "PASS";
   } else {
-    // enforce
     verdict = "PASS";
   }
 
@@ -162,6 +169,7 @@ export function main(argv = process.argv.slice(2)) {
   const positional = [];
   for (const arg of argv) {
     if (arg === "--mode=legacy" || arg === "--legacy") mode = "legacy";
+    else if (arg === "--mode=migrate") mode = "migrate";
     else if (arg === "--mode=enforce") mode = "enforce";
     else positional.push(arg);
   }
@@ -182,8 +190,21 @@ export function main(argv = process.argv.slice(2)) {
       `COMMIT=${item.sha} WRITER=${item.writer || "MISSING"} STATUS=${item.status || "?"}`,
     );
   }
-  // So PASS exit 0. UNKNOWN_LEGACY / PARTIAL_LEGACY / FAIL = exit 1 (nao e verde).
-  if (result.verdict !== "PASS") process.exit(1);
+  // Exit policy:
+  // - PASS => 0
+  // - MIGRATE_PARTIAL => 0 so se o tip (commits[0], git log newest first) tem Writer OK
+  // - UNKNOWN_LEGACY / PARTIAL_LEGACY / FAIL => 1 (nao e verde)
+  if (result.verdict === "PASS") return result;
+  if (result.verdict === "MIGRATE_PARTIAL") {
+    const tip = result.commits[0];
+    if (tip && tip.status === "OK" && tip.writer) {
+      console.log("WRITER_UNICO_MIGRATE_TIP_OK=1");
+      return result;
+    }
+    console.log("WRITER_UNICO_MIGRATE_TIP_OK=0");
+    process.exit(1);
+  }
+  process.exit(1);
   return result;
 }
 

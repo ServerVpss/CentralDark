@@ -118,3 +118,68 @@ test("intervalo vazio REPROVA — nada inspecionado nao e aprovacao", () => {
   assert.equal(evaluateWriters([]).verdict, "FAIL");
   assert.deepEqual(evaluateWriters([]).problems, ["NO_COMMITS_INSPECTED"]);
 });
+
+test("mode=migrate: tip com Writer + legado = MIGRATE_PARTIAL", () => {
+  const result = evaluateWriters(
+    [
+      commit("tip001", "feat: tip\n\nWriter: hermes-pivete"),
+      commit("old001", "feat: old without trailer"),
+    ],
+    { mode: "migrate" },
+  );
+  assert.equal(result.verdict, "MIGRATE_PARTIAL");
+  assert.equal(result.unknown_legacy, 1);
+  assert.deepEqual(result.writers, ["hermes-pivete"]);
+});
+
+test("mode=migrate: so legado = UNKNOWN_LEGACY", () => {
+  const result = evaluateWriters(
+    [commit("old001", "feat: old")],
+    { mode: "migrate" },
+  );
+  assert.equal(result.verdict, "UNKNOWN_LEGACY");
+});
+
+test("mode=migrate: dois Writers no intervalo = FAIL", () => {
+  const result = evaluateWriters(
+    [
+      commit("tip001", "feat: tip\n\nWriter: hermes-pivete"),
+      commit("mid001", "feat: mid\n\nWriter: bot-pivete"),
+      commit("old001", "feat: old"),
+    ],
+    { mode: "migrate" },
+  );
+  assert.equal(result.verdict, "FAIL");
+  assert.match(result.problems.join(" "), /WRITER_NOT_UNIQUE/);
+});
+
+test("mode=migrate: Writer + Co-authored-by (impostor) = Writer unico", () => {
+  const result = evaluateWriters(
+    [
+      commit("tip001", "feat: tip\n\nWriter: hermes-pivete\nCo-authored-by: bot <bot@example.com>"),
+      commit("old001", "feat: old"),
+    ],
+    { mode: "migrate" },
+  );
+  assert.equal(result.verdict, "MIGRATE_PARTIAL");
+  assert.deepEqual(result.writers, ["hermes-pivete"]);
+});
+
+test("mode=migrate: update branch com bot no range = FAIL", () => {
+  const result = evaluateWriters(
+    [
+      commit("tip001", "feat: tip\n\nWriter: hermes-pivete"),
+      commit("bot001", "chore: update branch\n\nWriter: bot-pivete"),
+      commit("old001", "feat: old"),
+    ],
+    { mode: "migrate" },
+  );
+  assert.equal(result.verdict, "FAIL");
+  assert.match(result.problems.join(" "), /WRITER_NOT_UNIQUE/);
+});
+
+test("mode=migrate: sem commits = FAIL (intervalo vazio)", () => {
+  const result = evaluateWriters([], { mode: "migrate" });
+  assert.equal(result.verdict, "FAIL");
+  assert.deepEqual(result.problems, ["NO_COMMITS_INSPECTED"]);
+});
