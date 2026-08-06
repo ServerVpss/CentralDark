@@ -65,14 +65,14 @@
     </section>
 
     <section class="metrics">
-      <article class="metric"><small>Correção real</small><strong id="correctionRate">—</strong><span id="correctionDetail">0/0</span></article>
-      <article class="metric"><small>Reincidência</small><strong id="recurrenceRate">—</strong><span id="recurrenceDetail">0/0</span></article>
-      <article class="metric"><small>Generalização</small><strong id="generalizationRate">—</strong><span id="generalizationDetail">0/0</span></article>
-      <article class="metric"><small>Retenção</small><strong id="retentionRate">—</strong><span id="retentionDetail">0/0</span></article>
-      <article class="metric"><small>XP válido</small><strong id="xpValid">0</strong><span>classe nova + correção + reteste</span></article>
-      <article class="metric"><small>Falso verde</small><strong id="falseGreen">0</strong><span>bloqueios encontrados</span></article>
-      <article class="metric"><small>Regressões</small><strong id="regressions">0</strong><span>capacidades que pioraram</span></article>
-      <article class="metric"><small>Iteração atual</small><strong id="iteration">0</strong><span id="runId">sem run</span></article>
+      <article class="metric"><small>Correção real</small><strong id="correctionRate">—</strong><span id="correctionDetail">sem dados</span></article>
+      <article class="metric"><small>Reincidência</small><strong id="recurrenceRate">—</strong><span id="recurrenceDetail">sem dados</span></article>
+      <article class="metric"><small>Generalização</small><strong id="generalizationRate">—</strong><span id="generalizationDetail">sem dados</span></article>
+      <article class="metric"><small>Retenção</small><strong id="retentionRate">—</strong><span id="retentionDetail">sem dados</span></article>
+      <article class="metric"><small>XP válido</small><strong id="xpValid">—</strong><span>classe nova + correção + reteste</span></article>
+      <article class="metric"><small>Falso verde</small><strong id="falseGreen">—</strong><span>bloqueios encontrados</span></article>
+      <article class="metric"><small>Regressões</small><strong id="regressions">—</strong><span>capacidades que pioraram</span></article>
+      <article class="metric"><small>Iteração atual</small><strong id="iteration">—</strong><span id="runId">sem run</span></article>
     </section>
 
     <section class="capsule-grid">
@@ -84,24 +84,26 @@
           <dt>Baseline</dt><dd id="baselineRef">—</dd>
           <dt>Fixture</dt><dd id="fixtureRef">—</dd>
           <dt>Writer</dt><dd id="writer">—</dd>
+          <dt>Ator do evento</dt><dd id="eventActor">—</dd>
           <dt>Judge</dt><dd id="evaluator">—</dd>
           <dt>Decisão do Chefe</dt><dd id="chiefDecision">PENDING</dd>
+          <dt>Recibo do Chefe</dt><dd id="chiefReceipt">—</dd>
           <dt>Último evento</dt><dd id="lastEvent">—</dd>
         </dl>
       </article>
 
       <article class="capsule-card">
-        <h2>🛡️ Travas ativas</h2>
+        <h2>🛡️ Travas medidas</h2>
         <ul class="guard-list" id="guardList"></ul>
       </article>
 
       <article class="capsule-card">
         <h2>🧾 Teste do run atual</h2>
         <dl class="kv">
-          <dt>Total</dt><dd id="testsTotal">0</dd>
-          <dt>Passaram</dt><dd id="testsPass">0</dd>
-          <dt>Falharam</dt><dd id="testsFail">0</dd>
-          <dt>Pulados</dt><dd id="testsSkipped">0</dd>
+          <dt>Total</dt><dd id="testsTotal">—</dd>
+          <dt>Passaram</dt><dd id="testsPass">—</dd>
+          <dt>Falharam</dt><dd id="testsFail">—</dd>
+          <dt>Pulados</dt><dd id="testsSkipped">—</dd>
           <dt>Pronto para promoção</dt><dd id="readyPromotion">NÃO</dd>
         </dl>
       </article>
@@ -127,7 +129,7 @@
     }
 
     function metricDetail(metric) {
-      if (!metric) return '0/0';
+      if (!metric) return 'sem dados';
       const state = metric.state === 'SEM_DENOMINADOR' ? ' · sem denominador' : '';
       return `${metric.numerator ?? 0}/${metric.denominator ?? 0}${state}`;
     }
@@ -136,6 +138,33 @@
       const el = $(id);
       el.textContent = text;
       el.className = `pill ${kind}`;
+    }
+
+    function guardVisual(state) {
+      if (state === 'ENFORCED') return ['🟢', 'comprovada'];
+      if (state === 'VIOLATED') return ['🔴', 'violada'];
+      return ['🟡', 'não medida'];
+    }
+
+    function renderGuards(guarantees = {}) {
+      const guards = [
+        ['Porcentagem exige denominador', guarantees.no_percentage_without_denominator],
+        ['SKIPPED nunca vira PASS', guarantees.skipped_never_counts_as_pass],
+        ['Identidade fixa dentro do run', guarantees.same_identity_per_run],
+        ['Judge independente para PASS final', guarantees.independent_evaluator_required_for_decision_pass],
+        ['Recibo do Chefe exigido para promoção', guarantees.chief_receipt_required_for_promotion],
+        ['Snapshot não autoriza produção', guarantees.production_not_authorized_by_snapshot],
+      ];
+      $('guardList').replaceChildren(...guards.map(([label, state]) => {
+        const item = document.createElement('li');
+        const icon = document.createElement('b');
+        const text = document.createElement('span');
+        const [emoji, detail] = guardVisual(state);
+        icon.textContent = emoji;
+        text.textContent = `${label} · ${detail}`;
+        item.append(icon, text);
+        return item;
+      }));
     }
 
     function render(data) {
@@ -148,9 +177,10 @@
       const statusKind = statusOk ? 'ok' : capsule.status === 'RUNNING' ? 'warn' : 'bad';
 
       pill('capsuleStatus', `${capsule.status || 'UNKNOWN'}${capsule.reason ? ` · ${capsule.reason}` : ''}`, statusKind);
-      pill('validationStatus', `VALIDAÇÃO ${validation.verdict || 'UNKNOWN'}`, validation.verdict === 'PASS' ? 'ok' : 'bad');
+      const validationKind = validation.verdict !== 'PASS' ? 'bad' : statusOk ? 'ok' : 'warn';
+      pill('validationStatus', `VALIDAÇÃO ${validation.verdict || 'UNKNOWN'}`, validationKind);
       pill('productionStatus', `PRODUÇÃO ${capsule.production || 'UNKNOWN'}`, capsule.production === 'UNTOUCHED' ? 'warn' : 'bad');
-      $('eventCount').textContent = `${data.source?.event_count || 0} eventos · ${data.source?.run_count || 0} runs`;
+      $('eventCount').textContent = `${data.source?.event_count ?? 0} eventos · ${data.source?.run_count ?? 0} runs`;
 
       $('correctionRate').textContent = metricText(learning.correction_rate);
       $('correctionDetail').textContent = metricDetail(learning.correction_rate);
@@ -171,8 +201,10 @@
       $('baselineRef').textContent = run.baseline_ref || '—';
       $('fixtureRef').textContent = run.fixture_ref || '—';
       $('writer').textContent = run.writer || '—';
+      $('eventActor').textContent = run.event_actor || '—';
       $('evaluator').textContent = run.evaluator_ref || '—';
       $('chiefDecision').textContent = run.chief_decision || 'PENDING';
+      $('chiefReceipt').textContent = run.chief_receipt_ref || '—';
       $('lastEvent').textContent = safeDate(run.last_event_at_utc);
 
       $('testsTotal').textContent = tests.total ?? 0;
@@ -181,31 +213,52 @@
       $('testsSkipped').textContent = tests.skipped ?? 0;
       $('readyPromotion').textContent = capsule.ready_for_promotion ? 'SIM' : 'NÃO';
 
-      const guarantees = data.guarantees || {};
-      const guards = [
-        ['Porcentagem exige denominador', guarantees.no_percentage_without_denominator],
-        ['SKIPPED nunca vira PASS', guarantees.skipped_never_counts_as_pass],
-        ['Identidade fixa dentro do run', guarantees.same_identity_per_run],
-        ['Judge independente para PASS final', guarantees.independent_evaluator_required_for_decision_pass],
-        ['Snapshot não autoriza produção', guarantees.production_not_authorized_by_snapshot],
-      ];
-      $('guardList').innerHTML = guards.map(([label, ok]) => `<li><b>${ok ? '🟢' : '🔴'}</b><span>${label}</span></li>`).join('');
+      renderGuards(data.guarantees || {});
 
       const problems = Array.isArray(validation.problems) ? validation.problems : [];
       $('problems').className = problems.length ? 'problem' : 'empty';
       $('problems').textContent = problems.length ? problems.join('\n') : 'Nenhum problema estrutural carregado.';
       $('refreshState').textContent = `atualizado ${safeDate(data.generated_at_utc)}`;
-      $('refreshState').className = `pill ${validation.verdict === 'PASS' ? 'ok' : 'bad'}`;
+      $('refreshState').className = `pill ${validationKind}`;
+    }
+
+    function renderUnavailable(message) {
+      pill('refreshState', `falha ao carregar · ${message}`, 'bad');
+      pill('capsuleStatus', 'BLOCKED · DATA_UNAVAILABLE', 'bad');
+      pill('validationStatus', 'VALIDAÇÃO UNKNOWN', 'warn');
+      pill('productionStatus', 'PRODUÇÃO UNKNOWN', 'bad');
+      $('eventCount').textContent = '— eventos · — runs';
+      for (const id of ['correctionRate', 'recurrenceRate', 'generalizationRate', 'retentionRate', 'xpValid', 'falseGreen', 'regressions', 'iteration']) {
+        $(id).textContent = '—';
+      }
+      for (const id of ['correctionDetail', 'recurrenceDetail', 'generalizationDetail', 'retentionDetail']) {
+        $(id).textContent = 'sem dados';
+      }
+      $('runId').textContent = 'sem run';
+      for (const id of ['candidateRef', 'candidateDigest', 'baselineRef', 'fixtureRef', 'writer', 'eventActor', 'evaluator', 'chiefReceipt', 'lastEvent']) {
+        $(id).textContent = '—';
+      }
+      $('chiefDecision').textContent = 'PENDING';
+      for (const id of ['testsTotal', 'testsPass', 'testsFail', 'testsSkipped']) {
+        $(id).textContent = '—';
+      }
+      $('readyPromotion').textContent = 'NÃO';
+      renderGuards({});
+      $('problems').className = 'problem';
+      $('problems').textContent = `DATA_UNAVAILABLE: ${message}`;
     }
 
     async function refresh() {
+      if (refresh.running) return;
+      refresh.running = true;
       try {
         const response = await fetch(`${DATA_URL}?t=${Date.now()}`, { cache: 'no-store' });
         if (!response.ok) throw new Error(`${response.status} ${response.statusText}`);
         render(await response.json());
       } catch (error) {
-        pill('refreshState', `falha ao carregar · ${error.message}`, 'bad');
-        pill('capsuleStatus', 'BLOCKED · DATA_UNAVAILABLE', 'bad');
+        renderUnavailable(error.message);
+      } finally {
+        refresh.running = false;
       }
     }
 
