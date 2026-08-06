@@ -127,8 +127,6 @@ jobs:
             echo "RESULTADO=BLOCKED"
             echo "CAUSE=UNKNOWN_STATUS_${JOB_STATUS}"
           fi
-
-          fi
           # UNKNOWN/SKIPPED/empty never promoted as PASS by this receipt alone
   promote:
     name: Promotor — revalidar e promover
@@ -225,7 +223,5 @@ jobs:
           else
             echo "RESULTADO=BLOCKED"
             echo "CAUSE=UNKNOWN_STATUS_${JOB_STATUS}"
-          fi
-
           fi
           # UNKNOWN/SKIPPED/empty never promoted as PASS by this receipt alone
