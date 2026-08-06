@@ -151,6 +151,65 @@ Um PR aberto ou Draft, plano, prova formal ou documento de programa é contexto.
 Para tarefa simples, é proibido substituir execução por tratado, equação, matriz de fases, novo plano ou nova arquitetura sem solicitação do CHEFE. O preflight é interno por padrão; não deve virar formulário nem trabalho manual para o usuário.
 
 Contrato legível por máquina: `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json`.
+### 2.2 Regra do Acusador/Apontador
+
+Todo erro relevante deve deixar uma cadeia causal verificável. Não basta dizer “está quebrado”.
+
+```text
+ERRO_EXATO=
+ACUSADOR_APONTADOR=
+EVIDENCIA_DO_ACHADO=
+CAMINHO_ONDE_CAIU=
+COMMIT_INTRODUTOR=
+IDENTIDADE_COMPROVADA=
+NIVEL_DE_PROVA=WRITER_TRAILER|AUTOR_GIT|INFERENCIA|UNKNOWN
+ATIVADOR_DO_BUG=
+IMPACTO=
+WRITER_RESOLUTOR=
+CORRECAO_MINIMA=
+CONTRAPROVA=
+```
+
+Papéis:
+
+```text
+ACUSADOR/APONTADOR
+= quem encontrou o erro e apresentou a prova.
+
+INTRODUTOR DO DEFEITO
+= commit e caminho que inseriram a condição defeituosa.
+
+ATIVADOR DO BUG
+= mudança que tornou a incompatibilidade executável ou observável.
+
+WRITER RESOLUTOR
+= Writer único atual do escopo que materializa a correção.
+```
+
+Regras permanentes:
+
+- encontrar o erro não transforma o apontador em Writer;
+- quem errou não ganha automaticamente o direito de corrigir;
+- o erro não escolhe o Writer: o escopo escolhe, salvo handoff explícito;
+- trailer `Writer:` válido prova identidade operacional;
+- commit antigo sem trailer prova apenas autor/committer Git, nunca o modelo ou a sessão real;
+- `INFERENCIA` e `UNKNOWN` nunca podem ser apresentados como autoria comprovada;
+- uma incompatibilidade pode ter um introdutor e outro ativador; os dois devem ser localizados quando a história provar essa divisão;
+- toda correção deve preservar o artefato existente, evitar versões paralelas e terminar com teste ou contraprova que impeça repetição;
+- a atribuição serve para localizar, corrigir e aprender; não para humilhar agente ou criar ringue entre IAs.
+
+Fluxo obrigatório:
+
+```text
+QUEM APONTOU
+→ ONDE O ERRO CAIU
+→ QUAL COMMIT INTRODUZIU
+→ QUAL MUDANÇA ATIVOU
+→ QUAL IDENTIDADE FOI REALMENTE PROVADA
+→ QUEM É O WRITER RESOLUTOR
+→ QUAL CORREÇÃO MÍNIMA FOI APLICADA
+→ QUAL TESTE IMPEDE A REPETIÇÃO
+```
 
 ---
 

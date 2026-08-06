@@ -41,3 +41,51 @@
 - **Data:** 2026-07-27
 - **Contexto:** Auditei duas árvores duplicadas suspeitas (docs/CONSCIENCIA/CONSCIENCIA/ e docs/CONSCIENCIA/BRAIN/) pedidas pelo Pivete pra comparar e eliminar. Provei com 4 canais (contents API, git log por path, github_search_code, diff contra commit pai) que ambas são cópias congeladas do outer/docs-BRAIN, criadas por acidente no MESMO commit de bot (9b8eeec4e, memory-executor, 2026-07-02T16:29:03Z) que só deveria adicionar frontmatter — 404 confirmado nos dois paths no commit pai. Ao tentar apagar, testei github_commit com {content:"", delete:true} — o campo delete foi ignorado, resultado foi arquivo de 0 bytes em vez de removido. Restaurei o conteúdo original no commit seguinte.
 - **Aprendizado:** github_commit do MCP CentralDark só faz create/update via Contents API — não tem operação de deleção real, mesmo passando delete:true. device_bash não tem rede (não dá pra git push) e o Bash do container cloud não tem credencial git válida pra este repo. Pra apagar arquivo/pasta do repo é preciso rodar git rm + push num ambiente com acesso real (VPS ou local do Pivete) — não dá pra fazer só com as tools MCP desta sessão. Deixei o script pronto (scripts/run-once/eliminar-duplicatas-consciencia-brain.sh, PR #421) em vez de fingir que apaguei. Também: memory-executor (bot de frontmatter) é uma fonte de risco real de criar árvores duplicadas por resolução de caminho errada — mesmo padrão do bug do github-bot-controller.mjs desta sessão. Vale auditar se ele roda de novo.
+
+### 8. Nunca gerar -v2/-v3: refinar o arquivo que já existe
+- **Categoria:** regra
+- **Data:** 2026-08-04
+- **Contexto:** Ao corrigir o script de atualização do Hermes no Windows, a IA gerou um arquivo novo com sufixo -v2 em vez de aplicar a correção no script original que já existia. O Pivete corrigiu na hora: isso é recriar, não melhorar.
+- **Aprendizado:** Quando um arquivo/script/skill já existe, a correção vai DENTRO dele — mesmo nome, mesmo caminho, versão interna no cabeçalho se precisar rastrear. Nada de -v2, -v3, -novo, -final, -corrigido. Entregar patch/diff aplicável no original. Se a IA não tem o conteúdo do original em mãos, pede o arquivo antes de propor a correção — não inventa um substituto paralelo. Recriar do zero é regressão: perde ajuste acumulado e fragmenta a fonte de verdade. Corolário: também não afirmar causa que o Pivete não disse (ex: supor uso de botão de UI quando ele usou a CLI) — se não sabe, pergunta.
+
+### 9. Escritor único: auditar e comentar na PR alheia em vez de abrir PR concorrente
+- **Categoria:** armadilha
+- **Data:** 2026-08-05
+- **Contexto:** Auditoria do run vermelho no PR #554 levou a dois achados distintos. O run era de definição de workflow já removida da main pelo PR #584 (fantasma, sem conserto por código). O defeito vivo era outro: autonomia-promocao.yml 5/5 FAILURE na main por artefato ausente no contrato judge->promote. Ao preparar a correção, o PR #663 apareceu tocando os mesmos 5 arquivos, o que tornaria meu PR duplicata.
+- **Aprendizado:** Antes de abrir PR de correção, listar PRs abertos e comparar blob SHA dos arquivos alvo. Se outra IA já é escritora daqueles arquivos, NÃO abrir PR concorrente: auditar o HEAD real da branch dela e comentar a lacuna com local exato + patch mínimo + evidência executada. Dois padrões de defeito recorrentes achados assim: (1) upload-artifact com if-no-files-found warn seguido de download-artifact com name fixo é falha garantida sempre que o diretório puder ficar vazio — if always no upload não resolve, só garante que o step roda; (2) canal de notificação novo que lê nomes de secret diferentes dos já versionados no repo faz o humano criar o secret errado e o aviso continuar NOT_SENT — resolver a divergência de nome ANTES de pedir o secret. Também: corpo de PR que declara HEAD_SHA diferente do HEAD atual da branch invalida a prova.
+
+### 10. Reconferir o blob na hora de publicar, não só na hora de auditar
+- **Categoria:** erro-correcao
+- **Data:** 2026-08-06
+- **Contexto:** Auditoria do PR #664: baixei o blob `e63a12c8` (a61abaf), gerei um patch, provei 8 casos e rodei a suíte 10/10. Entre a geração e a publicação, o head foi para `94e53e9` (blob `ad56f473`). Postei o diff 8 minutos depois do arquivo já ter mudado — patch nasceu velho, não aplica. Mesmo erro aconteceu no #667 com a cápsula (`0cae63d1` → `0897b6a3`).
+- **Aprendizado:** Conferir `git hash-object` do arquivo alvo IMEDIATAMENTE antes de publicar, não só no começo da auditoria. Num repo com loop autônomo o head move em minutos, e patch contra blob morto vira lixo que o próximo agente tenta aplicar. Se moveu: refaz contra o blob novo ou marca o artefato anterior como morto no mesmo canal onde ele foi publicado.
+
+### 11. Hash validado por regex não prova que o artefato existe
+- **Categoria:** armadilha
+- **Data:** 2026-08-06
+- **Contexto:** Cápsula observável do #667. Ledger de dois eventos forjado à mão produziu validation=PASS, ready_for_promotion=true, xp_valid=1 e correction_rate=100%. O evidence_hash era 'f' repetido 64 vezes e o chief_receipt_hash era 'a' repetido 64 vezes, apontando para um recibo que nunca existiu; o event_actor 'SEGREDO/CHEFE' foi digitado pelo próprio writer. No mesmo objeto, guarantees.chief_receipt_required_for_promotion saiu ENFORCED.
+- **Aprendizado:** Regex sobre hash prova FORMATO, nunca PROCEDÊNCIA. Campo de evidência só vale se o agregador recomputar o hash sobre o artefato que a referência aponta e falhar quando a referência não resolve. Pior ainda é o snapshot declarar a própria garantia como cumprida: garantia auto-declarada transforma buraco silencioso em buraco com selo, e é isso que um painel ao vivo passa a transmitir como verdade.
+
+### 12. Modo novo não alcança problema empilhado antes da ramificação de modo
+- **Categoria:** erro-correcao
+- **Data:** 2026-08-06
+- **Contexto:** Gate WRITER_UNICO do #664. Foi criado mode=migrate para resolver a branch, com 16 testes verdes. Rodando o blob real contra os três commits reais da branch: enforce FAIL, legacy FAIL, migrate FAIL — todos com WRITER_NOT_UNIQUE e unknown_legacy=0. O migrate trata commit SEM trailer; os três commits TÊM trailer e um deles declara outro Writer. A unicidade é empilhada antes de qualquer branch de modo.
+- **Aprendizado:** Antes de criar modo novo para resolver um caso, conferir ONDE o problema é empilhado. Se o push do problema acontece antes da ramificação de modo, e o veredito olha o tamanho da lista de problemas primeiro, nenhum modo alcança aquele caso — o modo novo passa nos testes que ele mesmo trouxe e não move o caso real. Roda o gate contra o próprio artefato alvo nos TRÊS modos antes de declarar migração pronta.
+
+### 13. Recuo preventivo não é obediência
+- **Categoria:** armadilha
+- **Data:** 2026-08-06
+- **Contexto:** Um agente da casa se desculpou por 'ter fechado decisões e apresentado tudo como definitivo' e prometeu aguardar revisão sem impor escolhas — logo depois de receber um comando que dizia literalmente 'NÃO pare para pedir confirmação', 'não peça decisão técnica já dedutível' e proibia as frases 'escolha A ou B' e 'posso continuar?'. Ele leu o tom como bronca e devolveu a autonomia que o comando exigia.
+- **Aprendizado:** A autoridade do SEGREDO/CHEFE é sobre merge, deploy, VPS, secrets e reescrita de histórico. NÃO é sobre decisão técnica dedutível do próprio contrato. Quando o comando já fixou a decisão, executar não é impor — é obedecer. Pedir desculpa por ter decidido, ou devolver a decisão em nome de humildade, é recuo preventivo: parece obediência e produz um executor que trava no primeiro A/B e queima a janela de trabalho. Erro cometido e corrigido gera aprendizado; recuo preventivo não gera nada.
+
+### 14. Mutante equivalente sai do denominador mas aponta a invariante sem teste
+- **Categoria:** regra
+- **Data:** 2026-08-06
+- **Contexto:** Teste de mutação na cápsula do #667. Mudar 'skipped === 0' para 'skipped >= 0' deixou a suíte verde. Com a soma total = pass + fail + skipped já validada, skipped > 0 implica pass diferente de total, que é pego pela outra checagem — mutante sem defeito observável. Score corrigido de 2/12 para 2/11. A invariante da soma, que torna o mutante equivalente, não estava no conjunto de mutantes: furo do próprio harness.
+- **Aprendizado:** Mutante que sobrevive porque outra checagem já cobre o caso é EQUIVALENTE, não sobrevivente: desconta do denominador em vez de contar como falha da suíte. Mas ele não é descartável — ele aponta qual invariante está segurando a checagem, e essa invariante quase sempre também não tem teste. O mutante equivalente é a fonte de uma regra, não uma vitória de auditoria. Roda o mutante na invariante que o sustenta.
+
+### 15. Achado repetido é ruído, não reforço
+- **Categoria:** armadilha
+- **Data:** 2026-08-06
+- **Contexto:** Publiquei no #667 uma auditoria com tabela de mutantes e ataque de forja. O Grok já tinha postado mutantes, forja e ready=false no mesmo thread. Sobreposição em três dos quatro pontos; só o mutante equivalente e os asserts eram meus. Sem ferramenta para listar comentários de PR neste MCP, a checagem tem que ser feita antes, por quem tem acesso ao thread.
+- **Aprendizado:** Ler o thread do PR antes de publicar auditoria. Achado que outro agente já postou não vira mais forte por ser repetido — vira ruído, e ruído treina o time a ignorar comentário de auditoria, que é o único canal onde a prova vive. Se o achado já está lá, publica só o delta: o que muda a decisão de quem lê. Se não há delta, não publica.

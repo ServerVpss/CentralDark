@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-08-01T00:39:42.824Z
-- **Commit:** `363b04909091ae24da8d4408effb60c7c3be777e`
+- **Gerado:** 2026-08-06T04:55:34.820Z
+- **Commit:** `7913dab028a801e7ef9263f00ea3c2379a824e04`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 39 | 39 | 39 | 0 | 0 |
-| aprendizados | 7 | 0 | 0 | 7 | 0 |
+| aprendizados | 10 | 0 | 0 | 10 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **7**
+- 🟥 Faltando no Notion: **10**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -55,4 +55,7 @@
 - 5. Workflow promovido sem o script que ele executa: o bot autônomo nunca rodou
 - 6. A porta de entrada nunca existiu: por que nenhuma IA lia as regras da casa
 - 7. github_commit (MCP) não deleta arquivo; duplicatas CONSCIENCIA/BRAIN nasceram do mesmo commit de bot
+- 8. Nunca gerar -v2/-v3: refinar o arquivo que já existe
+- 9. Escritor único: auditar e comentar na PR alheia em vez de abrir PR concorrente
+- 10. Reconferir o blob na hora de publicar, não só na hora de auditar
 </details>
