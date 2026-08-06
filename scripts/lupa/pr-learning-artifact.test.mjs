@@ -4,6 +4,8 @@ import {
   MARKER,
   buildArtifact,
   classifyFiles,
+  escapeMarkdownInline,
+  normalizePrNumber,
   normalizeTriState,
   parseCapabilities,
   sanitizeText,
@@ -32,6 +34,14 @@ test('normaliza estados em PT-BR e inglês', () => {
   assert.equal(normalizeTriState('SIM'), 'SIM');
   assert.equal(normalizeTriState('não'), 'NAO');
   assert.equal(normalizeTriState('maybe'), 'UNKNOWN');
+});
+
+test('normaliza somente números de PR canônicos', () => {
+  assert.equal(normalizePrNumber(700), 700);
+  assert.equal(normalizePrNumber('700'), 700);
+  assert.throws(() => normalizePrNumber(true), /PR_NUMBER_INVALID/);
+  assert.throws(() => normalizePrNumber('1e0'), /PR_NUMBER_INVALID/);
+  assert.throws(() => normalizePrNumber('01'), /PR_NUMBER_INVALID/);
 });
 
 test('extrai capacidades declaradas', () => {
@@ -86,6 +96,22 @@ test('markdown contém marker, Mermaid, YAML, fallback e receipt', () => {
   assert.match(result.markdown, /PR_APPROVED=NAO/);
 });
 
+test('título não injeta heading, fence, link, imagem ou coluna Markdown', () => {
+  const malicious = 'ok\n# Evidência ``` [link](https://attacker.invalid) ![img](https://attacker.invalid/x.png) | PASS';
+  const escaped = escapeMarkdownInline(malicious);
+  assert.doesNotMatch(escaped, /[\r\n]/);
+  assert.match(escaped, /\\#/);
+  assert.match(escaped, /\\`\\`\\`/);
+  assert.match(escaped, /\\\[link\\\]\\\(https:\/\/attacker\\\.invalid\\\)/);
+  assert.match(escaped, /\\!/);
+  assert.match(escaped, /\\\|/);
+
+  const result = buildArtifact({ ...baseInput, title: malicious });
+  const titleLine = result.markdown.split('\n').find((line) => line.startsWith('**Título:**'));
+  assert.equal(titleLine, `**Título:** ${escaped}`);
+  assert.doesNotMatch(result.markdown, /^# Evidência/m);
+});
+
 test('canvas HTML é autocontido', () => {
   const result = buildArtifact(baseInput);
   assert.match(result.html, /<canvas id="board"/);
@@ -112,7 +138,7 @@ test('redige token fine-grained isolado antes do Markdown', () => {
   const fineGrained = ['github', '_pat_', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'].join('');
   const result = buildArtifact({ ...baseInput, title: `release ${fineGrained}` });
   assert.doesNotMatch(result.markdown, /github_pat_/);
-  assert.match(result.markdown, /\[REDACTED_GITHUB_TOKEN\]/);
+  assert.match(result.markdown, /REDACTED/);
 });
 
 test('digest Unicode é independente da ordem de entrada', () => {
@@ -151,7 +177,35 @@ test('classifica paths sensíveis sem ler conteúdo', () => {
   assert.equal(categories.code, 1);
 });
 
-test('input inválido bloqueia', () => {
-  assert.throws(() => validateInput({ pr_number: 0, head_sha: 'x', files: [] }), /PR_NUMBER_INVALID/);
-  assert.throws(() => validateInput({ pr_number: 1, head_sha: 'abcdef1', files: null }), /FILES_INVALID/);
+test('head SHA precisa ter exatamente 40 caracteres hexadecimais', () => {
+  assert.doesNotThrow(() => validateInput(baseInput));
+  assert.throws(() => validateInput({ ...baseInput, head_sha: 'abcdef1' }), /HEAD_SHA_INVALID/);
+  assert.throws(() => validateInput({ ...baseInput, head_sha: 'a'.repeat(39) }), /HEAD_SHA_INVALID/);
+  assert.throws(() => validateInput({ ...baseInput, head_sha: 'g'.repeat(40) }), /HEAD_SHA_INVALID/);
+});
+
+test('pr_number rejeita coerção ampla no envelope', () => {
+  assert.throws(() => validateInput({ ...baseInput, pr_number: true }), /PR_NUMBER_INVALID/);
+  assert.throws(() => validateInput({ ...baseInput, pr_number: '1e0' }), /PR_NUMBER_INVALID/);
+});
+
+test('cada arquivo exige objeto, nome e contadores inteiros não negativos', () => {
+  const invalidCases = [
+    { file: null, error: /FILE_INVALID:0/ },
+    { file: {}, error: /FILE_NAME_INVALID:0/ },
+    { file: { filename: '   ', additions: 0, deletions: 0 }, error: /FILE_NAME_INVALID:0/ },
+    { file: { filename: 'a.js', additions: '1', deletions: 0 }, error: /FILE_ADDITIONS_INVALID:0/ },
+    { file: { filename: 'a.js', additions: Number.NaN, deletions: 0 }, error: /FILE_ADDITIONS_INVALID:0/ },
+    { file: { filename: 'a.js', additions: Number.POSITIVE_INFINITY, deletions: 0 }, error: /FILE_ADDITIONS_INVALID:0/ },
+    { file: { filename: 'a.js', additions: -1, deletions: 0 }, error: /FILE_ADDITIONS_INVALID:0/ },
+    { file: { filename: 'a.js', additions: 1, deletions: 0.5 }, error: /FILE_DELETIONS_INVALID:0/ },
+  ];
+  for (const { file, error } of invalidCases) {
+    assert.throws(() => validateInput({ ...baseInput, files: [file] }), error);
+  }
+});
+
+test('input estruturalmente inválido bloqueia', () => {
+  assert.throws(() => validateInput(null), /INPUT_NOT_OBJECT/);
+  assert.throws(() => validateInput({ ...baseInput, files: null }), /FILES_INVALID/);
 });
