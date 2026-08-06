@@ -35,7 +35,8 @@ Cada execução gera no mesmo `HEAD_SHA`:
 3. **YAML estruturado** para leitura de máquina;
 4. **Canvas HTML autocontido** salvo como artifact do workflow;
 5. **receipt** com digest SHA-256;
-6. **pedido automático de suporte** quando a autoria declarar `NAO` ou `UNKNOWN`.
+6. **pedido automático de suporte** quando a autoria declarar `NAO` ou `UNKNOWN`;
+7. **bloqueio fail-closed** quando metadados apontarem caminho sensível.
 
 ## Contrato de capacidades
 
@@ -51,12 +52,15 @@ AI_CAPABILITIES:
 Regras:
 
 - não inventar suporte;
+- a fonte da capacidade é registrada como `DECLARED_UNVERIFIED`;
+- `SIM` declarado não é prova independente;
 - `UNKNOWN` não vira `SIM`;
 - o bot sempre oferece fallback em texto;
 - falta de Mermaid ou Canvas roteia `assign:chatgpt`;
 - falta de YAML estruturado roteia `assign:codex`;
 - o Dispatcher publica o briefing no próprio PR;
-- pedido de suporte não aprova, não mergeia e não altera código.
+- pedido de suporte não aprova, não mergeia e não altera código;
+- as labels `assign:chatgpt` e `assign:codex` pertencem ao seed oficial para recuperação reproduzível.
 
 As rotas são designações operacionais do repositório, não alegações universais sobre todo modelo futuro.
 
@@ -75,15 +79,19 @@ Ele não lê patch, conteúdo de arquivo, `.env`, secrets, tokens, sessões, cha
 
 O job do evento `pull_request` possui somente `contents: read`; ele testa o gerador no HEAD candidato e publica artifact de prova, mas não comenta nem escreve no PR.
 
+As Actions externas usadas nos workflows modificados são fixadas em SHAs imutáveis. Comentários idempotentes só reconhecem marcador publicado pelo `github-actions[bot]`, impedindo que comentário de terceiro bloqueie ou seja sobrescrito pelo bot.
+
 ## Máquina de estados
 
 ```mermaid
 stateDiagram-v2
     [*] --> PR_ABERTO
     PR_ABERTO --> ARTEFATO_GERADO
-    ARTEFATO_GERADO --> CAPACIDADES_OK: todas SIM
+    ARTEFATO_GERADO --> CAPACIDADES_OK: todas SIM declaradas
     ARTEFATO_GERADO --> SUPORTE_SOLICITADO: NAO ou UNKNOWN
+    ARTEFATO_GERADO --> BLOQUEADO_SENSIVEL: path sensível
     SUPORTE_SOLICITADO --> BRIEFING_PUBLICADO
+    BLOQUEADO_SENSIVEL --> GATES_PENDENTES
     CAPACIDADES_OK --> GATES_PENDENTES
     BRIEFING_PUBLICADO --> GATES_PENDENTES
     GATES_PENDENTES --> RECEIPT_EMITIDO
@@ -97,6 +105,8 @@ ARTEFATO != APROVAÇÃO
 COMMENT_CREATED != ENTREGA
 ARTIFACT_UPLOADED != CÓDIGO FUNCIONANDO
 SUPPORT_REQUESTED != WRITER_TRANSFERRED
+CAPABILITY_DECLARED_SIM != CAPABILITY_PROVEN
+SENSITIVE_PATHS_GT_0 => BLOCKED_SENSITIVE_PATH
 CHECKS_GREEN != PRODUÇÃO
 ```
 
@@ -113,6 +123,11 @@ WORKFLOW_YAML=VÁLIDO
 ARTIFACT_MARKDOWN=GERADO
 ARTIFACT_HTML=GERADO
 DIGEST_DETERMINÍSTICO=SIM
+TOKEN_FINE_GRAINED_REDACTED=SIM
+UNICODE_ORDER_INDEPENDENT=SIM
+SENSITIVE_PATH_GATE=PASS
+TEST_RECEIPT_DERIVED_FROM_TAP=SIM
+ACTIONS_PINNED_BY_SHA=SIM
 COMENTÁRIO_IDEMPOTENTE=PROVADO_EM_RUN
 ROTEAMENTO_DE_LABEL=PROVADO_EM_RUN
 DISPATCHER_NO_PR=PROVADO_EM_RUN
@@ -127,6 +142,7 @@ Reverter o commit que introduziu:
 - `.github/workflows/pr-learning-artifact.yml`;
 - extensões do `dispatcher-bots.yml`;
 - script e teste;
-- bloco de capacidades do template.
+- bloco de capacidades do template;
+- rotas `assign:*` adicionadas ao seed oficial.
 
 Nenhum estado de produção, VPS ou banco é tocado.
