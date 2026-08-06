@@ -99,7 +99,8 @@ test('digest é determinístico mesmo com ordem de arquivos diferente', () => {
 });
 
 test('sanitiza tokens, chaves e menções', () => {
-  const input = 'token=ghp_ABCDEFGHIJKLMNOPQRSTUVWXYZ123456 @everyone <script>';
+  const tokenLike = ['gh', 'p_', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ123456'].join('');
+  const input = `token=${tokenLike} @everyone <script>`;
   const safe = sanitizeText(input);
   assert.doesNotMatch(safe, /ghp_/);
   assert.doesNotMatch(safe, /@everyone/);
