@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-06T01:01:10.255Z",
-  "updatedAtBR": "05/08/2026, 22:01:10 BRT",
+  "updatedAt": "2026-08-06T04:55:54.039Z",
+  "updatedAtBR": "06/08/2026, 01:55:54 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "aprendizado(#9): Escritor único: auditar e comentar na PR alheia em vez de abrir PR concorrente",
+    "lastCommit": "aprendizado(#10): Reconferir o blob na hora de publicar, não só na hora de auditar",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-06T04:55:54.039Z",
+      "titulo": "Push na main · 7913dab028a801e7ef9263f00ea3c2379a824e04",
+      "detalhe": "aprendizado(#10): Reconferir o blob na hora de publicar, não só na hora de auditar",
+      "area": "Repositório",
+      "sha": "7913dab",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-06T01:01:10.255Z",
       "titulo": "Push na main · 849b2b13bfd300f7d032d2f2181cd072eef3916b",
       "detalhe": "aprendizado(#9): Escritor único: auditar e comentar na PR alheia em vez de abrir PR concorrente",
@@ -986,14 +994,6 @@
       "detalhe": "aprendizado(#7): github_commit (MCP) não deleta arquivo; duplicatas CONSCIENCIA/BRAIN nasceram do mesmo commit de bot",
       "area": "Repositório",
       "sha": "a5f27ec",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-27T20:19:43.689Z",
-      "titulo": "Push na main · 1bef425e3f58067b94392efcfb4fb20b764edcf1",
-      "detalhe": "aprendizado(#6): A porta de entrada nunca existiu: por que nenhuma IA lia as regras da casa",
-      "area": "Repositório",
-      "sha": "1bef425",
       "actor": "segredounlock"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-06T04:55:54.039Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 7913dab028a801e7ef9263f00ea3c2379a824e04 (7913dab)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-06T01:01:10.255Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 849b2b13bfd300f7d032d2f2181cd072eef3916b (849b2b1)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-27T20:48:49.164Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · a5f27ec90b52564b0118117c37a2b08647eddd89 (a5f27ec)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-27T20:19:43.689Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 1bef425e3f58067b94392efcfb4fb20b764edcf1 (1bef425)",
       "area": "Repositório",
       "status": "sucesso"
     }
