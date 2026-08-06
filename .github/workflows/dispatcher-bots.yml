@@ -16,7 +16,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: dispatcher-bots-${{ github.event.issue.number || github.event.pull_request.number }}
+  group: dispatcher-bots-${{ github.event_name }}-${{ github.event.issue.number || github.event.pull_request.number }}
   cancel-in-progress: false
 
 jobs:
@@ -39,7 +39,7 @@ jobs:
     runs-on: [self-hosted, Linux]
     steps:
       - name: Postar briefing idempotente
-        uses: actions/github-script@v7
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -65,7 +65,13 @@ jobs:
             for (const [label, text] of briefings) {
               if (!labels.includes(label)) continue;
               const marker = `<!-- dispatcher-bots:${label} -->`;
-              if (comments.some((comment) => comment.body?.includes(marker))) continue;
+              const alreadyPosted = comments.some((comment) => {
+                const owned =
+                  comment.user?.login === 'github-actions[bot]' ||
+                  comment.performed_via_github_app?.slug === 'github-actions';
+                return owned && comment.body?.includes(marker);
+              });
+              if (alreadyPosted) continue;
               const body = [
                 marker,
                 `🤖 **Dispatcher CentralDark** — este ${kind} pediu suporte via \`${label}\`.`,
