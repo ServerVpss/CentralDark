@@ -27,9 +27,23 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout preso ao HEAD validado
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 0
+          persist-credentials: false
+
+      - name: Provar checkout no mesmo HEAD do gate
+        env:
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          actual="$(git rev-parse HEAD)"
+          test "$actual" = "$HEAD_SHA" || {
+            echo "CHECKOUT_HEAD_MISMATCH expected=$HEAD_SHA actual=$actual"
+            exit 1
+          }
 
       - uses: actions/setup-node@v4
         with:
@@ -51,7 +65,7 @@ jobs:
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha || '' }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
-          AUTHORITY_APPROVED: ${{ contains(github.event.pull_request.labels.*.name, 'permito-segredo') || contains(github.event.pull_request.body || '', 'PERMITO SEGREDO') || contains(github.event.pull_request.labels.*.name, 'permito-pivete') || contains(github.event.pull_request.body || '', 'PERMITO PIVETE') }}
+          AUTHORITY_APPROVED: ${{ contains(github.event.pull_request.labels.*.name, 'permito-segredo') }}
         run: |
           set -euo pipefail
           node apps/modulos/mapeamento/core/validar-mapa.mjs \
@@ -63,18 +77,20 @@ jobs:
       - name: Validar porta e adaptadores universais
         run: node scripts/lupa/validar-porta-de-entrada.mjs
 
-      - name: Emitir relatório reproduzível
+      - name: Emitir todos os relatórios reproduzíveis
         if: always()
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha || '' }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
-          AUTHORITY_APPROVED: ${{ contains(github.event.pull_request.labels.*.name, 'permito-segredo') || contains(github.event.pull_request.body || '', 'PERMITO SEGREDO') || contains(github.event.pull_request.labels.*.name, 'permito-pivete') || contains(github.event.pull_request.body || '', 'PERMITO PIVETE') }}
+          AUTHORITY_APPROVED: ${{ contains(github.event.pull_request.labels.*.name, 'permito-segredo') }}
         run: |
-          set -euo pipefail
+          set -uo pipefail
+          status=0
           node apps/modulos/mapeamento/core/validar-mapa.mjs \
             --repo-root "$GITHUB_WORKSPACE" \
             --base-sha "$BASE_SHA" \
             --head-sha "$HEAD_SHA" \
-            --approved "$AUTHORITY_APPROVED"
-          node scripts/lupa/validar-porta-de-entrada.mjs --json
-          node scripts/lupa/validar-identidade-operacional.mjs --json
+            --approved "$AUTHORITY_APPROVED" || status=1
+          node scripts/lupa/validar-porta-de-entrada.mjs --json || status=1
+          node scripts/lupa/validar-identidade-operacional.mjs --json || status=1
+          exit "$status"
