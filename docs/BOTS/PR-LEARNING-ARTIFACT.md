@@ -66,6 +66,8 @@ As rotas são designações operacionais do repositório, não alegações unive
 
 ## Segurança
 
+Os dois jobs usam o runner já existente `runs-on: [self-hosted, Linux]`, evitando dependência do runner hospedado pelo GitHub quando o billing externo o bloqueia.
+
 O job que comenta usa `pull_request_target`, executa somente código da base confiável e não faz checkout do código não confiável do PR.
 
 Ele lê apenas:
@@ -78,7 +80,7 @@ Ele lê apenas:
 
 Ele não lê patch, conteúdo de arquivo, `.env`, secrets, tokens, sessões, chaves ou certificados.
 
-O job do evento `pull_request` possui somente `contents: read`; ele testa o gerador no HEAD candidato, compara o SHA completo do evento com `git rev-parse HEAD` e publica artifact de prova, mas não comenta nem escreve no PR.
+O job do evento `pull_request` possui somente `contents: read`; ele testa o gerador no HEAD candidato, compara o SHA completo do evento com `git rev-parse HEAD` e publica artifact de prova, mas não comenta nem escreve no PR. Esse job só aceita PR cuja origem seja o próprio repositório (`head.repo.full_name == github.repository`), recusando execução de HEAD vindo de fork no runner persistente.
 
 As Actions externas usadas nos workflows modificados são fixadas em SHAs imutáveis. Comentários idempotentes só reconhecem marcador publicado pelo `github-actions[bot]`, impedindo que comentário de terceiro bloqueie ou seja sobrescrito pelo bot.
 
@@ -125,6 +127,7 @@ A implementação só pode ser chamada de funcional quando houver:
 NODE_CHECK=PASS
 TESTES_DO_GERADOR=PASS
 WORKFLOW_YAML=VÁLIDO
+SELF_HOSTED_RUNNER=PROVADO_EM_RUN
 ARTIFACT_MARKDOWN=GERADO
 ARTIFACT_HTML=GERADO
 DIGEST_DETERMINÍSTICO=SIM
@@ -144,6 +147,26 @@ DISPATCHER_NO_PR=PROVADO_EM_RUN
 ```
 
 Antes do merge, os três últimos itens permanecem `PENDENTE_DE_RUNTIME`, porque `pull_request_target` usa a versão existente na branch padrão.
+
+## Primeira prova real do runner self-hosted
+
+No PR `#668`, o commit `c7fcc5168873cdb31ef4784ac453bdbf7b2c9f77` executou no runner `vmi3256920-centraldark`, labels `self-hosted` e `Linux`.
+
+```text
+CHECKOUT_EXACT_HEAD=PASS
+TESTS_TOTAL=19
+PASS=19
+FAIL=0
+SKIPPED=0
+HEAD_IDENTITY_MATCH=PASS
+MARKDOWN_AND_CANVAS=GERADOS
+ARTIFACT_UPLOAD=PASS
+ARTIFACT_ID=8961804370
+ARTIFACT_SHA256=787106cf86e0dfc9147b1f30289f338a30c967159f1a9bc80df4d52a43ee09af
+JOB_CONCLUSION=SUCCESS
+```
+
+Essa prova substitui a conclusão anterior de bloqueio total por billing: o billing bloqueia jobs `ubuntu-latest`, mas não impede o runner self-hosted já operacional.
 
 ## Rollback
 
