@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-04T09:48:10.984Z",
-  "updatedAtBR": "04/08/2026, 06:48:10 BRT",
+  "updatedAt": "2026-08-06T01:01:10.255Z",
+  "updatedAtBR": "05/08/2026, 22:01:10 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "aprendizado(#8): Nunca gerar -v2/-v3: refinar o arquivo que já existe",
+    "lastCommit": "aprendizado(#9): Escritor único: auditar e comentar na PR alheia em vez de abrir PR concorrente",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-06T01:01:10.255Z",
+      "titulo": "Push na main · 849b2b13bfd300f7d032d2f2181cd072eef3916b",
+      "detalhe": "aprendizado(#9): Escritor único: auditar e comentar na PR alheia em vez de abrir PR concorrente",
+      "area": "Repositório",
+      "sha": "849b2b1",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-04T09:48:10.984Z",
       "titulo": "Push na main · 0eec53227763fb8a2a7740bd6fad302d5f12f16c",
       "detalhe": "aprendizado(#8): Nunca gerar -v2/-v3: refinar o arquivo que já existe",
@@ -986,14 +994,6 @@
       "detalhe": "aprendizado(#6): A porta de entrada nunca existiu: por que nenhuma IA lia as regras da casa",
       "area": "Repositório",
       "sha": "1bef425",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-27T19:56:22.133Z",
-      "titulo": "Push na main · ff26701471b5615f92ce5f0cf85dca89f2b7d53e",
-      "detalhe": "aprendizado(#5): Workflow promovido sem o script que ele executa: o bot autônomo nunca rodou",
-      "area": "Repositório",
-      "sha": "ff26701",
       "actor": "segredounlock"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-06T01:01:10.255Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 849b2b13bfd300f7d032d2f2181cd072eef3916b (849b2b1)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-04T09:48:10.984Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 0eec53227763fb8a2a7740bd6fad302d5f12f16c (0eec532)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-27T20:19:43.689Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 1bef425e3f58067b94392efcfb4fb20b764edcf1 (1bef425)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-27T19:56:22.133Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · ff26701471b5615f92ce5f0cf85dca89f2b7d53e (ff26701)",
       "area": "Repositório",
       "status": "sucesso"
     }
