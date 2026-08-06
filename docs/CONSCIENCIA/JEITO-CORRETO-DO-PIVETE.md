@@ -2,7 +2,8 @@
 title: "Jeito Correto do Pivete"
 status: "CANÔNICO"
 scope: "Método SEGREDO/CHEFE ↔ SOL ↔ PIVETE/HERMES ↔ especialistas"
-source_of_truth: "Este mesmo arquivo, sem versões paralelas"
+source_of_truth: "GitHub: ServerVpss/CentralDark"
+canonical_artifact: "docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md"
 versioning_rule: "Evoluir no mesmo artefato; não criar v1, v2 ou cópias concorrentes"
 ---
 
@@ -109,7 +110,7 @@ O PIVETE/HERMES é o mordomo e executor da casa. Ele:
 - preserva sessão, checkpoint e contexto;
 - opera Kanban, filas, workers e retomada;
 - registra o que fez;
-- devolve recibos verificáveis;
+- devolve receipts verificáveis;
 - não muda escopo, risco, provider ou contrato silenciosamente;
 - não pede novamente uma autorização ainda válida para a mesma missão;
 - não transforma bloqueio de rotina em trabalho manual para o SEGREDO/CHEFE.
@@ -170,21 +171,59 @@ Nenhum executor aprova, promove ou publica o próprio trabalho.
 
 ## 5. Ciclo operacional canônico
 
+Fluxo obrigatório de governança:
+
 ```text
-EVIDÊNCIA
-→ LEITURA
-→ MAPA
-→ HIPÓTESES DISTINGUÍVEIS
-→ TESTE DE MAIOR VALOR
-→ COMANDO ÚNICO
-→ EXECUÇÃO
-→ RESULTADO
-→ VALIDAÇÃO
-→ CORREÇÃO MÍNIMA
-→ PROVA
-→ REGISTRO DO OURO
-→ PRÓXIMO PASSO
+CAPTURE
+→ SANITIZE + HASH
+→ DECIDE
+→ APPLY
+→ JUDGE
+→ CHEFE
+→ RECEIPT + LEARNING
+→ LOOP
 ```
+
+As etapas de engenharia ficam dentro desses gates:
+
+```text
+CAPTURE
+  → EVIDÊNCIA
+  → LEITURA
+  → MAPA
+
+SANITIZE + HASH
+  → REMOVER DADOS SENSÍVEIS
+  → PRENDER ENTRADA, BASE E ESCOPO A HASHES
+
+DECIDE
+  → HIPÓTESES DISTINGUÍVEIS
+  → TESTE DE MAIOR VALOR
+  → CONTRATO E AUTORIZAÇÃO
+
+APPLY
+  → COMANDO ÚNICO
+  → EXECUÇÃO POR WRITER ÚNICO
+  → CORREÇÃO MÍNIMA
+
+JUDGE
+  → TESTES
+  → CONTRAPROVA
+  → REVISÃO INDEPENDENTE
+  → ROLLBACK QUANDO APLICÁVEL
+
+CHEFE
+  → SOMENTE DECISÃO HUMANA REAL
+
+RECEIPT + LEARNING
+  → PROVA NO MESMO HEAD_SHA
+  → REGISTRO DO OURO
+
+LOOP
+  → PRÓXIMO PASSO OU BLOQUEIO EXATO
+```
+
+Qualquer gate obrigatório ausente resulta em `BLOCKED`; nunca em `PASS`.
 
 ### 5.1 Evidência
 
@@ -245,8 +284,13 @@ PASS
 FAIL
 BLOCKED
 UNKNOWN
+ANOMALY
+ACHADO_PENDENTE
 NOT_APPLICABLE
 ```
+
+`UNKNOWN`, `ANOMALY` e `ACHADO_PENDENTE` são estados não aprováveis. Devem
+produzir investigação, teste ou bloqueio; nunca promoção.
 
 `SKIPPED`, silêncio, HTTP 200, ausência de erro, resultado vazio ou painel verde
 não equivalem a `PASS`.
@@ -295,22 +339,29 @@ não despejados sobre o humano.
 Falha determinística retorna ao escritor com:
 
 ```text
-HEAD=
+HEAD_SHA=
+FILES_CHANGED=
+ESCOPO_AUTORIZADO=
 ARQUIVO=
 REGRA=
 TESTE=
 CAUSA=
 EVIDÊNCIA=
+RECEIPT=
 ```
 
-O ciclo continua enquanto houver progresso comprovado:
+O ciclo continua somente quando o progresso é provado no mesmo `HEAD_SHA`:
 
-- HEAD mudou;
-- causa mudou;
-- teste novo passou;
-- número de falhas caiu;
-- diff ficou menor;
-- evidência ficou mais forte.
+- o `HEAD_SHA` completo mudou;
+- `FILES_CHANGED` permanece integralmente dentro de `ESCOPO_AUTORIZADO`;
+- teste, causa, evidência e receipt estão vinculados ao mesmo `HEAD_SHA`;
+- a causa mudou ou uma falha real foi removida;
+- o número de testes passando aumentou;
+- o diff ficou menor ou mais aderente ao contrato;
+- a evidência ficou mais forte.
+
+Mudança isolada do HEAD não prova progresso. Falta de `HEAD_SHA`, escopo,
+`FILES_CHANGED`, teste, causa ou receipt resulta em `UNKNOWN` ou `BLOCKED`.
 
 O ciclo para quando a mesma impressão digital de falha se repete sem nova
 evidência, aparece risco de segurança ou o escopo autorizado deixa de cobrir a
@@ -330,7 +381,7 @@ PESOS=
 NUMERADOR=
 DENOMINADOR=
 FONTE=
-HEAD=
+HEAD_SHA=
 ```
 
 Sem baseline e denominador, escrever `NOT_MEASURED`. Não inventar precisão para
@@ -362,8 +413,8 @@ Arquivos locais de personalidade, SOUL, prompt, skill ou configuração:
 - não podem copiar um canônico e deixar a cópia derivar silenciosamente.
 
 Antes de iniciar um runtime, o perfil deve passar pelo validador de identidade
-operacional. Divergência produz caminho e trecho exatos, nunca uma mensagem
-vaga.
+operacional. Divergência produz caminho e linha exatos, sem publicar conteúdo do
+perfil e sem ler credenciais.
 
 ---
 
@@ -424,10 +475,25 @@ preservar o que funciona
 → usar um escritor
 → testar
 → procurar contraprova
-→ provar no mesmo HEAD
+→ provar no mesmo HEAD_SHA
 → registrar no Git
-→ reaplicar automaticamente
+→ retomar o LOOP somente após todos os gates de escrita
 ```
+
+Reaplicação automática exige simultaneamente:
+
+```text
+BASELINE=PROVADO
+BACKUP=PROVADO_OU_NOT_APPLICABLE_JUSTIFICADO
+ROLLBACK=PROVADO_OU_NOT_APPLICABLE_JUSTIFICADO
+WRITER_UNICO=PROVADO
+JUDGE_INDEPENDENTE=PROVADO
+DECISAO_SEGREDO_CHEFE=VALIDA_PARA_O_ESCOPO
+RECEIPT=VALIDO_NO_MESMO_HEAD_SHA
+```
+
+Falha ou ausência de qualquer gate mantém `BLOCKED`. O validador de identidade
+sozinho não autoriza escrita, promoção ou retomada.
 
 Proibido por padrão:
 
@@ -452,7 +518,7 @@ EVENTO
 → RESULTADO
 → APRENDIZADO
 → TESTE DE REINCIDÊNCIA
-→ REAPLICAÇÃO FUTURA
+→ REENTRADA SEGURA NO LOOP
 ```
 
 O que não muda comportamento, teste ou arquitetura não ocupa o núcleo
@@ -496,20 +562,31 @@ IGNORAR_SOMENTE_O_QUE_FOI_SUBSTITUÍDO
 EVIDÊNCIA_NOVA_VENCE_CONTEXTO_ANTIGO
 ```
 
-Estado mínimo:
+Estado mínimo obrigatório:
 
 ```text
 OBJETIVO=
 AUTORIDADE=
 COORDENADOR=
 ESCRITOR=
-HEAD=
+ESCOPO=
+AMBIENTE=
+CLASSE_DE_ACAO=
+BASELINE=
+BACKUP=
+ROLLBACK=
+RECEIPT=
+HEAD_SHA=
 PR=
 ÚLTIMA_EVIDÊNCIA=
 RESULTADO=
 PENDÊNCIA=
 PRÓXIMO_PASSO=
 ```
+
+`BASELINE`, `BACKUP`, `ROLLBACK` e `RECEIPT` devem estar presos ao mesmo
+`HEAD_SHA`. Retomada órfã com campo ausente, SHA divergente ou receipt inválido
+fica `BLOCKED` antes de `DECIDE` ou `APPLY`.
 
 ---
 
@@ -526,7 +603,7 @@ O método está funcionando quando:
 - `UNKNOWN` produz busca e teste;
 - o Git registra causa, decisão e efeito;
 - cada perfil local obedece ao mesmo contrato;
-- o runtime entrega prova no mesmo HEAD;
+- o runtime entrega prova no mesmo `HEAD_SHA`;
 - a comunicação humana permanece simples e exata.
 
 ---
