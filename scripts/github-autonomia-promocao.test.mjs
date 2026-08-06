@@ -17,7 +17,7 @@ function prFixture(overrides = {}) {
   return {
     number: 99,
     title: "fix: exemplo",
-    body: "PERMITO PIVETE",
+    body: "PERMITO SEGREDO",
     state: "open",
     draft: false,
     mergeable: true,
@@ -47,13 +47,39 @@ function successfulRuns(required) {
   }));
 }
 
-test("autorização aceita label ou marcador explícito no corpo", () => {
-  assert.equal(authorizationFor(prFixture()).authorized, true);
-  assert.equal(
-    authorizationFor(prFixture({ body: "sem marcador", labels: [{ name: "permito-pivete" }] })).authorized,
-    true,
+test("autorização canônica reconhece SEGREDO no corpo ou label", () => {
+  const body = authorizationFor(prFixture());
+  assert.equal(body.authorized, true);
+  assert.equal(body.authority, "SEGREDO/CHEFE");
+  assert.equal(body.labelToApply, "permito-segredo");
+
+  const label = authorizationFor(
+    prFixture({ body: "sem marcador", labels: [{ name: "permito-segredo" }] }),
   );
-  assert.equal(authorizationFor(prFixture({ body: "sem marcador" })).authorized, false);
+  assert.equal(label.authorized, true);
+  assert.equal(label.authority, "SEGREDO/CHEFE");
+  assert.equal(label.viaLabel, true);
+});
+
+test("marcador antigo continua compatível sem transformar Pivete em autoridade", () => {
+  const body = authorizationFor(prFixture({ body: "PERMITO PIVETE" }));
+  assert.equal(body.authorized, true);
+  assert.equal(body.authority, "LEGACY_PIVETE_COMPAT");
+  assert.equal(body.legacy, true);
+  assert.equal(body.labelToApply, "permito-pivete");
+
+  const label = authorizationFor(
+    prFixture({ body: "sem marcador", labels: [{ name: "permito-pivete" }] }),
+  );
+  assert.equal(label.authorized, true);
+  assert.equal(label.authority, "LEGACY_PIVETE_COMPAT");
+  assert.equal(label.legacy, true);
+});
+
+test("sem marcador ou label a autorização permanece ausente", () => {
+  const result = authorizationFor(prFixture({ body: "sem marcador", labels: [] }));
+  assert.equal(result.authorized, false);
+  assert.equal(result.authority, null);
 });
 
 test("seleção ignora run skipped mais nova e usa sucesso real", () => {
