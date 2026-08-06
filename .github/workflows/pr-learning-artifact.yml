@@ -18,8 +18,11 @@ concurrency:
 jobs:
   contract-tests:
     name: Provar gerador no HEAD do PR
-    if: github.event_name == 'pull_request' && github.repository == 'ServerVpss/CentralDark'
-    runs-on: ubuntu-latest
+    if: >-
+      github.event_name == 'pull_request' &&
+      github.repository == 'ServerVpss/CentralDark' &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: [self-hosted, Linux]
     timeout-minutes: 8
     permissions:
       contents: read
@@ -216,7 +219,7 @@ jobs:
     if: >-
       github.event_name == 'pull_request_target' &&
       github.repository == 'ServerVpss/CentralDark'
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux]
     timeout-minutes: 8
     permissions:
       contents: read
