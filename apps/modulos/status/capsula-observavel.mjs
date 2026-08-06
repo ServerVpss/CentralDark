@@ -128,8 +128,13 @@ export function validateEvent(event, index = 0) {
   if (event.failure_observed && !asString(event.failure_fingerprint)) {
     problems.push(`${at}:FAILURE_FINGERPRINT_REQUIRED`);
   }
-  if (!event.failure_observed && asString(event.failure_fingerprint)) {
-    problems.push(`${at}:FAILURE_FINGERPRINT_WITHOUT_FAILURE`);
+  if (
+    !event.failure_observed &&
+    asString(event.failure_fingerprint) &&
+    !event.correction_verified &&
+    !event.retained_after_retest
+  ) {
+    problems.push(`${at}:FAILURE_FINGERPRINT_WITHOUT_FAILURE_OR_CORRECTION`);
   }
   if (event.new_failure_class && !event.failure_observed) {
     problems.push(`${at}:NEW_FAILURE_CLASS_WITHOUT_FAILURE`);
@@ -233,10 +238,11 @@ export function aggregateCapsule(events, options = {}) {
     );
     if (identities.size > 1) validationProblems.push(`RUN_${runId}:IDENTITY_DRIFT`);
 
-    const iterations = new Set();
+    const phaseSlots = new Set();
     for (const event of runEvents) {
-      if (iterations.has(event.iteration)) validationProblems.push(`RUN_${runId}:ITERATION_DUPLICATE:${event.iteration}`);
-      iterations.add(event.iteration);
+      const slot = `${event.iteration}:${event.phase}`;
+      if (phaseSlots.has(slot)) validationProblems.push(`RUN_${runId}:PHASE_DUPLICATE:${slot}`);
+      phaseSlots.add(slot);
     }
   }
 
@@ -279,11 +285,13 @@ export function aggregateCapsule(events, options = {}) {
     reason = runSummary.reason;
   }
 
+  const currentRunFalseGreenCount = latestRunEvents.filter((event) => event.false_green_found).length;
+  const currentRunRegressionCount = latestRunEvents.filter((event) => event.regression_found).length;
   const readyForPromotion =
     status === 'PASS' &&
     runSummary.chief_decision === 'APPROVED' &&
-    falseGreenCount === 0 &&
-    regressionCount === 0 &&
+    currentRunFalseGreenCount === 0 &&
+    currentRunRegressionCount === 0 &&
     validationProblems.length === 0;
 
   return {
