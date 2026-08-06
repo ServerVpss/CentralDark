@@ -28,6 +28,7 @@ export function normalizeTriState(value) {
 export function sanitizeText(value, maxLength = 12000) {
   let text = String(value ?? '').slice(0, maxLength);
   const patterns = [
+    [/\bgithub_pat_[A-Za-z0-9_]{20,}\b/gi, '[REDACTED_GITHUB_TOKEN]'],
     [/\bBearer\s+[A-Za-z0-9._~+/=-]{12,}/gi, 'Bearer [REDACTED]'],
     [/\beyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{5,}\.[A-Za-z0-9_-]{5,}\b/g, '[REDACTED_JWT]'],
     [/\bgh[pousr]_[A-Za-z0-9_]{20,}\b/g, '[REDACTED_GITHUB_TOKEN]'],
@@ -110,7 +111,7 @@ function stableInput(input) {
       additions: Number(file.additions ?? 0),
       deletions: Number(file.deletions ?? 0),
     }))
-    .sort((a, b) => a.filename.localeCompare(b.filename));
+    .sort((a, b) => (a.filename < b.filename ? -1 : a.filename > b.filename ? 1 : 0));
   return {
     repository: String(input.repository ?? ''),
     pr_number: Number(input.pr_number),
@@ -130,7 +131,9 @@ export function buildArtifact(input) {
   const capabilities = parseCapabilities(stable.body);
   const missing = CAPABILITY_KEYS.filter((key) => capabilities[key] !== 'SIM');
   const supportRequired = missing.length > 0;
+  const capabilitySource = 'DECLARED_UNVERIFIED';
   const categories = classifyFiles(stable.files);
+  const sensitiveBlocked = categories.sensitive_paths > 0;
   const totals = stable.files.reduce((acc, file) => {
     acc.additions += file.additions;
     acc.deletions += file.deletions;
@@ -144,16 +147,26 @@ export function buildArtifact(input) {
     if (missing.some((item) => item === 'mermaid' || item === 'canvas_html')) supportLabels.add('assign:chatgpt');
     if (missing.includes('structured_yaml')) supportLabels.add('assign:codex');
   }
+  if (sensitiveBlocked) {
+    supportLabels.add('🔐 SEGURANÇA');
+    supportLabels.add('🔴 ERRO');
+  }
 
   const digestPayload = JSON.stringify({
     stable,
     capabilities,
     categories,
     missing,
+    capabilitySource,
+    sensitiveBlocked,
   });
   const artifactDigest = crypto.createHash('sha256').update(digestPayload).digest('hex');
   const shortSha = stable.head_sha.slice(0, 12);
-  const status = supportRequired ? 'SUPPORT_REQUIRED' : 'READY';
+  const status = sensitiveBlocked
+    ? 'BLOCKED_SENSITIVE_PATH'
+    : supportRequired
+      ? 'SUPPORT_REQUIRED'
+      : 'READY';
 
   const mermaid = [
     'flowchart LR',
@@ -176,6 +189,8 @@ export function buildArtifact(input) {
     `title: ${JSON.stringify(stable.title)}`,
     `author: ${JSON.stringify(stable.author)}`,
     `status: ${status}`,
+    `capability_source: ${capabilitySource}`,
+    `blocked: ${sensitiveBlocked ? 'SIM' : 'NAO'}`,
     'capabilities:',
     ...CAPABILITY_KEYS.map((key) => `  ${key}: ${capabilities[key]}`),
     'support:',
@@ -194,28 +209,41 @@ export function buildArtifact(input) {
     `artifact_digest: ${artifactDigest}`,
   ].join('\n');
 
-  const supportSection = supportRequired
+  const supportSection = sensitiveBlocked
     ? [
-        '## 🆘 Solicitação automática de suporte',
+        '## 🔴 Bloqueio por caminho sensível',
         '',
-        `A IA/autoria deste PR não declarou suporte completo para: **${missing.join(', ')}**.`,
+        `Foram detectados **${categories.sensitive_paths}** caminho(s) sensível(is) pelos metadados do PR.`,
         '',
-        'O bot aplicará labels de ajuda e pedirá a uma rota com suporte para traduzir/revisar o artefato, sem trocar o Writer do código e sem reiniciar a missão.',
+        'O artefato permanece disponível para investigação, mas o estado não pode ser READY e o check deve falhar fechado.',
         '',
         `Labels solicitadas: ${[...supportLabels].map((label) => `\`${label}\``).join(', ')}.`,
       ].join('\n')
-    : [
-        '## 🟢 Capacidades declaradas',
-        '',
-        'A autoria declarou suporte aos três formatos. Nenhuma transferência de suporte foi solicitada.',
-      ].join('\n');
+    : supportRequired
+      ? [
+          '## 🆘 Solicitação automática de suporte',
+          '',
+          `A IA/autoria deste PR não declarou suporte completo para: **${missing.join(', ')}**.`,
+          '',
+          'O bot aplicará labels de ajuda e pedirá a uma rota com suporte para traduzir/revisar o artefato, sem trocar o Writer do código e sem reiniciar a missão.',
+          '',
+          `Labels solicitadas: ${[...supportLabels].map((label) => `\`${label}\``).join(', ')}.`,
+        ].join('\n')
+      : [
+          '## 🟢 Capacidades declaradas',
+          '',
+          'A autoria declarou suporte aos três formatos. Essa declaração ainda não é prova independente da capacidade.',
+        ].join('\n');
 
   const plain = [
     `PR #${stable.pr_number} no HEAD ${stable.head_sha}.`,
     `${stable.files.length} arquivos alterados; +${totals.additions} e -${totals.deletions}.`,
-    supportRequired
-      ? `Faltam capacidades declaradas: ${missing.join(', ')}. O bot pede suporte sem mudar a autoria do código.`
-      : 'Todas as capacidades foram declaradas como suportadas.',
+    sensitiveBlocked
+      ? `Há ${categories.sensitive_paths} caminho(s) sensível(is); estado bloqueado.`
+      : supportRequired
+        ? `Faltam capacidades declaradas: ${missing.join(', ')}. O bot pede suporte sem mudar a autoria do código.`
+        : 'Todas as capacidades foram declaradas como suportadas, sem verificação independente.',
+    `Fonte das capacidades: ${capabilitySource}.`,
     'O artefato não aprova o PR: ele organiza contexto; testes, revisão e gates continuam obrigatórios.',
   ].join(' ');
 
@@ -249,6 +277,8 @@ export function buildArtifact(input) {
     '',
     '```text',
     `ARTIFACT_STATUS=${status}`,
+    `CAPABILITY_SOURCE=${capabilitySource}`,
+    `BLOCKED=${sensitiveBlocked ? 'SIM' : 'NAO'}`,
     `HEAD_SHA=${stable.head_sha}`,
     `FILES=${stable.files.length}`,
     `SUPPORT_REQUIRED=${supportRequired ? 'SIM' : 'NAO'}`,
@@ -265,7 +295,10 @@ export function buildArtifact(input) {
   const states = [
     ['PR_ABERTO', 'PR e HEAD identificados'],
     ['ARTEFATO_GERADO', 'Mermaid, YAML, texto e Canvas'],
-    [supportRequired ? 'SUPORTE_SOLICITADO' : 'CAPACIDADES_OK', supportRequired ? missing.join(', ') : 'todas SIM'],
+    [
+      sensitiveBlocked ? 'BLOQUEIO_SENSIVEL' : supportRequired ? 'SUPORTE_SOLICITADO' : 'CAPACIDADES_OK',
+      sensitiveBlocked ? `${categories.sensitive_paths} path(s)` : supportRequired ? missing.join(', ') : 'declaradas SIM',
+    ],
     ['GATES_PENDENTES', 'testes e revisão ainda decidem'],
     ['RECEIPT_EMITIDO', artifactDigest.slice(0, 16)],
   ];
@@ -322,6 +355,8 @@ ctx.fillText('SUPORTE NÃO TRANSFERE O WRITER DO CÓDIGO.',28,382);
   return {
     status,
     support_required: supportRequired,
+    blocked: sensitiveBlocked,
+    capability_source: capabilitySource,
     missing_capabilities: missing,
     support_labels: [...supportLabels],
     artifact_digest: artifactDigest,
@@ -350,6 +385,8 @@ function appendGithubOutput(file, result) {
   const lines = [
     `status=${result.status}`,
     `support_required=${result.support_required ? 'true' : 'false'}`,
+    `blocked=${result.blocked ? 'true' : 'false'}`,
+    `capability_source=${result.capability_source}`,
     `missing_capabilities=${result.missing_capabilities.join(',')}`,
     `support_labels=${result.support_labels.join(',')}`,
     `artifact_digest=${result.artifact_digest}`,
