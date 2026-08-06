@@ -59,3 +59,9 @@
 - **Data:** 2026-08-06
 - **Contexto:** Auditoria do PR #664: baixei o blob `e63a12c8` (a61abaf), gerei um patch, provei 8 casos e rodei a suíte 10/10. Entre a geração e a publicação, o head foi para `94e53e9` (blob `ad56f473`). Postei o diff 8 minutos depois do arquivo já ter mudado — patch nasceu velho, não aplica. Mesmo erro aconteceu no #667 com a cápsula (`0cae63d1` → `0897b6a3`).
 - **Aprendizado:** Conferir `git hash-object` do arquivo alvo IMEDIATAMENTE antes de publicar, não só no começo da auditoria. Num repo com loop autônomo o head move em minutos, e patch contra blob morto vira lixo que o próximo agente tenta aplicar. Se moveu: refaz contra o blob novo ou marca o artefato anterior como morto no mesmo canal onde ele foi publicado.
+
+### 11. Hash validado por regex não prova que o artefato existe
+- **Categoria:** armadilha
+- **Data:** 2026-08-06
+- **Contexto:** Cápsula observável do #667. Ledger de dois eventos forjado à mão produziu validation=PASS, ready_for_promotion=true, xp_valid=1 e correction_rate=100%. O evidence_hash era 'f' repetido 64 vezes e o chief_receipt_hash era 'a' repetido 64 vezes, apontando para um recibo que nunca existiu; o event_actor 'SEGREDO/CHEFE' foi digitado pelo próprio writer. No mesmo objeto, guarantees.chief_receipt_required_for_promotion saiu ENFORCED.
+- **Aprendizado:** Regex sobre hash prova FORMATO, nunca PROCEDÊNCIA. Campo de evidência só vale se o agregador recomputar o hash sobre o artefato que a referência aponta e falhar quando a referência não resolve. Pior ainda é o snapshot declarar a própria garantia como cumprida: garantia auto-declarada transforma buraco silencioso em buraco com selo, e é isso que um painel ao vivo passa a transmitir como verdade.
