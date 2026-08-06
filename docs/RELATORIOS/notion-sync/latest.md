@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-08-04T09:47:49.635Z
+# 🧠 Notion Sync — 2026-08-06T01:00:50.094Z
 
-- **Commit fonte:** `0eec53227763fb8a2a7740bd6fad302d5f12f16c`
+- **Commit fonte:** `849b2b13bfd300f7d032d2f2181cd072eef3916b`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 51 atualizadas · ❌ 331 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 52 atualizadas · ❌ 331 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
-| aprendizados | 8 | 1 | 7 | 0 | 0 |
+| aprendizados | 9 | 1 | 8 | 0 | 0 |
 | estrutura | 331 | 0 | 0 | 0 | 331 |
 
 ## Operações
@@ -73,7 +73,8 @@
 | aprendizados | atualizado | #5 — Workflow promovido sem o script que ele executa: o bot autônomo nunca rodou |
 | aprendizados | atualizado | #6 — A porta de entrada nunca existiu: por que nenhuma IA lia as regras da casa |
 | aprendizados | atualizado | #7 — github_commit (MCP) não deleta arquivo; duplicatas CONSCIENCIA/BRAIN nasceram do mesmo commit de bot |
-| aprendizados | criado | #8 — Nunca gerar -v2/-v3: refinar o arquivo que já existe |
+| aprendizados | atualizado | #8 — Nunca gerar -v2/-v3: refinar o arquivo que já existe |
+| aprendizados | criado | #9 — Escritor único: auditar e comentar na PR alheia em vez de abrir PR concorrente |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
