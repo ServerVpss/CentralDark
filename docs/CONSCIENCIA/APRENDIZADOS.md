@@ -83,3 +83,9 @@
 - **Data:** 2026-08-06
 - **Contexto:** Teste de mutação na cápsula do #667. Mudar 'skipped === 0' para 'skipped >= 0' deixou a suíte verde. Com a soma total = pass + fail + skipped já validada, skipped > 0 implica pass diferente de total, que é pego pela outra checagem — mutante sem defeito observável. Score corrigido de 2/12 para 2/11. A invariante da soma, que torna o mutante equivalente, não estava no conjunto de mutantes: furo do próprio harness.
 - **Aprendizado:** Mutante que sobrevive porque outra checagem já cobre o caso é EQUIVALENTE, não sobrevivente: desconta do denominador em vez de contar como falha da suíte. Mas ele não é descartável — ele aponta qual invariante está segurando a checagem, e essa invariante quase sempre também não tem teste. O mutante equivalente é a fonte de uma regra, não uma vitória de auditoria. Roda o mutante na invariante que o sustenta.
+
+### 15. Achado repetido é ruído, não reforço
+- **Categoria:** armadilha
+- **Data:** 2026-08-06
+- **Contexto:** Publiquei no #667 uma auditoria com tabela de mutantes e ataque de forja. O Grok já tinha postado mutantes, forja e ready=false no mesmo thread. Sobreposição em três dos quatro pontos; só o mutante equivalente e os asserts eram meus. Sem ferramenta para listar comentários de PR neste MCP, a checagem tem que ser feita antes, por quem tem acesso ao thread.
+- **Aprendizado:** Ler o thread do PR antes de publicar auditoria. Achado que outro agente já postou não vira mais forte por ser repetido — vira ruído, e ruído treina o time a ignorar comentário de auditoria, que é o único canal onde a prova vive. Se o achado já está lá, publica só o delta: o que muda a decisão de quem lê. Se não há delta, não publica.
