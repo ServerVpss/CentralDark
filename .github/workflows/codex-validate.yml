@@ -20,11 +20,30 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout exact PR HEAD
-        uses: actions/checkout@v6
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 0
+          persist-credentials: false
           submodules: false
+
+      - name: Prove checkout identity
+        env:
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$HEAD_SHA"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Test authenticated authority source
+        run: node --test scripts/lupa/authority-approval.test.mjs
+
+      - name: Resolve authenticated authority
+        id: authority
+        run: node scripts/lupa/authority-approval.mjs
 
       - name: Test deterministic map and provider guards
         run: |
@@ -37,7 +56,7 @@ jobs:
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha || '' }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
-          AUTHORITY_APPROVED: ${{ contains(github.event.pull_request.labels.*.name, 'permito-segredo') || contains(github.event.pull_request.body || '', 'PERMITO SEGREDO') || contains(github.event.pull_request.labels.*.name, 'permito-pivete') || contains(github.event.pull_request.body || '', 'PERMITO PIVETE') }}
+          AUTHORITY_APPROVED: ${{ steps.authority.outputs.approved }}
         run: |
           set -euo pipefail
           node apps/modulos/mapeamento/core/validar-mapa.mjs \
@@ -61,11 +80,22 @@ jobs:
           fi
           rm -rf "$checkout_dir"
 
-      - name: Checkout
-        uses: actions/checkout@v6
+      - name: Checkout exact PR HEAD without persisted credential
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
           path: .ci-codex-validate
+          persist-credentials: false
           submodules: false
+
+      - name: Prove isolated checkout identity
+        shell: bash
+        working-directory: .ci-codex-validate
+        env:
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$HEAD_SHA"
 
       - name: Validate required Codex files
         shell: bash
@@ -191,9 +221,11 @@ jobs:
     name: Validate MCP admin guard and runtime build
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v6
+      - name: Checkout exact PR HEAD
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
           submodules: false
 
       - name: Setup Node
