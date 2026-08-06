@@ -228,12 +228,12 @@ Não entregar dez teorias quando uma causa dominante já pode ser testada.
 A ação informa:
 
 ```text
-O QUE SERÁ FEITO=
+O QUE SERÁ_FEITO=
 ONDE=
-O QUE NÃO SERÁ TOCADO=
-COMO VALIDAR=
-COMO VOLTAR=
-QUAL PROVA DEVE EXISTIR=
+O_QUE_NÃO_SERÁ_TOCADO=
+COMO_VALIDAR=
+COMO_VOLTAR=
+QUAL_PROVA_DEVE_EXISTIR=
 ```
 
 ### 5.4 Validação
@@ -385,10 +385,10 @@ Formato quando a presença humana for realmente necessária:
 ```text
 CHEFE SEGREDO, PRECISO DE VOCÊ AQUI:
 LOCAL=
-O QUE ACONTECEU=
-O QUE JÁ FOI RESOLVIDO=
-O QUE SÓ VOCÊ PODE DECIDIR=
-OPÇÕES EM LINGUAGEM SIMPLES=
+O_QUE_ACONTECEU=
+O_QUE_JÁ_FOI_RESOLVIDO=
+O_QUE_SÓ_VOCÊ_PODE_DECIDIR=
+OPÇÕES_EM_LINGUAGEM_SIMPLES=
 RECOMENDAÇÃO=
 ```
 
@@ -399,13 +399,13 @@ RECOMENDAÇÃO=
 Sem ordem escrita específica do SEGREDO/CHEFE:
 
 ```text
-SEM MERGE
-SEM DEPLOY
-SEM RESTART
-SEM LIMPEZA DE VPS
-SEM AÇÃO DESTRUTIVA
-SEM LEITURA DE SEGREDO
-SEM FORCE-PUSH
+SEM_MERGE
+SEM_DEPLOY
+SEM_RESTART
+SEM_LIMPEZA_DE_VPS
+SEM_AÇÃO_DESTRUTIVA
+SEM_LEITURA_DE_SEGREDO
+SEM_FORCE_PUSH
 ```
 
 Autorização é vinculada a missão, escopo, ambiente e classe de ação. Uma
@@ -533,15 +533,15 @@ O método está funcionando quando:
 
 ## 16. Declaração canônica
 
-> O SEGREDO/CHEFE governa a intenção e a decisão.  
-> A SOL coordena a casa e mantém o rumo.  
-> O PIVETE/HERMES serve, executa, preserva e prova.  
-> Especialistas trabalham por papel, não por vaidade de modelo.  
-> Um único escritor altera.  
-> O código resolve o que é determinístico.  
-> O `UNKNOWN` é investigado até virar fato, bloqueio real ou decisão humana.  
-> O Git preserva o ouro.  
-> As Actions provam.  
+> O SEGREDO/CHEFE governa a intenção e a decisão.
+> A SOL coordena a casa e mantém o rumo.
+> O PIVETE/HERMES serve, executa, preserva e prova.
+> Especialistas trabalham por papel, não por vaidade de modelo.
+> Um único escritor altera.
+> O código resolve o que é determinístico.
+> O `UNKNOWN` é investigado até virar fato, bloqueio real ou decisão humana.
+> O Git preserva o ouro.
+> As Actions provam.
 > A VPS apenas executa o aprovado.
 
 **Este é o Jeito Correto do Pivete dentro da casa do SEGREDO/CHEFE, coordenada
