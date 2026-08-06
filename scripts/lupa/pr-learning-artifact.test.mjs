@@ -72,6 +72,7 @@ test('todas capacidades SIM geram READY', () => {
   const result = buildArtifact(baseInput);
   assert.equal(result.status, 'READY');
   assert.equal(result.support_required, false);
+  assert.equal(result.capability_source, 'DECLARED_UNVERIFIED');
   assert.deepEqual(result.missing_capabilities, []);
 });
 
@@ -105,6 +106,36 @@ test('sanitiza tokens, chaves e menções', () => {
   assert.doesNotMatch(safe, /ghp_/);
   assert.doesNotMatch(safe, /@everyone/);
   assert.doesNotMatch(safe, /<script>/);
+});
+
+test('redige token fine-grained isolado antes do Markdown', () => {
+  const fineGrained = ['github', '_pat_', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'].join('');
+  const result = buildArtifact({ ...baseInput, title: `release ${fineGrained}` });
+  assert.doesNotMatch(result.markdown, /github_pat_/);
+  assert.match(result.markdown, /\[REDACTED_GITHUB_TOKEN\]/);
+});
+
+test('digest Unicode é independente da ordem de entrada', () => {
+  const unicodeFiles = [
+    { filename: 'docs/z.md', status: 'modified', additions: 1, deletions: 0 },
+    { filename: 'docs/ä.md', status: 'modified', additions: 1, deletions: 0 },
+    { filename: 'docs/a.md', status: 'modified', additions: 1, deletions: 0 },
+  ];
+  const a = buildArtifact({ ...baseInput, files: unicodeFiles });
+  const b = buildArtifact({ ...baseInput, files: [...unicodeFiles].reverse() });
+  assert.equal(a.artifact_digest, b.artifact_digest);
+});
+
+test('path sensível bloqueia READY e aplica labels de segurança', () => {
+  const result = buildArtifact({
+    ...baseInput,
+    files: [...baseInput.files, { filename: '.env', status: 'added', additions: 1, deletions: 0 }],
+  });
+  assert.equal(result.status, 'BLOCKED_SENSITIVE_PATH');
+  assert.equal(result.blocked, true);
+  assert.ok(result.support_labels.includes('🔐 SEGURANÇA'));
+  assert.ok(result.support_labels.includes('🔴 ERRO'));
+  assert.match(result.markdown, /BLOCKED=SIM/);
 });
 
 test('classifica paths sensíveis sem ler conteúdo', () => {
