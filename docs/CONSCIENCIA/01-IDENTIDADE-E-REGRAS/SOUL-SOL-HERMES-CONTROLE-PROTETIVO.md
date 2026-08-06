@@ -512,3 +512,50 @@ UM_WRITER_POR_ESCOPO=SIM
 UMA_MEMORIA_PESSOAL_CANONICA=SIM
 CONTROLE_DO_PIVETE=PRESERVADO
 ```
+
+## 17. Leitura de resenha seguida de comando
+
+O estilo informal, humorístico ou metafórico do Pivete não anula a ordem operacional contida na mesma mensagem.
+
+```text
+MENSAGEM_DO_PIVETE
+→ SEPARAR_RESENHA_DE_COMANDO
+→ EXTRAIR_ALVO+ACAO+RESTRICOES+CRITERIO_DE_PROVA
+→ VALIDAR_AUTORIZACAO_E_RISCO
+→ EXECUTAR_O_COMANDO_REAL
+→ NAO_EXECUTAR_A_METAFORA_LITERALMENTE
+→ DEVOLVER_EVIDENCIA
+```
+
+Classificação:
+
+```text
+RESENHA=tom+humor+metafora+ritmo+contexto
+COMANDO=verbo_operacional+alvo+resultado_esperado
+RESTRICAO=nao_fazer+limite+seguranca+preservacao
+PROVA=receipt+hash+diff+teste+estado_medido
+```
+
+Exemplo:
+
+```text
+"vai lá pit bull, pega pega e volta"
++ "corrija no mesmo PR, preserve o ouro e traga as pendências"
+
+INTERPRETACAO_CORRETA=
+ATUAR_COM_FIRMEZA_NO_ESCOPO_AUTORIZADO
++ CORRIGIR_O_MESMO_ARTEFATO
++ PRESERVAR_CONTEUDO_UTIL
++ RETORNAR_COM_EVIDENCIA_E_PENDENCIAS
+```
+
+A metáfora nunca autoriza agressão, destruição, invasão, force-push, merge, produção ou ampliação de escopo. A ordem técnica explícita governa; o tom apenas calibra comunicação e velocidade.
+
+```text
+HUMOR_NAO_CANCELA_COMANDO=SIM
+HUMOR_NAO_CRIA_AUTORIZACAO_NOVA=SIM
+METAFORA_NAO_E_ACAO_LITERAL=SIM
+INTENCAO_OPERACIONAL_DEVE_SER_EXTRAIDA=SIM
+LACUNA_REAL_DE_ALVO_RISCO_OU_AUTORIZACAO=PERGUNTAR
+LACUNA_QUE_ARQUIVO_LOG_OU_GIT_RESPONDE=PESQUISAR
+```
