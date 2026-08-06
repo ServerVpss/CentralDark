@@ -10,11 +10,12 @@
  *   Princípio 3.
  *
  * Contrato:
- *   - todo commit do intervalo carrega o trailer `Writer: <slug>`;
- *   - o intervalo inteiro tem UM único valor de Writer;
- *   - `Writer-Session:` é opcional e precisa ser opaco (sem cara de credencial).
+ *   - futuro (mode=enforce): todo commit carrega trailer `Writer: <slug>`;
+ *   - passado (mode=legacy): commit sem trailer = UNKNOWN_LEGACY (nao inventa autor);
+ *   - o intervalo enforce tem UM unico valor de Writer;
+ *   - `Writer-Session:` e opcional e precisa ser opaco (sem cara de credencial).
  *
- * Fail-closed: ausência, formato inválido ou divergência retornam FAIL e exit 1.
+ * Fail-closed: so verdict=PASS exit 0. UNKNOWN_LEGACY/FAIL exit 1 (nao e verde).
  * Warning nunca é veredito — ver `.github/workflows/farm-co-author.yml`, que é
  * `continue-on-error: true` e por isso não serve de gate.
  *
@@ -62,13 +63,30 @@ export function parseWriterTrailers(message) {
  * Veredito do intervalo. `commits` = [{ sha, message }].
  * Intervalo vazio é FAIL: nada provado não é nada aprovado.
  */
-export function evaluateWriters(commits) {
+/**
+ * Fronteira de ativacao do gate Writer:
+ * - mode=enforce (default, futuro/CI): falta de trailer = FAIL
+ * - mode=legacy (passado/UNKNOWN_LEGACY): commit sem trailer = UNKNOWN_LEGACY
+ *   (nao inventa autoria historica; nao conta como PASS)
+ * Em ambos os modos: trailer presente invalido / multi-writer / credencial = FAIL.
+ * Intervalo vazio sempre FAIL.
+ */
+export function evaluateWriters(commits, options = {}) {
+  const mode = options.mode === "legacy" ? "legacy" : "enforce";
   const problems = [];
   const seen = new Set();
   const perCommit = [];
+  let unknownLegacy = 0;
 
   if (!Array.isArray(commits) || commits.length === 0) {
-    return { verdict: "FAIL", writers: [], problems: ["NO_COMMITS_INSPECTED"], commits: [] };
+    return {
+      verdict: "FAIL",
+      mode,
+      writers: [],
+      problems: ["NO_COMMITS_INSPECTED"],
+      commits: [],
+      unknown_legacy: 0,
+    };
   }
 
   for (const commit of commits) {
@@ -76,32 +94,51 @@ export function evaluateWriters(commits) {
     const { writer, session } = parseWriterTrailers(commit?.message);
 
     if (!writer) {
-      problems.push(`WRITER_TRAILER_MISSING:${sha}`);
-      perCommit.push({ sha, writer: null, session: null });
+      if (mode === "legacy") {
+        unknownLegacy += 1;
+        perCommit.push({ sha, writer: null, session: null, status: "UNKNOWN_LEGACY" });
+      } else {
+        problems.push(`WRITER_TRAILER_MISSING:${sha}`);
+        perCommit.push({ sha, writer: null, session: null, status: "FAIL" });
+      }
       continue;
     }
     if (!WRITER_SLUG.test(writer)) {
       problems.push(`WRITER_SLUG_INVALID:${sha}`);
-      perCommit.push({ sha, writer: null, session: null });
+      perCommit.push({ sha, writer: null, session: null, status: "FAIL" });
       continue;
     }
     if (session && looksLikeCredential(session)) {
       problems.push(`WRITER_SESSION_LOOKS_LIKE_CREDENTIAL:${sha}`);
-      perCommit.push({ sha, writer, session: "REDACTED" });
+      perCommit.push({ sha, writer, session: "REDACTED", status: "FAIL" });
       continue;
     }
     seen.add(writer);
-    perCommit.push({ sha, writer, session: session || null });
+    perCommit.push({ sha, writer, session: session || null, status: "OK" });
   }
 
   const writers = [...seen].sort();
   if (writers.length > 1) problems.push(`WRITER_NOT_UNIQUE:${writers.join("+")}`);
 
+  let verdict;
+  if (problems.length) {
+    verdict = "FAIL";
+  } else if (mode === "legacy") {
+    if (unknownLegacy > 0 && writers.length === 0) verdict = "UNKNOWN_LEGACY";
+    else if (unknownLegacy > 0 && writers.length >= 1) verdict = "PARTIAL_LEGACY";
+    else verdict = "PASS";
+  } else {
+    // enforce
+    verdict = "PASS";
+  }
+
   return {
-    verdict: problems.length ? "FAIL" : "PASS",
+    verdict,
+    mode,
     writers,
     problems,
     commits: perCommit,
+    unknown_legacy: unknownLegacy,
   };
 }
 
@@ -121,15 +158,31 @@ export function readCommits(range) {
 }
 
 export function main(argv = process.argv.slice(2)) {
-  const range = argv[0];
-  if (!range) throw new Error("RANGE_REQUIRED: uso -> validar-escritor-unico.mjs <base>..<head>");
-  const result = evaluateWriters(readCommits(range));
+  let mode = "enforce";
+  const positional = [];
+  for (const arg of argv) {
+    if (arg === "--mode=legacy" || arg === "--legacy") mode = "legacy";
+    else if (arg === "--mode=enforce") mode = "enforce";
+    else positional.push(arg);
+  }
+  const range = positional[0];
+  if (!range) {
+    throw new Error(
+      "RANGE_REQUIRED: uso -> validar-escritor-unico.mjs <base>..<head> [--mode=enforce|legacy]",
+    );
+  }
+  const result = evaluateWriters(readCommits(range), { mode });
   console.log(`WRITER_UNICO_VERDICT=${result.verdict}`);
+  console.log(`WRITER_UNICO_MODE=${result.mode}`);
   console.log(`WRITER_UNICO_WRITERS=${result.writers.join(",") || "none"}`);
+  console.log(`WRITER_UNICO_UNKNOWN_LEGACY=${result.unknown_legacy}`);
   console.log(`WRITER_UNICO_PROBLEMS=${result.problems.join(" ") || "none"}`);
   for (const item of result.commits) {
-    console.log(`COMMIT=${item.sha} WRITER=${item.writer || "MISSING"}`);
+    console.log(
+      `COMMIT=${item.sha} WRITER=${item.writer || "MISSING"} STATUS=${item.status || "?"}`,
+    );
   }
+  // So PASS exit 0. UNKNOWN_LEGACY / PARTIAL_LEGACY / FAIL = exit 1 (nao e verde).
   if (result.verdict !== "PASS") process.exit(1);
   return result;
 }
