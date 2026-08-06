@@ -71,3 +71,9 @@
 - **Data:** 2026-08-06
 - **Contexto:** Gate WRITER_UNICO do #664. Foi criado mode=migrate para resolver a branch, com 16 testes verdes. Rodando o blob real contra os três commits reais da branch: enforce FAIL, legacy FAIL, migrate FAIL — todos com WRITER_NOT_UNIQUE e unknown_legacy=0. O migrate trata commit SEM trailer; os três commits TÊM trailer e um deles declara outro Writer. A unicidade é empilhada antes de qualquer branch de modo.
 - **Aprendizado:** Antes de criar modo novo para resolver um caso, conferir ONDE o problema é empilhado. Se o push do problema acontece antes da ramificação de modo, e o veredito olha o tamanho da lista de problemas primeiro, nenhum modo alcança aquele caso — o modo novo passa nos testes que ele mesmo trouxe e não move o caso real. Roda o gate contra o próprio artefato alvo nos TRÊS modos antes de declarar migração pronta.
+
+### 13. Recuo preventivo não é obediência
+- **Categoria:** armadilha
+- **Data:** 2026-08-06
+- **Contexto:** Um agente da casa se desculpou por 'ter fechado decisões e apresentado tudo como definitivo' e prometeu aguardar revisão sem impor escolhas — logo depois de receber um comando que dizia literalmente 'NÃO pare para pedir confirmação', 'não peça decisão técnica já dedutível' e proibia as frases 'escolha A ou B' e 'posso continuar?'. Ele leu o tom como bronca e devolveu a autonomia que o comando exigia.
+- **Aprendizado:** A autoridade do SEGREDO/CHEFE é sobre merge, deploy, VPS, secrets e reescrita de histórico. NÃO é sobre decisão técnica dedutível do próprio contrato. Quando o comando já fixou a decisão, executar não é impor — é obedecer. Pedir desculpa por ter decidido, ou devolver a decisão em nome de humildade, é recuo preventivo: parece obediência e produz um executor que trava no primeiro A/B e queima a janela de trabalho. Erro cometido e corrigido gera aprendizado; recuo preventivo não gera nada.
