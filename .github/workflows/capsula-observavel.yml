@@ -1,0 +1,66 @@
+name: Cápsula Observável — contrato e falso verde
+
+on:
+  pull_request:
+    paths:
+      - 'apps/modulos/status/capsula-observavel.mjs'
+      - 'apps/modulos/status/capsula-observavel.test.mjs'
+      - 'apps/modulos/status/capsula-event.schema.json'
+      - 'apps/modulos/status/capsula-data.json'
+      - 'apps/modulos/status/capsula.html'
+      - 'apps/modulos/status/README.md'
+      - '.github/workflows/capsula-observavel.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: capsula-observavel-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  contrato:
+    name: Validar cápsula sem falso verde
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exato do candidato
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+
+      - name: Verificar diff
+        run: git diff --check
+
+      - name: Executar testes discriminativos
+        run: node --test apps/modulos/status/capsula-observavel.test.mjs
+
+      - name: Provar estado vazio fail-closed
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          tmp="$(mktemp)"
+          node apps/modulos/status/capsula-observavel.mjs --output "$tmp" >/dev/null
+          node - "$tmp" <<'NODE'
+          const fs = require('node:fs');
+          const snapshot = JSON.parse(fs.readFileSync(process.argv[2], 'utf8'));
+          if (snapshot.capsule.status !== 'BLOCKED') throw new Error('EMPTY_NOT_BLOCKED');
+          if (snapshot.capsule.reason !== 'NO_EVENTS') throw new Error('EMPTY_REASON_INVALID');
+          if (snapshot.learning.correction_rate.percent !== null) throw new Error('EMPTY_PERCENT_INVENTED');
+          if (snapshot.capsule.production !== 'UNTOUCHED') throw new Error('PRODUCTION_STATE_INVALID');
+          console.log('CAPSULA_EMPTY_FAIL_CLOSED=PASS');
+          NODE
+
+      - name: Recibo
+        run: |
+          {
+            echo '## Cápsula Observável'
+            echo ''
+            echo '- testes discriminativos: PASS'
+            echo '- estado vazio: BLOCKED/NO_EVENTS'
+            echo '- porcentagem sem denominador: bloqueada'
+            echo '- skipped como pass: bloqueado'
+            echo '- produção: UNTOUCHED'
+          } >> "$GITHUB_STEP_SUMMARY"
