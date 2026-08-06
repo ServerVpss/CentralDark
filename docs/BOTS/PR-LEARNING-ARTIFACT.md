@@ -11,7 +11,7 @@ versioning_rule: "Evoluir estes mesmos artefatos; não criar V2/V3 ou bot concor
 
 ## Intenção registrada
 
-Ao abrir ou atualizar um Pull Request, o CentralDark deve produzir automaticamente um artefato curto que permita a humanos e inteligências entenderem o mesmo estado com rapidez.
+Ao abrir, editar ou atualizar um Pull Request, o CentralDark deve produzir automaticamente um artefato curto que permita a humanos e inteligências entenderem o mesmo estado com rapidez.
 
 A intenção é de **SEGREDO/CHEFE**:
 
@@ -70,14 +70,15 @@ O job que comenta usa `pull_request_target`, executa somente código da base con
 
 Ele lê apenas:
 
-- título e corpo sanitizados;
+- título sanitizado e codificado para Markdown inline;
+- corpo sanitizado para leitura do contrato de capacidades;
 - número do PR;
 - base e HEAD;
 - nomes, status e contagens dos arquivos.
 
 Ele não lê patch, conteúdo de arquivo, `.env`, secrets, tokens, sessões, chaves ou certificados.
 
-O job do evento `pull_request` possui somente `contents: read`; ele testa o gerador no HEAD candidato e publica artifact de prova, mas não comenta nem escreve no PR.
+O job do evento `pull_request` possui somente `contents: read`; ele testa o gerador no HEAD candidato, compara o SHA completo do evento com `git rev-parse HEAD` e publica artifact de prova, mas não comenta nem escreve no PR.
 
 As Actions externas usadas nos workflows modificados são fixadas em SHAs imutáveis. Comentários idempotentes só reconhecem marcador publicado pelo `github-actions[bot]`, impedindo que comentário de terceiro bloqueie ou seja sobrescrito pelo bot.
 
@@ -107,6 +108,10 @@ ARTIFACT_UPLOADED != CÓDIGO FUNCIONANDO
 SUPPORT_REQUESTED != WRITER_TRANSFERRED
 CAPABILITY_DECLARED_SIM != CAPABILITY_PROVEN
 SENSITIVE_PATHS_GT_0 => BLOCKED_SENSITIVE_PATH
+HEAD_DECLARADO != HEAD_DO_CHECKOUT => BLOCKED
+PR_NUMBER_NAO_CANONICO => BLOCKED
+FILE_METADATA_INVALID => BLOCKED
+MARKDOWN_NAO_CONFIAVEL => CODIFICAR_ANTES_DE_PUBLICAR
 CHECKS_GREEN != PRODUÇÃO
 ```
 
@@ -124,6 +129,11 @@ ARTIFACT_MARKDOWN=GERADO
 ARTIFACT_HTML=GERADO
 DIGEST_DETERMINÍSTICO=SIM
 TOKEN_FINE_GRAINED_REDACTED=SIM
+MARKDOWN_INLINE_INJECTION_BLOCKED=SIM
+HEAD_SHA_EXACT_40_HEX=SIM
+CHECKOUT_HEAD_MATCH=SIM
+PR_NUMBER_CANONICAL=SIM
+FILE_METADATA_VALIDATED=SIM
 UNICODE_ORDER_INDEPENDENT=SIM
 SENSITIVE_PATH_GATE=PASS
 TEST_RECEIPT_DERIVED_FROM_TAP=SIM
