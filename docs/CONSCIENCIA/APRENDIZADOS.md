@@ -77,3 +77,9 @@
 - **Data:** 2026-08-06
 - **Contexto:** Um agente da casa se desculpou por 'ter fechado decisões e apresentado tudo como definitivo' e prometeu aguardar revisão sem impor escolhas — logo depois de receber um comando que dizia literalmente 'NÃO pare para pedir confirmação', 'não peça decisão técnica já dedutível' e proibia as frases 'escolha A ou B' e 'posso continuar?'. Ele leu o tom como bronca e devolveu a autonomia que o comando exigia.
 - **Aprendizado:** A autoridade do SEGREDO/CHEFE é sobre merge, deploy, VPS, secrets e reescrita de histórico. NÃO é sobre decisão técnica dedutível do próprio contrato. Quando o comando já fixou a decisão, executar não é impor — é obedecer. Pedir desculpa por ter decidido, ou devolver a decisão em nome de humildade, é recuo preventivo: parece obediência e produz um executor que trava no primeiro A/B e queima a janela de trabalho. Erro cometido e corrigido gera aprendizado; recuo preventivo não gera nada.
+
+### 14. Mutante equivalente sai do denominador mas aponta a invariante sem teste
+- **Categoria:** regra
+- **Data:** 2026-08-06
+- **Contexto:** Teste de mutação na cápsula do #667. Mudar 'skipped === 0' para 'skipped >= 0' deixou a suíte verde. Com a soma total = pass + fail + skipped já validada, skipped > 0 implica pass diferente de total, que é pego pela outra checagem — mutante sem defeito observável. Score corrigido de 2/12 para 2/11. A invariante da soma, que torna o mutante equivalente, não estava no conjunto de mutantes: furo do próprio harness.
+- **Aprendizado:** Mutante que sobrevive porque outra checagem já cobre o caso é EQUIVALENTE, não sobrevivente: desconta do denominador em vez de contar como falha da suíte. Mas ele não é descartável — ele aponta qual invariante está segurando a checagem, e essa invariante quase sempre também não tem teste. O mutante equivalente é a fonte de uma regra, não uma vitória de auditoria. Roda o mutante na invariante que o sustenta.
