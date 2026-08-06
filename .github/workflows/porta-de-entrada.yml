@@ -49,6 +49,13 @@ jobs:
         with:
           node-version: 22
 
+      - name: Testar fonte autenticada de autorização
+        run: node --test scripts/lupa/authority-approval.test.mjs
+
+      - name: Resolver autorização autenticada
+        id: authority
+        run: node scripts/lupa/authority-approval.mjs
+
       - name: Testar contrato de identidade operacional
         run: node --test scripts/lupa/validar-identidade-operacional.test.mjs
 
@@ -65,7 +72,7 @@ jobs:
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha || '' }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
-          AUTHORITY_APPROVED: ${{ contains(github.event.pull_request.labels.*.name, 'permito-segredo') }}
+          AUTHORITY_APPROVED: ${{ steps.authority.outputs.approved }}
         run: |
           set -euo pipefail
           node apps/modulos/mapeamento/core/validar-mapa.mjs \
@@ -82,7 +89,7 @@ jobs:
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha || '' }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
-          AUTHORITY_APPROVED: ${{ contains(github.event.pull_request.labels.*.name, 'permito-segredo') }}
+          AUTHORITY_APPROVED: ${{ steps.authority.outputs.approved }}
         run: |
           set -uo pipefail
           status=0
