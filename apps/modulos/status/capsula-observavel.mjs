@@ -1,5 +1,14 @@
 #!/usr/bin/env node
-import { readFileSync, writeFileSync, renameSync, chmodSync, existsSync } from 'node:fs';
+import {
+  chmodSync,
+  closeSync,
+  existsSync,
+  openSync,
+  readFileSync,
+  renameSync,
+  unlinkSync,
+  writeFileSync,
+} from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -20,6 +29,52 @@ const BLOCK_REASONS = new Set([
 const CHIEF_DECISIONS = new Set(['PENDING', 'APPROVED', 'REJECTED']);
 const DIGEST_RE = /^(?:[a-f0-9]{40}|[a-f0-9]{64})$/;
 const HASH_RE = /^[a-f0-9]{64}$/;
+
+export const EVENT_ALLOWED_KEYS = Object.freeze([
+  'schema_version',
+  'capsule_id',
+  'run_id',
+  'mission_id',
+  'iteration',
+  'timestamp_utc',
+  'phase',
+  'candidate_ref',
+  'candidate_digest',
+  'baseline_ref',
+  'fixture_ref',
+  'evaluator_ref',
+  'writer',
+  'event_actor',
+  'action',
+  'status',
+  'reason',
+  'chief_decision',
+  'chief_receipt_ref',
+  'chief_receipt_hash',
+  'tests',
+  'evidence_hash',
+  'failure_observed',
+  'failure_fingerprint',
+  'new_failure_class',
+  'correction_verified',
+  'retained_after_retest',
+  'false_green_found',
+  'regression_found',
+  'generalization',
+  'retention',
+]);
+
+const EVENT_ALLOWED_KEY_SET = new Set(EVENT_ALLOWED_KEYS);
+const TEST_ALLOWED_KEYS = new Set(['total', 'pass', 'fail', 'skipped']);
+const RATIO_ALLOWED_KEYS = new Set(['pass', 'total']);
+
+const CREDENTIAL_SHAPES = [
+  /gh[pousr]_[A-Za-z0-9]{20,}/,
+  /github_pat_[A-Za-z0-9_]{20,}/,
+  /sk-[A-Za-z0-9_-]{16,}/,
+  /\bey[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}/,
+  /\b\d{8,12}:[A-Za-z0-9_-]{30,}\b/,
+];
 
 function asString(value) {
   return typeof value === 'string' ? value.trim() : '';
@@ -42,6 +97,27 @@ function metric(numerator, denominator) {
     percent: Number(((numerator / denominator) * 100).toFixed(2)),
     state: 'MEASURED',
   };
+}
+
+function looksLikeCredential(value) {
+  return CREDENTIAL_SHAPES.some((pattern) => pattern.test(String(value ?? '')));
+}
+
+function containsCredentialShape(value) {
+  if (typeof value === 'string') return looksLikeCredential(value);
+  if (Array.isArray(value)) return value.some(containsCredentialShape);
+  if (value && typeof value === 'object') return Object.values(value).some(containsCredentialShape);
+  return false;
+}
+
+function rejectUnknownKeys(value, allowed, problem) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return [];
+  return Object.keys(value).some((key) => !allowed.has(key)) ? [problem] : [];
+}
+
+function guaranteeState(measured, ok) {
+  if (!measured) return 'UNKNOWN';
+  return ok ? 'ENFORCED' : 'VIOLATED';
 }
 
 export function parseJsonl(text) {
@@ -75,6 +151,7 @@ export function validateEvent(event, index = 0) {
     'fixture_ref',
     'evaluator_ref',
     'writer',
+    'event_actor',
     'action',
     'evidence_hash',
   ];
@@ -82,6 +159,9 @@ export function validateEvent(event, index = 0) {
   if (!event || typeof event !== 'object' || Array.isArray(event)) {
     return [`${at}:NOT_OBJECT`];
   }
+
+  problems.push(...rejectUnknownKeys(event, EVENT_ALLOWED_KEY_SET, `${at}:UNKNOWN_FIELD_PRESENT`));
+  if (containsCredentialShape(event)) problems.push(`${at}:CREDENTIAL_SHAPE_DETECTED`);
 
   if (event.schema_version !== 1) problems.push(`${at}:SCHEMA_VERSION`);
   for (const field of requiredStrings) {
@@ -100,6 +180,7 @@ export function validateEvent(event, index = 0) {
   if (!tests || typeof tests !== 'object' || Array.isArray(tests)) {
     problems.push(`${at}:TESTS_REQUIRED`);
   } else {
+    problems.push(...rejectUnknownKeys(tests, TEST_ALLOWED_KEYS, `${at}:TESTS_UNKNOWN_FIELD`));
     for (const key of ['total', 'pass', 'fail', 'skipped']) {
       if (!isNonNegativeInteger(tests[key])) problems.push(`${at}:TESTS_${key.toUpperCase()}_INVALID`);
     }
@@ -152,6 +233,21 @@ export function validateEvent(event, index = 0) {
     problems.push(`${at}:REASON_ONLY_ALLOWED_FOR_BLOCKED`);
   }
 
+  const chiefFinal = event.chief_decision === 'APPROVED' || event.chief_decision === 'REJECTED';
+  if (chiefFinal) {
+    if (event.phase !== 'DECIDE') problems.push(`${at}:CHIEF_DECISION_OUTSIDE_DECIDE`);
+    if (asString(event.event_actor) !== 'SEGREDO/CHEFE') problems.push(`${at}:CHIEF_ACTOR_INVALID`);
+    if (asString(event.event_actor) === asString(event.writer)) problems.push(`${at}:CHIEF_EQUALS_WRITER`);
+    if (asString(event.event_actor) === asString(event.evaluator_ref)) problems.push(`${at}:CHIEF_EQUALS_EVALUATOR`);
+    if (!asString(event.chief_receipt_ref)) problems.push(`${at}:CHIEF_RECEIPT_REF_REQUIRED`);
+    if (!HASH_RE.test(asString(event.chief_receipt_hash))) problems.push(`${at}:CHIEF_RECEIPT_HASH_REQUIRED`);
+  } else if (asString(event.chief_receipt_ref) || asString(event.chief_receipt_hash)) {
+    problems.push(`${at}:CHIEF_RECEIPT_WITHOUT_DECISION`);
+  }
+  if (event.chief_decision === 'APPROVED' && event.status !== 'PASS') {
+    problems.push(`${at}:CHIEF_APPROVED_WITHOUT_PASS`);
+  }
+
   if (event.status === 'PASS') {
     const testsOk = tests && tests.total > 0 && tests.fail === 0 && tests.skipped === 0 && tests.pass === tests.total;
     if (!testsOk) problems.push(`${at}:PASS_WITHOUT_COMPLETE_TESTS`);
@@ -169,6 +265,7 @@ export function validateEvent(event, index = 0) {
       problems.push(`${at}:${field.toUpperCase()}_INVALID`);
       continue;
     }
+    problems.push(...rejectUnknownKeys(value, RATIO_ALLOWED_KEYS, `${at}:${field.toUpperCase()}_UNKNOWN_FIELD`));
     if (!isNonNegativeInteger(value.pass) || !isNonNegativeInteger(value.total) || value.pass > value.total) {
       problems.push(`${at}:${field.toUpperCase()}_COUNTS_INVALID`);
     }
@@ -190,17 +287,20 @@ function currentRunSummary(runEvents) {
   const decision = latestByTimestamp(decisions);
   const tests = decision?.tests || { total: 0, pass: 0, fail: 0, skipped: 0 };
   return {
-    run_id: latest?.run_id || null,
-    candidate_ref: latest?.candidate_ref || null,
-    candidate_digest: latest?.candidate_digest || null,
-    baseline_ref: latest?.baseline_ref || null,
-    fixture_ref: latest?.fixture_ref || null,
-    evaluator_ref: latest?.evaluator_ref || null,
-    writer: latest?.writer || null,
+    run_id: asString(latest?.run_id) || null,
+    candidate_ref: asString(latest?.candidate_ref) || null,
+    candidate_digest: asString(latest?.candidate_digest) || null,
+    baseline_ref: asString(latest?.baseline_ref) || null,
+    fixture_ref: asString(latest?.fixture_ref) || null,
+    evaluator_ref: asString(latest?.evaluator_ref) || null,
+    writer: asString(latest?.writer) || null,
+    event_actor: asString(decision?.event_actor || latest?.event_actor) || null,
     iteration: latest?.iteration || 0,
     status: decision?.status || 'RUNNING',
     reason: decision?.reason || '',
     chief_decision: decision?.chief_decision || 'PENDING',
+    chief_receipt_ref: asString(decision?.chief_receipt_ref) || null,
+    chief_receipt_hash: asString(decision?.chief_receipt_hash) || null,
     tests,
     test_success: metric(tests.pass, tests.total),
     generalization: metric(decision?.generalization?.pass || 0, decision?.generalization?.total || 0),
@@ -228,12 +328,12 @@ export function aggregateCapsule(events, options = {}) {
   for (const [runId, runEvents] of runs) {
     const identities = new Set(
       runEvents.map((event) => [
-        event.candidate_ref,
-        event.candidate_digest,
-        event.baseline_ref,
-        event.fixture_ref,
-        event.evaluator_ref,
-        event.writer,
+        asString(event.candidate_ref),
+        asString(event.candidate_digest),
+        asString(event.baseline_ref),
+        asString(event.fixture_ref),
+        asString(event.evaluator_ref),
+        asString(event.writer),
       ].join('|')),
     );
     if (identities.size > 1) validationProblems.push(`RUN_${runId}:IDENTITY_DRIFT`);
@@ -247,16 +347,16 @@ export function aggregateCapsule(events, options = {}) {
   }
 
   const allFailures = events.filter((event) => event.failure_observed && asString(event.failure_fingerprint));
-  const uniqueFailures = new Set(allFailures.map((event) => event.failure_fingerprint));
+  const uniqueFailures = new Set(allFailures.map((event) => asString(event.failure_fingerprint)));
   const corrected = new Set(
     events
       .filter((event) => event.correction_verified && event.retained_after_retest && asString(event.failure_fingerprint))
-      .map((event) => event.failure_fingerprint),
+      .map((event) => asString(event.failure_fingerprint)),
   );
   const newClasses = new Set(
     events
       .filter((event) => event.new_failure_class && asString(event.failure_fingerprint))
-      .map((event) => event.failure_fingerprint),
+      .map((event) => asString(event.failure_fingerprint)),
   );
   const xpValid = [...newClasses].filter((fingerprint) => corrected.has(fingerprint)).length;
   const xpRejected = Math.max(0, newClasses.size - xpValid);
@@ -265,7 +365,7 @@ export function aggregateCapsule(events, options = {}) {
   const regressionCount = events.filter((event) => event.regression_found).length;
 
   const latest = latestByTimestamp(events);
-  const latestRunEvents = latest ? (runs.get(latest.run_id) || []) : [];
+  const latestRunEvents = latest ? (runs.get(asString(latest.run_id) || '__invalid__') || []) : [];
   const runSummary = currentRunSummary(latestRunEvents);
 
   let status = 'RUNNING';
@@ -287,12 +387,25 @@ export function aggregateCapsule(events, options = {}) {
 
   const currentRunFalseGreenCount = latestRunEvents.filter((event) => event.false_green_found).length;
   const currentRunRegressionCount = latestRunEvents.filter((event) => event.regression_found).length;
+  const receiptBoundApproval =
+    runSummary.chief_decision === 'APPROVED' &&
+    runSummary.event_actor === 'SEGREDO/CHEFE' &&
+    HASH_RE.test(runSummary.chief_receipt_hash || '') &&
+    Boolean(runSummary.chief_receipt_ref) &&
+    runSummary.event_actor !== runSummary.writer &&
+    runSummary.event_actor !== runSummary.evaluator_ref;
   const readyForPromotion =
     status === 'PASS' &&
-    runSummary.chief_decision === 'APPROVED' &&
+    receiptBoundApproval &&
     currentRunFalseGreenCount === 0 &&
     currentRunRegressionCount === 0 &&
     validationProblems.length === 0;
+
+  const passDecisions = events.filter((event) => event.phase === 'DECIDE' && event.status === 'PASS');
+  const chiefDecisions = events.filter((event) => event.chief_decision !== 'PENDING');
+  const hasEvents = events.length > 0;
+  const passMeasured = passDecisions.length > 0;
+  const chiefMeasured = chiefDecisions.length > 0;
 
   return {
     schema_version: 1,
@@ -322,11 +435,24 @@ export function aggregateCapsule(events, options = {}) {
       recurrence_rate: metric(recurrenceCount, allFailures.length),
     },
     guarantees: {
-      no_percentage_without_denominator: true,
-      skipped_never_counts_as_pass: true,
-      same_identity_per_run: validationProblems.every((problem) => !problem.includes('IDENTITY_DRIFT')),
-      independent_evaluator_required_for_decision_pass: true,
-      production_not_authorized_by_snapshot: true,
+      no_percentage_without_denominator: 'ENFORCED',
+      skipped_never_counts_as_pass: guaranteeState(
+        passMeasured,
+        !validationProblems.some((problem) => problem.includes('PASS_WITHOUT_COMPLETE_TESTS')),
+      ),
+      same_identity_per_run: guaranteeState(
+        hasEvents,
+        !validationProblems.some((problem) => problem.includes('IDENTITY_DRIFT')),
+      ),
+      independent_evaluator_required_for_decision_pass: guaranteeState(
+        passMeasured,
+        !validationProblems.some((problem) => problem.includes('PASS_WITHOUT_INDEPENDENT_EVALUATOR')),
+      ),
+      chief_receipt_required_for_promotion: guaranteeState(
+        chiefMeasured,
+        !validationProblems.some((problem) => problem.includes('CHIEF_')),
+      ),
+      production_not_authorized_by_snapshot: 'ENFORCED',
     },
     validation: {
       verdict: validationProblems.length ? 'FAIL' : 'PASS',
@@ -339,11 +465,11 @@ function stableStringify(value) {
   return JSON.stringify(value, null, 2) + '\n';
 }
 
-function atomicWrite(path, content) {
+function atomicWrite(path, content, mode = 0o600) {
   const absolute = resolve(path);
   const temp = `${absolute}.tmp-${process.pid}`;
-  writeFileSync(temp, content, { encoding: 'utf8', mode: 0o600 });
-  chmodSync(temp, 0o600);
+  writeFileSync(temp, content, { encoding: 'utf8', mode });
+  chmodSync(temp, mode);
   renameSync(temp, absolute);
 }
 
@@ -352,22 +478,47 @@ function readLedger(path) {
   return parseJsonl(readFileSync(path, 'utf8'));
 }
 
-function appendEventAtomically({ ledgerPath, eventPath }) {
-  const existing = readLedger(ledgerPath);
-  if (existing.errors.length) throw new Error(`LEDGER_INVALID:${existing.errors.join('|')}`);
-  const event = JSON.parse(readFileSync(eventPath, 'utf8'));
-  const eventProblems = validateEvent(event, existing.events.length);
-  if (eventProblems.length) throw new Error(`EVENT_REJECTED:${eventProblems.join('|')}`);
-
-  const candidate = [...existing.events, event];
-  const snapshot = aggregateCapsule(candidate);
-  if (snapshot.validation.verdict !== 'PASS') {
-    throw new Error(`LEDGER_REJECTED:${snapshot.validation.problems.join('|')}`);
+function withLedgerLock(ledgerPath, callback) {
+  const lockPath = `${resolve(ledgerPath)}.lock`;
+  let descriptor = null;
+  let acquired = false;
+  try {
+    descriptor = openSync(lockPath, 'wx', 0o600);
+    acquired = true;
+    return callback();
+  } catch (error) {
+    if (error?.code === 'EEXIST') throw new Error('LEDGER_LOCKED');
+    throw error;
+  } finally {
+    if (descriptor !== null) closeSync(descriptor);
+    if (acquired) {
+      try {
+        unlinkSync(lockPath);
+      } catch (error) {
+        if (error?.code !== 'ENOENT') throw error;
+      }
+    }
   }
+}
 
-  const content = candidate.map((item) => JSON.stringify(item)).join('\n') + '\n';
-  atomicWrite(ledgerPath, content);
-  return snapshot;
+function appendEventWithLock({ ledgerPath, eventPath }) {
+  return withLedgerLock(ledgerPath, () => {
+    const existing = readLedger(ledgerPath);
+    if (existing.errors.length) throw new Error(`LEDGER_INVALID:${existing.errors.join('|')}`);
+    const event = JSON.parse(readFileSync(eventPath, 'utf8'));
+    const eventProblems = validateEvent(event, existing.events.length);
+    if (eventProblems.length) throw new Error(`EVENT_REJECTED:${eventProblems.join('|')}`);
+
+    const candidate = [...existing.events, event];
+    const snapshot = aggregateCapsule(candidate);
+    if (snapshot.validation.verdict !== 'PASS') {
+      throw new Error(`LEDGER_REJECTED:${snapshot.validation.problems.join('|')}`);
+    }
+
+    const content = candidate.map((item) => JSON.stringify(item)).join('\n') + '\n';
+    atomicWrite(ledgerPath, content, 0o600);
+    return snapshot;
+  });
 }
 
 function parseArgs(argv) {
@@ -387,6 +538,11 @@ function parseArgs(argv) {
   return args;
 }
 
+export function exitCodeForSnapshot(snapshot) {
+  if (snapshot?.validation?.verdict !== 'PASS') return 1;
+  return snapshot?.capsule?.status === 'PASS' ? 0 : 2;
+}
+
 export function main(argv = process.argv.slice(2)) {
   const args = parseArgs(argv);
   const ledgerPath = args.ledger || args.input;
@@ -395,22 +551,22 @@ export function main(argv = process.argv.slice(2)) {
   let snapshot;
   if (args['append-event']) {
     if (!ledgerPath) throw new Error('LEDGER_REQUIRED');
-    snapshot = appendEventAtomically({ ledgerPath, eventPath: args['append-event'] });
+    snapshot = appendEventWithLock({ ledgerPath, eventPath: args['append-event'] });
   } else {
     const parsed = ledgerPath ? readLedger(ledgerPath) : { events: [], errors: [] };
     snapshot = aggregateCapsule(parsed.events, { parseErrors: parsed.errors });
   }
 
-  if (outputPath) atomicWrite(outputPath, stableStringify(snapshot));
+  if (outputPath) atomicWrite(outputPath, stableStringify(snapshot), 0o644);
   process.stdout.write(stableStringify(snapshot));
-  if (snapshot.validation.verdict !== 'PASS') process.exitCode = 1;
   return snapshot;
 }
 
 const isMain = process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 if (isMain) {
   try {
-    main();
+    const snapshot = main();
+    process.exitCode = exitCodeForSnapshot(snapshot);
   } catch (error) {
     process.stderr.write(`CAPSULA_ERROR=${error.message}\n`);
     process.exit(1);
