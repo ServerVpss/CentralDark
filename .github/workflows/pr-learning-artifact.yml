@@ -25,6 +25,7 @@ jobs:
       contents: read
     steps:
       - name: Checkout exato do PR sem credencial persistente
+        id: checkout_pr
         uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
           fetch-depth: 0
@@ -58,6 +59,7 @@ jobs:
           } >> "$GITHUB_OUTPUT"
 
       - name: Preparar entrada do próprio PR
+        id: prepare_input
         env:
           REPOSITORY: ${{ github.repository }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
@@ -114,6 +116,7 @@ jobs:
             --github-output "$GITHUB_OUTPUT"
 
       - name: Publicar artefato de prova do HEAD
+        id: upload_contract
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: pr-learning-contract-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}
@@ -123,9 +126,23 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
-      - name: Receipt no resumo do job
+      - name: Gate de caminho sensível
+        id: sensitive_gate
+        if: steps.artifact.outputs.blocked == 'true'
+        run: |
+          echo "BLOCKED_SENSITIVE_PATH" >&2
+          exit 1
+
+      - name: Receipt final do contrato
+        if: always()
         env:
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          CHECKOUT_OUTCOME: ${{ steps.checkout_pr.outcome }}
+          TESTS_OUTCOME: ${{ steps.tests.outcome }}
+          INPUT_OUTCOME: ${{ steps.prepare_input.outcome }}
+          ARTIFACT_OUTCOME: ${{ steps.artifact.outcome }}
+          UPLOAD_OUTCOME: ${{ steps.upload_contract.outcome }}
+          GATE_OUTCOME: ${{ steps.sensitive_gate.outcome }}
           ARTIFACT_STATUS: ${{ steps.artifact.outputs.status }}
           SUPPORT_REQUIRED: ${{ steps.artifact.outputs.support_required }}
           ARTIFACT_DIGEST: ${{ steps.artifact.outputs.artifact_digest }}
@@ -134,21 +151,54 @@ jobs:
           TEST_FAIL: ${{ steps.tests.outputs.fail }}
           TEST_SKIPPED: ${{ steps.tests.outputs.skipped }}
         run: |
+          set -Eeuo pipefail
+          value_or_unknown() {
+            if [ -n "${1:-}" ]; then printf '%s' "$1"; else printf 'UNKNOWN'; fi
+          }
+          CHECKOUT="$(value_or_unknown "$CHECKOUT_OUTCOME")"
+          TESTS="$(value_or_unknown "$TESTS_OUTCOME")"
+          INPUT="$(value_or_unknown "$INPUT_OUTCOME")"
+          ARTIFACT="$(value_or_unknown "$ARTIFACT_OUTCOME")"
+          UPLOAD="$(value_or_unknown "$UPLOAD_OUTCOME")"
+          GATE="$(value_or_unknown "$GATE_OUTCOME")"
+          STATUS="$(value_or_unknown "$ARTIFACT_STATUS")"
+          TOTAL="$(value_or_unknown "$TEST_TOTAL")"
+          PASS="$(value_or_unknown "$TEST_PASS")"
+          FAIL="$(value_or_unknown "$TEST_FAIL")"
+          SKIPPED="$(value_or_unknown "$TEST_SKIPPED")"
+          DIGEST="$(value_or_unknown "$ARTIFACT_DIGEST")"
+          SUPPORT="$(value_or_unknown "$SUPPORT_REQUIRED")"
+
+          BLOCKED=NAO
+          CAUSE=NENHUMA
+          if [ "$CHECKOUT" != "success" ]; then BLOCKED=SIM; CAUSE=CHECKOUT_NOT_PROVEN
+          elif [ "$TESTS" != "success" ]; then BLOCKED=SIM; CAUSE=TESTS_NOT_PROVEN
+          elif [ "$INPUT" != "success" ]; then BLOCKED=SIM; CAUSE=INPUT_NOT_PROVEN
+          elif [ "$ARTIFACT" != "success" ]; then BLOCKED=SIM; CAUSE=ARTIFACT_NOT_PROVEN
+          elif [ "$UPLOAD" != "success" ]; then BLOCKED=SIM; CAUSE=UPLOAD_NOT_PROVEN
+          elif [ "$GATE" = "failure" ]; then BLOCKED=SIM; CAUSE=BLOCKED_SENSITIVE_PATH
+          elif [ "$TOTAL" = "UNKNOWN" ] || [ "$PASS" = "UNKNOWN" ] || [ "$FAIL" = "UNKNOWN" ] || [ "$SKIPPED" = "UNKNOWN" ]; then
+            BLOCKED=SIM; CAUSE=TEST_RECEIPT_UNKNOWN
+          elif [ "$FAIL" != "0" ] || [ "$SKIPPED" != "0" ] || [ "$PASS" != "$TOTAL" ]; then
+            BLOCKED=SIM; CAUSE=TEST_RECEIPT_NOT_GREEN
+          fi
+
           {
-            echo "## Artefato de aprendizado — contrato"
+            echo "## Artefato de aprendizado — receipt final do contrato"
             echo
             echo "- HEAD: \`$HEAD_SHA\`"
-            echo "- Status: \`$ARTIFACT_STATUS\`"
-            echo "- Suporte necessário: \`$SUPPORT_REQUIRED\`"
-            echo "- Digest: \`$ARTIFACT_DIGEST\`"
-            echo "- Testes: \`$TEST_TOTAL total / $TEST_PASS PASS / $TEST_FAIL FAIL / $TEST_SKIPPED SKIPPED\`"
+            echo "- Alvo: \`PR_HEAD\`"
+            echo "- BLOCKED: \`$BLOCKED\`"
+            echo "- Causa: \`$CAUSE\`"
+            echo "- Outcomes: \`checkout=$CHECKOUT tests=$TESTS input=$INPUT artifact=$ARTIFACT upload=$UPLOAD sensitive_gate=$GATE\`"
+            echo "- Testes: \`$TOTAL total / $PASS PASS / $FAIL FAIL / $SKIPPED SKIPPED\`"
+            echo "- Estado do artefato: \`$STATUS\`"
+            echo "- Suporte necessário: \`$SUPPORT\`"
+            echo "- Digest: \`$DIGEST\`"
+            echo "- Contraprova: \`negative_cases + sensitive_path_gate\`"
+            echo "- Rollback: \`reverter somente commits deste PR\`"
+            echo "- Decisão humana: \`OBRIGATÓRIA_ANTES_DO_MERGE\`"
           } >> "$GITHUB_STEP_SUMMARY"
-
-      - name: Gate de caminho sensível
-        if: steps.artifact.outputs.blocked == 'true'
-        run: |
-          echo "BLOCKED_SENSITIVE_PATH" >&2
-          exit 1
 
   publish-comment:
     name: Comentar e rotear usando somente código confiável da base
@@ -163,6 +213,7 @@ jobs:
       issues: write
     steps:
       - name: Checkout exato da base confiável
+        id: checkout_base
         uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
           fetch-depth: 1
@@ -170,6 +221,7 @@ jobs:
           persist-credentials: false
 
       - name: Preparar metadados sanitizados pela API
+        id: prepare_metadata
         uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
         env:
           INPUT_PATH: ${{ runner.temp }}/pr-learning-input.json
@@ -219,6 +271,7 @@ jobs:
             --github-output "$GITHUB_OUTPUT"
 
       - name: Salvar Canvas e Markdown como artifact
+        id: upload_published
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: pr-learning-artifact-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}
@@ -229,11 +282,13 @@ jobs:
           retention-days: 30
 
       - name: Atualizar comentário idempotente e pedir suporte
+        id: publish_comment
         uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
         env:
           MARKDOWN_PATH: ${{ runner.temp }}/pr-learning-artifact.md
           SUPPORT_REQUIRED: ${{ steps.artifact.outputs.support_required }}
           SUPPORT_LABELS: ${{ steps.artifact.outputs.support_labels }}
+          BLOCKED: ${{ steps.artifact.outputs.blocked }}
         with:
           script: |
             const fs = require('fs');
@@ -267,33 +322,75 @@ jobs:
               await github.rest.issues.addLabels({ owner, repo, issue_number, labels });
             }
 
-            if (process.env.SUPPORT_REQUIRED === 'true') {
+            if (process.env.BLOCKED === 'true') {
+              core.notice('SECURITY_PATH_BLOCKED');
+            } else if (process.env.SUPPORT_REQUIRED === 'true') {
               core.notice('SUPPORT_REQUEST_DISPATCHED');
             } else {
-              core.notice('CAPABILITIES_DECLARED_READY');
+              core.notice('CAPABILITIES_DECLARED_UNVERIFIED');
             }
 
-      - name: Receipt final do bot
-        env:
-          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
-          ARTIFACT_STATUS: ${{ steps.artifact.outputs.status }}
-          SUPPORT_REQUIRED: ${{ steps.artifact.outputs.support_required }}
-          ARTIFACT_DIGEST: ${{ steps.artifact.outputs.artifact_digest }}
-        run: |
-          {
-            echo "## PR Learning Artifact Bot"
-            echo
-            echo "- HEAD observado: \`$HEAD_SHA\`"
-            echo "- Código executado da base: \`$BASE_SHA\`"
-            echo "- Estado: \`$ARTIFACT_STATUS\`"
-            echo "- Suporte: \`$SUPPORT_REQUIRED\`"
-            echo "- Digest: \`$ARTIFACT_DIGEST\`"
-            echo "- Aprovação/merge automático: \`NÃO\`"
-          } >> "$GITHUB_STEP_SUMMARY"
-
       - name: Gate final de caminho sensível
+        id: publish_sensitive_gate
         if: steps.artifact.outputs.blocked == 'true'
         run: |
           echo "BLOCKED_SENSITIVE_PATH" >&2
           exit 1
+
+      - name: Receipt final do bot
+        if: always()
+        env:
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          CHECKOUT_OUTCOME: ${{ steps.checkout_base.outcome }}
+          METADATA_OUTCOME: ${{ steps.prepare_metadata.outcome }}
+          ARTIFACT_OUTCOME: ${{ steps.artifact.outcome }}
+          UPLOAD_OUTCOME: ${{ steps.upload_published.outcome }}
+          PUBLISH_OUTCOME: ${{ steps.publish_comment.outcome }}
+          GATE_OUTCOME: ${{ steps.publish_sensitive_gate.outcome }}
+          ARTIFACT_STATUS: ${{ steps.artifact.outputs.status }}
+          SUPPORT_REQUIRED: ${{ steps.artifact.outputs.support_required }}
+          ARTIFACT_DIGEST: ${{ steps.artifact.outputs.artifact_digest }}
+        run: |
+          set -Eeuo pipefail
+          value_or_unknown() {
+            if [ -n "${1:-}" ]; then printf '%s' "$1"; else printf 'UNKNOWN'; fi
+          }
+          CHECKOUT="$(value_or_unknown "$CHECKOUT_OUTCOME")"
+          METADATA="$(value_or_unknown "$METADATA_OUTCOME")"
+          ARTIFACT="$(value_or_unknown "$ARTIFACT_OUTCOME")"
+          UPLOAD="$(value_or_unknown "$UPLOAD_OUTCOME")"
+          PUBLISH="$(value_or_unknown "$PUBLISH_OUTCOME")"
+          GATE="$(value_or_unknown "$GATE_OUTCOME")"
+          STATUS="$(value_or_unknown "$ARTIFACT_STATUS")"
+          SUPPORT="$(value_or_unknown "$SUPPORT_REQUIRED")"
+          DIGEST="$(value_or_unknown "$ARTIFACT_DIGEST")"
+
+          BLOCKED=NAO
+          CAUSE=NENHUMA
+          if [ "$CHECKOUT" != "success" ]; then BLOCKED=SIM; CAUSE=TRUSTED_BASE_CHECKOUT_NOT_PROVEN
+          elif [ "$METADATA" != "success" ]; then BLOCKED=SIM; CAUSE=METADATA_NOT_PROVEN
+          elif [ "$ARTIFACT" != "success" ]; then BLOCKED=SIM; CAUSE=ARTIFACT_NOT_PROVEN
+          elif [ "$UPLOAD" != "success" ]; then BLOCKED=SIM; CAUSE=UPLOAD_NOT_PROVEN
+          elif [ "$PUBLISH" != "success" ]; then BLOCKED=SIM; CAUSE=COMMENT_OR_LABEL_NOT_PROVEN
+          elif [ "$GATE" = "failure" ]; then BLOCKED=SIM; CAUSE=BLOCKED_SENSITIVE_PATH
+          elif [ "$STATUS" = "UNKNOWN" ] || [ "$DIGEST" = "UNKNOWN" ]; then BLOCKED=SIM; CAUSE=RECEIPT_UNKNOWN
+          fi
+
+          {
+            echo "## PR Learning Artifact Bot — receipt final"
+            echo
+            echo "- HEAD observado: \`$HEAD_SHA\`"
+            echo "- Base confiável executada: \`$BASE_SHA\`"
+            echo "- Alvo: \`PR_CONVERSATION_AND_ARTIFACT\`"
+            echo "- BLOCKED: \`$BLOCKED\`"
+            echo "- Causa: \`$CAUSE\`"
+            echo "- Outcomes: \`checkout=$CHECKOUT metadata=$METADATA artifact=$ARTIFACT upload=$UPLOAD publish=$PUBLISH sensitive_gate=$GATE\`"
+            echo "- Estado: \`$STATUS\`"
+            echo "- Suporte: \`$SUPPORT\`"
+            echo "- Digest: \`$DIGEST\`"
+            echo "- Contraprova: \`marker de terceiro não conta como comentário do bot\`"
+            echo "- Rollback: \`reverter somente commits deste PR\`"
+            echo "- Aprovação/merge automático: \`NÃO\`"
+            echo "- Decisão humana: \`OBRIGATÓRIA_ANTES_DO_MERGE\`"
+          } >> "$GITHUB_STEP_SUMMARY"
