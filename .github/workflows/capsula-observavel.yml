@@ -32,43 +32,96 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Verificar diff exato do PR
+      - name: Fixar Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22.23.1'
+
+      - name: Verificar diff exato do candidato
+        id: diff
         env:
-          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.sha }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         shell: bash
         run: |
           set -Eeuo pipefail
-          git fetch --no-tags origin "$BASE_SHA" "$HEAD_SHA"
-          git diff --check "$BASE_SHA" "$HEAD_SHA" -- .
+          if [[ "$EVENT_NAME" == "pull_request" ]]; then
+            git fetch --no-tags origin "$BASE_SHA" "$HEAD_SHA"
+            git diff --check "$BASE_SHA" "$HEAD_SHA" -- .
+          else
+            parent="$(git rev-parse "${HEAD_SHA}^")"
+            git diff --check "$parent" "$HEAD_SHA" -- .
+          fi
 
       - name: Executar testes discriminativos
+        id: tests
         run: node --test apps/modulos/status/capsula-observavel.test.mjs
 
       - name: Provar estado vazio fail-closed
+        id: empty
         shell: bash
         run: |
           set -Eeuo pipefail
           tmp="$(mktemp)"
-          node apps/modulos/status/capsula-observavel.mjs --output "$tmp" >/dev/null
+          rc=0
+          node apps/modulos/status/capsula-observavel.mjs --output "$tmp" >/dev/null || rc=$?
+          [[ "$rc" -eq 2 ]] || { echo "EMPTY_EXIT_CODE_INVALID=$rc"; exit 1; }
           node - "$tmp" <<'NODE'
           const fs = require('node:fs');
           const snapshot = JSON.parse(fs.readFileSync(process.argv[2], 'utf8'));
           if (snapshot.capsule.status !== 'BLOCKED') throw new Error('EMPTY_NOT_BLOCKED');
           if (snapshot.capsule.reason !== 'NO_EVENTS') throw new Error('EMPTY_REASON_INVALID');
           if (snapshot.learning.correction_rate.percent !== null) throw new Error('EMPTY_PERCENT_INVENTED');
+          if (snapshot.guarantees.same_identity_per_run !== 'UNKNOWN') throw new Error('EMPTY_GUARANTEE_INVENTED');
           if (snapshot.capsule.production !== 'UNTOUCHED') throw new Error('PRODUCTION_STATE_INVALID');
           console.log('CAPSULA_EMPTY_FAIL_CLOSED=PASS');
           NODE
 
-      - name: Recibo
+      - name: Provar snapshot commitado como artefato derivado
+        id: snapshot
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          tmp="$(mktemp)"
+          rc=0
+          node apps/modulos/status/capsula-observavel.mjs --output "$tmp" >/dev/null || rc=$?
+          [[ "$rc" -eq 2 ]] || { echo "SNAPSHOT_GENERATOR_EXIT_INVALID=$rc"; exit 1; }
+          node - "$tmp" apps/modulos/status/capsula-data.json <<'NODE'
+          const fs = require('node:fs');
+          const normalized = (path) => {
+            const value = JSON.parse(fs.readFileSync(path, 'utf8'));
+            delete value.generated_at_utc;
+            return JSON.stringify(value);
+          };
+          if (normalized(process.argv[2]) !== normalized(process.argv[3])) {
+            throw new Error('CAPSULA_SNAPSHOT_DRIFT');
+          }
+          console.log('CAPSULA_SNAPSHOT_DERIVED=PASS');
+          NODE
+
+      - name: Recibo vinculado ao candidato
+        if: always()
+        env:
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          WORKFLOW_NAME: ${{ github.workflow }}
+          RUN_ID: ${{ github.run_id }}
+          DIFF_OUTCOME: ${{ steps.diff.outcome }}
+          TESTS_OUTCOME: ${{ steps.tests.outcome }}
+          EMPTY_OUTCOME: ${{ steps.empty.outcome }}
+          SNAPSHOT_OUTCOME: ${{ steps.snapshot.outcome }}
+          JOB_STATUS: ${{ job.status }}
         run: |
           {
             echo '## Cápsula Observável'
             echo ''
-            echo '- testes discriminativos: PASS'
-            echo '- estado vazio: BLOCKED/NO_EVENTS'
-            echo '- porcentagem sem denominador: bloqueada'
-            echo '- skipped como pass: bloqueado'
+            echo "- head_sha: $HEAD_SHA"
+            echo "- workflow: $WORKFLOW_NAME"
+            echo "- run_id: $RUN_ID"
+            echo "- job_status: $JOB_STATUS"
+            echo "- diff_real: $DIFF_OUTCOME"
+            echo "- testes_discriminativos: $TESTS_OUTCOME"
+            echo "- estado_vazio_fail_closed: $EMPTY_OUTCOME"
+            echo "- snapshot_derivado: $SNAPSHOT_OUTCOME"
             echo '- produção: UNTOUCHED'
           } >> "$GITHUB_STEP_SUMMARY"
