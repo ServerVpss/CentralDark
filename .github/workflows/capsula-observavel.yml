@@ -29,10 +29,18 @@ jobs:
         uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
           persist-credentials: false
 
-      - name: Verificar diff
-        run: git diff --check
+      - name: Verificar diff exato do PR
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          git fetch --no-tags origin "$BASE_SHA" "$HEAD_SHA"
+          git diff --check "$BASE_SHA" "$HEAD_SHA" -- .
 
       - name: Executar testes discriminativos
         run: node --test apps/modulos/status/capsula-observavel.test.mjs
