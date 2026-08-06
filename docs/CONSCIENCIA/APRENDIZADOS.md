@@ -65,3 +65,9 @@
 - **Data:** 2026-08-06
 - **Contexto:** Cápsula observável do #667. Ledger de dois eventos forjado à mão produziu validation=PASS, ready_for_promotion=true, xp_valid=1 e correction_rate=100%. O evidence_hash era 'f' repetido 64 vezes e o chief_receipt_hash era 'a' repetido 64 vezes, apontando para um recibo que nunca existiu; o event_actor 'SEGREDO/CHEFE' foi digitado pelo próprio writer. No mesmo objeto, guarantees.chief_receipt_required_for_promotion saiu ENFORCED.
 - **Aprendizado:** Regex sobre hash prova FORMATO, nunca PROCEDÊNCIA. Campo de evidência só vale se o agregador recomputar o hash sobre o artefato que a referência aponta e falhar quando a referência não resolve. Pior ainda é o snapshot declarar a própria garantia como cumprida: garantia auto-declarada transforma buraco silencioso em buraco com selo, e é isso que um painel ao vivo passa a transmitir como verdade.
+
+### 12. Modo novo não alcança problema empilhado antes da ramificação de modo
+- **Categoria:** erro-correcao
+- **Data:** 2026-08-06
+- **Contexto:** Gate WRITER_UNICO do #664. Foi criado mode=migrate para resolver a branch, com 16 testes verdes. Rodando o blob real contra os três commits reais da branch: enforce FAIL, legacy FAIL, migrate FAIL — todos com WRITER_NOT_UNIQUE e unknown_legacy=0. O migrate trata commit SEM trailer; os três commits TÊM trailer e um deles declara outro Writer. A unicidade é empilhada antes de qualquer branch de modo.
+- **Aprendizado:** Antes de criar modo novo para resolver um caso, conferir ONDE o problema é empilhado. Se o push do problema acontece antes da ramificação de modo, e o veredito olha o tamanho da lista de problemas primeiro, nenhum modo alcança aquele caso — o modo novo passa nos testes que ele mesmo trouxe e não move o caso real. Roda o gate contra o próprio artefato alvo nos TRÊS modos antes de declarar migração pronta.
