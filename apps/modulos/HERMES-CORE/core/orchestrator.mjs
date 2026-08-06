@@ -10,6 +10,7 @@ import { exec } from 'node:child_process';
 import { randomBytes } from 'node:crypto';
 import { createServer as httpCreateServer } from 'node:http';
 import { renameComRetry as renameComRetryUtil } from '../utils/fs-safe.mjs';
+import { continuityBlockReceipt, validateContinuityState } from './continuity-guard.mjs';
 
 // Carrega /root/CentralDark/.env no boot — PM2 não herda ~/.bashrc (DARKAI_URL, DARKAI_ANON_KEY, ELITE_ANTHROPIC_TOKEN)
 try {
@@ -100,6 +101,23 @@ function renameComRetry(src, dst, tag) {
   return renameComRetryUtil(src, dst, tag || '', { log, onEnotempty: registrarEnotempty });
 }
 
+async function registrarRetomadaBloqueada({ mission, source, receiptPath, validation }) {
+  const receipt = continuityBlockReceipt({ mission, source, validation });
+  const serialized = `${JSON.stringify(receipt, null, 2)}\n`;
+  const anterior = await readFile(receiptPath, 'utf8').catch(() => '');
+  if (anterior === serialized) return false;
+
+  await writeFile(receiptPath, serialized, { encoding: 'utf8', mode: 0o600 });
+  const reasons = receipt.reasons.join(',');
+  log(`⛔ RETOMADA BLOCKED: ${mission} — ${reasons}`);
+  await notificar(
+    'Hermes: RETOMADA BLOQUEADA ⛔',
+    `⛔ <b>${mission}</b>\nLOCAL: <code>${source}</code>\nFALHA: ${reasons.slice(0, 500)}\nAÇÃO: corrigir o contrato no mesmo HEAD antes de DECIDE/APPLY.`,
+    'admin'
+  );
+  return true;
+}
+
 async function retomarOrfas() {
   if (!existsSync(ANDAMENTO)) return;
   const orfas = [];
@@ -112,7 +130,7 @@ async function retomarOrfas() {
       // Pasta com missao.md dentro
       if (!existsSync(join(dir, 'missao.md'))) continue;
       orfas.push({ dir, nome, mtime: statEntry.mtimeMs, tipo: 'pasta' });
-    } else if (statEntry.isFile() && nome.endsWith('.json')) {
+    } else if (statEntry.isFile() && nome.endsWith('.json') && !nome.endsWith('.blocked.json')) {
       // Arquivo .json solto — missão órfã em formato JSON
       orfas.push({ dir, nome, mtime: statEntry.mtimeMs, tipo: 'json' });
     }
@@ -124,36 +142,59 @@ async function retomarOrfas() {
     const { dir, nome, tipo } = entry;
 
     if (tipo === 'json') {
-      // .json solto — lê o JSON, cria pasta, move pra dentro
+      // .json solto — valida antes de criar pasta, mover ou decidir
       try {
         const conteudo = JSON.parse(await readFile(dir, 'utf8'));
+        const estadoContinuidade = conteudo.state || null;
+        const validation = validateContinuityState(estadoContinuidade);
+        if (!validation.ok) {
+          await registrarRetomadaBloqueada({
+            mission: nome,
+            source: dir,
+            receiptPath: `${dir}.blocked.json`,
+            validation,
+          });
+          continue;
+        }
+
         const slug = slugify(conteudo.titulo || nome.replace('.json', ''));
         const pasta = join(ANDAMENTO, slug);
         await mkdir(pasta, { recursive: true });
         await writeFile(join(pasta, 'missao.md'), conteudo.missao || conteudo.descricao || '');
-        if (conteudo.state) await writeFile(join(pasta, 'state.json'), JSON.stringify(conteudo.state, null, 2));
+        await writeFile(join(pasta, 'state.json'), JSON.stringify(estadoContinuidade, null, 2));
         await renameComRetry(dir, join(pasta, `original-${nome}`), 'orfa-json-original');
 
         let missao = (conteudo.missao || conteudo.descricao || '').trim();
-        let historico = conteudo.state?.historico || [];
-        let retomadas = conteudo.state?.retomadas || 0;
+        const historico = Array.isArray(estadoContinuidade.historico) ? estadoContinuidade.historico : [];
+        let retomadas = estadoContinuidade.retomadas || 0;
         if (!missao) { try { missao = (await readFile(join(pasta, 'missao.md'), 'utf8')).trim(); } catch { continue; } }
         retomadas++;
         log(`🔄 RETOMADA (.json): ${slug} — continuando da etapa ${historico.length} (retomada #${retomadas})`);
         await notificar('Hermes: RETOMADA 🔄', `🔄 <b>${slug}</b>\nMissão órfã (.json) — continuando da etapa ${historico.length} (retomada #${retomadas}).`);
-        await rodarMissao(pasta, slug, missao, historico, retomadas);
+        await rodarMissao(pasta, slug, missao, historico, retomadas, estadoContinuidade);
       } catch (e) { log(`erro ao processar .json órfão ${nome}: ${e.message}`); }
       continue;
     }
 
-    // Pasta com missao.md
-    let missao = '', historico = [], retomadas = 0;
+    // Pasta com missao.md: state.json ausente/corrompido bloqueia; não cai para execução cega.
+    let estadoContinuidade = null;
     try {
-      const s = JSON.parse(await readFile(join(dir, 'state.json'), 'utf8'));
-      missao = (s.missao || '').trim();
-      historico = Array.isArray(s.historico) ? s.historico : [];
-      retomadas = s.retomadas || 0;
-    } catch { /* state.json ausente/corrompido — cai pro missao.md com histórico zerado */ }
+      estadoContinuidade = JSON.parse(await readFile(join(dir, 'state.json'), 'utf8'));
+    } catch {}
+    const validation = validateContinuityState(estadoContinuidade);
+    if (!validation.ok) {
+      await registrarRetomadaBloqueada({
+        mission: nome,
+        source: join(dir, 'state.json'),
+        receiptPath: join(dir, 'retomada-blocked.json'),
+        validation,
+      });
+      continue;
+    }
+
+    let missao = (estadoContinuidade.missao || '').trim();
+    const historico = Array.isArray(estadoContinuidade.historico) ? estadoContinuidade.historico : [];
+    let retomadas = estadoContinuidade.retomadas || 0;
     if (!missao) {
       try { missao = (await readFile(join(dir, 'missao.md'), 'utf8')).trim(); } catch { continue; }
     }
@@ -161,13 +202,13 @@ async function retomarOrfas() {
     log(`🔄 RETOMADA: ${nome} — continuando da etapa ${historico.length} (retomada #${retomadas})`);
     await notificar(
       'Hermes: RETOMADA 🔄',
-      `🔄 <b>${nome}</b>\nDaemon reiniciou no meio da missão — continuando da etapa ${historico.length} (retomada #${retomadas}). Nada foi re-executado.`
+      `🔄 <b>${nome}</b>\nContrato de continuidade validado — continuando da etapa ${historico.length} (retomada #${retomadas}). Nada foi re-executado.`
     );
-    await rodarMissao(dir, nome, missao, historico, retomadas);
+    await rodarMissao(dir, nome, missao, historico, retomadas, estadoContinuidade);
   }
 }
 
-async function rodarMissao(dir, slug, missao, historico = [], retomadas = 0) {
+async function rodarMissao(dir, slug, missao, historico = [], retomadas = 0, continuityState = {}) {
   const logPath = join(dir, 'hermes.log');
   const statePath = join(dir, 'state.json');
   const lg = (msg) => appendFile(logPath, `[${new Date().toISOString()}] ${msg}\n`).catch(()=>{});
@@ -222,7 +263,7 @@ async function rodarMissao(dir, slug, missao, historico = [], retomadas = 0) {
     const entrada = { etapa_titulo, ferramenta, args, resultado: resultado.saida, ok: resultado.ok };
     if (parecer && !parecer.aprovado) entrada.critic = parecer.parecer.slice(0, 300);
     historico.push(entrada);
-    await writeFile(statePath, JSON.stringify({ missao, historico, retomadas }, null, 2));
+    await writeFile(statePath, JSON.stringify({ ...continuityState, missao, historico, retomadas }, null, 2));
     registrarEtapa(resultado.ok);
 
     const emoji = resultado.ok ? '✅' : '⚠️';
