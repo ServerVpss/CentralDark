@@ -18,7 +18,12 @@ const ENGINE = join(ROOT, "scripts", "github-autonomia-promocao.mjs");
 function markerAuthorized(pr) {
   const labels = new Set((pr.labels || []).map((label) => String(label.name || label).toLowerCase()));
   const text = `${pr.title || ""}\n${pr.body || ""}`;
-  return labels.has("permito-pivete") || /\bPERMITO[ _-]?PIVETE\b/i.test(text);
+  return Boolean(
+    labels.has("permito-segredo") ||
+    /\bPERMITO[ _-]?SEGREDO\b/i.test(text) ||
+    labels.has("permito-pivete") ||
+    /\bPERMITO[ _-]?PIVETE\b/i.test(text)
+  );
 }
 
 export function eligibleSummary(pr, repository, trustedAuthors = ["segredounlock"]) {
@@ -66,7 +71,7 @@ async function upsertDiagnostic(token, repository, number, code, detail) {
     marker,
     "## Autonomia — bloqueio operacional",
     "",
-    `Código: \\`${code}\\``,
+    "Código: `" + code + "`",
     "",
     String(detail || "sem detalhe").slice(0, 2500),
     "",
