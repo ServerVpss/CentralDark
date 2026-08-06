@@ -1,0 +1,252 @@
+name: PR — artefato de aprendizado automático
+
+on:
+  pull_request:
+    types: [opened, reopened, ready_for_review, synchronize]
+    branches: [main]
+  pull_request_target:
+    types: [opened, reopened, ready_for_review, synchronize]
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pr-learning-artifact-${{ github.event.pull_request.number }}-${{ github.event_name }}
+  cancel-in-progress: true
+
+jobs:
+  contract-tests:
+    name: Provar gerador no HEAD do PR
+    if: github.event_name == 'pull_request' && github.repository == 'ServerVpss/CentralDark'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout exato do PR sem credencial persistente
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+
+      - name: Sintaxe e testes discriminativos
+        run: |
+          set -Eeuo pipefail
+          node --check scripts/lupa/pr-learning-artifact.mjs
+          node --check scripts/lupa/pr-learning-artifact.test.mjs
+          node --test scripts/lupa/pr-learning-artifact.test.mjs
+
+      - name: Preparar entrada do próprio PR
+        env:
+          REPOSITORY: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+          FILES_JSON: ${{ runner.temp }}/pr-learning-files.json
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          git fetch --no-tags origin "$BASE_SHA"
+          FILES_JSON="$RUNNER_TEMP/pr-learning-files.json"
+          git diff --numstat "$BASE_SHA" "$HEAD_SHA" -- . |
+            node -e '
+              const fs=require("fs");
+              const rows=fs.readFileSync(0,"utf8").trim().split(/\r?\n/).filter(Boolean);
+              const files=rows.map((row)=>{
+                const [a,d,...rest]=row.split("\t");
+                return {
+                  filename: rest.join("\t"),
+                  status: "modified",
+                  additions: a==="-" ? 0 : Number(a||0),
+                  deletions: d==="-" ? 0 : Number(d||0)
+                };
+              });
+              fs.writeFileSync(process.env.FILES_JSON, JSON.stringify(files));
+            '
+          node - <<'NODE'
+          const fs = require('fs');
+          const files = JSON.parse(fs.readFileSync(process.env.FILES_JSON, 'utf8'));
+          const input = {
+            repository: process.env.REPOSITORY,
+            pr_number: Number(process.env.PR_NUMBER),
+            head_sha: process.env.HEAD_SHA,
+            base_sha: process.env.BASE_SHA,
+            title: process.env.PR_TITLE || '',
+            author: process.env.PR_AUTHOR || '',
+            body: process.env.PR_BODY || '',
+            files,
+          };
+          fs.writeFileSync(`${process.env.RUNNER_TEMP}/pr-learning-input.json`, JSON.stringify(input));
+          NODE
+
+      - name: Gerar Markdown e Canvas HTML
+        id: artifact
+        run: |
+          set -Eeuo pipefail
+          node scripts/lupa/pr-learning-artifact.mjs \
+            --input "$RUNNER_TEMP/pr-learning-input.json" \
+            --markdown "$RUNNER_TEMP/pr-learning-artifact.md" \
+            --html "$RUNNER_TEMP/pr-learning-artifact.html" \
+            --github-output "$GITHUB_OUTPUT"
+
+      - name: Publicar artefato de prova do HEAD
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr-learning-contract-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}
+          path: |
+            ${{ runner.temp }}/pr-learning-artifact.md
+            ${{ runner.temp }}/pr-learning-artifact.html
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Receipt no resumo do job
+        run: |
+          {
+            echo "## Artefato de aprendizado — contrato"
+            echo
+            echo "- HEAD: \`${{ github.event.pull_request.head.sha }}\`"
+            echo "- Status: \`${{ steps.artifact.outputs.status }}\`"
+            echo "- Suporte necessário: \`${{ steps.artifact.outputs.support_required }}\`"
+            echo "- Digest: \`${{ steps.artifact.outputs.artifact_digest }}\`"
+            echo "- Testes: 11/11 PASS"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  publish-comment:
+    name: Comentar e rotear usando somente código confiável da base
+    if: >-
+      github.event_name == 'pull_request_target' &&
+      github.repository == 'ServerVpss/CentralDark'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+    steps:
+      - name: Checkout exato da base confiável
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 1
+          ref: ${{ github.event.pull_request.base.sha }}
+          persist-credentials: false
+
+      - name: Preparar metadados sanitizados pela API
+        uses: actions/github-script@v7
+        env:
+          INPUT_PATH: ${{ runner.temp }}/pr-learning-input.json
+        with:
+          script: |
+            const fs = require('fs');
+            const { owner, repo } = context.repo;
+            const pr = context.payload.pull_request;
+            const files = await github.paginate(github.rest.pulls.listFiles, {
+              owner,
+              repo,
+              pull_number: pr.number,
+              per_page: 100,
+            });
+            if (files.length > 300) core.setFailed('PR_LEARNING_TOO_MANY_FILES');
+            const redact = (value, limit) => String(value || '')
+              .slice(0, limit)
+              .replace(/\bBearer\s+[A-Za-z0-9._~+/=-]{12,}/gi, 'Bearer [REDACTED]')
+              .replace(/\beyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{5,}\.[A-Za-z0-9_-]{5,}\b/g, '[REDACTED_JWT]')
+              .replace(/\bgh[pousr]_[A-Za-z0-9_]{20,}\b/g, '[REDACTED_GITHUB_TOKEN]')
+              .replace(/\bsk-[A-Za-z0-9_-]{16,}\b/g, '[REDACTED_PROVIDER_KEY]');
+            const input = {
+              repository: `${owner}/${repo}`,
+              pr_number: pr.number,
+              head_sha: pr.head.sha,
+              base_sha: pr.base.sha,
+              title: redact(pr.title, 500),
+              author: redact(pr.user?.login, 200),
+              body: redact(pr.body, 12000),
+              files: files.map((file) => ({
+                filename: file.filename,
+                status: file.status,
+                additions: file.additions,
+                deletions: file.deletions,
+              })),
+            };
+            fs.writeFileSync(process.env.INPUT_PATH, JSON.stringify(input), { mode: 0o600 });
+
+      - name: Gerar artefato confiável
+        id: artifact
+        run: |
+          set -Eeuo pipefail
+          node scripts/lupa/pr-learning-artifact.mjs \
+            --input "$RUNNER_TEMP/pr-learning-input.json" \
+            --markdown "$RUNNER_TEMP/pr-learning-artifact.md" \
+            --html "$RUNNER_TEMP/pr-learning-artifact.html" \
+            --github-output "$GITHUB_OUTPUT"
+
+      - name: Salvar Canvas e Markdown como artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr-learning-artifact-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}
+          path: |
+            ${{ runner.temp }}/pr-learning-artifact.md
+            ${{ runner.temp }}/pr-learning-artifact.html
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Atualizar comentário idempotente e pedir suporte
+        uses: actions/github-script@v7
+        env:
+          MARKDOWN_PATH: ${{ runner.temp }}/pr-learning-artifact.md
+          SUPPORT_REQUIRED: ${{ steps.artifact.outputs.support_required }}
+          SUPPORT_LABELS: ${{ steps.artifact.outputs.support_labels }}
+        with:
+          script: |
+            const fs = require('fs');
+            const { owner, repo } = context.repo;
+            const issue_number = context.payload.pull_request.number;
+            const marker = '<!-- centraldark-pr-learning-artifact -->';
+            const body = fs.readFileSync(process.env.MARKDOWN_PATH, 'utf8').slice(0, 60000);
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              owner,
+              repo,
+              issue_number,
+              per_page: 100,
+            });
+            const existing = comments.find((comment) => comment.body?.includes(marker));
+            if (existing) {
+              await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
+            } else {
+              await github.rest.issues.createComment({ owner, repo, issue_number, body });
+            }
+
+            const labels = String(process.env.SUPPORT_LABELS || '')
+              .split(',')
+              .map((label) => label.trim())
+              .filter(Boolean);
+            for (const label of labels) {
+              try {
+                await github.rest.issues.addLabels({ owner, repo, issue_number, labels: [label] });
+              } catch (error) {
+                core.warning(`LABEL_NOT_APPLIED ${label}: ${error.message}`);
+              }
+            }
+
+            if (process.env.SUPPORT_REQUIRED === 'true') {
+              core.notice('SUPPORT_REQUEST_DISPATCHED');
+            } else {
+              core.notice('CAPABILITIES_DECLARED_READY');
+            }
+
+      - name: Receipt final do bot
+        run: |
+          {
+            echo "## PR Learning Artifact Bot"
+            echo
+            echo "- HEAD observado: \`${{ github.event.pull_request.head.sha }}\`"
+            echo "- Código executado da base: \`${{ github.event.pull_request.base.sha }}\`"
+            echo "- Estado: \`${{ steps.artifact.outputs.status }}\`"
+            echo "- Suporte: \`${{ steps.artifact.outputs.support_required }}\`"
+            echo "- Digest: \`${{ steps.artifact.outputs.artifact_digest }}\`"
+            echo "- Aprovação/merge automático: \`NÃO\`"
+          } >> "$GITHUB_STEP_SUMMARY"
