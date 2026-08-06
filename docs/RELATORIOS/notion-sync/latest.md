@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-08-06T01:00:50.094Z
+# 🧠 Notion Sync — 2026-08-06T04:55:31.470Z
 
-- **Commit fonte:** `849b2b13bfd300f7d032d2f2181cd072eef3916b`
+- **Commit fonte:** `7913dab028a801e7ef9263f00ea3c2379a824e04`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 52 atualizadas · ❌ 331 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 53 atualizadas · ❌ 331 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
-| aprendizados | 9 | 1 | 8 | 0 | 0 |
+| aprendizados | 10 | 1 | 9 | 0 | 0 |
 | estrutura | 331 | 0 | 0 | 0 | 331 |
 
 ## Operações
@@ -74,7 +74,8 @@
 | aprendizados | atualizado | #6 — A porta de entrada nunca existiu: por que nenhuma IA lia as regras da casa |
 | aprendizados | atualizado | #7 — github_commit (MCP) não deleta arquivo; duplicatas CONSCIENCIA/BRAIN nasceram do mesmo commit de bot |
 | aprendizados | atualizado | #8 — Nunca gerar -v2/-v3: refinar o arquivo que já existe |
-| aprendizados | criado | #9 — Escritor único: auditar e comentar na PR alheia em vez de abrir PR concorrente |
+| aprendizados | atualizado | #9 — Escritor único: auditar e comentar na PR alheia em vez de abrir PR concorrente |
+| aprendizados | criado | #10 — Reconferir o blob na hora de publicar, não só na hora de auditar |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |

@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-08-06T01:00:55.478Z
-- **Commit:** `849b2b13bfd300f7d032d2f2181cd072eef3916b`
+- **Gerado:** 2026-08-06T04:55:34.820Z
+- **Commit:** `7913dab028a801e7ef9263f00ea3c2379a824e04`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 39 | 39 | 39 | 0 | 0 |
-| aprendizados | 9 | 0 | 0 | 9 | 0 |
+| aprendizados | 10 | 0 | 0 | 10 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **9**
+- 🟥 Faltando no Notion: **10**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -57,4 +57,5 @@
 - 7. github_commit (MCP) não deleta arquivo; duplicatas CONSCIENCIA/BRAIN nasceram do mesmo commit de bot
 - 8. Nunca gerar -v2/-v3: refinar o arquivo que já existe
 - 9. Escritor único: auditar e comentar na PR alheia em vez de abrir PR concorrente
+- 10. Reconferir o blob na hora de publicar, não só na hora de auditar
 </details>
