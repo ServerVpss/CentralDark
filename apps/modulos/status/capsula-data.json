@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at_utc": "2026-08-06T03:52:40.929Z",
+  "generated_at_utc": "2026-08-06T04:17:13.243Z",
   "source": {
     "event_count": 0,
     "run_count": 0,
@@ -19,10 +19,13 @@
       "fixture_ref": null,
       "evaluator_ref": null,
       "writer": null,
+      "event_actor": null,
       "iteration": 0,
       "status": "RUNNING",
       "reason": "",
       "chief_decision": "PENDING",
+      "chief_receipt_ref": null,
+      "chief_receipt_hash": null,
       "tests": {
         "total": 0,
         "pass": 0,
@@ -74,11 +77,12 @@
     }
   },
   "guarantees": {
-    "no_percentage_without_denominator": true,
-    "skipped_never_counts_as_pass": true,
-    "same_identity_per_run": true,
-    "independent_evaluator_required_for_decision_pass": true,
-    "production_not_authorized_by_snapshot": true
+    "no_percentage_without_denominator": "ENFORCED",
+    "skipped_never_counts_as_pass": "UNKNOWN",
+    "same_identity_per_run": "UNKNOWN",
+    "independent_evaluator_required_for_decision_pass": "UNKNOWN",
+    "chief_receipt_required_for_promotion": "UNKNOWN",
+    "production_not_authorized_by_snapshot": "ENFORCED"
   },
   "validation": {
     "verdict": "PASS",
