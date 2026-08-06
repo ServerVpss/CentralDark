@@ -150,7 +150,7 @@ jobs:
               pull_number: pr.number,
               per_page: 100,
             });
-            if (files.length > 300) core.setFailed('PR_LEARNING_TOO_MANY_FILES');
+            if (files.length > 300) throw new Error('PR_LEARNING_TOO_MANY_FILES');
             const redact = (value, limit) => String(value || '')
               .slice(0, limit)
               .replace(/\bBearer\s+[A-Za-z0-9._~+/=-]{12,}/gi, 'Bearer [REDACTED]')
@@ -224,12 +224,8 @@ jobs:
               .split(',')
               .map((label) => label.trim())
               .filter(Boolean);
-            for (const label of labels) {
-              try {
-                await github.rest.issues.addLabels({ owner, repo, issue_number, labels: [label] });
-              } catch (error) {
-                core.warning(`LABEL_NOT_APPLIED ${label}: ${error.message}`);
-              }
+            if (labels.length) {
+              await github.rest.issues.addLabels({ owner, repo, issue_number, labels });
             }
 
             if (process.env.SUPPORT_REQUIRED === 'true') {
