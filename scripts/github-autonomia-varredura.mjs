@@ -15,6 +15,20 @@ const API = "https://api.github.com";
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const ENGINE = join(ROOT, "scripts", "github-autonomia-promocao.mjs");
 
+export const SWEEP_MANIFEST_FILE = "sweep-manifest.json";
+export const RECEIPT_FILE_PATTERN = /^receipt-pr-\d+\.json$/;
+
+export function buildSweepManifest({ repository, candidates = [], generatedAt, eventName, runId }) {
+  return {
+    schema: "centraldark.autonomia-sweep-manifest.v1",
+    generated_at: generatedAt || new Date().toISOString(),
+    repository,
+    event_name: eventName || "unknown",
+    run_id: runId || null,
+    candidates: candidates.map((pr) => Number(pr.number)).filter((n) => Number.isInteger(n) && n > 0),
+  };
+}
+
 function markerAuthorized(pr) {
   const labels = new Set((pr.labels || []).map((label) => String(label.name || label).toLowerCase()));
   const text = `${pr.title || ""}\n${pr.body || ""}`;
@@ -113,6 +127,24 @@ async function judgeSweep() {
   const candidates = pulls.filter((pr) => eligibleSummary(pr, repository, trustedAuthors));
   console.log(`AUTONOMIA_SWEEP_CANDIDATES=${candidates.map((pr) => pr.number).join(",") || "none"}`);
 
+  // Artefato sempre presente: sem isto o diretorio fica vazio quando nao ha
+  // candidato, upload-artifact@v4 (if-no-files-found: warn) nao cria artefato
+  // nenhum e o job promote quebra no download-artifact@v4.
+  await writeFile(
+    join(sweepDir, SWEEP_MANIFEST_FILE),
+    `${JSON.stringify(
+      buildSweepManifest({
+        repository,
+        candidates,
+        eventName: process.env.GITHUB_EVENT_NAME,
+        runId: process.env.GITHUB_RUN_ID,
+      }),
+      null,
+      2,
+    )}\n`,
+    { encoding: "utf8", mode: 0o600 },
+  );
+
   for (const pr of candidates) {
     const eventPath = join(sweepDir, `event-pr-${pr.number}.json`);
     const receiptPath = join(sweepDir, `receipt-pr-${pr.number}.json`);
@@ -150,7 +182,7 @@ async function promoteSweep() {
   if (!promoterToken) throw new Error("PROMOTER_TOKEN_MISSING");
   await mkdir(sweepDir, { recursive: true });
 
-  const files = (await readdir(sweepDir)).filter((name) => /^receipt-pr-\d+\.json$/.test(name)).sort();
+  const files = (await readdir(sweepDir)).filter((name) => RECEIPT_FILE_PATTERN.test(name)).sort();
   console.log(`AUTONOMIA_PROMOTE_RECEIPTS=${files.join(",") || "none"}`);
 
   for (const name of files) {
