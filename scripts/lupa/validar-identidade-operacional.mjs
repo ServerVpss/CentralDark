@@ -10,6 +10,12 @@ const CANONICAL = Object.freeze({
     "SOL ORGANIZA",
     "PIVETE/HERMES PRESERVA E EXECUTA",
   ],
+  "AGENTS.md": [
+    "existe somente um escritor por escopo",
+    "SEGREDO/CHEFE permanece autoridade humana final",
+    "SOL coordena, PIVETE/HERMES preserva e executa",
+    "CAPTURE → SANITIZE + HASH → DECIDE → APPLY → JUDGE → CHEFE → RECEIPT + LEARNING → LOOP",
+  ],
   "docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md": [
     "SEGREDO/CHEFE = humano e autoridade final",
     "SOL = coordenadora da casa e organizadora dos agentes",
@@ -45,6 +51,10 @@ const FORBIDDEN_CANONICAL = Object.freeze([
     code: "PIVETE_AUTORIDADE_FINAL_MAQUINA",
     pattern: /\bPIVETE\s*=\s*AUTORIDADE_FINAL\b/i,
   },
+  {
+    code: "UNKNOWN_CONVERTIDO_EM_PASS",
+    pattern: /\bUNKNOWN\s*(?:=|:|→|->)\s*PASS\b/i,
+  },
 ]);
 
 const FORBIDDEN_PROFILE = Object.freeze([
@@ -71,6 +81,10 @@ const SENSITIVE_SEGMENTS = new Set([
   ".ssh",
   "certs",
   "certificates",
+  "credentials",
+  "credential",
+  "keys",
+  "key",
 ]);
 
 function parseArgs(argv) {
@@ -102,7 +116,12 @@ function lineOf(text, index) {
   return text.slice(0, index).split(/\r?\n/).length;
 }
 
-export function findForbidden(text, rules = FORBIDDEN_CANONICAL, path = "<memory>") {
+export function findForbidden(
+  text,
+  rules = FORBIDDEN_CANONICAL,
+  path = "<memory>",
+  { redactExcerpt = false } = {},
+) {
   const findings = [];
   for (const rule of rules) {
     const match = rule.pattern.exec(text);
@@ -111,7 +130,9 @@ export function findForbidden(text, rules = FORBIDDEN_CANONICAL, path = "<memory
       code: rule.code,
       path,
       line: lineOf(text, match.index),
-      excerpt: match[0].replace(/\s+/g, " ").slice(0, 180),
+      excerpt: redactExcerpt
+        ? "[PROFILE_CONTENT_REDACTED]"
+        : match[0].replace(/\s+/g, " ").slice(0, 180),
     });
   }
   return findings;
@@ -140,7 +161,14 @@ function safeRead(path) {
 
 function isSensitive(relativePath) {
   const normalized = relativePath.split(sep).map((part) => part.toLowerCase());
-  return normalized.some((part) => SENSITIVE_SEGMENTS.has(part) || part.startsWith(".env."));
+  return normalized.some((part) => {
+    const stem = part.replace(/\.[^.]+$/, "");
+    return (
+      SENSITIVE_SEGMENTS.has(part) ||
+      SENSITIVE_SEGMENTS.has(stem) ||
+      part.startsWith(".env.")
+    );
+  });
 }
 
 function walkTextFiles(root) {
@@ -186,7 +214,11 @@ export function validateProfileRoot(root) {
   for (const file of walkTextFiles(root)) {
     const text = safeRead(file);
     if (text == null) continue;
-    findings.push(...findForbidden(text, FORBIDDEN_PROFILE, relative(root, file)));
+    findings.push(
+      ...findForbidden(text, FORBIDDEN_PROFILE, relative(root, file), {
+        redactExcerpt: true,
+      }),
+    );
   }
   return findings;
 }
