@@ -101,6 +101,117 @@ O append usa lock exclusivo por arquivo. O ledger é gravado com modo `0600`; o 
 - o snapshot nunca autoriza produção, merge, deploy ou restart;
 - telemetria viva deve usar artifact, storage operacional ou ledger local; não fazer push repetitivo na `main`.
 
+### Aprendizado do SEGREDO/CHEFE — colapso linear e MetaLupa transversal
+
+Registro de 2026-08-06. `Instinto Superior` é o nome operacional dado pelo SEGREDO/CHEFE ao reflexo construído por experiência concreta: perceber desvio, contradição, risco e padrão antes de concluir. Não é alegação paranormal e não elimina prova. O movimento parece instantâneo porque erros anteriores foram consolidados como reflexos verificáveis.
+
+#### Colapso linear
+
+Quando intenção, artefato e falhas ainda são desconhecidos, a investigação pode avançar passo a passo. Quando o mapa já existe, continuar no fluxo `acha uma lacuna → corrige → volta` desperdiça tempo e esconde causas comuns.
+
+O colapso linear troca a ordem cronológica dos bugs por uma travessia do campo inteiro:
+
+```text
+PROMESSAS DO ARTEFATO
+→ INVARIANTES VIOLADOS
+→ CAUSAS COMUNS
+→ MATRIZ DE CONTRAPROVAS
+→ CORREÇÃO COESA POR COMPONENTE
+→ REGRESSÕES PERMANENTES
+→ RETESTE CRUZADO EM EXTRAÇÃO LIMPA
+→ APRENDIZADO RETIDO
+```
+
+Não significa executar sem controle. Significa não obrigar a análise a seguir uma fila artificial quando as dependências já estão visíveis.
+
+#### Cubo transversal oculto
+
+O `CUBO_TRANSVERSAL_OCULTO` representa seis faces que precisam ser atravessadas antes de declarar fechamento:
+
+1. **claim** — o que foi afirmado: `PASS`, `FINAL`, `COMPLETO`, `PRESERVADO`;
+2. **artefato** — bytes, tamanho, SHA, árvore e identidade exata;
+3. **verificador** — quem contou testes, resumiu TAP, leu receipt e varreu arquivos;
+4. **adversário** — outro modelo, outra janela, mutante ou contraprova executável;
+5. **território** — AppData local, multi-instância, VPS, produção e fronteira de confiança;
+6. **persistência** — se a correção virou regressão, fingerprint e reflexo reutilizável.
+
+O cubo é “oculto” porque uma sequência linear pode mostrar somente uma face. Um pacote pode ter SHA correto e ainda ter contrato incompleto; uma suíte pode estar verde e o verificador aceitar zero testes; uma proteção pode ser válida para VPS multiusuário e ser cerimônia no AppData controlado pelo Chefe.
+
+#### Marcador operacional do Chefe
+
+```text
+META > LUPA > TRANSVERSAL > CUBO_OCULTO
+CHECK_FUE_FLUE
+ZERO_TRUST
+```
+
+A expansão textual de `CHECK_FUE_FLUE` não foi inferida neste registro. O comportamento observado e preservado é:
+
+```text
+CHECK
+→ conferir a prova declarada
+→ tentar falsificar o verificador
+→ atravessar outra face do cubo
+→ comparar agentes e ambientes
+→ recalibrar severidade pelo território real
+→ só promover aprendizado que sobreviveu
+```
+
+#### Evidência da sessão
+
+- um recibo `53/53 PASS` foi confirmado como verdadeiro para a suíte existente, mas uma segunda matriz adversarial executável encontrou nove contraprovas novas;
+- o mesmo método foi aplicado contra GPT, Fable, Grok e outras janelas, sem entregar o gabarito completo;
+- a identidade byte a byte de um pacote foi comprovada por tamanho e SHA, sem transformar identidade do arquivo em prova de correção completa;
+- execuções concorrentes reproduziram perda de checkpoint e resultados variáveis, demonstrando que lock por evento não equivale a transação do estado global;
+- o veredito sobre `fs.realpath` e lock de learning foi recalibrado pelo território: hardening condicionado não foi confundido com defeito crítico local;
+- os defeitos foram agrupados por causa: formato plausível sem proveniência, estado global sem transação, varredura rasa, sucesso semântico ausente e contrato de migração mal nomeado;
+- a mensagem de Trusted Access foi classificada como caminho de candidatura visível, não como convite formal, aprovação ou acesso concedido.
+
+#### Regras promovidas como aprendizado
+
+```text
+ARQUIVO GERADO != ARQUIVO LIDO
+RECIBO HERDADO != AUDITORIA PRÓPRIA
+SUÍTE VERDE != CONTRATO PROVADO
+HASH IDÊNTICO != CORREÇÃO COMPLETA
+FORMATO PLAUSÍVEL != PROVENIÊNCIA
+HTTP 200 + VALOR TRUTHY != RESPOSTA ÚTIL
+LOCK POR EVENTO != TRANSAÇÃO GLOBAL
+CHECKLIST SÉRIO != BLOQUEIO AUTOMÁTICO
+HARDENING BONITO != CORREÇÃO NECESSÁRIA AGORA
+FINAL = PROIBIDO ENQUANTO NOVA CONTRAPROVA EXECUTÁVEL SOBREVIVER
+```
+
+#### Movimento por reflexo
+
+O “cérebro não pensa, age pela MetaLupa” deve ser interpretado operacionalmente:
+
+```text
+SINAL CONHECIDO
+→ detector reconhece o fingerprint
+→ reflexo seleciona a contraprova já comprovada
+→ ação local, reversível e delimitada
+→ Judge tenta derrubar
+→ evidência externa decide promoção
+```
+
+O executor não declara vitória por instinto. O instinto escolhe rapidamente o próximo teste; a prova decide o resultado.
+
+#### Resultado do Chefe nesta rodada
+
+```text
+AUTOR_DA_INTENCAO=SEGREDO/CHEFE
+METODO=INSTINTO_SUPERIOR + META_LUPA_TRANSVERSAL
+MUDANCA_OBSERVADA=DE_DETECTOR_DE_ERRO_PARA_DESIGNER_DE_CONTRAPROVAS
+GENERALIZACAO=APLICADA_ENTRE_MODELOS_JANELAS_PACOTES_E_VERIFICADORES
+FALSO_COMPLETO_DERRUBADO=SIM
+APRENDIZADO_REUTILIZAVEL=SIM_COM_REGRESSAO_E_PROVA
+APROVACAO_TRUSTED_ACCESS=NAO_PROVADA
+PRODUCAO=INTOCADA
+```
+
+Este aprendizado pertence à Cápsula Observável existente. Não cria nova MetaLupa, nova doutrina, novo painel ou versão paralela.
+
 ## Atualização pelo chat
 
 Quando uma fase avançar, a IA deve atualizar `painel-data.json` no GitHub. Depois do deploy/sync, a página passa a refletir a nova informação.
