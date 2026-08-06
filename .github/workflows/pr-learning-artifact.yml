@@ -2,10 +2,10 @@ name: PR — artefato de aprendizado automático
 
 on:
   pull_request:
-    types: [opened, reopened, ready_for_review, synchronize]
+    types: [opened, reopened, ready_for_review, synchronize, edited]
     branches: [main]
   pull_request_target:
-    types: [opened, reopened, ready_for_review, synchronize]
+    types: [opened, reopened, ready_for_review, synchronize, edited]
     branches: [main]
 
 permissions:
@@ -25,18 +25,37 @@ jobs:
       contents: read
     steps:
       - name: Checkout exato do PR sem credencial persistente
-        uses: actions/checkout@v5
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha }}
           persist-credentials: false
 
       - name: Sintaxe e testes discriminativos
+        id: tests
         run: |
           set -Eeuo pipefail
           node --check scripts/lupa/pr-learning-artifact.mjs
           node --check scripts/lupa/pr-learning-artifact.test.mjs
-          node --test scripts/lupa/pr-learning-artifact.test.mjs
+          node --test scripts/lupa/pr-learning-artifact.test.mjs | tee "$RUNNER_TEMP/pr-learning.tap"
+          TOTAL="$(awk '/^# tests / {print $3}' "$RUNNER_TEMP/pr-learning.tap" | tail -1)"
+          PASS="$(awk '/^# pass / {print $3}' "$RUNNER_TEMP/pr-learning.tap" | tail -1)"
+          FAIL="$(awk '/^# fail / {print $3}' "$RUNNER_TEMP/pr-learning.tap" | tail -1)"
+          SKIPPED="$(awk '/^# skipped / {print $3}' "$RUNNER_TEMP/pr-learning.tap" | tail -1)"
+          if [ -z "$TOTAL" ] || [ -z "$PASS" ] || [ -z "$FAIL" ] || [ -z "$SKIPPED" ]; then
+            echo "TEST_RECEIPT_INCOMPLETE" >&2
+            exit 1
+          fi
+          if [ "$FAIL" -ne 0 ] || [ "$SKIPPED" -ne 0 ] || [ "$PASS" -ne "$TOTAL" ]; then
+            echo "TESTS_BLOCKED total=$TOTAL pass=$PASS fail=$FAIL skipped=$SKIPPED" >&2
+            exit 1
+          fi
+          {
+            echo "total=$TOTAL"
+            echo "pass=$PASS"
+            echo "fail=$FAIL"
+            echo "skipped=$SKIPPED"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Preparar entrada do próprio PR
         env:
@@ -95,7 +114,7 @@ jobs:
             --github-output "$GITHUB_OUTPUT"
 
       - name: Publicar artefato de prova do HEAD
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: pr-learning-contract-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}
           path: |
@@ -105,16 +124,31 @@ jobs:
           retention-days: 30
 
       - name: Receipt no resumo do job
+        env:
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          ARTIFACT_STATUS: ${{ steps.artifact.outputs.status }}
+          SUPPORT_REQUIRED: ${{ steps.artifact.outputs.support_required }}
+          ARTIFACT_DIGEST: ${{ steps.artifact.outputs.artifact_digest }}
+          TEST_TOTAL: ${{ steps.tests.outputs.total }}
+          TEST_PASS: ${{ steps.tests.outputs.pass }}
+          TEST_FAIL: ${{ steps.tests.outputs.fail }}
+          TEST_SKIPPED: ${{ steps.tests.outputs.skipped }}
         run: |
           {
             echo "## Artefato de aprendizado — contrato"
             echo
-            echo "- HEAD: \`${{ github.event.pull_request.head.sha }}\`"
-            echo "- Status: \`${{ steps.artifact.outputs.status }}\`"
-            echo "- Suporte necessário: \`${{ steps.artifact.outputs.support_required }}\`"
-            echo "- Digest: \`${{ steps.artifact.outputs.artifact_digest }}\`"
-            echo "- Testes: 11/11 PASS"
+            echo "- HEAD: \`$HEAD_SHA\`"
+            echo "- Status: \`$ARTIFACT_STATUS\`"
+            echo "- Suporte necessário: \`$SUPPORT_REQUIRED\`"
+            echo "- Digest: \`$ARTIFACT_DIGEST\`"
+            echo "- Testes: \`$TEST_TOTAL total / $TEST_PASS PASS / $TEST_FAIL FAIL / $TEST_SKIPPED SKIPPED\`"
           } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Gate de caminho sensível
+        if: steps.artifact.outputs.blocked == 'true'
+        run: |
+          echo "BLOCKED_SENSITIVE_PATH" >&2
+          exit 1
 
   publish-comment:
     name: Comentar e rotear usando somente código confiável da base
@@ -129,14 +163,14 @@ jobs:
       issues: write
     steps:
       - name: Checkout exato da base confiável
-        uses: actions/checkout@v5
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
           fetch-depth: 1
           ref: ${{ github.event.pull_request.base.sha }}
           persist-credentials: false
 
       - name: Preparar metadados sanitizados pela API
-        uses: actions/github-script@v7
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
         env:
           INPUT_PATH: ${{ runner.temp }}/pr-learning-input.json
         with:
@@ -185,7 +219,7 @@ jobs:
             --github-output "$GITHUB_OUTPUT"
 
       - name: Salvar Canvas e Markdown como artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: pr-learning-artifact-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}
           path: |
@@ -195,7 +229,7 @@ jobs:
           retention-days: 30
 
       - name: Atualizar comentário idempotente e pedir suporte
-        uses: actions/github-script@v7
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
         env:
           MARKDOWN_PATH: ${{ runner.temp }}/pr-learning-artifact.md
           SUPPORT_REQUIRED: ${{ steps.artifact.outputs.support_required }}
@@ -213,7 +247,12 @@ jobs:
               issue_number,
               per_page: 100,
             });
-            const existing = comments.find((comment) => comment.body?.includes(marker));
+            const isOwnedComment = (comment) =>
+              comment.user?.login === 'github-actions[bot]' ||
+              comment.performed_via_github_app?.slug === 'github-actions';
+            const existing = comments.find(
+              (comment) => isOwnedComment(comment) && comment.body?.includes(marker),
+            );
             if (existing) {
               await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
             } else {
@@ -235,14 +274,26 @@ jobs:
             }
 
       - name: Receipt final do bot
+        env:
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          ARTIFACT_STATUS: ${{ steps.artifact.outputs.status }}
+          SUPPORT_REQUIRED: ${{ steps.artifact.outputs.support_required }}
+          ARTIFACT_DIGEST: ${{ steps.artifact.outputs.artifact_digest }}
         run: |
           {
             echo "## PR Learning Artifact Bot"
             echo
-            echo "- HEAD observado: \`${{ github.event.pull_request.head.sha }}\`"
-            echo "- Código executado da base: \`${{ github.event.pull_request.base.sha }}\`"
-            echo "- Estado: \`${{ steps.artifact.outputs.status }}\`"
-            echo "- Suporte: \`${{ steps.artifact.outputs.support_required }}\`"
-            echo "- Digest: \`${{ steps.artifact.outputs.artifact_digest }}\`"
+            echo "- HEAD observado: \`$HEAD_SHA\`"
+            echo "- Código executado da base: \`$BASE_SHA\`"
+            echo "- Estado: \`$ARTIFACT_STATUS\`"
+            echo "- Suporte: \`$SUPPORT_REQUIRED\`"
+            echo "- Digest: \`$ARTIFACT_DIGEST\`"
             echo "- Aprovação/merge automático: \`NÃO\`"
           } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Gate final de caminho sensível
+        if: steps.artifact.outputs.blocked == 'true'
+        run: |
+          echo "BLOCKED_SENSITIVE_PATH" >&2
+          exit 1
