@@ -10,10 +10,12 @@ export const CAPABILITY_KEYS = ['mermaid', 'canvas_html', 'structured_yaml'];
 const YES = new Set(['sim', 'yes', 'true', '1', 'suportado', 'supported']);
 const NO = new Set(['nao', 'não', 'no', 'false', '0', 'não_suportado', 'unsupported']);
 
+/** Remove diacríticos para comparar estados sem alterar o texto de saída. */
 function stripDiacritics(value) {
   return String(value ?? '').normalize('NFD').replace(/\p{Diacritic}/gu, '');
 }
 
+/** Normaliza uma declaração de capacidade para SIM, NAO ou UNKNOWN. */
 export function normalizeTriState(value) {
   const raw = String(value ?? '').trim().toLowerCase();
   const ascii = stripDiacritics(raw);
@@ -22,6 +24,7 @@ export function normalizeTriState(value) {
   return 'UNKNOWN';
 }
 
+/** Sanitiza metadados não confiáveis e limita o tamanho antes da publicação. */
 export function sanitizeText(value, maxLength = 12000) {
   let text = String(value ?? '').slice(0, maxLength);
   const patterns = [
@@ -34,9 +37,11 @@ export function sanitizeText(value, maxLength = 12000) {
     [/(api[_-]?key|secret|password|passwd|token)\s*[:=]\s*["']?[A-Za-z0-9._~+/=-]{16,}/gi, '$1=[REDACTED]'],
   ];
   for (const [pattern, replacement] of patterns) text = text.replace(pattern, replacement);
+  // Evita menções automáticas e HTML injetável em comentário/artefato.
   return text.replaceAll('@', '@\u200b').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
 }
 
+/** Extrai o contrato AI_CAPABILITIES da descrição do Pull Request. */
 export function parseCapabilities(body) {
   const result = {
     mermaid: 'UNKNOWN',
@@ -63,6 +68,7 @@ export function parseCapabilities(body) {
   return result;
 }
 
+/** Classifica somente metadados de paths, sem abrir o conteúdo dos arquivos. */
 export function classifyFiles(files = []) {
   const categories = {
     workflows: 0,
@@ -87,6 +93,7 @@ export function classifyFiles(files = []) {
   return categories;
 }
 
+/** Valida o envelope mínimo necessário para gerar um artefato reproduzível. */
 export function validateInput(input) {
   if (!input || typeof input !== 'object') throw new TypeError('INPUT_NOT_OBJECT');
   if (!Number.isInteger(Number(input.pr_number)) || Number(input.pr_number) <= 0) throw new TypeError('PR_NUMBER_INVALID');
@@ -94,6 +101,7 @@ export function validateInput(input) {
   if (!Array.isArray(input.files)) throw new TypeError('FILES_INVALID');
 }
 
+/** Produz uma representação estável e sanitizada para cálculo do digest. */
 function stableInput(input) {
   const files = [...input.files]
     .map((file) => ({
@@ -115,6 +123,7 @@ function stableInput(input) {
   };
 }
 
+/** Gera Markdown, Canvas HTML, receipt e decisão de roteamento de suporte. */
 export function buildArtifact(input) {
   validateInput(input);
   const stable = stableInput(input);
@@ -136,7 +145,12 @@ export function buildArtifact(input) {
     if (missing.includes('structured_yaml')) supportLabels.add('assign:codex');
   }
 
-  const digestPayload = JSON.stringify({ stable, capabilities, categories, missing });
+  const digestPayload = JSON.stringify({
+    stable,
+    capabilities,
+    categories,
+    missing,
+  });
   const artifactDigest = crypto.createHash('sha256').update(digestPayload).digest('hex');
   const shortSha = stable.head_sha.slice(0, 12);
   const status = supportRequired ? 'SUPPORT_REQUIRED' : 'READY';
@@ -318,6 +332,7 @@ ctx.fillText('SUPORTE NÃO TRANSFERE O WRITER DO CÓDIGO.',28,382);
   };
 }
 
+/** Converte argumentos simples --chave valor da CLI em objeto. */
 function parseArgs(argv) {
   const args = {};
   for (let i = 0; i < argv.length; i += 1) {
@@ -329,6 +344,7 @@ function parseArgs(argv) {
   return args;
 }
 
+/** Publica saídas escalares no arquivo GITHUB_OUTPUT quando disponível. */
 function appendGithubOutput(file, result) {
   if (!file) return;
   const lines = [
@@ -341,6 +357,7 @@ function appendGithubOutput(file, result) {
   fs.appendFileSync(file, `${lines.join('\n')}\n`, 'utf8');
 }
 
+/** Executa a CLI sem efeitos fora dos paths de saída explicitamente informados. */
 async function main() {
   const args = parseArgs(process.argv.slice(2));
   if (!args.input || !args.markdown || !args.html) {
