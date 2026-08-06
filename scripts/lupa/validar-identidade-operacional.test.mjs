@@ -26,6 +26,16 @@ function validRepo() {
   );
   write(
     root,
+    "AGENTS.md",
+    [
+      "existe somente um escritor por escopo",
+      "SEGREDO/CHEFE permanece autoridade humana final",
+      "SOL coordena, PIVETE/HERMES preserva e executa",
+      "CAPTURE → SANITIZE + HASH → DECIDE → APPLY → JUDGE → CHEFE → RECEIPT + LEARNING → LOOP",
+    ].join("\n"),
+  );
+  write(
+    root,
     "docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md",
     [
       "SEGREDO/CHEFE = humano e autoridade final",
@@ -57,6 +67,50 @@ test("atribuir autoridade final ao Pivete falha com caminho e linha", () => {
   assert.equal(findings[0].line, 2);
 });
 
+test("AGENTS conflitante com LEIA-ME-IA bloqueia", () => {
+  const root = validRepo();
+  write(
+    root,
+    "AGENTS.md",
+    [
+      "existe somente um escritor por escopo",
+      "SEGREDO/CHEFE permanece autoridade humana final",
+      "SOL coordena, PIVETE/HERMES preserva e executa",
+      "CAPTURE → SANITIZE + HASH → DECIDE → APPLY → JUDGE → CHEFE → RECEIPT + LEARNING → LOOP",
+      "O Pivete é a autoridade final.",
+    ].join("\n"),
+  );
+  const report = runValidation({ repoRoot: root });
+  assert.equal(report.ok, false);
+  assert.equal(
+    report.findings.some(
+      (finding) => finding.path === "AGENTS.md" && finding.code === "PIVETE_COMO_AUTORIDADE_FINAL",
+    ),
+    true,
+  );
+});
+
+test("UNKNOWN=PASS é conflito canônico", () => {
+  const root = validRepo();
+  write(
+    root,
+    "AGENTS.md",
+    [
+      "existe somente um escritor por escopo",
+      "SEGREDO/CHEFE permanece autoridade humana final",
+      "SOL coordena, PIVETE/HERMES preserva e executa",
+      "CAPTURE → SANITIZE + HASH → DECIDE → APPLY → JUDGE → CHEFE → RECEIPT + LEARNING → LOOP",
+      "UNKNOWN=PASS",
+    ].join("\n"),
+  );
+  const report = runValidation({ repoRoot: root });
+  assert.equal(report.ok, false);
+  assert.equal(
+    report.findings.some((finding) => finding.code === "UNKNOWN_CONVERTIDO_EM_PASS"),
+    true,
+  );
+});
+
 test("token obrigatório ausente não vira verde", () => {
   const findings = validateRequiredTokens("SEGREDO/CHEFE = humano e autoridade final", [
     "WRITER_UNICO=true",
@@ -65,7 +119,7 @@ test("token obrigatório ausente não vira verde", () => {
   assert.equal(findings[0].code, "TOKEN_DE_IDENTIDADE_AUSENTE");
 });
 
-test("perfil local com PERMITO PIVETE é apontado exatamente", () => {
+test("perfil local com PERMITO PIVETE aponta local sem publicar conteúdo", () => {
   const root = mkdtempSync(join(tmpdir(), "perfil-sol-"));
   write(root, "SOUL.md", "regra antiga\nPERMITO PIVETE\n");
   const findings = validateProfileRoot(root);
@@ -73,14 +127,34 @@ test("perfil local com PERMITO PIVETE é apontado exatamente", () => {
   assert.equal(findings[0].code, "PERMISSAO_LEGADA_PERMITO_PIVETE");
   assert.equal(findings[0].path, "SOUL.md");
   assert.equal(findings[0].line, 2);
+  assert.equal(findings[0].excerpt, "[PROFILE_CONTENT_REDACTED]");
+  assert.equal(JSON.stringify(findings).includes("PERMITO PIVETE"), false);
 });
 
-test("perfil local não lê caminho sensível", () => {
+test("perfil local não lê caminhos sensíveis conhecidos", () => {
   const root = mkdtempSync(join(tmpdir(), "perfil-pivete-"));
   write(root, ".env", "PERMITO PIVETE");
   write(root, "secrets/segredo.txt", "O Pivete é a autoridade final");
+  write(root, "credentials.yml", "PERMITO PIVETE");
+  write(root, "credentials/config.yaml", "O Pivete é a autoridade final");
+  write(root, "keys/private.json", "UNKNOWN=PASS");
   write(root, "SOUL.md", "SEGREDO/CHEFE comanda.");
   assert.deepEqual(validateProfileRoot(root), []);
+});
+
+test("conteúdo multilinha de perfil permanece redigido", () => {
+  const root = mkdtempSync(join(tmpdir(), "perfil-redaction-"));
+  write(
+    root,
+    "config.yaml",
+    "nenhuma ação de escrita\n" +
+      "contexto-interno-que-nao-pode-sair ".repeat(3) +
+      "autorização explícita\nVALOR_PRIVADO Pivete",
+  );
+  const findings = validateProfileRoot(root);
+  assert.equal(findings.length, 1);
+  assert.equal(findings[0].excerpt, "[PROFILE_CONTENT_REDACTED]");
+  assert.equal(JSON.stringify(findings).includes("VALOR_PRIVADO"), false);
 });
 
 test("UNKNOWN e escritor único são invariantes, não decoração", () => {
