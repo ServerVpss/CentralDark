@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-07T00:49:54.245Z",
-  "updatedAtBR": "06/08/2026, 21:49:54 BRT",
+  "updatedAt": "2026-08-07T03:28:00.395Z",
+  "updatedAtBR": "07/08/2026, 00:28:00 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "fix(autonomia): fechar falhas silenciosas, token do promotor e aviso ao vivo (#663)",
+    "lastCommit": "feat(casa): manter Escola viva e sincronizar Obsidian com o Hermes (#637)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-07T03:28:00.395Z",
+      "titulo": "Push na main · 5f991776bceb5978b40b82499abf8ce592640e5a",
+      "detalhe": "feat(casa): manter Escola viva e sincronizar Obsidian com o Hermes (#637)",
+      "area": "Repositório",
+      "sha": "5f99177",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-07T00:49:54.245Z",
       "titulo": "Push na main · e490cdeb3c905dbd85e0731490c3dea73517dadd",
       "detalhe": "fix(autonomia): fechar falhas silenciosas, token do promotor e aviso ao vivo (#663)",
@@ -986,14 +994,6 @@
       "detalhe": "docs(mcp): registro da limpeza e do conserto do dispatcher (28/07/2026)",
       "area": "Repositório",
       "sha": "2c16e70",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-28T09:26:26.832Z",
-      "titulo": "Push na main · 699c98467e5eb2345c792241624de233ffe21850",
-      "detalhe": "docs(mcp): corrige RECONECTAR-CONECTOR — 2 endpoints, URL admin e afirmacoes falsas",
-      "area": "Repositório",
-      "sha": "699c984",
       "actor": "segredounlock"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-07T03:28:00.395Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 5f991776bceb5978b40b82499abf8ce592640e5a (5f99177)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-07T00:49:54.245Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · e490cdeb3c905dbd85e0731490c3dea73517dadd (e490cde)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-28T09:57:17.666Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 2c16e7008fefa111ee4b9cdf3ff31ed2493878c9 (2c16e70)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-28T09:26:26.832Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 699c98467e5eb2345c792241624de233ffe21850 (699c984)",
       "area": "Repositório",
       "status": "sucesso"
     }
