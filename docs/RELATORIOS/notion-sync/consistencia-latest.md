@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-08-06T04:55:34.820Z
-- **Commit:** `7913dab028a801e7ef9263f00ea3c2379a824e04`
+- **Gerado:** 2026-08-07T03:31:48.330Z
+- **Commit:** `5f991776bceb5978b40b82499abf8ce592640e5a`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 39 | 39 | 39 | 0 | 0 |
-| aprendizados | 10 | 0 | 0 | 10 | 0 |
+| aprendizados | 15 | 0 | 0 | 15 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **10**
+- 🟥 Faltando no Notion: **15**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -58,4 +58,9 @@
 - 8. Nunca gerar -v2/-v3: refinar o arquivo que já existe
 - 9. Escritor único: auditar e comentar na PR alheia em vez de abrir PR concorrente
 - 10. Reconferir o blob na hora de publicar, não só na hora de auditar
+- 11. Hash validado por regex não prova que o artefato existe
+- 12. Modo novo não alcança problema empilhado antes da ramificação de modo
+- 13. Recuo preventivo não é obediência
+- 14. Mutante equivalente sai do denominador mas aponta a invariante sem teste
+- 15. Achado repetido é ruído, não reforço
 </details>
