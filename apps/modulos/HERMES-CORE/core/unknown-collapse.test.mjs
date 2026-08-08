@@ -83,6 +83,20 @@ test('decisor aceita somente os cinco estados de colapso', () => {
   }
 });
 
+test('cache legado inválido é descartado antes de bloquear o fallback', async () => {
+  const decisor = await readFile(new URL('./decisor.mjs', import.meta.url), 'utf8');
+  const inicio = decisor.indexOf('function verCache(k)');
+  const fim = decisor.indexOf('function salvarCache', inicio);
+  const trecho = decisor.slice(inicio, fim);
+
+  assert.ok(inicio >= 0);
+  assert.ok(fim > inicio);
+  assert.match(trecho, /return validarDecisao\(it\.valor\)/);
+  assert.match(trecho, /catch\s*\{/);
+  assert.match(trecho, /cache\.delete\(k\)/);
+  assert.match(trecho, /return null/);
+});
+
 test('rejeição do gate final mantém o orquestrador no loop e CONCLUIDA nasce depois do gate', async () => {
   const orchestrator = await readFile(new URL('./orchestrator.mjs', import.meta.url), 'utf8');
   const reject = orchestrator.indexOf('if (!finalizacao.aprovado)');
