@@ -1,12 +1,12 @@
 name: porta-de-entrada
 
 # Gate canônico: atualiza o mecanismo existente em vez de criar workflows
-# paralelos. Valida identidade, reconciliação, raiz única da CentralDark e
-# proíbe workflow novo quando a capacidade deve ser estendida no existente.
+# paralelos. Valida identidade, reconciliação, raiz única da CentralDark,
+# labels operacionais e a fronteira única da API.
 
 on:
   pull_request:
-    branches: [main]
+    branches: [main, program/centraldark-convergencia-omniroute-722]
     types: [opened, reopened, synchronize, ready_for_review, edited, labeled, unlabeled]
   push:
     branches: [main]
@@ -65,6 +65,68 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+
+      - name: Exigir labels operacionais canônicas
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const fs = require('node:fs');
+          const event = JSON.parse(fs.readFileSync(process.env.GITHUB_EVENT_PATH, 'utf8'));
+          const labels = (event.pull_request?.labels || []).map((item) => String(item?.name || ''));
+          const seed = fs.readFileSync('.github/workflows/bots-labels-seed.yml', 'utf8');
+          const canonical = new Set([...seed.matchAll(/name:\s*'([^']+)'/g)].map((match) => match[1]));
+          const temporaryAuthorityAliases = new Set(['permito-segredo', 'permito-pivete', 'PERMITO-SEGREDO', 'PERMITO-PIVETE']);
+          const canonicalPresent = labels.filter((label) => canonical.has(label));
+          const invalid = labels.filter((label) => !canonical.has(label) && !temporaryAuthorityAliases.has(label));
+          const authorityCompat = labels.filter((label) => temporaryAuthorityAliases.has(label));
+
+          if (canonicalPresent.length === 0) {
+            console.error('LABEL_GATE_BLOCKED=SEM_LABEL_CANONICA');
+            process.exit(1);
+          }
+          if (invalid.length > 0) {
+            console.error(`LABEL_GATE_BLOCKED=LABEL_NAO_CANONICA count=${invalid.length}`);
+            process.exit(1);
+          }
+          if (authorityCompat.length > 0) {
+            console.log(`LABEL_GATE_COMPAT_AUTHORITY=${authorityCompat.length} aguardando_migracao_issue_707=1`);
+          }
+          console.log(`LABEL_GATE=PASS canonical=${canonicalPresent.length}`);
+          NODE
+
+      - name: Bloquear novo bypass direto de provider fora do Gateway
+        if: github.event_name == 'pull_request'
+        shell: bash
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          test "$BASE_SHA" != "" && test "$HEAD_SHA" != ""
+          forbidden='https?://(api\.openai\.com|api\.anthropic\.com|openrouter\.ai|api\.groq\.com|generativelanguage\.googleapis\.com|api\.x\.ai)'
+          failed=0
+          while IFS= read -r file; do
+            case "$file" in
+              *.js|*.mjs|*.cjs|*.ts|*.tsx|*.py|*.sh|*.yml|*.yaml|*.json) ;;
+              *) continue ;;
+            esac
+            case "$file" in
+              apps/modulos/arsenal-openai-adapter/*|apps/modulos/elite-anthropic-proxy/*|apps/modulos/elite-gateway/*|apps/modulos/proxy/*|apps/modulos/lovable-proxy/*|apps/modulos/oauth-broker/*)
+                continue
+                ;;
+            esac
+            if git diff -U0 "$BASE_SHA" "$HEAD_SHA" -- "$file" \
+              | grep '^+' \
+              | grep -v '^+++' \
+              | grep -Eiq "$forbidden"; then
+              echo "API_SINGLE_ENTRY_BLOCKED path=$file reason=NEW_DIRECT_PROVIDER_BYPASS"
+              failed=1
+            fi
+          done < <(git diff --name-only "$BASE_SHA" "$HEAD_SHA")
+          test "$failed" -eq 0
+          echo "CENTRALDARK_API_SINGLE_ENTRY=PASS"
 
       - name: Testar fonte autenticada de autorização
         run: node --test scripts/lupa/authority-approval.test.mjs
@@ -154,6 +216,9 @@ jobs:
           echo "CENTRALDARK_ROOT_ONLY=1"
           echo "WORKFLOW_REUSE_REQUIRED=1"
           echo "AI_DETERMINISTIC_FALLBACK_REQUIRED=1"
+          echo "MOTHER_BRANCH_GATED=1"
+          echo "CANONICAL_LABELS_REQUIRED=1"
+          echo "CENTRALDARK_API_SINGLE_ENTRY=1"
           echo "JOB_STATUS=${JOB_STATUS}"
           if [ "${FORK_BLOCKED:-}" = "true" ]; then
             echo "RESULTADO=BLOCKED"
