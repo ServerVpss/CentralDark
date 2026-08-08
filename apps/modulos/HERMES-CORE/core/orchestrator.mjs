@@ -217,9 +217,11 @@ async function rodarMissao(dir, slug, missao, historico = [], retomadas = 0) {
 
     if (terminou) {
       let finalizacao;
+      let gateDisponivel = true;
       try {
         finalizacao = auditarFinalizacao({ missao, decisao, historico });
       } catch (e) {
+        gateDisponivel = false;
         finalizacao = {
           aprovado: false,
           parecer: `gate final indisponível: ${String(e.message || e).slice(0, 180)}`,
@@ -233,6 +235,30 @@ async function rodarMissao(dir, slug, missao, historico = [], retomadas = 0) {
       }
 
       await writeFile(finalReceiptPath, `${JSON.stringify(finalizacao.receipt, null, 2)}\n`, { encoding: 'utf8', mode: 0o600 });
+
+      if (!gateDisponivel) {
+        const bloqueio = String(finalizacao.parecer || 'gate final indisponível').slice(0, 500);
+        terminalState = 'BLOCKED';
+        terminalReason = 'FINALIZATION_GATE_UNAVAILABLE';
+        await lg(`⛔ gate final indisponível na etapa ${etapa}: ${bloqueio}`);
+        historico.push({
+          etapa_titulo: 'Gate final indisponível',
+          ferramenta: 'finalization_gate',
+          args: { proposta: ferramenta },
+          resultado: bloqueio,
+          ok: false,
+          critic: bloqueio,
+        });
+        await writeFile(statePath, JSON.stringify({ missao, historico, retomadas, terminal_state: terminalState, terminal_reason: terminalReason }, null, 2));
+        registrarEtapa(false);
+        registrarFalha();
+        await notificar(
+          'Hermes: conclusão BLOQUEADA ⛔',
+          `⛔ <b>${slug}</b>\nO gate final está indisponível. Fail-closed aplicado.\n\n<pre>${bloqueio.replace(/</g,'&lt;')}</pre>\n\nA missão permanece bloqueada em em-andamento; nenhum verde foi emitido.`,
+          'admin'
+        );
+        break;
+      }
 
       if (!finalizacao.aprovado) {
         const bloqueio = String(finalizacao.parecer || 'prova insuficiente').slice(0, 500);
