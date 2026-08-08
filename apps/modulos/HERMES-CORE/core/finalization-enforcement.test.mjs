@@ -3,6 +3,7 @@ import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
 const source = await readFile(new URL('./orchestrator.mjs', import.meta.url), 'utf8');
+const executorSource = await readFile(new URL('../agents/Executor/agent.mjs', import.meta.url), 'utf8');
 
 test('T1: terminou=true passa pelo gate antes de qualquer conclusão', () => {
   assert.match(source, /auditarFinalizacao/);
@@ -106,4 +107,34 @@ test('BLOCKED fica em em-andamento e retomada automática respeita o bloqueio', 
   assert.match(source, /terminal_state === 'BLOCKED'/);
   assert.match(source, /RETOMADA BLOQUEADA/);
   assert.match(source, /missão permanece em-andamento/);
+});
+
+test('T14 Executor: aprender não engole falha do ledger e faz read-back dos dois destinos', () => {
+  const start = executorSource.indexOf("case 'aprender':");
+  const end = executorSource.indexOf("case 'git':", start);
+  const trecho = executorSource.slice(start, end);
+
+  assert.ok(start >= 0 && end > start);
+  assert.match(trecho, /registrarNoLedger\(/);
+  assert.doesNotMatch(trecho, /registrarNoLedger\([^\n]+\)\s*;?\s*\}\s*catch\s*\{\s*\}/);
+  assert.match(trecho, /readFile\(APRENDIZADOS/);
+  assert.match(trecho, /readFile\(ARSENAL_APRENDIZADOS/);
+  assert.match(trecho, /LEARNING_PERSISTENCE_VERIFIED=true/);
+  assert.match(trecho, /LEARNING_PERSISTENCE_VERIFIED=false/);
+});
+
+test('T14 Executor: commit_push falha fechado e só fica verde após ler o HEAD remoto', () => {
+  const start = executorSource.indexOf("if (acao === 'commit_push')");
+  const end = executorSource.indexOf('return { ok: false, saida: `ação git desconhecida', start);
+  const trecho = executorSource.slice(start, end);
+
+  assert.ok(start >= 0 && end > start);
+  assert.match(trecho, /set -o pipefail/);
+  assert.match(trecho, /PUSH PENDENTE — relatar/);
+  assert.match(trecho, /exit 23/);
+  assert.match(trecho, /git rev-parse HEAD/);
+  assert.match(trecho, /git ls-remote origin refs\/heads\/main/);
+  assert.match(trecho, /test "\$LOCAL_HEAD" = "\$REMOTE_HEAD"/);
+  assert.match(trecho, /REMOTE_HEAD_VERIFIED=/);
+  assert.match(trecho, /if \(!\/REMOTE_HEAD_VERIFIED=/);
 });
