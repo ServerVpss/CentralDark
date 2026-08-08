@@ -8,7 +8,7 @@ require_canonical_path "$BLOCO" "$REPO" || exit 0
 
 if [ -d "$REPO/.git" ]; then
   REMOTE=$(git -C "$REPO" remote get-url origin 2>/dev/null || echo "?")
-  if printf '%s' "$REMOTE" | grep -Eq 'github\.com[:/]ServerVpss/CentralDark(\.git)?$'; then
+  if printf '%s' "$REMOTE" | grep -Eq '^(git@github\.com:|https://github\.com/|ssh://git@github\.com/)ServerVpss/CentralDark(\.git)?$'; then
     emit_ok "$BLOCO" "Repositório canônico: $REPO"
     emit_ok "$BLOCO" "Remote: $REMOTE"
   else
