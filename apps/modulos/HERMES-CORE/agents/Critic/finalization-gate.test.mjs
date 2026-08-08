@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { auditarFinalizacao } from './agent.mjs';
+import { auditarFinalizacao, resultadoAprovadoPeloCritic } from './agent.mjs';
 
 const concluir = (extra = {}) => ({
   terminou: true,
@@ -8,6 +8,13 @@ const concluir = (extra = {}) => ({
   args: { mensagem: 'missão concluída com evidência' },
   _modelo_usado: 'test-model',
   ...extra,
+});
+
+test('resultado efetivo exige Executor e Critic verdes', () => {
+  assert.equal(resultadoAprovadoPeloCritic({ ok: true }, { aprovado: true }), true);
+  assert.equal(resultadoAprovadoPeloCritic({ ok: true }, { aprovado: false }), false);
+  assert.equal(resultadoAprovadoPeloCritic({ ok: false }, { aprovado: true }), false);
+  assert.equal(resultadoAprovadoPeloCritic({ ok: true }, null), false);
 });
 
 test('bloqueia terminou=true sem histórico/evidência', () => {
