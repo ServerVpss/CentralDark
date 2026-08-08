@@ -5,10 +5,16 @@ set -Eeuo pipefail
 
 REPO_DIR="${CENTRALDARK_ROOT:-/root/CentralDark}"
 BRANCH="main"
+
+case "$REPO_DIR" in
+  /root/CentralDark) ;;
+  *) printf '[ERRO] ROOT_FORA_DA_CENTRALDARK=%s\n' "$REPO_DIR" >&2; exit 20 ;;
+esac
+
 LOG_DIR="${REPO_DIR}/logs"
 LOG="${LOG_DIR}/github-sync.log"
 LOCK="/tmp/centraldark-gh-pull.lock"
-EXPECTED_ORIGIN_RE='github\.com[:/]ServerVpss/CentralDark(\.git)?$'
+EXPECTED_ORIGIN_RE='^(git@github\.com:|https://github\.com/|ssh://git@github\.com/)ServerVpss/CentralDark(\.git)?$'
 
 ts() { date '+%Y-%m-%d %H:%M:%S'; }
 mkdir -p "$LOG_DIR"
@@ -21,11 +27,6 @@ if ! flock -n 200; then
 fi
 
 echo "===== $(ts) =====" >> "$LOG"
-
-case "$REPO_DIR" in
-  /root/CentralDark|/root/CentralDark/*) ;;
-  *) echo "[ERRO] ROOT_FORA_DA_CENTRALDARK=$REPO_DIR" | tee -a "$LOG"; exit 20 ;;
-esac
 
 if [ ! -d "$REPO_DIR/.git" ]; then
   echo "[ERRO] REPO_CANONICO_AUSENTE=$REPO_DIR" | tee -a "$LOG"
@@ -53,7 +54,10 @@ if [ -n "$DIRTY_TRACKED" ]; then
 fi
 
 BEFORE="$(git -C "$REPO_DIR" rev-parse HEAD)"
-git -C "$REPO_DIR" fetch --prune --no-tags origin "$BRANCH" >> "$LOG" 2>&1
+if ! timeout 60s git -C "$REPO_DIR" fetch --prune --no-tags origin "$BRANCH" >> "$LOG" 2>&1; then
+  echo "[ERRO] FETCH_TIMEOUT_OR_FAILURE" | tee -a "$LOG"
+  exit 28
+fi
 REMOTE="$(git -C "$REPO_DIR" rev-parse "origin/$BRANCH")"
 
 if [ "$BEFORE" = "$REMOTE" ]; then
