@@ -53,7 +53,7 @@ function ghListOpenSentinelaIssues() {
       'issue', 'list', '-R', REPO,
       '--state', 'open',
       '--search', 'sentinela- in:title',
-      '--json', 'number,title',
+      '--json', 'number,title,labels',
       '--limit', '500',
     ], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
     return { ok: true, issues: JSON.parse(out) };
@@ -258,8 +258,8 @@ if (!issueInventory.ok) {
       item.issue.number,
       `🟢 **RECUPERAÇÃO SENTINELA**\n\nA condição \`sentinela-${item.id}\` não está mais presente na medição atual. Fechamento por transição real de estado; se voltar, um novo ALERT poderá ser emitido.`
     );
-    let notify = { status: DRY_RUN ? 'DRY_RUN' : 'NOT_SENT' };
-    if (closed.ok && !DRY_RUN) {
+    let notify = { status: DRY_RUN ? 'DRY_RUN' : (item.issue.canonicalProducer ? 'NOT_SENT' : 'SILENT_LEGACY_BOOTSTRAP') };
+    if (closed.ok && !DRY_RUN && item.issue.canonicalProducer) {
       notify = notifyViaHermes({
         type: 'RECOVERY',
         area: 'Sentinela',
@@ -294,9 +294,10 @@ if (!issueInventory.ok) {
     telegramSent: eventos.filter((e) => e.notify === 'SENT').length,
     telegramUnavailable: eventos.filter((e) => e.notify === 'UNAVAILABLE').length,
     telegramFailed: eventos.filter((e) => e.notify === 'FAILED' || e.notify === 'UNKNOWN').length,
+    legacyRecoveriesSilent: eventos.filter((e) => e.type === 'RECOVERY' && e.notify === 'SILENT_LEGACY_BOOTSTRAP').length,
   };
 
-  const report = `# Sentinela — ${snapshot.at}\n\n| Métrica | Valor |\n|---|---|\n| Endpoints checados | ${endpointsResult.length} |\n| Endpoints fora | ${endpointsResult.filter((r) => r.status < 200 || r.status >= 400).length} |\n| Workflows vermelhos 24h | ${wfCount} |\n| Divergências atuais | ${divergencias.length} |\n| ALERT novos | ${counts.alerts} |\n| KEEP silenciosos | ${counts.keep} |\n| RECOVERY | ${counts.recoveries} |\n| Duplicatas fechadas | ${counts.duplicatesClosed} |\n| Telegram SENT | ${counts.telegramSent} |\n| Telegram UNAVAILABLE | ${counts.telegramUnavailable} |\n| Telegram FAILED/UNKNOWN | ${counts.telegramFailed} |\n| Dry-run? | ${DRY_RUN ? 'sim' : 'não'} |\n\n## Endpoints\n\n${endpointsResult.map((r) => `- ${r.status >= 200 && r.status < 400 ? '🟢' : '🔴'} **${r.name}** — \`${r.status}\` em ${r.latencyMs}ms${r.cors ? ` · CORS=\`${r.cors}\`` : ''}${r.error ? ` · erro: ${r.error}` : ''}`).join('\n')}\n\n## Divergências atuais\n\n${divergencias.length === 0 ? '_Nenhuma divergência._' : divergencias.map((d) => `- **[${d.sev}]** ${d.area} → ${d.titulo} (agente sugerido: \`${d.bot}\`)`).join('\n')}\n\n## Drift GitHub <-> VPS\n\n- Status: \`${driftEvidence.status}\` (${driftEvidence.code})\n- ${driftEvidence.motivo}\n${recoveryNote ? `- ${recoveryNote}` : ''}\n`;
+  const report = `# Sentinela — ${snapshot.at}\n\n| Métrica | Valor |\n|---|---|\n| Endpoints checados | ${endpointsResult.length} |\n| Endpoints fora | ${endpointsResult.filter((r) => r.status < 200 || r.status >= 400).length} |\n| Workflows vermelhos 24h | ${wfCount} |\n| Divergências atuais | ${divergencias.length} |\n| ALERT novos | ${counts.alerts} |\n| KEEP silenciosos | ${counts.keep} |\n| RECOVERY | ${counts.recoveries} |\n| Duplicatas fechadas | ${counts.duplicatesClosed} |\n| Telegram SENT | ${counts.telegramSent} |\n| Telegram UNAVAILABLE | ${counts.telegramUnavailable} |\n| Telegram FAILED/UNKNOWN | ${counts.telegramFailed} |\n| Recovery legado silencioso | ${counts.legacyRecoveriesSilent} |\n| Dry-run? | ${DRY_RUN ? 'sim' : 'não'} |\n\n## Endpoints\n\n${endpointsResult.map((r) => `- ${r.status >= 200 && r.status < 400 ? '🟢' : '🔴'} **${r.name}** — \`${r.status}\` em ${r.latencyMs}ms${r.cors ? ` · CORS=\`${r.cors}\`` : ''}${r.error ? ` · erro: ${r.error}` : ''}`).join('\n')}\n\n## Divergências atuais\n\n${divergencias.length === 0 ? '_Nenhuma divergência._' : divergencias.map((d) => `- **[${d.sev}]** ${d.area} → ${d.titulo} (agente sugerido: \`${d.bot}\`)`).join('\n')}\n\n## Drift GitHub <-> VPS\n\n- Status: \`${driftEvidence.status}\` (${driftEvidence.code})\n- ${driftEvidence.motivo}\n${recoveryNote ? `- ${recoveryNote}` : ''}\n`;
   writeFileSync(REPORT_FILE, report);
 
   console.log(`Sentinela rodou. ALERT=${counts.alerts} KEEP=${counts.keep} RECOVERY=${counts.recoveries} DUPLICATE_CLOSED=${counts.duplicatesClosed} TELEGRAM_SENT=${counts.telegramSent}.`);
