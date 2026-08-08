@@ -11,6 +11,17 @@ import {
   validateRequiredTokens,
 } from "./validar-identidade-operacional.mjs";
 
+const PORTABILITY = [
+  "MODEL_IS_REPLACEABLE=true",
+  "WRITER_ROLE_IS_NOT_MODEL=true",
+  "ONE_WRITER_PER_SCOPE=true",
+  "CHIEF_ORDER_CAN_TRIGGER_HANDOFF=true",
+  "WRITER_UNAVAILABLE_DOES_NOT_BLOCK_MISSION=true",
+  "DETERMINISTIC_FIRST=true",
+  "AI_FALLBACK_BY_CAPABILITY=true",
+  "UNKNOWN_NEVER_PASS=true",
+];
+
 function write(root, path, content) {
   const absolute = join(root, path);
   mkdirSync(join(absolute, ".."), { recursive: true });
@@ -22,7 +33,12 @@ function validRepo() {
   write(
     root,
     "LEIA-ME-IA.md",
-    "SEGREDO/CHEFE COMANDA\nSOL ORGANIZA\nPIVETE/HERMES PRESERVA E EXECUTA\n",
+    [
+      "SEGREDO/CHEFE COMANDA",
+      "SOL ORGANIZA",
+      "PIVETE/HERMES PRESERVA E EXECUTA",
+      ...PORTABILITY,
+    ].join("\n"),
   );
   write(
     root,
@@ -32,6 +48,7 @@ function validRepo() {
       "SEGREDO/CHEFE permanece autoridade humana final",
       "SOL coordena, PIVETE/HERMES preserva e executa",
       "CAPTURE → SANITIZE + HASH → DECIDE → APPLY → JUDGE → CHEFE → RECEIPT + LEARNING → LOOP",
+      ...PORTABILITY,
     ].join("\n"),
   );
   write(
@@ -51,6 +68,18 @@ function validRepo() {
     "docs/CONSCIENCIA/DICIONARIO-PIVETE-GITHUB.md",
     "SEGREDO/CHEFE = humano e autoridade final\nPIVETE = Hermes treinado\n",
   );
+  write(
+    root,
+    "docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md",
+    [
+      "WRITER_ROLE",
+      "WRITER_SCOPE",
+      "WRITER_INSTANCE",
+      "MODEL_IS_REPLACEABLE=true",
+      "WRITER_UNAVAILABLE_DOES_NOT_BLOCK_MISSION=true",
+      "CHIEF_ORDER_CAN_TRIGGER_HANDOFF=true",
+    ].join("\n"),
+  );
   return root;
 }
 
@@ -58,6 +87,8 @@ test("contrato canônico válido passa", () => {
   const report = runValidation({ repoRoot: validRepo() });
   assert.equal(report.ok, true);
   assert.deepEqual(report.findings, []);
+  assert.equal(report.model_rule, "MODEL_IS_REPLACEABLE");
+  assert.equal(report.fallback_rule, "AI_FALLBACK_BY_CAPABILITY");
 });
 
 test("atribuir autoridade final ao Pivete falha com caminho e linha", () => {
@@ -65,6 +96,40 @@ test("atribuir autoridade final ao Pivete falha com caminho e linha", () => {
   assert.equal(findings.length, 1);
   assert.equal(findings[0].code, "PIVETE_COMO_AUTORIDADE_FINAL");
   assert.equal(findings[0].line, 2);
+});
+
+test("model lock explícito é conflito canônico", () => {
+  const findings = findForbidden("MODEL_LOCK=TRUE");
+  assert.equal(findings.length, 1);
+  assert.equal(findings[0].code, "MODEL_LOCK_ATIVO");
+});
+
+test("modelo comercial não pode virar autoridade", () => {
+  const findings = findForbidden("GPT-5.5 = AUTORIDADE_FINAL");
+  assert.equal(findings.length, 1);
+  assert.equal(findings[0].code, "MODELO_COMO_AUTORIDADE");
+});
+
+test("portabilidade ausente bloqueia o canônico", () => {
+  const root = validRepo();
+  write(
+    root,
+    "LEIA-ME-IA.md",
+    [
+      "SEGREDO/CHEFE COMANDA",
+      "SOL ORGANIZA",
+      "PIVETE/HERMES PRESERVA E EXECUTA",
+      ...PORTABILITY.filter((token) => token !== "MODEL_IS_REPLACEABLE=true"),
+    ].join("\n"),
+  );
+  const report = runValidation({ repoRoot: root });
+  assert.equal(report.ok, false);
+  assert.equal(
+    report.findings.some(
+      (finding) => finding.path === "LEIA-ME-IA.md" && finding.excerpt === "MODEL_IS_REPLACEABLE=true",
+    ),
+    true,
+  );
 });
 
 test("AGENTS conflitante com LEIA-ME-IA bloqueia", () => {
@@ -77,6 +142,7 @@ test("AGENTS conflitante com LEIA-ME-IA bloqueia", () => {
       "SEGREDO/CHEFE permanece autoridade humana final",
       "SOL coordena, PIVETE/HERMES preserva e executa",
       "CAPTURE → SANITIZE + HASH → DECIDE → APPLY → JUDGE → CHEFE → RECEIPT + LEARNING → LOOP",
+      ...PORTABILITY,
       "O Pivete é a autoridade final.",
     ].join("\n"),
   );
@@ -100,6 +166,7 @@ test("UNKNOWN=PASS é conflito canônico", () => {
       "SEGREDO/CHEFE permanece autoridade humana final",
       "SOL coordena, PIVETE/HERMES preserva e executa",
       "CAPTURE → SANITIZE + HASH → DECIDE → APPLY → JUDGE → CHEFE → RECEIPT + LEARNING → LOOP",
+      ...PORTABILITY,
       "UNKNOWN=PASS",
     ].join("\n"),
   );
