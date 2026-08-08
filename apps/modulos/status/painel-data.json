@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-08T05:43:05.295Z",
-  "updatedAtBR": "08/08/2026, 02:43:05 BRT",
+  "updatedAt": "2026-08-08T05:59:08.938Z",
+  "updatedAtBR": "08/08/2026, 02:59:08 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "fix(governança): tornar SEGREDO autoridade, SOL coordenadora e PIVETE executor (#662)",
+    "lastCommit": "x",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-08T05:59:08.938Z",
+      "titulo": "Push na main · 12d164352352cecd634291ca8ad1611757fbab0f",
+      "detalhe": "x",
+      "area": "Repositório",
+      "sha": "12d1643",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-08T05:43:05.295Z",
       "titulo": "Push na main · 7509860c66ce16f171e65c6002e73659f1e122ee",
       "detalhe": "fix(governança): tornar SEGREDO autoridade, SOL coordenadora e PIVETE executor (#662)",
@@ -986,14 +994,6 @@
       "detalhe": "fix(ci): consertar agentes autonomos e porta canonica",
       "area": "Repositório",
       "sha": "b422a0d",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-28T19:20:43.227Z",
-      "titulo": "Push na main · 1cb687e96190cd46d48d8b255fd9830803a0015c",
-      "detalhe": "fix(meta-lupa): fail closed on invalid ledger input (#446)",
-      "area": "Repositório",
-      "sha": "1cb687e",
       "actor": "segredounlock"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-08T05:59:08.938Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 12d164352352cecd634291ca8ad1611757fbab0f (12d1643)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-08T05:43:05.295Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 7509860c66ce16f171e65c6002e73659f1e122ee (7509860)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-28T19:46:40.417Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · b422a0d4321ccc34fb4ed7b4c44eac82fb725da2 (b422a0d)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-28T19:20:43.227Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 1cb687e96190cd46d48d8b255fd9830803a0015c (1cb687e)",
       "area": "Repositório",
       "status": "sucesso"
     }
