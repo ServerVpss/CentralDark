@@ -45,6 +45,15 @@ test('aprova mutação seguida de teste bem-sucedido', () => {
   assert.equal(r.receipt.validation_after_mutation_index, 1);
 });
 
+test('git status é leitura e não exige validação posterior', () => {
+  const historico = [{
+    etapa_titulo: 'status', ferramenta: 'git', args: { acao: 'status' }, resultado: 'clean', ok: true,
+  }];
+  const r = auditarFinalizacao({ missao: 'x', decisao: concluir(), historico });
+  assert.equal(r.aprovado, true);
+  assert.equal(r.receipt.last_mutation_index, -1);
+});
+
 test('echo de marcador não conta como teste', () => {
   const historico = [
     { etapa_titulo: 'editar', ferramenta: 'escrever_arquivo', args: { path: 'a.mjs' }, resultado: 'gravado', ok: true },
