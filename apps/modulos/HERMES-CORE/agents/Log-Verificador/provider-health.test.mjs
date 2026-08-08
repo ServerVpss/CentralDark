@@ -6,6 +6,7 @@ import { detectarEventoProvedor, sanitizarLinhaLog } from './provider-health.mjs
 // Reusar o mesmo gate: carregar também as regressões críticas de finalização,
 // sem criar workflow/runner paralelo só para este fix.
 await import('../Critic/finalization-gate.test.mjs');
+await import('../Critic/mutation-attempts.test.mjs');
 await import('../../core/finalization-enforcement.test.mjs');
 
 test('sanitiza bearer, key e jwt antes de qualquer saída', () => {
