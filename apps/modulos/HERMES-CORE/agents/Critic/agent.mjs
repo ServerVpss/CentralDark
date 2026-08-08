@@ -77,15 +77,20 @@ export function resultadoAprovadoPeloCritic(resultado = {}, parecer = null) {
   return resultado?.ok === true && parecer?.aprovado === true;
 }
 
-const MUTATING_TOOLS = new Set(['escrever_arquivo', 'git']);
 const MUTATING_SHELL = /\b(?:rm|mv|cp|mkdir|touch|chmod|chown|tee|sed\s+-i|git\s+(?:add|commit|push|merge|rebase|reset|apply|checkout|switch)|npm\s+(?:install|i)|pnpm\s+install|yarn\s+add|pm2\s+(?:restart|reload|start|stop|delete)|docker\s+(?:compose\s+)?(?:up|down|restart|rm))\b/i;
 const VALIDATION_SHELL = /\b(?:node\s+--check|node\s+--test|npm\s+(?:test|run\s+(?:test|build|typecheck|lint))|pnpm\s+(?:test|build|typecheck|lint)|yarn\s+(?:test|build|typecheck|lint)|pytest|vitest|jest|tsc\b|typecheck\b|eslint\b|sha256sum\b|git\s+(?:diff|status|rev-parse)\b|curl\b|health\b|validar\b|validate\b|check\b)\b/i;
+
+function gitMuta(h) {
+  if (h?.ferramenta !== 'git') return false;
+  const acao = String(h.args?.acao || '').toLowerCase();
+  return acao !== '' && acao !== 'status';
+}
 
 function indiceUltimaMutacao(historico) {
   let idx = -1;
   for (let i = 0; i < historico.length; i++) {
     const h = historico[i] || {};
-    if (MUTATING_TOOLS.has(h.ferramenta)) idx = i;
+    if (h.ferramenta === 'escrever_arquivo' || gitMuta(h)) idx = i;
     else if (h.ferramenta === 'shell' && MUTATING_SHELL.test(String(h.args?.comando || ''))) idx = i;
   }
   return idx;
@@ -97,7 +102,7 @@ function indiceValidacaoDepois(historico, depoisDe) {
     if (h.ok !== true || h.critic) continue;
     if (h.ferramenta === 'shell' && VALIDATION_SHELL.test(String(h.args?.comando || ''))) return i;
     if (h.ferramenta === 'handler' && ['ping', 'http'].includes(String(h.args?.acao || ''))) return i;
-    if (h.ferramenta === 'git' && String(h.args?.acao || '') === 'status') return i;
+    if (h.ferramenta === 'git' && String(h.args?.acao || '').toLowerCase() === 'status') return i;
   }
   return -1;
 }
