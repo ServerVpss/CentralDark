@@ -4,6 +4,7 @@ import { auditarFinalizacao, resultadoAprovadoPeloCritic } from './agent.mjs';
 
 const concluir = (extra = {}) => ({
   terminou: true,
+  estado: 'FATO',
   ferramenta: 'notificar_progresso',
   args: { mensagem: 'missão concluída com evidência' },
   _modelo_usado: 'test-model',
