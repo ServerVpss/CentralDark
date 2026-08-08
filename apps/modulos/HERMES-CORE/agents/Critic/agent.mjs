@@ -37,6 +37,14 @@ function heuristica(decisao, resultado, historico) {
   if (!resultado.ok) problemas.push(`etapa falhou: ${String(resultado.saida || '').slice(0, 120)}`);
   if (/ferramenta desconhecida/.test(resultado.saida || '')) problemas.push('decisor inventou ferramenta inexistente');
   if (/🚫 bloqueio/.test(resultado.saida || '')) problemas.push('tentou comando bloqueado pelas travas de segurança');
+  if (decisao?.ferramenta === 'git' && String(decisao.args?.acao || '') === 'commit_push'
+      && resultado.ok && !/REMOTE_HEAD_VERIFIED=[0-9a-f]{40}/i.test(String(resultado.saida || ''))) {
+    problemas.push('git commit_push sem prova de HEAD remoto');
+  }
+  if (decisao?.ferramenta === 'aprender' && resultado.ok
+      && !/LEARNING_PERSISTENCE_VERIFIED=true/.test(String(resultado.saida || ''))) {
+    problemas.push('aprendizado sem prova de persistência nos dois destinos');
+  }
   const ult = (historico ?? []).slice(-2);
   if (ult.length === 2 && ult.every(h => !h.ok)) problemas.push('3ª falha em sequência se esta contar — risco de pausa');
   return problemas;
@@ -84,7 +92,7 @@ const SHELL_REDIRECTION_WRITE = /(?:^|[\s;&|])\d*>>?(?!&)(?=\s*[^\s])/;
 const SHELL_PYTHON_WRITE = /(?:python(?:3)?\b[^\n]*\bopen\s*\([^\n]*,[^\n]*['"](?:w|a|x)[+b]?['"]|\bdd\b[^\n]*\bof=)/i;
 const SHELL_NODE_FS_WRITE = /\b(?:node|bun)\b[^\n]*(?:(?:node:)?fs|require\s*\(\s*['"](?:node:)?fs['"]\s*\)|from\s+['"](?:node:)?fs['"])[^\n]*\b(?:writeFile(?:Sync)?|appendFile(?:Sync)?|createWriteStream|truncate(?:Sync)?|rm(?:Sync)?|unlink(?:Sync)?|rename(?:Sync)?|copyFile(?:Sync)?|mkdir(?:Sync)?)\b/i;
 
-// Depois de mutação, só um teste comportamental explícito satisfaz o gate final.
+// Depois de mutação local, só um teste comportamental explícito satisfaz o gate final.
 // Sintaxe, tipo, lint, build, hash, git state, curl/health e ping são evidências úteis,
 // mas NÃO demonstram sozinhos que a mudança faz o que deveria fazer.
 const BEHAVIOR_TEST_SHELL = /(?:\bnode\s+--test\b|\bnpm\s+(?:test|run\s+test(?=\s|:|$))|\bpnpm\s+(?:test|run\s+test(?=\s|:|$))|\byarn\s+(?:test|run\s+test(?=\s|:|$))|\bbun\s+test\b|\bdeno\s+test\b|\bpytest\b|\bvitest\b|\bjest\b|\bpython(?:3)?\s+-m\s+unittest\b|\bgo\s+test\b|\bcargo\s+test\b|\bdotnet\s+test\b)/i;
@@ -95,6 +103,15 @@ function gitMuta(h) {
   return acao !== '' && acao !== 'status';
 }
 
+function handlerMuta(h) {
+  if (h?.ferramenta !== 'handler') return false;
+  const acao = String(h.args?.acao || '').toLowerCase();
+  if (acao === 'deploy' || acao === 'webhook') return true;
+  if (acao !== 'http') return false;
+  const metodo = String(h.args?.metodo || h.args?.method || 'GET').toUpperCase();
+  return !['GET', 'HEAD'].includes(metodo);
+}
+
 function shellMuta(comando) {
   const cmd = String(comando || '');
   return MUTATING_SHELL.test(cmd)
@@ -103,14 +120,23 @@ function shellMuta(comando) {
     || SHELL_NODE_FS_WRITE.test(cmd);
 }
 
-function indiceUltimaMutacao(historico) {
-  let idx = -1;
+function classificarMutacao(h, index) {
+  if (!h || h.ok !== true || h.critic) return null;
+  if (h.ferramenta === 'escrever_arquivo') return { index, kind: 'LOCAL', step: h };
+  if (h.ferramenta === 'shell' && shellMuta(h.args?.comando)) return { index, kind: 'LOCAL', step: h };
+  if (h.ferramenta === 'git' && gitMuta(h)) return { index, kind: 'GIT_REMOTE', step: h };
+  if (h.ferramenta === 'aprender') return { index, kind: 'KNOWLEDGE', step: h };
+  if (handlerMuta(h)) return { index, kind: 'REMOTE_HANDLER', step: h };
+  return null;
+}
+
+function listarMutacoes(historico) {
+  const out = [];
   for (let i = 0; i < historico.length; i++) {
-    const h = historico[i] || {};
-    if (h.ferramenta === 'escrever_arquivo' || gitMuta(h)) idx = i;
-    else if (h.ferramenta === 'shell' && shellMuta(h.args?.comando)) idx = i;
+    const m = classificarMutacao(historico[i], i);
+    if (m) out.push(m);
   }
-  return idx;
+  return out;
 }
 
 function indiceTesteComportamentalDepois(historico, depoisDe) {
@@ -120,6 +146,70 @@ function indiceTesteComportamentalDepois(historico, depoisDe) {
     if (h.ferramenta === 'shell' && BEHAVIOR_TEST_SHELL.test(String(h.args?.comando || ''))) return i;
   }
   return -1;
+}
+
+function indiceProvaRemoteHandler(historico, mutacao) {
+  const verifyUrl = String(mutacao.step.args?.verify_url || '').trim();
+  const verifyContains = String(mutacao.step.args?.verify_contains || '').trim();
+  if (!verifyUrl || !verifyContains) return -1; // HTTP 200 sozinho não é prova.
+
+  for (let i = mutacao.index + 1; i < historico.length; i++) {
+    const h = historico[i] || {};
+    if (h.ok !== true || h.critic || h.ferramenta !== 'handler') continue;
+    if (String(h.args?.acao || '').toLowerCase() !== 'http') continue;
+    const metodo = String(h.args?.metodo || h.args?.method || 'GET').toUpperCase();
+    if (metodo !== 'GET') continue;
+    if (String(h.args?.url || '').trim() !== verifyUrl) continue;
+    if (!String(h.resultado || '').includes(verifyContains)) continue;
+    return i;
+  }
+  return -1;
+}
+
+function provarMutacao(historico, mutacao) {
+  if (mutacao.kind === 'LOCAL') {
+    const index = indiceTesteComportamentalDepois(historico, mutacao.index);
+    return { ok: index >= 0, proof_index: index, proof_kind: 'BEHAVIOR_TEST' };
+  }
+  if (mutacao.kind === 'GIT_REMOTE') {
+    const ok = /REMOTE_HEAD_VERIFIED=[0-9a-f]{40}/i.test(String(mutacao.step.resultado || ''));
+    return { ok, proof_index: ok ? mutacao.index : -1, proof_kind: 'REMOTE_HEAD_READBACK' };
+  }
+  if (mutacao.kind === 'KNOWLEDGE') {
+    const ok = /LEARNING_PERSISTENCE_VERIFIED=true/.test(String(mutacao.step.resultado || ''));
+    return { ok, proof_index: ok ? mutacao.index : -1, proof_kind: 'DUAL_STORE_READBACK' };
+  }
+  if (mutacao.kind === 'REMOTE_HANDLER') {
+    const index = indiceProvaRemoteHandler(historico, mutacao);
+    return { ok: index >= 0, proof_index: index, proof_kind: 'REMOTE_POSTCONDITION' };
+  }
+  return { ok: false, proof_index: -1, proof_kind: 'UNKNOWN' };
+}
+
+function avaliarMutacoes(historico) {
+  const mutacoes = listarMutacoes(historico);
+  const proofs = [];
+  const problems = [];
+
+  for (const m of mutacoes) {
+    const p = provarMutacao(historico, m);
+    proofs.push({ mutation_index: m.index, kind: m.kind, ...p });
+    if (p.ok) continue;
+
+    if (m.kind === 'LOCAL') {
+      problems.push(`mutação sem teste comportamental bem-sucedido posterior (etapa=${m.index})`);
+    } else if (m.kind === 'GIT_REMOTE') {
+      problems.push(`git remoto sem confirmação REMOTE_HEAD_VERIFIED (etapa=${m.index})`);
+    } else if (m.kind === 'KNOWLEDGE') {
+      problems.push(`aprendizado sem confirmação LEARNING_PERSISTENCE_VERIFIED (etapa=${m.index})`);
+    } else if (m.kind === 'REMOTE_HANDLER') {
+      problems.push(`mutação remota sem pós-condição verificável: exigir verify_url + verify_contains e GET posterior correspondente (etapa=${m.index})`);
+    } else {
+      problems.push(`mutação sem prova reconhecida (etapa=${m.index})`);
+    }
+  }
+
+  return { mutacoes, proofs, problems };
 }
 
 function sha256(value) {
@@ -132,8 +222,12 @@ export function auditarFinalizacao({ missao = '', decisao = {}, historico = [] }
   const problemas = [];
   const resumo = String(decisao?.args?.mensagem || decisao?.pensamento || '').trim();
   const ultimo = historico.length ? historico[historico.length - 1] : null;
-  const ultimaMutacao = indiceUltimaMutacao(historico);
-  const testeComportamentalDepois = indiceTesteComportamentalDepois(historico, ultimaMutacao);
+  const mut = avaliarMutacoes(historico);
+  const ultimaMutacao = mut.mutacoes.length ? mut.mutacoes[mut.mutacoes.length - 1] : null;
+  const ultimaProva = ultimaMutacao
+    ? mut.proofs.find(p => p.mutation_index === ultimaMutacao.index)
+    : null;
+  const locais = mut.proofs.filter(p => p.kind === 'LOCAL');
 
   if (decisao?.terminou !== true) problemas.push('decisor não propôs conclusão');
   if (decisao?.ferramenta !== 'notificar_progresso') problemas.push('conclusão deve usar notificar_progresso');
@@ -141,13 +235,10 @@ export function auditarFinalizacao({ missao = '', decisao = {}, historico = [] }
   if (!historico.length) problemas.push('histórico vazio: nenhuma ação/evidência observada');
   if (ultimo && ultimo.ok !== true) problemas.push('última etapa não está aprovada');
   if (ultimo?.critic) problemas.push('última etapa possui reprovação do Critic');
-
-  if (ultimaMutacao >= 0 && testeComportamentalDepois < 0) {
-    problemas.push('houve mutação sem teste comportamental bem-sucedido posterior');
-  }
+  problemas.push(...mut.problems);
 
   const receipt = {
-    schema_version: 1,
+    schema_version: 2,
     gate: 'HERMES_FINALIZATION_CRITIC',
     status: problemas.length ? 'BLOCKED' : 'PASS',
     mission_sha256: sha256(missao),
@@ -155,8 +246,11 @@ export function auditarFinalizacao({ missao = '', decisao = {}, historico = [] }
     decision_model: decisao?._modelo_usado || null,
     history_entries: historico.length,
     last_step_index: historico.length ? historico.length - 1 : -1,
-    last_mutation_index: ultimaMutacao,
-    behavior_test_after_mutation_index: testeComportamentalDepois,
+    last_mutation_index: ultimaMutacao?.index ?? -1,
+    behavior_test_after_mutation_index: ultimaMutacao?.kind === 'LOCAL' ? (ultimaProva?.proof_index ?? -1) : -1,
+    mutations_total: mut.mutacoes.length,
+    mutation_proofs: mut.proofs,
+    unproven_mutations: mut.proofs.filter(p => !p.ok).map(p => ({ mutation_index: p.mutation_index, kind: p.kind })),
     checks: {
       completion_proposed: decisao?.terminou === true,
       completion_tool_valid: decisao?.ferramenta === 'notificar_progresso',
@@ -164,7 +258,8 @@ export function auditarFinalizacao({ missao = '', decisao = {}, historico = [] }
       history_present: historico.length > 0,
       last_step_ok: Boolean(ultimo && ultimo.ok === true),
       last_step_critic_clear: Boolean(ultimo && !ultimo.critic),
-      mutation_has_later_behavior_test: ultimaMutacao < 0 || testeComportamentalDepois > ultimaMutacao,
+      mutation_has_later_behavior_test: locais.every(p => p.ok),
+      all_mutations_proved: mut.proofs.every(p => p.ok),
     },
     problems: problemas,
   };
