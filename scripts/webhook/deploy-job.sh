@@ -3,9 +3,15 @@ set -Eeuo pipefail
 
 ROOT="${CENTRALDARK_ROOT:-/root/CentralDark}"
 THEME="${ROOT}/scripts/lib/theme.sh"
-LOG_DIR="${WEBHOOK_DEPLOY_LOG_DIR:-/root/Multizap/revisoes/$(date +%Y%m%d-%H%M%S)/webhook-deploy}"
+LOG_DIR="${WEBHOOK_DEPLOY_LOG_DIR:-${ROOT}/revisoes/$(date +%Y%m%d-%H%M%S)/webhook-deploy}"
 SUMMARY_FILE="${LOG_DIR}/summary.txt"
 FULL_LOG="${LOG_DIR}/deploy.log"
+EXPECTED_ORIGIN_RE='github\.com[:/]ServerVpss/CentralDark(\.git)?$'
+
+case "$ROOT" in
+  /root/CentralDark|/root/CentralDark/*) ;;
+  *) printf 'ROOT_FORA_DA_CENTRALDARK=%s\n' "$ROOT" >&2; exit 20 ;;
+esac
 
 mkdir -p "$LOG_DIR"
 
@@ -52,16 +58,27 @@ netflix_success "Contexto registrado"
 
 netflix_step 2 7 "Sincronizacao controlada"
 if [ -d "$ROOT/.git" ]; then
+  ORIGIN="$(git -C "$ROOT" remote get-url origin 2>/dev/null || true)"
+  if ! printf '%s' "$ORIGIN" | grep -Eq "$EXPECTED_ORIGIN_RE"; then
+    netflix_error "Origin não é ServerVpss/CentralDark"
+    exit 21
+  fi
   log_run git -C "$ROOT" status --short
   log_run git -C "$ROOT" rev-parse --abbrev-ref HEAD
   if [ "${WEBHOOK_DEPLOY_GIT_PULL:-0}" = "1" ]; then
+    DIRTY_TRACKED="$(git -C "$ROOT" status --porcelain=v1 --untracked-files=no)"
+    if [ -n "$DIRTY_TRACKED" ]; then
+      netflix_error "BLOCKED_LOCAL_DIRTY"
+      exit 22
+    fi
     log_run git -C "$ROOT" pull --ff-only origin main
   else
-    netflix_warning "git pull desativado neste lote preparatorio"
+    netflix_warning "git pull desativado; workflow canônico controla sincronização"
     printf 'git_pull=disabled\n' >>"$SUMMARY_FILE"
   fi
 else
-  netflix_warning "Repositorio git nao encontrado em ROOT"
+  netflix_error "Repositorio canônico não encontrado em ROOT"
+  exit 23
 fi
 
 netflix_step 3 7 "Build apps/web quando existir"
@@ -123,7 +140,9 @@ netflix_step 7 7 "Salvando resumo"
 {
   printf '\nCOPIE-E-MANDE\n'
   printf 'Status: preparatorio\n'
+  printf 'Root canônico: %s\n' "$ROOT"
   printf 'Log: %s\n' "$LOG_DIR"
+  printf 'Árvores externas: OUT_OF_SCOPE\n'
   printf 'Caddy/Docker/PM2 sensivel/WuzAPI/WhatsApp/banco/CRM: nao tocados\n'
 } | tee -a "$SUMMARY_FILE"
 netflix_done
