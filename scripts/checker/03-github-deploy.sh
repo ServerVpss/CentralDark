@@ -1,38 +1,47 @@
 #!/usr/bin/env bash
-# Bloco 03 — GitHub + workflow + webhook + run-once + post-deploy
+# Bloco 03 — GitHub + deploy canônico CentralDark
 source "$(dirname "$0")/_lib.sh"
 BLOCO="03-github-deploy"
 
-REPO="$CK_MULTIZAP_ROOT/apps/clone-deck"
+REPO="$CK_REPO_ROOT"
+require_canonical_path "$BLOCO" "$REPO" || exit 0
+
 if [ -d "$REPO/.git" ]; then
-  emit_ok "$BLOCO" "Repositório clonado em $REPO"
   REMOTE=$(git -C "$REPO" remote get-url origin 2>/dev/null || echo "?")
-  emit_ok "$BLOCO" "Remote: $REMOTE"
+  if printf '%s' "$REMOTE" | grep -Eq 'github\.com[:/]ServerVpss/CentralDark(\.git)?$'; then
+    emit_ok "$BLOCO" "Repositório canônico: $REPO"
+    emit_ok "$BLOCO" "Remote: $REMOTE"
+  else
+    emit_erro "$BLOCO" "Remote não canônico em $REPO: $REMOTE"
+  fi
 else
-  emit_erro "$BLOCO" "Repositório clone-deck não encontrado em $REPO"
+  emit_erro "$BLOCO" "Repositório ServerVpss/CentralDark não encontrado em $REPO"
 fi
 
-# Webhook listener (porta 9003 padrão)
+# Webhook canônico observado na CentralDark usa a porta 9300.
 if has_cmd ss; then
-  if ss -ltn 2>/dev/null | grep -qE ':9003\s'; then
-    emit_ok "$BLOCO" "Webhook listener escutando em :9003"
+  if ss -ltn 2>/dev/null | grep -qE ':9300\s'; then
+    emit_ok "$BLOCO" "Webhook listener escutando em :9300"
   else
-    emit_alerta "$BLOCO" "Nada escutando em :9003 (webhook-bot pode estar parado)"
+    emit_alerta "$BLOCO" "Nada escutando em :9300"
   fi
 fi
 
-# Cron de fallback
-if crontab -l 2>/dev/null | grep -q "clone-deck-gh-pull-with-deploy"; then
-  emit_ok "$BLOCO" "Cron de fallback do gh-pull instalado"
+# Qualquer cron que ainda execute a partir de /root/Multizap é drift, não fallback.
+CRON="$(crontab -l 2>/dev/null || true)"
+if printf '%s\n' "$CRON" | grep -q '/root/Multizap'; then
+  emit_erro "$BLOCO" "Cron operacional ainda aponta para árvore externa /root/Multizap"
+elif printf '%s\n' "$CRON" | grep -Eq 'clone-deck-gh-pull-with-deploy|CentralDark'; then
+  emit_ok "$BLOCO" "Cron de sincronização encontrado sem dependência Multizap"
 else
-  emit_alerta "$BLOCO" "Cron de fallback gh-pull NÃO encontrado"
+  emit_alerta "$BLOCO" "Cron de sincronização não localizado"
 fi
 
-# Scripts essenciais existem
-for s in scripts/clone-deck-gh-pull-with-deploy.sh infra/scripts/post-deploy.sh; do
+# Atualizar mecanismos existentes; não criar pipeline paralelo.
+for s in scripts/clone-deck-gh-pull-with-deploy.sh scripts/webhook/deploy-job.sh; do
   if [ -f "$REPO/$s" ]; then
-    emit_ok "$BLOCO" "Script presente: $s"
+    emit_ok "$BLOCO" "Mecanismo existente presente: $s"
   else
-    emit_alerta "$BLOCO" "Script ausente no repo: $s"
+    emit_erro "$BLOCO" "Mecanismo canônico ausente: $s"
   fi
 done
