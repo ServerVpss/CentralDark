@@ -1,9 +1,10 @@
 name: porta-de-entrada
 
-# Protege a porta universal e o mapa canônico do repositório inteiro.
-# O gate verifica alcance, contratos, identidade Git, raízes duplicadas,
-# novos caminhos paralelos e validações mascaradas. Nenhum adaptador guarda
-# uma cópia manual da governança e nenhum relatório transforma falha em verde.
+# Protege a porta universal, a identidade operacional e o mapa canônico.
+# O gate verifica alcance, contratos, papéis da casa, identidade Git,
+# raízes duplicadas, novos caminhos paralelos e validações mascaradas.
+# Nenhum adaptador guarda cópia manual da governança e nenhum relatório
+# transforma falha em verde.
 
 on:
   pull_request:
@@ -22,6 +23,14 @@ concurrency:
 
 jobs:
   validar:
+    name: Porta, identidade e governança canônica estão íntegras?
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout preso ao HEAD validado
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
     name: Porta e governança canônica estão íntegras?
     runs-on: [self-hosted, Linux]
     timeout-minutes: 5
@@ -50,10 +59,41 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
           fetch-depth: 0
+          persist-credentials: false
+
+      - name: Provar checkout no mesmo HEAD do gate
+        env:
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          actual="$(git rev-parse HEAD)"
+          test "$actual" = "$HEAD_SHA" || {
+            echo "CHECKOUT_HEAD_MISMATCH expected=$HEAD_SHA actual=$actual"
+            exit 1
+          }
 
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+
+      - name: Testar fonte autenticada de autorização
+        run: node --test scripts/lupa/authority-approval.test.mjs
+
+      - name: Resolver autorização autenticada
+        id: authority
+        run: node scripts/lupa/authority-approval.mjs
+
+      - name: Testar contrato de identidade operacional
+        run: node --test scripts/lupa/validar-identidade-operacional.test.mjs
+
+      - name: Validar identidade SEGREDO → SOL → PIVETE/HERMES
+        run: node scripts/lupa/validar-identidade-operacional.mjs
+
+      - name: Testar retomada fail-closed do Hermes
+        run: node --test apps/modulos/HERMES-CORE/core/continuity-guard.test.mjs
+
+      - name: Validar sintaxe do orquestrador Hermes
+        run: node --check apps/modulos/HERMES-CORE/core/orchestrator.mjs
 
       - name: Testar falsificadores do mapa global
         run: node --test apps/modulos/mapeamento/tests/validar-mapa.test.mjs
@@ -65,30 +105,35 @@ jobs:
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha || '' }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
-          PIVETE_APPROVED: ${{ contains(github.event.pull_request.labels.*.name, 'permito-pivete') || contains(github.event.pull_request.body || '', 'PERMITO PIVETE') }}
+          AUTHORITY_APPROVED: ${{ steps.authority.outputs.approved }}
         run: |
           set -euo pipefail
           node apps/modulos/mapeamento/core/validar-mapa.mjs \
             --repo-root "$GITHUB_WORKSPACE" \
             --base-sha "$BASE_SHA" \
             --head-sha "$HEAD_SHA" \
-            --approved "$PIVETE_APPROVED"
+            --approved "$AUTHORITY_APPROVED"
 
       - name: Validar porta e adaptadores universais
         run: node scripts/lupa/validar-porta-de-entrada.mjs
 
-      - name: Emitir relatório reproduzível
+      - name: Emitir todos os relatórios reproduzíveis
         if: always()
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha || '' }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
-          PIVETE_APPROVED: ${{ contains(github.event.pull_request.labels.*.name, 'permito-pivete') || contains(github.event.pull_request.body || '', 'PERMITO PIVETE') }}
+          AUTHORITY_APPROVED: ${{ steps.authority.outputs.approved }}
         run: |
-          set -euo pipefail
+          set -uo pipefail
+          status=0
           node apps/modulos/mapeamento/core/validar-mapa.mjs \
             --repo-root "$GITHUB_WORKSPACE" \
             --base-sha "$BASE_SHA" \
             --head-sha "$HEAD_SHA" \
+            --approved "$AUTHORITY_APPROVED" || status=1
+          node scripts/lupa/validar-porta-de-entrada.mjs --json || status=1
+          node scripts/lupa/validar-identidade-operacional.mjs --json || status=1
+          exit "$status"
             --approved "$PIVETE_APPROVED"
           node scripts/lupa/validar-porta-de-entrada.mjs --json
 
