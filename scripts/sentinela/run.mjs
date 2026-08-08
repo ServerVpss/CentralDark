@@ -1,12 +1,13 @@
 #!/usr/bin/env node
-// Sentinela 24/7 — varre divergências e abre Issues com dedupe.
-// Read-only no repo/VPS (não toca em produção). Usa apenas HTTPS público + gh CLI.
+// Sentinela 24/7 — detecta divergências e só reage a mudança real de estado.
+// Read-only no repo/VPS; mutações ficam restritas a Issues operacionais deduplicadas.
 
 import { execSync, execFileSync } from 'node:child_process';
-import { mkdirSync, writeFileSync, readFileSync, existsSync } from 'node:fs';
-import { createHash } from 'node:crypto';
+import { mkdirSync, writeFileSync, readFileSync, existsSync, rmSync } from 'node:fs';
 import path from 'node:path';
 import { evaluateDrift, toDivergencia, describeRecovery } from './drift.mjs';
+import { reconcileFindingState } from './state-machine.mjs';
+import { notifyViaHermes } from './hermes-notify.mjs';
 
 const DRY_RUN = String(process.env.DRY_RUN || 'false').toLowerCase() === 'true';
 const REPO = process.env.REPO_ALVO || 'ServerVpss/CentralDark';
@@ -46,59 +47,72 @@ async function checkEndpoint(ep) {
   }
 }
 
-function hash(s) {
-  return createHash('sha1').update(s).digest('hex').slice(0, 10);
+function ghListOpenSentinelaIssues() {
+  try {
+    const out = execFileSync('gh', [
+      'issue', 'list', '-R', REPO,
+      '--state', 'open',
+      '--search', 'sentinela- in:title',
+      '--json', 'number,title',
+      '--limit', '500',
+    ], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
+    return { ok: true, issues: JSON.parse(out) };
+  } catch (e) {
+    return { ok: false, error: String(e.message || e) };
+  }
 }
 
-function ghIssueExists(titleHash) {
+function ghAvailableLabels() {
   try {
-    const out = execSync(
-      `gh issue list -R "${REPO}" --state open --search "in:title sentinela-${titleHash}" --json number,title --limit 5`,
-      { encoding: 'utf8' }
-    );
-    const arr = JSON.parse(out);
-    return arr.find((i) => i.title.includes(titleHash));
+    const out = execFileSync('gh', [
+      'label', 'list', '-R', REPO,
+      '--json', 'name',
+      '--limit', '500',
+    ], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
+    return new Set(JSON.parse(out).map((item) => String(item.name || '')));
   } catch {
-    return null;
+    return new Set();
   }
+}
+
+function canonicalLabelsForFinding(finding, availableLabels) {
+  const desired = ['🟡 PENDÊNCIA', '🤖 IA-VALIDAR'];
+  if (finding?.sev === 'p1' || finding?.area === 'Endpoints' || finding?.area === 'Drift-VPS') {
+    desired.push('🔴 RISCO-SERVIDOR');
+  }
+  if (finding?.area === 'Workflows' || finding?.area === 'Drift-VPS') {
+    desired.push('🔄 GIT');
+  }
+  return [...new Set(desired)].filter((label) => availableLabels.has(label));
 }
 
 function ghOpenIssue({ title, body, labels }) {
   if (DRY_RUN) return { number: 0, dry: true };
-  const labelArgs = labels.map((l) => `--label "${l}"`).join(' ');
-  const tmpBody = path.join('/tmp', `sent-${Date.now()}.md`);
+  const tmpBody = path.join('/tmp', `sent-${process.pid}-${Date.now()}.md`);
   writeFileSync(tmpBody, body);
   try {
-    const out = execSync(
-      `gh issue create -R "${REPO}" --title "${title.replace(/"/g, '\\"')}" --body-file "${tmpBody}" ${labelArgs}`,
-      { encoding: 'utf8' }
-    );
-    const m = out.match(/\/issues\/(\d+)/);
-    return { number: m ? Number(m[1]) : 0 };
+    const args = ['issue', 'create', '-R', REPO, '--title', title, '--body-file', tmpBody];
+    for (const label of labels) args.push('--label', label);
+    const out = execFileSync('gh', args, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
+    const match = out.match(/\/issues\/(\d+)/);
+    return { number: match ? Number(match[1]) : 0, url: out.trim() };
   } catch (e) {
     return { error: String(e.message || e) };
+  } finally {
+    try { rmSync(tmpBody, { force: true }); } catch {}
   }
 }
 
-function ensureLabels() {
-  if (DRY_RUN) return;
-  const labels = [
-    ['sentinela', 'B60205', 'Aberta automaticamente pela sentinela'],
-    ['auto', 'CCCCCC', 'Criada por bot'],
-    ['p1', 'FF0000', 'Alta prioridade'],
-    ['p2', 'FFA500', 'Média'],
-    ['p3', 'FFFF00', 'Baixa'],
-    ['assign:codex', '5319E7', 'Bot responsável: Codex'],
-    ['assign:supabase-bot', '3ECF8E', 'Bot responsável: Supabase'],
-    ['assign:claude', 'FF80B0', 'Bot responsável: Claude'],
-    ['assign:grok', '1F6FEB', 'Bot responsável: Grok'],
-    ['assign:chatgpt', '10A37F', 'Bot responsável: ChatGPT'],
-    ['stale', '6E6E6E', 'Passou do TTL'],
-  ];
-  for (const [name, color, desc] of labels) {
-    try {
-      execSync(`gh label create "${name}" -R "${REPO}" -c "${color}" -d "${desc}" --force`, { stdio: 'ignore' });
-    } catch {}
+function ghCloseIssue(number, comment) {
+  if (DRY_RUN) return { ok: true, dry: true };
+  try {
+    execFileSync('gh', [
+      'issue', 'close', String(number), '-R', REPO,
+      '--comment', comment,
+    ], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: String(e.message || e) };
   }
 }
 
@@ -116,7 +130,6 @@ async function checkEndpoints() {
       detalhe: `URL: ${r.url}\nStatus: ${r.status}\nLatência: ${r.latencyMs}ms\nErro: ${r.error || '-'}`,
     });
   }
-  // CORS check
   for (const r of out) {
     if (r.url.includes('mcp.centralldark.com') && r.status >= 200 && r.status < 400 && !r.cors) {
       divergencias.push({
@@ -148,7 +161,7 @@ async function checkWorkflowsRuins() {
       });
     }
     return arr.length;
-  } catch (e) {
+  } catch {
     return 0;
   }
 }
@@ -157,9 +170,6 @@ function realGit(args) {
   return execFileSync('git', args, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
 }
 
-// Drift GitHub <-> checkout implantado. Caminho vem só da fonte canônica
-// (secret CENTRALDARK_ROOT, mapeado pelo workflow em VPS_REPO_PATH) — nunca
-// inventado aqui. Ausência do secret é ERROR explícito, nunca skip silencioso.
 function checkVpsDrift() {
   const repoPath = process.env.VPS_REPO_PATH || '';
   if (!repoPath) {
@@ -176,7 +186,6 @@ function checkVpsDrift() {
 
 // === Run ===
 
-ensureLabels();
 const endpointsResult = await checkEndpoints();
 const wfCount = await checkWorkflowsRuins();
 const driftEvidence = checkVpsDrift();
@@ -184,7 +193,6 @@ const driftDivergencia = toDivergencia(driftEvidence);
 if (driftDivergencia) divergencias.push(driftDivergencia);
 const recoveryNote = describeRecovery(previousSnapshot, driftEvidence);
 
-// Snapshot
 const snapshot = {
   at: new Date().toISOString(),
   endpoints: endpointsResult,
@@ -194,73 +202,94 @@ const snapshot = {
 };
 writeFileSync(SNAPSHOT_FILE, JSON.stringify(snapshot, null, 2));
 
-// Abrir issues com dedupe
-const abertas = [];
-for (const d of divergencias) {
-  const h = hash(`${d.area}|${d.titulo}`);
-  const title = `[SENTINELA sentinela-${h}] ${d.area}: ${d.titulo}`;
-  const existing = ghIssueExists(h);
-  if (existing) {
-    abertas.push({ ...d, hash: h, ja: existing.number });
-    continue;
+// Fonte durável do estado: Issues Sentinela abertas. Se a leitura falhar,
+// falha fechado para nunca recriar alertas por assumir inventário vazio.
+const issueInventory = ghListOpenSentinelaIssues();
+if (!issueInventory.ok) {
+  const report = `# Sentinela — ${snapshot.at}\n\nSTATUS=BLOCKED\nREASON=ISSUE_INVENTORY_UNAVAILABLE\n\nNenhuma Issue foi criada/fechada e nenhum Telegram foi enviado porque o inventário de Issues Sentinela abertas não pôde ser lido.\n`;
+  writeFileSync(REPORT_FILE, report);
+  console.error('Sentinela bloqueada: não foi possível ler Issues abertas; nenhuma mutação executada.');
+  process.exitCode = 2;
+} else {
+  const transitions = reconcileFindingState({ findings: divergencias, openIssues: issueInventory.issues });
+  const availableLabels = ghAvailableLabels();
+  const eventos = [];
+
+  for (const item of transitions.create) {
+    const d = item.finding;
+    const title = `[SENTINELA sentinela-${item.id}] ${d.area}: ${d.titulo}`;
+    const body = `> Aberta automaticamente pela **Sentinela** (run ${process.env.GITHUB_RUN_ID || 'local'}).\n> ID determinístico: \`sentinela-${item.id}\`.\n\n## Área\n${d.area}\n\n## Severidade\n${d.sev}\n\n## Agente sugerido\n\`${d.bot || 'não definido'}\`\n\n## Detalhe sanitizado\n\`\`\`\n${d.detalhe}\n\`\`\`\n\n## Critério para fechar\n- condição deixa de existir na próxima medição determinística;\n- recuperação é registrada antes do fechamento;\n- ausência de mudança mantém silêncio.\n\n---\n_A Sentinela detecta; Hermes explica/notifica; IA é opcional para diagnóstico/refino._\n`;
+    const created = ghOpenIssue({
+      title,
+      body,
+      labels: canonicalLabelsForFinding(d, availableLabels),
+    });
+
+    let notify = { status: DRY_RUN ? 'DRY_RUN' : 'NOT_SENT' };
+    if (created.number > 0 && !DRY_RUN) {
+      notify = notifyViaHermes({
+        type: 'ALERT',
+        area: d.area,
+        title: d.titulo,
+        issueNumber: created.number,
+        url: created.url || `https://github.com/${REPO}/issues/${created.number}`,
+      });
+    }
+    eventos.push({ type: 'ALERT', id: item.id, issue: created.number || 0, error: created.error || null, notify: notify.status });
   }
-  const body = `> Aberta automaticamente pela **sentinela** (run ${process.env.GITHUB_RUN_ID || 'local'}).
-> Hash de dedupe: \`sentinela-${h}\` — não reabre se já existir.
 
-## Área
-${d.area}
+  // KEEP é silêncio por contrato: nenhum comentário, Issue nova ou Telegram.
+  for (const item of transitions.keep) {
+    eventos.push({ type: 'KEEP', id: item.id, issue: item.issue.number, notify: 'SILENT' });
+  }
 
-## Severidade
-${d.sev}
+  for (const item of transitions.recover) {
+    const closed = ghCloseIssue(
+      item.issue.number,
+      `🟢 **RECUPERAÇÃO SENTINELA**\n\nA condição \`sentinela-${item.id}\` não está mais presente na medição atual. Fechamento por transição real de estado; se voltar, um novo ALERT poderá ser emitido.`
+    );
+    let notify = { status: DRY_RUN ? 'DRY_RUN' : 'NOT_SENT' };
+    if (closed.ok && !DRY_RUN) {
+      notify = notifyViaHermes({
+        type: 'RECOVERY',
+        area: 'Sentinela',
+        title: item.issue.title,
+        issueNumber: item.issue.number,
+        url: `https://github.com/${REPO}/issues/${item.issue.number}`,
+      });
+    }
+    eventos.push({ type: 'RECOVERY', id: item.id, issue: item.issue.number, error: closed.error || null, notify: notify.status });
+  }
 
-## Bot responsável
-\`assign:${d.bot}\`
+  // Duplicata com MESMO hash: preserva a Issue mais antiga como canônica e
+  // fecha apenas a duplicata comprovada, sem emitir Telegram extra.
+  for (const item of transitions.duplicates) {
+    const closed = ghCloseIssue(
+      item.duplicate.number,
+      `♻️ Duplicata determinística de #${item.canonical.number} (mesmo \`sentinela-${item.id}\`). Mantida a Issue mais antiga como canônica.`
+    );
+    eventos.push({
+      type: 'DUPLICATE_OPEN',
+      id: item.id,
+      issue: item.duplicate.number,
+      canonical: item.canonical.number,
+      error: closed.error || null,
+      notify: 'SILENT',
+    });
+  }
 
-## Detalhe (sanitizado)
-\`\`\`
-${d.detalhe}
-\`\`\`
+  const counts = {
+    alerts: eventos.filter((e) => e.type === 'ALERT' && e.issue > 0).length,
+    keep: eventos.filter((e) => e.type === 'KEEP').length,
+    recoveries: eventos.filter((e) => e.type === 'RECOVERY' && !e.error).length,
+    duplicatesClosed: eventos.filter((e) => e.type === 'DUPLICATE_OPEN' && !e.error).length,
+    telegramSent: eventos.filter((e) => e.notify === 'SENT').length,
+    telegramUnavailable: eventos.filter((e) => e.notify === 'UNAVAILABLE').length,
+    telegramFailed: eventos.filter((e) => e.notify === 'FAILED' || e.notify === 'UNKNOWN').length,
+  };
 
-## Critério pra fechar
-- Endpoint volta 200 / workflow verde / CORS configurado / pendência registrada.
-- Bot dono comenta com PR ou justificativa.
-- Após 7 dias sem ação, sentinela-stale escala.
+  const report = `# Sentinela — ${snapshot.at}\n\n| Métrica | Valor |\n|---|---|\n| Endpoints checados | ${endpointsResult.length} |\n| Endpoints fora | ${endpointsResult.filter((r) => r.status < 200 || r.status >= 400).length} |\n| Workflows vermelhos 24h | ${wfCount} |\n| Divergências atuais | ${divergencias.length} |\n| ALERT novos | ${counts.alerts} |\n| KEEP silenciosos | ${counts.keep} |\n| RECOVERY | ${counts.recoveries} |\n| Duplicatas fechadas | ${counts.duplicatesClosed} |\n| Telegram SENT | ${counts.telegramSent} |\n| Telegram UNAVAILABLE | ${counts.telegramUnavailable} |\n| Telegram FAILED/UNKNOWN | ${counts.telegramFailed} |\n| Dry-run? | ${DRY_RUN ? 'sim' : 'não'} |\n\n## Endpoints\n\n${endpointsResult.map((r) => `- ${r.status >= 200 && r.status < 400 ? '🟢' : '🔴'} **${r.name}** — \`${r.status}\` em ${r.latencyMs}ms${r.cors ? ` · CORS=\`${r.cors}\`` : ''}${r.error ? ` · erro: ${r.error}` : ''}`).join('\n')}\n\n## Divergências atuais\n\n${divergencias.length === 0 ? '_Nenhuma divergência._' : divergencias.map((d) => `- **[${d.sev}]** ${d.area} → ${d.titulo} (agente sugerido: \`${d.bot}\`)`).join('\n')}\n\n## Drift GitHub <-> VPS\n\n- Status: \`${driftEvidence.status}\` (${driftEvidence.code})\n- ${driftEvidence.motivo}\n${recoveryNote ? `- ${recoveryNote}` : ''}\n`;
+  writeFileSync(REPORT_FILE, report);
 
----
-_Anti-loop: só o bot com label \`assign:${d.bot}\` deve agir._
-`;
-  const labels = ['sentinela', 'auto', d.sev, `assign:${d.bot}`];
-  const r = ghOpenIssue({ title, body, labels });
-  abertas.push({ ...d, hash: h, nova: r.number, erro: r.error });
+  console.log(`Sentinela rodou. ALERT=${counts.alerts} KEEP=${counts.keep} RECOVERY=${counts.recoveries} DUPLICATE_CLOSED=${counts.duplicatesClosed} TELEGRAM_SENT=${counts.telegramSent}.`);
 }
-
-// Relatório
-const report = `# Sentinela — ${snapshot.at}
-
-| Métrica | Valor |
-|---|---|
-| Endpoints checados | ${endpointsResult.length} |
-| Endpoints fora | ${endpointsResult.filter((r) => r.status < 200 || r.status >= 400).length} |
-| Workflows vermelhos 24h | ${wfCount} |
-| Divergências detectadas | ${divergencias.length} |
-| Issues novas | ${abertas.filter((a) => a.nova).length} |
-| Issues já abertas (dedupe) | ${abertas.filter((a) => a.ja).length} |
-| Dry-run? | ${DRY_RUN ? 'sim' : 'não'} |
-
-## Endpoints
-
-${endpointsResult.map((r) => `- ${r.status >= 200 && r.status < 400 ? '🟢' : '🔴'} **${r.name}** — \`${r.status}\` em ${r.latencyMs}ms${r.cors ? ` · CORS=\`${r.cors}\`` : ''}${r.error ? ` · erro: ${r.error}` : ''}`).join('\n')}
-
-## Divergências
-
-${divergencias.length === 0 ? '_Nenhuma divergência. Tudo verde._' : divergencias.map((d, i) => `- **[${d.sev}]** ${d.area} → ${d.titulo} (bot: \`${d.bot}\`)`).join('\n')}
-
-## Drift GitHub <-> VPS
-
-- Status: \`${driftEvidence.status}\` (${driftEvidence.code})
-- ${driftEvidence.motivo}
-${recoveryNote ? `- ${recoveryNote}` : ''}
-`;
-writeFileSync(REPORT_FILE, report);
-
-console.log(`Sentinela rodou. Divergências: ${divergencias.length}. Issues novas: ${abertas.filter((a) => a.nova).length}.`);
