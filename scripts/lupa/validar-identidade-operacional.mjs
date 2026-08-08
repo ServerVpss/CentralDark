@@ -89,7 +89,7 @@ const FORBIDDEN_CANONICAL = Object.freeze([
   },
   {
     code: "UNKNOWN_SELF_LOOP_DECLARADO",
-    pattern: /\bUNKNOWN\s*(?:=|:|→|->)\s*UNKNOWN\b/i,
+    pattern: /^\s*UNKNOWN\s*(?:=|:|→|->)\s*UNKNOWN\b/im,
   },
   {
     code: "MODEL_LOCK_ATIVO",
