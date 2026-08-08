@@ -78,7 +78,7 @@ export function resultadoAprovadoPeloCritic(resultado = {}, parecer = null) {
 }
 
 const MUTATING_SHELL = /\b(?:rm|mv|cp|mkdir|touch|chmod|chown|tee|sed\s+-i|git\s+(?:add|commit|push|merge|rebase|reset|apply|checkout|switch)|npm\s+(?:install|i)|pnpm\s+install|yarn\s+add|pm2\s+(?:restart|reload|start|stop|delete)|docker\s+(?:compose\s+)?(?:up|down|restart|rm))\b/i;
-const VALIDATION_SHELL = /\b(?:node\s+--check|node\s+--test|npm\s+(?:test|run\s+(?:test|build|typecheck|lint))|pnpm\s+(?:test|build|typecheck|lint)|yarn\s+(?:test|build|typecheck|lint)|pytest|vitest|jest|tsc\b|typecheck\b|eslint\b|sha256sum\b|git\s+(?:diff|status|rev-parse)\b|curl\b|health\b|validar\b|validate\b|check\b)\b/i;
+const VALIDATION_SHELL = /\b(?:node\s+--check|node\s+--test|npm\s+(?:test|run\s+(?:test|build|typecheck|lint))|pnpm\s+(?:test|build|typecheck|lint)|yarn\s+(?:test|build|typecheck|lint)|pytest|vitest|jest|tsc\b|typecheck\b|eslint\b|sha256sum\b|curl\b|health\b|validar\b|validate\b|check\b)\b/i;
 
 function gitMuta(h) {
   if (h?.ferramenta !== 'git') return false;
@@ -102,7 +102,6 @@ function indiceValidacaoDepois(historico, depoisDe) {
     if (h.ok !== true || h.critic) continue;
     if (h.ferramenta === 'shell' && VALIDATION_SHELL.test(String(h.args?.comando || ''))) return i;
     if (h.ferramenta === 'handler' && ['ping', 'http'].includes(String(h.args?.acao || ''))) return i;
-    if (h.ferramenta === 'git' && String(h.args?.acao || '').toLowerCase() === 'status') return i;
   }
   return -1;
 }
