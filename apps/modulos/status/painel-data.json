@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-07T03:32:36.778Z",
-  "updatedAtBR": "07/08/2026, 00:32:36 BRT",
+  "updatedAt": "2026-08-08T04:08:53.610Z",
+  "updatedAtBR": "08/08/2026, 01:08:53 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "docs(arquitetura): reconciliar contrato de production guardrails determinísticos (#661)",
+    "lastCommit": "fix(lupa): preservar SHA exato e restaurar branch binding no CI (#705)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-08T04:08:53.610Z",
+      "titulo": "Push na main · 03c14362f33b1c2ab853392a191f946ae316a179",
+      "detalhe": "fix(lupa): preservar SHA exato e restaurar branch binding no CI (#705)",
+      "area": "Repositório",
+      "sha": "03c1436",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-07T03:32:36.778Z",
       "titulo": "Push na main · 1f2f2380f184cc893a106bc08b9acd6e152b675d",
       "detalhe": "docs(arquitetura): reconciliar contrato de production guardrails determinísticos (#661)",
@@ -986,14 +994,6 @@
       "detalhe": "fix(mcp): manifesto aprovado de destrutivas — tira os números mágicos do guard (#435)",
       "area": "Repositório",
       "sha": "feb825d",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-28T11:50:55.641Z",
-      "titulo": "Push na main · abf033643a7d12558e1ee218b56008b49031dfd4",
-      "detalhe": "fix(mcp): rotas e OpenAPI honestos — fecha itens 2,3,4,5,7 da issue #148 (#434)",
-      "area": "Repositório",
-      "sha": "abf0336",
       "actor": "segredounlock"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-08T04:08:53.610Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 03c14362f33b1c2ab853392a191f946ae316a179 (03c1436)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-07T03:32:36.778Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 1f2f2380f184cc893a106bc08b9acd6e152b675d (1f2f238)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-28T11:52:33.141Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · feb825d4b6329353795b0de3a671655453217313 (feb825d)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-28T11:50:55.641Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · abf033643a7d12558e1ee218b56008b49031dfd4 (abf0336)",
       "area": "Repositório",
       "status": "sucesso"
     }
