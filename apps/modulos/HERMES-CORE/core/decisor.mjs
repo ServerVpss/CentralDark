@@ -166,12 +166,24 @@ DEVOLVA APENAS JSON VÁLIDO, SEM MARKDOWN, SEM \`\`\`, ASSIM:
 {
   "pensamento": "por que essa etapa agora (1-2 frases)",
   "etapa_titulo": "título curto pro Telegram (max 60 char)",
+  "estado": "TESTE|FATO|FAIL|BLOCKED|CHEFE_SEGREDO_NECESSARIO",
   "ferramenta": "shell|darkai|git|escrever_arquivo|ler_arquivo|notificar_progresso|handler|aprender",
   "args": { ... },
   "terminou": false
 }
-Quando a missão estiver 100% concluída, devolva "terminou": true e "ferramenta": "notificar_progresso" com o resumo final.
+UNKNOWN, estado vazio ou estado fora do enum são inválidos. Se falta evidência, use TESTE e escolha a ação que mais reduz a incerteza. Use FATO somente quando a evidência resolveu a dúvida. FAIL registra falha observada; BLOCKED registra impedimento externo; CHEFE_SEGREDO_NECESSARIO é reservado à única dependência humana impossível de resolver pelo organismo.
+Quando a missão estiver 100% concluída e provada, devolva "estado": "FATO", "terminou": true e "ferramenta": "notificar_progresso" com o resumo final.
 `;
+
+const ESTADOS_DECISAO = new Set(['TESTE', 'FATO', 'FAIL', 'BLOCKED', 'CHEFE_SEGREDO_NECESSARIO']);
+
+export function validarDecisao(decisao) {
+  if (!decisao || typeof decisao !== 'object' || Array.isArray(decisao)) throw new Error('decisão inválida');
+  const estado = String(decisao.estado || '').trim().toUpperCase();
+  if (!ESTADOS_DECISAO.has(estado)) throw new Error(`estado semântico inválido: ${estado || 'AUSENTE'}`);
+  if (decisao.terminou === true && estado !== 'FATO') throw new Error(`estado ${estado} não pode encerrar missão`);
+  return { ...decisao, estado };
+}
 
 const SYSTEM_FALLBACK = `Você é o Hermes, executor autônomo da CentralDark. Pense passo-a-passo. Nunca desvie da missão. Sempre devolva JSON puro.`;
 let SYSTEM = SYSTEM_FALLBACK;
@@ -383,7 +395,7 @@ export async function decidir(missao, historico) {
   const hit = verCache(k);
   if (hit) {
     console.log(`[decisor] 💾 cache HIT (${cache.size} itens)`);
-    return { ...hit, _cache: true };
+    return { ...validarDecisao(hit), _cache: true };
   }
 
   const historico_erros = [];
@@ -426,7 +438,7 @@ export async function decidir(missao, historico) {
     try {
       const prompt = montarPrompt(missao, historico, historico_erros, memoria);
       const stdout = await chamarDarkaiComResiliencia(cfg.modelo, SYSTEM, prompt, cfg.timeout_ms);
-      const decisao = extrairJSON(stdout);
+      const decisao = validarDecisao(extrairJSON(stdout));
       decisao._modelo_usado = cfg.modelo;
       console.log(`[decisor] ✅ ${cfg.modelo} respondeu em ${Date.now()-t0}ms`);
       salvarCache(k, decisao);
@@ -444,7 +456,7 @@ export async function decidir(missao, historico) {
   try {
     const prompt = montarPrompt(missao, historico, historico_erros, memoria);
     const texto = await chamarEliteAnthropic(prompt);
-    const decisao = extrairJSON(texto);
+    const decisao = validarDecisao(extrairJSON(texto));
     decisao._modelo_usado = `elite:${ELITE_MODEL}`;
     console.log(`[decisor] ✅ Elite ${ELITE_MODEL} respondeu em ${Date.now()-t0}ms`);
     salvarCache(k, decisao);
