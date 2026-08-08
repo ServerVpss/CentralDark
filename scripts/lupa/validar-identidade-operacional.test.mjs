@@ -231,6 +231,11 @@ test("UNKNOWN não pode declarar self-loop", () => {
   assert.equal(findings[0].code, "UNKNOWN_SELF_LOOP_DECLARADO");
 });
 
+test("menção explicativa de self-loop não é declaração", () => {
+  const findings = findForbidden("Um self-loop explícito `UNKNOWN → UNKNOWN` é inválido.");
+  assert.deepEqual(findings, []);
+});
+
 test("carga de prova permanece no organismo", () => {
   for (const token of [
     "CHEFE_NAO_CARREGA_CARGA_DA_PROVA=true",
