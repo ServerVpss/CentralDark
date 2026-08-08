@@ -3,7 +3,7 @@ title: "04 ESTRUTURA VPS"
 date: 2026-06-29
 tags: ["consciencia"]
 updated: 2026-08-08
-status: "CANÔNICO"
+status: "OPERACIONAL"
 ---
 
 # 04 — Estrutura da VPS
