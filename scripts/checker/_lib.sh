@@ -33,17 +33,28 @@ has_cmd() { command -v "$1" >/dev/null 2>&1; }
 # Roda comando e retorna saída (best-effort, não quebra em erro)
 safe_run() { "$@" 2>&1 || true; }
 
-# Fronteira canônica da VPS. Tudo fora de /root/CentralDark é OUT_OF_SCOPE
-# por padrão e não pode ser usado como fonte de verdade, runtime permanente ou
-# fallback silencioso. Dependência externa real precisa ser transplantada para
-# dentro da CentralDark por uma mudança separada e comprovada.
-export CK_CENTRALDARK_ROOT="${CK_CENTRALDARK_ROOT:-/root/CentralDark}"
-export CK_REPO_ROOT="${CK_REPO_ROOT:-$CK_CENTRALDARK_ROOT}"
+# Fronteira canônica da VPS. A raiz é fixa: override externo não muda autoridade.
+# Caminho candidato é resolvido antes da comparação para bloquear ../ e symlink escape.
+CK_CANONICAL_ROOT='/root/CentralDark'
+CK_REQUESTED_REPO_ROOT="${CK_REPO_ROOT:-$CK_CANONICAL_ROOT}"
+export CK_CENTRALDARK_ROOT="$CK_CANONICAL_ROOT"
+export CK_REPO_ROOT="$CK_CANONICAL_ROOT"
 export CK_EXTERNAL_ROOT_POLICY="OUT_OF_SCOPE"
 
+canonicalize_path() {
+  realpath -m -- "${1:-}" 2>/dev/null
+}
+
 is_canonical_path() {
-  case "${1:-}" in
-    "$CK_CENTRALDARK_ROOT"|"$CK_CENTRALDARK_ROOT"/*) return 0 ;;
+  local requested_root resolved_root resolved_path
+  requested_root="$(canonicalize_path "$CK_REQUESTED_REPO_ROOT")" || return 1
+  resolved_root="$(canonicalize_path "$CK_CANONICAL_ROOT")" || return 1
+  resolved_path="$(canonicalize_path "${1:-}")" || return 1
+
+  [ "$requested_root" = "$resolved_root" ] || return 1
+
+  case "$resolved_path" in
+    "$resolved_root"|"$resolved_root"/*) return 0 ;;
     *) return 1 ;;
   esac
 }
