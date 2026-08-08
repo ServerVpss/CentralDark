@@ -87,7 +87,7 @@ hipóteses, testes, números honestos e comportamento reproduzível; não a redu
 folclore documental.
 
 Na fronteira operacional, o SEGREDO/CHEFE fornece a intenção. A carga de
-investigar, localizar causa, formular hipótese, testar, contraprov ar e provar o
+investigar, localizar causa, formular hipótese, testar, contraprovar e provar o
 trabalho entregue pertence ao organismo, não ao humano.
 
 ```text
