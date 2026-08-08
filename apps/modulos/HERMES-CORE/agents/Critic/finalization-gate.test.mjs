@@ -10,6 +10,11 @@ const concluir = (extra = {}) => ({
   ...extra,
 });
 
+const mutacaoArquivo = () => ({
+  etapa_titulo: 'editar', ferramenta: 'escrever_arquivo', args: { path: 'a.mjs' },
+  resultado: 'gravado', ok: true,
+});
+
 test('resultado efetivo exige Executor e Critic verdes', () => {
   assert.equal(resultadoAprovadoPeloCritic({ ok: true }, { aprovado: true }), true);
   assert.equal(resultadoAprovadoPeloCritic({ ok: true }, { aprovado: false }), false);
@@ -24,28 +29,25 @@ test('bloqueia terminou=true sem histórico/evidência', () => {
   assert.match(r.parecer, /histórico vazio/);
 });
 
-test('bloqueia mutação sem validação posterior', () => {
-  const historico = [{
-    etapa_titulo: 'editar', ferramenta: 'escrever_arquivo', args: { path: 'a.mjs' },
-    resultado: 'gravado', ok: true,
-  }];
-  const r = auditarFinalizacao({ missao: 'x', decisao: concluir(), historico });
+test('bloqueia mutação sem teste comportamental posterior', () => {
+  const r = auditarFinalizacao({ missao: 'x', decisao: concluir(), historico: [mutacaoArquivo()] });
   assert.equal(r.aprovado, false);
-  assert.match(r.parecer, /mutação sem validação semântica/);
+  assert.match(r.parecer, /mutação sem teste comportamental/);
 });
 
-test('aprova mutação seguida de teste bem-sucedido', () => {
+test('aprova mutação seguida de teste comportamental bem-sucedido', () => {
   const historico = [
-    { etapa_titulo: 'editar', ferramenta: 'escrever_arquivo', args: { path: 'a.mjs' }, resultado: 'gravado', ok: true },
+    mutacaoArquivo(),
     { etapa_titulo: 'testar', ferramenta: 'shell', args: { comando: 'node --test a.test.mjs' }, resultado: 'pass 4', ok: true },
   ];
   const r = auditarFinalizacao({ missao: 'x', decisao: concluir(), historico });
   assert.equal(r.aprovado, true);
   assert.equal(r.receipt.status, 'PASS');
-  assert.equal(r.receipt.validation_after_mutation_index, 1);
+  assert.equal(r.receipt.behavior_test_after_mutation_index, 1);
+  assert.equal(r.receipt.checks.mutation_has_later_behavior_test, true);
 });
 
-test('git status é leitura e não exige validação posterior quando não houve mutação', () => {
+test('git status é leitura e não exige teste posterior quando não houve mutação', () => {
   const historico = [{
     etapa_titulo: 'status', ferramenta: 'git', args: { acao: 'status' }, resultado: 'clean', ok: true,
   }];
@@ -54,37 +56,37 @@ test('git status é leitura e não exige validação posterior quando não houve
   assert.equal(r.receipt.last_mutation_index, -1);
 });
 
-test('git status depois de mutação não substitui teste semântico', () => {
+test('git status depois de mutação não substitui teste comportamental', () => {
   const historico = [
-    { etapa_titulo: 'editar', ferramenta: 'escrever_arquivo', args: { path: 'a.mjs' }, resultado: 'gravado', ok: true },
+    mutacaoArquivo(),
     { etapa_titulo: 'status', ferramenta: 'git', args: { acao: 'status' }, resultado: 'modified a.mjs', ok: true },
   ];
   const r = auditarFinalizacao({ missao: 'x', decisao: concluir(), historico });
   assert.equal(r.aprovado, false);
-  assert.match(r.parecer, /mutação sem validação semântica/);
+  assert.match(r.parecer, /mutação sem teste comportamental/);
 });
 
-test('sha256sum depois de mutação é prova de estado, não prova semântica', () => {
+test('sha256sum depois de mutação é prova de estado, não teste comportamental', () => {
   const historico = [
-    { etapa_titulo: 'editar', ferramenta: 'escrever_arquivo', args: { path: 'a.mjs' }, resultado: 'gravado', ok: true },
+    mutacaoArquivo(),
     { etapa_titulo: 'hash', ferramenta: 'shell', args: { comando: 'sha256sum a.mjs' }, resultado: 'abc  a.mjs', ok: true },
   ];
   const r = auditarFinalizacao({ missao: 'x', decisao: concluir(), historico });
   assert.equal(r.aprovado, false);
-  assert.match(r.parecer, /mutação sem validação semântica/);
+  assert.match(r.parecer, /mutação sem teste comportamental/);
 });
 
-test('handler ping/http genérico não prova semântica do artefato mutado', () => {
+test('handler ping/http genérico não prova comportamento do artefato mutado', () => {
   const historico = [
-    { etapa_titulo: 'editar', ferramenta: 'escrever_arquivo', args: { path: 'a.mjs' }, resultado: 'gravado', ok: true },
+    mutacaoArquivo(),
     { etapa_titulo: 'ping', ferramenta: 'handler', args: { acao: 'ping' }, resultado: 'pong', ok: true },
   ];
   const r = auditarFinalizacao({ missao: 'x', decisao: concluir(), historico });
   assert.equal(r.aprovado, false);
-  assert.match(r.parecer, /mutação sem validação semântica/);
+  assert.match(r.parecer, /mutação sem teste comportamental/);
 });
 
-test('redirecionamento shell conta como mutação e exige validação semântica', () => {
+test('redirecionamento shell conta como mutação e exige teste comportamental', () => {
   const historico = [{
     etapa_titulo: 'escrever-shell', ferramenta: 'shell', args: { comando: 'printf x > a.txt' },
     resultado: 'ok', ok: true,
@@ -92,10 +94,10 @@ test('redirecionamento shell conta como mutação e exige validação semântica
   const r = auditarFinalizacao({ missao: 'x', decisao: concluir(), historico });
   assert.equal(r.aprovado, false);
   assert.equal(r.receipt.last_mutation_index, 0);
-  assert.match(r.parecer, /mutação sem validação semântica/);
+  assert.match(r.parecer, /mutação sem teste comportamental/);
 });
 
-test('escrita programática em shell conta como mutação', () => {
+test('escrita Python em shell conta como mutação', () => {
   const historico = [{
     etapa_titulo: 'escrever-python', ferramenta: 'shell',
     args: { comando: `python3 -c "open('a.txt','w').write('x')"` },
@@ -106,9 +108,66 @@ test('escrita programática em shell conta como mutação', () => {
   assert.equal(r.receipt.last_mutation_index, 0);
 });
 
+test('T12: node fs.writeFileSync conta como mutação e bloqueia sem teste', () => {
+  const historico = [{
+    etapa_titulo: 'escrever-node', ferramenta: 'shell',
+    args: { comando: `node -e "require('fs').writeFileSync('tmp-x.mjs','export default 1')"` },
+    resultado: 'ok', ok: true,
+  }];
+  const r = auditarFinalizacao({ missao: 'x', decisao: concluir(), historico });
+  assert.equal(r.aprovado, false);
+  assert.equal(r.receipt.last_mutation_index, 0);
+  assert.match(r.parecer, /mutação sem teste comportamental/);
+});
+
+test('T12: appendFileSync/createWriteStream também são mutações Node', () => {
+  for (const comando of [
+    `node -e "require('node:fs').appendFileSync('x.log','x')"`,
+    `node -e "require('fs').createWriteStream('x.log')"`,
+  ]) {
+    const historico = [{ etapa_titulo: 'node-write', ferramenta: 'shell', args: { comando }, resultado: 'ok', ok: true }];
+    const r = auditarFinalizacao({ missao: 'x', decisao: concluir(), historico });
+    assert.equal(r.aprovado, false, comando);
+    assert.equal(r.receipt.last_mutation_index, 0, comando);
+  }
+});
+
+test('T13a: node --check prova sintaxe, não comportamento', () => {
+  const historico = [
+    mutacaoArquivo(),
+    { etapa_titulo: 'sintaxe', ferramenta: 'shell', args: { comando: 'node --check a.mjs' }, resultado: 'ok', ok: true },
+  ];
+  const r = auditarFinalizacao({ missao: 'x', decisao: concluir(), historico });
+  assert.equal(r.aprovado, false);
+  assert.equal(r.receipt.behavior_test_after_mutation_index, -1);
+});
+
+test('T13a: typecheck lint e build isolados não substituem teste comportamental', () => {
+  for (const comando of ['tsc --noEmit', 'eslint a.mjs', 'npm run typecheck', 'npm run build']) {
+    const historico = [
+      mutacaoArquivo(),
+      { etapa_titulo: 'static', ferramenta: 'shell', args: { comando }, resultado: 'ok', ok: true },
+    ];
+    const r = auditarFinalizacao({ missao: 'x', decisao: concluir(), historico });
+    assert.equal(r.aprovado, false, comando);
+    assert.equal(r.receipt.behavior_test_after_mutation_index, -1, comando);
+  }
+});
+
+test('T13b: node --check seguido de node --test pode satisfazer o gate', () => {
+  const historico = [
+    mutacaoArquivo(),
+    { etapa_titulo: 'sintaxe', ferramenta: 'shell', args: { comando: 'node --check a.mjs' }, resultado: 'ok', ok: true },
+    { etapa_titulo: 'comportamento', ferramenta: 'shell', args: { comando: 'node --test a.test.mjs' }, resultado: 'pass', ok: true },
+  ];
+  const r = auditarFinalizacao({ missao: 'x', decisao: concluir(), historico });
+  assert.equal(r.aprovado, true);
+  assert.equal(r.receipt.behavior_test_after_mutation_index, 2);
+});
+
 test('echo de marcador não conta como teste', () => {
   const historico = [
-    { etapa_titulo: 'editar', ferramenta: 'escrever_arquivo', args: { path: 'a.mjs' }, resultado: 'gravado', ok: true },
+    mutacaoArquivo(),
     { etapa_titulo: 'fake', ferramenta: 'shell', args: { comando: 'echo TSC_OK' }, resultado: 'TSC_OK', ok: true },
   ];
   const r = auditarFinalizacao({ missao: 'x', decisao: concluir(), historico });
