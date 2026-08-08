@@ -127,6 +127,10 @@ async function retomarOrfas() {
       // .json solto — lê o JSON, cria pasta, move pra dentro
       try {
         const conteudo = JSON.parse(await readFile(dir, 'utf8'));
+        if (conteudo.state?.terminal_state === 'BLOCKED') {
+          log(`⏸️ RETOMADA BLOQUEADA: ${nome} — requer novo delta/autorização para sair de BLOCKED`);
+          continue;
+        }
         const slug = slugify(conteudo.titulo || nome.replace('.json', ''));
         const pasta = join(ANDAMENTO, slug);
         await mkdir(pasta, { recursive: true });
@@ -148,11 +152,16 @@ async function retomarOrfas() {
 
     // Pasta com missao.md
     let missao = '', historico = [], retomadas = 0;
+    let estado = null;
     try {
-      const s = JSON.parse(await readFile(join(dir, 'state.json'), 'utf8'));
-      missao = (s.missao || '').trim();
-      historico = Array.isArray(s.historico) ? s.historico : [];
-      retomadas = s.retomadas || 0;
+      estado = JSON.parse(await readFile(join(dir, 'state.json'), 'utf8'));
+      if (estado?.terminal_state === 'BLOCKED') {
+        log(`⏸️ RETOMADA BLOQUEADA: ${nome} — estado terminal BLOCKED preservado`);
+        continue;
+      }
+      missao = (estado.missao || '').trim();
+      historico = Array.isArray(estado.historico) ? estado.historico : [];
+      retomadas = estado.retomadas || 0;
     } catch { /* state.json ausente/corrompido — cai pro missao.md com histórico zerado */ }
     if (!missao) {
       try { missao = (await readFile(join(dir, 'missao.md'), 'utf8')).trim(); } catch { continue; }
@@ -179,6 +188,9 @@ async function rodarMissao(dir, slug, missao, historico = [], retomadas = 0) {
 
   let falhasSeguidas = 0;
   let etapa = historico.length;
+  let terminalState = 'RUNNING';
+  let terminalReason = null;
+  let finalMessage = null;
 
   while (true) {
     etapa++;
@@ -191,12 +203,17 @@ async function rodarMissao(dir, slug, missao, historico = [], retomadas = 0) {
       await lg(`❌ decisor falhou: ${e.message}`);
       await notificar(`Hermes: decisor falhou`, `❌ etapa ${etapa}\n${e.message.slice(0,300)}`);
       falhasSeguidas++;
-      if (falhasSeguidas >= MAX_FALHAS) break;
+      if (falhasSeguidas >= MAX_FALHAS) {
+        terminalState = 'BLOCKED';
+        terminalReason = 'MAX_FALHAS_DECISOR';
+        registrarFalha();
+        break;
+      }
       await new Promise(r => setTimeout(r, 10_000));
       continue;
     }
 
-    const { etapa_titulo, ferramenta, args = {}, terminou, pensamento } = decisao;
+    const { etapa_titulo, ferramenta, args = {}, terminou } = decisao;
 
     if (terminou) {
       let finalizacao;
@@ -228,7 +245,7 @@ async function rodarMissao(dir, slug, missao, historico = [], retomadas = 0) {
           ok: false,
           critic: bloqueio,
         });
-        await writeFile(statePath, JSON.stringify({ missao, historico, retomadas }, null, 2));
+        await writeFile(statePath, JSON.stringify({ missao, historico, retomadas, terminal_state: 'RUNNING', terminal_reason: 'FINALIZATION_GATE_BLOCKED' }, null, 2));
         registrarEtapa(false);
         await notificar(
           'Hermes: conclusão BLOQUEADA ⛔',
@@ -239,12 +256,10 @@ async function rodarMissao(dir, slug, missao, historico = [], retomadas = 0) {
         continue;
       }
 
-      await lg(`🏁 missão concluída na etapa ${etapa} — finalization gate PASS`);
-      registrarConclusao();
-      await notificar(
-        `Hermes: MISSÃO CONCLUÍDA 🎉`,
-        `✅ <b>${slug}</b>\n\n${(args.mensagem || pensamento || 'concluído').slice(0, 800)}\n\nGate final: PASS\nTotal: ${etapa-1} etapas`
-      );
+      await lg(`🏁 proposta de conclusão aprovada na etapa ${etapa} — finalization gate PASS`);
+      terminalState = 'CONCLUIDA';
+      terminalReason = 'FINALIZATION_GATE_PASS';
+      finalMessage = String(decisao.args?.mensagem || decisao.pensamento || 'concluído').slice(0, 800);
       break;
     }
 
@@ -267,7 +282,7 @@ async function rodarMissao(dir, slug, missao, historico = [], retomadas = 0) {
     const entrada = { etapa_titulo, ferramenta, args, resultado: resultado.saida, ok: etapaAprovada };
     if (parecer && !parecer.aprovado) entrada.critic = parecer.parecer.slice(0, 300);
     historico.push(entrada);
-    await writeFile(statePath, JSON.stringify({ missao, historico, retomadas }, null, 2));
+    await writeFile(statePath, JSON.stringify({ missao, historico, retomadas, terminal_state: 'RUNNING', terminal_reason: null }, null, 2));
     registrarEtapa(etapaAprovada);
 
     const emoji = etapaAprovada ? '✅' : '⚠️';
@@ -281,7 +296,9 @@ async function rodarMissao(dir, slug, missao, historico = [], retomadas = 0) {
     if (!etapaAprovada) {
       falhasSeguidas++;
       if (falhasSeguidas >= MAX_FALHAS) {
-        await lg(`🔴 pausando após ${MAX_FALHAS} falhas seguidas`);
+        terminalState = 'BLOCKED';
+        terminalReason = 'MAX_FALHAS_EXECUTOR_OR_CRITIC';
+        await lg(`🔴 pausando após ${MAX_FALHAS} falhas/reprovações seguidas`);
         registrarFalha();
         await notificar(
           `Hermes: PAUSEI 🔴`,
@@ -296,7 +313,37 @@ async function rodarMissao(dir, slug, missao, historico = [], retomadas = 0) {
     await new Promise(r => setTimeout(r, 2000));
   }
 
-  await moverMissaoParaConcluida(dir, slug, lg);
+  await writeFile(statePath, JSON.stringify({ missao, historico, retomadas, terminal_state: terminalState, terminal_reason: terminalReason }, null, 2));
+
+  if (terminalState !== 'CONCLUIDA') {
+    await lg(`⏸️ missão permanece em-andamento: state=${terminalState} reason=${terminalReason || 'UNKNOWN'}`);
+    return { ok: false, state: terminalState, reason: terminalReason };
+  }
+
+  const movida = await moverMissaoParaConcluida(dir, slug, lg);
+  if (!movida.ok) {
+    terminalState = 'BLOCKED';
+    terminalReason = `MOVE_CONCLUIDAS_FAILED:${movida.reason || 'UNKNOWN'}`;
+    registrarFalha();
+    await writeFile(statePath, JSON.stringify({ missao, historico, retomadas, terminal_state: terminalState, terminal_reason: terminalReason }, null, 2)).catch(() => {});
+    await notificar(
+      'Hermes: conclusão BLOQUEADA ⛔',
+      `⛔ <b>${slug}</b>\nGate final passou, mas a promoção física para concluídas falhou.\nMotivo: <code>${String(movida.reason || 'UNKNOWN').replace(/</g,'&lt;')}</code>\nNenhum verde final foi emitido.`,
+      'admin'
+    );
+    return { ok: false, state: terminalState, reason: terminalReason };
+  }
+
+  registrarConclusao();
+  await writeFile(
+    join(movida.path, 'state.json'),
+    JSON.stringify({ missao, historico, retomadas, terminal_state: 'CONCLUIDA', terminal_reason: terminalReason }, null, 2)
+  ).catch(() => {});
+  await notificar(
+    `Hermes: MISSÃO CONCLUÍDA 🎉`,
+    `✅ <b>${slug}</b>\n\n${finalMessage || 'concluído'}\n\nGate final: PASS\nTotal: ${etapa-1} etapas`
+  );
+  return { ok: true, state: 'CONCLUIDA', path: movida.path };
 }
 
 // ═══════════════════════════════════════════════════════════════
