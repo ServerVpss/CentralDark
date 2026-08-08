@@ -2,6 +2,12 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { detectarEventoProvedor, sanitizarLinhaLog } from './provider-health.mjs';
 
+// `codex-validate` já usa este arquivo como entrypoint determinístico do HERMES-CORE.
+// Reusar o mesmo gate: carregar também as regressões críticas de finalização,
+// sem criar workflow/runner paralelo só para este fix.
+await import('../Critic/finalization-gate.test.mjs');
+await import('../../core/finalization-enforcement.test.mjs');
+
 test('sanitiza bearer, key e jwt antes de qualquer saída', () => {
   const bearer = ['segredo', '123456789'].join('');
   const key = ['sk', 'abcdefghijklmnopqrstuvwxyz'].join('-');
