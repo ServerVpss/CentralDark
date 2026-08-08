@@ -42,6 +42,44 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 2
           persist-credentials: false
+
+      # O checkout continua preso ao SHA imutável. Esta etapa só dá ao Git local
+      # a identidade de branch já provada pelo evento, porque o OPERATION_RECEIPT
+      # fail-closed exige branch explícita e `git branch --show-current` é vazio
+      # em detached HEAD. A branch local nunca é fonte do conteúdo e não é pushada.
+      - name: Vincular branch esperada ao SHA exato
+        shell: bash
+        env:
+          EXPECTED_BRANCH: ${{ github.event.pull_request.head.ref || github.ref_name }}
+          EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          if [ -z "${EXPECTED_BRANCH}" ]; then
+            echo "OPERATION_RECEIPT_EXPECTED_BRANCH_MISSING"
+            exit 1
+          fi
+          git check-ref-format --branch "${EXPECTED_BRANCH}" >/dev/null
+          BEFORE_SHA="$(git rev-parse HEAD)"
+          if [ "${BEFORE_SHA}" != "${EXPECTED_SHA}" ]; then
+            echo "OPERATION_RECEIPT_HEAD_MISMATCH expected=${EXPECTED_SHA} actual=${BEFORE_SHA}"
+            exit 1
+          fi
+          if git show-ref --verify --quiet "refs/heads/${EXPECTED_BRANCH}"; then
+            git branch -f "${EXPECTED_BRANCH}" "${EXPECTED_SHA}"
+          else
+            git branch "${EXPECTED_BRANCH}" "${EXPECTED_SHA}"
+          fi
+          git switch "${EXPECTED_BRANCH}" >/dev/null
+          AFTER_SHA="$(git rev-parse HEAD)"
+          ACTUAL_BRANCH="$(git branch --show-current)"
+          if [ "${AFTER_SHA}" != "${EXPECTED_SHA}" ] || [ "${ACTUAL_BRANCH}" != "${EXPECTED_BRANCH}" ]; then
+            echo "OPERATION_RECEIPT_BRANCH_BINDING_FAILED expected_branch=${EXPECTED_BRANCH} actual_branch=${ACTUAL_BRANCH:-empty} expected_sha=${EXPECTED_SHA} actual_sha=${AFTER_SHA}"
+            exit 1
+          fi
+          echo "OPERATION_RECEIPT_BRANCH_BINDING=PASS"
+          echo "EXPECTED_BRANCH=${EXPECTED_BRANCH}"
+          echo "HEAD_SHA=${AFTER_SHA}"
+
       - uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38
         with:
           python-version: '3.11'
