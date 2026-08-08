@@ -84,7 +84,7 @@ const SHELL_REDIRECTION_WRITE = /(?:^|[\s;&|])\d*>>?(?!&)(?=\s*[^\s])/;
 const SHELL_PROGRAMMATIC_WRITE = /(?:python(?:3)?\b[^\n]*\bopen\s*\([^\n]*,[^\n]*['"](?:w|a|x)[+b]?['"]|\bdd\b[^\n]*\bof=)/i;
 
 // Prova pós-mutação precisa validar sintaxe/tipo/build/comportamento aplicável.
-// Evidência de estado/identidade (git status/diff/rev-parse, hash, curl/health solto)
+// Evidência de estado/identidade (git status/diff/rev-parse, hash, curl/health/ping/http soltos)
 // NÃO satisfaz sozinha este gate.
 const BEHAVIOR_VALIDATION_SHELL = /(?:\bnode\s+--(?:check|test)\b|\bnpm\s+(?:test|run\s+(?:test|build|typecheck|lint))\b|\bpnpm\s+(?:test|build|typecheck|lint)\b|\byarn\s+(?:test|build|typecheck|lint)\b|\bpytest\b|\bvitest\b|\bjest\b|\btsc\b|\btypecheck\b|\beslint\b|\bbash\s+-n\b|\bpython(?:3)?\s+-m\s+(?:py_compile|compileall)\b)/i;
 
@@ -114,7 +114,6 @@ function indiceValidacaoDepois(historico, depoisDe) {
     const h = historico[i] || {};
     if (h.ok !== true || h.critic) continue;
     if (h.ferramenta === 'shell' && BEHAVIOR_VALIDATION_SHELL.test(String(h.args?.comando || ''))) return i;
-    if (h.ferramenta === 'handler' && ['ping', 'http'].includes(String(h.args?.acao || ''))) return i;
   }
   return -1;
 }
