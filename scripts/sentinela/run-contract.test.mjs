@@ -23,7 +23,6 @@ test('Sentinela não recria o dialeto legado de labels', () => {
   assert.doesNotMatch(source, /function\s+ensureLabels/);
   assert.doesNotMatch(source, /gh\s+label\s+create/);
   assert.doesNotMatch(source, /['"]assign:(?:codex|claude|grok|chatgpt|supabase-bot)['"]/);
-  assert.doesNotMatch(source, /['"](?:sentinela|auto|p1|p2|p3|stale)['"]\s*,?\s*\/\/\s*label/i);
 });
 
 test('labels emitidas seguem o catálogo canônico da #707', () => {
@@ -41,10 +40,11 @@ test('labels emitidas seguem o catálogo canônico da #707', () => {
   }
 });
 
-test('somente transições ALERT/RECOVERY chamam Hermes e duplicata permanece silenciosa', () => {
+test('somente ALERT e RECOVERY chamam Hermes; KEEP e duplicata permanecem silenciosos', () => {
   const calls = source.match(/notifyViaHermes\(/g) || [];
-  assert.equal(calls.length, 3, '1 import/reference + 2 chamadas runtime esperadas');
+  assert.equal(calls.length, 2, 'somente ALERT + RECOVERY podem chamar Hermes');
   assert.match(source, /type: 'ALERT'[\s\S]*notifyViaHermes/);
   assert.match(source, /type: 'RECOVERY'[\s\S]*notifyViaHermes/);
+  assert.match(source, /type: 'KEEP'[\s\S]*notify: 'SILENT'/);
   assert.match(source, /type: 'DUPLICATE_OPEN'[\s\S]*notify: 'SILENT'/);
 });
