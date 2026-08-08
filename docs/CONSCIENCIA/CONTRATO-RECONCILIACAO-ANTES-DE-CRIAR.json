@@ -54,6 +54,51 @@
     "external_dependency_action": "CAPTURE_READ_ONLY_THEN_TRANSPLANT_MINIMAL_INTO_CANONICAL",
     "external_runtime_fallback": "FORBIDDEN"
   },
+  "integration_spine_policy": {
+    "marker": "MOTHER_SPINE_REQUIRED",
+    "mother_issue": 722,
+    "mother_pr": 724,
+    "mother_branch": "program/centraldark-convergencia-omniroute-722",
+    "mother_pr_mode": "PERSISTENT_OPEN_DRAFT_CONTROL_PLANE",
+    "new_convergence_child_pr_base": "program/centraldark-convergencia-omniroute-722",
+    "legacy_pr_retarget": "SYNC_MOTHER_THEN_RETARGET_NO_FORCE_PUSH",
+    "promotion_to_main": "EXACT_MOTHER_SHA_SNAPSHOT_THROUGH_SHORT_PROMOTION_PR",
+    "parallelism": "ONE_WRITER_PER_SCOPE_MULTIPLE_READERS_REVIEWERS",
+    "writer_handoff": "EXPLICIT_NO_MODEL_LOCK"
+  },
+  "label_policy": {
+    "marker": "CANONICAL_LABELS_REQUIRED",
+    "catalog_source": ".github/workflows/bots-labels-seed.yml",
+    "visible_pattern": "EMOJI_PLUS_PTBR_UPPERCASE",
+    "pr_without_canonical_label": "WORK_BLOCKED",
+    "issue_without_canonical_label": "AGENT_MUST_NOT_ASSUME_WORK",
+    "noncanonical_visible_label": "WORK_BLOCKED_AFTER_MIGRATION",
+    "temporary_authority_aliases": [
+      "permito-segredo",
+      "permito-pivete",
+      "PERMITO-SEGREDO",
+      "PERMITO-PIVETE"
+    ],
+    "temporary_alias_owner": 707,
+    "legacy_creation": "FORBIDDEN"
+  },
+  "api_gateway_policy": {
+    "marker": "CENTRALDARK_API_SINGLE_ENTRY",
+    "official_origin": "https://api.centralldark.com",
+    "openai_compatible_base": "https://api.centralldark.com/v1",
+    "internal_consumers_use_official_api": true,
+    "routing_fallback_analytics_live_behind_gateway": true,
+    "new_direct_provider_bypass": "FORBIDDEN",
+    "existing_direct_provider_debt": "INVENTORY_AND_MIGRATE_WITHOUT_BREAKING",
+    "provider_upstream_allowed_only_inside": [
+      "apps/modulos/arsenal-openai-adapter/",
+      "apps/modulos/elite-anthropic-proxy/",
+      "apps/modulos/elite-gateway/",
+      "apps/modulos/proxy/",
+      "apps/modulos/lovable-proxy/",
+      "apps/modulos/oauth-broker/"
+    ]
+  },
   "workflow_policy": {
     "marker": "WORKFLOW_REUSE_REQUIRED",
     "reuse_existing_before_new": true,
