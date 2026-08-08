@@ -9,6 +9,14 @@ function requiredString(value, field) {
   return value.trim();
 }
 
+function issueLabelNames(issue) {
+  if (!Array.isArray(issue?.labels)) return [];
+  return issue.labels
+    .map((label) => typeof label === 'string' ? label : label?.name)
+    .filter(Boolean)
+    .map(String);
+}
+
 export function findingId(finding) {
   const area = requiredString(finding?.area, 'finding.area');
   const titulo = requiredString(finding?.titulo, 'finding.titulo');
@@ -23,7 +31,14 @@ export function parseSentinelaIssue(issue) {
   const number = Number(issue?.number ?? issue?.issue_number ?? 0);
   if (!Number.isInteger(number) || number <= 0) return null;
 
-  return { id: match[1].toLowerCase(), number, title };
+  const labels = issueLabelNames(issue);
+  return {
+    id: match[1].toLowerCase(),
+    number,
+    title,
+    labels,
+    canonicalProducer: labels.includes('🛡️ SENTINELA'),
+  };
 }
 
 export function normalizeFindings(findings = []) {
