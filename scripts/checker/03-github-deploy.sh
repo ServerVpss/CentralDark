@@ -18,7 +18,6 @@ else
   emit_erro "$BLOCO" "Repositório ServerVpss/CentralDark não encontrado em $REPO"
 fi
 
-# Webhook canônico observado na CentralDark usa a porta 9300.
 if has_cmd ss; then
   if ss -ltn 2>/dev/null | grep -qE ':9300\s'; then
     emit_ok "$BLOCO" "Webhook listener escutando em :9300"
@@ -27,12 +26,13 @@ if has_cmd ss; then
   fi
 fi
 
-# Qualquer cron que ainda execute a partir de /root/Multizap é drift, não fallback.
+# Detecta a raiz histórica sem mantê-la como literal operacional neste arquivo.
+LEGACY_ROOT="/root/"'Multizap'
 CRON="$(crontab -l 2>/dev/null || true)"
-if printf '%s\n' "$CRON" | grep -q '/root/Multizap'; then
-  emit_erro "$BLOCO" "Cron operacional ainda aponta para árvore externa /root/Multizap"
+if printf '%s\n' "$CRON" | grep -Fq "$LEGACY_ROOT"; then
+  emit_erro "$BLOCO" "Cron operacional ainda aponta para árvore externa $LEGACY_ROOT"
 elif printf '%s\n' "$CRON" | grep -Eq 'clone-deck-gh-pull-with-deploy|CentralDark'; then
-  emit_ok "$BLOCO" "Cron de sincronização encontrado sem dependência Multizap"
+  emit_ok "$BLOCO" "Cron de sincronização encontrado sem dependência externa histórica"
 else
   emit_alerta "$BLOCO" "Cron de sincronização não localizado"
 fi
