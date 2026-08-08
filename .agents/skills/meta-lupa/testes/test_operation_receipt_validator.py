@@ -233,6 +233,27 @@ def test_achado_pendente_without_evidence_hash_is_allowed() -> None:
     assert reason == ""
 
 
+def test_unknown_receipt_cannot_park_as_valid_terminal_state() -> None:
+    ok, reason, details = validate_operation_receipt(
+        _valid_receipt(
+            status="UNKNOWN",
+            evidence_sha256="",
+            chief_decision="PENDING",
+            next_step="investigar a lacuna",
+        )
+    )
+
+    assert ok is False
+    assert reason == "OPERATION_RECEIPT_UNKNOWN_MUST_COLLAPSE"
+    assert details["allowed_next_states"] == [
+        "TESTE",
+        "FATO",
+        "FAIL",
+        "BLOCKED",
+        "CHEFE_SEGREDO_NECESSARIO",
+    ]
+
+
 def test_blank_writer_is_rejected() -> None:
     ok, reason, _ = validate_operation_receipt(_valid_receipt(writer="   "))
 
