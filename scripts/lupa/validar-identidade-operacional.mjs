@@ -4,17 +4,30 @@ import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { extname, join, relative, resolve, sep } from "node:path";
 import { pathToFileURL } from "node:url";
 
+const PORTABILITY_TOKENS = [
+  "MODEL_IS_REPLACEABLE=true",
+  "WRITER_ROLE_IS_NOT_MODEL=true",
+  "ONE_WRITER_PER_SCOPE=true",
+  "CHIEF_ORDER_CAN_TRIGGER_HANDOFF=true",
+  "WRITER_UNAVAILABLE_DOES_NOT_BLOCK_MISSION=true",
+  "DETERMINISTIC_FIRST=true",
+  "AI_FALLBACK_BY_CAPABILITY=true",
+  "UNKNOWN_NEVER_PASS=true",
+];
+
 const CANONICAL = Object.freeze({
   "LEIA-ME-IA.md": [
     "SEGREDO/CHEFE COMANDA",
     "SOL ORGANIZA",
     "PIVETE/HERMES PRESERVA E EXECUTA",
+    ...PORTABILITY_TOKENS,
   ],
   "AGENTS.md": [
     "existe somente um escritor por escopo",
     "SEGREDO/CHEFE permanece autoridade humana final",
     "SOL coordena, PIVETE/HERMES preserva e executa",
     "CAPTURE → SANITIZE + HASH → DECIDE → APPLY → JUDGE → CHEFE → RECEIPT + LEARNING → LOOP",
+    ...PORTABILITY_TOKENS,
   ],
   "docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md": [
     "SEGREDO/CHEFE = humano e autoridade final",
@@ -27,6 +40,14 @@ const CANONICAL = Object.freeze({
   "docs/CONSCIENCIA/DICIONARIO-PIVETE-GITHUB.md": [
     "SEGREDO/CHEFE = humano e autoridade final",
     "PIVETE = Hermes treinado",
+  ],
+  "docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md": [
+    "WRITER_ROLE",
+    "WRITER_SCOPE",
+    "WRITER_INSTANCE",
+    "MODEL_IS_REPLACEABLE=true",
+    "WRITER_UNAVAILABLE_DOES_NOT_BLOCK_MISSION=true",
+    "CHIEF_ORDER_CAN_TRIGGER_HANDOFF=true",
   ],
 });
 
@@ -54,6 +75,14 @@ const FORBIDDEN_CANONICAL = Object.freeze([
   {
     code: "UNKNOWN_CONVERTIDO_EM_PASS",
     pattern: /\bUNKNOWN\s*(?:=|:|→|->)\s*PASS\b/i,
+  },
+  {
+    code: "MODEL_LOCK_ATIVO",
+    pattern: /\bMODEL_LOCK\s*(?:=|:)\s*(?:SIM|TRUE|ON|1)\b/i,
+  },
+  {
+    code: "MODELO_COMO_AUTORIDADE",
+    pattern: /\b(?:GPT(?:-[\w.]+)?|CLAUDE(?:-[\w.]+)?|GEMINI(?:-[\w.]+)?|CODEX|GROK)\s*(?:=|:)\s*AUTORIDADE(?:_FINAL)?\b/i,
   },
 ]);
 
@@ -258,7 +287,9 @@ export function runValidation({ repoRoot, profileRoots = [] }) {
     authority: "SEGREDO/CHEFE",
     coordinator: "SOL",
     executor: "PIVETE/HERMES",
-    writer_rule: "WRITER_UNICO",
+    writer_rule: "ONE_WRITER_PER_SCOPE_PORTABLE_INSTANCE",
+    model_rule: "MODEL_IS_REPLACEABLE",
+    fallback_rule: "AI_FALLBACK_BY_CAPABILITY",
     unknown_rule: "UNKNOWN_NAO_PASSA",
     canonical_findings: canonicalFindings,
     profile_reports: profileReports,
@@ -277,6 +308,7 @@ function printHuman(report) {
   console.log(
     `IDENTIDADE_OK=${report.ok ? 1 : 0} ` +
       `AUTORIDADE=SEGREDO_CHEFE COORDENADOR=SOL EXECUTOR=PIVETE_HERMES ` +
+      `WRITER=PORTABLE_SCOPE_LOCK MODEL=REPLACEABLE FALLBACK=BY_CAPABILITY ` +
       `ERROS=${report.findings.length}`,
   );
 }
