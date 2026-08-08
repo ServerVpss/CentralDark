@@ -237,8 +237,10 @@ export function auditarFinalizacao({ missao = '', decisao = {}, historico = [] }
   const ultimaMutacao = mut.mutacoes.length ? mut.mutacoes[mut.mutacoes.length - 1] : null;
   const ultimaProva = ultimaMutacao ? mut.proofs.find(p => p.mutation_index === ultimaMutacao.index) : null;
   const locais = mut.proofs.filter(p => p.kind === 'LOCAL');
+  const estadoSemantico = String(decisao?.estado || '').trim().toUpperCase();
 
   if (decisao?.terminou !== true) problemas.push('decisor não propôs conclusão');
+  if (estadoSemantico !== 'FATO') problemas.push(`estado semântico final não resolvido: ${estadoSemantico || 'AUSENTE'}`);
   if (decisao?.ferramenta !== 'notificar_progresso') problemas.push('conclusão deve usar notificar_progresso');
   if (!resumo) problemas.push('resumo final ausente');
   if (!historico.length) problemas.push('histórico vazio: nenhuma ação/evidência observada');
@@ -250,6 +252,7 @@ export function auditarFinalizacao({ missao = '', decisao = {}, historico = [] }
     schema_version: 2,
     gate: 'HERMES_FINALIZATION_CRITIC',
     status: problemas.length ? 'BLOCKED' : 'PASS',
+    semantic_state: estadoSemantico || null,
     mission_sha256: sha256(missao),
     history_sha256: sha256(JSON.stringify(historico)),
     decision_model: decisao?._modelo_usado || null,
@@ -262,6 +265,7 @@ export function auditarFinalizacao({ missao = '', decisao = {}, historico = [] }
     unproven_mutations: mut.proofs.filter(p => !p.ok).map(p => ({ mutation_index: p.mutation_index, kind: p.kind })),
     checks: {
       completion_proposed: decisao?.terminou === true,
+      semantic_state_fact: estadoSemantico === 'FATO',
       completion_tool_valid: decisao?.ferramenta === 'notificar_progresso',
       summary_present: Boolean(resumo),
       history_present: historico.length > 0,
