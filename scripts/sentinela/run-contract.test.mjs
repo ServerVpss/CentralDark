@@ -11,7 +11,7 @@ test('run integra máquina de estado + Hermes sem depender de polling de sessão
   assert.match(source, /reconcileFindingState/);
   assert.match(source, /notifyViaHermes/);
   assert.match(source, /ghListOpenSentinelaIssues/);
-  assert.match(source, /KEEP[^\n]*SILENT|type: 'KEEP'[\s\S]*notify: 'SILENT'/);
+  assert.match(source, /type: 'KEEP'[\s\S]*notify: 'SILENT'/);
 });
 
 test('inventário de Issues falha fechado antes de mutação', () => {
@@ -40,11 +40,17 @@ test('labels emitidas seguem o catálogo canônico da #707', () => {
   }
 });
 
-test('somente ALERT e RECOVERY chamam Hermes; KEEP e duplicata permanecem silenciosos', () => {
+test('inventário lê labels e bootstrap legado não gera flood de recuperação', () => {
+  assert.match(source, /number,title,labels/);
+  assert.match(source, /canonicalProducer/);
+  assert.match(source, /SILENT_LEGACY_BOOTSTRAP/);
+});
+
+test('somente ALERT e RECOVERY canônico chamam Hermes; KEEP e duplicata permanecem silenciosos', () => {
   const calls = source.match(/notifyViaHermes\(/g) || [];
-  assert.equal(calls.length, 2, 'somente ALERT + RECOVERY podem chamar Hermes');
+  assert.equal(calls.length, 2, 'somente ALERT + RECOVERY canônico podem chamar Hermes');
   assert.match(source, /type: 'ALERT'[\s\S]*notifyViaHermes/);
-  assert.match(source, /type: 'RECOVERY'[\s\S]*notifyViaHermes/);
+  assert.match(source, /canonicalProducer[\s\S]*notifyViaHermes/);
   assert.match(source, /type: 'KEEP'[\s\S]*notify: 'SILENT'/);
   assert.match(source, /type: 'DUPLICATE_OPEN'[\s\S]*notify: 'SILENT'/);
 });
