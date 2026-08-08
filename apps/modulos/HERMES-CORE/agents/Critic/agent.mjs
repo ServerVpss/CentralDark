@@ -77,16 +77,17 @@ export function resultadoAprovadoPeloCritic(resultado = {}, parecer = null) {
   return resultado?.ok === true && parecer?.aprovado === true;
 }
 
-// Mutações de shell: cobre comandos conhecidos E redirecionamentos/escritas genéricas.
+// Mutações de shell: cobre comandos conhecidos E redirecionamentos/escritas programáticas observadas.
 // A lista é conservadora de propósito: dúvida sobre escrita => tratar como mutação.
 const MUTATING_SHELL = /\b(?:rm|mv|cp|mkdir|touch|chmod|chown|tee|truncate|install|rsync|sed\s+-i|perl\s+-[^\n]*i|git\s+(?:add|commit|push|merge|rebase|reset|apply|checkout|switch)|npm\s+(?:install|i)|pnpm\s+install|yarn\s+add|pm2\s+(?:restart|reload|start|stop|delete)|docker\s+(?:compose\s+)?(?:up|down|restart|rm))\b/i;
 const SHELL_REDIRECTION_WRITE = /(?:^|[\s;&|])\d*>>?(?!&)(?=\s*[^\s])/;
-const SHELL_PROGRAMMATIC_WRITE = /(?:python(?:3)?\b[^\n]*\bopen\s*\([^\n]*,[^\n]*['"](?:w|a|x)[+b]?['"]|\bdd\b[^\n]*\bof=)/i;
+const SHELL_PYTHON_WRITE = /(?:python(?:3)?\b[^\n]*\bopen\s*\([^\n]*,[^\n]*['"](?:w|a|x)[+b]?['"]|\bdd\b[^\n]*\bof=)/i;
+const SHELL_NODE_FS_WRITE = /\b(?:node|bun)\b[^\n]*(?:(?:node:)?fs|require\s*\(\s*['"](?:node:)?fs['"]\s*\)|from\s+['"](?:node:)?fs['"])[^\n]*\b(?:writeFile(?:Sync)?|appendFile(?:Sync)?|createWriteStream|truncate(?:Sync)?|rm(?:Sync)?|unlink(?:Sync)?|rename(?:Sync)?|copyFile(?:Sync)?|mkdir(?:Sync)?)\b/i;
 
-// Prova pós-mutação precisa validar sintaxe/tipo/build/comportamento aplicável.
-// Evidência de estado/identidade (git status/diff/rev-parse, hash, curl/health/ping/http soltos)
-// NÃO satisfaz sozinha este gate.
-const BEHAVIOR_VALIDATION_SHELL = /(?:\bnode\s+--(?:check|test)\b|\bnpm\s+(?:test|run\s+(?:test|build|typecheck|lint))\b|\bpnpm\s+(?:test|build|typecheck|lint)\b|\byarn\s+(?:test|build|typecheck|lint)\b|\bpytest\b|\bvitest\b|\bjest\b|\btsc\b|\btypecheck\b|\beslint\b|\bbash\s+-n\b|\bpython(?:3)?\s+-m\s+(?:py_compile|compileall)\b)/i;
+// Depois de mutação, só um teste comportamental explícito satisfaz o gate final.
+// Sintaxe, tipo, lint, build, hash, git state, curl/health e ping são evidências úteis,
+// mas NÃO demonstram sozinhos que a mudança faz o que deveria fazer.
+const BEHAVIOR_TEST_SHELL = /(?:\bnode\s+--test\b|\bnpm\s+(?:test|run\s+test(?=\s|:|$))|\bpnpm\s+(?:test|run\s+test(?=\s|:|$))|\byarn\s+(?:test|run\s+test(?=\s|:|$))|\bbun\s+test\b|\bdeno\s+test\b|\bpytest\b|\bvitest\b|\bjest\b|\bpython(?:3)?\s+-m\s+unittest\b|\bgo\s+test\b|\bcargo\s+test\b|\bdotnet\s+test\b)/i;
 
 function gitMuta(h) {
   if (h?.ferramenta !== 'git') return false;
@@ -96,7 +97,10 @@ function gitMuta(h) {
 
 function shellMuta(comando) {
   const cmd = String(comando || '');
-  return MUTATING_SHELL.test(cmd) || SHELL_REDIRECTION_WRITE.test(cmd) || SHELL_PROGRAMMATIC_WRITE.test(cmd);
+  return MUTATING_SHELL.test(cmd)
+    || SHELL_REDIRECTION_WRITE.test(cmd)
+    || SHELL_PYTHON_WRITE.test(cmd)
+    || SHELL_NODE_FS_WRITE.test(cmd);
 }
 
 function indiceUltimaMutacao(historico) {
@@ -109,11 +113,11 @@ function indiceUltimaMutacao(historico) {
   return idx;
 }
 
-function indiceValidacaoDepois(historico, depoisDe) {
+function indiceTesteComportamentalDepois(historico, depoisDe) {
   for (let i = Math.max(0, depoisDe + 1); i < historico.length; i++) {
     const h = historico[i] || {};
     if (h.ok !== true || h.critic) continue;
-    if (h.ferramenta === 'shell' && BEHAVIOR_VALIDATION_SHELL.test(String(h.args?.comando || ''))) return i;
+    if (h.ferramenta === 'shell' && BEHAVIOR_TEST_SHELL.test(String(h.args?.comando || ''))) return i;
   }
   return -1;
 }
@@ -129,7 +133,7 @@ export function auditarFinalizacao({ missao = '', decisao = {}, historico = [] }
   const resumo = String(decisao?.args?.mensagem || decisao?.pensamento || '').trim();
   const ultimo = historico.length ? historico[historico.length - 1] : null;
   const ultimaMutacao = indiceUltimaMutacao(historico);
-  const validacaoDepois = indiceValidacaoDepois(historico, ultimaMutacao);
+  const testeComportamentalDepois = indiceTesteComportamentalDepois(historico, ultimaMutacao);
 
   if (decisao?.terminou !== true) problemas.push('decisor não propôs conclusão');
   if (decisao?.ferramenta !== 'notificar_progresso') problemas.push('conclusão deve usar notificar_progresso');
@@ -138,8 +142,8 @@ export function auditarFinalizacao({ missao = '', decisao = {}, historico = [] }
   if (ultimo && ultimo.ok !== true) problemas.push('última etapa não está aprovada');
   if (ultimo?.critic) problemas.push('última etapa possui reprovação do Critic');
 
-  if (ultimaMutacao >= 0 && validacaoDepois < 0) {
-    problemas.push('houve mutação sem validação semântica bem-sucedida posterior');
+  if (ultimaMutacao >= 0 && testeComportamentalDepois < 0) {
+    problemas.push('houve mutação sem teste comportamental bem-sucedido posterior');
   }
 
   const receipt = {
@@ -152,7 +156,7 @@ export function auditarFinalizacao({ missao = '', decisao = {}, historico = [] }
     history_entries: historico.length,
     last_step_index: historico.length ? historico.length - 1 : -1,
     last_mutation_index: ultimaMutacao,
-    validation_after_mutation_index: validacaoDepois,
+    behavior_test_after_mutation_index: testeComportamentalDepois,
     checks: {
       completion_proposed: decisao?.terminou === true,
       completion_tool_valid: decisao?.ferramenta === 'notificar_progresso',
@@ -160,7 +164,7 @@ export function auditarFinalizacao({ missao = '', decisao = {}, historico = [] }
       history_present: historico.length > 0,
       last_step_ok: Boolean(ultimo && ultimo.ok === true),
       last_step_critic_clear: Boolean(ultimo && !ultimo.critic),
-      mutation_has_later_semantic_validation: ultimaMutacao < 0 || validacaoDepois > ultimaMutacao,
+      mutation_has_later_behavior_test: ultimaMutacao < 0 || testeComportamentalDepois > ultimaMutacao,
     },
     problems: problemas,
   };
