@@ -15,6 +15,11 @@ const mutacaoArquivo = () => ({
   resultado: 'gravado', ok: true,
 });
 
+const testeNode = (arquivo = 'a.test.mjs') => ({
+  etapa_titulo: 'testar', ferramenta: 'shell', args: { comando: `node --test ${arquivo}` },
+  resultado: 'pass', ok: true,
+});
+
 test('resultado efetivo exige Executor e Critic verdes', () => {
   assert.equal(resultadoAprovadoPeloCritic({ ok: true }, { aprovado: true }), true);
   assert.equal(resultadoAprovadoPeloCritic({ ok: true }, { aprovado: false }), false);
@@ -26,6 +31,7 @@ test('bloqueia terminou=true sem histórico/evidência', () => {
   const r = auditarFinalizacao({ missao: 'x', decisao: concluir(), historico: [] });
   assert.equal(r.aprovado, false);
   assert.equal(r.receipt.status, 'BLOCKED');
+  assert.equal(r.receipt.schema_version, 2);
   assert.match(r.parecer, /histórico vazio/);
 });
 
@@ -36,15 +42,13 @@ test('bloqueia mutação sem teste comportamental posterior', () => {
 });
 
 test('aprova mutação seguida de teste comportamental bem-sucedido', () => {
-  const historico = [
-    mutacaoArquivo(),
-    { etapa_titulo: 'testar', ferramenta: 'shell', args: { comando: 'node --test a.test.mjs' }, resultado: 'pass 4', ok: true },
-  ];
+  const historico = [mutacaoArquivo(), testeNode()];
   const r = auditarFinalizacao({ missao: 'x', decisao: concluir(), historico });
   assert.equal(r.aprovado, true);
   assert.equal(r.receipt.status, 'PASS');
   assert.equal(r.receipt.behavior_test_after_mutation_index, 1);
   assert.equal(r.receipt.checks.mutation_has_later_behavior_test, true);
+  assert.equal(r.receipt.checks.all_mutations_proved, true);
 });
 
 test('git status é leitura e não exige teste posterior quando não houve mutação', () => {
@@ -54,6 +58,7 @@ test('git status é leitura e não exige teste posterior quando não houve muta�
   const r = auditarFinalizacao({ missao: 'x', decisao: concluir(), historico });
   assert.equal(r.aprovado, true);
   assert.equal(r.receipt.last_mutation_index, -1);
+  assert.equal(r.receipt.mutations_total, 0);
 });
 
 test('git status depois de mutação não substitui teste comportamental', () => {
@@ -76,7 +81,7 @@ test('sha256sum depois de mutação é prova de estado, não teste comportamenta
   assert.match(r.parecer, /mutação sem teste comportamental/);
 });
 
-test('handler ping/http genérico não prova comportamento do artefato mutado', () => {
+test('handler ping/http genérico não prova comportamento do artefato local mutado', () => {
   const historico = [
     mutacaoArquivo(),
     { etapa_titulo: 'ping', ferramenta: 'handler', args: { acao: 'ping' }, resultado: 'pong', ok: true },
@@ -158,11 +163,93 @@ test('T13b: node --check seguido de node --test pode satisfazer o gate', () => {
   const historico = [
     mutacaoArquivo(),
     { etapa_titulo: 'sintaxe', ferramenta: 'shell', args: { comando: 'node --check a.mjs' }, resultado: 'ok', ok: true },
-    { etapa_titulo: 'comportamento', ferramenta: 'shell', args: { comando: 'node --test a.test.mjs' }, resultado: 'pass', ok: true },
+    testeNode(),
   ];
   const r = auditarFinalizacao({ missao: 'x', decisao: concluir(), historico });
   assert.equal(r.aprovado, true);
   assert.equal(r.receipt.behavior_test_after_mutation_index, 2);
+});
+
+test('T14: aprendizado só passa com read-back dos dois destinos emitido pelo Executor', () => {
+  const semProva = [{
+    etapa_titulo: 'aprender', ferramenta: 'aprender', args: { categoria: 'x', licao: 'ouro' },
+    resultado: 'salvo', ok: true,
+  }];
+  const bloqueado = auditarFinalizacao({ missao: 'x', decisao: concluir(), historico: semProva });
+  assert.equal(bloqueado.aprovado, false);
+  assert.match(bloqueado.parecer, /LEARNING_PERSISTENCE_VERIFIED/);
+
+  const comProva = [{ ...semProva[0], resultado: 'LEARNING_PERSISTENCE_VERIFIED=true categoria=x json=true ledger=true' }];
+  const aprovado = auditarFinalizacao({ missao: 'x', decisao: concluir(), historico: comProva });
+  assert.equal(aprovado.aprovado, true);
+  assert.equal(aprovado.receipt.mutation_proofs[0].proof_kind, 'DUAL_STORE_READBACK');
+});
+
+test('T14: git commit_push só passa com confirmação do HEAD remoto', () => {
+  const base = {
+    etapa_titulo: 'push', ferramenta: 'git', args: { acao: 'commit_push' }, ok: true,
+  };
+  const bloqueado = auditarFinalizacao({
+    missao: 'x', decisao: concluir(), historico: [{ ...base, resultado: 'Everything up-to-date' }],
+  });
+  assert.equal(bloqueado.aprovado, false);
+  assert.match(bloqueado.parecer, /REMOTE_HEAD_VERIFIED/);
+
+  const aprovado = auditarFinalizacao({
+    missao: 'x', decisao: concluir(),
+    historico: [{ ...base, resultado: `REMOTE_HEAD_VERIFIED=${'a'.repeat(40)}` }],
+  });
+  assert.equal(aprovado.aprovado, true);
+  assert.equal(aprovado.receipt.mutation_proofs[0].proof_kind, 'REMOTE_HEAD_READBACK');
+});
+
+test('T14: handler remoto mutável sem pós-condição específica nunca vira verde por HTTP 200', () => {
+  const historico = [{
+    etapa_titulo: 'deploy', ferramenta: 'handler',
+    args: { acao: 'deploy', url: 'https://deploy.invalid' },
+    resultado: 'deploy: 200 ok', ok: true,
+  }];
+  const r = auditarFinalizacao({ missao: 'x', decisao: concluir(), historico });
+  assert.equal(r.aprovado, false);
+  assert.match(r.parecer, /verify_url \+ verify_contains/);
+  assert.equal(r.receipt.unproven_mutations[0].kind, 'REMOTE_HANDLER');
+});
+
+test('T14: handler remoto só passa com GET posterior no verify_url e conteúdo esperado', () => {
+  const historico = [
+    {
+      etapa_titulo: 'deploy', ferramenta: 'handler',
+      args: {
+        acao: 'deploy', url: 'https://deploy.invalid',
+        verify_url: 'https://app.invalid/health', verify_contains: 'version=abc123',
+      },
+      resultado: 'deploy: 200 ok', ok: true,
+    },
+    {
+      etapa_titulo: 'provar', ferramenta: 'handler',
+      args: { acao: 'http', metodo: 'GET', url: 'https://app.invalid/health' },
+      resultado: 'HTTP 200 {"status":"ok","version":"version=abc123"}', ok: true,
+    },
+  ];
+  const r = auditarFinalizacao({ missao: 'x', decisao: concluir(), historico });
+  assert.equal(r.aprovado, true);
+  assert.equal(r.receipt.mutation_proofs[0].proof_kind, 'REMOTE_POSTCONDITION');
+  assert.equal(r.receipt.mutation_proofs[0].proof_index, 1);
+});
+
+test('T14: mutação anterior sem prova não é escondida por mutação posterior auto-verificada', () => {
+  const historico = [
+    mutacaoArquivo(),
+    {
+      etapa_titulo: 'aprender', ferramenta: 'aprender', args: { categoria: 'x', licao: 'ouro' },
+      resultado: 'LEARNING_PERSISTENCE_VERIFIED=true categoria=x json=true ledger=true', ok: true,
+    },
+  ];
+  const r = auditarFinalizacao({ missao: 'x', decisao: concluir(), historico });
+  assert.equal(r.aprovado, false);
+  assert.equal(r.receipt.mutations_total, 2);
+  assert.equal(r.receipt.unproven_mutations.length, 1);
+  assert.equal(r.receipt.unproven_mutations[0].kind, 'LOCAL');
 });
 
 test('echo de marcador não conta como teste', () => {
