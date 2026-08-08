@@ -71,6 +71,12 @@ export async function auditar(decisao, resultado, historico = []) {
   return { aprovado: false, parecer };
 }
 
+// Resultado de etapa só é verde quando Executor E Critic concordam.
+// Critic ausente/indisponível não é aprovação implícita.
+export function resultadoAprovadoPeloCritic(resultado = {}, parecer = null) {
+  return resultado?.ok === true && parecer?.aprovado === true;
+}
+
 const MUTATING_TOOLS = new Set(['escrever_arquivo', 'git']);
 const MUTATING_SHELL = /\b(?:rm|mv|cp|mkdir|touch|chmod|chown|tee|sed\s+-i|git\s+(?:add|commit|push|merge|rebase|reset|apply|checkout|switch)|npm\s+(?:install|i)|pnpm\s+install|yarn\s+add|pm2\s+(?:restart|reload|start|stop|delete)|docker\s+(?:compose\s+)?(?:up|down|restart|rm))\b/i;
 const VALIDATION_SHELL = /\b(?:node\s+--check|node\s+--test|npm\s+(?:test|run\s+(?:test|build|typecheck|lint))|pnpm\s+(?:test|build|typecheck|lint)|yarn\s+(?:test|build|typecheck|lint)|pytest|vitest|jest|tsc\b|typecheck\b|eslint\b|sha256sum\b|git\s+(?:diff|status|rev-parse)\b|curl\b|health\b|validar\b|validate\b|check\b)\b/i;
