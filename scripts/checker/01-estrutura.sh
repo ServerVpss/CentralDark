@@ -31,7 +31,7 @@ else
   emit_erro "$BLOCO" "Repo Git canônico ausente em $CK_REPO_ROOT"
 fi
 
-# O checker não valida /root/Multizap nem árvores irmãs. Se um componente
-# necessário existir apenas fora da CentralDark, ele vira dependência a migrar,
+# O checker não valida árvores irmãs/externas. Se um componente necessário
+# existir fora da CentralDark, ele vira dependência a migrar e provar,
 # nunca requisito operacional permanente deste checker.
 emit_ok "$BLOCO" "Fronteira externa: ${CK_EXTERNAL_ROOT_POLICY}"
