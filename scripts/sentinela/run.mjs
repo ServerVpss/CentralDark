@@ -75,15 +75,32 @@ function ghAvailableLabels() {
   }
 }
 
+const AGENT_LABEL = {
+  chatgpt: '🧠 AGENTE-CHATGPT',
+  claude: '🧠 AGENTE-CLAUDE',
+  codex: '🧠 AGENTE-CODEX',
+  grok: '🧠 AGENTE-GROK',
+  lovable: '🧠 AGENTE-LOVABLE',
+  'supabase-bot': '🧠 AGENTE-SUPABASE',
+};
+
+const PRIORITY_LABEL = {
+  p1: '🔴 PRIORIDADE-ALTA',
+  p2: '🟡 PRIORIDADE-MÉDIA',
+  p3: '🟢 PRIORIDADE-BAIXA',
+};
+
 function canonicalLabelsForFinding(finding, availableLabels) {
-  const desired = ['🟡 PENDÊNCIA', '🤖 IA-VALIDAR'];
-  if (finding?.sev === 'p1' || finding?.area === 'Endpoints' || finding?.area === 'Drift-VPS') {
-    desired.push('🔴 RISCO-SERVIDOR');
-  }
+  const desired = [
+    '🛡️ SENTINELA',
+    '🤖 AUTO',
+    PRIORITY_LABEL[finding?.sev],
+    AGENT_LABEL[finding?.bot],
+  ];
   if (finding?.area === 'Workflows' || finding?.area === 'Drift-VPS') {
     desired.push('🔄 GIT');
   }
-  return [...new Set(desired)].filter((label) => availableLabels.has(label));
+  return [...new Set(desired.filter(Boolean))].filter((label) => availableLabels.has(label));
 }
 
 function ghOpenIssue({ title, body, labels }) {
@@ -115,8 +132,6 @@ function ghCloseIssue(number, comment) {
     return { ok: false, error: String(e.message || e) };
   }
 }
-
-// === Checks ===
 
 async function checkEndpoints() {
   const out = await Promise.all(ENDPOINTS.map(checkEndpoint));
@@ -184,8 +199,6 @@ function checkVpsDrift() {
   return evaluateDrift({ repoPath, expectedRepo: REPO, branch: 'main', git: realGit });
 }
 
-// === Run ===
-
 const endpointsResult = await checkEndpoints();
 const wfCount = await checkWorkflowsRuins();
 const driftEvidence = checkVpsDrift();
@@ -202,8 +215,6 @@ const snapshot = {
 };
 writeFileSync(SNAPSHOT_FILE, JSON.stringify(snapshot, null, 2));
 
-// Fonte durável do estado: Issues Sentinela abertas. Se a leitura falhar,
-// falha fechado para nunca recriar alertas por assumir inventário vazio.
 const issueInventory = ghListOpenSentinelaIssues();
 if (!issueInventory.ok) {
   const report = `# Sentinela — ${snapshot.at}\n\nSTATUS=BLOCKED\nREASON=ISSUE_INVENTORY_UNAVAILABLE\n\nNenhuma Issue foi criada/fechada e nenhum Telegram foi enviado porque o inventário de Issues Sentinela abertas não pôde ser lido.\n`;
@@ -238,7 +249,6 @@ if (!issueInventory.ok) {
     eventos.push({ type: 'ALERT', id: item.id, issue: created.number || 0, error: created.error || null, notify: notify.status });
   }
 
-  // KEEP é silêncio por contrato: nenhum comentário, Issue nova ou Telegram.
   for (const item of transitions.keep) {
     eventos.push({ type: 'KEEP', id: item.id, issue: item.issue.number, notify: 'SILENT' });
   }
@@ -261,8 +271,6 @@ if (!issueInventory.ok) {
     eventos.push({ type: 'RECOVERY', id: item.id, issue: item.issue.number, error: closed.error || null, notify: notify.status });
   }
 
-  // Duplicata com MESMO hash: preserva a Issue mais antiga como canônica e
-  // fecha apenas a duplicata comprovada, sem emitir Telegram extra.
   for (const item of transitions.duplicates) {
     const closed = ghCloseIssue(
       item.duplicate.number,
