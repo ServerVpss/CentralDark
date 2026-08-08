@@ -70,6 +70,27 @@ Regras automáticas:
 - SOL coordena, PIVETE/HERMES preserva e executa, Judge valida de forma independente;
 - tarefa simples não vira swarm, tratado matemático, matriz de fases ou nova arquitetura sem solicitação.
 
+### Portabilidade do Writer e fallback por capacidade
+
+```text
+MODEL_IS_REPLACEABLE=true
+WRITER_ROLE_IS_NOT_MODEL=true
+ONE_WRITER_PER_SCOPE=true
+CHIEF_ORDER_CAN_TRIGGER_HANDOFF=true
+WRITER_UNAVAILABLE_DOES_NOT_BLOCK_MISSION=true
+DETERMINISTIC_FIRST=true
+AI_FALLBACK_BY_CAPABILITY=true
+UNKNOWN_NEVER_PASS=true
+```
+
+`Writer` protege o **escopo**, não a marca do modelo. O estado deve separar `WRITER_ROLE`, `WRITER_SCOPE` e `WRITER_INSTANCE`; nome de modelo/provider é telemetria da instância atual e nunca posse permanente.
+
+Se o Writer atual estiver vivo e possuir delta ainda não entregue, outro executor permanece `READ_ONLY/JUDGE`. Se ele finalizou, está offline, perdeu sessão, bateu quota/rate-limit ou ficou indisponível, capture HEAD + branch + dirty/uncommitted state e faça `WRITER_HANDOFF` para outra instância capaz. Não espere um modelo específico voltar quando o estado pode ser preservado e transferido.
+
+Uma ordem atual de `SEGREDO/CHEFE` pode iniciar o handoff imediatamente; isso **não** autoriza dois Writers simultâneos. Primeiro capture/preserve o estado do escopo, depois transfira a posse e continue.
+
+Para trabalho que usa IA: mecanismo determinístico primeiro; escolha o modelo por capacidade/saúde/custo. GPT-5.5 pode ser preferência para raciocínio crítico quando disponível, mas nunca é dependência de ownership. Em `429`, `402`, timeout ou modelo offline, tente outro provider/modelo já configurado e capaz; se nenhum puder cumprir o contrato, marque `BLOCKED/UNKNOWN`. Falha de um modelo não bloqueia a missão inteira e nunca vira `PASS`.
+
 ## Doutrina
 
 ```txt
