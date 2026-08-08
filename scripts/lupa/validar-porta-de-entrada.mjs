@@ -46,11 +46,15 @@ const BOUNDARY_ENFORCED_FILES = [
   "scripts/checker/01-estrutura.sh",
   "scripts/checker/02-logs.sh",
   "scripts/checker/03-github-deploy.sh",
+  "scripts/checker/04-pm2.sh",
   "scripts/checker/05-telegram-bot.sh",
+  "scripts/checker/06-supabase-sync.sh",
   "scripts/checker/07-whatsapp-wuzapi.sh",
   "scripts/checker/08-chat-ao-vivo.sh",
+  "scripts/checker/09-caddy.sh",
   "scripts/checker/10-crm.sh",
   "scripts/checker/11-seguranca.sh",
+  "scripts/checker/12-wildcard-dns.sh",
   "scripts/checker/run-all.sh",
   "scripts/clone-deck-gh-pull-with-deploy.sh",
   "scripts/webhook/deploy-job.sh",
@@ -75,13 +79,18 @@ function lerJson(relativePath) {
 }
 
 function git(args) {
+  return execFileSync("git", ["-C", ROOT, ...args], {
+    encoding: "utf8",
+    stdio: ["ignore", "pipe", "pipe"],
+  });
+}
+
+function gitCommitExiste(sha) {
   try {
-    return execFileSync("git", ["-C", ROOT, ...args], {
-      encoding: "utf8",
-      stdio: ["ignore", "pipe", "pipe"],
-    });
+    git(["rev-parse", "--verify", `${sha}^{commit}`]);
+    return true;
   } catch {
-    return "";
+    return false;
   }
 }
 
@@ -289,13 +298,25 @@ for (const file of BOUNDARY_ENFORCED_FILES) {
 // Não criar workflow paralelo. Em PRs com BASE/HEAD conhecidos, qualquer novo
 // arquivo de workflow é bloqueado para forçar extensão do mecanismo existente.
 if (shaValido(BASE_SHA) && shaValido(HEAD_SHA)) {
-  const workflowChanges = git(["diff", "--name-status", BASE_SHA, HEAD_SHA, "--", ".github/workflows"]);
-  for (const line of workflowChanges.split(/\r?\n/).filter(Boolean)) {
-    const [status, path] = line.split(/\t/);
-    if (status === "A" && /\.ya?ml$/i.test(path || "")) {
-      errors.push(`NOVO_WORKFLOW_BLOQUEADO_REUTILIZE_EXISTENTE:${path}`);
+  const baseExiste = gitCommitExiste(BASE_SHA);
+  const headExiste = gitCommitExiste(HEAD_SHA);
+  if (!baseExiste) errors.push(`WORKFLOW_BASE_SHA_INDISPONIVEL:${BASE_SHA}`);
+  if (!headExiste) errors.push(`WORKFLOW_HEAD_SHA_INDISPONIVEL:${HEAD_SHA}`);
+  if (baseExiste && headExiste) {
+    try {
+      const workflowChanges = git(["diff", "--name-status", BASE_SHA, HEAD_SHA, "--", ".github/workflows"]);
+      for (const line of workflowChanges.split(/\r?\n/).filter(Boolean)) {
+        const [status, path] = line.split(/\t/);
+        if (status === "A" && /\.ya?ml$/i.test(path || "")) {
+          errors.push(`NOVO_WORKFLOW_BLOQUEADO_REUTILIZE_EXISTENTE:${path}`);
+        }
+      }
+    } catch {
+      errors.push(`WORKFLOW_DIFF_INDISPONIVEL:${BASE_SHA}:${HEAD_SHA}`);
     }
   }
+} else if (BASE_SHA || HEAD_SHA) {
+  errors.push(`WORKFLOW_SHA_INVALIDO:${BASE_SHA || "EMPTY"}:${HEAD_SHA || "EMPTY"}`);
 }
 
 for (const entrypoint of ENTRADAS) {
