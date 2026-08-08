@@ -77,8 +77,16 @@ export function resultadoAprovadoPeloCritic(resultado = {}, parecer = null) {
   return resultado?.ok === true && parecer?.aprovado === true;
 }
 
-const MUTATING_SHELL = /\b(?:rm|mv|cp|mkdir|touch|chmod|chown|tee|sed\s+-i|git\s+(?:add|commit|push|merge|rebase|reset|apply|checkout|switch)|npm\s+(?:install|i)|pnpm\s+install|yarn\s+add|pm2\s+(?:restart|reload|start|stop|delete)|docker\s+(?:compose\s+)?(?:up|down|restart|rm))\b/i;
-const VALIDATION_SHELL = /\b(?:node\s+--check|node\s+--test|npm\s+(?:test|run\s+(?:test|build|typecheck|lint))|pnpm\s+(?:test|build|typecheck|lint)|yarn\s+(?:test|build|typecheck|lint)|pytest|vitest|jest|tsc\b|typecheck\b|eslint\b|sha256sum\b|curl\b|health\b|validar\b|validate\b|check\b)\b/i;
+// Mutações de shell: cobre comandos conhecidos E redirecionamentos/escritas genéricas.
+// A lista é conservadora de propósito: dúvida sobre escrita => tratar como mutação.
+const MUTATING_SHELL = /\b(?:rm|mv|cp|mkdir|touch|chmod|chown|tee|truncate|install|rsync|sed\s+-i|perl\s+-[^\n]*i|git\s+(?:add|commit|push|merge|rebase|reset|apply|checkout|switch)|npm\s+(?:install|i)|pnpm\s+install|yarn\s+add|pm2\s+(?:restart|reload|start|stop|delete)|docker\s+(?:compose\s+)?(?:up|down|restart|rm))\b/i;
+const SHELL_REDIRECTION_WRITE = /(?:^|[\s;&|])\d*>>?(?!&)(?=\s*[^\s])/;
+const SHELL_PROGRAMMATIC_WRITE = /(?:python(?:3)?\b[^\n]*\bopen\s*\([^\n]*,[^\n]*['"](?:w|a|x)[+b]?['"]|\bdd\b[^\n]*\bof=)/i;
+
+// Prova pós-mutação precisa validar sintaxe/tipo/build/comportamento aplicável.
+// Evidência de estado/identidade (git status/diff/rev-parse, hash, curl/health solto)
+// NÃO satisfaz sozinha este gate.
+const BEHAVIOR_VALIDATION_SHELL = /(?:\bnode\s+--(?:check|test)\b|\bnpm\s+(?:test|run\s+(?:test|build|typecheck|lint))\b|\bpnpm\s+(?:test|build|typecheck|lint)\b|\byarn\s+(?:test|build|typecheck|lint)\b|\bpytest\b|\bvitest\b|\bjest\b|\btsc\b|\btypecheck\b|\beslint\b|\bbash\s+-n\b|\bpython(?:3)?\s+-m\s+(?:py_compile|compileall)\b)/i;
 
 function gitMuta(h) {
   if (h?.ferramenta !== 'git') return false;
@@ -86,12 +94,17 @@ function gitMuta(h) {
   return acao !== '' && acao !== 'status';
 }
 
+function shellMuta(comando) {
+  const cmd = String(comando || '');
+  return MUTATING_SHELL.test(cmd) || SHELL_REDIRECTION_WRITE.test(cmd) || SHELL_PROGRAMMATIC_WRITE.test(cmd);
+}
+
 function indiceUltimaMutacao(historico) {
   let idx = -1;
   for (let i = 0; i < historico.length; i++) {
     const h = historico[i] || {};
     if (h.ferramenta === 'escrever_arquivo' || gitMuta(h)) idx = i;
-    else if (h.ferramenta === 'shell' && MUTATING_SHELL.test(String(h.args?.comando || ''))) idx = i;
+    else if (h.ferramenta === 'shell' && shellMuta(h.args?.comando)) idx = i;
   }
   return idx;
 }
@@ -100,7 +113,7 @@ function indiceValidacaoDepois(historico, depoisDe) {
   for (let i = Math.max(0, depoisDe + 1); i < historico.length; i++) {
     const h = historico[i] || {};
     if (h.ok !== true || h.critic) continue;
-    if (h.ferramenta === 'shell' && VALIDATION_SHELL.test(String(h.args?.comando || ''))) return i;
+    if (h.ferramenta === 'shell' && BEHAVIOR_VALIDATION_SHELL.test(String(h.args?.comando || ''))) return i;
     if (h.ferramenta === 'handler' && ['ping', 'http'].includes(String(h.args?.acao || ''))) return i;
   }
   return -1;
@@ -127,7 +140,7 @@ export function auditarFinalizacao({ missao = '', decisao = {}, historico = [] }
   if (ultimo?.critic) problemas.push('última etapa possui reprovação do Critic');
 
   if (ultimaMutacao >= 0 && validacaoDepois < 0) {
-    problemas.push('houve mutação sem validação bem-sucedida posterior');
+    problemas.push('houve mutação sem validação semântica bem-sucedida posterior');
   }
 
   const receipt = {
@@ -148,7 +161,7 @@ export function auditarFinalizacao({ missao = '', decisao = {}, historico = [] }
       history_present: historico.length > 0,
       last_step_ok: Boolean(ultimo && ultimo.ok === true),
       last_step_critic_clear: Boolean(ultimo && !ultimo.critic),
-      mutation_has_later_validation: ultimaMutacao < 0 || validacaoDepois > ultimaMutacao,
+      mutation_has_later_semantic_validation: ultimaMutacao < 0 || validacaoDepois > ultimaMutacao,
     },
     problems: problemas,
   };
