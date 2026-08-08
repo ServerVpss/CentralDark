@@ -15,6 +15,16 @@ const PORTABILITY_TOKENS = [
   "UNKNOWN_NEVER_PASS=true",
 ];
 
+const UNKNOWN_PROGRESS_TOKENS = [
+  "UNKNOWN_NAO_ESTACIONA=true",
+  "UNKNOWN_SELF_LOOP=FORBIDDEN",
+  "UNKNOWN_TRANSITIONS=TESTE|FATO|FAIL|BLOCKED|CHEFE_SEGREDO_NECESSARIO",
+  "CHEFE_NAO_CARREGA_CARGA_DA_PROVA=true",
+  "CHEFE_NAO_E_OBJETO_DA_PROVA=true",
+  "IA_PROVA_SUAS_PROPRIAS_AFIRMACOES=true",
+  "IA_PROVA_SEU_PROPRIO_TRABALHO=true",
+];
+
 const CANONICAL = Object.freeze({
   "LEIA-ME-IA.md": [
     "SEGREDO/CHEFE COMANDA",
@@ -35,6 +45,7 @@ const CANONICAL = Object.freeze({
     "PIVETE/HERMES = mordomo de casa, executor e guardião da continuidade",
     "WRITER_UNICO=true",
     "UNKNOWN_NAO_PASSA=true",
+    ...UNKNOWN_PROGRESS_TOKENS,
     "CHEFE_SEGREDO_NECESSARIO",
   ],
   "docs/CONSCIENCIA/DICIONARIO-PIVETE-GITHUB.md": [
@@ -75,6 +86,10 @@ const FORBIDDEN_CANONICAL = Object.freeze([
   {
     code: "UNKNOWN_CONVERTIDO_EM_PASS",
     pattern: /\bUNKNOWN\s*(?:=|:|→|->)\s*PASS\b/i,
+  },
+  {
+    code: "UNKNOWN_SELF_LOOP_DECLARADO",
+    pattern: /\bUNKNOWN\s*(?:=|:|→|->)\s*UNKNOWN\b/i,
   },
   {
     code: "MODEL_LOCK_ATIVO",
@@ -290,7 +305,8 @@ export function runValidation({ repoRoot, profileRoots = [] }) {
     writer_rule: "ONE_WRITER_PER_SCOPE_PORTABLE_INSTANCE",
     model_rule: "MODEL_IS_REPLACEABLE",
     fallback_rule: "AI_FALLBACK_BY_CAPABILITY",
-    unknown_rule: "UNKNOWN_NAO_PASSA",
+    unknown_rule: "UNKNOWN_NAO_PASSA+UNKNOWN_NAO_ESTACIONA",
+    proof_rule: "IA_PROVA_SUAS_PROPRIAS_AFIRMACOES_E_TRABALHO",
     canonical_findings: canonicalFindings,
     profile_reports: profileReports,
     findings: [...canonicalFindings, ...profileFindings],
@@ -309,7 +325,7 @@ function printHuman(report) {
     `IDENTIDADE_OK=${report.ok ? 1 : 0} ` +
       `AUTORIDADE=SEGREDO_CHEFE COORDENADOR=SOL EXECUTOR=PIVETE_HERMES ` +
       `WRITER=PORTABLE_SCOPE_LOCK MODEL=REPLACEABLE FALLBACK=BY_CAPABILITY ` +
-      `ERROS=${report.findings.length}`,
+      `UNKNOWN=NO_PASS_NO_PARK PROOF=AI_OWNS ERROS=${report.findings.length}`,
   );
 }
 
