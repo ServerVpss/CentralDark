@@ -74,6 +74,16 @@ test('sha256sum depois de mutação é prova de estado, não prova semântica', 
   assert.match(r.parecer, /mutação sem validação semântica/);
 });
 
+test('handler ping/http genérico não prova semântica do artefato mutado', () => {
+  const historico = [
+    { etapa_titulo: 'editar', ferramenta: 'escrever_arquivo', args: { path: 'a.mjs' }, resultado: 'gravado', ok: true },
+    { etapa_titulo: 'ping', ferramenta: 'handler', args: { acao: 'ping' }, resultado: 'pong', ok: true },
+  ];
+  const r = auditarFinalizacao({ missao: 'x', decisao: concluir(), historico });
+  assert.equal(r.aprovado, false);
+  assert.match(r.parecer, /mutação sem validação semântica/);
+});
+
 test('redirecionamento shell conta como mutação e exige validação semântica', () => {
   const historico = [{
     etapa_titulo: 'escrever-shell', ferramenta: 'shell', args: { comando: 'printf x > a.txt' },
