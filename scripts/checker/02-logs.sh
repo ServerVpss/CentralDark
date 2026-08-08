@@ -19,10 +19,13 @@ else
   emit_alerta "$BLOCO" "Nenhuma revisão anterior encontrada na raiz canônica"
 fi
 
-# Verifica sanitização somente dentro da árvore CentralDark.
-VAZAMENTOS=$(grep -rliE 'BOT_TOKEN=[A-Za-z0-9]|SUPABASE_SERVICE_ROLE_KEY=[A-Za-z0-9]' "$REVISOES" 2>/dev/null | head -5 || true)
+# Nunca lê conteúdo de revisão para procurar credenciais. Detecta apenas nomes
+# que indicam material sensível bruto; valores permanecem fora do checker.
+VAZAMENTOS=$(find "$REVISOES" -xdev -type f \
+  \( -name '.env' -o -name '.env.*' -o -iname '*credential*' -o -iname '*private*key*' -o -iname '*service*role*' -o -iname '*bot*token*' \) \
+  -print 2>/dev/null | head -5 || true)
 if [ -z "$VAZAMENTOS" ]; then
-  emit_ok "$BLOCO" "Nenhum vazamento de secret encontrado em revisões"
+  emit_ok "$BLOCO" "Nenhum artefato sensível bruto detectado por nome em revisões"
 else
-  emit_erro "$BLOCO" "Possível vazamento em revisões: $(echo "$VAZAMENTOS" | tr '\n' ' ')"
+  emit_erro "$BLOCO" "Artefato sensível bruto detectado por nome em revisões: $(echo "$VAZAMENTOS" | tr '\n' ' ')"
 fi
