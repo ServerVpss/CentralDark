@@ -35,12 +35,39 @@
     "existing_capability_satisfies_request": "REUSE",
     "existing_capability_partially_satisfies_request": "EXTEND_MINIMALLY",
     "new_component_requires_proved_gap": true,
+    "new_workflow_when_equivalent_exists": "FORBIDDEN_UPDATE_EXISTING",
     "proposal_without_inventory": "BOOT_BLOCKED",
     "file_found_but_not_cross_referenced": "CONTEXT_RECONCILIATION_FAILURE",
     "open_or_draft_pr_is_operational_authority": false,
     "program_document_is_runtime_proof": false,
     "existing_path_is_runtime_proof": false,
     "formal_proof_without_user_request": "FORBIDDEN_FOR_SIMPLE_TASKS"
+  },
+  "repository_boundary_policy": {
+    "marker": "CENTRALDARK_ROOT_ONLY_REQUIRED",
+    "repository": "ServerVpss/CentralDark",
+    "vps_root": "/root/CentralDark",
+    "external_root_default": "OUT_OF_SCOPE",
+    "explicit_external_exclusions": [
+      "/root/Multizap/apps/clone-deck"
+    ],
+    "external_dependency_action": "CAPTURE_READ_ONLY_THEN_TRANSPLANT_MINIMAL_INTO_CANONICAL",
+    "external_runtime_fallback": "FORBIDDEN"
+  },
+  "workflow_policy": {
+    "marker": "WORKFLOW_REUSE_REQUIRED",
+    "reuse_existing_before_new": true,
+    "parallel_v2_v3_copy_final": "FORBIDDEN",
+    "new_workflow_requires_material_gap": true,
+    "ai_policy_marker": "AI_DETERMINISTIC_FALLBACK_REQUIRED",
+    "deterministic_first": true,
+    "ai_for": [
+      "UNKNOWN",
+      "ANOMALY",
+      "SEMANTIC_ADVISORY"
+    ],
+    "ai_unavailable": "DETERMINISTIC_FALLBACK_OR_FAIL_CLOSED",
+    "rate_limit_timeout_model_offline_is_pass": false
   },
   "complexity_policy": {
     "simple_local_clear_reversible": "DIRECT_MINIMAL_ACTION",
