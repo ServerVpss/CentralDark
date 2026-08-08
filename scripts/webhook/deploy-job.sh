@@ -2,16 +2,22 @@
 set -Eeuo pipefail
 
 ROOT="${CENTRALDARK_ROOT:-/root/CentralDark}"
-THEME="${ROOT}/scripts/lib/theme.sh"
-LOG_DIR="${WEBHOOK_DEPLOY_LOG_DIR:-${ROOT}/revisoes/$(date +%Y%m%d-%H%M%S)/webhook-deploy}"
-SUMMARY_FILE="${LOG_DIR}/summary.txt"
-FULL_LOG="${LOG_DIR}/deploy.log"
-EXPECTED_ORIGIN_RE='github\.com[:/]ServerVpss/CentralDark(\.git)?$'
-
 case "$ROOT" in
-  /root/CentralDark|/root/CentralDark/*) ;;
+  /root/CentralDark) ;;
   *) printf 'ROOT_FORA_DA_CENTRALDARK=%s\n' "$ROOT" >&2; exit 20 ;;
 esac
+
+THEME="${ROOT}/scripts/lib/theme.sh"
+LOG_DIR="${WEBHOOK_DEPLOY_LOG_DIR:-${ROOT}/revisoes/$(date +%Y%m%d-%H%M%S)/webhook-deploy}"
+RESOLVED_LOG_DIR="$(realpath -m -- "$LOG_DIR" 2>/dev/null || true)"
+case "$RESOLVED_LOG_DIR" in
+  "$ROOT/revisoes"|"$ROOT/revisoes"/*) ;;
+  *) printf 'LOG_DIR_FORA_DA_CENTRALDARK=%s\n' "$LOG_DIR" >&2; exit 24 ;;
+esac
+LOG_DIR="$RESOLVED_LOG_DIR"
+SUMMARY_FILE="${LOG_DIR}/summary.txt"
+FULL_LOG="${LOG_DIR}/deploy.log"
+EXPECTED_ORIGIN_RE='^(git@github\.com:|https://github\.com/|ssh://git@github\.com/)ServerVpss/CentralDark(\.git)?$'
 
 mkdir -p "$LOG_DIR"
 
@@ -64,7 +70,12 @@ if [ -d "$ROOT/.git" ]; then
     exit 21
   fi
   log_run git -C "$ROOT" status --short
-  log_run git -C "$ROOT" rev-parse --abbrev-ref HEAD
+  CURRENT_BRANCH="$(git -C "$ROOT" symbolic-ref --quiet --short HEAD 2>/dev/null || true)"
+  if [ "$CURRENT_BRANCH" != "main" ]; then
+    netflix_error "BRANCH_NAO_CANONICA=${CURRENT_BRANCH:-DETACHED}"
+    exit 25
+  fi
+  printf 'branch=%s\n' "$CURRENT_BRANCH" >>"$SUMMARY_FILE"
   if [ "${WEBHOOK_DEPLOY_GIT_PULL:-0}" = "1" ]; then
     DIRTY_TRACKED="$(git -C "$ROOT" status --porcelain=v1 --untracked-files=no)"
     if [ -n "$DIRTY_TRACKED" ]; then
