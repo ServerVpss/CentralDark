@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "contract_id": "CENTRALDARK_RECONCILIATION_BEFORE_CREATION",
+  "status": "CANONICAL",
+  "marker": "REUSE_BEFORE_CREATE_REQUIRED",
+  "applies_to": [
+    "chatgpt",
+    "claude",
+    "codex",
+    "gemini",
+    "copilot",
+    "cursor",
+    "windsurf",
+    "hermes",
+    "plugins",
+    "future_agents"
+  ],
+  "mandatory_pre_solution_sequence": [
+    "resolve_user_intent",
+    "search_existing_capabilities",
+    "open_primary_implementation_files",
+    "cross_reference_capabilities_with_request",
+    "classify_authority_and_runtime_state",
+    "reuse_or_extend_before_create"
+  ],
+  "state_classes": [
+    "CANONICAL",
+    "OPERATIONAL",
+    "CANDIDATE",
+    "PROGRAM_ONLY",
+    "HISTORICAL",
+    "UNKNOWN"
+  ],
+  "decision_rules": {
+    "existing_capability_satisfies_request": "REUSE",
+    "existing_capability_partially_satisfies_request": "EXTEND_MINIMALLY",
+    "new_component_requires_proved_gap": true,
+    "proposal_without_inventory": "BOOT_BLOCKED",
+    "file_found_but_not_cross_referenced": "CONTEXT_RECONCILIATION_FAILURE",
+    "open_or_draft_pr_is_operational_authority": false,
+    "program_document_is_runtime_proof": false,
+    "existing_path_is_runtime_proof": false,
+    "formal_proof_without_user_request": "FORBIDDEN_FOR_SIMPLE_TASKS"
+  },
+  "complexity_policy": {
+    "simple_local_clear_reversible": "DIRECT_MINIMAL_ACTION",
+    "broad_uncertain_multilayer_or_high_risk": "DELTA_WITH_INDEPENDENT_REVIEW",
+    "never_expose_internal_governance_as_user_bureaucracy": true
+  },
+  "internal_receipt_fields": [
+    "USER_INTENT",
+    "EXISTING_CAPABILITIES",
+    "EVIDENCE_OPENED",
+    "AUTHORITY_CLASSIFICATION",
+    "REUSE_DECISION",
+    "REAL_GAP",
+    "MINIMAL_ACTION"
+  ],
+  "receipt_visibility": "INTERNAL_BY_DEFAULT; SHOW_ONLY_ON_AUDIT_OR_BLOCKER"
+}

@@ -17,18 +17,38 @@ concurrency:
 
 jobs:
   triage:
-    name: Gates determinísticos em runner hospedado
+    name: Gates determinísticos em runner self-hosted
     if: github.event_name == 'pull_request' && github.repository == 'ServerVpss/CentralDark' && !github.event.pull_request.draft
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux]
     timeout-minutes: 10
     permissions:
       contents: read
       pull-requests: write
       issues: write
     steps:
+
+      - name: Bloquear HEAD de fork no runner persistente
+        id: fork_guard
+        if: github.event_name == 'pull_request' || github.event_name == 'pull_request_target'
+        shell: bash
+        env:
+          HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
+          BASE_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          if [ -z "${HEAD_REPO}" ] || [ "${HEAD_REPO}" != "${BASE_REPO}" ]; then
+            echo "blocked=true" >> "$GITHUB_OUTPUT"
+            echo "cause=FORK_HEAD" >> "$GITHUB_OUTPUT"
+            echo "BLOCKED_FORK_HEAD repo=${HEAD_REPO:-empty}"
+            exit 1
+          fi
+          echo "blocked=false" >> "$GITHUB_OUTPUT"
+          echo "FORK_GUARD_OK ${HEAD_REPO}"
+
       - name: Checkout exato do PR
-        uses: actions/checkout@v5
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with:
+          persist-credentials: false
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha }}
 
@@ -75,7 +95,7 @@ jobs:
               '',
               `- [${secretOk ? 'x' : ' '}] Scanner de paths e valores sensíveis`,
               '- [x] `git diff --check`',
-              '- [x] PR analisado em `ubuntu-latest`; nenhum script do PR foi executado na VPS',
+              '- [x] Gates determinísticos no self-hosted; scanner roda sobre diff (revisar trust do checkout); nenhum script do PR foi executado na VPS',
               `- [x] Classificação de path operacional: ${process.env.TOUCHED_SENSITIVE === 'true' ? 'TOCADO — revisão e autorização obrigatórias' : 'não tocado'}`,
               '- [ ] Revisão final Codex visível',
               '',
@@ -92,6 +112,39 @@ jobs:
           echo "SECRET_SUSPECT_BLOCKED"
           exit 1
 
+
+      - name: Receipt determinístico (sempre)
+        if: always()
+        shell: bash
+        env:
+          JOB_STATUS: ${{ job.status }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          EVENT_NAME: ${{ github.event_name }}
+          FORK_BLOCKED: ${{ steps.fork_guard.outputs.blocked }}
+          FORK_CAUSE: ${{ steps.fork_guard.outputs.cause }}
+        run: |
+          set -euo pipefail
+          echo "HEAD_SHA=${HEAD_SHA}"
+          echo "EVENT_NAME=${EVENT_NAME}"
+          echo "EXECUTOR=self-hosted"
+          echo "ROTA_PRIMARIA=self-hosted-linux"
+          echo "ROTA_FALLBACK=BLOCKED_NO_HOSTED"
+          echo "JOB_STATUS=${JOB_STATUS}"
+          if [ "${FORK_BLOCKED:-}" = "true" ]; then
+            echo "RESULTADO=BLOCKED"
+            echo "CAUSE=${FORK_CAUSE:-FORK_HEAD}"
+          elif [ "${JOB_STATUS}" = "cancelled" ]; then
+            echo "RESULTADO=BLOCKED"
+            echo "CAUSE=CANCELLED_OR_RUNNER_UNAVAILABLE"
+          elif [ "${JOB_STATUS}" = "failure" ]; then
+            echo "RESULTADO=FAIL"
+          elif [ "${JOB_STATUS}" = "success" ]; then
+            echo "RESULTADO=PASS"
+          else
+            echo "RESULTADO=BLOCKED"
+            echo "CAUSE=UNKNOWN_STATUS_${JOB_STATUS}"
+          fi
+          # UNKNOWN/SKIPPED/empty never promoted as PASS by this receipt alone
   gemini-advisory:
     name: Gemini consultivo via darkai
     if: >-
@@ -106,6 +159,25 @@ jobs:
       pull-requests: write
       issues: write
     steps:
+
+      - name: Bloquear HEAD de fork no runner persistente
+        id: fork_guard
+        if: github.event_name == 'pull_request' || github.event_name == 'pull_request_target'
+        shell: bash
+        env:
+          HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
+          BASE_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          if [ -z "${HEAD_REPO}" ] || [ "${HEAD_REPO}" != "${BASE_REPO}" ]; then
+            echo "blocked=true" >> "$GITHUB_OUTPUT"
+            echo "cause=FORK_HEAD" >> "$GITHUB_OUTPUT"
+            echo "BLOCKED_FORK_HEAD repo=${HEAD_REPO:-empty}"
+            exit 1
+          fi
+          echo "blocked=false" >> "$GITHUB_OUTPUT"
+          echo "FORK_GUARD_OK ${HEAD_REPO}"
+
       - name: Preparar diff sanitizado pela API, sem checkout
         id: prepare
         uses: actions/github-script@v7
@@ -217,3 +289,36 @@ jobs:
             const existing = comments.find(c => c.body && c.body.includes(marker));
             if (existing) await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
             else await github.rest.issues.createComment({ owner, repo, issue_number, body });
+
+      - name: Receipt determinístico (sempre)
+        if: always()
+        shell: bash
+        env:
+          JOB_STATUS: ${{ job.status }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          EVENT_NAME: ${{ github.event_name }}
+          FORK_BLOCKED: ${{ steps.fork_guard.outputs.blocked }}
+          FORK_CAUSE: ${{ steps.fork_guard.outputs.cause }}
+        run: |
+          set -euo pipefail
+          echo "HEAD_SHA=${HEAD_SHA}"
+          echo "EVENT_NAME=${EVENT_NAME}"
+          echo "EXECUTOR=self-hosted"
+          echo "ROTA_PRIMARIA=self-hosted-linux"
+          echo "ROTA_FALLBACK=BLOCKED_NO_HOSTED"
+          echo "JOB_STATUS=${JOB_STATUS}"
+          if [ "${FORK_BLOCKED:-}" = "true" ]; then
+            echo "RESULTADO=BLOCKED"
+            echo "CAUSE=${FORK_CAUSE:-FORK_HEAD}"
+          elif [ "${JOB_STATUS}" = "cancelled" ]; then
+            echo "RESULTADO=BLOCKED"
+            echo "CAUSE=CANCELLED_OR_RUNNER_UNAVAILABLE"
+          elif [ "${JOB_STATUS}" = "failure" ]; then
+            echo "RESULTADO=FAIL"
+          elif [ "${JOB_STATUS}" = "success" ]; then
+            echo "RESULTADO=PASS"
+          else
+            echo "RESULTADO=BLOCKED"
+            echo "CAUSE=UNKNOWN_STATUS_${JOB_STATUS}"
+          fi
+          # UNKNOWN/SKIPPED/empty never promoted as PASS by this receipt alone

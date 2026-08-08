@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-08-04T09:47:49.635Z
+# 🧠 Notion Sync — 2026-08-07T03:31:45.144Z
 
-- **Commit fonte:** `0eec53227763fb8a2a7740bd6fad302d5f12f16c`
+- **Commit fonte:** `5f991776bceb5978b40b82499abf8ce592640e5a`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 51 atualizadas · ❌ 331 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 59 atualizadas · ❌ 333 erros
 
 ## Por base
 
@@ -15,8 +15,8 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
-| aprendizados | 8 | 1 | 7 | 0 | 0 |
-| estrutura | 331 | 0 | 0 | 0 | 331 |
+| aprendizados | 15 | 0 | 15 | 0 | 0 |
+| estrutura | 333 | 0 | 0 | 0 | 333 |
 
 ## Operações
 
@@ -73,7 +73,14 @@
 | aprendizados | atualizado | #5 — Workflow promovido sem o script que ele executa: o bot autônomo nunca rodou |
 | aprendizados | atualizado | #6 — A porta de entrada nunca existiu: por que nenhuma IA lia as regras da casa |
 | aprendizados | atualizado | #7 — github_commit (MCP) não deleta arquivo; duplicatas CONSCIENCIA/BRAIN nasceram do mesmo commit de bot |
-| aprendizados | criado | #8 — Nunca gerar -v2/-v3: refinar o arquivo que já existe |
+| aprendizados | atualizado | #8 — Nunca gerar -v2/-v3: refinar o arquivo que já existe |
+| aprendizados | atualizado | #9 — Escritor único: auditar e comentar na PR alheia em vez de abrir PR concorrente |
+| aprendizados | atualizado | #10 — Reconferir o blob na hora de publicar, não só na hora de auditar |
+| aprendizados | atualizado | #11 — Hash validado por regex não prova que o artefato existe |
+| aprendizados | atualizado | #12 — Modo novo não alcança problema empilhado antes da ramificação de modo |
+| aprendizados | atualizado | #13 — Recuo preventivo não é obediência |
+| aprendizados | atualizado | #14 — Mutante equivalente sai do denominador mas aponta a invariante sem teste |
+| aprendizados | atualizado | #15 — Achado repetido é ruído, não reforço |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
@@ -240,6 +247,7 @@
 | estrutura | erro | docs/CONSCIENCIA/DICIONARIO-PIVETE-GITHUB.md |
 | estrutura | erro | docs/CONSCIENCIA/DNS-WILDCARD-CENTRALLDARK.md |
 | estrutura | erro | docs/CONSCIENCIA/EDGE_FUNCTIONS.md |
+| estrutura | erro | docs/CONSCIENCIA/ESCOLA-HERMES-CASA.md |
 | estrutura | erro | docs/CONSCIENCIA/ESPELHO-CLONE-DECK-PASSIVO.md |
 | estrutura | erro | docs/CONSCIENCIA/GITHUB-LABELS-OPERACIONAIS.md |
 | estrutura | erro | docs/CONSCIENCIA/GITHUB-PR-OBSERVAR-CODEX.md |
@@ -391,6 +399,7 @@
 | estrutura | erro | docs/CONSCIENCIA/TREINAMENTO-IAS/protocolos/PONTOS-DE-COMANDO.md |
 | estrutura | erro | docs/CONSCIENCIA/TREINAMENTO-IAS/protocolos/PROMPT-BASE-GRUPO.md |
 | estrutura | erro | docs/CONSCIENCIA/TREINAMENTO-IAS/protocolos/PROTOCOLO-V4-VETO-ABSOLUTO.md |
+| estrutura | erro | docs/CONSCIENCIA/VAULT/APRENDIZADO-CANDIDATO.template.md |
 | estrutura | erro | docs/CONSCIENCIA/VAULT/INDEX.md |
 | estrutura | erro | docs/CONSCIENCIA/VAULT/PROMPT-MESTRE.md |
 | estrutura | erro | docs/CONSCIENCIA/VAULT/REGRAS-AUTONOMIA.md |

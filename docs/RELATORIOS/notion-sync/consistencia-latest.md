@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-08-04T09:47:52.861Z
-- **Commit:** `0eec53227763fb8a2a7740bd6fad302d5f12f16c`
+- **Gerado:** 2026-08-07T03:31:48.330Z
+- **Commit:** `5f991776bceb5978b40b82499abf8ce592640e5a`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 39 | 39 | 39 | 0 | 0 |
-| aprendizados | 8 | 0 | 0 | 8 | 0 |
+| aprendizados | 15 | 0 | 0 | 15 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **8**
+- 🟥 Faltando no Notion: **15**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -56,4 +56,11 @@
 - 6. A porta de entrada nunca existiu: por que nenhuma IA lia as regras da casa
 - 7. github_commit (MCP) não deleta arquivo; duplicatas CONSCIENCIA/BRAIN nasceram do mesmo commit de bot
 - 8. Nunca gerar -v2/-v3: refinar o arquivo que já existe
+- 9. Escritor único: auditar e comentar na PR alheia em vez de abrir PR concorrente
+- 10. Reconferir o blob na hora de publicar, não só na hora de auditar
+- 11. Hash validado por regex não prova que o artefato existe
+- 12. Modo novo não alcança problema empilhado antes da ramificação de modo
+- 13. Recuo preventivo não é obediência
+- 14. Mutante equivalente sai do denominador mas aponta a invariante sem teste
+- 15. Achado repetido é ruído, não reforço
 </details>
