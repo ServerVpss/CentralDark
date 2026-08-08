@@ -31,7 +31,7 @@ test('bloqueia mutação sem validação posterior', () => {
   }];
   const r = auditarFinalizacao({ missao: 'x', decisao: concluir(), historico });
   assert.equal(r.aprovado, false);
-  assert.match(r.parecer, /mutação sem validação/);
+  assert.match(r.parecer, /mutação sem validação semântica/);
 });
 
 test('aprova mutação seguida de teste bem-sucedido', () => {
@@ -61,7 +61,39 @@ test('git status depois de mutação não substitui teste semântico', () => {
   ];
   const r = auditarFinalizacao({ missao: 'x', decisao: concluir(), historico });
   assert.equal(r.aprovado, false);
-  assert.match(r.parecer, /mutação sem validação/);
+  assert.match(r.parecer, /mutação sem validação semântica/);
+});
+
+test('sha256sum depois de mutação é prova de estado, não prova semântica', () => {
+  const historico = [
+    { etapa_titulo: 'editar', ferramenta: 'escrever_arquivo', args: { path: 'a.mjs' }, resultado: 'gravado', ok: true },
+    { etapa_titulo: 'hash', ferramenta: 'shell', args: { comando: 'sha256sum a.mjs' }, resultado: 'abc  a.mjs', ok: true },
+  ];
+  const r = auditarFinalizacao({ missao: 'x', decisao: concluir(), historico });
+  assert.equal(r.aprovado, false);
+  assert.match(r.parecer, /mutação sem validação semântica/);
+});
+
+test('redirecionamento shell conta como mutação e exige validação semântica', () => {
+  const historico = [{
+    etapa_titulo: 'escrever-shell', ferramenta: 'shell', args: { comando: 'printf x > a.txt' },
+    resultado: 'ok', ok: true,
+  }];
+  const r = auditarFinalizacao({ missao: 'x', decisao: concluir(), historico });
+  assert.equal(r.aprovado, false);
+  assert.equal(r.receipt.last_mutation_index, 0);
+  assert.match(r.parecer, /mutação sem validação semântica/);
+});
+
+test('escrita programática em shell conta como mutação', () => {
+  const historico = [{
+    etapa_titulo: 'escrever-python', ferramenta: 'shell',
+    args: { comando: `python3 -c "open('a.txt','w').write('x')"` },
+    resultado: 'ok', ok: true,
+  }];
+  const r = auditarFinalizacao({ missao: 'x', decisao: concluir(), historico });
+  assert.equal(r.aprovado, false);
+  assert.equal(r.receipt.last_mutation_index, 0);
 });
 
 test('echo de marcador não conta como teste', () => {
