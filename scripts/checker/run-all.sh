@@ -12,8 +12,10 @@ source "$SCRIPT_DIR/_lib.sh"
 TS=$(date +%Y%m%d-%H%M%S)
 SAIDA_DIR="${CK_CENTRALDARK_ROOT}/revisoes/${TS}/checker-final"
 require_canonical_path "run-all" "$SAIDA_DIR" || exit 2
-mkdir -p "$SAIDA_DIR" 2>/dev/null || SAIDA_DIR="/tmp/centraldark-checker-${TS}"
-mkdir -p "$SAIDA_DIR"
+mkdir -p "$SAIDA_DIR" || {
+  echo "ERRO|run-all|Não foi possível criar saída canônica: $SAIDA_DIR" >&2
+  exit 2
+}
 
 BRUTO="${SAIDA_DIR}/bruto.txt"
 RELATORIO="${SAIDA_DIR}/relatorio.md"
