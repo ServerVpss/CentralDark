@@ -1,9 +1,11 @@
 #!/usr/bin/env node
 // 🧐 Agente Critic — auditor implacável. Audita CADA etapa executada.
 // Barato por design: heurística local sempre; modelo (gemini flash via darkai) SÓ quando a etapa falhou.
-// Fail-safe: qualquer erro aqui é ignorado pelo orquestrador — o Critic nunca derruba uma missão.
+// Fail-safe da auditoria comum: heurística local preserva parecer mesmo se o modelo cair.
+// Fail-closed da finalização: terminou=true é só proposta; conclusão exige gate determinístico.
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
+import { createHash } from 'node:crypto';
 const pexec = promisify(execFile);
 
 const MODELO_AUDITORIA = 'google/gemini-3-flash-preview';
@@ -67,6 +69,85 @@ export async function auditar(decisao, resultado, historico = []) {
     } catch { /* heurística já basta */ }
   }
   return { aprovado: false, parecer };
+}
+
+const MUTATING_TOOLS = new Set(['escrever_arquivo', 'git']);
+const MUTATING_SHELL = /\b(?:rm|mv|cp|mkdir|touch|chmod|chown|tee|sed\s+-i|git\s+(?:add|commit|push|merge|rebase|reset|apply|checkout|switch)|npm\s+(?:install|i)|pnpm\s+install|yarn\s+add|pm2\s+(?:restart|reload|start|stop|delete)|docker\s+(?:compose\s+)?(?:up|down|restart|rm))\b/i;
+const VALIDATION_SHELL = /\b(?:node\s+--check|node\s+--test|npm\s+(?:test|run\s+(?:test|build|typecheck|lint))|pnpm\s+(?:test|build|typecheck|lint)|yarn\s+(?:test|build|typecheck|lint)|pytest|vitest|jest|tsc\b|typecheck\b|eslint\b|sha256sum\b|git\s+(?:diff|status|rev-parse)\b|curl\b|health\b|validar\b|validate\b|check\b)\b/i;
+
+function indiceUltimaMutacao(historico) {
+  let idx = -1;
+  for (let i = 0; i < historico.length; i++) {
+    const h = historico[i] || {};
+    if (MUTATING_TOOLS.has(h.ferramenta)) idx = i;
+    else if (h.ferramenta === 'shell' && MUTATING_SHELL.test(String(h.args?.comando || ''))) idx = i;
+  }
+  return idx;
+}
+
+function indiceValidacaoDepois(historico, depoisDe) {
+  for (let i = Math.max(0, depoisDe + 1); i < historico.length; i++) {
+    const h = historico[i] || {};
+    if (h.ok !== true || h.critic) continue;
+    if (h.ferramenta === 'shell' && VALIDATION_SHELL.test(String(h.args?.comando || ''))) return i;
+    if (h.ferramenta === 'handler' && ['ping', 'http'].includes(String(h.args?.acao || ''))) return i;
+    if (h.ferramenta === 'git' && String(h.args?.acao || '') === 'status') return i;
+  }
+  return -1;
+}
+
+function sha256(value) {
+  return createHash('sha256').update(String(value)).digest('hex');
+}
+
+// Gate final determinístico: terminou=true é PROPOSTA, nunca prova de conclusão.
+// O Critic final pode bloquear. Não usa LLM nem depende da narrativa do decisor.
+export function auditarFinalizacao({ missao = '', decisao = {}, historico = [] } = {}) {
+  const problemas = [];
+  const resumo = String(decisao?.args?.mensagem || decisao?.pensamento || '').trim();
+  const ultimo = historico.length ? historico[historico.length - 1] : null;
+  const ultimaMutacao = indiceUltimaMutacao(historico);
+  const validacaoDepois = indiceValidacaoDepois(historico, ultimaMutacao);
+
+  if (decisao?.terminou !== true) problemas.push('decisor não propôs conclusão');
+  if (decisao?.ferramenta !== 'notificar_progresso') problemas.push('conclusão deve usar notificar_progresso');
+  if (!resumo) problemas.push('resumo final ausente');
+  if (!historico.length) problemas.push('histórico vazio: nenhuma ação/evidência observada');
+  if (ultimo && ultimo.ok !== true) problemas.push('última etapa não está aprovada');
+  if (ultimo?.critic) problemas.push('última etapa possui reprovação do Critic');
+
+  if (ultimaMutacao >= 0 && validacaoDepois < 0) {
+    problemas.push('houve mutação sem validação bem-sucedida posterior');
+  }
+
+  const receipt = {
+    schema_version: 1,
+    gate: 'HERMES_FINALIZATION_CRITIC',
+    status: problemas.length ? 'BLOCKED' : 'PASS',
+    mission_sha256: sha256(missao),
+    history_sha256: sha256(JSON.stringify(historico)),
+    decision_model: decisao?._modelo_usado || null,
+    history_entries: historico.length,
+    last_step_index: historico.length ? historico.length - 1 : -1,
+    last_mutation_index: ultimaMutacao,
+    validation_after_mutation_index: validacaoDepois,
+    checks: {
+      completion_proposed: decisao?.terminou === true,
+      completion_tool_valid: decisao?.ferramenta === 'notificar_progresso',
+      summary_present: Boolean(resumo),
+      history_present: historico.length > 0,
+      last_step_ok: Boolean(ultimo && ultimo.ok === true),
+      last_step_critic_clear: Boolean(ultimo && !ultimo.critic),
+      mutation_has_later_validation: ultimaMutacao < 0 || validacaoDepois > ultimaMutacao,
+    },
+    problems: problemas,
+  };
+
+  return {
+    aprovado: problemas.length === 0,
+    parecer: problemas.length ? problemas.join('; ') : 'gate final aprovado',
+    receipt,
+  };
 }
 
 // CLI standalone pra debug
