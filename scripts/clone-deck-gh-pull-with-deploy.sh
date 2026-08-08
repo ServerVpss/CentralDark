@@ -1,71 +1,86 @@
-#!/bin/bash
-set -euo pipefail
+#!/usr/bin/env bash
+# Nome legado preservado por compatibilidade de chamadores. O comportamento
+# canônico é exclusivamente ServerVpss/CentralDark em /root/CentralDark.
+set -Eeuo pipefail
 
-REPO_DIR="/root/Multizap/apps/clone-deck"
+REPO_DIR="${CENTRALDARK_ROOT:-/root/CentralDark}"
 BRANCH="main"
-LOG="/var/log/clone-deck-webhook.log"
-LOCK="/tmp/clone-deck-gh-pull.lock"
+LOG_DIR="${REPO_DIR}/logs"
+LOG="${LOG_DIR}/github-sync.log"
+LOCK="/tmp/centraldark-gh-pull.lock"
+EXPECTED_ORIGIN_RE='github\.com[:/]ServerVpss/CentralDark(\.git)?$'
 
 ts() { date '+%Y-%m-%d %H:%M:%S'; }
+mkdir -p "$LOG_DIR"
 
 exec 200>"$LOCK"
 if ! flock -n 200; then
-  echo "[$(ts)] [LOCK] Outro pull em andamento" >> "$LOG"
-  echo "LOCK: outro pull em andamento"
+  echo "[$(ts)] [LOCK] Outra sincronização CentralDark em andamento" >> "$LOG"
+  echo "LOCKED_SYNC_IN_PROGRESS"
   exit 0
 fi
 
 echo "===== $(ts) =====" >> "$LOG"
 
+case "$REPO_DIR" in
+  /root/CentralDark|/root/CentralDark/*) ;;
+  *) echo "[ERRO] ROOT_FORA_DA_CENTRALDARK=$REPO_DIR" | tee -a "$LOG"; exit 20 ;;
+esac
+
 if [ ! -d "$REPO_DIR/.git" ]; then
-  echo "[ERRO] $REPO_DIR nao e repo git" >> "$LOG"
-  exit 1
+  echo "[ERRO] REPO_CANONICO_AUSENTE=$REPO_DIR" | tee -a "$LOG"
+  exit 21
 fi
 
-cd "$REPO_DIR"
+ORIGIN="$(git -C "$REPO_DIR" remote get-url origin 2>/dev/null || true)"
+if ! printf '%s' "$ORIGIN" | grep -Eq "$EXPECTED_ORIGIN_RE"; then
+  echo "[ERRO] ORIGIN_REPOSITORY_MISMATCH" | tee -a "$LOG"
+  exit 22
+fi
 
-CURRENT=$(git rev-parse --abbrev-ref HEAD)
+CURRENT="$(git -C "$REPO_DIR" symbolic-ref --quiet --short HEAD || true)"
 if [ "$CURRENT" != "$BRANCH" ]; then
-  git checkout "$BRANCH" >> "$LOG" 2>&1
+  echo "[ERRO] BRANCH_NAO_CANONICA=${CURRENT:-DETACHED}" | tee -a "$LOG"
+  exit 23
 fi
 
-# Ao invés de checar DIRTY e falhar bloqueando a atualização, vamos apenas registrar
-# se a branch está suja e prosseguir mesclando as atualizações do remote sem sobrescrever o trabalho
-# não comitado (Evitando reset --hard) usando stashing inteligente.
-DIRTY=$(git status --porcelain 2>/dev/null | grep -v '^??' || true)
-
-BEFORE=$(git rev-parse --short HEAD)
-git fetch origin "$BRANCH" >> "$LOG" 2>&1
-
-if [ -n "$DIRTY" ]; then
-  echo "[INFO] Alteracoes locais detectadas, fazendo stash antes do pull seguro..." >> "$LOG"
-  git stash push -m "WIP before webhook auto-pull" >> "$LOG" 2>&1
-  
-  # Aqui o pull.rebase resolve commits remotos com a cabeça preservando histórico.
-  git pull origin "$BRANCH" --rebase >> "$LOG" 2>&1 || {
-     echo "[ERRO] Conflito crítico de rebase! Abortando e restaurando stash." >> "$LOG"
-     git rebase --abort >> "$LOG" 2>&1
-     git stash pop >> "$LOG" 2>&1
-     exit 1
-  }
-  
-  echo "[INFO] Restaurando alteracoes locais do stash..." >> "$LOG"
-  # Retorna as alterações locais sem comitar (mascarando possíveis conflitos)
-  git stash pop >> "$LOG" 2>&1 || echo "[AVISO] Stash pop gerou avisos. Resolva manualmente." >> "$LOG"
-else
-  # Se não estava sujo, fazemos o avanço rápido
-  git pull origin "$BRANCH" --ff-only >> "$LOG" 2>&1 || git rebase origin/"$BRANCH" >> "$LOG" 2>&1
+# Não esconde trabalho local com stash/rebase automático. Dirty tracked bloqueia
+# a sincronização; nenhum dado local é sobrescrito ou mascarado.
+DIRTY_TRACKED="$(git -C "$REPO_DIR" status --porcelain=v1 --untracked-files=no)"
+if [ -n "$DIRTY_TRACKED" ]; then
+  echo "[ERRO] BLOCKED_LOCAL_DIRTY" | tee -a "$LOG"
+  exit 24
 fi
 
-AFTER=$(git rev-parse --short HEAD)
+BEFORE="$(git -C "$REPO_DIR" rev-parse HEAD)"
+git -C "$REPO_DIR" fetch --prune --no-tags origin "$BRANCH" >> "$LOG" 2>&1
+REMOTE="$(git -C "$REPO_DIR" rev-parse "origin/$BRANCH")"
 
-echo "[OK] $BEFORE -> $AFTER $(git log --oneline -1 2>/dev/null || echo '')" >> "$LOG"
-
-# POST-DEPLOY automático
-if [ -f "$REPO_DIR/scripts/post-deploy.sh" ]; then
-  echo "[POST-DEPLOY] Executando..." >> "$LOG"
-  bash "$REPO_DIR/scripts/post-deploy.sh" >> "$LOG" 2>&1 || echo "[WARN] post-deploy falhou" >> "$LOG"
+if [ "$BEFORE" = "$REMOTE" ]; then
+  echo "[OK] ALREADY_SYNCED=$BEFORE" >> "$LOG"
+  echo "SYNC_OK HEAD=$BEFORE CHANGED=0"
+  exit 0
 fi
 
-echo "" >> "$LOG"
-echo "Pull OK: $BEFORE -> $AFTER"
+if ! git -C "$REPO_DIR" merge-base --is-ancestor "$BEFORE" "$REMOTE"; then
+  echo "[ERRO] NON_FAST_FORWARD_LOCAL_OR_REMOTE_DIVERGENCE" | tee -a "$LOG"
+  exit 25
+fi
+
+git -C "$REPO_DIR" merge --ff-only "$REMOTE" >> "$LOG" 2>&1
+AFTER="$(git -C "$REPO_DIR" rev-parse HEAD)"
+[ "$AFTER" = "$REMOTE" ] || { echo "[ERRO] HEAD_POST_SYNC_MISMATCH" | tee -a "$LOG"; exit 26; }
+
+echo "[OK] $BEFORE -> $AFTER" >> "$LOG"
+
+# Deploy não é duplicado aqui. O mecanismo canônico de produção permanece o
+# workflow existente vps-exec-selfhosted.yml. Este script apenas sincroniza.
+# Um chamador legado pode solicitar explicitamente o deploy-job já existente,
+# nunca um workflow paralelo.
+if [ "${CENTRALDARK_RUN_DEPLOY_JOB:-0}" = "1" ]; then
+  DEPLOY_JOB="$REPO_DIR/scripts/webhook/deploy-job.sh"
+  [ -x "$DEPLOY_JOB" ] || { echo "[ERRO] DEPLOY_JOB_CANONICO_AUSENTE" | tee -a "$LOG"; exit 27; }
+  "$DEPLOY_JOB" >> "$LOG" 2>&1
+fi
+
+echo "SYNC_OK HEAD=$AFTER CHANGED=1"
