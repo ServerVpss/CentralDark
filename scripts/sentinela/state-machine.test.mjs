@@ -5,8 +5,8 @@ import { findingId, normalizeFindings, parseSentinelaIssue, reconcileFindingStat
 const F = { area: 'Workflows', titulo: 'Workflow vermelho: codex-validate', bot: 'codex', sev: 'p2' };
 const ID = findingId(F);
 
-function issue(number, id = ID) {
-  return { number, title: `[SENTINELA sentinela-${id}] Workflows: Workflow vermelho: codex-validate` };
+function issue(number, id = ID, labels = []) {
+  return { number, title: `[SENTINELA sentinela-${id}] Workflows: Workflow vermelho: codex-validate`, labels };
 }
 
 test('findingId é estável para a mesma área+título', () => {
@@ -34,6 +34,13 @@ test('finding que sumiu vira RECOVERY', () => {
   assert.equal(r.keep.length, 0);
   assert.equal(r.recover.length, 1);
   assert.equal(r.recover[0].issue.number, 10);
+});
+
+test('issue canônica nova é distinguida de issue legado para bootstrap silencioso', () => {
+  const legacy = parseSentinelaIssue(issue(10, ID, ['sentinela', 'auto']));
+  const canonical = parseSentinelaIssue(issue(11, ID, [{ name: '🛡️ SENTINELA' }, { name: '🤖 AUTO' }]));
+  assert.equal(legacy.canonicalProducer, false);
+  assert.equal(canonical.canonicalProducer, true);
 });
 
 test('finding duplicado na mesma varredura é colapsado', () => {
