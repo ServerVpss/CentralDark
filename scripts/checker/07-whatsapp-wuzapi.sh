@@ -14,8 +14,8 @@ else
   emit_alerta "$BLOCO" "Pasta do QR ainda não está consolidada na raiz canônica: $QR"
 fi
 
-# WuzAPI via Docker é observado pelo runtime; o checker não usa caminhos de
-# /root/Multizap como dependência. Se o processo existir fora da CentralDark,
+# WuzAPI via Docker é observado pelo runtime; o checker não usa árvore externa
+# histórica como dependência. Se o processo existir fora da CentralDark,
 # a migração do componente vira finding separado.
 if has_cmd docker; then
   WUZ=$(docker ps --format '{{.Names}}\t{{.Status}}' 2>/dev/null | grep -i wuzapi || true)
