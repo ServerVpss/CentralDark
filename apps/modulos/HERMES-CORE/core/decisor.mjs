@@ -118,7 +118,12 @@ function verCache(k) {
   const it = cache.get(k);
   if (!it) return null;
   if (Date.now() - it.ts > CACHE_TTL_MS) { cache.delete(k); return null; }
-  return it.valor;
+  try {
+    return validarDecisao(it.valor);
+  } catch {
+    cache.delete(k);
+    return null;
+  }
 }
 function salvarCache(k, valor) {
   if (cache.size >= CACHE_MAX) cache.delete(cache.keys().next().value);
@@ -138,7 +143,8 @@ Você tem estas ferramentas disponíveis (escolha UMA por etapa):
    args: { "modelo": "openai/gpt-5", "prompt": "..." }
 
 3. "git" — operações git (commit, push, status, diff)
-   args: { "acao": "commit_push", "mensagem": "...", "paths": ["apps/modulos/hub"] }  |  { "acao": "status" }\n   REGRA: paths é OBRIGATÓRIO no commit_push — só os caminhos que a missão tocou.
+   args: { "acao": "commit_push", "mensagem": "...", "paths": ["apps/modulos/hub"] }  |  { "acao": "status" }
+   REGRA: paths é OBRIGATÓRIO no commit_push — só os caminhos que a missão tocou.
 
 4. "escrever_arquivo" — cria ou sobrescreve arquivo dentro de /root/CentralDark
    args: { "path": "docs/foo.md", "conteudo": "..." }
@@ -395,7 +401,7 @@ export async function decidir(missao, historico) {
   const hit = verCache(k);
   if (hit) {
     console.log(`[decisor] 💾 cache HIT (${cache.size} itens)`);
-    return { ...validarDecisao(hit), _cache: true };
+    return { ...hit, _cache: true };
   }
 
   const historico_erros = [];
