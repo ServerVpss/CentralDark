@@ -33,6 +33,27 @@ has_cmd() { command -v "$1" >/dev/null 2>&1; }
 # Roda comando e retorna saída (best-effort, não quebra em erro)
 safe_run() { "$@" 2>&1 || true; }
 
-# Caminhos padrão CentralDark / Multizap (legado)
-export CK_MULTIZAP_ROOT="${CK_MULTIZAP_ROOT:-/root/Multizap}"
+# Fronteira canônica da VPS. Tudo fora de /root/CentralDark é OUT_OF_SCOPE
+# por padrão e não pode ser usado como fonte de verdade, runtime permanente ou
+# fallback silencioso. Dependência externa real precisa ser transplantada para
+# dentro da CentralDark por uma mudança separada e comprovada.
 export CK_CENTRALDARK_ROOT="${CK_CENTRALDARK_ROOT:-/root/CentralDark}"
+export CK_REPO_ROOT="${CK_REPO_ROOT:-$CK_CENTRALDARK_ROOT}"
+export CK_EXTERNAL_ROOT_POLICY="OUT_OF_SCOPE"
+
+is_canonical_path() {
+  case "${1:-}" in
+    "$CK_CENTRALDARK_ROOT"|"$CK_CENTRALDARK_ROOT"/*) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
+require_canonical_path() {
+  local bloco="$1"
+  local path="$2"
+  if is_canonical_path "$path"; then
+    return 0
+  fi
+  emit_erro "$bloco" "Caminho fora da fronteira CentralDark bloqueado: $path"
+  return 1
+}
