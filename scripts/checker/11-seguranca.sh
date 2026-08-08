@@ -21,7 +21,7 @@ done
 REPO="$CK_REPO_ROOT"
 require_canonical_path "$BLOCO" "$REPO" || exit 0
 if [ -d "$REPO/.git" ]; then
-  VAZADOS=$(git -C "$REPO" ls-files 2>/dev/null | grep -E '(^|/)\.env$|(^|/)\.env\.[^e]' | grep -v '\.example$' || true)
+  VAZADOS=$(git -C "$REPO" ls-files 2>/dev/null | grep -E '(^|/)\.env($|\.)' | grep -vE '(^|/)\.env\.example$' || true)
   if [ -z "$VAZADOS" ]; then
     emit_ok "$BLOCO" "Nenhum .env versionado no repo canônico"
   else
