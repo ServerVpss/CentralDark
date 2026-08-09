@@ -6,12 +6,12 @@ import path from "node:path";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(here, "..");
-const repo = path.resolve(root, "..", "..", "..");
+const hubRoot = path.resolve(root, "..", "hub");
 
 const consumer = readFileSync(path.join(root, "src", "hub-mission-consumer.js"), "utf8");
 const health = readFileSync(path.join(root, "src", "health-deep.js"), "utf8");
-const hubCommand = readFileSync(path.join(repo, "hub", "supabase", "functions", "hub-command", "index.ts"), "utf8");
-const migration = readFileSync(path.join(repo, "hub", "supabase", "migrations", "20260809_hub_mission_execution_contract.sql"), "utf8");
+const hubCommand = readFileSync(path.join(hubRoot, "supabase", "functions", "hub-command", "index.ts"), "utf8");
+const migration = readFileSync(path.join(hubRoot, "supabase", "migrations", "20260809_hub_mission_execution_contract.sql"), "utf8");
 
 test("consumer só reclama missão queued + approved com capability", () => {
   assert.match(consumer, /state=eq\.queued/);
