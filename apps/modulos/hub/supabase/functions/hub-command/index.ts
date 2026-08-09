@@ -8,12 +8,26 @@ const CAPABILITY_RE = /^[A-Za-z0-9_-]{1,64}$/;
 const AUTHORIZATIONS = new Set(['pending', 'approved', 'denied']);
 const RISKS = new Set(['R0', 'R1', 'R2', 'R3', 'R4']);
 const MAX_INPUT_BYTES = 20_000;
+const SENSITIVE_KEY_RE = /(^|[_-])(token|secret|password|passwd|authorization|cookie|session|api[_-]?key|private[_-]?key|service[_-]?role)([_-]|$)/i;
+const SENSITIVE_VALUE_RE = /(?:Bearer\s+\S{12,}|gh[pousr]_[A-Za-z0-9]{20,}|sb_(?:secret|publishable)_[A-Za-z0-9_-]{20,}|sk-[A-Za-z0-9]{20,}|-----BEGIN [A-Z ]*PRIVATE KEY-----)/i;
 
 function json(status: number, body: object) {
   return new Response(JSON.stringify(body), {
     status,
     headers: { ...corsHeaders, 'Content-Type': 'application/json' },
   });
+}
+
+function containsSensitiveMaterial(value: unknown, depth = 0): boolean {
+  if (depth > 8) return true;
+  if (typeof value === 'string') return SENSITIVE_VALUE_RE.test(value);
+  if (Array.isArray(value)) return value.some((item) => containsSensitiveMaterial(item, depth + 1));
+  if (value && typeof value === 'object') {
+    return Object.entries(value as Record<string, unknown>).some(([key, item]) =>
+      SENSITIVE_KEY_RE.test(key) || containsSensitiveMaterial(item, depth + 1)
+    );
+  }
+  return false;
 }
 
 Deno.serve(async (req) => {
@@ -52,6 +66,9 @@ Deno.serve(async (req) => {
   const executionInput = body.input == null ? {} : body.input;
   if (typeof executionInput !== 'object' || Array.isArray(executionInput)) {
     return json(400, { error: 'input_must_be_object' });
+  }
+  if (containsSensitiveMaterial(executionInput)) {
+    return json(400, { error: 'input_contains_sensitive_material' });
   }
   const inputJson = JSON.stringify(executionInput);
   if (new TextEncoder().encode(inputJson).byteLength > MAX_INPUT_BYTES) {
