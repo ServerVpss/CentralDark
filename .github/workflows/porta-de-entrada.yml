@@ -24,14 +24,6 @@ concurrency:
 jobs:
   validar:
     name: Porta, identidade e governança canônica estão íntegras?
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - name: Checkout preso ao HEAD validado
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
-        with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
-    name: Porta e governança canônica estão íntegras?
     runs-on: [self-hosted, Linux]
     timeout-minutes: 5
     steps:
@@ -59,7 +51,6 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
           fetch-depth: 0
-          persist-credentials: false
 
       - name: Provar checkout no mesmo HEAD do gate
         env:
@@ -134,8 +125,6 @@ jobs:
           node scripts/lupa/validar-porta-de-entrada.mjs --json || status=1
           node scripts/lupa/validar-identidade-operacional.mjs --json || status=1
           exit "$status"
-            --approved "$PIVETE_APPROVED"
-          node scripts/lupa/validar-porta-de-entrada.mjs --json
 
       - name: Receipt determinístico (sempre)
         if: always()

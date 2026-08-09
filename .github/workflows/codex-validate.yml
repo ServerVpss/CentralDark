@@ -40,13 +40,11 @@ jobs:
           echo "FORK_GUARD_OK ${HEAD_REPO}"
 
       - name: Checkout exact PR HEAD
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with:
           persist-credentials: false
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 0
-          persist-credentials: false
           submodules: false
 
       - name: Prove checkout identity
@@ -155,8 +153,6 @@ jobs:
           fi
           rm -rf "$checkout_dir"
 
-      - name: Checkout exact PR HEAD without persisted credential
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
       - name: Checkout
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with:
@@ -332,9 +328,6 @@ jobs:
     runs-on: [self-hosted, Linux]
     timeout-minutes: 20
     steps:
-      - name: Checkout exact PR HEAD
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
-
       - name: Bloquear HEAD de fork no runner persistente
         id: fork_guard
         if: github.event_name == 'pull_request' || github.event_name == 'pull_request_target'
