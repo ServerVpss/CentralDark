@@ -6,6 +6,7 @@ const concluir = {
   terminou: true,
   ferramenta: 'notificar_progresso',
   args: { mensagem: 'fim com prova' },
+  estado: 'FATO',
 };
 
 test('T15: tentativa de escrita falhada continua sendo mutação potencial', () => {
