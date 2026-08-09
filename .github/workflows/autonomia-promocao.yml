@@ -43,11 +43,8 @@ jobs:
       issues: read
       actions: read
       checks: read
-    env:
-      BOT_SWEEP_DIR: ${{ runner.temp }}/centraldark-autonomia
 
     steps:
-
       - name: Bloquear HEAD de fork no runner persistente
         id: fork_guard
         if: github.event_name == 'pull_request' || github.event_name == 'pull_request_target'
@@ -93,6 +90,7 @@ jobs:
 
       - name: Avaliar PRs autorizados sem capacidade de escrita
         env:
+          BOT_SWEEP_DIR: ${{ runner.temp }}/centraldark-autonomia
           JUDGE_TOKEN: ${{ github.token }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
@@ -104,10 +102,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: autonomia-judge-${{ github.run_id }}
-          path: ${{ env.BOT_SWEEP_DIR }}
+          path: ${{ runner.temp }}/centraldark-autonomia
           if-no-files-found: warn
           retention-days: 14
-
 
       - name: Receipt determinístico (sempre)
         if: always()
@@ -141,6 +138,7 @@ jobs:
             echo "CAUSE=UNKNOWN_STATUS_${JOB_STATUS}"
           fi
           # UNKNOWN/SKIPPED/empty never promoted as PASS by this receipt alone
+
   promote:
     name: Promotor — revalidar e promover
     needs: judge
@@ -152,11 +150,8 @@ jobs:
       issues: write
       actions: write
       checks: read
-    env:
-      BOT_SWEEP_DIR: ${{ runner.temp }}/centraldark-autonomia
 
     steps:
-
       - name: Bloquear HEAD de fork no runner persistente
         id: fork_guard
         if: github.event_name == 'pull_request' || github.event_name == 'pull_request_target'
@@ -190,10 +185,11 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: autonomia-judge-${{ github.run_id }}
-          path: ${{ env.BOT_SWEEP_DIR }}
+          path: ${{ runner.temp }}/centraldark-autonomia
 
       - name: Promover somente recibos válidos e estado vivo idêntico
         env:
+          BOT_SWEEP_DIR: ${{ runner.temp }}/centraldark-autonomia
           PROMOTER_TOKEN: ${{ secrets.PROMOTION_TOKEN }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
@@ -205,7 +201,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: autonomia-promote-${{ github.run_id }}
-          path: ${{ env.BOT_SWEEP_DIR }}
+          path: ${{ runner.temp }}/centraldark-autonomia
           if-no-files-found: warn
           retention-days: 14
 
