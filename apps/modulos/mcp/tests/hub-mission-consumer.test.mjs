@@ -27,6 +27,11 @@ test("execução passa pelo dispatcher admin canônico", () => {
   assert.doesNotMatch(consumer, /commands\.join/);
 });
 
+test("consumer reutiliza sanitizador canônico", () => {
+  assert.match(consumer, /sanitizeOutgoingText/);
+  assert.doesNotMatch(consumer, /gh\[pousr\]_\[A-Za-z0-9\]/);
+});
+
 test("receipt é hash e evidência não é auto-validada pelo executor", () => {
   assert.match(consumer, /createHash\("sha256"\)/);
   assert.match(consumer, /type:\s*"mcp_tool_receipt"/);
@@ -42,10 +47,13 @@ test("claim stale falha fechado e nunca é refileirado automaticamente", () => {
   assert.match(migration, /hub_missions_running_claim_idx/);
 });
 
-test("hub-command grava capability e input explicitamente", () => {
+test("hub-command grava capability/input e bloqueia material sensível", () => {
   assert.match(hubCommand, /capability/);
   assert.match(hubCommand, /input:\s*executionInput/);
   assert.match(hubCommand, /auto_execution_eligible/);
+  assert.match(hubCommand, /input_contains_sensitive_material/);
+  assert.match(hubCommand, /SENSITIVE_KEY_RE/);
+  assert.match(hubCommand, /SENSITIVE_VALUE_RE/);
   assert.doesNotMatch(hubCommand, /commands/);
 });
 
