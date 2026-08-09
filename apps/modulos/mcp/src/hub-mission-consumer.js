@@ -148,9 +148,9 @@ async function appendEvidence(mission, receiptSha) {
 
 async function finalizeMission(missionId, ok, executionStatus) {
   const finishedAt = new Date().toISOString();
-  await rest(`/rest/v1/hub_missions?id=eq.${encodeURIComponent(missionId)}&state=eq.running&claimed_by=eq.${encodeURIComponent(WORKER_ID)}`, {
+  const rows = await rest(`/rest/v1/hub_missions?id=eq.${encodeURIComponent(missionId)}&state=eq.running&claimed_by=eq.${encodeURIComponent(WORKER_ID)}`, {
     method: "PATCH",
-    prefer: "return=minimal",
+    prefer: "return=representation",
     body: {
       state: ok ? "done" : "failed",
       finished_at: finishedAt,
@@ -158,6 +158,10 @@ async function finalizeMission(missionId, ok, executionStatus) {
       updated_at: finishedAt,
     },
   });
+  if (!Array.isArray(rows) || rows.length !== 1) {
+    throw new Error("HUB_MISSION_FINALIZE_READBACK_FAILED");
+  }
+  return rows[0];
 }
 
 async function recoverStaleClaims() {
