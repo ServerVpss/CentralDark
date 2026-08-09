@@ -1,9 +1,10 @@
 name: porta-de-entrada
 
-# Protege a porta universal e o mapa canônico do repositório inteiro.
-# O gate verifica alcance, contratos, identidade Git, raízes duplicadas,
-# novos caminhos paralelos e validações mascaradas. Nenhum adaptador guarda
-# uma cópia manual da governança e nenhum relatório transforma falha em verde.
+# Protege a porta universal, a identidade operacional e o mapa canônico.
+# O gate verifica alcance, contratos, papéis da casa, identidade Git,
+# raízes duplicadas, novos caminhos paralelos e validações mascaradas.
+# Nenhum adaptador guarda cópia manual da governança e nenhum relatório
+# transforma falha em verde.
 
 on:
   pull_request:
@@ -22,17 +23,77 @@ concurrency:
 
 jobs:
   validar:
-    name: Porta e governança canônica estão íntegras?
+    name: Porta, identidade e governança canônica estão íntegras?
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout preso ao HEAD validado
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+    name: Porta e governança canônica estão íntegras?
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 5
+    steps:
+
+      - name: Bloquear HEAD de fork no runner persistente
+        id: fork_guard
+        if: github.event_name == 'pull_request' || github.event_name == 'pull_request_target'
+        shell: bash
+        env:
+          HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
+          BASE_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          if [ -z "${HEAD_REPO}" ] || [ "${HEAD_REPO}" != "${BASE_REPO}" ]; then
+            echo "blocked=true" >> "$GITHUB_OUTPUT"
+            echo "cause=FORK_HEAD" >> "$GITHUB_OUTPUT"
+            echo "BLOCKED_FORK_HEAD repo=${HEAD_REPO:-empty}"
+            exit 1
+          fi
+          echo "blocked=false" >> "$GITHUB_OUTPUT"
+          echo "FORK_GUARD_OK ${HEAD_REPO}"
+
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
           fetch-depth: 0
+          persist-credentials: false
+
+      - name: Provar checkout no mesmo HEAD do gate
+        env:
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          actual="$(git rev-parse HEAD)"
+          test "$actual" = "$HEAD_SHA" || {
+            echo "CHECKOUT_HEAD_MISMATCH expected=$HEAD_SHA actual=$actual"
+            exit 1
+          }
 
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+
+      - name: Testar fonte autenticada de autorização
+        run: node --test scripts/lupa/authority-approval.test.mjs
+
+      - name: Resolver autorização autenticada
+        id: authority
+        run: node scripts/lupa/authority-approval.mjs
+
+      - name: Testar contrato de identidade operacional
+        run: node --test scripts/lupa/validar-identidade-operacional.test.mjs
+
+      - name: Validar identidade SEGREDO → SOL → PIVETE/HERMES
+        run: node scripts/lupa/validar-identidade-operacional.mjs
+
+      - name: Testar retomada fail-closed do Hermes
+        run: node --test apps/modulos/HERMES-CORE/core/continuity-guard.test.mjs
+
+      - name: Validar sintaxe do orquestrador Hermes
+        run: node --check apps/modulos/HERMES-CORE/core/orchestrator.mjs
 
       - name: Testar falsificadores do mapa global
         run: node --test apps/modulos/mapeamento/tests/validar-mapa.test.mjs
@@ -44,29 +105,67 @@ jobs:
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha || '' }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
-          PIVETE_APPROVED: ${{ contains(github.event.pull_request.labels.*.name, 'permito-pivete') || contains(github.event.pull_request.body || '', 'PERMITO PIVETE') }}
+          AUTHORITY_APPROVED: ${{ steps.authority.outputs.approved }}
         run: |
           set -euo pipefail
           node apps/modulos/mapeamento/core/validar-mapa.mjs \
             --repo-root "$GITHUB_WORKSPACE" \
             --base-sha "$BASE_SHA" \
             --head-sha "$HEAD_SHA" \
-            --approved "$PIVETE_APPROVED"
+            --approved "$AUTHORITY_APPROVED"
 
       - name: Validar porta e adaptadores universais
         run: node scripts/lupa/validar-porta-de-entrada.mjs
 
-      - name: Emitir relatório reproduzível
+      - name: Emitir todos os relatórios reproduzíveis
         if: always()
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha || '' }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
-          PIVETE_APPROVED: ${{ contains(github.event.pull_request.labels.*.name, 'permito-pivete') || contains(github.event.pull_request.body || '', 'PERMITO PIVETE') }}
+          AUTHORITY_APPROVED: ${{ steps.authority.outputs.approved }}
         run: |
-          set -euo pipefail
+          set -uo pipefail
+          status=0
           node apps/modulos/mapeamento/core/validar-mapa.mjs \
             --repo-root "$GITHUB_WORKSPACE" \
             --base-sha "$BASE_SHA" \
             --head-sha "$HEAD_SHA" \
+            --approved "$AUTHORITY_APPROVED" || status=1
+          node scripts/lupa/validar-porta-de-entrada.mjs --json || status=1
+          node scripts/lupa/validar-identidade-operacional.mjs --json || status=1
+          exit "$status"
             --approved "$PIVETE_APPROVED"
           node scripts/lupa/validar-porta-de-entrada.mjs --json
+
+      - name: Receipt determinístico (sempre)
+        if: always()
+        shell: bash
+        env:
+          JOB_STATUS: ${{ job.status }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          EVENT_NAME: ${{ github.event_name }}
+          FORK_BLOCKED: ${{ steps.fork_guard.outputs.blocked }}
+          FORK_CAUSE: ${{ steps.fork_guard.outputs.cause }}
+        run: |
+          set -euo pipefail
+          echo "HEAD_SHA=${HEAD_SHA}"
+          echo "EVENT_NAME=${EVENT_NAME}"
+          echo "EXECUTOR=self-hosted"
+          echo "ROTA_PRIMARIA=self-hosted-linux"
+          echo "ROTA_FALLBACK=BLOCKED_NO_HOSTED"
+          echo "JOB_STATUS=${JOB_STATUS}"
+          if [ "${FORK_BLOCKED:-}" = "true" ]; then
+            echo "RESULTADO=BLOCKED"
+            echo "CAUSE=${FORK_CAUSE:-FORK_HEAD}"
+          elif [ "${JOB_STATUS}" = "cancelled" ]; then
+            echo "RESULTADO=BLOCKED"
+            echo "CAUSE=CANCELLED_OR_RUNNER_UNAVAILABLE"
+          elif [ "${JOB_STATUS}" = "failure" ]; then
+            echo "RESULTADO=FAIL"
+          elif [ "${JOB_STATUS}" = "success" ]; then
+            echo "RESULTADO=PASS"
+          else
+            echo "RESULTADO=BLOCKED"
+            echo "CAUSE=UNKNOWN_STATUS_${JOB_STATUS}"
+          fi
+          # UNKNOWN/SKIPPED/empty never promoted as PASS by this receipt alone

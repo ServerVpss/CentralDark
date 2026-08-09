@@ -12,11 +12,14 @@ const valueAfter = (name, fallback) => {
 const ROOT = resolve(valueAfter("--repo-root", process.cwd()));
 const JSON_OUT = argv.includes("--json");
 const PORTA = "LEIA-ME-IA.md";
+const PORTA_VIVA = "docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md";
 const CONTRATO_DELTA = "docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md";
+const CONTRATO_RECONCILIACAO = "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json";
 const IDENTIDADE_LUPA = ".agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA";
 
 const ADAPTADORES = [
   "AGENTS.md",
+  "CHATGPT.md",
   "CODEX.md",
   "CLAUDE.md",
   "README.md",
@@ -43,6 +46,14 @@ const ler = (relativePath) => {
   }
 };
 const ehGerado = (relativePath) => GERADOS.some((pattern) => pattern.test(relativePath));
+
+function lerJson(relativePath) {
+  try {
+    return JSON.parse(ler(relativePath));
+  } catch {
+    return null;
+  }
+}
 
 function caminhosCitados(texto) {
   const encontrados = new Set();
@@ -98,7 +109,9 @@ const errors = [];
 const warnings = [];
 
 if (!existe(PORTA)) errors.push(`PORTA_AUSENTE:${PORTA}`);
+if (!existe(PORTA_VIVA)) errors.push(`PORTA_VIVA_AUSENTE:${PORTA_VIVA}`);
 if (!existe(CONTRATO_DELTA)) errors.push(`CONTRATO_DELTA_AUSENTE:${CONTRATO_DELTA}`);
+if (!existe(CONTRATO_RECONCILIACAO)) errors.push(`CONTRATO_RECONCILIACAO_AUSENTE:${CONTRATO_RECONCILIACAO}`);
 if (!existe(IDENTIDADE_LUPA)) errors.push(`IDENTIDADE_LUPA_AUSENTE:${IDENTIDADE_LUPA}`);
 
 for (const adapter of ADAPTADORES) {
@@ -106,12 +119,99 @@ for (const adapter of ADAPTADORES) {
     errors.push(`ADAPTADOR_AUSENTE:${adapter}`);
     continue;
   }
+
   const content = ler(adapter);
-  const required = [PORTA, CONTRATO_DELTA, "CENTRALDARK_AI_BOOT", ".agents/skills/meta-lupa/SKILL.md", IDENTIDADE_LUPA];
-  for (const token of required) {
+  for (const token of [PORTA, CONTRATO_DELTA, "CENTRALDARK_AI_BOOT", ".agents/skills/meta-lupa/SKILL.md", IDENTIDADE_LUPA]) {
     if (!content.includes(token)) errors.push(`ADAPTADOR_SEM_TOKEN:${adapter}:${token}`);
   }
   if (/SKILL_COMMIT_SHA\s*:/i.test(content)) errors.push(`ADAPTADOR_COM_SHA_COPIADO:${adapter}`);
+}
+
+const semanticRequirements = new Map([
+  [PORTA, [
+    "REUSE_BEFORE_CREATE_REQUIRED",
+    CONTRATO_RECONCILIACAO,
+    "FALHA_DE_RECONCILIACAO_DE_CONTEXTO",
+    "context_reconciliation: LOADED",
+  ]],
+  ["AGENTS.md", [
+    "REUSE_BEFORE_CREATE_REQUIRED",
+    CONTRATO_RECONCILIACAO,
+    "FALHA_DE_RECONCILIACAO_DE_CONTEXTO",
+    "tarefa simples não vira swarm",
+  ]],
+  [PORTA_VIVA, [
+    "REUSE_BEFORE_CREATE_REQUIRED",
+    CONTRATO_RECONCILIACAO,
+    "PROGRAM_ONLY",
+    "FALHA_DE_RECONCILIACAO_DE_CONTEXTO",
+    "Fluxo proporcional ao risco",
+  ]],
+  [".claude/rules/00-centraldark-boot-universal.md", [
+    "REUSE_BEFORE_CREATE_REQUIRED",
+    CONTRATO_RECONCILIACAO,
+    "FALHA_DE_RECONCILIACAO_DE_CONTEXTO",
+  ]],
+  ["CHATGPT.md", [
+    "REUSE_BEFORE_CREATE_REQUIRED",
+    CONTRATO_RECONCILIACAO,
+    "FALHA_DE_RECONCILIACAO_DE_CONTEXTO",
+  ]],
+]);
+
+for (const [source, tokens] of semanticRequirements) {
+  const content = ler(source);
+  for (const token of tokens) {
+    if (!content.includes(token)) errors.push(`RECONCILIACAO_SEM_TOKEN:${source}:${token}`);
+  }
+}
+
+const agentsContent = ler("AGENTS.md");
+if (/META_LUPA_BOOT_REQUIRED\s*:\s*SIM/i.test(agentsContent)) {
+  errors.push("CONTRADICAO_COMPLEXIDADE:AGENTS_META_LUPA_PARA_TODA_TAREFA");
+}
+if (/Antes de alterar qualquer arquivo[\s\S]{0,220}BEGIN\+FINAL/i.test(agentsContent)) {
+  errors.push("CONTRADICAO_COMPLEXIDADE:AGENTS_LEDGER_PARA_TODA_TAREFA");
+}
+if (/## Fluxo único dos agentes/i.test(ler(PORTA_VIVA))) {
+  errors.push("CONTRADICAO_COMPLEXIDADE:PORTA_FLUXO_CRITICO_DECLARADO_UNICO");
+}
+
+const contract = lerJson(CONTRATO_RECONCILIACAO);
+if (!contract) {
+  errors.push(`CONTRATO_RECONCILIACAO_JSON_INVALIDO:${CONTRATO_RECONCILIACAO}`);
+} else {
+  if (contract.schema_version !== 1) errors.push("CONTRATO_RECONCILIACAO_SCHEMA_INVALIDO");
+  if (contract.status !== "CANONICAL") errors.push("CONTRATO_RECONCILIACAO_NAO_CANONICO");
+  if (contract.marker !== "REUSE_BEFORE_CREATE_REQUIRED") errors.push("CONTRATO_RECONCILIACAO_MARKER_INVALIDO");
+
+  const requiredSequence = [
+    "resolve_user_intent",
+    "search_existing_capabilities",
+    "open_primary_implementation_files",
+    "cross_reference_capabilities_with_request",
+    "classify_authority_and_runtime_state",
+    "reuse_or_extend_before_create",
+  ];
+  const sequence = contract.mandatory_pre_solution_sequence;
+  if (!Array.isArray(sequence)) {
+    errors.push("CONTRATO_RECONCILIACAO_SEQUENCIA_AUSENTE");
+  } else {
+    for (const step of requiredSequence) {
+      if (!sequence.includes(step)) errors.push(`CONTRATO_RECONCILIACAO_ETAPA_AUSENTE:${step}`);
+    }
+  }
+
+  const rules = contract.decision_rules ?? {};
+  if (rules.new_component_requires_proved_gap !== true) errors.push("CONTRATO_RECONCILIACAO_GAP_NAO_OBRIGATORIO");
+  if (rules.proposal_without_inventory !== "BOOT_BLOCKED") errors.push("CONTRATO_RECONCILIACAO_SEM_FAIL_CLOSED");
+  if (rules.file_found_but_not_cross_referenced !== "CONTEXT_RECONCILIATION_FAILURE") errors.push("CONTRATO_RECONCILIACAO_SEM_CROSS_REFERENCE");
+  if (rules.open_or_draft_pr_is_operational_authority !== false) errors.push("CONTRATO_RECONCILIACAO_PR_DRAFT_COM_AUTORIDADE");
+  if (rules.program_document_is_runtime_proof !== false) errors.push("CONTRATO_RECONCILIACAO_PROGRAMA_COMO_RUNTIME");
+  if (rules.formal_proof_without_user_request !== "FORBIDDEN_FOR_SIMPLE_TASKS") errors.push("CONTRATO_RECONCILIACAO_FORMALISMO_SEM_LIMITE");
+  if (contract.complexity_policy?.never_expose_internal_governance_as_user_bureaucracy !== true) {
+    errors.push("CONTRATO_RECONCILIACAO_GOVERNANCA_EXPOSTA_AO_USUARIO");
+  }
 }
 
 for (const entrypoint of ENTRADAS) {
@@ -144,8 +244,11 @@ for (const canonical of canonicalDocuments) {
 const report = {
   guardrail: "validar-porta-de-entrada",
   porta: PORTA,
+  porta_viva: PORTA_VIVA,
   contrato_delta: CONTRATO_DELTA,
+  contrato_reconciliacao: CONTRATO_RECONCILIACAO,
   identidade_lupa: IDENTIDADE_LUPA,
+  reuse_before_create_required: true,
   adaptadores_obrigatorios: ADAPTADORES,
   adaptadores_encontrados: ADAPTADORES.filter(existe),
   canonicos_encontrados: canonicalDocuments.length,
@@ -162,6 +265,7 @@ else {
   for (const error of errors) console.error(`ERRO ${error}`);
   console.log(
     `PORTA_OK=${report.ok ? 1 : 0} ` +
+      `REUSE_BEFORE_CREATE=${report.reuse_before_create_required ? 1 : 0} ` +
       `ADAPTADORES=${report.adaptadores_encontrados.length}/${report.adaptadores_obrigatorios.length} ` +
       `CANONICOS=${report.canonicos_encontrados} ` +
       `ALCANCAVEIS=${report.canonicos_alcancaveis} ` +
