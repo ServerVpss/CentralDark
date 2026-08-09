@@ -11,14 +11,9 @@ import { getCatalogSummary } from "./tools/core/tools-catalog.js";
 import { config } from "./config.js";
 import { log } from "./log.js";
 import { activeSseSubscribers, getSseDiagnostics } from "./admin.js";
-import { getHubMissionConsumerStatus, startHubMissionConsumer } from "./hub-mission-consumer.js";
 
 const MCP_VERSION = "0.4.0-v2.2";
 const SERVICE_STARTED_AT = new Date().toISOString();
-
-// Boot do consumer no mesmo processo MCP. Sem service_role ele fica disabled
-// e aparece no health; não cria serviço/cron/workflow paralelo.
-startHubMissionConsumer();
 
 function checkSecret(name) {
     const v = process.env[name];
@@ -53,7 +48,6 @@ export async function healthDeep(req, res) {
         const disk = checkDisk(config.log.dir);
         const sse = getSseDiagnostics();
         const sseAtivas = activeSseSubscribers();
-        const hubConsumer = getHubMissionConsumerStatus();
 
         // Dependências externas (checagem leve — sem network)
         const telegramTokenOk = checkSecret("TELEGRAM_BOT_TOKEN").present
@@ -62,24 +56,12 @@ export async function healthDeep(req, res) {
             && checkSecret("MCP_ADMIN_PASSWORD").present;
         const githubOk = checkSecret("GITHUB_TOKEN").present
             || checkSecret("GH_TOKEN").present;
-        const hubConsumerOk = hubConsumer.enabled === true && hubConsumer.status !== "error";
 
         const dependencias = [
             checkDependencia("mcp_catalog", summary.toolCount > 0, { toolCount: summary.toolCount }),
             checkDependencia("oauth", oauthOk, { secretsPresentes: oauthOk }),
             checkDependencia("telegram_bot", telegramTokenOk, { tokenPresente: telegramTokenOk }),
             checkDependencia("github_api", githubOk, { tokenPresente: githubOk }),
-            checkDependencia("hub_mission_consumer", hubConsumerOk, {
-                enabled: hubConsumer.enabled,
-                status: hubConsumer.status,
-                reason: hubConsumer.reason,
-                workerId: hubConsumer.workerId,
-                pollMs: hubConsumer.pollMs,
-                lastPollAt: hubConsumer.lastPollAt,
-                lastMissionId: hubConsumer.lastMissionId,
-                lastExecutionStatus: hubConsumer.lastExecutionStatus,
-                lastError: hubConsumer.lastError,
-            }),
             checkDependencia("sse", true, { conexoesAtivas: sseAtivas, eventosPorMinuto: sse.eventosPorMinuto, ultimoEventoHaMs: sse.ultimoEventoHaMs, status: "operacional" }),
             checkDependencia("disk_logs", disk.ok, disk),
             checkDependencia("memoria", rssMb < 512, { rssMb, heapMb }),
@@ -104,7 +86,6 @@ export async function healthDeep(req, res) {
             loadavg: os.loadavg(),
             sseAtivas,
             sse,
-            hubMissionConsumer: hubConsumer,
             dependencias,
             checks: dependencias.map(d => ({ key: d.nome, ok: d.ok, detail: d.detalhe })),
             elapsedMs: Math.round(performance.now() - t0),
