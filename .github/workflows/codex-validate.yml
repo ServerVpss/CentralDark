@@ -5,6 +5,7 @@ on:
     types: [opened, synchronize, reopened, ready_for_review, edited, labeled, unlabeled]
     branches:
       - main
+      - program/centraldark-convergencia-omniroute-722
   workflow_dispatch:
 
 permissions:
