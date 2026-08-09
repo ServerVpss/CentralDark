@@ -2,7 +2,7 @@ name: Lupa Drift Guard
 
 on:
   pull_request:
-    branches: [main, pivete/dev, pivete/auditoria]
+    branches: [main, program/centraldark-convergencia-omniroute-722, pivete/dev, pivete/auditoria]
     types: [opened, reopened, synchronize, ready_for_review, labeled, unlabeled]
   workflow_dispatch:
 
