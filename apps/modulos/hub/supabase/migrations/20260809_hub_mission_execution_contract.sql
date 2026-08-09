@@ -46,13 +46,32 @@ create index if not exists hub_missions_running_claim_idx
 comment on column public.hub_missions.capability is
   'Nome exato de uma tool do catálogo MCP CentralDark. NULL = missão sem execução automática.';
 comment on column public.hub_missions.input is
-  'Argumentos JSON da capability; nunca interpretar title/target como comando.';
+  'Argumentos JSON internos da capability; não expor na view api.';
 comment on column public.hub_missions.claimed_by is
   'Instância que venceu o claim condicional queued->running.';
 
--- Atualiza a view existente para expor as colunas adicionadas.
+-- A view de frontend NÃO expõe input. Capability e estado de execução são
+-- observáveis; argumentos ficam apenas na tabela public via service_role.
 create or replace view api.hub_missions as
-  select * from public.hub_missions;
+  select
+    id,
+    title,
+    creator,
+    agent,
+    target,
+    state,
+    "authorization",
+    branch_sha,
+    risk,
+    rollback,
+    created_at,
+    updated_at,
+    capability,
+    claimed_by,
+    claimed_at,
+    finished_at,
+    execution_status
+  from public.hub_missions;
 grant select on api.hub_missions to authenticated, anon;
 
 notify pgrst, 'reload schema';
