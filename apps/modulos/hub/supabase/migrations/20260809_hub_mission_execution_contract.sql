@@ -36,7 +36,7 @@ begin
 end $$;
 
 create index if not exists hub_missions_execution_queue_idx
-  on public.hub_missions (state, authorization, created_at)
+  on public.hub_missions (state, "authorization", created_at)
   where capability is not null;
 
 comment on column public.hub_missions.capability is
