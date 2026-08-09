@@ -196,22 +196,14 @@ async function retomarOrfas() {
       continue;
     }
 
+    if (estadoContinuidade.terminal_state === 'BLOCKED') {
+      log(`⏸️ RETOMADA BLOQUEADA: ${nome} — estado terminal BLOCKED preservado`);
+      continue;
+    }
+
     let missao = (estadoContinuidade.missao || '').trim();
     const historico = Array.isArray(estadoContinuidade.historico) ? estadoContinuidade.historico : [];
     let retomadas = estadoContinuidade.retomadas || 0;
-    // Pasta com missao.md
-    let missao = '', historico = [], retomadas = 0;
-    let estado = null;
-    try {
-      estado = JSON.parse(await readFile(join(dir, 'state.json'), 'utf8'));
-      if (estado?.terminal_state === 'BLOCKED') {
-        log(`⏸️ RETOMADA BLOQUEADA: ${nome} — estado terminal BLOCKED preservado`);
-        continue;
-      }
-      missao = (estado.missao || '').trim();
-      historico = Array.isArray(estado.historico) ? estado.historico : [];
-      retomadas = estado.retomadas || 0;
-    } catch { /* state.json ausente/corrompido — cai pro missao.md com histórico zerado */ }
     if (!missao) {
       try { missao = (await readFile(join(dir, 'missao.md'), 'utf8')).trim(); } catch { continue; }
     }
