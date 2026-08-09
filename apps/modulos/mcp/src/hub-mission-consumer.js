@@ -7,10 +7,15 @@ const DEFAULT_PROJECT_REF = "lyoigsqluyktoclwdaft";
 const DEFAULT_POLL_MS = 5_000;
 const MIN_POLL_MS = 1_000;
 const MAX_POLL_MS = 60_000;
+const DEFAULT_STALE_MS = 30 * 60_000;
+const MIN_STALE_MS = 5 * 60_000;
+const MAX_STALE_MS = 24 * 60 * 60_000;
+const STALE_SWEEP_INTERVAL_MS = 60_000;
 const WORKER_ID = String(process.env.HUB_MISSION_WORKER_ID || `centraldark-mcp-${process.pid}`).slice(0, 120);
 
 let timer = null;
 let tickRunning = false;
+let lastStaleSweepAtMs = 0;
 const state = {
   enabled: false,
   status: "not_started",
@@ -19,6 +24,8 @@ const state = {
   lastPollAt: null,
   lastMissionId: null,
   lastExecutionStatus: null,
+  lastStaleSweepAt: null,
+  staleFailedCount: 0,
   lastError: null,
 };
 
@@ -33,6 +40,12 @@ function pollMs() {
   const raw = Number(process.env.HUB_MISSION_POLL_MS || DEFAULT_POLL_MS);
   if (!Number.isFinite(raw)) return DEFAULT_POLL_MS;
   return Math.max(MIN_POLL_MS, Math.min(MAX_POLL_MS, Math.trunc(raw)));
+}
+
+function staleMs() {
+  const raw = Number(process.env.HUB_MISSION_STALE_MS || DEFAULT_STALE_MS);
+  if (!Number.isFinite(raw)) return DEFAULT_STALE_MS;
+  return Math.max(MIN_STALE_MS, Math.min(MAX_STALE_MS, Math.trunc(raw)));
 }
 
 function restConfig() {
@@ -149,6 +162,56 @@ async function finalizeMission(missionId, ok, executionStatus) {
   });
 }
 
+async function recoverStaleClaims() {
+  const now = Date.now();
+  if (now - lastStaleSweepAtMs < STALE_SWEEP_INTERVAL_MS) return 0;
+  lastStaleSweepAtMs = now;
+  state.lastStaleSweepAt = new Date(now).toISOString();
+
+  const cutoff = new Date(now - staleMs()).toISOString();
+  const query = [
+    "select=id,claimed_by,claimed_at,capability",
+    "state=eq.running",
+    `claimed_at=lt.${encodeURIComponent(cutoff)}`,
+    "order=claimed_at.asc",
+    "limit=20",
+  ].join("&");
+  const staleRows = await rest(`/rest/v1/hub_missions?${query}`);
+  if (!Array.isArray(staleRows) || staleRows.length === 0) return 0;
+
+  let failed = 0;
+  for (const row of staleRows) {
+    const finishedAt = new Date().toISOString();
+    const rows = await rest(
+      `/rest/v1/hub_missions?id=eq.${encodeURIComponent(row.id)}&state=eq.running&claimed_at=lt.${encodeURIComponent(cutoff)}`,
+      {
+        method: "PATCH",
+        prefer: "return=representation",
+        body: {
+          state: "failed",
+          finished_at: finishedAt,
+          execution_status: "STALE_CLAIM_UNPROVEN",
+          updated_at: finishedAt,
+        },
+      },
+    );
+    if (!Array.isArray(rows) || rows.length !== 1) continue;
+    failed += 1;
+    try {
+      await appendEvent(
+        row.id,
+        "stale_claim",
+        "failed",
+        `claim expirado; replay automático proibido; previous_worker=${String(row.claimed_by || "unknown").slice(0, 120)}; capability=${String(row.capability || "unknown").slice(0, 64)}`,
+      );
+    } catch (err) {
+      log.error("hub_mission_stale_event_error", { missionId: row.id, error: safeError(err) });
+    }
+  }
+  state.staleFailedCount += failed;
+  return failed;
+}
+
 function unwrapResult(result) {
   const first = result?.content?.find?.((item) => item?.type === "text" && typeof item.text === "string");
   if (!first) return result ?? {};
@@ -221,7 +284,7 @@ async function processOneMission() {
   } catch (err) {
     const reason = safeError(err);
     try { await appendEvent(mission.id, "execution_error", "failed", reason); } catch { /* best effort após falha */ }
-    try { await finalizeMission(mission.id, false, "CONSUMER_ERROR"); } catch { /* estado será reconciliado por observabilidade */ }
+    try { await finalizeMission(mission.id, false, "CONSUMER_ERROR"); } catch { /* estado será reconciliado por stale sweep */ }
     state.lastExecutionStatus = "CONSUMER_ERROR";
     state.lastError = reason;
     throw err;
@@ -233,6 +296,7 @@ async function tick() {
   tickRunning = true;
   state.lastPollAt = new Date().toISOString();
   try {
+    await recoverStaleClaims();
     const processed = await processOneMission();
     state.status = processed ? "processed" : "idle";
     if (!processed) state.lastError = null;
@@ -267,12 +331,12 @@ export function startHubMissionConsumer() {
   void tick();
   timer = setInterval(() => { void tick(); }, pollMs());
   timer.unref?.();
-  log.info("hub_mission_consumer_started", { workerId: WORKER_ID, pollMs: pollMs() });
+  log.info("hub_mission_consumer_started", { workerId: WORKER_ID, pollMs: pollMs(), staleMs: staleMs() });
   return getHubMissionConsumerStatus();
 }
 
 export function getHubMissionConsumerStatus() {
-  return { ...state, pollMs: pollMs() };
+  return { ...state, pollMs: pollMs(), staleMs: staleMs() };
 }
 
 export const __test = Object.freeze({ classifyResult, receiptHash, safeError });
