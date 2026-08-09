@@ -68,11 +68,13 @@ function ultimosCommits(qtd = 5) {
 }
 
 function ultimosAprendizados(qtd = 3) {
-  const raw = lerArquivoSeguro('docs/CONSCIENCIA/APRENDIZADOS.md', 15000);
+  // Este coletor precisa enxergar o arquivo inteiro para não truncar justamente
+  // o aprendizado mais novo. O retorno continua limitado a `qtd` títulos.
+  const raw = lerArquivoSeguro('docs/CONSCIENCIA/APRENDIZADOS.md', Number.POSITIVE_INFINITY);
   if (!raw) return null;
-  // Cada aprendizado começa com "### " (nível 3)
+  // Cada aprendizado começa com "### " (nível 3).
   const blocos = raw.split(/\n### /).slice(1); // ignora header
-  const ultimos = blocos.slice(0, qtd).map(b => {
+  const ultimos = blocos.slice(-qtd).map(b => {
     const linha = b.split('\n')[0].replace(/^-?\d+\.?\s*/, '').trim();
     return linha;
   }).filter(Boolean);
