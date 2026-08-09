@@ -1,8 +1,8 @@
 # Aprendizado — limites de IA, linguagem humana e promessa sem prova
 
-**Data:** 2026-08-09  
-**Origem:** sessão direta SEGREDO/CHEFE ↔ SOL/ChatGPT + histórico operacional já registrado no CentralDark  
-**Categoria:** erro recorrente de agentes / falso compromisso / comunicação de risco  
+**Data:** 2026-08-09
+**Origem:** sessão direta SEGREDO/CHEFE ↔ SOL/ChatGPT + histórico operacional já registrado no CentralDark
+**Categoria:** erro recorrente de agentes / falso compromisso / comunicação de risco
 **Status:** CANDIDATO EM PR — não canônico até integração na `main`
 
 ## Contexto
