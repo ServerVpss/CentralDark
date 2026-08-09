@@ -39,6 +39,13 @@ test("receipt é hash e evidência não é auto-validada pelo executor", () => {
   assert.match(consumer, /hub_mission_events/);
 });
 
+test("finalização exige read-back de exatamente uma missão", () => {
+  assert.match(consumer, /async function finalizeMission/);
+  assert.match(consumer, /prefer:\s*"return=representation"/);
+  assert.match(consumer, /HUB_MISSION_FINALIZE_READBACK_FAILED/);
+  assert.match(consumer, /rows\.length !== 1/);
+});
+
 test("claim stale falha fechado e nunca é refileirado automaticamente", () => {
   assert.match(consumer, /STALE_CLAIM_UNPROVEN/);
   assert.match(consumer, /replay automático proibido/);
@@ -57,10 +64,14 @@ test("hub-command grava capability/input e bloqueia material sensível", () => {
   assert.doesNotMatch(hubCommand, /commands/);
 });
 
-test("schema estende hub_missions em vez de criar fila paralela", () => {
+test("schema estende hub_missions sem expor input na view api", () => {
   assert.match(migration, /alter table public\.hub_missions/);
   assert.match(migration, /add column if not exists capability text/);
   assert.match(migration, /add column if not exists input jsonb/);
+  assert.match(migration, /não expor na view api/i);
+  const apiView = migration.match(/create or replace view api\.hub_missions as[\s\S]*?from public\.hub_missions;/i)?.[0] || "";
+  assert.ok(apiView.length > 0);
+  assert.doesNotMatch(apiView, /\binput\b/i);
   assert.doesNotMatch(migration, /create table[^;]+queue/i);
 });
 
