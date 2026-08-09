@@ -4,6 +4,10 @@ import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { extname, join, relative, resolve, sep } from "node:path";
 import { pathToFileURL } from "node:url";
 
+const CONTRACT_PATH = "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json";
+const META_LUPA_PATH = ".agents/skills/meta-lupa/SKILL.md";
+const META_LUPA_IDENTITY_PATH = ".agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA";
+
 const CANONICAL = Object.freeze({
   "LEIA-ME-IA.md": [
     "SEGREDO/CHEFE COMANDA",
@@ -27,6 +31,13 @@ const CANONICAL = Object.freeze({
   "docs/CONSCIENCIA/DICIONARIO-PIVETE-GITHUB.md": [
     "SEGREDO/CHEFE = humano e autoridade final",
     "PIVETE = Hermes treinado",
+  ],
+  [META_LUPA_PATH]: [
+    "AUTORIZACAO_DO_SEGREDO_CHEFE:",
+    "sem prometer certeza absoluta",
+  ],
+  [META_LUPA_IDENTITY_PATH]: [
+    "SEGREDO/CHEFE",
   ],
 });
 
@@ -55,18 +66,41 @@ const FORBIDDEN_CANONICAL = Object.freeze([
     code: "UNKNOWN_CONVERTIDO_EM_PASS",
     pattern: /\bUNKNOWN\s*(?:=|:|→|->)\s*PASS\b/i,
   },
+  {
+    code: "META_LUPA_AUTORIZACAO_LEGADA",
+    pattern: /\bAUTORIZACAO_DO_PIVETE\b/i,
+  },
+  {
+    code: "PERMISSAO_LEGADA_PERMITO_PIVETE",
+    pattern: /\bPERMITO[ _-]?PIVETE\b/i,
+  },
 ]);
 
 const FORBIDDEN_PROFILE = Object.freeze([
   ...FORBIDDEN_CANONICAL,
   {
-    code: "PERMISSAO_LEGADA_PERMITO_PIVETE",
-    pattern: /\bPERMITO[ _-]?PIVETE\b/i,
-  },
-  {
     code: "ESCRITA_DEPENDE_DE_AUTORIZACAO_DO_PIVETE",
     pattern: /nenhuma ação de escrita[\s\S]{0,180}autorização explícita[\s\S]{0,80}Pivete/i,
   },
+]);
+
+const REQUIRED_CLAIM_SURFACES = Object.freeze([
+  "chatgpt",
+  "claude",
+  "codex",
+  "gemini",
+  "copilot",
+  "cursor",
+  "windsurf",
+  "hermes",
+  "plugins",
+  "future_agents",
+  "mcp",
+  "webui",
+  "cli",
+  "ci",
+  "cd",
+  "telegram",
 ]);
 
 const TEXT_EXTENSIONS = new Set([".md", ".mdc", ".txt", ".yaml", ".yml", ".json"]);
@@ -159,6 +193,16 @@ function safeRead(path) {
   }
 }
 
+function safeJson(path) {
+  const text = safeRead(path);
+  if (text == null) return null;
+  try {
+    return JSON.parse(text);
+  } catch {
+    return null;
+  }
+}
+
 function isSensitive(relativePath) {
   const normalized = relativePath.split(sep).map((part) => part.toLowerCase());
   return normalized.some((part) => {
@@ -223,6 +267,53 @@ export function validateProfileRoot(root) {
   return findings;
 }
 
+export function validateAgentClaimPolicy(repoRoot) {
+  const findings = [];
+  const path = join(repoRoot, CONTRACT_PATH);
+  const contract = safeJson(path);
+  if (!contract) {
+    findings.push({
+      code: "AGENT_CLAIM_CONTRATO_AUSENTE_OU_INVALIDO",
+      path: CONTRACT_PATH,
+      line: null,
+      excerpt: "Contrato machine-readable ausente ou inválido.",
+    });
+    return findings;
+  }
+
+  const policy = contract.agent_claim_policy ?? {};
+  const checks = [
+    [policy.marker === "AGENT_CLAIM_CAPABILITY_REQUIRED", "AGENT_CLAIM_MARKER_AUSENTE"],
+    [policy.narrative_changes_system_state === false, "AGENT_CLAIM_NARRATIVA_MUDA_ESTADO"],
+    [policy.claim_must_not_exceed_observable_capability === true, "AGENT_CLAIM_CAPACIDADE_NAO_LIMITA_ALEGACAO"],
+    [policy.permanent_behavior_without_proved_persistence === "BLOCK", "AGENT_CLAIM_PROMESSA_PERMANENTE_NAO_BLOQUEADA"],
+    [policy.absolute_commitment_without_verifiable_mechanism === "REWRITE_TO_OBSERVABLE_SCOPE", "AGENT_CLAIM_ABSOLUTO_SEM_REBAIXAMENTO"],
+    [policy.communication_policy?.critique_target === "SYSTEM_OR_ARTIFACT_NOT_HUMAN", "AGENT_CLAIM_CRITICA_PODE_ATINGIR_HUMANO"],
+    [policy.communication_policy?.status_colors?.YELLOW === "CONCRETE_WORK_IN_PROGRESS_OR_TARGET_PROOF_PENDING", "AGENT_CLAIM_AMARELO_SEM_PENDENCIA_CONCRETA"],
+    [policy.communication_policy?.status_colors?.NONE === "UNKNOWN_NOT_MEASURED_NOT_APPLICABLE_OR_DESCRIPTIVE", "AGENT_CLAIM_NAO_MEDIDO_COM_ALERTA"],
+    [policy.integration?.one_policy_for_all_adapters === true, "AGENT_CLAIM_POLITICA_FRAGMENTADA"],
+    [policy.integration?.external_vendor_ui === "OUT_OF_REPO_CONTROL", "AGENT_CLAIM_UI_EXTERNA_SUPERDECLARADA"],
+  ];
+
+  for (const [ok, code] of checks) {
+    if (!ok) findings.push({ code, path: CONTRACT_PATH, line: null, excerpt: policy.marker || "AUSENTE" });
+  }
+
+  const applies = new Set(Array.isArray(contract.applies_to) ? contract.applies_to : []);
+  for (const surface of REQUIRED_CLAIM_SURFACES) {
+    if (!applies.has(surface)) {
+      findings.push({
+        code: "AGENT_CLAIM_SUPERFICIE_AUSENTE",
+        path: CONTRACT_PATH,
+        line: null,
+        excerpt: surface,
+      });
+    }
+  }
+
+  return findings;
+}
+
 export function validateRepository(repoRoot) {
   const findings = [];
   for (const [path, tokens] of Object.entries(CANONICAL)) {
@@ -240,6 +331,7 @@ export function validateRepository(repoRoot) {
     findings.push(...validateRequiredTokens(text, tokens, path));
     findings.push(...findForbidden(text, FORBIDDEN_CANONICAL, path));
   }
+  findings.push(...validateAgentClaimPolicy(repoRoot));
   return findings;
 }
 
@@ -260,6 +352,7 @@ export function runValidation({ repoRoot, profileRoots = [] }) {
     executor: "PIVETE/HERMES",
     writer_rule: "WRITER_UNICO",
     unknown_rule: "UNKNOWN_NAO_PASSA",
+    agent_claim_rule: "AGENT_CLAIM_CAPABILITY_REQUIRED",
     canonical_findings: canonicalFindings,
     profile_reports: profileReports,
     findings: [...canonicalFindings, ...profileFindings],
@@ -277,6 +370,7 @@ function printHuman(report) {
   console.log(
     `IDENTIDADE_OK=${report.ok ? 1 : 0} ` +
       `AUTORIDADE=SEGREDO_CHEFE COORDENADOR=SOL EXECUTOR=PIVETE_HERMES ` +
+      `AGENT_CLAIM=AGENT_CLAIM_CAPABILITY_REQUIRED ` +
       `ERROS=${report.findings.length}`,
   );
 }

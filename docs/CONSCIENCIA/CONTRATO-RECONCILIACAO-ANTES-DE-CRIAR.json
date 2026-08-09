@@ -13,7 +13,13 @@
     "windsurf",
     "hermes",
     "plugins",
-    "future_agents"
+    "future_agents",
+    "mcp",
+    "webui",
+    "cli",
+    "ci",
+    "cd",
+    "telegram"
   ],
   "mandatory_pre_solution_sequence": [
     "resolve_user_intent",
@@ -35,12 +41,115 @@
     "existing_capability_satisfies_request": "REUSE",
     "existing_capability_partially_satisfies_request": "EXTEND_MINIMALLY",
     "new_component_requires_proved_gap": true,
+    "new_workflow_when_equivalent_exists": "FORBIDDEN_UPDATE_EXISTING",
     "proposal_without_inventory": "BOOT_BLOCKED",
     "file_found_but_not_cross_referenced": "CONTEXT_RECONCILIATION_FAILURE",
     "open_or_draft_pr_is_operational_authority": false,
     "program_document_is_runtime_proof": false,
     "existing_path_is_runtime_proof": false,
     "formal_proof_without_user_request": "FORBIDDEN_FOR_SIMPLE_TASKS"
+  },
+  "agent_claim_policy": {
+    "marker": "AGENT_CLAIM_CAPABILITY_REQUIRED",
+    "source_of_truth": "this_contract",
+    "narrative_changes_system_state": false,
+    "claim_must_not_exceed_observable_capability": true,
+    "permanent_behavior_without_proved_persistence": "BLOCK",
+    "absolute_commitment_without_verifiable_mechanism": "REWRITE_TO_OBSERVABLE_SCOPE",
+    "learning_claim_requires": [
+      "applicable_rule_loaded",
+      "behavior_observed_in_scope",
+      "test_or_counterproof_when_claiming_guarantee"
+    ],
+    "unproven_alignment_state": "NOT_PROVEN",
+    "communication_policy": {
+      "critique_target": "SYSTEM_OR_ARTIFACT_NOT_HUMAN",
+      "humor_must_not_replace_precision": true,
+      "status_colors": {
+        "GREEN": "PROVEN_HEALTHY_OR_STABLE",
+        "YELLOW": "CONCRETE_WORK_IN_PROGRESS_OR_TARGET_PROOF_PENDING",
+        "RED": "FAIL_BLOCK_OR_NEGATIVE_COUNTERPROOF",
+        "NONE": "UNKNOWN_NOT_MEASURED_NOT_APPLICABLE_OR_DESCRIPTIVE"
+      }
+    },
+    "integration": {
+      "one_policy_for_all_adapters": true,
+      "adapter_inheritance": "LEIA-ME-IA.md -> this_contract",
+      "ci_enforcement": "scripts/lupa/validar-porta-de-entrada.mjs",
+      "external_vendor_ui": "OUT_OF_REPO_CONTROL",
+      "external_vendor_ui_rule": "DO_NOT_CLAIM_MECHANICAL_ENFORCEMENT_WITHOUT_RUNTIME_HOOK"
+    }
+  },
+  "repository_boundary_policy": {
+    "marker": "CENTRALDARK_ROOT_ONLY_REQUIRED",
+    "repository": "ServerVpss/CentralDark",
+    "vps_root": "/root/CentralDark",
+    "external_root_default": "OUT_OF_SCOPE",
+    "explicit_external_exclusions": [
+      "/root/Multizap/apps/clone-deck"
+    ],
+    "external_dependency_action": "CAPTURE_READ_ONLY_THEN_TRANSPLANT_MINIMAL_INTO_CANONICAL",
+    "external_runtime_fallback": "FORBIDDEN"
+  },
+  "integration_spine_policy": {
+    "marker": "MOTHER_SPINE_REQUIRED",
+    "mother_issue": 722,
+    "mother_pr": 724,
+    "mother_branch": "program/centraldark-convergencia-omniroute-722",
+    "mother_pr_mode": "PERSISTENT_OPEN_DRAFT_CONTROL_PLANE",
+    "new_convergence_child_pr_base": "program/centraldark-convergencia-omniroute-722",
+    "legacy_pr_retarget": "SYNC_MOTHER_THEN_RETARGET_NO_FORCE_PUSH",
+    "promotion_to_main": "EXACT_MOTHER_SHA_SNAPSHOT_THROUGH_SHORT_PROMOTION_PR",
+    "parallelism": "ONE_WRITER_PER_SCOPE_MULTIPLE_READERS_REVIEWERS",
+    "writer_handoff": "EXPLICIT_NO_MODEL_LOCK"
+  },
+  "label_policy": {
+    "marker": "CANONICAL_LABELS_REQUIRED",
+    "catalog_source": ".github/workflows/bots-labels-seed.yml",
+    "visible_pattern": "EMOJI_PLUS_PTBR_UPPERCASE",
+    "pr_without_canonical_label": "WORK_BLOCKED",
+    "issue_without_canonical_label": "AGENT_MUST_NOT_ASSUME_WORK",
+    "noncanonical_visible_label": "WORK_BLOCKED_AFTER_MIGRATION",
+    "temporary_authority_aliases": [
+      "permito-segredo",
+      "permito-pivete",
+      "PERMITO-SEGREDO",
+      "PERMITO-PIVETE"
+    ],
+    "temporary_alias_owner": 707,
+    "legacy_creation": "FORBIDDEN"
+  },
+  "api_gateway_policy": {
+    "marker": "CENTRALDARK_API_SINGLE_ENTRY",
+    "official_origin": "https://api.centralldark.com",
+    "openai_compatible_base": "https://api.centralldark.com/v1",
+    "internal_consumers_use_official_api": true,
+    "routing_fallback_analytics_live_behind_gateway": true,
+    "new_direct_provider_bypass": "FORBIDDEN",
+    "existing_direct_provider_debt": "INVENTORY_AND_MIGRATE_WITHOUT_BREAKING",
+    "provider_upstream_allowed_only_inside": [
+      "apps/modulos/arsenal-openai-adapter/",
+      "apps/modulos/elite-anthropic-proxy/",
+      "apps/modulos/elite-gateway/",
+      "apps/modulos/proxy/",
+      "apps/modulos/lovable-proxy/",
+      "apps/modulos/oauth-broker/"
+    ]
+  },
+  "workflow_policy": {
+    "marker": "WORKFLOW_REUSE_REQUIRED",
+    "reuse_existing_before_new": true,
+    "parallel_v2_v3_copy_final": "FORBIDDEN",
+    "new_workflow_requires_material_gap": true,
+    "ai_policy_marker": "AI_DETERMINISTIC_FALLBACK_REQUIRED",
+    "deterministic_first": true,
+    "ai_for": [
+      "UNKNOWN",
+      "ANOMALY",
+      "SEMANTIC_ADVISORY"
+    ],
+    "ai_unavailable": "DETERMINISTIC_FALLBACK_OR_FAIL_CLOSED",
+    "rate_limit_timeout_model_offline_is_pass": false
   },
   "complexity_policy": {
     "simple_local_clear_reversible": "DIRECT_MINIMAL_ACTION",

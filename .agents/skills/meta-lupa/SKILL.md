@@ -81,6 +81,7 @@ Escalonamento: comece FRIA; contradição escala para MÉDIA; criticidade, recor
 12. Subordinar autoajuste a um mapa único. Autonomia sem mapa é drift, não evolução.
 13. Tratar área consolidada como bloqueada por padrão; confiança alta não desfaz trava.
 14. Executar AutoLupa sobre o próprio veredito até atingir ponto fixo evidencial, sem limite artificial de iterações e sem prometer certeza absoluta.
+15. Nenhuma promessa de alinhamento, aprendizado ou comportamento permanente pode exceder a capacidade observável do agente. Sem mecanismo persistente comprovado, rebaixar `sempre`, `nunca mais`, `garanto`, `não repetirei` ou equivalente para uma alegação testável no escopo atual.
 
 ## Gate de Mapa Único
 
@@ -111,7 +112,7 @@ CAMINHO_CANONICO:
 RESPONSABILIDADE:
 TESTES:
 REVISAO/FALSIFICACAO:
-AUTORIZACAO_DO_PIVETE:
+AUTORIZACAO_DO_SEGREDO_CHEFE:
 COMMIT_OU_MERGE_SHA:
 MECANISMO_DE_TRAVA:
 ROLLBACK/RECUPERACAO:
@@ -442,7 +443,7 @@ A AutoLupa (Fase 9) deve produzir um bloco curto no fim do relatório:
 (reaproveitar existente / duplicação / EF na VPS / demo como real / secret /
 provider vs rota / sobrevive troca modelo / relatório sem chat / autossep /
 crítico mesmo SHA / branch só escopo / rollback / PR evidências / autoridade
-Pivete / contradição fechada). Sem o bloco, veredito não sela.
+SEGREDO/CHEFE / contradição fechada). Sem o bloco, veredito não sela.
 
 ### XP-5. Matriz de existência de recursos
 

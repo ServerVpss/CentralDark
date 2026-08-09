@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # ============================================================================
-# Checker END-TO-END do instalador CentralDark / MultiZap
-# Roda os 11 blocos de validação, agrega resultado e gera relatório final
-# em /root/Multizap/revisoes/YYYYMMDD-HHMMSS/checker-final/
+# Checker END-TO-END da CentralDark
+# Roda os 12 blocos de validação, agrega resultado e gera relatório final
+# exclusivamente em /root/CentralDark/revisoes/...
 # ============================================================================
 set -uo pipefail
 
@@ -10,14 +10,16 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/_lib.sh"
 
 TS=$(date +%Y%m%d-%H%M%S)
-SAIDA_DIR="${CK_MULTIZAP_ROOT}/revisoes/${TS}/checker-final"
-mkdir -p "$SAIDA_DIR" 2>/dev/null || SAIDA_DIR="/tmp/checker-${TS}"
-mkdir -p "$SAIDA_DIR"
+SAIDA_DIR="${CK_CENTRALDARK_ROOT}/revisoes/${TS}/checker-final"
+require_canonical_path "run-all" "$SAIDA_DIR" || exit 2
+mkdir -p "$SAIDA_DIR" || {
+  echo "ERRO|run-all|Não foi possível criar saída canônica: $SAIDA_DIR" >&2
+  exit 2
+}
 
 BRUTO="${SAIDA_DIR}/bruto.txt"
 RELATORIO="${SAIDA_DIR}/relatorio.md"
 
-# Executa cada bloco em ordem
 MODULOS=(
   01-estrutura.sh
   02-logs.sh
@@ -42,7 +44,6 @@ for m in "${MODULOS[@]}"; do
   fi
 done
 
-# Conta resultados
 TOTAL_OK=$(grep -c '^OK|'     "$BRUTO" || true)
 TOTAL_AL=$(grep -c '^ALERTA|' "$BRUTO" || true)
 TOTAL_ER=$(grep -c '^ERRO|'   "$BRUTO" || true)
@@ -55,12 +56,13 @@ else
   STATUS_FINAL="OK"
 fi
 
-# Monta relatório bloco a bloco
 {
   echo "# Relatório Final — Checker CentralDark"
   echo
   echo "**Data:** $(TZ=America/Sao_Paulo date '+%Y-%m-%d %H:%M:%S %Z')"
   echo "**Host:** $(hostname 2>/dev/null || echo "${HOSTNAME:-desconhecido}")"
+  echo "**Raiz canônica:** \`$CK_CENTRALDARK_ROOT\`"
+  echo "**Política externa:** \`$CK_EXTERNAL_ROOT_POLICY\`"
   echo "**STATUS FINAL:** \`$STATUS_FINAL\`"
   echo
   echo "## Resumo"
@@ -71,7 +73,6 @@ fi
   echo "## Detalhes por bloco"
   echo
 
-  # Lista blocos únicos
   BLOCOS=$(awk -F'|' '{print $2}' "$BRUTO" | sort -u)
   for b in $BLOCOS; do
     echo "### $b"
@@ -88,12 +89,11 @@ fi
     echo "1. Corrigir os itens marcados como ❌ ERRO antes de declarar instalação concluída."
   fi
   if [ "$TOTAL_AL" -gt 0 ]; then
-    echo "2. Revisar os itens ⚠️ ALERTA — muitos são pendências conhecidas e esperadas."
+    echo "2. Revisar os itens ⚠️ ALERTA — sem usar árvore externa como fallback silencioso."
   fi
   echo "3. Log bruto sanitizado: \`$BRUTO\`"
 } > "$RELATORIO"
 
-# Imprime no terminal (resumo)
 echo
 printf "${CK_INFO}===== RESUMO DO CHECKER =====${CK_RST}\n"
 case "$STATUS_FINAL" in
@@ -104,7 +104,6 @@ esac
 echo "OK=$TOTAL_OK  ALERTA=$TOTAL_AL  ERRO=$TOTAL_ER"
 echo "Relatório: $RELATORIO"
 
-# Exit code: 0 OK, 1 ALERTA, 2 ERRO (instalador usa pra bloquear)
 case "$STATUS_FINAL" in
   OK)     exit 0 ;;
   ALERTA) exit 1 ;;
