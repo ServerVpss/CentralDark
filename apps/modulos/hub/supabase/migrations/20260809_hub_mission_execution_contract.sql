@@ -39,6 +39,10 @@ create index if not exists hub_missions_execution_queue_idx
   on public.hub_missions (state, "authorization", created_at)
   where capability is not null;
 
+create index if not exists hub_missions_running_claim_idx
+  on public.hub_missions (claimed_at)
+  where state = 'running';
+
 comment on column public.hub_missions.capability is
   'Nome exato de uma tool do catálogo MCP CentralDark. NULL = missão sem execução automática.';
 comment on column public.hub_missions.input is
