@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-08T08:31:26.849Z",
-  "updatedAtBR": "08/08/2026, 05:31:26 BRT",
+  "updatedAt": "2026-08-09T20:29:46.542Z",
+  "updatedAtBR": "09/08/2026, 17:29:46 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "feat(hermes): adicionar skill cot-react-loop (#648)",
+    "lastCommit": "fix(hermes): reconciliar retomada e impedir UNKNOWN terminal (#728)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-09T20:29:46.542Z",
+      "titulo": "Push na main · 1490417d8e43399f18e28907856fd80f9c4f1d21",
+      "detalhe": "fix(hermes): reconciliar retomada e impedir UNKNOWN terminal (#728)",
+      "area": "Repositório",
+      "sha": "1490417",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-08T08:31:26.849Z",
       "titulo": "Push na main · 3e95bf8586036609bd1d56712345d3b8df9d5aa8",
       "detalhe": "feat(hermes): adicionar skill cot-react-loop (#648)",
@@ -986,14 +994,6 @@
       "detalhe": "test(meta-lupa): Opus 5 guardrails; Fable causalidade pendente",
       "area": "Repositório",
       "sha": "90d4877",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-28T19:54:25.263Z",
-      "titulo": "Push na main · 5c082450cd0709c9db6cffb579810b1cd6a1a5bc",
-      "detalhe": "fix(ci): avoid blank line in generated retomada state",
-      "area": "Repositório",
-      "sha": "5c08245",
       "actor": "segredounlock"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-09T20:29:46.542Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 1490417d8e43399f18e28907856fd80f9c4f1d21 (1490417)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-08T08:31:26.849Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 3e95bf8586036609bd1d56712345d3b8df9d5aa8 (3e95bf8)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-28T21:10:16.426Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 90d4877e52e0a5bc011c3d6d106ad3dbd1a2485f (90d4877)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-28T19:54:25.263Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 5c082450cd0709c9db6cffb579810b1cd6a1a5bc (5c08245)",
       "area": "Repositório",
       "status": "sucesso"
     }
