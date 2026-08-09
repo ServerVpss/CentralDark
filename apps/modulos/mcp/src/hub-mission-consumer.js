@@ -1,5 +1,6 @@
 import { createHash } from "node:crypto";
 import { log } from "./log.js";
+import { sanitizeOutgoingText } from "./lib/sanitize.js";
 import { mcpAdminTools } from "./tools/core/mcp-admin.js";
 
 const CAPABILITY_RE = /^[A-Za-z0-9_-]{1,64}$/;
@@ -30,10 +31,7 @@ const state = {
 };
 
 function safeError(err) {
-  return String(err?.message || err || "unknown_error")
-    .replace(/(Bearer\s+)[^\s]+/gi, "$1[REDACTED]")
-    .replace(/\b(sb_(?:secret|publishable)_[A-Za-z0-9_-]+|gh[pousr]_[A-Za-z0-9_-]+)\b/g, "[REDACTED]")
-    .slice(0, 500);
+  return sanitizeOutgoingText(String(err?.message || err || "unknown_error")).slice(0, 500);
 }
 
 function pollMs() {
