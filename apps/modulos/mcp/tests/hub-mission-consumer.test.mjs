@@ -34,6 +34,14 @@ test("receipt é hash e evidência não é auto-validada pelo executor", () => {
   assert.match(consumer, /hub_mission_events/);
 });
 
+test("claim stale falha fechado e nunca é refileirado automaticamente", () => {
+  assert.match(consumer, /STALE_CLAIM_UNPROVEN/);
+  assert.match(consumer, /replay automático proibido/);
+  assert.match(consumer, /state:\s*"failed"/);
+  assert.doesNotMatch(consumer, /STALE_CLAIM[\s\S]{0,500}state:\s*"queued"/);
+  assert.match(migration, /hub_missions_running_claim_idx/);
+});
+
 test("hub-command grava capability e input explicitamente", () => {
   assert.match(hubCommand, /capability/);
   assert.match(hubCommand, /input:\s*executionInput/);
