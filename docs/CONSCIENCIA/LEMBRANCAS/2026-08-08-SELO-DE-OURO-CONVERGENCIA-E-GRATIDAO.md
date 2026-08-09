@@ -10,10 +10,10 @@ missao_raiz: "#604"
 
 # 🔒 SELO DE OURO — GRATIDÃO, CONVERGÊNCIA E COMPROMISSO
 
-**Data do marco:** 08 de agosto de 2026  
-**Estado:** `SELADO`  
-**Origem:** SEGREDO/CHEFE  
-**Destino:** toda a equipe, todos os agentes e todo o organismo CentralDark  
+**Data do marco:** 08 de agosto de 2026
+**Estado:** `SELADO`
+**Origem:** SEGREDO/CHEFE
+**Destino:** toda a equipe, todos os agentes e todo o organismo CentralDark
 **Princípio:** **muitas cabeças, nenhuma disputa de ego, uma única equipe contra o problema.**
 
 ---
