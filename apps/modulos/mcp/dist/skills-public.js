@@ -1,234 +1,196 @@
-// Rotas públicas de skills — servem skills/<nome>/ do repo SEM exigir OAuth.
-// Qualquer IA externa (Claude Code, Cursor, Codex CLI) puxa via curl simples.
-//
-// Fonte: raw.githubusercontent.com do mirror público `segredounlock/clone-deck`.
-// Cache em memória de 5 min pra não estourar rate-limit do GitHub anônimo (60/h).
+// Rotas públicas de skills — servem diretamente as skills instaladas no
+// checkout vivo do CentralDark. A fonte é .agents/skills/, nunca um mirror.
+import crypto from "node:crypto";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { log } from "./log.js";
-const RAW_BASE = "https://raw.githubusercontent.com/segredounlock/clone-deck/main";
-const API_BASE = "https://api.github.com/repos/segredounlock/clone-deck/contents";
-const CACHE_TTL_MS = 5 * 60 * 1000;
-const cache = new Map();
-function cacheGet(key) {
-    const e = cache.get(key);
-    if (!e)
-        return null;
-    if (Date.now() - e.at > CACHE_TTL_MS) {
-        cache.delete(key);
-        return null;
-    }
-    return e.data;
+const MODULE_DIR = path.dirname(fileURLToPath(import.meta.url));
+export const REPO_ROOT = path.resolve(process.env.CENTRALDARK_REPO_ROOT || path.join(MODULE_DIR, "../../../.."));
+export const SKILLS_DIR = path.join(REPO_ROOT, ".agents", "skills");
+const SOURCE_OF_TRUTH = "ServerVpss/CentralDark";
+function isNomeSeguro(nome) {
+    return /^[a-z0-9][a-z0-9-]{1,63}$/i.test(nome);
 }
-function cacheSet(key, data) {
-    cache.set(key, { at: Date.now(), data });
+function stripQuotes(value) {
+    return value.trim().replace(/^["']|["']$/g, "");
 }
-function isNomeSeguro(n) {
-    return /^[a-z0-9][a-z0-9-]{1,63}$/i.test(n);
-}
-async function fetchTexto(url) {
-    const cached = cacheGet(`txt:${url}`);
-    if (cached !== null)
-        return cached;
-    try {
-        const r = await fetch(url, { headers: { "User-Agent": "MCP-CentralDark/skills" } });
-        if (!r.ok)
-            return null;
-        const t = await r.text();
-        cacheSet(`txt:${url}`, t);
-        return t;
-    }
-    catch (e) {
-        log.warn("skills_fetch_erro", { url, erro: String(e) });
-        return null;
-    }
-}
-async function listarDirSkills() {
-    const cached = cacheGet(`dir:skills`);
-    if (cached)
-        return cached;
-    try {
-        const r = await fetch(`${API_BASE}/skills`, {
-            headers: {
-                Accept: "application/vnd.github+json",
-                "User-Agent": "MCP-CentralDark/skills",
-            },
-        });
-        if (!r.ok)
-            return null;
-        const arr = (await r.json());
-        cacheSet(`dir:skills`, arr);
-        return arr;
-    }
-    catch (e) {
-        log.warn("skills_dir_erro", { erro: String(e) });
-        return null;
-    }
-}
-function parseFrontmatter(md) {
-    const m = md.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
-    if (!m)
-        return { meta: {}, body: md };
+export function parseFrontmatter(md) {
+    const normalized = String(md || "").replace(/\r\n/g, "\n");
+    const match = normalized.match(/^---\n([\s\S]*?)\n---\n?([\s\S]*)$/);
+    if (!match)
+        return { meta: {}, body: normalized };
+    const lines = match[1].split("\n");
     const meta = {};
-    let listaAtual = null;
-    let chaveAtual = "";
-    for (const linha of m[1].split("\n")) {
-        if (!linha.trim())
+    for (let i = 0; i < lines.length; i += 1) {
+        const kv = lines[i].match(/^([A-Za-z0-9_-]+):\s*(.*)$/);
+        if (!kv)
             continue;
-        const mLista = linha.match(/^\s+-\s+(.+)$/);
-        if (mLista && listaAtual) {
-            listaAtual.push(mLista[1].trim().replace(/^["']|["']$/g, ""));
+        const key = kv[1];
+        const raw = kv[2].trim();
+        if (/^[>|][+-]?$/.test(raw)) {
+            const parts = [];
+            while (i + 1 < lines.length && /^\s+/.test(lines[i + 1])) {
+                i += 1;
+                parts.push(lines[i].trim());
+            }
+            meta[key] = parts.join(raw.startsWith(">") ? " " : "\n").trim();
             continue;
         }
-        const mKv = linha.match(/^(\w+):\s*(.*)$/);
-        if (mKv) {
-            chaveAtual = mKv[1];
-            const v = mKv[2].trim();
-            if (v === "") {
-                listaAtual = [];
-                meta[chaveAtual] = listaAtual;
+        if (raw === "") {
+            const list = [];
+            while (i + 1 < lines.length) {
+                const item = lines[i + 1].match(/^\s+-\s+(.+)$/);
+                if (!item)
+                    break;
+                i += 1;
+                list.push(stripQuotes(item[1]));
             }
-            else {
-                meta[chaveAtual] = v.replace(/^["']|["']$/g, "");
-                listaAtual = null;
-            }
+            meta[key] = list;
+            continue;
         }
+        meta[key] = stripQuotes(raw);
     }
-    return { meta, body: m[2] };
+    return { meta, body: match[2] };
+}
+function sha256(content) {
+    return crypto.createHash("sha256").update(content, "utf8").digest("hex");
+}
+function canonicalPath(nome) {
+    return `.agents/skills/${nome}/SKILL.md`;
+}
+export function getInstalledSkill(nome) {
+    if (!isNomeSeguro(nome))
+        return null;
+    const file = path.join(SKILLS_DIR, nome, "SKILL.md");
+    try {
+        const content = fs.readFileSync(file, "utf8");
+        const { meta } = parseFrontmatter(content);
+        return {
+            nome: meta.name || nome,
+            pasta: nome,
+            versao: meta.version || "unversioned",
+            descricao: meta.description || "",
+            agentes: Array.isArray(meta.agents) ? meta.agents : [],
+            canonical_path: canonicalPath(nome),
+            sha256: sha256(content),
+            source_of_truth: SOURCE_OF_TRUTH,
+            content,
+        };
+    }
+    catch (error) {
+        log.warn("skill_local_read_error", { nome, error: String(error) });
+        return null;
+    }
+}
+export function listInstalledSkills() {
+    let entries = [];
+    try {
+        entries = fs.readdirSync(SKILLS_DIR, { withFileTypes: true });
+    }
+    catch (error) {
+        log.error("skills_local_dir_error", { path: SKILLS_DIR, error: String(error) });
+        return [];
+    }
+    return entries
+        .filter((entry) => entry.isDirectory() && isNomeSeguro(entry.name))
+        .map((entry) => getInstalledSkill(entry.name))
+        .filter(Boolean)
+        .sort((a, b) => a.pasta.localeCompare(b.pasta));
 }
 function setCorsAndCache(res) {
     res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Cache-Control", "public, max-age=300");
+    // Estado vivo: não permitir que um cache de 5 min vire fonte de verdade.
+    res.setHeader("Cache-Control", "no-store");
 }
 function gerarInstallSh(nome, baseUrl) {
     return `#!/usr/bin/env bash
-# Instalador da skill "${nome}" da Consciência CentralDark.
-# Servido por ${baseUrl}/skills/${nome}/install.sh — sem auth, 1 comando, 3s.
+# Instalador da skill "${nome}" do CentralDark vivo.
 set -euo pipefail
-
 SKILL_NOME="${nome}"
 BASE_URL="${baseUrl}"
 SKILL_URL="\${BASE_URL}/skills/\${SKILL_NOME}/SKILL.md"
-
-echo "→ Baixando skill \${SKILL_NOME} de \${BASE_URL}..."
 TMP="$(mktemp)"
-if ! curl -fsSL "\${SKILL_URL}" -o "\${TMP}"; then
-  echo "✗ Falhou ao baixar \${SKILL_URL}" >&2
-  exit 1
-fi
+trap 'rm -f "\${TMP}"' EXIT
+curl -fsSL "\${SKILL_URL}" -o "\${TMP}"
 
-# Detecta agente IA local e escolhe o destino certo
 detectar_destino() {
-  if [ -d "\$HOME/.claude" ]; then
-    echo "\$HOME/.claude/skills/\${SKILL_NOME}"; return
-  fi
-  if [ -d "\$HOME/.cursor" ]; then
-    echo "\$HOME/.cursor/skills/\${SKILL_NOME}"; return
-  fi
-  if [ -d "\$HOME/.config/codex" ]; then
-    echo "\$HOME/.config/codex/skills/\${SKILL_NOME}"; return
-  fi
-  if [ -d "\$HOME/.config/claude" ]; then
-    echo "\$HOME/.config/claude/skills/\${SKILL_NOME}"; return
-  fi
-  # Fallback genérico
+  if [ -d "\$HOME/.claude" ]; then echo "\$HOME/.claude/skills/\${SKILL_NOME}"; return; fi
+  if [ -d "\$HOME/.cursor" ]; then echo "\$HOME/.cursor/skills/\${SKILL_NOME}"; return; fi
+  if [ -d "\$HOME/.config/codex" ]; then echo "\$HOME/.config/codex/skills/\${SKILL_NOME}"; return; fi
+  if [ -d "\$HOME/.config/claude" ]; then echo "\$HOME/.config/claude/skills/\${SKILL_NOME}"; return; fi
   echo "\$HOME/.ia-skills/\${SKILL_NOME}"
 }
-
 DEST="$(detectar_destino)"
 mkdir -p "\${DEST}"
 mv "\${TMP}" "\${DEST}/SKILL.md"
-
-echo ""
-echo "✓ Skill instalada em: \${DEST}/SKILL.md"
-echo "✓ Tamanho: $(wc -c < "\${DEST}/SKILL.md") bytes"
-echo ""
-echo "→ Próximo passo: reinicie ou recarregue seu agente IA."
-echo "  A Consciência CentralDark vai entrar em vigor na próxima resposta."
+trap - EXIT
+echo "SKILL_INSTALLED=\${DEST}/SKILL.md"
 `;
 }
-// ─────────────────────────── Handlers ───────────────────────────
 export async function handleSkillsList(_req, res, baseUrl) {
     setCorsAndCache(res);
-    const dir = await listarDirSkills();
-    if (!dir) {
-        res.status(503).json({ ok: false, erro: "Não foi possível listar skills no momento." });
+    const skills = listInstalledSkills();
+    if (!fs.existsSync(SKILLS_DIR)) {
+        res.status(503).json({ ok: false, erro: "Diretório canônico .agents/skills ausente.", source_of_truth: SOURCE_OF_TRUTH });
         return;
-    }
-    const skills = [];
-    for (const entry of dir) {
-        if (entry.type !== "dir")
-            continue;
-        if (!isNomeSeguro(entry.name))
-            continue;
-        const md = await fetchTexto(`${RAW_BASE}/skills/${entry.name}/SKILL.md`);
-        if (!md)
-            continue;
-        const { meta } = parseFrontmatter(md);
-        skills.push({
-            nome: meta.name ?? entry.name,
-            versao: meta.version ?? "0.0.0",
-            descricao: meta.description ?? "",
-            url_install: `${baseUrl}/skills/${entry.name}/install.sh`,
-        });
     }
     res.json({
         ok: true,
+        source_of_truth: SOURCE_OF_TRUTH,
+        canonical_root: ".agents/skills",
         total: skills.length,
-        skills,
-        como_usar: `curl -sL ${baseUrl}/skills/<nome>/install.sh | bash`,
+        skills: skills.map(({ content: _content, ...skill }) => ({
+            ...skill,
+            url_skill_md: `${baseUrl}/skills/${skill.pasta}/SKILL.md`,
+            url_install: `${baseUrl}/skills/${skill.pasta}/install.sh`,
+        })),
+        routing: "descobrir todas; carregar somente a skill cujo gatilho/descrição se aplica à missão",
     });
 }
 export async function handleSkillManifest(req, res, baseUrl) {
     setCorsAndCache(res);
-    const nome = String(req.params.nome ?? "");
+    const nome = String(req.params.nome || "");
     if (!isNomeSeguro(nome)) {
         res.status(400).json({ ok: false, erro: "Nome inválido." });
         return;
     }
-    const md = await fetchTexto(`${RAW_BASE}/skills/${nome}/SKILL.md`);
-    if (!md) {
-        res.status(404).json({ ok: false, erro: `Skill '${nome}' não encontrada.` });
+    const skill = getInstalledSkill(nome);
+    if (!skill) {
+        res.status(404).json({ ok: false, erro: `Skill '${nome}' não encontrada em .agents/skills/.` });
         return;
     }
-    const { meta } = parseFrontmatter(md);
     res.json({
         ok: true,
-        nome: meta.name ?? nome,
-        versao: meta.version ?? "0.0.0",
-        descricao: meta.description ?? "",
-        agentes: meta.agents ?? [],
+        ...skill,
         url_skill_md: `${baseUrl}/skills/${nome}/SKILL.md`,
         url_install: `${baseUrl}/skills/${nome}/install.sh`,
-        conteudo_skill_md: md,
+        conteudo_skill_md: skill.content,
     });
 }
 export async function handleSkillRaw(req, res) {
     setCorsAndCache(res);
-    const nome = String(req.params.nome ?? "");
-    if (!isNomeSeguro(nome)) {
-        res.status(400).type("text/plain").send("Nome inválido.");
+    const nome = String(req.params.nome || "");
+    const skill = getInstalledSkill(nome);
+    if (!skill) {
+        res.status(isNomeSeguro(nome) ? 404 : 400).type("text/plain").send(isNomeSeguro(nome) ? `Skill '${nome}' não encontrada.` : "Nome inválido.");
         return;
     }
-    const md = await fetchTexto(`${RAW_BASE}/skills/${nome}/SKILL.md`);
-    if (!md) {
-        res.status(404).type("text/plain").send(`Skill '${nome}' não encontrada.`);
-        return;
-    }
-    res.type("text/markdown; charset=utf-8").send(md);
+    res.setHeader("X-CentralDark-Skill-SHA256", skill.sha256);
+    res.setHeader("X-CentralDark-Skill-Path", skill.canonical_path);
+    res.type("text/markdown; charset=utf-8").send(skill.content);
 }
 export async function handleSkillInstaller(req, res, baseUrl) {
     setCorsAndCache(res);
-    const nome = String(req.params.nome ?? "");
+    const nome = String(req.params.nome || "");
     if (!isNomeSeguro(nome)) {
-        res.status(400).type("text/plain").send("# Nome inválido");
+        res.status(400).type("text/plain").send("# Nome inválido\nexit 1\n");
         return;
     }
-    // Valida que existe antes de devolver um script que tentaria baixar do nada
-    const md = await fetchTexto(`${RAW_BASE}/skills/${nome}/SKILL.md`);
-    if (!md) {
+    if (!getInstalledSkill(nome)) {
         res.status(404).type("text/plain").send(`# Skill '${nome}' não encontrada\nexit 1\n`);
         return;
     }
     res.type("text/x-shellscript; charset=utf-8").send(gerarInstallSh(nome, baseUrl));
 }
-//# sourceMappingURL=skills-public.js.map
 //# sourceMappingURL=skills-public.js.map
