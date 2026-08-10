@@ -33,7 +33,8 @@ Nenhuma dessas visões pode inventar outro mapa.
 - alteração em área protegida sem a autorização canônica `permito-segredo`;
 - caminho absoluto, travessia `../` ou entrada duplicada no mapa;
 - selo `PROVEN` com prova incompleta, Judge igual ao Writer, teste `SKIPPED` ou alegação de eficácia 100% sem denominador reproduzível;
-- selo `PROVEN` cujo fingerprint Git material não corresponde ao alvo no HEAD da prova ou no HEAD atual.
+- selo `PROVEN` cujo fingerprint Git material não corresponde ao alvo no HEAD da prova ou no HEAD atual;
+- selo `PROVEN` cujo gate/MetaLupa que produziram a prova mudaram sem revalidação daquela fronteira.
 
 A label registra autorização de `SEGREDO/CHEFE` para a mudança protegida. Autorização permite a cirurgia; **não transforma automaticamente o alvo em consolidado**.
 
@@ -57,6 +58,9 @@ O selo `PROVEN` só nasce quando a entrada possui `proof` válido com:
 ```text
 head_sha completo
 + material_git_oid do path no head_sha (blob/tree Git)
++ dependency_git_oids das dependências probatórias obrigatórias
+  - apps/modulos/mapeamento/core/validar-mapa.mjs
+  - .agents/skills/meta-lupa/SKILL.md
 + evidence_ref
 + writer_ref != judge_ref
 + tests: PASS total, skipped=0
@@ -68,7 +72,21 @@ head_sha completo
 
 `100%` aqui significa somente **100% do denominador declarado e reproduzível**, nunca certeza global do sistema.
 
-A prova é preservada por dependência causal: um novo HEAD fora do caminho protegido **não** força revalidação se o `material_git_oid` continuar idêntico. Se o material protegido mudar, mesmo com autorização válida, o selo anterior deixa de autorizar `PROVEN` até existir nova prova/fingerprint sobre o material novo. O gate revalida a fronteira atingida pelo delta, não o repositório inteiro por ritual.
+A prova é preservada por dependência causal. Um novo HEAD fora do caminho protegido **e fora das dependências probatórias** não força revalidação se os OIDs continuarem idênticos. Se o material protegido mudar, só aquela fronteira fica stale. Se o gate ou a MetaLupa que sustentam a prova mudarem, a prova dependente também fica stale mesmo que o alvo permaneça byte-idêntico. Dependência ausente ou não reproduzível nunca vira PASS.
+
+Portanto:
+
+```text
+HEAD mudou
+≠ apagar todas as provas
+
+alvo/dependência da prova mudou
+→ invalidar só a prova dependente
+→ re-provar a fronteira afetada
+
+alvo/dependências intactos
+→ preservar a prova
+```
 
 Depois disso, edição continua fail-closed até nova autorização explícita para o caminho exato. Se a prova for inválida, o mapa falha fechado; se a prova histórica estiver ausente, o caminho permanece `PROTECTED_UNPROVEN` em vez de receber falso verde.
 
