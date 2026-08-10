@@ -173,6 +173,35 @@ DIFICULDADE
 
 Assim, `AGENTE_PODE_CAIR != MISSAO_CAIU` e `MODELO_NAO_SABE != SISTEMA_SEM_SAIDA`: estado, missão, HEAD, evidência, PR e handoff permanecem fora da memória privada do processo individual.
 
+## Comandos incrementais e debug em tempo real
+
+Mensagens novas do SEGREDO/CHEFE durante uma missão ativa são **deltas de intenção e telemetria**, não ordem automática para reiniciar o plano inteiro. O agente deve reconciliar cada comando novo com o estado vivo e usar somente a parte ainda material para aquele instante.
+
+```text
+NOVO_COMANDO_OU_TELEMETRIA
+→ preservar MISSION_ID + SCOPE + HEAD + evidência já provada
+→ remedir o estado vivo quando a informação puder ter mudado
+→ separar: NOVO | AINDA_APLICAVEL | SUPERADO | FORA_DO_ESCOPO
+→ executar somente NOVO + AINDA_APLICAVEL
+→ ignorar instrução já satisfeita ou superada pela evidência mais nova
+→ não repetir ação já concluída
+→ não perguntar ao CHEFE qual função rodar quando a dor e a próxima ação técnica já forem determináveis pela Casa
+→ se não houver caneta: entregar delta mínimo ao Writer e continuar READ_ONLY
+→ se houver caneta: corrigir mínimo e re-provar
+→ CHEFE só volta ao loop quando surgir decisão humana realmente nova
+```
+
+Mensagens podem chegar em sequência enquanto a execução avança. A ordem temporal da conversa não vence a evidência atual: **estado comprovado mais recente vence instrução histórica já consumida**. Informação atrasada pode acrescentar risco ou prova nova, mas nunca rebobina automaticamente a missão.
+
+Regra prática:
+
+```text
+CHEFE DEBUGA EM TEMPO REAL
++ SISTEMA RECEBE DELTAS EM TEMPO REAL
++ CADA AGENTE USA SÓ O QUE IMPORTA AGORA
+= CONTINUIDADE SEM RECOMEÇO E SEM MICROGERENCIAMENTO
+```
+
 ## Palavras do usuário registradas
 
 > “salva na sua memoria da que pra ffrente slva n a conciencia vc vai manda as infformesçoes assim quando for comando pra roda na vps ! quando for um prontp de comando tambem pq se vc manda aasssim aparece oo botao de copiar entendeu ? fica melhor pramim e leve? etendeu ! quando vier informaçoes do mcp tambem vc deve usar assim ! pra fica mais leve blz?”
