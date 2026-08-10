@@ -12,6 +12,7 @@ import { getCatalogSummary, CATALOG_VERSION } from "./tools/core/tools-catalog.j
 import { handleSkillsList, handleSkillManifest, handleSkillRaw, handleSkillInstaller, } from "./skills-public.js";
 import { correlationMiddleware, withCid } from "./correlation.js";
 import { healthDeep } from "./health-deep.js";
+import { startHubMissionConsumer } from "./hub-mission-consumer.js";
 import { adminGet, adminLogin, adminLogout, adminRotas, adminTools, adminLogsStream, adminTestarSse, adminBuscarLogs, adminMetricas, adminE2E, adminE2EPublico, bootstrapAdminLogCapture, } from "./admin.js";
 // ─────────────────────── Handlers globais de crash (v2.3) ───────────────────────
 // Captura QUALQUER erro não tratado com stack trace completo antes do PM2 matar.
@@ -55,6 +56,9 @@ function validarEnvsObrigatorias() {
 validarEnvsObrigatorias();
 // Captura logs pro buffer do painel /admin (deve rodar ANTES do primeiro log)
 bootstrapAdminLogCapture();
+// O consumer nasce somente no bootstrap explícito do processo. /health é puro
+// observador e importar o módulo não pode reclamar missão nem mutar estado.
+startHubMissionConsumer();
 const app = express();
 app.disable("x-powered-by");
 function setCorsHeaders(res) {
