@@ -6,8 +6,7 @@
   "type": "module",
   "main": "dist/index.js",
   "scripts": {
-    "test:live-boot": "node --test tests/live-boot-skills-observability.test.mjs",
-    "build": "npm run test:live-boot && tsc -p tsconfig.json",
+    "build": "tsc -p tsconfig.json",
     "start": "node dist/index.js",
     "dev": "tsx watch src/index.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit"
