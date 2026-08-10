@@ -1,21 +1,18 @@
 // Servidor MCP (Streamable HTTP, stateless) via SDK oficial.
 // Cada request POST /mcp instancia um Server + StreamableHTTPServerTransport efêmero.
 import crypto from "node:crypto";
-import fs from "node:fs";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { CallToolRequestSchema, ListToolsRequestSchema } from "@modelcontextprotocol/sdk/types.js";
 import { z } from "zod";
 import { log } from "./log.js";
+import { config } from "./config.js";
+import * as gh from "./tools/github/github.js";
 import { ALL_TOOLS, CATALOG_VERSION } from "./tools/core/tools-catalog.js";
 import { sanitizeOutgoingDeep } from "./lib/sanitize.js";
 import { auditToolExecution } from "./audit-logger.js";
-import { listInstalledSkills } from "./skills-public.js";
-const MODULE_DIR = path.dirname(fileURLToPath(import.meta.url));
-const REPO_ROOT = path.resolve(process.env.CENTRALDARK_REPO_ROOT || path.join(MODULE_DIR, "../../../.."));
-const BOOT_PATH = path.join(REPO_ROOT, "LEIA-ME-IA.md");
+const SOURCE_OF_TRUTH = "ServerVpss/CentralDark";
+const SKILL_ROOT = ".agents/skills";
 function zodTypeToJsonSchema(schema) {
     if (schema instanceof z.ZodOptional || schema instanceof z.ZodDefault)
         return zodTypeToJsonSchema(schema._def.innerType);
@@ -49,40 +46,70 @@ function zodTypeToJsonSchema(schema) {
 function sha256(text) {
     return crypto.createHash("sha256").update(text, "utf8").digest("hex");
 }
-function liveBootInstructions() {
-    let boot = "";
-    try {
-        boot = fs.readFileSync(BOOT_PATH, "utf8");
-    }
-    catch (error) {
-        log.error("mcp_live_boot_unavailable", { path: "LEIA-ME-IA.md", error: String(error) });
+function decodeRepoFile(file) {
+    if (typeof file === "string")
+        return { content: file, blobSha: null };
+    if (file?.decoded)
+        return { content: file.decoded, blobSha: file.sha ?? null };
+    if (file?.content)
+        return { content: Buffer.from(file.content, "base64").toString("utf8"), blobSha: file.sha ?? null };
+    throw new Error("GITHUB_FILE_CONTENT_UNREADABLE");
+}
+async function readRepoFile(token, relativePath) {
+    const file = await gh.getFileContent(token, config.github.owner, config.github.repo, relativePath);
+    return decodeRepoFile(file);
+}
+async function listRepoDir(token, relativePath) {
+    const result = await gh.getFileContent(token, config.github.owner, config.github.repo, relativePath);
+    return Array.isArray(result) ? result : [];
+}
+async function liveBootInstructions(token) {
+    if (!token) {
         return [
             "# CENTRALDARK LIVE BOOT — BLOQUEADO",
             "MISSION_ID=UNRESOLVED",
             "STATUS=BLOCKED_BOOT_CONTEXT",
             "ROLE=READ_ONLY",
-            "SOURCE_OF_TRUTH=ServerVpss/CentralDark",
-            "LEIA-ME-IA.md não está alcançável neste runtime. Não promova, não escreva e não declare PASS até restaurar o contexto canônico.",
+            `SOURCE_OF_TRUTH=${SOURCE_OF_TRUTH}`,
+            "AUTHENTICATED_GITHUB_CONTEXT=MISSING",
         ].join("\n");
     }
-    const skills = listInstalledSkills();
-    const inventory = skills.length > 0
-        ? skills.map((skill) => `- ${skill.pasta}: ${skill.descricao || "sem descrição"} [sha256=${skill.sha256}]`).join("\n")
-        : "- SKILL_INVENTORY=EMPTY_OR_UNAVAILABLE";
-    return [
-        "# CENTRALDARK LIVE BOOT",
-        "SOURCE_OF_TRUTH=ServerVpss/CentralDark",
-        `BOOT_SHA256=${sha256(boot)}`,
-        "SKILL_ROUTING=DISCOVER_ALL_LOAD_ONLY_APPLICABLE",
-        "FRESH_CHEFE_DELTA=PRIORITY_HYPOTHESIS_VERIFY_AGAINST_LIVE_STATE",
-        "CHEFE_NAO_FICA_CEGO=REPO_OWNED_ACTION_REQUIRES_SANITIZED_OBSERVABILITY",
-        "",
-        "## Skills instaladas e alcançáveis",
-        inventory,
-        "",
-        "## Porta canônica viva — LEIA-ME-IA.md",
-        boot,
-    ].join("\n");
+    try {
+        const bootFile = await readRepoFile(token, "LEIA-ME-IA.md");
+        const skillEntries = await listRepoDir(token, SKILL_ROOT);
+        const skillNames = skillEntries
+            .filter((entry) => entry.type === "dir")
+            .map((entry) => entry.name)
+            .sort();
+        return [
+            "# CENTRALDARK LIVE BOOT",
+            `SOURCE_OF_TRUTH=${SOURCE_OF_TRUTH}`,
+            "BOOT_CHANNEL=GITHUB_AUTHENTICATED_DEFAULT_BRANCH",
+            `BOOT_BLOB_SHA=${bootFile.blobSha ?? "UNKNOWN"}`,
+            `BOOT_SHA256=${sha256(bootFile.content)}`,
+            "SKILL_ROUTING=DISCOVER_ALL_LOAD_ONLY_APPLICABLE",
+            `SKILLS_DISCOVERED=${skillNames.length}`,
+            `SKILL_DIRS=${skillNames.join(",")}`,
+            "SKILL_SELECTION=CALL_skill_listar_THEN_skill_instalar_ONLY_IF_APPLICABLE",
+            "FRESH_CHEFE_DELTA=PRIORITY_HYPOTHESIS_VERIFY_AGAINST_LIVE_STATE",
+            "CHEFE_NAO_FICA_CEGO=REPO_OWNED_ACTION_REQUIRES_SANITIZED_OBSERVABILITY",
+            "",
+            "## Porta canônica viva — LEIA-ME-IA.md",
+            bootFile.content,
+        ].join("\n");
+    }
+    catch (error) {
+        log.error("mcp_live_boot_unavailable", { source: SOURCE_OF_TRUTH, error: String(error) });
+        return [
+            "# CENTRALDARK LIVE BOOT — BLOQUEADO",
+            "MISSION_ID=UNRESOLVED",
+            "STATUS=BLOCKED_BOOT_CONTEXT",
+            "ROLE=READ_ONLY",
+            `SOURCE_OF_TRUTH=${SOURCE_OF_TRUTH}`,
+            "GITHUB_LIVE_BOOT=UNAVAILABLE",
+            "Não promova, não escreva e não declare PASS até restaurar o contexto canônico autenticado.",
+        ].join("\n");
+    }
 }
 // Endpoint público nunca anuncia nem executa destrutivas. No endpoint admin,
 // toda destrutiva passa exclusivamente pelo dispatcher auditado mcp_admin_call.
@@ -93,7 +120,7 @@ function auditEntry(options, entry) {
         ...entry,
     });
 }
-function buildServer(options) {
+async function buildServer(options) {
     const requestedVisibleTools = options.visibleTools ?? ALL_TOOLS;
     const visibleTools = options.admin === true
         ? requestedVisibleTools.filter((tool) => tool.annotations?.destructiveHint !== true || tool.name === "mcp_admin_call")
@@ -102,7 +129,8 @@ function buildServer(options) {
     const callableTools = options.admin === true
         ? requestedCallableTools.filter((tool) => tool.annotations?.destructiveHint !== true || tool.name === "mcp_admin_call")
         : requestedCallableTools.filter((tool) => tool.annotations?.destructiveHint !== true);
-    const server = new Server({ name: options.label ?? "mcp-centraldark", version: `0.4.0+${CATALOG_VERSION}` }, { capabilities: { tools: {} }, instructions: liveBootInstructions() });
+    const instructions = await liveBootInstructions(options.token);
+    const server = new Server({ name: options.label ?? "mcp-centraldark", version: `0.4.0+${CATALOG_VERSION}` }, { capabilities: { tools: {} }, instructions });
     server.setRequestHandler(ListToolsRequestSchema, async () => {
         const startedAt = Date.now();
         log.info("mcp_tools_list_start", { cid: options.cid, label: options.label ?? "private" });
@@ -208,7 +236,7 @@ function buildServer(options) {
     return server;
 }
 export async function handleMcpRequest(req, res, ghToken, options = {}) {
-    const server = buildServer({ ...options, token: ghToken });
+    const server = await buildServer({ ...options, token: ghToken });
     const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
     res.on("close", () => {
         transport.close().catch(() => { });
