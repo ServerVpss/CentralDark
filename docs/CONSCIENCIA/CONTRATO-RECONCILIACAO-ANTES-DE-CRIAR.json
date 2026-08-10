@@ -19,7 +19,9 @@
     "cli",
     "ci",
     "cd",
-    "telegram"
+    "telegram",
+    "multimodal_input",
+    "portable_package"
   ],
   "mandatory_pre_solution_sequence": [
     "resolve_user_intent",
@@ -75,10 +77,55 @@
     "integration": {
       "one_policy_for_all_adapters": true,
       "adapter_inheritance": "LEIA-ME-IA.md -> this_contract",
-      "ci_enforcement": "scripts/lupa/validar-porta-de-entrada.mjs",
+      "ci_enforcement": "scripts/lupa/validar-porta-de-entrada.mjs + scripts/lupa/portable-kernel.mjs",
       "external_vendor_ui": "OUT_OF_REPO_CONTROL",
       "external_vendor_ui_rule": "DO_NOT_CLAIM_MECHANICAL_ENFORCEMENT_WITHOUT_RUNTIME_HOOK"
     }
+  },
+  "multimodal_input_policy": {
+    "marker": "IMAGE_INPUT_IS_OPERATIONAL",
+    "image_is_sensor": true,
+    "screenshot_is_current_truth": false,
+    "screenshot_is_trigger_for_live_measurement": true,
+    "material_visual_finding_action": "REMEASURE_LIVE_SOURCE_THEN_ACT_MINIMALLY",
+    "live_state_required_before_mutation": true,
+    "stale_image_action": "USE_AS_HISTORICAL_DELTA_ONLY",
+    "visual_signal_classes": [
+      "ERROR",
+      "FINDING",
+      "HEAD",
+      "PR",
+      "CI",
+      "BLOCKER",
+      "MATERIAL_DELTA",
+      "EXPLICIT_USER_INSTRUCTION"
+    ],
+    "known_fix_and_valid_authority": "DO_NOT_ASK_AGAIN_EXECUTE_MINIMAL_TEST_RECORD_CONTINUE",
+    "image_or_audio_never_proves_hidden_mechanism": true
+  },
+  "portable_boot_policy": {
+    "marker": "CENTRALDARK_PORTABLE_KERNEL",
+    "canonical_entrypoint": "LEIA-ME-IA.md",
+    "portable_generator": "scripts/lupa/portable-kernel.mjs",
+    "package_is_cache_not_authority": true,
+    "package_source": "LIVE_REPOSITORY_CANONICAL_FILES",
+    "stale_package_action": "REBUILD_FROM_LIVE_REPOSITORY",
+    "export_must_bind_to_head_sha": true,
+    "export_must_hash_each_member": true,
+    "model_provider_lock": false,
+    "supported_surfaces": [
+      "chat",
+      "cli",
+      "mcp",
+      "webui",
+      "desktop",
+      "local_model",
+      "external_model"
+    ],
+    "repo_to_package": "AUTOMATIC_ON_VALIDATION_OR_EXPLICIT_EXPORT",
+    "package_to_repo": "DELTA_ONLY_AFTER_LIVE_REMEASURE_WRITER_SCOPE_AND_INDEPENDENT_JUDGE",
+    "never_overwrite_newer_live_state": true,
+    "obsolete_export_action": "REGENERATE_NOT_PATCH_STALE_ARCHIVE"
   },
   "repository_boundary_policy": {
     "marker": "CENTRALDARK_ROOT_ONLY_REQUIRED",
