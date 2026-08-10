@@ -8,6 +8,8 @@ const MODULES_ROOT = 'apps/modulos/';
 const PARALLEL_NAME = /(?:^|[-_.])(v\d+|copy|copia|backup|bak|novo|new|old|legacy|antigo)(?:$|[-_.])/i;
 const TEXT_EXTENSION = /\.(?:md|mdc|txt|json|ya?ml|mjs|cjs|js|ts|tsx|jsx|py|sh|ps1|toml|ini|conf|properties)$/i;
 const DEFAULT_MAP = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../config/mapa-canonico.json');
+const FULL_SHA = /^[0-9a-f]{40}$/;
+const CONSOLIDATION_LOCK = 'MAP_PROTECTED_PATH';
 
 export function normalizarCaminho(value) {
   const raw = String(value || '').replaceAll('\\', '/').replace(/^\.\//, '');
@@ -34,6 +36,77 @@ function registrarCaminho(raw, origem, vistos, erros) {
   }
 }
 
+function textoNaoVazio(value) {
+  return typeof value === 'string' && value.trim().length > 0;
+}
+
+function inteiroNaoNegativo(value) {
+  return Number.isInteger(value) && value >= 0;
+}
+
+/**
+ * Um caminho listado como consolidado continua protegido por segurança, mas só
+ * recebe selo evidencial PROVEN quando a prova é fechada e reproduzível.
+ * Ausência de prova nunca é convertida em PASS: vira PROTECTED_UNPROVEN.
+ */
+export function validarProvaConsolidacao(area) {
+  const proof = area?.proof;
+  if (proof == null) {
+    return { status: 'PROTECTED_UNPROVEN', errors: [] };
+  }
+
+  const errors = [];
+  if (!FULL_SHA.test(String(proof.head_sha || ''))) errors.push('head_sha inválido');
+  for (const field of ['evidence_ref', 'writer_ref', 'judge_ref', 'counterproof_ref', 'rollback_ref']) {
+    if (!textoNaoVazio(proof[field])) errors.push(`${field} ausente`);
+  }
+  if (textoNaoVazio(proof.writer_ref) && textoNaoVazio(proof.judge_ref) && proof.writer_ref === proof.judge_ref) {
+    errors.push('writer_ref e judge_ref devem ser independentes');
+  }
+  if (proof.lock_mechanism !== CONSOLIDATION_LOCK) {
+    errors.push(`lock_mechanism deve ser ${CONSOLIDATION_LOCK}`);
+  }
+
+  const tests = proof.tests;
+  if (!tests || !inteiroNaoNegativo(tests.passed) || !Number.isInteger(tests.total) || tests.total <= 0 || !inteiroNaoNegativo(tests.skipped)) {
+    errors.push('tests inválido');
+  } else {
+    if (tests.passed !== tests.total) errors.push('tests não estão 100% PASS');
+    if (tests.skipped !== 0) errors.push('tests contém SKIPPED');
+  }
+
+  const efficacy = proof.efficacy;
+  if (!efficacy || !inteiroNaoNegativo(efficacy.numerator) || !Number.isInteger(efficacy.denominator) || efficacy.denominator <= 0) {
+    errors.push('efficacy sem numerador/denominador válido');
+  } else {
+    const expected = (efficacy.numerator / efficacy.denominator) * 100;
+    if (efficacy.numerator !== efficacy.denominator) errors.push('eficácia menor que 100%');
+    if (efficacy.percent !== expected || efficacy.percent !== 100) {
+      errors.push('efficacy.percent não reproduz 100%');
+    }
+  }
+
+  return { status: errors.length ? 'INVALID_PROOF' : 'PROVEN', errors };
+}
+
+export function resumirConsolidacoes(map) {
+  const proven = [];
+  const protectedUnproven = [];
+  const invalid = [];
+  for (const area of map?.consolidated_areas || []) {
+    const result = validarProvaConsolidacao(area);
+    const pathValue = area?.path || '<sem-path>';
+    if (result.status === 'PROVEN') proven.push(pathValue);
+    else if (result.status === 'PROTECTED_UNPROVEN') protectedUnproven.push(pathValue);
+    else invalid.push({ path: pathValue, errors: result.errors });
+  }
+  return {
+    proven,
+    protected_unproven: protectedUnproven,
+    invalid,
+  };
+}
+
 export function validarDocumentoMapa(map) {
   const erros = [];
   if (map?.schema_version !== 1) erros.push('schema_version deve ser 1');
@@ -46,6 +119,15 @@ export function validarDocumentoMapa(map) {
   if (!Array.isArray(map?.forbidden_roots)) erros.push('forbidden_roots inválido');
   if (!Array.isArray(map?.historical_roots)) erros.push('historical_roots inválido');
   if (!Array.isArray(map?.validation_entrypoints) || !map.validation_entrypoints.length) erros.push('validation_entrypoints vazio');
+
+  const policy = map?.consolidation_evidence_policy;
+  if (policy?.enabled !== true) erros.push('consolidation_evidence_policy.enabled deve ser true');
+  if (policy?.legacy_without_proof !== 'PROTECTED_UNPROVEN') {
+    erros.push('consolidation_evidence_policy.legacy_without_proof inválido');
+  }
+  if (policy?.efficacy_100_requires_denominator !== true) {
+    erros.push('consolidation_evidence_policy.efficacy_100_requires_denominator deve ser true');
+  }
 
   const setoresVistos = new Map();
   const travasVistas = new Map();
@@ -60,6 +142,8 @@ export function validarDocumentoMapa(map) {
   for (const area of map?.consolidated_areas || []) {
     if (!area?.path || !area?.reason) erros.push('área consolidada sem path/reason');
     else registrarCaminho(area.path, `trava:${area.path}`, travasVistas, erros);
+    const proof = validarProvaConsolidacao(area);
+    for (const error of proof.errors) erros.push(`prova de consolidação inválida [${area?.path || '<sem-path>'}]: ${error}`);
   }
 
   for (const contract of map?.canonical_contracts || []) {
@@ -110,6 +194,12 @@ function moduleRootsFromMap(map) {
 
 function protectedPaths(map) {
   return (map.consolidated_areas || []).map(area => normalizarCaminho(area.path));
+}
+
+function evidenceLockedPaths(map) {
+  return (map.consolidated_areas || [])
+    .filter(area => validarProvaConsolidacao(area).status === 'PROVEN')
+    .map(area => normalizarCaminho(area.path));
 }
 
 function touchesPath(file, locked) {
@@ -345,8 +435,10 @@ export function validarMudanca({ repoRoot, baseSha, headSha, approved = false, m
   }
 
   const locks = protectedPaths(map);
+  const evidenceLocks = evidenceLockedPaths(map);
   const touchedLocks = [...new Set(changed.flatMap(item => locks.filter(locked => touchesPath(item.file, locked))))];
-  if (touchedLocks.length && !approved) erros.push(`área consolidada alterada sem label ${map.approval_label}: ${touchedLocks.join(', ')}`);
+  const touchedEvidenceLocks = [...new Set(changed.flatMap(item => evidenceLocks.filter(locked => touchesPath(item.file, locked))))];
+  if (touchedLocks.length && !approved) erros.push(`área protegida alterada sem label ${map.approval_label}: ${touchedLocks.join(', ')}`);
 
   const mappedModules = moduleRootsFromMap(map);
   const newModules = new Set();
@@ -376,7 +468,15 @@ export function validarMudanca({ repoRoot, baseSha, headSha, approved = false, m
     if (!mappedModules.has(key)) erros.push(`novo módulo fora do mapa canônico: ${MODULES_ROOT}${name}/`);
   }
 
-  return { ok: erros.length === 0, erros, avisos, changed, touchedLocks, newModules: [...newModules] };
+  return {
+    ok: erros.length === 0,
+    erros,
+    avisos,
+    changed,
+    touchedLocks,
+    touchedEvidenceLocks,
+    newModules: [...newModules],
+  };
 }
 
 function parseArgs(argv) {
@@ -398,6 +498,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     const map = carregarMapa(args.mapPath);
     const tree = validarArvore({ repoRoot: args.repoRoot, map });
     const change = validarMudanca({ ...args, map });
+    const consolidation = resumirConsolidacoes(map);
     const result = {
       ok: tree.ok && change.ok,
       source_of_truth: map.source_of_truth,
@@ -405,6 +506,10 @@ if (import.meta.url === `file://${process.argv[1]}`) {
       warnings: [...tree.avisos, ...change.avisos],
       changed_files: change.changed.length,
       touched_locks: change.touchedLocks || [],
+      touched_evidence_locks: change.touchedEvidenceLocks || [],
+      consolidation_proven: consolidation.proven.length,
+      consolidation_protected_unproven: consolidation.protected_unproven.length,
+      consolidation_invalid: consolidation.invalid.length,
       new_modules: change.newModules || [],
       tracked_files: tree.global?.trackedFiles ?? null,
       canonical_contracts: tree.global?.canonicalContracts ?? [],
