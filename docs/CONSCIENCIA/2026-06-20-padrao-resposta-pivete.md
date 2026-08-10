@@ -53,6 +53,8 @@ CÓDIGO/VALIDAÇÃO/EXECUÇÃO
 → gíria nunca substitui prova, contrato ou gate
 ```
 
+Interpretar linguagem pelo contexto **não concede autorização operacional**. Publicação, rollback, deploy, ação destrutiva ou de alto risco exige escopo autorizado, contrato aplicável, reversibilidade e evidência. Se a intenção estiver ambígua para uma ação sensível, bloquear a execução e pedir esclarecimento; ausência de prova nunca vira aprovação.
+
 Vocabulário regional de referência que os agentes devem reconhecer quando aparecer no contexto: `é barril`, `baratino`, `brocar`, `se pique/se picar`, `não comer reggae`, `largar o doce`, `pegar a visão`, `namoral`, `boca de 09`, `pegar ar`, `crocodilagem`, `tá na cocó`, `é bala`, `pegar um baba`, `se adiante`, `oxente/oxe` e `fuleiro`.
 
 A interpretação depende do contexto. Exemplo importante: `é barril` pode indicar dificuldade ou algo muito bom/admirável; `pegar ar` indica irritação; `brocar` indica fazer muito bem/ter sucesso; `pegar a visão` indica ficar atento/entender o que está acontecendo.
@@ -81,9 +83,12 @@ Regras de convivência operacional:
 
 - agente não disputa autoria, culpa ou protagonismo; disputa-se hipótese por evidência;
 - erro encontrado vira causa, correção mínima, teste e aprendizado — não ringue entre modelos;
+- erro relevante segue a cadeia causal canônica de `LEIA-ME-IA.md`: apontador, evidência, caminho, commit introdutor, identidade comprovada, ativador, impacto, Writer resolutor, correção mínima e contraprova;
 - quem está `READ_ONLY` não escreve no escopo ocupado; pede ou aguarda handoff;
+- qualquer mutação exige posse comprovada por handoff explícito, HEAD aplicável e identidade operacional do Writer; ausência desses elementos bloqueia a escrita;
 - ao receber a caneta, o novo Writer continua do `HEAD`, escopo, evidência, pendência e próximo gate já provados;
-- se outro agente já resolveu ou registrou a mesma coisa, aproveitar o delta útil e não duplicar trabalho;
+- Writer e Judge devem ser agentes distintos no mesmo escopo/HEAD; executor não aprova a própria mudança trocando apenas o rótulo;
+- se outro agente já resolveu ou registrou o mesmo, aproveitar o delta útil e não duplicar trabalho;
 - não devolver ao SEGREDO/CHEFE operação manual que a ferramenta disponível consegue executar com segurança e autorização;
 - se faltar capacidade real, apontar o local e a capacidade faltante; não fingir impossibilidade global;
 - velocidade nunca autoriza pular hash, diff, teste, contraprova, Writer único ou autorização;
@@ -109,11 +114,15 @@ Comentário, review, issue, PR, handoff, label ou outro canal compartilhado é e
 PREWRITE_READ_AVAILABLE=SIM
 → ler o canal/objeto atual
 → comparar HEAD, Writer, handoff e mensagem equivalente
+→ reservar/serializar a intenção de escrita quando o canal oferecer CAS, lease, etag, expected_sha ou mecanismo equivalente
+→ imediatamente antes de confirmar, revalidar que o estado observado ainda é o atual
+→ se houver conflito ou mudança concorrente: bloquear, reler e reconciliar
 → atualizar o objeto existente quando a correção for do mesmo registro
 → criar nova escrita somente se houver delta material
 
 PREWRITE_READ_AVAILABLE=NAO
 → READ_STATE=UNPROVEN
+→ tratar `UNPROVEN` como estado local equivalente a `UNKNOWN`: nunca PASS, nunca autorização, nunca receipt final
 → não afirmar que "não existe comentário/handoff" por ausência de ferramenta
 → evitar nova escrita quando ela puder duplicar estado ou disputar posse
 → se a escrita for materialmente necessária e segura, declarar a limitação no próprio receipt e usar formato idempotente/deduplicável quando existir
@@ -129,7 +138,7 @@ A Meta Lupa também proíbe inflar evidência correlacionada:
 MESMA_ORIGEM + DOIS_CAMINHOS/OBSERVADORES
 → duas observações ou execuções correlacionadas
 → NÃO chamar automaticamente de "duas fontes independentes"
-→ registrar dependência/cluster
+→ registrar fonte, execução, commit/HEAD, dependências upstream e cluster de correlação
 → independência só pode ser alegada quando a proveniência realmente for distinta
 ```
 
@@ -141,6 +150,28 @@ WRITER_ATUAL=<outro agente>
 ```
 
 Um Judge em READ_ONLY não se rotula como Writer do mesmo escopo.
+
+## Roteamento de dificuldade e busca de skill/capability
+
+Dificuldade de um modelo não encerra a missão. Quando uma ação emperrar por falta de conhecimento, ferramenta ou padrão técnico, o agente deve procurar primeiro o que já existe e só escalar o necessário.
+
+```text
+DIFICULDADE
+→ reproduzir/medir o erro
+→ buscar solução no repo, histórico, docs e skills instaladas
+→ procurar capability/ferramenta conectada aplicável
+→ se ainda faltar conhecimento e houver Internet: buscar semanticamente em fonte primária
+→ se outra especialidade resolver melhor: encaminhar em READ_ONLY com missão+HEAD+scope+evidência
+→ se precisar escrever: handoff de caneta; nunca segundo Writer
+→ corrigir o mínimo
+→ testar + contraprovar + Judge + Meta Lupa quando aplicável
+→ se o padrão se repetir e a solução ficar estável: determinizar no gate/test/skill/contrato existente
+→ se não houver prova suficiente: UNKNOWN/BLOCKED com local e próximo teste
+```
+
+`SEARCH_SKILL` significa descobrir e reutilizar uma skill/capability existente que corresponda semanticamente à dificuldade atual. Não criar skill nova por uma hipótese bonita. Skill nova só nasce quando houver erro recorrente comprovado, correção estável, contraprova e lacuna que não caiba no mecanismo existente.
+
+Assim, `AGENTE_PODE_CAIR != MISSAO_CAIU` e `MODELO_NAO_SABE != SISTEMA_SEM_SAIDA`: estado, missão, HEAD, evidência, PR e handoff permanecem fora da memória privada do processo individual.
 
 ## Palavras do usuário registradas
 
@@ -226,7 +257,9 @@ CONFIRMAÇÃO:
 - Não ler, abrir, copiar, editar, resumir ou usar como contexto arquivos sensíveis; validar credenciais apenas por presença/ausência sanitizada.
 - Não inventar sucesso: validar com prova.
 - Antes de escrever em canal compartilhado, ler o estado atual quando houver capacidade; ausência da ferramenta de leitura vira `UNPROVEN`, não prova de ausência.
+- `UNPROVEN` nunca conta como PASS, autorização ou receipt final.
 - Não chamar observações da mesma origem de fontes independentes sem provar proveniência realmente distinta.
+- Diante de dificuldade técnica, procurar primeiro skill/capability existente e fonte primária antes de devolver bloqueio genérico ao usuário.
 - Logs completos não devem ser colados no chat; salvar em `/root/CentralDark/revisoes/YYYYMMDD-HHMMSS/NOME-DA-TAREFA/` e mostrar só resumo.
 - Trabalhar sempre que possível por GitHub + workflow + webhook + run-once.
 - Nenhum bot/agente faz merge na main. Merge em main exige aprovação humana explícita.
