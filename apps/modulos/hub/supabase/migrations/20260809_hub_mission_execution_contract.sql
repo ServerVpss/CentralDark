@@ -46,9 +46,19 @@ create index if not exists hub_missions_running_claim_idx
 comment on column public.hub_missions.capability is
   'Nome exato de uma tool do catálogo MCP CentralDark. NULL = missão sem execução automática.';
 comment on column public.hub_missions.input is
-  'Argumentos JSON internos da capability; não expor na view api.';
+  'Argumentos JSON internos da capability; não expor na view api nem em SELECT authenticated da tabela public.';
 comment on column public.hub_missions.claimed_by is
   'Instância que venceu o claim condicional queued->running.';
+
+-- O grant antigo era SELECT de tabela inteira para authenticated. Depois que
+-- `input` passou a existir isso exporia argumentos internos. Revoga o grant de
+-- tabela e devolve somente as colunas operacionais não sensíveis.
+revoke select on public.hub_missions from authenticated;
+grant select (
+  id, title, creator, agent, target, state, "authorization", branch_sha, risk,
+  rollback, created_at, updated_at, capability, claimed_by, claimed_at,
+  finished_at, execution_status
+) on public.hub_missions to authenticated;
 
 -- A view de frontend NÃO expõe input. Capability e estado de execução são
 -- observáveis; argumentos ficam apenas na tabela public via service_role.
@@ -72,6 +82,7 @@ create or replace view api.hub_missions as
     finished_at,
     execution_status
   from public.hub_missions;
-grant select on api.hub_missions to authenticated, anon;
+revoke all on api.hub_missions from anon;
+grant select on api.hub_missions to authenticated;
 
 notify pgrst, 'reload schema';
