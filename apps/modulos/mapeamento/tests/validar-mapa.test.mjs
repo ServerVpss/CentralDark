@@ -5,6 +5,7 @@ import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import test from 'node:test';
 import {
+  CONSOLIDATION_PROOF_DEPENDENCIES,
   normalizarCaminho,
   resumirConsolidacoes,
   temSegmentoAdjacenteDuplicado,
@@ -37,10 +38,15 @@ const baseMap = {
   consolidated_areas: [{ path: 'apps/modulos/protegido/', reason: 'teste' }],
 };
 
-function provaValida({ headSha = 'a'.repeat(40), materialGitOid = 'b'.repeat(40) } = {}) {
+function provaValida({
+  headSha = 'a'.repeat(40),
+  materialGitOid = 'b'.repeat(40),
+  dependencyGitOids = Object.fromEntries(CONSOLIDATION_PROOF_DEPENDENCIES.map(item => [item, 'c'.repeat(40)])),
+} = {}) {
   return {
     head_sha: headSha,
     material_git_oid: materialGitOid,
+    dependency_git_oids: dependencyGitOids,
     evidence_ref: 'ci:run-123',
     writer_ref: 'writer:gpt-5-6-sol',
     judge_ref: 'judge:independente',
@@ -68,11 +74,17 @@ function initRepo(root) {
   git(root, 'config', 'user.name', 'CentralDark Test');
 }
 
+function dependencyOidsAt(root, ref) {
+  return Object.fromEntries(CONSOLIDATION_PROOF_DEPENDENCIES.map(item => [item, git(root, 'rev-parse', `${ref}:${item}`)]));
+}
+
 function repoTemporario() {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'centraldark-map-'));
   initRepo(root);
   write(root, 'apps/modulos/existente/index.mjs', 'export default true;\n');
   write(root, 'apps/modulos/protegido/index.mjs', 'export default true;\n');
+  write(root, 'apps/modulos/mapeamento/core/validar-mapa.mjs', '// proof gate fixture\n');
+  write(root, '.agents/skills/meta-lupa/SKILL.md', '# Meta Lupa fixture\n');
   write(root, 'LEIA-ME.md', '# porta\n');
   write(root, 'AGENTS.md', 'LEIA-ME.md\n');
   git(root, 'add', '.');
@@ -150,7 +162,7 @@ test('legado sem prova continua protegido mas não recebe selo PROVEN', () => {
   assert.equal(summary.invalid.length, 0);
 });
 
-test('selo PROVEN exige prova fechada, fingerprint material, Judge independente e eficácia 100/100', () => {
+test('selo PROVEN exige prova fechada, fingerprint material/dependências, Judge independente e eficácia 100/100', () => {
   const map = structuredClone(baseMap);
   map.consolidated_areas[0].proof = provaValida();
   assert.equal(validarDocumentoMapa(map).length, 0);
@@ -160,12 +172,14 @@ test('selo PROVEN exige prova fechada, fingerprint material, Judge independente 
   assert.equal(summary.protected_unproven.length, 0);
 });
 
-test('rejeita selo PROVEN sem fingerprint material', () => {
+test('rejeita selo PROVEN sem fingerprint material ou das dependências', () => {
   const map = structuredClone(baseMap);
   map.consolidated_areas[0].proof = provaValida();
   delete map.consolidated_areas[0].proof.material_git_oid;
+  delete map.consolidated_areas[0].proof.dependency_git_oids;
   const errors = validarDocumentoMapa(map).join('\n');
   assert.match(errors, /material_git_oid inválido/);
+  assert.match(errors, /dependency_git_oids ausente/);
   assert.equal(resumirConsolidacoes(map).invalid.length, 1);
 });
 
@@ -188,23 +202,44 @@ test('rejeita selo com Judge igual ao Writer ou teste SKIPPED', () => {
   assert.match(errors, /SKIPPED/);
 });
 
-test('preserva PROVEN em HEAD novo fora do alvo e invalida só quando o material protegido muda', () => {
+test('preserva PROVEN fora das dependências e invalida só alvo ou mecanismo probatório tocado', () => {
   const root = repoTemporario();
   const proofHead = git(root, 'rev-parse', 'HEAD');
   const protectedPath = 'apps/modulos/protegido';
   const materialGitOid = git(root, 'rev-parse', `${proofHead}:${protectedPath}`);
   const map = structuredClone(baseMap);
-  map.consolidated_areas[0].proof = provaValida({ headSha: proofHead, materialGitOid });
+  map.consolidated_areas[0].proof = provaValida({
+    headSha: proofHead,
+    materialGitOid,
+    dependencyGitOids: dependencyOidsAt(root, proofHead),
+  });
 
   const original = validarProvaConsolidacao(map.consolidated_areas[0], { repoRoot: root, headSha: proofHead });
   assert.equal(original.status, 'PROVEN', original.errors.join('\n'));
 
-  fs.appendFileSync(path.join(root, 'apps/modulos/existente/index.mjs'), '// mudança fora do alvo\n');
+  fs.appendFileSync(path.join(root, 'apps/modulos/existente/index.mjs'), '// mudança fora do alvo e da prova\n');
   git(root, 'add', '.');
   git(root, 'commit', '-qm', 'unrelated');
   const unrelatedHead = git(root, 'rev-parse', 'HEAD');
   const preserved = validarProvaConsolidacao(map.consolidated_areas[0], { repoRoot: root, headSha: unrelatedHead });
   assert.equal(preserved.status, 'PROVEN', preserved.errors.join('\n'));
+
+  const proofDependency = CONSOLIDATION_PROOF_DEPENDENCIES[0];
+  fs.appendFileSync(path.join(root, proofDependency), '// mudança no mecanismo probatório\n');
+  git(root, 'add', '.');
+  git(root, 'commit', '-qm', 'proof-dependency-change');
+  const dependencyHead = git(root, 'rev-parse', 'HEAD');
+  const staleDependency = validarProvaConsolidacao(map.consolidated_areas[0], { repoRoot: root, headSha: dependencyHead });
+  assert.equal(staleDependency.status, 'INVALID_PROOF');
+  assert.match(staleDependency.errors.join('\n'), /dependência da prova mudou/);
+
+  map.consolidated_areas[0].proof = provaValida({
+    headSha: dependencyHead,
+    materialGitOid: git(root, 'rev-parse', `${dependencyHead}:${protectedPath}`),
+    dependencyGitOids: dependencyOidsAt(root, dependencyHead),
+  });
+  const proofRecovered = validarProvaConsolidacao(map.consolidated_areas[0], { repoRoot: root, headSha: dependencyHead });
+  assert.equal(proofRecovered.status, 'PROVEN', proofRecovered.errors.join('\n'));
 
   fs.appendFileSync(path.join(root, 'apps/modulos/protegido/index.mjs'), '// mudança material\n');
   git(root, 'add', '.');
@@ -214,13 +249,16 @@ test('preserva PROVEN em HEAD novo fora do alvo e invalida só quando o material
   assert.equal(stale.status, 'INVALID_PROOF');
   assert.match(stale.errors.join('\n'), /material mudou desde a prova/);
 
-  const blocked = validarMudanca({ repoRoot: root, baseSha: unrelatedHead, headSha: changedHead, approved: true, map });
+  const blocked = validarMudanca({ repoRoot: root, baseSha: dependencyHead, headSha: changedHead, approved: true, map });
   assert.equal(blocked.ok, false);
   assert.match(blocked.erros.join('\n'), /nova prova material/);
 
-  const refreshedOid = git(root, 'rev-parse', `${changedHead}:${protectedPath}`);
-  map.consolidated_areas[0].proof = provaValida({ headSha: changedHead, materialGitOid: refreshedOid });
-  const recovered = validarMudanca({ repoRoot: root, baseSha: unrelatedHead, headSha: changedHead, approved: true, map });
+  map.consolidated_areas[0].proof = provaValida({
+    headSha: changedHead,
+    materialGitOid: git(root, 'rev-parse', `${changedHead}:${protectedPath}`),
+    dependencyGitOids: dependencyOidsAt(root, changedHead),
+  });
+  const recovered = validarMudanca({ repoRoot: root, baseSha: dependencyHead, headSha: changedHead, approved: true, map });
   assert.equal(recovered.ok, true, recovered.erros.join('\n'));
 });
 
