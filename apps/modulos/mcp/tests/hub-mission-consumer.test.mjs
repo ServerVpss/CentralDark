@@ -10,6 +10,7 @@ const hubRoot = path.resolve(root, "..", "hub");
 
 const consumer = readFileSync(path.join(root, "src", "hub-mission-consumer.js"), "utf8");
 const health = readFileSync(path.join(root, "src", "health-deep.js"), "utf8");
+const mcpAdmin = readFileSync(path.join(root, "src", "tools", "core", "mcp-admin.js"), "utf8");
 const hubCommand = readFileSync(path.join(hubRoot, "supabase", "functions", "hub-command", "index.ts"), "utf8");
 const migration = readFileSync(path.join(hubRoot, "supabase", "migrations", "20260809_hub_mission_execution_contract.sql"), "utf8");
 
@@ -25,6 +26,13 @@ test("execução passa pelo dispatcher admin canônico", () => {
   assert.match(consumer, /confirmAdmin:\s*"CONFIRMO ADMIN"/);
   assert.doesNotMatch(consumer, /vps-ssh-exec\.yml/);
   assert.doesNotMatch(consumer, /commands\.join/);
+});
+
+test("dispatcher interno valida inputSchema antes de qualquer handler", () => {
+  assert.match(mcpAdmin, /inputSchema\.safeParse\(rawInput \?\? \{\}\)/);
+  assert.match(mcpAdmin, /status:\s*"INPUT_INVALIDO"/);
+  assert.match(mcpAdmin, /tool\.handler\(parsed\.data, ctx\)/);
+  assert.doesNotMatch(mcpAdmin, /tool\.handler\(input\.input \?\? \{\}, ctx\)/);
 });
 
 test("consumer reutiliza sanitizador canônico", () => {
