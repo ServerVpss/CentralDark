@@ -37,9 +37,10 @@ const baseMap = {
   consolidated_areas: [{ path: 'apps/modulos/protegido/', reason: 'teste' }],
 };
 
-function provaValida() {
+function provaValida({ headSha = 'a'.repeat(40), materialGitOid = 'b'.repeat(40) } = {}) {
   return {
-    head_sha: 'a'.repeat(40),
+    head_sha: headSha,
+    material_git_oid: materialGitOid,
     evidence_ref: 'ci:run-123',
     writer_ref: 'writer:gpt-5-6-sol',
     judge_ref: 'judge:independente',
@@ -149,7 +150,7 @@ test('legado sem prova continua protegido mas não recebe selo PROVEN', () => {
   assert.equal(summary.invalid.length, 0);
 });
 
-test('selo PROVEN exige prova fechada, Judge independente e eficácia 100/100', () => {
+test('selo PROVEN exige prova fechada, fingerprint material, Judge independente e eficácia 100/100', () => {
   const map = structuredClone(baseMap);
   map.consolidated_areas[0].proof = provaValida();
   assert.equal(validarDocumentoMapa(map).length, 0);
@@ -157,6 +158,15 @@ test('selo PROVEN exige prova fechada, Judge independente e eficácia 100/100', 
   const summary = resumirConsolidacoes(map);
   assert.equal(summary.proven.length, 1);
   assert.equal(summary.protected_unproven.length, 0);
+});
+
+test('rejeita selo PROVEN sem fingerprint material', () => {
+  const map = structuredClone(baseMap);
+  map.consolidated_areas[0].proof = provaValida();
+  delete map.consolidated_areas[0].proof.material_git_oid;
+  const errors = validarDocumentoMapa(map).join('\n');
+  assert.match(errors, /material_git_oid inválido/);
+  assert.equal(resumirConsolidacoes(map).invalid.length, 1);
 });
 
 test('rejeita alegação de 100% sem denominador reproduzível', () => {
@@ -176,6 +186,42 @@ test('rejeita selo com Judge igual ao Writer ou teste SKIPPED', () => {
   const errors = validarDocumentoMapa(map).join('\n');
   assert.match(errors, /devem ser independentes/);
   assert.match(errors, /SKIPPED/);
+});
+
+test('preserva PROVEN em HEAD novo fora do alvo e invalida só quando o material protegido muda', () => {
+  const root = repoTemporario();
+  const proofHead = git(root, 'rev-parse', 'HEAD');
+  const protectedPath = 'apps/modulos/protegido';
+  const materialGitOid = git(root, 'rev-parse', `${proofHead}:${protectedPath}`);
+  const map = structuredClone(baseMap);
+  map.consolidated_areas[0].proof = provaValida({ headSha: proofHead, materialGitOid });
+
+  const original = validarProvaConsolidacao(map.consolidated_areas[0], { repoRoot: root, headSha: proofHead });
+  assert.equal(original.status, 'PROVEN', original.errors.join('\n'));
+
+  fs.appendFileSync(path.join(root, 'apps/modulos/existente/index.mjs'), '// mudança fora do alvo\n');
+  git(root, 'add', '.');
+  git(root, 'commit', '-qm', 'unrelated');
+  const unrelatedHead = git(root, 'rev-parse', 'HEAD');
+  const preserved = validarProvaConsolidacao(map.consolidated_areas[0], { repoRoot: root, headSha: unrelatedHead });
+  assert.equal(preserved.status, 'PROVEN', preserved.errors.join('\n'));
+
+  fs.appendFileSync(path.join(root, 'apps/modulos/protegido/index.mjs'), '// mudança material\n');
+  git(root, 'add', '.');
+  git(root, 'commit', '-qm', 'material-change');
+  const changedHead = git(root, 'rev-parse', 'HEAD');
+  const stale = validarProvaConsolidacao(map.consolidated_areas[0], { repoRoot: root, headSha: changedHead });
+  assert.equal(stale.status, 'INVALID_PROOF');
+  assert.match(stale.errors.join('\n'), /material mudou desde a prova/);
+
+  const blocked = validarMudanca({ repoRoot: root, baseSha: unrelatedHead, headSha: changedHead, approved: true, map });
+  assert.equal(blocked.ok, false);
+  assert.match(blocked.erros.join('\n'), /nova prova material/);
+
+  const refreshedOid = git(root, 'rev-parse', `${changedHead}:${protectedPath}`);
+  map.consolidated_areas[0].proof = provaValida({ headSha: changedHead, materialGitOid: refreshedOid });
+  const recovered = validarMudanca({ repoRoot: root, baseSha: unrelatedHead, headSha: changedHead, approved: true, map });
+  assert.equal(recovered.ok, true, recovered.erros.join('\n'));
 });
 
 test('bloqueia mudança em área consolidada sem aprovação', () => {

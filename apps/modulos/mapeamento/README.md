@@ -32,7 +32,8 @@ Nenhuma dessas visões pode inventar outro mapa.
 - duplicidade de módulos que difiram apenas por maiúsculas/minúsculas;
 - alteração em área protegida sem a autorização canônica `permito-segredo`;
 - caminho absoluto, travessia `../` ou entrada duplicada no mapa;
-- selo `PROVEN` com prova incompleta, Judge igual ao Writer, teste `SKIPPED` ou alegação de eficácia 100% sem denominador reproduzível.
+- selo `PROVEN` com prova incompleta, Judge igual ao Writer, teste `SKIPPED` ou alegação de eficácia 100% sem denominador reproduzível;
+- selo `PROVEN` cujo fingerprint Git material não corresponde ao alvo no HEAD da prova ou no HEAD atual.
 
 A label registra autorização de `SEGREDO/CHEFE` para a mudança protegida. Autorização permite a cirurgia; **não transforma automaticamente o alvo em consolidado**.
 
@@ -55,6 +56,7 @@ O selo `PROVEN` só nasce quando a entrada possui `proof` válido com:
 
 ```text
 head_sha completo
++ material_git_oid do path no head_sha (blob/tree Git)
 + evidence_ref
 + writer_ref != judge_ref
 + tests: PASS total, skipped=0
@@ -65,6 +67,8 @@ head_sha completo
 ```
 
 `100%` aqui significa somente **100% do denominador declarado e reproduzível**, nunca certeza global do sistema.
+
+A prova é preservada por dependência causal: um novo HEAD fora do caminho protegido **não** força revalidação se o `material_git_oid` continuar idêntico. Se o material protegido mudar, mesmo com autorização válida, o selo anterior deixa de autorizar `PROVEN` até existir nova prova/fingerprint sobre o material novo. O gate revalida a fronteira atingida pelo delta, não o repositório inteiro por ritual.
 
 Depois disso, edição continua fail-closed até nova autorização explícita para o caminho exato. Se a prova for inválida, o mapa falha fechado; se a prova histórica estiver ausente, o caminho permanece `PROTECTED_UNPROVEN` em vez de receber falso verde.
 
