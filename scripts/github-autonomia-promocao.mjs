@@ -25,7 +25,6 @@ export const DEFAULT_REQUIRED_WORKFLOWS = Object.freeze([
 export const BLOCKING_LABELS = Object.freeze([
   "do-not-merge",
   "hold",
-  "needs-human",
   "autonomia-bloqueada",
 ]);
 
@@ -56,6 +55,17 @@ export function normalizedLabels(pr) {
   return new Set((pr.labels || []).map((label) => String(label.name || label).toLowerCase()));
 }
 
+/**
+ * Autorização humana (A) e prontidão técnica (R) são estados distintos.
+ *
+ * A única fonte autenticada de A neste fluxo é a label canônica
+ * `permito-segredo`. Enquanto a label persistir no mesmo PR/escopo, A persiste
+ * entre novos HEADs e revalidações. Texto do body e `permito-pivete` são apenas
+ * rastro histórico; nunca concedem autoridade.
+ *
+ * R é recalculada continuamente por HEAD, gates, Judge, findings e mergeability.
+ * R=0 nunca apaga A=1 nem autoriza perguntar ao CHEFE de novo.
+ */
 export function authorizationFor(pr) {
   const labels = normalizedLabels(pr);
   const body = `${pr.title || ""}\n${pr.body || ""}`;
@@ -63,15 +73,15 @@ export function authorizationFor(pr) {
   const legacyPiveteBodyMarker = /\bPERMITO[ _-]?PIVETE\b/i.test(body);
   const segredoLabel = labels.has("permito-segredo");
   const legacyPiveteLabel = labels.has("permito-pivete");
-  const authorized = segredoLabel || segredoBodyMarker || legacyPiveteLabel || legacyPiveteBodyMarker;
-  const canonical = segredoLabel || segredoBodyMarker;
 
   return {
-    authorized,
-    viaLabel: segredoLabel || legacyPiveteLabel,
-    viaBody: segredoBodyMarker || legacyPiveteBodyMarker,
-    authority: canonical ? "SEGREDO/CHEFE" : authorized ? "LEGACY_PIVETE_COMPAT" : null,
-    labelToApply: segredoBodyMarker ? "permito-segredo" : legacyPiveteBodyMarker ? "permito-pivete" : null,
+    authorized: segredoLabel,
+    viaLabel: segredoLabel,
+    viaBody: false,
+    authority: segredoLabel ? "SEGREDO/CHEFE" : null,
+    source: segredoLabel ? "github-label:permito-segredo" : "none",
+    persistence: segredoLabel ? "UNTIL_LABEL_REMOVED_OR_SCOPE_CHANGES" : "NONE",
+    historicalBodyMarker: segredoBodyMarker || legacyPiveteBodyMarker,
     legacy: legacyPiveteLabel || legacyPiveteBodyMarker,
   };
 }
@@ -375,14 +385,6 @@ async function upsertBlockComment(client, repository, candidate) {
   }
 }
 
-async function ensureAuthorizationLabel(client, repository, pr, candidate) {
-  if (candidate.authorization.viaLabel || !candidate.authorization.viaBody) return;
-  if (!candidate.authorization.labelToApply) throw new Error("AUTHORIZATION_LABEL_UNRESOLVED");
-  await client.request("POST", `/repos/${repository}/issues/${pr.number}/labels`, {
-    labels: [candidate.authorization.labelToApply],
-  });
-}
-
 async function runJudge() {
   const repository = process.env.GITHUB_REPOSITORY || "";
   const client = new GitHubClient(process.env.GITHUB_TOKEN || "");
@@ -433,8 +435,6 @@ async function runPromote() {
       console.log(`PR=${pr.number} STATE_CHANGED_REEVALUATE_LATER`);
       continue;
     }
-
-    await ensureAuthorizationLabel(client, repository, pr, candidate);
 
     if (candidate.decision === "BLOCKED") {
       await upsertBlockComment(client, repository, candidate);
