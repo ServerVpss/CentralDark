@@ -188,7 +188,7 @@ export const mcpAdminTools = [
                     actor: ctx?.callerUser ?? undefined,
                     correlationId: ctx?.correlationId ?? undefined,
                     adminAuthorized: false,
-              });
+                });
                 return ok({
                     ok: false,
                     status: !hasAdminContext ? "ESCOPO_ADMIN_NECESSARIO" : "CONTEXTO_ADMIN_INCOMPLETO",
