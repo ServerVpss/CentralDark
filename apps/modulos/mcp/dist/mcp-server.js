@@ -123,9 +123,21 @@ function steadyInstructions() {
 // toda destrutiva passa exclusivamente pelo dispatcher auditado mcp_admin_call.
 export const PUBLIC_CALLABLE_MCP_TOOLS = [];
 function auditEntry(options, entry) {
+    const cid = options.cid ?? null;
     auditToolExecution({
-        correlationId: options.cid ?? null,
+        correlationId: cid,
         ...entry,
+    });
+    // CHEFE_NAO_FICA_CEGO: o audit JSONL preserva detalhes sanitizados; o log
+    // operacional publica somente metadados não sensíveis no buffer/SSE admin.
+    log.info("mcp_tool_execution", {
+        cid,
+        method: entry.method ?? null,
+        toolName: entry.toolName ?? null,
+        ok: entry.ok === true,
+        durationMs: Number.isFinite(entry.durationMs) ? entry.durationMs : null,
+        exitCode: Number.isFinite(entry.exitCode) ? entry.exitCode : null,
+        auditTrail: true,
     });
 }
 async function buildServer(options) {
