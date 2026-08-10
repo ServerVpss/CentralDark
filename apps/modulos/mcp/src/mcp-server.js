@@ -201,11 +201,11 @@ async function buildServer(options) {
         if (!tool) {
             const result = {
                 isError: true,
-                content: [{ type: "text", text: `Tool desconhecida: ${req.params.name}` }],
+                content: [{ type: "text", text: "Tool desconhecida." }],
             };
             auditEntry(options, {
                 method: "tools/call",
-                toolName: req.params.name,
+                toolName: "unknown_tool",
                 input: req.params.arguments ?? {},
                 result,
                 durationMs: Date.now() - startedAt,
