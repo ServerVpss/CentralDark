@@ -38,6 +38,21 @@ const ADMIN_CONFIRM = "CONFIRMO ADMIN";
 function ok(data) {
     return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
 }
+function parseToolInput(tool, rawInput) {
+    return tool.inputSchema.safeParse(rawInput ?? {});
+}
+function invalidInputResponse(input, parsed, destructive) {
+    return ok({
+        ok: false,
+        status: "INPUT_INVALIDO",
+        tool: input.tool,
+        destructive: destructive === true,
+        erros: parsed.error.issues.map((issue) => ({
+            path: issue.path.join("."),
+            message: issue.message,
+        })),
+    });
+}
 const runtimeTools = [
     codeReviewerToolDefinition,
     ...aprendizadoTools,
@@ -202,7 +217,9 @@ export const mcpAdminTools = [
             }
             const destructive = tool.annotations?.destructiveHint === true;
             if (!destructive) {
-                return tool.handler(input.input ?? {}, ctx);
+                const parsed = parseToolInput(tool, input.input);
+                if (!parsed.success) return invalidInputResponse(input, parsed, false);
+                return tool.handler(parsed.data, ctx);
             }
             // Destrutiva: startup auditável + guarda canônica versionada.
             const startup = await ensureStartupAuditReady();
@@ -241,7 +258,9 @@ export const mcpAdminTools = [
                             : "Nada foi executado. Passe confirmAdmin='CONFIRMO ADMIN' ou 'PERMITO PIVETE'."),
                 });
             }
-            return tool.handler(input.input ?? {}, ctx);
+            const parsed = parseToolInput(tool, input.input);
+            if (!parsed.success) return invalidInputResponse(input, parsed, true);
+            return tool.handler(parsed.data, ctx);
         },
     },
 ];
