@@ -59,11 +59,17 @@ export async function healthDeep(req, res) {
         const githubOk = checkSecret("GITHUB_TOKEN").present
             || checkSecret("GH_TOKEN").present;
 
+        const now = Date.now();
         const lastPollMs = hubConsumer.lastPollAt ? Date.parse(hubConsumer.lastPollAt) : NaN;
-        const pollStaleMs = Number.isFinite(lastPollMs) ? Math.max(0, Date.now() - lastPollMs) : null;
+        const bootStartedMs = Date.parse(SERVICE_STARTED_AT);
+        const bootAgeMs = Number.isFinite(bootStartedMs) ? Math.max(0, now - bootStartedMs) : null;
+        const pollStaleMs = Number.isFinite(lastPollMs) ? Math.max(0, now - lastPollMs) : null;
         const explicitlyDisabled = hubConsumer.status === "disabled"
             && hubConsumer.reason === "HUB_MISSION_CONSUMER_ENABLED=false";
-        const startingGrace = hubConsumer.status === "starting" && hubConsumer.lastPollAt == null;
+        const startingGrace = hubConsumer.status === "starting"
+            && hubConsumer.lastPollAt == null
+            && bootAgeMs !== null
+            && bootAgeMs < hubConsumer.pollMs * 6;
         const pollFresh = pollStaleMs !== null && pollStaleMs < hubConsumer.pollMs * 6;
         const hubConsumerOk = explicitlyDisabled || startingGrace || (
             hubConsumer.enabled === true
@@ -85,6 +91,8 @@ export async function healthDeep(req, res) {
                 requestTimeoutMs: hubConsumer.requestTimeoutMs,
                 lastPollAt: hubConsumer.lastPollAt,
                 pollStaleMs,
+                bootAgeMs,
+                critical: true,
                 lastMissionId: hubConsumer.lastMissionId,
                 lastExecutionStatus: hubConsumer.lastExecutionStatus,
                 staleUnprovenCount: hubConsumer.staleUnprovenCount,
@@ -98,12 +106,14 @@ export async function healthDeep(req, res) {
 
         const okCount = dependencias.filter((d) => d.ok).length;
         const score = pct(okCount, dependencias.length);
-        const status = score === 100 ? "healthy" : score >= 60 ? "degraded" : "unhealthy";
+        const criticalFailures = dependencias.filter((d) => d.detalhe?.critical === true && !d.ok);
+        const status = criticalFailures.length > 0 ? "unhealthy" : (score === 100 ? "healthy" : score >= 60 ? "degraded" : "unhealthy");
 
         res.status(status === "unhealthy" ? 503 : 200).json({
             ok: status !== "unhealthy",
             status,
             score,
+            criticalFailures: criticalFailures.map((d) => d.nome),
             versao: MCP_VERSION,
             catalogVersion: summary.catalogVersion || null,
             toolCount: summary.toolCount,
