@@ -37,13 +37,28 @@ jobs:
           echo "blocked=false" >> "$GITHUB_OUTPUT"
           echo "FORK_GUARD_OK ${HEAD_REPO}"
 
-      - name: Checkout
+      - name: Checkout exact PR HEAD
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 2
           persist-credentials: false
 
+      - name: Provar identidade do checkout
+        shell: bash
+        env:
+          EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          ACTUAL_SHA="$(git rev-parse HEAD)"
+          if [ "${ACTUAL_SHA}" != "${EXPECTED_SHA}" ]; then
+            echo "DRIFT_GUARD_HEAD_MISMATCH expected=${EXPECTED_SHA} actual=${ACTUAL_SHA}"
+            exit 1
+          fi
+          echo "DRIFT_GUARD_HEAD=PASS sha=${ACTUAL_SHA}"
+
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38
         with:
           python-version: '3.11'
 
@@ -72,7 +87,7 @@ jobs:
 
       - name: Upload inventário
         if: success()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: inventario-skills
           path: |
