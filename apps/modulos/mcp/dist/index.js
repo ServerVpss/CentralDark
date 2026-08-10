@@ -12,6 +12,7 @@ import { getCatalogSummary, CATALOG_VERSION } from "./tools/core/tools-catalog.j
 import { handleSkillsList, handleSkillManifest, handleSkillRaw, handleSkillInstaller, } from "./skills-public.js";
 import { correlationMiddleware, withCid } from "./correlation.js";
 import { healthDeep } from "./health-deep.js";
+import { startHubMissionConsumer } from "./hub-mission-consumer.js";
 import { adminGet, adminLogin, adminLogout, adminRotas, adminTools, adminLogsStream, adminTestarSse, adminBuscarLogs, adminMetricas, adminE2E, adminE2EPublico, bootstrapAdminLogCapture, } from "./admin.js";
 // ─────────────────────── Handlers globais de crash (v2.3) ───────────────────────
 // Captura QUALQUER erro não tratado com stack trace completo antes do PM2 matar.
@@ -55,6 +56,9 @@ function validarEnvsObrigatorias() {
 validarEnvsObrigatorias();
 // Captura logs pro buffer do painel /admin (deve rodar ANTES do primeiro log)
 bootstrapAdminLogCapture();
+// O consumer nasce somente no bootstrap explícito do processo. /health é puro
+// observador e importar o módulo não pode reclamar missão nem mutar estado.
+startHubMissionConsumer();
 const app = express();
 app.disable("x-powered-by");
 function setCorsHeaders(res) {
@@ -159,7 +163,7 @@ app.get("/tools.json", (_req, res) => {
 app.get("/openapi.json", (_req, res) => {
     res.setHeader("Cache-Control", "no-store");
     const summary = getCatalogSummary();
-    // ─────────────── #148 item 5: OpenAPI so anuncia o que serve ──────────
+    // ────────────── #148 item 5: OpenAPI so anuncia o que serve ──────────
     // MOTIVO  > este gerador criava um path POST /mcp-tools/<nome> para cada
     //           tool do catalogo (102 paths), mas NAO existe nenhum handler
     //           app.post("/mcp-tools/...") neste servidor. Todos os 102
@@ -261,7 +265,7 @@ app.get("/openapi.json", (_req, res) => {
         "x-mcp-tool-count": summary.toolCount,
     });
 });
-// ───────────────────────── Status dos conectores ─────────────────────────
+// ──────────────────────── Status dos conectores ─────────────────────────
 app.get("/status", (req, res) => {
     getStatusHtml(req, res).catch(() => {
         if (!res.headersSent)
@@ -274,7 +278,7 @@ app.get("/status.json", (req, res) => {
             res.status(500).json({ ok: false });
     });
 });
-// ───────────────────────── Skills públicas (sem auth) ────────────────────
+// ───────────────────────── Skills públicas (sem auth) ───────────────────
 app.get("/skills", (req, res) => {
     handleSkillsList(req, res, config.publicUrl).catch(() => {
         if (!res.headersSent)
@@ -299,7 +303,7 @@ app.get("/skills/:nome/install.sh", (req, res) => {
             res.status(500).type("text/plain").send("# erro\nexit 1\n");
     });
 });
-// ───────────────────────── OAuth discovery (MCP) ─────────────────────────
+// ──────────────────────────── OAuth discovery (MCP) ─────────────────────────
 app.get("/.well-known/oauth-protected-resource", getProtectedResourceMetadata);
 app.get("/.well-known/oauth-protected-resource/mcp", getProtectedResourceMetadata);
 app.get("/mcp/.well-known/oauth-protected-resource", getProtectedResourceMetadata);
