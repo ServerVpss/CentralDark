@@ -79,10 +79,16 @@ test("menos é mais: GitHub vivo só é carregado no initialize", () => {
     assert.match(sourceServer, /SKILL_ROUTING=LOAD_ONLY_APPLICABLE/);
 });
 
-test("toda execução de tool passa pelo audit wrapper com correlation id", () => {
+test("toda execução de tool passa pelo audit wrapper e chega ao stream com o mesmo cid", () => {
     const wrapper = sourceServer.match(/function auditEntry\([\s\S]*?\n\}/)?.[0] || "";
     assert.match(wrapper, /auditToolExecution/);
-    assert.match(wrapper, /correlationId:\s*options\.cid\s*\?\?\s*null/);
+    assert.match(wrapper, /const cid = options\.cid \?\? null/);
+    assert.match(wrapper, /correlationId:\s*cid/);
+    assert.match(wrapper, /log\.info\("mcp_tool_execution"/);
+    assert.match(wrapper, /\bcid,/);
+    assert.match(wrapper, /toolName:\s*entry\.toolName/);
+    assert.match(wrapper, /durationMs:/);
+    assert.match(wrapper, /auditTrail:\s*true/);
     assert.equal((sourceServer.match(/auditToolExecution\s*\(/g) || []).length, 1);
     assert.ok((sourceServer.match(/auditEntry\s*\(/g) || []).length >= 5);
 });
@@ -108,7 +114,8 @@ test("100% só pode ser declarado sobre denominador fechado", () => {
         sourceSkillTools.includes("gh.getFileContent"),
         sourceServer.includes("BOOT_CHANNEL=GITHUB_AUTHENTICATED_DEFAULT_BRANCH"),
         sourceServer.includes('includeLiveInstructions: method === "initialize"'),
-        sourceServer.includes("correlationId: options.cid ?? null"),
+        sourceServer.includes("correlationId: cid"),
+        sourceServer.includes('log.info("mcp_tool_execution"'),
         sourcePublicSkills.includes("AUTHENTICATED_MCP_REQUIRED"),
         auditLogger.includes("mcp_tool_execution"),
         correlation.includes("X-Correlation-Id"),
