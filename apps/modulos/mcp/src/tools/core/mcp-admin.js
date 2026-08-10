@@ -176,7 +176,7 @@ export const mcpAdminTools = [
     },
     {
         name: "mcp_admin_call",
-        description: "Dispatcher fixo do MCP. Chama tool interna pelo nome, sem reconectar. Tools destrutivas exigem confirmAdmin='CONFIRMO ADMIN' ou 'PERMITO PIVETE'. Para escrever em <caminho-vps>, use tool='admin_vault_write' com input={name, content, overwrite:true}; não use vps_write_file_safe.",
+        description: "Dispatcher fixo do MCP. Chama tool interna pelo nome, sem reconectar. Tools destrutivas exigem confirmação admin no caminho interativo canônico; o auto-consumer de missões nunca sintetiza essa aprovação.",
         annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false, openWorldHint: false, title: "Chamada admin MCP" },
         inputSchema: z.object({
             tool: z.string().min(1),
@@ -216,9 +216,23 @@ export const mcpAdminTools = [
                 });
             }
             const destructive = tool.annotations?.destructiveHint === true;
+            const parsed = parseToolInput(tool, input.input);
+            if (!parsed.success) return invalidInputResponse(input, parsed, destructive);
+
+            // Missão automática pode executar capacidade não destrutiva, mas não
+            // fabrica aprovação humana para uma tool destructiveHint=true.
+            if (destructive && ctx?.autoMission === true) {
+                return ok({
+                    ok: false,
+                    status: "INDEPENDENT_APPROVAL_REQUIRED",
+                    executionStatus: "blocked",
+                    tool: input.tool,
+                    destructive: true,
+                    observacao: "Nada foi executado. Use o caminho admin interativo com autorização independente aplicável.",
+                });
+            }
+
             if (!destructive) {
-                const parsed = parseToolInput(tool, input.input);
-                if (!parsed.success) return invalidInputResponse(input, parsed, false);
                 return tool.handler(parsed.data, ctx);
             }
             // Destrutiva: startup auditável + guarda canônica versionada.
@@ -236,7 +250,7 @@ export const mcpAdminTools = [
                 confirmAdmin: input.confirmAdmin,
                 runtimeTools,
                 expectation: getCanonicalExpectation(),
-                inputPayload: input.input,
+                inputPayload: parsed.data,
                 actor: ctx?.callerUser ?? undefined,
                 correlationId: ctx?.correlationId ?? undefined,
                 adminAuthorized: true,
@@ -255,11 +269,9 @@ export const mcpAdminTools = [
                         ? "Auditoria fail-closed: destrutiva bloqueada."
                         : (decision.status === "DIVERGENCIA_CATALOGO"
                             ? "Divergência de catálogo detectada. Somente esta destrutiva foi bloqueada."
-                            : "Nada foi executado. Passe confirmAdmin='CONFIRMO ADMIN' ou 'PERMITO PIVETE'."),
+                            : "Nada foi executado. Passe a confirmação admin exigida pelo caminho interativo canônico."),
                 });
             }
-            const parsed = parseToolInput(tool, input.input);
-            if (!parsed.success) return invalidInputResponse(input, parsed, true);
             return tool.handler(parsed.data, ctx);
         },
     },
