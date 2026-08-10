@@ -10,6 +10,10 @@ const TEXT_EXTENSION = /\.(?:md|mdc|txt|json|ya?ml|mjs|cjs|js|ts|tsx|jsx|py|sh|p
 const DEFAULT_MAP = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../config/mapa-canonico.json');
 const FULL_SHA = /^[0-9a-f]{40}$/;
 const CONSOLIDATION_LOCK = 'MAP_PROTECTED_PATH';
+export const CONSOLIDATION_PROOF_DEPENDENCIES = Object.freeze([
+  'apps/modulos/mapeamento/core/validar-mapa.mjs',
+  '.agents/skills/meta-lupa/SKILL.md',
+]);
 
 export function normalizarCaminho(value) {
   const raw = String(value || '').replaceAll('\\', '/').replace(/^\.\//, '');
@@ -53,9 +57,10 @@ function gitObjectOidAt(repoRoot, ref, rawPath) {
  * Um caminho listado como consolidado continua protegido por segurança, mas só
  * recebe selo evidencial PROVEN quando a prova é fechada e reproduzível.
  * Ausência de prova nunca é convertida em PASS: vira PROTECTED_UNPROVEN.
- * Quando repoRoot/headSha são fornecidos, o selo também precisa apontar para o
- * mesmo objeto Git material que existe no HEAD atual. HEAD novo fora do alvo
- * preserva a prova; byte/árvore material diferente invalida somente a fronteira.
+ * Quando repoRoot/headSha são fornecidos, o selo precisa manter iguais tanto o
+ * objeto Git material do alvo quanto as dependências que produziram/julgaram a
+ * prova. HEAD novo fora dessas fronteiras preserva a prova; delta material no
+ * alvo ou no mecanismo probatório invalida somente a fronteira dependente.
  */
 export function validarProvaConsolidacao(area, { repoRoot = null, headSha = null } = {}) {
   const proof = area?.proof;
@@ -74,6 +79,17 @@ export function validarProvaConsolidacao(area, { repoRoot = null, headSha = null
   }
   if (proof.lock_mechanism !== CONSOLIDATION_LOCK) {
     errors.push(`lock_mechanism deve ser ${CONSOLIDATION_LOCK}`);
+  }
+
+  const dependencyOids = proof.dependency_git_oids;
+  if (!dependencyOids || typeof dependencyOids !== 'object' || Array.isArray(dependencyOids)) {
+    errors.push('dependency_git_oids ausente');
+  } else {
+    for (const dependencyPath of CONSOLIDATION_PROOF_DEPENDENCIES) {
+      if (!FULL_SHA.test(String(dependencyOids[dependencyPath] || ''))) {
+        errors.push(`dependency_git_oids inválido: ${dependencyPath}`);
+      }
+    }
   }
 
   const tests = proof.tests;
@@ -109,8 +125,20 @@ export function validarProvaConsolidacao(area, { repoRoot = null, headSha = null
         if (declared !== currentOid) {
           errors.push(`material mudou desde a prova: declarado=${declared} atual=${currentOid}`);
         }
+
+        for (const dependencyPath of CONSOLIDATION_PROOF_DEPENDENCIES) {
+          const declaredDependency = String(proof.dependency_git_oids[dependencyPath]).toLowerCase();
+          const proofDependencyOid = gitObjectOidAt(repoRoot, proof.head_sha, dependencyPath);
+          const currentDependencyOid = gitObjectOidAt(repoRoot, headSha, dependencyPath);
+          if (declaredDependency !== proofDependencyOid) {
+            errors.push(`dependency_git_oids não corresponde ao proof.head_sha [${dependencyPath}]: declarado=${declaredDependency} prova=${proofDependencyOid}`);
+          }
+          if (declaredDependency !== currentDependencyOid) {
+            errors.push(`dependência da prova mudou [${dependencyPath}]: declarado=${declaredDependency} atual=${currentDependencyOid}`);
+          }
+        }
       } catch (error) {
-        errors.push(`fingerprint material indisponível: ${error.message}`);
+        errors.push(`fingerprint material/dependência indisponível: ${error.message}`);
       }
     }
   }
