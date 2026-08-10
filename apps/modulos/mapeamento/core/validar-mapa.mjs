@@ -44,12 +44,20 @@ function inteiroNaoNegativo(value) {
   return Number.isInteger(value) && value >= 0;
 }
 
+function gitObjectOidAt(repoRoot, ref, rawPath) {
+  const target = normalizarCaminho(rawPath).replace(/\/$/, '');
+  return git(repoRoot, ['rev-parse', `${ref}:${target}`]).toLowerCase();
+}
+
 /**
  * Um caminho listado como consolidado continua protegido por segurança, mas só
  * recebe selo evidencial PROVEN quando a prova é fechada e reproduzível.
  * Ausência de prova nunca é convertida em PASS: vira PROTECTED_UNPROVEN.
+ * Quando repoRoot/headSha são fornecidos, o selo também precisa apontar para o
+ * mesmo objeto Git material que existe no HEAD atual. HEAD novo fora do alvo
+ * preserva a prova; byte/árvore material diferente invalida somente a fronteira.
  */
-export function validarProvaConsolidacao(area) {
+export function validarProvaConsolidacao(area, { repoRoot = null, headSha = null } = {}) {
   const proof = area?.proof;
   if (proof == null) {
     return { status: 'PROTECTED_UNPROVEN', errors: [] };
@@ -57,6 +65,7 @@ export function validarProvaConsolidacao(area) {
 
   const errors = [];
   if (!FULL_SHA.test(String(proof.head_sha || ''))) errors.push('head_sha inválido');
+  if (!FULL_SHA.test(String(proof.material_git_oid || ''))) errors.push('material_git_oid inválido');
   for (const field of ['evidence_ref', 'writer_ref', 'judge_ref', 'counterproof_ref', 'rollback_ref']) {
     if (!textoNaoVazio(proof[field])) errors.push(`${field} ausente`);
   }
@@ -86,15 +95,35 @@ export function validarProvaConsolidacao(area) {
     }
   }
 
+  if (repoRoot && headSha && errors.length === 0) {
+    if (!FULL_SHA.test(String(headSha))) {
+      errors.push('HEAD atual inválido para prova material');
+    } else {
+      try {
+        const declared = String(proof.material_git_oid).toLowerCase();
+        const proofOid = gitObjectOidAt(repoRoot, proof.head_sha, area.path);
+        const currentOid = gitObjectOidAt(repoRoot, headSha, area.path);
+        if (declared !== proofOid) {
+          errors.push(`material_git_oid não corresponde ao proof.head_sha: declarado=${declared} prova=${proofOid}`);
+        }
+        if (declared !== currentOid) {
+          errors.push(`material mudou desde a prova: declarado=${declared} atual=${currentOid}`);
+        }
+      } catch (error) {
+        errors.push(`fingerprint material indisponível: ${error.message}`);
+      }
+    }
+  }
+
   return { status: errors.length ? 'INVALID_PROOF' : 'PROVEN', errors };
 }
 
-export function resumirConsolidacoes(map) {
+export function resumirConsolidacoes(map, context = {}) {
   const proven = [];
   const protectedUnproven = [];
   const invalid = [];
   for (const area of map?.consolidated_areas || []) {
-    const result = validarProvaConsolidacao(area);
+    const result = validarProvaConsolidacao(area, context);
     const pathValue = area?.path || '<sem-path>';
     if (result.status === 'PROVEN') proven.push(pathValue);
     else if (result.status === 'PROTECTED_UNPROVEN') protectedUnproven.push(pathValue);
@@ -440,6 +469,15 @@ export function validarMudanca({ repoRoot, baseSha, headSha, approved = false, m
   const touchedEvidenceLocks = [...new Set(changed.flatMap(item => evidenceLocks.filter(locked => touchesPath(item.file, locked))))];
   if (touchedLocks.length && !approved) erros.push(`área protegida alterada sem label ${map.approval_label}: ${touchedLocks.join(', ')}`);
 
+  for (const area of map.consolidated_areas || []) {
+    const locked = normalizarCaminho(area.path);
+    if (!touchedEvidenceLocks.includes(locked)) continue;
+    const liveProof = validarProvaConsolidacao(area, { repoRoot, headSha });
+    if (liveProof.status !== 'PROVEN') {
+      erros.push(`área PROVEN alterada exige nova prova material [${locked}]: ${liveProof.errors.join('; ') || 'prova atual indisponível'}`);
+    }
+  }
+
   const mappedModules = moduleRootsFromMap(map);
   const newModules = new Set();
   for (const item of changed) {
@@ -498,11 +536,16 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     const map = carregarMapa(args.mapPath);
     const tree = validarArvore({ repoRoot: args.repoRoot, map });
     const change = validarMudanca({ ...args, map });
-    const consolidation = resumirConsolidacoes(map);
+    const effectiveHead = args.headSha || git(args.repoRoot, ['rev-parse', 'HEAD']);
+    const consolidation = resumirConsolidacoes(map, { repoRoot: args.repoRoot, headSha: effectiveHead });
     const result = {
-      ok: tree.ok && change.ok,
+      ok: tree.ok && change.ok && consolidation.invalid.length === 0,
       source_of_truth: map.source_of_truth,
-      errors: [...tree.erros, ...change.erros],
+      errors: [
+        ...tree.erros,
+        ...change.erros,
+        ...consolidation.invalid.flatMap(item => item.errors.map(error => `prova material inválida [${item.path}]: ${error}`)),
+      ],
       warnings: [...tree.avisos, ...change.avisos],
       changed_files: change.changed.length,
       touched_locks: change.touchedLocks || [],
