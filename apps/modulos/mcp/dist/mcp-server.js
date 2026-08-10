@@ -111,6 +111,14 @@ async function liveBootInstructions(token) {
         ].join("\n");
     }
 }
+function steadyInstructions() {
+    return [
+        `SOURCE_OF_TRUTH=${SOURCE_OF_TRUTH}`,
+        "BOOT_CONTEXT=INITIALIZE_ONLY",
+        "SKILL_ROUTING=LOAD_ONLY_APPLICABLE",
+        "CHEFE_NAO_FICA_CEGO=TELEMETRY_CORRELATED",
+    ].join("\n");
+}
 // Endpoint público nunca anuncia nem executa destrutivas. No endpoint admin,
 // toda destrutiva passa exclusivamente pelo dispatcher auditado mcp_admin_call.
 export const PUBLIC_CALLABLE_MCP_TOOLS = [];
@@ -129,7 +137,9 @@ async function buildServer(options) {
     const callableTools = options.admin === true
         ? requestedCallableTools.filter((tool) => tool.annotations?.destructiveHint !== true || tool.name === "mcp_admin_call")
         : requestedCallableTools.filter((tool) => tool.annotations?.destructiveHint !== true);
-    const instructions = await liveBootInstructions(options.token);
+    const instructions = options.includeLiveInstructions
+        ? await liveBootInstructions(options.token)
+        : steadyInstructions();
     const server = new Server({ name: options.label ?? "mcp-centraldark", version: `0.4.0+${CATALOG_VERSION}` }, { capabilities: { tools: {} }, instructions });
     server.setRequestHandler(ListToolsRequestSchema, async () => {
         const startedAt = Date.now();
@@ -236,7 +246,12 @@ async function buildServer(options) {
     return server;
 }
 export async function handleMcpRequest(req, res, ghToken, options = {}) {
-    const server = await buildServer({ ...options, token: ghToken });
+    const method = String(req.body?.method || "unknown");
+    const server = await buildServer({
+        ...options,
+        token: ghToken,
+        includeLiveInstructions: method === "initialize",
+    });
     const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
     res.on("close", () => {
         transport.close().catch(() => { });
@@ -244,6 +259,6 @@ export async function handleMcpRequest(req, res, ghToken, options = {}) {
     });
     await server.connect(transport);
     await transport.handleRequest(req, res, req.body);
-    log.info("mcp_request_handled", { cid: options.cid, method: req.body?.method || "unknown" });
+    log.info("mcp_request_handled", { cid: options.cid, method });
 }
 //# sourceMappingURL=mcp-server.js.map
