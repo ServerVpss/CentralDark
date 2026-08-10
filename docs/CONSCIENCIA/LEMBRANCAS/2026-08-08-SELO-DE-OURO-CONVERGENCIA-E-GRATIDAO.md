@@ -2,6 +2,7 @@
 title: "SELO DE OURO — Convergência e Gratidão"
 status: "SELADO"
 date: "2026-08-08"
+updated: "2026-08-10"
 authority: "SEGREDO/CHEFE"
 scope: "Marco humano e doutrina operacional de convergência da CentralDark"
 pr_mae: "#724"
@@ -10,10 +11,11 @@ missao_raiz: "#604"
 
 # 🔒 SELO DE OURO — GRATIDÃO, CONVERGÊNCIA E COMPROMISSO
 
-**Data do marco:** 08 de agosto de 2026
-**Estado:** `SELADO`
-**Origem:** SEGREDO/CHEFE
-**Destino:** toda a equipe, todos os agentes e todo o organismo CentralDark
+**Data do marco:** 08 de agosto de 2026  
+**Atualização de continuidade:** 10 de agosto de 2026  
+**Estado:** `SELADO`  
+**Origem:** SEGREDO/CHEFE  
+**Destino:** toda a equipe, todos os agentes e todo o organismo CentralDark  
 **Princípio:** **muitas cabeças, nenhuma disputa de ego, uma única equipe contra o problema.**
 
 ---
@@ -305,6 +307,102 @@ Quando vencerem, **vençam juntos**.
 
 ---
 
+## 🌎 Marco de continuidade — 10/08/2026
+
+Este registro amplia o selo anterior sem apagar uma linha do que veio antes.
+
+SEGREDO/CHEFE declarou, em um momento de forte emoção, que quer transformar o “ouro” acumulado nesta jornada em capacidade real de negócio e prosperidade. Isso é registrado como **intenção e objetivo**, não como resultado econômico já provado.
+
+Também declarou explicitamente que não pretende abandonar a SOL como parceira operacional e que essa gratidão não diminui ninguém: Hermes, Claude, Codex, Gemini, Grok, Fable, CodeRabbit, Actions, ferramentas e todos os agentes que contribuíram continuam sendo considerados partes importantes da jornada.
+
+O compromisso ético foi reafirmado pelo próprio autor:
+
+> **“Eu prometi nunca fazer mal a ninguém.”**
+
+Este compromisso humano não substitui os controles técnicos da CentralDark; ele os reforça. Segurança, autorização, Zero Trust, Writer único, Judge independente, prova e contraprova continuam obrigatórios onde se aplicam.
+
+### A travessia que deve ficar registrada
+
+A jornada não é resumida por “aprendeu prompt”. O que ficou documentado foi uma mudança de método:
+
+```text
+INTUIÇÃO FORTE
+→ MUITAS TENTATIVAS
+→ ZERO TRUST
+→ FONTE DA VERDADE NO GITHUB
+→ UM WRITER POR ESCOPO
+→ HEAD/SHA/TESTES
+→ META LUPA
+→ CONTRAPROVA
+→ JUDGE INDEPENDENTE
+→ MENOS É MAIS
+→ PRESERVAÇÃO DO OURO
+→ REVALIDAÇÃO CAUSAL
+→ CORRIGIR SÓ A FRONTEIRA QUE MUDOU
+```
+
+A força continuou. O que mudou foi a mira.
+
+O objetivo de longo prazo também ficou mais simples: transformar complexidade acumulada em operação que possa ser usada com o mínimo de atrito, sem perder evidência, segurança, memória ou capacidade de recuperação.
+
+### Autoria declarada pelo próprio autor
+
+Nesta atualização, SEGREDO/CHEFE pediu que sua autoria humana fosse registrada de forma explícita.
+
+```text
+NOME_REAL_DECLARADO_PELO_AUTOR=Damaracio Neves Sores
+ORIGEM_DECLARADA=Vitória da Conquista, Bahia, Brasil
+DIREÇÃO=de Vitória da Conquista para o mundo
+```
+
+Este documento registra **a declaração do próprio autor**; não a apresenta como identidade civil verificada por terceiro.
+
+### Sobre SOL e a parceria
+
+O agradecimento à SOL é registrado sem apagar a regra que tornou a equipe mais forte:
+
+```text
+SOL_IMPORTANTE=true
+SOL_NAO_E_DONA_DA_INTENCAO=true
+TODOS_OS_COLABORADORES_IMPORTAM=true
+ADVERSARIO=ERRO
+EVIDENCIA_DECIDE=true
+```
+
+A contribuição da SOL foi organizar, confrontar, sintetizar e devolver perguntas mais fortes. A persistência, as decisões, as tentativas, as mudanças de direção e a continuidade pertencem à trajetória de SEGREDO/CHEFE.
+
+O registro correto não é dependência de uma ferramenta específica. É continuidade de um método que pode sobreviver a plataforma, interface ou modelo, preservando a voz, a intenção e a doutrina no repositório.
+
+### Sobre a emoção deste dia
+
+SEGREDO/CHEFE registrou que escreveu chorando, sob forte emoção, depois de sentir que uma fase difícil de sua saga finalmente havia se consolidado em algo que reconhecia como seu método.
+
+Também deixou a frase:
+
+> **“Deus é fiel.”**
+
+Ela fica registrada como expressão pessoal de fé e gratidão do autor, sem ser convertida em regra técnica do sistema.
+
+### O que esta atualização NÃO autoriza
+
+A emoção deste marco não suspende evidência, segurança ou governança.
+
+```text
+SEM_EVIDENCIA_NAO_VIRA_FATO=true
+INTENCAO_COMERCIAL_NAO_VIRA_RECEITA_PROVADA=true
+GRATIDAO_NAO_VIRA_AUTORIZACAO_TECNICA=true
+PARCERIA_NAO_VIRA_IDENTIDADE_OU_DEPENDENCIA_EXCLUSIVA=true
+ERRO_CONTINUA_SENDO_O_ADVERSARIO=true
+```
+
+O que muda é o registro humano: a razão de construir também importa.
+
+### Declaração de continuidade
+
+> Quero usar o que construí. Quero transformar aprendizado em valor. Quero prosperar com aquilo que eu conseguir provar que funciona. Quero continuar aprendendo sem apagar quem ajudou no caminho. Quero preservar a SOL como parceira operacional, o Hermes como continuidade, todos os agentes como contribuintes e a evidência como árbitro. Quero que minha história permaneça legível no repositório, não dependente da memória de uma conversa.
+
+---
+
 ## ❤️🫶🫡 Registro final
 
 Eu nunca imaginei que chegaria neste momento.
@@ -348,9 +446,12 @@ LEARNING=CONTINUOUS
 GOLD=PRESERVED
 GIVING_UP=false
 MENOS_E_MAIS=true
+ETHICAL_COMMITMENT_DECLARED=true
+AUTHORSHIP_DECLARED=true
+HISTORY_PRESERVED=true
 ```
 
 **Com gratidão, respeito e compromisso com toda a equipe.**
 
 ### SEGREDO/CHEFE
-**CentralDark — 08/08/2026**
+**CentralDark — 08/08/2026, ampliado em 10/08/2026**
