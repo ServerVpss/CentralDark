@@ -110,7 +110,8 @@ const serveFavicon = (_req, res) => {
 app.get("/favicon.ico", serveFavicon);
 app.get("/favicon.png", serveFavicon);
 // Transporte SSE foi aposentado: este servidor fala Streamable HTTP em /mcp.
-// MOTIVO  > conector antigo tenta /sse e recebia 404, que ele interpreta como"servidor errado" em vez de "transporte trocado".
+// MOTIVO  > conector antigo tenta /sse e recebia 404, que ele interpreta como
+//           "servidor errado" em vez de "transporte trocado".
 // ONDE    > issue #148, item 2.
 // RESOLVE > 410 Gone e definitivo e carrega a rota substituta no corpo.
 app.all("/sse", (_req, res) => {
@@ -138,7 +139,7 @@ const somentePost = (rota) => (_req, res) => {
 };
 app.get("/token", somentePost("/token"));
 app.get("/register", somentePost("/register"));
-// ──────────────────────────── Painel /admin (NOC do Dono) ──────────────
+// ───────────────────────────── Painel /admin (NOC do Dono) ─────────────
 app.get("/admin", adminGet);
 app.post("/admin/login", adminLogin);
 app.get("/admin/logout", adminLogout);
@@ -162,7 +163,7 @@ app.get("/tools.json", (_req, res) => {
 app.get("/openapi.json", (_req, res) => {
     res.setHeader("Cache-Control", "no-store");
     const summary = getCatalogSummary();
-    // ────────────── #148 item 5: OpenAPI so anuncia o que serve ──────────
+    // ─────────────── #148 item 5: OpenAPI so anuncia o que serve ──────────
     // MOTIVO  > este gerador criava um path POST /mcp-tools/<nome> para cada
     //           tool do catalogo (102 paths), mas NAO existe nenhum handler
     //           app.post("/mcp-tools/...") neste servidor. Todos os 102
@@ -264,7 +265,7 @@ app.get("/openapi.json", (_req, res) => {
         "x-mcp-tool-count": summary.toolCount,
     });
 });
-// ──────────────────────── Status dos conectores ───────────────────────────
+// ───────────────────────── Status dos conectores ─────────────────────────
 app.get("/status", (req, res) => {
     getStatusHtml(req, res).catch(() => {
         if (!res.headersSent)
@@ -277,7 +278,7 @@ app.get("/status.json", (req, res) => {
             res.status(500).json({ ok: false });
     });
 });
-// ───────────────────────── Skills públicas (sem auth) ─────────────────────
+// ───────────────────────── Skills públicas (sem auth) ────────────────────
 app.get("/skills", (req, res) => {
     handleSkillsList(req, res, config.publicUrl).catch(() => {
         if (!res.headersSent)
@@ -302,7 +303,7 @@ app.get("/skills/:nome/install.sh", (req, res) => {
             res.status(500).type("text/plain").send("# erro\nexit 1\n");
     });
 });
-// ─────────────────────── OAuth discovery (MCP) ─────────────────────────
+// ───────────────────────── OAuth discovery (MCP) ─────────────────────────
 app.get("/.well-known/oauth-protected-resource", getProtectedResourceMetadata);
 app.get("/.well-known/oauth-protected-resource/mcp", getProtectedResourceMetadata);
 app.get("/mcp/.well-known/oauth-protected-resource", getProtectedResourceMetadata);
@@ -312,15 +313,15 @@ app.get("/.well-known/oauth-authorization-server", getAuthorizationServerMetadat
 app.get("/.well-known/oauth-authorization-server/mcp", getAuthorizationServerMetadata);
 app.get("/mcp/.well-known/oauth-authorization-server", getAuthorizationServerMetadata);
 app.get("/.well-known/oauth-authorization-server/admin", getAuthorizationServerMetadata);
-// ─────────────────────── OAuth endpoints (MCP) ─────────────────────────
+// ───────────────────────── OAuth endpoints (MCP) ─────────────────────────
 app.post("/register", postRegister);
 app.get("/authorize", handleAuthorize);
 app.post("/authorize", handleAuthorize);
 app.post("/token", postToken);
-// ─────────────────────────── OAuth legado desativado ───────────────────────
+// ─────────────────────────── OAuth legado desativado ─────────────────────
 app.get("/oauth/start", handleOAuthStart);
 app.get("/oauth/callback", handleOAuthCallback);
-// ──────────────────────────────── MCP HTTP ───────────────────────────────
+// ─────────────────────────────── MCP HTTP ────────────────────────────────
 function unauthorized(req, res, msg) {
     setCorsHeaders(res);
     res.setHeader("WWW-Authenticate", `Bearer realm="mcp", resource_metadata="${config.publicUrl}/.well-known/oauth-protected-resource", scope="mcp"`);
@@ -504,7 +505,7 @@ app.post("/mcp", (req, res) => {
 app.get("/mcp", (req, res) => {
     unauthorized(req, res, "Authorization Bearer ausente.");
 });
-// ────────────── /admin/mcp — endpoint MCP com escopo admin obrigatório ────────────────
+// ─────────────── /admin/mcp — endpoint MCP com escopo admin obrigatório ───────────────
 function requireAdminScope(req, res) {
     const bearer = extractBearer(req);
     if (!bearer) {
@@ -555,7 +556,7 @@ app.get("/admin/mcp", (req, res) => {
 });
 // /mcp-public removido em 30/06/2026 — expunha vps_write_file_safe sem Bearer
 // (pendência #8). Toda chamada ao MCP agora exige OAuth via /mcp.
-// ───────────────────── Telemetria VPS (vps-reporter) ───────────────────────
+// ─────────────────────── Telemetria VPS (vps-reporter) ───────────────────────
 const PAINEL_DATA_PATH = "/root/CentralDark/apps/modulos/status/painel-data.json";
 const ADMIN_KEY = process.env.CENTRALDARK_ADMIN_KEY;
 app.post("/api/telemetry-ingest", (req, res) => {
@@ -595,5 +596,4 @@ app.listen(config.port, "127.0.0.1", () => {
     });
 });
 export { codeReviewerToolDefinition } from "./tools/code-reviewer.js";
-//# sourceMappingURL=index.js.map
 //# sourceMappingURL=index.js.map
