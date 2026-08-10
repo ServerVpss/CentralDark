@@ -298,9 +298,12 @@ jobs:
         working-directory: apps/modulos/mcp
         run: npm run typecheck
 
-      - name: Run admin guard tests
+      - name: Run MCP admin guard and mission bridge tests
         working-directory: apps/modulos/mcp
-        run: node --test tests/admin-guard.test.mjs
+        run: |
+          set -euo pipefail
+          node --test tests/admin-guard.test.mjs
+          node --test tests/hub-mission-consumer.test.mjs
 
       - name: Build runtime dist
         working-directory: apps/modulos/mcp
