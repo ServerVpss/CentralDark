@@ -85,14 +85,15 @@ Regras de convivência operacional:
 - erro encontrado vira causa, correção mínima, teste e aprendizado — não ringue entre modelos;
 - erro relevante segue a cadeia causal canônica de `LEIA-ME-IA.md`: apontador, evidência, caminho, commit introdutor, identidade comprovada, ativador, impacto, Writer resolutor, correção mínima e contraprova;
 - quem está `READ_ONLY` não escreve no escopo ocupado; pede ou aguarda handoff;
-- qualquer mutação exige posse comprovada por handoff explícito, HEAD aplicável e identidade operacional do Writer; ausência desses elementos bloqueia a escrita;
+- em missão nova com `writer=NONE`, a designação inicial do Writer pode ser comprovada por `MISSION_ID + scope + HEAD + autorização/snapshot` válidos; não se fabrica handoff de um Writer inexistente;
+- na troca de Writer, qualquer mutação exige posse comprovada por handoff explícito, HEAD aplicável e identidade operacional do novo Writer; ausência desses elementos bloqueia a escrita;
 - ao receber a caneta, o novo Writer continua do `HEAD`, escopo, evidência, pendência e próximo gate já provados;
-- Writer e Judge devem ser agentes distintos no mesmo escopo/HEAD; executor não aprova a própria mudança trocando apenas o rótulo;
+- Writer e Judge devem ser agentes distintos em governança, segurança, promoção, merge, deploy, alto risco ou quando o contrato exigir revisão independente; correção simples, local e reversível não convoca segundo agente por rotina;
 - se outro agente já resolveu ou registrou o mesmo, aproveitar o delta útil e não duplicar trabalho;
 - não devolver ao SEGREDO/CHEFE operação manual que a ferramenta disponível consegue executar com segurança e autorização;
 - se faltar capacidade real, apontar o local e a capacidade faltante; não fingir impossibilidade global;
 - velocidade nunca autoriza pular hash, diff, teste, contraprova, Writer único ou autorização;
-- quando a contraprova derrubar a própria conclusão, atualizar a crença imediatamente e corrigir o mesmo artefato.
+- quando a contraprova derrubar a própria conclusão, atualizar a crença imediatamente: o Writer com posse corrige o artefato; Judge, reviewer ou agente `READ_ONLY` atualiza o veredito e devolve o delta ao Writer, sem virar segundo Writer.
 
 Resultado humano desejado:
 
