@@ -15,7 +15,7 @@ mapa canônico → procurar encaixe existente → mudança mínima → teste/rev
 
 ## Fonte única executável
 
-`config/mapa-canonico.json` é a fonte executável para setores, caminhos canônicos e áreas consolidadas.
+`config/mapa-canonico.json` é a fonte executável para setores, caminhos canônicos e áreas protegidas. O campo histórico `consolidated_areas` preserva as travas existentes, mas **não prova consolidação sozinho**.
 
 - `CLAUDE.md` continua sendo a visão humana das travas.
 - `.github/CODEOWNERS` continua sinalizando propriedade.
@@ -30,21 +30,43 @@ Nenhuma dessas visões pode inventar outro mapa.
 - módulo novo fora do mapa;
 - nomes de versão paralela como `v2`, `copy`, `backup` ou `novo`;
 - duplicidade de módulos que difiram apenas por maiúsculas/minúsculas;
-- alteração em área consolidada sem o label exato `permito-pivete`;
-- caminho absoluto, travessia `../` ou entrada duplicada no mapa.
+- alteração em área protegida sem a autorização canônica `permito-segredo`;
+- caminho absoluto, travessia `../` ou entrada duplicada no mapa;
+- selo `PROVEN` com prova incompleta, Judge igual ao Writer, teste `SKIPPED` ou alegação de eficácia 100% sem denominador reproduzível.
 
-O label registra uma autorização do Pivete já existente para o alvo. Ele não pode ser aplicado por inferência.
+A label registra autorização de `SEGREDO/CHEFE` para a mudança protegida. Autorização permite a cirurgia; **não transforma automaticamente o alvo em consolidado**.
 
 ## Promoção para CONSOLIDADO
 
-Uma área só entra em `consolidated_areas` depois de:
+Existem dois estados diferentes:
 
 ```text
-teste → revisão/falsificação → autorização do Pivete
-→ commit/merge SHA → mapa reconhece o caminho → gate bloqueia
+PROTECTED_UNPROVEN
+→ caminho continua travado por segurança
+→ histórico/criticidade justificam proteção
+→ NÃO é prova de eficácia nem consolidação
+
+PROVEN
+→ caminho protegido + prova fechada no mesmo contrato
+→ pode ser chamado de consolidação evidencial
 ```
 
-Depois disso, edição automática falha fechado até nova autorização explícita para o caminho exato.
+O selo `PROVEN` só nasce quando a entrada possui `proof` válido com:
+
+```text
+head_sha completo
++ evidence_ref
++ writer_ref != judge_ref
++ tests: PASS total, skipped=0
++ efficacy: numerator == denominator > 0, percent=100
++ counterproof_ref
++ rollback_ref
++ lock_mechanism=MAP_PROTECTED_PATH
+```
+
+`100%` aqui significa somente **100% do denominador declarado e reproduzível**, nunca certeza global do sistema.
+
+Depois disso, edição continua fail-closed até nova autorização explícita para o caminho exato. Se a prova for inválida, o mapa falha fechado; se a prova histórica estiver ausente, o caminho permanece `PROTECTED_UNPROVEN` em vez de receber falso verde.
 
 ## O que escaneia
 
