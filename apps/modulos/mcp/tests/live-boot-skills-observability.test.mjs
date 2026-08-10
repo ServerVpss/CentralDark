@@ -93,6 +93,14 @@ test("toda execução de tool passa pelo audit wrapper e chega ao stream com o m
     assert.ok((sourceServer.match(/auditEntry\s*\(/g) || []).length >= 5);
 });
 
+test("tool desconhecida não ecoa nome controlado pelo cliente na telemetria", () => {
+    const unknownBlock = sourceServer.match(/if \(!tool\) \{[\s\S]*?return result;\n        \}/)?.[0] || "";
+    assert.match(unknownBlock, /toolName:\s*"unknown_tool"/);
+    assert.match(unknownBlock, /text:\s*"Tool desconhecida\."/);
+    assert.doesNotMatch(unknownBlock, /toolName:\s*req\.params\.name/);
+    assert.doesNotMatch(unknownBlock, /Tool desconhecida:\s*\$\{req\.params\.name\}/);
+});
+
 test("CHEFE_NAO_FICA_CEGO reutiliza observabilidade existente", () => {
     assert.match(auditLogger, /mcp_tool_execution/);
     assert.match(auditLogger, /sanitizeValue|sanitizeForLog/);
@@ -116,6 +124,8 @@ test("100% só pode ser declarado sobre denominador fechado", () => {
         sourceServer.includes('includeLiveInstructions: method === "initialize"'),
         sourceServer.includes("correlationId: cid"),
         sourceServer.includes('log.info("mcp_tool_execution"'),
+        sourceServer.includes('toolName: "unknown_tool"'),
+        !sourceServer.includes('Tool desconhecida: ${req.params.name}'),
         sourcePublicSkills.includes("AUTHENTICATED_MCP_REQUIRED"),
         auditLogger.includes("mcp_tool_execution"),
         correlation.includes("X-Correlation-Id"),
