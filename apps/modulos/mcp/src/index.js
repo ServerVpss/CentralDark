@@ -590,4 +590,3 @@ app.listen(config.port, "127.0.0.1", () => {
     });
 });
 export { codeReviewerToolDefinition } from "./tools/code-reviewer.js";
-//# sourceMappingURL=index.js.map
