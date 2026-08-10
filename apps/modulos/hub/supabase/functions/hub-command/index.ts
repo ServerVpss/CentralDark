@@ -5,6 +5,7 @@ import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors';
 import { createClient } from 'npm:@supabase/supabase-js@2';
 
 const CAPABILITY_RE = /^[A-Za-z0-9_-]{1,64}$/;
+const SHA_RE = /^[0-9a-f]{40}$/i;
 const AUTHORIZATIONS = new Set(['pending', 'approved', 'denied']);
 const RISKS = new Set(['R0', 'R1', 'R2', 'R3', 'R4']);
 const MAX_INPUT_BYTES = 20_000;
@@ -63,6 +64,12 @@ Deno.serve(async (req) => {
     : String(body.capability).trim();
   if (capability && !CAPABILITY_RE.test(capability)) return json(400, { error: 'capability_invalid' });
 
+  const branchSha = body.branch_sha == null || String(body.branch_sha).trim() === ''
+    ? null
+    : String(body.branch_sha).trim();
+  if (branchSha && !SHA_RE.test(branchSha)) return json(400, { error: 'branch_sha_invalid' });
+  if (capability && !branchSha) return json(400, { error: 'branch_sha_required_for_execution' });
+
   const executionInput = body.input == null ? {} : body.input;
   if (typeof executionInput !== 'object' || Array.isArray(executionInput)) {
     return json(400, { error: 'input_must_be_object' });
@@ -75,25 +82,28 @@ Deno.serve(async (req) => {
     return json(413, { error: 'input_too_large', max_bytes: MAX_INPUT_BYTES });
   }
 
-  const admin = createClient(URL_, SRK, { db: { schema: 'api' } });
-  const { data, error } = await admin.from('hub_missions').insert({
+  // `input` é deliberadamente omitido da view api.hub_missions; a escrita
+  // privilegiada precisa atingir a tabela interna public.hub_missions.
+  const adminPublic = createClient(URL_, SRK);
+  const adminApi = createClient(URL_, SRK, { db: { schema: 'api' } });
+  const { data, error } = await adminPublic.from('hub_missions').insert({
     title,
     creator: uid,
     agent: String(body.agent || 'hermes').slice(0, 40),
     target: body.target ? String(body.target).slice(0, 200) : null,
     state: 'queued',
     authorization,
-    branch_sha: body.branch_sha ? String(body.branch_sha).slice(0, 64) : null,
+    branch_sha: branchSha,
     risk,
     rollback: body.rollback ? String(body.rollback).slice(0, 500) : null,
     capability,
     input: executionInput,
-  }).select('id, title, state, authorization, capability, created_at').single();
+  }).select('id, title, state, authorization, capability, branch_sha, created_at').single();
 
   if (error) return json(500, { error: error.message });
 
   // Auditoria (sem segredos)
-  await admin.from('audit_log_api').insert({
+  await adminApi.from('audit_log_api').insert({
     request_id: crypto.randomUUID(),
     key_prefix: 'hub-command',
     path: '/hub-command',
@@ -107,9 +117,9 @@ Deno.serve(async (req) => {
     ok: true,
     mission_id: data.id,
     mission: data,
-    auto_execution_eligible: authorization === 'approved' && Boolean(capability),
+    auto_execution_eligible: authorization === 'approved' && Boolean(capability) && Boolean(branchSha),
     note: capability
-      ? 'Missão criada com capability MCP; consumidor do plano de controle pode executar após claim.'
+      ? 'Missão criada com capability MCP e revisão exata; o consumidor só executa após claim e gates próprios.'
       : 'Missão criada sem capability; permanece observável, mas não entra no auto-executor.',
   });
 });
