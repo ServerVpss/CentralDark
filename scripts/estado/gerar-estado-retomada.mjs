@@ -14,6 +14,7 @@
 
 import { readFileSync, existsSync, writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname, resolve } from "node:path";
+import { validarProvaConsolidacao } from "../../apps/modulos/mapeamento/core/validar-mapa.mjs";
 
 const args = process.argv.slice(2);
 function arg(name, def) {
@@ -106,10 +107,15 @@ function auditarMapa() {
     for (const p of s.paths || []) if (!ha(p)) faltaSetor.push({ setor: s.label, path: p });
   }
   const faltaArea = [];
+  const consolidacao = { proven: 0, protectedUnproven: 0, invalid: 0 };
   for (const a of m.consolidated_areas || []) {
-    if (!ha(a.path)) faltaArea.push({ path: a.path, reason: a.reason });
+    const proof = validarProvaConsolidacao(a);
+    if (proof.status === "PROVEN") consolidacao.proven += 1;
+    else if (proof.status === "PROTECTED_UNPROVEN") consolidacao.protectedUnproven += 1;
+    else consolidacao.invalid += 1;
+    if (!ha(a.path)) faltaArea.push({ path: a.path, reason: a.reason, proofStatus: proof.status });
   }
-  return { m, faltaSetor, faltaArea };
+  return { m, faltaSetor, faltaArea, consolidacao };
 }
 
 // Areas cuja ausencia no Git e o comportamento correto, nao um defeito.
@@ -161,11 +167,16 @@ for (const f of FASES) {
 L.push("");
 
 if (mapa) {
-  L.push("## Modulos declarados no mapa e ausentes no checkout");
+  L.push("## Caminhos protegidos no mapa e ausentes no checkout");
   L.push("");
   const todasFaltas = [
     ...mapa.faltaSetor.map((x) => ({ path: x.path, ctx: `setor ${x.setor}` })),
-    ...mapa.faltaArea.map((x) => ({ path: x.path, ctx: `area consolidada — ${x.reason}` })),
+    ...mapa.faltaArea.map((x) => ({
+      path: x.path,
+      ctx: x.proofStatus === "PROVEN"
+        ? `consolidacao PROVEN — ${x.reason}`
+        : `${x.proofStatus} — ${x.reason}`,
+    })),
   ];
   const reais = todasFaltas.filter((x) => !AUSENCIA_ESPERADA[x.path]);
   const esperadas = todasFaltas.filter((x) => AUSENCIA_ESPERADA[x.path]);
@@ -192,7 +203,10 @@ if (mapa) {
     L.push("declaracao sai. Enquanto isso, o ruido continua.");
     L.push("");
   }
-  L.push(`Totais no mapa: ${(mapa.m.sectors || []).reduce((a, s) => a + (s.paths || []).length, 0)} caminhos de setor, ${(mapa.m.consolidated_areas || []).length} areas consolidadas.`);
+  const totalSetores = (mapa.m.sectors || []).reduce((a, s) => a + (s.paths || []).length, 0);
+  const totalProtegidas = (mapa.m.consolidated_areas || []).length;
+  L.push(`Totais no mapa: ${totalSetores} caminhos de setor, ${totalProtegidas} areas protegidas.`);
+  L.push(`Consolidacao evidencial: PROVEN=${mapa.consolidacao.proven}, PROTECTED_UNPROVEN=${mapa.consolidacao.protectedUnproven}, INVALID_PROOF=${mapa.consolidacao.invalid}.`);
   L.push("");
 } else {
   L.push("## Modulos");
