@@ -14,6 +14,7 @@
 
 import { readFileSync, existsSync, writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname, resolve } from "node:path";
+import { execFileSync } from "node:child_process";
 import { validarProvaConsolidacao } from "../../apps/modulos/mapeamento/core/validar-mapa.mjs";
 
 const args = process.argv.slice(2);
@@ -24,6 +25,15 @@ function arg(name, def) {
 const ROOT = resolve(arg("--repo-root", process.cwd()));
 const OUT = join(ROOT, arg("--out", "docs/ESTADO-DA-RETOMADA.md"));
 const MAPA = join(ROOT, "apps/modulos/mapeamento/config/mapa-canonico.json");
+
+function headAtual() {
+  try {
+    return execFileSync("git", ["rev-parse", "HEAD"], { cwd: ROOT, encoding: "utf8" }).trim();
+  } catch {
+    return null;
+  }
+}
+const HEAD_SHA = headAtual();
 
 const ha = (p) => existsSync(join(ROOT, p));
 const todos = (...ps) => ps.every(ha);
@@ -109,7 +119,9 @@ function auditarMapa() {
   const faltaArea = [];
   const consolidacao = { proven: 0, protectedUnproven: 0, invalid: 0 };
   for (const a of m.consolidated_areas || []) {
-    const proof = validarProvaConsolidacao(a);
+    const proof = a?.proof != null && !HEAD_SHA
+      ? { status: "INVALID_PROOF", errors: ["HEAD atual indisponível para validar fingerprint material"] }
+      : validarProvaConsolidacao(a, HEAD_SHA ? { repoRoot: ROOT, headSha: HEAD_SHA } : {});
     if (proof.status === "PROVEN") consolidacao.proven += 1;
     else if (proof.status === "PROTECTED_UNPROVEN") consolidacao.protectedUnproven += 1;
     else consolidacao.invalid += 1;
