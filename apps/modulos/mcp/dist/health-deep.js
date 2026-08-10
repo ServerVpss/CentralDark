@@ -11,12 +11,9 @@ import { getCatalogSummary } from "./tools/core/tools-catalog.js";
 import { config } from "./config.js";
 import { log } from "./log.js";
 import { activeSseSubscribers, getSseDiagnostics } from "./admin.js";
-import { getHubMissionConsumerStatus, startHubMissionConsumer } from "./hub-mission-consumer.js";
+import { getHubMissionConsumerStatus } from "./hub-mission-consumer.js";
 const MCP_VERSION = "0.4.0-v2.2";
 const SERVICE_STARTED_AT = new Date().toISOString();
-// Boot do consumer no mesmo processo MCP. Sem service_role ele fica disabled
-// e aparece no health; não cria serviço/cron/workflow paralelo.
-startHubMissionConsumer();
 function checkSecret(name) {
     const v = process.env[name];
     return { name, present: Boolean(v && v.trim() && !v.startsWith("__MISSING_")) };
@@ -56,7 +53,15 @@ export async function healthDeep(req, res) {
             && checkSecret("MCP_ADMIN_PASSWORD").present;
         const githubOk = checkSecret("GITHUB_TOKEN").present
             || checkSecret("GH_TOKEN").present;
-        const hubConsumerOk = hubConsumer.enabled === true && hubConsumer.status !== "error";
+        const lastPollMs = hubConsumer.lastPollAt ? Date.parse(hubConsumer.lastPollAt) : NaN;
+        const pollStaleMs = Number.isFinite(lastPollMs) ? Math.max(0, Date.now() - lastPollMs) : null;
+        const explicitlyDisabled = hubConsumer.status === "disabled"
+            && hubConsumer.reason === "HUB_MISSION_CONSUMER_ENABLED=false";
+        const startingGrace = hubConsumer.status === "starting" && hubConsumer.lastPollAt == null;
+        const pollFresh = pollStaleMs !== null && pollStaleMs < hubConsumer.pollMs * 6;
+        const hubConsumerOk = explicitlyDisabled || startingGrace || (hubConsumer.enabled === true
+            && hubConsumer.status !== "error"
+            && pollFresh);
         const dependencias = [
             checkDependencia("mcp_catalog", summary.toolCount > 0, { toolCount: summary.toolCount }),
             checkDependencia("oauth", oauthOk, { secretsPresentes: oauthOk }),
@@ -68,9 +73,12 @@ export async function healthDeep(req, res) {
                 reason: hubConsumer.reason,
                 workerId: hubConsumer.workerId,
                 pollMs: hubConsumer.pollMs,
+                requestTimeoutMs: hubConsumer.requestTimeoutMs,
                 lastPollAt: hubConsumer.lastPollAt,
+                pollStaleMs,
                 lastMissionId: hubConsumer.lastMissionId,
                 lastExecutionStatus: hubConsumer.lastExecutionStatus,
+                staleUnprovenCount: hubConsumer.staleUnprovenCount,
                 lastError: hubConsumer.lastError,
             }),
             checkDependencia("sse", true, { conexoesAtivas: sseAtivas, eventosPorMinuto: sse.eventosPorMinuto, ultimoEventoHaMs: sse.ultimoEventoHaMs, status: "operacional" }),
