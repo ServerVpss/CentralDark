@@ -163,22 +163,6 @@ app.get("/tools.json", (_req, res) => {
 app.get("/openapi.json", (_req, res) => {
     res.setHeader("Cache-Control", "no-store");
     const summary = getCatalogSummary();
-    // ─────────────── #148 item 5: OpenAPI so anuncia o que serve ──────────
-    // MOTIVO  > este gerador criava um path POST /mcp-tools/<nome> para cada
-    //           tool do catalogo (102 paths), mas NAO existe nenhum handler
-    //           app.post("/mcp-tools/...") neste servidor. Todos os 102
-    //           respondiam 404. Provado em 2026-07-28:
-    //             POST https://mcp.centralldark.com/mcp-tools/adicionar_pendencia -> 404
-    //           O host alternativo api.centralldark.com responde 401 ate para
-    //           rota inventada, entao tambem nao prova que a rota exista la.
-    // ONDE    > issue #148, item 5 da secao "Falhas / atritos".
-    // RESOLVE > o spec passa a declarar as rotas HTTP que existem de verdade.
-    //           O catalogo de tools NAO se perde: continua em /tools.json e
-    //           agora tambem na extensao x-mcp-tools abaixo, que e informativa
-    //           e nao promete rota HTTP nenhuma.
-    //           Se um dia houver cliente Open WebUI real precisando de
-    //           /mcp-tools/<nome>, o caminho e IMPLEMENTAR o handler e so
-    //           entao voltar a declarar o path — nunca o contrario.
     const jsonRpcBody = {
         required: true,
         content: {
@@ -233,35 +217,28 @@ app.get("/openapi.json", (_req, res) => {
         info: {
             title: "CentralDark Elite Gateway",
             description: `OpenAI-compatible proxy + ${summary.toolCount} MCP tools. Modelos: bear, sonnet-4.6, opus-4.8, haiku-4.6.`,
-            version: "1.6.0",
+            version: "0.4.0",
         },
-        servers: [
-            { url: "https://mcp.centralldark.com", description: "MCP público" },
-        ],
+        servers: [{ url: config.publicUrl }],
         components: {
             securitySchemes: {
                 oauth2: {
                     type: "oauth2",
-                    description: "OAuth 2.1 + PKCE S256 + Dynamic Client Registration",
                     flows: {
                         authorizationCode: {
-                            authorizationUrl: "https://mcp.centralldark.com/authorize",
-                            tokenUrl: "https://mcp.centralldark.com/token",
-                            scopes: { mcp: "Ferramentas nao destrutivas", admin: "Dispatcher administrativo auditado" },
+                            authorizationUrl: `${config.publicUrl}/authorize`,
+                            tokenUrl: `${config.publicUrl}/token`,
+                            scopes: {
+                                mcp: "Acesso publico ao MCP CentralDark",
+                                admin: "Acesso administrativo ao MCP CentralDark",
+                            },
                         },
                     },
                 },
             },
         },
         paths,
-        // Catalogo informativo. NAO e rota HTTP — as tools sao chamadas por
-        // JSON-RPC tools/call em /mcp. Ver MOTIVO no bloco acima.
-        "x-mcp-tools": summary.tools.map((tool) => ({
-            name: tool.name,
-            title: tool.title ?? tool.name,
-            description: tool.description ?? "",
-            destructive: tool.annotations?.destructiveHint === true,
-        })),
+        "x-mcp-tools": summary.tools,
         "x-mcp-tool-count": summary.toolCount,
     });
 });
@@ -269,7 +246,7 @@ app.get("/openapi.json", (_req, res) => {
 app.get("/status", (req, res) => {
     getStatusHtml(req, res).catch(() => {
         if (!res.headersSent)
-            res.status(500).send("Erro ao gerar status.");
+            res.status(500).send("Erro ao gerar status");
     });
 });
 app.get("/status.json", (req, res) => {
@@ -282,19 +259,19 @@ app.get("/status.json", (req, res) => {
 app.get("/skills", (req, res) => {
     handleSkillsList(req, res, config.publicUrl).catch(() => {
         if (!res.headersSent)
-            res.status(500).json({ ok: false });
+            res.status(500).type("text/plain").send("Erro ao gerar manifesto de skills");
     });
 });
-app.get("/skills/:nome", (req, res) => {
+app.get("/skills/:nome/manifest.json", (req, res) => {
     handleSkillManifest(req, res, config.publicUrl).catch(() => {
         if (!res.headersSent)
-            res.status(500).json({ ok: false });
+            res.status(500).json({ ok: false, error: "erro ao gerar manifest" });
     });
 });
-app.get("/skills/:nome/SKILL.md", (req, res) => {
+app.get("/skills/:nome/raw/*", (req, res) => {
     handleSkillRaw(req, res).catch(() => {
         if (!res.headersSent)
-            res.status(500).type("text/plain").send("erro");
+            res.status(500).type("text/plain").send("erro ao servir arquivo");
     });
 });
 app.get("/skills/:nome/install.sh", (req, res) => {
@@ -307,8 +284,8 @@ app.get("/skills/:nome/install.sh", (req, res) => {
 app.get("/.well-known/oauth-protected-resource", getProtectedResourceMetadata);
 app.get("/.well-known/oauth-protected-resource/mcp", getProtectedResourceMetadata);
 app.get("/mcp/.well-known/oauth-protected-resource", getProtectedResourceMetadata);
-app.get("/.well-known/oauth-protected-resource/admin", getProtectedResourceMetadata);
 app.get("/.well-known/oauth-protected-resource/admin/mcp", getProtectedResourceMetadata);
+app.get("/admin/mcp/.well-known/oauth-protected-resource", getProtectedResourceMetadata);
 app.get("/.well-known/oauth-authorization-server", getAuthorizationServerMetadata);
 app.get("/.well-known/oauth-authorization-server/mcp", getAuthorizationServerMetadata);
 app.get("/mcp/.well-known/oauth-authorization-server", getAuthorizationServerMetadata);
@@ -334,7 +311,7 @@ function unauthorized(req, res, msg) {
 }
 function unauthorizedAdmin(req, res, msg, status = 401) {
     setCorsHeaders(res);
-    res.setHeader("WWW-Authenticate", `Bearer realm="mcp-admin", resource_metadata="${config.publicUrl}/.well-known/oauth-protected-resource/admin/mcp", scope="admin"`);
+    res.setHeader("WWW-Authenticate", `Bearer realm="admin-mcp", resource_metadata="${config.publicUrl}/.well-known/oauth-protected-resource/admin/mcp", scope="admin"`);
     res.status(status).json({
         jsonrpc: "2.0",
         error: { code: status === 403 ? -32001 : -32000, message: msg, data: { cid: req.cid } },
@@ -415,7 +392,6 @@ function resolveGhToken(req) {
     catch {
         return { accessTokens: -1 };
     } })();
-    // Diagnóstico obrigatório em toda request /mcp (níveis 1..5 de causa-raiz)
     const logAuth = (lookupResult, extra = {}) => {
         l.info("mcp_auth_diagnostic", {
             has_auth_header: hasAuthHeader,
@@ -443,10 +419,8 @@ function resolveGhToken(req) {
                 oauthScope: "",
             };
         }
-        // Fluxo OAuth normal (ChatGPT / clientes externos)
         const at = getAccessToken(bearer);
         if (!at) {
-            // Diferencia not_found vs expired olhando direto no cache bruto
             logAuth("not_found_or_expired");
             return { error: "Access token inválido ou expirado." };
         }
@@ -457,7 +431,6 @@ function resolveGhToken(req) {
             oauthScope: String(at.oauth_scope || ""),
         };
     }
-    // Retrocompatibilidade: header x-mcp-session
     const sid = String(req.header("x-mcp-session") ?? "");
     if (sid) {
         const s = getSession(sid);
@@ -501,7 +474,6 @@ app.post("/mcp", (req, res) => {
         }
     });
 });
-// GET /mcp — alguns clientes pingam pra checar OAuth via 401
 app.get("/mcp", (req, res) => {
     unauthorized(req, res, "Authorization Bearer ausente.");
 });
@@ -583,7 +555,6 @@ app.post("/api/telemetry-ingest", (req, res) => {
         res.status(500).json({ ok: false, error: "erro ao salvar telemetria" });
     }
 });
-// 404 padrão
 app.use((_req, res) => {
     res.status(404).json({ ok: false, error: "not_found" });
 });
@@ -596,4 +567,5 @@ app.listen(config.port, "127.0.0.1", () => {
     });
 });
 export { codeReviewerToolDefinition } from "./tools/code-reviewer.js";
+//# sourceMappingURL=index.js.map
 //# sourceMappingURL=index.js.map
