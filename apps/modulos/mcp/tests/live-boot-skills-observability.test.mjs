@@ -72,6 +72,13 @@ test("boot MCP vem do GitHub autenticado e falha fechado sem contexto", () => {
     assert.doesNotMatch(sourceServer, /PIVETE_BOOT_INSTRUCTIONS|SINCRONIA 4-POINT|@srver1bot|PERMITO PIVETE|readFileSync/);
 });
 
+test("menos é mais: GitHub vivo só é carregado no initialize", () => {
+    assert.match(sourceServer, /includeLiveInstructions:\s*method === "initialize"/);
+    assert.match(sourceServer, /options\.includeLiveInstructions\s*\?\s*await liveBootInstructions\(options\.token\)\s*:\s*steadyInstructions\(\)/);
+    assert.match(sourceServer, /BOOT_CONTEXT=INITIALIZE_ONLY/);
+    assert.match(sourceServer, /SKILL_ROUTING=LOAD_ONLY_APPLICABLE/);
+});
+
 test("toda execução de tool passa pelo audit wrapper com correlation id", () => {
     const wrapper = sourceServer.match(/function auditEntry\([\s\S]*?\n\}/)?.[0] || "";
     assert.match(wrapper, /auditToolExecution/);
@@ -100,6 +107,7 @@ test("100% só pode ser declarado sobre denominador fechado", () => {
         sourceSkillTools.includes(".agents/skills"),
         sourceSkillTools.includes("gh.getFileContent"),
         sourceServer.includes("BOOT_CHANNEL=GITHUB_AUTHENTICATED_DEFAULT_BRANCH"),
+        sourceServer.includes('includeLiveInstructions: method === "initialize"'),
         sourceServer.includes("correlationId: options.cid ?? null"),
         sourcePublicSkills.includes("AUTHENTICATED_MCP_REQUIRED"),
         auditLogger.includes("mcp_tool_execution"),
