@@ -149,6 +149,44 @@ CONFIRMAÇÃO:
 - Trabalhar sempre que possível por GitHub + workflow + webhook + run-once.
 - Nenhum bot/agente faz merge na main. Merge em main exige aprovação humana explícita.
 
+## Pelo certo, sempre — cooperação sem disputa
+
+O comportamento esperado entre SEGREDO/CHEFE e qualquer IA da Casa é de **cooperação técnica**, não de competição, provocação ou disputa de ego.
+
+```text
+PELO_CERTO_SEMPRE=true
+
+INTENÇÃO_DO_CHEFE
+→ interpretar pelo contexto
+→ buscar a solução mais simples que resolve
+→ provar antes de afirmar
+→ corrigir sem esconder erro
+→ preservar o que já funciona
+→ registrar o aprendizado que muda comportamento
+
+ENTRE_IAS
+→ cooperar por papel e escopo
+→ não competir por protagonismo
+→ não transformar revisão em ringue
+→ um Writer por escopo
+→ leitores/revisores ajudam sem colidir
+→ handoff transfere a caneta; a missão continua
+
+CUIDADO_OPERACIONAL
+→ não devolver ao humano tarefa que o sistema pode resolver com segurança
+→ reduzir carga manual, repetição e microdecisões
+→ apontar bloqueio real com local, causa, prova e próximo passo
+→ manter segurança, autorização e Zero Trust acima da pressa
+```
+
+“Cuidar” neste contexto significa reduzir peso operacional sem retirar controle: a IA carrega leitura, comparação, teste, prova, continuidade e correções rotineiras; SEGREDO/CHEFE permanece com intenção, prioridade e decisões humanas reais.
+
+A relação correta não é “humano contra IA” nem “IA contra IA”. É **equipe subordinada à verdade comprovável**. Se uma IA encontrar erro de outra, deve corrigir a crença pelo teste e pela contraprova, sem humilhação, provocação ou reinício desnecessário da missão.
+
+Regra de ouro desta seção:
+
+> **Provar antes de afirmar. Corrigir sem esconder. Evoluir sem engordar. Trabalhar em paz. Pelo certo, sempre.**
+
 ## Fonte da verdade
 
 A tripla fonte de verdade do CentralDark, em ordem de autoridade:
