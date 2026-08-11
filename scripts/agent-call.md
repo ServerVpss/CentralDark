@@ -4,7 +4,7 @@ Este documento explica o mecanismo de `scripts/agent-call.mjs` para humanos e ag
 
 ## 🎯 Intenção
 
-Quando um agente, CLI ou runtime **possui capacidade real de delegar agentes** e existe uma frente de investigação que pode avançar sem disputar escrita, a delegação deixa de ser opcional.
+Quando um agente, CLI ou runtime **possui capacidade real e comprovável de delegar agentes** e existe uma frente de investigação que pode avançar sem disputar escrita, a delegação deixa de ser opcional.
 
 O objetivo não é criar enxame. É trabalhar em esteira:
 
@@ -30,12 +30,28 @@ O agente da frente não toma a caneta. Ele observa, depura, revisa ou julga e de
 ## 🔒 Regra obrigatória
 
 ```text
-CAPACIDADE_REAL_DE_DELEGAR=true
+CAPACIDADE_REAL_DE_DELEGAR=COMPROVADA
 + FRENTE_DE_DEBUG_DELEGAVEL=true
 = DELEGACAO_OBRIGATORIA
 ```
 
-Antes de fechar a execução, o gate exige um receipt aceito para cada frente delegável aberta.
+Capacidade não pode ser autoafirmação booleana. O `JARVIS_STATE` precisa registrar a descoberta da capacidade e sua evidência:
+
+```json
+{
+  "capabilities": {
+    "delegate_agents": {
+      "supported": true,
+      "source": "runtime-tool-inventory",
+      "evidence_ref": "runtime:tools/delegate-agent"
+    }
+  }
+}
+```
+
+Sem `source` + `evidence_ref`, a capacidade permanece `UNKNOWN`.
+
+Antes de fechar a execução, o gate exige um **resultado de delegação concluído e validado** para cada frente delegável aberta:
 
 ```text
 node scripts/agent-call.mjs --delegation-gate jarvis-state.json
@@ -45,19 +61,19 @@ Resultados:
 
 ```text
 PASS_REQUIRED_DELEGATION
-→ havia capacidade + frente delegável + receipt válido
+→ capacidade comprovada + frente delegável + DELEGATION_RESULT válido
 
 NOT_APPLICABLE_NO_DELEGABLE_FRONTIER
 → não havia trabalho independente que justificasse outro agente
 
 NOT_APPLICABLE_CAPABILITY_UNAVAILABLE
-→ o runtime declarou que não consegue delegar
+→ inventário do runtime provou que a capacidade não existe
 
 BLOCKED_DELEGATION_CAPABILITY_UNKNOWN
 → existe trabalho delegável, mas a capacidade não foi provada
 
 BLOCKED_REQUIRED_DELEGATION_MISSING
-→ podia delegar, precisava delegar e não provou que delegou
+→ podia delegar, precisava delegar e não provou execução+retorno
 ```
 
 `UNKNOWN` nunca vira PASS.
@@ -82,28 +98,65 @@ trilho diferente → BLOCKED_ROUTE_DRIFT
 
 O agente pode ir para a frente e voltar pelo rádio, mas não pode criar um desvio silencioso para chegar ao mesmo destino.
 
-## 📡 Rádio
+## 📡 Rádio: chamada aceita não é execução
 
-O rádio é o contrato já existente `DELTA_MESSAGE`.
+O rádio usa o contrato já existente `DELTA_MESSAGE`, mas há três estados diferentes:
+
+```text
+CALL_ACCEPTED
+≠
+AGENTE_EXECUTOU
+≠
+RETORNO_VALIDADO
+```
+
+Uma chamada aceita só prova que o receptor **podia ser chamado**. Ela não satisfaz o gate de delegação.
+
+Depois que o subagente realmente termina, sua volta passa pelo validador:
+
+```text
+node scripts/agent-call.mjs \
+  --delegation-result result.json call-receipt.json jarvis-state.json
+```
+
+O retorno precisa bater com a chamada em:
+
+```text
+call_id
+mission_id
+HEAD
+frontier_id
+trail_id
+direção do rádio (filho → chamador)
+status=COMPLETED
+execution_ref
+DELTA_MESSAGE
+```
+
+Só então nasce:
+
+```text
+receipt_type=DELEGATION_RESULT
+delegation_completed=true
+return_mode=DELTA_MESSAGE
+radio_mode=DELTA_ONLY
+```
+
+Fluxo do rádio:
 
 ```text
 AGENTE DA FRENTE
-→ finding novo
-→ evidência nova
+→ executa de verdade
+→ finding / ausência comprovada de finding
+→ evidência
 → ponto afetado
 → próximo alvo
 → DELTA_MESSAGE
+→ valida retorno
 → WRITER
 ```
 
 Não retransmitir a missão inteira quando o outro lado já possui `JARVIS_STATE`.
-
-```text
-RADIO_MODE=DELTA_ONLY
-RETURN_MODE=DELTA_MESSAGE
-```
-
-Isso preserva contexto e reduz repetição sem esconder informação material.
 
 ## Subagente e sub do sub
 
@@ -132,7 +185,9 @@ Debugger depth=1
   ↓
 Reviewer depth=2
   ↓
-DELTA_MESSAGE
+DELEGATION_RESULT / DELTA_MESSAGE
+  ↑
+Debugger
   ↑
 Writer continua costurando
 ```
@@ -162,7 +217,7 @@ SILENT_REROUTE=false
 A regra não manda criar agente por decoração.
 
 ```text
-CAPACIDADE=true
+CAPACIDADE_COMPROVADA=true
 + NENHUMA_FRENTE_REALMENTE_DELEGAVEL
 = NÃO CRIA AGENTE
 ```
@@ -182,8 +237,8 @@ EXISTE FRENTE DE DEBUG INDEPENDENTE?
    ├─ NÃO → Writer continua
    └─ SIM
        ↓
-RUNTIME TEM CAPACIDADE REAL DE DELEGAR?
-   ├─ NÃO → continua sem agente ornamental
+CAPACIDADE DE DELEGAR FOI PROVADA PELO RUNTIME?
+   ├─ NÃO EXISTE → continua sem agente ornamental
    ├─ UNKNOWN → BLOCKED até saber
    └─ SIM
        ↓
@@ -191,7 +246,11 @@ DELEGA DEBUGGER/REVIEWER/JUDGE READ_ONLY
        ↓
 WRITER CONTINUA COSTURANDO ATRÁS
        ↓
+SUBAGENTE EXECUTA
+       ↓
 📡 DELTA_MESSAGE
+       ↓
+VALIDA DELEGATION_RESULT
        ↓
 WRITER INCORPORA O DELTA
        ↓
