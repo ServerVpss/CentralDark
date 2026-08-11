@@ -94,6 +94,9 @@ jobs:
       - name: Motor determinístico
         working-directory: .agents/skills/meta-lupa
         run: python testes/test_lupa.py
+      - name: Percentual evidencial — denominador fechado + dogfood
+        working-directory: .agents/skills/meta-lupa
+        run: python scripts/percentual_evidencial.py self-test
       - name: Validador e promotor do OPERATION_RECEIPT
         run: pytest .agents/skills/meta-lupa/testes/test_operation_receipt_validator.py -v
       - name: Guardrail do selo de ponto fixo
