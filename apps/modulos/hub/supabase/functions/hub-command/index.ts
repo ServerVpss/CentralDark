@@ -5,6 +5,7 @@ import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors';
 import { createClient } from 'npm:@supabase/supabase-js@2';
 
 const CAPABILITY_RE = /^[A-Za-z0-9_-]{1,64}$/;
+const WRITER_SCOPE_RE = /^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$/;
 const SHA_RE = /^[0-9a-f]{40}$/i;
 const AUTHORIZATIONS = new Set(['pending', 'approved', 'denied']);
 const RISKS = new Set(['R0', 'R1', 'R2', 'R3', 'R4']);
@@ -64,6 +65,12 @@ Deno.serve(async (req) => {
     : String(body.capability).trim();
   if (capability && !CAPABILITY_RE.test(capability)) return json(400, { error: 'capability_invalid' });
 
+  const writerScope = body.writer_scope == null || String(body.writer_scope).trim() === ''
+    ? null
+    : String(body.writer_scope).trim();
+  if (writerScope && !WRITER_SCOPE_RE.test(writerScope)) return json(400, { error: 'writer_scope_invalid' });
+  if (capability && !writerScope) return json(400, { error: 'writer_scope_required_for_execution' });
+
   const branchSha = body.branch_sha == null || String(body.branch_sha).trim() === ''
     ? null
     : String(body.branch_sha).trim();
@@ -97,8 +104,9 @@ Deno.serve(async (req) => {
     risk,
     rollback: body.rollback ? String(body.rollback).slice(0, 500) : null,
     capability,
+    writer_scope: writerScope,
     input: executionInput,
-  }).select('id, title, state, authorization, capability, branch_sha, created_at').single();
+  }).select('id, title, state, authorization, capability, writer_scope, branch_sha, created_at').single();
 
   if (error) return json(500, { error: error.message });
 
@@ -117,9 +125,9 @@ Deno.serve(async (req) => {
     ok: true,
     mission_id: data.id,
     mission: data,
-    auto_execution_eligible: authorization === 'approved' && Boolean(capability) && Boolean(branchSha),
+    auto_execution_eligible: authorization === 'approved' && Boolean(capability) && Boolean(writerScope) && Boolean(branchSha),
     note: capability
-      ? 'Missão criada com capability MCP e revisão exata; o consumidor só executa após claim e gates próprios.'
+      ? 'Missão criada com capability MCP, writer_scope e revisão exata; o banco só permite uma lease running por scope.'
       : 'Missão criada sem capability; permanece observável, mas não entra no auto-executor.',
   });
 });
