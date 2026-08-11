@@ -178,7 +178,7 @@ def measure_manifest(data: Any) -> dict[str, Any]:
     )
 
     coverage = numerator * 100.0 / denominator
-    resolution_plan = 100.0 if unresolved == 0 else fillers * 100.0 / unresolved
+    resolution_plan = None if unresolved == 0 else fillers * 100.0 / unresolved
     claim_100 = numerator == denominator and unresolved == 0
 
     return {
@@ -191,7 +191,7 @@ def measure_manifest(data: Any) -> dict[str, Any]:
         "denominator": denominator,
         "coverage_percent": round(coverage, 2),
         "unresolved": unresolved,
-        "resolution_plan_percent": round(resolution_plan, 2),
+        "resolution_plan_percent": None if resolution_plan is None else round(resolution_plan, 2),
         "claim_100_allowed": claim_100,
         "errors": [],
         "unresolved_ids": [check["id"] for check in unresolved_checks],
@@ -226,6 +226,7 @@ def run_self_test() -> dict[str, Any]:
 
     r = measure_manifest(_manifest(["PASS", "PASS", "PASS"]))
     tests.append(("all_pass_allows_exact_100", r["coverage_percent"] == 100.0 and r["claim_100_allowed"]))
+    tests.append(("no_gaps_resolution_plan_is_not_measured", r["resolution_plan_percent"] is None))
 
     r = measure_manifest(_manifest(["PASS", "PASS", "UNKNOWN"]))
     tests.append(("unknown_counts_against_denominator", r["coverage_percent"] == 66.67 and not r["claim_100_allowed"]))
