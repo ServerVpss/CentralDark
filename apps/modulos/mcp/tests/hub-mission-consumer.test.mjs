@@ -101,20 +101,24 @@ test("claim longo tem heartbeat e stale fica não comprovado, sem refileirar", (
   assert.match(migration, /hub_missions_running_claim_idx/);
 });
 
-test("hub-command exige writer_scope e revisão exata para missão executável", () => {
+test("hub-command cria pendente, deriva writer_scope no servidor e exige revisão exata", () => {
   assert.match(hubCommand, /adminPublic\.from\('hub_missions'\)/);
   assert.match(hubCommand, /adminApi\.from\('audit_log_api'\)/);
   assert.match(hubCommand, /WRITER_SCOPE_RE/);
-  assert.match(hubCommand, /writer_scope_required_for_execution/);
+  assert.match(hubCommand, /function derivedWriterScope/);
+  assert.match(hubCommand, /capability:\$\{capability\.toLowerCase\(\)\}/);
+  assert.match(hubCommand, /approval_requires_independent_gate/);
+  assert.match(hubCommand, /writer_scope_is_server_derived/);
   assert.match(hubCommand, /writer_scope:\s*writerScope/);
   assert.match(hubCommand, /SHA_RE/);
   assert.match(hubCommand, /branch_sha_required_for_execution/);
   assert.match(hubCommand, /input:\s*executionInput/);
-  assert.match(hubCommand, /auto_execution_eligible/);
-  assert.match(hubCommand, /Boolean\(writerScope\)/);
+  assert.match(hubCommand, /auto_execution_eligible:\s*false/);
   assert.match(hubCommand, /input_contains_sensitive_material/);
-  assert.match(hubCommand, /SENSITIVE_KEY_RE/);
+  assert.match(hubCommand, /const SENSITIVE_KEY_RE = \/\(token\|secret\|password/);
   assert.match(hubCommand, /SENSITIVE_VALUE_RE/);
+  assert.doesNotMatch(hubCommand, /writer_scope_required_for_execution/);
+  assert.doesNotMatch(hubCommand, /auto_execution_eligible:\s*authorization === 'approved'/);
   assert.doesNotMatch(hubCommand, /commands/);
 });
 
