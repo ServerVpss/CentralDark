@@ -1,12 +1,16 @@
 #!/usr/bin/env node
 import assert from "node:assert/strict";
-import { validateAgentCall } from "./agent-call.mjs";
+import { validateAgentCall, validateDelegationGate } from "./agent-call.mjs";
 
 const state = {
   mission_id: "M-1",
   head: { sha: "abc123" },
+  trail: { route_id: "TRILHO-A", origin: "A", destination: "B" },
   scope: { allowed: ["repo:read", "src:x"], denied: ["prod"] },
   writer: { agent: "hermes" },
+  capabilities: { delegate_agents: true },
+  debug_frontiers: [],
+  delegation_receipts: [],
 };
 const base = {
   call_id: "C-1",
@@ -15,19 +19,66 @@ const base = {
   to: "reviewer",
   requested_role: "REVIEWER",
   observed_head: "abc123",
+  trail_id: "TRILHO-A",
   scope: ["repo:read"],
   requested_action: "prove X",
   write_requested: false,
 };
 
-assert.equal(validateAgentCall(base, state).status, "ACCEPTED");
-assert.equal(validateAgentCall({ ...base, mission_id: "M-X" }, state).status, "BLOCKED_UNKNOWN_MISSION");
-assert.equal(validateAgentCall({ ...base, observed_head: "old" }, state).status, "BLOCKED_STALE_HEAD");
-assert.equal(validateAgentCall({ ...base, scope: ["prod"] }, state).status, "BLOCKED_OUT_OF_SCOPE");
-assert.equal(validateAgentCall({ ...base, requested_role: "REVIEWER", write_requested: true }, state).status, "BLOCKED_ROLE_CANNOT_WRITE");
-assert.equal(validateAgentCall({ ...base, to: "codex", requested_role: "EXECUTOR", write_requested: true }, state).status, "BLOCKED_WRITER_CONFLICT");
-assert.equal(validateAgentCall({ ...base, to: "hermes", requested_role: "EXECUTOR", write_requested: true }, state).status, "ACCEPTED");
-assert.equal(validateAgentCall({ ...base, to: "hermes", requested_role: "EXECUTOR", write_requested: true, writer_handoff_required: true }, state).status, "BLOCKED_MISSING_HANDOFF");
-assert.equal(validateAgentCall({ ...base, to: "hermes", requested_role: "EXECUTOR", write_requested: true, writer_handoff_required: true, writer_handoff_valid: true }, state).status, "ACCEPTED");
+let pass = 0;
+function check(actual, expected) {
+  assert.equal(actual, expected);
+  pass += 1;
+}
 
-console.log("agent-call: 9/9 PASS");
+check(validateAgentCall(base, state).status, "ACCEPTED");
+check(validateAgentCall({ ...base, mission_id: "M-X" }, state).status, "BLOCKED_UNKNOWN_MISSION");
+check(validateAgentCall({ ...base, observed_head: "old" }, state).status, "BLOCKED_STALE_HEAD");
+check(validateAgentCall({ ...base, trail_id: undefined }, state).status, "BLOCKED_MISSING_TRAIL");
+check(validateAgentCall({ ...base, trail_id: "DESVIO" }, state).status, "BLOCKED_ROUTE_DRIFT");
+check(validateAgentCall({ ...base, scope: ["prod"] }, state).status, "BLOCKED_OUT_OF_SCOPE");
+check(validateAgentCall({ ...base, requested_role: "REVIEWER", write_requested: true }, state).status, "BLOCKED_ROLE_CANNOT_WRITE");
+check(validateAgentCall({ ...base, to: "codex", requested_role: "EXECUTOR", write_requested: true }, state).status, "BLOCKED_WRITER_CONFLICT");
+check(validateAgentCall({ ...base, to: "hermes", requested_role: "EXECUTOR", write_requested: true }, state).status, "ACCEPTED");
+check(validateAgentCall({ ...base, to: "hermes", requested_role: "EXECUTOR", write_requested: true, writer_handoff_required: true }, state).status, "BLOCKED_MISSING_HANDOFF");
+check(validateAgentCall({ ...base, to: "hermes", requested_role: "EXECUTOR", write_requested: true, writer_handoff_required: true, writer_handoff_valid: true }, state).status, "ACCEPTED");
+
+const nested = {
+  ...base,
+  call_id: "C-2",
+  parent_call_id: "C-1",
+  frontier_id: "F-DEBUG",
+  depth: 1,
+  from: "sol",
+  to: "debugger",
+  requested_role: "DEBUGGER",
+  requested_action: "depurar a frente e devolver só o delta",
+};
+check(validateAgentCall({ ...nested, frontier_id: undefined }, state).status, "BLOCKED_INVALID_NESTED_CALL");
+check(validateAgentCall({ ...nested, depth: 0 }, state).status, "BLOCKED_INVALID_NESTED_CALL");
+check(validateAgentCall({ ...nested, to: "sol" }, state).status, "BLOCKED_SELF_DELEGATION");
+check(validateAgentCall({ ...nested, to: "hermes", requested_role: "EXECUTOR", write_requested: true }, state).status, "BLOCKED_NESTED_WRITE_WITHOUT_HANDOFF");
+check(validateAgentCall(nested, state).status, "ACCEPTED");
+check(validateAgentCall({ ...nested, call_id: "C-3", parent_call_id: "C-2", depth: 2, from: "debugger", to: "reviewer" }, state).status, "ACCEPTED");
+
+check(validateDelegationGate(state).status, "NOT_APPLICABLE_NO_DELEGABLE_FRONTIER");
+const frontierState = {
+  ...state,
+  debug_frontiers: [{ id: "F-DEBUG", delegable: true, status: "OPEN" }],
+};
+check(validateDelegationGate({ ...frontierState, capabilities: { delegate_agents: false } }).status, "NOT_APPLICABLE_CAPABILITY_UNAVAILABLE");
+check(validateDelegationGate({ ...frontierState, capabilities: {} }).status, "BLOCKED_DELEGATION_CAPABILITY_UNKNOWN");
+check(validateDelegationGate(frontierState).status, "BLOCKED_REQUIRED_DELEGATION_MISSING");
+
+const acceptedDelegation = validateAgentCall(nested, state);
+check(validateDelegationGate({ ...frontierState, delegation_receipts: [acceptedDelegation] }).status, "PASS_REQUIRED_DELEGATION");
+const writerReceipt = validateAgentCall({
+  ...base,
+  call_id: "C-W",
+  to: "hermes",
+  requested_role: "EXECUTOR",
+  write_requested: true,
+}, state);
+check(validateDelegationGate({ ...frontierState, delegation_receipts: [writerReceipt] }).status, "BLOCKED_REQUIRED_DELEGATION_MISSING");
+
+console.log(`agent-call: ${pass}/${pass} PASS`);
