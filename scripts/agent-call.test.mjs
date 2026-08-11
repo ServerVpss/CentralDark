@@ -152,6 +152,29 @@ check(validateHealingGate(healingState).status, "REQUIRED_WELD");
 check(validateHealingGate({ ...healingState, healing: { ...healingState.healing, trigger: "UNKNOWN" } }).status, "BLOCKED_HEALING_TRIGGER_UNKNOWN");
 check(validateHealingGate({ ...healingState, healing: { ...healingState.healing, frontier_id: "" } }).status, "BLOCKED_INVALID_HEALING_CONTEXT");
 
+// Histórico fabricado fora da ordem não pode produzir verde.
+const forgedRebuildHealed = {
+  protocol: "CENTRALDARK_AGENT_CALL_V1",
+  receipt_type: "HEALING_RESULT",
+  mission_id: "M-1",
+  observed_head: "abc123",
+  frontier_id: "F-HEAL",
+  trail_id: "TRILHO-A",
+  level: "REBUILD_LOCAL",
+  status: "HEALED",
+  accepted: true,
+  healed: true,
+  result_ref: "forged:rebuild",
+};
+check(validateHealingGate({ ...healingState, healing_receipts: [forgedRebuildHealed] }).status, "BLOCKED_INVALID_HEALING_HISTORY");
+
+const forgedBridgeHealed = {
+  ...forgedRebuildHealed,
+  level: "JUMP_BRIDGE",
+  result_ref: "forged:bridge",
+};
+check(validateHealingGate({ ...healingState, healing_receipts: [forgedBridgeHealed] }).status, "BLOCKED_INVALID_HEALING_HISTORY");
+
 const weldFailureInput = {
   mission_id: "M-1",
   observed_head: "abc123",
