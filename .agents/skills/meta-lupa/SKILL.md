@@ -485,3 +485,45 @@ falha apenas citada. Fable permanece `EXPERIMENTAL_FAIL_CLOSED`, fora do
 roteamento padrão, até existir controle comparativo válido com a mesma
 fixture, prompt, modelo, timeout, orçamento e manifesto de testes, com pelo
 menos duas seeds válidas por braço.
+
+## Percentual evidencial e fechamento de lacunas
+
+Quando o pedido, gate ou relatório usar porcentagem, a Meta Lupa mede um
+**escopo fechado**, nunca uma impressão geral. O medidor canônico desta skill é:
+
+```text
+scripts/percentual_evidencial.py
+```
+
+Contrato obrigatório:
+
+```text
+SCOPE=<escopo finito>
+HEAD_SHA=<40 hex do mesmo candidato>
+DECLARED_DENOMINATOR=<quantidade de checks required=true>
+NUMERATOR=<checks required=true com status PASS + evidência>
+DENOMINATOR=<DECLARED_DENOMINATOR validado contra os checks>
+COVERAGE_PERCENT=NUMERATOR / DENOMINATOR * 100
+```
+
+Regras fail-closed:
+
+1. o denominador é declarado antes do resultado e deve ser idêntico à quantidade de checks `required=true`;
+2. `PASS` sem evidência não entra no numerador e bloqueia o manifesto;
+3. `UNKNOWN`, `SKIPPED`, `BLOCKED` e `FAIL` continuam dentro do denominador e nunca viram PASS;
+4. toda lacuna requerida deve trazer `next_test`: o teste/evidência que pode preenchê-la na próxima rodada;
+5. `NOT_APPLICABLE` não pode retirar item requerido do denominador;
+6. IDs duplicados bloqueiam a medição;
+7. denominador zero ou ausente produz `NOT_MEASURED`/bloqueio, nunca `100%`;
+8. `100%` só é alegável quando `NUMERATOR == DENOMINATOR`, todos os itens requeridos estão em PASS com evidência e não existe lacuna;
+9. `resolution_plan_percent` mede somente quantas lacunas possuem um próximo teste explícito; não mede eficácia nem transforma UNKNOWN em conhecimento;
+10. o manifesto recebe SHA-256 canônico para provar que o denominador e os checks medidos não mudaram depois do resultado.
+
+Uso:
+
+```text
+python scripts/percentual_evidencial.py measure --input <manifest.json>
+python scripts/percentual_evidencial.py self-test
+```
+
+A saída pode declarar `100%` **somente dentro daquele denominador fechado e reproduzível**. Isso não contradiz a proibição de prometer certeza universal: `100% do contrato medido` é diferente de `100% de certeza sobre o mundo`.
