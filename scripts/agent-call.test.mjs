@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import assert from "node:assert/strict";
-import { validateAgentCall, validateDelegationGate } from "./agent-call.mjs";
+import { validateAgentCall, validateDelegationGate, validateDelegationResult } from "./agent-call.mjs";
 
 const state = {
   mission_id: "M-1",
@@ -8,7 +8,13 @@ const state = {
   trail: { route_id: "TRILHO-A", origin: "A", destination: "B" },
   scope: { allowed: ["repo:read", "src:x"], denied: ["prod"] },
   writer: { agent: "hermes" },
-  capabilities: { delegate_agents: true },
+  capabilities: {
+    delegate_agents: {
+      supported: true,
+      source: "runtime-tool-inventory",
+      evidence_ref: "runtime:tools/delegate-agent",
+    },
+  },
   debug_frontiers: [],
   delegation_receipts: [],
 };
@@ -66,19 +72,62 @@ const frontierState = {
   ...state,
   debug_frontiers: [{ id: "F-DEBUG", delegable: true, status: "OPEN" }],
 };
-check(validateDelegationGate({ ...frontierState, capabilities: { delegate_agents: false } }).status, "NOT_APPLICABLE_CAPABILITY_UNAVAILABLE");
-check(validateDelegationGate({ ...frontierState, capabilities: {} }).status, "BLOCKED_DELEGATION_CAPABILITY_UNKNOWN");
+const unsupported = {
+  ...frontierState,
+  capabilities: { delegate_agents: { supported: false, source: "runtime-tool-inventory", evidence_ref: "runtime:no-delegation-tool" } },
+};
+check(validateDelegationGate(unsupported).status, "NOT_APPLICABLE_CAPABILITY_UNAVAILABLE");
+check(validateDelegationGate({ ...frontierState, capabilities: { delegate_agents: false } }).status, "BLOCKED_DELEGATION_CAPABILITY_UNKNOWN");
+check(validateDelegationGate({ ...frontierState, capabilities: { delegate_agents: { supported: true } } }).status, "BLOCKED_DELEGATION_CAPABILITY_UNKNOWN");
 check(validateDelegationGate(frontierState).status, "BLOCKED_REQUIRED_DELEGATION_MISSING");
 
-const acceptedDelegation = validateAgentCall(nested, state);
-check(validateDelegationGate({ ...frontierState, delegation_receipts: [acceptedDelegation] }).status, "PASS_REQUIRED_DELEGATION");
-const writerReceipt = validateAgentCall({
-  ...base,
-  call_id: "C-W",
-  to: "hermes",
-  requested_role: "EXECUTOR",
-  write_requested: true,
+const acceptedCall = validateAgentCall(nested, state);
+check(validateDelegationGate({ ...frontierState, delegation_receipts: [acceptedCall] }).status, "BLOCKED_REQUIRED_DELEGATION_MISSING");
+
+const result = {
+  call_id: acceptedCall.call_id,
+  mission_id: "M-1",
+  from: "debugger",
+  to: "sol",
+  observed_head: "abc123",
+  frontier_id: "F-DEBUG",
+  trail_id: "TRILHO-A",
+  status: "COMPLETED",
+  execution_ref: "cli-run:42",
+  delta_message: { material_delta: "erro X em src:x", next_target: "src:x" },
+  evidence_refs: ["log:42"],
+};
+check(validateDelegationResult({ ...result, execution_ref: "" }, acceptedCall, state).status, "BLOCKED_INVALID_DELEGATION_RESULT");
+check(validateDelegationResult({ ...result, observed_head: "old" }, acceptedCall, state).status, "BLOCKED_STALE_HEAD");
+check(validateDelegationResult({ ...result, trail_id: "DESVIO" }, acceptedCall, state).status, "BLOCKED_ROUTE_DRIFT");
+check(validateDelegationResult({ ...result, from: "sol", to: "debugger" }, acceptedCall, state).status, "BLOCKED_RADIO_DIRECTION_MISMATCH");
+check(validateDelegationResult({ ...result, status: "RUNNING" }, acceptedCall, state).status, "BLOCKED_DELEGATION_NOT_COMPLETED");
+
+const completed = validateDelegationResult(result, acceptedCall, state);
+check(completed.status, "COMPLETED");
+check(validateDelegationGate({ ...frontierState, delegation_receipts: [completed] }).status, "PASS_REQUIRED_DELEGATION");
+
+const subSubCall = validateAgentCall({
+  ...nested,
+  call_id: "C-3",
+  parent_call_id: "C-2",
+  depth: 2,
+  from: "debugger",
+  to: "reviewer",
+  requested_role: "REVIEWER",
 }, state);
-check(validateDelegationGate({ ...frontierState, delegation_receipts: [writerReceipt] }).status, "BLOCKED_REQUIRED_DELEGATION_MISSING");
+const subSubResult = validateDelegationResult({
+  call_id: subSubCall.call_id,
+  mission_id: "M-1",
+  from: "reviewer",
+  to: "debugger",
+  observed_head: "abc123",
+  frontier_id: "F-DEBUG",
+  trail_id: "TRILHO-A",
+  status: "COMPLETED",
+  execution_ref: "cli-run:43",
+  delta_message: { material_delta: null, conclusion: "contraprova não derrubou o finding" },
+}, subSubCall, state);
+check(subSubResult.status, "COMPLETED");
 
 console.log(`agent-call: ${pass}/${pass} PASS`);
