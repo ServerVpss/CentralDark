@@ -202,6 +202,109 @@ BLOCKED_NESTED_WRITE_WITHOUT_HANDOFF
 
 Assim existe paralelismo de inteligência sem dois Writers brigando pelo mesmo escopo.
 
+## 🩹 HEALING STREET — cura da mesma rua
+
+`HEALING_STREET` não é nova missão, novo agente, novo trilho nem bypass de gate. É a escalada determinística quando **a costura normal já falhou**.
+
+```text
+COSTURA NORMAL
+   ↓ quebrou + falha provada
+🔥 WELD / SOLDA
+   ↓ falhou + causa/evidência
+🩺 REBUILD_LOCAL / REFAZ LOCALMENTE
+   ↓ falhou + causa/evidência
+🌉 JUMP_BRIDGE / SALTO + PONTE
+   ↓ falhou
+BLOCKED_HEALING_EXHAUSTED
+```
+
+Não existe contagem arbitrária de tentativas. Uma camada só sobe quando a anterior possui `HEALING_RESULT status=FAILED` válido. Repetir a mesma solda sem informação nova é desperdício.
+
+O estado abre a cura assim:
+
+```json
+{
+  "healing": {
+    "required": true,
+    "trigger": "STITCH_FAILED",
+    "frontier_id": "F-HEAL"
+  },
+  "healing_receipts": []
+}
+```
+
+Consultar o próximo nível:
+
+```text
+node scripts/agent-call.mjs --healing-gate jarvis-state.json
+```
+
+Registrar o resultado real:
+
+```text
+node scripts/agent-call.mjs --healing-result healing-result.json jarvis-state.json
+```
+
+### Solda
+
+`WELD` é o primeiro nível depois da costura quebrada. É uma correção localizada na mesma fronteira causal.
+
+Se falhar, precisa registrar:
+
+```text
+failure_ref
+cause_ref
+evidence_refs[]
+```
+
+Sem falha provada não existe autorização lógica para subir de nível.
+
+### Refaz + revisa
+
+`REBUILD_LOCAL` reconstrói **somente a região afetada**, a partir de checkpoints conhecidos. Não reinicia a missão e não invalida provas fora da fronteira causal tocada.
+
+Uma cura só pode declarar `HEALED` depois de:
+
+```text
+test_ref
+counterproof_ref
+review_forward_ref
+review_backward_ref
+checkpoint_before
+checkpoint_after
+postcondition_proven=true
+affected_frontier_revalidated=true
+material_delta_after_review=0
+```
+
+Ou seja: corrigiu, tentou derrubar e percorreu novamente a cadeia de ida e de volta antes de fechar.
+
+### Salto + Ponte
+
+`JUMP_BRIDGE` só existe quando a região local original ficou comprovadamente inviável. A ponte **não muda a missão nem cria outro trilho lógico**: ela atravessa o segmento quebrado e precisa religar em checkpoint provado do mesmo `trail_id`.
+
+Contrato obrigatório:
+
+```json
+{
+  "bridge": {
+    "rejoins_same_trail": true,
+    "target_checkpoint_proven": true,
+    "authorization_preserved": true,
+    "scope_preserved": true,
+    "mandatory_gates_skipped": []
+  }
+}
+```
+
+Qualquer gate obrigatório pulado, troca silenciosa de trilho, perda de escopo ou autorização produz:
+
+```text
+BLOCKED_UNSAFE_BRIDGE
+```
+
+A ponte troca o **mecanismo de travessia**, não a verdade exigida no destino.
+
 ## MENOS É MAIS + Meta Lupa
 
 Durante toda a esteira:
@@ -212,6 +315,7 @@ MENOS_E_MAIS_ALWAYS_ON=true
 ONE_SCOPE_ONE_WRITER=true
 SAME_DESTINATION_SAME_ROUTE=true
 SILENT_REROUTE=false
+HEAL_ONLY_AFFECTED_FRONTIER=true
 ```
 
 A regra não manda criar agente por decoração.
@@ -223,6 +327,28 @@ CAPACIDADE_COMPROVADA=true
 ```
 
 Delegar trabalho que não existe seria desperdício e violaria o próprio MENOS É MAIS.
+
+## 👊 Entrega pós-ação, não proposta prematura
+
+Quando a intenção do CHEFE está clara, a ação está dentro do escopo/autorização vigente e o sistema consegue verificar o resultado por ferramenta, o coordenador **não deve interromper o CHEFE para apresentar uma solução que ele próprio já pode aplicar e provar**.
+
+```text
+INTENÇÃO CLARA
++ AÇÃO AUTORIZADA
++ FERRAMENTA DISPONÍVEL
++ RISCO DENTRO DOS GATES
+→ EXECUTA
+→ TESTA
+→ CONTRAPROVA
+→ REVISA IDA
+→ REVISA VOLTA
+→ REGISTRA
+→ SÓ DEPOIS REPORTA O RESULTADO
+```
+
+Escalar antes da ação somente quando houver decisão/autorização exclusivamente humana, risco não autorizado, conflito de intenção ou bloqueio real que sobreviva ao ciclo completo.
+
+O relatório ao CHEFE deve trazer **trabalho feito + eficácia + evidência + bloqueio real**, e não uma proposta que já poderia ter sido resolvida autonomamente.
 
 ## Fluxo completo
 
@@ -254,14 +380,29 @@ VALIDA DELEGATION_RESULT
        ↓
 WRITER INCORPORA O DELTA
        ↓
+COSTURA QUEBROU?
+   ├─ NÃO → segue teste/contraprova
+   └─ SIM
+       ↓
+🔥 WELD
+       ↓ se falhar
+🩺 REBUILD_LOCAL
+       ↓ se falhar
+🌉 JUMP_BRIDGE
+       ↓
+TESTE + CONTRAPROVA + REVISÃO IDA/VOLTA
+       ↓
+VALIDA HEALING_RESULT
+       ↓
 TESTE + CONTRAPROVA + JUDGE + META LUPA
        ↓
 ANTES DE FECHAR:
 --delegation-gate
+--healing-gate (quando aplicável)
        ↓
 PASS?
    ├─ NÃO → volta exatamente ao fio solto
    └─ SIM → continua o fechamento normal da missão
 ```
 
-A chamada não concede autoridade, não promove código e não substitui os gates normais de Writer, teste, Judge, Meta Lupa, merge ou deploy.
+A chamada e o healing não concedem autoridade, não promovem código e não substituem os gates normais de Writer, teste, Judge, Meta Lupa, merge ou deploy.
