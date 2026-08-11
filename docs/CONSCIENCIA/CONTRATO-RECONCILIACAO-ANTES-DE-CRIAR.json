@@ -47,6 +47,40 @@
     "broad_uncertain_multilayer_or_high_risk": "DELTA_WITH_INDEPENDENT_REVIEW",
     "never_expose_internal_governance_as_user_bureaucracy": true
   },
+  "correction_learning_policy": {
+    "marker": "CORRECTION_LEARNING_REQUIRED",
+    "human_rule": "HERDAR MÉTODO ≠ HERDAR PERSONALIDADE",
+    "method_transfer_without_personality_copy": true,
+    "explicit_chief_intent_is_not_model_preference": true,
+    "preference_is_not_universal_rule": true,
+    "universalization_requires_scope_counterexample_test": true,
+    "validated_learning_destination": "EXISTING_CANONICAL_ARTIFACT",
+    "sequence": [
+      "capture_exact_correction",
+      "classify_correction",
+      "identify_concrete_cause",
+      "form_candidate_principle",
+      "declare_scope",
+      "seek_counterexample",
+      "run_discriminating_test",
+      "consolidate_or_reject"
+    ],
+    "classification": [
+      "EXPLICIT_CHIEF_INTENT",
+      "LOCAL_PREFERENCE",
+      "TRANSFERABLE_PRINCIPLE",
+      "HYPOTHESIS",
+      "RUNTIME_DEPENDENCY"
+    ],
+    "decision_rules": {
+      "explicit_chief_intent_applies_in_current_scope": true,
+      "model_must_not_soften_explicit_chief_intent_for_convenience": true,
+      "local_preference_becomes_universal_without_test": false,
+      "personality_copy_required": false,
+      "unproven_learning_becomes_gold": false,
+      "validated_learning_updates_existing_canonical_artifact": true
+    }
+  },
   "internal_receipt_fields": [
     "USER_INTENT",
     "EXISTING_CAPABILITIES",
