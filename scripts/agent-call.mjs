@@ -3,15 +3,8 @@
  * CentralDark Universal Agent Call — gate determinístico.
  *
  * Não executa modelo, não concede autoridade e não escreve no escopo chamado.
- * Recebe CALL + STATE em JSON, valida missão/HEAD/escopo/writer/trilho e emite receipt.
+ * Valida CALL, retorno de delegação e obrigação de delegar no JARVIS_STATE.
  * Transporte (MCP/HTTP/CLI/Telegram/etc.) fica fora deste núcleo.
- *
- * MENOS É MAIS + Meta Lupa:
- * - chamada aninhada continua na mesma missão e no mesmo trilho;
- * - subagente é read-only por padrão; escrita aninhada exige handoff explícito;
- * - se o runtime consegue delegar E existe frente de debug realmente separável,
- *   a finalização deve provar delegação por receipt aceito;
- * - sem frente delegável, não cria agente ornamental.
  */
 import { readFile } from "node:fs/promises";
 import { randomUUID } from "node:crypto";
@@ -23,6 +16,10 @@ const ALLOWED_ROLES = new Set([
 const WRITE_ROLES = new Set(["EXECUTOR", "HERMES"]);
 const DELEGATION_ROLES = new Set(["DEBUGGER", "REVIEWER", "JUDGE", "READ_ONLY"]);
 const CLOSED_FRONTIER_STATES = new Set(["CLOSED", "DONE", "RESOLVED"]);
+
+function nonEmpty(value) {
+  return typeof value === "string" && value.trim().length > 0;
+}
 
 function fail(reason, call, extra = {}) {
   return {
@@ -64,13 +61,34 @@ function openDelegableFrontiers(state) {
   ));
 }
 
-function receiptMatchesFrontier(receipt, frontier, state) {
+function getDelegationCapability(state) {
+  const cap = state?.capabilities?.delegate_agents;
+  if (
+    !cap
+    || typeof cap !== "object"
+    || typeof cap.supported !== "boolean"
+    || !nonEmpty(cap.source)
+    || !nonEmpty(cap.evidence_ref)
+  ) {
+    return { known: false, supported: null };
+  }
+  return {
+    known: true,
+    supported: cap.supported,
+    source: cap.source,
+    evidence_ref: cap.evidence_ref,
+  };
+}
+
+function resultReceiptMatchesFrontier(receipt, frontier, state) {
   const routeId = state?.trail?.route_id || null;
   return Boolean(
     receipt
     && receipt.protocol === PROTOCOL
+    && receipt.receipt_type === "DELEGATION_RESULT"
     && receipt.accepted === true
-    && receipt.status === "ACCEPTED"
+    && receipt.status === "COMPLETED"
+    && receipt.delegation_completed === true
     && receipt.mission_id === state.mission_id
     && receipt.observed_head === state?.head?.sha
     && receipt.frontier_id === frontier.id
@@ -81,12 +99,80 @@ function receiptMatchesFrontier(receipt, frontier, state) {
     && receipt.write_authorized === false
     && (!routeId || receipt.trail_id === routeId)
     && receipt.return_mode === "DELTA_MESSAGE"
+    && nonEmpty(receipt.execution_ref)
+    && receipt.delta_message !== undefined
+    && receipt.delta_message !== null
   );
 }
 
 /**
- * Gate de fechamento: se há capacidade real + frente delegável, tem que existir
- * ao menos um receipt de delegação read-only válido por frente.
+ * Valida a volta do rádio. CALL_ACCEPTED não prova execução; só este receipt
+ * DELEGATION_RESULT pode satisfazer o gate de delegação obrigatória.
+ */
+export function validateDelegationResult(result, callReceipt, state) {
+  if (!result || typeof result !== "object") return fail("BLOCKED_INVALID_DELEGATION_RESULT", result);
+  if (!state || typeof state !== "object") return fail("BLOCKED_UNKNOWN_MISSION", result);
+  if (
+    !callReceipt
+    || callReceipt.protocol !== PROTOCOL
+    || callReceipt.accepted !== true
+    || callReceipt.status !== "ACCEPTED"
+  ) {
+    return fail("BLOCKED_CALL_RECEIPT_NOT_ACCEPTED", result);
+  }
+  if (!callReceipt.parent_call_id || !DELEGATION_ROLES.has(callReceipt.requested_role) || callReceipt.write_authorized !== false) {
+    return fail("BLOCKED_CALL_NOT_READ_ONLY_DELEGATION", result);
+  }
+
+  const required = ["call_id", "mission_id", "from", "to", "observed_head", "frontier_id", "trail_id", "execution_ref", "delta_message"];
+  const missing = required.filter((key) => (
+    result[key] === undefined
+    || result[key] === null
+    || (typeof result[key] === "string" && result[key].trim() === "")
+  ));
+  if (missing.length) return fail("BLOCKED_INVALID_DELEGATION_RESULT", result, { missing });
+
+  if (result.call_id !== callReceipt.call_id) return fail("BLOCKED_DELEGATION_CALL_MISMATCH", result);
+  if (result.mission_id !== state.mission_id || result.mission_id !== callReceipt.mission_id) {
+    return fail("BLOCKED_UNKNOWN_MISSION", result);
+  }
+  if (result.observed_head !== state?.head?.sha || result.observed_head !== callReceipt.observed_head) {
+    return fail("BLOCKED_STALE_HEAD", result, { expected_head: state?.head?.sha || "UNKNOWN" });
+  }
+  if (result.frontier_id !== callReceipt.frontier_id) return fail("BLOCKED_FRONTIER_MISMATCH", result);
+  if (result.trail_id !== callReceipt.trail_id) return fail("BLOCKED_ROUTE_DRIFT", result, { expected_trail: callReceipt.trail_id });
+  if (result.from !== callReceipt.to || result.to !== callReceipt.from) return fail("BLOCKED_RADIO_DIRECTION_MISMATCH", result);
+  if (result.status !== "COMPLETED") return fail("BLOCKED_DELEGATION_NOT_COMPLETED", result);
+
+  return {
+    protocol: PROTOCOL,
+    receipt_type: "DELEGATION_RESULT",
+    call_id: callReceipt.call_id,
+    parent_call_id: callReceipt.parent_call_id,
+    depth: callReceipt.depth,
+    mission_id: callReceipt.mission_id,
+    status: "COMPLETED",
+    accepted: true,
+    delegation_completed: true,
+    write_authorized: false,
+    from: callReceipt.from,
+    to: callReceipt.to,
+    requested_role: callReceipt.requested_role,
+    observed_head: callReceipt.observed_head,
+    frontier_id: callReceipt.frontier_id,
+    trail_id: callReceipt.trail_id,
+    execution_ref: result.execution_ref,
+    delta_message: result.delta_message,
+    evidence_refs: Array.isArray(result.evidence_refs) ? result.evidence_refs : [],
+    return_mode: "DELTA_MESSAGE",
+    radio_mode: "DELTA_ONLY",
+  };
+}
+
+/**
+ * Gate de fechamento: se há capacidade real comprovada + frente delegável,
+ * exige um DELEGATION_RESULT válido por frente. Sem trabalho separável, não
+ * cria agente ornamental.
  */
 export function validateDelegationGate(state) {
   if (!state || typeof state !== "object") {
@@ -107,8 +193,13 @@ export function validateDelegationGate(state) {
     };
   }
 
-  const capability = state?.capabilities?.delegate_agents;
-  if (capability === false) {
+  const capability = getDelegationCapability(state);
+  if (!capability.known) {
+    return gateFail("BLOCKED_DELEGATION_CAPABILITY_UNKNOWN", state, {
+      delegable_frontiers: frontiers.map((frontier) => frontier.id || null),
+    });
+  }
+  if (capability.supported === false) {
     return {
       protocol: PROTOCOL,
       gate: "REQUIRED_DELEGATION",
@@ -117,28 +208,27 @@ export function validateDelegationGate(state) {
       status: "NOT_APPLICABLE_CAPABILITY_UNAVAILABLE",
       accepted: true,
       required: false,
+      capability_source: capability.source,
+      capability_evidence_ref: capability.evidence_ref,
       delegable_frontiers: frontiers.map((frontier) => frontier.id || null),
     };
   }
-  if (capability !== true) {
-    return gateFail("BLOCKED_DELEGATION_CAPABILITY_UNKNOWN", state, {
-      delegable_frontiers: frontiers.map((frontier) => frontier.id || null),
-    });
-  }
 
-  const invalidFrontiers = frontiers.filter((frontier) => !frontier.id);
+  const invalidFrontiers = frontiers.filter((frontier) => !nonEmpty(frontier.id));
   if (invalidFrontiers.length) {
     return gateFail("BLOCKED_INVALID_DEBUG_FRONTIER", state);
   }
 
   const receipts = Array.isArray(state.delegation_receipts) ? state.delegation_receipts : [];
   const missing = frontiers
-    .filter((frontier) => !receipts.some((receipt) => receiptMatchesFrontier(receipt, frontier, state)))
+    .filter((frontier) => !receipts.some((receipt) => resultReceiptMatchesFrontier(receipt, frontier, state)))
     .map((frontier) => frontier.id);
 
   if (missing.length) {
     return gateFail("BLOCKED_REQUIRED_DELEGATION_MISSING", state, {
       missing_frontiers: missing,
+      capability_source: capability.source,
+      capability_evidence_ref: capability.evidence_ref,
     });
   }
 
@@ -150,6 +240,8 @@ export function validateDelegationGate(state) {
     status: "PASS_REQUIRED_DELEGATION",
     accepted: true,
     required: true,
+    capability_source: capability.source,
+    capability_evidence_ref: capability.evidence_ref,
     delegated_frontiers: frontiers.map((frontier) => frontier.id),
     radio_mode: "DELTA_MESSAGE",
   };
@@ -208,6 +300,7 @@ export function validateAgentCall(call, state) {
 
   return {
     protocol: PROTOCOL,
+    receipt_type: "CALL_ACCEPTED",
     call_id: call.call_id || randomUUID(),
     parent_call_id: call.parent_call_id || null,
     depth: nested ? call.depth : 0,
@@ -239,6 +332,22 @@ async function main() {
     }
     const state = await readFile(statePath, "utf8").then(JSON.parse);
     const receipt = validateDelegationGate(state);
+    process.stdout.write(`${JSON.stringify(receipt, null, 2)}\n`);
+    process.exit(receipt.accepted ? 0 : 13);
+  }
+
+  if (args[0] === "--delegation-result") {
+    const [resultPath, callReceiptPath, statePath] = args.slice(1);
+    if (!resultPath || !callReceiptPath || !statePath) {
+      console.error("uso: node scripts/agent-call.mjs --delegation-result <result.json> <call-receipt.json> <jarvis-state.json>");
+      process.exit(2);
+    }
+    const [result, callReceipt, state] = await Promise.all([
+      readFile(resultPath, "utf8").then(JSON.parse),
+      readFile(callReceiptPath, "utf8").then(JSON.parse),
+      readFile(statePath, "utf8").then(JSON.parse),
+    ]);
+    const receipt = validateDelegationResult(result, callReceipt, state);
     process.stdout.write(`${JSON.stringify(receipt, null, 2)}\n`);
     process.exit(receipt.accepted ? 0 : 13);
   }
