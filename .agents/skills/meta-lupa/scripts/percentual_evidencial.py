@@ -14,6 +14,7 @@ import argparse
 import hashlib
 import json
 import re
+import subprocess
 import sys
 from pathlib import Path
 from typing import Any
@@ -37,6 +38,23 @@ def canonical_json(data: Any) -> str:
 
 def manifest_sha256(data: Any) -> str:
     return hashlib.sha256(canonical_json(data).encode("utf-8")).hexdigest()
+
+
+def current_head_sha() -> str:
+    """Resolve o HEAD real do checkout; self-audit sem HEAD vivo não sela 100%."""
+    try:
+        result = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+    except (OSError, subprocess.CalledProcessError) as exc:
+        raise RuntimeError("HEAD_SHA_UNAVAILABLE") from exc
+    value = result.stdout.strip()
+    if not HEAD_SHA_RE.fullmatch(value):
+        raise RuntimeError("HEAD_SHA_INVALID")
+    return value
 
 
 def _evidence_ok(value: Any) -> bool:
@@ -253,6 +271,9 @@ def run_self_test() -> dict[str, Any]:
     digest_b = manifest_sha256(_manifest(["PASS", "UNKNOWN"]))
     tests.append(("manifest_digest_is_deterministic", digest_a == digest_b and len(digest_a) == 64))
 
+    live_head = current_head_sha()
+    tests.append(("self_audit_binds_live_git_head", bool(HEAD_SHA_RE.fullmatch(live_head))))
+
     self_checks = [
         {
             "id": name,
@@ -266,7 +287,7 @@ def run_self_test() -> dict[str, Any]:
     audit_manifest = {
         "schema_version": SCHEMA_VERSION,
         "scope": "META_LUPA_PERCENTUAL_EVIDENCIAL_SELF_AUDIT",
-        "head_sha": "b" * 40,
+        "head_sha": live_head,
         "declared_denominator": len(self_checks),
         "checks": self_checks,
     }
