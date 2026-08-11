@@ -1,7 +1,7 @@
 -- Estende o plano de controle existente; não cria fila, serviço ou tabela paralela.
 -- A missão passa a carregar uma CAPACIDADE do catálogo MCP + argumentos JSON.
--- O claim é condicional no próprio UPDATE do consumidor (queued + approved),
--- e o banco garante no máximo um Writer running por scope, mesmo com várias instâncias.
+-- O claim é atômico no banco e escolhe somente scope sem Writer running,
+-- preservando uma única caneta ativa por scope mesmo com várias instâncias.
 
 alter table public.hub_missions
   add column if not exists capability text,
@@ -67,13 +67,64 @@ create index if not exists hub_missions_running_claim_idx
 
 -- PEN_POOL sem subsistema paralelo:
 -- queued = caneta em STOCK; running = LEASED. Várias canetas podem existir,
--- mas a transição queued->running é serializada pelo banco por writer_scope.
--- A unicidade é atômica: duas missões diferentes do mesmo scope não podem
--- manter dois Writers ativos ao mesmo tempo.
+-- mas duas missões do mesmo scope jamais podem permanecer LEASED juntas.
 create unique index if not exists hub_missions_one_running_writer_scope_idx
   on public.hub_missions (writer_scope)
   where state = 'running' and writer_scope is not null;
 
+-- Claim único e sem starvation entre scopes: o banco escolhe a missão mais
+-- antiga cujo scope não possui Writer ativo. FOR UPDATE SKIP LOCKED resolve
+-- corrida entre consumers; o índice UNIQUE acima é a segunda barreira atômica.
+create or replace function public.claim_next_hub_mission(p_worker_id text)
+returns setof public.hub_missions
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_worker_id text := left(nullif(btrim(p_worker_id), ''), 120);
+begin
+  if v_worker_id is null then
+    raise exception 'worker_id_required';
+  end if;
+
+  return query
+  with candidate as (
+    select queued.id
+    from public.hub_missions queued
+    where queued.state = 'queued'
+      and queued."authorization" = 'approved'
+      and queued.capability is not null
+      and queued.writer_scope is not null
+      and not exists (
+        select 1
+        from public.hub_missions active
+        where active.state = 'running'
+          and active.writer_scope = queued.writer_scope
+      )
+    order by queued.created_at asc
+    for update of queued skip locked
+    limit 1
+  )
+  update public.hub_missions mission
+  set state = 'running',
+      claimed_by = v_worker_id,
+      claimed_at = now(),
+      execution_status = 'claimed',
+      updated_at = now()
+  from candidate
+  where mission.id = candidate.id
+    and mission.state = 'queued'
+    and mission."authorization" = 'approved'
+  returning mission.*;
+end;
+$$;
+
+revoke all on function public.claim_next_hub_mission(text) from public, anon, authenticated;
+grant execute on function public.claim_next_hub_mission(text) to service_role;
+
+comment on function public.claim_next_hub_mission(text) is
+  'Claim atômico: escolhe missão queued/approved cujo writer_scope não está running; máximo 1 Writer ativo por scope.';
 comment on column public.hub_missions.capability is
   'Nome exato de uma tool do catálogo MCP CentralDark. NULL = missão sem execução automática.';
 comment on column public.hub_missions.input is
@@ -81,7 +132,7 @@ comment on column public.hub_missions.input is
 comment on column public.hub_missions.writer_scope is
   'Escopo lógico da caneta. Apenas uma missão pode permanecer running por writer_scope.';
 comment on column public.hub_missions.claimed_by is
-  'Instância que venceu o claim condicional queued->running.';
+  'Instância que venceu o claim atômico queued->running.';
 
 -- O grant antigo era SELECT de tabela inteira para authenticated. Depois que
 -- `input` passou a existir isso exporia argumentos internos. Revoga o grant de
