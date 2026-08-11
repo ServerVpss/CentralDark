@@ -10,7 +10,7 @@ const SHA_RE = /^[0-9a-f]{40}$/i;
 const AUTHORIZATIONS = new Set(['pending', 'approved', 'denied']);
 const RISKS = new Set(['R0', 'R1', 'R2', 'R3', 'R4']);
 const MAX_INPUT_BYTES = 20_000;
-const SENSITIVE_KEY_RE = /(^|[_-])(token|secret|password|passwd|authorization|cookie|session|api[_-]?key|private[_-]?key|service[_-]?role)([_-]|$)/i;
+const SENSITIVE_KEY_RE = /(token|secret|password|passwd|authorization|cookie|session|api[_-]?key|private[_-]?key|service[_-]?role)/i;
 const SENSITIVE_VALUE_RE = /(?:Bearer\s+\S{12,}|gh[pousr]_[A-Za-z0-9]{20,}|sb_(?:secret|publishable)_[A-Za-z0-9_-]{20,}|sk-[A-Za-z0-9]{20,}|-----BEGIN [A-Z ]*PRIVATE KEY-----)/i;
 
 function json(status: number, body: object) {
@@ -30,6 +30,12 @@ function containsSensitiveMaterial(value: unknown, depth = 0): boolean {
     );
   }
   return false;
+}
+
+function derivedWriterScope(capability: string | null): string | null {
+  if (!capability) return null;
+  const scope = `capability:${capability.toLowerCase()}`;
+  return WRITER_SCOPE_RE.test(scope) ? scope : null;
 }
 
 Deno.serve(async (req) => {
@@ -56,6 +62,7 @@ Deno.serve(async (req) => {
 
   const authorization = String(body.authorization || 'pending');
   if (!AUTHORIZATIONS.has(authorization)) return json(400, { error: 'authorization_invalid' });
+  if (authorization === 'approved') return json(403, { error: 'approval_requires_independent_gate' });
 
   const risk = String(body.risk || 'R1');
   if (!RISKS.has(risk)) return json(400, { error: 'risk_invalid' });
@@ -65,11 +72,11 @@ Deno.serve(async (req) => {
     : String(body.capability).trim();
   if (capability && !CAPABILITY_RE.test(capability)) return json(400, { error: 'capability_invalid' });
 
-  const writerScope = body.writer_scope == null || String(body.writer_scope).trim() === ''
-    ? null
-    : String(body.writer_scope).trim();
-  if (writerScope && !WRITER_SCOPE_RE.test(writerScope)) return json(400, { error: 'writer_scope_invalid' });
-  if (capability && !writerScope) return json(400, { error: 'writer_scope_required_for_execution' });
+  const writerScope = derivedWriterScope(capability);
+  if (capability && !writerScope) return json(400, { error: 'writer_scope_derivation_failed' });
+  if (body.writer_scope != null && String(body.writer_scope).trim() !== writerScope) {
+    return json(400, { error: 'writer_scope_is_server_derived', expected: writerScope });
+  }
 
   const branchSha = body.branch_sha == null || String(body.branch_sha).trim() === ''
     ? null
@@ -125,9 +132,9 @@ Deno.serve(async (req) => {
     ok: true,
     mission_id: data.id,
     mission: data,
-    auto_execution_eligible: authorization === 'approved' && Boolean(capability) && Boolean(writerScope) && Boolean(branchSha),
+    auto_execution_eligible: false,
     note: capability
-      ? 'Missão criada com capability MCP, writer_scope e revisão exata; o banco só permite uma lease running por scope.'
+      ? 'Missão criada pendente; writer_scope é derivado no servidor e aprovação exige gate independente.'
       : 'Missão criada sem capability; permanece observável, mas não entra no auto-executor.',
   });
 });
