@@ -14,11 +14,11 @@ const mcpAdmin = readFileSync(path.join(root, "src", "tools", "core", "mcp-admin
 const hubCommand = readFileSync(path.join(hubRoot, "supabase", "functions", "hub-command", "index.ts"), "utf8");
 const migration = readFileSync(path.join(hubRoot, "supabase", "migrations", "20260809_hub_mission_execution_contract.sql"), "utf8");
 
-test("consumer só reclama missão queued + approved com capability", () => {
-  assert.match(consumer, /state=eq\.queued/);
-  assert.match(consumer, /authorization=eq\.approved/);
-  assert.match(consumer, /capability=not\.is\.null/);
+test("consumer reclama missão por RPC atômica do plano de controle", () => {
+  assert.match(consumer, /rpc\/claim_next_hub_mission/);
+  assert.match(consumer, /p_worker_id:\s*WORKER_ID/);
   assert.match(consumer, /claimed_by/);
+  assert.doesNotMatch(consumer, /async function nextQueuedMission/);
 });
 
 test("execução passa pelo dispatcher admin canônico sem fabricar aprovação destrutiva", () => {
@@ -118,11 +118,18 @@ test("hub-command exige writer_scope e revisão exata para missão executável",
   assert.doesNotMatch(hubCommand, /commands/);
 });
 
-test("PEN_POOL reutiliza hub_missions: várias STOCK, no máximo uma LEASED por scope", () => {
+test("PEN_POOL reutiliza hub_missions com claim atômico e sem starvation entre scopes", () => {
   assert.match(migration, /add column if not exists writer_scope text/);
   assert.match(migration, /hub_missions_executable_scope_ck/);
   assert.match(migration, /check \(capability is null or writer_scope is not null\) not valid/i);
   assert.match(migration, /create unique index if not exists hub_missions_one_running_writer_scope_idx[\s\S]*on public\.hub_missions \(writer_scope\)[\s\S]*where state = 'running' and writer_scope is not null/i);
+  assert.match(migration, /create or replace function public\.claim_next_hub_mission\(p_worker_id text\)/i);
+  assert.match(migration, /queued\.state = 'queued'/);
+  assert.match(migration, /queued\."authorization" = 'approved'/);
+  assert.match(migration, /queued\.writer_scope is not null/);
+  assert.match(migration, /not exists \([\s\S]*active\.state = 'running'[\s\S]*active\.writer_scope = queued\.writer_scope[\s\S]*\)/i);
+  assert.match(migration, /for update of queued skip locked/i);
+  assert.match(migration, /grant execute on function public\.claim_next_hub_mission\(text\) to service_role/i);
   assert.match(migration, /queued = caneta em STOCK; running = LEASED/);
   assert.doesNotMatch(migration, /create table[^;]+pen[_-]?pool/i);
 });
