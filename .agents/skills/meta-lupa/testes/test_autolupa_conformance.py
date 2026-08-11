@@ -6,6 +6,7 @@ Regras:
 3. Falha se o veredito for APROVAR quando houver qualquer gap.
 4. Falha se a convocação do comitê independente (XP-3) e seu resultado estiverem ausentes.
 5. Falha se o git-blob SHA1 do SKILL.md local divergir do guard canônico.
+6. Falha se o guard deixar de explicar caminho, hash, validação, divergência e autoridade.
 
 Uso:
     AUTOLUPA_REPORT=caminho.md pytest .agents/skills/meta-lupa/testes/ -v
@@ -98,5 +99,31 @@ def test_hash_canonico_lupa_bate():
     esperado = HASH_GUARD.read_text(encoding="utf-8").strip().split()[0]
     assert atual == esperado, (
         f"Hash da Lupa divergente do canônico.\n  esperado: {esperado}\n  atual:    {atual}\n"
-        "Se intencional, rode scripts/lupa/validar_autolupa_hash.py --update com PERMITO_PIVETE=1."
+        "Se intencional, rode scripts/lupa/validar_autolupa_hash.py --update somente com autorização aplicável de SEGREDO/CHEFE."
     )
+
+
+def test_guard_explica_a_identidade_sem_enigma():
+    if not HASH_GUARD.exists():
+        pytest.fail(f"Guarda ausente: {HASH_GUARD}")
+
+    text = HASH_GUARD.read_text(encoding="utf-8")
+    first_line = text.splitlines()[0]
+    parts = first_line.split()
+
+    assert len(parts) >= 2, "Guard deve declarar hash e caminho na primeira linha"
+    assert re.fullmatch(r"[0-9a-f]{40}", parts[0]), "Primeiro campo do guard deve ser git-blob SHA1"
+    assert parts[1] == ".agents/skills/meta-lupa/SKILL.md", "Guard deve apontar para o SKILL.md canônico"
+
+    required_markers = (
+        "O_QUE_E=",
+        "COMO_LER=",
+        "CAMINHO_PROTEGIDO=",
+        "REGRA_BYTE_A_BYTE=",
+        "COMO_VALIDAR=",
+        "SE_DIVERGIR=",
+        "AUTORIDADE=SEGREDO/CHEFE",
+        "NAO_PROVA=",
+    )
+    missing = [marker for marker in required_markers if marker not in text]
+    assert not missing, f"Guard sem explicação suficiente: {missing}"
