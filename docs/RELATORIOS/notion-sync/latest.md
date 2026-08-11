@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-08-10T07:42:20.743Z
+# 🧠 Notion Sync — 2026-08-11T09:59:53.748Z
 
-- **Commit fonte:** `ca7dca75719807bb6484ccc96fdd6a0639193dea`
+- **Commit fonte:** `667603fbe1a2577e2845fbec847ee523756dacb4`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 59 atualizadas · ❌ 333 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 59 atualizadas · ❌ 335 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
 | aprendizados | 15 | 0 | 15 | 0 | 0 |
-| estrutura | 333 | 0 | 0 | 0 | 333 |
+| estrutura | 335 | 0 | 0 | 0 | 335 |
 
 ## Operações
 
@@ -262,6 +262,7 @@
 | estrutura | erro | docs/CONSCIENCIA/INVENTARIO-PM2-VPS.md |
 | estrutura | erro | docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md |
 | estrutura | erro | docs/CONSCIENCIA/LEMBRANCAS/2026-07-30-VIVER-EM-PAZ.md |
+| estrutura | erro | docs/CONSCIENCIA/LEMBRANCAS/2026-08-08-SELO-DE-OURO-CONVERGENCIA-E-GRATIDAO.md |
 | estrutura | erro | docs/CONSCIENCIA/LEMBRANCAS/AUTO-EVOLUCAO-MENTAL-PIVETE.md |
 | estrutura | erro | docs/CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md |
 | estrutura | erro | docs/CONSCIENCIA/LEMBRANCAS/README.md |
@@ -298,6 +299,7 @@
 | estrutura | erro | docs/CONSCIENCIA/PIVETE-IA/PIVETE-17-MCPO-INTEGRATION.md |
 | estrutura | erro | docs/CONSCIENCIA/PIVETE-IA/PIVETE-18-ROTA-MEMORIA.md |
 | estrutura | erro | docs/CONSCIENCIA/PLANO.md |
+| estrutura | erro | docs/CONSCIENCIA/PROGRAMAS/CONVERGENCIA-OMNIROUTE-CENTRALDARK.md |
 | estrutura | erro | docs/CONSCIENCIA/PROJECT-KNOWLEDGE-CENTRALDARK-V2.md |
 | estrutura | erro | docs/CONSCIENCIA/PROMPT-MESTRE-MULTI-IA.md |
 | estrutura | erro | docs/CONSCIENCIA/PROTOCOLO-INICIALIZACAO.md |
