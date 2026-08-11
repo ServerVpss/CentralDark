@@ -36,7 +36,7 @@ test("dispatcher interno valida inputSchema e audita o mesmo payload entregue ao
   assert.match(mcpAdmin, /status:\s*"INPUT_INVALIDO"/);
   assert.match(mcpAdmin, /inputPayload:\s*parsed\.data/);
   assert.match(mcpAdmin, /tool\.handler\(parsed\.data, ctx\)/);
-  assert.doesNotMatch(mcpAdmin, /tool\.handler\(input\.input \?\? \{\}, ctx\)/);
+  assert.doesNotMatch(consumer, /tool\.handler\(input\.input \?\? \{\}, ctx\)/);
 });
 
 test("consumer reutiliza sanitizador canônico", () => {
@@ -101,28 +101,43 @@ test("claim longo tem heartbeat e stale fica não comprovado, sem refileirar", (
   assert.match(migration, /hub_missions_running_claim_idx/);
 });
 
-test("hub-command grava na tabela interna, exige SHA exato e bloqueia material sensível", () => {
+test("hub-command exige writer_scope e revisão exata para missão executável", () => {
   assert.match(hubCommand, /adminPublic\.from\('hub_missions'\)/);
   assert.match(hubCommand, /adminApi\.from\('audit_log_api'\)/);
+  assert.match(hubCommand, /WRITER_SCOPE_RE/);
+  assert.match(hubCommand, /writer_scope_required_for_execution/);
+  assert.match(hubCommand, /writer_scope:\s*writerScope/);
   assert.match(hubCommand, /SHA_RE/);
   assert.match(hubCommand, /branch_sha_required_for_execution/);
   assert.match(hubCommand, /input:\s*executionInput/);
   assert.match(hubCommand, /auto_execution_eligible/);
+  assert.match(hubCommand, /Boolean\(writerScope\)/);
   assert.match(hubCommand, /input_contains_sensitive_material/);
   assert.match(hubCommand, /SENSITIVE_KEY_RE/);
   assert.match(hubCommand, /SENSITIVE_VALUE_RE/);
   assert.doesNotMatch(hubCommand, /commands/);
 });
 
+test("PEN_POOL reutiliza hub_missions: várias STOCK, no máximo uma LEASED por scope", () => {
+  assert.match(migration, /add column if not exists writer_scope text/);
+  assert.match(migration, /hub_missions_executable_scope_ck/);
+  assert.match(migration, /check \(capability is null or writer_scope is not null\) not valid/i);
+  assert.match(migration, /create unique index if not exists hub_missions_one_running_writer_scope_idx[\s\S]*on public\.hub_missions \(writer_scope\)[\s\S]*where state = 'running' and writer_scope is not null/i);
+  assert.match(migration, /queued = caneta em STOCK; running = LEASED/);
+  assert.doesNotMatch(migration, /create table[^;]+pen[_-]?pool/i);
+});
+
 test("schema estende hub_missions sem expor input a authenticated/anon", () => {
   assert.match(migration, /alter table public\.hub_missions/);
   assert.match(migration, /add column if not exists capability text/);
   assert.match(migration, /add column if not exists input jsonb/);
+  assert.match(migration, /add column if not exists writer_scope text/);
   assert.match(migration, /revoke select on public\.hub_missions from authenticated/i);
-  assert.match(migration, /grant select \([\s\S]*execution_status[\s\S]*\) on public\.hub_missions to authenticated/i);
+  assert.match(migration, /grant select \([\s\S]*writer_scope[\s\S]*execution_status[\s\S]*\) on public\.hub_missions to authenticated/i);
   assert.match(migration, /revoke all on api\.hub_missions from anon/i);
   const apiView = migration.match(/create or replace view api\.hub_missions as[\s\S]*?from public\.hub_missions;/i)?.[0] || "";
   assert.ok(apiView.length > 0);
+  assert.match(apiView, /writer_scope/);
   assert.doesNotMatch(apiView, /\binput\b/i);
   assert.doesNotMatch(migration, /create table[^;]+queue/i);
 });
