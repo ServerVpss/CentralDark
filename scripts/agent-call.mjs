@@ -146,21 +146,35 @@ function currentHealingReceipts(state) {
 
 function nextHealingLevel(state) {
   const receipts = currentHealingReceipts(state);
-  if (receipts.some((receipt) => receipt.status === "HEALED" && receipt.healed === true)) {
-    return { done: true, receipts, next: null };
-  }
   if (receipts.length === 0) return { done: false, receipts, next: "WELD" };
-
-  const last = receipts.at(-1);
-  if (last.status !== "FAILED" || last.healed !== false) {
+  if (receipts.length > HEALING_LEVELS.length) {
     return { done: false, receipts, invalid: "BLOCKED_INVALID_HEALING_HISTORY", next: null };
   }
-  const index = HEALING_LEVELS.indexOf(last.level);
-  if (index < 0) return { done: false, receipts, invalid: "BLOCKED_INVALID_HEALING_HISTORY", next: null };
-  if (index === HEALING_LEVELS.length - 1) {
+
+  for (let index = 0; index < receipts.length; index += 1) {
+    const receipt = receipts[index];
+    const expectedLevel = HEALING_LEVELS[index];
+    if (receipt.level !== expectedLevel) {
+      return { done: false, receipts, invalid: "BLOCKED_INVALID_HEALING_HISTORY", next: null };
+    }
+
+    const isLast = index === receipts.length - 1;
+    if (receipt.status === "HEALED") {
+      if (receipt.healed !== true || !isLast) {
+        return { done: false, receipts, invalid: "BLOCKED_INVALID_HEALING_HISTORY", next: null };
+      }
+      return { done: true, receipts, healedReceipt: receipt, next: null };
+    }
+
+    if (receipt.status !== "FAILED" || receipt.healed !== false) {
+      return { done: false, receipts, invalid: "BLOCKED_INVALID_HEALING_HISTORY", next: null };
+    }
+  }
+
+  if (receipts.length === HEALING_LEVELS.length) {
     return { done: false, receipts, exhausted: true, next: null };
   }
-  return { done: false, receipts, next: HEALING_LEVELS[index + 1] };
+  return { done: false, receipts, next: HEALING_LEVELS[receipts.length] };
 }
 
 /**
@@ -334,7 +348,7 @@ export function validateHealingGate(state) {
   const progression = nextHealingLevel(state);
   if (progression.invalid) return healingGateFail(progression.invalid, state);
   if (progression.done) {
-    const healed = progression.receipts.find((receipt) => receipt.status === "HEALED" && receipt.healed === true);
+    const healed = progression.healedReceipt;
     return {
       protocol: PROTOCOL,
       gate: "HEALING_STREET",
