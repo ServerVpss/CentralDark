@@ -8,6 +8,8 @@ on:
     paths:
       - ".agents/skills/meta-lupa/agents/nivel-7/**"
       - "scripts/nivel-7/**"
+      - "scripts/agent-call.mjs"
+      - "scripts/agent-call.test.mjs"
       - "public/downloads/lupa-bayesiana-nivel-7.zip"
       - "public/downloads/nivel-7-manifest.json"
       - ".github/workflows/nivel-7-tests.yml"
@@ -41,6 +43,14 @@ jobs:
         run: |
           set -euo pipefail
           test "$(git rev-parse HEAD)" = "$HEAD_SHA"
+
+      - name: Provar agent-call e esteira obrigatoria
+        run: |
+          set -euo pipefail
+          command -v node >/dev/null
+          node --check scripts/agent-call.mjs
+          node --check scripts/agent-call.test.mjs
+          node scripts/agent-call.test.mjs
 
       - uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38
         with:
