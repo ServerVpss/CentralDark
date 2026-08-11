@@ -17,12 +17,12 @@ function prFixture(overrides = {}) {
   return {
     number: 99,
     title: "fix: exemplo",
-    body: "PERMITO SEGREDO",
+    body: "sem marcador",
     state: "open",
     draft: false,
     mergeable: true,
     mergeable_state: "clean",
-    labels: [],
+    labels: [{ name: "permito-segredo" }],
     user: { login: "segredounlock" },
     head: {
       sha: "a".repeat(40),
@@ -47,39 +47,84 @@ function successfulRuns(required) {
   }));
 }
 
-test("autorização canônica reconhece SEGREDO no corpo ou label", () => {
-  const body = authorizationFor(prFixture());
-  assert.equal(body.authorized, true);
-  assert.equal(body.authority, "SEGREDO/CHEFE");
-  assert.equal(body.labelToApply, "permito-segredo");
-
-  const label = authorizationFor(
-    prFixture({ body: "sem marcador", labels: [{ name: "permito-segredo" }] }),
-  );
+test("autorização canônica vem somente da label persistente permito-segredo", () => {
+  const label = authorizationFor(prFixture());
   assert.equal(label.authorized, true);
   assert.equal(label.authority, "SEGREDO/CHEFE");
   assert.equal(label.viaLabel, true);
+  assert.equal(label.viaBody, false);
+  assert.equal(label.source, "github-label:permito-segredo");
+  assert.equal(label.persistence, "UNTIL_LABEL_REMOVED_OR_SCOPE_CHANGES");
+
+  const bodyOnly = authorizationFor(
+    prFixture({ body: "PERMITO SEGREDO", labels: [] }),
+  );
+  assert.equal(bodyOnly.authorized, false);
+  assert.equal(bodyOnly.authority, null);
+  assert.equal(bodyOnly.historicalBodyMarker, true);
 });
 
-test("marcador antigo continua compatível sem transformar Pivete em autoridade", () => {
-  const body = authorizationFor(prFixture({ body: "PERMITO PIVETE" }));
-  assert.equal(body.authorized, true);
-  assert.equal(body.authority, "LEGACY_PIVETE_COMPAT");
+test("autorização persiste quando HEAD muda e a label continua no mesmo PR", () => {
+  const antes = authorizationFor(prFixture({
+    head: { sha: "a".repeat(40), ref: "fix/exemplo", repo: { full_name: "ServerVpss/CentralDark" } },
+  }));
+  const depois = authorizationFor(prFixture({
+    head: { sha: "c".repeat(40), ref: "fix/exemplo", repo: { full_name: "ServerVpss/CentralDark" } },
+  }));
+  assert.equal(antes.authorized, true);
+  assert.equal(depois.authorized, true);
+  assert.equal(depois.persistence, "UNTIL_LABEL_REMOVED_OR_SCOPE_CHANGES");
+});
+
+test("legado Pivete e body histórico nunca concedem autoridade", () => {
+  const body = authorizationFor(prFixture({ body: "PERMITO PIVETE", labels: [] }));
+  assert.equal(body.authorized, false);
+  assert.equal(body.authority, null);
   assert.equal(body.legacy, true);
-  assert.equal(body.labelToApply, "permito-pivete");
+  assert.equal(body.historicalBodyMarker, true);
 
   const label = authorizationFor(
     prFixture({ body: "sem marcador", labels: [{ name: "permito-pivete" }] }),
   );
-  assert.equal(label.authorized, true);
-  assert.equal(label.authority, "LEGACY_PIVETE_COMPAT");
+  assert.equal(label.authorized, false);
+  assert.equal(label.authority, null);
   assert.equal(label.legacy, true);
 });
 
-test("sem marcador ou label a autorização permanece ausente", () => {
+test("sem label canônica a autorização permanece ausente", () => {
   const result = authorizationFor(prFixture({ body: "sem marcador", labels: [] }));
   assert.equal(result.authorized, false);
   assert.equal(result.authority, null);
+});
+
+test("needs-human genérico não apaga autorização já materializada", () => {
+  const required = ["gate"];
+  const result = evaluateCandidate({
+    pr: prFixture({ labels: [{ name: "permito-segredo" }, { name: "needs-human" }] }),
+    repository: "ServerVpss/CentralDark",
+    trustedAuthors: ["segredounlock"],
+    requiredWorkflows: required,
+    workflowRuns: successfulRuns(required),
+    unresolvedThreads: 0,
+  });
+  assert.equal(result.authorization.authorized, true);
+  assert.equal(result.decision, "READY");
+  assert.doesNotMatch(result.reasons.join(" "), /needs-human/);
+});
+
+test("hold explícito continua bloqueando prontidão sem apagar autorização", () => {
+  const required = ["gate"];
+  const result = evaluateCandidate({
+    pr: prFixture({ labels: [{ name: "permito-segredo" }, { name: "hold" }] }),
+    repository: "ServerVpss/CentralDark",
+    trustedAuthors: ["segredounlock"],
+    requiredWorkflows: required,
+    workflowRuns: successfulRuns(required),
+    unresolvedThreads: 0,
+  });
+  assert.equal(result.authorization.authorized, true);
+  assert.equal(result.decision, "BLOCKED");
+  assert.match(result.reasons.join(" "), /BLOCKING_LABEL:hold/);
 });
 
 test("seleção ignora run skipped mais nova e usa sucesso real", () => {
