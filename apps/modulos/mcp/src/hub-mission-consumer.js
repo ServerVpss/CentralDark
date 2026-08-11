@@ -120,36 +120,12 @@ function revisionVerdict(requestedSha, measuredSha) {
   return { ok: true, status: "REVISION_MATCH" };
 }
 
-async function nextQueuedMission() {
-  const query = [
-    "select=id,title,capability,input,authorization,risk,branch_sha,rollback,created_at",
-    "state=eq.queued",
-    "authorization=eq.approved",
-    "capability=not.is.null",
-    "order=created_at.asc",
-    "limit=1",
-  ].join("&");
-  const rows = await rest(`/rest/v1/hub_missions?${query}`);
-  return Array.isArray(rows) && rows.length > 0 ? rows[0] : null;
-}
-
-async function claimMission(candidate) {
-  const claimedAt = new Date().toISOString();
-  const id = encodeURIComponent(candidate.id);
-  const rows = await rest(
-    `/rest/v1/hub_missions?id=eq.${id}&state=eq.queued&authorization=eq.approved`,
-    {
-      method: "PATCH",
-      prefer: "return=representation",
-      body: {
-        state: "running",
-        claimed_by: WORKER_ID,
-        claimed_at: claimedAt,
-        execution_status: "claimed",
-        updated_at: claimedAt,
-      },
-    },
-  );
+async function claimNextMission() {
+  const rows = await rest("/rest/v1/rpc/claim_next_hub_mission", {
+    method: "POST",
+    prefer: "return=representation",
+    body: { p_worker_id: WORKER_ID },
+  });
   return Array.isArray(rows) && rows.length === 1 ? rows[0] : null;
 }
 
@@ -391,14 +367,12 @@ async function dispatchMission(mission) {
 }
 
 async function processOneMission() {
-  const candidate = await nextQueuedMission();
-  if (!candidate) return false;
-  const mission = await claimMission(candidate);
-  if (!mission) return false; // outra instância venceu o claim
+  const mission = await claimNextMission();
+  if (!mission) return false;
 
   state.lastMissionId = mission.id;
   try {
-    await appendEvent(mission.id, "claimed", "running", `worker=${WORKER_ID}; capability=${mission.capability}`);
+    await appendEvent(mission.id, "claimed", "running", `worker=${WORKER_ID}; scope=${String(mission.writer_scope || "unknown").slice(0, 200)}; capability=${mission.capability}`);
   } catch (err) {
     await releaseClaimBeforeDispatch(mission.id, "CLAIM_EVENT_WRITE_FAILED_REQUEUED");
     throw err;
@@ -424,7 +398,7 @@ async function processOneMission() {
 
     const receiptEvent = await appendReceiptEvent(mission, verdict.status, receiptText);
     await appendEvidence(mission, sha, receiptEvent.id);
-    await appendEvent(mission.id, "execution", verdict.status, `capability=${mission.capability}; receipt_sha256=${sha}; evidence_status=pending`);
+    await appendEvent(mission.id, "execution", verdict.status, `scope=${String(mission.writer_scope || "unknown").slice(0, 200)}; capability=${mission.capability}; receipt_sha256=${sha}; evidence_status=pending`);
     const finalStatus = verdict.ok ? `${verdict.status}:EVIDENCE_PENDING` : verdict.status;
     await finalizeMission(mission.id, verdict.ok, finalStatus);
 
