@@ -154,6 +154,12 @@ jobs:
       - name: Bloquear prova circular e cadeia sem âncora externa
         run: node scripts/lupa/proof-ownership.mjs
 
+      - name: Testar Dream Review isolado do memory-linker
+        run: node --test scripts/memory-linker/dream-review.test.mjs
+
+      - name: Validar sintaxe do Dream Review
+        run: node --check scripts/memory-linker/dream-review.mjs
+
       - name: Testar retomada fail-closed do Hermes
         run: node --test apps/modulos/HERMES-CORE/core/continuity-guard.test.mjs
 
@@ -235,6 +241,8 @@ jobs:
           echo "CENTRALDARK_API_SINGLE_ENTRY=1"
           echo "PROOF_OWNERSHIP_COVERAGE=PARTIAL_EXPLICIT"
           echo "UNREGISTERED_INVARIANT=UNPROVEN_NOT_OWNED"
+          echo "DREAM_REVIEW_ISOLATED=1"
+          echo "DREAM_DIRECT_CANONICAL_MUTATION=0"
           echo "JOB_STATUS=${JOB_STATUS}"
           if [ "${FORK_BLOCKED:-}" = "true" ]; then
             echo "RESULTADO=BLOCKED"
