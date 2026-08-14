@@ -10,12 +10,10 @@ export const CAPABILITY_KEYS = ['mermaid', 'canvas_html', 'structured_yaml'];
 const YES = new Set(['sim', 'yes', 'true', '1', 'suportado', 'supported']);
 const NO = new Set(['nao', 'não', 'no', 'false', '0', 'não_suportado', 'unsupported']);
 
-/** Remove diacríticos para comparar estados sem alterar o texto de saída. */
 function stripDiacritics(value) {
   return String(value ?? '').normalize('NFD').replace(/\p{Diacritic}/gu, '');
 }
 
-/** Normaliza uma declaração de capacidade para SIM, NAO ou UNKNOWN. */
 export function normalizeTriState(value) {
   const raw = String(value ?? '').trim().toLowerCase();
   const ascii = stripDiacritics(raw);
@@ -24,7 +22,6 @@ export function normalizeTriState(value) {
   return 'UNKNOWN';
 }
 
-/** Sanitiza metadados não confiáveis e limita o tamanho antes da publicação. */
 export function sanitizeText(value, maxLength = 12000) {
   let text = String(value ?? '').slice(0, maxLength);
   const patterns = [
@@ -38,11 +35,9 @@ export function sanitizeText(value, maxLength = 12000) {
     [/(api[_-]?key|secret|password|passwd|token)\s*[:=]\s*["']?[A-Za-z0-9._~+/=-]{16,}/gi, '$1=[REDACTED]'],
   ];
   for (const [pattern, replacement] of patterns) text = text.replace(pattern, replacement);
-  // Evita menções automáticas e HTML injetável em comentário/artefato.
   return text.replaceAll('@', '@\u200b').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
 }
 
-/** Codifica um valor para uma única linha segura em Markdown inline. */
 export function escapeMarkdownInline(value) {
   return String(value ?? '')
     .replace(/[\r\n\t]+/g, ' ')
@@ -51,7 +46,6 @@ export function escapeMarkdownInline(value) {
     .replace(/([\\`*_{}\[\]()#+.!|>\-])/g, '\\$1');
 }
 
-/** Normaliza um número de PR sem coerção ampla de booleanos ou notação exponencial. */
 export function normalizePrNumber(value) {
   if (typeof value === 'number') {
     if (Number.isSafeInteger(value) && value > 0) return value;
@@ -64,7 +58,6 @@ export function normalizePrNumber(value) {
   throw new TypeError('PR_NUMBER_INVALID');
 }
 
-/** Extrai o contrato AI_CAPABILITIES da descrição do Pull Request. */
 export function parseCapabilities(body) {
   const result = {
     mermaid: 'UNKNOWN',
@@ -91,7 +84,6 @@ export function parseCapabilities(body) {
   return result;
 }
 
-/** Classifica somente metadados de paths, sem abrir o conteúdo dos arquivos. */
 export function classifyFiles(files = []) {
   const categories = {
     workflows: 0,
@@ -116,7 +108,6 @@ export function classifyFiles(files = []) {
   return categories;
 }
 
-/** Valida o envelope mínimo necessário para gerar um artefato reproduzível. */
 export function validateInput(input) {
   if (!input || typeof input !== 'object' || Array.isArray(input)) throw new TypeError('INPUT_NOT_OBJECT');
   normalizePrNumber(input.pr_number);
@@ -142,7 +133,6 @@ export function validateInput(input) {
   }
 }
 
-/** Produz uma representação estável e sanitizada para cálculo do digest. */
 function stableInput(input) {
   const files = [...input.files]
     .map((file) => ({
@@ -164,7 +154,6 @@ function stableInput(input) {
   };
 }
 
-/** Gera Markdown, Canvas HTML, receipt e decisão de roteamento de suporte. */
 export function buildArtifact(input) {
   validateInput(input);
   const stable = stableInput(input);
@@ -284,7 +273,7 @@ export function buildArtifact(input) {
         ? `Faltam capacidades declaradas: ${missing.join(', ')}. O bot pede suporte sem mudar a autoria do código.`
         : 'Todas as capacidades foram declaradas como suportadas, sem verificação independente.',
     `Fonte das capacidades: ${capabilitySource}.`,
-    'O artefato não aprova o PR: ele organiza contexto; testes, revisão e gates continuam obrigatórios.',
+    'O artefato não aprova, não reprova nem decide autorização de merge; ele organiza contexto. Testes, revisão e contratos canônicos continuam decidindo.',
   ].join(' ');
 
   const markdown = [
@@ -325,11 +314,11 @@ export function buildArtifact(input) {
     `MISSING_CAPABILITIES=${missing.join(',') || 'NENHUMA'}`,
     `SENSITIVE_PATHS=${categories.sensitive_paths}`,
     `ARTIFACT_DIGEST=${artifactDigest}`,
-    'PR_APPROVED=NAO',
-    'MERGE_AUTHORIZED=NAO',
+    'PR_APPROVAL_DECISION=NOT_EVALUATED_BY_ARTIFACT',
+    'MERGE_AUTHORIZATION_DECISION=NOT_EVALUATED_BY_ARTIFACT',
     '```',
     '',
-    '> Este comentário é idempotente e deve ser atualizado no mesmo marcador. É contexto verificável, não prova de funcionamento do código.',
+    '> Este comentário é idempotente e deve ser atualizado no mesmo marcador. É contexto verificável; não é fonte de autoridade humana nem prova de funcionamento do código.',
   ].join('\n');
 
   const states = [
@@ -407,7 +396,6 @@ ctx.fillText('SUPORTE NÃO TRANSFERE O WRITER DO CÓDIGO.',28,382);
   };
 }
 
-/** Converte argumentos simples --chave valor da CLI em objeto. */
 function parseArgs(argv) {
   const args = {};
   for (let i = 0; i < argv.length; i += 1) {
@@ -419,7 +407,6 @@ function parseArgs(argv) {
   return args;
 }
 
-/** Publica saídas escalares no arquivo GITHUB_OUTPUT quando disponível. */
 function appendGithubOutput(file, result) {
   if (!file) return;
   const lines = [
@@ -434,7 +421,6 @@ function appendGithubOutput(file, result) {
   fs.appendFileSync(file, `${lines.join('\n')}\n`, 'utf8');
 }
 
-/** Executa a CLI sem efeitos fora dos paths de saída explicitamente informados. */
 async function main() {
   const args = parseArgs(process.argv.slice(2));
   if (!args.input || !args.markdown || !args.html) {
