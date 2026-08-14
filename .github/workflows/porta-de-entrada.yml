@@ -148,6 +148,12 @@ jobs:
       - name: Validar identidade SEGREDO → SOL → PIVETE/HERMES
         run: node scripts/lupa/validar-identidade-operacional.mjs
 
+      - name: Testar grafo finito de propriedade da prova
+        run: node --test scripts/lupa/proof-ownership.test.mjs
+
+      - name: Bloquear prova circular e cadeia sem âncora externa
+        run: node scripts/lupa/proof-ownership.mjs
+
       - name: Testar retomada fail-closed do Hermes
         run: node --test apps/modulos/HERMES-CORE/core/continuity-guard.test.mjs
 
@@ -202,6 +208,7 @@ jobs:
             --head-sha "$HEAD_SHA" \
             --json || status=1
           node scripts/lupa/validar-identidade-operacional.mjs --json || status=1
+          node scripts/lupa/proof-ownership.mjs || status=1
           exit "$status"
 
       - name: Receipt determinístico (sempre)
@@ -226,6 +233,7 @@ jobs:
           echo "MOTHER_BRANCH_GATED=1"
           echo "CANONICAL_LABELS_REQUIRED=1"
           echo "CENTRALDARK_API_SINGLE_ENTRY=1"
+          echo "PROOF_OWNERSHIP_REQUIRED=1"
           echo "JOB_STATUS=${JOB_STATUS}"
           if [ "${FORK_BLOCKED:-}" = "true" ]; then
             echo "RESULTADO=BLOCKED"
