@@ -33,6 +33,38 @@ has_cmd() { command -v "$1" >/dev/null 2>&1; }
 # Roda comando e retorna saída (best-effort, não quebra em erro)
 safe_run() { "$@" 2>&1 || true; }
 
-# Caminhos padrão CentralDark / Multizap (legado)
-export CK_MULTIZAP_ROOT="${CK_MULTIZAP_ROOT:-/root/Multizap}"
-export CK_CENTRALDARK_ROOT="${CK_CENTRALDARK_ROOT:-/root/CentralDark}"
+# Fronteira canônica da VPS. A raiz é fixa: override externo não muda autoridade.
+# Caminho candidato é resolvido antes da comparação para bloquear ../ e symlink escape.
+CK_CANONICAL_ROOT='/root/CentralDark'
+CK_REQUESTED_REPO_ROOT="${CK_REPO_ROOT:-$CK_CANONICAL_ROOT}"
+export CK_CENTRALDARK_ROOT="$CK_CANONICAL_ROOT"
+export CK_REPO_ROOT="$CK_CANONICAL_ROOT"
+export CK_EXTERNAL_ROOT_POLICY="OUT_OF_SCOPE"
+
+canonicalize_path() {
+  realpath -m -- "${1:-}" 2>/dev/null
+}
+
+is_canonical_path() {
+  local requested_root resolved_root resolved_path
+  requested_root="$(canonicalize_path "$CK_REQUESTED_REPO_ROOT")" || return 1
+  resolved_root="$(canonicalize_path "$CK_CANONICAL_ROOT")" || return 1
+  resolved_path="$(canonicalize_path "${1:-}")" || return 1
+
+  [ "$requested_root" = "$resolved_root" ] || return 1
+
+  case "$resolved_path" in
+    "$resolved_root"|"$resolved_root"/*) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
+require_canonical_path() {
+  local bloco="$1"
+  local path="$2"
+  if is_canonical_path "$path"; then
+    return 0
+  fi
+  emit_erro "$bloco" "Caminho fora da fronteira CentralDark bloqueado: $path"
+  return 1
+}

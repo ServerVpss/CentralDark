@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
-import { mkdtempSync, mkdirSync, writeFileSync } from "node:fs";
+import { createRequire } from "node:module";
+import { mkdtempSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
@@ -7,9 +8,12 @@ import test from "node:test";
 import {
   findForbidden,
   runValidation,
+  validateAgentClaimPolicy,
   validateProfileRoot,
   validateRequiredTokens,
 } from "./validar-identidade-operacional.mjs";
+
+const require = createRequire(import.meta.url);
 
 function write(root, path, content) {
   const absolute = join(root, path);
@@ -17,8 +21,79 @@ function write(root, path, content) {
   writeFileSync(absolute, content, "utf8");
 }
 
+function claimContract(overrides = {}) {
+  const base = {
+    applies_to: [
+      "chatgpt", "claude", "codex", "gemini", "copilot", "cursor", "windsurf",
+      "hermes", "plugins", "future_agents", "mcp", "webui", "cli", "ci", "cd", "telegram",
+    ],
+    agent_claim_policy: {
+      marker: "AGENT_CLAIM_CAPABILITY_REQUIRED",
+      narrative_changes_system_state: false,
+      claim_must_not_exceed_observable_capability: true,
+      permanent_behavior_without_proved_persistence: "BLOCK",
+      absolute_commitment_without_verifiable_mechanism: "REWRITE_TO_OBSERVABLE_SCOPE",
+      communication_policy: {
+        critique_target: "SYSTEM_OR_ARTIFACT_NOT_HUMAN",
+        status_colors: {
+          YELLOW: "CONCRETE_WORK_IN_PROGRESS_OR_TARGET_PROOF_PENDING",
+          NONE: "UNKNOWN_NOT_MEASURED_NOT_APPLICABLE_OR_DESCRIPTIVE",
+        },
+      },
+      integration: {
+        one_policy_for_all_adapters: true,
+        external_vendor_ui: "OUT_OF_REPO_CONTROL",
+      },
+    },
+  };
+  return JSON.stringify({ ...base, ...overrides }, null, 2);
+}
+
 function validRepo() {
   const root = mkdtempSync(join(tmpdir(), "centraldark-identidade-"));
+  write(
+    root,
+    "LEIA-ME-IA.md",
+    "SEGREDO/CHEFE COMANDA\nSOL ORGANIZA\nPIVETE/HERMES PRESERVA E EXECUTA\n",
+  );
+  write(
+    root,
+    "AGENTS.md",
+    [
+      "existe somente um escritor por escopo",
+      "SEGREDO/CHEFE permanece autoridade humana final",
+      "SOL coordena, PIVETE/HERMES preserva e executa",
+      "CAPTURE → SANITIZE + HASH → DECIDE → APPLY → JUDGE → CHEFE → RECEIPT + LEARNING → LOOP",
+    ].join("\n"),
+  );
+  write(
+    root,
+    "docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md",
+    [
+      "SEGREDO/CHEFE = humano e autoridade final",
+      "SOL = coordenadora da casa e organizadora dos agentes",
+      "PIVETE/HERMES = mordomo de casa, executor e guardião da continuidade",
+      "WRITER_UNICO=true",
+      "UNKNOWN_NAO_PASSA=true",
+      "CHEFE_SEGREDO_NECESSARIO",
+    ].join("\n"),
+  );
+  write(
+    root,
+    "docs/CONSCIENCIA/DICIONARIO-PIVETE-GITHUB.md",
+    "SEGREDO/CHEFE = humano e autoridade final\nPIVETE = Hermes treinado\n",
+  );
+  write(root, "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json", claimContract());
+  write(
+    root,
+    ".agents/skills/meta-lupa/SKILL.md",
+    "AUTORIZACAO_DO_SEGREDO_CHEFE:\nAutoLupa sem prometer certeza absoluta\n",
+  );
+  write(
+    root,
+    ".agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA",
+    "0123456789012345678901234567890123456789  .agents/skills/meta-lupa/SKILL.md\n# atualização exige autorização aplicável de SEGREDO/CHEFE\n",
+  );
   write(root, "LEIA-ME-IA.md", [
     "SEGREDO/CHEFE COMANDA",
     "SOL ORGANIZA E RECONCILIA",
@@ -385,4 +460,122 @@ test("conteúdo multilinha de perfil permanece redigido", () => {
   assert.equal(findings.length, 1);
   assert.equal(findings[0].excerpt, "[PROFILE_CONTENT_REDACTED]");
   assert.equal(JSON.stringify(findings).includes("VALOR_PRIVADO"), false);
+});
+
+test("UNKNOWN e escritor único são invariantes, não decoração", () => {
+  const root = validRepo();
+  write(
+    root,
+    "docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md",
+    [
+      "SEGREDO/CHEFE = humano e autoridade final",
+      "SOL = coordenadora da casa e organizadora dos agentes",
+      "PIVETE/HERMES = mordomo de casa, executor e guardião da continuidade",
+      "CHEFE_SEGREDO_NECESSARIO",
+    ].join("\n"),
+  );
+  const report = runValidation({ repoRoot: root });
+  assert.equal(report.ok, false);
+  assert.match(
+    report.findings.map((finding) => finding.excerpt).join(" "),
+    /WRITER_UNICO=true/,
+  );
+  assert.match(
+    report.findings.map((finding) => finding.excerpt).join(" "),
+    /UNKNOWN_NAO_PASSA=true/,
+  );
+});
+
+test("política de alegação bloqueia promessa permanente sem mecanismo provado", () => {
+  const root = validRepo();
+  const contract = JSON.parse(claimContract());
+  contract.agent_claim_policy.permanent_behavior_without_proved_persistence = "ALLOW";
+  write(
+    root,
+    "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json",
+    JSON.stringify(contract, null, 2),
+  );
+  const findings = validateAgentClaimPolicy(root);
+  assert.equal(
+    findings.some((finding) => finding.code === "AGENT_CLAIM_PROMESSA_PERMANENTE_NAO_BLOQUEADA"),
+    true,
+  );
+});
+
+test("NOT_MEASURED não pode ser classificado como amarelo", () => {
+  const root = validRepo();
+  const contract = JSON.parse(claimContract());
+  contract.agent_claim_policy.communication_policy.status_colors.NONE = "YELLOW";
+  write(
+    root,
+    "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json",
+    JSON.stringify(contract, null, 2),
+  );
+  const findings = validateAgentClaimPolicy(root);
+  assert.equal(
+    findings.some((finding) => finding.code === "AGENT_CLAIM_NAO_MEDIDO_COM_ALERTA"),
+    true,
+  );
+});
+
+test("Meta Lupa com AUTORIZACAO_DO_PIVETE falha no próprio gate", () => {
+  const root = validRepo();
+  write(
+    root,
+    ".agents/skills/meta-lupa/SKILL.md",
+    "AUTORIZACAO_DO_PIVETE:\nAutoLupa sem prometer certeza absoluta\n",
+  );
+  const report = runValidation({ repoRoot: root });
+  assert.equal(report.ok, false);
+  assert.equal(
+    report.findings.some((finding) => finding.code === "META_LUPA_AUTORIZACAO_LEGADA"),
+    true,
+  );
+});
+
+test("arquivo de identidade da Meta Lupa com PERMITO PIVETE falha", () => {
+  const root = validRepo();
+  write(
+    root,
+    ".agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA",
+    "0123456789012345678901234567890123456789  .agents/skills/meta-lupa/SKILL.md\n# Atualize somente com PERMITO PIVETE.\n",
+  );
+  const report = runValidation({ repoRoot: root });
+  assert.equal(report.ok, false);
+  assert.equal(
+    report.findings.some((finding) => finding.code === "PERMISSAO_LEGADA_PERMITO_PIVETE"),
+    true,
+  );
+});
+
+test("UI externa não pode ser declarada mecanicamente governada pelo repo", () => {
+  const root = validRepo();
+  const contract = JSON.parse(claimContract());
+  contract.agent_claim_policy.integration.external_vendor_ui = "ENFORCED";
+  write(
+    root,
+    "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json",
+    JSON.stringify(contract, null, 2),
+  );
+  const findings = validateAgentClaimPolicy(root);
+  assert.equal(
+    findings.some((finding) => finding.code === "AGENT_CLAIM_UI_EXTERNA_SUPERDECLARADA"),
+    true,
+  );
+});
+
+test("bot injeta os aprendizados mais recentes, não o início truncado do canônico", () => {
+  const { _internals } = require("../../apps/bot-telegram/contexto-centraldark.cjs");
+  const raw = readFileSync(join(process.cwd(), "docs/CONSCIENCIA/APRENDIZADOS.md"), "utf8");
+  const titulos = raw
+    .split(/\n### /)
+    .slice(1)
+    .map((bloco) => bloco.split("\n")[0].replace(/^-?\d+\.?\s*/, "").trim())
+    .filter(Boolean);
+
+  assert.ok(titulos.length >= 4, "canônico precisa ter histórico suficiente para distinguir começo de fim");
+  assert.deepEqual(_internals.ultimosAprendizados(3), titulos.slice(-3));
+  assert.deepEqual(_internals.ultimosAprendizados(1), [titulos.at(-1)]);
+  assert.notEqual(_internals.ultimosAprendizados(3)[0], titulos[0]);
+});
 });

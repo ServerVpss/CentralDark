@@ -84,6 +84,10 @@ jobs:
             { encoding: 'utf8' },
           );
           const canonical = new Set([...seed.matchAll(/name:\s*'([^']+)'/g)].map((match) => match[1]));
+          const temporaryAuthorityAliases = new Set(['permito-segredo', 'permito-pivete', 'PERMITO-SEGREDO', 'PERMITO-PIVETE']);
+          const canonicalPresent = labels.filter((label) => canonical.has(label));
+          const invalid = labels.filter((label) => !canonical.has(label) && !temporaryAuthorityAliases.has(label));
+          const authorityCompat = labels.filter((label) => temporaryAuthorityAliases.has(label));
           const authorityAliases = new Set(['permito-segredo', 'PERMITO-SEGREDO']);
           const canonicalPresent = labels.filter((label) => canonical.has(label));
           const invalid = labels.filter((label) => !canonical.has(label) && !authorityAliases.has(label));
@@ -98,6 +102,7 @@ jobs:
             process.exit(1);
           }
           if (authorityCompat.length > 0) {
+            console.log(`LABEL_GATE_COMPAT_AUTHORITY=${authorityCompat.length} aguardando_migracao_issue_707=1`);
             console.log(`LABEL_GATE_AUTHORITY_SEGREDO=${authorityCompat.length}`);
           }
           console.log(`LABEL_GATE=PASS canonical=${canonicalPresent.length}`);
@@ -148,6 +153,17 @@ jobs:
       - name: Validar identidade SEGREDO → SOL → PIVETE/HERMES
         run: node scripts/lupa/validar-identidade-operacional.mjs
 
+      - name: Testar kernel portátil e entrada multimodal
+        run: node --test scripts/lupa/portable-kernel.test.mjs
+
+      - name: Regenerar pacote portátil a partir do HEAD vivo
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/lupa/portable-kernel.mjs \
+            --export "$RUNNER_TEMP/CENTRALDARK-PORTABLE-KERNEL.json" \
+            --json
+          sha256sum "$RUNNER_TEMP/CENTRALDARK-PORTABLE-KERNEL.json"
       - name: Testar grafo finito de propriedade da prova
         run: node --test scripts/lupa/proof-ownership.test.mjs
 
@@ -214,6 +230,7 @@ jobs:
             --head-sha "$HEAD_SHA" \
             --json || status=1
           node scripts/lupa/validar-identidade-operacional.mjs --json || status=1
+          node scripts/lupa/portable-kernel.mjs --json || status=1
           node scripts/lupa/proof-ownership.mjs || status=1
           exit "$status"
 
@@ -239,6 +256,8 @@ jobs:
           echo "MOTHER_BRANCH_GATED=1"
           echo "CANONICAL_LABELS_REQUIRED=1"
           echo "CENTRALDARK_API_SINGLE_ENTRY=1"
+          echo "CENTRALDARK_PORTABLE_KERNEL=1"
+          echo "IMAGE_INPUT_IS_OPERATIONAL=1"
           echo "PROOF_OWNERSHIP_COVERAGE=PARTIAL_EXPLICIT"
           echo "UNREGISTERED_INVARIANT=UNPROVEN_NOT_OWNED"
           echo "DREAM_REVIEW_ISOLATED=1"

@@ -4,6 +4,10 @@ import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { extname, join, relative, resolve, sep } from "node:path";
 import { pathToFileURL } from "node:url";
 
+const CONTRACT_PATH = "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json";
+const META_LUPA_PATH = ".agents/skills/meta-lupa/SKILL.md";
+const META_LUPA_IDENTITY_PATH = ".agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA";
+
 const CANONICAL = Object.freeze({
   "LEIA-ME-IA.md": [
     "SEGREDO/CHEFE COMANDA",
@@ -86,6 +90,12 @@ const CANONICAL = Object.freeze({
     "SEGREDO/CHEFE = humano e autoridade final",
     "PIVETE = Hermes treinado",
   ],
+  [META_LUPA_PATH]: [
+    "AUTORIZACAO_DO_SEGREDO_CHEFE:",
+    "sem prometer certeza absoluta",
+  ],
+  [META_LUPA_IDENTITY_PATH]: [
+    "SEGREDO/CHEFE",
   "apps/modulos/elite-gateway/scripts/pivete_routes.py": [
     "CANONICAL_CONTEXT",
     "CANONICAL_CONTEXT_ALLOWLIST",
@@ -141,6 +151,38 @@ const ACTIVE_IDENTITY_SURFACES = Object.freeze([
 ]);
 
 const FORBIDDEN_CANONICAL = Object.freeze([
+  {
+    code: "PIVETE_COMO_AUTORIDADE_FINAL",
+    pattern: /\bO Pivete é a autoridade final\b/i,
+  },
+  {
+    code: "TITULO_AUTORIDADE_DO_PIVETE",
+    pattern: /\bAutoridade do Pivete\b/i,
+  },
+  {
+    code: "PIVETE_GOVERNA_INTENCAO",
+    pattern: /\bO Pivete governa a intenção\b/i,
+  },
+  {
+    code: "DECISAO_FINAL_ATRIBUIDA_AO_PIVETE",
+    pattern: /\bdecisão final do Pivete\b/i,
+  },
+  {
+    code: "PIVETE_AUTORIDADE_FINAL_MAQUINA",
+    pattern: /\bPIVETE\s*=\s*AUTORIDADE_FINAL\b/i,
+  },
+  {
+    code: "UNKNOWN_CONVERTIDO_EM_PASS",
+    pattern: /\bUNKNOWN\s*(?:=|:|→|->)\s*PASS\b/i,
+  },
+  {
+    code: "META_LUPA_AUTORIZACAO_LEGADA",
+    pattern: /\bAUTORIZACAO_DO_PIVETE\b/i,
+  },
+  {
+    code: "PERMISSAO_LEGADA_PERMITO_PIVETE",
+    pattern: /\bPERMITO[ _-]?PIVETE\b/i,
+  },
   { code: "PIVETE_COMO_AUTORIDADE_FINAL", pattern: /\bO Pivete é a autoridade final\b/i },
   { code: "TITULO_AUTORIDADE_DO_PIVETE", pattern: /\bAutoridade do Pivete\b/i },
   { code: "PIVETE_GOVERNA_INTENCAO", pattern: /\bO Pivete governa a intenção\b/i },
@@ -171,6 +213,23 @@ const FORBIDDEN_PROFILE = Object.freeze([
   },
 ]);
 
+const REQUIRED_CLAIM_SURFACES = Object.freeze([
+  "chatgpt",
+  "claude",
+  "codex",
+  "gemini",
+  "copilot",
+  "cursor",
+  "windsurf",
+  "hermes",
+  "plugins",
+  "future_agents",
+  "mcp",
+  "webui",
+  "cli",
+  "ci",
+  "cd",
+  "telegram",
 const FORBIDDEN_LOADER = Object.freeze([
   { code: "LOADER_GLOB_PIVETE_IA", pattern: /glob\(["']PIVETE-\*\.md["']\)/i },
   { code: "LOADER_CONCAT_ALL_PIVETE_FILES", pattern: /concat_all_files_in_order/i },
@@ -255,6 +314,16 @@ function safeRead(path) {
   }
 }
 
+function safeJson(path) {
+  const text = safeRead(path);
+  if (text == null) return null;
+  try {
+    return JSON.parse(text);
+  } catch {
+    return null;
+  }
+}
+
 function isSensitive(relativePath) {
   const normalized = relativePath.split(sep).map((part) => part.toLowerCase());
   return normalized.some((part) => {
@@ -299,6 +368,53 @@ export function validateProfileRoot(root) {
   return findings;
 }
 
+export function validateAgentClaimPolicy(repoRoot) {
+  const findings = [];
+  const path = join(repoRoot, CONTRACT_PATH);
+  const contract = safeJson(path);
+  if (!contract) {
+    findings.push({
+      code: "AGENT_CLAIM_CONTRATO_AUSENTE_OU_INVALIDO",
+      path: CONTRACT_PATH,
+      line: null,
+      excerpt: "Contrato machine-readable ausente ou inválido.",
+    });
+    return findings;
+  }
+
+  const policy = contract.agent_claim_policy ?? {};
+  const checks = [
+    [policy.marker === "AGENT_CLAIM_CAPABILITY_REQUIRED", "AGENT_CLAIM_MARKER_AUSENTE"],
+    [policy.narrative_changes_system_state === false, "AGENT_CLAIM_NARRATIVA_MUDA_ESTADO"],
+    [policy.claim_must_not_exceed_observable_capability === true, "AGENT_CLAIM_CAPACIDADE_NAO_LIMITA_ALEGACAO"],
+    [policy.permanent_behavior_without_proved_persistence === "BLOCK", "AGENT_CLAIM_PROMESSA_PERMANENTE_NAO_BLOQUEADA"],
+    [policy.absolute_commitment_without_verifiable_mechanism === "REWRITE_TO_OBSERVABLE_SCOPE", "AGENT_CLAIM_ABSOLUTO_SEM_REBAIXAMENTO"],
+    [policy.communication_policy?.critique_target === "SYSTEM_OR_ARTIFACT_NOT_HUMAN", "AGENT_CLAIM_CRITICA_PODE_ATINGIR_HUMANO"],
+    [policy.communication_policy?.status_colors?.YELLOW === "CONCRETE_WORK_IN_PROGRESS_OR_TARGET_PROOF_PENDING", "AGENT_CLAIM_AMARELO_SEM_PENDENCIA_CONCRETA"],
+    [policy.communication_policy?.status_colors?.NONE === "UNKNOWN_NOT_MEASURED_NOT_APPLICABLE_OR_DESCRIPTIVE", "AGENT_CLAIM_NAO_MEDIDO_COM_ALERTA"],
+    [policy.integration?.one_policy_for_all_adapters === true, "AGENT_CLAIM_POLITICA_FRAGMENTADA"],
+    [policy.integration?.external_vendor_ui === "OUT_OF_REPO_CONTROL", "AGENT_CLAIM_UI_EXTERNA_SUPERDECLARADA"],
+  ];
+
+  for (const [ok, code] of checks) {
+    if (!ok) findings.push({ code, path: CONTRACT_PATH, line: null, excerpt: policy.marker || "AUSENTE" });
+  }
+
+  const applies = new Set(Array.isArray(contract.applies_to) ? contract.applies_to : []);
+  for (const surface of REQUIRED_CLAIM_SURFACES) {
+    if (!applies.has(surface)) {
+      findings.push({
+        code: "AGENT_CLAIM_SUPERFICIE_AUSENTE",
+        path: CONTRACT_PATH,
+        line: null,
+        excerpt: surface,
+      });
+    }
+  }
+
+  return findings;
+}
+
 export function validateRepository(repoRoot) {
   const findings = [];
   const alreadyChecked = new Set();
@@ -324,6 +440,7 @@ export function validateRepository(repoRoot) {
     findings.push(...validateRequiredTokens(text, tokens, path));
     findings.push(...findForbidden(text, FORBIDDEN_CANONICAL, path));
   }
+  findings.push(...validateAgentClaimPolicy(repoRoot));
 
   for (const path of ACTIVE_IDENTITY_SURFACES) {
     if (alreadyChecked.has(path)) continue;
@@ -368,6 +485,7 @@ export function runValidation({ repoRoot, profileRoots = [] }) {
     information_gain_required: true,
     writer_rule: "WRITER_UNICO",
     unknown_rule: "UNKNOWN_NAO_PASSA",
+    agent_claim_rule: "AGENT_CLAIM_CAPABILITY_REQUIRED",
     canonical_findings: canonicalFindings,
     profile_reports: profileReports,
     findings: [...canonicalFindings, ...profileFindings],
@@ -380,6 +498,13 @@ function printHuman(report) {
     const location = `${finding.profile_root ? `${finding.profile_root}:` : ""}${finding.path}${finding.line ? `:${finding.line}` : ""}`;
     console.error(`IDENTIDADE_ERRO ${finding.code} ${location} :: ${finding.excerpt}`);
   }
+  console.log(
+    `IDENTIDADE_OK=${report.ok ? 1 : 0} ` +
+      `AUTORIDADE=SEGREDO_CHEFE COORDENADOR=SOL EXECUTOR=PIVETE_HERMES ` +
+      `AGENT_CLAIM=AGENT_CLAIM_CAPABILITY_REQUIRED ` +
+      `ERROS=${report.findings.length}`,
+  );
+  console.log(`IDENTIDADE_OK=${report.ok ? 1 : 0} AUTORIDADE=SEGREDO_CHEFE COORDENADOR=SOL EXECUTOR=PIVETE_HERMES SOUL=CANONICA MERGE=AUTO_SQUASH_IF_CLEAN ERROS=${report.findings.length}`);
   console.log(`IDENTIDADE_OK=${report.ok ? 1 : 0} AUTORIDADE=SEGREDO_CHEFE COORDENADOR=SOL EXECUTOR=PIVETE_HERMES LOADER=CANONICAL_ALLOWLIST LEGACY_SYNC=DISABLED MERGE=AUTO_SQUASH_IF_CLEAN LEARNING=INFORMATION_GAIN ERROS=${report.findings.length}`);
 }
 
