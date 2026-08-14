@@ -2,8 +2,6 @@ name: Autonomia — promoção segura
 
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
   pull_request_target:
     types: [opened, reopened, ready_for_review, synchronize, edited, labeled, unlabeled]
     branches: [main]
@@ -24,7 +22,7 @@ on:
 permissions: {}
 
 concurrency:
-  group: autonomia-promocao-${{ github.event.pull_request.number || github.event.workflow_run.head_sha || github.event.client_payload.merge_sha || github.ref }}
+  group: autonomia-promocao-${{ github.event.pull_request.number || github.event.workflow_run.head_sha || github.event.client_payload.pr_number || github.event.client_payload.merge_sha || github.ref }}
   cancel-in-progress: false
 
 env:
@@ -34,8 +32,8 @@ env:
 
 jobs:
   judge:
-    name: Juiz read-only — gerar recibos
-    runs-on: [self-hosted, Linux]
+    name: Juiz determinístico — intenção + estado + segurança
+    runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
       contents: read
@@ -45,24 +43,6 @@ jobs:
       checks: read
 
     steps:
-      - name: Bloquear HEAD de fork no runner persistente
-        id: fork_guard
-        if: github.event_name == 'pull_request' || github.event_name == 'pull_request_target'
-        shell: bash
-        env:
-          HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
-          BASE_REPO: ${{ github.repository }}
-        run: |
-          set -euo pipefail
-          if [ -z "${HEAD_REPO}" ] || [ "${HEAD_REPO}" != "${BASE_REPO}" ]; then
-            echo "blocked=true" >> "$GITHUB_OUTPUT"
-            echo "cause=FORK_HEAD" >> "$GITHUB_OUTPUT"
-            echo "BLOCKED_FORK_HEAD repo=${HEAD_REPO:-empty}"
-            exit 1
-          fi
-          echo "blocked=false" >> "$GITHUB_OUTPUT"
-          echo "FORK_GUARD_OK ${HEAD_REPO}"
-
       - name: Checkout exclusivo da main confiável
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
@@ -74,24 +54,25 @@ jobs:
         with:
           node-version: 22
 
-      - name: Provar presença de segredos (booleano, nunca valor)
+      - name: Provar presença de canais opcionais sem mostrar valor
+        shell: bash
         run: |
           set -euo pipefail
-          echo "SECRET_PROMOTION_TOKEN=${{ secrets.PROMOTION_TOKEN != '' && 'present' || 'absent' }}"
-          echo "SECRET_TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN != '' && 'present' || 'absent' }}"
-          echo "SECRET_TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID != '' && 'present' || 'absent' }}"
-          echo "SECRET_NOTIFY_WEBHOOK_URL=${{ secrets.NOTIFY_WEBHOOK_URL != '' && 'present' || 'absent' }}"
+          echo "PROMOTION_TOKEN=${{ secrets.PROMOTION_TOKEN != '' && 'present' || 'absent_using_github_token' }}"
+          echo "TELEGRAM=${{ secrets.TELEGRAM_BOT_TOKEN != '' && secrets.TELEGRAM_CHAT_ID != '' && 'present' || 'absent' }}"
+          echo "WEBHOOK=${{ secrets.NOTIFY_WEBHOOK_URL != '' && 'present' || 'absent' }}"
 
-      - name: Testar juiz, promotor e filtro da varredura
+      - name: Testar motor canônico
         run: |
           set -euo pipefail
           node --test scripts/github-autonomia-promocao.test.mjs
           node --test scripts/github-autonomia-varredura.test.mjs
 
-      - name: Avaliar PRs autorizados sem capacidade de escrita
+      - name: Avaliar PRs autorizados em read-only
         env:
           BOT_SWEEP_DIR: ${{ runner.temp }}/centraldark-autonomia
           JUDGE_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ github.token }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           NOTIFY_WEBHOOK_URL: ${{ secrets.NOTIFY_WEBHOOK_URL }}
@@ -106,43 +87,25 @@ jobs:
           if-no-files-found: warn
           retention-days: 14
 
-      - name: Receipt determinístico (sempre)
+      - name: Receipt determinístico
         if: always()
         shell: bash
         env:
           JOB_STATUS: ${{ job.status }}
-          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.event.workflow_run.head_sha || github.sha }}
           EVENT_NAME: ${{ github.event_name }}
-          FORK_BLOCKED: ${{ steps.fork_guard.outputs.blocked }}
-          FORK_CAUSE: ${{ steps.fork_guard.outputs.cause }}
         run: |
           set -euo pipefail
           echo "HEAD_SHA=${HEAD_SHA}"
           echo "EVENT_NAME=${EVENT_NAME}"
-          echo "EXECUTOR=self-hosted"
-          echo "ROTA_PRIMARIA=self-hosted-linux"
-          echo "ROTA_FALLBACK=BLOCKED_NO_HOSTED"
+          echo "EXECUTOR=github-hosted-ubuntu"
           echo "JOB_STATUS=${JOB_STATUS}"
-          if [ "${FORK_BLOCKED:-}" = "true" ]; then
-            echo "RESULTADO=BLOCKED"
-            echo "CAUSE=${FORK_CAUSE:-FORK_HEAD}"
-          elif [ "${JOB_STATUS}" = "cancelled" ]; then
-            echo "RESULTADO=BLOCKED"
-            echo "CAUSE=CANCELLED_OR_RUNNER_UNAVAILABLE"
-          elif [ "${JOB_STATUS}" = "failure" ]; then
-            echo "RESULTADO=FAIL"
-          elif [ "${JOB_STATUS}" = "success" ]; then
-            echo "RESULTADO=PASS"
-          else
-            echo "RESULTADO=BLOCKED"
-            echo "CAUSE=UNKNOWN_STATUS_${JOB_STATUS}"
-          fi
-          # UNKNOWN/SKIPPED/empty never promoted as PASS by this receipt alone
+          test "${JOB_STATUS}" = "success" && echo "RESULTADO=PASS" || echo "RESULTADO=BLOCKED"
 
   promote:
-    name: Promotor — revalidar e promover
+    name: Promotor — revalidar e squash main
     needs: judge
-    runs-on: [self-hosted, Linux]
+    runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
       contents: write
@@ -152,24 +115,6 @@ jobs:
       checks: read
 
     steps:
-      - name: Bloquear HEAD de fork no runner persistente
-        id: fork_guard
-        if: github.event_name == 'pull_request' || github.event_name == 'pull_request_target'
-        shell: bash
-        env:
-          HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
-          BASE_REPO: ${{ github.repository }}
-        run: |
-          set -euo pipefail
-          if [ -z "${HEAD_REPO}" ] || [ "${HEAD_REPO}" != "${BASE_REPO}" ]; then
-            echo "blocked=true" >> "$GITHUB_OUTPUT"
-            echo "cause=FORK_HEAD" >> "$GITHUB_OUTPUT"
-            echo "BLOCKED_FORK_HEAD repo=${HEAD_REPO:-empty}"
-            exit 1
-          fi
-          echo "blocked=false" >> "$GITHUB_OUTPUT"
-          echo "FORK_GUARD_OK ${HEAD_REPO}"
-
       - name: Checkout exclusivo da main confiável
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
@@ -191,6 +136,7 @@ jobs:
         env:
           BOT_SWEEP_DIR: ${{ runner.temp }}/centraldark-autonomia
           PROMOTER_TOKEN: ${{ secrets.PROMOTION_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           NOTIFY_WEBHOOK_URL: ${{ secrets.NOTIFY_WEBHOOK_URL }}
@@ -205,35 +151,19 @@ jobs:
           if-no-files-found: warn
           retention-days: 14
 
-      - name: Receipt determinístico (sempre)
+      - name: Receipt determinístico
         if: always()
         shell: bash
         env:
           JOB_STATUS: ${{ job.status }}
-          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.event.workflow_run.head_sha || github.sha }}
           EVENT_NAME: ${{ github.event_name }}
-          FORK_BLOCKED: ${{ steps.fork_guard.outputs.blocked }}
-          FORK_CAUSE: ${{ steps.fork_guard.outputs.cause }}
         run: |
           set -euo pipefail
           echo "HEAD_SHA=${HEAD_SHA}"
           echo "EVENT_NAME=${EVENT_NAME}"
-          echo "EXECUTOR=self-hosted"
-          echo "ROTA_PRIMARIA=self-hosted-linux"
-          echo "ROTA_FALLBACK=BLOCKED_NO_HOSTED"
+          echo "EXECUTOR=github-hosted-ubuntu"
+          echo "MERGE_METHOD=squash"
+          echo "REASK=NO_WHEN_INTENT_RECEIPT_VALID"
           echo "JOB_STATUS=${JOB_STATUS}"
-          if [ "${FORK_BLOCKED:-}" = "true" ]; then
-            echo "RESULTADO=BLOCKED"
-            echo "CAUSE=${FORK_CAUSE:-FORK_HEAD}"
-          elif [ "${JOB_STATUS}" = "cancelled" ]; then
-            echo "RESULTADO=BLOCKED"
-            echo "CAUSE=CANCELLED_OR_RUNNER_UNAVAILABLE"
-          elif [ "${JOB_STATUS}" = "failure" ]; then
-            echo "RESULTADO=FAIL"
-          elif [ "${JOB_STATUS}" = "success" ]; then
-            echo "RESULTADO=PASS"
-          else
-            echo "RESULTADO=BLOCKED"
-            echo "CAUSE=UNKNOWN_STATUS_${JOB_STATUS}"
-          fi
-          # UNKNOWN/SKIPPED/empty never promoted as PASS by this receipt alone
+          test "${JOB_STATUS}" = "success" && echo "RESULTADO=PASS" || echo "RESULTADO=BLOCKED"
