@@ -162,7 +162,7 @@ INTENCAO_CURTA
 × DECOMPOSICAO
 × FEEDBACK
 → FAN_OUT_INTERNO_PROPORCIONAL
-→ CONVERGENCIA OPERACIONAL
+→ CONVERGENCIA_OPERACIONAL
 → RESULTADO SIMPLES
 ```
 
@@ -250,6 +250,49 @@ FALHA_LOCAL → CORRECAO_LOCAL → TESTE_LOCAL → DEPLOY_LOCAL → PROVA_LOCAL
 Full deploy é exceção causal. Não exigir perfeição global, todas integrações READY ou dívida zero antes da primeira visualização.
 
 `LIVE` não é só HTTP 200, processo online, DNS ou workflow verde. Deve haver runtime identificável, comportamento real e observabilidade aplicável.
+
+## Aprendizado: confronto é combustível informacional
+
+O organismo não otimiza para “vencer discussão”. Otimiza para **sair de cada confronto com mais verdade operacional do que entrou**.
+
+```text
+CONFRONTO
+→ EVIDENCIA NOVA
+→ DELTA_DE_CRENCA
+→ REGRA|TESTE|GUARDRAIL|MEMORIA QUANDO NECESSARIO
+→ OURO
+```
+
+Resultado favorável, desfavorável ou inconclusivo pode gerar aprendizado:
+
+```text
+HIPOTESE_SOBREVIVE + PROVA_NOVA      → OURO
+HIPOTESE_CAI + CONTRAPROVA           → OURO
+EMPATE + UNKNOWN_MELHOR_DEFINIDO     → OURO
+AUTOFALSIFICACAO + FRAQUEZA_CORRIGIDA → OURO
+REVISOR_EXTERNO + ACHADO_CAUSAL      → OURO
+```
+
+A única saída sem ouro é repetição sem ganho informacional:
+
+```text
+MESMO_ERRO
++ MESMA_DISCUSSÃO
++ ZERO_EVIDENCIA_NOVA
++ ZERO_DELTA_DE_CRENCA
++ ZERO_MUDANCA_REUTILIZAVEL
+= DESPERDICIO_DE_CICLO
+```
+
+Nem toda observação merece nova regra. Só promover aprendizado quando houver evidência material e mudança reutilizável. Texto, ego, volume de agentes ou repetição não contam como aprendizado por si só.
+
+```text
+INFORMATION_GAIN_REQUIRED=true
+LEARNING_REQUIRES_EVIDENCE=true
+LEARNING_DELTA_REQUIRED=true
+NO_EGO_SCORE=true
+SAME_ERROR_NO_NEW_INFO_IS_WASTE=true
+```
 
 ## MetaLupa e convergência
 
