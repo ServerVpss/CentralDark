@@ -1,6 +1,6 @@
-# 🧠 Notion Sync — 2026-08-14T19:42:12.954Z
+# 🧠 Notion Sync — 2026-08-14T20:32:35.448Z
 
-- **Commit fonte:** `2605743e57a1ac6b66c10f680c813033dac7eff1`
+- **Commit fonte:** `d2b5d50cdcf30f2c71dc9006d4ba2cf96ea17c9a`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
@@ -179,6 +179,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-07-09-gateway-centraldark-chave-propria.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-07-10-gateway-138-modelos-e-schema-real-hub.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-07-10-primeiro-acesso-admin-hub.md |
+| estrutura | criado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-14-arqueologia-total-ouro-recuperado.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/MCP/MCP-EXPLICADO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/PROXY/APRENDIZADOS_PROXY.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/PROXY/CONFIGURACAO_CLINE.md |
