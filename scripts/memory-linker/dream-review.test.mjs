@@ -89,17 +89,21 @@ test('rejeita evento sem delta reutilizavel', () => {
   assert.equal(proposal.rejected[0].reason, 'LEARNING_DELTA_MISSING');
 });
 
-test('sanitiza segredo antes de materializar candidato', () => {
+test('sanitiza segredo sintetico antes de materializar candidato', () => {
+  const syntheticSecret = ['abcdefghijkl', 'mnopqrstuv'].join('');
+  const syntheticBearer = ['abcdefghijklmno', 'pqrstuvwxyz123456'].join('');
   const proposal = buildDreamProposal([
     event({
-      claim: 'token=abcdefghijklmnopqrstuv deve ser removido',
-      evidence: [{ type: 'note', value: 'Bearer abcdefghijklmnopqrstuvwxyz123456' }],
+      claim: `token=${syntheticSecret} deve ser removido`,
+      evidence: [{ type: 'note', value: `Bearer ${syntheticBearer}` }],
     }),
   ], { headSha: HEAD });
 
+  const serialized = JSON.stringify(proposal);
   assert.equal(proposal.candidate_count, 1);
   assert.match(proposal.candidates[0].claim, /\[REDACTED\]/);
-  assert.doesNotMatch(JSON.stringify(proposal), /abcdefghijklmnopqrstuvwxyz123456/);
+  assert.equal(serialized.includes(syntheticSecret), false);
+  assert.equal(serialized.includes(syntheticBearer), false);
 });
 
 test('sanitizador nao altera texto comum', () => {
