@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-14T17:18:10.054Z",
-  "updatedAtBR": "14/08/2026, 14:18:10 BRT",
+  "updatedAt": "2026-08-14T17:34:37.194Z",
+  "updatedAtBR": "14/08/2026, 14:34:37 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "feat(memory): integrar Dream Review isolado ao memory-linker canônico (#834)",
+    "lastCommit": "docs(consciencia): canonizar Expansão de Domínio (#835)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-14T17:34:37.194Z",
+      "titulo": "Push na main · 581191ff7fc1d4990d4a5721e01f073623a6cb4a",
+      "detalhe": "docs(consciencia): canonizar Expansão de Domínio (#835)",
+      "area": "Repositório",
+      "sha": "581191f",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-14T17:18:10.054Z",
       "titulo": "Push na main · c85064e37c669232a79fba87788f65f17868e672",
       "detalhe": "feat(memory): integrar Dream Review isolado ao memory-linker canônico (#834)",
@@ -988,14 +996,6 @@
       "detalhe": "chore: remove PR585 one-shot runner",
       "area": "Repositório",
       "sha": "b31eb15",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-03T23:02:16.745Z",
-      "titulo": "Push na main · 3780c85ebbf4d3824dab1b76c7e0383d57375358",
-      "detalhe": "fix: trigger PR585 runner by label",
-      "area": "Repositório",
-      "sha": "3780c85",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-14T17:34:37.194Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 581191ff7fc1d4990d4a5721e01f073623a6cb4a (581191f)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-14T17:18:10.054Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · c85064e37c669232a79fba87788f65f17868e672 (c85064e)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-03T23:09:24.750Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · b31eb15517f22840647391f9c7fcce441b177794 (b31eb15)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-03T23:02:16.745Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 3780c85ebbf4d3824dab1b76c7e0383d57375358 (3780c85)",
       "area": "Repositório",
       "status": "sucesso"
     }
