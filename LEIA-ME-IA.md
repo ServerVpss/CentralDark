@@ -28,7 +28,8 @@ Carregue nesta ordem:
 8. `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` quando a missão exigir coordenação multiagente.
 9. `.agents/skills/meta-lupa/SKILL.md` quando o risco exigir falsificação crítica.
 10. `.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA` para conferir a identidade canônica da skill.
-11. estado atual de branch, HEAD, PR, runtime, writer e ferramentas aplicáveis.
+11. `docs/CONSCIENCIA/PROOF-OWNERSHIP.json` quando houver gate, prova, Judge ou cadeia de validação — propriedade da prova e bloqueio de circularidade.
+12. estado atual de branch, HEAD, PR, runtime, writer e ferramentas aplicáveis.
 
 Nome de modelo não muda o contrato. GPT, Codex, Claude, Gemini, Grok, Copilot, Cursor, Windsurf, Hermes ou modelo futuro entram como motores/papéis substituíveis dentro do mesmo organismo.
 
@@ -217,6 +218,17 @@ Convergência adversarial total **só é aberta por solicitação explícita de 
 
 MetaLupa continua obrigatória proporcionalmente ao risco para bloquear falso verde e separar fato/inferência/hipótese/UNKNOWN.
 
+Quando houver mais de um provador, gate, Judge ou validação encadeada, carregar `docs/CONSCIENCIA/PROOF-OWNERSHIP.json` e aplicar:
+
+```text
+SELF_VALIDATION_WITHOUT_INDEPENDENT_COUNTERPROOF=UNPROVEN
+CIRCULAR_PROOF=UNPROVEN
+GRAPH_STRUCTURE_OK != INVARIANT_PROVEN
+UNREGISTERED_INVARIANT=UNPROVEN_NOT_OWNED
+```
+
+O grafo de prova é finito e de cobertura explícita: cada invariável registrada tem fonte, consumidor, provador responsável, teste negativo/contraprova e âncora observável. O mapa da prova não substitui o fato externo nem pode declarar PASS da própria invariável.
+
 ## 10. Aprendizado e generalização
 
 Correção útil do SEGREDO/CHEFE deve subir de nível:
@@ -295,6 +307,7 @@ TASKS_SECRETAS
 | pendências | `docs/PENDENCIAS.md` |
 | coordenação/escritor único | `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` |
 | MetaLupa | `.agents/skills/meta-lupa/SKILL.md` |
+| propriedade/anti-circularidade da prova | `docs/CONSCIENCIA/PROOF-OWNERSHIP.json` |
 | identidade MetaLupa | `.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA` |
 
 ## 14. Fechamento
