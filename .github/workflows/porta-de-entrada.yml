@@ -84,10 +84,6 @@ jobs:
             { encoding: 'utf8' },
           );
           const canonical = new Set([...seed.matchAll(/name:\s*'([^']+)'/g)].map((match) => match[1]));
-          const temporaryAuthorityAliases = new Set(['permito-segredo', 'permito-pivete', 'PERMITO-SEGREDO', 'PERMITO-PIVETE']);
-          const canonicalPresent = labels.filter((label) => canonical.has(label));
-          const invalid = labels.filter((label) => !canonical.has(label) && !temporaryAuthorityAliases.has(label));
-          const authorityCompat = labels.filter((label) => temporaryAuthorityAliases.has(label));
           const authorityAliases = new Set(['permito-segredo', 'PERMITO-SEGREDO']);
           const canonicalPresent = labels.filter((label) => canonical.has(label));
           const invalid = labels.filter((label) => !canonical.has(label) && !authorityAliases.has(label));
