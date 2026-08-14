@@ -83,6 +83,21 @@ test("contraprova sem independência reprova", () => {
   assert.ok(validateProofOwnership(contract, { exists: allExist }).errors.includes("PROOF_OWNERSHIP_COUNTERPROOF_NOT_INDEPENDENT:A"));
 });
 
+test("negative_test que não é artefato executável de teste reprova", () => {
+  const contract = baseContract();
+  contract.invariants[0].negative_test = "AGENTS.md";
+  contract.invariants[0].counterproof.path = "AGENTS.md";
+  const result = validateProofOwnership(contract, { exists: allExist });
+  assert.ok(result.errors.includes("PROOF_OWNERSHIP_NEGATIVE_TEST_NOT_EXECUTABLE_TEST:A:AGENTS.md"));
+});
+
+test("counterproof negative_test_suite diferente do negative_test reprova", () => {
+  const contract = baseContract();
+  contract.invariants[0].counterproof.path = "outro.test.mjs";
+  const result = validateProofOwnership(contract, { exists: allExist });
+  assert.ok(result.errors.includes("PROOF_OWNERSHIP_COUNTERPROOF_NOT_NEGATIVE_TEST:A"));
+});
+
 test("provador = teste negativo reprova", () => {
   const contract = baseContract();
   contract.invariants[0].negative_test = "prover.mjs";
