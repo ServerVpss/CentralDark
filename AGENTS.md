@@ -67,6 +67,31 @@ Mensagem atrasada não reinicia missão. Evidência nova vence contexto antigo. 
 
 A linguagem natural do SEGREDO/CHEFE é sinal contextual; não normalizar gíria/metáfora/digitação rápida cedo demais. Se a interpretação da IA falhar, corrigir a leitura da IA.
 
+### #ACORDAR é loop, não leitura única
+
+O estado pode mudar enquanto a missão está em execução. Uma medição correta no início não autoriza responder com snapshot velho no fim.
+
+```text
+ACORDAR_INICIAL
+→ FIXAR START_HEAD/ESTADO
+→ EXECUTAR/INVESTIGAR
+→ OBSERVAR EVIDENCIA NOVA
+→ SE ESTADO MATERIAL MUDOU: RECONCILIAR
+→ REVALIDAR BASE/HEAD/PR/RUNTIME APLICAVEIS
+→ FIXAR FINAL_HEAD/ESTADO
+→ RESPONDER/REGISTRAR SOBRE O SNAPSHOT FINAL
+```
+
+Se `main`, PR, workflow, runtime ou ferramenta aplicável mudar durante a própria análise, incorporar a mudança antes do veredito. Não chamar isso de drift acidental: em organismo vivo, é entrada nova de evidência.
+
+```text
+INITIAL_HEAD != FINAL_HEAD
+→ NAO RECOMEÇAR TUDO
+→ MEDIR DELTA
+→ ABSORVER O QUE E CAUSAL
+→ PRESERVAR O QUE CONTINUA VALIDO
+```
+
 ## Reconciliação obrigatória antes de criar
 
 ```text
@@ -109,6 +134,37 @@ NADA NO ESCURO.
 - não pedir confirmação para passo técnico previsível já coberto por autorização;
 - máquina mede estado que consegue medir;
 - SEGREDO/CHEFE recebe decisão humana real, não investigação mecânica.
+
+### Intenção curta pode abrir fan-out interno
+
+O humano não precisa enumerar cada busca, ferramenta, agente, arquivo ou verificação quando o contexto canônico já define missão, limites e critério de sucesso.
+
+```text
+INTENCAO_CURTA
+× CONTEXTO_RECUPERADO
+× MEMORIA_CANONICA
+× TOOLS_MEDIDAS
+× PERMISSOES_VIGENTES
+× DECOMPOSICAO
+× FEEDBACK
+→ FAN_OUT_INTERNO_PROPORCIONAL
+→ CONVERGENCIA OPERACIONAL
+→ RESULTADO SIMPLES
+```
+
+Fan-out é meio, não produto. Deve ser proporcional ao problema e permanecer dentro do mesmo objetivo/escopo. Não exigir prompt gigante para descrever passos que a máquina consegue derivar. Não transformar uma frase simples em arquitetura nova.
+
+Quando uma capacidade/corpo está indisponível, procurar outra capacidade já autorizada que consiga concluir o mesmo escopo antes de devolver bloqueio ao humano.
+
+```text
+CORPO_A_INDISPONIVEL
+→ MEDIR CORPO_B/CAPACIDADE_EXISTENTE
+→ MESMO ESCOPO + MESMA AUTORIZACAO + SEGURANCA OK
+→ CONTINUAR
+→ REGISTRAR QUAL CORPO EXECUTOU
+```
+
+Indisponibilidade de instrumento não revoga intenção humana nem prova indisponibilidade do organismo inteiro.
 
 ## Intenção autorizada → squash main
 
@@ -242,7 +298,14 @@ Não ler, copiar, publicar ou usar valores de `.env`, `secrets/`, `tokens/`, `se
 
 ## Fechamento
 
+Antes de fechar uma missão viva, medir novamente o mínimo material que poderia ter mudado desde o início. O recibo final deve declarar o snapshot realmente usado.
+
 ```text
+START_HEAD=
+FINAL_HEAD=
+HEAD_CHANGED_DURING_MISSION=SIM|NAO
+DELTA_RECONCILIADO=SIM|NAO|NAO_APLICAVEL
+EXECUTOR_REAL=
 FEITO=
 EVIDENCIA=
 PENDENCIA=
