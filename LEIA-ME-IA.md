@@ -161,7 +161,44 @@ Não pedir novamente autorização já concedida para o mesmo escopo/classe de a
 
 `LIVE` não é só HTTP 200, processo online, DNS ou workflow verde. Exige runtime/ação observável e caminho de diagnóstico/rollback.
 
-## 8. Convergência ≠ validação mínima
+## 8. Intenção autorizada → squash main
+
+Quando a intenção do SEGREDO/CHEFE e a promoção do mesmo escopo já estão autorizadas, não transformar merge em nova pergunta.
+
+```text
+INTENT_AUTHORIZED=true
+NO_HUMAN_REASK_FOR_MERGE=true
+MERGE_METHOD=squash
+TARGET=main
+```
+
+PR elegível carrega:
+
+```text
+Intent-Authorized: SEGREDO/CHEFE
+Merge-Policy: AUTO_SQUASH_IF_CLEAN
+Intent-Scope: <escopo>
+Writer: <agente>
+Writer-Scope: <escopo>
+```
+
+A promoção vive **somente** no fluxo canônico já existente `.github/workflows/autonomia-promocao.yml`.
+
+```text
+AUTOR CONFIAVEL + MESMO REPO
+→ RECIBO DE INTENCAO
+→ SCAN DE SEGURANCA DO DIFF
+→ SEM CHANGES_REQUESTED
+→ SEM CONFLITO
+→ BASE ATUALIZADA
+→ REVALIDAR HEAD/BASE
+→ SQUASH MAIN
+→ RECEIPT
+```
+
+O fast path não espera convergência externa nem todos os workflows auxiliares. Conflito, segredo, mudança de escopo ou `UNKNOWN` material bloqueiam fail-closed. Não criar segundo workflow para a mesma promoção.
+
+## 9. Convergência ≠ validação mínima
 
 ```text
 VALIDACAO_OPERACIONAL_MINIMA
@@ -175,7 +212,7 @@ Convergência adversarial total **só é aberta por solicitação explícita de 
 
 MetaLupa continua obrigatória proporcionalmente ao risco para bloquear falso verde e separar fato/inferência/hipótese/UNKNOWN.
 
-## 9. Aprendizado e generalização
+## 10. Aprendizado e generalização
 
 Correção útil do SEGREDO/CHEFE deve subir de nível:
 
@@ -199,7 +236,7 @@ REGRAS + GATES + SKILLS + MEMORIA
 → APRENDIZADO
 ```
 
-## 10. Benchmark privado
+## 11. Benchmark privado
 
 Quando SEGREDO/CHEFE solicitar prova de autonomia/generalização:
 
@@ -214,7 +251,7 @@ TASKS_SECRETAS
 → MEDIR ACERTO|ERRO|TRANSFERENCIA|EFICIENCIA|ROBUSTEZ
 ```
 
-## 11. Segurança
+## 12. Segurança
 
 - sem force-push;
 - sem `git reset --hard` operacional;
@@ -222,22 +259,23 @@ TASKS_SECRETAS
 - sem apagar irreversivelmente com consumidor/rollback `UNKNOWN`;
 - backup/snapshot antes de wipe quando tecnicamente disponível;
 - `UNKNOWN|SKIPPED|timeout|log ausente|SHA divergente` não são PASS;
-- sem V1/V2/V3, memória, painel ou orquestrador paralelo sem GAP_REAL.
+- sem V1/V2/V3, memória, painel, promotor ou orquestrador paralelo sem GAP_REAL.
 
-## 12. Onde está o resto
+## 13. Onde está o resto
 
 | Preciso de… | Vá para |
 |---|---|
 | identidade SOL / continuidade | `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md` |
 | boot/recovery universal | `docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md` |
 | permissões vigentes | `docs/CONSCIENCIA/02-PERMISSOES.md` |
+| promoção/merge | `.github/workflows/autonomia-promocao.yml` + `scripts/github-autonomia-promocao.mjs` |
 | deploy | `docs/CONSCIENCIA/03-FLUXO-DEPLOY.md` |
 | aprendizados | `docs/CONSCIENCIA/APRENDIZADOS.md` |
 | pendências | `docs/PENDENCIAS.md` |
 | coordenação/escritor único | `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` |
 | MetaLupa | `.agents/skills/meta-lupa/SKILL.md` |
 
-## 13. Fechamento
+## 14. Fechamento
 
 ```text
 O_QUE_FOI_FEITO=
