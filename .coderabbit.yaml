@@ -30,7 +30,21 @@ reviews:
     enabled: true
     drafts: true
     auto_incremental_review: true
-    auto_pause_after_reviewed_commits: 0
+    # Branches ativas geram muitos pushes. 2 preserva revisao incremental e
+    # evita que cada commit consuma a cota ate bater rate/spending cap.
+    auto_pause_after_reviewed_commits: 2
+  # O revisor externo deve gastar contexto em achados consequenciais. Higiene
+  # generica de titulo/body/docstring/issue ja e governada pelos contratos e
+  # gates determinísticos do repositorio, portanto nao duplica bloqueio aqui.
+  pre_merge_checks:
+    docstrings:
+      mode: "off"
+    title:
+      mode: "off"
+    description:
+      mode: "off"
+    issue_assessment:
+      mode: "off"
   # Recursos capazes de ESCREVER (commit, PR, alteracao de codigo) ficam
   # desligados explicitamente: por omissao vinham habilitados, o que viola o
   # modo somente leitura do revisor e contorna o WRITER_HANDOFF (writer unico

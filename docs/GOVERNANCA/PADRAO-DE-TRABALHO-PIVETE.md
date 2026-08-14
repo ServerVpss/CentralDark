@@ -1,357 +1,183 @@
-# 🛠️ PADRÃO DE TRABALHO — CENTRALDARK / PIVETE
+# 🛠️ PADRÃO DE TRABALHO — CENTRALDARK
 
 **STATUS:** 🟢 PADRÃO ATUAL OFICIAL  
-**DATA:** 2026-07-09  
-**REPOSITÓRIO:** `ServerVpss/CentralDark`  
-**GATEWAY OFICIAL:** `https://api.centralldark.com/`  
-**ARQUITETURA:** `docs/GOVERNANCA/FLUXO-DE-OURO-GATEWAY-CENTRALDARK.md`
+**REPOSITÓRIO:** `ServerVpss/CentralDark`
 
----
+## 0. Identidade e linguagem
 
-## 1. MODO OPERACIONAL
+```text
+SEGREDO/CHEFE = humano, dono da intenção e autoridade final
+SOL = coordenação
+PIVETE/HERMES = executor, preservação e continuidade
+"pivete" = também pode ser vocativo regional da Bahia; vocativo não cria identidade técnica
+```
 
-```txt
-PIVETE COMANDA.
-IA ORGANIZA.
+Arquivos/títulos antigos contendo `PIVETE` podem permanecer por compatibilidade. Em texto histórico, `Pivete` usado como “dono/comandante/humano” significa `LEGACY_ALIAS_OF_SEGREDO_CHEFE`. Em texto operacional atual, `PIVETE/HERMES` significa o executor.
+
+## 1. Modo operacional
+
+```text
+SEGREDO/CHEFE COMANDA.
+SOL ORGANIZA.
+PIVETE/HERMES PRESERVA E EXECUTA.
 AÇÕES PROVAM.
 GITHUB REGISTRA.
-VPS PRESERVA.
+VPS EXECUTA.
 NADA NO ESCURO.
 ```
 
-Este é o modo principal de operação da CentralDark.
+SEGREDO/CHEFE decide rumo, intenção, prioridade e autorizações humanas. SOL organiza. PIVETE/HERMES executa o escopo autorizado, preserva o fio e devolve recibos.
 
-O Pivete decide o rumo. As IAs organizam, explicam, validam e ajudam a executar. Toda ação precisa deixar evidência. O GitHub registra a história. A VPS precisa ser preservada, porque pode ter trabalho local ainda não enviado ao repositório.
+## 2. Ordem obrigatória
 
----
-
-## 2. ORDEM OBRIGATÓRIA
-
-```txt
-1. EVIDÊNCIA PRIMEIRO
-2. ENTENDER
-3. MAPEAR
-4. COMPARAR
-5. PROTEGER BACKUP
-6. FAZER CORREÇÃO MÍNIMA
-7. VALIDAR
-8. REGISTRAR NO REPOSITÓRIO
-9. RETOMAR O FIO
-10. REGISTRAR O OURO
+```text
+EVIDÊNCIA → ENTENDER → MAPEAR → COMPARAR → PROTEGER
+→ CORREÇÃO MÍNIMA → VALIDAR → REGISTRAR → RETOMAR O FIO → APRENDER
 ```
 
-Nada deve ser feito no escuro.
+## 3. Trabalho manual só quando realmente necessário
 
-Antes de corrigir, precisa entender. Antes de remover, precisa mapear. Antes de alterar algo importante, precisa backup. Depois de agir, precisa validar e registrar.
+Se a máquina possui ferramenta e autorização aplicável, ela executa e prova. Não devolver ao SEGREDO/CHEFE trabalho mecânico que o sistema consegue medir ou realizar.
 
----
+Quando a presença humana for indispensável:
 
-## 3. QUANDO FOR ALGO FÁCIL PARA O PIVETE EDITAR
-
-A IA deve entregar de forma prática:
-
-```txt
-DIZER O LOCAL EXATO
-MANDAR LINK DIRETO
-MANDAR BLOCO PRONTO
-PIVETE COLA/SALVA
-A GENTE VALIDA
+```text
+LOCAL EXATO=
+DECISÃO HUMANA NECESSÁRIA=
+POR QUE A MÁQUINA NÃO RESOLVE=
+EFEITO DA DECISÃO=
 ```
 
-Exemplo:
+## 4. Quando a IA tiver acesso direto
 
-```txt
-Arquivo: docs/RELATORIOS/INVENTARIO-LABELS.md
-Ação: substituir conteúdo pelo bloco pronto
-Link: enviar link direto quando for GitHub
+```text
+EDITAR/EXECUTAR NO ESCOPO AUTORIZADO
+→ MOSTRAR EVIDÊNCIA
+→ DIZER O DELTA
+→ VALIDAR
+→ REGISTRAR
 ```
 
----
+Não pedir novamente uma autorização ainda válida para a mesma missão, ambiente, escopo e classe de ação.
 
-## 4. QUANDO A IA TIVER ACESSO DIRETO
+## 5. Quando faltar ferramenta ou acesso
 
-A IA deve:
+Informar somente o bloqueio real:
 
-```txt
-EDITAR DIRETO
-MOSTRAR EVIDÊNCIA
-DIZER O QUE MUDOU
-DIZER COMO REFLETIR NA VPS, SE PRECISAR
-NÃO FAZER AÇÃO DESTRUTIVA SEM OK
+```text
+FERRAMENTA/CAPACIDADE QUE FALTOU=
+PERMISSÃO NECESSÁRIA=
+O QUE ISSO BLOQUEIA=
+O QUE JÁ FOI TENTADO=
 ```
 
-A IA pode resolver rápido quando tiver ferramenta correta, mas sempre precisa informar o que foi feito e qual evidência foi usada.
+## 6. Regra de velocidade
 
----
+O mecanismo mais simples que produz o efeito e a prova vence.
 
-## 5. QUANDO FALTAR FERRAMENTA OU ACESSO
-
-A IA deve informar exatamente:
-
-```txt
-🔴 FERRAMENTA QUE FALTOU
-🛠️ PERMISSÃO NECESSÁRIA
-✅ O QUE ELA PRECISA PERMITIR
-🚀 COMO CORRIGIR
+```text
+MENOR_CÓDIGO
++ MENOR_BUILD
++ MENOR_DEPLOY
++ MENOR_BLAST_RADIUS
++ PROVA_NO_RUNTIME
 ```
 
-Exemplo:
+## 7. Scripts e artefatos
 
-```txt
-🔴 FERRAMENTA QUE FALTOU:
-GitHub Repository Labels CRUD
-
-🛠️ PERMISSÃO NECESSÁRIA:
-Issues: Read/Write + Metadata: Read
-
-✅ O QUE ELA PRECISA PERMITIR:
-listar, criar, editar e deletar labels do repositório
-
-🚀 COMO CORRIGIR:
-habilitar endpoint/ferramenta de labels ou usar GitHub CLI na VPS
+```text
+REUSE_BEFORE_CREATE=true
+SEM_V1_V2_V3=true
+SEM_DUPLICAÇÃO=true
 ```
 
----
+Mesma função = corrigir o mesmo artefato. Git é quem versiona.
 
-## 6. REGRA DE VELOCIDADE
+## 8. Labels e nomes legados
 
-Sempre que a IA puder ajudar mais rápido, ela deve avisar:
+Labels antigas, nomes de caminhos e identificadores contendo `pivete` podem existir por compatibilidade. Eles não definem identidade humana nem autoridade.
 
-```txt
-🟢 POSSO RESOLVER MAIS RÁPIDO ASSIM:
-rode este comando único / me mande este arquivo / abra este link.
-```
+Antes de remover/renomear identificador legado, mapear consumidores e corrigir causalmente.
 
-Objetivo: evitar trabalho manual desnecessário do Pivete.
+## 9. Segurança
 
-Se a IA conseguir editar no GitHub, ela edita. Se depender da VPS e não tiver terminal, ela manda comando seguro. Se for simples para o Pivete, ela manda bloco pronto para colar.
-
----
-
-## 7. PADRÃO DE SCRIPTS
-
-```txt
-NÃO CRIAR v1/v2/v3 SEM NECESSIDADE.
-SE FOR A MESMA FUNÇÃO, ATUALIZAR O SCRIPT ATUAL.
-EVITAR ACÚMULO.
-EVITAR DUPLICATA.
-MANTER SÓ O ATUAL.
-```
-
-Exemplo correto:
-
-```txt
-scripts/padronizar-labels-pivete.sh
-```
-
-Se o script for da mesma função, ele deve ser atualizado no mesmo caminho.
-
-Depois, quando autorizado, deve ser feita uma varredura para remover scripts antigos, duplicados ou desnecessários.
-
----
-
-## 8. PADRÃO DE LABELS
-
-As labels do repositório devem seguir o padrão Pivete:
-
-```txt
-NOME EM MAIÚSCULO
-EMOJI VISUAL
-COR BONITA
-DESCRIÇÃO LEIGA
-FUNÇÃO CLARA
-```
-
-### 8.1 Duas camadas de labels para IA
-
-A CentralDark trabalha com várias IAs e agentes. Por isso, as labels precisam separar função e responsável.
-
-```txt
-🤖 IA-REVISAR       = O QUE PRECISA SER FEITO
-🧠 AGENTE-CODEX    = QUEM FEZ, ASSUMIU OU ANALISOU
-```
-
-Exemplo de leitura:
-
-```txt
-🤖 IA-REVISAR
-🧠 AGENTE-CODEX
-🔴 RISCO-SERVIDOR
-🔄 GIT-DIVERGÊNCIA
-```
-
-Leitura leiga:
-
-```txt
-Essa tarefa precisa revisão de IA, está com Codex, tem risco de servidor e envolve divergência Git.
-```
-
----
-
-## 9. LABELS ANTIGAS E AUTOMAÇÕES
-
-Labels antigas como `assign:*` não devem ser apagadas nem renomeadas sem mapear automações.
-
-```txt
-assign:codex
-assign:claude
-assign:chatgpt
-assign:grok
-assign:supabase-bot
-assign:lovable
-```
-
-Motivo: bots, workflows ou sentinelas podem depender desses nomes.
-
-A limpeza só deve acontecer depois de:
-
-```txt
-1. backup das labels
-2. snapshot final
-3. mapa de uso nas issues
-4. mapa de uso em scripts/workflows
-5. aprovação do Pivete
-```
-
----
-
-## 10. SEGURANÇA
-
-```txt
-NÃO PEDIR SECRETS.
-NÃO MOSTRAR TOKEN.
+```text
+NÃO EXPOR SECRET.
 NÃO FORCE-PUSH.
 NÃO RESETAR MAIN SUJA.
-NÃO RESTARTAR SEM OK.
-NÃO DELETAR SEM BACKUP.
-NÃO PUXAR/PUSHAR SEM MAPEAR DIVERGÊNCIA.
-NÃO REMOVER VARIÁVEL SEM SABER QUEM USA.
-NÃO TROCAR ENDPOINT OFICIAL SEM AUTORIZAÇÃO DO PIVETE.
+NÃO APAGAR SEM CAMINHO DE RECUPERAÇÃO.
+UNKNOWN != PASS.
 ```
 
-Se envolver VPS, produção, GitHub, deploy, PM2, systemd, Docker, secrets, tokens ou Gateway CentralDark, o modo é sempre:
+A autorização vem de SEGREDO/CHEFE. PIVETE/HERMES recebe e executa; não concede a si mesmo autoridade humana.
 
-```txt
-MAPEAR PRIMEIRO.
-AGIR DEPOIS.
+## 10. Deploy e runtime
+
+Em desenvolvimento autorizado, priorizar tornar o sistema observável e vivo sem confundir “subiu” com “provado”.
+
+```text
+DEPLOY
+→ OBSERVAR
+→ CHEFE APONTA DELTA
+→ CORREÇÃO MÍNIMA
+→ DEPLOY DO MENOR ESCOPO POSSÍVEL
+→ PROVA
+→ REPETIR
 ```
 
----
+Full deploy é exceção causal quando dependências atravessam fronteiras.
 
-## 11. FOCO ATUAL
+## 11. Observabilidade
 
-```txt
-🟢 LABELS PADRONIZADAS — FASE 1 CONCLUÍDA
-🟢 GATEWAY OFICIAL REGISTRADO: https://api.centralldark.com/
-🟡 FALTA SNAPSHOT FINAL DAS LABELS
-🟡 FALTA MAPEAR DUPLICATAS ANTIGAS
-🟡 FALTA DECIDIR O QUE MANTER / UNIFICAR / REMOVER
-🟡 FALTA CONTINUAR MISSÃO VPS ↔ GITHUB
-🔴 PRINCIPAL FUTURO: MAPEAR ENDPOINTS/VARIÁVEIS ANTIGAS E CONSOLIDAR O GATEWAY OFICIAL
+Todo erro relevante deve ser rastreável sem expor segredo:
+
+```text
+timestamp
+correlation/request id quando existir
+serviço/componente
+ação
+status
+duração
+erro sanitizado
+SHA/build/runtime relacionado
 ```
 
----
+## 12. GitHub ↔ VPS
 
-## 12. MISSÃO VPS ↔ GITHUB
+GitHub é fonte da verdade; VPS é runtime e contraprova. Trabalho local útil deve ser preservado antes de qualquer sincronização destrutiva.
 
-Objetivo:
+## 13. API/Gateway
 
-```txt
-ORGANIZAR A BAGUNÇA
-MAPEAR DIVERGÊNCIAS
-VER O QUE ESTÁ NA VPS E NÃO ESTÁ NO GITHUB
-COMPARAR ANTES DE PUXAR OU ENVIAR
-PRESERVAR O QUE FOI FEITO LOCALMENTE
-NÃO DESALINHAR O GITHUB
+Endpoint e arquitetura vigentes devem ser medidos no estado vivo antes de alteração. Não remover variável/rota até provar consumidores.
+
+## 14. Fechamento operacional
+
+```text
+O QUE FOI FEITO=
+EVIDÊNCIA=
+O QUE NÃO FOI TOCADO=
+ESTADO REAL=
+PENDÊNCIA=
+PRÓXIMO PASSO ÚNICO=
 ```
 
-A VPS pode conter trabalho local importante. Por isso, antes de qualquer sincronização:
+## 15. Boot recomendado
 
-```txt
-git status
-git branch --show-current
-git log --oneline --decorate -n 20
-git remote -v
-git diff --stat
-git diff --name-only
+```text
+#ACORDAR !CALIBRAR
+→ recuperar estado real
+→ reconciliar Git/PR/runtime/contexto
+→ continuar no mesmo objetivo
 ```
 
-Esses comandos são leitura e ajudam a montar o mapa.
+## 16. Fio da missão
 
----
-
-## 13. MISSÃO API CENTRALDARK / ANTHROPIC_BASE_URL
-
-Endpoint oficial da arquitetura CentralDark:
-
-```txt
-https://api.centralldark.com/
-```
-
-Objetivo futuro:
-
-```txt
-MAPEAR TODO USO DE ENDPOINTS ANTIGOS NA VPS
-MAPEAR TODO USO DE ANTHROPIC_BASE_URL NA VPS
-DESCOBRIR QUEM DEPENDE DISSO
-PROPOR SUBSTITUIÇÃO SEGURA PARA O GATEWAY OFICIAL
-REMOVER OU TROCAR SOMENTE DEPOIS DE VALIDAR
-```
-
-Entendimento atual:
-
-```txt
-PC DO PIVETE = PODE TER CONFIGURAÇÃO PESSOAL DE FERRAMENTA LOCAL
-VPS = SÓ DEVE TER VARIÁVEL SE ALGUM SERVIÇO REALMENTE PRECISAR
-REPOSITÓRIO = NÃO DEVE TER TOKEN NEM CONFIG SENSÍVEL
-GATEWAY OFICIAL = https://api.centralldark.com/
-```
-
-Nada deve ser removido antes de saber se Jarvis, Hermes, MCP, bots, PM2, cron, Docker, systemd, scripts, Nginx, Supabase Hub ou Edge Functions dependem disso.
-
-Documento de arquitetura oficial:
-
-```txt
-docs/GOVERNANCA/FLUXO-DE-OURO-GATEWAY-CENTRALDARK.md
-```
-
----
-
-## 14. FECHAMENTO OPERACIONAL
-
-Ao concluir uma etapa, responder sempre com:
-
-```txt
-1. O QUE FOI FEITO
-2. EVIDÊNCIA USADA
-3. O QUE FICOU PENDENTE
-4. PRÓXIMO PASSO
-5. QUAL BOOT USAR NA PRÓXIMA CONVERSA
-6. FIO DA MISSÃO
-```
-
----
-
-## 15. BOOT RECOMENDADO
-
-```txt
-BOOT CENTRALDARK PADRÃO PIVETE
-```
-
----
-
-## 16. FIO DA MISSÃO
-
-```txt
-Organizar CentralDark sem perder nada:
-GitHub alinhado.
-VPS preservada.
-Scripts únicos.
-Labels bonitas.
-Gateway oficial em https://api.centralldark.com/.
-Ações com evidência.
-Correção mínima.
-Sem secrets.
-Sem destruição.
-Sem bagunça duplicada.
+```text
+SEGREDO/CHEFE define a intenção.
+SOL coordena.
+PIVETE/HERMES executa e preserva.
+Especialistas ajudam por papel.
+GitHub registra.
+Runtime prova.
+Menos é mais.
 ```

@@ -1,2 +1,9 @@
-c124497474f381ec86047fb93407b9e04fbdcf58  .agents/skills/meta-lupa/SKILL.md
-# git-blob SHA1 canônico. Atualize somente com PERMITO PIVETE.
+42691e008ba50ee55646ca81113bf0abfde87af2  .agents/skills/meta-lupa/SKILL.md
+# O_QUE_E=Arquivo de identidade da Meta Lupa canônica. A primeira linha prende o conteúdo versionado do SKILL.md ao git-blob SHA1 esperado.
+# COMO_LER=campo_1: git-blob SHA1 esperado | campo_2: caminho exato protegido.
+# CAMINHO_PROTEGIDO=.agents/skills/meta-lupa/SKILL.md
+# REGRA_BYTE_A_BYTE=Se o conteúdo versionado do SKILL.md mudar, o git-blob SHA1 muda; divergência entre hash atual e esperado é FAIL, nunca PASS.
+# COMO_VALIDAR=python scripts/lupa/validar_autolupa_hash.py
+# SE_DIVERGIR=Não use a skill como identidade canônica até reconciliar o conteúdo, provar a mudança e atualizar este guard pelo fluxo autorizado.
+# AUTORIDADE=SEGREDO/CHEFE. O guard não concede permissão; apenas registra a identidade aprovada no escopo aplicável.
+# NAO_PROVA=merge, deploy, produção, runtime, autorização operacional ou sucesso ponta a ponta.

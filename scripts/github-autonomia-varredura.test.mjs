@@ -8,12 +8,20 @@ import {
   sanitizeNotice,
 } from "./github-autonomia-varredura.mjs";
 
+const INTENT_BODY = [
+  "Intent-Authorized: SEGREDO/CHEFE",
+  "Merge-Policy: AUTO_SQUASH_IF_CLEAN",
+  "Intent-Scope: TESTE_CANONICO",
+  "Writer: GPT-5.6-Sol",
+  "Writer-Scope: TESTE_CANONICO",
+].join("\n");
+
 function pr(overrides = {}) {
   return {
     state: "open",
     draft: false,
     title: "fix: canário",
-    body: "PERMITO SEGREDO",
+    body: INTENT_BODY,
     labels: [],
     user: { login: "segredounlock" },
     base: { ref: "main" },
@@ -22,28 +30,26 @@ function pr(overrides = {}) {
   };
 }
 
-test("aceita apenas PR autorizado, confiável e não draft", () => {
+test("recibo de intenção torna PR confiável elegível sem reask", () => {
   assert.equal(eligibleSummary(pr(), "ServerVpss/CentralDark"), true);
   assert.equal(eligibleSummary(pr({ draft: true }), "ServerVpss/CentralDark"), false);
   assert.equal(eligibleSummary(pr({ body: "sem autorização" }), "ServerVpss/CentralDark"), false);
   assert.equal(eligibleSummary(pr({ user: { login: "intruso" } }), "ServerVpss/CentralDark"), false);
 });
 
-test("label canônica permito-segredo autoriza", () => {
+test("label canônica permito-segredo continua elegível no modo adversarial", () => {
   assert.equal(
-    eligibleSummary(pr({ body: "sem marcador", labels: [{ name: "permito-segredo" }] }), "ServerVpss/CentralDark"),
+    eligibleSummary(pr({ body: "sem recibo", labels: [{ name: "permito-segredo" }] }), "ServerVpss/CentralDark"),
     true,
   );
 });
 
-test("marcador antigo permanece compatível durante migração", () => {
+test("marcadores legados não concedem mais elegibilidade", () => {
+  assert.equal(eligibleSummary(pr({ body: "PERMITO SEGREDO" }), "ServerVpss/CentralDark"), false);
+  assert.equal(eligibleSummary(pr({ body: "PERMITO PIVETE" }), "ServerVpss/CentralDark"), false);
   assert.equal(
-    eligibleSummary(pr({ body: "PERMITO PIVETE" }), "ServerVpss/CentralDark"),
-    true,
-  );
-  assert.equal(
-    eligibleSummary(pr({ body: "sem marcador", labels: [{ name: "permito-pivete" }] }), "ServerVpss/CentralDark"),
-    true,
+    eligibleSummary(pr({ body: "sem recibo", labels: [{ name: "permito-pivete" }] }), "ServerVpss/CentralDark"),
+    false,
   );
 });
 
@@ -67,7 +73,7 @@ test("nenhuma credencial escapa para log, comentário ou Telegram", () => {
   assert.equal(limpo.includes("[REDACTED]"), true);
 });
 
-test("classificação de falha é determinística, sem IA no caminho crítico", () => {
+test("classificação de falha é determinística", () => {
   assert.equal(classifyFailure("HTTP 429 rate limit exceeded"), "RATE_LIMITED");
   assert.equal(classifyFailure("insufficient_quota: billing hard limit"), "CREDITS_EXHAUSTED");
   assert.equal(classifyFailure("401 Bad credentials"), "TOKEN_DENIED");
@@ -76,7 +82,7 @@ test("classificação de falha é determinística, sem IA no caminho crítico", 
   assert.equal(classifyFailure("coisa nunca vista"), "UNKNOWN_FAILURE");
 });
 
-test("ausência de segredo de notificação é reportada, nunca assumida como enviada", () => {
+test("ausência de segredo de notificação é reportada, nunca assumida", () => {
   assert.deepEqual(noticeTargets({}), { telegram: false, webhook: false });
   assert.deepEqual(
     noticeTargets({ TELEGRAM_BOT_TOKEN: "x", TELEGRAM_CHAT_ID: "y" }),
