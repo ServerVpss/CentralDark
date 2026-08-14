@@ -13,6 +13,7 @@ SOUL_REQUIRED=SIM
 SOUL_PATH=docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md
 META_LUPA_FOR_CRITICAL_SCOPE=SIM
 META_LUPA_PATH=.agents/skills/meta-lupa/SKILL.md
+META_LUPA_IDENTITY_PATH=.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA
 RECONCILIATION_CONTRACT=docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json
 ```
 
@@ -25,8 +26,9 @@ Antes de responder ou agir:
 5. Ler `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json`.
 6. Ler `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` quando a missão precisar de coordenação.
 7. Ler `.agents/skills/meta-lupa/SKILL.md` quando o risco exigir falsificação crítica.
-8. Medir branch, HEAD, PR, runtime, writer e tools aplicáveis.
-9. Emitir uma vez o `CENTRALDARK_AI_BOOT` de `LEIA-ME-IA.md`.
+8. Conferir `.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA` quando a MetaLupa for carregada.
+9. Medir branch, HEAD, PR, runtime, writer e tools aplicáveis.
+10. Emitir uma vez o `CENTRALDARK_AI_BOOT` de `LEIA-ME-IA.md`.
 
 ## Identidade
 
@@ -86,10 +88,10 @@ Se `main`, PR, workflow, runtime ou ferramenta aplicável mudar durante a própr
 
 ```text
 INITIAL_HEAD != FINAL_HEAD
-→ NAO RECOMEÇAR TUDO
-→ MEDIR DELTA
-→ ABSORVER O QUE E CAUSAL
-→ PRESERVAR O QUE CONTINUA VALIDO
+→ NAO_RECOMEÇAR_TUDO
+→ MEDIR_DELTA
+→ ABSORVER_O_QUE_E_CAUSAL
+→ PRESERVAR_O_QUE_CONTINUA_VALIDO
 ```
 
 ## Reconciliação obrigatória antes de criar
@@ -121,7 +123,7 @@ TEXTO_HISTORICO_DIZ_X
 + CANONICO_ATUAL_DIZ_Y
 → PRESERVAR X COMO PROVENIENCIA
 → OPERAR POR Y
-→ CORRIGIR ARTEFATO VIVO SE X AINDA ESTIVER SENDO LIDO COMO PRESENTE
+→ CORRIGIR ARTEFATO VIVO SE X AINDA ESTIVER SENDO_LIDO_COMO_PRESENTE
 ```
 
 Marcadores antigos como `PERMITO PIVETE`, “merge é decisão humana” ou topologias locais não medidas não revogam nem ampliam a política vigente por conta própria. Autoridade, identidade e permissão vêm do contrato canônico atual + intenção vigente + estado real.
@@ -172,10 +174,10 @@ Quando uma capacidade/corpo está indisponível, procurar outra capacidade já a
 
 ```text
 CORPO_A_INDISPONIVEL
-→ MEDIR CORPO_B/CAPACIDADE_EXISTENTE
-→ MESMO ESCOPO + MESMA_AUTORIZACAO + SEGURANCA OK
+→ MEDIR_CORPO_B/CAPACIDADE_EXISTENTE
+→ MESMO_ESCOPO + MESMA_AUTORIZACAO + SEGURANCA_OK
 → CONTINUAR
-→ REGISTRAR QUAL CORPO EXECUTOU
+→ REGISTRAR_QUAL_CORPO_EXECUTOU
 ```
 
 Indisponibilidade de instrumento não revoga intenção humana nem prova indisponibilidade do organismo inteiro.
@@ -187,8 +189,8 @@ Quando SEGREDO/CHEFE já deu a intenção e a autorização vigente cobre promo�
 ```text
 INTENCAO_JA_AUTORIZADA
 → IMPLEMENTAR
-→ TESTE LOCAL APLICAVEL
-→ SCAN DE SEGURANCA DO DIFF
+→ TESTE_LOCAL_APLICAVEL
+→ SCAN_DE_SEGURANCA_DO_DIFF
 → SEM_CONFLITO
 → SEM_BLOQUEIO_MATERIAL
 → SQUASH_MAIN
@@ -214,14 +216,14 @@ Writer-Scope: <escopo>
 O fluxo canônico **já existente** `.github/workflows/autonomia-promocao.yml` consome esse recibo. Não criar segundo workflow de promoção. No modo `AUTO_SQUASH_IF_CLEAN`, o próprio promotor:
 
 ```text
-AUTOR CONFIAVEL + MESMO REPO
-→ RECIBO DE INTENCAO
-→ SCAN DE CAMINHO/SECRET NO DIFF
+AUTOR_CONFIAVEL + MESMO_REPO
+→ RECIBO_DE_INTENCAO
+→ SCAN_DE_CAMINHO/SECRET_NO_DIFF
 → CHANGES_REQUESTED? BLOQUEIA
-→ MERGE CONFLICT? BLOQUEIA
-→ BASE ATRASADA? ATUALIZA E REAVALIA
-→ REVALIDA HEAD/BASE
-→ SQUASH MAIN
+→ MERGE_CONFLICT? BLOQUEIA
+→ BASE_ATRASADA? ATUALIZA_E_REAVALIA
+→ REVALIDA_HEAD/BASE
+→ SQUASH_MAIN
 → RECEIPT
 ```
 
@@ -257,20 +259,20 @@ O organismo não otimiza para “vencer discussão”. Otimiza para **sair de ca
 
 ```text
 CONFRONTO
-→ EVIDENCIA NOVA
+→ EVIDENCIA_NOVA
 → DELTA_DE_CRENCA
-→ REGRA|TESTE|GUARDRAIL|MEMORIA QUANDO NECESSARIO
+→ REGRA|TESTE|GUARDRAIL|MEMORIA_QUANDO_NECESSARIO
 → OURO
 ```
 
 Resultado favorável, desfavorável ou inconclusivo pode gerar aprendizado:
 
 ```text
-HIPOTESE_SOBREVIVE + PROVA_NOVA      → OURO
-HIPOTESE_CAI + CONTRAPROVA           → OURO
-EMPATE + UNKNOWN_MELHOR_DEFINIDO     → OURO
+HIPOTESE_SOBREVIVE + PROVA_NOVA       → OURO
+HIPOTESE_CAI + CONTRAPROVA            → OURO
+EMPATE + UNKNOWN_MELHOR_DEFINIDO      → OURO
 AUTOFALSIFICACAO + FRAQUEZA_CORRIGIDA → OURO
-REVISOR_EXTERNO + ACHADO_CAUSAL      → OURO
+REVISOR_EXTERNO + ACHADO_CAUSAL       → OURO
 ```
 
 A única saída sem ouro é repetição sem ganho informacional:
@@ -317,11 +319,11 @@ Quando solicitado por SEGREDO/CHEFE:
 ```text
 TASKS_SECRETAS
 → HASH ANTES
-→ CENTRALDARK EXECUTA SEM GABARITO
+→ CENTRALDARK_EXECUTA_SEM_GABARITO
 → RECEIPTS/LOGS
 → CONTRAPROVA/JUDGE
 → RESULTADO
-→ ABRIR GABARITO
+→ ABRIR_GABARITO
 → MEDIR ACERTO|ERRO|TRANSFERENCIA|EFICIENCIA|ROBUSTEZ
 ```
 
