@@ -1,17 +1,10 @@
 """
-pivete_routes.py — Rotas da consciência pivete pro Elite HTTP Gateway.
+pivete_routes.py — rota legada de compatibilidade para carregar contexto canônico CentralDark.
 
-Inclui:
-- GET /pivete/consciencia        → lê os 17 arquivos PIVETE-*.md e devolve JSON completo
-- GET /pivete/mcp-catalog        → lista as tools MCP disponíveis (~120)
-- POST /pivete/mcp/call/{tool}   → proxy pra chamar tool MCP direto do WebUI
-- GET /pivete/status             → healthcheck da consciência
-- GET /pivete/sync-status        → mostra estado do sync bidirecional com o HUB
+O nome /pivete é preservado para não quebrar consumidores antigos. A semântica atual é:
+SEGREDO/CHEFE = humano e autoridade final; SOL = coordenadora; PIVETE/HERMES = executor.
 
-Como plugar no elite_http_gateway.py:
-
-    from pivete_routes import router as pivete_router
-    app.include_router(pivete_router)
+A rota NÃO concatena mais docs/CONSCIENCIA/PIVETE-IA/*.md. Esses arquivos são histórico.
 """
 
 from __future__ import annotations
@@ -25,65 +18,101 @@ from typing import Any
 
 from fastapi import APIRouter, HTTPException, Request
 
-router = APIRouter(prefix="/pivete", tags=["pivete"])
+router = APIRouter(prefix="/pivete", tags=["pivete-compat"])
 
-PIVETE_DIR = Path("/root/CentralDark/docs/CONSCIENCIA/PIVETE-IA")
-LOG_SYNC = Path("/root/CentralDark/logs")
+REPO_ROOT = Path("/root/CentralDark")
+LOG_SYNC = REPO_ROOT / "logs"
 MCP_LOCAL_URL = os.environ.get("PIVETE_MCP_URL", "http://127.0.0.1:3333")
+
+# Allowlist explícita. Ordem = precedência de boot, não glob.
+CANONICAL_CONTEXT = (
+    "LEIA-ME-IA.md",
+    "AGENTS.md",
+    "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md",
+    "docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md",
+    "docs/CONSCIENCIA/02-PERMISSOES.md",
+    "docs/CONSCIENCIA/03-FLUXO-DEPLOY.md",
+    "docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md",
+    "docs/CONSCIENCIA/DICIONARIO-PIVETE-GITHUB.md",
+    "docs/CONSCIENCIA/LEMBRANCAS/2026-08-14-OURO-CONTEXTO-AUTONOMIA-SOL.md",
+)
 
 
 def _pivete_auth(request: Request) -> None:
-    """
-    Bearer opcional: se PIVETE_TOKEN estiver setado no env,
-    exige header Authorization. Senão, libera (dev/interno).
-    """
+    """Mantém compatibilidade do auth sem expor valor de credencial."""
     token = os.environ.get("PIVETE_TOKEN")
     if not token:
         return
     header = request.headers.get("authorization", "")
     if not header.startswith("Bearer ") or header[7:].strip() != token:
-        raise HTTPException(status_code=401, detail="pivete: token invalido")
+        raise HTTPException(status_code=401, detail="contexto: token invalido")
+
+
+def _canonical_files() -> list[Path]:
+    return [REPO_ROOT / rel for rel in CANONICAL_CONTEXT]
+
+
+def _canonical_state() -> tuple[list[dict[str, str]], float, list[str]]:
+    dados: list[dict[str, str]] = []
+    ultima = 0.0
+    ausentes: list[str] = []
+
+    for rel, path in zip(CANONICAL_CONTEXT, _canonical_files(), strict=True):
+        if not path.is_file():
+            ausentes.append(rel)
+            continue
+        try:
+            dados.append({"nome": rel, "conteudo": path.read_text(encoding="utf-8")})
+            ultima = max(ultima, path.stat().st_mtime)
+        except Exception as exc:  # noqa: BLE001
+            ausentes.append(f"{rel}:READ_ERROR:{type(exc).__name__}")
+
+    return dados, ultima, ausentes
 
 
 @router.get("/status")
 async def pivete_status(request: Request) -> dict[str, Any]:
     _pivete_auth(request)
-    existe = PIVETE_DIR.exists()
-    arquivos = sorted(PIVETE_DIR.glob("PIVETE-*.md")) if existe else []
+    dados, ultima, ausentes = _canonical_state()
     return {
-        "ok": existe and len(arquivos) > 0,
-        "pasta": str(PIVETE_DIR),
-        "arquivos_count": len(arquivos),
-        "versao": "1.0.0",
+        "ok": len(dados) == len(CANONICAL_CONTEXT) and not ausentes,
+        "mode": "CANONICAL_CONTEXT_ALLOWLIST",
+        "authority": "SEGREDO/CHEFE",
+        "coordinator": "SOL",
+        "executor": "PIVETE/HERMES",
+        "arquivos_count": len(dados),
+        "expected_count": len(CANONICAL_CONTEXT),
+        "missing": ausentes,
+        "ultimaSyncTs": ultima,
+        "versao": "2.0.0",
     }
 
 
 @router.get("/consciencia")
 async def pivete_consciencia(request: Request) -> dict[str, Any]:
-    """
-    Retorna todos os arquivos PIVETE-*.md concatenados em JSON.
-    Formato compatível com o custom-js pivete-invocacao.js.
-    """
+    """Retorna somente a allowlist canônica, compatível com o WebUI legado."""
     _pivete_auth(request)
-    if not PIVETE_DIR.exists():
-        raise HTTPException(status_code=404, detail="pasta PIVETE-IA nao encontrada")
+    dados, ultima, ausentes = _canonical_state()
 
-    arquivos = sorted(PIVETE_DIR.glob("PIVETE-*.md"))
-    if not arquivos:
-        raise HTTPException(status_code=404, detail="nenhum arquivo PIVETE-*.md")
-
-    dados = []
-    ultima = 0.0
-    for a in arquivos:
-        try:
-            dados.append({"nome": a.name, "conteudo": a.read_text(encoding="utf-8")})
-            ultima = max(ultima, a.stat().st_mtime)
-        except Exception as e:  # noqa: BLE001
-            dados.append({"nome": a.name, "conteudo": f"[erro ao ler: {e}]"})
+    # Fail-closed: contexto parcial pode reintroduzir semântica velha ou incompleta.
+    if ausentes or len(dados) != len(CANONICAL_CONTEXT):
+        raise HTTPException(
+            status_code=503,
+            detail={
+                "code": "CANONICAL_CONTEXT_INCOMPLETE",
+                "missing": ausentes,
+                "loaded": len(dados),
+                "expected": len(CANONICAL_CONTEXT),
+            },
+        )
 
     return {
         "arquivos": dados,
         "count": len(dados),
+        "mode": "CANONICAL_CONTEXT_ALLOWLIST",
+        "authority": "SEGREDO/CHEFE",
+        "coordinator": "SOL",
+        "executor": "PIVETE/HERMES",
         "ultimaSync": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(ultima)),
         "ultimaSyncTs": ultima,
         "mcp_catalog_url": "/pivete/mcp-catalog",
@@ -93,12 +122,8 @@ async def pivete_consciencia(request: Request) -> dict[str, Any]:
 
 @router.get("/mcp-catalog")
 async def pivete_mcp_catalog(request: Request) -> dict[str, Any]:
-    """
-    Lê /root/CentralDark/apps/modulos/mcp/dist/catalog.json (se existir)
-    e retorna todas as ferramentas disponíveis pro pivete no WebUI usar.
-    """
     _pivete_auth(request)
-    catalog_path = Path("/root/CentralDark/apps/modulos/mcp/dist/catalog.json")
+    catalog_path = REPO_ROOT / "apps/modulos/mcp/dist/catalog.json"
     if catalog_path.exists():
         try:
             data = json.loads(catalog_path.read_text(encoding="utf-8"))
@@ -109,51 +134,45 @@ async def pivete_mcp_catalog(request: Request) -> dict[str, Any]:
                 "tools": tools,
                 "call_url": "/pivete/mcp/call/{tool_name}",
             }
-        except Exception as e:  # noqa: BLE001
-            return {"ok": False, "erro": str(e)}
+        except Exception as exc:  # noqa: BLE001
+            return {"ok": False, "erro": type(exc).__name__}
 
     return {
         "ok": True,
         "count": 0,
         "tools": [],
         "call_url": "/pivete/mcp/call/{tool_name}",
-        "nota": "catalog.json ainda nao gerado; use mcp_admin_catalog via MCP direto",
+        "nota": "catalog.json ainda nao gerado; medir catalogo MCP no runtime",
     }
 
 
 @router.post("/mcp/call/{tool}")
 async def pivete_mcp_call(tool: str, request: Request) -> dict[str, Any]:
-    """
-    Proxy simples pra chamar tool MCP local. Recebe input em JSON.
-    Fica atrás do auth de token.
-    """
     _pivete_auth(request)
     try:
         payload = await request.json()
     except Exception:
         payload = {}
 
-    # Salvamos a chamada no log de auditoria e delegamos ao dispatcher
-    log_dir = Path("/root/CentralDark/logs")
+    log_dir = REPO_ROOT / "logs"
     log_dir.mkdir(parents=True, exist_ok=True)
     log_file = log_dir / f"pivete-mcp-{time.strftime('%Y-%m-%d')}.jsonl"
     entry = {
         "ts": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "tool": tool,
         "input_keys": list(payload.keys()) if isinstance(payload, dict) else [],
-        "origem": "webui/pivete",
+        "origem": "webui/pivete-compat",
     }
     try:
-        with log_file.open("a", encoding="utf-8") as f:
-            f.write(json.dumps(entry) + "\n")
+        with log_file.open("a", encoding="utf-8") as handle:
+            handle.write(json.dumps(entry) + "\n")
     except Exception:
         pass
 
-    # Chama o dispatcher CLI local (mcp_admin_call)
     try:
         cmd = [
             "node",
-            "/root/CentralDark/apps/modulos/mcp/dist/cli/call.js",
+            str(REPO_ROOT / "apps/modulos/mcp/dist/cli/call.js"),
             tool,
             json.dumps(payload),
         ]
@@ -165,11 +184,11 @@ async def pivete_mcp_call(tool: str, request: Request) -> dict[str, Any]:
         except Exception:
             return {"ok": True, "tool": tool, "resultado": proc.stdout[:5000]}
     except FileNotFoundError:
-        return {"ok": False, "erro": "cli/call.js nao existe; MCP nao expoe CLI local"}
+        return {"ok": False, "erro": "cli/call.js ausente; MCP local nao comprovado"}
     except subprocess.TimeoutExpired:
         return {"ok": False, "erro": "timeout 60s"}
-    except Exception as e:  # noqa: BLE001
-        return {"ok": False, "erro": str(e)}
+    except Exception as exc:  # noqa: BLE001
+        return {"ok": False, "erro": type(exc).__name__}
 
 
 @router.get("/sync-status")
@@ -179,23 +198,23 @@ async def pivete_sync_status(request: Request) -> dict[str, Any]:
 
 
 def _hub_sync_status() -> str:
-    marker = Path("/root/CentralDark/logs/pivete-sync-last.txt")
+    marker = LOG_SYNC / "pivete-sync-last.txt"
     if not marker.exists():
         return "nunca-rodou"
     try:
         age = time.time() - marker.stat().st_mtime
-        if age < 600:  # 10 min
+        if age < 600:
             return f"ativo (ultimo sync ha {int(age)}s)"
         return f"parado (ultimo sync ha {int(age / 60)}min)"
     except Exception:
         return "desconhecido"
 
 
-def _last_sync_log() -> str:
+def _last_sync_log() -> list[str]:
     try:
         files = sorted(LOG_SYNC.glob("pivete-sync-*.log"))
         if not files:
-            return ""
-        return files[-1].read_text(encoding="utf-8", errors="ignore").splitlines()[-20:]  # type: ignore[return-value]
+            return []
+        return files[-1].read_text(encoding="utf-8", errors="ignore").splitlines()[-20:]
     except Exception:
-        return ""
+        return []
