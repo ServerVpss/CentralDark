@@ -57,6 +57,11 @@ jobs:
           fi
           echo "DRIFT_GUARD_HEAD=PASS sha=${ACTUAL_SHA}"
 
+      - name: Setup Python
+        uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38
+        with:
+          python-version: '3.11'
+
       - name: Confirmar MetaLupa como técnica Lupa canônica única
         run: |
           set -e
