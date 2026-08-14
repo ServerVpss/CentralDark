@@ -39,7 +39,7 @@ O artefato organiza o contexto. Ele não aprova código, não autoriza merge e n
 ## Arquivos sensíveis
 
 - [ ] Não li, abri, copiei, editei ou usei como contexto arquivos sensíveis.
-- [ ] Não há `.env`, token, cookie, sessão, chave privada, certificado ou credencial no diff.
+- [ ] Não há `.env`, `secrets/`, `tokens/`, `sessions/`, `.ssh/`, token, cookie, sessão, chave privada, certificado ou credencial no diff.
 - [ ] Valores sensíveis foram substituídos por placeholders seguros.
 
 ## Testes
@@ -49,7 +49,7 @@ Liste os testes realizados e seus resultados.
 ## Ações sensíveis
 
 - [ ] Não houve deploy, migration, reinício de serviço ou alteração na VPS.
-- [ ] Se houver ação sensível futura, ela aguarda autorização explícita do Pivete.
+- [ ] Se houver ação sensível futura, ela exige autorização aplicável do SEGREDO/CHEFE conforme o contrato canônico vigente.
 - [ ] Nenhuma ação destrutiva foi executada.
 
 ## Revisão
