@@ -62,7 +62,7 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Confirmar canônica única no disco
+      - name: Confirmar MetaLupa como técnica Lupa canônica única
         run: |
           set -e
           test -f .agents/skills/meta-lupa/SKILL.md || { echo "❌ canônica ausente"; exit 1; }
@@ -74,7 +74,7 @@ jobs:
               fi
             done
           done
-          echo "✅ apenas .agents/skills/meta-lupa/ está ativo"
+          echo "✅ meta-lupa é a única técnica Lupa canônica ativa; outras skills legítimas podem coexistir"
 
       - name: Gerar inventário de skills
         run: |
