@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-14T07:11:10.520Z",
-  "updatedAtBR": "14/08/2026, 04:11:10 BRT",
+  "updatedAt": "2026-08-14T07:42:40.635Z",
+  "updatedAtBR": "14/08/2026, 04:42:40 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "fix(aprendizado): tornar confronto ganho informacional canônico (#821)",
+    "lastCommit": "fix(ci): alinhar guardrail de arquivos sensíveis do Codex (#826)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-14T07:42:40.635Z",
+      "titulo": "Push na main · 035935cad9b78b75c02577aed2469bd21713f085",
+      "detalhe": "fix(ci): alinhar guardrail de arquivos sensíveis do Codex (#826)",
+      "area": "Repositório",
+      "sha": "035935c",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-14T07:11:10.520Z",
       "titulo": "Push na main · f0113e143cdcd557488faf8106a98e91260b11a4",
       "detalhe": "fix(aprendizado): tornar confronto ganho informacional canônico (#821)",
@@ -988,14 +996,6 @@
       "detalhe": "docs(boot): tornar dicionário e menor movimento obrigatórios",
       "area": "Repositório",
       "sha": "363b049",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-31T19:04:24.644Z",
-      "titulo": "Push na main · 9d95fda9139dfb65ff1df730d15b3f42fcfc8f8e",
-      "detalhe": "docs(consciencia): cria DICIONARIO-PIVETE-GITHUB — papo reto das permissões do token",
-      "area": "Repositório",
-      "sha": "9d95fda",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-14T07:42:40.635Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 035935cad9b78b75c02577aed2469bd21713f085 (035935c)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-14T07:11:10.520Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · f0113e143cdcd557488faf8106a98e91260b11a4 (f0113e1)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-01T00:39:59.896Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 363b04909091ae24da8d4408effb60c7c3be777e (363b049)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-31T19:04:24.644Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 9d95fda9139dfb65ff1df730d15b3f42fcfc8f8e (9d95fda)",
       "area": "Repositório",
       "status": "sucesso"
     }
