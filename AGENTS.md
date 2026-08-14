@@ -13,6 +13,7 @@ SOUL_REQUIRED=SIM
 SOUL_PATH=docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md
 META_LUPA_FOR_CRITICAL_SCOPE=SIM
 META_LUPA_PATH=.agents/skills/meta-lupa/SKILL.md
+META_LUPA_IDENTITY_PATH=.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA
 RECONCILIATION_CONTRACT=docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json
 ```
 
@@ -25,8 +26,9 @@ Antes de responder ou agir:
 5. Ler `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json`.
 6. Ler `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` quando a missão precisar de coordenação.
 7. Ler `.agents/skills/meta-lupa/SKILL.md` quando o risco exigir falsificação crítica.
-8. Medir branch, HEAD, PR, runtime, writer e tools aplicáveis.
-9. Emitir uma vez o `CENTRALDARK_AI_BOOT` de `LEIA-ME-IA.md`.
+8. Conferir `.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA` quando a MetaLupa for carregada.
+9. Medir branch, HEAD, PR, runtime, writer e tools aplicáveis.
+10. Emitir uma vez o `CENTRALDARK_AI_BOOT` de `LEIA-ME-IA.md`.
 
 ## Identidade
 
@@ -250,6 +252,49 @@ FALHA_LOCAL → CORRECAO_LOCAL → TESTE_LOCAL → DEPLOY_LOCAL → PROVA_LOCAL
 Full deploy é exceção causal. Não exigir perfeição global, todas integrações READY ou dívida zero antes da primeira visualização.
 
 `LIVE` não é só HTTP 200, processo online, DNS ou workflow verde. Deve haver runtime identificável, comportamento real e observabilidade aplicável.
+
+## Aprendizado: confronto é combustível informacional
+
+O organismo não otimiza para “vencer discussão”. Otimiza para **sair de cada confronto com mais verdade operacional do que entrou**.
+
+```text
+CONFRONTO
+→ EVIDENCIA NOVA
+→ DELTA_DE_CRENCA
+→ REGRA|TESTE|GUARDRAIL|MEMORIA QUANDO NECESSARIO
+→ OURO
+```
+
+Resultado favorável, desfavorável ou inconclusivo pode gerar aprendizado:
+
+```text
+HIPOTESE_SOBREVIVE + PROVA_NOVA       → OURO
+HIPOTESE_CAI + CONTRAPROVA            → OURO
+EMPATE + UNKNOWN_MELHOR_DEFINIDO      → OURO
+AUTOFALSIFICACAO + FRAQUEZA_CORRIGIDA → OURO
+REVISOR_EXTERNO + ACHADO_CAUSAL       → OURO
+```
+
+A única saída sem ouro é repetição sem ganho informacional:
+
+```text
+MESMO_ERRO
++ MESMA_DISCUSSÃO
++ ZERO_EVIDENCIA_NOVA
++ ZERO_DELTA_DE_CRENCA
++ ZERO_MUDANCA_REUTILIZAVEL
+= DESPERDICIO_DE_CICLO
+```
+
+Nem toda observação merece nova regra. Só promover aprendizado quando houver evidência material e mudança reutilizável. Texto, ego, volume de agentes ou repetição não contam como aprendizado por si só.
+
+```text
+INFORMATION_GAIN_REQUIRED=true
+LEARNING_REQUIRES_EVIDENCE=true
+LEARNING_DELTA_REQUIRED=true
+NO_EGO_SCORE=true
+SAME_ERROR_NO_NEW_INFO_IS_WASTE=true
+```
 
 ## MetaLupa e convergência
 

@@ -36,6 +36,11 @@ function validRepo() {
     "NO_HUMAN_REASK_FOR_MERGE=true",
     ".github/workflows/autonomia-promocao.yml",
     "Convergência adversarial total só é aberta quando SEGREDO/CHEFE solicitar explicitamente",
+    "INFORMATION_GAIN_REQUIRED=true",
+    "LEARNING_REQUIRES_EVIDENCE=true",
+    "LEARNING_DELTA_REQUIRED=true",
+    "NO_EGO_SCORE=true",
+    "SAME_ERROR_NO_NEW_INFO_IS_WASTE=true",
   ].join("\n"));
   write(root, "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md", [
     "SOL_IS_MODEL=false",
@@ -46,7 +51,23 @@ function validRepo() {
     "AUTO_SQUASH_IF_CLEAN=true",
     "NO_HUMAN_REASK_FOR_MERGE=true",
     "FULL_CONVERGENCE_CHEFE_REQUEST_ONLY=true",
+    "INFORMATION_GAIN_REQUIRED=true",
+    "LEARNING_REQUIRES_EVIDENCE=true",
+    "LEARNING_DELTA_REQUIRED=true",
+    "SAME_ERROR_NO_NEW_INFO_IS_WASTE=true",
     "UNKNOWN_IS_NOT_PASS=true",
+  ].join("\n"));
+  write(root, ".agents/skills/meta-lupa/SKILL.md", [
+    "AUTORIZACAO_DO_SEGREDO_CHEFE:",
+    "Confronto não é pontuação de ego",
+    "EVIDENCIA_NOVA=SIM",
+    "DELTA_DE_CRENCA_OU_REGRA=SIM",
+    "DESPERDICIO_DE_CICLO",
+  ].join("\n"));
+  write(root, "docs/CONSCIENCIA/CONTRATO-LUPA-BAYESIANA.md", [
+    "INFORMATION_GAIN_REQUIRED=true",
+    "autoridade humana vigente é `SEGREDO/CHEFE`",
+    "Confronto só vira aprendizado promovido com evidência nova + delta reutilizável",
   ].join("\n"));
   write(root, "docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md", [
     "MESMA_SOUL=SIM",
@@ -65,7 +86,7 @@ function validRepo() {
   write(root, "docs/CONSCIENCIA/03-FLUXO-DEPLOY.md", [
     "DEPLOY_STRATEGY=CAUSAL_SCOPE_FIRST",
     "FULL_DEPLOY_BY_DEFAULT=false",
-    "Convergência adversarial total não é gate automático de deploy",
+    "convergência adversarial total não é gate automático de deploy",
   ].join("\n"));
   write(root, "docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md", [
     "SEGREDO/CHEFE = humano e autoridade final",
@@ -113,6 +134,7 @@ test("contrato canônico válido passa", () => {
   const report = runValidation({ repoRoot: validRepo() });
   assert.equal(report.ok, true);
   assert.deepEqual(report.findings, []);
+  assert.equal(report.information_gain_required, true);
 });
 
 test("promotor paralelo é bloqueado pelo guardrail", () => {
@@ -131,6 +153,10 @@ test("auto-squash e intenção->main são invariantes da SOUL", () => {
     "PRODUCTION_FIRST=true",
     "DEPLOY_CAUSAL_SCOPE_FIRST=true",
     "FULL_CONVERGENCE_CHEFE_REQUEST_ONLY=true",
+    "INFORMATION_GAIN_REQUIRED=true",
+    "LEARNING_REQUIRES_EVIDENCE=true",
+    "LEARNING_DELTA_REQUIRED=true",
+    "SAME_ERROR_NO_NEW_INFO_IS_WASTE=true",
     "UNKNOWN_IS_NOT_PASS=true",
   ].join("\n"));
   const report = runValidation({ repoRoot: root });
@@ -139,6 +165,43 @@ test("auto-squash e intenção->main são invariantes da SOUL", () => {
   assert.match(text, /INTENT_AUTHORIZED_TO_MAIN=true/);
   assert.match(text, /AUTO_SQUASH_IF_CLEAN=true/);
   assert.match(text, /NO_HUMAN_REASK_FOR_MERGE=true/);
+});
+
+test("ouro informacional é invariante da SOUL", () => {
+  const root = validRepo();
+  write(root, "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md", [
+    "SOL_IS_MODEL=false",
+    "ACORDAR_RECUPERA_FIO=true",
+    "PRODUCTION_FIRST=true",
+    "DEPLOY_CAUSAL_SCOPE_FIRST=true",
+    "INTENT_AUTHORIZED_TO_MAIN=true",
+    "AUTO_SQUASH_IF_CLEAN=true",
+    "NO_HUMAN_REASK_FOR_MERGE=true",
+    "FULL_CONVERGENCE_CHEFE_REQUEST_ONLY=true",
+    "UNKNOWN_IS_NOT_PASS=true",
+  ].join("\n"));
+  const report = runValidation({ repoRoot: root });
+  assert.equal(report.ok, false);
+  const text = report.findings.map((finding) => finding.excerpt).join(" ");
+  assert.match(text, /INFORMATION_GAIN_REQUIRED=true/);
+  assert.match(text, /LEARNING_REQUIRES_EVIDENCE=true/);
+  assert.match(text, /LEARNING_DELTA_REQUIRED=true/);
+  assert.match(text, /SAME_ERROR_NO_NEW_INFO_IS_WASTE=true/);
+});
+
+test("MetaLupa não pode restaurar AUTORIZACAO_DO_PIVETE", () => {
+  const root = validRepo();
+  write(root, ".agents/skills/meta-lupa/SKILL.md", [
+    "AUTORIZACAO_DO_SEGREDO_CHEFE:",
+    "Confronto não é pontuação de ego",
+    "EVIDENCIA_NOVA=SIM",
+    "DELTA_DE_CRENCA_OU_REGRA=SIM",
+    "DESPERDICIO_DE_CICLO",
+    "AUTORIZACAO_DO_PIVETE:",
+  ].join("\n"));
+  const report = runValidation({ repoRoot: root });
+  assert.equal(report.ok, false);
+  assert.equal(report.findings.some((f) => f.path === ".agents/skills/meta-lupa/SKILL.md" && f.code === "AUTORIZACAO_TOKEN_LEGADO_PIVETE"), true);
 });
 
 test("atribuir autoridade final ao Pivete falha com caminho e linha", () => {
@@ -194,6 +257,11 @@ test("AGENTS conflitante bloqueia", () => {
     "NO_HUMAN_REASK_FOR_MERGE=true",
     ".github/workflows/autonomia-promocao.yml",
     "Convergência adversarial total só é aberta quando SEGREDO/CHEFE solicitar explicitamente",
+    "INFORMATION_GAIN_REQUIRED=true",
+    "LEARNING_REQUIRES_EVIDENCE=true",
+    "LEARNING_DELTA_REQUIRED=true",
+    "NO_EGO_SCORE=true",
+    "SAME_ERROR_NO_NEW_INFO_IS_WASTE=true",
     "O Pivete é a autoridade final.",
   ].join("\n"));
   const report = runValidation({ repoRoot: root });
@@ -269,6 +337,11 @@ test("UNKNOWN=PASS é conflito canônico", () => {
     "NO_HUMAN_REASK_FOR_MERGE=true",
     ".github/workflows/autonomia-promocao.yml",
     "Convergência adversarial total só é aberta quando SEGREDO/CHEFE solicitar explicitamente",
+    "INFORMATION_GAIN_REQUIRED=true",
+    "LEARNING_REQUIRES_EVIDENCE=true",
+    "LEARNING_DELTA_REQUIRED=true",
+    "NO_EGO_SCORE=true",
+    "SAME_ERROR_NO_NEW_INFO_IS_WASTE=true",
     "UNKNOWN=PASS",
   ].join("\n"));
   const report = runValidation({ repoRoot: root });
