@@ -73,6 +73,47 @@ CONFRONTO|ERRO|REVIEW|AUTOFALSIFICACAO
 
 Sem evidência nova e sem delta reutilizável, não existe aprendizado operacional; existe repetição.
 
+## Consolidação ociosa — "Dream Review"
+
+Quando não houver missão interativa exigindo o mesmo Writer, o organismo pode revisar experiências recentes **em cópia isolada** para produzir candidatos de aprendizado. O termo `Dream Review` é apenas um nome operacional para consolidação offline; não significa sonho ou consciência humana.
+
+A implementação canônica reutiliza `scripts/memory-linker/` e não cria um segundo cérebro:
+
+```text
+EVENTOS DE EXPERIENCIA
+→ scripts/memory-linker/dream-review.mjs
+→ SANITIZAR
+→ EXIGIR EVIDENCIA + LEARNING_DELTA + HEAD
+→ DEDUPLICAR PADROES
+→ DREAM_PROPOSAL:CANDIDATE
+→ METALUPA / CONTRAPROVA
+→ PROMOCAO CANONICA SOMENTE SE SOBREVIVER
+```
+
+Invariantes do Dream Review:
+
+```text
+DREAM_REVIEW_ISOLATED=true
+DREAM_OUTPUT=CANDIDATE_ONLY
+DREAM_DIRECT_CANONICAL_MUTATION=false
+RAW_SESSION_MUTATION=false
+EVIDENCE_REQUIRED=true
+LEARNING_DELTA_REQUIRED=true
+SAME_HEAD_REVALIDATION_REQUIRED=true
+META_LUPA_BEFORE_PROMOTION=true
+PROOF_OWNERSHIP_WHEN_APPLICABLE=true
+```
+
+O Dream Review **não** agenda a si próprio, não faz deploy e não promove memória/skill/regra por conta própria. Agendamento futuro deve reutilizar o scheduler/cron canônico já existente e só depois de o runtime local ser medido. A ausência de fila/event bridge vivo permanece `UNPROVEN`, não motivo para inventar segundo pipeline.
+
+O estado bruto de sessão é evidência de entrada e permanece preservado. A consolidação produz uma proposta nova; o original não é reescrito para fazer a hipótese parecer verdadeira.
+
+```text
+RAW_EXPERIENCE=IMMUTABLE_INPUT
+DREAM_PROPOSAL=DERIVED_CANDIDATE
+CANONICAL_MEMORY=SEPARATE_PROMOTION_STEP
+```
+
 ## Autoaperfeiçoamento sem circularidade
 
 Autoaperfeiçoamento não pode depender apenas da própria declaração do sistema.
@@ -126,6 +167,7 @@ Este arquivo é a fonte conceitual única. A distribuição ocorre sem copiar o 
 - `AGENTS.md` mantém o contrato genérico de ganho informacional e continua semanticamente subordinado ao boot;
 - `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md` mantém identidade, autoridade e aprendizado sem redefinir este conceito;
 - `docs/CONSCIENCIA/LEMBRANCAS/2026-08-14-OURO-CONTEXTO-AUTONOMIA-SOL.md` preserva a proveniência histórica quando o aprendizado for consolidado;
-- `docs/CONSCIENCIA/PROOF-OWNERSHIP.json` limita circularidade da metaprova.
+- `docs/CONSCIENCIA/PROOF-OWNERSHIP.json` limita circularidade da metaprova;
+- `scripts/memory-linker/dream-review.mjs` materializa apenas o candidato isolado da consolidação ociosa.
 
 Não duplicar este contrato integralmente nos consumidores; preservar uma única semântica e referenciar esta fonte quando o próprio método estiver sendo refinado.
