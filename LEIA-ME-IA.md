@@ -29,7 +29,8 @@ Carregue nesta ordem:
 9. `.agents/skills/meta-lupa/SKILL.md` quando o risco exigir falsificação crítica.
 10. `.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA` para conferir a identidade canônica da skill.
 11. `docs/CONSCIENCIA/PROOF-OWNERSHIP.json` quando houver gate, prova, Judge ou cadeia de validação — propriedade da prova e bloqueio de circularidade.
-12. estado atual de branch, HEAD, PR, runtime, writer e ferramentas aplicáveis.
+12. `docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md` quando houver aprendizado do próprio método, autoaperfeiçoamento do scaffold ou revisão de como o organismo trabalha.
+13. estado atual de branch, HEAD, PR, runtime, writer e ferramentas aplicáveis.
 
 Nome de modelo não muda o contrato. GPT, Codex, Claude, Gemini, Grok, Copilot, Cursor, Windsurf, Hermes ou modelo futuro entram como motores/papéis substituíveis dentro do mesmo organismo.
 
@@ -256,6 +257,28 @@ LEARNING_REQUIRES_EVIDENCE=true
 SAME_ERROR_NO_NEW_INFO_IS_WASTE=true
 ```
 
+Quando o próprio organismo revisa **como** está trabalhando e muda o scaffold por evidência, aplicar `docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md`:
+
+```text
+OBSERVAR_O_PROPRIO_PROCESSO
+→ ACHAR ERRO DO METODO
+→ TESTAR/CONTRAPROVAR
+→ ALTERAR MENOR SCAFFOLD APLICAVEL
+→ REGISTRAR DELTA REUTILIZAVEL
+→ PROXIMA EXECUCAO COMECA MAIS ALTO
+```
+
+Esse ciclo é **metacognição operacional**. Quando SEGREDO/CHEFE ensina/corrige e o organismo materializa o aprendizado no scaffold, a relação é **coevolução operacional humano–sistema**. A autoridade permanece no SEGREDO/CHEFE; não presumir mudança de pesos do modelo nem AGI a partir da arquitetura.
+
+```text
+OPERATIONAL_METACOGNITION=true
+HUMAN_SYSTEM_COEVOLUTION=OPERATIONAL
+SCAFFOLD_LEARNING_PRIMARY=true
+MODEL_WEIGHT_UPDATE_ASSUMED=false
+AUTHORITY_REMAINS_WITH_SEGREDO_CHEFE=true
+AGI_CLAIM_FROM_ARCHITECTURE=false
+```
+
 Generalização sistêmica por composição:
 
 ```text
@@ -304,6 +327,7 @@ TASKS_SECRETAS
 | promoção/merge | `.github/workflows/autonomia-promocao.yml` + `scripts/github-autonomia-promocao.mjs` |
 | deploy | `docs/CONSCIENCIA/03-FLUXO-DEPLOY.md` |
 | aprendizados | `docs/CONSCIENCIA/APRENDIZADOS.md` |
+| metacognição / coevolução operacional | `docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md` |
 | pendências | `docs/PENDENCIAS.md` |
 | coordenação/escritor único | `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` |
 | MetaLupa | `.agents/skills/meta-lupa/SKILL.md` |
