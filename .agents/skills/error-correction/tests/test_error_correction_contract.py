@@ -1,11 +1,13 @@
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SKILL = ROOT / "SKILL.md"
 CONTRACT = ROOT / "contract.json"
+GUARD = ROOT / "ERROR_CORRECTION_CANONICAL_SHA"
 
 
 def load_contract() -> dict:
@@ -21,6 +23,10 @@ def decide(trigger: str, *, writer_collision: bool = False, bypass: bool = False
     if writer_collision:
         return contract["decision_rules"]["writer_collision"]
     return contract["decision_rules"]["auto_trigger_starts"]
+
+
+def git_blob_sha1(data: bytes) -> str:
+    return hashlib.sha1(f"blob {len(data)}\0".encode("ascii") + data).hexdigest()
 
 
 def test_detecta_erro_e_volta_ao_mesmo_fio():
@@ -145,3 +151,9 @@ def test_gate_de_promocao_e_fail_closed():
         "return_to_mission_thread": True,
         "zero_deploy": True,
     }
+
+
+def test_selo_bate_com_skill_atual():
+    expected = GUARD.read_text(encoding="utf-8").strip().split()[0]
+    actual = git_blob_sha1(SKILL.read_bytes())
+    assert actual == expected
