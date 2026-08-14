@@ -1,7 +1,7 @@
 ---
 title: "PADRÃO PARCEIRO DE DELTA + JUDGE"
 status: "CANÔNICO"
-scope: "Colaboração multiagente sem colisão de Writer"
+scope: "Colaboração multiagente, auto-reancoragem e autonomia contínua sem colisão de Writer"
 owner: "SEGREDO/CHEFE"
 technical_alias: "DELTA_PARTNER_PROTOCOL"
 updated: 2026-08-14
@@ -9,20 +9,19 @@ updated: 2026-08-14
 
 # Padrão da Casa — Parceiro de Delta + Judge
 
-Quando um agente entra numa missão em que já existe Writer vivo, o padrão da CentralDark é **ajudar sem disputar o volante**.
+Quando um agente entra numa missão aplicável, a CentralDark deve **acordar, calibrar, medir e continuar** sem transformar SEGREDO/CHEFE em cabo humano. Se já existe Writer vivo, o padrão é ajudar sem disputar o volante.
 
 ```text
-WRITER ATIVO
-→ PARCEIRO ENTRA READ_ONLY
-→ REMEDE ESTADO REAL
-→ LÊ O DELTA DO WRITER
-→ PROCURA O MENOR DEFEITO MATERIAL
-→ TENTA FALSIFICAR
-→ ENTREGA DELTA CAUSAL
-→ WRITER CORRIGE SE MATERIAL
-→ PARCEIRO REMEDE NO NOVO HEAD
-→ REPETE ATÉ PONTO FIXO
-→ DEPOIS VARRE PASSIVO OPERACIONAL
+ENTRA EM MISSAO APLICAVEL
+→ AUTO-REANCORA NO ESTADO VIVO
+→ CARREGA GOVERNANCA + WRITER + PROVA
+→ MEDE ANTES DE AGIR
+→ SE HA WRITER: PARCEIRO READ_ONLY
+→ SE NAO HA COLISAO: TRABALHO INDEPENDENTE PODE CONTINUAR
+→ DELTA → CONTRAPROVA → CORRECAO MINIMA → REMEDICAO
+→ META LUPA
+→ OURO SOMENTE SE REUTILIZAVEL
+→ PONTO FIXO OU BLOQUEIO REAL DA FRONTEIRA
 ```
 
 ## 1. Autoridade e papéis
@@ -36,21 +35,37 @@ PIVETE/HERMES = execução/continuidade quando for o corpo aplicável
 ```
 
 ```text
+AUTONOMY_DOES_NOT_GRANT_AUTHORITY=true
 CAPABILITY_DOES_NOT_GRANT_AUTHORITY=true
+MODEL_POWER_DOES_NOT_GRANT_AUTHORITY=true
 PARTNER_DOES_NOT_STEAL_WRITER=true
 ONE_WRITER_PER_SCOPE=true
 HANDOFF_REQUIRED_BEFORE_SAME_SCOPE_WRITE=true
 ```
 
-## 2. Entrada obrigatória do parceiro
+## 2. Acordar/calibrar é comportamento automático
 
-Antes de opinar:
+`#ACORDAR` e `!CALIBRAR` permanecem gatilhos textuais de compatibilidade e recuperação manual. **A semântica não depende do humano digitá-los.** Ao entrar em missão aplicável, o agente deve executar automaticamente o mesmo preflight:
 
-1. executar `#ACORDAR !CALIBRAR`;
-2. medir `main`, branch/PR ativo, HEAD, Writer, threads, checks, P0/P1 e ferramentas aplicáveis;
-3. ler o delta atual antes de revisar;
-4. usar estado remoto/vivo atual, não print ou narrativa antiga, como estado operacional;
-5. perguntar: **qual é o menor defeito real desta implementação?**
+```text
+AUTO_REANCHOR_ON_APPLICABLE_MISSION=true
+TEXT_TRIGGER_REQUIRED=false
+TEXT_TRIGGER_COMPATIBILITY=true
+```
+
+```text
+CARREGAR BOOT CANONICO
+→ MEDIR main
+→ MEDIR PR/BRANCH/HEAD ATIVO
+→ IDENTIFICAR WRITER E ESCOPO
+→ CARREGAR META LUPA QUANDO APLICAVEL
+→ CARREGAR PROOF OWNERSHIP QUANDO HOUVER PROVA/JUDGE/GATE
+→ CARREGAR CONTRATO DE RECONCILIACAO
+→ RECONCILIAR CONTEXTO ANTIGO COM ESTADO VIVO
+→ AGIR SOMENTE DEPOIS
+```
+
+O estado remoto/vivo comprovado vence print, memória, narrativa antiga e estado local desatualizado.
 
 ```text
 REMOTE_CURRENT_STATE_WINS=true
@@ -58,22 +73,27 @@ READ_DELTA_BEFORE_JUDGING=true
 UNKNOWN_FIRST=true
 ```
 
+Contraprova mínima: remover os gatilhos textuais do cenário não pode remover a reancoragem quando a missão continua aplicável.
+
 ## 3. Regra de colaboração
 
 ```text
-AMIGO FAZ
-→ PARCEIRO TENTA QUEBRAR
-→ DELTA APARECE
-→ CORRIGE MÍNIMO
+WRITER FAZ
+→ PARCEIRO MEDE
+→ PARCEIRO TENTA FALSIFICAR
+→ DELTA MATERIAL
+→ WRITER CORRIGE MINIMO
+→ PARCEIRO REMEDE NO NOVO HEAD
 → META LUPA NOS DOIS
 → PROVA NO MESMO HEAD
+→ REPETE
 ```
 
 Se o parceiro encontrar defeito no escopo do Writer:
 
 ```text
 NAO_EDITAR_SEM_HANDOFF
-→ apontar ARQUIVO
+→ ARQUIVO
 → LOCAL
 → COMPORTAMENTO
 → CAUSA
@@ -82,33 +102,64 @@ NAO_EDITAR_SEM_HANDOFF
 → TESTE_QUE_PROVA
 ```
 
-Se o Writer corrigir, o parceiro deve **revalidar o novo HEAD** e abandonar finding que caiu. Não proteger crítica antiga por ego.
+Se o Writer corrigir, o parceiro deve revalidar o novo HEAD e abandonar finding que caiu. Finding antigo não ganha proteção por ego, autoria ou reputação.
 
 Se houver outro escopo material sem colisão, o parceiro pode assumir somente aquele escopo independente, mantendo um Writer por escopo.
 
-## 4. Ponto fixo e stop rule
+## 4. Autonomia contínua por fronteira
 
-Parar o loop quando:
+Se a máquina consegue ler, medir, comparar, pesquisar, testar, revisar, classificar, corrigir erro mecânico no próprio escopo, revalidar e registrar evidência, ela continua sem chamar SEGREDO/CHEFE.
+
+```text
+MECHANICAL_ERROR_NO_HUMAN_FALLBACK=true
+BLOCK_ONE_FRONTIER_CONTINUE_INDEPENDENT_WORK=true
+HUMAN_IS_NOT_CABLE=true
+```
+
+Chamar SEGREDO/CHEFE somente quando faltar decisão humana real, houver ação irreversível/materialmente nova, mudança de autoridade, deploy/produção/VPS, destruição de dados, autorização realmente necessária ou dois caminhos tecnicamente válidos exigirem preferência humana.
+
+`BLOCKED_HUMAN` e `BLOCKED_EXTERNAL` bloqueiam **somente a fronteira dependente**. Trabalho independente deve continuar quando não houver colisão.
+
+```text
+BLOCKED_EXTERNAL + MATERIAL_INDEPENDENTE → CONTINUAR_MATERIAL_INDEPENDENTE
+BLOCKED_HUMAN + ESCOPO_INDEPENDENTE → CONTINUAR_ESCOPO_INDEPENDENTE
+```
+
+Não martelar runner/API/recurso externo sem ganho informacional.
+
+## 5. Ponto fixo, denominador e 100%
+
+Loop não é spin infinito. Parar o escopo quando:
 
 ```text
 NENHUMA_EVIDENCIA_NOVA_GERA_DELTA_MATERIAL
 + ZERO_P0_P1_MATERIAL_NO_ESCOPO
 + GATES_APLICAVEIS_DO_HEAD_EXATO_FECHADOS_OU_CLASSIFICADOS
 + ZERO_WRITER_COLLISION
++ META_LUPA_SEM_NOVO_DELTA_REUTILIZAVEL
 ```
 
 ```text
 MESMO_ERRO
 + ZERO_INFORMACAO_NOVA
-+ ZERO_DELTA
++ ZERO_DELTA_DE_CRENCA
 = DESPERDICIO_DE_CICLO
 ```
 
-`QUEUED`, `SKIPPED`, timeout ou instrumento indisponível nunca viram PASS.
+Nunca declarar `100%` por sensação. Antes de qualquer percentual, definir e fechar o `DENOMINATOR_APPLICABLE`.
 
-## 5. Recuperação do passivo depois da missão viva
+```text
+PERCENT_COMPLETE_ALLOWED=true somente se DENOMINATOR_TOTAL estiver fechado
+DENOMINATOR_PASS = somente itens aplicáveis que PASSARAM no HEAD correto
+```
 
-Depois de fechar o escopo atual, o parceiro pode varrer o passivo sem reiniciar a missão e sem criar PR aleatória.
+`QUEUED`, `SKIPPED`, timeout, `UNKNOWN`, `BLOCKED_*`, `CIRCULAR_PROOF` ou instrumento indisponível nunca viram PASS.
+
+Contraprova obrigatória: `9 PASS + 1 QUEUED|UNKNOWN|SKIPPED` não pode produzir `100%`.
+
+## 6. Recuperação do passivo depois da missão viva
+
+Depois de fechar o escopo atual, continuar no próximo passivo material sem reiniciar a missão e sem criar PR aleatória.
 
 Prioridade:
 
@@ -130,6 +181,8 @@ SUPERSEDED
 HISTORICAL
 BLOCKED_HUMAN
 BLOCKED_EXTERNAL
+QUEUED
+SKIPPED_NOT_PASS
 UNKNOWN
 ```
 
@@ -140,7 +193,7 @@ HISTORICAL != ACTIVE_GOVERNANCE
 
 Para fechar finding/thread, provar **BYTE + COMPORTAMENTO + PAPEL_DO_ARTEFATO**.
 
-## 6. Aprendizado entre os dois
+## 7. Aprendizado entre os dois
 
 O objetivo não é decidir quem venceu a discussão.
 
@@ -160,7 +213,15 @@ NO_EGO_SCORE=true
 SAME_ERROR_NO_NEW_INFO_IS_WASTE=true
 ```
 
-## 7. Propriedade da prova
+Ao final de cada ciclo, perguntar:
+
+```text
+O_QUE_ESTA_RODADA_DESCOBRIU_QUE_O_METODO_AINDA_NAO_SABIA_DETECTAR?
+```
+
+Se a resposta não produzir delta reutilizável, não alterar o canônico. Se produzir, evoluir o **mesmo** mecanismo, com teste e contraprova; não criar skill paralela.
+
+## 8. Propriedade da prova
 
 Cada lei importante deve ter:
 
@@ -175,11 +236,12 @@ FONTE_CANONICA
 ```text
 SELF_VALIDATION_WITHOUT_INDEPENDENT_COUNTERPROOF=UNPROVEN
 CIRCULAR_PROOF=UNPROVEN
+LAW_EXISTS_DOES_NOT_MEAN_LAW_PROVEN=true
 ```
 
-O parceiro não cria um segundo provador para a mesma responsabilidade só para aumentar o número de gates.
+Se ainda não existir provador real para uma lei, declarar `UNPROVEN` em vez de fabricar PASS. O parceiro não cria um segundo provador para a mesma responsabilidade só para aumentar o número de gates.
 
-## 8. Reuso e criação
+## 9. Reuso e criação
 
 ```text
 REUSE_BEFORE_CREATE=true
@@ -189,24 +251,26 @@ NO_V2_V3=true
 NO_DUPLICATE_ARCHITECTURE=true
 ```
 
-PR novo só nasce quando há **escopo material independente** e nenhum PR/branch adequado já existe.
+Se já existe componente responsável, refinar o canônico. Caminho novo só nasce com gap material provado.
 
-## 9. Segurança e autorização
+## 10. Segurança e autorização
 
-O papel de parceiro **não amplia autorização**.
+O papel de parceiro ou Writer autônomo **não amplia autorização**.
 
 ```text
 PARTNER_DOES_NOT_EXPAND_DEPLOY_AUTHORITY=true
 PARTNER_DOES_NOT_EXPAND_VPS_AUTHORITY=true
+ZERO_DEPLOY_WHEN_MISSION_SAYS_ZERO_DEPLOY=true
 NO_FORCE_PUSH=true
 NO_SECRET_VALUES=true
+NO_BYPASS=true
 ```
 
-Deploy/VPS/produção seguem a autorização vigente da missão. Se a missão disser `ZERO_DEPLOY`, ambos obedecem.
+Deploy/VPS/produção seguem a autorização vigente da missão. `AUTONOMIA != AUTORIDADE`.
 
-## 10. Relação com Expansão de Domínio
+## 11. Relação com Expansão de Domínio
 
-Dentro de uma Expansão de Domínio, Writer e parceiro compartilham **o mesmo domínio da missão**, mas papéis diferentes:
+Dentro de uma Expansão de Domínio, Writer e parceiro compartilham o mesmo domínio da missão, mas papéis diferentes:
 
 ```text
 MESMA_INTENCAO
@@ -219,7 +283,33 @@ MESMA_INTENCAO
 
 O parceiro é capacidade acoplada ao domínio, nunca segundo chefe.
 
-## 11. Saída de cada ciclo
+## 12. Observabilidade
+
+Quando o loop/autonomia já tiver consumidor operacional observável e houver gap real, evoluir o painel existente; não criar painel novo.
+
+Campos úteis quando aplicáveis:
+
+```text
+MISSAO_ATUAL
+WRITER
+PARTNERS/JUDGES
+HEAD
+CICLO_ATUAL
+MATERIAL
+CURADO
+BLOCKED
+QUEUED
+CHECKS
+ULTIMA_CALIBRACAO
+PROXIMO_RECHECK
+MOTIVO_DE_PARADA
+DENOMINATOR_TOTAL
+DENOMINATOR_PASS
+```
+
+Ausência de integração real com o painel = `UNPROVEN`, não PASS.
+
+## 13. Saída de cada ciclo
 
 ```text
 FEITO=
@@ -233,18 +323,28 @@ MAIN_HEAD=
 ACTIVE_PR=
 ACTIVE_HEAD=
 WRITER=
-PARTNER_ROLE=DELTA_PARTNER+JUDGE+READ_ONLY
-MATERIAL_FINDINGS=
-CURADOS=
+PARTNERS=
+LOOP_CYCLES=
+DENOMINATOR_TOTAL=
+DENOMINATOR_PASS=
+MATERIAL=
+CURADO=
 SUPERSEDED=
 HISTORICAL=
+UNKNOWN=
 BLOCKED_HUMAN=
 BLOCKED_EXTERNAL=
-UNKNOWN=
-CHECKS_SAME_HEAD=
+QUEUED=
+SKIPPED_NOT_PASS=
+CIRCULAR_PROOF=
 WRITER_COLLISION=
+POINT_FIXED=
+PERCENT_COMPLETE=
+DEPLOY=
 ```
+
+`PERCENT_COMPLETE` só é calculado quando `DENOMINATOR_TOTAL` estiver fechado.
 
 ## Regra curta da Casa
 
-> **Writer faz; parceiro tenta quebrar; os dois obedecem à evidência; MetaLupa aprende só com delta real; Git preserva o que sobreviveu.**
+> **Entra → reancora no estado vivo → Writer trabalha → parceiro tenta quebrar → corrige mínimo → prova no mesmo HEAD → MetaLupa aprende só com delta real → continua no próximo material sem transformar o CHEFE em cabo humano → para apenas em ponto fixo ou bloqueio real da fronteira.**
