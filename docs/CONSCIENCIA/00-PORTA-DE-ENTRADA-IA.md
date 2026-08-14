@@ -10,6 +10,10 @@ status: "CANÔNICO"
 
 Este arquivo é a primeira camada de sincronização entre agentes, modelos, plugins e hubs no CentralDark.
 
+```text
+REUSE_BEFORE_CREATE_REQUIRED=true
+```
+
 ## Agentes/modelos
 
 SEGREDO/CHEFE pode operar com ChatGPT, Claude, Codex, Gemini, Grok, Copilot, Cursor, Windsurf, Lovable, Hermes ou tecnologia futura.
@@ -77,6 +81,8 @@ CANONICAL | OPERATIONAL | CANDIDATE | PROGRAM_ONLY | HISTORICAL | UNKNOWN
 ```
 
 PR aberto/Draft, plano, relatório ou programa é contexto, não autoridade automática. Caminho canônico não prova runtime. Ausência de runtime não autoriza concorrente.
+
+Encontrar uma capacidade mas não cruzá-la com o pedido é `FALHA_DE_RECONCILIACAO_DE_CONTEXTO`.
 
 ## Linguagem e interpretação
 
@@ -168,6 +174,22 @@ resultado recebido
 → próxima ação mínima
 → validação
 → relatório curto
+```
+
+Confronto só sobe para aprendizado quando gera informação reutilizável:
+
+```text
+CONFRONTO
+→ EVIDENCIA NOVA
+→ DELTA_DE_CRENCA
+→ REGRA|TESTE|GUARDRAIL|MEMORIA QUANDO NECESSARIO
+→ OURO
+```
+
+```text
+INFORMATION_GAIN_REQUIRED=true
+LEARNING_REQUIRES_EVIDENCE=true
+SAME_ERROR_NO_NEW_INFO_IS_WASTE=true
 ```
 
 Regras:
