@@ -62,7 +62,7 @@ jobs:
             exit 1
           }
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: 22
 
@@ -88,6 +88,10 @@ jobs:
           const canonicalPresent = labels.filter((label) => canonical.has(label));
           const invalid = labels.filter((label) => !canonical.has(label) && !temporaryAuthorityAliases.has(label));
           const authorityCompat = labels.filter((label) => temporaryAuthorityAliases.has(label));
+          const authorityAliases = new Set(['permito-segredo', 'PERMITO-SEGREDO']);
+          const canonicalPresent = labels.filter((label) => canonical.has(label));
+          const invalid = labels.filter((label) => !canonical.has(label) && !authorityAliases.has(label));
+          const authorityCompat = labels.filter((label) => authorityAliases.has(label));
 
           if (canonicalPresent.length === 0) {
             console.error('LABEL_GATE_BLOCKED=SEM_LABEL_CANONICA');
@@ -99,6 +103,7 @@ jobs:
           }
           if (authorityCompat.length > 0) {
             console.log(`LABEL_GATE_COMPAT_AUTHORITY=${authorityCompat.length} aguardando_migracao_issue_707=1`);
+            console.log(`LABEL_GATE_AUTHORITY_SEGREDO=${authorityCompat.length}`);
           }
           console.log(`LABEL_GATE=PASS canonical=${canonicalPresent.length}`);
           NODE

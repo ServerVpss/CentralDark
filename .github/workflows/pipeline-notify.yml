@@ -24,7 +24,7 @@ name: Pipeline — Telegram + Painel
 on:
   pull_request:
     types: [opened, ready_for_review, synchronize, closed]
-    branches: [main]
+    branches: [main, program/centraldark-convergencia-omniroute-722]
   pull_request_review:
     types: [submitted]
 
@@ -75,7 +75,7 @@ jobs:
                     echo "emoji=🟢"  >> $GITHUB_OUTPUT
                     echo "stage=MERGEADO" >> $GITHUB_OUTPUT
                     echo "label=MERGEADO" >> $GITHUB_OUTPUT
-                    echo "desc=Entrou na main — deploy iniciando" >> $GITHUB_OUTPUT
+                    echo "desc=Entrou na base alvo — promoção seguinte depende de gates" >> $GITHUB_OUTPUT
                   else
                     echo "emoji=❌"  >> $GITHUB_OUTPUT
                     echo "stage=FECHADO" >> $GITHUB_OUTPUT
@@ -91,7 +91,7 @@ jobs:
                   echo "emoji=✅"  >> $GITHUB_OUTPUT
                   echo "stage=APROVADO" >> $GITHUB_OUTPUT
                   echo "label=APROVADO" >> $GITHUB_OUTPUT
-                  echo "desc=Aprovado — pronto para merge" >> $GITHUB_OUTPUT
+                  echo "desc=Aprovado — pronto para próximo gate" >> $GITHUB_OUTPUT
                   ;;
                 changes_requested)
                   echo "emoji=🔄"  >> $GITHUB_OUTPUT
