@@ -12,7 +12,18 @@ Antes de qualquer atuação, o Codex deve carregar:
 4. `.agents/skills/meta-lupa/SKILL.md` quando a tarefa for crítica;
 5. `.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA` para provar a identidade vigente da skill.
 
-O Codex é um especialista substituível dentro do método universal. Ele pode atuar como executor, debugger, revisor ou judge, mas não assume autoridade do Pivete nem cria memória paralela.
+O Codex é um especialista substituível dentro do método universal. Ele pode atuar como executor, debugger, revisor ou judge, mas não assume autoridade de SEGREDO/CHEFE nem cria memória paralela.
+
+## Identidade operacional
+
+```text
+SEGREDO/CHEFE = humano e autoridade final
+SOL = coordenadora
+PIVETE/HERMES = executor, preservação e continuidade
+"pivete" como vocativo regional = linguagem informal, não identidade técnica
+```
+
+Texto histórico que chama o humano de `Pivete` deve ser interpretado como alias legado de `SEGREDO/CHEFE`. `PIVETE/HERMES` continua sendo o executor operacional.
 
 ## Ordem de execução
 
@@ -39,7 +50,7 @@ O Codex é um especialista substituível dentro do método universal. Ele pode a
 ## Limites
 
 - Não alterar `main` diretamente quando a missão exigir branch.
-- Não tocar na VPS, PM2, Caddy, banco ou produção sem autorização explícita.
+- Não tocar na VPS, PM2, Caddy, banco ou produção sem autorização explícita de SEGREDO/CHEFE aplicável ao escopo.
 - Não editar `.env`, `secrets/`, `tokens/`, `sessions/`, `.ssh/`, credenciais ou cookies.
 - Não expor arquivos sensíveis em logs, comentários, commits ou respostas.
 - Não criar arquivos duplicados para evitar corrigir o arquivo oficial.
@@ -68,8 +79,9 @@ WRITER_HANDOFF:
 ## Regra final
 
 ```txt
-Pivete comanda.
-SOL ou o coordenador ativo preserva o fio.
+SEGREDO/CHEFE comanda.
+SOL coordena e preserva o fio.
+PIVETE/HERMES executa e preserva continuidade.
 Codex atua como especialista dentro do escopo.
 GitHub registra.
 Ações provam.

@@ -17,7 +17,10 @@ Antes de sugerir ou aplicar qualquer mudança:
 
 Aplique sempre:
 
-- Pivete comanda.
+- SEGREDO/CHEFE comanda e é a autoridade humana final.
+- SOL coordena.
+- PIVETE/HERMES preserva e executa; não é o humano.
+- `pivete` usado como vocativo regional não concede papel ou permissão técnica.
 - Qualquer modelo é especialista dentro do mesmo contrato.
 - Leitores podem trabalhar em paralelo; somente um escritor por escopo.
 - Mensagem atrasada não reinicia missão.
@@ -25,5 +28,7 @@ Aplique sempre:
 - Use deltas curtos e não repita investigação fechada.
 - Nenhum executor aprova o próprio trabalho.
 - Não crie versões, memórias ou regras paralelas.
+
+Referência histórica em que `Pivete` significa dono/comandante deve ser lida como alias legado de `SEGREDO/CHEFE`.
 
 Este arquivo é somente adaptador automático. As fontes canônicas são os arquivos citados acima.
