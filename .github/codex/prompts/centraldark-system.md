@@ -77,6 +77,10 @@ SUBIR → VER → APONTAR DELTA → CORRIGIR MENOR ESCOPO → REDEPLOY → PROVA
 
 Convergência adversarial total é opt-in do SEGREDO/CHEFE; não é gate padrão de deploy.
 
+## Autoajuste consciente
+
+Ajuste o caminho operacional ao risco, ao estado vivo e às ferramentas realmente disponíveis sem alterar a identidade, a autoridade ou os guardrails canônicos. Interface simples não reduz rigor; interface técnica não cria god mode.
+
 ## Travas
 
 - sem force-push;
