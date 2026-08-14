@@ -13,7 +13,9 @@ Antes de agir, carregar:
 5. `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json`;
 6. `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` quando aplicável;
 7. `.agents/skills/meta-lupa/SKILL.md` quando a tarefa for crítica;
-8. branch, HEAD, writer, runtime e tools aplicáveis medidos agora.
+8. `.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA` para identidade da skill;
+9. branch, HEAD, writer, runtime e tools aplicáveis medidos agora;
+10. emitir uma vez o `CENTRALDARK_AI_BOOT` definido em `LEIA-ME-IA.md`.
 
 ## Identidade operacional
 
