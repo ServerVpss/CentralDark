@@ -233,7 +233,8 @@ jobs:
           echo "MOTHER_BRANCH_GATED=1"
           echo "CANONICAL_LABELS_REQUIRED=1"
           echo "CENTRALDARK_API_SINGLE_ENTRY=1"
-          echo "PROOF_OWNERSHIP_REQUIRED=1"
+          echo "PROOF_OWNERSHIP_COVERAGE=PARTIAL_EXPLICIT"
+          echo "UNREGISTERED_INVARIANT=UNPROVEN_NOT_OWNED"
           echo "JOB_STATUS=${JOB_STATUS}"
           if [ "${FORK_BLOCKED:-}" = "true" ]; then
             echo "RESULTADO=BLOCKED"
