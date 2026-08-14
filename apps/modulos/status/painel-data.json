@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-14T05:16:21.196Z",
-  "updatedAtBR": "14/08/2026, 02:16:21 BRT",
+  "updatedAt": "2026-08-14T05:33:08.131Z",
+  "updatedAtBR": "14/08/2026, 02:33:08 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "fix(autonomia): convergir canário no relatório canônico (#816)",
+    "lastCommit": "docs(operacao): registrar reconciliação contínua e fan-out por intenção (#817)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-14T05:33:08.131Z",
+      "titulo": "Push na main · 22ce3096dbf5ddfc70becfe4171d23b35913e282",
+      "detalhe": "docs(operacao): registrar reconciliação contínua e fan-out por intenção (#817)",
+      "area": "Repositório",
+      "sha": "22ce309",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-14T05:16:21.196Z",
       "titulo": "Push na main · bc8b296d96107801f068d139a119dcc718c1f9bc",
       "detalhe": "fix(autonomia): convergir canário no relatório canônico (#816)",
@@ -986,14 +994,6 @@
       "detalhe": "fix(autonomia): adicionar varredura observável e fallback eventual (#571)",
       "area": "Repositório",
       "sha": "be25051",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-30T17:55:21.421Z",
-      "titulo": "Push na main · 2e55133db8015c936816affd8f4534b3beae7a0a",
-      "detalhe": "fix(autonomia): tornar todos os gates obrigatórios e reexecutáveis (#569)",
-      "area": "Repositório",
-      "sha": "2e55133",
       "actor": "segredounlock"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-14T05:33:08.131Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 22ce3096dbf5ddfc70becfe4171d23b35913e282 (22ce309)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-14T05:16:21.196Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · bc8b296d96107801f068d139a119dcc718c1f9bc (bc8b296)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-30T18:05:45.514Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · be2505183a0d69f2f6c874072a180f426b8d2d8d (be25051)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-30T17:55:21.421Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 2e55133db8015c936816affd8f4534b3beae7a0a (2e55133)",
       "area": "Repositório",
       "status": "sucesso"
     }
