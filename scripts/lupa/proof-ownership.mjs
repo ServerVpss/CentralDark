@@ -2,6 +2,7 @@
 
 import { existsSync, readFileSync } from "node:fs";
 import { resolve, join } from "node:path";
+import { fileURLToPath } from "node:url";
 
 export function validateProofOwnership(contract, { exists = () => true } = {}) {
   const errors = [];
@@ -23,6 +24,8 @@ export function validateProofOwnership(contract, { exists = () => true } = {}) {
     unknown_skipped_pending: "NOT_PASS",
     proof_graph_must_be_acyclic: true,
     proof_must_end_in_external_anchor: true,
+    graph_structure_ok_is_not_invariant_proof: true,
+    external_anchor_must_be_observed_by_responsible_prover: true,
   };
   for (const [key, expected] of Object.entries(expectedRules)) {
     if (rules[key] !== expected) errors.push(`PROOF_OWNERSHIP_RULE_INVALID:${key}`);
@@ -71,9 +74,11 @@ export function validateProofOwnership(contract, { exists = () => true } = {}) {
       errors.push(`PROOF_OWNERSHIP_EXTERNAL_ANCHOR_MISSING:${invariant.id}`);
     } else {
       const kind = String(invariant.external_anchor.kind ?? "");
+      const observation = String(invariant.external_anchor.observation ?? "");
       if (!kind || /validator_output|self/i.test(kind)) {
         errors.push(`PROOF_OWNERSHIP_EXTERNAL_ANCHOR_INVALID:${invariant.id}:${kind || "EMPTY"}`);
       }
+      if (!observation) errors.push(`PROOF_OWNERSHIP_EXTERNAL_OBSERVATION_MISSING:${invariant.id}`);
     }
 
     for (const path of [invariant.source, invariant.consumer, invariant.prover, invariant.negative_test, invariant.external_anchor?.path]) {
@@ -109,6 +114,8 @@ export function validateProofOwnership(contract, { exists = () => true } = {}) {
 
   return {
     ok: errors.length === 0,
+    topology_only: true,
+    invariant_proof: false,
     invariant_count: invariants.length,
     proof_classes: [...ownerByClass.keys()].sort(),
     errors,
@@ -125,7 +132,8 @@ function parseArgs(argv) {
   return out;
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+const isMain = process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1]);
+if (isMain) {
   const args = parseArgs(process.argv.slice(2));
   const root = resolve(args["repo-root"] ?? process.cwd());
   const contractPath = args.contract ?? "docs/CONSCIENCIA/PROOF-OWNERSHIP.json";
@@ -140,6 +148,6 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     exists: (relativePath) => existsSync(join(root, relativePath)),
   });
   for (const error of result.errors) console.error(`ERRO ${error}`);
-  console.log(`PROOF_OWNERSHIP_OK=${result.ok ? 1 : 0} INVARIANTS=${result.invariant_count} CLASSES=${result.proof_classes.length} ERROS=${result.errors.length}`);
+  console.log(`PROOF_GRAPH_STRUCTURE_OK=${result.ok ? 1 : 0} TOPOLOGY_ONLY=1 INVARIANT_PROOF=0 INVARIANTS=${result.invariant_count} CLASSES=${result.proof_classes.length} ERROS=${result.errors.length}`);
   process.exit(result.ok ? 0 : 1);
 }
