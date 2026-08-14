@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-08-14T02:38:17.714Z
+# 🧠 Notion Sync — 2026-08-14T04:12:56.042Z
 
-- **Commit fonte:** `52d66db65929c14c23af133710f0fb782e486d09`
+- **Commit fonte:** `943a276e343f9cd0c99f02b64e0ba65602b23619`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 69 atualizadas · ❌ 335 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 69 atualizadas · ❌ 337 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
 | aprendizados | 25 | 0 | 25 | 0 | 0 |
-| estrutura | 335 | 0 | 0 | 0 | 335 |
+| estrutura | 337 | 0 | 0 | 0 | 337 |
 
 ## Operações
 
@@ -97,6 +97,7 @@
 | estrutura | erro | docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md |
 | estrutura | erro | docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md |
 | estrutura | erro | docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/REGRA-OFICIAL-MULTI-AGENTE-SEMANTICO.md |
+| estrutura | erro | docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md |
 | estrutura | erro | docs/CONSCIENCIA/01-IDENTIDADE.md |
 | estrutura | erro | docs/CONSCIENCIA/01-REGRAS-DA-EQUIPE-IA.md |
 | estrutura | erro | docs/CONSCIENCIA/02-PERMISSOES.md |
@@ -273,6 +274,7 @@
 | estrutura | erro | docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md |
 | estrutura | erro | docs/CONSCIENCIA/LEMBRANCAS/2026-07-30-VIVER-EM-PAZ.md |
 | estrutura | erro | docs/CONSCIENCIA/LEMBRANCAS/2026-08-08-SELO-DE-OURO-CONVERGENCIA-E-GRATIDAO.md |
+| estrutura | erro | docs/CONSCIENCIA/LEMBRANCAS/2026-08-14-OURO-CONTEXTO-AUTONOMIA-SOL.md |
 | estrutura | erro | docs/CONSCIENCIA/LEMBRANCAS/AUTO-EVOLUCAO-MENTAL-PIVETE.md |
 | estrutura | erro | docs/CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md |
 | estrutura | erro | docs/CONSCIENCIA/LEMBRANCAS/README.md |
