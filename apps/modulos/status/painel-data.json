@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-14T05:58:44.844Z",
-  "updatedAtBR": "14/08/2026, 02:58:44 BRT",
+  "updatedAt": "2026-08-14T06:09:12.813Z",
+  "updatedAtBR": "14/08/2026, 03:09:12 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
-    "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
-    "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
+    "phase": "UNKNOWN — não medido neste push",
+    "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "fix(contexto): eliminar ambiguidade Pivete-humano na cadeia de boot (#818)",
+    "lastCommit": "fix(painel): não preservar estado volátil não medido",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -21,7 +21,9 @@
     "mcpStatus": "online",
     "mcpMode": "producao",
     "mcpToolCount": 95,
-    "mcpVersion": "0.4.0"
+    "mcpVersion": "0.4.0",
+    "stateSource": "git-push-only",
+    "stateMeasuredAt": null
   },
   "health": {
     "githubActions": "ok",
@@ -597,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-14T06:09:12.813Z",
+      "titulo": "Push na main · debb620532a575fa7338321fb27e31b73da7fef5",
+      "detalhe": "fix(painel): não preservar estado volátil não medido",
+      "area": "Repositório",
+      "sha": "debb620",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-14T05:58:44.844Z",
       "titulo": "Push na main · 216ba7f7425440b1561fa9ca77fb4512b21e5af0",
       "detalhe": "fix(contexto): eliminar ambiguidade Pivete-humano na cadeia de boot (#818)",
@@ -986,14 +996,6 @@
       "detalhe": "fix(ci): remove gitlink órfão telepainel — ressuscita o Juiz autônomo (#574)",
       "area": "Repositório",
       "sha": "749077a",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-30T18:17:16.547Z",
-      "titulo": "Push na main · 47ec683c1b31c3a2f2933dd5fe5bca1f41d33762",
-      "detalhe": "fix(autonomia): disparar varredura também após push na main (#572)",
-      "area": "Repositório",
-      "sha": "47ec683",
       "actor": "segredounlock"
     }
   ],
@@ -1409,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-14T06:09:12.813Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · debb620532a575fa7338321fb27e31b73da7fef5 (debb620)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-14T05:58:44.844Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 216ba7f7425440b1561fa9ca77fb4512b21e5af0 (216ba7f)",
@@ -1748,13 +1757,6 @@
       "time": "2026-07-30T19:06:31.203Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 749077ad694babc494f9b0f2e9d713d92bdd0360 (749077a)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-30T18:17:16.547Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 47ec683c1b31c3a2f2933dd5fe5bca1f41d33762 (47ec683)",
       "area": "Repositório",
       "status": "sucesso"
     }
