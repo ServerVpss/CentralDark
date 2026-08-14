@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 
 const ALLOWED_KINDS = new Set(['MEMORY', 'SKILL', 'RULE', 'TEST', 'GUARDRAIL', 'CONTRACT']);
 const SHA40_RE = /^[a-f0-9]{40}$/i;
+const VALID_STATUSES = new Set(['CANDIDATE', 'NO_NEW_INFORMATION']);
 
 function stableStringify(value) {
   if (Array.isArray(value)) return `[${value.map(stableStringify).join(',')}]`;
@@ -69,8 +70,9 @@ function normalizeEvent(raw, index, expectedHead) {
   if (!Array.isArray(raw.evidence) || raw.evidence.length === 0) return reject('EVIDENCE_MISSING');
 
   const eventHead = normalizeText(raw.head_sha ?? raw.canonical_head);
-  if (eventHead && !SHA40_RE.test(eventHead)) return reject('EVENT_HEAD_INVALID');
-  if (eventHead && eventHead.toLowerCase() !== expectedHead.toLowerCase()) return reject('HEAD_MISMATCH');
+  if (!eventHead) return reject('EVENT_HEAD_MISSING');
+  if (!SHA40_RE.test(eventHead)) return reject('EVENT_HEAD_INVALID');
+  if (eventHead.toLowerCase() !== expectedHead.toLowerCase()) return reject('HEAD_MISMATCH');
 
   const rawKind = normalizeText(raw.kind).toUpperCase();
   const kind = ALLOWED_KINDS.has(rawKind) ? rawKind : 'MEMORY';
@@ -87,7 +89,7 @@ function normalizeEvent(raw, index, expectedHead) {
       timestamp: new Date(timestamp).toISOString(),
       source: sanitizeDreamText(source),
       session_id: sanitizeDreamText(sessionId),
-      head_sha: expectedHead,
+      head_sha: expectedHead.toLowerCase(),
       kind,
       target: sanitizeDreamText(target),
       claim: sanitizedClaim,
@@ -198,17 +200,36 @@ export function buildDreamProposal(events, { headSha, parseRejections = [] } = {
 export function validateDreamProposal(proposal) {
   const errors = [];
   if (!proposal || typeof proposal !== 'object' || Array.isArray(proposal)) return { ok: false, errors: ['PROPOSAL_INVALID'] };
+
   if (proposal.mode !== 'DREAM_REVIEW_ISOLATED') errors.push('MODE_INVALID');
+  if (!VALID_STATUSES.has(proposal.status)) errors.push('STATUS_INVALID');
   if (proposal.apply_allowed !== false) errors.push('APPLY_MUST_BE_FALSE');
   if (proposal.direct_canonical_mutation !== false) errors.push('DIRECT_CANONICAL_MUTATION_FORBIDDEN');
   if (proposal.raw_session_mutation !== false) errors.push('RAW_SESSION_MUTATION_FORBIDDEN');
   if (!SHA40_RE.test(String(proposal.head_sha ?? ''))) errors.push('HEAD_SHA_INVALID');
   if (!Array.isArray(proposal.candidates)) errors.push('CANDIDATES_INVALID');
-  for (const candidate of proposal.candidates ?? []) {
-    if (candidate?.promotion?.status !== 'CANDIDATE') errors.push(`CANDIDATE_STATUS_INVALID:${candidate?.id ?? 'UNKNOWN'}`);
-    if (candidate?.promotion?.direct_canonical_mutation !== false) errors.push(`CANDIDATE_DIRECT_MUTATION_FORBIDDEN:${candidate?.id ?? 'UNKNOWN'}`);
-    if (!Array.isArray(candidate?.evidence) || candidate.evidence.length === 0) errors.push(`CANDIDATE_EVIDENCE_MISSING:${candidate?.id ?? 'UNKNOWN'}`);
+
+  const promotion = proposal.promotion_contract;
+  if (!promotion || typeof promotion !== 'object' || Array.isArray(promotion)) {
+    errors.push('PROMOTION_CONTRACT_INVALID');
+  } else {
+    if (promotion.authority !== 'SEGREDO/CHEFE') errors.push('PROMOTION_AUTHORITY_INVALID');
+    if (promotion.candidate_only !== true) errors.push('PROMOTION_CANDIDATE_ONLY_REQUIRED');
+    if (promotion.meta_lupa_required !== true) errors.push('PROMOTION_META_LUPA_REQUIRED');
+    if (promotion.same_head_revalidation_required !== true) errors.push('PROMOTION_SAME_HEAD_REQUIRED');
+    if (promotion.proof_ownership_when_applicable !== true) errors.push('PROMOTION_PROOF_OWNERSHIP_REQUIRED');
   }
+
+  for (const candidate of proposal.candidates ?? []) {
+    const id = candidate?.id ?? 'UNKNOWN';
+    if (candidate?.promotion?.status !== 'CANDIDATE') errors.push(`CANDIDATE_STATUS_INVALID:${id}`);
+    if (candidate?.promotion?.direct_canonical_mutation !== false) errors.push(`CANDIDATE_DIRECT_MUTATION_FORBIDDEN:${id}`);
+    if (candidate?.promotion?.meta_lupa_required !== true) errors.push(`CANDIDATE_META_LUPA_REQUIRED:${id}`);
+    if (candidate?.promotion?.same_head_revalidation_required !== true) errors.push(`CANDIDATE_SAME_HEAD_REQUIRED:${id}`);
+    if (candidate?.promotion?.proof_ownership_when_applicable !== true) errors.push(`CANDIDATE_PROOF_OWNERSHIP_REQUIRED:${id}`);
+    if (!Array.isArray(candidate?.evidence) || candidate.evidence.length === 0) errors.push(`CANDIDATE_EVIDENCE_MISSING:${id}`);
+  }
+
   return { ok: errors.length === 0, errors };
 }
 
