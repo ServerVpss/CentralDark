@@ -85,6 +85,12 @@ const CANONICAL = Object.freeze({
     '"executor": "PIVETE/HERMES"',
     '"legacy_sources_excluded"',
   ],
+  "apps/modulos/pivete-sync/pivete-sync.mjs": [
+    "LEGACY_SYNC_DISABLED_CANONICAL_GIT_ONLY",
+    "GIT_CANONICAL=true",
+    "HUB_TO_GIT=false",
+    "GIT_TO_LEGACY_PIVETE_HUB=false",
+  ],
 });
 
 const ACTIVE_IDENTITY_SURFACES = Object.freeze([
@@ -153,6 +159,17 @@ const LOADER_SURFACES = Object.freeze([
   "apps/modulos/elite-gateway/scripts/pivete_routes.py",
   "apps/modulos/WebUI/custom-css/pivete-invocacao.js",
   "apps/modulos/WebUI/custom-css/pivete-persona.json",
+]);
+
+const FORBIDDEN_SYNC = Object.freeze([
+  { code: "SYNC_LEGADO_ACESSA_TABELA_PIVETE", pattern: /pivete_consciencia/i },
+  { code: "SYNC_LEGADO_LE_SERVICE_ROLE", pattern: /HUB_SUPABASE_SERVICE_ROLE_KEY/i },
+  { code: "SYNC_LEGADO_HUB_PARA_VPS", pattern: /hub->vps/i },
+  { code: "SYNC_LEGADO_GIT_PUSH", pattern: /git\s+push/i },
+]);
+
+const SYNC_SURFACES = Object.freeze([
+  "apps/modulos/pivete-sync/pivete-sync.mjs",
 ]);
 
 const FORBIDDEN_PARALLEL_PATHS = Object.freeze([
@@ -299,6 +316,12 @@ export function validateRepository(repoRoot) {
     findings.push(...findForbidden(text, FORBIDDEN_LOADER, path));
   }
 
+  for (const path of SYNC_SURFACES) {
+    const text = safeRead(join(repoRoot, path));
+    if (text == null) continue;
+    findings.push(...findForbidden(text, FORBIDDEN_SYNC, path));
+  }
+
   return findings;
 }
 
@@ -315,6 +338,7 @@ export function runValidation({ repoRoot, profileRoots = [] }) {
     soul: "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md",
     context_recovery: "#ACORDAR",
     context_loader: "CANONICAL_CONTEXT_ALLOWLIST",
+    legacy_sync: "DISABLED_CANONICAL_GIT_ONLY",
     deployment: "PRODUCTION_FIRST + CAUSAL_SCOPE_FIRST",
     merge_policy: "INTENT_AUTHORIZED -> AUTO_SQUASH_IF_CLEAN -> MAIN",
     convergence: "FULL_ADVERSARIAL_ONLY_ON_CHEFE_REQUEST",
@@ -332,7 +356,7 @@ function printHuman(report) {
     const location = `${finding.profile_root ? `${finding.profile_root}:` : ""}${finding.path}${finding.line ? `:${finding.line}` : ""}`;
     console.error(`IDENTIDADE_ERRO ${finding.code} ${location} :: ${finding.excerpt}`);
   }
-  console.log(`IDENTIDADE_OK=${report.ok ? 1 : 0} AUTORIDADE=SEGREDO_CHEFE COORDENADOR=SOL EXECUTOR=PIVETE_HERMES LOADER=CANONICAL_ALLOWLIST SOUL=CANONICA MERGE=AUTO_SQUASH_IF_CLEAN ERROS=${report.findings.length}`);
+  console.log(`IDENTIDADE_OK=${report.ok ? 1 : 0} AUTORIDADE=SEGREDO_CHEFE COORDENADOR=SOL EXECUTOR=PIVETE_HERMES LOADER=CANONICAL_ALLOWLIST LEGACY_SYNC=DISABLED MERGE=AUTO_SQUASH_IF_CLEAN ERROS=${report.findings.length}`);
 }
 
 async function main() {
