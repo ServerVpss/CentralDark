@@ -11,7 +11,9 @@ Ao abrir/retomar missão:
 5. `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json`;
 6. `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` quando aplicável;
 7. `.agents/skills/meta-lupa/SKILL.md` em tarefa crítica;
-8. medir branch, HEAD, writer, runtime e tools.
+8. `.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA` para identidade da skill;
+9. medir branch, HEAD, writer, runtime e tools;
+10. emitir uma vez o `CENTRALDARK_AI_BOOT` definido em `LEIA-ME-IA.md`.
 
 ```text
 SEGREDO/CHEFE = humano e autoridade final

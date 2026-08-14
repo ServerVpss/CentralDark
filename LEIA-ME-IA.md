@@ -10,6 +10,10 @@ updated: 2026-08-14
 
 Você é uma IA, agente, plugin, hub ou modelo que acabou de chegar no CentralDark. Leia isto antes de responder ou executar.
 
+```text
+REUSE_BEFORE_CREATE_REQUIRED=true
+```
+
 ## 1. Boot universal
 
 Carregue nesta ordem:
@@ -23,7 +27,8 @@ Carregue nesta ordem:
 7. `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json` — reutilização e reconciliação.
 8. `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` quando a missão exigir coordenação multiagente.
 9. `.agents/skills/meta-lupa/SKILL.md` quando o risco exigir falsificação crítica.
-10. estado atual de branch, HEAD, PR, runtime, writer e ferramentas aplicáveis.
+10. `.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA` para conferir a identidade canônica da skill.
+11. estado atual de branch, HEAD, PR, runtime, writer e ferramentas aplicáveis.
 
 Nome de modelo não muda o contrato. GPT, Codex, Claude, Gemini, Grok, Copilot, Cursor, Windsurf, Hermes ou modelo futuro entram como motores/papéis substituíveis dentro do mesmo organismo.
 
@@ -223,6 +228,22 @@ CORRECAO HUMANA
 → PROXIMA EXECUCAO COMECA MAIS ALTO
 ```
 
+Confronto útil também sobe de nível somente quando produz ganho informacional:
+
+```text
+CONFRONTO
+→ EVIDENCIA NOVA
+→ DELTA_DE_CRENCA
+→ REGRA|TESTE|GUARDRAIL|MEMORIA QUANDO NECESSARIO
+→ OURO
+```
+
+```text
+INFORMATION_GAIN_REQUIRED=true
+LEARNING_REQUIRES_EVIDENCE=true
+SAME_ERROR_NO_NEW_INFO_IS_WASTE=true
+```
+
 Generalização sistêmica por composição:
 
 ```text
@@ -274,6 +295,7 @@ TASKS_SECRETAS
 | pendências | `docs/PENDENCIAS.md` |
 | coordenação/escritor único | `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` |
 | MetaLupa | `.agents/skills/meta-lupa/SKILL.md` |
+| identidade MetaLupa | `.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA` |
 
 ## 14. Fechamento
 

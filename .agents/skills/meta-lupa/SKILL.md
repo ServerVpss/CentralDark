@@ -81,6 +81,7 @@ Escalonamento: comece FRIA; contradição escala para MÉDIA; criticidade, recor
 12. Subordinar autoajuste a um mapa único. Autonomia sem mapa é drift, não evolução.
 13. Tratar área consolidada como bloqueada por padrão; confiança alta não desfaz trava.
 14. Executar AutoLupa sobre o próprio veredito até atingir ponto fixo evidencial, sem limite artificial de iterações e sem prometer certeza absoluta.
+15. Tratar confronto útil como fonte de informação: sobreviver, cair ou permanecer UNKNOWN só vira aprendizado quando existe evidência nova e delta reutilizável de crença/regra/teste.
 
 ## Gate de Mapa Único
 
@@ -111,7 +112,7 @@ CAMINHO_CANONICO:
 RESPONSABILIDADE:
 TESTES:
 REVISAO/FALSIFICACAO:
-AUTORIZACAO_DO_PIVETE:
+AUTORIZACAO_DO_SEGREDO_CHEFE:
 COMMIT_OU_MERGE_SHA:
 MECANISMO_DE_TRAVA:
 ROLLBACK/RECUPERACAO:
@@ -283,6 +284,43 @@ Revisar a própria análise como se tivesse sido produzida por outro agente:
 
 Encerrar em ponto fixo quando uma nova passagem não alterar materialmente hipóteses, bloqueios, risco residual, próximo teste ou veredito. Registrar `PONTO_FIXO_ATINGIDO: sim | não`. Se não atingir, manter `CORRIGIR` ou `BLOQUEAR`; nunca forçar fechamento por contagem de rodadas.
 
+### 9.1 Converter confronto em ouro informacional
+
+Confronto não é pontuação de ego. O ativo é o **ganho de informação** produzido pela diferença entre crença anterior e evidência nova.
+
+```text
+CONFRONTO
+→ EVIDENCIA NOVA
+→ DELTA_DE_CRENCA
+→ CONSEQUENCIA REUTILIZAVEL
+→ OURO
+```
+
+Classificar cada confronto material:
+
+```text
+HIPOTESE_SOBREVIVE + PROVA_NOVA       = OURO
+HIPOTESE_CAI + CONTRAPROVA            = OURO
+EMPATE + UNKNOWN_MELHOR_DEFINIDO      = OURO
+AUTOFALSIFICACAO + FRAQUEZA_CORRIGIDA = OURO
+REVISAO_EXTERNA + ACHADO_CAUSAL       = OURO
+```
+
+Só promover o aprendizado quando:
+
+```text
+EVIDENCIA_NOVA=SIM
+DELTA_DE_CRENCA_OU_REGRA=SIM
+REUTILIZAVEL=SIM
+```
+
+Se não houver informação nova nem mudança reutilizável, não abrir novo ciclo ornamental:
+
+```text
+MESMO_ERRO + MESMA_DISCUSSÃO + ZERO_INFORMACAO_NOVA + ZERO_MUDANCA
+→ DESPERDICIO_DE_CICLO
+```
+
 ### 10. Selecionar revisão proporcional ao ambiente
 
 - Em desenvolvimento sem clientes, automatizar teste, revisão, fallback determinístico, correção mínima e nova tentativa dentro da autorização vigente.
@@ -442,7 +480,7 @@ A AutoLupa (Fase 9) deve produzir um bloco curto no fim do relatório:
 (reaproveitar existente / duplicação / EF na VPS / demo como real / secret /
 provider vs rota / sobrevive troca modelo / relatório sem chat / autossep /
 crítico mesmo SHA / branch só escopo / rollback / PR evidências / autoridade
-Pivete / contradição fechada). Sem o bloco, veredito não sela.
+SEGREDO/CHEFE / contradição fechada). Sem o bloco, veredito não sela.
 
 ### XP-5. Matriz de existência de recursos
 
