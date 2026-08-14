@@ -25,8 +25,8 @@
     "consumer",
     "prover",
     "negative_test",
-    "external_anchor",
-    "independent_counterproof"
+    "counterproof",
+    "external_anchor"
   ],
   "invariants": [
     {
@@ -36,12 +36,17 @@
       "consumer": "docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md",
       "prover": "scripts/lupa/validar-identidade-operacional.mjs",
       "negative_test": "scripts/lupa/validar-identidade-operacional.test.mjs",
+      "counterproof": {
+        "kind": "negative_test_suite",
+        "path": "scripts/lupa/validar-identidade-operacional.test.mjs",
+        "observation": "casos adversariais tentam produzir falso PASS sem executar o provador como oraculo",
+        "independent_from_prover": true
+      },
       "external_anchor": {
         "kind": "repository_active_surface",
         "path": "AGENTS.md",
         "observation": "conteudo versionado da superficie ativa no mesmo HEAD"
       },
-      "independent_counterproof": true,
       "depends_on": []
     },
     {
@@ -51,12 +56,17 @@
       "consumer": ".github/workflows/porta-de-entrada.yml",
       "prover": "scripts/lupa/authority-approval.mjs",
       "negative_test": "scripts/lupa/authority-approval.test.mjs",
+      "counterproof": {
+        "kind": "negative_test_suite",
+        "path": "scripts/lupa/authority-approval.test.mjs",
+        "observation": "payloads sem autoridade ou com alias legado devem falhar sem consultar a conclusao do provador",
+        "independent_from_prover": true
+      },
       "external_anchor": {
         "kind": "github_event_label",
         "path": ".github/workflows/bots-labels-seed.yml",
         "observation": "label autenticada no payload real de GITHUB_EVENT_PATH; o arquivo seed sozinho nao prova presenca da label"
       },
-      "independent_counterproof": true,
       "depends_on": []
     }
   ]
