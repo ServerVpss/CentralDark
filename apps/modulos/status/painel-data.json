@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-11T10:02:43.038Z",
-  "updatedAtBR": "11/08/2026, 07:02:43 BRT",
+  "updatedAt": "2026-08-14T01:57:15.105Z",
+  "updatedAtBR": "13/08/2026, 22:57:15 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "fix(release): promover snapshot da convergência com CI determinístico (#733)",
+    "lastCommit": "docs(aprendizado): registrar método live-first e menor movimento",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-14T01:57:15.105Z",
+      "titulo": "Push na main · b3c9329871d32a9cfd8a4ebc6a66e642bb8928ff",
+      "detalhe": "docs(aprendizado): registrar método live-first e menor movimento",
+      "area": "Repositório",
+      "sha": "b3c9329",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-11T10:02:43.038Z",
       "titulo": "Push na main · 667603fbe1a2577e2845fbec847ee523756dacb4",
       "detalhe": "fix(release): promover snapshot da convergência com CI determinístico (#733)",
@@ -986,14 +994,6 @@
       "detalhe": "fix(sentinela): automatizar drift GitHub-VPS e remover entrada vazia do mapa (#551)",
       "area": "Repositório",
       "sha": "f251e31",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-30T09:33:27.305Z",
-      "titulo": "Push na main · 4c2179ec9d81b35cdd5eddb83623226ad4ed37f9",
-      "detalhe": "docs(arquitetura): registrar Jarvis em delta e escritor único (#552)",
-      "area": "Repositório",
-      "sha": "4c2179e",
       "actor": "segredounlock"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-14T01:57:15.105Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · b3c9329871d32a9cfd8a4ebc6a66e642bb8928ff (b3c9329)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-11T10:02:43.038Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 667603fbe1a2577e2845fbec847ee523756dacb4 (667603f)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-30T09:36:27.257Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · f251e315a70454fe98850fbcd6fcc712cbeb01ff (f251e31)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-30T09:33:27.305Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 4c2179ec9d81b35cdd5eddb83623226ad4ed37f9 (4c2179e)",
       "area": "Repositório",
       "status": "sucesso"
     }
