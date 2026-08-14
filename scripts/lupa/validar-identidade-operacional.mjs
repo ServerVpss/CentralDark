@@ -30,18 +30,22 @@ const CANONICAL = Object.freeze({
   ],
 });
 
-// Superfícies operacionais que também podem orientar agentes. São opcionais no
-// harness de teste, mas quando existem no repo real não podem contradizer o
-// contrato de identidade.
 const ACTIVE_IDENTITY_SURFACES = Object.freeze([
+  "README.md",
   "CLAUDE.md",
   "CODEX.md",
+  ".cursor/rules/centraldark-governanca.mdc",
+  ".github/copilot-instructions.md",
+  ".github/codex/prompts/centraldark-system.md",
   "docs/GOVERNANCA/MODO-DE-PENSAR-PIVETE.md",
   "docs/GOVERNANCA/PADRAO-DE-TRABALHO-PIVETE.md",
+  "docs/GOVERNANCA/FLUXO-DE-OURO-GATEWAY-CENTRALDARK.md",
   "docs/CONSCIENCIA/PROTOCOLO-ORQUESTRACAO-PIVETE.md",
   "docs/CONSCIENCIA/PIVETE-IA/PIVETE-03-REGRAS-VIVAS.md",
   "docs/CONSCIENCIA/REGRA-OFICIAL-HIERARQUIA-MEMORIA.md",
   "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/REGRA-OFICIAL-MULTI-AGENTE-SEMANTICO.md",
+  "docs/CONSCIENCIA/ARTEFATOS/BOOT-CENTRALDARK-MODOS.md",
+  "docs/CONSCIENCIA/ARTEFATOS/centraldark-prompt-universal.md",
 ]);
 
 const FORBIDDEN_CANONICAL = Object.freeze([
@@ -186,7 +190,7 @@ export function validateRepository(repoRoot) {
   for (const path of ACTIVE_IDENTITY_SURFACES) {
     if (alreadyChecked.has(path)) continue;
     const text = safeRead(join(repoRoot, path));
-    if (text == null) continue; // opcional no harness; no repo real existe e será checado
+    if (text == null) continue;
     findings.push(...findForbidden(text, FORBIDDEN_CANONICAL, path));
   }
 
@@ -217,9 +221,7 @@ function printHuman(report) {
     const location = `${finding.profile_root ? `${finding.profile_root}:` : ""}${finding.path}${finding.line ? `:${finding.line}` : ""}`;
     console.error(`IDENTIDADE_ERRO ${finding.code} ${location} :: ${finding.excerpt}`);
   }
-  console.log(
-    `IDENTIDADE_OK=${report.ok ? 1 : 0} AUTORIDADE=SEGREDO_CHEFE COORDENADOR=SOL EXECUTOR=PIVETE_HERMES ERROS=${report.findings.length}`,
-  );
+  console.log(`IDENTIDADE_OK=${report.ok ? 1 : 0} AUTORIDADE=SEGREDO_CHEFE COORDENADOR=SOL EXECUTOR=PIVETE_HERMES ERROS=${report.findings.length}`);
 }
 
 async function main() {
