@@ -89,3 +89,63 @@
 - **Data:** 2026-08-06
 - **Contexto:** Publiquei no #667 uma auditoria com tabela de mutantes e ataque de forja. O Grok já tinha postado mutantes, forja e ready=false no mesmo thread. Sobreposição em três dos quatro pontos; só o mutante equivalente e os asserts eram meus. Sem ferramenta para listar comentários de PR neste MCP, a checagem tem que ser feita antes, por quem tem acesso ao thread.
 - **Aprendizado:** Ler o thread do PR antes de publicar auditoria. Achado que outro agente já postou não vira mais forte por ser repetido — vira ruído, e ruído treina o time a ignorar comentário de auditoria, que é o único canal onde a prova vive. Se o achado já está lá, publica só o delta: o que muda a decisão de quem lê. Se não há delta, não publica.
+
+### 16. #ACORDAR é recuperação de estado real, não apenas comando de GitHub
+- **Categoria:** regra
+- **Data:** 2026-08-13
+- **Contexto:** Nesta sessão, `#ACORDAR !CALIBRAR` foi usado para interromper resposta baseada em contexto parcial, reler estado vivo, consultar GitHub e reconciliar conversa, repo, PR, HEAD e evidência. O próprio uso mostrou que uma palavra curta pode carregar um contrato operacional quando o significado já está estabelecido no contexto.
+- **Aprendizado:** Interpretar `#ACORDAR` como `RECUPERAR_ESTADO_REAL_ANTES_DE_CONTINUAR`: reler missão/fio, recuperar contexto relevante, medir estado vivo e reconciliar divergências antes de responder. GitHub entra quando é fonte necessária, mas o comando não significa apenas “abra o GitHub”. Não obrigar o SEGREDO/CHEFE a repetir contexto ou prova que o próprio sistema consegue reconstruir.
+
+### 17. Uma SOL, um SOUL, uma superfície; modelos e ferramentas são capacidades substituíveis
+- **Categoria:** regra
+- **Data:** 2026-08-13
+- **Contexto:** O desenho operacional foi refinado de “dois chats” para uma única SOL com identidade persistente, podendo planejar e agir na mesma conversa/interface. Voz e texto são entradas; Hermes, tools, providers e modelos ficam por baixo como braços/motores.
+- **Aprendizado:** Não criar segunda identidade, segundo chat obrigatório ou segundo orquestrador para separar planejamento de ação. O padrão é `UMA_SOL + UM_SOUL + UM_ESTADO + MODOS_OPERACIONAIS`. Modelo/provider pode mudar sem mudar a identidade. O fluxo correto é `fala/texto → intenção → modo → ferramenta/motor → execução → prova → mesma conversa`.
+
+### 18. O humano decide intenção; a máquina prova o estado e não devolve investigação mensurável ao humano
+- **Categoria:** regra
+- **Data:** 2026-08-13
+- **Contexto:** A sessão mostrou repetidamente desperdício quando o sistema pede ao SEGREDO/CHEFE para provar novamente conexão, permissão, estado de repo ou fatos que a própria máquina consegue medir. Quando o mesmo contrato/alvo continua válido, exigir a mesma prova humana de novo é peso sem ganho.
+- **Aprendizado:** `CHEFE_DECIDE_INTENCAO=true`; `MAQUINA_PROVA_ESTADO=true`. Prova já produzida e ainda pertencente ao mesmo alvo/contrato deve ser reutilizada. Só reprovar/revalidar quando alvo, HEAD, ambiente, escopo, autorização ou evidência material mudou. Não transformar o humano em roteador de informações que ferramentas já conseguem coletar.
+
+### 19. Em desenvolvimento autorizado, produção observável vem antes de perfeição global
+- **Categoria:** regra
+- **Data:** 2026-08-13
+- **Contexto:** O SEGREDO/CHEFE explicitou que precisa ver a CentralDark viva para avaliar botão por botão, UI, Builder/Preview, integrações e arquitetura. Três meses de gates, convergência e refinamento no escuro impediram justamente a observação necessária para orientar o próximo delta. O objetivo atual é colocar um vertical slice real no ar e iterar.
+- **Aprendizado:** Quando o CHEFE autoriza `PRODUCTION_FIRST` em ambiente de desenvolvimento próprio, não exigir perfeição visual, todas as integrações READY, dívida zero, convergência global ou Meta Lupa global antes da primeira visualização. O primeiro objetivo é `CENTRALDARK_VISIBLE_ONLINE + ADMIN_VISIBLE + RUNTIME_IDENTIFIABLE + NO_SECRET_LEAK`. Depois: `CHEFE CLICA → APONTA DELTA → CORREÇÃO MÍNIMA → REDEPLOY → REPETE`. Segurança protege o movimento; não deve virar paralisia.
+
+### 20. Convergência, Judge e Meta Lupa servem para tentar quebrar; não para decidir a intenção do CHEFE
+- **Categoria:** regra
+- **Data:** 2026-08-13
+- **Contexto:** Foi separado o papel de design/autoridade do papel de falsificação. O CHEFE define o que quer; Writer implementa; convergência/Judge/Meta Lupa procuram regressão, falso verde, conflito, falha de segurança e caso não coberto. Usá-los como assembleia para decidir a arquitetura do CHEFE cria atraso e dilui responsabilidade.
+- **Aprendizado:** `CHEFE_DEFINE → WRITER_IMPLEMENTA → TESTES_PROVAM → CONVERGENCIA_TENTA_REFUTAR → META_LUPA_FECHA`. Convergência não redesenha intenção já decidida e não deve bloquear indefinidamente a primeira observação do runtime quando o risco está autorizado e rollback existe.
+
+### 21. Falha local pede correção local e deploy no menor blast radius possível
+- **Categoria:** regra
+- **Data:** 2026-08-13
+- **Contexto:** A inspeção do deploy canônico mostrou que o MCP já possui um mecanismo alinhado a esse princípio: build em worktree isolada, promoção atômica de `dist`, restart apenas de `CentralDark-MCP`, health, startup audit, estabilidade e rollback. Isso confirmou que redeploy global por padrão é peso desnecessário quando o componente causal é isolável.
+- **Aprendizado:** `FALHA_LOCAL → COMPONENTE_CAUSAL → CORREÇÃO_LOCAL → TESTE_LOCAL → DEPLOY_LOCAL → PROVA_LOCAL`. Full deploy só quando dependência compartilhada, contrato/schema global, artefato monolítico, migração ou incompatibilidade real atravessar fronteiras. Não confundir “workflow atual faz tudo” com “necessidade técnica exige tudo”. O menor blast radius é parte do `MENOS_E_MAIS`.
+
+### 22. Painel Admin precisa ser observabilidade operacional, não só configuração
+- **Categoria:** regra
+- **Data:** 2026-08-13
+- **Contexto:** O repo já contém MCP Admin/Telepainel com health, catálogo de tools, OAuth, auditoria, conectores e adapters de logs. O CHEFE quer usar o sistema vivo e, quando algo falhar, apontar o erro exato em vez de operar no escuro.
+- **Aprendizado:** Todo erro relevante deve chegar a um local observável com `timestamp`, `correlation/request id` quando houver, serviço/componente, ação, status, duração, erro sanitizado e SHA/build/runtime relacionado. O painel deve mostrar health, ferramentas, conectores, OAuth, auditoria e erro sanitizado. Nunca registrar token, senha, Authorization, cookie ou valor de secret. Se já existe logging/auditoria canônico, reutilizar; criar novo sistema de logs só com GAP_REAL.
+
+### 23. HTTP 200, PM2 online, DNS resolvendo ou painel verde não provam LIVE
+- **Categoria:** armadilha
+- **Data:** 2026-08-13
+- **Contexto:** A Meta Lupa aplicada contra o plano de deploy confirmou o falso verde: cada instrumento prova só uma camada. Um site pode responder 200 e ainda renderizar errado; um processo pode estar online e não executar o comportamento esperado; um painel pode usar fallback estático e parecer saudável.
+- **Aprendizado:** Para declarar `LIVE`, provar no mesmo runtime pelo menos: domínio abre externamente, UI real renderiza, admin real abre, runtime identifica SHA/artefato, uma ação mínima real funciona, auditoria/log registra a ação, um erro controlado aparece sanitizado e existe caminho de rollback/redeploy. Evidência parcial continua `PARTIAL/UNKNOWN`, nunca vira PASS por aparência.
+
+### 24. API paga é capacidade, não identidade nem caminho obrigatório
+- **Categoria:** regra
+- **Data:** 2026-08-13
+- **Contexto:** O desenho econômico/operacional foi corrigido: a SOL não depende de uma API paga como motor normal. A arquitetura pode usar execução determinística, tools, MCP, modelos locais, free tiers, créditos e providers diferentes; modelo forte/pago entra quando agrega capacidade real.
+- **Aprendizado:** `DETERMINISTICO/LOCAL/TOOLS/FREE-CAPACITY FIRST`; modelo/provider é motor temporário, não identidade. A SOL/SOUL mantém continuidade enquanto roteia para a capacidade adequada. Não transformar custo de inferência em custo de identidade; subir potência somente quando a tarefa exigir.
+
+### 25. “Menos é mais” significa menor movimento compatível com efeito, observabilidade e segurança
+- **Categoria:** regra
+- **Data:** 2026-08-13
+- **Contexto:** A conversa consolidou que simplificar não é remover prova, rollback ou logs; é remover passos, agentes, documentos, confirmações e redeploys que não alteram a causalidade do problema. Uma palavra (`#ACORDAR`) pode recuperar um contrato inteiro; um deploy local pode substituir rebuild global; uma observação viva pode valer mais que semanas de planejamento no escuro.
+- **Aprendizado:** Antes de adicionar etapa, agente, gate, painel, script ou arquitetura, perguntar: `isso muda a decisão, reduz risco causal ou produz observação que não existe?` Se não, remover. O padrão é `MENOR_CODIGO + MENOR_BUILD + MENOR_DEPLOY + MENOR_BLAST_RADIUS + PROVA_NO_RUNTIME`. Todo agente da casa deve tratar este princípio como comportamento operacional, não como slogan.
