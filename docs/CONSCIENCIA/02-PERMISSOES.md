@@ -23,8 +23,9 @@ SEGREDO/CHEFE é a autoridade humana final. Autorização já concedida e ainda 
 - Reutilizar painel/admin, MCP, Gateway, Builder, WebUI e demais componentes canônicos antes de criar qualquer alternativa.
 - Atualizar documentação/instalador quando a mudança material exigir.
 - Registrar logs/receipts sanitizados e pendências reais.
+- Concluir **squash merge para `main`** sem re-perguntar quando a intenção/promoção já estiver autorizada, o PR estiver no mesmo escopo, sem conflito e com validação aplicável concluída.
 
-## 🔥 AUTORIZAÇÃO PERSISTENTE — PRODUCTION FIRST
+## 🔥 AUTORIZAÇÃO PERSISTENTE — PRODUCTION FIRST + MAIN QUANDO PRONTO
 
 Autorização explicitamente concedida por SEGREDO/CHEFE para a missão/organismo CentralDark:
 
@@ -39,9 +40,37 @@ DNS_MUTATION=PERMITIDO
 CONTABO_MUTATION=PERMITIDO
 VPS_MUTATION=PERMITIDO
 VPS_CLEAN_REBUILD=PERMITIDO_SE_NECESSARIO
+MERGE_MAIN_SQUASH=PERMITIDO_SE_INTENCAO_JA_AUTORIZADA_E_PR_LIMPO
 NO_HUMAN_REASK_FOR_ALREADY_GRANTED_SCOPE=true
 NO_RETURN_TO_CHEFE_FOR_MACHINE_MEASURABLE_STATE=true
+NO_HUMAN_REASK_FOR_MERGE=true
 ```
+
+### Contrato de intenção → main
+
+```text
+SEGREDO/CHEFE DEFINE A INTENCAO
+→ WRITER IMPLEMENTA NO ESCOPO
+→ TESTES APLICAVEIS
+→ SEM CONFLITO
+→ SEM BLOQUEIO MATERIAL
+→ SQUASH MERGE MAIN
+→ REGISTRAR SHA/RECEIPT
+```
+
+Não terminar em `READY_FOR_MERGE`, `AGUARDANDO_AUTORIZACAO` ou equivalente quando a autorização de promoção já estiver coberta pelo mesmo escopo.
+
+Quando usar PR, registrar no corpo:
+
+```text
+Intent-Authorized: SEGREDO/CHEFE
+Merge-Policy: AUTO_SQUASH_IF_CLEAN
+Intent-Scope: <escopo>
+Writer: <agente>
+Writer-Scope: <escopo>
+```
+
+O workflow canônico `.github/workflows/intencao-chefe-auto-squash.yml` consome esse recibo e conclui o squash quando os gates aplicáveis estão verdes e a branch está mergeável.
 
 Essa autorização não concede carta branca para recurso externo não relacionado, segredo, gasto novo, exclusão irreversível sem mapa ou mudança de intenção de negócio.
 
@@ -119,6 +148,7 @@ SHA/build/runtime relacionado
 → diagnosticar
 → menor correção
 → teste
+→ squash main quando já autorizado e mergeável
 → deploy/aplicação no menor escopo
 → validar runtime/log
 → corrigir novamente se necessário
