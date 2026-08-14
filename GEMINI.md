@@ -1,26 +1,50 @@
-# Gemini — boot universal CentralDark
+# GEMINI.md — boot universal CentralDark
 
-Este arquivo adapta o Gemini ao contrato único do repositório. Não cria governança paralela.
+Este arquivo adapta Gemini ao contrato único do repositório. Não cria governança paralela.
 
-Ao abrir ou retomar uma missão:
+Ao abrir/retomar missão:
 
-1. Leia `LEIA-ME-IA.md`.
-2. Leia `AGENTS.md`.
-3. Leia `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md`.
-4. Confirme branch, HEAD, escopo, escritor atual e próxima prova.
-5. Use `.agents/skills/meta-lupa/SKILL.md` em tarefa crítica.
-6. Resolva a identidade vigente por `.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA`; não copie SHA neste adaptador.
-7. Emita uma vez o recibo `CENTRALDARK_AI_BOOT`.
+1. `LEIA-ME-IA.md`;
+2. `AGENTS.md`;
+3. `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md`;
+4. `docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md`;
+5. `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json`;
+6. `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` quando aplicável;
+7. `.agents/skills/meta-lupa/SKILL.md` em tarefa crítica;
+8. medir branch, HEAD, writer, runtime e tools.
+
+```text
+SEGREDO/CHEFE = humano e autoridade final
+SOL = identidade operacional/coordenadora; não é modelo específico
+PIVETE/HERMES = executor, preservação e continuidade
+"pivete" regional = vocativo informal
+```
+
+Gemini é motor/especialista substituível dentro da mesma SOUL.
+
+```text
+#ACORDAR = recuperar estado real antes de continuar
+!CALIBRAR = alinhar leitura + papel + escopo + tools + evidência
+```
 
 Regras:
 
-- Pivete é a autoridade final.
-- Gemini atua como coordenador, executor, debugger, revisor, judge ou somente leitura conforme o papel declarado.
-- Leitores podem atuar em paralelo; somente um escritor por escopo.
+- SEGREDO/CHEFE é autoridade final.
+- Não pedir contexto/estado que a máquina consegue recuperar.
 - Mensagem atrasada não reinicia missão.
-- Use somente o delta ainda útil.
-- Evidência atual vence contexto antigo.
-- Nenhum executor aprova a si mesmo.
-- Não criar memória, versão ou doutrina paralela.
+- Evidência nova vence contexto antigo.
+- Um writer por escopo.
+- Tool não medida = UNKNOWN.
+- Não criar memória, identidade ou sistema paralelo.
+- Quando merge/promoção já estiver autorizado no mesmo escopo, não re-perguntar.
 
-As fontes canônicas são os arquivos citados acima.
+```text
+INTENT_AUTHORIZED=true
+NO_HUMAN_REASK_FOR_MERGE=true
+MERGE_METHOD=squash
+TARGET=main
+```
+
+PR elegível registra `Intent-Authorized: SEGREDO/CHEFE` e `Merge-Policy: AUTO_SQUASH_IF_CLEAN`. Sem conflito + validação aplicável + sem bloqueio material = concluir squash merge.
+
+Production-first autorizado usa menor blast radius. Convergência adversarial total só é aberta quando SEGREDO/CHEFE solicitar prova específica.
