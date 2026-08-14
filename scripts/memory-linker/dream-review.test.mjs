@@ -71,6 +71,15 @@ test('rejeita evento sem evidencia e nao fabrica aprendizado', () => {
   assert.equal(proposal.candidate_count, 0);
 });
 
+test('rejeita evento sem HEAD em vez de cola-lo artificialmente ao estado atual', () => {
+  const proposal = buildDreamProposal([
+    event({ head_sha: '' }),
+  ], { headSha: HEAD });
+
+  assert.equal(proposal.accepted_event_count, 0);
+  assert.equal(proposal.rejected[0].reason, 'EVENT_HEAD_MISSING');
+});
+
 test('rejeita evento vinculado a outro HEAD', () => {
   const proposal = buildDreamProposal([
     event({ head_sha: 'b'.repeat(40) }),
@@ -119,6 +128,21 @@ test('validador reprova proposta que tenta aplicar direto', () => {
   assert.equal(result.ok, false);
   assert.ok(result.errors.includes('APPLY_MUST_BE_FALSE'));
   assert.ok(result.errors.includes('DIRECT_CANONICAL_MUTATION_FORBIDDEN'));
+});
+
+test('validador reprova tentativa de desligar MetaLupa ou revalidacao no mesmo HEAD', () => {
+  const proposal = buildDreamProposal([event()], { headSha: HEAD });
+  proposal.promotion_contract.meta_lupa_required = false;
+  proposal.promotion_contract.same_head_revalidation_required = false;
+  proposal.candidates[0].promotion.meta_lupa_required = false;
+  proposal.candidates[0].promotion.same_head_revalidation_required = false;
+
+  const result = validateDreamProposal(proposal);
+  assert.equal(result.ok, false);
+  assert.ok(result.errors.includes('PROMOTION_META_LUPA_REQUIRED'));
+  assert.ok(result.errors.includes('PROMOTION_SAME_HEAD_REQUIRED'));
+  assert.ok(result.errors.some((error) => error.startsWith('CANDIDATE_META_LUPA_REQUIRED:')));
+  assert.ok(result.errors.some((error) => error.startsWith('CANDIDATE_SAME_HEAD_REQUIRED:')));
 });
 
 test('HEAD invalido falha fechado', () => {
