@@ -88,10 +88,10 @@ Se `main`, PR, workflow, runtime ou ferramenta aplicável mudar durante a própr
 
 ```text
 INITIAL_HEAD != FINAL_HEAD
-→ NAO_RECOMEÇAR_TUDO
-→ MEDIR_DELTA
-→ ABSORVER_O_QUE_E_CAUSAL
-→ PRESERVAR_O_QUE_CONTINUA_VALIDO
+→ NAO RECOMEÇAR TUDO
+→ MEDIR DELTA
+→ ABSORVER O QUE E CAUSAL
+→ PRESERVAR O QUE CONTINUA VALIDO
 ```
 
 ## Reconciliação obrigatória antes de criar
@@ -123,7 +123,7 @@ TEXTO_HISTORICO_DIZ_X
 + CANONICO_ATUAL_DIZ_Y
 → PRESERVAR X COMO PROVENIENCIA
 → OPERAR POR Y
-→ CORRIGIR ARTEFATO VIVO SE X AINDA ESTIVER SENDO_LIDO_COMO_PRESENTE
+→ CORRIGIR ARTEFATO VIVO SE X AINDA ESTIVER SENDO LIDO COMO PRESENTE
 ```
 
 Marcadores antigos como `PERMITO PIVETE`, “merge é decisão humana” ou topologias locais não medidas não revogam nem ampliam a política vigente por conta própria. Autoridade, identidade e permissão vêm do contrato canônico atual + intenção vigente + estado real.
@@ -174,10 +174,10 @@ Quando uma capacidade/corpo está indisponível, procurar outra capacidade já a
 
 ```text
 CORPO_A_INDISPONIVEL
-→ MEDIR_CORPO_B/CAPACIDADE_EXISTENTE
-→ MESMO_ESCOPO + MESMA_AUTORIZACAO + SEGURANCA_OK
+→ MEDIR CORPO_B/CAPACIDADE_EXISTENTE
+→ MESMO ESCOPO + MESMA AUTORIZACAO + SEGURANCA OK
 → CONTINUAR
-→ REGISTRAR_QUAL_CORPO_EXECUTOU
+→ REGISTRAR QUAL CORPO EXECUTOU
 ```
 
 Indisponibilidade de instrumento não revoga intenção humana nem prova indisponibilidade do organismo inteiro.
@@ -189,8 +189,8 @@ Quando SEGREDO/CHEFE já deu a intenção e a autorização vigente cobre promo�
 ```text
 INTENCAO_JA_AUTORIZADA
 → IMPLEMENTAR
-→ TESTE_LOCAL_APLICAVEL
-→ SCAN_DE_SEGURANCA_DO_DIFF
+→ TESTE LOCAL APLICAVEL
+→ SCAN DE SEGURANCA DO DIFF
 → SEM_CONFLITO
 → SEM_BLOQUEIO_MATERIAL
 → SQUASH_MAIN
@@ -216,14 +216,14 @@ Writer-Scope: <escopo>
 O fluxo canônico **já existente** `.github/workflows/autonomia-promocao.yml` consome esse recibo. Não criar segundo workflow de promoção. No modo `AUTO_SQUASH_IF_CLEAN`, o próprio promotor:
 
 ```text
-AUTOR_CONFIAVEL + MESMO_REPO
-→ RECIBO_DE_INTENCAO
-→ SCAN_DE_CAMINHO/SECRET_NO_DIFF
+AUTOR CONFIAVEL + MESMO REPO
+→ RECIBO DE INTENCAO
+→ SCAN DE CAMINHO/SECRET NO DIFF
 → CHANGES_REQUESTED? BLOQUEIA
-→ MERGE_CONFLICT? BLOQUEIA
-→ BASE_ATRASADA? ATUALIZA_E_REAVALIA
-→ REVALIDA_HEAD/BASE
-→ SQUASH_MAIN
+→ MERGE CONFLICT? BLOQUEIA
+→ BASE ATRASADA? ATUALIZA E REAVALIA
+→ REVALIDA HEAD/BASE
+→ SQUASH MAIN
 → RECEIPT
 ```
 
@@ -259,9 +259,9 @@ O organismo não otimiza para “vencer discussão”. Otimiza para **sair de ca
 
 ```text
 CONFRONTO
-→ EVIDENCIA_NOVA
+→ EVIDENCIA NOVA
 → DELTA_DE_CRENCA
-→ REGRA|TESTE|GUARDRAIL|MEMORIA_QUANDO_NECESSARIO
+→ REGRA|TESTE|GUARDRAIL|MEMORIA QUANDO NECESSARIO
 → OURO
 ```
 
@@ -319,11 +319,11 @@ Quando solicitado por SEGREDO/CHEFE:
 ```text
 TASKS_SECRETAS
 → HASH ANTES
-→ CENTRALDARK_EXECUTA_SEM_GABARITO
+→ CENTRALDARK EXECUTA SEM GABARITO
 → RECEIPTS/LOGS
 → CONTRAPROVA/JUDGE
 → RESULTADO
-→ ABRIR_GABARITO
+→ ABRIR GABARITO
 → MEDIR ACERTO|ERRO|TRANSFERENCIA|EFICIENCIA|ROBUSTEZ
 ```
 
