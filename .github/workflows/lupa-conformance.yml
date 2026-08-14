@@ -2,7 +2,7 @@ name: lupa-conformance
 
 on:
   pull_request:
-    branches: [main]
+    branches: [main, program/centraldark-convergencia-omniroute-722]
     types: [opened, reopened, synchronize, ready_for_review, labeled, unlabeled]
   workflow_dispatch:
 
@@ -43,10 +43,6 @@ jobs:
           fetch-depth: 2
           persist-credentials: false
 
-      # O checkout continua preso ao SHA imutável. Esta etapa só dá ao Git local
-      # a identidade de branch já provada pelo evento, porque o OPERATION_RECEIPT
-      # fail-closed exige branch explícita e `git branch --show-current` é vazio
-      # em detached HEAD. A branch local nunca é fonte do conteúdo e não é pushada.
       - name: Vincular branch esperada ao SHA exato
         shell: bash
         env:
@@ -94,6 +90,9 @@ jobs:
       - name: Motor determinístico
         working-directory: .agents/skills/meta-lupa
         run: python testes/test_lupa.py
+      - name: Percentual evidencial — denominador fechado + dogfood
+        working-directory: .agents/skills/meta-lupa
+        run: python scripts/percentual_evidencial.py self-test
       - name: Validador e promotor do OPERATION_RECEIPT
         run: pytest .agents/skills/meta-lupa/testes/test_operation_receipt_validator.py -v
       - name: Guardrail do selo de ponto fixo

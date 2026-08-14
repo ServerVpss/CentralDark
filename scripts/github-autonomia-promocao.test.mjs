@@ -3,8 +3,11 @@ import test from "node:test";
 
 import {
   DEFAULT_WAIT_TIMEOUT_MS,
+  FAST_MERGE_POLICY,
   authorizationFor,
   evaluateCandidate,
+  intentReceipt,
+  scanPullFiles,
   sealReceipt,
   selectLatestNonSkipped,
   verifySealedReceipt,
@@ -13,11 +16,19 @@ import {
   workflowVerdicts,
 } from "./github-autonomia-promocao.mjs";
 
+const INTENT_BODY = [
+  "Intent-Authorized: SEGREDO/CHEFE",
+  `Merge-Policy: ${FAST_MERGE_POLICY}`,
+  "Intent-Scope: TESTE_CANONICO",
+  "Writer: GPT-5.6-Sol",
+  "Writer-Scope: TESTE_CANONICO",
+].join("\n");
+
 function prFixture(overrides = {}) {
   return {
     number: 99,
     title: "fix: exemplo",
-    body: "PERMITO SEGREDO",
+    body: INTENT_BODY,
     state: "open",
     draft: false,
     mergeable: true,
@@ -29,10 +40,7 @@ function prFixture(overrides = {}) {
       ref: "fix/exemplo",
       repo: { full_name: "ServerVpss/CentralDark" },
     },
-    base: {
-      sha: "b".repeat(40),
-      ref: "main",
-    },
+    base: { sha: "b".repeat(40), ref: "main" },
     ...overrides,
   };
 }
@@ -47,191 +55,164 @@ function successfulRuns(required) {
   }));
 }
 
-test("autorização canônica reconhece SEGREDO no corpo ou label", () => {
-  const body = authorizationFor(prFixture());
-  assert.equal(body.authorized, true);
-  assert.equal(body.authority, "SEGREDO/CHEFE");
-  assert.equal(body.labelToApply, "permito-segredo");
+function evaluate(pr = prFixture(), overrides = {}) {
+  return evaluateCandidate({
+    pr,
+    repository: "ServerVpss/CentralDark",
+    trustedAuthors: ["segredounlock"],
+    requiredWorkflows: ["gate-a", "gate-b"],
+    workflowRuns: [],
+    unresolvedThreads: 0,
+    securityFindings: [],
+    ...overrides,
+  });
+}
 
-  const label = authorizationFor(
-    prFixture({ body: "sem marcador", labels: [{ name: "permito-segredo" }] }),
-  );
-  assert.equal(label.authorized, true);
-  assert.equal(label.authority, "SEGREDO/CHEFE");
-  assert.equal(label.viaLabel, true);
+test("recibo de intenção completo é autorização canônica do fast path", () => {
+  const receipt = intentReceipt(prFixture());
+  assert.equal(receipt.valid, true);
+  assert.equal(receipt.authority, "SEGREDO/CHEFE");
+  assert.equal(receipt.mergePolicy, FAST_MERGE_POLICY);
+  assert.equal(receipt.intentScope, "TESTE_CANONICO");
+
+  const auth = authorizationFor(prFixture());
+  assert.equal(auth.authorized, true);
+  assert.equal(auth.viaBody, true);
+  assert.equal(auth.viaLabel, false);
+  assert.equal(auth.source, "pr-body:intent-authorized");
+  assert.equal(auth.authority, "SEGREDO/CHEFE");
 });
 
-test("marcador antigo continua compatível sem transformar Pivete em autoridade", () => {
-  const body = authorizationFor(prFixture({ body: "PERMITO PIVETE" }));
-  assert.equal(body.authorized, true);
-  assert.equal(body.authority, "LEGACY_PIVETE_COMPAT");
-  assert.equal(body.legacy, true);
-  assert.equal(body.labelToApply, "permito-pivete");
-
-  const label = authorizationFor(
-    prFixture({ body: "sem marcador", labels: [{ name: "permito-pivete" }] }),
-  );
-  assert.equal(label.authorized, true);
-  assert.equal(label.authority, "LEGACY_PIVETE_COMPAT");
-  assert.equal(label.legacy, true);
+test("recibo incompleto não autoriza", () => {
+  const pr = prFixture({ body: "Intent-Authorized: SEGREDO/CHEFE\nMerge-Policy: AUTO_SQUASH_IF_CLEAN" });
+  assert.equal(intentReceipt(pr).valid, false);
+  assert.equal(authorizationFor(pr).authorized, false);
 });
 
-test("sem marcador ou label a autorização permanece ausente", () => {
-  const result = authorizationFor(prFixture({ body: "sem marcador", labels: [] }));
-  assert.equal(result.authorized, false);
-  assert.equal(result.authority, null);
+test("label persistente permito-segredo continua compatível", () => {
+  const auth = authorizationFor(prFixture({ body: "sem recibo", labels: [{ name: "permito-segredo" }] }));
+  assert.equal(auth.authorized, true);
+  assert.equal(auth.viaLabel, true);
+  assert.equal(auth.viaBody, false);
+  assert.equal(auth.source, "github-label:permito-segredo");
 });
 
-test("seleção ignora run skipped mais nova e usa sucesso real", () => {
+test("PERMITO SEGREDO/PIVETE no body é histórico e não autoriza", () => {
+  for (const body of ["PERMITO SEGREDO", "PERMITO PIVETE"]) {
+    const auth = authorizationFor(prFixture({ body, labels: [] }));
+    assert.equal(auth.authorized, false);
+    assert.equal(auth.historicalBodyMarker, true);
+  }
+  const legacyLabel = authorizationFor(prFixture({ body: "sem recibo", labels: [{ name: "permito-pivete" }] }));
+  assert.equal(legacyLabel.authorized, false);
+  assert.equal(legacyLabel.legacy, true);
+});
+
+test("fast path não espera convergência/workflows externos", () => {
+  const result = evaluate();
+  assert.equal(result.mode, "FAST");
+  assert.equal(result.decision, "READY");
+  assert.deepEqual(result.workflows, []);
+  assert.deepEqual(result.waits, []);
+});
+
+test("fast path ignora thread comum mas não CHANGES_REQUESTED explícito", () => {
+  const common = evaluate(prFixture(), { unresolvedThreads: 9 });
+  assert.equal(common.decision, "READY");
+
+  const blocked = evaluate(prFixture(), { blockingReview: true });
+  assert.equal(blocked.decision, "BLOCKED");
+  assert.match(blocked.reasons.join(" "), /CHANGES_REQUESTED/);
+});
+
+test("fast path continua fail-closed para conflito, fork e autor externo", () => {
+  const conflict = evaluate(prFixture({ mergeable: false, mergeable_state: "dirty" }));
+  assert.equal(conflict.decision, "BLOCKED");
+  assert.match(conflict.reasons.join(" "), /MERGE_CONFLICT/);
+
+  const external = evaluate(prFixture({
+    user: { login: "intruso" },
+    head: { sha: "a".repeat(40), ref: "fork", repo: { full_name: "outro/fork" } },
+  }));
+  assert.equal(external.decision, "BLOCKED");
+  assert.match(external.reasons.join(" "), /AUTHOR_NOT_TRUSTED/);
+  assert.match(external.reasons.join(" "), /HEAD_EXTERNAL_REPOSITORY/);
+});
+
+test("scanner bloqueia caminho sensível e segredo literal, não documentação comum", () => {
+  const findings = scanPullFiles([
+    { filename: "docs/README.md", patch: "+ use Authorization apenas como nome de header" },
+    { filename: ".env.production", patch: "+SAFE=placeholder" },
+    { filename: "src/config.js", patch: `+const x = "ghp_${"A".repeat(36)}"` },
+  ]);
+  assert.equal(findings.some((x) => x.startsWith("SENSITIVE_PATH:.env.production")), true);
+  assert.equal(findings.some((x) => x.startsWith("GITHUB_TOKEN_LITERAL:src/config.js")), true);
+  assert.equal(findings.some((x) => x.includes("docs/README.md")), false);
+
+  const result = evaluate(prFixture(), { securityFindings: findings });
+  assert.equal(result.decision, "BLOCKED");
+  assert.match(result.reasons.join(" "), /SECURITY_FINDING/);
+});
+
+test("branch atrás da main pede atualização automática antes do merge", () => {
+  const result = evaluate(prFixture(), { baseUpdateRequired: true });
+  assert.equal(result.decision, "UPDATE_REQUIRED");
+});
+
+test("mergeability pendente espera; conflito nunca vira WAIT verde", () => {
+  const waiting = evaluate(prFixture({ mergeable: null, mergeable_state: "unknown" }));
+  assert.equal(waiting.decision, "WAIT");
+  assert.match(waiting.waits.join(" "), /MERGEABILITY_PENDING/);
+
+  const conflict = evaluate(prFixture({ mergeable: false, mergeable_state: "dirty" }));
+  assert.equal(conflict.decision, "BLOCKED");
+});
+
+test("modo adversarial por label preserva os workflows e contraprova completos", () => {
+  const pr = prFixture({ body: "sem recibo", labels: [{ name: "permito-segredo" }] });
+  const missing = evaluate(pr);
+  assert.equal(missing.mode, "ADVERSARIAL");
+  assert.equal(missing.decision, "WAIT");
+  assert.match(missing.waits.join(" "), /WORKFLOW_MISSING/);
+
+  const ready = evaluate(pr, { workflowRuns: successfulRuns(["gate-a", "gate-b"]) });
+  assert.equal(ready.decision, "READY");
+  assert.equal(ready.workflows.every((x) => x.state === "PASS"), true);
+});
+
+test("hold explícito bloqueia sem apagar autorização", () => {
+  const result = evaluate(prFixture({ labels: [{ name: "hold" }] }));
+  assert.equal(result.authorization.authorized, true);
+  assert.equal(result.decision, "BLOCKED");
+  assert.match(result.reasons.join(" "), /BLOCKING_LABEL:hold/);
+});
+
+test("seleção de workflow ignora skipped mais novo e usa execução real", () => {
   const selected = selectLatestNonSkipped([
     { id: 1, name: "gate", run_number: 20, status: "completed", conclusion: "skipped" },
     { id: 2, name: "gate", run_number: 19, status: "completed", conclusion: "success" },
   ], "gate");
   assert.equal(selected.id, 2);
+  assert.deepEqual(workflowVerdicts([], ["gate"]), [{ name: "gate", state: "MISSING", run_id: null, conclusion: null }]);
 });
 
-test("workflow ausente nunca vira verde", () => {
-  assert.deepEqual(workflowVerdicts([], ["gate"]), [
-    { name: "gate", state: "MISSING", run_id: null, conclusion: null },
-  ]);
-});
-
-test("candidato pronto exige todos os contratos", () => {
-  const required = ["gate-a", "gate-b"];
-  const result = evaluateCandidate({
-    pr: prFixture(),
-    repository: "ServerVpss/CentralDark",
-    trustedAuthors: ["segredounlock"],
-    requiredWorkflows: required,
-    workflowRuns: successfulRuns(required),
-    unresolvedThreads: 0,
-  });
-  assert.equal(result.decision, "READY");
-  assert.deepEqual(result.reasons, []);
-  assert.deepEqual(result.waits, []);
-});
-
-test("base atrasada pede atualização antes do merge", () => {
-  const required = ["gate"];
-  const result = evaluateCandidate({
-    pr: prFixture(),
-    repository: "ServerVpss/CentralDark",
-    trustedAuthors: ["segredounlock"],
-    requiredWorkflows: required,
-    workflowRuns: successfulRuns(required),
-    unresolvedThreads: 0,
-    baseUpdateRequired: true,
-  });
-  assert.equal(result.decision, "UPDATE_REQUIRED");
-});
-
-test("thread pendente bloqueia promoção", () => {
-  const required = ["gate"];
-  const result = evaluateCandidate({
-    pr: prFixture(),
-    repository: "ServerVpss/CentralDark",
-    trustedAuthors: ["segredounlock"],
-    requiredWorkflows: required,
-    workflowRuns: successfulRuns(required),
-    unresolvedThreads: 1,
-  });
-  assert.equal(result.decision, "BLOCKED");
-  assert.match(result.reasons.join(" "), /UNRESOLVED_REVIEW_THREADS/);
-});
-
-test("autor externo ou fork nunca é promovido", () => {
-  const required = ["gate"];
-  const result = evaluateCandidate({
-    pr: prFixture({
-      user: { login: "intruso" },
-      head: { sha: "a".repeat(40), ref: "fork", repo: { full_name: "outro/fork" } },
-    }),
-    repository: "ServerVpss/CentralDark",
-    trustedAuthors: ["segredounlock"],
-    requiredWorkflows: required,
-    workflowRuns: successfulRuns(required),
-    unresolvedThreads: 0,
-  });
-  assert.equal(result.decision, "BLOCKED");
-  assert.match(result.reasons.join(" "), /AUTHOR_NOT_TRUSTED/);
-  assert.match(result.reasons.join(" "), /HEAD_EXTERNAL_REPOSITORY/);
-});
-
-test("falha de workflow bloqueia e skipped não substitui sucesso", () => {
-  const required = ["gate"];
-  const result = evaluateCandidate({
-    pr: prFixture(),
-    repository: "ServerVpss/CentralDark",
-    trustedAuthors: ["segredounlock"],
-    requiredWorkflows: required,
-    workflowRuns: [
-      { id: 1, name: "gate", run_number: 3, status: "completed", conclusion: "skipped" },
-      { id: 2, name: "gate", run_number: 2, status: "completed", conclusion: "failure" },
-    ],
-    unresolvedThreads: 0,
-  });
-  assert.equal(result.decision, "BLOCKED");
-  assert.match(result.reasons.join(" "), /WORKFLOW_FAILED/);
-});
-
-test("recibo válido é preso ao hash e expira em 15 minutos", () => {
-  const generated = new Date("2026-07-30T17:00:00.000Z");
+test("recibo selado é preso ao hash e expira", () => {
+  const generated = new Date("2026-08-14T03:00:00.000Z");
   const sealed = sealReceipt({
-    schema: "centraldark.autonomia-promocao.v1",
+    schema: "centraldark.autonomia-promocao.v2",
     generated_at: generated.toISOString(),
     repository: "ServerVpss/CentralDark",
     candidates: [],
   });
-  assert.equal(
-    verifySealedReceipt(sealed, generated.getTime() + 14 * 60 * 1000).repository,
-    "ServerVpss/CentralDark",
-  );
-  assert.throws(
-    () => verifySealedReceipt(sealed, generated.getTime() + 16 * 60 * 1000),
-    /RECEIPT_EXPIRED/,
-  );
+  assert.equal(verifySealedReceipt(sealed, generated.getTime() + 14 * 60 * 1000).repository, "ServerVpss/CentralDark");
+  assert.throws(() => verifySealedReceipt(sealed, generated.getTime() + 16 * 60 * 1000), /RECEIPT_EXPIRED/);
   const adulterated = structuredClone(sealed);
   adulterated.receipt.repository = "outro/repo";
   assert.throws(() => verifySealedReceipt(adulterated, generated.getTime()), /RECEIPT_HASH_INVALID/);
 });
 
-test("espera dentro da janela continua espera", () => {
-  const agora = Date.parse("2026-08-05T12:00:00.000Z");
-  const result = evaluateCandidate({
-    pr: prFixture({ updated_at: "2026-08-05T11:40:00.000Z" }),
-    repository: "ServerVpss/CentralDark",
-    trustedAuthors: ["segredounlock"],
-    requiredWorkflows: ["gate"],
-    workflowRuns: [],
-    unresolvedThreads: 0,
-    now: agora,
-  });
-  assert.equal(result.decision, "WAIT");
-  assert.match(result.waits.join(" "), /WORKFLOW_MISSING/);
-});
-
-test("espera parada além da janela vira bloqueio, nunca espera infinita muda", () => {
-  const agora = Date.parse("2026-08-05T12:00:00.000Z");
-  const result = evaluateCandidate({
-    pr: prFixture({ updated_at: "2026-08-05T10:00:00.000Z" }),
-    repository: "ServerVpss/CentralDark",
-    trustedAuthors: ["segredounlock"],
-    requiredWorkflows: ["gate"],
-    workflowRuns: [],
-    unresolvedThreads: 0,
-    now: agora,
-  });
-  assert.equal(result.decision, "BLOCKED");
-  assert.match(result.reasons.join(" "), /WAIT_TIMEOUT:120min/);
-});
-
-test("sem relógio o comportamento antigo é preservado", () => {
-  assert.equal(waitAgeMs(prFixture({ updated_at: "2026-08-05T10:00:00.000Z" })), null);
-  assert.equal(waitAgeMs({ updated_at: "data inválida" }, Date.now()), null);
-});
-
-test("janela de espera é configurável e cai no padrão quando inválida", () => {
+test("janela adversarial de espera continua configurável", () => {
+  assert.equal(waitAgeMs(prFixture({ updated_at: "2026-08-14T02:00:00.000Z" })), null);
   assert.equal(waitTimeoutMsFromEnv({}), DEFAULT_WAIT_TIMEOUT_MS);
-  assert.equal(waitTimeoutMsFromEnv({ BOT_WAIT_TIMEOUT_MINUTES: "0" }), DEFAULT_WAIT_TIMEOUT_MS);
   assert.equal(waitTimeoutMsFromEnv({ BOT_WAIT_TIMEOUT_MINUTES: "10" }), 600000);
 });

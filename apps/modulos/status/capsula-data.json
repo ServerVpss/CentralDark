@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "generated_at_utc": "2026-08-06T04:17:13.243Z",
+  "source": {
+    "event_count": 0,
+    "run_count": 0,
+    "kind": "NO_EVENTS"
+  },
+  "capsule": {
+    "status": "BLOCKED",
+    "reason": "NO_EVENTS",
+    "production": "UNTOUCHED",
+    "ready_for_promotion": false,
+    "current_run": {
+      "run_id": null,
+      "candidate_ref": null,
+      "candidate_digest": null,
+      "baseline_ref": null,
+      "fixture_ref": null,
+      "evaluator_ref": null,
+      "writer": null,
+      "event_actor": null,
+      "iteration": 0,
+      "status": "RUNNING",
+      "reason": "",
+      "chief_decision": "PENDING",
+      "chief_receipt_ref": null,
+      "chief_receipt_hash": null,
+      "tests": {
+        "total": 0,
+        "pass": 0,
+        "fail": 0,
+        "skipped": 0
+      },
+      "test_success": {
+        "numerator": 0,
+        "denominator": 0,
+        "percent": null,
+        "state": "SEM_DENOMINADOR"
+      },
+      "generalization": {
+        "numerator": 0,
+        "denominator": 0,
+        "percent": null,
+        "state": "SEM_DENOMINADOR"
+      },
+      "retention": {
+        "numerator": 0,
+        "denominator": 0,
+        "percent": null,
+        "state": "SEM_DENOMINADOR"
+      },
+      "last_event_at_utc": null,
+      "decision_event_present": false
+    }
+  },
+  "learning": {
+    "failures_observed": 0,
+    "unique_failure_classes": 0,
+    "repeated_failures": 0,
+    "corrections_verified_and_retained": 0,
+    "xp_valid": 0,
+    "xp_rejected": 0,
+    "false_green_count": 0,
+    "regression_count": 0,
+    "correction_rate": {
+      "numerator": 0,
+      "denominator": 0,
+      "percent": null,
+      "state": "SEM_DENOMINADOR"
+    },
+    "recurrence_rate": {
+      "numerator": 0,
+      "denominator": 0,
+      "percent": null,
+      "state": "SEM_DENOMINADOR"
+    }
+  },
+  "guarantees": {
+    "no_percentage_without_denominator": "ENFORCED",
+    "skipped_never_counts_as_pass": "UNKNOWN",
+    "same_identity_per_run": "UNKNOWN",
+    "independent_evaluator_required_for_decision_pass": "UNKNOWN",
+    "chief_receipt_required_for_promotion": "UNKNOWN",
+    "production_not_authorized_by_snapshot": "ENFORCED"
+  },
+  "validation": {
+    "verdict": "PASS",
+    "problems": []
+  }
+}

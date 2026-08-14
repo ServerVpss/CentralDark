@@ -2,7 +2,10 @@
 name: cot-react-loop
 description: >-
   Use durante tarefas complexas com múltiplas ferramentas para executar, medir,
-  criticar, corrigir e parar com evidência, sem falso verde.
+  criticar, corrigir e parar com evidência, sem falso verde. Também é descoberto
+  automaticamente diante de ERROR, FAIL, DRIFT, REGRESSION, CONFLICT, UNKNOWN
+  material, check vermelho, contrato/teste/hash divergente, estado obsoleto,
+  autoridade ambígua ou tool failure; o gatilho abre diagnóstico, não autoridade.
 ---
 
 # COT-REACT-LOOP
@@ -52,11 +55,66 @@ Triggers:
 ```text
 usa loop durante | executa por etapas | missão complexa | múltiplas ferramentas
 mede e corrige | não perde o fio | continua até prova | modo reagir
+ERROR | FAIL | DRIFT | REGRESSION | CONFLICT | UNKNOWN material
+check vermelho | contrato divergente | teste quebrado | hash drift
+memória/estado obsoleto | autoridade ambígua | tool failure
 ```
 
 Não ativar para pergunta factual simples, ordem literal de um passo, resposta
 já provada no disco, ação bloqueada por falta de autorização ou tarefa cuja
 relação causal já foi rejeitada por `raciocinio-deliberado`.
+
+### 2.1 Auto-correction transversal sem skill paralela
+
+O auto-trigger **não** concede escrita. Ele apenas entra em diagnóstico e
+preserva `MISSION_ID`, alvo, Writer, HEAD e fio já existentes.
+
+```text
+TRIGGER MATERIAL
+→ DETECTAR
+→ LOCALIZAR CAUSA
+→ REUSE_BEFORE_CREATE
+→ CORRIGIR O MÍNIMO
+→ PROVAR NO HEAD NOVO
+→ META-LUPA/CONTRAPROVA APLICÁVEL
+→ RETORNAR AO MESMO FIO
+```
+
+Para erro simples/local/reversível, usar o menor caminho causal e não inflar a
+tarefa em loop complexo. Para erro amplo, recorrente ou multi-tool, continuar
+pelo loop desta skill.
+
+```text
+SELF_HEALING=true
+SELF_JUSTIFYING=false
+REUSE_BEFORE_CREATE=true
+RETURN_TO_MISSION_THREAD=true
+UNKNOWN|SKIPPED|QUEUED|PENDING != PASS
+```
+
+Se outro Writer estiver ativo **no mesmo escopo**, permanecer `READ_ONLY` e
+entregar somente delta; não disputar caneta:
+
+```yaml
+DELTA_MESSAGE:
+  mission_id: ""
+  from: "cot-react-loop"
+  mode: READ_ONLY
+  observed_state_sha: ""
+  delta_type: "ERROR|FAIL|DRIFT|REGRESSION|CONFLICT|UNKNOWN|TOOL_FAILURE"
+  severity: "P0|P1|P2|P3"
+  do_not_rewind: true
+  cause: ""
+  minimal_fix: ""
+  evidence: []
+  apply_if: ""
+  reject_if: ""
+  proof_expected: []
+```
+
+Mesmo erro + zero informação nova + zero mudança = desperdício. Evidência que
+mata hipótese/regra deve fazê-la mudar ou morrer; nunca ajustar teste ou
+rebaixar canônico só para produzir verde.
 
 ## 3. Gate de entrada
 
@@ -596,7 +654,7 @@ Finalizar e parar.
 RACIOCINIO-DELIBERADO → decide antes
 COT-REACT-LOOP        → executa, mede e corrige durante
 META-LUPA             → tenta derrubar depois
-PIVETE                 → autoriza promoção
+SEGREDO/CHEFE          → autoridade final para promoção
 ```
 
 ```text

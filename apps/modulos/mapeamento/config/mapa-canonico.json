@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "source_of_truth": "apps/modulos/mapeamento/config/mapa-canonico.json",
-  "approval_label": "permito-pivete",
+  "approval_label": "permito-segredo",
   "rules": {
     "new_module_requires_map": true,
     "protected_changes_fail_closed": true,
@@ -10,6 +10,11 @@
     "adjacent_repeated_directory_forbidden": true,
     "canonical_contracts_fail_closed": true,
     "validation_failure_masking_forbidden": true
+  },
+  "consolidation_evidence_policy": {
+    "enabled": true,
+    "legacy_without_proof": "PROTECTED_UNPROVEN",
+    "efficacy_100_requires_denominator": true
   },
   "canonical_contracts": [
     {

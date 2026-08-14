@@ -3,14 +3,13 @@
 source "$(dirname "$0")/_lib.sh"
 BLOCO="08-chat-ao-vivo"
 
-# Verifica se o backend do bot tem as rotas/módulos esperados
-BOT="$CK_MULTIZAP_ROOT/apps/clone-deck/apps/bot"
-if [ ! -d "$BOT" ]; then
-  BOT="$CK_MULTIZAP_ROOT/apps/bot"
-fi
+# Somente a implementação dentro da CentralDark é operacional. Não há fallback
+# para clone-deck/Multizap; dependência externa real precisa ser migrada.
+BOT="$CK_CENTRALDARK_ROOT/apps/bot"
+require_canonical_path "$BLOCO" "$BOT" || exit 0
 
 if [ ! -d "$BOT" ]; then
-  emit_alerta "$BLOCO" "Pasta do bot não encontrada — pulando verificações"
+  emit_alerta "$BLOCO" "Pasta canônica do bot não encontrada: $BOT"
   exit 0
 fi
 
@@ -32,6 +31,6 @@ if has_cmd curl; then
   if [ "$HTTP" = "200" ]; then
     emit_ok "$BLOCO" "Gateway respondeu /health 200"
   else
-    emit_alerta "$BLOCO" "Gateway /health respondeu $HTTP (esperado se WuzAPI estiver em outra porta)"
+    emit_alerta "$BLOCO" "Gateway /health respondeu $HTTP"
   fi
 fi

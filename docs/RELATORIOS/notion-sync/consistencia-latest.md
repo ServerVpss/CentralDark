@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-08-08T05:46:07.249Z
-- **Commit:** `7509860c66ce16f171e65c6002e73659f1e122ee`
+- **Gerado:** 2026-08-14T18:28:11.183Z
+- **Commit:** `6aeb1162da2284c70d16006a46ad41fdcc724835`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 39 | 39 | 39 | 0 | 0 |
-| aprendizados | 15 | 0 | 0 | 15 | 0 |
+| aprendizados | 26 | 0 | 0 | 26 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **15**
+- 🟥 Faltando no Notion: **26**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -63,4 +63,15 @@
 - 13. Recuo preventivo não é obediência
 - 14. Mutante equivalente sai do denominador mas aponta a invariante sem teste
 - 15. Achado repetido é ruído, não reforço
+- 16. Frase de agente não prova alinhamento; promessa maior que capacidade é falso compromisso
+- 16. #ACORDAR é recuperação de estado real, não apenas comando de GitHub
+- 17. Uma SOL, um SOUL, uma superfície; modelos e ferramentas são capacidades substituíveis
+- 18. O humano decide intenção; a máquina prova o estado e não devolve investigação mensurável ao humano
+- 19. Em desenvolvimento autorizado, produção observável vem antes de perfeição global
+- 20. Convergência, Judge e Meta Lupa servem para tentar quebrar; não para decidir a intenção do CHEFE
+- 21. Falha local pede correção local e deploy no menor blast radius possível
+- 22. Painel Admin precisa ser observabilidade operacional, não só configuração
+- 23. HTTP 200, PM2 online, DNS resolvendo ou painel verde não provam LIVE
+- 24. API paga é capacidade, não identidade nem caminho obrigatório
+- 25. “Menos é mais” significa menor movimento compatível com efeito, observabilidade e segurança
 </details>

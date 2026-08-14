@@ -2,28 +2,22 @@
 /**
  * Varredura eventual da promoção autônoma.
  *
- * Modos separados por capacidade:
- * - judge: recebe token read-only e produz recibos SHA-256;
- * - promote: recebe somente o token do promotor, revalida e promove.
+ * Um único motor canônico:
+ * - judge: read-only, produz recibo SHA-256;
+ * - promote: revalida HEAD/base/intenção e promove.
  */
 import { spawnSync } from "node:child_process";
 import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { authorizationFor } from "./github-autonomia-promocao.mjs";
 
 const API = "https://api.github.com";
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const ENGINE = join(ROOT, "scripts", "github-autonomia-promocao.mjs");
 
 function markerAuthorized(pr) {
-  const labels = new Set((pr.labels || []).map((label) => String(label.name || label).toLowerCase()));
-  const text = `${pr.title || ""}\n${pr.body || ""}`;
-  return Boolean(
-    labels.has("permito-segredo") ||
-    /\bPERMITO[ _-]?SEGREDO\b/i.test(text) ||
-    labels.has("permito-pivete") ||
-    /\bPERMITO[ _-]?PIVETE\b/i.test(text)
-  );
+  return authorizationFor(pr).authorized;
 }
 
 export function eligibleSummary(pr, repository, trustedAuthors = ["segredounlock"]) {
@@ -45,7 +39,7 @@ async function api(token, method, path, body) {
       Authorization: `Bearer ${token}`,
       Accept: "application/vnd.github+json",
       "X-GitHub-Api-Version": "2022-11-28",
-      "User-Agent": "centraldark-autonomia-varredura/2.0",
+      "User-Agent": "centraldark-autonomia-varredura/3.0",
       ...(body === undefined ? {} : { "Content-Type": "application/json" }),
     },
     body: body === undefined ? undefined : JSON.stringify(body),
@@ -53,15 +47,10 @@ async function api(token, method, path, body) {
   const text = await response.text();
   let data = {};
   if (text) {
-    try {
-      data = JSON.parse(text);
-    } catch {
-      data = { message: text.slice(0, 500) };
-    }
+    try { data = JSON.parse(text); }
+    catch { data = { message: text.slice(0, 500) }; }
   }
-  if (!response.ok) {
-    throw new Error(`GITHUB_${method}_${path}_${response.status}:${String(data.message || "request failed").slice(0, 500)}`);
-  }
+  if (!response.ok) throw new Error(`GITHUB_${method}_${path}_${response.status}:${String(data.message || "request failed").slice(0, 500)}`);
   return data;
 }
 
@@ -71,11 +60,11 @@ async function upsertDiagnostic(token, repository, number, code, detail) {
     marker,
     "## Autonomia — bloqueio operacional",
     "",
-    "Código: `" + code + "`",
+    `Código: \`${code}\``,
     "",
     String(detail || "sem detalhe").slice(0, 2500),
     "",
-    "Nenhuma promoção foi executada. O controlador continuará reavaliando automaticamente.",
+    "Nenhuma promoção foi executada. O controlador continuará reavaliando automaticamente sem pedir novamente a mesma autorização.",
   ].join("\n");
   const comments = await api(token, "GET", `/repos/${repository}/issues/${number}/comments?per_page=100`);
   const existing = comments.find((comment) => String(comment.body || "").includes(marker));
@@ -91,17 +80,12 @@ const SECRET_PATTERNS = [
   /\b\d{8,12}:[A-Za-z0-9_-]{30,}\b/g,
 ];
 
-/** Remove credenciais antes de qualquer coisa sair do runner. */
 export function sanitizeNotice(text, limit = 900) {
   let clean = String(text ?? "");
   for (const pattern of SECRET_PATTERNS) clean = clean.replace(pattern, "[REDACTED]");
   return clean.replace(/\s+/g, " ").trim().slice(0, limit);
 }
 
-/**
- * Classifica a falha em causa determinística, sem IA no caminho crítico.
- * Falta de crédito, 429 e provedor fora do ar nunca podem virar PASS nem espera muda.
- */
 export function classifyFailure(text) {
   const value = String(text || "").toLowerCase();
   if (/insufficient[_ ]quota|quota exceeded|credit|billing|payment required|402/.test(value)) return "CREDITS_EXHAUSTED";
@@ -119,7 +103,6 @@ export function noticeTargets(env = process.env) {
   };
 }
 
-/** Nunca lança: notificar é obrigação, mas não pode derrubar o motor. */
 export async function notify(event, env = process.env) {
   const targets = noticeTargets(env);
   const text = [
@@ -143,9 +126,7 @@ export async function notify(event, env = process.env) {
     } catch (error) {
       results.push(`telegram:NOT_SENT_${classifyFailure(error?.message)}`);
     }
-  } else {
-    results.push("telegram:NOT_SENT_NO_SECRET");
-  }
+  } else results.push("telegram:NOT_SENT_NO_SECRET");
 
   if (targets.webhook) {
     try {
@@ -158,9 +139,7 @@ export async function notify(event, env = process.env) {
     } catch (error) {
       results.push(`webhook:NOT_SENT_${classifyFailure(error?.message)}`);
     }
-  } else {
-    results.push("webhook:NOT_SENT_NO_SECRET");
-  }
+  } else results.push("webhook:NOT_SENT_NO_SECRET");
 
   const line = `AUTONOMIA_NOTICE=${event.code} ${results.join(" ")}`;
   console.log(line);
@@ -206,10 +185,7 @@ async function judgeSweep() {
   for (const pr of candidates) {
     const eventPath = join(sweepDir, `event-pr-${pr.number}.json`);
     const receiptPath = join(sweepDir, `receipt-pr-${pr.number}.json`);
-    await writeFile(eventPath, `${JSON.stringify({ pull_request: { number: pr.number } })}\n`, {
-      encoding: "utf8",
-      mode: 0o600,
-    });
+    await writeFile(eventPath, `${JSON.stringify({ pull_request: { number: pr.number } })}\n`, { encoding: "utf8", mode: 0o600 });
 
     const judge = runEngine("judge", {
       GITHUB_TOKEN: judgeToken,
@@ -222,24 +198,15 @@ async function judgeSweep() {
     if (judge.status !== 0) {
       const raw = String(judge.stderr || judge.stdout || "JUDGE_FAILED");
       const code = classifyFailure(raw);
-      await writeFile(join(sweepDir, `judge-failure-pr-${pr.number}.txt`), raw.slice(0, 4000), {
-        encoding: "utf8",
-        mode: 0o600,
-      });
-      await notify({
-        code: `JUDGE_FAILED:${code}`,
-        pr: pr.number,
-        head: pr.head?.sha,
-        run: process.env.GITHUB_RUN_ID || null,
-        detail: raw,
-      });
+      await writeFile(join(sweepDir, `judge-failure-pr-${pr.number}.txt`), raw.slice(0, 4000), { encoding: "utf8", mode: 0o600 });
+      await notify({ code: `JUDGE_FAILED:${code}`, pr: pr.number, head: pr.head?.sha, run: process.env.GITHUB_RUN_ID || null, detail: raw });
       failures.push(`${pr.number}:${code}`);
       continue;
     }
 
     const sealed = JSON.parse(await readFile(receiptPath, "utf8"));
-    const decision = sealed?.receipt?.candidates?.[0]?.decision || "UNKNOWN";
-    console.log(`PR=${pr.number} SWEEP_DECISION=${decision}`);
+    const candidate = sealed?.receipt?.candidates?.[0] || {};
+    console.log(`PR=${pr.number} SWEEP_MODE=${candidate.mode || "UNKNOWN"} SWEEP_DECISION=${candidate.decision || "UNKNOWN"}`);
   }
 
   console.log(`AUTONOMIA_JUDGE_FAILURES=${failures.join(",") || "none"}`);
@@ -248,14 +215,9 @@ async function judgeSweep() {
 
 async function promoteSweep() {
   const { repository, sweepDir } = config();
-  const promoterToken = process.env.PROMOTER_TOKEN || process.env.PROMOTION_TOKEN || "";
+  const promoterToken = process.env.PROMOTER_TOKEN || process.env.PROMOTION_TOKEN || process.env.GITHUB_TOKEN || "";
   if (!promoterToken) {
-    await notify({
-      code: "PROMOTION_TOKEN_MISSING",
-      run: process.env.GITHUB_RUN_ID || null,
-      detail:
-        "Sem identidade própria de promotor não existe separação de poderes e o merge feito com o token do Actions não dispara os gates seguintes. Promoção bloqueada por contrato.",
-    });
+    await notify({ code: "PROMOTER_TOKEN_MISSING", run: process.env.GITHUB_RUN_ID || null, detail: "Nenhum token de escrita disponível para concluir a intenção já autorizada." });
     throw new Error("PROMOTER_TOKEN_MISSING");
   }
   await mkdir(sweepDir, { recursive: true });
@@ -283,12 +245,7 @@ async function promoteSweep() {
       const raw = String(promote.stderr || promote.stdout || "falha sem detalhe");
       const code = classifyFailure(raw);
       await upsertDiagnostic(promoterToken, repository, number, `PROMOTE_FAILED:${code}`, sanitizeNotice(raw, 2400));
-      await notify({
-        code: `PROMOTE_FAILED:${code}`,
-        pr: number,
-        run: process.env.GITHUB_RUN_ID || null,
-        detail: raw,
-      });
+      await notify({ code: `PROMOTE_FAILED:${code}`, pr: number, run: process.env.GITHUB_RUN_ID || null, detail: raw });
       failures.push(`${number}:${code}`);
     }
   }

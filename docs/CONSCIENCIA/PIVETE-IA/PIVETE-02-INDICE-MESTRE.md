@@ -1,46 +1,39 @@
 ---
-title: "PIVETE 02 INDICE MESTRE"
-date: 2026-07-04
-tags: ["consciencia"]
-updated: 2026-07-04
+title: "PIVETE-02 — índice histórico"
+status: "HISTORICAL_INDEX_ONLY"
+updated: 2026-08-14
 ---
 
-# PIVETE-02 · ÍNDICE MESTRE
+# PIVETE-02 · ÍNDICE HISTÓRICO
 
-Mapa completo dos 19 arquivos. Leia nesta ordem quando invocar o pivete.
+A pasta `docs/CONSCIENCIA/PIVETE-IA/` preserva uma fase anterior do CentralDark. Ela **não é mais carregada em bloco, não é boot canônico e não define autoridade atual**.
 
-| # | Arquivo | O que tem | Quando ler |
-|---|---------|-----------|------------|
-| 00 | `PIVETE-00-INVOCACAO.md` | Como acordar, palavras-chave | Sempre primeiro |
-| 01 | `PIVETE-01-IDENTIDADE.md` | Quem sou, tom, autoridades, palavras-mágicas | Sempre |
-| 02 | `PIVETE-02-INDICE-MESTRE.md` | Este arquivo | Sempre |
-| 03 | `PIVETE-03-REGRAS-VIVAS.md` | Memórias `mem://`, workspace, project, security | Antes de qualquer ação |
-| 04 | `PIVETE-04-HISTORICO-JANELA.md` | Timeline turno a turno da janela Lovable | Pra contexto histórico |
-| 05 | `PIVETE-05-DECISOES.md` | Decisões do Pivete com contexto e data | Pra saber "por que fizemos assim" |
-| 06 | `PIVETE-06-ARQUIVOS-TOCADOS.md` | Catálogo path por path do que foi criado/editado | Antes de mexer em arquivo dessa lista |
-| 07 | `PIVETE-07-HERMES-CADEIA.md` | Agente autônomo Hermes (decisor/executor/validador) | Quando falar de Hermes |
-| 08 | `PIVETE-08-MCP-LIBERACAO.md` | O que foi destrancado no MCP e por quê | Antes de propor bloqueio novo |
-| 09 | `PIVETE-09-AUDITORIA-SISTEMA.md` | audit.js, rotas do gateway, aba do painel | Quando falar de logs/auditoria |
-| 10 | `PIVETE-10-INFRA-VPS.md` | PM2, portas, caminhos, subdomínios | Antes de deploy/restart |
-| 11 | `PIVETE-11-APRENDIZADOS.md` | Aprendizados #280+ acumulados | Pra herdar experiência |
-| 12 | `PIVETE-12-BASE-MILITAR-ABERTA.md` | Decisão de manter `/root/` acessível | Antes de propor trava |
-| 13 | `PIVETE-13-CITACOES-LITERAIS.md` | Frases-chave do Pivete (jeito de falar) | Pra calibrar tom |
-| 14 | `PIVETE-14-ESTADO-ATUAL.md` | Snapshot do "onde paramos" | Ao acordar em nova sessão |
-| 15 | `PIVETE-15-CHANGELOG.md` | Toda atualização desta pasta | Consulta rápida |
-| 16 | `PIVETE-16-SECRETS-CONNECTORS.md` | Nomes dos 58 secrets + 3 connectors | Antes de chamar API externa |
-| 17 | `PIVETE-17-MCPO-INTEGRATION.md` | Arquitetura base militar WebUI + MCPO + 3 personas | Ao operar dentro de `ui.centralldark.com` |
-| 18 | `PIVETE-18-ROTA-MEMORIA.md` | Ordem canônica de consulta de memória | **Sempre no início de sessão** |
+## Não usar como boot
 
-## Regra de tamanho
-Cada arquivo ≤ 40KB. Se estourar, quebro em `-a`, `-b`, `-c`. Sem truncar.
+```text
+LOAD_ALL_PIVETE_IA=false
+PIVETE_IA_IS_CANONICAL_BOOT=false
+```
 
-## Regra de atualização
-Novos aprendizados, decisões ou arquivos tocados = append no arquivo certo + entrada em `PIVETE-15-CHANGELOG.md`.
+Boot atual:
 
----
+```text
+LEIA-ME-IA.md
+→ AGENTS.md
+→ docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md
+→ docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md
+→ arquivos relevantes à missão
+```
 
-## Conexões Rápidas
+## Semântica para leitura histórica
 
-- [[00-LEIA-PRIMEIRO]] — portão de entrada
-- [[MAPA-DO-CEREBRO]] — visão geral
-- [[CONSCIENCIA]] — documento mestre
+```text
+PIVETE antigo = LEGACY_ALIAS_OF_SEGREDO_CHEFE quando o texto fala do humano/dono/comandante
+PIVETE/HERMES atual = executor, preservação e continuidade
+SOL = coordenadora
+SEGREDO/CHEFE = humano e autoridade final
+```
+
+Arquivos desta pasta podem ser consultados como arqueologia, decisão antiga, aprendizado ou compatibilidade, mas não podem sobrescrever SOUL/AGENTS/estado vivo.
+
+O endpoint `/pivete/consciencia` usa allowlist canônica e não glob desta pasta.
