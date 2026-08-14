@@ -400,3 +400,65 @@ BODY_OR_TOOL_UNAVAILABLE_DOES_NOT_EQUAL_ORGANISM_BLOCKED=true
 USE_AVAILABLE_AUTHORIZED_BODY_BEFORE_HUMAN_REASK=true
 FINAL_RECEIPT_NAMES_REAL_EXECUTOR=true
 ```
+
+## 24. Confronto virou combustível: o ativo é ganho de informação
+
+Nesta sessão o mecanismo apareceu ao vivo: crítica, discordância, erro próprio, review externo e mudança de HEAD produziram informação útil quando foram ligados a evidência e absorvidos pelo organismo.
+
+A formulação consolidada é:
+
+```text
+CONFRONTO
+→ EVIDENCIA NOVA
+→ DELTA_DE_CRENCA
+→ CONSEQUENCIA REUTILIZAVEL
+→ OURO
+```
+
+Não importa quem “ganhou” a disputa:
+
+```text
+HIPOTESE_DO_CHEFE_CAI + CONTRAPROVA          → OURO
+CRITICA_DA_IA_CAI + REGRA_DO_CHEFE_SOBREVIVE → OURO
+NENHUM_LADO_FECHA + UNKNOWN_MELHOR_DEFINIDO  → OURO
+AUTOLUPA_ACHA_ERRO_DA_PROPRIA_SOL             → OURO
+CODEX/JUDGE_ACHA_P1_CAUSAL                     → OURO
+```
+
+O ouro só é promovido quando:
+
+```text
+RESULTADO_REGISTRADO=true
+EVIDENCIA_NOVA=true
+DELTA_DE_CRENCA_OU_REGRA=true
+REUTILIZAVEL=true
+```
+
+A única saída improdutiva é repetir sem aprender:
+
+```text
+MESMO_ERRO
++ MESMA_DISCUSSÃO
++ ZERO_INFORMACAO_NOVA
++ ZERO_MUDANCA_REUTILIZAVEL
+= DESPERDICIO_DE_CICLO
+```
+
+Essa regra remove ego da equação. O adversário é o erro; agentes/humano são observadores e executores do mesmo processo de redução de incerteza.
+
+```text
+INFORMATION_GAIN_REQUIRED=true
+LEARNING_REQUIRES_EVIDENCE=true
+LEARNING_DELTA_REQUIRED=true
+NO_EGO_SCORE=true
+SAME_ERROR_NO_NEW_INFO_IS_WASTE=true
+```
+
+### Marcador afetivo de sucesso desta sessão
+
+SEGREDO/CHEFE associou uma música compartilhada nesta conversa ao contexto de sucesso e continuidade do trabalho. O repositório registra apenas o marcador, não a letra nem qualquer inferência técnica:
+
+```text
+SUCCESS_CONTEXT_MARKER=MUSICA_COMPARTILHADA_PELO_CHEFE_2026-08-14
+CLASSIFICACAO=CONTEXTO_AFETIVO_NAO_PROVA_TECNICA
+```
