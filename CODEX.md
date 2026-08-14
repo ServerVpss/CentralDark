@@ -98,6 +98,10 @@ Convergência adversarial total não é gate automático. Só abrir quando SEGRE
 - sem segundo writer no mesmo escopo;
 - ação irreversível com `UNKNOWN` material exige mapa/backup/rollback.
 
+## Arquivos sensíveis
+
+Não ler, copiar, publicar ou usar valores de `.env`, `secrets/`, `tokens/`, `sessions/`, `.ssh/`, chaves privadas, cookies ou connection strings como contexto sem necessidade/autorização específica. Nunca reproduzir valores.
+
 ## Fechamento
 
 ```text
