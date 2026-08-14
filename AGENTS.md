@@ -112,6 +112,20 @@ Classificar como `CANONICAL | OPERATIONAL | CANDIDATE | PROGRAM_ONLY | HISTORICA
 
 PR aberto/Draft, plano ou relatório não vira autoridade operacional automaticamente. Caminho existente não prova runtime; ausência de runtime não autoriza duplicação.
 
+### Narrativa histórica não sobrescreve lei canônica atual
+
+PR body, comentário, label antiga, relatório ou memória podem conter política válida na época e hoje superada. Merge de código **não promove automaticamente toda frase histórica para regra atual**.
+
+```text
+TEXTO_HISTORICO_DIZ_X
++ CANONICO_ATUAL_DIZ_Y
+→ PRESERVAR X COMO PROVENIENCIA
+→ OPERAR POR Y
+→ CORRIGIR ARTEFATO VIVO SE X AINDA ESTIVER SENDO LIDO COMO PRESENTE
+```
+
+Marcadores antigos como `PERMITO PIVETE`, “merge é decisão humana” ou topologias locais não medidas não revogam nem ampliam a política vigente por conta própria. Autoridade, identidade e permissão vêm do contrato canônico atual + intenção vigente + estado real.
+
 ## Doutrina
 
 ```text
