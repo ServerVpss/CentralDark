@@ -84,7 +84,7 @@ function validRepo() {
   write(root, "docs/CONSCIENCIA/03-FLUXO-DEPLOY.md", [
     "DEPLOY_STRATEGY=CAUSAL_SCOPE_FIRST",
     "FULL_DEPLOY_BY_DEFAULT=false",
-    "Convergência adversarial total não é gate automático de deploy",
+    "convergência adversarial total não é gate automático de deploy",
   ].join("\n"));
   write(root, "docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md", [
     "SEGREDO/CHEFE = humano e autoridade final",
