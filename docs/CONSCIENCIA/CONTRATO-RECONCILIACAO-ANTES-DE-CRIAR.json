@@ -5,7 +5,15 @@
   "marker": "REUSE_BEFORE_CREATE_REQUIRED",
   "authority": "SEGREDO/CHEFE",
   "soul": "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md",
+  "executor_scope": {
+    "rule": "ANY_EXECUTOR_ENTERING_THE_HOUSE_AND_CONSUMING_THE_CANONICAL_CONTRACT",
+    "named_models_are_foundation": false,
+    "named_adapters_are_compatibility_only": true
+  },
   "applies_to": [
+    "ANY_EXECUTOR_CONSUMING_CANONICAL_CONTRACT"
+  ],
+  "compatibility_adapters": [
     "chatgpt",
     "claude",
     "codex",
@@ -21,6 +29,35 @@
   "same_operating_contract": true,
   "physical_tool_parity_guaranteed": false,
   "tool_availability_rule": "MEASURE_IN_RUNTIME; UNKNOWN_IF_NOT_PROVED",
+  "authority_vs_capability": {
+    "capable_to_execute_equals_authorized_to_decide": false,
+    "human_authority": "SEGREDO/CHEFE",
+    "executor_default_authority": "NONE_EXCEPT_EXPLICITLY_DELEGATED_SCOPE",
+    "model_strength_increases_authority": false,
+    "rule": "CAPABLE_TO_EXECUTE != AUTHORIZED_TO_DECIDE"
+  },
+  "interface_policy": {
+    "same_engine": true,
+    "same_guardrails": true,
+    "novice_is_simplified_engine": false,
+    "novice_interface": "LESS_VISIBLE_COMPLEXITY_SAME_ENGINE",
+    "rigor_interface": "MORE_VISIBILITY_AND_INTENT_CONTROL_SAME_LAWS",
+    "expert_mode_is_god_mode": false,
+    "expert_mode_can_bypass_guardrails": false,
+    "equivalence_counterproof": "SAME_INTENT_THROUGH_NOVICE_AND_RIGOR_INTERFACES_MUST_CONVERGE_TO_MATERIALLY_EQUIVALENT_SAFE_RESULT",
+    "principle": "SIMPLICITY_AT_INPUT; BRUTALITY_IN_VALIDATION"
+  },
+  "rigor_by_action_risk": {
+    "depends_on_user_skill": false,
+    "read_text": "LOW_OPERATIONAL_RIGOR",
+    "small_ui_or_css_change": "SMALL_CAUSAL_PROOF",
+    "contract_or_governance_change": "PROOF_PLUS_COUNTERPROOF",
+    "authority_change": "SEMANTIC_VALIDATION_PLUS_NEGATIVE_TEST",
+    "secret_or_credential_boundary": "FAIL_CLOSED",
+    "main_promotion": "APPLICABLE_GATES_AND_EXACT_HEAD",
+    "deploy": "EXPLICITLY_APPLICABLE_AUTHORIZATION_PLUS_RUNTIME_GATES",
+    "rule": "RIGOR_FOLLOWS_ACTION_RISK_NOT_USER_LEVEL"
+  },
   "mandatory_boot_sources": [
     "LEIA-ME-IA.md",
     "AGENTS.md",
@@ -84,12 +121,15 @@
   "review_finding_policy": {
     "outdated_position_is_proof_of_cure": false,
     "required_dimensions": ["BYTE", "BEHAVIOR", "ARTIFACT_ROLE"],
-    "classes": ["CURADO", "MATERIAL", "SUPERSEDED"],
+    "classes": ["CURADO", "MATERIAL", "SUPERSEDED", "HISTORICAL", "UNKNOWN"],
     "curado": "criticized byte absent AND criticized behavior absent",
     "material": "byte changed_or_absent BUT criticized behavior still exists in active surface",
     "superseded": "old criticism no longer governs because a newer canonical contract intentionally replaced that behavior",
+    "historical": "factual provenance for its time; preserved and forbidden from governing present behavior",
+    "unknown": "insufficient evidence to classify without inventing certainty",
     "historical_artifact_rule": "preserve factual provenance; remove only its ability to govern current behavior",
-    "resolve_thread_only_when": "BYTE_AND_BEHAVIOR_VERIFIED_OR_EXPLICITLY_SUPERSEDED_BY_CANONICAL_RULE"
+    "resolve_thread_only_when": "BYTE_AND_BEHAVIOR_VERIFIED_OR_EXPLICITLY_SUPERSEDED_OR_HISTORICAL_BY_CANONICAL_ROLE",
+    "rule": "BYTE + BEHAVIOR + ARTIFACT_ROLE -> CURADO|MATERIAL|SUPERSEDED|HISTORICAL|UNKNOWN"
   },
   "mechanical_error_policy": {
     "human_is_fallback_for_machine_measurable_error": false,
