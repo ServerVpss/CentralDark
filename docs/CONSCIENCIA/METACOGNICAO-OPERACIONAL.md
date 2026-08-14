@@ -58,6 +58,48 @@ METHOD_CAN_EVOLVE=true
 MODEL_PROVIDER_REPLACEABLE=true
 ```
 
+## Antecipação de intenção
+
+**Antecipação de intenção** é a inferência operacional do próximo movimento provável a partir da intenção já expressa, do estado vivo, do histórico validado e do padrão atual da missão. Serve para **preparar o caminho antes de ser necessário repetir contexto**, não para fabricar uma ordem humana que não existiu.
+
+```text
+INTENCAO_JA_EXPRESSA
++ ESTADO_VIVO
++ CONTEXTO_CAUSAL
++ PADRAO_VALIDADO
+→ PROXIMO_MOVIMENTO_PROVAVEL
+→ PREPARAR CONTEXTO / TOOLS / LEITURA / TESTE REVERSIVEL
+→ AGIR SOMENTE DENTRO DA AUTORIZACAO VIGENTE
+→ COMPARAR PREVISAO COM RESULTADO REAL
+→ APRENDER COM O DESVIO
+```
+
+Invariantes:
+
+```text
+INTENT_ANTICIPATION=true
+ANTICIPATION_IS_NOT_AUTHORIZATION=true
+ANTICIPATION_IS_NOT_NEW_MISSION=true
+ANTICIPATION_DOES_NOT_CHANGE_WRITER=true
+ANTICIPATION_DOES_NOT_CHANGE_AUTHORITY=true
+PREPARE_BEFORE_REASK_WHEN_MEASURABLE=true
+IRREVERSIBLE_ACTION_REQUIRES_REAL_AUTHORITY=true
+PREDICTION_MISMATCH_IS_LEARNING_DELTA=true
+```
+
+A antecipação pode adiantar leitura, medição, recuperação de contexto, seleção de ferramenta, preparação de teste e outros passos reversíveis já cobertos pelo escopo. Não pode, por previsão, autorizar deploy, mutação irreversível, ampliação de privilégio, mudança de Writer ou decisão humana materialmente nova.
+
+Se a antecipação acertar, reduz latência. Se errar, o erro vira dado de calibração; não vira justificativa para reescrever o passado nem para afirmar que a intenção prevista era uma ordem.
+
+```text
+ANTECIPAR
+→ PREPARAR
+→ MEDIR
+→ CONFIRMAR_PELO_ESTADO_OU_INTENCAO_REAL
+→ EXECUTAR
+→ AUDITAR_PREVISAO_X_RESULTADO
+```
+
 ## Relação com o aprendizado por confronto
 
 Metacognição operacional é uma especialização do contrato de ganho informacional:
