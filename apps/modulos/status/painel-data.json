@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-14T18:48:31.641Z",
-  "updatedAtBR": "14/08/2026, 15:48:31 BRT",
+  "updatedAt": "2026-08-14T19:35:50.922Z",
+  "updatedAtBR": "14/08/2026, 16:35:50 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "docs(metacognicao): canonizar antecipação de intenção (#839)",
+    "lastCommit": "fix(governança): canonizar corrida pós-merge e restaurar guard singleton (#845)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-14T19:35:50.922Z",
+      "titulo": "Push na main · 2605743e57a1ac6b66c10f680c813033dac7eff1",
+      "detalhe": "fix(governança): canonizar corrida pós-merge e restaurar guard singleton (#845)",
+      "area": "Repositório",
+      "sha": "2605743",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-14T18:48:31.641Z",
       "titulo": "Push na main · d2e9881c17e6f6cb241e1f957d26e44d6f3f2fc0",
       "detalhe": "docs(metacognicao): canonizar antecipação de intenção (#839)",
@@ -988,14 +996,6 @@
       "detalhe": "fix: trigger autonomy recovery on synchronize",
       "area": "Repositório",
       "sha": "6c23269",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-03T23:30:06.005Z",
-      "titulo": "Push na main · c1cfe1d0fe728e4d02b8769219fcc188fc5a433e",
-      "detalhe": "chore: provar autonomia canônica end-to-end",
-      "area": "Repositório",
-      "sha": "c1cfe1d",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-14T19:35:50.922Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 2605743e57a1ac6b66c10f680c813033dac7eff1 (2605743)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-14T18:48:31.641Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · d2e9881c17e6f6cb241e1f957d26e44d6f3f2fc0 (d2e9881)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-03T23:30:46.955Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 6c23269f132a31e272c95021f975801b08e27413 (6c23269)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-03T23:30:06.005Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · c1cfe1d0fe728e4d02b8769219fcc188fc5a433e (c1cfe1d)",
       "area": "Repositório",
       "status": "sucesso"
     }
