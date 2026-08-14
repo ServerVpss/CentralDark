@@ -1,36 +1,29 @@
 {
-  "schema_version": 1,
-  "vault_root": "E:\\CentralDark\\Pivete\\CASA-VAULT",
-  "repo_root": "E:\\CentralDark\\Pivete\\CentralDark",
-  "sync_schedule_minutes": 5,
+  "schema_version": 2,
+  "status": "BLOCKED_PENDING_LOCAL_INSPECTION",
+  "enabled": false,
+  "repo_root": null,
+  "vault_root": null,
+  "hermes_home": null,
+  "active_vault": null,
+  "default_mode": "Status",
+  "requires_explicit_roots": true,
+  "requires_local_inspection": true,
   "canonical_mapping": {
     "vault_path": "00-CANONICO",
     "repo_path": "docs/BRAIN",
-    "mode": "bidirectional",
+    "mode": "disabled-until-roots-proven",
     "delete_policy": "never-delete-automatically",
     "conflict_policy": "preserve-both-and-stop"
   },
-  "local_only": [
-    ".obsidian",
-    ".hermes-sync",
-    "10-MEMORIA-PRIVADA",
-    "20-INBOX-HERMES",
-    "30-ANEXOS",
-    "90-CONFLITOS"
-  ],
-  "behavior_sources": [
-    "LEIA-ME-IA.md",
-    "AGENTS.md",
-    "docs/BRAIN/00 - Mapa do Sistema/DIRECAO-ATUAL-HERMES.md",
-    "docs/CONSCIENCIA/APRENDIZADOS.md",
-    "docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md",
-    ".agents/skills"
-  ],
   "rules": {
     "private_content_never_enters_git": true,
-    "canonical_notes_require_git_sync": true,
     "candidate_learning_stays_local_until_proven": true,
-    "approved_learning_updates_existing_canonical_file": true,
-    "obsidian_edit_changes_trajectory_only_after_sync_and_reload": true
-  }
+    "no_physical_path_assumption": true,
+    "no_mutating_sync_before_local_inspection": true,
+    "unknown_is_not_pass": true
+  },
+  "authority": "SEGREDO/CHEFE",
+  "coordinator": "SOL",
+  "executor": "PIVETE/HERMES"
 }

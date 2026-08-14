@@ -86,14 +86,17 @@ test('todas capacidades SIM geram READY', () => {
   assert.deepEqual(result.missing_capabilities, []);
 });
 
-test('markdown contém marker, Mermaid, YAML, fallback e receipt', () => {
+test('markdown contém marker, Mermaid, YAML, fallback e receipt sem decidir merge', () => {
   const result = buildArtifact(baseInput);
   assert.ok(result.markdown.startsWith(MARKER));
   assert.match(result.markdown, /```mermaid/);
   assert.match(result.markdown, /artifact_type: pr_learning_card/);
   assert.match(result.markdown, /Fallback universal em texto simples/);
   assert.match(result.markdown, /ARTIFACT_DIGEST=/);
-  assert.match(result.markdown, /PR_APPROVED=NAO/);
+  assert.match(result.markdown, /PR_APPROVAL_DECISION=NOT_EVALUATED_BY_ARTIFACT/);
+  assert.match(result.markdown, /MERGE_AUTHORIZATION_DECISION=NOT_EVALUATED_BY_ARTIFACT/);
+  assert.doesNotMatch(result.markdown, /PR_APPROVED=NAO/);
+  assert.doesNotMatch(result.markdown, /MERGE_AUTHORIZED=NAO/);
 });
 
 test('título não injeta heading, fence, link, imagem ou coluna Markdown', () => {
