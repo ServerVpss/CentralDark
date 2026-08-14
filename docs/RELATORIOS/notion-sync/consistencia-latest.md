@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-08-14T04:30:57.818Z
-- **Commit:** `5e8be2c9baa823490c449c9425b239380bbf38e1`
+- **Gerado:** 2026-08-14T18:08:28.183Z
+- **Commit:** `d2e9881c17e6f6cb241e1f957d26e44d6f3f2fc0`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 39 | 39 | 39 | 0 | 0 |
-| aprendizados | 25 | 0 | 0 | 25 | 0 |
+| aprendizados | 26 | 0 | 0 | 26 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **25**
+- 🟥 Faltando no Notion: **26**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -63,6 +63,7 @@
 - 13. Recuo preventivo não é obediência
 - 14. Mutante equivalente sai do denominador mas aponta a invariante sem teste
 - 15. Achado repetido é ruído, não reforço
+- 16. Frase de agente não prova alinhamento; promessa maior que capacidade é falso compromisso
 - 16. #ACORDAR é recuperação de estado real, não apenas comando de GitHub
 - 17. Uma SOL, um SOUL, uma superfície; modelos e ferramentas são capacidades substituíveis
 - 18. O humano decide intenção; a máquina prova o estado e não devolve investigação mensurável ao humano

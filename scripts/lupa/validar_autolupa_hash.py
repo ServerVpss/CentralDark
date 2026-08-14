@@ -21,6 +21,9 @@ Uso:
 `PERMITO_PIVETE=1` é um sinal técnico legado preservado por compatibilidade.
 Ele NÃO define autoridade humana. Só pode materializar uma autorização já
 aplicável de SEGREDO/CHEFE para alterar a identidade canônica da Meta Lupa.
+    python scripts/lupa/validar_autolupa_hash.py            # local vs guard
+    python scripts/lupa/validar_autolupa_hash.py --fetch    # + valida remoto
+    python scripts/lupa/validar_autolupa_hash.py --update   # requer evento PR autenticado com label permito-segredo
 """
 from __future__ import annotations
 
@@ -35,9 +38,11 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 SKILL = ROOT / ".agents/skills/meta-lupa/SKILL.md"
 GUARD = ROOT / ".agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA"
+AUTHORITY_APPROVAL = ROOT / "scripts/lupa/authority-approval.mjs"
 API_URL = "https://api.github.com/repos/ServerVpss/CentralDark/contents/.agents/skills/meta-lupa/SKILL.md?ref=main"
 LEGACY_AUTH_SIGNAL = "PERMITO_PIVETE"
 SKILL_REPO_PATH = ".agents/skills/meta-lupa/SKILL.md"
+CANONICAL_AUTHORITY_RECEIPT = "AUTHORITY_APPROVED=true AUTHORITY=SEGREDO/CHEFE SOURCE=github-label:permito-segredo"
 
 
 def git_blob_sha1(path: Path) -> str:
@@ -84,6 +89,29 @@ def print_identity(label: str, value: str) -> None:
     print(f"{label}={value}")
 
 
+def canonical_authority_approved() -> tuple[bool, str]:
+    """Consulta a fonte única de autoridade; não aceita env-marker legado."""
+    if not AUTHORITY_APPROVAL.exists():
+        return False, "authority-approval.mjs ausente"
+
+    env = os.environ.copy()
+    env.pop("GITHUB_OUTPUT", None)
+    result = subprocess.run(
+        ["node", str(AUTHORITY_APPROVAL)],
+        cwd=ROOT,
+        env=env,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    receipt = (result.stdout or "").strip()
+    approved = result.returncode == 0 and CANONICAL_AUTHORITY_RECEIPT in receipt
+    if approved:
+        return True, receipt
+    reason = receipt or (result.stderr or "").strip() or f"authority-approval exit={result.returncode}"
+    return False, reason
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--fetch", action="store_true")
@@ -116,6 +144,22 @@ def main() -> int:
         print_identity("NOVO_HASH_ESPERADO", local)
         print("SIGNIFICADO=O guard agora identifica exatamente o conteúdo versionado atual do SKILL.md.")
         print("NAO_PROVA=merge|deploy|producao|runtime|autorizacao_operacional")
+        approved, receipt = canonical_authority_approved()
+        if not approved:
+            print(
+                "[FAIL] --update requer autoridade canônica autenticada "
+                "SEGREDO/CHEFE via github-label:permito-segredo",
+                file=sys.stderr,
+            )
+            print(f"[AUTHORITY] {receipt}", file=sys.stderr)
+            return 3
+        GUARD.write_text(
+            f"{local}  .agents/skills/meta-lupa/SKILL.md\n"
+            "# git-blob SHA1 canônico. Atualize somente com autorização vigente de SEGREDO/CHEFE.\n",
+            encoding="utf-8",
+        )
+        print(f"[OK] guard atualizado -> {local}")
+        print(f"[AUTHORITY] {receipt}")
         return 0
 
     if local != esperado:

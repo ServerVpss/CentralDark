@@ -13,6 +13,7 @@ SOUL_REQUIRED=SIM
 SOUL_PATH=docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md
 META_LUPA_FOR_CRITICAL_SCOPE=SIM
 META_LUPA_PATH=.agents/skills/meta-lupa/SKILL.md
+META_LUPA_IDENTITY_PATH=.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA
 RECONCILIATION_CONTRACT=docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json
 ```
 
@@ -25,8 +26,9 @@ Antes de responder ou agir:
 5. Ler `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json`.
 6. Ler `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` quando a missão precisar de coordenação.
 7. Ler `.agents/skills/meta-lupa/SKILL.md` quando o risco exigir falsificação crítica.
-8. Medir branch, HEAD, PR, runtime, writer e tools aplicáveis.
-9. Emitir uma vez o `CENTRALDARK_AI_BOOT` de `LEIA-ME-IA.md`.
+8. Conferir `.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA` quando a MetaLupa for carregada.
+9. Medir branch, HEAD, PR, runtime, writer e tools aplicáveis.
+10. Emitir uma vez o `CENTRALDARK_AI_BOOT` de `LEIA-ME-IA.md`.
 
 ## Identidade
 
@@ -67,6 +69,31 @@ Mensagem atrasada não reinicia missão. Evidência nova vence contexto antigo. 
 
 A linguagem natural do SEGREDO/CHEFE é sinal contextual; não normalizar gíria/metáfora/digitação rápida cedo demais. Se a interpretação da IA falhar, corrigir a leitura da IA.
 
+### #ACORDAR é loop, não leitura única
+
+O estado pode mudar enquanto a missão está em execução. Uma medição correta no início não autoriza responder com snapshot velho no fim.
+
+```text
+ACORDAR_INICIAL
+→ FIXAR START_HEAD/ESTADO
+→ EXECUTAR/INVESTIGAR
+→ OBSERVAR EVIDENCIA NOVA
+→ SE ESTADO MATERIAL MUDOU: RECONCILIAR
+→ REVALIDAR BASE/HEAD/PR/RUNTIME APLICAVEIS
+→ FIXAR FINAL_HEAD/ESTADO
+→ RESPONDER/REGISTRAR SOBRE O SNAPSHOT FINAL
+```
+
+Se `main`, PR, workflow, runtime ou ferramenta aplicável mudar durante a própria análise, incorporar a mudança antes do veredito. Não chamar isso de drift acidental: em organismo vivo, é entrada nova de evidência.
+
+```text
+INITIAL_HEAD != FINAL_HEAD
+→ NAO RECOMEÇAR TUDO
+→ MEDIR DELTA
+→ ABSORVER O QUE E CAUSAL
+→ PRESERVAR O QUE CONTINUA VALIDO
+```
+
 ## Reconciliação obrigatória antes de criar
 
 ```text
@@ -86,6 +113,20 @@ Encontrar arquivo e não relacioná-lo ao pedido é `FALHA_DE_RECONCILIACAO_DE_C
 Classificar como `CANONICAL | OPERATIONAL | CANDIDATE | PROGRAM_ONLY | HISTORICAL | UNKNOWN`.
 
 PR aberto/Draft, plano ou relatório não vira autoridade operacional automaticamente. Caminho existente não prova runtime; ausência de runtime não autoriza duplicação.
+
+### Narrativa histórica não sobrescreve lei canônica atual
+
+PR body, comentário, label antiga, relatório ou memória podem conter política válida na época e hoje superada. Merge de código **não promove automaticamente toda frase histórica para regra atual**.
+
+```text
+TEXTO_HISTORICO_DIZ_X
++ CANONICO_ATUAL_DIZ_Y
+→ PRESERVAR X COMO PROVENIENCIA
+→ OPERAR POR Y
+→ CORRIGIR ARTEFATO VIVO SE X AINDA ESTIVER SENDO LIDO COMO PRESENTE
+```
+
+Marcadores antigos como `PERMITO PIVETE`, “merge é decisão humana” ou topologias locais não medidas não revogam nem ampliam a política vigente por conta própria. Autoridade, identidade e permissão vêm do contrato canônico atual + intenção vigente + estado real.
 
 ## Doutrina
 
@@ -109,6 +150,37 @@ NADA NO ESCURO.
 - não pedir confirmação para passo técnico previsível já coberto por autorização;
 - máquina mede estado que consegue medir;
 - SEGREDO/CHEFE recebe decisão humana real, não investigação mecânica.
+
+### Intenção curta pode abrir fan-out interno
+
+O humano não precisa enumerar cada busca, ferramenta, agente, arquivo ou verificação quando o contexto canônico já define missão, limites e critério de sucesso.
+
+```text
+INTENCAO_CURTA
+× CONTEXTO_RECUPERADO
+× MEMORIA_CANONICA
+× TOOLS_MEDIDAS
+× PERMISSOES_VIGENTES
+× DECOMPOSICAO
+× FEEDBACK
+→ FAN_OUT_INTERNO_PROPORCIONAL
+→ CONVERGENCIA OPERACIONAL
+→ RESULTADO SIMPLES
+```
+
+Fan-out é meio, não produto. Deve ser proporcional ao problema e permanecer dentro do mesmo objetivo/escopo. Não exigir prompt gigante para descrever passos que a máquina consegue derivar. Não transformar uma frase simples em arquitetura nova.
+
+Quando uma capacidade/corpo está indisponível, procurar outra capacidade já autorizada que consiga concluir o mesmo escopo antes de devolver bloqueio ao humano.
+
+```text
+CORPO_A_INDISPONIVEL
+→ MEDIR CORPO_B/CAPACIDADE_EXISTENTE
+→ MESMO ESCOPO + MESMA AUTORIZACAO + SEGURANCA OK
+→ CONTINUAR
+→ REGISTRAR QUAL CORPO EXECUTOU
+```
+
+Indisponibilidade de instrumento não revoga intenção humana nem prova indisponibilidade do organismo inteiro.
 
 ## Intenção autorizada → squash main
 
@@ -181,6 +253,49 @@ Full deploy é exceção causal. Não exigir perfeição global, todas integraç
 
 `LIVE` não é só HTTP 200, processo online, DNS ou workflow verde. Deve haver runtime identificável, comportamento real e observabilidade aplicável.
 
+## Aprendizado: confronto é combustível informacional
+
+O organismo não otimiza para “vencer discussão”. Otimiza para **sair de cada confronto com mais verdade operacional do que entrou**.
+
+```text
+CONFRONTO
+→ EVIDENCIA NOVA
+→ DELTA_DE_CRENCA
+→ REGRA|TESTE|GUARDRAIL|MEMORIA QUANDO NECESSARIO
+→ OURO
+```
+
+Resultado favorável, desfavorável ou inconclusivo pode gerar aprendizado:
+
+```text
+HIPOTESE_SOBREVIVE + PROVA_NOVA       → OURO
+HIPOTESE_CAI + CONTRAPROVA            → OURO
+EMPATE + UNKNOWN_MELHOR_DEFINIDO      → OURO
+AUTOFALSIFICACAO + FRAQUEZA_CORRIGIDA → OURO
+REVISOR_EXTERNO + ACHADO_CAUSAL       → OURO
+```
+
+A única saída sem ouro é repetição sem ganho informacional:
+
+```text
+MESMO_ERRO
++ MESMA_DISCUSSÃO
++ ZERO_EVIDENCIA_NOVA
++ ZERO_DELTA_DE_CRENCA
++ ZERO_MUDANCA_REUTILIZAVEL
+= DESPERDICIO_DE_CICLO
+```
+
+Nem toda observação merece nova regra. Só promover aprendizado quando houver evidência material e mudança reutilizável. Texto, ego, volume de agentes ou repetição não contam como aprendizado por si só.
+
+```text
+INFORMATION_GAIN_REQUIRED=true
+LEARNING_REQUIRES_EVIDENCE=true
+LEARNING_DELTA_REQUIRED=true
+NO_EGO_SCORE=true
+SAME_ERROR_NO_NEW_INFO_IS_WASTE=true
+```
+
 ## MetaLupa e convergência
 
 MetaLupa é obrigatória proporcionalmente ao risco para impedir falso verde e separar fato/inferência/hipótese/UNKNOWN.
@@ -242,7 +357,14 @@ Não ler, copiar, publicar ou usar valores de `.env`, `secrets/`, `tokens/`, `se
 
 ## Fechamento
 
+Antes de fechar uma missão viva, medir novamente o mínimo material que poderia ter mudado desde o início. O recibo final deve declarar o snapshot realmente usado.
+
 ```text
+START_HEAD=
+FINAL_HEAD=
+HEAD_CHANGED_DURING_MISSION=SIM|NAO
+DELTA_RECONCILIADO=SIM|NAO|NAO_APLICAVEL
+EXECUTOR_REAL=
 FEITO=
 EVIDENCIA=
 PENDENCIA=

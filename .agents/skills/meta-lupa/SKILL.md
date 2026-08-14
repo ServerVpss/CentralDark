@@ -82,6 +82,7 @@ Escalonamento: comece FRIA; contradição escala para MÉDIA; criticidade, recor
 13. Tratar área consolidada como bloqueada por padrão; confiança alta não desfaz trava.
 14. Executar AutoLupa sobre o próprio veredito até atingir ponto fixo evidencial, sem limite artificial de iterações e sem prometer certeza absoluta.
 15. Nenhuma promessa de alinhamento, aprendizado ou comportamento permanente pode exceder a capacidade observável do agente. Sem mecanismo persistente comprovado, rebaixar `sempre`, `nunca mais`, `garanto`, `não repetirei` ou equivalente para uma alegação testável no escopo atual.
+15. Tratar confronto útil como fonte de informação: sobreviver, cair ou permanecer UNKNOWN só vira aprendizado quando existe evidência nova e delta reutilizável de crença/regra/teste.
 
 ## Gate de Mapa Único
 
@@ -283,6 +284,43 @@ Revisar a própria análise como se tivesse sido produzida por outro agente:
 8. atualizar o ledger e repetir somente quando surgir contradição ou evidência material nova.
 
 Encerrar em ponto fixo quando uma nova passagem não alterar materialmente hipóteses, bloqueios, risco residual, próximo teste ou veredito. Registrar `PONTO_FIXO_ATINGIDO: sim | não`. Se não atingir, manter `CORRIGIR` ou `BLOQUEAR`; nunca forçar fechamento por contagem de rodadas.
+
+### 9.1 Converter confronto em ouro informacional
+
+Confronto não é pontuação de ego. O ativo é o **ganho de informação** produzido pela diferença entre crença anterior e evidência nova.
+
+```text
+CONFRONTO
+→ EVIDENCIA NOVA
+→ DELTA_DE_CRENCA
+→ CONSEQUENCIA REUTILIZAVEL
+→ OURO
+```
+
+Classificar cada confronto material:
+
+```text
+HIPOTESE_SOBREVIVE + PROVA_NOVA       = OURO
+HIPOTESE_CAI + CONTRAPROVA            = OURO
+EMPATE + UNKNOWN_MELHOR_DEFINIDO      = OURO
+AUTOFALSIFICACAO + FRAQUEZA_CORRIGIDA = OURO
+REVISAO_EXTERNA + ACHADO_CAUSAL       = OURO
+```
+
+Só promover o aprendizado quando:
+
+```text
+EVIDENCIA_NOVA=SIM
+DELTA_DE_CRENCA_OU_REGRA=SIM
+REUTILIZAVEL=SIM
+```
+
+Se não houver informação nova nem mudança reutilizável, não abrir novo ciclo ornamental:
+
+```text
+MESMO_ERRO + MESMA_DISCUSSÃO + ZERO_INFORMACAO_NOVA + ZERO_MUDANCA
+→ DESPERDICIO_DE_CICLO
+```
 
 ### 10. Selecionar revisão proporcional ao ambiente
 
@@ -527,3 +565,4 @@ python scripts/percentual_evidencial.py self-test
 ```
 
 A saída pode declarar `100%` **somente dentro daquele denominador fechado e reproduzível**. Isso não contradiz a proibição de prometer certeza universal: `100% do contrato medido` é diferente de `100% de certeza sobre o mundo`.
+menos duas seeds válidas por braço.

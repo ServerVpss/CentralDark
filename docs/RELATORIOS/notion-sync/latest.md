@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-08-14T04:30:54.896Z
+# 🧠 Notion Sync — 2026-08-14T18:08:24.749Z
 
-- **Commit fonte:** `5e8be2c9baa823490c449c9425b239380bbf38e1`
+- **Commit fonte:** `d2e9881c17e6f6cb241e1f957d26e44d6f3f2fc0`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 406 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 409 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -15,8 +15,8 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
-| aprendizados | 25 | 0 | 25 | 0 | 0 |
-| estrutura | 337 | 0 | 337 | 0 | 0 |
+| aprendizados | 26 | 0 | 26 | 0 | 0 |
+| estrutura | 339 | 0 | 339 | 0 | 0 |
 
 ## Operações
 
@@ -81,6 +81,7 @@
 | aprendizados | atualizado | #13 — Recuo preventivo não é obediência |
 | aprendizados | atualizado | #14 — Mutante equivalente sai do denominador mas aponta a invariante sem teste |
 | aprendizados | atualizado | #15 — Achado repetido é ruído, não reforço |
+| aprendizados | atualizado | #16 — Frase de agente não prova alinhamento; promessa maior que capacidade é falso compromisso |
 | aprendizados | atualizado | #16 — #ACORDAR é recuperação de estado real, não apenas comando de GitHub |
 | aprendizados | atualizado | #17 — Uma SOL, um SOUL, uma superfície; modelos e ferramentas são capacidades substituíveis |
 | aprendizados | atualizado | #18 — O humano decide intenção; a máquina prova o estado e não devolve investigação mensurável ao humano |
@@ -260,6 +261,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/EDGE_FUNCTIONS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ESCOLA-HERMES-CASA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ESPELHO-CLONE-DECK-PASSIVO.md |
+| estrutura | atualizado | docs/CONSCIENCIA/EXPANSAO-DE-DOMINIO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/GITHUB-LABELS-OPERACIONAIS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/GITHUB-PR-OBSERVAR-CODEX.md |
 | estrutura | atualizado | docs/CONSCIENCIA/GITHUB-PROFISSIONAL-AUTOMACAO-CONTINUA.md |
@@ -283,6 +285,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/MAPA-DOS-BOTS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/MCP-FLUXO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/MEGA-PAINEL-SUGESTOES-IA.md |
+| estrutura | atualizado | docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md |
 | estrutura | atualizado | docs/CONSCIENCIA/MODO-SEGREDO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/NOTIFY/INSTALAR-VPS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/NOTIFY/README.md |

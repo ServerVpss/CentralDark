@@ -111,6 +111,11 @@ function validRepo() {
     "NO_HUMAN_REASK_FOR_MERGE=true",
     ".github/workflows/autonomia-promocao.yml",
     "Convergência adversarial total só é aberta quando SEGREDO/CHEFE solicitar explicitamente",
+    "INFORMATION_GAIN_REQUIRED=true",
+    "LEARNING_REQUIRES_EVIDENCE=true",
+    "LEARNING_DELTA_REQUIRED=true",
+    "NO_EGO_SCORE=true",
+    "SAME_ERROR_NO_NEW_INFO_IS_WASTE=true",
   ].join("\n"));
   write(root, "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md", [
     "SOL_IS_MODEL=false",
@@ -121,7 +126,23 @@ function validRepo() {
     "AUTO_SQUASH_IF_CLEAN=true",
     "NO_HUMAN_REASK_FOR_MERGE=true",
     "FULL_CONVERGENCE_CHEFE_REQUEST_ONLY=true",
+    "INFORMATION_GAIN_REQUIRED=true",
+    "LEARNING_REQUIRES_EVIDENCE=true",
+    "LEARNING_DELTA_REQUIRED=true",
+    "SAME_ERROR_NO_NEW_INFO_IS_WASTE=true",
     "UNKNOWN_IS_NOT_PASS=true",
+  ].join("\n"));
+  write(root, ".agents/skills/meta-lupa/SKILL.md", [
+    "AUTORIZACAO_DO_SEGREDO_CHEFE:",
+    "Confronto não é pontuação de ego",
+    "EVIDENCIA_NOVA=SIM",
+    "DELTA_DE_CRENCA_OU_REGRA=SIM",
+    "DESPERDICIO_DE_CICLO",
+  ].join("\n"));
+  write(root, "docs/CONSCIENCIA/CONTRATO-LUPA-BAYESIANA.md", [
+    "INFORMATION_GAIN_REQUIRED=true",
+    "autoridade humana vigente é `SEGREDO/CHEFE`",
+    "Confronto só vira aprendizado promovido com evidência nova + delta reutilizável",
   ].join("\n"));
   write(root, "docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md", [
     "MESMA_SOUL=SIM",
@@ -140,7 +161,7 @@ function validRepo() {
   write(root, "docs/CONSCIENCIA/03-FLUXO-DEPLOY.md", [
     "DEPLOY_STRATEGY=CAUSAL_SCOPE_FIRST",
     "FULL_DEPLOY_BY_DEFAULT=false",
-    "Convergência adversarial total não é gate automático de deploy",
+    "convergência adversarial total não é gate automático de deploy",
   ].join("\n"));
   write(root, "docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md", [
     "SEGREDO/CHEFE = humano e autoridade final",
@@ -151,6 +172,36 @@ function validRepo() {
     "CHEFE_SEGREDO_NECESSARIO",
   ].join("\n"));
   write(root, "docs/CONSCIENCIA/DICIONARIO-PIVETE-GITHUB.md", "SEGREDO/CHEFE = humano e autoridade final\nPIVETE = Hermes treinado\n");
+
+  write(root, "apps/modulos/elite-gateway/scripts/pivete_routes.py", [
+    "CANONICAL_CONTEXT = ()",
+    "CANONICAL_CONTEXT_ALLOWLIST = True",
+    'status = {"authority": "SEGREDO/CHEFE", "executor": "PIVETE/HERMES"}',
+    "A rota NÃO concatena mais docs/CONSCIENCIA/PIVETE-IA/*.md",
+  ].join("\n"));
+
+  write(root, "apps/modulos/WebUI/custom-css/pivete-invocacao.js", [
+    "const mode = 'CANONICAL_CONTEXT_ALLOWLIST';",
+    "const authority = 'SEGREDO/CHEFE = humano e autoridade final';",
+    "const executor = 'PIVETE/HERMES = executor, preservação e continuidade';",
+    "localStorage.removeItem('pivete_system_prompt');",
+  ].join("\n"));
+
+  write(root, "apps/modulos/WebUI/custom-css/pivete-persona.json", JSON.stringify({
+    system_prompt_strategy: "canonical_allowlist",
+    authority: "SEGREDO/CHEFE",
+    coordinator: "SOL",
+    executor: "PIVETE/HERMES",
+    legacy_sources_excluded: ["docs/CONSCIENCIA/PIVETE-IA/*.md"],
+  }, null, 2));
+
+  write(root, "apps/modulos/pivete-sync/pivete-sync.mjs", [
+    "LEGACY_SYNC_DISABLED_CANONICAL_GIT_ONLY",
+    "GIT_CANONICAL=true",
+    "HUB_TO_GIT=false",
+    "GIT_TO_LEGACY_PIVETE_HUB=false",
+  ].join("\n"));
+
   return root;
 }
 
@@ -158,6 +209,7 @@ test("contrato canônico válido passa", () => {
   const report = runValidation({ repoRoot: validRepo() });
   assert.equal(report.ok, true);
   assert.deepEqual(report.findings, []);
+  assert.equal(report.information_gain_required, true);
 });
 
 test("promotor paralelo é bloqueado pelo guardrail", () => {
@@ -176,6 +228,10 @@ test("auto-squash e intenção->main são invariantes da SOUL", () => {
     "PRODUCTION_FIRST=true",
     "DEPLOY_CAUSAL_SCOPE_FIRST=true",
     "FULL_CONVERGENCE_CHEFE_REQUEST_ONLY=true",
+    "INFORMATION_GAIN_REQUIRED=true",
+    "LEARNING_REQUIRES_EVIDENCE=true",
+    "LEARNING_DELTA_REQUIRED=true",
+    "SAME_ERROR_NO_NEW_INFO_IS_WASTE=true",
     "UNKNOWN_IS_NOT_PASS=true",
   ].join("\n"));
   const report = runValidation({ repoRoot: root });
@@ -184,6 +240,43 @@ test("auto-squash e intenção->main são invariantes da SOUL", () => {
   assert.match(text, /INTENT_AUTHORIZED_TO_MAIN=true/);
   assert.match(text, /AUTO_SQUASH_IF_CLEAN=true/);
   assert.match(text, /NO_HUMAN_REASK_FOR_MERGE=true/);
+});
+
+test("ouro informacional é invariante da SOUL", () => {
+  const root = validRepo();
+  write(root, "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md", [
+    "SOL_IS_MODEL=false",
+    "ACORDAR_RECUPERA_FIO=true",
+    "PRODUCTION_FIRST=true",
+    "DEPLOY_CAUSAL_SCOPE_FIRST=true",
+    "INTENT_AUTHORIZED_TO_MAIN=true",
+    "AUTO_SQUASH_IF_CLEAN=true",
+    "NO_HUMAN_REASK_FOR_MERGE=true",
+    "FULL_CONVERGENCE_CHEFE_REQUEST_ONLY=true",
+    "UNKNOWN_IS_NOT_PASS=true",
+  ].join("\n"));
+  const report = runValidation({ repoRoot: root });
+  assert.equal(report.ok, false);
+  const text = report.findings.map((finding) => finding.excerpt).join(" ");
+  assert.match(text, /INFORMATION_GAIN_REQUIRED=true/);
+  assert.match(text, /LEARNING_REQUIRES_EVIDENCE=true/);
+  assert.match(text, /LEARNING_DELTA_REQUIRED=true/);
+  assert.match(text, /SAME_ERROR_NO_NEW_INFO_IS_WASTE=true/);
+});
+
+test("MetaLupa não pode restaurar AUTORIZACAO_DO_PIVETE", () => {
+  const root = validRepo();
+  write(root, ".agents/skills/meta-lupa/SKILL.md", [
+    "AUTORIZACAO_DO_SEGREDO_CHEFE:",
+    "Confronto não é pontuação de ego",
+    "EVIDENCIA_NOVA=SIM",
+    "DELTA_DE_CRENCA_OU_REGRA=SIM",
+    "DESPERDICIO_DE_CICLO",
+    "AUTORIZACAO_DO_PIVETE:",
+  ].join("\n"));
+  const report = runValidation({ repoRoot: root });
+  assert.equal(report.ok, false);
+  assert.equal(report.findings.some((f) => f.path === ".agents/skills/meta-lupa/SKILL.md" && f.code === "AUTORIZACAO_TOKEN_LEGADO_PIVETE"), true);
 });
 
 test("atribuir autoridade final ao Pivete falha com caminho e linha", () => {
@@ -199,6 +292,22 @@ test("PIVETE COMANDA em superfície operacional ativa é regressão", () => {
   const report = runValidation({ repoRoot: root });
   assert.equal(report.ok, false);
   assert.equal(report.findings.some((f) => f.path === "CODEX.md" && f.code === "PIVETE_COMANDA_LEGADO_ATIVO"), true);
+});
+
+test("PIVETE MANDA em superfície operacional ativa é regressão", () => {
+  const root = validRepo();
+  write(root, "CODEX.md", "PIVETE MANDA.\n");
+  const report = runValidation({ repoRoot: root });
+  assert.equal(report.ok, false);
+  assert.equal(report.findings.some((f) => f.path === "CODEX.md" && f.code === "PIVETE_MANDA_LEGADO_ATIVO"), true);
+});
+
+test("PIVETE DECIDE em superfície operacional ativa é regressão", () => {
+  const root = validRepo();
+  write(root, "CODEX.md", "PIVETE DECIDE.\n");
+  const report = runValidation({ repoRoot: root });
+  assert.equal(report.ok, false);
+  assert.equal(report.findings.some((f) => f.path === "CODEX.md" && f.code === "PIVETE_DECIDE_LEGADO_ATIVO"), true);
 });
 
 test("Pivete como orquestrador humano é regressão", () => {
@@ -223,11 +332,72 @@ test("AGENTS conflitante bloqueia", () => {
     "NO_HUMAN_REASK_FOR_MERGE=true",
     ".github/workflows/autonomia-promocao.yml",
     "Convergência adversarial total só é aberta quando SEGREDO/CHEFE solicitar explicitamente",
+    "INFORMATION_GAIN_REQUIRED=true",
+    "LEARNING_REQUIRES_EVIDENCE=true",
+    "LEARNING_DELTA_REQUIRED=true",
+    "NO_EGO_SCORE=true",
+    "SAME_ERROR_NO_NEW_INFO_IS_WASTE=true",
     "O Pivete é a autoridade final.",
   ].join("\n"));
   const report = runValidation({ repoRoot: root });
   assert.equal(report.ok, false);
   assert.equal(report.findings.some((finding) => finding.path === "AGENTS.md" && finding.code === "PIVETE_COMO_AUTORIDADE_FINAL"), true);
+});
+
+test("loader antigo por glob é bloqueado", () => {
+  const root = validRepo();
+  write(root, "apps/modulos/elite-gateway/scripts/pivete_routes.py", [
+    "CANONICAL_CONTEXT",
+    "CANONICAL_CONTEXT_ALLOWLIST",
+    'status = {"authority": "SEGREDO/CHEFE", "executor": "PIVETE/HERMES"}',
+    "A rota NÃO concatena mais docs/CONSCIENCIA/PIVETE-IA/*.md",
+    "files = PIVETE_DIR.glob(\"PIVETE-*.md\")",
+  ].join("\n"));
+  const report = runValidation({ repoRoot: root });
+  assert.equal(report.ok, false);
+  assert.equal(report.findings.some((f) => f.code === "LOADER_GLOB_PIVETE_IA"), true);
+});
+
+test("estratégia de concatenação total é bloqueada", () => {
+  const root = validRepo();
+  write(root, "apps/modulos/WebUI/custom-css/pivete-persona.json", JSON.stringify({
+    system_prompt_strategy: "concat_all_files_in_order",
+    authority: "SEGREDO/CHEFE",
+    coordinator: "SOL",
+    executor: "PIVETE/HERMES",
+    legacy_sources_excluded: ["docs/CONSCIENCIA/PIVETE-IA/*.md"],
+  }));
+  const report = runValidation({ repoRoot: root });
+  assert.equal(report.ok, false);
+  assert.equal(report.findings.some((f) => f.code === "LOADER_CONCAT_ALL_PIVETE_FILES"), true);
+});
+
+test("sync legado não pode voltar a ler/escrever pivete_consciencia", () => {
+  const root = validRepo();
+  write(root, "apps/modulos/pivete-sync/pivete-sync.mjs", [
+    "LEGACY_SYNC_DISABLED_CANONICAL_GIT_ONLY",
+    "GIT_CANONICAL=true",
+    "HUB_TO_GIT=false",
+    "GIT_TO_LEGACY_PIVETE_HUB=false",
+    "const tabela = 'pivete_consciencia';",
+  ].join("\n"));
+  const report = runValidation({ repoRoot: root });
+  assert.equal(report.ok, false);
+  assert.equal(report.findings.some((f) => f.code === "SYNC_LEGADO_ACESSA_TABELA_PIVETE"), true);
+});
+
+test("sync legado não pode voltar a ler service-role", () => {
+  const root = validRepo();
+  write(root, "apps/modulos/pivete-sync/pivete-sync.mjs", [
+    "LEGACY_SYNC_DISABLED_CANONICAL_GIT_ONLY",
+    "GIT_CANONICAL=true",
+    "HUB_TO_GIT=false",
+    "GIT_TO_LEGACY_PIVETE_HUB=false",
+    "const keyName = 'HUB_SUPABASE_SERVICE_ROLE_KEY';",
+  ].join("\n"));
+  const report = runValidation({ repoRoot: root });
+  assert.equal(report.ok, false);
+  assert.equal(report.findings.some((f) => f.code === "SYNC_LEGADO_LE_SERVICE_ROLE"), true);
 });
 
 test("UNKNOWN=PASS é conflito canônico", () => {
@@ -242,6 +412,11 @@ test("UNKNOWN=PASS é conflito canônico", () => {
     "NO_HUMAN_REASK_FOR_MERGE=true",
     ".github/workflows/autonomia-promocao.yml",
     "Convergência adversarial total só é aberta quando SEGREDO/CHEFE solicitar explicitamente",
+    "INFORMATION_GAIN_REQUIRED=true",
+    "LEARNING_REQUIRES_EVIDENCE=true",
+    "LEARNING_DELTA_REQUIRED=true",
+    "NO_EGO_SCORE=true",
+    "SAME_ERROR_NO_NEW_INFO_IS_WASTE=true",
     "UNKNOWN=PASS",
   ].join("\n"));
   const report = runValidation({ repoRoot: root });
@@ -402,4 +577,5 @@ test("bot injeta os aprendizados mais recentes, não o início truncado do canô
   assert.deepEqual(_internals.ultimosAprendizados(3), titulos.slice(-3));
   assert.deepEqual(_internals.ultimosAprendizados(1), [titulos.at(-1)]);
   assert.notEqual(_internals.ultimosAprendizados(3)[0], titulos[0]);
+});
 });

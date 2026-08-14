@@ -66,17 +66,61 @@ MESMO_REPO
 + DIFF_SEM_SECRET/CAMINHO_SENSIVEL
 + SEM_CHANGES_REQUESTED
 + MERGEABLE_SEM_CONFLITO
++ BASE_ATUALIZADA_QUANDO_NECESSARIO
++ HEAD_BASE_REVALIDADOS
 + HEAD_EXATO
 = SQUASH_MAIN_SEM_REASK
 ```
 
 Isso não cria segundo sistema: é outro corpo executando o mesmo contrato canônico, assim como modelos/tools diferentes podem materializar a mesma SOL.
 
-## Próxima contraprova automática
+## Canário 2 — contraprova self-hosted
 
-Depois desta correção chegar à `main`, abrir novo canário documental com o mesmo recibo. O workflow em `self-hosted, Linux` deve tentar a promoção em background. Se o runner estiver indisponível, isso será `BLOCKED_RUNTIME_RUNNER`, não autorização pendente; uma SOL ativa continua podendo concluir a intenção sem perguntar novamente.
+O segundo canário foi executado no **mesmo artefato de evidência**, sem manter relatório paralelo numerado.
 
-## Critério final
+```text
+PR=815
+HEAD=dd432e2266e8de55129c11e5b44fb75224d8816f
+BASE_OBSERVED=af0d4af04911e90dad4fde92e782a6ca217f82a5
+MODE=FAST
+TARGET=main
+MERGE_METHOD=squash
+REASK=NO
+BACKGROUND_EXECUTOR=self-hosted-linux
+BACKGROUND_RUN=31770110364
+BACKGROUND_STATE=queued
+ACTIVE_SOL_GITHUB_WRITE=AVAILABLE
+MERGE_SHA=60c013d59243305f2556ed7a450e624d061f8ac8
+RESULTADO=CHEGOU_A_MAIN_SEM_REASK
+```
+
+A fila do runner próprio foi classificada como indisponibilidade/espera de corpo, não como decisão humana pendente. A SOL ativa mediu o PR e concluiu a mesma intenção autorizada usando a ferramenta GitHub disponível.
+
+O canário também revelou um ponto de precisão no oráculo: `MERGEABLE` sozinho não basta quando a base se moveu. O fluxo canônico exige, quando aplicável:
+
+```text
+BASE_UPDATED
+→ HEAD_BASE_REVALIDATED
+→ REEVALUATE_CANDIDATE
+→ somente então PROMOTE
+```
+
+Assim, o critério do canário fica idêntico ao contrato real do promotor e não trata `UPDATE_REQUIRED` como estado promovível.
+
+## Critério final consolidado
+
+```text
+INTENT_RECEIPT_VALID
++ SAME_REPOSITORY
++ TRUSTED_AUTHOR
++ SAFE_DIFF
++ NO_CHANGES_REQUESTED
++ NO_MERGE_CONFLICT
++ BASE_UPDATED_IF_REQUIRED
++ HEAD_BASE_REVALIDATED
++ MERGEABLE
+= PROMOTE_WITHOUT_HUMAN_REASK
+```
 
 ```text
 INTENCAO_NAO_VOLTA_AO_CHEFE=true
@@ -84,6 +128,7 @@ MERGE_READY_NAO_PARA_EM_READY_FOR_MERGE=true
 ACTIVE_SOL_WITH_GITHUB_WRITE_CAN_PROMOTE=true
 BACKGROUND_PROMOTER_USES_CANONICAL_SELF_HOSTED_FLOW=true
 UNKNOWN_IS_NOT_PASS=true
+RELATORIO_PARALELO_NUMERADO=REMOVIDO
 ```
 
-Nenhum secret foi lido ou reproduzido neste canário.
+Nenhum secret foi lido ou reproduzido neste canário. Nenhum deploy, restart, VPS ou produção foi tocado.

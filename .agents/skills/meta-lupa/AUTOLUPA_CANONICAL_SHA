@@ -7,3 +7,5 @@
 # SE_DIVERGIR=Não use a skill como identidade canônica até reconciliar o conteúdo, provar a mudança e atualizar este guard pelo fluxo autorizado.
 # AUTORIDADE=SEGREDO/CHEFE. O guard não concede permissão; apenas registra a identidade aprovada no escopo aplicável.
 # NAO_PROVA=merge, deploy, produção, runtime, autorização operacional ou sucesso ponta a ponta.
+fd0f9881c57e3b88f5adeee913bc998de32ba22d  .agents/skills/meta-lupa/SKILL.md
+# git-blob SHA1 canônico. Atualize somente com autorização vigente de SEGREDO/CHEFE.

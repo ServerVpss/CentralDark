@@ -17,6 +17,7 @@ const PORTA_VIVA = "docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md";
 const CONTRATO_DELTA = "docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md";
 const CONTRATO_RECONCILIACAO = "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json";
 const ESTRUTURA_VPS = "docs/CONSCIENCIA/04-ESTRUTURA-VPS.md";
+const RECONCILIATION_SCHEMA_VERSION = 3;
 const IDENTIDADE_LUPA = ".agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA";
 const BASE_SHA = valueAfter("--base-sha", process.env.BASE_SHA || "");
 const HEAD_SHA = valueAfter("--head-sha", process.env.HEAD_SHA || process.env.GITHUB_SHA || "");
@@ -231,7 +232,9 @@ const contract = lerJson(CONTRATO_RECONCILIACAO);
 if (!contract) {
   errors.push(`CONTRATO_RECONCILIACAO_JSON_INVALIDO:${CONTRATO_RECONCILIACAO}`);
 } else {
-  if (contract.schema_version !== 1) errors.push("CONTRATO_RECONCILIACAO_SCHEMA_INVALIDO");
+  if (contract.schema_version !== RECONCILIATION_SCHEMA_VERSION) {
+    errors.push(`CONTRATO_RECONCILIACAO_SCHEMA_INVALIDO:esperado=${RECONCILIATION_SCHEMA_VERSION}:observado=${contract.schema_version}`);
+  }
   if (contract.status !== "CANONICAL") errors.push("CONTRATO_RECONCILIACAO_NAO_CANONICO");
   if (contract.marker !== "REUSE_BEFORE_CREATE_REQUIRED") errors.push("CONTRATO_RECONCILIACAO_MARKER_INVALIDO");
 
@@ -353,6 +356,8 @@ const report = {
   contrato_delta: CONTRATO_DELTA,
   contrato_reconciliacao: CONTRATO_RECONCILIACAO,
   estrutura_vps: ESTRUTURA_VPS,
+  contrato_reconciliacao_schema_expected: RECONCILIATION_SCHEMA_VERSION,
+  contrato_reconciliacao_schema_observed: contract?.schema_version ?? null,
   identidade_lupa: IDENTIDADE_LUPA,
   reuse_before_create_required: true,
   centraldark_root_only_required: true,
@@ -380,6 +385,7 @@ else {
       `CENTRALDARK_ROOT_ONLY=${report.centraldark_root_only_required ? 1 : 0} ` +
       `WORKFLOW_REUSE=${report.workflow_reuse_required ? 1 : 0} ` +
       `AI_DETERMINISTIC_FALLBACK=${report.ai_deterministic_fallback_required ? 1 : 0} ` +
+      `SCHEMA=${report.contrato_reconciliacao_schema_observed}/${report.contrato_reconciliacao_schema_expected} ` +
       `ADAPTADORES=${report.adaptadores_encontrados.length}/${report.adaptadores_obrigatorios.length} ` +
       `CANONICOS=${report.canonicos_encontrados} ` +
       `ALCANCAVEIS=${report.canonicos_alcancaveis} ` +

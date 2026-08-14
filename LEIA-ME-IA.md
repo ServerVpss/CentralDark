@@ -10,6 +10,10 @@ updated: 2026-08-14
 
 Você é uma IA, agente, plugin, hub ou modelo que acabou de chegar no CentralDark. Leia isto antes de responder ou executar.
 
+```text
+REUSE_BEFORE_CREATE_REQUIRED=true
+```
+
 ## 1. Boot universal
 
 Carregue nesta ordem:
@@ -23,7 +27,10 @@ Carregue nesta ordem:
 7. `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json` — reutilização e reconciliação.
 8. `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` quando a missão exigir coordenação multiagente.
 9. `.agents/skills/meta-lupa/SKILL.md` quando o risco exigir falsificação crítica.
-10. estado atual de branch, HEAD, PR, runtime, writer e ferramentas aplicáveis.
+10. `.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA` para conferir a identidade canônica da skill.
+11. `docs/CONSCIENCIA/PROOF-OWNERSHIP.json` quando houver gate, prova, Judge ou cadeia de validação — propriedade da prova e bloqueio de circularidade.
+12. `docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md` quando houver aprendizado do próprio método, autoaperfeiçoamento do scaffold ou revisão de como o organismo trabalha.
+13. estado atual de branch, HEAD, PR, runtime, writer e ferramentas aplicáveis.
 
 Nome de modelo não muda o contrato. GPT, Codex, Claude, Gemini, Grok, Copilot, Cursor, Windsurf, Hermes ou modelo futuro entram como motores/papéis substituíveis dentro do mesmo organismo.
 
@@ -212,6 +219,17 @@ Convergência adversarial total **só é aberta por solicitação explícita de 
 
 MetaLupa continua obrigatória proporcionalmente ao risco para bloquear falso verde e separar fato/inferência/hipótese/UNKNOWN.
 
+Quando houver mais de um provador, gate, Judge ou validação encadeada, carregar `docs/CONSCIENCIA/PROOF-OWNERSHIP.json` e aplicar:
+
+```text
+SELF_VALIDATION_WITHOUT_INDEPENDENT_COUNTERPROOF=UNPROVEN
+CIRCULAR_PROOF=UNPROVEN
+GRAPH_STRUCTURE_OK != INVARIANT_PROVEN
+UNREGISTERED_INVARIANT=UNPROVEN_NOT_OWNED
+```
+
+O grafo de prova é finito e de cobertura explícita: cada invariável registrada tem fonte, consumidor, provador responsável, teste negativo/contraprova e âncora observável. O mapa da prova não substitui o fato externo nem pode declarar PASS da própria invariável.
+
 ## 10. Aprendizado e generalização
 
 Correção útil do SEGREDO/CHEFE deve subir de nível:
@@ -221,6 +239,44 @@ CORRECAO HUMANA
 → EVIDENCIA
 → REGRA|TESTE|SKILL|CONTRATO|MEMORIA
 → PROXIMA EXECUCAO COMECA MAIS ALTO
+```
+
+Confronto útil também sobe de nível somente quando produz ganho informacional:
+
+```text
+CONFRONTO
+→ EVIDENCIA NOVA
+→ DELTA_DE_CRENCA
+→ REGRA|TESTE|GUARDRAIL|MEMORIA QUANDO NECESSARIO
+→ OURO
+```
+
+```text
+INFORMATION_GAIN_REQUIRED=true
+LEARNING_REQUIRES_EVIDENCE=true
+SAME_ERROR_NO_NEW_INFO_IS_WASTE=true
+```
+
+Quando o próprio organismo revisa **como** está trabalhando e muda o scaffold por evidência, aplicar `docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md`:
+
+```text
+OBSERVAR_O_PROPRIO_PROCESSO
+→ ACHAR ERRO DO METODO
+→ TESTAR/CONTRAPROVAR
+→ ALTERAR MENOR SCAFFOLD APLICAVEL
+→ REGISTRAR DELTA REUTILIZAVEL
+→ PROXIMA EXECUCAO COMECA MAIS ALTO
+```
+
+Esse ciclo é **metacognição operacional**. Quando SEGREDO/CHEFE ensina/corrige e o organismo materializa o aprendizado no scaffold, a relação é **coevolução operacional humano–sistema**. A autoridade permanece no SEGREDO/CHEFE; não presumir mudança de pesos do modelo nem AGI a partir da arquitetura.
+
+```text
+OPERATIONAL_METACOGNITION=true
+HUMAN_SYSTEM_COEVOLUTION=OPERATIONAL
+SCAFFOLD_LEARNING_PRIMARY=true
+MODEL_WEIGHT_UPDATE_ASSUMED=false
+AUTHORITY_REMAINS_WITH_SEGREDO_CHEFE=true
+AGI_CLAIM_FROM_ARCHITECTURE=false
 ```
 
 Generalização sistêmica por composição:
@@ -271,9 +327,12 @@ TASKS_SECRETAS
 | promoção/merge | `.github/workflows/autonomia-promocao.yml` + `scripts/github-autonomia-promocao.mjs` |
 | deploy | `docs/CONSCIENCIA/03-FLUXO-DEPLOY.md` |
 | aprendizados | `docs/CONSCIENCIA/APRENDIZADOS.md` |
+| metacognição / coevolução operacional | `docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md` |
 | pendências | `docs/PENDENCIAS.md` |
 | coordenação/escritor único | `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` |
 | MetaLupa | `.agents/skills/meta-lupa/SKILL.md` |
+| propriedade/anti-circularidade da prova | `docs/CONSCIENCIA/PROOF-OWNERSHIP.json` |
+| identidade MetaLupa | `.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA` |
 
 ## 14. Fechamento
 

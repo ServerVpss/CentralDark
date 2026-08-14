@@ -6,9 +6,11 @@ Antes de sugerir, editar, revisar ou executar:
 2. Leia `AGENTS.md`.
 3. Leia `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md`.
 4. Leia `docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md`.
-5. Leia o contrato de reconciliação.
-6. Meça branch, HEAD, escopo, writer, runtime e tools.
-7. Use MetaLupa proporcionalmente ao risco.
+5. Leia `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json`.
+6. Leia `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` quando aplicável.
+7. Use `.agents/skills/meta-lupa/SKILL.md` proporcionalmente ao risco e confira `.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA`.
+8. Meça branch, HEAD, escopo, writer, runtime e tools.
+9. Emita uma vez o `CENTRALDARK_AI_BOOT` definido em `LEIA-ME-IA.md`.
 
 ```text
 SEGREDO/CHEFE = humano e autoridade final
