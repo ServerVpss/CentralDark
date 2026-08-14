@@ -34,13 +34,34 @@
     "recover_history_when_available": true,
     "measure_machine_state": true,
     "new_evidence_overrides_stale_context": true,
-    "unknown_first": true
+    "unknown_first": true,
+    "continuous_until_close": true,
+    "recheck_live_head_before_final_verdict": true
+  },
+  "message_stream_policy": {
+    "multiple_human_messages_restart_mission": false,
+    "extract_reusable_gold": true,
+    "incorporate_only_when_causal": true,
+    "discard_noncausal_noise": true,
+    "continue_current_mission_without_reset": true,
+    "record_reusable_learning_at_close": true,
+    "rule": "MESSAGE_STREAM -> EXTRACT_GOLD -> INCORPORATE_IF_CAUSAL -> DISCARD_NOISE -> CONTINUE_MISSION"
   },
   "language_policy": {
     "normalize_human_speech_before_reasoning": false,
     "slang_metaphor_abbreviation_are_context_signals": true,
     "if_interpretation_fails_correct_ai_reading_not_human": true,
     "regional_pivete_is_technical_identity": false
+  },
+  "authority_semantics": {
+    "human_authority": "SEGREDO/CHEFE",
+    "coordination": "SOL",
+    "execution_and_continuity": "PIVETE/HERMES",
+    "pivete_as_active_human_authority": "REGRESSION",
+    "pivete_as_executor_profile_or_namespace": "VALID",
+    "pivete_in_append_only_history_or_ledger": "PRESERVE_PROVENANCE",
+    "historical_semantics_may_govern_present": false,
+    "rule": "DO_NOT_HUNT_THE_WORD_PIVETE; HUNT_PIVETE_INHERITING_SEGREDO_AUTHORITY"
   },
   "mandatory_pre_solution_sequence": [
     "resolve_user_intent",
@@ -60,6 +81,29 @@
     "HISTORICAL",
     "UNKNOWN"
   ],
+  "review_finding_policy": {
+    "outdated_position_is_proof_of_cure": false,
+    "required_dimensions": ["BYTE", "BEHAVIOR", "ARTIFACT_ROLE"],
+    "classes": ["CURADO", "MATERIAL", "SUPERSEDED"],
+    "curado": "criticized byte absent AND criticized behavior absent",
+    "material": "byte changed_or_absent BUT criticized behavior still exists in active surface",
+    "superseded": "old criticism no longer governs because a newer canonical contract intentionally replaced that behavior",
+    "historical_artifact_rule": "preserve factual provenance; remove only its ability to govern current behavior",
+    "resolve_thread_only_when": "BYTE_AND_BEHAVIOR_VERIFIED_OR_EXPLICITLY_SUPERSEDED_BY_CANONICAL_RULE"
+  },
+  "mechanical_error_policy": {
+    "human_is_fallback_for_machine_measurable_error": false,
+    "if_cause_is_explicit_and_in_scope": "SELF_RESOLVE_AND_RETEST",
+    "same_defect_class_requires_deterministic_guard": true,
+    "unknown_or_external_dependency": "REPORT_BLOCKED_WITH_CAUSE",
+    "rule": "IF_MACHINE_CAN_RESOLVE_IT_DO_NOT_ESCALATE_TO_HUMAN"
+  },
+  "runtime_drift_policy": {
+    "declared_version_differs_from_effective_runtime": "DRIFT",
+    "drift_is_pass": false,
+    "include_in_denominator_only_when_applicable": true,
+    "measure_path_and_effective_binary_before_correction": true
+  },
   "decision_rules": {
     "existing_capability_satisfies_request": "REUSE",
     "existing_capability_partially_satisfies_request": "EXTEND_MINIMALLY",
