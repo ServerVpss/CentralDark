@@ -56,11 +56,12 @@ RETOMAR MISSAO
 4. Ler `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json`.
 5. Ler `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md`.
 6. Ler `docs/CONSCIENCIA/APRENDIZADOS.md` e `docs/PENDENCIAS.md` quando relevantes.
-7. Consultar GitHub Actions quando envolver CI/PR/merge/deploy.
-8. Medir branch, HEAD, escopo, escritor atual, runtime e ferramentas aplicáveis.
-9. Emitir uma vez o `CENTRALDARK_AI_BOOT` definido em `LEIA-ME-IA.md`.
-10. Executar a reconciliação antes de propor qualquer solução nova.
-11. Continuar do ponto real sem pedir novamente estado que a própria máquina consegue medir.
+7. Quando a missão projetar contexto + ferramentas + observabilidade para um ambiente delimitado, carregar `docs/CONSCIENCIA/EXPANSAO-DE-DOMINIO.md`.
+8. Consultar GitHub Actions quando envolver CI/PR/merge/deploy.
+9. Medir branch, HEAD, escopo, escritor atual, runtime e ferramentas aplicáveis.
+10. Emitir uma vez o `CENTRALDARK_AI_BOOT` definido em `LEIA-ME-IA.md`.
+11. Executar a reconciliação antes de propor qualquer solução nova.
+12. Continuar do ponto real sem pedir novamente estado que a própria máquina consegue medir.
 
 ## Preflight universal — reutilizar antes de criar
 
@@ -122,6 +123,20 @@ carregar governanca
 → rollback/log/prova
 → registrar
 ```
+
+### Missão com Expansão de Domínio
+
+```text
+INTENCAO
+→ DELIMITAR PERIMETRO
+→ ACOPLAR SOMENTE CAPACIDADES MEDIDAS E NECESSARIAS
+→ EXECUTAR COM WRITER UNICO + TELEMETRIA
+→ PROVAR / CONTRAPROVAR
+→ COLAPSAR DOMINIO
+→ PRESERVAR EVIDENCIA + OURO PROVADO
+```
+
+`EXPANSAO_DE_DOMINIO` não cria privilégio, não autoriza bypass e não cria engine paralela. É o envelope operacional temporário da missão.
 
 **Convergência adversarial total, swarm e Judge independente não são gate automático de rotina.** São ativados quando SEGREDO/CHEFE pedir explicitamente para provar autonomia, arquitetura, robustez ou generalização. MetaLupa continua bloqueando falso verde e fazendo falsificação interna do crítico.
 
@@ -210,6 +225,7 @@ Regras:
 | Identidade e continuidade SOL | `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md` |
 | Regra/erro/padrão reutilizável | `docs/CONSCIENCIA/APRENDIZADOS.md` |
 | Reconciliação antes de criar | `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json` |
+| Expansão de Domínio / envelope de missão | `docs/CONSCIENCIA/EXPANSAO-DE-DOMINIO.md` |
 | Coordenação/escritor único | `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` |
 | Promoção canônica | `.github/workflows/autonomia-promocao.yml` |
 | Pendências | `docs/PENDENCIAS.md` |
