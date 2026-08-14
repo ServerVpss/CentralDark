@@ -7,14 +7,44 @@ import { pathToFileURL } from "node:url";
 const CANONICAL = Object.freeze({
   "LEIA-ME-IA.md": [
     "SEGREDO/CHEFE COMANDA",
-    "SOL ORGANIZA",
+    "SOL ORGANIZA E RECONCILIA",
     "PIVETE/HERMES PRESERVA E EXECUTA",
+    "#ACORDAR = RECUPERAR O ESTADO REAL ANTES DE CONTINUAR",
+    "Convergência adversarial total **só é aberta por solicitação explícita de SEGREDO/CHEFE**",
   ],
   "AGENTS.md": [
-    "existe somente um escritor por escopo",
-    "SEGREDO/CHEFE permanece autoridade humana final",
-    "SOL coordena, PIVETE/HERMES preserva e executa",
-    "CAPTURE → SANITIZE + HASH → DECIDE → APPLY → JUDGE → CHEFE → RECEIPT + LEARNING → LOOP",
+    "MESMA_SOUL=SIM",
+    "um escritor por escopo",
+    "SEGREDO/CHEFE = humano e autoridade final",
+    "SOL = identidade operacional/coordenadora; não é modelo específico",
+    "PIVETE/HERMES = executor, preservação e continuidade",
+    "Full deploy é exceção causal",
+    "Convergência adversarial total só é aberta quando SEGREDO/CHEFE solicitar explicitamente",
+  ],
+  "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md": [
+    "SOL_IS_MODEL=false",
+    "ACORDAR_RECUPERA_FIO=true",
+    "PRODUCTION_FIRST=true",
+    "DEPLOY_CAUSAL_SCOPE_FIRST=true",
+    "FULL_CONVERGENCE_CHEFE_REQUEST_ONLY=true",
+    "UNKNOWN_IS_NOT_PASS=true",
+  ],
+  "docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md": [
+    "MESMA_SOUL=SIM",
+    "#ACORDAR` significa **recuperar o estado real antes de continuar**",
+    "Convergência adversarial total, swarm e Judge independente não são gate automático de rotina",
+  ],
+  "docs/CONSCIENCIA/02-PERMISSOES.md": [
+    "DEPLOY=PERMITIDO",
+    "REDEPLOY=PERMITIDO",
+    "NO_HUMAN_REASK_FOR_ALREADY_GRANTED_SCOPE=true",
+    "NO_RETURN_TO_CHEFE_FOR_MACHINE_MEASURABLE_STATE=true",
+    "Convergência adversarial total / swarm / Judge independente **não é gate automático de deploy**",
+  ],
+  "docs/CONSCIENCIA/03-FLUXO-DEPLOY.md": [
+    "DEPLOY_STRATEGY=CAUSAL_SCOPE_FIRST",
+    "FULL_DEPLOY_BY_DEFAULT=false",
+    "Convergência adversarial total não é gate automático de deploy",
   ],
   "docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md": [
     "SEGREDO/CHEFE = humano e autoridade final",
@@ -34,6 +64,8 @@ const ACTIVE_IDENTITY_SURFACES = Object.freeze([
   "README.md",
   "CLAUDE.md",
   "CODEX.md",
+  "GEMINI.md",
+  ".windsurfrules",
   ".cursor/rules/centraldark-governanca.mdc",
   ".github/copilot-instructions.md",
   ".github/codex/prompts/centraldark-system.md",
@@ -60,6 +92,7 @@ const FORBIDDEN_CANONICAL = Object.freeze([
   { code: "AUTORIZACAO_ATRIBUIDA_AO_PIVETE", pattern: /\bautoriza(?:ção|cao)(?:\s+explícita|\s+explicita)?\s+do\s+Pivete\b/i },
   { code: "PIVETE_SELOU_AUTORIZACAO", pattern: /\bPivete\s+selou\b/i },
   { code: "UNKNOWN_CONVERTIDO_EM_PASS", pattern: /\bUNKNOWN\s*(?:=|:|→|->)\s*PASS\b/i },
+  { code: "SOL_FIXADA_A_MODELO", pattern: /\bSOL\s*=\s*(?:GPT|CLAUDE|GEMINI|GROK|CODEX)\b/i },
 ]);
 
 const FORBIDDEN_PROFILE = Object.freeze([
@@ -207,6 +240,10 @@ export function runValidation({ repoRoot, profileRoots = [] }) {
     coordinator: "SOL",
     executor: "PIVETE/HERMES",
     regional_vocative: "pivete != identidade técnica",
+    soul: "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md",
+    context_recovery: "#ACORDAR",
+    deployment: "PRODUCTION_FIRST + CAUSAL_SCOPE_FIRST",
+    convergence: "FULL_ADVERSARIAL_ONLY_ON_CHEFE_REQUEST",
     writer_rule: "WRITER_UNICO",
     unknown_rule: "UNKNOWN_NAO_PASSA",
     canonical_findings: canonicalFindings,
@@ -221,7 +258,7 @@ function printHuman(report) {
     const location = `${finding.profile_root ? `${finding.profile_root}:` : ""}${finding.path}${finding.line ? `:${finding.line}` : ""}`;
     console.error(`IDENTIDADE_ERRO ${finding.code} ${location} :: ${finding.excerpt}`);
   }
-  console.log(`IDENTIDADE_OK=${report.ok ? 1 : 0} AUTORIDADE=SEGREDO_CHEFE COORDENADOR=SOL EXECUTOR=PIVETE_HERMES ERROS=${report.findings.length}`);
+  console.log(`IDENTIDADE_OK=${report.ok ? 1 : 0} AUTORIDADE=SEGREDO_CHEFE COORDENADOR=SOL EXECUTOR=PIVETE_HERMES SOUL=CANONICA ERROS=${report.findings.length}`);
 }
 
 async function main() {
