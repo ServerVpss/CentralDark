@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-08-14T02:02:29.039Z
+# 🧠 Notion Sync — 2026-08-14T02:38:17.714Z
 
-- **Commit fonte:** `b3c9329871d32a9cfd8a4ebc6a66e642bb8928ff`
+- **Commit fonte:** `52d66db65929c14c23af133710f0fb782e486d09`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 10 criadas · ♻️ 59 atualizadas · ❌ 335 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 69 atualizadas · ❌ 335 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
-| aprendizados | 25 | 10 | 15 | 0 | 0 |
+| aprendizados | 25 | 0 | 25 | 0 | 0 |
 | estrutura | 335 | 0 | 0 | 0 | 335 |
 
 ## Operações
@@ -81,16 +81,16 @@
 | aprendizados | atualizado | #13 — Recuo preventivo não é obediência |
 | aprendizados | atualizado | #14 — Mutante equivalente sai do denominador mas aponta a invariante sem teste |
 | aprendizados | atualizado | #15 — Achado repetido é ruído, não reforço |
-| aprendizados | criado | #16 — #ACORDAR é recuperação de estado real, não apenas comando de GitHub |
-| aprendizados | criado | #17 — Uma SOL, um SOUL, uma superfície; modelos e ferramentas são capacidades substituíveis |
-| aprendizados | criado | #18 — O humano decide intenção; a máquina prova o estado e não devolve investigação mensurável ao humano |
-| aprendizados | criado | #19 — Em desenvolvimento autorizado, produção observável vem antes de perfeição global |
-| aprendizados | criado | #20 — Convergência, Judge e Meta Lupa servem para tentar quebrar; não para decidir a intenção do CHEFE |
-| aprendizados | criado | #21 — Falha local pede correção local e deploy no menor blast radius possível |
-| aprendizados | criado | #22 — Painel Admin precisa ser observabilidade operacional, não só configuração |
-| aprendizados | criado | #23 — HTTP 200, PM2 online, DNS resolvendo ou painel verde não provam LIVE |
-| aprendizados | criado | #24 — API paga é capacidade, não identidade nem caminho obrigatório |
-| aprendizados | criado | #25 — “Menos é mais” significa menor movimento compatível com efeito, observabilidade e segurança |
+| aprendizados | atualizado | #16 — #ACORDAR é recuperação de estado real, não apenas comando de GitHub |
+| aprendizados | atualizado | #17 — Uma SOL, um SOUL, uma superfície; modelos e ferramentas são capacidades substituíveis |
+| aprendizados | atualizado | #18 — O humano decide intenção; a máquina prova o estado e não devolve investigação mensurável ao humano |
+| aprendizados | atualizado | #19 — Em desenvolvimento autorizado, produção observável vem antes de perfeição global |
+| aprendizados | atualizado | #20 — Convergência, Judge e Meta Lupa servem para tentar quebrar; não para decidir a intenção do CHEFE |
+| aprendizados | atualizado | #21 — Falha local pede correção local e deploy no menor blast radius possível |
+| aprendizados | atualizado | #22 — Painel Admin precisa ser observabilidade operacional, não só configuração |
+| aprendizados | atualizado | #23 — HTTP 200, PM2 online, DNS resolvendo ou painel verde não provam LIVE |
+| aprendizados | atualizado | #24 — API paga é capacidade, não identidade nem caminho obrigatório |
+| aprendizados | atualizado | #25 — “Menos é mais” significa menor movimento compatível com efeito, observabilidade e segurança |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
