@@ -41,11 +41,14 @@ export function validateProofOwnership(contract, { exists = () => true } = {}) {
   const byId = new Map();
 
   for (const invariant of invariants) {
-    const required = ["id", "proof_class", "source", "consumer", "prover", "negative_test", "counterproof", "external_anchor"];
+    const required = ["id", "proof_class", "source", "consumer", "prover", "negative_test", "counterproof", "external_anchor", "depends_on"];
     for (const field of required) {
       if (invariant?.[field] == null || invariant[field] === "") {
         errors.push(`PROOF_OWNERSHIP_FIELD_MISSING:${invariant?.id ?? "UNKNOWN"}:${field}`);
       }
+    }
+    if (invariant?.depends_on != null && !Array.isArray(invariant.depends_on)) {
+      errors.push(`PROOF_OWNERSHIP_DEPENDS_ON_INVALID:${invariant?.id ?? "UNKNOWN"}`);
     }
     if (!invariant?.id) continue;
     if (ids.has(invariant.id)) errors.push(`PROOF_OWNERSHIP_DUPLICATE_ID:${invariant.id}`);
@@ -92,10 +95,18 @@ export function validateProofOwnership(contract, { exists = () => true } = {}) {
     } else {
       const kind = String(invariant.external_anchor.kind ?? "");
       const observation = String(invariant.external_anchor.observation ?? "");
+      const anchorPath = String(invariant.external_anchor.path ?? "");
+      const eventField = String(invariant.external_anchor.event_field ?? "");
       if (!kind || /validator_output|self/i.test(kind)) {
         errors.push(`PROOF_OWNERSHIP_EXTERNAL_ANCHOR_INVALID:${invariant.id}:${kind || "EMPTY"}`);
       }
       if (!observation) errors.push(`PROOF_OWNERSHIP_EXTERNAL_OBSERVATION_MISSING:${invariant.id}`);
+      if (kind === "github_event_label" && !eventField) {
+        errors.push(`PROOF_OWNERSHIP_EXTERNAL_EVENT_FIELD_MISSING:${invariant.id}`);
+      }
+      if (kind !== "github_event_label" && !anchorPath) {
+        errors.push(`PROOF_OWNERSHIP_EXTERNAL_PATH_MISSING:${invariant.id}`);
+      }
     }
 
     for (const path of [
@@ -112,9 +123,20 @@ export function validateProofOwnership(contract, { exists = () => true } = {}) {
     }
   }
 
+  const effectiveDeps = new Map();
   for (const invariant of invariants) {
-    for (const dependency of invariant?.depends_on ?? []) {
+    effectiveDeps.set(invariant.id, new Set(Array.isArray(invariant.depends_on) ? invariant.depends_on : []));
+  }
+
+  for (const invariant of invariants) {
+    for (const dependency of Array.isArray(invariant.depends_on) ? invariant.depends_on : []) {
       if (!byId.has(dependency)) errors.push(`PROOF_OWNERSHIP_UNKNOWN_DEPENDENCY:${invariant.id}:${dependency}`);
+    }
+    for (const other of invariants) {
+      if (invariant.id === other.id) continue;
+      if (invariant.consumer && other.prover && invariant.consumer === other.prover) {
+        effectiveDeps.get(invariant.id)?.add(other.id);
+      }
     }
   }
 
@@ -127,8 +149,7 @@ export function validateProofOwnership(contract, { exists = () => true } = {}) {
     }
     if (visited.has(id)) return;
     visiting.add(id);
-    const invariant = byId.get(id);
-    for (const dependency of invariant?.depends_on ?? []) {
+    for (const dependency of effectiveDeps.get(id) ?? []) {
       if (byId.has(dependency)) visit(dependency);
     }
     visiting.delete(id);
@@ -142,6 +163,7 @@ export function validateProofOwnership(contract, { exists = () => true } = {}) {
     invariant_proof: false,
     coverage_status: contract.coverage_status,
     invariant_count: invariants.length,
+    unregistered_known_count: Array.isArray(contract.unregistered_known_invariants) ? contract.unregistered_known_invariants.length : 0,
     proof_classes: [...ownerByClass.keys()].sort(),
     errors,
   };
@@ -173,6 +195,6 @@ if (isMain) {
     exists: (relativePath) => existsSync(join(root, relativePath)),
   });
   for (const error of result.errors) console.error(`ERRO ${error}`);
-  console.log(`PROOF_GRAPH_STRUCTURE_OK=${result.ok ? 1 : 0} COVERAGE=${result.coverage_status} TOPOLOGY_ONLY=1 INVARIANT_PROOF=0 INVARIANTS=${result.invariant_count} CLASSES=${result.proof_classes.length} ERROS=${result.errors.length}`);
+  console.log(`PROOF_GRAPH_STRUCTURE_OK=${result.ok ? 1 : 0} COVERAGE=${result.coverage_status} TOPOLOGY_ONLY=1 INVARIANT_PROOF=0 INVARIANTS=${result.invariant_count} UNREGISTERED_KNOWN=${result.unregistered_known_count} CLASSES=${result.proof_classes.length} ERROS=${result.errors.length}`);
   process.exit(result.ok ? 0 : 1);
 }
