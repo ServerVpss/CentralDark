@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-08-14T20:32:35.448Z
+# 🧠 Notion Sync — 2026-08-14T22:49:04.873Z
 
-- **Commit fonte:** `d2b5d50cdcf30f2c71dc9006d4ba2cf96ea17c9a`
+- **Commit fonte:** `a030f4d276c43abd34ec275187c015fdaf132f24`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 409 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 411 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
 | aprendizados | 26 | 0 | 26 | 0 | 0 |
-| estrutura | 340 | 1 | 339 | 0 | 0 |
+| estrutura | 341 | 0 | 341 | 0 | 0 |
 
 ## Operações
 
@@ -179,7 +179,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-07-09-gateway-centraldark-chave-propria.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-07-10-gateway-138-modelos-e-schema-real-hub.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-07-10-primeiro-acesso-admin-hub.md |
-| estrutura | criado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-14-arqueologia-total-ouro-recuperado.md |
+| estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-14-arqueologia-total-ouro-recuperado.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/MCP/MCP-EXPLICADO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/PROXY/APRENDIZADOS_PROXY.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/PROXY/CONFIGURACAO_CLINE.md |
@@ -276,7 +276,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/INVENTARIO-PM2-VPS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md |
 | estrutura | atualizado | docs/CONSCIENCIA/LEMBRANCAS/2026-07-30-VIVER-EM-PAZ.md |
-| estrutura | criado | docs/CONSCIENCIA/LEMBRANCAS/2026-08-06-writer-provenance-gap.md |
+| estrutura | atualizado | docs/CONSCIENCIA/LEMBRANCAS/2026-08-06-writer-provenance-gap.md |
 | estrutura | atualizado | docs/CONSCIENCIA/LEMBRANCAS/2026-08-08-SELO-DE-OURO-CONVERGENCIA-E-GRATIDAO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/LEMBRANCAS/2026-08-14-OURO-CONTEXTO-AUTONOMIA-SOL.md |
 | estrutura | atualizado | docs/CONSCIENCIA/LEMBRANCAS/AUTO-EVOLUCAO-MENTAL-PIVETE.md |
