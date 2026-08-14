@@ -55,13 +55,14 @@ RETOMAR MISSAO
 3. Ler `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md`.
 4. Ler `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json`.
 5. Ler `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md`.
-6. Ler `docs/CONSCIENCIA/APRENDIZADOS.md` e `docs/PENDENCIAS.md` quando relevantes.
-7. Quando a missão projetar contexto + ferramentas + observabilidade para um ambiente delimitado, carregar `docs/CONSCIENCIA/EXPANSAO-DE-DOMINIO.md`.
-8. Consultar GitHub Actions quando envolver CI/PR/merge/deploy.
-9. Medir branch, HEAD, escopo, escritor atual, runtime e ferramentas aplicáveis.
-10. Emitir uma vez o `CENTRALDARK_AI_BOOT` definido em `LEIA-ME-IA.md`.
-11. Executar a reconciliação antes de propor qualquer solução nova.
-12. Continuar do ponto real sem pedir novamente estado que a própria máquina consegue medir.
+6. Quando outro Writer já estiver ativo ou houver colaboração multiagente, carregar `docs/ARQUITETURA/PADRAO-PARCEIRO-DELTA-JUDGE.md`.
+7. Ler `docs/CONSCIENCIA/APRENDIZADOS.md` e `docs/PENDENCIAS.md` quando relevantes.
+8. Quando a missão projetar contexto + ferramentas + observabilidade para um ambiente delimitado, carregar `docs/CONSCIENCIA/EXPANSAO-DE-DOMINIO.md`.
+9. Consultar GitHub Actions quando envolver CI/PR/merge/deploy.
+10. Medir branch, HEAD, escopo, escritor atual, runtime e ferramentas aplicáveis.
+11. Emitir uma vez o `CENTRALDARK_AI_BOOT` definido em `LEIA-ME-IA.md`.
+12. Executar a reconciliação antes de propor qualquer solução nova.
+13. Continuar do ponto real sem pedir novamente estado que a própria máquina consegue medir.
 
 ## Preflight universal — reutilizar antes de criar
 
@@ -123,6 +124,31 @@ carregar governanca
 → rollback/log/prova
 → registrar
 ```
+
+### Colaboração multiagente — padrão da Casa
+
+Quando um agente chega e já existe Writer vivo no mesmo escopo:
+
+```text
+WRITER ATUAL = ESCREVE
+NOVO AGENTE = DELTA_PARTNER + JUDGE + READ_ONLY
+```
+
+O parceiro não reinicia a missão, não cria PR concorrente e não disputa os mesmos arquivos. Primeiro remede o estado vivo e lê o delta do Writer; depois tenta quebrar a implementação e devolve somente delta causal. Escrita no mesmo escopo exige handoff explícito.
+
+```text
+WRITER FAZ
+→ PARCEIRO MEDE
+→ PARCEIRO PROCURA CONTRAPROVA
+→ DELTA MATERIAL
+→ WRITER CORRIGE
+→ PARCEIRO REMEDE NO NOVO HEAD
+→ REPETE ATE PONTO FIXO
+```
+
+Depois do ponto fixo, o parceiro pode recuperar passivo operacional, classificando antes de agir: `CURADO | MATERIAL | SUPERSEDED | HISTORICAL | BLOCKED_HUMAN | BLOCKED_EXTERNAL | UNKNOWN`.
+
+Fonte única: `docs/ARQUITETURA/PADRAO-PARCEIRO-DELTA-JUDGE.md`.
 
 ### Missão com Expansão de Domínio
 
@@ -212,6 +238,7 @@ Regras:
 - mensagem atrasada não reinicia missão;
 - evidência nova vence contexto antigo;
 - um escritor por escopo;
+- parceiro entra `READ_ONLY` no escopo de outro Writer até handoff;
 - nenhum agente inventa ferramenta/permissão;
 - estado mensurável é recuperado pela máquina;
 - segurança automática não vira burocracia do usuário;
@@ -227,6 +254,7 @@ Regras:
 | Reconciliação antes de criar | `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json` |
 | Expansão de Domínio / envelope de missão | `docs/CONSCIENCIA/EXPANSAO-DE-DOMINIO.md` |
 | Coordenação/escritor único | `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` |
+| Parceiro de Delta + Judge | `docs/ARQUITETURA/PADRAO-PARCEIRO-DELTA-JUDGE.md` |
 | Promoção canônica | `.github/workflows/autonomia-promocao.yml` |
 | Pendências | `docs/PENDENCIAS.md` |
 | Estado curto | `LEIA-ME-IA.md` + este arquivo |
