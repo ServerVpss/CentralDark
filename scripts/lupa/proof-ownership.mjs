@@ -1,0 +1,207 @@
+#!/usr/bin/env node
+
+import { existsSync, readFileSync } from "node:fs";
+import { resolve, join } from "node:path";
+import { fileURLToPath } from "node:url";
+
+export function validateProofOwnership(contract, { exists = () => true } = {}) {
+  const errors = [];
+  if (!contract || typeof contract !== "object" || Array.isArray(contract)) {
+    return { ok: false, errors: ["PROOF_OWNERSHIP_CONTRACT_INVALID"] };
+  }
+  if (contract.schema_version !== 1) errors.push("PROOF_OWNERSHIP_SCHEMA_INVALID");
+  if (contract.status !== "CANONICAL") errors.push("PROOF_OWNERSHIP_NOT_CANONICAL");
+  if (contract.marker !== "PROOF_OWNERSHIP_REQUIRED") errors.push("PROOF_OWNERSHIP_MARKER_INVALID");
+  if (contract.coverage_status !== "PARTIAL_EXPLICIT") errors.push("PROOF_OWNERSHIP_COVERAGE_MUST_BE_PARTIAL_EXPLICIT");
+
+  const rules = contract.global_rules ?? {};
+  const expectedRules = {
+    self_validation_without_independent_counterproof: "UNPROVEN",
+    circular_proof: "UNPROVEN",
+    written_rule_without_consumer: "UNPROVEN",
+    written_rule_without_prover: "UNPROVEN",
+    prover_without_negative_test: "UNPROVEN",
+    same_proof_class_multiple_owners: "BLOCKED_DUPLICATE_PROOF_OWNER",
+    unregistered_invariant: "UNPROVEN_NOT_OWNED",
+    unknown_skipped_pending: "NOT_PASS",
+    proof_graph_must_be_acyclic: true,
+    proof_must_end_in_external_anchor: true,
+    graph_structure_ok_is_not_invariant_proof: true,
+    external_anchor_must_be_observed_by_responsible_prover: true,
+  };
+  for (const [key, expected] of Object.entries(expectedRules)) {
+    if (rules[key] !== expected) errors.push(`PROOF_OWNERSHIP_RULE_INVALID:${key}`);
+  }
+
+  const invariants = Array.isArray(contract.invariants) ? contract.invariants : [];
+  if (invariants.length === 0) errors.push("PROOF_OWNERSHIP_INVARIANTS_EMPTY");
+
+  const ids = new Set();
+  const ownerByClass = new Map();
+  const byId = new Map();
+
+  for (const invariant of invariants) {
+    const required = ["id", "proof_class", "source", "consumer", "prover", "negative_test", "counterproof", "external_anchor", "depends_on"];
+    for (const field of required) {
+      if (invariant?.[field] == null || invariant[field] === "") {
+        errors.push(`PROOF_OWNERSHIP_FIELD_MISSING:${invariant?.id ?? "UNKNOWN"}:${field}`);
+      }
+    }
+    if (invariant?.depends_on != null && !Array.isArray(invariant.depends_on)) {
+      errors.push(`PROOF_OWNERSHIP_DEPENDS_ON_INVALID:${invariant?.id ?? "UNKNOWN"}`);
+    }
+    if (!invariant?.id) continue;
+    if (ids.has(invariant.id)) errors.push(`PROOF_OWNERSHIP_DUPLICATE_ID:${invariant.id}`);
+    ids.add(invariant.id);
+    byId.set(invariant.id, invariant);
+
+    const proofClass = String(invariant.proof_class ?? "");
+    const prover = String(invariant.prover ?? "");
+    const negativeTest = String(invariant.negative_test ?? "");
+    if (proofClass && prover) {
+      const currentOwner = ownerByClass.get(proofClass);
+      if (currentOwner && currentOwner !== prover) {
+        errors.push(`PROOF_OWNERSHIP_DUPLICATE_OWNER:${proofClass}:${currentOwner}:${prover}`);
+      } else {
+        ownerByClass.set(proofClass, prover);
+      }
+    }
+
+    if (prover && negativeTest && prover === negativeTest) {
+      errors.push(`PROOF_OWNERSHIP_SELF_TEST:${invariant.id}`);
+    }
+    if (negativeTest && !/\.(?:test|spec)\.[cm]?[jt]s$/i.test(negativeTest)) {
+      errors.push(`PROOF_OWNERSHIP_NEGATIVE_TEST_NOT_EXECUTABLE_TEST:${invariant.id}:${negativeTest}`);
+    }
+    if (prover && invariant.consumer && prover === invariant.consumer) {
+      errors.push(`PROOF_OWNERSHIP_PROVER_IS_CONSUMER:${invariant.id}`);
+    }
+
+    if (!invariant.counterproof || typeof invariant.counterproof !== "object") {
+      errors.push(`PROOF_OWNERSHIP_COUNTERPROOF_MISSING:${invariant.id}`);
+    } else {
+      const counterproofPath = String(invariant.counterproof.path ?? "");
+      const counterproofKind = String(invariant.counterproof.kind ?? "");
+      const counterproofObservation = String(invariant.counterproof.observation ?? "");
+      if (!counterproofPath || !counterproofKind || !counterproofObservation) {
+        errors.push(`PROOF_OWNERSHIP_COUNTERPROOF_INCOMPLETE:${invariant.id}`);
+      }
+      if (invariant.counterproof.independent_from_prover !== true) {
+        errors.push(`PROOF_OWNERSHIP_COUNTERPROOF_NOT_INDEPENDENT:${invariant.id}`);
+      }
+      if (counterproofPath && counterproofPath === prover) {
+        errors.push(`PROOF_OWNERSHIP_COUNTERPROOF_IS_PROVER:${invariant.id}`);
+      }
+      if (counterproofKind === "negative_test_suite" && counterproofPath !== negativeTest) {
+        errors.push(`PROOF_OWNERSHIP_COUNTERPROOF_NOT_NEGATIVE_TEST:${invariant.id}`);
+      }
+    }
+
+    if (!invariant.external_anchor || typeof invariant.external_anchor !== "object") {
+      errors.push(`PROOF_OWNERSHIP_EXTERNAL_ANCHOR_MISSING:${invariant.id}`);
+    } else {
+      const kind = String(invariant.external_anchor.kind ?? "");
+      const observation = String(invariant.external_anchor.observation ?? "");
+      const anchorPath = String(invariant.external_anchor.path ?? "");
+      const eventField = String(invariant.external_anchor.event_field ?? "");
+      if (!kind || /validator_output|self/i.test(kind)) {
+        errors.push(`PROOF_OWNERSHIP_EXTERNAL_ANCHOR_INVALID:${invariant.id}:${kind || "EMPTY"}`);
+      }
+      if (!observation) errors.push(`PROOF_OWNERSHIP_EXTERNAL_OBSERVATION_MISSING:${invariant.id}`);
+      if (kind === "github_event_label" && !eventField) {
+        errors.push(`PROOF_OWNERSHIP_EXTERNAL_EVENT_FIELD_MISSING:${invariant.id}`);
+      }
+      if (kind !== "github_event_label" && !anchorPath) {
+        errors.push(`PROOF_OWNERSHIP_EXTERNAL_PATH_MISSING:${invariant.id}`);
+      }
+    }
+
+    for (const path of [
+      invariant.source,
+      invariant.consumer,
+      prover,
+      negativeTest,
+      invariant.counterproof?.path,
+      invariant.external_anchor?.path,
+    ]) {
+      if (typeof path === "string" && path && !exists(path)) {
+        errors.push(`PROOF_OWNERSHIP_PATH_MISSING:${invariant.id}:${path}`);
+      }
+    }
+  }
+
+  const effectiveDeps = new Map();
+  for (const invariant of invariants) {
+    effectiveDeps.set(invariant.id, new Set(Array.isArray(invariant.depends_on) ? invariant.depends_on : []));
+  }
+
+  for (const invariant of invariants) {
+    for (const dependency of Array.isArray(invariant.depends_on) ? invariant.depends_on : []) {
+      if (!byId.has(dependency)) errors.push(`PROOF_OWNERSHIP_UNKNOWN_DEPENDENCY:${invariant.id}:${dependency}`);
+    }
+    for (const other of invariants) {
+      if (invariant.id === other.id) continue;
+      if (invariant.consumer && other.prover && invariant.consumer === other.prover) {
+        effectiveDeps.get(invariant.id)?.add(other.id);
+      }
+    }
+  }
+
+  const visiting = new Set();
+  const visited = new Set();
+  function visit(id) {
+    if (visiting.has(id)) {
+      errors.push(`PROOF_OWNERSHIP_CYCLE:${id}`);
+      return;
+    }
+    if (visited.has(id)) return;
+    visiting.add(id);
+    for (const dependency of effectiveDeps.get(id) ?? []) {
+      if (byId.has(dependency)) visit(dependency);
+    }
+    visiting.delete(id);
+    visited.add(id);
+  }
+  for (const id of byId.keys()) visit(id);
+
+  return {
+    ok: errors.length === 0,
+    topology_only: true,
+    invariant_proof: false,
+    coverage_status: contract.coverage_status,
+    invariant_count: invariants.length,
+    unregistered_known_count: Array.isArray(contract.unregistered_known_invariants) ? contract.unregistered_known_invariants.length : 0,
+    proof_classes: [...ownerByClass.keys()].sort(),
+    errors,
+  };
+}
+
+function parseArgs(argv) {
+  const out = {};
+  for (let i = 0; i < argv.length; i += 1) {
+    if (!argv[i].startsWith("--")) continue;
+    out[argv[i].slice(2)] = argv[i + 1];
+    i += 1;
+  }
+  return out;
+}
+
+const isMain = process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1]);
+if (isMain) {
+  const args = parseArgs(process.argv.slice(2));
+  const root = resolve(args["repo-root"] ?? process.cwd());
+  const contractPath = args.contract ?? "docs/CONSCIENCIA/PROOF-OWNERSHIP.json";
+  let contract;
+  try {
+    contract = JSON.parse(readFileSync(join(root, contractPath), "utf8"));
+  } catch (error) {
+    console.error(`PROOF_OWNERSHIP_LOAD_ERROR=${error.message}`);
+    process.exit(1);
+  }
+  const result = validateProofOwnership(contract, {
+    exists: (relativePath) => existsSync(join(root, relativePath)),
+  });
+  for (const error of result.errors) console.error(`ERRO ${error}`);
+  console.log(`PROOF_GRAPH_STRUCTURE_OK=${result.ok ? 1 : 0} COVERAGE=${result.coverage_status} TOPOLOGY_ONLY=1 INVARIANT_PROOF=0 INVARIANTS=${result.invariant_count} UNREGISTERED_KNOWN=${result.unregistered_known_count} CLASSES=${result.proof_classes.length} ERROS=${result.errors.length}`);
+  process.exit(result.ok ? 0 : 1);
+}
