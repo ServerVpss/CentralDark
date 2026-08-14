@@ -57,6 +57,7 @@ export function validateProofOwnership(contract, { exists = () => true } = {}) {
 
     const proofClass = String(invariant.proof_class ?? "");
     const prover = String(invariant.prover ?? "");
+    const negativeTest = String(invariant.negative_test ?? "");
     if (proofClass && prover) {
       const currentOwner = ownerByClass.get(proofClass);
       if (currentOwner && currentOwner !== prover) {
@@ -66,10 +67,13 @@ export function validateProofOwnership(contract, { exists = () => true } = {}) {
       }
     }
 
-    if (invariant.prover && invariant.negative_test && invariant.prover === invariant.negative_test) {
+    if (prover && negativeTest && prover === negativeTest) {
       errors.push(`PROOF_OWNERSHIP_SELF_TEST:${invariant.id}`);
     }
-    if (invariant.prover && invariant.consumer && invariant.prover === invariant.consumer) {
+    if (negativeTest && !/\.(?:test|spec)\.[cm]?[jt]s$/i.test(negativeTest)) {
+      errors.push(`PROOF_OWNERSHIP_NEGATIVE_TEST_NOT_EXECUTABLE_TEST:${invariant.id}:${negativeTest}`);
+    }
+    if (prover && invariant.consumer && prover === invariant.consumer) {
       errors.push(`PROOF_OWNERSHIP_PROVER_IS_CONSUMER:${invariant.id}`);
     }
 
@@ -85,8 +89,11 @@ export function validateProofOwnership(contract, { exists = () => true } = {}) {
       if (invariant.counterproof.independent_from_prover !== true) {
         errors.push(`PROOF_OWNERSHIP_COUNTERPROOF_NOT_INDEPENDENT:${invariant.id}`);
       }
-      if (counterproofPath && counterproofPath === invariant.prover) {
+      if (counterproofPath && counterproofPath === prover) {
         errors.push(`PROOF_OWNERSHIP_COUNTERPROOF_IS_PROVER:${invariant.id}`);
+      }
+      if (counterproofKind === "negative_test_suite" && counterproofPath !== negativeTest) {
+        errors.push(`PROOF_OWNERSHIP_COUNTERPROOF_NOT_NEGATIVE_TEST:${invariant.id}`);
       }
     }
 
@@ -112,8 +119,8 @@ export function validateProofOwnership(contract, { exists = () => true } = {}) {
     for (const path of [
       invariant.source,
       invariant.consumer,
-      invariant.prover,
-      invariant.negative_test,
+      prover,
+      negativeTest,
       invariant.counterproof?.path,
       invariant.external_anchor?.path,
     ]) {
