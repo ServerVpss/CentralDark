@@ -12,7 +12,9 @@
     "same_proof_class_multiple_owners": "BLOCKED_DUPLICATE_PROOF_OWNER",
     "unknown_skipped_pending": "NOT_PASS",
     "proof_graph_must_be_acyclic": true,
-    "proof_must_end_in_external_anchor": true
+    "proof_must_end_in_external_anchor": true,
+    "graph_structure_ok_is_not_invariant_proof": true,
+    "external_anchor_must_be_observed_by_responsible_prover": true
   },
   "required_fields_per_invariant": [
     "id",
@@ -34,7 +36,8 @@
       "negative_test": "scripts/lupa/validar-identidade-operacional.test.mjs",
       "external_anchor": {
         "kind": "repository_active_surface",
-        "path": "AGENTS.md"
+        "path": "AGENTS.md",
+        "observation": "conteudo versionado da superficie ativa no mesmo HEAD"
       },
       "independent_counterproof": true,
       "depends_on": []
@@ -47,8 +50,9 @@
       "prover": "scripts/lupa/authority-approval.mjs",
       "negative_test": "scripts/lupa/authority-approval.test.mjs",
       "external_anchor": {
-        "kind": "github_event_label_contract",
-        "path": ".github/workflows/bots-labels-seed.yml"
+        "kind": "github_event_label",
+        "path": ".github/workflows/bots-labels-seed.yml",
+        "observation": "label autenticada no payload real de GITHUB_EVENT_PATH; o arquivo seed sozinho nao prova presenca da label"
       },
       "independent_counterproof": true,
       "depends_on": []
