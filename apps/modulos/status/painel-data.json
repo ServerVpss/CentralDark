@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-14T07:42:40.635Z",
-  "updatedAtBR": "14/08/2026, 04:42:40 BRT",
+  "updatedAt": "2026-08-14T09:57:37.437Z",
+  "updatedAtBR": "14/08/2026, 06:57:37 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "fix(ci): alinhar guardrail de arquivos sensíveis do Codex (#826)",
+    "lastCommit": "feat(skill): evoluir cot-react-loop com auto-correction transversal (#822)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-14T09:57:37.437Z",
+      "titulo": "Push na main · 8d7debfc0746b9e9d03e21fa09187716837b1f53",
+      "detalhe": "feat(skill): evoluir cot-react-loop com auto-correction transversal (#822)",
+      "area": "Repositório",
+      "sha": "8d7debf",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-14T07:42:40.635Z",
       "titulo": "Push na main · 035935cad9b78b75c02577aed2469bd21713f085",
       "detalhe": "fix(ci): alinhar guardrail de arquivos sensíveis do Codex (#826)",
@@ -988,14 +996,6 @@
       "detalhe": "fix(autonomia): separar juiz, promotor e eventos pós-merge (#584)",
       "area": "Repositório",
       "sha": "18f6e54",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-01T00:39:59.896Z",
-      "titulo": "Push na main · 363b04909091ae24da8d4408effb60c7c3be777e",
-      "detalhe": "docs(boot): tornar dicionário e menor movimento obrigatórios",
-      "area": "Repositório",
-      "sha": "363b049",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-14T09:57:37.437Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 8d7debfc0746b9e9d03e21fa09187716837b1f53 (8d7debf)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-14T07:42:40.635Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 035935cad9b78b75c02577aed2469bd21713f085 (035935c)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-03T22:45:09.569Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 18f6e54b99b1a6120eeec197c457b8a1645c2e22 (18f6e54)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-01T00:39:59.896Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 363b04909091ae24da8d4408effb60c7c3be777e (363b049)",
       "area": "Repositório",
       "status": "sucesso"
     }
