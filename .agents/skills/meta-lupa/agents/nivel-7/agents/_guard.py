@@ -1,6 +1,4 @@
-"""Guard read-only: instala audit hook que registra tentativas de escrita.
-Nao toca em nenhum teste; se um run() violar, o proprio agente falha via assert.
-"""
+"""Guard read-only reentrante para agentes N7 aninhados."""
 import sys, threading, functools
 
 _state = threading.local()
@@ -34,12 +32,17 @@ def read_only(func):
     @functools.wraps(func)
     def wrapper(*a, **kw):
         _install()
+        depth = getattr(_state, "depth", 0)
+        if depth == 0:
+            _state.violations = []
+        _state.depth = depth + 1
         _state.active = True
-        _state.violations = []
         try:
             result = func(*a, **kw)
         finally:
-            _state.active = False
+            _state.depth -= 1
+            _state.active = _state.depth > 0
+
         assert not _state.violations, (
             f"read-only violado por {func.__module__}: {_state.violations}"
         )
