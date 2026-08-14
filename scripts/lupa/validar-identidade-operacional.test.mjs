@@ -38,6 +38,8 @@ function validRepo() {
     "Convergência adversarial total só é aberta quando SEGREDO/CHEFE solicitar explicitamente",
     "INFORMATION_GAIN_REQUIRED=true",
     "LEARNING_REQUIRES_EVIDENCE=true",
+    "LEARNING_DELTA_REQUIRED=true",
+    "NO_EGO_SCORE=true",
     "SAME_ERROR_NO_NEW_INFO_IS_WASTE=true",
   ].join("\n"));
   write(root, "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md", [
@@ -257,6 +259,8 @@ test("AGENTS conflitante bloqueia", () => {
     "Convergência adversarial total só é aberta quando SEGREDO/CHEFE solicitar explicitamente",
     "INFORMATION_GAIN_REQUIRED=true",
     "LEARNING_REQUIRES_EVIDENCE=true",
+    "LEARNING_DELTA_REQUIRED=true",
+    "NO_EGO_SCORE=true",
     "SAME_ERROR_NO_NEW_INFO_IS_WASTE=true",
     "O Pivete é a autoridade final.",
   ].join("\n"));
@@ -335,6 +339,8 @@ test("UNKNOWN=PASS é conflito canônico", () => {
     "Convergência adversarial total só é aberta quando SEGREDO/CHEFE solicitar explicitamente",
     "INFORMATION_GAIN_REQUIRED=true",
     "LEARNING_REQUIRES_EVIDENCE=true",
+    "LEARNING_DELTA_REQUIRED=true",
+    "NO_EGO_SCORE=true",
     "SAME_ERROR_NO_NEW_INFO_IS_WASTE=true",
     "UNKNOWN=PASS",
   ].join("\n"));
