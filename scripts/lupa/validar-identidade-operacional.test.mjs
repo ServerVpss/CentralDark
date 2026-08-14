@@ -76,6 +76,29 @@ function validRepo() {
     "CHEFE_SEGREDO_NECESSARIO",
   ].join("\n"));
   write(root, "docs/CONSCIENCIA/DICIONARIO-PIVETE-GITHUB.md", "SEGREDO/CHEFE = humano e autoridade final\nPIVETE = Hermes treinado\n");
+
+  write(root, "apps/modulos/elite-gateway/scripts/pivete_routes.py", [
+    "CANONICAL_CONTEXT = ()",
+    "CANONICAL_CONTEXT_ALLOWLIST = True",
+    'status = {"authority": "SEGREDO/CHEFE", "executor": "PIVETE/HERMES"}',
+    "A rota NÃO concatena mais docs/CONSCIENCIA/PIVETE-IA/*.md",
+  ].join("\n"));
+
+  write(root, "apps/modulos/WebUI/custom-css/pivete-invocacao.js", [
+    "const mode = 'CANONICAL_CONTEXT_ALLOWLIST';",
+    "const authority = 'SEGREDO/CHEFE = humano e autoridade final';",
+    "const executor = 'PIVETE/HERMES = executor, preservação e continuidade';",
+    "localStorage.removeItem('pivete_system_prompt');",
+  ].join("\n"));
+
+  write(root, "apps/modulos/WebUI/custom-css/pivete-persona.json", JSON.stringify({
+    system_prompt_strategy: "canonical_allowlist",
+    authority: "SEGREDO/CHEFE",
+    coordinator: "SOL",
+    executor: "PIVETE/HERMES",
+    legacy_sources_excluded: ["docs/CONSCIENCIA/PIVETE-IA/*.md"],
+  }, null, 2));
+
   return root;
 }
 
@@ -126,6 +149,22 @@ test("PIVETE COMANDA em superfície operacional ativa é regressão", () => {
   assert.equal(report.findings.some((f) => f.path === "CODEX.md" && f.code === "PIVETE_COMANDA_LEGADO_ATIVO"), true);
 });
 
+test("PIVETE MANDA em superfície operacional ativa é regressão", () => {
+  const root = validRepo();
+  write(root, "CODEX.md", "PIVETE MANDA.\n");
+  const report = runValidation({ repoRoot: root });
+  assert.equal(report.ok, false);
+  assert.equal(report.findings.some((f) => f.path === "CODEX.md" && f.code === "PIVETE_MANDA_LEGADO_ATIVO"), true);
+});
+
+test("PIVETE DECIDE em superfície operacional ativa é regressão", () => {
+  const root = validRepo();
+  write(root, "CODEX.md", "PIVETE DECIDE.\n");
+  const report = runValidation({ repoRoot: root });
+  assert.equal(report.ok, false);
+  assert.equal(report.findings.some((f) => f.path === "CODEX.md" && f.code === "PIVETE_DECIDE_LEGADO_ATIVO"), true);
+});
+
 test("Pivete como orquestrador humano é regressão", () => {
   const findings = findForbidden("Pivete é o orquestrador. Ele define a decisão final.");
   assert.equal(findings.some((f) => f.code === "PIVETE_ORQUESTRADOR_HUMANO"), true);
@@ -153,6 +192,34 @@ test("AGENTS conflitante bloqueia", () => {
   const report = runValidation({ repoRoot: root });
   assert.equal(report.ok, false);
   assert.equal(report.findings.some((finding) => finding.path === "AGENTS.md" && finding.code === "PIVETE_COMO_AUTORIDADE_FINAL"), true);
+});
+
+test("loader antigo por glob é bloqueado", () => {
+  const root = validRepo();
+  write(root, "apps/modulos/elite-gateway/scripts/pivete_routes.py", [
+    "CANONICAL_CONTEXT",
+    "CANONICAL_CONTEXT_ALLOWLIST",
+    'status = {"authority": "SEGREDO/CHEFE", "executor": "PIVETE/HERMES"}',
+    "A rota NÃO concatena mais docs/CONSCIENCIA/PIVETE-IA/*.md",
+    "files = PIVETE_DIR.glob(\"PIVETE-*.md\")",
+  ].join("\n"));
+  const report = runValidation({ repoRoot: root });
+  assert.equal(report.ok, false);
+  assert.equal(report.findings.some((f) => f.code === "LOADER_GLOB_PIVETE_IA"), true);
+});
+
+test("estratégia de concatenação total é bloqueada", () => {
+  const root = validRepo();
+  write(root, "apps/modulos/WebUI/custom-css/pivete-persona.json", JSON.stringify({
+    system_prompt_strategy: "concat_all_files_in_order",
+    authority: "SEGREDO/CHEFE",
+    coordinator: "SOL",
+    executor: "PIVETE/HERMES",
+    legacy_sources_excluded: ["docs/CONSCIENCIA/PIVETE-IA/*.md"],
+  }));
+  const report = runValidation({ repoRoot: root });
+  assert.equal(report.ok, false);
+  assert.equal(report.findings.some((f) => f.code === "LOADER_CONCAT_ALL_PIVETE_FILES"), true);
 });
 
 test("UNKNOWN=PASS é conflito canônico", () => {
