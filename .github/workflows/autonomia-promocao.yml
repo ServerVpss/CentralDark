@@ -33,7 +33,7 @@ env:
 jobs:
   judge:
     name: Juiz determinístico — intenção + estado + segurança
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux]
     timeout-minutes: 10
     permissions:
       contents: read
@@ -58,7 +58,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          echo "PROMOTION_TOKEN=${{ secrets.PROMOTION_TOKEN != '' && 'present' || 'absent_using_github_token' }}"
+          echo "PROMOTION_TOKEN=${{ (secrets.PROMOTION_TOKEN != '' || secrets.GITHUB_PAT_PERFIL != '') && 'present' || 'absent_active_agent_can_still_promote' }}"
           echo "TELEGRAM=${{ secrets.TELEGRAM_BOT_TOKEN != '' && secrets.TELEGRAM_CHAT_ID != '' && 'present' || 'absent' }}"
           echo "WEBHOOK=${{ secrets.NOTIFY_WEBHOOK_URL != '' && 'present' || 'absent' }}"
 
@@ -98,14 +98,14 @@ jobs:
           set -euo pipefail
           echo "HEAD_SHA=${HEAD_SHA}"
           echo "EVENT_NAME=${EVENT_NAME}"
-          echo "EXECUTOR=github-hosted-ubuntu"
+          echo "EXECUTOR=self-hosted-linux"
           echo "JOB_STATUS=${JOB_STATUS}"
           test "${JOB_STATUS}" = "success" && echo "RESULTADO=PASS" || echo "RESULTADO=BLOCKED"
 
   promote:
     name: Promotor — revalidar e squash main
     needs: judge
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux]
     timeout-minutes: 10
     permissions:
       contents: write
@@ -135,8 +135,7 @@ jobs:
       - name: Promover somente recibos válidos e estado vivo idêntico
         env:
           BOT_SWEEP_DIR: ${{ runner.temp }}/centraldark-autonomia
-          PROMOTER_TOKEN: ${{ secrets.PROMOTION_TOKEN }}
-          GITHUB_TOKEN: ${{ github.token }}
+          PROMOTER_TOKEN: ${{ secrets.PROMOTION_TOKEN || secrets.GITHUB_PAT_PERFIL }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           NOTIFY_WEBHOOK_URL: ${{ secrets.NOTIFY_WEBHOOK_URL }}
@@ -162,7 +161,7 @@ jobs:
           set -euo pipefail
           echo "HEAD_SHA=${HEAD_SHA}"
           echo "EVENT_NAME=${EVENT_NAME}"
-          echo "EXECUTOR=github-hosted-ubuntu"
+          echo "EXECUTOR=self-hosted-linux"
           echo "MERGE_METHOD=squash"
           echo "REASK=NO_WHEN_INTENT_RECEIPT_VALID"
           echo "JOB_STATUS=${JOB_STATUS}"
