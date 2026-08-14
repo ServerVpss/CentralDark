@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "status": "CANONICAL",
+  "marker": "PROOF_OWNERSHIP_REQUIRED",
+  "purpose": "Impedir prova circular, duplicacao de responsabilidade e PASS fabricado pelo proprio provador.",
+  "global_rules": {
+    "self_validation_without_independent_counterproof": "UNPROVEN",
+    "circular_proof": "UNPROVEN",
+    "written_rule_without_consumer": "UNPROVEN",
+    "written_rule_without_prover": "UNPROVEN",
+    "prover_without_negative_test": "UNPROVEN",
+    "same_proof_class_multiple_owners": "BLOCKED_DUPLICATE_PROOF_OWNER",
+    "unknown_skipped_pending": "NOT_PASS",
+    "proof_graph_must_be_acyclic": true,
+    "proof_must_end_in_external_anchor": true
+  },
+  "required_fields_per_invariant": [
+    "id",
+    "proof_class",
+    "source",
+    "consumer",
+    "prover",
+    "negative_test",
+    "external_anchor",
+    "independent_counterproof"
+  ],
+  "invariants": [
+    {
+      "id": "IDENTITY_AUTHORITY_ACTIVE_SURFACES",
+      "proof_class": "identity_authority",
+      "source": "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md",
+      "consumer": "docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md",
+      "prover": "scripts/lupa/validar-identidade-operacional.mjs",
+      "negative_test": "scripts/lupa/validar-identidade-operacional.test.mjs",
+      "external_anchor": {
+        "kind": "repository_active_surface",
+        "path": "AGENTS.md"
+      },
+      "independent_counterproof": true,
+      "depends_on": []
+    },
+    {
+      "id": "AUTHORITY_RECEIPT_FROM_GITHUB_EVENT",
+      "proof_class": "authenticated_authority",
+      "source": "docs/CONSCIENCIA/02-PERMISSOES.md",
+      "consumer": ".github/workflows/porta-de-entrada.yml",
+      "prover": "scripts/lupa/authority-approval.mjs",
+      "negative_test": "scripts/lupa/authority-approval.test.mjs",
+      "external_anchor": {
+        "kind": "github_event_label_contract",
+        "path": ".github/workflows/bots-labels-seed.yml"
+      },
+      "independent_counterproof": true,
+      "depends_on": []
+    }
+  ]
+}
