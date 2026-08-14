@@ -187,6 +187,34 @@ RESOLVED → SOMENTE_APOS_ESTADO_FINAL_PROVADO
 
 `Accept Both` é preferível quando os dois lados são complementares e podem coexistir sem quebrar contrato, sintaxe, ordem, ownership ou comportamento. Nunca usar `Both` como regra cega para escapar da decisão semântica.
 
+Antes de escolher qualquer botão, **todo conflito passa por arqueologia mínima dos dois lados**. `<<<<<<< HEAD` identifica o lado atualmente checkout; não prova que ele é produção, legado estável ou autoridade. Da mesma forma, `>>>>>>> <ref>` identifica o outro lado do conflito; não prova que seja novo, melhor ou menos confiável.
+
+```text
+TODO_CONFLITO
+→ IDENTIFICAR BASE + CURRENT/HEAD + INCOMING
+→ LER INTENCAO/PR/COMMIT INTRODUTOR QUANDO DISPONIVEL
+→ LOCALIZAR CONSUMIDOR + TESTE + CONTRATO APLICAVEL
+→ CLASSIFICAR: COMPLEMENTAR | EXCLUSIVO | SUPERADO | HISTORICO | UNKNOWN
+→ TESTAR SE ACCEPT_BOTH PRESERVA OS DOIS SEM REGRESSAO
+→ SE SIM: ACCEPT_BOTH
+→ LIMPAR DUPLICACAO/RETORNO/DECLARACAO/ORDEM INCOMPATIVEL
+→ RODAR VALIDACAO ESTATICA/TESTE APLICAVEL
+→ MARK_RESOLVED SOMENTE DEPOIS DA PROVA
+```
+
+Para valor único — hash canônico, identidade, autoridade, porta exclusiva, chave de configuração, endpoint único, schema/version pin ou equivalente — **não escolher `Current` nem `Incoming` por posição visual**. Fazer arqueologia e provar a fonte vigente; só então manter um valor.
+
+```text
+CONFLICT_PRECHECK_REQUIRED=true
+ARCHAEOLOGY_BEFORE_RESOLUTION=true
+ACCEPT_BOTH_FIRST_WHEN_COMPATIBLE=true
+CURRENT_IS_NOT_AUTHORITY_BY_POSITION=true
+INCOMING_IS_NOT_AUTHORITY_BY_POSITION=true
+UNIQUE_VALUE_REQUIRES_SEMANTIC_OWNER=true
+POST_ACCEPT_BOTH_CLEANUP_REQUIRED=true
+VALIDATE_BEFORE_MARK_RESOLVED=true
+```
+
 ### Intenção curta pode abrir fan-out interno
 
 O humano não precisa enumerar cada busca, ferramenta, agente, arquivo ou verificação quando o contexto canônico já define missão, limites e critério de sucesso.
