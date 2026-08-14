@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-14T16:21:04.811Z",
-  "updatedAtBR": "14/08/2026, 13:21:04 BRT",
+  "updatedAt": "2026-08-14T17:18:10.054Z",
+  "updatedAtBR": "14/08/2026, 14:18:10 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "fix(lupa): fechar brechas pós-827 e registrar metacognição operacional (#833)",
+    "lastCommit": "feat(memory): integrar Dream Review isolado ao memory-linker canônico (#834)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-14T17:18:10.054Z",
+      "titulo": "Push na main · c85064e37c669232a79fba87788f65f17868e672",
+      "detalhe": "feat(memory): integrar Dream Review isolado ao memory-linker canônico (#834)",
+      "area": "Repositório",
+      "sha": "c85064e",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-14T16:21:04.811Z",
       "titulo": "Push na main · 6e56fcd26cd5425c5c2a541fa2b5c53231133860",
       "detalhe": "fix(lupa): fechar brechas pós-827 e registrar metacognição operacional (#833)",
@@ -988,14 +996,6 @@
       "detalhe": "fix: trigger PR585 runner by label",
       "area": "Repositório",
       "sha": "3780c85",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-03T23:01:54.439Z",
-      "titulo": "Push na main · 1074e8133056a5fdcd0ba3b7bd0f0a751d60a0ba",
-      "detalhe": "fix: make PR585 runner observable",
-      "area": "Repositório",
-      "sha": "1074e81",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-14T17:18:10.054Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · c85064e37c669232a79fba87788f65f17868e672 (c85064e)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-14T16:21:04.811Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 6e56fcd26cd5425c5c2a541fa2b5c53231133860 (6e56fcd)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-03T23:02:16.745Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 3780c85ebbf4d3824dab1b76c7e0383d57375358 (3780c85)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-03T23:01:54.439Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 1074e8133056a5fdcd0ba3b7bd0f0a751d60a0ba (1074e81)",
       "area": "Repositório",
       "status": "sucesso"
     }
