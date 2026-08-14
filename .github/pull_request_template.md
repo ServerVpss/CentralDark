@@ -4,6 +4,31 @@
 
 Descreva em uma frase o que esta mudança resolve no repositório oficial `ServerVpss/CentralDark`.
 
+## Capacidades da IA autora
+
+Declare honestamente o que a IA que abriu ou escreveu este PR consegue interpretar.  
+`UNKNOWN` é válido. O bot gera fallback em texto simples e pede suporte automaticamente quando necessário.
+
+```yaml
+AI_CAPABILITIES:
+  mermaid: UNKNOWN
+  canvas_html: UNKNOWN
+  structured_yaml: UNKNOWN
+```
+
+## Artefato de aprendizado
+
+O workflow `PR — artefato de aprendizado automático` deve gerar no mesmo HEAD:
+
+- comentário Mermaid;
+- fallback universal em texto;
+- cartão YAML;
+- Canvas HTML como artifact;
+- receipt;
+- pedido de suporte por labels quando alguma capacidade for `NAO` ou `UNKNOWN`.
+
+O artefato organiza o contexto. Ele não aprova código, não autoriza merge e não substitui testes.
+
 ## Escopo
 
 - [ ] Alteração limitada ao necessário.

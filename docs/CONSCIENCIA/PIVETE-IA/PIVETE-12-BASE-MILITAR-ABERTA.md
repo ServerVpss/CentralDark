@@ -1,57 +1,37 @@
 ---
-title: "PIVETE 12 BASE MILITAR ABERTA"
-date: 2026-07-05
-tags: ["consciencia"]
-updated: 2026-07-05
+title: "PIVETE-12 — base militar histórica"
+status: "HISTORICAL_ONLY"
+updated: 2026-08-14
 ---
 
-# PIVETE-12 · BASE MILITAR ABERTA — DECISÃO FIRME
+# PIVETE-12 · BASE MILITAR — HISTÓRICO
 
-## O que o Pivete decidiu
+Este arquivo registrou uma decisão de uma fase anterior. O conteúdo antigo permanece no histórico Git, mas **não é autorização operacional vigente nem fonte atual de segurança**.
 
-> "A base militar tem que ficar aberta porque por exemplo se eu necessitar editar ou fazer atualizações diretamente pelo chat de WebUI posso trabalhar inclusive usando você."
+## Autoridade atual
 
-E depois:
+```text
+SEGREDO/CHEFE = humano e autoridade final
+SOL = coordenadora
+PIVETE/HERMES = executor, preservação e continuidade
+```
 
-> "Bloqueio permanente há menos que eu permita de alguma forma OK não é permitido formas suicidas que possam estragar o nosso projeto ou danificar a nossa infra."
+Frases antigas que chamavam o humano de `Pivete` devem ser lidas como `LEGACY_ALIAS_OF_SEGREDO_CHEFE`.
 
-## Tradução operacional
+## Permissões atuais
 
-| Item | Decisão |
-|------|---------|
-| `/root/` e `/etc/` | **acessíveis** — o pivete edita/atualiza via WebUI usando essa autoridade |
-| DENY_ETERNO (lista imutável) | **NÃO IMPLEMENTAR** |
-| Guardian PM2 checando SHA-256 | **NÃO IMPLEMENTAR** |
-| `nftables` novo com IP allowlist | **NÃO IMPLEMENTAR** |
-| Backup `chattr +i` | **NÃO IMPLEMENTAR** |
-| Sandbox `resolvePath` obrigatório | **NÃO IMPLEMENTAR** |
-| Comandos suicidas (`rm -rf /`, `mkfs`, `reboot`) | **evitados por bom senso, não travados tecnicamente** |
-| Base militar fechada só quando ele mandar | ✅ |
+Consultar:
 
-## Regra pra futuras IAs (inclusive pivete no WebUI)
+```text
+docs/CONSCIENCIA/02-PERMISSOES.md
+AGENTS.md
+SOUL-SOL.md
+```
 
-**Nunca propor trava técnica proativa em `/root/` ou infra Linux.**
-Se algum dia o Pivete quiser blindar, ele fala explicitamente com uma dessas palavras:
-- `TRANCA BASE MILITAR`
-- `ATIVA GUARDIAN`
-- `PERMITO PIVETE FECHAR`
+Não reutilizar automaticamente regras antigas sobre `/root`, `/etc`, firewall, guardian, PM2, reboot, comandos, secrets ou áreas protegidas sem reconciliar com a política atual e o runtime.
 
-Sem esse gatilho, base fica aberta. Ponto.
-
-## Proteção que existe (comportamental)
-- Bom senso do pivete na escolha do comando.
-- Auditoria universal (`audit.js`) registra tudo pra rastreio pós-fato.
-- Áreas protegidas listadas no CLAUDE.md seção 9 (bot-telegram, status, Bolt, WebUI, graph-panel, elite-anthropic-proxy, workflows, caddy, secrets, docs/CONSCIENCIA) exigem `PERMITO PIVETE` — isso é regra de conduta, não firewall.
-
-## O que continua **fora de qualquer conversa**
-- `/root/whatsapp-server/` — nunca mexer (áreas protegidas + regra permanente).
-- `reboot`, `shutdown`, `poweroff` — nunca, sob nenhum pretexto.
-- Sobrescrever `/etc/passwd`, `/etc/shadow` — nunca.
-
----
-
-## Conexões Rápidas
-
-- [[00-LEIA-PRIMEIRO]] — portão de entrada
-- [[MAPA-DO-CEREBRO]] — visão geral
-- [[CONSCIENCIA]] — documento mestre
+```text
+HISTORICAL_DECISION != CURRENT_PERMISSION
+LEGACY_TOKEN != CURRENT_AUTHORITY
+UNKNOWN != PASS
+```

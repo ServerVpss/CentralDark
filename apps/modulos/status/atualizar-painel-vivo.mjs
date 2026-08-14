@@ -3,13 +3,9 @@
 // Recebe variáveis de ambiente do workflow `painel-auto-update.yml`
 // e registra o evento em apps/modulos/status/painel-data.json.
 //
-// Variáveis lidas:
-//   PAINEL_EVENTO          — título curto do evento (ex.: "Push na main · <sha>")
-//   PAINEL_EVENTO_DETALHE  — descrição maior (ex.: mensagem de commit)
-//   PAINEL_EVENTO_AREA     — área/contexto (ex.: "Repositório")
-//   SHA                    — hash do commit
-//   ACTOR                  — quem disparou
-//   MSG                    — mensagem do commit
+// Um push Git prova commit/evento. Ele NÃO prova phase/currentTask de runtime.
+// Campos voláteis só recebem valor atual quando o chamador fornece evidência
+// explícita via PAINEL_PHASE / PAINEL_CURRENT_TASK; caso contrário ficam UNKNOWN.
 
 import { readFileSync, writeFileSync } from "node:fs";
 import { resolve, dirname } from "node:path";
@@ -23,6 +19,8 @@ const detalhe = process.env.PAINEL_EVENTO_DETALHE || process.env.MSG || "";
 const area = process.env.PAINEL_EVENTO_AREA || "Repositório";
 const sha = (process.env.SHA || "").slice(0, 7);
 const actor = process.env.ACTOR || "desconhecido";
+const phaseMedida = String(process.env.PAINEL_PHASE || "").trim();
+const currentTaskMedida = String(process.env.PAINEL_CURRENT_TASK || "").trim();
 const agora = new Date().toISOString();
 const agoraBR = new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" }) + " BRT";
 
@@ -38,11 +36,18 @@ try {
 data.updatedAt = agora;
 data.updatedAtBR = agoraBR;
 
-// 2) Registra commit recente em project
+// 2) Registra somente o que este push consegue provar.
 if (data.project) {
-  if (sha) data.project.branch = data.project.branch || "main";
+  data.project.branch = "main";
   const primeiraLinha = (detalhe || "").split("\n")[0].slice(0, 200);
   if (primeiraLinha) data.project.lastCommit = primeiraLinha;
+
+  data.project.phase = phaseMedida || "UNKNOWN — não medido neste push";
+  data.project.currentTask = currentTaskMedida || "UNKNOWN — não medido neste push";
+  data.project.stateSource = (phaseMedida || currentTaskMedida)
+    ? "explicit-event-payload"
+    : "git-push-only";
+  data.project.stateMeasuredAt = (phaseMedida || currentTaskMedida) ? agora : null;
 }
 
 // 3) Anexa ao events[]

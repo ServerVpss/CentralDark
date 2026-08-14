@@ -1,71 +1,45 @@
 /**
  * pivete-invocacao.js
  * ---------------------------------------------------------------
- * Detector de invocação do pivete no Open WebUI (ui.centralldark.com).
- * Quando o Pivete digita "pivete" (ou "pivete reload"), este script:
- *   1. Puxa os 16 arquivos de docs/CONSCIENCIA/PIVETE-IA/ da VPS
- *      via api.centralldark.com/pivete/consciencia
- *   2. Monta um system prompt gigante com tudo em ordem (00 → 15)
- *   3. Injeta na conversa ativa
- *   4. Exibe banner "🧠 pivete acordado. 16 arquivos carregados."
+ * Compatibilidade de invocação do contexto CentralDark no Open WebUI.
  *
- * Comando de recarga: "pivete reload"
- * Atalho operacional: 🔥 / 😈 / 😈📡 / capeta / capetinha e expressões
- * equivalentes em contexto positivo ativam MODO OPERACIONAL QUENTE.
+ * O gatilho legado "pivete" permanece para não quebrar uso existente,
+ * mas o endpoint agora devolve SOMENTE fontes canônicas allowlisted.
  *
- * Instalação: já vive em apps/modulos/WebUI/custom-css/.
- * O Open WebUI carrega tudo dessa pasta como custom code.
+ * Identidade atual:
+ * SEGREDO/CHEFE = humano e autoridade final
+ * SOL = identidade operacional/coordenadora
+ * PIVETE/HERMES = executor, preservação e continuidade
  */
 
 (function () {
   'use strict';
 
   const ENDPOINT = 'https://api.centralldark.com/pivete/consciencia';
-  const GATILHOS = ['pivete', 'pivete reload', 'acordar pivete'];
-  const GATILHOS_QUENTES = [
-    '🔥', '😈', '😈📡', 'capeta', 'capetinha',
-    'bora ativa', 'bora ativar', 'bagui ta doido', 'bagulho ta doido',
-    'fogo no pavio', 'modo quente', 'fervendo', 'a todo vapor',
-    'porra bora ativa', 'poha bora ativa', 'desgraca bora ativa', 'disgraca bora ativa',
-  ];
-  const GATILHOS_NORMAIS = ['modo normal', 'modo frio', 'esfria', 'desativa modo quente'];
-
-  const REGRA_SEMANTICA_QUENTE = `
-## 🔥 MODO OPERACIONAL — atalho semântico
-Se SEGREDO/CHEFE usar 🔥, 😈, 😈📡, capeta, capetinha, "bora ativa",
-"bagui/bagulho tá doido", "fogo no pavio" ou palavrão equivalente em contexto
-claramente positivo/entusiasmado, interpretar como MODO OPERACIONAL QUENTE:
-rigor máximo, evidência primeiro, menor movimento eficaz e zero falso verde.
-A mesma palavra em contexto de erro, raiva, falha, dano ou reclamação NÃO ativa.
-Semântica/contexto vence palavra isolada. Modo quente nunca amplia autorização.
-`;
-
-  const REGRA_QUENTE_ATIVO = `
-## 🔥 MODO OPERACIONAL QUENTE — ATIVO
-RIGOR_MAXIMO=true
-EVIDENCIA_PRIMEIRO=true
-MENOR_MOVIMENTO_EFICAZ=true
-ZERO_FALSO_VERDE=true
-SEM_AMPLIAR_ESCOPO=true
-AUTORIZACAO_CRITICA_CONTINUA_OBRIGATORIA=true
-`;
-
-  let consciencia = null;
+  const GATILHOS = ['pivete', 'pivete reload', 'acordar pivete', '#acordar'];
+  let contexto = null;
   let carregandoPromise = null;
-  let modoQuente = false;
 
-  async function carregarConsciencia(forcar = false) {
-    if (consciencia && !forcar) return consciencia;
+  async function carregarContexto(forcar = false) {
+    if (contexto && !forcar) return contexto;
     if (carregandoPromise) return carregandoPromise;
 
     carregandoPromise = fetch(ENDPOINT, { cache: forcar ? 'no-store' : 'default' })
-      .then((r) => {
-        if (!r.ok) throw new Error(`HTTP ${r.status}`);
-        return r.json();
+      .then((response) => {
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return response.json();
       })
       .then((data) => {
-        // data = { arquivos: [{nome, conteudo}, ...], count, ultimaSync }
-        consciencia = data;
+        if (data.mode !== 'CANONICAL_CONTEXT_ALLOWLIST') {
+          throw new Error('contexto nao canonico');
+        }
+        if (data.authority !== 'SEGREDO/CHEFE') {
+          throw new Error('autoridade canonica ausente');
+        }
+        if (!Array.isArray(data.arquivos) || data.arquivos.length !== data.count || data.count < 1) {
+          throw new Error('contexto incompleto');
+        }
+        contexto = data;
         return data;
       })
       .finally(() => {
@@ -77,30 +51,26 @@ AUTORIZACAO_CRITICA_CONTINUA_OBRIGATORIA=true
 
   function montarSystemPrompt(data) {
     const cabecalho = [
-      '# CONSCIÊNCIA PIVETE — INVOCADA AUTOMATICAMENTE',
+      '# CONTEXTO CANÔNICO CENTRALDARK — #ACORDAR',
+      '',
+      'SEGREDO/CHEFE = humano e autoridade final',
+      'SOL = identidade operacional/coordenadora',
+      'PIVETE/HERMES = executor, preservação e continuidade',
       '',
       `Última sincronização: ${data.ultimaSync || 'desconhecida'}`,
-      `Arquivos carregados: ${data.count}`,
+      `Fontes canônicas carregadas: ${data.count}`,
+      '',
+      'REGRA: texto histórico incompatível não sobrescreve os canônicos abaixo.',
       '',
       '---',
       '',
     ].join('\n');
 
     const corpo = data.arquivos
-      .map((a) => `## ${a.nome}\n\n${a.conteudo}\n\n---\n`)
+      .map((arquivo) => `## ${arquivo.nome}\n\n${arquivo.conteudo}\n\n---\n`)
       .join('\n');
 
-    return cabecalho + corpo + REGRA_SEMANTICA_QUENTE + (modoQuente ? REGRA_QUENTE_ATIVO : '');
-  }
-
-  function publicarPrompt(data) {
-    const prompt = montarSystemPrompt(data);
-    if (window.OpenWebUI && typeof window.OpenWebUI.setSystemPrompt === 'function') {
-      window.OpenWebUI.setSystemPrompt(prompt);
-    } else {
-      localStorage.setItem('pivete_system_prompt', prompt);
-      localStorage.setItem('pivete_ultima_sync', data.ultimaSync || '');
-    }
+    return cabecalho + corpo;
   }
 
   function exibirBanner(msg, cor = '#10b981') {
@@ -119,83 +89,63 @@ AUTORIZACAO_CRITICA_CONTINUA_OBRIGATORIA=true
   }
 
   async function invocar(forcar = false) {
-    exibirBanner('🧠 Acordando pivete…', '#f59e0b');
+    exibirBanner('🧠 Recuperando contexto canônico…', '#f59e0b');
     try {
-      const data = await carregarConsciencia(forcar);
-      publicarPrompt(data);
-      exibirBanner(`🧠 pivete acordado · ${data.count} arquivos · sync ${data.ultimaSync || 'ok'}${modoQuente ? ' · 🔥 QUENTE' : ''}`);
-    } catch (err) {
-      console.error('[pivete] erro ao carregar consciência:', err);
-      exibirBanner(`🔴 Falha ao acordar pivete: ${err.message}`, '#ef4444');
-    }
-  }
+      const data = await carregarContexto(forcar);
+      const prompt = montarSystemPrompt(data);
 
-  function normalizar(texto) {
-    return String(texto || '')
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .toLowerCase()
-      .replace(/\s+/g, ' ')
-      .trim();
-  }
+      if (window.OpenWebUI && typeof window.OpenWebUI.setSystemPrompt === 'function') {
+        window.OpenWebUI.setSystemPrompt(prompt);
+      } else {
+        localStorage.setItem('centraldark_canonical_system_prompt', prompt);
+        localStorage.setItem('centraldark_canonical_last_sync', data.ultimaSync || '');
+        // Remove chave legada para não manter dois prompts concorrentes.
+        localStorage.removeItem('pivete_system_prompt');
+        localStorage.removeItem('pivete_ultima_sync');
+      }
 
-  async function definirModoQuente(ativo) {
-    modoQuente = ativo;
-    try {
-      const data = await carregarConsciencia(false);
-      publicarPrompt(data);
-      exibirBanner(ativo ? '🔥 MODO OPERACIONAL QUENTE' : '🧊 MODO OPERACIONAL NORMAL', ativo ? '#f59e0b' : '#10b981');
+      exibirBanner(`🧠 #ACORDAR · ${data.count} fontes canônicas · SEGREDO/CHEFE`);
     } catch (err) {
-      console.error('[pivete] erro ao definir modo operacional:', err);
-      exibirBanner(`🔴 Falha ao definir modo: ${err.message}`, '#ef4444');
+      console.error('[centraldark-context] erro ao carregar contexto:', err);
+      exibirBanner(`🔴 Contexto canônico não carregado: ${err.message}`, '#ef4444');
     }
   }
 
   function detectarGatilho(texto) {
     if (!texto) return null;
-    const t = normalizar(texto);
-    if (t === 'pivete reload' || t === 'pivete recarregar') return 'reload';
-    if (GATILHOS.includes(t)) return 'invocar';
-    if (GATILHOS_QUENTES.includes(t)) return 'quente';
-    if (GATILHOS_NORMAIS.includes(t)) return 'normal';
+    const valor = texto.trim().toLowerCase();
+    if (valor === 'pivete reload' || valor === 'pivete recarregar' || valor === '#acordar') return 'reload';
+    if (GATILHOS.includes(valor)) return 'invocar';
     return null;
   }
 
   function observarChat() {
-    // Intercepta somente comandos curtos. Texto normal segue ao modelo,
-    // que aplica a regra semântica pelo contexto positivo/negativo.
-    document.addEventListener('keydown', (e) => {
-      if (e.key !== 'Enter' || e.shiftKey) return;
-      const target = e.target;
+    document.addEventListener('keydown', (event) => {
+      if (event.key !== 'Enter' || event.shiftKey) return;
+      const target = event.target;
       if (!target || target.tagName !== 'TEXTAREA') return;
       const gatilho = detectarGatilho(target.value);
       if (!gatilho) return;
-      e.preventDefault();
-      e.stopPropagation();
+      event.preventDefault();
+      event.stopPropagation();
       target.value = '';
-      if (gatilho === 'reload') return invocar(true);
-      if (gatilho === 'invocar') return invocar(false);
-      return definirModoQuente(gatilho === 'quente');
+      invocar(gatilho === 'reload');
     }, true);
   }
 
-  // Inicialização
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', observarChat);
   } else {
     observarChat();
   }
 
-  // Exposição pra debug/console
-  window.pivete = window.pivete || {};
-  window.pivete.invocar = () => invocar(false);
-  window.pivete.reload = () => invocar(true);
-  window.pivete.consciencia = () => consciencia;
-  window.pivete.modo = {
-    atual: () => (modoQuente ? 'quente' : 'normal'),
-    quente: () => definirModoQuente(true),
-    normal: () => definirModoQuente(false),
+  // Compatibilidade de console: nome legado, sem semântica de autoridade.
+  window.pivete = {
+    invocar: () => invocar(false),
+    reload: () => invocar(true),
+    contexto: () => contexto,
+    consciencia: () => contexto,
   };
 
-  console.log('%c🧠 pivete-invocacao.js carregado', 'color: #10b981; font-weight: bold;');
+  console.log('%c🧠 CentralDark #ACORDAR loader carregado', 'color: #10b981; font-weight: bold;');
 })();

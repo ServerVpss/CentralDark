@@ -2,6 +2,116 @@
 
 > Histórico cronológico de cada execução do workflow `notion-sync.yml`.
 
+## 2026-08-14T07:10:40.574Z · EXEC · target=all · por @segredounlock
+
+- Commit fonte: `f0113e143cdcd557488faf8106a98e91260b11a4`
+- Bases atualizadas: regras, pendencias, decisoes, aprendizados, estrutura
+- Bases ignoradas: —
+  - **regras**: 0 criadas · 4 atualizadas · 0 ignoradas · 0 erros (Git: 4)
+  - **pendencias**: 0 criadas · 1 atualizadas · 0 ignoradas · 0 erros (Git: 1)
+  - **decisoes**: 0 criadas · 39 atualizadas · 0 ignoradas · 0 erros (Git: 39)
+  - **aprendizados**: 0 criadas · 26 atualizadas · 0 ignoradas · 0 erros (Git: 26)
+  - **estrutura**: 0 criadas · 337 atualizadas · 0 ignoradas · 0 erros (Git: 337)
+
+## 2026-08-14T06:04:40.785Z · EXEC · target=all · por @segredounlock
+
+- Commit fonte: `216ba7f7425440b1561fa9ca77fb4512b21e5af0`
+- Bases atualizadas: regras, pendencias, decisoes, aprendizados, estrutura
+- Bases ignoradas: —
+  - **regras**: 0 criadas · 4 atualizadas · 0 ignoradas · 0 erros (Git: 4)
+  - **pendencias**: 0 criadas · 1 atualizadas · 0 ignoradas · 0 erros (Git: 1)
+  - **decisoes**: 0 criadas · 39 atualizadas · 0 ignoradas · 0 erros (Git: 39)
+  - **aprendizados**: 0 criadas · 26 atualizadas · 0 ignoradas · 0 erros (Git: 26)
+  - **estrutura**: 0 criadas · 337 atualizadas · 0 ignoradas · 0 erros (Git: 337)
+
+## 2026-08-14T05:12:02.230Z · EXEC · target=all · por @segredounlock
+
+- Commit fonte: `22ce3096dbf5ddfc70becfe4171d23b35913e282`
+- Bases atualizadas: regras, pendencias, decisoes, aprendizados, estrutura
+- Bases ignoradas: —
+  - **regras**: 0 criadas · 4 atualizadas · 0 ignoradas · 0 erros (Git: 4)
+  - **pendencias**: 0 criadas · 1 atualizadas · 0 ignoradas · 0 erros (Git: 1)
+  - **decisoes**: 0 criadas · 39 atualizadas · 0 ignoradas · 0 erros (Git: 39)
+  - **aprendizados**: 0 criadas · 26 atualizadas · 0 ignoradas · 0 erros (Git: 26)
+  - **estrutura**: 0 criadas · 337 atualizadas · 0 ignoradas · 0 erros (Git: 337)
+
+## 2026-08-14T04:58:28.247Z · EXEC · target=all · por @segredounlock
+
+- Commit fonte: `c602a5a7a66b77ae561185bf412e15b9c503cb0f`
+- Bases atualizadas: regras, pendencias, decisoes, aprendizados, estrutura
+- Bases ignoradas: —
+  - **regras**: 0 criadas · 4 atualizadas · 0 ignoradas · 0 erros (Git: 4)
+  - **pendencias**: 0 criadas · 1 atualizadas · 0 ignoradas · 0 erros (Git: 1)
+  - **decisoes**: 0 criadas · 39 atualizadas · 0 ignoradas · 0 erros (Git: 39)
+  - **aprendizados**: 1 criadas · 25 atualizadas · 0 ignoradas · 0 erros (Git: 26)
+  - **estrutura**: 0 criadas · 337 atualizadas · 0 ignoradas · 0 erros (Git: 337)
+
+## 2026-08-14T04:30:54.896Z · EXEC · target=all · por @segredounlock
+
+- Commit fonte: `5e8be2c9baa823490c449c9425b239380bbf38e1`
+- Bases atualizadas: regras, pendencias, decisoes, aprendizados, estrutura
+- Bases ignoradas: —
+  - **regras**: 0 criadas · 4 atualizadas · 0 ignoradas · 0 erros (Git: 4)
+  - **pendencias**: 0 criadas · 1 atualizadas · 0 ignoradas · 0 erros (Git: 1)
+  - **decisoes**: 0 criadas · 39 atualizadas · 0 ignoradas · 0 erros (Git: 39)
+  - **aprendizados**: 0 criadas · 25 atualizadas · 0 ignoradas · 0 erros (Git: 25)
+  - **estrutura**: 0 criadas · 337 atualizadas · 0 ignoradas · 0 erros (Git: 337)
+
+## 2026-08-14T04:12:56.042Z · EXEC · target=all · por @segredounlock
+
+- Commit fonte: `943a276e343f9cd0c99f02b64e0ba65602b23619`
+- Bases atualizadas: regras, pendencias, decisoes, aprendizados, estrutura
+- Bases ignoradas: —
+  - **regras**: 0 criadas · 4 atualizadas · 0 ignoradas · 0 erros (Git: 4)
+  - **pendencias**: 0 criadas · 1 atualizadas · 0 ignoradas · 0 erros (Git: 1)
+  - **decisoes**: 0 criadas · 39 atualizadas · 0 ignoradas · 0 erros (Git: 39)
+  - **aprendizados**: 0 criadas · 25 atualizadas · 0 ignoradas · 0 erros (Git: 25)
+  - **estrutura**: 0 criadas · 0 atualizadas · 0 ignoradas · 337 erros (Git: 337)
+
+## 2026-08-14T02:38:17.714Z · EXEC · target=all · por @segredounlock
+
+- Commit fonte: `52d66db65929c14c23af133710f0fb782e486d09`
+- Bases atualizadas: regras, pendencias, decisoes, aprendizados, estrutura
+- Bases ignoradas: —
+  - **regras**: 0 criadas · 4 atualizadas · 0 ignoradas · 0 erros (Git: 4)
+  - **pendencias**: 0 criadas · 1 atualizadas · 0 ignoradas · 0 erros (Git: 1)
+  - **decisoes**: 0 criadas · 39 atualizadas · 0 ignoradas · 0 erros (Git: 39)
+  - **aprendizados**: 0 criadas · 25 atualizadas · 0 ignoradas · 0 erros (Git: 25)
+  - **estrutura**: 0 criadas · 0 atualizadas · 0 ignoradas · 335 erros (Git: 335)
+
+## 2026-08-14T02:02:29.039Z · EXEC · target=all · por @segredounlock
+
+- Commit fonte: `b3c9329871d32a9cfd8a4ebc6a66e642bb8928ff`
+- Bases atualizadas: regras, pendencias, decisoes, aprendizados, estrutura
+- Bases ignoradas: —
+  - **regras**: 0 criadas · 4 atualizadas · 0 ignoradas · 0 erros (Git: 4)
+  - **pendencias**: 0 criadas · 1 atualizadas · 0 ignoradas · 0 erros (Git: 1)
+  - **decisoes**: 0 criadas · 39 atualizadas · 0 ignoradas · 0 erros (Git: 39)
+  - **aprendizados**: 10 criadas · 15 atualizadas · 0 ignoradas · 0 erros (Git: 25)
+  - **estrutura**: 0 criadas · 0 atualizadas · 0 ignoradas · 335 erros (Git: 335)
+
+## 2026-08-11T09:59:53.748Z · EXEC · target=all · por @segredounlock
+
+- Commit fonte: `667603fbe1a2577e2845fbec847ee523756dacb4`
+- Bases atualizadas: regras, pendencias, decisoes, aprendizados, estrutura
+- Bases ignoradas: —
+  - **regras**: 0 criadas · 4 atualizadas · 0 ignoradas · 0 erros (Git: 4)
+  - **pendencias**: 0 criadas · 1 atualizadas · 0 ignoradas · 0 erros (Git: 1)
+  - **decisoes**: 0 criadas · 39 atualizadas · 0 ignoradas · 0 erros (Git: 39)
+  - **aprendizados**: 0 criadas · 15 atualizadas · 0 ignoradas · 0 erros (Git: 15)
+  - **estrutura**: 0 criadas · 0 atualizadas · 0 ignoradas · 335 erros (Git: 335)
+
+## 2026-08-10T07:42:20.743Z · EXEC · target=all · por @segredounlock
+
+- Commit fonte: `ca7dca75719807bb6484ccc96fdd6a0639193dea`
+- Bases atualizadas: regras, pendencias, decisoes, aprendizados, estrutura
+- Bases ignoradas: —
+  - **regras**: 0 criadas · 4 atualizadas · 0 ignoradas · 0 erros (Git: 4)
+  - **pendencias**: 0 criadas · 1 atualizadas · 0 ignoradas · 0 erros (Git: 1)
+  - **decisoes**: 0 criadas · 39 atualizadas · 0 ignoradas · 0 erros (Git: 39)
+  - **aprendizados**: 0 criadas · 15 atualizadas · 0 ignoradas · 0 erros (Git: 15)
+  - **estrutura**: 0 criadas · 0 atualizadas · 0 ignoradas · 333 erros (Git: 333)
+
 ## 2026-08-08T05:46:03.654Z · EXEC · target=all · por @segredounlock
 
 - Commit fonte: `7509860c66ce16f171e65c6002e73659f1e122ee`

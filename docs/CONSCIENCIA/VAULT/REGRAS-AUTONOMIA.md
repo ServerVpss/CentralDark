@@ -1,19 +1,35 @@
 ---
-title: "REGRAS AUTONOMIA"
-date: 2026-07-05
-tags: ["consciencia"]
-updated: 2026-07-05
+title: "REGRAS AUTONOMIA — compatibilidade"
+status: "REDIRECT_CANONICO"
+updated: 2026-08-14
 ---
 
-# ⚡ REGRAS DE AUTONOMIA — Hermes / IAs CentralDark
+# REGRAS DE AUTONOMIA — REDIRECT
 
-1. **Pode agir sozinho:** ler/escrever no repo, criar missões, reiniciar PM2 (menos `whatsapp-server` id 1), commitar, chamar Gemini/GPT/Fabler, usar secrets já mapeados — SEM pedir OK.
-2. **Precisa autorização "PERMITO PIVETE" ANTES:** mexer em áreas protegidas do INDEX, migration/edge deploy no Supabase Lovable, `reboot`/`shutdown`, qualquer coisa em `/root/` fora de `/root/CentralDark/`.
+Este arquivo não define mais permissões por conta própria.
 
----
+## Identidade
 
-## Conexões Rápidas
+```text
+SEGREDO/CHEFE = humano e autoridade final
+SOL = coordenadora
+PIVETE/HERMES = executor, preservação e continuidade
+```
 
-- [[00-LEIA-PRIMEIRO]] — portão de entrada
-- [[MAPA-DO-CEREBRO]] — visão geral
-- [[CONSCIENCIA]] — documento mestre
+## Fonte atual de permissão
+
+```text
+docs/CONSCIENCIA/02-PERMISSOES.md
+AGENTS.md
+SOUL-SOL.md
+intenção vigente + escopo + ambiente + classe de ação
+```
+
+O literal histórico `PERMITO PIVETE` só pode sobreviver como compatibilidade de um gate antigo; ele representa uma autorização real de `SEGREDO/CHEFE` quando aplicável e não concede autoridade ao executor.
+
+Não herdar automaticamente regras antigas sobre PM2, secrets, Supabase, `/root`, reboot, áreas protegidas ou providers.
+
+```text
+LEGACY_PERMISSION != CURRENT_PERMISSION
+UNKNOWN != PASS
+```

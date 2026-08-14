@@ -6,6 +6,7 @@ Regras:
 3. Falha se o veredito for APROVAR quando houver qualquer gap.
 4. Falha se a convocação do comitê independente (XP-3) e seu resultado estiverem ausentes.
 5. Falha se o git-blob SHA1 do SKILL.md local divergir do guard canônico.
+6. Falha se o updater de hash voltar a aceitar marcador legado de autoridade.
 
 Uso:
     AUTOLUPA_REPORT=caminho.md pytest .agents/skills/meta-lupa/testes/ -v
@@ -22,6 +23,7 @@ import pytest
 REPO_ROOT = Path(__file__).resolve().parents[4]
 SKILL_PATH = REPO_ROOT / ".agents/skills/meta-lupa/SKILL.md"
 HASH_GUARD = REPO_ROOT / ".agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA"
+HASH_UPDATER = REPO_ROOT / "scripts/lupa/validar_autolupa_hash.py"
 
 CHECKS_OBRIGATORIAS = [
     "XP-1", "XP-2", "XP-3", "XP-4",
@@ -98,5 +100,13 @@ def test_hash_canonico_lupa_bate():
     esperado = HASH_GUARD.read_text(encoding="utf-8").strip().split()[0]
     assert atual == esperado, (
         f"Hash da Lupa divergente do canônico.\n  esperado: {esperado}\n  atual:    {atual}\n"
-        "Se intencional, rode scripts/lupa/validar_autolupa_hash.py --update com PERMITO_PIVETE=1."
+        "Se intencional, use scripts/lupa/validar_autolupa_hash.py --update em evento PR autenticado com label permito-segredo."
     )
+
+
+def test_hash_updater_usa_autoridade_canonica():
+    assert HASH_UPDATER.exists(), f"Updater ausente: {HASH_UPDATER}"
+    source = HASH_UPDATER.read_text(encoding="utf-8")
+    assert "PERMITO_PIVETE" not in source, "Updater voltou a aceitar marcador legado PERMITO_PIVETE"
+    assert "authority-approval.mjs" in source, "Updater não consulta a fonte canônica de autoridade"
+    assert "CANONICAL_AUTHORITY_RECEIPT" in source, "Updater não exige receipt canônico autenticado"

@@ -2,7 +2,7 @@ name: lupa-conformance
 
 on:
   pull_request:
-    branches: [main]
+    branches: [main, program/centraldark-convergencia-omniroute-722]
     types: [opened, reopened, synchronize, ready_for_review, labeled, unlabeled]
   workflow_dispatch:
 
@@ -43,10 +43,6 @@ jobs:
           fetch-depth: 2
           persist-credentials: false
 
-      # O checkout continua preso ao SHA imutável. Esta etapa só dá ao Git local
-      # a identidade de branch já provada pelo evento, porque o OPERATION_RECEIPT
-      # fail-closed exige branch explícita e `git branch --show-current` é vazio
-      # em detached HEAD. A branch local nunca é fonte do conteúdo e não é pushada.
       - name: Vincular branch esperada ao SHA exato
         shell: bash
         env:

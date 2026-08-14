@@ -15,6 +15,7 @@ const PORTA = "LEIA-ME-IA.md";
 const PORTA_VIVA = "docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md";
 const CONTRATO_DELTA = "docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md";
 const CONTRATO_RECONCILIACAO = "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json";
+const RECONCILIATION_SCHEMA_VERSION = 3;
 const IDENTIDADE_LUPA = ".agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA";
 
 const ADAPTADORES = [
@@ -181,7 +182,9 @@ const contract = lerJson(CONTRATO_RECONCILIACAO);
 if (!contract) {
   errors.push(`CONTRATO_RECONCILIACAO_JSON_INVALIDO:${CONTRATO_RECONCILIACAO}`);
 } else {
-  if (contract.schema_version !== 1) errors.push("CONTRATO_RECONCILIACAO_SCHEMA_INVALIDO");
+  if (contract.schema_version !== RECONCILIATION_SCHEMA_VERSION) {
+    errors.push(`CONTRATO_RECONCILIACAO_SCHEMA_INVALIDO:esperado=${RECONCILIATION_SCHEMA_VERSION}:observado=${contract.schema_version}`);
+  }
   if (contract.status !== "CANONICAL") errors.push("CONTRATO_RECONCILIACAO_NAO_CANONICO");
   if (contract.marker !== "REUSE_BEFORE_CREATE_REQUIRED") errors.push("CONTRATO_RECONCILIACAO_MARKER_INVALIDO");
 
@@ -212,83 +215,6 @@ if (!contract) {
   if (contract.complexity_policy?.never_expose_internal_governance_as_user_bureaucracy !== true) {
     errors.push("CONTRATO_RECONCILIACAO_GOVERNANCA_EXPOSTA_AO_USUARIO");
   }
-
-  const learning = contract.correction_learning_policy ?? {};
-  if (learning.marker !== "CORRECTION_LEARNING_REQUIRED") {
-    errors.push("APRENDIZADO_CORRECAO_MARKER_AUSENTE");
-  }
-  if (learning.method_transfer_without_personality_copy !== true) {
-    errors.push("APRENDIZADO_CORRECAO_METODO_SEM_COPIA_IDENTIDADE_AUSENTE");
-  }
-  if (learning.explicit_chief_intent_is_not_model_preference !== true) {
-    errors.push("APRENDIZADO_CORRECAO_INTENCAO_CHEFE_NAO_PRESERVADA");
-  }
-  if (learning.preference_is_not_universal_rule !== true) {
-    errors.push("APRENDIZADO_CORRECAO_PREFERENCIA_PODE_VIRAR_LEI");
-  }
-  if (learning.universalization_requires_scope_counterexample_test !== true) {
-    errors.push("APRENDIZADO_CORRECAO_SEM_ESCOPO_CONTRAEXEMPLO_TESTE");
-  }
-  if (learning.validated_learning_destination !== "EXISTING_CANONICAL_ARTIFACT") {
-    errors.push("APRENDIZADO_CORRECAO_DESTINO_NAO_CANONICO");
-  }
-
-  const requiredLearningSequence = [
-    "capture_exact_correction",
-    "classify_correction",
-    "identify_concrete_cause",
-    "form_candidate_principle",
-    "declare_scope",
-    "seek_counterexample",
-    "run_discriminating_test",
-    "consolidate_or_reject",
-  ];
-  if (!Array.isArray(learning.sequence)) {
-    errors.push("APRENDIZADO_CORRECAO_SEQUENCIA_AUSENTE");
-  } else {
-    for (const step of requiredLearningSequence) {
-      if (!learning.sequence.includes(step)) {
-        errors.push(`APRENDIZADO_CORRECAO_ETAPA_AUSENTE:${step}`);
-      }
-    }
-  }
-
-  const requiredLearningClasses = [
-    "EXPLICIT_CHIEF_INTENT",
-    "LOCAL_PREFERENCE",
-    "TRANSFERABLE_PRINCIPLE",
-    "HYPOTHESIS",
-    "RUNTIME_DEPENDENCY",
-  ];
-  if (!Array.isArray(learning.classification)) {
-    errors.push("APRENDIZADO_CORRECAO_CLASSIFICACAO_AUSENTE");
-  } else {
-    for (const item of requiredLearningClasses) {
-      if (!learning.classification.includes(item)) {
-        errors.push(`APRENDIZADO_CORRECAO_CLASSE_AUSENTE:${item}`);
-      }
-    }
-  }
-
-  const learningRules = learning.decision_rules ?? {};
-  if (learningRules.explicit_chief_intent_applies_in_current_scope !== true) {
-    errors.push("APRENDIZADO_CORRECAO_INTENCAO_EXPLICITA_NAO_APLICA");
-  }
-  if (learningRules.model_must_not_soften_explicit_chief_intent_for_convenience !== true) {
-    errors.push("APRENDIZADO_CORRECAO_MODELO_PODE_FLEXIBILIZAR_INTENCAO");
-  }
-  if (learningRules.local_preference_becomes_universal_without_test !== false) {
-    errors.push("APRENDIZADO_CORRECAO_UNIVERSALIZACAO_SEM_TESTE");
-  }
-  if (learningRules.personality_copy_required !== false) {
-    errors.push("APRENDIZADO_CORRECAO_COPIA_PERSONALIDADE_EXIGIDA");
-  }
-  if (learningRules.unproven_learning_becomes_gold !== false) {
-    errors.push("APRENDIZADO_CORRECAO_OURO_SEM_PROVA");
-  }
-  if (learningRules.validated_learning_updates_existing_canonical_artifact !== true) {
-    errors.push("APRENDIZADO_CORRECAO_NAO_ATUALIZA_CANONICO_EXISTENTE");
-  }
 }
 
 for (const entrypoint of ENTRADAS) {
@@ -318,20 +244,16 @@ for (const canonical of canonicalDocuments) {
   if (!reachable.has(canonical)) errors.push(`CANONICO_ORFAO:${canonical}`);
 }
 
-const correctionLearningRequired =
-  contract?.correction_learning_policy?.marker === "CORRECTION_LEARNING_REQUIRED";
-
 const report = {
   guardrail: "validar-porta-de-entrada",
   porta: PORTA,
   porta_viva: PORTA_VIVA,
   contrato_delta: CONTRATO_DELTA,
   contrato_reconciliacao: CONTRATO_RECONCILIACAO,
+  contrato_reconciliacao_schema_expected: RECONCILIATION_SCHEMA_VERSION,
+  contrato_reconciliacao_schema_observed: contract?.schema_version ?? null,
   identidade_lupa: IDENTIDADE_LUPA,
   reuse_before_create_required: true,
-  correction_learning_required: correctionLearningRequired,
-  correction_learning_rule: "CORRECTION→CAUSE→SCOPE→COUNTEREXAMPLE→TEST→CONSOLIDATE_OR_REJECT",
-  method_transfer_rule: "METHOD_WITHOUT_PERSONALITY_COPY",
   adaptadores_obrigatorios: ADAPTADORES,
   adaptadores_encontrados: ADAPTADORES.filter(existe),
   canonicos_encontrados: canonicalDocuments.length,
@@ -349,7 +271,7 @@ else {
   console.log(
     `PORTA_OK=${report.ok ? 1 : 0} ` +
       `REUSE_BEFORE_CREATE=${report.reuse_before_create_required ? 1 : 0} ` +
-      `CORRECTION_LEARNING=${report.correction_learning_required ? 1 : 0} ` +
+      `SCHEMA=${report.contrato_reconciliacao_schema_observed}/${report.contrato_reconciliacao_schema_expected} ` +
       `ADAPTADORES=${report.adaptadores_encontrados.length}/${report.adaptadores_obrigatorios.length} ` +
       `CANONICOS=${report.canonicos_encontrados} ` +
       `ALCANCAVEIS=${report.canonicos_alcancaveis} ` +

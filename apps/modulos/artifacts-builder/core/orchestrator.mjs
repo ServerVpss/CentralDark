@@ -9,6 +9,8 @@ import { join, dirname, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execSync, exec } from 'node:child_process';
 import { createServer } from 'node:http';
+import { buildArtifactRecord } from './schema.mjs';
+import { renderSessionReportHtml, renderSessionReportCss } from './session-report.mjs';
 
 const BASE = dirname(dirname(fileURLToPath(import.meta.url)));
 const PENDENTE  = join(BASE, 'missions/pendente');
@@ -53,8 +55,65 @@ function parseMissao(content) {
   return { nome, tipo, desc, reqs, rotas, tema };
 }
 
+// Tipos renderizados por um construtor dedicado em vez do template genérico
+// de cards — por capacidade, não "3D em tudo pra parecer bonito" (contrato
+// universal, seção 5). Novos tipos diferenciados entram aqui, um de cada vez.
+const RENDERERS_DEDICADOS = new Set(['session-report']);
+
+/** Extrai um bloco ```json ... ``` de dentro do texto de Requisitos. Formato
+ * escolhido para não obrigar a reescrever `parseMissao()` (correção mínima):
+ * o schema universal (schema.mjs) continua sendo a fonte de verdade do
+ * contrato; isto é só onde o payload chega dentro do markdown existente. */
+function extrairPayloadJSON(reqs) {
+  const match = String(reqs ?? '').match(/```json\s*([\s\S]*?)```/i);
+  if (!match) throw new Error('SESSION_REPORT_PAYLOAD_JSON_AUSENTE');
+  return JSON.parse(match[1]);
+}
+
+async function construirArtefatoDedicado(parsed) {
+  const { nome, tipo, reqs } = parsed;
+  const slug = slugify(nome);
+  const dir = join(PUBLIC, slug);
+  await mkdir(dir, { recursive: true });
+
+  log(`🏗️ Construindo (renderer dedicado): ${nome} (${tipo}) em ${dir}`);
+
+  const payload = extrairPayloadJSON(reqs);
+  const record = buildArtifactRecord({
+    artifact_type: tipo,
+    title: nome,
+    slug,
+    purpose: payload.purpose,
+    story: payload.story ?? null,
+    producer: payload.producer,
+    mission_id: payload.mission_id ?? null,
+    source: payload.source,
+    state: payload.state ?? 'PROVED',
+    views: { human: 'html', machine: 'manifest.json' },
+    evidence: payload.data?.evidence ?? [],
+    relations: payload.relations,
+  });
+
+  if (!record.validation.ok) {
+    log(`⛔ Artefato BLOQUEADO (validação falhou): ${record.validation.errors.join(', ')}`);
+  }
+
+  const html = renderSessionReportHtml(record, payload.data);
+  await writeFile(join(dir, 'index.html'), html, 'utf8');
+  await writeFile(join(dir, 'style.css'), renderSessionReportCss(), 'utf8');
+  await writeFile(join(dir, 'app.js'), '// renderer dedicado: sem JS de runtime, HTML já vem pronto do build\n', 'utf8');
+  await writeFile(join(dir, 'manifest.json'), JSON.stringify(record, null, 2), 'utf8');
+
+  await atualizarIndiceGlobal();
+  log(`✅ Artefato construído (dedicado): ${slug} · state=${record.state} · digest=${record.content_digest.slice(0, 12)}`);
+  return { slug, dir, manifest: record };
+}
+
 async function construirArtefato(parsed) {
   const { nome, tipo, desc, reqs, rotas, tema } = parsed;
+
+  if (RENDERERS_DEDICADOS.has(tipo)) return construirArtefatoDedicado(parsed);
+
   const slug = slugify(nome);
   const dir = join(PUBLIC, slug);
   await mkdir(dir, { recursive: true });
@@ -249,16 +308,25 @@ async function atualizarIndiceGlobal() {
     <h1>🏗️ Artifacts Builder</h1>
     <p>Sistema autônomo de construção de artefatos · ${items.length} artefato(s) construído(s)</p>
     <div class="grid">
-      ${items.map(m => `
+      ${items.map(m => {
+        // Schema tolerante: manifests antigos (nome/tipo/criado/descricao) e
+        // o schema universal novo (title/artifact_type/created_at/purpose)
+        // convivem sem migração — zero regressão nos 13 artefatos existentes.
+        const tipo = m.artifact_type ?? m.tipo ?? 'desconhecido';
+        const titulo = m.title ?? m.nome ?? m.slug;
+        const desc = m.purpose?.what ?? m.descricao ?? '';
+        const criado = m.created_at ?? m.criado ?? new Date().toISOString();
+        return `
         <a href="/${m.slug}/">
           <div class="card">
-            <div class="tipo">${m.tipo}</div>
-            <h2>${m.nome}</h2>
-            <div class="desc">${(m.descricao || '').slice(0, 120)}</div>
-            <div class="data">${new Date(m.criado).toLocaleString('pt-BR')}</div>
+            <div class="tipo">${tipo}</div>
+            <h2>${titulo}</h2>
+            <div class="desc">${String(desc).slice(0, 120)}</div>
+            <div class="data">${new Date(criado).toLocaleString('pt-BR')}</div>
           </div>
         </a>
-      `).join('')}
+      `;
+      }).join('')}
     </div>
     ${items.length === 0 ? '<p style="text-align:center;padding:3rem;color:var(--muted);">Nenhum artefato construído ainda. Crie uma missão em missions/pendente/</p>' : ''}
   </div>
@@ -332,6 +400,19 @@ const MIME = {
 const server = createServer(async (req, res) => {
   try {
     let pathname = new URL(req.url, 'http://localhost').pathname;
+
+    // BUGFIX (achado ao testar este PR, não relacionado ao schema universal):
+    // havia um segundo listener `server.on('request', ...)` só para /health.
+    // Node dispara TODOS os listeners de 'request' pra cada requisição, então
+    // /health caía nos dois: este handler (404, escreve headers) E o outro
+    // (200, tenta escrever de novo) → ERR_HTTP_HEADERS_SENT, processo cai.
+    // Reproduzido rodando o servidor real e batendo em /health antes deste
+    // fix. Handler único agora; ver TWINS no PR.
+    if (pathname === '/health') {
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ status: 'ok', uptime: process.uptime(), port: PORT }));
+      return;
+    }
     if (pathname === '/') pathname = '/index.html';
 
     const filePath = join(PUBLIC, pathname);
@@ -356,14 +437,6 @@ const server = createServer(async (req, res) => {
 });
 
 server.listen(PORT, '0.0.0.0', () => log(`🏗️ Artifacts Builder server :${PORT}`));
-
-// ── Health endpoint ──
-server.on('request', (req, res) => {
-  if (req.url === '/health') {
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ status: 'ok', uptime: process.uptime(), port: PORT }));
-  }
-});
 
 // ── Loop ──
 async function loop() {

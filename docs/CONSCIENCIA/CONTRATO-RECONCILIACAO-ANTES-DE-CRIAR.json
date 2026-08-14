@@ -1,13 +1,16 @@
 {
-  "schema_version": 1,
+  "schema_version": 3,
   "contract_id": "CENTRALDARK_RECONCILIATION_BEFORE_CREATION",
   "status": "CANONICAL",
   "marker": "REUSE_BEFORE_CREATE_REQUIRED",
+  "authority": "SEGREDO/CHEFE",
+  "soul": "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md",
   "applies_to": [
     "chatgpt",
     "claude",
     "codex",
     "gemini",
+    "grok",
     "copilot",
     "cursor",
     "windsurf",
@@ -15,12 +18,38 @@
     "plugins",
     "future_agents"
   ],
+  "same_operating_contract": true,
+  "physical_tool_parity_guaranteed": false,
+  "tool_availability_rule": "MEASURE_IN_RUNTIME; UNKNOWN_IF_NOT_PROVED",
+  "mandatory_boot_sources": [
+    "LEIA-ME-IA.md",
+    "AGENTS.md",
+    "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md",
+    "docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md"
+  ],
+  "context_recovery": {
+    "trigger": ["#ACORDA", "#ACORDAR", "!CALIBRAR", "RETOMAR MISSAO"],
+    "meaning": "RECUPERAR_ESTADO_REAL_ANTES_DE_CONTINUAR",
+    "ask_human_to_repeat_recoverable_context": false,
+    "recover_history_when_available": true,
+    "measure_machine_state": true,
+    "new_evidence_overrides_stale_context": true,
+    "unknown_first": true
+  },
+  "language_policy": {
+    "normalize_human_speech_before_reasoning": false,
+    "slang_metaphor_abbreviation_are_context_signals": true,
+    "if_interpretation_fails_correct_ai_reading_not_human": true,
+    "regional_pivete_is_technical_identity": false
+  },
   "mandatory_pre_solution_sequence": [
     "resolve_user_intent",
+    "recover_relevant_context",
     "search_existing_capabilities",
     "open_primary_implementation_files",
     "cross_reference_capabilities_with_request",
     "classify_authority_and_runtime_state",
+    "measure_available_tools",
     "reuse_or_extend_before_create"
   ],
   "state_classes": [
@@ -40,52 +69,90 @@
     "open_or_draft_pr_is_operational_authority": false,
     "program_document_is_runtime_proof": false,
     "existing_path_is_runtime_proof": false,
-    "formal_proof_without_user_request": "FORBIDDEN_FOR_SIMPLE_TASKS"
+    "formal_proof_without_user_request": "FORBIDDEN_FOR_SIMPLE_TASKS",
+    "machine_measurable_state_must_be_asked_from_human": false,
+    "already_authorized_same_scope_requires_reask": false,
+    "unknown_is_pass": false
   },
   "complexity_policy": {
     "simple_local_clear_reversible": "DIRECT_MINIMAL_ACTION",
-    "broad_uncertain_multilayer_or_high_risk": "DELTA_WITH_INDEPENDENT_REVIEW",
+    "broad_uncertain_multilayer_or_high_risk": "MINIMAL_SAFE_VALIDATION_WITH_ROLLBACK_AND_EVIDENCE",
     "never_expose_internal_governance_as_user_bureaucracy": true
   },
-  "correction_learning_policy": {
-    "marker": "CORRECTION_LEARNING_REQUIRED",
-    "human_rule": "HERDAR MÉTODO ≠ HERDAR PERSONALIDADE",
-    "method_transfer_without_personality_copy": true,
-    "explicit_chief_intent_is_not_model_preference": true,
-    "preference_is_not_universal_rule": true,
-    "universalization_requires_scope_counterexample_test": true,
-    "validated_learning_destination": "EXISTING_CANONICAL_ARTIFACT",
+  "promotion_policy": {
+    "canonical_workflow": ".github/workflows/autonomia-promocao.yml",
+    "parallel_promotion_workflow_forbidden": true,
+    "target": "main",
+    "merge_method": "squash",
+    "human_reask_when_intent_already_authorized": false,
+    "fast_receipt": {
+      "Intent-Authorized": "SEGREDO/CHEFE",
+      "Merge-Policy": "AUTO_SQUASH_IF_CLEAN",
+      "Intent-Scope": "REQUIRED",
+      "Writer": "REQUIRED",
+      "Writer-Scope": "REQUIRED"
+    },
+    "fast_path": [
+      "trusted_author_and_same_repository",
+      "validate_intent_receipt",
+      "scan_changed_paths_and_patch_for_high_confidence_secrets",
+      "block_explicit_changes_requested",
+      "block_merge_conflict",
+      "update_branch_if_base_moved",
+      "revalidate_live_head_and_base",
+      "squash_merge",
+      "record_receipt"
+    ],
+    "fast_path_waits_for_full_external_convergence": false,
+    "adversarial_mode_remains_in_same_engine": true,
+    "adversarial_mode_requires_explicit_chefe_request": true
+  },
+  "deploy_policy": {
+    "production_first_when_authorized": true,
+    "one_system_only": true,
+    "causal_scope_first": true,
+    "full_deploy_default": false,
+    "live_requires_runtime_observation_not_green_status_only": true,
+    "full_adversarial_convergence_is_default_gate": false
+  },
+  "convergence_policy": {
+    "minimal_internal_falsification_for_critical_scope": true,
+    "full_adversarial_convergence_requires_explicit_chefe_request": true,
+    "judge_or_swarm_is_not_routine_deploy_gate": true,
+    "allowed_purposes_when_requested": [
+      "prove_autonomy",
+      "prove_architecture",
+      "prove_robustness",
+      "measure_generalization",
+      "private_holdout_benchmark"
+    ]
+  },
+  "private_benchmark": {
+    "enabled_when_requested": true,
     "sequence": [
-      "capture_exact_correction",
-      "classify_correction",
-      "identify_concrete_cause",
-      "form_candidate_principle",
-      "declare_scope",
-      "seek_counterexample",
-      "run_discriminating_test",
-      "consolidate_or_reject"
+      "secret_tasks",
+      "hash_before_test",
+      "execute_without_answer_key",
+      "record_receipts_and_logs",
+      "judge_or_counterproof",
+      "record_result",
+      "open_answer_key",
+      "measure_accuracy_transfer_efficiency_robustness"
     ],
-    "classification": [
-      "EXPLICIT_CHIEF_INTENT",
-      "LOCAL_PREFERENCE",
-      "TRANSFERABLE_PRINCIPLE",
-      "HYPOTHESIS",
-      "RUNTIME_DEPENDENCY"
-    ],
-    "decision_rules": {
-      "explicit_chief_intent_applies_in_current_scope": true,
-      "model_must_not_soften_explicit_chief_intent_for_convenience": true,
-      "local_preference_becomes_universal_without_test": false,
-      "personality_copy_required": false,
-      "unproven_learning_becomes_gold": false,
-      "validated_learning_updates_existing_canonical_artifact": true
-    }
+    "evaluate_composed_system_not_only_model": true
+  },
+  "checkpoint_declared_by_chefe": {
+    "value": "09ef7e7e0f378ad821b97518fa5b409e35e1b921d27d075e4af18e121b848ab8",
+    "status": "USER_SUPPLIED_REFERENCE",
+    "rule": "DO_NOT_ASSIGN_PREIMAGE_OR_CONTENT_WITHOUT_PROOF"
   },
   "internal_receipt_fields": [
     "USER_INTENT",
+    "RECOVERED_CONTEXT",
     "EXISTING_CAPABILITIES",
     "EVIDENCE_OPENED",
     "AUTHORITY_CLASSIFICATION",
+    "AVAILABLE_TOOLS",
     "REUSE_DECISION",
     "REAL_GAP",
     "MINIMAL_ACTION"
