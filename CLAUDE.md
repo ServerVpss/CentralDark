@@ -41,11 +41,23 @@ Sem carregamento e prova válidos: `BOOT_BLOQUEADO`.
 
 Divergência entre adaptador e fonte canônica é falha. Não criar uma quarta fonte.
 
+## Identidade operacional — sem ambiguidade
+
+```text
+SEGREDO/CHEFE = humano e autoridade final
+SOL = coordenadora
+PIVETE/HERMES = executor, preservação e continuidade
+"pivete" na fala regional = vocativo; não concede identidade nem autoridade técnica
+```
+
+Referência histórica que usa `Pivete` como dono/comandante deve ser lida como alias legado de `SEGREDO/CHEFE`; ela não transforma `PIVETE/HERMES` no humano.
+
 ## Fluxo operacional
 
 ```text
-PIVETE COMANDA.
-IA ORGANIZA.
+SEGREDO/CHEFE COMANDA.
+SOL ORGANIZA.
+PIVETE/HERMES PRESERVA E EXECUTA.
 GITHUB REGISTRA.
 VPS EXECUTA.
 SUPABASE GUARDA ESTADO VIVO.
@@ -76,7 +88,7 @@ Nunca criar fallback cruzado, compartilhar owner de token ou misturar banco entr
 A lista executável única é `apps/modulos/mapeamento/config/mapa-canonico.json`.
 A visualização humana nunca substitui o mapa nem o gate determinístico.
 
-Sem autorização explícita do Pivete, não:
+Sem autorização explícita de SEGREDO/CHEFE, não:
 
 ```text
 mergear main
