@@ -100,6 +100,73 @@ ANTECIPAR
 → AUDITAR_PREVISAO_X_RESULTADO
 ```
 
+## Tempo e escopo da evidência
+
+Informação recebida agora não é automaticamente informação que **aconteceu agora**; informação visualmente próxima não é automaticamente informação do **mesmo escopo técnico**.
+
+Antes de promover qualquer observação a estado vivo, separar três coordenadas:
+
+```text
+EVENT_TIME        = quando o evento ocorreu
+OBSERVATION_TIME  = quando o agente observou/mediu a evidência
+OPERATIONAL_SCOPE = repo + ref/PR/HEAD + path + Writer + perímetro aplicável
+```
+
+E só então perguntar:
+
+```text
+IS_STILL_TRUE_NOW?
+```
+
+Invariantes:
+
+```text
+OBSERVED_NOW_DOES_NOT_MEAN_HAPPENED_NOW=true
+CONVERSATIONAL_PROXIMITY_DOES_NOT_MEAN_SAME_SCOPE=true
+PRINT_IS_CONTEXT_NOT_LIVE_STATE=true
+SHA_IDENTIFIES_A_STATE_NOT_THE_CURRENT_MAIN=true
+REMOTE_CURRENT_STATE_WINS=true
+SCOPE_AND_TIME_REQUIRED_FOR_STATE_CLAIMS=true
+```
+
+Fluxo mínimo:
+
+```text
+PRINT|RELATO|LOG|SHA
+→ IDENTIFICAR EVENT_TIME QUANDO DISPONIVEL
+→ IDENTIFICAR OPERATIONAL_SCOPE
+→ REGISTRAR OBSERVATION_TIME
+→ MEDIR ESTADO VIVO DO MESMO ALVO
+→ COMPARAR
+→ DELTA
+```
+
+Um print antigo continua útil como evidência temporal, mas não governa o presente sem remedição. Um HEAD antigo continua sendo um endereço verificável de estado, mas não vira `main atual` por aparecer numa conversa nova.
+
+Quando `main` ou outro alvo avança durante uma missão, não reiniciar tudo. Recalcular apenas a fronteira cuja relação com o novo estado possa ter mudado:
+
+```text
+NEW_HEAD
+→ IDENTIFICAR FRONTEIRA AFETADA
+→ INVALIDAR SOMENTE PROVAS DEPENDENTES DO ESTADO ANTIGO
+→ PRESERVAR FINDINGS/PROVAS INDEPENDENTES
+→ REMEDIR
+→ CONTINUAR O FIO
+```
+
+Se o instrumento vivo cair:
+
+```text
+INSTRUMENT_UNAVAILABLE
+→ LIVE_STATE_CONFIDENCE_DOWN
+→ OLD_CONTEXT_REMAINS_CONTEXT
+→ LIVE_STATE_CLAIM=UNPROVEN
+→ BLOQUEAR SOMENTE A FRONTEIRA QUE DEPENDE DO INSTRUMENTO
+→ CONTINUAR TRABALHO INDEPENDENTE
+```
+
+Indisponibilidade de instrumento nunca é compensada com confiança narrativa maior.
+
 ## Relação com o aprendizado por confronto
 
 Metacognição operacional é uma especialização do contrato de ganho informacional:

@@ -1,0 +1,13 @@
+{
+  "status": "PASS_WITH_SYNTHETIC_FIXTURES_CLASSIFIED",
+  "scope": "PACOTE-SESSAO-INTEIRA-CENTRALDARK-20260806.zip",
+  "common_live_secret_patterns_found": 0,
+  "synthetic_fixture_matches": 13,
+  "suspicious_filenames": 2,
+  "classification": {
+    "synthetic_token_examples": "Fixtures de testes de sanitização; valores deliberadamente artificiais.",
+    "secret_reader_files": "Mutantes adversariais que tentam ler .env e devem ser bloqueados; não são arquivos secretos."
+  },
+  "limitations": "Varredura por padrões conhecidos reduz risco, mas não prova ausência matemática de todo segredo possível.",
+  "repository_visibility": "private"
+}

@@ -1,0 +1,56 @@
+schema: centraldark.learning.session-evidence.v1
+intent_author: SEGREDO/CHEFE
+date: 2026-08-06
+repository: ServerVpss/CentralDark
+base:
+  branch: main
+  sha: f692e3118304724c0c860b56bb00a33e18edeac5
+state:
+  artifact_recovered: true
+  identity_proved: true
+  local_revalidation: PASS
+  package_complete_accessible_scope: true
+  pr_candidate: true
+  canonical: false
+artifacts:
+  interrupted:
+    path: evidence/session-completa-20260806/GATILHO-UNIVERSAL-IA-RIGOR-MAXIMO.zip
+    sha256: 877057300af4369e01e9636809ee6b632ccac9f94db2894acd5f1a6b887588fd
+    size_bytes: 46740
+    zip_entries: 54
+    dangerous_paths: 0
+    symlinks: 0
+    crc: PASS
+  full_session_accessible_scope:
+    original:
+      name: PACOTE-SESSAO-INTEIRA-CENTRALDARK-20260806.zip
+      sha256: c00aa54b2ef2cb613067b50da58ef53b55e73b8074d078c5814d9558da07daf6
+      size_bytes: 32203566
+      zip_entries: 742
+      dangerous_paths: 0
+      symlinks: 0
+      crc: PASS
+      embedded_in_pr: false
+      delivered_in_conversation: true
+  learning_bundle:
+    path: evidence/session-completa-20260806/ARTEFATO-APRENDIZADO-COMPLETO-CENTRALDARK-20260806.zip
+    generated_on_branch: true
+    includes_exact_interrupted_artifact: true
+runtime_evidence:
+  node_check: {total: 24, pass: 24}
+  tests: {total: 31, pass: 31, fail: 0, skipped: 0, cancelled: 0, todo: 0}
+  counterproofs: {total: 5, closed: 5}
+  code_seal: {status: PASS, tracked_files: 37, missing: 0, changed: 0, untracked: 0}
+  secret_file_read_scan: PASS
+  functions_documented: {total: 48, dual_description_missing: 0}
+  live_api_called: false
+security:
+  no_merge: true
+  no_deploy: true
+  no_restart: true
+  no_production_change: true
+  repository_private: true
+  synthetic_fixture_matches_classified: true
+promotion_gate:
+  current: PR_CANDIDATE
+  required_for_canonical: HUMAN_REVIEW_AND_AUTHORIZED_MERGE
