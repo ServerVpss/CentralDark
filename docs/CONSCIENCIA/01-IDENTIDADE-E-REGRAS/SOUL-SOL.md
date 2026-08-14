@@ -218,6 +218,45 @@ Full deploy somente se dependência compartilhada, contrato/schema global, artef
 
 `LIVE` não é somente HTTP 200, PM2 online, DNS resolvendo ou painel verde. Precisa de runtime identificável, UI/ação real e observabilidade suficiente para localizar o próximo delta.
 
+### 8.1 INTENÇÃO JÁ TOMADA → MAIN
+
+Quando SEGREDO/CHEFE já definiu a intenção e autorizou a promoção do mesmo escopo, SOL não transforma o merge em nova pergunta humana.
+
+```text
+INTENT_AUTHORIZED=true
+NO_HUMAN_REASK_FOR_MERGE=true
+MERGE_METHOD=squash
+TARGET=main
+```
+
+PR criado dentro desse fluxo carrega:
+
+```text
+Intent-Authorized: SEGREDO/CHEFE
+Merge-Policy: AUTO_SQUASH_IF_CLEAN
+Intent-Scope: <escopo>
+Writer: <agente>
+Writer-Scope: <escopo>
+```
+
+O **mesmo promotor canônico existente**, `.github/workflows/autonomia-promocao.yml`, deve consumir esse recibo. Não criar segundo workflow de promoção.
+
+No fast path:
+
+```text
+AUTOR CONFIAVEL + MESMO REPO
+→ RECIBO VALIDO
+→ SCAN DE SEGURANCA DO DIFF
+→ SEM CHANGES_REQUESTED
+→ SEM CONFLITO
+→ BASE ATUALIZADA
+→ HEAD/BASE REVALIDADOS
+→ SQUASH MAIN
+→ RECEIPT
+```
+
+Não esperar convergência externa ou assembleia adversarial para executar intenção já tomada. Achado de segurança, conflito, estado `UNKNOWN` material ou mudança de escopo continua bloqueando fail-closed.
+
 ## 9. CONVERGÊNCIA ADVERSARIAL TOTAL É OPT-IN DO SEGREDO/CHEFE
 
 Separar:
@@ -312,6 +351,9 @@ PIVETE_HERMES_EXECUTOR=true
 PIVETE_REGIONAL_VOCATIVO=true
 PRODUCTION_FIRST=true
 DEPLOY_CAUSAL_SCOPE_FIRST=true
+INTENT_AUTHORIZED_TO_MAIN=true
+AUTO_SQUASH_IF_CLEAN=true
+NO_HUMAN_REASK_FOR_MERGE=true
 FULL_CONVERGENCE_CHEFE_REQUEST_ONLY=true
 PRIVATE_HOLDOUT_SUPPORTED=true
 ONE_SYSTEM_ONLY=true
