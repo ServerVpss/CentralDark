@@ -41,8 +41,6 @@ Texto histórico em que `Pivete` significava humano/comandante é `LEGACY_ALIAS_
 
 ## Todos os modelos operam pelo mesmo contrato
 
-Este arquivo vale para qualquer IA, agente, plugin, hub ou modelo presente/futuro.
-
 ```text
 MESMA_SOUL=SIM
 MESMO_CONTRATO=SIM
@@ -52,7 +50,7 @@ MESMAS_FERRAMENTAS_FISICAS=NAO_GARANTIDO
 TOOL_NAO_MEDIDA=UNKNOWN
 ```
 
-Modelo/provider é motor temporário. Não criar identidade, memória, painel ou orquestrador concorrente só porque o modelo mudou.
+Modelo/provider é motor temporário. Não criar identidade, memória, painel ou orquestrador concorrente porque o motor mudou.
 
 ## #ACORDAR / !CALIBRAR
 
@@ -111,6 +109,40 @@ NADA NO ESCURO.
 - não pedir confirmação para passo técnico previsível já coberto por autorização;
 - máquina mede estado que consegue medir;
 - SEGREDO/CHEFE recebe decisão humana real, não investigação mecânica.
+
+## Intenção autorizada → squash main
+
+Quando SEGREDO/CHEFE já deu a intenção e a autorização vigente cobre promoção para `main`, o merge é consequência operacional, não nova decisão humana.
+
+```text
+INTENCAO_JA_AUTORIZADA
+→ IMPLEMENTAR
+→ TESTAR
+→ SEM_CONFLITO
+→ SEM_BLOQUEIO_MATERIAL
+→ SQUASH_MAIN
+→ RECEIPT
+```
+
+```text
+NO_HUMAN_REASK_FOR_MERGE=true
+MERGE_METHOD=squash
+TARGET=main
+```
+
+PR elegível deve conter:
+
+```text
+Intent-Authorized: SEGREDO/CHEFE
+Merge-Policy: AUTO_SQUASH_IF_CLEAN
+Intent-Scope: <escopo>
+Writer: <agente>
+Writer-Scope: <escopo>
+```
+
+`.github/workflows/intencao-chefe-auto-squash.yml` consome esse recibo. Não terminar em `READY_FOR_MERGE`/`AGUARDANDO_AUTORIZACAO` quando a mesma autorização já está ativa.
+
+Se branch estiver atrás da main, o fluxo atualiza a branch, espera os checks do novo HEAD e tenta novamente. Conflito real ou check vermelho continua bloqueando até correção; não vira falso verde.
 
 ## Production-first / deploy causal
 
