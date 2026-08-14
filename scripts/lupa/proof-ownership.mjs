@@ -12,6 +12,7 @@ export function validateProofOwnership(contract, { exists = () => true } = {}) {
   if (contract.schema_version !== 1) errors.push("PROOF_OWNERSHIP_SCHEMA_INVALID");
   if (contract.status !== "CANONICAL") errors.push("PROOF_OWNERSHIP_NOT_CANONICAL");
   if (contract.marker !== "PROOF_OWNERSHIP_REQUIRED") errors.push("PROOF_OWNERSHIP_MARKER_INVALID");
+  if (contract.coverage_status !== "PARTIAL_EXPLICIT") errors.push("PROOF_OWNERSHIP_COVERAGE_MUST_BE_PARTIAL_EXPLICIT");
 
   const rules = contract.global_rules ?? {};
   const expectedRules = {
@@ -21,6 +22,7 @@ export function validateProofOwnership(contract, { exists = () => true } = {}) {
     written_rule_without_prover: "UNPROVEN",
     prover_without_negative_test: "UNPROVEN",
     same_proof_class_multiple_owners: "BLOCKED_DUPLICATE_PROOF_OWNER",
+    unregistered_invariant: "UNPROVEN_NOT_OWNED",
     unknown_skipped_pending: "NOT_PASS",
     proof_graph_must_be_acyclic: true,
     proof_must_end_in_external_anchor: true,
@@ -116,6 +118,7 @@ export function validateProofOwnership(contract, { exists = () => true } = {}) {
     ok: errors.length === 0,
     topology_only: true,
     invariant_proof: false,
+    coverage_status: contract.coverage_status,
     invariant_count: invariants.length,
     proof_classes: [...ownerByClass.keys()].sort(),
     errors,
@@ -148,6 +151,6 @@ if (isMain) {
     exists: (relativePath) => existsSync(join(root, relativePath)),
   });
   for (const error of result.errors) console.error(`ERRO ${error}`);
-  console.log(`PROOF_GRAPH_STRUCTURE_OK=${result.ok ? 1 : 0} TOPOLOGY_ONLY=1 INVARIANT_PROOF=0 INVARIANTS=${result.invariant_count} CLASSES=${result.proof_classes.length} ERROS=${result.errors.length}`);
+  console.log(`PROOF_GRAPH_STRUCTURE_OK=${result.ok ? 1 : 0} COVERAGE=${result.coverage_status} TOPOLOGY_ONLY=1 INVARIANT_PROOF=0 INVARIANTS=${result.invariant_count} CLASSES=${result.proof_classes.length} ERROS=${result.errors.length}`);
   process.exit(result.ok ? 0 : 1);
 }
