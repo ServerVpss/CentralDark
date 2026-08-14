@@ -2,7 +2,7 @@ name: Lupa Drift Guard
 
 on:
   pull_request:
-    branches: [main, pivete/dev, pivete/auditoria]
+    branches: [main, program/centraldark-convergencia-omniroute-722, pivete/dev, pivete/auditoria]
     types: [opened, reopened, synchronize, ready_for_review, labeled, unlabeled]
   workflow_dispatch:
 
@@ -15,17 +15,54 @@ concurrency:
 
 jobs:
   drift-guard:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 20
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+
+      - name: Bloquear HEAD de fork no runner persistente
+        id: fork_guard
+        if: github.event_name == 'pull_request' || github.event_name == 'pull_request_target'
+        shell: bash
+        env:
+          HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
+          BASE_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          if [ -z "${HEAD_REPO}" ] || [ "${HEAD_REPO}" != "${BASE_REPO}" ]; then
+            echo "blocked=true" >> "$GITHUB_OUTPUT"
+            echo "cause=FORK_HEAD" >> "$GITHUB_OUTPUT"
+            echo "BLOCKED_FORK_HEAD repo=${HEAD_REPO:-empty}"
+            exit 1
+          fi
+          echo "blocked=false" >> "$GITHUB_OUTPUT"
+          echo "FORK_GUARD_OK ${HEAD_REPO}"
+
+      - name: Checkout exact PR HEAD
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 2
+          persist-credentials: false
+
+      - name: Provar identidade do checkout
+        shell: bash
+        env:
+          EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          ACTUAL_SHA="$(git rev-parse HEAD)"
+          if [ "${ACTUAL_SHA}" != "${EXPECTED_SHA}" ]; then
+            echo "DRIFT_GUARD_HEAD_MISMATCH expected=${EXPECTED_SHA} actual=${ACTUAL_SHA}"
+            exit 1
+          fi
+          echo "DRIFT_GUARD_HEAD=PASS sha=${ACTUAL_SHA}"
 
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38
         with:
           python-version: '3.11'
 
-      - name: Confirmar canônica única no disco
+      - name: Confirmar MetaLupa como técnica Lupa canônica única
         run: |
           set -e
           test -f .agents/skills/meta-lupa/SKILL.md || { echo "❌ canônica ausente"; exit 1; }
@@ -37,7 +74,7 @@ jobs:
               fi
             done
           done
-          echo "✅ apenas .agents/skills/meta-lupa/ está ativo"
+          echo "✅ meta-lupa é a única técnica Lupa canônica ativa; outras skills legítimas podem coexistir"
 
       - name: Gerar inventário de skills
         run: |
@@ -49,10 +86,43 @@ jobs:
         run: python scripts/lupa/detectar_drift.py
 
       - name: Upload inventário
-        if: always()
-        uses: actions/upload-artifact@v4
+        if: success()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: inventario-skills
           path: |
             /tmp/inv.json
             docs/RELATORIOS/inventario-skills.json
+
+      - name: Receipt determinístico (sempre)
+        if: always()
+        shell: bash
+        env:
+          JOB_STATUS: ${{ job.status }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          EVENT_NAME: ${{ github.event_name }}
+          FORK_BLOCKED: ${{ steps.fork_guard.outputs.blocked }}
+          FORK_CAUSE: ${{ steps.fork_guard.outputs.cause }}
+        run: |
+          set -euo pipefail
+          echo "HEAD_SHA=${HEAD_SHA}"
+          echo "EVENT_NAME=${EVENT_NAME}"
+          echo "EXECUTOR=self-hosted"
+          echo "ROTA_PRIMARIA=self-hosted-linux"
+          echo "ROTA_FALLBACK=BLOCKED_NO_HOSTED"
+          echo "JOB_STATUS=${JOB_STATUS}"
+          if [ "${FORK_BLOCKED:-}" = "true" ]; then
+            echo "RESULTADO=BLOCKED"
+            echo "CAUSE=${FORK_CAUSE:-FORK_HEAD}"
+          elif [ "${JOB_STATUS}" = "cancelled" ]; then
+            echo "RESULTADO=BLOCKED"
+            echo "CAUSE=CANCELLED_OR_RUNNER_UNAVAILABLE"
+          elif [ "${JOB_STATUS}" = "failure" ]; then
+            echo "RESULTADO=FAIL"
+          elif [ "${JOB_STATUS}" = "success" ]; then
+            echo "RESULTADO=PASS"
+          else
+            echo "RESULTADO=BLOCKED"
+            echo "CAUSE=UNKNOWN_STATUS_${JOB_STATUS}"
+          fi
+          # UNKNOWN/SKIPPED/empty never promoted as PASS by this receipt alone

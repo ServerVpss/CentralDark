@@ -81,6 +81,8 @@ Escalonamento: comece FRIA; contradição escala para MÉDIA; criticidade, recor
 12. Subordinar autoajuste a um mapa único. Autonomia sem mapa é drift, não evolução.
 13. Tratar área consolidada como bloqueada por padrão; confiança alta não desfaz trava.
 14. Executar AutoLupa sobre o próprio veredito até atingir ponto fixo evidencial, sem limite artificial de iterações e sem prometer certeza absoluta.
+15. Nenhuma promessa de alinhamento, aprendizado ou comportamento permanente pode exceder a capacidade observável do agente. Sem mecanismo persistente comprovado, rebaixar `sempre`, `nunca mais`, `garanto`, `não repetirei` ou equivalente para uma alegação testável no escopo atual.
+15. Tratar confronto útil como fonte de informação: sobreviver, cair ou permanecer UNKNOWN só vira aprendizado quando existe evidência nova e delta reutilizável de crença/regra/teste.
 
 ## Gate de Mapa Único
 
@@ -111,7 +113,7 @@ CAMINHO_CANONICO:
 RESPONSABILIDADE:
 TESTES:
 REVISAO/FALSIFICACAO:
-AUTORIZACAO_DO_PIVETE:
+AUTORIZACAO_DO_SEGREDO_CHEFE:
 COMMIT_OU_MERGE_SHA:
 MECANISMO_DE_TRAVA:
 ROLLBACK/RECUPERACAO:
@@ -283,6 +285,43 @@ Revisar a própria análise como se tivesse sido produzida por outro agente:
 
 Encerrar em ponto fixo quando uma nova passagem não alterar materialmente hipóteses, bloqueios, risco residual, próximo teste ou veredito. Registrar `PONTO_FIXO_ATINGIDO: sim | não`. Se não atingir, manter `CORRIGIR` ou `BLOQUEAR`; nunca forçar fechamento por contagem de rodadas.
 
+### 9.1 Converter confronto em ouro informacional
+
+Confronto não é pontuação de ego. O ativo é o **ganho de informação** produzido pela diferença entre crença anterior e evidência nova.
+
+```text
+CONFRONTO
+→ EVIDENCIA NOVA
+→ DELTA_DE_CRENCA
+→ CONSEQUENCIA REUTILIZAVEL
+→ OURO
+```
+
+Classificar cada confronto material:
+
+```text
+HIPOTESE_SOBREVIVE + PROVA_NOVA       = OURO
+HIPOTESE_CAI + CONTRAPROVA            = OURO
+EMPATE + UNKNOWN_MELHOR_DEFINIDO      = OURO
+AUTOFALSIFICACAO + FRAQUEZA_CORRIGIDA = OURO
+REVISAO_EXTERNA + ACHADO_CAUSAL       = OURO
+```
+
+Só promover o aprendizado quando:
+
+```text
+EVIDENCIA_NOVA=SIM
+DELTA_DE_CRENCA_OU_REGRA=SIM
+REUTILIZAVEL=SIM
+```
+
+Se não houver informação nova nem mudança reutilizável, não abrir novo ciclo ornamental:
+
+```text
+MESMO_ERRO + MESMA_DISCUSSÃO + ZERO_INFORMACAO_NOVA + ZERO_MUDANCA
+→ DESPERDICIO_DE_CICLO
+```
+
 ### 10. Selecionar revisão proporcional ao ambiente
 
 - Em desenvolvimento sem clientes, automatizar teste, revisão, fallback determinístico, correção mínima e nova tentativa dentro da autorização vigente.
@@ -442,7 +481,7 @@ A AutoLupa (Fase 9) deve produzir um bloco curto no fim do relatório:
 (reaproveitar existente / duplicação / EF na VPS / demo como real / secret /
 provider vs rota / sobrevive troca modelo / relatório sem chat / autossep /
 crítico mesmo SHA / branch só escopo / rollback / PR evidências / autoridade
-Pivete / contradição fechada). Sem o bloco, veredito não sela.
+SEGREDO/CHEFE / contradição fechada). Sem o bloco, veredito não sela.
 
 ### XP-5. Matriz de existência de recursos
 
@@ -483,4 +522,47 @@ independente, preservando módulos corretos e distinguindo falha encontrada de
 falha apenas citada. Fable permanece `EXPERIMENTAL_FAIL_CLOSED`, fora do
 roteamento padrão, até existir controle comparativo válido com a mesma
 fixture, prompt, modelo, timeout, orçamento e manifesto de testes, com pelo
+menos duas seeds válidas por braço.
+
+## Percentual evidencial e fechamento de lacunas
+
+Quando o pedido, gate ou relatório usar porcentagem, a Meta Lupa mede um
+**escopo fechado**, nunca uma impressão geral. O medidor canônico desta skill é:
+
+```text
+scripts/percentual_evidencial.py
+```
+
+Contrato obrigatório:
+
+```text
+SCOPE=<escopo finito>
+HEAD_SHA=<40 hex do mesmo candidato>
+DECLARED_DENOMINATOR=<quantidade de checks required=true>
+NUMERATOR=<checks required=true com status PASS + evidência>
+DENOMINATOR=<DECLARED_DENOMINATOR validado contra os checks>
+COVERAGE_PERCENT=NUMERATOR / DENOMINATOR * 100
+```
+
+Regras fail-closed:
+
+1. o denominador é declarado antes do resultado e deve ser idêntico à quantidade de checks `required=true`;
+2. `PASS` sem evidência não entra no numerador e bloqueia o manifesto;
+3. `UNKNOWN`, `SKIPPED`, `BLOCKED` e `FAIL` continuam dentro do denominador e nunca viram PASS;
+4. toda lacuna requerida deve trazer `next_test`: o teste/evidência que pode preenchê-la na próxima rodada;
+5. `NOT_APPLICABLE` não pode retirar item requerido do denominador;
+6. IDs duplicados bloqueiam a medição;
+7. denominador zero ou ausente produz `NOT_MEASURED`/bloqueio, nunca `100%`;
+8. `100%` só é alegável quando `NUMERATOR == DENOMINATOR`, todos os itens requeridos estão em PASS com evidência e não existe lacuna;
+9. `resolution_plan_percent` mede somente quantas lacunas possuem um próximo teste explícito; não mede eficácia nem transforma UNKNOWN em conhecimento;
+10. o manifesto recebe SHA-256 canônico para provar que o denominador e os checks medidos não mudaram depois do resultado.
+
+Uso:
+
+```text
+python scripts/percentual_evidencial.py measure --input <manifest.json>
+python scripts/percentual_evidencial.py self-test
+```
+
+A saída pode declarar `100%` **somente dentro daquele denominador fechado e reproduzível**. Isso não contradiz a proibição de prometer certeza universal: `100% do contrato medido` é diferente de `100% de certeza sobre o mundo`.
 menos duas seeds válidas por braço.

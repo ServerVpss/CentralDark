@@ -2,8 +2,6 @@ name: Autonomia — promoção segura
 
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
   pull_request_target:
     types: [opened, reopened, ready_for_review, synchronize, edited, labeled, unlabeled]
     branches: [main]
@@ -24,17 +22,18 @@ on:
 permissions: {}
 
 concurrency:
-  group: autonomia-promocao-${{ github.event.pull_request.number || github.event.workflow_run.head_sha || github.event.client_payload.merge_sha || github.ref }}
+  group: autonomia-promocao-${{ github.event.pull_request.number || github.event.workflow_run.head_sha || github.event.client_payload.pr_number || github.event.client_payload.merge_sha || github.ref }}
   cancel-in-progress: false
 
 env:
   BOT_TRUSTED_AUTHORS: segredounlock
   BOT_REQUIRED_WORKFLOWS: porta-de-entrada,codex-validate,lupa-conformance,Lupa Drift Guard,PR auto-review (Codex + checklist),Pipeline — Telegram + Painel
+  BOT_WAIT_TIMEOUT_MINUTES: "45"
 
 jobs:
   judge:
-    name: Juiz read-only — gerar recibos
-    runs-on: ubuntu-latest
+    name: Juiz determinístico — intenção + estado + segurança
+    runs-on: [self-hosted, Linux]
     timeout-minutes: 10
     permissions:
       contents: read
@@ -42,44 +41,71 @@ jobs:
       issues: read
       actions: read
       checks: read
-    env:
-      BOT_SWEEP_DIR: ${{ runner.temp }}/centraldark-autonomia
 
     steps:
       - name: Checkout exclusivo da main confiável
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
-          ref: main
+          ref: ${{ github.event.pull_request.base.sha || github.sha }}
           fetch-depth: 1
           persist-credentials: false
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: 22
 
-      - name: Testar juiz, promotor e filtro da varredura
+      - name: Provar presença de canais opcionais sem mostrar valor
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "PROMOTION_TOKEN=${{ (secrets.PROMOTION_TOKEN != '' || secrets.GITHUB_PAT_PERFIL != '') && 'present' || 'absent_active_agent_can_still_promote' }}"
+          echo "TELEGRAM=${{ secrets.TELEGRAM_BOT_TOKEN != '' && secrets.TELEGRAM_CHAT_ID != '' && 'present' || 'absent' }}"
+          echo "WEBHOOK=${{ secrets.NOTIFY_WEBHOOK_URL != '' && 'present' || 'absent' }}"
+
+      - name: Testar motor canônico
         run: |
           set -euo pipefail
           node --test scripts/github-autonomia-promocao.test.mjs
           node --test scripts/github-autonomia-varredura.test.mjs
 
-      - name: Avaliar PRs autorizados sem capacidade de escrita
+      - name: Avaliar PRs autorizados em read-only
         env:
+          BOT_SWEEP_DIR: ${{ runner.temp }}/centraldark-autonomia
           JUDGE_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ github.token }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          NOTIFY_WEBHOOK_URL: ${{ secrets.NOTIFY_WEBHOOK_URL }}
         run: node scripts/github-autonomia-varredura.mjs judge
 
       - name: Publicar recibos do juiz
-        uses: actions/upload-artifact@v4
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: autonomia-judge-${{ github.run_id }}
-          path: ${{ env.BOT_SWEEP_DIR }}
+          path: ${{ runner.temp }}/centraldark-autonomia
           if-no-files-found: warn
           retention-days: 14
 
+      - name: Receipt determinístico
+        if: always()
+        shell: bash
+        env:
+          JOB_STATUS: ${{ job.status }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.event.workflow_run.head_sha || github.sha }}
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          set -euo pipefail
+          echo "HEAD_SHA=${HEAD_SHA}"
+          echo "EVENT_NAME=${EVENT_NAME}"
+          echo "EXECUTOR=self-hosted-linux"
+          echo "JOB_STATUS=${JOB_STATUS}"
+          test "${JOB_STATUS}" = "success" && echo "RESULTADO=PASS" || echo "RESULTADO=BLOCKED"
+
   promote:
-    name: Promotor — revalidar e promover
+    name: Promotor — revalidar e squash main
     needs: judge
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux]
     timeout-minutes: 10
     permissions:
       contents: write
@@ -87,37 +113,56 @@ jobs:
       issues: write
       actions: write
       checks: read
-    env:
-      BOT_SWEEP_DIR: ${{ runner.temp }}/centraldark-autonomia
 
     steps:
       - name: Checkout exclusivo da main confiável
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
-          ref: main
+          ref: ${{ github.event.pull_request.base.sha || github.sha }}
           fetch-depth: 1
           persist-credentials: false
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: 22
 
       - name: Baixar recibos produzidos pelo juiz
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         with:
           name: autonomia-judge-${{ github.run_id }}
-          path: ${{ env.BOT_SWEEP_DIR }}
+          path: ${{ runner.temp }}/centraldark-autonomia
 
       - name: Promover somente recibos válidos e estado vivo idêntico
         env:
-          PROMOTER_TOKEN: ${{ secrets.PROMOTION_TOKEN || github.token }}
+          BOT_SWEEP_DIR: ${{ runner.temp }}/centraldark-autonomia
+          PROMOTER_TOKEN: ${{ secrets.PROMOTION_TOKEN || secrets.GITHUB_PAT_PERFIL }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          NOTIFY_WEBHOOK_URL: ${{ secrets.NOTIFY_WEBHOOK_URL }}
         run: node scripts/github-autonomia-varredura.mjs promote
 
       - name: Publicar resultado sanitizado
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: autonomia-promote-${{ github.run_id }}
-          path: ${{ env.BOT_SWEEP_DIR }}
+          path: ${{ runner.temp }}/centraldark-autonomia
           if-no-files-found: warn
           retention-days: 14
+
+      - name: Receipt determinístico
+        if: always()
+        shell: bash
+        env:
+          JOB_STATUS: ${{ job.status }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.event.workflow_run.head_sha || github.sha }}
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          set -euo pipefail
+          echo "HEAD_SHA=${HEAD_SHA}"
+          echo "EVENT_NAME=${EVENT_NAME}"
+          echo "EXECUTOR=self-hosted-linux"
+          echo "MERGE_METHOD=squash"
+          echo "REASK=NO_WHEN_INTENT_RECEIPT_VALID"
+          echo "JOB_STATUS=${JOB_STATUS}"
+          test "${JOB_STATUS}" = "success" && echo "RESULTADO=PASS" || echo "RESULTADO=BLOCKED"

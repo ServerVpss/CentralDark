@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-08-04T09:47:52.861Z
-- **Commit:** `0eec53227763fb8a2a7740bd6fad302d5f12f16c`
+- **Gerado:** 2026-08-14T18:28:11.183Z
+- **Commit:** `6aeb1162da2284c70d16006a46ad41fdcc724835`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 39 | 39 | 39 | 0 | 0 |
-| aprendizados | 8 | 0 | 0 | 8 | 0 |
+| aprendizados | 26 | 0 | 0 | 26 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **8**
+- 🟥 Faltando no Notion: **26**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -56,4 +56,22 @@
 - 6. A porta de entrada nunca existiu: por que nenhuma IA lia as regras da casa
 - 7. github_commit (MCP) não deleta arquivo; duplicatas CONSCIENCIA/BRAIN nasceram do mesmo commit de bot
 - 8. Nunca gerar -v2/-v3: refinar o arquivo que já existe
+- 9. Escritor único: auditar e comentar na PR alheia em vez de abrir PR concorrente
+- 10. Reconferir o blob na hora de publicar, não só na hora de auditar
+- 11. Hash validado por regex não prova que o artefato existe
+- 12. Modo novo não alcança problema empilhado antes da ramificação de modo
+- 13. Recuo preventivo não é obediência
+- 14. Mutante equivalente sai do denominador mas aponta a invariante sem teste
+- 15. Achado repetido é ruído, não reforço
+- 16. Frase de agente não prova alinhamento; promessa maior que capacidade é falso compromisso
+- 16. #ACORDAR é recuperação de estado real, não apenas comando de GitHub
+- 17. Uma SOL, um SOUL, uma superfície; modelos e ferramentas são capacidades substituíveis
+- 18. O humano decide intenção; a máquina prova o estado e não devolve investigação mensurável ao humano
+- 19. Em desenvolvimento autorizado, produção observável vem antes de perfeição global
+- 20. Convergência, Judge e Meta Lupa servem para tentar quebrar; não para decidir a intenção do CHEFE
+- 21. Falha local pede correção local e deploy no menor blast radius possível
+- 22. Painel Admin precisa ser observabilidade operacional, não só configuração
+- 23. HTTP 200, PM2 online, DNS resolvendo ou painel verde não provam LIVE
+- 24. API paga é capacidade, não identidade nem caminho obrigatório
+- 25. “Menos é mais” significa menor movimento compatível com efeito, observabilidade e segurança
 </details>

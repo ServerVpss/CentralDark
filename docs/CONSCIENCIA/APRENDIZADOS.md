@@ -47,3 +47,110 @@
 - **Data:** 2026-08-04
 - **Contexto:** Ao corrigir o script de atualização do Hermes no Windows, a IA gerou um arquivo novo com sufixo -v2 em vez de aplicar a correção no script original que já existia. O Pivete corrigiu na hora: isso é recriar, não melhorar.
 - **Aprendizado:** Quando um arquivo/script/skill já existe, a correção vai DENTRO dele — mesmo nome, mesmo caminho, versão interna no cabeçalho se precisar rastrear. Nada de -v2, -v3, -novo, -final, -corrigido. Entregar patch/diff aplicável no original. Se a IA não tem o conteúdo do original em mãos, pede o arquivo antes de propor a correção — não inventa um substituto paralelo. Recriar do zero é regressão: perde ajuste acumulado e fragmenta a fonte de verdade. Corolário: também não afirmar causa que o Pivete não disse (ex: supor uso de botão de UI quando ele usou a CLI) — se não sabe, pergunta.
+
+### 9. Escritor único: auditar e comentar na PR alheia em vez de abrir PR concorrente
+- **Categoria:** armadilha
+- **Data:** 2026-08-05
+- **Contexto:** Auditoria do run vermelho no PR #554 levou a dois achados distintos. O run era de definição de workflow já removida da main pelo PR #584 (fantasma, sem conserto por código). O defeito vivo era outro: autonomia-promocao.yml 5/5 FAILURE na main por artefato ausente no contrato judge->promote. Ao preparar a correção, o PR #663 apareceu tocando os mesmos 5 arquivos, o que tornaria meu PR duplicata.
+- **Aprendizado:** Antes de abrir PR de correção, listar PRs abertos e comparar blob SHA dos arquivos alvo. Se outra IA já é escritora daqueles arquivos, NÃO abrir PR concorrente: auditar o HEAD real da branch dela e comentar a lacuna com local exato + patch mínimo + evidência executada. Dois padrões de defeito recorrentes achados assim: (1) upload-artifact com if-no-files-found warn seguido de download-artifact com name fixo é falha garantida sempre que o diretório puder ficar vazio — if always no upload não resolve, só garante que o step roda; (2) canal de notificação novo que lê nomes de secret diferentes dos já versionados no repo faz o humano criar o secret errado e o aviso continuar NOT_SENT — resolver a divergência de nome ANTES de pedir o secret. Também: corpo de PR que declara HEAD_SHA diferente do HEAD atual da branch invalida a prova.
+
+### 10. Reconferir o blob na hora de publicar, não só na hora de auditar
+- **Categoria:** erro-correcao
+- **Data:** 2026-08-06
+- **Contexto:** Auditoria do PR #664: baixei o blob `e63a12c8` (a61abaf), gerei um patch, provei 8 casos e rodei a suíte 10/10. Entre a geração e a publicação, o head foi para `94e53e9` (blob `ad56f473`). Postei o diff 8 minutos depois do arquivo já ter mudado — patch nasceu velho, não aplica. Mesmo erro aconteceu no #667 com a cápsula (`0cae63d1` → `0897b6a3`).
+- **Aprendizado:** Conferir `git hash-object` do arquivo alvo IMEDIATAMENTE antes de publicar, não só no começo da auditoria. Num repo com loop autônomo o head move em minutos, e patch contra blob morto vira lixo que o próximo agente tenta aplicar. Se moveu: refaz contra o blob novo ou marca o artefato anterior como morto no mesmo canal onde ele foi publicado.
+
+### 11. Hash validado por regex não prova que o artefato existe
+- **Categoria:** armadilha
+- **Data:** 2026-08-06
+- **Contexto:** Cápsula observável do #667. Ledger de dois eventos forjado à mão produziu validation=PASS, ready_for_promotion=true, xp_valid=1 e correction_rate=100%. O evidence_hash era 'f' repetido 64 vezes e o chief_receipt_hash era 'a' repetido 64 vezes, apontando para um recibo que nunca existiu; o event_actor 'SEGREDO/CHEFE' foi digitado pelo próprio writer. No mesmo objeto, guarantees.chief_receipt_required_for_promotion saiu ENFORCED.
+- **Aprendizado:** Regex sobre hash prova FORMATO, nunca PROCEDÊNCIA. Campo de evidência só vale se o agregador recomputar o hash sobre o artefato que a referência aponta e falhar quando a referência não resolve. Pior ainda é o snapshot declarar a própria garantia como cumprida: garantia auto-declarada transforma buraco silencioso em buraco com selo, e é isso que um painel ao vivo passa a transmitir como verdade.
+
+### 12. Modo novo não alcança problema empilhado antes da ramificação de modo
+- **Categoria:** erro-correcao
+- **Data:** 2026-08-06
+- **Contexto:** Gate WRITER_UNICO do #664. Foi criado mode=migrate para resolver a branch, com 16 testes verdes. Rodando o blob real contra os três commits reais da branch: enforce FAIL, legacy FAIL, migrate FAIL — todos com WRITER_NOT_UNIQUE e unknown_legacy=0. O migrate trata commit SEM trailer; os três commits TÊM trailer e um deles declara outro Writer. A unicidade é empilhada antes de qualquer branch de modo.
+- **Aprendizado:** Antes de criar modo novo para resolver um caso, conferir ONDE o problema é empilhado. Se o push do problema acontece antes da ramificação de modo, e o veredito olha o tamanho da lista de problemas primeiro, nenhum modo alcança aquele caso — o modo novo passa nos testes que ele mesmo trouxe e não move o caso real. Roda o gate contra o próprio artefato alvo nos TRÊS modos antes de declarar migração pronta.
+
+### 13. Recuo preventivo não é obediência
+- **Categoria:** armadilha
+- **Data:** 2026-08-06
+- **Contexto:** Um agente da casa se desculpou por 'ter fechado decisões e apresentado tudo como definitivo' e prometeu aguardar revisão sem impor escolhas — logo depois de receber um comando que dizia literalmente 'NÃO pare para pedir confirmação', 'não peça decisão técnica já dedutível' e proibia as frases 'escolha A ou B' e 'posso continuar?'. Ele leu o tom como bronca e devolveu a autonomia que o comando exigia.
+- **Aprendizado:** A autoridade do SEGREDO/CHEFE é sobre merge, deploy, VPS, secrets e reescrita de histórico. NÃO é sobre decisão técnica dedutível do próprio contrato. Quando o comando já fixou a decisão, executar não é impor — é obedecer. Pedir desculpa por ter decidido, ou devolver a decisão em nome de humildade, é recuo preventivo: parece obediência e produz um executor que trava no primeiro A/B e queima a janela de trabalho. Erro cometido e corrigido gera aprendizado; recuo preventivo não gera nada.
+
+### 14. Mutante equivalente sai do denominador mas aponta a invariante sem teste
+- **Categoria:** regra
+- **Data:** 2026-08-06
+- **Contexto:** Teste de mutação na cápsula do #667. Mudar 'skipped === 0' para 'skipped >= 0' deixou a suíte verde. Com a soma total = pass + fail + skipped já validada, skipped > 0 implica pass diferente de total, que é pego pela outra checagem — mutante sem defeito observável. Score corrigido de 2/12 para 2/11. A invariante da soma, que torna o mutante equivalente, não estava no conjunto de mutantes: furo do próprio harness.
+- **Aprendizado:** Mutante que sobrevive porque outra checagem já cobre o caso é EQUIVALENTE, não sobrevivente: desconta do denominador em vez de contar como falha da suíte. Mas ele não é descartável — ele aponta qual invariante está segurando a checagem, e essa invariante quase sempre também não tem teste. O mutante equivalente é a fonte de uma regra, não uma vitória de auditoria. Roda o mutante na invariante que o sustenta.
+
+### 15. Achado repetido é ruído, não reforço
+- **Categoria:** armadilha
+- **Data:** 2026-08-06
+- **Contexto:** Publiquei no #667 uma auditoria com tabela de mutantes e ataque de forja. O Grok já tinha postado mutantes, forja e ready=false no mesmo thread. Sobreposição em três dos quatro pontos; só o mutante equivalente e os asserts eram meus. Sem ferramenta para listar comentários de PR neste MCP, a checagem tem que ser feita antes, por quem tem acesso ao thread.
+- **Aprendizado:** Ler o thread do PR antes de publicar auditoria. Achado que outro agente já postou não vira mais forte por ser repetido — vira ruído, e ruído treina o time a ignorar comentário de auditoria, que é o único canal onde a prova vive. Se o achado já está lá, publica só o delta: o que muda a decisão de quem lê. Se não há delta, não publica.
+
+### 16. Frase de agente não prova alinhamento; promessa maior que capacidade é falso compromisso
+- **Categoria:** erro-correcao / recorrência de agentes
+- **Data:** 2026-08-09
+- **Contexto:** Em uma sessão curta com SEGREDO/CHEFE, a SOL/ChatGPT cometeu três falhas observáveis em sequência: marcou `🟡` sem pendência operacional concreta, usou a metáfora depreciativa `zoológico de agentes` para descrever uma arquitetura do usuário e declarou `não repetir` como se pudesse garantir comportamento futuro permanente. Ao ser exigida a prova, a própria IA reconheceu que não consegue se auto-reprogramar, alterar o próprio treinamento nem provar uma garantia permanente. Na tentativa inicial de registrar o aprendizado, a mesma IA repetiu a classe de erro: criou `docs/CONSCIENCIA/APRENDIZADOS/2026-08-09-limites-ia-e-promessa-sem-prova.md` apesar de `docs/CONSCIENCIA/APRENDIZADOS.md` já ser o destino canônico, deixou `HEAD_SHA` obsoleto no corpo do PR e introduziu trailing whitespace que derrubou o CI. A investigação posterior encontrou ainda que a `main` carregava uma `porta-de-entrada.yml` com blocos duplicados, enquanto o PR #709 já era a lane Writer existente para corrigir exatamente porta, contrato e validador universal.
+- **Aprendizado:** Texto do agente não muda estado e não prova aprendizado permanente. Toda alegação deve caber na capacidade observável do agente. Sem mecanismo persistente comprovado, `sempre`, `nunca mais`, `garanto`, `não repetirei` ou equivalente devem ser rebaixados para uma afirmação testável no escopo atual. `🟡` só representa trabalho real pendente ou prova em andamento; dado não medido é `NOT_MEASURED`, sem alerta artificial. Crítica técnica deve atingir o sistema/artefato, nunca reduzir o humano ou seu projeto. A correção arquitetural não é copiar a regra para cada IA: todos os adaptadores carregam a mesma porta e o mesmo contrato; o único validador universal deve fiscalizar essa política para ChatGPT, Claude, Codex, Gemini, Copilot, Cursor, Windsurf, Hermes, plugins e agentes futuros. Aprendizado vai no canônico existente; mecanismo vai no gate existente; teste tenta quebrar o mesmo mecanismo. Se a própria Meta Lupa contrariar a autoridade atual ou prometer certeza absoluta, ela também deve falhar no mesmo princípio e ser corrigida no próprio artefato, com identidade canônica atualizada.
+### 16. #ACORDAR é recuperação de estado real, não apenas comando de GitHub
+- **Categoria:** regra
+- **Data:** 2026-08-13
+- **Contexto:** Nesta sessão, `#ACORDAR !CALIBRAR` foi usado para interromper resposta baseada em contexto parcial, reler estado vivo, consultar GitHub e reconciliar conversa, repo, PR, HEAD e evidência. O próprio uso mostrou que uma palavra curta pode carregar um contrato operacional quando o significado já está estabelecido no contexto.
+- **Aprendizado:** Interpretar `#ACORDAR` como `RECUPERAR_ESTADO_REAL_ANTES_DE_CONTINUAR`: reler missão/fio, recuperar contexto relevante, medir estado vivo e reconciliar divergências antes de responder. GitHub entra quando é fonte necessária, mas o comando não significa apenas “abra o GitHub”. Não obrigar o SEGREDO/CHEFE a repetir contexto ou prova que o próprio sistema consegue reconstruir.
+
+### 17. Uma SOL, um SOUL, uma superfície; modelos e ferramentas são capacidades substituíveis
+- **Categoria:** regra
+- **Data:** 2026-08-13
+- **Contexto:** O desenho operacional foi refinado de “dois chats” para uma única SOL com identidade persistente, podendo planejar e agir na mesma conversa/interface. Voz e texto são entradas; Hermes, tools, providers e modelos ficam por baixo como braços/motores.
+- **Aprendizado:** Não criar segunda identidade, segundo chat obrigatório ou segundo orquestrador para separar planejamento de ação. O padrão é `UMA_SOL + UM_SOUL + UM_ESTADO + MODOS_OPERACIONAIS`. Modelo/provider pode mudar sem mudar a identidade. O fluxo correto é `fala/texto → intenção → modo → ferramenta/motor → execução → prova → mesma conversa`.
+
+### 18. O humano decide intenção; a máquina prova o estado e não devolve investigação mensurável ao humano
+- **Categoria:** regra
+- **Data:** 2026-08-13
+- **Contexto:** A sessão mostrou repetidamente desperdício quando o sistema pede ao SEGREDO/CHEFE para provar novamente conexão, permissão, estado de repo ou fatos que a própria máquina consegue medir. Quando o mesmo contrato/alvo continua válido, exigir a mesma prova humana de novo é peso sem ganho.
+- **Aprendizado:** `CHEFE_DECIDE_INTENCAO=true`; `MAQUINA_PROVA_ESTADO=true`. Prova já produzida e ainda pertencente ao mesmo alvo/contrato deve ser reutilizada. Só reprovar/revalidar quando alvo, HEAD, ambiente, escopo, autorização ou evidência material mudou. Não transformar o humano em roteador de informações que ferramentas já conseguem coletar.
+
+### 19. Em desenvolvimento autorizado, produção observável vem antes de perfeição global
+- **Categoria:** regra
+- **Data:** 2026-08-13
+- **Contexto:** O SEGREDO/CHEFE explicitou que precisa ver a CentralDark viva para avaliar botão por botão, UI, Builder/Preview, integrações e arquitetura. Três meses de gates, convergência e refinamento no escuro impediram justamente a observação necessária para orientar o próximo delta. O objetivo atual é colocar um vertical slice real no ar e iterar.
+- **Aprendizado:** Quando o CHEFE autoriza `PRODUCTION_FIRST` em ambiente de desenvolvimento próprio, não exigir perfeição visual, todas as integrações READY, dívida zero, convergência global ou Meta Lupa global antes da primeira visualização. O primeiro objetivo é `CENTRALDARK_VISIBLE_ONLINE + ADMIN_VISIBLE + RUNTIME_IDENTIFIABLE + NO_SECRET_LEAK`. Depois: `CHEFE CLICA → APONTA DELTA → CORREÇÃO MÍNIMA → REDEPLOY → REPETE`. Segurança protege o movimento; não deve virar paralisia.
+
+### 20. Convergência, Judge e Meta Lupa servem para tentar quebrar; não para decidir a intenção do CHEFE
+- **Categoria:** regra
+- **Data:** 2026-08-13
+- **Contexto:** Foi separado o papel de design/autoridade do papel de falsificação. O CHEFE define o que quer; Writer implementa; convergência/Judge/Meta Lupa procuram regressão, falso verde, conflito, falha de segurança e caso não coberto. Usá-los como assembleia para decidir a arquitetura do CHEFE cria atraso e dilui responsabilidade.
+- **Aprendizado:** `CHEFE_DEFINE → WRITER_IMPLEMENTA → TESTES_PROVAM → CONVERGENCIA_TENTA_REFUTAR → META_LUPA_FECHA`. Convergência não redesenha intenção já decidida e não deve bloquear indefinidamente a primeira observação do runtime quando o risco está autorizado e rollback existe.
+
+### 21. Falha local pede correção local e deploy no menor blast radius possível
+- **Categoria:** regra
+- **Data:** 2026-08-13
+- **Contexto:** A inspeção do deploy canônico mostrou que o MCP já possui um mecanismo alinhado a esse princípio: build em worktree isolada, promoção atômica de `dist`, restart apenas de `CentralDark-MCP`, health, startup audit, estabilidade e rollback. Isso confirmou que redeploy global por padrão é peso desnecessário quando o componente causal é isolável.
+- **Aprendizado:** `FALHA_LOCAL → COMPONENTE_CAUSAL → CORREÇÃO_LOCAL → TESTE_LOCAL → DEPLOY_LOCAL → PROVA_LOCAL`. Full deploy só quando dependência compartilhada, contrato/schema global, artefato monolítico, migração ou incompatibilidade real atravessar fronteiras. Não confundir “workflow atual faz tudo” com “necessidade técnica exige tudo”. O menor blast radius é parte do `MENOS_E_MAIS`.
+
+### 22. Painel Admin precisa ser observabilidade operacional, não só configuração
+- **Categoria:** regra
+- **Data:** 2026-08-13
+- **Contexto:** O repo já contém MCP Admin/Telepainel com health, catálogo de tools, OAuth, auditoria, conectores e adapters de logs. O CHEFE quer usar o sistema vivo e, quando algo falhar, apontar o erro exato em vez de operar no escuro.
+- **Aprendizado:** Todo erro relevante deve chegar a um local observável com `timestamp`, `correlation/request id` quando houver, serviço/componente, ação, status, duração, erro sanitizado e SHA/build/runtime relacionado. O painel deve mostrar health, ferramentas, conectores, OAuth, auditoria e erro sanitizado. Nunca registrar token, senha, Authorization, cookie ou valor de secret. Se já existe logging/auditoria canônico, reutilizar; criar novo sistema de logs só com GAP_REAL.
+
+### 23. HTTP 200, PM2 online, DNS resolvendo ou painel verde não provam LIVE
+- **Categoria:** armadilha
+- **Data:** 2026-08-13
+- **Contexto:** A Meta Lupa aplicada contra o plano de deploy confirmou o falso verde: cada instrumento prova só uma camada. Um site pode responder 200 e ainda renderizar errado; um processo pode estar online e não executar o comportamento esperado; um painel pode usar fallback estático e parecer saudável.
+- **Aprendizado:** Para declarar `LIVE`, provar no mesmo runtime pelo menos: domínio abre externamente, UI real renderiza, admin real abre, runtime identifica SHA/artefato, uma ação mínima real funciona, auditoria/log registra a ação, um erro controlado aparece sanitizado e existe caminho de rollback/redeploy. Evidência parcial continua `PARTIAL/UNKNOWN`, nunca vira PASS por aparência.
+
+### 24. API paga é capacidade, não identidade nem caminho obrigatório
+- **Categoria:** regra
+- **Data:** 2026-08-13
+- **Contexto:** O desenho econômico/operacional foi corrigido: a SOL não depende de uma API paga como motor normal. A arquitetura pode usar execução determinística, tools, MCP, modelos locais, free tiers, créditos e providers diferentes; modelo forte/pago entra quando agrega capacidade real.
+- **Aprendizado:** `DETERMINISTICO/LOCAL/TOOLS/FREE-CAPACITY FIRST`; modelo/provider é motor temporário, não identidade. A SOL/SOUL mantém continuidade enquanto roteia para a capacidade adequada. Não transformar custo de inferência em custo de identidade; subir potência somente quando a tarefa exigir.
+
+### 25. “Menos é mais” significa menor movimento compatível com efeito, observabilidade e segurança
+- **Categoria:** regra
+- **Data:** 2026-08-13
+- **Contexto:** A conversa consolidou que simplificar não é remover prova, rollback ou logs; é remover passos, agentes, documentos, confirmações e redeploys que não alteram a causalidade do problema. Uma palavra (`#ACORDAR`) pode recuperar um contrato inteiro; um deploy local pode substituir rebuild global; uma observação viva pode valer mais que semanas de planejamento no escuro.
+- **Aprendizado:** Antes de adicionar etapa, agente, gate, painel, script ou arquitetura, perguntar: `isso muda a decisão, reduz risco causal ou produz observação que não existe?` Se não, remover. O padrão é `MENOR_CODIGO + MENOR_BUILD + MENOR_DEPLOY + MENOR_BLAST_RADIUS + PROVA_NO_RUNTIME`. Todo agente da casa deve tratar este princípio como comportamento operacional, não como slogan.

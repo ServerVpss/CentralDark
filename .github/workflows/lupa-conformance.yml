@@ -2,7 +2,7 @@ name: lupa-conformance
 
 on:
   pull_request:
-    branches: [main]
+    branches: [main, program/centraldark-convergencia-omniroute-722]
     types: [opened, reopened, synchronize, ready_for_review, labeled, unlabeled]
   workflow_dispatch:
 
@@ -15,13 +15,67 @@ concurrency:
 
 jobs:
   guard:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 20
     steps:
+
+      - name: Bloquear HEAD de fork no runner persistente
+        id: fork_guard
+        if: github.event_name == 'pull_request' || github.event_name == 'pull_request_target'
+        shell: bash
+        env:
+          HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
+          BASE_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          if [ -z "${HEAD_REPO}" ] || [ "${HEAD_REPO}" != "${BASE_REPO}" ]; then
+            echo "blocked=true" >> "$GITHUB_OUTPUT"
+            echo "cause=FORK_HEAD" >> "$GITHUB_OUTPUT"
+            echo "BLOCKED_FORK_HEAD repo=${HEAD_REPO:-empty}"
+            exit 1
+          fi
+          echo "blocked=false" >> "$GITHUB_OUTPUT"
+          echo "FORK_GUARD_OK ${HEAD_REPO}"
+
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
-          ref: ${{ github.head_ref || github.ref_name }}
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 2
           persist-credentials: false
+
+      - name: Vincular branch esperada ao SHA exato
+        shell: bash
+        env:
+          EXPECTED_BRANCH: ${{ github.event.pull_request.head.ref || github.ref_name }}
+          EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          if [ -z "${EXPECTED_BRANCH}" ]; then
+            echo "OPERATION_RECEIPT_EXPECTED_BRANCH_MISSING"
+            exit 1
+          fi
+          git check-ref-format --branch "${EXPECTED_BRANCH}" >/dev/null
+          BEFORE_SHA="$(git rev-parse HEAD)"
+          if [ "${BEFORE_SHA}" != "${EXPECTED_SHA}" ]; then
+            echo "OPERATION_RECEIPT_HEAD_MISMATCH expected=${EXPECTED_SHA} actual=${BEFORE_SHA}"
+            exit 1
+          fi
+          if git show-ref --verify --quiet "refs/heads/${EXPECTED_BRANCH}"; then
+            git branch -f "${EXPECTED_BRANCH}" "${EXPECTED_SHA}"
+          else
+            git branch "${EXPECTED_BRANCH}" "${EXPECTED_SHA}"
+          fi
+          git switch "${EXPECTED_BRANCH}" >/dev/null
+          AFTER_SHA="$(git rev-parse HEAD)"
+          ACTUAL_BRANCH="$(git branch --show-current)"
+          if [ "${AFTER_SHA}" != "${EXPECTED_SHA}" ] || [ "${ACTUAL_BRANCH}" != "${EXPECTED_BRANCH}" ]; then
+            echo "OPERATION_RECEIPT_BRANCH_BINDING_FAILED expected_branch=${EXPECTED_BRANCH} actual_branch=${ACTUAL_BRANCH:-empty} expected_sha=${EXPECTED_SHA} actual_sha=${AFTER_SHA}"
+            exit 1
+          fi
+          echo "OPERATION_RECEIPT_BRANCH_BINDING=PASS"
+          echo "EXPECTED_BRANCH=${EXPECTED_BRANCH}"
+          echo "HEAD_SHA=${AFTER_SHA}"
+
       - uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38
         with:
           python-version: '3.11'
@@ -36,6 +90,9 @@ jobs:
       - name: Motor determinístico
         working-directory: .agents/skills/meta-lupa
         run: python testes/test_lupa.py
+      - name: Percentual evidencial — denominador fechado + dogfood
+        working-directory: .agents/skills/meta-lupa
+        run: python scripts/percentual_evidencial.py self-test
       - name: Validador e promotor do OPERATION_RECEIPT
         run: pytest .agents/skills/meta-lupa/testes/test_operation_receipt_validator.py -v
       - name: Guardrail do selo de ponto fixo
@@ -44,3 +101,36 @@ jobs:
       - name: Regressão do selo e do recibo de XP
         working-directory: .agents/skills/meta-lupa
         run: python testes/test_selo_ponto_fixo.py
+
+      - name: Receipt determinístico (sempre)
+        if: always()
+        shell: bash
+        env:
+          JOB_STATUS: ${{ job.status }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          EVENT_NAME: ${{ github.event_name }}
+          FORK_BLOCKED: ${{ steps.fork_guard.outputs.blocked }}
+          FORK_CAUSE: ${{ steps.fork_guard.outputs.cause }}
+        run: |
+          set -euo pipefail
+          echo "HEAD_SHA=${HEAD_SHA}"
+          echo "EVENT_NAME=${EVENT_NAME}"
+          echo "EXECUTOR=self-hosted"
+          echo "ROTA_PRIMARIA=self-hosted-linux"
+          echo "ROTA_FALLBACK=BLOCKED_NO_HOSTED"
+          echo "JOB_STATUS=${JOB_STATUS}"
+          if [ "${FORK_BLOCKED:-}" = "true" ]; then
+            echo "RESULTADO=BLOCKED"
+            echo "CAUSE=${FORK_CAUSE:-FORK_HEAD}"
+          elif [ "${JOB_STATUS}" = "cancelled" ]; then
+            echo "RESULTADO=BLOCKED"
+            echo "CAUSE=CANCELLED_OR_RUNNER_UNAVAILABLE"
+          elif [ "${JOB_STATUS}" = "failure" ]; then
+            echo "RESULTADO=FAIL"
+          elif [ "${JOB_STATUS}" = "success" ]; then
+            echo "RESULTADO=PASS"
+          else
+            echo "RESULTADO=BLOCKED"
+            echo "CAUSE=UNKNOWN_STATUS_${JOB_STATUS}"
+          fi
+          # UNKNOWN/SKIPPED/empty never promoted as PASS by this receipt alone
