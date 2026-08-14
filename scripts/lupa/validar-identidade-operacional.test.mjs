@@ -99,6 +99,13 @@ function validRepo() {
     legacy_sources_excluded: ["docs/CONSCIENCIA/PIVETE-IA/*.md"],
   }, null, 2));
 
+  write(root, "apps/modulos/pivete-sync/pivete-sync.mjs", [
+    "LEGACY_SYNC_DISABLED_CANONICAL_GIT_ONLY",
+    "GIT_CANONICAL=true",
+    "HUB_TO_GIT=false",
+    "GIT_TO_LEGACY_PIVETE_HUB=false",
+  ].join("\n"));
+
   return root;
 }
 
@@ -220,6 +227,34 @@ test("estratégia de concatenação total é bloqueada", () => {
   const report = runValidation({ repoRoot: root });
   assert.equal(report.ok, false);
   assert.equal(report.findings.some((f) => f.code === "LOADER_CONCAT_ALL_PIVETE_FILES"), true);
+});
+
+test("sync legado não pode voltar a ler/escrever pivete_consciencia", () => {
+  const root = validRepo();
+  write(root, "apps/modulos/pivete-sync/pivete-sync.mjs", [
+    "LEGACY_SYNC_DISABLED_CANONICAL_GIT_ONLY",
+    "GIT_CANONICAL=true",
+    "HUB_TO_GIT=false",
+    "GIT_TO_LEGACY_PIVETE_HUB=false",
+    "const tabela = 'pivete_consciencia';",
+  ].join("\n"));
+  const report = runValidation({ repoRoot: root });
+  assert.equal(report.ok, false);
+  assert.equal(report.findings.some((f) => f.code === "SYNC_LEGADO_ACESSA_TABELA_PIVETE"), true);
+});
+
+test("sync legado não pode voltar a ler service-role", () => {
+  const root = validRepo();
+  write(root, "apps/modulos/pivete-sync/pivete-sync.mjs", [
+    "LEGACY_SYNC_DISABLED_CANONICAL_GIT_ONLY",
+    "GIT_CANONICAL=true",
+    "HUB_TO_GIT=false",
+    "GIT_TO_LEGACY_PIVETE_HUB=false",
+    "const keyName = 'HUB_SUPABASE_SERVICE_ROLE_KEY';",
+  ].join("\n"));
+  const report = runValidation({ repoRoot: root });
+  assert.equal(report.ok, false);
+  assert.equal(report.findings.some((f) => f.code === "SYNC_LEGADO_LE_SERVICE_ROLE"), true);
 });
 
 test("UNKNOWN=PASS é conflito canônico", () => {
