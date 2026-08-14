@@ -41,7 +41,7 @@ export function validateProofOwnership(contract, { exists = () => true } = {}) {
   const byId = new Map();
 
   for (const invariant of invariants) {
-    const required = ["id", "proof_class", "source", "consumer", "prover", "negative_test", "external_anchor", "independent_counterproof"];
+    const required = ["id", "proof_class", "source", "consumer", "prover", "negative_test", "counterproof", "external_anchor"];
     for (const field of required) {
       if (invariant?.[field] == null || invariant[field] === "") {
         errors.push(`PROOF_OWNERSHIP_FIELD_MISSING:${invariant?.id ?? "UNKNOWN"}:${field}`);
@@ -63,15 +63,30 @@ export function validateProofOwnership(contract, { exists = () => true } = {}) {
       }
     }
 
-    if (invariant.independent_counterproof !== true) {
-      errors.push(`PROOF_OWNERSHIP_COUNTERPROOF_MISSING:${invariant.id}`);
-    }
     if (invariant.prover && invariant.negative_test && invariant.prover === invariant.negative_test) {
       errors.push(`PROOF_OWNERSHIP_SELF_TEST:${invariant.id}`);
     }
     if (invariant.prover && invariant.consumer && invariant.prover === invariant.consumer) {
       errors.push(`PROOF_OWNERSHIP_PROVER_IS_CONSUMER:${invariant.id}`);
     }
+
+    if (!invariant.counterproof || typeof invariant.counterproof !== "object") {
+      errors.push(`PROOF_OWNERSHIP_COUNTERPROOF_MISSING:${invariant.id}`);
+    } else {
+      const counterproofPath = String(invariant.counterproof.path ?? "");
+      const counterproofKind = String(invariant.counterproof.kind ?? "");
+      const counterproofObservation = String(invariant.counterproof.observation ?? "");
+      if (!counterproofPath || !counterproofKind || !counterproofObservation) {
+        errors.push(`PROOF_OWNERSHIP_COUNTERPROOF_INCOMPLETE:${invariant.id}`);
+      }
+      if (invariant.counterproof.independent_from_prover !== true) {
+        errors.push(`PROOF_OWNERSHIP_COUNTERPROOF_NOT_INDEPENDENT:${invariant.id}`);
+      }
+      if (counterproofPath && counterproofPath === invariant.prover) {
+        errors.push(`PROOF_OWNERSHIP_COUNTERPROOF_IS_PROVER:${invariant.id}`);
+      }
+    }
+
     if (!invariant.external_anchor || typeof invariant.external_anchor !== "object") {
       errors.push(`PROOF_OWNERSHIP_EXTERNAL_ANCHOR_MISSING:${invariant.id}`);
     } else {
@@ -83,7 +98,14 @@ export function validateProofOwnership(contract, { exists = () => true } = {}) {
       if (!observation) errors.push(`PROOF_OWNERSHIP_EXTERNAL_OBSERVATION_MISSING:${invariant.id}`);
     }
 
-    for (const path of [invariant.source, invariant.consumer, invariant.prover, invariant.negative_test, invariant.external_anchor?.path]) {
+    for (const path of [
+      invariant.source,
+      invariant.consumer,
+      invariant.prover,
+      invariant.negative_test,
+      invariant.counterproof?.path,
+      invariant.external_anchor?.path,
+    ]) {
       if (typeof path === "string" && path && !exists(path)) {
         errors.push(`PROOF_OWNERSHIP_PATH_MISSING:${invariant.id}:${path}`);
       }
