@@ -4,6 +4,7 @@ import { auditarFinalizacao } from './agent.mjs';
 
 const concluir = {
   terminou: true,
+  estado: 'FATO',
   ferramenta: 'notificar_progresso',
   args: { mensagem: 'fim com prova' },
 };

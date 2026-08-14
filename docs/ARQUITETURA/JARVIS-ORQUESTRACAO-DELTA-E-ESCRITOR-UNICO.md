@@ -1,336 +1,315 @@
-# JARVIS — ORQUESTRAÇÃO EM DELTA E ESCRITOR ÚNICO
+# JARVIS — ORQUESTRAÇÃO EM DELTA, CONTEXTO RECUPERÁVEL E ESCRITOR ÚNICO
 
-> **Data:** 2026-07-30
-> **Autoria da intenção:** Pivete
-> **Organização técnica:** SOL/ChatGPT
-> **Tipo:** contrato arquitetural complementar
-> **Status:** canônico após merge na `main`
+> **Origem:** 2026-07-30
+> **Atualizado:** 2026-08-14
+> **Autoria da intenção:** SEGREDO/CHEFE
+> **Organização técnica:** SOL/ChatGPT + organismo CentralDark
+> **Status:** CANÔNICO
 
 ## 1. Encaixe e precedência
 
-Este documento não cria outro Jarvis, outra memória, outro ledger, outra Meta Lupa nem outro sistema de agentes.
+Este documento não cria outro Jarvis, outra SOL, outra memória, outro ledger, outra MetaLupa nem outro sistema de agentes.
 
-Ele detalha uma regra operacional já subordinada a:
+Precedência:
 
-1. `CLAUDE.md`;
-2. `LEIA-ME-IA.md`;
-3. `mapa-canonico.json`;
-4. `docs/PLANO-MESTRE-RETOMADA-CASA-METALUPA-APIS-NEGOCIOS.md`;
-5. regras de segurança, autorização, escopo, teste e evidência do repositório.
+1. `LEIA-ME-IA.md`;
+2. `AGENTS.md`;
+3. `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md`;
+4. `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json`;
+5. estado real medido e autorização vigente do SEGREDO/CHEFE;
+6. este contrato.
 
-Em caso de conflito, vencem as fontes superiores e este contrato deve ser corrigido.
-
-**Nota de precedência (fecha ambiguidade de autoridade):** onde este documento usa
-"Pivete" como autoridade final (Seção 3 "Papéis" e o critério de aceitação 10 da
-Seção 11), trata-se do mesmo humano designado `SEGREDO/CHEFE` na pilha canônica de
-`LEIA-ME-IA.md` e `AGENTS.md`: `SEGREDO/CHEFE > SOL/COORDENADOR > PIVETE/HERMES >
-Writer/Judge/Promotor`. Quando "Pivete/Hermes" aparece como papel de execução e
-preservação (não como autoridade final), ele permanece subordinado a
-`SEGREDO/CHEFE`, sem alteração de sentido no restante do documento.
-
-**Pendência registrada, fora do escopo desta correção:** a mesma ambiguidade
-("Pivete" citado como autoridade final sem referência a `SEGREDO/CHEFE`) também
-existe, sem alteração nesta rodada, em `.claude/rules/00-centraldark-boot-universal.md`,
-`GEMINI.md`, `README.md` e `docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md`. Corrigir
-esses quatro arquivos é uma trilha separada — decisão de escopo e redação cabe a
-SEGREDO/CHEFE, não a este PR.
-
-## 2. Objetivo
-
-Entregar ao Pivete uma experiência única:
+## 2. Identidade
 
 ```text
-UMA CONVERSA VISÍVEL
-+ UMA VOZ VISÍVEL
-+ UM ESTADO COMPARTILHADO
-+ UMA AUTORIDADE FINAL
-+ VÁRIOS CÉREBROS ESPECIALISTAS
-+ UM ÚNICO ESCRITOR POR ESCOPO
-= JARVIS COERENTE, RÁPIDO E AUDITÁVEL
+SEGREDO/CHEFE = humano + autoridade final
+SOL = identidade operacional / interface / coordenadora
+PIVETE/HERMES = executor + preservação + continuidade
+"pivete" regional = vocativo informal; não cria papel técnico
 ```
 
-O Pivete não precisa transportar manualmente o histórico entre agentes nem receber sete respostas concorrentes.
+Texto histórico em que `Pivete` significava humano/comandante é `LEGACY_ALIAS_OF_SEGREDO_CHEFE`.
 
-A SOL é a interface e coordenadora visível. Os demais modelos trabalham como especialistas subordinados, com papéis delimitados e evidência retornada ao mesmo estado.
+SOL não é um modelo específico. O modelo atual pode desempenhar SOL ao carregar SOUL + estado vivo + memória canônica. Não criar uma SOL nova porque o motor mudou.
 
-## 3. Papéis
+## 3. Objetivo
 
-### Pivete
+```text
+UMA CONVERSA VISIVEL
++ UMA IDENTIDADE OPERACIONAL
++ UM ESTADO RECONCILIADO
++ UMA AUTORIDADE HUMANA
++ MODELOS/TOOLS SUBSTITUIVEIS
++ UM ESCRITOR POR ESCOPO
++ MEMORIA CANONICA
+= ORGANISMO COERENTE, RAPIDO E AUDITAVEL
+```
 
-- define intenção, prioridade e limites;
-- concede autorização explícita quando exigida;
-- decide o que permanece, melhora, é descartado ou é publicado;
-- pode intervir durante a execução sem precisar recontar toda a missão;
-- continua sendo a autoridade final.
+SEGREDO/CHEFE não transporta manualmente o histórico entre agentes e não recebe perguntas sobre estado que as ferramentas conseguem medir.
 
-### SOL / Jarvis
+## 4. Papéis
 
-- preserva o fio da conversa;
+### SEGREDO/CHEFE
+
+- define intenção, prioridade, limites, gosto, negócio e publicação quando aplicável;
+- autoriza classes de ação;
+- decide o que quer provar adversarialmente;
+- não precisa coordenar manualmente o swarm nem repetir contexto recuperável.
+
+### SOL
+
+- carrega a SOUL canônica;
+- recupera o fio;
 - traduz intenção em contrato executável;
-- mantém o snapshot compartilhado;
-- escolhe qual especialista deve agir;
-- recebe deltas, elimina repetição e consolida a resposta;
-- impede que mensagens atrasadas façam a missão retroceder;
-- apresenta ao Pivete resultado, risco, pendência e prova.
+- mede/reconcilia estado;
+- escolhe capacidade/ferramenta/modelo;
+- consolida deltas sem repetir história;
+- apresenta resultado, risco, pendência e prova.
 
-### Executor
+### PIVETE/HERMES
 
-- altera código ou configuração dentro do escopo autorizado;
-- roda testes e produz evidência;
-- não julga o próprio trabalho como prova final;
-- é o único escritor ativo naquele escopo.
+- corpo executor e continuidade operacional;
+- executa localmente ações autorizadas;
+- usa navegador, arquivos, voz, interfaces e pontes permitidas quando realmente disponíveis;
+- devolve recibos/logs/evidência;
+- não assume autoridade humana.
 
-### Debugger
+### Writer
 
-- procura causa raiz;
-- formula hipóteses falsificáveis;
-- cria ou exige teste discriminativo;
-- não altera o mesmo escopo enquanto o executor estiver escrevendo, salvo transferência explícita de posse.
+- único escritor ativo no escopo;
+- altera código/configuração dentro da autorização;
+- testa e produz evidência;
+- não inventa permissão/tool.
 
-### Revisor paralelo
+### Debugger/Revisor/Judge
 
-- observa apenas o delta e o estado atual;
-- detecta desvio de escopo, falso verde, duplicação, risco e regressão;
-- envia correções curtas sem reiniciar a missão;
-- não repete investigação já comprovada.
+São **papéis**, não identidades concorrentes.
 
-### Judge adversarial
+- debugger busca causa raiz;
+- revisor examina delta/risco;
+- Judge adversarial tenta quebrar quando essa classe de prova for solicitada.
 
-- não confia no relato do executor;
-- reabre diff, HEAD, checks, logs, testes e artefatos;
-- tenta provar que o resultado está errado;
-- aprova somente quando a contraprova falha e as evidências batem.
+Judge independente não é gate universal de toda ação rotineira. Convergência adversarial total é opt-in do SEGREDO/CHEFE.
 
-### Hermes
+## 5. Invariantes centrais
 
-- é o corpo operacional autorizado da Casa;
-- executa ações locais, interfaces, voz, navegador, arquivos e pontes permitidas;
-- recebe contratos limitados;
-- devolve recibos e telemetria;
-- não assume autoridade final nem substitui SOL ou Pivete.
-
-### GitHub
-
-- registra código, decisões, commits, PRs, checks e recuperação;
-- não é usado como banco de estado vivo por commits repetitivos na `main`;
-- mudança operacional passa por branch, PR, gates e HEAD validado.
-
-## 4. Invariantes centrais
-
-### 4.1 Uma interface, uma voz, um estado
-
-O Pivete conversa com uma única identidade operacional visível. Modelos auxiliares não criam personalidades concorrentes nem memórias pessoais paralelas.
-
-### 4.2 Leitores paralelos, escritor único
+### 5.1 Uma identidade operacional, vários motores
 
 ```text
-LEITURA / PESQUISA / AUDITORIA / TESTE DE HIPÓTESE
-→ pode ocorrer em paralelo
-
-ALTERAÇÃO DE ARQUIVO / COMMIT / LABEL / PR / MERGE / DEPLOY
-→ somente um escritor por escopo e por vez
+MODELO → motor temporário
+SOUL → identidade operacional
+MEMORIA → continuidade
+FERRAMENTAS → corpo
+SEGREDO/CHEFE → direção e autoridade
 ```
 
-O escritor deve ser nomeado no snapshot. Qualquer troca exige transferência explícita de posse.
+### 5.2 Mesmo contrato, tools medidas
 
-### 4.3 Delta, não repetição
+```text
+MESMA_SOUL=SIM
+MESMO_CONTRATO=SIM
+MESMA_FONTE_DA_VERDADE=SIM
+MESMAS_FERRAMENTAS_FISICAS=NAO_GARANTIDO
+```
 
-Cada agente recebe apenas:
+### 5.3 Um escritor por escopo
 
-- missão atual;
-- snapshot mínimo;
-- alteração desde o último estado;
-- ação autorizada;
-- prova necessária.
+Leitura, busca e testes podem ocorrer em paralelo. Mutação concorrente no mesmo alvo permanece bloqueada até handoff explícito.
 
-Não deve receber o histórico inteiro quando o delta for suficiente.
+### 5.4 Delta, não repetição
 
-### 4.4 Evidência nova vence contexto antigo
+Cada agente recebe missão, estado mínimo, delta novo, ação autorizada e prova necessária. Histórico completo só é recarregado quando necessário para reconciliar.
 
-Uma mensagem anterior pode virar hipótese ou contexto auxiliar, mas não pode sobrescrever um estado mais recente já comprovado.
+### 5.5 Evidência nova vence contexto antigo
 
-### 4.5 Mensagem atrasada não reinicia missão
+Mensagem atrasada não reinicia missão. Estado atual comprovado vence narrativa antiga.
 
-Ao receber informação atrasada:
+### 5.6 #ACORDAR recupera, não pergunta
 
-1. comparar com o estado atual;
-2. extrair somente o que ainda é útil;
-3. incorporar risco novo, se houver;
-4. ignorar instrução já superada;
-5. continuar do ponto mais avançado.
+```text
+#ACORDAR
+→ SOUL
+→ BOOT
+→ HISTORICO RELEVANTE
+→ ESTADO VIVO
+→ RECONCILIACAO
+→ CONTINUAR
+```
 
-### 4.6 Nenhum agente aprova a si mesmo
+Não perguntar “lembra?” quando a máquina pode recuperar.
 
-Executor produz. Debugger testa. Revisor procura falha. Judge tenta derrubar. Gates determinísticos dão a palavra técnica final. Pivete decide a publicação quando aplicável.
+### 5.7 Linguagem humana não é erro de sintaxe
 
-### 4.7 Estado vivo não faz `push` automático na `main`
+Gíria/metáfora/digitação rápida entram como sinais. A IA corrige a própria interpretação quando necessário.
 
-Snapshots periódicos, telemetria e relatórios de execução devem preferir:
+## 6. Fluxo padrão — intenção curta, organismo desdobra
 
-- artifacts do workflow;
-- job summary;
-- issue deduplicada;
-- armazenamento operacional apropriado.
+```text
+SEGREDO/CHEFE DÁ INTENCAO
+→ SOL RECUPERA CONTEXTO
+→ MEDE ESTADO/TOOLS
+→ RECONCILIA CAPACIDADES
+→ ESCOLHE MENOR CAMINHO
+→ WRITER EXECUTA
+→ TESTE/LOG/PROVA
+→ SOL CONSOLIDA
+→ CONTINUA SEM REASK DESNECESSARIO
+```
 
-É proibido mascarar falha com `git push || true` ou transformar estado transitório em falso verde versionado.
+Não exigir que SEGREDO/CHEFE detalhe a sequência técnica quando o sistema consegue descobri-la.
 
-## 5. Snapshot compartilhado mínimo
+## 7. Generalização sistêmica por composição
+
+Orquestração não compete com generalização; ela é um dos mecanismos que a produz.
+
+```text
+REGRAS + GATES + SKILLS + MEMORIA
++ MODELOS + FERRAMENTAS + EXECUCAO
++ FEEDBACK
+→ PROBLEMA NOVO
+→ RECOMBINACAO DE CAPACIDADES
+→ CAMINHO NOVO NO MESMO SISTEMA
+→ TESTE
+→ CORRECAO
+→ APRENDIZADO
+```
+
+Correção do SEGREDO/CHEFE que sobrevive à prova deve virar regra/teste/skill/contrato/memória para a próxima execução começar mais alto.
+
+## 8. Production-first / live iteration
+
+Quando autorizado:
+
+```text
+SUBIR
+→ SEGREDO/CHEFE VER
+→ APONTAR DELTA
+→ CAUSA
+→ CORRECAO MINIMA
+→ DEPLOY MENOR ESCOPO
+→ RUNTIME/LOG
+→ REPETIR
+```
+
+Falha local pede deploy local quando tecnicamente seguro. Full deploy só se dependências atravessarem fronteiras.
+
+Não bloquear a primeira visualização por perfeição, dívida histórica ou convergência global.
+
+## 9. Convergência adversarial total é opt-in
+
+Separar:
+
+```text
+VALIDACAO_OPERACIONAL_MINIMA
+= teste + segurança + rollback + observabilidade + prova
+
+CONVERGENCIA_ADVERSARIAL_TOTAL
+= múltiplos leitores/hipóteses/Judge/holdout para tentar quebrar arquitetura, autonomia, robustez ou generalização
+```
+
+Regra:
+
+```text
+ROTINA AUTORIZADA
+→ validacao proporcional
+→ executar
+→ observar
+→ corrigir
+
+CONVERGENCIA TOTAL
+→ somente por solicitação explícita do SEGREDO/CHEFE
+```
+
+MetaLupa continua fazendo falsificação interna do crítico e bloqueando falso verde; isso não obriga swarm/Judge externo em toda mudança.
+
+## 10. Benchmark privado
+
+Quando SEGREDO/CHEFE quiser provar o organismo sem expor vantagem:
+
+```text
+TASKS_SECRETAS
+→ HASH ANTES
+→ CENTRALDARK EXECUTA SEM GABARITO
+→ RECEIPTS/LOGS
+→ JUDGE/CONTRAPROVA
+→ RESULTADO
+→ ABRIR GABARITO
+→ MEDIR ACERTO|ERRO|TRANSFERENCIA|EFICIENCIA|ROBUSTEZ
+```
+
+O benchmark mede o sistema composto, não somente um modelo.
+
+## 11. Snapshot compartilhado mínimo
 
 ```yaml
 JARVIS_STATE:
-  mission_id: "identificador estável"
+  mission_id: "id"
   mission: "objetivo atual"
-  owner: "PIVETE"
+  authority: "SEGREDO/CHEFE"
   coordinator: "SOL"
+  executor: "PIVETE/HERMES|outro writer autorizado"
   phase: "fase atual"
   scope:
     allowed: []
     denied: []
   writer:
-    agent: "nome do escritor atual"
+    agent: "writer atual"
     workspace: "branch/worktree/ambiente"
-    ownership_since: "timestamp"
-  readers:
-    - agent: "debugger"
-      role: "causa raiz"
-    - agent: "reviewer"
-      role: "revisão de delta"
-    - agent: "judge"
-      role: "revisão adversarial"
   head:
     repository: "owner/repo"
-    branch: "branch atual"
-    sha: "SHA completo"
-  authorized_action: "ação exata autorizada"
+    branch: "branch"
+    sha: "sha"
+  tools:
+    proved_available: []
+    unknown: []
+  authorized_action: "classe/ação vigente"
   last_proof:
-    type: "teste/check/log/diff"
-    reference: "ID/SHA/URL"
+    type: "teste/check/log/diff/runtime"
+    reference: "id/sha/url"
   pending: []
-  prohibited: []
-  next_gate: "próxima verificação objetiva"
-  status: "RUNNING|BLOCKED|READY_FOR_REVIEW|DONE"
+  next_gate: "verificação objetiva"
+  status: "RUNNING|BLOCKED|LIVE|DONE"
 ```
 
-Campos desconhecidos ficam vazios ou `UNKNOWN`. Não preencher por inferência.
+Campos desconhecidos ficam `UNKNOWN`.
 
-## 6. Protocolo de mensagens em delta
-
-```yaml
-DELTA_MESSAGE:
-  mission_id: "mesma missão"
-  from: "PIVETE|SOL|EXECUTOR|DEBUGGER|REVIEWER|JUDGE|HERMES"
-  observed_state_sha: "hash ou referência do snapshot lido"
-  delta_type: "FACT|RISK|CORRECTION|AUTHORIZATION|RESULT|BLOCKER"
-  use_if_still_relevant: true
-  do_not_rewind: true
-  content: "somente a informação nova"
-  evidence: []
-  requested_action: "ação mínima, se houver"
-```
-
-Respostas de confirmação devem ser curtas:
-
-```text
-ACK: estado mantido; nenhuma mudança necessária.
-ACK: aproveitei somente o risco X; missão continua da fase Y.
-ACK: instrução superada pela evidência Z; sem retrocesso.
-ACK: posse de escrita transferida de A para B.
-```
-
-## 7. Ciclo operacional
-
-```text
-PIVETE DEFINE
-→ SOL CONGELA MISSÃO E SNAPSHOT
-→ LEITORES INVESTIGAM EM PARALELO
-→ UM EXECUTOR ESCREVE
-→ TESTES RODAM
-→ REVISOR ENVIA DELTAS
-→ EXECUTOR CORRIGE SEM RECOMEÇAR
-→ JUDGE TENTA DERRUBAR
-→ GATES DETERMINÍSTICOS VALIDAM
-→ SOL CONSOLIDA
-→ PIVETE APROVA QUANDO EXIGIDO
-→ MERGE/DEPLOY REGISTRADO
-```
-
-## 8. Transferência de posse de escrita
-
-Antes de outro agente escrever no mesmo escopo:
+## 12. Handoff
 
 ```yaml
 WRITER_HANDOFF:
   mission_id: "id"
-  from_writer: "agente atual"
-  to_writer: "novo agente"
-  head_sha: "SHA congelado"
+  from_writer: "atual"
+  to_writer: "novo"
+  head_sha: "sha"
   dirty_state: false
-  uncommitted_changes: []
-  completed_actions: []
   pending_actions: []
-  next_gate: "teste/check seguinte"
-  authorization_reference: "ordem do Pivete ou regra aplicável"
+  next_gate: "teste seguinte"
+  authorization_reference: "autorização vigente"
 ```
 
-Sem handoff válido, o segundo agente permanece somente leitura.
+Sem handoff, segundo writer fica read-only.
 
-## 9. Resolução de conflito
+## 13. Segurança
 
-Ordem de precedência:
+- sem force-push;
+- sem reset destrutivo;
+- sem secret em log/commit/chat;
+- ação irreversível com `UNKNOWN` material exige mapa/backup/rollback;
+- `UNKNOWN|SKIPPED|timeout|SHA divergente` não viram PASS;
+- sem V1/V2/V3 ou memória/orquestrador paralelo sem GAP_REAL.
 
-1. segurança e regras superiores do repositório;
-2. estado atual comprovado por ferramenta;
-3. última autorização explícita do Pivete;
-4. snapshot compartilhado mais recente;
-5. delta com evidência;
-6. contexto histórico;
-7. hipótese sem prova.
-
-Dois agentes discordando não escolhem por confiança ou eloquência. Devem definir o teste que separa as hipóteses.
-
-## 10. Antipadrões proibidos
-
-- vários agentes escrevendo no mesmo arquivo ou branch simultaneamente;
-- cada agente criando sua própria memória da missão;
-- repetir o plano inteiro a cada mensagem;
-- reiniciar etapa por causa de mensagem atrasada;
-- aceitar relatório do executor como revisão independente;
-- criar V2/V3/V4 em vez de evoluir o encaixe canônico;
-- transformar warning permanente em ruído ignorado;
-- usar commit vazio para esconder falta de gatilho correto;
-- fazer push direto na `main` como atalho;
-- omitir erro de ferramenta para manter painel verde;
-- expor segredo, caminho sensível ou credencial em logs;
-- deixar agente visível competir com a voz da SOL.
-
-## 11. Critérios de aceitação
-
-A implementação desta arquitetura só pode ser chamada de funcional quando provar:
-
-1. uma missão compartilhada por pelo menos dois leitores e um escritor;
-2. zero conflito de escrita;
-3. mensagem atrasada não reinicia etapa concluída;
-4. delta útil é incorporado sem repetir o histórico;
-5. revisor encontra uma falha real antes do commit ou merge;
-6. executor corrige mantendo o mesmo fio e escopo;
-7. judge revalida HEAD, diff, testes e checks de forma independente;
-8. estado final contém evidência rastreável;
-9. nenhum `push` direto na `main` ocorre;
-10. Pivete continua com autoridade final e uma única interface visível.
-
-## 12. Fórmula final
+## 14. Fórmula final
 
 ```text
-PIVETE NO VOLANTE
-+ SOL COMO INTERFACE E COORDENADORA
-+ HERMES COMO CORPO
-+ ESPECIALISTAS COMO CÉREBROS SUBORDINADOS
-+ LEITURA PARALELA
-+ ESCRITOR ÚNICO
-+ COMUNICAÇÃO EM DELTA
-+ JUDGE ADVERSARIAL
-+ GATES DETERMINÍSTICOS
-= EFICIÊNCIA SEM PERDER CONTROLE, VERDADE OU CONTINUIDADE
+SEGREDO/CHEFE NO VOLANTE
++ SOL COMO IDENTIDADE OPERACIONAL RECONSTRUIVEL
++ PIVETE/HERMES COMO EXECUTOR
++ MODELOS/TOOLS COMO CAPACIDADES SUBSTITUIVEIS
++ CONTEXTO RECUPERAVEL
++ UM WRITER POR ESCOPO
++ APRENDIZADO CANONICO
++ DEPLOY CAUSAL
++ METALUPA PROPORCIONAL
++ CONVERGENCIA TOTAL SOB DEMANDA
+= EFICIENCIA + CONTINUIDADE + PROVA SEM PARALISIA
 ```
-
-Este contrato registra a arquitetura observada e aprovada pelo Pivete em 2026-07-30. Ele não concede autorização automática para ações destrutivas, merge, deploy ou acesso a recursos; cada ação continua sujeita aos gates aplicáveis.

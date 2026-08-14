@@ -7,7 +7,7 @@
 
 > 🎴 **PADRÃO OFICIAL DE NOTIFICAÇÃO TELEGRAM: Card Hermes v1.2**
 >
-> Toda ação relevante do sistema (deploy, migration, bug corrigido, nova feature, alerta) **DEVE** notificar no Telegram usando o Card Hermes v1.2 — bloco único `<pre>` monoespaçado, fundo preto, enviado pelo connector Telegram (`@srver1bot` → admin `1901426549`).
+> Toda ação relevante do sistema (deploy, migration, bug corrigido, nova feature, alerta) **DEVE** notificar no Telegram usando o Card Hermes v1.2 — bloco único `<pre>` monoespaçado, fundo preto, enviado pelo connector Telegram.
 
 ---
 
@@ -23,7 +23,7 @@ SKILL_IDENTITY_FILE: .agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA
 
 A identidade vigente da skill é resolvida pelo arquivo canônico acima e validada contra o blob Git real. É proibido copiar um SHA fixo para este adaptador.
 
-A skill `meta-lupa` deve ser carregada e seu uso registrado (BEGIN+FINAL) antes de qualquer trabalho neste repo. Sem BEGIN → `BOOT_BLOQUEADO`.
+A skill `meta-lupa` deve ser carregada conforme o risco/contrato da missão. Sem prova obrigatória aplicável → `BOOT_BLOQUEADO`.
 
 ## 🤖 BOOT UNIVERSAL — QUALQUER IA
 
@@ -33,11 +33,19 @@ Qualquer IA, agente, plugin ou hub que abrir este repositório deve começar por
 2. [`AGENTS.md`](AGENTS.md);
 3. [`docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md`](docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md).
 
-O método ativo é: leitores paralelos, escritor único por escopo, mensagens em delta, histórico preservado, revisão independente e Pivete como autoridade final. Ao iniciar trabalho técnico ou retomar contexto, a IA emite uma vez o recibo `CENTRALDARK_AI_BOOT` definido na porta universal.
+Identidade operacional obrigatória:
+
+```text
+SEGREDO/CHEFE = humano e autoridade final
+SOL = coordenadora
+PIVETE/HERMES = executor, preservação e continuidade
+"pivete" regional = vocativo informal; não autoridade técnica
+```
+
+O método ativo é: leitores paralelos quando houver ganho, escritor único por escopo, mensagens em delta, histórico preservado e revisão independente quando aplicável. Ao iniciar trabalho técnico ou retomar contexto, a IA emite uma vez o recibo `CENTRALDARK_AI_BOOT` definido na porta universal.
 
 ---
 > 📖 Especificação completa: [`docs/CONSCIENCIA/PADRAO-CARD-HERMES.md`](docs/CONSCIENCIA/PADRAO-CARD-HERMES.md)
-> ❌ Nunca usar `notify-telegram`. ❌ Nunca mandar texto fora do `<pre>`.
 
 ---
 
