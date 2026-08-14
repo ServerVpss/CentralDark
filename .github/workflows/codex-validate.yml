@@ -192,13 +192,15 @@ jobs:
         run: |
           set -euo pipefail
           docs=("AGENTS.md" "CODEX.md" ".github/codex/prompts/centraldark-system.md" ".github/pull_request_template.md")
-          for file in "${docs[@]}"; do grep -q "arquivos sensíveis\|Arquivos sensíveis" "$file" || { echo "Missing sensitive-file guardrail wording in $file"; exit 1; }; done
+          terms=("\\.env" "secrets/" "tokens/" "sessions/" "\\.ssh/")
+          for file in "${docs[@]}"; do
+            grep -q "arquivos sensíveis\|Arquivos sensíveis" "$file" || { echo "Missing sensitive-file guardrail wording in $file"; exit 1; }
+            for term in "${terms[@]}"; do
+              grep -q "$term" "$file" || { echo "Missing sensitive-file guardrail term '$term' in $file"; exit 1; }
+            done
+          done
           grep -q "Não li, abri, copiei, editei ou usei como contexto arquivos sensíveis" .github/pull_request_template.md
           grep -q "Verifiquei comentários de agentes no PR antes do merge" .github/pull_request_template.md
-          grep -q "\.env" AGENTS.md
-          grep -q "secrets""/" AGENTS.md
-          grep -q "sessions""/" CODEX.md
-          grep -q "\.ssh""/" .github/codex/prompts/centraldark-system.md
 
       - name: Check docs do not contain real secret values
         shell: bash
