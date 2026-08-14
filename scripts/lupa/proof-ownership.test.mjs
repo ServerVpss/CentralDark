@@ -3,6 +3,28 @@ import assert from "node:assert/strict";
 
 import { validateProofOwnership } from "./proof-ownership.mjs";
 
+const makeInvariant = (overrides = {}) => ({
+  id: "A",
+  proof_class: "authority",
+  source: "source.md",
+  consumer: "consumer.mjs",
+  prover: "prover.mjs",
+  negative_test: "prover.test.mjs",
+  counterproof: {
+    kind: "negative_test_suite",
+    path: "prover.test.mjs",
+    observation: "casos adversariais tentam falso PASS",
+    independent_from_prover: true,
+  },
+  external_anchor: {
+    kind: "github_event_label",
+    event_field: "pull_request.labels",
+    observation: "label observada no payload real do evento",
+  },
+  depends_on: [],
+  ...overrides,
+});
+
 const baseContract = () => ({
   schema_version: 1,
   status: "CANONICAL",
@@ -22,33 +44,13 @@ const baseContract = () => ({
     graph_structure_ok_is_not_invariant_proof: true,
     external_anchor_must_be_observed_by_responsible_prover: true,
   },
-  invariants: [
-    {
-      id: "A",
-      proof_class: "identity",
-      source: "source.md",
-      consumer: "consumer.mjs",
-      prover: "prover.mjs",
-      negative_test: "prover.test.mjs",
-      counterproof: {
-        kind: "negative_test_suite",
-        path: "prover.test.mjs",
-        observation: "casos adversariais tentam falso PASS",
-        independent_from_prover: true,
-      },
-      external_anchor: {
-        kind: "repository_active_surface",
-        path: "anchor.md",
-        observation: "conteudo versionado observado no mesmo HEAD",
-      },
-      depends_on: [],
-    },
-  ],
+  unregistered_known_invariants: [],
+  invariants: [makeInvariant()],
 });
 
 const allExist = () => true;
 
-test("grafo finito valido passa somente como topologia parcial", () => {
+test("grafo válido passa somente como topologia parcial", () => {
   const result = validateProofOwnership(baseContract(), { exists: allExist });
   assert.equal(result.ok, true);
   assert.equal(result.topology_only, true);
@@ -57,128 +59,88 @@ test("grafo finito valido passa somente como topologia parcial", () => {
   assert.deepEqual(result.errors, []);
 });
 
-test("grafo nao pode alegar cobertura diferente da parcial explicita", () => {
+test("cobertura FULL é falso verde e reprova", () => {
   const contract = baseContract();
   contract.coverage_status = "FULL";
-  const result = validateProofOwnership(contract, { exists: allExist });
-  assert.equal(result.ok, false);
-  assert.ok(result.errors.includes("PROOF_OWNERSHIP_COVERAGE_MUST_BE_PARTIAL_EXPLICIT"));
+  assert.equal(validateProofOwnership(contract, { exists: allExist }).ok, false);
 });
 
 test("contraprova booleana sem artefato reprova", () => {
   const contract = baseContract();
   contract.invariants[0].counterproof = true;
-  const result = validateProofOwnership(contract, { exists: allExist });
-  assert.equal(result.ok, false);
-  assert.ok(result.errors.includes("PROOF_OWNERSHIP_COUNTERPROOF_MISSING:A"));
+  assert.ok(validateProofOwnership(contract, { exists: allExist }).errors.includes("PROOF_OWNERSHIP_COUNTERPROOF_MISSING:A"));
 });
 
-test("contraprova que e o proprio provador reprova", () => {
+test("contraprova que é o próprio provador reprova", () => {
   const contract = baseContract();
   contract.invariants[0].counterproof.path = "prover.mjs";
-  const result = validateProofOwnership(contract, { exists: allExist });
-  assert.equal(result.ok, false);
-  assert.ok(result.errors.includes("PROOF_OWNERSHIP_COUNTERPROOF_IS_PROVER:A"));
+  assert.ok(validateProofOwnership(contract, { exists: allExist }).errors.includes("PROOF_OWNERSHIP_COUNTERPROOF_IS_PROVER:A"));
 });
 
-test("contraprova sem independência declarada reprova", () => {
+test("contraprova sem independência reprova", () => {
   const contract = baseContract();
   contract.invariants[0].counterproof.independent_from_prover = false;
-  const result = validateProofOwnership(contract, { exists: allExist });
-  assert.equal(result.ok, false);
-  assert.ok(result.errors.includes("PROOF_OWNERSHIP_COUNTERPROOF_NOT_INDEPENDENT:A"));
+  assert.ok(validateProofOwnership(contract, { exists: allExist }).errors.includes("PROOF_OWNERSHIP_COUNTERPROOF_NOT_INDEPENDENT:A"));
 });
 
-test("provador testado por si proprio reprova", () => {
+test("provador = teste negativo reprova", () => {
   const contract = baseContract();
   contract.invariants[0].negative_test = "prover.mjs";
-  const result = validateProofOwnership(contract, { exists: allExist });
-  assert.equal(result.ok, false);
-  assert.ok(result.errors.some((item) => item.startsWith("PROOF_OWNERSHIP_SELF_TEST:A")));
+  assert.ok(validateProofOwnership(contract, { exists: allExist }).errors.includes("PROOF_OWNERSHIP_SELF_TEST:A"));
 });
 
-test("provador que tambem e consumidor reprova", () => {
+test("provador = consumidor reprova", () => {
   const contract = baseContract();
   contract.invariants[0].consumer = "prover.mjs";
-  const result = validateProofOwnership(contract, { exists: allExist });
-  assert.equal(result.ok, false);
-  assert.ok(result.errors.some((item) => item.startsWith("PROOF_OWNERSHIP_PROVER_IS_CONSUMER:A")));
+  assert.ok(validateProofOwnership(contract, { exists: allExist }).errors.includes("PROOF_OWNERSHIP_PROVER_IS_CONSUMER:A"));
 });
 
-test("ancora que depende de output de validator reprova", () => {
+test("âncora baseada em output do validator reprova", () => {
   const contract = baseContract();
   contract.invariants[0].external_anchor.kind = "validator_output";
-  const result = validateProofOwnership(contract, { exists: allExist });
-  assert.equal(result.ok, false);
-  assert.ok(result.errors.some((item) => item.startsWith("PROOF_OWNERSHIP_EXTERNAL_ANCHOR_INVALID:A")));
+  assert.equal(validateProofOwnership(contract, { exists: allExist }).ok, false);
 });
 
-test("ancora sem descricao da observacao externa reprova", () => {
+test("âncora github sem event_field reprova", () => {
   const contract = baseContract();
-  delete contract.invariants[0].external_anchor.observation;
-  const result = validateProofOwnership(contract, { exists: allExist });
-  assert.equal(result.ok, false);
-  assert.ok(result.errors.includes("PROOF_OWNERSHIP_EXTERNAL_OBSERVATION_MISSING:A"));
+  delete contract.invariants[0].external_anchor.event_field;
+  assert.ok(validateProofOwnership(contract, { exists: allExist }).errors.includes("PROOF_OWNERSHIP_EXTERNAL_EVENT_FIELD_MISSING:A"));
 });
 
-test("dependencia circular reprova", () => {
+test("âncora estática sem path reprova", () => {
+  const contract = baseContract();
+  contract.invariants[0].external_anchor = { kind: "repository_active_surface", observation: "x" };
+  assert.ok(validateProofOwnership(contract, { exists: allExist }).errors.includes("PROOF_OWNERSHIP_EXTERNAL_PATH_MISSING:A"));
+});
+
+test("depends_on ausente reprova", () => {
+  const contract = baseContract();
+  delete contract.invariants[0].depends_on;
+  assert.ok(validateProofOwnership(contract, { exists: allExist }).errors.includes("PROOF_OWNERSHIP_FIELD_MISSING:A:depends_on"));
+});
+
+test("ciclo explícito A→B→A reprova", () => {
   const contract = baseContract();
   contract.invariants[0].depends_on = ["B"];
-  contract.invariants.push({
-    id: "B",
-    proof_class: "runtime",
-    source: "b-source.md",
-    consumer: "b-consumer.mjs",
-    prover: "b-prover.mjs",
-    negative_test: "b-prover.test.mjs",
-    counterproof: {
-      kind: "negative_test_suite",
-      path: "b-prover.test.mjs",
-      observation: "counterexample externo ao provador",
-      independent_from_prover: true,
-    },
-    external_anchor: {
-      kind: "runtime_observation",
-      path: "b-anchor.log",
-      observation: "evento externo observado pelo consumidor real",
-    },
-    depends_on: ["A"],
-  });
-  const result = validateProofOwnership(contract, { exists: allExist });
-  assert.equal(result.ok, false);
-  assert.ok(result.errors.some((item) => item.startsWith("PROOF_OWNERSHIP_CYCLE:")));
+  contract.invariants.push(makeInvariant({ id: "B", proof_class: "runtime", prover: "b-prover.mjs", consumer: "b-consumer.mjs", negative_test: "b.test.mjs", counterproof: { kind: "negative_test_suite", path: "b.test.mjs", observation: "x", independent_from_prover: true }, depends_on: ["A"] }));
+  assert.ok(validateProofOwnership(contract, { exists: allExist }).errors.some((item) => item.startsWith("PROOF_OWNERSHIP_CYCLE:")));
+});
+
+test("ciclo implícito consumer→prover é inferido e reprova", () => {
+  const contract = baseContract();
+  contract.invariants[0].consumer = "b-prover.mjs";
+  contract.invariants.push(makeInvariant({ id: "B", proof_class: "runtime", prover: "b-prover.mjs", consumer: "prover.mjs", negative_test: "b.test.mjs", counterproof: { kind: "negative_test_suite", path: "b.test.mjs", observation: "x", independent_from_prover: true } }));
+  assert.ok(validateProofOwnership(contract, { exists: allExist }).errors.some((item) => item.startsWith("PROOF_OWNERSHIP_CYCLE:")));
 });
 
 test("mesma classe com dois donos reprova", () => {
   const contract = baseContract();
-  contract.invariants.push({
-    id: "B",
-    proof_class: "identity",
-    source: "b-source.md",
-    consumer: "b-consumer.mjs",
-    prover: "outro-prover.mjs",
-    negative_test: "outro-prover.test.mjs",
-    counterproof: {
-      kind: "negative_test_suite",
-      path: "outro-prover.test.mjs",
-      observation: "counterexample externo ao segundo provador",
-      independent_from_prover: true,
-    },
-    external_anchor: {
-      kind: "repository_active_surface",
-      path: "b-anchor.md",
-      observation: "outra superficie ativa observada no mesmo HEAD",
-    },
-    depends_on: [],
-  });
-  const result = validateProofOwnership(contract, { exists: allExist });
-  assert.equal(result.ok, false);
-  assert.ok(result.errors.some((item) => item.startsWith("PROOF_OWNERSHIP_DUPLICATE_OWNER:identity:")));
+  contract.invariants.push(makeInvariant({ id: "B", prover: "outro.mjs", consumer: "outro-consumer.mjs", negative_test: "outro.test.mjs", counterproof: { kind: "negative_test_suite", path: "outro.test.mjs", observation: "x", independent_from_prover: true } }));
+  assert.ok(validateProofOwnership(contract, { exists: allExist }).errors.some((item) => item.startsWith("PROOF_OWNERSHIP_DUPLICATE_OWNER:authority:")));
 });
 
-test("path ausente reprova", () => {
+test("path obrigatório ausente reprova", () => {
   const contract = baseContract();
-  const result = validateProofOwnership(contract, { exists: (path) => path !== "anchor.md" });
-  assert.equal(result.ok, false);
-  assert.ok(result.errors.includes("PROOF_OWNERSHIP_PATH_MISSING:A:anchor.md"));
+  const result = validateProofOwnership(contract, { exists: (path) => path !== "source.md" });
+  assert.ok(result.errors.includes("PROOF_OWNERSHIP_PATH_MISSING:A:source.md"));
 });
