@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "status": "CANONICAL",
+  "marker": "PROOF_OWNERSHIP_REQUIRED",
+  "coverage_status": "PARTIAL_EXPLICIT",
+  "scope": "TOPOLOGY_ONLY",
+  "purpose": "Impedir prova circular, duplicacao de responsabilidade e PASS fabricado pelo proprio provador sem fingir que topologia prova a invariavel factual.",
+  "global_rules": {
+    "self_validation_without_independent_counterproof": "UNPROVEN",
+    "circular_proof": "UNPROVEN",
+    "written_rule_without_consumer": "UNPROVEN",
+    "written_rule_without_prover": "UNPROVEN",
+    "prover_without_negative_test": "UNPROVEN",
+    "same_proof_class_multiple_owners": "BLOCKED_DUPLICATE_PROOF_OWNER",
+    "unregistered_invariant": "UNPROVEN_NOT_OWNED",
+    "proof_graph_must_be_acyclic": true,
+    "proof_must_end_in_external_anchor": true,
+    "graph_structure_ok_is_not_invariant_proof": true,
+    "external_anchor_must_be_observed_by_responsible_prover": true,
+    "execution_status_is_out_of_scope": true
+  },
+  "allowed_proof_classes": [
+    "authenticated_authority"
+  ],
+  "required_registered_invariants": [
+    "AUTHORITY_RECEIPT_FROM_GITHUB_EVENT"
+  ],
+  "required_fields_per_invariant": [
+    "id",
+    "proof_class",
+    "source",
+    "consumer",
+    "prover",
+    "negative_test",
+    "counterproof",
+    "external_anchor",
+    "depends_on"
+  ],
+  "unregistered_known_invariants": [
+    {
+      "id": "IDENTITY_AUTHORITY_ACTIVE_SURFACES",
+      "reason": "O validador atual consome as proprias superficies canonicas; ainda nao existe ancora independente suficiente para registrar essa classe sem circularidade.",
+      "status": "UNPROVEN_NOT_OWNED"
+    },
+    {
+      "id": "PROOF_OWNERSHIP_GRAPH_STRUCTURE",
+      "reason": "O detector mede somente a topologia do grafo e nao pode registrar a propria conclusao como prova factual independente.",
+      "status": "UNPROVEN_NOT_OWNED"
+    }
+  ],
+  "invariants": [
+    {
+      "id": "AUTHORITY_RECEIPT_FROM_GITHUB_EVENT",
+      "proof_class": "authenticated_authority",
+      "source": "docs/CONSCIENCIA/02-PERMISSOES.md",
+      "consumer": ".github/workflows/porta-de-entrada.yml",
+      "prover": "scripts/lupa/authority-approval.mjs",
+      "negative_test": "scripts/lupa/authority-approval.test.mjs",
+      "counterproof": {
+        "kind": "negative_test_suite",
+        "path": "scripts/lupa/authority-approval.test.mjs",
+        "observation": "payloads sem autoridade ou com alias legado devem falhar sem consultar a conclusao do provador",
+        "independent_from_prover": true
+      },
+      "external_anchor": {
+        "kind": "github_event_label",
+        "event_field": "pull_request.labels",
+        "observation": "label autenticada observada no payload real de GITHUB_EVENT_PATH; arquivo seed isolado nao prova presenca da label"
+      },
+      "depends_on": []
+    }
+  ]
+}

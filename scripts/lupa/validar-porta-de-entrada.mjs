@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join, posix, resolve } from "node:path";
 
@@ -15,7 +16,11 @@ const PORTA = "LEIA-ME-IA.md";
 const PORTA_VIVA = "docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md";
 const CONTRATO_DELTA = "docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md";
 const CONTRATO_RECONCILIACAO = "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json";
+const ESTRUTURA_VPS = "docs/CONSCIENCIA/04-ESTRUTURA-VPS.md";
+const RECONCILIATION_SCHEMA_VERSION = 3;
 const IDENTIDADE_LUPA = ".agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA";
+const BASE_SHA = valueAfter("--base-sha", process.env.BASE_SHA || "");
+const HEAD_SHA = valueAfter("--head-sha", process.env.HEAD_SHA || process.env.GITHUB_SHA || "");
 
 const ADAPTADORES = [
   "AGENTS.md",
@@ -37,6 +42,25 @@ const GERADOS = [
   /^docs\/ESTADO-DA-RETOMADA\.md$/,
 ];
 
+const BOUNDARY_ENFORCED_FILES = [
+  "scripts/checker/_lib.sh",
+  "scripts/checker/01-estrutura.sh",
+  "scripts/checker/02-logs.sh",
+  "scripts/checker/03-github-deploy.sh",
+  "scripts/checker/04-pm2.sh",
+  "scripts/checker/05-telegram-bot.sh",
+  "scripts/checker/06-supabase-sync.sh",
+  "scripts/checker/07-whatsapp-wuzapi.sh",
+  "scripts/checker/08-chat-ao-vivo.sh",
+  "scripts/checker/09-caddy.sh",
+  "scripts/checker/10-crm.sh",
+  "scripts/checker/11-seguranca.sh",
+  "scripts/checker/12-wildcard-dns.sh",
+  "scripts/checker/run-all.sh",
+  "scripts/clone-deck-gh-pull-with-deploy.sh",
+  "scripts/webhook/deploy-job.sh",
+];
+
 const existe = (relativePath) => existsSync(join(ROOT, relativePath));
 const ler = (relativePath) => {
   try {
@@ -53,6 +77,26 @@ function lerJson(relativePath) {
   } catch {
     return null;
   }
+}
+
+function git(args) {
+  return execFileSync("git", ["-C", ROOT, ...args], {
+    encoding: "utf8",
+    stdio: ["ignore", "pipe", "pipe"],
+  });
+}
+
+function gitCommitExiste(sha) {
+  try {
+    git(["rev-parse", "--verify", `${sha}^{commit}`]);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function shaValido(value) {
+  return /^[0-9a-f]{40}$/i.test(String(value || ""));
 }
 
 function caminhosCitados(texto) {
@@ -112,6 +156,7 @@ if (!existe(PORTA)) errors.push(`PORTA_AUSENTE:${PORTA}`);
 if (!existe(PORTA_VIVA)) errors.push(`PORTA_VIVA_AUSENTE:${PORTA_VIVA}`);
 if (!existe(CONTRATO_DELTA)) errors.push(`CONTRATO_DELTA_AUSENTE:${CONTRATO_DELTA}`);
 if (!existe(CONTRATO_RECONCILIACAO)) errors.push(`CONTRATO_RECONCILIACAO_AUSENTE:${CONTRATO_RECONCILIACAO}`);
+if (!existe(ESTRUTURA_VPS)) errors.push(`ESTRUTURA_VPS_AUSENTE:${ESTRUTURA_VPS}`);
 if (!existe(IDENTIDADE_LUPA)) errors.push(`IDENTIDADE_LUPA_AUSENTE:${IDENTIDADE_LUPA}`);
 
 for (const adapter of ADAPTADORES) {
@@ -157,6 +202,12 @@ const semanticRequirements = new Map([
     CONTRATO_RECONCILIACAO,
     "FALHA_DE_RECONCILIACAO_DE_CONTEXTO",
   ]],
+  [ESTRUTURA_VPS, [
+    "CENTRALDARK_ROOT_ONLY_REQUIRED=SIM",
+    "WORKFLOW_REUSE_REQUIRED=SIM",
+    "AI_DETERMINISTIC_FALLBACK_REQUIRED=SIM",
+    "/root/Multizap/apps/clone-deck=OUT_OF_SCOPE",
+  ]],
 ]);
 
 for (const [source, tokens] of semanticRequirements) {
@@ -181,7 +232,9 @@ const contract = lerJson(CONTRATO_RECONCILIACAO);
 if (!contract) {
   errors.push(`CONTRATO_RECONCILIACAO_JSON_INVALIDO:${CONTRATO_RECONCILIACAO}`);
 } else {
-  if (contract.schema_version !== 1) errors.push("CONTRATO_RECONCILIACAO_SCHEMA_INVALIDO");
+  if (contract.schema_version !== RECONCILIATION_SCHEMA_VERSION) {
+    errors.push(`CONTRATO_RECONCILIACAO_SCHEMA_INVALIDO:esperado=${RECONCILIATION_SCHEMA_VERSION}:observado=${contract.schema_version}`);
+  }
   if (contract.status !== "CANONICAL") errors.push("CONTRATO_RECONCILIACAO_NAO_CANONICO");
   if (contract.marker !== "REUSE_BEFORE_CREATE_REQUIRED") errors.push("CONTRATO_RECONCILIACAO_MARKER_INVALIDO");
 
@@ -204,6 +257,7 @@ if (!contract) {
 
   const rules = contract.decision_rules ?? {};
   if (rules.new_component_requires_proved_gap !== true) errors.push("CONTRATO_RECONCILIACAO_GAP_NAO_OBRIGATORIO");
+  if (rules.new_workflow_when_equivalent_exists !== "FORBIDDEN_UPDATE_EXISTING") errors.push("WORKFLOW_REUSE_NAO_OBRIGATORIO");
   if (rules.proposal_without_inventory !== "BOOT_BLOCKED") errors.push("CONTRATO_RECONCILIACAO_SEM_FAIL_CLOSED");
   if (rules.file_found_but_not_cross_referenced !== "CONTEXT_RECONCILIATION_FAILURE") errors.push("CONTRATO_RECONCILIACAO_SEM_CROSS_REFERENCE");
   if (rules.open_or_draft_pr_is_operational_authority !== false) errors.push("CONTRATO_RECONCILIACAO_PR_DRAFT_COM_AUTORIDADE");
@@ -212,6 +266,60 @@ if (!contract) {
   if (contract.complexity_policy?.never_expose_internal_governance_as_user_bureaucracy !== true) {
     errors.push("CONTRATO_RECONCILIACAO_GOVERNANCA_EXPOSTA_AO_USUARIO");
   }
+
+  const boundary = contract.repository_boundary_policy ?? {};
+  if (boundary.marker !== "CENTRALDARK_ROOT_ONLY_REQUIRED") errors.push("BOUNDARY_MARKER_AUSENTE");
+  if (boundary.repository !== "ServerVpss/CentralDark") errors.push("BOUNDARY_REPOSITORY_INVALIDO");
+  if (boundary.vps_root !== "/root/CentralDark") errors.push("BOUNDARY_VPS_ROOT_INVALIDO");
+  if (boundary.external_root_default !== "OUT_OF_SCOPE") errors.push("BOUNDARY_EXTERNAL_DEFAULT_INVALIDO");
+  if (!Array.isArray(boundary.explicit_external_exclusions) || !boundary.explicit_external_exclusions.includes("/root/Multizap/apps/clone-deck")) {
+    errors.push("BOUNDARY_CLONE_DECK_NAO_EXCLUIDO");
+  }
+  if (boundary.external_runtime_fallback !== "FORBIDDEN") errors.push("BOUNDARY_EXTERNAL_FALLBACK_NAO_BLOQUEADO");
+
+  const workflow = contract.workflow_policy ?? {};
+  if (workflow.marker !== "WORKFLOW_REUSE_REQUIRED") errors.push("WORKFLOW_POLICY_MARKER_AUSENTE");
+  if (workflow.reuse_existing_before_new !== true) errors.push("WORKFLOW_REUSE_FALSE");
+  if (workflow.ai_policy_marker !== "AI_DETERMINISTIC_FALLBACK_REQUIRED") errors.push("AI_FALLBACK_MARKER_AUSENTE");
+  if (workflow.deterministic_first !== true) errors.push("AI_DETERMINISTICO_NAO_PRIORITARIO");
+  if (workflow.ai_unavailable !== "DETERMINISTIC_FALLBACK_OR_FAIL_CLOSED") errors.push("AI_SEM_FALLBACK_DETERMINISTICO");
+  if (workflow.rate_limit_timeout_model_offline_is_pass !== false) errors.push("AI_INDISPONIVEL_PODE_VIRAR_PASS");
+}
+
+// A dívida histórica pode continuar arquivada, mas estes entrypoints ativos não
+// podem depender de /root/Multizap. Isso torna a fronteira determinística sem
+// reescrever de uma vez todos os documentos históricos.
+for (const file of BOUNDARY_ENFORCED_FILES) {
+  if (!existe(file)) {
+    errors.push(`BOUNDARY_FILE_AUSENTE:${file}`);
+    continue;
+  }
+  if (ler(file).includes("/root/Multizap")) errors.push(`BOUNDARY_EXTERNAL_PATH_ATIVO:${file}`);
+  if (ler(file).includes("CK_MULTIZAP_ROOT")) errors.push(`BOUNDARY_LEGACY_ROOT_ATIVO:${file}`);
+}
+
+// Não criar workflow paralelo. Em PRs com BASE/HEAD conhecidos, qualquer novo
+// arquivo de workflow é bloqueado para forçar extensão do mecanismo existente.
+if (shaValido(BASE_SHA) && shaValido(HEAD_SHA)) {
+  const baseExiste = gitCommitExiste(BASE_SHA);
+  const headExiste = gitCommitExiste(HEAD_SHA);
+  if (!baseExiste) errors.push(`WORKFLOW_BASE_SHA_INDISPONIVEL:${BASE_SHA}`);
+  if (!headExiste) errors.push(`WORKFLOW_HEAD_SHA_INDISPONIVEL:${HEAD_SHA}`);
+  if (baseExiste && headExiste) {
+    try {
+      const workflowChanges = git(["diff", "--name-status", BASE_SHA, HEAD_SHA, "--", ".github/workflows"]);
+      for (const line of workflowChanges.split(/\r?\n/).filter(Boolean)) {
+        const [status, path] = line.split(/\t/);
+        if (status === "A" && /\.ya?ml$/i.test(path || "")) {
+          errors.push(`NOVO_WORKFLOW_BLOQUEADO_REUTILIZE_EXISTENTE:${path}`);
+        }
+      }
+    } catch {
+      errors.push(`WORKFLOW_DIFF_INDISPONIVEL:${BASE_SHA}:${HEAD_SHA}`);
+    }
+  }
+} else if (BASE_SHA || HEAD_SHA) {
+  errors.push(`WORKFLOW_SHA_INVALIDO:${BASE_SHA || "EMPTY"}:${HEAD_SHA || "EMPTY"}`);
 }
 
 for (const entrypoint of ENTRADAS) {
@@ -247,8 +355,16 @@ const report = {
   porta_viva: PORTA_VIVA,
   contrato_delta: CONTRATO_DELTA,
   contrato_reconciliacao: CONTRATO_RECONCILIACAO,
+  estrutura_vps: ESTRUTURA_VPS,
+  contrato_reconciliacao_schema_expected: RECONCILIATION_SCHEMA_VERSION,
+  contrato_reconciliacao_schema_observed: contract?.schema_version ?? null,
   identidade_lupa: IDENTIDADE_LUPA,
   reuse_before_create_required: true,
+  centraldark_root_only_required: true,
+  workflow_reuse_required: true,
+  ai_deterministic_fallback_required: true,
+  base_sha: BASE_SHA || null,
+  head_sha: HEAD_SHA || null,
   adaptadores_obrigatorios: ADAPTADORES,
   adaptadores_encontrados: ADAPTADORES.filter(existe),
   canonicos_encontrados: canonicalDocuments.length,
@@ -266,6 +382,10 @@ else {
   console.log(
     `PORTA_OK=${report.ok ? 1 : 0} ` +
       `REUSE_BEFORE_CREATE=${report.reuse_before_create_required ? 1 : 0} ` +
+      `CENTRALDARK_ROOT_ONLY=${report.centraldark_root_only_required ? 1 : 0} ` +
+      `WORKFLOW_REUSE=${report.workflow_reuse_required ? 1 : 0} ` +
+      `AI_DETERMINISTIC_FALLBACK=${report.ai_deterministic_fallback_required ? 1 : 0} ` +
+      `SCHEMA=${report.contrato_reconciliacao_schema_observed}/${report.contrato_reconciliacao_schema_expected} ` +
       `ADAPTADORES=${report.adaptadores_encontrados.length}/${report.adaptadores_obrigatorios.length} ` +
       `CANONICOS=${report.canonicos_encontrados} ` +
       `ALCANCAVEIS=${report.canonicos_alcancaveis} ` +

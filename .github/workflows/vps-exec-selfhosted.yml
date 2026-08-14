@@ -73,8 +73,10 @@ jobs:
           import re
           import sys
           denied = re.compile(r'(^|/)(\.env(?:\.|$)|secrets?(?:/|$)|tokens?(?:/|$)|sessions?(?:/|$)|\.ssh(?:/|$)|[^/]+\.(?:pem|key)$)', re.I)
-          mcp_root = 'apps/modulos/mcp/'
-          runtime_dist = 'apps/modulos/mcp/dist/'
+          dependency_manifests = {
+              'apps/modulos/mcp/package.json',
+              'apps/modulos/mcp/package-lock.json',
+          }
           for raw in Path(sys.argv[1]).read_bytes().split(b'\0'):
               if not raw:
                   continue
@@ -83,15 +85,14 @@ jobs:
               path = item[3:] if len(item) >= 4 else item
               shown = 'SENSITIVE_TRACKED_PATH_REDACTED' if denied.search(path) else path
               print(f'TRACKED_DIRTY_PRESERVED {code} {shown}')
-              in_runtime_dist = path == 'apps/modulos/mcp/dist' or path.startswith(runtime_dist)
-              if path.startswith(mcp_root) and not in_runtime_dist:
+              if path in dependency_manifests:
                   Path(sys.argv[2]).write_text('dirty', encoding='utf-8')
           PY
             if [[ -s "$DIRTY_MCP_FLAG" ]]; then
-              echo "MCP_TRACKED_SOURCE_DIRTY"
+              echo "MCP_DEPENDENCY_MANIFEST_DIRTY"
               exit 26
             fi
-            echo "NON_MCP_DIRTY_TREE_PRESERVED"
+            echo "TRACKED_DIRTY_TREE_PRESERVED_ATOMIC_DIST_ONLY"
           fi
 
           # A porta 9300 só pode pertencer ao webhook legado conhecido. Ele é

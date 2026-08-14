@@ -2,7 +2,7 @@
 # postdeploy-healthcheck.sh — validação pós-deploy do MCP CentralDark.
 # Rodar automaticamente pelo webhook logo após pm2 restart.
 # Só marca o serviço como "PRONTO" se AMBOS responderem:
-#   • /health/deep       → HTTP 200 + score >= 60
+#   • /health/deep       → HTTP 200 + score >= 60 + hub_mission_consumer crítico OK
 #   • /admin/logs/stream → HTTP 200 + content-type text/event-stream + primeiro frame
 # Retorno 0 = OK, retorno 2 = falhou (webhook deve chamar rollback-mcp.sh rollback).
 set -euo pipefail
@@ -14,6 +14,36 @@ DEADLINE=$(( $(date +%s) + TIMEOUT_SEG ))
 
 log() { echo "[$(date +%H:%M:%S)] $*"; }
 
+health_ready() {
+  node -e '
+const fs = require("node:fs");
+let body = "";
+process.stdin.on("data", chunk => { body += chunk; });
+process.stdin.on("end", () => {
+  try {
+    const json = JSON.parse(body || "{}");
+    const checks = Array.isArray(json.checks) ? json.checks : [];
+    const hub = checks.find((item) => item && item.key === "hub_mission_consumer");
+    const score = Number(json.score || 0);
+    const ok = json.ok === true && json.status !== "unhealthy" && score >= 60 && hub && hub.ok === true;
+    if (!ok) {
+      console.error(JSON.stringify({
+        ok: json.ok,
+        status: json.status,
+        score,
+        criticalFailures: json.criticalFailures || [],
+        hub_mission_consumer: hub || null,
+      }));
+      process.exit(1);
+    }
+  } catch (err) {
+    console.error(String(err && err.message || err));
+    process.exit(1);
+  }
+});
+'
+}
+
 log "🔎 Aguardando MCP em $BASE ..."
 
 # ─── ETAPA 1: /health/deep ──────────────────────────────────────────────
@@ -23,11 +53,11 @@ while :; do
     SCORE=$(echo "$RESP" | grep -oE '"score":[[:space:]]*[0-9]+' | head -1 | grep -oE '[0-9]+' || echo 0)
     STATUS=$(echo "$RESP" | grep -oE '"status":[[:space:]]*"[^"]+"' | head -1 | cut -d'"' -f4 || echo unknown)
     VERSAO=$(echo "$RESP" | grep -oE '"versao":[[:space:]]*"[^"]+"' | head -1 | cut -d'"' -f4 || echo "?")
-    if [ "${SCORE:-0}" -ge 60 ]; then
-      log "✅ /health/deep OK — score=$SCORE status=$STATUS versao=$VERSAO"
+    if echo "$RESP" | health_ready; then
+      log "✅ /health/deep OK — score=$SCORE status=$STATUS versao=$VERSAO hub_mission_consumer=OK"
       break
     fi
-    log "⏳ /health/deep respondeu mas score=$SCORE (ainda subindo)..."
+    log "⏳ /health/deep ainda não pronto — score=$SCORE status=$STATUS hub_mission_consumer precisa estar OK"
   fi
   if [ "$(date +%s)" -ge "$DEADLINE" ]; then
     log "❌ /health/deep não respondeu ok em ${TIMEOUT_SEG}s"

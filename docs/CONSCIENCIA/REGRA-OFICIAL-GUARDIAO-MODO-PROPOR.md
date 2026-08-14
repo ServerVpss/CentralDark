@@ -1,66 +1,48 @@
 ---
-title: "REGRA OFICIAL GUARDIAO MODO PROPOR"
-date: 2026-06-29
-tags: ["consciencia"]
-updated: 2026-06-29
+title: "Guardião modo propor — decisão histórica"
+status: "HISTORICAL_DECISION"
+updated: 2026-08-14
 ---
 
-# 📜 Regra Oficial — Guardião da Consciência: Modo "Propor" Obrigatório
+# Guardião da Consciência — decisão histórica
 
-> **Status:** Ativo e em observação
-> **Data de criação:** 25/06/2026
-> **Responsável pela decisão:** Pivete (dono do projeto)
-> **Aprendizado quântico rastreado:** Nº 249 em `docs/CONSCIENCIA/APRENDIZADOS.md`
-> **Commit de registro:** [`4ba028c`](https://github.com/ServerVpss/CentralDark/commit/4ba028c5164c05b5a3370de2958fa8341724ec36)
+Este arquivo registrou uma regra de 25/06/2026 com janela temporal que já passou. Ele **não deve mais se apresentar como regra oficial vigente sem medir código/runtime atual**.
 
----
+## Identidade
 
-## Descrição
+```text
+SEGREDO/CHEFE = humano e autoridade final
+SOL = coordenadora
+PIVETE/HERMES = executor, preservação e continuidade
+```
 
-O agente **Guardião da Consciência** (`infra/guardiao/`) é responsável por
-vigiar a integridade da pasta `docs/CONSCIENCIA/` e propor correções de
-organização via Telegram + Mega Painel.
+O `Pivete (dono do projeto)` citado historicamente é `LEGACY_ALIAS_OF_SEGREDO_CHEFE`.
 
-## Regras invioláveis
+## O que permanece como princípio
 
-1. **Modo inicial travado em `propor`.** O Guardião nunca move arquivos
-   automaticamente nesta versão.
-2. **Modo `auto` bloqueado por código** até **08/07/2026**
-   (`guardiao.py: DATA_LIBERACAO_AUTO`). Mesmo com `GUARDIAO_MODO=auto` no
-   ambiente, o código força `propor` e loga `WARNING`.
-3. **A data sozinha não libera o modo `auto`.** É necessário cumprir
-   *todos* os pré-requisitos abaixo, cumulativamente:
-   - Mínimo **7~10 dias úteis** de propostas reais do Guardião.
-   - **Maioria das propostas validadas** como corretas pelo admin.
-   - Lógica de mover arquivos **implementada e revisada** (hoje não existe).
-   - **Aprovação explícita** do dono (Pivete).
-4. **Logs estruturados obrigatórios** (`RotatingFileHandler` 10MB × 5).
-5. **Bateria de testes pytest** roda dentro do `run.sh` antes de subir o
-   processo no PM2 — se algum teste falhar, o deploy aborta.
-6. **Auto-registro no Mega Painel** como serviço vivo via heartbeat de 60s.
+- mudança automática de organização exige causa, teste, observabilidade e rollback;
+- data antiga por si só não prova que modo `auto` foi ativado;
+- logs/testes documentados precisam ser confirmados no código/runtime atual antes de afirmar PASS.
 
-## Para qualquer IA ou agente futuro
+## O que NÃO pode ser herdado como estado atual
 
-Esta regra **deve ser respeitada integralmente**. São proibidos sem
-aprovação explícita do dono:
+```text
+DATA_LIBERACAO_AUTO
+modo atual do Guardião
+PM2 atual
+tests atuais
+heartbeat/painel atual
+aprovação pendente antiga
+```
 
-- Trocar o modo padrão de `propor` para `auto`.
-- Remover, adiantar ou comentar a trava `DATA_LIBERACAO_AUTO`.
-- Pular ou desativar a bateria de testes no `run.sh`.
-- Desativar o sistema de logs estruturado.
-- Implementar lógica de movimentação automática sem revisão prévia.
+Para operar o Guardião hoje:
 
-## Referências cruzadas
+```text
+#ACORDAR
+→ abrir infra/guardiao/ atual
+→ medir configuração/runtime
+→ reconciliar docs
+→ aplicar autorização vigente de SEGREDO/CHEFE
+```
 
-- Código: `infra/guardiao/guardiao.py`
-- Documentação técnica: `docs/CONSCIENCIA/GUARDIAO-DA-CONSCIENCIA.md`
-- Memória de constraint: `.lovable/memory/constraints/guardiao-liberacao-auto.md`
-- Aprendizado nº 249: `docs/CONSCIENCIA/APRENDIZADOS.md`
-
----
-
-## Conexões Rápidas
-
-- [[00-LEIA-PRIMEIRO]] — portão de entrada
-- [[MAPA-DO-CEREBRO]] — visão geral
-- [[CONSCIENCIA]] — documento mestre
+O conteúdo anterior permanece no histórico Git para proveniência.

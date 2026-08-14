@@ -2,6 +2,7 @@
 
 > 📌 **Mapa visual e ordem de implementação:** `docs/BOTS/TIME-DE-BOTS.md`
 > 📌 **Protocolo de revisão humana (obrigatório):** `docs/BOTS/PROTOCOLO-REVISAO-HUMANA.md`
+> 📌 **Artefato automático de aprendizado em PR:** `docs/BOTS/PR-LEARNING-ARTIFACT.md`
 > 📌 **Seed das labels oficiais:** workflow `.github/workflows/bots-labels-seed.yml` (rodar manual a cada bot novo)
 > 📌 **Regra inquebrável:** todo bot abre Issue/PR com label `revisao-humana`. Nenhum bot mergeia em `main`, apaga arquivo, reinicia produção ou toca secret.
 
@@ -11,15 +12,16 @@ Matriz oficial "quem faz o quê". Cada bot tem escopo fixo e label de assign. Se
 
 | Bot | Label | Escopo | Onde mora | Como roda |
 |---|---|---|---|---|
-| **ChatGPT + MCP** | `assign:chatgpt` | Comando central, validação cadeia 7 passos, fechamento | `mcp.centralldark.com` | manual (humano) |
-| **Codex** | `assign:codex` | Revisão código + PRs pequenos + build/test | GitHub App | `pr-auto-review.yml`, `codex-validate.yml` |
+| **PR Learning Artifact Bot** | `🤖 AUTO` + suporte por `assign:*` | Mermaid, texto simples, YAML, Canvas HTML, receipt e pedido de suporte no PR | `scripts/lupa/pr-learning-artifact.mjs` | `pr-learning-artifact.yml` |
+| **ChatGPT + MCP** | `assign:chatgpt` | Comando central, validação cadeia 7 passos, fechamento e suporte Mermaid/Canvas | `mcp.centralldark.com` | manual (humano) |
+| **Codex** | `assign:codex` | Revisão código + PRs pequenos + build/test + suporte YAML estruturado | GitHub App | `pr-auto-review.yml`, `codex-validate.yml` |
 | **Supabase Bot** | `assign:supabase-bot` | Schema/RLS/migrations read-only | `CentralDark/apps/supabase-bot/` | `supabase-bot.yml` |
 | **Lovable** | `assign:lovable` | Frontend/UI/painel | Lovable | sync repo |
 | **Grok** | `assign:grok` | VPS/PM2/SSH read-only | sandbox | manual |
 | **Dependabot** | — | Atualizações de dep | GitHub | `dependabot.yml` |
 | **CodeQL** | — | Segurança JS/TS | GitHub | `codeql.yml` |
 | **Sentinela** | — | Detecta divergência e abre Issue | `scripts/sentinela/` | `sentinela-divergencias.yml` (6h) |
-| **Dispatcher** | — | Roteia Issue ao bot dono | — | `dispatcher-bots.yml` (on label) |
+| **Dispatcher** | — | Roteia Issue ou PR ao bot dono | — | `dispatcher-bots.yml` (on label) |
 | **Doc-guardião** | `assign:doc-guardiao` | Cobra README/PLANO por pasta | planejado | modo relatório |
 | **Faxineiro-repo** | `assign:faxineiro-repo` | Órfãos/ZIPs/dangling | planejado | modo relatório |
 | **Auditor-divergência** | `assign:auditor-divergencia` | Repo vs origin/main vs VPS | planejado | modo relatório |
@@ -35,6 +37,8 @@ Matriz oficial "quem faz o quê". Cada bot tem escopo fixo e label de assign. Se
 3. **Dedupe**: sentinela calcula hash do título; não reabre Issue que já existe.
 4. **Sensível bloqueado**: nenhum bot toca Docker, WuzAPI, WhatsApp, Caddy, banco real, secrets, sem confirmação humana.
 5. **Relatório obrigatório**: toda execução de bot grava em `docs/RELATORIOS/<bot>/<data>.md`.
+6. **Suporte não transfere Writer**: pedir Mermaid, Canvas ou YAML a outro agente não entrega a ele posse de escrita do código.
+7. **Artefato não aprova**: comentário ou Canvas organiza contexto; checks, Judge e SEGREDO/CHEFE continuam decidindo.
 
 ## Fluxo
 
@@ -48,6 +52,10 @@ Matriz oficial "quem faz o quê". Cada bot tem escopo fixo e label de assign. Se
   Dispatcher posta briefing pro bot
        ↓
   Bot age (PR, comentário, relatório)
+       ↓
+  PR Learning Artifact organiza Mermaid + texto + YAML + Canvas
+       ↓
+  Se faltar capacidade, Dispatcher pede suporte sem trocar Writer
        ↓
   ChatGPT valida cadeia 7 passos → fecha Issue
        ↓

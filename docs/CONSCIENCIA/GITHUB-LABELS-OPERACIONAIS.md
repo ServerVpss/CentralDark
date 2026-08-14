@@ -1,88 +1,58 @@
 # Labels Operacionais CentralDark
 
-Este arquivo define o padrao oficial de labels do GitHub para operar o CentralDark de forma simples, leiga e segura.
-
-## Regra central
+## Identidade
 
 ```text
-Label boa precisa dizer o que fazer.
-Label tecnica demais confunde.
-Label em portugues ajuda o Pivete a operar o sistema sem depender de tradutor mental.
+SEGREDO/CHEFE = humano e autoridade final
+SOL = coordenadora
+PIVETE/HERMES = executor, preservação e continuidade
 ```
 
-## Regra 2026-07-14 (Pivete)
+Labels roteiam trabalho; **não concedem autoridade humana**.
+
+## Núcleo
+
+| Label | Semântica atual |
+|---|---|
+| 🟢 PRONTO-PARA-IA | contexto suficiente para análise/execução dentro do escopo vigente |
+| 🟡 IA-PRECISA-REVISAR | revisão técnica necessária |
+| 🔴 RISCO-SERVIDOR | risco de runtime/infra; aplicar gates proporcionais |
+| 🟡 PRECISA-DE-OK | existe decisão humana realmente pendente de SEGREDO/CHEFE |
+| 🔐 SEGURANÇA | auth/secret/RLS/credencial; fail-closed e sem valor de secret |
+| 🟢 CORREÇÃO-SEGURA | baixo risco e escopo claro |
+| 🔴 FALTA-EVIDÊNCIA | estado técnico insuficiente; `UNKNOWN` não vira PASS |
+| 🧠 AGENTE-GROK | roteamento/capacidade, não autoridade |
+| 🧠 AGENTE-CODEX | roteamento/capacidade, não autoridade |
+| 🛠️ INFRA | classificação de escopo |
+| 🔧 SELF-HEAL | automação determinística aplicável |
+| 🤖 AGENTIC-DEVOPS | coordenação de capacidade, sem segundo sistema |
+
+## Autorização
 
 ```text
-SÓ labels com emoji.
-Proibido: assign:grok, bug, p1, documentation, stale…
-Dono IA = 🧠 AGENTE-GROK / 🧠 AGENTE-CODEX / etc.
-Seed: .github/workflows/bots-labels-seed.yml (só emoji).
+INTENCAO_JA_AUTORIZADA
+→ NÃO adicionar PRECISA-DE-OK só por cerimônia
+
+DECISAO_HUMANA_REALMENTE_NOVA
+→ PRECISA-DE-OK
+→ AUTORIDADE=SEGREDO/CHEFE
 ```
 
-## Labels oficiais (núcleo)
+O texto histórico `aguarda PERMITO Pivete` corresponde a `LEGACY_COMPATIBILITY_TOKEN_FOR_SEGREDO_CHEFE` quando algum gate ainda exigir o literal. Não significa que PIVETE/HERMES autoriza a si mesmo.
 
-| Label | Quando usar | Permissao operacional |
-|---|---|---|
-| 🟢 PRONTO-PARA-IA | Tarefa clara, contexto suficiente | IA analisa / propõe |
-| 🟡 IA-PRECISA-REVISAR | Precisa revisão IA | IA revisa, não mergea sozinha |
-| 🔴 RISCO-SERVIDOR | VPS, deploy, PM2, Caddy, produção | BOOT Completo + confirmação |
-| 🟡 PRECISA-DE-OK | Aguarda PERMITO Pivete | IA para |
-| 🔐 SEGURANÇA | RLS, secrets, tokens, auth | Read-only primeiro |
-| 🟢 CORREÇÃO-SEGURA | Baixo risco, sem segredo/destrutivo | Branch/PR ok |
-| 🔴 FALTA-EVIDÊNCIA | Sem log/print/prova | Bloqueia até prova |
-| 🧠 AGENTE-GROK | Grok dono (VPS/PM2/infra) | Roteamento |
-| 🧠 AGENTE-CODEX | Codex dono (código/PR) | Roteamento |
-| 🛠️ INFRA | Servidor / deploy / PM2 | Com RISCO se produção |
-| 🔧 SELF-HEAL | Script puro restart | Preferir sem IA |
-| 🤖 AGENTIC-DEVOPS | Orquestração self-heal | Sem inventar V3 |
+## Automação
 
-## Como aplicar
+1. Label verde não transforma `UNKNOWN` em PASS.
+2. Label vermelha sinaliza risco/impedimento; não substitui prova causal.
+3. `PRECISA-DE-OK` só pausa quando houver decisão humana nova fora da autorização vigente.
+4. Mudança de escopo/ambiente/risco pode invalidar autorização anterior.
+5. Roteamento de agente não muda Writer único nem autoridade.
 
-### Issue comum
-
-Use `🟢 PRONTO-PARA-IA` quando a tarefa estiver bem explicada.
-
-### Pull request
-
-Use `🟡 IA-PRECISA-REVISAR` quando o PR precisa de leitura da IA/Codex.
-
-### VPS, deploy ou banco
-
-Use sempre:
+## Regra final
 
 ```text
-🔴 RISCO-SERVIDOR
-🟡 PRECISA-DE-OK
+LABEL = SINAL
+INTENCAO = SEGREDO/CHEFE
+ESTADO = EVIDENCIA
+EXECUCAO = CAPACIDADE AUTORIZADA
 ```
-
-Se envolver banco, auth, RLS ou segredo, adicionar tambem:
-
-```text
-🔴 SEGURANÇA
-```
-
-### Falta de prova
-
-Use `🔴 FALTA-EVIDÊNCIA` quando alguem pediu correcao, mas ainda nao trouxe print, log, output ou erro real.
-
-## Regras para automacao
-
-1. Bots podem pegar automaticamente apenas tarefas com `🟢 PRONTO-PARA-IA` ou `🟢 CORREÇÃO-SEGURA`.
-2. Qualquer label vermelha bloqueia acao automatica destrutiva.
-3. `🟡 PRECISA-DE-OK` pausa a missao ate o Pivete autorizar.
-4. `🔴 RISCO-SERVIDOR` muda o modo para BOOT Completo.
-5. `🔴 SEGURANÇA` exige registro de evidencia antes e depois.
-6. `🔴 FALTA-EVIDÊNCIA` impede patch ate prova real.
-
-## Mapeamento do padrao CentralDark
-
-```text
-Memoria fixa = texto curto CentralDark
-Chat simples = so manda a missao
-Chat GitHub/docs/PR = BOOT Medio
-Chat VPS/Actions/deploy/producao = BOOT Completo
-```
-
-## Fio da missao
-
-Labels padronizadas -> Codex/Hermes trabalham com menos confusao -> PRs ficam mais faceis de revisar -> VPS so executa o que foi aprovado.

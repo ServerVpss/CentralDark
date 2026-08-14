@@ -12,6 +12,7 @@ import { config } from "./config.js";
 import { log } from "./log.js";
 import { activeSseSubscribers, getSseDiagnostics } from "./admin.js";
 import { getHubMissionConsumerStatus, startHubMissionConsumer } from "./hub-mission-consumer.js";
+import { getHubMissionConsumerStatus } from "./hub-mission-consumer.js";
 
 const MCP_VERSION = "0.4.0-v2.2";
 const SERVICE_STARTED_AT = new Date().toISOString();
@@ -64,6 +65,24 @@ export async function healthDeep(req, res) {
             || checkSecret("GH_TOKEN").present;
         const hubConsumerOk = hubConsumer.enabled === true && hubConsumer.status !== "error";
 
+        const now = Date.now();
+        const lastPollMs = hubConsumer.lastPollAt ? Date.parse(hubConsumer.lastPollAt) : NaN;
+        const bootStartedMs = Date.parse(SERVICE_STARTED_AT);
+        const bootAgeMs = Number.isFinite(bootStartedMs) ? Math.max(0, now - bootStartedMs) : null;
+        const pollStaleMs = Number.isFinite(lastPollMs) ? Math.max(0, now - lastPollMs) : null;
+        const explicitlyDisabled = hubConsumer.status === "disabled"
+            && hubConsumer.reason === "HUB_MISSION_CONSUMER_ENABLED=false";
+        const startingGrace = hubConsumer.status === "starting"
+            && hubConsumer.lastPollAt == null
+            && bootAgeMs !== null
+            && bootAgeMs < hubConsumer.pollMs * 6;
+        const pollFresh = pollStaleMs !== null && pollStaleMs < hubConsumer.pollMs * 6;
+        const hubConsumerOk = explicitlyDisabled || startingGrace || (
+            hubConsumer.enabled === true
+            && hubConsumer.status !== "error"
+            && pollFresh
+        );
+
         const dependencias = [
             checkDependencia("mcp_catalog", summary.toolCount > 0, { toolCount: summary.toolCount }),
             checkDependencia("oauth", oauthOk, { secretsPresentes: oauthOk }),
@@ -78,6 +97,14 @@ export async function healthDeep(req, res) {
                 lastPollAt: hubConsumer.lastPollAt,
                 lastMissionId: hubConsumer.lastMissionId,
                 lastExecutionStatus: hubConsumer.lastExecutionStatus,
+                requestTimeoutMs: hubConsumer.requestTimeoutMs,
+                lastPollAt: hubConsumer.lastPollAt,
+                pollStaleMs,
+                bootAgeMs,
+                critical: true,
+                lastMissionId: hubConsumer.lastMissionId,
+                lastExecutionStatus: hubConsumer.lastExecutionStatus,
+                staleUnprovenCount: hubConsumer.staleUnprovenCount,
                 lastError: hubConsumer.lastError,
             }),
             checkDependencia("sse", true, { conexoesAtivas: sseAtivas, eventosPorMinuto: sse.eventosPorMinuto, ultimoEventoHaMs: sse.ultimoEventoHaMs, status: "operacional" }),
@@ -88,12 +115,14 @@ export async function healthDeep(req, res) {
 
         const okCount = dependencias.filter((d) => d.ok).length;
         const score = pct(okCount, dependencias.length);
-        const status = score === 100 ? "healthy" : score >= 60 ? "degraded" : "unhealthy";
+        const criticalFailures = dependencias.filter((d) => d.detalhe?.critical === true && !d.ok);
+        const status = criticalFailures.length > 0 ? "unhealthy" : (score === 100 ? "healthy" : score >= 60 ? "degraded" : "unhealthy");
 
         res.status(status === "unhealthy" ? 503 : 200).json({
             ok: status !== "unhealthy",
             status,
             score,
+            criticalFailures: criticalFailures.map((d) => d.nome),
             versao: MCP_VERSION,
             catalogVersion: summary.catalogVersion || null,
             toolCount: summary.toolCount,

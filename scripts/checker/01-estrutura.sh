@@ -1,29 +1,37 @@
 #!/usr/bin/env bash
-# Bloco 01 — Estrutura de pastas obrigatórias
+# Bloco 01 — Estrutura canônica da CentralDark
 source "$(dirname "$0")/_lib.sh"
 BLOCO="01-estrutura"
 
 PASTAS_OBRIG=(
-  "$CK_MULTIZAP_ROOT"
-  "$CK_MULTIZAP_ROOT/apps/bot"
-  "$CK_MULTIZAP_ROOT/apps/bot-telegram"
-  "$CK_MULTIZAP_ROOT/api/whatsapp/qrcode"
-  "$CK_MULTIZAP_ROOT/revisoes"
+  "$CK_CENTRALDARK_ROOT"
+  "$CK_CENTRALDARK_ROOT/apps"
+  "$CK_CENTRALDARK_ROOT/scripts"
+  "$CK_CENTRALDARK_ROOT/infra"
+  "$CK_CENTRALDARK_ROOT/revisoes"
 )
 
 for p in "${PASTAS_OBRIG[@]}"; do
+  require_canonical_path "$BLOCO" "$p" || continue
   if [ -d "$p" ]; then
-    emit_ok "$BLOCO" "Pasta existe: $p"
+    emit_ok "$BLOCO" "Pasta canônica existe: $p"
   else
-    emit_erro "$BLOCO" "Pasta faltando: $p"
+    emit_erro "$BLOCO" "Pasta canônica faltando: $p"
   fi
 done
 
-# CentralDark (nova estrutura) — opcional, só alerta
-for p in "$CK_CENTRALDARK_ROOT" "$CK_CENTRALDARK_ROOT/secrets" "$CK_CENTRALDARK_ROOT/revisoes"; do
-  if [ -d "$p" ]; then
-    emit_ok "$BLOCO" "CentralDark: $p"
+if [ -d "$CK_REPO_ROOT/.git" ]; then
+  REMOTE="$(git -C "$CK_REPO_ROOT" remote get-url origin 2>/dev/null || true)"
+  if printf '%s' "$REMOTE" | grep -Eq 'github\.com[:/]ServerVpss/CentralDark(\.git)?$'; then
+    emit_ok "$BLOCO" "Repo canônico confirmado em $CK_REPO_ROOT"
   else
-    emit_alerta "$BLOCO" "CentralDark ainda não migrado: $p (esperado, migração gradual)"
+    emit_erro "$BLOCO" "Repo em $CK_REPO_ROOT não aponta para ServerVpss/CentralDark"
   fi
-done
+else
+  emit_erro "$BLOCO" "Repo Git canônico ausente em $CK_REPO_ROOT"
+fi
+
+# O checker não valida árvores irmãs/externas. Se um componente necessário
+# existir fora da CentralDark, ele vira dependência a migrar e provar,
+# nunca requisito operacional permanente deste checker.
+emit_ok "$BLOCO" "Fronteira externa: ${CK_EXTERNAL_ROOT_POLICY}"

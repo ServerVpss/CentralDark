@@ -6,6 +6,12 @@ PR-mãe permanente: #724
 Branch-mãe: `program/centraldark-convergencia-omniroute-722`  
 Missão global relacionada: #604  
 Programa Casa/Mente relacionado: PR #554  
+Autoridade: SEGREDO/CHEFE
+Issue-mãe: #722
+PR-mãe permanente: #724
+Branch-mãe: `program/centraldark-convergencia-omniroute-722`
+Missão global relacionada: #604
+Programa Casa/Mente relacionado: PR #554
 
 ## Direção final
 

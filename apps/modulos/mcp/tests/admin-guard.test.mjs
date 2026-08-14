@@ -39,9 +39,12 @@ test("CONFIRMO ADMIN → released (confirmo_admin)", () => {
   const r = evaluateAdminConfirmation("CONFIRMO ADMIN");
   assert.equal(r.decision, "released"); assert.equal(r.confirmationMode, "confirmo_admin");
 });
-test("PERMITO PIVETE → released (permito_pivete)", () => {
-  const r = evaluateAdminConfirmation("PERMITO PIVETE");
-  assert.equal(r.decision, "released"); assert.equal(r.confirmationMode, "permito_pivete");
+test("PERMITO SEGREDO → released (permito_segredo)", () => {
+  const r = evaluateAdminConfirmation("PERMITO SEGREDO");
+  assert.equal(r.decision, "released"); assert.equal(r.confirmationMode, "permito_segredo");
+});
+test("PERMITO PIVETE é legado e não concede autoridade", () => {
+  assert.equal(evaluateAdminConfirmation("PERMITO PIVETE").decision, "blocked");
 });
 test("confirmação inválida → blocked", () => {
   assert.equal(evaluateAdminConfirmation("qualquer coisa").decision, "blocked");
@@ -224,9 +227,9 @@ test("sanitização: JWT/sk-/gh_/Bearer não vazam; chaves sensíveis somem", as
   process.env.MCP_ADMIN_CHAIN_STATE = path.join(TMP, ".chain.json");
 });
 
-test("guardDestructive: baseline ok + PERMITO PIVETE → allow + executionStatus authorized", async () => {
+test("guardDestructive: baseline ok + PERMITO SEGREDO → allow + executionStatus authorized", async () => {
   const g = await guardDestructive({
-    toolName: "admin_pm2_restart", adminAuthorized: true, confirmAdmin: "PERMITO PIVETE",
+    toolName: "admin_pm2_restart", adminAuthorized: true, confirmAdmin: "PERMITO SEGREDO",
     runtimeTools: makeRuntime().tools, expectation: getCanonicalExpectation(),
   });
   assert.equal(g.allow, true); assert.equal(g.status, "OK");
@@ -241,7 +244,7 @@ test("guardDestructive: confirmação herdada é bloqueada mesmo com catálogo v
 });
 test("guardDestructive: escopo admin ausente bloqueia e audita", async () => {
   const g = await guardDestructive({
-    toolName: "admin_pm2_restart", adminAuthorized: false, confirmAdmin: "PERMITO PIVETE",
+    toolName: "admin_pm2_restart", adminAuthorized: false, confirmAdmin: "PERMITO SEGREDO",
     runtimeTools: makeRuntime().tools, expectation: getCanonicalExpectation(),
     actor: "oauth-user", correlationId: "cid-scope-test",
   });
@@ -356,7 +359,7 @@ test("sem `expectation`, o guard usa o manifesto — não uma expectativa vazia"
     { name: "intrusa_sem_expectation", annotations: { destructiveHint: true } }];
   const g = await guardDestructive({
     toolName: "intrusa_sem_expectation", adminAuthorized: true,
-    confirmAdmin: "PERMITO PIVETE", runtimeTools: comIntrusa,
+    confirmAdmin: "PERMITO SEGREDO", runtimeTools: comIntrusa,
   });
   assert.equal(g.allow, false, "expectativa vazia deixaria passar — não pode");
   assert.equal(g.status, "DESTRUTIVA_EM_QUARENTENA");
@@ -371,7 +374,7 @@ test("guardDestructive: input keys sensíveis sanitizadas em disco", async () =>
   const tools = names.map((n) => ({ name: n, annotations: { destructiveHint: true } }));
   for (let i = 0; i < 71; i++) tools.push({ name: `ro_${i}`, annotations: { destructiveHint: false } });
   await g({
-    toolName: "admin_pm2_restart", adminAuthorized: true, confirmAdmin: "PERMITO PIVETE",
+    toolName: "admin_pm2_restart", adminAuthorized: true, confirmAdmin: "PERMITO SEGREDO",
     runtimeTools: tools, expectation: ge(),
     inputPayload: { name: "x", authorization: "Bearer VAZAR" },
   });
@@ -502,7 +505,7 @@ test("cenario B: destrutiva desconhecida entra em quarentena sozinha", async () 
     runtimeTools: comIntrusa, adminAuthorized: true,
   });
   assert.equal(aprovada.allow, true,
-    "divergencia em OUTRA tool nao pode bloquear esta");
+    "divergência em OUTRA tool não pode bloquear esta");
 });
 
 test("cenario C: aprovada ausente do runtime avisa, sem falso verde", async () => {

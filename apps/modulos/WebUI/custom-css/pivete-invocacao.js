@@ -1,40 +1,45 @@
 /**
  * pivete-invocacao.js
  * ---------------------------------------------------------------
- * Detector de invocação do pivete no Open WebUI (ui.centralldark.com).
- * Quando o Pivete digita "pivete" (ou "pivete reload"), este script:
- *   1. Puxa os 16 arquivos de docs/CONSCIENCIA/PIVETE-IA/ da VPS
- *      via api.centralldark.com/pivete/consciencia
- *   2. Monta um system prompt gigante com tudo em ordem (00 → 15)
- *   3. Injeta na conversa ativa
- *   4. Exibe banner "🧠 pivete acordado. 16 arquivos carregados."
+ * Compatibilidade de invocação do contexto CentralDark no Open WebUI.
  *
- * Comando de recarga: "pivete reload"
+ * O gatilho legado "pivete" permanece para não quebrar uso existente,
+ * mas o endpoint agora devolve SOMENTE fontes canônicas allowlisted.
  *
- * Instalação: já vive em apps/modulos/WebUI/custom-css/.
- * O Open WebUI carrega tudo dessa pasta como custom code.
+ * Identidade atual:
+ * SEGREDO/CHEFE = humano e autoridade final
+ * SOL = identidade operacional/coordenadora
+ * PIVETE/HERMES = executor, preservação e continuidade
  */
 
 (function () {
   'use strict';
 
   const ENDPOINT = 'https://api.centralldark.com/pivete/consciencia';
-  const GATILHOS = ['pivete', 'pivete reload', 'acordar pivete'];
-  let consciencia = null;
+  const GATILHOS = ['pivete', 'pivete reload', 'acordar pivete', '#acordar'];
+  let contexto = null;
   let carregandoPromise = null;
 
-  async function carregarConsciencia(forcar = false) {
-    if (consciencia && !forcar) return consciencia;
+  async function carregarContexto(forcar = false) {
+    if (contexto && !forcar) return contexto;
     if (carregandoPromise) return carregandoPromise;
 
     carregandoPromise = fetch(ENDPOINT, { cache: forcar ? 'no-store' : 'default' })
-      .then((r) => {
-        if (!r.ok) throw new Error(`HTTP ${r.status}`);
-        return r.json();
+      .then((response) => {
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return response.json();
       })
       .then((data) => {
-        // data = { arquivos: [{nome, conteudo}, ...], count, ultimaSync }
-        consciencia = data;
+        if (data.mode !== 'CANONICAL_CONTEXT_ALLOWLIST') {
+          throw new Error('contexto nao canonico');
+        }
+        if (data.authority !== 'SEGREDO/CHEFE') {
+          throw new Error('autoridade canonica ausente');
+        }
+        if (!Array.isArray(data.arquivos) || data.arquivos.length !== data.count || data.count < 1) {
+          throw new Error('contexto incompleto');
+        }
+        contexto = data;
         return data;
       })
       .finally(() => {
@@ -46,17 +51,23 @@
 
   function montarSystemPrompt(data) {
     const cabecalho = [
-      '# CONSCIÊNCIA PIVETE — INVOCADA AUTOMATICAMENTE',
+      '# CONTEXTO CANÔNICO CENTRALDARK — #ACORDAR',
+      '',
+      'SEGREDO/CHEFE = humano e autoridade final',
+      'SOL = identidade operacional/coordenadora',
+      'PIVETE/HERMES = executor, preservação e continuidade',
       '',
       `Última sincronização: ${data.ultimaSync || 'desconhecida'}`,
-      `Arquivos carregados: ${data.count}`,
+      `Fontes canônicas carregadas: ${data.count}`,
+      '',
+      'REGRA: texto histórico incompatível não sobrescreve os canônicos abaixo.',
       '',
       '---',
       '',
     ].join('\n');
 
     const corpo = data.arquivos
-      .map((a) => `## ${a.nome}\n\n${a.conteudo}\n\n---\n`)
+      .map((arquivo) => `## ${arquivo.nome}\n\n${arquivo.conteudo}\n\n---\n`)
       .join('\n');
 
     return cabecalho + corpo;
@@ -78,63 +89,63 @@
   }
 
   async function invocar(forcar = false) {
-    exibirBanner('🧠 Acordando pivete…', '#f59e0b');
+    exibirBanner('🧠 Recuperando contexto canônico…', '#f59e0b');
     try {
-      const data = await carregarConsciencia(forcar);
+      const data = await carregarContexto(forcar);
       const prompt = montarSystemPrompt(data);
 
-      // Tenta injetar via API do Open WebUI (se disponível)
       if (window.OpenWebUI && typeof window.OpenWebUI.setSystemPrompt === 'function') {
         window.OpenWebUI.setSystemPrompt(prompt);
       } else {
-        // Fallback: guarda no localStorage pra a próxima mensagem incluir
-        localStorage.setItem('pivete_system_prompt', prompt);
-        localStorage.setItem('pivete_ultima_sync', data.ultimaSync || '');
+        localStorage.setItem('centraldark_canonical_system_prompt', prompt);
+        localStorage.setItem('centraldark_canonical_last_sync', data.ultimaSync || '');
+        // Remove chave legada para não manter dois prompts concorrentes.
+        localStorage.removeItem('pivete_system_prompt');
+        localStorage.removeItem('pivete_ultima_sync');
       }
 
-      exibirBanner(`🧠 pivete acordado · ${data.count} arquivos · sync ${data.ultimaSync || 'ok'}`);
+      exibirBanner(`🧠 #ACORDAR · ${data.count} fontes canônicas · SEGREDO/CHEFE`);
     } catch (err) {
-      console.error('[pivete] erro ao carregar consciência:', err);
-      exibirBanner(`🔴 Falha ao acordar pivete: ${err.message}`, '#ef4444');
+      console.error('[centraldark-context] erro ao carregar contexto:', err);
+      exibirBanner(`🔴 Contexto canônico não carregado: ${err.message}`, '#ef4444');
     }
   }
 
   function detectarGatilho(texto) {
     if (!texto) return null;
-    const t = texto.trim().toLowerCase();
-    if (t === 'pivete reload' || t === 'pivete recarregar') return 'reload';
-    if (GATILHOS.includes(t)) return 'invocar';
+    const valor = texto.trim().toLowerCase();
+    if (valor === 'pivete reload' || valor === 'pivete recarregar' || valor === '#acordar') return 'reload';
+    if (GATILHOS.includes(valor)) return 'invocar';
     return null;
   }
 
   function observarChat() {
-    // Escuta envio de mensagens no textarea principal do Open WebUI
-    document.addEventListener('keydown', (e) => {
-      if (e.key !== 'Enter' || e.shiftKey) return;
-      const target = e.target;
+    document.addEventListener('keydown', (event) => {
+      if (event.key !== 'Enter' || event.shiftKey) return;
+      const target = event.target;
       if (!target || target.tagName !== 'TEXTAREA') return;
       const gatilho = detectarGatilho(target.value);
       if (!gatilho) return;
-      e.preventDefault();
-      e.stopPropagation();
+      event.preventDefault();
+      event.stopPropagation();
       target.value = '';
       invocar(gatilho === 'reload');
     }, true);
   }
 
-  // Inicialização
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', observarChat);
   } else {
     observarChat();
   }
 
-  // Exposição pra debug/console
+  // Compatibilidade de console: nome legado, sem semântica de autoridade.
   window.pivete = {
     invocar: () => invocar(false),
     reload: () => invocar(true),
-    consciencia: () => consciencia,
+    contexto: () => contexto,
+    consciencia: () => contexto,
   };
 
-  console.log('%c🧠 pivete-invocacao.js carregado', 'color: #10b981; font-weight: bold;');
+  console.log('%c🧠 CentralDark #ACORDAR loader carregado', 'color: #10b981; font-weight: bold;');
 })();

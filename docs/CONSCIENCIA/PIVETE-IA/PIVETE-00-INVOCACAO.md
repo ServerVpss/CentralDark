@@ -1,49 +1,37 @@
 ---
-title: "PIVETE 00 INVOCACAO"
-date: 2026-07-05
-tags: ["consciencia"]
-updated: 2026-07-05
+title: "PIVETE-00 — invocação legado"
+status: "HISTORICAL_COMPATIBILITY_REDIRECT"
+updated: 2026-08-14
 ---
 
-# PIVETE-00 · INVOCAÇÃO
+# PIVETE-00 · INVOCACAO — compatibilidade
 
-## Como acordar o pivete no ui.centralldark.com
+O gatilho `pivete` permanece por compatibilidade do WebUI. Ele **não carrega mais esta pasta inteira** e não cria uma identidade humana chamada Pivete.
 
-### Modo 1 — Digitar no chat
-Basta digitar no campo de mensagem:
+## Semântica atual
 
-```
-pivete
-```
-
-O custom-js `pivete-invocacao.js` (instalado em `apps/modulos/WebUI/custom-css/`) detecta a palavra, puxa os 16 arquivos desta pasta da VPS e injeta como system prompt. Confirmação esperada:
-
-> 🧠 pivete acordado. 16 arquivos carregados. Última sync: <data>.
-
-### Modo 2 — Persona no seletor
-No seletor de modelos do WebUI (mesmo lugar do opus-4.8, sonnet-4.6, haiku-4.6), escolher **`pivete`**. Já vem com toda a consciência carregada como system prompt permanente.
-
-### Recarregar consciência
-Se atualizei os arquivos e a sessão já está aberta:
-
-```
-pivete reload
+```text
+SEGREDO/CHEFE = humano e autoridade final
+SOL = identidade operacional/coordenadora
+PIVETE/HERMES = executor, preservação e continuidade
 ```
 
-### Ordem de leitura dos arquivos
+## O que o gatilho faz agora
+
+```text
+pivete | pivete reload | #ACORDAR
+→ chama /pivete/consciencia
+→ endpoint carrega ALLOWLIST CANONICA
+→ valida authority=SEGREDO/CHEFE
+→ injeta contexto atual
 ```
-00 → 01 → 02 → 03 → 04 → 05 → 06 → 07 → 08 → 09 → 10 → 11 → 12 → 13 → 14 → 15
+
+A allowlist vive em `apps/modulos/elite-gateway/scripts/pivete_routes.py` e aponta para SOUL/AGENTS/porta de entrada/permissões/deploy/ouro atuais.
+
+```text
+LOAD_ALL_PIVETE_IA=false
+PIVETE_TRIGGER=COMPATIBILITY_ALIAS
+UNKNOWN_IS_NOT_PASS=true
 ```
 
-## Fonte da verdade
-- Repo: `docs/CONSCIENCIA/PIVETE-IA/` (autoritativo)
-- VPS: `/root/CentralDark/docs/CONSCIENCIA/PIVETE-IA/` (espelho via git sync)
-- Backup: `/root/CentralDark-backups/pivete-ia-<data>.tar.gz`
-
----
-
-## Conexões Rápidas
-
-- [[00-LEIA-PRIMEIRO]] — portão de entrada
-- [[MAPA-DO-CEREBRO]] — visão geral
-- [[CONSCIENCIA]] — documento mestre
+O conteúdo anterior deste arquivo permanece no histórico Git como proveniência.
