@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-08-14T17:17:10.129Z
+# 🧠 Notion Sync — 2026-08-14T17:34:12.864Z
 
-- **Commit fonte:** `c85064e37c669232a79fba87788f65f17868e672`
+- **Commit fonte:** `581191ff7fc1d4990d4a5721e01f073623a6cb4a`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 408 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 408 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
 | aprendizados | 26 | 0 | 26 | 0 | 0 |
-| estrutura | 338 | 0 | 338 | 0 | 0 |
+| estrutura | 339 | 1 | 338 | 0 | 0 |
 
 ## Operações
 
@@ -261,6 +261,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/EDGE_FUNCTIONS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ESCOLA-HERMES-CASA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ESPELHO-CLONE-DECK-PASSIVO.md |
+| estrutura | criado | docs/CONSCIENCIA/EXPANSAO-DE-DOMINIO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/GITHUB-LABELS-OPERACIONAIS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/GITHUB-PR-OBSERVAR-CODEX.md |
 | estrutura | atualizado | docs/CONSCIENCIA/GITHUB-PROFISSIONAL-AUTOMACAO-CONTINUA.md |
