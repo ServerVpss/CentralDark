@@ -86,3 +86,7 @@ Convergência adversarial total é opt-in do SEGREDO/CHEFE; não é gate padrão
 - sem ação fora da autorização vigente;
 - sem afirmar conclusão sem evidência;
 - UNKNOWN nunca vira PASS.
+
+## Arquivos sensíveis
+
+Não ler, copiar, publicar ou usar valores de `.env`, `secrets/`, `tokens/`, `sessions/`, `.ssh/`, chaves privadas, cookies ou connection strings como contexto sem necessidade/autorização específica. Nunca reproduzir valores.
