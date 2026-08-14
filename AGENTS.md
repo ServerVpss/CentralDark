@@ -151,6 +151,42 @@ NADA NO ESCURO.
 - máquina mede estado que consegue medir;
 - SEGREDO/CHEFE recebe decisão humana real, não investigação mecânica.
 
+### Menos é Mais: ação nativa, semântica e prova
+
+Não gastar raciocínio para substituir uma operação determinística que a própria ferramenta já oferece e cuja semântica corresponde ao objetivo autorizado.
+
+```text
+ACAO_NATIVA_EXISTE
++ SEMANTICA_COMPATIVEL
++ ESCOPO_AUTORIZADO
++ RISCO_IRREVERSIVEL_AUSENTE
+→ USAR_ACAO_NATIVA
+→ MEDIR_RESULTADO_REAL
+```
+
+A interface executar a operação prova somente o efeito que ela declara. Um merge concluído prova merge; não prova, por inferência, que todos os checks passaram, que runtime está saudável ou que outra propriedade não medida virou PASS.
+
+Quando houver ambiguidade material, exclusividade real ou risco que a ação simples não resolve semanticamente, o automatismo para e a inteligência entra apenas no delta necessário.
+
+```text
+AMBIGUIDADE_MATERIAL | EXCLUSIVIDADE_REAL | RISCO_IRREVERSIVEL
+→ CLASSIFICAR_SEMANTICA
+→ IDENTIFICAR_DONO/INTENCAO/CONSUMIDOR
+→ EXECUTAR_MENOR_ACAO_CORRETA
+→ PROVAR_EFEITO
+```
+
+Para conflitos em ferramentas que oferecem `Accept Current`, `Accept Incoming` e `Accept Both`, o botão é mecanismo, não política universal:
+
+```text
+COEXISTENCIA_VALIDA → ACCEPT_BOTH
+EXCLUSIVIDADE_REAL → DETERMINAR_SEMANTICA → MANTER_UM
+CODIGO|WORKFLOW|CONTRATO → ACCEPT_BOTH_NAO_ENCERRA_SOZINHO
+RESOLVED → SOMENTE_APOS_ESTADO_FINAL_PROVADO
+```
+
+`Accept Both` é preferível quando os dois lados são complementares e podem coexistir sem quebrar contrato, sintaxe, ordem, ownership ou comportamento. Nunca usar `Both` como regra cega para escapar da decisão semântica.
+
 ### Intenção curta pode abrir fan-out interno
 
 O humano não precisa enumerar cada busca, ferramenta, agente, arquivo ou verificação quando o contexto canônico já define missão, limites e critério de sucesso.
