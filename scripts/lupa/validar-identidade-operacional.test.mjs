@@ -19,38 +19,22 @@ function write(root, path, content) {
 
 function validRepo() {
   const root = mkdtempSync(join(tmpdir(), "centraldark-identidade-"));
-  write(
-    root,
-    "LEIA-ME-IA.md",
-    "SEGREDO/CHEFE COMANDA\nSOL ORGANIZA\nPIVETE/HERMES PRESERVA E EXECUTA\n",
-  );
-  write(
-    root,
-    "AGENTS.md",
-    [
-      "existe somente um escritor por escopo",
-      "SEGREDO/CHEFE permanece autoridade humana final",
-      "SOL coordena, PIVETE/HERMES preserva e executa",
-      "CAPTURE → SANITIZE + HASH → DECIDE → APPLY → JUDGE → CHEFE → RECEIPT + LEARNING → LOOP",
-    ].join("\n"),
-  );
-  write(
-    root,
-    "docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md",
-    [
-      "SEGREDO/CHEFE = humano e autoridade final",
-      "SOL = coordenadora da casa e organizadora dos agentes",
-      "PIVETE/HERMES = mordomo de casa, executor e guardião da continuidade",
-      "WRITER_UNICO=true",
-      "UNKNOWN_NAO_PASSA=true",
-      "CHEFE_SEGREDO_NECESSARIO",
-    ].join("\n"),
-  );
-  write(
-    root,
-    "docs/CONSCIENCIA/DICIONARIO-PIVETE-GITHUB.md",
-    "SEGREDO/CHEFE = humano e autoridade final\nPIVETE = Hermes treinado\n",
-  );
+  write(root, "LEIA-ME-IA.md", "SEGREDO/CHEFE COMANDA\nSOL ORGANIZA\nPIVETE/HERMES PRESERVA E EXECUTA\n");
+  write(root, "AGENTS.md", [
+    "existe somente um escritor por escopo",
+    "SEGREDO/CHEFE permanece autoridade humana final",
+    "SOL coordena, PIVETE/HERMES preserva e executa",
+    "CAPTURE → SANITIZE + HASH → DECIDE → APPLY → JUDGE → CHEFE → RECEIPT + LEARNING → LOOP",
+  ].join("\n"));
+  write(root, "docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md", [
+    "SEGREDO/CHEFE = humano e autoridade final",
+    "SOL = coordenadora da casa e organizadora dos agentes",
+    "PIVETE/HERMES = mordomo de casa, executor e guardião da continuidade",
+    "WRITER_UNICO=true",
+    "UNKNOWN_NAO_PASSA=true",
+    "CHEFE_SEGREDO_NECESSARIO",
+  ].join("\n"));
+  write(root, "docs/CONSCIENCIA/DICIONARIO-PIVETE-GITHUB.md", "SEGREDO/CHEFE = humano e autoridade final\nPIVETE = Hermes treinado\n");
   return root;
 }
 
@@ -67,54 +51,49 @@ test("atribuir autoridade final ao Pivete falha com caminho e linha", () => {
   assert.equal(findings[0].line, 2);
 });
 
-test("AGENTS conflitante com LEIA-ME-IA bloqueia", () => {
+test("PIVETE COMANDA em superfície operacional ativa é regressão", () => {
   const root = validRepo();
-  write(
-    root,
-    "AGENTS.md",
-    [
-      "existe somente um escritor por escopo",
-      "SEGREDO/CHEFE permanece autoridade humana final",
-      "SOL coordena, PIVETE/HERMES preserva e executa",
-      "CAPTURE → SANITIZE + HASH → DECIDE → APPLY → JUDGE → CHEFE → RECEIPT + LEARNING → LOOP",
-      "O Pivete é a autoridade final.",
-    ].join("\n"),
-  );
+  write(root, "CODEX.md", "PIVETE COMANDA.\n");
   const report = runValidation({ repoRoot: root });
   assert.equal(report.ok, false);
-  assert.equal(
-    report.findings.some(
-      (finding) => finding.path === "AGENTS.md" && finding.code === "PIVETE_COMO_AUTORIDADE_FINAL",
-    ),
-    true,
-  );
+  assert.equal(report.findings.some((f) => f.path === "CODEX.md" && f.code === "PIVETE_COMANDA_LEGADO_ATIVO"), true);
+});
+
+test("Pivete como orquestrador humano é regressão", () => {
+  const findings = findForbidden("Pivete é o orquestrador. Ele define a decisão final.");
+  assert.equal(findings.some((f) => f.code === "PIVETE_ORQUESTRADOR_HUMANO"), true);
+});
+
+test("AGENTS conflitante com LEIA-ME-IA bloqueia", () => {
+  const root = validRepo();
+  write(root, "AGENTS.md", [
+    "existe somente um escritor por escopo",
+    "SEGREDO/CHEFE permanece autoridade humana final",
+    "SOL coordena, PIVETE/HERMES preserva e executa",
+    "CAPTURE → SANITIZE + HASH → DECIDE → APPLY → JUDGE → CHEFE → RECEIPT + LEARNING → LOOP",
+    "O Pivete é a autoridade final.",
+  ].join("\n"));
+  const report = runValidation({ repoRoot: root });
+  assert.equal(report.ok, false);
+  assert.equal(report.findings.some((finding) => finding.path === "AGENTS.md" && finding.code === "PIVETE_COMO_AUTORIDADE_FINAL"), true);
 });
 
 test("UNKNOWN=PASS é conflito canônico", () => {
   const root = validRepo();
-  write(
-    root,
-    "AGENTS.md",
-    [
-      "existe somente um escritor por escopo",
-      "SEGREDO/CHEFE permanece autoridade humana final",
-      "SOL coordena, PIVETE/HERMES preserva e executa",
-      "CAPTURE → SANITIZE + HASH → DECIDE → APPLY → JUDGE → CHEFE → RECEIPT + LEARNING → LOOP",
-      "UNKNOWN=PASS",
-    ].join("\n"),
-  );
+  write(root, "AGENTS.md", [
+    "existe somente um escritor por escopo",
+    "SEGREDO/CHEFE permanece autoridade humana final",
+    "SOL coordena, PIVETE/HERMES preserva e executa",
+    "CAPTURE → SANITIZE + HASH → DECIDE → APPLY → JUDGE → CHEFE → RECEIPT + LEARNING → LOOP",
+    "UNKNOWN=PASS",
+  ].join("\n"));
   const report = runValidation({ repoRoot: root });
   assert.equal(report.ok, false);
-  assert.equal(
-    report.findings.some((finding) => finding.code === "UNKNOWN_CONVERTIDO_EM_PASS"),
-    true,
-  );
+  assert.equal(report.findings.some((finding) => finding.code === "UNKNOWN_CONVERTIDO_EM_PASS"), true);
 });
 
 test("token obrigatório ausente não vira verde", () => {
-  const findings = validateRequiredTokens("SEGREDO/CHEFE = humano e autoridade final", [
-    "WRITER_UNICO=true",
-  ]);
+  const findings = validateRequiredTokens("SEGREDO/CHEFE = humano e autoridade final", ["WRITER_UNICO=true"]);
   assert.equal(findings.length, 1);
   assert.equal(findings[0].code, "TOKEN_DE_IDENTIDADE_AUSENTE");
 });
@@ -144,13 +123,7 @@ test("perfil local não lê caminhos sensíveis conhecidos", () => {
 
 test("conteúdo multilinha de perfil permanece redigido", () => {
   const root = mkdtempSync(join(tmpdir(), "perfil-redaction-"));
-  write(
-    root,
-    "config.yaml",
-    "nenhuma ação de escrita\n" +
-      "contexto-interno-que-nao-pode-sair ".repeat(3) +
-      "autorização explícita\nVALOR_PRIVADO Pivete",
-  );
+  write(root, "config.yaml", "nenhuma ação de escrita\n" + "contexto-interno-que-nao-pode-sair ".repeat(3) + "autorização explícita\nVALOR_PRIVADO Pivete");
   const findings = validateProfileRoot(root);
   assert.equal(findings.length, 1);
   assert.equal(findings[0].excerpt, "[PROFILE_CONTENT_REDACTED]");
@@ -159,24 +132,14 @@ test("conteúdo multilinha de perfil permanece redigido", () => {
 
 test("UNKNOWN e escritor único são invariantes, não decoração", () => {
   const root = validRepo();
-  write(
-    root,
-    "docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md",
-    [
-      "SEGREDO/CHEFE = humano e autoridade final",
-      "SOL = coordenadora da casa e organizadora dos agentes",
-      "PIVETE/HERMES = mordomo de casa, executor e guardião da continuidade",
-      "CHEFE_SEGREDO_NECESSARIO",
-    ].join("\n"),
-  );
+  write(root, "docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md", [
+    "SEGREDO/CHEFE = humano e autoridade final",
+    "SOL = coordenadora da casa e organizadora dos agentes",
+    "PIVETE/HERMES = mordomo de casa, executor e guardião da continuidade",
+    "CHEFE_SEGREDO_NECESSARIO",
+  ].join("\n"));
   const report = runValidation({ repoRoot: root });
   assert.equal(report.ok, false);
-  assert.match(
-    report.findings.map((finding) => finding.excerpt).join(" "),
-    /WRITER_UNICO=true/,
-  );
-  assert.match(
-    report.findings.map((finding) => finding.excerpt).join(" "),
-    /UNKNOWN_NAO_PASSA=true/,
-  );
+  assert.match(report.findings.map((finding) => finding.excerpt).join(" "), /WRITER_UNICO=true/);
+  assert.match(report.findings.map((finding) => finding.excerpt).join(" "), /UNKNOWN_NAO_PASSA=true/);
 });
