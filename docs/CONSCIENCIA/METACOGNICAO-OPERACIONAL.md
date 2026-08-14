@@ -119,12 +119,13 @@ UNKNOWN_IS_NOT_PASS=true
 
 ## Distribuição canônica
 
-Este arquivo define o conceito. Os consumidores são:
+Este arquivo é a fonte conceitual única. A distribuição ocorre sem copiar o contrato inteiro:
 
-- `LEIA-ME-IA.md`: boot e regra resumida para qualquer modelo/agente;
-- `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md`: identidade e autoridade;
-- `.agents/skills/meta-lupa/SKILL.md`: mecanismo de falsificação/AutoLupa;
-- `docs/CONSCIENCIA/LEMBRANCAS/2026-08-14-OURO-CONTEXTO-AUTONOMIA-SOL.md`: proveniência histórica do aprendizado;
-- `docs/CONSCIENCIA/PROOF-OWNERSHIP.json`: limite anti-circular da metaprova.
+- `LEIA-ME-IA.md` referencia esta fonte no boot universal e no ciclo de aprendizado;
+- `.agents/skills/meta-lupa/references/metacognicao-operacional.md` conecta AutoLupa/metodologia a esta fonte;
+- `AGENTS.md` mantém o contrato genérico de ganho informacional e continua semanticamente subordinado ao boot;
+- `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md` mantém identidade, autoridade e aprendizado sem redefinir este conceito;
+- `docs/CONSCIENCIA/LEMBRANCAS/2026-08-14-OURO-CONTEXTO-AUTONOMIA-SOL.md` preserva a proveniência histórica quando o aprendizado for consolidado;
+- `docs/CONSCIENCIA/PROOF-OWNERSHIP.json` limita circularidade da metaprova.
 
-Não duplicar este contrato integralmente nesses consumidores; referenciar a fonte e preservar uma única semântica.
+Não duplicar este contrato integralmente nos consumidores; preservar uma única semântica e referenciar esta fonte quando o próprio método estiver sendo refinado.
