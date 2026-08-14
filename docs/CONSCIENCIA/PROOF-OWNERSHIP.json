@@ -26,29 +26,17 @@
     "prover",
     "negative_test",
     "counterproof",
-    "external_anchor"
+    "external_anchor",
+    "depends_on"
   ],
-  "invariants": [
+  "unregistered_known_invariants": [
     {
       "id": "IDENTITY_AUTHORITY_ACTIVE_SURFACES",
-      "proof_class": "identity_authority",
-      "source": "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md",
-      "consumer": "docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md",
-      "prover": "scripts/lupa/validar-identidade-operacional.mjs",
-      "negative_test": "scripts/lupa/validar-identidade-operacional.test.mjs",
-      "counterproof": {
-        "kind": "negative_test_suite",
-        "path": "scripts/lupa/validar-identidade-operacional.test.mjs",
-        "observation": "casos adversariais tentam produzir falso PASS sem executar o provador como oraculo",
-        "independent_from_prover": true
-      },
-      "external_anchor": {
-        "kind": "repository_active_surface",
-        "path": "AGENTS.md",
-        "observation": "conteudo versionado da superficie ativa no mesmo HEAD"
-      },
-      "depends_on": []
-    },
+      "reason": "O validador atual consome as próprias superfícies canônicas; ainda não existe âncora independente suficiente para registrar essa classe sem circularidade.",
+      "status": "UNPROVEN_NOT_OWNED"
+    }
+  ],
+  "invariants": [
     {
       "id": "AUTHORITY_RECEIPT_FROM_GITHUB_EVENT",
       "proof_class": "authenticated_authority",
@@ -64,8 +52,8 @@
       },
       "external_anchor": {
         "kind": "github_event_label",
-        "path": ".github/workflows/bots-labels-seed.yml",
-        "observation": "label autenticada no payload real de GITHUB_EVENT_PATH; o arquivo seed sozinho nao prova presenca da label"
+        "event_field": "pull_request.labels",
+        "observation": "label autenticada observada no payload real de GITHUB_EVENT_PATH; arquivo seed isolado não prova presença da label"
       },
       "depends_on": []
     }
