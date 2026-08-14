@@ -257,7 +257,47 @@ STATUS=REFERENCIA_FORNECIDA_PELO_CHEFE
 REGRA=NAO_ATRIBUIR_PREIMAGE_OU_CONTEUDO_AO_HASH_SEM_PROVA
 ```
 
-## 17. Selo
+## 17. MetaLupa contra a própria implementação encontrou um paralelo e o matou
+
+Durante a materialização desta conversa, foi criado inicialmente um workflow novo para `AUTO_SQUASH_IF_CLEAN`. A MetaLupa contra a própria evidência abriu o inventário e encontrou que já existia o fluxo canônico:
+
+```text
+.github/workflows/autonomia-promocao.yml
+scripts/github-autonomia-promocao.mjs
+scripts/github-autonomia-varredura.mjs
+```
+
+O novo workflow seria duplicação de responsabilidade. A correção correta foi:
+
+```text
+PARALELO NOVO
+→ IDENTIFICAR CAPACIDADE EXISTENTE
+→ APAGAR O PARALELO
+→ ABSORVER A NOVA SEMANTICA NO PROMOTOR CANONICO
+→ TESTAR FAST + ADVERSARIAL
+→ GUARDRAIL PROIBE O PARALELO DE VOLTAR
+```
+
+Isso virou prova concreta de `REUSE_BEFORE_CREATE`: a própria SOL foi obrigada a desfazer a primeira solução quando a evidência mostrou encaixe canônico melhor.
+
+## 18. Intenção já tomada não vira nova fila humana
+
+Quando a intenção e a promoção para `main` já estão autorizadas no mesmo escopo:
+
+```text
+INTENCAO
+→ IMPLEMENTACAO
+→ SCAN DE SEGURANCA DO DIFF
+→ SEM CONFLITO
+→ BASE ATUALIZADA
+→ HEAD/BASE REVALIDADOS
+→ SQUASH MAIN
+→ RECEIPT
+```
+
+O fast path vive dentro do promotor canônico existente. Ele não espera convergência externa nem todos os workflows auxiliares. O modo adversarial completo continua no mesmo motor e só entra quando SEGREDO/CHEFE pedir para provar arquitetura/autonomia/robustez/generalização.
+
+## 19. Selo
 
 ```text
 CHEFE_DECIDE_INTENCAO=true
@@ -270,6 +310,9 @@ PIVETE_REGIONAL_VOCATIVO=true
 ONE_SYSTEM_ONLY=true
 PRODUCTION_FIRST=true
 DEPLOY_CAUSAL_SCOPE_FIRST=true
+INTENT_AUTHORIZED_TO_MAIN=true
+AUTO_SQUASH_IF_CLEAN=true
+NO_HUMAN_REASK_FOR_MERGE=true
 FULL_CONVERGENCE_CHEFE_REQUEST_ONLY=true
 PRIVATE_HOLDOUT_SUPPORTED=true
 NO_FALSE_GREEN=true
