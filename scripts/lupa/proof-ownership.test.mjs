@@ -17,6 +17,8 @@ const baseContract = () => ({
     unknown_skipped_pending: "NOT_PASS",
     proof_graph_must_be_acyclic: true,
     proof_must_end_in_external_anchor: true,
+    graph_structure_ok_is_not_invariant_proof: true,
+    external_anchor_must_be_observed_by_responsible_prover: true,
   },
   invariants: [
     {
@@ -26,7 +28,11 @@ const baseContract = () => ({
       consumer: "consumer.mjs",
       prover: "prover.mjs",
       negative_test: "prover.test.mjs",
-      external_anchor: { kind: "repository_active_surface", path: "anchor.md" },
+      external_anchor: {
+        kind: "repository_active_surface",
+        path: "anchor.md",
+        observation: "conteudo versionado observado no mesmo HEAD",
+      },
       independent_counterproof: true,
       depends_on: [],
     },
@@ -35,9 +41,11 @@ const baseContract = () => ({
 
 const allExist = () => true;
 
-test("grafo finito valido passa", () => {
+test("grafo finito valido passa somente como topologia", () => {
   const result = validateProofOwnership(baseContract(), { exists: allExist });
   assert.equal(result.ok, true);
+  assert.equal(result.topology_only, true);
+  assert.equal(result.invariant_proof, false);
   assert.deepEqual(result.errors, []);
 });
 
@@ -65,6 +73,14 @@ test("ancora que depende de output de validator reprova", () => {
   assert.ok(result.errors.some((item) => item.startsWith("PROOF_OWNERSHIP_EXTERNAL_ANCHOR_INVALID:A")));
 });
 
+test("ancora sem descricao da observacao externa reprova", () => {
+  const contract = baseContract();
+  delete contract.invariants[0].external_anchor.observation;
+  const result = validateProofOwnership(contract, { exists: allExist });
+  assert.equal(result.ok, false);
+  assert.ok(result.errors.includes("PROOF_OWNERSHIP_EXTERNAL_OBSERVATION_MISSING:A"));
+});
+
 test("dependencia circular reprova", () => {
   const contract = baseContract();
   contract.invariants[0].depends_on = ["B"];
@@ -75,7 +91,11 @@ test("dependencia circular reprova", () => {
     consumer: "b-consumer.mjs",
     prover: "b-prover.mjs",
     negative_test: "b-prover.test.mjs",
-    external_anchor: { kind: "runtime_observation", path: "b-anchor.log" },
+    external_anchor: {
+      kind: "runtime_observation",
+      path: "b-anchor.log",
+      observation: "evento externo observado pelo consumidor real",
+    },
     independent_counterproof: true,
     depends_on: ["A"],
   });
@@ -93,7 +113,11 @@ test("mesma classe com dois donos reprova", () => {
     consumer: "b-consumer.mjs",
     prover: "outro-prover.mjs",
     negative_test: "outro-prover.test.mjs",
-    external_anchor: { kind: "repository_active_surface", path: "b-anchor.md" },
+    external_anchor: {
+      kind: "repository_active_surface",
+      path: "b-anchor.md",
+      observation: "outra superficie ativa observada no mesmo HEAD",
+    },
     independent_counterproof: true,
     depends_on: [],
   });
