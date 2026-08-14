@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-08-14T16:18:31.161Z
+# 🧠 Notion Sync — 2026-08-14T17:17:10.129Z
 
-- **Commit fonte:** `6e56fcd26cd5425c5c2a541fa2b5c53231133860`
+- **Commit fonte:** `c85064e37c669232a79fba87788f65f17868e672`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 407 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 408 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
 | aprendizados | 26 | 0 | 26 | 0 | 0 |
-| estrutura | 338 | 1 | 337 | 0 | 0 |
+| estrutura | 338 | 0 | 338 | 0 | 0 |
 
 ## Operações
 
@@ -284,7 +284,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/MAPA-DOS-BOTS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/MCP-FLUXO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/MEGA-PAINEL-SUGESTOES-IA.md |
-| estrutura | criado | docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md |
+| estrutura | atualizado | docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md |
 | estrutura | atualizado | docs/CONSCIENCIA/MODO-SEGREDO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/NOTIFY/INSTALAR-VPS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/NOTIFY/README.md |
