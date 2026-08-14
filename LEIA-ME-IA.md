@@ -48,6 +48,45 @@ Nome de modelo não muda a regra. Claude, Sonnet, Opus, GPT, Codex, Gemini, Grok
 Copilot, Cursor, Windsurf, Hermes ou qualquer modelo futuro entra como um papel
 operacional: coordenador, executor, debugger, revisor, judge ou corpo autorizado.
 
+### 1.2 Writer portátil — papel estável, modelo substituível
+
+```text
+MODEL_IS_REPLACEABLE=true
+WRITER_ROLE_IS_NOT_MODEL=true
+ONE_WRITER_PER_SCOPE=true
+CHIEF_ORDER_CAN_TRIGGER_HANDOFF=true
+WRITER_UNAVAILABLE_DOES_NOT_BLOCK_MISSION=true
+DETERMINISTIC_FIRST=true
+AI_FALLBACK_BY_CAPABILITY=true
+UNKNOWN_NEVER_PASS=true
+```
+
+O Writer é uma exclusão mútua sobre **escopo**, não uma reserva eterna para um modelo. Sempre separe:
+
+```text
+WRITER_ROLE      = função estável (SOL|HERMES|EXECUTOR|OUTRO PAPEL AUTORIZADO)
+WRITER_SCOPE     = arquivos/serviço/branch sob posse de escrita
+WRITER_INSTANCE  = sessão/agente/modelo atual, substituível
+MODEL/PROVIDER   = telemetria/capacidade, nunca autoridade
+```
+
+Se o Writer atual está vivo e possui delta ainda não entregue, outro executor fica `READ_ONLY/JUDGE`. Se ele terminou, está offline, perdeu sessão, ficou sem quota, recebeu `429/402`, timeout ou outra indisponibilidade, capture HEAD + branch + dirty/uncommitted state, preserve qualquer delta existente e faça `WRITER_HANDOFF` para outra instância capaz. **Não espere um modelo específico voltar quando o estado pode ser transferido com segurança.**
+
+Uma ordem atual de `SEGREDO/CHEFE` pode iniciar o handoff imediatamente. A ordem humana vence snapshot/model-lock antigo, mas não cria dois Writers simultâneos: primeiro capture e preserve o estado, depois transfira a posse e continue.
+
+Quando a tarefa depender de IA, o caminho é:
+
+```text
+DETERMINÍSTICO PRIMEIRO
+→ definir capacidade necessária
+→ preferir modelo/provider forte e saudável (GPT-5.5 quando disponível e adequado a tarefa crítica)
+→ se indisponível, cair para o próximo modelo/provider configurado e capaz
+→ preservar mission_id + scope + HEAD + evidência
+→ 429|402|TIMEOUT|OFFLINE|UNKNOWN != PASS
+```
+
+Falha de uma IA não é bloqueio global se outra consegue cumprir o mesmo contrato. Se nenhuma rota capaz existir, o estado é `BLOCKED/UNKNOWN`, nunca sucesso inventado.
+
 Ao iniciar trabalho técnico, depois de reset de contexto ou ao assumir uma missão
 existente, emita uma única vez o recibo curto abaixo. Não repita em toda mensagem:
 
@@ -140,7 +179,7 @@ INTENÇÃO DO CHEFE
 → CRIAR SOMENTE COM GAP REAL PROVADO
 ```
 
-Encontrar o arquivo e não reconhecer que ele atende ao pedido é:
+Encontrar um arquivo e não reconhecer que ele atende ao pedido é:
 
 ```text
 BOOT_BLOQUEADO=FALHA_DE_RECONCILIACAO_DE_CONTEXTO
@@ -151,7 +190,8 @@ Um PR aberto ou Draft, plano, prova formal ou documento de programa é contexto.
 Para tarefa simples, é proibido substituir execução por tratado, equação, matriz de fases, novo plano ou nova arquitetura sem solicitação do CHEFE. O preflight é interno por padrão; não deve virar formulário nem trabalho manual para o usuário.
 
 Contrato legível por máquina: `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json`.
-### 2.2 Regra do Acusador/Apontador
+
+### 2.3 Regra do Acusador/Apontador
 
 Todo erro relevante deve deixar uma cadeia causal verificável. Não basta dizer “está quebrado”.
 

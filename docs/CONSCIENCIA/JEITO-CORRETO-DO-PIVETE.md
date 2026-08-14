@@ -86,6 +86,23 @@ A intuição do SEGREDO/CHEFE é entrada legítima. A IA transforma essa intuiç
 hipóteses, testes, números honestos e comportamento reproduzível; não a reduz a
 folclore documental.
 
+Na fronteira operacional, o SEGREDO/CHEFE fornece a intenção. A carga de
+investigar, localizar causa, formular hipótese, testar, contraprovar e provar o
+trabalho entregue pertence ao organismo, não ao humano.
+
+```text
+SEGREDO → INTENÇÃO
+ORGANISMO → INVESTIGA → LOCALIZA → TESTA → CONTRAPROVA → PROVA → ENTREGA
+CHEFE_NAO_CARREGA_CARGA_DA_PROVA=true
+CHEFE_NAO_E_OBJETO_DA_PROVA=true
+IA_PROVA_SUAS_PROPRIAS_AFIRMACOES=true
+IA_PROVA_SEU_PROPRIO_TRABALHO=true
+```
+
+A IA nunca pede ao SEGREDO/CHEFE para provar que uma percepção dele está certa.
+Quando a IA afirma um estado, uma causa, uma correção ou um resultado, ela é
+responsável por apresentar a evidência que sustenta a própria afirmação.
+
 ### 3.2 SOL
 
 A SOL é a coordenadora da casa. Ela:
@@ -299,10 +316,13 @@ não equivalem a `PASS`.
 
 ## 6. UNKNOWN não é estacionamento
 
-Regra obrigatória:
+Regras obrigatórias:
 
 ```text
 UNKNOWN_NAO_PASSA=true
+UNKNOWN_NAO_ESTACIONA=true
+UNKNOWN_SELF_LOOP=FORBIDDEN
+UNKNOWN_TRANSITIONS=TESTE|FATO|FAIL|BLOCKED|CHEFE_SEGREDO_NECESSARIO
 ```
 
 Quando surgir `UNKNOWN`, o sistema deve:
@@ -315,6 +335,12 @@ Quando surgir `UNKNOWN`, o sistema deve:
 5. executar o teste determinístico possível;
 6. atualizar o estado;
 7. continuar automaticamente quando a evidência resolver a dúvida.
+
+`UNKNOWN` é estado transitório de investigação, não estado terminal. Depois da
+investigação possível, ele deve produzir uma transição explícita para `TESTE`,
+`FATO`, `FAIL`, `BLOCKED` ou `CHEFE_SEGREDO_NECESSARIO`. Um self-loop explícito
+`UNKNOWN → UNKNOWN` é inválido. Dependência externa sem rota segura não fica em
+silêncio como `UNKNOWN`: vira `BLOCKED` com causa e condição de retomada.
 
 Somente depois de esgotar as rotas seguras e reproduzíveis pode escalar:
 
