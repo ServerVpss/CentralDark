@@ -19,6 +19,8 @@ const CANONICAL = Object.freeze({
     "SOL = identidade operacional/coordenadora; não é modelo específico",
     "PIVETE/HERMES = executor, preservação e continuidade",
     "Full deploy é exceção causal",
+    "NO_HUMAN_REASK_FOR_MERGE=true",
+    ".github/workflows/autonomia-promocao.yml",
     "Convergência adversarial total só é aberta quando SEGREDO/CHEFE solicitar explicitamente",
   ],
   "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md": [
@@ -26,6 +28,9 @@ const CANONICAL = Object.freeze({
     "ACORDAR_RECUPERA_FIO=true",
     "PRODUCTION_FIRST=true",
     "DEPLOY_CAUSAL_SCOPE_FIRST=true",
+    "INTENT_AUTHORIZED_TO_MAIN=true",
+    "AUTO_SQUASH_IF_CLEAN=true",
+    "NO_HUMAN_REASK_FOR_MERGE=true",
     "FULL_CONVERGENCE_CHEFE_REQUEST_ONLY=true",
     "UNKNOWN_IS_NOT_PASS=true",
   ],
@@ -39,6 +44,8 @@ const CANONICAL = Object.freeze({
     "REDEPLOY=PERMITIDO",
     "NO_HUMAN_REASK_FOR_ALREADY_GRANTED_SCOPE=true",
     "NO_RETURN_TO_CHEFE_FOR_MACHINE_MEASURABLE_STATE=true",
+    "NO_HUMAN_REASK_FOR_MERGE=true",
+    ".github/workflows/autonomia-promocao.yml",
     "Convergência adversarial total / swarm / Judge independente **não é gate automático de deploy**",
   ],
   "docs/CONSCIENCIA/03-FLUXO-DEPLOY.md": [
@@ -102,6 +109,10 @@ const FORBIDDEN_PROFILE = Object.freeze([
     code: "ESCRITA_DEPENDE_DE_AUTORIZACAO_DO_PIVETE",
     pattern: /nenhuma ação de escrita[\s\S]{0,180}autorização explícita[\s\S]{0,80}Pivete/i,
   },
+]);
+
+const FORBIDDEN_PARALLEL_PATHS = Object.freeze([
+  ".github/workflows/intencao-chefe-auto-squash.yml",
 ]);
 
 const TEXT_EXTENSIONS = new Set([".md", ".mdc", ".txt", ".yaml", ".yml", ".json"]);
@@ -209,6 +220,17 @@ export function validateRepository(repoRoot) {
   const findings = [];
   const alreadyChecked = new Set();
 
+  for (const path of FORBIDDEN_PARALLEL_PATHS) {
+    if (existsSync(join(repoRoot, path))) {
+      findings.push({
+        code: "PROMOTOR_PARALELO_PROIBIDO",
+        path,
+        line: null,
+        excerpt: "A promoção deve ser absorvida por .github/workflows/autonomia-promocao.yml",
+      });
+    }
+  }
+
   for (const [path, tokens] of Object.entries(CANONICAL)) {
     const text = safeRead(join(repoRoot, path));
     alreadyChecked.add(path);
@@ -243,6 +265,7 @@ export function runValidation({ repoRoot, profileRoots = [] }) {
     soul: "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md",
     context_recovery: "#ACORDAR",
     deployment: "PRODUCTION_FIRST + CAUSAL_SCOPE_FIRST",
+    merge_policy: "INTENT_AUTHORIZED -> AUTO_SQUASH_IF_CLEAN -> MAIN",
     convergence: "FULL_ADVERSARIAL_ONLY_ON_CHEFE_REQUEST",
     writer_rule: "WRITER_UNICO",
     unknown_rule: "UNKNOWN_NAO_PASSA",
@@ -258,7 +281,7 @@ function printHuman(report) {
     const location = `${finding.profile_root ? `${finding.profile_root}:` : ""}${finding.path}${finding.line ? `:${finding.line}` : ""}`;
     console.error(`IDENTIDADE_ERRO ${finding.code} ${location} :: ${finding.excerpt}`);
   }
-  console.log(`IDENTIDADE_OK=${report.ok ? 1 : 0} AUTORIDADE=SEGREDO_CHEFE COORDENADOR=SOL EXECUTOR=PIVETE_HERMES SOUL=CANONICA ERROS=${report.findings.length}`);
+  console.log(`IDENTIDADE_OK=${report.ok ? 1 : 0} AUTORIDADE=SEGREDO_CHEFE COORDENADOR=SOL EXECUTOR=PIVETE_HERMES SOUL=CANONICA MERGE=AUTO_SQUASH_IF_CLEAN ERROS=${report.findings.length}`);
 }
 
 async function main() {

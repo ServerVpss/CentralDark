@@ -70,7 +70,7 @@ Writer: <agente>
 Writer-Scope: <escopo>
 ```
 
-O workflow canônico `.github/workflows/intencao-chefe-auto-squash.yml` consome esse recibo e conclui o squash quando os gates aplicáveis estão verdes e a branch está mergeável.
+O fluxo canônico já existente `.github/workflows/autonomia-promocao.yml` consome esse recibo. No modo `AUTO_SQUASH_IF_CLEAN`, usa validação determinística mínima, não espera convergência externa, revalida o HEAD vivo e conclui squash quando o PR está elegível. O modo adversarial permanece disponível sob solicitação explícita do SEGREDO/CHEFE.
 
 Essa autorização não concede carta branca para recurso externo não relacionado, segredo, gasto novo, exclusão irreversível sem mapa ou mudança de intenção de negócio.
 

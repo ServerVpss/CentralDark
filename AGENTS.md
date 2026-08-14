@@ -117,7 +117,8 @@ Quando SEGREDO/CHEFE já deu a intenção e a autorização vigente cobre promo�
 ```text
 INTENCAO_JA_AUTORIZADA
 → IMPLEMENTAR
-→ TESTAR
+→ TESTE LOCAL APLICAVEL
+→ SCAN DE SEGURANCA DO DIFF
 → SEM_CONFLITO
 → SEM_BLOQUEIO_MATERIAL
 → SQUASH_MAIN
@@ -140,9 +141,23 @@ Writer: <agente>
 Writer-Scope: <escopo>
 ```
 
-`.github/workflows/intencao-chefe-auto-squash.yml` consome esse recibo. Não terminar em `READY_FOR_MERGE`/`AGUARDANDO_AUTORIZACAO` quando a mesma autorização já está ativa.
+O fluxo canônico **já existente** `.github/workflows/autonomia-promocao.yml` consome esse recibo. Não criar segundo workflow de promoção. No modo `AUTO_SQUASH_IF_CLEAN`, o próprio promotor:
 
-Se branch estiver atrás da main, o fluxo atualiza a branch, espera os checks do novo HEAD e tenta novamente. Conflito real ou check vermelho continua bloqueando até correção; não vira falso verde.
+```text
+AUTOR CONFIAVEL + MESMO REPO
+→ RECIBO DE INTENCAO
+→ SCAN DE CAMINHO/SECRET NO DIFF
+→ CHANGES_REQUESTED? BLOQUEIA
+→ MERGE CONFLICT? BLOQUEIA
+→ BASE ATRASADA? ATUALIZA E REAVALIA
+→ REVALIDA HEAD/BASE
+→ SQUASH MAIN
+→ RECEIPT
+```
+
+Esse fast path **não espera convergência externa nem todos os workflows auxiliares**. O modo adversarial com workflows/Judge completos permanece no mesmo motor e é usado quando SEGREDO/CHEFE solicitar prova adversarial. `UNKNOWN`, conflito e achado de segurança continuam fail-closed.
+
+Não terminar em `READY_FOR_MERGE`/`AGUARDANDO_AUTORIZACAO` quando a mesma autorização já está ativa.
 
 ## Production-first / deploy causal
 

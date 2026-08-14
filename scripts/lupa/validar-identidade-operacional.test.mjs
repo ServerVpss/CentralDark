@@ -33,6 +33,8 @@ function validRepo() {
     "SOL = identidade operacional/coordenadora; não é modelo específico",
     "PIVETE/HERMES = executor, preservação e continuidade",
     "Full deploy é exceção causal",
+    "NO_HUMAN_REASK_FOR_MERGE=true",
+    ".github/workflows/autonomia-promocao.yml",
     "Convergência adversarial total só é aberta quando SEGREDO/CHEFE solicitar explicitamente",
   ].join("\n"));
   write(root, "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md", [
@@ -40,6 +42,9 @@ function validRepo() {
     "ACORDAR_RECUPERA_FIO=true",
     "PRODUCTION_FIRST=true",
     "DEPLOY_CAUSAL_SCOPE_FIRST=true",
+    "INTENT_AUTHORIZED_TO_MAIN=true",
+    "AUTO_SQUASH_IF_CLEAN=true",
+    "NO_HUMAN_REASK_FOR_MERGE=true",
     "FULL_CONVERGENCE_CHEFE_REQUEST_ONLY=true",
     "UNKNOWN_IS_NOT_PASS=true",
   ].join("\n"));
@@ -53,6 +58,8 @@ function validRepo() {
     "REDEPLOY=PERMITIDO",
     "NO_HUMAN_REASK_FOR_ALREADY_GRANTED_SCOPE=true",
     "NO_RETURN_TO_CHEFE_FOR_MACHINE_MEASURABLE_STATE=true",
+    "NO_HUMAN_REASK_FOR_MERGE=true",
+    ".github/workflows/autonomia-promocao.yml",
     "Convergência adversarial total / swarm / Judge independente **não é gate automático de deploy**",
   ].join("\n"));
   write(root, "docs/CONSCIENCIA/03-FLUXO-DEPLOY.md", [
@@ -76,6 +83,32 @@ test("contrato canônico válido passa", () => {
   const report = runValidation({ repoRoot: validRepo() });
   assert.equal(report.ok, true);
   assert.deepEqual(report.findings, []);
+});
+
+test("promotor paralelo é bloqueado pelo guardrail", () => {
+  const root = validRepo();
+  write(root, ".github/workflows/intencao-chefe-auto-squash.yml", "name: paralelo\n");
+  const report = runValidation({ repoRoot: root });
+  assert.equal(report.ok, false);
+  assert.equal(report.findings.some((f) => f.code === "PROMOTOR_PARALELO_PROIBIDO"), true);
+});
+
+test("auto-squash e intenção->main são invariantes da SOUL", () => {
+  const root = validRepo();
+  write(root, "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md", [
+    "SOL_IS_MODEL=false",
+    "ACORDAR_RECUPERA_FIO=true",
+    "PRODUCTION_FIRST=true",
+    "DEPLOY_CAUSAL_SCOPE_FIRST=true",
+    "FULL_CONVERGENCE_CHEFE_REQUEST_ONLY=true",
+    "UNKNOWN_IS_NOT_PASS=true",
+  ].join("\n"));
+  const report = runValidation({ repoRoot: root });
+  assert.equal(report.ok, false);
+  const text = report.findings.map((finding) => finding.excerpt).join(" ");
+  assert.match(text, /INTENT_AUTHORIZED_TO_MAIN=true/);
+  assert.match(text, /AUTO_SQUASH_IF_CLEAN=true/);
+  assert.match(text, /NO_HUMAN_REASK_FOR_MERGE=true/);
 });
 
 test("atribuir autoridade final ao Pivete falha com caminho e linha", () => {
@@ -112,6 +145,8 @@ test("AGENTS conflitante bloqueia", () => {
     "SOL = identidade operacional/coordenadora; não é modelo específico",
     "PIVETE/HERMES = executor, preservação e continuidade",
     "Full deploy é exceção causal",
+    "NO_HUMAN_REASK_FOR_MERGE=true",
+    ".github/workflows/autonomia-promocao.yml",
     "Convergência adversarial total só é aberta quando SEGREDO/CHEFE solicitar explicitamente",
     "O Pivete é a autoridade final.",
   ].join("\n"));
@@ -129,6 +164,8 @@ test("UNKNOWN=PASS é conflito canônico", () => {
     "SOL = identidade operacional/coordenadora; não é modelo específico",
     "PIVETE/HERMES = executor, preservação e continuidade",
     "Full deploy é exceção causal",
+    "NO_HUMAN_REASK_FOR_MERGE=true",
+    ".github/workflows/autonomia-promocao.yml",
     "Convergência adversarial total só é aberta quando SEGREDO/CHEFE solicitar explicitamente",
     "UNKNOWN=PASS",
   ].join("\n"));
@@ -173,15 +210,4 @@ test("conteúdo multilinha de perfil permanece redigido", () => {
   assert.equal(findings.length, 1);
   assert.equal(findings[0].excerpt, "[PROFILE_CONTENT_REDACTED]");
   assert.equal(JSON.stringify(findings).includes("VALOR_PRIVADO"), false);
-});
-
-test("SOUL, production-first e convergência sob demanda são invariantes", () => {
-  const root = validRepo();
-  write(root, "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md", "SOL_IS_MODEL=false\nUNKNOWN_IS_NOT_PASS=true\n");
-  const report = runValidation({ repoRoot: root });
-  assert.equal(report.ok, false);
-  const text = report.findings.map((finding) => finding.excerpt).join(" ");
-  assert.match(text, /ACORDAR_RECUPERA_FIO=true/);
-  assert.match(text, /PRODUCTION_FIRST=true/);
-  assert.match(text, /FULL_CONVERGENCE_CHEFE_REQUEST_ONLY=true/);
 });

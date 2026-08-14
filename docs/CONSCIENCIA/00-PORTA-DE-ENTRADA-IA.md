@@ -135,6 +135,30 @@ SUBIR
 
 Full deploy é exceção causal. Não bloquear a primeira visualização por perfeição global, dívida histórica ou convergência ornamental.
 
+## Intenção autorizada → main
+
+Quando a intenção e a promoção do mesmo escopo já foram dadas pelo SEGREDO/CHEFE:
+
+```text
+NO_HUMAN_REASK_FOR_MERGE=true
+MERGE_METHOD=squash
+TARGET=main
+```
+
+O PR deve carregar `Intent-Authorized`, `Merge-Policy: AUTO_SQUASH_IF_CLEAN`, `Intent-Scope`, `Writer` e `Writer-Scope`.
+
+A promoção usa somente o fluxo canônico já existente:
+
+```text
+.github/workflows/autonomia-promocao.yml
+→ scripts/github-autonomia-varredura.mjs
+→ scripts/github-autonomia-promocao.mjs
+```
+
+No fast path, o motor valida autor/repo, recibo, diff sensível, `CHANGES_REQUESTED`, conflito, base/HEAD e então faz squash. Não espera convergência externa. O modo adversarial completo permanece no mesmo motor para quando SEGREDO/CHEFE solicitar.
+
+Não criar segundo promotor/workflow para essa função.
+
 ## Padrão operacional
 
 ```text
@@ -165,6 +189,7 @@ Regras:
 | Regra/erro/padrão reutilizável | `docs/CONSCIENCIA/APRENDIZADOS.md` |
 | Reconciliação antes de criar | `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json` |
 | Coordenação/escritor único | `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` |
+| Promoção canônica | `.github/workflows/autonomia-promocao.yml` |
 | Pendências | `docs/PENDENCIAS.md` |
 | Estado curto | `LEIA-ME-IA.md` + este arquivo |
 
