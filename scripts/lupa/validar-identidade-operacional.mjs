@@ -22,6 +22,9 @@ const CANONICAL = Object.freeze({
     "NO_HUMAN_REASK_FOR_MERGE=true",
     ".github/workflows/autonomia-promocao.yml",
     "Convergência adversarial total só é aberta quando SEGREDO/CHEFE solicitar explicitamente",
+    "INFORMATION_GAIN_REQUIRED=true",
+    "LEARNING_REQUIRES_EVIDENCE=true",
+    "SAME_ERROR_NO_NEW_INFO_IS_WASTE=true",
   ],
   "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md": [
     "SOL_IS_MODEL=false",
@@ -32,7 +35,23 @@ const CANONICAL = Object.freeze({
     "AUTO_SQUASH_IF_CLEAN=true",
     "NO_HUMAN_REASK_FOR_MERGE=true",
     "FULL_CONVERGENCE_CHEFE_REQUEST_ONLY=true",
+    "INFORMATION_GAIN_REQUIRED=true",
+    "LEARNING_REQUIRES_EVIDENCE=true",
+    "LEARNING_DELTA_REQUIRED=true",
+    "SAME_ERROR_NO_NEW_INFO_IS_WASTE=true",
     "UNKNOWN_IS_NOT_PASS=true",
+  ],
+  ".agents/skills/meta-lupa/SKILL.md": [
+    "AUTORIZACAO_DO_SEGREDO_CHEFE:",
+    "Confronto não é pontuação de ego",
+    "EVIDENCIA_NOVA=SIM",
+    "DELTA_DE_CRENCA_OU_REGRA=SIM",
+    "DESPERDICIO_DE_CICLO",
+  ],
+  "docs/CONSCIENCIA/CONTRATO-LUPA-BAYESIANA.md": [
+    "INFORMATION_GAIN_REQUIRED=true",
+    "autoridade humana vigente é `SEGREDO/CHEFE`",
+    "Confronto só vira aprendizado promovido com evidência nova + delta reutilizável",
   ],
   "docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md": [
     "MESMA_SOUL=SIM",
@@ -135,6 +154,7 @@ const FORBIDDEN_CANONICAL = Object.freeze([
   { code: "PIVETE_USUARIO_MESTRE", pattern: /\bUsu[aá]rio\s+mestre\s*=\s*Pivete\b/i },
   { code: "PIVETE_TOPO_HUMANO", pattern: /\bPivete\s*\(topo\)\b/i },
   { code: "AUTORIZACAO_ATRIBUIDA_AO_PIVETE", pattern: /\bautoriza(?:ção|cao)(?:\s+explícita|\s+explicita)?\s+do\s+Pivete\b/i },
+  { code: "AUTORIZACAO_TOKEN_LEGADO_PIVETE", pattern: /\bAUTORIZACAO_DO_PIVETE\b/i },
   { code: "PIVETE_SELOU_AUTORIZACAO", pattern: /\bPivete\s+selou\b/i },
   { code: "UNKNOWN_CONVERTIDO_EM_PASS", pattern: /\bUNKNOWN\s*(?:=|:|→|->)\s*PASS\b/i },
   { code: "SOL_FIXADA_A_MODELO", pattern: /\bSOL\s*=\s*(?:GPT|CLAUDE|GEMINI|GROK|CODEX)\b/i },
@@ -342,6 +362,8 @@ export function runValidation({ repoRoot, profileRoots = [] }) {
     deployment: "PRODUCTION_FIRST + CAUSAL_SCOPE_FIRST",
     merge_policy: "INTENT_AUTHORIZED -> AUTO_SQUASH_IF_CLEAN -> MAIN",
     convergence: "FULL_ADVERSARIAL_ONLY_ON_CHEFE_REQUEST",
+    learning: "CONFRONTO -> EVIDENCIA -> DELTA_DE_CRENCA -> REGRA|TESTE|GUARDRAIL|MEMORIA -> OURO",
+    information_gain_required: true,
     writer_rule: "WRITER_UNICO",
     unknown_rule: "UNKNOWN_NAO_PASSA",
     canonical_findings: canonicalFindings,
@@ -356,7 +378,7 @@ function printHuman(report) {
     const location = `${finding.profile_root ? `${finding.profile_root}:` : ""}${finding.path}${finding.line ? `:${finding.line}` : ""}`;
     console.error(`IDENTIDADE_ERRO ${finding.code} ${location} :: ${finding.excerpt}`);
   }
-  console.log(`IDENTIDADE_OK=${report.ok ? 1 : 0} AUTORIDADE=SEGREDO_CHEFE COORDENADOR=SOL EXECUTOR=PIVETE_HERMES LOADER=CANONICAL_ALLOWLIST LEGACY_SYNC=DISABLED MERGE=AUTO_SQUASH_IF_CLEAN ERROS=${report.findings.length}`);
+  console.log(`IDENTIDADE_OK=${report.ok ? 1 : 0} AUTORIDADE=SEGREDO_CHEFE COORDENADOR=SOL EXECUTOR=PIVETE_HERMES LOADER=CANONICAL_ALLOWLIST LEGACY_SYNC=DISABLED MERGE=AUTO_SQUASH_IF_CLEAN LEARNING=INFORMATION_GAIN ERROS=${report.findings.length}`);
 }
 
 async function main() {
