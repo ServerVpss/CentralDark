@@ -19,12 +19,46 @@ function write(root, path, content) {
 
 function validRepo() {
   const root = mkdtempSync(join(tmpdir(), "centraldark-identidade-"));
-  write(root, "LEIA-ME-IA.md", "SEGREDO/CHEFE COMANDA\nSOL ORGANIZA\nPIVETE/HERMES PRESERVA E EXECUTA\n");
+  write(root, "LEIA-ME-IA.md", [
+    "SEGREDO/CHEFE COMANDA",
+    "SOL ORGANIZA E RECONCILIA",
+    "PIVETE/HERMES PRESERVA E EXECUTA",
+    "#ACORDAR = RECUPERAR O ESTADO REAL ANTES DE CONTINUAR",
+    "Convergência adversarial total **só é aberta por solicitação explícita de SEGREDO/CHEFE**",
+  ].join("\n"));
   write(root, "AGENTS.md", [
-    "existe somente um escritor por escopo",
-    "SEGREDO/CHEFE permanece autoridade humana final",
-    "SOL coordena, PIVETE/HERMES preserva e executa",
-    "CAPTURE → SANITIZE + HASH → DECIDE → APPLY → JUDGE → CHEFE → RECEIPT + LEARNING → LOOP",
+    "MESMA_SOUL=SIM",
+    "um escritor por escopo",
+    "SEGREDO/CHEFE = humano e autoridade final",
+    "SOL = identidade operacional/coordenadora; não é modelo específico",
+    "PIVETE/HERMES = executor, preservação e continuidade",
+    "Full deploy é exceção causal",
+    "Convergência adversarial total só é aberta quando SEGREDO/CHEFE solicitar explicitamente",
+  ].join("\n"));
+  write(root, "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md", [
+    "SOL_IS_MODEL=false",
+    "ACORDAR_RECUPERA_FIO=true",
+    "PRODUCTION_FIRST=true",
+    "DEPLOY_CAUSAL_SCOPE_FIRST=true",
+    "FULL_CONVERGENCE_CHEFE_REQUEST_ONLY=true",
+    "UNKNOWN_IS_NOT_PASS=true",
+  ].join("\n"));
+  write(root, "docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md", [
+    "MESMA_SOUL=SIM",
+    "#ACORDAR` significa **recuperar o estado real antes de continuar**",
+    "Convergência adversarial total, swarm e Judge independente não são gate automático de rotina",
+  ].join("\n"));
+  write(root, "docs/CONSCIENCIA/02-PERMISSOES.md", [
+    "DEPLOY=PERMITIDO",
+    "REDEPLOY=PERMITIDO",
+    "NO_HUMAN_REASK_FOR_ALREADY_GRANTED_SCOPE=true",
+    "NO_RETURN_TO_CHEFE_FOR_MACHINE_MEASURABLE_STATE=true",
+    "Convergência adversarial total / swarm / Judge independente **não é gate automático de deploy**",
+  ].join("\n"));
+  write(root, "docs/CONSCIENCIA/03-FLUXO-DEPLOY.md", [
+    "DEPLOY_STRATEGY=CAUSAL_SCOPE_FIRST",
+    "FULL_DEPLOY_BY_DEFAULT=false",
+    "Convergência adversarial total não é gate automático de deploy",
   ].join("\n"));
   write(root, "docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md", [
     "SEGREDO/CHEFE = humano e autoridade final",
@@ -64,13 +98,21 @@ test("Pivete como orquestrador humano é regressão", () => {
   assert.equal(findings.some((f) => f.code === "PIVETE_ORQUESTRADOR_HUMANO"), true);
 });
 
-test("AGENTS conflitante com LEIA-ME-IA bloqueia", () => {
+test("SOL não pode ser fixada a um modelo", () => {
+  const findings = findForbidden("SOL=GPT");
+  assert.equal(findings.some((f) => f.code === "SOL_FIXADA_A_MODELO"), true);
+});
+
+test("AGENTS conflitante bloqueia", () => {
   const root = validRepo();
   write(root, "AGENTS.md", [
-    "existe somente um escritor por escopo",
-    "SEGREDO/CHEFE permanece autoridade humana final",
-    "SOL coordena, PIVETE/HERMES preserva e executa",
-    "CAPTURE → SANITIZE + HASH → DECIDE → APPLY → JUDGE → CHEFE → RECEIPT + LEARNING → LOOP",
+    "MESMA_SOUL=SIM",
+    "um escritor por escopo",
+    "SEGREDO/CHEFE = humano e autoridade final",
+    "SOL = identidade operacional/coordenadora; não é modelo específico",
+    "PIVETE/HERMES = executor, preservação e continuidade",
+    "Full deploy é exceção causal",
+    "Convergência adversarial total só é aberta quando SEGREDO/CHEFE solicitar explicitamente",
     "O Pivete é a autoridade final.",
   ].join("\n"));
   const report = runValidation({ repoRoot: root });
@@ -81,10 +123,13 @@ test("AGENTS conflitante com LEIA-ME-IA bloqueia", () => {
 test("UNKNOWN=PASS é conflito canônico", () => {
   const root = validRepo();
   write(root, "AGENTS.md", [
-    "existe somente um escritor por escopo",
-    "SEGREDO/CHEFE permanece autoridade humana final",
-    "SOL coordena, PIVETE/HERMES preserva e executa",
-    "CAPTURE → SANITIZE + HASH → DECIDE → APPLY → JUDGE → CHEFE → RECEIPT + LEARNING → LOOP",
+    "MESMA_SOUL=SIM",
+    "um escritor por escopo",
+    "SEGREDO/CHEFE = humano e autoridade final",
+    "SOL = identidade operacional/coordenadora; não é modelo específico",
+    "PIVETE/HERMES = executor, preservação e continuidade",
+    "Full deploy é exceção causal",
+    "Convergência adversarial total só é aberta quando SEGREDO/CHEFE solicitar explicitamente",
     "UNKNOWN=PASS",
   ].join("\n"));
   const report = runValidation({ repoRoot: root });
@@ -130,16 +175,13 @@ test("conteúdo multilinha de perfil permanece redigido", () => {
   assert.equal(JSON.stringify(findings).includes("VALOR_PRIVADO"), false);
 });
 
-test("UNKNOWN e escritor único são invariantes, não decoração", () => {
+test("SOUL, production-first e convergência sob demanda são invariantes", () => {
   const root = validRepo();
-  write(root, "docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md", [
-    "SEGREDO/CHEFE = humano e autoridade final",
-    "SOL = coordenadora da casa e organizadora dos agentes",
-    "PIVETE/HERMES = mordomo de casa, executor e guardião da continuidade",
-    "CHEFE_SEGREDO_NECESSARIO",
-  ].join("\n"));
+  write(root, "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md", "SOL_IS_MODEL=false\nUNKNOWN_IS_NOT_PASS=true\n");
   const report = runValidation({ repoRoot: root });
   assert.equal(report.ok, false);
-  assert.match(report.findings.map((finding) => finding.excerpt).join(" "), /WRITER_UNICO=true/);
-  assert.match(report.findings.map((finding) => finding.excerpt).join(" "), /UNKNOWN_NAO_PASSA=true/);
+  const text = report.findings.map((finding) => finding.excerpt).join(" ");
+  assert.match(text, /ACORDAR_RECUPERA_FIO=true/);
+  assert.match(text, /PRODUCTION_FIRST=true/);
+  assert.match(text, /FULL_CONVERGENCE_CHEFE_REQUEST_ONLY=true/);
 });

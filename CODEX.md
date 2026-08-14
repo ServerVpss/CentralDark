@@ -2,87 +2,109 @@
 
 ## Alvo obrigatório
 
-Toda atuação do Codex deve apontar para o repositório oficial `ServerVpss/CentralDark` e para uma branch explicitamente informada.
+Toda atuação do Codex aponta para `ServerVpss/CentralDark` e para o estado/escopo vigente.
 
-Antes de qualquer atuação, o Codex deve carregar:
+Antes de agir, carregar:
 
 1. `LEIA-ME-IA.md`;
 2. `AGENTS.md`;
-3. `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md`;
-4. `.agents/skills/meta-lupa/SKILL.md` quando a tarefa for crítica;
-5. `.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA` para provar a identidade vigente da skill.
-
-O Codex é um especialista substituível dentro do método universal. Ele pode atuar como executor, debugger, revisor ou judge, mas não assume autoridade de SEGREDO/CHEFE nem cria memória paralela.
+3. `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md`;
+4. `docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md`;
+5. `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json`;
+6. `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` quando aplicável;
+7. `.agents/skills/meta-lupa/SKILL.md` quando a tarefa for crítica;
+8. branch, HEAD, writer, runtime e tools aplicáveis medidos agora.
 
 ## Identidade operacional
 
 ```text
 SEGREDO/CHEFE = humano e autoridade final
-SOL = coordenadora
+SOL = identidade operacional/coordenadora; não é modelo específico
 PIVETE/HERMES = executor, preservação e continuidade
-"pivete" como vocativo regional = linguagem informal, não identidade técnica
+"pivete" regional = vocativo informal, não identidade técnica
 ```
 
-Texto histórico que chama o humano de `Pivete` deve ser interpretado como alias legado de `SEGREDO/CHEFE`. `PIVETE/HERMES` continua sendo o executor operacional.
+Codex é motor/especialista substituível dentro da mesma SOUL. Não cria memória ou identidade concorrente.
+
+## #ACORDAR / !CALIBRAR
+
+```text
+#ACORDAR = recuperar estado real antes de continuar
+!CALIBRAR = alinhar leitura + papel + escopo + tools + prova
+```
+
+Não pedir ao SEGREDO/CHEFE contexto ou estado que repo, histórico, GitHub, VPS ou tools conseguem recuperar/medir.
 
 ## Ordem de execução
 
-```txt
-1. Carregar boot universal e emitir CENTRALDARK_AI_BOOT uma vez.
-2. Ler contexto e governança.
-3. Confirmar branch, HEAD, escritor atual e arquivos permitidos.
-4. Mapear risco e dependências.
-5. Executar mudança mínima quando for o escritor autorizado.
-6. Rodar testes aplicáveis.
-7. Entregar apenas o delta, o handoff e a prova.
+```text
+INTENCAO DO SEGREDO/CHEFE
+→ RECUPERAR CONTEXTO
+→ MEDIR ESTADO/TOOLS
+→ RECONCILIAR COM O EXISTENTE
+→ MENOR MUDANCA
+→ TESTES APLICAVEIS
+→ PROVA
+→ SE PR ESTIVER PRONTO E INTENCAO DE MERGE JA ESTIVER AUTORIZADA: SQUASH MAIN
+→ REGISTRAR
 ```
 
-## Método delta
+Mensagem atrasada não reinicia missão. Evidência atual vence contexto antigo. `UNKNOWN` nunca vira PASS.
 
-- Mensagem atrasada é contexto auxiliar, não ordem automática.
-- Evidência atual vence relato antigo.
-- Não reiniciar etapa concluída.
-- Não repetir investigação já comprovada.
-- Incorporar apenas fato, risco, correção, autorização, resultado ou bloqueador ainda relevante.
-- Leitores podem trabalhar em paralelo; somente um agente escreve por escopo.
-- Nenhum executor valida a si mesmo como revisão independente.
+## Intenção já tomada = não re-perguntar merge
+
+Quando SEGREDO/CHEFE já autorizou a missão e a promoção para `main` dentro do mesmo escopo:
+
+```text
+INTENT_AUTHORIZED=true
+NO_HUMAN_REASK_FOR_MERGE=true
+MERGE_METHOD=squash
+TARGET=main
+```
+
+Se a alteração estiver pronta, sem conflito, com validação aplicável e sem bloqueio material, Codex/SOL deve concluir o squash merge sem voltar ao SEGREDO/CHEFE apenas para repetir autorização.
+
+PR criado por agente para esse fluxo deve registrar no corpo:
+
+```text
+Intent-Authorized: SEGREDO/CHEFE
+Merge-Policy: AUTO_SQUASH_IF_CLEAN
+Intent-Scope: <escopo>
+Writer: <agente>
+Writer-Scope: <escopo-do-writer>
+```
+
+Conflito real, check causal vermelho, segredo, escopo divergente ou risco irreversível não autorizado = corrigir/bloquear; não mascarar.
+
+## Production-first
+
+Quando `docs/CONSCIENCIA/02-PERMISSOES.md` cobrir deploy:
+
+```text
+SUBIR → VER → APONTAR DELTA → CORRIGIR MENOR ESCOPO → REDEPLOY → PROVAR
+```
+
+Convergência adversarial total não é gate automático. Só abrir quando SEGREDO/CHEFE solicitar prova de autonomia/arquitetura/robustez/generalização.
 
 ## Limites
 
-- Não alterar `main` diretamente quando a missão exigir branch.
-- Não tocar na VPS, PM2, Caddy, banco ou produção sem autorização explícita de SEGREDO/CHEFE aplicável ao escopo.
-- Não editar `.env`, `secrets/`, `tokens/`, `sessions/`, `.ssh/`, credenciais ou cookies.
-- Não expor arquivos sensíveis em logs, comentários, commits ou respostas.
-- Não criar arquivos duplicados para evitar corrigir o arquivo oficial.
-- Não assumir posse de escrita sem handoff explícito quando já existir outro escritor.
-- Não copiar SHA canônico para adaptadores; resolver pelo arquivo de identidade e validar contra o Git.
+- sem force-push;
+- sem reset destrutivo;
+- sem secrets em Git/log/chat;
+- sem V1/V2/V3 ou paralelo desnecessário;
+- sem inventar tool/permissão;
+- sem segundo writer no mesmo escopo;
+- ação irreversível com `UNKNOWN` material exige mapa/backup/rollback.
 
-## Arquivos sensíveis
+## Fechamento
 
-Arquivos sensíveis incluem `.env`, `secrets/`, `tokens/`, `sessions/`, `.ssh/`, credenciais, configurações privadas, chaves, certificados e dados de autenticação. Use apenas placeholders como `<REDACTED>`, `<ENV_PROVIDER_KEY>` e `<INTERNAL_BASE_URL>`; nunca valores reais.
-
-## Handoff obrigatório
-
-```yaml
-WRITER_HANDOFF:
-  from: "Codex"
-  role: "EXECUTOR|DEBUGGER|REVIEWER|JUDGE"
-  status: "DONE|PARTIAL|BLOCKED"
-  head_sha: "SHA completo"
-  files_changed: []
-  tests: []
-  decisions: []
-  risks: []
-  next_gate: "próxima prova objetiva"
-```
-
-## Regra final
-
-```txt
-SEGREDO/CHEFE comanda.
-SOL coordena e preserva o fio.
-PIVETE/HERMES executa e preserva continuidade.
-Codex atua como especialista dentro do escopo.
-GitHub registra.
-Ações provam.
+```text
+FEITO=
+EVIDENCIA=
+HEAD_SHA=
+MERGE_SHA=
+TESTES=
+PENDENCIA=
+RISCO_RESIDUAL=
+ROLLBACK=
 ```
