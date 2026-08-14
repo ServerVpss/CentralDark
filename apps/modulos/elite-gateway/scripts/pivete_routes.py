@@ -22,7 +22,6 @@ router = APIRouter(prefix="/pivete", tags=["pivete-compat"])
 
 REPO_ROOT = Path("/root/CentralDark")
 LOG_SYNC = REPO_ROOT / "logs"
-MCP_LOCAL_URL = os.environ.get("PIVETE_MCP_URL", "http://127.0.0.1:3333")
 
 # Allowlist explícita. Ordem = precedência de boot, não glob.
 CANONICAL_CONTEXT = (
@@ -57,7 +56,7 @@ def _canonical_state() -> tuple[list[dict[str, str]], float, list[str]]:
     ultima = 0.0
     ausentes: list[str] = []
 
-    for rel, path in zip(CANONICAL_CONTEXT, _canonical_files(), strict=True):
+    for rel, path in zip(CANONICAL_CONTEXT, _canonical_files()):
         if not path.is_file():
             ausentes.append(rel)
             continue
@@ -116,6 +115,7 @@ async def pivete_consciencia(request: Request) -> dict[str, Any]:
         "ultimaSync": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(ultima)),
         "ultimaSyncTs": ultima,
         "mcp_catalog_url": "/pivete/mcp-catalog",
+        # Campo mantido por compatibilidade; valor diferencia heartbeat de sync de conteúdo.
         "hub_sync_status": _hub_sync_status(),
     }
 
@@ -200,14 +200,15 @@ async def pivete_sync_status(request: Request) -> dict[str, Any]:
 def _hub_sync_status() -> str:
     marker = LOG_SYNC / "pivete-sync-last.txt"
     if not marker.exists():
-        return "nunca-rodou"
+        return "compat-heartbeat-ausente"
     try:
+        text = marker.read_text(encoding="utf-8", errors="ignore")[:500]
         age = time.time() - marker.stat().st_mtime
-        if age < 600:
-            return f"ativo (ultimo sync ha {int(age)}s)"
-        return f"parado (ultimo sync ha {int(age / 60)}min)"
+        if "LEGACY_SYNC_DISABLED_CANONICAL_GIT_ONLY" in text:
+            return f"compat-heartbeat-canonical-git-only ({int(age)}s)"
+        return f"legacy-marker-unverified ({int(age)}s)"
     except Exception:
-        return "desconhecido"
+        return "compat-heartbeat-unknown"
 
 
 def _last_sync_log() -> list[str]:
