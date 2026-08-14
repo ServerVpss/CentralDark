@@ -154,6 +154,30 @@ NEW_HEAD
 → CONTINUAR O FIO
 ```
 
+Quando um merge/promoção fecha enquanto ainda existem correções ou escritas em voo, tratar como **corrida de estado**, não como nova missão e não como autorização para reaplicar a branch inteira. O estado promovido e o estado final do candidato precisam ser comparados antes de qualquer follow-up:
+
+```text
+MERGE_DURING_IN_FLIGHT_WRITE
+→ FIXAR MERGED_HEAD
+→ FIXAR BRANCH_FINAL_HEAD
+→ COMPARAR MERGED_HEAD ↔ BRANCH_FINAL_HEAD
+→ CLASSIFICAR SOMENTE O RESIDUO
+→ RESIDUO=0: ZERO_ACAO
+→ RESIDUO_MATERIAL>0: FOLLOW_UP_MINIMO NO MESMO ESCOPO
+→ NAO REAPLICAR DELTA JA PROMOVIDO
+→ NAO REABRIR A MISSAO POR CORRIDA MECANICA
+```
+
+O follow-up só existe se o resíduo ainda for material no estado vivo e não houver colisão de Writer. Se outro agente já absorveu o resíduo, a ação correta é registrar `CURADO/SUPERSEDED` e não duplicar a correção.
+
+```text
+POST_MERGE_RACE_REQUIRES_REMEASUREMENT=true
+MERGED_CONTENT_NOT_REAPPLIED=true
+RESIDUAL_ONLY_FOLLOWUP=true
+ZERO_RESIDUAL_ZERO_ACTION=true
+WRITER_COLLISION_STILL_BLOCKS_WRITE=true
+```
+
 Se o instrumento vivo cair:
 
 ```text
