@@ -2,6 +2,7 @@
   "schema_version": 1,
   "status": "CANONICAL",
   "marker": "PROOF_OWNERSHIP_REQUIRED",
+  "coverage_status": "PARTIAL_EXPLICIT",
   "purpose": "Impedir prova circular, duplicacao de responsabilidade e PASS fabricado pelo proprio provador.",
   "global_rules": {
     "self_validation_without_independent_counterproof": "UNPROVEN",
@@ -10,6 +11,7 @@
     "written_rule_without_prover": "UNPROVEN",
     "prover_without_negative_test": "UNPROVEN",
     "same_proof_class_multiple_owners": "BLOCKED_DUPLICATE_PROOF_OWNER",
+    "unregistered_invariant": "UNPROVEN_NOT_OWNED",
     "unknown_skipped_pending": "NOT_PASS",
     "proof_graph_must_be_acyclic": true,
     "proof_must_end_in_external_anchor": true,
