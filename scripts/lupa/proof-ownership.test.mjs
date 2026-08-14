@@ -7,6 +7,7 @@ const baseContract = () => ({
   schema_version: 1,
   status: "CANONICAL",
   marker: "PROOF_OWNERSHIP_REQUIRED",
+  coverage_status: "PARTIAL_EXPLICIT",
   global_rules: {
     self_validation_without_independent_counterproof: "UNPROVEN",
     circular_proof: "UNPROVEN",
@@ -14,6 +15,7 @@ const baseContract = () => ({
     written_rule_without_prover: "UNPROVEN",
     prover_without_negative_test: "UNPROVEN",
     same_proof_class_multiple_owners: "BLOCKED_DUPLICATE_PROOF_OWNER",
+    unregistered_invariant: "UNPROVEN_NOT_OWNED",
     unknown_skipped_pending: "NOT_PASS",
     proof_graph_must_be_acyclic: true,
     proof_must_end_in_external_anchor: true,
@@ -41,12 +43,21 @@ const baseContract = () => ({
 
 const allExist = () => true;
 
-test("grafo finito valido passa somente como topologia", () => {
+test("grafo finito valido passa somente como topologia parcial", () => {
   const result = validateProofOwnership(baseContract(), { exists: allExist });
   assert.equal(result.ok, true);
   assert.equal(result.topology_only, true);
   assert.equal(result.invariant_proof, false);
+  assert.equal(result.coverage_status, "PARTIAL_EXPLICIT");
   assert.deepEqual(result.errors, []);
+});
+
+test("grafo nao pode alegar cobertura diferente da parcial explicita", () => {
+  const contract = baseContract();
+  contract.coverage_status = "FULL";
+  const result = validateProofOwnership(contract, { exists: allExist });
+  assert.equal(result.ok, false);
+  assert.ok(result.errors.includes("PROOF_OWNERSHIP_COVERAGE_MUST_BE_PARTIAL_EXPLICIT"));
 });
 
 test("provador testado por si proprio reprova", () => {
