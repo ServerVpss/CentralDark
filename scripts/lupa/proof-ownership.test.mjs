@@ -30,12 +30,17 @@ const baseContract = () => ({
       consumer: "consumer.mjs",
       prover: "prover.mjs",
       negative_test: "prover.test.mjs",
+      counterproof: {
+        kind: "negative_test_suite",
+        path: "prover.test.mjs",
+        observation: "casos adversariais tentam falso PASS",
+        independent_from_prover: true,
+      },
       external_anchor: {
         kind: "repository_active_surface",
         path: "anchor.md",
         observation: "conteudo versionado observado no mesmo HEAD",
       },
-      independent_counterproof: true,
       depends_on: [],
     },
   ],
@@ -58,6 +63,30 @@ test("grafo nao pode alegar cobertura diferente da parcial explicita", () => {
   const result = validateProofOwnership(contract, { exists: allExist });
   assert.equal(result.ok, false);
   assert.ok(result.errors.includes("PROOF_OWNERSHIP_COVERAGE_MUST_BE_PARTIAL_EXPLICIT"));
+});
+
+test("contraprova booleana sem artefato reprova", () => {
+  const contract = baseContract();
+  contract.invariants[0].counterproof = true;
+  const result = validateProofOwnership(contract, { exists: allExist });
+  assert.equal(result.ok, false);
+  assert.ok(result.errors.includes("PROOF_OWNERSHIP_COUNTERPROOF_MISSING:A"));
+});
+
+test("contraprova que e o proprio provador reprova", () => {
+  const contract = baseContract();
+  contract.invariants[0].counterproof.path = "prover.mjs";
+  const result = validateProofOwnership(contract, { exists: allExist });
+  assert.equal(result.ok, false);
+  assert.ok(result.errors.includes("PROOF_OWNERSHIP_COUNTERPROOF_IS_PROVER:A"));
+});
+
+test("contraprova sem independência declarada reprova", () => {
+  const contract = baseContract();
+  contract.invariants[0].counterproof.independent_from_prover = false;
+  const result = validateProofOwnership(contract, { exists: allExist });
+  assert.equal(result.ok, false);
+  assert.ok(result.errors.includes("PROOF_OWNERSHIP_COUNTERPROOF_NOT_INDEPENDENT:A"));
 });
 
 test("provador testado por si proprio reprova", () => {
@@ -102,12 +131,17 @@ test("dependencia circular reprova", () => {
     consumer: "b-consumer.mjs",
     prover: "b-prover.mjs",
     negative_test: "b-prover.test.mjs",
+    counterproof: {
+      kind: "negative_test_suite",
+      path: "b-prover.test.mjs",
+      observation: "counterexample externo ao provador",
+      independent_from_prover: true,
+    },
     external_anchor: {
       kind: "runtime_observation",
       path: "b-anchor.log",
       observation: "evento externo observado pelo consumidor real",
     },
-    independent_counterproof: true,
     depends_on: ["A"],
   });
   const result = validateProofOwnership(contract, { exists: allExist });
@@ -124,12 +158,17 @@ test("mesma classe com dois donos reprova", () => {
     consumer: "b-consumer.mjs",
     prover: "outro-prover.mjs",
     negative_test: "outro-prover.test.mjs",
+    counterproof: {
+      kind: "negative_test_suite",
+      path: "outro-prover.test.mjs",
+      observation: "counterexample externo ao segundo provador",
+      independent_from_prover: true,
+    },
     external_anchor: {
       kind: "repository_active_surface",
       path: "b-anchor.md",
       observation: "outra superficie ativa observada no mesmo HEAD",
     },
-    independent_counterproof: true,
     depends_on: [],
   });
   const result = validateProofOwnership(contract, { exists: allExist });
