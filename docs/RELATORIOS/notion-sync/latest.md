@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-08-14T04:58:28.247Z
+# 🧠 Notion Sync — 2026-08-14T05:12:02.230Z
 
-- **Commit fonte:** `c602a5a7a66b77ae561185bf412e15b9c503cb0f`
+- **Commit fonte:** `22ce3096dbf5ddfc70becfe4171d23b35913e282`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 406 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 407 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
-| aprendizados | 26 | 1 | 25 | 0 | 0 |
+| aprendizados | 26 | 0 | 26 | 0 | 0 |
 | estrutura | 337 | 0 | 337 | 0 | 0 |
 
 ## Operações
@@ -81,7 +81,7 @@
 | aprendizados | atualizado | #13 — Recuo preventivo não é obediência |
 | aprendizados | atualizado | #14 — Mutante equivalente sai do denominador mas aponta a invariante sem teste |
 | aprendizados | atualizado | #15 — Achado repetido é ruído, não reforço |
-| aprendizados | criado | #16 — Frase de agente não prova alinhamento; promessa maior que capacidade é falso compromisso |
+| aprendizados | atualizado | #16 — Frase de agente não prova alinhamento; promessa maior que capacidade é falso compromisso |
 | aprendizados | atualizado | #16 — #ACORDAR é recuperação de estado real, não apenas comando de GitHub |
 | aprendizados | atualizado | #17 — Uma SOL, um SOUL, uma superfície; modelos e ferramentas são capacidades substituíveis |
 | aprendizados | atualizado | #18 — O humano decide intenção; a máquina prova o estado e não devolve investigação mensurável ao humano |
