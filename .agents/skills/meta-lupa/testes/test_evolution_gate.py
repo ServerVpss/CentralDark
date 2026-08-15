@@ -1,9 +1,33 @@
 #!/usr/bin/env python3
 import os
 import sys
+from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from scripts.evolution_gate import manifest_sha256, validate  # noqa: E402
+from scripts.evolution_gate import (  # noqa: E402
+    CROSS_META_LENSES,
+    manifest_sha256,
+    validate,
+)
+
+
+META_SUBJECTS = {
+    "META_LUPA",
+    "MENOS_E_MAIS",
+    "INSTINTO_SUPERIOR",
+    "EXPANSAO_DE_DOMINIO",
+    "METACOGNICAO_OPERACIONAL",
+}
+
+
+def cross_meta_review(status="NO_CHANGE"):
+    return {
+        lens: {
+            "status": status,
+            "evidence": [f"{lens}: avaliado no estado final"],
+        }
+        for lens in CROSS_META_LENSES
+    }
 
 
 def signed(subject="META_LUPA"):
@@ -26,6 +50,9 @@ def signed(subject="META_LUPA"):
         "tests": [{"name": "positivo", "status": "PASS", "evidence": ["receipt"]}],
         "regressions": [{"name": "regressão", "status": "PASS", "evidence": ["receipt"]}],
     }
+    if subject in META_SUBJECTS:
+        manifest["cross_meta_review"] = cross_meta_review()
+        manifest["meta_fixed_point"] = True
     if subject == "MENOS_E_MAIS":
         manifest["complexity_before"] = 5
         manifest["complexity_after"] = 4
@@ -40,23 +67,19 @@ def resign(manifest):
     return manifest
 
 
-def test_five_meta_owners_can_be_verified():
-    for subject in (
-        "META_LUPA",
-        "MENOS_E_MAIS",
-        "INSTINTO_SUPERIOR",
-        "EXPANSAO_DE_DOMINIO",
-        "METACOGNICAO_OPERACIONAL",
-    ):
+def test_five_meta_owners_can_be_verified_only_after_cross_meta_review():
+    for subject in META_SUBJECTS:
         result = validate(signed(subject))
         assert result["evolution_verified"] is True
         assert result["required_meta_subject"] is True
+        assert result["meta_fixed_point"] is True
 
 
-def test_contract_is_universal_for_future_capabilities():
+def test_contract_is_universal_for_future_capabilities_without_forcing_meta_fields():
     result = validate(signed("CAPACIDADE_FUTURA"))
     assert result["evolution_verified"] is True
     assert result["required_meta_subject"] is False
+    assert result["meta_fixed_point"] is None
 
 
 def test_same_state_is_not_evolution():
@@ -114,3 +137,71 @@ def test_invalid_subject_is_blocked():
     manifest["subject"] = "nome livre com espaço"
     result = validate(resign(manifest))
     assert "SUBJECT_INVALID" in result["errors"]
+
+
+def test_meta_owner_without_cross_meta_review_is_unproven():
+    manifest = signed("META_LUPA")
+    manifest.pop("cross_meta_review")
+    result = validate(resign(manifest))
+    assert result["evolution_verified"] is False
+    assert "CROSS_META_REVIEW_MISSING" in result["errors"]
+
+
+def test_meta_owner_cannot_skip_a_mandatory_lens():
+    manifest = signed("META_LUPA")
+    manifest["cross_meta_review"].pop("INSTINTO_SUPERIOR")
+    result = validate(resign(manifest))
+    assert result["evolution_verified"] is False
+    assert "CROSS_META_INSTINTO_SUPERIOR_MISSING" in result["errors"]
+
+
+def test_meta_lens_without_evidence_is_unproven_even_when_status_is_no_change():
+    manifest = signed("META_LUPA")
+    manifest["cross_meta_review"]["MENOS_E_MAIS"]["evidence"] = []
+    result = validate(resign(manifest))
+    assert result["evolution_verified"] is False
+    assert "CROSS_META_MENOS_E_MAIS_EVIDENCE_MISSING" in result["errors"]
+
+
+def test_meta_lens_cannot_invent_freeform_status():
+    manifest = signed("META_LUPA")
+    manifest["cross_meta_review"]["META_MINERACAO"]["status"] = "MELHOROU_MUITO"
+    result = validate(resign(manifest))
+    assert result["evolution_verified"] is False
+    assert "CROSS_META_META_MINERACAO_STATUS_INVALID" in result["errors"]
+
+
+def test_delta_absorbed_is_valid_when_fixed_point_is_reached_afterwards():
+    manifest = signed("METACOGNICAO_OPERACIONAL")
+    manifest["cross_meta_review"]["META_MINERACAO"] = {
+        "status": "DELTA_ABSORBED",
+        "evidence": ["fonte de maior resolução expôs estrutura causal nova e ela entrou no after_ref"],
+    }
+    result = validate(resign(manifest))
+    assert result["evolution_verified"] is True
+    assert result["meta_fixed_point"] is True
+
+
+def test_meta_owner_without_fixed_point_is_unproven():
+    manifest = signed("INSTINTO_SUPERIOR")
+    manifest["meta_fixed_point"] = False
+    result = validate(resign(manifest))
+    assert result["evolution_verified"] is False
+    assert "META_FIXED_POINT_UNPROVEN" in result["errors"]
+
+
+def test_pdf_mining_keeps_biblioteca_elfica_pinned_in_canonical_scaffold():
+    repo_root = Path(__file__).resolve().parents[4]
+    owner = repo_root / "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md"
+    content = owner.read_text(encoding="utf-8")
+
+    required_markers = (
+        "BIBLIOTECA_ELFICA_SOURCE_PINNED=true",
+        "PDF_MINING_SOURCE_POOL+=BIBLIOTECA_ELFICA",
+        "ALWAYS_IN_PDF_SOURCE_POOL=true",
+        "NO_AUTH_QUOTA_CAPTCHA_BYPASS=true",
+        "SOURCE_PROVIDED_BULK_CHANNEL_PREFERRED=true",
+        "EXTERNAL_PDF_BYTES_NOT_COMMITTED_TO_CANONICAL_REPO_BY_DEFAULT=true",
+    )
+    for marker in required_markers:
+        assert marker in content, f"BIBLIOTECA_ELFICA_CANONICAL_MARKER_MISSING={marker}"

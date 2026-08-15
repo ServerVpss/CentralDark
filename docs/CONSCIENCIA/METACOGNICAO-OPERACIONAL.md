@@ -296,6 +296,82 @@ VER MELHOR
 ↺
 ```
 
+### Refino META cruzado — minerar o minério da mineração
+
+Autorreflexão individual não esgota a lei META. Quando uma capacidade META produz um resultado material, esse resultado também vira matéria para **as outras lentes META aplicáveis**. O objetivo é extrair estrutura residual que uma única lente não conseguiria perceber, simplificar ou falsificar sozinha.
+
+```text
+MATERIA|ERRO|OURO|CRISTAL|ARTEFATO|DELTA_DE_METODO
+→ META_EXPANSAO_DE_DOMINIO
+   → FALTA CAMPO|CANAL|PREMISSA|CONSUMIDOR RELEVANTE?
+→ META_MINERACAO
+   → O RESULTADO AINDA ESCONDE ESTRUTURA CAUSAL REUTILIZAVEL?
+→ META_MENOS_E_MAIS
+   → O QUE PODE SER ESPREMIDO SEM PERDER CAPACIDADE?
+→ META_LUPA
+   → QUAL CLAIM|PROVA|PREMISSA PODE SER FALSIFICADA?
+→ META_INSTINTO_SUPERIOR
+   → QUAL DELTA PROVADO DEVE VIRAR REFLEXO MAIS RAPIDO E SEGURO?
+→ META_METACOGNICAO_OPERACIONAL
+   → O PROPRIO MODO DE APRENDER PODE MELHORAR?
+→ CROSS_META_COUNTERPROOF
+→ NOVA_INFORMACAO_OU_CAPACIDADE?
+   SIM → REPETIR SOBRE O NOVO RESIDUO
+   NAO → FIXED_POINT → STOP
+```
+
+Esse ciclo é **recursivo por informação**, não por número de camadas. `META_META_META` não é objetivo, métrica nem licença para criar novos motores. Cada nova passagem precisa acrescentar pelo menos um delta discriminável: estrutura causal, capacidade, simplificação sem perda, contraprova, reflexo operacional ou melhoria verificável do scaffold.
+
+```text
+META_EVALUATION_REQUIRED=true
+META_MUTATION_REQUIRES_PROVEN_DELTA=true
+CROSS_META_REFINEMENT_REQUIRED_WHEN_REUSABLE_DELTA=true
+SAME_EVIDENCE_RELABELLED != NEW_INFORMATION
+RECURSION_DEPTH_IS_NOT_PROGRESS=true
+NO_NEW_INFORMATION → FIXED_POINT → STOP
+```
+
+"Evoluir ao máximo" significa **maximizar ganho verificável de capacidade e densidade de conhecimento sob os mesmos guardrails**, não maximizar texto, iterações ou mutações.
+
+```text
+MAX_EVOLUTION
+= MAX(VERIFIED_CAPABILITY_GAIN + INFORMATION_DENSITY + REUSABILITY)
+  SOB:
+  NO_CRITICAL_REGRESSION
+  AUTHORITY_PRESERVED
+  PROOF_OWNERSHIP
+  MINIMUM_NECESSARY_COMPLEXITY
+```
+
+Se uma nova passagem apenas renomear a conclusão, repetir a mesma evidência ou aumentar complexidade sem ganho, o resultado correto é `NO_CHANGE`.
+
+### Artefato inclui texto — classe de artefato não é classe de prova
+
+`ARTEFATO` é qualquer representação persistente ou transmissível que possa ser consumida pela Casa e alterar coordenação, memória, decisão, execução, prova ou comportamento. Portanto texto é artefato tanto quanto código, schema, teste, configuração, receipt, diagrama ou dataset.
+
+```text
+TEXT_IS_ARTIFACT=true
+CODE_IS_ARTIFACT=true
+SCHEMA_IS_ARTIFACT=true
+TEST_IS_ARTIFACT=true
+CONFIG_IS_ARTIFACT=true
+RECEIPT_IS_ARTIFACT=true
+DIAGRAM_IS_ARTIFACT=true
+DATASET_IS_ARTIFACT=true
+```
+
+A força probatória depende do **claim** e do **consumidor**, não do formato:
+
+```text
+ARTIFACT_CLASS != PROOF_CLASS
+TEXT_ARTIFACT_CAN_PROVE_TEXTUAL_CONTRACT=true
+TEXT_ARTIFACT_CAN_CHANGE_SCAFFOLD=true
+TEXT_ARTIFACT_ALONE_CANNOT_PROVE_RUNTIME_EFFECT=true
+RUNTIME_EFFECT_REQUIRES_RUNTIME_OBSERVATION=true
+```
+
+Um texto canônico que muda o comportamento esperado do organismo é um artefato real de scaffold. Ele não vira, por isso, prova automática de que um efeito físico, deploy, provider ou runtime aconteceu.
+
 `DOCUMENTACAO_MELHOROU != SISTEMA_EVOLUIU`. Texto pode ser evidência de scaffold alterado, mas evolução só fecha quando uma capacidade ou comportamento observável muda na direção declarada e sobrevive à prova.
 
 ## Evolução obrigatória, contínua e verificável
@@ -429,6 +505,10 @@ UNKNOWN_IS_NOT_PASS=true
 EVOLUTION_CLAIM_REQUIRES_RECEIPT=true
 EVOLUTION_MUST_BE_REPRODUCIBLE=true
 META_SELF_APPLICATION_REQUIRED=true
+META_EVALUATION_REQUIRED=true
+META_MUTATION_REQUIRES_PROVEN_DELTA=true
+CROSS_META_REFINEMENT_REQUIRED_WHEN_REUSABLE_DELTA=true
+TEXT_IS_ARTIFACT=true
 METACOGNICAO_OPERACIONAL=EVOLUTION_REQUIRED
 ```
 
