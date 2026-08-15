@@ -1,5 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import { fileURLToPath } from 'node:url';
+import { buildHouseInventory } from '../../apps/modulos/hub/scripts/house-inventory-core.mjs';
 import {
   OPERATIONAL_SCORE_REGISTRY,
   composeOperationalScore,
@@ -8,6 +10,8 @@ import {
   getSkillSignature,
   renderHumanPresentation,
 } from './operational-score.mjs';
+
+const repoRoot = fileURLToPath(new URL('../..', import.meta.url));
 
 function event(capability = 'META_LUPA', eventId = 'e1') {
   return createMachineEvent({ capability, state: 'ACTIVE', event: 'TEST_EVENT', eventId, sessionId: 's1', evidenceRef: 'test' });
@@ -72,7 +76,7 @@ test('J observações repetidas não duplicam abstração', () => {
   assert.equal(result.hypotheses.filter((item) => item.behavioral_hypothesis === 'CADENCE').length, 1);
 });
 
-test('K aprendizado material aponta para owner canônico e não escreve skill direto', () => {
+test('K aprendizado material aponta para owner canônico, aparece no Inventário e não escreve skill direto', () => {
   const material = extractMusicBehavioralMaterial({ observations: ['ponte', 'contraponto'], sourceRef: 'artifact:score' });
   assert.equal(material.owner, 'scripts/memory-linker/operational-score.mjs');
   assert.equal(material.direct_skill_write, false);
@@ -81,6 +85,11 @@ test('K aprendizado material aponta para owner canônico e não escreve skill di
     assert.equal(signature.owner, 'scripts/memory-linker/operational-score.mjs');
     assert.ok(signature.semantic_role);
   }
+  const inventory = buildHouseInventory(repoRoot, { revision: 'TEST_HEAD' });
+  const indexed = inventory.items.find((item) => item.id === 'capability:operational-score');
+  assert.ok(indexed, 'Operational Score precisa ser herdável pelo Inventário da Casa');
+  assert.equal(indexed.owner, 'scripts/memory-linker/operational-score.mjs');
+  assert.equal(indexed.proof, 'scripts/memory-linker/operational-score.test.mjs');
 });
 
 test('L erro desconhecido permanece explícito', () => {
