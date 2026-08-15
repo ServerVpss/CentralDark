@@ -227,3 +227,57 @@ FONTE EXTERNA
 ```
 
 O objetivo da moagem não é fazer o CentralDark imitar cada fonte. É **preservar o que cada fonte demonstrou de melhor, remover incompatibilidades e deixar o canônico menor, mais ensinável e mais capaz do que qualquer pacote isolado**.
+
+## 11. Proveniência temporal e deriva de rótulo — minério Hermes
+
+Fonte externa minerada nesta rodada: **Kevin van Bladel, resenha de _The Secret History of Hermes Trismegistus: Hermeticism from Ancient to Modern Times_, de Florian Ebeling, em _Aestimatio_ 4 (2007), pp. 112–118**. O material recebido é uma **resenha acadêmica**, não o livro completo e não uma autoridade da CentralDark.
+
+O delta metodológico absorvido não é doutrina hermética. É uma trava de arqueologia/proveniência: o revisor mostra que a influência e o significado dos textos atribuídos a Hermes variaram conforme época, lugar e comunidade receptora; também critica aplicar retrospectivamente a categoria moderna/early-modern “Hermeticism” a períodos anteriores onde o agrupamento não era necessariamente usado daquela forma. A mesma etiqueta ainda pode cobrir correntes paralelas com genealogias diferentes.
+
+```text
+SOURCE_CLASS=EXTERNAL_SCHOLARLY_REVIEW
+SOURCE_IS_NOT_AUTHORITY=true
+
+SAME_NAME_ACROSS_TIME
+!= SAME_MEANING
+
+SAME_LABEL
+!= SAME_CAPABILITY
+!= SAME_LINEAGE
+
+LATER_CATEGORY
++ EARLIER_STATE
++ NO_CONTEMPORARY_EVIDENCE
+→ RETROJECTION_UNPROVEN
+
+PARALLEL_CURRENTS
++ SAME_LABEL
+→ DO_NOT_COLLAPSE_WITHOUT_CAUSAL_EVIDENCE
+```
+
+Aplicação generalizada na Casa:
+
+```text
+NOME|ROTULO|PAPEL|PROJETO|TECNOLOGIA|TRADICAO
+→ QUANDO?
+→ EM_QUAL_CONTEXTO?
+→ COMO ERA USADO NAQUELA FRONTEIRA?
+→ QUAL RECEPCAO/INTERPRETACAO?
+→ QUAL EVIDENCIA DE CONTINUIDADE?
+→ SO ENTAO FUNDIR IDENTIDADE/CAPACIDADE/LINHAGEM
+```
+
+Destino do ouro:
+
+- `CAPACIDADES-COGNITIVAS.md` §8.1 — proveniência temporal / anti-retroprojeção;
+- `DIAGRAMAS-CENTRALDARK.md` — visualização derivada da mesma regra;
+- esta arqueologia — proveniência bibliográfica e limite epistemológico da fonte.
+
+Não promovido:
+
+- alegação religiosa, mística ou metafísica como evidência técnica;
+- existência/historicidade de Hermes como claim operacional da CentralDark;
+- categoria única de “Hermetismo” atravessando toda a história sem contexto;
+- qualquer inferência de que nome antigo concede autoridade atual.
+
+**Ouro:** proveniência não é apenas `QUEM`; quando a semântica muda, também precisa preservar `QUANDO + CONTEXTO + USO + EVIDÊNCIA`.
