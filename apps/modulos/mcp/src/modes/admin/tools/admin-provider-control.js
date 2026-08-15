@@ -401,7 +401,7 @@ async function contaboAccessToken() {
   const payload = await response.json().catch(() => ({}));
   if (!response.ok || !payload?.access_token) throw new Error(`CONTABO_AUTH_FAILED:${response.status}`);
   contaboTokenCache = {
-    token: payload.access_token,
+    "token": payload.access_token,
     expiresAt: now + Math.max(60, Number(payload.expires_in || 300)) * 1000,
   };
   return contaboTokenCache.token;
