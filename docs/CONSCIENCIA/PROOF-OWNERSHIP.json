@@ -17,7 +17,16 @@
     "proof_must_end_in_external_anchor": true,
     "graph_structure_ok_is_not_invariant_proof": true,
     "external_anchor_must_be_observed_by_responsible_prover": true,
-    "execution_status_is_out_of_scope": true
+    "execution_status_is_out_of_scope": true,
+    "credit_attribution_is_not_proof_ownership": true,
+    "credit_does_not_confer_authority": true,
+    "credit_does_not_prove_claim": true,
+    "source_credit_must_preserve_provenance": true,
+    "proof_credit_requires_observed_proof_contribution": true,
+    "proof_ownership_must_not_erase_source_credit": true,
+    "reputation_cannot_receive_unobserved_proof_credit": true,
+    "multiple_material_credits_can_coexist": true,
+    "reality_judges_claims_not_people": true
   },
   "allowed_proof_classes": [
     "authenticated_authority"
