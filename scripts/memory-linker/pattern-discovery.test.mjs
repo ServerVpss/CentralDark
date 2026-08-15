@@ -73,6 +73,17 @@ test('nao agrupa deltas lexicalmente fracos ou diferentes', () => {
   assert.equal(result.pattern_count, 0);
 });
 
+test('complete-link impede A~B e B~C de fabricar A=C', () => {
+  const result = discoverPatterns(proposal([
+    candidate('a', { learning_delta: 'alpha bravo charlie delta' }),
+    candidate('b', { learning_delta: 'alpha bravo charlie echo' }),
+    candidate('c', { learning_delta: 'alpha bravo echo foxtrot' }),
+  ]));
+  assert.equal(result.pattern_count, 1);
+  assert.equal(result.patterns[0].candidate_count, 2);
+  assert.deepEqual(result.patterns[0].member_candidate_ids, ['a', 'b']);
+});
+
 test('recorrencia provada em membros elegiveis gera handoff automatico sem escrita direta', () => {
   const enriched = enrichDreamProposal(proposal([
     candidate('a'),
