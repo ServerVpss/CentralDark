@@ -1,6 +1,6 @@
 # Semantic Core — NILC GloVe-50d
 
-Status de implementação: `CANDIDATE_NOT_DEPLOYED`  
+Status de implementação: `CANDIDATE_NOT_DEPLOYED`
 Escopo: primitiva lexical local reutilizável dentro do owner semântico existente `infra/mcp/`.
 
 ## Contrato
