@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-15T02:48:45.458Z",
-  "updatedAtBR": "14/08/2026, 23:48:45 BRT",
+  "updatedAt": "2026-08-15T03:20:21.434Z",
+  "updatedAtBR": "15/08/2026, 00:20:21 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "docs(jarvis): descobrir trabalho pelo estado sem duplicar workers (#866)",
+    "lastCommit": "docs(jarvis): reconciliar work candidate após #871",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-15T03:20:21.434Z",
+      "titulo": "Push na main · 62bd0f3fa45423cd487a1b13786292fbdac6cce6",
+      "detalhe": "docs(jarvis): reconciliar work candidate após #871",
+      "area": "Repositório",
+      "sha": "62bd0f3",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-15T02:48:45.458Z",
       "titulo": "Push na main · 323569c95b20b815c973788cb20f0f01730a52ea",
       "detalhe": "docs(jarvis): descobrir trabalho pelo estado sem duplicar workers (#866)",
@@ -988,14 +996,6 @@
       "detalhe": "docs(operacao): registrar reconciliação contínua e fan-out por intenção (#817)",
       "area": "Repositório",
       "sha": "22ce309",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-14T05:16:21.196Z",
-      "titulo": "Push na main · bc8b296d96107801f068d139a119dcc718c1f9bc",
-      "detalhe": "fix(autonomia): convergir canário no relatório canônico (#816)",
-      "area": "Repositório",
-      "sha": "bc8b296",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-15T03:20:21.434Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 62bd0f3fa45423cd487a1b13786292fbdac6cce6 (62bd0f3)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-15T02:48:45.458Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 323569c95b20b815c973788cb20f0f01730a52ea (323569c)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-14T05:33:08.131Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 22ce3096dbf5ddfc70becfe4171d23b35913e282 (22ce309)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-14T05:16:21.196Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · bc8b296d96107801f068d139a119dcc718c1f9bc (bc8b296)",
       "area": "Repositório",
       "status": "sucesso"
     }
