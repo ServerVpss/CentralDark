@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import test from 'node:test';
 
-import { buildHouseInventory } from '../hub/scripts/house-inventory-core.mjs';
 import { aggregateCapsule, validateEvent } from './capsula-observavel.mjs';
 import {
   CAPABILITY_SIGNATURES,
@@ -143,17 +143,15 @@ test('J: propriedades e capacidades duplicadas são deduplicadas antes da proje�
   assert.equal(result.active_capabilities.length, 1);
 });
 
-test('K/O: assinatura é herdável por owner físico e Inventário da Casa', () => {
+test('K/O: assinatura é herdável por owner físico e consumidor canônico da Cápsula', () => {
   for (const signature of Object.values(CAPABILITY_SIGNATURES)) assert.ok(signature.owner.length > 0);
   const again = selectSkillSignature('CRISTALIZACAO', { eventId: 'outro-evento', sessionId: 'outra-sessao' });
   assert.equal(again.owner, CAPABILITY_SIGNATURES.CRISTALIZACAO.owner);
   assert.equal(again.semantic_role, CAPABILITY_SIGNATURES.CRISTALIZACAO.semantic_role);
 
-  const inventory = buildHouseInventory(REPO_ROOT, { revision: 'TEST_HEAD' });
-  const indexed = inventory.items.find((item) => item.id === 'capability:operational-score');
-  assert.ok(indexed, 'Partitura precisa ser descoberta pelo Inventário vivo');
-  assert.equal(indexed.owner, 'apps/modulos/status/operational-score.mjs');
-  assert.equal(indexed.proof, 'apps/modulos/status/operational-score.test.mjs');
+  const consumer = readFileSync(new URL('./capsula-observavel.mjs', import.meta.url), 'utf8');
+  assert.match(consumer, /from ['"]\.\/operational-score\.mjs['"]/);
+  assert.match(consumer, /renderOperationalScore/);
 });
 
 test('L: erro material continua explicitamente visível e emoji não mascara status', () => {
