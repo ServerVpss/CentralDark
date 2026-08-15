@@ -16,6 +16,20 @@ import {
 } from './pattern-discovery.mjs';
 
 const WRITE_ROLES = new Set(['EXECUTOR', 'HERMES']);
+const AGENT_CALL_PROTOCOL = 'CENTRALDARK_AGENT_CALL_V1';
+
+function blockedScopeReceipt(call, state) {
+  return {
+    protocol: AGENT_CALL_PROTOCOL,
+    call_id: call.call_id,
+    mission_id: state?.mission_id ?? null,
+    status: 'BLOCKED_AUTHORIZED_SCOPE_UNPROVEN',
+    accepted: false,
+    write_authorized: false,
+    observed_head: call.observed_head,
+    scope: call.scope,
+  };
+}
 
 export function routePatternAutonomy(proposal, state) {
   if (!proposal || typeof proposal !== 'object' || Array.isArray(proposal)) throw new TypeError('PROPOSAL_INVALID');
@@ -29,6 +43,7 @@ export function routePatternAutonomy(proposal, state) {
   const writerRole = WRITE_ROLES.has(declaredWriterRole) ? declaredWriterRole : 'EXECUTOR';
   const coordinator = String(state?.coordinator ?? 'SOL');
   const routeId = state?.trail?.route_id ? String(state.trail.route_id) : null;
+  const allowedScope = Array.isArray(state?.scope?.allowed) ? state.scope.allowed : [];
 
   const routed = queue.map((item) => {
     const call = {
@@ -46,7 +61,12 @@ export function routePatternAutonomy(proposal, state) {
       evidence_candidate_ids: item.member_candidate_ids,
       ...(routeId ? { trail_id: routeId } : {}),
     };
-    const receipt = validateAgentCall(call, state);
+
+    const scopeExplicitlyAuthorized = allowedScope.length > 0 && allowedScope.includes(item.target);
+    const receipt = scopeExplicitlyAuthorized
+      ? validateAgentCall(call, state)
+      : blockedScopeReceipt(call, state);
+
     return {
       queue_id: item.id,
       pattern_id: item.pattern_id,
@@ -61,8 +81,9 @@ export function routePatternAutonomy(proposal, state) {
   return {
     schema_version: 1,
     mode: 'CANONICAL_AGENT_CALL_ROUTING',
-    protocol: 'CENTRALDARK_AGENT_CALL_V1',
+    protocol: AGENT_CALL_PROTOCOL,
     head_sha: proposal.head_sha,
+    explicit_allowed_scope_required: true,
     transport_execution: false,
     transport_status: 'OUTSIDE_THIS_DETERMINISTIC_CORE',
     queue_count: queue.length,
