@@ -148,8 +148,16 @@ test('camada final simples é contrato obrigatório do sistema', () => {
     'SIMPLE_FINAL_LAYER_FIELDS=O_QUE_E|O_QUE_MUDOU|PRA_QUE_SERVE',
     'SIMPLE_FINAL_LAYER_MUST_NOT_HIDE_BLOCKED_OR_UNKNOWN=true',
     'SIMPLE_LAYER_IS_TRANSLATION_NOT_SECOND_TRUTH=true',
+    'DUAL_REGISTER_REQUIRED=true',
+    'TECHNICAL_REGISTER_PLUS_CHEFE_REGISTER=true',
+    'SAME_TARGET_IN_BOTH_REGISTERS=true',
+    'PHYSICAL_OR_OPERATIONAL_LOCATION_MUST_BE_NAMED=true',
+    'ACTION_MUST_BE_TRANSLATED_TO_PRACTICAL_VERB=true',
   ];
   for (const marker of required) assert.ok(pattern.includes(marker), `missing ${marker}`);
+  for (const phrase of ['aí em casa/local', 'na VPS/servidor', 'no GitHub/repo', 'no sistema/site real que está no ar']) {
+    assert.ok(pattern.includes(phrase), `missing CHEFE register example ${phrase}`);
+  }
 });
 
 test('imagem é sensor e nunca substitui medição viva', () => {
