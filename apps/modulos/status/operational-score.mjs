@@ -81,23 +81,31 @@ export const CAPABILITY_SIGNATURES = Object.freeze({
 });
 
 const BEHAVIORAL_MAP = Object.freeze({
-  RHYTHM: 'OPERATIONAL_CADENCE',
-  CADENCE: 'OPERATIONAL_CADENCE',
+  RHYTHM: 'OPERATIONAL_CADENCE', RITMO: 'OPERATIONAL_CADENCE',
+  CADENCE: 'OPERATIONAL_CADENCE', CADENCIA: 'OPERATIONAL_CADENCE',
   TEMPO: 'OPERATIONAL_CADENCE',
-  PAUSE: 'WAIT_FOR_NEW_INFORMATION',
-  SILENCE: 'NO_NEW_INFORMATION_NOOP',
+  PAUSE: 'WAIT_FOR_NEW_INFORMATION', PAUSA: 'WAIT_FOR_NEW_INFORMATION',
+  SILENCE: 'NO_NEW_INFORMATION_NOOP', SILENCIO: 'NO_NEW_INFORMATION_NOOP',
   CRESCENDO: 'INCREASE_DEPTH_WHILE_INFORMATION_GAIN_CONTINUES',
   DECRESCENDO: 'REDUCE_ACTIVITY_WHEN_DELTA_CONVERGES',
-  REFRAIN: 'REASSERT_MISSION_INVARIANTS',
-  BRIDGE: 'STRATEGY_TRANSITION',
-  COUNTERPOINT: 'COMPARE_INDEPENDENT_HYPOTHESES',
-  HARMONY: 'CAPABILITIES_COOPERATE_WITHOUT_SEMANTIC_MERGE',
-  DISSONANCE: 'INVESTIGATE_CONFLICTING_EVIDENCE',
-  TENSION: 'UNRESOLVED_HYPOTHESIS',
-  RESOLUTION: 'PROVEN_CLOSURE',
-  DYNAMICS: 'INVESTIGATION_INTENSITY',
+  REFRAIN: 'REASSERT_MISSION_INVARIANTS', REFRAO: 'REASSERT_MISSION_INVARIANTS',
+  BRIDGE: 'STRATEGY_TRANSITION', PONTE: 'STRATEGY_TRANSITION',
+  COUNTERPOINT: 'COMPARE_INDEPENDENT_HYPOTHESES', CONTRAPONTO: 'COMPARE_INDEPENDENT_HYPOTHESES',
+  HARMONY: 'CAPABILITIES_COOPERATE_WITHOUT_SEMANTIC_MERGE', HARMONIA: 'CAPABILITIES_COOPERATE_WITHOUT_SEMANTIC_MERGE',
+  DISSONANCE: 'INVESTIGATE_CONFLICTING_EVIDENCE', DISSONANCIA: 'INVESTIGATE_CONFLICTING_EVIDENCE',
+  TENSION: 'UNRESOLVED_HYPOTHESIS', TENSAO: 'UNRESOLVED_HYPOTHESIS',
+  RESOLUTION: 'PROVEN_CLOSURE', RESOLUCAO: 'PROVEN_CLOSURE',
+  DYNAMICS: 'INVESTIGATION_INTENSITY', DINAMICA: 'INVESTIGATION_INTENSITY',
   CLIMAX: 'FINAL_COUNTERPROOF',
   CODA: 'FINAL_RECEIPT_AND_CLOSURE',
+});
+
+const BEHAVIORAL_REUSE = Object.freeze({
+  REASSERT_MISSION_INVARIANTS: 'METACOGNICAO',
+  COMPARE_INDEPENDENT_HYPOTHESES: 'META_LUPA',
+  INVESTIGATE_CONFLICTING_EVIDENCE: 'META_LUPA',
+  PROVEN_CLOSURE: 'FIXED_POINT',
+  FINAL_COUNTERPROOF: 'META_LUPA',
 });
 
 const EVENT_STATUSES = new Set(['PASS', 'FAIL', 'UNKNOWN', 'ANOMALY', 'ACHADO_PENDENTE', 'BLOCKED']);
@@ -276,14 +284,25 @@ export function compileBehavioralMaterial({ artifactClass = 'MUSIC', observableP
   const normalized = [...new Set((Array.isArray(observableProperties) ? observableProperties : []).map(normalizeProperty).filter(Boolean))];
   const hypotheses = [...new Set(normalized.map((property) => BEHAVIORAL_MAP[property]).filter(Boolean))].sort();
   const unknownProperties = normalized.filter((property) => !BEHAVIORAL_MAP[property]).sort();
+  const dedupeDecisions = hypotheses.map((hypothesis) => {
+    const existingCapability = BEHAVIORAL_REUSE[hypothesis] || null;
+    return Object.freeze({
+      behavioral_hypothesis: hypothesis,
+      status: existingCapability ? 'REUSE_EXISTING' : 'CANDIDATE_ONLY',
+      existing_capability: existingCapability,
+    });
+  });
+  const hasCandidate = dedupeDecisions.some((decision) => decision.status === 'CANDIDATE_ONLY');
+  const status = hypotheses.length === 0 ? 'INSUFFICIENT_EVIDENCE' : hasCandidate ? 'CANDIDATE_ONLY' : 'REUSE_EXISTING';
 
   return {
     schema_version: 1,
     mode: 'BEHAVIORAL_MATERIAL_ABSTRACTION',
-    status: hypotheses.length ? 'CANDIDATE_ONLY' : 'INSUFFICIENT_EVIDENCE',
+    status,
     artifact_class: String(artifactClass || 'UNKNOWN').toUpperCase(),
     observable_properties: normalized,
     behavioral_hypotheses: hypotheses,
+    dedupe_decisions: dedupeDecisions,
     unknown_properties: unknownProperties,
     source_ref: String(sourceRef || '').trim() || null,
     evidence_ref: String(evidenceRef || '').trim() || null,
@@ -293,8 +312,9 @@ export function compileBehavioralMaterial({ artifactClass = 'MUSIC', observableP
     protected_text_copied: false,
     direct_skill_write: false,
     direct_canonical_mutation: false,
-    owner_resolution_required: true,
-    dedupe_required: true,
+    owner_resolution_required: hasCandidate,
+    dedupe_required: false,
+    dedupe_performed: true,
     counterproof_required: true,
     test_required: true,
     promotion_allowed: false,
