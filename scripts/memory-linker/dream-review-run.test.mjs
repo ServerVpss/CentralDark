@@ -72,6 +72,7 @@ test('fila elegivel vira CALL aceito pelo writer canonico sem executar transport
   assert.equal(proposal.autonomy_routing.queue_count, 1);
   assert.equal(proposal.autonomy_routing.accepted_call_count, 1);
   assert.equal(proposal.autonomy_routing.blocked_call_count, 0);
+  assert.equal(proposal.autonomy_routing.explicit_allowed_scope_required, true);
   assert.equal(proposal.autonomy_routing.transport_execution, false);
   assert.equal(proposal.autonomy_routing.routed[0].call.to, 'hermes-pivete');
   assert.equal(proposal.autonomy_routing.routed[0].receipt.accepted, true);
@@ -94,4 +95,13 @@ test('roteamento bloqueia ausencia de writer em vez de assumir caneta', () => {
   assert.equal(routing.blocked_call_count, 1);
   assert.equal(routing.routed[0].receipt.accepted, false);
   assert.equal(routing.routed[0].receipt.status, 'BLOCKED_NO_WRITER');
+});
+
+test('roteamento bloqueia escopo vazio mesmo que agent-call isolado aceitasse lista aberta', () => {
+  const proposal = buildDreamReviewWithPatterns([event(1), event(2)], { headSha: HEAD });
+  const routing = routePatternAutonomy(proposal, jarvisState({ scope: { allowed: [], denied: [] } }));
+  assert.equal(routing.accepted_call_count, 0);
+  assert.equal(routing.blocked_call_count, 1);
+  assert.equal(routing.routed[0].receipt.accepted, false);
+  assert.equal(routing.routed[0].receipt.status, 'BLOCKED_AUTHORIZED_SCOPE_UNPROVEN');
 });
