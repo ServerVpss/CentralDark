@@ -49,3 +49,51 @@ maior. Exemplo real: subconjunto higienizado = 6 BLOQUEADA + 16 PRECISA_PR;
 panorama das 34 restantes = 14 BLOQUEADAS + 20 ARQUITETURA. São
 denominadores diferentes. Citar os dois sem misturar; se somar, explicar
 de onde vem cada fração.
+
+## Caso I — Dissonância Operacional Controlada
+
+Quando a Casa precisar testar a própria capacidade de se corrigir, pode
+introduzir uma perturbação sintética **fora do estado canônico** e tentar
+falsificar a tese atual. O objetivo é descobrir fragilidade antes que ela
+apareça por acidente.
+
+Contrato executável: `docs/CONSCIENCIA/CONTRATO-DISSONANCIA-OPERACIONAL-CONTROLADA.json`.
+Regressão: `scripts/lupa/controlled-dissonance.test.mjs`.
+
+```text
+CANONICO
+→ CLONE/AMBIENTE_ISOLADO
+→ INJETAR_CONFLITO_SINTETICO
+→ META_LUPA_FALSIFICA
+→ CONTRAPROVA
+→ DELTA_REAL?
+   NAO → DESCARTAR_PERTURBACAO → EVIDENCIA_DE_RESISTENCIA
+   SIM → CORRECAO_MINIMA → REGRESSAO → CANDIDATO_A_CRISTAL
+→ RESTAURAR/CONFIRMAR_CANONICO_INTACTO
+```
+
+Invariantes:
+
+```text
+CONTROLLED_DISSONANCE=true
+SYNTHETIC_CONFLICT=true
+ISOLATED=true
+REVERSIBLE=true
+OBSERVABLE=true
+FALSIFIABLE=true
+NON_CANONICAL=true
+ZERO_DEPLOY=true
+FAKE_EVIDENCE=false
+SYNTHETIC_CONFLICT_IS_NOT_EVIDENCE=true
+SURVIVING_CONFLICT_IS_NOT_PASS=true
+PROVEN_DELTA_IS_CANDIDATE_CRYSTAL=true
+REGRESSION_PROTECTED_IS_CRYSTAL=true
+CANONICAL_CONTAMINATION=BLOCK
+NO_INFORMATION_GAIN=NO_CHANGE
+```
+
+A dissonância pode atingir código, arquitetura, owner, prova, provider,
+ordenação, aliases ou crença operacional, mas nunca recebe autoridade para
+mudar o canônico diretamente. Perturbação é matéria de teste; só o delta que
+sobrevive a evidência, contraprova e regressão pode ser absorvido pelo dono
+canônico já existente.
