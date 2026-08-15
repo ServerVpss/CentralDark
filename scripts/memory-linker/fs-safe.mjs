@@ -25,6 +25,9 @@ export function ensureRegularFileInsideRootSync(root, target) {
 /**
  * Escrita UTF-8 atômica e idempotente para artefatos derivados do memory-linker.
  *
+ * - recusa substituir symlink/target não regular;
+ * - preserva o modo POSIX do arquivo existente por padrão;
+ * - arquivo novo usa 0600, salvo `mode` explícito;
  * - valida no-op por bytes quando skipIfUnchanged=true;
  * - grava em arquivo temporário irmão;
  * - fsync no arquivo antes do rename;
@@ -33,12 +36,17 @@ export function ensureRegularFileInsideRootSync(root, target) {
  *
  * Retorna UPDATED ou UNCHANGED para que telemetria não confunda execução com mutação.
  */
-export function atomicWriteUtf8Sync(target, contents, { skipIfUnchanged = true, mode = 0o600 } = {}) {
-  if (skipIfUnchanged && fs.existsSync(target)) {
-    try {
+export function atomicWriteUtf8Sync(target, contents, { skipIfUnchanged = true, mode = null } = {}) {
+  let targetMode = mode ?? 0o600;
+
+  if (fs.existsSync(target)) {
+    const stat = fs.lstatSync(target);
+    if (stat.isSymbolicLink()) throw new Error('ATOMIC_TARGET_SYMLINK_FORBIDDEN');
+    if (!stat.isFile()) throw new Error('ATOMIC_TARGET_NOT_REGULAR_FILE');
+    if (mode === null) targetMode = stat.mode & 0o777;
+
+    if (skipIfUnchanged) {
       if (fs.readFileSync(target, 'utf8') === contents) return 'UNCHANGED';
-    } catch {
-      // leitura falhou: segue para escrita real em vez de fabricar no-op
     }
   }
 
@@ -52,7 +60,7 @@ export function atomicWriteUtf8Sync(target, contents, { skipIfUnchanged = true, 
   let fd = null;
   let committed = false;
   try {
-    fd = fs.openSync(temp, 'wx', mode);
+    fd = fs.openSync(temp, 'wx', targetMode);
     const buffer = Buffer.from(contents, 'utf8');
     let offset = 0;
     while (offset < buffer.length) {
