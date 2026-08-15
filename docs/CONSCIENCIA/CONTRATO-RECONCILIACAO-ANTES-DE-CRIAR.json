@@ -58,6 +58,8 @@
     "cross_reference_capabilities_with_request",
     "classify_authority_and_runtime_state",
     "measure_available_tools",
+    "normalize_evidence_scope_time_and_provenance",
+    "arbitrate_conflict_by_discriminating_test_if_needed",
     "reuse_or_extend_before_create"
   ],
   "state_classes": [
@@ -81,7 +83,12 @@
     "formal_proof_without_user_request": "FORBIDDEN_FOR_SIMPLE_TASKS",
     "machine_measurable_state_must_be_asked_from_human": false,
     "already_authorized_same_scope_requires_reask": false,
-    "unknown_is_pass": false
+    "unknown_is_pass": false,
+    "parallel_perception_same_scope": "ALLOWED_READ_ONLY_WHEN_INFORMATION_GAIN",
+    "parallel_mutation_same_scope": "BLOCKED_HANDOFF_REQUIRED",
+    "model_vote_is_truth_mechanism": false,
+    "same_finding_without_new_evidence": "DROP_DUPLICATE",
+    "derived_projection_is_source_of_truth": false
   },
   "agent_claim_policy": {
     "marker": "AGENT_CLAIM_CAPABILITY_REQUIRED",
@@ -181,6 +188,87 @@
     "promotion_to_main": "USE_CANONICAL_PROMOTION_POLICY_ON_MAIN",
     "parallelism": "ONE_WRITER_PER_SCOPE_MULTIPLE_READERS_REVIEWERS",
     "writer_handoff": "EXPLICIT_NO_MODEL_LOCK"
+  },
+  "standard_architecture": {
+    "marker": "ONE_CORE_MANY_ARMS_STANDARD",
+    "canonical_owner": "docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md",
+    "authority_center": "SEGREDO/CHEFE",
+    "coordination_center": "SOL",
+    "perception": {
+      "parallel": true,
+      "roles": [
+        "RESEARCHER",
+        "DEBUGGER",
+        "ARCHAEOLOGIST",
+        "REVIEWER",
+        "DELTA_PARTNER",
+        "JUDGE"
+      ],
+      "same_writer_scope_mode": "READ_ONLY",
+      "requires_information_gain": true,
+      "correlated_views_are_independent_evidence": false
+    },
+    "evidence_envelope": {
+      "required_fields": [
+        "TARGET",
+        "OPERATIONAL_SCOPE",
+        "EVENT_TIME",
+        "OBSERVATION_TIME",
+        "PROVENANCE",
+        "CLAIM",
+        "EVIDENCE_REF",
+        "CLASS"
+      ],
+      "class_values": ["FACT", "INFERENCE", "HYPOTHESIS", "UNKNOWN"]
+    },
+    "arbitration": {
+      "same_target_conflict": "DISCRIMINATING_TEST_THEN_EVIDENCE_THEN_REALITY",
+      "different_target": "NOT_A_CONFLICT",
+      "model_vote_is_truth": false,
+      "name_or_reputation_is_authority": false,
+      "indistinguishable_hypotheses": "UNKNOWN"
+    },
+    "mutation": {
+      "rule": "ONE_WRITER_PER_SCOPE",
+      "parallel_same_scope": "BLOCKED",
+      "handoff_required": true,
+      "strategy": "MINIMAL_CAUSAL_MUTATION"
+    },
+    "promotion": {
+      "spine": "main",
+      "policy": "USE_CANONICAL_PROMOTION_POLICY_ON_MAIN"
+    },
+    "execution": {
+      "runtime_executes_promoted_artifact": true,
+      "runtime_is_structural_source_of_truth": false
+    },
+    "observability": {
+      "instruments": ["logs", "receipts", "graph", "panel", "reports"],
+      "derived_projection_is_authority": false,
+      "graph_fingerprint_role": "DELTA_INSTRUMENT",
+      "green_visual_status_is_end_to_end_pass": false
+    },
+    "learning": {
+      "same_finding_without_new_evidence": "DROP_DUPLICATE",
+      "same_conclusion_new_provenance_without_action_delta": "REGISTER_PROVENANCE_NO_MUTATION",
+      "counterproof_changes_belief": "MATERIAL_DELTA",
+      "no_material_delta": "NO_CHANGE",
+      "absorb_only_reusable_proven_delta": true
+    },
+    "flow": [
+      "INTENT",
+      "REANCHOR",
+      "FAN_OUT_READ_ONLY",
+      "NORMALIZE_EVIDENCE",
+      "DEDUPE",
+      "ARBITRATE_BY_TEST",
+      "SINGLE_WRITER_MINIMAL_MUTATION",
+      "VERIFY_SAME_TARGET",
+      "CANONICAL_PROMOTION",
+      "RUNTIME_EXECUTION",
+      "OBSERVE",
+      "ABSORB_REUSABLE_DELTA_OR_NO_CHANGE"
+    ]
   },
   "label_policy": {
     "marker": "CANONICAL_LABELS_REQUIRED",
@@ -309,9 +397,13 @@
     "EVIDENCE_OPENED",
     "AUTHORITY_CLASSIFICATION",
     "AVAILABLE_TOOLS",
+    "EVIDENCE_ENVELOPE",
+    "ARBITRATION_RESULT",
+    "WRITER_SCOPE",
     "REUSE_DECISION",
     "REAL_GAP",
-    "MINIMAL_ACTION"
+    "MINIMAL_ACTION",
+    "NO_CHANGE_REASON"
   ],
   "receipt_visibility": "INTERNAL_BY_DEFAULT; SHOW_ONLY_ON_AUDIT_OR_BLOCKER"
 }
