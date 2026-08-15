@@ -14,6 +14,7 @@ import test from 'node:test';
 const ROOT = resolve(process.cwd());
 const SCRIPT = join(ROOT, 'scripts/lupa/portable-kernel.mjs');
 const CONTRACT = join(ROOT, 'docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json');
+const RESPONSE_PATTERN = join(ROOT, 'docs/CONSCIENCIA/2026-06-20-padrao-resposta-pivete.md');
 const METACOGNITION = 'docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md';
 
 function run(args = []) {
@@ -44,6 +45,20 @@ function materializeBundleAsRepo(bundle, root) {
   git(root, ['add', '.']);
   git(root, ['commit', '-q', '-m', 'fixture']);
 }
+
+test('camada final simples é contrato obrigatório do sistema', () => {
+  const pattern = readFileSync(RESPONSE_PATTERN, 'utf8');
+  const required = [
+    'SIMPLE_FINAL_LAYER_REQUIRED=true',
+    'SIMPLE_FINAL_LAYER_TRIGGER=NONTRIVIAL_TECHNICAL_OR_EXPLANATORY_RESPONSE',
+    'SIMPLE_FINAL_LAYER_POSITION=LAST',
+    'SIMPLE_FINAL_LAYER_LABEL=NO_TEU_MODO_SIMPLES',
+    'SIMPLE_FINAL_LAYER_FIELDS=O_QUE_E|O_QUE_MUDOU|PRA_QUE_SERVE',
+    'SIMPLE_FINAL_LAYER_MUST_NOT_HIDE_BLOCKED_OR_UNKNOWN=true',
+    'SIMPLE_LAYER_IS_TRANSLATION_NOT_SECOND_TRUTH=true',
+  ];
+  for (const marker of required) assert.ok(pattern.includes(marker), `missing ${marker}`);
+});
 
 test('imagem é sensor e nunca substitui medição viva', () => {
   const contract = JSON.parse(readFileSync(CONTRACT, 'utf8'));
