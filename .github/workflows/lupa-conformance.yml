@@ -114,12 +114,13 @@ jobs:
         run: |
           set -euo pipefail
           node --version
+          node --check scripts/memory-linker/delta-core.mjs
           node --check scripts/memory-linker/fs-safe.mjs
           node --check scripts/memory-linker/dream-review.mjs
           node --check scripts/memory-linker/memory-linker-agent.mjs
           node --check scripts/memory-linker/memory-analyst-agent.mjs
           node --check scripts/memory-linker/memory-executor-agent.mjs
-          node --test scripts/memory-linker/dream-review.test.mjs scripts/memory-linker/fs-safe.test.mjs
+          node --test scripts/memory-linker/dream-review.test.mjs scripts/memory-linker/fs-safe.test.mjs scripts/memory-linker/delta-core.test.mjs
 
       - name: Receipt determinístico (sempre)
         if: always()
