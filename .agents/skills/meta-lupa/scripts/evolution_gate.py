@@ -371,7 +371,7 @@ def _crystal_ok(value: Any, manifest: dict[str, Any], errors: list[str]) -> dict
             if not isinstance(confidence, dict):
                 errors.append("CRYSTAL_CONFIDENCE_MISSING")
             else:
-                if confidence.get("method") not in {"PAIRED_BOOTSTRAP", "WILSON"}:
+                if confidence.get("method") != "PAIRED_BOOTSTRAP":
                     errors.append("CRYSTAL_CONFIDENCE_METHOD_INVALID")
                 if confidence.get("level") != 0.95:
                     errors.append("CRYSTAL_CONFIDENCE_LEVEL_MUST_BE_95")
@@ -644,7 +644,7 @@ def validate(manifest: Any, repo_root: str | None = None) -> dict[str, Any]:
         "required_meta_subject": is_required_meta,
         "meta_fixed_point": manifest.get("meta_fixed_point") if (is_required_meta or crystal_claim == "IRREDUCIBLE") else None,
         "crystal_claim": crystal_claim,
-        "crystal_verified": crystal_metrics["verified"] if crystal_metrics else None,
+        "crystal_verified": (crystal_metrics["verified"] and verified) if crystal_metrics else None,
         "crystal_compression_gain_percent": (
             crystal_metrics["compression_gain_percent"] if crystal_metrics else None
         ),
