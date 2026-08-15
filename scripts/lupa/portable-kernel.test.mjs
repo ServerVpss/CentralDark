@@ -243,7 +243,7 @@ test('DNA fail-closed se um owner perder marcador de capacidade condensada', () 
     assert.ok(original.includes('META_EVALUATION_REQUIRED=true'));
     writeFileSync(
       metacognitionPath,
-      original.replace('META_EVALUATION_REQUIRED=true', 'META_EVALUATION_REQUIRED=false'),
+      original.replaceAll('META_EVALUATION_REQUIRED=true', 'META_EVALUATION_REQUIRED=false'),
       'utf8',
     );
 
