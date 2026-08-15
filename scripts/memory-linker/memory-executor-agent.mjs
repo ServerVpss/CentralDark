@@ -6,10 +6,11 @@
  * Toda mutação é atômica; receipt distingue arquivo corrigido, commit e push.
  */
 
+import crypto from 'node:crypto';
 import fs from 'fs';
 import path from 'path';
 import https from 'https';
-import { execSync } from 'child_process';
+import { execFileSync } from 'child_process';
 import { atomicWriteUtf8Sync } from './fs-safe.mjs';
 
 const RAIZ        = '/root/CentralDark';
@@ -19,6 +20,30 @@ const CONSCIENCIA = path.join(RAIZ, 'docs/CONSCIENCIA');
 const ENV_FILE    = path.join(RAIZ, 'secrets/mcp.env');
 const DRY_RUN     = process.argv.includes('--dry-run');
 
+function stable(value) {
+  if (Array.isArray(value)) return `[${value.map(stable).join(',')}]`;
+  if (value && typeof value === 'object') {
+    return `{${Object.keys(value).sort().map(k => `${JSON.stringify(k)}:${stable(value[k])}`).join(',')}}`;
+  }
+  return JSON.stringify(value);
+}
+function sha256(value) { return crypto.createHash('sha256').update(String(value)).digest('hex'); }
+function canonicalDecisionFingerprint(decision) {
+  if (typeof decision.decisionFingerprint === 'string' && decision.decisionFingerprint.length > 0) {
+    return decision.decisionFingerprint;
+  }
+  const criticos = Array.isArray(decision.criticos) ? decision.criticos : [];
+  const altos = Array.isArray(decision.altos) ? decision.altos : [];
+  const autoFix = Array.isArray(decision.autoFix) ? decision.autoFix : [];
+  return sha256(stable({
+    criticos,
+    altos,
+    autoFix,
+    totalCritico: Number.isFinite(decision.totalCritico) ? decision.totalCritico : criticos.length,
+    totalAlto: Number.isFinite(decision.totalAlto) ? decision.totalAlto : altos.length,
+    totalAutoFix: Number.isFinite(decision.totalAutoFix) ? decision.totalAutoFix : autoFix.length,
+  }));
+}
 function loadEnv() {
   try {
     return Object.fromEntries(
@@ -34,7 +59,8 @@ const decision = JSON.parse(fs.readFileSync(DECISION, 'utf8'));
 const decisionTime = decision.observedAt ?? decision.timestamp;
 const idadeMin = (Date.now() - new Date(decisionTime).getTime()) / 60000;
 if (!Number.isFinite(idadeMin) || idadeMin > 180 || decision.totalAutoFix === 0) process.exit(0);
-if (!decision.decisionFingerprint) throw new Error('DECISION_FINGERPRINT_MISSING');
+const decisionFingerprint = canonicalDecisionFingerprint(decision);
+const migratedLegacyDecision = !decision.decisionFingerprint;
 
 function findFile(nome) {
   function walk(d) {
@@ -102,18 +128,20 @@ for (const fix of (decision.autoFix || [])) {
 }
 
 if (DRY_RUN) {
-  console.log(`MEMORY_EXECUTOR=DRY_RUN WOULD_CHANGE=${corrigidos.length} SKIPPED=${ignorados.length} DECISION=${decision.decisionFingerprint}`);
+  console.log(`MEMORY_EXECUTOR=DRY_RUN WOULD_CHANGE=${corrigidos.length} SKIPPED=${ignorados.length} DECISION=${decisionFingerprint} LEGACY=${migratedLegacyDecision ? 1 : 0}`);
   process.exit(0);
 }
 
 if (corrigidos.length === 0) {
   const receipt = {
     ...decision,
+    decisionFingerprint,
+    migratedLegacyDecision,
     totalAutoFix: 0,
     executed: new Date().toISOString(),
     execution: {
       status: 'NO_CHANGE',
-      decisionFingerprint: decision.decisionFingerprint,
+      decisionFingerprint,
       changed: [],
       skipped: ignorados,
       commit: 'NOT_NEEDED',
@@ -121,7 +149,7 @@ if (corrigidos.length === 0) {
     },
   };
   atomicWriteUtf8Sync(DECISION, `${JSON.stringify(receipt, null, 2)}\n`, { skipIfUnchanged: true });
-  console.log(`MEMORY_EXECUTOR=NO_CHANGE DECISION=${decision.decisionFingerprint}`);
+  console.log(`MEMORY_EXECUTOR=NO_CHANGE DECISION=${decisionFingerprint}`);
   process.exit(0);
 }
 
@@ -131,10 +159,10 @@ let commitSha = null;
 let gitError = null;
 
 try {
-  execSync(`git -C "${RAIZ}" add -- ${corrigidos.map(c => `"${c.path.replaceAll('"', '\\"')}"`).join(' ')}`, { stdio: 'pipe' });
+  execFileSync('git', ['-C', RAIZ, 'add', '--', ...corrigidos.map(c => c.path)], { stdio: 'pipe' });
   const hasDiff = (() => {
     try {
-      execSync(`git -C "${RAIZ}" diff --cached --quiet`, { stdio: 'pipe' });
+      execFileSync('git', ['-C', RAIZ, 'diff', '--cached', '--quiet'], { stdio: 'pipe' });
       return false;
     } catch { return true; }
   })();
@@ -144,12 +172,17 @@ try {
     pushStatus = 'NOT_NEEDED';
   } else {
     const details = corrigidos.map(c => `- ${c.arquivo}: ${c.tipo}`).join('\n');
-    execSync(`git -C "${RAIZ}" commit -m "fix(memory-executor): auto-corrige ${corrigidos.length} gap(s) de memória" -m "${details.replaceAll('"', '\\"')}"`, { stdio: 'pipe' });
-    commitSha = execSync(`git -C "${RAIZ}" rev-parse HEAD`, { encoding: 'utf8' }).trim();
+    execFileSync('git', [
+      '-C', RAIZ,
+      'commit',
+      '-m', `fix(memory-executor): auto-corrige ${corrigidos.length} gap(s) de memória`,
+      '-m', details,
+    ], { stdio: 'pipe' });
+    commitSha = execFileSync('git', ['-C', RAIZ, 'rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
     commitStatus = 'COMMITTED';
 
     try {
-      execSync(`git -C "${RAIZ}" push origin main`, { stdio: 'pipe' });
+      execFileSync('git', ['-C', RAIZ, 'push', 'origin', 'main'], { stdio: 'pipe' });
       pushStatus = 'PUSHED';
     } catch (error) {
       pushStatus = 'FAILED';
@@ -164,11 +197,13 @@ try {
 
 const receipt = {
   ...decision,
+  decisionFingerprint,
+  migratedLegacyDecision,
   totalAutoFix: 0,
   executed: new Date().toISOString(),
   execution: {
     status: pushStatus === 'FAILED' || commitStatus === 'FAILED' ? 'PARTIAL' : 'COMPLETED',
-    decisionFingerprint: decision.decisionFingerprint,
+    decisionFingerprint,
     changed: corrigidos,
     skipped: ignorados,
     commit: commitStatus,
@@ -204,7 +239,7 @@ msg += `\n💾 commit: <b>${commitStatus}</b>`;
 if (commitSha) msg += ` <code>${commitSha.slice(0, 12)}</code>`;
 msg += `\n🔄 push: <b>${pushStatus}</b>`;
 if (gitError) msg += `\n⚠️ <code>${gitError.slice(0, 240)}</code>`;
-msg += `\n🧬 decisão: <code>${decision.decisionFingerprint.slice(0, 16)}</code>`;
+msg += `\n🧬 decisão: <code>${decisionFingerprint.slice(0, 16)}</code>`;
 await send(msg);
 
 console.log(`MEMORY_EXECUTOR=${receipt.execution.status} CHANGED=${corrigidos.length} COMMIT=${commitStatus} PUSH=${pushStatus} SHA=${commitSha ?? 'NONE'}`);
