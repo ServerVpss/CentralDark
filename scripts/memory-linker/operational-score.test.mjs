@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { buildHouseInventory } from '../../apps/modulos/hub/scripts/house-inventory-core.mjs';
@@ -76,7 +77,7 @@ test('J observações repetidas não duplicam abstração', () => {
   assert.equal(result.hypotheses.filter((item) => item.behavioral_hypothesis === 'CADENCE').length, 1);
 });
 
-test('K aprendizado material aponta para owner canônico, aparece no Inventário e não escreve skill direto', () => {
+test('K aprendizado material chega ao owner, Inventário e consumidor real', () => {
   const material = extractMusicBehavioralMaterial({ observations: ['ponte', 'contraponto'], sourceRef: 'artifact:score' });
   assert.equal(material.owner, 'scripts/memory-linker/operational-score.mjs');
   assert.equal(material.direct_skill_write, false);
@@ -90,6 +91,9 @@ test('K aprendizado material aponta para owner canônico, aparece no Inventário
   assert.ok(indexed, 'Operational Score precisa ser herdável pelo Inventário da Casa');
   assert.equal(indexed.owner, 'scripts/memory-linker/operational-score.mjs');
   assert.equal(indexed.proof, 'scripts/memory-linker/operational-score.test.mjs');
+  const scout = fs.readFileSync(new URL('./memory-linker-agent.mjs', import.meta.url), 'utf8');
+  assert.match(scout, /createMachineEvent\(\{[\s\S]*capability: 'MINERACAO',[\s\S]*event: 'SOURCE_DELTA_DETECTED'/);
+  assert.match(scout, /OPERATIONAL_SCORE_EVENT=/);
 });
 
 test('L erro desconhecido permanece explícito', () => {
@@ -103,7 +107,7 @@ test('M ZERO_DEPLOY por construção: módulo não possui capability destrutiva 
   assert.equal(material.execute_action, false);
 });
 
-test('N antirrepetição só troca apresentação e permite fallback', () => {
+test('N antirrepetição não muda evento e NO_NEW_INFORMATION não emite partitura', () => {
   const machine = event('MINERACAO', 'same');
   const base = renderHumanPresentation(machine, { presentationEpoch: 0 });
   const changed = renderHumanPresentation(machine, { presentationEpoch: 0, recentSignatures: [base.visual] });
@@ -112,6 +116,12 @@ test('N antirrepetição só troca apresentação e permite fallback', () => {
   const all = getSkillSignature('MINERACAO').visual_candidates;
   const fallback = renderHumanPresentation(machine, { recentSignatures: all });
   assert.ok(all.includes(fallback.visual));
+
+  const scout = fs.readFileSync(new URL('./memory-linker-agent.mjs', import.meta.url), 'utf8');
+  const noInfoStart = scout.indexOf('if (!informationGain(previousFingerprint, currentFingerprint))');
+  const scoreStart = scout.indexOf('const scoreEvent = createMachineEvent');
+  const earlyExit = scout.indexOf('process.exit(0);', noInfoStart);
+  assert.ok(noInfoStart >= 0 && earlyExit > noInfoStart && scoreStart > earlyExit, 'partitura só pode nascer depois do early exit de NO_NEW_INFORMATION');
 });
 
 test('O próxima sessão importa o mesmo cristal sem depender deste processo', async () => {
