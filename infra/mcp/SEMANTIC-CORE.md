@@ -75,6 +75,8 @@ Repo/Python/CLI
   -> semantic_bridge.py / semantic_core.py
 
 MCP existente
+  -> mesmo mcp-server.js
+  -> semantic://nilc/glove-50d/manifest
   -> tools/cognitivo/semantic.js
   -> semantic_bridge.py --serve
   -> semantic_core.py
@@ -93,6 +95,29 @@ Hermes / IA local / Builder
   -> consomem as mesmas tools MCP quando esse é o canal já existente
   -> não carregam implementação GloVe própria
 ```
+
+### MCP resource
+
+O servidor MCP canônico foi estendido; nenhum segundo servidor foi criado.
+
+```text
+RESOURCE=semantic://nilc/glove-50d/manifest
+READ_ONLY=true
+```
+
+A projeção MCP expõe somente:
+
+```text
+MODEL_ID
+REVISION
+DIMENSION
+VOCAB_SIZE
+LICENSE
+HEALTH
+PROVENANCE
+```
+
+Caminhos físicos do host (`physical_path`, `embedding_path`, `vocab_path`) permanecem fora da superfície MCP.
 
 ### Obsidian Mobile
 
