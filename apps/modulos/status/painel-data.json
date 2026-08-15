@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-15T01:59:40.191Z",
-  "updatedAtBR": "14/08/2026, 22:59:40 BRT",
+  "updatedAt": "2026-08-15T02:01:00.180Z",
+  "updatedAtBR": "14/08/2026, 23:01:00 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "refactor(memory): analyst usar delta-core compartilhado",
+    "lastCommit": "test(memory): provar saturacao por ganho informacional",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-15T02:01:00.180Z",
+      "titulo": "Push na main · 90c919b3462362dbe9f4719b2156145ab49edafa",
+      "detalhe": "test(memory): provar saturacao por ganho informacional",
+      "area": "Repositório",
+      "sha": "90c919b",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-15T01:59:40.191Z",
       "titulo": "Push na main · 8b738fabc0bc1e69faf076497f25a9d7c6f1fe82",
       "detalhe": "refactor(memory): analyst usar delta-core compartilhado",
@@ -988,14 +996,6 @@
       "detalhe": "fix(identidade): separar SEGREDO/CHEFE de PIVETE/HERMES ponta a ponta (#811)",
       "area": "Repositório",
       "sha": "52d66db",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-14T01:57:15.105Z",
-      "titulo": "Push na main · b3c9329871d32a9cfd8a4ebc6a66e642bb8928ff",
-      "detalhe": "docs(aprendizado): registrar método live-first e menor movimento",
-      "area": "Repositório",
-      "sha": "b3c9329",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-15T02:01:00.180Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 90c919b3462362dbe9f4719b2156145ab49edafa (90c919b)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-15T01:59:40.191Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 8b738fabc0bc1e69faf076497f25a9d7c6f1fe82 (8b738fa)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-14T02:42:31.331Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 52d66db65929c14c23af133710f0fb782e486d09 (52d66db)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-14T01:57:15.105Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · b3c9329871d32a9cfd8a4ebc6a66e642bb8928ff (b3c9329)",
       "area": "Repositório",
       "status": "sucesso"
     }
