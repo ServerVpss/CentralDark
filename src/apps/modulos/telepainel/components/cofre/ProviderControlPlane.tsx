@@ -48,6 +48,13 @@ type Budget = {
 
 type RuntimeState = "MEASURED" | "UNPROVEN_NOT_DEPLOYED" | "ERROR";
 
+type ProviderBudgetRpcClient = {
+  rpc: (fn: "get_provider_budget_overview") => PromiseLike<{
+    data: unknown;
+    error: unknown;
+  }>;
+};
+
 async function adminProviderCall<T>(tool: string, input: Record<string, unknown> = {}): Promise<T> {
   const { data } = await supabase.auth.getSession();
   const accessToken = data.session?.access_token;
@@ -110,9 +117,10 @@ export function ProviderControlPlane() {
     }
 
     try {
-      const { data, error } = await supabase.rpc("get_provider_budget_overview" as never);
+      const budgetRpc = supabase as unknown as ProviderBudgetRpcClient;
+      const { data, error } = await budgetRpc.rpc("get_provider_budget_overview");
       if (!error && data && typeof data === "object") {
-        const payload = data as unknown as { budgets?: Budget[] };
+        const payload = data as { budgets?: Budget[] };
         setBudgets(Array.isArray(payload.budgets) ? payload.budgets : []);
       } else {
         setBudgets([]);
