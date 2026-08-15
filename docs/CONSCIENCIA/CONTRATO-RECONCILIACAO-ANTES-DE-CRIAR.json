@@ -171,14 +171,14 @@
     "external_runtime_fallback": "FORBIDDEN"
   },
   "integration_spine_policy": {
-    "marker": "MOTHER_SPINE_REQUIRED",
+    "marker": "MAIN_CANONICAL_SPINE",
     "mother_issue": 722,
     "mother_pr": 724,
     "mother_branch": "program/centraldark-convergencia-omniroute-722",
-    "mother_pr_mode": "PERSISTENT_OPEN_DRAFT_CONTROL_PLANE",
-    "new_convergence_child_pr_base": "program/centraldark-convergencia-omniroute-722",
-    "legacy_pr_retarget": "SYNC_MOTHER_THEN_RETARGET_NO_FORCE_PUSH",
-    "promotion_to_main": "EXACT_MOTHER_SHA_SNAPSHOT_THROUGH_SHORT_PROMOTION_PR",
+    "mother_pr_mode": "HISTORICAL_CLOSED_NOT_OPERATIONAL_CONTROL_PLANE",
+    "new_convergence_child_pr_base": "main",
+    "legacy_pr_retarget": "DO_NOT_RETARGET_TO_CLOSED_MOTHER; RECONCILE_WITH_MAIN_CANONICAL_STATE",
+    "promotion_to_main": "USE_CANONICAL_PROMOTION_POLICY_ON_MAIN",
     "parallelism": "ONE_WRITER_PER_SCOPE_MULTIPLE_READERS_REVIEWERS",
     "writer_handoff": "EXPLICIT_NO_MODEL_LOCK"
   },
