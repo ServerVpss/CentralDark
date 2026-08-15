@@ -119,7 +119,7 @@ jobs:
           node --check scripts/memory-linker/memory-linker-agent.mjs
           node --check scripts/memory-linker/memory-analyst-agent.mjs
           node --check scripts/memory-linker/memory-executor-agent.mjs
-          node --test scripts/memory-linker/dream-review.test.mjs
+          node --test scripts/memory-linker/dream-review.test.mjs scripts/memory-linker/fs-safe.test.mjs
 
       - name: Receipt determinístico (sempre)
         if: always()
