@@ -56,32 +56,41 @@ test('H renderer funciona sem música externa', () => {
   assert.match(rendered.presentation, /SENTINELA/);
 });
 
-test('I material musical vira somente hipótese candidata', () => {
-  const result = extractMusicBehavioralMaterial({ observations: ['crescendo', 'dissonance', 'resolution'], sourceRef: 'artifact:music' });
+test('I material musical vira somente hipótese candidata e reconhece contrato PT-BR', () => {
+  const result = extractMusicBehavioralMaterial({ observations: ['crescendo', 'dissonância', 'resolução'], sourceRef: 'artifact:music' });
   assert.equal(result.status, 'CANDIDATE_ONLY');
   assert.equal(result.direct_skill_write, false);
   assert.equal(result.execute_action, false);
   assert.equal(result.source_is_authority, false);
+  assert.equal(result.dedupe_required, true);
+  assert.equal(result.counterproof_required, true);
   assert.deepEqual(result.hypotheses.map((item) => item.behavioral_hypothesis).sort(), ['INCREASE_DEPTH_WHILE_INFORMATION_GAIN', 'INVESTIGATE_CONFLICTING_EVIDENCE', 'PROVEN_CLOSURE'].sort());
 });
 
 test('J observações repetidas não duplicam abstração', () => {
-  const result = extractMusicBehavioralMaterial({ observations: ['rhythm forte', 'rhythm repetido', 'tempo rápido'] });
+  const result = extractMusicBehavioralMaterial({ observations: ['ritmo forte', 'rhythm repetido', 'tempo rápido'] });
   assert.equal(result.hypotheses.filter((item) => item.behavioral_hypothesis === 'CADENCE').length, 1);
 });
 
-test('K/L assinatura mantém owner e erro desconhecido permanece explícito', () => {
+test('K aprendizado material aponta para owner canônico e não escreve skill direto', () => {
+  const material = extractMusicBehavioralMaterial({ observations: ['ponte', 'contraponto'], sourceRef: 'artifact:score' });
+  assert.equal(material.owner, 'scripts/memory-linker/operational-score.mjs');
+  assert.equal(material.direct_skill_write, false);
   for (const id of Object.keys(OPERATIONAL_SCORE_REGISTRY)) {
     const signature = getSkillSignature(id);
     assert.equal(signature.owner, 'scripts/memory-linker/operational-score.mjs');
     assert.ok(signature.semantic_role);
   }
+});
+
+test('L erro desconhecido permanece explícito', () => {
   assert.throws(() => createMachineEvent({ capability: '', event: 'X' }), /UNKNOWN_CAPABILITY/);
 });
 
-test('M ZERO_DEPLOY por construção: módulo não expõe ação de deploy', () => {
-  assert.equal('deploy' in OPERATIONAL_SCORE_REGISTRY, false);
-  const material = extractMusicBehavioralMaterial({ observations: ['climax'] });
+test('M ZERO_DEPLOY por construção: módulo não possui capability destrutiva nem dispara ação', () => {
+  assert.equal(Object.hasOwn(OPERATIONAL_SCORE_REGISTRY, 'DEPLOY'), false);
+  assert.equal(Object.keys(OPERATIONAL_SCORE_REGISTRY).some((id) => /DELETE|DEPLOY|RESTART|RESET/.test(id)), false);
+  const material = extractMusicBehavioralMaterial({ observations: ['clímax'] });
   assert.equal(material.execute_action, false);
 });
 
@@ -96,8 +105,15 @@ test('N antirrepetição só troca apresentação e permite fallback', () => {
   assert.ok(all.includes(fallback.visual));
 });
 
+test('O próxima sessão importa o mesmo cristal sem depender deste processo', async () => {
+  const nextSession = await import(new URL('./operational-score.mjs?session=next', import.meta.url));
+  const signature = nextSession.getSkillSignature('CRISTALIZACAO');
+  assert.equal(signature.capability_id, 'CRISTALIZACAO');
+  assert.equal(signature.owner, 'scripts/memory-linker/operational-score.mjs');
+});
+
 test('silêncio musical mapeia NO_NEW_INFORMATION sem disparar ação', () => {
-  const result = extractMusicBehavioralMaterial({ interpretation: 'silence after convergence' });
+  const result = extractMusicBehavioralMaterial({ interpretation: 'silêncio após convergência' });
   assert.equal(result.hypotheses[0].behavioral_hypothesis, 'NO_NEW_INFORMATION');
   assert.equal(result.execute_action, false);
 });
