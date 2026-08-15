@@ -1,99 +1,169 @@
-name: Bots — seed de labels oficiais
+name: Bots — labels operacionais canônicas
 
-# Cria/atualiza labels padrão CentralDark e rotas assign necessárias aos bots.
-# Roda manual + 1x/mês. Não apaga labels existentes.
+# Único owner do catálogo ativo de labels operacionais.
+# Cria/atualiza o catálogo canônico, migra aliases legados e remove labels mortas.
+# Histórico permanece no GitHub; taxonomia ativa fica limpa.
 
 on:
   workflow_dispatch:
   schedule:
     - cron: '0 6 1 * *'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/bots-labels-seed.yml'
 
 permissions:
   issues: write
+  pull-requests: write
   contents: read
 
 jobs:
-  seed:
+  reconcile:
     runs-on: [self-hosted, Linux]
     if: github.repository == 'ServerVpss/CentralDark'
     steps:
-      - name: Seed labels oficiais
+      - name: Reconciliar labels operacionais
         uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
         with:
           script: |
             const { owner, repo } = context.repo;
-            // Catálogo único — alinhado a docs/CONSCIENCIA/GITHUB-LABELS-OPERACIONAIS.md
-            const labels = [
-              { name: '🟢 PRONTO-PARA-IA', color: '0E8A16', description: 'Tarefa clara — IA pode trabalhar' },
-              { name: '🟢 CORREÇÃO-SEGURA', color: '0E8A16', description: 'Correção baixo risco em branch/PR' },
-              { name: '🟢 SUCESSO', color: '0E8A16', description: 'Validado / estável / concluído' },
-              { name: '🟢 PRIORIDADE-BAIXA', color: '0E8A16', description: 'Pode esperar' },
-              { name: '🟢 SUPABASE', color: '3ECF8E', description: 'Supabase / banco / auth / storage' },
-              { name: '🟡 PRECISA-DE-OK', color: 'FBCA04', description: 'Aguarda PERMITO do Pivete' },
-              { name: '🟡 IA-PRECISA-REVISAR', color: 'FBCA04', description: 'IA revisou ou precisa validação' },
-              { name: '🟡 PENDÊNCIA', color: 'FBCA04', description: 'Aguarda decisão ou prova' },
-              { name: '🟡 ATENÇÃO', color: 'FBCA04', description: 'Cuidado antes de seguir' },
-              { name: '🟡 PRIORIDADE-MÉDIA', color: 'FFA500', description: 'Importante mas planejável' },
-              { name: '🔴 RISCO-SERVIDOR', color: 'D93F0B', description: 'VPS / PM2 / deploy / produção' },
-              { name: '🔴 FALTA-EVIDÊNCIA', color: 'D93F0B', description: 'Sem log/print/prova' },
-              { name: '🔴 ERRO', color: 'B60205', description: 'Falha confirmada' },
-              { name: '🔴 PRIORIDADE-ALTA', color: 'FF0000', description: 'Resolver logo' },
-              { name: '🔐 SEGURANÇA', color: 'B60205', description: 'Token secret chave RLS exposição' },
-              { name: '🛠️ INFRA', color: 'D93F0B', description: 'VPS servidor deploy PM2 nginx' },
-              { name: '🧠 AGENTE-GROK', color: '1F6FEB', description: 'Grok responsável (VPS/PM2/SSH/infra)' },
-              { name: '🧠 AGENTE-CODEX', color: '5319E7', description: 'Codex responsável (código/PR)' },
-              { name: '🧠 AGENTE-CLAUDE', color: 'B088FF', description: 'Claude responsável' },
-              { name: '🧠 AGENTE-CHATGPT', color: '10A37F', description: 'ChatGPT/DarkAI responsável' },
-              { name: '🧠 AGENTE-LOVABLE', color: 'FF80B0', description: 'Lovable / UI responsável' },
-              { name: '🧠 AGENTE-HERMES', color: '7057FF', description: 'Hermes envolvido' },
-              { name: '🧠 AGENTE-SENTINELA', color: 'B60205', description: 'Sentinela criou/detectou' },
-              { name: '🧠 AGENTE-SUPABASE', color: '3ECF8E', description: 'Supabase bot/agente banco' },
-              { name: '🧠 AGENTE-JARVIS', color: '0052CC', description: 'Jarvis envolvido' },
-              { name: '🤖 IA-EXECUTAR', color: '5319E7', description: 'IA pode executar controlado' },
-              { name: '🤖 IA-REVISAR', color: '5319E7', description: 'IA precisa revisar' },
-              { name: '🤖 IA-INFRA', color: 'D93F0B', description: 'IA em VPS/deploy/Git' },
-              { name: '🤖 IA-FRONTEND', color: 'FF80B0', description: 'IA em tela/layout' },
-              { name: '🤖 IA-DOCUMENTAR', color: '0075CA', description: 'IA documentar/organizar' },
-              { name: '🤖 IA-PESQUISAR', color: '1F6FEB', description: 'IA pesquisar contexto' },
-              { name: '🤖 IA-VALIDAR', color: '0E8A16', description: 'IA provar se está correto' },
-              { name: '🤖 AUTO', color: '5319E7', description: 'Criado/atualizado por automação' },
-              { name: '🤖 AGENTIC-DEVOPS', color: '5319E7', description: 'Orquestração self-heal / run-once (sem V3)' },
-              { name: '🔧 SELF-HEAL', color: '0E8A16', description: 'Script puro PM2/Docker restart determinístico' },
-              { name: '🕸️ GRAPHIFY', color: '5319E7', description: 'Pipeline Graphify / grafo do repo' },
-              { name: '🛡️ SENTINELA', color: 'B60205', description: 'Veio da sentinela/monitoramento' },
-              { name: '🧭 PAINEL', color: '0052CC', description: 'Painel dashboard admin cockpit' },
-              { name: '🧩 DIVERGÊNCIA', color: 'D93F0B', description: 'Estados diferentes para alinhar' },
-              { name: '🔄 GIT', color: '1F6FEB', description: 'Branch commit pull push merge' },
-              { name: '🔄 GIT-DIVERGÊNCIA', color: 'D93F0B', description: 'VPS e GitHub diferentes' },
-              { name: '🐞 BUG', color: 'D73A4A', description: 'Algo quebrado' },
-              { name: '✨ MELHORIA', color: 'A2EEEF', description: 'Melhoria refinamento' },
-              { name: '📚 DOCS', color: '0075CA', description: 'Documentação registro memória' },
-              { name: '🎨 FRONTEND', color: 'FF80B0', description: 'Tela layout mobile' },
-              { name: '♻️ DUPLICADO', color: 'CFD3D7', description: 'Já existe outra issue' },
-              { name: '❓ DÚVIDA', color: 'D876E3', description: 'Falta esclarecer' },
-              { name: '🆘 AJUDA-NECESSÁRIA', color: '008672', description: 'Precisa apoio' },
-              { name: '🌱 BOM-PARA-INICIAR', color: '7057FF', description: 'Tarefa simples' },
-              { name: '🚫 INVÁLIDO', color: 'E4E669', description: 'Issue não faz sentido' },
-              { name: '🧊 PARADO', color: 'CFD3D7', description: 'Velha sem movimento' },
-              { name: '🧊 NÃO-FAZER', color: 'FFFFFF', description: 'Decidido não seguir' },
-              { name: 'assign:chatgpt', color: '10A37F', description: 'Rota de suporte ChatGPT / Mermaid / Canvas / orquestração' },
-              { name: 'assign:codex', color: '5319E7', description: 'Rota de suporte Codex / código / YAML estruturado' },
-            ];
 
-            let created = 0, updated = 0, kept = 0, failed = 0;
-            for (const lbl of labels) {
-              try {
-                const existing = await github.rest.issues.getLabel({ owner, repo, name: lbl.name }).catch(() => null);
-                if (!existing) {
-                  await github.rest.issues.createLabel({ owner, repo, ...lbl });
-                  created++;
-                } else if (existing.data.color.toLowerCase() !== lbl.color.toLowerCase() || (existing.data.description || '') !== lbl.description) {
-                  await github.rest.issues.updateLabel({ owner, repo, name: lbl.name, new_name: lbl.name, color: lbl.color, description: lbl.description });
-                  updated++;
-                } else kept++;
-              } catch (e) {
-                failed++;
-                core.warning(`falha ${lbl.name}: ${e.message}`);
+            const canonical = [
+              ['👑 PERMITO-SEGREDO','5319E7','Autorização humana canônica de SEGREDO/CHEFE'],
+              ['🔄 GIT','1F6FEB','Branch commit pull push merge'],
+              ['🧠 AGENTE-CHATGPT','10A37F','ChatGPT/SOL como capacidade, nunca autoridade'],
+              ['🧠 AGENTE-CLAUDE','B088FF','Claude como capacidade, nunca autoridade'],
+              ['🧠 AGENTE-CODEX','5319E7','Codex como capacidade, nunca autoridade'],
+              ['🧠 AGENTE-GROK','1F6FEB','Grok como capacidade, nunca autoridade'],
+              ['🧠 AGENTE-HERMES','7057FF','PIVETE/Hermes executor'],
+              ['🧠 AGENTE-JARVIS','0052CC','Jarvis/orquestração'],
+              ['🧠 AGENTE-SENTINELA','B60205','Sentinela detector'],
+              ['🧠 AGENTE-SUPABASE','3ECF8E','Supabase/banco'],
+              ['🤖 AUTO','5319E7','Criado/atualizado por automação'],
+              ['🐞 BUG','D73A4A','Algo quebrado'],
+              ['♻️ DUPLICADO','CFD3D7','Já existe outra issue material equivalente'],
+              ['✨ MELHORIA','A2EEEF','Melhoria/refinamento'],
+              ['❓ DÚVIDA','D876E3','Falta esclarecer materialmente'],
+              ['🆘 AJUDA-NECESSÁRIA','008672','Ação humana realmente necessária'],
+              ['🌱 BOM-PARA-INICIAR','7057FF','Tarefa simples'],
+              ['🎨 FRONTEND','FF80B0','Tela/layout/mobile'],
+              ['📚 DOCS','0075CA','Documentação/memória versionada'],
+              ['🔄 GIT-DIVERGÊNCIA','D93F0B','Estados Git diferentes para reconciliar'],
+              ['🔐 SEGURANÇA','B60205','Auth/secret/RLS/credencial'],
+              ['🔧 SELF-HEAL','0E8A16','Recuperação determinística'],
+              ['🔴 ERRO','B60205','Falha confirmada'],
+              ['🔴 FALTA-EVIDÊNCIA','D93F0B','Sem prova suficiente; UNKNOWN não é PASS'],
+              ['🔴 PRIORIDADE-ALTA','FF0000','Resolver logo'],
+              ['🔴 RISCO-SERVIDOR','D93F0B','VPS/PM2/deploy/produção'],
+              ['🕸️ GRAPHIFY','5319E7','Graphify/grafo'],
+              ['🚫 INVÁLIDO','E4E669','Issue sem ferida material aplicável'],
+              ['🛠️ INFRA','D93F0B','Infra/VPS/servidor'],
+              ['🛡️ SENTINELA','B60205','Finding material da Sentinela'],
+              ['🟡 ATENÇÃO','FBCA04','Atenção material'],
+              ['🟡 IA-PRECISA-REVISAR','FBCA04','Revisão técnica necessária'],
+              ['🟡 PENDÊNCIA','FBCA04','Pendência material comprovada'],
+              ['🟡 PRIORIDADE-MÉDIA','FFA500','Prioridade média'],
+              ['🟢 CORREÇÃO-SEGURA','0E8A16','Correção de baixo risco'],
+              ['🟢 PRIORIDADE-BAIXA','0E8A16','Prioridade baixa'],
+              ['🟢 PRONTO-PARA-IA','0E8A16','Contexto suficiente para IA'],
+              ['🟢 SUCESSO','0E8A16','Validado/estável/concluído'],
+              ['🟢 SUPABASE','3ECF8E','Supabase/banco/auth/storage'],
+              ['🤖 AGENTIC-DEVOPS','5319E7','Orquestração agentic sem sistema paralelo'],
+              ['🤖 IA-DOCUMENTAR','0075CA','IA documentar/organizar'],
+              ['🤖 IA-EXECUTAR','5319E7','IA executar dentro do escopo autorizado'],
+              ['🤖 IA-FRONTEND','FF80B0','IA em frontend'],
+              ['🤖 IA-INFRA','D93F0B','IA em infra'],
+              ['🤖 IA-PESQUISAR','1F6FEB','IA pesquisar contexto'],
+              ['🤖 IA-REVISAR','5319E7','IA revisar'],
+              ['🤖 IA-VALIDAR','0E8A16','IA validar/provar'],
+              ['🧊 NÃO-FAZER','FFFFFF','Decisão explícita de não executar'],
+              ['🧊 PARADO','CFD3D7','Sem movimento; não equivale a ferida viva'],
+              ['🧩 DIVERGÊNCIA','D93F0B','Estados divergentes'],
+              ['🧭 PAINEL','0052CC','Painel/cockpit'],
+              ['SUPERSEDED','CFD3D7','Claim integralmente absorvido por owner canônico'],
+            ].map(([name,color,description]) => ({name,color,description}));
+
+            const aliases = new Map([
+              ['assign:chatgpt',['🧠 AGENTE-CHATGPT']],
+              ['assign:claude',['🧠 AGENTE-CLAUDE']],
+              ['assign:codex',['🧠 AGENTE-CODEX']],
+              ['assign:grok',['🧠 AGENTE-GROK']],
+              ['assign:supabase-bot',['🧠 AGENTE-SUPABASE']],
+              ['assign:lovable',['🎨 FRONTEND']],
+              ['auto',['🤖 AUTO']],
+              ['bug',['🐞 BUG']],
+              ['p0',['🔴 PRIORIDADE-ALTA']],
+              ['p1',['🔴 PRIORIDADE-ALTA']],
+              ['p2',['🟡 PRIORIDADE-MÉDIA']],
+              ['p3',['🟢 PRIORIDADE-BAIXA']],
+              ['sentinela',['🛡️ SENTINELA']],
+              ['vigia',['🛡️ SENTINELA']],
+              ['stale',['🧊 PARADO']],
+              ['superseded',['SUPERSEDED']],
+              ['needs-codex-review',['🟡 IA-PRECISA-REVISAR','🧠 AGENTE-CODEX']],
+              ['revisao-humana',['🆘 AJUDA-NECESSÁRIA']],
+              ['🟡 PRECISA-DE-OK',['🆘 AJUDA-NECESSÁRIA']],
+              ['permito-segredo',['👑 PERMITO-SEGREDO']],
+              ['PERMITO-SEGREDO',['👑 PERMITO-SEGREDO']],
+              ['📚 DOC',['📚 DOCS']],
+            ]);
+
+            const obsolete = new Set([
+              '🧠 AGENTE-LOVABLE',
+              'permito-pivete',
+              'PERMITO-PIVETE',
+              'pr611-reconcile',
+            ]);
+
+            for (const label of canonical) {
+              const current = await github.rest.issues.getLabel({owner,repo,name:label.name}).catch(() => null);
+              if (!current) await github.rest.issues.createLabel({owner,repo,...label});
+              else if (current.data.color.toLowerCase() !== label.color.toLowerCase() || (current.data.description || '') !== label.description) {
+                await github.rest.issues.updateLabel({owner,repo,name:label.name,new_name:label.name,color:label.color,description:label.description});
               }
             }
-            core.notice(`labels oficiais — +${created} ~${updated} =${kept} !${failed}`);
+
+            const items = await github.paginate(github.rest.issues.listForRepo,{owner,repo,state:'all',per_page:100});
+            for (const item of items) {
+              const names = new Set((item.labels || []).map(l => typeof l === 'string' ? l : l.name));
+              for (const [oldName,newNames] of aliases) {
+                if (!names.has(oldName)) continue;
+                for (const name of newNames) {
+                  if (!names.has(name)) await github.rest.issues.addLabels({owner,repo,issue_number:item.number,labels:[name]});
+                }
+                await github.rest.issues.removeLabel({owner,repo,issue_number:item.number,name:oldName}).catch(e => { if (e.status !== 404) throw e; });
+              }
+              for (const dead of obsolete) {
+                if (names.has(dead)) await github.rest.issues.removeLabel({owner,repo,issue_number:item.number,name:dead}).catch(e => { if (e.status !== 404) throw e; });
+              }
+            }
+
+            const labels = await github.paginate(github.rest.issues.listLabelsForRepo,{owner,repo,per_page:100});
+            for (const label of labels) {
+              const name = label.name;
+              if (name.startsWith('red-action:')) {
+                const slug = name.slice('red-action:'.length).toUpperCase();
+                const target = `🔴 ACTION:${slug}`.slice(0,50);
+                const current = await github.rest.issues.getLabel({owner,repo,name:target}).catch(() => null);
+                if (!current) await github.rest.issues.createLabel({owner,repo,name:target,color:'B60205',description:'Workflow vermelho material'});
+                for (const item of items) {
+                  const names = new Set((item.labels || []).map(l => typeof l === 'string' ? l : l.name));
+                  if (!names.has(name)) continue;
+                  await github.rest.issues.addLabels({owner,repo,issue_number:item.number,labels:[target]});
+                  await github.rest.issues.removeLabel({owner,repo,issue_number:item.number,name}).catch(e => { if (e.status !== 404) throw e; });
+                }
+                await github.rest.issues.deleteLabel({owner,repo,name});
+              }
+            }
+
+            for (const oldName of [...aliases.keys(), ...obsolete]) {
+              await github.rest.issues.deleteLabel({owner,repo,name:oldName}).catch(e => { if (e.status !== 404) throw e; });
+            }
+
+            const finalLabels = await github.paginate(github.rest.issues.listLabelsForRepo,{owner,repo,per_page:100});
+            const forbidden = finalLabels.filter(l => /[a-z]/.test(l.name) && !/^SUPERSEDED$/.test(l.name));
+            if (forbidden.length) core.setFailed(`VISIBLE_LOWERCASE_OPERATIONAL_LABELS=${forbidden.map(l=>l.name).join(',')}`);
+            const duplicates = ['assign:chatgpt','assign:claude','assign:codex','assign:grok','assign:supabase-bot','assign:lovable','auto','bug','p0','p1','p2','p3','sentinela','vigia','stale','superseded','needs-codex-review','revisao-humana','🟡 PRECISA-DE-OK','permito-segredo','permito-pivete','PERMITO-PIVETE','📚 DOC'].filter(name => finalLabels.some(l => l.name === name));
+            if (duplicates.length) core.setFailed(`DEAD_OR_DUPLICATE_LABELS=${duplicates.join(',')}`);
+            core.notice(`LABELS_FINAL=${finalLabels.length}; OBSOLETE_AGENT_LABELS=${finalLabels.filter(l=>/LOVABLE/i.test(l.name)).length}`);
