@@ -20,7 +20,7 @@ permissions:
 
 jobs:
   reconcile:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux]
     if: github.repository == 'ServerVpss/CentralDark'
     steps:
       - name: Reconciliar labels operacionais
