@@ -116,6 +116,40 @@ Repetir o mesmo comando sem informação nova é ruído. Dificuldade não reinic
 
 Quando a falha revelar classe mais ampla, dilatar somente o necessário para achar a causa geradora antes de tampar o sintoma.
 
+### 5.1 Triangulação causal — girar o mesmo objeto sem perder o fio
+
+Mudar de ângulo não significa mudar de missão. Quando sintomas, relatos ou soluções locais competem entre si, observar o **mesmo alvo** por perspectivas diferentes até localizar o que permanece causalmente verdadeiro entre elas.
+
+```text
+MESMO_ALVO
+→ CODIGO
+→ RUNTIME
+→ HISTORICO
+→ SEGURANCA
+→ MODELO/REVISOR
+→ ERRO
+→ CONTRAPROVA
+→ COMPARAR DELTAS
+→ INVARIANTE QUE SOBREVIVE AOS ANGULOS
+→ CAUSA GERADORA
+→ MENOR CORRECAO
+```
+
+Regras:
+
+- trocar perspectiva não abre missão paralela;
+- múltiplos ângulos aumentam cobertura, mas evidências correlacionadas não viram independentes só porque vieram de telas ou modelos diferentes;
+- antes de corrigir cinco sintomas separados, testar se uma causa comum os produz;
+- parar de dilatar quando o novo ângulo não acrescentar ganho informacional material;
+- a conclusão boa é a que continua válida quando o ângulo muda, não a que parece convincente em uma única superfície.
+
+```text
+ANGLE_CHANGE != MISSION_CHANGE
+MULTI_VIEW != AUTOMATIC_INDEPENDENT_EVIDENCE
+CAUSE_GENERATOR_BEFORE_SYMPTOM_PATCHING=true
+NO_NEW_INFORMATION → STOP_EXPANSION
+```
+
 ## 6. Consolidação — crescer em capacidade, não em regras
 
 Uma regra nova entra quando resolve um gap real; não fica para sempre só porque já entrou.
