@@ -1,0 +1,160 @@
+import assert from 'node:assert/strict';
+import { resolve } from 'node:path';
+import test from 'node:test';
+
+import { compileArtifactCapability } from '../../../scripts/memory-linker/artifact-capability.mjs';
+import {
+  CAPABILITY_SIGNATURES,
+  OPERATIONAL_SCORE_CONTRACT,
+  compileBehavioralMaterial,
+  renderOperationalScore,
+  selectSkillSignature,
+  validateSignatureRegistry,
+} from './operational-score.mjs';
+
+const HASH = 'a'.repeat(64);
+const DIGEST = '1'.repeat(40);
+
+function event(overrides = {}) {
+  return {
+    schema_version: 1,
+    capsule_id: 'CAPSULA-OPERATIONAL-SCORE',
+    run_id: 'run-score-001',
+    mission_id: 'mission-score-001',
+    iteration: 1,
+    timestamp_utc: '2026-08-15T23:30:00Z',
+    phase: 'OBSERVE',
+    candidate_ref: 'candidate@sha',
+    candidate_digest: DIGEST,
+    baseline_ref: 'baseline',
+    fixture_ref: 'fixture',
+    evaluator_ref: 'judge-read-only',
+    writer: 'sol-writer',
+    event_actor: 'sol-writer',
+    action: 'medir partitura operacional',
+    status: 'UNKNOWN',
+    reason: '',
+    chief_decision: 'PENDING',
+    chief_receipt_ref: '',
+    chief_receipt_hash: '',
+    tests: { total: 1, pass: 0, fail: 1, skipped: 0 },
+    evidence_hash: HASH,
+    failure_observed: false,
+    failure_fingerprint: '',
+    new_failure_class: false,
+    correction_verified: false,
+    retained_after_retest: false,
+    false_green_found: false,
+    regression_found: false,
+    generalization: { pass: 0, total: 0 },
+    retention: { pass: 0, total: 0 },
+    ...overrides,
+  };
+}
+
+test('registry tem ids estáveis e owners físicos no checkout', () => {
+  assert.deepEqual(validateSignatureRegistry({ repoRoot: resolve(import.meta.dirname, '../../..') }), []);
+  assert.equal(CAPABILITY_SIGNATURES.META_LUPA.semantic_role, 'investigacao_e_contraprova');
+  assert.equal(OPERATIONAL_SCORE_CONTRACT.ZERO_DEPLOY, true);
+});
+
+test('A/B/C: significado fica estável e variação visual não altera máquina', () => {
+  const first = renderOperationalScore({ machineEvent: event(), activeCapabilities: ['META_LUPA'], presentationEpoch: 1 });
+  const second = renderOperationalScore({ machineEvent: event(), activeCapabilities: ['META_LUPA'], presentationEpoch: 2 });
+  assert.equal(first.active_capabilities[0].semantic_role, second.active_capabilities[0].semantic_role);
+  assert.deepEqual(first.machine_event, second.machine_event);
+  assert.equal(first.presentation_changes_behavior, false);
+});
+
+test('D/E: assinatura desconhecida falha fechada e não aparece ativa', () => {
+  const result = renderOperationalScore({ machineEvent: event(), activeCapabilities: ['CAPABILITY_INEXISTENTE'] });
+  assert.equal(result.status, 'PARTIAL_SAFE');
+  assert.deepEqual(result.active_capabilities, []);
+  assert.deepEqual(result.rejected_capabilities, ['CAPABILITY_INEXISTENTE']);
+  assert.equal(selectSkillSignature('CAPABILITY_INEXISTENTE').active, false);
+});
+
+test('F: composição preserva ids individuais e não funde semântica', () => {
+  const result = renderOperationalScore({ machineEvent: event(), activeCapabilities: ['META_LUPA', 'METACOGNICAO', 'MINERACAO'] });
+  assert.deepEqual(result.active_capabilities.map((item) => item.capability_id), ['META_LUPA', 'METACOGNICAO', 'MINERACAO']);
+  assert.equal(new Set(result.active_capabilities.map((item) => item.semantic_role)).size, 3);
+});
+
+test('G/H: evento estruturado funciona sem emoji e renderer sem marcador musical', () => {
+  const result = renderOperationalScore({ machineEvent: event(), activeCapabilities: ['META_LUPA'], allowEmoji: false, allowMusic: false });
+  assert.equal(result.authority, 'MACHINE_EVENT');
+  assert.equal(result.machine_event.status, 'UNKNOWN');
+  assert.equal(result.active_capabilities[0].presentation.emoji, '');
+  assert.equal(result.active_capabilities[0].presentation.musical, '');
+  assert.match(result.active_capabilities[0].presentation.label, /^META_LUPA — /);
+});
+
+test('I: música vira somente matéria comportamental candidata, nunca skill direta', () => {
+  const material = compileBehavioralMaterial({ artifactClass: 'MUSIC', observableProperties: ['rhythm', 'pause', 'dissonance', 'resolution'] });
+  assert.equal(material.status, 'CANDIDATE_ONLY');
+  assert.equal(material.direct_skill_write, false);
+  assert.equal(material.promotion_allowed, false);
+  assert.deepEqual(material.behavioral_hypotheses, [
+    'INVESTIGATE_CONFLICTING_EVIDENCE',
+    'OPERATIONAL_CADENCE',
+    'PROVEN_CLOSURE',
+    'WAIT_FOR_NEW_INFORMATION',
+  ]);
+});
+
+test('I complementar: mídia no minerador existente não executa artefato nem promove skill', () => {
+  const contract = compileArtifactCapability({
+    artifactPath: 'observacao.wav',
+    metadata: { transcript: 'ritmo e pausa observados; procedure segura', capabilities: ['cadencia operacional'] },
+    target: 'docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md',
+  });
+  assert.equal(contract.execute_artifact, false);
+  assert.equal(contract.direct_skill_write, false);
+  assert.equal(contract.apply_allowed, false);
+  assert.equal(contract.source_is_authority, false);
+});
+
+test('J: propriedades e capacidades duplicadas são deduplicadas antes da projeção', () => {
+  const material = compileBehavioralMaterial({ observableProperties: ['rhythm', 'RHYTHM', 'tempo'] });
+  assert.deepEqual(material.behavioral_hypotheses, ['OPERATIONAL_CADENCE']);
+  const result = renderOperationalScore({ machineEvent: event(), activeCapabilities: ['MINERACAO', 'MINERACAO'] });
+  assert.equal(result.active_capabilities.length, 1);
+});
+
+test('K/O: cada assinatura aponta owner canônico descobrível por outra sessão', () => {
+  for (const signature of Object.values(CAPABILITY_SIGNATURES)) {
+    assert.ok(signature.owner.length > 0);
+  }
+  const again = selectSkillSignature('CRISTALIZACAO', { eventId: 'outro-evento', sessionId: 'outra-sessao' });
+  assert.equal(again.owner, CAPABILITY_SIGNATURES.CRISTALIZACAO.owner);
+  assert.equal(again.semantic_role, CAPABILITY_SIGNATURES.CRISTALIZACAO.semantic_role);
+});
+
+test('L: erro material continua explicitamente visível e emoji não mascara status', () => {
+  const result = renderOperationalScore({
+    machineEvent: event({ status: 'FAIL', action: 'regressao detectada', failure_observed: true, failure_fingerprint: 'regressao-x' }),
+    activeCapabilities: ['META_LUPA'],
+  });
+  assert.equal(result.machine_event.status, 'FAIL');
+  assert.match(result.human_presentation[0], /FAIL — regressao detectada/);
+});
+
+test('M: projeção declara zero deploy e não contém ação de deploy', () => {
+  const result = renderOperationalScore({ machineEvent: event(), activeCapabilities: ['FIXED_POINT'] });
+  assert.equal(result.zero_deploy, true);
+  assert.equal(OPERATIONAL_SCORE_CONTRACT.ZERO_DEPLOY, true);
+});
+
+test('N: ausência de capacidade nova não gera spam visual', () => {
+  const result = renderOperationalScore({ machineEvent: event(), activeCapabilities: [] });
+  assert.equal(result.status, 'NO_CHANGE');
+  assert.deepEqual(result.human_presentation, []);
+});
+
+test('evento inválido bloqueia antes de qualquer apresentação', () => {
+  const invalid = event({ evidence_hash: 'quebrado' });
+  const result = renderOperationalScore({ machineEvent: invalid, activeCapabilities: ['META_LUPA'] });
+  assert.equal(result.status, 'BLOCKED');
+  assert.equal(result.reason, 'INVALID_MACHINE_EVENT');
+  assert.deepEqual(result.human_presentation, []);
+});
