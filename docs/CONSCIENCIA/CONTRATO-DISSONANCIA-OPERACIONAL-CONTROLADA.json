@@ -1,0 +1,67 @@
+{
+  "title": "Dissonancia Operacional Controlada",
+  "status": "CANONICAL_CONTRACT",
+  "authority": "SEGREDO/CHEFE",
+  "scope": "Repositorio inteiro; operador transversal de falsificacao e self-correction sem contaminacao canonica",
+  "owner": ".agents/skills/meta-lupa/SKILL.md + docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md",
+  "versioning_rule": "Evoluir owners existentes; nao criar motor, identidade, skill ou arquitetura paralela",
+  "invariants": {
+    "CONTROLLED_DISSONANCE": true,
+    "SYNTHETIC_CONFLICT": true,
+    "ISOLATED": true,
+    "REVERSIBLE": true,
+    "OBSERVABLE": true,
+    "FALSIFIABLE": true,
+    "NON_CANONICAL": true,
+    "ZERO_DEPLOY": true,
+    "FAKE_EVIDENCE": false,
+    "SYNTHETIC_CONFLICT_IS_NOT_EVIDENCE": true,
+    "SURVIVING_CONFLICT_IS_NOT_PASS": true,
+    "PROVEN_DELTA_IS_CANDIDATE_CRYSTAL": true,
+    "REGRESSION_PROTECTED_IS_CRYSTAL": true,
+    "CANONICAL_CONTAMINATION": "BLOCK",
+    "NO_INFORMATION_GAIN": "NO_CHANGE",
+    "ONE_WRITER_PER_SCOPE": true,
+    "REALITY_IS_JUDGE": true
+  },
+  "pipeline": [
+    "FIX_CANONICAL_STATE",
+    "CREATE_ISOLATED_COPY_OR_SANDBOX",
+    "INJECT_SYNTHETIC_CONFLICT",
+    "OBSERVE_WITH_META_LUPA",
+    "RUN_DISCRIMINATING_COUNTERPROOF",
+    "CLASSIFY_INFORMATION_GAIN",
+    "DISCARD_SYNTHETIC_PERTURBATION",
+    "IF_PROVEN_DELTA_APPLY_MINIMAL_FIX_TO_EXISTING_OWNER",
+    "RUN_REGRESSION",
+    "VERIFY_CANONICAL_BOUNDARY",
+    "CRYSTALLIZE_ONLY_PROVEN_REUSABLE_DELTA"
+  ],
+  "allowed_targets": [
+    "code",
+    "architecture",
+    "ownership",
+    "proof_chain",
+    "provider_failure",
+    "ordering",
+    "aliases",
+    "operational_belief",
+    "tests",
+    "contracts"
+  ],
+  "forbidden": [
+    "mutate_canonical_as_the_perturbation",
+    "deploy_synthetic_state",
+    "promote_fake_evidence",
+    "declare_pass_only_because_conflict_was_survived",
+    "create_parallel_owner_without_proven_gap",
+    "skip_regression_before_crystallization"
+  ],
+  "verdicts": {
+    "NO_DELTA": "RESISTANCE_EVIDENCE_ONLY",
+    "DELTA_UNPROVEN": "CANDIDATE_ONLY",
+    "DELTA_PROVEN_WITHOUT_REGRESSION": "UNPROVEN_CRYSTAL",
+    "DELTA_PROVEN_AND_REGRESSION_PROTECTED": "CRYSTAL",
+    "CANONICAL_CONTAMINATED": "BLOCK"
+  }
+}
