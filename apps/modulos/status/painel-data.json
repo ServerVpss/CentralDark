@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-15T20:24:27.112Z",
-  "updatedAtBR": "15/08/2026, 17:24:27 BRT",
+  "updatedAt": "2026-08-15T20:38:37.996Z",
+  "updatedAtBR": "15/08/2026, 17:38:37 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "fix(resposta): exigir fechamento completo do significado (#895)",
+    "lastCommit": "feat(hub): Contabo + Gmail no oauth-broker (delta mínimo)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-15T20:38:37.996Z",
+      "titulo": "Push na main · 3cf24b84db974b7921d2ea9877970904660e53f4",
+      "detalhe": "feat(hub): Contabo + Gmail no oauth-broker (delta mínimo)",
+      "area": "Repositório",
+      "sha": "3cf24b8",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-15T20:24:27.112Z",
       "titulo": "Push na main · 783f29b2995a277783f6884f395f8a53514378af",
       "detalhe": "fix(resposta): exigir fechamento completo do significado (#895)",
@@ -988,14 +996,6 @@
       "detalhe": "docs(consciencia): explicitar triangulacao causal por multiplos angulos",
       "area": "Repositório",
       "sha": "af96955",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-15T01:02:30.055Z",
-      "titulo": "Push na main · 228101af84683d26f116598b770073c9870a30cc",
-      "detalhe": "docs(boot): ensinar DNA cognitivo a todo modelo",
-      "area": "Repositório",
-      "sha": "228101a",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-15T20:38:37.996Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 3cf24b84db974b7921d2ea9877970904660e53f4 (3cf24b8)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-15T20:24:27.112Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 783f29b2995a277783f6884f395f8a53514378af (783f29b)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-15T01:10:34.484Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · af969557e816afa8c4f26e6358abfe14fccc4d68 (af96955)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-15T01:02:30.055Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 228101af84683d26f116598b770073c9870a30cc (228101a)",
       "area": "Repositório",
       "status": "sucesso"
     }
