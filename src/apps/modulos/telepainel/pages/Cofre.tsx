@@ -30,6 +30,7 @@ import {
   CheckCircle2,
   XCircle,
   Activity,
+  ServerCog,
 } from "lucide-react";
 import { useTelegramBots } from "@/shared/hooks/useTelegramBots";
 import {
@@ -39,6 +40,7 @@ import {
 } from "@/shared/hooks/useNotificationRoutes";
 import { useNotificationsLog } from "@/shared/hooks/useNotificationsLog";
 import { supabase } from "@/integrations/supabase/hub-client";
+import { ProviderControlPlane } from "@/apps/modulos/telepainel/components/cofre/ProviderControlPlane";
 import { toast } from "sonner";
 
 const ADMIN_CHAT_ID_DEFAULT = "1901426549";
@@ -65,7 +67,7 @@ export default function Cofre() {
         </header>
 
         <Tabs defaultValue="visao" className="w-full">
-          <TabsList className="grid grid-cols-3 md:grid-cols-6 w-full shadow-3d-soft">
+          <TabsList className="grid grid-cols-3 md:grid-cols-7 w-full shadow-3d-soft">
             <TabsTrigger value="visao">
               <Activity className="w-4 h-4 mr-1" />
               Visão
@@ -81,6 +83,10 @@ export default function Cofre() {
             <TabsTrigger value="contas">
               <KeyRound className="w-4 h-4 mr-1" />
               Contas
+            </TabsTrigger>
+            <TabsTrigger value="infra">
+              <ServerCog className="w-4 h-4 mr-1" />
+              Infra
             </TabsTrigger>
             <TabsTrigger value="modulos">
               <Package className="w-4 h-4 mr-1" />
@@ -103,6 +109,9 @@ export default function Cofre() {
           </TabsContent>
           <TabsContent value="contas" className="mt-6">
             <ContasTab />
+          </TabsContent>
+          <TabsContent value="infra" className="mt-6">
+            <ProviderControlPlane />
           </TabsContent>
           <TabsContent value="modulos" className="mt-6">
             <ModulosTab />

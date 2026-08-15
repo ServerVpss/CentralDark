@@ -13,6 +13,7 @@ import { handleSkillsList, handleSkillManifest, handleSkillRaw, handleSkillInsta
 import { correlationMiddleware, withCid } from "./correlation.js";
 import { healthDeep } from "./health-deep.js";
 import { startHubMissionConsumer } from "./hub-mission-consumer.js";
+import { providerAdminBridge } from "./provider-admin-bridge.js";
 import { adminGet, adminLogin, adminLogout, adminRotas, adminTools, adminLogsStream, adminTestarSse, adminBuscarLogs, adminMetricas, adminE2E, adminE2EPublico, bootstrapAdminLogCapture, } from "./admin.js";
 // ─────────────────────── Handlers globais de crash (v2.3) ───────────────────────
 // Captura QUALQUER erro não tratado com stack trace completo antes do PM2 matar.
@@ -155,6 +156,7 @@ app.post("/admin/api/e2e", adminE2E);
 app.get("/admin/api/e2e/publico", adminE2EPublico);
 app.get("/admin/logs/stream", adminLogsStream);
 app.post("/admin/api/testar-sse", adminTestarSse);
+app.post("/admin/provider", providerAdminBridge);
 // Emissão administrativa de chave (autenticada por senha) — usada pelo painel
 // /admin (aba Chaves) e pelo fluxo "Entrar com GitHub" da Ponte MCP.
 app.post("/admin/api/issue-key", handleIssueKey);
