@@ -104,6 +104,8 @@ values
 on conflict (control_id) do nothing;
 
 -- Read-only admin projection. Private tables remain inaccessible to the browser.
+-- Prefer the same public.has_role owner consumed by AdminRoute. The api.user_roles
+-- fallback only exists for a fresh HUB stack where that function is absent.
 create or replace function public.get_private_security_overview()
 returns jsonb
 language plpgsql
@@ -112,6 +114,8 @@ set search_path = pg_catalog
 as $$
 declare
   v_user_id uuid := auth.uid();
+  v_is_admin boolean := false;
+  v_has_role_owner boolean := false;
   v_controls jsonb;
   v_open_incidents bigint;
   v_revoked_sessions bigint;
@@ -121,12 +125,28 @@ begin
     raise exception 'AUTH_REQUIRED' using errcode = '42501';
   end if;
 
-  if not exists (
+  select exists (
     select 1
-      from api.user_roles r
-     where r.user_id = v_user_id
-       and r.role = 'admin'
-  ) then
+      from pg_catalog.pg_proc p
+      join pg_catalog.pg_namespace n on n.oid = p.pronamespace
+     where n.nspname = 'public'
+       and p.proname = 'has_role'
+  ) into v_has_role_owner;
+
+  if v_has_role_owner then
+    execute 'select public.has_role($1, ''admin'')'
+       into v_is_admin
+       using v_user_id;
+  else
+    select exists (
+      select 1
+        from api.user_roles r
+       where r.user_id = v_user_id
+         and r.role = 'admin'
+    ) into v_is_admin;
+  end if;
+
+  if not coalesce(v_is_admin, false) then
     raise exception 'ADMIN_REQUIRED' using errcode = '42501';
   end if;
 
