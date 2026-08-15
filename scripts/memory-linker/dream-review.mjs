@@ -4,10 +4,13 @@ import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { atomicWriteUtf8Sync } from './fs-safe.mjs';
 
 const ALLOWED_KINDS = new Set(['MEMORY', 'SKILL', 'RULE', 'TEST', 'GUARDRAIL', 'CONTRACT']);
+const SOURCE_CLASSES = new Set(['HUMAN_AUTHORITY', 'TOOL_MEASURED', 'INTERNAL', 'EXTERNAL_UNTRUSTED', 'UNDECLARED']);
 const SHA40_RE = /^[a-f0-9]{40}$/i;
 const VALID_STATUSES = new Set(['CANDIDATE', 'NO_NEW_INFORMATION']);
+const VALID_PROMOTION_STATUSES = new Set(['CANDIDATE', 'QUARANTINE']);
 
 function stableStringify(value) {
   if (Array.isArray(value)) return `[${value.map(stableStringify).join(',')}]`;
@@ -23,6 +26,12 @@ function sha256(value) {
 
 function normalizeText(value) {
   return String(value ?? '').replace(/\s+/g, ' ').trim();
+}
+
+function normalizeTimestamp(value) {
+  const text = String(value ?? '').trim();
+  if (!text || Number.isNaN(Date.parse(text))) return null;
+  return new Date(text).toISOString();
 }
 
 export function sanitizeDreamText(value) {
@@ -48,15 +57,24 @@ function sanitizeEvidence(value) {
   return value;
 }
 
+function normalizeSourceClass(value) {
+  const normalized = normalizeText(value).toUpperCase() || 'UNDECLARED';
+  return SOURCE_CLASSES.has(normalized) ? normalized : null;
+}
+
 function normalizeEvent(raw, index, expectedHead) {
   const reject = (reason) => ({ ok: false, rejection: { index, reason } });
   if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return reject('EVENT_NOT_OBJECT');
 
-  const timestamp = String(raw.timestamp ?? '').trim();
-  if (!timestamp || Number.isNaN(Date.parse(timestamp))) return reject('TIMESTAMP_INVALID');
+  const eventTime = normalizeTimestamp(raw.event_time ?? raw.timestamp);
+  if (!eventTime) return reject('EVENT_TIME_INVALID');
+  const observedAt = normalizeTimestamp(raw.observed_at ?? raw.timestamp ?? raw.event_time);
+  if (!observedAt) return reject('OBSERVED_AT_INVALID');
 
   const source = normalizeText(raw.source);
   if (!source) return reject('SOURCE_MISSING');
+  const sourceClass = normalizeSourceClass(raw.source_class);
+  if (!sourceClass) return reject('SOURCE_CLASS_INVALID');
 
   const sessionId = normalizeText(raw.session_id ?? raw.sessionId);
   if (!sessionId) return reject('SESSION_ID_MISSING');
@@ -76,18 +94,25 @@ function normalizeEvent(raw, index, expectedHead) {
 
   const rawKind = normalizeText(raw.kind).toUpperCase();
   const kind = ALLOWED_KINDS.has(rawKind) ? rawKind : 'MEMORY';
-  const target = normalizeText(raw.target || 'UNSPECIFIED');
+  const target = normalizeText(raw.target);
+  if (!target) return reject('TARGET_MISSING');
 
   const sanitizedClaim = sanitizeDreamText(claim);
   const sanitizedDelta = sanitizeDreamText(learningDelta);
   const sanitizedEvidence = raw.evidence.map(sanitizeEvidence);
+  const consumerEvidence = Array.isArray(raw.consumer_evidence)
+    ? raw.consumer_evidence.map(sanitizeEvidence)
+    : [];
   const fingerprint = sha256(`${kind}\u0000${target}\u0000${sanitizedClaim.toLowerCase()}\u0000${sanitizedDelta.toLowerCase()}`);
 
   return {
     ok: true,
     event: {
-      timestamp: new Date(timestamp).toISOString(),
+      timestamp: eventTime,
+      event_time: eventTime,
+      observed_at: observedAt,
       source: sanitizeDreamText(source),
+      source_class: sourceClass,
       session_id: sanitizeDreamText(sessionId),
       head_sha: expectedHead.toLowerCase(),
       kind,
@@ -95,6 +120,7 @@ function normalizeEvent(raw, index, expectedHead) {
       claim: sanitizedClaim,
       learning_delta: sanitizedDelta,
       evidence: sanitizedEvidence,
+      consumer_evidence: consumerEvidence,
       fingerprint,
     },
   };
@@ -133,43 +159,62 @@ export function buildDreamProposal(events, { headSha, parseRejections = [] } = {
       target: event.target,
       claim: event.claim,
       learning_delta: event.learning_delta,
-      first_seen: event.timestamp,
-      last_seen: event.timestamp,
+      first_seen: event.observed_at,
+      last_seen: event.observed_at,
+      first_event_time: event.event_time,
+      last_event_time: event.event_time,
       sources: [],
+      source_classes: [],
       session_ids: [],
       evidence: [],
+      consumer_evidence: [],
       observations: 0,
-      promotion: {
-        status: 'CANDIDATE',
-        direct_canonical_mutation: false,
-        meta_lupa_required: true,
-        same_head_revalidation_required: true,
-        proof_ownership_when_applicable: true,
-      },
     };
 
-    current.first_seen = current.first_seen < event.timestamp ? current.first_seen : event.timestamp;
-    current.last_seen = current.last_seen > event.timestamp ? current.last_seen : event.timestamp;
+    current.first_seen = current.first_seen < event.observed_at ? current.first_seen : event.observed_at;
+    current.last_seen = current.last_seen > event.observed_at ? current.last_seen : event.observed_at;
+    current.first_event_time = current.first_event_time < event.event_time ? current.first_event_time : event.event_time;
+    current.last_event_time = current.last_event_time > event.event_time ? current.last_event_time : event.event_time;
     current.sources.push(event.source);
+    current.source_classes.push(event.source_class);
     current.session_ids.push(event.session_id);
     current.evidence.push(...event.evidence);
+    current.consumer_evidence.push(...event.consumer_evidence);
     current.observations += 1;
     grouped.set(event.fingerprint, current);
   }
 
   const candidates = [...grouped.values()]
-    .map((candidate) => ({
-      ...candidate,
-      sources: [...new Set(candidate.sources)].sort(),
-      session_ids: [...new Set(candidate.session_ids)].sort(),
-      evidence: dedupeStable(candidate.evidence),
-    }))
+    .map((candidate) => {
+      const sourceClasses = [...new Set(candidate.source_classes)].sort();
+      const consumerEvidence = dedupeStable(candidate.consumer_evidence);
+      const quarantineOnly = sourceClasses.length > 0 && sourceClasses.every((value) => value === 'EXTERNAL_UNTRUSTED');
+      return {
+        ...candidate,
+        sources: [...new Set(candidate.sources)].sort(),
+        source_classes: sourceClasses,
+        session_ids: [...new Set(candidate.session_ids)].sort(),
+        evidence: dedupeStable(candidate.evidence),
+        consumer_evidence: consumerEvidence,
+        consumer_reachability: consumerEvidence.length > 0 ? 'EVIDENCED' : 'UNPROVEN',
+        promotion: {
+          status: quarantineOnly ? 'QUARANTINE' : 'CANDIDATE',
+          direct_canonical_mutation: false,
+          meta_lupa_required: true,
+          same_head_revalidation_required: true,
+          proof_ownership_when_applicable: true,
+          independent_confirmation_required: quarantineOnly,
+          consumer_evidence_required_for_capability_claim: true,
+        },
+      };
+    })
     .sort((a, b) => a.fingerprint.localeCompare(b.fingerprint));
 
-  const eventTimes = accepted.map((item) => item.timestamp).sort();
-  const generatedAt = eventTimes.at(-1) ?? '1970-01-01T00:00:00.000Z';
+  const observationTimes = accepted.map((item) => item.observed_at).sort();
+  const generatedAt = observationTimes.at(-1) ?? '1970-01-01T00:00:00.000Z';
   const sourceDigest = sha256(stableStringify({ headSha: headSha.toLowerCase(), accepted, rejected }));
   const status = candidates.length > 0 ? 'CANDIDATE' : 'NO_NEW_INFORMATION';
+  const quarantinedCandidateCount = candidates.filter((candidate) => candidate.promotion.status === 'QUARANTINE').length;
 
   return {
     schema_version: 1,
@@ -182,6 +227,7 @@ export function buildDreamProposal(events, { headSha, parseRejections = [] } = {
     direct_canonical_mutation: false,
     raw_session_mutation: false,
     candidate_count: candidates.length,
+    quarantined_candidate_count: quarantinedCandidateCount,
     accepted_event_count: accepted.length,
     rejected_event_count: rejected.length,
     rejected,
@@ -192,6 +238,9 @@ export function buildDreamProposal(events, { headSha, parseRejections = [] } = {
       meta_lupa_required: true,
       same_head_revalidation_required: true,
       proof_ownership_when_applicable: true,
+      external_untrusted_never_auto_promote: true,
+      source_identity_is_not_authority: true,
+      consumer_evidence_required_for_capability_claim: true,
       canonical_promotion_path: 'INTENT_AUTHORIZED -> AUTO_SQUASH_IF_CLEAN -> main',
     },
   };
@@ -218,19 +267,35 @@ export function validateDreamProposal(proposal) {
     if (promotion.meta_lupa_required !== true) errors.push('PROMOTION_META_LUPA_REQUIRED');
     if (promotion.same_head_revalidation_required !== true) errors.push('PROMOTION_SAME_HEAD_REQUIRED');
     if (promotion.proof_ownership_when_applicable !== true) errors.push('PROMOTION_PROOF_OWNERSHIP_REQUIRED');
+    if (promotion.external_untrusted_never_auto_promote !== true) errors.push('PROMOTION_UNTRUSTED_QUARANTINE_REQUIRED');
+    if (promotion.source_identity_is_not_authority !== true) errors.push('PROMOTION_SOURCE_IDENTITY_NOT_AUTHORITY_REQUIRED');
+    if (promotion.consumer_evidence_required_for_capability_claim !== true) errors.push('PROMOTION_CONSUMER_EVIDENCE_REQUIRED');
   }
 
   for (const candidate of proposal.candidates ?? []) {
     const id = candidate?.id ?? 'UNKNOWN';
-    if (candidate?.promotion?.status !== 'CANDIDATE') errors.push(`CANDIDATE_STATUS_INVALID:${id}`);
+    if (!VALID_PROMOTION_STATUSES.has(candidate?.promotion?.status)) errors.push(`CANDIDATE_STATUS_INVALID:${id}`);
     if (candidate?.promotion?.direct_canonical_mutation !== false) errors.push(`CANDIDATE_DIRECT_MUTATION_FORBIDDEN:${id}`);
     if (candidate?.promotion?.meta_lupa_required !== true) errors.push(`CANDIDATE_META_LUPA_REQUIRED:${id}`);
     if (candidate?.promotion?.same_head_revalidation_required !== true) errors.push(`CANDIDATE_SAME_HEAD_REQUIRED:${id}`);
     if (candidate?.promotion?.proof_ownership_when_applicable !== true) errors.push(`CANDIDATE_PROOF_OWNERSHIP_REQUIRED:${id}`);
+    if (candidate?.promotion?.consumer_evidence_required_for_capability_claim !== true) errors.push(`CANDIDATE_CONSUMER_EVIDENCE_REQUIRED:${id}`);
     if (!Array.isArray(candidate?.evidence) || candidate.evidence.length === 0) errors.push(`CANDIDATE_EVIDENCE_MISSING:${id}`);
+    if (!Array.isArray(candidate?.source_classes) || candidate.source_classes.length === 0) errors.push(`CANDIDATE_SOURCE_CLASS_MISSING:${id}`);
+    if (candidate?.promotion?.status === 'QUARANTINE' && candidate?.promotion?.independent_confirmation_required !== true) {
+      errors.push(`QUARANTINE_CONFIRMATION_REQUIRED:${id}`);
+    }
+    if (candidate?.promotion?.status === 'CANDIDATE' && candidate?.source_classes?.every((value) => value === 'EXTERNAL_UNTRUSTED')) {
+      errors.push(`UNTRUSTED_ONLY_CANNOT_BE_CANDIDATE:${id}`);
+    }
   }
 
   return { ok: errors.length === 0, errors };
+}
+
+export function writeProposalIdempotent(outputPath, proposal) {
+  const serialized = `${JSON.stringify(proposal, null, 2)}\n`;
+  return atomicWriteUtf8Sync(outputPath, serialized, { skipIfUnchanged: true, mode: 0o600 });
 }
 
 function parseArgs(argv) {
@@ -273,9 +338,8 @@ async function main() {
   const validation = validateDreamProposal(proposal);
   if (!validation.ok) throw new Error(`DREAM_PROPOSAL_INVALID=${validation.errors.join(',')}`);
 
-  fs.mkdirSync(path.dirname(outputPath), { recursive: true });
-  fs.writeFileSync(outputPath, `${JSON.stringify(proposal, null, 2)}\n`, 'utf8');
-  console.log(`DREAM_REVIEW=${proposal.status} HEAD_SHA=${proposal.head_sha} CANDIDATES=${proposal.candidate_count} ACCEPTED=${proposal.accepted_event_count} REJECTED=${proposal.rejected_event_count} APPLY_ALLOWED=0`);
+  const writeStatus = writeProposalIdempotent(outputPath, proposal);
+  console.log(`DREAM_REVIEW=${proposal.status} HEAD_SHA=${proposal.head_sha} CANDIDATES=${proposal.candidate_count} ACCEPTED=${proposal.accepted_event_count} REJECTED=${proposal.rejected_event_count} APPLY_ALLOWED=0 WRITE=${writeStatus}`);
 }
 
 const isMain = process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1]);
