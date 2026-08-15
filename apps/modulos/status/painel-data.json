@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-15T18:12:51.096Z",
-  "updatedAtBR": "15/08/2026, 15:12:51 BRT",
+  "updatedAt": "2026-08-15T18:43:10.650Z",
+  "updatedAtBR": "15/08/2026, 15:43:10 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "feat(resposta): tornar trabalho estudo ensino uma escola operacional (#887)",
+    "lastCommit": "feat(soul): cristalizar crédito cooperativo e realidade como árbitro (#888)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-15T18:43:10.650Z",
+      "titulo": "Push na main · 81c2abaa1aba2c8c93cda9deb489599ac08330b0",
+      "detalhe": "feat(soul): cristalizar crédito cooperativo e realidade como árbitro (#888)",
+      "area": "Repositório",
+      "sha": "81c2aba",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-15T18:12:51.096Z",
       "titulo": "Push na main · e0b2cc5191e64f651ef9976df361fa55ffe003cd",
       "detalhe": "feat(resposta): tornar trabalho estudo ensino uma escola operacional (#887)",
@@ -988,14 +996,6 @@
       "detalhe": "fix(governança): canonizar corrida pós-merge e restaurar guard singleton (#845)",
       "area": "Repositório",
       "sha": "2605743",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-14T18:48:31.641Z",
-      "titulo": "Push na main · d2e9881c17e6f6cb241e1f957d26e44d6f3f2fc0",
-      "detalhe": "docs(metacognicao): canonizar antecipação de intenção (#839)",
-      "area": "Repositório",
-      "sha": "d2e9881",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-15T18:43:10.650Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 81c2abaa1aba2c8c93cda9deb489599ac08330b0 (81c2aba)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-15T18:12:51.096Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · e0b2cc5191e64f651ef9976df361fa55ffe003cd (e0b2cc5)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-14T19:35:50.922Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 2605743e57a1ac6b66c10f680c813033dac7eff1 (2605743)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-14T18:48:31.641Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · d2e9881c17e6f6cb241e1f957d26e44d6f3f2fc0 (d2e9881)",
       "area": "Repositório",
       "status": "sucesso"
     }
