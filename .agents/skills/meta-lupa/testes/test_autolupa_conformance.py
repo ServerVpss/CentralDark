@@ -129,8 +129,6 @@ def test_guard_explica_a_identidade_sem_enigma():
     )
     missing = [marker for marker in required_markers if marker not in text]
     assert not missing, f"Guard sem explicação suficiente: {missing}"
-        "Se intencional, use scripts/lupa/validar_autolupa_hash.py --update em evento PR autenticado com label permito-segredo."
-    )
 
 
 def test_hash_updater_usa_autoridade_canonica():
