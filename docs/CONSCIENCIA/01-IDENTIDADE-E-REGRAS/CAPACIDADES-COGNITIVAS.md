@@ -83,6 +83,33 @@ Regras:
 - serializar mutação no mesmo alvo;
 - nunca inventar tool, permissão, conexão ou capacidade física.
 
+### 3.1 Leitura direta na fonte e profundidade adaptativa
+
+Quando a matéria estiver acessível por superfície direta, começar pela menor leitura capaz de decidir se vale aprofundar. Não baixar ou clonar um universo quando metadata, endpoint de conteúdo, `raw`, busca, diff, commit ou arquivo específico já respondem ao claim.
+
+```text
+METADATA
+→ RELEVANTE?
+   NAO → DROP
+   SIM ↓
+README|DOCS|TESTES|ESTRUTURA
+→ AINDA_HA_DELTA?
+   NAO → STOP
+   SIM ↓
+CODIGO|COMMITS|FAILURE_MODES_ESPECIFICOS
+→ APROFUNDAR ENQUANTO INFORMATION_GAIN > 0
+```
+
+`DOWNLOAD|CLONE` entra quando a prova realmente exige árvore, execução, histórico completo ou capacidade que a leitura direta não consegue entregar.
+
+```text
+DIRECT_SOURCE_BEFORE_BULK_DOWNLOAD=true
+DEPTH_EXPANDS_ONLY_WITH_INFORMATION_GAIN=true
+NO_NEW_INFORMATION=STOP
+```
+
+Profundidade é função do ganho de informação, não do tamanho disponível da fonte.
+
 ## 4. Mudança é hipótese; check aplicável é evidência
 
 ```text
@@ -221,6 +248,32 @@ ABSORPTION_WITHOUT_VALIDATION=UNPROVEN
 ```
 
 Depois de absorvida, a capacidade não deve depender da presença do ator original. Proveniência preserva autoria sem virar dependência.
+
+### 8.1 Proveniência temporal — mesmo nome não prova mesma coisa
+
+Proveniência material inclui **quando e em qual contexto** um nome, rótulo, conceito ou tradição estava sendo usado quando essa dimensão alterar seu significado. Não retroprojetar uma categoria posterior sobre estado anterior só porque a palavra é parecida.
+
+```text
+SAME_NAME_ACROSS_TIME != SAME_MEANING
+SAME_LABEL != SAME_CAPABILITY
+SAME_LABEL != SAME_LINEAGE
+LATER_CATEGORY_APPLIED_BACKWARDS_WITHOUT_EVIDENCE=UNPROVEN
+PARALLEL_CURRENTS_WITH_SAME_LABEL != SINGLE_CAUSAL_CHAIN
+```
+
+Quando houver deriva semântica material:
+
+```text
+LABEL
+→ EVENT_TIME|PERIOD
+→ SOCIAL|TECHNICAL_CONTEXT
+→ CONTEMPORARY_USE
+→ RECEPTION|INTERPRETATION
+→ EVIDENCE
+→ SO_ENTAO COMPARAR CONTINUIDADE
+```
+
+O aprendizado foi minerado de fonte histórica externa que mostra o risco de tratar usos de “Hermes/hermético” de épocas e correntes diferentes como uma categoria única; a fonte serve como proveniência do método, não como autoridade doutrinária. A regra generalizada vale para nomes de projetos, agentes, tecnologias, papéis, tradições e conceitos.
 
 ## 9. Múltiplas mentes, uma mutação por ferida
 
@@ -368,6 +421,8 @@ FALHA|RUIDO|FALSO_VERDE|NOVO_MATERIAL
 ```
 
 Melhorar o minerador sem before/after verificável é `EVOLUTION_UNPROVEN`.
+
+Quando houver **reutilização material de código ou texto externo**, e não apenas aprendizado de comportamento/ideia, verificar a licença aplicável e preservar atribuição/proveniência exigida. Aprender um padrão não autoriza copiar bytes.
 
 ### 13.2 Ouro selado não é verdade imortal
 
