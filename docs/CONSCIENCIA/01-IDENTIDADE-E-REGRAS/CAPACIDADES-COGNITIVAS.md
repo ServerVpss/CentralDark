@@ -498,6 +498,54 @@ SOURCE_IS_PROVENANCE_NOT_AUTHORITY=true
 PROVEN_GOLD_WITH_OWNER_AND_CONSUMER=ABSORB_WITHIN_AUTHORIZED_SCOPE
 ```
 
+#### 13.1.1 Fonte persistente de PDF — Biblioteca Élfica
+
+Quando a missão envolver **mineração de PDF, RPG, fantasia, jogos, revistas ou acervo correlato**, a Biblioteca Élfica entra no pool persistente de descoberta do mesmo minerador. Isso não cria crawler paralelo, segunda memória ou nova autoridade: a fonte apenas fica pinada como origem externa reutilizável.
+
+```text
+BIBLIOTECA_ELFICA_SOURCE_PINNED=true
+BIBLIOTECA_ELFICA_URL=https://bibliotecaelfica.org/
+PDF_MINING_SOURCE_POOL+=BIBLIOTECA_ELFICA
+ALWAYS_IN_PDF_SOURCE_POOL=true
+ALWAYS_REGISTERED != ALWAYS_DOWNLOADED
+SOURCE_IS_PROVENANCE_NOT_AUTHORITY=true
+```
+
+Fluxo padrão:
+
+```text
+PDF_MINING
+→ CONSULTAR BIBLIOTECA_ELFICA
+→ ENUMERAR O CATALOGO PUBLICAMENTE DISPONIVEL
+→ NORMALIZAR TITULO|CATEGORIA|URL|TAMANHO|OBSERVED_AT
+→ DEDUPLICAR
+→ CORPUS_COMPLETO_NECESSARIO?
+   NAO → PROFUNDIDADE_ADAPTATIVA POR RELEVANCIA/DELTA
+   SIM → PREFERIR CANAL DE ACERVO EM MASSA PUBLICADO PELA PROPRIA FONTE
+→ PDF ACESSIVEL NO CANAL AUTORIZADO?
+   NAO → PENDING_ACCESS|NO_FETCH
+   SIM → HASH → EXTRAIR → MINERAR → PROVENIENCIA
+→ CAPACIDADE|PADRAO
+→ META_MINERACAO EXISTENTE
+→ CONTRAPROVA
+→ DONO + CONSUMIDOR
+→ ABSORVER SOMENTE DELTA PROVADO
+```
+
+Guardrails de aquisição e retenção:
+
+```text
+NO_AUTH_QUOTA_CAPTCHA_BYPASS=true
+SOURCE_PROVIDED_BULK_CHANNEL_PREFERRED=true
+BULK_DISCOVERY != ENDPOINT_HAMMERING
+PDF_BYTES=EXTERNAL_INPUT
+EXTERNAL_PDF_BYTES_NOT_COMMITTED_TO_CANONICAL_REPO_BY_DEFAULT=true
+PRESERVE_METADATA_HASH_PROVENANCE=true
+MATERIAL_REPUBLICATION_OR_BYTE_REUSE_REQUIRES_RIGHTS_CHECK=true
+```
+
+A intenção de “usar sempre” fica materializada como **fonte padrão em toda mineração de PDF aplicável**, não como download cego em todo turno. Quando for necessário cobrir o acervo completo, usar o mecanismo em massa disponibilizado pela própria origem em vez de contornar limites de download individual. Os bytes externos permanecem fora do Git; o que sobe para a Casa é o delta de conhecimento/capacidade provado, com proveniência.
+
 A igualdade de conclusão não encerra automaticamente a mineração quando a nova fonte tem **maior resolução ou classe epistemológica mais direta**. Primeiro registrar a proveniência; depois perguntar se a fonte expõe estrutura causal que a abstração anterior não capturava.
 
 ```text
