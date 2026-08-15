@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { resolve } from 'node:path';
 import test from 'node:test';
 
+import { buildHouseInventory } from '../hub/scripts/house-inventory-core.mjs';
 import { aggregateCapsule, validateEvent } from './capsula-observavel.mjs';
 import {
   CAPABILITY_SIGNATURES,
@@ -14,6 +15,7 @@ import {
 
 const HASH = 'a'.repeat(64);
 const DIGEST = '1'.repeat(40);
+const REPO_ROOT = resolve(import.meta.dirname, '../../..');
 
 function event(overrides = {}) {
   return {
@@ -68,7 +70,7 @@ function chiefPass(overrides = {}) {
 }
 
 test('registry tem ids estáveis e owners físicos no checkout', () => {
-  assert.deepEqual(validateSignatureRegistry({ repoRoot: resolve(import.meta.dirname, '../../..') }), []);
+  assert.deepEqual(validateSignatureRegistry({ repoRoot: REPO_ROOT }), []);
   assert.equal(CAPABILITY_SIGNATURES.META_LUPA.semantic_role, 'investigacao_e_contraprova');
   assert.equal(CAPABILITY_SIGNATURES.ARTIFACT_TO_CAPABILITY.owner, 'scripts/memory-linker/artifact-capability.mjs');
   assert.equal(OPERATIONAL_SCORE_CONTRACT.ZERO_DEPLOY, true);
@@ -141,11 +143,17 @@ test('J: propriedades e capacidades duplicadas são deduplicadas antes da proje�
   assert.equal(result.active_capabilities.length, 1);
 });
 
-test('K/O: cada assinatura aponta owner canônico descobrível por outra sessão', () => {
+test('K/O: assinatura é herdável por owner físico e Inventário da Casa', () => {
   for (const signature of Object.values(CAPABILITY_SIGNATURES)) assert.ok(signature.owner.length > 0);
   const again = selectSkillSignature('CRISTALIZACAO', { eventId: 'outro-evento', sessionId: 'outra-sessao' });
   assert.equal(again.owner, CAPABILITY_SIGNATURES.CRISTALIZACAO.owner);
   assert.equal(again.semantic_role, CAPABILITY_SIGNATURES.CRISTALIZACAO.semantic_role);
+
+  const inventory = buildHouseInventory(REPO_ROOT, { revision: 'TEST_HEAD' });
+  const indexed = inventory.items.find((item) => item.id === 'capability:operational-score');
+  assert.ok(indexed, 'Partitura precisa ser descoberta pelo Inventário vivo');
+  assert.equal(indexed.owner, 'apps/modulos/status/operational-score.mjs');
+  assert.equal(indexed.proof, 'apps/modulos/status/operational-score.test.mjs');
 });
 
 test('L: erro material continua explicitamente visível e emoji não mascara status', () => {
