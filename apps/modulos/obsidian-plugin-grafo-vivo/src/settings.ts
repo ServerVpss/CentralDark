@@ -1,4 +1,4 @@
-// Configurações do plugin: URL do JSON, refresh, auto-update, semântica local e rollback.
+// Configurações do plugin: URL do JSON, refresh, auto-update e rollback.
 
 import { App, Notice, Platform, PluginSettingTab, Setting } from "obsidian";
 import type GrafoVivoPlugin from "./main";
@@ -15,6 +15,8 @@ export interface GrafoVivoSettings {
 }
 
 export const DEFAULT_SETTINGS: GrafoVivoSettings = {
+  // Padrão 2026: plugin só CONSOME API (mesmo stack Graphify+GrafoVivo)
+  // mode=vivo = PM2 operacional (leve, tempo real). UI full: /api/graph
   urlGrafo: "https://grafo.centralldark.com/api/graph?mode=vivo",
   intervaloSegundos: 15,
   abrirNotaAoClicar: true,
@@ -41,25 +43,33 @@ export class GrafoVivoSettingTab extends PluginSettingTab {
     new Setting(containerEl)
       .setName("URL do grafo")
       .setDesc("Endpoint que retorna o JSON {nodes, edges}.")
-      .addText((txt) => txt.setValue(this.plugin.settings.urlGrafo).onChange(async (v) => {
-        this.plugin.settings.urlGrafo = v.trim();
-        await this.plugin.saveSettings();
-      }));
+      .addText((txt) =>
+        txt
+          .setValue(this.plugin.settings.urlGrafo)
+          .onChange(async (v) => {
+            this.plugin.settings.urlGrafo = v.trim();
+            await this.plugin.saveSettings();
+          }),
+      );
 
     new Setting(containerEl)
       .setName("Intervalo de atualização (segundos)")
       .setDesc("Frequência com que o grafo busca novos dados. Mínimo 5s.")
-      .addText((txt) => txt.setValue(String(this.plugin.settings.intervaloSegundos)).onChange(async (v) => {
-        this.plugin.settings.intervaloSegundos = Math.max(5, parseInt(v, 10) || 30);
-        await this.plugin.saveSettings();
-      }));
+      .addText((txt) =>
+        txt.setValue(String(this.plugin.settings.intervaloSegundos)).onChange(async (v) => {
+          this.plugin.settings.intervaloSegundos = Math.max(5, parseInt(v, 10) || 30);
+          await this.plugin.saveSettings();
+        }),
+      );
 
     new Setting(containerEl)
       .setName("Abrir nota ao clicar no nó")
-      .addToggle((tg) => tg.setValue(this.plugin.settings.abrirNotaAoClicar).onChange(async (v) => {
-        this.plugin.settings.abrirNotaAoClicar = v;
-        await this.plugin.saveSettings();
-      }));
+      .addToggle((tg) =>
+        tg.setValue(this.plugin.settings.abrirNotaAoClicar).onChange(async (v) => {
+          this.plugin.settings.abrirNotaAoClicar = v;
+          await this.plugin.saveSettings();
+        }),
+      );
 
     if (Platform.isDesktopApp) {
       containerEl.createEl("h3", { text: "Semântica local" });
@@ -67,21 +77,25 @@ export class GrafoVivoSettingTab extends PluginSettingTab {
       new Setting(containerEl)
         .setName("Raiz do CentralDark")
         .setDesc("Diretório local do repo que contém infra/mcp/semantic_bridge.py. Vazio = usa CENTRALDARK_REPO_ROOT; não baixa modelo nem usa rede.")
-        .addText((txt) => txt
-          .setPlaceholder("E:/CentralDark ou /caminho/CentralDark")
-          .setValue(this.plugin.settings.semanticRepoRoot)
-          .onChange(async (v) => {
-            this.plugin.settings.semanticRepoRoot = v.trim();
-            await this.plugin.saveSettings();
-          }));
+        .addText((txt) =>
+          txt
+            .setPlaceholder("E:/CentralDark ou /caminho/CentralDark")
+            .setValue(this.plugin.settings.semanticRepoRoot)
+            .onChange(async (v) => {
+              this.plugin.settings.semanticRepoRoot = v.trim();
+              await this.plugin.saveSettings();
+            }),
+        );
 
       new Setting(containerEl)
         .setName("Python semântico")
         .setDesc("Executável Python local. Vazio = SEMANTIC_PYTHON ou python/python3.")
-        .addText((txt) => txt.setValue(this.plugin.settings.semanticPython).onChange(async (v) => {
-          this.plugin.settings.semanticPython = v.trim();
-          await this.plugin.saveSettings();
-        }));
+        .addText((txt) =>
+          txt.setValue(this.plugin.settings.semanticPython).onChange(async (v) => {
+            this.plugin.settings.semanticPython = v.trim();
+            await this.plugin.saveSettings();
+          }),
+        );
     }
 
     containerEl.createEl("h3", { text: "🚀 Auto-atualização" });
@@ -89,37 +103,46 @@ export class GrafoVivoSettingTab extends PluginSettingTab {
     new Setting(containerEl)
       .setName("Auto-atualizar plugin")
       .setDesc("Mostra o changelog e pergunta antes de atualizar.")
-      .addToggle((tg) => tg.setValue(this.plugin.settings.autoUpdateAtivo).onChange(async (v) => {
-        this.plugin.settings.autoUpdateAtivo = v;
-        await this.plugin.saveSettings();
-        if (v) this.plugin.autoUpdater.iniciar();
-        else this.plugin.autoUpdater.parar();
-      }));
+      .addToggle((tg) =>
+        tg.setValue(this.plugin.settings.autoUpdateAtivo).onChange(async (v) => {
+          this.plugin.settings.autoUpdateAtivo = v;
+          await this.plugin.saveSettings();
+          if (v) this.plugin.autoUpdater.iniciar();
+          else this.plugin.autoUpdater.parar();
+        }),
+      );
 
     new Setting(containerEl)
       .setName("URL do endpoint de release")
-      .addText((txt) => txt.setValue(this.plugin.settings.autoUpdateBaseUrl).onChange(async (v) => {
-        this.plugin.settings.autoUpdateBaseUrl = v.trim();
-        await this.plugin.saveSettings();
-      }));
+      .addText((txt) =>
+        txt.setValue(this.plugin.settings.autoUpdateBaseUrl).onChange(async (v) => {
+          this.plugin.settings.autoUpdateBaseUrl = v.trim();
+          await this.plugin.saveSettings();
+        }),
+      );
 
     new Setting(containerEl)
       .setName("Intervalo de checagem (minutos)")
       .setDesc("Mínimo 5min.")
-      .addText((txt) => txt.setValue(String(this.plugin.settings.autoUpdateIntervaloMinutos)).onChange(async (v) => {
-        this.plugin.settings.autoUpdateIntervaloMinutos = Math.max(5, parseInt(v, 10) || 10);
-        await this.plugin.saveSettings();
-      }));
+      .addText((txt) =>
+        txt.setValue(String(this.plugin.settings.autoUpdateIntervaloMinutos)).onChange(async (v) => {
+          this.plugin.settings.autoUpdateIntervaloMinutos = Math.max(5, parseInt(v, 10) || 10);
+          await this.plugin.saveSettings();
+        }),
+      );
 
     new Setting(containerEl)
       .setName("Checar atualização agora")
       .setDesc(`Versão instalada: ${this.plugin.manifest.version}`)
-      .addButton((btn) => btn.setButtonText("Checar agora").setCta().onClick(async () => {
-        new Notice("🔎 Checando atualização...");
-        await this.plugin.autoUpdater.checarComPrompt();
-      }));
+      .addButton((btn) =>
+        btn.setButtonText("Checar agora").setCta().onClick(async () => {
+          new Notice("🔎 Checando atualização...");
+          await this.plugin.autoUpdater.checarComPrompt();
+        }),
+      );
 
     containerEl.createEl("h3", { text: "↩️ Rollback" });
+
     const areaRollback = containerEl.createDiv();
     this.renderizarRollback(areaRollback);
   }
