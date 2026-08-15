@@ -316,6 +316,60 @@ CLAIM|NARRATIVE|FRAMEWORK|LEGACY|VENDOR|MODEL_OUTPUT
 
 Essas regras valem para arqueologia de repo, aliases, migração de sistemas, frameworks, modelos, providers, narrativas de produto e qualquer cadeia de autoridade. A fonte preserva proveniência; a capacidade generalizada fica independente dela.
 
+### 8.3 Exposição mediada, efeito residual e reutilização contida — padrão Medusa
+
+A página de Medusa foi usada como **mapa de navegação**, e o núcleo foi contraverificado em fonte antiga (Pseudo-Apolodoro) e em evidência/curadoria do Metropolitan Museum of Art. A mitologia é proveniência da descoberta, não autoridade técnica da Casa.
+
+No relato de Perseu, a interação perigosa é evitada por **observação mediada** no escudo; depois da decapitação, a cabeça continua capaz de produzir o mesmo efeito e precisa de contenção; por fim, a capacidade perigosa é incorporada à égide de Atena como instrumento defensivo. A generalização operacional é:
+
+```text
+DIRECT_EXPOSURE_CAN_BE_THE_HAZARD=true
+DIRECT_EXPOSURE_RISK
+→ MEDIATED_OBSERVATION
+→ PRESERVE_RAW_SOURCE
+→ INSPECT_DERIVED_VIEW
+→ VERIFY_WHAT_THE_MEDIATION_LOSES
+
+SOURCE_DISABLED != DERIVED_EFFECT_NEUTRALIZED
+DETACHED_ARTIFACT_CAN_RETAIN_EFFECT_ON_CONSUMER
+RESIDUAL_CAPABILITY_REQUIRES_CONTAINMENT
+
+DANGEROUS_CAPABILITY
++ CONTAINMENT
++ EXPLICIT_OWNER
++ BOUNDED_PURPOSE
++ AUTHORIZATION
++ COUNTERPROOF
+→ DEFENSIVE_REUSE_CANDIDATE
+
+THREAT_REPURPOSED != TRUSTED
+```
+
+A mediação reduz exposição; não autoriza afirmar equivalência total entre representação e fonte:
+
+```text
+MEDIATED_VIEW != FULL_SOURCE_EQUIVALENCE
+SAFE_TO_INSPECT != SAFE_TO_EXECUTE
+SOURCE_REMOVED != ARTIFACT_HARMLESS
+```
+
+Aplicação na Casa:
+
+```text
+UNTRUSTED_TEXT|PROMPT|LOG|FILE|MODEL_OUTPUT|PAYLOAD|SAMPLE
+→ A INTERPRETACAO DIRETA PODE ALTERAR ESTADO OU AMPLIAR RISCO?
+   NAO → LEITURA NORMAL
+   SIM → QUOTE|PARSE|SANITIZE|SANDBOX|PROXY|DERIVED_VIEW
+→ PRESERVAR PROVENIENCIA
+→ CONTER ARTEFATO RESIDUAL
+→ EXTRAIR CAPACIDADE/INFORMACAO SEM HERDAR AUTORIDADE
+→ REUTILIZAR SOMENTE SOB DONO + LIMITE + PROVA
+```
+
+Texto também é artefato: um texto separado da fonte pode continuar alterando o comportamento de quem o consome. Portanto `PASSIVE_STORAGE` não implica `PASSIVE_EFFECT_ON_INTERPRETER`. A classe de prova do texto continua subordinada ao claim: contrato textual pode ser provado pelo artefato textual; efeito de runtime exige observação de runtime.
+
+O objetivo técnico não é “temer a fonte”; é escolher **o canal de observação que preserva informação sem entregar ao material mais autoridade ou superfície do que precisa**.
+
 ## 9. Múltiplas mentes, uma mutação por ferida
 
 ```text
