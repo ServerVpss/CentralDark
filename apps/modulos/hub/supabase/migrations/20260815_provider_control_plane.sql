@@ -45,7 +45,8 @@ alter default privileges in schema centraldark_private revoke all on tables from
 alter default privileges in schema centraldark_private revoke all on sequences from public, anon, authenticated;
 
 -- Reserva idempotente de uma operação externa. Service-role only.
--- A mesma key + mesmo fingerprint retorna a reserva existente; fingerprint diferente falha.
+-- A mesma key + mesmo fingerprint só pode atravessar a rede UMA vez:
+-- SUCCEEDED reapresenta o receipt; PENDING/FAILED/UNKNOWN exigem nova key e reconciliação explícita.
 create or replace function public.reserve_provider_operation(
   p_idempotency_key uuid,
   p_provider text,
@@ -62,6 +63,7 @@ set search_path = pg_catalog
 as $$
 declare
   v_row centraldark_private.provider_operation_receipt%rowtype;
+  v_inserted integer := 0;
 begin
   if p_idempotency_key is null then raise exception 'IDEMPOTENCY_KEY_REQUIRED'; end if;
   if p_provider not in ('cloudflare','contabo','supabase') then raise exception 'PROVIDER_INVALID'; end if;
@@ -79,6 +81,7 @@ begin
     'PENDING', p_amount, p_currency, now(), now()
   )
   on conflict (idempotency_key) do nothing;
+  get diagnostics v_inserted = row_count;
 
   select * into v_row
     from centraldark_private.provider_operation_receipt
@@ -92,6 +95,9 @@ begin
   if v_row.provider <> p_provider or v_row.capability <> p_capability then
     raise exception 'IDEMPOTENCY_KEY_SCOPE_MISMATCH';
   end if;
+  if v_inserted = 0 and v_row.state <> 'SUCCEEDED' then
+    raise exception 'IDEMPOTENCY_OPERATION_ALREADY_RESERVED';
+  end if;
 
   return jsonb_build_object(
     'idempotency_key', v_row.idempotency_key,
@@ -101,7 +107,8 @@ begin
     'request_fingerprint', v_row.request_fingerprint,
     'started_at', v_row.started_at,
     'finished_at', v_row.finished_at,
-    'provider_status', v_row.provider_status
+    'provider_status', v_row.provider_status,
+    'new_reservation', v_inserted = 1
   );
 end;
 $$;
