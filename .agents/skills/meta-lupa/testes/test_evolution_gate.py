@@ -507,6 +507,24 @@ def test_evaluated_candidate_that_pareto_dominates_selected_blocks_crystal():
     assert "CRYSTAL_PARETO_DOMINATED_BY_ALT_0" in result["errors"]
 
 
+def test_crystal_contract_remains_canonical_in_metacognition_owner():
+    repo_root = Path(__file__).resolve().parents[4]
+    owner = repo_root / "docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md"
+    content = owner.read_text(encoding="utf-8")
+    required_markers = (
+        "META_CRISTAL_IS_NEW_LENS=false",
+        "CRISTAL_IS_CROSS_META_OUTPUT=true",
+        "FIXED_POINT != IRREDUCIBLE",
+        "IRREDUCIBILITY_SCOPE=DECLARED_RESIDUE_SET",
+        "GLOBAL_POWERSET_MINIMALITY=UNPROVEN_UNLESS_EXHAUSTIVE",
+        "CONFIDENCE_METHOD=PAIRED_BOOTSTRAP",
+        "PARETO_SCOPE=EVALUATED_CANDIDATE_SET",
+        "CRISTAL_CLAIM_DOES_NOT_UPGRADE_BASE_FAILURE=true",
+    )
+    for marker in required_markers:
+        assert marker in content, f"CRYSTAL_CANONICAL_MARKER_MISSING={marker}"
+
+
 def test_pdf_mining_keeps_biblioteca_elfica_pinned_in_canonical_scaffold():
     repo_root = Path(__file__).resolve().parents[4]
     owner = repo_root / "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md"
