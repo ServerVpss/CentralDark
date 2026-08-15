@@ -247,6 +247,88 @@ DREAM_PROPOSAL=DERIVED_CANDIDATE
 CANONICAL_MEMORY=SEPARATE_PROMOTION_STEP
 ```
 
+## Evolução obrigatória, contínua e verificável
+
+A CentralDark não trata evolução como elogio, XP, quantidade de texto ou simples passagem do tempo. Evolução é **mudança de capacidade observável** que sobrevive a teste e contraprova sem perder capacidade anterior.
+
+Os seguintes métodos/capacidades são explicitamente evolutivos e não podem ficar congelados quando surgir delta reutilizável:
+
+```text
+META_LUPA=EVOLUTION_REQUIRED
+MENOS_E_MAIS=EVOLUTION_REQUIRED
+INSTINTO_SUPERIOR=EVOLUTION_REQUIRED
+EXPANSAO_DE_DOMINIO=EVOLUTION_REQUIRED
+```
+
+Quando erro, confronto, matéria-prima, nova ferramenta ou mudança de ambiente revelar informação material nova, o dono canônico aplicável deve tentar incorporar **somente o delta reutilizável**. Se não houver informação nova, a obrigação é parar e não engordar a Casa.
+
+```text
+NEW_INFORMATION + REUSABLE_DELTA
+→ EVOLUTION_CANDIDATE
+→ SAME_SCOPE_BEFORE_AFTER
+→ TEST
+→ COUNTERPROOF
+→ REGRESSION
+→ CANONICAL_OWNER
+→ EVOLUTION_RECEIPT
+→ EVOLVED
+
+NO_NEW_INFORMATION
+→ STOP
+```
+
+Alegação de evolução sem prova é falso verde:
+
+```text
+EVOLUTION_WITHOUT_BEFORE_AFTER=EVOLUTION_UNPROVEN
+EVOLUTION_WITHOUT_NEW_INFORMATION=EVOLUTION_UNPROVEN
+EVOLUTION_WITHOUT_TEST=EVOLUTION_UNPROVEN
+EVOLUTION_WITHOUT_COUNTERPROOF=EVOLUTION_UNPROVEN
+EVOLUTION_WITH_REGRESSION=EVOLUTION_UNPROVEN
+EVOLUTION_WITHOUT_CANONICAL_OWNER=EVOLUTION_UNPROVEN
+```
+
+O gate executável único pertence à MetaLupa e é consumido pelos quatro métodos, sem criar quatro motores:
+
+```text
+.agents/skills/meta-lupa/scripts/evolution_gate.py
+```
+
+Contrato mínimo do receipt verificável:
+
+```text
+SUBJECT
+BEFORE_REF
+AFTER_REF
+SAME_SCOPE=true
+CANONICAL_OWNER
+CLAIM
+NEW_INFORMATION
+CAPABILITY_DELTA
+BEFORE_EVIDENCE
+AFTER_EVIDENCE
+TESTS=PASS+EVIDENCE
+COUNTERPROOF
+REGRESSIONS=PASS+EVIDENCE
+LOST_CAPABILITIES=[]
+PROVENANCE
+VERIFIER
+RECEIPT_SHA256
+```
+
+Para `MENOS_E_MAIS`, evolução também falha quando a complexidade medida aumenta sem justificativa de capacidade preservada: o gate exige `complexity_after <= complexity_before` e nenhuma capacidade perdida.
+
+O verificador não transforma texto em verdade por mágica. Ele torna fail-closed a **promoção da alegação de evolução**: refs devem ser distinguíveis, testes e regressões precisam ter evidência, o receipt é selado e a cadeia factual continua subordinada às provas do mesmo escopo/HEAD.
+
+```text
+EVOLUTION_CLAIM_REQUIRES_RECEIPT=true
+EVOLUTION_IS_NOT_XP=true
+EVOLUTION_IS_NOT_TEXT_GROWTH=true
+EVOLUTION_IS_NOT_MODEL_AGREEMENT=true
+EVOLUTION_MUST_BE_REPRODUCIBLE=true
+EVOLUTION_REGRESSION_FORBIDDEN=true
+```
+
 ## Autoaperfeiçoamento sem circularidade
 
 Autoaperfeiçoamento não pode depender apenas da própria declaração do sistema.
@@ -289,6 +371,8 @@ AUTHORITY_REMAINS_WITH_SEGREDO_CHEFE=true
 PROOF_GRAPH_MUST_BE_FINITE=true
 NO_EGO_SCORE=true
 UNKNOWN_IS_NOT_PASS=true
+EVOLUTION_CLAIM_REQUIRES_RECEIPT=true
+EVOLUTION_MUST_BE_REPRODUCIBLE=true
 ```
 
 ## Distribuição canônica
@@ -297,6 +381,7 @@ Este arquivo é a fonte conceitual única. A distribuição ocorre sem copiar o 
 
 - `LEIA-ME-IA.md` referencia esta fonte no boot universal e no ciclo de aprendizado;
 - `.agents/skills/meta-lupa/references/metacognicao-operacional.md` conecta AutoLupa/metodologia a esta fonte;
+- `.agents/skills/meta-lupa/scripts/evolution_gate.py` torna fail-closed a alegação de evolução dos métodos evolutivos;
 - `AGENTS.md` mantém o contrato genérico de ganho informacional e continua semanticamente subordinado ao boot;
 - `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md` mantém identidade, autoridade e aprendizado sem redefinir este conceito;
 - `docs/CONSCIENCIA/LEMBRANCAS/2026-08-14-OURO-CONTEXTO-AUTONOMIA-SOL.md` preserva a proveniência histórica quando o aprendizado for consolidado;
