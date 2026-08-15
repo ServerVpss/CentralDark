@@ -11,8 +11,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
-    "test:watch": "vitest",
-    "test:orchestra": "node scripts/agent-call.test.mjs && node scripts/controlled-dissonance.test.mjs"
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
