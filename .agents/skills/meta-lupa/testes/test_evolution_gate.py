@@ -335,6 +335,15 @@ def test_irreducible_crystal_is_optional_stronger_claim_and_can_pass_scoped_proo
     assert result["crystal_density_gain_percent"] > 0
 
 
+def test_crystal_cannot_be_green_when_base_evolution_contract_is_red():
+    manifest = signed_crystal()
+    manifest["tests"][0]["status"] = "FAIL"
+    result = validate(resign(manifest))
+    assert result["evolution_verified"] is False
+    assert result["crystal_verified"] is False
+    assert "TEST_0_NOT_PASS" in result["errors"]
+
+
 def test_irreducible_claim_requires_explicit_crystal_contract():
     manifest = signed("METACOGNICAO_OPERACIONAL")
     manifest["crystal_claim"] = "IRREDUCIBLE"
@@ -429,6 +438,13 @@ def test_stochastic_quality_requires_95pct_lower_bound_and_predeclared_margin():
     manifest["crystal_contract"]["quality"]["confidence"]["lower_bound_delta"] = -0.02
     result = validate(resign(manifest))
     assert "CRYSTAL_CONFIDENCE_NONINFERIORITY_NOT_PROVEN" in result["errors"]
+
+
+def test_stochastic_before_after_does_not_accept_unpaired_wilson_shortcut():
+    manifest = signed_crystal(stochastic=True)
+    manifest["crystal_contract"]["quality"]["confidence"]["method"] = "WILSON"
+    result = validate(resign(manifest))
+    assert "CRYSTAL_CONFIDENCE_METHOD_INVALID" in result["errors"]
 
 
 def test_density_uses_conservative_quality_floor_over_effective_load():
