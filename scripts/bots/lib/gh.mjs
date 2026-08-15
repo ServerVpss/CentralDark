@@ -10,6 +10,46 @@ if (!TOKEN) {
   process.exit(1);
 }
 
+const LABEL_ALIASES = new Map([
+  ["assign:chatgpt", ["🧠 AGENTE-CHATGPT"]],
+  ["assign:claude", ["🧠 AGENTE-CLAUDE"]],
+  ["assign:codex", ["🧠 AGENTE-CODEX"]],
+  ["assign:grok", ["🧠 AGENTE-GROK"]],
+  ["assign:supabase-bot", ["🧠 AGENTE-SUPABASE"]],
+  ["assign:lovable", ["🎨 FRONTEND"]],
+  ["auto", ["🤖 AUTO"]],
+  ["bug", ["🐞 BUG"]],
+  ["p0", ["🔴 PRIORIDADE-ALTA"]],
+  ["p1", ["🔴 PRIORIDADE-ALTA"]],
+  ["p2", ["🟡 PRIORIDADE-MÉDIA"]],
+  ["p3", ["🟢 PRIORIDADE-BAIXA"]],
+  ["severidade:p0", ["🔴 PRIORIDADE-ALTA"]],
+  ["severidade:p1", ["🔴 PRIORIDADE-ALTA"]],
+  ["severidade:p2", ["🟡 PRIORIDADE-MÉDIA"]],
+  ["severidade:p3", ["🟢 PRIORIDADE-BAIXA"]],
+  ["sentinela", ["🛡️ SENTINELA"]],
+  ["vigia", ["🛡️ SENTINELA"]],
+  ["revisao-humana", ["🆘 AJUDA-NECESSÁRIA"]],
+  ["needs-codex-review", ["🟡 IA-PRECISA-REVISAR", "🧠 AGENTE-CODEX"]],
+  ["permito-segredo", ["👑 PERMITO-SEGREDO"]],
+  ["permito-pivete", []],
+  ["stale", ["🧊 PARADO"]],
+  ["superseded", ["SUPERSEDED"]],
+]);
+
+export function canonicalLabels(labels = []) {
+  const out = [];
+  for (const raw of labels || []) {
+    const name = String(raw?.name || raw || "").trim();
+    if (!name) continue;
+    const mapped = LABEL_ALIASES.get(name);
+    if (mapped) out.push(...mapped);
+    else if (/^assign:/i.test(name)) continue;
+    else out.push(name);
+  }
+  return [...new Set(out)];
+}
+
 async function req(method, path, body) {
   const res = await fetch(`${API}${path}`, {
     method,
@@ -39,14 +79,14 @@ export async function findBotIssue(marker) {
 }
 
 export async function createIssue({ title, body, labels }) {
-  return req("POST", `/repos/${REPO}/issues`, { title, body, labels });
+  return req("POST", `/repos/${REPO}/issues`, { title, body, labels: canonicalLabels(labels) });
 }
 
 export async function updateIssue(number, { title, body, labels, state }) {
   const payload = {};
   if (title) payload.title = title;
   if (body) payload.body = body;
-  if (labels) payload.labels = labels;
+  if (labels) payload.labels = canonicalLabels(labels);
   if (state) payload.state = state;
   return req("PATCH", `/repos/${REPO}/issues/${number}`, payload);
 }
