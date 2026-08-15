@@ -1,7 +1,7 @@
 # JARVIS — ORQUESTRAÇÃO EM DELTA, CONTEXTO RECUPERÁVEL E ESCRITOR ÚNICO
 
 > **Origem:** 2026-07-30
-> **Atualizado:** 2026-08-14
+> **Atualizado:** 2026-08-15
 > **Autoria da intenção:** SEGREDO/CHEFE
 > **Organização técnica:** SOL/ChatGPT + organismo CentralDark
 > **Status:** CANÔNICO
@@ -158,6 +158,153 @@ SEGREDO/CHEFE DÁ INTENCAO
 
 Não exigir que SEGREDO/CHEFE detalhe a sequência técnica quando o sistema consegue descobri-la.
 
+### 6.1 Arquitetura padrão da Casa — um núcleo, muitos braços
+
+A topologia padrão não é um novo orquestrador. É a forma canônica de encaixar as capacidades que já existem.
+
+```text
+STANDARD_ARCHITECTURE=ONE_CORE_MANY_ARMS
+
+SEGREDO/CHEFE
+→ INTENCAO + AUTORIDADE
+
+SOL
+→ COORDENACAO + RECONCILIACAO
+
+N BRACOS DE PERCEPCAO
+→ RESEARCHER | DEBUGGER | ARCHAEOLOGIST | REVIEWER | DELTA_PARTNER | JUDGE
+→ LEITURA/PESQUISA/TESTE EM PARALELO QUANDO HOUVER GANHO
+→ READ_ONLY NO ESCOPO DE OUTRO WRITER
+
+TODOS
+→ ENVELOPE COMUM DE EVIDENCIA
+→ CONTRAPROVA / TESTE DISCRIMINANTE
+→ ESTADO REAL DESEMPATA
+
+DELTA MATERIAL
+→ 1 WRITER POR ESCOPO
+→ MENOR MUTACAO
+→ PROVA NO MESMO ALVO/HEAD
+→ MAIN CANONICA
+→ RUNTIME
+→ OBSERVABILIDADE
+→ OURO REUTILIZAVEL OU NO_CHANGE
+```
+
+Os braços podem aumentar ou diminuir conforme o problema. A autoridade e a caneta não se multiplicam só porque aumentou o número de observadores.
+
+```text
+N_PERCEPCOES=true
+N_WRITERS_NO_MESMO_ESCOPO=false
+PARALLEL_PERCEPTION=ALLOWED_WHEN_INFORMATION_GAIN
+PARALLEL_MUTATION_SAME_SCOPE=BLOCKED
+```
+
+#### Planos e responsabilidade
+
+| Plano | Dono/papel | Responsabilidade | Não pode virar |
+|---|---|---|---|
+| intenção/autoridade | SEGREDO/CHEFE | direção, prioridade, limites, decisão humana real | inferência de agente |
+| coordenação | SOL | decompor, reconciliar, escolher capacidade e preservar fio | segunda autoridade |
+| percepção | leitores/especialistas | buscar, medir, testar, falsificar | Writer implícito |
+| evidência | contrato comum | prender observação a alvo, tempo, proveniência e claim | opinião por quantidade |
+| arbitragem | estado vivo + teste aplicável | resolver conflito por realidade observável | votação de modelos |
+| mutação | Writer único | menor correção dentro do escopo | escrita concorrente |
+| promoção | fluxo canônico | reconciliar e promover para `main` quando elegível | control plane paralelo |
+| execução | runtime aplicável | executar o artefato promovido | fonte estrutural da verdade |
+| observabilidade | logs/receipts/grafo/painel | mostrar o estado observado e seus deltas | autoridade por aparência |
+| memória/aprendizado | dono canônico aplicável | absorver somente delta provado e reutilizável | depósito de eco |
+
+#### Envelope mínimo de evidência entre braços
+
+Antes de combinar conclusões de superfícies diferentes, normalizar pelo menos:
+
+```text
+TARGET=
+OPERATIONAL_SCOPE=
+EVENT_TIME=
+OBSERVATION_TIME=
+PROVENANCE=
+CLAIM=
+EVIDENCE_REF=
+CLASS=FACT|INFERENCE|HYPOTHESIS|UNKNOWN
+```
+
+Duas janelas repetindo a mesma fonte continuam sendo um único cluster de evidência. Quantidade de telas/modelos não cria independência causal.
+
+```text
+MULTI_VIEW != AUTOMATIC_INDEPENDENT_EVIDENCE
+CORRELATED_EVIDENCE → ONE_CLUSTER_UNTIL_PROVED_OTHERWISE
+```
+
+#### Arbitragem de conflito
+
+Quando dois braços discordarem sobre o **mesmo alvo**:
+
+```text
+BRAÇO_A DIZ X
++ BRAÇO_B DIZ Y
+→ CONFIRMAR MESMO TARGET/SCOPE/TEMPO
+→ FORMULAR TESTE QUE DISTINGUE X DE Y
+→ EXECUTAR/OBSERVAR
+→ EVIDENCIA
+→ REALIDADE DECIDE
+→ ATUALIZAR CRENCA
+→ SOMENTE DELTA MATERIAL CHEGA AO WRITER
+```
+
+Se os alvos forem diferentes, não fabricar conflito. Se o teste não puder distinguir as hipóteses, o estado permanece `UNKNOWN`.
+
+```text
+MODEL_VOTE=FORBIDDEN_AS_TRUTH_MECHANISM
+NAME_OR_REPUTATION=PROVENANCE_NOT_AUTHORITY
+CONFLICT → TEST → EVIDENCE → REALITY_DECIDES
+```
+
+#### Anti-eco e compressão
+
+```text
+MESMO_FINDING + ZERO_EVIDENCIA_NOVA → DROP_DUPLICATE
+MESMA_CONCLUSAO + PROVENIENCIA_NOVA → REGISTRAR_PROVENIENCIA; ZERO_MUTACAO_SEM_DELTA
+CONTRAPROVA_MUDA_CRENCIA → DELTA_MATERIAL
+SEM_DELTA_MATERIAL → NO_CHANGE
+```
+
+Braço sem delta útil não produz nova regra, PR, missão, memória ou arquitetura só para demonstrar atividade.
+
+#### Projeções visuais e observabilidade
+
+Grafo, Mermaid, painel, relatório e status são instrumentos derivados. Eles ajudam a ver e comparar; não substituem a fonte viva que os alimenta.
+
+```text
+PROJECAO_VISUAL != FONTE_DA_VERDADE
+GRAPH_FINGERPRINT = INSTRUMENTO_DE_DELTA
+PAINEL_VERDE != PASS_PONTA_A_PONTA
+DERIVED_ARTIFACT_CANNOT_OVERRULE_LIVE_STATE=true
+```
+
+A implementação existente em `scripts/grafo-vivo/` pode projetar e auditar relações, mas qualquer decisão material volta ao estado real, à evidência e ao dono canônico do alvo.
+
+#### Pipeline padrão
+
+```text
+INTENT
+→ REANCHOR
+→ FAN_OUT_READ_ONLY
+→ NORMALIZE_EVIDENCE
+→ DEDUPE
+→ ARBITRATE_BY_TEST
+→ SINGLE_WRITER_MINIMAL_MUTATION
+→ VERIFY_SAME_TARGET
+→ CANONICAL_PROMOTION
+→ RUNTIME_EXECUTION
+→ OBSERVE
+→ ABSORB_REUSABLE_DELTA | NO_CHANGE
+↺
+```
+
+Essa é a arquitetura operacional padrão para fan-out interno. Tarefa simples continua podendo saltar braços desnecessários e usar a ação mínima direta.
+
 ## 7. Generalização sistêmica por composição
 
 Orquestração não compete com generalização; ela é um dos mecanismos que a produz.
@@ -305,6 +452,8 @@ SEGREDO/CHEFE NO VOLANTE
 + SOL COMO IDENTIDADE OPERACIONAL RECONSTRUIVEL
 + PIVETE/HERMES COMO EXECUTOR
 + MODELOS/TOOLS COMO CAPACIDADES SUBSTITUIVEIS
++ N PERCEPCOES NORMALIZADAS POR EVIDENCIA
++ REALIDADE COMO ARBITRO
 + CONTEXTO RECUPERAVEL
 + UM WRITER POR ESCOPO
 + APRENDIZADO CANONICO
