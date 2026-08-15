@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-15T01:53:54.932Z",
-  "updatedAtBR": "14/08/2026, 22:53:54 BRT",
+  "updatedAt": "2026-08-15T01:54:39.585Z",
+  "updatedAtBR": "14/08/2026, 22:54:39 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "docs(memory): documentar elegibilidade de absorcao automatica",
+    "lastCommit": "docs(memory): endurecer fonte e prova para autoabsorcao",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-15T01:54:39.585Z",
+      "titulo": "Push na main · 3c25953cdef4837594b156ff22a0e2d58344043b",
+      "detalhe": "docs(memory): endurecer fonte e prova para autoabsorcao",
+      "area": "Repositório",
+      "sha": "3c25953",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-15T01:53:54.932Z",
       "titulo": "Push na main · 9bee88f7cda3968df5e70aef7f4264aade12c0c8",
       "detalhe": "docs(memory): documentar elegibilidade de absorcao automatica",
@@ -988,14 +996,6 @@
       "detalhe": "revert: remover artefato acidental sem escopo",
       "area": "Repositório",
       "sha": "20813d3",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-08T05:59:08.938Z",
-      "titulo": "Push na main · 12d164352352cecd634291ca8ad1611757fbab0f",
-      "detalhe": "x",
-      "area": "Repositório",
-      "sha": "12d1643",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-15T01:54:39.585Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 3c25953cdef4837594b156ff22a0e2d58344043b (3c25953)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-15T01:53:54.932Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 9bee88f7cda3968df5e70aef7f4264aade12c0c8 (9bee88f)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-08T05:59:22.761Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 20813d3d420e44cbfbf4b587ccb968cf20a6382e (20813d3)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-08T05:59:08.938Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 12d164352352cecd634291ca8ad1611757fbab0f (12d1643)",
       "area": "Repositório",
       "status": "sucesso"
     }
