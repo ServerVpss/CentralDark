@@ -151,3 +151,40 @@ OURO_ANTIGO
 ```
 
 **Princípio:** enxergar tudo; mexer só onde dói; não perder ouro; não carregar lixo; provar; incorporar; continuar.
+
+## 9. Capacidade no centro; nome somente na proveniência
+
+Cruzamento da sessão de 2026-08-14 com a arqueologia já consolidada: nome de pessoa, modelo, provider, janela ou agente não deve ser o eixo da seleção operacional. O nome continua importante para autoria e rastreabilidade, mas a capacidade demonstrada é o que pode ser reaproveitado pelo organismo.
+
+```text
+NOME|MODELO|PROVIDER|AGENTE
+→ PROVENIENCIA
+
+CAPACIDADE
+→ CONTRIBUICAO
+→ EVIDENCIA
+→ CONTRAPROVA
+→ ESTADO
+→ PROVA APLICAVEL
+→ ABSORCAO NO DONO CANONICO
+→ CAPACIDADE REUTILIZAVEL
+```
+
+Regras:
+
+- roteamento e seleção usam **capacidade observada no escopo**, não prestígio ou nome próprio;
+- proveniência preserva quem trouxe, descobriu, formalizou, implementou, contraprovou ou validou o delta;
+- uma mesma capacidade pode ter múltiplas proveniências e uma mesma proveniência pode contribuir com capacidades diferentes;
+- contribuição que não sobreviveu à contraprova permanece `CANDIDATE|HISTORICAL|UNKNOWN`; não vira capacidade absorvida;
+- `ABSORPTION_WITHOUT_VALIDATION=UNPROVEN`;
+- depois de absorvido no dono canônico, o funcionamento não deve depender da presença do ator original;
+- não criar módulo, skill, memória ou identidade nova só para registrar quem trouxe o ouro: registrar a proveniência no mecanismo existente.
+
+```text
+NOME_CAI_DO_CENTRO=true
+CAPACIDADE_SOBE_PARA_SELECAO=true
+PROVENIENCIA_PRESERVADA=true
+DEPENDENCIA_NO_ATOR_ORIGINAL_APOS_ABSORCAO=false
+```
+
+Esse refinamento não cria outro motor de proveniência. Ele fecha semanticamente o que já existia em SOUL, JARVIS, MetaLupa e nesta arqueologia: **o organismo preserva autoria sem ficar dependente do autor para reutilizar a capacidade comprovada**.
