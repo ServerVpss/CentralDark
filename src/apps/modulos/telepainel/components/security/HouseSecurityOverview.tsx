@@ -22,6 +22,13 @@ type SecurityOverview = {
   last_restore_test: string | null;
 };
 
+type SecurityRpcClient = {
+  rpc: (fn: "get_private_security_overview") => PromiseLike<{
+    data: unknown;
+    error: unknown;
+  }>;
+};
+
 const EMPTY_COUNTS: Record<SecurityStatus, number> = {
   PASS: 0,
   WARN: 0,
@@ -39,7 +46,8 @@ export function HouseSecurityOverview() {
 
   const refresh = useCallback(async () => {
     setLoading(true);
-    const { data, error } = await (supabase as any).rpc("get_private_security_overview");
+    const securityRpc = supabase as unknown as SecurityRpcClient;
+    const { data, error } = await securityRpc.rpc("get_private_security_overview");
 
     if (error || !data || typeof data !== "object") {
       setOverview(null);
