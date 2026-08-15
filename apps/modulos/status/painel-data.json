@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-15T04:54:26.006Z",
-  "updatedAtBR": "15/08/2026, 01:54:26 BRT",
+  "updatedAt": "2026-08-15T06:29:53.900Z",
+  "updatedAtBR": "15/08/2026, 03:29:53 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "feat(memory): descobrir padrões e roteá-los para autonomia (#869)",
+    "lastCommit": "docs(cognition): aprofundar garimpo com fonte direta Hermes",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-15T06:29:53.900Z",
+      "titulo": "Push na main · 770e78c90a7d8c9dae237ed527b354fa356fc582",
+      "detalhe": "docs(cognition): aprofundar garimpo com fonte direta Hermes",
+      "area": "Repositório",
+      "sha": "770e78c",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-15T04:54:26.006Z",
       "titulo": "Push na main · 91fccf727921de4eda54ef1384e821a2a9a4e603",
       "detalhe": "feat(memory): descobrir padrões e roteá-los para autonomia (#869)",
@@ -988,14 +996,6 @@
       "detalhe": "fix(ci): alinhar guardrail de arquivos sensíveis do Codex (#826)",
       "area": "Repositório",
       "sha": "035935c",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-14T07:11:10.520Z",
-      "titulo": "Push na main · f0113e143cdcd557488faf8106a98e91260b11a4",
-      "detalhe": "fix(aprendizado): tornar confronto ganho informacional canônico (#821)",
-      "area": "Repositório",
-      "sha": "f0113e1",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-15T06:29:53.900Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 770e78c90a7d8c9dae237ed527b354fa356fc582 (770e78c)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-15T04:54:26.006Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 91fccf727921de4eda54ef1384e821a2a9a4e603 (91fccf7)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-14T07:42:40.635Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 035935cad9b78b75c02577aed2469bd21713f085 (035935c)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-14T07:11:10.520Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · f0113e143cdcd557488faf8106a98e91260b11a4 (f0113e1)",
       "area": "Repositório",
       "status": "sucesso"
     }
