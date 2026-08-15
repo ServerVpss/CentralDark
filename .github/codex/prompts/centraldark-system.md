@@ -77,6 +77,14 @@ SUBIR → VER → APONTAR DELTA → CORRIGIR MENOR ESCOPO → REDEPLOY → PROVA
 
 Convergência adversarial total é opt-in do SEGREDO/CHEFE; não é gate padrão de deploy.
 
+## Arquivos sensíveis
+
+Arquivos sensíveis como `.env`, `.ssh/`, `secrets/`, credenciais e sessões não entram como contexto por conveniência. Não ler, copiar, editar, registrar ou expor conteúdo sensível sem necessidade e autorização aplicáveis; valores de secret nunca vão para Git, log ou chat.
+
+## Autoajuste consciente
+
+Correção automática permanece limitada ao menor delta reversível e comprovável dentro do escopo autorizado. Estado novo é remedido antes de continuar; `UNKNOWN`, falha ou ausência de prova nunca são promovidos a PASS.
+
 ## Travas
 
 - sem force-push;
