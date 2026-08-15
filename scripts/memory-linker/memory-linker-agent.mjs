@@ -11,6 +11,7 @@ import path from 'path';
 import https from 'https';
 import { canonicalizeFindings, findingFingerprint, informationGain } from './delta-core.mjs';
 import { atomicWriteUtf8Sync, ensureRegularFileInsideRootSync } from './fs-safe.mjs';
+import { createMachineEvent, renderHumanPresentation } from './operational-score.mjs';
 
 const RAIZ       = '/root/CentralDark';
 const DIR        = path.join(RAIZ, 'scripts/memory-linker');
@@ -140,6 +141,18 @@ const report = {
   ...findings,
 };
 atomicWriteUtf8Sync(REPORT, `${JSON.stringify(report, null, 2)}\n`, { skipIfUnchanged: true });
+
+const scoreEvent = createMachineEvent({
+  capability: 'MINERACAO',
+  event: 'SOURCE_DELTA_DETECTED',
+  eventId: currentFingerprint,
+  sessionId: 'memory-linker-scout',
+  evidenceRef: path.relative(RAIZ, REPORT),
+  payload: { findings: report.total, unsafePaths: findings.unsafePaths.length },
+});
+const scorePresentation = renderHumanPresentation(scoreEvent);
+console.log(`OPERATIONAL_SCORE_EVENT=${JSON.stringify(scoreEvent)}`);
+console.log(scorePresentation.presentation);
 console.log(`MEMORY_SCOUT=DELTA FINDINGS=${report.total} UNSAFE_PATHS=${findings.unsafePaths.length} FINGERPRINT=${currentFingerprint}`);
 
 if (report.total === 0) process.exit(0);
