@@ -291,13 +291,13 @@ function credentialStatus(value) {
 export function providerCredentialStatus(env = process.env) {
   return {
     cloudflare: {
-      CLOUDFLARE_API_TOKEN: credentialStatus(env.CLOUDFLARE_API_TOKEN || env.CF_API_TOKEN),
+      "CLOUDFLARE_API_TOKEN": credentialStatus(env.CLOUDFLARE_API_TOKEN || env.CF_API_TOKEN),
     },
     contabo: {
-      CONTABO_CLIENT_ID: credentialStatus(env.CONTABO_CLIENT_ID),
-      CONTABO_CLIENT_SECRET: credentialStatus(env.CONTABO_CLIENT_SECRET),
-      CONTABO_API_USER: credentialStatus(env.CONTABO_API_USER),
-      CONTABO_API_PASSWORD: credentialStatus(env.CONTABO_API_PASSWORD),
+      "CONTABO_CLIENT_ID": credentialStatus(env.CONTABO_CLIENT_ID),
+      "CONTABO_CLIENT_SECRET": credentialStatus(env.CONTABO_CLIENT_SECRET),
+      "CONTABO_API_USER": credentialStatus(env.CONTABO_API_USER),
+      "CONTABO_API_PASSWORD": credentialStatus(env.CONTABO_API_PASSWORD),
     },
   };
 }
