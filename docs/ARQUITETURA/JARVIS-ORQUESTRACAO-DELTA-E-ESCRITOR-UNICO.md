@@ -305,6 +305,8 @@ INTENT
 
 Essa é a arquitetura operacional padrão para fan-out interno. Tarefa simples continua podendo saltar braços desnecessários e usar a ação mínima direta.
 
+A seção 7.1 distribui trabalho entre **escopos independentes**; esta seção governa como cada frente percebe, arbitra e entrega delta antes da caneta. As duas compartilham dedupe, ganho informacional e Writer único, sem criar workers concorrentes no mesmo escopo.
+
 ## 7. Generalização sistêmica por composição
 
 Orquestração não compete com generalização; ela é um dos mecanismos que a produz.
@@ -322,6 +324,151 @@ REGRAS + GATES + SKILLS + MEMORIA
 ```
 
 Correção do SEGREDO/CHEFE que sobrevive à prova deve virar regra/teste/skill/contrato/memória para a próxima execução começar mais alto.
+
+### 7.1 Descoberta e distribuição autônoma de trabalho
+
+O objetivo não é maximizar número de agentes, janelas ou workers. A medida útil é quanto **trabalho material e independente** o organismo consegue descobrir, distribuir, concluir e absorver dentro da intenção vigente sem transformar SEGREDO/CHEFE em roteador manual.
+
+```text
+MESMA MISSAO
++ MESMO CANONICO
++ FRENTES DIFERENTES
++ TRABALHO DESCOBERTO PELO ESTADO
+→ PARALELISMO UTIL
+```
+
+A descoberta parte de estado/evidência, não de desejo de manter worker ocupado:
+
+```text
+ESTADO|EVIDENCIA|RECEIPT|ACHADO
+→ HA DELTA MATERIAL?
+   NAO → DROP / SATURACAO LOCAL
+   SIM ↓
+→ IDENTIFICAR CAUSA + DONO + CONSUMIDOR + WRITER_SCOPE
+→ GERAR FINGERPRINT DO TRABALHO
+→ JA EXISTE MESMA FERIDA ATIVA|ABSORVIDA?
+   SIM → DROP_DUPLICATION
+   NAO ↓
+→ CLASSIFICAR ELEGIBILIDADE + AUTORIZACAO
+→ PUBLICAR CANDIDATO NO PLANO DE CONTROLE EXISTENTE
+→ CLAIM/LOCK ATOMICO DO WRITER_SCOPE
+→ EXECUTAR
+→ PROVAR
+→ ABSORVER OU REJEITAR
+→ REMEDIR ESTADO
+→ REDESCOBRIR SOMENTE O RESIDUO
+```
+
+A identidade da ferida deve ser estável o suficiente para impedir que reformulação textual fabrique trabalho novo. Quando aplicável, o fingerprint inclui causa/claim, dono, escopo de escrita, estado ou HEAD relevante e delta esperado; mudança puramente cosmética não cria novo candidato.
+
+```text
+SAME_WORK_FINGERPRINT → DROP_DUPLICATION
+NEW_INFORMATION_REQUIRED=true
+WORK_DISCOVERY_IS_NOT_AUTHORIZATION=true
+CANDIDATE_IS_NOT_APPROVED_MISSION=true
+RESULT_IS_INPUT_ONLY_AFTER_EVIDENCE=true
+WRITER_SCOPE_LOCK_REMAINS_REQUIRED=true
+```
+
+#### Encaixe físico já existente
+
+Não criar `WORK_ENGINE`, segunda fila nem segundo orquestrador. O plano de controle já existente é o dono físico da distribuição:
+
+```text
+apps/modulos/hub/supabase/.../hub_missions
+→ queued = trabalho disponível
+→ running = caneta em uso
+→ claim_next_hub_mission(...)
+→ FOR UPDATE SKIP LOCKED
+→ índice UNIQUE por writer_scope running
+→ consumer MCP executa somente missão approved
+```
+
+Esse mecanismo já resolve distribuição e exclusão mútua por escopo. Ele **não prova sozinho descoberta automática de novas feridas**.
+
+Estado de capacidade desta fronteira:
+
+```text
+WORK_QUEUE=OPERATIONAL_IN_REPO
+ATOMIC_CLAIM_PER_SCOPE=OPERATIONAL_IN_REPO
+MULTI_WORKER_DIFFERENT_SCOPES=SUPPORTED_BY_CONTRACT
+AUTO_WORK_DISCOVERY_PRODUCER=UNPROVEN
+RESULT_TO_NEW_WORK_CANDIDATE=UNPROVEN
+AUTO_APPROVAL_FROM_WORKER=FORBIDDEN
+```
+
+Um resultado pode revelar próximo trabalho, mas não pode saltar a fronteira de autoridade:
+
+```text
+RESULTADO
+→ EVIDENCIA
+→ NOVO DELTA MATERIAL?
+→ WORK_CANDIDATE
+→ DEDUPE
+→ ELEGIBILITY/AUTHORITY GATE
+→ FILA EXISTENTE
+```
+
+Worker nunca transforma a própria saída em aprovação. Se a nova frente estiver fora da intenção/autorização vigente, ela permanece candidata/pending.
+
+#### Saturação e capacidade ociosa
+
+Saturação é ausência de **ganho informacional material**, não ausência de movimento:
+
+```text
+SEM NOVA EVIDENCIA
++ SEM RESIDUO MATERIAL
++ SEM WORK_CANDIDATE ELEGIVEL NA FRONTEIRA
+→ FRONTIER_SATURATED
+```
+
+Capacidade ociosa não inventa tarefa para parecer produtiva. Dentro da intenção vigente ela pode procurar outra fronteira por leitura/medição reversível, passando novamente por descoberta → dedupe → elegibilidade.
+
+```text
+WORKER_IDLE
+→ BUSCAR OUTRA FRONTEIRA ELEGIVEL
+→ NENHUMA? IDLE/SATURATED
+→ EXISTE? CLAIM PELO PLANO DE CONTROLE
+```
+
+`IDLE` é estado válido. Loop sem informação nova é desperdício, não autonomia.
+
+#### Ouro absorvido reduz trabalho futuro
+
+```text
+TRABALHO CONCLUIDO
+→ OURO PROVADO
+→ DONO CANONICO
+→ ESTADO MUDA
+→ PROXIMA DESCOBERTA COMPARA CONTRA O CANONICO NOVO
+→ MESMA FERIDA CAI NO DEDUPE
+→ MENOS TRABALHO REPETIDO
+```
+
+Portanto, aprendizado útil deve diminuir a probabilidade de redescobrir e refazer a mesma classe de trabalho sem nova evidência.
+
+#### Métrica certa
+
+A pergunta operacional é:
+
+> **Quanto trabalho útil independente o organismo descobre, distribui, conclui e absorve sem roteamento manual do SEGREDO/CHEFE?**
+
+Coletores futuros podem medir, sem inventar números:
+
+```text
+DISCOVERED_CANDIDATES
+DEDUPED_CANDIDATES
+ELIGIBLE_CANDIDATES
+CLAIMED_WORK
+COMPLETED_WORK
+ABSORBED_WORK
+AUTO_DISCOVERED_WORK
+HUMAN_ROUTED_WORK
+DUPLICATE_WORK_BLOCKED
+SATURATED_FRONTIERS
+```
+
+Sem coletor real, esses campos ficam `UNKNOWN`. Quantidade de janelas/agentes não é proxy dessa capacidade.
 
 ## 8. Production-first / live iteration
 
