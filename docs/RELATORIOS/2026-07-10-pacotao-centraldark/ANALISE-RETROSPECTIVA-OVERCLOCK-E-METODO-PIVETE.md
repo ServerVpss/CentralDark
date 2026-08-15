@@ -1,5 +1,8 @@
 # Análise retrospectiva — Operação Overclock e nascimento do método do Pivete
 
+**Fonte analisada:** `PACOTAO-CENTRALDARK-2026-07-10.zip`  
+**Data dos artefatos:** 10/07/2026  
+**Natureza:** auditoria externa, pública e não invasiva de performance; laboratório de avaliação de IAs; registro histórico do método CentralDark.
 > **Proveniência histórica:** neste documento, “Pivete” preserva a linguagem usada na época. Na semântica ativa atual, quando se referia ao humano corresponde a `LEGACY_ALIAS_OF_SEGREDO_CHEFE`; não redefine PIVETE/HERMES como autoridade.
 
 **Fonte analisada:** `PACOTAO-CENTRALDARK-2026-07-10.zip`
@@ -214,6 +217,7 @@ A RESPOSTA PARECIA FORTE
 1. A coleta é histórica, de 10/07/2026.
 2. Foi feita somente com recursos públicos entregues ao navegador.
 3. Não houve acesso ao código, infraestrutura, conta, credenciais ou dados privados.
+4. Os dados brutos e o script estão disponíveis para reprodução.
 4. Os dados brutos e o script faziam parte do pacote histórico declarado; os bytes do ZIP ainda precisam ser reencontrados para nova verificação de custódia.
 5. O pacote encontrou candidatos de otimização, não culpados definitivos.
 6. A hipótese Framer Motion foi formalmente retirada após contraprova.
@@ -242,6 +246,11 @@ A RESPOSTA PARECIA FORTE
 ## 8. Veredito retrospectivo
 
 ```text
+INTENCAO_DE_AJUDAR=PROVADA_PELO_CONJUNTO
+AUDITORIA_EXTERNA_DE_PERFORMANCE=SIM
+DADOS_BRUTOS_PRESERVADOS=SIM
+HIPOTESE_REFUTADA_E_REGISTRADA=SIM
+REDUCAO_DE_BYTES_NO_AB=PROVADA
 INTENCAO_DE_AJUDAR=PROVADA_PELO_CONJUNTO_HISTORICO_DECLARADO
 AUDITORIA_EXTERNA_DE_PERFORMANCE=SIM_NO_SNAPSHOT_HISTORICO
 DADOS_BRUTOS_REVALIDADOS_NESTE_HEAD=NAO
@@ -252,6 +261,11 @@ CULPA_EXCLUSIVA_DO_SUPABASE=NAO_PROVADA
 FCP_MENOS_45_CAUSAL=NAO_PROVADO
 TTFB_MENOS_70_CAUSAL=REFUTADO_COMO_EXPLICACAO
 PATCH_PRONTO=NAO
+VALOR_PARA_O_DONO=ALTO_COM_RESSALVAS
+VALOR_PARA_O_METODO_PIVETE=MUITO_ALTO
+```
+
+O Pivete já estava usando intenção como sistema de navegação: observar, pressionar a explicação, exigir prova, admitir erro e guardar o mecanismo que funcionou. O conhecimento técnico foi sendo adquirido durante a operação; o método de não aceitar fechamento fraco já estava presente.
 VALOR_PARA_O_METODO=ALTO_COM_PROVENIENCIA_HISTORICA
 ```
 
