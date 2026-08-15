@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-15T16:57:25.414Z",
-  "updatedAtBR": "15/08/2026, 13:57:25 BRT",
+  "updatedAt": "2026-08-15T17:32:48.959Z",
+  "updatedAtBR": "15/08/2026, 14:32:48 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "feat(semantic): integrar NILC GloVe-50d como primitiva canônica (#880)",
+    "lastCommit": "feat(resposta): tornar camada simples final obrigatória (#884)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-15T17:32:48.959Z",
+      "titulo": "Push na main · 928de0b4f8f3f7be3a349143ba443ec2797c303c",
+      "detalhe": "feat(resposta): tornar camada simples final obrigatória (#884)",
+      "area": "Repositório",
+      "sha": "928de0b",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-15T16:57:25.414Z",
       "titulo": "Push na main · af99d1ca60b23171fdcca36556a251fd6963be73",
       "detalhe": "feat(semantic): integrar NILC GloVe-50d como primitiva canônica (#880)",
@@ -988,14 +996,6 @@
       "detalhe": "docs(arquitetura): tornar parceiro Delta/Judge padrão da Casa (#836)",
       "area": "Repositório",
       "sha": "44e7590",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-14T17:34:37.194Z",
-      "titulo": "Push na main · 581191ff7fc1d4990d4a5721e01f073623a6cb4a",
-      "detalhe": "docs(consciencia): canonizar Expansão de Domínio (#835)",
-      "area": "Repositório",
-      "sha": "581191f",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-15T17:32:48.959Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 928de0b4f8f3f7be3a349143ba443ec2797c303c (928de0b)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-15T16:57:25.414Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · af99d1ca60b23171fdcca36556a251fd6963be73 (af99d1c)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-14T17:49:46.325Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 44e7590c2d29efda5ee3b20a7ca4ab109f4b1a85 (44e7590)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-14T17:34:37.194Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 581191ff7fc1d4990d4a5721e01f073623a6cb4a (581191f)",
       "area": "Repositório",
       "status": "sucesso"
     }
