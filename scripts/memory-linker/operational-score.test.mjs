@@ -61,15 +61,20 @@ test('H renderer funciona sem música externa', () => {
   assert.match(rendered.presentation, /SENTINELA/);
 });
 
-test('I material musical vira somente hipótese candidata e reconhece contrato PT-BR', () => {
+test('I material musical deduplica contra owner existente antes de criar capability', () => {
   const result = extractMusicBehavioralMaterial({ observations: ['crescendo', 'dissonância', 'resolução'], sourceRef: 'artifact:music' });
   assert.equal(result.status, 'CANDIDATE_ONLY');
   assert.equal(result.direct_skill_write, false);
   assert.equal(result.execute_action, false);
   assert.equal(result.source_is_authority, false);
-  assert.equal(result.dedupe_required, true);
+  assert.equal(result.dedupe_performed, true);
   assert.equal(result.counterproof_required, true);
-  assert.deepEqual(result.hypotheses.map((item) => item.behavioral_hypothesis).sort(), ['INCREASE_DEPTH_WHILE_INFORMATION_GAIN', 'INVESTIGATE_CONFLICTING_EVIDENCE', 'PROVEN_CLOSURE'].sort());
+  const dissonance = result.hypotheses.find((item) => item.behavioral_hypothesis === 'INVESTIGATE_CONFLICTING_EVIDENCE');
+  const resolution = result.hypotheses.find((item) => item.behavioral_hypothesis === 'PROVEN_CLOSURE');
+  const crescendo = result.hypotheses.find((item) => item.behavioral_hypothesis === 'INCREASE_DEPTH_WHILE_INFORMATION_GAIN');
+  assert.deepEqual({ status: dissonance.status, owner: dissonance.existing_capability }, { status: 'REUSE_EXISTING', owner: 'META_LUPA' });
+  assert.deepEqual({ status: resolution.status, owner: resolution.existing_capability }, { status: 'REUSE_EXISTING', owner: 'FIXED_POINT' });
+  assert.deepEqual({ status: crescendo.status, owner: crescendo.existing_capability }, { status: 'CANDIDATE_ONLY', owner: null });
 });
 
 test('J observações repetidas não duplicam abstração', () => {
