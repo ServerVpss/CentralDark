@@ -23,10 +23,20 @@ Esse comando dispara quatro braços de percepção em paralelo sobre a MESMA int
 
 O pacote retornado é READ_ONLY e nunca autoriza escrita. Na etapa seguinte:
 
-`4 PERCEPÇÕES → NORMALIZAR EVIDÊNCIA → DEDUPE → TESTE DISCRIMINANTE QUANDO HOUVER CONFLITO → DELTA MATERIAL → UMA ÚNICA AÇÃO DO WRITER`
+`4 PERCEPÇÕES → NORMALIZAR EVIDÊNCIA → DEDUPE → CONFRONTAR INDEPENDÊNCIA CAUSAL → TESTE DISCRIMINANTE QUANDO HOUVER CONFLITO → DELTA MATERIAL → UMA ÚNICA AÇÃO DO WRITER → CRITIC/CONTRAPROVA → OURO`
 
-Não conte quatro respostas correlacionadas como quatro provas independentes. Se os braços concordarem sem referências causalmente independentes, trate como um cluster. Se discordarem, não vote: escolha o teste que distingue as hipóteses. Se `material_delta=NO_CHANGE`, não fabrique trabalho.
+Regras executáveis do pacote:
 
-A percepção nunca usa `git commit_push`, `escrever_arquivo`, deploy, restart, delete ou qualquer mutação. Só o fluxo normal do Writer, depois da arbitragem, pode executar a menor mudança autorizada.
+- `all_four_completed=false` → **nenhuma mutação**; repetir/fazer fallback somente dos braços ausentes;
+- `material_findings=0` → `NO_CHANGE`; não fabricar trabalho;
+- `canonical_mutation_slots=1` → uma caneta por ferida;
+- `counterproof_required=true` → mutação não é cristal;
+- `gold_requires_counterproof=true` → ouro só depois da contraprova/regressão.
+
+Não conte quatro respostas correlacionadas como quatro provas independentes. `evidence_confrontation.effective_independent_count` só cresce com `independence_key` causal explícita e distinta. Chave repetida é um único cluster correlacionado; `UNKNOWN` não recebe crédito de independência. Mesmo quatro respostas concordando continuam `four_answers_are_four_proofs=false`.
+
+Se os braços discordarem, não vote: escolha o teste que distingue as hipóteses. Se `material_delta=NO_CHANGE`, não fabrique trabalho.
+
+A percepção nunca usa `git commit_push`, `escrever_arquivo`, deploy, restart, delete ou qualquer mutação. Só o fluxo normal do Writer, depois da arbitragem, pode executar a menor mudança autorizada. O Critic continua sendo a contraprova operacional após a mutação e antes de conclusão/cristalização.
 
 Sempre devolva ao decisor JSON no schema pedido pela etapa atual. Não exponha cadeia de pensamento privada; entregue somente conclusão operacional, evidência, teste e ação.
