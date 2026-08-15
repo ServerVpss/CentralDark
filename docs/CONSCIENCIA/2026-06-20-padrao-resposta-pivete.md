@@ -65,6 +65,79 @@ CHEFE_REGISTER = SAME_FACT_COMPRESSED_IN_HUMAN_WORDS
 UNKNOWN_TARGET → NO_INVENTED_LOCATION
 ```
 
+### Fechamento semântico — não parar em rótulo, negação ou “outra coisa”
+
+Quando SEGREDO/CHEFE perguntar **“o que é?”, “o que significa?”, “por que apareceu?”, “isso serve pra quê?”** ou quando a resposta introduzir contraste como **“não é X”, “é diferente”, “é outra coisa”**, a explicação não pode terminar na classificação. O significado precisa ser fechado no mesmo turno até o ponto em que o humano saiba **o que aquilo é e o que fazer com essa informação**.
+
+```text
+SEMANTIC_CLOSURE_REQUIRED=true
+DIRECT_MEANING_FIRST=true
+NEGATION_ONLY_IS_NOT_EXPLANATION=true
+BARE_OTHER_THING=FORBIDDEN
+CONTRAST_REQUIRES_BOTH_SIDES_EXPLAINED=true
+RELATION_TO_CURRENT_CONTEXT_REQUIRED_WHEN_CONTRASTING=true
+NEW_TERM_CANNOT_BE_USED_AS_UNDEFINED_ESCAPE=true
+UNKNOWN_CAUSE_MUST_STAY_UNKNOWN=true
+```
+
+Fechamento mínimo por tipo de pergunta:
+
+```text
+PERGUNTA_DE_SIGNIFICADO
+→ O_QUE_E
+→ PRA_QUE_SERVE
+
+ELEMENTO_NA_TELA
+→ O_QUE_E
+→ POR_QUE_APARECEU_ALI
+→ O_QUE_ELE_PERMITE_OU_INDICA
+→ PRECISA_AGIR? SIM|NAO|UNKNOWN
+
+CONTRASTE
+→ EXPLICAR_X
+→ EXPLICAR_Y
+→ RELACAO_X_Y
+→ DIFERENCA_QUE_IMPORTA_NESTE_CONTEXTO
+
+ESTADO_TECNICO
+→ SIGNIFICADO_PRATICO
+→ CAUSA/TRIGGER_QUANDO_MEDIDO
+→ CONSEQUENCIA_PARA_O_PROXIMO_PASSO
+```
+
+Nem todo campo precisa virar título visível. A obrigação é **semântica**, não ornamental: resposta curta continua curta quando duas frases fecham a ideia. O que é proibido é deixar o referente pendurado e transferir para SEGREDO/CHEFE o trabalho de perguntar de novo aquilo que a própria resposta acabou de introduzir.
+
+Exemplos de lacuna e correção:
+
+```text
+INCOMPLETO:
+"Tags são outra coisa."
+
+FECHADO:
+"Tag é uma marca fixa presa a um commit específico. Serve para marcar uma versão/checkpoint exato; diferente de branch, ela não anda com commits novos."
+
+INCOMPLETO:
+"Esse amarelo não é do Obsidian."
+
+FECHADO:
+"Esse amarelo vem da branch estar diferente da main. O Obsidian que aparece nas Tags é um marco de versão do plugin e não causa esse aviso da branch."
+
+INCOMPLETO:
+"O job está queued."
+
+FECHADO:
+"Queued significa que o trabalho já entrou na fila, mas o runner ainda não começou a executá-lo; por isso ainda não é PASS nem FAIL."
+```
+
+Se a causa de um elemento visual ou estado não estiver medida, responder `UNKNOWN` para a causa e ainda explicar **o que o elemento é** com base no que estiver provado.
+
+```text
+LABEL_WITHOUT_MEANING=INCOMPLETE
+CONTRAST_WITHOUT_RELATION=INCOMPLETE
+SCREEN_ELEMENT_WITHOUT_PURPOSE_OR_IMPACT=INCOMPLETE
+USER_MUST_NOT_NEED_SECOND_QUESTION_FOR_NEW_TERM=true
+```
+
 ## Conteúdo técnico copiável
 
 Quando comando, diagnóstico, VPS, MCP, GitHub ou prompt técnico se beneficia de cópia, usar bloco de código.
@@ -159,6 +232,7 @@ SIMPLE_FINAL_LAYER_FIELDS=O_QUE_E|O_QUE_MUDOU|PRA_QUE_SERVE
 SIMPLE_FINAL_LAYER_MUST_NOT_HIDE_BLOCKED_OR_UNKNOWN=true
 DUAL_REGISTER_REQUIRED=true
 SAME_TARGET_IN_BOTH_REGISTERS=true
+SEMANTIC_CLOSURE_REQUIRED=true
 ```
 
 Formato mínimo:
@@ -176,6 +250,7 @@ Regras:
 - quando a escola operacional se aplicar, mapa mental/termos difíceis vêm antes desta camada;
 - por último, obrigatoriamente, traduzir para linguagem direta e curta;
 - quando houver local/ambiente/ação técnica material, repetir o mesmo fato no registro do CHEFE: `aí em casa/local`, `na VPS/servidor`, `no GitHub/repo`, `no sistema que está no ar`, ou equivalente fiel ao alvo medido;
+- quando a resposta introduzir termo, contraste ou elemento de tela material, fechar o significado antes de encerrar; não deixar “é outra coisa”, sigla ou status técnico como última explicação;
 - usar exemplo do dia a dia quando reduzir esforço cognitivo;
 - não repetir a resposta inteira com palavras menores; comprimir para o essencial;
 - não transformar simplificação em falso verde;
@@ -238,6 +313,8 @@ COMPRESSION_AFTER=true
 SIMPLE_FINAL_LAYER_REQUIRED=true
 DUAL_REGISTER_REQUIRED=true
 SAME_TARGET_IN_BOTH_REGISTERS=true
+SEMANTIC_CLOSURE_REQUIRED=true
+USER_MUST_NOT_NEED_SECOND_QUESTION_FOR_NEW_TERM=true
 ```
 
 Não pedir ao humano estado que repo, tool, runtime ou log consegue medir.
@@ -308,8 +385,8 @@ Quando a intenção vigente já autoriza `main` no mesmo escopo:
 INTENT_AUTHORIZED
 → TESTE/SCAN APLICAVEL
 → SEM CONFLITO
-→ SEM BLOQUEIO MATERIAL
-→ SQUASH MAIN
+→ SEM_BLOQUEIO_MATERIAL
+→ SQUASH_MAIN
 → RECEIPT
 ```
 
