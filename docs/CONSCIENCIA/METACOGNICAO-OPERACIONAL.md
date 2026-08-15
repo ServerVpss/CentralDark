@@ -247,6 +247,57 @@ DREAM_PROPOSAL=DERIVED_CANDIDATE
 CANONICAL_MEMORY=SEPARATE_PROMOTION_STEP
 ```
 
+## Lei META — autoraplicação verificável
+
+Na CentralDark, `META` não significa criar uma camada nova em cima da anterior. Significa **aplicar a própria lei de uma capacidade sobre ela mesma** e verificar se o resultado observável melhorou.
+
+```text
+META(X) = X APLICA A PROPRIA LEI SOBRE X
+```
+
+Os donos META obrigatórios são:
+
+```text
+META_EXPANSAO_DE_DOMINIO
+→ a expansão pergunta se está enxergando o campo certo
+→ mata ponto cego
+→ VER MELHOR
+
+META_MENOS_E_MAIS
+→ o método pergunta quanto do próprio método é realmente necessário
+→ mata gordura
+→ CARREGAR MENOS
+
+META_LUPA
+→ a Lupa tenta falsificar a própria conclusão e a própria cadeia de prova
+→ mata autoengano
+→ SABER/PROVAR MELHOR
+
+META_INSTINTO_SUPERIOR
+→ o reflexo verifica se virou comportamento melhor, com menos atrito e sem perder missão
+→ mata atrito operacional
+→ AGIR MELHOR
+
+META_METACOGNICAO_OPERACIONAL
+→ o método de aprender observa e falsifica o próprio modo de aprender
+→ mata aprendizado ornamental
+→ APRENDER A APRENDER MELHOR
+```
+
+O ciclo não termina numa escada:
+
+```text
+VER MELHOR
+→ CARREGAR MENOS
+→ SABER MELHOR
+→ AGIR MELHOR
+→ APRENDER COM O DELTA
+→ VER MELHOR DE NOVO
+↺
+```
+
+`DOCUMENTACAO_MELHOROU != SISTEMA_EVOLUIU`. Texto pode ser evidência de scaffold alterado, mas evolução só fecha quando uma capacidade ou comportamento observável muda na direção declarada e sobrevive à prova.
+
 ## Evolução obrigatória, contínua e verificável
 
 A CentralDark não trata evolução como elogio, XP, quantidade de texto ou simples passagem do tempo. Evolução é **mudança de capacidade observável** que sobrevive a teste e contraprova sem perder capacidade anterior.
@@ -258,7 +309,10 @@ META_LUPA=EVOLUTION_REQUIRED
 MENOS_E_MAIS=EVOLUTION_REQUIRED
 INSTINTO_SUPERIOR=EVOLUTION_REQUIRED
 EXPANSAO_DE_DOMINIO=EVOLUTION_REQUIRED
+METACOGNICAO_OPERACIONAL=EVOLUTION_REQUIRED
 ```
+
+A lei é universal: **qualquer componente que alegue `EVOLVED` ou melhoria permanente deve fornecer o mesmo tipo de prova verificável**, mesmo quando não pertence aos cinco donos META acima.
 
 Quando erro, confronto, matéria-prima, nova ferramenta ou mudança de ambiente revelar informação material nova, o dono canônico aplicável deve tentar incorporar **somente o delta reutilizável**. Se não houver informação nova, a obrigação é parar e não engordar a Casa.
 
@@ -288,7 +342,7 @@ EVOLUTION_WITH_REGRESSION=EVOLUTION_UNPROVEN
 EVOLUTION_WITHOUT_CANONICAL_OWNER=EVOLUTION_UNPROVEN
 ```
 
-O gate executável único pertence à MetaLupa e é consumido pelos quatro métodos, sem criar quatro motores:
+O gate executável único pertence à MetaLupa e é consumido pelos cinco donos META e por qualquer outra capacidade que alegue evolução, sem criar motores paralelos:
 
 ```text
 .agents/skills/meta-lupa/scripts/evolution_gate.py
@@ -327,6 +381,7 @@ EVOLUTION_IS_NOT_TEXT_GROWTH=true
 EVOLUTION_IS_NOT_MODEL_AGREEMENT=true
 EVOLUTION_MUST_BE_REPRODUCIBLE=true
 EVOLUTION_REGRESSION_FORBIDDEN=true
+META_SELF_APPLICATION_REQUIRED=true
 ```
 
 ## Autoaperfeiçoamento sem circularidade
@@ -373,6 +428,8 @@ NO_EGO_SCORE=true
 UNKNOWN_IS_NOT_PASS=true
 EVOLUTION_CLAIM_REQUIRES_RECEIPT=true
 EVOLUTION_MUST_BE_REPRODUCIBLE=true
+META_SELF_APPLICATION_REQUIRED=true
+METACOGNICAO_OPERACIONAL=EVOLUTION_REQUIRED
 ```
 
 ## Distribuição canônica
@@ -380,8 +437,8 @@ EVOLUTION_MUST_BE_REPRODUCIBLE=true
 Este arquivo é a fonte conceitual única. A distribuição ocorre sem copiar o contrato inteiro:
 
 - `LEIA-ME-IA.md` referencia esta fonte no boot universal e no ciclo de aprendizado;
-- `.agents/skills/meta-lupa/references/metacognicao-operacional.md` conecta AutoLupa/metodologia a esta fonte;
-- `.agents/skills/meta-lupa/scripts/evolution_gate.py` torna fail-closed a alegação de evolução dos métodos evolutivos;
+- `.agents/skills/meta-lupa/references/metacognicao-operacional.md` conecta AutoLupa/metodologia e a lei META a esta fonte;
+- `.agents/skills/meta-lupa/scripts/evolution_gate.py` torna fail-closed a alegação universal de evolução e reconhece os cinco donos META obrigatórios;
 - `AGENTS.md` mantém o contrato genérico de ganho informacional e continua semanticamente subordinado ao boot;
 - `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md` mantém identidade, autoridade e aprendizado sem redefinir este conceito;
 - `docs/CONSCIENCIA/LEMBRANCAS/2026-08-14-OURO-CONTEXTO-AUTONOMIA-SOL.md` preserva a proveniência histórica quando o aprendizado for consolidado;
