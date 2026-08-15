@@ -22,6 +22,45 @@ METODO_CORRIGIDO_COM_DELTA_REUTILIZAVEL = METACOGNICAO_OPERACIONAL
 CHEFE_ENSINA + ORGANISMO_MATERIALIZA + FUTURO_MUDA = COEVOLUCAO_OPERACIONAL
 ```
 
+## Lei META — autoraplicação verificável
+
+```text
+META(X) = X APLICA A PROPRIA LEI SOBRE X
+```
+
+Logo, a própria metacognição também é alvo da metacognição:
+
+```text
+META_METACOGNICAO
+→ observar como estamos aprendendo
+→ localizar desperdício/erro no próprio método de aprender
+→ propor menor delta reutilizável
+→ provar BEFORE/AFTER no mesmo escopo
+→ testar + contraprovocar + regressão
+→ somente então declarar evolução
+```
+
+Os donos META obrigatórios compartilham uma única lei:
+
+```text
+META_EXPANSAO_DE_DOMINIO = VER MELHOR
+META_MENOS_E_MAIS = CARREGAR MENOS
+META_LUPA = SABER/PROVAR MELHOR
+META_INSTINTO_SUPERIOR = AGIR MELHOR
+META_METACOGNICAO_OPERACIONAL = APRENDER A APRENDER MELHOR
+```
+
+Ciclo:
+
+```text
+VER MELHOR
+→ CARREGAR MENOS
+→ SABER MELHOR
+→ AGIR MELHOR
+→ APRENDER COM O DELTA
+→ VER MELHOR DE NOVO
+```
+
 ## Evolução obrigatória e verificável
 
 MetaLupa não pode apenas acumular XP, texto ou histórico. Quando erro, confronto, contraprova ou matéria-prima revelar uma melhoria reutilizável, a própria MetaLupa deve evoluir **no mesmo artefato canônico** ou nos recursos já pertencentes a ele.
@@ -53,19 +92,23 @@ O gate executável único vive em:
 .agents/skills/meta-lupa/scripts/evolution_gate.py
 ```
 
-Consumidores obrigatórios do mesmo contrato:
+Consumidores META obrigatórios do mesmo contrato:
 
 ```text
 META_LUPA
 MENOS_E_MAIS
 INSTINTO_SUPERIOR
 EXPANSAO_DE_DOMINIO
+METACOGNICAO_OPERACIONAL
 ```
+
+A lei também vale para qualquer outra capacidade que alegue evolução. Os cinco acima são autorreflexivos por contrato; os demais podem ser medidos pelo mesmo gate sem ganhar motor paralelo.
 
 Se o estado anterior e posterior forem iguais, se não houver informação nova, se teste/regressão não passarem, se capacidade anterior for perdida ou se o receipt for adulterado, o resultado permanece `EVOLUTION_UNPROVEN`.
 
 Guardrails:
 
+- documentação melhorada, sozinha, não prova evolução comportamental;
 - metacognição operacional não prova consciência subjetiva;
 - scaffold alterado não implica mudança dos pesos do modelo;
 - autoaperfeiçoamento sem evidência externa/contraprova aplicável permanece `UNPROVEN`;
