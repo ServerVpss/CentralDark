@@ -55,12 +55,13 @@ A ordem do filesystem é normalizada antes do fingerprint; reordenação sem mud
 ```text
 experiência/evento
 → normalizar tempo + proveniência
-→ classificar confiança da fonte
+→ calcular classe efetiva da fonte
 → dream-review.mjs
 → proposta derivada
 → CANDIDATE | QUARANTINE
 → MetaLupa/contraprova
-→ prova de consumidor
+→ prova verificada de dono + consumidor
+→ confirmação TOOL_MEASURED
 → elegibilidade de absorção
 → Writer autorizado
 ```
@@ -77,8 +78,8 @@ Cada linha JSONL representa uma observação candidata:
 {
   "event_time": "2026-08-14T12:00:00-03:00",
   "observed_at": "2026-08-14T12:03:00-03:00",
-  "source": "chat:segredo-sol",
-  "source_class": "HUMAN_AUTHORITY",
+  "source": "test:reproducao-local",
+  "source_class": "TOOL_MEASURED",
   "session_id": "session-001",
   "head_sha": "0123456789abcdef0123456789abcdef01234567",
   "kind": "RULE",
@@ -86,7 +87,8 @@ Cada linha JSONL representa uma observação candidata:
   "claim": "hipótese ou aprendizado observado",
   "learning_delta": "o que deve mudar de modo reutilizável",
   "evidence": [{"type": "receipt", "value": "referência verificável"}],
-  "consumer_evidence": [{"type": "test", "value": "consumidor-real-pass"}]
+  "owner_evidence": [{"type":"owner","ref":"dono-canônico","status":"PASS","verified":true}],
+  "consumer_evidence": [{"type":"test","ref":"consumer-path-pass","status":"PASS","verified":true}]
 }
 ```
 
@@ -104,11 +106,22 @@ EXTERNAL_UNTRUSTED
 UNDECLARED
 ```
 
-`source_class` registra a fronteira epistemológica; **nome da fonte não concede autoridade**.
+`source_class` é uma alegação do evento, não autoridade por si só. A classe efetiva pode ser reduzida pelo formato da origem.
+
+## Fonte externa não se autopromove pelo rótulo
+
+Origem com forma externa (`https://`, `web:`, `email:`, `external:`, `fetched:`, `scrape:` etc.) é classificada efetivamente como `EXTERNAL_UNTRUSTED`, mesmo se o payload tentar declarar `HUMAN_AUTHORITY` ou outra classe superior.
+
+```text
+CALLER_LABEL != AUTHORITY
+EXTERNAL_SHAPE + CLAIMED_HUMAN_AUTHORITY
+→ EFFECTIVE_SOURCE_CLASS=EXTERNAL_UNTRUSTED
+→ QUARANTINE
+```
+
+O relatório preserva classe alegada, classe efetiva e se houve clamp para auditoria.
 
 ## Quarentena de matéria externa
-
-Material vindo somente de `EXTERNAL_UNTRUSTED` pode ser minerado, mas não vira candidato promocional normal por repetição ou aparência convincente:
 
 ```text
 EXTERNAL_UNTRUSTED_ONLY
@@ -117,11 +130,28 @@ EXTERNAL_UNTRUSTED_ONLY
 → AUTO_ABSORB_ELIGIBLE=false
 
 EXTERNAL_UNTRUSTED
-+ TOOL_MEASURED|HUMAN_AUTHORITY|INTERNAL com prova aplicável
++ TOOL_MEASURED com prova aplicável
 → CANDIDATE
 ```
 
 A proveniência externa permanece mesmo depois da confirmação. A dependência operacional da fonte não permanece.
+
+## Evidência declarada ≠ evidência verificada
+
+`owner_evidence` e `consumer_evidence` podem carregar contexto, mas só contam para elegibilidade quando o registro possuir:
+
+```text
+TYPE ∈ TEST|RECEIPT|RUNTIME|OWNER|CONSUMER
+VERIFIED=true
+STATUS=PASS
+REF não vazio
+```
+
+Objeto solto como `{type:"test", value:"pass"}` não fecha consumidor nem dono.
+
+```text
+DECLARED_EVIDENCE != VERIFIED_EVIDENCE
+```
 
 ## Elegibilidade de absorção automática
 
@@ -129,19 +159,20 @@ O Dream Review pode marcar ouro como **elegível** para absorção sem devolver 
 
 ```text
 CANDIDATE
-+ FONTE_CONFIRMADA/INDEPENDENTE
++ TOOL_MEASURED
++ OWNER_REACHABILITY=EVIDENCED
 + CONSUMER_REACHABILITY=EVIDENCED
 → AUTO_ABSORB_ELIGIBLE=true
 
 AUTO_ABSORB_ELIGIBLE
-+ DONO_CANÔNICO EXISTENTE
++ DONO CANÔNICO EXISTENTE
 + ESCOPO REVERSÍVEL JÁ AUTORIZADO
 + WRITER CERTO
 + SAME_HEAD / PROVA APLICÁVEL
 → ABSORÇÃO
 ```
 
-Se faltar consumidor, confirmação independente, dono existente ou escopo autorizado, permanece candidato. O propositor não ganha caneta só porque encontrou ouro.
+Se faltar confirmação medida, dono, consumidor ou escopo autorizado, permanece candidato. O propositor não ganha caneta só porque encontrou ouro.
 
 ```text
 ELIGIBLE != APPLIED
@@ -160,15 +191,14 @@ Backfill, sincronização atrasada e importação nunca devem fabricar causalida
 
 ## Consumidor real
 
-`target` é obrigatório. `consumer_evidence` registra prova de que a capacidade chega a um consumidor observável.
+`target` é obrigatório. Consumidor e dono precisam ser evidenciados quando o claim depender de alcance real.
 
 ```text
 CODIGO_EXISTE != CAPACIDADE_PROVADA
 MECANISMO_EXISTE != CONSUMIDOR_PROVADO
 CAPABILITY_CLAIM → CONSUMER_EVIDENCE
+AUTO_ABSORB → OWNER_EVIDENCE + CONSUMER_EVIDENCE + TOOL_MEASURED
 ```
-
-Ausência de `consumer_evidence` não apaga o candidato; deixa `consumer_reachability=UNPROVEN` e impede usar a existência do código como prova de comportamento ou marcar autoabsorção como elegível.
 
 ## Escrita sem churn
 
@@ -242,10 +272,12 @@ DIRECT_CANONICAL_MUTATION=false
 META_LUPA_BEFORE_PROMOTION=true
 SAME_HEAD_REVALIDATION_REQUIRED=true
 SOURCE_IDENTITY_IS_NOT_AUTHORITY=true
+CALLER_LABEL_CANNOT_ELEVATE_EXTERNAL_SOURCE=true
 EXTERNAL_UNTRUSTED_ALONE_NEVER_AUTO_PROMOTE=true
+DECLARED_EVIDENCE_IS_NOT_VERIFIED_EVIDENCE=true
 EVENT_TIME_NE_OBSERVED_AT=true
 CONSUMER_EVIDENCE_REQUIRED_FOR_CAPABILITY_CLAIM=true
-AUTO_ABSORB_REQUIRES_PROVEN_OWNER_CONSUMER_AUTHORIZED_SCOPE=true
+AUTO_ABSORB_REQUIRES_TOOL_MEASURED_OWNER_CONSUMER_AUTHORIZED_SCOPE=true
 PROPOSER_DIRECT_WRITE_FORBIDDEN=true
 NO_CHANGE_NE_NOISE=true
 NO_NEW_INFORMATION=STOP=true
