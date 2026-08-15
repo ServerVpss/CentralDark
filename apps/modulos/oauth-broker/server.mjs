@@ -1,5 +1,5 @@
 // ============================================================
-// OAuth Broker CentralDark — porta 8098 (v2.1 — test + welcome-kit)
+// OAuth Broker CentralDark — porta 8098 (v2.2 — contabo + gmail + cf test)
 // ============================================================
 import express from "express";
 import crypto from "node:crypto";
@@ -41,17 +41,14 @@ function toBuffer(raw){
   if(Buffer.isBuffer(raw)) return raw;
   if(raw && raw.type==="Buffer" && Array.isArray(raw.data)) return Buffer.from(raw.data);
   if(typeof raw==="string"){
-    // bytea hex: "\x..." — pode conter JSON serializado {"type":"Buffer","data":[...]}
     if(raw.startsWith("\\x")){
       const hex=raw.slice(2); const asBytes=Buffer.from(hex,"hex");
-      // tenta detectar JSON dentro
       const asText=asBytes.toString("utf8");
       if(asText.startsWith('{"type":"Buffer"')){
         try{ const j=JSON.parse(asText); return Buffer.from(j.data); }catch{}
       }
       return asBytes;
     }
-    // base64 direto
     try{ return Buffer.from(raw,"base64"); }catch{}
   }
   return Buffer.from(raw);
@@ -64,12 +61,11 @@ function decrypt(raw){ const b=toBuffer(raw);
 const app = express();
 app.use(express.json({ limit:"1mb" }));
 app.use((req,res,next)=>{ const st=Date.now();
-  const bp = req.body && Object.keys(req.body).length ? Object.fromEntries(Object.entries(req.body).map(([k,v])=>[k, /key|token|secret/i.test(k)?`***${String(v).slice(-4)}`:v])) : undefined;
+  const bp = req.body && Object.keys(req.body).length ? Object.fromEntries(Object.entries(req.body).map(([k,v])=>[k, /key|token|secret|password/i.test(k)?`***${String(v).slice(-4)}`:v])) : undefined;
   res.on("finish",()=>logAction({kind:"http",method:req.method,path:req.path,status:res.statusCode,ms:Date.now()-st,ip:req.ip,body:bp})); next(); });
 
-app.get("/health",(_q,r)=>r.json({ok:true,service:"oauth-broker",version:"2.1"}));
+app.get("/health",(_q,r)=>r.json({ok:true,service:"oauth-broker",version:"2.2"}));
 
-// ---------- LISTAGEM ----------
 app.get("/api/keys/list", async (req,res)=>{
   try{ const uid=toUuid(req.query.user_id); if(!uid) return res.status(400).json({ok:false,error:"faltou user_id"});
     const {data,error}=await sb.from("oauth_connections").select("id,provider_id,expires_at,status,account_label,consent_at,scopes_granted,last_test_at,last_test_status").eq("user_id",uid).order("consent_at",{ascending:false});
@@ -85,22 +81,34 @@ app.get("/api/providers", async (_q,res)=>{
   }catch(e){return res.status(500).json({ok:false,error:e.message});}
 });
 
-// ---------- STORE ----------
 app.post("/api/keys/store", async (req,res)=>{
   try{ let {user_id,provider_id,api_key,account_label}=req.body||{};
     user_id=toUuid(user_id);
     if(!user_id||!provider_id||!api_key) return res.status(400).json({ok:false,error:"faltou user_id/provider_id/api_key"});
-    if(String(api_key).trim().length<10) return res.status(400).json({ok:false,error:"api_key muito curta"});
+    // Contabo: aceita JSON com 4 campos (mínimo 10 chars no payload)
+    const rawKey = typeof api_key === "object" ? JSON.stringify(api_key) : String(api_key).trim();
+    if(rawKey.length<10) return res.status(400).json({ok:false,error:"api_key muito curta"});
+    if(provider_id === "contabo"){
+      try{
+        const j = JSON.parse(rawKey);
+        for (const k of ["client_id","client_secret","api_user","api_password"]) {
+          if(!j[k]) return res.status(400).json({ok:false,error:`contabo: faltou ${k}`});
+        }
+      }catch{
+        return res.status(400).json({ok:false,error:"contabo: api_key deve ser JSON {client_id,client_secret,api_user,api_password}"});
+      }
+    }
     if(!account_label||!String(account_label).trim()){
       const {count}=await sb.from("oauth_connections").select("id",{count:"exact",head:true}).eq("user_id",user_id).eq("provider_id",provider_id);
       account_label=`conta-${(count||0)+1}`;
     }
     account_label=String(account_label).trim().slice(0,60);
-    const enc=encrypt(String(api_key).trim());
+    const enc=encrypt(rawKey);
     const expiresAt=new Date(Date.now()+365*24*3600*1000).toISOString();
+    const scopes = provider_id === "contabo" ? "instances:read" : "api_key";
     const {data:conn,error}=await sb.from("oauth_connections").upsert({
       user_id, provider_id, access_token_enc:enc, refresh_token_enc:null,
-      scopes_granted:"api_key", expires_at:expiresAt, consent_at:new Date().toISOString(),
+      scopes_granted:scopes, expires_at:expiresAt, consent_at:new Date().toISOString(),
       status:"active", account_label,
     },{onConflict:"user_id,provider_id,account_label"}).select().maybeSingle();
     if(error) return res.status(500).json({ok:false,error:error.message});
@@ -124,9 +132,6 @@ app.delete("/api/keys/:id", async (req,res)=>{
   }catch(e){return res.status(500).json({ok:false,error:e.message});}
 });
 
-// ============================================================
-// 🧪 POST /api/keys/:id/test — ping real na API do provider
-// ============================================================
 const PROVIDER_TEST = {
   openai: async (t) => {
     const r = await fetch("https://api.openai.com/v1/models", { headers:{ Authorization:`Bearer ${t}` }});
@@ -168,10 +173,53 @@ const PROVIDER_TEST = {
     const j = await r.json().catch(()=>({}));
     return { ok:r.ok, http:r.status, detail: r.ok ? (j.email||"ok") : (j.error?.message||"erro") };
   },
+  gmail: async (t) => {
+    const r = await fetch("https://gmail.googleapis.com/gmail/v1/users/me/profile", { headers:{ Authorization:`Bearer ${t}` }});
+    const j = await r.json().catch(()=>({}));
+    return { ok:r.ok, http:r.status, detail: r.ok ? (j.emailAddress||"ok") : (j.error?.message||JSON.stringify(j).slice(0,120)) };
+  },
   supabase: async (t) => {
     const r = await fetch("https://api.supabase.com/v1/projects", { headers:{ Authorization:`Bearer ${t}` }});
     const j = await r.json().catch(()=>({}));
     return { ok:r.ok, http:r.status, detail: r.ok ? `${(j||[]).length} projetos` : (j.message||"erro") };
+  },
+  cloudflare: async (t) => {
+    const r = await fetch("https://api.cloudflare.com/client/v4/user/tokens/verify", { headers:{ Authorization:`Bearer ${t}`, Accept:"application/json" }});
+    const j = await r.json().catch(()=>({}));
+    const active = j?.success && j?.result?.status === "active";
+    return { ok:!!active, http:r.status, detail: active ? "token active" : (j?.errors?.[0]?.message||"verify fail") };
+  },
+  // Contabo: api_key armazenado = JSON {client_id,client_secret,api_user,api_password}
+  contabo: async (raw) => {
+    let cred;
+    try { cred = JSON.parse(raw); } catch { return { ok:false, http:0, detail:"JSON inválido" }; }
+    const body = new URLSearchParams({
+      client_id: cred.client_id,
+      client_secret: cred.client_secret,
+      username: cred.api_user,
+      password: cred.api_password,
+      grant_type: "password",
+    });
+    const tokRes = await fetch("https://auth.contabo.com/auth/realms/contabo/protocol/openid-connect/token", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body,
+    });
+    const tokJ = await tokRes.json().catch(()=>({}));
+    if (!tokRes.ok || !tokJ.access_token) {
+      return { ok:false, http:tokRes.status, detail: tokJ.error_description || tokJ.error || "auth fail" };
+    }
+    const instRes = await fetch("https://api.contabo.com/v1/compute/instances", {
+      headers: {
+        Authorization: `Bearer ${tokJ.access_token}`,
+        "x-request-id": crypto.randomUUID(),
+        Accept: "application/json",
+      },
+    });
+    const instJ = await instRes.json().catch(()=>({}));
+    if (!instRes.ok) return { ok:false, http:instRes.status, detail: "instances fail" };
+    const n = Array.isArray(instJ?.data) ? instJ.data.length : (instJ?.data ? 1 : 0);
+    return { ok:true, http:instRes.status, detail: `${n} instances (read-only)` };
   },
 };
 
@@ -197,9 +245,6 @@ app.post("/api/keys/:id/test", async (req,res)=>{
   }catch(e){ return res.status(500).json({ok:false,error:e.message}); }
 });
 
-// ============================================================
-// 📚 GET /api/welcome-kit — mapa completo pra MCP/Hermes/IA
-// ============================================================
 app.get("/api/welcome-kit", async (req,res)=>{
   try{
     const uid = req.query.user_id ? toUuid(req.query.user_id) : null;
@@ -215,29 +260,8 @@ app.get("/api/welcome-kit", async (req,res)=>{
         name:"CentralDark",
         hub_base: PUBLIC_BASE,
         domain:"centralldark.com",
-        broker_version:"2.1",
+        broker_version:"2.2",
         principle:"todas as contas de todos os providers vivem AQUI, cifradas AES-256-GCM, com log auditável",
-      },
-      rules:{
-        must_read:[
-          "docs/CONSCIENCIA/DARKAI/README.md (comando darkai + orquestração)",
-          "docs/CONSCIENCIA/ARSENAL/README.md (conselho de IAs)",
-          "docs/CONSCIENCIA/PADRAO-CARD-HERMES.md (padrão Telegram)",
-          "CLAUDE.md seção 9 (áreas protegidas 🔒)",
-        ],
-        must_do:[
-          "usar tokens do HUB via /api/keys/list — jamais hardcode",
-          "toda ação relevante → card Hermes v1.3 no Telegram (@srver1bot)",
-          "sempre PT-BR, tom leigo, direto",
-          "modo enxame: paralelizar 10-20 sub-agentes",
-        ],
-        must_not:[
-          "❌ mexer em áreas 🔒 sem 'PERMITO PIVETE'",
-          "❌ criar tabela/edge no Lovable Cloud (trava ativa — usar HUB)",
-          "❌ usar preto puro (#000), roxo, ou branco puro — padrão esmeralda #10b981",
-          "❌ nome real do usuário — sempre 'Pivete'",
-          "❌ criar coisa nova quando já existe local consolidado — aprimorar no lugar",
-        ],
       },
       providers: providers||[],
       connections,
@@ -245,27 +269,14 @@ app.get("/api/welcome-kit", async (req,res)=>{
         list:"GET /api/keys/list?user_id=X",
         store:"POST /api/keys/store {user_id,provider_id,api_key,account_label}",
         test:"POST /api/keys/:id/test",
-        rename:"PATCH /api/keys/:id {account_label}",
-        remove:"DELETE /api/keys/:id",
-        oauth_start:"GET /oauth/{github|notion|gdrive}/start?user_id=X&redirect_to=URL",
+        oauth_start:"GET /oauth/{github|notion|gdrive|gmail}/start?user_id=X&redirect_to=URL",
         welcome:"GET /api/welcome-kit?user_id=X",
-        logs:"GET /api/logs/tail",
-      },
-      hermes_notify:{
-        connector_id:"telegram",
-        connection_id:"std_01kvw4jkcbekyr1t33vs4p5e9w",
-        bot:"@srver1bot",
-        admin_chat:"1901426549",
-        format:"card Hermes v1.3 em <pre>",
       },
       timestamp: new Date().toISOString(),
     });
   }catch(e){ res.status(500).json({ok:false,error:e.message}); }
 });
 
-// ============================================================
-// OAuth flows
-// ============================================================
 const stateCache = new Map();
 setInterval(()=>{const n=Date.now(); for(const[k,v] of stateCache)if(v.exp<n)stateCache.delete(k);},60000);
 
@@ -275,11 +286,16 @@ const OAUTH_CFG = {
     userinfo: async(t)=>{const r=await fetch("https://api.github.com/user",{headers:{Authorization:`Bearer ${t}`,"User-Agent":"CentralDark-HUB"}});const j=await r.json();return j.login||"github";} },
   notion:{ ok:!!(NOTION_CLIENT_ID&&NOTION_CLIENT_SECRET), authorize:"https://api.notion.com/v1/oauth/authorize", token:"https://api.notion.com/v1/oauth/token",
     scope:"", client_id:NOTION_CLIENT_ID, client_secret:NOTION_CLIENT_SECRET, extraAuth:{owner:"user",response_type:"code"},
-    userinfo: async(_t,tj)=>tj?.workspace_name||"notion-workspace" },
+    userinfo: async(_t,tj)=>tj?.workspace_name ||"notion-workspace" },
   gdrive:{ ok:!!(GOOGLE_OAUTH_CLIENT_ID&&GOOGLE_OAUTH_CLIENT_SECRET), authorize:"https://accounts.google.com/o/oauth2/v2/auth", token:"https://oauth2.googleapis.com/token",
     scope:"https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.readonly openid email profile",
     client_id:GOOGLE_OAUTH_CLIENT_ID, client_secret:GOOGLE_OAUTH_CLIENT_SECRET, extraAuth:{access_type:"offline",prompt:"consent"},
     userinfo: async(t)=>{const r=await fetch("https://www.googleapis.com/oauth2/v2/userinfo",{headers:{Authorization:`Bearer ${t}`}});const j=await r.json();return j.email||"google";} },
+  // Gmail: mesmo client Google, scopes de mail (mínimo readonly + send se consumer exigir depois)
+  gmail:{ ok:!!(GOOGLE_OAUTH_CLIENT_ID&&GOOGLE_OAUTH_CLIENT_SECRET), authorize:"https://accounts.google.com/o/oauth2/v2/auth", token:"https://oauth2.googleapis.com/token",
+    scope:"https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.send openid email profile",
+    client_id:GOOGLE_OAUTH_CLIENT_ID, client_secret:GOOGLE_OAUTH_CLIENT_SECRET, extraAuth:{access_type:"offline",prompt:"consent"},
+    userinfo: async(t)=>{const r=await fetch("https://www.googleapis.com/oauth2/v2/userinfo",{headers:{Authorization:`Bearer ${t}`}});const j=await r.json();return j.email||"gmail";} },
 };
 
 app.get("/oauth/:provider/start", async (req,res)=>{
@@ -289,14 +305,8 @@ app.get("/oauth/:provider/start", async (req,res)=>{
     return res.status(503).send(`<!doctype html><meta charset="utf-8"><title>OAuth ${p}</title>
       <body style="font-family:system-ui;background:#052e2b;color:#e4f5f0;padding:40px;max-width:720px;margin:auto">
       <h1 style="color:#34d399">🛠️ Falta cadastrar OAuth do ${p.toUpperCase()}</h1>
-      <p>Pra ativar login OAuth do <b>${p}</b>, cria um app OAuth no console e coloca as chaves no <code>.env</code>:</p>
-      <pre style="background:#0a3d38;padding:14px;border-radius:8px;overflow:auto">${p==="notion"?"NOTION_CLIENT_ID=xxx\nNOTION_CLIENT_SECRET=yyy":
-      p==="gdrive"?"GOOGLE_OAUTH_CLIENT_ID=xxx\nGOOGLE_OAUTH_CLIENT_SECRET=yyy":"CLIENT_ID/SECRET"}</pre>
-      <p><b>Callback URL a colar no console do provider:</b></p>
-      <pre style="background:#0a3d38;padding:14px;border-radius:8px">${PUBLIC_BASE}/oauth/${p}/callback</pre>
-      <p><b>Console:</b> ${p==="notion"?'<a style="color:#34d399" href="https://www.notion.so/my-integrations">notion.so/my-integrations</a>':
-      p==="gdrive"?'<a style="color:#34d399" href="https://console.cloud.google.com/apis/credentials">console.cloud.google.com/apis/credentials</a>':""}</p>
-      <p style="margin-top:20px"><a href="javascript:history.back()" style="color:#34d399">← voltar</a></p>
+      <p>Callback: <code>${PUBLIC_BASE}/oauth/${p}/callback</code></p>
+      <p><a href="javascript:history.back()" style="color:#34d399">← voltar</a></p>
       </body>`);
   }
   const uid=toUuid(req.query.user_id||"dev-pivete"); const rt=req.query.redirect_to||PUBLIC_BASE;
@@ -341,6 +351,6 @@ app.get("/api/logs/tail",(_q,res)=>{
 });
 
 app.listen(PORT,"127.0.0.1",()=>{
-  console.log(`oauth-broker on 127.0.0.1:${PORT} (v2.1 test + welcome-kit)`);
-  logAction({kind:"boot",port:PORT,version:"2.1",oauth_ready:Object.fromEntries(Object.entries(OAUTH_CFG).map(([k,v])=>[k,v.ok]))});
+  console.log(`oauth-broker on 127.0.0.1:${PORT} (v2.2 contabo+gmail+cf)`);
+  logAction({kind:"boot",port:PORT,version:"2.2",oauth_ready:Object.fromEntries(Object.entries(OAUTH_CFG).map(([k,v])=>[k,v.ok]))});
 });
