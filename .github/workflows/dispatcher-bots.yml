@@ -12,7 +12,7 @@ on:
 
 permissions:
   issues: write
-  pull-requests: read
+  pull-requests: write
   contents: read
 
 concurrency:
@@ -55,12 +55,24 @@ jobs:
               ['assign:chatgpt', 'ChatGPT: apoiar artefatos Mermaid/Canvas/YAML, orquestrar, validar cadeia de prova e fechar somente quando o critério for cumprido. Suporte visual não transfere o Writer do código.'],
             ];
 
-            const comments = await github.paginate(github.rest.issues.listComments, {
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number,
-              per_page: 100,
-            });
+            let comments;
+            try {
+              comments = await github.paginate(github.rest.issues.listComments, {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number,
+                per_page: 100,
+              });
+            } catch (error) {
+              if (kind !== 'PR' || error.status !== 403) throw error;
+              core.warning('DISPATCHER_PR_LIST_FALLBACK=pull_request_reviews');
+              comments = await github.paginate(github.rest.pulls.listReviews, {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: issue_number,
+                per_page: 100,
+              });
+            }
 
             for (const [label, text] of briefings) {
               if (!labels.includes(label)) continue;
@@ -83,10 +95,23 @@ jobs:
                 '---',
                 text,
               ].join('\n');
-              await github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number,
-                body,
-              });
+
+              try {
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number,
+                  body,
+                });
+              } catch (error) {
+                if (kind !== 'PR' || error.status !== 403) throw error;
+                core.warning('DISPATCHER_PR_POST_FALLBACK=pull_request_review');
+                await github.rest.pulls.createReview({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: issue_number,
+                  body,
+                  event: 'COMMENT',
+                });
+              }
             }
