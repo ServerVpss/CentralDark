@@ -4,7 +4,10 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "predev": "node scripts/generate-house-inventory.mjs",
     "dev": "vite",
+    "inventory:generate": "node scripts/generate-house-inventory.mjs",
+    "prebuild": "node scripts/generate-house-inventory.mjs",
     "build": "tsc -b && vite build",
     "preview": "vite preview"
   },

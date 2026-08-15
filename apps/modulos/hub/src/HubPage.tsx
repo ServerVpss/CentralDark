@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { DashboardTab } from './components/dashboard/DashboardTab';
 import { CatalogTab } from './components/catalog/CatalogTab';
+import { InventoryTab } from './components/inventory/InventoryTab';
 import { PoliciesTab } from './components/policies/PoliciesTab';
 import { AuditTab } from './components/audit/AuditTab';
 import { ConnectorsTab } from './components/connectors/ConnectorsTab';
@@ -15,7 +16,6 @@ import { ButtonLogDrawer } from './components/ButtonLogDrawer';
 import { logButton, trackAction } from './lib/buttonLog';
 import { useHubAutoRefresh } from './hooks/useHubAutoRefresh';
 import { hubAuth } from './integrations/supabase/hub-client';
-
 
 export default function HubPage() {
   const [userEmail, setUserEmail] = useState<string | null>(null);
@@ -82,12 +82,12 @@ export default function HubPage() {
         </div>
       </header>
 
-
       <main className="container mx-auto p-6 space-y-6">
         <Tabs defaultValue="dashboard" className="space-y-6" onValueChange={(v) => logButton('hub.tab-change', { tab: v })}>
-          <TabsList className="grid w-full grid-cols-4 sm:grid-cols-8 h-auto sm:h-11 p-1 card-premium gap-1">
+          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-5 xl:grid-cols-10 h-auto p-1 card-premium gap-1">
             <TabsTrigger value="dashboard" className="data-[state=active]:gradient-emerald data-[state=active]:text-primary-foreground data-[state=active]:shadow-3d-primary transition-all">Dashboard</TabsTrigger>
             <TabsTrigger value="hermes" className="data-[state=active]:gradient-emerald data-[state=active]:text-primary-foreground data-[state=active]:shadow-3d-primary transition-all">🧠 Hermes</TabsTrigger>
+            <TabsTrigger value="inventory" className="data-[state=active]:gradient-emerald data-[state=active]:text-primary-foreground data-[state=active]:shadow-3d-primary transition-all">🧬 Inventário</TabsTrigger>
             <TabsTrigger value="gateway" className="data-[state=active]:gradient-emerald data-[state=active]:text-primary-foreground data-[state=active]:shadow-3d-primary transition-all">🔌 Gateway</TabsTrigger>
             <TabsTrigger value="catalog" className="data-[state=active]:gradient-emerald data-[state=active]:text-primary-foreground data-[state=active]:shadow-3d-primary transition-all">Catálogo</TabsTrigger>
             <TabsTrigger value="policies" className="data-[state=active]:gradient-emerald data-[state=active]:text-primary-foreground data-[state=active]:shadow-3d-primary transition-all">Políticas</TabsTrigger>
@@ -99,6 +99,7 @@ export default function HubPage() {
 
           <TabsContent value="dashboard"><DashboardTab /></TabsContent>
           <TabsContent value="hermes"><HermesTab /></TabsContent>
+          <TabsContent value="inventory"><RoleGuard requiredRole="admin"><InventoryTab /></RoleGuard></TabsContent>
           <TabsContent value="gateway"><GatewayTab /></TabsContent>
           <TabsContent value="catalog"><CatalogTab /></TabsContent>
           <TabsContent value="policies">

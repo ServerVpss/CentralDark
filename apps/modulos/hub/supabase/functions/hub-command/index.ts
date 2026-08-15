@@ -3,6 +3,7 @@
 // NÃO executa tarefa longa aqui. A execução é consumida pelo plano de controle fora desta função.
 import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors';
 import { createClient } from 'npm:@supabase/supabase-js@2';
+import { operationalError } from '../_shared/operational-error.mjs';
 
 const CAPABILITY_RE = /^[A-Za-z0-9_-]{1,64}$/;
 const WRITER_SCOPE_RE = /^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$/;
@@ -56,7 +57,25 @@ Deno.serve(async (req) => {
   const { data: isAdmin, error: roleErr } = await asUser.rpc('has_role', { _user_id: uid, _role: 'admin' });
   if (roleErr || !isAdmin) return json(403, { error: 'forbidden' });
 
-  const body = await req.json().catch(() => ({}));
+  let body: Record<string, unknown>;
+  try {
+    body = await req.json();
+  } catch (error) {
+    return json(400, {
+      ok: false,
+      error: operationalError({
+        component: 'hub-command',
+        owner: 'HUB/control-plane',
+        operation: 'create_mission',
+        stage: 'PARSE_REQUEST_JSON',
+        causeClass: 'INVALID_JSON',
+        error,
+        retryable: false,
+        autoRecoveryAttempted: false,
+        nextMachineAction: 'FIX_REQUEST_PAYLOAD_AND_RETRY',
+      }),
+    });
+  }
   const title = String(body.title || '').slice(0, 200).trim();
   if (!title) return json(400, { error: 'title_required' });
 
@@ -117,8 +136,9 @@ Deno.serve(async (req) => {
 
   if (error) return json(500, { error: error.message });
 
-  // Auditoria (sem segredos)
-  await adminApi.from('audit_log_api').insert({
+  // Auditoria (sem segredos). Falha de auditoria é parcial e ganha endereço;
+  // não é engolida nem dispara retry cego que duplicaria a missão já criada.
+  const { error: auditError } = await adminApi.from('audit_log_api').insert({
     request_id: crypto.randomUUID(),
     key_prefix: 'hub-command',
     path: '/hub-command',
@@ -126,7 +146,30 @@ Deno.serve(async (req) => {
     status: 201,
     model: 'admin-op',
     error_code: null,
-  }).then(() => {}, () => {});
+  });
+  if (auditError) {
+    const receipt = operationalError({
+      component: 'hub-command',
+      owner: 'HUB/control-plane',
+      operation: 'create_mission',
+      stage: 'AUDIT_WRITE_AFTER_MISSION_CREATE',
+      causeClass: 'AUDIT_WRITE_FAILED',
+      evidenceRef: { mission_id: data.id },
+      error: auditError,
+      retryable: true,
+      autoRecoveryAttempted: false,
+      nextMachineAction: 'REPAIR_AUDIT_PATH_THEN_REMEASURE_MISSION_WITHOUT_DUPLICATE_RETRY',
+    });
+    console.error(JSON.stringify(receipt));
+    return json(207, {
+      ok: false,
+      partial_success: true,
+      mission_created: true,
+      mission_id: data.id,
+      mission: data,
+      error: receipt,
+    });
+  }
 
   return json(201, {
     ok: true,

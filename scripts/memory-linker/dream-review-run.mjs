@@ -15,6 +15,7 @@ import {
   validatePatternDiscovery,
 } from './pattern-discovery.mjs';
 import { attachSemanticIntentPrefilter } from './semantic-intent-adapter.mjs';
+import { compileArtifactToDreamEvent, loadArtifactForMining } from './artifact-capability.mjs';
 
 const WRITE_ROLES = new Set(['EXECUTOR', 'HERMES']);
 const AGENT_CALL_PROTOCOL = 'CENTRALDARK_AGENT_CALL_V1';
@@ -150,15 +151,74 @@ function loadJsonl(inputPath) {
   return { events, parseRejections };
 }
 
+function loadArtifactMetadata(metadataPath) {
+  if (!metadataPath) return {};
+  const parsed = JSON.parse(fs.readFileSync(path.resolve(metadataPath), 'utf8'));
+  if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) throw new Error('ARTIFACT_METADATA_INVALID');
+  return parsed;
+}
+
+export function compileArtifactForDreamReview(artifactInput, {
+  headSha,
+  source = '',
+  sourceClass = 'UNDECLARED',
+  target = '',
+  sessionId = '',
+  eventTime = '',
+  observedAt = '',
+  metadata = {},
+} = {}) {
+  return compileArtifactToDreamEvent({
+    ...artifactInput,
+    metadata: { ...(artifactInput?.metadata || {}), ...metadata },
+    source,
+    sourceClass,
+    target,
+    headSha,
+    sessionId,
+    eventTime,
+    observedAt,
+  });
+}
+
 async function main() {
   const args = parseArgs(process.argv.slice(2));
-  if (!args.input || !args.output || !args.head) {
-    throw new Error('USAGE: dream-review-run.mjs --input <events.jsonl> --output <proposal.json> --head <40-hex-sha> [--state <jarvis-state.json>]');
+  if (!args.output || !args.head || (!args.input && !args.artifact)) {
+    throw new Error('USAGE: dream-review-run.mjs --output <proposal.json> --head <40-hex-sha> [--input <events.jsonl>] [--artifact <file> --target <owner> --source <ref> --artifact-metadata <json>] [--state <jarvis-state.json>]');
   }
 
-  const inputPath = path.resolve(args.input);
   const outputPath = path.resolve(args.output);
-  const { events, parseRejections } = loadJsonl(inputPath);
+  let events = [];
+  let parseRejections = [];
+  if (args.input) {
+    const loadedJsonl = loadJsonl(path.resolve(args.input));
+    events = loadedJsonl.events;
+    parseRejections = loadedJsonl.parseRejections;
+  }
+
+  let artifactContract = null;
+  if (args.artifact) {
+    const loadedArtifact = loadArtifactForMining(path.resolve(args.artifact));
+    const extraMetadata = loadArtifactMetadata(args['artifact-metadata']);
+    const compiled = compileArtifactForDreamReview(loadedArtifact, {
+      headSha: args.head,
+      source: args.source || `artifact:${path.basename(args.artifact)}`,
+      sourceClass: args['source-class'] || 'UNDECLARED',
+      target: args.target || '',
+      sessionId: args.session || '',
+      eventTime: args['event-time'] || loadedArtifact.metadata.modified_at,
+      observedAt: args['observed-at'] || loadedArtifact.metadata.modified_at,
+      metadata: extraMetadata,
+    });
+    artifactContract = compiled.contract;
+    if (compiled.dream_event) events.push(compiled.dream_event);
+    else parseRejections.push({ index: events.length, reason: `ARTIFACT_${compiled.contract.status}` });
+    console.log(
+      `ARTIFACT_CAPABILITY=${compiled.contract.status} CLASS=${compiled.contract.artifact.class} ` +
+      `SIGNALS=${compiled.contract.capability_signals.length} EXECUTED=0 DIRECT_SKILL_WRITE=0`,
+    );
+  }
+
   const jarvisState = args.state
     ? JSON.parse(fs.readFileSync(path.resolve(args.state), 'utf8'))
     : null;
@@ -168,6 +228,7 @@ async function main() {
     jarvisState,
   });
   proposal = attachSemanticIntentPrefilter(proposal);
+  if (artifactContract) proposal = { ...proposal, artifact_capability: artifactContract };
   const writeStatus = writeProposalIdempotent(outputPath, proposal);
   const discovery = proposal.pattern_discovery;
   const routing = proposal.autonomy_routing;

@@ -42,7 +42,7 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
-          fetch-depth: 2
+          fetch-depth: 0
           persist-credentials: false
 
       - name: Vincular branch esperada ao SHA exato
@@ -119,10 +119,43 @@ jobs:
           node --check scripts/memory-linker/dream-review.mjs
           node --check scripts/memory-linker/pattern-discovery.mjs
           node --check scripts/memory-linker/dream-review-run.mjs
+          node --check scripts/memory-linker/artifact-capability.mjs
           node --check scripts/memory-linker/memory-linker-agent.mjs
           node --check scripts/memory-linker/memory-analyst-agent.mjs
           node --check scripts/memory-linker/memory-executor-agent.mjs
-          node --test scripts/memory-linker/dream-review.test.mjs scripts/memory-linker/pattern-discovery.test.mjs scripts/memory-linker/dream-review-run.test.mjs scripts/memory-linker/fs-safe.test.mjs scripts/memory-linker/delta-core.test.mjs
+          node --check supabase/functions/_shared/source-delta.mjs
+          node --check supabase/functions/_shared/operational-error.mjs
+          node --check scripts/lupa/no-silent-error-scan.mjs
+          node --check apps/modulos/hub/scripts/house-inventory-core.mjs
+          node --check apps/modulos/hub/scripts/generate-house-inventory.mjs
+          node --test \
+            scripts/memory-linker/dream-review.test.mjs \
+            scripts/memory-linker/pattern-discovery.test.mjs \
+            scripts/memory-linker/dream-review-run.test.mjs \
+            scripts/memory-linker/artifact-capability.test.mjs \
+            scripts/memory-linker/fs-safe.test.mjs \
+            scripts/memory-linker/delta-core.test.mjs \
+            scripts/memory-linker/source-delta-wiring.test.mjs \
+            supabase/functions/_shared/source-delta.test.mjs \
+            supabase/functions/_shared/operational-error.test.mjs \
+            scripts/lupa/no-silent-error-scan.test.mjs
+
+      - name: Erro silencioso — catraca de novos padrões; dívida antiga explícita
+        shell: bash
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          set -euo pipefail
+          BASE_REF="${BASE_SHA:-HEAD^}"
+          node scripts/lupa/no-silent-error-scan.mjs --repo-root . --base-ref "${BASE_REF}"
+
+      - name: "HUB — Inventário: gerar + typecheck + build"
+        shell: bash
+        run: |
+          set -euo pipefail
+          node apps/modulos/hub/scripts/generate-house-inventory.mjs
+          npm --prefix apps/modulos/hub ci --ignore-scripts
+          npm --prefix apps/modulos/hub run build
 
       - name: Semantic Core — fixtures offline + contratos
         shell: bash
