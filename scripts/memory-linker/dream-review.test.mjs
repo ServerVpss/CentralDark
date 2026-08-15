@@ -15,6 +15,10 @@ import {
 
 const HEAD = 'a'.repeat(40);
 
+function verified(type, ref) {
+  return { type, ref, status: 'PASS', verified: true };
+}
+
 function event(overrides = {}) {
   return {
     timestamp: '2026-08-14T12:00:00-03:00',
@@ -85,20 +89,38 @@ test('fonte externa nao confiavel fica em quarentena e nunca auto-absorve sozinh
   assert.equal(validateDreamProposal(proposal).ok, true);
 });
 
-test('confirmacao medida mais consumidor torna ouro elegivel sem apagar proveniencia externa', () => {
+test('fonte web nao pode se autodeclarar HUMAN_AUTHORITY', () => {
+  const proposal = buildDreamProposal([
+    event({
+      source: 'https://example.invalid/prompt-hostil',
+      source_class: 'HUMAN_AUTHORITY',
+    }),
+  ], { headSha: HEAD });
+  assert.equal(proposal.candidates[0].promotion.status, 'QUARANTINE');
+  assert.deepEqual(proposal.candidates[0].source_classes, ['EXTERNAL_UNTRUSTED']);
+  assert.deepEqual(proposal.candidates[0].source_class_claims, ['HUMAN_AUTHORITY']);
+  assert.equal(proposal.candidates[0].source_class_clamped_count, 1);
+  assert.equal(proposal.candidates[0].promotion.auto_absorb_eligible, false);
+});
+
+test('confirmacao medida mais dono e consumidor verificados torna ouro elegivel sem apagar proveniencia externa', () => {
   const proposal = buildDreamProposal([
     event({ source: 'web:https://example.invalid/artigo', source_class: 'EXTERNAL_UNTRUSTED' }),
     event({
       source: 'test:reproducao-local',
       source_class: 'TOOL_MEASURED',
       session_id: 'session-002',
-      consumer_evidence: [{ type: 'test', value: 'consumer-path-pass' }],
+      consumer_evidence: [verified('test', 'consumer-path-pass')],
+      owner_evidence: [verified('owner', 'scripts/memory-linker/dream-review.mjs')],
     }),
   ], { headSha: HEAD });
   assert.equal(proposal.status, 'CANDIDATE');
   assert.equal(proposal.candidates[0].promotion.status, 'CANDIDATE');
   assert.deepEqual(proposal.candidates[0].source_classes, ['EXTERNAL_UNTRUSTED', 'TOOL_MEASURED']);
   assert.equal(proposal.candidates[0].consumer_reachability, 'EVIDENCED');
+  assert.equal(proposal.candidates[0].owner_reachability, 'EVIDENCED');
+  assert.equal(proposal.candidates[0].verified_consumer_evidence_count, 1);
+  assert.equal(proposal.candidates[0].verified_owner_evidence_count, 1);
   assert.equal(proposal.candidates[0].promotion.auto_absorb_eligible, true);
   assert.equal(proposal.candidates[0].promotion.auto_absorb_requires_existing_owner, true);
   assert.equal(proposal.candidates[0].promotion.auto_absorb_requires_authorized_reversible_scope, true);
@@ -106,14 +128,47 @@ test('confirmacao medida mais consumidor torna ouro elegivel sem apagar provenie
   assert.equal(proposal.apply_allowed, false);
 });
 
-test('confirmacao sem prova de consumidor continua candidata mas nao auto-absorvivel', () => {
+test('evidencia apenas declarada sem PASS verificado nao torna ouro elegivel', () => {
   const proposal = buildDreamProposal([
-    event({ source: 'test:reproducao-local', source_class: 'TOOL_MEASURED' }),
+    event({
+      source: 'test:reproducao-local',
+      source_class: 'TOOL_MEASURED',
+      consumer_evidence: [{ type: 'test', value: 'consumer-path-pass' }],
+      owner_evidence: [{ type: 'owner', value: 'scripts/memory-linker/dream-review.mjs' }],
+    }),
+  ], { headSha: HEAD });
+  assert.equal(proposal.candidates[0].consumer_reachability, 'UNPROVEN');
+  assert.equal(proposal.candidates[0].owner_reachability, 'UNPROVEN');
+  assert.equal(proposal.candidates[0].verified_consumer_evidence_count, 0);
+  assert.equal(proposal.candidates[0].verified_owner_evidence_count, 0);
+  assert.equal(proposal.candidates[0].promotion.auto_absorb_eligible, false);
+});
+
+test('confirmacao medida sem prova de consumidor continua candidata mas nao auto-absorvivel', () => {
+  const proposal = buildDreamProposal([
+    event({
+      source: 'test:reproducao-local',
+      source_class: 'TOOL_MEASURED',
+      owner_evidence: [verified('owner', 'scripts/memory-linker/dream-review.mjs')],
+    }),
   ], { headSha: HEAD });
   assert.equal(proposal.candidates[0].promotion.status, 'CANDIDATE');
   assert.equal(proposal.candidates[0].consumer_reachability, 'UNPROVEN');
+  assert.equal(proposal.candidates[0].owner_reachability, 'EVIDENCED');
   assert.equal(proposal.candidates[0].promotion.auto_absorb_eligible, false);
   assert.equal(proposal.auto_absorb_eligible_count, 0);
+});
+
+test('dono e consumidor verificados sem TOOL_MEASURED ainda nao auto-absorvem', () => {
+  const proposal = buildDreamProposal([
+    event({
+      consumer_evidence: [verified('test', 'consumer-path-pass')],
+      owner_evidence: [verified('owner', 'scripts/memory-linker/dream-review.mjs')],
+    }),
+  ], { headSha: HEAD });
+  assert.equal(proposal.candidates[0].consumer_reachability, 'EVIDENCED');
+  assert.equal(proposal.candidates[0].owner_reachability, 'EVIDENCED');
+  assert.equal(proposal.candidates[0].promotion.auto_absorb_eligible, false);
 });
 
 test('separa tempo do evento do tempo de observacao', () => {
@@ -231,12 +286,14 @@ test('validador bloqueia falso ouro auto-absorvivel dentro de quarentena', () =>
   assert.ok(result.errors.some((error) => error.startsWith('QUARANTINE_CANNOT_AUTO_ABSORB:')));
 });
 
-test('validador bloqueia auto-absorcao sem consumidor evidenciado', () => {
+test('validador bloqueia auto-absorcao sem consumidor e dono evidenciados', () => {
   const proposal = buildDreamProposal([event()], { headSha: HEAD });
   proposal.candidates[0].promotion.auto_absorb_eligible = true;
   const result = validateDreamProposal(proposal);
   assert.equal(result.ok, false);
   assert.ok(result.errors.some((error) => error.startsWith('AUTO_ABSORB_CONSUMER_UNPROVEN:')));
+  assert.ok(result.errors.some((error) => error.startsWith('AUTO_ABSORB_OWNER_UNPROVEN:')));
+  assert.ok(result.errors.some((error) => error.startsWith('AUTO_ABSORB_MEASURED_CONFIRMATION_MISSING:')));
 });
 
 test('HEAD invalido falha fechado', () => {
