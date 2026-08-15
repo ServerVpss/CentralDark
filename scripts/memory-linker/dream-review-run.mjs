@@ -35,9 +35,12 @@ export function routePatternAutonomy(proposal, state) {
   if (!proposal || typeof proposal !== 'object' || Array.isArray(proposal)) throw new TypeError('PROPOSAL_INVALID');
   if (!state || typeof state !== 'object' || Array.isArray(state)) throw new TypeError('JARVIS_STATE_INVALID');
 
-  const queue = proposal?.pattern_discovery?.autonomy_queue;
-  if (!Array.isArray(queue)) throw new TypeError('AUTONOMY_QUEUE_INVALID');
+  const patternValidation = validatePatternDiscovery(proposal);
+  if (!patternValidation.ok) {
+    throw new Error(`PATTERN_DISCOVERY_INVALID=${patternValidation.errors.join(',')}`);
+  }
 
+  const queue = proposal.pattern_discovery.autonomy_queue;
   const writerAgent = String(state?.writer?.agent ?? '');
   const declaredWriterRole = String(state?.writer?.role ?? '').toUpperCase();
   const writerRole = WRITE_ROLES.has(declaredWriterRole) ? declaredWriterRole : 'EXECUTOR';
