@@ -96,6 +96,7 @@ const CANONICAL = Object.freeze({
   ],
   [META_LUPA_IDENTITY_PATH]: [
     "SEGREDO/CHEFE",
+  ],
   "apps/modulos/elite-gateway/scripts/pivete_routes.py": [
     "CANONICAL_CONTEXT",
     "CANONICAL_CONTEXT_ALLOWLIST",
@@ -230,6 +231,8 @@ const REQUIRED_CLAIM_SURFACES = Object.freeze([
   "ci",
   "cd",
   "telegram",
+]);
+
 const FORBIDDEN_LOADER = Object.freeze([
   { code: "LOADER_GLOB_PIVETE_IA", pattern: /glob\(["']PIVETE-\*\.md["']\)/i },
   { code: "LOADER_CONCAT_ALL_PIVETE_FILES", pattern: /concat_all_files_in_order/i },
