@@ -64,8 +64,22 @@ test('um braço ausente mantém mutação bloqueada', () => {
   assert.equal(packet.ready_for_writer, false);
   assert.equal(packet.mutation_allowed, false);
   assert.equal(packet.canonical_mutation_slots, 0);
-  assert.equal(packet.next_rule, 'RETRY_FAILED_PERCEPTIONS_BEFORE_MUTATION');
+  assert.equal(packet.next_rule, 'RESOLVE_BLOCKED_PERCEPTIONS_BEFORE_MUTATION');
   assert.deepEqual(packet.failed_roles, ['IMPLEMENTATION', 'REGRESSION_FALSE_GREEN', 'SIMPLIFICATION']);
+});
+
+test('hipótese ou evidência UNKNOWN não vira mutação pronta', () => {
+  const results = PERCEPTION_ATTACKS.map((attack) => result(attack.id));
+  results[1] = result('IMPLEMENTATION', {
+    class: 'HYPOTHESIS',
+    evidence_ref: 'UNKNOWN',
+  });
+  const packet = buildPerceptionPacket({ mission: 'mesma intenção', head: 'abc123', results });
+  assert.equal(packet.kernel_convergence.status, 'BLOCKED_UNPROVEN_PERCEPTION_FINDINGS');
+  assert.equal(packet.ready_for_writer, false);
+  assert.equal(packet.canonical_mutation_slots, 0);
+  assert.deepEqual(packet.failed_roles, ['IMPLEMENTATION']);
+  assert.equal(packet.next_rule, 'RESOLVE_BLOCKED_PERCEPTIONS_BEFORE_MUTATION');
 });
 
 test('quatro NO_CHANGE não fabricam trabalho', () => {
