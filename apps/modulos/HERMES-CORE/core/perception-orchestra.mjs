@@ -32,13 +32,21 @@ export const PERCEPTION_ATTACKS = Object.freeze([
   }),
 ]);
 
+const REQUIRED_ROLES = Object.freeze(PERCEPTION_ATTACKS.map((item) => item.id));
+
 const SYSTEM = `Você é um braço READ_ONLY de percepção da CentralDark.
 Sua função é falsificar uma crença por um ângulo específico. Não escreva arquivos, não faça deploy, não proponha autoridade nova e não encerre por votação.
 Devolva APENAS JSON válido neste schema:
-{"claim":"frase curta","class":"FACT|INFERENCE|HYPOTHESIS|UNKNOWN","evidence_ref":"referência observável ou UNKNOWN","counterexample":"o que quebraria a tese","recommended_test":"teste discriminante read-only ou reversível","material_delta":"delta útil ou NO_CHANGE"}`;
+{"claim":"frase curta","class":"FACT|INFERENCE|HYPOTHESIS|UNKNOWN","evidence_ref":"referência observável ou UNKNOWN","independence_key":"fonte/failure-mode causal que torna esta evidência independente, ou UNKNOWN","counterexample":"o que quebraria a tese","recommended_test":"teste discriminante read-only ou reversível","material_delta":"delta útil ou NO_CHANGE"}`;
 
 function normalizeText(value) {
   return String(value ?? '').trim().replace(/\s+/g, ' ');
+}
+
+function normalizeIndependenceKey(value) {
+  const key = normalizeText(value);
+  if (!key || key.toUpperCase() === 'UNKNOWN') return 'UNKNOWN';
+  return key.toLowerCase();
 }
 
 function extractJson(text) {
@@ -81,6 +89,7 @@ export function dedupePerceptionFindings(results) {
         ? String(finding.class).toUpperCase()
         : 'UNKNOWN',
       evidence_ref: normalizeText(finding.evidence_ref) || 'UNKNOWN',
+      independence_key: normalizeIndependenceKey(finding.independence_key),
       counterexample: normalizeText(finding.counterexample),
       recommended_test: normalizeText(finding.recommended_test),
       material_delta: normalizeText(finding.material_delta) || 'NO_CHANGE',
@@ -89,23 +98,92 @@ export function dedupePerceptionFindings(results) {
   return output;
 }
 
+export function confrontPerceptionEvidence(results) {
+  const items = Array.isArray(results) ? results : [];
+  const successfulRoles = new Set(
+    items
+      .filter((item) => item?.status === 'OK' && item.finding)
+      .map((item) => item.role)
+      .filter((role) => REQUIRED_ROLES.includes(role)),
+  );
+  const failedRoles = REQUIRED_ROLES.filter((role) =>
+    items.some((item) => item?.role === role && item?.status !== 'OK')
+  );
+  const missingRoles = REQUIRED_ROLES.filter((role) => !successfulRoles.has(role));
+  const clusters = new Map();
+  const unprovenIndependenceRoles = [];
+  const tests = [];
+
+  for (const item of items) {
+    if (item?.status !== 'OK' || !item.finding || !REQUIRED_ROLES.includes(item.role)) continue;
+    const independenceKey = normalizeIndependenceKey(item.finding.independence_key);
+    if (independenceKey === 'UNKNOWN') {
+      unprovenIndependenceRoles.push(item.role);
+    } else {
+      const roles = clusters.get(independenceKey) || [];
+      roles.push(item.role);
+      clusters.set(independenceKey, roles);
+    }
+    const test = normalizeText(item.finding.recommended_test);
+    if (test && !tests.includes(test)) tests.push(test);
+  }
+
+  const correlatedClusters = [...clusters.entries()]
+    .filter(([, roles]) => roles.length > 1)
+    .map(([independence_key, roles]) => ({ independence_key, roles }));
+
+  const effectiveIndependentCount = clusters.size;
+  const allFourCompleted = missingRoles.length === 0 && successfulRoles.size === REQUIRED_ROLES.length;
+
+  return Object.freeze({
+    required_roles: [...REQUIRED_ROLES],
+    successful_roles: [...successfulRoles],
+    failed_roles: failedRoles,
+    missing_roles: missingRoles,
+    all_four_completed: allFourCompleted,
+    explicit_independence_keys: [...clusters.keys()],
+    effective_independent_count: effectiveIndependentCount,
+    correlated_clusters: correlatedClusters,
+    unproven_independence_roles: [...new Set(unprovenIndependenceRoles)],
+    discriminating_tests: tests,
+    confidence_can_increase: allFourCompleted && effectiveIndependentCount >= 2,
+    four_answers_are_four_proofs: false,
+    correlated_evidence_inflation_blocked: true,
+  });
+}
+
 export function buildPerceptionPacket({ mission, results }) {
   const deduped = dedupePerceptionFindings(results);
+  const materialFindings = deduped.filter(
+    (item) => normalizeText(item.material_delta).toUpperCase() !== 'NO_CHANGE',
+  );
+  const confrontation = confrontPerceptionEvidence(results);
+  const readyForWriter = confrontation.all_four_completed && materialFindings.length > 0;
+  let nextRule = 'CONFRONT_EVIDENCE_THEN_ONE_CANONICAL_MUTATION';
+  if (!confrontation.all_four_completed) nextRule = 'RETRY_MISSING_PERCEPTIONS_BEFORE_MUTATION';
+  else if (!materialFindings.length) nextRule = 'NO_MATERIAL_DELTA_NO_MUTATION';
+
   return Object.freeze({
-    schema_version: 1,
+    schema_version: 2,
     mode: 'PARALLEL_PERCEPTION_SERIAL_MUTATION',
     same_intent: true,
     mission: normalizeText(mission).slice(0, 1200),
     parallel_perception: true,
     mutation_allowed: false,
+    canonical_mutation_slots: 1,
     writer_required_for_mutation: true,
     model_vote_is_truth: false,
     reality_is_judge: true,
     dedupe_required: true,
+    correlated_evidence_inflation_blocked: true,
+    counterproof_required: true,
+    gold_requires_counterproof: true,
     results,
     deduped_findings: deduped,
-    ready_for_writer: deduped.length > 0,
-    next_rule: 'CONFRONT_EVIDENCE_THEN_ONE_CANONICAL_MUTATION',
+    material_findings: materialFindings,
+    evidence_confrontation: confrontation,
+    ready_for_writer: readyForWriter,
+    next_rule: nextRule,
   });
 }
 
@@ -160,6 +238,7 @@ function perceptionPrompt(mission, assignment) {
     `INTENÇÃO ÚNICA: ${normalizeText(mission).slice(0, 8000)}`,
     `ÂNGULO ${assignment.id}: ${assignment.objective}`,
     'Você é percepção somente. Não muta o alvo. Não trate concordância entre modelos como prova.',
+    'Indique independence_key somente quando conseguir nomear a fonte ou failure-mode causal que torna a evidência independente; caso contrário use UNKNOWN.',
     'Procure uma evidência ou teste que possa derrubar a crença. Se não houver delta, material_delta=NO_CHANGE.',
   ].join('\n\n');
 }
