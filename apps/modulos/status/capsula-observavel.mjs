@@ -11,6 +11,7 @@ import {
 } from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { renderOperationalScore } from './operational-score.mjs';
 
 const PHASES = new Set(['PLAN', 'ACT', 'OBSERVE', 'CRITIQUE', 'REFINE', 'DECIDE']);
 const STATUSES = new Set(['PASS', 'FAIL', 'UNKNOWN', 'ANOMALY', 'ACHADO_PENDENTE', 'BLOCKED']);
@@ -29,6 +30,7 @@ const BLOCK_REASONS = new Set([
 const CHIEF_DECISIONS = new Set(['PENDING', 'APPROVED', 'REJECTED']);
 const DIGEST_RE = /^(?:[a-f0-9]{40}|[a-f0-9]{64})$/;
 const HASH_RE = /^[a-f0-9]{64}$/;
+const CAPABILITY_ID_RE = /^[A-Z0-9_:-]{1,80}$/;
 
 export const EVENT_ALLOWED_KEYS = Object.freeze([
   'schema_version',
@@ -60,6 +62,7 @@ export const EVENT_ALLOWED_KEYS = Object.freeze([
   'retained_after_retest',
   'false_green_found',
   'regression_found',
+  'active_capabilities',
   'generalization',
   'retention',
 ]);
@@ -120,6 +123,12 @@ function guaranteeState(measured, ok) {
   return ok ? 'ENFORCED' : 'VIOLATED';
 }
 
+function normalizedCapabilities(value) {
+  return [...new Set((Array.isArray(value) ? value : [])
+    .map((item) => asString(item).toUpperCase())
+    .filter(Boolean))];
+}
+
 export function parseJsonl(text) {
   const events = [];
   const errors = [];
@@ -175,6 +184,17 @@ export function validateEvent(event, index = 0) {
   if (!DIGEST_RE.test(asString(event.candidate_digest))) problems.push(`${at}:CANDIDATE_DIGEST_INVALID`);
   if (!HASH_RE.test(asString(event.evidence_hash))) problems.push(`${at}:EVIDENCE_HASH_INVALID`);
   if (Number.isNaN(Date.parse(event.timestamp_utc))) problems.push(`${at}:TIMESTAMP_INVALID`);
+
+  if (event.active_capabilities != null) {
+    if (!Array.isArray(event.active_capabilities)) {
+      problems.push(`${at}:ACTIVE_CAPABILITIES_INVALID`);
+    } else {
+      if (event.active_capabilities.length > 32) problems.push(`${at}:ACTIVE_CAPABILITIES_TOO_MANY`);
+      const normalized = event.active_capabilities.map((item) => asString(item).toUpperCase());
+      if (normalized.some((item) => !CAPABILITY_ID_RE.test(item))) problems.push(`${at}:ACTIVE_CAPABILITY_ID_INVALID`);
+      if (new Set(normalized).size !== normalized.length) problems.push(`${at}:ACTIVE_CAPABILITY_DUPLICATE`);
+    }
+  }
 
   const tests = event.tests;
   if (!tests || typeof tests !== 'object' || Array.isArray(tests)) {
@@ -295,6 +315,7 @@ function currentRunSummary(runEvents) {
     evaluator_ref: asString(latest?.evaluator_ref) || null,
     writer: asString(latest?.writer) || null,
     event_actor: asString(decision?.event_actor || latest?.event_actor) || null,
+    active_capabilities: normalizedCapabilities(latest?.active_capabilities),
     iteration: latest?.iteration || 0,
     status: decision?.status || 'RUNNING',
     reason: decision?.reason || '',
@@ -307,6 +328,22 @@ function currentRunSummary(runEvents) {
     retention: metric(decision?.retention?.pass || 0, decision?.retention?.total || 0),
     last_event_at_utc: latest?.timestamp_utc || null,
     decision_event_present: Boolean(decision),
+  };
+}
+
+function noEventScore() {
+  return {
+    schema_version: 1,
+    status: 'NO_CHANGE',
+    reason: 'NO_EVENTS',
+    machine_event: null,
+    active_capabilities: [],
+    rejected_capabilities: [],
+    human_presentation: [],
+    authority: 'MACHINE_EVENT',
+    presentation_is_projection: true,
+    presentation_changes_behavior: false,
+    zero_deploy: true,
   };
 }
 
@@ -367,6 +404,15 @@ export function aggregateCapsule(events, options = {}) {
   const latest = latestByTimestamp(events);
   const latestRunEvents = latest ? (runs.get(asString(latest.run_id) || '__invalid__') || []) : [];
   const runSummary = currentRunSummary(latestRunEvents);
+  const operationalScore = latest
+    ? renderOperationalScore({
+        machineEvent: latest,
+        activeCapabilities: runSummary.active_capabilities,
+        validationProblems,
+        sessionId: asString(latest.run_id),
+        presentationEpoch: latest.iteration,
+      })
+    : noEventScore();
 
   let status = 'RUNNING';
   let reason = '';
@@ -394,12 +440,14 @@ export function aggregateCapsule(events, options = {}) {
     Boolean(runSummary.chief_receipt_ref) &&
     runSummary.event_actor !== runSummary.writer &&
     runSummary.event_actor !== runSummary.evaluator_ref;
+  const scoreAllowsPromotion = !['BLOCKED', 'PARTIAL_SAFE'].includes(operationalScore.status);
   const readyForPromotion =
     status === 'PASS' &&
     receiptBoundApproval &&
     currentRunFalseGreenCount === 0 &&
     currentRunRegressionCount === 0 &&
-    validationProblems.length === 0;
+    validationProblems.length === 0 &&
+    scoreAllowsPromotion;
 
   const passDecisions = events.filter((event) => event.phase === 'DECIDE' && event.status === 'PASS');
   const chiefDecisions = events.filter((event) => event.chief_decision !== 'PENDING');
@@ -422,6 +470,7 @@ export function aggregateCapsule(events, options = {}) {
       ready_for_promotion: readyForPromotion,
       current_run: runSummary,
     },
+    operational_score: operationalScore,
     learning: {
       failures_observed: allFailures.length,
       unique_failure_classes: uniqueFailures.size,
@@ -452,6 +501,8 @@ export function aggregateCapsule(events, options = {}) {
         chiefMeasured,
         !validationProblems.some((problem) => problem.includes('CHIEF_')),
       ),
+      machine_event_is_authority: 'ENFORCED',
+      operational_score_is_projection: 'ENFORCED',
       production_not_authorized_by_snapshot: 'ENFORCED',
     },
     validation: {
