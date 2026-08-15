@@ -8,7 +8,7 @@ Este diretório é um **único pipeline**. Não criar `Dream Engine`, `Night Bra
 SCOUT
 memory-linker-agent.mjs
 → mede gaps
-→ fingerprint estável dos achados
+→ delta-core.mjs normaliza + calcula fingerprint
 → mesmo fingerprint: NO_NEW_INFORMATION / STOP
 → delta: last-report.json
 
@@ -22,6 +22,7 @@ EXECUTOR
 memory-executor-agent.mjs
 → auto-fixes documentais seguros já classificados
 → --dry-run = preview sem escrita/commit/push
+→ confina alvo à raiz física de docs/CONSCIENCIA
 → mutação real = escrita atômica
 → receipt separa arquivo / commit / push
 ```
@@ -32,9 +33,12 @@ Relatórios/decisões legados sem fingerprint são migrados deterministicamente 
 
 Scheduler rodar não significa que um agente caro precisa trabalhar de novo.
 
+`delta-core.mjs` concentra a regra pura para Scout e Analyst não divergirem:
+
 ```text
-SCAN
-→ FINGERPRINT_DOS_ACHADOS
+ACHADOS
+→ ORDENAR + DEDUPLICAR
+→ FINGERPRINT ESTÁVEL
 → IGUAL_AO_ANTERIOR
    → NO_NEW_INFORMATION
    → NÃO REGRAVAR RELATÓRIO
@@ -46,7 +50,7 @@ SCAN
    → CONSUMIDOR SEGUINTE
 ```
 
-A ordem do filesystem é normalizada antes do fingerprint; reordenação sem mudança semântica não fabrica aprendizado.
+A ordem do filesystem, ordem das chaves e repetição do mesmo achado não podem fabricar aprendizado. Os testes de `delta-core` exigem que reordenação produza o mesmo fingerprint e informação material nova produza fingerprint diferente.
 
 ## Consolidação ociosa / Dream Review
 
@@ -200,9 +204,22 @@ CAPABILITY_CLAIM → CONSUMER_EVIDENCE
 AUTO_ABSORB → OWNER_EVIDENCE + CONSUMER_EVIDENCE + TOOL_MEASURED
 ```
 
-## Escrita sem churn
+## Escrita sem churn e sem escape físico
 
-`fs-safe.mjs` é o helper compartilhado do módulo para artefatos derivados:
+`fs-safe.mjs` é o helper compartilhado do módulo para artefatos derivados e para validar arquivos que o Executor pode tocar.
+
+```text
+ALVO_DE_CONTEUDO
+→ LSTAT
+→ SYMLINK? REJEITA
+→ ARQUIVO_REGULAR? EXIGE
+→ REALPATH DENTRO DA RAIZ? EXIGE
+→ SÓ ENTÃO LER/ESCREVER
+```
+
+Symlink `.md` dentro de `docs/CONSCIENCIA` apontando para fora não é seguido: vira achado `unsafePaths`, o Analyst classifica como crítico e o Executor não toca.
+
+Para escrita derivada:
 
 ```text
 VALID_PAYLOAD
@@ -257,8 +274,8 @@ O arquivo de saída é uma **proposta derivada**. A absorção canônica continu
 Não há workflow novo para este módulo. `.github/workflows/lupa-conformance.yml` é o consumidor canônico da regressão e deve executar:
 
 ```text
-node --check fs-safe + dream-review + Scout + Analyst + Executor
-node --test dream-review.test.mjs
+node --check delta-core + fs-safe + dream-review + Scout + Analyst + Executor
+node --test dream-review.test.mjs + fs-safe.test.mjs + delta-core.test.mjs
 ```
 
 Uma mudança no memory-linker que quebra essa fronteira deve ficar vermelha antes de ser chamada de evolução.
@@ -281,6 +298,9 @@ AUTO_ABSORB_REQUIRES_TOOL_MEASURED_OWNER_CONSUMER_AUTHORIZED_SCOPE=true
 PROPOSER_DIRECT_WRITE_FORBIDDEN=true
 NO_CHANGE_NE_NOISE=true
 NO_NEW_INFORMATION=STOP=true
+FINGERPRINT_IS_ORDER_INVARIANT=true
+SYMLINK_CONTENT_PATH=FORBIDDEN
+PHYSICAL_ROOT_ESCAPE=FORBIDDEN
 DRY_RUN_IS_NOT_APPLY=true
 COMMIT_IS_NOT_PUSH=true
 LEGACY_STATE_MIGRATES_WITHOUT_RESET=true
