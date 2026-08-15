@@ -76,6 +76,7 @@ const RX_GH_CLIENT_ID = /\bOv2[A-Za-z0-9]{15,30}\b/g; // GitHub OAuth Client ID 
 const RX_SECRET_VAR_USAGE = /\$\{?[A-Z][A-Z0-9_]{2,}_(KEY|TOKEN|SECRET|PASSWORD|PAT)[A-Z0-9_]*\}?/g;
 const RX_NOREPLY_EMAIL = /\b[A-Za-z0-9._%+-]+@users\.noreply\.github\.com\b/g;
 const RX_GENERIC_EMAIL = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/g;
+const RX_SENSITIVE_KEY = /(authorization|cookie|password|passwd|secret|token|api[_-]?key|service[_-]?role|private[_-]?key)/i;
 function scrubIp(ip) {
     if (/^(127\.|0\.0\.0\.0|255\.|10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.)/.test(ip))
         return ip;
@@ -105,6 +106,8 @@ export function sanitizeOutgoingText(input) {
 }
 // Aplica recursivamente em qualquer estrutura (string/array/objeto).
 // Usado pra higienizar o resultado de uma tool MCP antes de devolver.
+// Chaves semanticamente sensíveis são redigidas mesmo quando o valor é curto
+// demais para casar com um padrão de token conhecido.
 export function sanitizeOutgoingDeep(value) {
     if (value == null)
         return value;
@@ -115,7 +118,9 @@ export function sanitizeOutgoingDeep(value) {
     if (typeof value === "object") {
         const out = {};
         for (const [k, v] of Object.entries(value)) {
-            out[k] = sanitizeOutgoingDeep(v);
+            out[k] = RX_SENSITIVE_KEY.test(k)
+                ? "<valor-segredo-removido>"
+                : sanitizeOutgoingDeep(v);
         }
         return out;
     }
