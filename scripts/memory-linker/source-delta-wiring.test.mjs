@@ -71,6 +71,7 @@ test('Inventário da Casa deriva owners reais sem criar segunda verdade', () => 
     assert.ok(item.summary.length <= 240, `resumo gordo ${item.id}`);
     assert.ok(existsSync(resolve(ROOT, item.owner)), `owner inexistente ${item.id}: ${item.owner}`);
     assert.ok(existsSync(resolve(ROOT, item.proof)), `prova inexistente ${item.id}: ${item.proof}`);
+    assert.ok(['CURRENT_OWNER', 'HISTORICAL_RECORD'].includes(item.temporal_scope), `escopo temporal inválido ${item.id}`);
   }
 
   for (const required of [
@@ -83,9 +84,21 @@ test('Inventário da Casa deriva owners reais sem criar segunda verdade', () => 
     'crystal:fixed-point',
   ]) assert.ok(ids.has(required), `poder obrigatório ausente: ${required}`);
 
+  const fixedPointRecords = inventory.items.filter((item) => item.type === 'FIXED_POINT_RECORD');
+  const miningCandidates = inventory.items.filter((item) => item.type === 'LEARNING_CANDIDATE');
+  assert.ok(fixedPointRecords.length > 0, 'ledger real não expôs fixed points registrados');
+  assert.ok(miningCandidates.length > 0, 'ledger real não expôs candidatos/minérios registrados');
+  for (const item of [...fixedPointRecords, ...miningCandidates]) {
+    assert.equal(item.owner, '.agents/skills/meta-lupa/references/uso-ledger.jsonl');
+    assert.equal(item.temporal_scope, 'HISTORICAL_RECORD');
+    assert.ok(item.recorded_at, `registro sem tempo ${item.id}`);
+    assert.ok(!/runtime atual/i.test(item.status));
+  }
+
   const rendered = renderInventoryModule(inventory);
   assert.ok(rendered.includes('export const HOUSE_INVENTORY'));
   assert.ok(rendered.includes('REPOSITORY_OWNERS'));
+  assert.ok(rendered.includes('HISTORICAL_RECORD'));
 });
 
 test('HUB expõe Inventário visível, admin e com o mesmo botão de mineração', () => {
@@ -99,6 +112,7 @@ test('HUB expõe Inventário visível, admin e com o mesmo botão de mineração
   assert.ok(INVENTORY_UI.includes('Mineração'));
   assert.ok(INVENTORY_UI.includes('Cristais'));
   assert.ok(INVENTORY_UI.includes('Artefatos'));
+  assert.ok(INVENTORY_UI.includes('histórico registrado'));
   assert.ok(INVENTORY_UI.includes('o Inventário é índice, não segunda verdade'));
 
   const pkg = JSON.parse(HUB_PACKAGE);
