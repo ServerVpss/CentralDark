@@ -8,6 +8,8 @@ import { atomicWriteUtf8Sync } from './fs-safe.mjs';
 
 const ALLOWED_KINDS = new Set(['MEMORY', 'SKILL', 'RULE', 'TEST', 'GUARDRAIL', 'CONTRACT']);
 const SOURCE_CLASSES = new Set(['HUMAN_AUTHORITY', 'TOOL_MEASURED', 'INTERNAL', 'EXTERNAL_UNTRUSTED', 'UNDECLARED']);
+const VERIFIED_EVIDENCE_TYPES = new Set(['TEST', 'RECEIPT', 'RUNTIME', 'OWNER', 'CONSUMER']);
+const EXTERNAL_SOURCE_RE = /^(?:https?:\/\/|web:|email:|external:|fetched:|scrape:|scraped:|rss:)/i;
 const SHA40_RE = /^[a-f0-9]{40}$/i;
 const VALID_STATUSES = new Set(['CANDIDATE', 'NO_NEW_INFORMATION']);
 const VALID_PROMOTION_STATUSES = new Set(['CANDIDATE', 'QUARANTINE']);
@@ -62,6 +64,20 @@ function normalizeSourceClass(value) {
   return SOURCE_CLASSES.has(normalized) ? normalized : null;
 }
 
+export function effectiveSourceClass(source, claimedClass) {
+  const sourceText = normalizeText(source);
+  if (EXTERNAL_SOURCE_RE.test(sourceText)) return 'EXTERNAL_UNTRUSTED';
+  return normalizeSourceClass(claimedClass);
+}
+
+function isVerifiedEvidence(value) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
+  const type = normalizeText(value.type).toUpperCase();
+  const status = normalizeText(value.status).toUpperCase();
+  const ref = normalizeText(value.ref ?? value.value ?? value.path ?? value.sha);
+  return VERIFIED_EVIDENCE_TYPES.has(type) && value.verified === true && status === 'PASS' && ref.length > 0;
+}
+
 function normalizeEvent(raw, index, expectedHead) {
   const reject = (reason) => ({ ok: false, rejection: { index, reason } });
   if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return reject('EVENT_NOT_OBJECT');
@@ -73,7 +89,9 @@ function normalizeEvent(raw, index, expectedHead) {
 
   const source = normalizeText(raw.source);
   if (!source) return reject('SOURCE_MISSING');
-  const sourceClass = normalizeSourceClass(raw.source_class);
+  const claimedSourceClass = normalizeSourceClass(raw.source_class);
+  if (!claimedSourceClass) return reject('SOURCE_CLASS_INVALID');
+  const sourceClass = effectiveSourceClass(source, claimedSourceClass);
   if (!sourceClass) return reject('SOURCE_CLASS_INVALID');
 
   const sessionId = normalizeText(raw.session_id ?? raw.sessionId);
@@ -103,6 +121,9 @@ function normalizeEvent(raw, index, expectedHead) {
   const consumerEvidence = Array.isArray(raw.consumer_evidence)
     ? raw.consumer_evidence.map(sanitizeEvidence)
     : [];
+  const ownerEvidence = Array.isArray(raw.owner_evidence)
+    ? raw.owner_evidence.map(sanitizeEvidence)
+    : [];
   const fingerprint = sha256(`${kind}\u0000${target}\u0000${sanitizedClaim.toLowerCase()}\u0000${sanitizedDelta.toLowerCase()}`);
 
   return {
@@ -112,7 +133,9 @@ function normalizeEvent(raw, index, expectedHead) {
       event_time: eventTime,
       observed_at: observedAt,
       source: sanitizeDreamText(source),
+      source_class_claimed: claimedSourceClass,
       source_class: sourceClass,
+      source_class_clamped: sourceClass !== claimedSourceClass,
       session_id: sanitizeDreamText(sessionId),
       head_sha: expectedHead.toLowerCase(),
       kind,
@@ -121,6 +144,7 @@ function normalizeEvent(raw, index, expectedHead) {
       learning_delta: sanitizedDelta,
       evidence: sanitizedEvidence,
       consumer_evidence: consumerEvidence,
+      owner_evidence: ownerEvidence,
       fingerprint,
     },
   };
@@ -165,9 +189,12 @@ export function buildDreamProposal(events, { headSha, parseRejections = [] } = {
       last_event_time: event.event_time,
       sources: [],
       source_classes: [],
+      source_class_claims: [],
+      source_class_clamped_count: 0,
       session_ids: [],
       evidence: [],
       consumer_evidence: [],
+      owner_evidence: [],
       observations: 0,
     };
 
@@ -177,9 +204,12 @@ export function buildDreamProposal(events, { headSha, parseRejections = [] } = {
     current.last_event_time = current.last_event_time > event.event_time ? current.last_event_time : event.event_time;
     current.sources.push(event.source);
     current.source_classes.push(event.source_class);
+    current.source_class_claims.push(event.source_class_claimed);
+    if (event.source_class_clamped) current.source_class_clamped_count += 1;
     current.session_ids.push(event.session_id);
     current.evidence.push(...event.evidence);
     current.consumer_evidence.push(...event.consumer_evidence);
+    current.owner_evidence.push(...event.owner_evidence);
     current.observations += 1;
     grouped.set(event.fingerprint, current);
   }
@@ -187,21 +217,34 @@ export function buildDreamProposal(events, { headSha, parseRejections = [] } = {
   const candidates = [...grouped.values()]
     .map((candidate) => {
       const sourceClasses = [...new Set(candidate.source_classes)].sort();
+      const sourceClassClaims = [...new Set(candidate.source_class_claims)].sort();
       const consumerEvidence = dedupeStable(candidate.consumer_evidence);
+      const ownerEvidence = dedupeStable(candidate.owner_evidence);
+      const verifiedConsumerEvidence = consumerEvidence.filter(isVerifiedEvidence);
+      const verifiedOwnerEvidence = ownerEvidence.filter(isVerifiedEvidence);
       const quarantineOnly = sourceClasses.length > 0 && sourceClasses.every((value) => value === 'EXTERNAL_UNTRUSTED');
-      const hasIndependentOrMeasuredSource = sourceClasses.some((value) =>
-        value === 'TOOL_MEASURED' || value === 'HUMAN_AUTHORITY' || value === 'INTERNAL');
-      const consumerReachability = consumerEvidence.length > 0 ? 'EVIDENCED' : 'UNPROVEN';
-      const autoAbsorbEligible = !quarantineOnly && hasIndependentOrMeasuredSource && consumerReachability === 'EVIDENCED';
+      const hasMeasuredSource = sourceClasses.includes('TOOL_MEASURED');
+      const consumerReachability = verifiedConsumerEvidence.length > 0 ? 'EVIDENCED' : 'UNPROVEN';
+      const ownerReachability = verifiedOwnerEvidence.length > 0 ? 'EVIDENCED' : 'UNPROVEN';
+      const autoAbsorbEligible =
+        !quarantineOnly &&
+        hasMeasuredSource &&
+        consumerReachability === 'EVIDENCED' &&
+        ownerReachability === 'EVIDENCED';
 
       return {
         ...candidate,
         sources: [...new Set(candidate.sources)].sort(),
         source_classes: sourceClasses,
+        source_class_claims: sourceClassClaims,
         session_ids: [...new Set(candidate.session_ids)].sort(),
         evidence: dedupeStable(candidate.evidence),
         consumer_evidence: consumerEvidence,
+        owner_evidence: ownerEvidence,
+        verified_consumer_evidence_count: verifiedConsumerEvidence.length,
+        verified_owner_evidence_count: verifiedOwnerEvidence.length,
         consumer_reachability: consumerReachability,
+        owner_reachability: ownerReachability,
         promotion: {
           status: quarantineOnly ? 'QUARANTINE' : 'CANDIDATE',
           direct_canonical_mutation: false,
@@ -210,6 +253,8 @@ export function buildDreamProposal(events, { headSha, parseRejections = [] } = {
           proof_ownership_when_applicable: true,
           independent_confirmation_required: quarantineOnly,
           consumer_evidence_required_for_capability_claim: true,
+          owner_evidence_required_for_auto_absorb: true,
+          measured_confirmation_required_for_auto_absorb: true,
           auto_absorb_eligible: autoAbsorbEligible,
           auto_absorb_requires_existing_owner: true,
           auto_absorb_requires_authorized_reversible_scope: true,
@@ -249,11 +294,14 @@ export function buildDreamProposal(events, { headSha, parseRejections = [] } = {
       same_head_revalidation_required: true,
       proof_ownership_when_applicable: true,
       external_untrusted_alone_never_auto_promote: true,
+      caller_label_cannot_elevate_external_source: true,
       source_identity_is_not_authority: true,
       consumer_evidence_required_for_capability_claim: true,
+      verified_owner_and_consumer_required_for_auto_absorb: true,
+      measured_confirmation_required_for_auto_absorb: true,
       auto_absorb_when_proven_owner_consumer_authorized: true,
       proposer_direct_write_forbidden: true,
-      canonical_promotion_path: 'INTENT_AUTHORIZED -> PROVEN_OWNER_CONSUMER -> AUTHORIZED_WRITER -> main',
+      canonical_promotion_path: 'INTENT_AUTHORIZED -> TOOL_MEASURED -> VERIFIED_OWNER_CONSUMER -> AUTHORIZED_WRITER -> main',
     },
   };
 }
@@ -280,8 +328,11 @@ export function validateDreamProposal(proposal) {
     if (promotion.same_head_revalidation_required !== true) errors.push('PROMOTION_SAME_HEAD_REQUIRED');
     if (promotion.proof_ownership_when_applicable !== true) errors.push('PROMOTION_PROOF_OWNERSHIP_REQUIRED');
     if (promotion.external_untrusted_alone_never_auto_promote !== true) errors.push('PROMOTION_UNTRUSTED_QUARANTINE_REQUIRED');
+    if (promotion.caller_label_cannot_elevate_external_source !== true) errors.push('PROMOTION_SOURCE_CLASS_CLAMP_REQUIRED');
     if (promotion.source_identity_is_not_authority !== true) errors.push('PROMOTION_SOURCE_IDENTITY_NOT_AUTHORITY_REQUIRED');
     if (promotion.consumer_evidence_required_for_capability_claim !== true) errors.push('PROMOTION_CONSUMER_EVIDENCE_REQUIRED');
+    if (promotion.verified_owner_and_consumer_required_for_auto_absorb !== true) errors.push('PROMOTION_VERIFIED_OWNER_CONSUMER_REQUIRED');
+    if (promotion.measured_confirmation_required_for_auto_absorb !== true) errors.push('PROMOTION_MEASURED_CONFIRMATION_REQUIRED');
     if (promotion.auto_absorb_when_proven_owner_consumer_authorized !== true) errors.push('PROMOTION_AUTO_ABSORB_CONTRACT_REQUIRED');
     if (promotion.proposer_direct_write_forbidden !== true) errors.push('PROMOTION_PROPOSER_DIRECT_WRITE_FORBIDDEN');
   }
@@ -294,6 +345,8 @@ export function validateDreamProposal(proposal) {
     if (candidate?.promotion?.same_head_revalidation_required !== true) errors.push(`CANDIDATE_SAME_HEAD_REQUIRED:${id}`);
     if (candidate?.promotion?.proof_ownership_when_applicable !== true) errors.push(`CANDIDATE_PROOF_OWNERSHIP_REQUIRED:${id}`);
     if (candidate?.promotion?.consumer_evidence_required_for_capability_claim !== true) errors.push(`CANDIDATE_CONSUMER_EVIDENCE_REQUIRED:${id}`);
+    if (candidate?.promotion?.owner_evidence_required_for_auto_absorb !== true) errors.push(`CANDIDATE_OWNER_EVIDENCE_REQUIRED:${id}`);
+    if (candidate?.promotion?.measured_confirmation_required_for_auto_absorb !== true) errors.push(`CANDIDATE_MEASURED_CONFIRMATION_REQUIRED:${id}`);
     if (candidate?.promotion?.auto_absorb_requires_existing_owner !== true) errors.push(`CANDIDATE_AUTO_ABSORB_OWNER_REQUIRED:${id}`);
     if (candidate?.promotion?.auto_absorb_requires_authorized_reversible_scope !== true) errors.push(`CANDIDATE_AUTO_ABSORB_SCOPE_REQUIRED:${id}`);
     if (!Array.isArray(candidate?.evidence) || candidate.evidence.length === 0) errors.push(`CANDIDATE_EVIDENCE_MISSING:${id}`);
@@ -309,6 +362,12 @@ export function validateDreamProposal(proposal) {
     }
     if (candidate?.promotion?.auto_absorb_eligible === true && candidate?.consumer_reachability !== 'EVIDENCED') {
       errors.push(`AUTO_ABSORB_CONSUMER_UNPROVEN:${id}`);
+    }
+    if (candidate?.promotion?.auto_absorb_eligible === true && candidate?.owner_reachability !== 'EVIDENCED') {
+      errors.push(`AUTO_ABSORB_OWNER_UNPROVEN:${id}`);
+    }
+    if (candidate?.promotion?.auto_absorb_eligible === true && !candidate?.source_classes?.includes('TOOL_MEASURED')) {
+      errors.push(`AUTO_ABSORB_MEASURED_CONFIRMATION_MISSING:${id}`);
     }
   }
 
