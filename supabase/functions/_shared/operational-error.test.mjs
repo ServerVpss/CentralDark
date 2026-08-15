@@ -3,14 +3,16 @@ import test from 'node:test';
 import { operationalError } from './operational-error.mjs';
 
 test('erro operacional sempre entrega endereço mínimo e seguro', () => {
+  const bearerFixture = ['Bearer', 'abcdefghijklmnopqrstuvwxyz'].join(' ');
+  const githubTokenFixture = ['ghp_', 'abcdefghijklmnopqrstuvwxyz'].join('');
   const receipt = operationalError({
     component: 'catalog-sync',
     owner: 'catalog-sync',
     operation: 'github-release-scan',
     stage: 'FETCH_RELEASE',
     causeClass: 'HTTP_401',
-    evidenceRef: { status: 401, authorization: 'Bearer abcdefghijklmnopqrstuvwxyz' },
-    error: new Error('Bearer ghp_abcdefghijklmnopqrstuvwxyz failed'),
+    evidenceRef: { status: 401, authorization: bearerFixture },
+    error: new Error(`${bearerFixture} ${githubTokenFixture} failed`),
     retryable: false,
     autoRecoveryAttempted: true,
     nextMachineAction: 'SURFACE_PERMISSION_WOUND',
