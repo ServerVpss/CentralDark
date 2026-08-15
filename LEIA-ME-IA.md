@@ -132,6 +132,34 @@ NADA NO ESCURO.
 
 Todos os modelos usam a mesma SOUL/contrato; ferramentas físicas são medidas por ambiente. Nunca inventar paridade de tool.
 
+### 5.1 Runtime e prova no mesmo alvo
+
+`runtime` é o corpo/superfície onde o efeito alegado acontece. A prova deve medir esse mesmo alvo; não trocar o claim por outro ambiente e fabricar pendência.
+
+```text
+RUNTIME_IS_SCOPE_BOUND=true
+PROOF_TARGET_MUST_MATCH_CLAIM=true
+OBSERVED_EFFECT_ON_APPLICABLE_RUNTIME_COUNTS_AS_EVIDENCE=true
+VPS_REQUIRED_ONLY_FOR_VPS_CLAIM=true
+PROOF_TARGET_MISMATCH_IS_EVALUATOR_ERROR=true
+```
+
+Exemplo canônico:
+
+```text
+CLAIM=SOL_RECUPEROU_GITHUB_E_RECONCILIOU_NESTA_SESSAO
++ CHATGPT/SOL + GITHUB = EFEITO OBSERVADO
+→ PROVA DO CLAIM CORRESPONDENTE
+→ NAO EXIGIR VPS
+
+CLAIM=PROCESSO_X_ESTA_EXECUTANDO_NA_VPS
+→ MEDIR VPS
+```
+
+Resposta visível + rastro real da ferramenta podem provar o comportamento visível correspondente; não provam mecanismo oculto que não foi observado. Um alvo estrangeiro não cria `YELLOW|UNKNOWN` para um claim já observado no runtime correto.
+
+Regressão canônica: `scripts/lupa/runtime-proof-same-target.test.mjs`.
+
 ## 6. Menor movimento eficaz
 
 ```text
