@@ -7,16 +7,46 @@ Este diretório é um **único pipeline**. Não criar `Dream Engine`, `Night Bra
 ```text
 SCOUT
 memory-linker-agent.mjs
-→ last-report.json
+→ mede gaps
+→ fingerprint estável dos achados
+→ mesmo fingerprint: NO_NEW_INFORMATION / STOP
+→ delta: last-report.json
 
 ANALYST
 memory-analyst-agent.mjs
-→ analyst-decision.json
+→ consome findingFingerprint
+→ mesmo fingerprint já classificado: STOP
+→ delta: analyst-decision.json
 
 EXECUTOR
 memory-executor-agent.mjs
 → auto-fixes documentais seguros já classificados
+→ --dry-run = preview sem escrita/commit/push
+→ mutação real = escrita atômica
+→ receipt separa arquivo / commit / push
 ```
+
+Relatórios/decisões legados sem fingerprint são migrados determinísticamente na leitura; a evolução do pipeline não exige apagar estado anterior nem fabricar erro de migração.
+
+## Regra de despertar por informação
+
+Scheduler rodar não significa que um agente caro precisa trabalhar de novo.
+
+```text
+SCAN
+→ FINGERPRINT_DOS_ACHADOS
+→ IGUAL_AO_ANTERIOR
+   → NO_NEW_INFORMATION
+   → NÃO REGRAVAR RELATÓRIO
+   → NÃO NOTIFICAR
+   → NÃO ACORDAR PRÓXIMA ETAPA POR REPETIÇÃO
+→ DIFERENTE
+   → DELTA
+   → MATERIALIZAR
+   → CONSUMIDOR SEGUINTE
+```
+
+A ordem do filesystem é normalizada antes do fingerprint; reordenação sem mudança semântica não fabrica aprendizado.
 
 ## Consolidação ociosa / Dream Review
 
@@ -125,6 +155,32 @@ VALID_PAYLOAD
 
 Isso separa **execução** de **mutação real** e reduz churn que pareceria aprendizado novo sem existir delta.
 
+## Dry-run verdadeiro
+
+`memory-executor-agent.mjs --dry-run` calcula o que mudaria, mas não escreve arquivo, não faz `git add`, não cria commit e não faz push.
+
+```text
+DRY_RUN
+→ WOULD_CHANGE + SKIPPED + DECISION_FINGERPRINT
+→ ZERO_WRITE
+→ ZERO_COMMIT
+→ ZERO_PUSH
+```
+
+Preview nunca pode ser contado como mudança aplicada.
+
+## Receipt factual de commit/push
+
+O Executor não transforma tentativa em sucesso:
+
+```text
+ARQUIVO = UPDATED|UNCHANGED|FAILED
+COMMIT  = COMMITTED|NO_DIFF|FAILED|NOT_NEEDED
+PUSH    = PUSHED|FAILED|NOT_NEEDED|NOT_ATTEMPTED
+```
+
+`PUSH=FAILED` produz execução `PARTIAL`; a notificação não diz “enviado” quando apenas o arquivo local ou commit existe.
+
 ## Execução manual determinística
 
 ```text
@@ -137,6 +193,17 @@ node scripts/memory-linker/dream-review.mjs \
 A saída declara `WRITE=UPDATED|UNCHANGED`. `UNCHANGED` significa que a execução encontrou exatamente o mesmo resultado e não regravou o arquivo.
 
 O arquivo de saída é uma **proposta derivada**. Promoção para memória/skill/regra canônica continua sendo outra etapa, no mesmo contrato de autoridade e prova da CentralDark.
+
+## Prova no gate existente
+
+Não há workflow novo para este módulo. `.github/workflows/lupa-conformance.yml` é o consumidor canônico da regressão e deve executar:
+
+```text
+node --check fs-safe + dream-review + Scout + Analyst + Executor
+node --test dream-review.test.mjs
+```
+
+Uma mudança no memory-linker que quebra essa fronteira deve ficar vermelha antes de ser chamada de evolução.
 
 ## Regras
 
@@ -151,6 +218,10 @@ EXTERNAL_UNTRUSTED_NEVER_AUTO_PROMOTE=true
 EVENT_TIME_NE_OBSERVED_AT=true
 CONSUMER_EVIDENCE_REQUIRED_FOR_CAPABILITY_CLAIM=true
 NO_CHANGE_NE_NOISE=true
+NO_NEW_INFORMATION=STOP=true
+DRY_RUN_IS_NOT_APPLY=true
+COMMIT_IS_NOT_PUSH=true
+LEGACY_STATE_MIGRATES_WITHOUT_RESET=true
 ```
 
 Agendamento não nasce aqui. Se/quanto o runtime local comprovar um scheduler canônico aplicável, reutilize-o. Sem scheduler provado, `SCHEDULE=UNPROVEN`.
