@@ -138,7 +138,7 @@ test('trabalhar estudar e ensinar é contrato obrigatório e transversal antes d
   assert.ok(pattern.includes('PROCESS_TELEMETRY != RESULT'), 'transversal teaching must not turn process telemetry into result');
 });
 
-test('camada final simples é contrato obrigatório do sistema', () => {
+test('camada final simples e fechamento semântico são contratos obrigatórios do sistema', () => {
   const pattern = readFileSync(RESPONSE_PATTERN, 'utf8');
   const required = [
     'SIMPLE_FINAL_LAYER_REQUIRED=true',
@@ -153,11 +153,33 @@ test('camada final simples é contrato obrigatório do sistema', () => {
     'SAME_TARGET_IN_BOTH_REGISTERS=true',
     'PHYSICAL_OR_OPERATIONAL_LOCATION_MUST_BE_NAMED=true',
     'ACTION_MUST_BE_TRANSLATED_TO_PRACTICAL_VERB=true',
+    'SEMANTIC_CLOSURE_REQUIRED=true',
+    'DIRECT_MEANING_FIRST=true',
+    'NEGATION_ONLY_IS_NOT_EXPLANATION=true',
+    'BARE_OTHER_THING=FORBIDDEN',
+    'CONTRAST_REQUIRES_BOTH_SIDES_EXPLAINED=true',
+    'RELATION_TO_CURRENT_CONTEXT_REQUIRED_WHEN_CONTRASTING=true',
+    'NEW_TERM_CANNOT_BE_USED_AS_UNDEFINED_ESCAPE=true',
+    'USER_MUST_NOT_NEED_SECOND_QUESTION_FOR_NEW_TERM=true',
   ];
   for (const marker of required) assert.ok(pattern.includes(marker), `missing ${marker}`);
   for (const phrase of ['aí em casa/local', 'na VPS/servidor', 'no GitHub/repo', 'no sistema/site real que está no ar']) {
     assert.ok(pattern.includes(phrase), `missing CHEFE register example ${phrase}`);
   }
+  for (const phrase of [
+    'Tags são outra coisa.',
+    'Tag é uma marca fixa presa a um commit específico.',
+    'Queued significa que o trabalho já entrou na fila',
+    'PERGUNTA_DE_SIGNIFICADO',
+    'ELEMENTO_NA_TELA',
+    'CONTRASTE',
+    'ESTADO_TECNICO',
+  ]) {
+    assert.ok(pattern.includes(phrase), `missing semantic closure example ${phrase}`);
+  }
+  const closureIndex = pattern.indexOf('### Fechamento semântico — não parar em rótulo, negação ou “outra coisa”');
+  const simpleIndex = pattern.indexOf('## Camada final obrigatória — NO TEU MODO, SIMPLES');
+  assert.ok(closureIndex >= 0 && closureIndex < simpleIndex, 'semantic closure must be defined before the final simple layer');
 });
 
 test('imagem é sensor e nunca substitui medição viva', () => {
