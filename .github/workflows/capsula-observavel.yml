@@ -8,6 +8,8 @@ on:
       - 'apps/modulos/status/capsula-event.schema.json'
       - 'apps/modulos/status/capsula-data.json'
       - 'apps/modulos/status/capsula.html'
+      - 'apps/modulos/status/operational-score.mjs'
+      - 'apps/modulos/status/operational-score.test.mjs'
       - 'apps/modulos/status/README.md'
       - '.github/workflows/capsula-observavel.yml'
   workflow_dispatch:
@@ -56,7 +58,7 @@ jobs:
 
       - name: Executar testes discriminativos
         id: tests
-        run: node --test apps/modulos/status/capsula-observavel.test.mjs
+        run: node --test apps/modulos/status/capsula-observavel.test.mjs apps/modulos/status/operational-score.test.mjs
 
       - name: Provar estado vazio fail-closed
         id: empty
