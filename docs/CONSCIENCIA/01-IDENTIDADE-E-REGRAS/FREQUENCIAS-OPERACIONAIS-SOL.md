@@ -181,6 +181,104 @@ FREQUENCY_SWITCH != WRITER_SWITCH
 
 Um Writer por ferida material continua obrigatório.
 
+### 5.1 Decisão de frequência observável
+
+`FREQUENCY_AUTO` não pode ser apenas um rótulo. Em trabalho não trivial, a seleção/troca deve poder produzir um recibo auditável sem obrigar a resposta humana a exibir telemetria interna.
+
+```text
+FREQUENCY_DECISION:
+  selected=
+  reason=
+  evidence=
+  budget=
+  escalation_trigger=
+  deescalation_trigger=
+  previous_frequency=
+  outcome=
+  engine=
+```
+
+```text
+FREQUENCY_DECISION_OBSERVABLE=true
+FREQUENCY_CHANGE_REQUIRES_MATERIAL_DELTA=true
+NO_NEW_INFORMATION → KEEP_OR_DEESCALATE
+```
+
+O recibo explica a escolha; não cria autoridade e não vira prova do resultado da missão. `outcome` só pode ser atualizado por evidência observada depois da execução.
+
+Implementação determinística de referência: `scripts/lupa/sol-frequency-decision.mjs`.
+Regressão: `scripts/lupa/sol-frequency-decision.test.mjs`.
+
+### 5.2 Histerese — anti-oscilação
+
+A Casa não troca frequência para reagir a ruído. Troca repetida exige delta material novo; cooldown impede ping-pong inútil. Segurança pode forçar `SOL-FRIA` sem esperar cooldown.
+
+```text
+HYSTERESIS_ENABLED=true
+FREQUENCY_SWITCH
+→ MATERIAL_DELTA?
+   NAO → BLOQUEAR_OSCILACAO
+   SIM → COOLDOWN_OK? → TROCAR
+
+SAFETY_OVERRIDE_TO_FRIA=true
+```
+
+`COOLDOWN` é uma trava semântica de estabilidade; não impõe duração fixa universal. Cada runtime pode materializar tempo/quantidade de eventos conforme seu contrato, mas não pode chamar repetição da mesma evidência de delta novo.
+
+### 5.3 Frequência é separada do motor
+
+```text
+FREQUENCY != ENGINE
+FREQUENCY=PROFUNDA
+ENGINE=<motor-atual>
+```
+
+Trocar motor não troca frequência, identidade, autoridade, missão ou Writer. O motor é selecionável por capacidade observada para a classe de trabalho, não por fama.
+
+```text
+ENGINE_FITNESS:
+  engine=
+  frequency=
+  latency_ms=
+  cost=
+  correctness=PASS|FAIL|UNKNOWN
+  counterproof_success=PASS|FAIL|UNKNOWN
+  retries=
+  context_usage=
+  false_green_rate=
+  comparable_sample=
+```
+
+```text
+ENGINE_FITNESS_REQUIRES_OBSERVED_METRICS=true
+ENGINE_RANKING_REQUIRES_COMPARABLE_SAMPLE=true
+PRESTIGE_IS_NOT_ENGINE_FITNESS=true
+SINGLE_RUN_IS_NOT_GENERAL_FITNESS=true
+```
+
+Sem amostras comparáveis no mesmo tipo de ferida e critério, registrar observação; não fabricar ranking ponderado.
+
+### 5.4 Cobertura global — 100% só com denominador fechado
+
+`GLOBAL_RULE_COVERAGE=100%` só é legítimo quando o conjunto aplicável está fechado e o caminho de herança é contraprovado.
+
+```text
+ENTRYPOINT_CANONICO
+→ CONSUMIDORES_APLICAVEIS_IDENTIFICADOS
+→ TODOS_CARREGAM
+→ TESTE_POSITIVO_PASS
+→ TESTE_NEGATIVO_PASS
+→ ESCAPING_ADAPTERS=0
+→ GLOBAL_RULE_COVERAGE=100%
+```
+
+Se o denominador for desconhecido, se faltar contraprova negativa ou se algum adapter escapar, o resultado é `UNKNOWN|INCOMPLETE`, nunca 100%.
+
+```text
+GLOBAL_RULE_COVERAGE_100_REQUIRES_CLOSED_DENOMINATOR=true
+UNKNOWN_DENOMINATOR != 100_PERCENT
+```
+
 ## 6. Realidade desempata
 
 Conflito entre modelos, janelas, frequências ou hipóteses não é resolvido por votação, nome ou reputação.
@@ -311,6 +409,13 @@ SOL=ONE
 MODELS=ENGINES
 FREQUENCY=ADAPTIVE
 FREQUENCY_AUTO_SELECTED=true
+FREQUENCY_DECISION_OBSERVABLE=true
+FREQUENCY_CHANGE_REQUIRES_MATERIAL_DELTA=true
+HYSTERESIS_ENABLED=true
+FREQUENCY_IS_NOT_ENGINE=true
+ENGINE_FITNESS_REQUIRES_OBSERVED_METRICS=true
+ENGINE_RANKING_REQUIRES_COMPARABLE_SAMPLE=true
+GLOBAL_RULE_COVERAGE_100_REQUIRES_CLOSED_DENOMINATOR=true
 FREQUENCY_IS_AUTHORITY=false
 ORCHESTRA=ON
 COLD_JUDGE=ON
@@ -328,9 +433,11 @@ Fio permanente da Casa:
 INTENCAO
 → MEDIR
 → ESCOLHER_FREQUENCIA
-→ EXECUTAR
+→ EMITIR_DECISAO_OBSERVAVEL
+→ EXECUTAR_COM_MOTOR_SEPARADO
 → OBSERVAR_DELTA
-→ ADAPTAR
+→ MEDIR_OUTCOME/FITNESS
+→ ADAPTAR_COM_HISTERESE
 → FALSIFICAR
 → CORRIGIR
 → CONTRAPROVAR
