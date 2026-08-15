@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import os
 import sys
+from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from scripts.evolution_gate import (  # noqa: E402
@@ -187,3 +188,20 @@ def test_meta_owner_without_fixed_point_is_unproven():
     result = validate(resign(manifest))
     assert result["evolution_verified"] is False
     assert "META_FIXED_POINT_UNPROVEN" in result["errors"]
+
+
+def test_pdf_mining_keeps_biblioteca_elfica_pinned_in_canonical_scaffold():
+    repo_root = Path(__file__).resolve().parents[4]
+    owner = repo_root / "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md"
+    content = owner.read_text(encoding="utf-8")
+
+    required_markers = (
+        "BIBLIOTECA_ELFICA_SOURCE_PINNED=true",
+        "PDF_MINING_SOURCE_POOL+=BIBLIOTECA_ELFICA",
+        "ALWAYS_IN_PDF_SOURCE_POOL=true",
+        "NO_AUTH_QUOTA_CAPTCHA_BYPASS=true",
+        "SOURCE_PROVIDED_BULK_CHANNEL_PREFERRED=true",
+        "EXTERNAL_PDF_BYTES_NOT_COMMITTED_TO_CANONICAL_REPO_BY_DEFAULT=true",
+    )
+    for marker in required_markers:
+        assert marker in content, f"BIBLIOTECA_ELFICA_CANONICAL_MARKER_MISSING={marker}"
