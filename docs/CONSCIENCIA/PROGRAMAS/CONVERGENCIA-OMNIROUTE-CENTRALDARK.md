@@ -1,11 +1,13 @@
 # CONVERGÊNCIA OMNIROUTE → CENTRALDARK
 
 Autoridade: SEGREDO/CHEFE
-Issue-mãe: #722
-PR-mãe permanente: #724
-Branch-mãe: `program/centraldark-convergencia-omniroute-722`
+Issue de referência: #722
+PR histórica: #724 — `CLOSED`, não mergeada, proveniência somente
+Branch histórica: `program/centraldark-convergencia-omniroute-722`
 Missão global relacionada: #604
 Programa Casa/Mente relacionado: PR #554
+
+> **Estado reconciliado em 2026-08-14:** a antiga #724 não é mais control plane operacional nem base obrigatória de trabalho novo. A fonte de verdade vigente é `main` + canônicos vivos + estado real medido. O histórico #722/#724 permanece como proveniência da convergência e não deve ser ressuscitado como governança paralela.
 
 ## Direção final
 
@@ -17,51 +19,50 @@ RESULTADO = UM ÚNICO PRODUTO CENTRALDARK
 
 Não criar painel, router, app, grafo, vault ou produto paralelo sem `GAP_REAL` comprovado.
 
-## PR-mãe permanente
+## Antiga PR-mãe — proveniência, não control plane
 
-A #724 é a espinha dorsal permanente de integração. Ela permanece `OPEN` + `Draft` enquanto o organismo existir.
+A #724 foi a espinha histórica de integração. O estado vivo atual é:
 
-Ela **não** deve virar um diff gigante escrito simultaneamente por vários agentes. O paralelismo acontece em lanes/PRs-filhos e converge para a branch-mãe.
+```text
+PR_724=CLOSED_NOT_MERGED
+ROLE=HISTORICAL_PROVENANCE
+OPERATIONAL_AUTHORITY=NAO
+SOURCE_OF_TRUTH=main + canônicos vivos
+```
+
+Nenhum trabalho novo deve usar a branch histórica como base obrigatória ou reabrir a #724 para recriar o control plane antigo.
+
+Fluxo atual:
 
 ```text
 INTENÇÃO DO SEGREDO/CHEFE
-→ ISSUE/LANE COM LABELS CANÔNICAS
+→ ISSUE/LANE QUANDO NECESSÁRIA
 → 1 WRITER POR ESCOPO
-→ PR-FILHO PEQUENO
-→ BASE = program/centraldark-convergencia-omniroute-722
+→ BRANCH PEQUENA A PARTIR DE main
+→ PR PEQUENA PARA main
 → TESTE + CONTRAPROVA + RECEIPT
-→ MERGE NA BRANCH-MÃE
-→ #722/#724 ATUALIZADAS
-→ REPETIR
+→ PROMOÇÃO PELO FLUXO CANÔNICO
+→ main
+→ REGISTRO
 ```
 
-PR legado que nasceu antes da mãe deve:
-
-```text
-SYNC_MOTHER
-→ MERGE NORMAL, SEM FORCE-PUSH
-→ TESTAR NOVAMENTE
-→ RETARGET PARA BRANCH-MÃE
-```
-
-Não trocar a base no escuro se isso produzir conflito ou estado não-mergeável.
+PR legado ligado à antiga mãe deve ser reconciliado contra o `main` vivo. Não retargetear automaticamente para a branch fechada e não usar force-push.
 
 ## Promoção para `main`
 
-Uma PR mergeada não pode permanecer aberta para sempre. Portanto a #724, enquanto for control plane permanente, não é consumida diretamente pela `main`.
-
-Quando um conjunto estiver provado:
+A promoção vigente segue o contrato canônico de `LEIA-ME-IA.md`, `AGENTS.md`, `docs/CONSCIENCIA/02-PERMISSOES.md` e `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json`.
 
 ```text
-HEAD_EXATO_DA_MAE
-→ SNAPSHOT/RELEASE CANDIDATE
-→ PR CURTA DE PROMOÇÃO PARA main
-→ GATES NO MESMO SHA
-→ MERGE
-→ #724 CONTINUA ABERTA
+INTENCAO_AUTORIZADA
+→ BRANCH/PR PEQUENA BASEADA EM main
+→ TESTE/SCAN APLICAVEL
+→ SEM CONFLITO
+→ HEAD/BASE REVALIDADOS
+→ SQUASH main
+→ RECEIPT
 ```
 
-A PR de promoção não é outra PR-mãe. É apenas transporte de um snapshot provado.
+Não criar segunda PR-mãe nem segundo promotor. O fluxo de promoção continua em `.github/workflows/autonomia-promocao.yml`.
 
 ## API única CentralDark
 
@@ -103,7 +104,7 @@ Labels visíveis novas/ativas seguem `EMOJI + PT-BR + MAIÚSCULO`.
 
 ## Paralelismo profissional
 
-Paralelo por escopo, não vários Writers no mesmo arquivo:
+Paralelo por escopo, não vários Writers no mesmo arquivo. As associações abaixo são referências históricas da convergência e não model-lock atual:
 
 ```text
 #707  CLAUDE
@@ -112,7 +113,6 @@ Paralelo por escopo, não vários Writers no mesmo arquivo:
 #709  CHATGPT/SOL
       → porta-de-entrada
       → API única
-      → branch-mãe também passa pelos gates
 
 #721  SONNET/CLAUDE
       → Artifact Builder
@@ -145,13 +145,14 @@ A existência deste desenho não prova subagentes reais numa determinada sessão
 - Pacotão 01–36 é a gramática do organismo; não criar pacote 37/38/39.
 - Reuse-before-create.
 - Um Writer por escopo.
-- Sem escrita direta na `main`.
+- Sem escrita direta na `main`; usar branch/PR e promoção canônica quando aplicável.
 - `UNKNOWN/SKIPPED/QUEUED` não são `PASS`.
 - Zero regressão.
 - Nenhuma capacidade histórica é removida antes de consumidor + prova + substituto.
 - Estado vivo não deve poluir a `main` com commits periódicos.
+- #722/#724 preservam proveniência; não governam contra o canônico vivo.
 
-## Trilhos que alimentam #722/#724
+## Trilhos históricos da convergência
 
 - #604 — unificação operacional total;
 - PR #554 — Casa + Mente Estendida;
@@ -172,21 +173,23 @@ Outras issues/PRs/branches devem ser classificados antes de criar trabalho novo:
 ```text
 KEEP
 ABSORB_GOLD
-MERGE_INTO_MOTHER
+MERGE_INTO_CANONICAL
 SUPERSEDED
 HISTORICAL
 BLOCKED
 UNKNOWN
 ```
 
-## Gate da PR-mãe
+## Gate histórico da antiga PR-mãe
+
+O gate abaixo preserva o desenho que existia quando #724 era control plane. Ele não é gate operacional atual e não autoriza reabrir a PR:
 
 ```text
 OMNIROUTE_PINNED=PASS
 PACKAGE_01_36=36/36
 HISTORICAL_GOLD_INVENTORIED=PASS
 DUPLICATE_CAPABILITIES_RESOLVED=PASS
-MOTHER_SPINE_ROUTING=PASS
+MOTHER_SPINE_ROUTING=HISTORICAL
 CANONICAL_LABELS_REQUIRED=PASS
 CENTRALDARK_API_SINGLE_ENTRY=PASS
 NEW_PROVIDER_BYPASS=0
@@ -205,4 +208,13 @@ P0_OPEN=0
 P1_OPEN=0
 ```
 
-A #724 permanece `Draft` e aberta como control plane. Promoção para `main` acontece somente por snapshot provado no mesmo SHA e autorização aplicável.
+Estado final deste artefato:
+
+```text
+#722=REFERENCE_TRACKER
+#724=HISTORICAL_CLOSED_NOT_MERGED
+OLD_MOTHER_BRANCH=PROVENANCE_ONLY
+NEW_WORK_BASE=main
+PROMOTION=CANONICAL_SQUASH_FLOW
+PARALLEL_CONTROL_PLANE=NO
+```
