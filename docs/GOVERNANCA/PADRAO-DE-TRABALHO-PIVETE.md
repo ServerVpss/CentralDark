@@ -83,6 +83,21 @@ MENOR_CÓDIGO
 + PROVA_NO_RUNTIME
 ```
 
+### 6.1 Menos é Mais evolui ou estagna
+
+`Menos é Mais` não é uma frase congelada. O método deve evoluir quando a experiência revelar um caminho que preserve ou aumente capacidade com menos complexidade, menos passos, menor blast radius ou menor custo cognitivo.
+
+```text
+MENOS_E_MAIS=EVOLUTION_REQUIRED
+CAPACIDADE_PERDIDA=EVOLUTION_UNPROVEN
+COMPLEXIDADE_AUMENTOU_SEM_GANHO=EVOLUTION_UNPROVEN
+NO_NEW_INFORMATION=STOP
+```
+
+Uma melhoria só pode ser chamada de evolução de `Menos é Mais` quando o mesmo escopo tiver antes/depois verificável, informação nova, delta reutilizável, teste, contraprova, regressão e nenhuma capacidade anterior perdida.
+
+O contrato conceitual vive em `docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md`; o gate executável compartilhado vive em `.agents/skills/meta-lupa/scripts/evolution_gate.py`.
+
 ## 7. Scripts e artefatos
 
 ```text
