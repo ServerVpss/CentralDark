@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-15T19:30:54.093Z",
-  "updatedAtBR": "15/08/2026, 16:30:54 BRT",
+  "updatedAt": "2026-08-15T19:53:37.844Z",
+  "updatedAtBR": "15/08/2026, 16:53:37 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "fix(review): usar API CentralDark antes do darkai local (#896)",
+    "lastCommit": "feat(meta): provar cristal irredutível no CROSS-META (#897)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-15T19:53:37.844Z",
+      "titulo": "Push na main · 243984e21804da6834bfaa1fb917c84e89565457",
+      "detalhe": "feat(meta): provar cristal irredutível no CROSS-META (#897)",
+      "area": "Repositório",
+      "sha": "243984e",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-15T19:30:54.093Z",
       "titulo": "Push na main · 419f21bb76e687cf1ed758f82ac2c3d5975fcd8e",
       "detalhe": "fix(review): usar API CentralDark antes do darkai local (#896)",
@@ -988,14 +996,6 @@
       "detalhe": "docs(consciencia): concentrar DNA cognitivo operacional",
       "area": "Repositório",
       "sha": "ea69d3c",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-15T00:49:52.386Z",
-      "titulo": "Push na main · 997a123c2836e69d52fb78539651851bbf6c1e89",
-      "detalhe": "docs(consciencia): absorver capacidade sobre nome e proveniencia",
-      "area": "Repositório",
-      "sha": "997a123",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-15T19:53:37.844Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 243984e21804da6834bfaa1fb917c84e89565457 (243984e)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-15T19:30:54.093Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 419f21bb76e687cf1ed758f82ac2c3d5975fcd8e (419f21b)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-15T00:56:10.600Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · ea69d3cc6eba82947ae35050b8f1cac6d8179f95 (ea69d3c)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-15T00:49:52.386Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 997a123c2836e69d52fb78539651851bbf6c1e89 (997a123)",
       "area": "Repositório",
       "status": "sucesso"
     }
