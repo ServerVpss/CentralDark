@@ -4,8 +4,6 @@ import crypto from 'node:crypto';
 import { existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-import { validateEvent } from './capsula-observavel.mjs';
-
 export const OPERATIONAL_SCORE_CONTRACT = Object.freeze({
   OPERATIONAL_SCORE: true,
   MACHINE_EVENT_IS_AUTHORITY: true,
@@ -102,6 +100,9 @@ const BEHAVIORAL_MAP = Object.freeze({
   CODA: 'FINAL_RECEIPT_AND_CLOSURE',
 });
 
+const EVENT_STATUSES = new Set(['PASS', 'FAIL', 'UNKNOWN', 'ANOMALY', 'ACHADO_PENDENTE', 'BLOCKED']);
+const HASH64_RE = /^[a-f0-9]{64}$/;
+
 function stableObject(value) {
   if (Array.isArray(value)) return value.map(stableObject);
   if (value && typeof value === 'object') {
@@ -116,15 +117,14 @@ function sha256(value) {
 
 function deterministicIndex(seed, length) {
   if (!Number.isInteger(length) || length <= 0) return -1;
-  const digest = sha256(seed).slice(0, 12);
-  return Number.parseInt(digest, 16) % length;
+  return Number.parseInt(sha256(seed).slice(0, 12), 16) % length;
 }
 
 function normalizedRecent(recent) {
   return new Set((Array.isArray(recent) ? recent : []).map((item) => String(item || '').trim()).filter(Boolean));
 }
 
-function chooseCandidate(candidates, seed, recent) {
+function chooseCandidate(candidates, seed, recent = []) {
   const list = Array.isArray(candidates) ? candidates.filter(Boolean) : [];
   if (!list.length) return '';
   const recentSet = normalizedRecent(recent);
@@ -155,27 +155,14 @@ export function selectSkillSignature(capabilityId, options = {}) {
   const id = String(capabilityId || '').trim().toUpperCase();
   const signature = CAPABILITY_SIGNATURES[id];
   if (!signature) {
-    return Object.freeze({
-      status: 'UNKNOWN_CAPABILITY',
-      capability_id: id || null,
-      active: false,
-      presentation: null,
-    });
+    return Object.freeze({ status: 'UNKNOWN_CAPABILITY', capability_id: id || null, active: false, presentation: null });
   }
 
-  const eventId = String(options.eventId || 'event');
-  const sessionId = String(options.sessionId || 'session');
-  const epoch = String(options.presentationEpoch ?? 0);
-  const baseSeed = `${id}|${eventId}|${sessionId}|${epoch}`;
-  const emoji = options.allowEmoji === false
-    ? ''
-    : chooseCandidate(signature.visual_candidates, `${baseSeed}|visual`, options.recentVisual);
-  const musical = options.allowMusic === false
-    ? ''
-    : chooseCandidate(signature.musical_candidates, `${baseSeed}|music`, options.recentMusical);
-  const verb = chooseCandidate(signature.verbs, `${baseSeed}|verb`, []);
+  const baseSeed = `${id}|${String(options.eventId || 'event')}|${String(options.sessionId || 'session')}|${String(options.presentationEpoch ?? 0)}`;
+  const emoji = options.allowEmoji === false ? '' : chooseCandidate(signature.visual_candidates, `${baseSeed}|visual`, options.recentVisual);
+  const musical = options.allowMusic === false ? '' : chooseCandidate(signature.musical_candidates, `${baseSeed}|music`, options.recentMusical);
+  const verb = chooseCandidate(signature.verbs, `${baseSeed}|verb`);
   const prefix = [emoji, musical].filter(Boolean).join('');
-  const label = `${prefix ? `${prefix} ` : ''}${id} — ${verb}`;
 
   return Object.freeze({
     status: 'READY',
@@ -184,8 +171,21 @@ export function selectSkillSignature(capabilityId, options = {}) {
     owner: signature.owner,
     semantic_role: signature.semantic_role,
     signature_family: signature.signature_family,
-    presentation: Object.freeze({ emoji, musical, verb, label }),
+    presentation: Object.freeze({ emoji, musical, verb, label: `${prefix ? `${prefix} ` : ''}${id} — ${verb}` }),
   });
+}
+
+function validateMachineProjection(event) {
+  const problems = [];
+  if (!event || typeof event !== 'object' || Array.isArray(event)) return ['MACHINE_EVENT_NOT_OBJECT'];
+  for (const field of ['run_id', 'mission_id', 'phase', 'status', 'action', 'evidence_hash', 'writer', 'evaluator_ref']) {
+    if (!String(event[field] ?? '').trim()) problems.push(`MACHINE_EVENT_FIELD_MISSING:${field}`);
+  }
+  if (event.schema_version !== 1) problems.push('MACHINE_EVENT_SCHEMA_VERSION');
+  if (!Number.isInteger(event.iteration) || event.iteration < 1) problems.push('MACHINE_EVENT_ITERATION');
+  if (!EVENT_STATUSES.has(event.status)) problems.push('MACHINE_EVENT_STATUS');
+  if (!HASH64_RE.test(String(event.evidence_hash || ''))) problems.push('MACHINE_EVENT_EVIDENCE_HASH');
+  return problems;
 }
 
 function machineProjection(event) {
@@ -211,6 +211,7 @@ function humanStatusLine(event, allowEmoji = true) {
 export function renderOperationalScore({
   machineEvent,
   activeCapabilities = [],
+  validationProblems = [],
   sessionId = '',
   presentationEpoch = 0,
   allowEmoji = true,
@@ -218,7 +219,8 @@ export function renderOperationalScore({
   recentVisual = [],
   recentMusical = [],
 } = {}) {
-  const eventProblems = validateEvent(machineEvent);
+  const upstreamProblems = Array.isArray(validationProblems) ? validationProblems.filter(Boolean) : ['VALIDATION_PROBLEMS_INVALID'];
+  const eventProblems = [...upstreamProblems, ...validateMachineProjection(machineEvent)];
   if (eventProblems.length) {
     return {
       schema_version: 1,
@@ -231,6 +233,7 @@ export function renderOperationalScore({
       human_presentation: [],
       authority: 'MACHINE_EVENT',
       presentation_is_projection: true,
+      presentation_changes_behavior: false,
       zero_deploy: true,
     };
   }
@@ -257,9 +260,7 @@ export function renderOperationalScore({
     machine_event: machineProjection(machineEvent),
     active_capabilities: active,
     rejected_capabilities: rejected,
-    human_presentation: uniqueIds.length
-      ? [humanStatusLine(machineEvent, allowEmoji), ...active.map((item) => item.presentation.label)]
-      : [],
+    human_presentation: uniqueIds.length ? [humanStatusLine(machineEvent, allowEmoji), ...active.map((item) => item.presentation.label)] : [],
     authority: 'MACHINE_EVENT',
     presentation_is_projection: true,
     presentation_changes_behavior: false,
@@ -268,39 +269,25 @@ export function renderOperationalScore({
 }
 
 function normalizeProperty(value) {
-  return String(value || '')
-    .trim()
-    .toUpperCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[\s-]+/g, '_');
+  return String(value || '').trim().toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[\s-]+/g, '_');
 }
 
-export function compileBehavioralMaterial({
-  artifactClass = 'MUSIC',
-  observableProperties = [],
-  sourceRef = '',
-  evidenceRef = '',
-} = {}) {
-  const normalized = [...new Set((Array.isArray(observableProperties) ? observableProperties : [])
-    .map(normalizeProperty)
-    .filter(Boolean))];
+export function compileBehavioralMaterial({ artifactClass = 'MUSIC', observableProperties = [], sourceRef = '', evidenceRef = '' } = {}) {
+  const normalized = [...new Set((Array.isArray(observableProperties) ? observableProperties : []).map(normalizeProperty).filter(Boolean))];
   const hypotheses = [...new Set(normalized.map((property) => BEHAVIORAL_MAP[property]).filter(Boolean))].sort();
   const unknownProperties = normalized.filter((property) => !BEHAVIORAL_MAP[property]).sort();
-  const status = hypotheses.length ? 'CANDIDATE_ONLY' : 'INSUFFICIENT_EVIDENCE';
-  const fingerprint = sha256(JSON.stringify(stableObject({ artifactClass, hypotheses })));
 
   return {
     schema_version: 1,
     mode: 'BEHAVIORAL_MATERIAL_ABSTRACTION',
-    status,
+    status: hypotheses.length ? 'CANDIDATE_ONLY' : 'INSUFFICIENT_EVIDENCE',
     artifact_class: String(artifactClass || 'UNKNOWN').toUpperCase(),
     observable_properties: normalized,
     behavioral_hypotheses: hypotheses,
     unknown_properties: unknownProperties,
     source_ref: String(sourceRef || '').trim() || null,
     evidence_ref: String(evidenceRef || '').trim() || null,
-    candidate_fingerprint: fingerprint,
+    candidate_fingerprint: sha256(JSON.stringify(stableObject({ artifactClass, hypotheses }))),
     source_is_authority: false,
     raw_content_stored: false,
     protected_text_copied: false,
