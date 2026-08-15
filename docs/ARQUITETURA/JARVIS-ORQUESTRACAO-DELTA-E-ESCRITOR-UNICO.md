@@ -393,9 +393,12 @@ WORK_QUEUE=OPERATIONAL_IN_REPO
 ATOMIC_CLAIM_PER_SCOPE=OPERATIONAL_IN_REPO
 MULTI_WORKER_DIFFERENT_SCOPES=SUPPORTED_BY_CONTRACT
 AUTO_WORK_DISCOVERY_PRODUCER=UNPROVEN
-RESULT_TO_NEW_WORK_CANDIDATE=UNPROVEN
-AUTO_APPROVAL_FROM_WORKER=FORBIDDEN
+RESULT_TO_NEW_WORK_CANDIDATE=IMPLEMENTED_IN_REPO_CANDIDATE
+AUTO_APPROVAL_FROM_WORKER=BLOCKED_BY_DESIGN_AND_TEST
+MIGRATION_RUNTIME=UNPROVEN_NOT_DEPLOYED
 ```
+
+`RESULT_TO_NEW_WORK_CANDIDATE` descreve capacidade implementada e testada no repositório. Não prova que a migration já está aplicada nem que o consumer vivo executa esse caminho; essa fronteira só muda após medição física do runtime.
 
 Um resultado pode revelar próximo trabalho, mas não pode saltar a fronteira de autoridade:
 
