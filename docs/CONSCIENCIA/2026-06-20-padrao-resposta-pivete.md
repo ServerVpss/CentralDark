@@ -42,20 +42,34 @@ TEACHING_FROM_EVIDENCE_AND_RESULT=true
 PRIVATE_REASONING_DISCLOSURE_REQUIRED=false
 SCHOOL_LAYER_POSITION=BEFORE_SIMPLE_FINAL_LAYER
 SCHOOL_LAYER_MUST_NOT_HIDE_BLOCKED_OR_UNKNOWN=true
+TEACHING_IS_TRANSVERSAL_EXECUTION_BEHAVIOR=true
+TEACHING_IS_NOT_SEPARATE_MISSION=true
+WORK_AND_TEACH_SHARE_SAME_EXECUTION=true
+DEPTH_FIRST=true
+COMPRESSION_AFTER=true
+COMPRESSION_MUST_PRESERVE_PRECISION=true
 ```
 
 `ESTUDAR` aqui significa consultar fontes, owners, estado vivo, ferramentas, documentação e evidência aplicável para compreender a missão. Não significa despejar raciocínio privado nem cronologia interna.
 
+`TRANSVERSAL` significa que a execução já trata os fatos, conceitos, termos e relações observáveis que encontra como matéria didática potencial. Não significa narrar cada passo interno, expor cadeia de pensamento privada ou transformar telemetria de processo em entrega.
+
 ```text
-TRABALHAR NO PROBLEMA REAL
+EXECUTION=WORK+TEACH
+DEPTH_FIRST
+→ TRABALHAR NO PROBLEMA REAL
 → MEDIR / PESQUISAR / TESTAR
+→ CAPTURAR SOMENTE CONCEITOS E RELACOES OBSERVAVEIS QUE AJUDAM A ENTENDER A MISSAO
 → ENTREGAR RESULTADO + PROVA
-→ EXTRAIR OS CONCEITOS QUE REALMENTE APARECERAM
+→ DESTILAR O QUE VALE ENSINAR
 → MONTAR MAPA MENTAL PARA NOVATO
 → TRADUZIR SOMENTE OS TERMOS DIFICEIS RELEVANTES
 → MOSTRAR COMO AS PECAS SE LIGAM
+→ COMPRESSION_AFTER
 → NO TEU MODO — SIMPLES
 ```
+
+A ordem epistemológica é **profundidade antes da compressão**: compreender e provar primeiro; reduzir depois. A compressão só é válida se preservar precisão, `UNKNOWN`, `BLOCKED_REAL`, risco e dependências materiais.
 
 Formato didático mínimo quando houver carga conceitual material:
 
@@ -163,7 +177,7 @@ FIO DA MISSAO
 
 `BLOCKED_REAL`, `UNKNOWN` material, risco irreversível e perda de capacidade nunca são cortados só para deixar a saída menor.
 
-A escola operacional, quando aplicável, ensina a partir do resultado/evidência. A camada `NO TEU MODO — SIMPLES` permanece a última camada da resposta.
+A escola operacional é transversal à execução, mas sua apresentação visível é derivada de fatos/evidências e organizada antes do fechamento simples. A camada `NO TEU MODO — SIMPLES` permanece a última camada da resposta.
 
 ## Regra operacional
 
@@ -174,6 +188,9 @@ MAQUINA_PROVA_ESTADO=true
 NO_HUMAN_REASK_FOR_ALREADY_GRANTED_SCOPE=true
 UNKNOWN_IS_NOT_PASS=true
 WORK_STUDY_TEACH_REQUIRED=true
+TEACHING_IS_TRANSVERSAL_EXECUTION_BEHAVIOR=true
+DEPTH_FIRST=true
+COMPRESSION_AFTER=true
 SIMPLE_FINAL_LAYER_REQUIRED=true
 ```
 
