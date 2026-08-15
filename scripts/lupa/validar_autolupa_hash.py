@@ -15,15 +15,9 @@ Uso:
     python scripts/lupa/validar_autolupa_hash.py --fetch
         Também compara o guard com o blob da `main` remota.
 
-    PERMITO_PIVETE=1 python scripts/lupa/validar_autolupa_hash.py --update
-        Atualiza o guard com o hash local atual.
-
-`PERMITO_PIVETE=1` é um sinal técnico legado preservado por compatibilidade.
-Ele NÃO define autoridade humana. Só pode materializar uma autorização já
-aplicável de SEGREDO/CHEFE para alterar a identidade canônica da Meta Lupa.
-    python scripts/lupa/validar_autolupa_hash.py            # local vs guard
-    python scripts/lupa/validar_autolupa_hash.py --fetch    # + valida remoto
-    python scripts/lupa/validar_autolupa_hash.py --update   # requer evento PR autenticado com label permito-segredo
+    python scripts/lupa/validar_autolupa_hash.py --update
+        Atualiza o guard somente quando `authority-approval.mjs` devolver
+        receipt canônico autenticado de SEGREDO/CHEFE.
 """
 from __future__ import annotations
 
@@ -40,7 +34,6 @@ SKILL = ROOT / ".agents/skills/meta-lupa/SKILL.md"
 GUARD = ROOT / ".agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA"
 AUTHORITY_APPROVAL = ROOT / "scripts/lupa/authority-approval.mjs"
 API_URL = "https://api.github.com/repos/ServerVpss/CentralDark/contents/.agents/skills/meta-lupa/SKILL.md?ref=main"
-LEGACY_AUTH_SIGNAL = "PERMITO_PIVETE"
 SKILL_REPO_PATH = ".agents/skills/meta-lupa/SKILL.md"
 CANONICAL_AUTHORITY_RECEIPT = "AUTHORITY_APPROVED=true AUTHORITY=SEGREDO/CHEFE SOURCE=github-label:permito-segredo"
 
@@ -90,7 +83,7 @@ def print_identity(label: str, value: str) -> None:
 
 
 def canonical_authority_approved() -> tuple[bool, str]:
-    """Consulta a fonte única de autoridade; não aceita env-marker legado."""
+    """Consulta a fonte única de autoridade; não aceita marcador local como substituto."""
     if not AUTHORITY_APPROVAL.exists():
         return False, "authority-approval.mjs ausente"
 
@@ -130,20 +123,7 @@ def main() -> int:
     print_identity("HASH_LOCAL_ATUAL", local)
 
     if args.update:
-        if os.environ.get(LEGACY_AUTH_SIGNAL) != "1":
-            print(
-                "[FAIL] UPDATE_BLOQUEADO=falta sinal técnico legado "
-                f"{LEGACY_AUTH_SIGNAL}=1; ele não concede autoridade e só pode "
-                "materializar autorização aplicável de SEGREDO/CHEFE.",
-                file=sys.stderr,
-            )
-            return 3
-
-        GUARD.write_text(render_guard(local), encoding="utf-8")
-        print("[OK] GUARD_ATUALIZADO=SIM")
-        print_identity("NOVO_HASH_ESPERADO", local)
-        print("SIGNIFICADO=O guard agora identifica exatamente o conteúdo versionado atual do SKILL.md.")
-        print("NAO_PROVA=merge|deploy|producao|runtime|autorizacao_operacional")
+        # Autoridade vem ANTES da mutação. Falha de aprovação deixa o guard byte a byte intacto.
         approved, receipt = canonical_authority_approved()
         if not approved:
             print(
@@ -153,12 +133,12 @@ def main() -> int:
             )
             print(f"[AUTHORITY] {receipt}", file=sys.stderr)
             return 3
-        GUARD.write_text(
-            f"{local}  .agents/skills/meta-lupa/SKILL.md\n"
-            "# git-blob SHA1 canônico. Atualize somente com autorização vigente de SEGREDO/CHEFE.\n",
-            encoding="utf-8",
-        )
-        print(f"[OK] guard atualizado -> {local}")
+
+        GUARD.write_text(render_guard(local), encoding="utf-8")
+        print("[OK] GUARD_ATUALIZADO=SIM")
+        print_identity("NOVO_HASH_ESPERADO", local)
+        print("SIGNIFICADO=O guard agora identifica exatamente o conteúdo versionado atual do SKILL.md.")
+        print("NAO_PROVA=merge|deploy|producao|runtime|autorizacao_operacional")
         print(f"[AUTHORITY] {receipt}")
         return 0
 
