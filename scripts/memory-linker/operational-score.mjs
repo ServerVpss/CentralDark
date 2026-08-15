@@ -13,21 +13,21 @@ const REGISTRY = Object.freeze({
 });
 
 const MUSIC_PATTERNS = Object.freeze({
-  rhythm: 'CADENCE',
-  pause: 'WAIT_FOR_INFORMATION',
+  rhythm: 'CADENCE', ritmo: 'CADENCE',
+  pause: 'WAIT_FOR_INFORMATION', pausa: 'WAIT_FOR_INFORMATION',
   crescendo: 'INCREASE_DEPTH_WHILE_INFORMATION_GAIN',
   decrescendo: 'REDUCE_ACTIVITY_ON_CONVERGENCE',
-  refrain: 'RETURN_TO_INVARIANT',
-  bridge: 'STRATEGY_TRANSITION',
-  counterpoint: 'COMPARE_INDEPENDENT_HYPOTHESES',
-  harmony: 'COOPERATE_WITHOUT_SEMANTIC_COLLISION',
-  dissonance: 'INVESTIGATE_CONFLICTING_EVIDENCE',
-  tension: 'UNRESOLVED_HYPOTHESIS',
-  resolution: 'PROVEN_CLOSURE',
+  refrain: 'RETURN_TO_INVARIANT', refrao: 'RETURN_TO_INVARIANT',
+  bridge: 'STRATEGY_TRANSITION', ponte: 'STRATEGY_TRANSITION',
+  counterpoint: 'COMPARE_INDEPENDENT_HYPOTHESES', contraponto: 'COMPARE_INDEPENDENT_HYPOTHESES',
+  harmony: 'COOPERATE_WITHOUT_SEMANTIC_COLLISION', harmonia: 'COOPERATE_WITHOUT_SEMANTIC_COLLISION',
+  dissonance: 'INVESTIGATE_CONFLICTING_EVIDENCE', dissonancia: 'INVESTIGATE_CONFLICTING_EVIDENCE',
+  tension: 'UNRESOLVED_HYPOTHESIS', tensao: 'UNRESOLVED_HYPOTHESIS',
+  resolution: 'PROVEN_CLOSURE', resolucao: 'PROVEN_CLOSURE',
   tempo: 'CADENCE',
-  dynamics: 'INVESTIGATION_INTENSITY',
-  silence: 'NO_NEW_INFORMATION',
-  climax: 'FINAL_COUNTERPROOF',
+  dynamics: 'INVESTIGATION_INTENSITY', dinamica: 'INVESTIGATION_INTENSITY',
+  silence: 'NO_NEW_INFORMATION', silencio: 'NO_NEW_INFORMATION',
+  climax: 'FINAL_COUNTERPROOF', clímax: 'FINAL_COUNTERPROOF', climax: 'FINAL_COUNTERPROOF',
   coda: 'FINAL_RECORD',
 });
 
@@ -114,7 +114,11 @@ export function composeOperationalScore(events, options = {}) {
 }
 
 function normalizeObservation(value) {
-  return String(value ?? '').trim().toLowerCase().replace(/[áàâã]/g, 'a').replace(/[éê]/g, 'e').replace(/[í]/g, 'i').replace(/[óôõ]/g, 'o').replace(/[ú]/g, 'u').replace(/ç/g, 'c');
+  return String(value ?? '')
+    .trim()
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
 }
 
 export function extractMusicBehavioralMaterial({ observations = [], interpretation = '', sourceRef = null } = {}) {
@@ -123,7 +127,7 @@ export function extractMusicBehavioralMaterial({ observations = [], interpretati
   for (const item of raw) {
     const normalized = normalizeObservation(item);
     for (const [token, abstraction] of Object.entries(MUSIC_PATTERNS)) {
-      if (normalized.includes(token)) detected.set(abstraction, token);
+      if (normalized.includes(normalizeObservation(token))) detected.set(abstraction, token);
     }
   }
   const hypotheses = [...detected].map(([abstraction, observed_property]) => ({
@@ -134,12 +138,15 @@ export function extractMusicBehavioralMaterial({ observations = [], interpretati
   return Object.freeze({
     schema_version: 1,
     material_type: 'MUSIC_BEHAVIORAL_MATERIAL',
+    owner: 'scripts/memory-linker/operational-score.mjs',
     source_ref: sourceRef,
     source_is_authority: false,
     copy_music: false,
     copy_lyrics: false,
     direct_skill_write: false,
     execute_action: false,
+    dedupe_required: true,
+    counterproof_required: true,
     hypotheses,
     status: hypotheses.length ? 'CANDIDATE_ONLY' : 'INSUFFICIENT_EVIDENCE',
   });
