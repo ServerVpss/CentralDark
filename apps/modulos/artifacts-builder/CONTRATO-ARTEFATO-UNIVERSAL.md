@@ -53,6 +53,38 @@ bytes reais.
 - Renderer 3D — declarado `3D_NOT_APPLICABLE` para `session-report` (um relatório não precisa de 3D pra ser entendido). Fica disponível como capability futura quando um `artifact_type` realmente se beneficiar (ex.: mapa de dependências, grafo).
 - Reempacotamento do ZIP 01–36 — bytes não disponíveis, ver acima.
 
+## Artefato derivado — visualização não inventa realidade
+
+Artefato estrutural, diagrama, Mermaid, relatório visual ou grafo é uma **visão derivada** do estado canônico/evidenciado. Nunca ganha autoridade para fabricar relação, fluxo, papel ou estado que a fonte canônica não sustenta.
+
+```text
+CANONICO|ESTADO_EVIDENCIADO
+→ ARTEFATO_DERIVADO
+
+ARTEFATO_DERIVADO
+!= AUTORIDADE
+
+MERMAID != VERDADE
+```
+
+Quando uma relação, fluxo, papel ou estado material mudar:
+
+```text
+OURO_ESTRUTURAL
+→ MUDANCA_MATERIAL?
+   NAO → NO_ARTIFACT_CHANGE
+   SIM ↓
+→ REUTILIZAR ARTEFATO EXISTENTE
+→ ATUALIZAR MENOR DELTA OU COMPRIMIR O STALE
+→ VALIDAR FORMATO/RENDERER QUANDO APLICAVEL
+→ CONFERIR CONTRA CANONICO
+→ DISCREPANCIA? NOVA MATERIA-PRIMA PARA MINERACAO
+```
+
+O fluxo permitido é `CANONICO → ARTEFATO`. O fluxo `ARTEFATO → INVENTAR_CANONICO` é proibido.
+
+Artefato obsoleto não deve continuar afirmando topologia/runtime antigo como fato atual. Quando não houver medição física recente, declarar `UNPROVEN|UNKNOWN` em vez de preservar uma certeza visual só porque o diagrama é bonito.
+
 ## Segurança verificada
 
 - `sanitizeText` bloqueia PAT/Bearer/JWT/provider key/bot token/chave privada — 5 testes.
