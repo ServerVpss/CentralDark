@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { validateAgentCall } from '../agent-call.mjs';
 import {
   buildDreamProposal,
   validateDreamProposal,
@@ -14,17 +15,85 @@ import {
   validatePatternDiscovery,
 } from './pattern-discovery.mjs';
 
-export function buildDreamReviewWithPatterns(events, { headSha, parseRejections = [] } = {}) {
+const WRITE_ROLES = new Set(['EXECUTOR', 'HERMES']);
+
+export function routePatternAutonomy(proposal, state) {
+  if (!proposal || typeof proposal !== 'object' || Array.isArray(proposal)) throw new TypeError('PROPOSAL_INVALID');
+  if (!state || typeof state !== 'object' || Array.isArray(state)) throw new TypeError('JARVIS_STATE_INVALID');
+
+  const queue = proposal?.pattern_discovery?.autonomy_queue;
+  if (!Array.isArray(queue)) throw new TypeError('AUTONOMY_QUEUE_INVALID');
+
+  const writerAgent = String(state?.writer?.agent ?? '');
+  const declaredWriterRole = String(state?.writer?.role ?? '').toUpperCase();
+  const writerRole = WRITE_ROLES.has(declaredWriterRole) ? declaredWriterRole : 'EXECUTOR';
+  const coordinator = String(state?.coordinator ?? 'SOL');
+  const routeId = state?.trail?.route_id ? String(state.trail.route_id) : null;
+
+  const routed = queue.map((item) => {
+    const call = {
+      call_id: item.id,
+      mission_id: state?.mission_id ?? '',
+      from: coordinator,
+      to: writerAgent,
+      requested_role: writerRole,
+      observed_head: proposal.head_sha,
+      scope: [item.target],
+      requested_action: `ABSORB_PROVEN_PATTERN:${item.pattern_id}`,
+      write_requested: true,
+      writer_handoff_required: false,
+      pattern_id: item.pattern_id,
+      evidence_candidate_ids: item.member_candidate_ids,
+      ...(routeId ? { trail_id: routeId } : {}),
+    };
+    const receipt = validateAgentCall(call, state);
+    return {
+      queue_id: item.id,
+      pattern_id: item.pattern_id,
+      call,
+      receipt,
+    };
+  });
+
+  const acceptedCount = routed.filter((item) => item.receipt?.accepted === true && item.receipt?.write_authorized === true).length;
+  const blockedCount = routed.length - acceptedCount;
+
+  return {
+    schema_version: 1,
+    mode: 'CANONICAL_AGENT_CALL_ROUTING',
+    protocol: 'CENTRALDARK_AGENT_CALL_V1',
+    head_sha: proposal.head_sha,
+    transport_execution: false,
+    transport_status: 'OUTSIDE_THIS_DETERMINISTIC_CORE',
+    queue_count: queue.length,
+    accepted_call_count: acceptedCount,
+    blocked_call_count: blockedCount,
+    routed,
+  };
+}
+
+export function buildDreamReviewWithPatterns(events, {
+  headSha,
+  parseRejections = [],
+  jarvisState = null,
+} = {}) {
   const baseProposal = buildDreamProposal(events, { headSha, parseRejections });
   const baseValidation = validateDreamProposal(baseProposal);
   if (!baseValidation.ok) {
     throw new Error(`DREAM_PROPOSAL_INVALID=${baseValidation.errors.join(',')}`);
   }
 
-  const enriched = enrichDreamProposal(baseProposal);
+  let enriched = enrichDreamProposal(baseProposal);
   const patternValidation = validatePatternDiscovery(enriched);
   if (!patternValidation.ok) {
     throw new Error(`PATTERN_DISCOVERY_INVALID=${patternValidation.errors.join(',')}`);
+  }
+
+  if (jarvisState) {
+    enriched = {
+      ...enriched,
+      autonomy_routing: routePatternAutonomy(enriched, jarvisState),
+    };
   }
   return enriched;
 }
@@ -59,20 +128,30 @@ function loadJsonl(inputPath) {
 async function main() {
   const args = parseArgs(process.argv.slice(2));
   if (!args.input || !args.output || !args.head) {
-    throw new Error('USAGE: dream-review-run.mjs --input <events.jsonl> --output <proposal.json> --head <40-hex-sha>');
+    throw new Error('USAGE: dream-review-run.mjs --input <events.jsonl> --output <proposal.json> --head <40-hex-sha> [--state <jarvis-state.json>]');
   }
 
   const inputPath = path.resolve(args.input);
   const outputPath = path.resolve(args.output);
   const { events, parseRejections } = loadJsonl(inputPath);
-  const proposal = buildDreamReviewWithPatterns(events, { headSha: args.head, parseRejections });
+  const jarvisState = args.state
+    ? JSON.parse(fs.readFileSync(path.resolve(args.state), 'utf8'))
+    : null;
+  const proposal = buildDreamReviewWithPatterns(events, {
+    headSha: args.head,
+    parseRejections,
+    jarvisState,
+  });
   const writeStatus = writeProposalIdempotent(outputPath, proposal);
   const discovery = proposal.pattern_discovery;
+  const routing = proposal.autonomy_routing;
 
   console.log(
     `DREAM_REVIEW_RUN=${proposal.status} HEAD_SHA=${proposal.head_sha} ` +
     `CANDIDATES=${proposal.candidate_count} PATTERNS=${discovery.pattern_count} ` +
-    `AUTO_HANDOFF=${discovery.autonomy_handoff_eligible_count} DIRECT_APPLY=0 WRITE=${writeStatus}`,
+    `AUTO_HANDOFF=${discovery.autonomy_handoff_eligible_count} ` +
+    `CALLS_ACCEPTED=${routing?.accepted_call_count ?? 'NOT_MEASURED'} ` +
+    `TRANSPORT_EXECUTED=0 DIRECT_APPLY=0 WRITE=${writeStatus}`,
   );
 }
 
