@@ -189,6 +189,11 @@ export function buildDreamProposal(events, { headSha, parseRejections = [] } = {
       const sourceClasses = [...new Set(candidate.source_classes)].sort();
       const consumerEvidence = dedupeStable(candidate.consumer_evidence);
       const quarantineOnly = sourceClasses.length > 0 && sourceClasses.every((value) => value === 'EXTERNAL_UNTRUSTED');
+      const hasIndependentOrMeasuredSource = sourceClasses.some((value) =>
+        value === 'TOOL_MEASURED' || value === 'HUMAN_AUTHORITY' || value === 'INTERNAL');
+      const consumerReachability = consumerEvidence.length > 0 ? 'EVIDENCED' : 'UNPROVEN';
+      const autoAbsorbEligible = !quarantineOnly && hasIndependentOrMeasuredSource && consumerReachability === 'EVIDENCED';
+
       return {
         ...candidate,
         sources: [...new Set(candidate.sources)].sort(),
@@ -196,7 +201,7 @@ export function buildDreamProposal(events, { headSha, parseRejections = [] } = {
         session_ids: [...new Set(candidate.session_ids)].sort(),
         evidence: dedupeStable(candidate.evidence),
         consumer_evidence: consumerEvidence,
-        consumer_reachability: consumerEvidence.length > 0 ? 'EVIDENCED' : 'UNPROVEN',
+        consumer_reachability: consumerReachability,
         promotion: {
           status: quarantineOnly ? 'QUARANTINE' : 'CANDIDATE',
           direct_canonical_mutation: false,
@@ -205,6 +210,9 @@ export function buildDreamProposal(events, { headSha, parseRejections = [] } = {
           proof_ownership_when_applicable: true,
           independent_confirmation_required: quarantineOnly,
           consumer_evidence_required_for_capability_claim: true,
+          auto_absorb_eligible: autoAbsorbEligible,
+          auto_absorb_requires_existing_owner: true,
+          auto_absorb_requires_authorized_reversible_scope: true,
         },
       };
     })
@@ -215,6 +223,7 @@ export function buildDreamProposal(events, { headSha, parseRejections = [] } = {
   const sourceDigest = sha256(stableStringify({ headSha: headSha.toLowerCase(), accepted, rejected }));
   const status = candidates.length > 0 ? 'CANDIDATE' : 'NO_NEW_INFORMATION';
   const quarantinedCandidateCount = candidates.filter((candidate) => candidate.promotion.status === 'QUARANTINE').length;
+  const autoAbsorbEligibleCount = candidates.filter((candidate) => candidate.promotion.auto_absorb_eligible === true).length;
 
   return {
     schema_version: 1,
@@ -228,6 +237,7 @@ export function buildDreamProposal(events, { headSha, parseRejections = [] } = {
     raw_session_mutation: false,
     candidate_count: candidates.length,
     quarantined_candidate_count: quarantinedCandidateCount,
+    auto_absorb_eligible_count: autoAbsorbEligibleCount,
     accepted_event_count: accepted.length,
     rejected_event_count: rejected.length,
     rejected,
@@ -238,10 +248,12 @@ export function buildDreamProposal(events, { headSha, parseRejections = [] } = {
       meta_lupa_required: true,
       same_head_revalidation_required: true,
       proof_ownership_when_applicable: true,
-      external_untrusted_never_auto_promote: true,
+      external_untrusted_alone_never_auto_promote: true,
       source_identity_is_not_authority: true,
       consumer_evidence_required_for_capability_claim: true,
-      canonical_promotion_path: 'INTENT_AUTHORIZED -> AUTO_SQUASH_IF_CLEAN -> main',
+      auto_absorb_when_proven_owner_consumer_authorized: true,
+      proposer_direct_write_forbidden: true,
+      canonical_promotion_path: 'INTENT_AUTHORIZED -> PROVEN_OWNER_CONSUMER -> AUTHORIZED_WRITER -> main',
     },
   };
 }
@@ -267,9 +279,11 @@ export function validateDreamProposal(proposal) {
     if (promotion.meta_lupa_required !== true) errors.push('PROMOTION_META_LUPA_REQUIRED');
     if (promotion.same_head_revalidation_required !== true) errors.push('PROMOTION_SAME_HEAD_REQUIRED');
     if (promotion.proof_ownership_when_applicable !== true) errors.push('PROMOTION_PROOF_OWNERSHIP_REQUIRED');
-    if (promotion.external_untrusted_never_auto_promote !== true) errors.push('PROMOTION_UNTRUSTED_QUARANTINE_REQUIRED');
+    if (promotion.external_untrusted_alone_never_auto_promote !== true) errors.push('PROMOTION_UNTRUSTED_QUARANTINE_REQUIRED');
     if (promotion.source_identity_is_not_authority !== true) errors.push('PROMOTION_SOURCE_IDENTITY_NOT_AUTHORITY_REQUIRED');
     if (promotion.consumer_evidence_required_for_capability_claim !== true) errors.push('PROMOTION_CONSUMER_EVIDENCE_REQUIRED');
+    if (promotion.auto_absorb_when_proven_owner_consumer_authorized !== true) errors.push('PROMOTION_AUTO_ABSORB_CONTRACT_REQUIRED');
+    if (promotion.proposer_direct_write_forbidden !== true) errors.push('PROMOTION_PROPOSER_DIRECT_WRITE_FORBIDDEN');
   }
 
   for (const candidate of proposal.candidates ?? []) {
@@ -280,6 +294,8 @@ export function validateDreamProposal(proposal) {
     if (candidate?.promotion?.same_head_revalidation_required !== true) errors.push(`CANDIDATE_SAME_HEAD_REQUIRED:${id}`);
     if (candidate?.promotion?.proof_ownership_when_applicable !== true) errors.push(`CANDIDATE_PROOF_OWNERSHIP_REQUIRED:${id}`);
     if (candidate?.promotion?.consumer_evidence_required_for_capability_claim !== true) errors.push(`CANDIDATE_CONSUMER_EVIDENCE_REQUIRED:${id}`);
+    if (candidate?.promotion?.auto_absorb_requires_existing_owner !== true) errors.push(`CANDIDATE_AUTO_ABSORB_OWNER_REQUIRED:${id}`);
+    if (candidate?.promotion?.auto_absorb_requires_authorized_reversible_scope !== true) errors.push(`CANDIDATE_AUTO_ABSORB_SCOPE_REQUIRED:${id}`);
     if (!Array.isArray(candidate?.evidence) || candidate.evidence.length === 0) errors.push(`CANDIDATE_EVIDENCE_MISSING:${id}`);
     if (!Array.isArray(candidate?.source_classes) || candidate.source_classes.length === 0) errors.push(`CANDIDATE_SOURCE_CLASS_MISSING:${id}`);
     if (candidate?.promotion?.status === 'QUARANTINE' && candidate?.promotion?.independent_confirmation_required !== true) {
@@ -287,6 +303,12 @@ export function validateDreamProposal(proposal) {
     }
     if (candidate?.promotion?.status === 'CANDIDATE' && candidate?.source_classes?.every((value) => value === 'EXTERNAL_UNTRUSTED')) {
       errors.push(`UNTRUSTED_ONLY_CANNOT_BE_CANDIDATE:${id}`);
+    }
+    if (candidate?.promotion?.status === 'QUARANTINE' && candidate?.promotion?.auto_absorb_eligible === true) {
+      errors.push(`QUARANTINE_CANNOT_AUTO_ABSORB:${id}`);
+    }
+    if (candidate?.promotion?.auto_absorb_eligible === true && candidate?.consumer_reachability !== 'EVIDENCED') {
+      errors.push(`AUTO_ABSORB_CONSUMER_UNPROVEN:${id}`);
     }
   }
 
@@ -339,7 +361,7 @@ async function main() {
   if (!validation.ok) throw new Error(`DREAM_PROPOSAL_INVALID=${validation.errors.join(',')}`);
 
   const writeStatus = writeProposalIdempotent(outputPath, proposal);
-  console.log(`DREAM_REVIEW=${proposal.status} HEAD_SHA=${proposal.head_sha} CANDIDATES=${proposal.candidate_count} ACCEPTED=${proposal.accepted_event_count} REJECTED=${proposal.rejected_event_count} APPLY_ALLOWED=0 WRITE=${writeStatus}`);
+  console.log(`DREAM_REVIEW=${proposal.status} HEAD_SHA=${proposal.head_sha} CANDIDATES=${proposal.candidate_count} AUTO_ABSORB_ELIGIBLE=${proposal.auto_absorb_eligible_count} ACCEPTED=${proposal.accepted_event_count} REJECTED=${proposal.rejected_event_count} APPLY_ALLOWED=0 WRITE=${writeStatus}`);
 }
 
 const isMain = process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1]);
