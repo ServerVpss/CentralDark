@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-08-15T01:17:11.980Z
-- **Commit:** `5057dc2b37e27166c0cfe14cdab129912b9bf28b`
+- **Gerado:** 2026-08-15T01:51:46.146Z
+- **Commit:** `ce97a84caaf4daa0bc978f51ffd0895f3449b3ff`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
