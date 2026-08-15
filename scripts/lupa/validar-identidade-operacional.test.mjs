@@ -578,4 +578,3 @@ test("bot injeta os aprendizados mais recentes, não o início truncado do canô
   assert.deepEqual(_internals.ultimosAprendizados(1), [titulos.at(-1)]);
   assert.notEqual(_internals.ultimosAprendizados(3)[0], titulos[0]);
 });
-});
