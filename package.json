@@ -11,7 +11,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:orchestra": "node scripts/agent-call.test.mjs && node scripts/controlled-dissonance.test.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -60,7 +61,7 @@
     "react-day-picker": "^8.10.1",
     "react-dom": "^18.3.1",
     "react-force-graph-2d": "^1.29.1",
-    "react-helmet-async": "^3.0.0",
+    "react-helmet-async": "^2.0.5",
     "react-hook-form": "^7.61.1",
     "react-resizable-panels": "^2.1.9",
     "react-router-dom": "^6.30.1",
