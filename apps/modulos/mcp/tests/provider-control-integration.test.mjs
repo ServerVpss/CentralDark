@@ -73,6 +73,13 @@ test("ledger e budget ficam no centraldark_private com deny direto ao browser", 
   assert.doesNotMatch(migration, /card_number|payment_nonce|client_secret|api_password/);
 });
 
+test("idempotency key com outcome inconclusivo nunca atravessa a rede de novo", () => {
+  assert.match(migration, /get diagnostics v_inserted = row_count/);
+  assert.match(migration, /v_inserted = 0 and v_row\.state <> 'SUCCEEDED'/);
+  assert.match(migration, /IDEMPOTENCY_OPERATION_ALREADY_RESERVED/);
+  assert.match(migration, /'new_reservation', v_inserted = 1/);
+});
+
 test("budget guard nasce 80/100/120 e nao vira autorizacao de gasto", () => {
   assert.match(migration, /warn_percent numeric\(7,2\) not null default 80/);
   assert.match(migration, /alert_percent numeric\(7,2\) not null default 100/);
