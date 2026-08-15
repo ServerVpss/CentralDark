@@ -275,6 +275,47 @@ LABEL
 
 O aprendizado foi minerado de fonte histórica externa que mostra o risco de tratar usos de “Hermes/hermético” de épocas e correntes diferentes como uma categoria única; a fonte serve como proveniência do método, não como autoridade doutrinária. A regra generalizada vale para nomes de projetos, agentes, tecnologias, papéis, tradições e conceitos.
 
+### 8.2 Recepção, efeito e continuidade — separar narrativa de causalidade
+
+A leitura direta de _The Secret History of Hermes Trismegistus_, de Florian Ebeling (Cornell University Press/JSTOR), acrescenta estrutura causal além da regra temporal já absorvida. O valor para a Casa não é doutrina hermética: é aprender a separar **o que uma fonte diz que algo é**, **o efeito que realmente produziu**, **como cada receptor reinterpretou o material** e **por quais canais houve continuidade**.
+
+```text
+ANALOGICAL_COMPATIBILITY != SEMANTIC_IDENTITY
+RECEPTION = SOURCE × RECEIVER_CONTEXT
+MANY_RECEIVERS_FIND_SOMETHING_FAMILIAR != SINGLE_ORIGINAL_MEANING
+
+ORIGIN_CLAIM_FALSE_OR_UNPROVEN != DOWNSTREAM_EFFECT_ABSENT
+DOWNSTREAM_EFFECT_REAL != ORIGIN_CLAIM_TRUE
+CLAIM_TRUTH_AND_CAUSAL_EFFECT_REQUIRE_SEPARATE_EVIDENCE
+
+LOW_VISIBILITY_IN_MAIN_CHANNEL != NO_CONTINUITY
+REDISCOVERY_CLAIM_REQUIRES_PRIOR_ABSENCE_PROOF
+CONTINUITY_CAN_BE_FRAGMENTED_TRANSFORMED_OR_PARALLEL
+
+ROOT_PREMISE_COUNTERPROVED → RECHECK_DEPENDENT_CLAIMS
+SMALL_DISCRIMINATING_TEST_CAN_OUTWEIGH_ACCUMULATED_REPUTATION
+PRESTIGE_IS_NOT_EVIDENCE
+```
+
+Aplicação operacional:
+
+```text
+CLAIM|NARRATIVE|FRAMEWORK|LEGACY|VENDOR|MODEL_OUTPUT
+→ SEPARAR:
+   ORIGIN_NARRATIVE
+   OBSERVED_EFFECT
+   RECEIVER_INTERPRETATION
+   TRANSMISSION_CHANNEL
+   ROOT_PREMISES
+→ PROVAR CADA CAMADA NO ALVO CERTO
+→ NAO USAR EFEITO COMO PROVA DA ORIGEM
+→ NAO USAR ADOCAO COMO PROVA DE IDENTIDADE
+→ NAO DECLARAR DESCONTINUIDADE SEM PROCURAR CANAIS LATERAIS
+→ ATACAR PREMISSA RAIZ QUANDO MUITOS CLAIMS DEPENDEREM DELA
+```
+
+Essas regras valem para arqueologia de repo, aliases, migração de sistemas, frameworks, modelos, providers, narrativas de produto e qualquer cadeia de autoridade. A fonte preserva proveniência; a capacidade generalizada fica independente dela.
+
 ## 9. Múltiplas mentes, uma mutação por ferida
 
 ```text
@@ -402,6 +443,22 @@ NO_NEW_INFORMATION=NO_CHANGE
 SOURCE_IS_PROVENANCE_NOT_AUTHORITY=true
 PROVEN_GOLD_WITH_OWNER_AND_CONSUMER=ABSORB_WITHIN_AUTHORIZED_SCOPE
 ```
+
+A igualdade de conclusão não encerra automaticamente a mineração quando a nova fonte tem **maior resolução ou classe epistemológica mais direta**. Primeiro registrar a proveniência; depois perguntar se a fonte expõe estrutura causal que a abstração anterior não capturava.
+
+```text
+SAME_CONCLUSION + HIGHER_RESOLUTION_SOURCE
+→ PROVENANCE_DELTA
+→ NEW_CAUSAL_STRUCTURE?
+   NAO → REGISTER_PROVENANCE_ONLY
+   SIM → CONTINUE_MINING
+          → EXTRACT_NEW_PATTERN
+          → GENERALIZE
+          → CONTRAPROVAR
+          → ABSORB_MINIMAL_DELTA
+```
+
+Nesta própria evolução, uma resenha acadêmica já havia produzido a regra de proveniência temporal; a fonte direta do livro preservou a conclusão e, ao aprofundar, revelou novos deltas sobre recepção por analogia, efeito causal independente da narrativa de origem, continuidade por canais laterais e falsificação de premissa raiz. Portanto `SAME_CONCLUSION` não equivale a `NO_NEW_INFORMATION` quando a resolução da evidência aumenta.
 
 `META_MINERACAO` não é sexta arquitetura. É a própria metacognição aplicando a régua de mineração sobre **como minera**:
 
