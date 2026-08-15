@@ -32,10 +32,11 @@ const capability = (provider, name, spec) => Object.freeze({
   deprecated: false,
   alpha: false,
   restricted: false,
+  secretBearing: false,
   requiredParams: [],
   queryParams: [],
   body: false,
-  controlPlaneStatus: spec.status === "READ_SUPPORTED"
+  controlPlaneStatus: ["READ_SUPPORTED", "FINANCIAL_READ_SUPPORTED"].includes(spec.status)
     ? "READY_READ_ONLY"
     : spec.status === "UNSUPPORTED_BY_PUBLIC_API"
       ? "NOT_AVAILABLE"
@@ -199,6 +200,11 @@ export const PROVIDER_CAPABILITY_MATRIX = Object.freeze([
     permission: "Bearer + account role", evidenceRef: "https://api.contabo.com/",
     queryParams: ["page", "size", "orderBy", "instanceId", "requestId", "changedBy", "startDate", "endDate"],
   }),
+  capability("contabo", "instances.action_audits", {
+    status: "READ_SUPPORTED", method: "GET", path: "/v1/compute/instances/actions/audits",
+    permission: "Bearer + account role", evidenceRef: "https://api.contabo.com/",
+    queryParams: ["page", "size", "orderBy", "instanceId", "requestId", "changedBy", "startDate", "endDate"],
+  }),
   capability("contabo", "snapshots.list", {
     status: "READ_SUPPORTED", method: "GET", path: "/v1/compute/instances/{instance_id}/snapshots",
     permission: "Bearer + account role", evidenceRef: "https://api.contabo.com/",
@@ -252,7 +258,8 @@ export const PROVIDER_CAPABILITY_MATRIX = Object.freeze([
   capability("contabo", "secrets.list", {
     status: "READ_SUPPORTED", method: "GET", path: "/v1/secrets",
     permission: "Bearer + account role", evidenceRef: "https://api.contabo.com/",
-    queryParams: ["page", "size", "orderBy"],
+    queryParams: ["page", "size", "orderBy"], secretBearing: true,
+    controlPlaneStatus: "BLOCKED_SECRET_BEARING_RESPONSE",
   }),
   capability("contabo", "secrets.audits", {
     status: "READ_SUPPORTED", method: "GET", path: "/v1/secrets/audits",
@@ -544,6 +551,15 @@ export const adminProviderControlTools = [
         const request = buildProviderRequest(input.provider, input.capability, input.params);
         if (!["READ_SUPPORTED", "FINANCIAL_READ_SUPPORTED", "DEPRECATED"].includes(request.item.status)) {
           return jsonBlock({ ok: false, status: "READ_CAPABILITY_REQUIRED", capability: input.capability });
+        }
+        if (request.item.secretBearing === true) {
+          return jsonBlock({
+            ok: false,
+            status: "BLOCKED_SECRET_BEARING_RESPONSE",
+            provider: input.provider,
+            capability: input.capability,
+            observacao: "A API oficial pode devolver valor de secret; o cockpit não solicita nem renderiza esse payload.",
+          });
         }
         const result = await callProvider(input.provider, request);
         return jsonBlock({
