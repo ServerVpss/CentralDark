@@ -26,7 +26,7 @@ memory-executor-agent.mjs
 → receipt separa arquivo / commit / push
 ```
 
-Relatórios/decisões legados sem fingerprint são migrados determinísticamente na leitura; a evolução do pipeline não exige apagar estado anterior nem fabricar erro de migração.
+Relatórios/decisões legados sem fingerprint são migrados deterministicamente na leitura; a evolução do pipeline não exige apagar estado anterior nem fabricar erro de migração.
 
 ## Regra de despertar por informação
 
@@ -61,10 +61,11 @@ experiência/evento
 → CANDIDATE | QUARANTINE
 → MetaLupa/contraprova
 → prova de consumidor
-→ promoção canônica separada
+→ elegibilidade de absorção
+→ Writer autorizado
 ```
 
-Ele não altera sessão bruta, documento canônico, skill ou memória final. O resultado continua `apply_allowed=false`.
+O propositor não altera sessão bruta, documento canônico, skill ou memória final. `apply_allowed=false` e `direct_canonical_mutation=false` continuam sendo invariantes do Dream Review.
 
 Contrato conceitual: `docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md`.
 
@@ -113,6 +114,7 @@ Material vindo somente de `EXTERNAL_UNTRUSTED` pode ser minerado, mas não vira 
 EXTERNAL_UNTRUSTED_ONLY
 → QUARANTINE
 → INDEPENDENT_CONFIRMATION_REQUIRED
+→ AUTO_ABSORB_ELIGIBLE=false
 
 EXTERNAL_UNTRUSTED
 + TOOL_MEASURED|HUMAN_AUTHORITY|INTERNAL com prova aplicável
@@ -120,6 +122,32 @@ EXTERNAL_UNTRUSTED
 ```
 
 A proveniência externa permanece mesmo depois da confirmação. A dependência operacional da fonte não permanece.
+
+## Elegibilidade de absorção automática
+
+O Dream Review pode marcar ouro como **elegível** para absorção sem devolver triagem mecânica ao CHEFE. Elegibilidade não é autoaprovação nem escrita direta.
+
+```text
+CANDIDATE
++ FONTE_CONFIRMADA/INDEPENDENTE
++ CONSUMER_REACHABILITY=EVIDENCED
+→ AUTO_ABSORB_ELIGIBLE=true
+
+AUTO_ABSORB_ELIGIBLE
++ DONO_CANÔNICO EXISTENTE
++ ESCOPO REVERSÍVEL JÁ AUTORIZADO
++ WRITER CERTO
++ SAME_HEAD / PROVA APLICÁVEL
+→ ABSORÇÃO
+```
+
+Se faltar consumidor, confirmação independente, dono existente ou escopo autorizado, permanece candidato. O propositor não ganha caneta só porque encontrou ouro.
+
+```text
+ELIGIBLE != APPLIED
+PROPOSER != WRITER_AUTOMATICAMENTE
+WRITER != JUDGE
+```
 
 ## Tempo do fato ≠ tempo da observação
 
@@ -140,7 +168,7 @@ MECANISMO_EXISTE != CONSUMIDOR_PROVADO
 CAPABILITY_CLAIM → CONSUMER_EVIDENCE
 ```
 
-Ausência de `consumer_evidence` não apaga o candidato; deixa `consumer_reachability=UNPROVEN` e impede usar a existência do código como prova de comportamento.
+Ausência de `consumer_evidence` não apaga o candidato; deixa `consumer_reachability=UNPROVEN` e impede usar a existência do código como prova de comportamento ou marcar autoabsorção como elegível.
 
 ## Escrita sem churn
 
@@ -190,9 +218,9 @@ node scripts/memory-linker/dream-review.mjs \
   --head <HEAD_SHA_40_HEX>
 ```
 
-A saída declara `WRITE=UPDATED|UNCHANGED`. `UNCHANGED` significa que a execução encontrou exatamente o mesmo resultado e não regravou o arquivo.
+A saída declara `AUTO_ABSORB_ELIGIBLE=<n>` e `WRITE=UPDATED|UNCHANGED`. `UNCHANGED` significa que a execução encontrou exatamente o mesmo resultado e não regravou o arquivo.
 
-O arquivo de saída é uma **proposta derivada**. Promoção para memória/skill/regra canônica continua sendo outra etapa, no mesmo contrato de autoridade e prova da CentralDark.
+O arquivo de saída é uma **proposta derivada**. A absorção canônica continua pertencendo ao Writer autorizado no dono certo, sob o mesmo contrato de prova da CentralDark.
 
 ## Prova no gate existente
 
@@ -214,9 +242,11 @@ DIRECT_CANONICAL_MUTATION=false
 META_LUPA_BEFORE_PROMOTION=true
 SAME_HEAD_REVALIDATION_REQUIRED=true
 SOURCE_IDENTITY_IS_NOT_AUTHORITY=true
-EXTERNAL_UNTRUSTED_NEVER_AUTO_PROMOTE=true
+EXTERNAL_UNTRUSTED_ALONE_NEVER_AUTO_PROMOTE=true
 EVENT_TIME_NE_OBSERVED_AT=true
 CONSUMER_EVIDENCE_REQUIRED_FOR_CAPABILITY_CLAIM=true
+AUTO_ABSORB_REQUIRES_PROVEN_OWNER_CONSUMER_AUTHORIZED_SCOPE=true
+PROPOSER_DIRECT_WRITE_FORBIDDEN=true
 NO_CHANGE_NE_NOISE=true
 NO_NEW_INFORMATION=STOP=true
 DRY_RUN_IS_NOT_APPLY=true
