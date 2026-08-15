@@ -1,6 +1,8 @@
 name: lupa-conformance
 
 on:
+  push:
+    branches: [main]
   pull_request:
     branches: [main, program/centraldark-convergencia-omniroute-722]
     types: [opened, reopened, synchronize, ready_for_review, labeled, unlabeled]
