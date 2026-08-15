@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-15T01:46:14.245Z",
-  "updatedAtBR": "14/08/2026, 22:46:14 BRT",
+  "updatedAt": "2026-08-15T01:52:04.756Z",
+  "updatedAtBR": "14/08/2026, 22:52:04 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "docs(cognition): cristalizar mineracao automatica e ouro revalidavel",
+    "lastCommit": "fix(meta-lupa): remover sinal legado e autorizar antes de escrever",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-15T01:52:04.756Z",
+      "titulo": "Push na main · 7fe44e3f318dbe5da1f8d1404ad3dda9346884fc",
+      "detalhe": "fix(meta-lupa): remover sinal legado e autorizar antes de escrever",
+      "area": "Repositório",
+      "sha": "7fe44e3",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-15T01:46:14.245Z",
       "titulo": "Push na main · ce97a84caaf4daa0bc978f51ffd0895f3449b3ff",
       "detalhe": "docs(cognition): cristalizar mineracao automatica e ouro revalidavel",
@@ -988,14 +996,6 @@
       "detalhe": "fix(governança): tornar SEGREDO autoridade, SOL coordenadora e PIVETE executor (#662)",
       "area": "Repositório",
       "sha": "7509860",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-08T04:29:52.337Z",
-      "titulo": "Push na main · 2a1eb20239f2348cb25509e47a8cc5f8a65515ed",
-      "detalhe": "fix(hermes): fechar gate de finalização e falsos verdes de mutação (#704)",
-      "area": "Repositório",
-      "sha": "2a1eb20",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-15T01:52:04.756Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 7fe44e3f318dbe5da1f8d1404ad3dda9346884fc (7fe44e3)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-15T01:46:14.245Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · ce97a84caaf4daa0bc978f51ffd0895f3449b3ff (ce97a84)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-08T05:43:05.295Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 7509860c66ce16f171e65c6002e73659f1e122ee (7509860)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-08T04:29:52.337Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 2a1eb20239f2348cb25509e47a8cc5f8a65515ed (2a1eb20)",
       "area": "Repositório",
       "status": "sucesso"
     }
