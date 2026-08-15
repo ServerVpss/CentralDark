@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at_utc": "2026-08-06T04:17:13.243Z",
+  "generated_at_utc": "2026-08-15T23:40:00.000Z",
   "source": {
     "event_count": 0,
     "run_count": 0,
@@ -20,6 +20,7 @@
       "evaluator_ref": null,
       "writer": null,
       "event_actor": null,
+      "active_capabilities": [],
       "iteration": 0,
       "status": "RUNNING",
       "reason": "",
@@ -54,6 +55,19 @@
       "decision_event_present": false
     }
   },
+  "operational_score": {
+    "schema_version": 1,
+    "status": "NO_CHANGE",
+    "reason": "NO_EVENTS",
+    "machine_event": null,
+    "active_capabilities": [],
+    "rejected_capabilities": [],
+    "human_presentation": [],
+    "authority": "MACHINE_EVENT",
+    "presentation_is_projection": true,
+    "presentation_changes_behavior": false,
+    "zero_deploy": true
+  },
   "learning": {
     "failures_observed": 0,
     "unique_failure_classes": 0,
@@ -82,6 +96,8 @@
     "same_identity_per_run": "UNKNOWN",
     "independent_evaluator_required_for_decision_pass": "UNKNOWN",
     "chief_receipt_required_for_promotion": "UNKNOWN",
+    "machine_event_is_authority": "ENFORCED",
+    "operational_score_is_projection": "ENFORCED",
     "production_not_authorized_by_snapshot": "ENFORCED"
   },
   "validation": {
