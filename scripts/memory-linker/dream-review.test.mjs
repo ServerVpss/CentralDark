@@ -40,7 +40,10 @@ test('gera somente candidato isolado e nunca aplica direto', () => {
   assert.equal(proposal.raw_session_mutation, false);
   assert.equal(proposal.candidates[0].promotion.status, 'CANDIDATE');
   assert.equal(proposal.candidates[0].promotion.direct_canonical_mutation, false);
+  assert.equal(proposal.candidates[0].promotion.auto_absorb_eligible, false);
+  assert.equal(proposal.auto_absorb_eligible_count, 0);
   assert.equal(proposal.promotion_contract.authority, 'SEGREDO/CHEFE');
+  assert.equal(proposal.promotion_contract.proposer_direct_write_forbidden, true);
   assert.equal(validateDreamProposal(proposal).ok, true);
 });
 
@@ -66,7 +69,7 @@ test('deduplica observacoes equivalentes sem perder fontes e evidencias', () => 
   assert.equal(proposal.candidates[0].evidence.length, 2);
 });
 
-test('fonte externa nao confiavel fica em quarentena ate confirmacao independente', () => {
+test('fonte externa nao confiavel fica em quarentena e nunca auto-absorve sozinha', () => {
   const proposal = buildDreamProposal([
     event({
       source: 'web:https://example.invalid/artigo',
@@ -75,12 +78,14 @@ test('fonte externa nao confiavel fica em quarentena ate confirmacao independent
   ], { headSha: HEAD });
   assert.equal(proposal.status, 'CANDIDATE');
   assert.equal(proposal.quarantined_candidate_count, 1);
+  assert.equal(proposal.auto_absorb_eligible_count, 0);
   assert.equal(proposal.candidates[0].promotion.status, 'QUARANTINE');
   assert.equal(proposal.candidates[0].promotion.independent_confirmation_required, true);
+  assert.equal(proposal.candidates[0].promotion.auto_absorb_eligible, false);
   assert.equal(validateDreamProposal(proposal).ok, true);
 });
 
-test('confirmacao medida tira o mesmo delta da quarentena sem apagar proveniencia externa', () => {
+test('confirmacao medida mais consumidor torna ouro elegivel sem apagar proveniencia externa', () => {
   const proposal = buildDreamProposal([
     event({ source: 'web:https://example.invalid/artigo', source_class: 'EXTERNAL_UNTRUSTED' }),
     event({
@@ -94,6 +99,21 @@ test('confirmacao medida tira o mesmo delta da quarentena sem apagar provenienci
   assert.equal(proposal.candidates[0].promotion.status, 'CANDIDATE');
   assert.deepEqual(proposal.candidates[0].source_classes, ['EXTERNAL_UNTRUSTED', 'TOOL_MEASURED']);
   assert.equal(proposal.candidates[0].consumer_reachability, 'EVIDENCED');
+  assert.equal(proposal.candidates[0].promotion.auto_absorb_eligible, true);
+  assert.equal(proposal.candidates[0].promotion.auto_absorb_requires_existing_owner, true);
+  assert.equal(proposal.candidates[0].promotion.auto_absorb_requires_authorized_reversible_scope, true);
+  assert.equal(proposal.auto_absorb_eligible_count, 1);
+  assert.equal(proposal.apply_allowed, false);
+});
+
+test('confirmacao sem prova de consumidor continua candidata mas nao auto-absorvivel', () => {
+  const proposal = buildDreamProposal([
+    event({ source: 'test:reproducao-local', source_class: 'TOOL_MEASURED' }),
+  ], { headSha: HEAD });
+  assert.equal(proposal.candidates[0].promotion.status, 'CANDIDATE');
+  assert.equal(proposal.candidates[0].consumer_reachability, 'UNPROVEN');
+  assert.equal(proposal.candidates[0].promotion.auto_absorb_eligible, false);
+  assert.equal(proposal.auto_absorb_eligible_count, 0);
 });
 
 test('separa tempo do evento do tempo de observacao', () => {
@@ -199,6 +219,24 @@ test('validador reprova tentativa de desligar MetaLupa ou revalidacao no mesmo H
   assert.ok(result.errors.includes('PROMOTION_SAME_HEAD_REQUIRED'));
   assert.ok(result.errors.some((error) => error.startsWith('CANDIDATE_META_LUPA_REQUIRED:')));
   assert.ok(result.errors.some((error) => error.startsWith('CANDIDATE_SAME_HEAD_REQUIRED:')));
+});
+
+test('validador bloqueia falso ouro auto-absorvivel dentro de quarentena', () => {
+  const proposal = buildDreamProposal([
+    event({ source: 'web:https://example.invalid/artigo', source_class: 'EXTERNAL_UNTRUSTED' }),
+  ], { headSha: HEAD });
+  proposal.candidates[0].promotion.auto_absorb_eligible = true;
+  const result = validateDreamProposal(proposal);
+  assert.equal(result.ok, false);
+  assert.ok(result.errors.some((error) => error.startsWith('QUARANTINE_CANNOT_AUTO_ABSORB:')));
+});
+
+test('validador bloqueia auto-absorcao sem consumidor evidenciado', () => {
+  const proposal = buildDreamProposal([event()], { headSha: HEAD });
+  proposal.candidates[0].promotion.auto_absorb_eligible = true;
+  const result = validateDreamProposal(proposal);
+  assert.equal(result.ok, false);
+  assert.ok(result.errors.some((error) => error.startsWith('AUTO_ABSORB_CONSUMER_UNPROVEN:')));
 });
 
 test('HEAD invalido falha fechado', () => {
