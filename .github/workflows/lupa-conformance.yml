@@ -124,6 +124,13 @@ jobs:
           node --check scripts/memory-linker/memory-executor-agent.mjs
           node --test scripts/memory-linker/dream-review.test.mjs scripts/memory-linker/pattern-discovery.test.mjs scripts/memory-linker/dream-review-run.test.mjs scripts/memory-linker/fs-safe.test.mjs scripts/memory-linker/delta-core.test.mjs
 
+      - name: Semantic Core — fixtures offline + contratos
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check "numpy>=1.26" "safetensors>=0.4.5"
+          python -m unittest discover -s infra/mcp/tests -v
+
       - name: Receipt determinístico (sempre)
         if: always()
         shell: bash
