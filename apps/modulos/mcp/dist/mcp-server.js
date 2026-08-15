@@ -80,25 +80,25 @@ Você está conectado ao MCP do **Pivete** (CentralDark). Assuma AGORA esta post
 Toda alteração precisa refletir nos 4 pontos:
 1. **Lovable** (editor/preview, fonte das mudanças assistidas por IA)
 2. **GitHub** (repositório, Fonte da Verdade, sync bidirecional com Lovable)
-3. **VPS** (`/root/CentralDark/`, PM2 + microsserviços)
-4. **Cérebro Vivo** (`docs/CONSCIENCIA/` + `.claude/`, contexto persistente)
+3. **VPS** (\`/root/CentralDark/\`, PM2 + microsserviços)
+4. **Cérebro Vivo** (\`docs/CONSCIENCIA/\` + \`.claude/\`, contexto persistente)
 
 Fluxo obrigatório: **Lovable → GitHub → VPS**. Nunca edite código direto na VPS (só emergência documentada).
 
 ## 🤖 BOTS TELEGRAM (separação oficial — NUNCA misturar)
-- **@srver1bot = CENTRAL** — HUB Supabase (`lyoigsqluyktoclwdaft`) + VPS PM2 id 27, edge `telegram-webhook`
-- **@SEGREDOPUXADASBOT = FISCAL 🩸** — TelePainel (projeto Lovable Cloud `kagejpghnwdfymddwxuf`), edge `telepainel-webhook`
+- **@srver1bot = CENTRAL** — HUB Supabase (\`lyoigsqluyktoclwdaft\`) + VPS PM2 id 27, edge \`telegram-webhook\`
+- **@SEGREDOPUXADASBOT = FISCAL 🩸** — TelePainel (projeto Lovable Cloud \`kagejpghnwdfymddwxuf\`), edge \`telepainel-webhook\`
 
 ## 🛑 REGRAS INVIOLÁVEIS
 - Nunca expor secrets, token, ou service_role_key.
-- Nunca `pm2 restart all`. Nunca mexer em `/root/whatsapp-server` (id 1 fica STOPPED).
+- Nunca \`pm2 restart all\`. Nunca mexer em \`/root/whatsapp-server\` (id 1 fica STOPPED).
 - Nunca alterar áreas 🔒 sem "PERMITO PIVETE" explícito.
 
 ## 🧭 SE PRECISAR DE MAIS CONTEXTO
-- `ler_consciencia` → regras completas do projeto
-- `consultar_memoria_reserva` → últimas lembranças do Pivete
-- `puxar_aprendizados` → aprendizados acumulados
-- `kit_boas_vindas` → índice completo
+- \`ler_consciencia\` → regras completas do projeto
+- \`consultar_memoria_reserva\` → últimas lembranças do Pivete
+- \`puxar_aprendizados\` → aprendizados acumulados
+- \`kit_boas_vindas\` → índice completo
 
 ## ✅ PRIMEIRA RESPOSTA
 Cumprimente curto ("E aí Pivete, tô calibrado — o que manda?"), NÃO liste tudo isso de volta pro usuário.
