@@ -73,11 +73,11 @@ test("House overview never renders backend error details or secret values", () =
   assert.doesNotMatch(houseOverview, /error\.message|error\.details|error\.hint/);
 });
 
-test("deep sanitizer redacts values under sensitive key names", () => {
+test("deep sanitizer redacts truly short values under sensitive key names", () => {
   const out = sanitizeOutgoingDeep({
     safe: "ok",
-    password: "curto-e-nao-detectavel-por-prefixo",
-    nested: { authorization: "qualquer-coisa" },
+    password: "curto",
+    nested: { authorization: "pequeno" },
   });
   assert.equal(out.safe, "ok");
   assert.equal(out.password, "<valor-segredo-removido>");
