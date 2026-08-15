@@ -166,11 +166,6 @@ function fixedOwners(repoRoot) {
       consumers: ['MEMORY_LINKER', 'META_LUPA'], summary: 'Consolidação isolada que produz candidatos; não promove direto.',
     },
     {
-      id: 'capability:operational-score', name: 'Operational Score / Partitura', group: 'CAPACIDADES', type: 'CAPABILITY',
-      owner: 'apps/modulos/status/operational-score.mjs', proof: 'apps/modulos/status/operational-score.test.mjs',
-      consumers: ['AGENTES', 'CAPSULA', 'HUB'], summary: 'Projeta capabilities reais sobre o MACHINE_EVENT da Cápsula; emoji e marcador musical são telemetria sem autoridade.',
-    },
-    {
       id: 'capability:semantic-core', name: 'Semantic Core', group: 'CAPACIDADES', type: 'CAPABILITY',
       owner: 'infra/mcp/SEMANTIC-CORE.md', proof: 'infra/mcp/tests',
       consumers: ['MCP', 'AGENTES'], summary: 'Contrato semântico com fixtures e contraprovas offline.',
