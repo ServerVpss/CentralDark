@@ -1,6 +1,6 @@
 # 📚 INDEX — Segundo Cérebro CentralDark
 
-> Gerado automaticamente em 2026-08-14 05:58 UTC. Não editar manualmente.
+> Gerado automaticamente em 2026-08-15 02:20 UTC. Não editar manualmente.
 
 ## (raiz)
 
