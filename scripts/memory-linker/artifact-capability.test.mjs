@@ -134,3 +134,42 @@ test('loader lê binário como minério passivo, calcula hash e não interpreta 
   assert.match(loaded.metadata.sha256, /^[0-9a-f]{64}$/);
   assert.equal(loaded.metadata.size_bytes, 6);
 });
+
+test('ANY_INPUT=POSSIBLE_ORE sem promoção automática', () => {
+  const result = compileArtifactCapability({
+    content: 'comentário humano sugerindo simplificação de fluxo',
+    metadata: { material_class: 'COMMENT', comment_text: 'remover duplicação sem perder capacidade' },
+    source: 'comment:42',
+    target: TARGET,
+  });
+  assert.equal(result.artifact.class, 'COMMENT');
+  assert.equal(result.ore_contract.any_input_is_possible_ore, true);
+  assert.equal(result.ore_contract.promotion_is_not_universal, true);
+  assert.equal(result.promotion_contract.dedupe_required, true);
+  assert.equal(result.promotion_contract.counterproof_required, true);
+  assert.equal(result.promotion_contract.test_required, true);
+  assert.equal(result.direct_canonical_mutation, false);
+});
+
+test('Chrome DevTools MCP entra como observação de navegador, nunca autoridade', () => {
+  const result = compileArtifactCapability({
+    metadata: {
+      material_class: 'BROWSER_OBSERVATION',
+      browser_observation: true,
+      observation_text: 'DevTools page snapshot + console + network request observed',
+      console_text: 'TypeError in frontend handler',
+      network_text: 'GET /api/status 500',
+      performance_text: 'LCP regression observed in trace',
+    },
+    source: 'mcp:chrome-devtools',
+    target: TARGET,
+  });
+  assert.equal(result.artifact.class, 'BROWSER_OBSERVATION');
+  const ids = result.capability_signals.map((item) => item.id);
+  assert.ok(ids.includes('BROWSER_DEBUGGING_OBSERVATION'));
+  assert.ok(ids.includes('BROWSER_CONSOLE_SIGNAL'));
+  assert.ok(ids.includes('BROWSER_NETWORK_SIGNAL'));
+  assert.ok(ids.includes('BROWSER_PERFORMANCE_SIGNAL'));
+  assert.equal(result.source_is_authority, false);
+  assert.equal(result.apply_allowed, false);
+});
