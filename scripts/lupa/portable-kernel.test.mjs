@@ -46,6 +46,41 @@ function materializeBundleAsRepo(bundle, root) {
   git(root, ['commit', '-q', '-m', 'fixture']);
 }
 
+test('trabalhar estudar e ensinar é contrato obrigatório e transversal antes da camada simples', () => {
+  const pattern = readFileSync(RESPONSE_PATTERN, 'utf8');
+  const required = [
+    'WORK_STUDY_TEACH_REQUIRED=true',
+    'WORK_STUDY_TEACH_TRIGGER=NONTRIVIAL_TECHNICAL_OR_EXPLANATORY_RESPONSE',
+    'WORK_RESULT_REMAINS_PRIMARY=true',
+    'NOVICE_MENTAL_MAP_REQUIRED=true',
+    'DIFFICULT_TERM_TRANSLATION_REQUIRED=true',
+    'TEACHING_FROM_EVIDENCE_AND_RESULT=true',
+    'PRIVATE_REASONING_DISCLOSURE_REQUIRED=false',
+    'SCHOOL_LAYER_POSITION=BEFORE_SIMPLE_FINAL_LAYER',
+    'SCHOOL_LAYER_MUST_NOT_HIDE_BLOCKED_OR_UNKNOWN=true',
+    'TEACHING_IS_TRANSVERSAL_EXECUTION_BEHAVIOR=true',
+    'TEACHING_IS_NOT_SEPARATE_MISSION=true',
+    'WORK_AND_TEACH_SHARE_SAME_EXECUTION=true',
+    'DEPTH_FIRST=true',
+    'COMPRESSION_AFTER=true',
+    'COMPRESSION_MUST_PRESERVE_PRECISION=true',
+    'EVERY_APPLICABLE_EXECUTION_CAN_TEACH=true',
+    'TEACHING_IS_DERIVED_ARTIFACT=true',
+    'TEACHING_IS_NOT_RUNTIME_PROOF=true',
+    'TEACHING_IS_NOT_SECOND_TRUTH=true',
+  ];
+  for (const marker of required) assert.ok(pattern.includes(marker), `missing ${marker}`);
+
+  const schoolIndex = pattern.indexOf('## Escola operacional embutida — trabalhar, estudar e ensinar');
+  const simpleIndex = pattern.indexOf('## Camada final obrigatória — NO TEU MODO, SIMPLES');
+  const depthIndex = pattern.indexOf('DEPTH_FIRST=true');
+  const compressionIndex = pattern.indexOf('COMPRESSION_AFTER=true');
+  assert.ok(schoolIndex >= 0, 'missing school layer section');
+  assert.ok(simpleIndex > schoolIndex, 'simple layer must remain after school layer');
+  assert.ok(depthIndex >= 0 && compressionIndex > depthIndex, 'compression must remain after depth');
+  assert.ok(pattern.includes('PROCESS_TELEMETRY != RESULT'), 'transversal teaching must not turn process telemetry into result');
+});
+
 test('camada final simples é contrato obrigatório do sistema', () => {
   const pattern = readFileSync(RESPONSE_PATTERN, 'utf8');
   const required = [
