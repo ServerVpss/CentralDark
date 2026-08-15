@@ -27,8 +27,12 @@ CAPABILITY REAL
 
 A música entra somente como matéria comportamental abstrata. Ritmo/tempo, pausa, crescendo, decrescendo, refrão, ponte, contraponto, harmonia, dissonância, tensão, resolução, dinâmica, silêncio, clímax e coda podem gerar hipóteses reutilizáveis; nunca ações diretas.
 
-A saída musical permanece `CANDIDATE_ONLY` até dedupe, contraprova, owner e teste. O módulo não copia música/letra, não escreve skill diretamente e não dispara ação operacional.
+Antes de abrir capability nova, o extrator compara abstrações semanticamente claras com o registry existente. Quando já existe owner compatível, o resultado é `REUSE_EXISTING` (por exemplo, contraprova/dissonância → `META_LUPA`, resolução provada → `FIXED_POINT`, coda/registro → `GIT`). Só gap sem owner conhecido permanece `CANDIDATE_ONLY`. Em ambos os casos conteúdo musical não ganha autoridade e ainda exige contraprova antes de qualquer cristal novo.
+
+O módulo não copia música/letra, não escreve skill diretamente e não dispara ação operacional.
 
 Capability desconhecida falha explicitamente com `UNKNOWN_CAPABILITY`. Música, nota ou emoji nunca mapeiam implicitamente para `DEPLOY`, `DELETE`, `RESTART`, `RESET`, merge ou qualquer ação destrutiva.
+
+`memory-linker-agent.mjs` é o primeiro consumidor real: emite `MINERACAO/SOURCE_DELTA_DETECTED` somente depois que `informationGain` confirma delta. `NO_NEW_INFORMATION` encerra antes da emissão, evitando telemetria falsa/spam.
 
 `operational-score.test.mjs` cobre A–O do contrato. O `lupa-conformance.yml` executa sintaxe e regressão no mesmo gate canônico do Memory-Linker.
