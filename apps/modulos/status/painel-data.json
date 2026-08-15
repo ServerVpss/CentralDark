@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-15T21:01:51.158Z",
-  "updatedAtBR": "15/08/2026, 18:01:51 BRT",
+  "updatedAt": "2026-08-15T21:04:29.496Z",
+  "updatedAtBR": "15/08/2026, 18:04:29 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "fix(hermes): wire applyRoutingStrategy no decisor",
+    "lastCommit": "feat(admin): centralizar provider control plane no Cofre (#874)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-15T21:04:29.496Z",
+      "titulo": "Push na main · 262196e04a0561c92ce639c0559d623a76fe20cb",
+      "detalhe": "feat(admin): centralizar provider control plane no Cofre (#874)",
+      "area": "Repositório",
+      "sha": "262196e",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-15T21:01:51.158Z",
       "titulo": "Push na main · b5960d9e7a454d54f01efde684a29760efb40be5",
       "detalhe": "fix(hermes): wire applyRoutingStrategy no decisor",
@@ -988,14 +996,6 @@
       "detalhe": "feat(memory): escrita atomica e idempotente compartilhada",
       "area": "Repositório",
       "sha": "f3bac6b",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-15T01:24:04.969Z",
-      "titulo": "Push na main · a2d1a08eaa9fe602a7d31546777ecc886219efc4",
-      "detalhe": "docs(meta): cristalizar lei de autoraplicação e meta-metacognição",
-      "area": "Repositório",
-      "sha": "a2d1a08",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-15T21:04:29.496Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 262196e04a0561c92ce639c0559d623a76fe20cb (262196e)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-15T21:01:51.158Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · b5960d9e7a454d54f01efde684a29760efb40be5 (b5960d9)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-15T01:33:45.233Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · f3bac6bc7d0b511d4cff5dd11b6978788ca6ae24 (f3bac6b)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-15T01:24:04.969Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · a2d1a08eaa9fe602a7d31546777ecc886219efc4 (a2d1a08)",
       "area": "Repositório",
       "status": "sucesso"
     }
