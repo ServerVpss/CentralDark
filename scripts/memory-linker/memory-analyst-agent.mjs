@@ -6,10 +6,10 @@
  * de forma atômica/idempotente. Mesmo fingerprint já analisado = STOP.
  */
 
-import crypto from 'node:crypto';
 import fs   from 'fs';
 import path from 'path';
 import https from 'https';
+import { findingFingerprint as deriveFindingFingerprint, sha256Stable } from './delta-core.mjs';
 import { atomicWriteUtf8Sync } from './fs-safe.mjs';
 
 const RAIZ     = '/root/CentralDark';
@@ -18,14 +18,6 @@ const REPORT   = path.join(DIR, 'last-report.json');
 const DECISION = path.join(DIR, 'analyst-decision.json');
 const ENV_FILE = path.join(RAIZ, 'secrets/mcp.env');
 
-function stable(value) {
-  if (Array.isArray(value)) return `[${value.map(stable).join(',')}]`;
-  if (value && typeof value === 'object') {
-    return `{${Object.keys(value).sort().map(k => `${JSON.stringify(k)}:${stable(value[k])}`).join(',')}}`;
-  }
-  return JSON.stringify(value);
-}
-function sha256(value) { return crypto.createHash('sha256').update(String(value)).digest('hex'); }
 function loadEnv() {
   try {
     return Object.fromEntries(
@@ -39,23 +31,7 @@ function canonicalReportFingerprint(report) {
   if (typeof report.findingFingerprint === 'string' && report.findingFingerprint.length > 0) {
     return report.findingFingerprint;
   }
-  const orfas = [...(report.orfas || [])].sort();
-  const noConexoes = [...(report.noConexoes || [])].sort();
-  const semFrontmatter = [...(report.semFrontmatter || [])].sort();
-  const unsafePaths = [...(report.unsafePaths || [])].sort();
-  const brokenLinks = Object.fromEntries(
-    Object.entries(report.brokenLinks || {})
-      .sort(([a], [b]) => a.localeCompare(b))
-      .map(([link, origins]) => [link, [...new Set(Array.isArray(origins) ? origins : [])].sort()])
-  );
-  return sha256(stable({
-    orfas,
-    brokenLinks,
-    noConexoes,
-    semFrontmatter,
-    unsafePaths,
-    total: orfas.length + Object.keys(brokenLinks).length + noConexoes.length + semFrontmatter.length + unsafePaths.length,
-  }));
+  return deriveFindingFingerprint(report);
 }
 
 if (!fs.existsSync(REPORT)) process.exit(0);
@@ -114,7 +90,7 @@ const classification = {
   totalAlto: altos.length,
   totalAutoFix: autoFix.length,
 };
-const decisionFingerprint = sha256(stable(classification));
+const decisionFingerprint = sha256Stable(classification);
 const decision = {
   timestamp: new Date().toISOString(),
   observedAt: new Date().toISOString(),
