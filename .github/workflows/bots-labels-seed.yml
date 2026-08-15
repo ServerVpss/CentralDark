@@ -90,22 +90,26 @@ jobs:
               ['assign:codex',['🧠 AGENTE-CODEX']],
               ['assign:grok',['🧠 AGENTE-GROK']],
               ['assign:supabase-bot',['🧠 AGENTE-SUPABASE']],
+              ['assign:lovable',['🎨 FRONTEND']],
               ['auto',['🤖 AUTO']],
               ['bug',['🐞 BUG']],
+              ['p0',['🔴 PRIORIDADE-ALTA']],
               ['p1',['🔴 PRIORIDADE-ALTA']],
               ['p2',['🟡 PRIORIDADE-MÉDIA']],
               ['p3',['🟢 PRIORIDADE-BAIXA']],
               ['sentinela',['🛡️ SENTINELA']],
+              ['vigia',['🛡️ SENTINELA']],
               ['stale',['🧊 PARADO']],
               ['superseded',['SUPERSEDED']],
               ['needs-codex-review',['🟡 IA-PRECISA-REVISAR','🧠 AGENTE-CODEX']],
+              ['revisao-humana',['🆘 AJUDA-NECESSÁRIA']],
+              ['🟡 PRECISA-DE-OK',['🆘 AJUDA-NECESSÁRIA']],
               ['permito-segredo',['👑 PERMITO-SEGREDO']],
               ['PERMITO-SEGREDO',['👑 PERMITO-SEGREDO']],
               ['📚 DOC',['📚 DOCS']],
             ]);
 
             const obsolete = new Set([
-              'assign:lovable',
               '🧠 AGENTE-LOVABLE',
               'permito-pivete',
               'PERMITO-PIVETE',
@@ -160,4 +164,6 @@ jobs:
             const finalLabels = await github.paginate(github.rest.issues.listLabelsForRepo,{owner,repo,per_page:100});
             const forbidden = finalLabels.filter(l => /[a-z]/.test(l.name) && !/^SUPERSEDED$/.test(l.name));
             if (forbidden.length) core.setFailed(`VISIBLE_LOWERCASE_OPERATIONAL_LABELS=${forbidden.map(l=>l.name).join(',')}`);
+            const duplicates = ['assign:chatgpt','assign:claude','assign:codex','assign:grok','assign:supabase-bot','assign:lovable','auto','bug','p0','p1','p2','p3','sentinela','vigia','stale','superseded','needs-codex-review','revisao-humana','🟡 PRECISA-DE-OK','permito-segredo','permito-pivete','PERMITO-PIVETE','📚 DOC'].filter(name => finalLabels.some(l => l.name === name));
+            if (duplicates.length) core.setFailed(`DEAD_OR_DUPLICATE_LABELS=${duplicates.join(',')}`);
             core.notice(`LABELS_FINAL=${finalLabels.length}; OBSOLETE_AGENT_LABELS=${finalLabels.filter(l=>/LOVABLE/i.test(l.name)).length}`);
