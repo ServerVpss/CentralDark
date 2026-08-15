@@ -74,6 +74,94 @@ O propositor não altera sessão bruta, documento canônico, skill ou memória f
 
 Contrato conceitual: `docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md`.
 
+## Descoberta determinística de padrão e autonomia
+
+`pattern-discovery.mjs` **não cria outro cérebro nem outro minerador**. Ele recebe somente candidatos já sanitizados pelo Dream Review e procura recorrência entre **fingerprints diferentes** no mesmo `kind` + mesmo `target`.
+
+A arquitetura padrão passa a ser:
+
+```text
+MATÉRIA BRUTA
+→ DREAM REVIEW
+→ NORMALIZAR + SANITIZAR + PROVENIÊNCIA + HEAD
+→ DEDUPE EXATO POR FINGERPRINT
+→ CANDIDATOS
+→ PATTERN DISCOVERY
+→ COMPLETE-LINK + JACCARD DETERMINÍSTICO
+→ PADRÃO CANDIDATO
+→ CONTRAPROVA / OWNER / CONSUMER / TOOL_MEASURED
+→ AUTONOMY_QUEUE
+→ HANDOFF_TO_AUTHORIZED_WRITER
+→ SAME_HEAD + META_LUPA + PROOF OWNERSHIP QUANDO APLICÁVEL
+→ MENOR COSTURA
+→ TESTE
+→ OURO CANÔNICO
+```
+
+### Por que `complete-link`
+
+Um padrão só cresce quando **cada membro novo** é compatível com todos os membros já agrupados. Isso evita corrente frouxa do tipo `A parece B`, `B parece C`, logo `A=C` sem prova.
+
+A similaridade textual é apenas um **sensor de recorrência**:
+
+```text
+SIMILARIDADE != PROVA CAUSAL
+PADRÃO != VERDADE
+RECORRÊNCIA != INDEPENDÊNCIA DE EVIDÊNCIA
+```
+
+Por isso o detector é conservador por padrão:
+
+- exige mesmo `kind`;
+- exige mesmo `target`/dono esperado;
+- exige fingerprints distintos;
+- usa tokens normalizados sem depender de acento;
+- exige pelo menos 3 tokens materiais compartilhados;
+- exige Jaccard mínimo de `0.60` em todos os pares do cluster;
+- não atravessa targets apenas porque a frase parece semelhante;
+- fonte externa em quarentena continua sem handoff automático.
+
+### Fila de autonomia sem roubar a caneta
+
+Quando todos os membros de um padrão já são `auto_absorb_eligible`, existe diversidade mínima de sessão + origem e o padrão sobrevive ao detector, a saída pode conter:
+
+```text
+AUTONOMY_QUEUE
+→ action=HANDOFF_TO_AUTHORIZED_WRITER
+→ apply_directly=false
+→ SAME_HEAD_REVALIDATION
+→ WRITER_SCOPE_MATCH
+→ AUTHORIZED_REVERSIBLE_SCOPE
+→ META_LUPA
+→ PROOF_OWNERSHIP_WHEN_APPLICABLE
+```
+
+Isso automatiza **descoberta + roteamento** sem misturar papéis:
+
+```text
+MINERADOR DESCOBRE
+→ FILA ROTEIA
+→ WRITER COSTURA
+→ TESTE/JUDGE PROVA
+```
+
+O minerador nunca usa recorrência para se promover a Writer e nunca grava o canônico diretamente.
+
+### Façade única para rodar a arquitetura
+
+`dream-review-run.mjs` compõe o Dream Review existente com o detector de padrões sem duplicar a lógica de normalização/promoção.
+
+```text
+node scripts/memory-linker/dream-review-run.mjs \
+  --input <eventos.jsonl> \
+  --output <proposta.json> \
+  --head <HEAD_SHA_40_HEX>
+```
+
+A saída acrescenta `pattern_discovery.patterns` e `pattern_discovery.autonomy_queue`. `DIRECT_APPLY=0` permanece obrigatório.
+
+O agendamento físico continua pertencendo ao scheduler/cron canônico quando comprovado no runtime; este módulo não inventa segundo scheduler. Sem scheduler medido, `SCHEDULE=UNPROVEN`.
+
 ## Formato mínimo de evento
 
 Cada linha JSONL representa uma observação candidata:
@@ -258,6 +346,8 @@ PUSH    = PUSHED|FAILED|NOT_NEEDED|NOT_ATTEMPTED
 
 ## Execução manual determinística
 
+Fluxo base, preservado para compatibilidade:
+
 ```text
 node scripts/memory-linker/dream-review.mjs \
   --input <eventos.jsonl> \
@@ -265,7 +355,16 @@ node scripts/memory-linker/dream-review.mjs \
   --head <HEAD_SHA_40_HEX>
 ```
 
-A saída declara `AUTO_ABSORB_ELIGIBLE=<n>` e `WRITE=UPDATED|UNCHANGED`. `UNCHANGED` significa que a execução encontrou exatamente o mesmo resultado e não regravou o arquivo.
+Fluxo padrão com descoberta de padrão/autonomia:
+
+```text
+node scripts/memory-linker/dream-review-run.mjs \
+  --input <eventos.jsonl> \
+  --output <proposta.json> \
+  --head <HEAD_SHA_40_HEX>
+```
+
+A saída base declara `AUTO_ABSORB_ELIGIBLE=<n>`. A façade acrescenta `PATTERNS=<n>` e `AUTO_HANDOFF=<n>`. `UNCHANGED` significa que a execução encontrou exatamente o mesmo resultado e não regravou o arquivo.
 
 O arquivo de saída é uma **proposta derivada**. A absorção canônica continua pertencendo ao Writer autorizado no dono certo, sob o mesmo contrato de prova da CentralDark.
 
@@ -274,8 +373,8 @@ O arquivo de saída é uma **proposta derivada**. A absorção canônica continu
 Não há workflow novo para este módulo. `.github/workflows/lupa-conformance.yml` é o consumidor canônico da regressão e deve executar:
 
 ```text
-node --check delta-core + fs-safe + dream-review + Scout + Analyst + Executor
-node --test dream-review.test.mjs + fs-safe.test.mjs + delta-core.test.mjs
+node --check delta-core + fs-safe + dream-review + pattern-discovery + dream-review-run + Scout + Analyst + Executor
+node --test dream-review + pattern-discovery + dream-review-run + fs-safe + delta-core
 ```
 
 Uma mudança no memory-linker que quebra essa fronteira deve ficar vermelha antes de ser chamada de evolução.
@@ -286,6 +385,13 @@ Uma mudança no memory-linker que quebra essa fronteira deve ficar vermelha ante
 RAW_EXPERIENCE=IMMUTABLE_INPUT
 DREAM_PROPOSAL=CANDIDATE_ONLY
 DIRECT_CANONICAL_MUTATION=false
+PATTERN_DISCOVERY=DETERMINISTIC
+PATTERN_IS_PROOF=false
+PATTERN_SAME_KIND_REQUIRED=true
+PATTERN_SAME_TARGET_REQUIRED=true
+PATTERN_COMPLETE_LINK_REQUIRED=true
+AUTONOMY_HANDOFF_ONLY_AFTER_MEMBER_ELIGIBILITY=true
+AUTONOMY_QUEUE_DIRECT_APPLY=false
 META_LUPA_BEFORE_PROMOTION=true
 SAME_HEAD_REVALIDATION_REQUIRED=true
 SOURCE_IDENTITY_IS_NOT_AUTHORITY=true
