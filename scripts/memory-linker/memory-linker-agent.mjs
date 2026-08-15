@@ -10,13 +10,14 @@ import crypto from 'node:crypto';
 import fs   from 'fs';
 import path from 'path';
 import https from 'https';
-import { atomicWriteUtf8Sync } from './fs-safe.mjs';
+import { atomicWriteUtf8Sync, ensureRegularFileInsideRootSync } from './fs-safe.mjs';
 
 const RAIZ       = '/root/CentralDark';
 const DIR        = path.join(RAIZ, 'scripts/memory-linker');
 const STATE_FILE = path.join(DIR, '.next_run');
 const REPORT     = path.join(DIR, 'last-report.json');
 const ENV_FILE   = path.join(RAIZ, 'secrets/mcp.env');
+const unsafePaths = new Set();
 
 function stable(value) {
   if (Array.isArray(value)) return `[${value.map(stable).join(',')}]`;
@@ -42,7 +43,6 @@ function loadEnv() {
   }
 }
 
-// Timer aleatório 60–120 min. O timer pode mudar sem significar aprendizado novo.
 const now = Date.now();
 let nextRun = 0;
 try { nextRun = parseInt(fs.readFileSync(STATE_FILE, 'utf8').trim(), 10); } catch {}
@@ -57,8 +57,15 @@ function scanDir(dir) {
   function walk(d) {
     for (const e of fs.readdirSync(d, { withFileTypes: true })) {
       const f = path.join(d, e.name);
-      if (e.isDirectory()) walk(f);
-      else if (e.name.endsWith('.md')) out.push(f);
+      if (e.isDirectory()) {
+        walk(f);
+      } else if (e.name.endsWith('.md')) {
+        try {
+          out.push(ensureRegularFileInsideRootSync(dir, f));
+        } catch (error) {
+          unsafePaths.add(`${path.relative(RAIZ, f)}:${error.message}`);
+        }
+      }
     }
   }
   walk(dir);
@@ -116,10 +123,10 @@ for (const f of scanDir(path.join(RAIZ, 'docs/CONSCIENCIA'))) {
   if (!allMentioned.has(name.toUpperCase())) orfas.push(name);
 }
 
-// Ordenação estável: a ordem do filesystem não pode fabricar delta.
 orfas.sort();
 noConexoes.sort();
 semFront.sort();
+const unsafe = [...unsafePaths].sort();
 const brokenObject = Object.fromEntries(
   [...brokenLinks.entries()]
     .sort(([a], [b]) => a.localeCompare(b))
@@ -131,7 +138,8 @@ const findings = {
   brokenLinks: brokenObject,
   noConexoes,
   semFrontmatter: semFront,
-  total: orfas.length + Object.keys(brokenObject).length + noConexoes.length + semFront.length,
+  unsafePaths: unsafe,
+  total: orfas.length + Object.keys(brokenObject).length + noConexoes.length + semFront.length + unsafe.length,
 };
 const findingFingerprint = sha256(stable(findings));
 
@@ -155,7 +163,7 @@ const report = {
   ...findings,
 };
 atomicWriteUtf8Sync(REPORT, `${JSON.stringify(report, null, 2)}\n`, { skipIfUnchanged: true });
-console.log(`MEMORY_SCOUT=DELTA FINDINGS=${report.total} FINGERPRINT=${findingFingerprint}`);
+console.log(`MEMORY_SCOUT=DELTA FINDINGS=${report.total} UNSAFE_PATHS=${unsafe.length} FINGERPRINT=${findingFingerprint}`);
 
 if (report.total === 0) process.exit(0);
 
@@ -166,7 +174,7 @@ const ADMIN_ID = env.TELEGRAM_ADMIN_ID;
 function send(text) {
   if (!TOKEN || !ADMIN_ID) return Promise.resolve({ sent: false, reason: 'NOT_CONFIGURED' });
   return new Promise(resolve => {
-    const body = JSON.stringify({ chat_id: ADMIN_ID, text, parse_mode: 'HTML', disable_notification: true });
+    const body = JSON.stringify({ chat_id: ADMIN_ID, text, parse_mode: 'HTML', disable_notification: unsafe.length === 0 });
     const req  = https.request({
       hostname: 'api.telegram.org', path: `/bot${TOKEN}/sendMessage`, method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(body) }
@@ -177,6 +185,7 @@ function send(text) {
 }
 
 let msg = `🔍 <b>Stage 1 — Scout encontrou DELTA (${report.total})</b>\n\n`;
+if (unsafe.length)              msg += `🛡️ Caminhos inseguros: ${unsafe.length} | `;
 if (orfas.length)               msg += `📍 Órfãs: ${orfas.length} | `;
 if (Object.keys(brokenObject).length) msg += `❓ Links quebrados: ${Object.keys(brokenObject).length} | `;
 if (noConexoes.length)          msg += `🔗 Sem conexões: ${noConexoes.length} | `;
