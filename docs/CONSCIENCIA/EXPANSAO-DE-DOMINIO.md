@@ -194,6 +194,22 @@ DREAM_REVIEW = OFFLINE_CANDIDATE_CONSOLIDATION
 
 Nenhuma dessas peças substitui SEGREDO/CHEFE.
 
+### 11.1 Expansão de Domínio também evolui
+
+O domínio não é uma receita fixa. Quando uma missão revelar nova forma comprovada de delimitar perímetro, acoplar capacidade, reduzir custo, detectar saturação, colapsar mais limpo ou preservar melhor o ouro, o mesmo contrato de Expansão deve evoluir.
+
+```text
+EXPANSAO_DE_DOMINIO=EVOLUTION_REQUIRED
+NOVO_PADRAO_REUTILIZAVEL + PROVA
+→ EVOLUTION_CANDIDATE
+→ MESMO_DONO
+→ BEFORE/AFTER
+→ TESTE + CONTRAPROVA + REGRESSAO
+→ EVOLUTION_RECEIPT
+```
+
+Sem ganho informacional material, não adicionar regra. Sem before/after verificável, não declarar evolução. O contrato conceitual único está em `docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md`; o gate executável compartilhado está em `.agents/skills/meta-lupa/scripts/evolution_gate.py`.
+
 ## 12. Painel / observabilidade desejada
 
 Quando um domínio estiver vivo e os coletores físicos existirem, o painel deve poder mostrar, sem inventar métrica:
