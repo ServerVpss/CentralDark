@@ -89,6 +89,15 @@ export function buildKernelState({ mission, head, assignments = [] }) {
   };
 }
 
+function perceptionIsUnproven(result) {
+  const finding = result?.finding || {};
+  const materialDelta = normalizeText(finding.material_delta) || 'NO_CHANGE';
+  if (materialDelta.toUpperCase() === 'NO_CHANGE') return false;
+  const evidenceRef = normalizeText(finding.evidence_ref) || 'UNKNOWN';
+  const classification = String(finding.class || 'UNKNOWN').toUpperCase();
+  return evidenceRef.toUpperCase() === 'UNKNOWN' || classification !== 'FACT';
+}
+
 function toKernelReceipt(result, state) {
   const finding = result?.finding || {};
   const materialDelta = normalizeText(finding.material_delta) || 'NO_CHANGE';
@@ -98,7 +107,7 @@ function toKernelReceipt(result, state) {
   const classification = String(finding.class || 'UNKNOWN').toUpperCase();
   const noChange = materialDelta.toUpperCase() === 'NO_CHANGE';
   const hasEvidence = evidenceRef.toUpperCase() !== 'UNKNOWN';
-  const verdict = noChange ? 'NO_CHANGE' : (hasEvidence && classification !== 'UNKNOWN' ? 'MATERIAL' : 'UNKNOWN');
+  const verdict = noChange ? 'NO_CHANGE' : (hasEvidence && classification === 'FACT' ? 'MATERIAL' : 'UNKNOWN');
 
   return {
     protocol: PROTOCOL,
@@ -142,7 +151,7 @@ function blockedPacket({ mission, results, state, plan, failedRoles, status }) {
     deduped_findings: [],
     serial_mutation_queue: [],
     ready_for_writer: false,
-    next_rule: 'RETRY_FAILED_PERCEPTIONS_BEFORE_MUTATION',
+    next_rule: 'RESOLVE_BLOCKED_PERCEPTIONS_BEFORE_MUTATION',
   });
 }
 
@@ -175,6 +184,18 @@ export function buildPerceptionPacket({ mission, results, head = 'TEST_HEAD', as
       plan,
       failedRoles,
       status: 'BLOCKED_FOUR_PERCEPTIONS_REQUIRED',
+    });
+  }
+
+  const unprovenRoles = resultList.filter(perceptionIsUnproven).map((item) => item.role);
+  if (unprovenRoles.length > 0) {
+    return blockedPacket({
+      mission,
+      results: resultList,
+      state,
+      plan,
+      failedRoles: unprovenRoles,
+      status: 'BLOCKED_UNPROVEN_PERCEPTION_FINDINGS',
     });
   }
 
