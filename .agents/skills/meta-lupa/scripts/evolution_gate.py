@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 """Gate determinístico de evolução verificável da CentralDark.
 
-Não decide sozinho se uma ideia é boa. Ele impede que "evoluiu" seja
-promovido sem antes/depois, ganho de informação, delta reutilizável, teste,
+Não decide sozinho se uma ideia é boa. Impede que qualquer componente alegue
+"evolução" sem antes/depois, ganho de informação, delta reutilizável, teste,
 contraprova, regressão e proveniência no mesmo escopo.
 
-Consumidores canônicos: META_LUPA, MENOS_E_MAIS, INSTINTO_SUPERIOR e
-EXPANSAO_DE_DOMINIO. O mecanismo é único; cada consumidor continua no seu
-dono canônico.
+Os donos META obrigatórios são: META_LUPA, MENOS_E_MAIS,
+INSTINTO_SUPERIOR, EXPANSAO_DE_DOMINIO e METACOGNICAO_OPERACIONAL.
+Outras capacidades também podem usar o mesmo contrato: evolução é universal,
+o mecanismo de prova continua único.
 """
 from __future__ import annotations
 
@@ -16,17 +17,18 @@ import hashlib
 import json
 import re
 import subprocess
-import sys
 from pathlib import Path
 from typing import Any
 
 SCHEMA_VERSION = 1
-SUBJECTS = {
+REQUIRED_META_SUBJECTS = {
     "META_LUPA",
     "MENOS_E_MAIS",
     "INSTINTO_SUPERIOR",
     "EXPANSAO_DE_DOMINIO",
+    "METACOGNICAO_OPERACIONAL",
 }
+SUBJECT_RE = re.compile(r"^[A-Z][A-Z0-9_]{2,63}$")
 HEX40 = re.compile(r"^[0-9a-f]{40}$")
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
 
@@ -71,8 +73,7 @@ def _checks_ok(value: Any, prefix: str, errors: list[str]) -> None:
             errors.append(f"{prefix}_{index}_NAME_MISSING")
         if item.get("status") != "PASS":
             errors.append(f"{prefix}_{index}_NOT_PASS")
-        evidence = item.get("evidence")
-        if not _nonempty_str_list(evidence):
+        if not _nonempty_str_list(item.get("evidence")):
             errors.append(f"{prefix}_{index}_EVIDENCE_MISSING")
 
 
@@ -91,7 +92,7 @@ def validate(manifest: Any, repo_root: str | None = None) -> dict[str, Any]:
         errors.append("SCHEMA_VERSION_INVALID")
 
     subject = manifest.get("subject")
-    if subject not in SUBJECTS:
+    if not isinstance(subject, str) or not SUBJECT_RE.fullmatch(subject):
         errors.append("SUBJECT_INVALID")
 
     before_ref = manifest.get("before_ref")
@@ -161,6 +162,7 @@ def validate(manifest: Any, repo_root: str | None = None) -> dict[str, Any]:
     return {
         "schema_version": SCHEMA_VERSION,
         "subject": subject,
+        "required_meta_subject": subject in REQUIRED_META_SUBJECTS,
         "status": "EVOLVED" if verified else "EVOLUTION_UNPROVEN",
         "evolution_verified": verified,
         "before_ref": before_ref,
@@ -170,18 +172,18 @@ def validate(manifest: Any, repo_root: str | None = None) -> dict[str, Any]:
     }
 
 
-def self_test() -> int:
-    base = {
+def _signed_base(subject: str = "META_LUPA") -> dict[str, Any]:
+    base: dict[str, Any] = {
         "schema_version": 1,
-        "subject": "META_LUPA",
+        "subject": subject,
         "before_ref": "1" * 40,
         "after_ref": "2" * 40,
         "same_scope": True,
-        "canonical_owner": ".agents/skills/meta-lupa/SKILL.md",
-        "claim": "bloqueia uma classe nova de falso verde",
+        "canonical_owner": "owner.md",
+        "claim": "capacidade aumentou sem regressão",
         "verifier": "judge-read-only",
         "new_information": ["novo failure mode reproduzido"],
-        "capability_delta": ["detectar falso verde X"],
+        "capability_delta": ["nova capacidade reutilizável"],
         "before_evidence": ["fixture antes"],
         "after_evidence": ["fixture depois"],
         "counterproof": ["caso negativo independente"],
@@ -190,34 +192,44 @@ def self_test() -> int:
         "tests": [{"name": "positivo", "status": "PASS", "evidence": ["receipt positivo"]}],
         "regressions": [{"name": "regressao", "status": "PASS", "evidence": ["receipt regressao"]}],
     }
+    if subject == "MENOS_E_MAIS":
+        base["complexity_before"] = 5
+        base["complexity_after"] = 4
     base["receipt_sha256"] = manifest_sha256(base)
-    assert validate(base)["evolution_verified"] is True
+    return base
 
-    duplicate = dict(base)
+
+def _resign(value: dict[str, Any]) -> dict[str, Any]:
+    value["receipt_sha256"] = manifest_sha256({k: v for k, v in value.items() if k != "receipt_sha256"})
+    return value
+
+
+def self_test() -> int:
+    for subject in sorted(REQUIRED_META_SUBJECTS):
+        assert validate(_signed_base(subject))["evolution_verified"] is True
+
+    # A lei vale também para uma capacidade futura: não é enum decorativo.
+    assert validate(_signed_base("CAPACIDADE_FUTURA"))["evolution_verified"] is True
+
+    duplicate = _signed_base()
     duplicate["after_ref"] = duplicate["before_ref"]
-    duplicate["receipt_sha256"] = manifest_sha256({k: v for k, v in duplicate.items() if k != "receipt_sha256"})
-    result = validate(duplicate)
-    assert result["evolution_verified"] is False and "NO_STATE_DELTA" in result["errors"]
+    result = validate(_resign(duplicate))
+    assert not result["evolution_verified"] and "NO_STATE_DELTA" in result["errors"]
 
-    no_info = dict(base)
+    no_info = _signed_base()
     no_info["new_information"] = []
-    no_info["receipt_sha256"] = manifest_sha256({k: v for k, v in no_info.items() if k != "receipt_sha256"})
-    result = validate(no_info)
-    assert result["evolution_verified"] is False and "NEW_INFORMATION_MISSING" in result["errors"]
+    result = validate(_resign(no_info))
+    assert not result["evolution_verified"] and "NEW_INFORMATION_MISSING" in result["errors"]
 
-    regression = dict(base)
+    regression = _signed_base()
     regression["lost_capabilities"] = ["capacidade anterior perdida"]
-    regression["receipt_sha256"] = manifest_sha256({k: v for k, v in regression.items() if k != "receipt_sha256"})
-    result = validate(regression)
-    assert result["evolution_verified"] is False and "CAPABILITY_REGRESSION" in result["errors"]
+    result = validate(_resign(regression))
+    assert not result["evolution_verified"] and "CAPABILITY_REGRESSION" in result["errors"]
 
-    less = dict(base)
-    less["subject"] = "MENOS_E_MAIS"
-    less["complexity_before"] = 5
+    less = _signed_base("MENOS_E_MAIS")
     less["complexity_after"] = 6
-    less["receipt_sha256"] = manifest_sha256({k: v for k, v in less.items() if k != "receipt_sha256"})
-    result = validate(less)
-    assert result["evolution_verified"] is False and "MENOS_E_MAIS_COMPLEXITY_REGRESSION" in result["errors"]
+    result = validate(_resign(less))
+    assert not result["evolution_verified"] and "MENOS_E_MAIS_COMPLEXITY_REGRESSION" in result["errors"]
 
     print("PASS evolution_gate")
     return 0
