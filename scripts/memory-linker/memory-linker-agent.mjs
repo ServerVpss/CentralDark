@@ -6,10 +6,10 @@
  * Só materializa novo relatório quando o conjunto de achados muda.
  */
 
-import crypto from 'node:crypto';
 import fs   from 'fs';
 import path from 'path';
 import https from 'https';
+import { canonicalizeFindings, findingFingerprint, informationGain } from './delta-core.mjs';
 import { atomicWriteUtf8Sync, ensureRegularFileInsideRootSync } from './fs-safe.mjs';
 
 const RAIZ       = '/root/CentralDark';
@@ -18,18 +18,6 @@ const STATE_FILE = path.join(DIR, '.next_run');
 const REPORT     = path.join(DIR, 'last-report.json');
 const ENV_FILE   = path.join(RAIZ, 'secrets/mcp.env');
 const unsafePaths = new Set();
-
-function stable(value) {
-  if (Array.isArray(value)) return `[${value.map(stable).join(',')}]`;
-  if (value && typeof value === 'object') {
-    return `{${Object.keys(value).sort().map(k => `${JSON.stringify(k)}:${stable(value[k])}`).join(',')}}`;
-  }
-  return JSON.stringify(value);
-}
-
-function sha256(value) {
-  return crypto.createHash('sha256').update(String(value)).digest('hex');
-}
 
 function loadEnv() {
   try {
@@ -123,25 +111,14 @@ for (const f of scanDir(path.join(RAIZ, 'docs/CONSCIENCIA'))) {
   if (!allMentioned.has(name.toUpperCase())) orfas.push(name);
 }
 
-orfas.sort();
-noConexoes.sort();
-semFront.sort();
-const unsafe = [...unsafePaths].sort();
-const brokenObject = Object.fromEntries(
-  [...brokenLinks.entries()]
-    .sort(([a], [b]) => a.localeCompare(b))
-    .map(([link, origins]) => [link, [...new Set(origins)].sort()])
-);
-
-const findings = {
+const findings = canonicalizeFindings({
   orfas,
-  brokenLinks: brokenObject,
+  brokenLinks: Object.fromEntries(brokenLinks),
   noConexoes,
   semFrontmatter: semFront,
-  unsafePaths: unsafe,
-  total: orfas.length + Object.keys(brokenObject).length + noConexoes.length + semFront.length + unsafe.length,
-};
-const findingFingerprint = sha256(stable(findings));
+  unsafePaths: [...unsafePaths],
+});
+const currentFingerprint = findingFingerprint(findings);
 
 let previousFingerprint = null;
 try {
@@ -149,21 +126,21 @@ try {
   previousFingerprint = previous.findingFingerprint ?? null;
 } catch {}
 
-if (previousFingerprint === findingFingerprint) {
-  console.log(`MEMORY_SCOUT=NO_NEW_INFORMATION FINGERPRINT=${findingFingerprint}`);
+if (!informationGain(previousFingerprint, currentFingerprint)) {
+  console.log(`MEMORY_SCOUT=NO_NEW_INFORMATION FINGERPRINT=${currentFingerprint}`);
   process.exit(0);
 }
 
 const report = {
   timestamp: new Date().toISOString(),
   observedAt: new Date().toISOString(),
-  findingFingerprint,
+  findingFingerprint: currentFingerprint,
   previousFindingFingerprint: previousFingerprint,
   nextRunMin: delayMin,
   ...findings,
 };
 atomicWriteUtf8Sync(REPORT, `${JSON.stringify(report, null, 2)}\n`, { skipIfUnchanged: true });
-console.log(`MEMORY_SCOUT=DELTA FINDINGS=${report.total} UNSAFE_PATHS=${unsafe.length} FINGERPRINT=${findingFingerprint}`);
+console.log(`MEMORY_SCOUT=DELTA FINDINGS=${report.total} UNSAFE_PATHS=${findings.unsafePaths.length} FINGERPRINT=${currentFingerprint}`);
 
 if (report.total === 0) process.exit(0);
 
@@ -174,7 +151,7 @@ const ADMIN_ID = env.TELEGRAM_ADMIN_ID;
 function send(text) {
   if (!TOKEN || !ADMIN_ID) return Promise.resolve({ sent: false, reason: 'NOT_CONFIGURED' });
   return new Promise(resolve => {
-    const body = JSON.stringify({ chat_id: ADMIN_ID, text, parse_mode: 'HTML', disable_notification: unsafe.length === 0 });
+    const body = JSON.stringify({ chat_id: ADMIN_ID, text, parse_mode: 'HTML', disable_notification: findings.unsafePaths.length === 0 });
     const req  = https.request({
       hostname: 'api.telegram.org', path: `/bot${TOKEN}/sendMessage`, method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(body) }
@@ -185,11 +162,11 @@ function send(text) {
 }
 
 let msg = `🔍 <b>Stage 1 — Scout encontrou DELTA (${report.total})</b>\n\n`;
-if (unsafe.length)              msg += `🛡️ Caminhos inseguros: ${unsafe.length} | `;
-if (orfas.length)               msg += `📍 Órfãs: ${orfas.length} | `;
-if (Object.keys(brokenObject).length) msg += `❓ Links quebrados: ${Object.keys(brokenObject).length} | `;
-if (noConexoes.length)          msg += `🔗 Sem conexões: ${noConexoes.length} | `;
-if (semFront.length)            msg += `📄 Sem frontmatter: ${semFront.length}`;
-msg += `\n\n🧬 fingerprint: <code>${findingFingerprint.slice(0, 16)}</code>\n⚙️ Stage 2 classifica somente porque houve informação nova.`;
+if (findings.unsafePaths.length) msg += `🛡️ Caminhos inseguros: ${findings.unsafePaths.length} | `;
+if (findings.orfas.length)       msg += `📍 Órfãs: ${findings.orfas.length} | `;
+if (Object.keys(findings.brokenLinks).length) msg += `❓ Links quebrados: ${Object.keys(findings.brokenLinks).length} | `;
+if (findings.noConexoes.length)  msg += `🔗 Sem conexões: ${findings.noConexoes.length} | `;
+if (findings.semFrontmatter.length) msg += `📄 Sem frontmatter: ${findings.semFrontmatter.length}`;
+msg += `\n\n🧬 fingerprint: <code>${currentFingerprint.slice(0, 16)}</code>\n⚙️ Stage 2 classifica somente porque houve informação nova.`;
 
 await send(msg);
