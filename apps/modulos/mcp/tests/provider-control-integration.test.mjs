@@ -11,6 +11,7 @@ const bridge = read("../src/provider-admin-bridge.js");
 const index = read("../src/index.js");
 const adapter = read("../src/modes/admin/tools/admin-provider-control.js");
 const dispatcher = read("../src/tools/core/mcp-admin.js");
+const destructiveManifest = JSON.parse(read("../manifesto-destrutivas.json"));
 const migration = read("../../hub/supabase/migrations/20260815_provider_control_plane.sql");
 const ui = read("../../../../src/apps/modulos/telepainel/components/cofre/ProviderControlPlane.tsx");
 const cofre = read("../../../../src/apps/modulos/telepainel/pages/Cofre.tsx");
@@ -49,6 +50,16 @@ test("dispatcher unico consome provider tools; nao existe segundo MCP", () => {
   assert.match(dispatcher, /adminProviderControlTools/);
   assert.match(dispatcher, /\.\.\.adminProviderControlTools/);
   assert.match(dispatcher, /name: "mcp_admin_call"/);
+});
+
+test("provider_mutate fica em revisão e nunca ganha aprovação por nascer no catálogo", () => {
+  const approved = destructiveManifest.destrutivasAprovadas.map((item) => item.nome);
+  const review = destructiveManifest.destrutivasEmRevisao.find((item) => item.nome === "provider_mutate");
+  assert.equal(approved.includes("provider_mutate"), false);
+  assert.ok(review);
+  assert.equal(review.estado, "EM_ENGENHARIA_DE_COMPENSACAO");
+  assert.equal(Object.values(review.gateFinal).every((value) => value === false), true);
+  assert.equal(destructiveManifest.resumo.aprovadasNestaRodada, 0);
 });
 
 test("ledger e budget ficam no centraldark_private com deny direto ao browser", () => {
