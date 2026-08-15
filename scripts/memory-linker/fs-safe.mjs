@@ -1,6 +1,27 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+function pathEscapesRoot(rootReal, targetReal) {
+  const relative = path.relative(rootReal, targetReal);
+  return relative === '..' || relative.startsWith(`..${path.sep}`) || path.isAbsolute(relative);
+}
+
+/**
+ * Resolve somente arquivo regular que permaneça fisicamente dentro da raiz.
+ * Symlink de arquivo é recusado antes de read/write; symlink de ancestral que
+ * resolva para fora também falha pelo realpath.
+ */
+export function ensureRegularFileInsideRootSync(root, target) {
+  const rootReal = fs.realpathSync(root);
+  const stat = fs.lstatSync(target);
+  if (stat.isSymbolicLink()) throw new Error('PATH_SYMLINK_FORBIDDEN');
+  if (!stat.isFile()) throw new Error('PATH_NOT_REGULAR_FILE');
+
+  const targetReal = fs.realpathSync(target);
+  if (pathEscapesRoot(rootReal, targetReal)) throw new Error('PATH_OUTSIDE_ROOT');
+  return targetReal;
+}
+
 /**
  * Escrita UTF-8 atômica e idempotente para artefatos derivados do memory-linker.
  *
