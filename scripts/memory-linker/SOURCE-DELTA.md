@@ -111,6 +111,42 @@ ACAO_HUMANA_MINIMA
 
 Segredo nunca entra no receipt. O scanner `scripts/lupa/no-silent-error-scan.mjs` bloqueia padrões sintáticos inequívocos de erro engolido no código rastreado; classes semânticas mais amplas continuam sendo expandidas por regressão quando forem observadas.
 
+### Dívida histórica não vira falso verde
+
+A primeira varredura do gate encontrou dívida anterior à introdução desta regra. Corrigir centenas de ocorrências em owners diferentes dentro de uma única missão violaria `ONE_WRITER_PER_SCOPE` e misturaria código runtime, testes, builds gerados e supressões deliberadas sem arqueologia causal.
+
+Por isso o gate funciona como **catraca progressiva**, sem esconder a dívida:
+
+```text
+NO_SILENT_ERROR_RATCHET=true
+NEW_SILENT_ERROR_IN_CHANGED_CODE=BLOCK
+LEGACY_SILENT_ERROR=VISIBLE_DEBT
+LEGACY_DEBT != PASS
+GLOBAL_NO_SILENT_ERROR=UNPROVEN_WHILE_LEGACY_DEBT_EXISTS
+TEST_FIXTURE_OR_GENERATED_COPY != RUNTIME_OWNER
+```
+
+Em PR, o scanner mede todo código acionável e separa:
+
+```text
+ARQUIVO TOCADO + PADRAO SILENCIOSO
+→ NEW_SILENT_ERROR
+→ FAIL
+
+ARQUIVO NAO TOCADO + PADRAO SILENCIOSO
+→ LEGACY_DEBT + caminho + linha
+→ não fabrica PASS global
+→ owner deve remediar quando aquela ferida entrar em escopo
+```
+
+Quando um owner com dívida for tocado, a própria catraca deixa de tratá-la como legado e exige correção antes da promoção. Assim a Casa só pode manter ou reduzir o conjunto observável de silêncio; nunca aumentá-lo. Testes que deliberadamente exercitam exceção, fixtures, documentação, backups e cópias `dist`/minificadas ficam fora do denominador runtime para não contar a mesma ferida duas vezes nem transformar contraprova em bug.
+
+```text
+SILENT_ERROR_DEBT_AFTER <= SILENT_ERROR_DEBT_BEFORE
+NEW_SILENT_ERROR_ALLOWED=ZERO
+LEGACY_DEBT_MUST_REMAIN_ADDRESSED=true
+```
+
 ## Menos é Mais
 
 ```text

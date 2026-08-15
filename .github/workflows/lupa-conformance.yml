@@ -42,7 +42,7 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
-          fetch-depth: 2
+          fetch-depth: 0
           persist-credentials: false
 
       - name: Vincular branch esperada ao SHA exato
@@ -136,11 +136,14 @@ jobs:
             supabase/functions/_shared/operational-error.test.mjs \
             scripts/lupa/no-silent-error-scan.test.mjs
 
-      - name: Erro silencioso — bloquear padrões inequívocos no código rastreado
+      - name: Erro silencioso — catraca de novos padrões; dívida antiga explícita
         shell: bash
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
         run: |
           set -euo pipefail
-          node scripts/lupa/no-silent-error-scan.mjs --repo-root .
+          BASE_REF="${BASE_SHA:-HEAD^}"
+          node scripts/lupa/no-silent-error-scan.mjs --repo-root . --base-ref "${BASE_REF}"
 
       - name: Semantic Core — fixtures offline + contratos
         shell: bash
