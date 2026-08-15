@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-15T01:23:31.930Z",
-  "updatedAtBR": "14/08/2026, 22:23:31 BRT",
+  "updatedAt": "2026-08-15T01:24:04.969Z",
+  "updatedAtBR": "14/08/2026, 22:24:04 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "ci(meta-lupa): exigir prova de evolução no gate canônico",
+    "lastCommit": "docs(meta): cristalizar lei de autoraplicação e meta-metacognição",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-15T01:24:04.969Z",
+      "titulo": "Push na main · a2d1a08eaa9fe602a7d31546777ecc886219efc4",
+      "detalhe": "docs(meta): cristalizar lei de autoraplicação e meta-metacognição",
+      "area": "Repositório",
+      "sha": "a2d1a08",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-15T01:23:31.930Z",
       "titulo": "Push na main · 6dc6afbe3381144bf96fb055bba39f7830964f5e",
       "detalhe": "ci(meta-lupa): exigir prova de evolução no gate canônico",
@@ -988,14 +996,6 @@
       "detalhe": "fix(pr611): restaurar contrato validado antes dos testes",
       "area": "Repositório",
       "sha": "07690b9",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-03T23:48:32.578Z",
-      "titulo": "Push na main · 03fb3b9502730460edf01a90c5784ecf19058e58",
-      "detalhe": "fix(pr611): carregar tarefa feature na Escola",
-      "area": "Repositório",
-      "sha": "03fb3b9",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-15T01:24:04.969Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · a2d1a08eaa9fe602a7d31546777ecc886219efc4 (a2d1a08)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-15T01:23:31.930Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 6dc6afbe3381144bf96fb055bba39f7830964f5e (6dc6afb)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-04T00:02:00.691Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 07690b9c3aea90db449d5d96ccd728b47618db06 (07690b9)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-03T23:48:32.578Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 03fb3b9502730460edf01a90c5784ecf19058e58 (03fb3b9)",
       "area": "Repositório",
       "status": "sucesso"
     }
