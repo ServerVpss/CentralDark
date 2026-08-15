@@ -197,6 +197,22 @@ SINAL CONHECIDO
 
 O executor não declara vitória por instinto. O instinto escolhe rapidamente o próximo teste; a prova decide o resultado.
 
+#### Instinto Superior evolui obrigatoriamente
+
+O reflexo não pode virar ritual congelado. Se um erro novo derrubar um reflexo antigo, se surgir uma contraprova melhor ou se a mesma intenção puder ser resolvida com menos latência/mais precisão sem perder segurança, o `Instinto Superior` deve incorporar o delta comprovado.
+
+```text
+INSTINTO_SUPERIOR=EVOLUTION_REQUIRED
+REFLEXO_ANTIGO + FALHA_NOVA
+→ NOVA_INFORMACAO
+→ REFLEXO_CANDIDATO
+→ BEFORE/AFTER NO MESMO ESCOPO
+→ TESTE + CONTRAPROVA + REGRESSAO
+→ REFLEXO_PROMOVIDO
+```
+
+Sem before/after, sem ganho informacional ou com regressão, o estado é `EVOLUTION_UNPROVEN`. O contrato conceitual único vive em `docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md`; o gate executável compartilhado vive em `.agents/skills/meta-lupa/scripts/evolution_gate.py`.
+
 #### Resultado do Chefe nesta rodada
 
 ```text
