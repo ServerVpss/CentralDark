@@ -131,7 +131,7 @@ app.all("/sse", (_req, res) => {
 // MOTIVO  > GET /token e GET /register caiam no 404 generico, escondendo que
 //           a rota existe e so aceita POST. Confunde diagnostico de OAuth.
 // ONDE    > issue #148, item 7.
-// RESOLVE > 405 + header Allow: POST, nao 404.
+// RESOLVE > 405 + header Allow: POST, como manda o RFC 9110 secao 15.5.6.
 const somentePost = (rota) => (_req, res) => {
     res.setHeader("Allow", "POST");
     res.status(405).json({
@@ -231,7 +231,7 @@ app.get("/openapi.json", (_req, res) => {
         "/health/deep": { get: { summary: "Healthcheck profundo", operationId: "healthDeep", responses: respostaJson } },
         "/status.json": { get: { summary: "Status dos conectores", operationId: "statusJson", responses: respostaJson } },
         "/register": { post: { summary: "OAuth 2.1 Dynamic Client Registration", operationId: "oauthRegister", responses: respostaJson } },
-        "/authorize": { get: { summary: "OAuth 2.1 authorize (PKCE S256)", operationId: "oauthAuthorize", responses: { "200": { description: "Tela de consentimento" }, "302": { description: "Redirect com code" } } } },
+        "/authorize": { get: { summary: "OAuth 2.1 authorize (PKCE S256)", operationId: "oauthAuthorize", responses: { "200": { description: "Tela de consentimento" }, "302": { description: "Redirect com code" } } },
         "/token": { post: { summary: "OAuth 2.1 token endpoint", operationId: "oauthToken", responses: respostaJson } },
         "/.well-known/oauth-protected-resource": { get: { summary: "RFC 9728 protected resource metadata", operationId: "protectedResourceMetadata", responses: respostaJson } },
         "/.well-known/oauth-authorization-server": { get: { summary: "RFC 8414 authorization server metadata", operationId: "authorizationServerMetadata", responses: respostaJson } },
