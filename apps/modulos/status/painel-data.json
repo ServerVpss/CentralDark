@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-15T02:05:20.017Z",
-  "updatedAtBR": "14/08/2026, 23:05:20 BRT",
+  "updatedAt": "2026-08-15T02:18:42.456Z",
+  "updatedAtBR": "14/08/2026, 23:18:42 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "test(memory): provar modo preservado e alvo atomico seguro",
+    "lastCommit": "fix(governance): reconciliar #724 histórica com main canônica",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-15T02:18:42.456Z",
+      "titulo": "Push na main · 9092c52605cbb8af5c7721435161a5a1b6405647",
+      "detalhe": "fix(governance): reconciliar #724 histórica com main canônica",
+      "area": "Repositório",
+      "sha": "9092c52",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-15T02:05:20.017Z",
       "titulo": "Push na main · 4edf761825e78a237489f04bcdbe355494d99120",
       "detalhe": "test(memory): provar modo preservado e alvo atomico seguro",
@@ -988,14 +996,6 @@
       "detalhe": "feat(governança): SOUL canônica + intenção autorizada → squash main (#812)",
       "area": "Repositório",
       "sha": "943a276",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-14T04:05:49.943Z",
-      "titulo": "Push na main · 6ea38465fc9e96c6292e443b8ad91e28462f573c",
-      "detalhe": "docs(aprendizado): registrar incidente de escopo do menos e mais (#758)",
-      "area": "Repositório",
-      "sha": "6ea3846",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-15T02:18:42.456Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 9092c52605cbb8af5c7721435161a5a1b6405647 (9092c52)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-15T02:05:20.017Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 4edf761825e78a237489f04bcdbe355494d99120 (4edf761)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-14T04:37:22.646Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 943a276e343f9cd0c99f02b64e0ba65602b23619 (943a276)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-14T04:05:49.943Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 6ea38465fc9e96c6292e443b8ad91e28462f573c (6ea3846)",
       "area": "Repositório",
       "status": "sucesso"
     }
