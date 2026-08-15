@@ -24,7 +24,7 @@ concurrency:
 jobs:
   contrato:
     name: Validar cápsula sem falso verde
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux]
     timeout-minutes: 10
     steps:
       - name: Checkout exato do candidato
