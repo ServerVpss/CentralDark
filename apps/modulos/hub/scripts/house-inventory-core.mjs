@@ -1,3 +1,4 @@
+import { execFileSync } from 'node:child_process';
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -46,6 +47,16 @@ function frontmatterStatus(text) {
 function stableId(prefix, value) {
   const digest = crypto.createHash('sha256').update(String(value)).digest('hex').slice(0, 12);
   return `${prefix}:${digest}`;
+}
+
+function resolveRevision(repoRoot, explicitRevision) {
+  if (explicitRevision) return explicitRevision;
+  if (process.env.VERCEL_GIT_COMMIT_SHA) return process.env.VERCEL_GIT_COMMIT_SHA;
+  if (process.env.CF_PAGES_COMMIT_SHA) return process.env.CF_PAGES_COMMIT_SHA;
+  if (fs.existsSync(path.resolve(repoRoot, '.git'))) {
+    return execFileSync('git', ['-C', repoRoot, 'rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
+  }
+  return process.env.GITHUB_SHA ? `EVENT_SHA:${process.env.GITHUB_SHA}` : 'WORKTREE_UNRESOLVED';
 }
 
 function makeItem({ id, name, group, type, status, owner, consumers = [], proof, summary, source = owner }) {
@@ -215,7 +226,7 @@ export function buildHouseInventory(repoRoot, { revision } = {}) {
     source_of_truth: 'REPOSITORY_OWNERS',
     source_is_authority: false,
     second_truth: false,
-    generated_from: revision || process.env.VERCEL_GIT_COMMIT_SHA || process.env.GITHUB_SHA || process.env.CF_PAGES_COMMIT_SHA || 'WORKTREE',
+    generated_from: resolveRevision(resolvedRoot, revision),
     groups: INVENTORY_GROUPS,
     counts,
     total: deduped.length,
