@@ -28,6 +28,15 @@ REQUIRED_META_SUBJECTS = {
     "EXPANSAO_DE_DOMINIO",
     "METACOGNICAO_OPERACIONAL",
 }
+CROSS_META_LENSES = (
+    "EXPANSAO_DE_DOMINIO",
+    "META_MINERACAO",
+    "MENOS_E_MAIS",
+    "META_LUPA",
+    "INSTINTO_SUPERIOR",
+    "METACOGNICAO_OPERACIONAL",
+)
+CROSS_META_OUTCOMES = {"DELTA_ABSORBED", "NO_CHANGE", "NOT_APPLICABLE"}
 SUBJECT_RE = re.compile(r"^[A-Z][A-Z0-9_]{2,63}$")
 HEX40 = re.compile(r"^[0-9a-f]{40}$")
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
@@ -75,6 +84,21 @@ def _checks_ok(value: Any, prefix: str, errors: list[str]) -> None:
             errors.append(f"{prefix}_{index}_NOT_PASS")
         if not _nonempty_str_list(item.get("evidence")):
             errors.append(f"{prefix}_{index}_EVIDENCE_MISSING")
+
+
+def _cross_meta_ok(value: Any, errors: list[str]) -> None:
+    if not isinstance(value, dict):
+        errors.append("CROSS_META_REVIEW_MISSING")
+        return
+    for lens in CROSS_META_LENSES:
+        item = value.get(lens)
+        if not isinstance(item, dict):
+            errors.append(f"CROSS_META_{lens}_MISSING")
+            continue
+        if item.get("status") not in CROSS_META_OUTCOMES:
+            errors.append(f"CROSS_META_{lens}_STATUS_INVALID")
+        if not _nonempty_str_list(item.get("evidence")):
+            errors.append(f"CROSS_META_{lens}_EVIDENCE_MISSING")
 
 
 def validate(manifest: Any, repo_root: str | None = None) -> dict[str, Any]:
@@ -133,6 +157,12 @@ def validate(manifest: Any, repo_root: str | None = None) -> dict[str, Any]:
     _checks_ok(manifest.get("tests"), "TEST", errors)
     _checks_ok(manifest.get("regressions"), "REGRESSION", errors)
 
+    is_required_meta = subject in REQUIRED_META_SUBJECTS
+    if is_required_meta:
+        _cross_meta_ok(manifest.get("cross_meta_review"), errors)
+        if manifest.get("meta_fixed_point") is not True:
+            errors.append("META_FIXED_POINT_UNPROVEN")
+
     if subject == "MENOS_E_MAIS":
         before_complexity = manifest.get("complexity_before")
         after_complexity = manifest.get("complexity_after")
@@ -162,13 +192,24 @@ def validate(manifest: Any, repo_root: str | None = None) -> dict[str, Any]:
     return {
         "schema_version": SCHEMA_VERSION,
         "subject": subject,
-        "required_meta_subject": subject in REQUIRED_META_SUBJECTS,
+        "required_meta_subject": is_required_meta,
+        "meta_fixed_point": manifest.get("meta_fixed_point") if is_required_meta else None,
         "status": "EVOLVED" if verified else "EVOLUTION_UNPROVEN",
         "evolution_verified": verified,
         "before_ref": before_ref,
         "after_ref": after_ref,
         "manifest_sha256": manifest_sha256(manifest),
         "errors": sorted(set(errors)),
+    }
+
+
+def _meta_review(status: str = "NO_CHANGE") -> dict[str, dict[str, Any]]:
+    return {
+        lens: {
+            "status": status,
+            "evidence": [f"{lens}: avaliação cruzada concluída sem delta residual"],
+        }
+        for lens in CROSS_META_LENSES
     }
 
 
@@ -192,6 +233,9 @@ def _signed_base(subject: str = "META_LUPA") -> dict[str, Any]:
         "tests": [{"name": "positivo", "status": "PASS", "evidence": ["receipt positivo"]}],
         "regressions": [{"name": "regressao", "status": "PASS", "evidence": ["receipt regressao"]}],
     }
+    if subject in REQUIRED_META_SUBJECTS:
+        base["cross_meta_review"] = _meta_review()
+        base["meta_fixed_point"] = True
     if subject == "MENOS_E_MAIS":
         base["complexity_before"] = 5
         base["complexity_after"] = 4
@@ -230,6 +274,21 @@ def self_test() -> int:
     less["complexity_after"] = 6
     result = validate(_resign(less))
     assert not result["evolution_verified"] and "MENOS_E_MAIS_COMPLEXITY_REGRESSION" in result["errors"]
+
+    no_cross_meta = _signed_base("META_LUPA")
+    no_cross_meta.pop("cross_meta_review")
+    result = validate(_resign(no_cross_meta))
+    assert not result["evolution_verified"] and "CROSS_META_REVIEW_MISSING" in result["errors"]
+
+    no_fixed_point = _signed_base("META_LUPA")
+    no_fixed_point["meta_fixed_point"] = False
+    result = validate(_resign(no_fixed_point))
+    assert not result["evolution_verified"] and "META_FIXED_POINT_UNPROVEN" in result["errors"]
+
+    missing_lens = _signed_base("META_LUPA")
+    missing_lens["cross_meta_review"].pop("INSTINTO_SUPERIOR")
+    result = validate(_resign(missing_lens))
+    assert not result["evolution_verified"] and "CROSS_META_INSTINTO_SUPERIOR_MISSING" in result["errors"]
 
     print("PASS evolution_gate")
     return 0
