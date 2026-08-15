@@ -540,3 +540,37 @@ def test_pdf_mining_keeps_biblioteca_elfica_pinned_in_canonical_scaffold():
     )
     for marker in required_markers:
         assert marker in content, f"BIBLIOTECA_ELFICA_CANONICAL_MARKER_MISSING={marker}"
+
+
+def test_zero_silent_learning_is_house_invariant_and_not_chat_or_private_cot_dump():
+    repo_root = Path(__file__).resolve().parents[4]
+    owner = repo_root / "docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md"
+    boot = repo_root / "LEIA-ME-IA.md"
+    content = owner.read_text(encoding="utf-8")
+    boot_content = boot.read_text(encoding="utf-8")
+
+    required_markers = (
+        "ZERO_SILENT_LEARNING=true",
+        "ZERO_SILENT_LEARNING_SCOPE=HOUSE",
+        "MATERIAL_LEARNING_MUST_SURFACE=true",
+        "MATERIAL_LEARNING_REQUIRES_EVIDENCE=true",
+        "MATERIAL_LEARNING_REQUIRES_OWNER=true",
+        "MATERIAL_LEARNING_REQUIRES_REUSABLE_DELTA=true",
+        "MATERIAL_LEARNING_MUST_OUTLIVE_EXECUTOR_WHEN_REUSABLE=true",
+        "MATERIAL_LEARNING_CANNOT_LIVE_ONLY_IN_SESSION=true",
+        "MATERIAL_LEARNING_MUST_BE_INSPECTABLE_BY_SEGREDO_CHEFE=true",
+        "MATERIAL_LEARNING_SURFACE=CONCLUSION+EVIDENCE+DELTA+IMPACT+OWNER+STATE",
+        "PRIVATE_CHAIN_OF_THOUGHT_NOT_REQUIRED=true",
+        "NO_NEW_INFORMATION_OR_REUSABLE_DELTA=NO_CHANGE",
+        "UNPROVEN_MATERIAL_LEARNING=CANDIDATE",
+        "UNSURFACED_MATERIAL_LEARNING=UNPROVEN",
+        "SILENT_CANONICAL_PROMOTION=FORBIDDEN",
+        "NO_NEW_MEMORY_ENGINE_REQUIRED=true",
+        "NO_NEW_WORKFLOW_REQUIRED=true",
+    )
+    for marker in required_markers:
+        assert marker in content, f"ZERO_SILENT_LEARNING_MARKER_MISSING={marker}"
+
+    assert "docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md" in boot_content
+    assert "não um formato de chat" in content
+    assert "não exige cadeia de pensamento privada" in content

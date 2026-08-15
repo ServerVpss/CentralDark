@@ -700,3 +700,51 @@ CRISTAL_CLAIM_DOES_NOT_UPGRADE_BASE_FAILURE=true
 IRREDUCIBLE_IS_STRONGER_THAN_FIXED_POINT=true
 NO_CRYSTAL_CLAIM_WITHOUT_STRICT_RECEIPT=true
 ```
+
+## ZERO SILENT LEARNING — aprendizado material não pode morrer no executor
+
+`ZERO_SILENT_LEARNING` é uma **invariante da Casa inteira**, não um formato de chat e não uma obrigação de despejar raciocínio privado. O alvo é impedir que um agente, workflow, ferramenta, motor ou sessão descubra uma correção material que altera a missão e depois deixe esse delta desaparecer quando o executor termina.
+
+Aprendizado material é somente o delta que, sustentado por evidência, muda crença operacional, método, capacidade, decisão técnica ou scaffold de forma relevante para execuções futuras. Observação passageira, repetição, preferência sem impacto técnico e a mesma evidência renomeada não contam.
+
+```text
+MATERIAL_LEARNING
+→ EVIDENCE
+→ DELTA_DE_CRENCA|DELTA_DE_METODO|DELTA_DE_CAPACIDADE
+→ EXPLICITAR CONCLUSAO + FONTE + O_QUE_MUDOU + IMPACTO
+→ LOCALIZAR CANONICAL_OWNER
+→ TESTAR/CONTRAPROVAR QUANDO APLICAVEL
+→ CANDIDATE|NO_CHANGE|PROVEN
+→ SE PROVEN + REUSABLE
+   → MENOR REGRA|TESTE|SKILL|CONTRATO|MEMORIA APLICAVEL
+   → PROXIMA EXECUCAO HERDA
+```
+
+A superfície do aprendizado deve ser auditável e inspecionável por `SEGREDO/CHEFE`, mas não exige cadeia de pensamento privada, token por token, scratchpad ou narrativa completa do raciocínio. O que não pode ficar escondido é o **resultado material**: conclusão, evidência/proveniência, delta, impacto, owner e estado de promoção.
+
+```text
+ZERO_SILENT_LEARNING=true
+ZERO_SILENT_LEARNING_SCOPE=HOUSE
+MATERIAL_LEARNING_MUST_SURFACE=true
+MATERIAL_LEARNING_REQUIRES_EVIDENCE=true
+MATERIAL_LEARNING_REQUIRES_OWNER=true
+MATERIAL_LEARNING_REQUIRES_REUSABLE_DELTA=true
+MATERIAL_LEARNING_MUST_OUTLIVE_EXECUTOR_WHEN_REUSABLE=true
+MATERIAL_LEARNING_CANNOT_LIVE_ONLY_IN_SESSION=true
+MATERIAL_LEARNING_MUST_BE_INSPECTABLE_BY_SEGREDO_CHEFE=true
+MATERIAL_LEARNING_SURFACE=CONCLUSION+EVIDENCE+DELTA+IMPACT+OWNER+STATE
+PRIVATE_CHAIN_OF_THOUGHT_NOT_REQUIRED=true
+```
+
+A lei não fabrica memória nem engorda a Casa. Se não houver informação nova ou delta reutilizável, o resultado correto continua sendo `NO_CHANGE`. Se houver delta material ainda não provado, ele deve ser visível como `CANDIDATE`, nunca promovido silenciosamente como verdade canônica.
+
+```text
+NO_NEW_INFORMATION_OR_REUSABLE_DELTA=NO_CHANGE
+UNPROVEN_MATERIAL_LEARNING=CANDIDATE
+UNSURFACED_MATERIAL_LEARNING=UNPROVEN
+SILENT_CANONICAL_PROMOTION=FORBIDDEN
+NO_NEW_MEMORY_ENGINE_REQUIRED=true
+NO_NEW_WORKFLOW_REQUIRED=true
+```
+
+A aplicação é transversal: SOL, PIVETE/HERMES, agentes especialistas, workflows, ferramentas, modelos substituíveis e consolidação offline obedecem ao mesmo owner. Consumidores não copiam esta seção inteira; carregam `METACOGNICAO-OPERACIONAL.md` pelo boot e materializam o menor artefato no owner específico da ferida.
