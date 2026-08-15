@@ -31,6 +31,15 @@ const MUSIC_PATTERNS = Object.freeze({
   coda: 'FINAL_RECORD',
 });
 
+const ABSTRACTION_REUSE = Object.freeze({
+  RETURN_TO_INVARIANT: 'METACOGNICAO',
+  COMPARE_INDEPENDENT_HYPOTHESES: 'META_LUPA',
+  INVESTIGATE_CONFLICTING_EVIDENCE: 'META_LUPA',
+  PROVEN_CLOSURE: 'FIXED_POINT',
+  FINAL_COUNTERPROOF: 'META_LUPA',
+  FINAL_RECORD: 'GIT',
+});
+
 function stableHash(parts) {
   return crypto.createHash('sha256').update(parts.map((part) => String(part ?? '')).join('\u0000')).digest('hex');
 }
@@ -126,11 +135,17 @@ export function extractMusicBehavioralMaterial({ observations = [], interpretati
       if (normalized.includes(normalizeObservation(token))) detected.set(abstraction, token);
     }
   }
-  const hypotheses = [...detected].map(([abstraction, observed_property]) => ({
-    observed_property,
-    behavioral_hypothesis: abstraction,
-    status: 'CANDIDATE_ONLY',
-  }));
+  const hypotheses = [...detected].map(([abstraction, observed_property]) => {
+    const existingCapability = ABSTRACTION_REUSE[abstraction] || null;
+    return {
+      observed_property,
+      behavioral_hypothesis: abstraction,
+      existing_capability: existingCapability,
+      status: existingCapability ? 'REUSE_EXISTING' : 'CANDIDATE_ONLY',
+    };
+  });
+  const hasCandidate = hypotheses.some((item) => item.status === 'CANDIDATE_ONLY');
+  const status = hypotheses.length === 0 ? 'INSUFFICIENT_EVIDENCE' : hasCandidate ? 'CANDIDATE_ONLY' : 'REUSE_EXISTING';
   return Object.freeze({
     schema_version: 1,
     material_type: 'MUSIC_BEHAVIORAL_MATERIAL',
@@ -141,10 +156,10 @@ export function extractMusicBehavioralMaterial({ observations = [], interpretati
     copy_lyrics: false,
     direct_skill_write: false,
     execute_action: false,
-    dedupe_required: true,
+    dedupe_performed: true,
     counterproof_required: true,
     hypotheses,
-    status: hypotheses.length ? 'CANDIDATE_ONLY' : 'INSUFFICIENT_EVIDENCE',
+    status,
   });
 }
 
