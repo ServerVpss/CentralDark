@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-15T01:42:23.693Z",
-  "updatedAtBR": "14/08/2026, 22:42:23 BRT",
+  "updatedAt": "2026-08-15T01:44:02.873Z",
+  "updatedAtBR": "14/08/2026, 22:44:02 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "fix(meta-lupa): corrigir indentacao do teste canonico",
+    "lastCommit": "fix(memory): migrar relatorio legado sem quebrar pipeline",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-15T01:44:02.873Z",
+      "titulo": "Push na main · 6a5c09796aefa70bfbe3b6edf998e873cf1d0930",
+      "detalhe": "fix(memory): migrar relatorio legado sem quebrar pipeline",
+      "area": "Repositório",
+      "sha": "6a5c097",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-15T01:42:23.693Z",
       "titulo": "Push na main · 599f12e2e09e541b0314df726e2b45504d4faa1d",
       "detalhe": "fix(meta-lupa): corrigir indentacao do teste canonico",
@@ -988,14 +996,6 @@
       "detalhe": "feat(casa): manter Escola viva e sincronizar Obsidian com o Hermes (#637)",
       "area": "Repositório",
       "sha": "5f99177",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-07T00:49:54.245Z",
-      "titulo": "Push na main · e490cdeb3c905dbd85e0731490c3dea73517dadd",
-      "detalhe": "fix(autonomia): fechar falhas silenciosas, token do promotor e aviso ao vivo (#663)",
-      "area": "Repositório",
-      "sha": "e490cde",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-15T01:44:02.873Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 6a5c09796aefa70bfbe3b6edf998e873cf1d0930 (6a5c097)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-15T01:42:23.693Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 599f12e2e09e541b0314df726e2b45504d4faa1d (599f12e)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-07T03:28:00.395Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 5f991776bceb5978b40b82499abf8ce592640e5a (5f99177)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-07T00:49:54.245Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · e490cdeb3c905dbd85e0731490c3dea73517dadd (e490cde)",
       "area": "Repositório",
       "status": "sucesso"
     }
