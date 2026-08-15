@@ -11,7 +11,7 @@ import fs from 'fs';
 import path from 'path';
 import https from 'https';
 import { execFileSync } from 'child_process';
-import { atomicWriteUtf8Sync } from './fs-safe.mjs';
+import { atomicWriteUtf8Sync, ensureRegularFileInsideRootSync } from './fs-safe.mjs';
 
 const RAIZ        = '/root/CentralDark';
 const DIR         = path.join(RAIZ, 'scripts/memory-linker');
@@ -82,9 +82,17 @@ const ignorados = [];
 const hoje = new Date().toISOString().split('T')[0];
 
 for (const fix of (decision.autoFix || [])) {
-  const filePath = findFile(fix.arquivo);
-  if (!filePath) {
+  const candidatePath = findFile(fix.arquivo);
+  if (!candidatePath) {
     ignorados.push({ arquivo: fix.arquivo, tipo: fix.tipo, motivo: 'FILE_NOT_FOUND' });
+    continue;
+  }
+
+  let filePath;
+  try {
+    filePath = ensureRegularFileInsideRootSync(CONSCIENCIA, candidatePath);
+  } catch (error) {
+    ignorados.push({ arquivo: fix.arquivo, tipo: fix.tipo, motivo: `SECURITY_BOUNDARY:${error.message}` });
     continue;
   }
 
