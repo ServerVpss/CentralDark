@@ -320,12 +320,96 @@ EXPERIENCIA BRUTA
 
 Não copiar o ponto fraco junto com a capacidade. O objetivo não é imitar um modelo; é deixar o organismo melhor do que a fonte que forneceu o padrão.
 
+### 13.1 Mineração automática — matéria nova não vira trabalho manual do CHEFE
+
+Quando nova matéria chega **dentro da intenção vigente e do escopo já autorizado**, minerar é dever do organismo. Não devolver ao humano a triagem que a máquina consegue executar e verificar.
+
+```text
+NOVA_MATERIA
+→ EXTRAIR_CAPACIDADE
+→ COMPARAR_COM_CANONICO
+→ IGUAL: DROP_DUPLICATION
+→ PARCIAL: COSTURAR_DELTA
+→ NOVO: PROVAR_GAP
+→ CONTRAPROVAR
+→ LOCALIZAR_DONO
+→ PROVAR_CONSUMIDOR
+→ ABSORVER_SE_SEGURO_E_AUTORIZADO
+→ TESTAR
+→ PRESERVAR_PROVENIENCIA
+→ REMOVER_DEPENDENCIA_DA_FONTE
+→ CONTINUAR
+```
+
+Não pedir confirmação para ler, comparar, deduplicar, testar ou aplicar correção reversível de repositório já coberta pela missão. Human gate permanece para nova intenção, segredo, ação irreversível, deploy/publicação, novo gasto, ampliação de privilégio, colisão de Writer sem handoff ou bloqueio físico real.
+
+```text
+MINING_WITHIN_ACTIVE_INTENT=AUTOMATIC
+NO_NEW_INFORMATION=NO_CHANGE
+SOURCE_IS_PROVENANCE_NOT_AUTHORITY=true
+PROVEN_GOLD_WITH_OWNER_AND_CONSUMER=ABSORB_WITHIN_AUTHORIZED_SCOPE
+```
+
+`META_MINERACAO` não é sexta arquitetura. É a própria metacognição aplicando a régua de mineração sobre **como minera**:
+
+```text
+META_MINERACAO ⊂ META_METACOGNICAO_OPERACIONAL
+
+FALHA|RUIDO|FALSO_VERDE|NOVO_MATERIAL
+→ O FILTRO DE MINERACAO PERDEU ALGO?
+→ INFORMACAO NOVA?
+   NAO → NO_CHANGE
+   SIM → MENOR_DELTA_NO_FILTRO
+→ BEFORE/AFTER
+→ TESTE
+→ CONTRAPROVA
+→ REGRESSAO
+→ EVOLUTION_GATE
+```
+
+Melhorar o minerador sem before/after verificável é `EVOLUTION_UNPROVEN`.
+
+### 13.2 Ouro selado não é verdade imortal
+
+Uma capacidade validada continua sendo ouro enquanto a fronteira e a evidência que a sustentam permanecerem aplicáveis. Absorção remove dependência da fonte; não elimina a possibilidade de a realidade mudar.
+
+```text
+OURO_SELADO != VERDADE_IMORTAL
+
+BOUNDARY_CHANGED
+| VIOLATED
+| OUTDATED
+| SUPERSEDED
+| CONSUMER_DISAPPEARED
+| EVIDENCE_STALE
+→ REVALIDATE
+→ KEEP | SUPERSEDE | RETIRE
+```
+
+Tempo pode acionar revisão, mas não copiar limiar arbitrário de outra arquitetura como lei universal. **Evidência decide**.
+
+Aposentadoria/removal também precisa de prova:
+
+```text
+RETIRE_CANDIDATE
+→ PROVAR_DONO_E_CONSUMIDORES
+→ PROVAR_SUBSTITUTO_OU_DESNECESSIDADE
+→ CONTRAPROVA
+→ REGRESSAO
+→ CAPACIDADE_DEPOIS >= CAPACIDADE_ANTES
+→ SO_ENTAO_RETIRE
+```
+
+Regra pinada por autoridade, segurança ou contrato crítico não sofre auto-retire silencioso. A retenção/revisão precisa declarar motivo.
+
+Remover regra velha pode ser **evolução real** quando reduz complexidade sem perder capacidade e o before/after passa pelo mesmo gate de evolução verificável.
+
 ## 14. Relações canônicas
 
 - `LEIA-ME-IA.md` — porta raiz.
 - `docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md` — recuperação, roteamento e risco.
 - `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md` — identidade/continuidade.
-- `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json` — reutilização antes de criação.
+- `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json` — reutilização e reconciliação.
 - `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` — coordenação e Writer.
 - `docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md` — aprendizagem do scaffold.
 - `.agents/skills/meta-lupa/SKILL.md` — falsificação e ponto fixo.
@@ -341,6 +425,9 @@ SERIALIZAR A MAO.
 TRATAR MUDANCA COMO HIPOTESE.
 VERIFICAR O CLAIM CERTO.
 APRENDER COM O ERRO.
+MINERAR MATERIA NOVA SEM DEVOLVER TRIAGEM MECANICA AO HUMANO.
+PARAR QUANDO NAO HOUVER INFORMACAO NOVA.
+REVALIDAR OURO QUANDO A FRONTEIRA MUDAR.
 PODAR SO DEPOIS DE ESTABILIZAR.
 TRANSFORMAR INVARIANTE CRITICA EM MECANISMO.
 PRESERVAR PROVENIENCIA.
