@@ -1,0 +1,12 @@
+[
+  {"left":"cava mais isso","right":"aprofunda essa fonte","label":"SAME_INTENT"},
+  {"left":"aprofunda essa fonte","right":"espreme mais esse material","label":"SAME_INTENT"},
+  {"left":"procura mais evidência dessa hipótese","right":"busca outras fontes para essa hipótese","label":"SAME_INTENT"},
+  {"left":"rankeia os resultados mais úteis","right":"ordena os achados por relevância","label":"SAME_INTENT"},
+  {"left":"abre o arquivo canônico","right":"reinicia o servidor","label":"DIFFERENT_INTENT"},
+  {"left":"buscar termos relacionados","right":"fazer deploy em produção","label":"DIFFERENT_INTENT"},
+  {"left":"deduplicar conceitos parecidos","right":"apagar a memória canônica","label":"DIFFERENT_INTENT"},
+  {"left":"medir similaridade semântica","right":"autorizar pagamento da fatura","label":"DIFFERENT_INTENT"},
+  {"left":"subir isso","right":"promover isso","label":"AMBIGUOUS"},
+  {"left":"arruma esse estado","right":"corrige essa memória","label":"AMBIGUOUS"}
+]

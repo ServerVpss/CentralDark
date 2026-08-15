@@ -1,6 +1,6 @@
 // Configurações do plugin: URL do JSON, refresh, auto-update e rollback.
 
-import { App, Notice, PluginSettingTab, Setting } from "obsidian";
+import { App, Notice, Platform, PluginSettingTab, Setting } from "obsidian";
 import type GrafoVivoPlugin from "./main";
 
 export interface GrafoVivoSettings {
@@ -10,6 +10,8 @@ export interface GrafoVivoSettings {
   autoUpdateAtivo: boolean;
   autoUpdateBaseUrl: string;
   autoUpdateIntervaloMinutos: number;
+  semanticRepoRoot: string;
+  semanticPython: string;
 }
 
 export const DEFAULT_SETTINGS: GrafoVivoSettings = {
@@ -21,6 +23,8 @@ export const DEFAULT_SETTINGS: GrafoVivoSettings = {
   autoUpdateAtivo: true,
   autoUpdateBaseUrl: "https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/plugin-release",
   autoUpdateIntervaloMinutos: 10,
+  semanticRepoRoot: "",
+  semanticPython: "",
 };
 
 export class GrafoVivoSettingTab extends PluginSettingTab {
@@ -66,6 +70,33 @@ export class GrafoVivoSettingTab extends PluginSettingTab {
           await this.plugin.saveSettings();
         }),
       );
+
+    if (Platform.isDesktopApp) {
+      containerEl.createEl("h3", { text: "Semântica local" });
+
+      new Setting(containerEl)
+        .setName("Raiz do CentralDark")
+        .setDesc("Diretório local do repo que contém infra/mcp/semantic_bridge.py. Vazio = usa CENTRALDARK_REPO_ROOT; não baixa modelo nem usa rede.")
+        .addText((txt) =>
+          txt
+            .setPlaceholder("E:/CentralDark ou /caminho/CentralDark")
+            .setValue(this.plugin.settings.semanticRepoRoot)
+            .onChange(async (v) => {
+              this.plugin.settings.semanticRepoRoot = v.trim();
+              await this.plugin.saveSettings();
+            }),
+        );
+
+      new Setting(containerEl)
+        .setName("Python semântico")
+        .setDesc("Executável Python local. Vazio = SEMANTIC_PYTHON ou python/python3.")
+        .addText((txt) =>
+          txt.setValue(this.plugin.settings.semanticPython).onChange(async (v) => {
+            this.plugin.settings.semanticPython = v.trim();
+            await this.plugin.saveSettings();
+          }),
+        );
+    }
 
     containerEl.createEl("h3", { text: "🚀 Auto-atualização" });
 

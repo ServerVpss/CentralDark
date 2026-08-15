@@ -3,6 +3,7 @@ import { execFileSync } from "node:child_process";
 import { config } from "./config.js";
 import { log } from "./log.js";
 import { sanitizeOutgoingText } from "./lib/sanitize.js";
+import { extractWorkCandidates } from "./lib/work-candidate.js";
 import { mcpAdminTools } from "./tools/core/mcp-admin.js";
 const CAPABILITY_RE = /^[A-Za-z0-9_-]{1,64}$/;
 const SHA_RE = /^[0-9a-f]{40}$/i;
@@ -223,6 +224,54 @@ async function appendEvidence(mission, receiptSha, receiptEventId) {
         },
     });
 }
+async function publishWorkCandidates(mission, payload, receiptSha) {
+    const normalized = extractWorkCandidates(payload, mission);
+    const stats = {
+        totalObserved: normalized.totalObserved,
+        accepted: normalized.accepted.length,
+        rejected: normalized.rejected.length,
+        truncated: normalized.truncated === true,
+        created: 0,
+        deduped: 0,
+        failed: 0,
+    };
+    for (const candidate of normalized.accepted) {
+        try {
+            const rows = await rest("/rest/v1/rpc/publish_hub_work_candidate", {
+                method: "POST",
+                prefer: "return=representation",
+                body: {
+                    p_parent_mission_id: mission.id,
+                    p_worker_id: WORKER_ID,
+                    p_work_fingerprint: candidate.work_fingerprint,
+                    p_capability: candidate.capability,
+                    p_input: candidate.input,
+                    p_branch_sha: candidate.branch_sha,
+                    p_title: candidate.title,
+                    p_target: candidate.target,
+                    p_risk: candidate.risk,
+                    p_receipt_sha: receiptSha,
+                },
+            });
+            if (!Array.isArray(rows) || rows.length !== 1 || !rows[0]?.mission_id || typeof rows[0]?.created !== "boolean") {
+                throw new Error("WORK_CANDIDATE_PUBLISH_READBACK_FAILED");
+            }
+            if (rows[0].created)
+                stats.created += 1;
+            else
+                stats.deduped += 1;
+        }
+        catch (err) {
+            stats.failed += 1;
+            log.error("hub_work_candidate_publish_error", {
+                missionId: mission.id,
+                fingerprint: candidate.work_fingerprint,
+                error: safeError(err),
+            });
+        }
+    }
+    return stats;
+}
 async function finalizeMission(missionId, ok, executionStatus) {
     const finishedAt = new Date().toISOString();
     const rows = await rest(`/rest/v1/hub_missions?id=eq.${encodeURIComponent(missionId)}&state=eq.running&claimed_by=eq.${encodeURIComponent(WORKER_ID)}`, {
@@ -385,7 +434,28 @@ async function processOneMission() {
         const receiptEvent = await appendReceiptEvent(mission, verdict.status, receiptText);
         await appendEvidence(mission, sha, receiptEvent.id);
         await appendEvent(mission.id, "execution", verdict.status, `scope=${String(mission.writer_scope || "unknown").slice(0, 200)}; capability=${mission.capability}; receipt_sha256=${sha}; evidence_status=pending`);
-        const finalStatus = verdict.ok ? `${verdict.status}:EVIDENCE_PENDING` : verdict.status;
+        let discoveryStatus = "NO_WORK_CANDIDATES";
+        if (verdict.ok) {
+            try {
+                const discovery = await publishWorkCandidates(mission, verdict.payload, sha);
+                if (discovery.totalObserved > 0) {
+                    discoveryStatus = discovery.failed > 0
+                        ? "WORK_DISCOVERY_UNPROVEN"
+                        : "WORK_CANDIDATES_PENDING";
+                    await appendEvent(mission.id, "work_discovery", discovery.failed > 0 ? "unproven" : "pending", `observed=${discovery.totalObserved}; accepted=${discovery.accepted}; created=${discovery.created}; deduped=${discovery.deduped}; rejected=${discovery.rejected}; failed=${discovery.failed}; truncated=${discovery.truncated}`);
+                }
+            }
+            catch (err) {
+                discoveryStatus = "WORK_DISCOVERY_UNPROVEN";
+                try {
+                    await appendEvent(mission.id, "work_discovery", "unproven", safeError(err));
+                }
+                catch { /* derivação falhou; resultado original continua mensurado */ }
+            }
+        }
+        const finalStatus = verdict.ok
+            ? `${verdict.status}:EVIDENCE_PENDING:${discoveryStatus}`
+            : verdict.status;
         await finalizeMission(mission.id, verdict.ok, finalStatus);
         state.lastExecutionStatus = finalStatus;
         state.lastError = verdict.ok ? null : verdict.status;

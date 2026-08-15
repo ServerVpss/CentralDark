@@ -14,6 +14,7 @@ import {
   enrichDreamProposal,
   validatePatternDiscovery,
 } from './pattern-discovery.mjs';
+import { attachSemanticIntentPrefilter } from './semantic-intent-adapter.mjs';
 
 const WRITE_ROLES = new Set(['EXECUTOR', 'HERMES']);
 const AGENT_CALL_PROTOCOL = 'CENTRALDARK_AGENT_CALL_V1';
@@ -161,19 +162,22 @@ async function main() {
   const jarvisState = args.state
     ? JSON.parse(fs.readFileSync(path.resolve(args.state), 'utf8'))
     : null;
-  const proposal = buildDreamReviewWithPatterns(events, {
+  let proposal = buildDreamReviewWithPatterns(events, {
     headSha: args.head,
     parseRejections,
     jarvisState,
   });
+  proposal = attachSemanticIntentPrefilter(proposal);
   const writeStatus = writeProposalIdempotent(outputPath, proposal);
   const discovery = proposal.pattern_discovery;
   const routing = proposal.autonomy_routing;
+  const semantic = proposal.semantic_prefilter;
 
   console.log(
     `DREAM_REVIEW_RUN=${proposal.status} HEAD_SHA=${proposal.head_sha} ` +
     `CANDIDATES=${proposal.candidate_count} PATTERNS=${discovery.pattern_count} ` +
     `AUTO_HANDOFF=${discovery.autonomy_handoff_eligible_count} ` +
+    `SEMANTIC_PREFILTER=${semantic?.status ?? 'UNKNOWN'} ` +
     `CALLS_ACCEPTED=${routing?.accepted_call_count ?? 'NOT_MEASURED'} ` +
     `TRANSPORT_EXECUTED=0 DIRECT_APPLY=0 WRITE=${writeStatus}`,
   );
