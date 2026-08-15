@@ -149,7 +149,7 @@ jobs:
           BASE_REF="${BASE_SHA:-HEAD^}"
           node scripts/lupa/no-silent-error-scan.mjs --repo-root . --base-ref "${BASE_REF}"
 
-      - name: HUB — Inventário: gerar + typecheck + build
+      - name: "HUB — Inventário: gerar + typecheck + build"
         shell: bash
         run: |
           set -euo pipefail
