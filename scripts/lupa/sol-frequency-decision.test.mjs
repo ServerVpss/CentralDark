@@ -1,9 +1,11 @@
 import assert from 'node:assert/strict';
 import {
   SOL_FREQUENCY_INVARIANTS,
+  compareThinkingRoutes,
   decideFrequency,
   globalRuleCoverage,
   recordEngineFitness,
+  recordThinkingRouteOutcome,
 } from './sol-frequency-decision.mjs';
 
 const rapid = decideFrequency({
@@ -76,6 +78,94 @@ const fitness = recordEngineFitness({
   comparable_sample: false,
 });
 assert.equal(fitness.ranking_allowed, false, 'sem amostra comparavel nao ranquear motor por fama ou numero isolado');
+
+const route = recordThinkingRouteOutcome({
+  material_class: 'BROWSER_OBSERVATION',
+  material_fingerprint: 'sha256:abc',
+  skills: ['META_LUPA', 'ARTIFACT_TO_CAPABILITY', 'META_LUPA'],
+  frequency: 'PROFUNDA',
+  engine_fitness: fitness,
+  evidence: ['console TypeError', 'network 500', 'counterproof PASS'],
+  reusable_delta: true,
+  fixed_point: true,
+});
+assert.deepEqual(route.skills, ['META_LUPA', 'ARTIFACT_TO_CAPABILITY']);
+assert.equal(route.learning_state, 'REINFORCE');
+assert.equal(route.reinforce_route, true);
+assert.equal(route.crystal_eligible, true);
+assert.equal(route.ranking_allowed, false);
+
+const failedFitness = recordEngineFitness({
+  engine: 'engine-c',
+  frequency: 'PROFUNDA',
+  latency_ms: 900,
+  correctness: 'FAIL',
+  counterproof_success: 'FAIL',
+  retries: 0,
+  comparable_sample: true,
+});
+const failedRoute = recordThinkingRouteOutcome({
+  material_class: 'BROWSER_OBSERVATION',
+  material_fingerprint: 'sha256:abc',
+  skills: ['META_LUPA'],
+  frequency: 'PROFUNDA',
+  engine_fitness: failedFitness,
+  evidence: ['regressao detectada'],
+});
+assert.equal(failedRoute.learning_state, 'RECALIBRATE');
+assert.equal(failedRoute.crystal_eligible, false);
+
+const unknownFitness = recordEngineFitness({
+  engine: 'engine-d',
+  frequency: 'PROFUNDA',
+  latency_ms: 800,
+  correctness: 'UNKNOWN',
+  counterproof_success: 'UNKNOWN',
+  retries: 0,
+  comparable_sample: true,
+});
+const unknownRoute = recordThinkingRouteOutcome({
+  material_class: 'BROWSER_OBSERVATION',
+  material_fingerprint: 'sha256:abc',
+  skills: [],
+  frequency: 'PROFUNDA',
+  engine_fitness: unknownFitness,
+  evidence: ['runner indisponivel'],
+});
+assert.equal(unknownRoute.learning_state, 'OBSERVE_ONLY');
+assert.equal(unknownRoute.reinforce_route, false);
+assert.equal(unknownRoute.recalibrate_route, false);
+
+const comparablePassA = recordThinkingRouteOutcome({
+  material_class: 'SOURCE_CODE',
+  material_fingerprint: 'sha256:def',
+  skills: ['META_LUPA'],
+  frequency: 'MEDIA',
+  engine_fitness: recordEngineFitness({
+    engine: 'engine-a', frequency: 'MEDIA', latency_ms: 1500,
+    correctness: 'PASS', counterproof_success: 'PASS', retries: 1, comparable_sample: true,
+  }),
+  evidence: ['same wound class', 'same criterion'],
+});
+const comparablePassB = recordThinkingRouteOutcome({
+  material_class: 'SOURCE_CODE',
+  material_fingerprint: 'sha256:def',
+  skills: ['META_LUPA'],
+  frequency: 'MEDIA',
+  engine_fitness: recordEngineFitness({
+    engine: 'engine-b', frequency: 'MEDIA', latency_ms: 1100,
+    correctness: 'PASS', counterproof_success: 'PASS', retries: 0, comparable_sample: true,
+  }),
+  evidence: ['same wound class', 'same criterion'],
+});
+const comparison = compareThinkingRoutes([comparablePassA, comparablePassB]);
+assert.equal(comparison.status, 'COMPARABLE');
+assert.equal(comparison.winner.engine, 'engine-b');
+
+assert.deepEqual(
+  compareThinkingRoutes([route, comparablePassB]),
+  { status: 'INSUFFICIENT_COMPARABLE_SAMPLE', winner: null },
+);
 
 assert.deepEqual(
   globalRuleCoverage({
