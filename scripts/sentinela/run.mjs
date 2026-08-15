@@ -53,11 +53,11 @@ function hash(s) {
 function ghIssueExists(titleHash) {
   try {
     const out = execSync(
-      `gh issue list -R "${REPO}" --state open --search "in:title sentinela-${titleHash}" --json number,title --limit 5`,
+      `gh issue list -R "${REPO}" --state open --json number,title --limit 1000`,
       { encoding: 'utf8' }
     );
     const arr = JSON.parse(out);
-    return arr.find((i) => i.title.includes(titleHash));
+    return arr.find((i) => i.title.includes(`sentinela-${titleHash}`));
   } catch {
     return null;
   }
@@ -196,11 +196,18 @@ writeFileSync(SNAPSHOT_FILE, JSON.stringify(snapshot, null, 2));
 
 // Abrir issues com dedupe
 const abertas = [];
+const seenHashes = new Map();
 for (const d of divergencias) {
   const h = hash(`${d.area}|${d.titulo}`);
   const title = `[SENTINELA sentinela-${h}] ${d.area}: ${d.titulo}`;
+  const seen = seenHashes.get(h);
+  if (seen) {
+    abertas.push({ ...d, hash: h, ja: seen });
+    continue;
+  }
   const existing = ghIssueExists(h);
   if (existing) {
+    seenHashes.set(h, existing.number);
     abertas.push({ ...d, hash: h, ja: existing.number });
     continue;
   }
@@ -231,6 +238,7 @@ _Anti-loop: só o bot com label \`assign:${d.bot}\` deve agir._
 `;
   const labels = ['sentinela', 'auto', d.sev, `assign:${d.bot}`];
   const r = ghOpenIssue({ title, body, labels });
+  if (r.number) seenHashes.set(h, r.number);
   abertas.push({ ...d, hash: h, nova: r.number, erro: r.error });
 }
 
