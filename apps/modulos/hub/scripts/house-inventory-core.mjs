@@ -166,6 +166,11 @@ function fixedOwners(repoRoot) {
       consumers: ['MEMORY_LINKER', 'META_LUPA'], summary: 'Consolidação isolada que produz candidatos; não promove direto.',
     },
     {
+      id: 'capability:operational-score', name: 'Operational Score / Partitura', group: 'CAPACIDADES', type: 'CAPABILITY',
+      owner: 'scripts/memory-linker/operational-score.mjs', proof: 'scripts/memory-linker/operational-score.test.mjs',
+      consumers: ['AGENTES', 'HUB', 'MEMORY_LINKER'], summary: 'Eventos estruturados com assinaturas observáveis; apresentação é projeção e música vira apenas matéria comportamental candidata.',
+    },
+    {
       id: 'capability:semantic-core', name: 'Semantic Core', group: 'CAPACIDADES', type: 'CAPABILITY',
       owner: 'infra/mcp/SEMANTIC-CORE.md', proof: 'infra/mcp/tests',
       consumers: ['MCP', 'AGENTES'], summary: 'Contrato semântico com fixtures e contraprovas offline.',
