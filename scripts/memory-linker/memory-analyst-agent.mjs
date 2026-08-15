@@ -35,6 +35,26 @@ function loadEnv() {
     );
   } catch { return {}; }
 }
+function canonicalReportFingerprint(report) {
+  if (typeof report.findingFingerprint === 'string' && report.findingFingerprint.length > 0) {
+    return report.findingFingerprint;
+  }
+  const orfas = [...(report.orfas || [])].sort();
+  const noConexoes = [...(report.noConexoes || [])].sort();
+  const semFrontmatter = [...(report.semFrontmatter || [])].sort();
+  const brokenLinks = Object.fromEntries(
+    Object.entries(report.brokenLinks || {})
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([link, origins]) => [link, [...new Set(Array.isArray(origins) ? origins : [])].sort()])
+  );
+  return sha256(stable({
+    orfas,
+    brokenLinks,
+    noConexoes,
+    semFrontmatter,
+    total: orfas.length + Object.keys(brokenLinks).length + noConexoes.length + semFrontmatter.length,
+  }));
+}
 
 if (!fs.existsSync(REPORT)) process.exit(0);
 const report = JSON.parse(fs.readFileSync(REPORT, 'utf8'));
@@ -42,12 +62,12 @@ const reportTime = report.observedAt ?? report.timestamp;
 const idadeMin = (Date.now() - new Date(reportTime).getTime()) / 60000;
 if (!Number.isFinite(idadeMin) || idadeMin > 180) process.exit(0);
 if (report.total === 0) process.exit(0);
-if (!report.findingFingerprint) throw new Error('REPORT_FINGERPRINT_MISSING');
+const reportFingerprint = canonicalReportFingerprint(report);
 
 let previousDecision = null;
 try { previousDecision = JSON.parse(fs.readFileSync(DECISION, 'utf8')); } catch {}
-if (previousDecision?.baseFingerprint === report.findingFingerprint) {
-  console.log(`MEMORY_ANALYST=NO_NEW_INFORMATION FINGERPRINT=${report.findingFingerprint}`);
+if (previousDecision?.baseFingerprint === reportFingerprint) {
+  console.log(`MEMORY_ANALYST=NO_NEW_INFORMATION FINGERPRINT=${reportFingerprint}`);
   process.exit(0);
 }
 
@@ -57,9 +77,10 @@ const altos = [];
 const autoFix = [];
 
 for (const [link, origens] of Object.entries(report.brokenLinks || {})) {
-  const emCritico = origens.some(o => CRITICOS.some(c => o.toUpperCase().includes(c)));
-  if (emCritico) criticos.push({ tipo: 'link-quebrado-critico', link, origens });
-  else altos.push({ tipo: 'link-quebrado', link, origens });
+  const safeOrigins = Array.isArray(origens) ? origens : [];
+  const emCritico = safeOrigins.some(o => CRITICOS.some(c => String(o).toUpperCase().includes(c)));
+  if (emCritico) criticos.push({ tipo: 'link-quebrado-critico', link, origens: safeOrigins });
+  else altos.push({ tipo: 'link-quebrado', link, origens: safeOrigins });
 }
 
 if ((report.orfas || []).length > 5) {
@@ -92,12 +113,13 @@ const decision = {
   timestamp: new Date().toISOString(),
   observedAt: new Date().toISOString(),
   baseReport: report.timestamp,
-  baseFingerprint: report.findingFingerprint,
+  baseFingerprint: reportFingerprint,
+  migratedLegacyReport: !report.findingFingerprint,
   decisionFingerprint,
   ...classification,
 };
 atomicWriteUtf8Sync(DECISION, `${JSON.stringify(decision, null, 2)}\n`, { skipIfUnchanged: true });
-console.log(`MEMORY_ANALYST=DELTA AUTOFIX=${autoFix.length} CRITICAL=${criticos.length} HIGH=${altos.length} FINGERPRINT=${decisionFingerprint}`);
+console.log(`MEMORY_ANALYST=DELTA AUTOFIX=${autoFix.length} CRITICAL=${criticos.length} HIGH=${altos.length} FINGERPRINT=${decisionFingerprint} LEGACY=${decision.migratedLegacyReport ? 1 : 0}`);
 
 const env = loadEnv();
 const TOKEN = env.TELEGRAM_BOT_TOKEN;
@@ -136,5 +158,5 @@ if (autoFix.length > 0) {
   if (semF) msg += `  • ${semF} frontmatter\n`;
   if (semC) msg += `  • ${semC} Conexões Rápidas\n`;
 }
-msg += `\n🧬 base: <code>${report.findingFingerprint.slice(0, 16)}</code>`;
+msg += `\n🧬 base: <code>${reportFingerprint.slice(0, 16)}</code>`;
 await send(msg);
