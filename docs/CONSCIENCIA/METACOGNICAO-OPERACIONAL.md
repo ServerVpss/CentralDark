@@ -164,8 +164,8 @@ MERGE_DURING_IN_FLIGHT_WRITE
 → CLASSIFICAR SOMENTE O RESIDUO
 → RESIDUO=0: ZERO_ACAO
 → RESIDUO_MATERIAL>0: FOLLOW_UP_MINIMO NO MESMO ESCOPO
-→ NAO REAPLICAR DELTA JA_PROMOVIDO
-→ NAO_REABRIR_A_MISSAO_POR_CORRIDA_MECANICA
+→ NAO REAPLICAR DELTA JA PROMOVIDO
+→ NAO REABRIR A MISSAO POR CORRIDA MECANICA
 ```
 
 O follow-up só existe se o resíduo ainda for material no estado vivo e não houver colisão de Writer. Se outro agente já absorveu o resíduo, a ação correta é registrar `CURADO/SUPERSEDED` e não duplicar a correção.
