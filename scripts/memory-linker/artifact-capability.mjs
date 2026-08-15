@@ -13,6 +13,10 @@ const DOC = new Set(['.md', '.txt', '.rst', '.pdf', '.doc', '.docx', '.odt', '.r
 const MEDIA = new Set(['.mp3', '.wav', '.m4a', '.ogg', '.flac', '.mp4', '.mov', '.mkv', '.webm']);
 const IMAGE = new Set(['.png', '.jpg', '.jpeg', '.webp', '.gif', '.bmp', '.svg']);
 const STRUCTURED = new Set(['.json', '.yaml', '.yml', '.toml', '.xml']);
+const ORE_CLASSES = Object.freeze(new Set([
+  'API_SPEC', 'SCHEMA', 'EXECUTABLE_BINARY', 'LOG', 'SOURCE_CODE', 'MEDIA', 'IMAGE', 'DOCUMENT', 'STRUCTURED_DATA',
+  'BROWSER_OBSERVATION', 'CONVERSATION', 'COMMENT', 'FEEDBACK', 'COMMIT', 'PULL_REQUEST', 'ISSUE', 'RUNTIME_EVENT', 'UNKNOWN',
+]));
 
 function stableValue(value) {
   if (Array.isArray(value)) return value.map(stableValue);
@@ -38,6 +42,12 @@ function sourceText(content, metadata = {}) {
     metadata.transcript,
     metadata.description,
     metadata.interface_text,
+    metadata.observation_text,
+    metadata.console_text,
+    metadata.network_text,
+    metadata.performance_text,
+    metadata.comment_text,
+    metadata.feedback_text,
   ].filter((value) => typeof value === 'string' && value.trim()).join('\n')).slice(0, 512_000);
 }
 
@@ -57,9 +67,12 @@ function addSignal(list, id, evidence) {
 }
 
 export function classifyArtifact({ artifactPath = '', mime = '', content = '', metadata = {} } = {}) {
+  const explicit = String(metadata.material_class || metadata.source_class || '').trim().toUpperCase();
+  if (ORE_CLASSES.has(explicit) && explicit !== 'UNKNOWN') return explicit;
   const ext = path.extname(String(artifactPath || '')).toLowerCase();
   const m = String(mime || metadata.mime || '').toLowerCase();
   const text = sourceText(content, metadata);
+  if (metadata.browser_observation === true || /\b(?:console|network request|performance trace|lighthouse|page snapshot|devtools)\b/i.test(text)) return 'BROWSER_OBSERVATION';
   if (/\b(?:openapi|swagger)\s*[:"]/i.test(text) || m.includes('openapi')) return 'API_SPEC';
   if (STRUCTURED.has(ext) && /\$schema|json schema|schema_version/i.test(text)) return 'SCHEMA';
   if (EXEC.has(ext) || m.includes('x-msdownload') || m === 'application/octet-stream') return 'EXECUTABLE_BINARY';
@@ -108,6 +121,20 @@ export function extractCapabilitySignals({ artifactClass, content = '', metadata
   }
   if (artifactClass === 'MEDIA' && inline(metadata.transcript)) addSignal(signals, 'TRANSCRIPT_AVAILABLE', metadata.transcript);
   if (artifactClass === 'IMAGE' && inline(metadata.description)) addSignal(signals, 'VISUAL_OBSERVATION', metadata.description);
+  if (artifactClass === 'BROWSER_OBSERVATION') {
+    addSignal(signals, 'BROWSER_DEBUGGING_OBSERVATION', metadata.observation_text || metadata.description || firstLine(text, /console|network|performance|lighthouse|snapshot|devtools/i));
+    if (inline(metadata.console_text)) addSignal(signals, 'BROWSER_CONSOLE_SIGNAL', metadata.console_text);
+    if (inline(metadata.network_text)) addSignal(signals, 'BROWSER_NETWORK_SIGNAL', metadata.network_text);
+    if (inline(metadata.performance_text)) addSignal(signals, 'BROWSER_PERFORMANCE_SIGNAL', metadata.performance_text);
+  }
+  if (['CONVERSATION', 'COMMENT', 'FEEDBACK'].includes(artifactClass)) {
+    const evidence = metadata.feedback_text || metadata.comment_text || metadata.description || content;
+    if (inline(evidence)) addSignal(signals, 'HUMAN_FEEDBACK_SIGNAL', evidence);
+  }
+  if (['COMMIT', 'PULL_REQUEST', 'ISSUE', 'RUNTIME_EVENT'].includes(artifactClass)) {
+    const evidence = metadata.description || metadata.observation_text || content;
+    if (inline(evidence)) addSignal(signals, 'OPERATIONAL_EVENT_SIGNAL', evidence);
+  }
   return signals.sort((a, b) => `${a.id}\u0000${a.evidence}`.localeCompare(`${b.id}\u0000${b.evidence}`));
 }
 
@@ -125,6 +152,7 @@ export function compileArtifactCapability({ artifactPath = '', mime = '', conten
   if (artifactClass === 'EXECUTABLE_BINARY' && !signals.some((item) => ['EXECUTABLE_WRAPPER', 'CLI_INTERFACE'].includes(item.id))) needs.push('INTERFACE_OR_HELP_OR_OBSERVED_INVOCATION');
   if (artifactClass === 'MEDIA' && !inline(metadata.transcript)) needs.push('TRANSCRIPT_OR_VERIFIED_OBSERVATION');
   if (artifactClass === 'IMAGE' && !inline(metadata.description)) needs.push('VERIFIED_VISUAL_OBSERVATION');
+  if (artifactClass === 'BROWSER_OBSERVATION' && !signals.some((item) => item.id.startsWith('BROWSER_'))) needs.push('VERIFIED_BROWSER_OBSERVATION');
   if (signals.length === 0 && needs.length === 0) needs.push('EXPLICIT_CAPABILITY_EVIDENCE');
   const status = signals.length === 0 ? 'INSUFFICIENT_EVIDENCE' : (inline(target) ? 'CANDIDATE' : 'OWNER_UNRESOLVED');
   const capabilityFingerprint = sha256(Buffer.from(JSON.stringify(stableValue({
@@ -134,6 +162,14 @@ export function compileArtifactCapability({ artifactPath = '', mime = '', conten
   return {
     schema_version: 1,
     mode: 'ARTIFACT_CAPABILITY_ADAPTER',
+    ore_contract: {
+      any_input_is_possible_ore: true,
+      everything_can_teach: true,
+      source_is_not_authority: true,
+      promotion_is_not_universal: true,
+      gold_requires_proof: true,
+      crystal_requires_reusable_proven_delta: true,
+    },
     status,
     artifact: {
       path_hint: artifactPath ? path.basename(String(artifactPath)) : null,
@@ -163,6 +199,9 @@ export function compileArtifactCapability({ artifactPath = '', mime = '', conten
       counterproof_required: true,
       same_head_revalidation_required: true,
       source_on_demand_preserved: true,
+      dedupe_required: true,
+      test_required: true,
+      proof_before_crystal: true,
     },
   };
 }
