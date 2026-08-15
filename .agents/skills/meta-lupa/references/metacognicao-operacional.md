@@ -61,6 +61,103 @@ VER MELHOR
 → VER MELHOR DE NOVO
 ```
 
+## Mineração automática — dever dentro da metacognição
+
+Mineração **não é uma sexta arquitetura META**. É uma função da `META_METACOGNICAO_OPERACIONAL`: matéria nova dentro da intenção vigente deve ser processada sem devolver ao humano o trabalho mecânico de separar ouro de ruído.
+
+```text
+NOVA_MATERIA_DENTRO_DA_INTENCAO_VIGENTE
+→ MINERAR_AUTOMATICAMENTE
+→ EXTRAIR_CAPACIDADE
+→ COMPARAR_COM_CANONICO
+→ DUPLICADO: DROP
+→ PARCIAL: EXTRAIR_DELTA
+→ NOVO: PROVAR_GAP
+→ CONTRAPROVAR
+→ DONO_CANONICO
+→ CONSUMIDOR_REAL
+→ TESTAR
+→ ABSORVER_SE_AUTORIZADO_E_REVERSIVEL
+→ PRESERVAR_PROVENIENCIA
+→ REMOVER_DEPENDENCIA_DA_FONTE
+→ CONTINUAR
+```
+
+Não pedir confirmação apenas para ler, comparar, testar, deduplicar ou costurar delta reversível já coberto pela intenção vigente.
+
+Human gate continua obrigatório somente quando a fronteira exigir decisão realmente humana/materialmente nova, como:
+
+```text
+NOVA_INTENCAO
+SECRET_VALUE
+ACAO_IRREVERSIVEL
+DEPLOY|PUBLICACAO
+GASTO_NOVO
+AMPLIACAO_DE_PRIVILEGIO
+WRITER_COLLISION_SEM_HANDOFF
+BLOCKER_FISICO_REAL
+```
+
+`META_MINERACAO` significa o minerador aplicar a própria régua sobre o **método de minerar**, não criar `mining-engine-v2`:
+
+```text
+ANTES_DO_FILTRO
+→ ERRO|MATERIAL|CONTRAPROVA NOVA
+→ GANHO_DE_INFORMACAO?
+   NAO → NO_CHANGE
+   SIM → MENOR_DELTA_NO_FILTRO
+→ TESTE
+→ CONTRAPROVA
+→ AFTER
+→ FITNESS_DELTA
+→ evolution_gate.py
+```
+
+```text
+META_MINERACAO ⊂ META_METACOGNICAO_OPERACIONAL
+NO_NEW_INFORMATION=NO_CHANGE
+MINING_EVOLUTION_WITHOUT_BEFORE_AFTER=EVOLUTION_UNPROVEN
+```
+
+## Ouro não é imortal — ciclo de vida verificável
+
+Absorção fecha a dependência da fonte, não congela a regra para sempre.
+
+```text
+OURO_SELADO != VERDADE_IMORTAL
+```
+
+Uma regra/capacidade absorvida volta à Lupa quando a **fronteira material** mudar ou quando houver evidência de que envelheceu:
+
+```text
+BOUNDARY_CHANGED
+| VIOLATED
+| OUTDATED
+| SUPERSEDED
+| CONSUMER_DISAPPEARED
+| EVIDENCE_STALE
+→ REVALIDATE
+→ KEEP | SUPERSEDE | RETIRE
+```
+
+Não copiar um número arbitrário de dias de uma fonte externa como lei universal. Tempo pode disparar revisão; **evidência decide o destino**.
+
+Para aposentar/remover ouro:
+
+```text
+RETIRE_CANDIDATE
+→ PROVAR_DONO/CONSUMIDORES
+→ PROVAR_SUBSTITUTO_OU_CAPACIDADE_DESNECESSARIA
+→ CONTRAPROVA
+→ REGRESSAO
+→ CAPACIDADE_DEPOIS >= CAPACIDADE_ANTES
+→ SO_ENTAO_RETIRE
+```
+
+Regra pinada por autoridade/segurança/contrato crítico não sofre auto-retire silencioso; retenção ou revisão precisa carregar motivo explícito.
+
+Remover regra velha **pode ser evolução** quando reduz complexidade sem perda de capacidade e o before/after passa pelo mesmo gate verificável.
+
 ## Evolução obrigatória e verificável
 
 MetaLupa não pode apenas acumular XP, texto ou histórico. Quando erro, confronto, contraprova ou matéria-prima revelar uma melhoria reutilizável, a própria MetaLupa deve evoluir **no mesmo artefato canônico** ou nos recursos já pertencentes a ele.
