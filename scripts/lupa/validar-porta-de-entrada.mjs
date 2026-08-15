@@ -192,6 +192,13 @@ const semanticRequirements = new Map([
     "FALHA_DE_RECONCILIACAO_DE_CONTEXTO",
     "Fluxo proporcional ao risco",
   ]],
+  [CONTRATO_DELTA, [
+    "STANDARD_ARCHITECTURE=ONE_CORE_MANY_ARMS",
+    "N_PERCEPCOES=true",
+    "PARALLEL_MUTATION_SAME_SCOPE=BLOCKED",
+    "SEM_DELTA_MATERIAL → NO_CHANGE",
+    "PROJECAO_VISUAL != FONTE_DA_VERDADE",
+  ]],
   [".claude/rules/00-centraldark-boot-universal.md", [
     "REUSE_BEFORE_CREATE_REQUIRED",
     CONTRATO_RECONCILIACAO,
@@ -244,6 +251,8 @@ if (!contract) {
     "open_primary_implementation_files",
     "cross_reference_capabilities_with_request",
     "classify_authority_and_runtime_state",
+    "normalize_evidence_scope_time_and_provenance",
+    "arbitrate_conflict_by_discriminating_test_if_needed",
     "reuse_or_extend_before_create",
   ];
   const sequence = contract.mandatory_pre_solution_sequence;
@@ -263,8 +272,87 @@ if (!contract) {
   if (rules.open_or_draft_pr_is_operational_authority !== false) errors.push("CONTRATO_RECONCILIACAO_PR_DRAFT_COM_AUTORIDADE");
   if (rules.program_document_is_runtime_proof !== false) errors.push("CONTRATO_RECONCILIACAO_PROGRAMA_COMO_RUNTIME");
   if (rules.formal_proof_without_user_request !== "FORBIDDEN_FOR_SIMPLE_TASKS") errors.push("CONTRATO_RECONCILIACAO_FORMALISMO_SEM_LIMITE");
+  if (rules.parallel_perception_same_scope !== "ALLOWED_READ_ONLY_WHEN_INFORMATION_GAIN") errors.push("ARQUITETURA_PERCEPCAO_PARALELA_INVALIDA");
+  if (rules.parallel_mutation_same_scope !== "BLOCKED_HANDOFF_REQUIRED") errors.push("ARQUITETURA_MUTACAO_PARALELA_NAO_BLOQUEADA");
+  if (rules.model_vote_is_truth_mechanism !== false) errors.push("ARQUITETURA_VOTACAO_DE_MODELO_COMO_VERDADE");
+  if (rules.same_finding_without_new_evidence !== "DROP_DUPLICATE") errors.push("ARQUITETURA_ANTI_ECO_AUSENTE");
+  if (rules.derived_projection_is_source_of_truth !== false) errors.push("ARQUITETURA_PROJECAO_DERIVADA_COMO_AUTORIDADE");
   if (contract.complexity_policy?.never_expose_internal_governance_as_user_bureaucracy !== true) {
     errors.push("CONTRATO_RECONCILIACAO_GOVERNANCA_EXPOSTA_AO_USUARIO");
+  }
+
+  const topology = contract.standard_architecture ?? {};
+  if (topology.marker !== "ONE_CORE_MANY_ARMS_STANDARD") errors.push("ARQUITETURA_PADRAO_MARKER_AUSENTE");
+  if (topology.canonical_owner !== CONTRATO_DELTA) errors.push("ARQUITETURA_PADRAO_DONO_INVALIDO");
+  if (topology.authority_center !== "SEGREDO/CHEFE") errors.push("ARQUITETURA_PADRAO_AUTORIDADE_INVALIDA");
+  if (topology.coordination_center !== "SOL") errors.push("ARQUITETURA_PADRAO_COORDENACAO_INVALIDA");
+
+  const perception = topology.perception ?? {};
+  if (perception.parallel !== true) errors.push("ARQUITETURA_PERCEPCAO_PARALELA_DESATIVADA");
+  if (perception.same_writer_scope_mode !== "READ_ONLY") errors.push("ARQUITETURA_PERCEPCAO_ROUBA_WRITER");
+  if (perception.requires_information_gain !== true) errors.push("ARQUITETURA_PERCEPCAO_SEM_GANHO_INFORMACIONAL");
+  if (perception.correlated_views_are_independent_evidence !== false) errors.push("ARQUITETURA_EVIDENCIA_CORRELACIONADA_MULTIPLICADA");
+
+  const envelope = topology.evidence_envelope ?? {};
+  const requiredEvidenceFields = [
+    "TARGET",
+    "OPERATIONAL_SCOPE",
+    "EVENT_TIME",
+    "OBSERVATION_TIME",
+    "PROVENANCE",
+    "CLAIM",
+    "EVIDENCE_REF",
+    "CLASS",
+  ];
+  if (!Array.isArray(envelope.required_fields)) {
+    errors.push("ARQUITETURA_ENVELOPE_EVIDENCIA_AUSENTE");
+  } else {
+    for (const field of requiredEvidenceFields) {
+      if (!envelope.required_fields.includes(field)) errors.push(`ARQUITETURA_ENVELOPE_CAMPO_AUSENTE:${field}`);
+    }
+  }
+
+  const arbitration = topology.arbitration ?? {};
+  if (arbitration.same_target_conflict !== "DISCRIMINATING_TEST_THEN_EVIDENCE_THEN_REALITY") errors.push("ARQUITETURA_ARBITRAGEM_INVALIDA");
+  if (arbitration.different_target !== "NOT_A_CONFLICT") errors.push("ARQUITETURA_FALSO_CONFLITO_DE_ALVO");
+  if (arbitration.model_vote_is_truth !== false) errors.push("ARQUITETURA_ARBITRAGEM_POR_VOTO");
+  if (arbitration.name_or_reputation_is_authority !== false) errors.push("ARQUITETURA_REPUTACAO_COMO_AUTORIDADE");
+  if (arbitration.indistinguishable_hypotheses !== "UNKNOWN") errors.push("ARQUITETURA_HIPOTESE_INDISTINGUIVEL_NAO_UNKNOWN");
+
+  const mutation = topology.mutation ?? {};
+  if (mutation.rule !== "ONE_WRITER_PER_SCOPE") errors.push("ARQUITETURA_WRITER_UNICO_AUSENTE");
+  if (mutation.parallel_same_scope !== "BLOCKED") errors.push("ARQUITETURA_WRITER_PARALELO_NAO_BLOQUEADO");
+  if (mutation.handoff_required !== true) errors.push("ARQUITETURA_HANDOFF_NAO_OBRIGATORIO");
+  if (mutation.strategy !== "MINIMAL_CAUSAL_MUTATION") errors.push("ARQUITETURA_MUTACAO_NAO_MINIMA");
+
+  const observability = topology.observability ?? {};
+  if (observability.derived_projection_is_authority !== false) errors.push("ARQUITETURA_OBSERVABILIDADE_VIROU_AUTORIDADE");
+  if (observability.graph_fingerprint_role !== "DELTA_INSTRUMENT") errors.push("ARQUITETURA_GRAPH_FINGERPRINT_PAPEL_INVALIDO");
+  if (observability.green_visual_status_is_end_to_end_pass !== false) errors.push("ARQUITETURA_FALSO_VERDE_VISUAL");
+
+  const learning = topology.learning ?? {};
+  if (learning.same_finding_without_new_evidence !== "DROP_DUPLICATE") errors.push("ARQUITETURA_APRENDIZADO_COM_ECO");
+  if (learning.no_material_delta !== "NO_CHANGE") errors.push("ARQUITETURA_NO_CHANGE_AUSENTE");
+  if (learning.absorb_only_reusable_proven_delta !== true) errors.push("ARQUITETURA_ABSORCAO_SEM_PROVA");
+
+  const requiredFlow = [
+    "INTENT",
+    "REANCHOR",
+    "FAN_OUT_READ_ONLY",
+    "NORMALIZE_EVIDENCE",
+    "DEDUPE",
+    "ARBITRATE_BY_TEST",
+    "SINGLE_WRITER_MINIMAL_MUTATION",
+    "VERIFY_SAME_TARGET",
+    "CANONICAL_PROMOTION",
+    "RUNTIME_EXECUTION",
+    "OBSERVE",
+    "ABSORB_REUSABLE_DELTA_OR_NO_CHANGE",
+  ];
+  if (!Array.isArray(topology.flow)) {
+    errors.push("ARQUITETURA_FLUXO_PADRAO_AUSENTE");
+  } else if (requiredFlow.some((step, index) => topology.flow[index] !== step)) {
+    errors.push("ARQUITETURA_FLUXO_PADRAO_FORA_DE_ORDEM");
   }
 
   const boundary = contract.repository_boundary_policy ?? {};
@@ -358,6 +446,7 @@ const report = {
   estrutura_vps: ESTRUTURA_VPS,
   contrato_reconciliacao_schema_expected: RECONCILIATION_SCHEMA_VERSION,
   contrato_reconciliacao_schema_observed: contract?.schema_version ?? null,
+  arquitetura_padrao_marker: contract?.standard_architecture?.marker ?? null,
   identidade_lupa: IDENTIDADE_LUPA,
   reuse_before_create_required: true,
   centraldark_root_only_required: true,
@@ -385,6 +474,7 @@ else {
       `CENTRALDARK_ROOT_ONLY=${report.centraldark_root_only_required ? 1 : 0} ` +
       `WORKFLOW_REUSE=${report.workflow_reuse_required ? 1 : 0} ` +
       `AI_DETERMINISTIC_FALLBACK=${report.ai_deterministic_fallback_required ? 1 : 0} ` +
+      `ARCHITECTURE=${report.arquitetura_padrao_marker || "MISSING"} ` +
       `SCHEMA=${report.contrato_reconciliacao_schema_observed}/${report.contrato_reconciliacao_schema_expected} ` +
       `ADAPTADORES=${report.adaptadores_encontrados.length}/${report.adaptadores_obrigatorios.length} ` +
       `CANONICOS=${report.canonicos_encontrados} ` +
