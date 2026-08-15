@@ -3,7 +3,7 @@ title: "LEIA-ME-IA"
 status: "CANÔNICO"
 scope: "Porta de entrada única para qualquer IA que conectar no CentralDark"
 source_of_truth: "Este arquivo + SOUL canônica + estado real medido"
-updated: 2026-08-14
+updated: 2026-08-15
 ---
 
 # LEIA-ME-IA — comece por aqui
@@ -21,16 +21,17 @@ Carregue nesta ordem:
 1. `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md` — identidade operacional e continuidade.
 2. `AGENTS.md` — contrato geral dos agentes.
 3. `docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md` — recuperação/boot universal.
-4. `docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md` — método de interação.
-5. `docs/CONSCIENCIA/2026-06-20-padrao-resposta-pivete.md` — formato de resposta.
-6. `docs/CONSCIENCIA/DICIONARIO-PIVETE-GITHUB.md` — vocabulário operacional.
-7. `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json` — reutilização e reconciliação.
-8. `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` quando a missão exigir coordenação multiagente.
-9. `.agents/skills/meta-lupa/SKILL.md` quando o risco exigir falsificação crítica.
-10. `.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA` para conferir a identidade canônica da skill.
-11. `docs/CONSCIENCIA/PROOF-OWNERSHIP.json` quando houver gate, prova, Judge ou cadeia de validação — propriedade da prova e bloqueio de circularidade.
-12. `docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md` quando houver aprendizado do próprio método, autoaperfeiçoamento do scaffold ou revisão de como o organismo trabalha.
-13. estado atual de branch, HEAD, PR, runtime, writer e ferramentas aplicáveis.
+4. `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md` — DNA cognitivo operacional concentrado.
+5. `docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md` — método de interação.
+6. `docs/CONSCIENCIA/2026-06-20-padrao-resposta-pivete.md` — formato de resposta.
+7. `docs/CONSCIENCIA/DICIONARIO-PIVETE-GITHUB.md` — vocabulário operacional.
+8. `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json` — reutilização e reconciliação.
+9. `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` quando a missão exigir coordenação multiagente.
+10. `.agents/skills/meta-lupa/SKILL.md` quando o risco exigir falsificação crítica.
+11. `.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA` para conferir a identidade canônica da skill.
+12. `docs/CONSCIENCIA/PROOF-OWNERSHIP.json` quando houver gate, prova, Judge ou cadeia de validação — propriedade da prova e bloqueio de circularidade.
+13. `docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md` quando houver aprendizado do próprio método, autoaperfeiçoamento do scaffold ou revisão de como o organismo trabalha.
+14. estado atual de branch, HEAD, PR, runtime, writer e ferramentas aplicáveis.
 
 Nome de modelo não muda o contrato. GPT, Codex, Claude, Gemini, Grok, Copilot, Cursor, Windsurf, Hermes ou modelo futuro entram como motores/papéis substituíveis dentro do mesmo organismo.
 
@@ -322,6 +323,7 @@ TASKS_SECRETAS
 | Preciso de… | Vá para |
 |---|---|
 | identidade SOL / continuidade | `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md` |
+| método cognitivo operacional | `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md` |
 | boot/recovery universal | `docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md` |
 | permissões vigentes | `docs/CONSCIENCIA/02-PERMISSOES.md` |
 | promoção/merge | `.github/workflows/autonomia-promocao.yml` + `scripts/github-autonomia-promocao.mjs` |
