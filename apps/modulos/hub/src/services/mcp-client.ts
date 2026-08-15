@@ -49,7 +49,7 @@ export const mcpClient = {
   },
 
   // SOURCE_DELTA: o botão do HUB chama o owner real `catalog-sync`.
-  // Não inventa POST /tools/sync no MCP — essa rota não existe no servidor canônico.
+  // Não inventa uma rota de sincronização paralela no MCP canônico.
   async syncCatalog(): Promise<SyncResult> {
     const { data, error } = await hubAuth.functions.invoke('catalog-sync', {
       method: 'POST',
