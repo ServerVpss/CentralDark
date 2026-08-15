@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-15T01:02:30.055Z",
-  "updatedAtBR": "14/08/2026, 22:02:30 BRT",
+  "updatedAt": "2026-08-15T01:10:34.484Z",
+  "updatedAtBR": "14/08/2026, 22:10:34 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "docs(boot): ensinar DNA cognitivo a todo modelo",
+    "lastCommit": "docs(consciencia): explicitar triangulacao causal por multiplos angulos",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-15T01:10:34.484Z",
+      "titulo": "Push na main · af969557e816afa8c4f26e6358abfe14fccc4d68",
+      "detalhe": "docs(consciencia): explicitar triangulacao causal por multiplos angulos",
+      "area": "Repositório",
+      "sha": "af96955",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-15T01:02:30.055Z",
       "titulo": "Push na main · 228101af84683d26f116598b770073c9870a30cc",
       "detalhe": "docs(boot): ensinar DNA cognitivo a todo modelo",
@@ -988,14 +996,6 @@
       "detalhe": "fix(pr611): configurar identidade Git antes do merge",
       "area": "Repositório",
       "sha": "9aa4d96",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-03T23:43:23.676Z",
-      "titulo": "Push na main · 14bb437f1f5b2eb3bb8bd17a37320d1986220ef3",
-      "detalhe": "fix(pr611): reportar run e testar somente gates reais",
-      "area": "Repositório",
-      "sha": "14bb437",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-15T01:10:34.484Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · af969557e816afa8c4f26e6358abfe14fccc4d68 (af96955)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-15T01:02:30.055Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 228101af84683d26f116598b770073c9870a30cc (228101a)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-03T23:45:03.287Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 9aa4d96ee7c0852432f20a3fb34edbb550a0d9eb (9aa4d96)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-03T23:43:23.676Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 14bb437f1f5b2eb3bb8bd17a37320d1986220ef3 (14bb437)",
       "area": "Repositório",
       "status": "sucesso"
     }
