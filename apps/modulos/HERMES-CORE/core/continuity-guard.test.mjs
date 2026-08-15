@@ -114,7 +114,7 @@ test('dedupe funde eco e preserva ângulos materialmente diferentes', () => {
   assert.deepEqual(deduped.map((item) => item.role), ['A_LOGIC', 'D_SIMPLIFICATION']);
 });
 
-test('pacote de quatro percepções é read-only e serializa a caneta', () => {
+test('pacote incompleto continua read-only e não libera a caneta', () => {
   const packet = buildPerceptionPacket({
     mission: 'mesma intenção',
     results: [{
@@ -127,5 +127,6 @@ test('pacote de quatro percepções é read-only e serializa a caneta', () => {
   assert.equal(packet.writer_required_for_mutation, true);
   assert.equal(packet.model_vote_is_truth, false);
   assert.equal(packet.reality_is_judge, true);
-  assert.equal(packet.next_rule, 'CONFRONT_EVIDENCE_THEN_ONE_CANONICAL_MUTATION');
+  assert.equal(packet.ready_for_writer, false);
+  assert.equal(packet.next_rule, 'RETRY_MISSING_PERCEPTIONS_BEFORE_MUTATION');
 });
