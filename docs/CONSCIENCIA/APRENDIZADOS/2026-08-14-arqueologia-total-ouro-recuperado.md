@@ -188,3 +188,42 @@ DEPENDENCIA_NO_ATOR_ORIGINAL_APOS_ABSORCAO=false
 ```
 
 Esse refinamento não cria outro motor de proveniência. Ele fecha semanticamente o que já existia em SOUL, JARVIS, MetaLupa e nesta arqueologia: **o organismo preserva autoria sem ficar dependente do autor para reutilizar a capacidade comprovada**.
+
+## 10. Moagem concentrada dos artefatos externos — destino do ouro
+
+Em 2026-08-15, os pacotes entregues pelo SEGREDO/CHEFE foram tratados como matéria-prima de aprendizado. Nenhum pacote portátil substitui o GitHub vivo nem vira segundo sistema.
+
+```text
+PORTABLE_PACKAGE_IS_CACHE_NOT_AUTHORITY=true
+NO_NEW_ENGINE_FROM_PACKAGE=true
+UPLOAD_PROVENANCE_PRESERVED=true
+ABSORB_DELTA_NOT_CONTAINER=true
+```
+
+Destino por fonte:
+
+| Fonte | Ouro preservado | Destino canônico | O que não foi copiado |
+|---|---|---|---|
+| `CENTRALDARK-EXECUTOR-UNICO(1)` | dilatação interna + resíduo final; modelo ≠ papel ≠ autoridade; um Writer; autoria/proveniência | `CAPACIDADES-COGNITIVAS.md` + padrão de resposta + Porta | pacote/executor paralelo |
+| `CENTRALDARK-EXECUTOR-UNICO(2)` | kernel conceitual de proveniência; denominador fechado; absorção validada; capacidade reutilizável | esta arqueologia + `CAPACIDADES-COGNITIVAS.md`; prova usa mecanismos MetaLupa/receipts já existentes | segundo kernel/engine de prova |
+| `DETERMINAÇÕES...` | declaração não muda estado; regra crítica precisa mecanismo; estados honestos; falso verde; Writer único; correção mínima; fechamento por receipts | MetaLupa + operation receipt + validador de Porta + `CAPACIDADES-COGNITIVAS.md` | segunda máquina de estados |
+| `REGISTRO-MÃE` | ferida como sensor; compressão; cientista-dos-cientistas; classes epistêmicas; capacidade acima de nome | SOUL + MetaLupa + Metacognição + Capacidades | estado histórico como autoridade viva |
+| `RECONCILIAÇÃO CANÔNICA` | reconciliar antes de criar; preservar só delta útil; não confundir pacote com runtime | contrato de reconciliação + Porta | topologia antiga não medida |
+| `PACOTE ZT` | fail-closed em autoridade, secrets, privilégio, irreversibilidade e fronteira de segurança | `CAPACIDADES-COGNITIVAS.md` + regras atuais de segurança | `NO_INFERENCE` global que bloquearia compreensão semântica/antecipação reversível |
+| `manual-oculto-ia-curso` | loop Ground→Act→Observe→Re-evaluate→Verify; contrato de tools; mudança como hipótese; consolidação/poda; disposição vs garantia dura; destilação de logs | `CAPACIDADES-COGNITIVAS.md` | texto didático integral e pontos cegos da fonte |
+| `PROMPT-UNIVERSAL-MODELOS` | qualquer modelo ocupa papel; N percepções/1 Writer; telemetria ≠ resultado; saída residual | Porta + padrão de resposta + Capacidades | prompt concorrente como autoridade |
+| imagens/mídia/diagramas | mapa conceitual e apresentação da mesma arquitetura | proveniência histórica/visual | imagem, áudio ou vídeo como prova de runtime |
+
+Regra de síntese:
+
+```text
+FONTE EXTERNA
+→ EXTRAIR COMPORTAMENTO
+→ CRUZAR COM DONO EXISTENTE
+→ CORRIGIR PONTO CEGO DA FONTE
+→ CONTRAPROVAR QUANDO O CLAIM EXIGIR
+→ ABSORVER SOMENTE DELTA
+→ DESCARTAR DEPENDENCIA DO PACOTE
+```
+
+O objetivo da moagem não é fazer o CentralDark imitar cada fonte. É **preservar o que cada fonte demonstrou de melhor, remover incompatibilidades e deixar o canônico menor, mais ensinável e mais capaz do que qualquer pacote isolado**.
