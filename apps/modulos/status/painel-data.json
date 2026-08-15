@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-15T01:55:31.560Z",
-  "updatedAtBR": "14/08/2026, 22:55:31 BRT",
+  "updatedAt": "2026-08-15T01:56:46.640Z",
+  "updatedAtBR": "14/08/2026, 22:56:46 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "fix(memory): confinar executor a arquivo regular da consciencia",
+    "lastCommit": "fix(memory): scout recusar markdown fora da raiz fisica",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-15T01:56:46.640Z",
+      "titulo": "Push na main · 000e104ffa68c4723b72049b67f6a8752e91f23d",
+      "detalhe": "fix(memory): scout recusar markdown fora da raiz fisica",
+      "area": "Repositório",
+      "sha": "000e104",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-15T01:55:31.560Z",
       "titulo": "Push na main · 0b63c5434cbea75e32c8d59750e7300b23dedb27",
       "detalhe": "fix(memory): confinar executor a arquivo regular da consciencia",
@@ -988,14 +996,6 @@
       "detalhe": "feat(acordo-tri-agentes): contrato vinculante entre Codex + Connector + Copilot",
       "area": "Repositório",
       "sha": "61a5822",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-09T20:29:46.542Z",
-      "titulo": "Push na main · 1490417d8e43399f18e28907856fd80f9c4f1d21",
-      "detalhe": "fix(hermes): reconciliar retomada e impedir UNKNOWN terminal (#728)",
-      "area": "Repositório",
-      "sha": "1490417",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-15T01:56:46.640Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 000e104ffa68c4723b72049b67f6a8752e91f23d (000e104)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-15T01:55:31.560Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 0b63c5434cbea75e32c8d59750e7300b23dedb27 (0b63c54)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-09T21:17:40.702Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 61a5822fb58403c93dfb40f63ebe941c45cf739e (61a5822)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-09T20:29:46.542Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 1490417d8e43399f18e28907856fd80f9c4f1d21 (1490417)",
       "area": "Repositório",
       "status": "sucesso"
     }
