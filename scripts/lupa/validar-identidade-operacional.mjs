@@ -41,6 +41,10 @@ const CANONICAL = Object.freeze({
     "REUSE_BEFORE_CREATE=true",
     "ONE_SYSTEM_ONLY=true",
     "ONE_WRITER_PER_SCOPE=true",
+    "INTENT_AUTHORIZED=true",
+    "NO_HUMAN_REASK_FOR_MERGE=true",
+    "MERGE_METHOD=squash",
+    "TARGET=main",
     "INFORMATION_GAIN_REQUIRED=true",
     "LEARNING_REQUIRES_EVIDENCE=true",
     "LEARNING_DELTA_REQUIRED=true",
@@ -455,7 +459,7 @@ export function runValidation({ repoRoot, profileRoots = [] }) {
     context_loader: "CANONICAL_CONTEXT_ALLOWLIST",
     legacy_sync: "DISABLED_CANONICAL_GIT_ONLY",
     deployment: "PRODUCTION_FIRST + CAUSAL_SCOPE_FIRST",
-    merge_policy: "INTENT_AUTHORIZED -> AUTO_SQUASH_IF_CLEAN -> MAIN",
+    merge_policy: "INTENT_AUTHORIZED -> MERGE_METHOD=squash -> TARGET=main",
     convergence: "FULL_ADVERSARIAL_ONLY_ON_CHEFE_REQUEST",
     learning: "CONFRONTO -> EVIDENCIA -> DELTA_DE_CRENCA -> REGRA|TESTE|GUARDRAIL|MEMORIA -> OURO",
     information_gain_required: true,
@@ -480,8 +484,8 @@ function printHuman(report) {
       `AGENT_CLAIM=AGENT_CLAIM_CAPABILITY_REQUIRED ` +
       `ERROS=${report.findings.length}`,
   );
-  console.log(`IDENTIDADE_OK=${report.ok ? 1 : 0} AUTORIDADE=SEGREDO_CHEFE COORDENADOR=SOL EXECUTOR=PIVETE_HERMES SOUL=CANONICA MERGE=AUTO_SQUASH_IF_CLEAN ERROS=${report.findings.length}`);
-  console.log(`IDENTIDADE_OK=${report.ok ? 1 : 0} AUTORIDADE=SEGREDO_CHEFE COORDENADOR=SOL EXECUTOR=PIVETE_HERMES LOADER=CANONICAL_ALLOWLIST LEGACY_SYNC=DISABLED MERGE=AUTO_SQUASH_IF_CLEAN LEARNING=INFORMATION_GAIN ERROS=${report.findings.length}`);
+  console.log(`IDENTIDADE_OK=${report.ok ? 1 : 0} AUTORIDADE=SEGREDO_CHEFE COORDENADOR=SOL EXECUTOR=PIVETE_HERMES SOUL=CANONICA MERGE=squash TARGET=main ERROS=${report.findings.length}`);
+  console.log(`IDENTIDADE_OK=${report.ok ? 1 : 0} AUTORIDADE=SEGREDO_CHEFE COORDENADOR=SOL EXECUTOR=PIVETE_HERMES LOADER=CANONICAL_ALLOWLIST LEGACY_SYNC=DISABLED MERGE=squash TARGET=main LEARNING=INFORMATION_GAIN ERROS=${report.findings.length}`);
 }
 
 async function main() {
