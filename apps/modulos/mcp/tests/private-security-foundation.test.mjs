@@ -28,9 +28,11 @@ test("private security schema is deny-by-default for browser roles", () => {
   assert.doesNotMatch(migration, /grant\s+(?:select|insert|update|delete|all).*centraldark_private.*to\s+(?:anon|authenticated)/i);
 });
 
-test("admin overview rechecks authority in database and exposes no private table grants", () => {
+test("admin overview reuses the live has_role owner and keeps a fresh-stack fallback", () => {
   assert.match(migration, /function public\.get_private_security_overview/i);
   assert.match(migration, /auth\.uid\(\)/i);
+  assert.match(migration, /p\.proname = 'has_role'/i);
+  assert.match(migration, /execute 'select public\.has_role\(\$1, ''admin''\)'/i);
   assert.match(migration, /from api\.user_roles/i);
   assert.match(migration, /r\.role = 'admin'/i);
   assert.match(migration, /grant execute on function public\.get_private_security_overview\(\) to authenticated/i);
