@@ -12,6 +12,13 @@ class SemanticContractTests(unittest.TestCase):
         s=(REPO_ROOT/"apps/modulos/mcp/src/tools/cognitivo/semantic.js").read_text(encoding="utf-8")
         self.assertIn("readOnlyHint: true",s); self.assertIn("destructiveHint: false",s)
         for x in ("createOrUpdateFile","writeFile","mcp_admin_call","provider_mutate"): self.assertNotIn(x,s)
+    def test_t11b_mcp_manifest_resource_is_same_server_and_path_safe(self):
+        server=(REPO_ROOT/"apps/modulos/mcp/src/mcp-server.js").read_text(encoding="utf-8")
+        semantic=(REPO_ROOT/"apps/modulos/mcp/src/tools/cognitivo/semantic.js").read_text(encoding="utf-8")
+        self.assertIn("semantic://nilc/glove-50d/manifest",semantic)
+        self.assertIn("ListResourcesRequestSchema",server); self.assertIn("ReadResourceRequestSchema",server)
+        manifest_block=semantic[semantic.index("export async function readSemanticManifest"):semantic.index("function semanticTool")]
+        for x in ("physical_path","embedding_path","vocab_path"): self.assertNotIn(x,manifest_block)
     def test_t12_semantic_surface_has_no_api_mutation(self):
         s=(MCP_DIR/"semantic_core.py").read_text(encoding="utf-8")+(MCP_DIR/"semantic_bridge.py").read_text(encoding="utf-8")
         for x in ("requests.post","fetch(","createOrUpdateFile","subprocess.run","os.system"): self.assertNotIn(x,s)

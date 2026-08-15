@@ -5,6 +5,13 @@ import readline from "node:readline";
 import { z } from "zod";
 import { config } from "../../config.js";
 
+export const SEMANTIC_MANIFEST_URI = "semantic://nilc/glove-50d/manifest";
+const SEMANTIC_MODEL_ID = "nilc-glove-50d@9296f6537f6b0a24d449a2677c21c18c2c0c3bdd";
+const SEMANTIC_REVISION = "9296f6537f6b0a24d449a2677c21c18c2c0c3bdd";
+const SEMANTIC_SOURCE = "nilc-nlp/glove-50d";
+const SEMANTIC_LICENSE = "CC-BY-4.0";
+const SEMANTIC_DIMENSION = 50;
+
 const READ_ONLY = Object.freeze({
   readOnlyHint: true,
   destructiveHint: false,
@@ -113,6 +120,43 @@ async function callSemantic(operation, args = {}) {
   });
 }
 
+export async function readSemanticManifest() {
+  const health = await callSemantic("semantic_health", {});
+  const base = {
+    model_id: health?.model_id || SEMANTIC_MODEL_ID,
+    revision: health?.revision || SEMANTIC_REVISION,
+    dimension: health?.dimension ?? SEMANTIC_DIMENSION,
+    vocab_size: health?.vocab_size ?? null,
+    license: SEMANTIC_LICENSE,
+    health,
+    provenance: {
+      source: SEMANTIC_SOURCE,
+      revision: SEMANTIC_REVISION,
+      source_is_authority: false,
+    },
+  };
+
+  if (health?.ok !== true) return base;
+
+  const info = await callSemantic("semantic_model_info", {});
+  return {
+    ...base,
+    model_id: info?.model_id || base.model_id,
+    revision: info?.revision || base.revision,
+    dimension: info?.dimension ?? base.dimension,
+    vocab_size: info?.vocab_size ?? base.vocab_size,
+    license: info?.license || base.license,
+    provenance: {
+      source: info?.source || SEMANTIC_SOURCE,
+      revision: info?.revision || SEMANTIC_REVISION,
+      sha256_embeddings: info?.sha256_embeddings ?? null,
+      sha256_vocab: info?.sha256_vocab ?? null,
+      normalization_version: info?.normalization_version ?? null,
+      source_is_authority: false,
+    },
+  };
+}
+
 function semanticTool(name, description, inputSchema, operation = name) {
   return {
     name,
@@ -164,11 +208,24 @@ const dedupe = semanticTool(
   "Gera pares candidatos a dedupe sem fusão automática. Sem threshold calibrado por evidência retorna UNPROVEN_THRESHOLD.",
   z.object({ items: z.array(z.string().min(1).max(4096)).min(2).max(200), threshold: z.number().min(-1).max(1).optional() }),
 );
-const modelInfo = semanticTool(
-  "semantic_model_info",
-  "Expõe MODEL_ID, revisão, dimensão, vocabulário, licença, hashes e proveniência do core local fixado.",
-  z.object({}),
-);
+const modelInfo = {
+  name: "semantic_model_info",
+  description: "Expõe manifesto semântico seguro do modelo local fixado, sem caminhos físicos do host.",
+  annotations: { ...READ_ONLY, title: "semantic_model_info" },
+  inputSchema: z.object({}),
+  handler: async () => {
+    try {
+      return textResult(await readSemanticManifest());
+    } catch (error) {
+      return textResult({
+        ok: false,
+        error: String(error?.message || error),
+        operation: "semantic_model_info",
+        authority: "PERCEPTION_ONLY",
+      }, true);
+    }
+  },
+};
 const health = semanticTool(
   "semantic_health",
   "Health read-only do core semântico local; falha fechado se modelo, revisão, dimensão ou hashes não forem válidos.",

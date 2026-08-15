@@ -2,10 +2,11 @@
 // Cada request POST /mcp instancia um Server + StreamableHTTPServerTransport efêmero.
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
-import { CallToolRequestSchema, ListToolsRequestSchema, } from "@modelcontextprotocol/sdk/types.js";
+import { CallToolRequestSchema, ListResourcesRequestSchema, ListToolsRequestSchema, ReadResourceRequestSchema, } from "@modelcontextprotocol/sdk/types.js";
 import { z } from "zod";
 import { log } from "./log.js";
 import { ALL_TOOLS, CATALOG_VERSION } from "./tools/core/tools-catalog.js";
+import { readSemanticManifest, SEMANTIC_MANIFEST_URI } from "./tools/cognitivo/semantic.js";
 import { sanitizeOutgoingDeep } from "./lib/sanitize.js";
 import { auditToolExecution } from "./audit-logger.js";
 function zodTypeToJsonSchema(schema) {
@@ -114,7 +115,8 @@ function buildServer(options) {
     const callableTools = options.admin === true
         ? requestedCallableTools.filter((tool) => tool.annotations?.destructiveHint !== true || tool.name === "mcp_admin_call")
         : requestedCallableTools.filter((tool) => tool.annotations?.destructiveHint !== true);
-    const server = new Server({ name: options.label ?? "mcp-centraldark", version: `0.4.0+${CATALOG_VERSION}` }, { capabilities: { tools: {} }, instructions: PIVETE_BOOT_INSTRUCTIONS });
+    const semanticResourceEnabled = visibleTools.some((tool) => tool.name === "semantic_model_info");
+    const server = new Server({ name: options.label ?? "mcp-centraldark", version: `0.4.0+${CATALOG_VERSION}` }, { capabilities: { tools: {}, resources: {} }, instructions: PIVETE_BOOT_INSTRUCTIONS });
     server.setRequestHandler(ListToolsRequestSchema, async () => {
         const startedAt = Date.now();
         log.info("mcp_tools_list_start", { cid: options.cid, label: options.label ?? "private" });
@@ -139,6 +141,62 @@ function buildServer(options) {
             ok: true,
         });
         log.info("mcp_tools_list_ok", { cid: options.cid, toolCount: result.tools.length, ms: Date.now() - startedAt });
+        return result;
+    });
+    server.setRequestHandler(ListResourcesRequestSchema, async () => {
+        const startedAt = Date.now();
+        const resources = semanticResourceEnabled
+            ? [{
+                uri: SEMANTIC_MANIFEST_URI,
+                name: "NILC GloVe-50d manifest",
+                description: "Manifesto read-only do core semântico local fixado; não expõe caminhos físicos do host.",
+                mimeType: "application/json",
+            }]
+            : [];
+        auditToolExecution({
+            method: "resources/list",
+            toolName: "list_resources",
+            input: {},
+            result: { resourceCount: resources.length, label: options.label ?? "private" },
+            durationMs: Date.now() - startedAt,
+            exitCode: null,
+            ok: true,
+        });
+        return { resources };
+    });
+    server.setRequestHandler(ReadResourceRequestSchema, async (req) => {
+        const startedAt = Date.now();
+        if (!semanticResourceEnabled || req.params.uri !== SEMANTIC_MANIFEST_URI) {
+            const error = new Error(`Resource desconhecido: ${req.params.uri}`);
+            auditToolExecution({
+                method: "resources/read",
+                toolName: "read_resource",
+                input: { uri: req.params.uri },
+                result: { ok: false, resourceFound: false },
+                error,
+                durationMs: Date.now() - startedAt,
+                exitCode: null,
+                ok: false,
+            });
+            throw error;
+        }
+        const manifest = sanitizeOutgoingDeep(await readSemanticManifest());
+        const result = {
+            contents: [{
+                uri: SEMANTIC_MANIFEST_URI,
+                mimeType: "application/json",
+                text: JSON.stringify(manifest),
+            }],
+        };
+        auditToolExecution({
+            method: "resources/read",
+            toolName: "semantic_manifest",
+            input: { uri: req.params.uri },
+            result: { ok: true, modelId: manifest?.model_id ?? null, health: manifest?.health?.status ?? "UNKNOWN" },
+            durationMs: Date.now() - startedAt,
+            exitCode: null,
+            ok: true,
+        });
         return result;
     });
     server.setRequestHandler(CallToolRequestSchema, async (req) => {
