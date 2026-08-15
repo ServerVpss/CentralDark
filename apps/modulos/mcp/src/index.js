@@ -15,8 +15,6 @@ import { healthDeep } from "./health-deep.js";
 import { startHubMissionConsumer } from "./hub-mission-consumer.js";
 import { providerAdminBridge } from "./provider-admin-bridge.js";
 import { adminGet, adminLogin, adminLogout, adminRotas, adminTools, adminLogsStream, adminTestarSse, adminBuscarLogs, adminMetricas, adminE2E, adminE2EPublico, bootstrapAdminLogCapture, } from "./admin.js";
-// ─────────────────────── Handlers globais de crash (v2.3) ───────────────────────
-// Captura QUALQUER erro não tratado com stack trace completo antes do PM2 matar.
 process.on("uncaughtException", (err) => {
     console.error("[FATAL] uncaughtException:", err?.stack || err);
     try {
@@ -33,11 +31,7 @@ process.on("unhandledRejection", (reason) => {
     catch { }
     process.exit(1);
 });
-// ─────────────────────── Validação de env obrigatórias (v2.3) ───────────────────────
-// Falha rápido com erro claro se algo essencial estiver faltando.
 function validarEnvsObrigatorias() {
-    // Só o que é essencial pro NOSSO sistema. GitHub OAuth é opcional
-    // (endpoints que dependerem falham em runtime com erro claro).
     const envsObrigatorias = [
         "CENTRALDARK_ADMIN_KEY",
         "MCP_SESSION_SECRET",
@@ -55,10 +49,7 @@ function validarEnvsObrigatorias() {
     console.log("[BOOT] Todas envs obrigatórias presentes ✓");
 }
 validarEnvsObrigatorias();
-// Captura logs pro buffer do painel /admin (deve rodar ANTES do primeiro log)
 bootstrapAdminLogCapture();
-// O consumer nasce somente no bootstrap explícito do processo. /health é puro
-// observador e importar o módulo não pode reclamar missão nem mutar estado.
 startHubMissionConsumer();
 const app = express();
 app.disable("x-powered-by");
@@ -77,9 +68,7 @@ app.options("*", (_req, res) => {
 });
 app.use(express.json({ limit: "2mb" }));
 app.use(express.urlencoded({ extended: false, limit: "1mb" }));
-// V2: Correlation-ID + request logger estruturado (rastreia OAuth→token→tools/list→SSE)
 app.use(correlationMiddleware);
-// ─────────────────────────────── Health ──────────────────────────────────
 app.get("/health", (_req, res) => {
     res.json({
         ok: true,
@@ -90,19 +79,7 @@ app.get("/health", (_req, res) => {
         time: new Date().toISOString(),
     });
 });
-// V2: healthcheck profundo (Health Score consumido pelo painel /admin)
 app.get("/health/deep", healthDeep);
-// ─────────────── #148: rotas que o dossie apontou como 404 mudo ───────────
-// MOTIVO  > a varredura da issue #148 achou 404 generico em /favicon.ico,
-//           /sse, GET /token e GET /register. 404 nao diz ao cliente se a
-//           rota nunca existiu, se mudou de metodo ou se foi aposentada.
-// ONDE    > issue #148, itens 2, 4 e 7 da secao "Falhas / atritos".
-// RESOLVE > cada uma passa a responder o codigo que descreve o fato:
-//           favicon 200, transporte aposentado 410, metodo errado 405.
-
-// Favicon 32x32 (PNG embutido em base64 — sem arquivo binario no repo).
-// Existe porque a UI /admin e mantida; sem ele o conector fica com icone
-// generico na lista do cliente.
 const FAVICON_PNG = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAdElEQVR42mNgkxShKWIYARYI7GzEgyiyAL/RRFrDQLnp+O1goNxo/NYQZQHxviRsAalxSFALA4WmE9SI0wJS0zthC8h2PrH5gBamj1owasFQtoAmGY3mRQU9CjuaF9f0qHDoUWXSvNKnU7OFHg2v0cYvGAEAow7TzjWyeR0AAAAASUVORK5CYII=", "base64");
 const serveFavicon = (_req, res) => {
     res.setHeader("Content-Type", "image/png");
@@ -111,12 +88,6 @@ const serveFavicon = (_req, res) => {
 };
 app.get("/favicon.ico", serveFavicon);
 app.get("/favicon.png", serveFavicon);
-
-// Transporte SSE foi aposentado: este servidor fala Streamable HTTP em /mcp.
-// MOTIVO  > conector antigo tenta /sse e recebia 404, que ele interpreta como
-//           "servidor errado" em vez de "transporte trocado".
-// ONDE    > issue #148, item 2.
-// RESOLVE > 410 Gone e definitivo e carrega a rota substituta no corpo.
 app.all("/sse", (_req, res) => {
     res.status(410).json({
         ok: false,
@@ -126,12 +97,6 @@ app.all("/sse", (_req, res) => {
         documentation: "/.well-known/oauth-protected-resource",
     });
 });
-
-// Metodo errado responde 405 com Allow, nao 404.
-// MOTIVO  > GET /token e GET /register caiam no 404 generico, escondendo que
-//           a rota existe e so aceita POST. Confunde diagnostico de OAuth.
-// ONDE    > issue #148, item 7.
-// RESOLVE > 405 + header Allow: POST, como manda o RFC 9110 secao 15.5.6.
 const somentePost = (rota) => (_req, res) => {
     res.setHeader("Allow", "POST");
     res.status(405).json({
@@ -143,8 +108,6 @@ const somentePost = (rota) => (_req, res) => {
 };
 app.get("/token", somentePost("/token"));
 app.get("/register", somentePost("/register"));
-
-// ───────────────────────────── Painel /admin (NOC do Dono) ─────────────
 app.get("/admin", adminGet);
 app.post("/admin/login", adminLogin);
 app.get("/admin/logout", adminLogout);
@@ -156,37 +119,15 @@ app.post("/admin/api/e2e", adminE2E);
 app.get("/admin/api/e2e/publico", adminE2EPublico);
 app.get("/admin/logs/stream", adminLogsStream);
 app.post("/admin/api/testar-sse", adminTestarSse);
-// Ponte estreita do TelePainel: JWT do HUB é revalidado + has_role(admin).
-// Só provider_* alcança o dispatcher; credencial de provider fica no servidor.
 app.post("/admin/provider", providerAdminBridge);
-// Emissão administrativa de chave (autenticada por senha) — usada pelo painel
-// /admin (aba Chaves) e pelo fluxo "Entrar com GitHub" da Ponte MCP.
 app.post("/admin/api/issue-key", handleIssueKey);
-// Manifesto público do catálogo de tools
 app.get("/tools.json", (_req, res) => {
     res.setHeader("Cache-Control", "no-store");
     res.json(getCatalogSummary());
 });
-// OpenAPI 3.1 spec — compatível com Open WebUI Tool Servers e Builder
 app.get("/openapi.json", (_req, res) => {
     res.setHeader("Cache-Control", "no-store");
     const summary = getCatalogSummary();
-    // ─────────────── #148 item 5: OpenAPI so anuncia o que serve ──────────
-    // MOTIVO  > este gerador criava um path POST /mcp-tools/<nome> para cada
-    //           tool do catalogo (102 paths), mas NAO existe nenhum handler
-    //           app.post("/mcp-tools/...") neste servidor. Todos os 102
-    //           respondiam 404. Provado em 2026-07-28:
-    //             POST https://mcp.centralldark.com/mcp-tools/adicionar_pendencia -> 404
-    //           O host alternativo api.centralldark.com responde 401 ate para
-    //           rota inventada, entao tambem nao prova que a rota exista la.
-    // ONDE    > issue #148, item 5 da secao "Falhas / atritos".
-    // RESOLVE > o spec passa a declarar as rotas HTTP que existem de verdade.
-    //           O catalogo de tools NAO se perde: continua em /tools.json e
-    //           agora tambem na extensao x-mcp-tools abaixo, que e informativa
-    //           e nao promete rota HTTP nenhuma.
-    //           Se um dia houver cliente Open WebUI real precisando de
-    //           /mcp-tools/<nome>, o caminho e IMPLEMENTAR o handler e so
-    //           entao voltar a declarar o path — nunca o contrario.
     const jsonRpcBody = {
         required: true,
         content: {
@@ -231,7 +172,7 @@ app.get("/openapi.json", (_req, res) => {
         "/health/deep": { get: { summary: "Healthcheck profundo", operationId: "healthDeep", responses: respostaJson } },
         "/status.json": { get: { summary: "Status dos conectores", operationId: "statusJson", responses: respostaJson } },
         "/register": { post: { summary: "OAuth 2.1 Dynamic Client Registration", operationId: "oauthRegister", responses: respostaJson } },
-        "/authorize": { get: { summary: "OAuth 2.1 authorize (PKCE S256)", operationId: "oauthAuthorize", responses: { "200": { description: "Tela de consentimento" }, "302": { description: "Redirect com code" } } },
+        "/authorize": { get: { summary: "OAuth 2.1 authorize (PKCE S256)", operationId: "oauthAuthorize", responses: { "200": { description: "Tela de consentimento" }, "302": { description: "Redirect com code" } } } },
         "/token": { post: { summary: "OAuth 2.1 token endpoint", operationId: "oauthToken", responses: respostaJson } },
         "/.well-known/oauth-protected-resource": { get: { summary: "RFC 9728 protected resource metadata", operationId: "protectedResourceMetadata", responses: respostaJson } },
         "/.well-known/oauth-authorization-server": { get: { summary: "RFC 8414 authorization server metadata", operationId: "authorizationServerMetadata", responses: respostaJson } },
@@ -262,8 +203,6 @@ app.get("/openapi.json", (_req, res) => {
             },
         },
         paths,
-        // Catalogo informativo. NAO e rota HTTP — as tools sao chamadas por
-        // JSON-RPC tools/call em /mcp. Ver MOTIVO no bloco acima.
         "x-mcp-tools": summary.tools.map((tool) => ({
             name: tool.name,
             title: tool.title ?? tool.name,
@@ -273,7 +212,6 @@ app.get("/openapi.json", (_req, res) => {
         "x-mcp-tool-count": summary.toolCount,
     });
 });
-// ───────────────────────── Status dos conectores ─────────────────────────
 app.get("/status", (req, res) => {
     getStatusHtml(req, res).catch(() => {
         if (!res.headersSent)
@@ -286,7 +224,6 @@ app.get("/status.json", (req, res) => {
             res.status(500).json({ ok: false });
     });
 });
-// ───────────────────────── Skills públicas (sem auth) ────────────────────
 app.get("/skills", (req, res) => {
     handleSkillsList(req, res, config.publicUrl).catch(() => {
         if (!res.headersSent)
@@ -311,7 +248,6 @@ app.get("/skills/:nome/install.sh", (req, res) => {
             res.status(500).type("text/plain").send("# erro\nexit 1\n");
     });
 });
-// ───────────────────────── OAuth discovery (MCP) ─────────────────────────
 app.get("/.well-known/oauth-protected-resource", getProtectedResourceMetadata);
 app.get("/.well-known/oauth-protected-resource/mcp", getProtectedResourceMetadata);
 app.get("/mcp/.well-known/oauth-protected-resource", getProtectedResourceMetadata);
@@ -321,15 +257,12 @@ app.get("/.well-known/oauth-authorization-server", getAuthorizationServerMetadat
 app.get("/.well-known/oauth-authorization-server/mcp", getAuthorizationServerMetadata);
 app.get("/mcp/.well-known/oauth-authorization-server", getAuthorizationServerMetadata);
 app.get("/.well-known/oauth-authorization-server/admin", getAuthorizationServerMetadata);
-// ───────────────────────── OAuth endpoints (MCP) ─────────────────────────
 app.post("/register", postRegister);
 app.get("/authorize", handleAuthorize);
 app.post("/authorize", handleAuthorize);
 app.post("/token", postToken);
-// ─────────────────────────── OAuth legado desativado ─────────────────────
 app.get("/oauth/start", handleOAuthStart);
 app.get("/oauth/callback", handleOAuthCallback);
-// ─────────────────────────────── MCP HTTP ────────────────────────────────
 function unauthorized(req, res, msg) {
     setCorsHeaders(res);
     res.setHeader("WWW-Authenticate", `Bearer realm="mcp", resource_metadata="${config.publicUrl}/.well-known/oauth-protected-resource", scope="mcp"`);
@@ -418,8 +351,6 @@ function resolveGhToken(req) {
     const bearer = extractBearer(req);
     const tokenPrefix = bearer ? bearer.slice(0, 8) : null;
     const stats = (() => { try { return getStateStats(); } catch { return { accessTokens: -1 }; } })();
-
-    // Diagnóstico obrigatório em toda request /mcp (níveis 1..5 de causa-raiz)
     const logAuth = (lookupResult, extra = {}) => {
         l.info("mcp_auth_diagnostic", {
             has_auth_header: hasAuthHeader,
@@ -430,7 +361,6 @@ function resolveGhToken(req) {
             ...extra,
         });
     };
-
     if (bearer) {
         const directToken = process.env.MCP_CENTRALDARK_TOKEN ||
             process.env.CENTRALDARK_MCP_TOKEN ||
@@ -448,10 +378,8 @@ function resolveGhToken(req) {
                 oauthScope: "",
             };
         }
-        // Fluxo OAuth normal (ChatGPT / clientes externos)
         const at = getAccessToken(bearer);
         if (!at) {
-            // Diferencia not_found vs expired olhando direto no cache bruto
             logAuth("not_found_or_expired");
             return { error: "Access token inválido ou expirado." };
         }
@@ -462,7 +390,6 @@ function resolveGhToken(req) {
             oauthScope: String(at.oauth_scope || ""),
         };
     }
-    // Retrocompatibilidade: header x-mcp-session
     const sid = String(req.header("x-mcp-session") ?? "");
     if (sid) {
         const s = getSession(sid);
@@ -506,11 +433,9 @@ app.post("/mcp", (req, res) => {
         }
     });
 });
-// GET /mcp — alguns clientes pingam pra checar OAuth via 401
 app.get("/mcp", (req, res) => {
     unauthorized(req, res, "Authorization Bearer ausente.");
 });
-// ─────────────── /admin/mcp — endpoint MCP com escopo admin obrigatório ───────────────
 function requireAdminScope(req, res) {
     const bearer = extractBearer(req);
     if (!bearer) { unauthorizedAdmin(req, res, "Authorization Bearer com escopo admin ausente."); return null; }
@@ -552,9 +477,6 @@ app.post("/admin/mcp", (req, res) => {
 app.get("/admin/mcp", (req, res) => {
     unauthorizedAdmin(req, res, "Authorization Bearer com escopo admin ausente.");
 });
-// /mcp-public removido em 30/06/2026 — expunha vps_write_file_safe sem Bearer
-// (pendência #8). Toda chamada ao MCP agora exige OAuth via /mcp.
-// ─────────────────────── Telemetria VPS (vps-reporter) ───────────────────────
 const PAINEL_DATA_PATH = "/root/CentralDark/apps/modulos/status/painel-data.json";
 const ADMIN_KEY = process.env.CENTRALDARK_ADMIN_KEY;
 app.post("/api/telemetry-ingest", (req, res) => {
@@ -581,7 +503,6 @@ app.post("/api/telemetry-ingest", (req, res) => {
         res.status(500).json({ ok: false, error: "erro ao salvar telemetria" });
     }
 });
-// 404 padrão
 app.use((_req, res) => {
     res.status(404).json({ ok: false, error: "not_found" });
 });
