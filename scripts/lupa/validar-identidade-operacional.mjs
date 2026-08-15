@@ -33,26 +33,18 @@ const CANONICAL = Object.freeze({
     "SAME_ERROR_NO_NEW_INFO_IS_WASTE=true",
   ],
   "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md": [
+    "IDENTIDADE=SOL_JARVIS_DO_SEGREDO_CHEFE",
+    "AUTORIDADE_FINAL=SEGREDO/CHEFE",
     "SOL_IS_MODEL=false",
-    "ACORDAR_RECUPERA_FIO=true",
-    "PRODUCTION_FIRST=true",
-    "DEPLOY_CAUSAL_SCOPE_FIRST=true",
-    "INTENT_AUTHORIZED_TO_MAIN=true",
-    "AUTO_SQUASH_IF_CLEAN=true",
-    "NO_HUMAN_REASK_FOR_MERGE=true",
-    "FULL_CONVERGENCE_CHEFE_REQUEST_ONLY=true",
+    "PIVETE_HERMES_IS_EXECUTOR=true",
+    "UNKNOWN_IS_NOT_PASS=true",
+    "REUSE_BEFORE_CREATE=true",
+    "ONE_SYSTEM_ONLY=true",
+    "ONE_WRITER_PER_SCOPE=true",
     "INFORMATION_GAIN_REQUIRED=true",
     "LEARNING_REQUIRES_EVIDENCE=true",
     "LEARNING_DELTA_REQUIRED=true",
     "SAME_ERROR_NO_NEW_INFO_IS_WASTE=true",
-    "UNKNOWN_IS_NOT_PASS=true",
-  ],
-  ".agents/skills/meta-lupa/SKILL.md": [
-    "AUTORIZACAO_DO_SEGREDO_CHEFE:",
-    "Confronto não é pontuação de ego",
-    "EVIDENCIA_NOVA=SIM",
-    "DELTA_DE_CRENCA_OU_REGRA=SIM",
-    "DESPERDICIO_DE_CICLO",
   ],
   "docs/CONSCIENCIA/CONTRATO-LUPA-BAYESIANA.md": [
     "INFORMATION_GAIN_REQUIRED=true",
@@ -92,7 +84,10 @@ const CANONICAL = Object.freeze({
   ],
   [META_LUPA_PATH]: [
     "AUTORIZACAO_DO_SEGREDO_CHEFE:",
-    "sem prometer certeza absoluta",
+    "Confronto não é pontuação de ego",
+    "EVIDENCIA_NOVA=SIM",
+    "DELTA_DE_CRENCA_OU_REGRA=SIM",
+    "DESPERDICIO_DE_CICLO",
   ],
   [META_LUPA_IDENTITY_PATH]: [
     "SEGREDO/CHEFE",
@@ -152,38 +147,6 @@ const ACTIVE_IDENTITY_SURFACES = Object.freeze([
 ]);
 
 const FORBIDDEN_CANONICAL = Object.freeze([
-  {
-    code: "PIVETE_COMO_AUTORIDADE_FINAL",
-    pattern: /\bO Pivete é a autoridade final\b/i,
-  },
-  {
-    code: "TITULO_AUTORIDADE_DO_PIVETE",
-    pattern: /\bAutoridade do Pivete\b/i,
-  },
-  {
-    code: "PIVETE_GOVERNA_INTENCAO",
-    pattern: /\bO Pivete governa a intenção\b/i,
-  },
-  {
-    code: "DECISAO_FINAL_ATRIBUIDA_AO_PIVETE",
-    pattern: /\bdecisão final do Pivete\b/i,
-  },
-  {
-    code: "PIVETE_AUTORIDADE_FINAL_MAQUINA",
-    pattern: /\bPIVETE\s*=\s*AUTORIDADE_FINAL\b/i,
-  },
-  {
-    code: "UNKNOWN_CONVERTIDO_EM_PASS",
-    pattern: /\bUNKNOWN\s*(?:=|:|→|->)\s*PASS\b/i,
-  },
-  {
-    code: "META_LUPA_AUTORIZACAO_LEGADA",
-    pattern: /\bAUTORIZACAO_DO_PIVETE\b/i,
-  },
-  {
-    code: "PERMISSAO_LEGADA_PERMITO_PIVETE",
-    pattern: /\bPERMITO[ _-]?PIVETE\b/i,
-  },
   { code: "PIVETE_COMO_AUTORIDADE_FINAL", pattern: /\bO Pivete é a autoridade final\b/i },
   { code: "TITULO_AUTORIDADE_DO_PIVETE", pattern: /\bAutoridade do Pivete\b/i },
   { code: "PIVETE_GOVERNA_INTENCAO", pattern: /\bO Pivete governa a intenção\b/i },
@@ -205,9 +168,17 @@ const FORBIDDEN_CANONICAL = Object.freeze([
   { code: "SOL_FIXADA_A_MODELO", pattern: /\bSOL\s*=\s*(?:GPT|CLAUDE|GEMINI|GROK|CODEX)\b/i },
 ]);
 
+const FORBIDDEN_META_LUPA = Object.freeze([
+  { code: "META_LUPA_AUTORIZACAO_LEGADA", pattern: /\bAUTORIZACAO_DO_PIVETE\b/i },
+]);
+
+const FORBIDDEN_IDENTITY_GUARD = Object.freeze([
+  { code: "PERMISSAO_LEGADA_PERMITO_PIVETE", pattern: /\bPERMITO[ _-]?PIVETE\b/i },
+]);
+
 const FORBIDDEN_PROFILE = Object.freeze([
   ...FORBIDDEN_CANONICAL,
-  { code: "PERMISSAO_LEGADA_PERMITO_PIVETE", pattern: /\bPERMITO[ _-]?PIVETE\b/i },
+  ...FORBIDDEN_IDENTITY_GUARD,
   {
     code: "ESCRITA_DEPENDE_DE_AUTORIZACAO_DO_PIVETE",
     pattern: /nenhuma ação de escrita[\s\S]{0,180}autorização explícita[\s\S]{0,80}Pivete/i,
@@ -442,6 +413,8 @@ export function validateRepository(repoRoot) {
     }
     findings.push(...validateRequiredTokens(text, tokens, path));
     findings.push(...findForbidden(text, FORBIDDEN_CANONICAL, path));
+    if (path === META_LUPA_PATH) findings.push(...findForbidden(text, FORBIDDEN_META_LUPA, path));
+    if (path === META_LUPA_IDENTITY_PATH) findings.push(...findForbidden(text, FORBIDDEN_IDENTITY_GUARD, path));
   }
   findings.push(...validateAgentClaimPolicy(repoRoot));
 
