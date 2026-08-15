@@ -105,22 +105,37 @@ test('G/H: evento estruturado funciona sem emoji e renderer sem marcador musical
   assert.match(result.active_capabilities[0].presentation.label, /^META_LUPA — /);
 });
 
-test('I: música vira somente matéria comportamental candidata, nunca skill direta', () => {
-  const material = compileBehavioralMaterial({ artifactClass: 'MUSIC', observableProperties: ['rhythm', 'pause', 'dissonance', 'resolution'] });
+test('I: música vira matéria comportamental, deduplica owner existente e nunca escreve skill', () => {
+  const material = compileBehavioralMaterial({ artifactClass: 'MUSIC', observableProperties: ['ritmo', 'pausa', 'dissonância', 'resolução'] });
   assert.equal(material.status, 'CANDIDATE_ONLY');
   assert.equal(material.direct_skill_write, false);
   assert.equal(material.promotion_allowed, false);
   assert.equal(material.source_is_authority, false);
+  assert.equal(material.dedupe_performed, true);
+  assert.equal(material.dedupe_required, false);
   assert.deepEqual(material.behavioral_hypotheses, [
     'INVESTIGATE_CONFLICTING_EVIDENCE',
     'OPERATIONAL_CADENCE',
     'PROVEN_CLOSURE',
     'WAIT_FOR_NEW_INFORMATION',
   ]);
+  const dissonance = material.dedupe_decisions.find((item) => item.behavioral_hypothesis === 'INVESTIGATE_CONFLICTING_EVIDENCE');
+  const resolution = material.dedupe_decisions.find((item) => item.behavioral_hypothesis === 'PROVEN_CLOSURE');
+  const cadence = material.dedupe_decisions.find((item) => item.behavioral_hypothesis === 'OPERATIONAL_CADENCE');
+  assert.deepEqual(dissonance, { behavioral_hypothesis: 'INVESTIGATE_CONFLICTING_EVIDENCE', status: 'REUSE_EXISTING', existing_capability: 'META_LUPA' });
+  assert.deepEqual(resolution, { behavioral_hypothesis: 'PROVEN_CLOSURE', status: 'REUSE_EXISTING', existing_capability: 'FIXED_POINT' });
+  assert.deepEqual(cadence, { behavioral_hypothesis: 'OPERATIONAL_CADENCE', status: 'CANDIDATE_ONLY', existing_capability: null });
+});
+
+test('I.1: matéria totalmente coberta vira REUSE_EXISTING, não capability nova', () => {
+  const material = compileBehavioralMaterial({ observableProperties: ['contraponto', 'dissonância', 'resolução', 'clímax'] });
+  assert.equal(material.status, 'REUSE_EXISTING');
+  assert.equal(material.owner_resolution_required, false);
+  assert.ok(material.dedupe_decisions.every((item) => item.status === 'REUSE_EXISTING'));
 });
 
 test('J: propriedades e capacidades duplicadas são deduplicadas antes da projeção', () => {
-  const material = compileBehavioralMaterial({ observableProperties: ['rhythm', 'RHYTHM', 'tempo'] });
+  const material = compileBehavioralMaterial({ observableProperties: ['ritmo', 'RHYTHM', 'tempo'] });
   assert.deepEqual(material.behavioral_hypotheses, ['OPERATIONAL_CADENCE']);
   const result = renderOperationalScore({ machineEvent: event(), activeCapabilities: ['MINERACAO', 'MINERACAO'] });
   assert.equal(result.active_capabilities.length, 1);
