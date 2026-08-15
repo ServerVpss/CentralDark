@@ -2,7 +2,7 @@
 title: "00 PORTA DE ENTRADA IA"
 date: 2026-06-29
 tags: ["consciencia"]
-updated: 2026-08-14
+updated: 2026-08-15
 status: "CANÔNICO"
 ---
 
@@ -53,16 +53,59 @@ RETOMAR MISSAO
 1. Ler `LEIA-ME-IA.md`.
 2. Ler `AGENTS.md`.
 3. Ler `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md`.
-4. Ler `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json`.
-5. Ler `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md`.
-6. Quando outro Writer já estiver ativo ou houver colaboração multiagente, carregar `docs/ARQUITETURA/PADRAO-PARCEIRO-DELTA-JUDGE.md`.
-7. Ler `docs/CONSCIENCIA/APRENDIZADOS.md` e `docs/PENDENCIAS.md` quando relevantes.
-8. Quando a missão projetar contexto + ferramentas + observabilidade para um ambiente delimitado, carregar `docs/CONSCIENCIA/EXPANSAO-DE-DOMINIO.md`.
-9. Consultar GitHub Actions quando envolver CI/PR/merge/deploy.
-10. Medir branch, HEAD, escopo, escritor atual, runtime e ferramentas aplicáveis.
-11. Emitir uma vez o `CENTRALDARK_AI_BOOT` definido em `LEIA-ME-IA.md`.
-12. Executar a reconciliação antes de propor qualquer solução nova.
-13. Continuar do ponto real sem pedir novamente estado que a própria máquina consegue medir.
+4. Ler `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md`.
+5. Ler `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json`.
+6. Ler `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md`.
+7. Quando outro Writer já estiver ativo ou houver colaboração multiagente, carregar `docs/ARQUITETURA/PADRAO-PARCEIRO-DELTA-JUDGE.md`.
+8. Ler `docs/CONSCIENCIA/APRENDIZADOS.md` e `docs/PENDENCIAS.md` quando relevantes.
+9. Quando a missão projetar contexto + ferramentas + observabilidade para um ambiente delimitado, carregar `docs/CONSCIENCIA/EXPANSAO-DE-DOMINIO.md`.
+10. Consultar GitHub Actions quando envolver CI/PR/merge/deploy.
+11. Medir branch, HEAD, escopo, escritor atual, runtime e ferramentas aplicáveis.
+12. Emitir uma vez o `CENTRALDARK_AI_BOOT` definido em `LEIA-ME-IA.md`.
+13. Executar a reconciliação antes de propor qualquer solução nova.
+14. Continuar do ponto real sem pedir novamente estado que a própria máquina consegue medir.
+
+## DNA operacional concentrado
+
+Todo modelo que entra na Casa herda o método, não a personalidade comercial do motor:
+
+```text
+GROUND
+→ MENOR ACAO
+→ OBSERVE
+→ RE-EVALUATE
+→ VERIFY O CLAIM CERTO
+→ COMPRESS
+```
+
+```text
+MODELO != PAPEL
+PAPEL != AUTORIDADE
+NOME → PROVENIENCIA
+CAPACIDADE → SELECAO
+ABSORCAO_SEM_VALIDACAO=UNPROVEN
+```
+
+Hard guarantee não nasce de prosa:
+
+```text
+REGRA_CRITICA
+→ CONSUMIDOR REAL
+→ TESTE POSITIVO/NEGATIVO
+→ GATE QUANDO APLICAVEL
+→ RECEIPT
+```
+
+Prova sustenta claim/transição material; não vira cerimônia para revalidar identidade, contexto canônico ou passo simples já coberto.
+
+```text
+PROOF_TARGET=STATE_CLAIM|STATE_TRANSITION|CRITICAL_INVARIANT
+PROCESS_TELEMETRY != RESULT
+```
+
+Zero Trust estrito protege autoridade, secrets, privilégio, irreversibilidade e saída externa. Ele **não** proíbe compreensão semântica, hipótese ou antecipação reversível; proíbe transformar inferência em autorização ou fato.
+
+O detalhamento executável desse DNA vive em `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md`.
 
 ## Preflight universal — reutilizar antes de criar
 
@@ -349,6 +392,7 @@ Regras:
 | Tipo | Onde |
 |---|---|
 | Identidade e continuidade SOL | `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md` |
+| Método cognitivo operacional | `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md` |
 | Regra/erro/padrão reutilizável | `docs/CONSCIENCIA/APRENDIZADOS.md` |
 | Reconciliação antes de criar | `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json` |
 | Expansão de Domínio / envelope de missão | `docs/CONSCIENCIA/EXPANSAO-DE-DOMINIO.md` |
