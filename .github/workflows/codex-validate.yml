@@ -298,12 +298,13 @@ jobs:
         working-directory: apps/modulos/mcp
         run: npm run typecheck
 
-      - name: Run MCP admin guard and mission bridge tests
+      - name: Run MCP admin guard, mission bridge and provider control tests
         working-directory: apps/modulos/mcp
         run: |
           set -euo pipefail
           node --test tests/admin-guard.test.mjs
           node --test tests/hub-mission-consumer.test.mjs
+          node --test tests/provider-admin-bridge.test.mjs tests/provider-control-integration.test.mjs tests/provider-control.test.mjs tests/provider-secret-boundary.test.mjs
 
       - name: Build runtime dist
         working-directory: apps/modulos/mcp
