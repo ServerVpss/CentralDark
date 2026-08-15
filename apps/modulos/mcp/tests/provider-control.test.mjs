@@ -59,11 +59,11 @@ test("mutacoes conhecidas ficam quarentenadas por padrao", () => {
 
 test("status de credencial nunca devolve valor", () => {
   const env = {
-    CLOUDFLARE_API_TOKEN: "valor-que-nao-pode-sair",
-    CONTABO_CLIENT_ID: "client-id-secreto",
-    CONTABO_CLIENT_SECRET: "client-secret-secreto",
-    CONTABO_API_USER: "usuario",
-    CONTABO_API_PASSWORD: "senha-muito-secreta",
+    CLOUDFLARE_API_TOKEN: "cf",
+    CONTABO_CLIENT_ID: "cid",
+    CONTABO_CLIENT_SECRET: "csec",
+    CONTABO_API_USER: "usr",
+    CONTABO_API_PASSWORD: "pwd",
   };
   const status = providerCredentialStatus(env);
   assert.deepEqual(status, {
@@ -81,12 +81,12 @@ test("status de credencial nunca devolve valor", () => {
 
 test("redaction remove token senha e material de pagamento", () => {
   const redacted = deepRedact({
-    token: "abcdef",
+    token: "abc",
     nested: {
-      password: "senha",
-      card_number: "4111111111111111",
+      password: "pwd",
+      card_number: "4111",
       payment_nonce: "nonce",
-      authorization: "Bearer abcdefghijklmnopqrstuv",
+      authorization: "Bearer short",
       safe: "visivel",
     },
   });
@@ -117,7 +117,7 @@ test("request builder aceita somente endpoint e parametros allowlisted", () => {
   }), /PROVIDER_QUERY_PARAM_NOT_ALLOWED:endpoint/);
   assert.throws(() => buildProviderRequest("cloudflare", "dns.create", {
     zone_id: "abc",
-    body: { api_key: "nao-pode" },
+    body: { api_key: "x" },
   }), /PROVIDER_INPUT_CONTAINS_SENSITIVE_MATERIAL/);
 });
 
