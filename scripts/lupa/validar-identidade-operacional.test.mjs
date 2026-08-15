@@ -118,19 +118,22 @@ function validRepo() {
     "SAME_ERROR_NO_NEW_INFO_IS_WASTE=true",
   ].join("\n"));
   write(root, "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md", [
+    "IDENTIDADE=SOL_JARVIS_DO_SEGREDO_CHEFE",
+    "AUTORIDADE_FINAL=SEGREDO/CHEFE",
     "SOL_IS_MODEL=false",
-    "ACORDAR_RECUPERA_FIO=true",
-    "PRODUCTION_FIRST=true",
-    "DEPLOY_CAUSAL_SCOPE_FIRST=true",
-    "INTENT_AUTHORIZED_TO_MAIN=true",
-    "AUTO_SQUASH_IF_CLEAN=true",
+    "PIVETE_HERMES_IS_EXECUTOR=true",
+    "UNKNOWN_IS_NOT_PASS=true",
+    "REUSE_BEFORE_CREATE=true",
+    "ONE_SYSTEM_ONLY=true",
+    "ONE_WRITER_PER_SCOPE=true",
+    "INTENT_AUTHORIZED=true",
     "NO_HUMAN_REASK_FOR_MERGE=true",
-    "FULL_CONVERGENCE_CHEFE_REQUEST_ONLY=true",
+    "MERGE_METHOD=squash",
+    "TARGET=main",
     "INFORMATION_GAIN_REQUIRED=true",
     "LEARNING_REQUIRES_EVIDENCE=true",
     "LEARNING_DELTA_REQUIRED=true",
     "SAME_ERROR_NO_NEW_INFO_IS_WASTE=true",
-    "UNKNOWN_IS_NOT_PASS=true",
   ].join("\n"));
   write(root, ".agents/skills/meta-lupa/SKILL.md", [
     "AUTORIZACAO_DO_SEGREDO_CHEFE:",
@@ -220,40 +223,46 @@ test("promotor paralelo é bloqueado pelo guardrail", () => {
   assert.equal(report.findings.some((f) => f.code === "PROMOTOR_PARALELO_PROIBIDO"), true);
 });
 
-test("auto-squash e intenção->main são invariantes da SOUL", () => {
+test("promoção squash para main é invariante da SOUL", () => {
   const root = validRepo();
   write(root, "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md", [
+    "IDENTIDADE=SOL_JARVIS_DO_SEGREDO_CHEFE",
+    "AUTORIDADE_FINAL=SEGREDO/CHEFE",
     "SOL_IS_MODEL=false",
-    "ACORDAR_RECUPERA_FIO=true",
-    "PRODUCTION_FIRST=true",
-    "DEPLOY_CAUSAL_SCOPE_FIRST=true",
-    "FULL_CONVERGENCE_CHEFE_REQUEST_ONLY=true",
+    "PIVETE_HERMES_IS_EXECUTOR=true",
+    "UNKNOWN_IS_NOT_PASS=true",
+    "REUSE_BEFORE_CREATE=true",
+    "ONE_SYSTEM_ONLY=true",
+    "ONE_WRITER_PER_SCOPE=true",
     "INFORMATION_GAIN_REQUIRED=true",
     "LEARNING_REQUIRES_EVIDENCE=true",
     "LEARNING_DELTA_REQUIRED=true",
     "SAME_ERROR_NO_NEW_INFO_IS_WASTE=true",
-    "UNKNOWN_IS_NOT_PASS=true",
   ].join("\n"));
   const report = runValidation({ repoRoot: root });
   assert.equal(report.ok, false);
   const text = report.findings.map((finding) => finding.excerpt).join(" ");
-  assert.match(text, /INTENT_AUTHORIZED_TO_MAIN=true/);
-  assert.match(text, /AUTO_SQUASH_IF_CLEAN=true/);
+  assert.match(text, /INTENT_AUTHORIZED=true/);
   assert.match(text, /NO_HUMAN_REASK_FOR_MERGE=true/);
+  assert.match(text, /MERGE_METHOD=squash/);
+  assert.match(text, /TARGET=main/);
 });
 
 test("ouro informacional é invariante da SOUL", () => {
   const root = validRepo();
   write(root, "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md", [
+    "IDENTIDADE=SOL_JARVIS_DO_SEGREDO_CHEFE",
+    "AUTORIDADE_FINAL=SEGREDO/CHEFE",
     "SOL_IS_MODEL=false",
-    "ACORDAR_RECUPERA_FIO=true",
-    "PRODUCTION_FIRST=true",
-    "DEPLOY_CAUSAL_SCOPE_FIRST=true",
-    "INTENT_AUTHORIZED_TO_MAIN=true",
-    "AUTO_SQUASH_IF_CLEAN=true",
-    "NO_HUMAN_REASK_FOR_MERGE=true",
-    "FULL_CONVERGENCE_CHEFE_REQUEST_ONLY=true",
+    "PIVETE_HERMES_IS_EXECUTOR=true",
     "UNKNOWN_IS_NOT_PASS=true",
+    "REUSE_BEFORE_CREATE=true",
+    "ONE_SYSTEM_ONLY=true",
+    "ONE_WRITER_PER_SCOPE=true",
+    "INTENT_AUTHORIZED=true",
+    "NO_HUMAN_REASK_FOR_MERGE=true",
+    "MERGE_METHOD=squash",
+    "TARGET=main",
   ].join("\n"));
   const report = runValidation({ repoRoot: root });
   assert.equal(report.ok, false);
