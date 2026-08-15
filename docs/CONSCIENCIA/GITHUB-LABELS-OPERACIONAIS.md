@@ -1,58 +1,91 @@
 # Labels Operacionais CentralDark
 
-## Identidade
+## Identidade e autoridade
 
 ```text
 SEGREDO/CHEFE = humano e autoridade final
 SOL = coordenadora
 PIVETE/HERMES = executor, preservação e continuidade
+MODELO = capacidade substituível
+REALIDADE = juiz
 ```
 
-Labels roteiam trabalho; **não concedem autoridade humana**.
+Label roteia trabalho; **nunca concede autoridade humana**.
 
-## Núcleo
-
-| Label | Semântica atual |
-|---|---|
-| 🟢 PRONTO-PARA-IA | contexto suficiente para análise/execução dentro do escopo vigente |
-| 🟡 IA-PRECISA-REVISAR | revisão técnica necessária |
-| 🔴 RISCO-SERVIDOR | risco de runtime/infra; aplicar gates proporcionais |
-| 🟡 PRECISA-DE-OK | existe decisão humana realmente pendente de SEGREDO/CHEFE |
-| 🔐 SEGURANÇA | auth/secret/RLS/credencial; fail-closed e sem valor de secret |
-| 🟢 CORREÇÃO-SEGURA | baixo risco e escopo claro |
-| 🔴 FALTA-EVIDÊNCIA | estado técnico insuficiente; `UNKNOWN` não vira PASS |
-| 🧠 AGENTE-GROK | roteamento/capacidade, não autoridade |
-| 🧠 AGENTE-CODEX | roteamento/capacidade, não autoridade |
-| 🛠️ INFRA | classificação de escopo |
-| 🔧 SELF-HEAL | automação determinística aplicável |
-| 🤖 AGENTIC-DEVOPS | coordenação de capacidade, sem segundo sistema |
-
-## Autorização
+A autorização humana canônica é:
 
 ```text
-INTENCAO_JA_AUTORIZADA
-→ NÃO adicionar PRECISA-DE-OK só por cerimônia
-
-DECISAO_HUMANA_REALMENTE_NOVA
-→ PRECISA-DE-OK
-→ AUTORIDADE=SEGREDO/CHEFE
+👑 PERMITO-SEGREDO
 ```
 
-O texto histórico `aguarda PERMITO Pivete` corresponde a `LEGACY_COMPATIBILITY_TOKEN_FOR_SEGREDO_CHEFE` quando algum gate ainda exigir o literal. Não significa que PIVETE/HERMES autoriza a si mesmo.
+`permito-pivete`, `PERMITO-PIVETE` e outros aliases históricos não pertencem à taxonomia operacional ativa. O histórico permanece nos registros antigos, sem promover PIVETE/HERMES/modelo/bot a autoridade.
 
-## Automação
+## Lei do catálogo
 
-1. Label verde não transforma `UNKNOWN` em PASS.
-2. Label vermelha sinaliza risco/impedimento; não substitui prova causal.
-3. `PRECISA-DE-OK` só pausa quando houver decisão humana nova fora da autorização vigente.
-4. Mudança de escopo/ambiente/risco pode invalidar autorização anterior.
-5. Roteamento de agente não muda Writer único nem autoridade.
+```text
+UMA_SEMÂNTICA = UMA_LABEL_CANÔNICA
+LABEL_OPERACIONAL = MAIÚSCULAS
+ALIAS_LEGADO = MIGRAR_ANTES_DE_APAGAR
+SEM_CONSUMIDOR + SEM_ROTEAMENTO + SEM_VALOR_OPERACIONAL = REMOVER
+```
+
+`🧠 AGENTE-LOVABLE` e `assign:lovable` são obsoletos e não recebem novos trabalhos.
+
+## Núcleo canônico
+
+- `👑 PERMITO-SEGREDO`
+- `🔄 GIT`, `🔄 GIT-DIVERGÊNCIA`
+- `🧠 AGENTE-CHATGPT`, `🧠 AGENTE-CLAUDE`, `🧠 AGENTE-CODEX`, `🧠 AGENTE-GROK`, `🧠 AGENTE-HERMES`, `🧠 AGENTE-JARVIS`, `🧠 AGENTE-SENTINELA`, `🧠 AGENTE-SUPABASE`
+- `🤖 AUTO`, `🤖 AGENTIC-DEVOPS`, `🤖 IA-DOCUMENTAR`, `🤖 IA-EXECUTAR`, `🤖 IA-FRONTEND`, `🤖 IA-INFRA`, `🤖 IA-PESQUISAR`, `🤖 IA-REVISAR`, `🤖 IA-VALIDAR`
+- `🐞 BUG`, `♻️ DUPLICADO`, `✨ MELHORIA`, `❓ DÚVIDA`, `🆘 AJUDA-NECESSÁRIA`, `🌱 BOM-PARA-INICIAR`, `🎨 FRONTEND`, `📚 DOCS`
+- `🔐 SEGURANÇA`, `🔧 SELF-HEAL`, `🔴 ERRO`, `🔴 FALTA-EVIDÊNCIA`, `🔴 PRIORIDADE-ALTA`, `🔴 RISCO-SERVIDOR`, `🛠️ INFRA`
+- `🛡️ SENTINELA`, `🟡 ATENÇÃO`, `🟡 IA-PRECISA-REVISAR`, `🟡 PENDÊNCIA`, `🟡 PRIORIDADE-MÉDIA`
+- `🟢 CORREÇÃO-SEGURA`, `🟢 PRIORIDADE-BAIXA`, `🟢 PRONTO-PARA-IA`, `🟢 SUCESSO`, `🟢 SUPABASE`
+- `🕸️ GRAPHIFY`, `🚫 INVÁLIDO`, `🧊 NÃO-FAZER`, `🧊 PARADO`, `🧩 DIVERGÊNCIA`, `🧭 PAINEL`, `SUPERSEDED`
+
+## Alias legado → canônico
+
+```text
+assign:chatgpt      → 🧠 AGENTE-CHATGPT
+assign:claude       → 🧠 AGENTE-CLAUDE
+assign:codex        → 🧠 AGENTE-CODEX
+assign:grok         → 🧠 AGENTE-GROK
+assign:supabase-bot → 🧠 AGENTE-SUPABASE
+auto                 → 🤖 AUTO
+bug                  → 🐞 BUG
+p1                   → 🔴 PRIORIDADE-ALTA
+p2                   → 🟡 PRIORIDADE-MÉDIA
+p3                   → 🟢 PRIORIDADE-BAIXA
+sentinela            → 🛡️ SENTINELA
+stale                → 🧊 PARADO
+superseded           → SUPERSEDED
+permito-segredo      → 👑 PERMITO-SEGREDO
+📚 DOC               → 📚 DOCS
+```
+
+## Issue não é memória
+
+```text
+EVENTO
+→ fingerprint
+→ existe ferida material equivalente?
+   SIM → atualizar evidência existente
+   NÃO → provar materialidade
+         → só então criar issue
+
+CAUSA SUMIU
+→ comprovar
+→ fechar quando a política permitir
+```
+
+Workflow vermelho sozinho não cria automaticamente uma nova ferida. `SKIPPED`, `UNKNOWN`, `PENDING`, ausência de erro ou alerta histórico não são `PASS`.
 
 ## Regra final
 
 ```text
 LABEL = SINAL
-INTENCAO = SEGREDO/CHEFE
-ESTADO = EVIDENCIA
-EXECUCAO = CAPACIDADE AUTORIZADA
+INTENÇÃO = SEGREDO/CHEFE
+ESTADO = EVIDÊNCIA
+EXECUÇÃO = CAPACIDADE AUTORIZADA
+REALIDADE = JUIZ
 ```
