@@ -122,7 +122,25 @@ jobs:
           node --check scripts/memory-linker/memory-linker-agent.mjs
           node --check scripts/memory-linker/memory-analyst-agent.mjs
           node --check scripts/memory-linker/memory-executor-agent.mjs
-          node --test scripts/memory-linker/dream-review.test.mjs scripts/memory-linker/pattern-discovery.test.mjs scripts/memory-linker/dream-review-run.test.mjs scripts/memory-linker/fs-safe.test.mjs scripts/memory-linker/delta-core.test.mjs
+          node --check supabase/functions/_shared/source-delta.mjs
+          node --check supabase/functions/_shared/operational-error.mjs
+          node --check scripts/lupa/no-silent-error-scan.mjs
+          node --test \
+            scripts/memory-linker/dream-review.test.mjs \
+            scripts/memory-linker/pattern-discovery.test.mjs \
+            scripts/memory-linker/dream-review-run.test.mjs \
+            scripts/memory-linker/fs-safe.test.mjs \
+            scripts/memory-linker/delta-core.test.mjs \
+            scripts/memory-linker/source-delta-wiring.test.mjs \
+            supabase/functions/_shared/source-delta.test.mjs \
+            supabase/functions/_shared/operational-error.test.mjs \
+            scripts/lupa/no-silent-error-scan.test.mjs
+
+      - name: Erro silencioso — bloquear padrões inequívocos no código rastreado
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/lupa/no-silent-error-scan.mjs --repo-root .
 
       - name: Semantic Core — fixtures offline + contratos
         shell: bash
