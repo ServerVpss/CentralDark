@@ -1,7 +1,4 @@
 #!/usr/bin/env python3
-import copy
-import hashlib
-import json
 import os
 import sys
 
@@ -43,14 +40,23 @@ def resign(manifest):
     return manifest
 
 
-def test_four_required_subjects_can_be_verified():
+def test_five_meta_owners_can_be_verified():
     for subject in (
         "META_LUPA",
         "MENOS_E_MAIS",
         "INSTINTO_SUPERIOR",
         "EXPANSAO_DE_DOMINIO",
+        "METACOGNICAO_OPERACIONAL",
     ):
-        assert validate(signed(subject))["evolution_verified"] is True
+        result = validate(signed(subject))
+        assert result["evolution_verified"] is True
+        assert result["required_meta_subject"] is True
+
+
+def test_contract_is_universal_for_future_capabilities():
+    result = validate(signed("CAPACIDADE_FUTURA"))
+    assert result["evolution_verified"] is True
+    assert result["required_meta_subject"] is False
 
 
 def test_same_state_is_not_evolution():
@@ -101,3 +107,10 @@ def test_missing_counterproof_blocks_evolution():
     manifest["counterproof"] = []
     result = validate(resign(manifest))
     assert "COUNTERPROOF_MISSING" in result["errors"]
+
+
+def test_invalid_subject_is_blocked():
+    manifest = signed("META_LUPA")
+    manifest["subject"] = "nome livre com espaço"
+    result = validate(resign(manifest))
+    assert "SUBJECT_INVALID" in result["errors"]
