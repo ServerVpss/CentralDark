@@ -1,0 +1,103 @@
+#!/usr/bin/env python3
+import copy
+import hashlib
+import json
+import os
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from scripts.evolution_gate import manifest_sha256, validate  # noqa: E402
+
+
+def signed(subject="META_LUPA"):
+    manifest = {
+        "schema_version": 1,
+        "subject": subject,
+        "before_ref": "1" * 40,
+        "after_ref": "2" * 40,
+        "same_scope": True,
+        "canonical_owner": "owner.md",
+        "claim": "capacidade aumentou sem regressão",
+        "verifier": "judge-read-only",
+        "new_information": ["failure mode novo"],
+        "capability_delta": ["nova capacidade reutilizável"],
+        "before_evidence": ["evidência antes"],
+        "after_evidence": ["evidência depois"],
+        "counterproof": ["contraprova independente"],
+        "provenance": ["origem registrada"],
+        "lost_capabilities": [],
+        "tests": [{"name": "positivo", "status": "PASS", "evidence": ["receipt"]}],
+        "regressions": [{"name": "regressão", "status": "PASS", "evidence": ["receipt"]}],
+    }
+    if subject == "MENOS_E_MAIS":
+        manifest["complexity_before"] = 5
+        manifest["complexity_after"] = 4
+    manifest["receipt_sha256"] = manifest_sha256(manifest)
+    return manifest
+
+
+def resign(manifest):
+    manifest["receipt_sha256"] = manifest_sha256(
+        {k: v for k, v in manifest.items() if k != "receipt_sha256"}
+    )
+    return manifest
+
+
+def test_four_required_subjects_can_be_verified():
+    for subject in (
+        "META_LUPA",
+        "MENOS_E_MAIS",
+        "INSTINTO_SUPERIOR",
+        "EXPANSAO_DE_DOMINIO",
+    ):
+        assert validate(signed(subject))["evolution_verified"] is True
+
+
+def test_same_state_is_not_evolution():
+    manifest = signed()
+    manifest["after_ref"] = manifest["before_ref"]
+    result = validate(resign(manifest))
+    assert result["status"] == "EVOLUTION_UNPROVEN"
+    assert "NO_STATE_DELTA" in result["errors"]
+
+
+def test_no_information_gain_is_not_evolution():
+    manifest = signed()
+    manifest["new_information"] = []
+    result = validate(resign(manifest))
+    assert "NEW_INFORMATION_MISSING" in result["errors"]
+
+
+def test_failed_test_blocks_evolution():
+    manifest = signed()
+    manifest["tests"][0]["status"] = "FAIL"
+    result = validate(resign(manifest))
+    assert "TEST_0_NOT_PASS" in result["errors"]
+
+
+def test_regression_blocks_evolution():
+    manifest = signed()
+    manifest["lost_capabilities"] = ["capacidade anterior"]
+    result = validate(resign(manifest))
+    assert "CAPABILITY_REGRESSION" in result["errors"]
+
+
+def test_menos_e_mais_cannot_get_more_complex_and_call_it_evolution():
+    manifest = signed("MENOS_E_MAIS")
+    manifest["complexity_after"] = manifest["complexity_before"] + 1
+    result = validate(resign(manifest))
+    assert "MENOS_E_MAIS_COMPLEXITY_REGRESSION" in result["errors"]
+
+
+def test_receipt_tamper_is_detected():
+    manifest = signed()
+    manifest["claim"] = "texto alterado depois do selo"
+    result = validate(manifest)
+    assert "RECEIPT_SHA256_MISMATCH" in result["errors"]
+
+
+def test_missing_counterproof_blocks_evolution():
+    manifest = signed()
+    manifest["counterproof"] = []
+    result = validate(resign(manifest))
+    assert "COUNTERPROOF_MISSING" in result["errors"]
