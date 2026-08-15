@@ -1,5 +1,11 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import {
+  SOL_FREQUENCY_INVARIANTS,
+  decideFrequency,
+  globalRuleCoverage,
+  recordEngineFitness,
+} from './sol-frequency-decision.mjs';
 
 const agents = readFileSync(new URL('../../AGENTS.md', import.meta.url), 'utf8');
 const contract = readFileSync(
@@ -22,6 +28,13 @@ for (const marker of [
   'MODELS=ENGINES',
   'FREQUENCY=ADAPTIVE',
   'FREQUENCY_AUTO_SELECTED=true',
+  'FREQUENCY_DECISION_OBSERVABLE=true',
+  'FREQUENCY_CHANGE_REQUIRES_MATERIAL_DELTA=true',
+  'HYSTERESIS_ENABLED=true',
+  'FREQUENCY_IS_NOT_ENGINE=true',
+  'ENGINE_FITNESS_REQUIRES_OBSERVED_METRICS=true',
+  'ENGINE_RANKING_REQUIRES_COMPARABLE_SAMPLE=true',
+  'GLOBAL_RULE_COVERAGE_100_REQUIRES_CLOSED_DENOMINATOR=true',
   'FREQUENCY_IS_AUTHORITY=false',
   'USE_LOWEST_SUFFICIENT_FREQUENCY=true',
   'AUTO_ESCALATE_ON_MATERIAL_DELTA=true',
@@ -48,5 +61,53 @@ for (const frequency of [
 ]) {
   assert.ok(contract.includes(frequency), `missing operational frequency: ${frequency}`);
 }
+
+const escalation = decideFrequency({
+  selected: 'PROFUNDA',
+  previous_frequency: 'RAPIDA',
+  reason: 'conflito material',
+  evidence: ['multiple owners'],
+  engine: 'engine-a',
+  material_delta: true,
+  cooldown_elapsed: true,
+});
+assert.equal(escalation.selected, 'PROFUNDA');
+assert.equal(escalation.switch_applied, true);
+
+const hysteresis = decideFrequency({
+  selected: 'RAPIDA',
+  previous_frequency: 'PROFUNDA',
+  reason: 'sem nova evidencia',
+  evidence: ['same evidence'],
+  engine: 'engine-a',
+  material_delta: false,
+  cooldown_elapsed: false,
+});
+assert.equal(hysteresis.selected, 'PROFUNDA');
+assert.equal(hysteresis.switch_blocked_by_hysteresis, true);
+
+const fitness = recordEngineFitness({
+  engine: 'engine-b',
+  frequency: 'PROFUNDA',
+  latency_ms: 100,
+  correctness: 'PASS',
+  counterproof_success: 'PASS',
+  retries: 0,
+  comparable_sample: false,
+});
+assert.equal(fitness.ranking_allowed, false);
+
+assert.deepEqual(
+  globalRuleCoverage({
+    applicable_consumers: 2,
+    loaded_consumers: 2,
+    positive_test: true,
+    negative_test: false,
+    escaping_adapters: 0,
+  }),
+  { status: 'INCOMPLETE', percent: 99 },
+);
+
+for (const value of Object.values(SOL_FREQUENCY_INVARIANTS)) assert.equal(value, true);
 
 console.log('PASS sol-frequency-global-contract');
