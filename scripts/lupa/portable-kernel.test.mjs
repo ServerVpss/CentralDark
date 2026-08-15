@@ -15,6 +15,10 @@ const ROOT = resolve(process.cwd());
 const SCRIPT = join(ROOT, 'scripts/lupa/portable-kernel.mjs');
 const CONTRACT = join(ROOT, 'docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json');
 const RESPONSE_PATTERN = join(ROOT, 'docs/CONSCIENCIA/2026-06-20-padrao-resposta-pivete.md');
+const SOUL = join(ROOT, 'docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md');
+const COGNITION = join(ROOT, 'docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md');
+const ORCHESTRATION = join(ROOT, 'docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md');
+const PROOF_OWNERSHIP = join(ROOT, 'docs/CONSCIENCIA/PROOF-OWNERSHIP.json');
 const METACOGNITION = 'docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md';
 
 function run(args = []) {
@@ -45,6 +49,59 @@ function materializeBundleAsRepo(bundle, root) {
   git(root, ['add', '.']);
   git(root, ['commit', '-q', '-m', 'fixture']);
 }
+
+test('decência operacional preserva crédito sem transformar crédito em autoridade ou prova', () => {
+  const soul = readFileSync(SOUL, 'utf8');
+  const soulMarkers = [
+    'CREDITO_FICA_COM_QUEM_MERECE=true',
+    'DELTA_FICA_COM_QUEM_PROVOU=true',
+    'NINGUEM_PRECISA_PERDER_PARA_A_CASA_GANHAR=true',
+    'CREDIT_IS_ATTRIBUTION_NOT_AUTHORITY=true',
+    'CREDIT_IS_NOT_PROOF=true',
+    'CREDIT_PRESERVATION_REQUIRED=true',
+    'COMPETITION=0',
+    'RESPECT=ON',
+    'CREDIT=PRESERVED',
+    'REALITY=JUDGE',
+    'NO_WINNER_LOSER_FRAMING=true',
+    'REALITY_JUDGES_CLAIMS_NOT_PEOPLE=true',
+    'MULTIPLE_CREDITS_CAN_COEXIST=true',
+  ];
+  for (const marker of soulMarkers) assert.ok(soul.includes(marker), `missing SOUL marker ${marker}`);
+
+  const proof = JSON.parse(readFileSync(PROOF_OWNERSHIP, 'utf8'));
+  const proofRules = proof.global_rules ?? {};
+  assert.equal(proofRules.credit_attribution_is_not_proof_ownership, true);
+  assert.equal(proofRules.credit_does_not_confer_authority, true);
+  assert.equal(proofRules.credit_does_not_prove_claim, true);
+  assert.equal(proofRules.source_credit_must_preserve_provenance, true);
+  assert.equal(proofRules.proof_credit_requires_observed_proof_contribution, true);
+  assert.equal(proofRules.proof_ownership_must_not_erase_source_credit, true);
+  assert.equal(proofRules.reputation_cannot_receive_unobserved_proof_credit, true);
+  assert.equal(proofRules.multiple_material_credits_can_coexist, true);
+  assert.equal(proofRules.reality_judges_claims_not_people, true);
+
+  const pattern = readFileSync(RESPONSE_PATTERN, 'utf8');
+  const responseMarkers = [
+    'CREDIT_PRESERVATION_VISIBLE_REQUIRED=true',
+    'NO_FALSE_SELF_ORIGIN=true',
+    'CREDIT_DOES_NOT_CONFER_AUTHORITY=true',
+    'CREDIT_IS_NOT_PROOF=true',
+    'NO_WINNER_LOSER_FRAMING=true',
+    'REALITY_JUDGES_CLAIMS_NOT_PEOPLE=true',
+  ];
+  for (const marker of responseMarkers) assert.ok(pattern.includes(marker), `missing response marker ${marker}`);
+
+  const orchestration = readFileSync(ORCHESTRATION, 'utf8');
+  assert.ok(orchestration.includes('MODEL_VOTE=FORBIDDEN_AS_TRUTH_MECHANISM'));
+  assert.ok(orchestration.includes('NAME_OR_REPUTATION=PROVENANCE_NOT_AUTHORITY'));
+  assert.ok(orchestration.includes('CONFLICT → TEST → EVIDENCE → REALITY_DECIDES'));
+
+  const cognition = readFileSync(COGNITION, 'utf8');
+  assert.ok(cognition.includes('SOURCE_IS_PROVENANCE_NOT_AUTHORITY=true'));
+  assert.ok(cognition.includes('ABSORPTION_WITHOUT_VALIDATION=UNPROVEN'));
+  assert.ok(cognition.includes('Proveniência preserva autoria sem virar dependência.'));
+});
 
 test('trabalhar estudar e ensinar é contrato obrigatório e transversal antes da camada simples', () => {
   const pattern = readFileSync(RESPONSE_PATTERN, 'utf8');
