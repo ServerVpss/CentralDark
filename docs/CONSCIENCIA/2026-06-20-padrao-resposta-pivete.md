@@ -385,8 +385,8 @@ Quando a intenção vigente já autoriza `main` no mesmo escopo:
 INTENT_AUTHORIZED
 → TESTE/SCAN APLICAVEL
 → SEM CONFLITO
-→ SEM_BLOQUEIO_MATERIAL
-→ SQUASH_MAIN
+→ SEM BLOQUEIO MATERIAL
+→ SQUASH MAIN
 → RECEIPT
 ```
 
