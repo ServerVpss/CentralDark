@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-14T22:43:12.696Z",
-  "updatedAtBR": "14/08/2026, 19:43:12 BRT",
+  "updatedAt": "2026-08-15T00:49:52.386Z",
+  "updatedAtBR": "14/08/2026, 21:49:52 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "chore(consciencia): snapshot vivo 2026-08-14 — fonte única PENDENCIAS + status calibragem",
+    "lastCommit": "docs(consciencia): absorver capacidade sobre nome e proveniencia",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-15T00:49:52.386Z",
+      "titulo": "Push na main · 997a123c2836e69d52fb78539651851bbf6c1e89",
+      "detalhe": "docs(consciencia): absorver capacidade sobre nome e proveniencia",
+      "area": "Repositório",
+      "sha": "997a123",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-14T22:43:12.696Z",
       "titulo": "Push na main · a030f4d276c43abd34ec275187c015fdaf132f24",
       "detalhe": "chore(consciencia): snapshot vivo 2026-08-14 — fonte única PENDENCIAS + status calibragem",
@@ -988,14 +996,6 @@
       "detalhe": "fix: observe PR611 reconciliation on synchronize",
       "area": "Repositório",
       "sha": "b2b45ce",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-03T23:36:26.883Z",
-      "titulo": "Push na main · fe21c794b39c00af51f98686c487f830429a22b8",
-      "detalhe": "test(autonomia): canário final end-to-end (#636)",
-      "area": "Repositório",
-      "sha": "fe21c79",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-15T00:49:52.386Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 997a123c2836e69d52fb78539651851bbf6c1e89 (997a123)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-14T22:43:12.696Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · a030f4d276c43abd34ec275187c015fdaf132f24 (a030f4d)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-03T23:36:50.958Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · b2b45cef1a84e557a42c38115e2ddd0750a887c0 (b2b45ce)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-03T23:36:26.883Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · fe21c794b39c00af51f98686c487f830429a22b8 (fe21c79)",
       "area": "Repositório",
       "status": "sucesso"
     }
