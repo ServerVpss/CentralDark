@@ -42,6 +42,7 @@ function canonicalReportFingerprint(report) {
   const orfas = [...(report.orfas || [])].sort();
   const noConexoes = [...(report.noConexoes || [])].sort();
   const semFrontmatter = [...(report.semFrontmatter || [])].sort();
+  const unsafePaths = [...(report.unsafePaths || [])].sort();
   const brokenLinks = Object.fromEntries(
     Object.entries(report.brokenLinks || {})
       .sort(([a], [b]) => a.localeCompare(b))
@@ -52,7 +53,8 @@ function canonicalReportFingerprint(report) {
     brokenLinks,
     noConexoes,
     semFrontmatter,
-    total: orfas.length + Object.keys(brokenLinks).length + noConexoes.length + semFrontmatter.length,
+    unsafePaths,
+    total: orfas.length + Object.keys(brokenLinks).length + noConexoes.length + semFrontmatter.length + unsafePaths.length,
   }));
 }
 
@@ -75,6 +77,10 @@ const CRITICOS = ['00-LEIA-PRIMEIRO', 'MAPA-DO-CEREBRO', 'CONSCIENCIA', 'BRAIN',
 const criticos = [];
 const altos = [];
 const autoFix = [];
+
+for (const unsafePath of (report.unsafePaths || [])) {
+  criticos.push({ tipo: 'path-inseguro', path: String(unsafePath) });
+}
 
 for (const [link, origens] of Object.entries(report.brokenLinks || {})) {
   const safeOrigins = Array.isArray(origens) ? origens : [];
@@ -140,7 +146,10 @@ function send(text) {
 let msg = `🧠 <b>Stage 2 — Analyst classificou DELTA</b>\n\n`;
 if (criticos.length > 0) {
   msg += `🔴 <b>CRÍTICO (${criticos.length})</b>\n`;
-  criticos.slice(0, 4).forEach(c => { msg += `  • <code>[[${c.link}]]</code> quebrado em arquivo crítico\n`; });
+  criticos.slice(0, 4).forEach(c => {
+    if (c.tipo === 'path-inseguro') msg += `  • Caminho recusado: <code>${c.path}</code>\n`;
+    else msg += `  • <code>[[${c.link}]]</code> quebrado em arquivo crítico\n`;
+  });
   msg += '\n';
 }
 if (altos.length > 0) {
