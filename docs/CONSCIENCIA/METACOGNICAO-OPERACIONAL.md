@@ -526,3 +526,177 @@ Este arquivo é a fonte conceitual única. A distribuição ocorre sem copiar o 
 - `scripts/memory-linker/dream-review.mjs` materializa apenas o candidato isolado da consolidação ociosa.
 
 Não duplicar este contrato integralmente nos consumidores; preservar uma única semântica e referenciar esta fonte quando o próprio método estiver sendo refinado.
+
+## CRISTAL — saída irredutível do CROSS-META, não nova lente
+
+`CRISTAL` é o nome de um **resultado mais forte** do CROSS-META quando a saída já chegou ao ponto fixo e também sobrevive a uma prova explícita de irreducibilidade no escopo declarado. Não existe `META_CRISTAL` como sétima lente, novo cérebro, nova skill ou novo motor.
+
+```text
+META_CRISTAL_IS_NEW_LENS=false
+CRISTAL_IS_CROSS_META_OUTPUT=true
+FIXED_POINT != IRREDUCIBLE
+IRREDUCIBLE_REQUIRES_EXECUTABLE_RECEIPT=true
+```
+
+A essência operacional é:
+
+```text
+CAVA O QUANTO PRECISAR
+→ PROVA O QUE SOBROU
+→ ENTREGA SO O IRREDUTIVEL
+```
+
+`MENOS_E_MAIS` aqui não significa pensar pouco, pesquisar pouco ou esconder complexidade. Significa permitir profundidade interna proporcional ao problema e terminar com a menor representação **que ainda preserva capacidade, prova, proveniência, reconstrução e caminho de volta ao owner**.
+
+```text
+RESUMO → reduz texto
+CRISTAL → reduz representação sem perder função verificável
+```
+
+O fluxo é o mesmo, sem nova camada META:
+
+```text
+MATERIA
+→ CROSS_META
+→ FIXED_POINT
+→ DECLARAR RESIDUO CANDIDATO
+→ TENTAR REMOVER CADA RESIDUO
+→ REMOCAO PRESERVA TODOS OS CONTRATOS?
+   SIM → REMOVER → CROSS_META DE NOVO
+   NAO → PRESERVAR + EVIDENCIA DO CONTRATO QUE QUEBROU
+→ MEDIR CUSTO EFETIVO + QUALIDADE
+→ COMPARAR CANDIDATOS AVALIADOS
+→ SEM RESIDUO REMOVIVEL
++ SEM CANDIDATO AVALIADO QUE PARETO-DOMINE
++ TODOS OS GATES DE FIDELIDADE
+→ CRISTAL_CONDENSADO_IRREDUTIVEL
+```
+
+### Irredutibilidade sem falso absoluto
+
+A condição matemática ideal de mínimo global exigiria demonstrar que **nenhum subconjunto próprio possível** preserva todos os contratos. Essa afirmação só é válida com busca exaustiva do espaço correspondente. O gate atual deliberadamente **não fabrica essa prova**.
+
+Ele prova uma afirmação menor e auditável:
+
+```text
+IRREDUCIBILITY_SCOPE=DECLARED_RESIDUE_SET
+GLOBAL_POWERSET_MINIMALITY=UNPROVEN_UNLESS_EXHAUSTIVE
+```
+
+Portanto `IRREDUCIBLE` significa: no conjunto de resíduos explicitamente encontrado e coberto pelas seis lentes CROSS-META, cada candidato foi submetido a remoção discriminante; nenhum permaneceu removível sem quebrar contrato material.
+
+Cada tentativa de remoção deve apontar qual classe de contrato quebra, por exemplo:
+
+```text
+CRITICAL_CAPABILITY
+TRACEABILITY
+RECONSTRUCTION
+PROOF_OWNERSHIP
+QUALITY_NONINFERIORITY
+AUTHORITY
+RUNTIME_CLAIM
+```
+
+`meta_fixed_point=true` sozinho continua insuficiente. Ponto fixo informacional diz que a nova passagem não encontrou informação/capacidade nova; não prova que a representação restante já é mínima no escopo testado.
+
+### Custo efetivo — compacto que reabre tudo não é ganho
+
+Quando existe `source-on-demand`, medir somente bytes/tokens do artefato compacto pode fabricar compressão. O custo relevante inclui o que realmente precisa voltar das fontes sob uma carga de trabalho declarada:
+
+```text
+L_effective = L_boot + L_source_on_demand_observed
+```
+
+`L_source_on_demand_observed` exige denominador de workload e evidência da distribuição usada. Não inventar `P(q)` ou custo esperado sem amostra defensável.
+
+Para alegar cristal:
+
+```text
+L_effective_after < L_effective_before
+```
+
+O percentual de compressão é **calculado pelo gate**, não confiado ao candidato.
+
+### Fidelidade, qualidade e densidade
+
+Claims críticos não usam média para esconder perda:
+
+```text
+CRITICAL_CAPABILITY_RETENTION_REQUIRED=100%
+MATERIAL_TRACEABILITY_REQUIRED=100%
+LOST_CRITICAL_CAPABILITIES_REQUIRED=0
+RECONSTRUCTION=PASS
+PROOF_OWNERSHIP=PASS+EXTERNAL_ANCHOR_EVIDENCE
+```
+
+Para qualidade não crítica, o denominador e a margem `epsilon` são congelados **antes** do resultado.
+
+Quando a avaliação é determinística:
+
+```text
+CONFIDENCE_METHOD=EXACT_DETERMINISTIC
+```
+
+Não fabricar intervalo estatístico.
+
+Quando o mesmo benchmark é avaliado antes/depois de forma estocástica:
+
+```text
+CONFIDENCE_METHOD=PAIRED_BOOTSTRAP
+CONFIDENCE_LEVEL=0.95
+```
+
+O limite inferior de 95% precisa provar ganho (`LCB(delta) > 0`) ou não-inferioridade (`LCB(delta) >= -epsilon`), conforme objetivo e `epsilon` pré-declarados. O contrato pareado não aceita um intervalo de proporção não pareado como atalho para o delta.
+
+A densidade conservadora é:
+
+```text
+D = QUALITY_FLOOR / L_effective
+```
+
+e o cristal exige:
+
+```text
+D_after > D_before
+```
+
+Assim, reduzir muito o tamanho enquanto derruba qualidade não pode virar “densidade melhor” por narrativa.
+
+### Pareto sem fingir domínio universal
+
+O gate procura dominância somente entre alternativas **realmente avaliadas**:
+
+```text
+PARETO_SCOPE=EVALUATED_CANDIDATE_SET
+```
+
+O candidato selecionado é ligado às métricas do próprio receipt; não pode declarar números diferentes só para parecer Pareto-ótimo. Se qualquer alternativa avaliada tiver custo efetivo menor ou igual e todas as qualidades/fidelidades maiores ou iguais, com pelo menos uma melhora estrita, o claim `IRREDUCIBLE` falha.
+
+Isso não prova ótimo global sobre candidatos nunca gerados ou nunca medidos.
+
+### Receipt forte opcional
+
+A evolução normal continua usando o contrato universal já existente. `crystal_claim=IRREDUCIBLE` é um claim **opcional e mais forte**; só então o receipt precisa acrescentar:
+
+```text
+CRYSTAL_CLAIM=IRREDUCIBLE
+CRYSTAL_CONTRACT:
+  OUTPUT_KIND=CRISTAL_CONDENSADO_IRREDUTIVEL
+  META_CRISTAL_IS_NEW_LENS=false
+  CRITICAL_RETENTION=100%
+  TRACEABILITY=100%
+  RECONSTRUCTION=PASS
+  PROOF_OWNERSHIP=PASS+EXTERNAL_ANCHOR
+  EFFECTIVE_LOAD=MEASURED
+  QUALITY=PREDECLARED_DENOMINATOR+EPSILON
+  IRREDUCIBILITY=DECLARED_RESIDUE_SET+REMOVAL_PROBES
+  PARETO=EVALUATED_CANDIDATE_SET
+```
+
+Se qualquer parte falhar, o resultado pode continuar sendo um `EVOLVED`, `FIXED_POINT` ou candidato condensado conforme a prova disponível, mas **não recebe o selo `IRREDUCIBLE`**.
+
+```text
+CRISTAL_CLAIM_DOES_NOT_UPGRADE_BASE_FAILURE=true
+IRREDUCIBLE_IS_STRONGER_THAN_FIXED_POINT=true
+NO_CRYSTAL_CLAIM_WITHOUT_STRICT_RECEIPT=true
+```
