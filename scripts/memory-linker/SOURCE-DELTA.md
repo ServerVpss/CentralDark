@@ -76,6 +76,73 @@ O owner runtime existente `supabase/functions/catalog-sync/index.ts` foi convert
 
 Adicionar GitHub, Hugging Face, papers ou outra origem significa **adicionar adapter neste contrato**, não criar outro minerador.
 
+## ARTIFACT → CAPABILITY — qualquer matéria entra pela mesma refinaria
+
+`scripts/memory-linker/artifact-capability.mjs` é um adapter do mesmo motor. Ele não cria `Skill Engine`, memória, fila ou promotor paralelo.
+
+```text
+PDF | TXT | MD | API | OPENAPI | SCHEMA | LOG | CODE | IMAGE | AUDIO | VIDEO | EXE | BIN
+→ CLASSIFICAR ARTEFATO
+→ EXTRAIR SOMENTE SINAIS OPERACIONAIS EVIDENCIADOS
+→ CAPABILITY_FINGERPRINT
+→ OWNER EXISTE?
+→ DREAM REVIEW EXISTENTE
+→ DEDUPE / CONTRAPROVA / METALUPA
+→ SKILL CANDIDATA
+→ PROVA DE OWNER + CONSUMIDOR + MEDIÇÃO
+→ WRITER AUTORIZADO
+→ CANÔNICO
+```
+
+A saída é pequena de propósito: classe do artefato, SHA/fingerprint, sinais de capacidade, owner alvo, necessidades ainda não provadas e referência `source-on-demand`. O arquivo inteiro não entra no boot nem vira skill por volume.
+
+```text
+ARTIFACT_IS_ORE=true
+CAPABILITY_IS_GOLD=true
+ARTIFACT_IS_AUTHORITY=false
+DIRECT_SKILL_WRITE=false
+DIRECT_CANONICAL_MUTATION=false
+SOURCE_ON_DEMAND=true
+```
+
+### Binário e executável
+
+O adapter **nunca executa um binário para descobrir o que ele faz**. `.exe/.dll/.bin/.so` sem interface documentada, `--help` capturado legitimamente ou invocação previamente observada produz:
+
+```text
+STATUS=INSUFFICIENT_EVIDENCE
+NEEDS=INTERFACE_OR_HELP_OR_OBSERVED_INVOCATION
+EXECUTE_ARTIFACT=false
+```
+
+Quando existe interface documentada, ele pode gerar apenas um candidato `EXECUTABLE_WRAPPER`: inputs, flags, outputs, erros e limites observáveis. Isso ainda não é prova de segurança nem autorização de execução.
+
+### Documento, manual, PDF, mídia e imagem
+
+Texto fornecido ou extraído por ferramenta confiável pode produzir sinais como `SAFETY_CONSTRAINTS`, `PROCEDURE`, `ERROR_CONTRACT`, `MAINTENANCE`, `PRIVILEGE_OR_PERMISSION`, `APPLICATION_CONTROL` e `OBSERVABILITY_OR_RESPONSE`.
+
+PDF/binário não sofre OCR implícito nem interpretação mágica: sem texto extraído/evidência observável, fica insuficiente. Áudio/vídeo exigem transcrição ou observação verificada; imagem exige descrição/observação verificada. A imagem, a transcrição ou o manual continuam sendo **fonte**, nunca PASS.
+
+### API, schema, log e código
+
+- OpenAPI/Swagger → `API_CONTRACT` candidato;
+- schema estruturado → `DATA_SCHEMA` candidato;
+- log → `DIAGNOSTIC_SIGNAL` candidato, sem transformar erro em verdade causal;
+- código-fonte → `CODE_INTERFACE` candidato, apontando para owner/testes em vez de duplicar código na skill.
+
+### Owner não é inventado
+
+Se o adapter encontra capacidade mas o owner não foi localizado:
+
+```text
+STATUS=OWNER_UNRESOLVED
+DIRECT_WRITE=0
+```
+
+Só depois de localizar owner e consumidor reais o evento entra como `kind=SKILL` no `Dream Review`. Fonte HTTP externa é rebaixada pelo próprio Dream Review para `EXTERNAL_UNTRUSTED`, portanto fica em `QUARANTINE` até confirmação independente.
+
+O CLI canônico `dream-review-run.mjs` aceita `--artifact` e injeta o candidato no **mesmo** Dream Review. `--artifact-metadata` pode fornecer texto extraído/help/transcrição já observados; nenhum desses campos concede autoridade.
+
 ## Erro com endereço — nunca silêncio
 
 ```text
