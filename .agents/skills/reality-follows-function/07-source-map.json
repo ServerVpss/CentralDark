@@ -26,7 +26,12 @@
     {
       "insight": "LESS_IS_MORE",
       "owner_section": "6. Consolidação + 12. Saída comprimida",
-      "owner_markers": ["resíduo mínimo irredutível", "COMPRESS"]
+      "owner_markers": ["resíduo mínimo irredutível", "COMPRESS"],
+      "crystal_projection": "10-less-is-more.json",
+      "supporting_owners": [
+        "docs/GOVERNANCA/PADRAO-DE-TRABALHO-PIVETE.md",
+        "docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md"
+      ]
     }
   ],
   "classification": "STITCH_DELTA_NOT_NEW_BRAIN",

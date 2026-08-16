@@ -13,6 +13,7 @@ const boot = readJson('00-boot.json');
 const contract = readJson('01-contract.json');
 const sourceMap = readJson('07-source-map.json');
 const tests = readJson('09-tests.json');
+const lessIsMore = readJson('10-less-is-more.json');
 const owner = readFileSync(join(root, boot.canonical_owner), 'utf8');
 
 assert.equal(boot.global_repository_scope, true);
@@ -20,6 +21,7 @@ assert.equal(boot.mandatory_house_behavior, true);
 assert.equal(boot.owner_already_in_universal_boot, true);
 assert.equal(boot.skill_is_parallel_authority, false);
 assert.equal(boot.skill_is_reusable_projection, true);
+assert.equal(boot.load_order.includes('10-less-is-more.json'), true);
 assert.equal(contract.reality, 'JUDGE');
 assert.equal(contract.invariants.FUNCTION_OVER_NAME, true);
 assert.equal(contract.invariants.EFFECT_BEFORE_STORY, true);
@@ -29,10 +31,46 @@ assert.equal(contract.invariants.BETTER_COUNTERPROOF_CAN_REPLACE_OLD_BELIEF, tru
 assert.equal(contract.invariants.NEW_EVIDENCE_WINS_OVER_STALE_CONTEXT, true);
 assert.equal(contract.invariants.SAFETY_WITHOUT_BUREAUCRACY, true);
 assert.equal(contract.invariants.LESS_IS_MORE, true);
+assert.equal(contract.invariants.LESS_IS_MORE_PRESERVES_ESSENCE_CAPABILITY_SAFETY_AND_PROOF, true);
+assert.equal(contract.invariants.SIMPLICITY_REMOVES_UNPROVEN_EXCESS_NOT_CAPABILITY, true);
+assert.equal(contract.invariants.MODERATION_MEANS_NEITHER_LACK_NOR_EXCESS, true);
+assert.equal(contract.invariants.VALUE_DENSITY_OVER_RAW_MINIMALISM, true);
+assert.equal(contract.invariants.JUST_LESS_IS_NOT_LESS_IS_MORE, true);
+assert.equal(contract.invariants.CHIEF_INPUT_MAY_EXPAND_AGENT_OUTPUT_MUST_CONSOLIDATE, true);
 assert.equal(contract.hard_boundaries.UNKNOWN_IS_NOT_PASS, true);
 assert.equal(contract.hard_boundaries.ONE_WRITER_PER_SCOPE, true);
 assert.equal(contract.hard_boundaries.REUSE_BEFORE_CREATE, true);
 assert.equal(sourceMap.classification, 'STITCH_DELTA_NOT_NEW_BRAIN');
+
+assert.equal(lessIsMore.skill_id, boot.skill_id);
+assert.equal(lessIsMore.status, 'CANONICAL_CRYSTAL_PROJECTION');
+assert.equal(
+  lessIsMore.short_crystal,
+  'ESSENCE + CLARITY + CAPABILITY + SAFETY + PROOF - EXCESS = MENOS_E_MAIS',
+);
+assert.equal(lessIsMore.input_output_boundary.chief_input_may_be_large, true);
+assert.equal(lessIsMore.input_output_boundary.chief_may_expand_search, true);
+assert.equal(lessIsMore.input_output_boundary.agent_must_consolidate, true);
+assert.equal(lessIsMore.evolution_gate.pass_result, 'MENOS_E_MAIS_EVOLUTION');
+assert.equal(lessIsMore.evolution_gate.reject_result, 'SO_MENOS_NOT_MENOS_E_MAIS');
+assert.equal(
+  lessIsMore.distinction,
+  'IF_CAPABILITY_SAFETY_OR_PROOF_IS_LOST_THEN_IT_IS_JUST_LESS_NOT_LESS_IS_MORE',
+);
+assert.equal(lessIsMore.duplicate_owner_created, false);
+assert.equal(lessIsMore.new_architecture_created, false);
+
+for (const supportingOwner of lessIsMore.supporting_owners) {
+  assert.equal(typeof supportingOwner?.path, 'string');
+  assert.ok(Array.isArray(supportingOwner.markers) && supportingOwner.markers.length > 0);
+  const supportingText = readFileSync(join(root, supportingOwner.path), 'utf8');
+  for (const marker of supportingOwner.markers) {
+    assert.ok(
+      supportingText.includes(marker),
+      `supporting owner ${supportingOwner.path} missing marker: ${marker}`,
+    );
+  }
+}
 
 const expectedCases = new Map([
   ['NAME_MISS_DOES_NOT_PROVE_ABSENCE', {
@@ -58,6 +96,18 @@ const expectedCases = new Map([
   ['SAME_EFFECT_DIFFERENT_NAME', {
     given: 'Model or component name changed but responsibility and effect remain',
     expect: 'Treat name as provenance and trace functional owner',
+  }],
+  ['JUST_LESS_IS_NOT_LESS_IS_MORE', {
+    given: 'A simplification removes capability, safety or proof',
+    expect: 'Reject it as just less, not Menos é Mais',
+  }],
+  ['MODERATION_PRESERVES_ESSENCE', {
+    given: 'A candidate removes weight that has no proven value',
+    expect: 'Prefer the smallest sufficient form that preserves essence, capability, safety and proof',
+  }],
+  ['CHIEF_INPUT_MAY_BE_LARGE', {
+    given: 'The chief expands context, hypotheses, tools or lenses',
+    expect: 'Allow exploration and consolidate only the final agent output and architecture',
   }],
 ]);
 
