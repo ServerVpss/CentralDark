@@ -60,6 +60,41 @@ EDITAR/EXECUTAR NO ESCOPO AUTORIZADO
 
 Não pedir novamente uma autorização ainda válida para a mesma missão, ambiente, escopo e classe de ação.
 
+### 4.1 Intenção vigente deriva selos e microatos necessários
+
+O selo operacional não é uma segunda decisão humana. Quando ele apenas materializa uma intenção do SEGREDO/CHEFE já autenticada e ainda válida para o mesmo escopo, deve ser aplicado automaticamente pelo sistema.
+
+```text
+INTENCAO_HUMANA_AUTENTICADA
++ PR/ACAO_CONTIDA_NO_ESCOPO_AUTORIZADO
++ SEM_NOVA_CLASSE_DE_RISCO
+→ DERIVAR_MICROATOS_NECESSARIOS
+→ APLICAR_LABEL/SELO_CANONICO_QUANDO_EXIGIDO
+→ GERAR_RECEIPT
+→ EXECUTAR_GATE/TESTE
+→ PROVAR
+```
+
+```text
+SELO != NOVA_AUTORIZACAO
+SELO = REGISTRO_MECANICO_DA_AUTORIZACAO_VIGENTE
+NO_HUMAN_REASK_FOR_DERIVED_MICROACT=true
+AUTO_APPLY_AUTHORITY_LABEL_IF_SCOPE_PROVEN=true
+```
+
+A derivação é fail-closed. Não aplicar selo automaticamente quando houver ampliação de missão/escopo, nova classe de risco, ambiguidade material, deploy/produção não autorizado, secret, force-push, ação irreversível nova ou qualquer requisito humano ainda não decidido.
+
+```text
+ESCOPO_NOVO_OU_MAIOR
+| RISCO_NOVO
+| INTENCAO_AMBIGUA
+| AUTORIZACAO_EXPIRADA_OU_NAO_PROVADA
+→ NAO_DERIVAR_SELO
+→ PEDIR_SOMENTE_A_DECISAO_HUMANA_REAL
+```
+
+Exemplo: `resolve este PR até ficar correto, sem deploy` autoriza automaticamente correções dentro do PR, testes, receipts, label/seal exigido pelo gate e reexecução do gate quando essas ações forem consequências necessárias do mesmo escopo. Não autoriza deploy, force-push, exposição de segredo nem mudança de missão.
+
 ## 5. Quando faltar ferramenta ou acesso
 
 Informar somente o bloqueio real:
