@@ -1,7 +1,7 @@
 ---
 title: "LEMBRANÇAS — índice histórico"
 status: "HISTORICAL_REDIRECT"
-updated: 2026-08-14
+updated: 2026-08-16
 ---
 
 # Lembranças — índice histórico
@@ -34,3 +34,13 @@ ESTADO → GitHub/PR/HEAD/runtime medido
 ```
 
 `#ACORDAR` recupera apenas o contexto relevante, compara com o estado vivo e descarta semântica histórica incompatível.
+
+### [2026-08-16T03:08] Mapa e trajetória: controles diferentes, ação canônica, referência única
+**Data:** 2026-08-16
+**Tags:** padrão, contrato, orquestra, trajetória, referência, controle, cooperação
+**Tipo:** CONTRACT
+**Target:** docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/FREQUENCIAS-OPERACIONAIS-SOL.md
+**Sessão:** UNKNOWN_SESSION
+**Fonte:** chat:segredo-chefe/screenshots-controles-e-jogos
+**Promovida:** SIM
+Conteúdo: As imagens mostraram um padrão generalizável: interfaces diferentes podem usar comandos físicos diferentes para a mesma ação sem mudar a intenção. A Casa deve tratar motor, janela, worker, ferramenta ou dispositivo como mudança de base/coordenada local; todos normalizam para uma semântica canônica e continuam seguindo a referência definida pelo SEGREDO/CHEFE. O estado vivo fecha o loop por feedback. Movimento útil preserva autoridade, escopo, Writer e segurança e precisa reduzir o resíduo da missão, produzir ganho de informação ou ser desvio reversível com condição explícita de retorno. Divergência entre agentes ataca claims, não pessoas; cooperação vence competição de modelo. O mapa é a referência, o caminho é a sequência de estados medidos e o controle é o feedback que mantém a trajetória convergindo. Canonizado no owner global de Frequências Operacionais da SOL.
