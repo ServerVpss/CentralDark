@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto';
 const META_TOOLS = new Set(['perception_orchestra', 'perception_gate']);
 const CRITICAL_HANDLER_ACTIONS = new Set(['deploy', 'pm2', 'webhook']);
 const MUTATING_HTTP_METHODS = new Set(['POST', 'PUT', 'PATCH', 'DELETE']);
+const PERCEPTION_COMMAND = 'apps/modulos/HERMES-CORE/core/perception-orchestra.mjs';
 
 function text(value) {
   return String(value ?? '').trim();
@@ -50,6 +51,55 @@ function shellLooksCritical(command) {
   ].some((rx) => rx.test(cmd));
 }
 
+function parsePacketFromResult(value) {
+  const raw = text(value);
+  const start = raw.indexOf('{');
+  const end = raw.lastIndexOf('}');
+  if (start < 0 || end < start) return null;
+  try {
+    const parsed = JSON.parse(raw.slice(start, end + 1));
+    return parsed && parsed.mode === 'PARALLEL_PERCEPTION_SERIAL_MUTATION' ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+function perceptionScopeFromCommand(command) {
+  const raw = String(command || '');
+  const quoted = raw.match(/HERMES_PERCEPTION_SCOPE_KEY='([^']*)'/);
+  if (quoted) return quoted[1].replace(/'\\''/g, "'");
+  const bare = raw.match(/HERMES_PERCEPTION_SCOPE_KEY=([^\s]+)/);
+  return bare ? bare[1] : null;
+}
+
+function gateFromHistoryEntry(entry) {
+  if (entry?.perception_gate) return entry.perception_gate.consumed === true ? null : entry.perception_gate;
+  if (entry?.ferramenta !== 'shell') return null;
+  const command = String(entry.args?.comando || '');
+  if (!command.includes(PERCEPTION_COMMAND)) return null;
+  const packet = parsePacketFromResult(entry.resultado);
+  if (!packet) {
+    return {
+      ready_for_writer: false,
+      proposal_scope_key: perceptionScopeFromCommand(command),
+      next_rule: 'PERCEPTION_RECEIPT_UNPARSEABLE',
+      discriminating_tests: [],
+      all_four_completed: false,
+      unproven_roles: [],
+    };
+  }
+  return {
+    ready_for_writer: packet.ready_for_writer === true,
+    proposal_scope_key: perceptionScopeFromCommand(command),
+    next_rule: packet.next_rule || 'UNKNOWN',
+    discriminating_tests: packet.evidence_confrontation?.discriminating_tests || [],
+    all_four_completed: packet.evidence_confrontation?.all_four_completed === true,
+    unproven_roles: packet.evidence_confrontation?.unproven_roles || [],
+    effective_independent_count: packet.evidence_confrontation?.effective_independent_count ?? 0,
+    material_findings: Array.isArray(packet.material_findings) ? packet.material_findings.length : 0,
+  };
+}
+
 export function classifyMaterialMutation(ferramenta, args = {}) {
   const tool = text(ferramenta);
   if (tool === 'escrever_arquivo') return { mutating: true, critical: false, kind: 'FILE_WRITE' };
@@ -92,9 +142,13 @@ function actionSignature(entry) {
   return `${text(entry?.ferramenta)}|${mutationScopeKey(entry?.ferramenta, entry?.args || {})}`;
 }
 
+function isPerceptionShell(entry) {
+  return entry?.ferramenta === 'shell' && String(entry.args?.comando || '').includes(PERCEPTION_COMMAND);
+}
+
 function recentRealEntries(historico, limit = 4) {
   return (Array.isArray(historico) ? historico : [])
-    .filter((entry) => !META_TOOLS.has(text(entry?.ferramenta)))
+    .filter((entry) => !META_TOOLS.has(text(entry?.ferramenta)) && !isPerceptionShell(entry))
     .slice(-limit);
 }
 
@@ -102,10 +156,9 @@ export function activePerceptionGate(historico) {
   const list = Array.isArray(historico) ? historico : [];
   for (let index = list.length - 1; index >= 0; index -= 1) {
     const entry = list[index];
+    const gate = gateFromHistoryEntry(entry);
+    if (gate) return gate;
     const tool = text(entry?.ferramenta);
-    if (entry?.perception_gate) {
-      return entry.perception_gate.consumed === true ? null : entry.perception_gate;
-    }
     if (tool === 'perception_gate' || tool === 'notificar_progresso') continue;
     break;
   }
@@ -177,5 +230,6 @@ export const PERCEPTION_GATE_INVARIANTS = Object.freeze({
   TEST_STATE_CANNOT_MUTATE_WITHOUT_PERCEPTION: true,
   FAILED_OR_CRITIC_REJECTED_PATH_REQUIRES_PERCEPTION: true,
   REPEATED_MUTATION_TARGET_REQUIRES_PERCEPTION: true,
-  READY_GATE_IS_SINGLE_USE: true,
+  PERCEPTION_RECEIPT_BOUND_TO_MUTATION_SCOPE: true,
+  READY_GATE_IS_SINGLE_USE_BY_HISTORY_BOUNDARY: true,
 });
