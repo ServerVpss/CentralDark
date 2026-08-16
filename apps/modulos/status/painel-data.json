@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-16T12:21:02.545Z",
-  "updatedAtBR": "16/08/2026, 09:21:02 BRT",
+  "updatedAt": "2026-08-16T12:27:35.187Z",
+  "updatedAtBR": "16/08/2026, 09:27:35 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "research(math): missão tripla para extrair a fórmula de convergência (#944)",
+    "lastCommit": "fix(segurança): cristalizar grafo de proteção humana em artefatos verificáveis (#952)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-16T12:27:35.187Z",
+      "titulo": "Push na main · 24d7387de41e1e54aed77a6629619314ccb9ff54",
+      "detalhe": "fix(segurança): cristalizar grafo de proteção humana em artefatos verificáveis (#952)",
+      "area": "Repositório",
+      "sha": "24d7387",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-16T12:21:02.545Z",
       "titulo": "Push na main · 16405dd7c04c7e7aab373611ae08f41b9c937c77",
       "detalhe": "research(math): missão tripla para extrair a fórmula de convergência (#944)",
@@ -988,14 +996,6 @@
       "detalhe": "fix(identity): restaurar sintaxe do gate porta-de-entrada (#879)",
       "area": "Repositório",
       "sha": "78cffbb",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-15T06:55:55.871Z",
-      "titulo": "Push na main · 46102f6c6cd5a35b6701adf7fbbf248dee1ab723",
-      "detalhe": "feat(meta): tornar refino cruzado e padrão Medusa verificáveis",
-      "area": "Repositório",
-      "sha": "46102f6",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-16T12:27:35.187Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 24d7387de41e1e54aed77a6629619314ccb9ff54 (24d7387)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-16T12:21:02.545Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 16405dd7c04c7e7aab373611ae08f41b9c937c77 (16405dd)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-15T07:07:46.352Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 78cffbb0cbb03d356ac101cc36c356ae30eb0786 (78cffbb)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-15T06:55:55.871Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 46102f6c6cd5a35b6701adf7fbbf248dee1ab723 (46102f6)",
       "area": "Repositório",
       "status": "sucesso"
     }
