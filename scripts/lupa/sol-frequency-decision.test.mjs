@@ -111,8 +111,46 @@ const uncrystallizedRoute = recordThinkingRouteOutcome({
 });
 assert.equal(uncrystallizedRoute.crystal_required, true);
 assert.equal(uncrystallizedRoute.fixed_point_requested, true);
+assert.equal(uncrystallizedRoute.crystallized, false);
+assert.equal(uncrystallizedRoute.durable_memory_receipt, false);
 assert.equal(uncrystallizedRoute.fixed_point, false);
 assert.equal(uncrystallizedRoute.fixed_point_blocked_by_uncrystallized, true);
+
+const declaredWithoutReceipt = recordThinkingRouteOutcome({
+  material_class: 'BROWSER_OBSERVATION',
+  material_fingerprint: 'sha256:declared-without-receipt',
+  skills: ['META_LUPA'],
+  frequency: 'PROFUNDA',
+  engine_fitness: fitness,
+  evidence: ['PASS', 'counterproof PASS'],
+  reusable_delta: true,
+  crystallized: true,
+  fixed_point: true,
+});
+assert.equal(declaredWithoutReceipt.crystallized_declared, true);
+assert.equal(declaredWithoutReceipt.crystallized, false, 'autoafirmacao sem gaveta duravel nao prova cristalizacao');
+assert.equal(declaredWithoutReceipt.fixed_point, false);
+
+const unobservedObsidian = recordThinkingRouteOutcome({
+  material_class: 'BROWSER_OBSERVATION',
+  material_fingerprint: 'sha256:obsidian-unobserved',
+  skills: ['META_LUPA'],
+  frequency: 'PROFUNDA',
+  engine_fitness: fitness,
+  evidence: ['PASS', 'counterproof PASS'],
+  reusable_delta: true,
+  crystallized: true,
+  persistence_receipt: {
+    channel: 'OBSIDIAN_INBOX',
+    target: 'CASA-VAULT/20-INBOX-HERMES/lesson.md',
+    observed: false,
+    durable: true,
+  },
+  fixed_point: true,
+});
+assert.equal(unobservedObsidian.persistence_receipt.verified, false);
+assert.equal(unobservedObsidian.crystallized, false, 'caminho Obsidian nao medido nao vira prova por intencao');
+assert.equal(unobservedObsidian.fixed_point, false);
 
 const route = recordThinkingRouteOutcome({
   material_class: 'BROWSER_OBSERVATION',
@@ -123,6 +161,12 @@ const route = recordThinkingRouteOutcome({
   evidence: ['console TypeError', 'network 500', 'counterproof PASS'],
   reusable_delta: true,
   crystallized: true,
+  persistence_receipt: {
+    channel: 'GITHUB_CANONICAL',
+    target: 'docs/CONSCIENCIA/owner-existente.md@commit:abc123',
+    observed: true,
+    durable: true,
+  },
   fixed_point: true,
 });
 assert.deepEqual(route.skills, ['META_LUPA', 'ARTIFACT_TO_CAPABILITY']);
@@ -130,10 +174,25 @@ assert.equal(route.learning_state, 'REINFORCE');
 assert.equal(route.reinforce_route, true);
 assert.equal(route.crystal_required, true);
 assert.equal(route.crystal_eligible, true);
+assert.equal(route.crystallized_declared, true);
 assert.equal(route.crystallized, true);
+assert.equal(route.durable_memory_receipt, true);
+assert.equal(route.persistence_receipt.verified, true);
 assert.equal(route.fixed_point, true);
 assert.equal(route.fixed_point_blocked_by_uncrystallized, false);
 assert.equal(route.ranking_allowed, false);
+
+assert.throws(() => recordThinkingRouteOutcome({
+  material_class: 'BROWSER_OBSERVATION',
+  material_fingerprint: 'sha256:bad-receipt',
+  skills: [],
+  frequency: 'PROFUNDA',
+  engine_fitness: fitness,
+  evidence: ['PASS'],
+  reusable_delta: true,
+  crystallized: true,
+  persistence_receipt: { channel: '', target: 'x', observed: true, durable: true },
+}), /persistence_receipt\.channel/);
 
 const failedFitness = recordEngineFitness({
   engine: 'engine-c',
