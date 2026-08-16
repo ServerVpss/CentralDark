@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-08-16T22:08:46.765Z
+# 🧠 Notion Sync — 2026-08-16T23:24:53.779Z
 
-- **Commit fonte:** `9f2eb5aa9de182234e6b6c817e4ac439444a806c`
+- **Commit fonte:** `6e61026bc8a5d33cac66adb875831a1cb8e2919d`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 412 atualizadas · ❌ 1 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 413 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
 | aprendizados | 26 | 0 | 26 | 0 | 0 |
-| estrutura | 343 | 0 | 342 | 0 | 1 |
+| estrutura | 344 | 1 | 343 | 0 | 0 |
 
 ## Operações
 
@@ -181,6 +181,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-07-10-gateway-138-modelos-e-schema-real-hub.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-07-10-primeiro-acesso-admin-hub.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-14-arqueologia-total-ouro-recuperado.md |
+| estrutura | criado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-16-verde-delta-fechado-promove.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/MCP/MCP-EXPLICADO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/PROXY/APRENDIZADOS_PROXY.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/PROXY/CONFIGURACAO_CLINE.md |
@@ -332,7 +333,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/RELATORIOS/20260703T075750Z-consolidacao-root-docs-centraldark.md |
 | estrutura | atualizado | docs/CONSCIENCIA/RELATORIOS/alinhamento-cerebro-20260630.md |
 | estrutura | atualizado | docs/CONSCIENCIA/RELATORIOS/notion-sync/2026-06-25T21-15-31.md |
-| estrutura | erro | docs/CONSCIENCIA/RELATORIOS/notion-sync/2026-06-25T23-00-16.md |
+| estrutura | atualizado | docs/CONSCIENCIA/RELATORIOS/notion-sync/2026-06-25T23-00-16.md |
 | estrutura | atualizado | docs/CONSCIENCIA/RELATORIOS/notion-sync/2026-06-26T00-15-26.md |
 | estrutura | atualizado | docs/CONSCIENCIA/RELATORIOS/notion-sync/2026-06-26T00-18-46.md |
 | estrutura | atualizado | docs/CONSCIENCIA/RELATORIOS/notion-sync/2026-06-26T06-48-28.md |
