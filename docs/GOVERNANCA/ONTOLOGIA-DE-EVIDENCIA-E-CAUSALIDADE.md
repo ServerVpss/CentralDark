@@ -1,6 +1,6 @@
 # Ontologia operacional da evidência e causalidade
 
-Status: CANÔNICO_CANDIDATO
+Status: CANÔNICO
 Escopo: toda a CentralDark — ChatGPT, modelos, agentes, plugins, MCP, WebUI, CLI, CI/CD, runtime, DevTools, logs, screenshots e superfícies futuras.
 Origem observável: evidências de 2026-08-16 envolvendo CTA de automação, DevTools, `forced-colors`/alto contraste, rede e console.
 Owner de entrada global: `LEIA-ME-IA.md`.
