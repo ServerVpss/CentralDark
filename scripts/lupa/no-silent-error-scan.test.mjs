@@ -77,23 +77,42 @@ test('SOUL mantém a invariante severa humano x máquina para toda a Casa', () =
   }
 });
 
-test('contrato global minimiza contexto pessoal e não trata acesso como permissão de divulgar', () => {
-  const contract = JSON.parse(readFileSync('docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json', 'utf8'));
-  const privacy = contract.personal_context_privacy_policy;
-  assert.equal(privacy?.marker, 'HOUSE_PERSONAL_CONTEXT_PRIVACY_INVARIANT');
-  assert.equal(privacy?.severity, 'HOUSE_CRITICAL');
-  assert.equal(privacy?.applies_to_all_models_agents_surfaces, true);
-  assert.equal(privacy?.context_access_is_disclosure_permission, false);
-  assert.equal(privacy?.tool_access_is_disclosure_permission, false);
-  assert.equal(privacy?.personal_context_minimization_required, true);
-  assert.equal(privacy?.location_lookup_requires_location_dependent_intent_or_explicit_request, true);
-  assert.equal(privacy?.unrequested_precise_location_disclosure, 'FORBIDDEN');
-  assert.equal(privacy?.time_query_requires_surfacing_city, false);
-  assert.equal(privacy?.derived_value_should_hide_nonessential_source_detail, true);
-  assert.equal(privacy?.incidental_personal_context_must_be_minimized_before_response, true);
-  assert.equal(privacy?.incident_logs_redact_sensitive_details_when_exact_value_is_not_needed_for_proof, true);
-  assert.equal(
-    privacy?.forensic_origin,
-    'docs/APRENDIZADOS/2026-08-16-incidente-exposicao-contexto-localizacao.md',
-  );
+test('Casa mantém minimização de contexto pessoal, redaction e proveniência temporal explícitas', () => {
+  const rule = readFileSync('docs/GOVERNANCA/CONTEXTO-PESSOAL-E-PROVENIENCIA-TEMPORAL.md', 'utf8');
+  const incident = readFileSync('docs/APRENDIZADOS/2026-08-16-incidente-contexto-pessoal-proveniencia-temporal.md', 'utf8');
+  const requiredRule = [
+    'HOUSE_PERSONAL_CONTEXT_PRIVACY_INVARIANT=true',
+    'SEVERITY=HOUSE_CRITICAL',
+    'APPLIES_TO_ALL_MODELS_AGENTS_SURFACES=true',
+    'PERSONAL_CONTEXT_MINIMIZATION=true',
+    'PERSONAL_CONTEXT_IS_NOT_DEFAULT_OUTPUT=true',
+    'DO_NOT_SURFACE_LOCATION_UNLESS_REQUESTED_OR_MATERIAL=true',
+    'CONTEXT_ACCESS != PERMISSION_TO_DISCLOSE',
+    'TOOL_CAN_ACCESS != RESPONSE_SHOULD_REVEAL',
+    'TIME_QUERY_DOES_NOT_REQUIRE_SURFACING_CITY=true',
+    'INCIDENT_LOGS_REDACT_SENSITIVE_DETAILS=true',
+    'REPOSITORY_HAS_NO_HUMAN_LOCAL_TIME=true',
+    'REPO_EVENT_TIME = SOURCE_EVENT_TIMESTAMP',
+    'LOCAL_TIME_CONVERSION = DERIVED_VIEW',
+    'NO_LOCATION_REQUIRED_TO_REPORT_RAW_UTC_TIMESTAMP=true',
+    'NO_PERSONAL_LOCATION_INFERENCE_FROM_REPO_TIMESTAMP=true',
+    'DO_NOT_ESCALATE_WORDING_BEYOND_EVIDENCE=true',
+  ];
+  for (const marker of requiredRule) {
+    assert.equal(rule.includes(marker), true, `MISSING_PERSONAL_CONTEXT_TIME_GUARD:${marker}`);
+  }
+  const requiredIncident = [
+    'INCIDENT_ID=INC-20260816-PERSONAL-CONTEXT-TEMPORAL-PROVENANCE',
+    'LOCATION_VALUE_REDACTED_IN_CANONICAL_INCIDENT=true',
+    'EXACT_LOCATION_RECORDED_HERE=false',
+    'EXACT_HOME_ADDRESS_DISCLOSED=false',
+    'EXACT_COORDINATES_DISCLOSED=false',
+    'SECRET_LOCATION_ACCESS_PROVEN=false',
+    'THIRD_PARTY_LOCATION_LEAK_PROVEN=false',
+    'TRACKING_MECHANISM_PROVEN=false',
+    'SUPPORTED_BY_VISUAL_EVIDENCE',
+  ];
+  for (const marker of requiredIncident) {
+    assert.equal(incident.includes(marker), true, `MISSING_INCIDENT_COUNTERPROOF:${marker}`);
+  }
 });
