@@ -15,6 +15,7 @@ import {
   validatePatternDiscovery,
 } from './pattern-discovery.mjs';
 import { updatePatternLibrary } from './pattern-library.mjs';
+import { loadMemoryReserveEvents } from './memory-reserve-events.mjs';
 import { attachSemanticIntentPrefilter } from './semantic-intent-adapter.mjs';
 import { compileArtifactToDreamEvent, loadArtifactForMining } from './artifact-capability.mjs';
 
@@ -184,8 +185,8 @@ export function compileArtifactForDreamReview(artifactInput, {
 
 async function main() {
   const args = parseArgs(process.argv.slice(2));
-  if (!args.output || !args.head || (!args.input && !args.artifact)) {
-    throw new Error('USAGE: dream-review-run.mjs --output <proposal.json> --head <40-hex-sha> [--input <events.jsonl>] [--artifact <file> --target <owner> --source <ref> --artifact-metadata <json>] [--state <jarvis-state.json>] [--library <pattern-library.json>]');
+  if (!args.output || !args.head) {
+    throw new Error('USAGE: dream-review-run.mjs --output <proposal.json> --head <40-hex-sha> [--input <events.jsonl>] [--artifact <file> --target <owner> --source <ref>] [--memory-reserve <LEMBRANCAS.md>] [--skip-memory-reserve true] [--state <jarvis-state.json>] [--library <pattern-library.json>]');
   }
 
   const outputPath = path.resolve(args.output);
@@ -196,6 +197,14 @@ async function main() {
     events = loadedJsonl.events;
     parseRejections = loadedJsonl.parseRejections;
   }
+
+  const memoryReserve = args['skip-memory-reserve'] === 'true'
+    ? { status: 'MEMORY_RESERVE_SKIPPED', events: [], skipped: [], scanned: 0 }
+    : loadMemoryReserveEvents({
+        headSha: args.head,
+        filePath: args['memory-reserve'] || '',
+      });
+  events.push(...memoryReserve.events);
 
   let artifactContract = null;
   if (args.artifact) {
@@ -229,6 +238,17 @@ async function main() {
     jarvisState,
   });
   proposal = attachSemanticIntentPrefilter(proposal);
+  proposal = {
+    ...proposal,
+    memory_reserve: {
+      status: memoryReserve.status,
+      scanned: memoryReserve.scanned,
+      accepted_events: memoryReserve.events.length,
+      skipped_entries: memoryReserve.skipped.length,
+      unknown_session_count: memoryReserve.events.filter((event) => event.session_id === 'UNKNOWN_SESSION').length,
+      raw_session_content_persisted_by_dream_review: false,
+    },
+  };
   if (artifactContract) proposal = { ...proposal, artifact_capability: artifactContract };
   const writeStatus = writeProposalIdempotent(outputPath, proposal);
   const libraryResult = updatePatternLibrary(proposal, { filePath: args.library || '' });
@@ -240,6 +260,8 @@ async function main() {
     `DREAM_REVIEW_RUN=${proposal.status} HEAD_SHA=${proposal.head_sha} ` +
     `CANDIDATES=${proposal.candidate_count} PATTERNS=${discovery.pattern_count} ` +
     `AUTO_HANDOFF=${discovery.autonomy_handoff_eligible_count} ` +
+    `MEMORY_RESERVE=${memoryReserve.status} MEMORY_EVENTS=${memoryReserve.events.length} ` +
+    `MEMORY_UNKNOWN_SESSIONS=${proposal.memory_reserve.unknown_session_count} ` +
     `LIBRARY=${libraryResult.status} LIBRARY_PATTERNS=${libraryResult.library.pattern_count} ` +
     `LIBRARY_CANDIDATES=${libraryResult.library.candidate_count} LIBRARY_SESSIONS=${libraryResult.library.session_count} ` +
     `SEMANTIC_PREFILTER=${semantic?.status ?? 'UNKNOWN'} ` +
