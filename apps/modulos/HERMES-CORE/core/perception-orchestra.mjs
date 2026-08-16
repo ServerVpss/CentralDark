@@ -14,22 +14,10 @@ const CADEIA_PATH = join(DIR, 'cadeia.json');
 const ANDAMENTO = join(BASE, 'missions', 'em-andamento');
 
 export const PERCEPTION_ATTACKS = Object.freeze([
-  Object.freeze({
-    id: 'A_LOGIC',
-    objective: 'Tente quebrar a lógica, premissas, causalidade e contradições da intenção atual.',
-  }),
-  Object.freeze({
-    id: 'B_IMPLEMENTATION',
-    objective: 'Tente quebrar a implementação: interfaces, owners, integração, estados e falhas concretas.',
-  }),
-  Object.freeze({
-    id: 'C_REGRESSION_FALSE_GREEN',
-    objective: 'Procure regressão, falso verde, prova circular, denominador incompleto e erro mascarado.',
-  }),
-  Object.freeze({
-    id: 'D_SIMPLIFICATION',
-    objective: 'Procure simplificação Menos É Mais: remover trabalho, duplicação e complexidade sem perder capacidade.',
-  }),
+  Object.freeze({ id: 'A_LOGIC', objective: 'Tente quebrar a lógica, premissas, causalidade e contradições da intenção atual.' }),
+  Object.freeze({ id: 'B_IMPLEMENTATION', objective: 'Tente quebrar a implementação: interfaces, owners, integração, estados e falhas concretas.' }),
+  Object.freeze({ id: 'C_REGRESSION_FALSE_GREEN', objective: 'Procure regressão, falso verde, prova circular, denominador incompleto e erro mascarado.' }),
+  Object.freeze({ id: 'D_SIMPLIFICATION', objective: 'Procure simplificação Menos É Mais: remover trabalho, duplicação e complexidade sem perder capacidade.' }),
 ]);
 
 const REQUIRED_ROLES = Object.freeze(PERCEPTION_ATTACKS.map((item) => item.id));
@@ -47,6 +35,21 @@ function normalizeIndependenceKey(value) {
   const key = normalizeText(value);
   if (!key || key.toUpperCase() === 'UNKNOWN') return 'UNKNOWN';
   return key.toLowerCase();
+}
+
+function normalizeClass(value) {
+  const classification = String(value || 'UNKNOWN').toUpperCase();
+  return ['FACT', 'INFERENCE', 'HYPOTHESIS', 'UNKNOWN'].includes(classification) ? classification : 'UNKNOWN';
+}
+
+function isNoChange(finding) {
+  return normalizeText(finding?.material_delta).toUpperCase() === 'NO_CHANGE';
+}
+
+function isProvenMaterialFinding(finding) {
+  return !isNoChange(finding)
+    && normalizeClass(finding?.class) === 'FACT'
+    && (normalizeText(finding?.evidence_ref) || 'UNKNOWN').toUpperCase() !== 'UNKNOWN';
 }
 
 function extractJson(text) {
@@ -85,9 +88,7 @@ export function dedupePerceptionFindings(results) {
       model: item.model,
       independence: item.independence,
       claim: normalizeText(finding.claim),
-      class: ['FACT', 'INFERENCE', 'HYPOTHESIS', 'UNKNOWN'].includes(String(finding.class || '').toUpperCase())
-        ? String(finding.class).toUpperCase()
-        : 'UNKNOWN',
+      class: normalizeClass(finding.class),
       evidence_ref: normalizeText(finding.evidence_ref) || 'UNKNOWN',
       independence_key: normalizeIndependenceKey(finding.independence_key),
       counterexample: normalizeText(finding.counterexample),
@@ -101,15 +102,12 @@ export function dedupePerceptionFindings(results) {
 export function confrontPerceptionEvidence(results) {
   const items = Array.isArray(results) ? results : [];
   const successfulRoles = new Set(
-    items
-      .filter((item) => item?.status === 'OK' && item.finding)
+    items.filter((item) => item?.status === 'OK' && item.finding)
       .map((item) => item.role)
       .filter((role) => REQUIRED_ROLES.includes(role)),
   );
   const missingRoles = REQUIRED_ROLES.filter((role) => !successfulRoles.has(role));
-  const failedRoles = REQUIRED_ROLES.filter((role) =>
-    items.some((item) => item?.role === role && item?.status !== 'OK')
-  );
+  const failedRoles = REQUIRED_ROLES.filter((role) => items.some((item) => item?.role === role && item?.status !== 'OK'));
   const clusters = new Map();
   const unprovenRoles = [];
   const tests = [];
@@ -117,14 +115,11 @@ export function confrontPerceptionEvidence(results) {
   for (const item of items) {
     if (item?.status !== 'OK' || !item.finding || !REQUIRED_ROLES.includes(item.role)) continue;
     const finding = item.finding;
-    const noChange = normalizeText(finding.material_delta).toUpperCase() === 'NO_CHANGE';
-    const classification = String(finding.class || 'UNKNOWN').toUpperCase();
-    const evidenceRef = normalizeText(finding.evidence_ref) || 'UNKNOWN';
-    const independenceKey = normalizeIndependenceKey(finding.independence_key);
-    const isProvenMaterial = !noChange && classification === 'FACT' && evidenceRef.toUpperCase() !== 'UNKNOWN';
+    const provenMaterial = isProvenMaterialFinding(finding);
+    if (!isNoChange(finding) && !provenMaterial) unprovenRoles.push(item.role);
 
-    if (!noChange && !isProvenMaterial) unprovenRoles.push(item.role);
-    if (isProvenMaterial && independenceKey !== 'UNKNOWN') {
+    const independenceKey = normalizeIndependenceKey(finding.independence_key);
+    if (provenMaterial && independenceKey !== 'UNKNOWN') {
       const roles = clusters.get(independenceKey) || [];
       roles.push(item.role);
       clusters.set(independenceKey, roles);
@@ -156,6 +151,20 @@ export function confrontPerceptionEvidence(results) {
   });
 }
 
+function collectRawUnprovenFindings(results) {
+  return (Array.isArray(results) ? results : [])
+    .filter((item) => item?.status === 'OK' && item.finding)
+    .filter((item) => !isNoChange(item.finding) && !isProvenMaterialFinding(item.finding))
+    .map((item) => ({
+      role: item.role,
+      claim: normalizeText(item.finding.claim),
+      class: normalizeClass(item.finding.class),
+      evidence_ref: normalizeText(item.finding.evidence_ref) || 'UNKNOWN',
+      recommended_test: normalizeText(item.finding.recommended_test),
+      material_delta: normalizeText(item.finding.material_delta),
+    }));
+}
+
 export function buildPerceptionPacket({ mission, results }) {
   const deduped = dedupePerceptionFindings(results);
   const confrontation = confrontPerceptionEvidence(results);
@@ -164,17 +173,15 @@ export function buildPerceptionPacket({ mission, results }) {
     && item.class === 'FACT'
     && item.evidence_ref.toUpperCase() !== 'UNKNOWN'
   ));
-  const unprovenFindings = deduped.filter((item) => (
-    item.material_delta.toUpperCase() !== 'NO_CHANGE'
-    && !(item.class === 'FACT' && item.evidence_ref.toUpperCase() !== 'UNKNOWN')
-  ));
+  const unprovenFindings = collectRawUnprovenFindings(results);
   const readyForWriter = confrontation.all_four_completed
+    && confrontation.unproven_roles.length === 0
     && unprovenFindings.length === 0
     && materialFindings.length > 0;
 
   let nextRule = 'CONFRONT_EVIDENCE_THEN_ONE_CANONICAL_MUTATION';
   if (!confrontation.all_four_completed) nextRule = 'RETRY_MISSING_PERCEPTIONS_BEFORE_MUTATION';
-  else if (unprovenFindings.length > 0) nextRule = 'RUN_DISCRIMINATING_TEST_BEFORE_MUTATION';
+  else if (confrontation.unproven_roles.length > 0 || unprovenFindings.length > 0) nextRule = 'RUN_DISCRIMINATING_TEST_BEFORE_MUTATION';
   else if (materialFindings.length === 0) nextRule = 'NO_MATERIAL_DELTA_NO_MUTATION';
 
   return Object.freeze({
