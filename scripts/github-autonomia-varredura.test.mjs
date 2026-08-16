@@ -6,6 +6,7 @@ import {
   eligibleSummary,
   noticeTargets,
   sanitizeNotice,
+  shouldMaterializeAuthority,
 } from "./github-autonomia-varredura.mjs";
 
 const INTENT_BODY = [
@@ -35,6 +36,15 @@ test("recibo de intenção torna PR confiável elegível sem reask", () => {
   assert.equal(eligibleSummary(pr({ draft: true }), "ServerVpss/CentralDark"), false);
   assert.equal(eligibleSummary(pr({ body: "sem autorização" }), "ServerVpss/CentralDark"), false);
   assert.equal(eligibleSummary(pr({ user: { login: "intruso" } }), "ServerVpss/CentralDark"), false);
+});
+
+test("promotor materializa selo somente para intenção confiável ainda sem label", () => {
+  assert.equal(shouldMaterializeAuthority(pr(), "ServerVpss/CentralDark"), true);
+  assert.equal(shouldMaterializeAuthority(pr({ labels: [{ name: "👑 PERMITO-SEGREDO" }] }), "ServerVpss/CentralDark"), false);
+  assert.equal(shouldMaterializeAuthority(pr({ body: "sem autorização" }), "ServerVpss/CentralDark"), false);
+  assert.equal(shouldMaterializeAuthority(pr({ draft: true }), "ServerVpss/CentralDark"), false);
+  assert.equal(shouldMaterializeAuthority(pr({ user: { login: "intruso" } }), "ServerVpss/CentralDark"), false);
+  assert.equal(shouldMaterializeAuthority(pr({ head: { repo: { full_name: "outro/fork" } } }), "ServerVpss/CentralDark"), false);
 });
 
 test("label canônica permito-segredo continua elegível no modo adversarial", () => {

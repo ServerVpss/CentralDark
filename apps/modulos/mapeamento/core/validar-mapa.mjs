@@ -477,13 +477,18 @@ function existedAt(repoRoot, sha, moduleRoot) {
   }
 }
 
+function mergeBase(repoRoot, baseSha, headSha) {
+  return git(repoRoot, ['merge-base', baseSha, headSha]);
+}
+
 export function validarMudanca({ repoRoot, baseSha, headSha, approved = false, map = carregarMapa() }) {
   const erros = validarDocumentoMapa(map);
   const avisos = [];
   const changed = [];
   if (!baseSha || !headSha) return { ok: erros.length === 0, erros, avisos, changed };
 
-  const raw = git(repoRoot, ['diff', '--name-status', '--find-renames', baseSha, headSha]);
+  const diffBaseSha = mergeBase(repoRoot, baseSha, headSha);
+  const raw = git(repoRoot, ['diff', '--name-status', '--find-renames', diffBaseSha, headSha]);
   for (const line of raw ? raw.split('\n') : []) {
     const cols = line.split('\t');
     const status = cols[0];
@@ -521,7 +526,7 @@ export function validarMudanca({ repoRoot, baseSha, headSha, approved = false, m
 
     if (!item.file.startsWith(MODULES_ROOT)) continue;
     const moduleName = item.file.slice(MODULES_ROOT.length).split('/')[0];
-    if (!moduleName || existedAt(repoRoot, baseSha, moduleName)) continue;
+    if (!moduleName || existedAt(repoRoot, diffBaseSha, moduleName)) continue;
     newModules.add(moduleName);
   }
 
@@ -539,6 +544,7 @@ export function validarMudanca({ repoRoot, baseSha, headSha, approved = false, m
     erros,
     avisos,
     changed,
+    diffBaseSha,
     touchedLocks,
     touchedEvidenceLocks,
     newModules: [...newModules],
@@ -576,6 +582,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
       ],
       warnings: [...tree.avisos, ...change.avisos],
       changed_files: change.changed.length,
+      diff_base_sha: change.diffBaseSha || null,
       touched_locks: change.touchedLocks || [],
       touched_evidence_locks: change.touchedEvidenceLocks || [],
       consolidation_proven: consolidation.proven.length,
