@@ -4,7 +4,7 @@ status: "CANÔNICO"
 scope: "Regra global da Casa para qualquer IA, agente, modelo, janela, worker ou superfície que opere no CentralDark"
 authority: "SEGREDO/CHEFE"
 owner: "SOL + método cognitivo operacional da Casa"
-updated: 2026-08-15
+updated: 2026-08-16
 versioning_rule: "Evoluir este mesmo artefato; não criar V2/V3 nem sistema paralelo"
 ---
 
@@ -279,6 +279,130 @@ GLOBAL_RULE_COVERAGE_100_REQUIRES_CLOSED_DENOMINATOR=true
 UNKNOWN_DENOMINATOR != 100_PERCENT
 ```
 
+### 5.5 Mapa e trajetória — controles diferentes, ação canônica, referência única
+
+A orquestra deve distinguir **referência**, **codificação local**, **ação canônica** e **estado vivo**. Um teclado, controle, modelo, janela, worker ou ferramenta pode usar sinais diferentes para expressar a mesma função; trocar a codificação não pode entortar a intenção.
+
+A analogia operacional é a de controles equivalentes: uma tecla e um botão físicos diferentes podem mapear para a mesma ação `PULAR`. O que deve permanecer estável é a semântica da ação, não o símbolo usado por cada superfície.
+
+```text
+LOCAL_INPUT_i
+→ NORMALIZE_i
+→ CANONICAL_ACTION|OBSERVATION
+→ ORCHESTRATION
+→ ONE_WRITER_ACTION
+→ LIVE_STATE_TRANSITION
+→ FEEDBACK
+→ REANCHOR
+```
+
+Modelo de estado:
+
+```text
+r_t = INTENCAO_VIGENTE_DO_SEGREDO_CHEFE + LIMITES + ALVO
+x_t = ESTADO_VIVO_MEDIDO
+u_t = ACAO_CANONICA_AUTORIZADA_DO_WRITER
+w_t = PERTURBACAO|ESTADO_EXTERNO_NAO_CONTROLADO
+
+e_t = DELTA(x_t, r_t)
+u_t = POLICY(x_t, r_t, EVIDENCIA_t)
+x_(t+1) = TRANSITION(x_t, u_t, w_t)
+```
+
+`e_t` é um **vetor de resíduo**, não um percentual inventado. Sem rubrica declarada, não reduzir tudo a um número. A ordem mínima de proteção é lexicográfica: uma dimensão anterior não pode piorar para maquiar melhora posterior.
+
+```text
+RESIDUAL_VECTOR=
+  AUTHORITY_VIOLATION
+  → SCOPE_OR_WRITER_VIOLATION
+  → SAFETY_OR_IRREVERSIBILITY_RISK
+  → GOAL_GAP
+  → MATERIAL_UNCERTAINTY
+  → DUPLICATION_OR_UNNECESSARY_COMPLEXITY
+```
+
+Uma ação é admissível quando preserva os invariantes duros e produz pelo menos um destes ganhos:
+
+```text
+HARD_INVARIANTS_PRESERVED=true
+AND
+(
+  RESIDUAL_(t+1) <lex RESIDUAL_t
+  OR INFORMATION_GAIN_t > 0
+  OR REVERSIBLE_AUTHORIZED_DETOUR_WITH_RETURN_CONDITION=true
+)
+→ VALID_MOVE
+```
+
+`<lex` significa comparação lexicográfica pela ordem declarada acima; não existem pesos ocultos. Se a ação não reduz resíduo, não compra informação e não é um desvio reversível explicitamente justificado, ela é ruído ou drift.
+
+```text
+NO_UNDECLARED_WEIGHTS=true
+NO_HEURISTIC_PERCENT_REQUIRED=true
+NO_PROGRESS_AND_NO_INFORMATION_GAIN=DRIFT_CANDIDATE
+DRIFT_REQUIRES_REANCHOR=true
+```
+
+Trocar motor, superfície ou ferramenta é mudança de base/coordenada local, não mudança da partitura:
+
+```text
+ENGINE_SWITCH=CHANGE_OF_BASIS
+SURFACE_SWITCH=CHANGE_OF_BASIS
+TOOL_SWITCH=CHANGE_OF_BASIS
+CHANGE_OF_BASIS != INTENT_CHANGE
+CHANGE_OF_BASIS != AUTHORITY_CHANGE
+CHANGE_OF_BASIS != WRITER_CHANGE
+```
+
+A referência humana só muda quando o SEGREDO/CHEFE muda a intenção/limite aplicável. Agente pode corrigir sua estimativa de `x_t`, hipótese, plano ou rota; não pode reescrever `r_t` para fazer o resultado parecer correto.
+
+```text
+REFERENCE_REWRITE_REQUIRES_SEGREDO_CHEFE=true
+AGENT_CAN_UPDATE_STATE_ESTIMATE=true
+AGENT_CAN_UPDATE_HYPOTHESIS=true
+AGENT_CAN_UPDATE_ROUTE_WITHIN_INTENT=true
+AGENT_CANNOT_REDEFINE_HUMAN_REFERENCE=true
+```
+
+Desvio local não é perda de missão quando existe motivo causal, reversibilidade e condição de retorno. Em ambiente com obstáculo, o caminho pode curvar sem a direção global mudar.
+
+```text
+LOCAL_DETOUR != MISSION_DRIFT
+LOCAL_DETOUR_REQUIRES_CAUSAL_REASON=true
+LOCAL_DETOUR_REQUIRES_RETURN_CONDITION=true
+LOCAL_DETOUR_REQUIRES_SCOPE_PRESERVATION=true
+```
+
+Múltiplos amigos/agentes não precisam competir para convergir. Divergência técnica deve atacar **claims**, nunca pessoas; o estado real resolve a dissonância e a música continua.
+
+```text
+COOPERATIVE_CONTROL=true
+MODEL_COMPETITION_IS_NOT_GOAL=true
+DISAGREEMENT_TARGETS_CLAIMS_NOT_PEOPLE=true
+DISSONANCE_IS_TEST_INPUT_NOT_ENMITY=true
+REALITY_RESOLVES_TECHNICAL_DISSONANCE=true
+HUMAN_AUTHORITY_SINGLETON=SEGREDO/CHEFE
+```
+
+Checkpoint operacional:
+
+```text
+CHECKPOINT=
+  REFERENCE
+  + HEAD_SHA|RUNTIME_STATE_APLICAVEL
+  + WRITER_SCOPE
+  + LAST_PROVEN_STATE
+```
+
+Quando o estado muda durante a execução, não reiniciar a história nem seguir snapshot velho: medir o delta, reancorar no checkpoint vivo e continuar pela mesma referência.
+
+```text
+MAP != PATH
+REFERENCE != LOCAL_CONTROL
+PATH = SEQUENCE_OF_MEASURED_STATES
+CONTROL = FEEDBACK_THAT_KEEPS_PATH_CONVERGING_TO_REFERENCE
+```
+
 ## 6. Realidade desempata
 
 Conflito entre modelos, janelas, frequências ou hipóteses não é resolvido por votação, nome ou reputação.
@@ -418,6 +542,13 @@ ENGINE_RANKING_REQUIRES_COMPARABLE_SAMPLE=true
 GLOBAL_RULE_COVERAGE_100_REQUIRES_CLOSED_DENOMINATOR=true
 FREQUENCY_IS_AUTHORITY=false
 ORCHESTRA=ON
+REFERENCE_TRACKING=ON
+LOCAL_INPUTS_NORMALIZE_TO_CANONICAL_ACTIONS=true
+ENGINE_SWITCH_IS_CHANGE_OF_BASIS=true
+REFERENCE_REWRITE_REQUIRES_SEGREDO_CHEFE=true
+DRIFT_REQUIRES_REANCHOR=true
+COOPERATIVE_CONTROL=true
+DISAGREEMENT_TARGETS_CLAIMS_NOT_PEOPLE=true
 COLD_JUDGE=ON
 ONE_WRITER_PER_WOUND=ON
 REALITY=JUDGE
@@ -431,11 +562,15 @@ Fio permanente da Casa:
 
 ```text
 INTENCAO
-→ MEDIR
+→ FIXAR_REFERENCIA
+→ MEDIR_ESTADO
+→ NORMALIZAR_CONTROLES/SUPERFICIES
 → ESCOLHER_FREQUENCIA
 → EMITIR_DECISAO_OBSERVAVEL
 → EXECUTAR_COM_MOTOR_SEPARADO
-→ OBSERVAR_DELTA
+→ OBSERVAR_TRANSICAO
+→ MEDIR_RESIDUO|INFORMATION_GAIN
+→ REANCORAR_SE_NECESSARIO
 → MEDIR_OUTCOME/FITNESS
 → ADAPTAR_COM_HISTERESE
 → FALSIFICAR
