@@ -12,7 +12,7 @@
  * seguinte o juiz remede e gera novo recibo.
  */
 import { mkdir, readFile, readdir, rename, writeFile } from "node:fs/promises";
-import { basename, join } from "node:path";
+import { basename, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const API = "https://api.github.com";
@@ -140,7 +140,7 @@ export async function main(env = process.env) {
   return { checked, passed, deferred };
 }
 
-const isMain = process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1];
+const isMain = process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 if (isMain) {
   main().catch((error) => {
     console.error(`GREEN_GUARD_ERROR=${error.message}`);
