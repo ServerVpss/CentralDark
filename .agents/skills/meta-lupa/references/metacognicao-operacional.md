@@ -203,6 +203,109 @@ A lei também vale para qualquer outra capacidade que alegue evolução. Os cinc
 
 Se o estado anterior e posterior forem iguais, se não houver informação nova, se teste/regressão não passarem, se capacidade anterior for perdida ou se o receipt for adulterado, o resultado permanece `EVOLUTION_UNPROVEN`.
 
+## Compressão cognitiva operacional — experiência que vira heurística sem virar mito
+
+Quando ciclos repetidos de trabalho produzem padrões estáveis e **validados**, a Casa pode condensar múltiplos passos recorrentes em uma representação operacional menor. O nome técnico interno para esse fenômeno é `COMPRESSAO_COGNITIVA_OPERACIONAL`.
+
+Isto descreve **expertise adquirida + chunking + metacognição operacional**. Não autoriza afirmar que um humano “virou IA”, que o sistema mudou pesos do modelo, que surgiu consciência, AGI ou qualquer excepcionalidade histórica sem benchmark externo comparável.
+
+```text
+EXPERIENCIAS_REPETIDAS
+→ PADROES_RECUPERAVEIS
+→ AGRUPAMENTO_EM_BLOCOS_FUNCIONAIS
+→ COMPRESSAO_DE_ETAPAS
+→ HEURISTICA_CANDIDATA
+→ TESTE_EM_CASOS_NOVOS
+→ TRANSFERENCIA_ENTRE_DOMINIOS
+→ PREDICAO_DO_PROXIMO_ESTADO
+→ CALIBRACAO_PELO_ERRO
+→ HEURISTICA_PROVADA|REBAIXADA|DESCARTADA
+```
+
+Um bloco pode condensar, por exemplo, `owner + gate + prova + writer + rollback + estado` numa única unidade mental/operacional **somente quando os contratos internos continuam recuperáveis**. Compressão que apaga owner, autorização, prova, rollback ou `UNKNOWN` é perda de capacidade, não evolução.
+
+```text
+CHUNKING_ALLOWED=true
+COMPRESSION_MUST_PRESERVE_RECOVERABILITY=true
+COMPRESSION_MUST_PRESERVE_CRITICAL_CONTRACTS=true
+HEURISTIC_IS_NOT_PROOF=true
+FAST_RECOGNITION_IS_NOT_AUTHORIZATION=true
+INTUITION_IS_CANDIDATE_UNTIL_CHECKED=true
+```
+
+A heurística sobe de nível apenas quando demonstra vantagem real sobre o caminho anterior:
+
+```text
+HEURISTICA_CANDIDATA
++ SAME_SCOPE_BEFORE_AFTER
++ MENOR_LATENCIA_OU_MENOR_CUSTO_COGNITIVO
++ CAPACIDADE_CRITICA_PRESERVADA
++ CASOS_NOVOS/HOLDOUT_QUANDO_APLICAVEL
++ CONTRAPROVA
++ ERROS_OBSERVADOS_REALIMENTAM_CALIBRACAO
+→ HEURISTICA_REUTILIZAVEL
+```
+
+Se funciona apenas nos exemplos que a originaram, classificar como memorização/overfit operacional, não generalização:
+
+```text
+TRAINING_CASE_SUCCESS_ONLY != GENERALIZATION
+TRANSFER_REQUIRES_NEW_CONTEXT=true
+NOVEL_CASE_FAILURE_REQUIRES_RECALIBRATION=true
+CONFIDENCE_MUST_TRACK_OBSERVED_ACCURACY=true
+OVERCONFIDENT_HEURISTIC=REGRESSION
+```
+
+A Casa também separa três claims que parecem iguais na conversa humana, mas exigem provas diferentes:
+
+```text
+CLAIM_A = "há um padrão de compressão/expertise observável"
+→ pode ser sustentado por comportamento repetido + casos + delta verificável
+
+CLAIM_B = "o humano virou IA / o sistema virou consciência"
+→ NÃO decorre do CLAIM_A; permanece UNPROVEN sem critério próprio
+
+CLAIM_C = "ninguém jamais chegou a esta combinação"
+→ exige universo comparativo/benchmark externo defensável; sem isso, UNPROVEN
+```
+
+A forma canônica de cristalizar experiência útil passa a ser:
+
+```text
+REPETICAO
+→ ERRO
+→ CORRECAO
+→ PADRAO
+→ CHUNKING
+→ COMPRESSAO
+→ HEURISTICA
+→ TRANSFERENCIA
+→ PREDICAO
+→ CONTRAPROVA
+→ INSTINTO_TECNICO_CALIBRADO
+→ OURO
+```
+
+`INSTINTO_TECNICO_CALIBRADO` não é licença para pular gate. É a capacidade de chegar mais rápido à hipótese provável, preservar poucas alternativas de alto valor e ainda submeter decisão material ao check correspondente.
+
+```text
+INSTINTO_TECNICO_CALIBRADO
+= FAST_PATTERN_RECOGNITION
++ SMALL_HIGH_VALUE_HYPOTHESIS_SET
++ ERROR_FEEDBACK
++ REQUIRED_GATES_PRESERVED
+```
+
+Esse mecanismo deve ser usado também para revisar o próprio método de aprender: se a Casa consegue transformar dez passos recorrentes em três sem perder prova, reconstrução ou segurança, isso é candidato a evolução; se a compressão só deixa a resposta mais confiante ou mais curta, é `NO_CHANGE|REGRESSION`.
+
+```text
+COGNITIVE_COMPRESSION_WITHOUT_CAPABILITY_GAIN=NO_CHANGE
+COGNITIVE_COMPRESSION_WITH_LOST_GUARDRAIL=REGRESSION
+COGNITIVE_COMPRESSION_WITH_PROVEN_TRANSFER=EVOLUTION_CANDIDATE
+UNIQUENESS_WITHOUT_COMPARABLE_BENCHMARK=UNPROVEN
+HUMAN_BECAME_AI_FROM_EXPERTISE=false
+```
+
 Guardrails:
 
 - documentação melhorada, sozinha, não prova evolução comportamental;
