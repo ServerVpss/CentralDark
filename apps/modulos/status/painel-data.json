@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-16T01:28:04.745Z",
-  "updatedAtBR": "15/08/2026, 22:28:04 BRT",
+  "updatedAt": "2026-08-16T01:56:18.019Z",
+  "updatedAtBR": "15/08/2026, 22:56:18 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "fix(hermes): confrontar quatro percepções antes da caneta (#923)",
+    "lastCommit": "docs(governança): oficializar deploy sob comando do CHEFE (#925)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-16T01:56:18.019Z",
+      "titulo": "Push na main · 6c3dc1b8cb9e6e4da8748be9977c0869a436d281",
+      "detalhe": "docs(governança): oficializar deploy sob comando do CHEFE (#925)",
+      "area": "Repositório",
+      "sha": "6c3dc1b",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-16T01:28:04.745Z",
       "titulo": "Push na main · 18454dcec28e644e507d1dd8b9373d7bea119926",
       "detalhe": "fix(hermes): confrontar quatro percepções antes da caneta (#923)",
@@ -988,14 +996,6 @@
       "detalhe": "feat(grok): instalar adaptador canônico CentralDark",
       "area": "Repositório",
       "sha": "476b43b",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-15T01:35:31.456Z",
-      "titulo": "Push na main · c09a387dca3fbca2ae186f390db04c022f9ca12d",
-      "detalhe": "test(memory): provar quarentena tempo consumidor e no-op",
-      "area": "Repositório",
-      "sha": "c09a387",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-16T01:56:18.019Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 6c3dc1b8cb9e6e4da8748be9977c0869a436d281 (6c3dc1b)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-16T01:28:04.745Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 18454dcec28e644e507d1dd8b9373d7bea119926 (18454dc)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-15T01:37:34.903Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 476b43b0879e1b05e6fed839870808bebd2be424 (476b43b)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-15T01:35:31.456Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · c09a387dca3fbca2ae186f390db04c022f9ca12d (c09a387)",
       "area": "Repositório",
       "status": "sucesso"
     }
