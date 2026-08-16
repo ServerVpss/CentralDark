@@ -45,6 +45,20 @@
       "summary": "Denominador estrutural fechado: 568 PNG + 2 Markdown + 1 TXT + 1 desktop.ini = 572 arquivos. Fingerprint cobre caminho, bytes, bytes comprimidos, SHA-256 e dimensões quando PNG."
     },
     {
+      "id": "material:screenshots-2026-08-16:archive-variant-delta",
+      "name": "Screenshots.zip · variante anterior ≠ ZIP anexado",
+      "group": "ARTEFATOS",
+      "type": "ARCHIVE_VARIANT_RECONCILIATION",
+      "status": "DISTINCT_BYTES_PROVEN",
+      "owner": "apps/modulos/hub/scripts/inventory-supplements/screenshots-2026-08-16-archive-full.json",
+      "consumers": ["INVENTARIO", "HUB_ADMIN", "META_LUPA"],
+      "proof": "USER_SCREENSHOT_ZIP_PROPERTIES + sha256:56b185de4265b789153c942ebda9d2cc197d590ba12aa0202409bc9e9131ef8c",
+      "source": "USER_SCREENSHOT_ZIP_PROPERTIES + USER_UPLOAD:Screenshots(2).zip",
+      "recorded_at": "2026-08-16T19:27:00Z",
+      "temporal_scope": "HISTORICAL_RECORD",
+      "summary": "O print anterior mostrou Screenshots.zip com 91.346.859 bytes; o arquivo real anexado agora possui 93.330.056 bytes. Portanto não são o mesmo byte-stream. Relação sucessor/cópia modificada não é inferida sem prova adicional."
+    },
+    {
       "id": "material:screenshots-2026-08-16:timestamp-captures",
       "name": "Capturas datadas · 539 PNG",
       "group": "ARTEFATOS",
