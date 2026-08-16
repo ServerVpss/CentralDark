@@ -76,3 +76,32 @@ test('SOUL mantém a invariante severa humano x máquina para toda a Casa', () =
     assert.equal(soul.includes(marker), true, `SOUL_MISSING_HUMAN_MACHINE_GUARD:${marker}`);
   }
 });
+
+test('Casa mantém minimização de contexto pessoal e proveniência temporal explícita', () => {
+  const rule = readFileSync('docs/GOVERNANCA/CONTEXTO-PESSOAL-E-PROVENIENCIA-TEMPORAL.md', 'utf8');
+  const incident = readFileSync('docs/APRENDIZADOS/2026-08-16-incidente-contexto-pessoal-proveniencia-temporal.md', 'utf8');
+  const requiredRule = [
+    'PERSONAL_CONTEXT_MINIMIZATION=true',
+    'PERSONAL_CONTEXT_IS_NOT_DEFAULT_OUTPUT=true',
+    'DO_NOT_SURFACE_LOCATION_UNLESS_REQUESTED_OR_MATERIAL=true',
+    'REPOSITORY_HAS_NO_HUMAN_LOCAL_TIME=true',
+    'REPO_EVENT_TIME = SOURCE_EVENT_TIMESTAMP',
+    'LOCAL_TIME_CONVERSION = DERIVED_VIEW',
+    'NO_LOCATION_REQUIRED_TO_REPORT_RAW_UTC_TIMESTAMP=true',
+    'NO_PERSONAL_LOCATION_INFERENCE_FROM_REPO_TIMESTAMP=true',
+    'DO_NOT_ESCALATE_WORDING_BEYOND_EVIDENCE=true',
+  ];
+  for (const marker of requiredRule) {
+    assert.equal(rule.includes(marker), true, `MISSING_PERSONAL_CONTEXT_TIME_GUARD:${marker}`);
+  }
+  const requiredIncident = [
+    'INCIDENT_ID=INC-20260816-PERSONAL-CONTEXT-TEMPORAL-PROVENANCE',
+    'SECRET_LOCATION_ACCESS_PROVEN=false',
+    'THIRD_PARTY_LOCATION_LEAK_PROVEN=false',
+    'TRACKING_MECHANISM_PROVEN=false',
+    'SUPPORTED_BY_VISUAL_EVIDENCE',
+  ];
+  for (const marker of requiredIncident) {
+    assert.equal(incident.includes(marker), true, `MISSING_INCIDENT_COUNTERPROOF:${marker}`);
+  }
+});
