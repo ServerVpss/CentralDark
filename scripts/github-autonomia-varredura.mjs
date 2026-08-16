@@ -3,6 +3,7 @@
  * Varredura eventual da promoção autônoma.
  *
  * Um único motor canônico:
+ * - reconcile-drafts: resolve somente Draft explicitamente automatizado;
  * - judge: read-only, produz recibo SHA-256;
  * - promote: materializa/verifica o selo canônico, revalida HEAD/base/intenção e promove.
  *
@@ -23,6 +24,7 @@ export const CANONICAL_AUTHORITY_LABEL = "👑 PERMITO-SEGREDO";
 export const CANONICAL_GIT_LABEL = "🔄 GIT";
 export const CANONICAL_AUTOMATION_LABEL = "🤖 AUTO";
 export const CANONICAL_SUCCESS_LABEL = "🟢 SUCESSO";
+export const AUTO_READY_POLICY = "WHEN_DEPENDENCIES_CLEAR";
 export const REQUIRED_PROMOTION_SEAL_LABELS = Object.freeze([
   CANONICAL_AUTHORITY_LABEL,
   CANONICAL_GIT_LABEL,
@@ -60,6 +62,39 @@ export function promotionSealReceipt(pr) {
     && Boolean(writer)
     && Boolean(writerScope);
   return { valid, authority, mergePolicy, intentScope, writer, writerScope };
+}
+
+export function dependencyNumbers(pr) {
+  const marker = lineMarker(pr?.body, "Depends-On") || "";
+  const numbers = [...marker.matchAll(/#(\d+)/g)]
+    .map((match) => Number(match[1]))
+    .filter((number) => Number.isInteger(number) && number > 0 && number !== Number(pr?.number));
+  return [...new Set(numbers)];
+}
+
+export function autoReadyState(pr, repository, trustedAuthors = ["segredounlock"]) {
+  const trusted = trustedAuthors.map((item) => item.toLowerCase());
+  const receipt = promotionSealReceipt(pr);
+  const labels = labelNames(pr);
+  const missingLabels = REQUIRED_PROMOTION_SEAL_LABELS.filter(
+    (label) => !labels.has(label.toLocaleLowerCase("pt-BR")),
+  );
+  const policy = lineMarker(pr?.body, "Auto-Ready");
+  const managed = Boolean(
+    pr?.state === "open" &&
+    pr?.base?.ref === "main" &&
+    pr?.head?.repo?.full_name === repository &&
+    trusted.includes(String(pr?.user?.login || "").toLowerCase()) &&
+    receipt.valid &&
+    missingLabels.length === 0 &&
+    policy === AUTO_READY_POLICY
+  );
+  return {
+    managed,
+    policy,
+    dependencies: dependencyNumbers(pr),
+    missingLabels,
+  };
 }
 
 export function promotionSealState(pr, repository, trustedAuthors = ["segredounlock"]) {
@@ -110,7 +145,7 @@ async function api(token, method, path, body) {
       Authorization: `Bearer ${token}`,
       Accept: "application/vnd.github+json",
       "X-GitHub-Api-Version": "2022-11-28",
-      "User-Agent": "centraldark-autonomia-varredura/3.1",
+      "User-Agent": "centraldark-autonomia-varredura/3.2",
       ...(body === undefined ? {} : { "Content-Type": "application/json" }),
     },
     body: body === undefined ? undefined : JSON.stringify(body),
@@ -123,6 +158,36 @@ async function api(token, method, path, body) {
   }
   if (!response.ok) throw new Error(`GITHUB_${method}_${path}_${response.status}:${String(data.message || "request failed").slice(0, 500)}`);
   return data;
+}
+
+async function graphql(token, query, variables) {
+  const response = await fetch(`${API}/graphql`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: "application/vnd.github+json",
+      "Content-Type": "application/json",
+      "User-Agent": "centraldark-autonomia-varredura/3.2",
+    },
+    body: JSON.stringify({ query, variables }),
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok || data.errors) {
+    throw new Error(`GITHUB_GRAPHQL_FAILED:${JSON.stringify(data.errors || data).slice(0, 500)}`);
+  }
+  return data.data;
+}
+
+async function setDraftState(token, pr, draft) {
+  const mutation = draft
+    ? `mutation($id: ID!) { convertPullRequestToDraft(input: { pullRequestId: $id }) { pullRequest { number isDraft } } }`
+    : `mutation($id: ID!) { markPullRequestReadyForReview(input: { pullRequestId: $id }) { pullRequest { number isDraft } } }`;
+  const data = await graphql(token, mutation, { id: pr.node_id });
+  const changed = draft
+    ? data?.convertPullRequestToDraft?.pullRequest
+    : data?.markPullRequestReadyForReview?.pullRequest;
+  if (!changed || Boolean(changed.isDraft) !== draft) throw new Error(`DRAFT_STATE_NOT_VERIFIED:${pr.number}`);
+  return changed;
 }
 
 async function upsertDiagnostic(token, repository, number, code, detail) {
@@ -240,6 +305,45 @@ function config() {
   const sweepDir = process.env.BOT_SWEEP_DIR || join(process.env.RUNNER_TEMP || "/tmp", "centraldark-autonomia");
   if (!repository.includes("/")) throw new Error("GITHUB_REPOSITORY_INVALID");
   return { repository, trustedAuthors, sweepDir };
+}
+
+async function reconcileDrafts() {
+  const { repository, trustedAuthors } = config();
+  const token = process.env.PROMOTER_TOKEN || process.env.PROMOTION_TOKEN || process.env.GITHUB_TOKEN || "";
+  if (!token) throw new Error("PROMOTER_TOKEN_MISSING");
+
+  const pulls = await api(token, "GET", `/repos/${repository}/pulls?state=open&per_page=100`);
+  const managed = pulls.filter((pr) => autoReadyState(pr, repository, trustedAuthors).managed);
+  const changed = [];
+
+  for (const pr of managed) {
+    const state = autoReadyState(pr, repository, trustedAuthors);
+    const dependencies = [];
+    for (const number of state.dependencies) {
+      const dependency = await api(token, "GET", `/repos/${repository}/pulls/${number}`);
+      dependencies.push({ number, merged: Boolean(dependency?.merged_at) });
+    }
+    const waiting = dependencies.filter((dependency) => !dependency.merged);
+    const desiredDraft = waiting.length > 0;
+    if (Boolean(pr.draft) === desiredDraft) {
+      console.log(`PR=${pr.number} AUTO_READY_NO_DELTA=1 DRAFT=${pr.draft ? 1 : 0} DEPENDENCIES=${state.dependencies.join(",") || "none"}`);
+      continue;
+    }
+
+    await setDraftState(token, pr, desiredDraft);
+    changed.push(pr.number);
+    console.log(`PR=${pr.number} AUTO_READY_TRANSITION=${desiredDraft ? "READY_TO_DRAFT" : "DRAFT_TO_READY"} DEPENDENCIES=${state.dependencies.join(",") || "none"}`);
+    await api(token, "POST", `/repos/${repository}/dispatches`, {
+      event_type: "centraldark_autonomia_recheck",
+      client_payload: {
+        pr_number: pr.number,
+        reason: desiredDraft ? "dependency_pending_auto_hold" : "dependencies_clear_auto_ready",
+        head: pr.head?.sha || null,
+      },
+    });
+  }
+
+  console.log(`AUTONOMIA_DRAFT_RECONCILED=${changed.join(",") || "none"}`);
 }
 
 async function judgeSweep() {
@@ -383,6 +487,7 @@ async function promoteSweep() {
 
 export async function main(argv = process.argv.slice(2)) {
   const mode = argv[0] || "";
+  if (mode === "reconcile-drafts") return reconcileDrafts();
   if (mode === "judge") return judgeSweep();
   if (mode === "promote") return promoteSweep();
   throw new Error(`MODE_INVALID:${mode || "empty"}`);
