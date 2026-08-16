@@ -49,7 +49,15 @@ revisoes/
 quarantine/
 
 # Backups e temporários
+# Regra da Casa: IDENTIDADE FICA; CONTEUDO EVOLUI; HISTORICO = GIT.
+# Backup local é efêmero/rollback pontual, nunca árvore genealógica nem versão canônica.
+# O nome ativo permanece canônico; v2/v3/final/old não substituem o histórico do Git.
 *.bak
+*.bak-*
+*.bak.*
+*.backup
+*.backup-*
+*.backup.*
 *.tmp
 *.save
 *.orig
