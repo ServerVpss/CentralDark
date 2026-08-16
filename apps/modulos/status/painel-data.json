@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-16T08:45:24.534Z",
-  "updatedAtBR": "16/08/2026, 05:45:24 BRT",
+  "updatedAt": "2026-08-16T09:13:06.389Z",
+  "updatedAtBR": "16/08/2026, 06:13:06 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "fix(comunicação): estado primeiro com técnico mínimo suficiente (#945)",
+    "lastCommit": "chore(git): cristalizar backup efêmero e histórico no Git",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-16T09:13:06.389Z",
+      "titulo": "Push na main · baa86545c89f510ecfbd0e340d2be4e614054325",
+      "detalhe": "chore(git): cristalizar backup efêmero e histórico no Git",
+      "area": "Repositório",
+      "sha": "baa8654",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-16T08:45:24.534Z",
       "titulo": "Push na main · b47df132bb9925b32429a6bba83715ac9bfbc607",
       "detalhe": "fix(comunicação): estado primeiro com técnico mínimo suficiente (#945)",
@@ -988,14 +996,6 @@
       "detalhe": "refactor(memory): centralizar fingerprint de ganho informacional",
       "area": "Repositório",
       "sha": "304d97c",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-15T01:57:58.745Z",
-      "titulo": "Push na main · 31df3924f96ba172888f8ea9b071c09e96c3f404",
-      "detalhe": "ci(meta-lupa): provar confinamento fisico do memory-linker",
-      "area": "Repositório",
-      "sha": "31df392",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-16T09:13:06.389Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · baa86545c89f510ecfbd0e340d2be4e614054325 (baa8654)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-16T08:45:24.534Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · b47df132bb9925b32429a6bba83715ac9bfbc607 (b47df13)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-15T01:58:33.157Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 304d97cbd4e27956fbaeca28b830deba613da6b8 (304d97c)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-15T01:57:58.745Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 31df3924f96ba172888f8ea9b071c09e96c3f404 (31df392)",
       "area": "Repositório",
       "status": "sucesso"
     }
