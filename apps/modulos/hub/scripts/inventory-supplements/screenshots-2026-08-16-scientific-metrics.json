@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "kind": "SANITIZED_INVENTORY_SUPPLEMENT",
+  "source_label": "Screenshots(2).zip · métricas científicas",
+  "observed_at": "2026-08-16T19:50:00Z",
+  "sanitized": true,
+  "source_is_authority": false,
+  "calculation_policy": {
+    "significant_digits": 6,
+    "formula_percent": "100 * numerator / denominator",
+    "formula_percent_change": "100 * (after - before) / before",
+    "false_precision": false
+  },
+  "items": [
+    {
+      "id": "material:screenshots-2026-08-16:scientific-composition",
+      "name": "Screenshots.zip · composição percentual",
+      "group": "ARTEFATOS",
+      "type": "ARCHIVE_SCIENTIFIC_METRICS",
+      "status": "CALCULATED_FROM_CLOSED_DENOMINATOR",
+      "owner": "apps/modulos/hub/scripts/inventory-supplements/screenshots-2026-08-16-scientific-metrics.json",
+      "consumers": ["INVENTARIO", "HUB_ADMIN"],
+      "proof": "572_FILES_ENUMERATED",
+      "source": "USER_UPLOAD:Screenshots(2).zip",
+      "recorded_at": "2026-08-16T19:50:00Z",
+      "temporal_scope": "HISTORICAL_RECORD",
+      "summary": "Denominador fechado de 572 arquivos: PNG=568/572=99,3007%; não-PNG=4/572=0,699301%; capturas datadas=539/572=94,2308%; Screenshot_1…18=18/572=3,14685%."
+    },
+    {
+      "id": "material:screenshots-2026-08-16:scientific-dedupe",
+      "name": "Screenshots.zip · dedupe e compressão",
+      "group": "ARTEFATOS",
+      "type": "ARCHIVE_SCIENTIFIC_METRICS",
+      "status": "CALCULATED_FROM_CLOSED_DENOMINATOR",
+      "owner": "apps/modulos/hub/scripts/inventory-supplements/screenshots-2026-08-16-scientific-metrics.json",
+      "consumers": ["INVENTARIO", "HUB_ADMIN"],
+      "proof": "SHA256_ALL_572_FILES + ARCHIVE_SIZE",
+      "source": "USER_UPLOAD:Screenshots(2).zip",
+      "recorded_at": "2026-08-16T19:50:00Z",
+      "temporal_scope": "HISTORICAL_RECORD",
+      "summary": "566/572 conteúdos SHA-256 únicos=98,9510%; 12 membros pertencem a 6 grupos duplicados=2,09790% dos membros; redução por dedupe de membros=6/572=1,04895%. ZIP=93,3971% do tamanho descompactado, economia de armazenamento=6,60293%."
+    },
+    {
+      "id": "material:screenshots-2026-08-16:scientific-variant-delta",
+      "name": "Screenshots.zip · delta entre snapshots",
+      "group": "ARTEFATOS",
+      "type": "ARCHIVE_VARIANT_METRICS",
+      "status": "DISTINCT_BYTE_STREAMS_QUANTIFIED",
+      "owner": "apps/modulos/hub/scripts/inventory-supplements/screenshots-2026-08-16-scientific-metrics.json",
+      "consumers": ["INVENTARIO", "HUB_ADMIN", "META_LUPA"],
+      "proof": "OLD_PROPERTIES_SCREENSHOT + CURRENT_ARCHIVE_SHA256",
+      "source": "USER_SCREENSHOT_ZIP_PROPERTIES + USER_UPLOAD:Screenshots(2).zip",
+      "recorded_at": "2026-08-16T19:50:00Z",
+      "temporal_scope": "HISTORICAL_RECORD",
+      "summary": "Snapshot anterior=91.346.859 bytes; upload atual=93.330.056 bytes; delta absoluto=+1.983.197 bytes; variação relativa=+2,17106%. Isso prova byte-streams distintos, não prova causalidade ou relação sucessor/cópia."
+    }
+  ]
+}
