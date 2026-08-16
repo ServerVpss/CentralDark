@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const obsidianWriter = require('./obsidian-writer.cjs');
 
 const CONSCIENCIA_DIR = path.resolve('/root/CentralDark/docs/CONSCIENCIA');
 
@@ -40,13 +41,49 @@ function buscarNosArquivos(query) {
   return resultados;
 }
 
+function extrairConsultaMemoria(value) {
+  const raw = String(value || '').trim();
+  if (!raw) return '';
+
+  const stripped = raw
+    .replace(
+      /^(?:consci[eê]ncia|mem[oó]ria|lembra(?:r)?|o que (?:voc[eê]\s+)?sabe|o que temos|aprendizado|decis[aã]o)(?:\s+(?:sobre|do|da|de))?\s*/i,
+      ''
+    )
+    .replace(/[?!.]+$/, '')
+    .trim();
+
+  return stripped || raw;
+}
+
 module.exports = {
   name: 'memoria-longa',
-  description: 'Lê e escreve no Cérebro Vivo (docs/CONSCIENCIA/)',
+  description: 'Lê e escreve no Cérebro Vivo (docs/CONSCIENCIA/) e roteia recall humano para docs/BRAIN',
   category: 'memory',
 
   async execute(params = {}) {
     const { op, filename, content, query, n } = params;
+
+    // O roteador de consciência chama memoria-longa com query, mas sem op.
+    // Nesse caminho humano de recall, reutilize a recuperação repo-native do BRAIN
+    // em vez de cair em "Op inválida" ou duplicar o motor de busca.
+    if (!op && query) {
+      const recallQuery = extrairConsultaMemoria(query);
+      const limit = typeof n === 'number' ? n : 8;
+      const result = await obsidianWriter.execute({
+        op: 'search',
+        query: recallQuery,
+        hops: 1,
+        limit,
+      });
+
+      return {
+        ...result,
+        route: 'repo-native-brain',
+        originalQuery: query,
+        recallQuery,
+      };
+    }
 
     if (op === 'list') {
       const arquivos = listarArquivos();
@@ -116,5 +153,9 @@ module.exports = {
         search: '{ op: "search", query: "webhook", n: 5 }',
       },
     };
+  },
+
+  _test: {
+    extrairConsultaMemoria,
   },
 };
