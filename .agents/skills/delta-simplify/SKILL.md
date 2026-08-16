@@ -81,6 +81,62 @@ NEW_RISK_REOPENS_REASONING=true
 
 Exceção: uma checagem final exigida por contrato continua sendo executada mesmo que a hipótese não tenha mudado; ela é **prova**, não reprocessamento da mesma crença.
 
+## Regra global — verde + delta fechado promove; não continua pensando
+
+Quando o mesmo `HEAD` já tem a validação aplicável concluída, não existe conflito material, a intenção já está autorizada e o delta está fechado, a ação útil restante é **promover pelo fluxo canônico e verificar a `main`**. Não abrir nova rodada de melhoria cosmética no mesmo branch só porque ainda há capacidade disponível.
+
+```text
+GREEN_APPLICABLE_CHECKS_ON_SAME_HEAD
++ NO_MATERIAL_CONFLICT
++ INTENT_AUTHORIZED
++ DELTA_CLOSED
+= FREEZE_HEAD
+→ CANONICAL_PROMOTION
+→ VERIFY_MAIN
+→ STOP_UNTIL_NEW_DELTA
+```
+
+Forma curta da Casa:
+
+```text
+VERDE + DELTA_FECHADO = PROMOVER, NAO_CONTINUAR_PENSANDO
+```
+
+A prova pertence ao `HEAD` que ela observou. Mudança material de `HEAD` invalida a prova presa ao SHA antigo e reabre somente a fronteira afetada. Sem `HEAD` novo, evidência nova, risco novo, conflito novo ou mudança de autoridade, não reexecutar a mesma bateria só para produzir outro recibo equivalente.
+
+```text
+HEAD_CHANGE_INVALIDATES_HEAD_BOUND_PROOF=true
+NO_HEAD_CHANGE + NO_NEW_EVIDENCE + NO_NEW_RISK + NO_NEW_CONFLICT + SAME_AUTHORITY
+= NO_PROOF_REPLAY_WITHOUT_CAUSE
+```
+
+Para evitar toil de promoção:
+
+```text
+HEAD_GREEN_AND_CLOSED → FREEZE_HEAD=true
+NICE_TO_HAVE_AFTER_GREEN → NEXT_DELTA|DROP
+DRAFT_IS_NOT_DEPENDENCY_SEMAPHORE=true
+NO_DRAFT_READY_TOGGLE_WITHOUT_STATE_CAUSE=true
+EXPIRED_OR_STALE_RECEIPT_WITH_SAME_HEAD != NEW_REASONING
+SAME_HEAD_RECEIPT_REFRESH → REFRESH_MINIMUM_APPLICABLE_PROOF_ONLY
+CANONICAL_PROMOTION_ONLY=true
+```
+
+`Draft` humano real continua sendo estado humano e não deve ser removido automaticamente sem o contrato específico aplicável. Esta regra só proíbe usar `Draft/Ready` como semáforo improvisado de dependência quando a Casa já possui promoção canônica e estado de máquina para isso.
+
+Essa regra também vale para lotes de PRs independentes:
+
+```text
+PARALLELIZE_INDEPENDENT_SCOPES
+→ ONE_WRITER_PER_SCOPE
+→ EACH_HEAD_PROVES_ITS_DELTA
+→ FREEZE_EACH_CLOSED_GREEN_HEAD
+→ SERIALIZE_CANONICAL_PROMOTION
+→ VERIFY_MAIN_AFTER_PROMOTION
+```
+
+O lote não autoriza merge cego: dependência real, conflito, segredo, `UNKNOWN` material ou mudança de escopo continuam bloqueando fail-closed.
+
 ## Fase 0 — Fixar o delta
 
 Antes de opinar, medir o alvo exato:
@@ -268,6 +324,7 @@ MEDE O DELTA
 → TENTA APAGAR COMPLEXIDADE
 → CORTA DESPERDÍCIO
 → SE NADA NOVO ENTROU, AGE EM VEZ DE REPENSAR
+→ SE VERDE + DELTA FECHADO, CONGELA O HEAD E PROMOVE
 → MEDE O RESULTADO
 → SOBE A CORREÇÃO PARA A CAUSA CERTA
 → TENTA DERRUBAR OS PRÓPRIOS FINDINGS
