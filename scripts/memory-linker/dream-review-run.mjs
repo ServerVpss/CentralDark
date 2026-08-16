@@ -14,6 +14,7 @@ import {
   enrichDreamProposal,
   validatePatternDiscovery,
 } from './pattern-discovery.mjs';
+import { updatePatternLibrary } from './pattern-library.mjs';
 import { attachSemanticIntentPrefilter } from './semantic-intent-adapter.mjs';
 import { compileArtifactToDreamEvent, loadArtifactForMining } from './artifact-capability.mjs';
 
@@ -184,7 +185,7 @@ export function compileArtifactForDreamReview(artifactInput, {
 async function main() {
   const args = parseArgs(process.argv.slice(2));
   if (!args.output || !args.head || (!args.input && !args.artifact)) {
-    throw new Error('USAGE: dream-review-run.mjs --output <proposal.json> --head <40-hex-sha> [--input <events.jsonl>] [--artifact <file> --target <owner> --source <ref> --artifact-metadata <json>] [--state <jarvis-state.json>]');
+    throw new Error('USAGE: dream-review-run.mjs --output <proposal.json> --head <40-hex-sha> [--input <events.jsonl>] [--artifact <file> --target <owner> --source <ref> --artifact-metadata <json>] [--state <jarvis-state.json>] [--library <pattern-library.json>]');
   }
 
   const outputPath = path.resolve(args.output);
@@ -230,6 +231,7 @@ async function main() {
   proposal = attachSemanticIntentPrefilter(proposal);
   if (artifactContract) proposal = { ...proposal, artifact_capability: artifactContract };
   const writeStatus = writeProposalIdempotent(outputPath, proposal);
+  const libraryResult = updatePatternLibrary(proposal, { filePath: args.library || '' });
   const discovery = proposal.pattern_discovery;
   const routing = proposal.autonomy_routing;
   const semantic = proposal.semantic_prefilter;
@@ -238,6 +240,8 @@ async function main() {
     `DREAM_REVIEW_RUN=${proposal.status} HEAD_SHA=${proposal.head_sha} ` +
     `CANDIDATES=${proposal.candidate_count} PATTERNS=${discovery.pattern_count} ` +
     `AUTO_HANDOFF=${discovery.autonomy_handoff_eligible_count} ` +
+    `LIBRARY=${libraryResult.status} LIBRARY_PATTERNS=${libraryResult.library.pattern_count} ` +
+    `LIBRARY_CANDIDATES=${libraryResult.library.candidate_count} LIBRARY_SESSIONS=${libraryResult.library.session_count} ` +
     `SEMANTIC_PREFILTER=${semantic?.status ?? 'UNKNOWN'} ` +
     `CALLS_ACCEPTED=${routing?.accepted_call_count ?? 'NOT_MEASURED'} ` +
     `TRANSPORT_EXECUTED=0 DIRECT_APPLY=0 WRITE=${writeStatus}`,
