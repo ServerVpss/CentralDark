@@ -198,6 +198,21 @@ export function evaluatePerceptionGate({ decisao, historico = [] }) {
         active_gate: activeGate,
       });
     }
+    return Object.freeze({
+      status: 'REQUIRE_FOUR_PERCEPTIONS',
+      required: true,
+      allow_mutation: false,
+      scope_key: scopeKey,
+      mutation,
+      active_gate: activeGate,
+      triggers: Object.freeze({
+        critical: mutation.critical,
+        uncertain_state: text(decisao?.estado).toUpperCase() !== 'FATO',
+        recent_failure_or_critic: false,
+        repeated_mutation_target: false,
+        active_gate_scope_mismatch: true,
+      }),
+    });
   }
 
   const estado = text(decisao?.estado).toUpperCase();
@@ -219,6 +234,7 @@ export function evaluatePerceptionGate({ decisao, historico = [] }) {
       uncertain_state: uncertainState,
       recent_failure_or_critic: recentFailure,
       repeated_mutation_target: repeatedTarget,
+      active_gate_scope_mismatch: false,
     }),
   });
 }
