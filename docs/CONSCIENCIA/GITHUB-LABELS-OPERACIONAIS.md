@@ -63,6 +63,42 @@ permito-segredo      → 👑 PERMITO-SEGREDO
 📚 DOC               → 📚 DOCS
 ```
 
+## Enforcement global de entrada
+
+O catálogo é único; cada superfície apenas adapta a entrada. O comportamento deve ser o mesmo para humano, bot, modelo, MCP CentralDark, HUB ou cliente futuro que passe pelo contrato da Casa.
+
+```text
+LABEL_RECEBIDA
+→ trim
+→ comparação case-insensitive para aliases conhecidos
+→ alias conhecido: converter para destino canônico
+→ alias de autoridade SEGREDO: 👑 PERMITO-SEGREDO
+→ alias de autoridade PIVETE/HERMES: descartar
+→ assign:* desconhecido: descartar, não inventar agente
+→ dedupe
+→ GitHub recebe somente o conjunto normalizado
+```
+
+Regras de integração:
+
+```text
+GITHUB_UI/API/BOTS → catálogo GitHub canônico
+MCP_CENTRALDARK → normaliza labels antes de criar issue no GitHub
+HUB → usa o MCP canônico; não cria segundo motor de labels
+AUTHORITY_APPROVAL → normaliza a label observada antes de decidir autorização
+CANONICAL_VISUAL_LABEL=👑 PERMITO-SEGREDO
+TEXT_ALIAS=permito-segredo
+TEXT_ALIAS_IS_COMPATIBILITY_NOT_SECOND_LABEL=true
+```
+
+O HUB já descobre ferramentas pelo MCP; portanto herda a semântica do tool GitHub existente. Não duplicar catálogo, regra de autoridade ou normalizador dentro da interface.
+
+```text
+SURFACE_IS_ADAPTER_NOT_AUTHORITY=true
+LABEL_NORMALIZATION_IS_INGRESS_CONTRACT=true
+ONE_LABEL_SEMANTIC_ONE_CANONICAL_NAME=true
+```
+
 ## Issue não é memória
 
 ```text

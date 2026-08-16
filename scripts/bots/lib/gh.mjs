@@ -32,17 +32,25 @@ const LABEL_ALIASES = new Map([
   ["revisao-humana", ["🆘 AJUDA-NECESSÁRIA"]],
   ["needs-codex-review", ["🟡 IA-PRECISA-REVISAR", "🧠 AGENTE-CODEX"]],
   ["permito-segredo", ["👑 PERMITO-SEGREDO"]],
+  ["👑 permito-segredo", ["👑 PERMITO-SEGREDO"]],
   ["permito-pivete", []],
   ["stale", ["🧊 PARADO"]],
   ["superseded", ["SUPERSEDED"]],
 ]);
+
+function foldLabelName(value) {
+  return String(value?.name || value || "")
+    .trim()
+    .toLocaleLowerCase("pt-BR");
+}
 
 export function canonicalLabels(labels = []) {
   const out = [];
   for (const raw of labels || []) {
     const name = String(raw?.name || raw || "").trim();
     if (!name) continue;
-    const mapped = LABEL_ALIASES.get(name);
+    const folded = foldLabelName(name);
+    const mapped = LABEL_ALIASES.get(folded);
     if (mapped) out.push(...mapped);
     else if (/^assign:/i.test(name)) continue;
     else out.push(name);

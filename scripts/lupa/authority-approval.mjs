@@ -4,19 +4,32 @@ import { appendFile, readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-export const CANONICAL_AUTHORITY_LABEL = "permito-segredo";
+export const CANONICAL_AUTHORITY_LABEL = "👑 PERMITO-SEGREDO";
+export const CANONICAL_AUTHORITY_SOURCE = "github-label:permito-segredo";
+
+function foldLabelName(value) {
+  return String(value?.name || value || "")
+    .trim()
+    .toLocaleLowerCase("pt-BR");
+}
+
+export function canonicalAuthorityLabel(value) {
+  const folded = foldLabelName(value);
+  if (folded === "permito-segredo" || folded === "👑 permito-segredo") {
+    return CANONICAL_AUTHORITY_LABEL;
+  }
+  return String(value?.name || value || "").trim();
+}
 
 export function authorityApprovalForEvent(event = {}) {
   const labels = new Set(
-    (event.pull_request?.labels || []).map((label) =>
-      String(label?.name || label || "").toLowerCase(),
-    ),
+    (event.pull_request?.labels || []).map((label) => canonicalAuthorityLabel(label)),
   );
   const approved = labels.has(CANONICAL_AUTHORITY_LABEL);
   return {
     approved,
     authority: approved ? "SEGREDO/CHEFE" : null,
-    source: approved ? `github-label:${CANONICAL_AUTHORITY_LABEL}` : "none",
+    source: approved ? CANONICAL_AUTHORITY_SOURCE : "none",
   };
 }
 

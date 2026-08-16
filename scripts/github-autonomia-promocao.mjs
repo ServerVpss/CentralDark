@@ -58,7 +58,11 @@ export function parseCsv(value, fallback = []) {
 }
 
 export function normalizedLabels(pr) {
-  return new Set((pr.labels || []).map((label) => String(label.name || label).toLowerCase()));
+  return new Set((pr.labels || []).map((label) => {
+    const name = String(label.name || label).trim().toLocaleLowerCase("pt-BR");
+    if (name === "permito-segredo" || name === "👑 permito-segredo") return "👑 permito-segredo";
+    return name;
+  }));
 }
 
 function lineMarker(body, name) {
@@ -85,7 +89,7 @@ export function intentReceipt(pr) {
  * Autorização humana (A) e prontidão técnica (R) são estados distintos.
  *
  * A pode vir de:
- * 1) label persistente `permito-segredo`; ou
+ * 1) label persistente canônica `👑 PERMITO-SEGREDO` (alias textual `permito-segredo` é só compatibilidade de entrada); ou
  * 2) recibo explícito no PR, criado dentro do escopo cuja intenção já foi tomada:
  *    Intent-Authorized + Merge-Policy + Intent-Scope + Writer + Writer-Scope.
  *
@@ -96,7 +100,7 @@ export function authorizationFor(pr) {
   const labels = normalizedLabels(pr);
   const body = `${pr.title || ""}\n${pr.body || ""}`;
   const receipt = intentReceipt(pr);
-  const segredoLabel = labels.has("permito-segredo");
+  const segredoLabel = labels.has("👑 permito-segredo");
   const legacyPiveteLabel = labels.has("permito-pivete");
   const segredoBodyMarker = /\bPERMITO[ _-]?SEGREDO\b/i.test(body);
   const legacyPiveteBodyMarker = /\bPERMITO[ _-]?PIVETE\b/i.test(body);
@@ -108,7 +112,7 @@ export function authorizationFor(pr) {
     viaBody: receipt.valid,
     authority: authorized ? "SEGREDO/CHEFE" : null,
     source: segredoLabel
-      ? "github-label:permito-segredo"
+      ? "github-label:👑 PERMITO-SEGREDO"
       : receipt.valid
         ? "pr-body:intent-authorized"
         : "none",

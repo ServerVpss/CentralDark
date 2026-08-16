@@ -1,6 +1,58 @@
 // Cliente mínimo da API do GitHub. Usa fetch nativo do Node 20+.
 import { log } from "../../log.js";
 const GITHUB_API = "https://api.github.com";
+
+const LABEL_ALIASES = new Map([
+    ["assign:chatgpt", ["🧠 AGENTE-CHATGPT"]],
+    ["assign:claude", ["🧠 AGENTE-CLAUDE"]],
+    ["assign:codex", ["🧠 AGENTE-CODEX"]],
+    ["assign:grok", ["🧠 AGENTE-GROK"]],
+    ["assign:supabase-bot", ["🧠 AGENTE-SUPABASE"]],
+    ["assign:lovable", ["🎨 FRONTEND"]],
+    ["auto", ["🤖 AUTO"]],
+    ["bug", ["🐞 BUG"]],
+    ["p0", ["🔴 PRIORIDADE-ALTA"]],
+    ["p1", ["🔴 PRIORIDADE-ALTA"]],
+    ["p2", ["🟡 PRIORIDADE-MÉDIA"]],
+    ["p3", ["🟢 PRIORIDADE-BAIXA"]],
+    ["severidade:p0", ["🔴 PRIORIDADE-ALTA"]],
+    ["severidade:p1", ["🔴 PRIORIDADE-ALTA"]],
+    ["severidade:p2", ["🟡 PRIORIDADE-MÉDIA"]],
+    ["severidade:p3", ["🟢 PRIORIDADE-BAIXA"]],
+    ["sentinela", ["🛡️ SENTINELA"]],
+    ["vigia", ["🛡️ SENTINELA"]],
+    ["revisao-humana", ["🆘 AJUDA-NECESSÁRIA"]],
+    ["needs-codex-review", ["🟡 IA-PRECISA-REVISAR", "🧠 AGENTE-CODEX"]],
+    ["permito-segredo", ["👑 PERMITO-SEGREDO"]],
+    ["👑 permito-segredo", ["👑 PERMITO-SEGREDO"]],
+    ["permito-pivete", []],
+    ["stale", ["🧊 PARADO"]],
+    ["superseded", ["SUPERSEDED"]],
+]);
+
+function foldLabelName(value) {
+    return String(value?.name || value || "")
+        .trim()
+        .toLocaleLowerCase("pt-BR");
+}
+
+export function canonicalLabels(labels = []) {
+    const out = [];
+    for (const raw of labels || []) {
+        const name = String(raw?.name || raw || "").trim();
+        if (!name)
+            continue;
+        const mapped = LABEL_ALIASES.get(foldLabelName(name));
+        if (mapped)
+            out.push(...mapped);
+        else if (/^assign:/i.test(name))
+            continue;
+        else
+            out.push(name);
+    }
+    return [...new Set(out)];
+}
+
 export class GitHubError extends Error {
     status;
     body;
@@ -143,7 +195,11 @@ export async function getFileContent(token, owner, repo, path, ref) {
 }
 // ---------- Escrita ----------
 export async function createIssue(token, owner, repo, input) {
-    return ghJson(token, "POST", `/repos/${owner}/${repo}/issues`, input);
+    const labels = canonicalLabels(input.labels || []);
+    return ghJson(token, "POST", `/repos/${owner}/${repo}/issues`, {
+        ...input,
+        ...(input.labels ? { labels } : {}),
+    });
 }
 export async function getIssue(token, owner, repo, issueNumber) {
     return ghFetch(token, `/repos/${owner}/${repo}/issues/${issueNumber}`);
