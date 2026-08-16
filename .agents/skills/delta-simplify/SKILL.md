@@ -1,6 +1,6 @@
 ---
 name: delta-simplify
-description: Revisar o delta já produzido para reduzir duplicação, complexidade, desperdício e correção superficial sem mudar a intenção nem substituir auditoria de correctness. Usar quando houver diff/PR/branch pronta para limpeza, quando a pergunta for "dá para fazer menor?", ou antes de promover mudança relevante. Não usar para caçar bug de correctness; para isso usar auditoria-pr + MetaLupa.
+description: Revisar o delta já produzido para reduzir duplicação, complexidade, desperdício e correção superficial sem mudar a intenção nem substituir auditoria de correctness. Usar quando houver diff/PR/branch pronta para limpeza, quando a pergunta for "dá para fazer menor?", antes de promover mudança relevante, ou quando a mesma intenção está sendo reprocessada sem informação/estado novo. Não usar para caçar bug de correctness; para isso usar auditoria-pr + MetaLupa.
 ---
 
 # DELTA SIMPLIFY — MENOR DELTA QUE PRESERVA A INTENÇÃO
@@ -44,6 +44,43 @@ A pergunta central é:
 
 > **Qual parte deste delta pode desaparecer sem perder o comportamento autorizado?**
 
+## Regra global — repetição sem delta vira ação, não nova cognição
+
+A Casa já classifica `NO_NEW_INFORMATION=NO_CHANGE`. Esta skill projeta isso para execução: se a intenção, a autorização e o estado material continuam iguais, repetir a mesma explicação, auditoria ou planejamento não produz informação.
+
+```text
+MESMA_INTENCAO
++ MESMA_AUTORIZACAO
++ NENHUMA_INFORMACAO_NOVA
++ NENHUMA_MUDANCA_DE_ESTADO_MATERIAL
+= NAO_REPROCESSAR
+→ EXECUTAR_PROXIMO_PASSO_MATERIAL_JA_DERIVADO
+→ MEDIR_RESULTADO
+→ RACIOCINAR_DE_NOVO_SOMENTE_SE_ESTADO|EVIDENCIA|RISCO|AUTORIDADE_MUDAR
+```
+
+Forma comprimida:
+
+```text
+REPETICAO != INFORMACAO_NOVA
+→ NAO_GASTAR_COGNICAO
+→ AGIR
+→ MEDIR
+```
+
+Isto não autoriza ação nova e não pula gate. Só elimina toil cognitivo dentro de uma intenção já autorizada.
+
+```text
+NO_REPROCESS_WITHOUT_DELTA=true
+ACTION_REQUIRES_EXISTING_AUTHORITY=true
+MEASURE_AFTER_ACTION=true
+STATE_CHANGE_REOPENS_REASONING=true
+UNKNOWN_MATERIAL_REOPENS_REASONING=true
+NEW_RISK_REOPENS_REASONING=true
+```
+
+Exceção: uma checagem final exigida por contrato continua sendo executada mesmo que a hipótese não tenha mudado; ela é **prova**, não reprocessamento da mesma crença.
+
 ## Fase 0 — Fixar o delta
 
 Antes de opinar, medir o alvo exato:
@@ -64,6 +101,15 @@ Se o HEAD mudar durante a revisão:
 NAO_RECOMEÇAR_TUDO
 → recalcular somente a fronteira afetada
 → abandonar finding que morreu
+```
+
+Se o HEAD **não** mudou e nenhuma evidência nova entrou:
+
+```text
+NAO_REPETIR_AUDITORIA_INTEIRA
+→ reutilizar achados ainda válidos
+→ executar o próximo passo material pendente
+→ medir
 ```
 
 ## Fase 1 — Quatro lentes obrigatórias
@@ -109,12 +155,14 @@ operações independentes feitas serialmente sem motivo
 trabalho pesado em bootstrap/hot path que pode ser adiado
 objeto durável retendo contexto maior que o necessário
 loop/recheck sem ganho de informação
+repetição de conversa/planejamento quando o próximo passo material já está determinado
 ```
 
 Regra CentralDark:
 
 ```text
 SAME_ERROR + NO_NEW_INFORMATION + NO_BELIEF_DELTA = WASTE
+SAME_INTENT + SAME_STATE + NEXT_STEP_KNOWN = ACT_THEN_MEASURE
 ```
 
 ### 4. ALTITUDE / CAUSA
@@ -219,6 +267,8 @@ MEDE O DELTA
 → PROCURA O QUE JÁ EXISTE
 → TENTA APAGAR COMPLEXIDADE
 → CORTA DESPERDÍCIO
+→ SE NADA NOVO ENTROU, AGE EM VEZ DE REPENSAR
+→ MEDE O RESULTADO
 → SOBE A CORREÇÃO PARA A CAUSA CERTA
 → TENTA DERRUBAR OS PRÓPRIOS FINDINGS
 → MUDA SÓ O QUE SOBREVIVE
