@@ -86,6 +86,19 @@ test('busca ranqueia capacidades e skills no mesmo espaço', () => {
   assert.equal(results[0].name, 'change-risk');
 });
 
+test('mesma consulta volta pela mesma rota mesmo se a ordem de entrada mudar', () => {
+  const [base] = normalizeIndex(INDEX, SOURCE);
+  const rotaA = { ...base, document_path: 'engineering/skills/a-route/SKILL.md' };
+  const rotaZ = { ...base, document_path: 'engineering/skills/z-route/SKILL.md' };
+  const primeira = findSkills([rotaZ, rotaA], 'a11y audit', 1)[0];
+  const segunda = findSkills([rotaA, rotaZ], 'a11y audit', 1)[0];
+  assert.equal(primeira.document_path, 'engineering/skills/a-route/SKILL.md');
+  assert.deepEqual(
+    [primeira.source_id, primeira.document_path],
+    [segunda.source_id, segunda.document_path],
+  );
+});
+
 test('nome duplicado entre fontes permanece ambíguo', () => {
   const base = normalizeIndex(INDEX, SOURCE)[0];
   const duplicate = { ...base, source_id: 'outra-fonte' };
