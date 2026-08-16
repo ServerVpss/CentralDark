@@ -15,6 +15,7 @@ import { authorizationFor } from "./github-autonomia-promocao.mjs";
 const API = "https://api.github.com";
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const ENGINE = join(ROOT, "scripts", "github-autonomia-promocao.mjs");
+export const CANONICAL_AUTHORITY_LABEL = "👑 PERMITO-SEGREDO";
 
 function markerAuthorized(pr) {
   return authorizationFor(pr).authorized;
@@ -29,6 +30,20 @@ export function eligibleSummary(pr, repository, trustedAuthors = ["segredounlock
     pr?.head?.repo?.full_name === repository &&
     trusted.includes(String(pr?.user?.login || "").toLowerCase()) &&
     markerAuthorized(pr)
+  );
+}
+
+export function shouldMaterializeAuthority(pr, repository, trustedAuthors = ["segredounlock"]) {
+  const auth = authorizationFor(pr);
+  const trusted = trustedAuthors.map((item) => item.toLowerCase());
+  return Boolean(
+    pr?.state === "open" &&
+    !pr?.draft &&
+    pr?.base?.ref === "main" &&
+    pr?.head?.repo?.full_name === repository &&
+    trusted.includes(String(pr?.user?.login || "").toLowerCase()) &&
+    auth.viaBody &&
+    !auth.viaLabel
   );
 }
 
@@ -214,7 +229,7 @@ async function judgeSweep() {
 }
 
 async function promoteSweep() {
-  const { repository, sweepDir } = config();
+  const { repository, trustedAuthors, sweepDir } = config();
   const promoterToken = process.env.PROMOTER_TOKEN || process.env.PROMOTION_TOKEN || process.env.GITHUB_TOKEN || "";
   if (!promoterToken) {
     await notify({ code: "PROMOTER_TOKEN_MISSING", run: process.env.GITHUB_RUN_ID || null, detail: "Nenhum token de escrita disponível para concluir a intenção já autorizada." });
@@ -232,6 +247,24 @@ async function promoteSweep() {
     if (!Number.isInteger(number) || number <= 0) continue;
     const eventPath = join(sweepDir, `event-pr-${number}.json`);
     const receiptPath = join(sweepDir, name);
+
+    const livePr = await api(promoterToken, "GET", `/repos/${repository}/pulls/${number}`);
+    if (shouldMaterializeAuthority(livePr, repository, trustedAuthors)) {
+      const labels = await api(promoterToken, "POST", `/repos/${repository}/issues/${number}/labels`, { labels: [CANONICAL_AUTHORITY_LABEL] });
+      const verified = Array.isArray(labels)
+        && labels.some((label) => String(label?.name || label).trim().toLocaleLowerCase("pt-BR") === CANONICAL_AUTHORITY_LABEL.toLocaleLowerCase("pt-BR"));
+      if (!verified) {
+        failures.push(`${number}:AUTHORITY_LABEL_NOT_VERIFIED`);
+        await upsertDiagnostic(promoterToken, repository, number, "AUTHORITY_LABEL_NOT_VERIFIED", "GitHub não confirmou a label canônica após a materialização da dependência derivada da intenção.");
+        continue;
+      }
+      console.log(`PR=${number} AUTHORITY_DEPENDENCY_MATERIALIZED=${CANONICAL_AUTHORITY_LABEL}`);
+      await api(promoterToken, "POST", `/repos/${repository}/dispatches`, {
+        event_type: "centraldark_autonomia_recheck",
+        client_payload: { pr_number: number, reason: "authority_dependency_materialized", head: livePr.head?.sha || null },
+      });
+      continue;
+    }
 
     const promote = runEngine("promote", {
       GITHUB_TOKEN: promoterToken,
