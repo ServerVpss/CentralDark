@@ -68,25 +68,25 @@ export async function safeUpdateFromOrigin({ repoPath, branch = 'main', log = ()
     return result({ ok: false, reason: 'BRANCH_MISMATCH', repoRoot });
   }
 
-  // Fetch atualiza a visão remota; refs/remotes podem aceitar atualização não-FF.
-  // Por isso a segurança não depende do fetch falhar: medimos a linhagem da ref
-  // antes/depois e bloqueamos rewrite explicitamente.
+  // Observa a ponta remota em FETCH_HEAD sem sobrescrever primeiro a ref de
+  // rastreamento local. Assim um rewind/rewrite remoto continua mensurável em
+  // vez de virar FETCH_FAILED ou apagar a última observação conhecida.
   const remoteRef = `refs/remotes/origin/${branch}`;
   const remoteBefore = await git(['rev-parse', '--verify', '--quiet', remoteRef], repoRoot);
   const remoteBeforeSha = remoteBefore.code === 0 && remoteBefore.stdout ? remoteBefore.stdout : null;
 
-  const fetch = await git(['fetch', 'origin', `refs/heads/${branch}:${remoteRef}`], repoRoot);
+  const fetch = await git(['fetch', '--no-tags', 'origin', `refs/heads/${branch}`], repoRoot);
   if (fetch.code !== 0) {
     log(`[safe-git] BLOCKED fetch falhou: ${sanitizeGitOutput(fetch.stderr || fetch.stdout)}`);
     return result({ ok: false, reason: 'FETCH_FAILED', repoRoot });
   }
 
-  const remoteAfter = await git(['rev-parse', '--verify', remoteRef], repoRoot);
-  if (remoteAfter.code !== 0 || !remoteAfter.stdout) {
-    log('[safe-git] BLOCKED ref remota não resolvida após fetch');
+  const fetchedHead = await git(['rev-parse', '--verify', 'FETCH_HEAD'], repoRoot);
+  if (fetchedHead.code !== 0 || !fetchedHead.stdout) {
+    log('[safe-git] BLOCKED FETCH_HEAD não resolvido após observação remota');
     return result({ ok: false, reason: 'REMOTE_REF_RESOLUTION_FAILED', repoRoot });
   }
-  const remoteSha = remoteAfter.stdout;
+  const remoteSha = fetchedHead.stdout;
 
   if (remoteBeforeSha && remoteBeforeSha !== remoteSha) {
     const remoteLineage = await git(['merge-base', '--is-ancestor', remoteBeforeSha, remoteSha], repoRoot);
@@ -94,6 +94,16 @@ export async function safeUpdateFromOrigin({ repoPath, branch = 'main', log = ()
       log(`[safe-git] BLOCKED REMOTE_REWRITE old=${remoteBeforeSha.slice(0, 12)} new=${remoteSha.slice(0, 12)}; estado local preservado`);
       return result({ ok: false, reason: 'REMOTE_REWRITE', remoteSha, repoRoot });
     }
+  }
+
+  // Só depois de provar que a nova observação não reescreve a linhagem anterior
+  // atualizamos a ref de rastreamento local, com compare-and-swap quando existe.
+  const trackingUpdate = remoteBeforeSha
+    ? await git(['update-ref', remoteRef, remoteSha, remoteBeforeSha], repoRoot)
+    : await git(['update-ref', remoteRef, remoteSha], repoRoot);
+  if (trackingUpdate.code !== 0) {
+    log(`[safe-git] BLOCKED tracking ref não atualizada: ${sanitizeGitOutput(trackingUpdate.stderr || trackingUpdate.stdout)}`);
+    return result({ ok: false, reason: 'REMOTE_TRACK_UPDATE_FAILED', remoteSha, repoRoot });
   }
 
   // Fetch observa refs; só depois medimos se o working tree pode receber mutação.
@@ -119,7 +129,7 @@ export async function safeUpdateFromOrigin({ repoPath, branch = 'main', log = ()
     return result({ ok: true, changed: false, localSha, remoteSha, repoRoot });
   }
 
-  const counts = await git(['rev-list', '--left-right', '--count', `HEAD...origin/${branch}`], repoRoot);
+  const counts = await git(['rev-list', '--left-right', '--count', `HEAD...${remoteSha}`], repoRoot);
   const [aheadRaw, behindRaw] = String(counts.stdout || '').split(/\s+/);
   const ahead = Number.parseInt(aheadRaw || '0', 10) || 0;
   const behind = Number.parseInt(behindRaw || '0', 10) || 0;
@@ -134,13 +144,13 @@ export async function safeUpdateFromOrigin({ repoPath, branch = 'main', log = ()
     return result({ ok: false, reason, localSha, remoteSha, repoRoot });
   }
 
-  const ancestry = await git(['merge-base', '--is-ancestor', 'HEAD', `origin/${branch}`], repoRoot);
+  const ancestry = await git(['merge-base', '--is-ancestor', 'HEAD', remoteSha], repoRoot);
   if (ancestry.code !== 0) {
     log('[safe-git] BLOCKED transição não é fast-forward; nenhum rewrite executado');
     return result({ ok: false, reason: 'NON_FAST_FORWARD', localSha, remoteSha, repoRoot });
   }
 
-  const merge = await git(['merge', '--ff-only', `origin/${branch}`], repoRoot);
+  const merge = await git(['merge', '--ff-only', remoteSha], repoRoot);
   if (merge.code !== 0) {
     log(`[safe-git] BLOCKED ff-only falhou: ${sanitizeGitOutput(merge.stderr || merge.stdout)}`);
     return result({ ok: false, reason: 'FAST_FORWARD_FAILED', localSha, remoteSha, repoRoot });
@@ -148,7 +158,7 @@ export async function safeUpdateFromOrigin({ repoPath, branch = 'main', log = ()
 
   const verified = await git(['rev-parse', 'HEAD'], repoRoot);
   if (verified.code !== 0 || verified.stdout !== remoteSha) {
-    log('[safe-git] BLOCKED pós-condição inválida: HEAD não coincide com origin');
+    log('[safe-git] BLOCKED pós-condição inválida: HEAD não coincide com remoto observado');
     return result({ ok: false, reason: 'POSTCONDITION_FAILED', localSha, remoteSha, repoRoot });
   }
 
