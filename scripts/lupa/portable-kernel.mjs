@@ -194,6 +194,20 @@ const CAPABILITY_SPECS = [
     reproduction: 'GROUND_ACT_OBSERVE_REEVALUATE_VERIFY_COMPRESS',
   },
   {
+    id: 'TECHNICAL_SIGNAL_ONTOLOGY',
+    layer: 'EPISTEMIC_SAFETY',
+    owner: COGNITION,
+    markers: [
+      'TECHNICAL_SIGNAL_ONTOLOGY=true',
+      'NO_EPISTEMIC_TELEPORT=true',
+      'VISIBLE_RUNTIME_LABEL != HIDDEN_MECHANISM_PROOF',
+      'DEPRECATION_WARNING != FEATURE_ACTIVE',
+      'ACCESSIBILITY_FEATURE != HOSTILE_INTENT',
+      'VISUAL_RENDERING_CHANGE != PHYSICAL_INJURY_PROOF',
+    ],
+    reproduction: 'CLASSIFY_VISIBLE_SIGNAL_REQUIRE_EVIDENCE_PER_CAUSAL_LAYER_AND_STOP_AT_UNKNOWN',
+  },
+  {
     id: 'CAUSAL_MINING_AND_DENSIFICATION',
     layer: 'LEARNING',
     owner: COGNITION,
@@ -401,6 +415,7 @@ const condensedDna = {
     'NO_NEW_INFORMATION_NO_CHANGE',
     'RUNTIME_MUST_BE_MEASURED_SEPARATELY',
     'CAPABILITY_INTENT_CONDUCT_EFFECT_ARE_SEPARATE',
+    'NO_EPISTEMIC_TELEPORT_FROM_SIGNAL_TO_HARM',
   ],
   operational_flow: contract.standard_architecture.flow,
   meta_flow: [
@@ -500,6 +515,7 @@ const receipt = {
   image_sensor_policy: 'PASS',
   portable_boot_policy: 'PASS',
   semantic_safety_boundary: 'PASS',
+  technical_signal_ontology: 'PASS',
   runtime_claim: 'UNPROVEN_BY_PORTABLE_KERNEL',
 };
 
@@ -551,6 +567,7 @@ if (JSON_ONLY || EXPORT_PATH) {
     'SCREENSHOT_CURRENT_TRUTH=0',
     'SCREENSHOT_TRIGGERS_LIVE_REMEASURE=1',
     'SEMANTIC_SAFETY_BOUNDARY=PASS',
+    'TECHNICAL_SIGNAL_ONTOLOGY=PASS',
     'STALE_PACKAGE_ACTION=REBUILD_FROM_LIVE_REPOSITORY',
   ].join('\n') + '\n');
 }
