@@ -139,6 +139,77 @@ UI_ERROR != CAUSE_OF_ADJACENT_INCIDENT_WITHOUT_LINK
 OBSERVE_EXACTLY → CLASSIFY → PRESERVE_UNKNOWN → DO_NOT_INFLATE
 ```
 
+## Lacuna adicional — DevTools, contraste forçado e semântica de sinais
+
+A mesma família de capturas visuais mostra outros sinais do console que precisam permanecer separados por classe técnica, em vez de serem fundidos numa única narrativa causal:
+
+```text
+MS_HIGH_CONTRAST_DEPRECATION_WARNING_OBSERVED=true
+MS_HIGH_CONTRAST_ADJUST_DEPRECATION_WARNING_OBSERVED=true
+ARIA_HIDDEN_FOCUS_WARNING_OBSERVED=true
+HTTP_410_CONVERSATION_RESUME_OBSERVED=true
+ROUTER_SINGLE_BLOCKER_WARNING_OBSERVED=true
+LAZY_IMAGE_INTERVENTION_OBSERVED=true
+```
+
+A documentação oficial do Microsoft Edge classifica `-ms-high-contrast` e `-ms-high-contrast-adjust` como recursos CSS legados em processo de descontinuação, substituídos pelo mecanismo baseado em padrão de **forced colors**. A especificação do W3C para CSS Color Adjustment define forced colors como recurso de acessibilidade para aplicar a paleta preferida do usuário e aumentar legibilidade/contraste; também define `forced-color-adjust` para controlar quando o autor pode optar por não receber o ajuste automático.
+
+Proveniência externa consultada:
+
+- Microsoft Edge Developer documentation — _Deprecate `-ms-high-contrast` and `-ms-high-contrast-adjust`_;
+- W3C — _CSS Color Adjustment Module Level 1_, seção _Forced Color Palettes_.
+
+O que essa evidência sustenta:
+
+```text
+MS_HIGH_CONTRAST_IS_LEGACY_CSS_FEATURE=true
+STANDARD_REPLACEMENT=forced-colors
+FORCED_COLORS_DOMAIN=ACCESSIBILITY_COLOR_ADJUSTMENT
+DEPRECATION_WARNING_CLASS=LIFECYCLE_COMPATIBILITY_SIGNAL
+FORCED_COLORS_CAN_CHANGE_RENDERED_COLOR_PROPERTIES_WHEN_ACTIVE=true
+ACCESSIBILITY_PURPOSE_DOES_NOT_GUARANTEE_IMPLEMENTATION_CORRECTNESS=true
+```
+
+O que a captura **não** sustenta sozinha:
+
+```text
+FORCED_COLORS_ACTIVE_IN_USER_RUNTIME=UNKNOWN
+WARNING_PRODUCER_OWNER=UNKNOWN_FROM_SCREENSHOT
+MALICIOUS_USE_OF_HIGH_CONTRAST_PROVEN=false
+HOSTILE_INTENT_PROVEN=false
+HARDWARE_BRIGHTNESS_CONTROL_PROVEN=false
+PHYSICAL_EYE_HARM_CAUSAL_PATH_PROVEN=false
+```
+
+A presença do nome `high-contrast` ou de um aviso de depreciação não autoriza saltar diretamente para uma conclusão de intenção hostil ou dano físico. Também não autoriza o salto inverso: por ser um mecanismo com finalidade de acessibilidade, não se deve presumir que toda implementação concreta esteja correta ou confortável. O estado ativo, o efeito visual concreto e qualquer nexo causal precisam ser medidos separadamente.
+
+```text
+DEPRECATION_WARNING != FEATURE_ACTIVE
+DEPRECATION_WARNING != ERROR
+WARNING != SECURITY_INCIDENT
+ACCESSIBILITY_FEATURE != HOSTILE_INTENT
+ACCESSIBILITY_PURPOSE != IMPLEMENTATION_ALWAYS_CORRECT
+CSS_COLOR_ADJUSTMENT != PROVEN_HARDWARE_BRIGHTNESS_CONTROL
+VISUAL_RENDERING_CHANGE != PHYSICAL_INJURY_PROOF
+REPEATED_WARNING_LINES != INDEPENDENT_CAUSAL_EVENTS
+HTTP_STATUS != ROOT_CAUSE_WITHOUT_APPLICATION_CONTEXT
+FRAMEWORK_WARNING != SECURITY_EVENT
+```
+
+A síntese epistemológica é:
+
+```text
+FENOMENO_VISIVEL
+→ CLASSIFICAR_O_TIPO_DO_SINAL
+→ LER_A_SEMANTICA_DO_PADRAO/FONTE
+→ MEDIR_SE_O_RECURSO_ESTA_ATIVO
+→ MEDIR_EFEITO_CONCRETO
+→ PROVAR_MECANISMO_CAUSAL
+→ SO_ENTAO AVALIAR INTENCAO/DANO
+```
+
+Qualquer seta não demonstrada termina em `UNKNOWN`; não é permitido "teletransportar" do nome de uma feature, warning ou erro para uma hipótese mais forte.
+
 ## Síntese comprimida
 
 ```text
@@ -150,6 +221,7 @@ CHEFE_NAO_PEDIU_AUTOMACAO
 → SUGESTAO != MUTACAO
 → RECORRENCIA_CONFIRMADA_EM_OUTRO_PR
 → RUNTIME/DEVTOOLS_PRESERVADO_COMO_EVIDENCIA_AUXILIAR
+→ SINAIS_TECNICOS_CLASSIFICADOS_POR_CAMADA
 → CAUSALIDADE_OCULTA_CONTINUA_UNKNOWN
 ```
 
@@ -162,4 +234,8 @@ CHEFE PEDIU? NAO -> NAO CRIAR
 ESTADO DO SCHEDULER NAO MEDIDO -> NAO AFIRMAR
 ROTULO "SIMULACAO" NO DEVTOOLS != PROVA DE GPT SIMULADO
 ERRO DE UI != CAUSA PROVADA SEM VINCULO CAUSAL
+DEPRECATION WARNING != RECURSO ATIVO
+NOME ASSUSTADOR != MECANISMO PROVADO
+SINAL → CLASSE → ESTADO → EFEITO → CAUSA → INTENCAO/DANO
+SEM PROVA ENTRE AS SETAS → UNKNOWN
 ```
