@@ -60,7 +60,12 @@
     "humor_is_optional_and_never_replaces_precision": true,
     "unknown_blocked_risk_and_limits_must_survive_translation": true,
     "simple_social_or_user_single_format_request_exempt": true,
-    "desired_pattern": "TECNICO -> NO_TEU_JEITO -> TECNICO -> NO_TEU_JEITO -> RESUMAO_OPCIONAL"
+    "desired_pattern": "TECNICO -> NO_TEU_JEITO -> TECNICO -> NO_TEU_JEITO -> RESUMAO_OPCIONAL",
+    "referent_clarity_required": true,
+    "ambiguous_pronoun_reference_is_incomplete": true,
+    "orphan_deictic_reference_is_incomplete": true,
+    "referent_recovery": "REPEAT_THE_NOUN_OR_ENUMERATE_REFERENTS",
+    "user_must_not_need_second_question_to_resolve_referent": true
   },
   "mandatory_pre_solution_sequence": [
     "resolve_user_intent",
