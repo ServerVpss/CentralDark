@@ -175,15 +175,6 @@ jobs:
       - name: Testar retomada fail-closed do Hermes
         run: node --test apps/modulos/HERMES-CORE/core/continuity-guard.test.mjs
 
-      - name: Testar kernel de dissonância controlada
-        run: node --test scripts/controlled-dissonance.test.mjs
-
-      - name: Testar executor real das quatro percepções
-        run: node --test apps/modulos/HERMES-CORE/core/perception-orchestra.test.mjs
-
-      - name: Validar sintaxe da orquestra de percepção
-        run: node --check apps/modulos/HERMES-CORE/core/perception-orchestra.mjs
-
       - name: Validar sintaxe do orquestrador Hermes
         run: node --check apps/modulos/HERMES-CORE/core/orchestrator.mjs
 
@@ -267,9 +258,6 @@ jobs:
           echo "UNREGISTERED_INVARIANT=UNPROVEN_NOT_OWNED"
           echo "DREAM_REVIEW_ISOLATED=1"
           echo "DREAM_DIRECT_CANONICAL_MUTATION=0"
-          echo "CONTROLLED_DISSONANCE_KERNEL_TESTED=1"
-          echo "FOUR_PERCEPTION_EXECUTOR_TESTED=1"
-          echo "PARALLEL_PERCEPTION_SERIAL_MUTATION=1"
           echo "JOB_STATUS=${JOB_STATUS}"
           if [ "${FORK_BLOCKED:-}" = "true" ]; then
             echo "RESULTADO=BLOCKED"

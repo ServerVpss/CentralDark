@@ -21,19 +21,20 @@ Esse comando dispara quatro braços de percepção em paralelo sobre a MESMA int
 - `C_REGRESSION_FALSE_GREEN` procura regressão, falso verde e prova circular;
 - `D_SIMPLIFICATION` procura Menos É Mais sem perda de capacidade.
 
-O pacote retornado é READ_ONLY e nunca autoriza escrita. Na etapa seguinte:
+O pacote retornado é READ_ONLY e nunca autoriza escrita. A arbitragem obrigatória é:
 
-`4 PERCEPÇÕES → NORMALIZAR EVIDÊNCIA → DEDUPE → CONFRONTAR INDEPENDÊNCIA CAUSAL → TESTE DISCRIMINANTE QUANDO HOUVER CONFLITO → DELTA MATERIAL → UMA ÚNICA AÇÃO DO WRITER → CRITIC/CONTRAPROVA → OURO`
+`4 PERCEPÇÕES → NORMALIZAR EVIDÊNCIA → DEDUPE → CONFRONTAR INDEPENDÊNCIA CAUSAL → TESTE DISCRIMINANTE QUANDO HOUVER CONFLITO → DELTA MATERIAL PROVADO → UMA ÚNICA AÇÃO DO WRITER → CRITIC/CONTRAPROVA → OURO`
 
-Regras executáveis do pacote:
+Regras do pacote:
 
 - `all_four_completed=false` → **nenhuma mutação**; repetir/fazer fallback somente dos braços ausentes;
+- `unproven_findings>0` → hipótese/UNKNOWN continua candidata; executar teste discriminante antes da caneta;
 - `material_findings=0` → `NO_CHANGE`; não fabricar trabalho;
-- `canonical_mutation_slots=1` → uma caneta por ferida;
-- `counterproof_required=true` → mutação não é cristal;
+- `canonical_mutation_slots=1` → uma caneta por vez;
+- `counterproof_required=true` → mutação ainda não é cristal;
 - `gold_requires_counterproof=true` → ouro só depois da contraprova/regressão.
 
-Não conte quatro respostas correlacionadas como quatro provas independentes. `evidence_confrontation.effective_independent_count` só cresce com `independence_key` causal explícita e distinta. Chave repetida é um único cluster correlacionado; `UNKNOWN` não recebe crédito de independência. Mesmo quatro respostas concordando continuam `four_answers_are_four_proofs=false`.
+Não conte quatro respostas correlacionadas como quatro provas independentes. `evidence_confrontation.effective_independent_count` só cresce quando há `independence_key` causal explícita em achado `FACT` com `evidence_ref` observável. Chave repetida é um cluster; `UNKNOWN` não recebe crédito de independência. Mesmo quatro respostas concordando continuam `four_answers_are_four_proofs=false`.
 
 Se os braços discordarem, não vote: escolha o teste que distingue as hipóteses. Se `material_delta=NO_CHANGE`, não fabrique trabalho.
 

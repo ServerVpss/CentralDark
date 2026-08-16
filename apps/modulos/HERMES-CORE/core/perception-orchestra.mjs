@@ -1,32 +1,36 @@
 #!/usr/bin/env node
 
 import { execFile } from 'node:child_process';
-import { createHash } from 'node:crypto';
 import { promisify } from 'node:util';
 import { readFile, readdir, stat } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import {
-  ATTACK_PROFILES,
-  PROTOCOL,
-  buildPerceptionPlan,
-  convergePerceptions,
-} from '../../../../scripts/controlled-dissonance.mjs';
 
 const pexec = promisify(execFile);
 const DIR = dirname(fileURLToPath(import.meta.url));
 const BASE = dirname(DIR);
-const REPO = join(DIR, '..', '..', '..', '..');
 const CADEIA_PATH = join(DIR, 'cadeia.json');
 const ANDAMENTO = join(BASE, 'missions', 'em-andamento');
 
-export const PERCEPTION_ATTACKS = Object.freeze(
-  ATTACK_PROFILES.map((profile) => Object.freeze({
-    id: profile.id,
-    objective: profile.objective,
-  })),
-);
+export const PERCEPTION_ATTACKS = Object.freeze([
+  Object.freeze({
+    id: 'A_LOGIC',
+    objective: 'Tente quebrar a lógica, premissas, causalidade e contradições da intenção atual.',
+  }),
+  Object.freeze({
+    id: 'B_IMPLEMENTATION',
+    objective: 'Tente quebrar a implementação: interfaces, owners, integração, estados e falhas concretas.',
+  }),
+  Object.freeze({
+    id: 'C_REGRESSION_FALSE_GREEN',
+    objective: 'Procure regressão, falso verde, prova circular, denominador incompleto e erro mascarado.',
+  }),
+  Object.freeze({
+    id: 'D_SIMPLIFICATION',
+    objective: 'Procure simplificação Menos É Mais: remover trabalho, duplicação e complexidade sem perder capacidade.',
+  }),
+]);
 
 const REQUIRED_ROLES = Object.freeze(PERCEPTION_ATTACKS.map((item) => item.id));
 
@@ -39,8 +43,10 @@ function normalizeText(value) {
   return String(value ?? '').trim().replace(/\s+/g, ' ');
 }
 
-function digest(value) {
-  return createHash('sha256').update(String(value ?? '')).digest('hex');
+function normalizeIndependenceKey(value) {
+  const key = normalizeText(value);
+  if (!key || key.toUpperCase() === 'UNKNOWN') return 'UNKNOWN';
+  return key.toLowerCase();
 }
 
 function extractJson(text) {
@@ -64,177 +70,135 @@ export function assignPerceptionModels(models, attacks = PERCEPTION_ATTACKS) {
   }));
 }
 
-export function buildKernelState({ mission, head, assignments = [] }) {
-  const text = normalizeText(mission);
-  const observedHead = normalizeText(head);
-  if (!text) throw new Error('PERCEPTION_MISSION_REQUIRED');
-  if (!observedHead) throw new Error('PERCEPTION_HEAD_REQUIRED');
-  const key = digest(text).slice(0, 20);
-  const agents = PERCEPTION_ATTACKS.map((attack, index) => {
-    const assignment = assignments[index];
-    const model = normalizeText(assignment?.model) || 'provider-unknown';
-    return `hermes-${attack.id.toLowerCase()}-${index}-${digest(model).slice(0, 8)}`;
-  });
-  return {
-    mission_id: `HERMES-DISSONANCE-${key}`,
-    intent_id: `INTENT-${key}`,
-    material_id: `MATERIAL-${key}`,
-    head: { sha: observedHead },
-    trail: { route_id: `TRAIL-${key}` },
-    scope: { allowed: ['repo:read'], denied: ['repo:write'] },
-    writer: { agent: 'hermes' },
-    writer_scope: `mission:${key}`,
-    coordinator: 'sol',
-    perception_agents: agents,
-  };
-}
-
-function perceptionIsUnproven(result) {
-  const finding = result?.finding || {};
-  const materialDelta = normalizeText(finding.material_delta) || 'NO_CHANGE';
-  if (materialDelta.toUpperCase() === 'NO_CHANGE') return false;
-  const evidenceRef = normalizeText(finding.evidence_ref) || 'UNKNOWN';
-  const classification = String(finding.class || 'UNKNOWN').toUpperCase();
-  return evidenceRef.toUpperCase() === 'UNKNOWN' || classification !== 'FACT';
-}
-
-function toKernelReceipt(result, state) {
-  const finding = result?.finding || {};
-  const materialDelta = normalizeText(finding.material_delta) || 'NO_CHANGE';
-  const evidenceRef = normalizeText(finding.evidence_ref) || 'UNKNOWN';
-  const independenceKey = normalizeText(finding.independence_key) || 'UNKNOWN';
-  const claim = normalizeText(finding.claim);
-  const classification = String(finding.class || 'UNKNOWN').toUpperCase();
-  const noChange = materialDelta.toUpperCase() === 'NO_CHANGE';
-  const hasEvidence = evidenceRef.toUpperCase() !== 'UNKNOWN';
-  const verdict = noChange ? 'NO_CHANGE' : (hasEvidence && classification === 'FACT' ? 'MATERIAL' : 'UNKNOWN');
-
-  return {
-    protocol: PROTOCOL,
-    attack_profile: result.role,
-    observer: `hermes-${String(result.role || '').toLowerCase()}`,
-    intent_id: state.intent_id,
-    material_id: state.material_id,
-    observed_head: state.head.sha,
-    writer_scope: state.writer_scope,
-    read_only: true,
-    write_performed: false,
-    findings: [{
-      wound: claim || result.role,
-      claim: claim || (noChange ? null : `UNKNOWN:${result.role}`),
-      verdict,
-      evidence_refs: hasEvidence ? [evidenceRef] : [],
-      evidence_cluster: independenceKey.toUpperCase() === 'UNKNOWN' ? 'cluster:unproven' : independenceKey,
-      proposed_correction: noChange ? null : materialDelta,
-    }],
-  };
-}
-
-function blockedPacket({ mission, results, state, plan, failedRoles, status }) {
-  return Object.freeze({
-    schema_version: 3,
-    protocol: PROTOCOL,
-    mode: 'PARALLEL_PERCEPTION_SERIAL_MUTATION',
-    same_intent: true,
-    mission: normalizeText(mission).slice(0, 1200),
-    observed_head: state.head.sha,
-    parallel_perception: true,
-    mutation_allowed: false,
-    canonical_mutation_slots: 0,
-    writer_required_for_mutation: true,
-    model_vote_is_truth: false,
-    reality_is_judge: true,
-    kernel_plan_status: plan?.status || 'UNKNOWN',
-    kernel_convergence: { status, accepted: false },
-    results,
-    failed_roles: failedRoles,
-    deduped_findings: [],
-    serial_mutation_queue: [],
-    ready_for_writer: false,
-    next_rule: 'RESOLVE_BLOCKED_PERCEPTIONS_BEFORE_MUTATION',
-  });
-}
-
-export function buildPerceptionPacket({ mission, results, head = 'TEST_HEAD', assignments = [] }) {
-  const state = buildKernelState({ mission, head, assignments });
-  const plan = buildPerceptionPlan(state);
-  if (plan.accepted !== true) {
-    return blockedPacket({
-      mission,
-      results,
-      state,
-      plan,
-      failedRoles: [...REQUIRED_ROLES],
-      status: plan.status,
+export function dedupePerceptionFindings(results) {
+  const seen = new Set();
+  const output = [];
+  for (const item of Array.isArray(results) ? results : []) {
+    if (item?.status !== 'OK' || !item.finding) continue;
+    const finding = item.finding;
+    const key = `${normalizeText(finding.claim).toLowerCase()}|${normalizeText(finding.recommended_test).toLowerCase()}`;
+    if (!key.replace('|', '')) continue;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    output.push({
+      role: item.role,
+      model: item.model,
+      independence: item.independence,
+      claim: normalizeText(finding.claim),
+      class: ['FACT', 'INFERENCE', 'HYPOTHESIS', 'UNKNOWN'].includes(String(finding.class || '').toUpperCase())
+        ? String(finding.class).toUpperCase()
+        : 'UNKNOWN',
+      evidence_ref: normalizeText(finding.evidence_ref) || 'UNKNOWN',
+      independence_key: normalizeIndependenceKey(finding.independence_key),
+      counterexample: normalizeText(finding.counterexample),
+      recommended_test: normalizeText(finding.recommended_test),
+      material_delta: normalizeText(finding.material_delta) || 'NO_CHANGE',
     });
   }
+  return output;
+}
 
-  const resultList = Array.isArray(results) ? results : [];
+export function confrontPerceptionEvidence(results) {
+  const items = Array.isArray(results) ? results : [];
   const successfulRoles = new Set(
-    resultList
+    items
       .filter((item) => item?.status === 'OK' && item.finding)
-      .map((item) => item.role),
+      .map((item) => item.role)
+      .filter((role) => REQUIRED_ROLES.includes(role)),
   );
-  const failedRoles = REQUIRED_ROLES.filter((role) => !successfulRoles.has(role));
-  if (failedRoles.length > 0 || resultList.length !== REQUIRED_ROLES.length) {
-    return blockedPacket({
-      mission,
-      results: resultList,
-      state,
-      plan,
-      failedRoles,
-      status: 'BLOCKED_FOUR_PERCEPTIONS_REQUIRED',
-    });
+  const missingRoles = REQUIRED_ROLES.filter((role) => !successfulRoles.has(role));
+  const failedRoles = REQUIRED_ROLES.filter((role) =>
+    items.some((item) => item?.role === role && item?.status !== 'OK')
+  );
+  const clusters = new Map();
+  const unprovenRoles = [];
+  const tests = [];
+
+  for (const item of items) {
+    if (item?.status !== 'OK' || !item.finding || !REQUIRED_ROLES.includes(item.role)) continue;
+    const finding = item.finding;
+    const noChange = normalizeText(finding.material_delta).toUpperCase() === 'NO_CHANGE';
+    const classification = String(finding.class || 'UNKNOWN').toUpperCase();
+    const evidenceRef = normalizeText(finding.evidence_ref) || 'UNKNOWN';
+    const independenceKey = normalizeIndependenceKey(finding.independence_key);
+    const isProvenMaterial = !noChange && classification === 'FACT' && evidenceRef.toUpperCase() !== 'UNKNOWN';
+
+    if (!noChange && !isProvenMaterial) unprovenRoles.push(item.role);
+    if (isProvenMaterial && independenceKey !== 'UNKNOWN') {
+      const roles = clusters.get(independenceKey) || [];
+      roles.push(item.role);
+      clusters.set(independenceKey, roles);
+    }
+
+    const recommendedTest = normalizeText(finding.recommended_test);
+    if (recommendedTest && !tests.includes(recommendedTest)) tests.push(recommendedTest);
   }
 
-  const unprovenRoles = resultList.filter(perceptionIsUnproven).map((item) => item.role);
-  if (unprovenRoles.length > 0) {
-    return blockedPacket({
-      mission,
-      results: resultList,
-      state,
-      plan,
-      failedRoles: unprovenRoles,
-      status: 'BLOCKED_UNPROVEN_PERCEPTION_FINDINGS',
-    });
-  }
-
-  const receipts = resultList.map((result) => toKernelReceipt(result, state));
-  const convergence = convergePerceptions(state, receipts);
-  const readyForWriter = convergence.accepted === true && convergence.status === 'READY_SINGLE_WRITER_MUTATION';
-  const noMaterialDelta = convergence.accepted === true && convergence.status === 'NO_MATERIAL_DELTA';
+  const correlatedClusters = [...clusters.entries()]
+    .filter(([, roles]) => roles.length > 1)
+    .map(([independence_key, roles]) => ({ independence_key, roles }));
+  const allFourCompleted = missingRoles.length === 0 && successfulRoles.size === REQUIRED_ROLES.length;
 
   return Object.freeze({
-    schema_version: 3,
-    protocol: PROTOCOL,
+    required_roles: [...REQUIRED_ROLES],
+    successful_roles: [...successfulRoles],
+    failed_roles: failedRoles,
+    missing_roles: missingRoles,
+    all_four_completed: allFourCompleted,
+    explicit_independence_keys: [...clusters.keys()],
+    effective_independent_count: clusters.size,
+    correlated_clusters: correlatedClusters,
+    unproven_roles: [...new Set(unprovenRoles)],
+    discriminating_tests: tests,
+    confidence_can_increase: allFourCompleted && clusters.size >= 2,
+    four_answers_are_four_proofs: false,
+    correlated_evidence_inflation_blocked: true,
+  });
+}
+
+export function buildPerceptionPacket({ mission, results }) {
+  const deduped = dedupePerceptionFindings(results);
+  const confrontation = confrontPerceptionEvidence(results);
+  const materialFindings = deduped.filter((item) => (
+    item.material_delta.toUpperCase() !== 'NO_CHANGE'
+    && item.class === 'FACT'
+    && item.evidence_ref.toUpperCase() !== 'UNKNOWN'
+  ));
+  const unprovenFindings = deduped.filter((item) => (
+    item.material_delta.toUpperCase() !== 'NO_CHANGE'
+    && !(item.class === 'FACT' && item.evidence_ref.toUpperCase() !== 'UNKNOWN')
+  ));
+  const readyForWriter = confrontation.all_four_completed
+    && unprovenFindings.length === 0
+    && materialFindings.length > 0;
+
+  let nextRule = 'CONFRONT_EVIDENCE_THEN_ONE_CANONICAL_MUTATION';
+  if (!confrontation.all_four_completed) nextRule = 'RETRY_MISSING_PERCEPTIONS_BEFORE_MUTATION';
+  else if (unprovenFindings.length > 0) nextRule = 'RUN_DISCRIMINATING_TEST_BEFORE_MUTATION';
+  else if (materialFindings.length === 0) nextRule = 'NO_MATERIAL_DELTA_NO_MUTATION';
+
+  return Object.freeze({
+    schema_version: 2,
     mode: 'PARALLEL_PERCEPTION_SERIAL_MUTATION',
     same_intent: true,
     mission: normalizeText(mission).slice(0, 1200),
-    observed_head: state.head.sha,
     parallel_perception: true,
     mutation_allowed: false,
     canonical_mutation_slots: readyForWriter ? 1 : 0,
     writer_required_for_mutation: true,
-    writer: state.writer.agent,
-    writer_scope: state.writer_scope,
     model_vote_is_truth: false,
     reality_is_judge: true,
     dedupe_required: true,
     correlated_evidence_inflation_blocked: true,
     counterproof_required: true,
     gold_requires_counterproof: true,
-    kernel_plan_status: plan.status,
-    kernel_convergence: convergence,
-    results: resultList,
-    failed_roles: [],
-    deduped_findings: convergence.deduped_findings || [],
-    serial_mutation_queue: convergence.canonical_mutations || [],
+    results,
+    deduped_findings: deduped,
+    material_findings: materialFindings,
+    unproven_findings: unprovenFindings,
+    evidence_confrontation: confrontation,
     ready_for_writer: readyForWriter,
-    next_rule: readyForWriter
-      ? 'SERIALIZE_CANONICAL_MUTATIONS_ONE_AT_A_TIME'
-      : noMaterialDelta
-        ? 'NO_MATERIAL_DELTA_NO_MUTATION'
-        : 'BLOCK_MUTATION_UNTIL_KERNEL_ACCEPTS_CONVERGENCE',
+    next_rule: nextRule,
   });
 }
 
@@ -322,28 +286,16 @@ async function callPerception(assignment, mission, timeoutMs) {
   }
 }
 
-async function resolveHead() {
-  const { stdout } = await pexec('git', ['rev-parse', 'HEAD'], {
-    cwd: REPO,
-    maxBuffer: 64 * 1024,
-    timeout: 5000,
-  });
-  const head = normalizeText(stdout);
-  if (!head) throw new Error('PERCEPTION_HEAD_UNAVAILABLE');
-  return head;
-}
-
 export async function runFourAnglePerception({ mission, models = null } = {}) {
   const text = normalizeText(mission);
   if (!text) throw new Error('PERCEPTION_MISSION_REQUIRED');
   const configs = models || activeModels();
   const assignments = assignPerceptionModels(configs);
   const timeoutByModel = new Map((configs || []).map((item) => [item.modelo, item.timeout_ms || 30_000]));
-  const head = await resolveHead();
   const results = await Promise.all(assignments.map((assignment) =>
     callPerception(assignment, text, timeoutByModel.get(assignment.model) || 30_000)
   ));
-  return buildPerceptionPacket({ mission: text, results, head, assignments });
+  return buildPerceptionPacket({ mission: text, results });
 }
 
 async function main() {
