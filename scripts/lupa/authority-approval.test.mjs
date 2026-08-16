@@ -3,6 +3,7 @@ import test from "node:test";
 
 import {
   CANONICAL_AUTHORITY_LABEL,
+  CANONICAL_AUTHORITY_SOURCE,
   authorityApprovalForEvent,
   canonicalAuthorityLabel,
 } from "./authority-approval.mjs";
@@ -14,7 +15,7 @@ test("label canônica visual emitida no GitHub autoriza SEGREDO/CHEFE", () => {
   assert.deepEqual(result, {
     approved: true,
     authority: "SEGREDO/CHEFE",
-    source: `github-label:${CANONICAL_AUTHORITY_LABEL}`,
+    source: CANONICAL_AUTHORITY_SOURCE,
   });
 });
 
@@ -28,6 +29,7 @@ test("alias textual histórico normaliza para a label canônica visual", () => {
   });
   assert.equal(result.approved, true);
   assert.equal(result.authority, "SEGREDO/CHEFE");
+  assert.equal(result.source, CANONICAL_AUTHORITY_SOURCE);
 });
 
 test("texto do corpo nunca concede autorização", () => {
