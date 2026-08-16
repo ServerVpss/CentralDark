@@ -9,6 +9,7 @@ Antes de responder ou agir neste repositório:
 5. Resolva a identidade vigente por `.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA`.
 6. Emita uma única vez o `CENTRALDARK_AI_BOOT`.
 7. Obedeça `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json`.
+8. Aplique `docs/GOVERNANCA/CONTEXTO-PESSOAL-E-PROVENIENCIA-TEMPORAL.md` antes de usar ou surfaciar contexto pessoal, localização ou conversão temporal derivada.
 
 `REUSE_BEFORE_CREATE_REQUIRED`
 
