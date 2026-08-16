@@ -89,12 +89,12 @@ test("recibo incompleto não autoriza", () => {
   assert.equal(authorizationFor(pr).authorized, false);
 });
 
-test("label visual canônica autoriza e preserva receipt compatível", () => {
+test("label visual canônica autoriza", () => {
   const auth = authorizationFor(prFixture({ body: "sem recibo", labels: [{ name: "👑 PERMITO-SEGREDO" }] }));
   assert.equal(auth.authorized, true);
   assert.equal(auth.viaLabel, true);
   assert.equal(auth.viaBody, false);
-  assert.equal(auth.source, "github-label:permito-segredo");
+  assert.equal(auth.source, "github-label:👑 PERMITO-SEGREDO");
 });
 
 test("alias textual permito-segredo continua compatível sem virar segunda label", () => {
@@ -102,7 +102,7 @@ test("alias textual permito-segredo continua compatível sem virar segunda label
     const auth = authorizationFor(prFixture({ body: "sem recibo", labels: [{ name }] }));
     assert.equal(auth.authorized, true);
     assert.equal(auth.viaLabel, true);
-    assert.equal(auth.source, "github-label:permito-segredo");
+    assert.equal(auth.source, "github-label:👑 PERMITO-SEGREDO");
   }
 });
 
