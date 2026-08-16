@@ -18,6 +18,96 @@ const normalizeSkills = (skills) => {
   return [...new Set(skills.map((item) => requiredText(item, 'skill')))];
 };
 
+const requiredFiniteNumber = (value, name) => {
+  if (!Number.isFinite(value)) throw new TypeError(`${name} must be a finite number`);
+  return value;
+};
+
+const normalizeSignificantDigits = (value) => {
+  if (!Number.isInteger(value) || value < 1 || value > 15) {
+    throw new TypeError('significant_digits must be an integer between 1 and 15');
+  }
+  return value;
+};
+
+const toSignificant = (value, digits) => {
+  if (value === 0) return 0;
+  return Number(value.toPrecision(digits));
+};
+
+export function quantifyRatio({
+  numerator,
+  denominator,
+  unit = 'count',
+  significant_digits = 6,
+}) {
+  const observedNumerator = requiredFiniteNumber(numerator, 'numerator');
+  const observedDenominator = requiredFiniteNumber(denominator, 'denominator');
+  const digits = normalizeSignificantDigits(significant_digits);
+  const observedUnit = requiredText(unit, 'unit');
+
+  if (observedDenominator === 0) {
+    return Object.freeze({
+      status: 'UNDEFINED',
+      numerator: observedNumerator,
+      denominator: observedDenominator,
+      unit: observedUnit,
+      ratio_raw: null,
+      percent_raw: null,
+      ratio: null,
+      percent: null,
+      significant_digits: digits,
+      formula: '100 * numerator / denominator',
+    });
+  }
+
+  const ratioRaw = observedNumerator / observedDenominator;
+  const percentRaw = ratioRaw * 100;
+  return Object.freeze({
+    status: 'PASS',
+    numerator: observedNumerator,
+    denominator: observedDenominator,
+    unit: observedUnit,
+    ratio_raw: ratioRaw,
+    percent_raw: percentRaw,
+    ratio: toSignificant(ratioRaw, digits),
+    percent: toSignificant(percentRaw, digits),
+    significant_digits: digits,
+    formula: '100 * numerator / denominator',
+  });
+}
+
+export function scientificDelta({
+  before,
+  after,
+  unit,
+  significant_digits = 6,
+}) {
+  const observedBefore = requiredFiniteNumber(before, 'before');
+  const observedAfter = requiredFiniteNumber(after, 'after');
+  const observedUnit = requiredText(unit, 'unit');
+  const digits = normalizeSignificantDigits(significant_digits);
+  const absoluteRaw = observedAfter - observedBefore;
+  const relativeRaw = observedBefore === 0 ? null : absoluteRaw / observedBefore;
+  const percentRaw = relativeRaw === null ? null : relativeRaw * 100;
+
+  return Object.freeze({
+    status: 'PASS',
+    before: observedBefore,
+    after: observedAfter,
+    unit: observedUnit,
+    absolute_delta_raw: absoluteRaw,
+    absolute_delta: toSignificant(absoluteRaw, digits),
+    relative_status: observedBefore === 0 ? 'UNDEFINED_BASELINE_ZERO' : 'PASS',
+    relative_delta_raw: relativeRaw,
+    relative_delta: relativeRaw === null ? null : toSignificant(relativeRaw, digits),
+    percent_change_raw: percentRaw,
+    percent_change: percentRaw === null ? null : toSignificant(percentRaw, digits),
+    significant_digits: digits,
+    formula: '100 * (after - before) / before',
+  });
+}
+
 export function decideFrequency({
   selected,
   previous_frequency = null,
@@ -101,6 +191,7 @@ export function recordThinkingRouteOutcome({
   engine_fitness,
   evidence,
   reusable_delta = false,
+  crystallized = false,
   fixed_point = false,
 }) {
   if (!FREQUENCIES.has(frequency)) throw new TypeError(`unknown frequency: ${frequency}`);
@@ -116,10 +207,15 @@ export function recordThinkingRouteOutcome({
   const proven = correctness === 'PASS' && counterproof === 'PASS';
   const failed = correctness === 'FAIL' || counterproof === 'FAIL';
   const learning_state = failed ? 'RECALIBRATE' : (proven ? 'REINFORCE' : 'OBSERVE_ONLY');
-  const crystal_eligible = proven && reusable_delta === true && fixed_point === true;
+  const crystal_required = proven && reusable_delta === true;
+  const crystal_eligible = crystal_required;
+  const crystal_done = crystallized === true;
+  const fixedPointRequested = fixed_point === true;
+  const fixed_point_blocked_by_uncrystallized = fixedPointRequested && crystal_required && !crystal_done;
+  const effectiveFixedPoint = fixedPointRequested && !fixed_point_blocked_by_uncrystallized;
 
   return Object.freeze({
-    schema_version: 1,
+    schema_version: 2,
     mode: 'SELF_TUNING_THINKING_ROUTE_OUTCOME',
     material_class: requiredText(material_class, 'material_class'),
     material_fingerprint: requiredText(material_fingerprint, 'material_fingerprint'),
@@ -134,10 +230,14 @@ export function recordThinkingRouteOutcome({
     comparable_sample: engine_fitness.comparable_sample === true,
     evidence: observedEvidence,
     reusable_delta: reusable_delta === true,
-    fixed_point: fixed_point === true,
+    crystallized: crystal_done,
+    fixed_point_requested: fixedPointRequested,
+    fixed_point: effectiveFixedPoint,
+    fixed_point_blocked_by_uncrystallized,
     learning_state,
     reinforce_route: learning_state === 'REINFORCE',
     recalibrate_route: learning_state === 'RECALIBRATE',
+    crystal_required,
     crystal_eligible,
     ranking_allowed: engine_fitness.ranking_allowed === true,
   });
@@ -169,7 +269,13 @@ export function globalRuleCoverage({
   }
   if (!Number.isInteger(escaping_adapters) || escaping_adapters < 0) return Object.freeze({ status: 'UNKNOWN', percent: null });
 
-  const percent = Math.floor((loaded_consumers / applicable_consumers) * 100);
+  const quantified = quantifyRatio({
+    numerator: loaded_consumers,
+    denominator: applicable_consumers,
+    unit: 'consumers',
+    significant_digits: 6,
+  });
+  const percent = Math.floor(quantified.percent_raw);
   const closed = loaded_consumers === applicable_consumers
     && positive_test === true
     && negative_test === true
@@ -193,4 +299,10 @@ export const SOL_FREQUENCY_INVARIANTS = Object.freeze({
   ROUTE_REINFORCEMENT_REQUIRES_PASS_AND_COUNTERPROOF: true,
   ROUTE_CRYSTAL_REQUIRES_REUSABLE_FIXED_POINT: true,
   GLOBAL_RULE_COVERAGE_100_REQUIRES_CLOSED_DENOMINATOR: true,
+  QUANTIFY_WHEN_MEASURABLE: true,
+  PERCENTAGE_REQUIRES_CLOSED_DENOMINATOR: true,
+  SCIENTIFIC_CALCULATION_REQUIRED_WHEN_MAGNITUDE_MATTERS: true,
+  NO_FALSE_PRECISION: true,
+  CRYSTALLIZE_ALL_PROVEN_REUSABLE_DELTA: true,
+  FIXED_POINT_BLOCKS_UNCRYSTALLIZED_REUSABLE_DELTA: true,
 });
