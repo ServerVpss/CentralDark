@@ -67,6 +67,7 @@ function validateContract(value) {
   const errors = [];
   const image = value.multimodal_input_policy ?? {};
   const portable = value.portable_boot_policy ?? {};
+  const language = value.language_policy ?? {};
 
   if (image.marker !== 'IMAGE_INPUT_IS_OPERATIONAL') errors.push('IMAGE_MARKER');
   if (image.image_is_sensor !== true) errors.push('IMAGE_NOT_SENSOR');
@@ -74,6 +75,15 @@ function validateContract(value) {
   if (image.screenshot_is_trigger_for_live_measurement !== true) errors.push('SCREENSHOT_MUST_TRIGGER_LIVE_MEASUREMENT');
   if (image.live_state_required_before_mutation !== true) errors.push('LIVE_REMEASURE_REQUIRED');
   if (image.material_visual_finding_action !== 'REMEASURE_LIVE_SOURCE_THEN_ACT_MINIMALLY') errors.push('IMAGE_ACTION_INVALID');
+
+  if (language.paired_explanation_house_standard !== true) errors.push('PAIRED_EXPLANATION_REQUIRED');
+  if (language.chefe_register_required_immediately_after_material_technical_unit !== true) errors.push('INLINE_CHEFE_REGISTER_REQUIRED');
+  if (language.final_simple_summary_does_not_replace_inline_translation !== true) errors.push('INLINE_TRANSLATION_CANNOT_BE_REPLACED_BY_SUMMARY');
+  if (language.referent_clarity_required !== true) errors.push('REFERENT_CLARITY_REQUIRED');
+  if (language.ambiguous_pronoun_reference_is_incomplete !== true) errors.push('AMBIGUOUS_PRONOUN_MUST_BE_INCOMPLETE');
+  if (language.orphan_deictic_reference_is_incomplete !== true) errors.push('ORPHAN_DEICTIC_MUST_BE_INCOMPLETE');
+  if (language.referent_recovery !== 'REPEAT_THE_NOUN_OR_ENUMERATE_REFERENTS') errors.push('REFERENT_RECOVERY_INVALID');
+  if (language.user_must_not_need_second_question_to_resolve_referent !== true) errors.push('REFERENT_SECOND_QUESTION_FORBIDDEN');
 
   if (portable.marker !== 'CENTRALDARK_PORTABLE_KERNEL') errors.push('PORTABLE_MARKER');
   if (portable.canonical_entrypoint !== 'LEIA-ME-IA.md') errors.push('PORTABLE_ENTRYPOINT');
@@ -252,6 +262,19 @@ const CAPABILITY_SPECS = [
       '"screenshot_is_current_truth": false',
     ],
     reproduction: 'USE_VISUAL_INPUT_AS_SENSOR_THEN_REMEASURE_LIVE_SOURCE',
+  },
+  {
+    id: 'PAIRED_EXPLANATION_AND_REFERENT_CLARITY',
+    layer: 'COMMUNICATION',
+    owner: CONTRACT,
+    markers: [
+      '"paired_explanation_house_standard": true',
+      '"chefe_register_required_immediately_after_material_technical_unit": true',
+      '"referent_clarity_required": true',
+      '"ambiguous_pronoun_reference_is_incomplete": true',
+      '"referent_recovery": "REPEAT_THE_NOUN_OR_ENUMERATE_REFERENTS"',
+    ],
+    reproduction: 'NAME_THE_TECHNICAL_TERM_TRANSLATE_INLINE_AND_REPEAT_THE_NOUN_IF_REFERENCE_COULD_BE_AMBIGUOUS',
   },
   {
     id: 'PORTABLE_REPRODUCTION_HEAD_BOUND',
