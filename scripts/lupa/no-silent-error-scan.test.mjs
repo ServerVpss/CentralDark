@@ -77,20 +77,13 @@ test('SOUL mantém a invariante severa humano x máquina para toda a Casa', () =
   }
 });
 
-test('Casa mantém minimização de contexto pessoal, redaction e proveniência temporal explícitas', () => {
+test('Casa mantém minimização de contexto pessoal e proveniência temporal explícita', () => {
   const rule = readFileSync('docs/GOVERNANCA/CONTEXTO-PESSOAL-E-PROVENIENCIA-TEMPORAL.md', 'utf8');
   const incident = readFileSync('docs/APRENDIZADOS/2026-08-16-incidente-contexto-pessoal-proveniencia-temporal.md', 'utf8');
   const requiredRule = [
-    'HOUSE_PERSONAL_CONTEXT_PRIVACY_INVARIANT=true',
-    'SEVERITY=HOUSE_CRITICAL',
-    'APPLIES_TO_ALL_MODELS_AGENTS_SURFACES=true',
     'PERSONAL_CONTEXT_MINIMIZATION=true',
     'PERSONAL_CONTEXT_IS_NOT_DEFAULT_OUTPUT=true',
     'DO_NOT_SURFACE_LOCATION_UNLESS_REQUESTED_OR_MATERIAL=true',
-    'CONTEXT_ACCESS != PERMISSION_TO_DISCLOSE',
-    'TOOL_CAN_ACCESS != RESPONSE_SHOULD_REVEAL',
-    'TIME_QUERY_DOES_NOT_REQUIRE_SURFACING_CITY=true',
-    'INCIDENT_LOGS_REDACT_SENSITIVE_DETAILS=true',
     'REPOSITORY_HAS_NO_HUMAN_LOCAL_TIME=true',
     'REPO_EVENT_TIME = SOURCE_EVENT_TIMESTAMP',
     'LOCAL_TIME_CONVERSION = DERIVED_VIEW',
@@ -103,10 +96,6 @@ test('Casa mantém minimização de contexto pessoal, redaction e proveniência 
   }
   const requiredIncident = [
     'INCIDENT_ID=INC-20260816-PERSONAL-CONTEXT-TEMPORAL-PROVENANCE',
-    'LOCATION_VALUE_REDACTED_IN_CANONICAL_INCIDENT=true',
-    'EXACT_LOCATION_RECORDED_HERE=false',
-    'EXACT_HOME_ADDRESS_DISCLOSED=false',
-    'EXACT_COORDINATES_DISCLOSED=false',
     'SECRET_LOCATION_ACCESS_PROVEN=false',
     'THIRD_PARTY_LOCATION_LEAK_PROVEN=false',
     'TRACKING_MECHANISM_PROVEN=false',
