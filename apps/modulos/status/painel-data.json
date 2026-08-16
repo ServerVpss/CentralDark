@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-16T19:29:43.903Z",
-  "updatedAtBR": "16/08/2026, 16:29:43 BRT",
+  "updatedAt": "2026-08-16T21:52:24.311Z",
+  "updatedAtBR": "16/08/2026, 18:52:24 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "docs(memoria): semear contexto da história do CHEFE sem reescrever fontes (#977)",
+    "lastCommit": "feat(hub): registrar pacote Screenshots na Estante (#979)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,38 @@
   ],
   "events": [
     {
+      "time": "2026-08-16T21:52:24.311Z",
+      "titulo": "Push na main · 5930ecff45611c151928307fe4d972b89fb8c4b3",
+      "detalhe": "feat(hub): registrar pacote Screenshots na Estante (#979)",
+      "area": "Repositório",
+      "sha": "5930ecf",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-08-16T21:43:18.014Z",
+      "titulo": "Push na main · c86cccefb60ed522fd0a9b693193f152ec3b8c54",
+      "detalhe": "fix(autonomia): cristalizar selo canônico antes de promover (#983)",
+      "area": "Repositório",
+      "sha": "c86ccce",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-08-16T19:59:16.336Z",
+      "titulo": "Push na main · 13bce83fd805f1e16bc8ee485eccdb5584c72274",
+      "detalhe": "docs(soul): registrar perfuminho e essência como derivados do OURO",
+      "area": "Repositório",
+      "sha": "13bce83",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-08-16T19:40:46.546Z",
+      "titulo": "Push na main · c8db7061762a3dcc2d158feca9592cea2462a39c",
+      "detalhe": "feat(hub): adicionar Boot Studio editável no Admin (#978)",
+      "area": "Repositório",
+      "sha": "c8db706",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-16T19:29:43.903Z",
       "titulo": "Push na main · e7d3df64c5d7863a127b032500ea58b1174b7a25",
       "detalhe": "docs(memoria): semear contexto da história do CHEFE sem reescrever fontes (#977)",
@@ -964,38 +996,6 @@
       "detalhe": "fix(labels): curar taxonomia operacional e fábricas de ruído",
       "area": "Repositório",
       "sha": "39b1508",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-15T21:04:29.496Z",
-      "titulo": "Push na main · 262196e04a0561c92ce639c0559d623a76fe20cb",
-      "detalhe": "feat(admin): centralizar provider control plane no Cofre (#874)",
-      "area": "Repositório",
-      "sha": "262196e",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-15T21:01:51.158Z",
-      "titulo": "Push na main · b5960d9e7a454d54f01efde684a29760efb40be5",
-      "detalhe": "fix(hermes): wire applyRoutingStrategy no decisor",
-      "area": "Repositório",
-      "sha": "b5960d9",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-15T20:38:59.891Z",
-      "titulo": "Push na main · 4da60b2c0d1b572943a0b467143b82a39bd3510e",
-      "detalhe": "feat(hermes): routing-strategy.mjs + wire notes",
-      "area": "Repositório",
-      "sha": "4da60b2",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-15T20:38:37.996Z",
-      "titulo": "Push na main · 3cf24b84db974b7921d2ea9877970904660e53f4",
-      "detalhe": "feat(hub): Contabo + Gmail no oauth-broker (delta mínimo)",
-      "area": "Repositório",
-      "sha": "3cf24b8",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,34 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-16T21:52:24.311Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 5930ecff45611c151928307fe4d972b89fb8c4b3 (5930ecf)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-08-16T21:43:18.014Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · c86cccefb60ed522fd0a9b693193f152ec3b8c54 (c86ccce)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-08-16T19:59:16.336Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 13bce83fd805f1e16bc8ee485eccdb5584c72274 (13bce83)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-08-16T19:40:46.546Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · c8db7061762a3dcc2d158feca9592cea2462a39c (c8db706)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-16T19:29:43.903Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · e7d3df64c5d7863a127b032500ea58b1174b7a25 (e7d3df6)",
@@ -1729,34 +1757,6 @@
       "time": "2026-08-16T00:15:19.568Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 39b1508b87d280be1b79185935ec4623c3ae2f52 (39b1508)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-15T21:04:29.496Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 262196e04a0561c92ce639c0559d623a76fe20cb (262196e)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-15T21:01:51.158Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · b5960d9e7a454d54f01efde684a29760efb40be5 (b5960d9)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-15T20:38:59.891Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 4da60b2c0d1b572943a0b467143b82a39bd3510e (4da60b2)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-15T20:38:37.996Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 3cf24b84db974b7921d2ea9877970904660e53f4 (3cf24b8)",
       "area": "Repositório",
       "status": "sucesso"
     }
