@@ -8,6 +8,7 @@ const SOURCE_CLASSES = new Set([
   'README',
   'SKILL',
   'OFFICIAL_DOC',
+  'ACADEMIC_PAPER',
   'CODE',
   'TEST',
   'INCIDENT',
@@ -95,13 +96,78 @@ function normalizeDependencies(dependencies = []) {
   return output;
 }
 
-function routeIdentity(input) {
+export function validateExternalPolicyProposal(proposal = {}) {
+  const blockers = [];
+  const warnings = [];
+  const kind = String(proposal.kind || 'GENERIC').trim().toUpperCase();
+
+  if (proposal.source_pattern_as_house_policy === true) {
+    blockers.push('SOURCE_PATTERN_IS_NOT_HOUSE_POLICY');
+  }
+
+  if (proposal.placeholder_test === true && String(proposal.behavior_claim || '').toUpperCase() === 'PROVEN') {
+    blockers.push('PLACEHOLDER_TEST_IS_NOT_BEHAVIOR_PROOF');
+  }
+
+  if (proposal.numeric_threshold !== undefined && proposal.numeric_threshold !== null) {
+    if (proposal.local_threshold_policy_proven !== true) {
+      blockers.push('EXTERNAL_NUMERIC_THRESHOLD_REQUIRES_LOCAL_POLICY');
+    }
+  }
+
+  if (kind === 'TOIL_AUTOMATION') {
+    if (proposal.universal_toil_percentage === true) {
+      blockers.push('UNIVERSAL_TOIL_PERCENTAGE_FORBIDDEN');
+    }
+  }
+
+  if (kind === 'SLO_POLICY' && proposal.deploy_block === true) {
+    const slo = proposal.slo && typeof proposal.slo === 'object' ? proposal.slo : {};
+    const required = [
+      ['sli', slo.sli],
+      ['target', slo.target],
+      ['window', slo.window],
+      ['policy_owner', slo.policy_owner],
+      ['measurement_ref', slo.measurement_ref],
+    ];
+    const missing = required.filter(([, value]) => !nonEmpty(String(value ?? ''))).map(([name]) => name);
+    if (missing.length > 0) blockers.push(`SLO_DEPLOY_BLOCK_MISSING:${missing.join(',')}`);
+  }
+
+  if (kind === 'CI_GUIDELINE' && proposal.hard_gate === true && proposal.local_gate_policy_proven !== true) {
+    blockers.push('SOURCE_GUIDELINE_CANNOT_BECOME_HARD_GATE_WITHOUT_LOCAL_POLICY');
+  }
+
+  if (proposal.multi_agent_default === true) {
+    blockers.push('MULTI_AGENT_DEFAULT_FORBIDDEN');
+  }
+
+  if (proposal.deterministic_routine === true && proposal.new_agent_required === true) {
+    blockers.push('DETERMINISTIC_TASK_BEFORE_AGENT');
+  }
+
+  if (nonEmpty(proposal.engine_pin)) {
+    if (proposal.engine_fitness_observed !== true) blockers.push('ENGINE_PIN_REQUIRES_OBSERVED_FITNESS');
+    if (proposal.engine_runtime_available !== true) blockers.push('ENGINE_PIN_REQUIRES_RUNTIME_AVAILABILITY');
+  }
+
+  if (nonEmpty(proposal.external_owner_name) && proposal.canonical_owner_verified !== true) {
+    blockers.push('EXTERNAL_OWNER_NOT_CANONICAL_OWNER');
+  }
+
+  if (kind === 'AGENTIC_RAG' && proposal.full_corpus_every_runtime === true) {
+    blockers.push('AGENTIC_RETRIEVAL_MUST_NOT_FORCE_FULL_CORPUS_RUNTIME');
+  }
+
+  if (blockers.length === 0 && proposal.source_guideline === true) {
+    warnings.push('SOURCE_GUIDELINE_ACCEPTED_AS_GUIDANCE_NOT_HARD_POLICY');
+  }
+
   return {
-    capability: input.capability,
-    boundary: input.boundary,
-    canonical_owner: input.canonical_owner,
-    callable_skill: input.callable_skill,
-    real_consumer: input.real_consumer,
+    ok: blockers.length === 0,
+    kind,
+    blockers: [...new Set(blockers)],
+    warnings: [...new Set(warnings)],
   };
 }
 
@@ -161,6 +227,14 @@ export function compileRoute(input = {}) {
   if (counterproof.status === FAIL) blockers.push('COUNTERPROOF_FAIL');
   else if (counterproof.status !== PASS) blockers.push('COUNTERPROOF_NOT_PASS');
 
+  const externalPolicyReceipt = input.external_policy && typeof input.external_policy === 'object'
+    ? validateExternalPolicyProposal(input.external_policy)
+    : null;
+  if (externalPolicyReceipt) {
+    blockers.push(...externalPolicyReceipt.blockers);
+    warnings.push(...externalPolicyReceipt.warnings);
+  }
+
   const requiredFields = [
     ['canonical_owner', input.canonical_owner],
     ['callable_skill', input.callable_skill],
@@ -179,8 +253,8 @@ export function compileRoute(input = {}) {
     return {
       status: 'INVALID',
       errors,
-      blockers,
-      warnings,
+      blockers: [...new Set(blockers)],
+      warnings: [...new Set(warnings)],
       duplicate_sources_dropped: duplicateSources.length,
     };
   }
@@ -194,7 +268,7 @@ export function compileRoute(input = {}) {
   }).slice(0, 24);
 
   const routeIr = {
-    schema_version: 1,
+    schema_version: 2,
     route_id: routeId,
     capability,
     boundary,
@@ -212,6 +286,7 @@ export function compileRoute(input = {}) {
     })),
     proven_reusable_findings: provenReusable.map((finding) => finding.id),
     counterproof,
+    external_policy_receipt: externalPolicyReceipt,
     dependencies,
     compiled_from_head: input.compiled_from_head || null,
     source_count_raw: Array.isArray(input.sources) ? input.sources.length : 0,
@@ -219,15 +294,16 @@ export function compileRoute(input = {}) {
     source_duplicates_dropped: duplicateSources.length,
   };
 
-  const status = blockers.length === 0 ? 'COMPILED' : 'CANDIDATE';
+  const uniqueBlockers = [...new Set(blockers)];
+  const status = uniqueBlockers.length === 0 ? 'COMPILED' : 'CANDIDATE';
   return {
     status,
     route_id: routeId,
     route_ir: routeIr,
     route_hash: sha256(routeIr),
     errors,
-    blockers,
-    warnings,
+    blockers: uniqueBlockers,
+    warnings: [...new Set(warnings)],
     duplicate_sources_dropped: duplicateSources.length,
   };
 }
@@ -338,9 +414,10 @@ export function selfTest() {
     sources: [
       { id: 'official', class: 'OFFICIAL_DOC', provenance: 'official://example', state: PASS, fingerprint: 'a' },
       { id: 'duplicate', class: 'OFFICIAL_DOC', provenance: 'official://copy', state: PASS, fingerprint: 'a' },
+      { id: 'paper', class: 'ACADEMIC_PAPER', provenance: 'arxiv://example', state: PASS, fingerprint: 'paper' },
       { id: 'test', class: 'TEST', provenance: 'repo://test', state: PASS, fingerprint: 'b' },
     ],
-    findings: [{ id: 'gold', state: PASS, reusable: true, source_ids: ['official', 'test'] }],
+    findings: [{ id: 'gold', state: PASS, reusable: true, source_ids: ['official', 'paper', 'test'] }],
     conflicts: [{ id: 'c1', status: 'RESOLVED' }],
     counterproof: { status: PASS, evidence: 'counterproof://1' },
     canonical_owner: 'docs/owner.md',
@@ -358,7 +435,19 @@ export function selfTest() {
   const compiled = compileRoute(base);
   assert.equal(compiled.status, 'COMPILED');
   assert.equal(compiled.duplicate_sources_dropped, 1);
-  assert.equal(compiled.route_ir.source_count_unique, 2);
+  assert.equal(compiled.route_ir.source_count_unique, 3);
+
+  const importedBadThreshold = compileRoute({
+    ...base,
+    external_policy: {
+      kind: 'TOIL_AUTOMATION',
+      numeric_threshold: 5,
+      deterministic_routine: true,
+      new_agent_required: false,
+    },
+  });
+  assert.equal(importedBadThreshold.status, 'CANDIDATE');
+  assert.ok(importedBadThreshold.blockers.includes('EXTERNAL_NUMERIC_THRESHOLD_REQUIRES_LOCAL_POLICY'));
 
   const flash = promoteRoute(compiled, {
     authority_valid: true,
@@ -404,6 +493,7 @@ export function selfTest() {
     flash_ready: flash.status,
     unaffected_decision: unrelated.decision,
     affected_decision: affected.decision,
+    external_threshold_blocked: importedBadThreshold.status,
   };
 }
 
@@ -415,8 +505,9 @@ if (invokedDirectly && process.argv.includes('--self-test')) {
   const result = selfTest();
   console.log('KNOWLEDGE_COMPILER=PASS');
   console.log(`ROUTE=${result.compiled_route}`);
-  console.log(`DUPLICATES_DROPPED=${result.source_duplicates_dropped}`);
+  console.log(`SOURCE_DUPLICATES_DROPPED=${result.source_duplicates_dropped}`);
   console.log(`FLASH=${result.flash_ready}`);
   console.log(`UNAFFECTED=${result.unaffected_decision}`);
   console.log(`AFFECTED=${result.affected_decision}`);
+  console.log(`EXTERNAL_THRESHOLD_BLOCKED=${result.external_threshold_blocked}`);
 }
