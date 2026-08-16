@@ -14,7 +14,9 @@ Quando houver ambiguidade material, risco crítico, regressão/falso verde, loop
 
 `node apps/modulos/HERMES-CORE/core/perception-orchestra.mjs --active-mission`
 
-Esse comando dispara quatro braços de percepção em paralelo sobre a MESMA intenção:
+Isso não depende só de obedecer ao prompt. O `decisor.mjs` passa toda decisão de mutação por `perception-policy.mjs`: mutação crítica, estado diferente de `FATO`, falha/Critic recente, alvo de mutação repetido ou loop detectado são interceptados deterministicamente e convertidos no fan-out read-only antes da caneta. Um receipt só libera o mesmo `mutationScopeKey`; depois de qualquer etapa real ele deixa de valer, portanto não existe autorização reutilizável para outra ferida.
+
+Esse comando dispara quatro braços de percepção em paralelo sobre a MESMA intenção e sobre a proposta material interceptada:
 
 - `A_LOGIC` tenta quebrar lógica/premissas/causalidade;
 - `B_IMPLEMENTATION` tenta quebrar implementação/owners/integração;
@@ -27,7 +29,7 @@ O pacote retornado é READ_ONLY e nunca autoriza escrita. A arbitragem obrigató
 
 Regras do pacote:
 
-- `all_four_completed=false` → **nenhuma mutação**; repetir/fazer fallback somente dos braços ausentes;
+- `all_four_completed=false` → **nenhuma mutação**; retry/fallback roda somente nos braços que falharam, sem repetir os que já entregaram;
 - `unproven_findings>0` → hipótese/UNKNOWN continua candidata; executar teste discriminante antes da caneta;
 - `material_findings=0` → `NO_CHANGE`; não fabricar trabalho;
 - `canonical_mutation_slots=1` → uma caneta por vez;
