@@ -67,38 +67,6 @@
     "referent_recovery": "REPEAT_THE_NOUN_OR_ENUMERATE_REFERENTS",
     "user_must_not_need_second_question_to_resolve_referent": true
   },
-  "personal_context_privacy_policy": {
-    "marker": "HOUSE_PERSONAL_CONTEXT_PRIVACY_INVARIANT",
-    "severity": "HOUSE_CRITICAL",
-    "applies_to_all_models_agents_surfaces": true,
-    "context_access_is_disclosure_permission": false,
-    "tool_access_is_disclosure_permission": false,
-    "personal_context_minimization_required": true,
-    "location_lookup_requires_location_dependent_intent_or_explicit_request": true,
-    "unrequested_precise_location_disclosure": "FORBIDDEN",
-    "time_query_requires_surfacing_city": false,
-    "derived_value_should_hide_nonessential_source_detail": true,
-    "incidental_personal_context_must_be_minimized_before_response": true,
-    "decorative_personalization_with_private_context_without_task_need": "FORBIDDEN",
-    "incident_logs_redact_sensitive_details_when_exact_value_is_not_needed_for_proof": true,
-    "decision_flow": [
-      "RESOLVE_USER_INTENT",
-      "CHECK_PERSONAL_CONTEXT_NECESSITY",
-      "DO_NOT_FETCH_IF_AVOIDABLE_WHEN_NOT_NEEDED",
-      "FETCH_MINIMUM_NECESSARY_WHEN_NEEDED",
-      "DERIVE_RESULT",
-      "CHECK_RAW_PERSONAL_DETAIL_NECESSITY",
-      "RETURN_DERIVED_RESULT_ONLY_WHEN_RAW_DETAIL_NOT_NEEDED",
-      "DISCLOSE_MINIMUM_NECESSARY_DETAIL_WHEN_EXPLICITLY_REQUIRED"
-    ],
-    "regression_markers": [
-      "CONTEXT_ACCESS != PERMISSION_TO_DISCLOSE",
-      "TOOL_CAN_ACCESS != RESPONSE_SHOULD_REVEAL",
-      "PERSONAL_CONTEXT_AVAILABLE != PERSONAL_CONTEXT_MATERIAL_TO_REQUEST",
-      "INTERNAL_DERIVATION != EXTERNAL_DISCLOSURE"
-    ],
-    "forensic_origin": "docs/APRENDIZADOS/2026-08-16-incidente-exposicao-contexto-localizacao.md"
-  },
   "mandatory_pre_solution_sequence": [
     "resolve_user_intent",
     "recover_relevant_context",
