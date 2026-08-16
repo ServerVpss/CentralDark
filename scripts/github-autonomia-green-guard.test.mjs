@@ -90,7 +90,7 @@ test("paginação encontra gate válido depois da primeira página sem aceitar c
   const seen = [];
   const request = async (_token, _method, path) => {
     seen.push(path);
-    return { workflow_runs: path.includes("page=1") ? page1 : page2 };
+    return { workflow_runs: /(?:[?&])page=1(?:&|$)/.test(path) ? page1 : page2 };
   };
   const runs = await runsForPullHead("token", "ServerVpss/CentralDark", HEAD, 99, request);
   assert.equal(seen.length, 2);
