@@ -174,7 +174,7 @@ export function findSkills(entries, query, limit = 8) {
   return entries
     .map((entry) => ({ ...entry, score: scoreSkill(entry, query) }))
     .filter((entry) => entry.score > 0)
-    .sort((a, b) => b.score - a.score || a.name.localeCompare(b.name) || a.source_id.localeCompare(b.source_id))
+    .sort((a, b) => b.score - a.score || a.name.localeCompare(b.name) || a.source_id.localeCompare(b.source_id) || a.document_path.localeCompare(b.document_path))
     .slice(0, limit);
 }
 
