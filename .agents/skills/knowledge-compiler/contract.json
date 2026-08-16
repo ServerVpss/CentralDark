@@ -9,6 +9,7 @@
   "conceptual_owner": "docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md",
   "execution_owner": "docs/CONSCIENCIA/PROTOCOLO-ORQUESTRACAO-PIVETE.md",
   "skill": ".agents/skills/knowledge-compiler/SKILL.md",
+  "crystal_route": ".agents/skills/knowledge-compiler/crystal-route.json",
   "consumer": ".agents/skills/knowledge-compiler/scripts/compiler.mjs",
   "regression": ".agents/skills/knowledge-compiler/tests/compiler.test.mjs",
   "gate": ".github/workflows/lupa-conformance.yml",
