@@ -18,6 +18,23 @@ const normalizeSkills = (skills) => {
   return [...new Set(skills.map((item) => requiredText(item, 'skill')))];
 };
 
+const normalizePersistenceReceipt = (receipt) => {
+  if (receipt === null || receipt === undefined) return null;
+  if (!receipt || typeof receipt !== 'object' || Array.isArray(receipt)) {
+    throw new TypeError('persistence_receipt must be an object when provided');
+  }
+  const normalized = {
+    channel: requiredText(receipt.channel, 'persistence_receipt.channel'),
+    target: requiredText(receipt.target, 'persistence_receipt.target'),
+    observed: receipt.observed === true,
+    durable: receipt.durable === true,
+  };
+  return Object.freeze({
+    ...normalized,
+    verified: normalized.observed && normalized.durable,
+  });
+};
+
 const requiredFiniteNumber = (value, name) => {
   if (!Number.isFinite(value)) throw new TypeError(`${name} must be a finite number`);
   return value;
@@ -192,6 +209,7 @@ export function recordThinkingRouteOutcome({
   evidence,
   reusable_delta = false,
   crystallized = false,
+  persistence_receipt = null,
   fixed_point = false,
 }) {
   if (!FREQUENCIES.has(frequency)) throw new TypeError(`unknown frequency: ${frequency}`);
@@ -202,6 +220,7 @@ export function recordThinkingRouteOutcome({
 
   const normalizedSkills = normalizeSkills(skills);
   const observedEvidence = normalizeEvidence(evidence);
+  const normalizedPersistenceReceipt = normalizePersistenceReceipt(persistence_receipt);
   const correctness = engine_fitness.correctness;
   const counterproof = engine_fitness.counterproof_success;
   const proven = correctness === 'PASS' && counterproof === 'PASS';
@@ -209,13 +228,15 @@ export function recordThinkingRouteOutcome({
   const learning_state = failed ? 'RECALIBRATE' : (proven ? 'REINFORCE' : 'OBSERVE_ONLY');
   const crystal_required = proven && reusable_delta === true;
   const crystal_eligible = crystal_required;
-  const crystal_done = crystallized === true;
+  const crystallized_declared = crystallized === true;
+  const durable_memory_receipt = normalizedPersistenceReceipt?.verified === true;
+  const crystal_done = crystallized_declared && (!crystal_required || durable_memory_receipt);
   const fixedPointRequested = fixed_point === true;
   const fixed_point_blocked_by_uncrystallized = fixedPointRequested && crystal_required && !crystal_done;
   const effectiveFixedPoint = fixedPointRequested && !fixed_point_blocked_by_uncrystallized;
 
   return Object.freeze({
-    schema_version: 2,
+    schema_version: 3,
     mode: 'SELF_TUNING_THINKING_ROUTE_OUTCOME',
     material_class: requiredText(material_class, 'material_class'),
     material_fingerprint: requiredText(material_fingerprint, 'material_fingerprint'),
@@ -230,7 +251,10 @@ export function recordThinkingRouteOutcome({
     comparable_sample: engine_fitness.comparable_sample === true,
     evidence: observedEvidence,
     reusable_delta: reusable_delta === true,
+    crystallized_declared,
     crystallized: crystal_done,
+    persistence_receipt: normalizedPersistenceReceipt,
+    durable_memory_receipt,
     fixed_point_requested: fixedPointRequested,
     fixed_point: effectiveFixedPoint,
     fixed_point_blocked_by_uncrystallized,
@@ -298,6 +322,9 @@ export const SOL_FREQUENCY_INVARIANTS = Object.freeze({
   THINKING_ROUTE_OUTCOME_SHARED: true,
   ROUTE_REINFORCEMENT_REQUIRES_PASS_AND_COUNTERPROOF: true,
   ROUTE_CRYSTAL_REQUIRES_PROVEN_REUSABLE_DELTA: true,
+  CRYSTAL_REQUIRES_DURABLE_MEMORY_RECEIPT: true,
+  SELF_ASSERTED_CRYSTALLIZATION_IS_NOT_PROOF: true,
+  OBSIDIAN_WRITE_REQUIRES_PROVEN_LOCAL_CHANNEL: true,
   GLOBAL_RULE_COVERAGE_100_REQUIRES_CLOSED_DENOMINATOR: true,
   QUANTIFY_WHEN_MEASURABLE: true,
   PERCENTAGE_REQUIRES_CLOSED_DENOMINATOR: true,
