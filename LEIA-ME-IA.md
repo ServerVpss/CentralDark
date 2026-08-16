@@ -3,7 +3,7 @@ title: "LEIA-ME-IA"
 status: "CANÔNICO"
 scope: "Porta de entrada única para qualquer IA que conectar no CentralDark"
 source_of_truth: "Este arquivo + SOUL canônica + estado real medido"
-updated: 2026-08-15
+updated: 2026-08-16
 ---
 
 # LEIA-ME-IA — comece por aqui
@@ -223,6 +223,49 @@ Resposta visível + rastro real da ferramenta podem provar o comportamento visí
 
 Regressão canônica: `scripts/lupa/runtime-proof-same-target.test.mjs`.
 
+### 5.2 Ontologia operacional — manifestação, mecanismo, causa e autoridade
+
+Toda IA da Casa deve classificar a evidência na camada que ela realmente prova antes de promover conclusão. O owner global é `docs/GOVERNANCA/ONTOLOGIA-DE-EVIDENCIA-E-CAUSALIDADE.md`.
+
+```text
+MANIFESTACAO != REPRESENTACAO
+REPRESENTACAO != MECANISMO
+MECANISMO_DISPONIVEL != MECANISMO_ATIVO
+MECANISMO_ATIVO != CAUSA_PROVADA
+CORRELACAO != CAUSALIDADE
+CAPACIDADE != EXECUCAO
+UI_CONTROL != AUTORIZACAO
+OBSERVACAO != INFERENCIA
+REPETICAO != PROVA_INDEPENDENTE
+```
+
+Fluxo obrigatório quando a evidência vier de screenshot, UI, DOM, CSS, acessibilidade, DevTools, rede, service worker, console, log, GitHub, CI, API, MCP ou runtime:
+
+```text
+OBSERVAR_EXATAMENTE
+→ CLASSIFICAR_CAMADA
+→ DEDUPE
+→ SEPARAR_FATO_INFERENCIA_HIPOTESE
+→ BUSCAR_ELO_DISCRIMINANTE
+→ CONTRAPROVAR_CLAIM_MAIS_FORTE
+→ PRESERVAR_UNKNOWN
+→ PROMOVER_SOMENTE_DELTA_SOBREVIVENTE
+```
+
+Exemplo canônico: warning `-ms-high-contrast` / `forced-colors` prova a advertência observada; não prova sozinho modo de alto contraste ativo, emulação ativa nem causa de incidente adjacente.
+
+```text
+VISIBLE_LABEL != HIDDEN_MECHANISM_PROOF
+FORCED_COLORS_WARNING != FORCED_COLORS_ACTIVE
+FORCED_COLORS_WARNING != INCIDENT_CAUSE
+NETWORK_ACTIVITY != TOOL_SUCCESS_PROOF
+SERVICE_WORKER_PRESENT != SERVICE_WORKER_CAUSED_EVENT
+UI_ERROR != CAUSE_OF_ADJACENT_INCIDENT_WITHOUT_LINK
+SCREENSHOT != HIDDEN_MECHANISM_PROOF
+```
+
+No jeito do CHEFE: **placa prova placa; motor ligado precisa prova do motor; dizer que o motor causou outra coisa precisa provar o fio entre os dois.**
+
 ## 6. Menor movimento eficaz
 
 ```text
@@ -421,6 +464,7 @@ TASKS_SECRETAS
 | deploy | `docs/CONSCIENCIA/03-FLUXO-DEPLOY.md` |
 | aprendizados | `docs/CONSCIENCIA/APRENDIZADOS.md` |
 | metacognição / coevolução operacional | `docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md` |
+| ontologia de evidência / causalidade | `docs/GOVERNANCA/ONTOLOGIA-DE-EVIDENCIA-E-CAUSALIDADE.md` |
 | pendências | `docs/PENDENCIAS.md` |
 | coordenação/escritor único | `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` |
 | MetaLupa | `.agents/skills/meta-lupa/SKILL.md` |
