@@ -134,8 +134,8 @@ function scanMetaCapabilities(repoRoot) {
   if (!exists(repoRoot, META_OWNER)) return [];
   const text = read(repoRoot, META_OWNER);
   const canonicalStatus = frontmatterStatus(text) || 'OWNER_PRESENT';
-  const tokens = [...new Set(text.match(/^META_[A-Z0-9_]+$/gm) || [])]
-    .filter((token) => Object.hasOwn(META_LABELS, token));
+  const tokens = Object.keys(META_LABELS)
+    .filter((token) => new RegExp(`(^|[^A-Z0-9_])${token}([^A-Z0-9_]|$)`, 'm').test(text));
   return tokens.sort().map((token) => makeItem({
     id: `meta:${token}`,
     name: META_LABELS[token],

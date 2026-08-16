@@ -171,10 +171,10 @@ export function buildArtifact(input) {
 
   const supportLabels = new Set(['🤖 AUTO']);
   if (supportRequired) {
-    supportLabels.add('🆘 AJUDA-NECESSÁRIA');
     supportLabels.add('🤖 IA-DOCUMENTAR');
-    if (missing.some((item) => item === 'mermaid' || item === 'canvas_html')) supportLabels.add('assign:chatgpt');
-    if (missing.includes('structured_yaml')) supportLabels.add('assign:codex');
+    supportLabels.add('🟡 IA-PRECISA-REVISAR');
+    if (missing.some((item) => item === 'mermaid' || item === 'canvas_html')) supportLabels.add('🧠 AGENTE-CHATGPT');
+    if (missing.includes('structured_yaml')) supportLabels.add('🧠 AGENTE-CODEX');
   }
   if (sensitiveBlocked) {
     supportLabels.add('🔐 SEGURANÇA');
@@ -250,11 +250,11 @@ export function buildArtifact(input) {
       ].join('\n')
     : supportRequired
       ? [
-          '## 🆘 Solicitação automática de suporte',
+          '## 🤖 Solicitação automática de suporte entre agentes',
           '',
           `A IA/autoria deste PR não declarou suporte completo para: **${missing.join(', ')}**.`,
           '',
-          'O bot aplicará labels de ajuda e pedirá a uma rota com suporte para traduzir/revisar o artefato, sem trocar o Writer do código e sem reiniciar a missão.',
+          'O bot aplica somente labels canônicas de agentes/revisão para pedir a uma rota compatível que traduza/revise o artefato, sem trocar o Writer do código e sem inventar necessidade de ação humana.',
           '',
           `Labels solicitadas: ${[...supportLabels].map((label) => `\`${label}\``).join(', ')}.`,
         ].join('\n')
@@ -270,7 +270,7 @@ export function buildArtifact(input) {
     sensitiveBlocked
       ? `Há ${categories.sensitive_paths} caminho(s) sensível(is); estado bloqueado.`
       : supportRequired
-        ? `Faltam capacidades declaradas: ${missing.join(', ')}. O bot pede suporte sem mudar a autoria do código.`
+        ? `Faltam capacidades declaradas: ${missing.join(', ')}. O bot pede suporte a agentes compatíveis sem mudar a autoria do código.`
         : 'Todas as capacidades foram declaradas como suportadas, sem verificação independente.',
     `Fonte das capacidades: ${capabilitySource}.`,
     'O artefato não aprova, não reprova nem decide autorização de merge; ele organiza contexto. Testes, revisão e contratos canônicos continuam decidindo.',

@@ -52,7 +52,7 @@ test('extrai capacidades declaradas', () => {
   });
 });
 
-test('capacidade ausente solicita suporte sem transferir Writer', () => {
+test('capacidade ausente solicita suporte canônico sem transferir Writer nem fabricar ação humana', () => {
   const result = buildArtifact({
     ...baseInput,
     body: `AI_CAPABILITIES:
@@ -62,12 +62,17 @@ test('capacidade ausente solicita suporte sem transferir Writer', () => {
   });
   assert.equal(result.status, 'SUPPORT_REQUIRED');
   assert.deepEqual(result.missing_capabilities, ['mermaid', 'canvas_html']);
-  assert.ok(result.support_labels.includes('assign:chatgpt'));
-  assert.ok(!result.support_labels.includes('assign:codex'));
+  assert.ok(result.support_labels.includes('🧠 AGENTE-CHATGPT'));
+  assert.ok(result.support_labels.includes('🟡 IA-PRECISA-REVISAR'));
+  assert.ok(result.support_labels.includes('🤖 IA-DOCUMENTAR'));
+  assert.ok(!result.support_labels.includes('🆘 AJUDA-NECESSÁRIA'));
+  assert.ok(!result.support_labels.some((label) => /^assign:/i.test(label)));
+  assert.ok(!result.support_labels.includes('🧠 AGENTE-CODEX'));
   assert.match(result.markdown, /sem trocar o Writer do código/);
+  assert.match(result.markdown, /sem inventar necessidade de ação humana/);
 });
 
-test('YAML ausente roteia suporte ao Codex', () => {
+test('YAML ausente roteia suporte ao Codex pela label canônica', () => {
   const result = buildArtifact({
     ...baseInput,
     body: `AI_CAPABILITIES:
@@ -75,7 +80,10 @@ test('YAML ausente roteia suporte ao Codex', () => {
   canvas_html: SIM
   structured_yaml: NAO`,
   });
-  assert.ok(result.support_labels.includes('assign:codex'));
+  assert.ok(result.support_labels.includes('🧠 AGENTE-CODEX'));
+  assert.ok(result.support_labels.includes('🟡 IA-PRECISA-REVISAR'));
+  assert.ok(!result.support_labels.some((label) => /^assign:/i.test(label)));
+  assert.ok(!result.support_labels.includes('🆘 AJUDA-NECESSÁRIA'));
 });
 
 test('todas capacidades SIM geram READY', () => {

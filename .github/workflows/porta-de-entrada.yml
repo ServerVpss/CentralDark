@@ -83,7 +83,17 @@ jobs:
             ['show', `${process.env.BASE_SHA}:.github/workflows/bots-labels-seed.yml`],
             { encoding: 'utf8' },
           );
-          const canonical = new Set([...seed.matchAll(/name:\s*'([^']+)'/g)].map((match) => match[1]));
+          const canonicalBlock = seed.match(
+            /const canonical\s*=\s*\[([\s\S]*?)\]\.map\(\(\[name,\s*color,\s*description\]\)\s*=>/,
+          )?.[1] || '';
+          const canonical = new Set(
+            [...canonicalBlock.matchAll(/\[\s*'([^']+)'\s*,\s*'[0-9A-Fa-f]{6}'\s*,/g)]
+              .map((match) => match[1]),
+          );
+          if (canonical.size === 0) {
+            console.error('LABEL_GATE_BLOCKED=CATALOGO_CANONICO_VAZIO');
+            process.exit(1);
+          }
           const authorityAliases = new Set(['permito-segredo', 'PERMITO-SEGREDO']);
           const canonicalPresent = labels.filter((label) => canonical.has(label));
           const invalid = labels.filter((label) => !canonical.has(label) && !authorityAliases.has(label));
@@ -101,7 +111,7 @@ jobs:
             console.log(`LABEL_GATE_COMPAT_AUTHORITY=${authorityCompat.length} aguardando_migracao_issue_707=1`);
             console.log(`LABEL_GATE_AUTHORITY_SEGREDO=${authorityCompat.length}`);
           }
-          console.log(`LABEL_GATE=PASS canonical=${canonicalPresent.length}`);
+          console.log(`LABEL_GATE=PASS canonical=${canonicalPresent.length} catalog=${canonical.size}`);
           NODE
 
       - name: Bloquear novo bypass direto de provider fora do Gateway
@@ -173,7 +183,18 @@ jobs:
         run: node --check scripts/memory-linker/dream-review.mjs
 
       - name: Testar retomada fail-closed do Hermes
-        run: node --test apps/modulos/HERMES-CORE/core/continuity-guard.test.mjs
+        shell: bash
+        run: |
+          set +e
+          output="$(node --test apps/modulos/HERMES-CORE/core/continuity-guard.test.mjs 2>&1)"
+          status=$?
+          set -e
+          printf '%s\n' "${output}"
+          if [ "${status}" -ne 0 ]; then
+            detail="$(printf '%s\n' "${output}" | tail -n 40 | tr '\n' ' ' | sed 's/%/%25/g; s/\r/%0D/g')"
+            echo "::error file=apps/modulos/HERMES-CORE/core/continuity-guard.test.mjs,title=HERMES_CONTINUITY_TEST_FAIL::${detail}"
+            exit "${status}"
+          fi
 
       - name: Validar sintaxe do orquestrador Hermes
         run: node --check apps/modulos/HERMES-CORE/core/orchestrator.mjs
