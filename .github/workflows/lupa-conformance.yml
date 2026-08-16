@@ -175,6 +175,8 @@ jobs:
             scripts/memory-linker/fs-safe.test.mjs
             scripts/memory-linker/delta-core.test.mjs
             scripts/memory-linker/source-delta-wiring.test.mjs
+            apps/bot-telegram/skills/externas/obsidian-writer.test.cjs
+            apps/bot-telegram/skills/externas/memoria-longa.test.cjs
             apps/modulos/mcp/src/admin-patterns-ui.test.mjs
             supabase/functions/_shared/source-delta.test.mjs
             supabase/functions/_shared/operational-error.test.mjs
