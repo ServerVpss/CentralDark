@@ -139,6 +139,32 @@ UI_ERROR != CAUSE_OF_ADJACENT_INCIDENT_WITHOUT_LINK
 OBSERVE_EXACTLY → CLASSIFY → PRESERVE_UNKNOWN → DO_NOT_INFLATE
 ```
 
+## Evidência auxiliar — forced-colors / high contrast
+
+Nas capturas do Console também aparecem warnings repetidos de depreciação relacionados a `-ms-high-contrast` / `-ms-high-contrast-adjust`, com orientação para o padrão moderno `forced-colors` / `forced-color-adjust`.
+
+O que essa evidência suporta é a presença de uma advertência de compatibilidade/acessibilidade na superfície observada. Ela **não** prova sozinha que o modo de alto contraste do usuário estava ativo, que o DevTools estava emulando `forced-colors`, nem que acessibilidade causou automação, localização ou outro efeito adjacente.
+
+```text
+LEGACY_HIGH_CONTRAST_WARNING_OBSERVED=true
+FORCED_COLORS_MIGRATION_GUIDANCE_OBSERVED=true
+ACTIVE_HIGH_CONTRAST_MODE=UNKNOWN_UNLESS_MEASURED
+FORCED_COLORS_EMULATION_ACTIVE=UNKNOWN_UNLESS_MEASURED
+FORCED_COLORS_CAUSED_AUTOMATION_CTA=UNPROVEN
+FORCED_COLORS_CAUSED_LOCATION_DISCLOSURE=UNPROVEN
+ACCESSIBILITY_WARNING_IS_SECURITY_INCIDENT=false
+ACCESSIBILITY_WARNING_CAN_BE_AUXILIARY_RUNTIME_EVIDENCE=true
+```
+
+A repetição do mesmo warning também não cria automaticamente múltiplas provas independentes:
+
+```text
+REPEATED_WARNING_COUNT != INDEPENDENT_EVIDENCE_COUNT
+SAME_SOURCE_REPEATED → ONE_EVIDENCE_CLUSTER_UNTIL_PROVED_OTHERWISE
+```
+
+A generalização desse aprendizado foi promovida para `docs/GOVERNANCA/ONTOLOGIA-DE-EVIDENCIA-E-CAUSALIDADE.md`.
+
 ## Síntese comprimida
 
 ```text
@@ -149,7 +175,9 @@ CHEFE_NAO_PEDIU_AUTOMACAO
 → JOB_ALVO_NAO_ENCONTRADO
 → SUGESTAO != MUTACAO
 → RECORRENCIA_CONFIRMADA_EM_OUTRO_PR
-→ RUNTIME/DEVTOOLS_PRESERVADO_COMO_EVIDENCIA_AUXILIAR
+→ RUNTIME/DEVTOOLS/ACCESSIBILITY_PRESERVADOS_COMO_EVIDENCIA_AUXILIAR
+→ ROTULO != MECANISMO
+→ REPETICAO != PROVA_INDEPENDENTE
 → CAUSALIDADE_OCULTA_CONTINUA_UNKNOWN
 ```
 
@@ -161,5 +189,7 @@ SUGESTAO != TAREFA CRIADA
 CHEFE PEDIU? NAO -> NAO CRIAR
 ESTADO DO SCHEDULER NAO MEDIDO -> NAO AFIRMAR
 ROTULO "SIMULACAO" NO DEVTOOLS != PROVA DE GPT SIMULADO
+FORCED_COLORS_WARNING != FORCED_COLORS_ACTIVE
+FORCED_COLORS_WARNING != CAUSA DE INCIDENTE ADJACENTE
 ERRO DE UI != CAUSA PROVADA SEM VINCULO CAUSAL
 ```
