@@ -89,12 +89,21 @@ test("recibo incompleto não autoriza", () => {
   assert.equal(authorizationFor(pr).authorized, false);
 });
 
-test("label persistente permito-segredo continua compatível", () => {
-  const auth = authorizationFor(prFixture({ body: "sem recibo", labels: [{ name: "permito-segredo" }] }));
+test("label visual canônica autoriza e preserva receipt compatível", () => {
+  const auth = authorizationFor(prFixture({ body: "sem recibo", labels: [{ name: "👑 PERMITO-SEGREDO" }] }));
   assert.equal(auth.authorized, true);
   assert.equal(auth.viaLabel, true);
   assert.equal(auth.viaBody, false);
   assert.equal(auth.source, "github-label:permito-segredo");
+});
+
+test("alias textual permito-segredo continua compatível sem virar segunda label", () => {
+  for (const name of ["permito-segredo", "PERMITO-SEGREDO", "👑 permito-segredo"]) {
+    const auth = authorizationFor(prFixture({ body: "sem recibo", labels: [{ name }] }));
+    assert.equal(auth.authorized, true);
+    assert.equal(auth.viaLabel, true);
+    assert.equal(auth.source, "github-label:permito-segredo");
+  }
 });
 
 test("PERMITO SEGREDO/PIVETE no body é histórico e não autoriza", () => {
@@ -168,8 +177,8 @@ test("mergeability pendente espera; conflito nunca vira WAIT verde", () => {
   assert.equal(conflict.decision, "BLOCKED");
 });
 
-test("modo adversarial por label preserva os workflows e contraprova completos", () => {
-  const pr = prFixture({ body: "sem recibo", labels: [{ name: "permito-segredo" }] });
+test("modo adversarial por label visual preserva workflows e contraprova completos", () => {
+  const pr = prFixture({ body: "sem recibo", labels: [{ name: "👑 PERMITO-SEGREDO" }] });
   const missing = evaluate(pr);
   assert.equal(missing.mode, "ADVERSARIAL");
   assert.equal(missing.decision, "WAIT");
