@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+import { resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
 const UPSTREAM_REPOSITORY = 'alirezarezvani/claude-skills';
 const UPSTREAM_COMMIT = 'aa8d778811a557a2c28ccadda4cf3d0bd028a4cc';
 const INDEX_PATH = '.codex/skills-index.json';
@@ -149,10 +152,16 @@ export async function inspectSkill(name, fetchImpl = fetch) {
   };
 }
 
-function integerArg(flag, fallback) {
-  const index = process.argv.indexOf(flag);
-  const parsed = index >= 0 ? Number(process.argv[index + 1]) : NaN;
-  return Number.isInteger(parsed) && parsed > 0 ? parsed : fallback;
+function parseFindArgs(args) {
+  const values = [...args];
+  let limit = 8;
+  const limitIndex = values.indexOf('--limit');
+  if (limitIndex >= 0) {
+    const parsed = Number(values[limitIndex + 1]);
+    if (Number.isInteger(parsed) && parsed > 0) limit = parsed;
+    values.splice(limitIndex, 2);
+  }
+  return { query: values.join(' ').trim(), limit };
 }
 
 async function main() {
@@ -163,10 +172,10 @@ async function main() {
     return;
   }
   if (command === 'find') {
-    const query = process.argv.slice(3).filter((value) => value !== '--limit' && !/^\d+$/.test(value)).join(' ');
+    const { query, limit } = parseFindArgs(process.argv.slice(3));
     if (!query) throw new Error('QUERY_REQUIRED');
     const { entries, summary } = await loadIndex();
-    const results = findSkills(entries, query, integerArg('--limit', 8));
+    const results = findSkills(entries, query, limit);
     console.log(JSON.stringify({ summary, query, results }, null, 2));
     return;
   }
@@ -179,7 +188,8 @@ async function main() {
   throw new Error(`COMMAND_INVALID:${command}`);
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+const isMain = process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+if (isMain) {
   main().catch((error) => {
     console.error(`SKILL_WORKSHOP_ERROR=${error.message}`);
     process.exit(1);
