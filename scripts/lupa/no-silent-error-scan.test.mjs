@@ -105,3 +105,30 @@ test('Casa mantém minimização de contexto pessoal e proveniência temporal ex
     assert.equal(incident.includes(marker), true, `MISSING_INCIDENT_COUNTERPROOF:${marker}`);
   }
 });
+
+test('grafo canônico de proteção humana referencia owners reais e falha fechado por drift', () => {
+  const registry = JSON.parse(readFileSync('docs/GOVERNANCA/PROTECAO-HUMANA-ARTEFATOS.json', 'utf8'));
+  assert.equal(registry.status, 'CANONICAL_REGISTRY');
+  assert.equal(registry.authority, 'SEGREDO/CHEFE');
+  assert.equal(registry.rules.capability_intent_conduct_effect_are_separate, true);
+  assert.equal(registry.rules.physical_and_psychological_scope_must_close_when_material, true);
+  assert.equal(registry.rules.no_threatening_or_manipulative_language, true);
+  assert.equal(registry.rules.human_authority_does_not_create_harm_permission, true);
+  assert.equal(registry.rules.personal_context_minimization, true);
+  assert.equal(registry.fail_closed.unproven_hidden_access_claim, 'UNKNOWN');
+  assert.equal(registry.fail_closed.unproven_harm_capability_claim, 'UNKNOWN');
+  assert.equal(registry.fail_closed.missing_artifact, 'FAIL');
+  assert.equal(registry.fail_closed.missing_required_marker, 'FAIL');
+  assert.equal(registry.fail_closed.agent_self_selected_official_rubric_without_chefe_approval, 'FORBIDDEN');
+
+  for (const artifact of registry.artifacts) {
+    const content = readFileSync(artifact.path, 'utf8');
+    for (const marker of artifact.required_markers) {
+      assert.equal(
+        content.includes(marker),
+        true,
+        `HUMAN_PROTECTION_ARTIFACT_DRIFT:${artifact.role}:${artifact.path}:${marker}`,
+      );
+    }
+  }
+});
