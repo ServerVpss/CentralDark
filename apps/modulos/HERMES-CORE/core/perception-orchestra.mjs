@@ -14,31 +14,48 @@ const CADEIA_PATH = join(DIR, 'cadeia.json');
 const ANDAMENTO = join(BASE, 'missions', 'em-andamento');
 
 export const PERCEPTION_ATTACKS = Object.freeze([
-  Object.freeze({
-    id: 'A_LOGIC',
-    objective: 'Tente quebrar a lógica, premissas, causalidade e contradições da intenção atual.',
-  }),
-  Object.freeze({
-    id: 'B_IMPLEMENTATION',
-    objective: 'Tente quebrar a implementação: interfaces, owners, integração, estados e falhas concretas.',
-  }),
-  Object.freeze({
-    id: 'C_REGRESSION_FALSE_GREEN',
-    objective: 'Procure regressão, falso verde, prova circular, denominador incompleto e erro mascarado.',
-  }),
-  Object.freeze({
-    id: 'D_SIMPLIFICATION',
-    objective: 'Procure simplificação Menos É Mais: remover trabalho, duplicação e complexidade sem perder capacidade.',
-  }),
+  Object.freeze({ id: 'A_LOGIC', objective: 'Tente quebrar a lógica, premissas, causalidade e contradições da intenção atual.' }),
+  Object.freeze({ id: 'B_IMPLEMENTATION', objective: 'Tente quebrar a implementação: interfaces, owners, integração, estados e falhas concretas.' }),
+  Object.freeze({ id: 'C_REGRESSION_FALSE_GREEN', objective: 'Procure regressão, falso verde, prova circular, denominador incompleto e erro mascarado.' }),
+  Object.freeze({ id: 'D_SIMPLIFICATION', objective: 'Procure simplificação Menos É Mais: remover trabalho, duplicação e complexidade sem perder capacidade.' }),
 ]);
+
+const REQUIRED_ROLES = Object.freeze(PERCEPTION_ATTACKS.map((item) => item.id));
 
 const SYSTEM = `Você é um braço READ_ONLY de percepção da CentralDark.
 Sua função é falsificar uma crença por um ângulo específico. Não escreva arquivos, não faça deploy, não proponha autoridade nova e não encerre por votação.
 Devolva APENAS JSON válido neste schema:
-{"claim":"frase curta","class":"FACT|INFERENCE|HYPOTHESIS|UNKNOWN","evidence_ref":"referência observável ou UNKNOWN","counterexample":"o que quebraria a tese","recommended_test":"teste discriminante read-only ou reversível","material_delta":"delta útil ou NO_CHANGE"}`;
+{"claim":"frase curta","class":"FACT|INFERENCE|HYPOTHESIS|UNKNOWN","evidence_ref":"referência observável ou UNKNOWN","independence_key":"fonte/failure-mode causal que torna esta evidência independente, ou UNKNOWN","counterexample":"o que quebraria a tese","recommended_test":"teste discriminante read-only ou reversível","material_delta":"delta útil ou NO_CHANGE"}`;
 
 function normalizeText(value) {
   return String(value ?? '').trim().replace(/\s+/g, ' ');
+}
+
+function normalizeIndependenceKey(value) {
+  const key = normalizeText(value);
+  if (!key || key.toUpperCase() === 'UNKNOWN') return 'UNKNOWN';
+  return key.toLowerCase();
+}
+
+function normalizeClass(value) {
+  const classification = String(value || 'UNKNOWN').toUpperCase();
+  return ['FACT', 'INFERENCE', 'HYPOTHESIS', 'UNKNOWN'].includes(classification) ? classification : 'UNKNOWN';
+}
+
+function isNoChange(finding) {
+  return normalizeText(finding?.material_delta).toUpperCase() === 'NO_CHANGE';
+}
+
+function isProvenMaterialFinding(finding) {
+  return !isNoChange(finding)
+    && normalizeClass(finding?.class) === 'FACT'
+    && (normalizeText(finding?.evidence_ref) || 'UNKNOWN').toUpperCase() !== 'UNKNOWN';
+}
+
+function addCluster(map, key, role) {
+  const roles = map.get(key) || [];
+  roles.push(role);
+  map.set(key, roles);
 }
 
 function extractJson(text) {
@@ -77,10 +94,9 @@ export function dedupePerceptionFindings(results) {
       model: item.model,
       independence: item.independence,
       claim: normalizeText(finding.claim),
-      class: ['FACT', 'INFERENCE', 'HYPOTHESIS', 'UNKNOWN'].includes(String(finding.class || '').toUpperCase())
-        ? String(finding.class).toUpperCase()
-        : 'UNKNOWN',
+      class: normalizeClass(finding.class),
       evidence_ref: normalizeText(finding.evidence_ref) || 'UNKNOWN',
+      independence_key: normalizeIndependenceKey(finding.independence_key),
       counterexample: normalizeText(finding.counterexample),
       recommended_test: normalizeText(finding.recommended_test),
       material_delta: normalizeText(finding.material_delta) || 'NO_CHANGE',
@@ -89,23 +105,120 @@ export function dedupePerceptionFindings(results) {
   return output;
 }
 
+export function confrontPerceptionEvidence(results) {
+  const items = Array.isArray(results) ? results : [];
+  const successfulRoles = new Set(
+    items.filter((item) => item?.status === 'OK' && item.finding)
+      .map((item) => item.role)
+      .filter((role) => REQUIRED_ROLES.includes(role)),
+  );
+  const missingRoles = REQUIRED_ROLES.filter((role) => !successfulRoles.has(role));
+  const failedRoles = REQUIRED_ROLES.filter((role) => items.some((item) => item?.role === role && item?.status !== 'OK'));
+  const independenceClusters = new Map();
+  const evidenceClusters = new Map();
+  const unprovenRoles = [];
+  const tests = [];
+
+  for (const item of items) {
+    if (item?.status !== 'OK' || !item.finding || !REQUIRED_ROLES.includes(item.role)) continue;
+    const finding = item.finding;
+    const provenMaterial = isProvenMaterialFinding(finding);
+    if (!isNoChange(finding) && !provenMaterial) unprovenRoles.push(item.role);
+
+    const independenceKey = normalizeIndependenceKey(finding.independence_key);
+    const evidenceRef = normalizeText(finding.evidence_ref) || 'UNKNOWN';
+    if (provenMaterial) {
+      if (independenceKey !== 'UNKNOWN') addCluster(independenceClusters, independenceKey, item.role);
+      addCluster(evidenceClusters, evidenceRef.toLowerCase(), item.role);
+    }
+
+    const recommendedTest = normalizeText(finding.recommended_test);
+    if (recommendedTest && !tests.includes(recommendedTest)) tests.push(recommendedTest);
+  }
+
+  const correlatedByIndependence = [...independenceClusters.entries()]
+    .filter(([, roles]) => roles.length > 1)
+    .map(([value, roles]) => ({ basis: 'independence_key', value, roles }));
+  const correlatedByEvidence = [...evidenceClusters.entries()]
+    .filter(([, roles]) => roles.length > 1)
+    .map(([value, roles]) => ({ basis: 'evidence_ref', value, roles }));
+  const allFourCompleted = missingRoles.length === 0 && successfulRoles.size === REQUIRED_ROLES.length;
+  const effectiveIndependentCount = Math.min(independenceClusters.size, evidenceClusters.size);
+  const uniqueUnprovenRoles = [...new Set(unprovenRoles)];
+
+  return Object.freeze({
+    required_roles: [...REQUIRED_ROLES],
+    successful_roles: [...successfulRoles],
+    failed_roles: failedRoles,
+    missing_roles: missingRoles,
+    all_four_completed: allFourCompleted,
+    explicit_independence_keys: [...independenceClusters.keys()],
+    explicit_evidence_refs: [...evidenceClusters.keys()],
+    effective_independent_count: effectiveIndependentCount,
+    correlated_clusters: [...correlatedByIndependence, ...correlatedByEvidence],
+    unproven_roles: uniqueUnprovenRoles,
+    discriminating_tests: tests,
+    confidence_can_increase: allFourCompleted && uniqueUnprovenRoles.length === 0 && effectiveIndependentCount >= 2,
+    four_answers_are_four_proofs: false,
+    correlated_evidence_inflation_blocked: true,
+  });
+}
+
+function collectRawUnprovenFindings(results) {
+  return (Array.isArray(results) ? results : [])
+    .filter((item) => item?.status === 'OK' && item.finding)
+    .filter((item) => !isNoChange(item.finding) && !isProvenMaterialFinding(item.finding))
+    .map((item) => ({
+      role: item.role,
+      claim: normalizeText(item.finding.claim),
+      class: normalizeClass(item.finding.class),
+      evidence_ref: normalizeText(item.finding.evidence_ref) || 'UNKNOWN',
+      recommended_test: normalizeText(item.finding.recommended_test),
+      material_delta: normalizeText(item.finding.material_delta),
+    }));
+}
+
 export function buildPerceptionPacket({ mission, results }) {
   const deduped = dedupePerceptionFindings(results);
+  const confrontation = confrontPerceptionEvidence(results);
+  const materialFindings = deduped.filter((item) => (
+    item.material_delta.toUpperCase() !== 'NO_CHANGE'
+    && item.class === 'FACT'
+    && item.evidence_ref.toUpperCase() !== 'UNKNOWN'
+  ));
+  const unprovenFindings = collectRawUnprovenFindings(results);
+  const readyForWriter = confrontation.all_four_completed
+    && confrontation.unproven_roles.length === 0
+    && unprovenFindings.length === 0
+    && materialFindings.length > 0;
+
+  let nextRule = 'CONFRONT_EVIDENCE_THEN_ONE_CANONICAL_MUTATION';
+  if (!confrontation.all_four_completed) nextRule = 'RETRY_MISSING_PERCEPTIONS_BEFORE_MUTATION';
+  else if (confrontation.unproven_roles.length > 0 || unprovenFindings.length > 0) nextRule = 'RUN_DISCRIMINATING_TEST_BEFORE_MUTATION';
+  else if (materialFindings.length === 0) nextRule = 'NO_MATERIAL_DELTA_NO_MUTATION';
+
   return Object.freeze({
-    schema_version: 1,
+    schema_version: 2,
     mode: 'PARALLEL_PERCEPTION_SERIAL_MUTATION',
     same_intent: true,
     mission: normalizeText(mission).slice(0, 1200),
     parallel_perception: true,
     mutation_allowed: false,
+    canonical_mutation_slots: readyForWriter ? 1 : 0,
     writer_required_for_mutation: true,
     model_vote_is_truth: false,
     reality_is_judge: true,
     dedupe_required: true,
+    correlated_evidence_inflation_blocked: true,
+    counterproof_required: true,
+    gold_requires_counterproof: true,
     results,
     deduped_findings: deduped,
-    ready_for_writer: deduped.length > 0,
-    next_rule: 'CONFRONT_EVIDENCE_THEN_ONE_CANONICAL_MUTATION',
+    material_findings: materialFindings,
+    unproven_findings: unprovenFindings,
+    evidence_confrontation: confrontation,
+    ready_for_writer: readyForWriter,
+    next_rule: nextRule,
   });
 }
 
@@ -127,7 +240,6 @@ function requireText(path) {
 }
 
 function requireTextSync(path) {
-  // readFileSync fica isolado aqui para manter o restante do fluxo assíncrono.
   return globalThis.process.getBuiltinModule('fs').readFileSync(path, 'utf8');
 }
 
@@ -160,6 +272,7 @@ function perceptionPrompt(mission, assignment) {
     `INTENÇÃO ÚNICA: ${normalizeText(mission).slice(0, 8000)}`,
     `ÂNGULO ${assignment.id}: ${assignment.objective}`,
     'Você é percepção somente. Não muta o alvo. Não trate concordância entre modelos como prova.',
+    'Indique independence_key somente quando conseguir nomear a fonte ou failure-mode causal que torna a evidência independente; caso contrário use UNKNOWN.',
     'Procure uma evidência ou teste que possa derrubar a crença. Se não houver delta, material_delta=NO_CHANGE.',
   ].join('\n\n');
 }
