@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "contract_id": "CENTRALDARK_KNOWLEDGE_COMPILER",
   "status": "CANONICAL_PROJECTION",
   "house_wide": true,
@@ -14,6 +14,12 @@
   "regression": ".agents/skills/knowledge-compiler/tests/compiler.test.mjs",
   "gate": ".github/workflows/lupa-conformance.yml",
   "supercommand": "COMPILE_THEN_APPLY",
+  "meta_forge": {
+    "alias": "FORGE_PLUS_EXISTING_CROSS_META",
+    "is_new_lens": false,
+    "meta_crystal_is_new_lens": false,
+    "output": "ONE_OPERATIONAL_CRYSTAL_ROUTE_PER_CAPABILITY_BOUNDARY"
+  },
   "phases": [
     "PLAN_ONLY",
     "INGEST",
@@ -32,6 +38,7 @@
       "README",
       "SKILL",
       "OFFICIAL_DOC",
+      "ACADEMIC_PAPER",
       "CODE",
       "TEST",
       "INCIDENT",
@@ -47,6 +54,58 @@
     "duplicate_material": "DROP_DUPLICATE_OR_REUSE",
     "source_priority_is_claim_specific": true,
     "prestige_is_authority": false
+  },
+  "external_source_policy": {
+    "source_pattern_is_house_policy": false,
+    "placeholder_test_is_behavior_proof": false,
+    "external_owner_name_is_canonical_owner": false,
+    "external_numeric_target_requires_local_fit_or_explicit_policy": true,
+    "source_guideline_as_hard_gate_requires_local_policy": true,
+    "slo_deploy_block_requires": [
+      "USER_RELEVANT_SLI",
+      "AGREED_TARGET",
+      "WINDOW",
+      "ERROR_BUDGET_POLICY",
+      "LIVE_MEASUREMENT"
+    ],
+    "toil": {
+      "deterministic_automation_first_when": [
+        "REPETITIVE",
+        "PREDICTABLE",
+        "MECHANICAL",
+        "KNOWN_RULE"
+      ],
+      "universal_percentage": false,
+      "measure_when_decision_depends_on_magnitude": true
+    },
+    "ci": {
+      "prefer": [
+        "SMALL_CHANGE",
+        "SELF_TESTING",
+        "FAST_FEEDBACK",
+        "MAINLINE_HEALTH",
+        "REVERSIBILITY"
+      ],
+      "external_time_guideline_is_global_gate": false
+    },
+    "agents": {
+      "perception_memory_action_are_conceptual_modules": true,
+      "module_requires_new_agent": false,
+      "multi_agent_default": false,
+      "multi_agent_requires_information_gain": true,
+      "deterministic_task_requires_agent": false
+    },
+    "retrieval": {
+      "context_load": "ON_DEMAND",
+      "planning_reflection_tool_use": "OPTIONAL_PATTERNS_FOR_COMPLEX_WORK",
+      "multi_agent_requires_benefit_over_coordination_cost": true
+    },
+    "engine": {
+      "model_name_is_authority": false,
+      "hard_pin_requires_observed_fitness": true,
+      "hard_pin_requires_runtime_availability": true,
+      "complexity_changes_frequency_before_identity": true
+    }
   },
   "operational_crystal": {
     "required": [
@@ -111,6 +170,9 @@
     "NEW_INFORMATION_DOES_NOT_MEAN_REBUILD_ALL",
     "DELTA_AFFECTED_ONLY",
     "UNKNOWN_IS_NOT_PASS",
-    "SOURCE_IS_PROVENANCE_NOT_AUTHORITY"
+    "SOURCE_IS_PROVENANCE_NOT_AUTHORITY",
+    "EXTERNAL_GUIDELINE_IS_NOT_HOUSE_POLICY",
+    "DETERMINISTIC_ROUTINE_BEFORE_AGENT",
+    "ENGINE_BY_OBSERVED_FITNESS_NOT_NAME"
   ]
 }
