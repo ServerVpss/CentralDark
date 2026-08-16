@@ -116,7 +116,7 @@ function extrairRota(linha) {
     if (typeof p === "string")
         return p;
     // fallback: procura /algo no msg
-    const m = /\s(\/[a-zA-Z0-9\/_\-.]+)/.exec(String(linha.msg || ""));
+    const m = /\s(\/[a-zA-Z0-9/_\-.]+)/.exec(String(linha.msg || ""));
     return m ? m[1] : "-";
 }
 // ─── HTML NOC (tema Esmeralda) — v2.1 ──────────────────────────────────
