@@ -4,6 +4,7 @@ import { adminPm2Tools } from "../../modes/admin/tools/admin-pm2.js";
 import { adminShellTools } from "../../modes/admin/tools/admin-shell.js";
 import { adminVaultRwTools } from "../../modes/admin/tools/admin-vault-rw.js";
 import { adminGitTools } from "../../modes/admin/tools/admin-git.js";
+import { adminProviderControlTools } from "../../modes/admin/tools/admin-provider-control.js";
 import { codeReviewerToolDefinition } from "../code-reviewer.js";
 import { z } from "zod";
 import { cognitivoTools } from "../cognitivo/cognitivo.js";
@@ -66,6 +67,7 @@ const runtimeTools = [
     ...adminShellTools,
     ...adminVaultRwTools,
     ...adminGitTools,
+    ...adminProviderControlTools,
     // MOTIVO  > estes 6 grupos existem no catalogo mas nao entravam em
     //           runtimeTools, entao 24 tools ficavam INALCANCAVEIS pelo
     //           dispatcher mcp_admin_call, entre elas as integracoes.
