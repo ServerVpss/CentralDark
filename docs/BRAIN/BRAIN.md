@@ -1,13 +1,15 @@
 ---
 title: "BRAIN — CentralDark"
 status: "NAVIGATION_ONLY"
-updated: 2026-08-14
+updated: 2026-08-16
 tags: ["brain", "centraldark", "navegacao", "obsidian"]
 ---
 
 # BRAIN — CentralDark
 
 Este arquivo é a entrada humana do vault/Obsidian. Ele **não é painel de runtime, não fixa PM2, não fixa quantidade de tools e não define autoridade operacional**.
+
+> 🧠 Navegação visual: [[MAPA-OBSIDIAN-BRAIN]] · índice completo: [[INDEX]]
 
 ## Identidade
 
