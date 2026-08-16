@@ -17,7 +17,8 @@
     "06-output.json",
     "07-source-map.json",
     "08-provenance.json",
-    "09-tests.json"
+    "09-tests.json",
+    "10-less-is-more.json"
   ],
   "validation_command": "node .agents/skills/reality-follows-function/scripts/validate.mjs",
   "boot_receipt": "REALITY_FOLLOWS_FUNCTION=LOADED"
