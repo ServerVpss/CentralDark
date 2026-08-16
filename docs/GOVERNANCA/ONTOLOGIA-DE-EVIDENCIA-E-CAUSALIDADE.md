@@ -125,6 +125,63 @@ DO_NOT_INFLATE_CAUSALITY=true
 DO_NOT_INFLATE_INCIDENT_SEVERITY_FROM_ADJACENT_WARNING=true
 ```
 
+## Autoridade isolada e recuperação — abstração do “cofre frio”
+
+A matéria de hardware/cold-wallet fornecida pelo SEGREDO/CHEFE é absorvida como **estrutura operacional**, não como dependência de criptomoeda, fabricante ou aparelho específico.
+
+O padrão útil é:
+
+```text
+AUTORIDADE_SENSIVEL
+→ ISOLAR_DA_SUPERFICIE_EXPOSTA
+→ PREPARAR_ACAO_NO_AMBIENTE_CONECTADO_SE_NECESSARIO
+→ EXIGIR_LIBERACAO_HUMANA_NO_LIMITE_IRREVERSIVEL
+→ EXECUTAR_SOMENTE_DELTA_AUTORIZADO
+→ MANTER_RECUPERACAO_FORA_DO_CAMINHO_ROTINEIRO
+→ PROVAR_RESULTADO_NO_ALVO
+```
+
+```text
+SENSITIVE_AUTHORITY_ISOLATED_BY_DEFAULT=true
+CONNECTED_CAPABILITY_DOES_NOT_REQUIRE_CONTINUOUS_SECRET_EXPOSURE=true
+IRREVERSIBLE_SENSITIVE_ACTION_REQUIRES_EXPLICIT_HUMAN_RELEASE=true
+RECOVERY_SECRET_IS_BREAK_GLASS_NOT_DAILY_AUTHORITY=true
+RECOVERY_SECRET_NEVER_IN_REPO_CHAT_LOG_SCREENSHOT=true
+RECOVERY_SECRET_MUST_NOT_BE_REQUESTED_BY_AGENT=true
+TRUSTED_AUTHORITY_COMPONENT_REQUIRES_PROVEN_PROVENANCE_AND_INTEGRITY=true
+RECOVERY_PATH_MUST_BE_TESTABLE_WITHOUT_EXPOSING_SECRET=true
+RECOVERY_STATE_MUST_NOT_BE_OVERWRITTEN_DURING_INCIDENT=true
+DESTRUCTIVE_EXTERNAL_WRITE_REQUIRES_RESTORABLE_BACKUP_AND_SPECIFIC_AUTHORIZATION=true
+FIRST_CONTRADICTION_STOPS_FURTHER_MUTATION=true
+```
+
+A recuperação é **break-glass**: existe para reconstruir autoridade/estado quando o caminho normal falha, não para circular diariamente por superfícies conectadas. A Casa nunca deve pedir ao humano que cole uma seed phrase, recovery phrase, private key, token ou segredo equivalente em chat, issue, PR, log, screenshot ou arquivo versionado.
+
+O princípio de “comprar do fabricante oficial” vira uma cadeia de confiança mais geral:
+
+```text
+TRUSTED_COMPONENT
+→ PROVENANCE
+→ INTEGRITY
+→ EXPECTED_IDENTITY
+→ ONLY_THEN_AUTHORITY_BOUNDARY
+```
+
+```text
+CLAIMED_TRUSTED_SOURCE != PROVEN_PROVENANCE
+PROVENANCE_WITHOUT_INTEGRITY != TRUSTED_COMPONENT
+TRUSTED_COMPONENT != AUTHORIZATION
+```
+
+Botão físico, air-gap, pen drive, placa metálica ou número de palavras são **implementações possíveis**, não leis universais:
+
+```text
+PHYSICAL_BUTTON_OR_AIR_GAP_IS_IMPLEMENTATION_SPECIFIC=true
+AUTHORITY_ISOLATION_IS_NOT_RUNTIME_OR_DEPLOY_PROOF=true
+```
+
+A abstração deve ser aplicada junto de `docs/SEGURANCA/PADRAO-SEGURANCA-END-TO-END.md`, que continua dono das regras concretas de segredo, confirmação explícita, backup e restauração.
+
 ## Ramificação global
 
 Esta ontologia vale para:
@@ -166,6 +223,7 @@ Aplicar junto de:
 - `docs/CONSCIENCIA/PROOF-OWNERSHIP.json` — propriedade da prova e anti-circularidade;
 - `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md` — superfície como adaptador, dedupe causal e estado reconstruído;
 - `.agents/skills/meta-lupa/SKILL.md` — fato/inferência/hipótese + falsificação;
+- `docs/SEGURANCA/PADRAO-SEGURANCA-END-TO-END.md` — segredo, confirmação, backup e restauração;
 - `docs/APRENDIZADOS/2026-08-16-incidente-automacao-sugerida-sem-pedido.md` — origem forense imediata das evidências de DevTools nesta cristalização.
 
 ## Compressão máxima
@@ -177,8 +235,10 @@ FOI ATIVADO ≠ FOI A CAUSA
 REPETIU ≠ VIROU PROVA NOVA
 RÓTULO ≠ MECANISMO
 MECANISMO ≠ AUTORIZAÇÃO
+SEGREDO DE RECUPERACAO ≠ AUTORIDADE ROTINEIRA
+COMPONENTE CONFIAVEL ≠ AUTORIZACAO
 PROVA → MESMA CAMADA → MESMO ALVO
 DESCONHECIDO → UNKNOWN, NÃO INVENÇÃO
 ```
 
-No jeito do CHEFE: **se a placa diz “forced-colors”, eu registro a placa. Pra dizer que o motor de `forced-colors` estava ligado, eu provo o motor. Pra dizer que ele causou outra coisa, eu provo o fio entre os dois.**
+No jeito do CHEFE: **a carteira fria ensinou a forma, não virou a Casa. A caneta sensível fica isolada; o sistema prepara; o humano libera o irreversível; a chave de emergência não passeia pelo caminho normal.**
