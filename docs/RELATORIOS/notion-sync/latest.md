@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-08-16T10:53:19.580Z
+# 🧠 Notion Sync — 2026-08-16T12:20:14.075Z
 
-- **Commit fonte:** `1fca49661401c6b05c1403427c4cae9e8182708f`
+- **Commit fonte:** `16405dd7c04c7e7aab373611ae08f41b9c937c77`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 412 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 412 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
 | aprendizados | 26 | 0 | 26 | 0 | 0 |
-| estrutura | 342 | 0 | 342 | 0 | 0 |
+| estrutura | 343 | 1 | 342 | 0 | 0 |
 
 ## Operações
 
@@ -289,6 +289,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/MCP-FLUXO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/MEGA-PAINEL-SUGESTOES-IA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md |
+| estrutura | criado | docs/CONSCIENCIA/MISSAO-CONVERGENCIA-TRIPLA-FORMULA-20260816.md |
 | estrutura | atualizado | docs/CONSCIENCIA/MODO-SEGREDO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/NOTIFY/INSTALAR-VPS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/NOTIFY/README.md |
