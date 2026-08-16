@@ -67,6 +67,7 @@ jobs:
           set -euo pipefail
           node --test scripts/github-autonomia-promocao.test.mjs
           node --test scripts/github-autonomia-varredura.test.mjs
+          node --test scripts/github-autonomia-green-guard.test.mjs
 
       - name: Avaliar PRs autorizados em read-only
         env:
@@ -132,6 +133,12 @@ jobs:
           name: autonomia-judge-${{ github.run_id }}
           path: ${{ runner.temp }}/centraldark-autonomia
 
+      - name: Exigir seis gates verdes no mesmo HEAD
+        env:
+          BOT_SWEEP_DIR: ${{ runner.temp }}/centraldark-autonomia
+          PROMOTER_TOKEN: ${{ secrets.PROMOTION_TOKEN || secrets.GITHUB_PAT_PERFIL }}
+        run: node scripts/github-autonomia-green-guard.mjs
+
       - name: Promover somente recibos válidos e estado vivo idêntico
         env:
           BOT_SWEEP_DIR: ${{ runner.temp }}/centraldark-autonomia
@@ -163,6 +170,7 @@ jobs:
           echo "EVENT_NAME=${EVENT_NAME}"
           echo "EXECUTOR=self-hosted-linux"
           echo "MERGE_METHOD=squash"
+          echo "GREEN_FIRST_REQUIRED=1"
           echo "REASK=NO_WHEN_INTENT_RECEIPT_VALID"
           echo "JOB_STATUS=${JOB_STATUS}"
           test "${JOB_STATUS}" = "success" && echo "RESULTADO=PASS" || echo "RESULTADO=BLOCKED"
