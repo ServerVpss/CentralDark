@@ -172,9 +172,15 @@ jobs:
           )
           for test_file in "${tests[@]}"; do
             echo "MEMORY_TEST_FILE=${test_file}"
-            if ! node --test "${test_file}"; then
-              echo "::error file=${test_file},title=MEMORY_LINKER_TEST_FAIL::node --test ${test_file} failed"
-              exit 1
+            set +e
+            output="$(node --test "${test_file}" 2>&1)"
+            status=$?
+            set -e
+            printf '%s\n' "${output}"
+            if [ "${status}" -ne 0 ]; then
+              detail="$(printf '%s\n' "${output}" | tail -n 30 | tr '\n' ' ' | sed 's/%/%25/g; s/\r/%0D/g')"
+              echo "::error file=${test_file},title=MEMORY_LINKER_TEST_FAIL::${detail}"
+              exit "${status}"
             fi
           done
 
