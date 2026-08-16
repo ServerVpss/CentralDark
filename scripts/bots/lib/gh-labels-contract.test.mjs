@@ -21,6 +21,12 @@ test('aliases operacionais legados possuem destino canônico', () => {
   ]) assert.ok(source.includes(`[\"${legacy}\"`) || source.includes(`['${legacy}'`), `alias sem regra: ${legacy}`);
 });
 
+test('normalização é case-insensitive e preserva a label visual canônica de autoridade', () => {
+  assert.match(source, /toLocaleLowerCase\("pt-BR"\)/);
+  assert.match(source, /\["👑 permito-segredo", \["👑 PERMITO-SEGREDO"\]\]/);
+  assert.match(source, /LABEL_ALIASES\.get\(folded\)/);
+});
+
 test('Lovable não é agente operacional e PIVETE não vira autoridade por label', () => {
   assert.doesNotMatch(source, /AGENTE-LOVABLE/);
   assert.match(source, /\["assign:lovable", \["🎨 FRONTEND"\]\]/);
