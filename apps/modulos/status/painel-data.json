@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-16T15:45:49.096Z",
-  "updatedAtBR": "16/08/2026, 12:45:49 BRT",
+  "updatedAt": "2026-08-16T15:56:30.390Z",
+  "updatedAtBR": "16/08/2026, 12:56:30 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "feat(agents): cristalizar adapter canônico para agentes externos (#965)",
+    "lastCommit": "feat(skill): tornar reality follows function reutilizável na Casa (#966)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-16T15:56:30.390Z",
+      "titulo": "Push na main · 03939faafd1eeee1b2e026b703d3023e3bab22c0",
+      "detalhe": "feat(skill): tornar reality follows function reutilizável na Casa (#966)",
+      "area": "Repositório",
+      "sha": "03939fa",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-16T15:45:49.096Z",
       "titulo": "Push na main · 281f83f6adea21e9ce5c527f8c65cc4019061e4e",
       "detalhe": "feat(agents): cristalizar adapter canônico para agentes externos (#965)",
@@ -988,14 +996,6 @@
       "detalhe": "feat(resposta): tornar trabalho estudo ensino uma escola operacional (#887)",
       "area": "Repositório",
       "sha": "e0b2cc5",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-15T17:43:49.890Z",
-      "titulo": "Push na main · 515f02ae111df7fd4ec34a14a884e9145b2af4a1",
-      "detalhe": "fix(canon): runtime e prova no mesmo alvo",
-      "area": "Repositório",
-      "sha": "515f02a",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-16T15:56:30.390Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 03939faafd1eeee1b2e026b703d3023e3bab22c0 (03939fa)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-16T15:45:49.096Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 281f83f6adea21e9ce5c527f8c65cc4019061e4e (281f83f)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-15T18:12:51.096Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · e0b2cc5191e64f651ef9976df361fa55ffe003cd (e0b2cc5)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-15T17:43:49.890Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 515f02ae111df7fd4ec34a14a884e9145b2af4a1 (515f02a)",
       "area": "Repositório",
       "status": "sucesso"
     }
