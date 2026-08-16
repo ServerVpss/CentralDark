@@ -4,7 +4,11 @@
  *
  * Um único motor canônico:
  * - judge: read-only, produz recibo SHA-256;
- * - promote: revalida HEAD/base/intenção e promove.
+ * - promote: materializa/verifica o selo canônico, revalida HEAD/base/intenção e promove.
+ *
+ * SELO_CANONICO_DE_PROMOCAO = recibo de intenção completo +
+ * 👑 PERMITO-SEGREDO + 🔄 GIT + 🤖 AUTO.
+ * O selo organiza/rastreia; não substitui gates, segurança nem prova.
  */
 import { spawnSync } from "node:child_process";
 import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
@@ -16,9 +20,70 @@ const API = "https://api.github.com";
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const ENGINE = join(ROOT, "scripts", "github-autonomia-promocao.mjs");
 export const CANONICAL_AUTHORITY_LABEL = "👑 PERMITO-SEGREDO";
+export const CANONICAL_GIT_LABEL = "🔄 GIT";
+export const CANONICAL_AUTOMATION_LABEL = "🤖 AUTO";
+export const CANONICAL_SUCCESS_LABEL = "🟢 SUCESSO";
+export const REQUIRED_PROMOTION_SEAL_LABELS = Object.freeze([
+  CANONICAL_AUTHORITY_LABEL,
+  CANONICAL_GIT_LABEL,
+  CANONICAL_AUTOMATION_LABEL,
+]);
+export const SUPPORTED_SEAL_MERGE_POLICIES = Object.freeze([
+  "AUTO_SQUASH_IF_CLEAN",
+  "GREEN_FIRST",
+  "GREEN_FIRST_6_OF_6_THEN_SQUASH",
+]);
 
 function markerAuthorized(pr) {
   return authorizationFor(pr).authorized;
+}
+
+function lineMarker(body, name) {
+  const match = String(body || "").match(new RegExp(`^${name}:\\s*(.+?)\\s*$`, "mi"));
+  return match?.[1]?.trim() || null;
+}
+
+function labelNames(pr) {
+  return new Set((pr?.labels || []).map((label) => String(label?.name || label).trim().toLocaleLowerCase("pt-BR")));
+}
+
+export function promotionSealReceipt(pr) {
+  const body = String(pr?.body || "");
+  const authority = lineMarker(body, "Intent-Authorized");
+  const mergePolicy = lineMarker(body, "Merge-Policy");
+  const intentScope = lineMarker(body, "Intent-Scope");
+  const writer = lineMarker(body, "Writer");
+  const writerScope = lineMarker(body, "Writer-Scope");
+  const valid = authority === "SEGREDO/CHEFE"
+    && SUPPORTED_SEAL_MERGE_POLICIES.includes(mergePolicy)
+    && Boolean(intentScope)
+    && Boolean(writer)
+    && Boolean(writerScope);
+  return { valid, authority, mergePolicy, intentScope, writer, writerScope };
+}
+
+export function promotionSealState(pr, repository, trustedAuthors = ["segredounlock"]) {
+  const trusted = trustedAuthors.map((item) => item.toLowerCase());
+  const receipt = promotionSealReceipt(pr);
+  const structurallyEligible = Boolean(
+    pr?.state === "open" &&
+    !pr?.draft &&
+    pr?.base?.ref === "main" &&
+    pr?.head?.repo?.full_name === repository &&
+    trusted.includes(String(pr?.user?.login || "").toLowerCase())
+  );
+  const labels = labelNames(pr);
+  const missingLabels = REQUIRED_PROMOTION_SEAL_LABELS.filter(
+    (label) => !labels.has(label.toLocaleLowerCase("pt-BR")),
+  );
+  const eligible = structurallyEligible && receipt.valid;
+  return {
+    eligible,
+    complete: eligible && missingLabels.length === 0,
+    receipt,
+    requiredLabels: [...REQUIRED_PROMOTION_SEAL_LABELS],
+    missingLabels,
+  };
 }
 
 export function eligibleSummary(pr, repository, trustedAuthors = ["segredounlock"]) {
@@ -29,22 +94,13 @@ export function eligibleSummary(pr, repository, trustedAuthors = ["segredounlock
     pr?.base?.ref === "main" &&
     pr?.head?.repo?.full_name === repository &&
     trusted.includes(String(pr?.user?.login || "").toLowerCase()) &&
-    markerAuthorized(pr)
+    (markerAuthorized(pr) || promotionSealReceipt(pr).valid)
   );
 }
 
 export function shouldMaterializeAuthority(pr, repository, trustedAuthors = ["segredounlock"]) {
-  const auth = authorizationFor(pr);
-  const trusted = trustedAuthors.map((item) => item.toLowerCase());
-  return Boolean(
-    pr?.state === "open" &&
-    !pr?.draft &&
-    pr?.base?.ref === "main" &&
-    pr?.head?.repo?.full_name === repository &&
-    trusted.includes(String(pr?.user?.login || "").toLowerCase()) &&
-    auth.viaBody &&
-    !auth.viaLabel
-  );
+  const seal = promotionSealState(pr, repository, trustedAuthors);
+  return Boolean(seal.eligible && seal.missingLabels.includes(CANONICAL_AUTHORITY_LABEL));
 }
 
 async function api(token, method, path, body) {
@@ -54,7 +110,7 @@ async function api(token, method, path, body) {
       Authorization: `Bearer ${token}`,
       Accept: "application/vnd.github+json",
       "X-GitHub-Api-Version": "2022-11-28",
-      "User-Agent": "centraldark-autonomia-varredura/3.0",
+      "User-Agent": "centraldark-autonomia-varredura/3.1",
       ...(body === undefined ? {} : { "Content-Type": "application/json" }),
     },
     body: body === undefined ? undefined : JSON.stringify(body),
@@ -249,23 +305,47 @@ async function promoteSweep() {
     const receiptPath = join(sweepDir, name);
 
     const livePr = await api(promoterToken, "GET", `/repos/${repository}/pulls/${number}`);
-    if (shouldMaterializeAuthority(livePr, repository, trustedAuthors)) {
-      const labels = await api(promoterToken, "POST", `/repos/${repository}/issues/${number}/labels`, { labels: [CANONICAL_AUTHORITY_LABEL] });
-      const verified = Array.isArray(labels)
-        && labels.some((label) => String(label?.name || label).trim().toLocaleLowerCase("pt-BR") === CANONICAL_AUTHORITY_LABEL.toLocaleLowerCase("pt-BR"));
-      if (!verified) {
-        failures.push(`${number}:AUTHORITY_LABEL_NOT_VERIFIED`);
-        await upsertDiagnostic(promoterToken, repository, number, "AUTHORITY_LABEL_NOT_VERIFIED", "GitHub não confirmou a label canônica após a materialização da dependência derivada da intenção.");
+    const seal = promotionSealState(livePr, repository, trustedAuthors);
+    if (!seal.eligible) {
+      failures.push(`${number}:PROMOTION_SEAL_RECEIPT_INVALID`);
+      await upsertDiagnostic(
+        promoterToken,
+        repository,
+        number,
+        "PROMOTION_SEAL_RECEIPT_INVALID",
+        "Selo recusado: exige Intent-Authorized=SEGREDO/CHEFE, Merge-Policy suportada, Intent-Scope, Writer e Writer-Scope no mesmo PR confiável.",
+      );
+      continue;
+    }
+
+    if (!seal.complete) {
+      const labels = await api(promoterToken, "POST", `/repos/${repository}/issues/${number}/labels`, { labels: seal.missingLabels });
+      const returned = new Set((Array.isArray(labels) ? labels : []).map(
+        (label) => String(label?.name || label).trim().toLocaleLowerCase("pt-BR"),
+      ));
+      const unverified = REQUIRED_PROMOTION_SEAL_LABELS.filter(
+        (label) => !returned.has(label.toLocaleLowerCase("pt-BR")),
+      );
+      if (unverified.length) {
+        failures.push(`${number}:PROMOTION_SEAL_NOT_VERIFIED`);
+        await upsertDiagnostic(
+          promoterToken,
+          repository,
+          number,
+          "PROMOTION_SEAL_NOT_VERIFIED",
+          `GitHub não confirmou o selo completo. Faltando após materialização: ${unverified.join(", ")}`,
+        );
         continue;
       }
-      console.log(`PR=${number} AUTHORITY_DEPENDENCY_MATERIALIZED=${CANONICAL_AUTHORITY_LABEL}`);
+      console.log(`PR=${number} PROMOTION_SEAL_MATERIALIZED=${REQUIRED_PROMOTION_SEAL_LABELS.join("|")}`);
       await api(promoterToken, "POST", `/repos/${repository}/dispatches`, {
         event_type: "centraldark_autonomia_recheck",
-        client_payload: { pr_number: number, reason: "authority_dependency_materialized", head: livePr.head?.sha || null },
+        client_payload: { pr_number: number, reason: "promotion_seal_materialized", head: livePr.head?.sha || null },
       });
       continue;
     }
 
+    console.log(`PR=${number} PROMOTION_SEAL=PASS`);
     const promote = runEngine("promote", {
       GITHUB_TOKEN: promoterToken,
       GITHUB_EVENT_PATH: eventPath,
@@ -280,6 +360,20 @@ async function promoteSweep() {
       await upsertDiagnostic(promoterToken, repository, number, `PROMOTE_FAILED:${code}`, sanitizeNotice(raw, 2400));
       await notify({ code: `PROMOTE_FAILED:${code}`, pr: number, run: process.env.GITHUB_RUN_ID || null, detail: raw });
       failures.push(`${number}:${code}`);
+      continue;
+    }
+
+    const after = await api(promoterToken, "GET", `/repos/${repository}/pulls/${number}`);
+    if (after?.merged_at) {
+      const finalLabels = await api(promoterToken, "POST", `/repos/${repository}/issues/${number}/labels`, { labels: [CANONICAL_SUCCESS_LABEL] });
+      const successVerified = Array.isArray(finalLabels)
+        && finalLabels.some((label) => String(label?.name || label).trim().toLocaleLowerCase("pt-BR") === CANONICAL_SUCCESS_LABEL.toLocaleLowerCase("pt-BR"));
+      if (!successVerified) {
+        failures.push(`${number}:SUCCESS_SEAL_NOT_VERIFIED`);
+        await notify({ code: "SUCCESS_SEAL_NOT_VERIFIED", pr: number, head: after?.merge_commit_sha || after?.head?.sha, run: process.env.GITHUB_RUN_ID || null, detail: "Merge concluído, mas a label 🟢 SUCESSO não foi confirmada pelo GitHub." });
+      } else {
+        console.log(`PR=${number} RESULT_SEAL=${CANONICAL_SUCCESS_LABEL}`);
+      }
     }
   }
 
