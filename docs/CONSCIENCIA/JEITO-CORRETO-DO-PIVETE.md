@@ -625,3 +625,71 @@ O método está funcionando quando:
 pela SOL.**
 
 Evoluir este mesmo arquivo. Não criar versões paralelas.
+
+---
+
+## 17. Squash rápido do CHEFE — promoção humana vira novo baseline
+
+Padrão operacional observado em múltiplas missões: quando o SEGREDO/CHEFE vê a
+ação de **Squash and merge** disponível e decide apertá-la, ele costuma promover
+o PR imediatamente. Os agentes devem aprender esse comportamento e tratá-lo como
+um evento humano esperado de promoção, não como surpresa, corrida, usurpação de
+Writer ou conflito por si só.
+
+O ato manual do SEGREDO/CHEFE encerra a decisão humana de promoção daquele PR.
+Depois disso, a obrigação dos agentes é medir novamente a `main`, adotar o SHA
+pós-squash como baseline canônico e continuar a mesma intenção a partir do
+estado vivo.
+
+```text
+CHEFE_SQUASH_FAST_PATH=OBSERVED_HUMAN_BEHAVIOR
+CHEFE_MAY_SQUASH_IMMEDIATELY_WHEN_GITHUB_UI_OFFERS_ACTION=true
+MANUAL_SQUASH_BY_SEGREDO_CHEFE=HUMAN_PROMOTION_EVENT
+POST_SQUASH_MAIN_SHA=NEW_CANONICAL_BASELINE
+PR_HEAD_SHA_MAY_DIFFER_FROM_POST_SQUASH_MAIN_SHA=true
+MAIN_MOVED != CONTENT_CONFLICT
+CONFLICT_REQUIRES_MATERIAL_OVERLAP_OR_GIT_INTEGRATION_FAILURE=true
+AGENT_MUST_REMEASURE_MAIN_AFTER_MANUAL_SQUASH=true
+AGENT_MUST_RECONCILE_NOT_COMPLAIN=true
+AGENT_MUST_NOT_ASK_CHEFE_TO_REPEAT_MERGE=true
+AGENT_MUST_NOT_TREAT_EXPECTED_SQUASH_AS_INCIDENT=true
+SAME_INTENT_CONTINUES_AFTER_SQUASH=true
+```
+
+A disponibilidade do botão é um **sinal de interface de que o GitHub oferece a
+ação**, enquanto o clique do SEGREDO/CHEFE é a decisão humana observável de
+promoção. O agente não deve converter a interface em prova de qualidade que ela
+não mede; deve usar os gates aplicáveis para claims técnicos e, ao mesmo tempo,
+respeitar a promoção humana já realizada sem devolver burocracia ao CHEFE.
+
+```text
+SQUASH_BUTTON_VISIBLE=GITHUB_UI_ACTION_AVAILABLE
+SQUASH_BUTTON_VISIBLE != TECHNICAL_PASS
+CHEFE_SQUASH_ACTION=AUTHORITATIVE_HUMAN_PROMOTION_EVENT
+TECHNICAL_CLAIMS_REQUIRE_APPLICABLE_EVIDENCE=true
+```
+
+Quando a `main` avançar enquanto outra janela/agente trabalha:
+
+```text
+DETECTAR_MAIN_ADVANCE
+→ IDENTIFICAR_SE_FOI_PROMOCAO_DO_CHEFE
+→ REMEDIR_HEAD_MAIN
+→ COMPARAR_ESCOPO_ARQUIVOS_HUNKS
+→ SEM_OVERLAP_MATERIAL: REBASELINE_E_CONTINUAR
+→ COM_OVERLAP_MATERIAL: RECONCILIAR_SEM_FORCE_PUSH
+→ PRESERVAR_DELTA_UTIL
+→ CONTINUAR_A_MESMA_MUSICA
+```
+
+Histórico de referência: PR #816 foi criado e squashado em cerca de vinte
+segundos com `Merge-Policy: AUTO_SQUASH_IF_CLEAN`; PR #933 mostrou que a `main`
+pode avançar em outros escopos e ainda receber o squash limpo do delta atual.
+Esses exemplos sustentam o comportamento de reconciliação rápida; não autorizam
+inventar ausência de conflito quando houver overlap material real.
+
+A meta final é retirar até este gesto manual do caminho crítico: conforme a
+promoção canônica ficar capaz de reproduzir com segurança a mesma decisão, os
+agentes devem aprender a executar o fast path autorizado sem depender do
+SEGREDO/CHEFE apertar o botão, preservando exatamente a mesma autoridade,
+intenção e semântica de squash.
