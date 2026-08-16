@@ -98,15 +98,69 @@ Uma melhoria só pode ser chamada de evolução de `Menos é Mais` quando o mesm
 
 O contrato conceitual vive em `docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md`; o gate executável compartilhado vive em `.agents/skills/meta-lupa/scripts/evolution_gate.py`.
 
-## 7. Scripts e artefatos
+## 7. Scripts, artefatos e identidade canônica
 
 ```text
 REUSE_BEFORE_CREATE=true
-SEM_V1_V2_V3=true
+ONE_IDENTITY_ONE_NAME=true
+ONE_CANONICAL_PATH=true
 SEM_DUPLICAÇÃO=true
+HISTORY=GIT
 ```
 
-Mesma função = corrigir o mesmo artefato. Git é quem versiona.
+Mesma função/identidade conceitual = corrigir o mesmo artefato. Git é quem guarda a evolução temporal.
+
+Não criar `v2`, `v3`, `v4`, `final`, `novo`, `old`, `antigo`, cópia numerada ou equivalente para representar a mesma identidade apenas porque o conteúdo mudou.
+
+```text
+NOME = IDENTIDADE
+CONTEÚDO = ESTADO ATUAL
+GIT = HISTÓRIA
+```
+
+### 7.1 Número no nome é sinal, não sentença
+
+Ocorrência de `v1/v2/v3/v4` ou semelhante é `CANDIDATE`, não condenação automática.
+
+Antes de renomear/remover, classificar:
+
+```text
+CANDIDATE
+→ conteúdo
+→ consumidores
+→ referências
+→ histórico
+→ owner
+→ estado ativo
+→ contrato de compatibilidade
+```
+
+Só então:
+
+```text
+VIOLATION
+| LEGITIMATE_EXCEPTION
+| HISTORICAL_RECORD
+| FALSE_POSITIVE
+```
+
+Exceção legítima exige razão estrutural: API pública versionada, schema/protocolo externo com coexistência necessária, migration imutável, formato wire compatível ou obrigação técnica equivalente. O simples fato de já existir `v2` no nome NÃO prova legitimidade.
+
+Relatório histórico, snapshot ou evidência de uma época pode preservar o texto original sem virar identidade funcional ativa.
+
+### 7.2 Backup local
+
+```text
+DEFAULT_BAK_COUNT=0
+MAX_BAK_PER_CANONICAL_IDENTITY=1
+BAK_IS_OPTIONAL_AIRBAG=true
+BAK_IS_NOT_HISTORY=true
+BAK_IS_NOT_CANONICAL=true
+```
+
+`.bak` é airbag local efêmero, não versão e não implementação concorrente. Só nasce quando risco real justificar recuperação local, preferencialmente do último estado bom provado. Depois de `PASS + GIT_DURABLE`, remover por default salvo necessidade operacional demonstrada.
+
+`*.bak` no `.gitignore` não prova que backups já rastreados deixaram de existir. Antes de limpar legado rastreado, mapear consumidores e preservar qualquer delta útil.
 
 ## 8. Labels e nomes legados
 
@@ -165,7 +219,53 @@ GitHub é fonte da verdade; VPS é runtime e contraprova. Trabalho local útil d
 
 Endpoint e arquitetura vigentes devem ser medidos no estado vivo antes de alteração. Não remover variável/rota até provar consumidores.
 
-## 14. Fechamento operacional
+## 14. PRs e relatórios: duas camadas, uma verdade
+
+Quando o material for denso, apresentar o mesmo estado em duas camadas.
+
+### 14.1 🎮 HUD do SEGREDO/CHEFE
+
+Primeiro, projeção curta e visual que não exige leitura de código/log bruto:
+
+```text
+OBJETIVO=
+ESTADO=🟢|🟡|🔴
+PROGRESSO=
+BLOQUEIO_REAL=
+PRÓXIMO_PASSO_ÚNICO=
+```
+
+Pode usar linguagem leve/regional e gamificação para facilitar leitura, sem alterar significado técnico.
+
+### 14.2 🧾 RAW DATA técnico
+
+Logo abaixo ou no artefato ligado ao HUD, preservar evidência reproduzível:
+
+```text
+BASE_SHA
+HEAD_SHA
+TARGET
+COMMENT/RECEIPT_ID
+TIMESTAMP
+TESTES/CHECKS
+HASHES
+FORMULAS/PREMISSAS quando aplicável
+ERROS SANITIZADOS
+EVIDÊNCIA DE RUNTIME quando aplicável
+```
+
+```text
+HUD != PROOF
+RAW_DATA = PROOF_INPUT
+HUD = PROJECTION_DERIVED_FROM_RAW_DATA
+HUD_MUST_NOT_INVENT_STATE=true
+```
+
+Gamificação nunca esconde vermelho, UNKNOWN, regressão ou divergência. Dados brutos não precisam ser despejados na primeira tela quando síntese suficiente resolve a pergunta do humano.
+
+## 15. Fechamento operacional
+
+Para o SEGREDO/CHEFE, responder primeiro o alvo perguntado. Estado simples não deve virar tratado técnico.
 
 ```text
 O QUE FOI FEITO=
@@ -176,7 +276,11 @@ PENDÊNCIA=
 PRÓXIMO PASSO ÚNICO=
 ```
 
-## 15. Boot recomendado
+Se a pergunta for apenas de estado, usar primeiro `SIM | PARCIAL | NÃO | UNKNOWN` e acrescentar somente a prova curta e a pendência que alterem aquele alvo. Problema vizinho não rebaixa alvo concluído para `PARCIAL`.
+
+Detalhe técnico/código entra quando pedido ou quando necessário para agir, provar ou evitar interpretação errada.
+
+## 16. Boot recomendado
 
 ```text
 #ACORDAR !CALIBRAR
@@ -185,7 +289,7 @@ PRÓXIMO PASSO ÚNICO=
 → continuar no mesmo objetivo
 ```
 
-## 16. Fio da missão
+## 17. Fio da missão
 
 ```text
 SEGREDO/CHEFE define a intenção.
