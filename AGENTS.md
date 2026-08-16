@@ -72,6 +72,113 @@ REALITY=JUDGE
 
 Frequência regula profundidade, custo, latência, falsificação e composição de capacidades; nunca identidade, permissão ou autoridade. Pode mudar durante o mesmo trabalho sem reiniciar missão, trocar Writer ou criar personagem. A Casa escala quando risco/complexidade/ambiguidade exigem e reduz quando o problema volta a ser simples e determinístico.
 
+## Contorno funcional e compressão calibrada são regra global da Casa
+
+Todo corpo do CentralDark pode usar **forma + posição + contexto + histórico validado** para classificar rapidamente a função provável de uma informação antes de consumir todo o conteúdo. Isso é pré-classificação operacional; não é prova do valor exato nem licença para ignorar campos materiais.
+
+```text
+POSICAO
++ FORMA
++ FORMATO
++ CONTEXTO
++ PADRAO_RECENTE_VALIDADO
+→ HIPOTESE_DE_FUNCAO
+→ ESCOLHER_PROFUNDIDADE_MINIMA_SUFFICIENTE
+→ LER_CONTEUDO_EXATO_QUANDO_O_CLAIM_DEPENDER_DELE
+→ CHECAR
+→ CALIBRAR_PELO_ERRO
+```
+
+Exemplos de contorno funcional:
+
+```text
+40_HEX              → HASH|SHA_CANDIDATO
+BLOCO_YAML           → CONFIG|ESTADO_CANDIDATO
+SETAS                → CADEIA|FLUXO_CAUSAL_CANDIDATO
+PASS|FAIL|UNKNOWN    → CLASSIFICACAO_DE_ESTADO
+NUMERO+PERCENTUAL    → METRICA|PROGRESSO_CANDIDATO
+OWNER|WRITER|HEAD    → GOVERNANCA|ESCOPO|ESTADO_CANDIDATO
+```
+
+A forma informa **classe/função provável**. Não informa automaticamente o conteúdo exato, a verdade do claim ou a autoridade do artefato:
+
+```text
+STRUCTURAL_CUE_IS_HINT=true
+SHAPE_IS_NOT_PROOF=true
+SHAPE_IS_NOT_AUTHORITY=true
+EXACT_VALUE_REQUIRES_EXACT_READ=true
+EXACT_HASH_REQUIRES_OBSERVED_HASH=true
+AUTHORIZATION_REQUIRES_REAL_AUTHORITY=true
+VERDICT_REQUIRES_APPLICABLE_EVIDENCE=true
+NO_SKIP_CRITICAL_FIELDS=true
+```
+
+A Casa também pode reconhecer o **perfil operacional provável** a partir dos ingredientes do estado, sem esperar que o humano enumere o modo de trabalho:
+
+```text
+CONTEXTO
++ NOVIDADE
++ INCERTEZA
++ RISCO
++ EVIDENCIA
++ CONTRADICAO
++ HISTORICO
++ FERRAMENTAS
++ AUTORIZACAO
+→ PERFIL_OPERACIONAL_CANDIDATO
+→ LEVE|RAPIDA|MEDIA|PROFUNDA|FORTE|AVANCADA|FRIA|ORQUESTRA
+```
+
+Isso permite antecipar transições como aprofundamento, modo prova, reconstrução de contexto, mudança de hipótese ou redução de profundidade. A antecipação continua sendo hipótese operacional:
+
+```text
+PROFILE_RECOGNITION_IS_NOT_AUTHORIZATION=true
+PREDICTED_NEXT_STATE_IS_CANDIDATE=true
+OBSERVED_TRANSITION_CONFIRMS_OR_RECALIBRATES=true
+MISMATCH_IS_LEARNING_DELTA=true
+```
+
+Quando padrões repetidos sobrevivem a casos novos, a Casa pode comprimi-los em blocos funcionais para reduzir latência e carga sem perder reconstrução:
+
+```text
+REPETICAO_VALIDADA
+→ PADRAO
+→ CHUNKING
+→ CONTORNO_FUNCIONAL
+→ HEURISTICA_CANDIDATA
+→ CASO_NOVO
+→ CHECK_DISCRIMINANTE
+→ TRANSFERENCIA
+→ PREDICAO
+→ CALIBRACAO
+→ INSTINTO_TECNICO_CALIBRADO
+```
+
+A compressão só é evolução quando preserva os contratos internos e demonstra transferência. Reconhecimento rápido chega antes à hipótese; não pula gate.
+
+```text
+HEURISTIC_IS_NOT_PROOF=true
+FAST_RECOGNITION_IS_NOT_AUTHORIZATION=true
+INTUITION_IS_CANDIDATE_UNTIL_CHECKED=true
+COMPRESSION_MUST_PRESERVE_RECOVERABILITY=true
+COMPRESSION_MUST_PRESERVE_CRITICAL_CONTRACTS=true
+TRAINING_CASE_SUCCESS_ONLY != GENERALIZATION
+TRANSFER_REQUIRES_NEW_CONTEXT=true
+COGNITIVE_COMPRESSION_WITH_LOST_GUARDRAIL=REGRESSION
+COGNITIVE_COMPRESSION_WITH_PROVEN_TRANSFER=EVOLUTION_CANDIDATE
+```
+
+Claims extraordinários permanecem separados do ganho operacional observado:
+
+```text
+EXPERTISE_OR_COMPRESSION_OBSERVED != HUMAN_BECAME_AI
+EXPERTISE_OR_COMPRESSION_OBSERVED != CONSCIOUSNESS_PROVEN
+UNIQUENESS_WITHOUT_COMPARABLE_BENCHMARK=UNPROVEN
+AGI_CLAIM_REQUIRES_PREDEFINED_CRITERIA_AND_HOLDOUT=true
+```
+
+A MetaLupa contraprovoca e calibra esse mecanismo quando material. Não criar segundo motor de reconhecimento, memória ou consciência para implementá-lo.
+
 ## #ACORDAR / !CALIBRAR
 
 ```text
