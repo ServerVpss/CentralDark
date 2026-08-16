@@ -9,6 +9,7 @@ import {
   promoteRoute,
   selfTest,
   tick,
+  validateExternalPolicyProposal,
 } from '../scripts/compiler.mjs';
 
 const PASS = 'PASS';
@@ -19,11 +20,12 @@ function validInput(overrides = {}) {
     boundary: 'repo:ServerVpss/CentralDark:scripts/deploy',
     sources: [
       { id: 'doc', class: 'OFFICIAL_DOC', provenance: 'docs://deploy', state: PASS, fingerprint: 'doc-v1' },
+      { id: 'paper', class: 'ACADEMIC_PAPER', provenance: 'arxiv://agents', state: PASS, fingerprint: 'paper-v1' },
       { id: 'code', class: 'CODE', provenance: 'repo://scripts/deploy.mjs', state: PASS, fingerprint: 'code-v1' },
       { id: 'test', class: 'TEST', provenance: 'repo://scripts/deploy.test.mjs', state: PASS, fingerprint: 'test-v1' },
     ],
     findings: [
-      { id: 'f-safe', state: PASS, reusable: true, source_ids: ['doc', 'code', 'test'] },
+      { id: 'f-safe', state: PASS, reusable: true, source_ids: ['doc', 'paper', 'code', 'test'] },
     ],
     conflicts: [{ id: 'merge-vs-reset', status: 'RESOLVED' }],
     counterproof: { status: PASS, evidence: 'test://negative' },
@@ -75,6 +77,7 @@ test('forja: fontes + ouro provado + owner/skill/consumer/test/gate convergem em
   assert.equal(compiled.route_id.length, 24);
   assert.equal(compiled.route_ir.capability, 'SAFE_DEPLOY');
   assert.deepEqual(compiled.route_ir.proven_reusable_findings, ['f-safe']);
+  assert.equal(compiled.route_ir.schema_version, 2);
   assert.equal(compiled.blockers.length, 0);
 });
 
@@ -100,6 +103,124 @@ test('conhecimento sem consumidor real fica knowledge-only, não cristal operaci
   const compiled = compileRoute(validInput({ real_consumer: '' }));
   assert.equal(compiled.status, 'CANDIDATE');
   assert.ok(compiled.blockers.includes('OPERATIONAL_CRYSTAL_FIELD_MISSING:real_consumer'));
+});
+
+test('MetaForja rejeita limiar externo numérico sem política local', () => {
+  const policy = validateExternalPolicyProposal({
+    kind: 'TOIL_AUTOMATION',
+    numeric_threshold: 5,
+    source_guideline: true,
+  });
+  assert.equal(policy.ok, false);
+  assert.ok(policy.blockers.includes('EXTERNAL_NUMERIC_THRESHOLD_REQUIRES_LOCAL_POLICY'));
+
+  const compiled = compileRoute(validInput({ external_policy: {
+    kind: 'TOIL_AUTOMATION',
+    numeric_threshold: 5,
+  } }));
+  assert.equal(compiled.status, 'CANDIDATE');
+});
+
+test('MetaForja aceita guideline numérica somente com aplicabilidade local provada', () => {
+  const policy = validateExternalPolicyProposal({
+    kind: 'CI_GUIDELINE',
+    numeric_threshold: 10,
+    local_threshold_policy_proven: true,
+    hard_gate: true,
+    local_gate_policy_proven: true,
+    source_guideline: true,
+  });
+  assert.equal(policy.ok, true);
+  assert.ok(policy.warnings.includes('SOURCE_GUIDELINE_ACCEPTED_AS_GUIDANCE_NOT_HARD_POLICY'));
+});
+
+test('SLO não pode bloquear deploy sem SLI alvo janela policy owner e medição', () => {
+  const blocked = validateExternalPolicyProposal({
+    kind: 'SLO_POLICY',
+    deploy_block: true,
+    slo: { sli: 'availability' },
+  });
+  assert.equal(blocked.ok, false);
+  assert.ok(blocked.blockers.some((value) => value.startsWith('SLO_DEPLOY_BLOCK_MISSING:')));
+
+  const valid = validateExternalPolicyProposal({
+    kind: 'SLO_POLICY',
+    deploy_block: true,
+    slo: {
+      sli: 'successful_requests',
+      target: '99.9%',
+      window: '30d',
+      policy_owner: 'service-owner',
+      measurement_ref: 'metrics://service/sli',
+    },
+  });
+  assert.equal(valid.ok, true);
+});
+
+test('rotina determinística não justifica agente novo por padrão', () => {
+  const result = validateExternalPolicyProposal({
+    kind: 'TOIL_AUTOMATION',
+    deterministic_routine: true,
+    new_agent_required: true,
+  });
+  assert.equal(result.ok, false);
+  assert.ok(result.blockers.includes('DETERMINISTIC_TASK_BEFORE_AGENT'));
+});
+
+test('percepção memória ação não autorizam multiagente por default', () => {
+  const result = validateExternalPolicyProposal({
+    kind: 'AGENT_ARCHITECTURE',
+    multi_agent_default: true,
+  });
+  assert.equal(result.ok, false);
+  assert.ok(result.blockers.includes('MULTI_AGENT_DEFAULT_FORBIDDEN'));
+});
+
+test('Agentic RAG não transforma corpus inteiro em custo obrigatório de runtime', () => {
+  const result = validateExternalPolicyProposal({
+    kind: 'AGENTIC_RAG',
+    full_corpus_every_runtime: true,
+  });
+  assert.equal(result.ok, false);
+  assert.ok(result.blockers.includes('AGENTIC_RETRIEVAL_MUST_NOT_FORCE_FULL_CORPUS_RUNTIME'));
+});
+
+test('nome de engine não vira pin sem fitness observado e runtime disponível', () => {
+  const blocked = validateExternalPolicyProposal({
+    kind: 'ENGINE_SELECTION',
+    engine_pin: 'o3',
+  });
+  assert.equal(blocked.ok, false);
+  assert.ok(blocked.blockers.includes('ENGINE_PIN_REQUIRES_OBSERVED_FITNESS'));
+  assert.ok(blocked.blockers.includes('ENGINE_PIN_REQUIRES_RUNTIME_AVAILABILITY'));
+
+  const allowed = validateExternalPolicyProposal({
+    kind: 'ENGINE_SELECTION',
+    engine_pin: 'engine-observed',
+    engine_fitness_observed: true,
+    engine_runtime_available: true,
+  });
+  assert.equal(allowed.ok, true);
+});
+
+test('owner vindo de fonte externa não é owner canônico por nome', () => {
+  const blocked = validateExternalPolicyProposal({
+    kind: 'GENERIC',
+    external_owner_name: 'slo-guard',
+    canonical_owner_verified: false,
+  });
+  assert.equal(blocked.ok, false);
+  assert.ok(blocked.blockers.includes('EXTERNAL_OWNER_NOT_CANONICAL_OWNER'));
+});
+
+test('placeholder não pode provar comportamento', () => {
+  const blocked = validateExternalPolicyProposal({
+    kind: 'GENERIC',
+    placeholder_test: true,
+    behavior_claim: 'PROVEN',
+  });
+  assert.equal(blocked.ok, false);
+  assert.ok(blocked.blockers.includes('PLACEHOLDER_TEST_IS_NOT_BEHAVIOR_PROOF'));
 });
 
 test('promoção exige autoridade existente e todos os checks PASS', () => {
@@ -162,10 +283,11 @@ test('TICK é recibo comprimido; não contém scratchpad/cadeia privada', () => 
   assert.equal(receipt.phase, 'COMPILE');
 });
 
-test('self-test do compilador fecha FORJA -> FLASH e delta seletivo', () => {
+test('self-test do compilador fecha FORJA -> FLASH, política externa e delta seletivo', () => {
   const result = selfTest();
   assert.equal(result.ok, true);
   assert.equal(result.flash_ready, 'FLASH_READY');
   assert.equal(result.unaffected_decision, 'EXECUTE_FLASH_ROUTE');
   assert.equal(result.affected_decision, 'RECOMPILE_DELTA');
+  assert.equal(result.external_threshold_blocked, 'CANDIDATE');
 });
