@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-08-16T21:51:37.938Z
+# 🧠 Notion Sync — 2026-08-16T22:08:46.765Z
 
-- **Commit fonte:** `c7507e94ff0990e144b6e50ea0d0180ca908d2ae`
+- **Commit fonte:** `9f2eb5aa9de182234e6b6c817e4ac439444a806c`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 413 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 412 atualizadas · ❌ 1 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
 | aprendizados | 26 | 0 | 26 | 0 | 0 |
-| estrutura | 343 | 0 | 343 | 0 | 0 |
+| estrutura | 343 | 0 | 342 | 0 | 1 |
 
 ## Operações
 
@@ -332,7 +332,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/RELATORIOS/20260703T075750Z-consolidacao-root-docs-centraldark.md |
 | estrutura | atualizado | docs/CONSCIENCIA/RELATORIOS/alinhamento-cerebro-20260630.md |
 | estrutura | atualizado | docs/CONSCIENCIA/RELATORIOS/notion-sync/2026-06-25T21-15-31.md |
-| estrutura | atualizado | docs/CONSCIENCIA/RELATORIOS/notion-sync/2026-06-25T23-00-16.md |
+| estrutura | erro | docs/CONSCIENCIA/RELATORIOS/notion-sync/2026-06-25T23-00-16.md |
 | estrutura | atualizado | docs/CONSCIENCIA/RELATORIOS/notion-sync/2026-06-26T00-15-26.md |
 | estrutura | atualizado | docs/CONSCIENCIA/RELATORIOS/notion-sync/2026-06-26T00-18-46.md |
 | estrutura | atualizado | docs/CONSCIENCIA/RELATORIOS/notion-sync/2026-06-26T06-48-28.md |
