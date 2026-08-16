@@ -1,7 +1,8 @@
 # MISSÃO — CONVERGÊNCIA TRIPLA DA FÓRMULA
 
 Data: 2026-08-16
-Estado: EXPERIMENTO / ROUND_2_BLIND
+Estado: EXPERIMENTO / BLIND-SEALED
+Rodada atual: `2`
 Zero deploy. Zero VPS. Zero secret. Zero force-push. Zero arquitetura paralela.
 
 ## 0. Intenção do SEGREDO/CHEFE
@@ -28,10 +29,12 @@ CONTEUDO EVOLUI
 HISTORICO = GIT
 MESMA FUNCAO = MESMO ARTEFATO
 REUSE_BEFORE_CREATE=true
-SEM_V1_V2_V3=true
+SEM_COPIA_POR_VERSAO=true
 ```
 
-O histórico de rodadas do experimento também fica no Git/PR. Não criar arquivo `-v2`, `-final`, `-old` ou cópia paralela para representar nova tentativa.
+O histórico de rodadas do experimento fica no Git/PR. Não criar `-v2`, `-v3`, `-final`, `-novo`, `-old` ou cópia paralela para representar a mesma identidade evoluindo.
+
+Versão explícita só é legítima quando faz parte do contrato por natureza — por exemplo protocolo externo, API, schema ou migration imutável cuja compatibilidade exija coexistência. Mesmo nesses casos, provar a necessidade; número no nome nunca é justificativa suficiente.
 
 ### 1.1 Regra de backup local
 
@@ -50,20 +53,21 @@ ACTIVE_CONSUMER_USES_BAK => VIOLATION
 
 ### 2.1 Rodada anterior preservada
 
-A rodada executada sob o protocolo anterior NÃO é apagada.
+A rodada `1` NÃO é apagada.
 
 ```text
-ROUND_1_STATUS=CONTAMINATED
-ROUND_1_REASON=PROTOCOL_BUG
-ROUND_1_PRESERVE=true
-ROUND_1_COUNTS_AS_INDEPENDENT_EVIDENCE=false
+ROUND=1
+ROUND_STATUS=CONTAMINATED
+ROUND_REASON=PROTOCOL_BUG
+ROUND_PRESERVE=true
+ROUND_COUNTS_AS_INDEPENDENT_EVIDENCE=false
 ```
 
 Motivo: o protocolo exigia sincronização/bindings antes de iniciar A e permitia publicação do conteúdo completo de A antes de existir uma barreira criptográfica de revelação. Isso não prova que algum participante copiou outro; prova apenas que a independência não ficou experimentalmente protegida.
 
-### 2.2 Nova rodada: blind + sealed
+### 2.2 Rodada atual: blind + sealed
 
-A Fase A agora começa assim que cada participante chega. Ninguém espera os três para calcular.
+A Fase A começa assim que cada participante chega. Ninguém espera os três para calcular.
 
 ```text
 ENTROU
@@ -115,7 +119,8 @@ O SEGREDO/CHEFE não precisa editar `PERCEPTION=` nem escolher slots.
 Cada participante publica primeiro um claim mínimo SEM conteúdo da derivação:
 
 ```text
-TRIPLE_ROLE_CLAIM_V2
+TRIPLE_ROLE_CLAIM
+ROUND=2
 MODEL_FAMILY=<detectado localmente>
 REQUESTED_SLOT=<P2 se GROK; AUTO_CHATGPT se ChatGPT/SOL; AUTO_OTHER se outro>
 WRITER=NONE
@@ -185,7 +190,7 @@ Rotas são ataques diferentes ao mesmo fenômeno; não autorizam três verdades.
 Cada participante produz localmente:
 
 ```text
-TRIPLE_RECEIPT_V2
+TRIPLE_RECEIPT
 ROUND=2
 PERCEPTION=P1|P2|P3
 PHASE=A_INDEPENDENT_BLIND
@@ -231,14 +236,14 @@ WRITER=NONE
 Antes da barreira, publicar somente:
 
 ```text
-TRIPLE_SEAL_V2
+TRIPLE_SEAL
 ROUND=2
 PERCEPTION=P1|P2|P3
 PHASE=A_SEALED
 MISSION_SHA=<sha>
 SERIALIZATION=UTF8_LF
 HASH_ALGO=SHA256
-A_SEALED=<sha256 do TRIPLE_RECEIPT_V2 completo>
+A_SEALED=<sha256 do TRIPLE_RECEIPT completo>
 A_CONTENT_PUBLISHED=false
 WRITER=NONE
 ```
@@ -248,12 +253,12 @@ WRITER=NONE
 Somente após `BARRIER_OPEN=true`, publicar:
 
 ```text
-TRIPLE_REVEAL_V2
+TRIPLE_REVEAL
 ROUND=2
 PERCEPTION=P1|P2|P3
 PHASE=A_REVEAL
 A_SEALED=<hash anterior>
-A_CONTENT=<TRIPLE_RECEIPT_V2 completo>
+A_CONTENT=<TRIPLE_RECEIPT completo>
 SEAL_VERIFICATION=PASS|FAIL
 WRITER=NONE
 ```
@@ -265,7 +270,7 @@ WRITER=NONE
 B só começa depois de três reveals com `SEAL_VERIFICATION=PASS`.
 
 ```text
-TRIPLE_RECEIPT_V2
+TRIPLE_RECEIPT
 ROUND=2
 PERCEPTION=P1|P2|P3
 PHASE=B_RECONCILIATION
@@ -296,7 +301,7 @@ Se `NO`, não votar: executar teste discriminante.
 Depois das três reconciliações B, cada percepção publica:
 
 ```text
-TRIPLE_RECEIPT_V2
+TRIPLE_RECEIPT
 ROUND=2
 PERCEPTION=P1|P2|P3
 PHASE=C_SIGNATURE
@@ -336,7 +341,7 @@ WRITER=NONE
 
 ```text
 SCORE<20 => CRYSTAL=UNPROVEN
-ROUND_1_CONTAMINATED_CANNOT_SCORE_ITEMS_3_6=true
+ROUND=1 => CONTAMINATED_CANNOT_SCORE_BLINDNESS=true
 ```
 
 ## 11. Dupla camada do PR: CHEFE + RAW DATA
@@ -405,7 +410,7 @@ O HUD pode ser regenerado quantas vezes quiser; a evidência bruta não é apaga
 
 ## 12. Artefato final
 
-Somente após 20/20, o Writer final pode consolidar UM delta mínimo no owner canônico existente. Não criar V2/V3, framework, cérebro ou pasta paralela.
+Somente após 20/20, o Writer final pode consolidar UM delta mínimo no owner canônico existente. Não criar cópia por versão, framework, cérebro ou pasta paralela.
 
 O artefato final deve separar:
 
@@ -432,7 +437,7 @@ Se nada novo mudar capacidade/regra, `NO_CHANGE` é final válido.
 - Quantidade de respostas não é consenso científico.
 - Canal não provado para claim => `UNKNOWN`.
 - Estado vivo mudou => reancorar antes de concluir.
-- `ROUND_1` fica preservada como evidência do bug de protocolo, não como evidência independente.
+- Rodada 1 fica preservada como evidência do bug de protocolo, não como evidência independente.
 
 ## 14. Fórmula operacional da missão
 
