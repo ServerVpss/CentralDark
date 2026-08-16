@@ -31,8 +31,35 @@ env:
   BOT_WAIT_TIMEOUT_MINUTES: "45"
 
 jobs:
+  reconcile-drafts:
+    name: Reconciliador — Draft automatizado sem botão humano
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 5
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout exclusivo da main confiável
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.event.pull_request.base.sha || github.sha }}
+          fetch-depth: 1
+          persist-credentials: false
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+
+      - name: Reconciliar somente Draft explicitamente gerenciado
+        env:
+          PROMOTER_TOKEN: ${{ secrets.PROMOTION_TOKEN || secrets.GITHUB_PAT_PERFIL || github.token }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node scripts/github-autonomia-varredura.mjs reconcile-drafts
+
   judge:
     name: Juiz determinístico — intenção + estado + segurança
+    needs: reconcile-drafts
     runs-on: [self-hosted, Linux]
     timeout-minutes: 10
     permissions:
