@@ -31,12 +31,11 @@ Se existe suspeita de comprometimento:
 
 ## Fases
 
-### 0. Inventário read-only
-
-Executar:
+### 0. Inventário read-only da VPS antiga
 
 ```bash
 bash scripts/vps-organizacao/003-inventario-rebuild-readonly.sh
+bash scripts/vps-organizacao/003-inventario-rebuild-readonly.test.sh
 ```
 
 Contrato:
@@ -86,6 +85,15 @@ REPO → SCHEMA, NUNCA VALOR
 
 A nova máquina deve nascer de imagem conhecida do provedor e receber somente dependências declaradas. Nada é copiado de `/usr/local/bin`, `/etc/systemd`, `/root`, venv, PM2 home ou Docker storage da máquina antiga.
 
+Antes do bootstrap:
+
+```bash
+bash scripts/vps-organizacao/004-preflight-vps-limpa.sh
+bash scripts/vps-organizacao/004-preflight-vps-limpa.test.sh
+```
+
+`READY_FOR_BOOTSTRAP=YES` não significa “sem malware”; significa apenas que o baseline material da VPS nova está compatível e sem roots/runtimes conhecidos da instalação anterior. O script mantém `MALWARE_VERDICT=NOT_PROVEN`.
+
 ### 5. Estratégia determinística por ecossistema
 
 Não existe linguagem vencedora global. A escolha é por componente e evidência.
@@ -98,8 +106,6 @@ Não existe linguagem vencedora global. A escolha é por componente e evidência
 - **Banco/Supabase:** schema/migrações versionados; dados entram por restore validado, nunca por cópia de diretório interno de banco em execução.
 
 ### 6. Configuração manual pelo sistema do CHEFE
-
-O fluxo desejado é:
 
 ```text
 VPS LIMPA
@@ -124,13 +130,20 @@ O restore começa vazio. Cada conjunto de dados precisa de dono, formato, hash/c
 
 ### 8. Segurança pós-build
 
-Aplicar múltiplas lentes quando disponíveis:
+Executar:
 
-- secret scan no repo e artefatos;
-- scanner de filesystem/imagem/container;
-- scanner antimalware em dados restauráveis;
-- inventário de SUID/SGID, serviços, timers, cron e portas;
-- comparação com manifesto esperado;
+```bash
+bash scripts/vps-organizacao/005-security-gate-pos-build.sh /root/CentralDark /root/Multizap/restore-staging
+bash scripts/vps-organizacao/005-security-gate-pos-build.test.sh
+```
+
+O gate é detect/block-only:
+
+- Trivy verifica vulnerabilidades, misconfigurações e secrets de severidade HIGH/CRITICAL no repo/runtime fonte;
+- ClamAV varre recursivamente o staging de dados quando restore é aplicável;
+- nenhuma detecção é removida automaticamente;
+- ferramenta obrigatória ausente vira `BLOCKED`, não PASS;
+- relatório bruto fica local com permissão restrita e recebe hash;
 - nenhum resultado `UNKNOWN`, `SKIPPED` ou scanner ausente vira PASS.
 
 ### 9. E2E e cutover
@@ -139,19 +152,15 @@ Só existe `READY_FOR_CUTOVER=true` quando o denominador aplicável estiver decl
 
 Reset/reinstalação da VPS antiga é etapa destrutiva separada. Ela só acontece após autorização humana aplicável ao ciclo e depois de backup/restore comprovados.
 
-## Contraprova do coletor
-
-```bash
-bash scripts/vps-organizacao/003-inventario-rebuild-readonly.test.sh
-```
-
-O teste sela sintaxe e bloqueia classes de comandos mutadores no coletor read-only, incluindo instalação/remoção de pacotes, restart de serviços, mutação PM2/Docker, firewall, reboot e `git reset --hard`.
-
 ## Critério de conclusão desta fundação
 
 ```text
 INVENTORY_SCRIPT=PASS
-READ_ONLY_GUARD=PASS
+INVENTORY_READ_ONLY_GUARD=PASS
+CLEAN_VPS_PREFLIGHT=PASS
+CLEAN_VPS_READ_ONLY_GUARD=PASS
+POST_BUILD_SECURITY_GATE=IMPLEMENTED
+POST_BUILD_SECURITY_GUARD=PASS
 CONFIG_BOUNDARY=DEFINED
 RESTORE_ALLOWLIST_POLICY=DEFINED
 MALWARE_TRUST_MODEL=DEFINED
