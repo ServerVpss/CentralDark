@@ -154,20 +154,29 @@ jobs:
           node --check scripts/lupa/no-silent-error-scan.mjs
           node --check apps/modulos/hub/scripts/house-inventory-core.mjs
           node --check apps/modulos/hub/scripts/generate-house-inventory.mjs
-          node --test \
-            scripts/memory-linker/dream-review.test.mjs \
-            scripts/memory-linker/pattern-discovery.test.mjs \
-            scripts/memory-linker/pattern-library.test.mjs \
-            scripts/memory-linker/memory-reserve-events.test.mjs \
-            scripts/memory-linker/dream-review-run.test.mjs \
-            scripts/memory-linker/artifact-capability.test.mjs \
-            scripts/memory-linker/fs-safe.test.mjs \
-            scripts/memory-linker/delta-core.test.mjs \
-            scripts/memory-linker/source-delta-wiring.test.mjs \
-            apps/modulos/mcp/src/admin-patterns-ui.test.mjs \
-            supabase/functions/_shared/source-delta.test.mjs \
-            supabase/functions/_shared/operational-error.test.mjs \
+
+          tests=(
+            scripts/memory-linker/dream-review.test.mjs
+            scripts/memory-linker/pattern-discovery.test.mjs
+            scripts/memory-linker/pattern-library.test.mjs
+            scripts/memory-linker/memory-reserve-events.test.mjs
+            scripts/memory-linker/dream-review-run.test.mjs
+            scripts/memory-linker/artifact-capability.test.mjs
+            scripts/memory-linker/fs-safe.test.mjs
+            scripts/memory-linker/delta-core.test.mjs
+            scripts/memory-linker/source-delta-wiring.test.mjs
+            apps/modulos/mcp/src/admin-patterns-ui.test.mjs
+            supabase/functions/_shared/source-delta.test.mjs
+            supabase/functions/_shared/operational-error.test.mjs
             scripts/lupa/no-silent-error-scan.test.mjs
+          )
+          for test_file in "${tests[@]}"; do
+            echo "MEMORY_TEST_FILE=${test_file}"
+            if ! node --test "${test_file}"; then
+              echo "::error file=${test_file},title=MEMORY_LINKER_TEST_FAIL::node --test ${test_file} failed"
+              exit 1
+            fi
+          done
 
       - name: Erro silencioso — catraca de novos padrões; dívida antiga explícita
         shell: bash
