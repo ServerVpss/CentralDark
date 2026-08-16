@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-16T02:55:41.024Z",
-  "updatedAtBR": "15/08/2026, 23:55:41 BRT",
+  "updatedAt": "2026-08-16T03:00:43.052Z",
+  "updatedAtBR": "16/08/2026, 00:00:43 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "docs(governança): tornar contorno funcional padrão global da Casa (#931)",
+    "lastCommit": "docs(governança): fixar partitura única e self-distillation operacional (#932)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-16T03:00:43.052Z",
+      "titulo": "Push na main · 7dd97f03a35e052a0fc11d26dfb1c632477460c4",
+      "detalhe": "docs(governança): fixar partitura única e self-distillation operacional (#932)",
+      "area": "Repositório",
+      "sha": "7dd97f0",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-16T02:55:41.024Z",
       "titulo": "Push na main · aa7da9a404a5198115b0163643ba0c4104a490a9",
       "detalhe": "docs(governança): tornar contorno funcional padrão global da Casa (#931)",
@@ -988,14 +996,6 @@
       "detalhe": "fix(meta-lupa): corrigir indentacao do teste canonico",
       "area": "Repositório",
       "sha": "599f12e",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-15T01:39:19.958Z",
-      "titulo": "Push na main · 439cee5da0e0a26b882948d5f326cffd87a845b0",
-      "detalhe": "ci(meta-lupa): provar memory-linker no gate canônico",
-      "area": "Repositório",
-      "sha": "439cee5",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-16T03:00:43.052Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 7dd97f03a35e052a0fc11d26dfb1c632477460c4 (7dd97f0)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-16T02:55:41.024Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · aa7da9a404a5198115b0163643ba0c4104a490a9 (aa7da9a)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-15T01:42:23.693Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 599f12e2e09e541b0314df726e2b45504d4faa1d (599f12e)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-15T01:39:19.958Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 439cee5da0e0a26b882948d5f326cffd87a845b0 (439cee5)",
       "area": "Repositório",
       "status": "sucesso"
     }
