@@ -11,6 +11,7 @@ import { getCatalogSummary } from "./tools/core/tools-catalog.js";
 import { log } from "./log.js";
 import { withCid } from "./correlation.js";
 import { config } from "./config.js";
+import { injectPatternAdmin } from "./admin-patterns-ui.js";
 
 const COOKIE = "cd_admin";
 const TTL_MS = 2 * 60 * 60 * 1000;
@@ -191,6 +192,7 @@ pre.snippet{background:var(--bg2);border:1px solid var(--border);border-radius:1
 .etapa.ok{border-left:3px solid var(--em2)}
 .etapa.err{border-left:3px solid var(--err)}
 .diag-actions{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+__PATTERN_ADMIN_STYLE__
 @media(max-width:900px){.hero{grid-template-columns:1fr 1fr 1fr}.grid{grid-template-columns:1fr}.conector-grid{grid-template-columns:1fr}.filters{grid-template-columns:1fr 1fr}}
 </style></head>
 <body>
@@ -201,6 +203,7 @@ pre.snippet{background:var(--bg2);border:1px solid var(--border);border-radius:1
 <nav class="tabs">
   <div class="tab active" data-p="visao">Visão Geral</div>
   <div class="tab" data-p="tools">Ferramentas</div>
+  __PATTERN_ADMIN_TAB__
   <div class="tab" data-p="audit">Auditoria</div>
   <div class="tab" data-p="conector">Conector</div>
   <div class="tab" data-p="diag">Diagnóstico</div>
@@ -229,6 +232,8 @@ pre.snippet{background:var(--bg2);border:1px solid var(--border);border-radius:1
   <div class="pane" id="p-tools">
     <div class="card"><h2>Catálogo de ferramentas MCP <span class="badge" id="toolCountBadge">carregando…</span></h2><div id="tools"></div></div>
   </div>
+
+  __PATTERN_ADMIN_PANE__
 
   <div class="pane" id="p-audit">
     <div class="card">
@@ -325,6 +330,8 @@ document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
   t.classList.add('active');
   $('p-'+t.dataset.p).classList.add('active');
 }));
+
+__PATTERN_ADMIN_SCRIPT__
 
 async function carregarHealth(){
   const r = await fetch('/health/deep'); const j = await r.json();
@@ -449,7 +456,7 @@ export function adminGet(req, res) {
         res.status(200).type("text/html").send(LOGIN_HTML.replace("__ERR__", ""));
         return;
     }
-    res.type("text/html").send(NOC_HTML);
+    res.type("text/html").send(injectPatternAdmin(NOC_HTML));
 }
 
 export function adminLogin(req, res) {

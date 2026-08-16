@@ -111,6 +111,27 @@ jobs:
         working-directory: .agents/skills/meta-lupa
         run: python testes/test_selo_ponto_fixo.py
 
+      - name: Padrões — biblioteca longitudinal
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check scripts/memory-linker/pattern-library.mjs
+          node --test scripts/memory-linker/pattern-library.test.mjs
+
+      - name: Padrões — ponte Lembranças para Dream Review
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check scripts/memory-linker/memory-reserve-events.mjs
+          node --test scripts/memory-linker/memory-reserve-events.test.mjs
+
+      - name: Padrões — gavetas seguras no Admin
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check apps/modulos/mcp/src/admin-patterns-ui.js
+          node --test apps/modulos/mcp/src/admin-patterns-ui.test.mjs
+
       - name: Memory Linker — sintaxe + mineração determinística
         shell: bash
         run: |
@@ -120,27 +141,48 @@ jobs:
           node --check scripts/memory-linker/fs-safe.mjs
           node --check scripts/memory-linker/dream-review.mjs
           node --check scripts/memory-linker/pattern-discovery.mjs
+          node --check scripts/memory-linker/pattern-library.mjs
+          node --check scripts/memory-linker/memory-reserve-events.mjs
           node --check scripts/memory-linker/dream-review-run.mjs
           node --check scripts/memory-linker/artifact-capability.mjs
           node --check scripts/memory-linker/memory-linker-agent.mjs
           node --check scripts/memory-linker/memory-analyst-agent.mjs
           node --check scripts/memory-linker/memory-executor-agent.mjs
+          node --check apps/modulos/mcp/src/admin-patterns-ui.js
           node --check supabase/functions/_shared/source-delta.mjs
           node --check supabase/functions/_shared/operational-error.mjs
           node --check scripts/lupa/no-silent-error-scan.mjs
           node --check apps/modulos/hub/scripts/house-inventory-core.mjs
           node --check apps/modulos/hub/scripts/generate-house-inventory.mjs
-          node --test \
-            scripts/memory-linker/dream-review.test.mjs \
-            scripts/memory-linker/pattern-discovery.test.mjs \
-            scripts/memory-linker/dream-review-run.test.mjs \
-            scripts/memory-linker/artifact-capability.test.mjs \
-            scripts/memory-linker/fs-safe.test.mjs \
-            scripts/memory-linker/delta-core.test.mjs \
-            scripts/memory-linker/source-delta-wiring.test.mjs \
-            supabase/functions/_shared/source-delta.test.mjs \
-            supabase/functions/_shared/operational-error.test.mjs \
+
+          tests=(
+            scripts/memory-linker/dream-review.test.mjs
+            scripts/memory-linker/pattern-discovery.test.mjs
+            scripts/memory-linker/pattern-library.test.mjs
+            scripts/memory-linker/memory-reserve-events.test.mjs
+            scripts/memory-linker/dream-review-run.test.mjs
+            scripts/memory-linker/artifact-capability.test.mjs
+            scripts/memory-linker/fs-safe.test.mjs
+            scripts/memory-linker/delta-core.test.mjs
+            scripts/memory-linker/source-delta-wiring.test.mjs
+            apps/modulos/mcp/src/admin-patterns-ui.test.mjs
+            supabase/functions/_shared/source-delta.test.mjs
+            supabase/functions/_shared/operational-error.test.mjs
             scripts/lupa/no-silent-error-scan.test.mjs
+          )
+          for test_file in "${tests[@]}"; do
+            echo "MEMORY_TEST_FILE=${test_file}"
+            set +e
+            output="$(node --test "${test_file}" 2>&1)"
+            status=$?
+            set -e
+            printf '%s\n' "${output}"
+            if [ "${status}" -ne 0 ]; then
+              detail="$(printf '%s\n' "${output}" | tail -n 30 | tr '\n' ' ' | sed 's/%/%25/g; s/\r/%0D/g')"
+              echo "::error file=${test_file},title=MEMORY_LINKER_TEST_FAIL::${detail}"
+              exit "${status}"
+            fi
+          done
 
       - name: Erro silencioso — catraca de novos padrões; dívida antiga explícita
         shell: bash

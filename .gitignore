@@ -93,6 +93,7 @@ scripts/issues-agent/.next_run
 scripts/memory-linker/.next_run
 scripts/memory-linker/analyst-decision.json
 scripts/memory-linker/last-report.json
+scripts/memory-linker/pattern-library.json
 scripts/sync-loop.sh
 apps/modulos/elite-gateway/venv/
 apps/modulos/elite-gateway/config/
@@ -104,4 +105,3 @@ contas/
 
 # Lab de experimentos visuais — não versionar
 public/lab-jarvis/
-
