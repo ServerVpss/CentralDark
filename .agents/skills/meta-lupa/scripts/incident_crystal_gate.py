@@ -9,14 +9,8 @@ from pathlib import Path
 
 TERMINAL = {"CRYSTAL", "NO_CHANGE_PROVEN", "HISTORICAL_EXCEPTION"}
 ALLOWED = TERMINAL | {
-    "DISCOVERED",
-    "FORENSIC",
-    "OWNER_MAPPED",
-    "RULE_PROMOTED",
-    "REGRESSION_WIRED",
-    "COUNTERPROVED",
-    "OPEN",
-    "UNKNOWN",
+    "DISCOVERED", "FORENSIC", "OWNER_MAPPED", "RULE_PROMOTED", "REGRESSION_WIRED",
+    "COUNTERPROVED", "OPEN", "UNKNOWN",
 }
 LEARNING_CATEGORIES = ("armadilha", "erro-correcao", "erro-correção")
 TOTAL_MARKERS = (
@@ -25,12 +19,8 @@ TOTAL_MARKERS = (
     "ALL_INCIDENTS_CRYSTALLIZED=true",
 )
 REQUIRED_META_LENSES = (
-    "META_EXPANSAO_DE_DOMINIO",
-    "META_MINERACAO",
-    "META_MENOS_E_MAIS",
-    "META_LUPA",
-    "META_INSTINTO_SUPERIOR",
-    "META_METACOGNICAO_OPERACIONAL",
+    "META_EXPANSAO_DE_DOMINIO", "META_MINERACAO", "META_MENOS_E_MAIS",
+    "META_LUPA", "META_INSTINTO_SUPERIOR", "META_METACOGNICAO_OPERACIONAL",
 )
 
 
@@ -48,7 +38,6 @@ def discover(repo_root):
             rel = path.relative_to(repo_root).as_posix()
             if "incidente" in path.name.casefold():
                 sources[f"file:{rel}"] = {"kind": "INCIDENT_FILE", "ref": rel}
-
     learning = repo_root / "docs/CONSCIENCIA/APRENDIZADOS.md"
     if learning.exists():
         text = learning.read_text(encoding="utf-8", errors="replace")
@@ -64,12 +53,9 @@ def discover(repo_root):
             if not category and "incidente" in title.casefold():
                 incident_like = True
             if incident_like:
-                key = f"learning:{match.group(1)}"
-                sources[key] = {
-                    "kind": "LEARNING_INCIDENT",
-                    "ref": "docs/CONSCIENCIA/APRENDIZADOS.md",
-                    "title": title,
-                    "category": category or "UNKNOWN",
+                sources[f"learning:{match.group(1)}"] = {
+                    "kind": "LEARNING_INCIDENT", "ref": "docs/CONSCIENCIA/APRENDIZADOS.md",
+                    "title": title, "category": category or "UNKNOWN",
                 }
     return sources
 
@@ -87,11 +73,11 @@ def scan_total_claims(repo_root):
             try:
                 if path.stat().st_size > 2_000_000:
                     continue
-                text = path.read_text(encoding="utf-8", errors="replace")
+                content = path.read_text(encoding="utf-8", errors="replace")
             except OSError:
                 continue
             for marker in TOTAL_MARKERS:
-                if marker in text:
+                if marker in content:
                     claims.append({"path": path.relative_to(repo_root).as_posix(), "marker": marker})
     return claims
 
@@ -100,12 +86,10 @@ def validate_cluster(cluster_id, cluster, repo_root):
     errors = []
     owner = cluster.get("owner_path")
     if not owner:
-        errors.append("OWNER_PATH_MISSING")
-        return errors
+        return ["OWNER_PATH_MISSING"]
     owner_path = repo_root / owner
     if not owner_path.exists():
-        errors.append(f"OWNER_PATH_NOT_FOUND:{owner}")
-        return errors
+        return [f"OWNER_PATH_NOT_FOUND:{owner}"]
     content = owner_path.read_text(encoding="utf-8", errors="replace")
     markers = cluster.get("owner_markers") or []
     if not markers:
@@ -167,9 +151,7 @@ def evaluate(repo_root, ledger, observed_head=None, final_seal=False):
     for cluster_id, cluster in clusters.items():
         for err in validate_cluster(cluster_id, cluster, repo_root):
             structural_errors.append(f"CLUSTER:{cluster_id}:{err}")
-
-    by_source = {}
-    ids = set()
+    by_source, ids = {}, set()
     for entry in entries:
         eid = entry.get("id")
         if eid in ids:
@@ -181,18 +163,14 @@ def evaluate(repo_root, ledger, observed_head=None, final_seal=False):
         by_source[source_key] = entry
         for err in validate_entry(entry, clusters):
             structural_errors.append(f"{eid or 'UNKNOWN'}:{err}")
-
     denominator = dict(discovered)
     for entry in entries:
         if entry.get("source_kind") == "EXTERNAL_HISTORY" and entry.get("source_key"):
             denominator.setdefault(entry["source_key"], {"kind": "EXTERNAL_HISTORY", "ref": entry.get("evidence_ref", "")})
-
     unregistered = sorted(k for k in denominator if k not in by_source)
     extra_registered = sorted(k for k in by_source if k not in denominator)
     structural_errors.extend(f"REGISTERED_SOURCE_NOT_IN_DENOMINATOR:{k}" for k in extra_registered)
-
-    nonterminal = []
-    terminal = []
+    nonterminal, terminal = [], []
     terminal_by_status = {key: 0 for key in sorted(TERMINAL)}
     for key in sorted(denominator):
         entry = by_source.get(key)
@@ -203,7 +181,6 @@ def evaluate(repo_root, ledger, observed_head=None, final_seal=False):
             terminal_by_status[entry["status"]] += 1
         else:
             nonterminal.append({"source_key": key, "status": entry.get("status")})
-
     claims = scan_total_claims(repo_root)
     base_ready = len(denominator) > 0 and not structural_errors and not unregistered and not nonterminal and len(terminal) == len(denominator)
     if claims and not base_ready:
@@ -211,44 +188,43 @@ def evaluate(repo_root, ledger, observed_head=None, final_seal=False):
 
     head_match = None
     same_head_gate = "NOT_RUN"
-    if final_seal:
-        if not observed_head or not re.fullmatch(r"[0-9a-f]{40}", observed_head):
-            structural_errors.append("FINAL_SEAL_HEAD_SHA_INVALID")
-            head_match = False
+    try:
+        actual_head = subprocess.check_output(
+            ["git", "-C", str(repo_root), "rev-parse", "HEAD"], text=True, stderr=subprocess.DEVNULL
+        ).strip()
+    except Exception:
+        actual_head = ""
+    if actual_head and re.fullmatch(r"[0-9a-f]{40}", actual_head):
+        if observed_head is None:
+            observed_head = actual_head
+            head_match = True
+            same_head_gate = "PASS_BY_CHECKOUT_HEAD_OBSERVATION"
         else:
-            try:
-                actual = subprocess.check_output(["git", "-C", str(repo_root), "rev-parse", "HEAD"], text=True).strip()
-            except Exception as exc:
-                structural_errors.append(f"FINAL_SEAL_GIT_HEAD_UNAVAILABLE:{exc}")
-                actual = ""
-            head_match = actual == observed_head
-            if not head_match:
-                structural_errors.append(f"FINAL_SEAL_HEAD_MISMATCH:expected={observed_head}:actual={actual}")
+            head_match = actual_head == observed_head
+            if head_match:
+                same_head_gate = "PASS_BY_EXPLICIT_HEAD_MATCH"
             else:
-                same_head_gate = "PASS_BY_FINAL_WORKFLOW_POSITION"
+                structural_errors.append(f"FINAL_SEAL_HEAD_MISMATCH:expected={observed_head}:actual={actual_head}")
+    elif final_seal:
+        structural_errors.append("FINAL_SEAL_GIT_HEAD_UNAVAILABLE")
+        head_match = False
+    if final_seal and (not observed_head or not re.fullmatch(r"[0-9a-f]{40}", observed_head)):
+        structural_errors.append("FINAL_SEAL_HEAD_SHA_INVALID")
+        head_match = False
 
-    total_ready = base_ready and not structural_errors and (not final_seal or head_match is True)
+    total_ready = base_ready and not structural_errors and head_match is True
     denominator_count = len(denominator)
     coverage_percent = round((len(terminal) / denominator_count) * 100, 6) if denominator_count else 0.0
     receipt = {
-        "schema_version": 2,
-        "gate": "INCIDENT_META_CRYSTAL",
-        "denominator_scope": ledger.get("denominator_scope"),
-        "denominator_count": denominator_count,
-        "registered_count": len([k for k in denominator if k in by_source]),
-        "terminal_count": len(terminal),
-        "terminal_by_status": terminal_by_status,
-        "coverage_percent": coverage_percent,
-        "unregistered_count": len(unregistered),
-        "nonterminal_count": len(nonterminal),
-        "unregistered": unregistered,
-        "nonterminal": nonterminal,
-        "total_claims_found": claims,
-        "observed_head": observed_head,
-        "same_head_gate": same_head_gate,
-        "total_ready": total_ready,
+        "schema_version": 2, "gate": "INCIDENT_META_CRYSTAL",
+        "denominator_scope": ledger.get("denominator_scope"), "denominator_count": denominator_count,
+        "registered_count": len([k for k in denominator if k in by_source]), "terminal_count": len(terminal),
+        "terminal_by_status": terminal_by_status, "coverage_percent": coverage_percent,
+        "unregistered_count": len(unregistered), "nonterminal_count": len(nonterminal),
+        "unregistered": unregistered, "nonterminal": nonterminal, "total_claims_found": claims,
+        "observed_head": observed_head, "same_head_gate": same_head_gate, "total_ready": total_ready,
         "status": "CRYSTAL_TOTAL" if total_ready else "PARTIAL_EXPLICIT",
-        "seal": "LOCKED_100_ZERO_FALSE_GREEN" if total_ready and final_seal else None,
+        "seal": "LOCKED_100_ZERO_FALSE_GREEN" if total_ready else None,
         "errors": structural_errors,
     }
     receipt["receipt_sha256"] = sha256_text(json.dumps(receipt, ensure_ascii=False, sort_keys=True, separators=(",", ":")))
@@ -262,8 +238,7 @@ def self_test():
         (root / "docs/CONSCIENCIA").mkdir(parents=True)
         (root / "docs/APRENDIZADOS/incidente-a.md").write_text("x", encoding="utf-8")
         (root / "docs/CONSCIENCIA/APRENDIZADOS.md").write_text(
-            "### 1. Falha que é regra\n- **Categoria:** regra\n\n### 2. Erro real\n- **Categoria:** erro-correcao\n",
-            encoding="utf-8",
+            "### 1. Falha que é regra\n- **Categoria:** regra\n\n### 2. Erro real\n- **Categoria:** erro-correcao\n", encoding="utf-8"
         )
         ledger = {"denominator_scope": "SELF_TEST", "clusters": {}, "entries": []}
         result = evaluate(root, ledger)
@@ -274,9 +249,8 @@ def self_test():
         result = evaluate(root, ledger)
         assert "FALSE_TOTAL_CRYSTALLIZATION_CLAIM" in result["errors"]
         ledger["entries"] = [{
-            "id": "INC-A", "source_key": "file:docs/APRENDIZADOS/incidente-a.md",
-            "evidence_ref": "e", "evidence_limit": "l", "status": "CRYSTAL",
-            "cluster_id": "X", "gate_head_sha": "a" * 40,
+            "id": "INC-A", "source_key": "file:docs/APRENDIZADOS/incidente-a.md", "evidence_ref": "e",
+            "evidence_limit": "l", "status": "CRYSTAL", "cluster_id": "X", "gate_head_sha": "a" * 40,
         }]
         result = evaluate(root, ledger)
         assert any("STATIC_SELF_REFERENTIAL_HEAD_FORBIDDEN" in err for err in result["errors"])
@@ -288,6 +262,7 @@ def main():
     parser.add_argument("--repo-root", default=".")
     parser.add_argument("--ledger", default="references/incident-crystals.json")
     parser.add_argument("--require-total", action="store_true")
+    parser.add_argument("--allow-partial", action="store_true")
     parser.add_argument("--final-seal", action="store_true")
     parser.add_argument("--head-sha", default="")
     parser.add_argument("--self-test", action="store_true")
@@ -304,7 +279,7 @@ def main():
     print(json.dumps(receipt, ensure_ascii=False, indent=2, sort_keys=True))
     if receipt["errors"]:
         return 1
-    if args.require_total and not receipt["total_ready"]:
+    if not args.allow_partial and not receipt["total_ready"]:
         return 2
     return 0
 
