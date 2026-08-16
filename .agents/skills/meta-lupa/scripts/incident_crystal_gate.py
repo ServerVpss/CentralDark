@@ -74,8 +74,13 @@ def discover(repo_root):
 
 def scan_total_claims(repo_root):
     claims = []
-    roots = [repo_root / "docs", repo_root / ".agents"]
-    suffixes = {".md", ".json", ".yml", ".yaml", ".py", ".mjs", ".js", ".ts", ".txt"}
+    # Artefatos declarativos apenas. O código do próprio detector contém os
+    # marcadores como literais e não pode ser tratado como claim de totalidade.
+    roots = [
+        repo_root / "docs",
+        repo_root / ".agents/skills/meta-lupa/references",
+    ]
+    suffixes = {".md", ".json", ".yml", ".yaml", ".txt"}
     for root in roots:
         if not root.exists():
             continue
