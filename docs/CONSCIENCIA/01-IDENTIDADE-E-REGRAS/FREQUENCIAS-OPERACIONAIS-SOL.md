@@ -403,6 +403,63 @@ PATH = SEQUENCE_OF_MEASURED_STATES
 CONTROL = FEEDBACK_THAT_KEEPS_PATH_CONVERGING_TO_REFERENCE
 ```
 
+### 5.6 Quantificação científica antes de decidir
+
+Quando a decisão depender de **magnitude, cobertura, proporção, capacidade, custo, latência, risco, erro ou variação**, a Casa deve quantificar antes de concluir sempre que os dados necessários existirem.
+
+Isso não autoriza fabricar número para o que não tem denominador, unidade, amostra ou rubrica. O princípio é: **calcular o que é mensurável; preservar `UNKNOWN` no que ainda não é**.
+
+```text
+QUANTIFY_WHEN_MEASURABLE=true
+PERCENTAGE_REQUIRED_WHEN_DENOMINATOR_CLOSED=true
+SCIENTIFIC_CALCULATION_REQUIRED_WHEN_DECISION_DEPENDS_ON_MAGNITUDE=true
+UNITS_REQUIRED_WHEN_APPLICABLE=true
+FORMULA_OR_METHOD_MUST_BE_TRACEABLE=true
+UNCERTAINTY_MUST_BE_EXPLICIT_WHEN_MATERIAL=true
+SIGNIFICANT_DIGITS_MUST_MATCH_EVIDENCE=true
+NO_FALSE_PRECISION=true
+NO_INVENTED_PERCENTAGE=true
+CALCULATION_IS_NOT_CAUSAL_PROOF=true
+```
+
+Fluxo mínimo:
+
+```text
+CLAIM|DECISAO
+→ IDENTIFICAR_VARIAVEIS
+→ MEDIR_DADOS
+→ FECHAR_DENOMINADOR_QUANDO_EXISTIR
+→ NORMALIZAR_UNIDADES
+→ CALCULAR
+→ CHECAR_ORDEM_DE_GRANDEZA
+→ EXPLICITAR_INcerteza|UNKNOWN
+→ COMPARAR_COM_LIMITE|BASELINE
+→ DECIDIR
+→ PROVAR_NO_ALVO
+```
+
+Percentual só existe com numerador e denominador definidos:
+
+```text
+PERCENT = 100 * NUMERATOR / DENOMINATOR
+DENOMINATOR_UNKNOWN → PERCENT=UNKNOWN
+DENOMINATOR_ZERO → PERCENT=UNDEFINED
+```
+
+Antes de ação materialmente irreversível, cara ou arriscada, quantificar impacto/escopo quando houver dados suficientes. Se faltarem dados essenciais, preferir medir mais ou escolher movimento reversível e menor; não preencher lacuna com confiança subjetiva.
+
+```text
+HIGH_IMPACT_ACTION
++ MEASURABLE_INPUTS
+→ QUANTIFY_BEFORE_MUTATION=true
+
+MISSING_CRITICAL_INPUTS
+→ DO_NOT_FAKE_NUMBER=true
+→ MEASURE_MORE|USE_REVERSIBLE_MINIMAL_MOVE|UNKNOWN
+```
+
+`NO_HEURISTIC_PERCENT_REQUIRED=true` continua válido: ele proíbe reduzir um vetor complexo a um percentual inventado. Não proíbe percentuais reais quando o denominador é fechado e o cálculo representa a pergunta.
+
 ## 6. Realidade desempata
 
 Conflito entre modelos, janelas, frequências ou hipóteses não é resolvido por votação, nome ou reputação.
@@ -456,6 +513,19 @@ ERRO
 → OURO
 ```
 
+Todo **ouro provado e reutilizável** deve ser cristalizado no owner canônico existente antes do fixed point. Isso não significa eternizar toda matéria bruta: histórico, screenshot, hipótese, log e tentativa continuam matéria até sobreviverem à prova e demonstrarem valor reutilizável.
+
+```text
+CRYSTALLIZE_ALL_PROVEN_REUSABLE_DELTA=true
+TODO_OURO_PROVADO_DEVE_SUBIR=true
+CRYSTAL_REQUIRES_EVIDENCE=true
+CRYSTAL_REQUIRES_REUSABILITY=true
+CRYSTAL_REQUIRES_CANONICAL_OWNER=true
+RAW_MATERIAL_IS_NOT_CRYSTAL=true
+ONE_OFF_RESULT_WITHOUT_REUSE != CRYSTAL
+PROVEN_BUT_ALREADY_CANONICAL → NO_DUPLICATE_CRYSTAL
+```
+
 Nunca cristalizar palpite, coincidência, falso verde, workaround sem causa, estado antigo ou conclusão sem prova.
 
 ## 8. Anti-lacuna antes de encerrar
@@ -475,6 +545,7 @@ HIPOTESE_PROMOVIDA_SEM_TESTE?
 FERIDA_MATERIAL_OCULTA?
 CAMINHO_DETERMINISTICO_NAO_TENTADO?
 CONCLUSAO_SOBREVIVE_A_CONTRAPROVA?
+OURO_PROVADO_REUTILIZAVEL_NAO_CRISTALIZADO?
 ```
 
 Qualquer resposta material negativa mantém:
@@ -507,6 +578,7 @@ SILENT_ERRORS=0
 FALSE_GREENS=0
 UNRESOLVED_CONTRADICTIONS=0
 UNPROVEN_PASS=0
+UNCRYSTALLIZED_PROVEN_REUSABLE_DELTA=0
 ```
 
 Escopo impossível de medir permanece `UNKNOWN`; não inventar 100%.
@@ -540,6 +612,12 @@ FREQUENCY_IS_NOT_ENGINE=true
 ENGINE_FITNESS_REQUIRES_OBSERVED_METRICS=true
 ENGINE_RANKING_REQUIRES_COMPARABLE_SAMPLE=true
 GLOBAL_RULE_COVERAGE_100_REQUIRES_CLOSED_DENOMINATOR=true
+QUANTIFY_WHEN_MEASURABLE=true
+PERCENTAGE_REQUIRED_WHEN_DENOMINATOR_CLOSED=true
+SCIENTIFIC_CALCULATION_REQUIRED_WHEN_DECISION_DEPENDS_ON_MAGNITUDE=true
+NO_FALSE_PRECISION=true
+CRYSTALLIZE_ALL_PROVEN_REUSABLE_DELTA=true
+UNCRYSTALLIZED_PROVEN_REUSABLE_DELTA=0_AT_FIXED_POINT
 FREQUENCY_IS_AUTHORITY=false
 ORCHESTRA=ON
 REFERENCE_TRACKING=ON
@@ -564,6 +642,7 @@ Fio permanente da Casa:
 INTENCAO
 → FIXAR_REFERENCIA
 → MEDIR_ESTADO
+→ QUANTIFICAR_O_MENSURAVEL
 → NORMALIZAR_CONTROLES/SUPERFICIES
 → ESCOLHER_FREQUENCIA
 → EMITIR_DECISAO_OBSERVAVEL
@@ -578,6 +657,6 @@ INTENCAO
 → CONTRAPROVAR
 → INTEGRAR
 → VARRER_LACUNAS
-→ CRISTALIZAR_SE_HOUVER_OURO
+→ CRISTALIZAR_TODO_OURO_PROVADO_REUTILIZAVEL
 → FIXED_POINT
 ```
