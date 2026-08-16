@@ -18,8 +18,13 @@ OUTPUT -> 06-output.json
 SOURCE_MAP -> 07-source-map.json
 PROVENANCE -> 08-provenance.json
 TEST_CASES -> 09-tests.json
+LESS_IS_MORE_CRYSTAL -> 10-less-is-more.json
 ```
 
 Owner canônico: `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md`.
 
 Regra curta: `FUNCAO > NOME -> EFEITO -> CAUSA -> CONTRAPROVA -> COMPRESSAO -> REALITY=JUDGE`.
+
+Cristal de compressão: `ESSENCIA + CLAREZA + CAPACIDADE + SEGURANCA + PROVA - EXCESSO = MENOS_E_MAIS`.
+
+Se a redução perde capacidade, segurança ou prova: `SO_MENOS != MENOS_E_MAIS`.
