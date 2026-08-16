@@ -693,3 +693,104 @@ promoção canônica ficar capaz de reproduzir com segurança a mesma decisão, 
 agentes devem aprender a executar o fast path autorizado sem depender do
 SEGREDO/CHEFE apertar o botão, preservando exatamente a mesma autoridade,
 intenção e semântica de squash.
+
+---
+
+## 18. Partitura causal — atacar, esquivar, recuperar, drenar e provar
+
+Este bloco é um **atalho operacional sobre os gates que já existem**. Não cria
+pipeline, cérebro, Writer, Judge ou arquitetura paralela.
+
+```text
+ATTACK_FIRST=true
+SQUIVE_FALSE_GREEN=true
+SQUIVE_PRESTIGE=true
+SQUIVE_APPARENT_AUTHORITY=true
+RECOVER_CURRENT_STATE_AFTER_ERROR=true
+MISSION_DOES_NOT_RESTART_ON_CORRECTION=true
+GOLD_DRAIN_TO_CAUSE_INVARIANT_RESIDUAL=true
+PROOF_REQUIRES_APPLICABLE_EVIDENCE=true
+PROOF_OWNER_REQUIRED_WHEN_APPLICABLE=true
+COUNTERPROOF_REQUIRED_WHEN_MATERIAL=true
+REALITY=ARBITER
+NO_NEW_INFORMATION → SILENCE → FIXED_POINT
+```
+
+A execução curta é:
+
+```text
+ATTACK
+→ claim ou premissa raiz entra como hipótese
+→ tentar derrubar antes de aceitar
+
+SQUIVE
+→ painel verde, prestígio, autoridade aparente, consenso ou solução fácil
+  não viram prova por aparência
+
+RECOVER
+→ errou? remedir o estado atual
+→ preservar tudo que continua válido
+→ corrigir a hipótese
+→ voltar ao mesmo fio; não reiniciar missão
+
+GOLD_DRAIN
+→ matéria
+→ causa
+→ invariante
+→ resíduo reutilizável
+→ remover somente o excesso que não carrega função, prova ou rollback
+
+PROVE
+→ evidência aplicável
+→ proof owner quando aplicável
+→ contraprova material
+→ Writer não julga o próprio trabalho
+→ realidade desempata o claim
+```
+
+O resumo fica:
+
+```text
+ATTACK → SQUIVE → RECOVER → DRAIN → PROVE → REALITY
+```
+
+Quando a passagem não acrescentar informação, capacidade, contraprova ou delta
+reutilizável, a ação correta é **parar**:
+
+```text
+NO_NEW_INFORMATION
+→ NO_CHANGE
+→ SILENCE
+→ FIXED_POINT
+```
+
+### 18.1 Medir melhora interna sem confundir baseline com benchmark
+
+O medidor longitudinal da MetaLupa é o owner executável deste claim. A forma
+conceitual é:
+
+```text
+MELHORA_MENSURAVEL
+= BASELINE
++ MESMA_RUBRICA
++ ESTADO_POSTERIOR
++ EVIDENCIA_COMPARAVEL
+→ DELTA
+```
+
+Para comparar estados internos do scaffold, baseline não é benchmark externo e
+deploy não é gate da medição. Esta dispensa é **limitada ao claim interno**; não
+vira permissão para provar runtime sem runtime nem para fazer comparação pública
+sem régua comparável.
+
+```text
+INTERNAL_SCAFFOLD_DELTA_REQUIRES_EXTERNAL_BENCHMARK=false
+INTERNAL_SCAFFOLD_DELTA_REQUIRES_DEPLOY=false
+COMPARATIVE_EXTERNAL_CLAIM_REQUIRES_COMPARABLE_BASELINE=true
+AGI_CLAIM_REQUIRES_OWN_CRITERION_AND_HOLDOUT=true
+AGI_LIKE_RUBRIC_COVERAGE != AGI_PROOF
+```
+
+Percentuais continuam sujeitos ao contrato da seção 8: sem baseline, dimensões,
+pesos, numerador, denominador, fonte e `HEAD_SHA`, o resultado é
+`NOT_MEASURED`.
