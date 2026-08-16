@@ -68,33 +68,51 @@ export async function safeUpdateFromOrigin({ repoPath, branch = 'main', log = ()
     return result({ ok: false, reason: 'BRANCH_MISMATCH', repoRoot });
   }
 
-  // Atualiza apenas a visão remota. Rewrite remoto não é forçado: falha fechado.
+  // Fetch atualiza a visão remota; refs/remotes podem aceitar atualização não-FF.
+  // Por isso a segurança não depende do fetch falhar: medimos a linhagem da ref
+  // antes/depois e bloqueamos rewrite explicitamente.
   const remoteRef = `refs/remotes/origin/${branch}`;
+  const remoteBefore = await git(['rev-parse', '--verify', '--quiet', remoteRef], repoRoot);
+  const remoteBeforeSha = remoteBefore.code === 0 && remoteBefore.stdout ? remoteBefore.stdout : null;
+
   const fetch = await git(['fetch', 'origin', `refs/heads/${branch}:${remoteRef}`], repoRoot);
   if (fetch.code !== 0) {
-    log(`[safe-git] BLOCKED fetch falhou/rewrite não-fast-forward detectado: ${sanitizeGitOutput(fetch.stderr || fetch.stdout)}`);
-    return result({ ok: false, reason: 'FETCH_FAILED_OR_REMOTE_REWRITE', repoRoot });
+    log(`[safe-git] BLOCKED fetch falhou: ${sanitizeGitOutput(fetch.stderr || fetch.stdout)}`);
+    return result({ ok: false, reason: 'FETCH_FAILED', repoRoot });
+  }
+
+  const remoteAfter = await git(['rev-parse', '--verify', remoteRef], repoRoot);
+  if (remoteAfter.code !== 0 || !remoteAfter.stdout) {
+    log('[safe-git] BLOCKED ref remota não resolvida após fetch');
+    return result({ ok: false, reason: 'REMOTE_REF_RESOLUTION_FAILED', repoRoot });
+  }
+  const remoteSha = remoteAfter.stdout;
+
+  if (remoteBeforeSha && remoteBeforeSha !== remoteSha) {
+    const remoteLineage = await git(['merge-base', '--is-ancestor', remoteBeforeSha, remoteSha], repoRoot);
+    if (remoteLineage.code !== 0) {
+      log(`[safe-git] BLOCKED REMOTE_REWRITE old=${remoteBeforeSha.slice(0, 12)} new=${remoteSha.slice(0, 12)}; estado local preservado`);
+      return result({ ok: false, reason: 'REMOTE_REWRITE', remoteSha, repoRoot });
+    }
   }
 
   // Fetch observa refs; só depois medimos se o working tree pode receber mutação.
   const status = await git(['status', '--porcelain=v1', '--untracked-files=all'], repoRoot);
   if (status.code !== 0) {
     log(`[safe-git] BLOCKED status falhou: ${sanitizeGitOutput(status.stderr || status.stdout)}`);
-    return result({ ok: false, reason: 'STATUS_FAILED', repoRoot });
+    return result({ ok: false, reason: 'STATUS_FAILED', remoteSha, repoRoot });
   }
   if (status.stdout) {
     log('[safe-git] BLOCKED working tree/index contém mudanças locais; preservado sem stash/reset');
-    return result({ ok: false, reason: 'DIRTY_WORKTREE', repoRoot });
+    return result({ ok: false, reason: 'DIRTY_WORKTREE', remoteSha, repoRoot });
   }
 
   const local = await git(['rev-parse', 'HEAD'], repoRoot);
-  const remote = await git(['rev-parse', `origin/${branch}`], repoRoot);
-  if (local.code !== 0 || remote.code !== 0 || !local.stdout || !remote.stdout) {
-    log('[safe-git] BLOCKED não foi possível resolver HEAD/origin');
-    return result({ ok: false, reason: 'REF_RESOLUTION_FAILED', repoRoot });
+  if (local.code !== 0 || !local.stdout) {
+    log('[safe-git] BLOCKED não foi possível resolver HEAD local');
+    return result({ ok: false, reason: 'LOCAL_REF_RESOLUTION_FAILED', remoteSha, repoRoot });
   }
   const localSha = local.stdout;
-  const remoteSha = remote.stdout;
 
   if (localSha === remoteSha) {
     log(`[safe-git] PASS já sincronizado HEAD=${localSha.slice(0, 12)}`);
