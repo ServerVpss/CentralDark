@@ -55,7 +55,7 @@ test('skill e protocolo materializam a mesma rota curta', async () => {
     'DELTA_AFFECTED_ONLY=true',
     'ONE_ACTIVE_ROUTE_PER_CAPABILITY_BOUNDARY=true',
   ]) {
-    assert.match(skill, new RegExp(marker.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+    assert.ok(skill.includes(marker), `SKILL_MARKER_MISSING:${marker}`);
   }
 
   for (const marker of [
@@ -65,6 +65,6 @@ test('skill e protocolo materializam a mesma rota curta', async () => {
     'ONE_ACTIVE_ROUTE_PER_CAPABILITY_BOUNDARY=true',
     'COMPILED_ROUTE != AUTHORIZATION',
   ]) {
-    assert.match(protocol, new RegExp(marker.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+    assert.ok(protocol.includes(marker), `PROTOCOL_MARKER_MISSING:${marker}`);
   }
 });
