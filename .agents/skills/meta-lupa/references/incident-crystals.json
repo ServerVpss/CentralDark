@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "contract_id": "CENTRALDARK_INCIDENT_META_CRYSTAL",
+  "status": "CANONICAL_CANDIDATE",
+  "denominator_scope": "TRACKED_INCIDENT_FILES + INCIDENT_LIKE_CANONICAL_LEARNINGS + EXPLICIT_REPO_HISTORY",
+  "total_claim_policy": "FORBIDDEN_UNTIL_DENOMINATOR_CLOSED_AND_ALL_ENTRIES_TERMINAL",
+  "terminal_statuses": [
+    "CRYSTAL",
+    "NO_CHANGE_PROVEN",
+    "HISTORICAL_EXCEPTION"
+  ],
+  "entries": [
+    {
+      "id": "INC-20260816-HUMAN-HARM-SEMANTIC-AMBIGUITY",
+      "source_key": "file:docs/APRENDIZADOS/2026-08-16-incidente-ambiguidade-seguranca-fisica-mental.md",
+      "source_kind": "INCIDENT_FILE",
+      "evidence_ref": "docs/APRENDIZADOS/2026-08-16-incidente-ambiguidade-seguranca-fisica-mental.md",
+      "evidence_limit": "Prova falha de fechamento semântico; não converte omissão em confissão nem prova intenção positiva de dano.",
+      "status": "REGRESSION_WIRED",
+      "owner_path": "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md",
+      "notes": "Regra global + padrão de resposta + portable kernel existem; PR #952 ainda fecha grafo verificável."
+    },
+    {
+      "id": "INC-20260816-PERSONAL-CONTEXT-TEMPORAL-PROVENANCE",
+      "source_key": "file:docs/APRENDIZADOS/2026-08-16-incidente-contexto-pessoal-proveniencia-temporal.md",
+      "source_kind": "INCIDENT_FILE",
+      "evidence_ref": "docs/APRENDIZADOS/2026-08-16-incidente-contexto-pessoal-proveniencia-temporal.md",
+      "evidence_limit": "Prova reapresentação de contexto/localização e falha de proveniência temporal; não prova acesso secreto, rastreamento ou vazamento a terceiro.",
+      "status": "REGRESSION_WIRED",
+      "owner_path": "docs/GOVERNANCA/CONTEXTO-PESSOAL-E-PROVENIENCIA-TEMPORAL.md",
+      "notes": "PR #953 está refinando redação/minimização e permanece Writer deste escopo."
+    },
+    {
+      "id": "INC-20260816-UNSOLICITED-AUTOMATION-SUGGESTION-UI",
+      "source_key": "file:docs/APRENDIZADOS/2026-08-16-incidente-automacao-sugerida-sem-pedido.md",
+      "source_kind": "INCIDENT_FILE",
+      "evidence_ref": "docs/APRENDIZADOS/2026-08-16-incidente-automacao-sugerida-sem-pedido.md",
+      "evidence_limit": "Prova CTA/sugestão não solicitada; inventário não provou tarefa ativa criada.",
+      "status": "RULE_PROMOTED",
+      "owner_path": "AGENTS.md"
+    },
+    {
+      "id": "INC-20260816-RUBRIC-DENOMINATOR-AUTHORITY",
+      "source_key": "history:pr-949-rubric-denominator-authority",
+      "source_kind": "EXTERNAL_HISTORY",
+      "evidence_ref": "PR#949",
+      "evidence_limit": "Incidente sobre agente fixar denominador/régua oficial e publicar percentual sem autoridade humana para aquela régua.",
+      "status": "FORENSIC"
+    },
+    {
+      "id": "INC-20260816-TRIPLE-CONVERGENCE-PROTOCOL-CONTAMINATION",
+      "source_key": "history:pr-944-round-1-protocol-bug",
+      "source_kind": "EXTERNAL_HISTORY",
+      "evidence_ref": "PR#944 ROUND_1 CONTAMINATED/PROTOCOL_BUG",
+      "evidence_limit": "Gate de bindings permitia contaminação da fase independente; rodada blind/sealed ainda está em curso.",
+      "status": "OPEN"
+    },
+    {
+      "id": "INC-20260815-OPERATIONAL-SCORE-PLACEHOLDER-DIRECT-MAIN",
+      "source_key": "history:pr-912-operational-score-placeholder",
+      "source_kind": "EXTERNAL_HISTORY",
+      "evidence_ref": "PR#912 + commit f15885df",
+      "evidence_limit": "Artefato placeholder foi escrito diretamente na main e depois substituído por owner funcional.",
+      "status": "FORENSIC"
+    },
+    {
+      "id": "INC-20260815-RUNNER-ASSUMPTION-CONTRADICTED-BY-RUNTIME",
+      "source_key": "history:pr-906-907-hosted-runner-assumption",
+      "source_kind": "EXTERNAL_HISTORY",
+      "evidence_ref": "PR#906 -> PR#907",
+      "evidence_limit": "Hipótese de hosted runner utilizável caiu diante do estado real de billing/runtime; self-hosted foi restaurado.",
+      "status": "FORENSIC"
+    },
+    {
+      "id": "INC-20260816-META-MINING-LAYOUT-FALSE-NEGATIVE",
+      "source_key": "history:pr-936-meta-mining-layout-false-negative",
+      "source_kind": "EXTERNAL_HISTORY",
+      "evidence_ref": "PR#936",
+      "evidence_limit": "Scanner exigia token em linha inteira e produzia falso negativo estrutural; correção tornou matching semântico.",
+      "status": "FORENSIC"
+    },
+    {
+      "id": "INC-20260815-DIRECT-MAIN-TEMP-ARTIFACT",
+      "source_key": "history:pr-838-tmp-do-not-use",
+      "source_kind": "EXTERNAL_HISTORY",
+      "evidence_ref": "PR#838",
+      "evidence_limit": "Escrita acidental direta na main foi removida com histórico preservado.",
+      "status": "FORENSIC"
+    },
+    {
+      "id": "INC-20260815-OBSERVABILITY-FALSE-CLAIM",
+      "source_key": "history:pr-842-observability-false-claim",
+      "source_kind": "EXTERNAL_HISTORY",
+      "evidence_ref": "PR#842",
+      "evidence_limit": "Drift guard passava enquanto mensagem absoluta comunicava estado mais forte do que a prova.",
+      "status": "FORENSIC"
+    },
+    {
+      "id": "INC-20260815-MERGE-DURING-IN-FLIGHT-WRITE",
+      "source_key": "history:pr-845-in-flight-write-race",
+      "source_kind": "EXTERNAL_HISTORY",
+      "evidence_ref": "PR#845",
+      "evidence_limit": "Merge ocorreu enquanto havia escrita em voo; aprendizado canônico passou a exigir residual-only follow-up.",
+      "status": "OWNER_MAPPED",
+      "owner_path": "docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md"
+    },
+    {
+      "id": "INC-20260815-TEST-FALSE-NEGATIVE-REPLACE",
+      "source_key": "history:pr-893-replace-false-negative",
+      "source_kind": "EXTERNAL_HISTORY",
+      "evidence_ref": "PR#893",
+      "evidence_limit": "Teste negativo removia apenas uma ocorrência e deixava marcador residual; replaceAll restaurou poder discriminante.",
+      "status": "FORENSIC"
+    }
+  ]
+}
