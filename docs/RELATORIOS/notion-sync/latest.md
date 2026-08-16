@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-08-16T12:20:14.075Z
+# 🧠 Notion Sync — 2026-08-16T18:28:12.135Z
 
-- **Commit fonte:** `16405dd7c04c7e7aab373611ae08f41b9c937c77`
+- **Commit fonte:** `097884f8827e49c0c4a7464ab58fce48ee7af22f`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 412 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 413 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
 | aprendizados | 26 | 0 | 26 | 0 | 0 |
-| estrutura | 343 | 1 | 342 | 0 | 0 |
+| estrutura | 343 | 0 | 343 | 0 | 0 |
 
 ## Operações
 
@@ -289,7 +289,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/MCP-FLUXO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/MEGA-PAINEL-SUGESTOES-IA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md |
-| estrutura | criado | docs/CONSCIENCIA/MISSAO-CONVERGENCIA-TRIPLA-FORMULA-20260816.md |
+| estrutura | atualizado | docs/CONSCIENCIA/MISSAO-CONVERGENCIA-TRIPLA-FORMULA-20260816.md |
 | estrutura | atualizado | docs/CONSCIENCIA/MODO-SEGREDO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/NOTIFY/INSTALAR-VPS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/NOTIFY/README.md |
