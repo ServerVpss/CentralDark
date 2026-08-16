@@ -222,6 +222,17 @@ function expandCodexSnapshot(snapshot, owner) {
     });
   }
 
+  for (const drawer of snapshot.observed_root_directories || []) {
+    push({
+      id: `codex:snapshot:drawer:${safeId(`${drawer.length}-${drawer}`)}`,
+      name: drawer,
+      group: 'ARTEFATOS',
+      type: 'LOCAL_DRAWER',
+      proof: snapshot.root_directory_observation_source || 'USER_SCREENSHOT',
+      summary: `Pasta/gaveta local observada na raiz .codex. O nome está registrado; o conteúdo interno não fazia parte do ZIP analisado.`,
+    });
+  }
+
   const toolEntries = Object.entries(snapshot.dynamic_tools || {});
   push({
     id: 'codex:snapshot:dynamic-tools',
