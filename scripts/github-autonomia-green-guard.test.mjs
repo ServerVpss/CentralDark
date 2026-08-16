@@ -6,17 +6,29 @@ import {
   greenDecision,
   greenVerdicts,
   parseCsv,
-  selectLatestNonSkipped,
+  runBelongsToPullHead,
+  runsForPullHead,
+  selectLatestRun,
+  shouldEnforceGreenFirst,
 } from "./github-autonomia-green-guard.mjs";
 
-function success(name, number = 1) {
+const HEAD = "a".repeat(40);
+
+function prLink(number = 99) {
+  return [{ number }];
+}
+
+function success(name, number = 1, overrides = {}) {
   return {
     id: number,
     name,
     run_number: number,
     status: "completed",
     conclusion: "success",
-    head_sha: "a".repeat(40),
+    head_sha: HEAD,
+    event: "pull_request",
+    pull_requests: prLink(),
+    ...overrides,
   };
 }
 
@@ -34,29 +46,63 @@ test("só fica verde quando todos os gates obrigatórios passam", () => {
 test("pending, failure e cancelled nunca viram verde", () => {
   const required = ["gate"];
   for (const run of [
-    { id: 1, name: "gate", run_number: 1, status: "queued", conclusion: null },
-    { id: 2, name: "gate", run_number: 2, status: "completed", conclusion: "failure" },
-    { id: 3, name: "gate", run_number: 3, status: "completed", conclusion: "cancelled" },
+    success("gate", 1, { status: "queued", conclusion: null }),
+    success("gate", 2, { conclusion: "failure" }),
+    success("gate", 3, { conclusion: "cancelled" }),
   ]) {
     assert.equal(greenDecision([run], required).green, false);
   }
 });
 
-test("skipped não substitui execução real; usa último não-skipped", () => {
+test("latest skipped é não-PASS e nunca cai para success antigo", () => {
   const runs = [
-    { id: 3, name: "gate", run_number: 30, status: "completed", conclusion: "skipped" },
-    { id: 2, name: "gate", run_number: 29, status: "completed", conclusion: "success" },
+    success("gate", 30, { conclusion: "skipped" }),
+    success("gate", 29),
   ];
-  assert.equal(selectLatestNonSkipped(runs, "gate")?.id, 2);
-  assert.equal(greenDecision(runs, ["gate"]).green, true);
+  assert.equal(selectLatestRun(runs, "gate")?.id, 30);
+  const result = greenDecision(runs, ["gate"]);
+  assert.equal(result.green, false);
+  assert.deepEqual(result.verdicts, [{ name: "gate", state: "SKIPPED", run_id: 30, conclusion: "skipped" }]);
 });
 
-test("failure não é escondida por success antigo", () => {
+test("failure mais nova não é escondida por success antigo", () => {
   const verdicts = greenVerdicts([
-    { id: 1, name: "gate", run_number: 10, status: "completed", conclusion: "success" },
-    { id: 2, name: "gate", run_number: 11, status: "completed", conclusion: "failure" },
+    success("gate", 10),
+    success("gate", 11, { conclusion: "failure" }),
   ], ["gate"]);
-  assert.deepEqual(verdicts, [{ name: "gate", state: "FAIL", run_id: 2, conclusion: "failure" }]);
+  assert.deepEqual(verdicts, [{ name: "gate", state: "FAIL", run_id: 11, conclusion: "failure" }]);
+});
+
+test("run manual ou de outro PR no mesmo SHA não conta", () => {
+  assert.equal(runBelongsToPullHead(success("gate"), 99, HEAD), true);
+  assert.equal(runBelongsToPullHead(success("gate", 2, { event: "workflow_dispatch" }), 99, HEAD), false);
+  assert.equal(runBelongsToPullHead(success("gate", 3, { pull_requests: prLink(100) }), 99, HEAD), false);
+  assert.equal(runBelongsToPullHead(success("gate", 4, { head_sha: "b".repeat(40) }), 99, HEAD), false);
+});
+
+test("paginação encontra gate válido depois da primeira página sem aceitar contexto errado", async () => {
+  const page1 = Array.from({ length: 100 }, (_, index) => success("outro", index + 1, { pull_requests: prLink(99) }));
+  const page2 = [
+    success("porta-de-entrada", 201, { pull_requests: prLink(99) }),
+    success("codex-validate", 202, { pull_requests: prLink(100) }),
+    success("lupa-conformance", 203, { event: "workflow_dispatch", pull_requests: prLink(99) }),
+  ];
+  const seen = [];
+  const request = async (_token, _method, path) => {
+    seen.push(path);
+    return { workflow_runs: path.includes("page=1") ? page1 : page2 };
+  };
+  const runs = await runsForPullHead("token", "ServerVpss/CentralDark", HEAD, 99, request);
+  assert.equal(seen.length, 2);
+  assert.deepEqual(runs.map((run) => run.name), ["outro", ...Array(99).fill("outro"), "porta-de-entrada"]);
+  assert.equal(runs.some((run) => run.name === "codex-validate"), false);
+  assert.equal(runs.some((run) => run.name === "lupa-conformance"), false);
+});
+
+test("fast path canônico não é convertido em convergência adversarial global", () => {
+  assert.equal(shouldEnforceGreenFirst({ decision: "READY", mode: "FAST" }), false);
+  assert.equal(shouldEnforceGreenFirst({ decision: "READY", mode: "ADVERSARIAL" }), true);
+  assert.equal(shouldEnforceGreenFirst({ decision: "WAIT", mode: "ADVERSARIAL" }), false);
 });
 
 test("lista padrão é exatamente a régua canônica de seis gates", () => {
