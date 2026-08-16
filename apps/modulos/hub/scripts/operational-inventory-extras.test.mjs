@@ -33,6 +33,8 @@ test('indexes personas, agent agreements and sanitized Codex snapshot', () => {
       models: ['gpt-example'],
       marketplaces: [],
       state_stores: ['state_5.sqlite'],
+      observed_root_directories: ['.tmp', 'tmp'],
+      root_directory_observation_source: 'USER_SCREENSHOT',
       structural_capabilities: { computer_use: true, chrome_native_host: 'com.openai.codexextension' },
     }));
 
@@ -45,6 +47,8 @@ test('indexes personas, agent agreements and sanitized Codex snapshot', () => {
     assert.ok(items.some((entry) => entry.type === 'SPAWNED_SUBAGENT' && entry.name === 'Bacon'));
     assert.ok(items.some((entry) => entry.type === 'DYNAMIC_TOOL' && entry.name === 'list_threads'));
     assert.ok(items.some((entry) => entry.type === 'COMPUTER_USE'));
+    assert.equal(items.filter((entry) => entry.type === 'LOCAL_DRAWER').length, 2);
+    assert.deepEqual(items.filter((entry) => entry.type === 'LOCAL_DRAWER').map((entry) => entry.name).sort(), ['.tmp', 'tmp']);
     assert.ok(items.filter((entry) => entry.source.startsWith('LOCAL_SNAPSHOT:')).every((entry) => entry.temporal_scope === 'HISTORICAL_RECORD'));
   } finally {
     fs.rmSync(root, { recursive: true, force: true });
