@@ -1,4 +1,8 @@
 import assert from 'node:assert/strict';
+import { mkdtempSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { pathToFileURL } from 'node:url';
 import test from 'node:test';
 
 import {
@@ -7,6 +11,7 @@ import {
   exactCandidates,
   findSkills,
   inspectSkill,
+  isMainEntry,
   normalizeIndex,
   normalizeSourcePath,
   skillRawUrl,
@@ -76,6 +81,19 @@ test('URL da skill fica presa ao commit upstream', () => {
   const url = skillRawUrl(entry);
   assert.match(url, new RegExp(SOURCE.commit));
   assert.match(url, /engineering\/skills\/a11y-audit\/SKILL\.md$/);
+});
+
+test('entrada CLI reconhece symlink para o mesmo arquivo real', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'skill-workshop-'));
+  try {
+    const target = join(dir, 'workshop real.mjs');
+    const link = join(dir, 'workshop-link.mjs');
+    writeFileSync(target, '// fixture\n');
+    symlinkSync(target, link);
+    assert.equal(isMainEntry(link, pathToFileURL(target).href), true);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
 });
 
 test('inspect baixa somente texto da skill e declara explicitamente que não executou recursos', async () => {
