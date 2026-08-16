@@ -2,20 +2,17 @@
 /**
  * Green-first guard para a promoção canônica.
  *
- * O juiz pode classificar uma intenção como READY no modo FAST, mas READY de
- * intenção não é sinônimo de gates verdes. Este guard roda imediatamente antes
- * do promotor e só deixa no diretório de promoção os recibos cujo MESMO HEAD
- * tenha PASS real em todos os workflows obrigatórios.
- *
- * Recibo sem verde não é adulterado: ele é movido para `deferred/`, portanto o
- * promotor canônico simplesmente não o encontra nesta rodada. Na rodada
- * seguinte o juiz remede e gera novo recibo.
+ * O fast path AUTO_SQUASH_IF_CLEAN continua canônico e não passa por esta
+ * catraca. O guard é a revalidação final dos recibos ADVERSARIAL/green-first:
+ * somente runs de pull_request do mesmo PR + mesmo HEAD, com a invocação mais
+ * nova de cada gate realmente concluída em success, podem chegar ao promotor.
  */
 import { mkdir, readFile, readdir, rename, writeFile } from "node:fs/promises";
 import { basename, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const API = "https://api.github.com";
+export const MAX_RUN_PAGES = 20;
 
 export const DEFAULT_REQUIRED_WORKFLOWS = Object.freeze([
   "porta-de-entrada",
@@ -34,9 +31,19 @@ export function parseCsv(value, fallback = []) {
   return items.length ? items : [...fallback];
 }
 
-export function selectLatestNonSkipped(runs, workflowName) {
+export function shouldEnforceGreenFirst(candidate) {
+  return candidate?.decision === "READY" && candidate?.mode !== "FAST";
+}
+
+export function runBelongsToPullHead(run, prNumber, headSha) {
+  if (run?.head_sha !== headSha || run?.event !== "pull_request") return false;
+  return Array.isArray(run?.pull_requests)
+    && run.pull_requests.some((pr) => Number(pr?.number) === Number(prNumber));
+}
+
+export function selectLatestRun(runs, workflowName) {
   return [...runs]
-    .filter((run) => run.name === workflowName && run.conclusion !== "skipped")
+    .filter((run) => run.name === workflowName)
     .sort((a, b) => {
       const byNumber = Number(b.run_number || 0) - Number(a.run_number || 0);
       if (byNumber) return byNumber;
@@ -46,10 +53,11 @@ export function selectLatestNonSkipped(runs, workflowName) {
 
 export function greenVerdicts(runs, requiredWorkflows) {
   return requiredWorkflows.map((name) => {
-    const run = selectLatestNonSkipped(runs, name);
+    const run = selectLatestRun(runs, name);
     if (!run) return { name, state: "MISSING", run_id: null, conclusion: null };
     if (run.status !== "completed") return { name, state: "PENDING", run_id: run.id, conclusion: run.conclusion || null };
     if (run.conclusion === "success") return { name, state: "PASS", run_id: run.id, conclusion: "success" };
+    if (run.conclusion === "skipped") return { name, state: "SKIPPED", run_id: run.id, conclusion: "skipped" };
     return { name, state: "FAIL", run_id: run.id, conclusion: run.conclusion || "unknown" };
   });
 }
@@ -69,7 +77,7 @@ async function api(token, method, path) {
       Authorization: `Bearer ${token}`,
       Accept: "application/vnd.github+json",
       "X-GitHub-Api-Version": "2022-11-28",
-      "User-Agent": "centraldark-autonomia-green-guard/1.0",
+      "User-Agent": "centraldark-autonomia-green-guard/2.0",
     },
   });
   const text = await response.text();
@@ -82,9 +90,18 @@ async function api(token, method, path) {
   return data;
 }
 
-async function runsForHead(token, repository, headSha) {
-  const data = await api(token, "GET", `/repos/${repository}/actions/runs?head_sha=${encodeURIComponent(headSha)}&per_page=100`);
-  return (data.workflow_runs || []).filter((run) => run.head_sha === headSha);
+export async function runsForPullHead(token, repository, headSha, prNumber, request = api) {
+  const runs = [];
+  for (let page = 1; page <= MAX_RUN_PAGES; page += 1) {
+    const path = `/repos/${repository}/actions/runs?head_sha=${encodeURIComponent(headSha)}&event=pull_request&per_page=100&page=${page}`;
+    const data = await request(token, "GET", path);
+    const batch = Array.isArray(data?.workflow_runs) ? data.workflow_runs : [];
+    for (const run of batch) {
+      if (runBelongsToPullHead(run, prNumber, headSha)) runs.push(run);
+    }
+    if (batch.length < 100) return runs;
+  }
+  throw new Error(`GREEN_GUARD_RUNS_OVERFLOW:pages>${MAX_RUN_PAGES}:PR=${prNumber}:HEAD=${headSha}`);
 }
 
 export async function main(env = process.env) {
@@ -102,18 +119,25 @@ export async function main(env = process.env) {
   let checked = 0;
   let passed = 0;
   let deferred = 0;
+  let fastSkipped = 0;
   for (const name of names) {
     const path = join(sweepDir, name);
     const document = JSON.parse(await readFile(path, "utf8"));
     const candidate = document?.receipt?.candidates?.[0];
     if (!candidate || candidate.decision !== "READY") continue;
 
+    if (!shouldEnforceGreenFirst(candidate)) {
+      fastSkipped += 1;
+      console.log(`GREEN_GUARD=SKIP_FAST PR=${candidate.pr_number || "UNKNOWN"} HEAD=${candidate.head_sha || "UNKNOWN"}`);
+      continue;
+    }
+
     const pr = Number(candidate.pr_number || 0);
     const head = String(candidate.head_sha || "");
     if (!pr || !/^[0-9a-f]{40}$/i.test(head)) throw new Error(`GREEN_GUARD_RECEIPT_INVALID:${basename(path)}`);
 
     checked += 1;
-    const runs = await runsForHead(token, repository, head);
+    const runs = await runsForPullHead(token, repository, head, pr);
     const decision = greenDecision(runs, required);
     const compact = decision.verdicts.map((item) => `${item.name}=${item.state}`).join(" | ");
 
@@ -127,7 +151,7 @@ export async function main(env = process.env) {
     const target = join(deferredDir, name);
     await rename(path, target);
     await writeFile(`${target}.green-guard.json`, `${JSON.stringify({
-      schema: "centraldark.green-first.v1",
+      schema: "centraldark.green-first.v2",
       pr_number: pr,
       head_sha: head,
       result: "DEFERRED_UNTIL_GREEN",
@@ -136,8 +160,9 @@ export async function main(env = process.env) {
     console.log(`GREEN_GUARD=DEFER PR=${pr} HEAD=${head} ${compact}`);
   }
 
-  console.log(`GREEN_GUARD_SUMMARY checked=${checked} pass=${passed} deferred=${deferred}`);
-  return { checked, passed, deferred };
+  console.log(`GREEN_GUARD_SUMMARY checked=${checked} pass=${passed} deferred=${deferred} fast_skipped=${fastSkipped}`);
+  if (deferred > 0) throw new Error(`GREEN_GUARD_DEFERRED:${deferred}`);
+  return { checked, passed, deferred, fastSkipped };
 }
 
 const isMain = process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
