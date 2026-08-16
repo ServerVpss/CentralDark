@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-16T08:45:24.534Z",
-  "updatedAtBR": "16/08/2026, 05:45:24 BRT",
+  "updatedAt": "2026-08-16T09:19:50.341Z",
+  "updatedAtBR": "16/08/2026, 06:19:50 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "fix(comunicação): estado primeiro com técnico mínimo suficiente (#945)",
+    "lastCommit": "fix(labels): normalização global entre GitHub, MCP e HUB (#946)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,22 @@
   ],
   "events": [
     {
+      "time": "2026-08-16T09:19:50.341Z",
+      "titulo": "Push na main · b8bebf70df64deac383b948f6055c78c01fa842c",
+      "detalhe": "fix(labels): normalização global entre GitHub, MCP e HUB (#946)",
+      "area": "Repositório",
+      "sha": "b8bebf7",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-08-16T09:13:06.389Z",
+      "titulo": "Push na main · baa86545c89f510ecfbd0e340d2be4e614054325",
+      "detalhe": "chore(git): cristalizar backup efêmero e histórico no Git",
+      "area": "Repositório",
+      "sha": "baa8654",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-16T08:45:24.534Z",
       "titulo": "Push na main · b47df132bb9925b32429a6bba83715ac9bfbc607",
       "detalhe": "fix(comunicação): estado primeiro com técnico mínimo suficiente (#945)",
@@ -980,22 +996,6 @@
       "detalhe": "refactor(memory): analyst usar delta-core compartilhado",
       "area": "Repositório",
       "sha": "8b738fa",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-15T01:58:33.157Z",
-      "titulo": "Push na main · 304d97cbd4e27956fbaeca28b830deba613da6b8",
-      "detalhe": "refactor(memory): centralizar fingerprint de ganho informacional",
-      "area": "Repositório",
-      "sha": "304d97c",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-15T01:57:58.745Z",
-      "titulo": "Push na main · 31df3924f96ba172888f8ea9b071c09e96c3f404",
-      "detalhe": "ci(meta-lupa): provar confinamento fisico do memory-linker",
-      "area": "Repositório",
-      "sha": "31df392",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,20 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-16T09:19:50.341Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · b8bebf70df64deac383b948f6055c78c01fa842c (b8bebf7)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-08-16T09:13:06.389Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · baa86545c89f510ecfbd0e340d2be4e614054325 (baa8654)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-16T08:45:24.534Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · b47df132bb9925b32429a6bba83715ac9bfbc607 (b47df13)",
@@ -1743,20 +1757,6 @@
       "time": "2026-08-15T01:59:40.191Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 8b738fabc0bc1e69faf076497f25a9d7c6f1fe82 (8b738fa)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-15T01:58:33.157Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 304d97cbd4e27956fbaeca28b830deba613da6b8 (304d97c)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-15T01:57:58.745Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 31df3924f96ba172888f8ea9b071c09e96c3f404 (31df392)",
       "area": "Repositório",
       "status": "sucesso"
     }
