@@ -2,11 +2,14 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  AUTO_READY_POLICY,
   CANONICAL_AUTHORITY_LABEL,
   CANONICAL_AUTOMATION_LABEL,
   CANONICAL_GIT_LABEL,
   REQUIRED_PROMOTION_SEAL_LABELS,
+  autoReadyState,
   classifyFailure,
+  dependencyNumbers,
   eligibleSummary,
   noticeTargets,
   promotionSealReceipt,
@@ -25,6 +28,8 @@ const INTENT_BODY = [
 
 function pr(overrides = {}) {
   return {
+    number: 999,
+    node_id: "PR_TESTE",
     state: "open",
     draft: false,
     title: "fix: canário",
@@ -74,6 +79,43 @@ test("selo exige recibo completo e política de merge conhecida", () => {
     body: INTENT_BODY.replace("AUTO_SQUASH_IF_CLEAN", "MERGE_SEM_CATRACA"),
   })).valid, false);
   assert.equal(promotionSealReceipt(pr({ body: "sem recibo" })).valid, false);
+});
+
+test("draft automatizado só é gerenciável com opt-in explícito + selo completo", () => {
+  const body = [
+    INTENT_BODY,
+    `Auto-Ready: ${AUTO_READY_POLICY}`,
+    "Depends-On: #983, #984",
+  ].join("\n");
+  const managed = autoReadyState(pr({
+    draft: true,
+    body,
+    labels: REQUIRED_PROMOTION_SEAL_LABELS.map((name) => ({ name })),
+  }), "ServerVpss/CentralDark");
+  assert.equal(managed.managed, true);
+  assert.deepEqual(managed.dependencies, [983, 984]);
+  assert.deepEqual(managed.missingLabels, []);
+
+  const humanDraft = autoReadyState(pr({
+    draft: true,
+    labels: REQUIRED_PROMOTION_SEAL_LABELS.map((name) => ({ name })),
+  }), "ServerVpss/CentralDark");
+  assert.equal(humanDraft.managed, false);
+
+  const incompleteSeal = autoReadyState(pr({
+    draft: true,
+    body,
+    labels: [{ name: CANONICAL_AUTHORITY_LABEL }],
+  }), "ServerVpss/CentralDark");
+  assert.equal(incompleteSeal.managed, false);
+});
+
+test("depends-on deduplica, ignora self-reference e não inventa dependência", () => {
+  assert.deepEqual(dependencyNumbers(pr()), []);
+  assert.deepEqual(dependencyNumbers(pr({
+    number: 985,
+    body: `${INTENT_BODY}\nDepends-On: #983 #983, #985, #984`,
+  })), [983, 984]);
 });
 
 test("promotor materializa autoridade somente como parte do selo confiável", () => {
