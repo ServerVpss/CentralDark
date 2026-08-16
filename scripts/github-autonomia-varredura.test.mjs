@@ -2,9 +2,15 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  CANONICAL_AUTHORITY_LABEL,
+  CANONICAL_AUTOMATION_LABEL,
+  CANONICAL_GIT_LABEL,
+  REQUIRED_PROMOTION_SEAL_LABELS,
   classifyFailure,
   eligibleSummary,
   noticeTargets,
+  promotionSealReceipt,
+  promotionSealState,
   sanitizeNotice,
   shouldMaterializeAuthority,
 } from "./github-autonomia-varredura.mjs";
@@ -38,7 +44,39 @@ test("recibo de intenção torna PR confiável elegível sem reask", () => {
   assert.equal(eligibleSummary(pr({ user: { login: "intruso" } }), "ServerVpss/CentralDark"), false);
 });
 
-test("promotor materializa selo somente para intenção confiável ainda sem label", () => {
+test("selo canônico sintetiza autoridade + canal Git + automação", () => {
+  const pending = promotionSealState(pr(), "ServerVpss/CentralDark");
+  assert.equal(pending.eligible, true);
+  assert.equal(pending.complete, false);
+  assert.deepEqual(pending.missingLabels, [
+    CANONICAL_AUTHORITY_LABEL,
+    CANONICAL_GIT_LABEL,
+    CANONICAL_AUTOMATION_LABEL,
+  ]);
+
+  const sealed = promotionSealState(pr({
+    labels: REQUIRED_PROMOTION_SEAL_LABELS.map((name) => ({ name })),
+  }), "ServerVpss/CentralDark");
+  assert.equal(sealed.eligible, true);
+  assert.equal(sealed.complete, true);
+  assert.deepEqual(sealed.missingLabels, []);
+});
+
+test("selo exige recibo completo e política de merge conhecida", () => {
+  assert.equal(promotionSealReceipt(pr()).valid, true);
+  assert.equal(promotionSealReceipt(pr({
+    body: INTENT_BODY.replace("AUTO_SQUASH_IF_CLEAN", "GREEN_FIRST"),
+  })).valid, true);
+  assert.equal(promotionSealReceipt(pr({
+    body: INTENT_BODY.replace("AUTO_SQUASH_IF_CLEAN", "GREEN_FIRST_6_OF_6_THEN_SQUASH"),
+  })).valid, true);
+  assert.equal(promotionSealReceipt(pr({
+    body: INTENT_BODY.replace("AUTO_SQUASH_IF_CLEAN", "MERGE_SEM_CATRACA"),
+  })).valid, false);
+  assert.equal(promotionSealReceipt(pr({ body: "sem recibo" })).valid, false);
+});
+
+test("promotor materializa autoridade somente como parte do selo confiável", () => {
   assert.equal(shouldMaterializeAuthority(pr(), "ServerVpss/CentralDark"), true);
   assert.equal(shouldMaterializeAuthority(pr({ labels: [{ name: "👑 PERMITO-SEGREDO" }] }), "ServerVpss/CentralDark"), false);
   assert.equal(shouldMaterializeAuthority(pr({ body: "sem autorização" }), "ServerVpss/CentralDark"), false);
@@ -47,11 +85,12 @@ test("promotor materializa selo somente para intenção confiável ainda sem lab
   assert.equal(shouldMaterializeAuthority(pr({ head: { repo: { full_name: "outro/fork" } } }), "ServerVpss/CentralDark"), false);
 });
 
-test("label canônica permito-segredo continua elegível no modo adversarial", () => {
-  assert.equal(
-    eligibleSummary(pr({ body: "sem recibo", labels: [{ name: "permito-segredo" }] }), "ServerVpss/CentralDark"),
-    true,
-  );
+test("label de autoridade sozinha permite investigação mas não fecha selo de promoção", () => {
+  const candidate = pr({ body: "sem recibo", labels: [{ name: "permito-segredo" }] });
+  assert.equal(eligibleSummary(candidate, "ServerVpss/CentralDark"), true);
+  const seal = promotionSealState(candidate, "ServerVpss/CentralDark");
+  assert.equal(seal.eligible, false);
+  assert.equal(seal.complete, false);
 });
 
 test("marcadores legados não concedem mais elegibilidade", () => {
@@ -63,12 +102,13 @@ test("marcadores legados não concedem mais elegibilidade", () => {
   );
 });
 
-test("fork e base diferente de main são bloqueados", () => {
+test("fork e base diferente de main são bloqueados pelo selo", () => {
   assert.equal(
     eligibleSummary(pr({ head: { repo: { full_name: "outro/fork" } } }), "ServerVpss/CentralDark"),
     false,
   );
   assert.equal(eligibleSummary(pr({ base: { ref: "dev" } }), "ServerVpss/CentralDark"), false);
+  assert.equal(promotionSealState(pr({ base: { ref: "dev" } }), "ServerVpss/CentralDark").eligible, false);
 });
 
 test("nenhuma credencial escapa para log, comentário ou Telegram", () => {
