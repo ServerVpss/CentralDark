@@ -1,7 +1,7 @@
 # CENTRALDARK — MERMAID VIVO DE SINCRONIA GLOBAL
 
-> 👑 **CHEFE / SEGREDO** = humano, dono da intenção e autoridade final.  
-> Este arquivo é **arquitetura/contrato**, não prova de implementação.  
+> 👑 **CHEFE / SEGREDO** = humano, dono da intenção e autoridade final.
+> Este arquivo é **arquitetura/contrato**, não prova de implementação.
 > Objetivo: impedir perda de contexto entre janelas, agentes, plataformas e ferramentas.
 
 ## Como ler
@@ -505,5 +505,5 @@ flowchart TD
 → A MÚSICA CONTINUA
 ```
 
-> **UMA BANDA · UMA CANÇÃO · UM COMPASSO · N SUPERFÍCIES**  
+> **UMA BANDA · UMA CANÇÃO · UM COMPASSO · N SUPERFÍCIES**
 > **VERDADE PRIMÁRIA · EVIDÊNCIA SUPREMA · REALIDADE DECIDE**
