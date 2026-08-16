@@ -21,7 +21,11 @@ let rodando = false;
 function log(msg) {
   const linha = `[${new Date().toISOString()}] ${msg}\n`;
   process.stdout.write(linha);
-  try { fs.appendFileSync(LOG_PATH, linha); } catch {}
+  try {
+    fs.appendFileSync(LOG_PATH, linha);
+  } catch {
+    process.stderr.write(`[telepainel-deploy] LOG_APPEND_FAILED path=${LOG_PATH}\n`);
+  }
 }
 
 function rodar(comando, args) {
