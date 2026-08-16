@@ -82,6 +82,77 @@ ZERO_SECRET=true
 ZERO_FORCE_PUSH=true
 ```
 
+## Recorrência observada — PR #952
+
+Nova evidência visual fornecida pelo SEGREDO/CHEFE na mesma data mostra uma segunda apresentação do mesmo padrão de interface, agora com o texto:
+
+```text
+Avisar quando o PR #952 estiver verde para main
+```
+
+No turno que originou a captura, o SEGREDO/CHEFE pediu calibração, registro, cristalização e síntese das evidências; não pediu criação de monitoramento agendado para o PR #952.
+
+O inventário real de automações foi medido novamente após essa evidência. Nenhuma tarefa ativa com título/prompt destinado a monitorar o PR #952 foi encontrada.
+
+```text
+RECURRENCE_OBSERVED=true
+RECURRENCE_COUNT_MINIMUM=2
+SECOND_UI_TARGET=PR952
+PR952_AUTOMATION_EXPLICITLY_REQUESTED_IN_TRIGGER_TURN=false
+PR952_AUTOMATION_SUGGESTION_UI=PROVEN
+PR952_ACTIVE_AUTOMATION_FOUND=NO
+PR952_SCHEDULED_TASK_CREATED=NOT_PROVEN
+```
+
+A recorrência fortalece a classificação de **padrão de superfície** sem autorizar ampliar a acusação para mutação do scheduler.
+
+```text
+REPEATED_UNSOLICITED_SUGGESTION_UI=PROVEN
+REPEATED_UNAUTHORIZED_TASK_CREATION=UNPROVEN
+```
+
+## Evidência de runtime da superfície — separar observação de causalidade
+
+As capturas adicionais do DevTools mostram tráfego `fetch`, `xhr` e `preflight`, além de uma linha `preflight` cujo campo de iniciador aparece visualmente como `Simulação`. Isso deve ser registrado literalmente como rótulo observado da ferramenta de desenvolvedor; **não** é prova suficiente de que respostas, tools ou ações do GPT tenham sido simuladas/falsificadas.
+
+Também foram observados no console erros de internacionalização para locale `pt-BR` envolvendo as chaves `toast.error` e `toast.announcement.withPrefix`, além de um evento `Uncaught (in promise)`.
+
+```text
+NETWORK_FETCH_OBSERVED=true
+NETWORK_XHR_OBSERVED=true
+NETWORK_PREFLIGHT_OBSERVED=true
+DEVTOOLS_INITIATOR_LABEL_SIMULACAO_OBSERVED=true
+GPT_TOOL_EXECUTION_SIMULATED=UNPROVEN
+GPT_RESPONSE_FABRICATION_PROVEN=false
+PT_BR_TOAST_ERROR_TRANSLATION_MISSING_OBSERVED=true
+PT_BR_TOAST_ANNOUNCEMENT_TRANSLATION_MISSING_OBSERVED=true
+UNCAUGHT_PROMISE_ERROR_OBSERVED=true
+CAUSAL_LINK_RUNTIME_ERRORS_TO_AUTOMATION_SUGGESTION=UNPROVEN
+```
+
+Regra reutilizável:
+
+```text
+VISIBLE_RUNTIME_LABEL != HIDDEN_MECHANISM_PROOF
+NETWORK_ACTIVITY != TOOL_SUCCESS_PROOF
+UI_ERROR != CAUSE_OF_ADJACENT_INCIDENT_WITHOUT_LINK
+OBSERVE_EXACTLY → CLASSIFY → PRESERVE_UNKNOWN → DO_NOT_INFLATE
+```
+
+## Síntese comprimida
+
+```text
+CHEFE_NAO_PEDIU_AUTOMACAO
+→ SUPERFICIE_MOSTROU_CTA_DE_RELOGIO
+→ INCIDENTE_DE_AUTORIDADE_PROVADO
+→ SCHEDULER_MEDIDO
+→ JOB_ALVO_NAO_ENCONTRADO
+→ SUGESTAO != MUTACAO
+→ RECORRENCIA_CONFIRMADA_EM_OUTRO_PR
+→ RUNTIME/DEVTOOLS_PRESERVADO_COMO_EVIDENCIA_AUXILIAR
+→ CAUSALIDADE_OCULTA_CONTINUA_UNKNOWN
+```
+
 ## Regra simples
 
 ```text
@@ -89,4 +160,6 @@ RELOGIO NA TELA != AUTORIZACAO
 SUGESTAO != TAREFA CRIADA
 CHEFE PEDIU? NAO -> NAO CRIAR
 ESTADO DO SCHEDULER NAO MEDIDO -> NAO AFIRMAR
+ROTULO "SIMULACAO" NO DEVTOOLS != PROVA DE GPT SIMULADO
+ERRO DE UI != CAUSA PROVADA SEM VINCULO CAUSAL
 ```
