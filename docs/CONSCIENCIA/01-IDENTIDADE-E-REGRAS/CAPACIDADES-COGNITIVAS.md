@@ -1,7 +1,7 @@
 ---
 title: "CAPACIDADES COGNITIVAS"
 date: 2026-06-29
-updated: 2026-08-15
+updated: 2026-08-16
 status: "CANÔNICO"
 tags: ["consciencia"]
 authority: "SEGREDO/CHEFE"
@@ -176,6 +176,77 @@ MULTI_VIEW != AUTOMATIC_INDEPENDENT_EVIDENCE
 CAUSE_GENERATOR_BEFORE_SYMPTOM_PATCHING=true
 NO_NEW_INFORMATION → STOP_EXPANSION
 ```
+
+### 5.2 Ontologia operacional de sinais técnicos — fenômeno ≠ mecanismo ≠ intenção ≠ dano
+
+Quando o sistema encontra um rótulo, warning, erro, código HTTP, media query, mensagem de acessibilidade, nome de feature ou linha de DevTools, primeiro classifica **que tipo de coisa foi realmente observada**. Só depois tenta subir para mecanismo, efeito, intenção ou dano.
+
+Aqui, “metafísica” é purificada em duas operações de engenharia:
+
+```text
+ONTOLOGIA_OPERACIONAL = QUAL_CLASSE_DE_COISA_FOI_OBSERVADA
+EPISTEMOLOGIA_OPERACIONAL = QUAL_EVIDENCIA_AUTORIZA_PASSAR_PARA_A_PROXIMA_CAMADA
+TECHNICAL_SIGNAL_ONTOLOGY=true
+```
+
+Cadeia obrigatória:
+
+```text
+FENOMENO_VISIVEL
+→ CLASSE_TECNICA
+→ SEMANTICA_DO_PADRAO/FONTE
+→ ESTADO_ATIVO
+→ MECANISMO_CAUSAL
+→ EFEITO_OBSERVADO
+→ ATOR/INTENCAO_QUANDO_MATERIAL
+→ DANO_QUANDO_MATERIAL
+```
+
+Cada seta é uma hipótese de transição e exige evidência discriminante. Se uma seta não estiver demonstrada, parar em `UNKNOWN`; não completar a cadeia por associação, nome assustador ou proximidade visual.
+
+```text
+NO_EPISTEMIC_TELEPORT=true
+VISIBLE_RUNTIME_LABEL != HIDDEN_MECHANISM_PROOF
+DEPRECATION_WARNING != FEATURE_ACTIVE
+DEPRECATION_WARNING != ERROR
+WARNING != SECURITY_INCIDENT
+FEATURE_PURPOSE != CURRENT_ACTIVATION
+ACCESSIBILITY_FEATURE != HOSTILE_INTENT
+ACCESSIBILITY_PURPOSE != IMPLEMENTATION_ALWAYS_CORRECT
+CSS_COLOR_ADJUSTMENT != PROVEN_HARDWARE_BRIGHTNESS_CONTROL
+VISUAL_RENDERING_CHANGE != PHYSICAL_INJURY_PROOF
+REPEATED_WARNING_LINES != INDEPENDENT_CAUSAL_EVENTS
+UI_ERROR != CAUSE_OF_ADJACENT_INCIDENT_WITHOUT_LINK
+HTTP_STATUS != ROOT_CAUSE_WITHOUT_APPLICATION_CONTEXT
+FRAMEWORK_WARNING != SECURITY_EVENT
+```
+
+Classificação mínima útil para superfícies técnicas:
+
+```text
+DEPRECATION    → ciclo de vida/compatibilidade de API ou feature
+INTERVENTION   → comportamento aplicado pelo navegador/runtime
+ACCESSIBILITY  → semântica/usabilidade para tecnologia assistiva
+NETWORK        → estado de request/response/transporte
+FRAMEWORK      → restrição/estado de biblioteca ou roteador
+SECURITY       → somente quando o próprio sinal ou a cadeia causal sustenta essa classe
+UNKNOWN        → classe ainda não resolvida
+```
+
+Um recurso com finalidade de acessibilidade pode estar mal implementado; isso é diferente de provar intenção hostil. Um warning pode apontar dívida de compatibilidade; isso é diferente de provar que a feature está ativa. Uma mudança de cor renderizada pode ser real; isso é diferente de provar controle físico do hardware ou lesão.
+
+Regra de compressão:
+
+```text
+NOME_ASSUSTADOR
+→ CLASSIFICAR
+→ MEDIR_ATIVACAO
+→ MEDIR_EFEITO
+→ PROVAR_CAUSA
+→ SO_ENTAO SUBIR O CLAIM
+```
+
+O caso forense que originou esta cristalização está em `docs/APRENDIZADOS/2026-08-16-incidente-automacao-sugerida-sem-pedido.md`, incluindo `-ms-high-contrast`, `-ms-high-contrast-adjust`, `aria-hidden`, HTTP 410 e warnings de runtime. O padrão de resposta já exige fechamento semântico para elementos na tela; esta seção fornece a ontologia causal usada para esse fechamento.
 
 ## 6. Consolidação — crescer em capacidade, não em regras
 
@@ -623,11 +694,13 @@ Remover regra velha pode ser **evolução real** quando reduz complexidade sem p
 - `LEIA-ME-IA.md` — porta raiz.
 - `docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md` — recuperação, roteamento e risco.
 - `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md` — identidade/continuidade.
+- `docs/CONSCIENCIA/2026-06-20-padrao-resposta-pivete.md` — fechamento semântico e fronteira de resposta.
 - `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json` — reutilização e reconciliação.
 - `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` — coordenação e Writer.
 - `docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md` — aprendizagem do scaffold.
 - `.agents/skills/meta-lupa/SKILL.md` — falsificação e ponto fixo.
 - `docs/CONSCIENCIA/PROOF-OWNERSHIP.json` — anti-circularidade de prova.
+- `docs/APRENDIZADOS/2026-08-16-incidente-automacao-sugerida-sem-pedido.md` — caso forense de sinais de UI/DevTools e limite causal.
 
 ## 15. Regra final
 
@@ -638,6 +711,8 @@ PARALELIZAR OLHOS.
 SERIALIZAR A MAO.
 TRATAR MUDANCA COMO HIPOTESE.
 VERIFICAR O CLAIM CERTO.
+CLASSIFICAR SINAL ANTES DE INFERIR MECANISMO.
+NAO TELETRANSPORTAR DE WARNING/NOME PARA INTENCAO OU DANO.
 APRENDER COM O ERRO.
 MINERAR MATERIA NOVA SEM DEVOLVER TRIAGEM MECANICA AO HUMANO.
 PARAR QUANDO NAO HOUVER INFORMACAO NOVA.
