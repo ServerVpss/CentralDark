@@ -98,6 +98,8 @@ jobs:
           python scripts/evolution_gate.py --self-test
           python scripts/evolution_series_gate.py --self-test
           python scripts/agi_claim_gate.py --self-test
+          python scripts/incident_crystal_gate.py --self-test
+          python scripts/incident_crystal_gate.py --repo-root ../../.. --ledger references/incident-crystals.json
           python scripts/evolution_series_gate.py --scan references --repo-root ../../..
           pytest testes/test_evolution_gate.py -v
       - name: Percentual evidencial — denominador fechado + dogfood
