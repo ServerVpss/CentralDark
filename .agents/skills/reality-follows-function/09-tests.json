@@ -31,6 +31,21 @@
       "id": "SAME_EFFECT_DIFFERENT_NAME",
       "given": "Model or component name changed but responsibility and effect remain",
       "expect": "Treat name as provenance and trace functional owner"
+    },
+    {
+      "id": "JUST_LESS_IS_NOT_LESS_IS_MORE",
+      "given": "A simplification removes capability, safety or proof",
+      "expect": "Reject it as just less, not Menos é Mais"
+    },
+    {
+      "id": "MODERATION_PRESERVES_ESSENCE",
+      "given": "A candidate removes weight that has no proven value",
+      "expect": "Prefer the smallest sufficient form that preserves essence, capability, safety and proof"
+    },
+    {
+      "id": "CHIEF_INPUT_MAY_BE_LARGE",
+      "given": "The chief expands context, hypotheses, tools or lenses",
+      "expect": "Allow exploration and consolidate only the final agent output and architecture"
     }
   ]
 }
