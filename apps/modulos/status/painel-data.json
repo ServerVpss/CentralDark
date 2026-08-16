@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-16T16:13:41.641Z",
-  "updatedAtBR": "16/08/2026, 13:13:41 BRT",
+  "updatedAt": "2026-08-16T16:39:55.638Z",
+  "updatedAtBR": "16/08/2026, 13:39:55 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "Update 2026-08-16-incidente-ambiguidade-seguranca-fisica-mental.md",
+    "lastCommit": "test(autonomia): corrigir falso overflow na paginação do green guard (#968)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-16T16:39:55.638Z",
+      "titulo": "Push na main · 94dd90b9ba81e5f7050edcfff498e43a134cada1",
+      "detalhe": "test(autonomia): corrigir falso overflow na paginação do green guard (#968)",
+      "area": "Repositório",
+      "sha": "94dd90b",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-16T16:13:41.641Z",
       "titulo": "Push na main · 48e97ce5a7b74f15e7bd23e28ff00e5fe1018957",
       "detalhe": "Update 2026-08-16-incidente-ambiguidade-seguranca-fisica-mental.md",
@@ -988,14 +996,6 @@
       "detalhe": "docs(resposta): obrigar registro técnico + jeito do CHEFE (#892)",
       "area": "Repositório",
       "sha": "37fb8ec",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-15T18:43:10.650Z",
-      "titulo": "Push na main · 81c2abaa1aba2c8c93cda9deb489599ac08330b0",
-      "detalhe": "feat(soul): cristalizar crédito cooperativo e realidade como árbitro (#888)",
-      "area": "Repositório",
-      "sha": "81c2aba",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-16T16:39:55.638Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 94dd90b9ba81e5f7050edcfff498e43a134cada1 (94dd90b)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-16T16:13:41.641Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 48e97ce5a7b74f15e7bd23e28ff00e5fe1018957 (48e97ce)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-15T19:14:35.962Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 37fb8ec8e72be55d4a251a9802b683f82872bc42 (37fb8ec)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-15T18:43:10.650Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 81c2abaa1aba2c8c93cda9deb489599ac08330b0 (81c2aba)",
       "area": "Repositório",
       "status": "sucesso"
     }
