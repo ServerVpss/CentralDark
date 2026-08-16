@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-16T11:45:33.142Z",
-  "updatedAtBR": "16/08/2026, 08:45:33 BRT",
+  "updatedAt": "2026-08-16T11:46:19.891Z",
+  "updatedAtBR": "16/08/2026, 08:46:19 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "docs(incidente): registrar recorrência de automação e runtime observado (#955)",
+    "lastCommit": "docs(governança): cristalizar ontologia global de evidência e causalidade (#956)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-16T11:46:19.891Z",
+      "titulo": "Push na main · 604cd93d7dcf895a6698987c8117667d7176c0d1",
+      "detalhe": "docs(governança): cristalizar ontologia global de evidência e causalidade (#956)",
+      "area": "Repositório",
+      "sha": "604cd93",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-16T11:45:33.142Z",
       "titulo": "Push na main · 46bf0d08d4c356ccdc9b2e692c9482c7c30efeb4",
       "detalhe": "docs(incidente): registrar recorrência de automação e runtime observado (#955)",
@@ -988,14 +996,6 @@
       "detalhe": "feat(security): absorver fundação privada sem duplicar owners (#873)",
       "area": "Repositório",
       "sha": "c330bf8",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-15T03:21:51.939Z",
-      "titulo": "Push na main · b939e947eed4f0a32afc49054de7b65813902049",
-      "detalhe": "docs: registrar pacotão histórico de 10/07/2026 e análise Overclock (#657)",
-      "area": "Repositório",
-      "sha": "b939e94",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-16T11:46:19.891Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 604cd93d7dcf895a6698987c8117667d7176c0d1 (604cd93)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-16T11:45:33.142Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 46bf0d08d4c356ccdc9b2e692c9482c7c30efeb4 (46bf0d0)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-15T03:43:28.575Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · c330bf8e87829e5c3e21f3571cdfe903970d9fd0 (c330bf8)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-15T03:21:51.939Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · b939e947eed4f0a32afc49054de7b65813902049 (b939e94)",
       "area": "Repositório",
       "status": "sucesso"
     }
