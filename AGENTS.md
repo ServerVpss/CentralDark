@@ -248,7 +248,7 @@ TEXTO_HISTORICO_DIZ_X
 + CANONICO_ATUAL_DIZ_Y
 → PRESERVAR X COMO PROVENIENCIA
 → OPERAR POR Y
-→ CORRIGIR ARTEFATO VIVO SE X AINDA_ESTIVER_SENDO_LIDO_COMO_PRESENTE
+→ CORRIGIR ARTEFATO VIVO SE X AINDA ESTIVER SENDO LIDO COMO PRESENTE
 ```
 
 Marcadores antigos como `PERMITO PIVETE`, “merge é decisão humana” ou topologias locais não medidas não revogam nem ampliam a política vigente por conta própria. Autoridade, identidade e permissão vêm do contrato canônico atual + intenção vigente + estado real.
@@ -324,7 +324,7 @@ TODO_CONFLITO
 → SE SIM: ACCEPT_BOTH
 → LIMPAR DUPLICACAO/RETORNO/DECLARACAO/ORDEM INCOMPATIVEL
 → RODAR VALIDACAO ESTATICA/TESTE APLICAVEL
-→ MARK_RESOLVED SOMENTE DEPOIS_DA_PROVA
+→ MARK_RESOLVED SOMENTE DEPOIS DA PROVA
 ```
 
 Para valor único — hash canônico, identidade, autoridade, porta exclusiva, chave de configuração, endpoint único, schema/version pin ou equivalente — **não escolher `Current` nem `Incoming` por posição visual**. Fazer arqueologia e provar a fonte vigente; só então manter um valor.
@@ -364,7 +364,7 @@ Quando uma capacidade/corpo está indisponível, procurar outra capacidade já a
 ```text
 CORPO_A_INDISPONIVEL
 → MEDIR CORPO_B/CAPACIDADE_EXISTENTE
-→ MESMO ESCOPO + MESMA_AUTORIZACAO + SEGURANCA OK
+→ MESMO ESCOPO + MESMA AUTORIZACAO + SEGURANCA OK
 → CONTINUAR
 → REGISTRAR QUAL CORPO EXECUTOU
 ```
@@ -405,8 +405,8 @@ Writer-Scope: <escopo>
 O fluxo canônico **já existente** `.github/workflows/autonomia-promocao.yml` consome esse recibo. Não criar segundo workflow de promoção. No modo `AUTO_SQUASH_IF_CLEAN`, o próprio promotor:
 
 ```text
-AUTOR CONFIAVEL + MESMO_REPO
-→ RECIBO_DE_INTENCAO
+AUTOR CONFIAVEL + MESMO REPO
+→ RECIBO DE INTENCAO
 → SCAN DE CAMINHO/SECRET NO DIFF
 → CHANGES_REQUESTED? BLOQUEIA
 → MERGE CONFLICT? BLOQUEIA
