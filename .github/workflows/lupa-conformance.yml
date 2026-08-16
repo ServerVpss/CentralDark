@@ -100,6 +100,15 @@ jobs:
           python scripts/agi_claim_gate.py --self-test
           python scripts/evolution_series_gate.py --scan references --repo-root ../../..
           pytest testes/test_evolution_gate.py -v
+      - name: Knowledge Compiler — FORJA rigorosa, runtime FLASH
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check .agents/skills/knowledge-compiler/scripts/compiler.mjs
+          node .agents/skills/knowledge-compiler/scripts/compiler.mjs --self-test
+          node --test \
+            .agents/skills/knowledge-compiler/tests/compiler.test.mjs \
+            .agents/skills/knowledge-compiler/tests/contract.test.mjs
       - name: Percentual evidencial — denominador fechado + dogfood
         working-directory: .agents/skills/meta-lupa
         run: python scripts/percentual_evidencial.py self-test
@@ -225,6 +234,9 @@ jobs:
           echo "EXECUTOR=self-hosted"
           echo "ROTA_PRIMARIA=self-hosted-linux"
           echo "ROTA_FALLBACK=BLOCKED_NO_HOSTED"
+          echo "KNOWLEDGE_COMPILER_GATE=1"
+          echo "MINING_ONCE_CRYSTALLIZE_ONCE_REUSE_N=1"
+          echo "DELTA_AFFECTED_ONLY=1"
           echo "JOB_STATUS=${JOB_STATUS}"
           if [ "${FORK_BLOCKED:-}" = "true" ]; then
             echo "RESULTADO=BLOCKED"
