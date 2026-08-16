@@ -12,6 +12,13 @@ import {
   confrontPerceptionEvidence,
   dedupePerceptionFindings,
 } from './perception-orchestra.mjs';
+import {
+  activePerceptionGate,
+  classifyMaterialMutation,
+  evaluatePerceptionGate,
+  mutationScopeKey,
+} from './perception-policy.mjs';
+import { aplicarGatePercepcao } from './decisor.mjs';
 
 const HEAD = 'a'.repeat(40);
 
@@ -50,6 +57,43 @@ function perception(role, overrides = {}) {
       material_delta: 'corrigir owner canônico',
       ...overrides,
     },
+  };
+}
+
+function decision(overrides = {}) {
+  return {
+    pensamento: 'correção local já comprovada',
+    etapa_titulo: 'Corrigir owner',
+    estado: 'FATO',
+    ferramenta: 'escrever_arquivo',
+    args: { path: 'apps/x.mjs', conteudo: 'x' },
+    terminou: false,
+    ...overrides,
+  };
+}
+
+function perceptionHistoryEntry(scopeKey, packetOverrides = {}) {
+  const packet = {
+    mode: 'PARALLEL_PERCEPTION_SERIAL_MUTATION',
+    ready_for_writer: true,
+    next_rule: 'CONFRONT_EVIDENCE_THEN_ONE_CANONICAL_MUTATION',
+    material_findings: [{ claim: 'delta' }],
+    evidence_confrontation: {
+      all_four_completed: true,
+      discriminating_tests: ['node --test x.test.mjs'],
+      unproven_roles: [],
+      effective_independent_count: 2,
+    },
+    ...packetOverrides,
+  };
+  return {
+    etapa_titulo: 'Quatro percepções antes da caneta',
+    ferramenta: 'shell',
+    args: {
+      comando: `HERMES_PERCEPTION_SCOPE_KEY='${scopeKey}' HERMES_PERCEPTION_PROPOSAL_B64='e30' node apps/modulos/HERMES-CORE/core/perception-orchestra.mjs --active-mission`,
+    },
+    resultado: JSON.stringify(packet),
+    ok: packet.ready_for_writer === true,
   };
 }
 
@@ -206,4 +250,142 @@ test('mesma evidence_ref com nomes causais diferentes também conta como um clus
   assert.equal(confrontation.effective_independent_count, 1);
   assert.equal(confrontation.confidence_can_increase, false);
   assert.ok(confrontation.correlated_clusters.some((item) => item.basis === 'evidence_ref'));
+});
+
+test('classificador distingue leitura de mutação material', () => {
+  assert.equal(classifyMaterialMutation('ler_arquivo', { path: 'x' }).mutating, false);
+  assert.equal(classifyMaterialMutation('shell', { comando: 'node --test x.test.mjs' }).mutating, false);
+  assert.equal(classifyMaterialMutation('escrever_arquivo', { path: 'x' }).mutating, true);
+  assert.equal(classifyMaterialMutation('git', { acao: 'commit_push', paths: ['x'] }).critical, true);
+  assert.equal(classifyMaterialMutation('handler', { acao: 'http', metodo: 'POST', url: 'https://example.invalid' }).critical, true);
+});
+
+test('TESTE não pode escrever sem disparar quatro percepções', () => {
+  const d = decision({ estado: 'TESTE' });
+  const gate = evaluatePerceptionGate({ decisao: d, historico: [] });
+  assert.equal(gate.status, 'REQUIRE_FOUR_PERCEPTIONS');
+  const routed = aplicarGatePercepcao(d, []);
+  assert.equal(routed.ferramenta, 'shell');
+  assert.match(routed.args.comando, /perception-orchestra\.mjs --active-mission/);
+  assert.match(routed.args.comando, /HERMES_PERCEPTION_SCOPE_KEY=/);
+});
+
+test('FATO local claro preserva caminho barato sem fan-out ornamental', () => {
+  const d = decision();
+  const gate = evaluatePerceptionGate({ decisao: d, historico: [] });
+  assert.equal(gate.status, 'NOT_REQUIRED_CLEAR_LOCAL');
+  const routed = aplicarGatePercepcao(d, []);
+  assert.equal(routed.ferramenta, 'escrever_arquivo');
+  assert.equal(routed._perception_gate_status, 'NOT_REQUIRED_CLEAR_LOCAL');
+});
+
+test('promoção git é crítica e exige quatro percepções mesmo em FATO', () => {
+  const d = decision({
+    ferramenta: 'git',
+    args: { acao: 'commit_push', mensagem: 'fix', paths: ['apps/x.mjs'] },
+  });
+  const routed = aplicarGatePercepcao(d, []);
+  assert.equal(routed.ferramenta, 'shell');
+  assert.equal(routed._perception_gate_status, 'REQUIRE_FOUR_PERCEPTIONS');
+});
+
+test('falha ou Critic recente obriga percepção antes de nova escrita', () => {
+  const historico = [{
+    etapa_titulo: 'falhou',
+    ferramenta: 'shell',
+    args: { comando: 'node --test x.test.mjs' },
+    resultado: 'FAIL',
+    ok: false,
+    critic: 'regressão',
+  }];
+  const routed = aplicarGatePercepcao(decision(), historico);
+  assert.equal(routed.ferramenta, 'shell');
+  assert.match(routed.args.comando, /perception-orchestra\.mjs/);
+});
+
+test('alvo de mutação repetido obriga percepção antes de reescrever', () => {
+  const d = decision();
+  const historico = [{
+    etapa_titulo: 'escrita anterior',
+    ferramenta: 'escrever_arquivo',
+    args: { path: 'apps/x.mjs', conteudo: 'antigo' },
+    resultado: 'ok',
+    ok: true,
+  }];
+  const gate = evaluatePerceptionGate({ decisao: d, historico });
+  assert.equal(gate.status, 'REQUIRE_FOUR_PERCEPTIONS');
+  assert.equal(gate.triggers.repeated_mutation_target, true);
+});
+
+test('loop detectado força fan-out antes de mutação mesmo quando decisão diz FATO', () => {
+  const routed = aplicarGatePercepcao(decision(), [], { emLoop: true });
+  assert.equal(routed.ferramenta, 'shell');
+  assert.equal(routed._perception_triggers.loop_detected, true);
+});
+
+test('receipt verde dos quatro braços libera exatamente o mesmo escopo de mutação', () => {
+  const d = decision({
+    ferramenta: 'git',
+    args: { acao: 'commit_push', mensagem: 'fix', paths: ['apps/x.mjs'] },
+  });
+  const scope = mutationScopeKey(d.ferramenta, d.args);
+  const historico = [perceptionHistoryEntry(scope)];
+  const active = activePerceptionGate(historico);
+  assert.equal(active.ready_for_writer, true);
+  assert.equal(active.proposal_scope_key, scope);
+  const gate = evaluatePerceptionGate({ decisao: d, historico });
+  assert.equal(gate.status, 'PASS_READY_PERCEPTION_GATE');
+  const routed = aplicarGatePercepcao(d, historico);
+  assert.equal(routed.ferramenta, 'git');
+});
+
+test('receipt não verde bloqueia a caneta e expõe teste discriminante', () => {
+  const d = decision();
+  const scope = mutationScopeKey(d.ferramenta, d.args);
+  const historico = [perceptionHistoryEntry(scope, {
+    ready_for_writer: false,
+    next_rule: 'RUN_DISCRIMINATING_TEST_BEFORE_MUTATION',
+    material_findings: [],
+    evidence_confrontation: {
+      all_four_completed: true,
+      discriminating_tests: ['node --test regressao.test.mjs'],
+      unproven_roles: ['B_IMPLEMENTATION'],
+      effective_independent_count: 1,
+    },
+  })];
+  historico[0].ok = false;
+  const gate = evaluatePerceptionGate({ decisao: d, historico });
+  assert.equal(gate.status, 'BLOCK_MUTATION_PENDING_DISCRIMINATING_EVIDENCE');
+  const routed = aplicarGatePercepcao(d, historico);
+  assert.equal(routed.ferramenta, 'notificar_progresso');
+  assert.match(routed.args.mensagem, /regressao\.test\.mjs/);
+});
+
+test('receipt de outro escopo não autoriza mutação nova', () => {
+  const d = decision();
+  const historico = [perceptionHistoryEntry('file:apps/outro.mjs')];
+  const gate = evaluatePerceptionGate({ decisao: d, historico });
+  assert.equal(gate.status, 'REQUIRE_FOUR_PERCEPTIONS');
+  const routed = aplicarGatePercepcao(d, historico);
+  assert.equal(routed.ferramenta, 'shell');
+});
+
+test('stdout prefixado por exit=2 ainda é reconhecido como receipt bloqueado', () => {
+  const d = decision();
+  const scope = mutationScopeKey(d.ferramenta, d.args);
+  const entry = perceptionHistoryEntry(scope, {
+    ready_for_writer: false,
+    next_rule: 'RETRY_MISSING_PERCEPTIONS_BEFORE_MUTATION',
+    evidence_confrontation: {
+      all_four_completed: false,
+      discriminating_tests: [],
+      unproven_roles: [],
+      effective_independent_count: 0,
+    },
+  });
+  entry.resultado = `exit=2 ${entry.resultado}`;
+  entry.ok = false;
+  const active = activePerceptionGate([entry]);
+  assert.equal(active.ready_for_writer, false);
+  assert.equal(active.next_rule, 'RETRY_MISSING_PERCEPTIONS_BEFORE_MUTATION');
 });

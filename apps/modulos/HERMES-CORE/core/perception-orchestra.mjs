@@ -66,10 +66,31 @@ function extractJson(text) {
   return JSON.parse(raw.slice(start, end + 1));
 }
 
+function modelName(value) {
+  return normalizeText(typeof value === 'string' ? value : value?.modelo);
+}
+
+export function enrichPerceptionMission(mission, proposalB64 = process.env.HERMES_PERCEPTION_PROPOSAL_B64 || '') {
+  const base = normalizeText(mission);
+  if (!proposalB64) return base;
+  try {
+    const proposal = JSON.parse(Buffer.from(String(proposalB64), 'base64url').toString('utf8'));
+    const safe = {
+      ferramenta: normalizeText(proposal?.ferramenta),
+      scope_key: normalizeText(proposal?.scope_key),
+      estado: normalizeText(proposal?.estado),
+      etapa_titulo: normalizeText(proposal?.etapa_titulo).slice(0, 120),
+      pensamento: normalizeText(proposal?.pensamento).slice(0, 500),
+    };
+    return `${base}\n\nPROPOSTA MATERIAL A SER CONTRAPROVADA:\n${JSON.stringify(safe)}`;
+  } catch {
+    return `${base}\n\nPROPOSTA MATERIAL A SER CONTRAPROVADA: UNKNOWN_PROPOSAL_ENCODING`;
+  }
+}
+
 export function assignPerceptionModels(models, attacks = PERCEPTION_ATTACKS) {
   const pool = (Array.isArray(models) ? models : [])
-    .map((item) => typeof item === 'string' ? item : item?.modelo)
-    .map(normalizeText)
+    .map(modelName)
     .filter(Boolean);
   if (!pool.length) throw new Error('PERCEPTION_MODEL_POOL_EMPTY');
   return attacks.map((attack, index) => Object.freeze({
@@ -77,6 +98,15 @@ export function assignPerceptionModels(models, attacks = PERCEPTION_ATTACKS) {
     model: pool[index % pool.length],
     independence: pool.length >= attacks.length ? 'ROLE_AND_PROVIDER_DIVERSE' : 'ROLE_DIVERSE_PROVIDER_REUSE',
   }));
+}
+
+export function selectFallbackModel(configs, usedModels = []) {
+  const used = new Set((Array.isArray(usedModels) ? usedModels : []).map(normalizeText).filter(Boolean));
+  for (const item of Array.isArray(configs) ? configs : []) {
+    const candidate = modelName(item);
+    if (candidate && !used.has(candidate)) return candidate;
+  }
+  return null;
 }
 
 export function dedupePerceptionFindings(results) {
@@ -277,7 +307,7 @@ function perceptionPrompt(mission, assignment) {
   ].join('\n\n');
 }
 
-async function callPerception(assignment, mission, timeoutMs) {
+async function callPerception(assignment, mission, timeoutMs, attempt = 1) {
   const t0 = Date.now();
   try {
     const { stdout } = await pexec('darkai', ['--model', assignment.model, '--system', SYSTEM, perceptionPrompt(mission, assignment)], {
@@ -290,6 +320,7 @@ async function callPerception(assignment, mission, timeoutMs) {
       model: assignment.model,
       independence: assignment.independence,
       status: 'OK',
+      attempt,
       elapsed_ms: Date.now() - t0,
       finding: extractJson(stdout),
     };
@@ -299,6 +330,7 @@ async function callPerception(assignment, mission, timeoutMs) {
       model: assignment.model,
       independence: assignment.independence,
       status: 'FAILED',
+      attempt,
       elapsed_ms: Date.now() - t0,
       error: normalizeText(error?.message).slice(0, 240),
       finding: null,
@@ -306,15 +338,45 @@ async function callPerception(assignment, mission, timeoutMs) {
   }
 }
 
+async function runWithMissingOnlyFallback(assignments, configs, mission, timeoutByModel) {
+  const results = await Promise.all(assignments.map((assignment) =>
+    callPerception(assignment, mission, timeoutByModel.get(assignment.model) || 30_000, 1)
+  ));
+  const usedByRole = new Map(assignments.map((assignment) => [assignment.id, new Set([assignment.model])]));
+  const maxFallbackRounds = Math.min(2, Math.max(0, (configs || []).length - 1));
+
+  for (let round = 1; round <= maxFallbackRounds; round += 1) {
+    const failedIndexes = results
+      .map((result, index) => result?.status === 'OK' ? -1 : index)
+      .filter((index) => index >= 0);
+    if (failedIndexes.length === 0) break;
+
+    const retries = await Promise.all(failedIndexes.map(async (index) => {
+      const original = assignments[index];
+      const used = usedByRole.get(original.id) || new Set([original.model]);
+      const fallbackModel = selectFallbackModel(configs, [...used]);
+      if (!fallbackModel) return { index, result: results[index] };
+      used.add(fallbackModel);
+      usedByRole.set(original.id, used);
+      const retryAssignment = { ...original, model: fallbackModel, independence: 'ROLE_DIVERSE_PROVIDER_FALLBACK' };
+      return {
+        index,
+        result: await callPerception(retryAssignment, mission, timeoutByModel.get(fallbackModel) || 30_000, round + 1),
+      };
+    }));
+
+    for (const retry of retries) results[retry.index] = retry.result;
+  }
+  return results;
+}
+
 export async function runFourAnglePerception({ mission, models = null } = {}) {
-  const text = normalizeText(mission);
+  const text = enrichPerceptionMission(mission);
   if (!text) throw new Error('PERCEPTION_MISSION_REQUIRED');
   const configs = models || activeModels();
   const assignments = assignPerceptionModels(configs);
-  const timeoutByModel = new Map((configs || []).map((item) => [item.modelo, item.timeout_ms || 30_000]));
-  const results = await Promise.all(assignments.map((assignment) =>
-    callPerception(assignment, text, timeoutByModel.get(assignment.model) || 30_000)
-  ));
+  const timeoutByModel = new Map((configs || []).map((item) => [modelName(item), item?.timeout_ms || 30_000]));
+  const results = await runWithMissingOnlyFallback(assignments, configs, text, timeoutByModel);
   return buildPerceptionPacket({ mission: text, results });
 }
 
