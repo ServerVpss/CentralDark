@@ -1,7 +1,7 @@
 ---
 title: "REGRA OFICIAL MULTI AGENTE SEMANTICO"
 tags: ["consciencia"]
-updated: 2026-08-14
+updated: 2026-08-15
 ---
 
 # REGRA OFICIAL — Protocolo Multi-Agente Semântico
@@ -80,6 +80,33 @@ Se um gate legado ainda exigir literal como `permito-pivete`, tratá-lo apenas c
 
 Autorização ainda válida não deve ser perguntada novamente apenas por rotina. Perguntar de novo quando houver nova decisão humana real, mudança material de escopo/ambiente/risco ou contrato que consuma a autorização.
 
+### 4.1 Deploy, laboratório e declaração de produção oficial
+
+Deploy **não é uma autorização global permanente**.
+
+```text
+DEPLOY_GLOBALLY_PREAUTHORIZED=false
+DEPLOY_REQUIRES_EXPLICIT_SEGREDO_CHEFE_COMMAND=true
+EXPLICIT_DEPLOY_COMMAND=AUTHORIZATION_FOR_CURRENT_MISSION_TARGET_ENVIRONMENT
+REASK_EACH_STEP_INSIDE_SAME_DEPLOY_CYCLE=false
+```
+
+Quando `SEGREDO/CHEFE` mandar explicitamente subir/deployar a missão, a classe `DEPLOY` fica autorizada para aquele ciclo, alvo e ambiente. Dentro do mesmo ciclo autorizado, corrigir, redeployar, desfazer pelo rollback previsto, reconstruir e retestar não exigem nova pergunta a cada iteração, salvo mudança material de missão, alvo, ambiente, risco ou revogação explícita do CHEFE.
+
+A ausência de uma ordem de deploy mantém deploy bloqueado. Autorização de código, PR, merge, teste ou investigação **não implica deploy**.
+
+Produção oficial também não é inferida por domínio, VPS, processo, painel ou deploy de teste:
+
+```text
+PRODUCTION_OFFICIAL_DEFAULT=false
+PRODUCTION_OFFICIAL_REQUIRES_EXPLICIT_SEGREDO_CHEFE_DECLARATION=true
+NO_PHANTOM_CLIENTS_OR_USERS=true
+```
+
+Declarações inequívocas como `estamos online de verdade`, `produção oficial`, `tem cliente real`, `abrimos ao público` ou equivalente mudam a classe operacional. A partir daí, runtime/VPS, disponibilidade, observabilidade, backup, rollback, segurança e resposta a incidente passam a receber criticidade de produção.
+
+Antes dessa declaração, o projeto vivo no GitHub permanece a referência estrutural principal. Runtime/VPS de laboratório só entram como objeto prioritário quando a missão pedir explicitamente runtime, deploy, smoke test ou comportamento daquele ambiente; não se inventam clientes, tráfego ou criticidade de produção ausentes.
+
 ## 5. Papéis funcionais
 
 ```text
@@ -123,21 +150,25 @@ Meta Lupa/Judge/Convergência servem para tentar refutar implementação, achar 
 
 ## 8. Desenvolvimento observável
 
-Quando a missão estiver autorizada para produção de desenvolvimento:
+Quando a missão estiver autorizada para produção de desenvolvimento **e houver ordem explícita de deploy**:
 
 ```text
 SUBIR → OBSERVAR → CHEFE APONTA DELTA → CORREÇÃO MÍNIMA → REDEPLOY → PROVAR → REPETIR
 ```
 
-Não bloquear a primeira observação por perfeição global. Segurança mínima, segredo protegido, rollback e evidência permanecem.
+A autorização de deploy permanece válida dentro desse ciclo enquanto missão, alvo, ambiente e classe de risco não mudarem materialmente. Não bloquear a primeira observação por perfeição global. Segurança mínima, segredo protegido, rollback e evidência permanecem.
+
+Sem ordem explícita de deploy, continuar em código/testes/PR/merge conforme a autorização aplicável, sem presumir que subir ambiente esteja liberado.
 
 ## 9. Menor blast radius
+
+Com deploy autorizado para o ciclo:
 
 ```text
 FALHA_LOCAL → CAUSA_LOCAL → CORREÇÃO_LOCAL → TESTE_LOCAL → DEPLOY_LOCAL → PROVA_LOCAL
 ```
 
-Full deploy só com causa técnica que atravesse fronteiras.
+Full deploy só com causa técnica que atravesse fronteiras e dentro da autorização vigente.
 
 ## 10. Segurança
 
@@ -165,6 +196,9 @@ Não copiar integralmente o mesmo fato em vários lugares.
 
 ```text
 CHEFE DECIDE A INTENÇÃO.
+CHEFE LIBERA DEPLOY QUANDO MANDAR DEPLOYAR.
+DEPLOY NÃO É AUTORIZAÇÃO GLOBAL PERMANENTE.
+PRODUÇÃO OFICIAL SÓ EXISTE APÓS DECLARAÇÃO EXPLÍCITA DO CHEFE.
 A MÁQUINA PROVA O ESTADO.
 SOL COORDENA.
 PIVETE/HERMES EXECUTA E PRESERVA.
