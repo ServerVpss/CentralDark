@@ -96,6 +96,8 @@ jobs:
         working-directory: .agents/skills/meta-lupa
         run: |
           python scripts/evolution_gate.py --self-test
+          python scripts/evolution_series_gate.py --self-test
+          python scripts/evolution_series_gate.py --scan references --repo-root ../../..
           pytest testes/test_evolution_gate.py -v
       - name: Percentual evidencial — denominador fechado + dogfood
         working-directory: .agents/skills/meta-lupa
