@@ -26,6 +26,7 @@ const METACOGNITION = 'docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md';
 const ORCHESTRATION = 'docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md';
 const PROOF_OWNERSHIP = 'docs/CONSCIENCIA/PROOF-OWNERSHIP.json';
 const RESPONSE_PATTERN = 'docs/CONSCIENCIA/2026-06-20-padrao-resposta-pivete.md';
+const EVIDENCE_ONTOLOGY = 'docs/GOVERNANCA/ONTOLOGIA-DE-EVIDENCIA-E-CAUSALIDADE.md';
 const EVOLUTION_GATE = '.agents/skills/meta-lupa/scripts/evolution_gate.py';
 const PORTABLE_SCRIPT = 'scripts/lupa/portable-kernel.mjs';
 const PORTABLE_TEST = 'scripts/lupa/portable-kernel.test.mjs';
@@ -120,6 +121,7 @@ const PORTABLE_SOURCE_FILES = [
   '.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA',
   METACOGNITION,
   PROOF_OWNERSHIP,
+  EVIDENCE_ONTOLOGY,
   EVOLUTION_GATE,
   '.agents/skills/meta-lupa/testes/test_evolution_gate.py',
   PORTABLE_SCRIPT,
@@ -192,6 +194,22 @@ const CAPABILITY_SPECS = [
       'CAUSE_GENERATOR_BEFORE_SYMPTOM_PATCHING=true',
     ],
     reproduction: 'GROUND_ACT_OBSERVE_REEVALUATE_VERIFY_COMPRESS',
+  },
+  {
+    id: 'EVIDENCE_CAUSALITY_ONTOLOGY',
+    layer: 'EPISTEMIC_SAFETY',
+    owner: EVIDENCE_ONTOLOGY,
+    markers: [
+      'MANIFESTACAO != REPRESENTACAO',
+      'MECANISMO_DISPONIVEL != MECANISMO_ATIVO',
+      'MECANISMO_ATIVO != CAUSA_PROVADA',
+      'L4_REQUIRES_DISCRIMINATING_EVIDENCE=true',
+      'FORCED_COLORS_MIGRATION_GUIDANCE_OBSERVED=true',
+      'REPEATED_WARNING_COUNT != INDEPENDENT_EVIDENCE_COUNT',
+      'VISIBLE_LABEL != HIDDEN_MECHANISM_PROOF',
+      'UNKNOWN_IS_BOUNDARY_OF_CURRENT_PROOF=true',
+    ],
+    reproduction: 'CLASSIFY_EVIDENCE_LAYER_DEDUPE_REQUIRE_DISCRIMINATING_CAUSAL_LINK_AND_PRESERVE_UNKNOWN',
   },
   {
     id: 'CAUSAL_MINING_AND_DENSIFICATION',
@@ -401,6 +419,7 @@ const condensedDna = {
     'NO_NEW_INFORMATION_NO_CHANGE',
     'RUNTIME_MUST_BE_MEASURED_SEPARATELY',
     'CAPABILITY_INTENT_CONDUCT_EFFECT_ARE_SEPARATE',
+    'EVIDENCE_LAYER_DOES_NOT_AUTO_PROMOTE_TO_CAUSALITY',
   ],
   operational_flow: contract.standard_architecture.flow,
   meta_flow: [
@@ -500,6 +519,7 @@ const receipt = {
   image_sensor_policy: 'PASS',
   portable_boot_policy: 'PASS',
   semantic_safety_boundary: 'PASS',
+  evidence_causality_ontology: 'PASS',
   runtime_claim: 'UNPROVEN_BY_PORTABLE_KERNEL',
 };
 
@@ -551,6 +571,7 @@ if (JSON_ONLY || EXPORT_PATH) {
     'SCREENSHOT_CURRENT_TRUTH=0',
     'SCREENSHOT_TRIGGERS_LIVE_REMEASURE=1',
     'SEMANTIC_SAFETY_BOUNDARY=PASS',
+    'EVIDENCE_CAUSALITY_ONTOLOGY=PASS',
     'STALE_PACKAGE_ACTION=REBUILD_FROM_LIVE_REPOSITORY',
   ].join('\n') + '\n');
 }
