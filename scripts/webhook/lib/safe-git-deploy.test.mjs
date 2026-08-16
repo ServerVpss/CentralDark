@@ -29,6 +29,7 @@ async function fixture() {
   await writeFile(join(source, 'state.txt'), 'base\n');
   git(source, 'add', 'state.txt');
   git(source, 'commit', '-m', 'base');
+  const baseSha = git(source, 'rev-parse', 'HEAD');
   git(source, 'branch', '-M', 'main');
   git(source, 'remote', 'add', 'origin', remote);
   git(source, 'push', '-u', 'origin', 'main');
@@ -39,7 +40,7 @@ async function fixture() {
   git(local, 'config', 'user.email', 'centraldark-test@example.invalid');
   await mkdir(join(local, 'apps', 'modulos', 'telepainel'), { recursive: true });
 
-  return { root, remote, source, local, nested: join(local, 'apps', 'modulos', 'telepainel') };
+  return { root, remote, source, local, baseSha, nested: join(local, 'apps', 'modulos', 'telepainel') };
 }
 
 async function remoteCommit(fx, content, message = 'remote delta') {
@@ -119,6 +120,23 @@ test('divergência: bloqueia e não escolhe merge/rebase pelo humano', async () 
   assert.equal(result.ok, false);
   assert.equal(result.reason, 'DIVERGED');
   assert.equal(git(fx.local, 'rev-parse', 'HEAD'), localSha);
+});
+
+test('rewrite remoto: detecta linhagem quebrada após fetch e preserva branch local', async () => {
+  const fx = await fixture();
+  const remoteV2 = await remoteCommit(fx, 'remote-v2');
+  const synced = await safeUpdateFromOrigin({ repoPath: fx.local, branch: 'main' });
+  assert.equal(synced.ok, true);
+  assert.equal(git(fx.local, 'rev-parse', 'HEAD'), remoteV2);
+
+  // Simula o estado remoto após um rewrite sem executar push --force no teste.
+  git(fx.remote, 'update-ref', 'refs/heads/main', fx.baseSha);
+  const result = await safeUpdateFromOrigin({ repoPath: fx.local, branch: 'main' });
+
+  assert.equal(result.ok, false);
+  assert.equal(result.reason, 'REMOTE_REWRITE');
+  assert.equal(git(fx.local, 'rev-parse', 'HEAD'), remoteV2);
+  assert.equal(await readFile(join(fx.local, 'state.txt'), 'utf8'), 'remote-v2\n');
 });
 
 test('branch errada ou HEAD destacado: fail-closed sem troca automática', async () => {
