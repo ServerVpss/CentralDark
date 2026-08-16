@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-16T04:46:03.700Z",
-  "updatedAtBR": "16/08/2026, 01:46:03 BRT",
+  "updatedAt": "2026-08-16T06:20:00.806Z",
+  "updatedAtBR": "16/08/2026, 03:20:00 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "fix(inventory): fechar resíduo META_MINERACAO pós-squash (#936)",
+    "lastCommit": "fix(meta-lupa): medir placar longitudinal sem benchmark (#937)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-16T06:20:00.806Z",
+      "titulo": "Push na main · b27e8b95f710c06621dfcfb31b76bfdc0c464a35",
+      "detalhe": "fix(meta-lupa): medir placar longitudinal sem benchmark (#937)",
+      "area": "Repositório",
+      "sha": "b27e8b9",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-16T04:46:03.700Z",
       "titulo": "Push na main · 499d5146692207be0a31106a378d10e1067a4ff2",
       "detalhe": "fix(inventory): fechar resíduo META_MINERACAO pós-squash (#936)",
@@ -988,14 +996,6 @@
       "detalhe": "docs(memory): documentar elegibilidade de absorcao automatica",
       "area": "Repositório",
       "sha": "9bee88f",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-15T01:52:04.756Z",
-      "titulo": "Push na main · 7fe44e3f318dbe5da1f8d1404ad3dda9346884fc",
-      "detalhe": "fix(meta-lupa): remover sinal legado e autorizar antes de escrever",
-      "area": "Repositório",
-      "sha": "7fe44e3",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-16T06:20:00.806Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · b27e8b95f710c06621dfcfb31b76bfdc0c464a35 (b27e8b9)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-16T04:46:03.700Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 499d5146692207be0a31106a378d10e1067a4ff2 (499d514)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-15T01:53:54.932Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 9bee88f7cda3968df5e70aef7f4264aade12c0c8 (9bee88f)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-15T01:52:04.756Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 7fe44e3f318dbe5da1f8d1404ad3dda9346884fc (7fe44e3)",
       "area": "Repositório",
       "status": "sucesso"
     }
