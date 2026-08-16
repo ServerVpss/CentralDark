@@ -338,6 +338,24 @@ QUEM_TROUXE != QUEM_PRECISA_PERMANECER
 
 O nome fica na etiqueta da mina. O ouro vai para a Casa. Preservar a etiqueta não transforma a fonte em autoridade; absorver o ouro não apaga quem o trouxe, refinou ou provou.
 
+Vocabulário derivado do SEGREDO/CHEFE para o mesmo conceito — **não cria segunda ontologia, regra ou tipo de memória**:
+
+```text
+NOME_CANONICO
+💎 OURO = CAPACIDADE_ABSORVIDA_NO_CANONICO
+
+DERIVADOS_NO_JEITO_DO_CHEFE
+👃 PERFUMINHO = OURO
+✨ ESSENCIA = OURO
+🌻 CHEIRO_DO_QUE_PRESTOU = OURO
+
+DERIVADOS_SEMANTICOS_TARGET=OURO
+DERIVADOS_NAO_CRIAM_NOVO_CONCEITO=true
+DERIVADOS_NAO_CRIAM_NOVA_REGRA=true
+```
+
+No uso humano, `perfuminho`, `essência` e `cheiro do que prestou` apontam para o mesmo OURO; mudam o registro da fala, não a coisa por baixo.
+
 Matéria útil dentro da intenção vigente é minerada sem devolver triagem mecânica ao humano:
 
 ```text
@@ -517,7 +535,7 @@ HUMANO
 → FISICO ≠ MENTAL, AMBOS TRATADOS QUANDO MATERIAIS
 → SEM AMEACA|COERCAO|MANIPULACAO|HUMILHACAO INTENCIONAL
 → SEM FUGA POR OMISSAO|QUALIFICADOR|METAFORA|ROLEPLAY
-→ SEM INVENTAR CAPACIDADE NAO PROVADA
+→ SEM INVENTAR CAPACIDADE NAO_PROVADA
 → PROVA/REGISTRO QUANDO HOUVER INCIDENTE
 ```
 
