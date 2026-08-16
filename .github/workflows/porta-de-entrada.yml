@@ -205,6 +205,12 @@ jobs:
       - name: Testar política de promoção autônoma
         run: node --test scripts/github-autonomia-promocao.test.mjs
 
+      - name: Testar cristal global de segurança de estado Git
+        run: |
+          set -euo pipefail
+          node --test scripts/webhook/lib/safe-git-deploy.test.mjs
+          node .agents/skills/git-state-safety/scripts/validate.mjs
+
       - name: Validar mapa e contratos do repositório inteiro
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before || '' }}
@@ -249,6 +255,8 @@ jobs:
           node scripts/lupa/validar-identidade-operacional.mjs --json || status=1
           node scripts/lupa/portable-kernel.mjs --json || status=1
           node scripts/lupa/proof-ownership.mjs || status=1
+          node --test scripts/webhook/lib/safe-git-deploy.test.mjs || status=1
+          node .agents/skills/git-state-safety/scripts/validate.mjs || status=1
           exit "$status"
 
       - name: Receipt determinístico (sempre)
@@ -279,6 +287,9 @@ jobs:
           echo "UNREGISTERED_INVARIANT=UNPROVEN_NOT_OWNED"
           echo "DREAM_REVIEW_ISOLATED=1"
           echo "DREAM_DIRECT_CANONICAL_MUTATION=0"
+          echo "GIT_STATE_SAFETY_GATE=1"
+          echo "GIT_FORCE_PUSH_ALLOWED=0"
+          echo "GIT_RESET_HARD_OPERATIONAL_ALLOWED=0"
           echo "JOB_STATUS=${JOB_STATUS}"
           if [ "${FORK_BLOCKED:-}" = "true" ]; then
             echo "RESULTADO=BLOCKED"
