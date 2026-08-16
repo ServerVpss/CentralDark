@@ -94,11 +94,16 @@ test('Inventário da Casa deriva owners reais sem criar segunda verdade', () => 
     assert.ok(item.recorded_at, `registro sem tempo ${item.id}`);
     assert.ok(!/runtime atual/i.test(item.status));
   }
+  for (const item of miningCandidates) {
+    assert.equal(item.summary, 'Candidato histórico preservado no ledger; conteúdo detalhado permanece on-demand no owner.');
+  }
 
   const rendered = renderInventoryModule(inventory);
   assert.ok(rendered.includes('export const HOUSE_INVENTORY'));
   assert.ok(rendered.includes('REPOSITORY_OWNERS'));
   assert.ok(rendered.includes('HISTORICAL_RECORD'));
+  assert.ok(!rendered.includes('Erro:'));
+  assert.ok(!rendered.includes('Correção:'));
 });
 
 test('HUB expõe Inventário visível, admin e com o mesmo botão de mineração', () => {

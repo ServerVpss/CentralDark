@@ -230,7 +230,7 @@ function scanMetaLedger(repoRoot) {
       source: META_LEDGER_OWNER,
       recorded_at: event.started_at_utc || null,
       temporal_scope: 'HISTORICAL_RECORD',
-      summary: `Candidato histórico preservado no ledger. ${event.erro ? `Erro: ${event.erro}` : event.correcao ? `Correção: ${event.correcao}` : 'Conteúdo detalhado permanece on-demand no owner.'}`,
+      summary: 'Candidato histórico preservado no ledger; conteúdo detalhado permanece on-demand no owner.',
     }));
 
   return [...fixedPoints, ...candidates];
