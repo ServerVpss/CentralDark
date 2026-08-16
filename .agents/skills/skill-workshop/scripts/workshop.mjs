@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import { realpathSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -188,8 +189,20 @@ async function main() {
   throw new Error(`COMMAND_INVALID:${command}`);
 }
 
-const isMain = process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
-if (isMain) {
+function canonicalPath(pathname) {
+  try {
+    return realpathSync(resolve(pathname));
+  } catch {
+    return resolve(pathname);
+  }
+}
+
+export function isMainEntry(entryPath, moduleUrl = import.meta.url) {
+  if (!entryPath) return false;
+  return canonicalPath(entryPath) === canonicalPath(fileURLToPath(moduleUrl));
+}
+
+if (isMainEntry(process.argv[1])) {
   main().catch((error) => {
     console.error(`SKILL_WORKSHOP_ERROR=${error.message}`);
     process.exit(1);
