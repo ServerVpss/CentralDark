@@ -121,6 +121,7 @@ jobs:
           node --check scripts/memory-linker/dream-review.mjs
           node --check scripts/memory-linker/pattern-discovery.mjs
           node --check scripts/memory-linker/pattern-library.mjs
+          node --check scripts/memory-linker/memory-reserve-events.mjs
           node --check scripts/memory-linker/dream-review-run.mjs
           node --check scripts/memory-linker/artifact-capability.mjs
           node --check scripts/memory-linker/memory-linker-agent.mjs
@@ -136,6 +137,7 @@ jobs:
             scripts/memory-linker/dream-review.test.mjs \
             scripts/memory-linker/pattern-discovery.test.mjs \
             scripts/memory-linker/pattern-library.test.mjs \
+            scripts/memory-linker/memory-reserve-events.test.mjs \
             scripts/memory-linker/dream-review-run.test.mjs \
             scripts/memory-linker/artifact-capability.test.mjs \
             scripts/memory-linker/fs-safe.test.mjs \
