@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-16T10:53:48.456Z",
-  "updatedAtBR": "16/08/2026, 07:53:48 BRT",
+  "updatedAt": "2026-08-16T11:04:26.485Z",
+  "updatedAtBR": "16/08/2026, 08:04:26 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "docs(incidente): tornar falha físico/mental mensurável (#948)",
+    "lastCommit": "fix(segurança): cristalizar fronteira capacidade × intenção (#951)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-16T11:04:26.485Z",
+      "titulo": "Push na main · a63d26cf89440b803f1175606c120f4c2bf2d3b5",
+      "detalhe": "fix(segurança): cristalizar fronteira capacidade × intenção (#951)",
+      "area": "Repositório",
+      "sha": "a63d26c",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-16T10:53:48.456Z",
       "titulo": "Push na main · aee7060b9836403e234d08538e416d4df0986240",
       "detalhe": "docs(incidente): tornar falha físico/mental mensurável (#948)",
@@ -988,14 +996,6 @@
       "detalhe": "docs(hermes): decodificar antes de interpretar (#865)",
       "area": "Repositório",
       "sha": "fa78327",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-15T02:18:42.456Z",
-      "titulo": "Push na main · 9092c52605cbb8af5c7721435161a5a1b6405647",
-      "detalhe": "fix(governance): reconciliar #724 histórica com main canônica",
-      "area": "Repositório",
-      "sha": "9092c52",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-16T11:04:26.485Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · a63d26cf89440b803f1175606c120f4c2bf2d3b5 (a63d26c)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-16T10:53:48.456Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · aee7060b9836403e234d08538e416d4df0986240 (aee7060)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-15T02:25:54.653Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · fa78327c7819651d77969bfd8617d214c0c0f745 (fa78327)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-15T02:18:42.456Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 9092c52605cbb8af5c7721435161a5a1b6405647 (9092c52)",
       "area": "Repositório",
       "status": "sucesso"
     }
