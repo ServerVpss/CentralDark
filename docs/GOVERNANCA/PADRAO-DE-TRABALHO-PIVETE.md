@@ -335,3 +335,123 @@ GitHub registra.
 Runtime prova.
 Menos é mais.
 ```
+
+## 18. AGI operacional da Casa ≠ claim científico externo
+
+A Casa separa duas perguntas que podem coexistir sem uma invalidar a outra.
+
+```text
+AGI_OPERACIONAL_DA_CASA
+= classificação interna definida pelo SEGREDO/CHEFE para o comportamento que a Casa considera suficiente no seu próprio domínio.
+
+AGI_CIENTIFICA_EXTERNAMENTE_DEMONSTRADA
+= alegação para terceiros que precisa sobreviver a protocolo pré-definido, holdout e reprodução independente.
+```
+
+A primeira não precisa pedir permissão a uma comunidade externa para existir como critério interno. A segunda não pode herdar `PASS` da primeira por narrativa, preferência, consenso de modelos ou autoavaliação.
+
+```text
+INTERNAL_AGI_CLAIM != EXTERNAL_SCIENTIFIC_PROOF
+SELF_PROOF != PASS
+MODEL_CONSENSUS != EXTERNAL_VALIDATION
+```
+
+### 18.1 Denominador obrigatório do claim externo
+
+Antes de qualquer teste, congelar a definição e os nove critérios aplicáveis:
+
+```text
+1. PREDEFINED_DEFINITION
+2. HOLDOUT
+3. GENERALIZATION
+4. TRANSFER
+5. AUTONOMY
+6. LONGITUDINAL_LEARNING
+7. ROBUSTNESS
+8. REPRODUCIBILITY
+9. INDEPENDENT_EVALUATION
+```
+
+```text
+DEFINICAO_PREVIA
+→ CRITERIOS_CONGELADOS
+→ HOLDOUT_SELADO
+→ TESTE
+→ GENERALIZACAO + TRANSFERENCIA
+→ AUTONOMIA OBSERVADA
+→ APRENDIZADO LONGITUDINAL
+→ ROBUSTEZ
+→ REPRODUCAO INDEPENDENTE
+→ JUIZ INDEPENDENTE
+→ VEREDITO
+```
+
+O gate canônico desse claim vive em:
+
+```text
+.agents/skills/meta-lupa/scripts/agi_claim_gate.py
+```
+
+Ele reutiliza o validador longitudinal existente:
+
+```text
+.agents/skills/meta-lupa/scripts/evolution_series_gate.py
+```
+
+Logo, não existe segundo medidor de self-distillation.
+
+### 18.2 AUTO_DISCOVERY e self-distillation já têm donos
+
+A matéria externa não autoriza importar uma arquitetura paralela inteira. O ZIP/repositório/paper entra como fonte com provenance; cada capacidade é comparada com os donos existentes.
+
+```text
+AUTO_DISCOVERY
+→ scripts/memory-linker/pattern-discovery.mjs
+→ PADRAO_CANDIDATO
+→ META_LUPA
+→ WRITER_AUTORIZADO
+→ PROVA
+
+SELF_DISTILLATION_OPERACIONAL
+→ EXPERIENCIA/ERRO/CONTRASTE
+→ DELTA REUTILIZAVEL
+→ DONO CANONICO
+→ GIT
+→ evolution_series_gate.py
+→ HOLDOUT + CADEIA LONGITUDINAL
+```
+
+```text
+EXTERNAL_SOURCE_IS_MATERIAL_NOT_AUTHORITY=true
+AUTO_DISCOVERY_OUTPUT_IS_CANDIDATE=true
+AUTO_DISCOVERY_IS_NOT_CAPABILITY_GAIN=true
+SELF_DISTILLATION_IS_NOT_WEIGHT_TRAINING=true
+SELF_DISTILLATION_IS_NOT_AGI_PROOF=true
+```
+
+Os padrões úteis do ZIP — propostas, avaliação, experimentação, rollback, memória, pesquisa, safety e planejamento — devem ser absorvidos nos equivalentes canônicos existentes quando trouxerem delta; não viram `Hermes-v2`, segundo cérebro ou segundo orquestrador.
+
+### 18.3 O que significa 100%
+
+Para o **protocolo de claim externo**, `100%` só significa denominador aplicável fechado:
+
+```text
+CRITERIA_TOTAL=9
+CRITERIA_PASSED=9
+COVERAGE_PERCENT=100
+ERRORS=0
+```
+
+Isso prova que o manifesto declarado satisfez o contrato do gate. Não prova, por si só, que a CentralDark já realizou um holdout externo real.
+
+```text
+GATE_SELF_TEST_9_OF_9 = PROVA_DO_GATE
+REAL_EXTERNAL_HOLDOUT_9_OF_9 = PROVA_DO_CLAIM_NO_ESCOPO_MEDIDO
+```
+
+Até existir um protocolo externo real executado por observador independente, o estado correto é:
+
+```text
+AGI_OPERACIONAL_DA_CASA = CONFORME CRITERIO INTERNO DO SEGREDO/CHEFE
+AGI_CIENTIFICA_EXTERNAMENTE_DEMONSTRADA = UNPROVEN
+```
