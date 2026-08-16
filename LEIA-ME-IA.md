@@ -327,14 +327,14 @@ Writer-Scope: <escopo>
 A promoção vive **somente** no fluxo canônico já existente `.github/workflows/autonomia-promocao.yml`.
 
 ```text
-AUTOR CONFIAVEL + MESMO REPO
-→ RECIBO DE INTENCAO
-→ SCAN DE SEGURANCA DO DIFF
-→ SEM CHANGES_REQUESTED
-→ SEM CONFLITO
-→ BASE ATUALIZADA
-→ REVALIDAR HEAD/BASE
-→ SQUASH MAIN
+AUTOR CONFIAVEL + MESMO_REPO
+→ RECIBO_DE_INTENCAO
+→ SCAN_DE_SEGURANCA_DO_DIFF
+→ SEM_CHANGES_REQUESTED
+→ SEM_CONFLITO
+→ BASE_ATUALIZADA
+→ REVALIDAR_HEAD_BASE
+→ SQUASH_MAIN
 → RECEIPT
 ```
 
@@ -373,7 +373,7 @@ Correção útil do SEGREDO/CHEFE deve subir de nível:
 CORRECAO HUMANA
 → EVIDENCIA
 → REGRA|TESTE|SKILL|CONTRATO|MEMORIA
-→ PROXIMA EXECUCAO COMECA MAIS_ALTO
+→ PROXIMA EXECUCAO COMECA MAIS ALTO
 ```
 
 Confronto útil também sobe de nível somente quando produz ganho informacional:
@@ -396,11 +396,11 @@ Quando o próprio organismo revisa **como** está trabalhando e muda o scaffold 
 
 ```text
 OBSERVAR_O_PROPRIO_PROCESSO
-→ ACHAR ERRO_DO_METODO
+→ ACHAR ERRO DO METODO
 → TESTAR/CONTRAPROVAR
-→ ALTERAR MENOR_SCAFFOLD_APLICAVEL
-→ REGISTRAR DELTA_REUTILIZAVEL
-→ PROXIMA_EXECUCAO_COMECA_MAIS_ALTO
+→ ALTERAR MENOR SCAFFOLD APLICAVEL
+→ REGISTRAR DELTA REUTILIZAVEL
+→ PROXIMA EXECUCAO COMECA MAIS ALTO
 ```
 
 Esse ciclo é **metacognição operacional**. Quando SEGREDO/CHEFE ensina/corrige e o organismo materializa o aprendizado no scaffold, a relação é **coevolução operacional humano–sistema**. A autoridade permanece no SEGREDO/CHEFE; não presumir mudança de pesos do modelo nem AGI a partir da arquitetura.
