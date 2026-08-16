@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-16T18:30:38.233Z",
-  "updatedAtBR": "16/08/2026, 15:30:38 BRT",
+  "updatedAt": "2026-08-16T19:01:10.615Z",
+  "updatedAtBR": "16/08/2026, 16:01:10 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "feat(resposta): cristalizar gramática visual adaptativa da SOL (#972)",
+    "lastCommit": "feat(hub): mapear inventário operacional da Casa (#976)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-16T19:01:10.615Z",
+      "titulo": "Push na main · cf6ce8632f0401c0c0d969531b130fee0fc0f5b3",
+      "detalhe": "feat(hub): mapear inventário operacional da Casa (#976)",
+      "area": "Repositório",
+      "sha": "cf6ce86",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-16T18:30:38.233Z",
       "titulo": "Push na main · 097884f8827e49c0c4a7464ab58fce48ee7af22f",
       "detalhe": "feat(resposta): cristalizar gramática visual adaptativa da SOL (#972)",
@@ -988,14 +996,6 @@
       "detalhe": "fix(resposta): exigir fechamento completo do significado (#895)",
       "area": "Repositório",
       "sha": "783f29b",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-15T19:53:37.844Z",
-      "titulo": "Push na main · 243984e21804da6834bfaa1fb917c84e89565457",
-      "detalhe": "feat(meta): provar cristal irredutível no CROSS-META (#897)",
-      "area": "Repositório",
-      "sha": "243984e",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-16T19:01:10.615Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · cf6ce8632f0401c0c0d969531b130fee0fc0f5b3 (cf6ce86)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-16T18:30:38.233Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 097884f8827e49c0c4a7464ab58fce48ee7af22f (097884f)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-15T20:24:27.112Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 783f29b2995a277783f6884f395f8a53514378af (783f29b)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-15T19:53:37.844Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 243984e21804da6834bfaa1fb917c84e89565457 (243984e)",
       "area": "Repositório",
       "status": "sucesso"
     }
