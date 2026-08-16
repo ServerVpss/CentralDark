@@ -111,6 +111,27 @@ jobs:
         working-directory: .agents/skills/meta-lupa
         run: python testes/test_selo_ponto_fixo.py
 
+      - name: Padrões — biblioteca longitudinal
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check scripts/memory-linker/pattern-library.mjs
+          node --test scripts/memory-linker/pattern-library.test.mjs
+
+      - name: Padrões — ponte Lembranças para Dream Review
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check scripts/memory-linker/memory-reserve-events.mjs
+          node --test scripts/memory-linker/memory-reserve-events.test.mjs
+
+      - name: Padrões — gavetas seguras no Admin
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check apps/modulos/mcp/src/admin-patterns-ui.js
+          node --test apps/modulos/mcp/src/admin-patterns-ui.test.mjs
+
       - name: Memory Linker — sintaxe + mineração determinística
         shell: bash
         run: |
