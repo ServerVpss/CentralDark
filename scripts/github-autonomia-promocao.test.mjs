@@ -15,6 +15,10 @@ import {
   waitTimeoutMsFromEnv,
   workflowVerdicts,
 } from "./github-autonomia-promocao.mjs";
+import {
+  DEFAULT_REQUIRED_WORKFLOWS as GREEN_REQUIRED_WORKFLOWS,
+  greenDecision as greenGuardDecision,
+} from "./github-autonomia-green-guard.mjs";
 
 const INTENT_BODY = [
   "Intent-Authorized: SEGREDO/CHEFE",
@@ -123,6 +127,30 @@ test("fast path não espera convergência/workflows externos", () => {
   assert.equal(result.decision, "READY");
   assert.deepEqual(result.workflows, []);
   assert.deepEqual(result.waits, []);
+});
+
+test("green-first é uma catraca posterior ao READY e exige os seis gates no mesmo conjunto", () => {
+  const ready = evaluate();
+  assert.equal(ready.decision, "READY");
+
+  const allGreen = successfulRuns(GREEN_REQUIRED_WORKFLOWS);
+  assert.equal(greenGuardDecision(allGreen, GREEN_REQUIRED_WORKFLOWS).green, true);
+
+  const missing = allGreen.slice(0, -1);
+  assert.equal(greenGuardDecision(missing, GREEN_REQUIRED_WORKFLOWS).green, false);
+
+  const pending = structuredClone(allGreen);
+  pending[0].status = "queued";
+  pending[0].conclusion = null;
+  assert.equal(greenGuardDecision(pending, GREEN_REQUIRED_WORKFLOWS).green, false);
+
+  const failed = structuredClone(allGreen);
+  failed[1].conclusion = "failure";
+  assert.equal(greenGuardDecision(failed, GREEN_REQUIRED_WORKFLOWS).green, false);
+
+  const cancelled = structuredClone(allGreen);
+  cancelled[2].conclusion = "cancelled";
+  assert.equal(greenGuardDecision(cancelled, GREEN_REQUIRED_WORKFLOWS).green, false);
 });
 
 test("fast path ignora thread comum mas não CHANGES_REQUESTED explícito", () => {
