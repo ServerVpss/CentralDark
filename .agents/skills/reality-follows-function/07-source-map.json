@@ -1,0 +1,34 @@
+{
+  "schema": "centraldark.skill.source-map.v1",
+  "skill_id": "reality-follows-function",
+  "canonical_owner": "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md",
+  "mappings": [
+    {
+      "insight": "FUNCTION_OVER_NAME",
+      "owner_section": "8. Capacidade no centro; nome na proveniência",
+      "owner_markers": ["NOME|MODELO|PROVIDER|AGENTE", "CAPACIDADE", "ABSORCAO NO DONO CANONICO"]
+    },
+    {
+      "insight": "TRACE_EFFECT_BACKWARDS",
+      "owner_section": "5.1 Triangulação causal + 8.2 Recepção, efeito e continuidade",
+      "owner_markers": ["CAUSE_GENERATOR_BEFORE_SYMPTOM_PATCHING=true", "OBSERVED_EFFECT", "ROOT_PREMISES"]
+    },
+    {
+      "insight": "TELEMETRY_IS_COUNTERPROOF",
+      "owner_section": "1. Loop cognitivo + 4. Mudança é hipótese",
+      "owner_markers": ["OBSERVE", "CHECK REAL APLICAVEL", "RESULTADO OBSERVADO"]
+    },
+    {
+      "insight": "SAFETY_WITHOUT_BUREAUCRACY",
+      "owner_section": "1. Loop cognitivo + 10. Zero Trust sem paralisar entendimento + 11. Prova sem teatro",
+      "owner_markers": ["O método não vira burocracia por existir.", "NO_PROOF_THEATER_FOR_IDENTITY=true"]
+    },
+    {
+      "insight": "LESS_IS_MORE",
+      "owner_section": "6. Consolidação + 12. Saída comprimida",
+      "owner_markers": ["resíduo mínimo irredutível", "COMPRESS"]
+    }
+  ],
+  "classification": "STITCH_DELTA_NOT_NEW_BRAIN",
+  "duplicate_owner_created": false
+}
