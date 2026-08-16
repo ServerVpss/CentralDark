@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-16T19:59:16.336Z",
-  "updatedAtBR": "16/08/2026, 16:59:16 BRT",
+  "updatedAt": "2026-08-16T21:43:18.014Z",
+  "updatedAtBR": "16/08/2026, 18:43:18 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "docs(soul): registrar perfuminho e essência como derivados do OURO",
+    "lastCommit": "fix(autonomia): cristalizar selo canônico antes de promover (#983)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-16T21:43:18.014Z",
+      "titulo": "Push na main · c86cccefb60ed522fd0a9b693193f152ec3b8c54",
+      "detalhe": "fix(autonomia): cristalizar selo canônico antes de promover (#983)",
+      "area": "Repositório",
+      "sha": "c86ccce",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-16T19:59:16.336Z",
       "titulo": "Push na main · 13bce83fd805f1e16bc8ee485eccdb5584c72274",
       "detalhe": "docs(soul): registrar perfuminho e essência como derivados do OURO",
@@ -988,14 +996,6 @@
       "detalhe": "feat(admin): centralizar provider control plane no Cofre (#874)",
       "area": "Repositório",
       "sha": "262196e",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-15T21:01:51.158Z",
-      "titulo": "Push na main · b5960d9e7a454d54f01efde684a29760efb40be5",
-      "detalhe": "fix(hermes): wire applyRoutingStrategy no decisor",
-      "area": "Repositório",
-      "sha": "b5960d9",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-16T21:43:18.014Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · c86cccefb60ed522fd0a9b693193f152ec3b8c54 (c86ccce)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-16T19:59:16.336Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 13bce83fd805f1e16bc8ee485eccdb5584c72274 (13bce83)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-15T21:04:29.496Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 262196e04a0561c92ce639c0559d623a76fe20cb (262196e)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-15T21:01:51.158Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · b5960d9e7a454d54f01efde684a29760efb40be5 (b5960d9)",
       "area": "Repositório",
       "status": "sucesso"
     }
