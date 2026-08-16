@@ -3,6 +3,7 @@ import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
 const contractUrl = new URL('../contract.json', import.meta.url);
+const crystalUrl = new URL('../crystal-route.json', import.meta.url);
 const skillUrl = new URL('../SKILL.md', import.meta.url);
 const protocolUrl = new URL('../../../../docs/CONSCIENCIA/PROTOCOLO-ORQUESTRACAO-PIVETE.md', import.meta.url);
 
@@ -17,16 +18,31 @@ test('contrato é projeção global model-neutral sem segundo cérebro', async (
   assert.equal(contract.supercommand, 'COMPILE_THEN_APPLY');
 });
 
-test('owner skill consumer test gate ficam ligados no mesmo contrato', async () => {
+test('owner skill cristal consumer test gate ficam ligados no mesmo contrato', async () => {
   const contract = JSON.parse(await readFile(contractUrl, 'utf8'));
   assert.equal(contract.conceptual_owner, 'docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md');
   assert.equal(contract.execution_owner, 'docs/CONSCIENCIA/PROTOCOLO-ORQUESTRACAO-PIVETE.md');
   assert.equal(contract.skill, '.agents/skills/knowledge-compiler/SKILL.md');
+  assert.equal(contract.crystal_route, '.agents/skills/knowledge-compiler/crystal-route.json');
   assert.equal(contract.consumer, '.agents/skills/knowledge-compiler/scripts/compiler.mjs');
   assert.equal(contract.regression, '.agents/skills/knowledge-compiler/tests/compiler.test.mjs');
   assert.equal(contract.gate, '.github/workflows/lupa-conformance.yml');
   assert.equal(contract.operational_crystal.one_active_route_per_capability_boundary, true);
   assert.equal(contract.operational_crystal.knowledge_without_consumer_is_operational, false);
+});
+
+test('cristal dogfood fecha exatamente uma capacidade/fronteira em uma rota', async () => {
+  const crystal = JSON.parse(await readFile(crystalUrl, 'utf8'));
+  assert.equal(crystal.artifact_kind, 'COMPILED_CRYSTAL_ROUTE_SPEC');
+  assert.equal(crystal.crystal_id, 'CENTRALDARK_KNOWLEDGE_COMPILATION');
+  assert.equal(crystal.route_id, 'b545f0d671eb7858f551facc');
+  assert.equal(crystal.capability, 'KNOWLEDGE_COMPILATION');
+  assert.equal(crystal.boundary, 'CENTRALDARK_HOUSE_COGNITIVE_SCAFFOLD');
+  assert.equal(crystal.runtime_readiness, 'DECIDED_BY_LIVE_GATE_RECEIPT');
+  assert.equal(crystal.invariants.one_active_route_per_capability_boundary, true);
+  assert.equal(crystal.invariants.compile_once_reuse_many, true);
+  assert.equal(crystal.invariants.delta_affected_only, true);
+  assert.equal(crystal.compiled_route.filter((step) => step === 'CRYSTALLIZE').length, 1);
 });
 
 test('FORJA e FLASH preservam compilação uma vez + invalidação seletiva', async () => {
