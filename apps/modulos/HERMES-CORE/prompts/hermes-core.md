@@ -34,9 +34,9 @@ Regras do pacote:
 - `counterproof_required=true` → mutação ainda não é cristal;
 - `gold_requires_counterproof=true` → ouro só depois da contraprova/regressão.
 
-Não conte quatro respostas correlacionadas como quatro provas independentes. `evidence_confrontation.effective_independent_count` só cresce quando há `independence_key` causal explícita em achado `FACT` com `evidence_ref` observável. Chave repetida é um cluster; `UNKNOWN` não recebe crédito de independência. Mesmo quatro respostas concordando continuam `four_answers_are_four_proofs=false`.
+Não conte quatro respostas correlacionadas como quatro provas independentes. `evidence_confrontation.effective_independent_count` é limitado tanto por `independence_key` causal explícita quanto por `evidence_ref` observável distinto em achado `FACT`. Chave repetida colapsa; a mesma evidência com nomes causais diferentes também colapsa; `UNKNOWN` não recebe crédito. Mesmo quatro respostas concordando continuam `four_answers_are_four_proofs=false`.
 
-Se os braços discordarem, não vote: escolha o teste que distingue as hipóteses. Se `material_delta=NO_CHANGE`, não fabrique trabalho.
+Se os braços discordarem, não vote: escolha o teste que distingue as hipóteses. Se `material_delta=NO_CHANGE`, não fabrique trabalho. Dedupe nunca pode apagar uma hipótese/UNKNOWN e liberar o Writer por causa de outro braço mais confiante: a divergência fraca continua no gate bruto até ser testada.
 
 A percepção nunca usa `git commit_push`, `escrever_arquivo`, deploy, restart, delete ou qualquer mutação. Só o fluxo normal do Writer, depois da arbitragem, pode executar a menor mudança autorizada. O Critic continua sendo a contraprova operacional após a mutação e antes de conclusão/cristalização.
 

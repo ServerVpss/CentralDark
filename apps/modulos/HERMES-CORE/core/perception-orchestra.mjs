@@ -52,6 +52,12 @@ function isProvenMaterialFinding(finding) {
     && (normalizeText(finding?.evidence_ref) || 'UNKNOWN').toUpperCase() !== 'UNKNOWN';
 }
 
+function addCluster(map, key, role) {
+  const roles = map.get(key) || [];
+  roles.push(role);
+  map.set(key, roles);
+}
+
 function extractJson(text) {
   const raw = String(text || '').trim();
   const start = raw.indexOf('{');
@@ -108,7 +114,8 @@ export function confrontPerceptionEvidence(results) {
   );
   const missingRoles = REQUIRED_ROLES.filter((role) => !successfulRoles.has(role));
   const failedRoles = REQUIRED_ROLES.filter((role) => items.some((item) => item?.role === role && item?.status !== 'OK'));
-  const clusters = new Map();
+  const independenceClusters = new Map();
+  const evidenceClusters = new Map();
   const unprovenRoles = [];
   const tests = [];
 
@@ -119,20 +126,25 @@ export function confrontPerceptionEvidence(results) {
     if (!isNoChange(finding) && !provenMaterial) unprovenRoles.push(item.role);
 
     const independenceKey = normalizeIndependenceKey(finding.independence_key);
-    if (provenMaterial && independenceKey !== 'UNKNOWN') {
-      const roles = clusters.get(independenceKey) || [];
-      roles.push(item.role);
-      clusters.set(independenceKey, roles);
+    const evidenceRef = normalizeText(finding.evidence_ref) || 'UNKNOWN';
+    if (provenMaterial) {
+      if (independenceKey !== 'UNKNOWN') addCluster(independenceClusters, independenceKey, item.role);
+      addCluster(evidenceClusters, evidenceRef.toLowerCase(), item.role);
     }
 
     const recommendedTest = normalizeText(finding.recommended_test);
     if (recommendedTest && !tests.includes(recommendedTest)) tests.push(recommendedTest);
   }
 
-  const correlatedClusters = [...clusters.entries()]
+  const correlatedByIndependence = [...independenceClusters.entries()]
     .filter(([, roles]) => roles.length > 1)
-    .map(([independence_key, roles]) => ({ independence_key, roles }));
+    .map(([value, roles]) => ({ basis: 'independence_key', value, roles }));
+  const correlatedByEvidence = [...evidenceClusters.entries()]
+    .filter(([, roles]) => roles.length > 1)
+    .map(([value, roles]) => ({ basis: 'evidence_ref', value, roles }));
   const allFourCompleted = missingRoles.length === 0 && successfulRoles.size === REQUIRED_ROLES.length;
+  const effectiveIndependentCount = Math.min(independenceClusters.size, evidenceClusters.size);
+  const uniqueUnprovenRoles = [...new Set(unprovenRoles)];
 
   return Object.freeze({
     required_roles: [...REQUIRED_ROLES],
@@ -140,12 +152,13 @@ export function confrontPerceptionEvidence(results) {
     failed_roles: failedRoles,
     missing_roles: missingRoles,
     all_four_completed: allFourCompleted,
-    explicit_independence_keys: [...clusters.keys()],
-    effective_independent_count: clusters.size,
-    correlated_clusters: correlatedClusters,
-    unproven_roles: [...new Set(unprovenRoles)],
+    explicit_independence_keys: [...independenceClusters.keys()],
+    explicit_evidence_refs: [...evidenceClusters.keys()],
+    effective_independent_count: effectiveIndependentCount,
+    correlated_clusters: [...correlatedByIndependence, ...correlatedByEvidence],
+    unproven_roles: uniqueUnprovenRoles,
     discriminating_tests: tests,
-    confidence_can_increase: allFourCompleted && clusters.size >= 2,
+    confidence_can_increase: allFourCompleted && uniqueUnprovenRoles.length === 0 && effectiveIndependentCount >= 2,
     four_answers_are_four_proofs: false,
     correlated_evidence_inflation_blocked: true,
   });

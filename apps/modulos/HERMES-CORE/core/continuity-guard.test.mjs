@@ -139,7 +139,7 @@ test('um braço ausente não libera writer', () => {
   assert.equal(packet.next_rule, 'RETRY_MISSING_PERCEPTIONS_BEFORE_MUTATION');
 });
 
-test('hipótese ou UNKNOWN exige teste antes de mutação', () => {
+test('dedupe não pode esconder hipótese ou UNKNOWN', () => {
   const results = PERCEPTION_ATTACKS.map((attack) => perception(attack.id));
   results[1] = perception('B_IMPLEMENTATION', {
     class: 'HYPOTHESIS',
@@ -185,7 +185,7 @@ test('mesma ferida com quatro fontes causais converge em uma correção candidat
   assert.equal(packet.reality_is_judge, true);
 });
 
-test('quatro respostas correlacionadas contam como um cluster causal', () => {
+test('mesma independence_key em quatro respostas conta como um cluster causal', () => {
   const results = PERCEPTION_ATTACKS.map((attack) => perception(attack.id, {
     independence_key: 'same-source',
   }));
@@ -193,11 +193,17 @@ test('quatro respostas correlacionadas contam como um cluster causal', () => {
   assert.equal(confrontation.all_four_completed, true);
   assert.equal(confrontation.effective_independent_count, 1);
   assert.equal(confrontation.confidence_can_increase, false);
-  assert.equal(confrontation.correlated_clusters.length, 1);
-  assert.deepEqual(confrontation.correlated_clusters[0].roles, [
-    'A_LOGIC',
-    'B_IMPLEMENTATION',
-    'C_REGRESSION_FALSE_GREEN',
-    'D_SIMPLIFICATION',
-  ]);
+  assert.ok(confrontation.correlated_clusters.some((item) => item.basis === 'independence_key'));
+});
+
+test('mesma evidence_ref com nomes causais diferentes também conta como um cluster', () => {
+  const results = PERCEPTION_ATTACKS.map((attack) => perception(attack.id, {
+    evidence_ref: 'same-evidence',
+  }));
+  const confrontation = confrontPerceptionEvidence(results);
+  assert.equal(confrontation.explicit_independence_keys.length, 4);
+  assert.equal(confrontation.explicit_evidence_refs.length, 1);
+  assert.equal(confrontation.effective_independent_count, 1);
+  assert.equal(confrontation.confidence_can_increase, false);
+  assert.ok(confrontation.correlated_clusters.some((item) => item.basis === 'evidence_ref'));
 });
