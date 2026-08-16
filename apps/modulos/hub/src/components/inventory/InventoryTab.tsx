@@ -19,6 +19,8 @@ type InventoryItem = {
   consumers: string[];
   proof: string;
   source: string;
+  recorded_at: string | null;
+  temporal_scope: 'CURRENT_OWNER' | 'HISTORICAL_RECORD';
   summary: string;
 };
 
@@ -38,6 +40,13 @@ function count(group: InventoryGroup) {
   return items.filter((item) => item.group === group).length;
 }
 
+function when(recordedAt: string | null) {
+  if (!recordedAt) return null;
+  const parsed = new Date(recordedAt);
+  if (Number.isNaN(parsed.getTime())) return recordedAt;
+  return parsed.toLocaleString('pt-BR');
+}
+
 export function InventoryTab() {
   const [search, setSearch] = useState('');
   const [group, setGroup] = useState<'TODOS' | InventoryGroup>('TODOS');
@@ -47,7 +56,7 @@ export function InventoryTab() {
     return items.filter((item) => {
       if (group !== 'TODOS' && item.group !== group) return false;
       if (!needle) return true;
-      return [item.name, item.type, item.status, item.owner, item.summary, ...item.consumers]
+      return [item.name, item.type, item.status, item.owner, item.summary, item.recorded_at ?? '', ...item.consumers]
         .join(' ')
         .toLocaleLowerCase('pt-BR')
         .includes(needle);
@@ -125,11 +134,20 @@ export function InventoryTab() {
                     <CardTitle className="text-base leading-5">{item.name}</CardTitle>
                     <div className="mt-1 text-[11px] text-muted-foreground">{GROUP_META[item.group].label} · {item.type}</div>
                   </div>
-                  <Badge variant="outline" className="shrink-0 text-[10px]">{item.status}</Badge>
+                  <div className="flex flex-col items-end gap-1">
+                    <Badge variant="outline" className="shrink-0 text-[10px]">{item.status}</Badge>
+                    {item.temporal_scope === 'HISTORICAL_RECORD' && <Badge variant="secondary" className="text-[10px]">histórico registrado</Badge>}
+                  </div>
                 </div>
               </CardHeader>
               <CardContent className="space-y-3 text-xs">
                 {item.summary && <p className="text-muted-foreground leading-5">{item.summary}</p>}
+                {item.recorded_at && (
+                  <div>
+                    <div className="text-[10px] uppercase tracking-wide text-muted-foreground">Registrado em</div>
+                    <div className="mt-1">{when(item.recorded_at)}</div>
+                  </div>
+                )}
                 <div>
                   <div className="text-[10px] uppercase tracking-wide text-muted-foreground">Owner / onde vive</div>
                   <code className="mt-1 block break-all rounded bg-muted/50 px-2 py-1.5 text-[11px]">{item.owner}</code>
@@ -153,7 +171,7 @@ export function InventoryTab() {
       )}
 
       <div className="rounded-xl border border-border/60 bg-muted/20 p-4 text-xs text-muted-foreground leading-5">
-        <strong className="text-foreground">Regra da estante:</strong> o Inventário é índice, não segunda verdade. Skills vêm de <code>.agents/skills/</code>, capacidades META do contrato canônico, aprendizados do owner de aprendizados e mineração/cristalização dos motores já existentes. Ferramentas continuam no Catálogo. O build recompõe esta visão antes de publicar.
+        <strong className="text-foreground">Regra da estante:</strong> o Inventário é índice, não segunda verdade. Skills vêm de <code>.agents/skills/</code>, capacidades META do contrato canônico, aprendizados do owner de aprendizados e mineração/cristalização dos motores já existentes. Fixed points e candidatos vindos do ledger aparecem como <strong>histórico registrado</strong>, nunca como estado runtime atual. Ferramentas continuam no Catálogo. O build recompõe esta visão antes de publicar.
       </div>
     </div>
   );

@@ -23,6 +23,7 @@ const META_LABELS = Object.freeze({
 });
 
 const META_OWNER = 'docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md';
+const META_LEDGER_OWNER = '.agents/skills/meta-lupa/references/uso-ledger.jsonl';
 
 function exists(repoRoot, relativePath) {
   return fs.existsSync(path.resolve(repoRoot, relativePath));
@@ -59,7 +60,20 @@ function resolveRevision(repoRoot, explicitRevision) {
   return process.env.GITHUB_SHA ? `EVENT_SHA:${process.env.GITHUB_SHA}` : 'WORKTREE_UNRESOLVED';
 }
 
-function makeItem({ id, name, group, type, status, owner, consumers = [], proof, summary, source = owner }) {
+function makeItem({
+  id,
+  name,
+  group,
+  type,
+  status,
+  owner,
+  consumers = [],
+  proof,
+  summary,
+  source = owner,
+  recorded_at = null,
+  temporal_scope = 'CURRENT_OWNER',
+}) {
   return {
     id,
     name,
@@ -71,8 +85,24 @@ function makeItem({ id, name, group, type, status, owner, consumers = [], proof,
     consumers: [...new Set(consumers)].sort(),
     proof,
     source,
+    recorded_at,
+    temporal_scope,
     summary: String(summary || '').replace(/\s+/g, ' ').trim().slice(0, 240),
   };
+}
+
+function parseJsonl(repoRoot, relativePath) {
+  return read(repoRoot, relativePath)
+    .split(/\r?\n/)
+    .map((line, index) => ({ line: line.trim(), number: index + 1 }))
+    .filter(({ line }) => line.length > 0)
+    .map(({ line, number }) => {
+      try {
+        return JSON.parse(line);
+      } catch (error) {
+        throw new Error(`HOUSE_INVENTORY_LEDGER_PARSE_ERROR path=${relativePath} line=${number} cause=${error instanceof Error ? error.message : String(error)}`);
+      }
+    });
 }
 
 function scanSkills(repoRoot) {
@@ -153,6 +183,59 @@ function scanLearnings(repoRoot) {
   }));
 }
 
+function scanMetaLedger(repoRoot) {
+  if (!exists(repoRoot, META_LEDGER_OWNER)) return [];
+  const events = parseJsonl(repoRoot, META_LEDGER_OWNER);
+  const beginByUsage = new Map(
+    events
+      .filter((event) => event?.event === 'BEGIN' && event.usage_id)
+      .map((event) => [String(event.usage_id), event]),
+  );
+
+  const fixedPoints = events
+    .filter((event) => event?.event === 'FINAL' && event.point_fixed_evidential === true && event.autolupa_executed === true)
+    .map((event) => {
+      const begin = beginByUsage.get(String(event.usage_id || '')) || {};
+      const mission = begin.mission_id || event.mission_id || event.usage_id || 'sem-missao';
+      const passed = Number(event.pass ?? 0);
+      const failed = Number(event.fail ?? 0);
+      const xp = event.xp_gained ?? event.xp_valid ?? null;
+      return makeItem({
+        id: stableId('crystal', event.record_hash || event.usage_id || JSON.stringify(event)),
+        name: `Fixed Point · ${humanize(mission)}`,
+        group: 'CRISTAIS',
+        type: 'FIXED_POINT_RECORD',
+        status: 'RECORDED_FIXED_POINT',
+        owner: META_LEDGER_OWNER,
+        consumers: ['META_LUPA', 'SELO_XP', 'INVENTARIO'],
+        proof: META_LEDGER_OWNER,
+        source: META_LEDGER_OWNER,
+        recorded_at: event.finished_at_utc || begin.started_at_utc || null,
+        temporal_scope: 'HISTORICAL_RECORD',
+        summary: `Registro histórico: verdict=${event.verdict ?? 'UNKNOWN'}; result=${event.result ?? 'UNKNOWN'}; pass=${passed}; fail=${failed}; xp=${xp ?? 'n/a'}. Não afirma estado runtime atual.`,
+      });
+    });
+
+  const candidates = events
+    .filter((event) => event?.event === 'CANDIDATE_REF')
+    .map((event) => makeItem({
+      id: stableId('ore', event.record_hash || event.usage_id || JSON.stringify(event)),
+      name: `Minério candidato · ${humanize(event.mission_id || event.usage_id || 'sem-missao')}`,
+      group: 'MINERACAO',
+      type: 'LEARNING_CANDIDATE',
+      status: 'RECORDED_CANDIDATE',
+      owner: META_LEDGER_OWNER,
+      consumers: ['META_LUPA', 'MEMORY_LINKER', 'INVENTARIO'],
+      proof: META_LEDGER_OWNER,
+      source: META_LEDGER_OWNER,
+      recorded_at: event.started_at_utc || null,
+      temporal_scope: 'HISTORICAL_RECORD',
+      summary: 'Candidato histórico preservado no ledger; conteúdo detalhado permanece on-demand no owner.',
+    }));
+
+  return [...fixedPoints, ...candidates];
+}
+
 function fixedOwners(repoRoot) {
   const definitions = [
     {
@@ -216,6 +299,7 @@ export function buildHouseInventory(repoRoot, { revision } = {}) {
     ...scanSkills(resolvedRoot),
     ...scanMetaCapabilities(resolvedRoot),
     ...scanLearnings(resolvedRoot),
+    ...scanMetaLedger(resolvedRoot),
     ...fixedOwners(resolvedRoot),
   ];
   const deduped = [...new Map(items.map((item) => [item.id, item])).values()]
