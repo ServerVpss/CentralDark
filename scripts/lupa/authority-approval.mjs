@@ -5,6 +5,7 @@ import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 export const CANONICAL_AUTHORITY_LABEL = "👑 PERMITO-SEGREDO";
+export const CANONICAL_AUTHORITY_SOURCE = "github-label:permito-segredo";
 
 function foldLabelName(value) {
   return String(value?.name || value || "")
@@ -28,7 +29,7 @@ export function authorityApprovalForEvent(event = {}) {
   return {
     approved,
     authority: approved ? "SEGREDO/CHEFE" : null,
-    source: approved ? `github-label:${CANONICAL_AUTHORITY_LABEL}` : "none",
+    source: approved ? CANONICAL_AUTHORITY_SOURCE : "none",
   };
 }
 
