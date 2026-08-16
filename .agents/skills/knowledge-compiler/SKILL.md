@@ -118,6 +118,172 @@ MUITAS FONTES
 
 `UMA VERDADE OPERACIONAL` não significa verdade absoluta universal. Significa que, para a capacidade + fronteira declaradas, conflitos relevantes foram arbitrados e existe uma única rota operacional ativa. Claims fora dessa fronteira continuam separados.
 
+## MetaForja — a FORJA passando pelo próprio CROSS-META
+
+`METAFORJA` é um alias operacional para aplicar as lentes META canônicas sobre a própria FORJA. Não cria sétima lente, novo agente, novo cérebro nem `META_CRISTAL` separado.
+
+```text
+METAFORJA
+= FORJA
++ META_EXPANSAO_DE_DOMINIO
++ META_MINERACAO
++ META_MENOS_E_MAIS
++ META_LUPA
++ META_INSTINTO_SUPERIOR
++ META_METACOGNICAO_OPERACIONAL
+
+META_FORJA_IS_NEW_LENS=false
+META_CRISTAL_IS_NEW_LENS=false
+```
+
+O resultado continua sendo:
+
+```text
+MUITO MINERIO ENTRA
+→ POUCO OURO SAI
+→ 1 CRISTAL POR CAPACIDADE/FRONTEIRA
+→ 1 ROTA ATIVA
+→ EXECUCAO RAPIDA
+```
+
+## Importar conhecimento externo sem importar dogma
+
+Fonte externa ensina padrão; não ganha autoridade sobre a Casa. Números, thresholds, nomes de owner, topologias de agentes, pins de modelo e bloqueios de deploy só viram política quando a aplicabilidade local for provada.
+
+```text
+SOURCE_PRESTIGE != AUTHORITY
+SOURCE_PATTERN != HOUSE_POLICY
+SOURCE_NUMERIC_GUIDELINE != HOUSE_THRESHOLD
+EXTERNAL_OWNER_NAME != CANONICAL_OWNER
+MODEL_NAME != ARCHITECTURAL_AUTHORITY
+PLACEHOLDER_TEST != BEHAVIOR_PROOF
+```
+
+### SRE — toil vira automação determinística quando a regra já é conhecida
+
+O ouro generalizado é medir e reduzir trabalho operacional repetitivo, previsível e mecânico. Não importar percentual arbitrário.
+
+```text
+REPETITIVE
++ PREDICTABLE
++ MECHANICAL
++ KNOWN_RULE
+→ DETERMINISTIC_AUTOMATION_FIRST
+→ AGENT_ONLY_FOR_RESIDUAL_JUDGMENT
+
+MEASURE_TOIL_WHEN_DECISION_DEPENDS_ON_MAGNITUDE=true
+NO_UNIVERSAL_TOIL_PERCENTAGE=true
+EXTERNAL_NUMERIC_TARGET_REQUIRES_LOCAL_FIT_OR_EXPLICIT_POLICY=true
+```
+
+### SRE — SLO/error budget é política do serviço, não trava mágica
+
+```text
+USER_RELEVANT_SLI
++ AGREED_TARGET
++ WINDOW
++ ERROR_BUDGET_POLICY
++ LIVE_MEASUREMENT
+→ DECISION_INPUT
+
+NO_SLO_OR_POLICY
+→ DO_NOT_INVENT_DEPLOY_BLOCK
+
+SLO_POLICY_IS_SERVICE_SPECIFIC=true
+```
+
+A FORJA pode aprender o mecanismo de error budget sem inventar que todo serviço usa o mesmo alvo, janela ou regra de congelamento.
+
+### Fowler/CI — integração pequena, autoteste, feedback e reversibilidade
+
+```text
+SMALL_CHANGE
++ SELF_TESTING
++ FAST_FEEDBACK
++ MAINLINE_HEALTH
++ REVERSIBILITY
+→ PREFER
+
+CI_FAILURE
+→ FIX_OR_REVERT_FAST
+→ RESTORE_MAINLINE
+```
+
+Uma guideline externa como `10-minute commit build` pode orientar diagnóstico de latência, mas não vira hard gate global sem política CentralDark específica e medição no runtime aplicável.
+
+```text
+SOURCE_GUIDELINE_AS_HARD_GATE_REQUIRES_LOCAL_POLICY=true
+```
+
+### Arquitetura — evoluir sem carregar cruft
+
+```text
+IMPORTANT_DESIGN
++ SIMPLICITY
++ EVOLVABILITY
++ REUSE
+→ LOWER_CHANGE_COST
+
+COORDINATE_CENTRALLY_ONLY_WHEN_REAL_COORDINATION_COST_JUSTIFIES
+NO_REBUILD_WHEN_DELTA_SUFFICES=true
+```
+
+### Agentes — módulos cognitivos não são novos funcionários
+
+Surveys podem decompor sistemas em percepção, memória e ação; isso é útil como mapa de capacidade, não como obrigação de criar três agentes.
+
+```text
+PERCEPTION + MEMORY + ACTION = CONCEPTUAL_MODULES
+MODULE != NEW_AGENT
+MULTI_AGENT=OPTIONAL_WHEN_INFORMATION_GAIN
+DETERMINISTIC_TASK != AGENT_BY_DEFAULT
+```
+
+### Agentic RAG — contexto e ferramentas sob demanda
+
+```text
+DYNAMIC_RETRIEVAL
++ PLANNING
++ REFLECTION
++ TOOL_USE
+→ OPTIONAL_PATTERNS_FOR_COMPLEX_WORK
+
+LOAD_CONTEXT_ON_DEMAND=true
+MULTI_AGENT_WHEN_BENEFIT_GT_COORDINATION_COST=true
+EVALUATION_GOVERNANCE_ERROR_HANDLING_REQUIRED=true
+```
+
+### Complexidade e motor — subir frequência, não canonizar nome de modelo
+
+Para debug difícil, arquitetura, código complexo, matemática, ciência, análise visual e investigação multietapa, a SOL escala a frequência cognitiva conforme risco/ambiguidade. A engine continua substituível.
+
+```text
+COMPLEX_TASK
+→ ESCALATE_SOL_FREQUENCY_AS_NEEDED
+→ SELECT_ENGINE_BY_OBSERVED_FITNESS
+
+ARCHITECTURE != O3_HARDCODE
+MODEL_PIN_REQUIRES_OBSERVED_FITNESS_AND_RUNTIME_AVAILABILITY=true
+PRESTIGE_IS_NOT_ENGINE_FITNESS=true
+```
+
+## Proveniência primária do lote SRE/Fowler/Agents
+
+As fontes completas permanecem externas; a Casa guarda somente proveniência + capacidade destilada.
+
+```text
+GOOGLE_SRE_BOOK=https://research.google/pubs/site-reliability-engineering-how-google-runs-production-systems/
+GOOGLE_SRE_WORKBOOK=https://research.google/pubs/the-site-reliability-workbook/
+GOOGLE_ELIMINATING_TOIL=https://sre.google/workbook/eliminating-toil/
+GOOGLE_SLO=https://sre.google/workbook/implementing-slos/
+FOWLER_ARCHITECTURE=https://martinfowler.com/architecture/
+FOWLER_CI=https://martinfowler.com/articles/continuousIntegration.html
+AGENTS_SE_SURVEY=https://arxiv.org/abs/2409.09030
+AGENTIC_RAG_SURVEY=https://arxiv.org/abs/2501.09136
+```
+
+A proveniência acadêmica/industrial reforça ou desafia a Casa; não prova runtime CentralDark por existir.
+
 ## FLASH — runtime não paga a mineração inteira de novo
 
 Depois do cristal promovido:
@@ -217,8 +383,9 @@ TICK:
 ## Implementação determinística
 
 - contrato: `contract.json`;
+- cristal/rota dogfood: `crystal-route.json`;
 - compilador/validador: `scripts/compiler.mjs`;
 - regressão: `tests/compiler.test.mjs`;
 - gate: `.github/workflows/lupa-conformance.yml`.
 
-O código determinístico valida estrutura, estados, dedupe, promoção e invalidação. A IA continua responsável pela parte semântica residual — entender intenção, extrair capacidade e propor arbitragem — sem poder pular os mesmos gates.
+O código determinístico valida estrutura, estados, dedupe, promoção, política de importação e invalidação. A IA continua responsável pela parte semântica residual — entender intenção, extrair capacidade e propor arbitragem — sem poder pular os mesmos gates.
