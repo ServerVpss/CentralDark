@@ -9,6 +9,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { buscarContexto } from '../agents/GraphRAG-Master/agent.mjs';
 import { applyRoutingStrategy } from './routing-strategy.mjs';
+import { evaluatePerceptionGate } from './perception-policy.mjs';
 const pexec = promisify(execFile);
 const DIR = dirname(fileURLToPath(import.meta.url));
 
@@ -189,6 +190,67 @@ export function validarDecisao(decisao) {
   if (!ESTADOS_DECISAO.has(estado)) throw new Error(`estado semântico inválido: ${estado || 'AUSENTE'}`);
   if (decisao.terminou === true && estado !== 'FATO') throw new Error(`estado ${estado} não pode encerrar missão`);
   return { ...decisao, estado };
+}
+
+function shellQuote(value) {
+  return `'${String(value ?? '').replace(/'/g, `'\\''`)}'`;
+}
+
+function perceptionProposal(decisao, scopeKey) {
+  const safe = {
+    ferramenta: String(decisao?.ferramenta || ''),
+    scope_key: scopeKey,
+    estado: String(decisao?.estado || ''),
+    etapa_titulo: String(decisao?.etapa_titulo || '').slice(0, 120),
+    pensamento: String(decisao?.pensamento || '').slice(0, 500),
+  };
+  return Buffer.from(JSON.stringify(safe), 'utf8').toString('base64url');
+}
+
+export function aplicarGatePercepcao(decisao, historico = [], { emLoop = false } = {}) {
+  const gate = evaluatePerceptionGate({ decisao, historico });
+  const loopForcesGate = emLoop === true && gate.mutation?.mutating === true && gate.status === 'NOT_REQUIRED_CLEAR_LOCAL';
+
+  if (gate.required === true || loopForcesGate) {
+    const proposal = perceptionProposal(decisao, gate.scope_key);
+    return {
+      pensamento: `gate determinístico de percepção antes de ${gate.mutation?.kind || 'MUTATION'}`,
+      etapa_titulo: 'Quatro percepções antes da caneta',
+      estado: 'TESTE',
+      ferramenta: 'shell',
+      args: {
+        comando: `HERMES_PERCEPTION_SCOPE_KEY=${shellQuote(gate.scope_key)} HERMES_PERCEPTION_PROPOSAL_B64=${shellQuote(proposal)} node apps/modulos/HERMES-CORE/core/perception-orchestra.mjs --active-mission`,
+      },
+      terminou: false,
+      _perception_gate_status: 'REQUIRE_FOUR_PERCEPTIONS',
+      _perception_original_tool: decisao.ferramenta,
+      _perception_original_scope: gate.scope_key,
+      _perception_triggers: { ...(gate.triggers || {}), loop_detected: emLoop === true },
+    };
+  }
+
+  if (gate.allow_mutation === false) {
+    const tests = (gate.active_gate?.discriminating_tests || []).slice(0, 4).join(' | ');
+    return {
+      pensamento: 'a percepção anterior ainda não provou delta suficiente; mutação continua bloqueada',
+      etapa_titulo: 'Caneta bloqueada até contraprova',
+      estado: 'TESTE',
+      ferramenta: 'notificar_progresso',
+      args: {
+        mensagem: `PERCEPTION_GATE=BLOCKED next=${gate.active_gate?.next_rule || 'TEST_REQUIRED'}${tests ? ` tests=${tests}` : ''}`.slice(0, 700),
+      },
+      terminou: false,
+      _perception_gate_status: gate.status,
+      _perception_original_tool: decisao.ferramenta,
+      _perception_original_scope: gate.scope_key,
+    };
+  }
+
+  return {
+    ...decisao,
+    _perception_gate_status: gate.status,
+    _perception_scope_key: gate.scope_key,
+  };
 }
 
 const SYSTEM_FALLBACK = `Você é o Hermes, executor autônomo da CentralDark. Pense passo-a-passo. Nunca desvie da missão. Sempre devolva JSON puro.`;
@@ -410,9 +472,10 @@ export async function decidir(missao, historico) {
     try {
       const prompt = montarPrompt(missao, historico, historico_erros, memoria);
       const stdout = await chamarDarkaiComResiliencia(cfg.modelo, SYSTEM, prompt, cfg.timeout_ms);
-      const decisao = validarDecisao(extrairJSON(stdout));
+      const bruta = validarDecisao(extrairJSON(stdout));
+      const decisao = validarDecisao(aplicarGatePercepcao(bruta, historico, { emLoop }));
       decisao._modelo_usado = cfg.modelo;
-      console.log(`[decisor] ✅ ${cfg.modelo} respondeu em ${Date.now()-t0}ms`);
+      console.log(`[decisor] ✅ ${cfg.modelo} respondeu em ${Date.now()-t0}ms gate=${decisao._perception_gate_status || 'UNKNOWN'}`);
       salvarCache(k, decisao);
       return decisao;
     } catch (e) {
@@ -427,9 +490,10 @@ export async function decidir(missao, historico) {
   try {
     const prompt = montarPrompt(missao, historico, historico_erros, memoria);
     const texto = await chamarEliteAnthropic(prompt);
-    const decisao = validarDecisao(extrairJSON(texto));
+    const bruta = validarDecisao(extrairJSON(texto));
+    const decisao = validarDecisao(aplicarGatePercepcao(bruta, historico, { emLoop }));
     decisao._modelo_usado = `elite:${ELITE_MODEL}`;
-    console.log(`[decisor] ✅ Elite ${ELITE_MODEL} respondeu em ${Date.now()-t0}ms`);
+    console.log(`[decisor] ✅ Elite ${ELITE_MODEL} respondeu em ${Date.now()-t0}ms gate=${decisao._perception_gate_status || 'UNKNOWN'}`);
     salvarCache(k, decisao);
     return decisao;
   } catch (e) {
