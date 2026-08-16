@@ -111,5 +111,29 @@
     "computer_use": true,
     "chrome_native_host": "com.openai.codexextension",
     "remote_control_client": "Codex Desktop"
-  }
+  },
+  "observed_root_directories": [
+    ".tmp",
+    "agents",
+    "ambient-suggestions",
+    "automations",
+    "cache",
+    "computer-use",
+    "computer-use-turn-ended",
+    "log",
+    "memories",
+    "node_repl",
+    "packages",
+    "pets",
+    "plugins",
+    "process_manager",
+    "rules",
+    "sessions",
+    "skills",
+    "sqlite",
+    "thread-writer-locks",
+    "tmp",
+    "vendor_imports"
+  ],
+  "root_directory_observation_source": "USER_SCREENSHOT_2026-08-16"
 }
