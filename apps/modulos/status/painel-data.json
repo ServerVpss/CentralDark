@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-16T00:15:19.568Z",
-  "updatedAtBR": "15/08/2026, 21:15:19 BRT",
+  "updatedAt": "2026-08-16T01:28:04.745Z",
+  "updatedAtBR": "15/08/2026, 22:28:04 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "fix(labels): curar taxonomia operacional e fábricas de ruído",
+    "lastCommit": "fix(hermes): confrontar quatro percepções antes da caneta (#923)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-16T01:28:04.745Z",
+      "titulo": "Push na main · 18454dcec28e644e507d1dd8b9373d7bea119926",
+      "detalhe": "fix(hermes): confrontar quatro percepções antes da caneta (#923)",
+      "area": "Repositório",
+      "sha": "18454dc",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-16T00:15:19.568Z",
       "titulo": "Push na main · 39b1508b87d280be1b79185935ec4623c3ae2f52",
       "detalhe": "fix(labels): curar taxonomia operacional e fábricas de ruído",
@@ -988,14 +996,6 @@
       "detalhe": "test(memory): provar quarentena tempo consumidor e no-op",
       "area": "Repositório",
       "sha": "c09a387",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-15T01:34:19.185Z",
-      "titulo": "Push na main · 30559c41ce24ffbef00c47927b5283a989fcbd7c",
-      "detalhe": "feat(memory): quarentenar fonte externa e provar consumidor",
-      "area": "Repositório",
-      "sha": "30559c4",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-16T01:28:04.745Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 18454dcec28e644e507d1dd8b9373d7bea119926 (18454dc)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-16T00:15:19.568Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 39b1508b87d280be1b79185935ec4623c3ae2f52 (39b1508)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-15T01:35:31.456Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · c09a387dca3fbca2ae186f390db04c022f9ca12d (c09a387)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-15T01:34:19.185Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 30559c41ce24ffbef00c47927b5283a989fcbd7c (30559c4)",
       "area": "Repositório",
       "status": "sucesso"
     }
