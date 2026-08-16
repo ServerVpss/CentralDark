@@ -1,6 +1,7 @@
 ---
 name: forja-sre-ops
 description: Capacidades operacionais derivadas de Site Reliability Engineering (Google) + Continuous Integration/Architecture (Fowler) destiladas para automatizar confiabilidade, eliminar toil e manter evolução sem ruptura.
+global: true
 ---
 
 # Forja — SRE Ops
