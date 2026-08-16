@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-16T01:56:18.019Z",
-  "updatedAtBR": "15/08/2026, 22:56:18 BRT",
+  "updatedAt": "2026-08-16T02:49:01.086Z",
+  "updatedAtBR": "15/08/2026, 23:49:01 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "docs(governança): oficializar deploy sob comando do CHEFE (#925)",
+    "lastCommit": "docs(meta-lupa): cristalizar compressão cognitiva operacional (#930)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-16T02:49:01.086Z",
+      "titulo": "Push na main · 9086dd537d9f7fd4686154ca807371619ccc2b29",
+      "detalhe": "docs(meta-lupa): cristalizar compressão cognitiva operacional (#930)",
+      "area": "Repositório",
+      "sha": "9086dd5",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-16T01:56:18.019Z",
       "titulo": "Push na main · 6c3dc1b8cb9e6e4da8748be9977c0869a436d281",
       "detalhe": "docs(governança): oficializar deploy sob comando do CHEFE (#925)",
@@ -988,14 +996,6 @@
       "detalhe": "feat(memory): analyst consumir somente delta novo",
       "area": "Repositório",
       "sha": "9ca8de1",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-15T01:37:34.903Z",
-      "titulo": "Push na main · 476b43b0879e1b05e6fed839870808bebd2be424",
-      "detalhe": "feat(grok): instalar adaptador canônico CentralDark",
-      "area": "Repositório",
-      "sha": "476b43b",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-16T02:49:01.086Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 9086dd537d9f7fd4686154ca807371619ccc2b29 (9086dd5)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-16T01:56:18.019Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 6c3dc1b8cb9e6e4da8748be9977c0869a436d281 (6c3dc1b)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-15T01:38:42.259Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 9ca8de150fdaa4b7702c8567a7b1188e66802f86 (9ca8de1)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-15T01:37:34.903Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 476b43b0879e1b05e6fed839870808bebd2be424 (476b43b)",
       "area": "Repositório",
       "status": "sucesso"
     }
