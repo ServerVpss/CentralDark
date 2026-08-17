@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-08-17T21:16:38.989Z
+# 🧠 Notion Sync — 2026-08-17T21:29:03.306Z
 
-- **Commit fonte:** `e772c176e4ac68c71ad3a7ef13e612a69cdd93da`
+- **Commit fonte:** `3ac1ac2ba7ad5d7dee7f28cc6d9c0f496ef32163`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 414 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 415 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
 | aprendizados | 26 | 0 | 26 | 0 | 0 |
-| estrutura | 345 | 1 | 344 | 0 | 0 |
+| estrutura | 346 | 1 | 345 | 0 | 0 |
 
 ## Operações
 
@@ -132,6 +132,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/22-PADRAO-STATUS-VISUAL.md |
 | estrutura | atualizado | docs/CONSCIENCIA/23-MISSAO-REPARO-PM2-SEM-REESTRUTURAR-APPS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/23-PAPEL-LOVABLE-CENTRAL-COMANDO.md |
+| estrutura | criado | docs/CONSCIENCIA/ADMINISTRAVEIS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/APRENDIZADOS/001-token-bot-vs-sessao-user.md |
 | estrutura | atualizado | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/APRENDIZADOS/002-arsenal-portas-fixas.md |
 | estrutura | atualizado | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/APRENDIZADOS/003-webui-custom-css-rota.md |
@@ -292,7 +293,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md |
 | estrutura | atualizado | docs/CONSCIENCIA/MISSAO-CONVERGENCIA-TRIPLA-FORMULA-20260816.md |
 | estrutura | atualizado | docs/CONSCIENCIA/MODO-SEGREDO.md |
-| estrutura | criado | docs/CONSCIENCIA/MULTIBUSSOLA.md |
+| estrutura | atualizado | docs/CONSCIENCIA/MULTIBUSSOLA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/NOTIFY/INSTALAR-VPS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/NOTIFY/README.md |
 | estrutura | atualizado | docs/CONSCIENCIA/NOTION-MAPA.md |
