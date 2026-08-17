@@ -58,7 +58,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          echo "PROMOTION_TOKEN=${{ (secrets.PROMOTION_TOKEN != '' || secrets.GITHUB_PAT_PERFIL != '') && 'present' || 'absent_active_agent_can_still_promote' }}"
+          echo "PROMOTION_TOKEN=${{ secrets.PROMOTION_TOKEN != '' && 'present' || 'absent_active_agent_can_still_promote' }}"
           echo "TELEGRAM=${{ secrets.TELEGRAM_BOT_TOKEN != '' && secrets.TELEGRAM_CHAT_ID != '' && 'present' || 'absent' }}"
           echo "WEBHOOK=${{ secrets.NOTIFY_WEBHOOK_URL != '' && 'present' || 'absent' }}"
 
@@ -78,6 +78,14 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           NOTIFY_WEBHOOK_URL: ${{ secrets.NOTIFY_WEBHOOK_URL }}
         run: node scripts/github-autonomia-varredura.mjs judge
+
+      - name: Garantir artifact mesmo sem candidatos elegíveis
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "${{ runner.temp }}/centraldark-autonomia"
+          touch "${{ runner.temp }}/centraldark-autonomia/.keep"
 
       - name: Publicar recibos do juiz
         if: always()
@@ -136,13 +144,15 @@ jobs:
       - name: Exigir seis gates verdes no mesmo HEAD
         env:
           BOT_SWEEP_DIR: ${{ runner.temp }}/centraldark-autonomia
-          PROMOTER_TOKEN: ${{ secrets.PROMOTION_TOKEN || secrets.GITHUB_PAT_PERFIL }}
+          PROMOTER_TOKEN: ${{ secrets.PROMOTION_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
         run: node scripts/github-autonomia-green-guard.mjs
 
       - name: Promover somente recibos válidos e estado vivo idêntico
         env:
           BOT_SWEEP_DIR: ${{ runner.temp }}/centraldark-autonomia
-          PROMOTER_TOKEN: ${{ secrets.PROMOTION_TOKEN || secrets.GITHUB_PAT_PERFIL }}
+          PROMOTER_TOKEN: ${{ secrets.PROMOTION_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           NOTIFY_WEBHOOK_URL: ${{ secrets.NOTIFY_WEBHOOK_URL }}
