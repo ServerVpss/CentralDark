@@ -84,16 +84,16 @@
         "fixed point"
       ],
       "directions": [
-        { "symbol": "↑", "name": "BOTTOM-UP", "description": "Efeito → consumidor → implementação → causa → owner → intenção." },
-        { "symbol": "↓", "name": "TOP-DOWN", "description": "Intenção → regra → owner → implementação → consumidor → efeito." },
-        { "symbol": "→", "name": "FORWARD", "description": "Fonte → consumidores → dependentes → blast radius." },
-        { "symbol": "←", "name": "REVERSE", "description": "Resultado → pré-requisitos → produtores → dependências → fonte." },
-        { "symbol": "↔", "name": "ROUND-TRIP", "description": "Ida e volta: intenção↔implementação, claim↔prova, antes↔depois." },
-        { "symbol": "↗", "name": "TRANSVERSAL NE", "description": "Cruza camadas e sobe de efeito lateral para origem/causa." },
         { "symbol": "↖", "name": "TRANSVERSAL NO", "description": "Evidência lateral → causa/owner alternativo." },
-        { "symbol": "↘", "name": "TRANSVERSAL SE", "description": "Origem/intenção → cross-layer → efeito lateral." },
+        { "symbol": "↑", "name": "BOTTOM-UP", "description": "Efeito → consumidor → implementação → causa → owner → intenção." },
+        { "symbol": "↗", "name": "TRANSVERSAL NE", "description": "Cruza camadas e sobe de efeito lateral para origem/causa." },
+        { "symbol": "←", "name": "REVERSE", "description": "Resultado → pré-requisitos → produtores → dependências → fonte." },
+        { "symbol": "✣", "name": "RENDEZVOUS", "description": "Cruza todos os achados: dedupe, conflito, contraprova, causalidade e resíduo." },
+        { "symbol": "→", "name": "FORWARD", "description": "Fonte → consumidores → dependentes → blast radius." },
         { "symbol": "↙", "name": "TRANSVERSAL SO", "description": "Estado/efeito → histórico/owner alternativo sem confiar na hierarquia óbvia." },
-        { "symbol": "✣", "name": "RENDEZVOUS", "description": "Cruza todos os achados: dedupe, conflito, contraprova, causalidade e resíduo." }
+        { "symbol": "↓", "name": "TOP-DOWN", "description": "Intenção → regra → owner → implementação → consumidor → efeito." },
+        { "symbol": "↘", "name": "TRANSVERSAL SE", "description": "Origem/intenção → cross-layer → efeito lateral." },
+        { "symbol": "↔", "name": "ROUND-TRIP", "description": "Ida e volta: intenção↔implementação, claim↔prova, antes↔depois." }
       ],
       "compasses": [
         "científica",
