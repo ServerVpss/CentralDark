@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-17T18:59:27.774Z",
-  "updatedAtBR": "17/08/2026, 15:59:27 BRT",
+  "updatedAt": "2026-08-17T19:03:52.651Z",
+  "updatedAtBR": "17/08/2026, 16:03:52 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "fix(seguranca): corpo do PR é matéria, não autoridade — fecha auto-concessão do selo SEGREDO/CHEFE (#1006)",
+    "lastCommit": "fix(governanca): absorver calibração do CHEFE sem ruído (#1007)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-17T19:03:52.651Z",
+      "titulo": "Push na main · f3b7f0cfc760bce68deac3b35052c990f86b5bd2",
+      "detalhe": "fix(governanca): absorver calibração do CHEFE sem ruído (#1007)",
+      "area": "Repositório",
+      "sha": "f3b7f0c",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-17T18:59:27.774Z",
       "titulo": "Push na main · 80038948c6abd999b6b78f902e2fa01bf56c73cc",
       "detalhe": "fix(seguranca): corpo do PR é matéria, não autoridade — fecha auto-concessão do selo SEGREDO/CHEFE (#1006)",
@@ -988,14 +996,6 @@
       "detalhe": "fix(inventory): fechar resíduo META_MINERACAO pós-squash (#936)",
       "area": "Repositório",
       "sha": "499d514",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-16T03:59:11.581Z",
-      "titulo": "Push na main · bc26c43263e458ccce2d41f4163026ae58f0afa7",
-      "detalhe": "feat(memory): biblioteca longitudinal de padrões no Admin (#935)",
-      "area": "Repositório",
-      "sha": "bc26c43",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-17T19:03:52.651Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · f3b7f0cfc760bce68deac3b35052c990f86b5bd2 (f3b7f0c)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-17T18:59:27.774Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 80038948c6abd999b6b78f902e2fa01bf56c73cc (8003894)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-16T04:46:03.700Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 499d5146692207be0a31106a378d10e1067a4ff2 (499d514)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-16T03:59:11.581Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · bc26c43263e458ccce2d41f4163026ae58f0afa7 (bc26c43)",
       "area": "Repositório",
       "status": "sucesso"
     }
