@@ -161,8 +161,43 @@ jobs:
               await github.rest.issues.deleteLabel({owner,repo,name:oldName}).catch(e => { if (e.status !== 404) throw e; });
             }
 
+            // Invariante final: nenhuma etiqueta operacional ativa sobrevive em minúsculas.
+            // Aliases conhecidos acima são cadáveres de migração. Qualquer minúscula restante
+            // é tratada como label funcional não catalogada e preserva o uso ao virar MAIÚSCULA.
+            const canonicalNames = new Set(canonical.map(l => l.name));
+            const labelsAfterLegacy = await github.paginate(github.rest.issues.listLabelsForRepo,{owner,repo,per_page:100});
+            for (const label of labelsAfterLegacy) {
+              const name = label.name;
+              if (canonicalNames.has(name)) continue;
+              if (name === name.toLocaleUpperCase('pt-BR')) continue;
+
+              const target = name.toLocaleUpperCase('pt-BR').slice(0,50);
+              const existing = await github.rest.issues.getLabel({owner,repo,name:target}).catch(() => null);
+              if (!existing) {
+                await github.rest.issues.updateLabel({
+                  owner,
+                  repo,
+                  name,
+                  new_name: target,
+                  color: label.color,
+                  description: label.description || '',
+                });
+                core.notice(`LABEL_UPPERCASED=${name}=>${target}`);
+                continue;
+              }
+
+              for (const item of items) {
+                const names = new Set((item.labels || []).map(l => typeof l === 'string' ? l : l.name));
+                if (!names.has(name)) continue;
+                if (!names.has(target)) await github.rest.issues.addLabels({owner,repo,issue_number:item.number,labels:[target]});
+                await github.rest.issues.removeLabel({owner,repo,issue_number:item.number,name}).catch(e => { if (e.status !== 404) throw e; });
+              }
+              await github.rest.issues.deleteLabel({owner,repo,name});
+              core.notice(`LABEL_ABSORBED_INTO_UPPERCASE=${name}=>${target}`);
+            }
+
             const finalLabels = await github.paginate(github.rest.issues.listLabelsForRepo,{owner,repo,per_page:100});
-            const forbidden = finalLabels.filter(l => /[a-z]/.test(l.name) && !/^SUPERSEDED$/.test(l.name));
+            const forbidden = finalLabels.filter(l => l.name !== l.name.toLocaleUpperCase('pt-BR'));
             if (forbidden.length) core.setFailed(`VISIBLE_LOWERCASE_OPERATIONAL_LABELS=${forbidden.map(l=>l.name).join(',')}`);
             const duplicates = ['assign:chatgpt','assign:claude','assign:codex','assign:grok','assign:supabase-bot','assign:lovable','auto','bug','p0','p1','p2','p3','sentinela','vigia','stale','superseded','needs-codex-review','revisao-humana','🟡 PRECISA-DE-OK','permito-segredo','permito-pivete','PERMITO-PIVETE','📚 DOC'].filter(name => finalLabels.some(l => l.name === name));
             if (duplicates.length) core.setFailed(`DEAD_OR_DUPLICATE_LABELS=${duplicates.join(',')}`);
