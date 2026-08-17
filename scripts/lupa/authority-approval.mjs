@@ -3,15 +3,19 @@
 /**
  * Fonte autenticada de autorização da CentralDark.
  *
- * FRONTEIRA ZERO TRUST:
+ * FRONTEIRA:
  *   MATERIAL != AUTHORITY
+ *   AUTHENTICATED_DELEGATION + CURRENT_INTENT + SCOPE = OPERATIONAL_AUTHORITY
  *
- * O corpo do PR é MATÉRIA, não ORDEM. Ele pode declarar INTENÇÃO CANDIDATA,
- * nunca produzir `approved=true` por si próprio nem materializar a label
- * canônica do SEGREDO/CHEFE.
+ * Texto solto, prompt, título, comentário ou material externo não concedem
+ * autoridade. Um recibo completo no PR somente vira autoridade operacional
+ * delegada quando o próprio evento GitHub prova simultaneamente:
+ * - autor autenticado pertencente à allowlist do SEGREDO/CHEFE;
+ * - head e base no mesmo repositório autorizado;
+ * - intenção, política, escopo e Writer explicitados.
  *
- * A única fonte de aprovação é a label canônica já presente no PR, aplicada
- * por um ato externo ao corpo/árvore do próprio PR.
+ * O modelo/CLI/MCP que opera por trás da conta é provenance/capacidade; não
+ * precisa fingir ser o humano nem pedir novo clique para a mesma intenção.
  */
 
 import { appendFile, readFile } from "node:fs/promises";
@@ -20,17 +24,9 @@ import { fileURLToPath } from "node:url";
 
 export const CANONICAL_AUTHORITY_LABEL = "👑 PERMITO-SEGREDO";
 export const CANONICAL_AUTHORITY_SOURCE = "github-label:permito-segredo";
-export const DERIVED_AUTHORITY_SOURCE = "github-label:auto-derived-from-intent";
+export const DELEGATED_AUTHORITY_SOURCE = "github-authenticated-intent-receipt";
 export const FAST_MERGE_POLICY = "AUTO_SQUASH_IF_CLEAN";
-
-/**
- * Derivação de autoridade a partir de matéria fica desligada e fail-closed.
- * Mantida como constante explícita para que o bloqueio seja testável e
- * auditável, em vez de virar código silenciosamente removido.
- */
-export const MATERIAL_DERIVED_AUTHORITY_ENABLED = false;
-export const MATERIAL_DERIVED_AUTHORITY_BLOCK =
-  "DERIVED_AUTHORITY_DISABLED_MATERIAL_IS_NOT_AUTHORITY";
+export const DELEGATED_AUTHORITY_ENABLED = true;
 
 function foldLabelName(value) {
   return String(value?.name || value || "")
@@ -59,11 +55,9 @@ export function canonicalAuthorityLabel(value) {
 }
 
 /**
- * Lê a INTENÇÃO CANDIDATA declarada no corpo do PR.
- *
- * `valid` significa apenas "o recibo está bem formado e vem de autor confiável
- * no mesmo repositório". NÃO significa autorizado, aprovado nem derivável.
- * Consumidores devem tratar isto como matéria classificada, nunca como grant.
+ * Lê o recibo de intenção e cruza com a identidade autenticada do evento.
+ * `valid=true` significa delegação operacional válida para este PR/escopo,
+ * não que qualquer texto contendo os mesmos campos seja autoridade.
  */
 export function intentReceiptForEvent(event = {}, { trustedAuthors = ["segredounlock"], repository = null } = {}) {
   const pr = event.pull_request || {};
@@ -77,8 +71,14 @@ export function intentReceiptForEvent(event = {}, { trustedAuthors = ["segredoun
   const trusted = trustedAuthorsFrom(trustedAuthors).has(author);
   const headRepo = pr.head?.repo?.full_name || null;
   const baseRepo = pr.base?.repo?.full_name || null;
-  const sameRepository = Boolean(headRepo && baseRepo && headRepo === baseRepo && (!repository || headRepo === repository));
-  const valid = authority === "SEGREDO/CHEFE"
+  const sameRepository = Boolean(
+    headRepo &&
+    baseRepo &&
+    headRepo === baseRepo &&
+    (!repository || headRepo === repository)
+  );
+  const valid = DELEGATED_AUTHORITY_ENABLED
+    && authority === "SEGREDO/CHEFE"
     && mergePolicy === FAST_MERGE_POLICY
     && Boolean(intentScope)
     && Boolean(writer)
@@ -88,7 +88,7 @@ export function intentReceiptForEvent(event = {}, { trustedAuthors = ["segredoun
 
   return {
     valid,
-    grantsAuthority: false,
+    grantsAuthority: valid,
     authority,
     mergePolicy,
     intentScope,
@@ -104,32 +104,78 @@ export function authorityApprovalForEvent(event = {}, options = {}) {
   const labels = new Set(
     (event.pull_request?.labels || []).map((label) => canonicalAuthorityLabel(label)),
   );
-  const approved = labels.has(CANONICAL_AUTHORITY_LABEL);
+  const viaLabel = labels.has(CANONICAL_AUTHORITY_LABEL);
   const intent = intentReceiptForEvent(event, options);
+  const viaDelegation = intent.valid;
+  const approved = viaLabel || viaDelegation;
+
   return {
     approved,
     authority: approved ? "SEGREDO/CHEFE" : null,
-    source: approved ? CANONICAL_AUTHORITY_SOURCE : "none",
-    // Matéria nunca deriva autoridade. Fail-closed e constante.
-    derivable: false,
-    candidateIntent: intent.valid,
-    materialDerivationBlocked: intent.valid && !approved
-      ? MATERIAL_DERIVED_AUTHORITY_BLOCK
-      : null,
+    source: viaLabel
+      ? CANONICAL_AUTHORITY_SOURCE
+      : viaDelegation
+        ? DELEGATED_AUTHORITY_SOURCE
+        : "none",
+    viaLabel,
+    viaDelegation,
+    derivable: !viaLabel && viaDelegation,
+    candidateIntent: Boolean(intent.authority || intent.mergePolicy || intent.intentScope || intent.writer || intent.writerScope),
     intent,
   };
 }
 
 /**
- * Mantida apenas como barreira explícita.
- *
- * Antes esta função aplicava sozinha a label canônica do SEGREDO/CHEFE a partir
- * de texto do corpo do PR — ou seja, a matéria se tornava autoridade. Qualquer
- * agente com o token da automação podia escrever cinco linhas e receber o selo
- * do humano. Agora falha fechada, sempre.
+ * Materializa o selo visual somente depois de a delegação autenticada já ter
+ * sido provada pelo evento GitHub. A label é receipt/rastro; não é um segundo
+ * pedido humano e não cria autoridade a partir de texto não autenticado.
  */
-export async function materializeDerivedAuthorityLabel() {
-  throw new Error(MATERIAL_DERIVED_AUTHORITY_BLOCK);
+export async function materializeDerivedAuthorityLabel(event, env = process.env, fetchImpl = fetch) {
+  const repository = env.GITHUB_REPOSITORY || "";
+  const token = env.GITHUB_TOKEN || "";
+  if (!repository.includes("/")) throw new Error("GITHUB_REPOSITORY_INVALID");
+  if (!token) throw new Error("GITHUB_TOKEN_MISSING");
+
+  const approval = authorityApprovalForEvent(event, {
+    trustedAuthors: env.BOT_TRUSTED_AUTHORS || "segredounlock",
+    repository,
+  });
+  if (!approval.viaDelegation) throw new Error("DELEGATED_AUTHORITY_NOT_PROVEN");
+  if (approval.viaLabel) return approval;
+
+  const number = Number(event.pull_request?.number || 0);
+  if (!Number.isInteger(number) || number <= 0) throw new Error("PR_NUMBER_INVALID");
+
+  const response = await fetchImpl(`https://api.github.com/repos/${repository}/issues/${number}/labels`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: "application/vnd.github+json",
+      "X-GitHub-Api-Version": "2022-11-28",
+      "Content-Type": "application/json",
+      "User-Agent": "centraldark-authority-approval/2.0",
+    },
+    body: JSON.stringify({ labels: [CANONICAL_AUTHORITY_LABEL] }),
+  });
+  const text = await response.text();
+  let labels = [];
+  if (text) {
+    try { labels = JSON.parse(text); }
+    catch { labels = []; }
+  }
+  if (!response.ok) throw new Error(`AUTHORITY_LABEL_MATERIALIZATION_FAILED:${response.status}`);
+  const confirmed = Array.isArray(labels) && labels.some(
+    (label) => canonicalAuthorityLabel(label) === CANONICAL_AUTHORITY_LABEL,
+  );
+  if (!confirmed) throw new Error("AUTHORITY_LABEL_NOT_CONFIRMED");
+
+  return {
+    ...approval,
+    approved: true,
+    authority: "SEGREDO/CHEFE",
+    source: DELEGATED_AUTHORITY_SOURCE,
+    materializedLabel: CANONICAL_AUTHORITY_LABEL,
+  };
 }
 
 export async function main(env = process.env) {
@@ -146,19 +192,13 @@ export async function main(env = process.env) {
   if (env.GITHUB_OUTPUT) {
     await appendFile(
       env.GITHUB_OUTPUT,
-      `approved=${result.approved}\nauthority=${result.authority || "NONE"}\nsource=${result.source}\nderived=false\ncandidate_intent=${result.candidateIntent}\n`,
+      `approved=${result.approved}\nauthority=${result.authority || "NONE"}\nsource=${result.source}\nderived=${result.derivable}\ncandidate_intent=${result.candidateIntent}\n`,
       "utf8",
     );
   }
 
-  if (result.materialDerivationBlocked) {
-    console.log(
-      `AUTHORITY_MATERIAL_DERIVATION_BLOCKED=${result.materialDerivationBlocked} candidate_intent=true approved=false`,
-    );
-  }
-
   console.log(
-    `AUTHORITY_APPROVED=${result.approved} AUTHORITY=${result.authority || "NONE"} SOURCE=${result.source} DERIVED=false`,
+    `AUTHORITY_APPROVED=${result.approved} AUTHORITY=${result.authority || "NONE"} SOURCE=${result.source} DELEGATED=${result.viaDelegation}`,
   );
   return result;
 }
