@@ -2,7 +2,7 @@
 title: "00 PORTA DE ENTRADA IA"
 date: 2026-06-29
 tags: ["consciencia"]
-updated: 2026-08-15
+updated: 2026-08-17
 status: "CANÔNICO"
 ---
 
@@ -28,7 +28,7 @@ MESMAS_FERRAMENTAS=NAO_GARANTIDO
 CAPACIDADE_NAO_MEDIDA=UNKNOWN
 ```
 
-## Comandos de recuperação
+## Comandos de recuperação e varredura
 
 Quando SEGREDO/CHEFE escrever qualquer um destes gatilhos, ou quando houver reset/troca de agente/retomada/dúvida de estado, a IA recupera o fio antes de agir:
 
@@ -44,9 +44,31 @@ RETOMAR MISSAO
 #ACORDA
 #ACORDAR
 !CALIBRAR
+!MULTIBUSSOLA
+!MULTI-BUSSOLA
+!MULTIBÚSSOLA
 ```
 
 `#ACORDAR` significa **recuperar o estado real antes de continuar**. Não significa pedir ao humano para repetir o contexto.
+
+`!CALIBRAR` significa alinhar interpretação, papel, escopo, tools e prova ao estado recuperado.
+
+`!MULTIBUSSOLA` significa aplicar a matriz multidirecional e multirreferencial oficial da Casa, com remedição temporal e revisão revisitada antes do fechamento. O owner canônico do comando é `docs/CONSCIENCIA/MULTIBUSSOLA.md`. O comando reutiliza a Metacognição Operacional e a MetaLupa; não cria novo cérebro, agente ou orquestrador.
+
+```text
+#ACORDAR + !CALIBRAR + !MULTIBUSSOLA
+→ RECUPERAR ESTADO
+→ CALIBRAR LEITURA
+→ ↓ ↑ → ← ↔ ↘ ↗ ↙ ↖
+→ ✣ RENDEZVOUS
+→ BÚSSOLAS CIENTÍFICA|CAUSAL|TEMPORAL|ESPACIAL|REFERENCIAL|MULTIRREGIONAL|ADVERSARIAL
+→ META(X)
+→ REVISÃO REVISITADA
+→ REMEDIR T1
+→ FIXED_POINT
+```
+
+Todos os eixos são considerados; somente os eixos materiais são executados. Eixo material não pode ser pulado por conveniência. Eixo sem ganho informacional esperado pode ser `SKIP_JUSTIFICADO`. `UNKNOWN` nunca vira PASS.
 
 ## Boot obrigatório
 
@@ -59,11 +81,12 @@ RETOMAR MISSAO
 7. Quando outro Writer já estiver ativo ou houver colaboração multiagente, carregar `docs/ARQUITETURA/PADRAO-PARCEIRO-DELTA-JUDGE.md`.
 8. Ler `docs/CONSCIENCIA/APRENDIZADOS.md` e `docs/PENDENCIAS.md` quando relevantes.
 9. Quando a missão projetar contexto + ferramentas + observabilidade para um ambiente delimitado, carregar `docs/CONSCIENCIA/EXPANSAO-DE-DOMINIO.md`.
-10. Consultar GitHub Actions quando envolver CI/PR/merge/deploy.
-11. Medir branch, HEAD, escopo, escritor atual, runtime e ferramentas aplicáveis.
-12. Emitir uma vez o `CENTRALDARK_AI_BOOT` definido em `LEIA-ME-IA.md`.
-13. Executar a reconciliação antes de propor qualquer solução nova.
-14. Continuar do ponto real sem pedir novamente estado que a própria máquina consegue medir.
+10. Quando `!MULTIBUSSOLA` for invocado, carregar `docs/CONSCIENCIA/MULTIBUSSOLA.md`.
+11. Consultar GitHub Actions quando envolver CI/PR/merge/deploy.
+12. Medir branch, HEAD, escopo, escritor atual, runtime e ferramentas aplicáveis.
+13. Emitir uma vez o `CENTRALDARK_AI_BOOT` definido em `LEIA-ME-IA.md`.
+14. Executar a reconciliação antes de propor qualquer solução nova.
+15. Continuar do ponto real sem pedir novamente estado que a própria máquina consegue medir.
 
 ## DNA operacional concentrado
 
@@ -396,6 +419,7 @@ Regras:
 | Regra/erro/padrão reutilizável | `docs/CONSCIENCIA/APRENDIZADOS.md` |
 | Reconciliação antes de criar | `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json` |
 | Expansão de Domínio / envelope de missão | `docs/CONSCIENCIA/EXPANSAO-DE-DOMINIO.md` |
+| `!MULTIBUSSOLA` / eixos + bússolas + revisão revisitada | `docs/CONSCIENCIA/MULTIBUSSOLA.md` |
 | Coordenação/escritor único | `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` |
 | Parceiro de Delta + Judge | `docs/ARQUITETURA/PADRAO-PARCEIRO-DELTA-JUDGE.md` |
 | Promoção canônica | `.github/workflows/autonomia-promocao.yml` |
