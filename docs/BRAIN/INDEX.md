@@ -1,6 +1,6 @@
 # 📚 INDEX — Segundo Cérebro CentralDark
 
-> Gerado automaticamente em 2026-08-16 23:33 UTC. Não editar manualmente.
+> Gerado automaticamente em 2026-08-17 01:08 UTC. Não editar manualmente.
 
 ## (raiz)
 
@@ -52,5 +52,6 @@
 ## 08 - Aprendizados & Memórias
 
 - [[2026-08-16-gaveta-duravel-cristalizacao]]
+- [[2026-08-16-verde-delta-fechado-promove]]
 - [[README]]
 
