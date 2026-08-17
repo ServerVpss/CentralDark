@@ -18,7 +18,7 @@ CAPACIDADE_NOVA
 → PODE_SER_REPRESENTADA_SEM_SECRET?
 → SIM
    → PROVEN_ADMINISTRABLE=true
-   → DECLARAR ADMINISTRABLE_COMMAND=<gatilho>
+   → DECLARAR marcador ADMINISTRABLE_COMMAND=<gatilho>
    → REGISTRAR_EM docs/CONSCIENCIA/ADMINISTRAVEIS.json
    → PAINEL_ADMIN_RENDERIZA_AUTOMATICAMENTE
 ```
@@ -46,11 +46,9 @@ SECRET != PANEL_DATA
 
 ## Regra futura obrigatória + gate
 
-Quando uma capacidade **for julgada e provada administrável**, a mesma mudança deve declarar o marcador canônico e registrar a ficha antes de fechar:
+Quando uma capacidade **for julgada e provada administrável**, a mesma mudança deve declarar o marcador canônico e registrar a ficha antes de fechar.
 
-```text
-ADMINISTRABLE_COMMAND=<gatilho>
-```
+Formato do marcador: `ADMINISTRABLE_COMMAND=<gatilho>` em uma linha própria do canônico aplicável. O exemplo fica inline justamente para não ser confundido pelo gate com uma declaração real.
 
 O gate já existente `codex-validate` executa `tests/admin-guard.test.mjs`; esse agregador preserva o guard histórico e inclui `tests/admin-administrables.test.mjs`. O teste exige correspondência bijetiva entre marcadores canônicos e `ADMINISTRAVEIS.json`, owner real e gatilho presente no owner.
 
