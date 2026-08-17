@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-08-17T23:21:46.425Z
+# 🧠 Notion Sync — 2026-08-17T23:43:10.878Z
 
-- **Commit fonte:** `7d2136f7ef8c282809cb5bedfeddd0854a9802f2`
+- **Commit fonte:** `713592339483bcec57e1ecbe8aac581156cb1197`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 416 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 417 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
 | aprendizados | 26 | 0 | 26 | 0 | 0 |
-| estrutura | 347 | 1 | 346 | 0 | 0 |
+| estrutura | 348 | 1 | 347 | 0 | 0 |
 
 ## Operações
 
@@ -183,7 +183,8 @@
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-07-10-primeiro-acesso-admin-hub.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-14-arqueologia-total-ouro-recuperado.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-16-verde-delta-fechado-promove.md |
-| estrutura | criado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-17-mapa-mental-intencao-comprimida.md |
+| estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-17-mapa-mental-intencao-comprimida.md |
+| estrutura | criado | docs/CONSCIENCIA/APRENDIZADOS/EVIDENCIAS/2026-08-17-registro-visual-recibo-muitos-olhos.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/MCP/MCP-EXPLICADO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/PROXY/APRENDIZADOS_PROXY.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/PROXY/CONFIGURACAO_CLINE.md |
