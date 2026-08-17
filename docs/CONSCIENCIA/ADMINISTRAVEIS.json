@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "status": "CANONICAL",
+  "owner": "docs/CONSCIENCIA/ADMINISTRAVEIS.md",
+  "panel": "MCP CentralDark · Admin",
+  "policy": {
+    "registration_rule": "PROVEN_ADMINISTRABLE -> REGISTER_HERE -> PANEL_AUTO_RENDER",
+    "no_hardcoded_cards": true,
+    "canonical_edit_goes_to_owner": true,
+    "panel_preferences_are_not_authority": true,
+    "secrets_must_never_be_rendered": true,
+    "unknown_never_pass": true
+  },
+  "items": [
+    {
+      "id": "acordar",
+      "title": "#ACORDAR",
+      "kind": "command",
+      "status": "CANONICAL",
+      "administrable": true,
+      "glyph": "⏱️",
+      "command": "#ACORDAR",
+      "aliases": ["#ACORDA"],
+      "purpose": "Recuperar o estado real antes de continuar e retomar do ponto verdadeiro.",
+      "owner": "LEIA-ME-IA.md",
+      "trigger_help": "Digite #ACORDAR (ou #ACORDA) em uma superfície que carregue o contrato CentralDark. O comando recupera estado, não inventa contexto.",
+      "flow": [
+        "carregar SOUL e governança",
+        "recuperar histórico aplicável",
+        "medir branch/HEAD/PR/Writer/tools/runtime aplicáveis",
+        "reconciliar divergências",
+        "continuar do ponto real"
+      ],
+      "buttons": [
+        { "id": "copy", "label": "Copiar gatilho", "icon": "📋", "effect": "Copia #ACORDAR para a área de transferência." },
+        { "id": "edit", "label": "Editar oficial", "icon": "✏️", "effect": "Abre o owner canônico no GitHub para edição formal." },
+        { "id": "hide", "label": "Ocultar ficha", "icon": "🧽", "effect": "Oculta somente esta ficha neste navegador; não desliga o comando." }
+      ]
+    },
+    {
+      "id": "calibrar",
+      "title": "!CALIBRAR",
+      "kind": "command",
+      "status": "CANONICAL",
+      "administrable": true,
+      "glyph": "🎯",
+      "command": "!CALIBRAR",
+      "aliases": [],
+      "purpose": "Alinhar interpretação, papel, escopo, ferramentas e prova ao estado recuperado.",
+      "owner": "LEIA-ME-IA.md",
+      "trigger_help": "Digite !CALIBRAR. Quando usado com #ACORDAR, primeiro recupera o estado e depois calibra a leitura do alvo.",
+      "flow": [
+        "resolver intenção e linguagem",
+        "confirmar autoridade/escopo",
+        "cruzar capacidades/owners/reuso",
+        "falsificar prova/risco/false green",
+        "ajustar frequência/engine/custo/latência"
+      ],
+      "buttons": [
+        { "id": "copy", "label": "Copiar gatilho", "icon": "📋", "effect": "Copia !CALIBRAR para a área de transferência." },
+        { "id": "edit", "label": "Editar oficial", "icon": "✏️", "effect": "Abre o owner canônico no GitHub para edição formal." },
+        { "id": "hide", "label": "Ocultar ficha", "icon": "🧽", "effect": "Oculta somente esta ficha neste navegador; não desliga o comando." }
+      ]
+    },
+    {
+      "id": "multibussola",
+      "title": "!MULTIBUSSOLA",
+      "kind": "command",
+      "status": "CANONICAL",
+      "administrable": true,
+      "glyph": "🧭",
+      "command": "!MULTIBUSSOLA",
+      "aliases": ["!MULTI-BUSSOLA", "!MULTIBÚSSOLA"],
+      "purpose": "Observar o mesmo alvo por todos os eixos e referenciais materiais, cruzar contraprovas, remedir T1 e fechar somente em fixed point.",
+      "owner": "docs/CONSCIENCIA/MULTIBUSSOLA.md",
+      "trigger_help": "Digite !MULTIBUSSOLA sozinho ou junto de #ACORDAR/!CALIBRAR. Todos os eixos são considerados; os eixos materiais são executados e skips exigem razão.",
+      "flow": [
+        "recuperar/calibrar quando aplicável",
+        "percorrer eixos materiais",
+        "rendezvous ✣ / dedupe / conflito / causalidade",
+        "aplicar bússolas + META(X) + MetaLupa + Menos É Mais",
+        "revisão revisitada T0→TΔ→T1",
+        "reaplicar somente cone causal afetado",
+        "fixed point"
+      ],
+      "directions": [
+        { "symbol": "↖", "name": "TRANSVERSAL NO", "description": "Evidência lateral → causa/owner alternativo." },
+        { "symbol": "↑", "name": "BOTTOM-UP", "description": "Efeito → consumidor → implementação → causa → owner → intenção." },
+        { "symbol": "↗", "name": "TRANSVERSAL NE", "description": "Cruza camadas e sobe de efeito lateral para origem/causa." },
+        { "symbol": "←", "name": "REVERSE", "description": "Resultado → pré-requisitos → produtores → dependências → fonte." },
+        { "symbol": "✣", "name": "RENDEZVOUS", "description": "Cruza todos os achados: dedupe, conflito, contraprova, causalidade e resíduo." },
+        { "symbol": "→", "name": "FORWARD", "description": "Fonte → consumidores → dependentes → blast radius." },
+        { "symbol": "↙", "name": "TRANSVERSAL SO", "description": "Estado/efeito → histórico/owner alternativo sem confiar na hierarquia óbvia." },
+        { "symbol": "↓", "name": "TOP-DOWN", "description": "Intenção → regra → owner → implementação → consumidor → efeito." },
+        { "symbol": "↘", "name": "TRANSVERSAL SE", "description": "Origem/intenção → cross-layer → efeito lateral." },
+        { "symbol": "↔", "name": "ROUND-TRIP", "description": "Ida e volta: intenção↔implementação, claim↔prova, antes↔depois." }
+      ],
+      "compasses": [
+        "científica",
+        "causal",
+        "temporal T0→TΔ→T1",
+        "espacial",
+        "astrofísica/referencial",
+        "Lua/propagação",
+        "multirregional",
+        "pirata/adversarial",
+        "dependências/impacto",
+        "multicamada",
+        "multimaterial",
+        "metacognitiva"
+      ],
+      "buttons": [
+        { "id": "copy", "label": "Copiar gatilho", "icon": "📋", "effect": "Copia !MULTIBUSSOLA para uso em uma superfície CentralDark." },
+        { "id": "edit", "label": "Editar oficial", "icon": "✏️", "effect": "Abre MULTIBUSSOLA.md no GitHub; mudança oficial continua auditável." },
+        { "id": "hide", "label": "Ocultar ficha", "icon": "🧽", "effect": "Oculta a ficha localmente sem desligar o comando nem alterar autoridade." },
+        { "id": "reset", "label": "Restaurar visual", "icon": "↩️", "effect": "Remove preferências visuais locais e restaura a ficha no painel." }
+      ]
+    }
+  ]
+}
