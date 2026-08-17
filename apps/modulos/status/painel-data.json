@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-17T22:53:15.767Z",
-  "updatedAtBR": "17/08/2026, 19:53:15 BRT",
+  "updatedAt": "2026-08-17T23:14:40.393Z",
+  "updatedAtBR": "17/08/2026, 20:14:40 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "fix(multibussola): separar parser, nome falado e Meta sem duplicar conceito (#1016)",
+    "lastCommit": "docs(memory): relembrar Viver em Paz com letra e contexto afetivo (#1018)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-17T23:14:40.393Z",
+      "titulo": "Push na main · 65d24d9aa957ea9be5bd1a380419b78ea9406365",
+      "detalhe": "docs(memory): relembrar Viver em Paz com letra e contexto afetivo (#1018)",
+      "area": "Repositório",
+      "sha": "65d24d9",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-17T22:53:15.767Z",
       "titulo": "Push na main · 3493b5ebba4317ec10870cc893499172a86e5829",
       "detalhe": "fix(multibussola): separar parser, nome falado e Meta sem duplicar conceito (#1016)",
@@ -988,14 +996,6 @@
       "detalhe": "chore(git): cristalizar backup efêmero e histórico no Git",
       "area": "Repositório",
       "sha": "baa8654",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-16T08:45:24.534Z",
-      "titulo": "Push na main · b47df132bb9925b32429a6bba83715ac9bfbc607",
-      "detalhe": "fix(comunicação): estado primeiro com técnico mínimo suficiente (#945)",
-      "area": "Repositório",
-      "sha": "b47df13",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-17T23:14:40.393Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 65d24d9aa957ea9be5bd1a380419b78ea9406365 (65d24d9)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-17T22:53:15.767Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 3493b5ebba4317ec10870cc893499172a86e5829 (3493b5e)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-16T09:13:06.389Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · baa86545c89f510ecfbd0e340d2be4e614054325 (baa8654)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-16T08:45:24.534Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · b47df132bb9925b32429a6bba83715ac9bfbc607 (b47df13)",
       "area": "Repositório",
       "status": "sucesso"
     }
