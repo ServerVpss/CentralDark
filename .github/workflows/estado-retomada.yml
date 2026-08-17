@@ -28,6 +28,8 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:
@@ -37,6 +39,7 @@ jobs:
         run: node scripts/estado/gerar-estado-retomada.mjs
 
       - name: Commitar apenas se houver diferenca real
+        shell: bash
         run: |
           set -euo pipefail
           if git diff --quiet -- docs/ESTADO-DA-RETOMADA.md; then
@@ -47,4 +50,15 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add docs/ESTADO-DA-RETOMADA.md
           git commit -m "chore(estado): regenerar ESTADO DA RETOMADA [skip ci]"
-          git push
+
+          PUSHED=false
+          for TRY in 1 2 3; do
+            git pull --rebase -X ours origin main
+            if git push origin HEAD:main; then
+              PUSHED=true
+              break
+            fi
+            echo "ESTADO_PUSH_RETRY=${TRY}"
+            sleep 2
+          done
+          test "$PUSHED" = true || { echo 'ESTADO_RETOMADA_PUSH_FAILED'; exit 1; }

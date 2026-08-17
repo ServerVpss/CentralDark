@@ -34,13 +34,20 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: painel-vivo
+  cancel-in-progress: false
+
 jobs:
   atualizar-painel:
     runs-on: [self-hosted, Linux]
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
-      - name: Atualizar painel vivo
+      - name: Atualizar painel vivo no owner canônico
         env:
           PAINEL_EVENTO: ${{ inputs.evento }}
           PAINEL_EVENTO_DETALHE: ${{ inputs.detalhe }}
@@ -49,12 +56,32 @@ jobs:
           PAINEL_MARCO: ${{ inputs.marco }}
           PAINEL_MARCO_PCT: ${{ inputs.marco_pct }}
           PAINEL_MARCO_STATUS: ${{ inputs.marco_status }}
-        run: node CentralDark/apps/projeto-dashboard/atualizar-painel-vivo.mjs
+          ACTOR: ${{ github.actor }}
+          SHA: ${{ github.sha }}
+        run: node apps/modulos/status/atualizar-painel-vivo.mjs
 
-      - name: Commit painel vivo
+      - name: Commit painel vivo sem colisão silenciosa
+        shell: bash
         run: |
+          set -euo pipefail
           git config user.name 'CentralDark Bot'
           git config user.email 'actions@github.com'
-          git add -- CentralDark/apps/projeto-dashboard/painel-data.json
-          git commit -m "chore(painel): atualizar mapa vivo" || exit 0
-          git push
+          git add -- apps/modulos/status/painel-data.json
+          if git diff --cached --quiet; then
+            echo 'PAINEL_VIVO_NO_CHANGE=1'
+            exit 0
+          fi
+          git commit -m "chore(painel): atualizar mapa vivo
+
+          Co-authored-by: SegredoiDev <segredounlock@users.noreply.github.com>"
+          PUSHED=false
+          for TRY in 1 2 3; do
+            git pull --rebase -X ours origin main
+            if git push origin HEAD:main; then
+              PUSHED=true
+              break
+            fi
+            echo "PUSH_RETRY=${TRY}"
+            sleep 2
+          done
+          test "$PUSHED" = true || { echo 'PAINEL_VIVO_PUSH_FAILED'; exit 1; }

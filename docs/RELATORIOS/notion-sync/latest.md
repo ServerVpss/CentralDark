@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-08-16T23:24:53.779Z
+# 🧠 Notion Sync — 2026-08-17T21:16:38.989Z
 
-- **Commit fonte:** `6e61026bc8a5d33cac66adb875831a1cb8e2919d`
+- **Commit fonte:** `e772c176e4ac68c71ad3a7ef13e612a69cdd93da`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 413 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 414 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
 | aprendizados | 26 | 0 | 26 | 0 | 0 |
-| estrutura | 344 | 1 | 343 | 0 | 0 |
+| estrutura | 345 | 1 | 344 | 0 | 0 |
 
 ## Operações
 
@@ -181,7 +181,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-07-10-gateway-138-modelos-e-schema-real-hub.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-07-10-primeiro-acesso-admin-hub.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-14-arqueologia-total-ouro-recuperado.md |
-| estrutura | criado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-16-verde-delta-fechado-promove.md |
+| estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-16-verde-delta-fechado-promove.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/MCP/MCP-EXPLICADO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/PROXY/APRENDIZADOS_PROXY.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/PROXY/CONFIGURACAO_CLINE.md |
@@ -292,6 +292,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md |
 | estrutura | atualizado | docs/CONSCIENCIA/MISSAO-CONVERGENCIA-TRIPLA-FORMULA-20260816.md |
 | estrutura | atualizado | docs/CONSCIENCIA/MODO-SEGREDO.md |
+| estrutura | criado | docs/CONSCIENCIA/MULTIBUSSOLA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/NOTIFY/INSTALAR-VPS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/NOTIFY/README.md |
 | estrutura | atualizado | docs/CONSCIENCIA/NOTION-MAPA.md |
