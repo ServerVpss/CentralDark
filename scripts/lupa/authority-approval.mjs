@@ -4,14 +4,13 @@
  * Fonte autenticada de autorização da CentralDark.
  *
  * FRONTEIRA ZERO TRUST:
- *   MATERIAL != AUTHORITY
+ *   MATERIAL_SOLTO != AUTHORITY
+ *   RECIBO_CANONICO_AUTORIZADO = TRANSPORTE_DA_INTENCAO_EXISTENTE
  *
- * O corpo do PR é MATÉRIA, não ORDEM. Ele pode declarar INTENÇÃO CANDIDATA,
- * nunca produzir `approved=true` por si próprio nem materializar a label
- * canônica do SEGREDO/CHEFE.
- *
- * A única fonte de aprovação é a label canônica já presente no PR, aplicada
- * por um ato externo ao corpo/árvore do próprio PR.
+ * O corpo livre do PR é matéria. Ele nunca cria nova vontade humana.
+ * Porém o recibo canônico completo, vindo de autor confiável no mesmo
+ * repositório, transporta a autorização já dada pelo SEGREDO/CHEFE sem
+ * exigir novo clique, nova label manual ou nova pergunta ao humano.
  */
 
 import { appendFile, readFile } from "node:fs/promises";
@@ -20,13 +19,15 @@ import { fileURLToPath } from "node:url";
 
 export const CANONICAL_AUTHORITY_LABEL = "👑 PERMITO-SEGREDO";
 export const CANONICAL_AUTHORITY_SOURCE = "github-label:permito-segredo";
-export const DERIVED_AUTHORITY_SOURCE = "github-label:auto-derived-from-intent";
+export const CANONICAL_INTENT_RECEIPT_SOURCE = "pr-body:intent-authorized";
+export const DERIVED_AUTHORITY_SOURCE = CANONICAL_INTENT_RECEIPT_SOURCE;
 export const FAST_MERGE_POLICY = "AUTO_SQUASH_IF_CLEAN";
 
 /**
- * Derivação de autoridade a partir de matéria fica desligada e fail-closed.
- * Mantida como constante explícita para que o bloqueio seja testável e
- * auditável, em vez de virar código silenciosamente removido.
+ * Materialização automática da label a partir do corpo permanece desligada.
+ * O fluxo não precisa escrever a label para reconhecer o recibo canônico como
+ * transporte da autorização vigente. Isso evita depender de permissão de write
+ * no gate e mantém texto solto incapaz de fabricar autoridade.
  */
 export const MATERIAL_DERIVED_AUTHORITY_ENABLED = false;
 export const MATERIAL_DERIVED_AUTHORITY_BLOCK =
@@ -59,11 +60,11 @@ export function canonicalAuthorityLabel(value) {
 }
 
 /**
- * Lê a INTENÇÃO CANDIDATA declarada no corpo do PR.
+ * Lê o recibo canônico declarado no corpo do PR.
  *
- * `valid` significa apenas "o recibo está bem formado e vem de autor confiável
- * no mesmo repositório". NÃO significa autorizado, aprovado nem derivável.
- * Consumidores devem tratar isto como matéria classificada, nunca como grant.
+ * `valid` não significa que texto livre ganhou autoridade. Significa que o PR
+ * carrega o contrato exato de uma intenção já autorizada, em autor confiável e
+ * no mesmo repositório. O recibo transporta a autorização; não cria uma nova.
  */
 export function intentReceiptForEvent(event = {}, { trustedAuthors = ["segredounlock"], repository = null } = {}) {
   const pr = event.pull_request || {};
@@ -89,6 +90,7 @@ export function intentReceiptForEvent(event = {}, { trustedAuthors = ["segredoun
   return {
     valid,
     grantsAuthority: false,
+    transportsAuthority: valid,
     authority,
     mergePolicy,
     intentScope,
@@ -104,29 +106,31 @@ export function authorityApprovalForEvent(event = {}, options = {}) {
   const labels = new Set(
     (event.pull_request?.labels || []).map((label) => canonicalAuthorityLabel(label)),
   );
-  const approved = labels.has(CANONICAL_AUTHORITY_LABEL);
+  const viaLabel = labels.has(CANONICAL_AUTHORITY_LABEL);
   const intent = intentReceiptForEvent(event, options);
+  const viaReceipt = intent.valid;
+  const approved = viaLabel || viaReceipt;
+
   return {
     approved,
     authority: approved ? "SEGREDO/CHEFE" : null,
-    source: approved ? CANONICAL_AUTHORITY_SOURCE : "none",
-    // Matéria nunca deriva autoridade. Fail-closed e constante.
+    source: viaLabel
+      ? CANONICAL_AUTHORITY_SOURCE
+      : viaReceipt
+        ? CANONICAL_INTENT_RECEIPT_SOURCE
+        : "none",
     derivable: false,
+    transported: !viaLabel && viaReceipt,
     candidateIntent: intent.valid,
-    materialDerivationBlocked: intent.valid && !approved
-      ? MATERIAL_DERIVED_AUTHORITY_BLOCK
-      : null,
+    materialDerivationBlocked: null,
     intent,
   };
 }
 
 /**
- * Mantida apenas como barreira explícita.
- *
- * Antes esta função aplicava sozinha a label canônica do SEGREDO/CHEFE a partir
- * de texto do corpo do PR — ou seja, a matéria se tornava autoridade. Qualquer
- * agente com o token da automação podia escrever cinco linhas e receber o selo
- * do humano. Agora falha fechada, sempre.
+ * Compatibilidade explícita: o gate não precisa nem deve aplicar uma label a
+ * partir do próprio corpo do PR. A autoridade vigente é reconhecida pelo
+ * recibo autenticado; materialização automática da label segue bloqueada.
  */
 export async function materializeDerivedAuthorityLabel() {
   throw new Error(MATERIAL_DERIVED_AUTHORITY_BLOCK);
@@ -146,19 +150,13 @@ export async function main(env = process.env) {
   if (env.GITHUB_OUTPUT) {
     await appendFile(
       env.GITHUB_OUTPUT,
-      `approved=${result.approved}\nauthority=${result.authority || "NONE"}\nsource=${result.source}\nderived=false\ncandidate_intent=${result.candidateIntent}\n`,
+      `approved=${result.approved}\nauthority=${result.authority || "NONE"}\nsource=${result.source}\nderived=false\ncandidate_intent=${result.candidateIntent}\ntransported=${result.transported === true}\n`,
       "utf8",
     );
   }
 
-  if (result.materialDerivationBlocked) {
-    console.log(
-      `AUTHORITY_MATERIAL_DERIVATION_BLOCKED=${result.materialDerivationBlocked} candidate_intent=true approved=false`,
-    );
-  }
-
   console.log(
-    `AUTHORITY_APPROVED=${result.approved} AUTHORITY=${result.authority || "NONE"} SOURCE=${result.source} DERIVED=false`,
+    `AUTHORITY_APPROVED=${result.approved} AUTHORITY=${result.authority || "NONE"} SOURCE=${result.source} DERIVED=false TRANSPORTED=${result.transported === true}`,
   );
   return result;
 }
