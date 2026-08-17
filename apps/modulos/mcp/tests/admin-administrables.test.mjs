@@ -30,14 +30,16 @@ async function declaredAdministrableCommands() {
   return commands;
 }
 
-test('registro canônico contém os três comandos governáveis', async () => {
+test('registro canônico preserva os três comandos baseline e aceita expansão', async () => {
   const registry = await readRegistry();
   assert.equal(registry.status, 'CANONICAL');
   assert.equal(registry.policy.registration_rule, 'PROVEN_ADMINISTRABLE -> REGISTER_HERE -> PANEL_AUTO_RENDER');
   assert.equal(registry.policy.declaration_marker, 'ADMINISTRABLE_COMMAND=<gatilho>');
 
   const ids = new Set(registry.items.map((item) => item.id));
-  assert.deepEqual(ids, new Set(['acordar', 'calibrar', 'multibussola']));
+  for (const required of ['acordar', 'calibrar', 'multibussola']) {
+    assert.ok(ids.has(required), `baseline administrável ausente: ${required}`);
+  }
 
   const multi = registry.items.find((item) => item.id === 'multibussola');
   assert.equal(multi.command, '!MULTIBUSSOLA');
