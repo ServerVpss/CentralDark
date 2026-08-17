@@ -48,14 +48,11 @@ jobs:
 
           Co-authored-by: SegredoiDev <segredounlock@users.noreply.github.com>"
 
-          PUSHED=false
-          for TRY in 1 2 3; do
-            git pull --rebase -X ours origin main
-            if git push origin HEAD:main; then
-              PUSHED=true
-              break
-            fi
-            echo "PUSH_RETRY=${TRY}"
-            sleep 2
-          done
-          test "$PUSHED" = true || { echo 'PAINEL_VALIDACAO_PUSH_FAILED'; exit 1; }
+          BASE_SHA=$(git rev-parse HEAD^)
+          git fetch --no-tags origin main
+          REMOTE_SHA=$(git rev-parse FETCH_HEAD)
+          if [ "$REMOTE_SHA" != "$BASE_SHA" ]; then
+            echo "PAINEL_VALIDACAO_BLOCKED_DIVERGENCE base=$BASE_SHA remote=$REMOTE_SHA"
+            exit 1
+          fi
+          git push origin HEAD:main
