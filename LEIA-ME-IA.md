@@ -3,7 +3,7 @@ title: "LEIA-ME-IA"
 status: "CANÔNICO"
 scope: "Porta de entrada única para qualquer IA que conectar no CentralDark"
 source_of_truth: "Este arquivo + SOUL canônica + estado real medido"
-updated: 2026-08-16
+updated: 2026-08-17
 ---
 
 # LEIA-ME-IA — comece por aqui
@@ -120,6 +120,7 @@ CENTRALDARK_AI_BOOT:
   role: "COORDINATOR|EXECUTOR|DEBUGGER|REVIEWER|JUDGE|HERMES|READ_ONLY"
   writer: "NONE|nome-do-escritor-atual"
   frequency: "LEVE|RAPIDA|MEDIA|PROFUNDA|FORTE|AVANCADA|FRIA|ORQUESTRA|ADAPTIVE"
+  fronts: "ADAPTIVE_1_TO_10"
 ```
 
 O recibo prova carregamento do contrato; não inventa permissão/tool nem substitui teste.
@@ -130,6 +131,112 @@ O recibo prova carregamento do contrato; não inventa permissão/tool nem substi
 #ACORDAR = RECUPERAR O ESTADO REAL ANTES DE CONTINUAR
 !CALIBRAR = ALINHAR INTERPRETACAO + PAPEL + ESCOPO + TOOLS + PROVA
 ```
+
+`#ACORDAR` e `!CALIBRAR` usam o mesmo organismo e podem abrir **frentes paralelas de percepção/reconciliação**. Dez é teto de potência, não quota: uma tarefa simples usa a menor quantidade suficiente; missão ampla, incerta ou crítica pode usar todas as frentes aplicáveis.
+
+```text
+GLOBAL_HOUSE_RULE=ACORDAR_CALIBRAR_ADAPTIVE_FANOUT
+FRONT_FANOUT_MIN=1
+FRONT_FANOUT_MAX=10
+FRONT_FANOUT_ADAPTIVE=true
+TEN_IS_CEILING_NOT_QUOTA=true
+FRONT_COUNT_IS_NOT_MODEL_COUNT=true
+FRONTS_ARE_READ_ONLY_UNTIL_RENDEZVOUS=true
+PARALLEL_PERCEPTION=true
+SERIALIZED_MUTATION=true
+ONE_WRITER_PER_SCOPE=true
+EXTERNAL_RESPONSE=COMPRESSED
+```
+
+### 2.1 As 5 frentes de `#ACORDAR`
+
+```text
+A1_HISTORY_SOUL
+→ SOUL, histórico relevante, lembranças, aprendizados e pendências aplicáveis
+
+A2_LIVE_REPOSITORY
+→ branch, HEAD, PRs, commits, diff e estado Git vivo
+
+A3_WRITERS_OWNERS_LOCKS
+→ owners, Writer atual, leases/locks, escopos concorrentes e handoff
+
+A4_RUNTIME_TOOLS_CONNECTIONS
+→ runtime aplicável, ferramentas reais, conexões, disponibilidade e limites físicos
+
+A5_CONTINUITY_DELTA_REPLAY
+→ continuidade, eventos/deltas novos, replay, cursor/retomada e mudança de estado durante a missão
+```
+
+### 2.2 As 5 frentes de `!CALIBRAR`
+
+```text
+C1_INTENT_LANGUAGE
+→ intenção, linguagem, referência, contexto e leitura provável sem normalizar cedo demais
+
+C2_AUTHORITY_SCOPE_PERMISSION
+→ autoridade, escopo, autorização vigente, limites e ação permitida
+
+C3_CAPABILITIES_OWNERS_REUSE
+→ capacidades existentes, owner canônico, reuso, dedupe e gap material real
+
+C4_PROOF_RISK_COUNTERPROOF
+→ prova, risco, UNKNOWN, contraprova, regressão, false green e alvo correto da evidência
+
+C5_FREQUENCY_ENGINE_COST_LATENCY
+→ frequência operacional, engine disponível, custo, latência e menor potência suficiente
+```
+
+Regra de ativação:
+
+```text
+TRIGGER=#ACORDAR
+→ considerar A1..A5
+
+TRIGGER=!CALIBRAR
+→ considerar C1..C5
+
+TRIGGER=#ACORDAR+!CALIBRAR
+→ considerar A1..A5 + C1..C5
+→ ativar somente as frentes com ganho informacional esperado
+→ máximo 10
+```
+
+Uma única IA pode executar várias frentes. Dez frentes **não** exigem dez modelos, dez agentes, dez janelas ou dez ferramentas. Quando houver braços físicos disponíveis, eles podem ser usados em paralelo somente para percepção/read-only; indisponibilidade de um braço não inventa bloqueio se outra capacidade autorizada cobre a frente.
+
+Cada frente produz um pacote curto e observável:
+
+```text
+FRONT_ID=
+STATUS=FACT|INFERENCE|HYPOTHESIS|UNKNOWN|NO_CHANGE
+EVIDENCE_REF=
+MATERIAL_DELTA=
+BLOCKER=
+NEXT=
+```
+
+As frentes não decidem por votação e não escrevem por conta própria. Antes de qualquer mutação, convergem no mesmo rendezvous:
+
+```text
+ACTIVE_FRONTS
+→ NORMALIZE_EVIDENCE
+→ DEDUPE
+→ SAME_TARGET_CONFLICT ? DISCRIMINATING_TEST : CONTINUE
+→ RECONCILED_SNAPSHOT
+→ ONE_NEXT_ACTION
+→ ONE_WRITER_PER_SCOPE
+→ VERIFY
+```
+
+```text
+SAME_FINDING_NO_NEW_EVIDENCE → DROP_DUPLICATE
+CORRELATED_VIEWS != INDEPENDENT_PROOFS
+UNKNOWN != PASS
+NO_CHANGE != WORK_TO_INVENT
+FRONT_DISAGREEMENT != MODEL_VOTE
+REALITY_IS_JUDGE=true
+```
+
+O fan-out é interno. A resposta ao SEGREDO/CHEFE continua mínima e consolidada: não despejar dez relatórios quando um snapshot reconciliado responde melhor.
 
 Quando houver reset de contexto, troca de agente, retomada ou `#ACORDAR`:
 
