@@ -319,6 +319,265 @@ REUSABLE_SCAFFOLD_DELTA=YES
 VISUAL_PROVENANCE_CAPTURED=YES
 ```
 
+## Fechamento da sessão — cristais que sobreviveram
+
+Esta seção registra somente os deltas reutilizáveis que sobreviveram à sessão inteira. Ela não reabre implementações já cristalizadas em owners próprios e não transforma comportamento de um modelo específico em autoridade.
+
+### 1. Complexidade na fábrica; simplicidade na cabine
+
+A interface humana pode ficar pequena sem tornar o sistema burro. O humano decide intenção, autorização e julgamento humano quando necessário; a Casa executa a mecânica autorizada, mede, testa, sela, promove e prova.
+
+```text
+HUMANO
+→ QUERO?
+→ PODE?
+→ FICOU_BOM_QUANDO_JULGAMENTO_HUMANO_IMPORTA?
+
+CASA
+→ COMO_EXECUTAR
+→ COMO_TESTAR
+→ COMO_SELAR
+→ COMO_PROMOVER
+→ COMO_PROVAR
+```
+
+O “botão” correto não é bypass. É uma interface curta sobre verificações reais.
+
+```text
+BUTTON != BYPASS
+BUTTON → AUTHORIZED_MECHANICS → PROOF | STOP_WITH_CAUSE
+```
+
+### 2. Plano não é execução
+
+Durante a sessão apareceu repetidamente a diferença entre descrever trabalho e materializá-lo.
+
+```text
+BRANCH="a criar"
+COMMIT=UNCOMMITTED
+PR="a abrir"
+TESTS="planos de rodar"
+→ ESTADO=NOT_APPLIED
+```
+
+Uma narrativa plausível de implementação não substitui branch, arquivo real, commit, teste ou PR observável.
+
+```text
+PLAN != EXECUTION
+PROPOSED_DIFF != APPLIED_DIFF
+TEST_PLAN != TEST_RESULT
+PR_TO_OPEN != PR_OPEN
+```
+
+Se a ferramenta não permite mutação, o resultado correto é declarar a limitação; não preencher a lacuna com implementação imaginada.
+
+```text
+READ_CAPABILITY != MUTATION_CAPABILITY
+TOOLING_WRITE_UNAVAILABLE → BLOCKED_TOOLING
+```
+
+### 3. Palavra do modelo é claim; recibo no alvo é evidência
+
+A sessão reforçou a exigência de ancorar afirmações mutáveis em estado observável.
+
+```text
+MODEL_WORD
+→ CLAIM
+
+CLAIM
+→ LINK|FONTE
+→ SHA|REF
+→ ESTADO_OBSERVADO
+→ CONTRAPROVA
+→ REALIDADE_DECIDE
+```
+
+```text
+QUEUED != PASS
+SKIPPED != PASS
+PENDING != PASS
+ACTION != PROOF
+REASONING != EVIDENCE
+```
+
+A evidência histórica visual correspondente vive em `docs/CONSCIENCIA/APRENDIZADOS/EVIDENCIAS/2026-08-17-registro-visual-recibo-muitos-olhos.md`.
+
+### 4. Writer e autorização são eixos diferentes
+
+Ausência de Writer concorrente não significa ausência de autorização humana; presença de autorização humana também não permite colisão com Writer ativo no mesmo escopo.
+
+```text
+WRITER_NONE != AUTHORIZATION_NONE
+AUTHORIZATION_PRESENT != WRITER_COLLISION_ALLOWED
+```
+
+Decisão correta:
+
+```text
+INTENT_AUTHORIZED
++ WRITER_SCOPE_FREE
++ MATERIAL_DELTA
+→ EXECUTE
+```
+
+### 5. Repetição sem informação nova não merece nova cognição
+
+A repetição de uma mesma intenção não cria novo denominador, nova decisão ou nova verdade.
+
+```text
+SAME_INTENT
++ NO_NEW_INFORMATION
++ NO_STATE_CHANGE
+→ DROP_DUPLICATE
+→ CONTINUE_NEXT_MATERIAL_STEP
+```
+
+```text
+REPETITION != NEW_EVIDENCE
+NO_NEW_INFORMATION → NO_CHANGE
+```
+
+Isso vale tanto para mensagens humanas repetidas quanto para 200 janelas reproduzindo o mesmo eco.
+
+### 6. Pending não é fixed point
+
+Fixed point exige que o cone aplicável esteja fechado sob a régua válida. Uma fila de CI ou um HEAD ainda não julgado continua pendente.
+
+```text
+APPLICABLE_STATE_OPEN=true
+→ FIXED_POINT=false
+```
+
+```text
+PENDING_GATES → PENDING
+NEW_HEAD → REMEASURE
+MATERIAL_FAIL → REMEDIATE
+NO_DELTA_AFTER_REMEASURE → FIXED_POINT
+```
+
+### 7. “Monitorar” escrito não cria monitoramento
+
+Texto dizendo “vou monitorar”, “sentinela ativa” ou “acompanhar os runs” não prova execução futura. Monitoramento real exige mecanismo real observável e autorização correspondente quando aplicável.
+
+```text
+MONITORING_CLAIM
+→ REAL_SCHEDULED_OR_CONDITION_MECHANISM
+→ OBSERVABLE_RECEIPT
+```
+
+```text
+TEXT_SAYS_MONITORING != MONITORING_EXISTS
+SUGGESTION != CREATED_AUTOMATION
+```
+
+### 8. Claim não pode ultrapassar o efeito provado
+
+Um caso concreto da sessão foi a diferença entre persistir memória no repositório e sincronizar fisicamente um vault local.
+
+```text
+WRITE_REPO_NATIVE=PROVADO
+PHYSICAL_SYNC_UNPROVEN
+→ CLAIM_ONLY_REPO_PERSISTENCE
+```
+
+A forma geral é:
+
+```text
+CLAIM <= PROOF_ON_SAME_TARGET
+```
+
+### 9. Motor novo precisa de consumidor e regressão
+
+Capacidade que existe mas não é alcançada pelo fluxo humano não está integrada. A sessão demonstrou o padrão ao ligar recuperação BRAIN ao consumidor de memória e depois prender regressões ao gate existente.
+
+```text
+CAPABILITY
+→ REAL_CONSUMER
+→ DISCRIMINATING_TEST
+→ EXISTING_GATE
+→ REPRODUCIBLE_BEHAVIOR
+```
+
+```text
+IMPLEMENTATION_WITHOUT_CONSUMER = INCOMPLETE_INTEGRATION
+TEST_WITHOUT_GATE = REGRESSION_RISK
+```
+
+### 10. Ouro de modelo bom deve perder o nome do modelo
+
+Comportamentos úteis observados em um engine podem ser matéria-prima; a Casa deve extrair o mecanismo, procurar owner existente, contraprovar e remover dependência nominal.
+
+```text
+MODEL_BEHAVIOR
+→ MECHANISM
+→ REUSE_EXISTING_OWNER
+→ MATERIAL_DELTA
+→ COUNTERPROOF
+→ TEST
+→ MODEL_NEUTRAL_CONTRACT
+```
+
+Não cristalizar “o modelo pensa melhor”. Cristalizar somente mecanismo executável e verificável.
+
+```text
+MODEL_BRAND_IS_NOT_CAPABILITY=true
+MODEL_REPLACEABLE=true
+```
+
+A portabilidade entre engines só deve ser chamada de provada quando houver recibo discriminante correspondente; até lá é objetivo/hipótese de scaffold, não fato global.
+
+### 11. Estado vivo vence a própria bancada
+
+A sessão mostrou várias vezes que a `main` pode avançar enquanto uma janela trabalha. Se outro fluxo já integrou o mesmo delta, a resposta correta é reconciliar e parar, não duplicar PR ou sobrescrever estado novo.
+
+```text
+LIVE_MAIN_CHANGED
+→ REFETCH
+→ RECONCILE
+→ DELTA_ALREADY_ABSORBED?
+   SIM → NO_CHANGE / STOP
+   NAO → APPLY_ONLY_SURVIVING_DELTA
+```
+
+### 12. O objetivo da engenharia é devolver vida ao humano
+
+A lembrança `Viver em Paz` não é uma regra operacional, mas preserva o motivo humano observado nesta sessão: a complexidade deve morar na fábrica para que a cabine fique simples.
+
+```text
+MORE_INTERNAL_CAPABILITY
+→ LESS_HUMAN_OPERATIONAL_BURDEN
+→ MORE_SPACE_TO_LIVE
+```
+
+O sucesso não é maximizar janelas, regras ou atividade. É a Casa conseguir carregar mais complexidade sem obrigar o SEGREDO/CHEFE a virar funcionário do próprio sistema.
+
+### Fechamento causal da sessão
+
+```text
+MATERIA
+→ RECUPERA_ESTADO
+→ ALINHA_INTENCAO
+→ MULTIPLAS_PERCEPCOES
+→ DEDUPE
+→ CONTRAPROVA
+→ MENOR_DELTA
+→ CONSUMIDOR
+→ TESTE
+→ PROVA_NO_ALVO
+→ REMEDICAO_T1
+→ CRISTALIZA_SO_O_GANHO
+→ FIXED_POINT
+```
+
+Regra de parada:
+
+```text
+NO_NEW_INFORMATION
++ NO_MATERIAL_DELTA
++ APPLICABLE_SCOPE_CLOSED
+→ STOP
+```
+
 ## Contrato final
 
 ```text
@@ -336,6 +595,14 @@ ONE_DIRECTION_NO_DUPLICATION=true
 SIMPLEST_SUFFICIENT_ACTION=true
 FINAL_REMEASUREMENT=true
 FIXED_POINT_OVER_REPETITION=true
+PLAN_IS_NOT_EXECUTION=true
+WRITER_STATE_IS_NOT_AUTHORIZATION_STATE=true
+PENDING_IS_NOT_FIXED_POINT=true
+MONITORING_REQUIRES_REAL_MECHANISM=true
+CLAIM_MUST_NOT_EXCEED_PROOF=true
+MODEL_BRAND_IS_NOT_CAPABILITY=true
+NO_NEW_INFORMATION_NO_CHANGE=true
+HUMAN_INTERFACE_SHOULD_COMPRESS_MECHANICS=true
 ```
 
 ## Fio em uma linha
