@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-17T01:07:45.510Z",
-  "updatedAtBR": "16/08/2026, 22:07:45 BRT",
+  "updatedAt": "2026-08-17T04:21:13.790Z",
+  "updatedAtBR": "17/08/2026, 01:21:13 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "learn(brain): espalhar padrão verde + delta fechado (#995)",
+    "lastCommit": "docs(comunicação): tornar SECO o modo padrão (#999)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-17T04:21:13.790Z",
+      "titulo": "Push na main · 4e14e207810f1b9d7f582f1ebb5f732d873bb314",
+      "detalhe": "docs(comunicação): tornar SECO o modo padrão (#999)",
+      "area": "Repositório",
+      "sha": "4e14e20",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-17T01:07:45.510Z",
       "titulo": "Push na main · 18bc0311c2024520c1254759f5d25175beae610f",
       "detalhe": "learn(brain): espalhar padrão verde + delta fechado (#995)",
@@ -988,14 +996,6 @@
       "detalhe": "docs(governança): fixar partitura única e self-distillation operacional (#932)",
       "area": "Repositório",
       "sha": "7dd97f0",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-16T02:55:41.024Z",
-      "titulo": "Push na main · aa7da9a404a5198115b0163643ba0c4104a490a9",
-      "detalhe": "docs(governança): tornar contorno funcional padrão global da Casa (#931)",
-      "area": "Repositório",
-      "sha": "aa7da9a",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-17T04:21:13.790Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 4e14e207810f1b9d7f582f1ebb5f732d873bb314 (4e14e20)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-17T01:07:45.510Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 18bc0311c2024520c1254759f5d25175beae610f (18bc031)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-16T03:00:43.052Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 7dd97f03a35e052a0fc11d26dfb1c632477460c4 (7dd97f0)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-16T02:55:41.024Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · aa7da9a404a5198115b0163643ba0c4104a490a9 (aa7da9a)",
       "area": "Repositório",
       "status": "sucesso"
     }
