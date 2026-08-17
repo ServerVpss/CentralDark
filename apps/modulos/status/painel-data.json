@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-17T04:21:13.790Z",
-  "updatedAtBR": "17/08/2026, 01:21:13 BRT",
+  "updatedAt": "2026-08-17T04:37:52.429Z",
+  "updatedAtBR": "17/08/2026, 01:37:52 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "docs(comunicação): tornar SECO o modo padrão (#999)",
+    "lastCommit": "feat(inventário): mapear métodos Hermes por função, métrica e limite (#1000)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-17T04:37:52.429Z",
+      "titulo": "Push na main · 81163669732ae85b504c74789ec79b4bece7a918",
+      "detalhe": "feat(inventário): mapear métodos Hermes por função, métrica e limite (#1000)",
+      "area": "Repositório",
+      "sha": "8116366",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-17T04:21:13.790Z",
       "titulo": "Push na main · 4e14e207810f1b9d7f582f1ebb5f732d873bb314",
       "detalhe": "docs(comunicação): tornar SECO o modo padrão (#999)",
@@ -988,14 +996,6 @@
       "detalhe": "feat(hub): fechar Inventário com cristais e minérios registrados (#918)",
       "area": "Repositório",
       "sha": "1388275",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-16T03:00:43.052Z",
-      "titulo": "Push na main · 7dd97f03a35e052a0fc11d26dfb1c632477460c4",
-      "detalhe": "docs(governança): fixar partitura única e self-distillation operacional (#932)",
-      "area": "Repositório",
-      "sha": "7dd97f0",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-17T04:37:52.429Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 81163669732ae85b504c74789ec79b4bece7a918 (8116366)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-17T04:21:13.790Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 4e14e207810f1b9d7f582f1ebb5f732d873bb314 (4e14e20)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-16T03:05:08.868Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 1388275b6dd9da27a2d899e7a558f0e2b8c6d32c (1388275)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-16T03:00:43.052Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 7dd97f03a35e052a0fc11d26dfb1c632477460c4 (7dd97f0)",
       "area": "Repositório",
       "status": "sucesso"
     }
