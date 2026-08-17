@@ -43,6 +43,13 @@ test('registro canônico preserva os três comandos baseline e aceita expansão'
 
   const multi = registry.items.find((item) => item.id === 'multibussola');
   assert.equal(multi.command, '!MULTIBUSSOLA');
+  assert.equal(multi.title, 'Multi Bússola');
+  assert.equal(multi.spoken_name, 'Multi Bússola');
+  assert.equal(multi.pronunciation_pt_br, 'MÚL-ti BÚS-so-la');
+  assert.equal(multi.meta_spoken_alias, 'Meta Bússola');
+  assert.match(multi.meta_semantics, /META_MULTIBUSSOLA/);
+  assert.equal(registry.items.some((item) => /^!META[-_]?BUSSOLA$/i.test(item.command || '')), false,
+    'Meta Bússola é leitura humana de META_MULTIBUSSOLA, não novo comando');
   assert.deepEqual(
     new Set(multi.directions.map((item) => item.symbol)),
     new Set(['↑', '↓', '→', '←', '↔', '↗', '↖', '↘', '↙', '✣']),
@@ -86,6 +93,7 @@ test('injector existente materializa a Central de Comandos sem segundo painel', 
   const rendered = injectPatternAdmin(html);
   assert.match(rendered, /data-p="commands"/);
   assert.match(rendered, /Central de Comandos/);
+  assert.match(rendered, /Multi Bússola/);
   assert.match(rendered, /!MULTIBUSSOLA/);
   assert.match(rendered, /#ACORDAR/);
   assert.match(rendered, /!CALIBRAR/);

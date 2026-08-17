@@ -75,6 +75,31 @@ A decisão semântica de que algo **é** administrável continua sendo feita por
 
 A tela não hardcoda um card por capacidade. Ela lê o registro canônico e renderiza os itens. Assim, uma nova capacidade registrada entra na mesma Central de Comandos sem criar novo painel, novo dashboard ou novo orquestrador.
 
+## Nome de exibição, parser e voz
+
+Comando técnico e nome humano não precisam ser a mesma string. O parser permanece estável; display e voz podem usar forma natural sem criar alias operacional novo.
+
+```text
+PARSER_TOKEN=!MULTIBUSSOLA
+DISPLAY_NAME=Multi Bússola
+VOICE_LABEL=Multi Bússola
+PRONUNCIATION_PT_BR=MÚL-ti BÚS-so-la
+
+META_SPOKEN_ALIAS=Meta Bússola
+META_SPOKEN_ALIAS_MEANS=META_MULTIBUSSOLA
+META_SPOKEN_ALIAS_IS_NEW_COMMAND=false
+META_SPOKEN_ALIAS_IS_NEW_ENGINE=false
+```
+
+`Meta Bússola` é somente uma forma humana/falada de referir-se à aplicação `META_MULTIBUSSOLA` já definida no owner `docs/CONSCIENCIA/MULTIBUSSOLA.md`. Não criar `!METABUSSOLA`, outra skill, outro motor ou outra capacidade paralela para isso.
+
+```text
+PARSER_TOKEN != DISPLAY_NAME
+DISPLAY_NAME != NEW_COMMAND
+VOICE_LABEL != NEW_AUTHORITY
+META_SPOKEN_ALIAS != SECOND_META_SYSTEM
+```
+
 ## Controles do painel
 
 Os controles visuais têm semântica explícita:
