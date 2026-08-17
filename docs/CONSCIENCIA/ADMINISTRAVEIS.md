@@ -18,6 +18,7 @@ CAPACIDADE_NOVA
 → PODE_SER_REPRESENTADA_SEM_SECRET?
 → SIM
    → PROVEN_ADMINISTRABLE=true
+   → DECLARAR marcador ADMINISTRABLE_COMMAND=<gatilho>
    → REGISTRAR_EM docs/CONSCIENCIA/ADMINISTRAVEIS.json
    → PAINEL_ADMIN_RENDERIZA_AUTOMATICAMENTE
 ```
@@ -43,18 +44,36 @@ ADMIN_PANEL_PREFERENCE != CANONICAL_MUTATION
 SECRET != PANEL_DATA
 ```
 
-## Regra futura obrigatória
+## Regra futura obrigatória + gate
+
+Quando uma capacidade **for julgada e provada administrável**, a mesma mudança deve declarar o marcador canônico e registrar a ficha antes de fechar.
+
+Formato do marcador: `ADMINISTRABLE_COMMAND=<gatilho>` em uma linha própria do canônico aplicável. O exemplo fica inline justamente para não ser confundido pelo gate com uma declaração real.
+
+O gate já existente `codex-validate` executa `tests/admin-guard.test.mjs`; esse agregador preserva o guard histórico e inclui `tests/admin-administrables.test.mjs`. O teste exige correspondência bijetiva entre marcadores canônicos e `ADMINISTRAVEIS.json`, owner real e gatilho presente no owner.
 
 ```text
 PROVEN_ADMINISTRABLE
+→ DECLARE_MARKER
 → REGISTER_BEFORE_CLOSE
 → PANEL_AUTO_RENDER
 
-NEW_ADMINISTRABLE_WITHOUT_REGISTRY_ENTRY
+MARKER_WITHOUT_REGISTRY_ENTRY
+= FAIL
+
+REGISTRY_WITHOUT_CANONICAL_MARKER
+= FAIL
+
+REGISTRY_WITHOUT_REAL_OWNER
+= FAIL
+
+NEW_ADMINISTRABLE_WITHOUT_MARKER_OR_REGISTRY
 = INCOMPLETE_INTEGRATION
 ```
 
-A tela não deve hardcodar um card por capacidade. Ela lê o registro canônico e renderiza os itens. Assim, uma nova capacidade registrada entra na mesma Central de Comandos sem criar novo painel, novo dashboard ou novo orquestrador.
+A decisão semântica de que algo **é** administrável continua sendo feita por evidência/intenção; depois dessa decisão, a integração deixa de depender de memória do agente e passa a ser verificável pelo gate.
+
+A tela não hardcoda um card por capacidade. Ela lê o registro canônico e renderiza os itens. Assim, uma nova capacidade registrada entra na mesma Central de Comandos sem criar novo painel, novo dashboard ou novo orquestrador.
 
 ## Controles do painel
 
@@ -73,20 +92,18 @@ Os controles visuais têm semântica explícita:
 ↩️ RESTAURAR VISUAL
 → remove preferência visual local; não altera o owner.
 
-🧭 SETAS/BÚSSOLA
+🧭 SETAS/BÚSSOLA
 → explicam a direção escolhida; são controles de aprendizagem/inspeção, não voto nem prova.
 ```
 
 Mudança de comportamento real continua pertencendo ao owner canônico e ao fluxo normal de Git/PR/Writer. O painel não transforma UI em autoridade.
 
-## Itens iniciais
-
-O registro nasce com:
+## Itens iniciais e marcadores
 
 ```text
-#ACORDAR
-!CALIBRAR
-!MULTIBUSSOLA
+ADMINISTRABLE_COMMAND=#ACORDAR
+ADMINISTRABLE_COMMAND=!CALIBRAR
+ADMINISTRABLE_COMMAND=!MULTIBUSSOLA
 ```
 
 `!MULTIBUSSOLA` inclui a matriz visual:
@@ -117,6 +134,7 @@ ONE_ADMIN_REGISTRY=true
 REUSE_EXISTING_NOC=true
 NO_CARD_HARDCODE_PER_FEATURE=true
 NO_SECOND_DASHBOARD=true
+NO_NEW_WORKFLOW_FOR_ADMIN_REGISTRY=true
 ```
 
 O owner visual atual é o painel MCP existente (`apps/modulos/mcp/src/admin.js`) estendido pelo injector já existente `apps/modulos/mcp/src/admin-patterns-ui.js`.

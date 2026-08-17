@@ -5,6 +5,8 @@
   "panel": "MCP CentralDark · Admin",
   "policy": {
     "registration_rule": "PROVEN_ADMINISTRABLE -> REGISTER_HERE -> PANEL_AUTO_RENDER",
+    "declaration_marker": "ADMINISTRABLE_COMMAND=<gatilho>",
+    "ci_gate": "apps/modulos/mcp/tests/admin-guard.test.mjs -> admin-administrables.test.mjs",
     "no_hardcoded_cards": true,
     "canonical_edit_goes_to_owner": true,
     "panel_preferences_are_not_authority": true,
