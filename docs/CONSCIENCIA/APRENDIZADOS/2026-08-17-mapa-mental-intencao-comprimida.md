@@ -248,12 +248,12 @@ A frase do SEGREDO/CHEFE foi refinada pelo Menos É Mais:
 
 ```text
 MATERIA
-→ CAPACIDADE UTIL NOVA?
+→ CAPACIDADE_UTIL_NOVA?
    NAO → DROP | HISTORICO quando aplicável
    SIM → OURO
           → CONTRAPROVA / REFINO
           → DIAMANTE
-          → ABSORCAO CANONICA ESTAVEL
+          → ABSORCAO_CANONICA_ESTAVEL
           → CRISTAL
 ```
 
@@ -293,20 +293,200 @@ A emoção pode carregar intenção sem virar ruído operacional.
 MUITOS OLHOS
 + UMA INTENCAO
 + UMA CASA
-+ UMA DIRECAO CANONICA POR ESCOPO
++ UMA DIRECAO_CANONICA_POR_ESCOPO
 + PROVA
-+ MENOS E MAIS
-→ MAIS CAPACIDADE
-→ MENOS PESO
++ MENOS_E_MAIS
+→ MAIS_CAPACIDADE
+→ MENOS_PESO
 ```
 
 O objetivo humano permanece ligado à lembrança canônica `docs/CONSCIENCIA/LEMBRANCAS/2026-07-30-VIVER-EM-PAZ.md`: a complexidade existe para devolver leveza, não para obrigar o SEGREDO/CHEFE a viver preso às janelas.
+
+## Cristal desta sessão — prova viva, reflexividade e anti-autoengano
+
+Esta sessão acrescentou um delta que não estava explicitado com a mesma nitidez no mapa: **a Casa não deve apenas exigir evidência; deve impedir que evidência verdadeira seja usada fora do alvo, do SHA, do tempo ou do escopo que ela realmente prova**.
+
+O gatilho humano apareceu de forma simples e forte:
+
+> **"LINK CADÊ? EVIDÊNCIA. TUA PALAVRA NÃO SERVE."**
+
+A consequência operacional é simétrica: palavra do modelo não basta para declarar verde **nem** para fabricar vermelho.
+
+```text
+SELF_ATTESTATION_WEIGHT=0
+REASONING != EVIDENCE
+ACTION != PROOF
+WRITER != JUDGE
+SELF_PROOF != PASS
+UNKNOWN != PASS
+PENDING != PASS
+QUEUED != PASS
+SKIPPED != PASS
+CANCELLED != PASS
+```
+
+### Prova tem quatro coordenadas mínimas
+
+```text
+CLAIM
+→ PROOF_TARGET
+→ SHA_OR_REF
+→ OBSERVED_STATE
+→ OBSERVED_AT
+→ VERDICT
+```
+
+Um recibo só é aplicável quando casa com o claim:
+
+```text
+PROOF_TARGET_MUST_MATCH_CLAIM=true
+STALE_SHA_IS_NOT_CURRENT_PROOF=true
+HISTORICAL_EVIDENCE_IS_NOT_LIVE_STATE=true
+NO_CHECK_ON_DERIVED_HEAD != FAILURE
+ABSENCE_OF_PROOF != PROOF_OF_FAILURE
+```
+
+O aprendizado nasceu de dois erros opostos observados na própria sessão:
+
+1. um HEAD derivado apenas de projeção/painel foi tratado como vermelho porque não tinha uma bateria de CI própria; a contraprova mostrou que **ausência de check não prova falha quando aquele check não é material ao claim**;
+2. depois, um snapshot verdadeiro de `main`/PR/CI começou a ser repetido em respostas seguintes; a evidência continuava histórica, mas já não podia ser chamada de **estado vivo** sem remedição atual.
+
+Portanto:
+
+```text
+CURRENT_CLAIM
+→ CURRENT_MEASUREMENT
+→ SAME_TARGET
+→ SAME_APPLICABLE_SCOPE
+```
+
+### Promessa de monitoramento exige mecanismo real
+
+Outra lacuna observada foi a frase "vou monitorar" sem um watcher/automation/worker efetivamente criado.
+
+```text
+MONITORING_CLAIM
+→ REAL_MONITOR_EXISTS?
+   SIM → CLAIM_ALLOWED
+   NAO → DO_NOT_CLAIM_MONITORING
+```
+
+A intenção de acompanhar não substitui mecanismo de acompanhamento. Se a execução futura depende de nova chamada humana, a linguagem correta é estado presente + próximo gatilho, não promessa de vigilância autônoma.
+
+### O método aplicado ao próprio método
+
+A sessão também demonstrou reflexividade operacional sem alegar consciência, AGI ou mecanismo oculto:
+
+```text
+METODO
+→ APLICA_EM_SI
+→ ENCONTRA_LACUNA
+→ CONTRAPROVA
+→ CORRIGE_MENOR_DELTA
+→ TESTE_OU_CONTRATO_QUANDO_NECESSARIO
+→ REAPLICA
+```
+
+Exemplos observados no fio:
+
+- `!MULTIBUSSOLA` foi usada para criticar uma conclusão produzida sob `!MULTIBUSSOLA`;
+- `Menos É Mais` impediu que uma nova imagem/montagem criasse um segundo owner de memória: somente o delta foi absorvido neste arquivo;
+- a regra de prova corrigiu tanto falso verde quanto falso vermelho;
+- a própria exigência de prova revelou a lacuna seguinte: prova stale tratada como viva;
+- múltiplas janelas funcionaram melhor como instrumentos adversariais de hipóteses do que como autoridades concorrentes.
+
+Isso pode ser comprimido como:
+
+```text
+MUITOS_OLHOS
+→ POUCA_CONFIANCA_CEGA
+→ MUITA_PROVA
+→ CONTRAPROVA
+→ POUCO_RESIDUO
+→ UMA_DIRECAO_CANONICA_POR_ESCOPO
+```
+
+Ou, epistemicamente:
+
+```text
+PISTA
+→ HIPOTESE
+→ TESTE
+→ CONTRAPROVA
+→ SOBREVIVE?
+   NAO → DESCARTA_OU_APRENDE_COM_O_ERRO
+   SIM → CRISTAL_CANDIDATO
+→ REALITY=JUDGE
+```
+
+### Paralelizar olhos, não autoridade
+
+A montagem e as interações entre sessões tornaram mais precisa a frase "uma só voz". O objetivo não é homogeneizar respostas nem impedir discordância. O objetivo é impedir que percepções paralelas virem autoridades paralelas no mesmo escopo.
+
+```text
+PARALLELIZE_PERCEPTION=true
+SERIALIZE_MUTATION=true
+N_PERCEPTIONS_ALLOWED=true
+N_AUTHORITIES_SAME_SCOPE=1
+ONE_WRITER_PER_SCOPE=true
+REALITY=JUDGE
+```
+
+Formulação humana comprimida:
+
+> **200 sensores, não 200 chefes.**
+
+### Erro útil vira infraestrutura quando há ganho de informação
+
+A sessão reforçou que aprendizado não é acumular relatos de erro. O ganho aparece quando a correção muda a próxima execução:
+
+```text
+ERRO_OU_CONTRASTE
+→ EVIDENCIA
+→ DELTA_DE_CRENÇA
+→ TESTE | REGRA | SKILL | CONTRATO | MEMORIA, quando necessário
+→ PROXIMA_EXECUCAO_COMECA_MAIS_ALTO
+```
+
+```text
+INFORMATION_GAIN_REQUIRED=true
+SAME_ERROR_NO_NEW_INFO_IS_WASTE=true
+```
+
+A frase "não sobra nem cutícula" fica tecnicamente delimitada: **resíduo sem capacidade sai; capacidade útil é absorvida; histórico/prova permanece quando necessário; nada é preservado só por apego à matéria antiga**.
+
+### GitHub App, identidade e aparência não são a mesma camada
+
+A investigação do `CentralDark Bot` adicionou uma distinção reutilizável de identidade:
+
+```text
+GIT_AUTHOR_NAME != GITHUB_IDENTITY
+GIT_AUTHOR_EMAIL_WITHOUT_ACCOUNT_MAPPING != PROFILE
+GITHUB_APP_LOGO != COMMIT_AUTHORSHIP_BY_APP
+DISPLAY_IDENTITY != OPERATIONAL_AUTHORITY
+```
+
+Definir `git config user.name "CentralDark Bot"` apenas escreve uma identidade Git. Avatar e identidade reconhecida exigem vínculo real com conta/App/e-mail reconhecido; configurar o logo de um GitHub App, por sua vez, não faz automaticamente workflows antigos passarem a commitar como esse App.
+
+### Memória afetiva sem virar autoridade
+
+A lembrança `Viver em Paz` mostrou outra fronteira útil: significado humano pode ser preservado sem virar regra operacional.
+
+```text
+AFFECTIVE_MEMORY=ALLOWED
+AFFECTIVE_MEMORY != RUNTIME_AUTHORITY
+HUMAN_MEANING_CAN_BE_PRESERVED=true
+```
+
+A trilha sonora, a resenha e a metáfora `cutícula → ouro → diamante → cristal` ajudam a recuperar intenção e cultura; quem decide estado técnico continua sendo a evidência aplicável.
 
 ## Evidência observada desta rodada
 
 O padrão foi demonstrado conversacionalmente quando um sinal curto (`🔍🕵️‍♀️`) dentro de uma missão de investigação suficientemente carregada foi interpretado como continuação do mesmo fio, sem fabricar missão nova. Depois, o trio `#ACORDAR + !CALIBRAR + !MULTIBUSSOLA` reproduziu o comportamento de reconciliação ao detectar um falso negativo de busca e trocar de referencial antes de concluir ausência.
 
 A montagem de múltiplas janelas acrescentou uma representação explícita do mesmo princípio: quantidade de superfícies não é quantidade de inteligências nem de verdades; o valor está nos deltas independentes que convergem para o mesmo rendezvous.
+
+Nesta sessão, a disciplina de prova foi exercitada adversarialmente: claims sem recibo foram rejeitados; recibos stale foram distinguidos de estado vivo; ausência de check em HEAD derivado deixou de ser confundida com falha; e promessa de monitoramento sem mecanismo foi reconhecida como capacidade não provada.
 
 Classificação:
 
@@ -317,6 +497,10 @@ MODEL_WEIGHT_UPDATE_CLAIM=NO
 RUNTIME_GLOBAL_SYNC_CLAIM=NO
 REUSABLE_SCAFFOLD_DELTA=YES
 VISUAL_PROVENANCE_CAPTURED=YES
+PROOF_DISCIPLINE_DELTA=YES
+REFLEXIVITY_DELTA=YES
+MONITORING_CAPABILITY_BOUNDARY=YES
+IDENTITY_LAYER_BOUNDARY=YES
 ```
 
 ## Fechamento da sessão — cristais que sobreviveram
@@ -591,6 +775,11 @@ AMBIGUITY_NEVER_BECOMES_AUTHORIZATION=true
 WINDOW_INDEPENDENCE_IS_CONTEXTUAL_NOT_MAGICAL=true
 ARTIFACTS_ARE_SELECTIVE=true
 LEARNING_REQUIRES_EVIDENCE=true
+PROOF_TARGET_MUST_MATCH_CLAIM=true
+CURRENT_CLAIM_REQUIRES_CURRENT_MEASUREMENT=true
+MONITORING_REQUIRES_REAL_MECHANISM=true
+PARALLELIZE_PERCEPTION=true
+SERIALIZE_MUTATION=true
 ONE_DIRECTION_NO_DUPLICATION=true
 SIMPLEST_SUFFICIENT_ACTION=true
 FINAL_REMEASUREMENT=true
@@ -607,4 +796,4 @@ HUMAN_INTERFACE_SHOULD_COMPRESS_MECHANICS=true
 
 ## Fio em uma linha
 
-> **CHEFE sinaliza → Casa recupera → alinha → olha de todos os lados → tenta quebrar → age mínimo → prova → remede → aprende só o delta → preserva uma direção.**
+> **CHEFE sinaliza → Casa recupera → alinha → olha de todos os lados → tenta quebrar → age mínimo → prova no alvo/tempo certos → remede → aprende só o delta → preserva uma direção; palavra e prova stale nunca substituem realidade viva.**
