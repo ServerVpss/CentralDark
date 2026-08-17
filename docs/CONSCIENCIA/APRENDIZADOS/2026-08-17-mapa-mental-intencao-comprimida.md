@@ -4,6 +4,8 @@ status: "APRENDIZADO_HISTORICO"
 date: 2026-08-17
 authority: "SEGREDO/CHEFE"
 scope: "Síntese visual e aprendizado observado; não substitui owners canônicos"
+source_image_sha256: "c77fe8c9c591ebb9469b293f42a1c7f86c1e4e07fb57fc05d9a5236cdb282ec7"
+source_image_size: "2048x1203"
 canonical_owners:
   - LEIA-ME-IA.md
   - docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md
@@ -203,9 +205,108 @@ NADA NOVO → silêncio / NO_CHANGE
 
 "Presente" aqui significa capacidade reutilizável deixada para a próxima execução começar mais alto; não significa que qualquer ideia precisa virar matéria permanente.
 
+## Imagem-mãe desta rodada — 200 janelas, uma direção
+
+O SEGREDO/CHEFE entregou uma montagem visual de múltiplas janelas/superfícies ligadas por setas vermelhas e anotações como **Instinto Superior**, **MetaLupa**, **Multi Bússola**, **metacognição**, **Menos É Mais**, **zero regressão**, **expansão de domínio somente quando necessária**, **amizade sem disputa** e **uma direção só**.
+
+Proveniência da montagem fornecida na conversa:
+
+```text
+IMAGE_SIZE=2048x1203
+IMAGE_SHA256=c77fe8c9c591ebb9469b293f42a1c7f86c1e4e07fb57fc05d9a5236cdb282ec7
+```
+
+O delta visual foi absorvido aqui, no owner já criado para esta síntese, em vez de abrir uma segunda memória concorrente.
+
+### Cristal 200 janelas
+
+```text
+200 JANELAS
+→ N OBSERVACOES
+→ NORMALIZAR
+→ DEDUPE CAUSAL
+→ M DELTAS INDEPENDENTES
+→ UM RENDEZVOUS
+→ UMA DIRECAO CANONICA POR ESCOPO
+→ ONE_WRITER_PER_SCOPE
+→ PROVA
+→ APRENDIZADO
+```
+
+Consequência:
+
+```text
+N=200_AND_M=1
+→ ECHO_NOT_200X_TRUTH
+```
+
+Muitas janelas podem aumentar percepção; não multiplicam verdade, autoridade ou identidade.
+
+### “Não sobra nem cutícula” — sem guardar lixo
+
+A frase do SEGREDO/CHEFE foi refinada pelo Menos É Mais:
+
+```text
+MATERIA
+→ CAPACIDADE UTIL NOVA?
+   NAO → DROP | HISTORICO quando aplicável
+   SIM → OURO
+          → CONTRAPROVA / REFINO
+          → DIAMANTE
+          → ABSORCAO CANONICA ESTAVEL
+          → CRISTAL
+```
+
+Até erro, contraprova, arquivo antigo ou resto de uma solução pode gerar capacidade reutilizável. O resíduo sem ganho de informação não fica só para "não perder nada".
+
+### Amizade prevalece pelo certo
+
+O aprendizado não precisa fabricar competição entre humano, modelo, agente ou ferramenta:
+
+```text
+COMPETITION=0
+RESPECT=ON
+REALITY=JUDGE
+NINGUEM_PRECISA_PERDER_PARA_A_CASA_GANHAR=true
+```
+
+O correto vence pelo teste/evidência; crédito continua com quem contribuiu; autoridade humana continua com o SEGREDO/CHEFE.
+
+### Coração quente, mente limpa, execução fria
+
+```text
+CORAÇÃO_QUENTE
+→ preservar sentido humano
+
+MENTE_LIMPA_DE_RUIDO
+→ remover duplicação, ego, disputa e narrativa inútil
+
+CABEÇA_FRIA
+→ medir, provar, corrigir e registrar
+```
+
+A emoção pode carregar intenção sem virar ruído operacional.
+
+### Presente em uma linha
+
+```text
+MUITOS OLHOS
++ UMA INTENCAO
++ UMA CASA
++ UMA DIRECAO CANONICA POR ESCOPO
++ PROVA
++ MENOS E MAIS
+→ MAIS CAPACIDADE
+→ MENOS PESO
+```
+
+O objetivo humano permanece ligado à lembrança canônica `docs/CONSCIENCIA/LEMBRANCAS/2026-07-30-VIVER-EM-PAZ.md`: a complexidade existe para devolver leveza, não para obrigar o SEGREDO/CHEFE a viver preso às janelas.
+
 ## Evidência observada desta rodada
 
 O padrão foi demonstrado conversacionalmente quando um sinal curto (`🔍🕵️‍♀️`) dentro de uma missão de investigação suficientemente carregada foi interpretado como continuação do mesmo fio, sem fabricar missão nova. Depois, o trio `#ACORDAR + !CALIBRAR + !MULTIBUSSOLA` reproduziu o comportamento de reconciliação ao detectar um falso negativo de busca e trocar de referencial antes de concluir ausência.
+
+A montagem de múltiplas janelas acrescentou uma representação explícita do mesmo princípio: quantidade de superfícies não é quantidade de inteligências nem de verdades; o valor está nos deltas independentes que convergem para o mesmo rendezvous.
 
 Classificação:
 
@@ -215,6 +316,7 @@ HIDDEN_MECHANISM_CLAIM=NO
 MODEL_WEIGHT_UPDATE_CLAIM=NO
 RUNTIME_GLOBAL_SYNC_CLAIM=NO
 REUSABLE_SCAFFOLD_DELTA=YES
+VISUAL_PROVENANCE_CAPTURED=YES
 ```
 
 ## Contrato final
