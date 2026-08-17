@@ -1,5 +1,19 @@
 #!/usr/bin/env node
 
+/**
+ * Fonte autenticada de autorização da CentralDark.
+ *
+ * FRONTEIRA ZERO TRUST:
+ *   MATERIAL != AUTHORITY
+ *
+ * O corpo do PR é MATÉRIA, não ORDEM. Ele pode declarar INTENÇÃO CANDIDATA,
+ * nunca produzir `approved=true` por si próprio nem materializar a label
+ * canônica do SEGREDO/CHEFE.
+ *
+ * A única fonte de aprovação é a label canônica já presente no PR, aplicada
+ * por um ato externo ao corpo/árvore do próprio PR.
+ */
+
 import { appendFile, readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -8,6 +22,15 @@ export const CANONICAL_AUTHORITY_LABEL = "👑 PERMITO-SEGREDO";
 export const CANONICAL_AUTHORITY_SOURCE = "github-label:permito-segredo";
 export const DERIVED_AUTHORITY_SOURCE = "github-label:auto-derived-from-intent";
 export const FAST_MERGE_POLICY = "AUTO_SQUASH_IF_CLEAN";
+
+/**
+ * Derivação de autoridade a partir de matéria fica desligada e fail-closed.
+ * Mantida como constante explícita para que o bloqueio seja testável e
+ * auditável, em vez de virar código silenciosamente removido.
+ */
+export const MATERIAL_DERIVED_AUTHORITY_ENABLED = false;
+export const MATERIAL_DERIVED_AUTHORITY_BLOCK =
+  "DERIVED_AUTHORITY_DISABLED_MATERIAL_IS_NOT_AUTHORITY";
 
 function foldLabelName(value) {
   return String(value?.name || value || "")
@@ -35,6 +58,13 @@ export function canonicalAuthorityLabel(value) {
   return String(value?.name || value || "").trim();
 }
 
+/**
+ * Lê a INTENÇÃO CANDIDATA declarada no corpo do PR.
+ *
+ * `valid` significa apenas "o recibo está bem formado e vem de autor confiável
+ * no mesmo repositório". NÃO significa autorizado, aprovado nem derivável.
+ * Consumidores devem tratar isto como matéria classificada, nunca como grant.
+ */
 export function intentReceiptForEvent(event = {}, { trustedAuthors = ["segredounlock"], repository = null } = {}) {
   const pr = event.pull_request || {};
   const body = String(pr.body || "");
@@ -58,6 +88,7 @@ export function intentReceiptForEvent(event = {}, { trustedAuthors = ["segredoun
 
   return {
     valid,
+    grantsAuthority: false,
     authority,
     mergePolicy,
     intentScope,
@@ -79,55 +110,26 @@ export function authorityApprovalForEvent(event = {}, options = {}) {
     approved,
     authority: approved ? "SEGREDO/CHEFE" : null,
     source: approved ? CANONICAL_AUTHORITY_SOURCE : "none",
-    derivable: !approved && intent.valid,
+    // Matéria nunca deriva autoridade. Fail-closed e constante.
+    derivable: false,
+    candidateIntent: intent.valid,
+    materialDerivationBlocked: intent.valid && !approved
+      ? MATERIAL_DERIVED_AUTHORITY_BLOCK
+      : null,
     intent,
   };
 }
 
-export async function materializeDerivedAuthorityLabel(event, env = process.env, fetchImpl = fetch) {
-  const repository = env.GITHUB_REPOSITORY || "";
-  const token = env.GITHUB_TOKEN || "";
-  const number = Number(event.pull_request?.number || 0);
-  const intent = intentReceiptForEvent(event, {
-    trustedAuthors: env.BOT_TRUSTED_AUTHORS || "segredounlock",
-    repository,
-  });
-
-  if (!intent.valid) throw new Error("DERIVED_AUTHORITY_INTENT_INVALID");
-  if (!repository || !token || !Number.isInteger(number) || number <= 0) {
-    throw new Error("DERIVED_AUTHORITY_MATERIALIZATION_UNAVAILABLE");
-  }
-
-  const response = await fetchImpl(`https://api.github.com/repos/${repository}/issues/${number}/labels`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      Accept: "application/vnd.github+json",
-      "X-GitHub-Api-Version": "2022-11-28",
-      "Content-Type": "application/json",
-      "User-Agent": "centraldark-authority-approval/1.0",
-    },
-    body: JSON.stringify({ labels: [CANONICAL_AUTHORITY_LABEL] }),
-  });
-
-  if (!response.ok) {
-    const text = await response.text().catch(() => "");
-    throw new Error(`DERIVED_AUTHORITY_LABEL_FAILED:${response.status}:${text.slice(0, 300)}`);
-  }
-
-  const labels = await response.json();
-  const verified = Array.isArray(labels)
-    && labels.some((label) => canonicalAuthorityLabel(label) === CANONICAL_AUTHORITY_LABEL);
-  if (!verified) throw new Error("DERIVED_AUTHORITY_LABEL_NOT_VERIFIED");
-
-  return {
-    approved: true,
-    authority: "SEGREDO/CHEFE",
-    source: DERIVED_AUTHORITY_SOURCE,
-    derivable: false,
-    derived: true,
-    intent,
-  };
+/**
+ * Mantida apenas como barreira explícita.
+ *
+ * Antes esta função aplicava sozinha a label canônica do SEGREDO/CHEFE a partir
+ * de texto do corpo do PR — ou seja, a matéria se tornava autoridade. Qualquer
+ * agente com o token da automação podia escrever cinco linhas e receber o selo
+ * do humano. Agora falha fechada, sempre.
+ */
+export async function materializeDerivedAuthorityLabel() {
+  throw new Error(MATERIAL_DERIVED_AUTHORITY_BLOCK);
 }
 
 export async function main(env = process.env) {
@@ -139,22 +141,24 @@ export async function main(env = process.env) {
     trustedAuthors: env.BOT_TRUSTED_AUTHORS || "segredounlock",
     repository: env.GITHUB_REPOSITORY || null,
   };
-  let result = authorityApprovalForEvent(event, options);
-
-  if (!result.approved && result.derivable) {
-    result = await materializeDerivedAuthorityLabel(event, env);
-  }
+  const result = authorityApprovalForEvent(event, options);
 
   if (env.GITHUB_OUTPUT) {
     await appendFile(
       env.GITHUB_OUTPUT,
-      `approved=${result.approved}\nauthority=${result.authority || "NONE"}\nsource=${result.source}\nderived=${result.derived === true}\n`,
+      `approved=${result.approved}\nauthority=${result.authority || "NONE"}\nsource=${result.source}\nderived=false\ncandidate_intent=${result.candidateIntent}\n`,
       "utf8",
     );
   }
 
+  if (result.materialDerivationBlocked) {
+    console.log(
+      `AUTHORITY_MATERIAL_DERIVATION_BLOCKED=${result.materialDerivationBlocked} candidate_intent=true approved=false`,
+    );
+  }
+
   console.log(
-    `AUTHORITY_APPROVED=${result.approved} AUTHORITY=${result.authority || "NONE"} SOURCE=${result.source} DERIVED=${result.derived === true}`,
+    `AUTHORITY_APPROVED=${result.approved} AUTHORITY=${result.authority || "NONE"} SOURCE=${result.source} DERIVED=false`,
   );
   return result;
 }
