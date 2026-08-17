@@ -1,0 +1,122 @@
+---
+title: "Administráveis — registro canônico do painel"
+status: "CANÔNICO"
+date: 2026-08-17
+authority: "SEGREDO/CHEFE"
+scope: "Regra de projeção de capacidades administráveis no painel MCP CentralDark"
+registry: "docs/CONSCIENCIA/ADMINISTRAVEIS.json"
+---
+
+# Administráveis — tudo que pode ser governado pelo CHEFE aparece no painel
+
+Esta regra fecha a lacuna entre **capacidade criada** e **capacidade visível/controlável pelo SEGREDO/CHEFE**.
+
+```text
+CAPACIDADE_NOVA
+→ OWNER_ESTAVEL?
+→ TEM_GATILHO|ESTADO|CONFIG|VISIBILIDADE|ACAO_HUMANA_CONTROLAVEL?
+→ PODE_SER_REPRESENTADA_SEM_SECRET?
+→ SIM
+   → PROVEN_ADMINISTRABLE=true
+   → REGISTRAR_EM docs/CONSCIENCIA/ADMINISTRAVEIS.json
+   → PAINEL_ADMIN_RENDERIZA_AUTOMATICAMENTE
+```
+
+## Critério
+
+Um item é `ADMINISTRABLE` quando existe pelo menos uma superfície humana legítima de controle ou inspeção, por exemplo:
+
+- comando/gatilho;
+- estado habilitado/desabilitado ou visível/oculto;
+- configuração segura;
+- owner editável/auditável;
+- ação explícita do CHEFE;
+- diagnóstico/observabilidade que permita decisão humana.
+
+Não registrar como administrável apenas porque um arquivo existe.
+
+```text
+FILE_EXISTS != ADMINISTRABLE
+DOCUMENTED != ACTIVE
+ADMIN_PANEL_CARD != AUTHORITY
+ADMIN_PANEL_PREFERENCE != CANONICAL_MUTATION
+SECRET != PANEL_DATA
+```
+
+## Regra futura obrigatória
+
+```text
+PROVEN_ADMINISTRABLE
+→ REGISTER_BEFORE_CLOSE
+→ PANEL_AUTO_RENDER
+
+NEW_ADMINISTRABLE_WITHOUT_REGISTRY_ENTRY
+= INCOMPLETE_INTEGRATION
+```
+
+A tela não deve hardcodar um card por capacidade. Ela lê o registro canônico e renderiza os itens. Assim, uma nova capacidade registrada entra na mesma Central de Comandos sem criar novo painel, novo dashboard ou novo orquestrador.
+
+## Controles do painel
+
+Os controles visuais têm semântica explícita:
+
+```text
+📋 COPIAR GATILHO
+→ copia a sintaxe; não finge que executou o comando.
+
+✏️ EDITAR OFICIAL
+→ abre o owner canônico no GitHub para mudança formal/auditável.
+
+🧽 OCULTAR FICHA
+→ preferência local do navegador; não desliga a capacidade.
+
+↩️ RESTAURAR VISUAL
+→ remove preferência visual local; não altera o owner.
+
+🧭 SETAS/BÚSSOLA
+→ explicam a direção escolhida; são controles de aprendizagem/inspeção, não voto nem prova.
+```
+
+Mudança de comportamento real continua pertencendo ao owner canônico e ao fluxo normal de Git/PR/Writer. O painel não transforma UI em autoridade.
+
+## Itens iniciais
+
+O registro nasce com:
+
+```text
+#ACORDAR
+!CALIBRAR
+!MULTIBUSSOLA
+```
+
+`!MULTIBUSSOLA` inclui a matriz visual:
+
+```text
+                    ↑
+              CAUSA / ORIGEM
+                    │
+              ↖     │     ↗
+                 \  │  /
+                  \ │ /
+← FONTE ─────────── ✣ ─────────── CONSUMIDOR →
+                  / │ \
+                 /  │  \
+              ↙     │     ↘
+                    │
+                    ↓
+              EFEITO / ESTADO
+```
+
+Mais `↔ ROUND-TRIP/CONTRAMÃO` e as bússolas científica, causal, temporal, espacial, referencial, propagação, multirregional, adversarial, impacto, multicamada, multimaterial e metacognitiva.
+
+## Menos É Mais
+
+```text
+ONE_ADMIN_PANEL_ONLY=true
+ONE_ADMIN_REGISTRY=true
+REUSE_EXISTING_NOC=true
+NO_CARD_HARDCODE_PER_FEATURE=true
+NO_SECOND_DASHBOARD=true
+```
+
+O owner visual atual é o painel MCP existente (`apps/modulos/mcp/src/admin.js`) estendido pelo injector já existente `apps/modulos/mcp/src/admin-patterns-ui.js`.
