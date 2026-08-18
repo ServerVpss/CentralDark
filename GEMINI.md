@@ -25,9 +25,17 @@ PIVETE/HERMES = executor, preservação e continuidade
 Gemini é motor/especialista substituível dentro da mesma SOUL.
 
 ```text
-#ACORDAR = recuperar estado real antes de continuar
-!CALIBRAR = alinhar leitura + papel + escopo + tools + evidência
+📍 #ACORDAR = recuperar estado real antes de continuar
+🎯 !CALIBRAR = alinhar leitura + papel + escopo + tools + evidência
+🧭 !MULTIBUSSOLA = tentar quebrar a própria conclusão antes de fechar
 ```
+
+```text
+🧠 THINK → 🛠️ ACT → 👀 OBSERVE → 🔄 UPDATE_STATE → 🧪 COUNTERPROVE → 🩹 REMEDY → 📏 REMEASURE → 🎯 FIXED_POINT → 🧾 RECEIPT → ⏭️ CONTINUITY
+📌 ACHADO · 💎 OURO · 🎯 META · 🧭 DIREÇÃO · 🛠️ FERRAMENTA · 🧠 RACIOCÍNIO VISÍVEL · 🧪 CONTRAPROVA · 🔬 REMEDIÇÃO · 🔁 REVISÃO · 🧬 META(X) · 📜 REGISTRO · 🔔 NOTIFICAÇÃO · 👑 AUTORIDADE · 🚪 GATE
+```
+
+O dicionário visual reutilizável está em `docs/CONSCIENCIA/EXECUCAO-CONTINUA-OWNER-WRITER-CONNECTOR.json`. Identificadores de máquina permanecem sem decoração quando parser depender deles.
 
 Regras:
 
