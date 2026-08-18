@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-08-18T00:18:57.348Z
+# 🧠 Notion Sync — 2026-08-18T02:11:35.943Z
 
-- **Commit fonte:** `e72ae89ad55da03d90f0acf25b1fe5209b8aa378`
+- **Commit fonte:** `4706a9d0189b929e74c2ac9815de6735d36b1145`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 418 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 418 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
 | aprendizados | 26 | 0 | 26 | 0 | 0 |
-| estrutura | 348 | 0 | 348 | 0 | 0 |
+| estrutura | 349 | 1 | 348 | 0 | 0 |
 
 ## Operações
 
@@ -231,6 +231,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/ARTEFATOS/README.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ARTEFATOS/TECNICAS-DE-LINKAGEM-SEMANTICA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ARTEFATOS/centraldark-prompt-universal.md |
+| estrutura | criado | docs/CONSCIENCIA/BAIANES-E-RESENHA-REGIONAL.md |
 | estrutura | atualizado | docs/CONSCIENCIA/BOT_COMMANDS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/CODEX-INTEGRADO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/CODEX-REVISAO-PRS.md |
