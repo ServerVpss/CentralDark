@@ -330,7 +330,8 @@ module.exports = {
       notifyAdmin(
         `<b>🧠 NOTA GRAVADA NO CÉREBRO</b>\n\n` +
         `<pre>📝 ${title}\n📁 ${folderName}\n🔗 ${linksCount} links injetados\n⏰ ${ts}</pre>\n\n` +
-        `✅ Aparece no Obsidian em ≤10 min\n` +
+        `✅ Persistido no BRAIN do repositório\n` +
+        `ℹ️ Sync físico com Obsidian: depende do canal local medido\n` +
         `<i>Caminho: ${relPath}</i>`
       );
       return {

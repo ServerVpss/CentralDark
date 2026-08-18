@@ -105,3 +105,10 @@ test('busca é somente leitura no corpus recebido', () => {
     f.cleanup();
   }
 });
+
+test('notificação de write não promete sync físico Obsidian sem canal provado', () => {
+  const source = fs.readFileSync(path.join(__dirname, 'obsidian-writer.cjs'), 'utf8');
+  assert.doesNotMatch(source, /Aparece no Obsidian em ≤10 min/);
+  assert.match(source, /Persistido no BRAIN do repositório/);
+  assert.match(source, /Sync físico com Obsidian: depende do canal local medido/);
+});
