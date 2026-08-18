@@ -2,10 +2,10 @@
 /**
  * Green-first guard para a promoção canônica.
  *
- * O fast path AUTO_SQUASH_IF_CLEAN continua canônico e não passa por esta
- * catraca. O guard é a revalidação final dos recibos ADVERSARIAL/green-first:
+ * Todo candidato READY, inclusive FAST, passa por esta catraca antes da promoção:
  * somente runs de pull_request do mesmo PR + mesmo HEAD, com a invocação mais
  * nova de cada gate realmente concluída em success, podem chegar ao promotor.
+ * FAST continua sendo modo de avaliação curta no Judge; não é bypass de prova.
  */
 import { mkdir, readFile, readdir, rename, writeFile } from "node:fs/promises";
 import { basename, join, resolve } from "node:path";
@@ -32,7 +32,7 @@ export function parseCsv(value, fallback = []) {
 }
 
 export function shouldEnforceGreenFirst(candidate) {
-  return candidate?.decision === "READY" && candidate?.mode !== "FAST";
+  return candidate?.decision === "READY";
 }
 
 export function runBelongsToPullHead(run, prNumber, headSha) {
@@ -128,7 +128,7 @@ export async function main(env = process.env) {
 
     if (!shouldEnforceGreenFirst(candidate)) {
       fastSkipped += 1;
-      console.log(`GREEN_GUARD=SKIP_FAST PR=${candidate.pr_number || "UNKNOWN"} HEAD=${candidate.head_sha || "UNKNOWN"}`);
+      console.log(`GREEN_GUARD=SKIP_NON_READY PR=${candidate.pr_number || "UNKNOWN"} HEAD=${candidate.head_sha || "UNKNOWN"}`);
       continue;
     }
 
