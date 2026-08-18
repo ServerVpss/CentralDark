@@ -14,7 +14,7 @@ jobs:
     if: github.event.inputs.confirm == 'CONFIRMO'
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
       - name: Verificar dependências
         run: |
