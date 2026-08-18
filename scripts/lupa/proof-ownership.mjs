@@ -48,6 +48,13 @@ export function validateOperationalClaimPolicy(contract, { exists = () => true }
   const rules = contract.global_rules ?? {};
   const policy = contract.operational_claim_policy ?? {};
   const requiredRules = {
+    reasoning_is_evidence: false,
+    action_is_proof: false,
+    writer_is_judge: false,
+    self_proof_is_pass: false,
+    absence_of_proof_is_failure: false,
+    absence_of_check_is_pass: false,
+    no_check_on_derived_head_is_failure: false,
     operational_claim_requires_enforcement: true,
     operational_claim_without_complete_chain: "UNPROVEN",
     documented_is_executed: false,
@@ -72,6 +79,7 @@ export function validateOperationalClaimPolicy(contract, { exists = () => true }
   if (policy.live_state_must_be_measured !== true) errors.push("OPERATIONAL_POLICY_LIVE_STATE_REQUIRED");
   if (policy.monitoring_requires_real_mechanism !== true) errors.push("OPERATIONAL_POLICY_REAL_MONITOR_REQUIRED");
   if (policy.fixed_point_scope_required !== true) errors.push("OPERATIONAL_POLICY_SCOPED_FIXED_POINT_REQUIRED");
+  if (policy.judge_must_be_independent_of_writer !== true) errors.push("OPERATIONAL_POLICY_WRITER_JUDGE_SEPARATION_REQUIRED");
   if (policy.duplicate_only_when_same_authority_and_capability !== true) errors.push("OPERATIONAL_POLICY_DUPLICATE_RULE_INVALID");
   if (policy.preserve_layer_specific_implementations !== true) errors.push("OPERATIONAL_POLICY_LAYER_PRESERVATION_REQUIRED");
 
@@ -145,7 +153,7 @@ export function validateOperationalClaimPolicy(contract, { exists = () => true }
       errors.push(`OPERATIONAL_CHAIN_FIXED_POINT_SCOPE_INVALID:${id}`);
     }
     if (nonEmptyString(chain.judge) && chain.judge === invariant.prover) {
-      errors.push(`OPERATIONAL_CHAIN_WRITER_JUDGE_COLLISION:${id}`);
+      errors.push(`OPERATIONAL_CHAIN_PROVER_JUDGE_COLLISION:${id}`);
     }
     if (chain.counterproof !== invariant.counterproof?.path) {
       errors.push(`OPERATIONAL_CHAIN_COUNTERPROOF_MISMATCH:${id}`);
