@@ -13,7 +13,7 @@ jobs:
     runs-on: [self-hosted, Linux]
     if: github.event.inputs.confirm == 'CONFIRMO'
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
       - name: Instalar certificado e recarregar Caddy
         env:

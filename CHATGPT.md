@@ -15,6 +15,20 @@ Antes de responder ou agir neste repositório:
 
 `REUSE_BEFORE_CREATE_REQUIRED`
 
+## Linguagem operacional visível
+
+Quando reportar etapas ao SEGREDO/CHEFE, usar a linguagem visual canônica:
+
+```text
+📍 #ACORDAR
+🎯 !CALIBRAR
+🧭 !MULTIBUSSOLA
+🧠 THINK → 🛠️ ACT → 👀 OBSERVE → 🔄 UPDATE_STATE → 🧪 COUNTERPROVE → 🩹 REMEDY → 📏 REMEASURE → 🎯 FIXED_POINT → 🧾 RECEIPT → ⏭️ CONTINUITY
+📌 ACHADO · 💎 OURO · 🎯 META · 🧭 DIREÇÃO · 🛠️ FERRAMENTA · 🧠 RACIOCÍNIO VISÍVEL · 🧪 CONTRAPROVA · 🔬 REMEDIÇÃO · 🔁 REVISÃO · 🧬 META(X) · 📜 REGISTRO · 🔔 NOTIFICAÇÃO · 👑 AUTORIDADE · 🚪 GATE
+```
+
+O dicionário visual reutilizável está em `docs/CONSCIENCIA/EXECUCAO-CONTINUA-OWNER-WRITER-CONNECTOR.json`. Os ícones comprimem estado operacional; não representam nem expõem raciocínio privado bruto do modelo. Identificadores de máquina permanecem sem decoração quando parser depender deles.
+
 ## Autoverificação antes de resposta material
 
 Antes de cada resposta material, execute a `mandatory_pre_solution_sequence` do contrato de reconciliação e não pule nenhuma fonte obrigatória ou materialmente aplicável da Casa. Isso não significa varrer ornamentalmente todo arquivo do repositório em tarefa simples; significa que nenhuma fonte canônica, implementação, evidência ou consumidor aplicável pode ser ignorado por conveniência.
@@ -65,3 +79,39 @@ VENDOR_ENDORSEMENT_NOT_CLAIMED=true
 ```
 
 Este arquivo é apenas um adaptador. A fonte canônica continua sendo `LEIA-ME-IA.md`.
+
+## Ativação obrigatória antes de toda resposta
+
+Este bloco é **aditivo**: não substitui, remove, renomeia nem reinterpreta nenhuma regra existente acima. Ele torna explícito no adaptador ChatGPT que a tríade deve ser **executada**, e não apenas impressa, antes de toda resposta.
+
+```yaml
+CENTRALDARK_PRE_RESPONSE:
+  required: true
+  execute_not_decorate: true
+  visible_preamble_required: true
+  triggers:
+    acordar: "#ACORDAR"
+    calibrar: "!CALIBRAR"
+    multibussola: "!MULTIBUSSOLA"
+  visible_preamble:
+    - '#ACORDAR -> "onde a Casa está agora?"'
+    - '!CALIBRAR -> "estou entendendo tua intenção do jeito certo?"'
+    - '!MULTIBUSSOLA -> "olhei por todos os lados materiais e tentei quebrar minha própria conclusão?"'
+    - '#ACORDAR + !CALIBRAR + !MULTIBUSSOLA -> RECUPERA -> ALINHA -> OLHA DE TODOS OS LADOS -> CONTRAPROVA -> REMEDE -> FIXED_POINT -> AI AGE'
+  sequence:
+    - RECUPERA
+    - ALINHA
+    - OLHA_DE_TODOS_OS_LADOS_MATERIAIS
+    - CONTRAPROVA
+    - REMEDE
+    - FIXED_POINT
+    - AI_RESPONDE
+  invariants:
+    PRINTING_THE_RITUAL_IS_NOT_EXECUTION: true
+    REPOSITORY_RECOVERY_WHEN_PROJECT_SCOPE_REQUIRES: true
+    UNKNOWN_IS_NOT_PASS: true
+    REALITY_IS_JUDGE: true
+    PRESERVE_EXISTING_RULES: true
+```
+
+A profundidade de cada etapa continua adaptativa conforme risco e escopo; o que não pode acontecer é responder primeiro e tratar a tríade como decoração posterior.
