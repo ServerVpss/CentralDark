@@ -38,7 +38,37 @@
     "WRITER": "✍️",
     "CONNECTOR": "🔌",
     "MODEL": "🤖",
-    "JUDGE": "⚖️"
+    "JUDGE": "⚖️",
+    "STABLE": "🟢",
+    "ATTENTION": "🟡",
+    "ALERT": "🔴",
+    "DEPLOY": "🚀",
+    "MAINTENANCE": "🛠️",
+    "GIT": "🔄",
+    "SUCCESS": "✅",
+    "PENDING": "⏳",
+    "BLOCKED": "⛔",
+    "UNKNOWN": "❓"
+  },
+  "visible_output_policy": {
+    "enabled": true,
+    "applies_to": [
+      "AGENT_RESPONSES",
+      "MODEL_ADAPTERS",
+      "WEBUI_STATUS",
+      "TELEGRAM_NOTIFICATIONS",
+      "WEBHOOK_NOTIFICATIONS",
+      "PR_STATUS_COMMENTS",
+      "HUMAN_FACING_RECEIPTS",
+      "OPERATIONAL_LOG_SUMMARIES"
+    ],
+    "rule": "EVERY_HUMAN_FACING_OPERATIONAL_STAGE_OR_STATUS_USES_ONE_SEMANTIC_ICON_WHEN_AN_ICON_EXISTS",
+    "icons_are_semantic_not_decorative": true,
+    "machine_identifiers_remain_plain_when_parsers_depend_on_them": true,
+    "do_not_change_protocol_keys_only_for_appearance": true,
+    "raw_private_reasoning_not_exposed": true,
+    "visible_reasoning_summary_may_use_visual_stages": true,
+    "minimum_sufficient_icon_density": true
   },
   "invariants": {
     "REALITY_IS_JUDGE": true,
