@@ -43,12 +43,13 @@ test("só fica verde quando todos os gates obrigatórios passam", () => {
   assert.equal(result.verdicts.find((item) => item.name === "lupa")?.state, "MISSING");
 });
 
-test("pending, failure e cancelled nunca viram verde", () => {
+test("pending, queued, failure e cancelled nunca viram verde", () => {
   const required = ["gate"];
   for (const run of [
-    success("gate", 1, { status: "queued", conclusion: null }),
-    success("gate", 2, { conclusion: "failure" }),
-    success("gate", 3, { conclusion: "cancelled" }),
+    success("gate", 1, { status: "pending", conclusion: null }),
+    success("gate", 2, { status: "queued", conclusion: null }),
+    success("gate", 3, { conclusion: "failure" }),
+    success("gate", 4, { conclusion: "cancelled" }),
   ]) {
     assert.equal(greenDecision([run], required).green, false);
   }
@@ -99,10 +100,22 @@ test("paginação encontra gate válido depois da primeira página sem aceitar c
   assert.equal(runs.some((run) => run.name === "lupa-conformance"), false);
 });
 
-test("fast path canônico não é convertido em convergência adversarial global", () => {
-  assert.equal(shouldEnforceGreenFirst({ decision: "READY", mode: "FAST" }), false);
+test("todo READY, inclusive FAST, passa pela catraca green-first", () => {
+  assert.equal(shouldEnforceGreenFirst({ decision: "READY", mode: "FAST" }), true);
   assert.equal(shouldEnforceGreenFirst({ decision: "READY", mode: "ADVERSARIAL" }), true);
   assert.equal(shouldEnforceGreenFirst({ decision: "WAIT", mode: "ADVERSARIAL" }), false);
+  assert.equal(shouldEnforceGreenFirst({ decision: "BLOCKED", mode: "FAST" }), false);
+});
+
+test("FAST READY com gate pending não pode virar green", () => {
+  const candidate = { decision: "READY", mode: "FAST" };
+  assert.equal(shouldEnforceGreenFirst(candidate), true);
+  const result = greenDecision([
+    success("porta", 1),
+    success("codex", 2, { status: "queued", conclusion: null }),
+  ], ["porta", "codex"]);
+  assert.equal(result.green, false);
+  assert.equal(result.verdicts.find((item) => item.name === "codex")?.state, "PENDING");
 });
 
 test("lista padrão é exatamente a régua canônica de seis gates", () => {
