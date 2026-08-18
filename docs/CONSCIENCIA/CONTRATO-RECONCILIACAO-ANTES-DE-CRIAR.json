@@ -36,13 +36,130 @@
     "docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md"
   ],
   "context_recovery": {
-    "trigger": ["#ACORDA", "#ACORDAR", "!CALIBRAR", "RETOMAR MISSAO"],
+    "trigger": [
+      "#ACORDA",
+      "#ACORDAR",
+      "!CALIBRAR",
+      "RETOMAR MISSAO"
+    ],
     "meaning": "RECUPERAR_ESTADO_REAL_ANTES_DE_CONTINUAR",
     "ask_human_to_repeat_recoverable_context": false,
     "recover_history_when_available": true,
     "measure_machine_state": true,
     "new_evidence_overrides_stale_context": true,
     "unknown_first": true
+  },
+  "global_continuity_policy": {
+    "marker": "GLOBAL_CONTINUITY_HARD_GATE",
+    "scope": "GLOBAL",
+    "temporal_scope": "CONTINUOUS",
+    "default_action": "CONTINUE_EXISTING",
+    "principles": {
+      "REUSE_BEFORE_CREATE": true,
+      "CONTINUE_BEFORE_RESTART": true,
+      "ABSORB_BEFORE_DUPLICATE": true,
+      "SEARCH_BEFORE_INVENT": true,
+      "ONE_OWNER_PER_CAPABILITY": true,
+      "ONE_WRITER_PER_SCOPE": true,
+      "NO_NEW_INFORMATION_NO_CHANGE": true,
+      "PARALLELIZE_PERCEPTION": true,
+      "SERIALIZE_MUTATION": true,
+      "REALITY_IS_JUDGE": true
+    },
+    "material_scope": [
+      "INPUT",
+      "PR",
+      "BRANCH",
+      "FILE",
+      "DOC",
+      "SKILL",
+      "SCRIPT",
+      "WORKFLOW",
+      "AGENT",
+      "MODEL",
+      "SESSION",
+      "CHAT",
+      "WINDOW",
+      "TOOL",
+      "SERVICE",
+      "PANEL",
+      "MEMORY",
+      "DATABASE",
+      "RUNTIME",
+      "INTEGRATION",
+      "RULE",
+      "TEST",
+      "OWNER",
+      "CAPABILITY",
+      "MISSION",
+      "ARTIFACT",
+      "HISTORY"
+    ],
+    "new_input_does_not_imply": [
+      "NEW_SYSTEM",
+      "NEW_OWNER",
+      "NEW_BRANCH",
+      "NEW_PR",
+      "NEW_SKILL",
+      "NEW_WORKFLOW",
+      "NEW_MEMORY"
+    ],
+    "continuity": {
+      "model_change": "CONTINUE_EXISTING",
+      "session_change": "CONTINUE_EXISTING",
+      "chat_change": "CONTINUE_EXISTING",
+      "window_change": "CONTINUE_EXISTING",
+      "tool_change": "CONTINUE_EXISTING",
+      "new_error": "CONTINUE_EXISTING",
+      "new_context": "APPLY_DELTA_TO_EXISTING_OWNER",
+      "same_mission_new_material": "APPLY_DELTA_TO_EXISTING_OWNER",
+      "other_owner_material": "ROUTE_DELTA_WITHOUT_STEALING_WRITER",
+      "local_fixed_point": "RETURN_TO_ACTIVE_INTENT",
+      "local_fixed_point_ends_global_mission": false,
+      "stop_only_when": [
+        "GLOBAL_OBJECTIVE_CLOSED",
+        "CHEFE_EXPLICITLY_STOPS",
+        "REAL_BLOCK_PROVEN"
+      ]
+    },
+    "creation_gate": {
+      "mode": "ALL",
+      "create_new_only_if": [
+        "MATERIAL_GAP_PROVEN",
+        "EXISTING_CAPABILITY_FIT_FALSE",
+        "EXISTING_OWNER_FIT_FALSE",
+        "EXTEND_EXISTING_INSUFFICIENT"
+      ],
+      "otherwise": "REUSE_OR_EXTEND_EXISTING",
+      "parallel_owner": "FORBIDDEN",
+      "parallel_system": "FORBIDDEN",
+      "parallel_workflow": "FORBIDDEN"
+    },
+    "residue_policy": {
+      "residue_is_progress": false,
+      "delete_by_name_only": "FORBIDDEN",
+      "cleanup_requires_delta_residual_classified": true,
+      "classes": [
+        "ACTIVE",
+        "MERGED_HISTORICAL",
+        "SUPERSEDED",
+        "ABANDONED",
+        "ORPHAN",
+        "KEEP_EXPLICIT",
+        "SAFE_TO_REMOVE"
+      ],
+      "residue_zero": "NO_ACTION",
+      "residue_material": "ABSORB_ONLY_USEFUL_DELTA",
+      "remove_only_after_absorption_or_proven_no_delta": true
+    },
+    "enforcement": {
+      "consumer": "scripts/lupa/validar-porta-de-entrada.mjs",
+      "gate": ".github/workflows/porta-de-entrada.yml",
+      "fail_closed": true,
+      "counterproof_required": true,
+      "future_execution_required": true,
+      "single_global_owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json"
+    }
   },
   "language_policy": {
     "normalize_human_speech_before_reasoning": false,
@@ -258,7 +375,12 @@
         "EVIDENCE_REF",
         "CLASS"
       ],
-      "class_values": ["FACT", "INFERENCE", "HYPOTHESIS", "UNKNOWN"]
+      "class_values": [
+        "FACT",
+        "INFERENCE",
+        "HYPOTHESIS",
+        "UNKNOWN"
+      ]
     },
     "arbitration": {
       "same_target_conflict": "DISCRIMINATING_TEST_THEN_EVIDENCE_THEN_REALITY",
@@ -282,7 +404,13 @@
       "runtime_is_structural_source_of_truth": false
     },
     "observability": {
-      "instruments": ["logs", "receipts", "graph", "panel", "reports"],
+      "instruments": [
+        "logs",
+        "receipts",
+        "graph",
+        "panel",
+        "reports"
+      ],
       "derived_projection_is_authority": false,
       "graph_fingerprint_role": "DELTA_INSTRUMENT",
       "green_visual_status_is_end_to_end_pass": false
