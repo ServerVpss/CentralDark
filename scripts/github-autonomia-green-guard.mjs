@@ -2,10 +2,10 @@
 /**
  * Green-first guard para a promoção canônica.
  *
- * O fast path AUTO_SQUASH_IF_CLEAN continua canônico e não passa por esta
- * catraca. O guard é a revalidação final dos recibos ADVERSARIAL/green-first:
+ * Todo candidato READY, inclusive FAST, passa por esta revalidação final:
  * somente runs de pull_request do mesmo PR + mesmo HEAD, com a invocação mais
  * nova de cada gate realmente concluída em success, podem chegar ao promotor.
+ * PENDING/QUEUED/SKIPPED/CANCELLED/MISSING nunca são PASS.
  */
 import { mkdir, readFile, readdir, rename, writeFile } from "node:fs/promises";
 import { basename, join, resolve } from "node:path";
@@ -32,7 +32,7 @@ export function parseCsv(value, fallback = []) {
 }
 
 export function shouldEnforceGreenFirst(candidate) {
-  return candidate?.decision === "READY" && candidate?.mode !== "FAST";
+  return candidate?.decision === "READY";
 }
 
 export function runBelongsToPullHead(run, prNumber, headSha) {
@@ -77,7 +77,7 @@ async function api(token, method, path) {
       Authorization: `Bearer ${token}`,
       Accept: "application/vnd.github+json",
       "X-GitHub-Api-Version": "2022-11-28",
-      "User-Agent": "centraldark-autonomia-green-guard/2.0",
+      "User-Agent": "centraldark-autonomia-green-guard/2.1",
     },
   });
   const text = await response.text();
@@ -119,7 +119,6 @@ export async function main(env = process.env) {
   let checked = 0;
   let passed = 0;
   let deferred = 0;
-  let fastSkipped = 0;
   for (const name of names) {
     const path = join(sweepDir, name);
     const document = JSON.parse(await readFile(path, "utf8"));
@@ -127,9 +126,7 @@ export async function main(env = process.env) {
     if (!candidate || candidate.decision !== "READY") continue;
 
     if (!shouldEnforceGreenFirst(candidate)) {
-      fastSkipped += 1;
-      console.log(`GREEN_GUARD=SKIP_FAST PR=${candidate.pr_number || "UNKNOWN"} HEAD=${candidate.head_sha || "UNKNOWN"}`);
-      continue;
+      throw new Error(`GREEN_GUARD_INVARIANT_BROKEN:READY_NOT_ENFORCED:${candidate.pr_number || "UNKNOWN"}`);
     }
 
     const pr = Number(candidate.pr_number || 0);
@@ -160,9 +157,9 @@ export async function main(env = process.env) {
     console.log(`GREEN_GUARD=DEFER PR=${pr} HEAD=${head} ${compact}`);
   }
 
-  console.log(`GREEN_GUARD_SUMMARY checked=${checked} pass=${passed} deferred=${deferred} fast_skipped=${fastSkipped}`);
+  console.log(`GREEN_GUARD_SUMMARY checked=${checked} pass=${passed} deferred=${deferred}`);
   if (deferred > 0) throw new Error(`GREEN_GUARD_DEFERRED:${deferred}`);
-  return { checked, passed, deferred, fastSkipped };
+  return { checked, passed, deferred };
 }
 
 const isMain = process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
