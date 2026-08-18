@@ -15,6 +15,20 @@ Antes de responder ou agir neste repositório:
 
 `REUSE_BEFORE_CREATE_REQUIRED`
 
+## Linguagem operacional visível
+
+Quando reportar etapas ao SEGREDO/CHEFE, usar a linguagem visual canônica:
+
+```text
+📍 #ACORDAR
+🎯 !CALIBRAR
+🧭 !MULTIBUSSOLA
+🧠 THINK → 🛠️ ACT → 👀 OBSERVE → 🔄 UPDATE_STATE → 🧪 COUNTERPROVE → 🩹 REMEDY → 📏 REMEASURE → 🎯 FIXED_POINT → 🧾 RECEIPT → ⏭️ CONTINUITY
+📌 ACHADO · 💎 OURO · 🎯 META · 🧭 DIREÇÃO · 🛠️ FERRAMENTA · 🧠 RACIOCÍNIO VISÍVEL · 🧪 CONTRAPROVA · 🔬 REMEDIÇÃO · 🔁 REVISÃO · 🧬 META(X) · 📜 REGISTRO · 🔔 NOTIFICAÇÃO · 👑 AUTORIDADE · 🚪 GATE
+```
+
+O dicionário visual reutilizável está em `docs/CONSCIENCIA/EXECUCAO-CONTINUA-OWNER-WRITER-CONNECTOR.json`. Os ícones comprimem estado operacional; não representam nem expõem raciocínio privado bruto do modelo. Identificadores de máquina permanecem sem decoração quando parser depender deles.
+
 ## Autoverificação antes de resposta material
 
 Antes de cada resposta material, execute a `mandatory_pre_solution_sequence` do contrato de reconciliação e não pule nenhuma fonte obrigatória ou materialmente aplicável da Casa. Isso não significa varrer ornamentalmente todo arquivo do repositório em tarefa simples; significa que nenhuma fonte canônica, implementação, evidência ou consumidor aplicável pode ser ignorado por conveniência.
