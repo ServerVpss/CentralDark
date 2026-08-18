@@ -1,0 +1,28 @@
+{
+  "scope": "GLOBAL_EXECUTION_GATE",
+  "branch": "fix/global-execution-gate-20260818",
+  "base": "main",
+  "base_sha": "d704d97f7c22382bec34b3f8d6dd1b3f1ec8f1bd",
+  "writers": 7,
+  "writers_paths": [
+    ".github/workflows/notion-sync.yml",
+    ".github/workflows/painel-vivo.yml",
+    ".github/workflows/obsidian-index.yml",
+    ".github/workflows/estado-retomada.yml",
+    ".github/workflows/painel-validacao.yml",
+    ".github/workflows/painel-auto-update.yml",
+    ".github/workflows/linear-pendencias-sync.yml"
+  ],
+  "gate": [
+    "node scripts/lupa/validar-continuidade-global.mjs",
+    "node scripts/lupa/validar-porta-de-entrada.mjs"
+  ],
+  "global_owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json",
+  "extension": "docs/CONSCIENCIA/EXECUCAO-CONTINUA-OWNER-WRITER-CONNECTOR.json",
+  "policy_ui": "USER_CREATED_ACTIONS_POLICY_NEUTRAL_NO_RESTRICT_ACTORS_EVENTS_LOCKFILE",
+  "ruleset_private_enforcement": "NOT_USED",
+  "counterproof": "VALIDATOR_MUTATES_MISSING_WRITER_GATE_AND_EXECUTION_LOOP_REMEDY",
+  "merge": "PENDING_CI_AND_REVIEW",
+  "main_confirmed": false,
+  "fixed_point_local": false
+}
