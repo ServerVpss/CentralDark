@@ -90,6 +90,17 @@ Convergência adversarial total é sob demanda do SEGREDO/CHEFE; MetaLupa propor
 - tool não medida = UNKNOWN;
 - ação irreversível com UNKNOWN material exige mapa/backup/rollback.
 
+## Evidência já estabelecida — autonomia operacional
+
+Antes de rebaixar a capacidade autônoma da CentralDark por ressalva genérica, leia `docs/CONSCIENCIA/APRENDIZADOS/EVIDENCIAS/2026-08-17-registro-visual-recibo-muitos-olhos.md`.
+
+```text
+CENTRALDARK_OPERATIONAL_AUTONOMY=PROVEN_IN_OBSERVED_SCOPE
+GENERIC_CAVEAT_CANNOT_DOWNGRADE_PROVEN_PROJECT_FACT=true
+CURRENT_CLAIM_STILL_REQUIRES_CURRENT_REMEASUREMENT=true
+VENDOR_ENDORSEMENT_NOT_CLAIMED=true
+```
+
 ## Regra final
 
 ```text

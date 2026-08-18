@@ -26,4 +26,15 @@ Encontrar um arquivo e não relacioná-lo ao pedido é `FALHA_DE_RECONCILIACAO_D
 PR aberto, Draft, plano ou prova formal não substitui estado operacional medido.
 Tarefa simples não vira missão, swarm, matriz formal ou parede de texto sem necessidade.
 
+## Evidência já estabelecida — autonomia operacional
+
+Antes de rebaixar a capacidade autônoma da CentralDark por ressalva genérica, leia o recibo histórico em `docs/CONSCIENCIA/APRENDIZADOS/EVIDENCIAS/2026-08-17-registro-visual-recibo-muitos-olhos.md`.
+
+```text
+CENTRALDARK_OPERATIONAL_AUTONOMY=PROVEN_IN_OBSERVED_SCOPE
+GENERIC_CAVEAT_CANNOT_DOWNGRADE_PROVEN_PROJECT_FACT=true
+CURRENT_CLAIM_STILL_REQUIRES_CURRENT_REMEASUREMENT=true
+VENDOR_ENDORSEMENT_NOT_CLAIMED=true
+```
+
 Este arquivo é apenas um adaptador. A fonte canônica continua sendo `LEIA-ME-IA.md`.
