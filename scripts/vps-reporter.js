@@ -54,7 +54,22 @@ async function coletarEEnviar() {
             disco: `${diskPercent}%`,
             load: loadAvg,
             timestamp: new Date().toISOString(),
-            brtTimestamp: brtTime
+            brtTimestamp: brtTime,
+            events: [{
+                event: 'vps_heartbeat',
+                producer: 'vps-reporter',
+                target: process.env.TELEMETRY_TARGET || 'VPS|MCP|CORE',
+                mission_id: process.env.MISSION_ID || 'telemetry-heartbeat',
+                writer_scope: process.env.WRITER_SCOPE || 'runtime-telemetry',
+                sha: process.env.CENTRALDARK_SHA || 'unknown',
+                trace_id: process.env.TRACE_ID || undefined,
+                timestamp: new Date().toISOString(),
+                latency_ms: null,
+                tokens: null,
+                cost: null,
+                result: 'PASS',
+                context: { cpu: `${cpuPercent}%`, ramPercent, disco: `${diskPercent}%`, load: loadAvg }
+            }]
         };
 
         let response;
