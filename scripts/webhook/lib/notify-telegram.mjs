@@ -64,9 +64,9 @@ export async function notifyVpsUpdated({ sha, msg }) {
   const shortSha = (sha || '').slice(0, 7);
   const text =
     `🚀 <b>VPS ATUALIZADA</b> — CentralDark\n` +
-    `<b>${escapeHtml(msg)}</b>\n` +
-    `<code>${shortSha}</code>\n` +
-    `<i>Deploy automático concluído via webhook</i>`;
+    `🔄 <b>${escapeHtml(msg)}</b>\n` +
+    `🧾 <code>${shortSha}</code>\n` +
+    `✅ <i>Deploy automático concluído via webhook</i>`;
   const body = JSON.stringify({
     chat_id: chat,
     parse_mode: 'HTML',
