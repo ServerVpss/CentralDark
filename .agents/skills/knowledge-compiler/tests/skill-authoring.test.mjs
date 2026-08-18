@@ -49,6 +49,15 @@ test('campo extra no frontmatter é bloqueado', () => {
   assert.ok(result.blockers.includes('FRONTMATTER_EXTRA_FIELD:version'));
 });
 
+test('campo duplicado no frontmatter é bloqueado', () => {
+  const result = validateSkillAuthoring(validSkill({
+    content: `---\nname: reviewing-evidence\nname: reviewing-evidence\ndescription: Revisa evidência.\n---\n\n1. Medir.`,
+    actionable_steps: 1,
+  }));
+  assert.equal(result.ok, false);
+  assert.ok(result.blockers.includes('FRONTMATTER_DUPLICATE_FIELD:name'));
+});
+
 test('nome deve ser lowercase-hyphenated e casar com diretório', () => {
   const badName = validateSkillAuthoring(validSkill({
     directory: '.agents/skills/reviewing-evidence',
