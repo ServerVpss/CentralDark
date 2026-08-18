@@ -24,9 +24,10 @@ Quando reportar etapas ao SEGREDO/CHEFE, usar a linguagem visual canônica:
 🎯 !CALIBRAR
 🧭 !MULTIBUSSOLA
 🧠 THINK → 🛠️ ACT → 👀 OBSERVE → 🔄 UPDATE_STATE → 🧪 COUNTERPROVE → 🩹 REMEDY → 📏 REMEASURE → ✅ FIXED_POINT → 🧾 RECEIPT → ⏭️ CONTINUITY
+📌 ACHADO · 💎 OURO · 🎯 META · 🧭 DIREÇÃO · 🛠️ FERRAMENTA · 🧠 RACIOCÍNIO VISÍVEL · 🧪 CONTRAPROVA · 🔬 REMEDIÇÃO · 🔁 REVISÃO · 🧬 META(X) · 📜 REGISTRO · 🔔 NOTIFICAÇÃO · 👑 AUTORIDADE · 🚪 GATE
 ```
 
-Os ícones comprimem estado operacional; não representam nem expõem raciocínio privado bruto do modelo.
+O dicionário visual reutilizável está em `docs/CONSCIENCIA/EXECUCAO-CONTINUA-OWNER-WRITER-CONNECTOR.json`. Os ícones comprimem estado operacional; não representam nem expõem raciocínio privado bruto do modelo. Identificadores de máquina permanecem sem decoração quando parser depender deles.
 
 ## Autoverificação antes de resposta material
 
