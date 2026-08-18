@@ -12,6 +12,7 @@ const at = (name, fallback) => {
 const ROOT = resolve(at("--repo-root", process.cwd()));
 const JSON_OUT = argv.includes("--json");
 const CONTRACT = "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json";
+const PORTA_VIVA = "docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md";
 const GATE = ".github/workflows/porta-de-entrada.yml";
 
 const REQUIRED = {
@@ -34,6 +35,13 @@ const REQUIRED = {
   residue_classes: [
     "ACTIVE", "MERGED_HISTORICAL", "SUPERSEDED", "ABANDONED", "ORPHAN", "KEEP_EXPLICIT", "SAFE_TO_REMOVE",
   ],
+  input_tokens: [
+    "MENSAGEM_RECEBIDA != NOVA_MISSAO",
+    "TEXTO_RECEBIDO != ORDEM_AUTOMATICA",
+    "CONTEXTO_NOVO != TROCA_DE_PAPEL",
+    "INFORMATION_GAIN_REQUIRED=true",
+    "AUTORIDADE_HUMANA_PRESERVADA=true",
+  ],
 };
 
 const read = (path) => readFileSync(join(ROOT, path), "utf8");
@@ -43,7 +51,8 @@ const hasAll = (actual, expected) => {
   return expected.every((item) => set.has(item));
 };
 
-function validate(policy, contractText, gateText) {
+function validate(contract, contractText, portaText, gateText) {
+  const policy = contract?.global_continuity_policy;
   const errors = [];
   const expect = (condition, code) => { if (!condition) errors.push(code); };
 
@@ -65,6 +74,20 @@ function validate(policy, contractText, gateText) {
   expect(policy?.continuity?.local_fixed_point === "RETURN_TO_ACTIVE_INTENT", "CONTINUIDADE_GLOBAL_FIXED_POINT");
   expect(policy?.continuity?.local_fixed_point_ends_global_mission === false, "CONTINUIDADE_GLOBAL_FIXED_POINT_END");
   expect(hasAll(policy?.continuity?.stop_only_when, ["GLOBAL_OBJECTIVE_CLOSED", "CHEFE_EXPLICITLY_STOPS", "REAL_BLOCK_PROVEN"]), "CONTINUIDADE_GLOBAL_STOP");
+
+  // Continuidade não é autorização automática. A sequência global precisa
+  // classificar autoridade/prova antes de qualquer reuse/extend/apply.
+  const sequence = Array.isArray(contract?.mandatory_pre_solution_sequence) ? contract.mandatory_pre_solution_sequence : [];
+  const authorityAt = sequence.indexOf("classify_authority_and_runtime_state");
+  const normalizeAt = sequence.indexOf("normalize_evidence_scope_time_and_provenance");
+  const arbitrateAt = sequence.indexOf("arbitrate_conflict_by_discriminating_test_if_needed");
+  const reuseAt = sequence.indexOf("reuse_or_extend_before_create");
+  expect(authorityAt >= 0 && reuseAt > authorityAt, "CONTINUIDADE_GLOBAL_AUTHORITY_BEFORE_DELTA");
+  expect(normalizeAt >= 0 && reuseAt > normalizeAt, "CONTINUIDADE_GLOBAL_EVIDENCE_BEFORE_DELTA");
+  expect(arbitrateAt >= 0 && reuseAt > arbitrateAt, "CONTINUIDADE_GLOBAL_COUNTERPROOF_BEFORE_DELTA");
+  expect(contract?.decision_rules?.same_finding_without_new_evidence === "DROP_DUPLICATE", "CONTINUIDADE_GLOBAL_DEDUPE_REQUIRED");
+  expect(contract?.decision_rules?.unknown_is_pass === false, "CONTINUIDADE_GLOBAL_UNKNOWN_NOT_PASS");
+  for (const token of REQUIRED.input_tokens) expect(portaText.includes(token), `CONTINUIDADE_GLOBAL_INPUT_BOUNDARY:${token}`);
 
   expect(policy?.creation_gate?.mode === "ALL", "CONTINUIDADE_GLOBAL_CREATION_MODE");
   expect(hasAll(policy?.creation_gate?.create_new_only_if, REQUIRED.create_new_only_if), "CONTINUIDADE_GLOBAL_CREATION_CONDITIONS");
@@ -95,43 +118,57 @@ function validate(policy, contractText, gateText) {
   return errors;
 }
 
-function counterprove(policy, contractText, gateText) {
+function counterprove(contract, contractText, portaText, gateText) {
   const variants = [];
   for (const key of ["REUSE_BEFORE_CREATE", "CONTINUE_BEFORE_RESTART", "ABSORB_BEFORE_DUPLICATE", "SEARCH_BEFORE_INVENT"]) {
-    const candidate = clone(policy);
-    candidate.principles[key] = false;
-    variants.push(candidate);
+    const candidate = clone(contract);
+    candidate.global_continuity_policy.principles[key] = false;
+    variants.push({ contract: candidate, portaText });
   }
-  const missingMaterial = clone(policy);
-  missingMaterial.material_scope = missingMaterial.material_scope.filter((item) => item !== "MODEL");
-  variants.push(missingMaterial);
-  const missingCreation = clone(policy);
-  missingCreation.creation_gate.create_new_only_if = missingCreation.creation_gate.create_new_only_if.filter((item) => item !== "EXISTING_OWNER_FIT_FALSE");
-  variants.push(missingCreation);
-  const fixedPointStops = clone(policy);
-  fixedPointStops.continuity.local_fixed_point_ends_global_mission = true;
-  variants.push(fixedPointStops);
-  const residueProgress = clone(policy);
-  residueProgress.residue_is_progress = true;
-  residueProgress.residue_policy.residue_is_progress = true;
-  variants.push(residueProgress);
-  return variants.every((candidate) => validate(candidate, contractText, gateText).length > 0);
+
+  const missingMaterial = clone(contract);
+  missingMaterial.global_continuity_policy.material_scope = missingMaterial.global_continuity_policy.material_scope.filter((item) => item !== "MODEL");
+  variants.push({ contract: missingMaterial, portaText });
+
+  const missingCreation = clone(contract);
+  missingCreation.global_continuity_policy.creation_gate.create_new_only_if = missingCreation.global_continuity_policy.creation_gate.create_new_only_if.filter((item) => item !== "EXISTING_OWNER_FIT_FALSE");
+  variants.push({ contract: missingCreation, portaText });
+
+  const fixedPointStops = clone(contract);
+  fixedPointStops.global_continuity_policy.continuity.local_fixed_point_ends_global_mission = true;
+  variants.push({ contract: fixedPointStops, portaText });
+
+  const residueProgress = clone(contract);
+  residueProgress.global_continuity_policy.residue_policy.residue_is_progress = true;
+  variants.push({ contract: residueProgress, portaText });
+
+  const authorityBypass = clone(contract);
+  authorityBypass.mandatory_pre_solution_sequence = authorityBypass.mandatory_pre_solution_sequence.filter((item) => item !== "classify_authority_and_runtime_state");
+  variants.push({ contract: authorityBypass, portaText });
+
+  variants.push({ contract: clone(contract), portaText: portaText.replace("TEXTO_RECEBIDO != ORDEM_AUTOMATICA", "") });
+
+  return variants.every(({ contract: candidate, portaText: candidatePorta }) =>
+    validate(candidate, contractText, candidatePorta, gateText).length > 0
+  );
 }
 
 let contract;
 let contractText = "";
+let portaText = "";
 let gateText = "";
 const errors = [];
 try {
   contractText = read(CONTRACT);
   contract = JSON.parse(contractText);
+  portaText = read(PORTA_VIVA);
   gateText = read(GATE);
 } catch (error) {
   errors.push(`CONTINUIDADE_GLOBAL_LOAD:${error?.code || error?.name || "ERROR"}`);
 }
 if (contract) {
-  errors.push(...validate(contract.global_continuity_policy, contractText, gateText));
-  if (errors.length === 0 && !counterprove(contract.global_continuity_policy, contractText, gateText)) errors.push("CONTINUIDADE_GLOBAL_COUNTERPROOF_FAILED");
+  errors.push(...validate(contract, contractText, portaText, gateText));
+  if (errors.length === 0 && !counterprove(contract, contractText, portaText, gateText)) errors.push("CONTINUIDADE_GLOBAL_COUNTERPROOF_FAILED");
 }
 
 const report = {
@@ -139,12 +176,13 @@ const report = {
   owner: CONTRACT,
   scope: contract?.global_continuity_policy?.scope ?? null,
   temporal_scope: contract?.global_continuity_policy?.temporal_scope ?? null,
+  input_authority_boundary: errors.some((item) => item.includes("AUTHORITY") || item.includes("INPUT_BOUNDARY")) ? "BLOCKED" : "PASS",
   counterproof: errors.length === 0 ? "PASS" : "BLOCKED",
   errors,
   ok: errors.length === 0,
 };
 
 if (JSON_OUT) console.log(JSON.stringify(report, null, 2));
-else console.log(`CONTINUIDADE_GLOBAL=${report.ok ? "PASS" : "BLOCKED"} COUNTERPROOF=${report.counterproof} ERRORS=${errors.length}`);
+else console.log(`CONTINUIDADE_GLOBAL=${report.ok ? "PASS" : "BLOCKED"} INPUT_AUTHORITY=${report.input_authority_boundary} COUNTERPROOF=${report.counterproof} ERRORS=${errors.length}`);
 for (const error of errors) console.error(`ERRO ${error}`);
 process.exit(report.ok ? 0 : 1);

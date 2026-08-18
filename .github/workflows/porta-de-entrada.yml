@@ -66,6 +66,9 @@ jobs:
         with:
           node-version: 22
 
+      - name: Validar continuidade global e fronteira de autoridade da entrada
+        run: node scripts/lupa/validar-continuidade-global.mjs
+
       - name: Exigir labels operacionais canônicas
         if: github.event_name == 'pull_request'
         shell: bash
@@ -248,6 +251,7 @@ jobs:
             --base-sha "$BASE_SHA" \
             --head-sha "$HEAD_SHA" \
             --approved "$AUTHORITY_APPROVED" || status=1
+          node scripts/lupa/validar-continuidade-global.mjs --json || status=1
           node scripts/lupa/validar-porta-de-entrada.mjs \
             --base-sha "$BASE_SHA" \
             --head-sha "$HEAD_SHA" \
@@ -278,6 +282,7 @@ jobs:
           echo "CENTRALDARK_ROOT_ONLY=1"
           echo "WORKFLOW_REUSE_REQUIRED=1"
           echo "AI_DETERMINISTIC_FALLBACK_REQUIRED=1"
+          echo "GLOBAL_CONTINUITY_HARD_GATE=1"
           echo "MOTHER_BRANCH_GATED=1"
           echo "CANONICAL_LABELS_REQUIRED=1"
           echo "CENTRALDARK_API_SINGLE_ENTRY=1"
