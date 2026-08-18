@@ -12,6 +12,7 @@ function emptyResult(errors = ["PROOF_OWNERSHIP_CONTRACT_INVALID"]) {
     ok: false,
     topology_only: true,
     invariant_proof: false,
+    operational_claim_policy_ok: false,
     coverage_status: "UNKNOWN",
     invariant_count: 0,
     unregistered_known_count: 0,
@@ -36,6 +37,133 @@ export function isRepoRelativePath(value) {
 
 function canonicalResponsibilityKey(invariant) {
   return `${String(invariant.source ?? "").trim()}::${String(invariant.consumer ?? "").trim()}`;
+}
+
+export function validateOperationalClaimPolicy(contract, { exists = () => true } = {}) {
+  if (!contract || typeof contract !== "object" || Array.isArray(contract)) {
+    return ["OPERATIONAL_POLICY_CONTRACT_INVALID"];
+  }
+
+  const errors = [];
+  const rules = contract.global_rules ?? {};
+  const policy = contract.operational_claim_policy ?? {};
+  const requiredRules = {
+    operational_claim_requires_enforcement: true,
+    operational_claim_without_complete_chain: "UNPROVEN",
+    documented_is_executed: false,
+    declared_is_enforced: false,
+    configured_is_active: false,
+    implemented_is_reachable: false,
+    triggered_is_completed: false,
+    completed_is_correct: false,
+    historical_pass_is_current_pass: false,
+    proof_target_must_match_claim: true,
+    local_fixed_point_is_end_of_intent: false,
+  };
+  for (const [key, expected] of Object.entries(requiredRules)) {
+    if (rules[key] !== expected) errors.push(`OPERATIONAL_RULE_INVALID:${key}`);
+  }
+
+  if (policy.marker !== "OPERATIONAL_CLAIM_REQUIRES_ENFORCEMENT") errors.push("OPERATIONAL_POLICY_MARKER_INVALID");
+  if (policy.applies_to !== "CLAIMS_THAT_PRODUCE_OR_GOVERN_BEHAVIOR") errors.push("OPERATIONAL_POLICY_SCOPE_INVALID");
+  if (policy.technology_lock !== false) errors.push("OPERATIONAL_POLICY_TECHNOLOGY_LOCK_FORBIDDEN");
+  if (policy.enforcement_must_be_proportional !== true) errors.push("OPERATIONAL_POLICY_PROPORTIONAL_ENFORCEMENT_REQUIRED");
+  if (policy.runtime_status_is_topology_proof !== false) errors.push("OPERATIONAL_POLICY_TOPOLOGY_IS_NOT_RUNTIME_PROOF");
+  if (policy.live_state_must_be_measured !== true) errors.push("OPERATIONAL_POLICY_LIVE_STATE_REQUIRED");
+  if (policy.monitoring_requires_real_mechanism !== true) errors.push("OPERATIONAL_POLICY_REAL_MONITOR_REQUIRED");
+  if (policy.fixed_point_scope_required !== true) errors.push("OPERATIONAL_POLICY_SCOPED_FIXED_POINT_REQUIRED");
+  if (policy.duplicate_only_when_same_authority_and_capability !== true) errors.push("OPERATIONAL_POLICY_DUPLICATE_RULE_INVALID");
+  if (policy.preserve_layer_specific_implementations !== true) errors.push("OPERATIONAL_POLICY_LAYER_PRESERVATION_REQUIRED");
+
+  const requiredChain = [
+    "claim",
+    "authority",
+    "owner",
+    "contract",
+    "implementation_or_consumer",
+    "enforcement",
+    "execution",
+    "observable_effect",
+    "proof_target",
+    "receipt",
+    "counterproof",
+    "live_state",
+    "judge",
+    "fixed_point_scope",
+  ];
+  if (!Array.isArray(policy.required_chain)) {
+    errors.push("OPERATIONAL_POLICY_REQUIRED_CHAIN_MISSING");
+  } else {
+    for (const field of requiredChain) {
+      if (!policy.required_chain.includes(field)) errors.push(`OPERATIONAL_POLICY_CHAIN_FIELD_MISSING:${field}`);
+    }
+  }
+
+  const classifications = new Set(Array.isArray(policy.classifications) ? policy.classifications : []);
+  for (const state of ["ENFORCED", "PARTIAL", "DOCUMENTATION_ONLY", "ORPHAN", "UNKNOWN", "NOT_APPLICABLE"]) {
+    if (!classifications.has(state)) errors.push(`OPERATIONAL_POLICY_CLASSIFICATION_MISSING:${state}`);
+  }
+
+  const nonPass = new Set(Array.isArray(policy.non_pass_states) ? policy.non_pass_states : []);
+  for (const state of ["UNKNOWN", "PENDING", "QUEUED", "SKIPPED", "CANCELLED"]) {
+    if (!nonPass.has(state)) errors.push(`OPERATIONAL_POLICY_NON_PASS_STATE_MISSING:${state}`);
+  }
+
+  const profiles = policy.mechanism_profiles ?? {};
+  for (const profile of [
+    "CODE_RULE",
+    "API_CONTRACT",
+    "WORKFLOW",
+    "DEPLOY",
+    "PANEL",
+    "ADMIN_DOCUMENTATION",
+    "OPERATIONAL_MEMORY",
+    "COMMAND",
+    "SECURITY",
+    "HUMAN_NON_AUTOMATABLE_RULE",
+  ]) {
+    if (!Array.isArray(profiles[profile]) || profiles[profile].length === 0) {
+      errors.push(`OPERATIONAL_POLICY_MECHANISM_PROFILE_MISSING:${profile}`);
+    }
+  }
+
+  const invariantFields = new Set(Array.isArray(contract.required_fields_per_invariant) ? contract.required_fields_per_invariant : []);
+  if (!invariantFields.has("operational_chain")) errors.push("OPERATIONAL_CHAIN_NOT_REQUIRED_PER_INVARIANT");
+
+  for (const invariant of Array.isArray(contract.invariants) ? contract.invariants : []) {
+    const chain = invariant?.operational_chain;
+    const id = String(invariant?.id ?? "UNKNOWN");
+    if (!chain || typeof chain !== "object" || Array.isArray(chain)) {
+      errors.push(`OPERATIONAL_CHAIN_MISSING:${id}`);
+      continue;
+    }
+    for (const field of requiredChain) {
+      if (!nonEmptyString(chain[field])) errors.push(`OPERATIONAL_CHAIN_FIELD_INVALID:${id}:${field}`);
+    }
+    if (chain.live_state !== "MEASURE_AT_RUNTIME") errors.push(`OPERATIONAL_CHAIN_STALE_STATE_FORBIDDEN:${id}`);
+    if (["FIXED_POINT", "MISSION"].includes(String(chain.fixed_point_scope ?? "").trim())) {
+      errors.push(`OPERATIONAL_CHAIN_FIXED_POINT_SCOPE_INVALID:${id}`);
+    }
+    if (nonEmptyString(chain.judge) && chain.judge === invariant.prover) {
+      errors.push(`OPERATIONAL_CHAIN_WRITER_JUDGE_COLLISION:${id}`);
+    }
+    if (chain.counterproof !== invariant.counterproof?.path) {
+      errors.push(`OPERATIONAL_CHAIN_COUNTERPROOF_MISMATCH:${id}`);
+    }
+
+    for (const pathField of ["owner", "contract", "implementation_or_consumer", "enforcement", "receipt", "counterproof"]) {
+      const candidate = chain[pathField];
+      if (!nonEmptyString(candidate)) continue;
+      const path = candidate.trim();
+      if (!isRepoRelativePath(path)) {
+        errors.push(`OPERATIONAL_CHAIN_PATH_OUTSIDE_REPO:${id}:${pathField}:${path}`);
+        continue;
+      }
+      if (!exists(path)) errors.push(`OPERATIONAL_CHAIN_PATH_MISSING:${id}:${pathField}:${path}`);
+    }
+  }
+
+  return errors;
 }
 
 export function validateProofOwnership(contract, { exists = () => true } = {}) {
@@ -68,6 +196,9 @@ export function validateProofOwnership(contract, { exists = () => true } = {}) {
   for (const [key, expected] of Object.entries(expectedRules)) {
     if (rules[key] !== expected) errors.push(`PROOF_OWNERSHIP_RULE_INVALID:${key}`);
   }
+
+  const operationalErrors = validateOperationalClaimPolicy(contract, { exists });
+  errors.push(...operationalErrors);
 
   const allowedProofClasses = Array.isArray(contract.allowed_proof_classes) ? contract.allowed_proof_classes : [];
   if (allowedProofClasses.length === 0 || allowedProofClasses.some((item) => !nonEmptyString(item))) {
@@ -102,7 +233,7 @@ export function validateProofOwnership(contract, { exists = () => true } = {}) {
         errors.push(`PROOF_OWNERSHIP_FIELD_INVALID:${String(invariant.id ?? "UNKNOWN")}:${field}`);
       }
     }
-    for (const field of ["counterproof", "external_anchor", "depends_on"]) {
+    for (const field of ["counterproof", "external_anchor", "depends_on", "operational_chain"]) {
       if (invariant[field] == null) {
         errors.push(`PROOF_OWNERSHIP_FIELD_MISSING:${String(invariant.id ?? "UNKNOWN")}:${field}`);
       }
@@ -283,6 +414,7 @@ export function validateProofOwnership(contract, { exists = () => true } = {}) {
     ok: errors.length === 0,
     topology_only: true,
     invariant_proof: false,
+    operational_claim_policy_ok: operationalErrors.length === 0,
     coverage_status: contract.coverage_status,
     invariant_count: invariants.length,
     unregistered_known_count: unregisteredKnown.length,
@@ -324,6 +456,6 @@ if (isMain) {
   });
 
   for (const error of result.errors) console.error(`ERRO ${error}`);
-  console.log(`PROOF_GRAPH_STRUCTURE_OK=${result.ok ? 1 : 0} COVERAGE=${result.coverage_status} TOPOLOGY_ONLY=1 INVARIANT_PROOF=0 INVARIANTS=${result.invariant_count} UNREGISTERED_KNOWN=${result.unregistered_known_count} CLASSES=${result.proof_classes.length} ERROS=${result.errors.length}`);
+  console.log(`PROOF_GRAPH_STRUCTURE_OK=${result.ok ? 1 : 0} OPERATIONAL_CLAIM_POLICY=${result.operational_claim_policy_ok ? 1 : 0} COVERAGE=${result.coverage_status} TOPOLOGY_ONLY=1 INVARIANT_PROOF=0 INVARIANTS=${result.invariant_count} UNREGISTERED_KNOWN=${result.unregistered_known_count} CLASSES=${result.proof_classes.length} ERROS=${result.errors.length}`);
   process.exit(result.ok ? 0 : 1);
 }
