@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { basename, dirname, posix } from 'node:path';
+import { basename, posix } from 'node:path';
 
 export const SKILL_AUTHORING_LIMITS = Object.freeze({
   description_max_chars: 1024,
@@ -38,6 +38,9 @@ function parseFrontmatter(content) {
     const match = line.match(/^([A-Za-z0-9_-]+):\s*(.*)$/);
     if (!match) return { ok: false, fields, keys, body: lines.slice(close + 1).join('\n'), error: 'FRONTMATTER_LINE_INVALID' };
     const [, key, rawValue] = match;
+    if (Object.hasOwn(fields, key)) {
+      return { ok: false, fields, keys, body: lines.slice(close + 1).join('\n'), error: `FRONTMATTER_DUPLICATE_FIELD:${key}` };
+    }
     keys.push(key);
     fields[key] = rawValue.trim().replace(/^(["'])(.*)\1$/, '$2');
   }
