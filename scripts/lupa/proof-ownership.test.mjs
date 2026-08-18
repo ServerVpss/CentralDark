@@ -1,7 +1,12 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { existsSync, readFileSync } from "node:fs";
+import { resolve } from "node:path";
 
 import { isRepoRelativePath, validateProofOwnership } from "./proof-ownership.mjs";
+
+const ROOT = resolve(process.cwd());
+const CANONICAL_CONTRACT = resolve(ROOT, "docs/CONSCIENCIA/PROOF-OWNERSHIP.json");
 
 const makeInvariant = (overrides = {}) => ({
   id: "AUTHORITY_RECEIPT_FROM_GITHUB_EVENT",
@@ -58,6 +63,127 @@ const allExist = () => true;
 
 function errorsFor(contract, exists = allExist) {
   return validateProofOwnership(contract, { exists }).errors;
+}
+
+function loadCanonicalContract() {
+  return JSON.parse(readFileSync(CANONICAL_CONTRACT, "utf8"));
+}
+
+function validateOperationalClaimPolicy(contract) {
+  const errors = [];
+  const rules = contract?.global_rules ?? {};
+  const policy = contract?.operational_claim_policy ?? {};
+  const requiredRules = {
+    operational_claim_requires_enforcement: true,
+    operational_claim_without_complete_chain: "UNPROVEN",
+    documented_is_executed: false,
+    declared_is_enforced: false,
+    configured_is_active: false,
+    implemented_is_reachable: false,
+    triggered_is_completed: false,
+    completed_is_correct: false,
+    historical_pass_is_current_pass: false,
+    proof_target_must_match_claim: true,
+    local_fixed_point_is_end_of_intent: false,
+  };
+  for (const [key, expected] of Object.entries(requiredRules)) {
+    if (rules[key] !== expected) errors.push(`OPERATIONAL_RULE_INVALID:${key}`);
+  }
+
+  if (policy.marker !== "OPERATIONAL_CLAIM_REQUIRES_ENFORCEMENT") errors.push("OPERATIONAL_POLICY_MARKER_INVALID");
+  if (policy.applies_to !== "CLAIMS_THAT_PRODUCE_OR_GOVERN_BEHAVIOR") errors.push("OPERATIONAL_POLICY_SCOPE_INVALID");
+  if (policy.technology_lock !== false) errors.push("OPERATIONAL_POLICY_TECHNOLOGY_LOCK_FORBIDDEN");
+  if (policy.enforcement_must_be_proportional !== true) errors.push("OPERATIONAL_POLICY_PROPORTIONAL_ENFORCEMENT_REQUIRED");
+  if (policy.runtime_status_is_topology_proof !== false) errors.push("OPERATIONAL_POLICY_TOPOLOGY_IS_NOT_RUNTIME_PROOF");
+  if (policy.live_state_must_be_measured !== true) errors.push("OPERATIONAL_POLICY_LIVE_STATE_REQUIRED");
+  if (policy.monitoring_requires_real_mechanism !== true) errors.push("OPERATIONAL_POLICY_REAL_MONITOR_REQUIRED");
+  if (policy.fixed_point_scope_required !== true) errors.push("OPERATIONAL_POLICY_SCOPED_FIXED_POINT_REQUIRED");
+  if (policy.duplicate_only_when_same_authority_and_capability !== true) errors.push("OPERATIONAL_POLICY_DUPLICATE_RULE_INVALID");
+  if (policy.preserve_layer_specific_implementations !== true) errors.push("OPERATIONAL_POLICY_LAYER_PRESERVATION_REQUIRED");
+
+  const requiredChain = [
+    "claim",
+    "authority",
+    "owner",
+    "contract",
+    "implementation_or_consumer",
+    "enforcement",
+    "execution",
+    "observable_effect",
+    "proof_target",
+    "receipt",
+    "counterproof",
+    "live_state",
+    "judge",
+    "fixed_point_scope",
+  ];
+  if (!Array.isArray(policy.required_chain)) {
+    errors.push("OPERATIONAL_POLICY_REQUIRED_CHAIN_MISSING");
+  } else {
+    for (const field of requiredChain) {
+      if (!policy.required_chain.includes(field)) errors.push(`OPERATIONAL_POLICY_CHAIN_FIELD_MISSING:${field}`);
+    }
+  }
+
+  const classifications = new Set(Array.isArray(policy.classifications) ? policy.classifications : []);
+  for (const state of ["ENFORCED", "PARTIAL", "DOCUMENTATION_ONLY", "ORPHAN", "UNKNOWN", "NOT_APPLICABLE"]) {
+    if (!classifications.has(state)) errors.push(`OPERATIONAL_POLICY_CLASSIFICATION_MISSING:${state}`);
+  }
+
+  const nonPass = new Set(Array.isArray(policy.non_pass_states) ? policy.non_pass_states : []);
+  for (const state of ["UNKNOWN", "PENDING", "QUEUED", "SKIPPED", "CANCELLED"]) {
+    if (!nonPass.has(state)) errors.push(`OPERATIONAL_POLICY_NON_PASS_STATE_MISSING:${state}`);
+  }
+
+  const profiles = policy.mechanism_profiles ?? {};
+  for (const profile of [
+    "CODE_RULE",
+    "API_CONTRACT",
+    "WORKFLOW",
+    "DEPLOY",
+    "PANEL",
+    "ADMIN_DOCUMENTATION",
+    "OPERATIONAL_MEMORY",
+    "COMMAND",
+    "SECURITY",
+    "HUMAN_NON_AUTOMATABLE_RULE",
+  ]) {
+    if (!Array.isArray(profiles[profile]) || profiles[profile].length === 0) {
+      errors.push(`OPERATIONAL_POLICY_MECHANISM_PROFILE_MISSING:${profile}`);
+    }
+  }
+
+  const invariantFields = new Set(Array.isArray(contract?.required_fields_per_invariant) ? contract.required_fields_per_invariant : []);
+  if (!invariantFields.has("operational_chain")) errors.push("OPERATIONAL_CHAIN_NOT_REQUIRED_PER_INVARIANT");
+
+  for (const invariant of Array.isArray(contract?.invariants) ? contract.invariants : []) {
+    const chain = invariant?.operational_chain;
+    const id = String(invariant?.id ?? "UNKNOWN");
+    if (!chain || typeof chain !== "object" || Array.isArray(chain)) {
+      errors.push(`OPERATIONAL_CHAIN_MISSING:${id}`);
+      continue;
+    }
+    for (const field of requiredChain) {
+      if (typeof chain[field] !== "string" || chain[field].trim() === "") {
+        errors.push(`OPERATIONAL_CHAIN_FIELD_INVALID:${id}:${field}`);
+      }
+    }
+    if (chain.live_state !== "MEASURE_AT_RUNTIME") errors.push(`OPERATIONAL_CHAIN_STALE_STATE_FORBIDDEN:${id}`);
+    if (chain.fixed_point_scope === "FIXED_POINT" || chain.fixed_point_scope === "MISSION" || chain.fixed_point_scope.trim() === "") {
+      errors.push(`OPERATIONAL_CHAIN_FIXED_POINT_SCOPE_INVALID:${id}`);
+    }
+    if (chain.judge === invariant.prover) errors.push(`OPERATIONAL_CHAIN_WRITER_JUDGE_COLLISION:${id}`);
+    if (chain.counterproof !== invariant.counterproof?.path) errors.push(`OPERATIONAL_CHAIN_COUNTERPROOF_MISMATCH:${id}`);
+
+    for (const pathField of ["owner", "contract", "implementation_or_consumer", "enforcement", "receipt", "counterproof"]) {
+      const path = chain[pathField];
+      if (typeof path === "string" && isRepoRelativePath(path) && !existsSync(resolve(ROOT, path))) {
+        errors.push(`OPERATIONAL_CHAIN_PATH_MISSING:${id}:${pathField}:${path}`);
+      }
+    }
+  }
+
+  return errors;
 }
 
 test("grafo válido passa somente como topologia parcial", () => {
@@ -240,4 +366,38 @@ test("status de execução é explicitamente fora do escopo deste detector", () 
   assert.equal(result.ok, true);
   assert.equal(result.topology_only, true);
   assert.equal(result.invariant_proof, false);
+});
+
+test("contrato canônico exige enforcement proporcional para qualquer claim operacional registrado", () => {
+  const contract = loadCanonicalContract();
+  assert.deepEqual(validateOperationalClaimPolicy(contract), []);
+});
+
+test("política operacional não pode ser trocada por YAML ou tecnologia única", () => {
+  const contract = loadCanonicalContract();
+  contract.operational_claim_policy.technology_lock = true;
+  assert.ok(validateOperationalClaimPolicy(contract).includes("OPERATIONAL_POLICY_TECHNOLOGY_LOCK_FORBIDDEN"));
+
+  delete contract.operational_claim_policy.mechanism_profiles.API_CONTRACT;
+  assert.ok(validateOperationalClaimPolicy(contract).includes("OPERATIONAL_POLICY_MECHANISM_PROFILE_MISSING:API_CONTRACT"));
+});
+
+test("claim operacional sem cadeia completa ou com estado stale reprova", () => {
+  const contract = loadCanonicalContract();
+  delete contract.invariants[0].operational_chain.enforcement;
+  assert.ok(validateOperationalClaimPolicy(contract).includes("OPERATIONAL_CHAIN_FIELD_INVALID:AUTHORITY_RECEIPT_FROM_GITHUB_EVENT:enforcement"));
+
+  const stale = loadCanonicalContract();
+  stale.invariants[0].operational_chain.live_state = "PASS_ONTEM";
+  assert.ok(validateOperationalClaimPolicy(stale).includes("OPERATIONAL_CHAIN_STALE_STATE_FORBIDDEN:AUTHORITY_RECEIPT_FROM_GITHUB_EVENT"));
+});
+
+test("fixed point operacional precisa declarar escopo e judge não pode ser o prover", () => {
+  const contract = loadCanonicalContract();
+  contract.invariants[0].operational_chain.fixed_point_scope = "FIXED_POINT";
+  assert.ok(validateOperationalClaimPolicy(contract).includes("OPERATIONAL_CHAIN_FIXED_POINT_SCOPE_INVALID:AUTHORITY_RECEIPT_FROM_GITHUB_EVENT"));
+
+  const collision = loadCanonicalContract();
+  collision.invariants[0].operational_chain.judge = collision.invariants[0].prover;
+  assert.ok(validateOperationalClaimPolicy(collision).includes("OPERATIONAL_CHAIN_WRITER_JUDGE_COLLISION:AUTHORITY_RECEIPT_FROM_GITHUB_EVENT"));
 });
