@@ -107,6 +107,34 @@
       "complexity_changes_frequency_before_identity": true
     }
   },
+  "skill_authoring": {
+    "mode": "DETERMINISTIC_SUBCAPABILITY",
+    "validator": ".agents/skills/knowledge-compiler/scripts/skill-authoring.mjs",
+    "regression": ".agents/skills/knowledge-compiler/tests/skill-authoring.test.mjs",
+    "canonical_root": ".agents/skills",
+    "reuse_before_create": true,
+    "existing_owner_fit_means_no_new_skill": true,
+    "create_when_any": [
+      "REPEATED_ACROSS_SESSIONS",
+      "COMPLEX_MULTI_STEP",
+      "STANDARDIZATION_NEEDED",
+      "PREVENTABLE_RECURRENT_ERROR"
+    ],
+    "frontmatter_allowed": [
+      "name",
+      "description"
+    ],
+    "name_rule": "LOWERCASE_HYPHENATED_MATCH_DIRECTORY",
+    "description_max_chars": 1024,
+    "skill_max_lines": 500,
+    "actionable_steps_required": true,
+    "generic_knowledge_becomes_skill": false,
+    "gerund_is_house_hard_gate": false,
+    "third_person_is_house_hard_gate": false,
+    "external_cli_is_house_dependency": false,
+    "external_skill_root_is_house_root": false,
+    "source_provenance": "https://github.com/mattnigh/skills_collection/blob/main/collection/BPSAI__paircoder__claude__skills__creating-skills__SKILL.md"
+  },
   "operational_crystal": {
     "required": [
       "capability",
@@ -173,6 +201,7 @@
     "SOURCE_IS_PROVENANCE_NOT_AUTHORITY",
     "EXTERNAL_GUIDELINE_IS_NOT_HOUSE_POLICY",
     "DETERMINISTIC_ROUTINE_BEFORE_AGENT",
+    "REUSE_EXISTING_SKILL_OWNER_BEFORE_CREATING_NEW_SKILL",
     "ENGINE_BY_OBSERVED_FITNESS_NOT_NAME"
   ]
 }
