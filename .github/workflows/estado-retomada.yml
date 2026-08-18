@@ -28,6 +28,8 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:
@@ -37,6 +39,7 @@ jobs:
         run: node scripts/estado/gerar-estado-retomada.mjs
 
       - name: Commitar apenas se houver diferenca real
+        shell: bash
         run: |
           set -euo pipefail
           if git diff --quiet -- docs/ESTADO-DA-RETOMADA.md; then
@@ -47,4 +50,15 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add docs/ESTADO-DA-RETOMADA.md
           git commit -m "chore(estado): regenerar ESTADO DA RETOMADA [skip ci]"
-          git push
+
+          BASE_SHA=$(git rev-parse HEAD^)
+          git fetch --no-tags origin main
+          REMOTE_SHA=$(git rev-parse FETCH_HEAD)
+          if [ "$REMOTE_SHA" != "$BASE_SHA" ]; then
+            echo "ESTADO_RETOMADA_BLOCKED_DIVERGENCE base=$BASE_SHA remote=$REMOTE_SHA"
+            exit 1
+          fi
+          echo "🚪 Gate global pré-main"
+          node scripts/lupa/validar-continuidade-global.mjs
+          node scripts/lupa/validar-porta-de-entrada.mjs
+          git push origin HEAD:main

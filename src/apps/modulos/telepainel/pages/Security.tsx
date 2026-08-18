@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { Loader2 } from "lucide-react";
 import { DashboardLayout } from "@/shared/layout/DashboardLayout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { useSecurity } from "@/shared/hooks/useSecurity";
 import {
+  HouseSecurityOverview,
   SecurityHeader,
   SecurityStats,
   SecurityToggles,
@@ -26,7 +26,6 @@ export default function Security() {
     saveSettings,
     refreshStats,
     refreshHistory,
-    isLoading,
   } = useSecurity();
 
   const [pendingChanges, setPendingChanges] = useState<Partial<BotSecuritySettings>>({});
@@ -44,9 +43,7 @@ export default function Security() {
     if (Object.keys(pendingChanges).length === 0) return;
     setIsSaving(true);
     const success = await saveSettings(pendingChanges);
-    if (success) {
-      setPendingChanges({});
-    }
+    if (success) setPendingChanges({});
     setIsSaving(false);
   };
 
@@ -55,63 +52,69 @@ export default function Security() {
     refreshHistory();
   };
 
-  // Merge pending changes with current settings for display
   const displaySettings = securitySettings
     ? { ...securitySettings, ...pendingChanges }
     : null;
 
-  if (isLoading && !selectedBotId) {
-    return (
-      <DashboardLayout>
-        <div className="flex items-center justify-center h-64">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        </div>
-      </DashboardLayout>
-    );
-  }
-
   return (
     <DashboardLayout>
-      <div className="space-y-5 max-w-[1400px] mx-auto">
-        <SecurityHeader
-          bots={bots}
-          selectedBotId={selectedBotId}
-          onBotChange={setSelectedBotId}
-          onRefresh={handleRefresh}
-          onSave={handleSave}
-          isSaving={isSaving}
-        />
+      <div className="mx-auto max-w-[1400px] space-y-5">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">Security Center / Centro de Segurança</h1>
+          <p className="text-sm text-muted-foreground">
+            Defesa privada da Casa. Detectar, validar, conter, preservar evidência e endurecer — sem retaliação.
+          </p>
+        </div>
 
-        <SecurityStats stats={stats} loading={statsLoading} />
-
-        <Tabs defaultValue="protections" className="w-full">
-          <TabsList className="grid w-full max-w-md grid-cols-3">
-            <TabsTrigger value="protections">Proteções</TabsTrigger>
-            <TabsTrigger value="advanced">Avançado</TabsTrigger>
-            <TabsTrigger value="history">Histórico</TabsTrigger>
+        <Tabs defaultValue="house" className="w-full">
+          <TabsList className="grid w-full max-w-md grid-cols-2">
+            <TabsTrigger value="house">Casa / House</TabsTrigger>
+            <TabsTrigger value="bots">Bots</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="protections" className="mt-6">
-            <SecurityToggles
-              settings={displaySettings}
-              loading={settingsLoading}
-              onToggle={handleToggle}
-            />
+          <TabsContent value="house" className="mt-6">
+            <HouseSecurityOverview />
           </TabsContent>
 
-          <TabsContent value="advanced" className="mt-6">
-            <SecurityAdvanced
-              settings={displaySettings}
-              loading={settingsLoading}
-              onUpdate={handleUpdate}
+          <TabsContent value="bots" className="mt-6 space-y-5">
+            <SecurityHeader
+              bots={bots}
+              selectedBotId={selectedBotId}
+              onBotChange={setSelectedBotId}
+              onRefresh={handleRefresh}
+              onSave={handleSave}
+              isSaving={isSaving}
             />
-          </TabsContent>
 
-          <TabsContent value="history" className="mt-6">
-            <SecurityHistory
-              messages={blockedMessages}
-              loading={historyLoading}
-            />
+            <SecurityStats stats={stats} loading={statsLoading} />
+
+            <Tabs defaultValue="protections" className="w-full">
+              <TabsList className="grid w-full max-w-md grid-cols-3">
+                <TabsTrigger value="protections">Proteções</TabsTrigger>
+                <TabsTrigger value="advanced">Avançado</TabsTrigger>
+                <TabsTrigger value="history">Histórico</TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="protections" className="mt-6">
+                <SecurityToggles
+                  settings={displaySettings}
+                  loading={settingsLoading}
+                  onToggle={handleToggle}
+                />
+              </TabsContent>
+
+              <TabsContent value="advanced" className="mt-6">
+                <SecurityAdvanced
+                  settings={displaySettings}
+                  loading={settingsLoading}
+                  onUpdate={handleUpdate}
+                />
+              </TabsContent>
+
+              <TabsContent value="history" className="mt-6">
+                <SecurityHistory messages={blockedMessages} loading={historyLoading} />
+              </TabsContent>
+            </Tabs>
           </TabsContent>
         </Tabs>
       </div>

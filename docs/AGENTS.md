@@ -1,63 +1,48 @@
-<p align="right">
-  <samp>🟢 <strong>Última atualização:</strong> 2026-05-31 às 04:00 BRT</samp>
-</p>
+# AGENTS — ponte de compatibilidade
 
-# Identidade do Agente — MultiZap Monorepo
+Este caminho existe apenas para consumidores históricos que ainda procuram `docs/AGENTS.md`.
 
-## Estrutura
+## Fonte canônica
 
-```
-apps/bot  → Bot WhatsApp (produção)
-apps/crm  → CRM Multicanal (produção)
-apps/web  → Landing Page
-infra/    → DB, deploy, configs
-docs/     → Documentação
-archive/  → Legado (não tocar)
-```
+Antes de qualquer ação, carregar nesta ordem:
 
-## Leitura operacional obrigatória
+1. `/LEIA-ME-IA.md`
+2. `/AGENTS.md`
+3. `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json`
 
-Antes de fazer push/PR ou diagnosticar deploy, leia também:
+Este arquivo **não** define uma segunda identidade, segundo fluxo de deploy ou segundo contrato de agentes.
 
-- docs/GITHUB_ACCESS.md
-- docs/WEBHOOKS.md
-- docs/deploy.md
+## Doutrina obrigatória
 
-## Leitura operacional obrigatória
-
-Antes de qualquer ação, leia:
-
-```txt
-conexao-ia/START_HERE.md
-conexao-ia/VPS_CONNECTION.md
-conexao-ia/CHECKLIST.md
-docs/GITHUB_ACCESS.md
-docs/WEBHOOKS.md
-docs/deploy.md
+```text
+CENTRALDARK = organismo canônico
+REUSE_BEFORE_CREATE = obrigatório
+EXTEND_EXISTING = preferido
+V2_V3_NOVO_FINAL_COPY_BACKUP = proibido quando a capacidade já existe
+MESMA_FUNÇÃO = evoluir owner canônico
+UNKNOWN/SKIPPED/PENDING = não são PASS
+SEGREDO/CHEFE = autoridade humana final
+MODELO/AGENTE = capacidade substituível
 ```
 
-## Regras Permanentes
+Antes de propor reconstrução total, sistema paralelo ou novo entrypoint:
 
-- ❌ Nunca expor secrets
-- ❌ Nunca commitar .env
-- ❌ Nunca usar pm2 restart all
-- ❌ Nunca mexer em /root/whatsapp-server
-- ❌ Nunca pedir SSH ao usuário
-- ❌ Nunca colocar token no frontend
-- ✅ Toda alteração via branch + PR
-- ✅ Deploy automático via push na main
-- ✅ Frontend → Supabase APENAS
-- ✅ Gateway → backend APENAS
+```text
+localizar owner atual
+→ abrir implementação
+→ mapear consumidores/testes
+→ provar gap material
+→ aplicar menor extensão segura
+```
 
-## Auto-execução
+Sem gap comprovado, a resposta correta é reutilizar, corrigir ou não mudar.
 
-A IA tem acesso completo via:
-1. GitHub webhook → VPS atualiza
-2. Post-deploy → reinicia serviços
-3. GitHub Actions → migrations Supabase
+## Segurança
 
-Nunca pedir comandos ao usuário.
+- nunca expor secrets, `.env`, tokens ou chaves;
+- sem force-push;
+- sem push direto de `main` local suja;
+- sem deploy/restart/reset destrutivo fora da autorização aplicável;
+- runtime só é exigido como prova quando o claim pertence ao runtime.
 
-## Identidade Operacional Herdada (Mapeamento Seguro)
-O Agente Arena opera compulsoriamente no modo **Debug Sistemático com Mapeamento Leigo e Prova Técnica**.
-O agente **nunca chuta, nunca omite logs e nunca oculta falhas para mascarar sucesso**. O modelo exige provas reais antes de qualquer declaração de resolução. Vide `security/NEXT_SESSION_PROMPT.md` e `apps/bot/skills/using-superpowers/evidence-based.md`.
+Histórico MultiZap permanece no Git e em documentação histórica; ele não dirige a identidade operacional atual da CentralDark.

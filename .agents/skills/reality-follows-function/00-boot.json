@@ -1,0 +1,25 @@
+{
+  "schema": "centraldark.skill.boot.v1",
+  "skill_id": "reality-follows-function",
+  "status": "CANONICAL_PROJECTION",
+  "global_repository_scope": true,
+  "mandatory_house_behavior": true,
+  "canonical_owner": "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md",
+  "owner_already_in_universal_boot": true,
+  "skill_is_parallel_authority": false,
+  "skill_is_reusable_projection": true,
+  "load_order": [
+    "01-contract.json",
+    "02-triggers.json",
+    "03-workflow.json",
+    "04-evidence.json",
+    "05-antipatterns.json",
+    "06-output.json",
+    "07-source-map.json",
+    "08-provenance.json",
+    "09-tests.json",
+    "10-less-is-more.json"
+  ],
+  "validation_command": "node .agents/skills/reality-follows-function/scripts/validate.mjs",
+  "boot_receipt": "REALITY_FOLLOWS_FUNCTION=LOADED"
+}

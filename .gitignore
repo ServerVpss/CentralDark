@@ -49,7 +49,15 @@ revisoes/
 quarantine/
 
 # Backups e temporários
+# Regra da Casa: IDENTIDADE FICA; CONTEUDO EVOLUI; HISTORICO = GIT.
+# Backup local é efêmero/rollback pontual, nunca árvore genealógica nem versão canônica.
+# O nome ativo permanece canônico; v2/v3/final/old não substituem o histórico do Git.
 *.bak
+*.bak-*
+*.bak.*
+*.backup
+*.backup-*
+*.backup.*
 *.tmp
 *.save
 *.orig
@@ -93,6 +101,7 @@ scripts/issues-agent/.next_run
 scripts/memory-linker/.next_run
 scripts/memory-linker/analyst-decision.json
 scripts/memory-linker/last-report.json
+scripts/memory-linker/pattern-library.json
 scripts/sync-loop.sh
 apps/modulos/elite-gateway/venv/
 apps/modulos/elite-gateway/config/
@@ -104,4 +113,3 @@ contas/
 
 # Lab de experimentos visuais — não versionar
 public/lab-jarvis/
-

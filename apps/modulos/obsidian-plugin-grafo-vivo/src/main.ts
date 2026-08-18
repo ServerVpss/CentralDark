@@ -1,15 +1,17 @@
 // Plugin CentralDark Grafo Vivo — ponto de entrada.
 // Registra a view lateral, comandos e o auto-atualizador.
 
-import { Plugin, WorkspaceLeaf } from "obsidian";
+import { Notice, Platform, Plugin, WorkspaceLeaf } from "obsidian";
 import { GrafoVivoView, VIEW_TYPE_GRAFO_VIVO } from "./view";
 import { Grafo3DView, VIEW_TYPE_GRAFO_3D } from "./view3d";
 import { DEFAULT_SETTINGS, GrafoVivoSettings, GrafoVivoSettingTab } from "./settings";
 import { AutoAtualizador } from "./autoUpdater";
+import { SemanticClient } from "./semantic";
 
 export default class GrafoVivoPlugin extends Plugin {
   settings: GrafoVivoSettings = DEFAULT_SETTINGS;
   autoUpdater!: AutoAtualizador;
+  semanticClient: SemanticClient | null = null;
 
   async onload() {
     await this.loadSettings();
@@ -56,6 +58,47 @@ export default class GrafoVivoPlugin extends Plugin {
       callback: () => this.autoUpdater.fazerRollback(),
     });
 
+    if (Platform.isDesktopApp) {
+      this.semanticClient = new SemanticClient(this.settings);
+
+      this.addCommand({
+        id: "semantic-expand-selection",
+        name: "Semântica local: expandir seleção/linha",
+        editorCallback: async (editor) => {
+          const text = editor.getSelection().trim() || editor.getLine(editor.getCursor().line).trim();
+          if (!text) {
+            new Notice("Sem texto para expansão semântica.");
+            return;
+          }
+          try {
+            const result = await this.semanticClient!.expand(text, 8);
+            const terms = Array.isArray(result?.candidates)
+              ? result.candidates.map((item: any) => item?.term).filter(Boolean)
+              : [];
+            new Notice(
+              terms.length ? `Semântica local: ${terms.join(", ")}` : "Sem candidatos semânticos conhecidos.",
+              10000,
+            );
+          } catch (error: any) {
+            new Notice(`Semântica local indisponível: ${error?.message || error}`, 10000);
+          }
+        },
+      });
+
+      this.addCommand({
+        id: "semantic-model-info",
+        name: "Semântica local: verificar modelo",
+        callback: async () => {
+          try {
+            const info = await this.semanticClient!.modelInfo();
+            new Notice(`${info?.model_id || "modelo desconhecido"} · ${info?.loaded === true ? "LOADED" : "UNKNOWN"}`, 10000);
+          } catch (error: any) {
+            new Notice(`Semântica local indisponível: ${error?.message || error}`, 10000);
+          }
+        },
+      });
+    }
+
     this.addSettingTab(new GrafoVivoSettingTab(this.app, this));
 
     this.autoUpdater = new AutoAtualizador(this);
@@ -63,13 +106,14 @@ export default class GrafoVivoPlugin extends Plugin {
   }
 
   async onunload() {
+    this.semanticClient?.stop();
+    this.semanticClient = null;
     this.autoUpdater?.parar();
   }
 
   async ativarView() {
     const { workspace } = this.app;
-    let leaf: WorkspaceLeaf | null =
-      workspace.getLeavesOfType(VIEW_TYPE_GRAFO_VIVO)[0] ?? null;
+    let leaf: WorkspaceLeaf | null = workspace.getLeavesOfType(VIEW_TYPE_GRAFO_VIVO)[0] ?? null;
     if (!leaf) {
       leaf = workspace.getRightLeaf(false);
       if (leaf) await leaf.setViewState({ type: VIEW_TYPE_GRAFO_VIVO, active: true });
@@ -79,8 +123,7 @@ export default class GrafoVivoPlugin extends Plugin {
 
   async ativarView3D() {
     const { workspace } = this.app;
-    let leaf: WorkspaceLeaf | null =
-      workspace.getLeavesOfType(VIEW_TYPE_GRAFO_3D)[0] ?? null;
+    let leaf: WorkspaceLeaf | null = workspace.getLeavesOfType(VIEW_TYPE_GRAFO_3D)[0] ?? null;
     if (!leaf) {
       leaf = workspace.getRightLeaf(false);
       if (leaf) await leaf.setViewState({ type: VIEW_TYPE_GRAFO_3D, active: true });

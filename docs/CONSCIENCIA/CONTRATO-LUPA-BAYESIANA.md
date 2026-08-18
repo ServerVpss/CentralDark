@@ -2,7 +2,7 @@
 title: "Contrato Lupa Bayesiana (canônica única)"
 date: 2026-07-23
 tags: ["lupa", "consciencia", "governanca"]
-updated: 2026-07-23
+updated: 2026-08-14
 ---
 
 # 🔍 Contrato da `lupa-bayesiana` — canônica única
@@ -16,7 +16,7 @@ updated: 2026-07-23
 |---|---|
 | Caminho canônico | `.agents/skills/meta-lupa/SKILL.md` |
 | Nome | `lupa-bayesiana` |
-| Duplicatas proibidas | `tecnica-da-lupa`, `metalupa-bayesiana-canonica`, `lupa-premium`, `meta-lupa` |
+| Duplicatas proibidas | `tecnica-da-lupa`, `metalupa-bayesiana-canonica`, `lupa-premium` |
 | Guard automatizado | `.github/workflows/lupa-drift-guard.yml` |
 | Inventário | `docs/RELATORIOS/inventario-skills.json` |
 
@@ -27,7 +27,7 @@ updated: 2026-07-23
 3. **Prior** com base declarada (histórico, base rate ou 0,5 neutro assumido).
 4. **Ledger de evidências** com proveniência, reprodutibilidade e cluster de dependência.
 5. **Custo do falso positivo e falso negativo** — se desconhecido, marcar `NÃO CALCULÁVEL`.
-6. **Autorização** aplicável (área protegida 🔒 exige `PERMITO PIVETE` explícito).
+6. **Autorização** aplicável: a autoridade humana vigente é `SEGREDO/CHEFE`; marcador histórico `PERMITO PIVETE` não concede nem revoga autorização atual.
 
 ## O que SAI (formato obrigatório de saída)
 
@@ -44,17 +44,40 @@ REGISTRO · FIO DA MISSÃO
 
 Vereditos permitidos: `APROVAR | CONDICIONAR | CORRIGIR | BLOQUEAR`.
 
+## Ganho de informação = ouro operacional
+
+A Lupa não mede vitória de uma pessoa ou modelo. Mede quanto uma observação reduz erro e melhora o próximo movimento.
+
+```text
+CONFRONTO
+→ EVIDENCIA NOVA
+→ DELTA_DE_CRENCA
+→ MUDANCA_REUTILIZAVEL
+→ OURO
+```
+
+```text
+HIPOTESE_SOBREVIVE + PROVA_NOVA       → OURO
+HIPOTESE_CAI + CONTRAPROVA            → OURO
+EMPATE + UNKNOWN_MELHOR_DEFINIDO      → OURO
+AUTOFALSIFICACAO + FRAQUEZA_CORRIGIDA → OURO
+REVISAO_EXTERNA + ACHADO_CAUSAL       → OURO
+```
+
+Sem evidência nova, sem delta de crença/regra/teste e sem consequência reutilizável, repetir o confronto é desperdício de ciclo. `INFORMATION_GAIN_REQUIRED=true`.
+
 ## Pontos fixos (invariantes que não mudam entre execuções)
 
 | # | Ponto fixo | Verificação automatizada |
 |---|---|---|
 | PF-1 | Só existe **uma** skill canônica de Lupa | `detectar_drift.py` — falha se ≠1 dir `.agents/skills/*lupa*` fora do canônico |
-| PF-2 | `tecnica-da-lupa` e `MetaLupa` **nunca** voltam como skills | `detectar_drift.py` — bloqueia diretório e menção ativa em doc |
+| PF-2 | `tecnica-da-lupa` e `MetaLupa` **nunca** voltam como skills paralelas | `detectar_drift.py` — bloqueia diretório e menção ativa em doc |
 | PF-3 | Toda AutoLupa termina em `PONTO_FIXO_ATINGIDO: sim` ou mantém `CORRIGIR/BLOQUEAR` | Revisão humana + `test_autolupa_conformance.py` (15 checks) |
-| PF-4 | Áreas 🔒 do `CLAUDE.md` §9 só mudam com `PERMITO PIVETE` explícito | `CODEOWNERS` + label `permito-pivete` no PR |
+| PF-4 | Área protegida só muda com autorização vigente do `SEGREDO/CHEFE` aplicável ao alvo | guardrails + contrato atual de permissões |
 | PF-5 | Prior nunca é `0` nem `1`; nunca inventar LR sem base declarada | Revisão manual + gate de falsificação da própria skill |
 | PF-6 | Consolidação exige o bloco de 8 campos (caminho, testes, SHA, rollback...) | Revisão humana no PR + `docs/CONSCIENCIA/09-ESTADO-ATUAL.md` |
 | PF-7 | Falta de dado → resultado válido é `NÃO CALCULÁVEL`, nunca chute numérico | Revisão humana |
+| PF-8 | Confronto só vira aprendizado promovido com evidência nova + delta reutilizável | SOUL + AGENTS + MetaLupa |
 
 ## Checks CI ativos
 
@@ -97,5 +120,5 @@ Se qualquer um dos três divergir, o PR já quebra no CI antes de chegar em revi
 ## Conexões
 
 - [[SKILL.md]] — `.agents/skills/meta-lupa/SKILL.md`
-- [[CLAUDE.md]] §9 — áreas protegidas 🔒
-- [[APRENDIZADOS.md]] — #325, #343 (recuperação e cooperação)
+- [[SOUL-SOL.md]] — autoridade e aprendizado operacional atuais
+- [[APRENDIZADOS.md]] — histórico de erros, correções e contraprovas

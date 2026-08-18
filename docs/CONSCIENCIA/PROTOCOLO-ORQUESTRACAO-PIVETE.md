@@ -1,288 +1,312 @@
 ---
-title: "PROTOCOLO DE ORQUESTRACAO PIVETE"
-date: 2026-07-07
-tags: ["consciencia", "orquestracao", "ia", "pivete", "centraldark"]
-updated: 2026-07-22
+title: "PROTOCOLO DE ORQUESTRACAO CENTRALDARK"
+tags: ["consciencia", "orquestracao", "ia", "centraldark"]
+updated: 2026-08-16
 ---
 
-# Protocolo de Orquestracao Pivete
+# Protocolo de Orquestração CentralDark
 
-> Manual fixo para qualquer IA entrar no CentralDark sem perder o fio da meada.
+Manual para qualquer IA entrar no CentralDark sem perder o fio e sem confundir o humano com o executor.
 
-Este protocolo existe porque chat nao e memoria permanente. Toda IA pode trocar, perder contexto, ficar sem token ou entrar no meio da missao. O que permanece e o metodo.
+## 0. Identidade canônica
+
+```text
+SEGREDO/CHEFE = humano e autoridade final
+SOL = coordenadora
+PIVETE/HERMES = executor, mordomo, preservação e continuidade
+"pivete" na fala regional = vocativo informal; não é identidade técnica automática
+```
+
+O nome antigo deste arquivo é preservado por compatibilidade. Qualquer trecho histórico em que `Pivete` significava dono, humano, comandante ou decisor deve ser interpretado como `LEGACY_ALIAS_OF_SEGREDO_CHEFE`. Isso não muda o registro histórico; muda sua leitura normativa atual.
 
 ## Regra central
 
 ```text
-Pivete comanda.
-DarkAI debate.
-Actions provam.
-IAs variam.
-O metodo permanece.
+SEGREDO/CHEFE COMANDA.
+SOL COORDENA.
+PIVETE/HERMES PRESERVA E EXECUTA.
+ACTIONS PROVAM.
+IAS VARIAM.
+O MÉTODO PERMANECE.
 ```
 
-## Explicacao simples
+SEGREDO/CHEFE define prioridade, limite, autorização e decisão humana final. SOL traduz e coordena. PIVETE/HERMES executa o que já foi autorizado, preserva estado/checkpoint e mantém continuidade. Especialistas entram por papel.
 
-Pivete e o orquestrador. Ele define prioridade, limite, permissao e decisao final.
-
-DarkAI funciona como apoio de debate: questiona, compara caminhos, aponta risco e protege o padrao.
-
-Actions sao a prova: teste, log, diff, print, CI, health check ou qualquer evidencia verificavel.
-
-As outras IAs sao modulos do arsenal. Podem ser ChatGPT, Codex, Claude, Grok, Gemini, Fable, Vibe, Lovable, Copilot ou qualquer agente novo. A IA pode mudar, mas o papel designado deve continuar.
-
-## Estado de Bordo
-
-Toda IA deve manter estas linhas vivas durante a conversa:
+## Estado de bordo
 
 ```text
 MISSION_ID:
 Objetivo atual:
 Fase atual:
-Decisao mais recente de Pivete:
-Plano em execucao:
-Ultima acao comprovada:
-Evidencias / validacoes:
-Pendencias:
-Proximo passo unico:
+Decisão mais recente de SEGREDO/CHEFE:
+Plano em execução:
+Última ação comprovada:
+Evidências / validações:
+Pendências:
+Próximo passo único:
 Travas:
-Divergencias / lacunas:
+Divergências / lacunas:
 Agente e papel:
 Fonte da verdade:
 ```
 
-Se a conversa mudar de assunto, a IA responde o assunto paralelo, fecha, retoma o Estado de Bordo e diz o proximo passo.
+Mensagem atrasada entra como delta. Assunto paralelo não reinicia missão.
 
-## Ponte de Continuidade Semantica
+## #ACORDAR / !CALIBRAR / !RELOAD
 
-A Ponte de Continuidade integra agentes, modelos, sessoes e aplicativos sem criar outra memoria.
+### `#ACORDAR`
+
+```text
+RECUPERAR O ESTADO REAL ANTES DE CONTINUAR
+→ missão/fio
+→ Git/PR/HEAD
+→ runtime/logs quando aplicável
+→ evidência atual
+→ divergências
+→ próximo passo único
+```
 
 ### `!CALIBRAR`
 
-Quando Pivete disser `!CALIBRAR`:
-
-1. interromper novas acoes;
-2. deixar processos em curso em estado seguro;
-3. comparar conversa, Git, PR, Actions, logs e estado vivo;
-4. atualizar somente os documentos canonicos que realmente mudaram;
-5. devolver o Estado de Bordo completo;
-6. nao iniciar outra execucao.
-
-Distribuicao oficial:
-
-- missao, fase e proximo passo → `docs/PENDENCIAS.md`;
-- estado comprovado → `docs/CONSCIENCIA/09-ESTADO-ATUAL.md`;
-- decisao de caminho → `docs/CONSCIENCIA/08-HISTORICO-DECISOES.md`;
-- aprendizado duravel → `docs/CONSCIENCIA/APRENDIZADOS.md`;
-- evidencia → commit, PR, Actions, teste, log ou relatorio canonico.
-
-Nao copiar o mesmo texto em todos os documentos. Cada local guarda apenas o fragmento de sua responsabilidade.
+Interrompe nova ação, preserva operação em curso com segurança, reconcilia conversa + Git + PR + Actions + logs + estado vivo e atualiza apenas os destinos canônicos necessários.
 
 ### `!RELOAD`
 
-Quando Pivete disser `!RELOAD`:
+Entra read-only, relê fontes canônicas, compara checkpoint com estado vivo e retoma somente o que continua válido. Não cria autorização nova.
 
-1. entrar em read-only;
-2. ler a regra oficial multi-agente, este protocolo, pendencias, aprendizados e estado atual;
-3. buscar semanticamente por `MISSION_ID`, objetivo, arquivos e evidencias;
-4. comparar o registrado com o estado real;
-5. informar divergencias;
-6. devolver o Estado de Bordo;
-7. retomar somente o proximo passo comprovado e somente se a autorizacao ainda cobrir o escopo.
+## Handoff entre aplicativos/agentes
 
-`!RELOAD` nao concede autorizacao, nao herda permissao de outra missao e nao transforma memoria de chat em prova.
+Quando a superfície atual não possuir capacidade:
 
-### Handoff entre aplicativos
+```text
+MESMA MISSION_ID
+→ MESMO ESCOPO
+→ HANDOFF DA SUBTAREFA
+→ RECEPTOR RELÊ FONTE DA VERDADE
+→ RESULTADO VOLTA AO MESMO FIO
+```
 
-Quando o aplicativo atual nao tiver ferramenta, contexto, acesso ou capacidade suficiente:
-
-1. o orquestrador mantem a `MISSION_ID`;
-2. envia ao agente adequado somente a subtarefa delimitada, o Estado de Bordo e as referencias canonicas;
-3. o receptor relê a Fonte da Verdade e valida as evidencias;
-4. o receptor nao cria missao, memoria ou documentacao paralela;
-5. o resultado volta ao orquestrador;
-6. o orquestrador sintetiza, prova e registra no mesmo fio.
-
-GitHub e a Fonte da Verdade. Lovable, ChatGPT, Claude, Grok, Codex, Notion e outras interfaces usam ponteiros e contexto operacional minimo.
+Não criar segunda missão, segunda memória, segundo orquestrador ou segundo Writer para escapar de limitação da interface.
 
 ## Modos operacionais
 
-Antes de agir, a IA deve declarar o modo:
-
-| Modo | O que significa |
+| Modo | Significado |
 |---|---|
-| Conversa | Explicar, tirar duvida, orientar em linguagem simples |
-| Planejamento | Organizar caminho antes de mexer |
-| Read-only | Ler, diagnosticar e propor sem alterar nada |
-| Edicao controlada | Editar somente dentro do escopo autorizado |
-| Execucao com travas | Rodar comandos/acoes permitidas, parar antes de risco |
-| V-REALTIME desenvolvimento | Executar o fluxo permanente GitHub -> Actions/scripts -> VPS -> prova, corrigindo e repetindo sem pedir a mesma autorizacao novamente |
+| Conversa | explicar/orientar |
+| Planejamento | organizar sem executar |
+| Read-only | diagnosticar sem mutar |
+| Edição controlada | escrever no escopo autorizado |
+| Execução com travas | operar com gates e rollback |
+| V-REALTIME desenvolvimento | iterar GitHub → runtime → prova sem repetir autorização ainda válida |
 
-## Boot universal
+### Planejamento compilado — `COMPILE_THEN_APPLY`
 
-Ao iniciar qualquer missao, a IA deve responder em poucas linhas:
+Quando a missão trouxer muitas fontes, decisões concorrentes, aprendizado reutilizável ou uma solução que deve ficar rápida nas próximas execuções, o modo `Planejamento` pode operar como **compilador** antes da mutação. Isso não cria um modo de autoridade novo e não exige que o SEGREDO/CHEFE memorize um comando.
 
 ```text
-Objetivo entendido:
-Modo atual:
-Escopo permitido:
-Fora de escopo:
-Evidencias necessarias:
-Proximo passo seguro:
+COMPILE_THEN_APPLY=true
+AUTO_TRIGGER_WHEN_MULTI_SOURCE_OR_REUSABLE_LEARNING=true
+PLAN_ONLY_BEFORE_ROUTE_READY=true
 ```
+
+Fluxo:
+
+```text
+INTENCAO + ESTADO_VIVO + FONTES
+→ PLANEJAR SEM MUTAR
+→ MINERAR
+→ EXTRAIR
+→ DEDUPLICAR
+→ CONTRAPROVAR
+→ ARBITRAR CONFLITOS
+→ LOCALIZAR OWNER
+→ LIGAR SKILL + CONSUMIDOR + TESTE + GATE
+→ COMPILAR ROUTE_IR
+→ ROTA PRONTA E AUTORIZACAO JA EXISTE?
+   NAO → CANDIDATE|BLOCKED + RESIDUO
+   SIM → APLICAR MENOR DELTA
+→ PROVAR
+→ CRISTALIZAR
+→ FLASH_READY
+```
+
+A separação é deliberada:
+
+```text
+FORJA = aprendizado lento, profundo e rigoroso
+FLASH = execução curta sobre rota já compilada
+
+MINERAR UMA VEZ
+→ CRISTALIZAR UMA VEZ
+→ REUTILIZAR N VEZES
+```
+
+No runtime normal, não reler o corpus inteiro se a rota continua válida:
+
+```text
+INTENCAO
+→ ROTEADOR
+→ OWNER
+→ SKILL
+→ CONSUMIDOR
+→ ACAO
+→ PROVA
+```
+
+Se entrar informação nova, recalcular somente a rota dependente do delta. Não reconstruir a Casa inteira por reflexo.
+
+```text
+NEW_INFORMATION != REBUILD_ALL
+DELTA_AFFECTED_ONLY=true
+UNAFFECTED_ROUTE_REUSE=true
+ONE_ACTIVE_ROUTE_PER_CAPABILITY_BOUNDARY=true
+```
+
+Planejamento, antecipação e rota compilada continuam sem poder criar permissão:
+
+```text
+PLAN_ONLY != EXECUTION
+COMPILED_ROUTE != AUTHORIZATION
+ANTICIPATION != AUTHORIZATION
+APPLY_REQUIRES_EXISTING_AUTHORITY=true
+```
+
+Quando progresso visível ajudar a manter o fio durante uma tarefa longa, usar somente recibo comprimido, nunca scratchpad ou cadeia privada:
+
+```text
+TICK:
+  phase: INGEST|DISTILL|ARBITRATE|COMPILE|APPLY|VERIFY|CRYSTALLIZE|FLASH_READY
+  delta: <mudanca material>
+  owner: <owner|UNKNOWN>
+  route: <route_id|PENDING>
+  blocker: <0|causa real>
+  next: <proximo passo unico>
+```
+
+Implementação chamável: `.agents/skills/knowledge-compiler/SKILL.md`.
+Owner de aprendizado/cristal: `docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md`.
 
 ## Boot CentralDark
 
-Quando a missao for no projeto CentralDark, executar tambem:
+Preferir `LEIA-ME-IA.md` + `AGENTS.md` + mapa canônico + arquivos relevantes à missão. Não carregar dezenas de documentos sem ganho causal.
+
+## Mapa único e reuso
 
 ```text
-1. Ler docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md
-2. Ler docs/CONSCIENCIA/PROTOCOLO-INICIALIZACAO.md
-3. Ler docs/PENDENCIAS.md
-4. Ler docs/CONSCIENCIA/APRENDIZADOS.md
-5. Ler docs/CONSCIENCIA/09-ESTADO-ATUAL.md
-6. Confirmar modo, riscos e proximo passo antes de agir
+REUSE_BEFORE_CREATE=true
+SEM_V1_V2_V3=true
+ONE_SCOPE_ONE_WRITER=true
 ```
 
-Se houver MCP CentralDark disponivel, usar o kit de boas-vindas antes das leituras manuais.
+Antes de criar pasta, rota, serviço, workflow, regra ou documento, procurar equivalente, abrir implementação principal e estender minimamente. Caminho novo só com GAP_REAL.
 
-## Mapa unico, encaixe e consolidacao
+## Evidência
 
-A estrutura nao "se ajeita sozinha". Ela evolui automaticamente somente guiada pelo mapa executavel `apps/modulos/mapeamento/config/mapa-canonico.json`.
-
-Antes de criar pasta, rota, servico, workflow, regra ou documento:
-
-1. ler o mapa e buscar funcao equivalente;
-2. encaixar no componente existente quando a responsabilidade for a mesma;
-3. estender o canônico com a menor mudanca compativel;
-4. criar caminho novo somente quando o encaixe for comprovadamente impossivel;
-5. usar nome humano, estavel e coerente;
-6. atualizar o mapa na mesma mudanca.
-
-Uma area somente vira `CONSOLIDADA` depois de teste, revisao/falsificacao, autorizacao do Pivete, GitHub/SHA e trava deterministica reconhecendo o caminho. Depois disso, falha fechado por padrao. O restante continua operavel no V-REALTIME.
-
-`CODEOWNERS`, tabela ou cadeado visual sinalizam; o check `Validate canonical map and consolidated areas` executa a trava.
-
-## Observabilidade de provedores
-
-O vigia canônico de provedores e o `HERMES-CORE/agents/Log-Verificador`. Nao criar outro monitor para a mesma funcao.
-
-Ordem do alerta:
-
-1. classificador deterministico sanitiza e identifica `credits_exhausted`, `billing_blocked`, `credits_low` ou `rate_limited`;
-2. Card Hermes avisa no Telegram sem depender de IA;
-3. DarkAI pode analisar como camada consultiva;
-4. se a IA falhar, o alerta deterministico permanece;
-5. porcentagem somente e exibida quando vier explicitamente do provedor;
-6. `429` significa limite temporario ate prova contraria, nunca credito esgotado por inferencia.
-
-## Regras de evidencia
-
-- Nao inventar historico.
-- Usar apenas conversa visivel, arquivos lidos, comandos executados, documentacao fornecida ou fontes verificadas.
-- Separar fato observado, inferencia e lacuna.
-- Nao dizer que testou, leu ou executou algo se nao fez.
-- Toda conclusao importante precisa de evidencia.
-
-## Regras de autorizacao
-
-### Autorizacao operacional permanente — V-REALTIME
-
-Pivete selou em 2026-07-22: enquanto a VPS estiver em **producao de desenvolvimento, sem clientes e sem volume real**, a autorizacao operacional cobre o fluxo oficial completo. A mesma permissao nao deve ser solicitada a cada entrega.
+Separar sempre:
 
 ```text
-GitHub audita e registra
--> IA revisa e amplia a analise
--> Actions e scripts deterministicos provam
--> VPS recebe somente o SHA aprovado
--> reviewer valida GitHub e VPS
--> health/auditoria confirmam
--> falha retorna para diagnostico, correcao e nova prova
+FATO
+INFERÊNCIA
+HIPÓTESE
+UNKNOWN
 ```
 
-Sem nova pergunta, o sistema pode:
+Não dizer que leu, testou ou executou sem ter feito. HTTP 200, ausência de erro, processo online ou painel verde são evidências parciais, não PASS automático.
 
-- criar branch e PR sobre a `main` remota atual;
-- commitar e atualizar a branch da missao;
-- revisar diff, HEAD_SHA, checks, logs sanitizados, health e estado do runtime;
-- mesclar com `expected_head_sha` depois dos gates do mesmo SHA;
-- executar deploy pelo workflow oficial aprovado;
-- reiniciar somente o servico afetado e comprovado;
-- aplicar rollback cirurgico e recuperavel quando um gate falhar;
-- inventariar legado/lixo, absorver o ouro util e remover somente o alvo comprovadamente descartavel com recuperacao;
-- corrigir no mesmo fluxo e repetir ate fechar o criterio de aceite;
-- encerrar PRs redundantes ou regressivos com veredito registrado e commits preservados.
+## Autorização
 
-Fallback operacional:
+Autoridade humana pertence a `SEGREDO/CHEFE`.
 
-1. IA principal analisa e implementa.
-2. Reviewer independente tenta falsificar a solucao.
-3. Se IA/provedor falhar, o script deterministico assume os gates objetivos.
-4. Falha de IA nunca vira falso verde.
-5. Falha de script fecha somente a tentativa: aciona diagnostico, correcao minima, rollback quando necessario e nova execucao.
-6. GitHub registra; Actions provam; VPS executa; o resultado volta ao mesmo fio.
+```text
+AUTORIZAÇÃO_HUMANA = SEGREDO/CHEFE
+PIVETE/HERMES = RECEBE + PRESERVA + EXECUTA
+SOL = COORDENA
+```
 
-**Forca maxima** significa usar os recursos, revisores, calculadores, testes e retries controlados necessarios. Nao significa ignorar evidencia, mascarar falha ou destruir ouro.
+Identificadores/labels legados como `permito-pivete` podem ser aceitos temporariamente apenas quando um gate antigo exigir esse literal. Nesse caso:
 
-Continuam proibidos, mesmo no V-REALTIME:
+```text
+permito-pivete = LEGACY_COMPATIBILITY_TOKEN_FOR_SEGREDO_CHEFE
+```
 
-- ler, pedir ou expor secrets, tokens, chaves, sessoes ou `.env`;
-- force-push, push da `main` local suja, `git reset --hard` ou `git clean`;
-- falso verde, bypass de check ou deploy de SHA diferente do aprovado;
-- exclusao definitiva sem alvo exato, inventario, prova e recuperacao;
-- migracao destrutiva, apagamento de banco ou dados;
-- alteracao ampla de Docker, Caddy, DNS, dominio, gateway ou rede fora do alvo validado;
-- qualquer acao irreversivel fora do escopo comprovado.
+Nunca interpretar esse nome como autoridade de PIVETE/HERMES.
 
-O bloqueio `fail-closed` nao encerra a missao: ele impede a tentativa defeituosa, preserva o estado e devolve o problema para correcao e nova prova.
+### V-REALTIME / desenvolvimento próprio autorizado
 
-Quando Pivete declarar **producao real, clientes ou volume**, o regime muda imediatamente. Deploy, restart, banco, rede e operacoes destrutivas passam a exigir gate especifico da nova fase.
+Enquanto a autorização vigente cobrir a missão, ambiente e classe de ação, não perguntar novamente por rotina já delegada. GitHub registra, Actions/scripts provam, VPS executa o SHA aprovado, falha retorna para correção mínima e nova prova.
 
-Perguntar novamente apenas quando o alvo exato nao puder ser resolvido, faltar autoridade para um escopo novo ou a acao sair da autorizacao permanente acima.
+Continuam proibidos:
+
+- expor secrets/tokens/chaves/sessões;
+- force-push e `git reset --hard`;
+- falso verde;
+- ação irreversível fora de escopo;
+- destruir ouro sem inventário/recuperação.
+
+## Produção observável / live iteration
+
+Em desenvolvimento autorizado:
+
+```text
+SUBIR
+→ VER
+→ CHEFE APONTA
+→ LOCALIZAR CAUSA
+→ CORRIGIR MENOR ESCOPO
+→ DEPLOY MENOR ESCOPO
+→ PROVAR NO RUNTIME/LOG
+→ REPETIR
+```
+
+Convergência, Judge e Meta Lupa tentam refutar o que foi implementado; não redefinem a intenção já decidida por SEGREDO/CHEFE.
+
+## Deploy cirúrgico
+
+```text
+FALHA_LOCAL
+→ COMPONENTE_CAUSAL
+→ CORREÇÃO_LOCAL
+→ TESTE_LOCAL
+→ DEPLOY_LOCAL QUANDO SUPORTADO
+→ PROVA LOCAL
+```
+
+Full deploy só quando dependência real atravessar fronteiras ou o artefato for indivisível.
+
+## Observabilidade
+
+Erros operacionais devem chegar a logs/auditoria sanitizados com componente, ação, status, duração, timestamp, correlation/request id quando houver e identidade do build/SHA. Nunca registrar valores de credencial.
 
 ## Ciclo de trabalho
 
 ```text
-Ler -> Fixar alvo/SHA -> Agir -> Revisar -> Provar -> Corrigir/repetir -> Registrar
+LER
+→ FIXAR ALVO/HEAD
+→ AGIR NO ESCOPO
+→ TESTAR
+→ PROVAR
+→ TENTAR REFUTAR QUANDO NECESSÁRIO
+→ CORRIGIR/REPETIR
+→ REGISTRAR APRENDIZADO
 ```
 
-1. Ler o contexto e fixar a Fonte da Verdade, o alvo e o `HEAD_SHA`.
-2. Agir dentro da autorizacao vigente sem devolver ao Pivete decisoes operacionais ja delegadas.
-3. Aplicar a menor mudanca estrutural que resolva a causa.
-4. Revisar nos dois lados: GitHub/diff/CI e VPS/runtime/health.
-5. Provar com evidencia reproduzivel do mesmo alvo e SHA.
-6. Se falhar, diagnosticar, corrigir e repetir; indisponibilidade de uma IA aciona fallback, nao abandono.
-7. Registrar o ouro e retomar o proximo passo unico.
-
-## Deposito de saida
-
-No fim de cada sessao importante, executar `!CALIBRAR` ou registrar o equivalente:
+## Depósito de saída
 
 ```text
 MISSION_ID:
-O que foi decidido:
+O que foi decidido por SEGREDO/CHEFE:
 O que foi feito:
-Evidencia usada:
-O que ficou pendente:
-Proximo passo unico:
+Evidência:
+Estado real:
+Pendência:
+Próximo passo único:
 Travas:
-Divergencias:
-Proxima decisao de Pivete:
 ```
 
-Se o aprendizado precisa sobreviver entre sessoes, gravar em `docs/CONSCIENCIA/APRENDIZADOS.md` ou no arquivo oficial correspondente.
+Aprendizado durável vai para `docs/CONSCIENCIA/APRENDIZADOS.md` ou para o artefato canônico correspondente.
 
-## Artefatos de apoio
-
-Arquivos de apoio deste protocolo:
-
-- `docs/CONSCIENCIA/ARTEFATOS/centraldark-prompt-universal.md`
-- `docs/CONSCIENCIA/ARTEFATOS/centraldark-computador-de-bordo.svg`
-
-Use o prompt universal quando a IA nao conseguir ler imagem. Use o SVG/PNG como painel visual para manter Pivete e as IAs no mesmo padrao.
-
-## Frase curta para colar em qualquer IA
+## Frase curta universal
 
 ```text
-Siga o Protocolo de Orquestracao Pivete: Pivete comanda, DarkAI debate, Actions provam e IAs variam. Em producao de desenvolvimento sem clientes, use a autorizacao V-REALTIME permanente: GitHub audita e registra; IA revisa; scripts/Actions provam; VPS executa somente o SHA aprovado; reviewer valida os dois lados; falha retorna para correcao e nova prova. IA indisponivel aciona fallback deterministico. Nao repita pedidos ja cobertos, nao exponha secrets, nao aceite falso verde e nao crie memoria, regra, missao ou versao paralela. Toda evolucao segue o mapa unico; area consolidada fica travada. Producao real so quando Pivete declarar.
+SEGREDO/CHEFE comanda; SOL coordena; PIVETE/HERMES preserva e executa; especialistas variam; GitHub registra; Actions e runtime provam. Recupere o estado real antes de continuar, reutilize antes de criar, não repita autorização ainda válida, faça o menor movimento causal e nunca converta UNKNOWN em PASS.
 ```

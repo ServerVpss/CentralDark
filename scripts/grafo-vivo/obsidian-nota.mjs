@@ -1,65 +1,83 @@
 #!/usr/bin/env node
 /**
  * Nota viva do Grafo no Obsidian — lê graph-data.json e escreve uma nota Markdown
- * que renderiza no Obsidian (Mermaid nativo): topologia focada + saúde dos processos + anomalias.
- * O Pivete só VISUALIZA no Obsidian; a nota é 100% gerada (nunca editada à mão).
+ * que renderiza no Obsidian (Mermaid nativo): topologia focada + saúde + auditoria.
  *
- * Roda junto do loop (a cada 5min). Uso: node obsidian-nota.mjs
+ * O Mermaid é projeção derivada do estado observado, nunca fonte de verdade.
+ * A nota só é regravada quando o fingerprint semântico muda.
  */
-import { readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
+
+import { atomicWriteUtf8Sync } from '../memory-linker/fs-safe.mjs';
+import {
+  buildGraphProjection,
+  cleanGraphLabel,
+  extractGraphFingerprint,
+  statusDot,
+} from './mermaid-core.mjs';
 
 const GRAPH = '/root/CentralDark/apps/modulos/status/graph-data.json';
 const NOTA  = '/root/CentralDark/docs/BRAIN/00 - Mapa do Sistema/GRAFO-VIVO.md';
 
-const mid   = s => String(s).replace(/[^a-zA-Z0-9]/g, '_');           // id seguro pro Mermaid
-const clean = l => String(l || '')                                    // tira dot do label
-  .replace(/^[\u{1F7E2}\u{1F534}\u{1F7E1}⚪]\s*/u, '')                  // dot de status (pair-aware)
-  .replace(/[\uD800-\uDFFF�]/g, '').trim();                           // limpa lixo de corrupção
-const dot   = st => ({ online: '🟢', stopped: '🔴', errored: '🟡', launching: '🟡' }[st] || '⚪');
+function edgeText(edge) {
+  const label = edge.label ? ` (${edge.label})` : '';
+  return `\`${edge.from} -> ${edge.to}\`${label}`;
+}
+
+function buildAuditMarkdown(audit) {
+  const lines = [];
+
+  for (const edge of audit.dangling_edges) {
+    lines.push(`- 🔴 **Aresta órfã:** ${edgeText(edge)} referencia nó ausente.`);
+  }
+  for (const edge of audit.duplicate_edges) {
+    lines.push(`- 🟡 **Aresta duplicada:** ${edgeText(edge)} aparece mais de uma vez.`);
+  }
+  for (const edge of audit.self_loops) {
+    lines.push(`- 🟡 **Self-loop:** ${edgeText(edge)}. Pode ser legítimo, mas merece inspeção.`);
+  }
+  if (audit.cycle_nodes.length) {
+    lines.push(`- 🟡 **Ciclo dirigido detectado:** ${audit.cycle_nodes.map((id) => `\`${id}\``).join(', ')}. Ciclo é achado, não erro automático.`);
+  }
+  if (audit.isolated_nodes.length) {
+    lines.push(`- ⚪ **Nós isolados:** ${audit.isolated_nodes.slice(0, 20).map((id) => `\`${id}\``).join(', ')}${audit.isolated_nodes.length > 20 ? '…' : ''}.`);
+  }
+
+  return lines.length
+    ? lines.join('\n')
+    : '✅ Nenhum achado estrutural básico: sem aresta órfã, duplicada, self-loop, ciclo dirigido ou nó isolado.';
+}
 
 function main() {
   const g = JSON.parse(readFileSync(GRAPH, 'utf8'));
-  const nodes = g.nodes || [];
-  const edges = g.edges || [];
-  const byId = new Map(nodes.map(n => [n.id, n]));
-  const s = g.stats || {};
+  const projection = buildGraphProjection(g);
+
+  if (!projection.validation.ok) {
+    throw new Error(`MERMAID_STRUCTURAL_VALIDATION_FAILED:${projection.validation.errors.join(',')}`);
+  }
+
+  const previous = existsSync(NOTA) ? readFileSync(NOTA, 'utf8') : '';
+  const previousFingerprint = extractGraphFingerprint(previous);
+  if (previousFingerprint === projection.fingerprint) {
+    console.log(`[obsidian-nota] NO_CHANGE · fingerprint=${projection.fingerprint.slice(0, 12)} · WRITE=UNCHANGED`);
+    return;
+  }
+
+  const s = projection.stats;
+  const monitorados = projection.monitored;
+  const caidos = projection.down;
   const agoraBR = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
 
-  // Subgrafo FOCADO pra Mermaid ficar legível: núcleo + gateways + orquestradores + monitorados vivos
-  const gruposFoco = new Set(['core', 'edge-ia', 'monitoramento']);
-  const tiposFoco  = new Set(['orquestrador', 'gateway', 'storage']);
-  const foco = nodes.filter(n => n.status || gruposFoco.has(n.group) || tiposFoco.has(n.type));
-  const focoIds = new Set(foco.map(n => n.id));
-  const arestasFoco = edges.filter(e => focoIds.has(e.from) && focoIds.has(e.to));
-
-  // Monitorados (com status vivo) → tabela de saúde
-  const monitorados = nodes.filter(n => n.status).sort((a, b) => a.label.localeCompare(b.label));
-  const caidos = monitorados.filter(n => n.status !== 'online');
-
-  // ── Mermaid ──
-  const linhasNos = foco.map(n => {
-    const lbl = (n.status ? dot(n.status) + ' ' : '') + clean(n.label);
-    return `    ${mid(n.id)}["${lbl.replace(/"/g, "'")}"]`;
-  });
-  const linhasArestas = arestasFoco.map(e => {
-    const lab = (e.label || '').slice(0, 22).replace(/[\[\]"|]/g, '');
-    return lab ? `    ${mid(e.from)} -->|${lab}| ${mid(e.to)}` : `    ${mid(e.from)} --> ${mid(e.to)}`;
-  });
-  const classesCaidos = caidos.length
-    ? `\n    classDef caido stroke:#ef4444,stroke-width:3px,color:#ef4444;\n    class ${caidos.map(n => mid(n.id)).join(',')} caido;`
-    : '';
-
-  // ── tabela de saúde ──
-  const tabela = monitorados.map(n =>
-    `| ${dot(n.status)} | ${clean(n.label)} | \`${n.pm2 || '—'}\` | ${n.status} |`
+  const tabela = monitorados.map((node) =>
+    `| ${statusDot(node.status)} | ${cleanGraphLabel(node.label)} | \`${node.pm2 || '—'}\` | ${node.status} |`
   ).join('\n');
 
-  // ── anomalias ──
   const anomalias = caidos.length
-    ? caidos.map(n => `- 🔴 **${clean(n.label)}** (\`${n.pm2}\`) — status \`${n.status}\`. Investigar: \`pm2 describe ${n.pm2}\``).join('\n')
-    : '✅ Nenhuma anomalia — todos os processos monitorados estão online.';
+    ? caidos.map((node) => `- 🔴 **${cleanGraphLabel(node.label)}** (\`${node.pm2 || '—'}\`) — status \`${node.status}\`.`).join('\n')
+    : '✅ Nenhuma anomalia de processo — todos os processos monitorados estão online.';
 
-  const fluxos = (s.fluxos_criticos || []).map(f => `- ${f}`).join('\n') || '_(sem fluxos registrados)_';
+  const fluxos = s.fluxos_criticos.map((flow) => `- ${flow}`).join('\n') || '_(sem fluxos registrados)_';
+  const auditMd = buildAuditMarkdown(projection.audit);
 
   const md = `---
 title: "Grafo Vivo — Visão em Tempo Real"
@@ -70,13 +88,13 @@ updated: ${new Date().toISOString().slice(0, 10)}
 
 # 🕸️ Grafo Vivo — Visão em Tempo Real
 
-> Nota **gerada automaticamente** a cada 5min a partir de \`graph-data.json\` (estado real do PM2 + gateway).
-> Não edite à mão — é sobrescrita. Mesmo grafo de \`status.centralldark.com\`, aqui dentro do Obsidian.
+> Nota **gerada automaticamente** a partir de \`graph-data.json\`.
+> **Mermaid não é verdade:** é uma projeção visual derivada do estado observado. O desenho nunca sobrescreve o canônico.
 
 \`\`\`
 ┌────────────────────────────────────────────────────────┐
 │  🕸️ GRAFO VIVO · atualizado ${agoraBR.padEnd(24)}│
-│  ${String(s.total_nodes ?? nodes.length).padStart(3)} nós · ${String(s.total_edges ?? edges.length).padStart(3)} arestas · ${String(s.online ?? 0).padStart(2)} 🟢 online · ${String(s.offline ?? 0).padStart(2)} 🔴 off       │
+│  ${String(s.total_nodes ?? projection.nodes.length).padStart(3)} nós · ${String(s.total_edges ?? projection.edges.length).padStart(3)} arestas · ${String(s.online ?? 0).padStart(2)} 🟢 online · ${String(s.offline ?? 0).padStart(2)} 🔴 off       │
 │  ${String(s.processos_vivos ?? 0).padStart(2)} processos PM2 · ${String(s.gateway_req_15min ?? 0).padStart(3)} req ChatGPT/15min                │
 └────────────────────────────────────────────────────────┘
 \`\`\`
@@ -84,12 +102,14 @@ updated: ${new Date().toISOString().slice(0, 10)}
 ## 🗺️ Topologia (quem chama quem — núcleo)
 
 \`\`\`mermaid
-flowchart LR
-${linhasNos.join('\n')}
-${linhasArestas.join('\n')}${classesCaidos}
+${projection.mermaid}
 \`\`\`
 
-> Vermelho = processo caído. Diagrama focado no núcleo; a saúde completa está na tabela abaixo.
+> Vermelho = processo caído. O diagrama é derivado; divergência visual vira achado para investigação, não autoridade.
+
+## 🔎 Auditoria visual das relações
+
+${auditMd}
 
 ## 🩺 Saúde dos processos monitorados
 
@@ -105,12 +125,30 @@ ${anomalias}
 
 ${fluxos}
 
+## 🧾 Receipt da projeção
+
+\`\`\`text
+PROJECTION_SOURCE=${GRAPH}
+GRAPH_FINGERPRINT=${projection.fingerprint}
+MERMAID_KIND=flowchart
+MERMAID_STRUCTURAL_VALIDATION=PASS
+VISUAL_IS_TRUTH=false
+FOCUS_NODES=${projection.focus_nodes.length}
+FOCUS_EDGES=${projection.focus_edges.length}
+DANGLING_EDGES=${projection.audit.dangling_edges.length}
+DUPLICATE_EDGES=${projection.audit.duplicate_edges.length}
+SELF_LOOPS=${projection.audit.self_loops.length}
+CYCLE_NODES=${projection.audit.cycle_nodes.length}
+ISOLATED_NODES=${projection.audit.isolated_nodes.length}
+WRITE=UPDATED
+\`\`\`
+
 ---
 🔗 [[00-MAPA]] · [[02-ARQUITETURA]] · [[MAPA-DOS-BOTS]] · painel: status.centralldark.com
 `;
 
-  writeFileSync(NOTA, md);
-  console.log(`[obsidian-nota] ✅ ${monitorados.length} monitorados · ${caidos.length} caído(s) · nota atualizada`);
+  const writeState = atomicWriteUtf8Sync(NOTA, md);
+  console.log(`[obsidian-nota] ${writeState} · ${monitorados.length} monitorados · ${caidos.length} caído(s) · fingerprint=${projection.fingerprint.slice(0, 12)}`);
 }
 
 main();

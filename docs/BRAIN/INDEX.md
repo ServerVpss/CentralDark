@@ -1,6 +1,6 @@
 # 📚 INDEX — Segundo Cérebro CentralDark
 
-> Gerado automaticamente em 2026-07-05 22:43 UTC. Não editar manualmente.
+> Gerado automaticamente em 2026-08-17 04:35 UTC. Não editar manualmente.
 
 ## (raiz)
 
@@ -21,15 +21,19 @@
 ## 00 - Mapa do Sistema
 
 - [[00-POSTURA-PIVETE]]
+- [[DIRECAO-ATUAL-HERMES]]
 - [[GRAFO-VIVO]]
 - [[INDEX]]
 - [[MAPA-DOS-BOTS]]
+- [[MAPA-OBSIDIAN-BRAIN]]
 - [[PROTOCOLO-INICIALIZACAO]]
 
 ## 05 - Documentacao
 
 - [[DIAGRAMAS-CENTRALDARK]]
 - [[GUIA-PROMPTS]]
+- [[INVENTARIO-METODOS-HERMES]]
+- [[OBSIDIAN-CASA-SINCRONIZACAO]]
 - [[PLUGINS-OBSIDIAN-RECOMENDADOS]]
 - [[TUTORIAL-OBSIDIAN]]
 
@@ -48,5 +52,7 @@
 
 ## 08 - Aprendizados & Memórias
 
+- [[2026-08-16-gaveta-duravel-cristalizacao]]
+- [[2026-08-16-verde-delta-fechado-promove]]
 - [[README]]
 

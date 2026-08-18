@@ -1,0 +1,22 @@
+{
+  "schema": "centraldark.skill.provenance.v1",
+  "skill_id": "reality-follows-function",
+  "origin": "SEGREDO/CHEFE + SOL interaction distilled on 2026-08-16",
+  "source_material_summary": [
+    "PROCURE_A_FUNCAO_NAO_O_NOME",
+    "SIGA_O_EFEITO",
+    "NAO_TRANSFORME_PRUDENCIA_EM_BUROCRACIA",
+    "TELEMETRIA_E_CONTRAPROVA",
+    "EVIDENCIA_SO_CAI_POR_CONTRAPROVA_MELHOR",
+    "MENOS_E_MAIS",
+    "ANTECIPE_A_COISA_CERTA_E_DEIXE_A_REALIDADE_TERMINAR_A_FRASE"
+  ],
+  "credit": {
+    "originator_of_material": "SEGREDO/CHEFE",
+    "distillation_role": "SOL",
+    "authority": "SEGREDO/CHEFE",
+    "credit_is_authority": false
+  },
+  "source_is_provenance_not_authority": true,
+  "absorbed_into_existing_owner": true
+}

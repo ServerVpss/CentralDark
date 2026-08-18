@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 // Sentinela 24/7 — varre divergências e abre Issues com dedupe.
 // Read-only no repo/VPS (não toca em produção). Usa apenas HTTPS público + gh CLI.
+// Labels são consumidas do catálogo canônico; este script nunca recria aliases legados.
 
 import { execSync, execFileSync } from 'node:child_process';
 import { mkdirSync, writeFileSync, readFileSync, existsSync } from 'node:fs';
@@ -13,6 +14,28 @@ const REPO = process.env.REPO_ALVO || 'ServerVpss/CentralDark';
 const SNAPSHOT_DIR = 'docs/sentinela';
 const SNAPSHOT_FILE = path.join(SNAPSHOT_DIR, 'last-snapshot.json');
 const REPORT_FILE = path.join(SNAPSHOT_DIR, 'last-report.md');
+
+const CANONICAL = Object.freeze({
+  sentinela: '🛡️ SENTINELA',
+  auto: '🤖 AUTO',
+  p1: '🔴 PRIORIDADE-ALTA',
+  p2: '🟡 PRIORIDADE-MÉDIA',
+  p3: '🟢 PRIORIDADE-BAIXA',
+  stale: '🧊 PARADO',
+  codex: '🧠 AGENTE-CODEX',
+  supabase: '🧠 AGENTE-SUPABASE',
+  claude: '🧠 AGENTE-CLAUDE',
+  grok: '🧠 AGENTE-GROK',
+  chatgpt: '🧠 AGENTE-CHATGPT',
+});
+
+function severityLabel(sev) {
+  return CANONICAL[sev] || CANONICAL.p2;
+}
+
+function agentLabel(bot) {
+  return CANONICAL[String(bot || '').toLowerCase()] || CANONICAL.codex;
+}
 
 mkdirSync(SNAPSHOT_DIR, { recursive: true });
 
@@ -53,11 +76,11 @@ function hash(s) {
 function ghIssueExists(titleHash) {
   try {
     const out = execSync(
-      `gh issue list -R "${REPO}" --state open --search "in:title sentinela-${titleHash}" --json number,title --limit 5`,
+      `gh issue list -R "${REPO}" --state open --json number,title --limit 1000`,
       { encoding: 'utf8' }
     );
     const arr = JSON.parse(out);
-    return arr.find((i) => i.title.includes(titleHash));
+    return arr.find((i) => i.title.includes(`sentinela-${titleHash}`));
   } catch {
     return null;
   }
@@ -80,28 +103,6 @@ function ghOpenIssue({ title, body, labels }) {
   }
 }
 
-function ensureLabels() {
-  if (DRY_RUN) return;
-  const labels = [
-    ['sentinela', 'B60205', 'Aberta automaticamente pela sentinela'],
-    ['auto', 'CCCCCC', 'Criada por bot'],
-    ['p1', 'FF0000', 'Alta prioridade'],
-    ['p2', 'FFA500', 'Média'],
-    ['p3', 'FFFF00', 'Baixa'],
-    ['assign:codex', '5319E7', 'Bot responsável: Codex'],
-    ['assign:supabase-bot', '3ECF8E', 'Bot responsável: Supabase'],
-    ['assign:claude', 'FF80B0', 'Bot responsável: Claude'],
-    ['assign:grok', '1F6FEB', 'Bot responsável: Grok'],
-    ['assign:chatgpt', '10A37F', 'Bot responsável: ChatGPT'],
-    ['stale', '6E6E6E', 'Passou do TTL'],
-  ];
-  for (const [name, color, desc] of labels) {
-    try {
-      execSync(`gh label create "${name}" -R "${REPO}" -c "${color}" -d "${desc}" --force`, { stdio: 'ignore' });
-    } catch {}
-  }
-}
-
 // === Checks ===
 
 async function checkEndpoints() {
@@ -116,7 +117,6 @@ async function checkEndpoints() {
       detalhe: `URL: ${r.url}\nStatus: ${r.status}\nLatência: ${r.latencyMs}ms\nErro: ${r.error || '-'}`,
     });
   }
-  // CORS check
   for (const r of out) {
     if (r.url.includes('mcp.centralldark.com') && r.status >= 200 && r.status < 400 && !r.cors) {
       divergencias.push({
@@ -148,7 +148,7 @@ async function checkWorkflowsRuins() {
       });
     }
     return arr.length;
-  } catch (e) {
+  } catch {
     return 0;
   }
 }
@@ -157,9 +157,6 @@ function realGit(args) {
   return execFileSync('git', args, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
 }
 
-// Drift GitHub <-> checkout implantado. Caminho vem só da fonte canônica
-// (secret CENTRALDARK_ROOT, mapeado pelo workflow em VPS_REPO_PATH) — nunca
-// inventado aqui. Ausência do secret é ERROR explícito, nunca skip silencioso.
 function checkVpsDrift() {
   const repoPath = process.env.VPS_REPO_PATH || '';
   if (!repoPath) {
@@ -174,9 +171,6 @@ function checkVpsDrift() {
   return evaluateDrift({ repoPath, expectedRepo: REPO, branch: 'main', git: realGit });
 }
 
-// === Run ===
-
-ensureLabels();
 const endpointsResult = await checkEndpoints();
 const wfCount = await checkWorkflowsRuins();
 const driftEvidence = checkVpsDrift();
@@ -184,7 +178,6 @@ const driftDivergencia = toDivergencia(driftEvidence);
 if (driftDivergencia) divergencias.push(driftDivergencia);
 const recoveryNote = describeRecovery(previousSnapshot, driftEvidence);
 
-// Snapshot
 const snapshot = {
   at: new Date().toISOString(),
   endpoints: endpointsResult,
@@ -194,27 +187,36 @@ const snapshot = {
 };
 writeFileSync(SNAPSHOT_FILE, JSON.stringify(snapshot, null, 2));
 
-// Abrir issues com dedupe
 const abertas = [];
+const seenHashes = new Map();
 for (const d of divergencias) {
   const h = hash(`${d.area}|${d.titulo}`);
   const title = `[SENTINELA sentinela-${h}] ${d.area}: ${d.titulo}`;
+  const seen = seenHashes.get(h);
+  if (seen) {
+    abertas.push({ ...d, hash: h, ja: seen });
+    continue;
+  }
   const existing = ghIssueExists(h);
   if (existing) {
+    seenHashes.set(h, existing.number);
     abertas.push({ ...d, hash: h, ja: existing.number });
     continue;
   }
-  const body = `> Aberta automaticamente pela **sentinela** (run ${process.env.GITHUB_RUN_ID || 'local'}).
+
+  const agente = agentLabel(d.bot);
+  const prioridade = severityLabel(d.sev);
+  const body = `> Aberta automaticamente pela **Sentinela** (run ${process.env.GITHUB_RUN_ID || 'local'}).
 > Hash de dedupe: \`sentinela-${h}\` — não reabre se já existir.
 
 ## Área
 ${d.area}
 
 ## Severidade
-${d.sev}
+${prioridade}
 
-## Bot responsável
-\`assign:${d.bot}\`
+## Capacidade roteada
+\`${agente}\`
 
 ## Detalhe (sanitizado)
 \`\`\`
@@ -223,18 +225,18 @@ ${d.detalhe}
 
 ## Critério pra fechar
 - Endpoint volta 200 / workflow verde / CORS configurado / pendência registrada.
-- Bot dono comenta com PR ou justificativa.
-- Após 7 dias sem ação, sentinela-stale escala.
+- A capacidade roteada comenta com PR ou justificativa.
+- Telemetria transitória não vira autoridade nem Writer permanente.
 
 ---
-_Anti-loop: só o bot com label \`assign:${d.bot}\` deve agir._
+_Anti-loop: atualizar a ferida material existente; label roteia capacidade, não autoridade._
 `;
-  const labels = ['sentinela', 'auto', d.sev, `assign:${d.bot}`];
+  const labels = [CANONICAL.sentinela, CANONICAL.auto, prioridade, agente];
   const r = ghOpenIssue({ title, body, labels });
+  if (r.number) seenHashes.set(h, r.number);
   abertas.push({ ...d, hash: h, nova: r.number, erro: r.error });
 }
 
-// Relatório
 const report = `# Sentinela — ${snapshot.at}
 
 | Métrica | Valor |
@@ -253,7 +255,7 @@ ${endpointsResult.map((r) => `- ${r.status >= 200 && r.status < 400 ? '🟢' : '
 
 ## Divergências
 
-${divergencias.length === 0 ? '_Nenhuma divergência. Tudo verde._' : divergencias.map((d, i) => `- **[${d.sev}]** ${d.area} → ${d.titulo} (bot: \`${d.bot}\`)`).join('\n')}
+${divergencias.length === 0 ? '_Nenhuma divergência. Tudo verde._' : divergencias.map((d) => `- **[${severityLabel(d.sev)}]** ${d.area} → ${d.titulo} (capacidade: \`${agentLabel(d.bot)}\`)`).join('\n')}
 
 ## Drift GitHub <-> VPS
 

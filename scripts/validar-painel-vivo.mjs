@@ -3,7 +3,7 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import path from 'node:path';
 
-const FILE = 'CentralDark/apps/modulos/status/painel-data.json';
+const FILE = 'apps/modulos/status/painel-data.json';
 const OUT_DIR = 'docs/RELATORIOS/painel-vivo-validacao';
 
 mkdirSync(OUT_DIR, { recursive: true });
@@ -23,7 +23,6 @@ for (const ms of data.milestones || []) {
   v(typeof ms.percent === 'number' && ms.percent >= 0 && ms.percent <= 100, `milestone ${ms.title}: percent 0..100`);
 }
 
-// Endpoints
 const endpoints = data.liveStatus || [
   { name: 'MCP Health', url: 'https://mcp.centralldark.com/health' },
   { name: 'MCP Status', url: 'https://mcp.centralldark.com/status.json' },

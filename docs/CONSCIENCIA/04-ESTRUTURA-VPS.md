@@ -2,90 +2,132 @@
 title: "04 ESTRUTURA VPS"
 date: 2026-06-29
 tags: ["consciencia"]
-updated: 2026-06-29
+updated: 2026-08-08
+status: "OPERACIONAL"
 ---
 
 # 04 — Estrutura da VPS
 
-VPS: `root@vmi3256920` (IP `89.117.78.124`).
+## Regra vigente
 
-## Estrutura ANTIGA (ainda em uso, migração gradual)
-
-```
-/root/Multizap/
-├─ apps/
-│  ├─ clone-deck/    ← repo principal (segredounlock/clone-deck)
-│  ├─ bot/
-│  ├─ crm/           ← NÃO MEXER sem confirmação
-│  ├─ portal/
-│  └─ web/
-├─ api/
-│  ├─ gateway/
-│  ├─ whatsapp/qrcode/
-│  ├─ webhooks/
-│  └─ integrations/
-├─ guarda/
-│  ├─ scripts/
-│  ├─ scans/
-│  ├─ status/
-│  └─ incidentes/
-├─ quarantine/
-└─ revisoes/         ← relatórios de cada ciclo de trabalho
+```text
+REPO_CANONICO=ServerVpss/CentralDark
+VPS_ROOT_CANONICO=/root/CentralDark
+CENTRALDARK_ROOT_ONLY_REQUIRED=SIM
+EXTERNAL_ROOT_DEFAULT=OUT_OF_SCOPE
+/root/Multizap/apps/clone-deck=OUT_OF_SCOPE
 ```
 
-## Estrutura NOVA OFICIAL (CentralDark — coisa nova já entra aqui)
+A árvore operacional da CentralDark é **somente** `/root/CentralDark`.
+Diretórios irmãos em `/root`, inclusive `/root/Multizap`, não fazem parte do
+território operacional por padrão e não podem ser usados como fonte da verdade,
+runtime permanente ou fallback silencioso da CentralDark.
 
-Validado direto na VPS em 2026-06-05:
+## Árvore canônica
 
-```
+```text
 /root/CentralDark/
 ├─ apps/
-│  ├─ install-callback/   ← landing + docs + bootstrap (install.centralldark.com)
-│  └─ mcp/                ← servidor MCP CentralDark (porta 9100)
 ├─ infra/
-│  ├─ caddy/              ← snippets de proxy (mcp.Caddyfile etc.)
-│  └─ pm2/                ← ecosystems (mcp.pm2.json etc.)
 ├─ scripts/
-│  └─ installer/
 ├─ logs/
-│  └─ mcp/
-├─ secrets/               ← mcp.env, lovable.env, cloudflare.env
-├─ revisoes/              ← relatórios de operações na nova árvore
-└─ memoria-consciencia/   ← memória privada do agente ChatGPT
+├─ revisoes/
+└─ demais componentes versionados/operacionais do ServerVpss/CentralDark
 ```
 
-**ATENÇÃO:** tudo minúsculo, SEM `APP/`. Versões antigas da doc falavam em `/root/CentralDark/APP/{site,modulos,servidor-whatsapp,gateway,...}` — aquilo era um plano que nunca virou realidade. A árvore acima é a que existe de fato.
+A árvore viva deve ser medida novamente antes de operação crítica; a estrutura
+acima define **fronteira**, não inventário completo de runtime.
 
-E também:
+## Repositório principal na VPS
 
-```
-/root/CentralDark/memoria-consciencia/   ← memória privada do agente ChatGPT
-```
-
-## Regra de migração
-
-**NÃO mover** pastas antigas (`/root/Multizap/...`) sem confirmação do usuário. Migração é gradual e manual.
-
-## Repo principal na VPS
-
-```
-/root/Multizap/apps/clone-deck
+```text
+PATH=/root/CentralDark
+REMOTE=ServerVpss/CentralDark
+BRANCH_CANONICA=main
 ```
 
-É clone do `segredounlock/clone-deck`. Sincronizado pelo cron `gh-pull` a cada 5 min.
+Qualquer checkout em outro diretório ou apontando para outro repositório é
+`EXTERNAL` até prova e reconciliação.
 
-## Docs por pasta (regra)
+## Regra para dependência externa
 
-TODA pasta (no repo e na VPS) precisa ter:
-- `README.md` — o que é
-- `PLANO.md` — o que falta
+Se um recurso necessário para a CentralDark existir apenas fora da raiz
+canônica, não se mantém a dependência por conveniência.
 
-Criar junto com a pasta. Ler antes de mexer. Atualizar ao terminar.
+```text
+CAPTURE_READ_ONLY
+→ PROVAR_CONSUMIDOR_E_DEPENDENCIA
+→ LOCALIZAR_EQUIVALENTE_JA_EXISTENTE_NA_CENTRALDARK
+→ SE_NAO_EXISTIR, TRANSPLANTAR_DELTA_MINIMO_PARA_CENTRALDARK
+→ ADAPTAR_CONSUMIDORES
+→ TESTAR
+→ CONTRAPROVAR
+→ PROMOVER_NO_REPO_CANONICO
+→ EXTERNO=HISTORICAL|SUPERSEDED
+```
+
+A captura externa não concede autorização para mover, apagar, reiniciar ou
+reescrever o recurso original. Primeiro o código entra na CentralDark e prova
+que funciona a partir da raiz canônica.
+
+## `/root/Multizap`
+
+`/root/Multizap` é **histórico/externo** para a CentralDark atual.
+
+```text
+/root/Multizap=OUT_OF_SCOPE
+/root/Multizap/apps/clone-deck=OUT_OF_SCOPE
+CLONE_DECK_COMO_REPO_PRINCIPAL=NAO
+FALLBACK_PARA_MULTIZAP=PROIBIDO
+```
+
+Referências antigas podem permanecer em arquivo histórico para explicar a
+origem do sistema, mas não podem governar checker, deploy, workflow, runtime ou
+novo código.
+
+## Workflows e automação
+
+Antes de criar workflow novo, atualizar o mecanismo existente que já cobre a
+capacidade.
+
+```text
+WORKFLOW_REUSE_REQUIRED=SIM
+AI_DETERMINISTIC_FALLBACK_REQUIRED=SIM
+
+BUSCAR_EXISTENTE
+→ ABRIR_IMPLEMENTACAO
+→ PROVAR_GAP
+→ ESTENDER_EXISTENTE
+```
+
+Quando houver IA no fluxo:
+
+```text
+DETERMINISTICO_PRIMEIRO
+→ IA_PARA_UNKNOWN_OU_ANALISE_SEMANTICA
+→ SE_IA_CAIR: FALLBACK_DETERMINISTICO_OU_FAIL_CLOSED
+→ 429|TIMEOUT|MODEL_OFFLINE != PASS
+```
+
+Padrões já existentes que devem ser reaproveitados incluem o deploy canônico
+self-hosted e a revisão de PR que mantém gates determinísticos independentes do
+parecer de modelo.
+
+## Regra de manutenção
+
+Toda IA que tocar código operacional deve:
+
+1. trabalhar dentro de `ServerVpss/CentralDark`;
+2. preferir alteração no artefato/workflow existente;
+3. impedir introdução de caminho operacional novo para `/root/Multizap`;
+4. deixar teste/contraprova que detecte regressão da fronteira;
+5. não criar V2/V3/NOVO/FINAL/COPY para capacidade já existente.
 
 ---
 
-## Conexões Rápidas
+## Conexões rápidas
 
-- [[00-LEIA-PRIMEIRO]] — portão de entrada
-- [[MAPA-DO-CEREBRO]] — visão geral
-- [[CONSCIENCIA]] — documento mestre
+- `LEIA-ME-IA.md` — porta universal
+- `AGENTS.md` — contrato dos agentes
+- `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json` — reutilização obrigatória
+- `scripts/lupa/validar-porta-de-entrada.mjs` — gate determinístico

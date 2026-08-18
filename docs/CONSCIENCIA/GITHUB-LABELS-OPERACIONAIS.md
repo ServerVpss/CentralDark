@@ -1,88 +1,127 @@
 # Labels Operacionais CentralDark
 
-Este arquivo define o padrao oficial de labels do GitHub para operar o CentralDark de forma simples, leiga e segura.
-
-## Regra central
+## Identidade e autoridade
 
 ```text
-Label boa precisa dizer o que fazer.
-Label tecnica demais confunde.
-Label em portugues ajuda o Pivete a operar o sistema sem depender de tradutor mental.
+SEGREDO/CHEFE = humano e autoridade final
+SOL = coordenadora
+PIVETE/HERMES = executor, preservação e continuidade
+MODELO = capacidade substituível
+REALIDADE = juiz
 ```
 
-## Regra 2026-07-14 (Pivete)
+Label roteia trabalho; **nunca concede autoridade humana**.
+
+A autorização humana canônica é:
 
 ```text
-SÓ labels com emoji.
-Proibido: assign:grok, bug, p1, documentation, stale…
-Dono IA = 🧠 AGENTE-GROK / 🧠 AGENTE-CODEX / etc.
-Seed: .github/workflows/bots-labels-seed.yml (só emoji).
+👑 PERMITO-SEGREDO
 ```
 
-## Labels oficiais (núcleo)
+`permito-pivete`, `PERMITO-PIVETE` e outros aliases históricos não pertencem à taxonomia operacional ativa. O histórico permanece nos registros antigos, sem promover PIVETE/HERMES/modelo/bot a autoridade.
 
-| Label | Quando usar | Permissao operacional |
-|---|---|---|
-| 🟢 PRONTO-PARA-IA | Tarefa clara, contexto suficiente | IA analisa / propõe |
-| 🟡 IA-PRECISA-REVISAR | Precisa revisão IA | IA revisa, não mergea sozinha |
-| 🔴 RISCO-SERVIDOR | VPS, deploy, PM2, Caddy, produção | BOOT Completo + confirmação |
-| 🟡 PRECISA-DE-OK | Aguarda PERMITO Pivete | IA para |
-| 🔐 SEGURANÇA | RLS, secrets, tokens, auth | Read-only primeiro |
-| 🟢 CORREÇÃO-SEGURA | Baixo risco, sem segredo/destrutivo | Branch/PR ok |
-| 🔴 FALTA-EVIDÊNCIA | Sem log/print/prova | Bloqueia até prova |
-| 🧠 AGENTE-GROK | Grok dono (VPS/PM2/infra) | Roteamento |
-| 🧠 AGENTE-CODEX | Codex dono (código/PR) | Roteamento |
-| 🛠️ INFRA | Servidor / deploy / PM2 | Com RISCO se produção |
-| 🔧 SELF-HEAL | Script puro restart | Preferir sem IA |
-| 🤖 AGENTIC-DEVOPS | Orquestração self-heal | Sem inventar V3 |
-
-## Como aplicar
-
-### Issue comum
-
-Use `🟢 PRONTO-PARA-IA` quando a tarefa estiver bem explicada.
-
-### Pull request
-
-Use `🟡 IA-PRECISA-REVISAR` quando o PR precisa de leitura da IA/Codex.
-
-### VPS, deploy ou banco
-
-Use sempre:
+## Lei do catálogo
 
 ```text
-🔴 RISCO-SERVIDOR
-🟡 PRECISA-DE-OK
+UMA_SEMÂNTICA = UMA_LABEL_CANÔNICA
+LABEL_OPERACIONAL = MAIÚSCULAS
+ALIAS_LEGADO = MIGRAR_ANTES_DE_APAGAR
+SEM_CONSUMIDOR + SEM_ROTEAMENTO + SEM_VALOR_OPERACIONAL = REMOVER
 ```
 
-Se envolver banco, auth, RLS ou segredo, adicionar tambem:
+`🧠 AGENTE-LOVABLE` e `assign:lovable` são obsoletos e não recebem novos trabalhos.
+
+## Núcleo canônico
+
+- `👑 PERMITO-SEGREDO`
+- `🔄 GIT`, `🔄 GIT-DIVERGÊNCIA`
+- `🧠 AGENTE-CHATGPT`, `🧠 AGENTE-CLAUDE`, `🧠 AGENTE-CODEX`, `🧠 AGENTE-GROK`, `🧠 AGENTE-HERMES`, `🧠 AGENTE-JARVIS`, `🧠 AGENTE-SENTINELA`, `🧠 AGENTE-SUPABASE`
+- `🤖 AUTO`, `🤖 AGENTIC-DEVOPS`, `🤖 IA-DOCUMENTAR`, `🤖 IA-EXECUTAR`, `🤖 IA-FRONTEND`, `🤖 IA-INFRA`, `🤖 IA-PESQUISAR`, `🤖 IA-REVISAR`, `🤖 IA-VALIDAR`
+- `🐞 BUG`, `♻️ DUPLICADO`, `✨ MELHORIA`, `❓ DÚVIDA`, `🆘 AJUDA-NECESSÁRIA`, `🌱 BOM-PARA-INICIAR`, `🎨 FRONTEND`, `📚 DOCS`
+- `🔐 SEGURANÇA`, `🔧 SELF-HEAL`, `🔴 ERRO`, `🔴 FALTA-EVIDÊNCIA`, `🔴 PRIORIDADE-ALTA`, `🔴 RISCO-SERVIDOR`, `🛠️ INFRA`
+- `🛡️ SENTINELA`, `🟡 ATENÇÃO`, `🟡 IA-PRECISA-REVISAR`, `🟡 PENDÊNCIA`, `🟡 PRIORIDADE-MÉDIA`
+- `🟢 CORREÇÃO-SEGURA`, `🟢 PRIORIDADE-BAIXA`, `🟢 PRONTO-PARA-IA`, `🟢 SUCESSO`, `🟢 SUPABASE`
+- `🕸️ GRAPHIFY`, `🚫 INVÁLIDO`, `🧊 NÃO-FAZER`, `🧊 PARADO`, `🧩 DIVERGÊNCIA`, `🧭 PAINEL`, `SUPERSEDED`
+
+## Alias legado → canônico
 
 ```text
-🔴 SEGURANÇA
+assign:chatgpt      → 🧠 AGENTE-CHATGPT
+assign:claude       → 🧠 AGENTE-CLAUDE
+assign:codex        → 🧠 AGENTE-CODEX
+assign:grok         → 🧠 AGENTE-GROK
+assign:supabase-bot → 🧠 AGENTE-SUPABASE
+auto                 → 🤖 AUTO
+bug                  → 🐞 BUG
+p1                   → 🔴 PRIORIDADE-ALTA
+p2                   → 🟡 PRIORIDADE-MÉDIA
+p3                   → 🟢 PRIORIDADE-BAIXA
+sentinela            → 🛡️ SENTINELA
+stale                → 🧊 PARADO
+superseded           → SUPERSEDED
+permito-segredo      → 👑 PERMITO-SEGREDO
+📚 DOC               → 📚 DOCS
 ```
 
-### Falta de prova
+## Enforcement global de entrada
 
-Use `🔴 FALTA-EVIDÊNCIA` quando alguem pediu correcao, mas ainda nao trouxe print, log, output ou erro real.
-
-## Regras para automacao
-
-1. Bots podem pegar automaticamente apenas tarefas com `🟢 PRONTO-PARA-IA` ou `🟢 CORREÇÃO-SEGURA`.
-2. Qualquer label vermelha bloqueia acao automatica destrutiva.
-3. `🟡 PRECISA-DE-OK` pausa a missao ate o Pivete autorizar.
-4. `🔴 RISCO-SERVIDOR` muda o modo para BOOT Completo.
-5. `🔴 SEGURANÇA` exige registro de evidencia antes e depois.
-6. `🔴 FALTA-EVIDÊNCIA` impede patch ate prova real.
-
-## Mapeamento do padrao CentralDark
+O catálogo é único; cada superfície apenas adapta a entrada. O comportamento deve ser o mesmo para humano, bot, modelo, MCP CentralDark, HUB ou cliente futuro que passe pelo contrato da Casa.
 
 ```text
-Memoria fixa = texto curto CentralDark
-Chat simples = so manda a missao
-Chat GitHub/docs/PR = BOOT Medio
-Chat VPS/Actions/deploy/producao = BOOT Completo
+LABEL_RECEBIDA
+→ trim
+→ comparação case-insensitive para aliases conhecidos
+→ alias conhecido: converter para destino canônico
+→ alias de autoridade SEGREDO: 👑 PERMITO-SEGREDO
+→ alias de autoridade PIVETE/HERMES: descartar
+→ assign:* desconhecido: descartar, não inventar agente
+→ dedupe
+→ GitHub recebe somente o conjunto normalizado
 ```
 
-## Fio da missao
+Regras de integração:
 
-Labels padronizadas -> Codex/Hermes trabalham com menos confusao -> PRs ficam mais faceis de revisar -> VPS so executa o que foi aprovado.
+```text
+GITHUB_UI/API/BOTS → catálogo GitHub canônico
+MCP_CENTRALDARK → normaliza labels antes de criar issue no GitHub
+HUB → usa o MCP canônico; não cria segundo motor de labels
+AUTHORITY_APPROVAL → normaliza a label observada antes de decidir autorização
+CANONICAL_VISUAL_LABEL=👑 PERMITO-SEGREDO
+TEXT_ALIAS=permito-segredo
+TEXT_ALIAS_IS_COMPATIBILITY_NOT_SECOND_LABEL=true
+```
+
+O HUB já descobre ferramentas pelo MCP; portanto herda a semântica do tool GitHub existente. Não duplicar catálogo, regra de autoridade ou normalizador dentro da interface.
+
+```text
+SURFACE_IS_ADAPTER_NOT_AUTHORITY=true
+LABEL_NORMALIZATION_IS_INGRESS_CONTRACT=true
+ONE_LABEL_SEMANTIC_ONE_CANONICAL_NAME=true
+```
+
+## Issue não é memória
+
+```text
+EVENTO
+→ fingerprint
+→ existe ferida material equivalente?
+   SIM → atualizar evidência existente
+   NÃO → provar materialidade
+         → só então criar issue
+
+CAUSA SUMIU
+→ comprovar
+→ fechar quando a política permitir
+```
+
+Workflow vermelho sozinho não cria automaticamente uma nova ferida. `SKIPPED`, `UNKNOWN`, `PENDING`, ausência de erro ou alerta histórico não são `PASS`.
+
+## Regra final
+
+```text
+LABEL = SINAL
+INTENÇÃO = SEGREDO/CHEFE
+ESTADO = EVIDÊNCIA
+EXECUÇÃO = CAPACIDADE AUTORIZADA
+REALIDADE = JUIZ
+```

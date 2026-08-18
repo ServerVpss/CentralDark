@@ -1,181 +1,193 @@
 ---
 title: "Diagramas do Sistema CentralDark"
 date: 2026-06-29
+updated: 2026-08-15
+status: "DERIVED_VIEW"
 tags: ["diagrama", "arquitetura", "fluxo", "mermaid", "sistema"]
-updated: 2026-06-29
+source_rule: "CANONICO -> ARTEFATO; artefato nao inventa canonico"
 ---
 
-# 🗺️ Diagramas do Sistema CentralDark
+# Diagramas CentralDark — visão derivada do canônico
 
-> Abre no Obsidian e os diagramas renderizam automaticamente.
-> Requer plugin: **Mermaid** (já vem nativo no Obsidian).
+> Estes diagramas são uma **visualização derivada**, não fonte da verdade.
+> Estado físico/runtime que não foi medido nesta rodada permanece `UNKNOWN|UNPROVEN`.
+> Histórico anterior continua preservado no Git.
 
----
+```text
+MERMAID != VERDADE
+CANONICO -> MERMAID
+MERMAID -> INVENTAR_CANONICO = FORBIDDEN
+```
 
-## 1. Fluxo Geral — Como os dados andam
+Fontes canônicas desta visão:
+
+- `LEIA-ME-IA.md` — boot, autoridade e precedência;
+- `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` — coordenação e Writer único;
+- `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md` — método cognitivo/mineração;
+- `scripts/memory-linker/README.md` — pipeline de memória;
+- `apps/modulos/artifacts-builder/CONTRATO-ARTEFATO-UNIVERSAL.md` — artefato derivado.
+
+## 1. Autoridade, identidade e execução
 
 ```mermaid
 flowchart TD
-    PIVETE(["👤 Pivete\n(você)"])
+    CHEFE["SEGREDO/CHEFE<br/>intencao + limites + autoridade humana"]
+    SOL["SOL<br/>coordena + reconcilia + protege o fio"]
+    MOTORS["Modelos / ferramentas<br/>motores substituiveis"]
+    HERMES["PIVETE/HERMES<br/>executor + continuidade"]
+    WRITER["Writer unico por escopo<br/>muta somente o alvo autorizado"]
+    VERIFY["Teste + MetaLupa + receipts<br/>prova aplicavel"]
+    GIT["GitHub / canonico<br/>historia + prova"]
+    REAL["Estado real medido<br/>desempata"]
 
-    subgraph ENTRADA["📲 Entrada"]
-        TG["📱 Telegram\n@srver1bot"]
-        CC["💻 Claude Code\n(terminal VPS)"]
-    end
-
-    subgraph BOT["🤖 Bot Hub (PM2 id 27)"]
-        HUB["HubBot\nunified-bot.cjs"]
-        CON["🧠 Consciousness\n(roteador de intenção)"]
-        SKL["⚡ Skills\n(executor)"]
-    end
-
-    subgraph CEREBRO["🧠 Cérebro Vivo"]
-        BRAIN["📓 BRAIN\n(Obsidian / docs/BRAIN)"]
-        CONS["📋 CONSCIENCIA\n(docs/CONSCIENCIA)"]
-    end
-
-    subgraph VPS["🖥️ VPS (infraestrutura)"]
-        PM2["⚙️ PM2\n(gerenciador de processos)"]
-        SCRIPTS["📜 Scripts\n(/root/CentralDark/scripts/)"]
-        MCP["🔌 MCP Hub\n(CentralDark-MCP)"]
-    end
-
-    GH["🐙 GitHub\nServerVpss/CentralDark\n(Fonte da Verdade)"]
-
-    PIVETE -->|"digita"| TG
-    PIVETE -->|"comanda"| CC
-    TG --> HUB
-    CC -->|"edita arquivos / faz commit"| GH
-    HUB --> CON
-    CON -->|"roteia"| SKL
-    SKL -->|"grava nota"| BRAIN
-    SKL -->|"registra decisão"| CONS
-    HUB <-->|"lê / escreve"| MCP
-    MCP <-->|"acessa"| VPS
-    SCRIPTS -->|"cron automático"| BRAIN
-    SCRIPTS -->|"cron automático"| CONS
-    BRAIN <-->|"sync pull/push"| GH
-    CONS <-->|"sync pull/push"| GH
-    PM2 -->|"roda"| HUB
-    PM2 -->|"roda"| SCRIPTS
-
-    style PIVETE fill:#6366f1,color:#fff,stroke:#4f46e5
-    style GH fill:#24292e,color:#fff,stroke:#000
-    style HUB fill:#0ea5e9,color:#fff
-    style CON fill:#8b5cf6,color:#fff
-    style BRAIN fill:#10b981,color:#fff
-    style CONS fill:#10b981,color:#fff
+    CHEFE --> SOL
+    MOTORS --> SOL
+    SOL --> HERMES
+    SOL --> WRITER
+    HERMES --> WRITER
+    WRITER --> VERIFY
+    VERIFY --> GIT
+    GIT --> REAL
+    REAL --> SOL
 ```
 
----
+Regras representadas:
 
-## 2. Pipeline de Memória — Os 3 Agentes Autônomos
+```text
+MODELO != PAPEL
+PAPEL != AUTORIDADE
+PARALELIZE_PERCEPCAO
+SERIALIZE_MUTACAO
+ONE_WRITER_PER_SCOPE=true
+```
+
+## 2. Refinaria cognitiva causal
 
 ```mermaid
-sequenceDiagram
-    participant CRON as ⏰ Cron
-    participant S1 as 🔍 Stage 1<br/>Scout
-    participant S2 as 🧠 Stage 2<br/>Analyst
-    participant S3 as 🔧 Stage 3<br/>Executor
-    participant VAULT as 📓 Vault<br/>(BRAIN + CONSCIENCIA)
-    participant GH as 🐙 GitHub
-    participant TG as 📱 Telegram
+flowchart TD
+    MAT["Materia-prima"]
+    EXTRACT["Extrair capacidade"]
+    COMPARE["Comparar com canonico"]
+    SAME{"Ja existe?"}
+    DROP["DROP_DUPLICATION"]
+    DELTA["Extrair delta / provar gap"]
+    ANGLES["Triangular angulos uteis"]
+    INFO{"Information gain?"}
+    STOP["STOP / NO_CHANGE"]
+    CAUSE["Causa geradora"]
+    COUNTER["Contraprova"]
+    OWNER["Dono + consumidor evidenciados"]
+    GOLD["Absorver ouro"]
+    PROV["Preservar proveniencia<br/>remover dependencia da fonte"]
 
-    CRON->>S1: toda hora (timer aleatório)
-    S1->>VAULT: varre notas
-    S1->>S1: detecta gaps<br/>(sem frontmatter, sem links,<br/>órfãs, isoladas)
-    
-    alt gaps encontrados
-        S1->>S2: escreve last-report.json
-        S1->>TG: notifica Pivete
-        CRON->>S2: 15 min depois
-        S2->>S2: classifica<br/>CRÍTICO / ALTO / AUTO-FIX
-        S2->>S3: escreve analyst-decision.json
-        CRON->>S3: 14 min depois
-        S3->>VAULT: corrige AUTO-FIX<br/>(adiciona frontmatter,<br/>seção Conexões Rápidas)
-        S3->>GH: commit + push automático
-        S3->>TG: "✅ X gaps corrigidos"
-    else sem gaps
-        S1->>S1: silêncio (não notifica)
-    end
+    MAT --> EXTRACT --> COMPARE --> SAME
+    SAME -->|igual| DROP
+    SAME -->|parcial ou novo| DELTA
+    DELTA --> ANGLES --> INFO
+    INFO -->|nao| STOP
+    INFO -->|sim| CAUSE --> COUNTER --> OWNER --> GOLD --> PROV
 ```
 
----
+```text
+FONTE = PROVENIENCIA
+CAPACIDADE = VALOR
+PROVA = FILTRO
+OURO = ABSORCAO
+```
 
-## 3. Sincronia 4-Point — A Lei do Sistema
+## 3. Memory Linker — pipeline canônico atual
+
+```mermaid
+flowchart TD
+    SCOUT["Scout<br/>mede gaps"]
+    FP["delta-core<br/>normaliza + fingerprint"]
+    GAIN{"Fingerprint mudou?"}
+    MSTOP["NO_NEW_INFORMATION<br/>nao regrava / nao acorda proxima etapa"]
+    REPORT["last-report.json"]
+    ANALYST["Analyst<br/>classifica delta"]
+    DECISION["analyst-decision.json"]
+    EXEC["Executor<br/>auto-fix documental seguro"]
+    SAFE["fs-safe<br/>raiz fisica + symlink guard + escrita atomica"]
+    RECEIPT["Receipt factual<br/>arquivo / commit / push separados"]
+    DREAM["Dream Review<br/>candidate ou quarantine"]
+    ML["MetaLupa + dono + consumidor + TOOL_MEASURED"]
+    AW["Writer autorizado"]
+
+    SCOUT --> FP --> GAIN
+    GAIN -->|nao| MSTOP
+    GAIN -->|sim| REPORT --> ANALYST --> DECISION --> EXEC --> SAFE --> RECEIPT
+    DREAM --> ML --> AW
+```
+
+Não há claim aqui sobre scheduler, PM2, Telegram ou VPS corrente. Sem medição física recente:
+
+```text
+SCHEDULE=UNPROVEN
+RUNTIME_TOPOLOGY=UNPROVEN
+```
+
+## 4. Evolução verificável e autoaplicação
 
 ```mermaid
 flowchart LR
-    subgraph P1["Ponto 1"]
-        VPS["🖥️ VPS\n/root/CentralDark/"]
-    end
-    subgraph P2["Ponto 2"]
-        GH["🐙 GitHub\nServerVpss/CentralDark"]
-    end
-    subgraph P3["Ponto 3"]
-        OBS["📓 Obsidian\ndocs/BRAIN + CONSCIENCIA"]
-    end
-    subgraph P4["Ponto 4"]
-        MEM["🧠 Memória das IAs\n.claude/ + CLAUDE.md"]
-    end
+    PERCEIVE["Perceber melhor"]
+    COMPRESS["Carregar menos"]
+    PROVE["Provar melhor"]
+    ACT["Agir melhor"]
+    LEARN["Aprender melhor"]
+    BEFORE["BEFORE"]
+    CHANGE["DELTA"]
+    AFTER["AFTER"]
+    TEST["TEST + COUNTERPROOF + EVIDENCE"]
+    RESULT{"Fitness delta real?"}
+    EVOLVE["EVOLUTION_PROVEN"]
+    NOCHANGE["NO_CHANGE / NO_EVOLUTION"]
 
-    VPS <-->|"git push/pull"| GH
-    GH <-->|"Obsidian Git\nauto-pull 10min"| OBS
-    VPS <-->|"arquivos = vault"| OBS
-    MEM <-->|"leitura obrigatória"| GH
-    MEM <-->|"contexto"| VPS
-
-    REGRA["⚠️ Nenhuma mudança\né concluída até os\n4 pontos estarem\nsincronizados"]
-
-    style REGRA fill:#ef4444,color:#fff,stroke:#dc2626
-    style VPS fill:#0ea5e9,color:#fff
-    style GH fill:#24292e,color:#fff
-    style OBS fill:#10b981,color:#fff
-    style MEM fill:#8b5cf6,color:#fff
+    PERCEIVE --> COMPRESS --> PROVE --> ACT --> LEARN --> PERCEIVE
+    BEFORE --> CHANGE --> AFTER --> TEST --> RESULT
+    RESULT -->|sim| EVOLVE
+    RESULT -->|nao| NOCHANGE
 ```
 
----
+```text
+META(X) = X APLICA A PROPRIA LEI SOBRE X
+EVOLUTION = MEASURABLE_FITNESS_DELTA
+EVOLUTION_REQUIRED != CHANGE_REQUIRED
+```
 
-## 4. Arsenal de Skills — Mapa de Chamada
+## 5. Proveniência temporal — nome não atravessa o tempo sozinho
 
 ```mermaid
 flowchart TD
-    PIVETE(["👤 Pivete fala..."])
+    LABEL["Nome / rotulo"]
+    TIME["Periodo / event time"]
+    CONTEXT["Contexto social ou tecnico"]
+    USE["Uso contemporaneo"]
+    RECEPTION["Recepcao / interpretacao"]
+    EVIDENCE["Evidencia"]
+    CONTINUITY{"Continuidade provada?"}
+    SAMECAP["Comparacao de capacidade/linhagem permitida"]
+    UNPROVEN["UNPROVEN<br/>nao retroprojetar categoria"]
 
-    PIVETE -->|"Grava aí / Anota"| MR["🧠 MEMORY-REGISTRAR"]
-    PIVETE -->|"Detetive / Investiga o grafo"| GI["🔍 GRAPH-INVESTIGATOR"]
-    PIVETE -->|"Liga tudo / Conecta"| SL["🔗 SEMANTIC-LINKER"]
-    PIVETE -->|"Audita tudo / Varredura"| SW["🕵️ SWARM-INVESTIGADOR"]
-    PIVETE -->|"Acha o bug / Investiga código"| CI["🐛 CODE-INVESTIGATOR"]
-    PIVETE -->|"Registra a decisão"| DR["📌 DECISION-RECORDER"]
-    PIVETE -->|"Forja / Melhora o prompt"| PE["✨ PROMPT-ENGINEER"]
-    PIVETE -->|"Revisão do dia"| DV["📋 DAILY-REVIEWER"]
-    PIVETE -->|"Analisa as issues"| IA["🐙 ISSUE-ANALYZER"]
-    PIVETE -->|"Revisa a arquitetura"| AR["🏗️ ARCHITECTURE-REVIEWER"]
-
-    MR --> BRAIN["📓 BRAIN vault"]
-    DR --> CONS["📋 08-HISTORICO-DECISOES"]
-    GI --> BRAIN
-    SL --> BRAIN
-    SW --> BRAIN
-    CI --> VPS["🖥️ VPS / código"]
-    PE --> CHAT["💬 resposta no chat"]
-    DV --> BRAIN
-    IA --> GH["🐙 GitHub issues"]
-    AR --> CONS
-
-    style PIVETE fill:#6366f1,color:#fff
-    style BRAIN fill:#10b981,color:#fff
-    style CONS fill:#10b981,color:#fff
-    style GH fill:#24292e,color:#fff
-    style VPS fill:#0ea5e9,color:#fff
+    LABEL --> TIME --> CONTEXT --> USE --> RECEPTION --> EVIDENCE --> CONTINUITY
+    CONTINUITY -->|sim| SAMECAP
+    CONTINUITY -->|nao| UNPROVEN
 ```
 
----
+```text
+SAME_NAME_ACROSS_TIME != SAME_MEANING
+SAME_LABEL != SAME_LINEAGE
+```
 
-## Conexões Rápidas
+## Regra de manutenção deste artefato
 
-- [[MAPA-DO-CEREBRO]] — visão geral textual do sistema
-- [[00-AGENTS-INDEX]] — arsenal de skills
-- [[00-LEIA-PRIMEIRO]] — regras para IAs
-- [[BRAIN]] — raiz do vault
+```text
+CANONICO_MUDOU_ESTRUTURALMENTE
+→ atualizar este arquivo existente
+→ conferir contra os donos canônicos
+→ validar Mermaid quando houver parser/renderer aplicável
+→ discrepância vira matéria-prima
+
+SEM_DELTA_ESTRUTURAL
+→ NO_ARTIFACT_CHANGE
+```

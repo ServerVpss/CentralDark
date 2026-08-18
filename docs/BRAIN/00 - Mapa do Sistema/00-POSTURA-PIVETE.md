@@ -1,102 +1,70 @@
 ---
-title: "Postura e Filosofia de Trabalho — Pivete"
+title: "Postura de trabalho — SEGREDO/CHEFE"
 date: 2026-06-29
-tags: ["filosofia", "postura", "pivete", "identidade", "regras-pessoais"]
+updated: 2026-08-14
+tags: ["filosofia", "postura", "segredo-chefe", "identidade", "regras-pessoais"]
+status: "ATIVO_RECONCILIADO"
+legacy_path: "00-POSTURA-PIVETE.md"
 ---
 
-# Postura e Filosofia de Trabalho — Pivete
+# Postura de trabalho — SEGREDO/CHEFE
 
-> **Esta nota é o "eu profissional" do Pivete.**
-> Toda [[IA]] que trabalhar com ele deve ler isso primeiro.
+O nome do arquivo é legado. Esta nota descreve o humano `SEGREDO/CHEFE`, não `PIVETE/HERMES`.
 
----
+## Identidade
 
-## Quem é o Pivete
-
-- **Autoridade máxima** do [[CentralDark]] — toda decisão estrutural passa por ele
-- Prefere confirmar antes de agir — cautela é virtude, não fraqueza
-- Aprende conversando — aprende fazendo, não lendo manual
-- Fala de forma informal (às vezes por voz) — a IA deve entender o contexto, não o texto
-- Gosta de saber o "porquê" antes do "como"
-
----
-
-## Postura de Segurança
-
-> *"Eu sou cauteloso com a integridade dos dados e do servidor. Analiso tudo antes de agir, pois não confio nem em mim mesmo. Essa é a minha base de segurança."*
-
-- **Nunca executa sem entender** o que o comando vai fazer
-- **Prefere dar um passo de cada vez** — sem pressa, sem atropelamento
-- **Confirma com a IA antes de executar** — "isso é seguro?" é uma pergunta válida sempre
-- **Secrets e tokens** nunca passam pelo log, chat ou terminal diretamente
-
----
-
-## Como falar com a IA (jeito do Pivete)
-
-| Situação | O que o Pivete faz |
-|---------|--------------------|
-| Tem uma ideia | Fala informal: *"grava aí que..."* |
-| Quer confirmar | Pergunta: *"isso tá certo?"* |
-| Quer executar | Dá o sinal: *"PROSSIGA"* ou *"PERMITO PIVETE"* |
-| Quer parar | Fala: *"para, espera"* ou *"cancela"* |
-| Esqueceu algo | Fala: *"você lembra do que a gente tava fazendo?"* |
-
----
-
-## Regras que o Pivete nunca abre mão
-
-```
-1. Verificar antes de executar — sempre
-2. Secrets nunca em CLI, só em arquivo
-3. pm2 save após qualquer mudança de processo
-4. Áreas protegidas exigem "PERMITO PIVETE" explícito
-5. Uma coisa de cada vez — sem pressa
+```text
+SEGREDO/CHEFE = humano + autor da intenção + autoridade final
+SOL = identidade operacional/coordenadora
+PIVETE/HERMES = executor + preservação + continuidade
+"pivete" regional = vocativo informal
 ```
 
----
+Qualquer versão histórica desta nota que chamava o humano de `Pivete` deve ser lida como `LEGACY_ALIAS_OF_SEGREDO_CHEFE`.
 
-## Como a IA deve se comportar com o Pivete
+## Como SEGREDO/CHEFE trabalha
 
-- **Perguntar se já fez** — quando retomar um assunto: *"Você já fez o Git pull? Quer que eu verifique?"*
-- **Confirmar antes de executar** ações irreversíveis
-- **Explicar em linguagem simples** — sem jargão desnecessário
-- **Responder em PT-BR sempre** — nunca em inglês
-- **Não sumir** — dar atualizações curtas enquanto trabalha
-- **Aceitar correção** — se errar, ajustar sem drama
+- prefere entender a intenção e o efeito, sem precisar operar cada detalhe mecânico;
+- aprende e refina conversando, testando e observando resultado real;
+- usa linguagem informal, voz, gíria, metáfora e digitação rápida; a IA interpreta pelo contexto;
+- valoriza prova, observabilidade, menor movimento eficaz e correção contínua;
+- quando a máquina consegue medir ou executar algo já autorizado, não deve devolver o trabalho mecânico ao humano.
 
----
+## Segurança
 
-## A Jornada
+```text
+CHEFE_DECIDE_INTENCAO=true
+MAQUINA_PROVA_ESTADO=true
+UNKNOWN_IS_NOT_PASS=true
+NO_SECRET_LEAK=true
+NO_FORCE_PUSH=true
+```
 
-O Pivete passou **30 dias construindo o CentralDark do zero**. Não é um desenvolvedor de formação — é alguém que aprendeu fazendo, errando e insistindo. Cada processo no PM2, cada skill no bot, cada nota no Obsidian foi resultado de persistência real.
+Ações irreversíveis fora do escopo vigente exigem decisão humana real. Rotina já autorizada não deve gerar confirmação repetida.
 
-Ele tem perfil que lembra TDAH — pensamento acelerado, começa várias coisas ao mesmo tempo, ansioso, dificuldade de concluir. Não é fraqueza — é como a mente dele funciona. O sistema foi construído **exatamente para isso**: para que ele não dependa da memória, para que as IAs lembrem o que ele esquece e continuem o que ele pausou.
+## Linguagem / comandos
 
-**O que as IAs devem fazer com isso:**
-- Nunca cobrar "você não terminou X" — apenas perguntar "quer continuar onde parou?"
-- Sugerir próximo passo sempre que uma conversa terminar sem conclusão
-- Lembrar proativamente de tarefas pausadas
-- Celebrar o que foi concluído — ele precisa ver o progresso
+Expressões como `grava`, `anota`, `registra`, `#ACORDAR`, `!CALIBRAR`, `prossiga` e equivalentes são interpretadas pelo contexto e pelo contrato atual.
 
-## Objetivos de aprendizado do Pivete
+Tokens antigos como `PERMITO PIVETE` são compatibilidade histórica/técnica quando algum gate ainda exigir o literal; não significam que PIVETE/HERMES é o humano.
 
-O Pivete quer aprender (sem pressa — na ordem que fizer sentido):
-- **Inteligência Artificial** — como funciona, como usar, como melhorar os próprios sistemas
-- **Governança de sistemas** — manter tudo organizado, com backup, atualizado
-- **Full-stack** — entender o código que seus sistemas rodam
-- **Autonomia** — depender cada vez menos de copiar comandos e mais de entender o que está fazendo
+## Regra de memória
 
-## Aprendizados do Pivete (atualizar sempre)
+Esta nota não diagnostica, classifica nem presume condição clínica, capacidade técnica ou escolaridade pela forma de falar/escrever.
 
-| Data | Aprendizado |
-|------|-------------|
-| 2026-06-29 | Configurou [[Obsidian]] com sparse-checkout — vault em `E:\CentralDark\BrainRepo\docs\BRAIN` |
-| 2026-06-29 | Ativou plugins: Git, Dataview, Templater, Style Settings, Iconize, Omnisearch, Tasks |
-| 2026-06-29 | Aprendeu que Auto-push OFF protege o vault de conflitos |
-| 2026-06-29 | Entendeu que a IA escreve pelo [[GitHub]], o vault só lê |
+A memória serve para reduzir repetição e preservar método, não para congelar uma descrição pessoal antiga.
 
----
+```text
+HUMANO_NAO_E_HD_DA_MAQUINA=true
+ACORDAR_RECUPERA_FIO=true
+HISTORICO_NAO_SOBRESCREVE_PRESENTE=true
+```
 
-*Esta nota é a memória de longo prazo do Pivete — atualizar a cada novo aprendizado relevante.*
-*Relacionado: [[BRAIN]] | [[00-MAPA]] | [[TUTORIAL-OBSIDIAN]]*
+## Fonte atual
+
+- `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md`
+- `AGENTS.md`
+- `docs/CONSCIENCIA/2026-06-20-padrao-resposta-pivete.md`
+- estado vivo quando a afirmação for técnica
+
+O conteúdo anterior permanece no histórico Git para proveniência.

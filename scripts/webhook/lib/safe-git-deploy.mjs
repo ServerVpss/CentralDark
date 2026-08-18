@@ -1,13 +1,11 @@
-// Helper compartilhado: `git reset --hard origin/<branch>` seguro contra perda de trabalho local.
+// Helper compartilhado de atualização Git para runtime/deploy.
 //
-// Um `git reset --hard origin/main` cego apaga dois tipos de trabalho local:
-//   1. Alterações NÃO-commitadas (working tree / index) -> protegidas com `git stash` + `pop`.
-//   2. Commits locais AINDA NÃO enviados ao remote        -> protegidos com uma branch de backup.
-//      (Atenção: `git stash` NÃO salva commits — só o backup-branch protege esse caso,
-//       que foi exatamente o que quase perdeu o Elite Mapper.)
+// Princípio:
+//   FETCH -> OBSERVAR -> COMPARAR -> APLICAR SOMENTE FAST-FORWARD -> VERIFICAR.
 //
-// Em conflito ao reaplicar o stash: mantém o stash salvo, restaura a árvore limpa
-// (pra não quebrar o build) e registra aviso. Nunca lança erro que pare o deploy.
+// O helper NÃO usa `git reset --hard`, NÃO faz stash automático e NÃO reescreve
+// histórico. Trabalho local, branch divergente, HEAD destacado ou rewrite remoto
+// bloqueiam a atualização e ficam preservados para reconciliação explícita.
 
 import { execFile } from 'child_process';
 
@@ -23,89 +21,149 @@ function git(args, cwd) {
   });
 }
 
-function timestamp() {
-  // 2026-06-25_14-03-09
-  return new Date().toISOString().replace('T', '_').replace(/\..+$/, '').replace(/:/g, '-');
+function sanitizeGitOutput(value) {
+  return String(value || '')
+    .replace(/https:\/\/[^\s/@:]+:[^\s/@]+@/gi, 'https://[REDACTED]@')
+    .replace(/\bBearer\s+[^\s]+/gi, 'Bearer [REDACTED]')
+    .replace(/\b(?:gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,})\b/g, '[REDACTED]')
+    .slice(0, 900);
+}
+
+function result({ ok, reason = null, changed = false, localSha = null, remoteSha = null, repoRoot = null }) {
+  return { ok, reason, changed, localSha, remoteSha, repoRoot };
 }
 
 /**
- * Atualiza `repoPath` para `origin/<branch>` sem perder trabalho local.
+ * Atualiza o branch local para `origin/<branch>` somente quando a transição é
+ * um fast-forward limpo e verificável.
  *
  * @param {object} o
- * @param {string} o.repoPath        caminho do repositório
- * @param {string} [o.branch='main'] branch remota
+ * @param {string} o.repoPath caminho dentro do repositório
+ * @param {string} [o.branch='main'] branch remota/local esperada
  * @param {(msg:string)=>void} o.log função de log
- * @returns {Promise<{ok:boolean, stashed:boolean, stashConflict:boolean, backupRef:string|null}>}
+ * @returns {Promise<{ok:boolean,reason:string|null,changed:boolean,localSha:string|null,remoteSha:string|null,repoRoot:string|null}>}
  */
-export async function safeResetToOrigin({ repoPath, branch = 'main', log }) {
-  const ts = timestamp();
-  log(`[safe-deploy] atualização segura de ${repoPath} -> origin/${branch}`);
+export async function safeUpdateFromOrigin({ repoPath, branch = 'main', log = () => {} }) {
+  const branchCheck = await git(['check-ref-format', '--branch', branch], repoPath);
+  if (branchCheck.code !== 0) {
+    log(`[safe-git] BLOCKED invalid branch: ${sanitizeGitOutput(branch)}`);
+    return result({ ok: false, reason: 'INVALID_BRANCH' });
+  }
 
-  // 0. Buscar o estado remoto.
-  const fetch = await git(['fetch', 'origin', branch], repoPath);
+  const top = await git(['rev-parse', '--show-toplevel'], repoPath);
+  if (top.code !== 0 || !top.stdout) {
+    log(`[safe-git] BLOCKED not a git repository: ${sanitizeGitOutput(top.stderr || top.stdout)}`);
+    return result({ ok: false, reason: 'NOT_A_GIT_REPOSITORY' });
+  }
+  const repoRoot = top.stdout;
+  log(`[safe-git] observar ${repoRoot} -> origin/${branch}`);
+
+  const currentBranch = await git(['symbolic-ref', '--quiet', '--short', 'HEAD'], repoRoot);
+  if (currentBranch.code !== 0 || !currentBranch.stdout) {
+    log('[safe-git] BLOCKED detached HEAD; nenhum estado foi sobrescrito');
+    return result({ ok: false, reason: 'DETACHED_HEAD', repoRoot });
+  }
+  if (currentBranch.stdout !== branch) {
+    log(`[safe-git] BLOCKED branch atual=${sanitizeGitOutput(currentBranch.stdout)} esperado=${sanitizeGitOutput(branch)}`);
+    return result({ ok: false, reason: 'BRANCH_MISMATCH', repoRoot });
+  }
+
+  // Observa a ponta remota em FETCH_HEAD sem sobrescrever primeiro a ref de
+  // rastreamento local. `--refmap=` desliga explicitamente o refmap configurado
+  // em remote.origin.fetch; sem isso o próprio fetch atualiza origin/<branch>
+  // antes da comparação e destrói a observação anterior usada para detectar
+  // rewrite remoto e para o compare-and-swap abaixo.
+  const remoteRef = `refs/remotes/origin/${branch}`;
+  const remoteBefore = await git(['rev-parse', '--verify', '--quiet', remoteRef], repoRoot);
+  const remoteBeforeSha = remoteBefore.code === 0 && remoteBefore.stdout ? remoteBefore.stdout : null;
+
+  const fetch = await git(['fetch', '--no-tags', '--refmap=', 'origin', `refs/heads/${branch}`], repoRoot);
   if (fetch.code !== 0) {
-    log(`[safe-deploy] ERRO no git fetch: ${fetch.stderr || fetch.stdout}`);
-    return { ok: false, stashed: false, stashConflict: false, backupRef: null };
+    log(`[safe-git] BLOCKED fetch falhou: ${sanitizeGitOutput(fetch.stderr || fetch.stdout)}`);
+    return result({ ok: false, reason: 'FETCH_FAILED', repoRoot });
   }
 
-  // 1. Commits locais não enviados? `reset --hard` os orfanaria; `stash` NÃO salva commits.
-  const ahead = await git(['rev-list', '--count', `origin/${branch}..HEAD`], repoPath);
-  const aheadCount = parseInt(ahead.stdout || '0', 10) || 0;
-  let backupRef = null;
-  if (aheadCount > 0) {
-    const ref = `backup-pre-deploy-${ts}`;
-    const b = await git(['branch', ref, 'HEAD'], repoPath);
-    if (b.code === 0) {
-      backupRef = ref;
-      log(`[safe-deploy] ⚠ ${aheadCount} commit(s) local(is) não enviado(s) — backup salvo na branch '${ref}'`);
-    } else {
-      log(`[safe-deploy] ⚠ ${aheadCount} commit(s) local(is) não enviado(s), mas FALHOU criar branch de backup: ${b.stderr}`);
+  const fetchedHead = await git(['rev-parse', '--verify', 'FETCH_HEAD'], repoRoot);
+  if (fetchedHead.code !== 0 || !fetchedHead.stdout) {
+    log('[safe-git] BLOCKED FETCH_HEAD não resolvido após observação remota');
+    return result({ ok: false, reason: 'REMOTE_REF_RESOLUTION_FAILED', repoRoot });
+  }
+  const remoteSha = fetchedHead.stdout;
+
+  if (remoteBeforeSha && remoteBeforeSha !== remoteSha) {
+    const remoteLineage = await git(['merge-base', '--is-ancestor', remoteBeforeSha, remoteSha], repoRoot);
+    if (remoteLineage.code !== 0) {
+      log(`[safe-git] BLOCKED REMOTE_REWRITE old=${remoteBeforeSha.slice(0, 12)} new=${remoteSha.slice(0, 12)}; estado local preservado`);
+      return result({ ok: false, reason: 'REMOTE_REWRITE', remoteSha, repoRoot });
     }
   }
 
-  // 2. Alterações não-commitadas (arquivos rastreados)? -> stash.
-  //    (arquivos não-rastreados sobrevivem ao reset --hard, então não precisam de stash)
-  const dirty = (await git(['diff-index', '--quiet', 'HEAD', '--'], repoPath)).code !== 0;
-  const stashMsg = `auto-stash-before-deploy-${ts}`;
-  let stashed = false;
-  if (dirty) {
-    const s = await git(['stash', 'push', '-m', stashMsg], repoPath);
-    if (s.code === 0) {
-      stashed = true;
-      log(`[safe-deploy] alterações locais não-commitadas detectadas — salvas em stash '${stashMsg}'`);
-    } else {
-      log(`[safe-deploy] ⚠ falha ao criar stash (${s.stderr || s.stdout}) — seguindo com o reset`);
-    }
+  // Só depois de provar que a nova observação não reescreve a linhagem anterior
+  // atualizamos a ref de rastreamento local, com compare-and-swap quando existe.
+  const trackingUpdate = remoteBeforeSha
+    ? await git(['update-ref', remoteRef, remoteSha, remoteBeforeSha], repoRoot)
+    : await git(['update-ref', remoteRef, remoteSha], repoRoot);
+  if (trackingUpdate.code !== 0) {
+    log(`[safe-git] BLOCKED tracking ref não atualizada: ${sanitizeGitOutput(trackingUpdate.stderr || trackingUpdate.stdout)}`);
+    return result({ ok: false, reason: 'REMOTE_TRACK_UPDATE_FAILED', remoteSha, repoRoot });
   }
 
-  // 3. Reset duro pro estado remoto.
-  const reset = await git(['reset', '--hard', `origin/${branch}`], repoPath);
-  if (reset.code !== 0) {
-    log(`[safe-deploy] ERRO no git reset --hard: ${reset.stderr || reset.stdout}`);
-    return { ok: false, stashed, stashConflict: false, backupRef };
+  // Fetch observa refs; só depois medimos se o working tree pode receber mutação.
+  const status = await git(['status', '--porcelain=v1', '--untracked-files=all'], repoRoot);
+  if (status.code !== 0) {
+    log(`[safe-git] BLOCKED status falhou: ${sanitizeGitOutput(status.stderr || status.stdout)}`);
+    return result({ ok: false, reason: 'STATUS_FAILED', remoteSha, repoRoot });
   }
-  log(`[safe-deploy] reset --hard origin/${branch} concluído (${reset.stdout || 'HEAD atualizado'})`);
-
-  // 4. Reaplicar o stash sobre a nova versão.
-  let stashConflict = false;
-  if (stashed) {
-    const pop = await git(['stash', 'pop'], repoPath);
-    if (pop.code === 0) {
-      log('[safe-deploy] stash reaplicado com sucesso sobre a nova versão');
-    } else {
-      // `git stash pop` em conflito NÃO descarta o stash: ele continua em `git stash list`.
-      stashConflict = true;
-      log('[safe-deploy] ⚠ CONFLITO ao reaplicar stash — restaurando árvore limpa pro build');
-      await git(['reset', '--hard', `origin/${branch}`], repoPath);
-      log(`[safe-deploy] ⚠ suas alterações locais foram PRESERVADAS no stash '${stashMsg}'. ` +
-          `Reaplique à mão: cd ${repoPath} && git stash list && git stash apply`);
-    }
+  if (status.stdout) {
+    log('[safe-git] BLOCKED working tree/index contém mudanças locais; preservado sem stash/reset');
+    return result({ ok: false, reason: 'DIRTY_WORKTREE', remoteSha, repoRoot });
   }
 
-  if (backupRef) {
-    log(`[safe-deploy] ⚠ lembrete: commits locais preservados em '${backupRef}'. ` +
-        `Recupere com: git -C ${repoPath} log ${backupRef}`);
+  const local = await git(['rev-parse', 'HEAD'], repoRoot);
+  if (local.code !== 0 || !local.stdout) {
+    log('[safe-git] BLOCKED não foi possível resolver HEAD local');
+    return result({ ok: false, reason: 'LOCAL_REF_RESOLUTION_FAILED', remoteSha, repoRoot });
+  }
+  const localSha = local.stdout;
+
+  if (localSha === remoteSha) {
+    log(`[safe-git] PASS já sincronizado HEAD=${localSha.slice(0, 12)}`);
+    return result({ ok: true, changed: false, localSha, remoteSha, repoRoot });
   }
 
-  return { ok: true, stashed, stashConflict, backupRef };
+  const counts = await git(['rev-list', '--left-right', '--count', `HEAD...${remoteSha}`], repoRoot);
+  const [aheadRaw, behindRaw] = String(counts.stdout || '').split(/\s+/);
+  const ahead = Number.parseInt(aheadRaw || '0', 10) || 0;
+  const behind = Number.parseInt(behindRaw || '0', 10) || 0;
+  if (counts.code !== 0) {
+    log(`[safe-git] BLOCKED comparação falhou: ${sanitizeGitOutput(counts.stderr || counts.stdout)}`);
+    return result({ ok: false, reason: 'COMPARE_FAILED', localSha, remoteSha, repoRoot });
+  }
+
+  if (ahead > 0) {
+    const reason = behind > 0 ? 'DIVERGED' : 'LOCAL_AHEAD';
+    log(`[safe-git] BLOCKED ${reason} ahead=${ahead} behind=${behind}; commits locais preservados`);
+    return result({ ok: false, reason, localSha, remoteSha, repoRoot });
+  }
+
+  const ancestry = await git(['merge-base', '--is-ancestor', 'HEAD', remoteSha], repoRoot);
+  if (ancestry.code !== 0) {
+    log('[safe-git] BLOCKED transição não é fast-forward; nenhum rewrite executado');
+    return result({ ok: false, reason: 'NON_FAST_FORWARD', localSha, remoteSha, repoRoot });
+  }
+
+  const merge = await git(['merge', '--ff-only', remoteSha], repoRoot);
+  if (merge.code !== 0) {
+    log(`[safe-git] BLOCKED ff-only falhou: ${sanitizeGitOutput(merge.stderr || merge.stdout)}`);
+    return result({ ok: false, reason: 'FAST_FORWARD_FAILED', localSha, remoteSha, repoRoot });
+  }
+
+  const verified = await git(['rev-parse', 'HEAD'], repoRoot);
+  if (verified.code !== 0 || verified.stdout !== remoteSha) {
+    log('[safe-git] BLOCKED pós-condição inválida: HEAD não coincide com remoto observado');
+    return result({ ok: false, reason: 'POSTCONDITION_FAILED', localSha, remoteSha, repoRoot });
+  }
+
+  log(`[safe-git] PASS fast-forward ${localSha.slice(0, 12)} -> ${remoteSha.slice(0, 12)}`);
+  return result({ ok: true, changed: true, localSha, remoteSha, repoRoot });
 }

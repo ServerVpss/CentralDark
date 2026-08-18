@@ -12,6 +12,8 @@ import { getCatalogSummary, CATALOG_VERSION } from "./tools/core/tools-catalog.j
 import { handleSkillsList, handleSkillManifest, handleSkillRaw, handleSkillInstaller, } from "./skills-public.js";
 import { correlationMiddleware, withCid } from "./correlation.js";
 import { healthDeep } from "./health-deep.js";
+import { startHubMissionConsumer } from "./hub-mission-consumer.js";
+import { providerAdminBridge } from "./provider-admin-bridge.js";
 import { adminGet, adminLogin, adminLogout, adminRotas, adminTools, adminLogsStream, adminTestarSse, adminBuscarLogs, adminMetricas, adminE2E, adminE2EPublico, bootstrapAdminLogCapture, } from "./admin.js";
 // ─────────────────────── Handlers globais de crash (v2.3) ───────────────────────
 // Captura QUALQUER erro não tratado com stack trace completo antes do PM2 matar.
@@ -55,6 +57,9 @@ function validarEnvsObrigatorias() {
 validarEnvsObrigatorias();
 // Captura logs pro buffer do painel /admin (deve rodar ANTES do primeiro log)
 bootstrapAdminLogCapture();
+// O consumer nasce somente no bootstrap explícito do processo. /health é puro
+// observador e importar o módulo não pode reclamar missão nem mutar estado.
+startHubMissionConsumer();
 const app = express();
 app.disable("x-powered-by");
 function setCorsHeaders(res) {
@@ -147,6 +152,7 @@ app.post("/admin/api/e2e", adminE2E);
 app.get("/admin/api/e2e/publico", adminE2EPublico);
 app.get("/admin/logs/stream", adminLogsStream);
 app.post("/admin/api/testar-sse", adminTestarSse);
+app.post("/admin/provider", providerAdminBridge);
 // Emissão administrativa de chave (autenticada por senha) — usada pelo painel
 // /admin (aba Chaves) e pelo fluxo "Entrar com GitHub" da Ponte MCP.
 app.post("/admin/api/issue-key", handleIssueKey);
@@ -592,5 +598,4 @@ app.listen(config.port, "127.0.0.1", () => {
     });
 });
 export { codeReviewerToolDefinition } from "./tools/code-reviewer.js";
-//# sourceMappingURL=index.js.map
 //# sourceMappingURL=index.js.map
