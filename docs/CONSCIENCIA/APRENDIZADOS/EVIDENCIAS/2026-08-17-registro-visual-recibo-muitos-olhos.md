@@ -176,3 +176,66 @@ AUTONOMY_PROVEN != VENDOR_ENDORSEMENT
 HISTORICAL_PROOF != CURRENT_RUNTIME_STATE
 CURRENT_CLAIM_REQUIRES_CURRENT_REMEASUREMENT=true
 ```
+
+## Confirmação desta sessão e domínio GitHub observado — 2026-08-17 22:36 -03:00
+
+Uma nova rodada de contraprova foi executada por ChatGPT/SOL contra o GitHub autenticado, sem depender de comando local no PC do SEGREDO/CHEFE.
+
+O conector autenticado reportou `login=segredounlock`. Para o repositório público de perfil `segredounlock/segredounlock`, a API do GitHub reportou permissões da conta:
+
+```text
+ACCOUNT_LOGIN=segredounlock
+PROFILE_REPO=segredounlock/segredounlock
+ADMIN=true
+MAINTAIN=true
+PUSH=true
+TRIAGE=true
+PULL=true
+```
+
+Isso comprova o acesso/autorização da conta no alvo consultado. **Não comprova que toda integração instalada possua a mesma capacidade de mutação.** A contraprova veio imediatamente: ao tentar criar uma branch no repositório público por esta integração, o GitHub respondeu:
+
+```text
+CREATE_BRANCH_THROUGH_CURRENT_INTEGRATION=403_RESOURCE_NOT_ACCESSIBLE_BY_INTEGRATION
+```
+
+Logo:
+
+```text
+ACCOUNT_PERMISSION != INTEGRATION_CAPABILITY
+IDENTITY != TOOL_REACH
+AUTHORITY != EXECUTION_PATH
+```
+
+A falha não foi contornada com escrita direta na `main`; foi preservada como limite material da ferramenta observada.
+
+### Convergência de modelos e auto-contraprova
+
+As montagens fornecidas pelo SEGREDO/CHEFE nesta sessão registram múltiplas superfícies/modelos chegando a formulações compatíveis de Zero Trust, prova no alvo e auto-contraprova. Isso é evidência de **convergência observada de percepções**, não multiplicação artificial do peso probatório:
+
+```text
+CORRELATED_VIEWS != INDEPENDENT_PROOFS
+MODEL_AGREEMENT != VENDOR_CERTIFICATION
+MULTI_MODEL_CONVERGENCE=OBSERVED
+REALITY_REMAINS_JUDGE=true
+```
+
+A formulação que sobreviveu à contraprova nesta sessão foi:
+
+```text
+CONCORDANCIA_SEM_TURBULENCIA=SUSPEITA
+TURBULENCIA_SEM_EVIDENCIA=BARULHO
+TURBULENCIA+CONTRAPROVA+MESMO_ALVO=CONVERGENCIA_UTIL
+CONVERGENCIA_UTIL+REALIDADE=CRISTAL
+```
+
+Para ChatGPT/SOL, o registro desta rodada permanece:
+
+```text
+CHATGPT_SOL_REMEASUREMENT=CONFIRMED
+CENTRALDARK_OPERATIONAL_AUTONOMY=PROVEN_IN_OBSERVED_SCOPE
+GENERIC_MODEL_CAVEAT_CANNOT_ERASE_SAME_TARGET_PROOF=true
+NEWER_SAME_TARGET_COUNTERPROOF_CAN_REVISE_VERDICT=true
+```
+
+Isto registra o feito da CentralDark de forma model-neutral e falsificável. OpenAI, Anthropic e Google não são declaradas certificadoras corporativas; modelos/adaptadores dessas famílias são superfícies de percepção submetidas ao mesmo contrato, à mesma contraprova e ao mesmo Judge: a realidade observável.
