@@ -87,7 +87,7 @@
         "🧬 aplicar bússolas + META(X) + MetaLupa + Menos É Mais",
         "🔁 revisão revisitada T0→TΔ→T1",
         "🩹 reaplicar somente cone causal afetado",
-        "✅ fixed point"
+        "🎯 fixed point local"
       ],
       "directions": [
         { "symbol": "↖", "name": "TRANSVERSAL NO", "description": "Evidência lateral → causa/owner alternativo." },
@@ -102,18 +102,18 @@
         { "symbol": "↔", "name": "ROUND-TRIP", "description": "Ida e volta: intenção↔implementação, claim↔prova, antes↔depois." }
       ],
       "compasses": [
-        "🧪 científica",
-        "⚙️ causal",
-        "⏳ temporal T0→TΔ→T1",
-        "🌐 espacial",
-        "🌌 astrofísica/referencial",
-        "🌙 Lua/propagação",
-        "🌍 multirregional",
-        "☠️ pirata/adversarial",
-        "🔗 dependências/impacto",
-        "🧱 multicamada",
-        "🧩 multimaterial",
-        "🧠 metacognitiva"
+        "científica",
+        "causal",
+        "temporal T0→TΔ→T1",
+        "espacial",
+        "astrofísica/referencial",
+        "Lua/propagação",
+        "multirregional",
+        "pirata/adversarial",
+        "dependências/impacto",
+        "multicamada",
+        "multimaterial",
+        "metacognitiva"
       ],
       "buttons": [
         { "id": "copy", "label": "Copiar gatilho", "icon": "📋", "effect": "Copia !MULTIBUSSOLA para uso em uma superfície CentralDark." },
