@@ -8,7 +8,7 @@ const lastSent = new Map();
 const LEVEL_ICONS = Object.freeze({
   critical: '🔴',
   warning: '🟡',
-  info: '🟢',
+  info: '',
   deploy: '🚀',
   maintenance: '🛠️',
   git: '🔄',
@@ -32,8 +32,9 @@ module.exports = {
     if (now - (lastSent.get(key) || 0) < THROTTLE_MS) return { ok: false, error: 'throttled' };
     lastSent.set(key, now);
 
-    const emoji = LEVEL_ICONS[level] || LEVEL_ICONS.info;
-    const parts = [`${emoji} <b>${esc(title)}</b>`, '', esc(message)];
+    const emoji = LEVEL_ICONS[level] ?? LEVEL_ICONS.info;
+    const heading = emoji ? `${emoji} <b>${esc(title)}</b>` : `<b>${esc(title)}</b>`;
+    const parts = [heading, '', esc(message)];
 
     for (const [k, v] of Object.entries(fields)) {
       if (v) parts.push(`<b>${esc(k)}:</b> <code>${esc(v)}</code>`);
