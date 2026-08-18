@@ -134,21 +134,21 @@
     "CANCELLED_NE_PASS": true
   },
   "boot": [
-    "📍 ACORDAR_MEASURE_LIVE_STATE",
-    "🎯 CALIBRAR_RECOVER_INTENT_SCOPE_AUTHORITY",
-    "🧭 MULTIBUSSOLA_COUNTERPROVE"
+    "ACORDAR_MEASURE_LIVE_STATE",
+    "CALIBRAR_RECOVER_INTENT_SCOPE_AUTHORITY",
+    "MULTIBUSSOLA_COUNTERPROVE"
   ],
   "execution_loop": [
-    "🧠 THINK",
-    "🛠️ ACT",
-    "👀 OBSERVE",
-    "🔄 UPDATE_STATE",
-    "🧪 COUNTERPROVE",
-    "🩹 REMEDY",
-    "📏 REMEASURE",
-    "✅ FIXED_POINT",
-    "🧾 RECEIPT",
-    "⏭️ CONTINUITY"
+    "THINK",
+    "ACT",
+    "OBSERVE",
+    "UPDATE_STATE",
+    "COUNTERPROVE",
+    "REMEDY",
+    "REMEASURE",
+    "FIXED_POINT",
+    "RECEIPT",
+    "CONTINUITY"
   ],
   "counterproof_transition": {
     "CONCLUSION_SURVIVED": "CONTINUE_SMALLEST_MATERIAL_DELTA",
