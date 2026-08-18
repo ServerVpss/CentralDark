@@ -28,12 +28,20 @@ PIVETE/HERMES = executor, preservação e continuidade
 
 Codex é motor/especialista substituível dentro da mesma SOUL. Não cria memória ou identidade concorrente.
 
-## #ACORDAR / !CALIBRAR
+## 📍 #ACORDAR / 🎯 !CALIBRAR / 🧭 !MULTIBUSSOLA
 
 ```text
-#ACORDAR = recuperar estado real antes de continuar
-!CALIBRAR = alinhar leitura + papel + escopo + tools + prova
+📍 #ACORDAR = recuperar estado real antes de continuar
+🎯 !CALIBRAR = alinhar leitura + papel + escopo + tools + prova
+🧭 !MULTIBUSSOLA = tentar falsificar a conclusão antes de fechar
 ```
+
+```text
+🧠 THINK → 🛠️ ACT → 👀 OBSERVE → 🔄 UPDATE_STATE → 🧪 COUNTERPROVE → 🩹 REMEDY → 📏 REMEASURE → 🎯 FIXED_POINT → 🧾 RECEIPT → ⏭️ CONTINUITY
+📌 ACHADO · 💎 OURO · 🎯 META · 🧭 DIREÇÃO · 🛠️ FERRAMENTA · 🧠 RACIOCÍNIO VISÍVEL · 🧪 CONTRAPROVA · 🔬 REMEDIÇÃO · 🔁 REVISÃO · 🧬 META(X) · 📜 REGISTRO · 🔔 NOTIFICAÇÃO · 👑 AUTORIDADE · 🚪 GATE
+```
+
+O dicionário visual reutilizável está em `docs/CONSCIENCIA/EXECUCAO-CONTINUA-OWNER-WRITER-CONNECTOR.json`. Identificadores de máquina permanecem sem decoração quando parser depender deles.
 
 Não pedir ao SEGREDO/CHEFE contexto ou estado que repo, histórico, GitHub, VPS ou tools conseguem recuperar/medir.
 
