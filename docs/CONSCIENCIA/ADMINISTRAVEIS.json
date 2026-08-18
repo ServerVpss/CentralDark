@@ -20,18 +20,18 @@
       "kind": "command",
       "status": "CANONICAL",
       "administrable": true,
-      "glyph": "⏱️",
+      "glyph": "📍",
       "command": "#ACORDAR",
       "aliases": ["#ACORDA"],
       "purpose": "Recuperar o estado real antes de continuar e retomar do ponto verdadeiro.",
       "owner": "LEIA-ME-IA.md",
       "trigger_help": "Digite #ACORDAR (ou #ACORDA) em uma superfície que carregue o contrato CentralDark. O comando recupera estado, não inventa contexto.",
       "flow": [
-        "carregar SOUL e governança",
-        "recuperar histórico aplicável",
-        "medir branch/HEAD/PR/Writer/tools/runtime aplicáveis",
-        "reconciliar divergências",
-        "continuar do ponto real"
+        "📍 carregar SOUL e governança",
+        "👀 recuperar histórico aplicável",
+        "📏 medir branch/HEAD/PR/Writer/tools/runtime aplicáveis",
+        "🔄 reconciliar divergências",
+        "⏭️ continuar do ponto real"
       ],
       "buttons": [
         { "id": "copy", "label": "Copiar gatilho", "icon": "📋", "effect": "Copia #ACORDAR para a área de transferência." },
@@ -52,11 +52,11 @@
       "owner": "LEIA-ME-IA.md",
       "trigger_help": "Digite !CALIBRAR. Quando usado com #ACORDAR, primeiro recupera o estado e depois calibra a leitura do alvo.",
       "flow": [
-        "resolver intenção e linguagem",
-        "confirmar autoridade/escopo",
-        "cruzar capacidades/owners/reuso",
-        "falsificar prova/risco/false green",
-        "ajustar frequência/engine/custo/latência"
+        "🎯 resolver intenção e linguagem",
+        "👑 confirmar autoridade/escopo",
+        "🛠️ cruzar capacidades/owners/reuso",
+        "🧪 falsificar prova/risco/false green",
+        "📏 ajustar frequência/engine/custo/latência"
       ],
       "buttons": [
         { "id": "copy", "label": "Copiar gatilho", "icon": "📋", "effect": "Copia !CALIBRAR para a área de transferência." },
@@ -81,13 +81,13 @@
       "owner": "docs/CONSCIENCIA/MULTIBUSSOLA.md",
       "trigger_help": "Digite !MULTIBUSSOLA sozinho ou junto de #ACORDAR/!CALIBRAR. Nome falado: Multi Bússola (MÚL-ti BÚS-so-la). Meta Bússola significa a aplicação META_MULTIBUSSOLA e não é um novo comando. Todos os eixos são considerados; os eixos materiais são executados e skips exigem razão.",
       "flow": [
-        "recuperar/calibrar quando aplicável",
-        "percorrer eixos materiais",
-        "rendezvous ✣ / dedupe / conflito / causalidade",
-        "aplicar bússolas + META(X) + MetaLupa + Menos É Mais",
-        "revisão revisitada T0→TΔ→T1",
-        "reaplicar somente cone causal afetado",
-        "fixed point"
+        "📍 recuperar/calibrar quando aplicável",
+        "🧭 percorrer eixos materiais",
+        "✣ rendezvous / dedupe / conflito / causalidade",
+        "🧬 aplicar bússolas + META(X) + MetaLupa + Menos É Mais",
+        "🔁 revisão revisitada T0→TΔ→T1",
+        "🩹 reaplicar somente cone causal afetado",
+        "✅ fixed point"
       ],
       "directions": [
         { "symbol": "↖", "name": "TRANSVERSAL NO", "description": "Evidência lateral → causa/owner alternativo." },
@@ -102,18 +102,18 @@
         { "symbol": "↔", "name": "ROUND-TRIP", "description": "Ida e volta: intenção↔implementação, claim↔prova, antes↔depois." }
       ],
       "compasses": [
-        "científica",
-        "causal",
-        "temporal T0→TΔ→T1",
-        "espacial",
-        "astrofísica/referencial",
-        "Lua/propagação",
-        "multirregional",
-        "pirata/adversarial",
-        "dependências/impacto",
-        "multicamada",
-        "multimaterial",
-        "metacognitiva"
+        "🧪 científica",
+        "⚙️ causal",
+        "⏳ temporal T0→TΔ→T1",
+        "🌐 espacial",
+        "🌌 astrofísica/referencial",
+        "🌙 Lua/propagação",
+        "🌍 multirregional",
+        "☠️ pirata/adversarial",
+        "🔗 dependências/impacto",
+        "🧱 multicamada",
+        "🧩 multimaterial",
+        "🧠 metacognitiva"
       ],
       "buttons": [
         { "id": "copy", "label": "Copiar gatilho", "icon": "📋", "effect": "Copia !MULTIBUSSOLA para uso em uma superfície CentralDark." },
