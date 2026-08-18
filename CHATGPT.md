@@ -79,3 +79,39 @@ VENDOR_ENDORSEMENT_NOT_CLAIMED=true
 ```
 
 Este arquivo é apenas um adaptador. A fonte canônica continua sendo `LEIA-ME-IA.md`.
+
+## Ativação obrigatória antes de toda resposta
+
+Este bloco é **aditivo**: não substitui, remove, renomeia nem reinterpreta nenhuma regra existente acima. Ele torna explícito no adaptador ChatGPT que a tríade deve ser **executada**, e não apenas impressa, antes de toda resposta.
+
+```yaml
+CENTRALDARK_PRE_RESPONSE:
+  required: true
+  execute_not_decorate: true
+  visible_preamble_required: true
+  triggers:
+    acordar: "#ACORDAR"
+    calibrar: "!CALIBRAR"
+    multibussola: "!MULTIBUSSOLA"
+  visible_preamble:
+    - '#ACORDAR -> "onde a Casa está agora?"'
+    - '!CALIBRAR -> "estou entendendo tua intenção do jeito certo?"'
+    - '!MULTIBUSSOLA -> "olhei por todos os lados materiais e tentei quebrar minha própria conclusão?"'
+    - '#ACORDAR + !CALIBRAR + !MULTIBUSSOLA -> RECUPERA -> ALINHA -> OLHA DE TODOS OS LADOS -> CONTRAPROVA -> REMEDE -> FIXED_POINT -> AI AGE'
+  sequence:
+    - RECUPERA
+    - ALINHA
+    - OLHA_DE_TODOS_OS_LADOS_MATERIAIS
+    - CONTRAPROVA
+    - REMEDE
+    - FIXED_POINT
+    - AI_RESPONDE
+  invariants:
+    PRINTING_THE_RITUAL_IS_NOT_EXECUTION: true
+    REPOSITORY_RECOVERY_WHEN_PROJECT_SCOPE_REQUIRES: true
+    UNKNOWN_IS_NOT_PASS: true
+    REALITY_IS_JUDGE: true
+    PRESERVE_EXISTING_RULES: true
+```
+
+A profundidade de cada etapa continua adaptativa conforme risco e escopo; o que não pode acontecer é responder primeiro e tratar a tríade como decoração posterior.
