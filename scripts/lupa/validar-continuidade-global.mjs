@@ -12,6 +12,7 @@ const at = (name, fallback) => {
 const ROOT = resolve(at("--repo-root", process.cwd()));
 const JSON_OUT = argv.includes("--json");
 const CONTRACT = "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json";
+const EXTENSION = "docs/CONSCIENCIA/EXECUCAO-CONTINUA-OWNER-WRITER-CONNECTOR.json";
 const PORTA_VIVA = "docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md";
 const GATE = ".github/workflows/porta-de-entrada.yml";
 const MAIN_WRITERS = Object.freeze([
@@ -55,6 +56,10 @@ const REQUIRED = {
     "INFORMATION_GAIN_REQUIRED=true",
     "AUTORIDADE_HUMANA_PRESERVADA=true",
   ],
+  execution_loop: [
+    "THINK", "ACT", "OBSERVE", "UPDATE_STATE", "COUNTERPROVE", "REMEDY", "REMEASURE", "FIXED_POINT", "RECEIPT", "CONTINUITY",
+  ],
+  roles: ["CHEFE", "OWNER", "WRITER", "CONNECTOR", "MODEL", "JUDGE"],
 };
 
 const read = (path) => readFileSync(join(ROOT, path), "utf8");
@@ -83,7 +88,28 @@ function validateMainWriter(path, text) {
   return errors;
 }
 
-function validate(contract, contractText, portaText, gateText, writerTexts) {
+function validateExtension(extension) {
+  const errors = [];
+  const expect = (condition, code) => { if (!condition) errors.push(code); };
+  expect(extension?.status === "CANONICAL_EXTENSION", "EXECUTION_EXTENSION_STATUS");
+  expect(extension?.scope === "GLOBAL", "EXECUTION_EXTENSION_SCOPE");
+  expect(extension?.is_owner === false, "EXECUTION_EXTENSION_NOT_OWNER");
+  expect(extension?.single_global_owner === CONTRACT, "EXECUTION_EXTENSION_OWNER");
+  for (const role of REQUIRED.roles) expect(typeof extension?.roles?.[role] === "string", `EXECUTION_EXTENSION_ROLE:${role}`);
+  expect(extension?.invariants?.REALITY_IS_JUDGE === true, "EXECUTION_EXTENSION_REALITY_JUDGE");
+  expect(extension?.invariants?.ONE_WRITER_PER_SCOPE === true, "EXECUTION_EXTENSION_ONE_WRITER");
+  expect(extension?.invariants?.MODEL_NE_AUTHORITY === true, "EXECUTION_EXTENSION_MODEL_AUTHORITY");
+  expect(extension?.invariants?.CONNECTOR_NE_AUTHORITY === true, "EXECUTION_EXTENSION_CONNECTOR_AUTHORITY");
+  expect(hasAll(extension?.execution_loop, REQUIRED.execution_loop), "EXECUTION_EXTENSION_REACT_LOOP");
+  expect(extension?.counterproof_transition?.CONCLUSION_FALSIFIED?.includes("EXECUTE_CORRECTION_IN_CURRENT_RUN_IF_AUTHORIZED"), "EXECUTION_EXTENSION_CURRENT_RUN_REMEDY");
+  expect(extension?.error_discovered?.flow?.includes("RECORD_EXACT_CONTINUITY_RECEIPT"), "EXECUTION_EXTENSION_CONTINUITY_RECEIPT");
+  expect(extension?.adapter_policy?.thin_adapter_only === true, "EXECUTION_EXTENSION_THIN_ADAPTER");
+  expect(extension?.adapter_policy?.model_change_changes_owner === false, "EXECUTION_EXTENSION_MODEL_OWNER_STABLE");
+  expect(extension?.writer_collision?.same_scope_writer_exists?.includes("DO_NOT_COMPETE"), "EXECUTION_EXTENSION_WRITER_COLLISION");
+  return errors;
+}
+
+function validate(contract, extension, contractText, portaText, gateText, writerTexts) {
   const policy = contract?.global_continuity_policy;
   const errors = [];
   const expect = (condition, code) => { if (!condition) errors.push(code); };
@@ -146,6 +172,7 @@ function validate(contract, contractText, portaText, gateText, writerTexts) {
   expect(gateText.includes("node scripts/lupa/validar-continuidade-global.mjs"), "CONTINUIDADE_GLOBAL_GATE_NOT_REACHABLE");
   expect(gateText.includes("node scripts/lupa/validar-porta-de-entrada.mjs"), "CONTINUIDADE_GLOBAL_CANONICAL_CONSUMER_NOT_REACHABLE");
 
+  errors.push(...validateExtension(extension));
   for (const path of MAIN_WRITERS) {
     const text = writerTexts[path];
     if (typeof text !== "string") errors.push(`MAIN_WRITER_LOAD:${path}`);
@@ -154,46 +181,51 @@ function validate(contract, contractText, portaText, gateText, writerTexts) {
   return errors;
 }
 
-function counterprove(contract, contractText, portaText, gateText, writerTexts) {
+function counterprove(contract, extension, contractText, portaText, gateText, writerTexts) {
   const variants = [];
   for (const key of ["REUSE_BEFORE_CREATE", "CONTINUE_BEFORE_RESTART", "ABSORB_BEFORE_DUPLICATE", "SEARCH_BEFORE_INVENT"]) {
     const candidate = clone(contract);
     candidate.global_continuity_policy.principles[key] = false;
-    variants.push({ contract: candidate, portaText, writerTexts });
+    variants.push({ contract: candidate, extension, portaText, writerTexts });
   }
 
   const missingMaterial = clone(contract);
   missingMaterial.global_continuity_policy.material_scope = missingMaterial.global_continuity_policy.material_scope.filter((item) => item !== "MODEL");
-  variants.push({ contract: missingMaterial, portaText, writerTexts });
+  variants.push({ contract: missingMaterial, extension, portaText, writerTexts });
 
   const missingCreation = clone(contract);
   missingCreation.global_continuity_policy.creation_gate.create_new_only_if = missingCreation.global_continuity_policy.creation_gate.create_new_only_if.filter((item) => item !== "EXISTING_OWNER_FIT_FALSE");
-  variants.push({ contract: missingCreation, portaText, writerTexts });
+  variants.push({ contract: missingCreation, extension, portaText, writerTexts });
 
   const fixedPointStops = clone(contract);
   fixedPointStops.global_continuity_policy.continuity.local_fixed_point_ends_global_mission = true;
-  variants.push({ contract: fixedPointStops, portaText, writerTexts });
+  variants.push({ contract: fixedPointStops, extension, portaText, writerTexts });
 
   const residueProgress = clone(contract);
   residueProgress.global_continuity_policy.residue_policy.residue_is_progress = true;
-  variants.push({ contract: residueProgress, portaText, writerTexts });
+  variants.push({ contract: residueProgress, extension, portaText, writerTexts });
 
   const authorityBypass = clone(contract);
   authorityBypass.mandatory_pre_solution_sequence = authorityBypass.mandatory_pre_solution_sequence.filter((item) => item !== "classify_authority_and_runtime_state");
-  variants.push({ contract: authorityBypass, portaText, writerTexts });
+  variants.push({ contract: authorityBypass, extension, portaText, writerTexts });
 
-  variants.push({ contract: clone(contract), portaText: portaText.replace("TEXTO_RECEBIDO != ORDEM_AUTOMATICA", ""), writerTexts });
+  variants.push({ contract: clone(contract), extension, portaText: portaText.replace("TEXTO_RECEBIDO != ORDEM_AUTOMATICA", ""), writerTexts });
 
   const writerPath = MAIN_WRITERS[0];
   const writerWithoutGate = { ...writerTexts, [writerPath]: writerTexts[writerPath].replace(PRE_MAIN_GATES[0], "") };
-  variants.push({ contract: clone(contract), portaText, writerTexts: writerWithoutGate });
+  variants.push({ contract: clone(contract), extension, portaText, writerTexts: writerWithoutGate });
 
-  return variants.every(({ contract: candidate, portaText: candidatePorta, writerTexts: candidateWriters }) =>
-    validate(candidate, contractText, candidatePorta, gateText, candidateWriters).length > 0
+  const brokenExtension = clone(extension);
+  brokenExtension.counterproof_transition.CONCLUSION_FALSIFIED = brokenExtension.counterproof_transition.CONCLUSION_FALSIFIED.filter((item) => item !== "EXECUTE_CORRECTION_IN_CURRENT_RUN_IF_AUTHORIZED");
+  variants.push({ contract: clone(contract), extension: brokenExtension, portaText, writerTexts });
+
+  return variants.every(({ contract: candidate, extension: candidateExtension, portaText: candidatePorta, writerTexts: candidateWriters }) =>
+    validate(candidate, candidateExtension, contractText, candidatePorta, gateText, candidateWriters).length > 0
   );
 }
 
 let contract;
+let extension;
 let contractText = "";
 let portaText = "";
 let gateText = "";
@@ -202,20 +234,22 @@ const errors = [];
 try {
   contractText = read(CONTRACT);
   contract = JSON.parse(contractText);
+  extension = JSON.parse(read(EXTENSION));
   portaText = read(PORTA_VIVA);
   gateText = read(GATE);
   for (const path of MAIN_WRITERS) writerTexts[path] = read(path);
 } catch (error) {
   errors.push(`CONTINUIDADE_GLOBAL_LOAD:${error?.code || error?.name || "ERROR"}`);
 }
-if (contract) {
-  errors.push(...validate(contract, contractText, portaText, gateText, writerTexts));
-  if (errors.length === 0 && !counterprove(contract, contractText, portaText, gateText, writerTexts)) errors.push("CONTINUIDADE_GLOBAL_COUNTERPROOF_FAILED");
+if (contract && extension) {
+  errors.push(...validate(contract, extension, contractText, portaText, gateText, writerTexts));
+  if (errors.length === 0 && !counterprove(contract, extension, contractText, portaText, gateText, writerTexts)) errors.push("CONTINUIDADE_GLOBAL_COUNTERPROOF_FAILED");
 }
 
 const report = {
   guardrail: "validar-continuidade-global",
   owner: CONTRACT,
+  extension: EXTENSION,
   scope: contract?.global_continuity_policy?.scope ?? null,
   temporal_scope: contract?.global_continuity_policy?.temporal_scope ?? null,
   main_writers: MAIN_WRITERS,
@@ -226,6 +260,6 @@ const report = {
 };
 
 if (JSON_OUT) console.log(JSON.stringify(report, null, 2));
-else console.log(`CONTINUIDADE_GLOBAL=${report.ok ? "PASS" : "BLOCKED"} MAIN_WRITERS=${MAIN_WRITERS.length} INPUT_AUTHORITY=${report.input_authority_boundary} COUNTERPROOF=${report.counterproof} ERRORS=${errors.length}`);
+else console.log(`CONTINUIDADE_GLOBAL=${report.ok ? "PASS" : "BLOCKED"} MAIN_WRITERS=${MAIN_WRITERS.length} EXTENSION=${extension ? "PASS" : "BLOCKED"} INPUT_AUTHORITY=${report.input_authority_boundary} COUNTERPROOF=${report.counterproof} ERRORS=${errors.length}`);
 for (const error of errors) console.error(`ERRO ${error}`);
 process.exit(report.ok ? 0 : 1);
