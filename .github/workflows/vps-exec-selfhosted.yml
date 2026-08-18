@@ -301,7 +301,7 @@ jobs:
 
       - name: Publicar status sanitizado no SHA
         if: always()
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         env:
           DEPLOY_OUTCOME: ${{ steps.deploy.outcome }}
           MCP_DEPLOYED: ${{ steps.deploy.outputs.deployed }}
@@ -340,7 +340,7 @@ jobs:
           rm -rf "$checkout_dir"
 
       - name: Checkout exact event SHA
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: ${{ github.sha }}
           path: .ci-operational-guards
@@ -359,7 +359,7 @@ jobs:
 
       - name: Publish sanitized operational guards status
         if: always()
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         env:
           DEPLOY_OUTCOME: ${{ steps.guards.outcome }}
           DEPLOYED: ${{ steps.guards.outputs.deployed }}
