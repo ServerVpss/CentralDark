@@ -142,11 +142,10 @@ jobs:
           name: autonomia-judge-${{ github.run_id }}
           path: ${{ runner.temp }}/centraldark-autonomia
 
-      - name: Aplicar guard proporcional à política escolhida
-        # FAST já passou pelos gates causais internos do motor: autor autenticado,
-        # mesmo repo, receipt/escopo, diff sensível, conflito, CHANGES_REQUESTED,
-        # base/HEAD e revalidação final. Green-first completo é exigido somente
-        # para modos não-FAST; o próprio guard registra SKIP_FAST de forma explícita.
+      - name: Aplicar guard green-first a todo candidato READY
+        # FAST continua rápido por não reexecutar o código do PR no Judge,
+        # mas não pode transformar PENDING/QUEUED/SKIPPED/CANCELLED/MISSING em PASS.
+        # Todo READY precisa fechar os gates aplicáveis no mesmo PR + mesmo HEAD.
         env:
           BOT_SWEEP_DIR: ${{ runner.temp }}/centraldark-autonomia
           PROMOTER_TOKEN: ${{ secrets.PROMOTION_TOKEN }}
@@ -185,7 +184,7 @@ jobs:
           echo "EVENT_NAME=${EVENT_NAME}"
           echo "EXECUTOR=self-hosted-linux"
           echo "MERGE_METHOD=squash"
-          echo "FAST_GREEN_FIRST_REQUIRED=0"
+          echo "FAST_GREEN_FIRST_REQUIRED=1"
           echo "ADVERSARIAL_GREEN_FIRST_REQUIRED=1"
           echo "FAST_CAUSAL_GATES=AUTHENTICATED_ACCOUNT+SAME_REPO+INTENT_SCOPE+SECRET_SCAN+CONFLICT+CHANGES_REQUESTED+HEAD_BASE_REVALIDATION"
           echo "REASK=NO_WHEN_INTENT_RECEIPT_VALID"
