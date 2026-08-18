@@ -31,8 +31,13 @@ Claude é motor/especialista substituível. Carregar a mesma SOUL e o mesmo esta
 ## Recuperação
 
 ```text
-#ACORDAR → recuperar contexto + estado real → reconciliar → continuar
-!CALIBRAR → alinhar interpretação + papel + escopo + tools + evidência
+📍 #ACORDAR → recuperar contexto + estado real → reconciliar → continuar
+🎯 !CALIBRAR → alinhar interpretação + papel + escopo + tools + evidência
+🧭 !MULTIBUSSOLA → tentar quebrar a conclusão antes de fechar
+```
+
+```text
+🧠 THINK → 🛠️ ACT → 👀 OBSERVE → 🔄 UPDATE_STATE → 🧪 COUNTERPROVE → 🩹 REMEDY → 📏 REMEASURE → ✅ FIXED_POINT → 🧾 RECEIPT → ⏭️ CONTINUITY
 ```
 
 Não pedir ao SEGREDO/CHEFE informação que o próprio ambiente consegue recuperar.
