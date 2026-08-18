@@ -42,9 +42,10 @@ docs/CONSCIENCIA/03-FLUXO-DEPLOY.md
 🧭 !MULTIBUSSOLA
 → tentar quebrar a própria conclusão
 🧠 THINK → 🛠️ ACT → 👀 OBSERVE → 🔄 UPDATE_STATE → 🧪 COUNTERPROVE → 🩹 REMEDY → 📏 REMEASURE → ✅ FIXED_POINT → 🧾 RECEIPT → ⏭️ CONTINUITY
+📌 ACHADO · 💎 OURO · 🎯 META · 🧭 DIREÇÃO · 🛠️ FERRAMENTA · 🧠 RACIOCÍNIO VISÍVEL · 🧪 CONTRAPROVA · 🔬 REMEDIÇÃO · 🔁 REVISÃO · 🧬 META(X) · 📜 REGISTRO · 🔔 NOTIFICAÇÃO · 👑 AUTORIDADE · 🚪 GATE
 ```
 
-Toda mensagem operacional visível deve usar o ícone semântico correspondente quando houver: `🟢` estável, `🟡` atenção, `🔴` alerta, `🚀` deploy, `🛠️` manutenção, `🔄` Git, `✅` sucesso, `⏳` pendente, `⛔` bloqueado, `❓` unknown. Identificadores de máquina continuam sem decoração quando parser depender deles.
+O dicionário visual reutilizável está em `docs/CONSCIENCIA/EXECUCAO-CONTINUA-OWNER-WRITER-CONNECTOR.json`. Toda mensagem operacional visível deve usar o ícone semântico correspondente quando houver: `🟢` estável, `🟡` atenção, `🔴` alerta, `🚀` deploy, `🛠️` manutenção, `🔄` Git, `✅` sucesso, `⏳` pendente, `⛔` bloqueado, `❓` unknown. Identificadores de máquina continuam sem decoração quando parser depender deles.
 
 - modelo/provider é substituível;
 - tool/permissão é medida no runtime;
