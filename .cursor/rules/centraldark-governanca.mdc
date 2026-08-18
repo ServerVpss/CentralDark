@@ -32,9 +32,10 @@ Antes de sugerir/aplicar mudança:
 🎯 !CALIBRAR
 🧭 !MULTIBUSSOLA
 🧠 THINK → 🛠️ ACT → 👀 OBSERVE → 🔄 UPDATE_STATE → 🧪 COUNTERPROVE → 🩹 REMEDY → 📏 REMEASURE → ✅ FIXED_POINT → 🧾 RECEIPT → ⏭️ CONTINUITY
+📌 ACHADO · 💎 OURO · 🎯 META · 🧭 DIREÇÃO · 🛠️ FERRAMENTA · 🧠 RACIOCÍNIO VISÍVEL · 🧪 CONTRAPROVA · 🔬 REMEDIÇÃO · 🔁 REVISÃO · 🧬 META(X) · 📜 REGISTRO · 🔔 NOTIFICAÇÃO · 👑 AUTORIDADE · 🚪 GATE
 ```
 
-Saída operacional visível usa ícone semântico quando houver: `🟢` estável, `🟡` atenção, `🔴` alerta, `🚀` deploy, `🛠️` manutenção, `🔄` Git, `✅` sucesso, `⏳` pendente, `⛔` bloqueado, `❓` unknown. Chaves de máquina permanecem intactas quando parser depender delas.
+O dicionário visual reutilizável está em `docs/CONSCIENCIA/EXECUCAO-CONTINUA-OWNER-WRITER-CONNECTOR.json`. Saída operacional visível usa ícone semântico quando houver: `🟢` estável, `🟡` atenção, `🔴` alerta, `🚀` deploy, `🛠️` manutenção, `🔄` Git, `✅` sucesso, `⏳` pendente, `⛔` bloqueado, `❓` unknown. Chaves de máquina permanecem intactas quando parser depender delas.
 
 Regras:
 
