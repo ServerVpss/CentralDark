@@ -2,8 +2,6 @@ name: 🧠 Notion Sync (docs/CONSCIENCIA → Notion)
 # Espelha automaticamente o conteúdo de docs/CONSCIENCIA/ para o Notion
 # usando UPSERT (cria se não existe, atualiza se existe).
 ## Lei vigente: Git é fonte da verdade. Notion é painel humano.
-# Ver docs/CONSCIENCIA/REGRA-OFICIAL-HIERARQUIA-MEMORIA.md
-# Mapa dos databases: docs/CONSCIENCIA/NOTION-MAPA.md
 
 on:
   push:
@@ -110,13 +108,11 @@ jobs:
             -m "Commit-fonte: ${{ github.sha }}" \
             -m "Disparado por: ${{ github.actor }}"
 
-          PUSHED=false
-          for i in 1 2 3 4 5; do
-            if git pull --rebase -X ours origin main && git push origin HEAD:main; then
-              PUSHED=true
-              break
-            fi
-            echo "NOTION_PUSH_RETRY=$i"
-            sleep $((RANDOM % 5 + 2))
-          done
-          test "$PUSHED" = true || { echo 'NOTION_REPORT_PUSH_FAILED'; exit 1; }
+          BASE_SHA=$(git rev-parse HEAD^)
+          git fetch --no-tags origin main
+          REMOTE_SHA=$(git rev-parse FETCH_HEAD)
+          if [ "$REMOTE_SHA" != "$BASE_SHA" ]; then
+            echo "NOTION_REPORT_BLOCKED_DIVERGENCE base=$BASE_SHA remote=$REMOTE_SHA"
+            exit 1
+          fi
+          git push origin HEAD:main
