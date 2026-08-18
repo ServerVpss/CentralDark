@@ -2,6 +2,8 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
+import './skill-authoring.test.mjs';
+
 const contractUrl = new URL('../contract.json', import.meta.url);
 const crystalUrl = new URL('../crystal-route.json', import.meta.url);
 const skillUrl = new URL('../SKILL.md', import.meta.url);
@@ -38,6 +40,24 @@ test('owner skill cristal consumer test gate ficam ligados no mesmo contrato', a
   assert.equal(contract.gate, '.github/workflows/lupa-conformance.yml');
   assert.equal(contract.operational_crystal.one_active_route_per_capability_boundary, true);
   assert.equal(contract.operational_crystal.knowledge_without_consumer_is_operational, false);
+});
+
+test('autoria de skill é subcapacidade determinística do mesmo knowledge-compiler', async () => {
+  const contract = JSON.parse(await readFile(contractUrl, 'utf8'));
+  const authoring = contract.skill_authoring;
+  assert.equal(authoring.mode, 'DETERMINISTIC_SUBCAPABILITY');
+  assert.equal(authoring.validator, '.agents/skills/knowledge-compiler/scripts/skill-authoring.mjs');
+  assert.equal(authoring.regression, '.agents/skills/knowledge-compiler/tests/skill-authoring.test.mjs');
+  assert.equal(authoring.canonical_root, '.agents/skills');
+  assert.equal(authoring.reuse_before_create, true);
+  assert.equal(authoring.existing_owner_fit_means_no_new_skill, true);
+  assert.deepEqual(authoring.frontmatter_allowed, ['name', 'description']);
+  assert.equal(authoring.description_max_chars, 1024);
+  assert.equal(authoring.skill_max_lines, 500);
+  assert.equal(authoring.gerund_is_house_hard_gate, false);
+  assert.equal(authoring.third_person_is_house_hard_gate, false);
+  assert.equal(authoring.external_cli_is_house_dependency, false);
+  assert.match(authoring.source_provenance, /mattnigh\/skills_collection/);
 });
 
 test('política externa não importa thresholds owners agentes ou modelos por prestígio', async () => {
