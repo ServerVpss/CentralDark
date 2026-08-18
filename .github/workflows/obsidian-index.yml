@@ -83,6 +83,9 @@ jobs:
             fi
             git add docs/BRAIN/INDEX.md
             git commit -m "chore(brain): regenerar INDEX.md automaticamente"
+            echo "🚪 Gate global pré-main"
+            node scripts/lupa/validar-continuidade-global.mjs
+            node scripts/lupa/validar-porta-de-entrada.mjs
             if git push origin HEAD:main; then
               echo "✅ INDEX publicado (tentativa $TRY)."
               exit 0
