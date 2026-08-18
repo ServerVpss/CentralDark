@@ -102,6 +102,9 @@ jobs:
             echo "LINEAR_SYNC_BLOCKED_DIVERGENCE base=$BASE_SHA remote=$REMOTE_SHA"
             exit 1
           fi
+          echo "🚪 Gate global pré-main"
+          node scripts/lupa/validar-continuidade-global.mjs
+          node scripts/lupa/validar-porta-de-entrada.mjs
           git push origin HEAD:main
 
       - name: Upload relatório
