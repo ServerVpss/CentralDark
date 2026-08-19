@@ -44,27 +44,28 @@ jobs:
 
     steps:
       - name: Checkout exclusivo da main confiável
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.event.pull_request.base.sha || github.sha }}
           fetch-depth: 1
           persist-credentials: false
 
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version: 22
+          node-version: 24
 
       - name: Provar presença de canais opcionais sem mostrar valor
         shell: bash
         run: |
           set -euo pipefail
-          echo "PROMOTION_TOKEN=${{ (secrets.PROMOTION_TOKEN != '' || secrets.GITHUB_PAT_PERFIL != '') && 'present' || 'absent_active_agent_can_still_promote' }}"
+          echo "PROMOTION_TOKEN=${{ secrets.PROMOTION_TOKEN != '' && 'present' || 'absent_active_agent_can_still_promote' }}"
           echo "TELEGRAM=${{ secrets.TELEGRAM_BOT_TOKEN != '' && secrets.TELEGRAM_CHAT_ID != '' && 'present' || 'absent' }}"
           echo "WEBHOOK=${{ secrets.NOTIFY_WEBHOOK_URL != '' && 'present' || 'absent' }}"
 
-      - name: Testar motor canônico
+      - name: Testar motor canônico e fronteira de autoridade delegada
         run: |
           set -euo pipefail
+          node --test scripts/lupa/authority-approval.test.mjs
           node --test scripts/github-autonomia-promocao.test.mjs
           node --test scripts/github-autonomia-varredura.test.mjs
           node --test scripts/github-autonomia-green-guard.test.mjs
@@ -79,9 +80,17 @@ jobs:
           NOTIFY_WEBHOOK_URL: ${{ secrets.NOTIFY_WEBHOOK_URL }}
         run: node scripts/github-autonomia-varredura.mjs judge
 
+      - name: Garantir artifact mesmo sem candidatos elegíveis
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "${{ runner.temp }}/centraldark-autonomia"
+          touch "${{ runner.temp }}/centraldark-autonomia/.keep"
+
       - name: Publicar recibos do juiz
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: autonomia-judge-${{ github.run_id }}
           path: ${{ runner.temp }}/centraldark-autonomia
@@ -117,32 +126,38 @@ jobs:
 
     steps:
       - name: Checkout exclusivo da main confiável
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.event.pull_request.base.sha || github.sha }}
           fetch-depth: 1
           persist-credentials: false
 
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version: 22
+          node-version: 24
 
       - name: Baixar recibos produzidos pelo juiz
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
         with:
           name: autonomia-judge-${{ github.run_id }}
           path: ${{ runner.temp }}/centraldark-autonomia
 
-      - name: Exigir seis gates verdes no mesmo HEAD
+      - name: Aplicar guard proporcional à política escolhida
+        # FAST já passou pelos gates causais internos do motor: autor autenticado,
+        # mesmo repo, receipt/escopo, diff sensível, conflito, CHANGES_REQUESTED,
+        # base/HEAD e revalidação final. Green-first completo é exigido somente
+        # para modos não-FAST; o próprio guard registra SKIP_FAST de forma explícita.
         env:
           BOT_SWEEP_DIR: ${{ runner.temp }}/centraldark-autonomia
-          PROMOTER_TOKEN: ${{ secrets.PROMOTION_TOKEN || secrets.GITHUB_PAT_PERFIL }}
+          PROMOTER_TOKEN: ${{ secrets.PROMOTION_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
         run: node scripts/github-autonomia-green-guard.mjs
 
       - name: Promover somente recibos válidos e estado vivo idêntico
         env:
           BOT_SWEEP_DIR: ${{ runner.temp }}/centraldark-autonomia
-          PROMOTER_TOKEN: ${{ secrets.PROMOTION_TOKEN || secrets.GITHUB_PAT_PERFIL }}
+          PROMOTER_TOKEN: ${{ secrets.PROMOTION_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           NOTIFY_WEBHOOK_URL: ${{ secrets.NOTIFY_WEBHOOK_URL }}
@@ -150,7 +165,7 @@ jobs:
 
       - name: Publicar resultado sanitizado
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: autonomia-promote-${{ github.run_id }}
           path: ${{ runner.temp }}/centraldark-autonomia
@@ -170,7 +185,9 @@ jobs:
           echo "EVENT_NAME=${EVENT_NAME}"
           echo "EXECUTOR=self-hosted-linux"
           echo "MERGE_METHOD=squash"
-          echo "GREEN_FIRST_REQUIRED=1"
+          echo "FAST_GREEN_FIRST_REQUIRED=0"
+          echo "ADVERSARIAL_GREEN_FIRST_REQUIRED=1"
+          echo "FAST_CAUSAL_GATES=AUTHENTICATED_ACCOUNT+SAME_REPO+INTENT_SCOPE+SECRET_SCAN+CONFLICT+CHANGES_REQUESTED+HEAD_BASE_REVALIDATION"
           echo "REASK=NO_WHEN_INTENT_RECEIPT_VALID"
           echo "JOB_STATUS=${JOB_STATUS}"
           test "${JOB_STATUS}" = "success" && echo "RESULTADO=PASS" || echo "RESULTADO=BLOCKED"

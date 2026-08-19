@@ -69,13 +69,15 @@ export async function safeUpdateFromOrigin({ repoPath, branch = 'main', log = ()
   }
 
   // Observa a ponta remota em FETCH_HEAD sem sobrescrever primeiro a ref de
-  // rastreamento local. Assim um rewind/rewrite remoto continua mensurável em
-  // vez de virar FETCH_FAILED ou apagar a última observação conhecida.
+  // rastreamento local. `--refmap=` desliga explicitamente o refmap configurado
+  // em remote.origin.fetch; sem isso o próprio fetch atualiza origin/<branch>
+  // antes da comparação e destrói a observação anterior usada para detectar
+  // rewrite remoto e para o compare-and-swap abaixo.
   const remoteRef = `refs/remotes/origin/${branch}`;
   const remoteBefore = await git(['rev-parse', '--verify', '--quiet', remoteRef], repoRoot);
   const remoteBeforeSha = remoteBefore.code === 0 && remoteBefore.stdout ? remoteBefore.stdout : null;
 
-  const fetch = await git(['fetch', '--no-tags', 'origin', `refs/heads/${branch}`], repoRoot);
+  const fetch = await git(['fetch', '--no-tags', '--refmap=', 'origin', `refs/heads/${branch}`], repoRoot);
   if (fetch.code !== 0) {
     log(`[safe-git] BLOCKED fetch falhou: ${sanitizeGitOutput(fetch.stderr || fetch.stdout)}`);
     return result({ ok: false, reason: 'FETCH_FAILED', repoRoot });

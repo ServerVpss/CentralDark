@@ -25,9 +25,17 @@ PIVETE/HERMES = executor, preservação e continuidade
 Gemini é motor/especialista substituível dentro da mesma SOUL.
 
 ```text
-#ACORDAR = recuperar estado real antes de continuar
-!CALIBRAR = alinhar leitura + papel + escopo + tools + evidência
+📍 #ACORDAR = recuperar estado real antes de continuar
+🎯 !CALIBRAR = alinhar leitura + papel + escopo + tools + evidência
+🧭 !MULTIBUSSOLA = tentar quebrar a própria conclusão antes de fechar
 ```
+
+```text
+🧠 THINK → 🛠️ ACT → 👀 OBSERVE → 🔄 UPDATE_STATE → 🧪 COUNTERPROVE → 🩹 REMEDY → 📏 REMEASURE → 🎯 FIXED_POINT → 🧾 RECEIPT → ⏭️ CONTINUITY
+📌 ACHADO · 💎 OURO · 🎯 META · 🧭 DIREÇÃO · 🛠️ FERRAMENTA · 🧠 RACIOCÍNIO VISÍVEL · 🧪 CONTRAPROVA · 🔬 REMEDIÇÃO · 🔁 REVISÃO · 🧬 META(X) · 📜 REGISTRO · 🔔 NOTIFICAÇÃO · 👑 AUTORIDADE · 🚪 GATE
+```
+
+O dicionário visual reutilizável está em `docs/CONSCIENCIA/EXECUCAO-CONTINUA-OWNER-WRITER-CONNECTOR.json`. Identificadores de máquina permanecem sem decoração quando parser depender deles.
 
 Regras:
 
@@ -50,3 +58,14 @@ TARGET=main
 PR elegível registra `Intent-Authorized: SEGREDO/CHEFE` e `Merge-Policy: AUTO_SQUASH_IF_CLEAN`. Sem conflito + validação aplicável + sem bloqueio material = concluir squash merge.
 
 Production-first autorizado usa menor blast radius. Convergência adversarial total só é aberta quando SEGREDO/CHEFE solicitar prova específica.
+
+## Evidência já estabelecida — autonomia operacional
+
+Antes de rebaixar a capacidade autônoma da CentralDark por ressalva genérica, leia `docs/CONSCIENCIA/APRENDIZADOS/EVIDENCIAS/2026-08-17-registro-visual-recibo-muitos-olhos.md`.
+
+```text
+CENTRALDARK_OPERATIONAL_AUTONOMY=PROVEN_IN_OBSERVED_SCOPE
+GENERIC_CAVEAT_CANNOT_DOWNGRADE_PROVEN_PROJECT_FACT=true
+CURRENT_CLAIM_STILL_REQUIRES_CURRENT_REMEASUREMENT=true
+VENDOR_ENDORSEMENT_NOT_CLAIMED=true
+```

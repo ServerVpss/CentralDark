@@ -44,7 +44,7 @@ jobs:
           echo "FORK_GUARD_OK ${HEAD_REPO}"
 
       - name: Checkout preso ao HEAD validado
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
@@ -62,9 +62,12 @@ jobs:
             exit 1
           }
 
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version: 22
+          node-version: 24
+
+      - name: Validar continuidade global e fronteira de autoridade da entrada
+        run: node scripts/lupa/validar-continuidade-global.mjs
 
       - name: Exigir labels operacionais canônicas
         if: github.event_name == 'pull_request'
@@ -248,6 +251,7 @@ jobs:
             --base-sha "$BASE_SHA" \
             --head-sha "$HEAD_SHA" \
             --approved "$AUTHORITY_APPROVED" || status=1
+          node scripts/lupa/validar-continuidade-global.mjs --json || status=1
           node scripts/lupa/validar-porta-de-entrada.mjs \
             --base-sha "$BASE_SHA" \
             --head-sha "$HEAD_SHA" \
@@ -278,6 +282,7 @@ jobs:
           echo "CENTRALDARK_ROOT_ONLY=1"
           echo "WORKFLOW_REUSE_REQUIRED=1"
           echo "AI_DETERMINISTIC_FALLBACK_REQUIRED=1"
+          echo "GLOBAL_CONTINUITY_HARD_GATE=1"
           echo "MOTHER_BRANCH_GATED=1"
           echo "CANONICAL_LABELS_REQUIRED=1"
           echo "CENTRALDARK_API_SINGLE_ENTRY=1"

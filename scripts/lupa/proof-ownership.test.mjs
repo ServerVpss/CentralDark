@@ -1,7 +1,34 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { existsSync, readFileSync } from "node:fs";
+import { resolve } from "node:path";
 
-import { isRepoRelativePath, validateProofOwnership } from "./proof-ownership.mjs";
+import {
+  isRepoRelativePath,
+  validateOperationalClaimPolicy,
+  validateProofOwnership,
+} from "./proof-ownership.mjs";
+
+const ROOT = resolve(process.cwd());
+const CANONICAL_CONTRACT = resolve(ROOT, "docs/CONSCIENCIA/PROOF-OWNERSHIP.json");
+const repoPathExists = (path) => isRepoRelativePath(path) && existsSync(resolve(ROOT, path));
+
+const defaultOperationalChain = () => ({
+  claim: "AUTHORITY_APPROVAL_CURRENT_GITHUB_EVENT",
+  authority: "SEGREDO/CHEFE",
+  owner: "docs/CONSCIENCIA/02-PERMISSOES.md",
+  contract: "docs/CONSCIENCIA/PROOF-OWNERSHIP.json",
+  implementation_or_consumer: "scripts/lupa/authority-approval.mjs",
+  enforcement: ".github/workflows/porta-de-entrada.yml",
+  execution: "GITHUB_ACTIONS_CURRENT_EVENT",
+  observable_effect: "AUTHORITY_APPROVED_OUTPUT_FOR_CURRENT_EVENT",
+  proof_target: "CURRENT_GITHUB_EVENT_AUTHORITY_DECISION",
+  receipt: ".github/workflows/porta-de-entrada.yml",
+  counterproof: "scripts/lupa/authority-approval.test.mjs",
+  live_state: "MEASURE_AT_RUNTIME",
+  judge: "REALITY_CURRENT_GITHUB_EVENT",
+  fixed_point_scope: "AUTHORITY_APPROVAL_CURRENT_EVENT",
+});
 
 const makeInvariant = (overrides = {}) => ({
   id: "AUTHORITY_RECEIPT_FROM_GITHUB_EVENT",
@@ -22,7 +49,51 @@ const makeInvariant = (overrides = {}) => ({
     observation: "label observada no payload real do evento",
   },
   depends_on: [],
+  operational_chain: defaultOperationalChain(),
   ...overrides,
+});
+
+const operationalPolicy = () => ({
+  marker: "OPERATIONAL_CLAIM_REQUIRES_ENFORCEMENT",
+  applies_to: "CLAIMS_THAT_PRODUCE_OR_GOVERN_BEHAVIOR",
+  technology_lock: false,
+  enforcement_must_be_proportional: true,
+  runtime_status_is_topology_proof: false,
+  live_state_must_be_measured: true,
+  monitoring_requires_real_mechanism: true,
+  fixed_point_scope_required: true,
+  duplicate_only_when_same_authority_and_capability: true,
+  preserve_layer_specific_implementations: true,
+  required_chain: [
+    "claim",
+    "authority",
+    "owner",
+    "contract",
+    "implementation_or_consumer",
+    "enforcement",
+    "execution",
+    "observable_effect",
+    "proof_target",
+    "receipt",
+    "counterproof",
+    "live_state",
+    "judge",
+    "fixed_point_scope",
+  ],
+  classifications: ["ENFORCED", "PARTIAL", "DOCUMENTATION_ONLY", "ORPHAN", "UNKNOWN", "NOT_APPLICABLE"],
+  non_pass_states: ["UNKNOWN", "PENDING", "QUEUED", "SKIPPED", "CANCELLED"],
+  mechanism_profiles: {
+    CODE_RULE: ["test", "linter", "ci_when_applicable"],
+    API_CONTRACT: ["schema", "implementation", "consumer_test"],
+    WORKFLOW: ["trigger", "execution", "receipt"],
+    DEPLOY: ["artifact", "runtime", "health_or_telemetry"],
+    PANEL: ["real_source", "consumer", "validation"],
+    ADMIN_DOCUMENTATION: ["owner", "marker_or_registry", "consumer", "scanner_or_gate_when_applicable"],
+    OPERATIONAL_MEMORY: ["canonical_owner", "provenance", "dedupe", "absorption"],
+    COMMAND: ["registry", "parser_or_consumer", "observable_behavior"],
+    SECURITY: ["policy", "enforcement", "adversarial_test_when_applicable"],
+    HUMAN_NON_AUTOMATABLE_RULE: ["explicit_authority", "procedure", "proportional_evidence_or_review"],
+  },
 });
 
 const baseContract = () => ({
@@ -44,9 +115,33 @@ const baseContract = () => ({
     graph_structure_ok_is_not_invariant_proof: true,
     external_anchor_must_be_observed_by_responsible_prover: true,
     execution_status_is_out_of_scope: true,
+    operational_claim_requires_enforcement: true,
+    operational_claim_without_complete_chain: "UNPROVEN",
+    documented_is_executed: false,
+    declared_is_enforced: false,
+    configured_is_active: false,
+    implemented_is_reachable: false,
+    triggered_is_completed: false,
+    completed_is_correct: false,
+    historical_pass_is_current_pass: false,
+    proof_target_must_match_claim: true,
+    local_fixed_point_is_end_of_intent: false,
   },
+  operational_claim_policy: operationalPolicy(),
   allowed_proof_classes: ["authenticated_authority", "runtime"],
   required_registered_invariants: ["AUTHORITY_RECEIPT_FROM_GITHUB_EVENT"],
+  required_fields_per_invariant: [
+    "id",
+    "proof_class",
+    "source",
+    "consumer",
+    "prover",
+    "negative_test",
+    "counterproof",
+    "external_anchor",
+    "depends_on",
+    "operational_chain",
+  ],
   unregistered_known_invariants: [
     { id: "IDENTITY_AUTHORITY_ACTIVE_SURFACES", status: "UNPROVEN_NOT_OWNED" },
     { id: "PROOF_OWNERSHIP_GRAPH_STRUCTURE", status: "UNPROVEN_NOT_OWNED" },
@@ -60,11 +155,16 @@ function errorsFor(contract, exists = allExist) {
   return validateProofOwnership(contract, { exists }).errors;
 }
 
+function loadCanonicalContract() {
+  return JSON.parse(readFileSync(CANONICAL_CONTRACT, "utf8"));
+}
+
 test("grafo válido passa somente como topologia parcial", () => {
   const result = validateProofOwnership(baseContract(), { exists: allExist });
   assert.equal(result.ok, true);
   assert.equal(result.topology_only, true);
   assert.equal(result.invariant_proof, false);
+  assert.equal(result.operational_claim_policy_ok, true);
   assert.equal(result.coverage_status, "PARTIAL_EXPLICIT");
   assert.equal(result.unregistered_known_count, 2);
 });
@@ -75,6 +175,7 @@ test("contrato inválido retorna shape determinístico", () => {
   assert.deepEqual(result.proof_classes, []);
   assert.equal(result.invariant_count, 0);
   assert.equal(result.topology_only, true);
+  assert.equal(result.operational_claim_policy_ok, false);
   assert.ok(result.errors.includes("PROOF_OWNERSHIP_CONTRACT_INVALID"));
 });
 
@@ -108,6 +209,13 @@ test("mesma responsabilidade com provadores diferentes reprova mesmo em classes 
       path: "scripts/lupa/outro-prover.test.mjs",
       observation: "falso PASS deve falhar",
       independent_from_prover: true,
+    },
+    operational_chain: {
+      ...defaultOperationalChain(),
+      claim: "B",
+      implementation_or_consumer: "scripts/lupa/outro-prover.mjs",
+      counterproof: "scripts/lupa/outro-prover.test.mjs",
+      fixed_point_scope: "B_SCOPE",
     },
   }));
   assert.ok(errorsFor(contract).some((item) => item.startsWith("PROOF_OWNERSHIP_DUPLICATE_RESPONSIBILITY:")));
@@ -159,6 +267,7 @@ test("negative_test precisa ter nome de teste", () => {
   const contract = baseContract();
   contract.invariants[0].negative_test = "AGENTS.md";
   contract.invariants[0].counterproof.path = "AGENTS.md";
+  contract.invariants[0].operational_chain.counterproof = "AGENTS.md";
   assert.ok(errorsFor(contract).some((item) => item.startsWith("PROOF_OWNERSHIP_NEGATIVE_TEST_NOT_EXECUTABLE_TEST:")));
 });
 
@@ -166,6 +275,7 @@ test("provador igual teste ou consumidor reprova", () => {
   const contractA = baseContract();
   contractA.invariants[0].negative_test = contractA.invariants[0].prover;
   contractA.invariants[0].counterproof.path = contractA.invariants[0].prover;
+  contractA.invariants[0].operational_chain.counterproof = contractA.invariants[0].prover;
   assert.ok(errorsFor(contractA).includes("PROOF_OWNERSHIP_SELF_TEST:AUTHORITY_RECEIPT_FROM_GITHUB_EVENT"));
 
   const contractB = baseContract();
@@ -202,6 +312,16 @@ test("ciclo explícito e implícito reprova", () => {
     counterproof: { kind: "negative_test_suite", path: "scripts/b-prover.test.mjs", observation: "x", independent_from_prover: true },
     external_anchor: { kind: "runtime_observation", path: "evidence/b.log", observation: "evento externo" },
     depends_on: ["AUTHORITY_RECEIPT_FROM_GITHUB_EVENT"],
+    operational_chain: {
+      ...defaultOperationalChain(),
+      claim: "B",
+      owner: "docs/b.md",
+      implementation_or_consumer: "scripts/b-prover.mjs",
+      enforcement: "scripts/b-consumer.mjs",
+      receipt: "evidence/b.log",
+      counterproof: "scripts/b-prover.test.mjs",
+      fixed_point_scope: "B_SCOPE",
+    },
   }));
   assert.ok(errorsFor(explicit).some((item) => item.startsWith("PROOF_OWNERSHIP_CYCLE:")));
 
@@ -217,6 +337,16 @@ test("ciclo explícito e implícito reprova", () => {
     counterproof: { kind: "negative_test_suite", path: "scripts/b-prover.test.mjs", observation: "x", independent_from_prover: true },
     external_anchor: { kind: "runtime_observation", path: "evidence/b.log", observation: "evento externo" },
     depends_on: [],
+    operational_chain: {
+      ...defaultOperationalChain(),
+      claim: "B",
+      owner: "docs/b.md",
+      implementation_or_consumer: "scripts/b-prover.mjs",
+      enforcement: "scripts/lupa/authority-approval.mjs",
+      receipt: "evidence/b.log",
+      counterproof: "scripts/b-prover.test.mjs",
+      fixed_point_scope: "B_SCOPE",
+    },
   }));
   assert.ok(errorsFor(implicit).some((item) => item.startsWith("PROOF_OWNERSHIP_CYCLE:")));
 });
@@ -240,4 +370,41 @@ test("status de execução é explicitamente fora do escopo deste detector", () 
   assert.equal(result.ok, true);
   assert.equal(result.topology_only, true);
   assert.equal(result.invariant_proof, false);
+  assert.equal(result.operational_claim_policy_ok, true);
+});
+
+test("contrato canônico exige enforcement proporcional para qualquer claim operacional registrado", () => {
+  const contract = loadCanonicalContract();
+  assert.deepEqual(validateOperationalClaimPolicy(contract, { exists: repoPathExists }), []);
+  const result = validateProofOwnership(contract, { exists: repoPathExists });
+  assert.equal(result.operational_claim_policy_ok, true);
+});
+
+test("política operacional não pode ser trocada por YAML ou tecnologia única", () => {
+  const contract = loadCanonicalContract();
+  contract.operational_claim_policy.technology_lock = true;
+  assert.ok(validateOperationalClaimPolicy(contract, { exists: repoPathExists }).includes("OPERATIONAL_POLICY_TECHNOLOGY_LOCK_FORBIDDEN"));
+
+  delete contract.operational_claim_policy.mechanism_profiles.API_CONTRACT;
+  assert.ok(validateOperationalClaimPolicy(contract, { exists: repoPathExists }).includes("OPERATIONAL_POLICY_MECHANISM_PROFILE_MISSING:API_CONTRACT"));
+});
+
+test("claim operacional sem cadeia completa ou com estado stale reprova", () => {
+  const contract = loadCanonicalContract();
+  delete contract.invariants[0].operational_chain.enforcement;
+  assert.ok(validateOperationalClaimPolicy(contract, { exists: repoPathExists }).includes("OPERATIONAL_CHAIN_FIELD_INVALID:AUTHORITY_RECEIPT_FROM_GITHUB_EVENT:enforcement"));
+
+  const stale = loadCanonicalContract();
+  stale.invariants[0].operational_chain.live_state = "PASS_ONTEM";
+  assert.ok(validateOperationalClaimPolicy(stale, { exists: repoPathExists }).includes("OPERATIONAL_CHAIN_STALE_STATE_FORBIDDEN:AUTHORITY_RECEIPT_FROM_GITHUB_EVENT"));
+});
+
+test("fixed point operacional precisa declarar escopo e judge não pode ser o prover", () => {
+  const contract = loadCanonicalContract();
+  contract.invariants[0].operational_chain.fixed_point_scope = "FIXED_POINT";
+  assert.ok(validateOperationalClaimPolicy(contract, { exists: repoPathExists }).includes("OPERATIONAL_CHAIN_FIXED_POINT_SCOPE_INVALID:AUTHORITY_RECEIPT_FROM_GITHUB_EVENT"));
+
+  const collision = loadCanonicalContract();
+  collision.invariants[0].operational_chain.judge = collision.invariants[0].prover;
+  assert.ok(validateOperationalClaimPolicy(collision, { exists: repoPathExists }).includes("OPERATIONAL_CHAIN_WRITER_JUDGE_COLLISION:AUTHORITY_RECEIPT_FROM_GITHUB_EVENT"));
 });

@@ -1,11 +1,10 @@
 name: linear-pendencias-sync
 
 # Sync bidirecional Linear ↔ docs/PENDENCIAS.md
-#
 # - Roda a cada 30 min e em push que toque PENDENCIAS.md.
-# - DRY-RUN no PR (comenta diferenças sem aplicar).
-# - APPLY na main (commit + fecha issues sincronizadas no Linear).
-# - Requer secret `LINEAR_API_KEY` (Personal API Key com escopo write).
+# - DRY-RUN no dispatch por padrão.
+# - APPLY em main/schedule.
+# - Requer secret LINEAR_API_KEY.
 
 on:
   schedule:
@@ -34,24 +33,24 @@ jobs:
   sync:
     runs-on: [self-hosted, Linux]
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
-          node-version: "20"
+          node-version: "24"
 
       - name: Validar secret
         id: gate
         run: |
           if [ -z "${{ secrets.LINEAR_API_KEY }}" ]; then
-            echo "::warning::Secret LINEAR_API_KEY ausente — pulando sync (não é erro)."
+            echo "::warning::Secret LINEAR_API_KEY ausente — sync indisponível nesta execução."
             {
               echo "# Linear sync"
               echo ""
-              echo "Mode: SKIP"
+              echo "Mode: BLOCKED_EXTERNAL"
               echo "Reason: LINEAR_API_KEY ausente."
               echo ""
               echo "Nenhum token foi exposto."
@@ -61,12 +60,13 @@ jobs:
           fi
           echo "skip=false" >> "$GITHUB_OUTPUT"
 
-      - name: Rodar sync (apply em main/dispatch, dry-run no resto)
+      - name: Rodar sync
         if: steps.gate.outputs.skip != 'true'
         id: run
         env:
           LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
         run: |
+          set -euo pipefail
           MODE=""
           if [ "${{ github.event_name }}" = "schedule" ] || [ "${{ github.event_name }}" = "push" ]; then
             MODE="--apply"
@@ -81,7 +81,9 @@ jobs:
 
       - name: Commit + push se PENDENCIAS.md mudou
         if: github.ref == 'refs/heads/main' && steps.gate.outputs.skip != 'true'
+        shell: bash
         run: |
+          set -euo pipefail
           if git diff --quiet docs/PENDENCIAS.md; then
             echo "Sem diff — nada a commitar."
             exit 0
@@ -92,11 +94,22 @@ jobs:
           git commit \
             -m "chore(pendencias): sync Linear → MD [skip ci]" \
             -m "Co-authored-by: SegredoiDev <segredounlock@users.noreply.github.com>"
-          git push
+
+          BASE_SHA=$(git rev-parse HEAD^)
+          git fetch --no-tags origin main
+          REMOTE_SHA=$(git rev-parse FETCH_HEAD)
+          if [ "$REMOTE_SHA" != "$BASE_SHA" ]; then
+            echo "LINEAR_SYNC_BLOCKED_DIVERGENCE base=$BASE_SHA remote=$REMOTE_SHA"
+            exit 1
+          fi
+          echo "🚪 Gate global pré-main"
+          node scripts/lupa/validar-continuidade-global.mjs
+          node scripts/lupa/validar-porta-de-entrada.mjs
+          git push origin HEAD:main
 
       - name: Upload relatório
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: linear-sync-report
           path: /tmp/linear-sync-report.md

@@ -1,7 +1,7 @@
-# Validação do Mega Painel — 2026-06-11T12-18-20-409Z
+# Validação do Mega Painel — 2026-08-18T00-08-32-542Z
 
 ## Estrutura
-- ✅ ok: 69
+- ✅ ok: 24
 - ❌ erros: 0
 
 _Estrutura limpa._
@@ -9,7 +9,7 @@ _Estrutura limpa._
 ## Endpoints ao vivo
 | Endpoint | Status | Latência | CORS |
 |---|---|---|---|
-| MCP Health | 🟢 200 | 266ms | — |
-| MCP Status | 🟢 200 | 297ms | — |
-| Install Status | 🟢 200 | 251ms | * |
-| API Health | 🟢 200 | 246ms | * |
+| MCP Health | 🟢 200 | 300ms | * |
+| MCP Status | 🟢 200 | 359ms | * |
+| Install Status | 🟠 503 | 62ms | — |
+| Painel | 🟢 200 | 152ms | * |

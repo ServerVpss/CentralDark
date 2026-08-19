@@ -36,7 +36,12 @@
     "docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md"
   ],
   "context_recovery": {
-    "trigger": ["#ACORDA", "#ACORDAR", "!CALIBRAR", "RETOMAR MISSAO"],
+    "trigger": [
+      "#ACORDA",
+      "#ACORDAR",
+      "!CALIBRAR",
+      "RETOMAR MISSAO"
+    ],
     "meaning": "RECUPERAR_ESTADO_REAL_ANTES_DE_CONTINUAR",
     "ask_human_to_repeat_recoverable_context": false,
     "recover_history_when_available": true,
@@ -44,11 +49,145 @@
     "new_evidence_overrides_stale_context": true,
     "unknown_first": true
   },
+  "global_continuity_policy": {
+    "marker": "GLOBAL_CONTINUITY_HARD_GATE",
+    "scope": "GLOBAL",
+    "temporal_scope": "CONTINUOUS",
+    "default_action": "CONTINUE_EXISTING",
+    "principles": {
+      "REUSE_BEFORE_CREATE": true,
+      "CONTINUE_BEFORE_RESTART": true,
+      "ABSORB_BEFORE_DUPLICATE": true,
+      "SEARCH_BEFORE_INVENT": true,
+      "ONE_OWNER_PER_CAPABILITY": true,
+      "ONE_WRITER_PER_SCOPE": true,
+      "NO_NEW_INFORMATION_NO_CHANGE": true,
+      "PARALLELIZE_PERCEPTION": true,
+      "SERIALIZE_MUTATION": true,
+      "REALITY_IS_JUDGE": true
+    },
+    "material_scope": [
+      "INPUT",
+      "PR",
+      "BRANCH",
+      "FILE",
+      "DOC",
+      "SKILL",
+      "SCRIPT",
+      "WORKFLOW",
+      "AGENT",
+      "MODEL",
+      "SESSION",
+      "CHAT",
+      "WINDOW",
+      "TOOL",
+      "SERVICE",
+      "PANEL",
+      "MEMORY",
+      "DATABASE",
+      "RUNTIME",
+      "INTEGRATION",
+      "RULE",
+      "TEST",
+      "OWNER",
+      "CAPABILITY",
+      "MISSION",
+      "ARTIFACT",
+      "HISTORY"
+    ],
+    "new_input_does_not_imply": [
+      "NEW_SYSTEM",
+      "NEW_OWNER",
+      "NEW_BRANCH",
+      "NEW_PR",
+      "NEW_SKILL",
+      "NEW_WORKFLOW",
+      "NEW_MEMORY"
+    ],
+    "continuity": {
+      "model_change": "CONTINUE_EXISTING",
+      "session_change": "CONTINUE_EXISTING",
+      "chat_change": "CONTINUE_EXISTING",
+      "window_change": "CONTINUE_EXISTING",
+      "tool_change": "CONTINUE_EXISTING",
+      "new_error": "CONTINUE_EXISTING",
+      "new_context": "APPLY_DELTA_TO_EXISTING_OWNER",
+      "same_mission_new_material": "APPLY_DELTA_TO_EXISTING_OWNER",
+      "other_owner_material": "ROUTE_DELTA_WITHOUT_STEALING_WRITER",
+      "local_fixed_point": "RETURN_TO_ACTIVE_INTENT",
+      "local_fixed_point_ends_global_mission": false,
+      "stop_only_when": [
+        "GLOBAL_OBJECTIVE_CLOSED",
+        "CHEFE_EXPLICITLY_STOPS",
+        "REAL_BLOCK_PROVEN"
+      ]
+    },
+    "creation_gate": {
+      "mode": "ALL",
+      "create_new_only_if": [
+        "MATERIAL_GAP_PROVEN",
+        "EXISTING_CAPABILITY_FIT_FALSE",
+        "EXISTING_OWNER_FIT_FALSE",
+        "EXTEND_EXISTING_INSUFFICIENT"
+      ],
+      "otherwise": "REUSE_OR_EXTEND_EXISTING",
+      "parallel_owner": "FORBIDDEN",
+      "parallel_system": "FORBIDDEN",
+      "parallel_workflow": "FORBIDDEN"
+    },
+    "residue_policy": {
+      "residue_is_progress": false,
+      "delete_by_name_only": "FORBIDDEN",
+      "cleanup_requires_delta_residual_classified": true,
+      "classes": [
+        "ACTIVE",
+        "MERGED_HISTORICAL",
+        "SUPERSEDED",
+        "ABANDONED",
+        "ORPHAN",
+        "KEEP_EXPLICIT",
+        "SAFE_TO_REMOVE"
+      ],
+      "residue_zero": "NO_ACTION",
+      "residue_material": "ABSORB_ONLY_USEFUL_DELTA",
+      "remove_only_after_absorption_or_proven_no_delta": true
+    },
+    "enforcement": {
+      "consumer": "scripts/lupa/validar-porta-de-entrada.mjs",
+      "gate": ".github/workflows/porta-de-entrada.yml",
+      "fail_closed": true,
+      "counterproof_required": true,
+      "future_execution_required": true,
+      "single_global_owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json"
+    }
+  },
   "language_policy": {
     "normalize_human_speech_before_reasoning": false,
     "slang_metaphor_abbreviation_are_context_signals": true,
     "if_interpretation_fails_correct_ai_reading_not_human": true,
     "regional_pivete_is_technical_identity": false,
+    "default_delivery_mode": "SECO",
+    "seco_mode": {
+      "enabled_by_default": true,
+      "response_order": [
+        "O_QUE_FAZ",
+        "O_QUE_MEDE",
+        "O_QUE_ACONTECE",
+        "O_QUE_DA_PARA_FAZER",
+        "LIMITE_REAL"
+      ],
+      "answer_before_contextual_history": true,
+      "history_philosophy_unsolicited": false,
+      "history_philosophy_expands_only_on_user_request": true,
+      "history_philosophy_offer_when_relevant": true,
+      "history_philosophy_offer_position": "ONE_LINE_AFTER_SECO",
+      "history_philosophy_offer_example": "Se quiser, eu também posso abrir a história/filosofia disso.",
+      "offer_is_not_expansion": true,
+      "offer_decision_is_contextual": true,
+      "unknown_blocked_risk_and_limits_must_remain_visible": true
+    },
+    "seco_precedes_paired_explanation": true,
+    "storytelling_is_default": false,
     "paired_explanation_house_standard": true,
     "paired_explanation_trigger": "MATERIAL_TECHNICAL_ANALYTICAL_OR_ABSTRACT_CONTENT",
     "paired_explanation_order": "TECHNICAL_THEN_CHEFE_REGISTER_INLINE",
@@ -60,7 +199,7 @@
     "humor_is_optional_and_never_replaces_precision": true,
     "unknown_blocked_risk_and_limits_must_survive_translation": true,
     "simple_social_or_user_single_format_request_exempt": true,
-    "desired_pattern": "TECNICO -> NO_TEU_JEITO -> TECNICO -> NO_TEU_JEITO -> RESUMAO_OPCIONAL",
+    "desired_pattern": "SECO -> O_QUE_FAZ -> O_QUE_MEDE -> O_QUE_ACONTECE -> O_QUE_DA_PARA_FAZER -> LIMITE_REAL -> HISTORIA_FILOSOFIA_OFERTA_OPCIONAL",
     "referent_clarity_required": true,
     "ambiguous_pronoun_reference_is_incomplete": true,
     "orphan_deictic_reference_is_incomplete": true,
@@ -236,7 +375,12 @@
         "EVIDENCE_REF",
         "CLASS"
       ],
-      "class_values": ["FACT", "INFERENCE", "HYPOTHESIS", "UNKNOWN"]
+      "class_values": [
+        "FACT",
+        "INFERENCE",
+        "HYPOTHESIS",
+        "UNKNOWN"
+      ]
     },
     "arbitration": {
       "same_target_conflict": "DISCRIMINATING_TEST_THEN_EVIDENCE_THEN_REALITY",
@@ -260,7 +404,13 @@
       "runtime_is_structural_source_of_truth": false
     },
     "observability": {
-      "instruments": ["logs", "receipts", "graph", "panel", "reports"],
+      "instruments": [
+        "logs",
+        "receipts",
+        "graph",
+        "panel",
+        "reports"
+      ],
       "derived_projection_is_authority": false,
       "graph_fingerprint_role": "DELTA_INSTRUMENT",
       "green_visual_status_is_end_to_end_pass": false
