@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-19T05:01:10.570Z",
-  "updatedAtBR": "19/08/2026, 02:01:10 BRT",
+  "updatedAt": "2026-08-19T07:54:06.951Z",
+  "updatedAtBR": "19/08/2026, 04:54:06 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "v0.0.0.0 fix(ci): fallback self-hosted deterministico nos gates canonicos (#1060 wave) (#1068)",
+    "lastCommit": "v0.0.0 fix(deploy): merge determinístico + frontend Central Dark Instinct-2 (#1082)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-19T07:54:06.951Z",
+      "titulo": "Push na main · ef363621dba9aa7d06d22dbaae86d202b8b534fc",
+      "detalhe": "v0.0.0 fix(deploy): merge determinístico + frontend Central Dark Instinct-2 (#1082)",
+      "area": "Repositório",
+      "sha": "ef36362",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-19T05:01:10.570Z",
       "titulo": "Push na main · 06d6fe52d9ada4d3613e3aff767044c38fb304dc",
       "detalhe": "v0.0.0.0 fix(ci): fallback self-hosted deterministico nos gates canonicos (#1060 wave) (#1068)",
@@ -988,14 +996,6 @@
       "detalhe": "fix(segurança): cristalizar grafo de proteção humana em artefatos verificáveis (#952)",
       "area": "Repositório",
       "sha": "24d7387",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-16T12:21:02.545Z",
-      "titulo": "Push na main · 16405dd7c04c7e7aab373611ae08f41b9c937c77",
-      "detalhe": "research(math): missão tripla para extrair a fórmula de convergência (#944)",
-      "area": "Repositório",
-      "sha": "16405dd",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-19T07:54:06.951Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · ef363621dba9aa7d06d22dbaae86d202b8b534fc (ef36362)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-19T05:01:10.570Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 06d6fe52d9ada4d3613e3aff767044c38fb304dc (06d6fe5)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-16T12:27:35.187Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 24d7387de41e1e54aed77a6629619314ccb9ff54 (24d7387)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-16T12:21:02.545Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 16405dd7c04c7e7aab373611ae08f41b9c937c77 (16405dd)",
       "area": "Repositório",
       "status": "sucesso"
     }
