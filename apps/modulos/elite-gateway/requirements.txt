@@ -27,6 +27,7 @@ pyee==13.0.1
 pytesseract==0.3.13
 python-dateutil==2.9.0.post0
 python-dotenv==1.2.2
+zendriver==0.16.0
 python-pptx==1.0.2
 reportlab==4.5.1
 requests==2.32.5
