@@ -1,0 +1,200 @@
+{
+  "main": {
+    "id": "f833fca6addc3e23",
+    "type": "split",
+    "children": [
+      {
+        "id": "56600f3102b170ae",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "2b448235ab9bd76e",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Visualização em gráfico"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "1bcd4a68d7ad18ef",
+    "type": "split",
+    "children": [
+      {
+        "id": "0f2adf5e748518ea",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "dd1643cdb5be100a",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Explorador de arquivos"
+            }
+          },
+          {
+            "id": "0b53e0d15e645737",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Procurar"
+            }
+          },
+          {
+            "id": "bcaaa267b272e2a6",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-bookmark",
+              "title": "Marcadores"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "52433eb6fd291cf9",
+    "type": "split",
+    "children": [
+      {
+        "id": "a8966231124774da",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "f89e6cc3b6ce2fd1",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Links inversos"
+            }
+          },
+          {
+            "id": "21ab649dce3b75de",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Links de saída"
+            }
+          },
+          {
+            "id": "9e4c7afeb1c4e209",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Etiquetas"
+            }
+          },
+          {
+            "id": "e40cf232c4ba5f4c",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "Todas as propriedades"
+            }
+          },
+          {
+            "id": "bb7f6ed3e8570f35",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Sumário"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Abrir a troca rápida": false,
+      "graph:Abrir visualização em gráfico": false,
+      "canvas:Criar novo canvas": false,
+      "daily-notes:Abrir a nota de hoje": false,
+      "templates:Inserir modelo": false,
+      "command-palette:Abrir paleta de comandos": false,
+      "bases:Criar nova base": false
+    }
+  },
+  "active": "2b448235ab9bd76e",
+  "lastOpenFiles": [
+    "Você está certo. Eu só falei; não t.txt",
+    "SIM. Isso entra direto no mesmo asp.txt",
+    "personaldaide.txt",
+    "Novo(a) Documento de Texto.txt",
+    "Novo(a) Documento de Texto (6).txt",
+    "Novo(a) Documento de Texto (5).txt",
+    "Novo(a) Documento de Texto (4).txt",
+    "Novo(a) Documento de Texto (3).txt",
+    "Novo(a) Documento de Texto (2).txt",
+    "KKKKKKKKK 😹🔥 na tua arquitetura,.txt",
+    "KKKKKKK aí tu vai fazer a orquestra.txt",
+    "00 - Mapa do Sistema/00-POSTURA-PIVETE.md",
+    "00 - Mapa do Sistema/GRAFO-VIVO.md"
+  ]
+}
