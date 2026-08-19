@@ -28,13 +28,13 @@ jobs:
     runs-on: [self-hosted, Linux]
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
 
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
-          node-version: '20'
+          node-version: '24'
 
       - name: Rodar testes determinísticos do drift GitHub<->VPS
         run: node --test scripts/sentinela/drift.test.mjs
@@ -60,7 +60,7 @@ jobs:
 
       - name: Publicar snapshot como artifact imutável
         if: success()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: sentinela-snapshot-${{ github.run_id }}
           path: |
