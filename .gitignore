@@ -113,3 +113,6 @@ contas/
 
 # Lab de experimentos visuais — não versionar
 public/lab-jarvis/
+docs/BRAIN/.obsidian/
+_forense/
+.agents/contratos/
