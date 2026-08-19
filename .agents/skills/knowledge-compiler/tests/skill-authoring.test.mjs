@@ -106,3 +106,35 @@ test('gerúndio e terceira pessoa ficam como orientação da fonte, não hard ga
   assert.ok(result.warnings.includes('GERUND_STYLE_IS_SOURCE_GUIDANCE_NOT_HOUSE_GATE'));
   assert.ok(result.warnings.includes('THIRD_PERSON_STYLE_IS_SOURCE_GUIDANCE_NOT_HOUSE_GATE'));
 });
+
+
+test('AUTHORITY_NORMALIZE bloqueia skill canônica que concede autoridade ao Pivete/modelo', () => {
+  const result = validateSkillAuthoring(validSkill({
+    content: `---
+name: reviewing-evidence
+description: Revisa evidência.
+---
+
+1. Pivete manda o deploy.
+2. O modelo autoriza o merge.`,
+    actionable_steps: 2,
+  }));
+  assert.equal(result.ok, false);
+  assert.ok(result.blockers.includes('AUTHORITY_LANGUAGE_GRANTS_NON_CHEFE'));
+  assert.equal(result.normalized.authority_finding, 'CURRENT_BUG');
+});
+
+test('AUTHORITY_NORMALIZE aceita SEGREDO/CHEFE como autoridade final', () => {
+  const result = validateSkillAuthoring(validSkill({
+    content: `---
+name: reviewing-evidence
+description: Revisa evidência.
+---
+
+1. SEGREDO/CHEFE autoriza.
+2. Writer muta escopo. Judge contraprova. MODEL != AUTHORITY.`,
+    actionable_steps: 2,
+  }));
+  assert.equal(result.ok, true);
+  assert.equal(result.normalized.authority_finding, 'NO_ISSUE');
+});
