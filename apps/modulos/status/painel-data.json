@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-19T09:45:02.672Z",
-  "updatedAtBR": "19/08/2026, 06:45:02 BRT",
+  "updatedAt": "2026-08-19T10:11:52.165Z",
+  "updatedAtBR": "19/08/2026, 07:11:52 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "feat(security): delta migration + host audit scripts from PRIVATE-SECURITY-BANK-FOUNDATION",
+    "lastCommit": "feat(skills): integrate delta from zips - open-second-brain, skills_collection, agi-self-improvement",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-19T10:11:52.165Z",
+      "titulo": "Push na main · dda68c0d9e45a7a85765ca5d330e39bc584423a6",
+      "detalhe": "feat(skills): integrate delta from zips - open-second-brain, skills_collection, agi-self-improvement",
+      "area": "Repositório",
+      "sha": "dda68c0",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-19T09:45:02.672Z",
       "titulo": "Push na main · 05e7f3b14d56b02055cf5912947e60f7ccb53ca6",
       "detalhe": "feat(security): delta migration + host audit scripts from PRIVATE-SECURITY-BANK-FOUNDATION",
@@ -988,14 +996,6 @@
       "detalhe": "feat(vps): fundar rebuild determinístico e inventário read-only (#964)",
       "area": "Repositório",
       "sha": "27c581c",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-16T14:52:35.014Z",
-      "titulo": "Push na main · c9bfc7d47a47a5216dce3ad9a49c01d2c1fca5be",
-      "detalhe": "fix(autonomia): exigir seis gates verdes antes de qualquer promoção (#958)",
-      "area": "Repositório",
-      "sha": "c9bfc7d",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-19T10:11:52.165Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · dda68c0d9e45a7a85765ca5d330e39bc584423a6 (dda68c0)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-19T09:45:02.672Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 05e7f3b14d56b02055cf5912947e60f7ccb53ca6 (05e7f3b)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-16T15:26:41.398Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 27c581c745ab7f0fd8f869507956622c4bba7a8d (27c581c)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-16T14:52:35.014Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · c9bfc7d47a47a5216dce3ad9a49c01d2c1fca5be (c9bfc7d)",
       "area": "Repositório",
       "status": "sucesso"
     }
