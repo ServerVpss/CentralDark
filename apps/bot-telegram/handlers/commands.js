@@ -12,7 +12,7 @@ module.exports = {
         text: '🤖 <b>MultiZap Bot</b>\n\nBem-vindo! Escolha uma opção:',
         buttons: [
           [{ text: '📊 Status', callback_data: 'cmd:status' }, { text: '🔌 Integrações', callback_data: 'cmd:integracoes' }],
-          [{ text: '⚡ Skills', callback_data: 'cmd:skills' }, { text: '❓ Ajuda', callback_data: 'cmd:help' }],
+          [{ text: '🔥 Skills', callback_data: 'cmd:skills' }, { text: '❓ Ajuda', callback_data: 'cmd:help' }],
         ],
       },
     };
@@ -39,7 +39,7 @@ module.exports = {
     return {
       handled: true,
       menu: {
-        text: '⚡ <b>Skills disponíveis</b>\n\nSelecione uma categoria:',
+        text: '🔥 <b>Skills disponíveis</b>\n\nSelecione uma categoria:',
         buttons: [
           [{ text: '💬 Comunicação', callback_data: 'skills:communication' }],
           [{ text: '🤖 IA', callback_data: 'skills:ai' }],
