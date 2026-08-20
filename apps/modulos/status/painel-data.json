@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-20T08:08:22.267Z",
-  "updatedAtBR": "20/08/2026, 05:08:22 BRT",
+  "updatedAt": "2026-08-20T08:55:25.497Z",
+  "updatedAtBR": "20/08/2026, 05:55:25 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "chore(deps): bump the npm_and_yarn group across 1 directory with 14 updates (#1083)",
+    "lastCommit": "chore(deps): bump the pip group across 3 directories with 8 updates (#1070)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-20T08:55:25.497Z",
+      "titulo": "Push na main · 1bee7837a03fa4c20eadb711f1d6379f4d983f8a",
+      "detalhe": "chore(deps): bump the pip group across 3 directories with 8 updates (#1070)",
+      "area": "Repositório",
+      "sha": "1bee783",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-20T08:08:22.267Z",
       "titulo": "Push na main · c5e9d3131fc13ca1ead71923c54aea10b6ccb3dc",
       "detalhe": "chore(deps): bump the npm_and_yarn group across 1 directory with 14 updates (#1083)",
@@ -988,14 +996,6 @@
       "detalhe": "chore(history): remover artefatos dedicados ao fable-method (#969)",
       "area": "Repositório",
       "sha": "62f405b",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-16T16:47:18.599Z",
-      "titulo": "Push na main · 0809c0469a2da60c28f5557d482b5c3d51972862",
-      "detalhe": "feat(skill): cristalizar Menos é Mais como densidade de valor (#967)",
-      "area": "Repositório",
-      "sha": "0809c04",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-20T08:55:25.497Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 1bee7837a03fa4c20eadb711f1d6379f4d983f8a (1bee783)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-20T08:08:22.267Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · c5e9d3131fc13ca1ead71923c54aea10b6ccb3dc (c5e9d31)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-16T17:02:34.971Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 62f405b7e180503871564076e734fbffc41b84ed (62f405b)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-16T16:47:18.599Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 0809c0469a2da60c28f5557d482b5c3d51972862 (0809c04)",
       "area": "Repositório",
       "status": "sucesso"
     }
