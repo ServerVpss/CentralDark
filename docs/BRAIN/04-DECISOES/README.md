@@ -7,7 +7,7 @@ updated: 2026-06-29
 
 # 📋 Decisões — CentralDark
 
-> Decisões importantes tomadas pelo Pivete ficam aqui.
+> Decisões importantes tomadas pelo SEGREDO/CHEFE ficam aqui.
 > Versão técnica/operacional: [[08-HISTORICO-DECISOES]] (em docs/CONSCIENCIA/)
 
 ---
@@ -17,4 +17,4 @@ updated: 2026-06-29
 - [[08-HISTORICO-DECISOES]] — histórico completo de decisões (CONSCIENCIA)
 - [[DECISION-RECORDER]] — skill para registrar decisões via bot
 - [[01-PENDENCIAS]] — tarefas que surgem das decisões
-- [[BRAIN]] — raiz do vault
+- [[BRAIN]] — raiz do vault (00-MAPA-SISTEMA)

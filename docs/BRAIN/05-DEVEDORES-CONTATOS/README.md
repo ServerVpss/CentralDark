@@ -29,7 +29,7 @@ A IA entende e registra aqui automaticamente.
 
 ```dataview
 TABLE file.ctime AS "Registrado em", tags AS "Tags"
-FROM "06 - Devedores & Contatos"
+FROM "05-DEVEDORES-CONTATOS"
 SORT file.ctime DESC
 ```
 
@@ -41,6 +41,6 @@ SORT file.ctime DESC
 
 ## Conexões Rápidas
 
-- [[01-PENDENCIAS]] — pendências financeiras que viram tarefas
-- [[BRAIN]] — raiz do vault
+- [[04-DECISOES/01-PENDENCIAS]] — pendências financeiras que viram tarefas
+- [[BRAIN]] — raiz do vault (00-MAPA-SISTEMA)
 - [[00-LEIA-PRIMEIRO]] — regras de roteamento

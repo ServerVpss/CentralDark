@@ -35,16 +35,14 @@ estado técnico atual → Git/PR/HEAD + runtime/logs medidos
 
 | Pasta | Papel |
 |---|---|
-| `00 - Mapa do Sistema` | mapas e postura reconciliada |
-| `01 - Pendências` | registros consultivos; confirmar estado vivo |
-| `02 - Arquitetura` | desenhos/decisões arquiteturais |
-| `03 - MCP & Hub` | referências de ferramentas e integrações |
-| `04 - Design & Visual` | referências visuais |
-| `05 - Documentação` | runbooks e documentação |
-| `06 - Decisões` | proveniência de decisões |
-| `07 - Reuniões & Notas` | notas humanas |
-| `08 - Recursos` | referências externas |
-| `09 - Arquivo Morto` | material histórico |
+| `00-MAPA-SISTEMA` | entrada, mapas, MOCs e postura reconciliada |
+| `01-CONCEITOS` | conceitos cristalizados (Banda, Dissonância, Mineração, Orquestração, Ouro, Identidade, Artefatos) |
+| `02-ENTRADA` | matéria bruta, padrões e Raw |
+| `03-DOCUMENTACAO` | runbooks, AGENTS-LIBRARY e canvas |
+| `04-DECISOES` | pendências e proveniência de decisões |
+| `05-DEVEDORES-CONTATOS` | devedores e contatos |
+| `06-REUNIOES-NOTAS` | notas humanas |
+| `07-APRENDIZADOS-MEMORIAS` | cristais, ouro do CHEFE e memórias |
 
 ## Regra de memória
 

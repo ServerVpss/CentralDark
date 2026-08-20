@@ -107,11 +107,12 @@ Mega Painel / Relatórios / Obsidian Git
 
 ## Como usar no Obsidian
 
-1. Abrir o vault `E:\CentralDark\Obsidian\Brain`.
+1. Abrir o vault `C:\CentralDark\Pivete\CentralDark\docs\BRAIN`.
 2. Rodar `Obsidian Git: Pull`.
-3. Começar por `docs/BRAIN/BRAIN.md`.
-4. Consultar `docs/BRAIN/01-PENDENCIAS.md` antes de decidir próxima tarefa.
-5. Consultar `docs/BRAIN/02-ARQUITETURA.md` antes de mexer em fluxo, webhook, MCP ou VPS.
+3. Começar por `docs/BRAIN/00-MAPA-SISTEMA/BRAIN.md`.
+4. Consultar `docs/BRAIN/00-MAPA-SISTEMA/INDEX.md` para navegação completa.
+5. Consultar `docs/BRAIN/04-DECISOES/01-PENDENCIAS.md` antes de decidir próxima tarefa.
+6. Consultar `docs/BRAIN/00-MAPA-SISTEMA/02-ARQUITETURA.md` antes de mexer em fluxo, webhook, MCP ou VPS.
 
 ---
 

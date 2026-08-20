@@ -36,7 +36,7 @@ Fale pelo Telegram de qualquer jeito:
 
 ```dataview
 TABLE file.ctime AS "Registrado em", tags AS "Tags"
-FROM "08 - Aprendizados & Memórias"
+FROM "07-APRENDIZADOS-MEMORIAS"
 SORT file.ctime DESC
 ```
 
@@ -48,6 +48,6 @@ SORT file.ctime DESC
 
 ## Conexões Rápidas
 
-- [[07 - Reuniões & Notas]] — notas que geraram esses aprendizados
+- [[06-REUNIOES-NOTAS]] — notas que geraram esses aprendizados
 - [[APRENDIZADOS]] — aprendizados técnicos (CONSCIENCIA)
-- [[BRAIN]] — raiz do vault
+- [[BRAIN]] — raiz do vault (00-MAPA-SISTEMA)

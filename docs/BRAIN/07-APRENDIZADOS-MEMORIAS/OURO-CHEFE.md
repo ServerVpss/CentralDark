@@ -45,6 +45,8 @@
 
 29. **[2026-08-20, CRIADO E PROVADO — não achado, criado por ordem explícita do CHEFE] `!EXECUÇÃO_REVERSÍVEL` e `!REMEDIÇÃO` registrados como gatilhos oficiais.** Owners novos: `docs/CONSCIENCIA/EXECUCAO-REVERSIVEL.md`, `docs/CONSCIENCIA/REMEDICAO.md`. Registrados em `ADMINISTRAVEIS.json` + `.md`. **Prova real:** teste `admin-administrables.test.mjs` rodado localmente, 3/3 pass, confirmando bijeção entre os 5 marcadores canônicos e os 5 itens do registro. Pegadinha encontrada e corrigida: marcador `ADMINISTRABLE_COMMAND=X` NUNCA pode ir entre crases (`` `X` ``) — o regex `^\s*ADMINISTRABLE_COMMAND` exige início de linha limpo, crase quebra o match silenciosamente (zero erro, só zero resultado). Arquivos precisam estar `git add`ados — o teste lê via `git ls-files`, arquivo só no disco não conta. CHEFE corrigiu explicitamente: "eu já tomei a partir do momento que mandei criar algo ou fazer" — ordem de criação é diferente de pedido de confirmar hipótese; quando é ordem, prova vem DEPOIS da execução, não trava a execução.
 
+30. **Contagem de "commits atrás do main" não é métrica de piora/melhora — é só sinal de desatualização.** 25 vs 31 commits atrás é a MESMA classe de problema (branch desatualizada), não regressão. Não comparar números de sessões diferentes como se fosse tendência — CHEFE corrigiu: "não faz diferença, não é pior nem melhor". Foco é: branch desatualizada → sim/não, não quanto.
+
 ## Próximo
 - CHEFE continua trazendo → eu adiciona aqui
 - Revisitar quando houver padrão novo ou correção
