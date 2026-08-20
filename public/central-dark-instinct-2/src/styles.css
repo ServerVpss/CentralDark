@@ -1,0 +1,432 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Sistema de design CentralDark — dark-neon premium.
+ * Base preta absoluta com acentos em dourado, azul, verde e roxo.
+ * Todas as cores em oklch. Nunca usar cores fixas nos componentes.
+ */
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-neon-blue: var(--neon-blue);
+  --color-neon-green: var(--neon-green);
+  --color-neon-purple: var(--neon-purple);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+
+  --font-display: "Space Grotesk", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", monospace;
+}
+
+:root {
+  --radius: 0.75rem;
+
+  --background: oklch(0.12 0.012 260);
+  --foreground: oklch(0.95 0.008 90);
+  --surface: oklch(0.16 0.016 265);
+  --surface-2: oklch(0.2 0.02 268);
+
+  --card: oklch(0.165 0.016 265);
+  --card-foreground: oklch(0.95 0.008 90);
+  --popover: oklch(0.18 0.018 266);
+  --popover-foreground: oklch(0.95 0.008 90);
+
+  --gold: oklch(0.82 0.15 88);
+  --gold-soft: oklch(0.68 0.12 84);
+  --neon-blue: oklch(0.72 0.17 245);
+  --neon-green: oklch(0.79 0.19 155);
+  --neon-purple: oklch(0.68 0.2 305);
+
+  --primary: oklch(0.82 0.15 88);
+  --primary-foreground: oklch(0.14 0.012 90);
+  --secondary: oklch(0.22 0.02 268);
+  --secondary-foreground: oklch(0.95 0.008 90);
+  --muted: oklch(0.21 0.018 266);
+  --muted-foreground: oklch(0.72 0.015 265);
+  --accent: oklch(0.72 0.17 245);
+  --accent-foreground: oklch(0.13 0.012 260);
+  --destructive: oklch(0.65 0.21 25);
+  --destructive-foreground: oklch(0.97 0.008 90);
+
+  --border: oklch(0.32 0.02 265 / 55%);
+  --input: oklch(0.3 0.02 265 / 65%);
+  --ring: oklch(0.82 0.15 88 / 60%);
+
+  --gradient-gold: linear-gradient(
+    120deg,
+    oklch(0.9 0.1 95),
+    oklch(0.82 0.15 88) 45%,
+    oklch(0.62 0.11 78)
+  );
+  --gradient-neon: linear-gradient(
+    120deg,
+    var(--neon-blue),
+    var(--neon-purple) 50%,
+    var(--neon-green)
+  );
+  --gradient-surface: linear-gradient(
+    160deg,
+    oklch(0.19 0.02 268 / 92%),
+    oklch(0.13 0.014 262 / 92%)
+  );
+
+  --shadow-neon: 0 0 0 1px oklch(0.82 0.15 88 / 18%),
+    0 18px 60px -24px oklch(0.82 0.15 88 / 35%);
+  --shadow-blue: 0 0 0 1px oklch(0.72 0.17 245 / 25%),
+    0 18px 60px -26px oklch(0.72 0.17 245 / 40%);
+  --shadow-deep: 0 30px 90px -40px oklch(0 0 0 / 85%);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-display);
+    -webkit-font-smoothing: antialiased;
+    background-image:
+      radial-gradient(
+        60rem 40rem at 12% -8%,
+        oklch(0.72 0.17 245 / 14%),
+        transparent 70%
+      ),
+      radial-gradient(
+        55rem 38rem at 92% 4%,
+        oklch(0.68 0.2 305 / 12%),
+        transparent 72%
+      ),
+      radial-gradient(
+        50rem 34rem at 50% 108%,
+        oklch(0.79 0.19 155 / 10%),
+        transparent 70%
+      );
+    background-attachment: fixed;
+  }
+
+  ::selection {
+    background: oklch(0.82 0.15 88 / 30%);
+  }
+}
+
+/* Texto com preenchimento dourado */
+@utility text-gold-gradient {
+  background: var(--gradient-gold);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility text-neon-gradient {
+  background: var(--gradient-neon);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Cartão de vidro escuro padrão do site */
+@utility panel {
+  background: var(--gradient-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-deep);
+}
+
+@utility panel-gold {
+  background: var(--gradient-surface);
+  border: 1px solid oklch(0.82 0.15 88 / 30%);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-neon);
+}
+
+@utility glow-gold {
+  box-shadow: var(--shadow-neon);
+}
+
+@utility glow-blue {
+  box-shadow: var(--shadow-blue);
+}
+
+/* Malha técnica de fundo */
+@utility grid-mesh {
+  background-image:
+    linear-gradient(oklch(1 0 0 / 4%) 1px, transparent 1px),
+    linear-gradient(90deg, oklch(1 0 0 / 4%) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+@utility hairline {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    oklch(0.82 0.15 88 / 45%),
+    transparent
+  );
+}
+
+/* Animações sutis */
+@keyframes cd-rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes cd-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes cd-orbit {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@utility animate-rise {
+  animation: cd-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@utility animate-soft-pulse {
+  animation: cd-pulse 3.4s ease-in-out infinite;
+}
+
+@utility animate-orbit {
+  animation: cd-orbit 26s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Acessibilidade: foco sempre visível em qualquer elemento interativo */
+@layer base {
+  :where(a, button, [role="button"], input, select, textarea, summary, [tabindex]):focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+}
+
+/* Bloco de marcas de provenance: só aparece na exportação em PDF */
+.print-stamp {
+  display: none;
+}
+
+/* ---------- Layout de impressão / exportação em PDF ---------- */
+@media print {
+  html {
+    scroll-behavior: auto;
+  }
+
+  body {
+    background: #fff !important;
+    background-image: none !important;
+    color: #101010 !important;
+  }
+
+  header,
+  footer,
+  .print\:hidden,
+  [data-print-hide] {
+    display: none !important;
+  }
+
+  main {
+    display: block;
+  }
+
+  /* garante que animações de entrada não escondam conteúdo no papel */
+  main *,
+  .print-stamp * {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+
+  section {
+    padding: 12pt 0 !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  h1,
+  h2,
+  h3 {
+    color: #101010 !important;
+    break-after: avoid;
+  }
+
+  h1 {
+    font-size: 22pt !important;
+  }
+  h2 {
+    font-size: 15pt !important;
+  }
+  h3 {
+    font-size: 11pt !important;
+  }
+
+  p,
+  li,
+  span,
+  td,
+  th {
+    color: #232323 !important;
+    font-size: 10pt !important;
+    line-height: 1.45 !important;
+  }
+
+  /* textos com gradiente precisam voltar a ter cor sólida no papel */
+  .text-gold-gradient,
+  .text-neon-gradient {
+    background: none !important;
+    color: #101010 !important;
+    -webkit-text-fill-color: #101010 !important;
+  }
+
+  .panel,
+  .panel-gold {
+    background: #fff !important;
+    border: 0.6pt solid #b9b9b9 !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+  }
+
+  /* badges e chips: no papel viram contorno claro com texto escuro */
+  main span,
+  main th span,
+  .print-stamp span {
+    background: transparent !important;
+    background-image: none !important;
+    color: #1a1a1a !important;
+    -webkit-text-fill-color: #1a1a1a !important;
+    border-color: #9a9a9a !important;
+  }
+
+  .grid-mesh,
+  .hairline,
+  [aria-hidden="true"] {
+    display: none !important;
+  }
+
+  img {
+    display: none !important;
+  }
+
+  /* grades viram uma coluna: layout responsivo no papel */
+  [class*="grid-cols"] {
+    display: block !important;
+  }
+
+  [class*="grid-cols"] > * {
+    margin-bottom: 8pt;
+  }
+
+  table {
+    width: 100% !important;
+    border-collapse: collapse;
+  }
+
+  th,
+  td {
+    border: 0.6pt solid #c4c4c4 !important;
+    padding: 4pt 6pt !important;
+    text-align: left;
+  }
+
+  /* Marcas de provenance no topo de toda exportação */
+  .print-stamp {
+    display: block !important;
+    border-bottom: 1pt solid #101010;
+    margin-bottom: 14pt;
+    padding-bottom: 8pt;
+  }
+
+  .print-stamp h1 {
+    margin: 0;
+  }
+
+  .print-stamp-meta {
+    font-family: var(--font-mono);
+    font-size: 8pt !important;
+    color: #444 !important;
+    word-break: break-all;
+  }
+
+  .print-stamp-warn {
+    font-size: 8.5pt !important;
+    color: #101010 !important;
+  }
+
+  /* Modo "seções-chave": esconde tudo que não estiver marcado */
+  body[data-print="chave"] main > section:not([data-key="1"]) {
+    display: none !important;
+  }
+
+  @page {
+    margin: 14mm;
+  }
+}
+

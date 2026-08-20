@@ -216,7 +216,7 @@ jobs:
 
       - name: Validar mapa e contratos do repositório inteiro
         env:
-          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before || '' }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before || github.sha }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
           AUTHORITY_APPROVED: ${{ steps.authority.outputs.approved }}
         run: |
@@ -229,7 +229,7 @@ jobs:
 
       - name: Validar porta, fronteira CentralDark e reuso de workflows
         env:
-          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before || '' }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before || github.sha }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
           set -euo pipefail
@@ -240,7 +240,7 @@ jobs:
       - name: Emitir todos os relatórios reproduzíveis
         if: always()
         env:
-          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before || '' }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before || github.sha }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
           AUTHORITY_APPROVED: ${{ steps.authority.outputs.approved }}
         run: |

@@ -23,6 +23,7 @@
   "phases": [
     "PLAN_ONLY",
     "INGEST",
+    "AUTHORITY_NORMALIZE",
     "EXTRACT",
     "DEDUPE",
     "COUNTERPROOF",
@@ -188,7 +189,14 @@
   },
   "tick": {
     "private_chain_of_thought_required": false,
-    "fields": ["phase", "delta", "owner", "route", "blocker", "next"],
+    "fields": [
+      "phase",
+      "delta",
+      "owner",
+      "route",
+      "blocker",
+      "next"
+    ],
     "purpose": "COMPRESSED_OPERATIONAL_PROGRESS_RECEIPT"
   },
   "laws": [
@@ -203,5 +211,23 @@
     "DETERMINISTIC_ROUTINE_BEFORE_AGENT",
     "REUSE_EXISTING_SKILL_OWNER_BEFORE_CREATING_NEW_SKILL",
     "ENGINE_BY_OBSERVED_FITNESS_NOT_NAME"
-  ]
+  ],
+  "authority_normalize": {
+    "enabled": true,
+    "module": ".agents/skills/knowledge-compiler/scripts/authority-normalize.mjs",
+    "final_human_authority": "SEGREDO/CHEFE",
+    "capability_absorbed": true,
+    "source_authority_absorbed": false,
+    "source_classes": [
+      "CURRENT_CANONICAL",
+      "LEGACY_HISTORICAL",
+      "EXTERNAL_UPSTREAM"
+    ],
+    "finding_classes": [
+      "CURRENT_BUG",
+      "LEGACY_OK",
+      "EXTERNAL_ADAPTED",
+      "NO_ISSUE"
+    ]
+  }
 }

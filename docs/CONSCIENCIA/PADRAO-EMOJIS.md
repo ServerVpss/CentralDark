@@ -1,90 +1,89 @@
+# PADRAO-EMOJIS — CentralDark
+
+> AUTORIDADE: SEGREDO/CHEFE
+> OBJETIVO: 1 emoji = 1 ação/comando/gatilho. NUNCA repetir emoji na mesma coluna nem entre colunas.
+> USO: logs, Telegram, painel WebUI, GitHub, chat Hermes. Emissor deve usar o emoji da linha correspondente.
+> STATUS: canônico (substitui link fantasma citado em 50+ docs que apontavam para este arquivo inexistente).
+
 ---
-title: "Padrão de Emojis — Logs e Notificações"
-date: 2026-07-03
-tags: ["consciencia", "padrao", "logs"]
-updated: 2026-07-03
+
+## 🎯 GATILHOS OFICIAIS (comandos da Casa)
+
+| Emoji | Gatilho | Fase dominante | Quando emitir |
+|-------|---------|----------------|---------------|
+| 🔥 | `#ACORDAR` | medição de estado vivo / sincronizar | início de qualquer ação, antes de opinar |
+| 🧭 | `!CALIBRAR` | reconciliação, correção de rota | intenção × estado diverge, realinhar |
+| 🎯 | `!MULTIBUSSOLA` | navegação multieixo / próximo passo | definir objetivo corrente e direção |
+| 🔍 | `META LUPA` / `META(x)` | falsificar / prover | aplicar lupa sobre própria saída ou claim |
+
+> Nota: 🔥 também é voz de "fogo/acordar" no chat — é o mesmo gatilho, não conflita.
+
 ---
 
-# 📢 PADRÃO DE EMOJIS — Fonte da Verdade
+## 🚦 STATUS (estado de execução)
 
-> Toda IA/script/workflow que gerar log, notificação Telegram, mensagem GitHub ou linha no painel status DEVE usar SÓ esses emojis, na função certa. Nada de emoji aleatório, nada de mix.
+| Emoji | Significado | Quando usar |
+|-------|-------------|-------------|
+| ✅ | Sucesso / concluído | job ou etapa finalizada sem erro |
+| ⚠️ | Atenção / retry | precisa validação manual ou segunda tentativa |
+| ❌ | Erro definitivo | falha confirmada |
+| 🔄 | Em andamento / sincronizando | processo rodando, fila, rebuild |
+| ⏳ | Aguardando / fila | espera externa, timeout |
+| 🔒 | Protegido / bloqueado | recurso trancado, permissão faltando |
 
-## 🚦 Status
-| Emoji | Uso |
-|---|---|
-| ✅ | Sucesso, ok, concluído |
-| ⚠️ | Alerta, atenção, retry |
-| ❌ | Erro, falha final |
-| 🔄 | Em andamento, retry, sincronizando |
-| ⏳ | Aguardando, fila, timeout |
-| 🔒 | Protegido, bloqueado |
+---
 
-## 🛠️ Ação
-| Emoji | Uso |
-|---|---|
-| 🚀 | Deploy, publish |
-| 🛠️ | Fix, correção |
+## 🛠️ AÇÃO (verbos de trabalho)
+
+| Emoji | Uso típico |
+|-------|------------|
+| 🚀 | Deploy / publish |
+| 🛠️ | Fix / correção |
 | 🧠 | Aprendizado registrado |
-| 📦 | Build, install |
-| 🎯 | Passo/objetivo atual |
+| 📦 | Build / install |
 | 🔨 | Trabalho em execução (Hermes) |
-| 🧙 | Conselho/tutor debatendo |
-| 📥 | Checkout, download |
-| 📤 | Push, upload |
-
-## 🧩 Módulo
-| Emoji | Uso |
-|---|---|
-| 🤖 | Bots Telegram |
-| 📊 | Painel status |
-| 🧬 | HUB (hub.centralldark.com) |
-| 📡 | VPS (PM2, Caddy) |
-| 🗂️ | GitHub |
-| 💾 | Supabase |
-| 📚 | Segundo Cérebro |
-| 🩸 | TelePainel/Fiscal |
-| 🎨 | UI/UX (Esmeralda) |
-
-## 👥 Agentes
-| Emoji | Quem |
-|---|---|
-| 👑 | Pivete (admin) |
-| 🧙 | Fabler (mestre-sábio) |
-| 🔨 | Hermes (executor) |
-| 💎 | Esmeralda (visual) |
-| 🧠 | GPT-5.5 (analista) |
-| ⚡ | Gemini 3 Flash (executor rápido) |
-| 🎯 | GPT-5.4 (preciso) |
-| 🔍 | Gemini 2.5 Pro (cético) |
-| 🎨 | GPT-5 (criativo) |
-
-## 📐 Card padrão (Telegram admin)
-
-```
-🔨 Hermes · Round N · HH:MM
-🎯 Passo: <descrição curta>
-🧙 Conselho: Fabler ✅ | GPT-5.5 ✅ | Gemini Pro ⚠️
-📦 Commit: <sha> → <resumo>
-⏱️ <duração> | 🧠 +N aprendizados
-```
-
-## 📏 Linha padrão (canal Status)
-
-```
-🔨 Hermes ▓▓▓▓▓░░░░░ 50% · <missão> · round N/~T
-```
-
-## ❌ Nunca
-- Emoji sem função (decorativo).
-- Empilhar (✅✅✅).
-- Bandeiras, comidas, mãos em log técnico.
-
-**Fonte da verdade:** este arquivo.
+| 🧙 | Conselho / tutor |
+| 📥 | Checkout / download |
+| 📤 | Push / upload |
 
 ---
 
-## Conexões Rápidas
+## 👥 AGENTES (quem fala)
 
-- [[00-LEIA-PRIMEIRO]] — portão de entrada
-- [[MAPA-DO-CEREBRO]] — visão geral
-- [[CONSCIENCIA]] — documento mestre
+| Emoji | Agente |
+|-------|--------|
+| 👑 | CHEFE / SEGREDO (autoridade humana final) |
+| ⚡ | Hermes (executor / energia) |
+| 💎 | SOL / Esmeralda (coordenador(a) canônico) |
+| 🔧 | Pivete (executor legado / aliases) |
+
+---
+
+## 🧩 MÓDULOS (onde roda)
+
+| Emoji | Módulo |
+|-------|--------|
+| 🤖 | Bots Telegram |
+| 📡 | VPS |
+| 🗂️ | GitHub |
+| 💻 | Local / PC (CentralDark) |
+| 🔗 | MCP CentralDark |
+
+---
+
+## ⚒️ REGRA DE OURO (anti-repetição)
+
+1. Cada emoji acima tem DONO único. Não reutilizar em outra linha.
+2. Quem emite log/notificação escolhe o emoji pela AÇÃO ou GATILHO, não por estilo.
+3. Emoji fora desta tabela = não canônico. Se precisar de novo, propor e o CHEFE autoriza.
+4. Conflitos resolvidos nesta v1 (eram repetidos no rascunho):
+   - `🔄` era ACORDAR + Em-andamento → ACORDAR virou 🔥
+   - `🛠️` era CALIBRAR + Fix → CALIBRAR virou 🧭
+   - `🔨` era Hermes-agente + Hermes-executando → Hermes-agente virou ⚡
+   - `💎` era Esmeralda + Ouro → Ouro absorvido na voz, Esmeralda mantém 💎
+
+---
+
+ANCORADO: CHEFE / SEGREDO 👑
+DONO: docs/CONSCIENCIA/PADRAO-EMOJIS.md
+VERSAO: 1.0 (canônica, substitui link fantasma)

@@ -121,6 +121,54 @@
         { "id": "hide", "label": "Ocultar ficha", "icon": "🧽", "effect": "Oculta a ficha localmente sem desligar o comando nem alterar autoridade." },
         { "id": "reset", "label": "Restaurar visual", "icon": "↩️", "effect": "Remove preferências visuais locais e restaura a ficha no painel." }
       ]
+    },
+    {
+      "id": "execucao_reversivel",
+      "title": "!EXECUÇÃO_REVERSÍVEL",
+      "kind": "command",
+      "status": "CANONICAL",
+      "administrable": true,
+      "glyph": "🔁",
+      "command": "!EXECUÇÃO_REVERSÍVEL",
+      "aliases": ["!EXECUCAO_REVERSIVEL", "!EXECUÇÃO REVERSÍVEL"],
+      "purpose": "Antes de qualquer mutação: garantir menor delta possível e caminho de volta testável.",
+      "owner": "docs/CONSCIENCIA/EXECUCAO-REVERSIVEL.md",
+      "trigger_help": "Digite !EXECUÇÃO_REVERSÍVEL antes de mutar algo. Bloqueia ação sem rollback testado.",
+      "flow": [
+        "🔁 identificar a menor mutação possível",
+        "🧯 confirmar caminho de volta (revert/rollback/restore)",
+        "🧪 testar o rollback, não presumir",
+        "✅ executar somente se rollback provado"
+      ],
+      "buttons": [
+        { "id": "copy", "label": "Copiar gatilho", "icon": "📋", "effect": "Copia !EXECUÇÃO_REVERSÍVEL para a área de transferência." },
+        { "id": "edit", "label": "Editar oficial", "icon": "✏️", "effect": "Abre o owner canônico no GitHub para edição formal." },
+        { "id": "hide", "label": "Ocultar ficha", "icon": "🧽", "effect": "Oculta somente esta ficha neste navegador; não desliga o comando." }
+      ]
+    },
+    {
+      "id": "remediacao",
+      "title": "!REMEDIÇÃO",
+      "kind": "command",
+      "status": "CANONICAL",
+      "administrable": true,
+      "glyph": "🔬",
+      "command": "!REMEDIÇÃO",
+      "aliases": ["!REMEDICAO", "!REMEDIÇAO"],
+      "purpose": "Depois da ação: medir o estado real de novo, comparar T0→T1, só então declarar veredito.",
+      "owner": "docs/CONSCIENCIA/REMEDICAO.md",
+      "trigger_help": "Digite !REMEDIÇÃO depois de executar algo. Compara antes/depois; nunca aceita status amarelo/parcial.",
+      "flow": [
+        "🔬 medir estado real agora (T1)",
+        "📏 comparar com estado antes (T0)",
+        "🧮 calcular delta real",
+        "✅❌ veredito: PROVADO ou NÃO PROVADO — sem meio-termo"
+      ],
+      "buttons": [
+        { "id": "copy", "label": "Copiar gatilho", "icon": "📋", "effect": "Copia !REMEDIÇÃO para a área de transferência." },
+        { "id": "edit", "label": "Editar oficial", "icon": "✏️", "effect": "Abre o owner canônico no GitHub para edição formal." },
+        { "id": "hide", "label": "Ocultar ficha", "icon": "🧽", "effect": "Oculta somente esta ficha neste navegador; não desliga o comando." }
+      ]
     }
   ]
 }

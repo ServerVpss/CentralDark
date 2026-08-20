@@ -389,3 +389,40 @@ TICK:
 - gate: `.github/workflows/lupa-conformance.yml`.
 
 O código determinístico valida estrutura, estados, dedupe, promoção, política de importação e invalidação. A IA continua responsável pela parte semântica residual — entender intenção, extrair capacidade e propor arbitragem — sem poder pular os mesmos gates.
+
+
+## AUTHORITY_NORMALIZE (lei imutável na ingestão)
+
+```text
+CAPACIDADE_DA_SKILL → ABSORVE
+AUTORIDADE_DA_SKILL → NÃO
+AUTORIDADE_FINAL=SEGREDO/CHEFE
+SOL=COORDENA
+PIVETE/HERMES=EXECUTA
+WRITER=MUTA_ESCOPO
+JUDGE=CONTRAPROVA
+MODEL|WRITER|EXECUTOR|JUDGE != AUTHORITY
+```
+
+Pipeline em toda skill/doc/zip absorvido:
+
+```text
+AUTHORITY_SCAN
+→ CLASSIFY_SOURCE (CURRENT_CANONICAL|LEGACY_HISTORICAL|EXTERNAL_UPSTREAM)
+→ EXTRACT_CAPABILITY
+→ NORMALIZE_TO_CASA
+→ CONTRAPROVA
+→ OWNER_EXISTENTE
+→ TEST
+→ OURO
+```
+
+| Classe fonte | Achado | Ação |
+|---|---|---|
+| CURRENT_CANONICAL + linguagem que concede autoridade a não-Chefe | CURRENT_BUG | menor delta no owner; reformular |
+| LEGACY_HISTORICAL | LEGACY_OK | preservar; Pivete legado = LEGACY_ALIAS_OF_SEGREDO_CHEFE |
+| EXTERNAL_UPSTREAM | EXTERNAL_ADAPTED | capacidade sim; autoridade externa não |
+
+Implementação: `scripts/authority-normalize.mjs` (hook em `skill-authoring.mjs`).
+CLI: `node scripts/authority-normalize.mjs --scan-file PATH [--source CLASS]`
+
