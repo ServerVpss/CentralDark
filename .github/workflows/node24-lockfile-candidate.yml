@@ -40,7 +40,7 @@ jobs:
           set -euo pipefail
           node --version
           npm --version
-          npm install --package-lock-only --ignore-scripts --no-audit --no-fund
+          npm install --package-lock-only --include=optional --ignore-scripts --no-audit --no-fund
           npm ci --ignore-scripts --no-audit --no-fund
 
       - name: Publicar lockfile candidato
