@@ -35,12 +35,13 @@ Pivete consulta no vault local
 
 | Arquivo | Função |
 |---|---|
-| `BRAIN.md` | Visão central do segundo cérebro |
-| `00-MAPA.md` | Índice navegável do vault/repo |
-| `01-PENDENCIAS.md` | Espelho resumido das pendências vivas |
-| `02-ARQUITETURA.md` | Arquitetura operacional atual |
-| `06-DECISOES.md` | Decisões históricas e regras consolidadas |
-| `PLANO.md` | Próximos passos desta pasta |
+| `00-MAPA-SISTEMA/BRAIN.md` | Visão central do segundo cérebro |
+| `00-MAPA-SISTEMA/00-MAPA.md` | Índice navegável do vault/repo |
+| `00-MAPA-SISTEMA/INDEX.md` | Índice Obsidian completo (wikilinks) |
+| `04-DECISOES/01-PENDENCIAS.md` | Espelho resumido das pendências vivas |
+| `00-MAPA-SISTEMA/02-ARQUITETURA.md` | Arquitetura operacional atual |
+| `04-DECISOES/06-DECISOES.md` | Decisões históricas e regras consolidadas |
+| `00-MAPA-SISTEMA/PLANO.md` | Próximos passos desta pasta |
 
 ---
 

@@ -30,7 +30,7 @@ module.exports = {
 
         case 'skills':
           await messages.editMessage(chatId, messageId,
-            '⚡ <b>Skills</b>\n\nSelecione uma categoria:',
+            '🔥 <b>Skills</b>\n\nSelecione uma categoria:',
             [
               [{ text: '💬 Comunicação', callback_data: 'skills:communication' }],
               [{ text: '🤖 IA', callback_data: 'skills:ai' }],

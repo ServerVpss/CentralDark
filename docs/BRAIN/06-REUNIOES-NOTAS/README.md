@@ -26,7 +26,7 @@ Exemplos:
 
 ```dataview
 TABLE file.ctime AS "Registrado em", tags AS "Tags"
-FROM "07 - Reuniões & Notas"
+FROM "06-REUNIOES-NOTAS"
 SORT file.ctime DESC
 ```
 
@@ -38,6 +38,6 @@ SORT file.ctime DESC
 
 ## Conexões Rápidas
 
-- [[01-PENDENCIAS]] — tarefas que surgem das reuniões
-- [[08 - Aprendizados & Memórias]] — aprendizados que surgem das notas
-- [[BRAIN]] — raiz do vault
+- [[04-DECISOES/01-PENDENCIAS]] — tarefas que surgem das reuniões
+- [[07-APRENDIZADOS-MEMORIAS]] — aprendizados que surgem das notas
+- [[BRAIN]] — raiz do vault (00-MAPA-SISTEMA)
