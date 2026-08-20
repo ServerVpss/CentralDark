@@ -29,24 +29,6 @@ TMP="$(mktemp -d)"
 trap "rm -rf $TMP" EXIT
 
 # ------------------------------------------------------------
-<<<<<<< Updated upstream
-# REGRAS — lê modelos configuráveis do regras.json (Fase 4)
-# Hot-reload: cada execução relê o JSON.
-# ------------------------------------------------------------
-REGRAS="$ROOT/regras.json"
-if command -v jq >/dev/null 2>&1 && [ -f "$REGRAS" ]; then
-  M_ROUTER=$(jq -r '.modelos.router // "gemini-3-flash-preview"' "$REGRAS")
-  M_PRO=$(jq -r    '.modelos.voz1_pro // "gemini-3.1-pro-preview"' "$REGRAS")
-  M_GPT=$(jq -r    '.modelos.voz2_gpt // "gpt-5"' "$REGRAS")
-  M_FLASH=$(jq -r  '.modelos.voz3_flash // "gemini-3-flash-preview"' "$REGRAS")
-  M_JUIZ=$(jq -r   '.modelos.juiz // "gemini-3.1-pro-preview"' "$REGRAS")
-else
-  M_ROUTER="gemini-3-flash-preview"
-  M_PRO="gemini-3.1-pro-preview"
-  M_GPT="gpt-5"
-  M_FLASH="gemini-3-flash-preview"
-  M_JUIZ="gemini-3.1-pro-preview"
-=======
 # REGRAS — lê modelos configuráveis (Fase 4, hot-reload por execução)
 # ------------------------------------------------------------
 REGRAS_JSON="$ROOT/regras.json"
@@ -59,23 +41,15 @@ if command -v jq >/dev/null 2>&1 && [ -f "$REGRAS_JSON" ]; then
 else
   M_ROUTER="gemini-3-flash-preview"; M_PRO="gemini-3.1-pro-preview"
   M_GPT="gpt-5"; M_FLASH="gemini-3-flash-preview"; M_JUIZ="gemini-3.1-pro-preview"
->>>>>>> Stashed changes
 fi
 
 # ------------------------------------------------------------
 # HANDLERS — cada backend em uma função (fácil expandir)
 # ------------------------------------------------------------
-<<<<<<< Updated upstream
-call_darkai_flash()  { darkai -m "$M_FLASH"  "$1" 2>&1 || echo "[flash falhou]"; }
-call_darkai_pro()    { darkai -m "$M_PRO"    "$1" 2>&1 || echo "[pro falhou]"; }
-call_darkai_gpt5()   { darkai -m "$M_GPT"    "$1" 2>&1 || echo "[gpt5 falhou]"; }
-call_darkai_router() { darkai -m "$M_ROUTER" "$1" 2>&1 || echo "[router falhou]"; }
-=======
 call_darkai_router() { darkai -m "$M_ROUTER" "$1" 2>&1 || echo "[router falhou]"; }
 call_darkai_flash()  { darkai -m "$M_FLASH"  "$1" 2>&1 || echo "[flash falhou]"; }
 call_darkai_pro()    { darkai -m "$M_PRO"    "$1" 2>&1 || echo "[pro falhou]"; }
 call_darkai_gpt5()   { darkai -m "$M_GPT"    "$1" 2>&1 || echo "[gpt5 falhou]"; }
->>>>>>> Stashed changes
 call_darkai_juiz()   { darkai -m "$M_JUIZ"   "$1" 2>&1 || echo "[juiz falhou]"; }
 
 # ------------------------------------------------------------
