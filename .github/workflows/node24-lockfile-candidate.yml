@@ -34,19 +34,23 @@ jobs:
           cache: npm
           cache-dependency-path: apps/modulos/mcp/package-lock.json
 
-      - name: Instalar com dependências opcionais (gera lockfile + instala)
+      - name: Gerar lockfile com dependências opcionais
         working-directory: apps/modulos/mcp
         run: |
           set -euo pipefail
           node --version
           npm --version
-          npm install --include=optional --ignore-scripts --no-audit --no-fund --prefer-offline
+          # Remove lockfile existente para forçar regeneração completa
+          rm -f package-lock.json
+          # Instala tudo incluindo dependências opcionais
+          npm install --include=optional --ignore-scripts --no-audit --no-fund --legacy-peer-deps
 
-      - name: Verificar lockfile gerado
+      - name: Verificar dependências opcionais @esbuild/*
         working-directory: apps/modulos/mcp
         run: |
           set -euo pipefail
-          npm ls @esbuild/linux-x64 || echo "WARNING: @esbuild/linux-x64 não instalado"
+          echo "Verificando dependências @esbuild/* instaladas:"
+          npm ls @esbuild/linux-x64 || echo "WARNING: @esbuild/linux-x64 NÃO instalado"
           npm ls @esbuild/* 2>/dev/null | head -20 || true
 
       - name: Publicar lockfile candidato
