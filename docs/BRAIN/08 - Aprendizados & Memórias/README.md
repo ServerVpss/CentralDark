@@ -1,7 +1,16 @@
 ---
-title: "Aprendizados & Memórias do Pivete"
+title: Aprendizados & Memórias do Pivete
 date: 2026-06-29
-tags: ["pessoal", "aprendizado", "memorias", "lembrancas"]
+tags:
+  - pessoal
+  - aprendizado
+  - memorias
+  - lembrancas
+  - aprender
+  - ACORDAR
+  - casa
+  - bugs
+  - engenharia
 updated: 2026-06-29
 ---
 
