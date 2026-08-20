@@ -1,7 +1,27 @@
 ---
 title: "Skill: Semantic Linker"
 date: 2026-06-29
-tags: ["skill", "semantica", "links", "organizacao", "grafo"]
+tags:
+  - skill
+  - semantica
+  - links
+  - organizacao
+  - grafo
+  - ACORDAR
+  - automacao
+  - aprender
+  - biblioteca
+  - casa
+  - decisoes
+  - cristalizacao
+  - filosofia
+  - excalidraw
+  - engenharia
+  - hubbot
+  - prioridade
+  - telemetria
+  - tutorial
+  - swarm
 updated: 2026-06-29
 ---
 

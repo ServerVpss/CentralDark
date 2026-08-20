@@ -3,7 +3,7 @@
 import { z } from "zod";
 import { execSync } from "node:child_process";
 const GATEWAY_URL = "http://localhost:8080";
-const GATEWAY_TOKEN = "9899b0faade8bb7b6d6a652a8a4fcfaa646096720dee7aa06d0b40f9a89287d6";
+const GATEWAY_TOKEN = process.env.ELITE_GATEWAY_TOKEN || process.env.MULTIZAP_GATEWAY_TOKEN || "";
 const LOG_OUT = "/root/.pm2/logs/CentralDark-EliteHTTP-out.log";
 const LOG_ERR = "/root/.pm2/logs/CentralDark-EliteHTTP-error.log";
 function ok(data) {
@@ -34,6 +34,7 @@ export const eliteGatewayTools = [
             model: z.string().default("gpt-4o").optional().describe("Modelo (padrão: gpt-4o)"),
         }),
         handler: async (input) => {
+            if (!GATEWAY_TOKEN) return ok({ error: "ELITE_GATEWAY_TOKEN ausente no ambiente" });
             const res = await fetch(`${GATEWAY_URL}/v1/chat/completions`, {
                 method: "POST",
                 headers: {
@@ -86,7 +87,7 @@ export const eliteGatewayTools = [
             try {
                 const t0 = Date.now();
                 const res = await fetch(`${GATEWAY_URL}/v1/models`, {
-                    headers: { Authorization: `Bearer ${GATEWAY_TOKEN}` },
+                    headers: {'Authorization': 'Bearer ${GATEWAY_TOKEN}'},
                     signal: AbortSignal.timeout(8000),
                 });
                 latencyMs = Date.now() - t0;

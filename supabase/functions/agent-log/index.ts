@@ -8,6 +8,7 @@
 //        -d '{"agent":"MCP","area":"VPS","acao":"editou config","alvo":"nginx.conf","status":"sucesso"}'
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { normalizeTelemetryBatch } from "../_shared/evidence-envelope.mjs";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -71,11 +72,36 @@ Deno.serve(async (req) => {
     Deno.env.get("HUB_SUPABASE_SERVICE_ROLE_KEY")!,
   );
 
+  const telemetryInput = Array.isArray(corpo.events)
+    ? corpo.events
+    : [{
+        event: corpo.event ?? acao,
+        producer: corpo.producer ?? agent,
+        target: corpo.target ?? alvo ?? area,
+        mission_id: corpo.mission_id ?? metadata.mission_id,
+        writer_scope: corpo.writer_scope ?? metadata.writer_scope,
+        sha: corpo.sha ?? metadata.sha,
+        trace_id: corpo.trace_id ?? metadata.trace_id,
+        timestamp: corpo.timestamp ?? new Date().toISOString(),
+        result: corpo.result ?? status,
+        latency_ms: corpo.latency_ms,
+        tokens: corpo.tokens,
+        cost: corpo.cost,
+        context: metadata,
+      }];
+  const envelope = await normalizeTelemetryBatch(telemetryInput);
+  const rows = envelope.events.map((event) => ({
+    agent,
+    area,
+    acao: event.event,
+    alvo: event.target || alvo,
+    status: STATUS_VALIDOS.has(String(event.result).toLowerCase()) ? String(event.result).toLowerCase() : status,
+    metadata: { ...metadata, evidence_envelope: event },
+  }));
   const { data, error } = await supa
     .from("agent_events")
-    .insert({ agent, area, acao, alvo, status, metadata })
-    .select("id, ts")
-    .single();
+    .insert(rows)
+    .select("id, ts");
 
   if (error) {
     return new Response(JSON.stringify({ error: error.message }), {
@@ -84,7 +110,7 @@ Deno.serve(async (req) => {
     });
   }
 
-  return new Response(JSON.stringify({ ok: true, ...data }), {
+  return new Response(JSON.stringify({ ok: true, ...envelope, rows: data }), {
     status: 200,
     headers: { ...corsHeaders, "Content-Type": "application/json" },
   });

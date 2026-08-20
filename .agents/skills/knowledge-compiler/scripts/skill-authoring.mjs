@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { basename, posix } from 'node:path';
+import { authorityGateForSkillContent, selfTestAuthorityNormalize } from './authority-normalize.mjs';
 
 export const SKILL_AUTHORING_LIMITS = Object.freeze({
   description_max_chars: 1024,
@@ -133,6 +134,13 @@ export function validateSkillAuthoring(input = {}) {
   if (input.require_gerund === true) warnings.push('GERUND_STYLE_IS_SOURCE_GUIDANCE_NOT_HOUSE_GATE');
   if (input.require_third_person === true) warnings.push('THIRD_PERSON_STYLE_IS_SOURCE_GUIDANCE_NOT_HOUSE_GATE');
 
+  const authority = authorityGateForSkillContent(content, {
+    source_class: input.source_class || 'CURRENT_CANONICAL',
+    path: directory ? `${directory}/SKILL.md` : undefined,
+  });
+  blockers.push(...authority.blockers);
+  warnings.push(...authority.warnings);
+
   return {
     ok: blockers.length === 0,
     status: blockers.length === 0 ? 'PASS' : 'BLOCKED',
@@ -148,11 +156,14 @@ export function validateSkillAuthoring(input = {}) {
       line_count: lineCount,
       frontmatter_keys: parsed.keys,
       actionable_steps: input.actionable_steps ?? null,
+      authority_finding: authority.finding,
+      authority_hits: authority.hits.length,
     },
   };
 }
 
 export function selfTestSkillAuthoring() {
+  selfTestAuthorityNormalize();
   const valid = validateSkillAuthoring({
     repeated_across_sessions: true,
     directory: '.agents/skills/reviewing-evidence',
