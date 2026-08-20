@@ -20,6 +20,9 @@ jobs:
     if: github.repository == 'ServerVpss/CentralDark' && github.event.pull_request.head.repo.full_name == github.repository
     runs-on: windows-latest
     timeout-minutes: 15
+    defaults:
+      run:
+        shell: pwsh
     steps:
       - name: Checkout exact PR HEAD
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -37,21 +40,23 @@ jobs:
       - name: Gerar lockfile com dependências opcionais (Windows)
         working-directory: apps/modulos/mcp
         run: |
-          set -euo pipefail
+          Set-StrictMode -Version Latest
+          $ErrorActionPreference = 'Stop'
           node --version
           npm --version
           # Remove lockfile existente para forçar regeneração completa
-          rm -f package-lock.json
+          Remove-Item -Force -ErrorAction SilentlyContinue package-lock.json
           # Instala tudo incluindo dependências opcionais do Windows
           npm install --include=optional --ignore-scripts --no-audit --no-fund --legacy-peer-deps
 
       - name: Verificar dependências opcionais @esbuild/* (Windows)
         working-directory: apps/modulos/mcp
         run: |
-          set -euo pipefail
-          echo "Verificando dependências @esbuild/* instaladas (Windows):"
-          npm ls @esbuild/win32-x64 || echo "WARNING: @esbuild/win32-x64 NÃO instalado"
-          npm ls @esbuild/* 2>/dev/null | head -20 || true
+          Set-StrictMode -Version Latest
+          $ErrorActionPreference = 'Continue'
+          Write-Host "Verificando dependências @esbuild/* instaladas (Windows):"
+          npm ls @esbuild/win32-x64 | Write-Host
+          npm ls @esbuild/* 2>$null | Select-Object -First 20
 
       - name: Publicar lockfile candidato
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
