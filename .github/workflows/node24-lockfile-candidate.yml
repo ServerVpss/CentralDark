@@ -18,7 +18,7 @@ jobs:
   generate:
     name: Gerar e provar lockfile com Node 24/npm 11
     if: github.repository == 'ServerVpss/CentralDark' && github.event.pull_request.head.repo.full_name == github.repository
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     timeout-minutes: 15
     steps:
       - name: Checkout exact PR HEAD
@@ -34,7 +34,7 @@ jobs:
           cache: npm
           cache-dependency-path: apps/modulos/mcp/package-lock.json
 
-      - name: Gerar lockfile com dependências opcionais
+      - name: Gerar lockfile com dependências opcionais (Windows)
         working-directory: apps/modulos/mcp
         run: |
           set -euo pipefail
@@ -42,15 +42,15 @@ jobs:
           npm --version
           # Remove lockfile existente para forçar regeneração completa
           rm -f package-lock.json
-          # Instala tudo incluindo dependências opcionais
+          # Instala tudo incluindo dependências opcionais do Windows
           npm install --include=optional --ignore-scripts --no-audit --no-fund --legacy-peer-deps
 
-      - name: Verificar dependências opcionais @esbuild/*
+      - name: Verificar dependências opcionais @esbuild/* (Windows)
         working-directory: apps/modulos/mcp
         run: |
           set -euo pipefail
-          echo "Verificando dependências @esbuild/* instaladas:"
-          npm ls @esbuild/linux-x64 || echo "WARNING: @esbuild/linux-x64 NÃO instalado"
+          echo "Verificando dependências @esbuild/* instaladas (Windows):"
+          npm ls @esbuild/win32-x64 || echo "WARNING: @esbuild/win32-x64 NÃO instalado"
           npm ls @esbuild/* 2>/dev/null | head -20 || true
 
       - name: Publicar lockfile candidato
