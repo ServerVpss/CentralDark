@@ -37,7 +37,7 @@ jobs:
           cache: npm
           cache-dependency-path: apps/modulos/mcp/package-lock.json
 
-      - name: Gerar lockfile com dependências opcionais (Windows)
+      - name: Gerar lockfile com dependências opcionais (Windows nativo)
         working-directory: apps/modulos/mcp
         run: |
           Set-StrictMode -Version Latest
@@ -46,7 +46,7 @@ jobs:
           npm --version
           # Remove lockfile existente para forçar regeneração completa
           Remove-Item -Force -ErrorAction SilentlyContinue package-lock.json
-          # Instala tudo incluindo dependências opcionais do Windows
+          # Instala tudo incluindo dependências opcionais DO WINDOWS (ex: @esbuild/win32-x64)
           npm install --include=optional --ignore-scripts --no-audit --no-fund --legacy-peer-deps
 
       - name: Verificar dependências opcionais @esbuild/* (Windows)
