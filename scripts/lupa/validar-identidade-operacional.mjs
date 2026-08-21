@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { extname, join, relative, resolve, sep } from "node:path";
 import { pathToFileURL } from "node:url";
@@ -251,17 +252,74 @@ const TEXT_EXTENSIONS = new Set([
 const KNOWN_TEXT_FILENAMES = new Set([
   ".gitmodules", ".npmrc", ".yarnrc", ".yarnrc.yml", "Dockerfile", "Makefile", "Procfile",
 ]);
+const DEPENDENCY_MANIFESTS = new Set([
+  "package.json", "requirements.txt", "pyproject.toml", "Pipfile", "Gemfile", "Cargo.toml",
+  "go.mod", "composer.json",
+]);
+const DOC_LIKE_EXTENSIONS = new Set([".html", ".md", ".mdc", ".txt"]);
+const GENERIC_EXTERNAL_RULES = (() => {
+  const overrideVerb = ["ign", "ore"].join("");
+  const priorWord = ["pre", "vious"].join("");
+  const instructionWord = ["instruc", "tions"].join("");
+  const overrideVerbPt = ["ign", "ore"].join("");
+  const instructionWordPt = ["instru", "ções"].join("");
+  const priorWordPt = ["anter", "iores"].join("");
+  const overrideAlternatives = [overrideVerb, ["dis", "regard"].join(""), ["over", "ride"].join("")].join("|");
+  const priorAlternatives = [priorWord, "prior", "system", "developer"].join("|");
+  const instructionAlternatives = [instructionWord, "prompt", "rules"].join("|");
+  const overrideAlternativesPt = [overrideVerbPt, "desconsidere", "sobreponha"].join("|");
+  const instructionAlternativesPt = [instructionWordPt, "instrucoes", "regras", "prompt"].join("|");
+  const priorAlternativesPt = [priorWordPt, "anterior", "sistema", "desenvolvedor"].join("|");
+  return Object.freeze([
+    {
+      code: "EXTERNAL_DELTA_REMOTE_SHELL",
+      pattern: /\b(?:curl|wget)\b[^\n|]{0,500}\|\s*(?:sudo\s+)?(?:sh|bash|zsh|fish|python3?|node)\b/i,
+    },
+    {
+      code: "EXTERNAL_DELTA_REMOTE_PROCESS_SUBSTITUTION",
+      pattern: /\b(?:sh|bash|zsh)\s*<\(\s*(?:curl|wget)\b/i,
+    },
+    {
+      code: "EXTERNAL_DELTA_REMOTE_POWERSHELL",
+      pattern: /\b(?:irm|iwr|Invoke-WebRequest|Invoke-RestMethod)\b[^\n|]{0,500}\|\s*(?:iex|Invoke-Expression)\b/i,
+    },
+    {
+      code: "EXTERNAL_DELTA_REMOTE_CODE_IMPORT",
+      pattern: /\b(?:import|export)\b[^\n]{0,300}["']https?:\/\//i,
+    },
+    {
+      code: "EXTERNAL_DELTA_UNICODE_CONTROL",
+      pattern: /[\u200B-\u200F\u202A-\u202E\u2066-\u2069\uFEFF]/u,
+    },
+    {
+      code: "EXTERNAL_DELTA_PROMPT_OVERRIDE",
+      pattern: new RegExp(
+        `\\b(?:${overrideAlternatives})\\b.{0,100}\\b(?:${priorAlternatives})\\b.{0,100}\\b(?:${instructionAlternatives})\\b`,
+        "i",
+      ),
+    },
+    {
+      code: "EXTERNAL_DELTA_PROMPT_OVERRIDE_PT",
+      pattern: new RegExp(
+        `\\b(?:${overrideAlternativesPt})\\b.{0,100}\\b(?:${instructionAlternativesPt})\\b.{0,100}\\b(?:${priorAlternativesPt})\\b`,
+        "i",
+      ),
+    },
+  ]);
+})();
 const SENSITIVE_SEGMENTS = new Set([
   ".env", "secrets", "secret", "tokens", "token", "sessions", "session", ".ssh",
   "certs", "certificates", "credentials", "credential", "keys", "key",
 ]);
 
 function parseArgs(argv) {
-  const values = { repoRoot: process.cwd(), profileRoots: [], json: false };
+  const values = { repoRoot: process.cwd(), profileRoots: [], baseRef: null, headRef: null, json: false };
   for (let index = 0; index < argv.length; index += 1) {
     const arg = argv[index];
     if (arg === "--repo-root" && argv[index + 1]) values.repoRoot = argv[++index];
     else if (arg === "--profile-root" && argv[index + 1]) values.profileRoots.push(argv[++index]);
+    else if (arg === "--base-ref" && argv[index + 1]) values.baseRef = argv[++index];
+    else if (arg === "--head-ref" && argv[index + 1]) values.headRef = argv[++index];
     else if (arg === "--json") values.json = true;
   }
   values.repoRoot = resolve(values.repoRoot);
@@ -402,6 +460,196 @@ export function validateExternalSourceBoundary(repoRoot) {
   return findings;
 }
 
+function redactedDeltaFinding(code, path, line, detail = "Nova referência externa exige revisão explícita.") {
+  return {
+    code,
+    path,
+    line,
+    excerpt: `[EXTERNAL_DELTA_REDACTED] ${detail}`,
+  };
+}
+
+function parseAddedLines(diffText) {
+  const additions = [];
+  let path = null;
+  let newLine = 0;
+  for (const rawLine of diffText.split(/\r?\n/)) {
+    if (rawLine.startsWith("+++ ")) {
+      const candidate = rawLine.slice(4);
+      path = candidate === "/dev/null" ? null : candidate.replace(/^b\//, "");
+      continue;
+    }
+    const hunk = rawLine.match(/^@@\s+-\d+(?:,\d+)?\s+\+(\d+)(?:,\d+)?\s+@@/);
+    if (hunk) {
+      newLine = Number(hunk[1]);
+      continue;
+    }
+    if (!path || rawLine.startsWith("diff --git") || rawLine.startsWith("--- ")) continue;
+    if (rawLine.startsWith("+")) {
+      additions.push({ path, line: newLine, text: rawLine.slice(1) });
+      newLine += 1;
+    } else if (!rawLine.startsWith("-")) {
+      newLine += 1;
+    }
+  }
+  return additions;
+}
+
+function isDependencyManifest(path) {
+  return DEPENDENCY_MANIFESTS.has(path.split("/").at(-1));
+}
+
+function specialAddedLineFindings({ path, line, text }) {
+  const findings = [];
+  const normalized = path.replaceAll("\\", "/");
+  const fileName = normalized.split("/").at(-1);
+  const extension = extname(fileName).toLowerCase();
+  const workflow = normalized.startsWith(".github/workflows/") || /(?:^|\/)action\.ya?ml$/i.test(normalized);
+
+  if (normalized === ".gitmodules" && /^\s*url\s*=/.test(text)) {
+    findings.push(redactedDeltaFinding("EXTERNAL_DELTA_SUBMODULE_URL", path, line));
+  }
+
+  if (workflow) {
+    const uses = text.match(/^\s*(?:-\s*)?uses:\s*([^\s#]+)/i)?.[1];
+    if (uses && !uses.startsWith("./")) {
+      const separator = uses.lastIndexOf("@");
+      const ref = separator >= 0 ? uses.slice(separator + 1) : "";
+      if (!/^[a-f0-9]{40}$/i.test(ref)) {
+        findings.push(redactedDeltaFinding("EXTERNAL_DELTA_UNPINNED_ACTION", path, line, "Action externa sem SHA imutável."));
+      }
+    }
+  }
+
+  if (/^Dockerfile(?:\..+)?$/i.test(fileName)) {
+    const image = text.match(/^\s*FROM\s+([^\s]+)/i)?.[1];
+    if (image && image.toLowerCase() !== "scratch" && !/@sha256:[a-f0-9]{64}$/i.test(image)) {
+      findings.push(redactedDeltaFinding("EXTERNAL_DELTA_UNPINNED_CONTAINER", path, line, "Imagem externa sem digest SHA-256."));
+    }
+  }
+
+  if (isDependencyManifest(normalized)) {
+    const metadataOnly = /^\s*["']?(?:homepage|repository|bugs|funding)["']?\s*[:=]/i.test(text);
+    const remoteSpec = /(?:git\+https?:\/\/|git:\/\/|github:|https?:\/\/|file:|git\s*=\s*["']|url\s*=\s*["'])/i.test(text);
+    if (remoteSpec && !metadataOnly) {
+      findings.push(redactedDeltaFinding("EXTERNAL_DELTA_REMOTE_DEPENDENCY", path, line));
+    }
+  }
+
+  const remoteDownload = /\b(?:curl|wget)\b/i.test(text) &&
+    /https?:\/\//i.test(text) &&
+    /(?:\s-o\s|\s-O\s|--output(?:-document)?(?:=|\s))/i.test(text);
+  if (remoteDownload) {
+    findings.push(redactedDeltaFinding("EXTERNAL_DELTA_REMOTE_DOWNLOAD", path, line));
+  }
+
+  if (/\bgit\s+(?:clone|fetch|pull|submodule\s+add)\b/i.test(text) &&
+      /(?:https?:\/\/|ssh:\/\/|git:\/\/|git@[^\s:]+:)/i.test(text)) {
+    findings.push(redactedDeltaFinding("EXTERNAL_DELTA_REMOTE_GIT_FETCH", path, line));
+  }
+
+  if (DOC_LIKE_EXTENSIONS.has(extension)) {
+    const remoteEmbed = /<(?:script|iframe|object|embed|img|link)\b[^>]*(?:src|href|data)\s*=\s*["']?https?:\/\//i.test(text);
+    const remoteImage = /!\[[^\]]*\]\(\s*https?:\/\//i.test(text);
+    if (remoteEmbed || remoteImage) {
+      findings.push(redactedDeltaFinding("EXTERNAL_DELTA_REMOTE_EMBED", path, line));
+    }
+  }
+
+  if ([".css", ".scss"].includes(extension) && /@import\s+(?:url\()?\s*["']?https?:\/\//i.test(text)) {
+    findings.push(redactedDeltaFinding("EXTERNAL_DELTA_REMOTE_STYLE_IMPORT", path, line));
+  }
+
+  return findings;
+}
+
+export function validateGenericAddedText(text, path = "<memory>", line = 1) {
+  return [
+    ...findForbidden(
+      text,
+      GENERIC_EXTERNAL_RULES,
+      path,
+      { redactExcerpt: true, redactedExcerpt: "[EXTERNAL_DELTA_REDACTED]" },
+    ).map((finding) => ({ ...finding, line })),
+    ...specialAddedLineFindings({ path, line, text }),
+  ];
+}
+
+function changedPathMetadataFindings(repoRoot, baseRef, headRef) {
+  const findings = [];
+  const output = execFileSync(
+    "git",
+    ["diff", "--name-only", "-z", "--no-renames", baseRef, headRef, "--"],
+    { cwd: repoRoot, encoding: "utf8", maxBuffer: 8 * 1024 * 1024 },
+  );
+  for (const path of output.split("\0").filter(Boolean)) {
+    const normalized = path.replaceAll("\\", "/");
+    if (/(?:^|\/)(?:node_modules|\.venv|site-packages|vendor\/bundle)(?:\/|$)/i.test(normalized)) {
+      findings.push(redactedDeltaFinding("EXTERNAL_DELTA_VENDORED_DEPENDENCY", path, null));
+    }
+    if (/\.(?:exe|dll|dylib|so|bin|node|jar|class|wasm)$/i.test(normalized)) {
+      findings.push(redactedDeltaFinding("EXTERNAL_DELTA_BINARY_PAYLOAD", path, null));
+    }
+    let treeEntry = "";
+    try {
+      treeEntry = execFileSync(
+        "git",
+        ["ls-tree", headRef, "--", path],
+        { cwd: repoRoot, encoding: "utf8", maxBuffer: 1024 * 1024 },
+      );
+    } catch {
+      treeEntry = "";
+    }
+    const mode = treeEntry.match(/^(\d{6})\s/)?.[1];
+    if (mode === "120000") findings.push(redactedDeltaFinding("EXTERNAL_DELTA_SYMLINK", path, null));
+    if (mode === "160000") findings.push(redactedDeltaFinding("EXTERNAL_DELTA_GITLINK", path, null));
+  }
+  return findings;
+}
+
+export function validateExternalDelta(repoRoot, { baseRef = null, headRef = null } = {}) {
+  if (!baseRef && !headRef) {
+    return { status: "NOT_APPLICABLE_NO_DIFF_REFS", base_ref: null, head_ref: null, additions: 0, findings: [] };
+  }
+  if (!baseRef || !headRef) {
+    return {
+      status: "BLOCKED_INCOMPLETE_DIFF_REFS",
+      base_ref: baseRef,
+      head_ref: headRef,
+      additions: 0,
+      findings: [redactedDeltaFinding("EXTERNAL_DELTA_REF_INCOMPLETE", "<git-diff>", null)],
+    };
+  }
+  try {
+    execFileSync("git", ["rev-parse", "--verify", `${baseRef}^{commit}`], { cwd: repoRoot, stdio: "ignore" });
+    execFileSync("git", ["rev-parse", "--verify", `${headRef}^{commit}`], { cwd: repoRoot, stdio: "ignore" });
+    const diffText = execFileSync(
+      "git",
+      ["diff", "--no-ext-diff", "--no-renames", "--unified=0", baseRef, headRef, "--"],
+      { cwd: repoRoot, encoding: "utf8", maxBuffer: 32 * 1024 * 1024 },
+    );
+    const additions = parseAddedLines(diffText);
+    const findings = additions.flatMap((addition) =>
+      validateGenericAddedText(addition.text, addition.path, addition.line));
+    findings.push(...changedPathMetadataFindings(repoRoot, baseRef, headRef));
+    return {
+      status: findings.length === 0 ? "PASS" : "BLOCKED",
+      base_ref: baseRef,
+      head_ref: headRef,
+      additions: additions.length,
+      findings,
+    };
+  } catch {
+    return {
+      status: "BLOCKED_DIFF_UNAVAILABLE",
+      base_ref: baseRef,
+      head_ref: headRef,
+      additions: 0,
+      findings: [redactedDeltaFinding("EXTERNAL_DELTA_UNMEASURED", "<git-diff>", null)],
+    };
+  }
+}
+
 export function validateProfileRoot(root) {
   const findings = [];
   if (!existsSync(root)) {
@@ -516,8 +764,9 @@ export function validateRepository(repoRoot) {
   return findings;
 }
 
-export function runValidation({ repoRoot, profileRoots = [] }) {
-  const canonicalFindings = validateRepository(repoRoot);
+export function runValidation({ repoRoot, profileRoots = [], baseRef = null, headRef = null }) {
+  const externalDelta = validateExternalDelta(repoRoot, { baseRef, headRef });
+  const canonicalFindings = [...validateRepository(repoRoot), ...externalDelta.findings];
   const profileReports = profileRoots.map((root) => ({ root, findings: validateProfileRoot(root) }));
   const profileFindings = profileReports.flatMap((item) => item.findings.map((finding) => ({ ...finding, profile_root: item.root })));
   return {
@@ -538,6 +787,7 @@ export function runValidation({ repoRoot, profileRoots = [] }) {
     writer_rule: "WRITER_UNICO",
     unknown_rule: "UNKNOWN_NAO_PASSA",
     agent_claim_rule: "AGENT_CLAIM_CAPABILITY_REQUIRED",
+    external_delta: externalDelta,
     canonical_findings: canonicalFindings,
     profile_reports: profileReports,
     findings: [...canonicalFindings, ...profileFindings],
@@ -554,6 +804,7 @@ function printHuman(report) {
     `IDENTIDADE_OK=${report.ok ? 1 : 0} ` +
       `AUTORIDADE=SEGREDO_CHEFE COORDENADOR=SOL EXECUTOR=PIVETE_HERMES ` +
       `AGENT_CLAIM=AGENT_CLAIM_CAPABILITY_REQUIRED ` +
+      `EXTERNAL_DELTA=${report.external_delta.status} ` +
       `ERROS=${report.findings.length}`,
   );
   console.log(`IDENTIDADE_OK=${report.ok ? 1 : 0} AUTORIDADE=SEGREDO_CHEFE COORDENADOR=SOL EXECUTOR=PIVETE_HERMES SOUL=CANONICA MERGE=AUTO_SQUASH_IF_CLEAN ERROS=${report.findings.length}`);

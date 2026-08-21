@@ -160,7 +160,13 @@ jobs:
         run: node --test scripts/lupa/validar-identidade-operacional.test.mjs
 
       - name: Validar identidade SEGREDO → SOL → PIVETE/HERMES
-        run: node scripts/lupa/validar-identidade-operacional.mjs
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before || github.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          node scripts/lupa/validar-identidade-operacional.mjs \
+            --base-ref "$BASE_SHA" \
+            --head-ref "$HEAD_SHA"
 
       - name: Testar kernel portátil e entrada multimodal
         run: node --test scripts/lupa/portable-kernel.test.mjs
@@ -256,7 +262,10 @@ jobs:
             --base-sha "$BASE_SHA" \
             --head-sha "$HEAD_SHA" \
             --json || status=1
-          node scripts/lupa/validar-identidade-operacional.mjs --json || status=1
+          node scripts/lupa/validar-identidade-operacional.mjs \
+            --base-ref "$BASE_SHA" \
+            --head-ref "$HEAD_SHA" \
+            --json || status=1
           node scripts/lupa/portable-kernel.mjs --json || status=1
           node scripts/lupa/proof-ownership.mjs || status=1
           node --test scripts/webhook/lib/safe-git-deploy.test.mjs || status=1
