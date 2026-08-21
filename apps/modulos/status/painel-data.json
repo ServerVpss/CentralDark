@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-21T10:54:02.038Z",
-  "updatedAtBR": "21/08/2026, 07:54:02 BRT",
+  "updatedAt": "2026-08-21T11:32:35.635Z",
+  "updatedAtBR": "21/08/2026, 08:32:35 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "security: bloquear reintrodução de fonte externa (#1098)",
+    "lastCommit": "fix(varredura): fechar convergência e falhas de inventário (#1097)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-21T11:32:35.635Z",
+      "titulo": "Push na main · ca517bdc865e0006193e8282f102397f306302fa",
+      "detalhe": "fix(varredura): fechar convergência e falhas de inventário (#1097)",
+      "area": "Repositório",
+      "sha": "ca517bd",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-21T10:54:02.038Z",
       "titulo": "Push na main · 9ef72f4235f8eb2426062da44f266b578504f123",
       "detalhe": "security: bloquear reintrodução de fonte externa (#1098)",
@@ -988,14 +996,6 @@
       "detalhe": "feat(cognição): compilar muitas fontes em uma rota FLASH (#985)",
       "area": "Repositório",
       "sha": "c7507e9",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-16T21:52:24.311Z",
-      "titulo": "Push na main · 5930ecff45611c151928307fe4d972b89fb8c4b3",
-      "detalhe": "feat(hub): registrar pacote Screenshots na Estante (#979)",
-      "area": "Repositório",
-      "sha": "5930ecf",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-21T11:32:35.635Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · ca517bdc865e0006193e8282f102397f306302fa (ca517bd)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-21T10:54:02.038Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 9ef72f4235f8eb2426062da44f266b578504f123 (9ef72f4)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-16T22:11:11.291Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · c7507e94ff0990e144b6e50ea0d0180ca908d2ae (c7507e9)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-16T21:52:24.311Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 5930ecff45611c151928307fe4d972b89fb8c4b3 (5930ecf)",
       "area": "Repositório",
       "status": "sucesso"
     }
