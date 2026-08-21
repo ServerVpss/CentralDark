@@ -86,7 +86,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p "${{ runner.temp }}/centraldark-autonomia"
-          touch "${{ runner.temp }}/centraldark-autonomia/.keep"
+          touch "${{ runner.temp }}/centraldark-autonomia/EMPTY"
 
       - name: Publicar recibos do juiz
         if: always()
@@ -94,7 +94,7 @@ jobs:
         with:
           name: autonomia-judge-${{ github.run_id }}
           path: ${{ runner.temp }}/centraldark-autonomia
-          if-no-files-found: warn
+          if-no-files-found: error
           retention-days: 14
 
       - name: Receipt determinístico
