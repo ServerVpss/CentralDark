@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-21T11:32:35.635Z",
-  "updatedAtBR": "21/08/2026, 08:32:35 BRT",
+  "updatedAt": "2026-08-21T20:08:51.476Z",
+  "updatedAtBR": "21/08/2026, 17:08:51 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "fix(varredura): fechar convergência e falhas de inventário (#1097)",
+    "lastCommit": "fix(actions): garantir artifact vazio do juiz (#1099)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-21T20:08:51.476Z",
+      "titulo": "Push na main · 44029316eaafec8ddace53e203bfa607caec5f1f",
+      "detalhe": "fix(actions): garantir artifact vazio do juiz (#1099)",
+      "area": "Repositório",
+      "sha": "4402931",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-21T11:32:35.635Z",
       "titulo": "Push na main · ca517bdc865e0006193e8282f102397f306302fa",
       "detalhe": "fix(varredura): fechar convergência e falhas de inventário (#1097)",
@@ -988,14 +996,6 @@
       "detalhe": "fix(memory): ligar recall humano à recuperação repo-native do BRAIN (#990)",
       "area": "Repositório",
       "sha": "e07cc48",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-16T22:11:11.291Z",
-      "titulo": "Push na main · c7507e94ff0990e144b6e50ea0d0180ca908d2ae",
-      "detalhe": "feat(cognição): compilar muitas fontes em uma rota FLASH (#985)",
-      "area": "Repositório",
-      "sha": "c7507e9",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-21T20:08:51.476Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 44029316eaafec8ddace53e203bfa607caec5f1f (4402931)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-21T11:32:35.635Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · ca517bdc865e0006193e8282f102397f306302fa (ca517bd)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-16T23:05:50.214Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · e07cc48f000d0f4271bdfe3f70b8de0b3ee89ee5 (e07cc48)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-16T22:11:11.291Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · c7507e94ff0990e144b6e50ea0d0180ca908d2ae (c7507e9)",
       "area": "Repositório",
       "status": "sucesso"
     }
