@@ -105,6 +105,7 @@ export const aprendizadoTools = [
             partes.push(``);
             partes.push(`- Leia somente o necessario: use \`read_file\` com \`maxLines\`, \`tailLines\` ou \`maxBytes\`.`);
             partes.push(`- Para procurar contexto, use \`search_files\` antes de abrir arquivos grandes.`);
+            partes.push(`- Para continuidade entre conversas, use \`personal_context_search\`; não peça ao SEGREDO/CHEFE o que a memória consegue recuperar.`);
             partes.push(`- Para GitHub, use \`github_read\`, \`github_commit\` e \`github_dispatch\` quando tiver permissao.`);
             partes.push(`- Para shell, use \`execute_command\`; ele respeita \`MCP_ALLOW_VPS_COMMANDS\`, timeout e truncamento.`);
             partes.push(`- Nao abrir .env, secrets, tokens, sessoes, bancos locais, chaves ou credenciais.`);
@@ -119,6 +120,7 @@ export const aprendizadoTools = [
             partes.push(``);
             partes.push(`- \`github_read\` com \`path="docs/PENDENCIAS.md"\` para pendencias oficiais.`);
             partes.push(`- \`github_read\` com \`path="docs/CONSCIENCIA/APRENDIZADOS.md"\` para memoria operacional.`);
+            partes.push(`- \`personal_context_search\` com consulta autossuficiente quando a resposta depender de sessão anterior.`);
             partes.push(`- \`search_files\` com \`query\` especifica antes de abrir logs ou arvores grandes.`);
             partes.push(`- \`read_file\` com \`tailLines=500\` para logs grandes.`);
             return textBlock(partes.join("\n"));

@@ -95,10 +95,17 @@ Fluxo obrigatório: **Lovable → GitHub → VPS**. Nunca edite código direto n
 - Nunca alterar áreas 🔒 sem "PERMITO PIVETE" explícito.
 
 ## 🧭 SE PRECISAR DE MAIS CONTEXTO
+- \`personal_context_search\` → cruza sessões anteriores com origem/confiança; chame antes de pedir repetição
+- \`personal_context_remember\` → registra decisão/correção/resumo que deve sobreviver ao restart
+- \`personal_context_stats\` → prova integridade e cobertura da memória longitudinal
 - \`ler_consciencia\` → regras completas do projeto
 - \`consultar_memoria_reserva\` → últimas lembranças do Pivete
 - \`puxar_aprendizados\` → aprendizados acumulados
 - \`kit_boas_vindas\` → índice completo
+
+Quando a mensagem depender de ontem/antes/de novo/continua ou de uma decisão passada,
+busque o contexto pessoal antes de responder. Não trate memória histórica como prova de
+estado vivo: reconcilie branch, HEAD, runtime e ferramentas quando o claim exigir.
 
 ## ✅ PRIMEIRA RESPOSTA
 Cumprimente curto ("E aí Pivete, tô calibrado — o que manda?"), NÃO liste tudo isso de volta pro usuário.

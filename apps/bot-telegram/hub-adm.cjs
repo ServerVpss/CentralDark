@@ -10,6 +10,7 @@
  */
 
 'use strict';
+const crypto = require('crypto');
 const fs = require('fs');
 
 // ── Carregar .env ─────────────────────────────────────────────────────────
@@ -36,6 +37,8 @@ const LLM_MODEL = process.env.LLM_MODEL || 'claude-sonnet-4-6';
 const GH_TOKEN  = process.env.GITHUB_TOKEN || process.env.GH_TOKEN || '';
 const MCP_PORT  = process.env.MCP_PORT || '9200';
 const TG_API    = 'https://api.telegram.org';
+const CONTEXT_OWNER = process.env.CENTRALDARK_CONTEXT_OWNER || 'segredo-chefe';
+const CONTEXT_ENABLED = process.env.CENTRALDARK_PERSONAL_CONTEXT !== 'false';
 
 if (!TOKEN) {
   console.error('[HubBot] SRVER1_BOT_TOKEN ausente. Adicione em secrets/telegram-alerts.env');
@@ -45,9 +48,100 @@ if (!TOKEN) {
 // ── Sessão por chat (agente ativo + histórico) ────────────────────────────
 const sessions = new Map();
 
+let personalContextModulePromise = null;
+
+function loadPersonalContext() {
+  if (!personalContextModulePromise) {
+    personalContextModulePromise = import('../modulos/mcp/src/lib/personal-context-store.js');
+  }
+  return personalContextModulePromise;
+}
+
+function newSessionId() {
+  return `telegram-hub:${crypto.randomUUID()}`;
+}
+
+function conversationIdFor(chatId) {
+  const digest = crypto.createHash('sha256').update(String(chatId)).digest('hex').slice(0, 24);
+  return `telegram-hub:${digest}`;
+}
+
+function rotateSession(sess) {
+  sess.history = [];
+  sess.sessionId = newSessionId();
+  sess.contextHits = 0;
+}
+
 function getSession(chatId) {
-  if (!sessions.has(chatId)) sessions.set(chatId, { agent: 'guardiao', history: [] });
+  if (!sessions.has(chatId)) sessions.set(chatId, {
+    agent: 'guardiao',
+    history: [],
+    sessionId: newSessionId(),
+    contextStatus: CONTEXT_ENABLED ? 'READY' : 'DISABLED',
+    contextHits: 0,
+  });
   return sessions.get(chatId);
+}
+
+async function recallPersonalContext(chatId, text, sess) {
+  if (!CONTEXT_ENABLED) return '';
+  try {
+    const memory = await loadPersonalContext();
+    const result = await memory.searchPersonalContext(text, {
+      ownerId: CONTEXT_OWNER,
+      sessionId: sess.sessionId,
+      excludeCurrentSession: true,
+      limit: 8,
+      maxContextChars: 6000,
+    });
+    sess.contextStatus = result.integrity;
+    sess.contextHits = result.selected_count;
+    return memory.renderPersonalContextForPrompt(result);
+  } catch (error) {
+    sess.contextStatus = 'UNKNOWN';
+    sess.contextHits = 0;
+    console.error(`[PersonalContext] recall falhou: ${error.message}`);
+    return '';
+  }
+}
+
+async function rememberTurn(chatId, sess, userText, assistantText) {
+  if (!CONTEXT_ENABLED) return;
+  try {
+    const memory = await loadPersonalContext();
+    const common = {
+      source: 'telegram:hub',
+      channel: 'telegram',
+      conversation_id: conversationIdFor(chatId),
+      session_id: sess.sessionId,
+      memory_kind: 'episodic',
+      tags: ['telegram', `agent:${sess.agent}`],
+    };
+    await memory.rememberPersonalContext({
+      ...common,
+      message_id: crypto.randomUUID(),
+      role: 'user',
+      content: userText,
+      source_class: 'USER_MESSAGE',
+      trust: 'USER_STATED',
+      confidence: 0.98,
+    }, { ownerId: CONTEXT_OWNER });
+    if (assistantText && !assistantText.startsWith('❌')) {
+      await memory.rememberPersonalContext({
+        ...common,
+        message_id: crypto.randomUUID(),
+        role: 'assistant',
+        content: assistantText,
+        source_class: 'ASSISTANT_MESSAGE',
+        trust: 'ASSISTANT_INFERRED',
+        confidence: 0.65,
+      }, { ownerId: CONTEXT_OWNER });
+    }
+    sess.contextStatus = 'VERIFIED';
+  } catch (error) {
+    sess.contextStatus = 'UNKNOWN';
+    console.error(`[PersonalContext] persistência falhou: ${error.message}`);
+  }
 }
 
 // ── Definição dos agentes ─────────────────────────────────────────────────
@@ -129,6 +223,7 @@ function buildPanel(chatId) {
   STATUS   SISTEMA OPERACIONAL  ✅
   AGENTE   ${ag.emoji} ${ag.nome.padEnd(23)}
   HIST.    ${String(sess.history.length).padStart(2)} msgs no contexto
+  MEMÓRIA  ${String(sess.contextStatus).padEnd(8)} · ${String(sess.contextHits).padStart(2)} lembradas
 
   ──────── Selecione agente ou ação ─
 
@@ -281,8 +376,8 @@ async function handleMessage(chatId, text, fromId) {
         return send(chatId, await getOpenIssues(), [[{ text: '🔙 Painel', callback_data: 'hub:main' }]]);
       }
       case '/limpar': {
-        sess.history = [];
-        return send(chatId, '🧹 Histórico limpo.', [[{ text: '🔙 Painel', callback_data: 'hub:main' }]]);
+        rotateSession(sess);
+        return send(chatId, '🧹 Contexto imediato limpo. Memória longitudinal preservada.', [[{ text: '🔙 Painel', callback_data: 'hub:main' }]]);
       }
       case '/agente': {
         const ag = AGENTS[sess.agent];
@@ -298,8 +393,11 @@ async function handleMessage(chatId, text, fromId) {
   sess.history.push({ role: 'user', content: text });
   await typing(chatId);
 
-  const response = await callLLM(sess.history, ag.prompt);
+  const recalledContext = await recallPersonalContext(chatId, text, sess);
+  const systemPrompt = recalledContext ? `${ag.prompt}\n\n${recalledContext}` : ag.prompt;
+  const response = await callLLM(sess.history, systemPrompt);
   sess.history.push({ role: 'assistant', content: response });
+  await rememberTurn(chatId, sess, text, response);
 
   // Enviar (split se > 4000 chars)
   const chunks = [];
@@ -330,11 +428,11 @@ async function handleCallback(chatId, msgId, data, qId, fromId) {
     const key = data.slice(7);
     if (!AGENTS[key]) return;
     sess.agent   = key;
-    sess.history = [];
+    rotateSession(sess);
     const ag = AGENTS[key];
     const p  = buildPanel(chatId);
     await edit(chatId, msgId, p.text, p.buttons);
-    return send(chatId, `${ag.emoji} <b>${ag.nome}</b> selecionado. Histórico limpo — pode falar!`);
+    return send(chatId, `${ag.emoji} <b>${ag.nome}</b> selecionado. Contexto imediato renovado; memória longitudinal preservada.`);
   }
 
   if (data === 'hub:status') {
@@ -350,10 +448,10 @@ async function handleCallback(chatId, msgId, data, qId, fromId) {
   }
 
   if (data === 'hub:clear') {
-    sess.history = [];
+    rotateSession(sess);
     const p = buildPanel(chatId);
     await edit(chatId, msgId, p.text, p.buttons);
-    return send(chatId, '🧹 Histórico limpo!');
+    return send(chatId, '🧹 Contexto imediato limpo. Memória longitudinal preservada.');
   }
 
   if (data === 'hub:config') {
@@ -369,7 +467,8 @@ async function handleCallback(chatId, msgId, data, qId, fromId) {
   Bot Token  ✅ Configurado (SRVER1_BOT_TOKEN)
   Modelo     ${LLM_MODEL}
   Agente     ${ag.emoji} ${ag.nome}
-  Histórico  ${sess.history.length} msgs</pre>`;
+  Histórico  ${sess.history.length} msgs
+  Memória    ${sess.contextStatus} · ${sess.contextHits} lembradas</pre>`;
     return edit(chatId, msgId, text, [[{ text: '🔙 Painel', callback_data: 'hub:main' }]]);
   }
 }

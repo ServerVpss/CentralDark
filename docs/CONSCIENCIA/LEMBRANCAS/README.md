@@ -2,7 +2,7 @@
 title: "Lembranças — memória de curto prazo da Casa"
 date: 2026-06-30
 tags: ["consciencia", "lembrancas", "memoria", "cognitivo", "mcp"]
-updated: 2026-08-16
+updated: 2026-08-21
 ---
 
 # 🧠 Lembranças — memória cruzada antes da próxima passagem
@@ -95,6 +95,63 @@ claim aprendido, uso prático, tipo/gaveta, target, primeira/última ocorrência
 sessões conhecidas, contagem e estado de prova. Evidência bruta continua no owner/fonte
 correspondente; conversa crua e raciocínio privado não são copiados para a biblioteca.
 
+## Personal Context — fio privado entre sessões
+
+`personal_context_*` é a camada operacional que faltava entre a conversa crua de uma
+superfície e as Lembranças já destiladas. Ela não cria outro cérebro: reutiliza o owner
+cognitivo do MCP e fornece ao Hub uma recuperação anterior à chamada do modelo.
+
+```text
+MENSAGEM NA SUPERFICIE CONECTADA
+→ IDENTIFICAR OWNER + SOURCE + CONVERSATION + SESSION
+→ BUSCAR CONTEXTO ANTERIOR RELEVANTE
+→ INJETAR SOMENTE TRECHOS SELECIONADOS NO SYSTEM PROMPT
+→ RESPONDER COM O CONTEXTO IMEDIATO
+→ SANITIZAR E REGISTRAR O TURNO
+→ PROXIMA SESSAO CONSEGUE RECUPERAR
+```
+
+Owner e store:
+
+```text
+IMPLEMENTATION_OWNER=apps/modulos/mcp/src/lib/personal-context-store.js
+MCP_OWNER=apps/modulos/mcp/src/tools/cognitivo/cognitivo.js
+FIRST_AUTOMATIC_ADAPTER=apps/bot-telegram/hub-adm.cjs
+DEFAULT_STORE=~/.centraldark/memory/personal-context.jsonl
+OVERRIDE_PATH=CENTRALDARK_CONTEXT_STORE_PATH
+OWNER_ID=CENTRALDARK_CONTEXT_OWNER|segredo-chefe
+STORE_IS_GIT_TRACKED=false
+STORE_MODE=0600
+LEDGER=APPEND_ONLY_SHA256_CHAIN
+ONE_WRITER_LOCK=true
+```
+
+Cada memória preserva `source`, `source_class`, `channel`, `conversation_id`, `session_id`,
+`message_id`, `role`, `memory_kind`, tempo, confiança, classificação de confiança,
+`content_hash`, `prev_hash` e `hash`. Decisões/regras podem declarar `memory_key`; uma nova
+entrada com a mesma chave supersede logicamente a anterior sem reescrever o ledger.
+
+A busca é determinística e limitada por quantidade/caracteres. Ela combina frase exata,
+cobertura de tokens, recência, tipo de memória, confiança e origem. Pedidos curtos de
+continuidade (`continua`, `ontem`, `retoma`) podem recuperar as entradas anteriores mais
+recentes mesmo sem repetir as mesmas palavras. Cada resultado explica por que foi escolhido
+e carrega `evidence_ref=personal-context:<hash>`.
+
+```text
+PERSONAL_CONTEXT != LIVE_STATE
+MEMORY_MATCH != CURRENT_FACT
+ASSISTANT_INFERRED != USER_STATED
+TAMPERED_LEDGER=FAIL_CLOSED
+CURRENT_SESSION_EXCLUDED_BY_DEFAULT=true
+SECRET_PATTERNS_REDACTED_BEFORE_WRITE=true
+CHAT_ID_RAW_STORED_BY_HUB=false
+```
+
+O Hub conecta essa camada automaticamente. Outros chats só entram na mesma memória quando
+o adapter correspondente chamar `personal_context_remember` e usar
+`personal_context_search` antes do modelo. A existência de uma janela, VPN, OAuth ou MCP
+não prova ingestão; **superfície sem adapter ligado continua fora do denominador**.
+
 Quando a superfície de origem souber identificar sessão e fonte, esses identificadores
 podem acompanhar a matéria. Quando não souber:
 
@@ -162,6 +219,9 @@ ONLY_INGESTED_OR_COMMITTED_MATERIAL_COUNTS=true
 
 | Tool | O que faz |
 |------|-----------|
+| `personal_context_search` | Cruza sessões anteriores e retorna trechos com origem/confiança/evidência |
+| `personal_context_remember` | Registra contexto sanitizado no ledger privado compartilhado |
+| `personal_context_stats` | Mede integridade, sessões, conversas, fontes e tipos sem expor conteúdo |
 | `consultar_memoria_reserva` | Lê as lembranças e filtra por tema, tag e eixo de tempo |
 | `consolidar_pensamento` | Grava um insight/regra/padrão novo no Git com validade |
 | `injetar_consciencia_centraldark` | Entrega regras de conduta da CentralDark |
@@ -178,6 +238,9 @@ scripts/memory-linker/memory-reserve-events.mjs
 scripts/memory-linker/pattern-library.mjs
 scripts/memory-linker/dream-review-run.mjs
 apps/modulos/mcp/src/admin-patterns-ui.js
+apps/modulos/mcp/src/lib/personal-context-store.js
+apps/modulos/mcp/src/tools/cognitivo/cognitivo.js
+apps/bot-telegram/hub-adm.cjs
 ```
 
 A implementação deve continuar reutilizando esses owners. Não criar `Pattern Center V2`,
