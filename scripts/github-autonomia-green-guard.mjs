@@ -2,10 +2,11 @@
 /**
  * Green-first guard para a promoção canônica.
  *
- * O fast path AUTO_SQUASH_IF_CLEAN continua canônico e não passa por esta
- * catraca. O guard é a revalidação final dos recibos ADVERSARIAL/green-first:
- * somente runs de pull_request do mesmo PR + mesmo HEAD, com a invocação mais
- * nova de cada gate realmente concluída em success, podem chegar ao promotor.
+ * CANÔNICO (autoridade SEGREDO/CHEFE, 2026-08-21): o gate determinístico vale
+ * SEMPRE. Não existe mais bypass por modo. Todo candidato READY passa pela
+ * catraca green-first: somente runs de pull_request do mesmo PR + mesmo HEAD,
+ * com a invocação mais nova de cada gate realmente concluída em success, podem
+ * chegar ao promotor. Quem prova é a máquina, não o modo declarado.
  */
 import { mkdir, readFile, readdir, rename, writeFile } from "node:fs/promises";
 import { basename, join, resolve } from "node:path";
@@ -31,8 +32,10 @@ export function parseCsv(value, fallback = []) {
   return items.length ? items : [...fallback];
 }
 
+// Gate determinístico sempre: o modo declarado (FAST/ADVERSARIAL) não dispensa
+// mais a catraca. Só a decisão READY entra, e entra para ser medida.
 export function shouldEnforceGreenFirst(candidate) {
-  return candidate?.decision === "READY" && candidate?.mode !== "FAST";
+  return candidate?.decision === "READY";
 }
 
 export function runBelongsToPullHead(run, prNumber, headSha) {
@@ -128,7 +131,7 @@ export async function main(env = process.env) {
 
     if (!shouldEnforceGreenFirst(candidate)) {
       fastSkipped += 1;
-      console.log(`GREEN_GUARD=SKIP_FAST PR=${candidate.pr_number || "UNKNOWN"} HEAD=${candidate.head_sha || "UNKNOWN"}`);
+      console.log(`GREEN_GUARD=SKIP_NAO_READY PR=${candidate.pr_number || "UNKNOWN"} HEAD=${candidate.head_sha || "UNKNOWN"}`);
       continue;
     }
 
@@ -143,7 +146,7 @@ export async function main(env = process.env) {
 
     if (decision.green) {
       passed += 1;
-      console.log(`GREEN_GUARD=PASS PR=${pr} HEAD=${head} ${compact}`);
+      console.log(`GREEN_GUARD=PASS PR=${pr} HEAD=${head} MODE=${candidate.mode || "UNKNOWN"} ${compact}`);
       continue;
     }
 
@@ -154,13 +157,14 @@ export async function main(env = process.env) {
       schema: "centraldark.green-first.v2",
       pr_number: pr,
       head_sha: head,
+      mode: candidate.mode || null,
       result: "DEFERRED_UNTIL_GREEN",
       verdicts: decision.verdicts,
     }, null, 2)}\n`, { encoding: "utf8", mode: 0o600 });
-    console.log(`GREEN_GUARD=DEFER PR=${pr} HEAD=${head} ${compact}`);
+    console.log(`GREEN_GUARD=DEFER PR=${pr} HEAD=${head} MODE=${candidate.mode || "UNKNOWN"} ${compact}`);
   }
 
-  console.log(`GREEN_GUARD_SUMMARY checked=${checked} pass=${passed} deferred=${deferred} fast_skipped=${fastSkipped}`);
+  console.log(`GREEN_GUARD_SUMMARY checked=${checked} pass=${passed} deferred=${deferred} skipped=${fastSkipped}`);
   if (deferred > 0) throw new Error(`GREEN_GUARD_DEFERRED:${deferred}`);
   return { checked, passed, deferred, fastSkipped };
 }
