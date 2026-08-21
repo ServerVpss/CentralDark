@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-21T08:53:56.626Z",
-  "updatedAtBR": "21/08/2026, 05:53:56 BRT",
+  "updatedAt": "2026-08-21T09:17:56.056Z",
+  "updatedAtBR": "21/08/2026, 06:17:56 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "feat(varredura): inventário determinístico de branches não convergidas (#1095)",
+    "lastCommit": "fix(varredura): rodar no runner self-hosted da Casa (#1096)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-21T09:17:56.056Z",
+      "titulo": "Push na main · 7934f1ecfb9ab2d8bb2c6793a66bde9d4957aff1",
+      "detalhe": "fix(varredura): rodar no runner self-hosted da Casa (#1096)",
+      "area": "Repositório",
+      "sha": "7934f1e",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-21T08:53:56.626Z",
       "titulo": "Push na main · 3c0d212fd57e2a439dfa21d74d3c17cc535c22f3",
       "detalhe": "feat(varredura): inventário determinístico de branches não convergidas (#1095)",
@@ -988,14 +996,6 @@
       "detalhe": "fix(autonomia): cristalizar selo canônico antes de promover (#983)",
       "area": "Repositório",
       "sha": "c86ccce",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-16T19:59:16.336Z",
-      "titulo": "Push na main · 13bce83fd805f1e16bc8ee485eccdb5584c72274",
-      "detalhe": "docs(soul): registrar perfuminho e essência como derivados do OURO",
-      "area": "Repositório",
-      "sha": "13bce83",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-21T09:17:56.056Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 7934f1ecfb9ab2d8bb2c6793a66bde9d4957aff1 (7934f1e)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-21T08:53:56.626Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 3c0d212fd57e2a439dfa21d74d3c17cc535c22f3 (3c0d212)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-16T21:43:18.014Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · c86cccefb60ed522fd0a9b693193f152ec3b8c54 (c86ccce)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-16T19:59:16.336Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 13bce83fd805f1e16bc8ee485eccdb5584c72274 (13bce83)",
       "area": "Repositório",
       "status": "sucesso"
     }
