@@ -1,0 +1,89 @@
+name: Varredura — branches órfãs (inventário determinístico)
+
+# Objetivo (intenção do SEGREDO/CHEFE):
+# "Nada pode ficar pra trás." Este workflow NÃO faz merge, NÃO faz deploy,
+# NÃO apaga nada. Ele apenas MEDE: lista todas as branches remotas e mostra,
+# para cada uma, quantos commits ainda NÃO estão na main e quais arquivos
+# elas tocam. É o mapa que diz o que precisa convergir.
+#
+# Roda em runner hospedado do GitHub de propósito: não depende do runner
+# self-hosted da VPS, para nunca ficar bloqueado pelo mesmo ponto de falha.
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 9 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  inventario:
+    name: Inventário de branches não convergidas
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout completo (histórico inteiro)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Medir cada branch contra a main
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p relatorio
+          REL=relatorio/branches-orfas.md
+
+          echo "# Inventário de branches — $(date -u +%Y-%m-%dT%H:%M:%SZ)" > "$REL"
+          echo "" >> "$REL"
+          echo "HEAD main: \`$(git rev-parse origin/main)\`" >> "$REL"
+          echo "" >> "$REL"
+
+          TOTAL=0
+          PENDENTES=0
+
+          for BRANCH in $(git for-each-ref --format='%(refname:short)' refs/remotes/origin | grep -v '^origin/main$' | grep -v '^origin/HEAD$'); do
+            TOTAL=$((TOTAL+1))
+            AHEAD=$(git rev-list --count origin/main.."$BRANCH" 2>/dev/null || echo 0)
+            ULTIMO=$(git log -1 --format='%ci' "$BRANCH" 2>/dev/null || echo 'desconhecido')
+
+            if [ "$AHEAD" -eq 0 ]; then
+              echo "- ✅ \`$BRANCH\` — nada pendente (tudo já está na main)" >> "$REL"
+            else
+              PENDENTES=$((PENDENTES+1))
+              echo "" >> "$REL"
+              echo "## 🟡 \`$BRANCH\` — $AHEAD commit(s) fora da main" >> "$REL"
+              echo "" >> "$REL"
+              echo "Último commit: $ULTIMO" >> "$REL"
+              echo "" >> "$REL"
+              echo "Commits pendentes:" >> "$REL"
+              echo '```' >> "$REL"
+              git log --oneline --no-decorate origin/main.."$BRANCH" | head -30 >> "$REL"
+              echo '```' >> "$REL"
+              echo "" >> "$REL"
+              echo "Arquivos tocados:" >> "$REL"
+              echo '```' >> "$REL"
+              git diff --name-only origin/main..."$BRANCH" | head -50 >> "$REL"
+              echo '```' >> "$REL"
+            fi
+          done
+
+          echo "" >> "$REL"
+          echo "---" >> "$REL"
+          echo "" >> "$REL"
+          echo "**TOTAL de branches:** $TOTAL" >> "$REL"
+          echo "**Com trabalho ainda fora da main:** $PENDENTES" >> "$REL"
+
+          cat "$REL" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Publicar relatório como artefato
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: inventario-branches-${{ github.run_id }}
+          path: relatorio/
+          if-no-files-found: warn
+          retention-days: 30
