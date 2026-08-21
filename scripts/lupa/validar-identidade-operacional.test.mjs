@@ -604,6 +604,15 @@ test("fronteira bloqueia domínio externo em configuração", () => {
   assert.equal(findings.some((finding) => finding.code === "EXTERNAL_SOURCE_DOMAIN_FORBIDDEN"), true);
 });
 
+test("fronteira cobre caminho sensível rastreado sem revelar conteúdo", () => {
+  const root = mkdtempSync(join(tmpdir(), "centraldark-boundary-"));
+  const organization = String.fromCharCode(83, 121, 110, 107, 114, 97, 65, 73);
+  write(root, "secrets/vendor.yml", `source: ${organization}/core\nprivate_value: never-print-me\n`);
+  const findings = validateExternalSourceBoundary(root);
+  assert.equal(findings.some((finding) => finding.code === "EXTERNAL_SOURCE_ORG_FORBIDDEN"), true);
+  assert.equal(JSON.stringify(findings).includes("never-print-me"), false);
+});
+
 test("fronteira limpa permanece verde e integra o gate canônico", () => {
   const root = validRepo();
   write(root, "src/adapter.ts", "export const source = 'centraldark-canonical';\n");
@@ -611,4 +620,3 @@ test("fronteira limpa permanece verde e integra o gate canônico", () => {
   assert.equal(report.ok, true);
   assert.deepEqual(validateExternalSourceBoundary(root), []);
 });
-

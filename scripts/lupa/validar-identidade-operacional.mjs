@@ -333,6 +333,8 @@ function walkTextFiles(root) {
     for (const entry of entries) {
       if (entry.isSymbolicLink()) continue;
       const absolute = join(directory, entry.name);
+      const rel = relative(root, absolute);
+      if (isSensitive(rel)) continue;
       if (entry.isDirectory()) {
         if ([".git", "node_modules", "dist", "build", ".cache"].includes(entry.name)) continue;
         visit(absolute);
@@ -353,8 +355,6 @@ function walkExternalBoundaryFiles(root) {
     for (const entry of entries) {
       if (entry.isSymbolicLink()) continue;
       const absolute = join(directory, entry.name);
-      const rel = relative(root, absolute);
-      if (isSensitive(rel)) continue;
       if (entry.isDirectory()) {
         if ([".git", "node_modules", ".cache", "coverage"].includes(entry.name)) continue;
         visit(absolute);
