@@ -6,8 +6,11 @@ name: Varredura — branches órfãs (inventário determinístico)
 # para cada uma, quantos commits ainda NÃO estão na main e quais arquivos
 # elas tocam. É o mapa que diz o que precisa convergir.
 #
-# Roda em runner hospedado do GitHub de propósito: não depende do runner
-# self-hosted da VPS, para nunca ficar bloqueado pelo mesmo ponto de falha.
+# CORREÇÃO (run 32462891597 e 32462896154 falharam em 2s com
+# "esta verificação não tem passos"): o job pedia ubuntu-latest, runner
+# hospedado do GitHub, que não está disponível para este repositório.
+# O job morria antes de qualquer step. Agora usa o mesmo runner
+# self-hosted que o resto da Casa usa e que está verde hoje.
 
 on:
   workflow_dispatch:
@@ -20,12 +23,12 @@ permissions:
 jobs:
   inventario:
     name: Inventário de branches não convergidas
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux]
     timeout-minutes: 10
 
     steps:
       - name: Checkout completo (histórico inteiro)
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
           persist-credentials: false
@@ -81,7 +84,7 @@ jobs:
 
       - name: Publicar relatório como artefato
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: inventario-branches-${{ github.run_id }}
           path: relatorio/
