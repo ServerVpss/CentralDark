@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-21T21:47:07.354Z",
-  "updatedAtBR": "21/08/2026, 18:47:07 BRT",
+  "updatedAt": "2026-08-21T22:53:43.133Z",
+  "updatedAtBR": "21/08/2026, 19:53:43 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "feat(memory): contexto persistente entre sessões e superfícies (#1100)",
+    "lastCommit": "fix(governance): tornar canônicos alcançáveis pela porta (#1101)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-21T22:53:43.133Z",
+      "titulo": "Push na main · 8ad7af3982f6e64415ea671425e8e03fa520e0cd",
+      "detalhe": "fix(governance): tornar canônicos alcançáveis pela porta (#1101)",
+      "area": "Repositório",
+      "sha": "8ad7af3",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-21T21:47:07.354Z",
       "titulo": "Push na main · 55ba95ce0acc01b8ce47ca1caf86521a511c1dc9",
       "detalhe": "feat(memory): contexto persistente entre sessões e superfícies (#1100)",
@@ -988,14 +996,6 @@
       "detalhe": "learn(brain): espalhar padrão verde + delta fechado (#995)",
       "area": "Repositório",
       "sha": "18bc031",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-16T23:55:03.232Z",
-      "titulo": "Push na main · d78ea32cb9fdaecad3af2d9b3861db44c9d2c26e",
-      "detalhe": "docs(brain): mapa visual navegável do Obsidian (#994)",
-      "area": "Repositório",
-      "sha": "d78ea32",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-21T22:53:43.133Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 8ad7af3982f6e64415ea671425e8e03fa520e0cd (8ad7af3)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-21T21:47:07.354Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 55ba95ce0acc01b8ce47ca1caf86521a511c1dc9 (55ba95c)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-17T01:07:45.510Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 18bc0311c2024520c1254759f5d25175beae610f (18bc031)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-16T23:55:03.232Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · d78ea32cb9fdaecad3af2d9b3861db44c9d2c26e (d78ea32)",
       "area": "Repositório",
       "status": "sucesso"
     }
