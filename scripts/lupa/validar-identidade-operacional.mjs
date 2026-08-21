@@ -231,7 +231,26 @@ const FORBIDDEN_PARALLEL_PATHS = Object.freeze([
   ".github/workflows/intencao-chefe-auto-squash.yml",
 ]);
 
-const TEXT_EXTENSIONS = new Set([".md", ".mdc", ".txt", ".yaml", ".yml", ".json", ".js", ".mjs", ".py"]);
+const EXTERNAL_SOURCE_RULES = (() => {
+  const projectToken = ["ai", "ox"].join("");
+  const organizationToken = String.fromCharCode(83, 121, 110, 107, 114, 97, 65, 73);
+  const projectDomain = ["ai", "ox", "squad", ".", "ai"].join("");
+  return Object.freeze([
+    { code: "EXTERNAL_SOURCE_PROJECT_FORBIDDEN", pattern: new RegExp(`\\b${projectToken}\\b`, "i") },
+    { code: "EXTERNAL_SOURCE_ORG_FORBIDDEN", pattern: new RegExp(`\\b${organizationToken}\\b`, "i") },
+    { code: "EXTERNAL_SOURCE_DOMAIN_FORBIDDEN", pattern: new RegExp(`\\b${projectDomain.replace(".", "\\.")}\\b`, "i") },
+  ]);
+})();
+
+const TEXT_EXTENSIONS = new Set([
+  ".bash", ".cjs", ".conf", ".css", ".go", ".graphql", ".html", ".ini", ".java", ".js",
+  ".jsx", ".json", ".kt", ".lock", ".md", ".mdc", ".mjs", ".php", ".py", ".rb", ".rs",
+  ".scss", ".sh", ".sql", ".svelte", ".swift", ".toml", ".ts", ".tsx", ".txt", ".vue",
+  ".xml", ".yaml", ".yml",
+]);
+const KNOWN_TEXT_FILENAMES = new Set([
+  ".gitmodules", ".npmrc", ".yarnrc", ".yarnrc.yml", "Dockerfile", "Makefile", "Procfile",
+]);
 const SENSITIVE_SEGMENTS = new Set([
   ".env", "secrets", "secret", "tokens", "token", "sessions", "session", ".ssh",
   "certs", "certificates", "credentials", "credential", "keys", "key",
@@ -254,7 +273,7 @@ function lineOf(text, index) {
   return text.slice(0, index).split(/\r?\n/).length;
 }
 
-export function findForbidden(text, rules = FORBIDDEN_CANONICAL, path = "<memory>", { redactExcerpt = false } = {}) {
+export function findForbidden(text, rules = FORBIDDEN_CANONICAL, path = "<memory>", { redactExcerpt = false, redactedExcerpt = "[PROFILE_CONTENT_REDACTED]" } = {}) {
   const findings = [];
   for (const rule of rules) {
     const match = rule.pattern.exec(text);
@@ -263,7 +282,7 @@ export function findForbidden(text, rules = FORBIDDEN_CANONICAL, path = "<memory
       code: rule.code,
       path,
       line: lineOf(text, match.index),
-      excerpt: redactExcerpt ? "[PROFILE_CONTENT_REDACTED]" : match[0].replace(/\s+/g, " ").slice(0, 180),
+      excerpt: redactExcerpt ? redactedExcerpt : match[0].replace(/\s+/g, " ").slice(0, 180),
     });
   }
   return findings;
@@ -278,10 +297,10 @@ export function validateRequiredTokens(text, tokens, path = "<memory>") {
   }));
 }
 
-function safeRead(path) {
+function safeRead(path, maxBytes = 512 * 1024) {
   try {
     const stat = statSync(path);
-    if (!stat.isFile() || stat.size > 512 * 1024) return null;
+    if (!stat.isFile() || stat.size > maxBytes) return null;
     return readFileSync(path, "utf8");
   } catch {
     return null;
@@ -314,8 +333,6 @@ function walkTextFiles(root) {
     for (const entry of entries) {
       if (entry.isSymbolicLink()) continue;
       const absolute = join(directory, entry.name);
-      const rel = relative(root, absolute);
-      if (isSensitive(rel)) continue;
       if (entry.isDirectory()) {
         if ([".git", "node_modules", "dist", "build", ".cache"].includes(entry.name)) continue;
         visit(absolute);
@@ -326,6 +343,63 @@ function walkTextFiles(root) {
   };
   visit(root);
   return files;
+}
+
+function walkExternalBoundaryFiles(root) {
+  const files = [];
+  const visit = (directory) => {
+    let entries = [];
+    try { entries = readdirSync(directory, { withFileTypes: true }); } catch { return; }
+    for (const entry of entries) {
+      if (entry.isSymbolicLink()) continue;
+      const absolute = join(directory, entry.name);
+      const rel = relative(root, absolute);
+      if (isSensitive(rel)) continue;
+      if (entry.isDirectory()) {
+        if ([".git", "node_modules", ".cache", "coverage"].includes(entry.name)) continue;
+        visit(absolute);
+        continue;
+      }
+      const extension = extname(entry.name).toLowerCase();
+      const environmentTemplate = entry.name === ".env" || entry.name.startsWith(".env.");
+      if (entry.isFile() && (TEXT_EXTENSIONS.has(extension) || KNOWN_TEXT_FILENAMES.has(entry.name) || environmentTemplate)) {
+        files.push(absolute);
+      }
+    }
+  };
+  visit(root);
+  return files;
+}
+
+export function validateExternalSourceBoundary(repoRoot) {
+  const findings = [];
+  if (!existsSync(repoRoot)) {
+    return [{
+      code: "EXTERNAL_SOURCE_ROOT_MISSING",
+      path: repoRoot,
+      line: null,
+      excerpt: "Raiz do repositório ausente; validação não executada.",
+    }];
+  }
+  for (const file of walkExternalBoundaryFiles(repoRoot)) {
+    const text = safeRead(file, 16 * 1024 * 1024);
+    if (text == null) {
+      findings.push({
+        code: "EXTERNAL_SOURCE_FILE_UNSCANNABLE",
+        path: relative(repoRoot, file),
+        line: null,
+        excerpt: "Arquivo textual ilegível ou maior que o limite de 16 MiB.",
+      });
+      continue;
+    }
+    findings.push(...findForbidden(
+      text,
+      EXTERNAL_SOURCE_RULES,
+      relative(repoRoot, file),
+      { redactExcerpt: true, redactedExcerpt: "[EXTERNAL_SOURCE_REFERENCE_REDACTED]" },
+    ));
+  }
+  return findings;
 }
 
 export function validateProfileRoot(root) {
@@ -403,6 +477,8 @@ export function validateRepository(repoRoot) {
       });
     }
   }
+
+  findings.push(...validateExternalSourceBoundary(repoRoot));
 
   for (const [path, tokens] of Object.entries(CANONICAL)) {
     const text = safeRead(join(repoRoot, path));

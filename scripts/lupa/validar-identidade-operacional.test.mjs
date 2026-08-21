@@ -9,6 +9,7 @@ import {
   findForbidden,
   runValidation,
   validateAgentClaimPolicy,
+  validateExternalSourceBoundary,
   validateProfileRoot,
   validateRequiredTokens,
 } from "./validar-identidade-operacional.mjs";
@@ -575,3 +576,39 @@ test("bot injeta os aprendizados mais recentes, não o início truncado do canô
   assert.deepEqual(_internals.ultimosAprendizados(1), [titulos.at(-1)]);
   assert.notEqual(_internals.ultimosAprendizados(3)[0], titulos[0]);
 });
+
+test("fronteira bloqueia projeto externo em superfície rastreável", () => {
+  const root = mkdtempSync(join(tmpdir(), "centraldark-boundary-"));
+  const dependency = ["@", "ai", "ox", "-squads/core"].join("");
+  write(root, "src/adapter.ts", `import "${dependency}";\n`);
+  const findings = validateExternalSourceBoundary(root);
+  assert.equal(findings.some((finding) => finding.code === "EXTERNAL_SOURCE_PROJECT_FORBIDDEN"), true);
+  assert.equal(findings[0].path, "src/adapter.ts");
+  assert.equal(findings[0].excerpt, "[EXTERNAL_SOURCE_REFERENCE_REDACTED]");
+  assert.equal(JSON.stringify(findings).includes(dependency), false);
+});
+
+test("fronteira bloqueia organização externa em workflow", () => {
+  const root = mkdtempSync(join(tmpdir(), "centraldark-boundary-"));
+  const organization = String.fromCharCode(83, 121, 110, 107, 114, 97, 65, 73);
+  write(root, ".github/workflows/import.yml", `uses: ${organization}/core/action@main\n`);
+  const findings = validateExternalSourceBoundary(root);
+  assert.equal(findings.some((finding) => finding.code === "EXTERNAL_SOURCE_ORG_FORBIDDEN"), true);
+});
+
+test("fronteira bloqueia domínio externo em configuração", () => {
+  const root = mkdtempSync(join(tmpdir(), "centraldark-boundary-"));
+  const domain = ["ai", "ox", "squad", ".", "ai"].join("");
+  write(root, "config/vendor.json", JSON.stringify({ endpoint: `https://${domain}` }));
+  const findings = validateExternalSourceBoundary(root);
+  assert.equal(findings.some((finding) => finding.code === "EXTERNAL_SOURCE_DOMAIN_FORBIDDEN"), true);
+});
+
+test("fronteira limpa permanece verde e integra o gate canônico", () => {
+  const root = validRepo();
+  write(root, "src/adapter.ts", "export const source = 'centraldark-canonical';\n");
+  const report = runValidation({ repoRoot: root });
+  assert.equal(report.ok, true);
+  assert.deepEqual(validateExternalSourceBoundary(root), []);
+});
+
