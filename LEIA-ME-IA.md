@@ -31,7 +31,9 @@ Carregue nesta ordem:
 11. `.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA` para conferir a identidade canônica da skill.
 12. `docs/CONSCIENCIA/PROOF-OWNERSHIP.json` quando houver gate, prova, Judge ou cadeia de validação — propriedade da prova e bloqueio de circularidade.
 13. `docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md` quando houver aprendizado do próprio método, autoaperfeiçoamento do scaffold ou revisão de como o organismo trabalha.
-14. estado atual de branch, HEAD, PR, runtime, writer e ferramentas aplicáveis.
+14. `docs/CONSCIENCIA/EXECUCAO-REVERSIVEL.md` antes de mutação com risco material — menor delta e caminho de volta preservado.
+15. `docs/CONSCIENCIA/REMEDICAO.md` depois de qualquer mutação — medir T0 → T1 antes de declarar o veredito.
+16. estado atual de branch, HEAD, PR, runtime, writer e ferramentas aplicáveis.
 
 Nome de modelo não muda o contrato. GPT, Codex, Claude, Gemini, Grok, Copilot, Cursor, Windsurf, Hermes ou modelo futuro entram como motores/papéis substituíveis dentro do mesmo organismo.
 
