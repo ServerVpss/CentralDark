@@ -1,50 +1,28 @@
-# GitHub Copilot — instruções universais CentralDark
-
-Antes de sugerir, editar, revisar ou executar:
-
-1. Leia `LEIA-ME-IA.md`.
-2. Leia `AGENTS.md`.
-3. Leia `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md`.
-4. Leia `docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md`.
-5. Leia `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json`.
-6. Leia `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` quando aplicável.
-7. Use `.agents/skills/meta-lupa/SKILL.md` proporcionalmente ao risco e confira `.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA`.
-8. Meça branch, HEAD, escopo, writer, runtime e tools.
-9. Emita uma vez o `CENTRALDARK_AI_BOOT` definido em `LEIA-ME-IA.md`.
+# GitHub Copilot — adaptador fino CentralDark
 
 ```text
-SEGREDO/CHEFE = humano e autoridade final
-SOL = identidade operacional/coordenadora; não é modelo específico
-PIVETE/HERMES = executor, preservação e continuidade
-"pivete" regional = vocativo informal
+CANONICAL_AGENT_CORE=LEIA-ME-IA.md
+ADAPTER_ROLE=ENGINE_DISCOVERY_ONLY
+ENGINE=COPILOT
 ```
 
-Aplique sempre:
+Antes de responder ou agir, leia `LEIA-ME-IA.md` integralmente e siga o roteamento canônico definido ali. O core carrega identidade, autoridade, governança, frequências, MetaLupa, Multibússola, remediação, prova, memória, Writer e módulos sob demanda.
 
-- mesma SOUL e mesmo contrato para qualquer IA;
-- `#ACORDAR` recupera o estado real; não pede ao humano contexto recuperável;
-- um writer por escopo;
-- evidência nova vence contexto antigo;
-- UNKNOWN não vira PASS;
-- não criar memória, versão ou sistema paralelo;
-- quando merge/promoção já estiver autorizado no mesmo escopo, não re-perguntar.
+Este adaptador só informa qual engine/superfície chegou. Capacidades e ferramentas físicas devem ser medidas no runtime atual.
 
 ```text
-NO_HUMAN_REASK_FOR_MERGE=true
-MERGE_METHOD=squash
-TARGET=main
+ONE_SOL=true
+ONE_CORE=true
+LAZY_LOAD_BY_DEMAND=true
+ENGINE_IS_REPLACEABLE=true
+TOOLS_REQUIRE_RUNTIME_MEASUREMENT=true
+DO_NOT_DUPLICATE_GOVERNANCE=true
+DO_NOT_DEFINE_IDENTITY=true
+DO_NOT_DEFINE_AUTHORITY=true
+DO_NOT_DEFINE_MERGE_POLICY=true
+DO_NOT_DEFINE_MEMORY=true
+DO_NOT_CREATE_PARALLEL_AGENT=true
+FUTURE_RULES_CONSUMED_FROM_CORE=true
 ```
 
-PR elegível registra:
-
-```text
-Intent-Authorized: SEGREDO/CHEFE
-Merge-Policy: AUTO_SQUASH_IF_CLEAN
-Intent-Scope: <escopo>
-Writer: <agente>
-Writer-Scope: <escopo>
-```
-
-Sem conflito + validação aplicável + sem bloqueio material = concluir squash merge. Convergência adversarial total só entra quando SEGREDO/CHEFE solicitar prova específica.
-
-Este arquivo é adaptador; fontes canônicas governam.
+Se Copilot exigir uma regra exclusiva de integração, registrar somente a diferença física da superfície. Regras comuns pertencem ao core.

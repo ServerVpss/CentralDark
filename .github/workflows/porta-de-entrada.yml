@@ -125,6 +125,9 @@ jobs:
       - name: Testar contrato de identidade operacional
         run: node --test scripts/lupa/validar-identidade-operacional.test.mjs
 
+      - name: Testar core único e adapters finos
+        run: node --test scripts/lupa/agent-core-adapters.test.mjs
+
       - name: Validar identidade SEGREDO → SOL → PIVETE/HERMES
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before || github.sha }}
@@ -232,6 +235,7 @@ jobs:
             --base-ref "$BASE_SHA" \
             --head-ref "$HEAD_SHA" \
             --json || status=1
+          node --test scripts/lupa/agent-core-adapters.test.mjs || status=1
           node scripts/lupa/portable-kernel.mjs --json || status=1
           node scripts/lupa/proof-ownership.mjs || status=1
           node --test scripts/webhook/lib/safe-git-deploy.test.mjs || status=1
@@ -262,6 +266,8 @@ jobs:
           echo "CANONICAL_LABELS_REQUIRED=1"
           echo "CENTRALDARK_API_SINGLE_ENTRY=1"
           echo "CENTRALDARK_PORTABLE_KERNEL=1"
+          echo "AGENT_CORE_SINGLETON=1"
+          echo "AGENT_ADAPTER_DRIFT_GUARD=1"
           echo "IMAGE_INPUT_IS_OPERATIONAL=1"
           echo "PROOF_OWNERSHIP_COVERAGE=PARTIAL_EXPLICIT"
           echo "UNREGISTERED_INVARIANT=UNPROVEN_NOT_OWNED"
