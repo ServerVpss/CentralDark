@@ -121,6 +121,28 @@ Subfunções existentes ficam ocultas atrás desta caixa visual:
    usa cristal pronto sem pagar a mineração inteira novamente
 ```
 
+### 📚 Biblioteca física + grafo semântico
+
+Owner material da biblioteca: `docs/BRAIN/03-DOCUMENTACAO/BIBLIOTECA/README.md`.
+
+```text
+PDF | EPUB | JWPUB
+→ source_id + hash + proveniência
+→ referência indexada
+→ tags/facetas
+→ wikilinks/backlinks
+→ MOC
+→ cognição | skill-candidate | conversa
+→ Knowledge Compiler / FORJA
+→ cristal quando provado
+```
+
+O roteador determinístico vive em `scripts/memory-linker/library-router.mjs` e reutiliza a área já existente de memória/linkagem, em vez de criar um segundo cérebro.
+
+A mesma entrada pode alimentar cognição, uma skill candidata e referência de conversa sem ser copiada para três depósitos. Tags dizem **em que gaveta semântica entra**; links dizem **com que nota/capacidade concreta conversa**; MOCs organizam o bairro.
+
+Referência contextual só aparece com relevância suficiente. Sem texto-fonte ingerido, a Casa pode citar a referência (`📖 Livro 1:2`), mas não inventa a citação textual.
+
 Leis:
 
 ```text
@@ -129,6 +151,10 @@ FONTE != AUTORIDADE
 FONTE_PRIMÁRIA != VERDADE_AUTOMÁTICA
 MUITO_MINÉRIO_ENTRA → POUCO_OURO_SAI
 RAW_CORPUS_LOAD_ON_DEMAND=true
+LIBRARY_REFERENCE != TECHNICAL_PROOF
+NO_SOURCE_TEXT → DO_NOT_INVENT_QUOTE
+PRIVATE_CHAIN_OF_THOUGHT_NOT_PERSISTED=true
+DELIBERATION_SUMMARY_ALLOWED=true
 ```
 
 ## 🦾 EXECUÇÃO — agir no alvo certo
