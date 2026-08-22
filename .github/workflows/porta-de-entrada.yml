@@ -69,53 +69,19 @@ jobs:
       - name: Validar continuidade global e fronteira de autoridade da entrada
         run: node scripts/lupa/validar-continuidade-global.mjs
 
+      - name: Testar decisão determinística do gate de labels
+        if: github.event_name == 'pull_request'
+        run: node --test scripts/lupa/label-gate.test.mjs
+
       - name: Exigir labels operacionais canônicas
         if: github.event_name == 'pull_request'
         shell: bash
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          node <<'NODE'
-          const { execFileSync } = require('node:child_process');
-          const fs = require('node:fs');
-          const event = JSON.parse(fs.readFileSync(process.env.GITHUB_EVENT_PATH, 'utf8'));
-          const labels = (event.pull_request?.labels || []).map((item) => String(item?.name || ''));
-          const seed = execFileSync(
-            'git',
-            ['show', `${process.env.BASE_SHA}:.github/workflows/bots-labels-seed.yml`],
-            { encoding: 'utf8' },
-          );
-          const canonicalBlock = seed.match(
-            /const canonical\s*=\s*\[([\s\S]*?)\]\.map\(\(\[name,\s*color,\s*description\]\)\s*=>/,
-          )?.[1] || '';
-          const canonical = new Set(
-            [...canonicalBlock.matchAll(/\[\s*'([^']+)'\s*,\s*'[0-9A-Fa-f]{6}'\s*,/g)]
-              .map((match) => match[1]),
-          );
-          if (canonical.size === 0) {
-            console.error('LABEL_GATE_BLOCKED=CATALOGO_CANONICO_VAZIO');
-            process.exit(1);
-          }
-          const authorityAliases = new Set(['permito-segredo', 'PERMITO-SEGREDO']);
-          const canonicalPresent = labels.filter((label) => canonical.has(label));
-          const invalid = labels.filter((label) => !canonical.has(label) && !authorityAliases.has(label));
-          const authorityCompat = labels.filter((label) => authorityAliases.has(label));
-
-          if (canonicalPresent.length === 0) {
-            console.error('LABEL_GATE_BLOCKED=SEM_LABEL_CANONICA');
-            process.exit(1);
-          }
-          if (invalid.length > 0) {
-            console.error(`LABEL_GATE_BLOCKED=LABEL_NAO_CANONICA count=${invalid.length}`);
-            process.exit(1);
-          }
-          if (authorityCompat.length > 0) {
-            console.log(`LABEL_GATE_COMPAT_AUTHORITY=${authorityCompat.length} aguardando_migracao_issue_707=1`);
-            console.log(`LABEL_GATE_AUTHORITY_SEGREDO=${authorityCompat.length}`);
-          }
-          console.log(`LABEL_GATE=PASS canonical=${canonicalPresent.length} catalog=${canonical.size}`);
-          NODE
+          node scripts/lupa/label-gate-run.mjs
 
       - name: Bloquear novo bypass direto de provider fora do Gateway
         if: github.event_name == 'pull_request'
