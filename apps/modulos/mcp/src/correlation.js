@@ -49,8 +49,7 @@ export function resolveTraceContext(headers = {}) {
     const incomingRequestId = boundedId(headerValue(headers, "x-request-id"), { min: 8, max: 128 });
     const requestId = incomingRequestId || randomUUID();
     const incomingCorrelationId = boundedId(headerValue(headers, "x-correlation-id"), { min: 8, max: 128 });
-    const cfRay = boundedId(headerValue(headers, "cf-ray"), { min: 8, max: 128 });
-    const correlationId = incomingCorrelationId || cfRay || requestId;
+    const correlationId = incomingCorrelationId || randomUUID();
     const missionId = boundedId(headerValue(headers, "x-mission-id"), { min: 1, max: 128 }) || null;
     const spanId = randomSpanId();
 
