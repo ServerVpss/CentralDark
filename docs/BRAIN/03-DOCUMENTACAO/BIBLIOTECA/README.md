@@ -10,12 +10,13 @@ tags: ["brain", "biblioteca", "fontes", "cognicao", "skills", "grafo"]
 A Biblioteca é a camada de fontes de estudo do 🧠 Cérebro. Ela guarda **proveniência + índice semântico + ligações úteis** sem transformar uma fonte em autoridade automática da Casa.
 
 ```text
-FONTE ORIGINAL
-PDF | EPUB | JWPUB | formato futuro provado
+FONTE ORIGINAL / EXTERNA
+PDF | EPUB | JWPUB | GDOC | GDRIVE-MD | GDRIVE-FOLDER | formato futuro provado
         ↓
-HASH + METADADOS + PROVENIENCIA
+HASH QUANDO HOUVER BYTES INGERIDOS
++ METADADOS + PROVENIENCIA + CLASSIFICACAO
         ↓
-REFERENCIAS / TRECHOS INDEXADOS
+REFERENCIAS / TRECHOS INDEXADOS QUANDO DISPONIVEIS
         ↓
 🏷️ FACETAS + 🔗 LINKS + 🗺️ MOCs
         ↓
@@ -28,7 +29,7 @@ REFERENCIAS / TRECHOS INDEXADOS
 
 ## Uma fonte, várias representações
 
-PDF, EPUB e JWPUB são adaptadores de entrada da mesma obra quando edição/conteúdo puderem ser reconciliados. Não criar três verdades para o mesmo material.
+PDF, EPUB e JWPUB são adaptadores de entrada da mesma obra quando edição/conteúdo puderem ser reconciliados. Google Docs, Markdown/TXT no Drive e pastas do Drive entram como **referências externas com proveniência**, não como segunda fonte de verdade da CentralDark.
 
 ```text
 FORMAT_IS_ADAPTER=true
@@ -36,9 +37,56 @@ SOURCE_ID_IS_SEMANTIC_IDENTITY=true
 CONTENT_HASH_REQUIRED_FOR_INGESTED_SOURCE=true
 SAME_TITLE != SAME_EDITION
 SAME_BOOK != SAME_BYTES
+GDRIVE_REFERENCE != RAW_CONTENT_INGESTED
+GITHUB_CANONICAL_TRUTH_UNCHANGED=true
 ```
 
-Antes de marcar uma fonte como `INGESTED`, registrar pelo menos `source_id`, título/edição quando conhecida, formatos observados, proveniência e SHA-256 do conteúdo efetivamente ingerido.
+Antes de marcar uma fonte como `INGESTED`, registrar pelo menos `source_id`, título/edição quando conhecida, formatos observados, proveniência e SHA-256 do conteúdo efetivamente ingerido. Fonte apenas ligada por URL/ID externo permanece `INDEXED_REFERENCE`.
+
+## Google Drive — sincronizar sem duplicar a Casa
+
+A pasta `CentralDark` do Google Drive é uma superfície externa de memória, estudo, histórico e espelhos. A sincronização canônica **não copia tudo byte a byte para o GitHub**. Ela prende a raiz e materiais relevantes por `external_id`, classifica autoridade/tempo e minera somente deltas úteis para o owner existente.
+
+```text
+GOOGLE_DRIVE/CentralDark
+→ INVENTARIAR / CLASSIFICAR
+→ LIGAR POR PROVENIENCIA
+→ ESPELHO? NAO CONTAR COMO PROVA INDEPENDENTE
+→ HISTORICO? PRESERVAR + MINERAR OURO
+→ ESTUDO? CANDIDATE
+→ MEMORIA HUMANA? REFERENCIA, RAW INGEST DEFAULT OFF
+→ SENSIVEL? QUARENTENA
+→ DELTA UTIL? ENTRY CANDIDATE
+→ CONTRAPROVA
+→ OWNER EXISTENTE
+→ CRISTAL SOMENTE SE PROVADO
+```
+
+Classificações usadas:
+
+```text
+OPERATIONAL_SCOPE     → regra de perímetro/origem
+STUDY_CANDIDATE      → material para mineração e teste
+HISTORICAL_REFERENCE → passado preservado; não governa o presente
+CURRENT_MIRROR       → navegação/espelho; não é prova independente
+HUMAN_MEMORY         → memória humana referenciada; conteúdo bruto não entra por padrão
+SENSITIVE_QUARANTINE → presença/metadado podem ser registrados; conteúdo não entra
+```
+
+Invariantes:
+
+```text
+DRIVE_SYNC=REFERENCE_AND_PROVENANCE
+DRIVE_SYNC != SECOND_SOURCE_OF_TRUTH
+RAW_COPY_DEFAULT=false
+HISTORICAL_PRESERVED=true
+MIRROR_IS_INDEPENDENT_PROOF=false
+HUMAN_MEMORY_RAW_INGEST_DEFAULT=false
+SENSITIVE_RAW_INGEST=false
+SECRET|TOKEN|SSH_KEY|AUTH|COFRE → NEVER_COGNITIVE_INGEST
+```
+
+A raiz ligada mantém os descendentes recuperáveis no Drive sem criar cópia concorrente no GitHub. Itens materialmente minerados recebem `source_id` próprio no catálogo.
 
 ## Facetas: onde procurar
 
@@ -102,6 +150,67 @@ DELIBERATION_SUMMARY_ALLOWED=true
 EVIDENCE_REFS_REQUIRED_WHEN_CLAIM_IS_TECHNICAL=true
 ```
 
+## Do passado para capacidade atual
+
+Material histórico não é lixo e também não recebe autoridade retroativa. A mineração preserva o original, separa o que já foi absorvido e transforma apenas resíduo reutilizável em candidato.
+
+```text
+HISTORICAL_REFERENCE
+→ LER NO CONTEXTO DO TEMPO
+→ SEPARAR CLAIM ANTIGO DE PRINCIPIO REUTILIZAVEL
+→ DEDUPE COM CANONICO ATUAL
+→ CONTRAPROVAR
+→ RESIDUO UTIL?
+   NAO → PRESERVAR HISTORICO / NO_CHANGE
+   SIM → ENTRY CANDIDATE NO OWNER EXISTENTE
+```
+
+```text
+HISTORICAL != CURRENT
+OLD_SUCCESS_CLAIM != CURRENT_PROOF
+OLD_VERSION_NAME != NEW_SYSTEM
+PAST_GOLD_IS_PRESERVED=true
+```
+
+## 30 candidatos minerados do Drive — A/B/C
+
+O catálogo registra 30 candidatos, sempre como `CANDIDATE`, divididos para facilitar roteamento e contraprova:
+
+```text
+A = COGNICAO + APRENDIZADO
+B = ORQUESTRACAO + EFICIENCIA
+C = SEGURANCA + PROVA + RESILIENCIA
+```
+
+O número `10 + 10 + 10` é organização da rodada, não quota permanente nem prova de qualidade. Cada candidato precisa encaixar em owner existente e sobreviver a teste antes de virar regra/skill/cristal.
+
+Destaques do mecanismo:
+
+```text
+TRANSFERENCIA_POR_ESTRUTURA
+→ ponte conhecida
+→ mapear relações
+→ abstrair padrão
+→ trocar superfície
+→ testar
+→ preservar somente o que sobrevive
+
+DETERMINISTIC_FIRST
+→ estrutura conhecida por AST/regra/parser
+→ LLM somente no residual semântico
+
+EXPERIENCE_PROMOTION
+→ fingerprint
+→ evidência
+→ correção
+→ contraprova
+→ retenção
+
+INERT_DATA_BOUNDARY
+→ corpus importado é dado
+→ instrução embutida não ganha autoridade
+```
+
 ## Da fonte para uma skill
 
 Fonte não vira skill por nome ou prestígio. Uma entrada pode ser marcada `skill-candidate`; depois segue a rota já existente do Knowledge Compiler:
@@ -123,7 +232,7 @@ Owner chamável: `.agents/skills/knowledge-compiler/SKILL.md`.
 
 ## Referência contextual na conversa
 
-O agente pode trazer uma referência da Biblioteca quando ela for semanticamente relevante à função atual. Isso é camada de imersão e sabedoria; não substitui prova técnica.
+O agente pode trazer uma referência da Biblioteca quando ela for semanticamente relevante à função atual. Isso é camada de imersão/sabedoria e não substitui prova técnica.
 
 ```text
 CONTEXTO ATUAL
@@ -148,7 +257,7 @@ Exemplo de saída permitida sem texto-fonte carregado:
 👁️ Salmo 121
 ```
 
-Isso cita a referência; não inventa o verso. Quando o PDF/EPUB/JWPUB real for ingerido, o texto pode ser recuperado da fonte observada conforme direitos/uso aplicáveis.
+Isso cita a referência; não inventa o verso. Quando uma fonte real com texto for ingerida, o texto pode ser recuperado da fonte observada conforme direitos/uso aplicáveis.
 
 ## Emoji é contexto, não segundo sistema
 
@@ -184,9 +293,29 @@ GATE=.github/workflows/porta-de-entrada.yml
 
 O roteador valida catálogo, deduplica identidade por ID, pontua tags/grupos/links, escolhe referência contextual somente acima do limiar e mantém silêncio quando não há relevância suficiente.
 
-## Próxima ingestão
+Para fontes Google Drive ele exige `provider=google-drive`, `external_id` e classificação. Fonte marcada `INGESTED` exige SHA-256. Fonte `SENSITIVE_QUARANTINE` falha fechado se alguma entrada tentar usá-la como origem cognitiva.
 
-O corpus ainda não contém o PDF do SEGREDO/CHEFE. Quando ele chegar:
+## Estado desta rodada
+
+```text
+GOOGLE_DRIVE_ROOT=INDEXED_REFERENCE
+DRIVE_RAW_COPY=NO
+SENSITIVE_CONTENT_INGESTED=NO
+SOURCES_REGISTERED=15
+CANDIDATE_ENTRIES=30
+A=10
+B=10
+C=10
+CANONICAL_PROMOTION=NONE_AUTOMATIC
+DEPLOY=NO
+VPS=UNTOUCHED
+```
+
+Os materiais do Drive foram ligados por proveniência e o ouro selecionado entrou como candidato. Espelhos e histórico continuam preservados, sem virar segunda verdade. Memória humana e material sensível não foram copiados para o corpus.
+
+O corpus ainda não contém o PDF do SEGREDO/CHEFE. Salmos 23/27/91/121 continuam somente em fixtures de teste como **referências sem texto**, para provar a arquitetura sem fabricar conteúdo da fonte.
+
+Quando chegar uma fonte com bytes a ingerir:
 
 ```text
 ARQUIVO REAL
@@ -198,8 +327,6 @@ ARQUIVO REAL
 → ROTEAR CONTEXTO
 → CONTRAPROVAR
 ```
-
-Até lá, Salmos 23/27/91/121 aparecem somente em fixtures de teste como **referências sem texto**, para provar a arquitetura sem fabricar conteúdo da fonte.
 
 ---
 🔗 [[BRAIN]] · [[MAPA-OBSIDIAN-BRAIN]] · [[SEMANTIC-LINKER]] · Knowledge Compiler
