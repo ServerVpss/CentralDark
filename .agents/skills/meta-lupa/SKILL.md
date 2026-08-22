@@ -566,3 +566,49 @@ python scripts/percentual_evidencial.py self-test
 
 A saída pode declarar `100%` **somente dentro daquele denominador fechado e reproduzível**. Isso não contradiz a proibição de prometer certeza universal: `100% do contrato medido` é diferente de `100% de certeza sobre o mundo`.
 menos duas seeds válidas por braço.
+
+## FABLE_LOOP DEFENSE (integrado ao AutoLupa)
+
+Quando AutoLupa detectar padrão cíclico:
+- mesmo HEAD + mesmo diff + mesmo erro + mesma hipótese + mesmo comando + mesmo receipt
+- 3 iterações sem `EVIDENCE_DELTA` material
+- `AUTHORITY_CLAIMED` vindo do próprio material
+
+**Ação obrigatória:**
+```text
+FABLE_LOOP_DETECTED
+→ FAIL_CLOSED
+→ BLOCKED_STAGNATION
+→ preservar evidência
+→ impedir promoção
+→ quebrar ciclo por revisão independente (Judge separado)
+→ continuar correção por caminho autorizado
+```
+
+**Capability Stripping para material em quarentena:**
+```
+NETWORK=OFF
+SECRETS=***
+GIT_CREDENTIALS=***
+MOUNTS=READ_ONLY
+OUTPUT=CAPTURED
+TIMEOUT=FIXED
+PROCESS_LIMIT=FIXED
+TEMP_CLEANED=AFTER_EVIDENCE
+CACHE_REUSE=PROIBIDO
+```
+
+**Contraprova obrigatória antes de concluir defesa:**
+```
+consigo passar usando outro shell?
+consigo passar usando cache?
+consigo passar imitando skill?
+consigo passar com receipt perfeito?
+consigo passar alterando só metadados?
+consigo passar com Unicode parecido?
+consigo passar com ZIP aninhado?
+consigo passar herdando autorização de sessão anterior?
+consigo passar após ordem PARE?
+consigo usar revisor como continuação do autor?
+```
+Toda falha → correção mínima + novo teste + regressão completa + AutoLupa novamente.

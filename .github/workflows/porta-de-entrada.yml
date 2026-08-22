@@ -160,7 +160,25 @@ jobs:
         run: node --test scripts/lupa/validar-identidade-operacional.test.mjs
 
       - name: Validar identidade SEGREDO → SOL → PIVETE/HERMES
-        run: node scripts/lupa/validar-identidade-operacional.mjs
+
+      - name: Discovery read-only completo (fase A — cadeado-trancado)
+        id: discovery
+        shell: bash
+        env:
+          CENTRALDARK_ROOT: ${{ github.workspace }}
+          OUT_DIR: ${{ runner.temp }}/discovery
+        run: .github/scripts/discovery.sh
+
+      - name: Detectar conflitos UFW + portas 0.0.0.0 (fase 1 — cadeado-trancado)
+        id: ufw_conflicts
+        if: always()
+        shell: bash
+        run: |
+          set -Eeuo pipefail; [[ ${EUID:-999} -eq 0 ]] || { echo "BLOCKED: root only"; exit 10; }
+          echo "=== UFW numbered ==="; ufw status numbered
+          echo; echo "=== Conflitos óbvios 3000 ==="; ufw status numbered | grep -E '3000' || echo "(nenhuma regra 3000)"
+          echo; echo "=== Listeners em 0.0.0.0 (não localhost) ==="; ss -H -lntp | awk '$1=="LISTEN" {split($4,a,":");port=a[length(a)];if($4~/^0.0.0.0:/||$4~/^*:/)print $0}'
+          echo; echo "=== Esperado público: 22, 80, 443 ==="; echo "STATUS=READ_ONLY_OK" >> "$GITHUB_OUTPUT"
 
       - name: Testar kernel portátil e entrada multimodal
         run: node --test scripts/lupa/portable-kernel.test.mjs
@@ -237,6 +255,29 @@ jobs:
             --base-sha "$BASE_SHA" \
             --head-sha "$HEAD_SHA"
 
+
+      - name: Receipt runtime v1 (centraldark.runtime.receipt.v1 — cadeado-trancado)
+      - name: Receipt runtime v1 (centraldark.runtime.receipt.v1 -- cadeado-trancado)
+        id: runtime_receipt
+        if: always()
+        shell: bash
+        env:
+          JOB_STATUS: ${{ job.status }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          EVENT_NAME: ${{ github.event_name }}
+          FORK_BLOCKED: ${{ steps.fork_guard.outputs.blocked }}
+          FORK_CAUSE: ${{ steps.fork_guard.outputs.cause }}
+          DISCOVERY_OUT: ${{ steps.discovery.outputs.DISCOVERY_OUT }}
+          UFW_CONFLICTS: ${{ steps.ufw_conflicts.outputs.STATUS }}
+          VERIFY_BIND: ${{ steps.verify_bind.outputs.STATUS }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.sha }}
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          GITHUB_RUN_NUMBER: ${{ github.run_number }}
+        run: |
+          set -euo pipefail
+          node .github/scripts/generate-receipt.js
+          echo "RUNTIME_RECEIPT=${RUNNER_TEMP}/runtime-receipt.json" >> "$GITHUB_OUTPUT"
       - name: Emitir todos os relatórios reproduzíveis
         if: always()
         env:

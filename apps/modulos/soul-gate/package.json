@@ -1,0 +1,25 @@
+{
+  "name": "@centraldark/soul-gate",
+  "version": "0.1.0",
+  "description": "SOUL Runtime Gate — filtro único autoaplicável para toda mutação de estado da Casa",
+  "main": "runtime/soul-gate.cjs",
+  "types": "runtime/soul-gate.d.ts",
+  "scripts": {
+    "test": "node --test runtime/soul-gate.test.cjs",
+    "test:watch": "node --test --watch runtime/soul-gate.test.cjs",
+    "gate": "node runtime/soul-gate.cjs",
+    "reload": "node -e \"require('./runtime/soul-gate.cjs').reload()\""
+  },
+  "keywords": [
+    "centraldark",
+    "soul",
+    "gate",
+    "runtime",
+    "governance"
+  ],
+  "author": "SEGREDO/CHEFE",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {},
+  "devDependencies": {}
+}
