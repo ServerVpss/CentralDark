@@ -150,6 +150,59 @@ DELIBERATION_SUMMARY_ALLOWED=true
 EVIDENCE_REFS_REQUIRED_WHEN_CLAIM_IS_TECHNICAL=true
 ```
 
+## Evidência recuperável e citação da execução
+
+A Biblioteca não cristaliza referência efêmera de retrieval como identidade permanente. Uma citação material só pode sair de evidência realmente recuperada na execução atual.
+
+```text
+EVIDENCE != REFERENCE_TOKEN
+
+CLAIM
+→ SOURCE_IDENTITY
+→ REAL_RETRIEVAL
+→ OBSERVED_REFERENCE
+→ CITATION
+```
+
+A identidade persistente reutiliza os campos que a fonte já oferece e guarda somente o necessário para reencontro e contraprova:
+
+```text
+source_id
++ provenance.external_id     quando houver ID externo estável
+OU provenance.canonical_path quando o caminho for o locator disponível
++ sha256                     quando necessário/disponível para bytes
++ version/revision_id        quando necessário/disponível para versão
+```
+
+Título/nome não identifica conteúdo. `turnXfileY`, linhas e referências equivalentes pertencem à execução que observou a evidência e **não entram no canon persistente**.
+
+```text
+IDENTIDADE_ESTAVEL
+→ REENCONTRAR FONTE
+→ RECUPERAR NOVAMENTE
+→ OBTER REFERENCIA ATUAL
+→ CITAR REFERENCIA ATUAL
+```
+
+O owner operacional continua sendo `scripts/memory-linker/library-router.mjs`. `createEvidenceSession({ retrieve })` cria a fronteira de uma execução: `recover()` só marca `REFERENCE_CURRENT` quando o retriever retorna a fonte reencontrada e uma `observed_reference`; `cite()` aceita apenas o receipt emitido pela mesma sessão; `crystallize()` persiste somente a identidade estável, sem payload nem token runtime.
+
+Estados de contraprova:
+
+```text
+SOURCE_FOUND    → identidade reencontrada; pode avançar se houver referência observada
+SOURCE_CHANGED  → mesmo locator com hash/versão diferente; claim antigo não reutiliza citação
+SOURCE_MISSING  → fonte não foi recuperada
+SOURCE_CONFLICT → source/locator/fingerprint observado não reconcilia com a identidade esperada
+REFERENCE_CURRENT → referência emitida por retrieval da sessão atual
+REFERENCE_STALE   → referência ausente, herdada, inventada ou de outra sessão
+```
+
+Arquivo movido pode permanecer `SOURCE_FOUND` quando o SHA-256 observado reconcilia o mesmo conteúdo e o locator é atualizado. Se a fonte expõe versão/hash e o valor antigo não é reobservado, o sistema falha fechado em vez de transformar ausência de prova em PASS.
+
+`citationLine()` permanece apenas como **referência contextual da Biblioteca** (ex.: `👁️ Salmo 121`). Não é evidência material. Citação de evidência material precisa atravessar a sessão de recuperação e sair de `cite()`.
+
+`buildDecisionSummary()` aceita identidades persistentes em `evidence_refs`, mas rejeita `turnXfileY` e equivalentes para impedir que metadado efêmero vire memória canônica.
+
 ## Do passado para capacidade atual
 
 Material histórico não é lixo e também não recebe autoridade retroativa. A mineração preserva o original, separa o que já foi absorvido e transforma apenas resíduo reutilizável em candidato.
