@@ -3,6 +3,17 @@ const ALLOWED_FORMATS = new Set([
   'gdoc', 'gdrive-md', 'gdrive-folder', 'txt',
 ]);
 const GOOGLE_DRIVE_FORMATS = new Set(['gdoc', 'gdrive-md', 'gdrive-folder']);
+const EPHEMERAL_REFERENCE_RE = /\bturn\d+(?:file|search|fetch|view|news|reddit|youtube|product|business|image)\d+\b/i;
+const EVIDENCE_RECEIPT_BRAND = Symbol('centraldark.evidence-receipt');
+
+export const EVIDENCE_STATES = Object.freeze({
+  SOURCE_FOUND: 'SOURCE_FOUND',
+  SOURCE_CHANGED: 'SOURCE_CHANGED',
+  SOURCE_MISSING: 'SOURCE_MISSING',
+  SOURCE_CONFLICT: 'SOURCE_CONFLICT',
+  REFERENCE_CURRENT: 'REFERENCE_CURRENT',
+  REFERENCE_STALE: 'REFERENCE_STALE',
+});
 
 export function normalizeToken(value) {
   return String(value ?? '')
@@ -24,6 +35,61 @@ function tokenVariants(value) {
 
 function assertArray(value, field) {
   if (!Array.isArray(value)) throw new Error(`${field}_MUST_BE_ARRAY`);
+}
+
+function nonEmptyString(value) {
+  return typeof value === 'string' && value.trim().length > 0;
+}
+
+function firstNonEmpty(...values) {
+  for (const value of values) {
+    if (nonEmptyString(value)) return value.trim();
+  }
+  return '';
+}
+
+function normalizeSha256(value) {
+  const candidate = String(value ?? '').trim().toLowerCase();
+  return /^[a-f0-9]{64}$/.test(candidate) ? candidate : '';
+}
+
+function normalizeStableIdentity(identity) {
+  if (!identity || typeof identity !== 'object' || Array.isArray(identity)) {
+    throw new Error('SOURCE_IDENTITY_REQUIRED');
+  }
+  const sourceId = normalizeToken(identity.source_id);
+  if (!sourceId) throw new Error('SOURCE_IDENTITY_SOURCE_ID_REQUIRED');
+  const locator = identity.locator;
+  if (!locator || typeof locator !== 'object' || Array.isArray(locator)) {
+    throw new Error(`SOURCE_IDENTITY_LOCATOR_REQUIRED:${sourceId}`);
+  }
+  const kind = normalizeToken(locator.kind);
+  const provider = normalizeToken(locator.provider);
+  const value = firstNonEmpty(locator.value);
+  if (!kind || !value) throw new Error(`SOURCE_IDENTITY_LOCATOR_INVALID:${sourceId}`);
+
+  const normalized = {
+    source_id: sourceId,
+    locator: {
+      kind,
+      ...(provider ? { provider } : {}),
+      value: kind === 'canonical_path' ? value.replaceAll('\\', '/') : value,
+    },
+  };
+  const sha256 = normalizeSha256(identity.sha256);
+  if (sha256) normalized.sha256 = sha256;
+  const version = firstNonEmpty(identity.version);
+  if (version) normalized.version = version;
+  return normalized;
+}
+
+function containsEphemeralReference(value, seen = new Set()) {
+  if (typeof value === 'string') return EPHEMERAL_REFERENCE_RE.test(value);
+  if (!value || typeof value !== 'object') return false;
+  if (seen.has(value)) return false;
+  seen.add(value);
+  if (Array.isArray(value)) return value.some((item) => containsEphemeralReference(item, seen));
+  return Object.values(value).some((item) => containsEphemeralReference(item, seen));
 }
 
 function validateGoogleDriveProvenance(source, sourceId, formats) {
@@ -97,6 +163,245 @@ export function validateCatalog(catalog) {
   return { status: 'PASS', sources: sourceIds.size, entries: entryIds.size };
 }
 
+export function deriveSourceIdentity(source) {
+  if (!source || typeof source !== 'object' || Array.isArray(source)) {
+    throw new Error('SOURCE_REQUIRED_FOR_IDENTITY');
+  }
+  const sourceId = normalizeToken(source.source_id);
+  if (!sourceId) throw new Error('SOURCE_ID_REQUIRED_FOR_IDENTITY');
+  const provenance = source.provenance && typeof source.provenance === 'object' ? source.provenance : {};
+  const provider = normalizeToken(firstNonEmpty(provenance.provider, source.provider));
+  const externalId = firstNonEmpty(provenance.external_id, source.external_id);
+  const canonicalPath = firstNonEmpty(
+    provenance.canonical_path,
+    source.canonical_path,
+    provenance.path,
+    source.path,
+  );
+
+  let locator;
+  if (externalId) {
+    locator = { kind: 'external_id', ...(provider ? { provider } : {}), value: externalId };
+  } else if (canonicalPath) {
+    locator = {
+      kind: 'canonical_path',
+      provider: provider || 'repository',
+      value: canonicalPath.replaceAll('\\', '/'),
+    };
+  } else {
+    throw new Error(`SOURCE_LOCATOR_REQUIRED:${sourceId}`);
+  }
+
+  const identity = { source_id: sourceId, locator };
+  const sha256 = normalizeSha256(source.sha256);
+  if (sha256) identity.sha256 = sha256;
+  const version = firstNonEmpty(
+    provenance.revision_id,
+    provenance.version,
+    source.revision_id,
+    source.version,
+  );
+  if (version) identity.version = version;
+  return normalizeStableIdentity(identity);
+}
+
+export function reconcileSourceIdentity(expectedIdentity, observedSourceOrIdentity) {
+  const expected = normalizeStableIdentity(expectedIdentity);
+  if (observedSourceOrIdentity == null) {
+    return {
+      source_status: EVIDENCE_STATES.SOURCE_MISSING,
+      reason: 'SOURCE_NOT_RECOVERED',
+      expected_identity: expected,
+      observed_identity: null,
+    };
+  }
+
+  let observed;
+  try {
+    observed = observedSourceOrIdentity.locator
+      ? normalizeStableIdentity(observedSourceOrIdentity)
+      : deriveSourceIdentity(observedSourceOrIdentity);
+  } catch (error) {
+    return {
+      source_status: EVIDENCE_STATES.SOURCE_CONFLICT,
+      reason: `OBSERVED_IDENTITY_INVALID:${error.message}`,
+      expected_identity: expected,
+      observed_identity: null,
+    };
+  }
+
+  if (expected.source_id !== observed.source_id) {
+    return {
+      source_status: EVIDENCE_STATES.SOURCE_CONFLICT,
+      reason: 'SOURCE_ID_MISMATCH',
+      expected_identity: expected,
+      observed_identity: observed,
+    };
+  }
+
+  const expectedLocator = JSON.stringify(expected.locator);
+  const observedLocator = JSON.stringify(observed.locator);
+  if (expectedLocator !== observedLocator) {
+    if (expected.sha256 && observed.sha256 && expected.sha256 === observed.sha256) {
+      return {
+        source_status: EVIDENCE_STATES.SOURCE_FOUND,
+        reason: 'SOURCE_RELOCATED_HASH_MATCH',
+        expected_identity: expected,
+        observed_identity: observed,
+      };
+    }
+    return {
+      source_status: EVIDENCE_STATES.SOURCE_CONFLICT,
+      reason: 'SOURCE_LOCATOR_MISMATCH',
+      expected_identity: expected,
+      observed_identity: observed,
+    };
+  }
+
+  if (expected.sha256) {
+    if (!observed.sha256) {
+      return {
+        source_status: EVIDENCE_STATES.SOURCE_CONFLICT,
+        reason: 'CONTENT_HASH_NOT_OBSERVED',
+        expected_identity: expected,
+        observed_identity: observed,
+      };
+    }
+    if (expected.sha256 !== observed.sha256) {
+      return {
+        source_status: EVIDENCE_STATES.SOURCE_CHANGED,
+        reason: 'CONTENT_HASH_CHANGED',
+        expected_identity: expected,
+        observed_identity: observed,
+      };
+    }
+  }
+
+  if (expected.version) {
+    if (!observed.version) {
+      return {
+        source_status: EVIDENCE_STATES.SOURCE_CONFLICT,
+        reason: 'SOURCE_VERSION_NOT_OBSERVED',
+        expected_identity: expected,
+        observed_identity: observed,
+      };
+    }
+    if (expected.version !== observed.version) {
+      return {
+        source_status: EVIDENCE_STATES.SOURCE_CHANGED,
+        reason: 'SOURCE_VERSION_CHANGED',
+        expected_identity: expected,
+        observed_identity: observed,
+      };
+    }
+  }
+
+  return {
+    source_status: EVIDENCE_STATES.SOURCE_FOUND,
+    reason: 'SOURCE_IDENTITY_MATCH',
+    expected_identity: expected,
+    observed_identity: observed,
+  };
+}
+
+export function createEvidenceSession({ retrieve } = {}) {
+  if (typeof retrieve !== 'function') throw new Error('EVIDENCE_RETRIEVER_REQUIRED');
+  const sessionToken = Object.freeze({});
+
+  const brand = (receipt) => {
+    Object.defineProperty(receipt, EVIDENCE_RECEIPT_BRAND, {
+      value: sessionToken,
+      enumerable: false,
+      configurable: false,
+      writable: false,
+    });
+    return receipt;
+  };
+
+  const requireCurrentReceipt = (receipt) => {
+    if (!receipt || receipt[EVIDENCE_RECEIPT_BRAND] !== sessionToken) {
+      throw new Error(EVIDENCE_STATES.REFERENCE_STALE);
+    }
+    if (receipt.source_status !== EVIDENCE_STATES.SOURCE_FOUND) {
+      throw new Error(receipt.source_status || EVIDENCE_STATES.SOURCE_CONFLICT);
+    }
+    if (receipt.reference_status !== EVIDENCE_STATES.REFERENCE_CURRENT || !nonEmptyString(receipt.observed_reference)) {
+      throw new Error(EVIDENCE_STATES.REFERENCE_STALE);
+    }
+    return receipt;
+  };
+
+  return Object.freeze({
+    async recover(stableIdentity) {
+      const expectedIdentity = normalizeStableIdentity(stableIdentity);
+      let retrieval;
+      try {
+        retrieval = await retrieve(expectedIdentity);
+      } catch (error) {
+        return brand({
+          type: 'RECOVERED_EVIDENCE',
+          source_status: EVIDENCE_STATES.SOURCE_CONFLICT,
+          reference_status: EVIDENCE_STATES.REFERENCE_STALE,
+          reason: `RETRIEVAL_FAILED:${error?.message || 'UNKNOWN'}`,
+          expected_identity: expectedIdentity,
+          stable_identity: expectedIdentity,
+          observed_identity: null,
+          observed_reference: null,
+          payload: null,
+        });
+      }
+
+      if (!retrieval) {
+        return brand({
+          type: 'RECOVERED_EVIDENCE',
+          source_status: EVIDENCE_STATES.SOURCE_MISSING,
+          reference_status: EVIDENCE_STATES.REFERENCE_STALE,
+          reason: 'SOURCE_NOT_RECOVERED',
+          expected_identity: expectedIdentity,
+          stable_identity: expectedIdentity,
+          observed_identity: null,
+          observed_reference: null,
+          payload: null,
+        });
+      }
+
+      const observedSource = retrieval.source_identity ?? retrieval.source ?? retrieval.observed_source ?? null;
+      const reconciliation = reconcileSourceIdentity(expectedIdentity, observedSource);
+      const observedReference = firstNonEmpty(retrieval.observed_reference);
+      const referenceStatus = reconciliation.source_status === EVIDENCE_STATES.SOURCE_FOUND && observedReference
+        ? EVIDENCE_STATES.REFERENCE_CURRENT
+        : EVIDENCE_STATES.REFERENCE_STALE;
+      const reason = referenceStatus === EVIDENCE_STATES.REFERENCE_STALE
+        && reconciliation.source_status === EVIDENCE_STATES.SOURCE_FOUND
+        ? 'OBSERVED_REFERENCE_REQUIRED'
+        : reconciliation.reason;
+
+      return brand({
+        type: 'RECOVERED_EVIDENCE',
+        source_status: reconciliation.source_status,
+        reference_status: referenceStatus,
+        reason,
+        expected_identity: reconciliation.expected_identity,
+        stable_identity: reconciliation.source_status === EVIDENCE_STATES.SOURCE_FOUND
+          ? reconciliation.observed_identity
+          : expectedIdentity,
+        observed_identity: reconciliation.observed_identity,
+        observed_reference: observedReference || null,
+        payload: retrieval.payload ?? null,
+      });
+    },
+
+    cite(receipt) {
+      return requireCurrentReceipt(receipt).observed_reference;
+    },
+
+    crystallize(receipt) {
+      const current = requireCurrentReceipt(receipt);
+      return normalizeStableIdentity(current.stable_identity);
+    },
+  });
+}
+
 function entryTokens(entry) {
   const weighted = new Map();
   const add = (value, weight) => {
@@ -155,6 +460,7 @@ export function pickContextualReference({ catalog, query = [], minScore = 4 }) {
   };
 }
 
+// Contextual library reference only. Material evidence citations must come from createEvidenceSession().cite().
 export function citationLine(candidate, { includeText = false } = {}) {
   if (!candidate) return null;
   const icon = candidate.emojis?.[0] || '📖';
@@ -178,6 +484,9 @@ export function buildDecisionSummary(input = {}) {
     throw new Error('PRIVATE_REASONING_NOT_PERSISTED');
   }
   const evidence = Array.isArray(input.evidence_refs) ? input.evidence_refs.filter(Boolean) : [];
+  if (evidence.some((item) => containsEphemeralReference(item))) {
+    throw new Error('EPHEMERAL_RETRIEVAL_REFERENCE_NOT_PERSISTED');
+  }
   const references = Array.isArray(input.library_refs) ? input.library_refs.filter(Boolean) : [];
   return {
     type: 'DELIBERATION_SUMMARY',
