@@ -1,5 +1,102 @@
 # Dicionário de Funções da API
 
+## Política de registro de linguagem
+
+Este arquivo também preserva a tradução entre a complexidade técnica interna da CentralDark e a forma humana de entregar a mesma informação ao SEGREDO/CHEFE.
+
+Princípio:
+
+```text
+FONTE / EVIDÊNCIA
+↓
+SEMÂNTICA
+↓
+CLASSIFICAR DESTINO
+├─ INTERNO_TÉCNICO
+├─ CHEFE
+└─ PÚBLICO
+↓
+ESCOLHER REGISTRO
+↓
+POLIR SEM ALTERAR O FATO
+↓
+ENTREGAR
+```
+
+A fonte decide **o que é verdade**. A semântica decide **o que significa**. O contexto decide **como falar**. O polimento decide **quão limpo fica**, sem criar segunda verdade.
+
+### Registros por destino
+
+```text
+TARGET=CHEFE
+→ PT-BR coloquial, natural, direto e polido
+→ termo técnico só quando necessário para a decisão ou pedido explícito
+→ quando termo técnico for material, traduzir imediatamente para o significado prático
+→ não despejar hash, gate, owner, stack, log ou código se a complexidade interna não mudar a decisão
+
+TARGET=INTERNO_TECNICO
+→ registro técnico preciso
+→ nomes exatos, logs, hashes, contratos, causas e provas preservados
+
+TARGET=PUBLICO
+→ norma culta/padrão + texto polido
+→ simples, claro e preciso
+→ sem gíria interna quando ela não ajudar o público
+```
+
+Regra de compressão para o CHEFE:
+
+```text
+CHEFE_SHOULD_NOT_NEED_TO_READ_INTERNAL_COMPLEXITY=true
+UNLESS_INTERNAL_COMPLEXITY_CHANGES_THE_DECISION=true
+SOURCE_OF_TRUTH_UNCHANGED=true
+MEANING_MUST_BE_PRESERVED=true
+REGISTER_IS_PRESENTATION_LAYER=true
+```
+
+No jeito simples: **a máquina segura a complexidade; o CHEFE recebe o significado**.
+
+### Vocabulário operacional
+
+```text
+SIMPLES      = fácil de compreender
+COLOQUIAL    = natural e espontâneo; pode usar gíria/contexto sem perder precisão
+CULTO        = registro alinhado à norma-padrão e vocabulário preciso
+POLIDO       = limpo, claro, bem acabado e sem excesso; não implica formalidade
+TÉCNICO      = vocabulário específico de uma área; não precisa ser difícil
+```
+
+Distinções que devem permanecer:
+
+```text
+SIMPLES != COLOQUIAL
+FORMAL != BEM_ESCRITO
+POLIDO != FORMAL
+TÉCNICO != DIFÍCIL
+REGISTRO != VERDADE
+POLIMENTO != ALTERAÇÃO_DO_FATO
+```
+
+Exemplo do mesmo fato em registros diferentes:
+
+```text
+FATO INTERNO:
+PR #1101
+state=open
+Writer=Codex Work
+scope=LEIA-ME-IA.md
+
+TÉCNICO/CULTO:
+"O PR #1101 permanece aberto e declara Codex Work como Writer responsável pelo escopo LEIA-ME-IA.md."
+
+CHEFE / COLOQUIAL POLIDO:
+"O #1101 ainda tá aberto. O Codex tá escrevendo justamente no LEIA-ME-IA.md, então aqui é só leitura."
+```
+
+O conteúdo factual é o mesmo; só muda a camada de apresentação.
+
+---
+
 ## `syncContactsFromWuzapi`
 - **Nome técnico:** `syncContactsFromWuzapi`
 - **Nome leigo:** Puxar os Clatos do WhatsApp para o CRM.
