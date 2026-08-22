@@ -53,6 +53,27 @@ const makeInvariant = (overrides = {}) => ({
   ...overrides,
 });
 
+const coverageClaimPolicy = () => ({
+  marker: "SOURCE_COVERAGE_RECEIPT_REQUIRED",
+  applies_when_scope_is: ["ALL", "WHOLE", "ENTIRE", "100%", "COMPLETE", "EXHAUSTIVE"],
+  tool_attempt_required_before_unavailable_claim: true,
+  tree_or_listing_counts_as_content_read: false,
+  partial_retrieval_counts_as_total_coverage: false,
+  required_receipt_fields: [
+    "source_and_ref",
+    "inventory_denominator",
+    "content_read_numerator",
+    "skipped_or_excluded",
+    "truncation_or_pagination",
+    "method",
+    "limitations",
+  ],
+  missing_denominator: "NOT_MEASURED",
+  unattempted_unavailability: "UNPROVEN",
+  tree_only_content_claim: "UNPROVEN",
+  partial_as_total: "UNPROVEN",
+});
+
 const operationalPolicy = () => ({
   marker: "OPERATIONAL_CLAIM_REQUIRES_ENFORCEMENT",
   applies_to: "CLAIMS_THAT_PRODUCE_OR_GOVERN_BEHAVIOR",
@@ -92,8 +113,10 @@ const operationalPolicy = () => ({
     OPERATIONAL_MEMORY: ["canonical_owner", "provenance", "dedupe", "absorption"],
     COMMAND: ["registry", "parser_or_consumer", "observable_behavior"],
     SECURITY: ["policy", "enforcement", "adversarial_test_when_applicable"],
+    SOURCE_COVERAGE: ["source_selection", "inventory", "content_read", "coverage_receipt", "countercheck"],
     HUMAN_NON_AUTOMATABLE_RULE: ["explicit_authority", "procedure", "proportional_evidence_or_review"],
   },
+  coverage_claim_policy: coverageClaimPolicy(),
 });
 
 const baseContract = () => ({
@@ -126,6 +149,10 @@ const baseContract = () => ({
     historical_pass_is_current_pass: false,
     proof_target_must_match_claim: true,
     local_fixed_point_is_end_of_intent: false,
+    tool_unavailable_without_attempt: "UNPROVEN",
+    source_listing_is_content_read: false,
+    repository_tree_is_full_content_read: false,
+    partial_retrieval_is_total_coverage: false,
   },
   operational_claim_policy: operationalPolicy(),
   allowed_proof_classes: ["authenticated_authority", "runtime"],
@@ -378,6 +405,24 @@ test("contrato canônico exige enforcement proporcional para qualquer claim oper
   assert.deepEqual(validateOperationalClaimPolicy(contract, { exists: repoPathExists }), []);
   const result = validateProofOwnership(contract, { exists: repoPathExists });
   assert.equal(result.operational_claim_policy_ok, true);
+});
+
+test("cobertura total exige tentativa real, denominador e separa inventário de leitura", () => {
+  const noAttempt = loadCanonicalContract();
+  noAttempt.operational_claim_policy.coverage_claim_policy.tool_attempt_required_before_unavailable_claim = false;
+  assert.ok(validateOperationalClaimPolicy(noAttempt, { exists: repoPathExists }).includes("OPERATIONAL_COVERAGE_TOOL_ATTEMPT_REQUIRED"));
+
+  const treeIsRead = loadCanonicalContract();
+  treeIsRead.operational_claim_policy.coverage_claim_policy.tree_or_listing_counts_as_content_read = true;
+  assert.ok(validateOperationalClaimPolicy(treeIsRead, { exists: repoPathExists }).includes("OPERATIONAL_COVERAGE_TREE_LISTING_NOT_CONTENT_READ"));
+
+  const partialIsTotal = loadCanonicalContract();
+  partialIsTotal.operational_claim_policy.coverage_claim_policy.partial_retrieval_counts_as_total_coverage = true;
+  assert.ok(validateOperationalClaimPolicy(partialIsTotal, { exists: repoPathExists }).includes("OPERATIONAL_COVERAGE_PARTIAL_NOT_TOTAL"));
+
+  const noDenominator = loadCanonicalContract();
+  noDenominator.operational_claim_policy.coverage_claim_policy.required_receipt_fields = noDenominator.operational_claim_policy.coverage_claim_policy.required_receipt_fields.filter((field) => field !== "inventory_denominator");
+  assert.ok(validateOperationalClaimPolicy(noDenominator, { exists: repoPathExists }).includes("OPERATIONAL_COVERAGE_RECEIPT_FIELD_MISSING:inventory_denominator"));
 });
 
 test("política operacional não pode ser trocada por YAML ou tecnologia única", () => {
