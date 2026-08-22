@@ -8,14 +8,14 @@
 
 ## 1. Intenção recuperada
 
-A intenção recebida nesta rodada foi generalizar o bloco inteiro até o **teto útil**, usando organograma como representação visual da estrutura, absorvendo todos os candidatos já encontrados e preservando a lei:
+Generalizar o bloco cognitivo inteiro até o **teto útil**, usando organograma para tornar estrutura e fluxo visíveis, absorvendo todos os candidatos já encontrados sem transformar histórico, reputação, analogia ou consenso em prova.
 
 ```text
 PASSADO_NAO_GOVERNA_PRESENTE=true
 PASSADO_PODE_ALIMENTAR_FUTURO=true
+MENOS_E_MAIS=true
+REALITY=JUDGE
 ```
-
-O objetivo não é aumentar quantidade de agentes, personagens ou iterações. É maximizar cobertura material até que não exista informação nova nem lacuna material aberta.
 
 ```text
 TETO_UTIL
@@ -29,11 +29,11 @@ TETO_UTIL
   ZERO_NOVO_SISTEMA_SE_O_ATUAL_COBRE
 ```
 
-## 2. Achado principal — a Casa já possuía o esqueleto
+## 2. Achado gerador — o esqueleto já existia
 
-O owner existente `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` já define `ONE_CORE_MANY_ARMS`, percepção paralela, dedupe, teste discriminante e Writer único.
+O owner `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` já define `ONE_CORE_MANY_ARMS`, percepção paralela, dedupe, teste discriminante e Writer único.
 
-O código existente `apps/modulos/HERMES-CORE/core/perception-orchestra.mjs` já materializa quatro ataques read-only:
+O código `apps/modulos/HERMES-CORE/core/perception-orchestra.mjs` já materializa quatro ataques read-only:
 
 ```text
 A_LOGIC
@@ -42,7 +42,7 @@ C_REGRESSION_FALSE_GREEN
 D_SIMPLIFICATION
 ```
 
-Portanto criar seis novos agentes permanentes seria duplicação. A costura adotada generaliza **lentes funcionais** sobre esses quatro ataques.
+Criar seis agentes permanentes adicionais seria duplicação. A generalização correta é representar seis **lentes funcionais** e cobri-las pelos quatro braços já existentes.
 
 ## 3. Mesa de Convergência — seis lentes funcionais
 
@@ -55,7 +55,7 @@ SYNTHESIS_RECONCILIATION
 IDENTITY_TRUST
 ```
 
-Cobertura comprimida:
+Cobertura:
 
 ```text
 AUTOMATION_FACTORY         → B_IMPLEMENTATION + D_SIMPLIFICATION
@@ -66,19 +66,49 @@ SYNTHESIS_RECONCILIATION   → A_LOGIC + D_SIMPLIFICATION
 IDENTITY_TRUST             → A_LOGIC + C_REGRESSION_FALSE_GREEN
 ```
 
-Resultado estrutural:
+Resultado:
 
 ```text
 6 LENTES
 → 4 ATAQUES EXISTENTES
 → ZERO WRITER EXTRA
 → ZERO AUTORIDADE EXTRA
-→ ZERO CHAMADA EXTRA OBRIGATORIA
+→ ZERO VOTACAO COMO VERDADE
+→ ZERO CHAMADA EXTRA OBRIGATORIA PELO ORGANOGRAMA
 ```
 
-## 4. Perfis de fonte do bloco fornecido pelo SEGREDO/CHEFE
+## 4. Organograma — separar autoridade de percepção
 
-Os nomes abaixo vieram do texto colado pelo SEGREDO/CHEFE nesta rodada. A CentralDark **não verificou nesta rodada** que esses rótulos descrevem de forma completa ou atual o comportamento real dessas pessoas. Portanto entram como `USER_SUPPLIED_SOURCE_PROFILE`, não como fato biográfico, persona ou autoridade.
+```text
+PLANO_DE_AUTORIDADE:
+SEGREDO/CHEFE
+→ SOL
+→ PIVETE/HERMES + 1 WRITER POR ESCOPO
+→ TESTE/RECEIPT
+→ ESTADO REAL
+
+PLANO_DE_PERCEPCAO:
+FONTES / HISTORICO / PESSOAS / PROJETOS
+→ SOURCE_PROFILE
+→ LENTES FUNCIONAIS
+→ 4 ATAQUES EXISTENTES
+→ DEDUPE + CONTRAPROVA
+→ SOL
+```
+
+```text
+PERCEPCAO != AUTORIDADE
+ESPECIALIDADE != AUTORIDADE
+FONTE != AUTORIDADE
+MODELO != AUTORIDADE
+CONCORDANCIA != PROVA
+```
+
+A visão Mermaid correspondente vive em `docs/BRAIN/03-DOCUMENTACAO/DIAGRAMAS-CENTRALDARK.md` e continua `DERIVED_VIEW`, nunca segunda verdade.
+
+## 5. Perfis de fonte do bloco fornecido pelo SEGREDO/CHEFE
+
+Os nomes abaixo foram recebidos no material humano desta rodada. A CentralDark **não verificou nesta rodada** que os rótulos descrevem de forma completa ou atual o comportamento real dessas pessoas. Portanto entram somente como proposta de `USER_SUPPLIED_SOURCE_PROFILE`.
 
 | Fonte sugerida pelo material humano | Lente sugerida | Estado |
 |---|---|---|
@@ -89,7 +119,14 @@ Os nomes abaixo vieram do texto colado pelo SEGREDO/CHEFE nesta rodada. A Centra
 | Allie Howe | `SYNTHESIS_RECONCILIATION` | USER_SUPPLIED / CURRENT_BEHAVIOR_UNVERIFIED |
 | Dick Hardt | `IDENTITY_TRUST` | USER_SUPPLIED / CURRENT_BEHAVIOR_UNVERIFIED |
 
-Contrato absorvido:
+Contrato executável em `cognitive-council.mjs`:
+
+```text
+SOURCE_PROFILE.authority=false
+SOURCE_PROFILE.writer=false
+SOURCE_PROFILE.persona_clone=false
+SOURCE_PROFILE.vote_weight=0
+```
 
 ```text
 PESSOA|PROJETO|PAPER|PODCAST|REPO
@@ -105,11 +142,11 @@ SOURCE_PROFILE != WRITER
 SOURCE_PROFILE != VOTO
 ```
 
-O link compartilhado do Miro foi tratado como referência humana para a ideia de organograma. O token/link completo **não foi persistido no repositório**.
+O link compartilhado do Miro foi usado somente como referência humana para a ideia de organograma. O URL/token completo não foi persistido no repositório.
 
-## 5. Pool completo dos 30 candidatos recuperados do PR #1104
+## 6. Pool completo dos 30 candidatos recuperados do PR #1104
 
-Todos permanecem `HISTORICAL_CANDIDATE`; a associação com lentes abaixo é uma **generalização/inferência desta rodada**, não promoção automática de capacidade.
+Todos permanecem `HISTORICAL_CANDIDATE`. A associação com lentes abaixo é `INFERENCE_MAPPING_2026_08_22`, isto é: generalização desta rodada, não promoção automática.
 
 ### A — Cognição + aprendizado
 
@@ -156,11 +193,11 @@ Todos permanecem `HISTORICAL_CANDIDATE`; a associação com lentes abaixo é uma
 | C09 | Validação Determinística de Saída | OBSERVABILITY_PROOF + STRUCTURAL_SKEPTIC |
 | C10 | Red Teaming com Fronteira Defensiva | STRUCTURAL_SKEPTIC + IDENTITY_TRUST |
 
-Código correspondente: `apps/modulos/HERMES-CORE/core/cognitive-council.mjs`.
+O código carrega exatamente esses 30 registros como candidatos históricos; nenhum recebe `PASS` só por estar no pool.
 
-## 6. Candidatos técnicos anteriormente encontrados
+## 7. Candidatos técnicos previamente encontrados
 
-### Função atual suficientemente provada para roteamento, nome técnico preservado
+Função atual suficiente para roteamento, nome técnico preservado:
 
 ```text
 Memory Linker
@@ -180,7 +217,7 @@ Continuity Guard
 → NÃO renomeado
 ```
 
-### Nomes que continuam sem equivalência humana 1:1 comprovada
+Nomes ainda sem equivalência humana 1:1 comprovada:
 
 ```text
 SOURCE_DELTA
@@ -192,31 +229,34 @@ DiffView.tsx
 DeployButton.tsx
 ```
 
-A regra permanece:
-
 ```text
 PARECE_PARECIDO != EQUIVALENCIA_100_PCT
 SEM_EQUIVALENCIA_100_PCT → NAO_RENOMEAR
 ```
 
-## 7. Botões/modelos mentais originais recuperados no PR #1112
+## 8. Vocabulário original — estado vivo reconciliado
+
+O PR #1112 foi re-medido durante esta própria rodada e **já estava fechado sem merge**. O delta comprovado de `PUBLICAR` e `CORRIGIR` foi portado diretamente para `main` no commit `8a99fc71a1def5ee3ab3436be19a6394f2d954bc`.
 
 ```text
+PR_1112=CLOSED_NOT_MERGED
+PUBLICAR_CORRIGIR_PORTED_DIRECTLY_TO_MAIN=true
+
 CRIAR            = MATCH_ATUAL_AINDA_NAO_RESOLVIDO
 MELHORAR         = MATCH_ATUAL_AINDA_NAO_RESOLVIDO
-VER AO VIVO      = MATCH_SEMANTICO_100_PCT / COSTURA PENDENTE NO PR #1112
-CORRIGIR         = COSTURADO NO PR #1112
-COMPARAR         = MATCH_SEMANTICO_100_PCT / COSTURA PENDENTE NO PR #1112
-PUBLICAR         = COSTURADO NO PR #1112
+VER AO VIVO      = EQUIVALENCIA_SEMANTICA_100_PCT / COSTURA_SEGURA_PENDENTE
+CORRIGIR         = APPLIED_IN_MAIN
+COMPARAR         = EQUIVALENCIA_SEMANTICA_100_PCT / COSTURA_SEGURA_PENDENTE
+PUBLICAR         = APPLIED_IN_MAIN
 VOLTAR           = MATCH_ATUAL_AINDA_NAO_RESOLVIDO
 MOSTRAR PROVA    = MATCH_ATUAL_AINDA_NAO_RESOLVIDO
 ```
 
-Esta branch **não invade o Writer/scope do PR #1112**. Ela generaliza a arquitetura cognitiva e deixa a costura visual naquele escopo.
+Esta branch não reabre #1112 nem duplica `main`. O resíduo visual `COMPARAR|VER_AO_VIVO` permanece uma lacuna de superfície separada; `CRIAR|MELHORAR|VOLTAR|MOSTRAR_PROVA` continuam sem match 100% e portanto intactos.
 
-## 8. Teto útil — contrato de fechamento real
+## 9. Teto útil — contrato de fechamento real
 
-Estados aceitos de lacuna:
+Estados aceitos:
 
 ```text
 OPEN
@@ -226,20 +266,20 @@ BLOCKED
 NOT_APPLICABLE
 ```
 
-Regras executáveis adicionadas:
+Regras executáveis:
 
 ```text
 RESOLVED
 → exige evidence_refs
 
 BLOCKED
-→ exige causa exata + owner + next_condition
+→ exige cause + owner + next_condition
 
 OPEN|UNKNOWN
 → impede fixed point
 
 BLOCKED_EXATO
-→ pode encerrar a tentativa na fronteira declarada
+→ fecha a tentativa na fronteira declarada
 → NÃO vira fixed point
 
 NEW_INFORMATION=true
@@ -258,11 +298,9 @@ ZERO_OPEN
 → STOP
 ```
 
-Isto impede transformar cansaço, número de rodadas ou consenso narrativo em fechamento.
+Isto impede transformar cansaço, quantidade de rodadas ou consenso narrativo em fechamento.
 
-## 9. Prova e consumidor
-
-A nova regra não ficou só em Markdown:
+## 10. Garantia dura: regra + consumidor + testes + gate
 
 ```text
 REGRA EXECUTAVEL
@@ -274,47 +312,100 @@ CONSUMIDOR REAL
 TESTES POSITIVOS/NEGATIVOS
 → apps/modulos/HERMES-CORE/core/cognitive-council.test.mjs
 
-GATE EXISTENTE RELACIONADO
-→ porta-de-entrada executa a suíte HERMES de continuidade/percepção
+GATE BLOQUEANTE EXISTENTE
+→ apps/modulos/HERMES-CORE/core/continuity-guard.test.mjs
+→ importa cognitive-council.test.mjs
+→ .github/workflows/porta-de-entrada.yml já executa continuity-guard.test.mjs
 ```
 
-A promoção continua condicionada ao CI do PR. `DOCUMENTED != EXECUTED` e `BRANCH_CODE != MAIN`.
+Não foi criado workflow paralelo.
 
-## 10. Google Drive — achado histórico útil
+`DOCUMENTED != EXECUTED`, portanto promoção continua condicionada ao CI no mesmo HEAD.
 
-A busca nesta rodada encontrou no Drive um material histórico (`TXT.txt`) que reforça uma regra já presente no canônico: não fabricar “teatro” técnico, não transformar inferência em fato e não atribuir à IA capacidades que o mecanismo não possui.
+## 11. SOURCE_DELTA — cano vivo já existe, mas não cobre toda a visão ainda
 
-O achado foi usado como **proveniência de reforço**, não como nova autoridade e não criou segundo contrato.
-
-## 11. Lacunas reais após a generalização
+A medição do owner `scripts/memory-linker/SOURCE-DELTA.md` e do consumidor físico `supabase/functions/catalog-sync/index.ts` provou:
 
 ```text
-SOURCE_PROFILES_PUBLICOS
-= material fornecido pelo CHEFE existe
-= claims atuais das pessoas NÃO foram verificados nesta rodada
-= não impede o mecanismo; impede apenas afirmar biografia/capacidade atual como FACT
-
-PR_1104_CANDIDATES
-= recuperados como candidatos históricos
-= não promovidos por esta branch
-
-PR_1112_VOCABULARIO
-= Writer/scope separado preservado
-= quatro rótulos ainda sem match 100%
-
-RUNTIME
-= não medido por esta branch
-= nenhum claim de deploy/serviço ligado foi feito
-
-CI
-= precisa executar no HEAD desta branch antes de qualquer promoção
+ONE_SOURCE_DELTA_ENGINE=true
+SOURCE_IS_PROVENANCE_NOT_AUTHORITY=true
 ```
 
-## 12. Fixed point arquitetural pretendido
+Adapters físicos atuais comprovados:
+
+```text
+mcp-tools:centraldark
+github-release:<owner/repo>
+```
+
+O fluxo já preserva checkpoint, ETag/Last-Modified, content/capability fingerprint, `NO_CHANGE` e `PENDING_REFINERY`.
+
+Porém o bloco humano pediu também posts, podcasts, artigos, talks e outras fontes públicas vivas. Nesta rodada **não foi encontrado adapter genérico atual comprovado para RSS/Atom/web/social** no owner físico.
+
+Portanto:
+
+```text
+LIVE_PUBLIC_SOURCE_GENERIC_ADAPTER=GAP_REAL
+GITHUB_RELEASE_SOURCE=PROVEN_EXISTING
+MCP_TOOLS_SOURCE=PROVEN_EXISTING
+RSS_ATOM_WEB_SOCIAL_GENERIC_SOURCE=NOT_IMPLEMENTED_IN_THIS_BRANCH
+```
+
+Não fabricar fonte, endpoint ou identidade. Antes de cadastrar uma pessoa como fonte viva é necessário provar o endpoint público correto e a licença/segurança aplicável. A arquitetura já sabe receber `Source Profile`; a coleta genérica ainda é resíduo material separado do conselho cognitivo.
+
+## 12. Google Drive — passado como minério, não governo
+
+A busca desta rodada encontrou material histórico no Drive que reforça regras já canônicas: não fabricar teatro técnico, não transformar inferência em fato e não atribuir ao mecanismo capacidades que ele não possui.
+
+O material foi tratado como proveniência histórica de reforço, não como nova autoridade e não criou contrato paralelo.
+
+## 13. Lacunas reais após a generalização
+
+```text
+COGNITIVE_COUNCIL_CODE
+= IMPLEMENTED_IN_BRANCH
+= CI_EXECUTION_PENDING
+
+30_CANDIDATES_PR_1104
+= ALL_REGISTERED_AS_HISTORICAL_CANDIDATE
+= NO_AUTOMATIC_PROMOTION
+
+PUBLIC_SOURCE_PROFILES
+= USER_SUPPLIED_MAPPING_EXISTS
+= CURRENT_BEHAVIOR_UNVERIFIED
+= SOURCE_ENDPOINTS_UNVERIFIED
+
+SOURCE_DELTA_GENERIC_PUBLIC_FEED
+= REAL_GAP
+= EXISTING_OWNER_IDENTIFIED
+= NOT_IMPLEMENTED_YET
+
+PR_1112
+= CLOSED_NOT_MERGED
+
+PUBLICAR|CORRIGIR
+= IN_MAIN
+
+COMPARAR|VER_AO_VIVO
+= 100_PCT_EQUIVALENCE
+= SAFE_STITCH_PENDING
+
+CRIAR|MELHORAR|VOLTAR|MOSTRAR_PROVA
+= UNRESOLVED
+
+RUNTIME
+= NOT_MEASURED_BY_THIS_BRANCH
+
+CI
+= REQUIRED_BEFORE_PROMOTION
+```
+
+## 14. Fixed point arquitetural pretendido
 
 ```text
 MATERIA EXTERNA/HISTORICA
 → SOURCE_PROFILE
+→ SOURCE_DELTA QUANDO ADAPTER EXISTE
 → 6 LENTES FUNCIONAIS
 → 4 ATAQUES EXISTENTES
 → DEDUPE
@@ -328,5 +419,9 @@ MATERIA EXTERNA/HISTORICA
 ```
 
 Princípio condensado:
+
+> **fonte vira proveniência; capacidade vira lente; concordância vira hipótese; prova decide.**
+
+E a régua do teto útil:
 
 > **diversidade controlada aumenta a chance de enxergar; só a prova transforma convergência em conhecimento.**
