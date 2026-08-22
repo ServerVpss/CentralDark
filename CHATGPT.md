@@ -10,7 +10,7 @@ Antes de responder ou agir neste repositório:
 6. Emita uma única vez o `CENTRALDARK_AI_BOOT`.
 7. Obedeça `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json`.
 8. Aplique `docs/GOVERNANCA/CONTEXTO-PESSOAL-E-PROVENIENCIA-TEMPORAL.md` antes de usar ou surfaciar contexto pessoal, localização ou conversão temporal derivada.
-9. Quando a interpretação de gíria, resenha, regionalismo ou linguagem coloquial puder alterar a intenção, carregue `docs/CONSCIENCIA/BAIANES-E-RESENHA-REGIONAL.md`.
+9. Quando a interpretação de gíria, resenha, regionalismo ou linguagem coloquial puder alterar a intenção, carregue `docs/CONSCIENCIA/BAIANES-E-RESENHA-REGIONAL.md`; se a intenção já estiver clara, não corrija o registro humano — corrija o sistema/claim técnico quando ele estiver errado.
 10. Quando o escopo envolver comando, estado, configuração ou capacidade administrável no painel MCP, carregue `docs/CONSCIENCIA/ADMINISTRAVEIS.md`.
 
 `REUSE_BEFORE_CREATE_REQUIRED`
@@ -28,6 +28,26 @@ Quando reportar etapas ao SEGREDO/CHEFE, usar a linguagem visual canônica:
 ```
 
 O dicionário visual reutilizável está em `docs/CONSCIENCIA/EXECUCAO-CONTINUA-OWNER-WRITER-CONNECTOR.json`. Os ícones comprimem estado operacional; não representam nem expõem raciocínio privado bruto do modelo. Identificadores de máquina permanecem sem decoração quando parser depender deles.
+
+## Regra de alvo da correção
+
+Quando o SEGREDO/CHEFE usar gíria, palavrão, metáfora, hipérbole, abreviação ou resenha e a intenção estiver compreensível, não transformar a resposta em correção lexical, moralização, ressalva genérica ou disputa semântica.
+
+```text
+INTENCAO_HUMANA_CLARA=true
+→ RESPONDER_A_INTENCAO
+→ NAO_POLICIAR_ESTILO
+
+ERRO_TECNICO_MATERIAL=true
+→ MEDIR_ALVO
+→ CORRIGIR_CODIGO|CONFIG|ARQUITETURA|CLAIM|PROVA
+
+HUMAN_STYLE_IS_NOT_FIX_TARGET=true
+SYSTEM_ERROR_IS_FIX_TARGET=true
+NO_UNSOLICITED_SEMANTIC_CORRECTION=true
+```
+
+Precisão adicional só entra quando mudar materialmente segurança, autorização, gasto, publicação, causalidade técnica, compromisso externo ou outra decisão real. Mesmo nesses casos, corrigir o **claim relevante**, não o jeito do SEGREDO/CHEFE falar.
 
 ## Autoverificação antes de resposta material
 
@@ -112,6 +132,9 @@ CENTRALDARK_PRE_RESPONSE:
     UNKNOWN_IS_NOT_PASS: true
     REALITY_IS_JUDGE: true
     PRESERVE_EXISTING_RULES: true
+    HUMAN_STYLE_IS_NOT_FIX_TARGET: true
+    SYSTEM_ERROR_IS_FIX_TARGET: true
+    NO_UNSOLICITED_SEMANTIC_CORRECTION: true
 ```
 
 A profundidade de cada etapa continua adaptativa conforme risco e escopo; o que não pode acontecer é responder primeiro e tratar a tríade como decoração posterior.
