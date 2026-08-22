@@ -52,6 +52,61 @@ test('catálogo válido aceita PDF + EPUB + JWPUB sem fingir que conteúdo já f
   assert.deepEqual(validateCatalog(catalog), { status: 'PASS', sources: 1, entries: 4 });
 });
 
+test('Google Drive entra como referência com proveniência explícita, sem fingir INGESTED', () => {
+  const drive = structuredClone(catalog);
+  drive.sources.push({
+    source_id: 'drive-estudo',
+    title: 'Estudo no Drive',
+    formats: ['gdoc', 'gdrive-md', 'gdrive-folder'],
+    status: 'INDEXED_REFERENCE',
+    classification: 'STUDY_CANDIDATE',
+    provenance: { provider: 'google-drive', external_id: 'arquivo-123' },
+  });
+  assert.deepEqual(validateCatalog(drive), { status: 'PASS', sources: 2, entries: 4 });
+});
+
+test('fonte Google Drive sem proveniência falha fechado', () => {
+  const broken = structuredClone(catalog);
+  broken.sources.push({
+    source_id: 'drive-sem-prova',
+    formats: ['gdoc'],
+    status: 'INDEXED_REFERENCE',
+    classification: 'STUDY_CANDIDATE',
+  });
+  assert.throws(() => validateCatalog(broken), /SOURCE_DRIVE_PROVIDER_REQUIRED/);
+});
+
+test('fonte marcada INGESTED exige SHA-256 real', () => {
+  const broken = structuredClone(catalog);
+  broken.sources.push({
+    source_id: 'fonte-sem-hash',
+    formats: ['pdf'],
+    status: 'INGESTED',
+  });
+  assert.throws(() => validateCatalog(broken), /INGESTED_SOURCE_SHA256_REQUIRED/);
+});
+
+test('fonte em quarentena sensível não pode alimentar entrada cognitiva', () => {
+  const broken = structuredClone(catalog);
+  broken.sources.push({
+    source_id: 'cofre',
+    formats: ['gdrive-folder'],
+    status: 'SENSITIVE_QUARANTINE',
+    classification: 'SENSITIVE_QUARANTINE',
+    provenance: { provider: 'google-drive', external_id: 'cofre-123' },
+  });
+  broken.entries.push({
+    id: 'vazamento',
+    source_id: 'cofre',
+    reference: 'não pode',
+    tags: [],
+    links: [],
+    emojis: [],
+    use: ['cognition'],
+  });
+  assert.throws(() => validateCatalog(broken), /ENTRY_SOURCE_QUARANTINED/);
+});
+
 test('continuidade + entrada-saída roteia Salmo 121', () => {
   const [top] = routeEntries({ catalog, query: ['continuidade', 'entrada-saida'] });
   assert.equal(top.entry.id, 'salmo-121');
