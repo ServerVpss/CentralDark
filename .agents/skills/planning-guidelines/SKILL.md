@@ -1,6 +1,6 @@
 ---
 name: planning-guidelines
-description: Structured planning methodology for features, refactors, and architectural decisions. Use before starting complex work to ensure clear scope, testable criteria, and reversible steps.
+description: Structured planning methodology for features, refactors, architectural decisions, and material infrastructure/production/security/deployment changes. Mandatory before material infra/runtime mutation planning; establishes explicit T0/T1 baseline, rollback, blast radius, and zero-regression scope before execution.
 ---
 
 # Planning Guidelines
