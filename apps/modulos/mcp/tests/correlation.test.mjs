@@ -12,7 +12,9 @@ test("gera identidades separadas para request, correlation, trace e span", () =>
     assert.ok(trace.request_id);
     assert.ok(trace.correlation_id);
     assert.equal(trace.parent_span_id, null);
+    assert.notEqual(trace.request_id, trace.correlation_id);
     assert.notEqual(trace.request_id, trace.trace_id);
+    assert.notEqual(trace.correlation_id, trace.trace_id);
 });
 
 test("preserva request_id e correlation_id independentes", () => {
@@ -41,13 +43,14 @@ test("traceparent inválido não contamina o trace novo", () => {
     assert.equal(trace.parent_span_id, null);
 });
 
-test("round-trip preserva trace e encadeia parent_span", () => {
+test("round-trip preserva trace, correlation e encadeia parent_span", () => {
     const first = resolveTraceContext({ "x-mission-id": "CD-TRACE-42" });
     const headers = Object.fromEntries(
         Object.entries(traceHeaders(first)).map(([key, value]) => [key.toLowerCase(), value]),
     );
     const second = resolveTraceContext(headers);
     assert.equal(second.trace_id, first.trace_id);
+    assert.equal(second.correlation_id, first.correlation_id);
     assert.equal(second.parent_span_id, first.span_id);
     assert.notEqual(second.span_id, first.span_id);
     assert.equal(second.mission_id, "CD-TRACE-42");
