@@ -6,6 +6,11 @@ import { readFile, readdir, stat } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import {
+  buildCognitiveCouncilPlan,
+  evaluateUsefulCeiling,
+  validateCognitiveCouncilPlan,
+} from './cognitive-council.mjs';
 
 const pexec = promisify(execFile);
 const DIR = dirname(fileURLToPath(import.meta.url));
@@ -208,6 +213,58 @@ function collectRawUnprovenFindings(results) {
     }));
 }
 
+function perceptionCeilingGaps(results, confrontation, materialFindings) {
+  const byRole = new Map((Array.isArray(results) ? results : []).map((item) => [item?.role, item]));
+  const gaps = [];
+
+  for (const role of REQUIRED_ROLES) {
+    const item = byRole.get(role);
+    if (!item || item.status !== 'OK' || !item.finding) {
+      gaps.push({ id: `perception:${role}`, state: 'OPEN' });
+      continue;
+    }
+
+    const finding = item.finding;
+    const evidenceRef = normalizeText(finding.evidence_ref) || 'UNKNOWN';
+    if (isNoChange(finding)) {
+      if (normalizeClass(finding.class) === 'FACT' && evidenceRef.toUpperCase() !== 'UNKNOWN') {
+        gaps.push({ id: `perception:${role}`, state: 'RESOLVED', evidence_refs: [evidenceRef] });
+      } else {
+        gaps.push({ id: `perception:${role}`, state: 'UNKNOWN' });
+      }
+      continue;
+    }
+
+    if (isProvenMaterialFinding(finding)) {
+      gaps.push({
+        id: `perception:${role}:material-delta`,
+        state: 'OPEN',
+        evidence_refs: [evidenceRef],
+      });
+    } else {
+      gaps.push({ id: `perception:${role}`, state: 'UNKNOWN' });
+    }
+  }
+
+  if (confrontation.unproven_roles.length > 0) {
+    for (const role of confrontation.unproven_roles) {
+      if (!gaps.some((gap) => gap.id === `perception:${role}` && gap.state === 'UNKNOWN')) {
+        gaps.push({ id: `perception:${role}`, state: 'UNKNOWN' });
+      }
+    }
+  }
+
+  if (materialFindings.length > 0) {
+    gaps.push({
+      id: 'writer:material-delta',
+      state: 'OPEN',
+      evidence_refs: materialFindings.map((item) => item.evidence_ref).filter(Boolean),
+    });
+  }
+
+  return gaps;
+}
+
 export function buildPerceptionPacket({ mission, results }) {
   const deduped = dedupePerceptionFindings(results);
   const confrontation = confrontPerceptionEvidence(results);
@@ -222,10 +279,23 @@ export function buildPerceptionPacket({ mission, results }) {
     && unprovenFindings.length === 0
     && materialFindings.length > 0;
 
+  const cognitiveCouncil = buildCognitiveCouncilPlan();
+  const councilValidation = validateCognitiveCouncilPlan(cognitiveCouncil);
+  if (!councilValidation.ok) {
+    throw new Error(`COGNITIVE_COUNCIL_INVALID:${councilValidation.errors.join(',')}`);
+  }
+  const usefulCeiling = evaluateUsefulCeiling({
+    gaps: perceptionCeilingGaps(results, confrontation, materialFindings),
+    new_information: false,
+    material_delta_pending: materialFindings.length > 0,
+  });
+
   let nextRule = 'CONFRONT_EVIDENCE_THEN_ONE_CANONICAL_MUTATION';
   if (!confrontation.all_four_completed) nextRule = 'RETRY_MISSING_PERCEPTIONS_BEFORE_MUTATION';
   else if (confrontation.unproven_roles.length > 0 || unprovenFindings.length > 0) nextRule = 'RUN_DISCRIMINATING_TEST_BEFORE_MUTATION';
-  else if (materialFindings.length === 0) nextRule = 'NO_MATERIAL_DELTA_NO_MUTATION';
+  else if (materialFindings.length === 0) nextRule = usefulCeiling.fixed_point
+    ? 'FIXED_POINT_NO_MATERIAL_DELTA'
+    : 'NO_MATERIAL_DELTA_NO_MUTATION';
 
   return Object.freeze({
     schema_version: 2,
@@ -242,6 +312,8 @@ export function buildPerceptionPacket({ mission, results }) {
     correlated_evidence_inflation_blocked: true,
     counterproof_required: true,
     gold_requires_counterproof: true,
+    cognitive_council: cognitiveCouncil,
+    useful_ceiling: usefulCeiling,
     results,
     deduped_findings: deduped,
     material_findings: materialFindings,
