@@ -9,7 +9,8 @@ permissions:
 
 jobs:
   validate-title:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 3
     steps:
       - name: Validate emoji prefix and uppercase title
         env:
