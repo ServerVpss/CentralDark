@@ -1,10 +1,14 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
+  EVIDENCE_STATES,
   buildDecisionSummary,
   citationLine,
+  createEvidenceSession,
+  deriveSourceIdentity,
   destinationsForEntry,
   pickContextualReference,
+  reconcileSourceIdentity,
   routeEntries,
   validateCatalog,
 } from './library-router.mjs';
@@ -47,6 +51,37 @@ const catalog = {
     },
   ],
 };
+
+const driveSource = ({
+  externalId = 'arquivo-123',
+  revisionId = 'rev-1',
+  title = 'Estudo no Drive',
+  path = 'ESTUDOS/estudo.gdoc',
+} = {}) => ({
+  source_id: 'drive-estudo',
+  title,
+  formats: ['gdoc'],
+  status: 'INDEXED_REFERENCE',
+  classification: 'STUDY_CANDIDATE',
+  provenance: {
+    provider: 'google-drive',
+    external_id: externalId,
+    revision_id: revisionId,
+    path,
+  },
+});
+
+const repoSource = ({
+  path = 'docs/antigo.txt',
+  sha256 = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+} = {}) => ({
+  source_id: 'repo-doc',
+  title: 'Documento local',
+  formats: ['txt'],
+  status: 'INGESTED',
+  sha256,
+  provenance: { provider: 'github', canonical_path: path },
+});
 
 test('catálogo válido aceita PDF + EPUB + JWPUB sem fingir que conteúdo já foi ingerido', () => {
   assert.deepEqual(validateCatalog(catalog), { status: 'PASS', sources: 1, entries: 4 });
@@ -159,4 +194,127 @@ test('ids duplicados falham fechado', () => {
   const broken = structuredClone(catalog);
   broken.entries.push(structuredClone(broken.entries[0]));
   assert.throws(() => validateCatalog(broken), /DUPLICATE_ENTRY_ID/);
+});
+
+test('identidade estável usa external_id e versão, não nome nem caminho móvel', () => {
+  const first = deriveSourceIdentity(driveSource({ title: 'Nome A', path: 'ANTIGO/doc.gdoc' }));
+  const moved = deriveSourceIdentity(driveSource({ title: 'Nome B', path: 'NOVO/doc.gdoc' }));
+  assert.deepEqual(first, moved);
+  assert.equal(first.locator.value, 'arquivo-123');
+  assert.equal(first.version, 'rev-1');
+});
+
+test('arquivo movido com mesmo SHA-256 é reencontrado e atualiza locator', () => {
+  const expected = deriveSourceIdentity(repoSource({ path: 'docs/antigo.txt' }));
+  const observed = repoSource({ path: 'docs/novo.txt' });
+  const result = reconcileSourceIdentity(expected, observed);
+  assert.equal(result.source_status, EVIDENCE_STATES.SOURCE_FOUND);
+  assert.equal(result.reason, 'SOURCE_RELOCATED_HASH_MATCH');
+  assert.equal(result.observed_identity.locator.value, 'docs/novo.txt');
+});
+
+test('mesmo nome com locator diferente vira SOURCE_CONFLICT', () => {
+  const expected = deriveSourceIdentity(driveSource({ title: 'Mesmo nome' }));
+  const observed = driveSource({ title: 'Mesmo nome', externalId: 'outro-arquivo' });
+  const result = reconcileSourceIdentity(expected, observed);
+  assert.equal(result.source_status, EVIDENCE_STATES.SOURCE_CONFLICT);
+  assert.equal(result.reason, 'SOURCE_LOCATOR_MISMATCH');
+});
+
+test('conteúdo alterado na mesma fonte vira SOURCE_CHANGED', () => {
+  const expected = deriveSourceIdentity(driveSource({ revisionId: 'rev-1' }));
+  const result = reconcileSourceIdentity(expected, driveSource({ revisionId: 'rev-2' }));
+  assert.equal(result.source_status, EVIDENCE_STATES.SOURCE_CHANGED);
+  assert.equal(result.reason, 'SOURCE_VERSION_CHANGED');
+});
+
+test('fonte removida vira SOURCE_MISSING e referência não pode ser citada', async () => {
+  const identity = deriveSourceIdentity(driveSource());
+  const session = createEvidenceSession({ retrieve: async () => null });
+  const receipt = await session.recover(identity);
+  assert.equal(receipt.source_status, EVIDENCE_STATES.SOURCE_MISSING);
+  assert.equal(receipt.reference_status, EVIDENCE_STATES.REFERENCE_STALE);
+  assert.throws(() => session.cite(receipt), /SOURCE_MISSING/);
+});
+
+test('citação exige retrieval observado na sessão; referência inventada é rejeitada', () => {
+  const session = createEvidenceSession({ retrieve: async () => null });
+  const forged = {
+    source_status: EVIDENCE_STATES.SOURCE_FOUND,
+    reference_status: EVIDENCE_STATES.REFERENCE_CURRENT,
+    observed_reference: 'turn999file999',
+  };
+  assert.throws(() => session.cite(forged), /REFERENCE_STALE/);
+});
+
+test('claim cristaliza identidade, nova sessão recupera a fonte e cita referência atual nova', async () => {
+  const initialIdentity = deriveSourceIdentity(driveSource());
+  const sessionA = createEvidenceSession({
+    retrieve: async () => ({
+      source: driveSource(),
+      observed_reference: 'turn10file2',
+      payload: 'evidência recuperada A',
+    }),
+  });
+  const receiptA = await sessionA.recover(initialIdentity);
+  assert.equal(receiptA.source_status, EVIDENCE_STATES.SOURCE_FOUND);
+  assert.equal(receiptA.reference_status, EVIDENCE_STATES.REFERENCE_CURRENT);
+  assert.equal(sessionA.cite(receiptA), 'turn10file2');
+
+  const persistedIdentity = sessionA.crystallize(receiptA);
+  const claim = buildDecisionSummary({
+    question: 'qual evidência sustenta a afirmação?',
+    decision: 'usar a fonte recuperável',
+    reason_summary: 'afirmação material derivada do conteúdo recuperado',
+    outcome: 'claim ligado à identidade persistente',
+    evidence_refs: [persistedIdentity],
+  });
+  const reloadedClaim = JSON.parse(JSON.stringify(claim));
+  assert.equal(JSON.stringify(reloadedClaim).includes('turn10file2'), false);
+  assert.equal(JSON.stringify(reloadedClaim).includes('evidência recuperada A'), false);
+
+  const sessionB = createEvidenceSession({
+    retrieve: async (identity) => ({
+      source_identity: identity,
+      observed_reference: 'turn77file4',
+      payload: 'evidência recuperada B',
+    }),
+  });
+  const receiptB = await sessionB.recover(reloadedClaim.evidence_refs[0]);
+  assert.equal(sessionB.cite(receiptB), 'turn77file4');
+  assert.throws(() => sessionB.cite(receiptA), /REFERENCE_STALE/);
+});
+
+test('retrieval sem referência observável mantém REFERENCE_STALE', async () => {
+  const identity = deriveSourceIdentity(driveSource());
+  const session = createEvidenceSession({
+    retrieve: async () => ({ source: driveSource(), payload: 'sem token runtime' }),
+  });
+  const receipt = await session.recover(identity);
+  assert.equal(receipt.source_status, EVIDENCE_STATES.SOURCE_FOUND);
+  assert.equal(receipt.reference_status, EVIDENCE_STATES.REFERENCE_STALE);
+  assert.throws(() => session.cite(receipt), /REFERENCE_STALE/);
+});
+
+test('SOURCE_CHANGED não reaproveita referência corrente de uma evidência antiga', async () => {
+  const identity = deriveSourceIdentity(driveSource({ revisionId: 'rev-1' }));
+  const session = createEvidenceSession({
+    retrieve: async () => ({
+      source: driveSource({ revisionId: 'rev-2' }),
+      observed_reference: 'turn88file1',
+    }),
+  });
+  const receipt = await session.recover(identity);
+  assert.equal(receipt.source_status, EVIDENCE_STATES.SOURCE_CHANGED);
+  assert.equal(receipt.reference_status, EVIDENCE_STATES.REFERENCE_STALE);
+  assert.throws(() => session.cite(receipt), /SOURCE_CHANGED/);
+});
+
+test('deliberação não cristaliza turnXfileY efêmero como evidência canônica', () => {
+  assert.throws(() => buildDecisionSummary({
+    evidence_refs: ['turn241file14'],
+  }), /EPHEMERAL_RETRIEVAL_REFERENCE_NOT_PERSISTED/);
+  assert.throws(() => buildDecisionSummary({
+    evidence_refs: [{ observed_reference: 'turn241file14' }],
+  }), /EPHEMERAL_RETRIEVAL_REFERENCE_NOT_PERSISTED/);
 });
