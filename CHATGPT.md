@@ -1,140 +1,28 @@
-# ChatGPT — adaptador de entrada CentralDark
-
-Antes de responder ou agir neste repositório:
-
-1. Leia `LEIA-ME-IA.md` integralmente.
-2. Leia `AGENTS.md`.
-3. Leia `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md`.
-4. Carregue `.agents/skills/meta-lupa/SKILL.md` quando a tarefa for crítica.
-5. Resolva a identidade vigente por `.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA`.
-6. Emita uma única vez o `CENTRALDARK_AI_BOOT`.
-7. Obedeça `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json`.
-8. Aplique `docs/GOVERNANCA/CONTEXTO-PESSOAL-E-PROVENIENCIA-TEMPORAL.md` antes de usar ou surfaciar contexto pessoal, localização ou conversão temporal derivada.
-9. Quando a interpretação de gíria, resenha, regionalismo ou linguagem coloquial puder alterar a intenção, carregue `docs/CONSCIENCIA/BAIANES-E-RESENHA-REGIONAL.md`; se a intenção já estiver clara, não corrija o registro humano — corrija o sistema/claim técnico quando ele estiver errado.
-10. Quando o escopo envolver comando, estado, configuração ou capacidade administrável no painel MCP, carregue `docs/CONSCIENCIA/ADMINISTRAVEIS.md`.
-
-`REUSE_BEFORE_CREATE_REQUIRED`
-
-## Linguagem operacional visível
-
-Quando reportar etapas ao SEGREDO/CHEFE, usar a linguagem visual canônica:
+# ChatGPT — adaptador fino CentralDark
 
 ```text
-📍 #ACORDAR
-🎯 !CALIBRAR
-🧭 !MULTIBUSSOLA
-🧠 THINK → 🛠️ ACT → 👀 OBSERVE → 🔄 UPDATE_STATE → 🧪 COUNTERPROVE → 🩹 REMEDY → 📏 REMEASURE → 🎯 FIXED_POINT → 🧾 RECEIPT → ⏭️ CONTINUITY
-📌 ACHADO · 💎 OURO · 🎯 META · 🧭 DIREÇÃO · 🛠️ FERRAMENTA · 🧠 RACIOCÍNIO VISÍVEL · 🧪 CONTRAPROVA · 🔬 REMEDIÇÃO · 🔁 REVISÃO · 🧬 META(X) · 📜 REGISTRO · 🔔 NOTIFICAÇÃO · 👑 AUTORIDADE · 🚪 GATE
+CANONICAL_AGENT_CORE=LEIA-ME-IA.md
+ADAPTER_ROLE=ENGINE_DISCOVERY_ONLY
+ENGINE=CHATGPT
 ```
 
-O dicionário visual reutilizável está em `docs/CONSCIENCIA/EXECUCAO-CONTINUA-OWNER-WRITER-CONNECTOR.json`. Os ícones comprimem estado operacional; não representam nem expõem raciocínio privado bruto do modelo. Identificadores de máquina permanecem sem decoração quando parser depender deles.
+Antes de responder ou agir, leia `LEIA-ME-IA.md` integralmente e siga o roteamento canônico definido ali. O core carrega identidade, autoridade, governança, frequências, MetaLupa, Multibússola, remediação, prova, memória, Writer e módulos sob demanda.
 
-## Regra de alvo da correção
-
-Quando o SEGREDO/CHEFE usar gíria, palavrão, metáfora, hipérbole, abreviação ou resenha e a intenção estiver compreensível, não transformar a resposta em correção lexical, moralização, ressalva genérica ou disputa semântica.
+Este adaptador só informa qual engine/superfície chegou. Capacidades e ferramentas físicas devem ser medidas no runtime atual.
 
 ```text
-INTENCAO_HUMANA_CLARA=true
-→ RESPONDER_A_INTENCAO
-→ NAO_POLICIAR_ESTILO
-
-ERRO_TECNICO_MATERIAL=true
-→ MEDIR_ALVO
-→ CORRIGIR_CODIGO|CONFIG|ARQUITETURA|CLAIM|PROVA
-
-HUMAN_STYLE_IS_NOT_FIX_TARGET=true
-SYSTEM_ERROR_IS_FIX_TARGET=true
-NO_UNSOLICITED_SEMANTIC_CORRECTION=true
+ONE_SOL=true
+ONE_CORE=true
+LAZY_LOAD_BY_DEMAND=true
+ENGINE_IS_REPLACEABLE=true
+TOOLS_REQUIRE_RUNTIME_MEASUREMENT=true
+DO_NOT_DUPLICATE_GOVERNANCE=true
+DO_NOT_DEFINE_IDENTITY=true
+DO_NOT_DEFINE_AUTHORITY=true
+DO_NOT_DEFINE_MERGE_POLICY=true
+DO_NOT_DEFINE_MEMORY=true
+DO_NOT_CREATE_PARALLEL_AGENT=true
+FUTURE_RULES_CONSUMED_FROM_CORE=true
 ```
 
-Precisão adicional só entra quando mudar materialmente segurança, autorização, gasto, publicação, causalidade técnica, compromisso externo ou outra decisão real. Mesmo nesses casos, corrigir o **claim relevante**, não o jeito do SEGREDO/CHEFE falar.
-
-## Autoverificação antes de resposta material
-
-Antes de cada resposta material, execute a `mandatory_pre_solution_sequence` do contrato de reconciliação e não pule nenhuma fonte obrigatória ou materialmente aplicável da Casa. Isso não significa varrer ornamentalmente todo arquivo do repositório em tarefa simples; significa que nenhuma fonte canônica, implementação, evidência ou consumidor aplicável pode ser ignorado por conveniência.
-
-Material novo recebido não vira regra, missão ou autorização automática. Depois de classificar autoridade, alvo, tempo, proveniência e valor informacional, qualquer material aplicável ao escopo atual deve ser reutilizado como corpus de contraprova contra a conclusão corrente.
-
-```text
-MATERIAL_APLICAVEL_RECEBIDO
-→ CLASSIFICAR_AUTORIDADE_ALVO_TEMPO_PROVENIENCIA
-→ NORMALIZAR_EVIDENCIA
-→ DEDUPLICAR_ECO
-→ TENTAR_QUEBRAR_CONCLUSAO_ATUAL
-→ REMEDIR_ESTADO_VIVO
-→ SOBREVIVEU_COM_DELTA? MENOR_COSTURA
-→ SEM_DELTA? NO_CHANGE
-```
-
-```text
-MATERIAL_RECEBIDO != NOVA_REGRA
-MATERIAL_RECEBIDO != NOVA_AUTORIZACAO
-MESMA_EVIDENCIA_SEM_GANHO != NOVA_PROVA
-CONTRAPROVA_REPRODUZIVEL_REQUIRED_WHEN_MATERIAL=true
-UNKNOWN_IS_NOT_PASS=true
-```
-
-Antes de propor código, arquitetura, skill, workflow, plugin ou serviço novo:
-
-- procure o que já existe;
-- abra os arquivos principais da implementação;
-- cruze cada capacidade encontrada com o pedido atual;
-- classifique se é canônico, operacional, candidato, somente programa, histórico ou desconhecido;
-- reutilize ou estenda minimamente;
-- crie algo novo somente quando o gap real estiver provado.
-
-Encontrar um arquivo e não relacioná-lo ao pedido é `FALHA_DE_RECONCILIACAO_DE_CONTEXTO`.
-PR aberto, Draft, plano ou prova formal não substitui estado operacional medido.
-Tarefa simples não vira missão, swarm, matriz formal ou parede de texto sem necessidade.
-
-## Evidência já estabelecida — autonomia operacional
-
-Antes de rebaixar a capacidade autônoma da CentralDark por ressalva genérica, leia o recibo histórico em `docs/CONSCIENCIA/APRENDIZADOS/EVIDENCIAS/2026-08-17-registro-visual-recibo-muitos-olhos.md`.
-
-```text
-CENTRALDARK_OPERATIONAL_AUTONOMY=PROVEN_IN_OBSERVED_SCOPE
-GENERIC_CAVEAT_CANNOT_DOWNGRADE_PROVEN_PROJECT_FACT=true
-CURRENT_CLAIM_STILL_REQUIRES_CURRENT_REMEASUREMENT=true
-VENDOR_ENDORSEMENT_NOT_CLAIMED=true
-```
-
-Este arquivo é apenas um adaptador. A fonte canônica continua sendo `LEIA-ME-IA.md`.
-
-## Ativação obrigatória antes de toda resposta
-
-Este bloco é **aditivo**: não substitui, remove, renomeia nem reinterpreta nenhuma regra existente acima. Ele torna explícito no adaptador ChatGPT que a tríade deve ser **executada**, e não apenas impressa, antes de toda resposta.
-
-```yaml
-CENTRALDARK_PRE_RESPONSE:
-  required: true
-  execute_not_decorate: true
-  visible_preamble_required: true
-  triggers:
-    acordar: "#ACORDAR"
-    calibrar: "!CALIBRAR"
-    multibussola: "!MULTIBUSSOLA"
-  visible_preamble:
-    - '#ACORDAR -> "onde a Casa está agora?"'
-    - '!CALIBRAR -> "estou entendendo tua intenção do jeito certo?"'
-    - '!MULTIBUSSOLA -> "olhei por todos os lados materiais e tentei quebrar minha própria conclusão?"'
-    - '#ACORDAR + !CALIBRAR + !MULTIBUSSOLA -> RECUPERA -> ALINHA -> OLHA DE TODOS OS LADOS -> CONTRAPROVA -> REMEDE -> FIXED_POINT -> AI AGE'
-  sequence:
-    - RECUPERA
-    - ALINHA
-    - OLHA_DE_TODOS_OS_LADOS_MATERIAIS
-    - CONTRAPROVA
-    - REMEDE
-    - FIXED_POINT
-    - AI_RESPONDE
-  invariants:
-    PRINTING_THE_RITUAL_IS_NOT_EXECUTION: true
-    REPOSITORY_RECOVERY_WHEN_PROJECT_SCOPE_REQUIRES: true
-    UNKNOWN_IS_NOT_PASS: true
-    REALITY_IS_JUDGE: true
-    PRESERVE_EXISTING_RULES: true
-    HUMAN_STYLE_IS_NOT_FIX_TARGET: true
-    SYSTEM_ERROR_IS_FIX_TARGET: true
-    NO_UNSOLICITED_SEMANTIC_CORRECTION: true
-```
-
-A profundidade de cada etapa continua adaptativa conforme risco e escopo; o que não pode acontecer é responder primeiro e tratar a tríade como decoração posterior.
+Regra de compatibilidade: se uma particularidade exclusiva do ChatGPT precisar ser documentada, registrar somente a diferença física da superfície/tool. Regras comuns pertencem ao core, nunca a este arquivo.
