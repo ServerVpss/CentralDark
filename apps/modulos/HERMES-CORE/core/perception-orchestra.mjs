@@ -293,9 +293,7 @@ export function buildPerceptionPacket({ mission, results }) {
   let nextRule = 'CONFRONT_EVIDENCE_THEN_ONE_CANONICAL_MUTATION';
   if (!confrontation.all_four_completed) nextRule = 'RETRY_MISSING_PERCEPTIONS_BEFORE_MUTATION';
   else if (confrontation.unproven_roles.length > 0 || unprovenFindings.length > 0) nextRule = 'RUN_DISCRIMINATING_TEST_BEFORE_MUTATION';
-  else if (materialFindings.length === 0) nextRule = usefulCeiling.fixed_point
-    ? 'FIXED_POINT_NO_MATERIAL_DELTA'
-    : 'NO_MATERIAL_DELTA_NO_MUTATION';
+  else if (materialFindings.length === 0) nextRule = 'NO_MATERIAL_DELTA_NO_MUTATION';
 
   return Object.freeze({
     schema_version: 2,
