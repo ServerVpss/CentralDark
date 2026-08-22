@@ -4,7 +4,7 @@
   "marker": "PROOF_OWNERSHIP_REQUIRED",
   "coverage_status": "PARTIAL_EXPLICIT",
   "scope": "TOPOLOGY_ONLY",
-  "purpose": "Impedir prova circular, duplicacao de responsabilidade e PASS fabricado pelo proprio provador, e exigir que claims operacionais registrados tenham caminho verificavel e proporcional entre autoridade, enforcement, efeito e prova sem fingir que topologia prova runtime.",
+  "purpose": "Impedir prova circular, duplicacao de responsabilidade, PASS fabricado pelo proprio provador e claims de cobertura/ferramenta maiores que a observacao; exigir caminho verificavel e proporcional entre autoridade, enforcement, efeito e prova sem fingir que topologia, inventario ou listagem provam runtime ou leitura de conteudo.",
   "global_rules": {
     "self_validation_without_independent_counterproof": "UNPROVEN",
     "circular_proof": "UNPROVEN",
@@ -29,6 +29,10 @@
     "historical_pass_is_current_pass": false,
     "proof_target_must_match_claim": true,
     "local_fixed_point_is_end_of_intent": false,
+    "tool_unavailable_without_attempt": "UNPROVEN",
+    "source_listing_is_content_read": false,
+    "repository_tree_is_full_content_read": false,
+    "partial_retrieval_is_total_coverage": false,
     "credit_attribution_is_not_proof_ownership": true,
     "credit_does_not_confer_authority": true,
     "credit_does_not_prove_claim": true,
@@ -91,7 +95,35 @@
       "OPERATIONAL_MEMORY": ["canonical_owner", "provenance", "dedupe", "absorption"],
       "COMMAND": ["registry", "parser_or_consumer", "observable_behavior"],
       "SECURITY": ["policy", "enforcement", "adversarial_test_when_applicable"],
+      "SOURCE_COVERAGE": ["source_selection", "inventory", "content_read", "coverage_receipt", "countercheck"],
       "HUMAN_NON_AUTOMATABLE_RULE": ["explicit_authority", "procedure", "proportional_evidence_or_review"]
+    },
+    "coverage_claim_policy": {
+      "marker": "SOURCE_COVERAGE_RECEIPT_REQUIRED",
+      "applies_when_scope_is": [
+        "ALL",
+        "WHOLE",
+        "ENTIRE",
+        "100%",
+        "COMPLETE",
+        "EXHAUSTIVE"
+      ],
+      "tool_attempt_required_before_unavailable_claim": true,
+      "tree_or_listing_counts_as_content_read": false,
+      "partial_retrieval_counts_as_total_coverage": false,
+      "required_receipt_fields": [
+        "source_and_ref",
+        "inventory_denominator",
+        "content_read_numerator",
+        "skipped_or_excluded",
+        "truncation_or_pagination",
+        "method",
+        "limitations"
+      ],
+      "missing_denominator": "NOT_MEASURED",
+      "unattempted_unavailability": "UNPROVEN",
+      "tree_only_content_claim": "UNPROVEN",
+      "partial_as_total": "UNPROVEN"
     }
   },
   "allowed_proof_classes": [
