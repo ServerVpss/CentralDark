@@ -1,0 +1,205 @@
+---
+title: "Biblioteca Cognitiva — CentralDark"
+status: "OPERATIONAL_IN_PR"
+owner: "docs/BRAIN/03-DOCUMENTACAO/BIBLIOTECA/README.md"
+tags: ["brain", "biblioteca", "fontes", "cognicao", "skills", "grafo"]
+---
+
+# 📚 Biblioteca Cognitiva — CentralDark
+
+A Biblioteca é a camada de fontes de estudo do 🧠 Cérebro. Ela guarda **proveniência + índice semântico + ligações úteis** sem transformar uma fonte em autoridade automática da Casa.
+
+```text
+FONTE ORIGINAL
+PDF | EPUB | JWPUB | formato futuro provado
+        ↓
+HASH + METADADOS + PROVENIENCIA
+        ↓
+REFERENCIAS / TRECHOS INDEXADOS
+        ↓
+🏷️ FACETAS + 🔗 LINKS + 🗺️ MOCs
+        ↓
+🧠 COGNICAO | 🛠️ SKILL_CANDIDATE | 💬 CONVERSA
+        ↓
+⛏️ KNOWLEDGE COMPILER / FORJA
+        ↓
+💎 CRISTAL quando houver prova + reuso
+```
+
+## Uma fonte, várias representações
+
+PDF, EPUB e JWPUB são adaptadores de entrada da mesma obra quando edição/conteúdo puderem ser reconciliados. Não criar três verdades para o mesmo material.
+
+```text
+FORMAT_IS_ADAPTER=true
+SOURCE_ID_IS_SEMANTIC_IDENTITY=true
+CONTENT_HASH_REQUIRED_FOR_INGESTED_SOURCE=true
+SAME_TITLE != SAME_EDITION
+SAME_BOOK != SAME_BYTES
+```
+
+Antes de marcar uma fonte como `INGESTED`, registrar pelo menos `source_id`, título/edição quando conhecida, formatos observados, proveniência e SHA-256 do conteúdo efetivamente ingerido.
+
+## Facetas: onde procurar
+
+Tags classificam **gavetas semânticas**, não relações entre notas. Prefixos mínimos:
+
+```text
+fonte/*
+tema/*
+funcao/*
+contexto/*
+capacidade/*
+uso/*
+```
+
+Exemplo:
+
+```yaml
+id: fonte:obra:referencia
+source_id: fonte:obra
+reference: "Livro 1:2"
+tags:
+  - tema/vigilancia
+  - funcao/continuidade
+  - contexto/entrada-saida
+  - capacidade/guarda
+use:
+  - cognition
+  - skill-candidate
+  - conversation
+```
+
+## Links: com quem isso conversa
+
+`[[wikilinks]]` ligam a referência a owners, conceitos, decisões ou capacidades concretas. Relação deve ser explicável; link ornamental é ruído.
+
+```text
+TAG  → em que gaveta semântica entra?
+LINK → com que nota/capacidade concreta se relaciona?
+MOC  → onde vejo o bairro inteiro?
+```
+
+Reutilizar `docs/BRAIN/03-DOCUMENTACAO/AGENTS-LIBRARY/SEMANTIC-LINKER.md` para linkagem contextual e backlinks. O mapa humano permanece em `docs/BRAIN/00-MAPA-SISTEMA/MAPA-OBSIDIAN-BRAIN.md`.
+
+## Cognição e deliberação persistível
+
+A Casa pode preservar uma trilha útil de decisão, mas não grava raciocínio privado bruto do modelo.
+
+```text
+PERGUNTA
+→ EVIDENCIA OBSERVADA
+→ ALTERNATIVAS MATERIAIS
+→ DECISAO
+→ MOTIVO RESUMIDO
+→ RESULTADO
+→ REFERENCIAS DA BIBLIOTECA QUANDO APLICAVEL
+```
+
+```text
+PRIVATE_CHAIN_OF_THOUGHT_NOT_PERSISTED=true
+DELIBERATION_SUMMARY_ALLOWED=true
+EVIDENCE_REFS_REQUIRED_WHEN_CLAIM_IS_TECHNICAL=true
+```
+
+## Da fonte para uma skill
+
+Fonte não vira skill por nome ou prestígio. Uma entrada pode ser marcada `skill-candidate`; depois segue a rota já existente do Knowledge Compiler:
+
+```text
+FONTE
+→ EXTRAIR CAPACIDADE
+→ DEDUPE
+→ CONTRAPROVA
+→ OWNER EXISTENTE
+→ SKILL CANDIDATA
+→ CONSUMIDOR
+→ TESTE
+→ GATE QUANDO MATERIAL
+→ CRISTAL
+```
+
+Owner chamável: `.agents/skills/knowledge-compiler/SKILL.md`.
+
+## Referência contextual na conversa
+
+O agente pode trazer uma referência da Biblioteca quando ela for semanticamente relevante à função atual. Isso é camada de imersão e sabedoria; não substitui prova técnica.
+
+```text
+CONTEXTO ATUAL
+→ TAGS/LINKS RELEVANTES
+→ ROTEAR REFERENCIA
+→ SCORE SUFICIENTE?
+   NAO → SILENCIO
+   SIM → 1 REFERENCIA CURTA POR PADRAO
+```
+
+```text
+LIBRARY_REFERENCE != TECHNICAL_PROOF
+NO_SOURCE_TEXT → DO_NOT_INVENT_QUOTE
+QUOTE_TEXT_ONLY_FROM_INGESTED_SOURCE=true
+ONE_CONTEXTUAL_REFERENCE_BY_DEFAULT=true
+LOW_RELEVANCE → SILENCE
+```
+
+Exemplo de saída permitida sem texto-fonte carregado:
+
+```text
+👁️ Salmo 121
+```
+
+Isso cita a referência; não inventa o verso. Quando o PDF/EPUB/JWPUB real for ingerido, o texto pode ser recuperado da fonte observada conforme direitos/uso aplicáveis.
+
+## Emoji é contexto, não segundo sistema
+
+A Biblioteca pode sugerir emojis por entrada (`emojis`), mas a regra global continua no padrão de resposta da Casa: emoji acompanha contexto e não substitui significado.
+
+Sugestões semânticas mínimas:
+
+```text
+📚 fonte/biblioteca
+🧠 cognição/memória
+💎 cristal/ouro
+🧭 direção
+🛡️ proteção
+👁️ vigilância
+🚪 entrada/saída
+🦾 execução
+🔎 investigação
+⚠️ risco
+✅ prova
+☀️ SOL
+```
+
+Não criar pacote paralelo de personalidade.
+
+## Implementação determinística
+
+```text
+CATALOGO=docs/BRAIN/03-DOCUMENTACAO/BIBLIOTECA/catalog.json
+ROTEADOR=scripts/memory-linker/library-router.mjs
+TESTE=scripts/memory-linker/library-router.test.mjs
+GATE=.github/workflows/porta-de-entrada.yml
+```
+
+O roteador valida catálogo, deduplica identidade por ID, pontua tags/grupos/links, escolhe referência contextual somente acima do limiar e mantém silêncio quando não há relevância suficiente.
+
+## Próxima ingestão
+
+O corpus ainda não contém o PDF do SEGREDO/CHEFE. Quando ele chegar:
+
+```text
+ARQUIVO REAL
+→ SHA256
+→ IDENTIFICAR EDICAO/FORMATO
+→ REGISTRAR SOURCE_ID
+→ EXTRAIR/INDEXAR SEM ALTERAR ORIGINAL
+→ TESTAR REFERENCIAS
+→ ROTEAR CONTEXTO
+→ CONTRAPROVAR
+```
+
+Até lá, Salmos 23/27/91/121 aparecem somente em fixtures de teste como **referências sem texto**, para provar a arquitetura sem fabricar conteúdo da fonte.
+
+---
+🔗 [[BRAIN]] · [[MAPA-OBSIDIAN-BRAIN]] · [[SEMANTIC-LINKER]] · Knowledge Compiler
