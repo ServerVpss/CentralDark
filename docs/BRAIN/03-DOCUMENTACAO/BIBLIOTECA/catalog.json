@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "owner": "docs/BRAIN/03-DOCUMENTACAO/BIBLIOTECA/README.md",
+  "status": "READY_FOR_INGESTION",
+  "supported_formats": ["pdf", "epub", "jwpub"],
+  "sources": [],
+  "entries": []
+}
