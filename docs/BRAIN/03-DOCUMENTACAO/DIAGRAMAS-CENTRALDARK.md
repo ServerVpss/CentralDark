@@ -1,7 +1,7 @@
 ---
 title: "Diagramas do Sistema CentralDark"
 date: 2026-06-29
-updated: 2026-08-15
+updated: 2026-08-22
 status: "DERIVED_VIEW"
 tags: ["diagrama", "arquitetura", "fluxo", "mermaid", "sistema"]
 source_rule: "CANONICO -> ARTEFATO; artefato nao inventa canonico"
@@ -25,6 +25,8 @@ Fontes canônicas desta visão:
 - `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` — coordenação e Writer único;
 - `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md` — método cognitivo/mineração;
 - `scripts/memory-linker/README.md` — pipeline de memória;
+- `apps/modulos/HERMES-CORE/core/perception-orchestra.mjs` — fan-out de percepção e convergência;
+- `apps/modulos/HERMES-CORE/core/cognitive-council.mjs` — lentes funcionais, pool de candidatos e teto útil;
 - `apps/modulos/artifacts-builder/CONTRATO-ARTEFATO-UNIVERSAL.md` — artefato derivado.
 
 ## 1. Autoridade, identidade e execução
@@ -178,6 +180,95 @@ flowchart TD
 SAME_NAME_ACROSS_TIME != SAME_MEANING
 SAME_LABEL != SAME_LINEAGE
 ```
+
+## 6. Organograma cognitivo — autoridade e percepção são planos diferentes
+
+O organograma não transforma especialidade em autoridade. A linha vertical mostra **quem decide/coordena/executa**; as linhas laterais mostram **quem percebe e contraprovê**.
+
+```mermaid
+flowchart TD
+    CHEFE2["SEGREDO/CHEFE<br/>AUTORIDADE FINAL"] --> SOL2["SOL<br/>coordenação + reconciliação"]
+    SOL2 --> HERMES2["PIVETE/HERMES<br/>execução + continuidade"]
+    SOL2 --> WRITER2["1 Writer por escopo"]
+    WRITER2 --> PROVA2["teste + receipt + estado real"]
+    PROVA2 --> SOL2
+
+    SOURCE["Fontes / histórico / pessoas / projetos<br/>PROVENIÊNCIA, não autoridade"] --> PROFILE["Source Profile<br/>claims observados + origem"]
+    PROFILE --> AUTO["AUTOMATION_FACTORY"]
+    PROFILE --> SKEPTIC["STRUCTURAL_SKEPTIC"]
+    PROFILE --> COORD["HUMAN_AGENT_COORDINATION"]
+    PROFILE --> OBS["OBSERVABILITY_PROOF"]
+    PROFILE --> SYN["SYNTHESIS_RECONCILIATION"]
+    PROFILE --> TRUST["IDENTITY_TRUST"]
+
+    AUTO --> B["B_IMPLEMENTATION"]
+    AUTO --> D["D_SIMPLIFICATION"]
+    SKEPTIC --> A["A_LOGIC"]
+    SKEPTIC --> C["C_REGRESSION_FALSE_GREEN"]
+    COORD --> B
+    OBS --> C
+    SYN --> A
+    SYN --> D
+    TRUST --> A
+    TRUST --> C
+
+    A --> SOL2
+    B --> SOL2
+    C --> SOL2
+    D --> SOL2
+```
+
+A compressão é intencional:
+
+```text
+6 LENTES FUNCIONAIS
+→ COBERTURA PELOS 4 ATAQUES JA EXISTENTES
+→ ZERO NOVA AUTORIDADE
+→ ZERO NOVO WRITER
+→ ZERO VOTACAO COMO VERDADE
+→ ZERO CHAMADA EXTRA EXIGIDA PELO ORGANOGRAMA
+```
+
+Uma pessoa, empresa, paper, podcast ou projeto pode alimentar um `Source Profile` somente por matéria recuperável. O perfil **não é clone da pessoa**, não recebe personalidade, voto, caneta ou autoridade. Depois da validação, a capacidade útil pode ser absorvida e a proveniência permanece registrada.
+
+```text
+SOURCE_PROFILE != PERSONA
+SOURCE_PROFILE != AGENT_AUTHORITY
+NAME_OR_REPUTATION != PROOF
+AGREEMENT != PROOF
+DIVERSIDADE_CONTROLADA + TESTE_DISCRIMINANTE + EVIDENCIA
+→ CONVERGENCIA MATERIAL
+```
+
+### 6.1 Teto útil e fechamento real
+
+O teto não é quantidade de rodadas. É o primeiro ponto em que não existe informação nova nem lacuna material aberta.
+
+```mermaid
+flowchart TD
+    GAP["lacunas materiais"] --> CLASS["OPEN | UNKNOWN | RESOLVED | BLOCKED | NOT_APPLICABLE"]
+    CLASS --> CHECK{"ha OPEN/UNKNOWN?"}
+    CHECK -->|sim| CONT["continuar somente no residuo"]
+    CHECK -->|nao| PENDING{"delta material pendente?"}
+    PENDING -->|sim| CONT
+    PENDING -->|nao| BLOCK{"ha BLOCKED?"}
+    BLOCK -->|sim| BOUND["BLOCKED_AT_EXACT_BOUNDARY<br/>causa + owner + proxima condicao"]
+    BLOCK -->|nao| INFO{"nova informacao?"}
+    INFO -->|sim| CONT
+    INFO -->|nao| FIXED["FIXED_POINT<br/>STOP"]
+```
+
+Regras:
+
+```text
+RESOLVED_SEM_EVIDENCIA = INVALID_RECEIPT
+BLOCKED_SEM_CAUSA_OWNER_PROXIMA_CONDICAO = INVALID_RECEIPT
+UNKNOWN != CLOSED
+BLOCKED_BOUNDARY != FIXED_POINT
+NO_NEW_INFORMATION + ZERO_MATERIAL_RESIDUAL = USEFUL_CEILING
+```
+
+O código executável correspondente vive em `apps/modulos/HERMES-CORE/core/cognitive-council.mjs` e é consumido pela `perception-orchestra.mjs`.
 
 ## Regra de manutenção deste artefato
 
