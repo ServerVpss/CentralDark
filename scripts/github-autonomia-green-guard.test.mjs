@@ -99,10 +99,13 @@ test("paginação encontra gate válido depois da primeira página sem aceitar c
   assert.equal(runs.some((run) => run.name === "lupa-conformance"), false);
 });
 
-test("fast path canônico não é convertido em convergência adversarial global", () => {
-  assert.equal(shouldEnforceGreenFirst({ decision: "READY", mode: "FAST" }), false);
+test("gate determinístico sempre: nenhum modo isenta a catraca", () => {
+  assert.equal(shouldEnforceGreenFirst({ decision: "READY", mode: "FAST" }), true);
   assert.equal(shouldEnforceGreenFirst({ decision: "READY", mode: "ADVERSARIAL" }), true);
+  assert.equal(shouldEnforceGreenFirst({ decision: "READY" }), true);
   assert.equal(shouldEnforceGreenFirst({ decision: "WAIT", mode: "ADVERSARIAL" }), false);
+  assert.equal(shouldEnforceGreenFirst({ decision: "WAIT", mode: "FAST" }), false);
+  assert.equal(shouldEnforceGreenFirst(null), false);
 });
 
 test("lista padrão é exatamente a régua canônica de seis gates", () => {
