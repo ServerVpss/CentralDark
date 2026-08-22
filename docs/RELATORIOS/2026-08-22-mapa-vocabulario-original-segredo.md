@@ -98,6 +98,8 @@ CORRESPONDENCIA=100%
 
 A camada visível foi restaurada nesta branch para `PUBLICAR` / `PUBLICAR NO <DESTINO>`. Os identificadores internos `DeployButton`, `handle*Deploy`, diretório `deploy/` e contratos técnicos foram preservados para não criar regressão por renomeação cosmética de implementação.
 
+O fluxo visual de `apps/modulos/Bolt/source/app/components/deploy/DeployAlert.tsx` também mostrava `Deploy` na etapa cujo estado interno já é `deployStatus`. Essa etapa foi restaurada visualmente para `PUBLICAR`; o identificador interno permanece técnico.
+
 ### 2.2 `Diff` → `COMPARAR`
 
 Estado observado em `apps/modulos/Bolt/source/app/components/workbench/Workbench.client.tsx`:
@@ -116,7 +118,7 @@ UI_LABEL=COMPARAR
 INTERNAL_VALUE='diff' PODE_PERMANECER
 ```
 
-Ainda não alterado nesta primeira costura enquanto o arquivo completo e seus consumidores continuam sendo medidos.
+Ainda não alterado nesta costura: `Workbench.client.tsx` é um arquivo amplo e a API de atualização disponível substitui o arquivo inteiro. Como a mudança desejada é de duas labels, a restauração fica pendente até uma costura mínima que não aumente risco de regressão.
 
 ### 2.3 `Preview` → `VER AO VIVO`
 
@@ -139,7 +141,25 @@ INTERNAL_VALUE='preview' PODE_PERMANECER
 COMPONENTE Preview.tsx PODE_PERMANECER TECNICO
 ```
 
-Ainda não alterado nesta primeira costura enquanto o arquivo completo e seus consumidores continuam sendo medidos.
+Ainda não alterado pela mesma razão de mudança mínima descrita acima.
+
+### 2.4 `Ask Bolt` em alertas de erro → `CORRIGIR`
+
+Foram observados dois consumidores reais:
+
+- `apps/modulos/Bolt/source/app/components/chat/ChatAlert.tsx`;
+- `apps/modulos/Bolt/source/app/components/deploy/DeployAlert.tsx`.
+
+Nos dois casos o botão visível `Ask Bolt` dispara uma mensagem cujo comando interno é literalmente `Fix this ... error`.
+
+```text
+UI_ATUAL_ANTES=Ask Bolt
+COMANDO_REAL=Fix this <erro>
+PLANO_ORIGINAL=CORRIGIR
+CORRESPONDENCIA=100%
+```
+
+A camada visível foi restaurada para `CORRIGIR` nos dois consumidores, preservando a implementação interna e o conteúdo técnico enviado ao agente.
 
 ## 3. Cápsula — nome original comprovado, não substituir por genérico
 
@@ -259,6 +279,25 @@ Pacote Mestre Canônico
 
 Esses nomes são evidência histórica de nomenclatura do organismo, mas o manifesto isolado não prova autoria humana individual de cada rótulo nem equivalência 1:1 com módulos atuais. Portanto entram como **REFERÊNCIA PARA CRUZAMENTO**, não como autorização automática de renomeação.
 
+A arquitetura dessa relíquia conecta explicitamente:
+
+```text
+Humano
+→ Inbox Universal
+→ Normalização determinística
+→ Event Bus
+→ Planner Executivo
+→ Scheduler
+→ Delegação por capacidade
+→ Executores / Ferramentas / Modelos
+→ Provas / Eventos / Artefatos
+→ Auditoria + MetaLupa
+→ Consolidador de Ouro
+→ Memória Viva | Grafo/Índices | DNA/Skills/Gates
+```
+
+Isso é útil para descobrir parentesco semântico com módulos atuais, mas ainda não basta para renomeação 1:1 de `Memory Linker`, `Dream Review`, `Pattern Discovery` ou outros componentes recentes.
+
 ## 7. Política de linguagem já existente confirma a correção
 
 Dois owners atuais já apontam na mesma direção:
@@ -266,9 +305,46 @@ Dois owners atuais já apontam na mesma direção:
 - `docs/CONSCIENCIA/DICIONARIO-PIVETE-GITHUB.md`: ao falar com SEGREDO/CHEFE, usar primeiro nomes traduzidos; jargão só quando necessário.
 - `docs/GLOSSARIO_TECNICO_LEIGO.md`: “a máquina segura a complexidade; o CHEFE recebe o significado”.
 
-Esta auditoria estende a aplicação prática dessa regra à nomenclatura arquitetural e aos botões sem criar nova verdade técnica.
+A cápsula histórica aprovada para handoff em 2026-07-29 é ainda mais explícita:
 
-## 8. Regra para as próximas costuras
+```text
+Nomes criados por IA não são automaticamente nomes aprovados pelo Pivete.
+```
+
+E no Builder ela registra:
+
+```text
+PIVETE FALA
+→ EU CRIO O CONTRATO
+→ AGENTES EDITAM
+→ PREVIEW MOSTRA
+→ EU OBSERVO
+→ AGENTES CORRIGEM
+→ PIVETE APROVA
+→ PUBLICAR
+→ REGISTRAR
+→ VOLTAR DISPONÍVEL
+```
+
+Portanto, preservar o vocabulário arquitetural humano na superfície não é uma regra nova inventada nesta rodada; é uma restauração de uma intenção já registrada historicamente.
+
+## 8. Candidatos atuais inspecionados e rejeitados para renomeação automática
+
+### `Start new chat` ≠ `CRIAR` ainda
+
+O sidebar atual possui `Start new chat`, mas isso cria/inicia uma conversa; o botão original `CRIAR` pertence ao fluxo da fábrica visual e pode significar criar projeto/produto. Sem provar identidade de ação, não renomear.
+
+### `Enhance prompt` ≠ `MELHORAR` ainda
+
+O ChatBox atual possui `Enhance prompt`, mas melhora o **prompt**, enquanto o `MELHORAR` original pertence ao produto/projeto no fluxo do Builder. Sem equivalência de alvo, não renomear.
+
+### `Report Bug` ≠ `CORRIGIR`
+
+`Report Bug` abre um relatório externo; não executa correção. O `CORRIGIR` foi restaurado somente onde o consumidor realmente dispara `Fix this ... error`.
+
+Essa distinção é o teste de 100%: palavras parecidas não bastam; **o efeito real precisa ser o mesmo**.
+
+## 9. Regra para as próximas costuras
 
 ```text
 1. RECUPERAR NOME ORIGINAL
@@ -294,7 +370,7 @@ RIGOR_TECNICO_POR_BAIXO
 MESMA_CASA, SEM PERDER ASSIMILACAO
 ```
 
-## 9. Estado desta rodada
+## 10. Estado desta rodada
 
 ```text
 MAIN_MUTADA=NAO
@@ -305,11 +381,11 @@ VPS=INTOCADA
 FORCE_PUSH=NAO
 
 PUBLICAR_UI=RESTAURADO_NA_BRANCH
-COMPARAR_UI=100_PCT_CONFIRMADO_PENDENTE_COSTURA
-VER_AO_VIVO_UI=100_PCT_CONFIRMADO_PENDENTE_COSTURA
-CRIAR=MATCH_ATUAL_AINDA_NAO_RESOLVIDO
-MELHORAR=MATCH_ATUAL_AINDA_NAO_RESOLVIDO
-CORRIGIR=MATCH_ATUAL_AINDA_NAO_RESOLVIDO
+CORRIGIR_UI=RESTAURADO_NA_BRANCH_EM_CONSUMIDORES_COM_FIX_REAL
+COMPARAR_UI=100_PCT_CONFIRMADO_PENDENTE_COSTURA_MINIMA
+VER_AO_VIVO_UI=100_PCT_CONFIRMADO_PENDENTE_COSTURA_MINIMA
+CRIAR=MATCH_ATUAL_NAO_PROVADO
+MELHORAR=MATCH_ATUAL_NAO_PROVADO
 VOLTAR=MATCH_ATUAL_AINDA_NAO_RESOLVIDO
 MOSTRAR_PROVA=MATCH_ATUAL_AINDA_NAO_RESOLVIDO
 ```
