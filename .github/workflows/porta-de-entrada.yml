@@ -157,6 +157,12 @@ jobs:
       - name: Testar Dream Review isolado do memory-linker
         run: node --test scripts/memory-linker/dream-review.test.mjs
 
+      - name: Testar biblioteca cognitiva, tags e referência contextual
+        run: |
+          set -euo pipefail
+          node --check scripts/memory-linker/library-router.mjs
+          node --test scripts/memory-linker/library-router.test.mjs
+
       - name: Validar sintaxe do Dream Review
         run: node --check scripts/memory-linker/dream-review.mjs
 
@@ -273,6 +279,7 @@ jobs:
           echo "UNREGISTERED_INVARIANT=UNPROVEN_NOT_OWNED"
           echo "DREAM_REVIEW_ISOLATED=1"
           echo "DREAM_DIRECT_CANONICAL_MUTATION=0"
+          echo "LIBRARY_COGNITION_ROUTER=1"
           echo "GIT_STATE_SAFETY_GATE=1"
           echo "GIT_FORCE_PUSH_ALLOWED=0"
           echo "GIT_RESET_HARD_OPERATIONAL_ALLOWED=0"
