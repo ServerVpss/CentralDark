@@ -1,4 +1,8 @@
-const ALLOWED_FORMATS = new Set(['pdf', 'epub', 'jwpub']);
+const ALLOWED_FORMATS = new Set([
+  'pdf', 'epub', 'jwpub',
+  'gdoc', 'gdrive-md', 'gdrive-folder', 'txt',
+]);
+const GOOGLE_DRIVE_FORMATS = new Set(['gdoc', 'gdrive-md', 'gdrive-folder']);
 
 export function normalizeToken(value) {
   return String(value ?? '')
@@ -22,6 +26,26 @@ function assertArray(value, field) {
   if (!Array.isArray(value)) throw new Error(`${field}_MUST_BE_ARRAY`);
 }
 
+function validateGoogleDriveProvenance(source, sourceId, formats) {
+  if (!formats.some((format) => GOOGLE_DRIVE_FORMATS.has(format))) return;
+  if (normalizeToken(source?.provenance?.provider) !== 'google-drive') {
+    throw new Error(`SOURCE_DRIVE_PROVIDER_REQUIRED:${sourceId}`);
+  }
+  if (!String(source?.provenance?.external_id ?? '').trim()) {
+    throw new Error(`SOURCE_DRIVE_EXTERNAL_ID_REQUIRED:${sourceId}`);
+  }
+  if (!String(source?.classification ?? '').trim()) {
+    throw new Error(`SOURCE_DRIVE_CLASSIFICATION_REQUIRED:${sourceId}`);
+  }
+}
+
+function validateIngestedHash(source, sourceId) {
+  if (normalizeToken(source?.status) !== 'ingested') return;
+  if (!/^[a-f0-9]{64}$/i.test(String(source?.sha256 ?? '').trim())) {
+    throw new Error(`INGESTED_SOURCE_SHA256_REQUIRED:${sourceId}`);
+  }
+}
+
 export function validateCatalog(catalog) {
   if (!catalog || typeof catalog !== 'object') throw new Error('CATALOG_MUST_BE_OBJECT');
   if (catalog.schema_version !== 1) throw new Error('UNSUPPORTED_SCHEMA_VERSION');
@@ -29,17 +53,23 @@ export function validateCatalog(catalog) {
   assertArray(catalog.entries, 'entries');
 
   const sourceIds = new Set();
+  const sourceById = new Map();
   for (const source of catalog.sources) {
     const sourceId = normalizeToken(source?.source_id);
     if (!sourceId) throw new Error('SOURCE_ID_REQUIRED');
     if (sourceIds.has(sourceId)) throw new Error(`DUPLICATE_SOURCE_ID:${sourceId}`);
     sourceIds.add(sourceId);
+    sourceById.set(sourceId, source);
+
     assertArray(source.formats ?? [], `source:${sourceId}:formats`);
-    for (const format of source.formats ?? []) {
-      if (!ALLOWED_FORMATS.has(normalizeToken(format))) {
+    const formats = (source.formats ?? []).map(normalizeToken);
+    for (const format of formats) {
+      if (!ALLOWED_FORMATS.has(format)) {
         throw new Error(`UNSUPPORTED_SOURCE_FORMAT:${format}`);
       }
     }
+    validateGoogleDriveProvenance(source, sourceId, formats);
+    validateIngestedHash(source, sourceId);
   }
 
   const entryIds = new Set();
@@ -50,6 +80,12 @@ export function validateCatalog(catalog) {
     entryIds.add(id);
     const sourceId = normalizeToken(entry?.source_id);
     if (!sourceIds.has(sourceId)) throw new Error(`ENTRY_SOURCE_UNKNOWN:${id}:${sourceId}`);
+
+    const sourceClass = normalizeToken(sourceById.get(sourceId)?.classification);
+    if (sourceClass === 'sensitive_quarantine' || sourceClass === 'sensitive-quarantine') {
+      throw new Error(`ENTRY_SOURCE_QUARANTINED:${id}:${sourceId}`);
+    }
+
     if (!String(entry.reference ?? '').trim()) throw new Error(`ENTRY_REFERENCE_REQUIRED:${id}`);
     assertArray(entry.tags ?? [], `entry:${id}:tags`);
     assertArray(entry.links ?? [], `entry:${id}:links`);
