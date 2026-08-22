@@ -5,6 +5,7 @@ import test from "node:test";
 
 const ROOT = resolve(new URL("../..", import.meta.url).pathname);
 const CORE = "LEIA-ME-IA.md";
+const PORTABLE_BRIDGE = "docs/CONSCIENCIA/ARTEFATOS/centraldark-prompt-universal.md";
 
 const ADAPTERS = Object.freeze([
   ["CHATGPT.md", "CHATGPT"],
@@ -94,14 +95,42 @@ test("adapters não formam cadeia ou cérebro paralelo", () => {
   }
 });
 
-test("round-trip preserva identidade do core independentemente da engine", () => {
-  const signatures = new Set();
-  for (const [path, engine] of ADAPTERS) {
+test("round-trip de qualquer engine termina no mesmo core", () => {
+  const coreRefs = new Set();
+  for (const [path] of ADAPTERS) {
     const content = read(path);
     const core = content.match(/CANONICAL_AGENT_CORE=([^\n\r]+)/)?.[1]?.trim();
     assert.equal(core, CORE, `CORE_ROUTE_MISMATCH:${path}`);
-    signatures.add(`${core}|ONE_SOL|LAZY|${engine ? "ENGINE" : "NO_ENGINE"}`);
+    coreRefs.add(core);
   }
-  const normalized = new Set([...signatures].map((value) => value.replace(/\|ENGINE$/, "|ENGINE")));
-  assert.equal(normalized.size, 1, "ADAPTERS_DIVERGED_FROM_SINGLE_CORE");
+  assert.deepEqual([...coreRefs], [CORE]);
+});
+
+test("prompt universal é ponte gerada, não segunda governança manual", () => {
+  const content = read(PORTABLE_BRIDGE);
+  for (const marker of [
+    `CANONICAL_AGENT_CORE=${CORE}`,
+    "PORTABLE_GENERATOR=scripts/lupa/portable-kernel.mjs",
+    "ONE_SOL=true",
+    "ONE_CORE=true",
+    "MANUAL_GOVERNANCE_COPY=false",
+    "PORTABLE_PACKAGE_IS_CACHE_NOT_AUTHORITY=true",
+    "PORTABLE_PACKAGE_SOURCE=LIVE_REPOSITORY_CANONICAL_FILES",
+    "STALE_PACKAGE_ACTION=REBUILD_FROM_LIVE_REPOSITORY",
+    "ENGINE_IS_REPLACEABLE=true",
+    "FUTURE_RULES_CONSUMED_FROM_CORE=true",
+  ]) {
+    assert.ok(content.includes(marker), `PORTABLE_BRIDGE_MARKER_MISSING:${marker}`);
+  }
+  assert.ok(content.length <= 3200, `PORTABLE_BRIDGE_TOO_LARGE:${content.length}`);
+  for (const forbidden of [
+    /NO_HUMAN_REASK_FOR_MERGE/i,
+    /MERGE_METHOD\s*=\s*squash/i,
+    /Intent-Authorized:/i,
+    /Merge-Policy:/i,
+    /SEGREDO\/CHEFE\s*=\s*humano/i,
+    /PIVETE\/HERMES\s*=\s*executor/i,
+  ]) {
+    assert.equal(forbidden.test(content), false, `PORTABLE_BRIDGE_REDEFINED_POLICY:${forbidden}`);
+  }
 });
