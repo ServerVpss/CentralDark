@@ -123,7 +123,7 @@ export default function DeployChatAlert({ alert, clearAlert, postMessage }: Depl
                           <span className="text-white text-xs">2</span>
                         )}
                       </div>
-                      <span className="ml-2">Deploy</span>
+                      <span className="ml-2">PUBLICAR</span>
                     </div>
                   </div>
                 </div>
@@ -172,7 +172,7 @@ export default function DeployChatAlert({ alert, clearAlert, postMessage }: Depl
                     )}
                   >
                     <div className="i-ph:chat-circle-duotone"></div>
-                    Ask Bolt
+                    CORRIGIR
                   </button>
                 )}
                 <button
