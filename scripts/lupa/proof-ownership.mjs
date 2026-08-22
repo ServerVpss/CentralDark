@@ -59,6 +59,10 @@ export function validateOperationalClaimPolicy(contract, { exists = () => true }
     historical_pass_is_current_pass: false,
     proof_target_must_match_claim: true,
     local_fixed_point_is_end_of_intent: false,
+    tool_unavailable_without_attempt: "UNPROVEN",
+    source_listing_is_content_read: false,
+    repository_tree_is_full_content_read: false,
+    partial_retrieval_is_total_coverage: false,
   };
   for (const [key, expected] of Object.entries(requiredRules)) {
     if (rules[key] !== expected) errors.push(`OPERATIONAL_RULE_INVALID:${key}`);
@@ -74,6 +78,51 @@ export function validateOperationalClaimPolicy(contract, { exists = () => true }
   if (policy.fixed_point_scope_required !== true) errors.push("OPERATIONAL_POLICY_SCOPED_FIXED_POINT_REQUIRED");
   if (policy.duplicate_only_when_same_authority_and_capability !== true) errors.push("OPERATIONAL_POLICY_DUPLICATE_RULE_INVALID");
   if (policy.preserve_layer_specific_implementations !== true) errors.push("OPERATIONAL_POLICY_LAYER_PRESERVATION_REQUIRED");
+
+  const coveragePolicy = policy.coverage_claim_policy ?? {};
+  if (coveragePolicy.marker !== "SOURCE_COVERAGE_RECEIPT_REQUIRED") {
+    errors.push("OPERATIONAL_COVERAGE_POLICY_MARKER_INVALID");
+  }
+  if (coveragePolicy.tool_attempt_required_before_unavailable_claim !== true) {
+    errors.push("OPERATIONAL_COVERAGE_TOOL_ATTEMPT_REQUIRED");
+  }
+  if (coveragePolicy.tree_or_listing_counts_as_content_read !== false) {
+    errors.push("OPERATIONAL_COVERAGE_TREE_LISTING_NOT_CONTENT_READ");
+  }
+  if (coveragePolicy.partial_retrieval_counts_as_total_coverage !== false) {
+    errors.push("OPERATIONAL_COVERAGE_PARTIAL_NOT_TOTAL");
+  }
+
+  const coverageScopes = new Set(Array.isArray(coveragePolicy.applies_when_scope_is) ? coveragePolicy.applies_when_scope_is : []);
+  for (const scope of ["ALL", "WHOLE", "ENTIRE", "100%", "COMPLETE", "EXHAUSTIVE"]) {
+    if (!coverageScopes.has(scope)) errors.push(`OPERATIONAL_COVERAGE_SCOPE_MARKER_MISSING:${scope}`);
+  }
+
+  const receiptFields = new Set(Array.isArray(coveragePolicy.required_receipt_fields) ? coveragePolicy.required_receipt_fields : []);
+  for (const field of [
+    "source_and_ref",
+    "inventory_denominator",
+    "content_read_numerator",
+    "skipped_or_excluded",
+    "truncation_or_pagination",
+    "method",
+    "limitations",
+  ]) {
+    if (!receiptFields.has(field)) errors.push(`OPERATIONAL_COVERAGE_RECEIPT_FIELD_MISSING:${field}`);
+  }
+
+  if (coveragePolicy.missing_denominator !== "NOT_MEASURED") {
+    errors.push("OPERATIONAL_COVERAGE_MISSING_DENOMINATOR_MUST_BE_NOT_MEASURED");
+  }
+  if (coveragePolicy.unattempted_unavailability !== "UNPROVEN") {
+    errors.push("OPERATIONAL_COVERAGE_UNATTEMPTED_UNAVAILABILITY_MUST_BE_UNPROVEN");
+  }
+  if (coveragePolicy.tree_only_content_claim !== "UNPROVEN") {
+    errors.push("OPERATIONAL_COVERAGE_TREE_ONLY_CLAIM_MUST_BE_UNPROVEN");
+  }
+  if (coveragePolicy.partial_as_total !== "UNPROVEN") {
+    errors.push("OPERATIONAL_COVERAGE_PARTIAL_AS_TOTAL_MUST_BE_UNPROVEN");
+  }
 
   const requiredChain = [
     "claim",
@@ -120,6 +169,7 @@ export function validateOperationalClaimPolicy(contract, { exists = () => true }
     "OPERATIONAL_MEMORY",
     "COMMAND",
     "SECURITY",
+    "SOURCE_COVERAGE",
     "HUMAN_NON_AUTOMATABLE_RULE",
   ]) {
     if (!Array.isArray(profiles[profile]) || profiles[profile].length === 0) {
