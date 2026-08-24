@@ -8,6 +8,7 @@ import {
   MAX_CATALOG_RETRIES,
   SUCCESS_COMMENT_MARKER,
   confirmationEvidence,
+  hasConfirmedLabel,
   retryCountFromEvent,
 } from "./github-pr-confirmado-label.mjs";
 
@@ -94,6 +95,17 @@ test("não confirma se HEAD provado ou merge SHA não batem com o PR vivo", () =
 test("a etiqueta confirmada é distinta da autoridade e do sucesso", () => {
   assert.notEqual(CANONICAL_CONFIRMED_LABEL, CANONICAL_AUTHORITY_LABEL);
   assert.notEqual(CANONICAL_CONFIRMED_LABEL, CANONICAL_SUCCESS_LABEL);
+});
+
+test("detector reconhece tentativa manual de falso verde", () => {
+  assert.equal(hasConfirmedLabel(pr()), false);
+  assert.equal(hasConfirmedLabel(pr({
+    labels: [
+      { name: CANONICAL_AUTHORITY_LABEL },
+      { name: CANONICAL_SUCCESS_LABEL },
+      { name: CANONICAL_CONFIRMED_LABEL },
+    ],
+  })), true);
 });
 
 test("retry de catálogo é bounded e inválido volta a zero", () => {
