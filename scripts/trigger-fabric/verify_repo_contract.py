@@ -33,6 +33,13 @@ check('docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md',[
  'PROVENIENCIA_DEVE_SOBREVIVER_AO_HANDOFF=true',
  'NEXT_CURSOR_DEVE_SOBREVIVER_AO_HANDOFF=true',
  'LEARNING_TRANSFER_FAIL',
+ 'ARCHITECTURE_CLASS = PROOF_CARRYING_CLOSED_LOOP_CONTROL',
+ 'STATE_MODEL = EPISTEMIC_STATE_MACHINE',
+ 'MUTATION_MODEL = SERIALIZED_SINGLE_WRITER',
+ 'CONTINUITY_MODEL = RECEIPT_PLUS_CHECKSUM_PLUS_NEXT_CURSOR',
+ 'EXECUTOR_CANNOT_SELF_APPROVE=true',
+ 'JUDGE_DOES_NOT_MUTATE=true',
+ 'GRAPH_IS_DERIVED_NOT_AUTHORITY=true',
 ], classification='CANONICAL_HANDOFF_POMBO_CHECKSUM')
 check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml',[
  'inherited_on_bot_entry: true',
@@ -49,6 +56,21 @@ check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml',[
  'NEGATIVE_TEST',
  'prose_only_rule: NOT_LEARNED',
  'repeated_chefe_instruction_after_promoted_rule: LEARNING_TRANSFER_FAIL',
+ 'verified_continuity:',
+ 'architecture_class: PROOF_CARRYING_CLOSED_LOOP_CONTROL',
+ 'state_model: EPISTEMIC_STATE_MACHINE',
+ 'mutation_model: SERIALIZED_SINGLE_WRITER',
+ 'continuity_model: RECEIPT_PLUS_CHECKSUM_PLUS_NEXT_CURSOR',
+ 'papagaio_mode: OFF',
+ 'pombo_mode: CHECKSUM_ON',
+ 'unknown_action: MEASURE_REALITY',
+ 'state_changed: RECALIBRATE',
+ 'checksum_semantics: BYTE_IDENTITY_NOT_SEMANTIC_PROOF',
+ 'executor_cannot_self_approve: true',
+ 'judge_does_not_mutate: true',
+ 'graph_is_derived_not_authority: true',
+ 'reality_is_final_judge: true',
+ 'next_equivalent_event_must_reuse_without_chefe_reteaching: true',
 ])
 check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml',[
  'event: BOT_ENTRY','event: PRE_HUMAN_RETURN','event: RESUME',
@@ -99,9 +121,6 @@ check('docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-pombo-correio-com-checksum.md',[
  'docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md',
 ], classification='POMBO_CHECKSUM_HANDOFF_CONTRACT')
 
-# Regra operacional global: a Casa não usa GitHub-hosted runners nos workflows raiz.
-# Linux self-hosted é o default. Se a capacidade exigir outra plataforma, ela ainda
-# precisa ser self-hosted e a necessidade deve permanecer explícita no próprio workflow.
 workflow_dir=ROOT/'.github'/'workflows'
 forbidden_runner_labels=('ubuntu-latest','windows-latest','macos-latest')
 runner_violations=[]
@@ -137,4 +156,5 @@ print('SELF_HEALING_CONTRACT=PASS')
 print('OPERATIONAL_RULE_LEARNING_CONTRACT=PASS')
 print('CANONICAL_HANDOFF_POMBO_CHECKSUM=PASS')
 print('POMBO_CHECKSUM_HANDOFF_CONTRACT=PASS')
+print('PROOF_CARRYING_CLOSED_LOOP_CONTROL=PASS')
 print('NOTE=PASS proves repository contract/path/runner-policy facts only; it does not prove live Windows/VPS/runtime inheritance.')
