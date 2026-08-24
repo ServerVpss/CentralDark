@@ -8,6 +8,18 @@ ENGINE=GEMINI
 
 Antes de responder ou agir, leia `LEIA-ME-IA.md` integralmente e siga o roteamento canônico definido ali. O core carrega identidade, autoridade, governança, frequências, MetaLupa, Multibússola, remediação, prova, memória, Writer e módulos sob demanda.
 
+Ponte explícita para o mapa canônico, sem duplicar governança:
+
+```text
+CENTRALDARK_AI_BOOT
+docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md
+.agents/skills/meta-lupa/SKILL.md
+.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA
+REUSE_BEFORE_CREATE_REQUIRED
+docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json
+FALHA_DE_RECONCILIACAO_DE_CONTEXTO
+```
+
 Este adaptador só informa qual engine/superfície chegou. Capacidades e ferramentas físicas devem ser medidas no runtime atual.
 
 ```text
