@@ -16,6 +16,10 @@ EVERY_MATERIAL_ENTERS_MILL=true
 NO_SILENT_DROP_OF_MATERIAL_DELTA=true
 MINER_NEVER_WRITES_CANONICAL_DIRECTLY=true
 ARTIFACT_WITHOUT_PROPERTIES=NOT_FLASH_READY
+SELF_HEALING_OPERATIONAL_FAILURES=true
+SAME_FAILURE_REUSES_CRYSTAL=true
+GITHUB_HOSTED_RUNNER_ALLOWED=false
+DEFAULT_CI_EXECUTOR=self-hosted-linux
 
 Todo início/retomada herda semanticamente:
 
@@ -54,6 +58,43 @@ MATERIAL_INGEST
 ```
 
 `SESSION_END` e `PRE_HUMAN_RETURN` não podem descartar delta material. Texto gerado é CANDIDATE, nunca autoridade. Cristal sem propriedades obrigatórias não é `FLASH_READY`.
+
+## Self-healing operacional universal
+
+Qualquer PR, commit, CI, falha de tool, falha de teste, drift de runtime ou erro operacional elegível entra no mesmo loop. Não trate falha conhecida como caso isolado e não peça ao CHEFE para repetir uma remediação já provada.
+
+```text
+EVENTO/FALHA
+→ #ACORDAR / estado vivo
+→ FAILURE_SIGNATURE
+→ SEARCH_EXISTING_CRYSTAL
+→ IDENTIFY_CAUSE
+→ TESTE_DISCRIMINANTE
+→ MINIMAL_REMEDIATION
+→ MESMO OWNER / MESMO WORKFLOW quando aplicável
+→ RETEST
+→ COUNTERPROOF
+→ REALITY_JUDGE
+→ RECEIPT
+→ CRYSTAL
+→ LAST_GOOD_STATE
+→ NEXT_CURSOR
+```
+
+Se `FAILURE_SIGNATURE` + causa + fronteiras forem equivalentes e não houver informação nova, reutilize o cristal; não refaça o mesmo raciocínio. Se a assinatura mudou, reabra investigação. `FAILURE != STOP`: falha é sensor enquanto existir rota segura/autorizada.
+
+Cristal obrigatório desta classe de incidente CI:
+
+```text
+SIGNATURE=GITHUB_HOSTED_RUNNER_SELECTED_WHILE_HOUSE_IS_SELF_HOSTED
+CAUSE_CLASS=EXECUTOR_ROUTE_POLICY_VIOLATION
+DEFAULT_REMEDIATION=BIND_EXISTING_WORKFLOW_TO_[self-hosted,Linux]
+PLATFORM_EXCEPTION=SELF_HOSTED_ONLY_WITH_CAPABILITY_PROOF
+NEW_EQUIVALENT_WORKFLOW=FORBIDDEN
+NEXT_OCCURRENCE=BLOCK_BEFORE_MERGE_AND_REUSE_CRYSTAL
+```
+
+A política vale para qualquer workflow raiz ativo e qualquer PR/commit que atravesse a Casa. Linux self-hosted é o default; necessidade real de Windows/macOS não autoriza GitHub-hosted — exige runner self-hosted da plataforma e prova da capacidade específica. Se esse runner não existir/estiver indisponível, preserve `BLOCKED/UNKNOWN`; não maquie de verde.
 
 ## Camisa de força antes de concluir
 
@@ -124,7 +165,7 @@ Regras:
 
 Não conte respostas correlacionadas como provas independentes. Conflito não é votação: use teste discriminante. Dedupe não pode apagar hipótese/UNKNOWN e liberar Writer. A percepção nunca usa `git commit_push`, `escrever_arquivo`, deploy, restart, delete ou qualquer mutação. Só o Writer, depois da arbitragem, executa a menor mudança autorizada. O Critic continua sendo contraprova operacional após mutação e antes de cristalização.
 
-## CI/PR/labels
+## CI/PR/commits/labels
 
 Não crie workflow/promotor/label paralelos. Reutilize os owners existentes:
 
@@ -132,6 +173,8 @@ Não crie workflow/promotor/label paralelos. Reutilize os owners existentes:
 - `.github/workflows/autonomia-promocao.yml`
 - `.github/workflows/trigger-fabric-package.yml`
 - `docs/CONSCIENCIA/GITHUB-LABELS-OPERACIONAIS.md`
+
+Todo PR e todo push/commit em qualquer branch atravessa `porta-de-entrada` e a política global de runner. Toda falha elegível alimenta o self-healing, preservando serialização de mutação e fronteiras de autoridade.
 
 `👑 PERMITO-SEGREDO` = autoridade humana delegada. `✅ PR CONFIRMADO` = resultado derivado pós-prova. Label não é autoridade por si só.
 
