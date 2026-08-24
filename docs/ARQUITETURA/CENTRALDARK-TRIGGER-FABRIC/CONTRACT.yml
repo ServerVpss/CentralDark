@@ -182,6 +182,50 @@ operational_rule_learning:
   same_rule_new_session: MUST_INHERIT_BY_REFERENCE
   same_rule_new_pr_or_commit: MUST_BE_ENFORCED_BY_EXISTING_GATE
   overgeneralization_guard: MINIMUM_VALID_SCOPE_THEN_EXPAND_BY_EVIDENCE
+verified_continuity:
+  source_crystal: docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-pombo-correio-com-checksum.md
+  canonical_handoff_owner: docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md
+  architecture_class: PROOF_CARRYING_CLOSED_LOOP_CONTROL
+  state_model: EPISTEMIC_STATE_MACHINE
+  mutation_model: SERIALIZED_SINGLE_WRITER
+  continuity_model: RECEIPT_PLUS_CHECKSUM_PLUS_NEXT_CURSOR
+  cultural_mode:
+    papagaio_mode: OFF
+    pombo_mode: CHECKSUM_ON
+  state_discipline:
+    live_state_first: true
+    unknown_action: MEASURE_REALITY
+    action_is_proof: false
+    state_changed: RECALIBRATE
+    history_is_current_state: false
+    inference_language_governs_state: false
+  failure_path:
+    - IDENTIFY_CAUSE
+    - FIND_EXISTING_OWNER
+    - EXECUTE_MINIMAL_DELTA
+    - RETEST
+    - COUNTERPROOF
+  proven_transfer_requires:
+    - receipt
+    - observed_at
+    - evidence_refs
+    - head_sha_or_content_sha256_when_material
+    - unknowns_preserved
+    - residual_preserved
+    - next_cursor
+  integrity:
+    checksum_semantics: BYTE_IDENTITY_NOT_SEMANTIC_PROOF
+    destination_lock_survives_handoff: true
+    provenance_survives_handoff: true
+    unknown_survives_handoff: true
+    next_cursor_survives_handoff: true
+    executor_cannot_self_approve: true
+    judge_does_not_mutate: true
+    graph_is_derived_not_authority: true
+    reality_is_final_judge: true
+  transfer_learning:
+    next_equivalent_event_must_reuse_without_chefe_reteaching: true
+    repeated_mechanical_instruction_after_promotion: LEARNING_TRANSFER_FAIL
 ci_binding:
   reuse_workflows:
     - .github/workflows/porta-de-entrada.yml
