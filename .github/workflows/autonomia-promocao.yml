@@ -71,6 +71,16 @@ jobs:
           node --test scripts/github-autonomia-green-guard.test.mjs
           node --test scripts/github-pr-confirmado-label.test.mjs
 
+      - name: Verificar Trigger Fabric canônica antes de qualquer promoção
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/trigger-fabric/verify_repo_contract.py . | tee "$RUNNER_TEMP/trigger-fabric-contract.txt"
+          grep -q '^REPO_CONTRACT_VERIFY=PASS$' "$RUNNER_TEMP/trigger-fabric-contract.txt"
+          grep -q '^BOT_ENTRY_CONTRACT=PASS$' "$RUNNER_TEMP/trigger-fabric-contract.txt"
+          grep -q '^OUTPUT_GUARD_CONTRACT=PASS$' "$RUNNER_TEMP/trigger-fabric-contract.txt"
+          grep -q '^WORKFLOW_REUSE_CONTRACT=PASS$' "$RUNNER_TEMP/trigger-fabric-contract.txt"
+
       - name: Avaliar PRs autorizados em read-only
         env:
           BOT_SWEEP_DIR: ${{ runner.temp }}/centraldark-autonomia
@@ -110,6 +120,10 @@ jobs:
           echo "HEAD_SHA=${HEAD_SHA}"
           echo "EVENT_NAME=${EVENT_NAME}"
           echo "EXECUTOR=self-hosted-linux"
+          echo "TRIGGER_FABRIC_CONTRACT_REQUIRED=1"
+          echo "BOT_ENTRY_CONTRACT_REQUIRED=1"
+          echo "OUTPUT_GUARD_CONTRACT_REQUIRED=1"
+          echo "WORKFLOW_REUSE_REQUIRED=1"
           echo "JOB_STATUS=${JOB_STATUS}"
           test "${JOB_STATUS}" = "success" && echo "RESULTADO=PASS" || echo "RESULTADO=BLOCKED"
 
@@ -144,10 +158,6 @@ jobs:
           path: ${{ runner.temp }}/centraldark-autonomia
 
       - name: Aplicar guard proporcional à política escolhida
-        # FAST já passou pelos gates causais internos do motor: autor autenticado,
-        # mesmo repo, receipt/escopo, diff sensível, conflito, CHANGES_REQUESTED,
-        # base/HEAD e revalidação final. Green-first completo é exigido somente
-        # para modos não-FAST; o próprio guard registra SKIP_FAST de forma explícita.
         env:
           BOT_SWEEP_DIR: ${{ runner.temp }}/centraldark-autonomia
           PROMOTER_TOKEN: ${{ secrets.PROMOTION_TOKEN }}
@@ -198,5 +208,6 @@ jobs:
           echo "FAST_CAUSAL_GATES=AUTHENTICATED_ACCOUNT+SAME_REPO+INTENT_SCOPE+SECRET_SCAN+CONFLICT+CHANGES_REQUESTED+HEAD_BASE_REVALIDATION"
           echo "REASK=NO_WHEN_INTENT_RECEIPT_VALID"
           echo "PR_CONFIRMED_LABEL=DERIVED_POST_MERGE_ONLY"
+          echo "TRIGGER_FABRIC_VERIFIED_BY_JUDGE=1"
           echo "JOB_STATUS=${JOB_STATUS}"
           test "${JOB_STATUS}" = "success" && echo "RESULTADO=PASS" || echo "RESULTADO=BLOCKED"

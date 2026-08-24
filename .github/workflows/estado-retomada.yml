@@ -2,6 +2,7 @@ name: estado-retomada
 
 # Regenera docs/ESTADO-DA-RETOMADA.md a partir de evidencia real do checkout.
 # Ninguem edita o arquivo a mao; quem quiser mudar o que e medido muda o script.
+# Regra da Casa: executor padrao = self-hosted Linux. GitHub-hosted = proibido.
 
 on:
   schedule:
@@ -24,14 +25,15 @@ concurrency:
 jobs:
   gerar:
     name: Gerar ESTADO DA RETOMADA
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux]
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
+          persist-credentials: false
 
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 24
 
@@ -59,6 +61,7 @@ jobs:
             exit 1
           fi
           echo "🚪 Gate global pré-main"
+          python scripts/trigger-fabric/verify_repo_contract.py .
           node scripts/lupa/validar-continuidade-global.mjs
           node scripts/lupa/validar-porta-de-entrada.mjs
           git push origin HEAD:main

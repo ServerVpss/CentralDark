@@ -1,0 +1,80 @@
+schema: centraldark.engine-binding.v1
+contract_owner: LEIA-ME-IA.md
+trigger_fabric_owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml
+binding_mode: LOAD_REFERENCE
+copy_brain: false
+engine_is_owner: false
+engines:
+  grok_build:
+    role: REPLACEABLE_ENGINE
+    may_operate_via: [github_tools, filesystem_when_available, tests]
+    inherits: [LEIA-ME-IA.md, AGENTS.md, Trigger Fabric]
+    memory_parallel: false
+    new_permission: false
+    runtime_specific_claims: MUST_BE_MEASURED
+  mistral_vibe:
+    role: CURRENT_INTERACTIVE_ENGINE_WHEN_ACTIVE
+    may_operate_via: [filesystem, terminal, git, tests]
+    inherits: [LEIA-ME-IA.md, AGENTS.md, Trigger Fabric]
+    runtime_specific_claims: MUST_BE_MEASURED
+  hermes:
+    role: EXECUTION_CONTINUITY_RUNTIME
+    owner: PIVETE/HERMES
+    prompt_consumer: apps/modulos/HERMES-CORE/prompts/hermes-core.md
+    required_for: [hermes_mission_routing, hermes_session_continuity, hermes_runtime_memory, hermes_hooks, hermes_scheduler, hermes_learning_transfer_test]
+    active_now: NOT_PROVEN_BY_THIS_DOCUMENT
+  other_models:
+    role: REPLACEABLE_ENGINE
+    inherits: [LEIA-ME-IA.md, AGENTS.md, Trigger Fabric]
+mandatory_inheritance:
+  - DESTINATION_LOCK
+  - ACORDAR
+  - CALIBRAR
+  - MULTIBUSSOLA
+  - META_LUPA_PROPORTIONAL
+  - ONE_WRITER_PER_SCOPE
+  - OUTPUT_GUARD
+  - REALITY_JUDGE
+  - RECEIPT_AND_CONTINUATION
+  - MATERIAL_INGEST_NO_SILENT_DROP
+  - ARTIFACT_PROPERTIES_WHEN_DERIVED
+  - SELF_HEALING_FAILURE_LOOP
+  - FAILURE_SIGNATURE_REUSE
+  - ANY_PR_OR_COMMIT_GATE
+  - CANONICAL_SELF_HOSTED_RUNNER_POLICY
+self_healing_binding:
+  applies_to: [PR, COMMIT, CI, TOOL_ERROR, TEST_FAILURE, RUNTIME_DRIFT, OPERATIONAL_FAILURE]
+  engine_must:
+    - MEASURE_CURRENT_STATE
+    - CLASSIFY_FAILURE_SIGNATURE
+    - SEARCH_EXISTING_CRYSTAL
+    - IDENTIFY_CAUSE
+    - CHOOSE_DISCRIMINATING_TEST
+    - EXECUTE_MINIMAL_SAFE_REMEDIATION
+    - RETEST
+    - COUNTERPROOF
+    - REALITY_JUDGE
+    - WRITE_RECEIPT
+    - PROMOTE_LAST_GOOD_STATE
+    - CONTINUE_NEXT_CURSOR
+  same_failure_no_new_information: REUSE_CRYSTAL_NOT_RETHINK
+  unknown: SEARCH_REALITY
+  human_return_before_fixed_point: FORBIDDEN_UNLESS_HUMAN_FRONTIER
+ci_runner_binding:
+  github_hosted: FORBIDDEN
+  default: [self-hosted, Linux]
+  platform_specific: SELF_HOSTED_ONLY_WITH_CAPABILITY_PROOF
+  root_workflow_gate: scripts/trigger-fabric/verify_repo_contract.py
+  pull_request_and_commit_entry: .github/workflows/porta-de-entrada.yml
+hard_guarantee_boundary:
+  prose_contract_only: BEST_EFFORT
+  hard_guarantee_requires: [REAL_CONSUMER, POSITIVE_NEGATIVE_TEST, BLOCKING_GATE_WHEN_APPLICABLE, VERIFIABLE_RECEIPT]
+ci_consumers:
+  - .github/workflows/porta-de-entrada.yml
+  - .github/workflows/autonomia-promocao.yml
+  - .github/workflows/trigger-fabric-package.yml
+labels:
+  canonical_taxonomy: docs/CONSCIENCIA/GITHUB-LABELS-OPERACIONAIS.md
+  authority: "👑 PERMITO-SEGREDO"
+  confirmed_result: "✅ PR CONFIRMADO"
+  label_is_authority: false
