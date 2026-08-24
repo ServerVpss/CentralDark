@@ -356,7 +356,12 @@ async function discoverActiveMission() {
     try {
       const state = JSON.parse(await readFile(join(dir, 'state.json'), 'utf8'));
       terminal = String(state?.terminal_state || 'RUNNING').toUpperCase();
-    } catch {}
+    } catch (error) {
+      console.warn('PERCEPTION_STATE_READ_FAILED', {
+        state_path: join(dir, 'state.json'),
+        error: error instanceof Error ? error.message : String(error),
+      });
+    }
     candidates.push({ missionPath, terminal, mtime: info.mtimeMs });
   }
   const running = candidates.filter((item) => !['DONE', 'COMPLETED', 'BLOCKED', 'FAILED'].includes(item.terminal));

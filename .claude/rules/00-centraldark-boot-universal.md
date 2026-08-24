@@ -8,17 +8,6 @@ ENGINE=CLAUDE_CODE
 
 Esta regra existe somente para garantir descoberta automática no Claude Code. Antes de responder ou agir, leia `LEIA-ME-IA.md` integralmente e execute o roteamento canônico definido ali.
 
-Ponte explícita para o mapa canônico, sem duplicar governança:
-
-```text
-CENTRALDARK_AI_BOOT
-docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md
-.agents/skills/meta-lupa/SKILL.md
-.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA
-REUSE_BEFORE_CREATE_REQUIRED
-docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json
-FALHA_DE_RECONCILIACAO_DE_CONTEXTO
-```
 
 ```text
 ONE_SOL=true
