@@ -1,11 +1,18 @@
 {
   "schema": "centraldark.trigger-fabric.sources.v1",
-  "base_head": "f488251d3ad3ba5f71e2973d9d42fef3683f4885",
+  "base_head": "078bf351acaae46091669aa6acdec76ef1d10730",
+  "observed_at": "2026-08-24T19:12:57.724Z",
   "sources": [
     "LEIA-ME-IA.md",
     "AGENTS.md",
+    "docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md",
+    "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md",
     "docs/CONSCIENCIA/MULTIBUSSOLA.md",
     ".agents/skills/meta-lupa/SKILL.md",
+    "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml",
+    "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml",
+    "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml",
+    "apps/modulos/HERMES-CORE/prompts/hermes-core.md",
     "apps/modulos/HERMES-CORE/core/orchestrator.mjs",
     "apps/modulos/HERMES-CORE/agents/GraphRAG-Master/agent.mjs",
     "scripts/memory-linker/README.md",
@@ -14,6 +21,16 @@
     ".agents/skills/session-intelligence-harvester/SKILL.md",
     ".agents/skills/knowledge-compiler/SKILL.md",
     ".agents/skills/vector-memory/SKILL.md",
-    ".github/workflows/lupa-conformance.yml"
-  ]
+    ".github/workflows/porta-de-entrada.yml",
+    ".github/workflows/autonomia-promocao.yml",
+    ".github/workflows/trigger-fabric-package.yml",
+    "docs/CONSCIENCIA/GITHUB-LABELS-OPERACIONAIS.md"
+  ],
+  "source_rules": {
+    "history_is_current": false,
+    "repo_presence_is_runtime_proof": false,
+    "package_pass_is_runtime_pass": false,
+    "engine_binding_documented_is_loaded": false,
+    "new_equivalent_workflow_allowed": false
+  }
 }
