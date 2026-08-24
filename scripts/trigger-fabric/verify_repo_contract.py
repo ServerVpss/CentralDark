@@ -103,10 +103,15 @@ check('docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-pombo-correio-com-checksum.md',[
  'NOT_PROVEN_MUST_REMAIN_NOT_PROVEN=true',
  'POMBO_CHECKSUM_REQUIRES_MEASURED_STATE_TIME_HEAD_EVIDENCE_RESIDUAL_DESTINATION=true',
 ], classification='POMBO_CHECKSUM_HANDOFF_CONTRACT')
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/COUNTERPROOF.md',[
+ 'LOCKED_EVIDENCE_BUNDLE_SHA256=fdb6a44cdda4a1e42a0032a855aa726fe0fdc14c4564ce15314d700454294dce',
+ 'CANONICAL_PROJECT_ARCHIVE_SHA256=0443d87a6ffe64de4c6ffeea3932a2dd1cf5cedb65e6d7c296ba3392458654cc',
+ 'LOCKED_EVIDENCE_ARCHITECTURE_CORROBORATION=PROVEN_AT_INSPECTION',
+ 'CURRENT_RUNTIME_INHERITANCE=NOT_PROVEN',
+ 'HISTORICAL_PACKAGE != CURRENT_STATE',
+ 'VISUAL_ALIAS != CANONICAL_OWNER',
+], classification='LOCKED_EVIDENCE_RECEIPT_CONTRACT')
 
-# Regra operacional global: a Casa não usa GitHub-hosted runners nos workflows raiz.
-# Linux self-hosted é o default. Se a capacidade exigir outra plataforma, ela ainda
-# precisa ser self-hosted e a necessidade deve permanecer explícita no próprio workflow.
 workflow_dir=ROOT/'.github'/'workflows'
 forbidden_runner_labels=('ubuntu-latest','windows-latest','macos-latest')
 runner_violations=[]
@@ -142,4 +147,5 @@ print('SELF_HEALING_CONTRACT=PASS')
 print('OPERATIONAL_RULE_LEARNING_CONTRACT=PASS')
 print('POMBO_CHECKSUM_HANDOFF_CONTRACT=PASS')
 print('VISUAL_ARCHITECTURE_ALIAS_CONTRACT=PASS')
-print('NOTE=PASS proves repository contract/path/runner-policy facts only; it does not prove live Windows/VPS/runtime inheritance.')
+print('LOCKED_EVIDENCE_RECEIPT_CONTRACT=PASS')
+print('NOTE=PASS proves repository contract/path/runner-policy/receipt facts only; it does not prove live Windows/VPS/runtime inheritance or recompute external bundle bytes.')
