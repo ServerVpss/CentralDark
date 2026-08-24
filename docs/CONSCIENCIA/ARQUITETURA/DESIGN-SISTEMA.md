@@ -139,6 +139,17 @@ mesmo `ThemeId` e o mesmo conjunto de tokens semânticos. Enquanto isso não
 estiver provado (build + render real de cada superfície nos 3 temas), tratar
 como `PARTIAL_COVERAGE`, nunca como concluído.
 
+
+## Cartazes canônicos e memória visual
+
+Os quatro cartazes aprovados pelo SEGREDO/CHEFE são testemunhas visuais do
+mesmo design system e estão catalogados em
+[`docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/`](../../BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/README.md).
+O `manifest.json` dessa pasta fixa hashes, proveniência e relações semânticas.
+Eles não criam paleta, runtime ou autoridade paralela: este documento continua
+o owner de design; a skill `visual-design-method` governa o método; índices e
+grafos são projeções reconstruíveis.
+
 ## Quando criar visual novo
 
 1. Confirmar com o usuário antes

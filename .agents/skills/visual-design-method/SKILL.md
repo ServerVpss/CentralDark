@@ -69,9 +69,9 @@ theme (`localStorage` or the project's existing preference store) so it
 survives reload; do not build a new backend just for this.
 
 Audit for leaks before shipping: any inline SVG `stroke`/`fill`, any
-`style="color:#..."`, any hardcoded `rgba()` outside the token block will
-silently break on other themes. `grep` for hex codes and `rgb(` outside the
-token definitions and route every hit through a token.
+`style="color:#..."`, any hardcoded `rgb()`/`rgba()` outside the token block
+will silently break on other themes. Search for hex codes and `rgba?\\(`
+outside the token definitions and route every hit through a token.
 
 ## 3. The three real CentralDark palettes found so far
 
@@ -93,10 +93,11 @@ register fits this artifact" — the three coexist everywhere, always.
 ## 4. Type pairing
 
 Pick a display face and a body face deliberately for the subject — never
-default to Inter/Space Grotesk because they feel safe. Google Fonts is the
-only external font host permitted inside a published Artifact's CSP; link
-it directly and always declare a real fallback stack. Keep a mono face
-reserved for tabular/data content (`font-variant-numeric: tabular-nums`
+default to Inter/Space Grotesk because they feel safe. Inspect the target's
+actual CSP before adding any external font host. If the CSP does not already
+permit the chosen host, use a self-hosted repository font or the declared
+system fallback; never weaken CSP just to make typography load. Keep a mono
+face reserved for tabular/data content (`font-variant-numeric: tabular-nums`
 wherever digits line up in a column).
 
 ## 5. Avoid AI-generated-design defaults
@@ -111,8 +112,11 @@ similar page, revise it.
 
 `CSS_COMPILED != VISUALLY_CORRECT`. Before telling the human it's ready:
 
-- Check tag/brace balance and script syntax mechanically (a `div` count, a
-  `new Function()` parse) — cheap, catches obvious breakage.
+- Check tag/brace balance and script syntax mechanically. Parse classic
+  scripts as classic scripts and modules as modules (`node --check` on an
+  extracted `.mjs`, the target parser, or a real browser compile). Never use
+  `new Function()` as a universal parser: it rejects valid module syntax and
+  can accept code under the wrong execution contract.
 - If a real browser/preview surface is available, actually render it and
   look, don't just assert.
 - If the rendering surface itself is unavailable or sandboxed (auth walls,
@@ -135,3 +139,23 @@ position), and any theme/token system already in place. Only extend.
   `knowledge-compiler` for crystallization
 - This skill governs the **decision process**, not delivery mechanics —
   those still belong to whatever engine/tool renders or publishes the page
+
+## Canonical visual witnesses
+
+The four CentralDark posters are indexed at
+`docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/README.md`; their stable
+IDs, source hashes, repository hashes and typed semantic relations live in
+that directory's `manifest.json`. Treat the posters as visual witnesses, not
+as executable authority. The design-system owner and governance text win on
+conflict. Obsidian, vector memory, Grafo Vivo and GraphRAG are rebuildable
+mirrors/indexes of the same brain — never a second writer.
+
+For a canonical poster delivery, preserve this chain:
+
+```text
+source image -> provenance/hash manifest -> Markdown/Mermaid meaning
+-> generated package/receipt
+```
+
+Do not commit a ZIP as the source of truth; generate it from the editable
+components and keep its receipt external to the final bytes.
