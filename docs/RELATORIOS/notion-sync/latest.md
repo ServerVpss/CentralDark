@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-08-18T02:11:35.943Z
+# 🧠 Notion Sync — 2026-08-24T23:41:26.740Z
 
-- **Commit fonte:** `4706a9d0189b929e74c2ac9815de6735d36b1145`
+- **Commit fonte:** `fcaab3242a7d3317c41e7295fe908d6ced28712b`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 418 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 424 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -15,8 +15,8 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
-| aprendizados | 26 | 0 | 26 | 0 | 0 |
-| estrutura | 349 | 1 | 348 | 0 | 0 |
+| aprendizados | 27 | 0 | 27 | 0 | 0 |
+| estrutura | 353 | 0 | 353 | 0 | 0 |
 
 ## Operações
 
@@ -92,6 +92,7 @@
 | aprendizados | atualizado | #23 — HTTP 200, PM2 online, DNS resolvendo ou painel verde não provam LIVE |
 | aprendizados | atualizado | #24 — API paga é capacidade, não identidade nem caminho obrigatório |
 | aprendizados | atualizado | #25 — “Menos é mais” significa menor movimento compatível com efeito, observabilidade e segurança |
+| aprendizados | atualizado | #26 — Batch .bat: 4 armadilhas que passam em revisão superficial |
 | estrutura | atualizado | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | atualizado | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
@@ -184,6 +185,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-14-arqueologia-total-ouro-recuperado.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-16-verde-delta-fechado-promove.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-17-mapa-mental-intencao-comprimida.md |
+| estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-pombo-correio-com-checksum.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/EVIDENCIAS/2026-08-17-registro-visual-recibo-muitos-olhos.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/MCP/MCP-EXPLICADO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/PROXY/APRENDIZADOS_PROXY.md |
@@ -231,7 +233,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/ARTEFATOS/README.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ARTEFATOS/TECNICAS-DE-LINKAGEM-SEMANTICA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ARTEFATOS/centraldark-prompt-universal.md |
-| estrutura | criado | docs/CONSCIENCIA/BAIANES-E-RESENHA-REGIONAL.md |
+| estrutura | atualizado | docs/CONSCIENCIA/BAIANES-E-RESENHA-REGIONAL.md |
 | estrutura | atualizado | docs/CONSCIENCIA/BOT_COMMANDS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/CODEX-INTEGRADO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/CODEX-REVISAO-PRS.md |
@@ -268,6 +270,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/EDGE_FUNCTIONS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ESCOLA-HERMES-CASA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ESPELHO-CLONE-DECK-PASSIVO.md |
+| estrutura | atualizado | docs/CONSCIENCIA/EXECUCAO-REVERSIVEL.md |
 | estrutura | atualizado | docs/CONSCIENCIA/EXPANSAO-DE-DOMINIO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/GITHUB-LABELS-OPERACIONAIS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/GITHUB-PR-OBSERVAR-CODEX.md |
@@ -291,6 +294,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/LEMBRANCAS/lembrancas-202606.md |
 | estrutura | atualizado | docs/CONSCIENCIA/MAPA-DO-CEREBRO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/MAPA-DOS-BOTS.md |
+| estrutura | atualizado | docs/CONSCIENCIA/MATRIZ-ORQUESTRACAO-PERFIS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/MCP-FLUXO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/MEGA-PAINEL-SUGESTOES-IA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md |
@@ -414,6 +418,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/RELATORIOS/notion-sync/investigacao-orfaos-aprendizados.md |
 | estrutura | atualizado | docs/CONSCIENCIA/RELATORIOS/notion-sync/latest.md |
 | estrutura | atualizado | docs/CONSCIENCIA/RELATORIOS/notion-sync/orphans-2026-06-25-arquivados-36.md |
+| estrutura | atualizado | docs/CONSCIENCIA/REMEDICAO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/REPOSITORIO-OFICIAL.md |
 | estrutura | atualizado | docs/CONSCIENCIA/RETOMADA-Arsenal-TelePainel.md |
 | estrutura | atualizado | docs/CONSCIENCIA/RETOMADA-Issues-Agent.md |

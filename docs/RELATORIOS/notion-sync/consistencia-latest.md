@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-08-18T02:11:39.056Z
-- **Commit:** `4706a9d0189b929e74c2ac9815de6735d36b1145`
+- **Gerado:** 2026-08-24T23:41:31.309Z
+- **Commit:** `fcaab3242a7d3317c41e7295fe908d6ced28712b`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 39 | 39 | 39 | 0 | 0 |
-| aprendizados | 26 | 0 | 0 | 26 | 0 |
+| aprendizados | 27 | 0 | 0 | 27 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **26**
+- 🟥 Faltando no Notion: **27**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -74,4 +74,5 @@
 - 23. HTTP 200, PM2 online, DNS resolvendo ou painel verde não provam LIVE
 - 24. API paga é capacidade, não identidade nem caminho obrigatório
 - 25. “Menos é mais” significa menor movimento compatível com efeito, observabilidade e segurança
+- 26. Batch .bat: 4 armadilhas que passam em revisão superficial
 </details>
