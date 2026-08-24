@@ -1,0 +1,19 @@
+{
+  "schema": "centraldark.trigger-fabric.sources.v1",
+  "base_head": "f488251d3ad3ba5f71e2973d9d42fef3683f4885",
+  "sources": [
+    "LEIA-ME-IA.md",
+    "AGENTS.md",
+    "docs/CONSCIENCIA/MULTIBUSSOLA.md",
+    ".agents/skills/meta-lupa/SKILL.md",
+    "apps/modulos/HERMES-CORE/core/orchestrator.mjs",
+    "apps/modulos/HERMES-CORE/agents/GraphRAG-Master/agent.mjs",
+    "scripts/memory-linker/README.md",
+    "scripts/memory-linker/dream-review-run.mjs",
+    "scripts/memory-linker/pattern-discovery.mjs",
+    ".agents/skills/session-intelligence-harvester/SKILL.md",
+    ".agents/skills/knowledge-compiler/SKILL.md",
+    ".agents/skills/vector-memory/SKILL.md",
+    ".github/workflows/lupa-conformance.yml"
+  ]
+}
