@@ -1,10 +1,11 @@
 {
   "schema": "centraldark.trigger-fabric.sources.v1",
-  "base_head": "078bf351acaae46091669aa6acdec76ef1d10730",
-  "observed_at": "2026-08-24T19:12:57.724Z",
+  "base_head": "LIVE_REMEASURE_REQUIRED",
+  "observed_at": "2026-08-24T20:00:00.000Z",
   "sources": [
     "LEIA-ME-IA.md",
     "AGENTS.md",
+    "CLAUDE.md",
     "docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md",
     "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md",
     "docs/CONSCIENCIA/MULTIBUSSOLA.md",
@@ -12,6 +13,8 @@
     "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml",
     "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml",
     "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml",
+    "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ARTIFACT-PROPERTIES.yml",
+    "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MATERIAL-INGEST.md",
     "apps/modulos/HERMES-CORE/prompts/hermes-core.md",
     "apps/modulos/HERMES-CORE/core/orchestrator.mjs",
     "apps/modulos/HERMES-CORE/agents/GraphRAG-Master/agent.mjs",
@@ -31,6 +34,8 @@
     "repo_presence_is_runtime_proof": false,
     "package_pass_is_runtime_pass": false,
     "engine_binding_documented_is_loaded": false,
-    "new_equivalent_workflow_allowed": false
+    "new_equivalent_workflow_allowed": false,
+    "artifact_never_invents_canonical": true,
+    "every_material_enters_mill": true
   }
 }
