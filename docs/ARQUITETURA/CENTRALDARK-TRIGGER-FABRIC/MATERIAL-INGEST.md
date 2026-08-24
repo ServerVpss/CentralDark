@@ -1,7 +1,7 @@
 ---
 title: "Material Ingest — moinho obrigatório"
 date: 2026-08-24
-updated: 2026-08-24T20:00:00-03:00
+updated: 2026-08-24T19:50:00-03:00
 status: CANONICO
 tags: [material, ingest, harvester, compiler, flash, propriedades]
 category: "M-Material"
@@ -41,6 +41,50 @@ MATÉRIA (link|texto|imagem|pdf|código|log|erro|correção|evento)
 → AÇÃO MÍNIMA + PROVA + CONTRAPROVA
 → REMEDIÇÃO T0→T1
 → PRÓXIMA EXECUÇÃO COMEÇA MAIS ALTO
+```
+
+## Máquina de estados da matéria
+
+O aprendizado `docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-alquimia-operacional-minerio-ouro-cristal.md`
+cristaliza a taxonomia sem criar engine novo.
+
+```text
+RAW_MATERIAL
+→ ASSAY
+→ CANDIDATE
+→ COUNTERPROOF
+→ GOLD
+→ OWNER_BINDING
+→ TEST + GATE
+→ CRYSTAL
+→ FLASH
+```
+
+Estados e regras:
+
+```text
+RAW_MATERIAL_IS_NOT_GOLD=true
+GOLD_IS_NOT_CRYSTAL=true
+CRYSTAL_REQUIRES_OWNER_CONSUMER_TEST_GATE=true
+UNKNOWN_MUST_SURVIVE=true
+NO_NEW_ENGINE_FROM_METAPHOR=true
+```
+
+Saídas laterais:
+
+```text
+DUPLICATE → DROP_DUPLICATE_KEEP_PROVENANCE
+CONFLICT → DISCRIMINATING_TEST
+UNKNOWN → QUARANTINE_PRESERVE_UNKNOWN
+FAIL → ROOT_CAUSE → MINIMAL_DELTA → RETEST
+STALE → INVALIDATE_AFFECTED_ROUTE_ONLY
+```
+
+O alias cultural `Alchemistic Cabinet` representa apenas compartimentação de matéria por estado. Não cria pasta obrigatória, banco, daemon, owner ou autoridade.
+
+```text
+ALCHEMISTIC_CABINET_IS_CULTURAL_ALIAS_ONLY=true
+ALCHEMISTIC_CABINET_IS_ENGINE=false
 ```
 
 ## Propriedades obrigatórias (foto Notion cristalizada)
@@ -83,6 +127,39 @@ GENERATIVE_OUTPUT_IS_NOT_AUTHORITY=true
 UNKNOWN_NEVER_PASS=true
 ```
 
+## Ganhos reutilizáveis desta rodada
+
+```text
+PROOF_DESTINATION_BINDING=true
+RECEIPT_IS_HEAD_SCOPED=true
+SUPERSEDED_PR_REQUIRES_SUCCESSOR_RESOLUTION=true
+SCREENSHOT_IS_NOT_RUNTIME_PROOF=true
+MULTIPLE_SURFACES_ARE_NOT_MULTIPLE_BRAINS=true
+LEARNING_TRANSFER_FAIL_ON_RETEACH=true
+```
+
+Interpretação operacional:
+
+```text
+PROOF_DESTINATION_BINDING
+→ prova precisa alcançar/referenciar o owner de destino
+
+RECEIPT_IS_HEAD_SCOPED
+→ HEAD mudou → receipt anterior vira histórico → remeasure
+
+SUPERSEDED_PR_REQUIRES_SUCCESSOR_RESOLUTION
+→ seguir o delta ao PR/owner vivo; não ressuscitar paralelo
+
+SCREENSHOT_IS_NOT_RUNTIME_PROOF
+→ screenshot prova somente a camada visual observável
+
+MULTIPLE_SURFACES_ARE_NOT_MULTIPLE_BRAINS
+→ várias superfícies compartilham intenção/owners; engines continuam substituíveis
+
+LEARNING_TRANSFER_FAIL_ON_RETEACH
+→ regra provada/promovida deve reaparecer automaticamente no evento equivalente
+```
+
 ## Cola de superfície
 
 | Superfície | Papel |
@@ -91,11 +168,14 @@ UNKNOWN_NEVER_PASS=true
 | `CLAUDE.md` | ponte DERIVED_VIEW → canônico |
 | `LEIA-ME-IA.md` | porta de entrada |
 | Hermes prompt | herda Trigger Fabric + learning route |
+| Knowledge Compiler | FORJA: matéria → ouro → cristal → rota |
+| Handoff/Pombo | leva receipt + checksum + NEXT_CURSOR ao próximo consumidor |
 
 ## O que isto **não** é
 
 - AutoBot V2
 - segundo cérebro paralelo
+- Alchemist Engine
 - RAG paralelo / MCP novo / daemon novo
 - deploy / VPS / force-push nesta missão
 
@@ -103,6 +183,7 @@ UNKNOWN_NEVER_PASS=true
 
 ```text
 CONTRACT = DECLARED_IN_TRIGGER_FABRIC
+MATERIAL_STATE_MACHINE = DECLARED_AND_BOUND_TO_EXISTING_FORJA
 IMPLEMENTATION_HOOKS = PARTIAL (owners exist; physical hooks not all proven)
 RUNTIME_HERMES_LEARNING = UNKNOWN até teste no corpo Hermes
 VECTOR_MEMORY_RUNTIME = NOT_PROVEN
