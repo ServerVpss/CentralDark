@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-24T19:12:57.724Z",
-  "updatedAtBR": "24/08/2026, 16:12:57 BRT",
+  "updatedAt": "2026-08-24T21:03:22.897Z",
+  "updatedAtBR": "24/08/2026, 18:03:22 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "🎨 CRISTALIZAR OS 3 TEMAS GLOBAIS OFICIAIS DA CENTRALDARK (#1121)",
+    "lastCommit": "📡 PREPARAR IPNAMES COMO INTELIGÊNCIA EXTERNA DE REDE (#1117)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-24T21:03:22.897Z",
+      "titulo": "Push na main · d85a5c27058fa131a16783831aaacc0edb9a275d",
+      "detalhe": "📡 PREPARAR IPNAMES COMO INTELIGÊNCIA EXTERNA DE REDE (#1117)",
+      "area": "Repositório",
+      "sha": "d85a5c2",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-24T19:12:57.724Z",
       "titulo": "Push na main · 2f20f34eaa7c10855e83bacad06fd45731cfbd5a",
       "detalhe": "🎨 CRISTALIZAR OS 3 TEMAS GLOBAIS OFICIAIS DA CENTRALDARK (#1121)",
@@ -988,14 +996,6 @@
       "detalhe": "fix(authority): restaurar receipt e bloquear writers em divergência (#1020)",
       "area": "Repositório",
       "sha": "e72ae89",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-18T00:27:07.191Z",
-      "titulo": "Push na main · 4681a084916c43fc02f89a7af7c2c8b5afa07fa3",
-      "detalhe": "docs(learning): cristalizar prova viva e reflexividade da sessão (#1023)",
-      "area": "Repositório",
-      "sha": "4681a08",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-24T21:03:22.897Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · d85a5c27058fa131a16783831aaacc0edb9a275d (d85a5c2)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-24T19:12:57.724Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 2f20f34eaa7c10855e83bacad06fd45731cfbd5a (2f20f34)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-18T00:29:45.069Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · e72ae89ad55da03d90f0acf25b1fe5209b8aa378 (e72ae89)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-18T00:27:07.191Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 4681a084916c43fc02f89a7af7c2c8b5afa07fa3 (4681a08)",
       "area": "Repositório",
       "status": "sucesso"
     }
