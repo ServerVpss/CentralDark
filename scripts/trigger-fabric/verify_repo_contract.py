@@ -35,6 +35,14 @@ check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml',[
  'NEGATIVE_TEST',
  'prose_only_rule: NOT_LEARNED',
  'repeated_chefe_instruction_after_promoted_rule: LEARNING_TRANSFER_FAIL',
+ 'verified_continuity:',
+ 'papagaio_mode: OFF',
+ 'pombo_mode: CHECKSUM_ON',
+ 'unknown_action: MEASURE_REALITY',
+ 'state_changed: RECALIBRATE',
+ 'head_sha_or_content_sha256_when_material',
+ 'checksum_semantics: BYTE_IDENTITY_NOT_SEMANTIC_PROOF',
+ 'next_equivalent_event_must_reuse_without_chefe_reteaching: true',
 ])
 check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml',[
  'event: BOT_ENTRY','event: PRE_HUMAN_RETURN','event: RESUME',
@@ -122,4 +130,5 @@ print('CANONICAL_RUNNER_POLICY=PASS')
 print('SELF_HEALING_CONTRACT=PASS')
 print('OPERATIONAL_RULE_LEARNING_CONTRACT=PASS')
 print('POMBO_CHECKSUM_HANDOFF_CONTRACT=PASS')
+print('POMBO_CHECKSUM_CONTINUITY_BINDING=PASS')
 print('NOTE=PASS proves repository contract/path/runner-policy facts only; it does not prove live Windows/VPS/runtime inheritance.')
