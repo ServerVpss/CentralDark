@@ -36,3 +36,13 @@ test('a ponte Electron é estreita e o renderer não ganha Node', () => {
   assert.match(preload, /exposeInMainWorld\('centraldark'/);
   assert.doesNotMatch(preload, /process\.env/);
 });
+
+test('o build da CentralDark funciona no Windows sem depender de rm Unix', () => {
+  const pkg = JSON.parse(read(`${root}/package.json`));
+  const clean = read(`${root}/scripts/clean-electron-output.mjs`);
+  assert.doesNotMatch(pkg.scripts['centraldark:build:win'], /rm -rf/);
+  assert.match(pkg.scripts['centraldark:build:win'], /clean-electron-output\.mjs/);
+  assert.match(clean, /rmSync/);
+  assert.match(clean, /recursive: true/);
+  assert.match(clean, /force: true/);
+});
