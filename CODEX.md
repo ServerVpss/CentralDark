@@ -6,6 +6,8 @@ ADAPTER_ROLE=ENGINE_DISCOVERY_ONLY
 ENGINE=CODEX
 ```
 
+## Alvo obrigatório
+
 Antes de responder ou agir, leia `LEIA-ME-IA.md` integralmente e siga o roteamento canônico definido ali. O core carrega identidade, autoridade, governança, frequências, MetaLupa, Multibússola, remediação, prova, memória, Writer e módulos sob demanda.
 
 `ServerVpss/CentralDark` é o repositório oficial e fonte estrutural da verdade.

@@ -8,6 +8,8 @@ ENGINE=CODEX_SYSTEM
 
 Leia `LEIA-ME-IA.md` integralmente antes de qualquer resposta ou ação e siga o roteamento canônico ali definido.
 
+## Autoajuste consciente
+
 Este arquivo existe somente porque a superfície Codex possui um ponto próprio de descoberta de prompt. Ele não define identidade, autoridade, governança, merge, memória, MetaLupa ou comportamento comum.
 
 `ServerVpss/CentralDark` é o repositório oficial e fonte estrutural da verdade.
