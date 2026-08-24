@@ -17,6 +17,7 @@ test('canonical poster set passes the real counterproof', async () => {
   const result = await validateCanonicalPosters();
   assert.equal(result.ok, true, result.errors.join('\n'));
   assert.equal(result.canonicalCount, 4);
+  assert.deepEqual(result.runtimeUnverified, ['obsidian']);
 });
 
 test('a forged green hash is rejected', async () => {
@@ -33,6 +34,22 @@ test('an orphaned semantic owner is rejected', async () => {
   const result = await validateCanonicalPosters({ manifest });
   assert.equal(result.ok, false);
   assert.match(result.errors.join('\n'), /missing semantic relation: owned-by/);
+});
+
+test('an existing file cannot impersonate a semantic owner', async () => {
+  const manifest = await manifestClone();
+  manifest.artifacts[0].relations.find(({ type }) => type === 'owned-by').target = 'LEIA-ME-IA.md';
+  const result = await validateCanonicalPosters({ manifest });
+  assert.equal(result.ok, false);
+  assert.match(result.errors.join('\n'), /semantic target mismatch/);
+});
+
+test('an unverified Windows path cannot impersonate the canonical mirror', async () => {
+  const manifest = await manifestClone();
+  manifest.projections.obsidian = 'Z:\\not-the-casa\\mirror';
+  const result = await validateCanonicalPosters({ manifest });
+  assert.equal(result.ok, false);
+  assert.match(result.errors.join('\n'), /unexpected Windows projection/);
 });
 
 test('the graph screenshot cannot promote itself to authority', async () => {

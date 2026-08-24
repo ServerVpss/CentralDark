@@ -26,6 +26,8 @@ flowchart TD
 
 Oxe, o pulo do gato é este: **segundo cérebro não é segundo dono**. Obsidian, vetor, grafo e GraphRAG são espelhos ou índices reconstruíveis. Se divergirem, vence o owner canônico mais novo e provado.
 
+O contrato fixa onde o espelho deve morar, mas o CI Linux não enxerga o disco `E:`. Por isso o gate declara `SECOND_BRAIN_RUNTIME=NOT_PROVEN`; somente um recibo executado no Windows pode mudar esse estado.
+
 ## Os quatro cartazes
 
 | ID | Cartaz | Função semântica | Dono textual |
@@ -72,7 +74,7 @@ Execute:
 
 ```bash
 node .agents/skills/visual-design-method/scripts/validate-canonical-posters.mjs
-node --test tests/canonical-posters.test.mjs
+node --test tests/canonical-posters.test.mjs tests/bolt-theme-contract.test.mjs
 ```
 
 Se um byte do cartaz mudar, um elo sumir, um owner deixar de existir ou surgir um quinto cartaz canônico sem contrato, o portão fecha.

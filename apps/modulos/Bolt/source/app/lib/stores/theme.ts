@@ -5,11 +5,17 @@ export type Theme = 'dark' | 'light' | 'emerald' | 'operational' | 'forge';
 
 export const kTheme = 'bolt_theme';
 
-export function themeIsDark() {
-  return themeStore.get() === 'dark';
+const DARK_THEMES: ReadonlySet<Theme> = new Set(['dark', 'operational', 'forge']);
+
+export function isDarkTheme(theme: Theme) {
+  return DARK_THEMES.has(theme);
 }
 
-export const DEFAULT_THEME: Theme = 'light';
+export function themeIsDark() {
+  return isDarkTheme(themeStore.get());
+}
+
+export const DEFAULT_THEME: Theme = 'emerald';
 
 export const themeStore = atom<Theme>(initStore());
 
@@ -52,3 +58,4 @@ export function cycleTheme() {
 export function toggleTheme() {
   cycleTheme();
 }
+

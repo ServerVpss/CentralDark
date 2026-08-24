@@ -1,1 +1,2 @@
-export type Theme = 'dark' | 'light';
+export type { Theme } from '~/lib/stores/theme';
+

@@ -9,6 +9,37 @@ const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url));
 export const DEFAULT_REPO_ROOT = resolve(SCRIPT_DIR, '../../../../');
 export const MANIFEST_PATH = 'docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/manifest.json';
 
+const EXPECTED_RELATIONS = {
+  'CD-POSTER-01-PAPAGAIO': {
+    'owned-by': '.agents/skills/visual-design-method/SKILL.md',
+    'governed-by': 'LEIA-ME-IA.md',
+    explains: 'docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json',
+    'mirrored-by': 'docs/ARQUITETURA/HERMES-CASA-OBSIDIAN-SYNC.md',
+  },
+  'CD-POSTER-02-CAJADO': {
+    'owned-by': '.agents/skills/visual-design-method/SKILL.md',
+    'governed-by': 'docs/CONSCIENCIA/ARQUITETURA/DESIGN-SISTEMA.md',
+    explains: 'docs/CONSCIENCIA/ARTEFATOS/TECNICAS-DE-LINKAGEM-SEMANTICA.md',
+    'mirrored-by': 'docs/ARQUITETURA/HERMES-CASA-OBSIDIAN-SYNC.md',
+  },
+  'CD-POSTER-03-TRAJETORIA': {
+    'owned-by': '.agents/skills/visual-design-method/SKILL.md',
+    'governed-by': 'AGENTS.md',
+    complements: 'docs/CONSCIENCIA/MAPA-DO-CEREBRO.md',
+    'mirrored-by': 'docs/ARQUITETURA/HERMES-CASA-OBSIDIAN-SYNC.md',
+  },
+  'CD-POSTER-04-ARQUITETURA': {
+    'owned-by': 'docs/CONSCIENCIA/MAPA-DO-CEREBRO.md',
+    'governed-by': 'LEIA-ME-IA.md',
+    explains: '.agents/skills/knowledge-compiler/contract.json',
+    'mirrored-by': 'docs/ARQUITETURA/HERMES-CASA-OBSIDIAN-SYNC.md',
+  },
+};
+
+const EXPECTED_WINDOWS_PROJECTIONS = {
+  obsidian: 'E:\\CentralDark\\Pivete\\CASA-VAULT\\00-CANONICO',
+};
+
 function assert(condition, message) {
   if (!condition) throw new Error(message);
 }
@@ -63,6 +94,7 @@ export async function validateCanonicalPosters({ repoRoot = DEFAULT_REPO_ROOT, m
   const root = resolve(repoRoot);
   const data = manifest ?? JSON.parse(await readFile(safeResolve(root, MANIFEST_PATH), 'utf8'));
   const errors = [];
+  const runtimeUnverified = [];
   const check = async (label, fn) => {
     try { await fn(); } catch (error) { errors.push(`${label}: ${error.message}`); }
   };
@@ -92,11 +124,20 @@ export async function validateCanonicalPosters({ repoRoot = DEFAULT_REPO_ROOT, m
       assert(/^[a-f0-9]{64}$/.test(artifact.source_sha256), 'original source sha256 is required');
       assert(artifact.storage === 'WEBP_Q92_DERIVATIVE', 'repository copy must declare its storage derivative');
       assert(Array.isArray(artifact.claims) && artifact.claims.length > 0, 'claims are required');
-      const types = new Set((artifact.relations ?? []).map((relation) => relation.type));
-      for (const type of ['owned-by', 'governed-by', 'mirrored-by']) {
-        assert(types.has(type), `missing semantic relation: ${type}`);
+      const expectedRelations = EXPECTED_RELATIONS[artifact.id];
+      assert(expectedRelations, `no relation contract for ${artifact.id}`);
+      assert(Array.isArray(artifact.relations), 'relations are required');
+      const actualRelations = new Map();
+      for (const relation of artifact.relations) {
+        assert(!actualRelations.has(relation.type), `duplicate semantic relation: ${artifact.id}:${relation.type}`);
+        actualRelations.set(relation.type, relation.target);
       }
-      for (const relation of artifact.relations) await requireFile(root, relation.target);
+      for (const [type, target] of Object.entries(expectedRelations)) {
+        assert(actualRelations.has(type), `missing semantic relation: ${type}`);
+        assert(actualRelations.get(type) === target, `semantic target mismatch: ${artifact.id}:${type}`);
+        await requireFile(root, target);
+      }
+      assert(artifact.relations.length === Object.keys(expectedRelations).length, `unexpected relation count for ${artifact.id}`);
       const absolute = await requireFile(root, artifact.path);
       assert(await sha256(absolute) === artifact.sha256, `sha256 mismatch: ${artifact.path}`);
       const dimensions = await imageDimensions(absolute);
@@ -117,11 +158,17 @@ export async function validateCanonicalPosters({ repoRoot = DEFAULT_REPO_ROOT, m
     await check(`owner:${owner}`, async () => { await requireFile(root, path); });
   }
   for (const [projection, path] of Object.entries(data.projections ?? {})) {
-    if (/^[A-Za-z]:\\/.test(path)) continue;
+    if (/^[A-Za-z]:\\/.test(path)) {
+      await check(`projection:${projection}`, async () => {
+        assert(EXPECTED_WINDOWS_PROJECTIONS[projection] === path, `unexpected Windows projection: ${projection}`);
+        runtimeUnverified.push(projection);
+      });
+      continue;
+    }
     await check(`projection:${projection}`, async () => { await stat(safeResolve(root, path)); });
   }
 
-  return { ok: errors.length === 0, errors, canonicalCount: data.artifacts?.length ?? 0 };
+  return { ok: errors.length === 0, errors, canonicalCount: data.artifacts?.length ?? 0, runtimeUnverified };
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
@@ -133,7 +180,8 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   } else {
     console.log('CANONICAL_POSTERS=PASS');
     console.log(`CANONICAL_COUNT=${result.canonicalCount}`);
-    console.log('SECOND_BRAIN_MODE=MIRROR');
+    console.log('SECOND_BRAIN_CONTRACT=MIRROR');
+    console.log(`SECOND_BRAIN_RUNTIME=${result.runtimeUnverified.includes('obsidian') ? 'NOT_PROVEN' : 'PROVED'}`);
     console.log('GRAPH_AUTHORITY=DERIVED_PROJECTION_REFERENCE');
   }
 }

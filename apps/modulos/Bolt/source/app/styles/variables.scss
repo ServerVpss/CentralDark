@@ -42,6 +42,8 @@
 
   --bolt-elements-artifacts-background: theme('colors.white');
   --bolt-elements-artifacts-backgroundHover: theme('colors.alpha.gray.2');
+  --bolt-elements-artifacts-textPrimary: var(--bolt-elements-textPrimary);
+  --bolt-elements-artifacts-textSecondary: var(--bolt-elements-textSecondary);
   --bolt-elements-artifacts-borderColor: var(--bolt-elements-borderColor);
   --bolt-elements-artifacts-inlineCode-background: theme('colors.gray.100');
   --bolt-elements-artifacts-inlineCode-text: var(--bolt-elements-textPrimary);
@@ -532,6 +534,8 @@
   /* Cartões/artifacts usam a face clara/foil real, não o shell escuro */
   --bolt-elements-artifacts-background: #ecdbae;
   --bolt-elements-artifacts-backgroundHover: #e2cd97;
+  --bolt-elements-artifacts-textPrimary: #2b1c08;
+  --bolt-elements-artifacts-textSecondary: #6b5636;
   --bolt-elements-artifacts-borderColor: #b7862a;
   --bolt-elements-artifacts-inlineCode-background: #dcc191;
   --bolt-elements-artifacts-inlineCode-text: #2b1c08;
@@ -650,3 +654,4 @@
   --bolt-elements-terminal-color-brightCyan: var(--bolt-terminal-brightCyan);
   --bolt-elements-terminal-color-brightWhite: var(--bolt-terminal-brightWhite);
 }
+

@@ -130,7 +130,7 @@ Reusar estes — não criar segundo sistema de design nem árvore de tokens para
 | Superfície | Owner | Estado medido em 2026-08-24 |
 | --- | --- | --- |
 | App principal / TelePainel / portal | `src/shared/theme/ThemeProvider.tsx`, `ThemeToggle.tsx`, `src/index.css` | Só `light/dark/system`; falta dimensão de paleta |
-| Bolt / Hermes Desktop | `apps/modulos/Bolt/source/app/lib/stores/theme.ts`, `app/styles/variables.scss` | Já usa `data-theme` com `light/dark/emerald`; faltam `operational`/`forge` |
+| Bolt / Hermes Desktop | `apps/modulos/Bolt/source/app/lib/stores/theme.ts`, `app/styles/variables.scss` | `emerald` é o default de perfil novo; `dark/light/operational/forge` continuam selecionáveis; build/render ainda precisam provar cobertura física |
 | Hub | `apps/modulos/hub/src/App.tsx` | Força tema claro; ainda sem mecanismo de tema |
 | Open WebUI | `apps/modulos/WebUI/custom-css/esmeralda.css` | Só Esmeralda, força light |
 
@@ -166,3 +166,4 @@ grafos são projeções reconstruíveis.
 - [[00-LEIA-PRIMEIRO]] — portão de entrada
 - [[MAPA-DO-CEREBRO]] — visão geral
 - [[CONSCIENCIA]] — documento mestre
+

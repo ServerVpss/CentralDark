@@ -275,4 +275,4 @@ jobs:
           set -euo pipefail
           node --check .agents/skills/visual-design-method/scripts/validate-canonical-posters.mjs
           node .agents/skills/visual-design-method/scripts/validate-canonical-posters.mjs
-          node --test tests/canonical-posters.test.mjs
+          node --test tests/canonical-posters.test.mjs tests/bolt-theme-contract.test.mjs
