@@ -23,6 +23,7 @@ principles:
   generative_output_is_candidate_not_authority: true
   artifact_never_invents_canonical: true
   operational_failure_must_be_generalized: true
+  proven_operational_rule_must_bind_to_runtime: true
   same_failure_without_new_information_reuses_crystal: true
 master_trigger:
   expression: "#ACORDAR + !CALIBRAR + !MULTIBUSSOLA"
@@ -138,6 +139,42 @@ artifact_properties:
   contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ARTIFACT-PROPERTIES.yml
   hermes_requires_properties: true
   missing_required: NOT_FLASH_READY
+operational_rule_learning:
+  mandatory: true
+  applies_to: [HUMAN_CORRECTION, TOOL_ERROR, TEST_FAILURE, CI_FAILURE, RUNTIME_DRIFT, REPEATED_MANUAL_FIX, NEW_INVARIANT]
+  lifecycle:
+    - OBSERVE_EVENT
+    - MEASURE_LIVE_STATE
+    - EXTRACT_FAILURE_OR_RULE_SIGNATURE
+    - IDENTIFY_CAUSE_OR_INVARIANT
+    - GENERALIZE_MINIMUM_VALID_SCOPE
+    - FIND_EXISTING_CANONICAL_OWNER
+    - FIND_REAL_CONSUMER
+    - BIND_RULE_TO_ENGINE_OR_GATE
+    - POSITIVE_TEST
+    - NEGATIVE_TEST
+    - COUNTERPROOF
+    - REALITY_JUDGE
+    - RECEIPT
+    - CRYSTAL
+    - LAST_GOOD_STATE
+    - TRANSFER_TEST_ON_NEXT_EVENT
+    - CONTINUE_UNTIL_SCOPE_FIXED_POINT
+  promotion_requires:
+    - canonical_owner
+    - real_consumer
+    - runtime_or_ci_binding
+    - positive_test
+    - negative_test
+    - counterproof
+    - receipt
+  prose_only_rule: NOT_LEARNED
+  documented_only_rule: NOT_LEARNED
+  repeated_chefe_instruction_after_promoted_rule: LEARNING_TRANSFER_FAIL
+  same_rule_new_engine: MUST_INHERIT_BY_REFERENCE
+  same_rule_new_session: MUST_INHERIT_BY_REFERENCE
+  same_rule_new_pr_or_commit: MUST_BE_ENFORCED_BY_EXISTING_GATE
+  overgeneralization_guard: MINIMUM_VALID_SCOPE_THEN_EXPAND_BY_EVIDENCE
 ci_binding:
   reuse_workflows:
     - .github/workflows/porta-de-entrada.yml
