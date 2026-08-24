@@ -16,10 +16,15 @@ export const CANONICAL_AUTHORITY_LABEL = "👑 PERMITO-SEGREDO";
 export const CANONICAL_SUCCESS_LABEL = "🟢 SUCESSO";
 export const SUCCESS_COMMENT_MARKER = "<!-- centraldark-autonomia-promocao-success -->";
 export const MAX_CATALOG_RETRIES = 5;
+const MAX_COMMENT_PAGES = 10;
 const SHA256_RE = /^[a-f0-9]{64}$/i;
 
 function normalizedLabelNames(pr) {
   return new Set((pr?.labels || []).map((label) => String(label?.name || label).trim().toLocaleLowerCase("pt-BR")));
+}
+
+export function hasConfirmedLabel(pr) {
+  return normalizedLabelNames(pr).has(CANONICAL_CONFIRMED_LABEL.toLocaleLowerCase("pt-BR"));
 }
 
 function lineValue(body, name) {
@@ -77,7 +82,7 @@ async function api(token, method, path, body, allow = []) {
       Authorization: `Bearer ${token}`,
       Accept: "application/vnd.github+json",
       "X-GitHub-Api-Version": "2022-11-28",
-      "User-Agent": "centraldark-pr-confirmado/1.1",
+      "User-Agent": "centraldark-pr-confirmado/1.2",
       ...(body === undefined ? {} : { "Content-Type": "application/json" }),
     },
     body: body === undefined ? undefined : JSON.stringify(body),
@@ -116,6 +121,17 @@ async function candidateNumbers(sweepDir, event) {
   return [...numbers].filter((number) => Number.isInteger(number) && number > 0);
 }
 
+async function fetchComments(token, repository, number) {
+  const comments = [];
+  for (let page = 1; page <= MAX_COMMENT_PAGES; page += 1) {
+    const result = await api(token, "GET", `/repos/${repository}/issues/${number}/comments?per_page=100&page=${page}`);
+    const batch = Array.isArray(result.data) ? result.data : [];
+    comments.push(...batch);
+    if (batch.length < 100 || batch.some((comment) => String(comment?.body || "").includes(SUCCESS_COMMENT_MARKER))) break;
+  }
+  return comments;
+}
+
 async function canonicalLabelExists(token, repository) {
   const encoded = encodeURIComponent(CANONICAL_CONFIRMED_LABEL);
   const result = await api(token, "GET", `/repos/${repository}/labels/${encoded}`, undefined, [404]);
@@ -140,6 +156,12 @@ async function scheduleCatalogRetry(token, repository, number, event) {
   console.log(`PR=${number} CONFIRMATION=CATALOG_RETRY_DISPATCHED count=${next}`);
 }
 
+async function removeFalseGreen(token, repository, number) {
+  const encoded = encodeURIComponent(CANONICAL_CONFIRMED_LABEL);
+  await api(token, "DELETE", `/repos/${repository}/issues/${number}/labels/${encoded}`, undefined, [404]);
+  console.log(`PR=${number} CONFIRMATION=FALSE_GREEN_REMOVED label=${CANONICAL_CONFIRMED_LABEL}`);
+}
+
 async function reconcile() {
   const repository = process.env.GITHUB_REPOSITORY || "";
   const token = process.env.PROMOTER_TOKEN || process.env.PROMOTION_TOKEN || process.env.GITHUB_TOKEN || "";
@@ -155,9 +177,10 @@ async function reconcile() {
   let labelExists = null;
   for (const number of numbers) {
     const pr = (await api(token, "GET", `/repos/${repository}/pulls/${number}`)).data;
-    const comments = (await api(token, "GET", `/repos/${repository}/issues/${number}/comments?per_page=100`)).data;
+    const comments = await fetchComments(token, repository, number);
     const evidence = confirmationEvidence(pr, comments);
     if (!evidence.confirmed) {
+      if (hasConfirmedLabel(pr)) await removeFalseGreen(token, repository, number);
       console.log(`PR=${number} CONFIRMATION=NOT_PROVEN reasons=${evidence.reasons.join("|")}`);
       continue;
     }
