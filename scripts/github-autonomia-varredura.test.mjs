@@ -5,12 +5,16 @@ import {
   CANONICAL_AUTHORITY_LABEL,
   CANONICAL_AUTOMATION_LABEL,
   CANONICAL_GIT_LABEL,
+  CANONICAL_REVIEW_LABEL,
+  OPERATIONAL_BASELINE_LABELS,
   REQUIRED_PROMOTION_SEAL_LABELS,
+  agentLabelsFromWriter,
   classifyFailure,
   eligibleSummary,
   noticeTargets,
   promotionSealReceipt,
   promotionSealState,
+  requiredOperationalLabels,
   sanitizeNotice,
   shouldMaterializeAuthority,
 } from "./github-autonomia-varredura.mjs";
@@ -45,21 +49,38 @@ test("recibo de intenção torna PR confiável elegível sem reask", () => {
 });
 
 test("selo canônico sintetiza autoridade + canal Git + automação", () => {
-  const pending = promotionSealState(pr(), "ServerVpss/CentralDark");
-  assert.equal(pending.eligible, true);
-  assert.equal(pending.complete, false);
-  assert.deepEqual(pending.missingLabels, [
+  assert.deepEqual([...REQUIRED_PROMOTION_SEAL_LABELS], [
     CANONICAL_AUTHORITY_LABEL,
     CANONICAL_GIT_LABEL,
     CANONICAL_AUTOMATION_LABEL,
   ]);
+});
 
+test("padrão operacional vale para TODO PR elegível — não só um", () => {
+  const pending = promotionSealState(pr(), "ServerVpss/CentralDark");
+  assert.equal(pending.eligible, true);
+  assert.equal(pending.complete, false);
+  assert.ok(pending.missingLabels.includes(CANONICAL_AUTHORITY_LABEL));
+  assert.ok(pending.missingLabels.includes(CANONICAL_GIT_LABEL));
+  assert.ok(pending.missingLabels.includes(CANONICAL_AUTOMATION_LABEL));
+  assert.ok(pending.missingLabels.includes(CANONICAL_REVIEW_LABEL));
+  assert.ok(pending.missingLabels.includes("🧠 AGENTE-CHATGPT"));
+
+  const full = requiredOperationalLabels(pr());
   const sealed = promotionSealState(pr({
-    labels: REQUIRED_PROMOTION_SEAL_LABELS.map((name) => ({ name })),
+    labels: full.map((name) => ({ name })),
   }), "ServerVpss/CentralDark");
   assert.equal(sealed.eligible, true);
   assert.equal(sealed.complete, true);
   assert.deepEqual(sealed.missingLabels, []);
+});
+
+test("Writer deriva agente canônico de forma determinística", () => {
+  assert.deepEqual(agentLabelsFromWriter("Grok/SOL"), ["🧠 AGENTE-GROK", "🧠 AGENTE-CHATGPT"]);
+  assert.deepEqual(agentLabelsFromWriter("Claude Code (Sonnet)"), ["🧠 AGENTE-CLAUDE"]);
+  assert.deepEqual(agentLabelsFromWriter("Codex"), ["🧠 AGENTE-CODEX"]);
+  assert.deepEqual(agentLabelsFromWriter("desconhecido"), []);
+  assert.ok(OPERATIONAL_BASELINE_LABELS.includes(CANONICAL_REVIEW_LABEL));
 });
 
 test("selo exige recibo completo e política de merge conhecida", () => {
