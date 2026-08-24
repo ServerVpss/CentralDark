@@ -28,6 +28,13 @@ check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml',[
  'github_hosted_runner: FORBIDDEN',
  'scope: ALL_ACTIVE_ROOT_GITHUB_WORKFLOWS',
  'scope: ALL_PR_COMMIT_AND_RUNTIME_ELIGIBLE_FAILURES',
+ 'operational_rule_learning:',
+ 'proven_operational_rule_must_bind_to_runtime: true',
+ 'BIND_RULE_TO_ENGINE_OR_GATE',
+ 'POSITIVE_TEST',
+ 'NEGATIVE_TEST',
+ 'prose_only_rule: NOT_LEARNED',
+ 'repeated_chefe_instruction_after_promoted_rule: LEARNING_TRANSFER_FAIL',
 ])
 check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml',[
  'event: BOT_ENTRY','event: PRE_HUMAN_RETURN','event: RESUME',
@@ -37,10 +44,12 @@ check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml',[
  'SAME_FAILURE_NO_NEW_INFO -> REUSE_CRYSTAL',
 ])
 check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml',[
- 'engine_is_owner: false','prompt_consumer: apps/modulos/HERMES-CORE/prompts/hermes-core.md','LOAD_REFERENCE'
+ 'engine_is_owner: false','prompt_consumer: apps/modulos/HERMES-CORE/prompts/hermes-core.md','LOAD_REFERENCE',
+ 'SELF_HEALING_FAILURE_LOOP','ANY_PR_OR_COMMIT_GATE','CANONICAL_SELF_HOSTED_RUNNER_POLICY'
 ])
 check('apps/modulos/HERMES-CORE/prompts/hermes-core.md',[
- 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml','OUTPUT_GUARD','LAST_GOOD_STATE','WORKING/FORJA != PASS'
+ 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml','OUTPUT_GUARD','LAST_GOOD_STATE','WORKING/FORJA != PASS',
+ 'Self-healing operacional universal','SAME_FAILURE_REUSES_CRYSTAL=true','GITHUB_HOSTED_RUNNER_ALLOWED=false'
 ])
 check('apps/modulos/HERMES-CORE/core/orchestrator.mjs',[
  'const INTERVAL  = 5000',
@@ -56,7 +65,10 @@ check('scripts/memory-linker/pattern-discovery.mjs')
 check('.agents/skills/session-intelligence-harvester/SKILL.md',['Run on session end (hook).'],'DECLARED_HOOK_NOT_RUNTIME_PROOF')
 check('.agents/skills/knowledge-compiler/SKILL.md')
 check('.agents/skills/vector-memory/SKILL.md',classification='CONTRACT_EXISTS_RUNTIME_NOT_PROVEN')
-check('.github/workflows/porta-de-entrada.yml',['WORKFLOW_REUSE_REQUIRED=1','GLOBAL_CONTINUITY_HARD_GATE=1'])
+check('.github/workflows/porta-de-entrada.yml',[
+ 'WORKFLOW_REUSE_REQUIRED=1','GLOBAL_CONTINUITY_HARD_GATE=1','ANY_BRANCH_PUSH_GATED=1',
+ 'GITHUB_HOSTED_RUNNER_ALLOWED=0','SELF_HEALING_CONTRACT_REQUIRED=1'
+])
 check('.github/workflows/autonomia-promocao.yml',['Juiz determinístico','github-pr-confirmado-label.mjs'])
 check('.github/workflows/trigger-fabric-package.yml',['Trigger Fabric Full Package','Fresh-extraction counterproof'])
 check('docs/CONSCIENCIA/GITHUB-LABELS-OPERACIONAIS.md',['👑 PERMITO-SEGREDO','✅ PR CONFIRMADO','Label roteia trabalho; **nunca concede autoridade humana**.'])
@@ -96,4 +108,5 @@ print('OUTPUT_GUARD_CONTRACT=PASS')
 print('WORKFLOW_REUSE_CONTRACT=PASS')
 print('CANONICAL_RUNNER_POLICY=PASS')
 print('SELF_HEALING_CONTRACT=PASS')
+print('OPERATIONAL_RULE_LEARNING_CONTRACT=PASS')
 print('NOTE=PASS proves repository contract/path/runner-policy facts only; it does not prove live Windows/VPS/runtime inheritance.')
