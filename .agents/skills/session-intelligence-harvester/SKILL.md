@@ -126,5 +126,3 @@ O objetivo é preservar o **mental e a inteligência** contidos nas abas, não p
 - Run on session end (hook)
 - Batch process historical exports
 - Incremental: only new sessions since last harvest
-EOF
-echo "session-intelligence-harvester SKILL.md criado"

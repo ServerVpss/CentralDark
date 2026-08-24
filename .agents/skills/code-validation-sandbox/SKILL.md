@@ -49,5 +49,3 @@ result = sandbox.run(
 
 ## Output
 Structured result → `knowledge-compiler` if pattern is reusable.
-EOF
-echo "code-validation-sandbox SKILL.md criado"
