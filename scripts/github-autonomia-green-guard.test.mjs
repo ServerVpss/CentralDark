@@ -99,8 +99,8 @@ test("paginação encontra gate válido depois da primeira página sem aceitar c
   assert.equal(runs.some((run) => run.name === "lupa-conformance"), false);
 });
 
-test("gate determinístico sempre: nenhum modo isenta a catraca", () => {
-  assert.equal(shouldEnforceGreenFirst({ decision: "READY", mode: "FAST" }), true);
+test("FAST autorizado não espera runners auxiliares; adversarial continua fail-closed", () => {
+  assert.equal(shouldEnforceGreenFirst({ decision: "READY", mode: "FAST" }), false);
   assert.equal(shouldEnforceGreenFirst({ decision: "READY", mode: "ADVERSARIAL" }), true);
   assert.equal(shouldEnforceGreenFirst({ decision: "READY" }), true);
   assert.equal(shouldEnforceGreenFirst({ decision: "WAIT", mode: "ADVERSARIAL" }), false);
@@ -108,7 +108,7 @@ test("gate determinístico sempre: nenhum modo isenta a catraca", () => {
   assert.equal(shouldEnforceGreenFirst(null), false);
 });
 
-test("lista padrão é exatamente a régua canônica de seis gates", () => {
+test("lista padrão é exatamente a régua canônica de seis gates adversariais", () => {
   assert.deepEqual(DEFAULT_REQUIRED_WORKFLOWS, [
     "porta-de-entrada",
     "codex-validate",
