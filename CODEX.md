@@ -28,3 +28,7 @@ FUTURE_RULES_CONSUMED_FROM_CORE=true
 ```
 
 Regra de compatibilidade: se uma particularidade exclusiva do Codex precisar ser documentada, registrar somente a diferença física da superfície/tool. Regras comuns pertencem ao core, nunca a este arquivo.
+
+## Arquivos sensíveis
+
+Não ler, copiar, publicar ou usar valores de `.env`, `secrets/`, `tokens/`, `sessions/`, `.ssh/`, chaves privadas, cookies ou connection strings como contexto sem necessidade/autorização específica. Nunca reproduzir valores.

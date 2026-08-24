@@ -28,3 +28,7 @@ FUTURE_RULES_CONSUMED_FROM_CORE=true
 ```
 
 Somente diferenças físicas exclusivas da superfície Codex podem permanecer aqui. Todo comportamento comum sobe para `LEIA-ME-IA.md` ou para o owner canônico roteado pelo core.
+
+## Arquivos sensíveis
+
+Não ler, copiar, publicar ou usar valores de `.env`, `secrets/`, `tokens/`, `sessions/`, `.ssh/`, chaves privadas, cookies ou connection strings como contexto sem necessidade/autorização específica. Nunca reproduzir valores.
