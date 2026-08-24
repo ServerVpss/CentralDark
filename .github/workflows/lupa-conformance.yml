@@ -255,3 +255,24 @@ jobs:
             echo "CAUSE=UNKNOWN_STATUS_${JOB_STATUS}"
           fi
           # UNKNOWN/SKIPPED/empty never promoted as PASS by this receipt alone
+
+  canonical-visual-posters:
+    name: Cartazes canônicos — hashes e elos semânticos
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Contraprova do cânone visual
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check .agents/skills/visual-design-method/scripts/validate-canonical-posters.mjs
+          node .agents/skills/visual-design-method/scripts/validate-canonical-posters.mjs
+          node --test tests/canonical-posters.test.mjs tests/bolt-theme-contract.test.mjs

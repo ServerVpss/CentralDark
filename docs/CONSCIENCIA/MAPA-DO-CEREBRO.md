@@ -126,6 +126,14 @@ Claude Code / MCP modifica arquivos
 
 ---
 
+
+## 6.1 Memória visual canônica
+
+- [Cartazes canônicos da CentralDark](../BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/README.md) — MOC dos quatro cartazes, proveniência e topologia semântica.
+- O cérebro canônico mora nos owners do Git; `CASA-VAULT/00-CANONICO` é o segundo cérebro como espelho, não autoridade paralela.
+- Vetores, Grafo Vivo, painel e GraphRAG são índices/projeções reconstruíveis.
+- O print do grafo é evidência observada, nunca owner.
+
 ## 7. Como Navegar
 
 1. Comece pelo **[[00-LEIA-PRIMEIRO]]** — ele define a ordem e o roteamento

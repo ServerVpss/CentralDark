@@ -78,6 +78,19 @@ Isso permite edição bidirecional sem sobrescrever silenciosamente nenhum lado.
 
 O conteúdo existente em `docs/BRAIN` não é descartado. Na primeira inicialização ele é copiado para `CASA-VAULT/00-CANONICO` e passa a aparecer no mesmo grafo das memórias locais, sem colocar as memórias locais dentro do repositório.
 
+
+## Cartazes, anexos canônicos e projeções
+
+`docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/` pertence à camada
+canônica e, portanto, entra em `CASA-VAULT/00-CANONICO` pelo mesmo contrato de
+sync. O manifesto preserva o hash do PNG entregue e o hash da cópia WebP leve
+guardada no Git. Grafo, GraphRAG e memória vetorial podem indexar esses itens,
+mas são projeções reconstruíveis: não escrevem de volta sobre os owners.
+
+Imagem privada continua em `30-ANEXOS`; só entra no canônico mediante
+classificação, proveniência, hash e autorização explícita. Arquivo presente no
+Git não prova que site, `.exe` ou VPS foi atualizado.
+
 ## Resultado esperado
 
 ```text

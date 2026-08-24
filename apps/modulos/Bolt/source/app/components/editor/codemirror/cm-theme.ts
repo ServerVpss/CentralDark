@@ -1,6 +1,7 @@
 import { Compartment, type Extension } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
 import { vscodeDark, vscodeLight } from '@uiw/codemirror-theme-vscode';
+import { isDarkTheme } from '~/lib/stores/theme';
 import type { Theme } from '~/types/theme.js';
 import type { EditorSettings } from './CodeMirrorEditor.js';
 
@@ -10,12 +11,12 @@ export const themeSelection = new Compartment();
 export function getTheme(theme: Theme, settings: EditorSettings = {}): Extension {
   return [
     getEditorTheme(settings),
-    theme === 'dark' ? themeSelection.of([getDarkTheme()]) : themeSelection.of([getLightTheme()]),
+    isDarkTheme(theme) ? themeSelection.of([getDarkTheme()]) : themeSelection.of([getLightTheme()]),
   ];
 }
 
 export function reconfigureTheme(theme: Theme) {
-  return themeSelection.reconfigure(theme === 'dark' ? getDarkTheme() : getLightTheme());
+  return themeSelection.reconfigure(isDarkTheme(theme) ? getDarkTheme() : getLightTheme());
 }
 
 function getEditorTheme(settings: EditorSettings) {
