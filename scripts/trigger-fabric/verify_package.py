@@ -2,7 +2,7 @@
 from pathlib import Path
 import hashlib, json, sys
 
-ROOT = Path(sys.argv[1] if len(sys.argv)>1 else '.').resolve()
+ROOT=Path(sys.argv[1] if len(sys.argv)>1 else '.').resolve()
 
 def sha256(path):
     h=hashlib.sha256(); h.update(path.read_bytes()); return h.hexdigest()
@@ -23,7 +23,7 @@ for item in manifest.get('files',[]):
 
 required=[
  'README.md','ARCHITECTURE.md','ARCHITECTURE.mmd','ARCHITECTURE.png',
- 'CONTRACT.yml','TRIGGERS.yml','ADVERSARIAL_HANDOFF.yml','LIVE_STATE.md',
+ 'CONTRACT.yml','TRIGGERS.yml','ENGINE_BINDING.yml','ADVERSARIAL_HANDOFF.yml','LIVE_STATE.md',
  'HISTORY.md','COUNTERPROOF.md','RASTRO.md','RECEIPT.md','SOURCES.json',
  'build_package.py','verify_package.py','MANIFEST.json','SHA256SUMS.txt'
 ]
@@ -38,6 +38,23 @@ live=(ROOT/'LIVE_STATE.md').read_text(encoding='utf-8',errors='replace') if (ROO
 history=(ROOT/'HISTORY.md').read_text(encoding='utf-8',errors='replace') if (ROOT/'HISTORY.md').exists() else ''
 if not live or not history: errors.append('LIVE_HISTORY_SEPARATION_MISSING')
 
+contract=(ROOT/'CONTRACT.yml').read_text(encoding='utf-8',errors='replace') if (ROOT/'CONTRACT.yml').exists() else ''
+for token in [
+ 'inherited_on_bot_entry: true',
+ 'mandatory_before_human_return: true',
+ 'no_new_workflow_when_owner_exists: true',
+ 'yellow_status_semantics: FORBIDDEN',
+]:
+    if token not in contract: errors.append(f'CONTRACT_GUARD_MISSING:{token}')
+
+triggers=(ROOT/'TRIGGERS.yml').read_text(encoding='utf-8',errors='replace') if (ROOT/'TRIGGERS.yml').exists() else ''
+for token in ['event: BOT_ENTRY','event: PRE_HUMAN_RETURN','event: RESUME']:
+    if token not in triggers: errors.append(f'TRIGGER_MISSING:{token}')
+
+engine=(ROOT/'ENGINE_BINDING.yml').read_text(encoding='utf-8',errors='replace') if (ROOT/'ENGINE_BINDING.yml').exists() else ''
+for token in ['engine_is_owner: false','binding_mode: LOAD_REFERENCE','prompt_consumer: apps/modulos/HERMES-CORE/prompts/hermes-core.md']:
+    if token not in engine: errors.append(f'ENGINE_BINDING_GUARD_MISSING:{token}')
+
 if errors:
     print('VERIFY=FAIL')
     print('\n'.join(errors))
@@ -45,4 +62,6 @@ if errors:
 
 print('VERIFY=PASS')
 print(f'FILES_VERIFIED={len(manifest.get("files",[]))}')
+print('BOT_ENTRY_CONTRACT=PASS')
+print('OUTPUT_GUARD_CONTRACT=PASS')
 print('GLOBAL_RUNTIME_100_PERCENT=NOT_PROVEN')
