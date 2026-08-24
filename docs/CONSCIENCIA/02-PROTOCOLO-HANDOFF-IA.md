@@ -233,15 +233,120 @@ ONE_SYSTEM_ONLY=true
 REUSE_BEFORE_CREATE=true
 ```
 
-## 9. Relações canônicas
+## 9. Arquitetura descoberta no circuito
+
+O circuito CHEFE → percepção → falsificação → Writer → executor → loop → juiz
+→ aprendizado → estado atualizado não é apenas um organograma. Ele forma uma
+arquitetura de controle em malha fechada orientada a evidência, com mutação
+serializada e continuidade verificável.
+
+```text
+ARCHITECTURE_CLASS = PROOF_CARRYING_CLOSED_LOOP_CONTROL
+STATE_MODEL = EPISTEMIC_STATE_MACHINE
+MUTATION_MODEL = SERIALIZED_SINGLE_WRITER
+CONTINUITY_MODEL = RECEIPT_PLUS_CHECKSUM_PLUS_NEXT_CURSOR
+REALITY_IS_FINAL_JUDGE = true
+NO_NEW_ENGINE_CREATED = true
+```
+
+Camadas e papéis:
+
+```text
+AUTHORITY_PLANE
+  👑 CHEFE
+  → CHEFE_INTENT + DESTINATION_LOCK
+
+ORIENTATION_PLANE
+  #ACORDAR → !CALIBRAR → !MULTIBUSSOLA
+  → estado vivo + intenção vigente + hipóteses materiais
+
+PERCEPTION_PLANE
+  GRAFO + VIGIA + J.R.V.S.
+  → observação/projeção/braços de percepção
+  → READ_ONLY enquanto percebem
+  → não substituem REALITY
+
+FALSIFICATION_PLANE
+  META LUPA
+  → tenta refutar a hipótese antes da mutação
+
+MUTATION_PLANE
+  WRITER ÚNICO
+  → uma caneta por escopo
+  → SERIALIZE_MUTATION
+
+EXECUTION_PLANE
+  HERMES/PIVETE
+  → executa e preserva continuidade quando aplicável
+
+STABILIZATION_LOOP
+  FABLE LOOP = nome de linguagem/Forja para iterar até estabilidade
+  → FIXED_POINT_CANDIDATE != PASS
+  → ação → medição → novo estado → repetir quando houver delta material
+
+INDEPENDENT_JUDGMENT
+  FABLE JUDGE = nome de linguagem/Forja para segundo leitor read-only
+  → EXECUTOR_CANNOT_SELF_APPROVE=true
+  → JUDGE_DOES_NOT_MUTATE=true
+  → REALITY permanece o juiz final
+
+REMEDIATION_LEARNING
+  TÉCNICA DA LUPA
+  → erro → mecanismo → owner existente → delta mínimo → reteste
+  → aprendizado altera comportamento futuro
+
+STATE_UPDATE
+  GRAFO
+  → projeção do estado atualizado
+  → GRAPH_IS_DERIVED_NOT_AUTHORITY=true
+
+CONTINUITY_PLANE
+  POMBO_MODE=CHECKSUM_ON
+  → estado medido + OBSERVED_AT + HEAD/SHA + evidência + UNKNOWN/residual
+  → receipt + NEXT_CURSOR
+  → próxima superfície continua sem redefinir o destino
+```
+
+Máquina de estados mínima:
+
+```text
+UNKNOWN
+→ MEASURE
+→ TEST
+→ OBSERVE_REALITY
+→ PROVADO | FALHOU | NOT_PROVEN
+
+FALHOU
+→ CAUSA
+→ OWNER_EXISTENTE
+→ DELTA_MINIMO
+→ RETESTE
+→ CONTRAPROVA
+
+PROVADO
+→ RECEIPT
+→ SHA/CHECKSUM quando material
+→ LEARNING
+→ NEXT_CURSOR
+→ PROXIMO #ACORDAR
+```
+
+Nomes da Forja como `FABLE LOOP`, `FABLE JUDGE`, `GRAFO`, `VIGIA` e `J.R.V.S.`
+são linguagem/papéis do circuito. Só contam como engine/runtime separado se o
+repo e a execução física provarem isso. O diagrama não concede autoridade de
+runtime por si só.
+
+## 10. Relações canônicas
 
 - `LEIA-ME-IA.md` — boot e estado vivo.
 - `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md` — loop cognitivo, falha como sensor e prova pública.
 - `docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-pombo-correio-com-checksum.md` — cristal/proveniência da linguagem Pombo.
+- `docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-fluxo-operacional-papagaio-off-pombo-on.md` — circuito de papéis promovido na #1145.
+- `.agents/skills/visual-design-method/assets/forja-de-cartas.html` — linguagem visual que contém Fable Loop, Fable Judge e Técnica da Lupa.
 - `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/` — contratos, receipts e continuidade executável.
 - `scripts/trigger-fabric/verify_repo_contract.py` — verificação determinística do contrato de repositório.
 
-## 10. Critério de handoff válido
+## 11. Critério de handoff válido
 
 ```text
 DESTINATION_PRESERVED
