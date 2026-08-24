@@ -1,7 +1,7 @@
 name: VPS SSH Exec [DESATIVADO — duplicata de vps-exec-selfhosted.yml]
 # TRAVA: Este workflow é duplicata exata de vps-exec-selfhosted.yml (ambos rodam bash -lc local).
-# Use vps-exec-selfhosted.yml. Este não será executado (on: com trigger impossível).
-# Para reativar: altere o trigger de volta para workflow_dispatch.
+# Use vps-exec-selfhosted.yml. Este não será executado (if:false).
+# Mesmo desativado, respeita a política global de executor da Casa para não reintroduzir hosted runner por cópia futura.
 on:
   workflow_dispatch:
     inputs:
@@ -12,7 +12,7 @@ on:
 
 jobs:
   noop:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux]
     if: false
     steps:
       - run: echo "desativado"
