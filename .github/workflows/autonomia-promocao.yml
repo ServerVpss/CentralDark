@@ -69,6 +69,7 @@ jobs:
           node --test scripts/github-autonomia-promocao.test.mjs
           node --test scripts/github-autonomia-varredura.test.mjs
           node --test scripts/github-autonomia-green-guard.test.mjs
+          node --test scripts/github-pr-confirmado-label.test.mjs
 
       - name: Avaliar PRs autorizados em read-only
         env:
@@ -163,6 +164,13 @@ jobs:
           NOTIFY_WEBHOOK_URL: ${{ secrets.NOTIFY_WEBHOOK_URL }}
         run: node scripts/github-autonomia-varredura.mjs promote
 
+      - name: Materializar ✅ PR CONFIRMADO somente após prova observada
+        env:
+          BOT_SWEEP_DIR: ${{ runner.temp }}/centraldark-autonomia
+          PROMOTER_TOKEN: ${{ secrets.PROMOTION_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node scripts/github-pr-confirmado-label.mjs reconcile
+
       - name: Publicar resultado sanitizado
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -189,5 +197,6 @@ jobs:
           echo "ADVERSARIAL_GREEN_FIRST_REQUIRED=1"
           echo "FAST_CAUSAL_GATES=AUTHENTICATED_ACCOUNT+SAME_REPO+INTENT_SCOPE+SECRET_SCAN+CONFLICT+CHANGES_REQUESTED+HEAD_BASE_REVALIDATION"
           echo "REASK=NO_WHEN_INTENT_RECEIPT_VALID"
+          echo "PR_CONFIRMED_LABEL=DERIVED_POST_MERGE_ONLY"
           echo "JOB_STATUS=${JOB_STATUS}"
           test "${JOB_STATUS}" = "success" && echo "RESULTADO=PASS" || echo "RESULTADO=BLOCKED"
