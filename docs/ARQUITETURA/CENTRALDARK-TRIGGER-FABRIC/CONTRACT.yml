@@ -17,6 +17,11 @@ principles:
   spec_ne_implementation: true
   action_ne_proof: true
   no_new_workflow_when_owner_exists: true
+  every_material_enters_mill: true
+  no_silent_drop_of_material_delta: true
+  miner_never_writes_canonical_directly: true
+  generative_output_is_candidate_not_authority: true
+  artifact_never_invents_canonical: true
 master_trigger:
   expression: "#ACORDAR + !CALIBRAR + !MULTIBUSSOLA"
   inherited_on_bot_entry: true
@@ -93,6 +98,44 @@ package_ingest:
   hash_before_semantic_reanalysis: true
   byte_identical: PROCESS_ONCE_KEEP_PROVENANCE
   big_library: PRECISE_RETRIEVAL_SMALL_CONTEXT
+material_ingest:
+  mandatory_for_chefe_and_agent_material: true
+  pipeline:
+    - TRIGGER_FABRIC
+    - SESSION_INTELLIGENCE_HARVESTER
+    - MEMORY_LINKER
+    - KNOWLEDGE_COMPILER_FORJA
+    - OWNER_SKILL_CONSUMER_TEST_GATE
+    - ARTIFACT_PROPERTIES
+    - VECTOR_MEMORY_DERIVED_INDEX
+    - GRAPH_RAG_HYBRID
+    - HERMES_FLASH_ROUTE
+  learning_event_schema: centraldark.learning-event.v1
+  required_fields:
+    - event_id
+    - event_time
+    - observed_at
+    - source
+    - source_class
+    - kind
+    - claim
+    - sensitivity
+  source_class_clamp:
+    external_prompt_cannot_self_elevate: true
+    external_default: EXTERNAL_UNTRUSTED
+  deterministic_first: true
+  generative_residual_only: true
+  promotion_boundary:
+    miner_direct_canonical_write: false
+    writer_only_after_owner_consumer_authority_test: true
+  derived_index:
+    vector_memory_is_derived_rebuildable: true
+    graph_is_derived_not_authority: true
+    selective_invalidation: true
+artifact_properties:
+  contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ARTIFACT-PROPERTIES.yml
+  hermes_requires_properties: true
+  missing_required: NOT_FLASH_READY
 ci_binding:
   reuse_workflows:
     - .github/workflows/porta-de-entrada.yml
@@ -116,6 +159,8 @@ claims:
   global_runtime_100_percent: false
   global_runtime_100_percent_status: NOT_PROVEN
   engine_binding_documented_is_runtime_loaded: false
+  vector_memory_runtime: NOT_PROVEN
+  learning_hooks_runtime: NOT_PROVEN
 return_rule:
   - DESTINATION_PROVED
   - HUMAN_FRONTIER_PROVED

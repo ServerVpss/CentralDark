@@ -5,6 +5,13 @@ binding_mode: LOAD_REFERENCE
 copy_brain: false
 engine_is_owner: false
 engines:
+  grok_build:
+    role: REPLACEABLE_ENGINE
+    may_operate_via: [github_tools, filesystem_when_available, tests]
+    inherits: [LEIA-ME-IA.md, AGENTS.md, Trigger Fabric]
+    memory_parallel: false
+    new_permission: false
+    runtime_specific_claims: MUST_BE_MEASURED
   mistral_vibe:
     role: CURRENT_INTERACTIVE_ENGINE_WHEN_ACTIVE
     may_operate_via: [filesystem, terminal, git, tests]
@@ -27,6 +34,8 @@ mandatory_inheritance:
   - OUTPUT_GUARD
   - REALITY_JUDGE
   - RECEIPT_AND_CONTINUATION
+  - MATERIAL_INGEST_NO_SILENT_DROP
+  - ARTIFACT_PROPERTIES_WHEN_DERIVED
 hard_guarantee_boundary:
   prose_contract_only: BEST_EFFORT
   hard_guarantee_requires: [REAL_CONSUMER, POSITIVE_NEGATIVE_TEST, BLOCKING_GATE_WHEN_APPLICABLE, VERIFIABLE_RECEIPT]
