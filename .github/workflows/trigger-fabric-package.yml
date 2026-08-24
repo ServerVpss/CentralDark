@@ -8,6 +8,7 @@ on:
       - '.github/workflows/trigger-fabric-package.yml'
       - 'LEIA-ME-IA.md'
       - 'AGENTS.md'
+      - 'docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md'
       - 'docs/CONSCIENCIA/MULTIBUSSOLA.md'
       - '.agents/skills/meta-lupa/**'
       - 'apps/modulos/HERMES-CORE/**'
@@ -15,10 +16,17 @@ on:
       - '.agents/skills/session-intelligence-harvester/**'
       - '.agents/skills/knowledge-compiler/**'
       - '.agents/skills/vector-memory/**'
+      - 'docs/CONSCIENCIA/GITHUB-LABELS-OPERACIONAIS.md'
+      - '.github/workflows/autonomia-promocao.yml'
+      - '.github/workflows/porta-de-entrada.yml'
   workflow_dispatch:
 
 permissions:
   contents: read
+
+concurrency:
+  group: trigger-fabric-package-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build-counterproof-package:
@@ -27,6 +35,19 @@ jobs:
     steps:
       - name: Checkout exact PR state
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Prove checkout HEAD
+        if: github.event_name == 'pull_request'
+        shell: bash
+        env:
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          actual="$(git rev-parse HEAD)"
+          test "$actual" = "$EXPECTED_HEAD"
+          echo "HEAD_SHA=$actual"
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -39,6 +60,9 @@ jobs:
           set -euo pipefail
           python scripts/trigger-fabric/verify_repo_contract.py . \
             | tee docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/VERIFY-RESULT.txt
+          grep -q '^REPO_CONTRACT_VERIFY=PASS$' docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/VERIFY-RESULT.txt
+          grep -q '^BOT_ENTRY_CONTRACT=PASS$' docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/VERIFY-RESULT.txt
+          grep -q '^OUTPUT_GUARD_CONTRACT=PASS$' docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/VERIFY-RESULT.txt
 
       - name: Render architecture PNG from canonical Mermaid
         shell: bash
@@ -73,6 +97,8 @@ jobs:
             /tmp/trigger-fabric-verify/CENTRALDARK_TRIGGER_FABRIC_FULL_PACKAGE \
             | tee .artifacts/trigger-fabric/extracted-verify-result.txt
           grep -q '^VERIFY=PASS$' .artifacts/trigger-fabric/extracted-verify-result.txt
+          grep -q '^BOT_ENTRY_CONTRACT=PASS$' .artifacts/trigger-fabric/extracted-verify-result.txt
+          grep -q '^OUTPUT_GUARD_CONTRACT=PASS$' .artifacts/trigger-fabric/extracted-verify-result.txt
 
       - name: Prove one final ZIP only
         shell: bash
