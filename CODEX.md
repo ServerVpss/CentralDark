@@ -34,3 +34,7 @@ Regra de compatibilidade: se uma particularidade exclusiva do Codex precisar ser
 ## Arquivos sensíveis
 
 Não ler, copiar, publicar ou usar valores de `.env`, `secrets/`, `tokens/`, `sessions/`, `.ssh/`, chaves privadas, cookies ou connection strings como contexto sem necessidade/autorização específica. Nunca reproduzir valores.
+
+## Ponteiros canônicos verificáveis
+
+Este adaptador carrega os owners `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md`, `.agents/skills/meta-lupa/SKILL.md` e `.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA` por meio de `LEIA-ME-IA.md`, e emite `CENTRALDARK_AI_BOOT`. Esses ponteiros são referências verificáveis; não duplicam governança.
