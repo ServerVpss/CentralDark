@@ -12,8 +12,13 @@ import { createHash } from "node:crypto";
 import { readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import {
+  normalizarCaminho,
+  validarDocumentoMapa,
+} from "../apps/modulos/mapeamento/core/validar-mapa.mjs";
 
 export const FAST_MERGE_POLICY = "AUTO_SQUASH_IF_CLEAN";
+export const CANONICAL_MAP_PATH = "apps/modulos/mapeamento/config/mapa-canonico.json";
 
 export const DEFAULT_REQUIRED_WORKFLOWS = Object.freeze([
   "porta-de-entrada",
@@ -55,6 +60,23 @@ export function parseCsv(value, fallback = []) {
     .map((item) => item.trim())
     .filter(Boolean);
   return items.length ? items : [...fallback];
+}
+
+export function executionProvenance(env = process.env) {
+  return {
+    controller: "scripts/github-autonomia-promocao.mjs",
+    connector_role: "PHYSICAL_ACCESS_PATH",
+    connector_transport: "GITHUB_API",
+    executor: "GITHUB_ACTIONS_RUNNER",
+    workflow: env.GITHUB_WORKFLOW || null,
+    run_id: env.GITHUB_RUN_ID || null,
+    actor: env.GITHUB_ACTOR || null,
+    triggering_actor: env.GITHUB_TRIGGERING_ACTOR || null,
+    runner_environment: env.RUNNER_ENVIRONMENT || null,
+    runner_name: env.RUNNER_NAME || null,
+    runner_os: env.RUNNER_OS || null,
+    hermes_runtime: "UNKNOWN_NOT_ATTESTED_BY_GITHUB_RECEIPT",
+  };
 }
 
 export function normalizedLabels(pr) {
@@ -163,6 +185,225 @@ export function workflowVerdicts(runs, requiredWorkflows) {
   });
 }
 
+function parseIdentityRecord(text) {
+  const lines = String(text || "")
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter((line) => line && !line.startsWith("#"));
+  if (lines.length !== 1) return { error: `registro de identidade deve ter uma linha útil; encontrado=${lines.length}` };
+  const match = lines[0].match(/^([0-9a-f]{40})\s+(.+)$/i);
+  if (!match) return { error: "registro de identidade inválido" };
+  try {
+    return { sha: match[1].toLowerCase(), target: normalizarCaminho(match[2].trim()) };
+  } catch (error) {
+    return { error: error.message };
+  }
+}
+
+function contractFinding(contract, errors, consumers, identity = null) {
+  return {
+    id: String(contract?.id || "<sem-id>"),
+    source: contract?.source || null,
+    source_blob_sha: contract?.source_blob_sha || null,
+    status: errors.length ? "FAIL" : "PASS",
+    errors,
+    consumers,
+    identity,
+  };
+}
+
+function mapContinuityErrors(trustedMap, headMap) {
+  const errors = [];
+  const headContracts = new Map((headMap?.canonical_contracts || []).map((contract) => [contract.id, contract]));
+  for (const trusted of trustedMap?.canonical_contracts || []) {
+    const current = headContracts.get(trusted.id);
+    if (!current) {
+      errors.push(`MAP_CONTRACT_REMOVED:${trusted.id}`);
+      continue;
+    }
+    for (const field of ["source", "target", "identity"]) {
+      if ((trusted[field] || null) !== (current[field] || null)) {
+        errors.push(`MAP_CONTRACT_FIELD_CHANGED:${trusted.id}:${field}`);
+      }
+    }
+    for (const field of ["consumers", "required_tokens", "forbidden_tokens"]) {
+      const currentValues = new Set(current[field] || []);
+      for (const value of trusted[field] || []) {
+        if (!currentValues.has(value)) errors.push(`MAP_CONTRACT_DENOMINATOR_REDUCED:${trusted.id}:${field}:${value}`);
+      }
+    }
+  }
+  return errors;
+}
+
+/**
+ * Valida o mapa e todos os consumidores no SHA remoto sem executar código do PR.
+ * `readSnapshot(path)` devolve `{ content, sha }` ou `null`, permitindo teste puro
+ * e transporte via API do GitHub no runtime do conector.
+ */
+export async function validateCanonicalSnapshot({ headSha, readSnapshot, trustedMap = null, trustedMapBlobSha = null }) {
+  const errors = [];
+  const contracts = [];
+  if (!/^[0-9a-f]{40}$/i.test(String(headSha || ""))) {
+    return {
+      head_sha: headSha || null,
+      map_path: CANONICAL_MAP_PATH,
+      map_blob_sha: null,
+      trusted_map_blob_sha: trustedMapBlobSha,
+      map_status: "FAIL",
+      contracts,
+      summary: { total: 0, passed: 0, failed: 0, consumers_total: 0, consumers_passed: 0 },
+      errors: ["HEAD_SHA_INVALID"],
+      verdict: "FAIL",
+    };
+  }
+
+  const mapFile = await readSnapshot(CANONICAL_MAP_PATH);
+  if (!mapFile) {
+    return {
+      head_sha: headSha,
+      map_path: CANONICAL_MAP_PATH,
+      map_blob_sha: null,
+      trusted_map_blob_sha: trustedMapBlobSha,
+      map_status: "FAIL",
+      contracts,
+      summary: { total: 0, passed: 0, failed: 0, consumers_total: 0, consumers_passed: 0 },
+      errors: [`MAP_MISSING:${CANONICAL_MAP_PATH}`],
+      verdict: "FAIL",
+    };
+  }
+
+  let map;
+  try {
+    map = JSON.parse(mapFile.content);
+  } catch (error) {
+    return {
+      head_sha: headSha,
+      map_path: CANONICAL_MAP_PATH,
+      map_blob_sha: mapFile.sha || null,
+      trusted_map_blob_sha: trustedMapBlobSha,
+      map_status: "FAIL",
+      contracts,
+      summary: { total: 0, passed: 0, failed: 0, consumers_total: 0, consumers_passed: 0 },
+      errors: [`MAP_JSON_INVALID:${error.message}`],
+      verdict: "FAIL",
+    };
+  }
+
+  const documentErrors = validarDocumentoMapa(map).map((error) => `MAP_DOCUMENT:${error}`);
+  errors.push(...documentErrors);
+  if (!trustedMap) errors.push("TRUSTED_BASE_MAP_MISSING");
+  else {
+    errors.push(...validarDocumentoMapa(trustedMap).map((error) => `TRUSTED_MAP_DOCUMENT:${error}`));
+    errors.push(...mapContinuityErrors(trustedMap, map));
+  }
+
+  for (const contract of map.canonical_contracts || []) {
+    const contractErrors = [];
+    const consumerFindings = [];
+    let sourcePath = null;
+    let sourceFile = null;
+    try {
+      sourcePath = normalizarCaminho(contract.source);
+      sourceFile = await readSnapshot(sourcePath);
+    } catch (error) {
+      contractErrors.push(`SOURCE_PATH_INVALID:${error.message}`);
+    }
+    if (sourcePath && !sourceFile) contractErrors.push(`SOURCE_MISSING:${sourcePath}`);
+
+    const uniqueConsumers = [];
+    const seenConsumers = new Set();
+    for (const rawConsumer of contract.consumers || []) {
+      try {
+        const consumer = normalizarCaminho(rawConsumer);
+        if (!seenConsumers.has(consumer)) {
+          seenConsumers.add(consumer);
+          uniqueConsumers.push(consumer);
+        }
+      } catch (error) {
+        contractErrors.push(`CONSUMER_PATH_INVALID:${rawConsumer}:${error.message}`);
+      }
+    }
+
+    for (const consumer of uniqueConsumers) {
+      const consumerErrors = [];
+      const file = await readSnapshot(consumer);
+      if (!file) consumerErrors.push("MISSING_OR_UNREADABLE");
+      else {
+        for (const token of contract.required_tokens || []) {
+          if (!file.content.includes(token)) consumerErrors.push(`REQUIRED_TOKEN_MISSING:${token}`);
+        }
+        for (const token of contract.forbidden_tokens || []) {
+          if (file.content.includes(token)) consumerErrors.push(`FORBIDDEN_TOKEN_PRESENT:${token}`);
+        }
+      }
+      consumerFindings.push({
+        path: consumer,
+        blob_sha: file?.sha || null,
+        status: consumerErrors.length ? "FAIL" : "PASS",
+        errors: consumerErrors,
+      });
+      for (const error of consumerErrors) contractErrors.push(`CONSUMER:${consumer}:${error}`);
+    }
+
+    let identity = null;
+    if (contract.identity === "git_blob_sha1") {
+      const parsed = parseIdentityRecord(sourceFile?.content || "");
+      identity = {
+        type: "git_blob_sha1",
+        declared_sha: parsed.sha || null,
+        declared_target: parsed.target || null,
+        target: contract.target || null,
+        target_blob_sha: null,
+        status: "FAIL",
+      };
+      if (parsed.error) contractErrors.push(`IDENTITY_RECORD_INVALID:${parsed.error}`);
+      else {
+        let target = null;
+        try { target = normalizarCaminho(contract.target); }
+        catch (error) { contractErrors.push(`IDENTITY_TARGET_INVALID:${error.message}`); }
+        if (target && parsed.target !== target) contractErrors.push(`IDENTITY_TARGET_MISMATCH:${parsed.target}:${target}`);
+        const targetFile = target ? await readSnapshot(target) : null;
+        identity.target_blob_sha = targetFile?.sha || null;
+        if (target && !targetFile) contractErrors.push(`IDENTITY_TARGET_MISSING:${target}`);
+        if (targetFile && parsed.sha !== String(targetFile.sha || "").toLowerCase()) {
+          contractErrors.push(`IDENTITY_BLOB_MISMATCH:${parsed.sha}:${targetFile.sha || "missing"}`);
+        }
+      }
+      identity.status = contractErrors.some((error) => error.startsWith("IDENTITY_")) ? "FAIL" : "PASS";
+    }
+
+    const finding = contractFinding(
+      { ...contract, source: sourcePath || contract.source, source_blob_sha: sourceFile?.sha || null },
+      contractErrors,
+      consumerFindings,
+      identity,
+    );
+    contracts.push(finding);
+    for (const error of contractErrors) errors.push(`CONTRACT:${finding.id}:${error}`);
+  }
+
+  const consumers = contracts.flatMap((contract) => contract.consumers);
+  const summary = {
+    total: contracts.length,
+    passed: contracts.filter((contract) => contract.status === "PASS").length,
+    failed: contracts.filter((contract) => contract.status === "FAIL").length,
+    consumers_total: consumers.length,
+    consumers_passed: consumers.filter((consumer) => consumer.status === "PASS").length,
+  };
+  return {
+    head_sha: headSha,
+    map_path: CANONICAL_MAP_PATH,
+    map_blob_sha: mapFile.sha || null,
+    trusted_map_blob_sha: trustedMapBlobSha,
+    map_status: documentErrors.length ? "FAIL" : "PASS",
+    contracts,
+    summary,
+    errors,
+    verdict: errors.length ? "FAIL" : "PASS",
+  };
+}
+
 export function waitAgeMs(pr, now = null) {
   if (now == null) return null;
   const stamp = Date.parse(pr?.updated_at || "");
@@ -181,6 +422,7 @@ export function evaluateCandidate({
   blockingReview = false,
   baseUpdateRequired = false,
   securityFindings = [],
+  canonicalValidation = null,
   now = null,
   waitTimeoutMs = DEFAULT_WAIT_TIMEOUT_MS,
 }) {
@@ -212,6 +454,11 @@ export function evaluateCandidate({
   }
 
   for (const finding of securityFindings) reasons.push(`SECURITY_FINDING:${finding}`);
+
+  if (!canonicalValidation) reasons.push("CANONICAL_VALIDATION_MISSING");
+  else if (canonicalValidation.verdict !== "PASS") {
+    reasons.push(`CANONICAL_VALIDATION_FAILED:${canonicalValidation.errors?.length || 0}`);
+  }
 
   if (pr.mergeable === false || pr.mergeable_state === "dirty") reasons.push("MERGE_CONFLICT");
   if (pr.mergeable == null || pr.mergeable_state === "unknown") waits.push("MERGEABILITY_PENDING");
@@ -252,6 +499,7 @@ export function evaluateCandidate({
     base_update_required: baseUpdateRequired,
     unresolved_review_threads: unresolvedThreads,
     security_findings: securityFindings,
+    canonical_validation: canonicalValidation,
     workflows,
     reasons,
     waits,
@@ -367,6 +615,34 @@ async function fetchPullFiles(client, repository, number) {
   return { files, overflow: true };
 }
 
+function encodeRepositoryPath(value) {
+  return normalizarCaminho(value).split("/").map(encodeURIComponent).join("/");
+}
+
+function snapshotReader(client, repository, headSha) {
+  const cache = new Map();
+  return async (rawPath) => {
+    const path = normalizarCaminho(rawPath);
+    if (!cache.has(path)) {
+      cache.set(path, (async () => {
+        const payload = await client.request(
+          "GET",
+          `/repos/${repository}/contents/${encodeRepositoryPath(path)}?ref=${encodeURIComponent(headSha)}`,
+          undefined,
+          { allow: [404] },
+        );
+        if (payload?.type !== "file" || payload.encoding !== "base64" || typeof payload.content !== "string") return null;
+        return {
+          path,
+          sha: String(payload.sha || "").toLowerCase(),
+          content: Buffer.from(payload.content.replace(/\s+/g, ""), "base64").toString("utf8"),
+        };
+      })());
+    }
+    return cache.get(path);
+  };
+}
+
 async function fetchBlockingReview(client, repository, number) {
   const reviews = await client.request("GET", `/repos/${repository}/pulls/${number}/reviews?per_page=100`);
   const latest = new Map();
@@ -403,10 +679,22 @@ async function inspectCandidate(client, repository, number, trustedAuthors, requ
   const pr = await fetchPull(client, repository, number);
   const auth = authorizationFor(pr);
   const fastPath = auth.merge_policy === FAST_MERGE_POLICY && auth.viaBody;
-  const [needsUpdate, changed, blockingReview] = await Promise.all([
+  const headSnapshot = snapshotReader(client, repository, pr.head.sha);
+  const baseSnapshot = snapshotReader(client, repository, pr.base.sha);
+  const trustedMapFile = await baseSnapshot(CANONICAL_MAP_PATH);
+  let trustedMap = null;
+  try { trustedMap = trustedMapFile ? JSON.parse(trustedMapFile.content) : null; }
+  catch { trustedMap = null; }
+  const [needsUpdate, changed, blockingReview, canonicalValidation] = await Promise.all([
     baseUpdateRequired(client, repository, pr),
     fetchPullFiles(client, repository, number),
     fetchBlockingReview(client, repository, number),
+    validateCanonicalSnapshot({
+      headSha: pr.head.sha,
+      readSnapshot: headSnapshot,
+      trustedMap,
+      trustedMapBlobSha: trustedMapFile?.sha || null,
+    }),
   ]);
 
   const securityFindings = scanPullFiles(changed.files);
@@ -432,6 +720,7 @@ async function inspectCandidate(client, repository, number, trustedAuthors, requ
     blockingReview,
     baseUpdateRequired: needsUpdate,
     securityFindings,
+    canonicalValidation,
     now: Date.now(),
     waitTimeoutMs: waitTimeoutMsFromEnv(),
   });
@@ -449,6 +738,9 @@ async function upsertBlockComment(client, repository, candidate) {
     "",
     "Bloqueios:",
     ...(candidate.reasons.length ? candidate.reasons.map((reason) => `- \`${reason}\``) : ["- estado não elegível"]),
+    ...(candidate.canonical_validation?.errors?.length
+      ? ["", "Mapa/contratos:", ...candidate.canonical_validation.errors.slice(0, 12).map((error) => `- \`${error}\``)]
+      : []),
     "",
     "Nenhum merge foi executado. O controlador reavalia automaticamente; não pede novamente a mesma autorização.",
   ];
@@ -470,6 +762,8 @@ async function upsertSuccessComment(client, repository, candidate, mergeSha, rec
     `AUTHORITY=\`${candidate.authorization.authority || "UNKNOWN"}\``,
     `INTENT_SCOPE=\`${candidate.authorization.intent_scope || "label-persistente"}\``,
     `JUDGE_RECEIPT_SHA256=\`${receiptSha}\``,
+    `CANONICAL_MAP_BLOB=\`${candidate.canonical_validation?.map_blob_sha || "UNKNOWN"}\``,
+    `CANONICAL_CONTRACTS=\`${candidate.canonical_validation?.summary?.passed || 0}/${candidate.canonical_validation?.summary?.total || 0}\``,
     "REASK=`NAO`",
   ].join("\n");
   await client.request("POST", `/repos/${repository}/issues/${candidate.pr_number}/comments`, { body });
@@ -487,11 +781,19 @@ async function runJudge() {
   for (const number of numbers) candidates.push(await inspectCandidate(client, repository, number, trustedAuthors, requiredWorkflows));
 
   const receipt = {
-    schema: "centraldark.autonomia-promocao.v2",
+    schema: "centraldark.autonomia-promocao.v3",
     generated_at: new Date().toISOString(),
     repository,
     event_name: process.env.GITHUB_EVENT_NAME || "unknown",
     run_id: process.env.GITHUB_RUN_ID || null,
+    execution_provenance: executionProvenance(process.env),
+    canonical_contract_policy: {
+      map: CANONICAL_MAP_PATH,
+      denominator: "LIVE_BASE_SHA",
+      target: "EXACT_PR_HEAD_SHA",
+      untrusted_pr_code_executed: false,
+      fail_closed: true,
+    },
     required_workflows_adversarial: requiredWorkflows,
     candidates,
   };
