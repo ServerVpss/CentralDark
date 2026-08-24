@@ -84,6 +84,23 @@ check('docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-pombo-correio-com-checksum.md',[
  'CHECKSUM != PROVA_SEMÂNTICA',
  'docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md',
 ], classification='POMBO_CHECKSUM_HANDOFF_CONTRACT')
+check('docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md',[
+ '#ACORDAR',
+ '!CALIBRAR',
+ '!MULTIBÚSSOLA',
+ '!META_LUPA',
+ 'UNKNOWN → MEASURE → TEST → OBSERVE_REALITY → PROVADO | FALHOU | NOT_PROVEN',
+ 'ACTION != PROOF',
+ 'STATE_CHANGED=true',
+ 'PAPAGAIO_MODE = OFF',
+ 'POMBO_MODE = CHECKSUM_ON',
+ 'HEAD_SHA / CONTENT_SHA256',
+ 'UNKNOWN_PRESERVED',
+ 'RESIDUAL_PRESERVED',
+ 'NEXT_CURSOR_PRESENT',
+ 'CHECKSUM != PROVA_SEMÂNTICA',
+ 'LEARNING_TRANSFER_FAIL',
+], classification='CANONICAL_HANDOFF_POMBO_MODE_CONTRACT')
 
 # Regra operacional global: a Casa não usa GitHub-hosted runners nos workflows raiz.
 # Linux self-hosted é o default. Se a capacidade exigir outra plataforma, ela ainda
@@ -122,4 +139,5 @@ print('CANONICAL_RUNNER_POLICY=PASS')
 print('SELF_HEALING_CONTRACT=PASS')
 print('OPERATIONAL_RULE_LEARNING_CONTRACT=PASS')
 print('POMBO_CHECKSUM_HANDOFF_CONTRACT=PASS')
+print('CANONICAL_HANDOFF_POMBO_MODE_CONTRACT=PASS')
 print('NOTE=PASS proves repository contract/path/runner-policy facts only; it does not prove live Windows/VPS/runtime inheritance.')
