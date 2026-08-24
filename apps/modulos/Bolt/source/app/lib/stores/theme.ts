@@ -58,4 +58,3 @@ export function cycleTheme() {
 export function toggleTheme() {
   cycleTheme();
 }
-
