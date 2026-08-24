@@ -67,6 +67,94 @@ LAST_GOOD_STATE
 NEXT_CURSOR / NEXT BOOT
 ```
 
+## Mapa visual derivado — aliases, nunca novos owners
+
+A Forja de cartas e outros artefatos visuais podem representar a mesma arquitetura com nomes culturais. Esses nomes **não criam componente, autoridade, gate ou owner**. Quando houver equivalência provada, o visual aponta para o owner canônico; quando não houver owner provado, permanece representação/UNKNOWN.
+
+```text
+                         👑 CHEFE
+                    intenção + autoridade
+                              │
+                              ▼
+          ☼ #ACORDAR → ⚙ !CALIBRAR → 🧭 !MULTIBÚSSOLA
+                              │
+                              ▼
+                        ☀️ SOL
+                 coordena / reconcilia
+                              │
+                 ┌────────────┼────────────┐
+                 ▼            ▼            ▼
+              ✶ GRAFO      ♄ VIGIA      ♃ J.R.V.S.
+              estado      observação     agentes
+                 └────────────┼────────────┘
+                              ▼
+                         ⊛ META LUPA
+                       tenta falsificar
+                              │
+                              ▼
+                        ✎ WRITER ÚNICO
+                              │
+                              ▼
+                          ☿ HERMES
+                    executa / preserva
+                              │
+                              ▼
+                         ∞ FABLE LOOP
+                  executar → medir → repetir
+                              │
+                              ▼
+                         ⚖ FABLE JUDGE
+                       segundo leitor
+                              │
+                    ┌─────────┴─────────┐
+                    │                   │
+                 FALHOU              PROVOU
+                    │                   │
+                    ▼                   ▼
+             🜏 TÉCNICA DA LUPA      APRENDIZADO
+             erro → mecanismo            │
+                    │                    │
+                    └──────────┬─────────┘
+                               ▼
+                           ✶ GRAFO
+                        estado atualizado
+                               │
+                               ▼
+                         PRÓXIMO #ACORDAR
+```
+
+Mapeamento operacional:
+
+```text
+CHEFE -> SEGREDO/CHEFE
+SOL -> SOL / coordenação canônica
+GRAFO -> GraphRAG + estado/grafo observável quando aplicável
+META_LUPA -> .agents/skills/meta-lupa/
+WRITER_UNICO -> ONE_WRITER_PER_SCOPE
+HERMES -> Hermes Core / PIVETE-HERMES executor
+FABLE_LOOP -> EXECUTE_MEASURE_REMEDIATE_LOOP
+FABLE_JUDGE -> REALITY_JUDGE
+TECNICA_DA_LUPA -> FAILURE_TO_LEARNING_LOOP / cristalização no owner existente
+VIGIA -> OBSERVABILITY_ALIAS; owner concreto deve ser provado por consumidor
+J.R.V.S. -> VISUAL_ALIAS_ONLY_UNTIL_CANONICAL_OWNER_PROVEN
+GUARDIAO_CASA -> REPRESENTATION_GAP_NOT_CANONICAL_OWNER
+```
+
+Invariantes da camada visual:
+
+```text
+VISUAL_ALIAS_IS_NOT_OWNER=true
+VISUAL_ALIAS_IS_NOT_RUNTIME_PROOF=true
+VISUAL_POSITION_IS_NOT_AUTHORITY=true
+FABLE_JUDGE_IS_ALIAS_OF_REALITY_JUDGE=true
+FABLE_LOOP_IS_ALIAS_OF_EXECUTE_MEASURE_REMEDIATE_LOOP=true
+JRVS_VISUAL_ALIAS_IS_NOT_CANONICAL_OWNER=true
+GUARDIAO_CASA_REPRESENTATION_GAP_IS_NOT_CANONICAL_OWNER=true
+NO_NEW_OWNER_FROM_VISUAL_METAPHOR=true
+```
+
+A ausência de `GuardiaoCasa` como owner canônico observado não proíbe futura representação visual; só impede promover a inferência para runtime sem owner + consumidor + prova. Da mesma forma, `J.R.V.S.` pode continuar como linguagem visual sem ganhar governança própria.
+
 ## Camisa de força de saída
 
 A entrada correta não basta. Antes de qualquer retorno material ao humano, o `OUTPUT_GUARD` verifica o mesmo claim ao contrário:
