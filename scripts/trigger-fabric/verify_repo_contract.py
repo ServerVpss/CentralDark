@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from pathlib import Path
-import json, sys
+import json, sys, re
 
 ROOT=Path(sys.argv[1] if len(sys.argv)>1 else '.').resolve()
 checks=[]
@@ -25,9 +25,16 @@ check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml',[
  'mandatory_before_human_return: true',
  'no_new_workflow_when_owner_exists: true',
  'yellow_status_semantics: FORBIDDEN',
+ 'github_hosted_runner: FORBIDDEN',
+ 'scope: ALL_ACTIVE_ROOT_GITHUB_WORKFLOWS',
+ 'scope: ALL_PR_COMMIT_AND_RUNTIME_ELIGIBLE_FAILURES',
 ])
 check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml',[
- 'event: BOT_ENTRY','event: PRE_HUMAN_RETURN','event: RESUME','BYTE_IDENTICAL -> PROCESS_ONCE_KEEP_PROVENANCE'
+ 'event: BOT_ENTRY','event: PRE_HUMAN_RETURN','event: RESUME',
+ 'event: ANY_PR_OR_COMMIT','event: CI_RUNNER_ROUTE_FAILURE',
+ 'BYTE_IDENTICAL -> PROCESS_ONCE_KEEP_PROVENANCE',
+ 'GITHUB_HOSTED_RUNNER -> FAIL_CLOSED',
+ 'SAME_FAILURE_NO_NEW_INFO -> REUSE_CRYSTAL',
 ])
 check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml',[
  'engine_is_owner: false','prompt_consumer: apps/modulos/HERMES-CORE/prompts/hermes-core.md','LOAD_REFERENCE'
@@ -54,12 +61,39 @@ check('.github/workflows/autonomia-promocao.yml',['Juiz determinístico','github
 check('.github/workflows/trigger-fabric-package.yml',['Trigger Fabric Full Package','Fresh-extraction counterproof'])
 check('docs/CONSCIENCIA/GITHUB-LABELS-OPERACIONAIS.md',['👑 PERMITO-SEGREDO','✅ PR CONFIRMADO','Label roteia trabalho; **nunca concede autoridade humana**.'])
 
+# Regra operacional global: a Casa não usa GitHub-hosted runners nos workflows raiz.
+# Linux self-hosted é o default. Se a capacidade exigir outra plataforma, ela ainda
+# precisa ser self-hosted e a necessidade deve permanecer explícita no próprio workflow.
+workflow_dir=ROOT/'.github'/'workflows'
+forbidden_runner_labels=('ubuntu-latest','windows-latest','macos-latest')
+runner_violations=[]
+workflow_files=[]
+if workflow_dir.exists():
+    workflow_files=sorted([*workflow_dir.glob('*.yml'),*workflow_dir.glob('*.yaml')])
+    for wf in workflow_files:
+        text=wf.read_text(encoding='utf-8',errors='replace')
+        for label in forbidden_runner_labels:
+            if re.search(r'(?mi)^\s*runs-on\s*:\s*[^#\n]*\b'+re.escape(label)+r'\b', text):
+                runner_violations.append({'path':str(wf.relative_to(ROOT)),'label':label})
+checks.append({
+    'path':'.github/workflows/*.{yml,yaml}',
+    'classification':'GLOBAL_RUNNER_POLICY',
+    'ok':not runner_violations,
+    'missing':runner_violations,
+    'files_scanned':len(workflow_files),
+})
+
 failed=[c for c in checks if not c['ok']]
-print(json.dumps({'checks':checks,'failed':len(failed)},ensure_ascii=False,indent=2))
+print(json.dumps({'checks':checks,'failed':len(failed),'runner_violations':runner_violations},ensure_ascii=False,indent=2))
 if failed:
-    print('REPO_CONTRACT_VERIFY=FAIL'); sys.exit(1)
+    print('REPO_CONTRACT_VERIFY=FAIL')
+    if runner_violations:
+        print('CANONICAL_RUNNER_POLICY=FAIL')
+    sys.exit(1)
 print('REPO_CONTRACT_VERIFY=PASS')
 print('BOT_ENTRY_CONTRACT=PASS')
 print('OUTPUT_GUARD_CONTRACT=PASS')
 print('WORKFLOW_REUSE_CONTRACT=PASS')
-print('NOTE=PASS proves repository contract/path facts only; it does not prove live Windows/VPS/runtime inheritance.')
+print('CANONICAL_RUNNER_POLICY=PASS')
+print('SELF_HEALING_CONTRACT=PASS')
+print('NOTE=PASS proves repository contract/path/runner-policy facts only; it does not prove live Windows/VPS/runtime inheritance.')
