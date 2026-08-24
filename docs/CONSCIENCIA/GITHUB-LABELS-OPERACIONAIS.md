@@ -20,6 +20,44 @@ A autorização humana canônica é:
 
 `permito-pivete`, `PERMITO-PIVETE` e outros aliases históricos não pertencem à taxonomia operacional ativa. O histórico permanece nos registros antigos, sem promover PIVETE/HERMES/modelo/bot a autoridade.
 
+## Resultado confirmado de PR
+
+A confirmação visual canônica é:
+
+```text
+✅ PR CONFIRMADO
+```
+
+Ela fica semanticamente **ao lado** de `👑 PERMITO-SEGREDO`, mas representa outra camada:
+
+```text
+👑 PERMITO-SEGREDO = AUTORIDADE HUMANA DELEGADA / INTENÇÃO
+✅ PR CONFIRMADO   = RESULTADO DERIVADO APÓS PROVA OBSERVADA
+```
+
+`✅ PR CONFIRMADO` nunca participa do selo que autoriza/promove o próprio PR e nunca concede autoridade. O CI só pode materializá-la depois de observar, no mesmo PR:
+
+```text
+PR_MERGED=true
++ 👑 PERMITO-SEGREDO presente
++ 🟢 SUCESSO presente
++ comentário canônico de promoção presente
++ HEAD_PROVADO == PR.head.sha
++ MERGE_SHA == PR.merge_commit_sha
++ JUDGE_RECEIPT_SHA256 = 64 hex válido
+→ ✅ PR CONFIRMADO
+```
+
+```text
+PR_CONFIRMED_IS_DERIVED_RESULT=true
+PR_CONFIRMED_IS_AUTHORITY=false
+PR_CONFIRMED_IS_PROMOTION_INPUT=false
+PR_CONFIRMED_CANNOT_SELF_PROVE=true
+UNKNOWN != CONFIRMED
+```
+
+Owner do mecanismo: `scripts/github-pr-confirmado-label.mjs`, executado dentro de `.github/workflows/autonomia-promocao.yml` depois do promotor canônico.
+
 ## Lei do catálogo
 
 ```text
@@ -34,6 +72,7 @@ SEM_CONSUMIDOR + SEM_ROTEAMENTO + SEM_VALOR_OPERACIONAL = REMOVER
 ## Núcleo canônico
 
 - `👑 PERMITO-SEGREDO`
+- `✅ PR CONFIRMADO`
 - `🔄 GIT`, `🔄 GIT-DIVERGÊNCIA`
 - `🧠 AGENTE-CHATGPT`, `🧠 AGENTE-CLAUDE`, `🧠 AGENTE-CODEX`, `🧠 AGENTE-GROK`, `🧠 AGENTE-HERMES`, `🧠 AGENTE-JARVIS`, `🧠 AGENTE-SENTINELA`, `🧠 AGENTE-SUPABASE`
 - `🤖 AUTO`, `🤖 AGENTIC-DEVOPS`, `🤖 IA-DOCUMENTAR`, `🤖 IA-EXECUTAR`, `🤖 IA-FRONTEND`, `🤖 IA-INFRA`, `🤖 IA-PESQUISAR`, `🤖 IA-REVISAR`, `🤖 IA-VALIDAR`
@@ -89,6 +128,8 @@ AUTHORITY_APPROVAL → normaliza a label observada antes de decidir autorizaçã
 CANONICAL_VISUAL_LABEL=👑 PERMITO-SEGREDO
 TEXT_ALIAS=permito-segredo
 TEXT_ALIAS_IS_COMPATIBILITY_NOT_SECOND_LABEL=true
+CONFIRMED_RESULT_LABEL=✅ PR CONFIRMADO
+CONFIRMED_RESULT_LABEL_IS_NOT_AUTHORITY=true
 ```
 
 O HUB já descobre ferramentas pelo MCP; portanto herda a semântica do tool GitHub existente. Não duplicar catálogo, regra de autoridade ou normalizador dentro da interface.
@@ -124,4 +165,7 @@ INTENÇÃO = SEGREDO/CHEFE
 ESTADO = EVIDÊNCIA
 EXECUÇÃO = CAPACIDADE AUTORIZADA
 REALIDADE = JUIZ
+
+👑 = AUTORIDADE
+✅ = RESULTADO CONFIRMADO
 ```
