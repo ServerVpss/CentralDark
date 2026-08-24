@@ -1,0 +1,45 @@
+schema: centraldark.trigger-fabric.v1
+base_head: f488251d3ad3ba5f71e2973d9d42fef3683f4885
+authority:
+  human_intent_owner: SEGREDO/CHEFE
+  coordinator: SOL
+  executor_continuity: HERMES/PIVETE
+  judge: REALITY
+principles:
+  one_system_only: true
+  reuse_before_create: true
+  one_owner_per_capability: true
+  one_writer_per_scope: true
+  parallelize_perception: true
+  serialize_mutation: true
+  unknown_never_pass: true
+  history_ne_current: true
+  spec_ne_implementation: true
+master_trigger:
+  expression: "#ACORDAR + !CALIBRAR + !MULTIBUSSOLA"
+  behavior:
+    - destination_lock
+    - recover_live_state
+    - align_intent_scope_tools_proof
+    - scan_all_material_axes
+    - rendezvous
+    - meta_lupa_proportional_to_risk
+    - route_to_existing_owner
+    - execute_minimal_delta
+    - collect_evidence
+    - counterproof
+    - reality_judge
+    - receipt_and_learning
+states:
+  proven: "GREEN"
+  failed_or_blocked: "RED"
+  unknown_not_proven: "BLACK"
+  quarantine_or_chefe_lock: "LOCKED"
+  working_forja: "WORKING"
+claims:
+  package_completeness_may_be_100_percent_if_verifier_passes: true
+  global_runtime_100_percent: false
+  global_runtime_100_percent_status: NOT_PROVEN
+return_rule:
+  - DESTINATION_PROVED
+  - HUMAN_FRONTIER_PROVED
