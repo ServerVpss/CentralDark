@@ -72,6 +72,18 @@ check('.github/workflows/porta-de-entrada.yml',[
 check('.github/workflows/autonomia-promocao.yml',['Juiz determinístico','github-pr-confirmado-label.mjs'])
 check('.github/workflows/trigger-fabric-package.yml',['Trigger Fabric Full Package','Fresh-extraction counterproof'])
 check('docs/CONSCIENCIA/GITHUB-LABELS-OPERACIONAIS.md',['👑 PERMITO-SEGREDO','✅ PR CONFIRMADO','Label roteia trabalho; **nunca concede autoridade humana**.'])
+check('docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-pombo-correio-com-checksum.md',[
+ 'POMBO != CÉREBRO',
+ 'POMBO != OWNER',
+ 'POMBO != JUIZ',
+ 'DESTINATION_LOCK_DEVE_SOBREVIVER_AO_HANDOFF=true',
+ 'UNKNOWN_DEVE_SOBREVIVER_AO_HANDOFF=true',
+ 'PROVENIÊNCIA_DEVE_SOBREVIVER_AO_HANDOFF=true',
+ 'NEXT_CURSOR_DEVE_SOBREVIVER_AO_HANDOFF=true',
+ 'LEARNING_TRANSFER_FAIL',
+ 'CHECKSUM != PROVA_SEMÂNTICA',
+ 'docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md',
+], classification='POMBO_CHECKSUM_HANDOFF_CONTRACT')
 
 # Regra operacional global: a Casa não usa GitHub-hosted runners nos workflows raiz.
 # Linux self-hosted é o default. Se a capacidade exigir outra plataforma, ela ainda
@@ -109,4 +121,5 @@ print('WORKFLOW_REUSE_CONTRACT=PASS')
 print('CANONICAL_RUNNER_POLICY=PASS')
 print('SELF_HEALING_CONTRACT=PASS')
 print('OPERATIONAL_RULE_LEARNING_CONTRACT=PASS')
+print('POMBO_CHECKSUM_HANDOFF_CONTRACT=PASS')
 print('NOTE=PASS proves repository contract/path/runner-policy facts only; it does not prove live Windows/VPS/runtime inheritance.')
