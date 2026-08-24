@@ -159,6 +159,75 @@ HANDOFF_QUE_CRIA_OWNER_PARALELO = FAIL
 HANDOFF_QUE_DEVOLVE_TRABALHO_MECÂNICO_AO_CHEFE = PAPAGAIO
 ```
 
+### Modo compacto obrigatório — Papagaio OFF / Pombo Checksum ON
+
+Este bloco resume o comportamento operacional esperado sem substituir os
+owners canônicos. Ele é uma forma compacta de checar se a transferência e a
+conclusão continuam presas à realidade observável.
+
+```text
+#ACORDAR
+→ estado vivo primeiro
+
+!CALIBRAR
+→ intenção/destino vigente
+
+!MULTIBÚSSOLA
+→ caminhos e hipóteses materiais
+
+!META_LUPA
+→ tenta quebrar a própria conclusão
+
+UNKNOWN
+→ vai atrás da realidade
+
+AÇÃO
+!= PROVA
+
+ESTADO MUDOU
+→ recalibra
+
+FALHOU
+→ causa → owner existente → delta mínimo → reteste
+
+PROVOU
+→ receipt + SHA/checksum + NEXT_CURSOR
+
+NÃO PROVOU
+→ NOT_PROVEN
+```
+
+```text
+PAPAGAIO_MODE = OFF
+"acho"
+"deve"
+"já estava"
+"parece"
+"provavelmente"
+→ NÃO governa estado
+
+POMBO_MODE = CHECKSUM_ON
+estado medido
++ horário
++ HEAD/SHA
++ evidência
++ residual/UNKNOWN
++ destino preservado
+→ continua o fio
+```
+
+Invariantes do bloco compacto:
+
+```text
+UNMEASURED_LANGUAGE_IS_NOT_STATE=true
+STATE_CHANGE_REQUIRES_RECALIBRATION=true
+ACTION_IS_NOT_PROOF=true
+FAILURE_REQUIRES_CAUSE_OWNER_MINIMAL_DELTA_RETEST=true
+PROVEN_RETURN_REQUIRES_RECEIPT_SHA_NEXT_CURSOR=true
+NOT_PROVEN_MUST_REMAIN_NOT_PROVEN=true
+POMBO_CHECKSUM_REQUIRES_MEASURED_STATE_TIME_HEAD_EVIDENCE_RESIDUAL_DESTINATION=true
+```
+
 O oposto cultural continua sendo `🚨 POMBO SEM CHECKSUM`: entrega sem prova de
 integridade/proveniência quando materialmente exigidas, ou devolução ao CHEFE
 de uma descoberta mecânica que a Casa conseguia realizar.
@@ -216,6 +285,11 @@ AND DESTINATION_SURVIVES_HANDOFF
 AND PROVENANCE_SURVIVES_HANDOFF
 AND UNKNOWN_SURVIVES_HANDOFF
 AND NEXT_CURSOR_SURVIVES_HANDOFF
+AND PAPAGAIO_MODE_OFF_PRESENT
+AND POMBO_MODE_CHECKSUM_ON_PRESENT
+AND STATE_CHANGE_RECALIBRATION_PRESENT
+AND ACTION_NE_PROOF_PRESENT
+AND FAILURE_MINIMAL_REMEDIATION_LOOP_PRESENT
 AND NO_PARALLEL_OWNER_CREATED
 AND MATERIAL_UNKNOWN_FOR_THIS_SCOPE = 0
 ```
