@@ -30,7 +30,7 @@ concurrency:
 
 jobs:
   build-counterproof-package:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux]
     timeout-minutes: 15
     steps:
       - name: Checkout exact PR state
