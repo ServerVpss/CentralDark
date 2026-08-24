@@ -53,7 +53,7 @@
       "relations": [
         {"type": "owned-by", "target": ".agents/skills/visual-design-method/SKILL.md"},
         {"type": "governed-by", "target": "LEIA-ME-IA.md"},
-        {"type": "explains", "target": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-CANONICA.md"},
+        {"type": "explains", "target": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json"},
         {"type": "mirrored-by", "target": "docs/ARQUITETURA/HERMES-CASA-OBSIDIAN-SYNC.md"}
       ]
     },

@@ -30,7 +30,7 @@ Oxe, o pulo do gato é este: **segundo cérebro não é segundo dono**. Obsidian
 
 | ID | Cartaz | Função semântica | Dono textual |
 | --- | --- | --- | --- |
-| CD-POSTER-01-PAPAGAIO | [Casa sem papagaio](./01-casa-nao-acredita-em-papagaio.webp) | firewall epistemológico | [Contrato de reconciliação](../../../CONSCIENCIA/CONTRATO-RECONCILIACAO-CANONICA.md) |
+| CD-POSTER-01-PAPAGAIO | [Casa sem papagaio](./01-casa-nao-acredita-em-papagaio.webp) | firewall epistemológico | [Contrato de reconciliação](../../../CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json) |
 | CD-POSTER-02-CAJADO | [Cajado da correção](./02-cajado-da-correcao.webp) | pipeline canônico de artefato | [Design system](../../../CONSCIENCIA/ARQUITETURA/DESIGN-SISTEMA.md) |
 | CD-POSTER-03-TRAJETORIA | [Trajetória vivida](./03-trajetoria-vivida.webp) | ciclo de aprendizado | [AGENTS](../../../../AGENTS.md) |
 | CD-POSTER-04-ARQUITETURA | [Arquitetura operacional](./04-arquitetura-operacional.webp) | topologia da Casa | [Mapa do cérebro](../../../CONSCIENCIA/MAPA-DO-CEREBRO.md) |
