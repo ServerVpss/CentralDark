@@ -25,6 +25,13 @@ principles:
   operational_failure_must_be_generalized: true
   proven_operational_rule_must_bind_to_runtime: true
   same_failure_without_new_information_reuses_crystal: true
+  second_brain_logical_one: true
+  second_brain_parallel_forbidden: true
+second_brain:
+  contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SECOND-BRAIN.yml
+  logical: ONE
+  surfaces: [github_canonical, local_obsidian_files, derived_graph_vector]
+  graph_vector_authority: false
 master_trigger:
   expression: "#ACORDAR + !CALIBRAR + !MULTIBUSSOLA"
   inherited_on_bot_entry: true
@@ -205,6 +212,14 @@ ci_binding:
     push_any_branch: REQUIRED_BY_PORTA_DE_ENTRADA
     push_main: REQUIRED
     direct_main_mutation_without_gate: FORBIDDEN_BY_POLICY
+  autonomy_promotion:
+    merge_method: squash
+    target: main
+    intent_authorized_no_reask: true
+    auto_squash_if_clean: true
+    wait_slow_self_hosted_auxiliary: false
+    causal_gates_required: true
+    false_green_forbidden: true
 self_healing:
   mandatory_for_operational_failure: true
   scope: ALL_PR_COMMIT_AND_RUNTIME_ELIGIBLE_FAILURES
