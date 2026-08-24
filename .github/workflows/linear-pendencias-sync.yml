@@ -60,52 +60,33 @@ jobs:
           fi
           echo "skip=false" >> "$GITHUB_OUTPUT"
 
-      - name: Rodar sync
-        if: steps.gate.outputs.skip != 'true'
-        id: run
+      - name: Rodar sync + publicar com writer-safe-push
+        if: github.ref == 'refs/heads/main' && steps.gate.outputs.skip != 'true'
+        shell: bash
         env:
           LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
+          WRITER_TAG: LINEAR_SYNC
+          PATHS: docs/PENDENCIAS.md
+          GIT_AUTHOR_NAME: centraldark-bot
+          GIT_AUTHOR_EMAIL: bot@centralldark.com
+          MAX_TRIES: "3"
+          EVENT_NAME: ${{ github.event_name }}
+          APPLY_INPUT: ${{ inputs.apply }}
         run: |
           set -euo pipefail
           MODE=""
-          if [ "${{ github.event_name }}" = "schedule" ] || [ "${{ github.event_name }}" = "push" ]; then
+          if [ "$EVENT_NAME" = "schedule" ] || [ "$EVENT_NAME" = "push" ]; then
             MODE="--apply"
-          elif [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.apply }}" = "true" ]; then
+          elif [ "$EVENT_NAME" = "workflow_dispatch" ] && [ "$APPLY_INPUT" = "true" ]; then
             MODE="--apply"
           fi
           if [ -n "$MODE" ]; then
-            node scripts/sync/linear-pendencias.mjs "$MODE" | tee /tmp/sync.out
+            export REGENERATE_CMD="node scripts/sync/linear-pendencias.mjs $MODE"
           else
-            node scripts/sync/linear-pendencias.mjs | tee /tmp/sync.out
+            export REGENERATE_CMD="node scripts/sync/linear-pendencias.mjs"
           fi
-
-      - name: Commit + push se PENDENCIAS.md mudou
-        if: github.ref == 'refs/heads/main' && steps.gate.outputs.skip != 'true'
-        shell: bash
-        run: |
-          set -euo pipefail
-          if git diff --quiet docs/PENDENCIAS.md; then
-            echo "Sem diff — nada a commitar."
-            exit 0
-          fi
-          git config user.name  "centraldark-bot"
-          git config user.email "bot@centralldark.com"
-          git add docs/PENDENCIAS.md
-          git commit \
-            -m "chore(pendencias): sync Linear → MD [skip ci]" \
-            -m "Co-authored-by: SegredoiDev <segredounlock@users.noreply.github.com>"
-
-          BASE_SHA=$(git rev-parse HEAD^)
-          git fetch --no-tags origin main
-          REMOTE_SHA=$(git rev-parse FETCH_HEAD)
-          if [ "$REMOTE_SHA" != "$BASE_SHA" ]; then
-            echo "LINEAR_SYNC_BLOCKED_DIVERGENCE base=$BASE_SHA remote=$REMOTE_SHA"
-            exit 1
-          fi
-          echo "🚪 Gate global pré-main"
-          node scripts/lupa/validar-continuidade-global.mjs
-          node scripts/lupa/validar-porta-de-entrada.mjs
-          git push origin HEAD:main
+          export COMMIT_MESSAGE=$'chore(pendencias): sync Linear → MD [skip ci]\n\nCo-authored-by: SegredoiDev <segredounlock@users.noreply.github.com>'
+          bash scripts/lupa/writer-safe-push-main.sh
 
       - name: Upload relatório
         if: always()
