@@ -20,6 +20,73 @@ check('AGENTS.md',['#ACORDAR','!CALIBRAR','REALITY=JUDGE'])
 check('docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md',['#ACORDAR + !CALIBRAR + !MULTIBUSSOLA','MESMO_CONTRATO=SIM'])
 check('docs/CONSCIENCIA/MULTIBUSSOLA.md',['!MULTIBUSSOLA','REALITY_IS_JUDGE=true','BOTTOM-UP','ROUND-TRIP'])
 check('.agents/skills/meta-lupa/SKILL.md',['# META LUPA','FALSO_VERDE_BLOQUEADO=SIM'])
+check('docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md',[
+ 'PAPAGAIO_MODE=OFF',
+ 'POMBO_MODE=CHECKSUM_ON',
+ 'HISTORY != CURRENT_STATE',
+ 'ACTION != PROOF',
+ 'UNKNOWN != PASS',
+ 'ESTADO_MUDOU',
+ 'NOT_PROVEN',
+ 'DESTINATION_LOCK_DEVE_SOBREVIVER_AO_HANDOFF=true',
+ 'UNKNOWN_DEVE_SOBREVIVER_AO_HANDOFF=true',
+ 'PROVENIENCIA_DEVE_SOBREVIVER_AO_HANDOFF=true',
+ 'NEXT_CURSOR_DEVE_SOBREVIVER_AO_HANDOFF=true',
+ 'LEARNING_TRANSFER_FAIL',
+ 'ARCHITECTURE_CLASS = PROOF_CARRYING_CLOSED_LOOP_CONTROL',
+ 'STATE_MODEL = EPISTEMIC_STATE_MACHINE',
+ 'MUTATION_MODEL = SERIALIZED_SINGLE_WRITER',
+ 'CONTINUITY_MODEL = RECEIPT_PLUS_CHECKSUM_PLUS_NEXT_CURSOR',
+ 'EXECUTOR_CANNOT_SELF_APPROVE=true',
+ 'JUDGE_DOES_NOT_MUTATE=true',
+ 'GRAPH_IS_DERIVED_NOT_AUTHORITY=true',
+], classification='CANONICAL_HANDOFF_POMBO_CHECKSUM')
+check('docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-alquimia-operacional-minerio-ouro-cristal.md',[
+ 'PAPAGAIO_IS_FAILURE_SIGNATURE=true',
+ 'POMBO_MODE=CHECKSUM_ON',
+ 'PROOF_WITHOUT_DESTINATION_BINDING = INCOMPLETE_HANDOFF',
+ 'RECEIPT_HEAD_SHA != CURRENT_HEAD_SHA',
+ 'PR_SUPERSEDED',
+ 'MULTIPLE_SURFACES_ARE_NOT_MULTIPLE_BRAINS=true',
+ 'RAW_MATERIAL_IS_NOT_GOLD=true',
+ 'GOLD_IS_NOT_CRYSTAL=true',
+ 'CRYSTAL_REQUIRES_OWNER_CONSUMER_TEST_GATE=true',
+ 'ALCHEMISTIC_CABINET_IS_CULTURAL_ALIAS_ONLY=true',
+ 'ITEM_PROOF_DESTINATION_BINDING',
+ 'ITEM_SAME_HEAD_RECEIPT',
+ 'ITEM_SUPERSEDED_CHAIN_FOLLOW',
+ 'ITEM_SCREENSHOT_SCOPE_GUARD',
+ 'ITEM_MULTI_SURFACE_ONE_DESTINATION',
+ 'ITEM_ALCHEMICAL_MATTER_STATES',
+ 'ITEM_LEARNING_TRANSFER',
+], classification='ALCHEMICAL_OPERATIONAL_LEARNING_CRYSTAL')
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MATERIAL-INGEST.md',[
+ 'RAW_MATERIAL',
+ 'ASSAY',
+ 'CANDIDATE',
+ 'COUNTERPROOF',
+ 'GOLD',
+ 'CRYSTAL',
+ 'FLASH',
+ 'PROOF_DESTINATION_BINDING=true',
+ 'RECEIPT_IS_HEAD_SCOPED=true',
+ 'SUPERSEDED_PR_REQUIRES_SUCCESSOR_RESOLUTION=true',
+ 'SCREENSHOT_IS_NOT_RUNTIME_PROOF=true',
+ 'MULTIPLE_SURFACES_ARE_NOT_MULTIPLE_BRAINS=true',
+ 'LEARNING_TRANSFER_FAIL_ON_RETEACH=true',
+ 'ALCHEMISTIC_CABINET_IS_CULTURAL_ALIAS_ONLY=true',
+ 'ALCHEMISTIC_CABINET_IS_ENGINE=false',
+ 'SETOR_COGNITIVO',
+ 'SETOR_DETERMINISTICO',
+ 'ITEM_MINIMAL_CONTEXT_MAX_DETERMINISM=true',
+ 'ITEM_DETERMINISTIC_GAUNTLET=true',
+ 'ITEM_SHORT_LIVED_ROLE_CONTEXT=true',
+ 'ITEM_ARCHITECTURE_DEPENDENCY_GUARD=true',
+ 'ITEM_ITERATE_MEASURE_REORGANIZE=true',
+ 'ITEM_VALUES_OVER_BLIND_HUMAN_RITUAL=true',
+ 'RISK_PROPORTIONAL_GAUNTLET = true',
+ 'SAME_HEAD_EVIDENCE_REQUIRED = true',
+], classification='MATERIAL_STATE_MACHINE_AND_DETERMINISTIC_SCAFFOLD')
 check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml',[
  'inherited_on_bot_entry: true',
  'mandatory_before_human_return: true',
@@ -35,6 +102,36 @@ check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml',[
  'NEGATIVE_TEST',
  'prose_only_rule: NOT_LEARNED',
  'repeated_chefe_instruction_after_promoted_rule: LEARNING_TRANSFER_FAIL',
+ 'verified_continuity:',
+ 'architecture_class: PROOF_CARRYING_CLOSED_LOOP_CONTROL',
+ 'state_model: EPISTEMIC_STATE_MACHINE',
+ 'mutation_model: SERIALIZED_SINGLE_WRITER',
+ 'continuity_model: RECEIPT_PLUS_CHECKSUM_PLUS_NEXT_CURSOR',
+ 'papagaio_mode: OFF',
+ 'pombo_mode: CHECKSUM_ON',
+ 'unknown_action: MEASURE_REALITY',
+ 'state_changed: RECALIBRATE',
+ 'checksum_semantics: BYTE_IDENTITY_NOT_SEMANTIC_PROOF',
+ 'executor_cannot_self_approve: true',
+ 'judge_does_not_mutate: true',
+ 'graph_is_derived_not_authority: true',
+ 'reality_is_final_judge: true',
+ 'next_equivalent_event_must_reuse_without_chefe_reteaching: true',
+ 'deterministic_scaffold:',
+ 'boot_prompt_policy: MINIMUM_SUFFICIENT_CONTEXT',
+ 'retrieval_policy: PRECISE_RETRIEVAL_SMALL_CONTEXT',
+ 'deterministic_gauntlet_required: true',
+ 'gauntlet_is_risk_proportional: true',
+ 'same_head_evidence_required: true',
+ 'machine_checkable_dependency_rules: PREFER_WHEN_MATERIAL',
+ 'use_only_if_material_gain_exceeds_coordination_overhead: true',
+ 'copy_human_ritual_blindly: false',
+ 'ITEM_MINIMAL_CONTEXT_MAX_DETERMINISM',
+ 'ITEM_DETERMINISTIC_GAUNTLET',
+ 'ITEM_SHORT_LIVED_ROLE_CONTEXT',
+ 'ITEM_ARCHITECTURE_DEPENDENCY_GUARD',
+ 'ITEM_ITERATE_MEASURE_REORGANIZE',
+ 'ITEM_VALUES_OVER_BLIND_HUMAN_RITUAL',
 ])
 check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml',[
  'event: BOT_ENTRY','event: PRE_HUMAN_RETURN','event: RESUME',
@@ -63,7 +160,13 @@ check('scripts/memory-linker/README.md',['NO_NEW_INFORMATION=STOP=true','DIRECT_
 check('scripts/memory-linker/dream-review-run.mjs')
 check('scripts/memory-linker/pattern-discovery.mjs')
 check('.agents/skills/session-intelligence-harvester/SKILL.md',['Run on session end (hook).'],'DECLARED_HOOK_NOT_RUNTIME_PROOF')
-check('.agents/skills/knowledge-compiler/SKILL.md')
+check('.agents/skills/knowledge-compiler/SKILL.md',[
+ 'MUITO MINERIO ENTRA',
+ 'POUCO OURO SAI',
+ 'OPERATIONAL_CRYSTAL',
+ 'FLASH_DOES_NOT_REPLAY_FULL_INGESTION=true',
+ 'SOURCE_IS_PROVENANCE_NOT_AUTHORITY=true',
+])
 check('.agents/skills/vector-memory/SKILL.md',classification='CONTRACT_EXISTS_RUNTIME_NOT_PROVEN')
 check('.github/workflows/porta-de-entrada.yml',[
  'WORKFLOW_REUSE_REQUIRED=1','GLOBAL_CONTINUITY_HARD_GATE=1','ANY_BRANCH_PUSH_GATED=1',
@@ -83,18 +186,8 @@ check('docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-pombo-correio-com-checksum.md',[
  'LEARNING_TRANSFER_FAIL',
  'CHECKSUM != PROVA_SEMÂNTICA',
  'docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md',
- 'PAPAGAIO_MODE=OFF',
- 'POMBO_MODE=CHECKSUM_ON',
- 'UNKNOWN_NEVER_PASS=true',
- 'ACTION_IS_NOT_PROOF=true',
- 'STATE_CHANGE_REQUIRES_RECALIBRATION=true',
- 'RESIDUAL_OR_UNKNOWN_PRESERVED=true',
- 'DESTINATION_PRESERVED=true',
 ], classification='POMBO_CHECKSUM_HANDOFF_CONTRACT')
 
-# Regra operacional global: a Casa não usa GitHub-hosted runners nos workflows raiz.
-# Linux self-hosted é o default. Se a capacidade exigir outra plataforma, ela ainda
-# precisa ser self-hosted e a necessidade deve permanecer explícita no próprio workflow.
 workflow_dir=ROOT/'.github'/'workflows'
 forbidden_runner_labels=('ubuntu-latest','windows-latest','macos-latest')
 runner_violations=[]
@@ -128,6 +221,10 @@ print('WORKFLOW_REUSE_CONTRACT=PASS')
 print('CANONICAL_RUNNER_POLICY=PASS')
 print('SELF_HEALING_CONTRACT=PASS')
 print('OPERATIONAL_RULE_LEARNING_CONTRACT=PASS')
+print('CANONICAL_HANDOFF_POMBO_CHECKSUM=PASS')
 print('POMBO_CHECKSUM_HANDOFF_CONTRACT=PASS')
-print('PAPAGAIO_OFF_POMBO_CHECKSUM_ON=PASS')
+print('PROOF_CARRYING_CLOSED_LOOP_CONTROL=PASS')
+print('ALCHEMICAL_OPERATIONAL_LEARNING_CRYSTAL=PASS')
+print('MATERIAL_STATE_MACHINE_AND_LEARNING_BINDING=PASS')
+print('DETERMINISTIC_SCAFFOLD_CONTRACT=PASS')
 print('NOTE=PASS proves repository contract/path/runner-policy facts only; it does not prove live Windows/VPS/runtime inheritance.')
