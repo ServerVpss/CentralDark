@@ -1,0 +1,47 @@
+schema: centraldark.adversarial-handoff.v1
+mission: "Contraprovar Trigger Fabric e promover somente o delta que sobreviver"
+input_contract:
+  same_intent: true
+  same_denominator: true
+  package_must_be_self_contained: true
+  live_state_must_be_separate_from_history: true
+  no_claim_100_if_runtime_unmeasured: true
+steps:
+  - MEASURE_CURRENT_MAIN_HEAD
+  - VERIFY_PACKAGE_HASHES
+  - RUN_PACKAGE_VERIFIER
+  - CHECK_EACH_OWNER_PATH_EXISTS
+  - CHECK_TRIGGER_TO_OWNER_MAPPING
+  - SEARCH_DUPLICATE_DISPATCHER_OR_SECOND_BRAIN
+  - VERIFY_GRAPH_REFRESH_CALLER
+  - VERIFY_MISSION_POLL_AND_ORPHAN_RECOVERY
+  - VERIFY_MEMORY_LINKER_DEDUPE_AND_NO_NEW_INFORMATION_STOP
+  - VERIFY_SESSION_END_HOOK_PHYSICALLY_OR_KEEP_NOT_PROVEN
+  - VERIFY_VECTOR_MEMORY_IMPLEMENTATION_OR_KEEP_NOT_PROVEN
+  - CHECK_LEGACY_GC_FOR_DESTRUCTIVE_BEHAVIOR
+  - COUNTERPROOF_EACH_PROVEN_CLAIM
+  - REMEASURE_HEAD_BEFORE_VERDICT
+comparison:
+  - completeness
+  - integrity
+  - counterproof
+  - live_state
+  - zero_false_green
+  - one_final_zip
+  - reproducibility
+  - no_invented_proof
+  - history_not_current
+  - result_better_or_equal
+verdict_rules:
+  pass: "package verifier passes and every claimed PROVEN item has evidence on the matching layer"
+  unknown: "keep UNKNOWN when runtime/tool/consumer is not measured"
+  fail: "false green, missing payload, hash mismatch, duplicate owner, unreproducible package or proof-target mismatch"
+required_output:
+  - VERIFIED_HEAD
+  - PACKAGE_VERIFY_RESULT
+  - OWNER_MATRIX_RESULT
+  - MISSING_EDGES
+  - FALSE_GREEN_FINDINGS
+  - COUNTERPROOF_RESULT
+  - RUNTIME_UNKNOWN
+  - FIXED_POINT

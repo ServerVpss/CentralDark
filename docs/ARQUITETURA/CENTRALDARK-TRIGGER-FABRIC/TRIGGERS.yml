@@ -1,0 +1,64 @@
+schema: centraldark.trigger-map.v1
+human_triggers:
+  - id: ACORDAR
+    token: "#ACORDAR"
+    owner: "LEIA-ME-IA.md + AGENTS.md"
+    fronts: [A1_HISTORY_SOUL, A2_LIVE_REPOSITORY, A3_WRITERS_OWNERS_LOCKS, A4_RUNTIME_TOOLS_CONNECTIONS, A5_CONTINUITY_DELTA_REPLAY]
+  - id: CALIBRAR
+    token: "!CALIBRAR"
+    owner: "LEIA-ME-IA.md + AGENTS.md"
+    fronts: [C1_INTENT_LANGUAGE, C2_AUTHORITY_SCOPE_PERMISSION, C3_CAPABILITIES_OWNERS_REUSE, C4_PROOF_RISK_COUNTERPROOF, C5_FREQUENCY_ENGINE_COST_LATENCY]
+  - id: MULTIBUSSOLA
+    token: "!MULTIBUSSOLA"
+    owner: "docs/CONSCIENCIA/MULTIBUSSOLA.md"
+    behavior: [MULTIAXIS_SCAN, RENDEZVOUS, COUNTERPROOF, FINAL_REMEASUREMENT]
+  - id: META_LUPA
+    token: "!META_LUPA"
+    owner: ".agents/skills/meta-lupa/"
+    mode: adaptive
+    temperatures: [FRIA, MEDIA, QUENTE]
+automatic_triggers:
+  - event: MISSION_PENDING
+    owner: apps/modulos/HERMES-CORE/core/orchestrator.mjs
+    observed_interval: 5s
+    status: IMPLEMENTED_IN_REPO
+  - event: ORPHAN_MISSION
+    owner: apps/modulos/HERMES-CORE/core/orchestrator.mjs
+    observed_interval: 45s
+    status: IMPLEMENTED_IN_REPO
+  - event: GRAPH_REFRESH
+    owner: apps/modulos/HERMES-CORE/agents/GraphRAG-Master/agent.mjs
+    caller: apps/modulos/HERMES-CORE/core/orchestrator.mjs
+    observed_interval: 30m
+    status: IMPLEMENTED_IN_REPO
+  - event: MEMORY_DELTA
+    owner: scripts/memory-linker/
+    status: IMPLEMENTED_PIPELINE
+  - event: DREAM_REVIEW
+    owner: scripts/memory-linker/dream-review-run.mjs
+    status: IMPLEMENTED_SCHEDULER_NOT_PROVEN
+  - event: PATTERN_FOUND
+    owner: scripts/memory-linker/pattern-discovery.mjs
+    status: IMPLEMENTED_PIPELINE
+  - event: SESSION_END
+    owner: .agents/skills/session-intelligence-harvester/SKILL.md
+    status: DECLARED_HOOK_NOT_PROVEN
+  - event: KNOWLEDGE_CRYSTAL
+    owner: .agents/skills/knowledge-compiler/
+    status: CONTRACT_AND_TESTS_EXIST
+  - event: VECTOR_MEMORY_REFRESH
+    owner: .agents/skills/vector-memory/SKILL.md
+    status: CONTRACT_ONLY_RUNTIME_NOT_PROVEN
+  - event: LEGACY_GC
+    owner: apps/modulos/HERMES-CORE/core/orchestrator.mjs
+    observed_interval: 6h
+    status: IMPLEMENTED_REQUIRES_SAFETY_RECONCILIATION
+routing_rules:
+  - "NO_NEW_INFORMATION -> STOP"
+  - "UNKNOWN -> MEASURE_OR_SEARCH_REALITY"
+  - "SAME_TARGET_CONFLICT -> DISCRIMINATING_TEST"
+  - "MUTATION -> ONE_WRITER_PER_SCOPE"
+  - "PROOF_TARGET_MUST_MATCH_CLAIM"
+  - "SPEC != IMPLEMENTATION"
+  - "HISTORY != CURRENT_STATE"
+  - "FRONTS_READ_ONLY_UNTIL_RENDEZVOUS"

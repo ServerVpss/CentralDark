@@ -1,0 +1,48 @@
+#!/usr/bin/env python3
+from pathlib import Path
+import hashlib, json, sys
+
+ROOT = Path(sys.argv[1] if len(sys.argv)>1 else '.').resolve()
+
+def sha256(path):
+    h=hashlib.sha256(); h.update(path.read_bytes()); return h.hexdigest()
+
+errors=[]
+manifest_path=ROOT/'MANIFEST.json'
+if not manifest_path.exists():
+    print('VERIFY=FAIL\nMANIFEST_MISSING'); sys.exit(1)
+manifest=json.loads(manifest_path.read_text(encoding='utf-8'))
+
+for item in manifest.get('files',[]):
+    p=ROOT/item['path']
+    if not p.exists():
+        errors.append(f"MISSING {item['path']}")
+        continue
+    if sha256(p)!=item['sha256']:
+        errors.append(f"HASH_MISMATCH {item['path']}")
+
+required=[
+ 'README.md','ARCHITECTURE.md','ARCHITECTURE.mmd','ARCHITECTURE.png',
+ 'CONTRACT.yml','TRIGGERS.yml','ADVERSARIAL_HANDOFF.yml','LIVE_STATE.md',
+ 'HISTORY.md','COUNTERPROOF.md','RASTRO.md','RECEIPT.md','SOURCES.json',
+ 'build_package.py','verify_package.py','MANIFEST.json','SHA256SUMS.txt'
+]
+for name in required:
+    if not (ROOT/name).exists(): errors.append(f'REQUIRED_MISSING {name}')
+
+receipt=(ROOT/'RECEIPT.md').read_text(encoding='utf-8',errors='replace') if (ROOT/'RECEIPT.md').exists() else ''
+if 'GLOBAL_RUNTIME_100_PERCENT = NOT_PROVEN' not in receipt:
+    errors.append('FALSE_GREEN_GUARD_MISSING')
+
+live=(ROOT/'LIVE_STATE.md').read_text(encoding='utf-8',errors='replace') if (ROOT/'LIVE_STATE.md').exists() else ''
+history=(ROOT/'HISTORY.md').read_text(encoding='utf-8',errors='replace') if (ROOT/'HISTORY.md').exists() else ''
+if not live or not history: errors.append('LIVE_HISTORY_SEPARATION_MISSING')
+
+if errors:
+    print('VERIFY=FAIL')
+    print('\n'.join(errors))
+    sys.exit(1)
+
+print('VERIFY=PASS')
+print(f'FILES_VERIFIED={len(manifest.get("files",[]))}')
+print('GLOBAL_RUNTIME_100_PERCENT=NOT_PROVEN')
