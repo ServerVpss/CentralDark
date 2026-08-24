@@ -8,6 +8,7 @@ ENGINE=CLAUDE_CODE
 
 Esta regra existe somente para garantir descoberta automática no Claude Code. Antes de responder ou agir, leia `LEIA-ME-IA.md` integralmente e execute o roteamento canônico definido ali.
 
+
 ```text
 ONE_SOL=true
 ONE_CORE=true

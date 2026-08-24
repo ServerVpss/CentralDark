@@ -69,5 +69,3 @@ exercise:
 ## Integration
 - Results → `assessment-builder` for scoring
 - Patterns → `knowledge-compiler` for curriculum improvement
-EOF
-echo "exercise-designer SKILL.md criado"

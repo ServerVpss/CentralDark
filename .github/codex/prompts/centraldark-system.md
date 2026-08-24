@@ -1,5 +1,7 @@
 # Codex System — adaptador fino CentralDark
 
+Repositório oficial: `ServerVpss/CentralDark`.
+
 ```text
 CANONICAL_AGENT_CORE=LEIA-ME-IA.md
 ADAPTER_ROLE=ENGINE_DISCOVERY_ONLY

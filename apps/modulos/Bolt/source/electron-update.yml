@@ -1,4 +1,5 @@
-owner: stackblitz-labs
-repo: bolt.diy
+owner: ServerVpss
+repo: CentralDark
 provider: github
-private: false
+private: true
+

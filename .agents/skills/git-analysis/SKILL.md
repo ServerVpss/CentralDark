@@ -28,5 +28,3 @@ Structural analysis of git repositories for architectural insight.
 
 ## Output format
 Structured findings with evidence (commit hashes, stats) → `knowledge-compiler` for crystallization.
-EOF
-echo "git-analysis SKILL.md criado"

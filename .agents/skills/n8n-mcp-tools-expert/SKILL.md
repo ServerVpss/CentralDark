@@ -60,5 +60,3 @@ Expose n8n workflows as MCP tools for external LLMs.
 - Use n8n credential types: API Key, OAuth2, Header Auth
 - Rotate credentials regularly
 - Limit workflow permissions (execute only needed nodes)
-EOF
-echo "n8n-mcp-tools-expert SKILL.md criado"

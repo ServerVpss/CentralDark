@@ -1,14 +1,14 @@
 {
-  "name": "bolt",
-  "description": "An AI Agent",
+  "name": "centraldark-desktop",
+  "description": "CentralDark — uma Casa, Hermes por baixo, SOL por cima e bancada de código compartilhada.",
   "private": true,
   "license": "MIT",
   "sideEffects": false,
   "type": "module",
   "version": "1.0.0",
   "author": {
-    "name": "bolt.diy team",
-    "email": "maintainers@bolt.diy"
+    "name": "CentralDark",
+    "email": "segredounlock@users.noreply.github.com"
   },
   "scripts": {
     "deploy": "npm run build && wrangler pages deploy",
@@ -36,11 +36,14 @@
     "electron:build:main": "vite build --config ./electron/main/vite.config.ts",
     "electron:build:preload": "vite build --config ./electron/preload/vite.config.ts",
     "electron:build:renderer": "remix vite:build --config vite-electron.config.js",
-    "electron:build:unpack": "rm -rf dist && pnpm electron:build:renderer && pnpm electron:build:deps && electron-builder --dir",
-    "electron:build:mac": "rm -rf dist && pnpm electron:build:renderer && pnpm electron:build:deps && electron-builder --mac",
-    "electron:build:win": "rm -rf dist && pnpm electron:build:renderer && pnpm electron:build:deps && electron-builder --win",
-    "electron:build:linux": "rm -rf dist && pnpm electron:build:renderer && pnpm electron:build:deps && electron-builder --linux",
-    "electron:build:dist": "rm -rf dist && pnpm electron:build:renderer && pnpm electron:build:deps && electron-builder --mwl"
+    "electron:build:unpack": "node scripts/clean-electron-output.mjs && pnpm electron:build:renderer && pnpm electron:build:deps && electron-builder --dir",
+    "electron:build:mac": "node scripts/clean-electron-output.mjs && pnpm electron:build:renderer && pnpm electron:build:deps && electron-builder --mac",
+    "electron:build:win": "node scripts/clean-electron-output.mjs && pnpm electron:build:renderer && pnpm electron:build:deps && electron-builder --win",
+    "electron:build:linux": "node scripts/clean-electron-output.mjs && pnpm electron:build:renderer && pnpm electron:build:deps && electron-builder --linux",
+    "electron:build:dist": "node scripts/clean-electron-output.mjs && pnpm electron:build:renderer && pnpm electron:build:deps && electron-builder --mwl",
+    "test:centraldark-desktop": "node --test scripts/centraldark-desktop-contract.test.mjs",
+    "centraldark:dev": "node scripts/electron-dev.mjs",
+    "centraldark:build:win": "node scripts/clean-electron-output.mjs && pnpm electron:build:renderer && pnpm electron:build:deps && electron-builder --win"
   },
   "engines": {
     "node": ">=18.18.0"
