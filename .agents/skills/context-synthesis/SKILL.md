@@ -61,5 +61,3 @@ Structured mental model:
 - Results → `knowledge-compiler` for crystallization
 - Gaps → `knowledge-compiler` as capability requests
 - Contradictions → `meta-lupa` for falsification
-EOF
-echo "context-synthesis SKILL.md criado"

@@ -78,5 +78,3 @@ Systematic generation of knowledge checks and assessment questions from source m
 - Output → `exercise-designer` for practice sets
 - Results → `assessment-builder` for scoring
 - Analytics → `content-evaluation-framework` for quality
-EOF
-echo "quiz-generator SKILL.md criado"

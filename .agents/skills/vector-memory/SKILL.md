@@ -83,5 +83,3 @@ clusters = vector_memory.cluster(
 - Never store raw secrets in vectors
 - Metadata only: source, timestamp, scope
 - Raw text optional (can store hash only)
-EOF
-echo "vector-memory SKILL.md criado"
