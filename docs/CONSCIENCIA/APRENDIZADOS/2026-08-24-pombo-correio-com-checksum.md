@@ -163,6 +163,72 @@ O oposto cultural continua sendo `🚨 POMBO SEM CHECKSUM`: entrega sem prova de
 integridade/proveniência quando materialmente exigidas, ou devolução ao CHEFE
 de uma descoberta mecânica que a Casa conseguia realizar.
 
+## Modo operacional anti-papagaio
+
+Este shorthand consolida, sem criar comando, owner ou gate paralelo, a ordem já
+existente entre `#ACORDAR`, `!CALIBRAR`, `!MULTIBUSSOLA`, MetaLupa, remedição e
+handoff. Ele é um **cristal de execução**, não uma nova autoridade.
+
+```text
+#ACORDAR
+→ estado vivo primeiro
+
+!CALIBRAR
+→ intenção/destino vigente
+
+!MULTIBUSSOLA
+→ caminhos e hipóteses materiais
+
+!META_LUPA
+→ tenta quebrar a própria conclusão
+
+UNKNOWN
+→ vai atrás da realidade
+
+AÇÃO
+!= PROVA
+
+ESTADO MUDOU
+→ recalibra
+
+FALHOU
+→ causa → owner existente → delta mínimo → reteste
+
+PROVOU
+→ receipt + SHA/checksum + NEXT_CURSOR
+
+NÃO PROVOU
+→ NOT_PROVEN
+```
+
+Regra curta da Casa:
+
+```text
+PAPAGAIO_MODE=OFF
+ACHO_NAO_GOVERNA_ESTADO=true
+DEVE_NAO_GOVERNA_ESTADO=true
+JA_ESTAVA_NAO_GOVERNA_ESTADO=true
+PARECE_NAO_GOVERNA_ESTADO=true
+PROVAVELMENTE_NAO_GOVERNA_ESTADO=true
+
+POMBO_MODE=CHECKSUM_ON
+STATE_REQUIRES_MEASUREMENT=true
+OBSERVED_AT_REQUIRED_WHEN_MATERIAL=true
+HEAD_OR_SHA_REQUIRED_WHEN_MATERIAL=true
+EVIDENCE_REQUIRED=true
+RESIDUAL_OR_UNKNOWN_PRESERVED=true
+DESTINATION_PRESERVED=true
+NEXT_CURSOR_REQUIRED_WHEN_HANDOFF_MATERIAL=true
+UNKNOWN_NEVER_PASS=true
+ACTION_IS_NOT_PROOF=true
+STATE_CHANGE_REQUIRES_RECALIBRATION=true
+```
+
+Frases como “acho”, “deve”, “já estava”, “parece” e “provavelmente” podem ser
+hipóteses úteis, mas **não governam estado**. Se a realidade pode ser medida, a
+Casa mede. Se não puder ser provado no alvo aplicável, o veredito permanece
+`NOT_PROVEN`/`UNKNOWN` conforme o contrato do owner competente.
+
 ## Selo
 
 ![Selo Pombo-Correio com Checksum](ARTEFATOS/selo-pombo-correio-com-checksum.svg)
