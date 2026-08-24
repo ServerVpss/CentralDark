@@ -76,7 +76,17 @@ check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MATERIAL-INGEST.md',[
  'LEARNING_TRANSFER_FAIL_ON_RETEACH=true',
  'ALCHEMISTIC_CABINET_IS_CULTURAL_ALIAS_ONLY=true',
  'ALCHEMISTIC_CABINET_IS_ENGINE=false',
-], classification='MATERIAL_STATE_MACHINE_AND_LEARNING_BINDING')
+ 'SETOR_COGNITIVO',
+ 'SETOR_DETERMINISTICO',
+ 'ITEM_MINIMAL_CONTEXT_MAX_DETERMINISM=true',
+ 'ITEM_DETERMINISTIC_GAUNTLET=true',
+ 'ITEM_SHORT_LIVED_ROLE_CONTEXT=true',
+ 'ITEM_ARCHITECTURE_DEPENDENCY_GUARD=true',
+ 'ITEM_ITERATE_MEASURE_REORGANIZE=true',
+ 'ITEM_VALUES_OVER_BLIND_HUMAN_RITUAL=true',
+ 'RISK_PROPORTIONAL_GAUNTLET = true',
+ 'SAME_HEAD_EVIDENCE_REQUIRED = true',
+], classification='MATERIAL_STATE_MACHINE_AND_DETERMINISTIC_SCAFFOLD')
 check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml',[
  'inherited_on_bot_entry: true',
  'mandatory_before_human_return: true',
@@ -107,6 +117,21 @@ check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml',[
  'graph_is_derived_not_authority: true',
  'reality_is_final_judge: true',
  'next_equivalent_event_must_reuse_without_chefe_reteaching: true',
+ 'deterministic_scaffold:',
+ 'boot_prompt_policy: MINIMUM_SUFFICIENT_CONTEXT',
+ 'retrieval_policy: PRECISE_RETRIEVAL_SMALL_CONTEXT',
+ 'deterministic_gauntlet_required: true',
+ 'gauntlet_is_risk_proportional: true',
+ 'same_head_evidence_required: true',
+ 'machine_checkable_dependency_rules: PREFER_WHEN_MATERIAL',
+ 'use_only_if_material_gain_exceeds_coordination_overhead: true',
+ 'copy_human_ritual_blindly: false',
+ 'ITEM_MINIMAL_CONTEXT_MAX_DETERMINISM',
+ 'ITEM_DETERMINISTIC_GAUNTLET',
+ 'ITEM_SHORT_LIVED_ROLE_CONTEXT',
+ 'ITEM_ARCHITECTURE_DEPENDENCY_GUARD',
+ 'ITEM_ITERATE_MEASURE_REORGANIZE',
+ 'ITEM_VALUES_OVER_BLIND_HUMAN_RITUAL',
 ])
 check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml',[
  'event: BOT_ENTRY','event: PRE_HUMAN_RETURN','event: RESUME',
@@ -201,4 +226,5 @@ print('POMBO_CHECKSUM_HANDOFF_CONTRACT=PASS')
 print('PROOF_CARRYING_CLOSED_LOOP_CONTROL=PASS')
 print('ALCHEMICAL_OPERATIONAL_LEARNING_CRYSTAL=PASS')
 print('MATERIAL_STATE_MACHINE_AND_LEARNING_BINDING=PASS')
+print('DETERMINISTIC_SCAFFOLD_CONTRACT=PASS')
 print('NOTE=PASS proves repository contract/path/runner-policy facts only; it does not prove live Windows/VPS/runtime inheritance.')
