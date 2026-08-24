@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-24T10:05:13.721Z",
-  "updatedAtBR": "24/08/2026, 07:05:13 BRT",
+  "updatedAt": "2026-08-24T10:39:12.681Z",
+  "updatedAtBR": "24/08/2026, 07:39:12 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "🧹 Remove stray heredoc artifacts from 13 SKILL.md files (#1120)",
+    "lastCommit": "docs: tornar baianês fácil o padrão automático da SOL",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-24T10:39:12.681Z",
+      "titulo": "Push na main · 575b4a29440fe2f28b0c32c7fa1ab6e7a887ff8d",
+      "detalhe": "docs: tornar baianês fácil o padrão automático da SOL",
+      "area": "Repositório",
+      "sha": "575b4a2",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-24T10:05:13.721Z",
       "titulo": "Push na main · 098ed8d6467ad0afdb3f8d40297989ea3742325c",
       "detalhe": "🧹 Remove stray heredoc artifacts from 13 SKILL.md files (#1120)",
@@ -988,14 +996,6 @@
       "detalhe": "fix(git): restaurar observação remota fail-closed",
       "area": "Repositório",
       "sha": "7707f0e",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-17T21:06:38.239Z",
-      "titulo": "Push na main · e772c176e4ac68c71ad3a7ef13e612a69cdd93da",
-      "detalhe": "feat(consciencia): oficializar !MULTIBUSSOLA na CentralDark (#1010)",
-      "area": "Repositório",
-      "sha": "e772c17",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-24T10:39:12.681Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 575b4a29440fe2f28b0c32c7fa1ab6e7a887ff8d (575b4a2)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-24T10:05:13.721Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 098ed8d6467ad0afdb3f8d40297989ea3742325c (098ed8d)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-17T21:44:12.695Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 7707f0ede97201a9bdf2c9098e63a4b249ad7cd8 (7707f0e)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-17T21:06:38.239Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · e772c176e4ac68c71ad3a7ef13e612a69cdd93da (e772c17)",
       "area": "Repositório",
       "status": "sucesso"
     }
