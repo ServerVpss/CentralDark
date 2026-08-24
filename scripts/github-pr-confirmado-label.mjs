@@ -8,6 +8,7 @@
  */
 import { readFile, readdir } from "node:fs/promises";
 import { join } from "node:path";
+import { pathToFileURL } from "node:url";
 
 const API = "https://api.github.com";
 export const CANONICAL_CONFIRMED_LABEL = "✅ PR CONFIRMADO";
@@ -21,8 +22,13 @@ function normalizedLabelNames(pr) {
 }
 
 function lineValue(body, name) {
-  const match = String(body || "").match(new RegExp(`^${name}=\\`?([^\\`\\n]+)\\`?\\s*$`, "mi"));
-  return match?.[1]?.trim() || null;
+  const prefix = `${name}=`;
+  const line = String(body || "")
+    .split(/\r?\n/)
+    .map((value) => value.trim())
+    .find((value) => value.toLocaleUpperCase("pt-BR").startsWith(prefix.toLocaleUpperCase("pt-BR")));
+  if (!line) return null;
+  return line.slice(prefix.length).trim().replace(/^`|`$/g, "") || null;
 }
 
 export function confirmationEvidence(pr, comments = []) {
@@ -154,7 +160,8 @@ export async function main(argv = process.argv.slice(2)) {
   throw new Error(`MODE_INVALID:${mode}`);
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+const invokedAsMain = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
+if (invokedAsMain) {
   main().catch((error) => {
     console.error(`PR_CONFIRMADO_ERROR=${error.message}`);
     process.exit(1);
