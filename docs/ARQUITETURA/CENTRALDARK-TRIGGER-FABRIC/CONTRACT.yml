@@ -22,6 +22,8 @@ principles:
   miner_never_writes_canonical_directly: true
   generative_output_is_candidate_not_authority: true
   artifact_never_invents_canonical: true
+  operational_failure_must_be_generalized: true
+  same_failure_without_new_information_reuses_crystal: true
 master_trigger:
   expression: "#ACORDAR + !CALIBRAR + !MULTIBUSSOLA"
   inherited_on_bot_entry: true
@@ -147,6 +149,58 @@ ci_binding:
     authority: "👑 PERMITO-SEGREDO"
     confirmed_result: "✅ PR CONFIRMADO"
     label_is_authority: false
+  runner_policy:
+    scope: ALL_ACTIVE_ROOT_GITHUB_WORKFLOWS
+    applies_to: [PULL_REQUEST, PUSH_COMMIT, WORKFLOW_DISPATCH, SCHEDULE, WORKFLOW_RUN, REPOSITORY_DISPATCH]
+    github_hosted_runner: FORBIDDEN
+    canonical_default: [self-hosted, Linux]
+    platform_specific_rule: SELF_HOSTED_PLATFORM_ONLY_WHEN_CAPABILITY_REQUIRES_IT
+    platform_specific_proof_required: true
+    linux_is_default: true
+    forbidden_labels: [ubuntu-latest, windows-latest, macos-latest]
+    violation_state: FAILED
+    remediation: UPDATE_EXISTING_WORKFLOW_ONLY
+    new_equivalent_workflow: FORBIDDEN
+    recheck: SAME_GATE_ON_NEW_HEAD
+    proof_gate: scripts/trigger-fabric/verify_repo_contract.py
+  commit_coverage:
+    pull_request: REQUIRED
+    push_any_branch: REQUIRED_BY_PORTA_DE_ENTRADA
+    push_main: REQUIRED
+    direct_main_mutation_without_gate: FORBIDDEN_BY_POLICY
+self_healing:
+  mandatory_for_operational_failure: true
+  scope: ALL_PR_COMMIT_AND_RUNTIME_ELIGIBLE_FAILURES
+  loop:
+    - MEASURE_CURRENT_STATE
+    - FAILURE_SIGNATURE
+    - IDENTIFY_CAUSE
+    - SEARCH_EXISTING_CRYSTAL
+    - DISCRIMINATING_TEST
+    - MINIMAL_REMEDIATION
+    - SAME_OWNER_SAME_WORKFLOW
+    - RETEST
+    - COUNTERPROOF
+    - REALITY_JUDGE
+    - RECEIPT
+    - CRYSTAL
+    - LAST_GOOD_STATE
+    - NEXT_CURSOR
+  runner_failure_crystal:
+    signature: GITHUB_HOSTED_RUNNER_SELECTED_WHILE_HOUSE_IS_SELF_HOSTED
+    cause_class: EXECUTOR_ROUTE_POLICY_VIOLATION
+    remediation: BIND_EXISTING_WORKFLOW_TO_SELF_HOSTED_CANONICAL_PLATFORM
+    default_platform: Linux
+    prohibit_new_workflow: true
+    next_occurrence: BLOCK_BEFORE_MERGE_AND_REUSE_CRYSTAL
+  fixed_point:
+    only_if:
+      - failure_class_generalized
+      - future_violation_blocked_by_gate
+      - current_affected_workflows_reconciled
+      - same_failure_reuses_crystal
+      - counterproof_survived
+      - material_unknown_zero_for_scope
 states:
   proven: "GREEN"
   failed_or_blocked: "RED"
