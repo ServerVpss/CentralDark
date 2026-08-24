@@ -20,6 +20,43 @@ A autorização humana canônica é:
 
 `permito-pivete`, `PERMITO-PIVETE` e outros aliases históricos não pertencem à taxonomia operacional ativa. O histórico permanece nos registros antigos, sem promover PIVETE/HERMES/modelo/bot a autoridade.
 
+## Padrão operacional global (TODO PR elegível)
+
+Não é opcional e não vale só para um PR. O motor de autonomia materializa o padrão em **todos** os PRs com recibo válido.
+
+```text
+SELO_CANONICO_DE_PROMOCAO
+= 👑 PERMITO-SEGREDO
++ 🔄 GIT
++ 🤖 AUTO
+
+BASELINE_OPERACIONAL
+= 🟡 IA-PRECISA-REVISAR
++ 🧠 AGENTE-* derivado do campo Writer
+
+PADRAO_COMPLETO = SELO + BASELINE + AGENTE(S)
+```
+
+Derivação de agente (determinística a partir de `Writer:` no body):
+
+```text
+grok        → 🧠 AGENTE-GROK
+chatgpt/sol → 🧠 AGENTE-CHATGPT
+claude      → 🧠 AGENTE-CLAUDE
+codex       → 🧠 AGENTE-CODEX
+hermes/pivete → 🧠 AGENTE-HERMES
+…
+```
+
+Owner: `scripts/github-autonomia-varredura.mjs` (`requiredOperationalLabels` + promote sweep).
+
+```text
+PR_ELEGIVEL + RECIBO_VALIDO
+→ materializa labels faltantes do PADRAO_COMPLETO
+→ recheck autonomia
+→ só então promove
+```
+
 ## Resultado confirmado de PR
 
 A confirmação visual canônica é:
@@ -33,9 +70,10 @@ Ela fica semanticamente **ao lado** de `👑 PERMITO-SEGREDO`, mas representa ou
 ```text
 👑 PERMITO-SEGREDO = AUTORIDADE HUMANA DELEGADA / INTENÇÃO
 ✅ PR CONFIRMADO   = RESULTADO DERIVADO APÓS PROVA OBSERVADA
+🟢 SUCESSO         = RESULTADO PÓS-MERGE DO PROMOTOR
 ```
 
-`✅ PR CONFIRMADO` nunca participa do selo que autoriza/promove o próprio PR e nunca concede autoridade. O CI só pode materializá-la depois de observar, no mesmo PR:
+`✅ PR CONFIRMADO` e `🟢 SUCESSO` **nunca** entram no selo de entrada. O CI só materializa confirmação depois de observar, no mesmo PR:
 
 ```text
 PR_MERGED=true
@@ -65,6 +103,7 @@ UMA_SEMÂNTICA = UMA_LABEL_CANÔNICA
 LABEL_OPERACIONAL = MAIÚSCULAS
 ALIAS_LEGADO = MIGRAR_ANTES_DE_APAGAR
 SEM_CONSUMIDOR + SEM_ROTEAMENTO + SEM_VALOR_OPERACIONAL = REMOVER
+PADRAO_OPERACIONAL_APLICA_A_TODO_PR_ELEGIVEL=true
 ```
 
 `🧠 AGENTE-LOVABLE` e `assign:lovable` são obsoletos e não recebem novos trabalhos.
@@ -130,6 +169,7 @@ TEXT_ALIAS=permito-segredo
 TEXT_ALIAS_IS_COMPATIBILITY_NOT_SECOND_LABEL=true
 CONFIRMED_RESULT_LABEL=✅ PR CONFIRMADO
 CONFIRMED_RESULT_LABEL_IS_NOT_AUTHORITY=true
+OPERATIONAL_STANDARD_IS_GLOBAL=true
 ```
 
 O HUB já descobre ferramentas pelo MCP; portanto herda a semântica do tool GitHub existente. Não duplicar catálogo, regra de autoridade ou normalizador dentro da interface.
@@ -167,5 +207,6 @@ EXECUÇÃO = CAPACIDADE AUTORIZADA
 REALIDADE = JUIZ
 
 👑 = AUTORIDADE
-✅ = RESULTADO CONFIRMADO
+🔄 + 🤖 + 🟡 + 🧠 = PADRÃO OPERACIONAL GLOBAL
+🟢 / ✅ = RESULTADO (pós-prova)
 ```
