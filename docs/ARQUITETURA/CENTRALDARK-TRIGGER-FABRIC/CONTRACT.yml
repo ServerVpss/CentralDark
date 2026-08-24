@@ -1,5 +1,5 @@
 schema: centraldark.trigger-fabric.v1
-base_head: f488251d3ad3ba5f71e2973d9d42fef3683f4885
+base_head: LIVE_REMEASURE_REQUIRED
 authority:
   human_intent_owner: SEGREDO/CHEFE
   coordinator: SOL
@@ -15,8 +15,12 @@ principles:
   unknown_never_pass: true
   history_ne_current: true
   spec_ne_implementation: true
+  action_ne_proof: true
+  no_new_workflow_when_owner_exists: true
 master_trigger:
   expression: "#ACORDAR + !CALIBRAR + !MULTIBUSSOLA"
+  inherited_on_bot_entry: true
+  meta_lupa: proportional_to_risk
   behavior:
     - destination_lock
     - recover_live_state
@@ -26,20 +30,92 @@ master_trigger:
     - meta_lupa_proportional_to_risk
     - route_to_existing_owner
     - execute_minimal_delta
+    - output_guard
     - collect_evidence
     - counterproof
     - reality_judge
-    - receipt_and_learning
+    - receipt_learning_cursor
+bot_entry:
+  mandatory: true
+  engine_is_owner: false
+  engine_switch_is_reset: false
+  source_contracts:
+    - LEIA-ME-IA.md
+    - AGENTS.md
+    - docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md
+    - docs/CONSCIENCIA/MULTIBUSSOLA.md
+    - .agents/skills/meta-lupa/SKILL.md
+  install_semantics: LOAD_CANONICAL_REFERENCE_NOT_COPY_BRAIN
+  runtime_activation_requires_observation: true
+output_guard:
+  mandatory_before_human_return: true
+  fields:
+    - claim
+    - target
+    - scope
+    - observed_at
+    - source
+    - source_timestamp
+    - head_sha
+    - input_sha256
+    - facts
+    - inferences
+    - hypotheses
+    - unknowns
+    - owner
+    - consumer
+    - top_down_result
+    - bottom_up_result
+    - round_trip_result
+    - evidence
+    - counterevidence
+    - proof_target_match
+    - temporal_freshness
+    - arithmetic_check
+    - denominator_check
+    - duplicate_check
+    - false_green_check
+    - history_current_check
+    - spec_implementation_check
+    - action_proof_check
+    - verdict
+    - residual
+    - next_cursor
+  contradiction_action: AUTOLUPA_REMEDIATE_BEFORE_RETURN
+continuation:
+  previous_proof_is_baseline_not_eternal_truth: true
+  unchanged_proven_target: REUSE_PROOF_FAST_PATH
+  changed_target: REVALIDATE_AFFECTED_CHAIN_ONLY
+  no_new_information: NO_CHANGE_NEXT
+  next_execution_baseline: LAST_GOOD_STATE
+package_ingest:
+  inventory_before_read: true
+  hash_before_semantic_reanalysis: true
+  byte_identical: PROCESS_ONCE_KEEP_PROVENANCE
+  big_library: PRECISE_RETRIEVAL_SMALL_CONTEXT
+ci_binding:
+  reuse_workflows:
+    - .github/workflows/porta-de-entrada.yml
+    - .github/workflows/autonomia-promocao.yml
+    - .github/workflows/trigger-fabric-package.yml
+  create_equivalent_workflow: FORBIDDEN_UPDATE_EXISTING
+  canonical_labels_doc: docs/CONSCIENCIA/GITHUB-LABELS-OPERACIONAIS.md
+  labels:
+    authority: "👑 PERMITO-SEGREDO"
+    confirmed_result: "✅ PR CONFIRMADO"
+    label_is_authority: false
 states:
   proven: "GREEN"
   failed_or_blocked: "RED"
   unknown_not_proven: "BLACK"
   quarantine_or_chefe_lock: "LOCKED"
   working_forja: "WORKING"
+  yellow_status_semantics: FORBIDDEN
 claims:
   package_completeness_may_be_100_percent_if_verifier_passes: true
   global_runtime_100_percent: false
   global_runtime_100_percent_status: NOT_PROVEN
+  engine_binding_documented_is_runtime_loaded: false
 return_rule:
   - DESTINATION_PROVED
   - HUMAN_FRONTIER_PROVED
