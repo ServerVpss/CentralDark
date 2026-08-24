@@ -1,0 +1,92 @@
+name: Trigger Fabric Full Package
+
+on:
+  pull_request:
+    paths:
+      - 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/**'
+      - 'scripts/trigger-fabric/**'
+      - '.github/workflows/trigger-fabric-package.yml'
+      - 'LEIA-ME-IA.md'
+      - 'AGENTS.md'
+      - 'docs/CONSCIENCIA/MULTIBUSSOLA.md'
+      - '.agents/skills/meta-lupa/**'
+      - 'apps/modulos/HERMES-CORE/**'
+      - 'scripts/memory-linker/**'
+      - '.agents/skills/session-intelligence-harvester/**'
+      - '.agents/skills/knowledge-compiler/**'
+      - '.agents/skills/vector-memory/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-counterproof-package:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact PR state
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Verify repository contract facts
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/trigger-fabric/verify_repo_contract.py . \
+            | tee docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/VERIFY-RESULT.txt
+
+      - name: Render architecture PNG from canonical Mermaid
+        shell: bash
+        run: |
+          set -euo pipefail
+          npx -y @mermaid-js/mermaid-cli@11.9.0 \
+            -i docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ARCHITECTURE.mmd \
+            -o docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ARCHITECTURE.png \
+            -b transparent
+          test -s docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ARCHITECTURE.png
+
+      - name: Build deterministic full ZIP
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/trigger-fabric/build_package.py | tee .artifacts/trigger-fabric/build-result.txt
+          test -s .artifacts/trigger-fabric/CENTRALDARK_TRIGGER_FABRIC_FULL_PACKAGE.zip
+
+      - name: Fresh-extraction counterproof
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/trigger-fabric-verify
+          mkdir -p /tmp/trigger-fabric-verify
+          python - <<'PY'
+          import zipfile
+          z='.artifacts/trigger-fabric/CENTRALDARK_TRIGGER_FABRIC_FULL_PACKAGE.zip'
+          with zipfile.ZipFile(z) as f:
+              f.extractall('/tmp/trigger-fabric-verify')
+          PY
+          python scripts/trigger-fabric/verify_package.py \
+            /tmp/trigger-fabric-verify/CENTRALDARK_TRIGGER_FABRIC_FULL_PACKAGE \
+            | tee .artifacts/trigger-fabric/extracted-verify-result.txt
+          grep -q '^VERIFY=PASS$' .artifacts/trigger-fabric/extracted-verify-result.txt
+
+      - name: Prove one final ZIP only
+        shell: bash
+        run: |
+          set -euo pipefail
+          count=$(find .artifacts/trigger-fabric -maxdepth 1 -type f -name '*.zip' | wc -l)
+          test "$count" -eq 1
+          sha256sum .artifacts/trigger-fabric/CENTRALDARK_TRIGGER_FABRIC_FULL_PACKAGE.zip \
+            | tee .artifacts/trigger-fabric/ZIP-SHA256.txt
+
+      - name: Upload canonical ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          name: CENTRALDARK_TRIGGER_FABRIC_FULL_PACKAGE
+          path: .artifacts/trigger-fabric/CENTRALDARK_TRIGGER_FABRIC_FULL_PACKAGE.zip
+          if-no-files-found: error
+          retention-days: 30
