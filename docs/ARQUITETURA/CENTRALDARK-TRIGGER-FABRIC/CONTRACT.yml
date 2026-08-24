@@ -226,6 +226,50 @@ verified_continuity:
   transfer_learning:
     next_equivalent_event_must_reuse_without_chefe_reteaching: true
     repeated_mechanical_instruction_after_promotion: LEARNING_TRANSFER_FAIL
+deterministic_scaffold:
+  purpose: CONSTRAIN_TACTICAL_ENGINES_WITHOUT_CONTEXT_BLOAT
+  cognitive_sector:
+    boot_prompt_policy: MINIMUM_SUFFICIENT_CONTEXT
+    retrieval_policy: PRECISE_RETRIEVAL_SMALL_CONTEXT
+    long_instruction_is_enforcement: false
+    deterministic_contract_outlives_context: true
+    role_context_policy: SHORT_LIVED_TASK_FOCUSED_WHEN_MATERIAL
+    model_switch_is_reset: false
+  execution_sector:
+    deterministic_gauntlet_required: true
+    gauntlet_is_risk_proportional: true
+    known_checks: [TYPECHECK, LINT, TEST, BUILD, SECURITY]
+    generated_checks: [REGRESSION_FROM_FAILURE, PROPERTY_BASED, METAMORPHIC, FUZZ, MUTATION]
+    mutation_testing_policy: APPLY_WHEN_VALUE_EXCEEDS_COST
+    property_fuzz_policy: APPLY_PROPORTIONAL_TO_WOUND_AND_RISK
+    same_head_evidence_required: true
+    executor_self_approval_forbidden: true
+  architecture_guard:
+    machine_checkable_dependency_rules: PREFER_WHEN_MATERIAL
+    graph_or_viewer_is_observation_not_authority: true
+    deep_module_small_interface_preferred: true
+    module_boundary_change_requires_consumer_scan: true
+  iteration_policy:
+    giant_upfront_plan_is_execution_proof: false
+    loop: [SMALL_DELTA, DETERMINISTIC_FEEDBACK, REMEASURE, REORGANIZE_IF_NEEDED]
+    planning_is_ephemeral_unless_promoted_by_evidence: true
+  multi_agent_policy:
+    use_only_if_material_gain_exceeds_coordination_overhead: true
+    parallelize_perception: true
+    serialize_mutation: true
+    specialized_agent_is_owner: false
+    specialized_agent_is_authority: false
+  discipline_policy:
+    preserve_human_values_and_invariants: true
+    copy_human_ritual_blindly: false
+    threshold_change_requires_evidence: true
+  learned_items:
+    - ITEM_MINIMAL_CONTEXT_MAX_DETERMINISM
+    - ITEM_DETERMINISTIC_GAUNTLET
+    - ITEM_SHORT_LIVED_ROLE_CONTEXT
+    - ITEM_ARCHITECTURE_DEPENDENCY_GUARD
+    - ITEM_ITERATE_MEASURE_REORGANIZE
+    - ITEM_VALUES_OVER_BLIND_HUMAN_RITUAL
 ci_binding:
   reuse_workflows:
     - .github/workflows/porta-de-entrada.yml
