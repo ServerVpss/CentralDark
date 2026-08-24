@@ -79,16 +79,16 @@ Extracted from actual repository/session artifacts, not invented:
 
 | Theme | Source | Signature |
 |---|---|---|
-| `emerald` | `docs/CONSCIENCIA/ARQUITETURA/DESIGN-SISTEMA.md` + `src/index.css` (`--primary: 152 76% 50%` dark) | Emerald green, near-black ground, Geist — the **official product** identity |
+| `emerald` | `docs/CONSCIENCIA/ARQUITETURA/DESIGN-SISTEMA.md` + `src/index.css` (`--primary: 152 76% 50%` dark) | Emerald green, near-black ground, Geist |
 | `operational` | Cartão operacional (5-etapas card) | Navy + cyan + red-as-alert — HUD/control-room register |
-| `forge` | `forja-de-cartas.html` (real CSS values: `#C0902B`, `#FFE9A8`, `#0C0A06`...) | Gold/bronze/black — premium/legendary/foil register |
+| `forge` | `.agents/skills/visual-design-method/assets/forja-de-cartas.html` (committed here for verifiable provenance — `sha256:e8f4016dcf8b2b6f9806d8ef29a5105506ef5eba5225f3aeff9b78bcb301f348`; real CSS values: `#C0902B`, `#FFE9A8`, `#0C0A06`, `#100D07`, `#2B1C08`...) | Gold/bronze shell + cream/foil card face — premium/legendary register |
 
-None of the three cancels the others. `emerald` is the documented default
-for product surfaces; `operational` and `forge` are legitimate alternate
-skins for artifacts that call for that register (an ops dashboard, a
-collectible/reward surface). Don't ask "which one is correct" — ask which
-register fits the current artifact, and offer the switch when more than one
-plausibly applies.
+**These are three global official themes, not three alternate skins to pick
+between per artifact.** `THEME_SWITCH != REDESIGN`: every CentralDark surface
+— site, painel, Hermes Desktop, Hub, WebUI, and any one-off artifact like a
+poster — carries the same structure and offers all three; the human picks
+which is active. `emerald` is the current default. Never present this as "which
+register fits this artifact" — the three coexist everywhere, always.
 
 ## 4. Type pairing
 

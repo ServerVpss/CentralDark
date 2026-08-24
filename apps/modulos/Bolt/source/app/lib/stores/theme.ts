@@ -1,7 +1,7 @@
 import { atom } from 'nanostores';
 import { logStore } from './logs';
 
-export type Theme = 'dark' | 'light' | 'emerald';
+export type Theme = 'dark' | 'light' | 'emerald' | 'operational' | 'forge';
 
 export const kTheme = 'bolt_theme';
 
@@ -25,7 +25,7 @@ function initStore() {
 }
 
 export function cycleTheme() {
-  const themes: Theme[] = ['dark', 'light', 'emerald'];
+  const themes: Theme[] = ['dark', 'light', 'emerald', 'operational', 'forge'];
   const currentTheme = themeStore.get();
   const nextTheme = themes[(themes.indexOf(currentTheme) + 1) % themes.length];
 
