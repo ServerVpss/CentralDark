@@ -15,6 +15,7 @@ export const CANONICAL_CONFIRMED_LABEL = "✅ PR CONFIRMADO";
 export const CANONICAL_AUTHORITY_LABEL = "👑 PERMITO-SEGREDO";
 export const CANONICAL_SUCCESS_LABEL = "🟢 SUCESSO";
 export const SUCCESS_COMMENT_MARKER = "<!-- centraldark-autonomia-promocao-success -->";
+export const MAX_CATALOG_RETRIES = 5;
 const SHA256_RE = /^[a-f0-9]{64}$/i;
 
 function normalizedLabelNames(pr) {
@@ -64,6 +65,11 @@ export function confirmationEvidence(pr, comments = []) {
   };
 }
 
+export function retryCountFromEvent(event = {}) {
+  const value = Number(event?.client_payload?.confirmation_retry_count || 0);
+  return Number.isInteger(value) && value >= 0 ? value : 0;
+}
+
 async function api(token, method, path, body, allow = []) {
   const response = await fetch(`${API}${path}`, {
     method,
@@ -71,7 +77,7 @@ async function api(token, method, path, body, allow = []) {
       Authorization: `Bearer ${token}`,
       Accept: "application/vnd.github+json",
       "X-GitHub-Api-Version": "2022-11-28",
-      "User-Agent": "centraldark-pr-confirmado/1.0",
+      "User-Agent": "centraldark-pr-confirmado/1.1",
       ...(body === undefined ? {} : { "Content-Type": "application/json" }),
     },
     body: body === undefined ? undefined : JSON.stringify(body),
@@ -88,7 +94,14 @@ async function api(token, method, path, body, allow = []) {
   return { status: response.status, data };
 }
 
-async function candidateNumbers(sweepDir) {
+async function currentEvent() {
+  const eventPath = process.env.GITHUB_EVENT_PATH || "";
+  if (!eventPath) return {};
+  try { return JSON.parse(await readFile(eventPath, "utf8")); }
+  catch { return {}; }
+}
+
+async function candidateNumbers(sweepDir, event) {
   const numbers = new Set();
   try {
     const files = await readdir(sweepDir);
@@ -98,14 +111,8 @@ async function candidateNumbers(sweepDir) {
     }
   } catch {}
 
-  const eventPath = process.env.GITHUB_EVENT_PATH || "";
-  if (eventPath) {
-    try {
-      const event = JSON.parse(await readFile(eventPath, "utf8"));
-      if (event.pull_request?.number) numbers.add(Number(event.pull_request.number));
-      if (event.client_payload?.pr_number) numbers.add(Number(event.client_payload.pr_number));
-    } catch {}
-  }
+  if (event.pull_request?.number) numbers.add(Number(event.pull_request.number));
+  if (event.client_payload?.pr_number) numbers.add(Number(event.client_payload.pr_number));
   return [...numbers].filter((number) => Number.isInteger(number) && number > 0);
 }
 
@@ -115,6 +122,24 @@ async function canonicalLabelExists(token, repository) {
   return result.status === 200;
 }
 
+async function scheduleCatalogRetry(token, repository, number, event) {
+  const retryCount = retryCountFromEvent(event);
+  if (retryCount >= MAX_CATALOG_RETRIES) {
+    console.log(`PR=${number} CONFIRMATION=CATALOG_RETRY_EXHAUSTED count=${retryCount}`);
+    return;
+  }
+  const next = retryCount + 1;
+  await api(token, "POST", `/repos/${repository}/dispatches`, {
+    event_type: "centraldark_autonomia_recheck",
+    client_payload: {
+      pr_number: number,
+      reason: "pr_confirmado_catalog_pending",
+      confirmation_retry_count: next,
+    },
+  });
+  console.log(`PR=${number} CONFIRMATION=CATALOG_RETRY_DISPATCHED count=${next}`);
+}
+
 async function reconcile() {
   const repository = process.env.GITHUB_REPOSITORY || "";
   const token = process.env.PROMOTER_TOKEN || process.env.PROMOTION_TOKEN || process.env.GITHUB_TOKEN || "";
@@ -122,22 +147,25 @@ async function reconcile() {
   if (!repository.includes("/")) throw new Error("GITHUB_REPOSITORY_INVALID");
   if (!token) throw new Error("GITHUB_TOKEN_MISSING");
 
-  const numbers = await candidateNumbers(sweepDir);
+  const event = await currentEvent();
+  const numbers = await candidateNumbers(sweepDir, event);
   console.log(`PR_CONFIRMADO_CANDIDATES=${numbers.join(",") || "none"}`);
   if (!numbers.length) return;
 
-  const labelExists = await canonicalLabelExists(token, repository);
-  if (!labelExists) {
-    console.log(`PR_CONFIRMADO_PENDING_CATALOG=${CANONICAL_CONFIRMED_LABEL}`);
-    return;
-  }
-
+  let labelExists = null;
   for (const number of numbers) {
     const pr = (await api(token, "GET", `/repos/${repository}/pulls/${number}`)).data;
     const comments = (await api(token, "GET", `/repos/${repository}/issues/${number}/comments?per_page=100`)).data;
     const evidence = confirmationEvidence(pr, comments);
     if (!evidence.confirmed) {
       console.log(`PR=${number} CONFIRMATION=NOT_PROVEN reasons=${evidence.reasons.join("|")}`);
+      continue;
+    }
+
+    if (labelExists === null) labelExists = await canonicalLabelExists(token, repository);
+    if (!labelExists) {
+      console.log(`PR=${number} CONFIRMATION=PROVEN_BUT_CATALOG_PENDING label=${CANONICAL_CONFIRMED_LABEL}`);
+      await scheduleCatalogRetry(token, repository, number, event);
       continue;
     }
 
