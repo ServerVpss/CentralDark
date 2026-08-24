@@ -79,6 +79,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          mkdir -p .artifacts/trigger-fabric
           python scripts/trigger-fabric/build_package.py | tee .artifacts/trigger-fabric/build-result.txt
           test -s .artifacts/trigger-fabric/CENTRALDARK_TRIGGER_FABRIC_FULL_PACKAGE.zip
 
