@@ -12,6 +12,8 @@ on:
       - 'docs/CONSCIENCIA/MULTIBUSSOLA.md'
       - '.agents/skills/meta-lupa/**'
       - '.agents/skills/distinct-engineering-compiler/**'
+      - '.agents/skills/capability-contract-router/**'
+      - '.agents/skills/signal-territory-crystallizer/**'
       - 'apps/modulos/HERMES-CORE/**'
       - 'scripts/memory-linker/**'
       - '.agents/skills/session-intelligence-harvester/**'
@@ -90,6 +92,25 @@ jobs:
           grep -q '"status": "PASS"' "$RUNNER_TEMP/fixed-point-miner.txt"
           grep -q '"fixed_point": true' "$RUNNER_TEMP/fixed-point-miner.txt"
           echo 'FIXED_POINT_MINER_10X12=PASS'
+
+      - name: Verify semantic crystal capability fabric
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s .agents/skills/capability-contract-router/SKILL.md
+          test -s .agents/skills/signal-territory-crystallizer/SKILL.md
+          test -s .agents/skills/distinct-engineering-compiler/references/signal-territory-fixed-point.md
+          test -s docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SIGNAL-TERRITORY-CAPABILITY-CRYSTAL.md
+          test -s scripts/trigger-fabric/semantic_crystal_tool.py
+          grep -q '^name: capability-contract-router$' .agents/skills/capability-contract-router/SKILL.md
+          grep -q '^name: signal-territory-crystallizer$' .agents/skills/signal-territory-crystallizer/SKILL.md
+          grep -q 'CAPABILITY_CONTRACT_ROUTER' docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml
+          grep -q 'SIGNAL_TERRITORY_CRYSTALLIZATION' docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml
+          grep -q 'FIXED_POINT_10X12_ADVERSARIAL_WHEN_CRYSTALLIZING' docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml
+          python scripts/trigger-fabric/semantic_crystal_tool.py --self-test \
+            | tee "$RUNNER_TEMP/semantic-crystal-self-test.txt"
+          grep -q '^SEMANTIC_CRYSTAL_TOOL_SELF_TEST=PASS$' "$RUNNER_TEMP/semantic-crystal-self-test.txt"
+          echo 'SEMANTIC_CRYSTAL_CAPABILITY_FABRIC=PASS'
 
       - name: Render architecture PNG from canonical Mermaid
         shell: bash
