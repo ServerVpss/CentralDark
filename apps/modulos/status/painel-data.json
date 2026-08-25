@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-25T02:05:20.538Z",
-  "updatedAtBR": "24/08/2026, 23:05:20 BRT",
+  "updatedAt": "2026-08-25T10:11:12.507Z",
+  "updatedAtBR": "25/08/2026, 07:11:12 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "📋 REMEASURE LIVE_STATE — PONTO FIXO OPERACIONAL DESTA RODADA (#1135)",
+    "lastCommit": "🛡️ CASCO VIVO — resiliência adaptativa contraprovada",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-25T10:11:12.507Z",
+      "titulo": "Push na main · 01135a7eca5ed6375860e35578a6db23deed34f9",
+      "detalhe": "🛡️ CASCO VIVO — resiliência adaptativa contraprovada",
+      "area": "Repositório",
+      "sha": "01135a7",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-25T02:05:20.538Z",
       "titulo": "Push na main · dd0d0ea34809c8e8a005cf90de76d36b38d06d00",
       "detalhe": "📋 REMEASURE LIVE_STATE — PONTO FIXO OPERACIONAL DESTA RODADA (#1135)",
@@ -988,14 +996,6 @@
       "detalhe": "feat(proof): exigir enforcement proporcional para claim operacional (#1027)",
       "area": "Repositório",
       "sha": "341c456",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-18T01:57:30.342Z",
-      "titulo": "Push na main · 9fbcb19e94866b6aec366f1778ec3a408aa93072",
-      "detalhe": "fix(authority): deduplicar owner e preservar transport-not-grant (#1026)",
-      "area": "Repositório",
-      "sha": "9fbcb19",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-25T10:11:12.507Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 01135a7eca5ed6375860e35578a6db23deed34f9 (01135a7)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-25T02:05:20.538Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · dd0d0ea34809c8e8a005cf90de76d36b38d06d00 (dd0d0ea)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-18T02:01:59.414Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 341c45683111d4ce689106ccc9872ecbe49d6e61 (341c456)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-18T01:57:30.342Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 9fbcb19e94866b6aec366f1778ec3a408aa93072 (9fbcb19)",
       "area": "Repositório",
       "status": "sucesso"
     }
