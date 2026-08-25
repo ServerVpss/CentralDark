@@ -1,7 +1,7 @@
 ---
 name: capability-contract-router
 description: Roteamento determinístico e mensurável de tarefas para capacidades, papéis e handoffs no CentralDark, sem transformar modelo em identidade nem ampliar autoridade.
-status: CANONICAL_CANDIDATE
+status: CANONICAL
 owner: SEGREDO/CHEFE
 runtime_role: SOL_COORDINATES_HERMES_EXECUTES_ENGINES_ARE_REPLACEABLE
 boot_required: true
@@ -185,7 +185,9 @@ Self-test é prova do algoritmo local conhecido, não prova integração em todo
 
 ## Promotion / Fixed Point
 
-A skill só pode ser promovida de candidata para canônica quando:
+A declaração `status: CANONICAL` só tem efeito canônico quando este artefato está presente na `main` vigente e os checks aplicáveis sobrevivem. Branch/PR não substituem promoção real.
+
+Gate de promoção:
 
 ```text
 SELF_TEST=PASS
@@ -194,7 +196,8 @@ SELF_TEST=PASS
 + CAPABILITY_GAP_NEGATIVE_FIXTURE_BLOCKS
 + WRITER_CONFLICT_FIXTURE_BLOCKS_AFFECTED_CANDIDATE
 + NO_DUPLICATE_OWNER_FOUND
-→ PROMOTION_CANDIDATE
++ MERGED_TO_MAIN
+→ CANONICAL_ACTIVE
 ```
 
 Fixed point do roteamento:
