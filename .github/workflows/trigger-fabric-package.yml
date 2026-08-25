@@ -11,6 +11,7 @@ on:
       - 'docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md'
       - 'docs/CONSCIENCIA/MULTIBUSSOLA.md'
       - '.agents/skills/meta-lupa/**'
+      - '.agents/skills/engine-gap-closure/**'
       - 'apps/modulos/HERMES-CORE/**'
       - 'scripts/memory-linker/**'
       - '.agents/skills/session-intelligence-harvester/**'
@@ -50,11 +51,6 @@ jobs:
           test "$actual" = "$EXPECTED_HEAD"
           echo "HEAD_SHA=$actual"
 
-      - name: Setup Node
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-        with:
-          node-version: '22'
-
       - name: Verify repository contract facts
         shell: bash
         run: |
@@ -64,6 +60,29 @@ jobs:
           grep -q '^REPO_CONTRACT_VERIFY=PASS$' docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/VERIFY-RESULT.txt
           grep -q '^BOT_ENTRY_CONTRACT=PASS$' docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/VERIFY-RESULT.txt
           grep -q '^OUTPUT_GUARD_CONTRACT=PASS$' docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/VERIFY-RESULT.txt
+
+      - name: Verify engine gap closure contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s .agents/skills/engine-gap-closure/SKILL.md
+          grep -q 'BOUNDARY_GUARD_PROFILE' .agents/skills/engine-gap-closure/SKILL.md
+          grep -q 'ENGINE_CAPABILITY_CARD' .agents/skills/engine-gap-closure/SKILL.md
+          grep -q 'SELF_HEALING_FAILURE_LOOP' .agents/skills/engine-gap-closure/SKILL.md
+          grep -q 'ENGINE_GAP_FIXED_POINT' .agents/skills/engine-gap-closure/SKILL.md
+          test -s scripts/trigger-fabric/engine_gap_fixed_point.py
+          python scripts/trigger-fabric/engine_gap_probe.py --self-test \
+            | tee .artifacts-engine-gap-probe-self-test.txt
+          grep -q '"ok": true' .artifacts-engine-gap-probe-self-test.txt
+          python scripts/trigger-fabric/engine_gap_fixed_point.py --self-test \
+            | tee .artifacts-engine-gap-fixed-point-self-test.txt
+          grep -q '"ok": true' .artifacts-engine-gap-fixed-point-self-test.txt
+          grep -q 'positive_reaches_fixed_point' .artifacts-engine-gap-fixed-point-self-test.txt
+          grep -q 'unknown_writer_blocks_false_green' .artifacts-engine-gap-fixed-point-self-test.txt
+          grep -q 'unknown_runtime_blocks_false_green' .artifacts-engine-gap-fixed-point-self-test.txt
+          grep -q 'engine-gap-closure/SKILL.md' docs/ARQUITETURA/CENTRALDARK-OMNI-ROUTER.md
+          echo 'ENGINE_GAP_CLOSURE_CONTRACT=PASS'
+          echo 'ENGINE_GAP_SELF_HEALING_FIXED_POINT=PASS'
 
       - name: Render architecture PNG from canonical Mermaid
         shell: bash
