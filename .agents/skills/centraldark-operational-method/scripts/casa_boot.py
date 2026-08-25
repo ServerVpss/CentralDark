@@ -12,6 +12,7 @@ NAO COPIA: o script apenas:
   - mede mtime/sha256;
   - localiza o SOUL do perfil (este arquivo vive no mesmo dir);
   - verifica PRESENCA DE CONCEITO de governanca (nao linha literal) no perfil;
+  - executa o self-test da capability-contract-router obrigatoria;
   - imprime relatorio + STATUS para o runtime consumir (stdout).
 
 FORA DE ESCOPO (noremoto): nao toca origin/remoto. Trabalha com o estado
@@ -21,6 +22,7 @@ SAIDA:
   JSON compacto em stdout com:
     canonical_soul, profile_soul, canonical_sha256, canonical_mtime,
     profile_mtime, governance_missing (conceitos ausentes),
+    capability_router_status, capability_router_self_test,
     status (OK | DRIFT | UNKNOWN), boot_evidence.
 
 USO:
@@ -32,6 +34,8 @@ import hashlib
 import json
 import os
 import re
+import subprocess
+import sys
 
 # ---- Caminhos (locais, noremoto) -------------------------------------------
 HOME = os.path.expanduser("~")
@@ -42,6 +46,14 @@ CASA_ROOT = r"E:\CentralDark\Pivete"
 CLONE_CANONICO = os.path.join(CASA_ROOT, "CentralDark")
 CANONICAL_SOUL = os.path.join(
     CLONE_CANONICO, "docs", "CONSCIENCIA", "01-IDENTIDADE-E-REGRAS", "SOUL-SOL.md"
+)
+CAPABILITY_ROUTER = os.path.join(
+    CLONE_CANONICO,
+    ".agents",
+    "skills",
+    "capability-contract-router",
+    "scripts",
+    "route_capabilities.py",
 )
 
 # Conceitos de governanca que o perfil PRECISA refletir. Nao exigimos a linha
@@ -98,6 +110,46 @@ def concept_present(needles, haystack_norm):
     return any(n in haystack_norm for n in needles)
 
 
+def run_capability_router_self_test():
+    if not os.path.isfile(CAPABILITY_ROUTER):
+        return {
+            "status": "UNKNOWN",
+            "reason": "CAPABILITY_ROUTER_AUSENTE",
+            "path": CAPABILITY_ROUTER,
+        }
+
+    try:
+        completed = subprocess.run(
+            [sys.executable, CAPABILITY_ROUTER, "--self-test"],
+            capture_output=True,
+            text=True,
+            timeout=15,
+            check=False,
+        )
+    except Exception as exc:
+        return {
+            "status": "UNKNOWN",
+            "reason": "CAPABILITY_ROUTER_SELF_TEST_EXCEPTION",
+            "error": type(exc).__name__,
+        }
+
+    try:
+        payload = json.loads(completed.stdout)
+    except json.JSONDecodeError:
+        return {
+            "status": "DRIFT",
+            "reason": "CAPABILITY_ROUTER_INVALID_JSON",
+            "exit_code": completed.returncode,
+            "stderr": completed.stderr[-500:],
+        }
+
+    return {
+        "status": "OK" if completed.returncode == 0 and payload.get("status") == "PASS" else "DRIFT",
+        "exit_code": completed.returncode,
+        "self_test": payload,
+    }
+
+
 def main():
     out = {
         "profile_dir": PROFILE_DIR,
@@ -105,6 +157,8 @@ def main():
         "profile_soul": PROFILE_SOUL,
         "canonical_present": os.path.isfile(CANONICAL_SOUL),
         "profile_present": os.path.isfile(PROFILE_SOUL),
+        "capability_router": CAPABILITY_ROUTER,
+        "capability_router_present": os.path.isfile(CAPABILITY_ROUTER),
         "status": "UNKNOWN",
         "governance_missing": [],
         "boot_evidence": [],
@@ -134,12 +188,26 @@ def main():
             missing.append(concept)
     out["governance_missing"] = missing
 
-    if not missing:
-        out["status"] = "OK"
-        out["boot_evidence"].append("PERFIL_REFLETE_GOVERNANCA_CANONICA")
+    router = run_capability_router_self_test()
+    out["capability_router_status"] = router.get("status")
+    out["capability_router_self_test"] = router
+
+    if router.get("status") == "OK":
+        out["boot_evidence"].append("CAPABILITY_ROUTER_SELF_TEST_PASS")
+    elif router.get("status") == "DRIFT":
+        out["boot_evidence"].append("CAPABILITY_ROUTER_SELF_TEST_FAIL")
     else:
+        out["boot_evidence"].append("CAPABILITY_ROUTER_SELF_TEST_UNKNOWN")
+
+    if missing:
         out["status"] = "DRIFT"
         out["boot_evidence"].append("PERFIL_OMITE_CONCEITO_CANONICO: " + ",".join(missing))
+    elif router.get("status") != "OK":
+        out["status"] = "DRIFT" if router.get("status") == "DRIFT" else "UNKNOWN"
+    else:
+        out["status"] = "OK"
+        out["boot_evidence"].append("PERFIL_REFLETE_GOVERNANCA_CANONICA")
+        out["boot_evidence"].append("CAPABILITY_ROUTER_BOOT_ENFORCED")
 
     print(json.dumps(out, ensure_ascii=False, indent=2))
 
