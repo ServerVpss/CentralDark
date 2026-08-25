@@ -25,6 +25,7 @@ required=[
  'README.md','ARCHITECTURE.md','ARCHITECTURE.mmd','ARCHITECTURE.png',
  'CONTRACT.yml','TRIGGERS.yml','ENGINE_BINDING.yml','ADVERSARIAL_HANDOFF.yml','LIVE_STATE.md',
  'HISTORY.md','COUNTERPROOF.md','RASTRO.md','RECEIPT.md','SOURCES.json',
+ 'OLHO-BIONICO-ANTI-FLASH.md',
  'build_package.py','verify_package.py','MANIFEST.json','SHA256SUMS.txt'
 ]
 for name in required:
@@ -55,6 +56,24 @@ engine=(ROOT/'ENGINE_BINDING.yml').read_text(encoding='utf-8',errors='replace') 
 for token in ['engine_is_owner: false','binding_mode: LOAD_REFERENCE','prompt_consumer: apps/modulos/HERMES-CORE/prompts/hermes-core.md']:
     if token not in engine: errors.append(f'ENGINE_BINDING_GUARD_MISSING:{token}')
 
+profile=(ROOT/'OLHO-BIONICO-ANTI-FLASH.md').read_text(encoding='utf-8',errors='replace') if (ROOT/'OLHO-BIONICO-ANTI-FLASH.md').exists() else ''
+for token in [
+ 'OLHO_BIONICO_IS_PROFILE=true',
+ 'OLHO_BIONICO_IS_NEW_ENGINE=false',
+ 'DERIVED_OUTPUT',
+ 'NO_CLEAN_SOURCE_REGION',
+ 'UNKNOWN_OR_REVIEW_REQUIRED',
+ 'PLACA_CENTRAL_IS_SOURCE_OF_TRUTH=false',
+ 'CULTURAL_ALIAS_IS_NOT_ENGINE=true',
+ 'CI_QUEUED = NOT_PASS',
+ 'DEPLOY = OUT_OF_SCOPE_THIS_MISSION',
+]:
+    if token not in profile: errors.append(f'OLHO_BIONICO_GUARD_MISSING:{token}')
+
+architecture=(ROOT/'ARCHITECTURE.mmd').read_text(encoding='utf-8',errors='replace') if (ROOT/'ARCHITECTURE.mmd').exists() else ''
+for token in ['OLHO BIÔNICO ANTI-FLASH','DERIVED OUTPUT','MONITORES DA CASA']:
+    if token not in architecture: errors.append(f'OLHO_BIONICO_DIAGRAM_MISSING:{token}')
+
 if errors:
     print('VERIFY=FAIL')
     print('\n'.join(errors))
@@ -64,4 +83,5 @@ print('VERIFY=PASS')
 print(f'FILES_VERIFIED={len(manifest.get("files",[]))}')
 print('BOT_ENTRY_CONTRACT=PASS')
 print('OUTPUT_GUARD_CONTRACT=PASS')
+print('OLHO_BIONICO_ANTI_FLASH_CONTRACT=PASS')
 print('GLOBAL_RUNTIME_100_PERCENT=NOT_PROVEN')
