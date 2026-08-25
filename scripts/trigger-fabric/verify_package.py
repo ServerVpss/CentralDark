@@ -31,6 +31,22 @@ required=[
 for name in required:
     if not (ROOT/name).exists(): errors.append(f'REQUIRED_MISSING {name}')
 
+# 2º CADEADO — Ontologia Musical + Judge Ternário
+# Verifica se a ontologia musical está presente no PADRAO-PARCEIRO-DELTA-JUDGE.md
+padrao_path = ROOT/'docs'/'ARQUITETURA'/'PADRAO-PARCEIRO-DELTA-JUDGE.md'
+if not padrao_path.exists():
+    errors.append('REQUIRED_MISSING docs/ARQUITETURA/PADRAO-PARCEIRO-DELTA-JUDGE.md')
+else:
+    padrao_content = padrao_path.read_text(encoding='utf-8', errors='replace')
+    musical_tokens = [
+        'MUSICIAN = agent role (not tool)',
+        'INSTRUMENT = tool capability (not agent)',
+        'JUDGE_THREE_WAY = ternary verdict (PASS | FAIL | UNKNOWN) + counterproof + receipt'
+    ]
+    for token in musical_tokens:
+        if token not in padrao_content:
+            errors.append(f'MUSICAL_ONTOLOGY_MISSING:{token}')
+
 receipt=(ROOT/'RECEIPT.md').read_text(encoding='utf-8',errors='replace') if (ROOT/'RECEIPT.md').exists() else ''
 if 'GLOBAL_RUNTIME_100_PERCENT = NOT_PROVEN' not in receipt:
     errors.append('FALSE_GREEN_GUARD_MISSING')
