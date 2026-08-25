@@ -296,10 +296,76 @@ O pacote/gate deve conseguir quebrar pelo menos estas regressões:
 4. ausência de UNKNOWN quando não existe fonte ambiente limpa;
 5. painel/monitor tratado como fonte da verdade;
 6. alias cultural tratado como mecanismo técnico;
-7. CI/merge confundido com runtime/deploy.
+7. CI/merge confundido com runtime/deploy;
+8. agente/modelo confundido com instrumento/tool;
+9. Judge reduzido a binário FAIL/PASS e apagando UNKNOWN/NOT_PROVEN;
+10. referência cultural elevada a autoridade técnica.
 ```
 
-## 10. Fixed point do escopo
+## 10. Banda / instrumentos — ontologia de papel amarrada ao circuito
+
+A referência `https://www.tibiawiki.com.br/wiki/Instrumentos_Musicais` entra somente como **referência cultural/semântica de instrumento**. Ela não governa arquitetura, runtime, prova nem autoridade da Casa.
+
+O encaixe canônico preserva a diferença entre quem toca e o meio usado para produzir efeito:
+
+```text
+CHEFE       = COMPOSITOR / intenção + autoridade
+SOL         = REGENTE / coordenação e reconciliação
+MÚSICO      = AGENTE / PAPEL operacional
+INSTRUMENTO = TOOL / CAPACIDADE utilizada pelo papel
+PARTITURA   = INTENÇÃO + DESTINATION_LOCK + CONTRATO
+
+COMPASSO    = INTENT_FINGERPRINT / cadeia causal compartilhada
+BATIDA      = EVENT_ID
+TEMPO       = STATE_VERSION
+NOTA        = AÇÃO / DELTA
+SOM         = EFEITO OBSERVÁVEL
+```
+
+Invariantes executáveis do mapeamento:
+
+```text
+MUSICIAN_IS_AGENT_ROLE=true
+INSTRUMENT_IS_TOOL_CAPABILITY=true
+AGENT_IS_NOT_INSTRUMENT=true
+TOOL_IS_NOT_AUTHORITY=true
+CULTURAL_REFERENCE_IS_NOT_TECHNICAL_AUTHORITY=true
+```
+
+`GRAFO`, `VIGIA` e `J.R.V.S.` permanecem braços/papéis de percepção. Podem usar instrumentos/capacidades diferentes, mas não ganham Writer ou autoridade por quantidade de observadores.
+
+O julgamento também não pode apagar o terceiro estado epistemológico:
+
+```text
+                 JUDGE
+                   │
+        ┌──────────┼──────────┐
+        ▼          ▼          ▼
+      FAIL   UNKNOWN/      PASS
+             NOT_PROVEN
+        │          │          │
+        ▼          ▼          ▼
+     LUPA       TESTE       RECEIPT
+     CAUSA      DISCRIM.    SHA/estado
+     DELTA         │          │
+     RETESTE    REMEDIR       ▼
+        └──────────┴──────→ GRAFO T1
+                              │
+                              ▼
+                         NEXT_CURSOR
+```
+
+```text
+JUDGE_THREE_WAY=true
+UNKNOWN_OR_NOT_PROVEN_IS_NOT_FAIL=true
+UNKNOWN_OR_NOT_PROVEN_IS_NOT_PASS=true
+EXECUTOR_CANNOT_SELF_APPROVE=true
+REALITY_IS_FINAL_JUDGE=true
+```
+
+A metáfora musical organiza leitura e papéis; não substitui `PROOF_OWNERSHIP`, MetaLupa, Gate, Writer único, execução no runtime nem efeito observável.
+
+## 11. Fixed point do escopo
 
 ```text
 PROFILE_IN_CANONICAL_FAMILY
