@@ -15,6 +15,7 @@
     "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml",
     "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ARTIFACT-PROPERTIES.yml",
     "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MATERIAL-INGEST.md",
+    "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/OLHO-BIONICO-ANTI-FLASH.md",
     "apps/modulos/HERMES-CORE/prompts/hermes-core.md",
     "apps/modulos/HERMES-CORE/core/orchestrator.mjs",
     "apps/modulos/HERMES-CORE/agents/GraphRAG-Master/agent.mjs",
@@ -36,6 +37,9 @@
     "engine_binding_documented_is_loaded": false,
     "new_equivalent_workflow_allowed": false,
     "artifact_never_invents_canonical": true,
-    "every_material_enters_mill": true
+    "every_material_enters_mill": true,
+    "visual_projection_is_runtime_proof": false,
+    "cultural_alias_is_technical_authority": false,
+    "derived_visual_output_must_preserve_source_binding": true
   }
 }
