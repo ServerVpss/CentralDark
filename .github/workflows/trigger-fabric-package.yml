@@ -71,13 +71,25 @@ jobs:
         run: |
           set -euo pipefail
           test -s .agents/skills/distinct-engineering-compiler/SKILL.md
+          test -s .agents/skills/distinct-engineering-compiler/scripts/fixed_point_miner.py
           grep -q '^name: distinct-engineering-compiler$' .agents/skills/distinct-engineering-compiler/SKILL.md
           grep -q 'RED GAP lane' .agents/skills/distinct-engineering-compiler/SKILL.md
+          grep -q '10 × 12 bidirecional' .agents/skills/distinct-engineering-compiler/SKILL.md
           grep -q 'SERIALIZE_MUTATION=true' .agents/skills/distinct-engineering-compiler/SKILL.md
           grep -q 'DISTINCT_ENGINEERING_COMPILER_ON_MATERIAL_GAP' docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml
           grep -q 'RED_ISSUE' docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml
           grep -q 'RED_PR_OR_FAILED_CHECK' docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml
           echo 'DISTINCT_ENGINEERING_COMPILER_BINDING=PASS'
+
+      - name: Counterprove bounded 10x12 fixed-point miner
+        shell: bash
+        run: |
+          set -euo pipefail
+          python .agents/skills/distinct-engineering-compiler/scripts/fixed_point_miner.py --self-test \
+            | tee "$RUNNER_TEMP/fixed-point-miner.txt"
+          grep -q '"status": "PASS"' "$RUNNER_TEMP/fixed-point-miner.txt"
+          grep -q '"fixed_point": true' "$RUNNER_TEMP/fixed-point-miner.txt"
+          echo 'FIXED_POINT_MINER_10X12=PASS'
 
       - name: Render architecture PNG from canonical Mermaid
         shell: bash
