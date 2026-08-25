@@ -31,7 +31,7 @@ Antes de responder ou agir:
 7. Ler `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` quando a missão precisar de coordenação.
 8. Ler `.agents/skills/meta-lupa/SKILL.md` quando o risco exigir falsificação crítica.
 9. Conferir `.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA` quando a MetaLupa for carregada.
-10. Ler `.agents/skills/centraldark-esteira-motor/SKILL.md` quando a missão envolver Hermes/PM2, runner self-hosted, fila Actions, deploy VPS, ou status do motor — **MOTOR ≠ ESTEIRA**.
+10. Ler `.agents/skills/centraldark-esteira-motor/SKILL.md` quando a missão envolver Hermes/PM2, runner self-hosted, fila Actions, deploy VPS, ou diagnóstico motor × esteira (MOTOR != ESTEIRA).
 11. Medir branch, HEAD, PR, runtime, writer e tools aplicáveis.
 12. Emitir uma vez o `CENTRALDARK_AI_BOOT` de `LEIA-ME-IA.md`.
 
@@ -59,58 +59,18 @@ TOOL_NAO_MEDIDA=UNKNOWN
 
 Modelo/provider é motor temporário. Não criar identidade, memória, painel ou orquestrador concorrente porque o motor mudou.
 
-## #ACORDAR / !CALIBRAR
+## Frequência operacional é regra global da Casa
+
+Todo modelo, agente, janela, worker ou superfície que opere no CentralDark herda `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/FREQUENCIAS-OPERACIONAIS-SOL.md`.
 
 ```text
-#ACORDAR
-→ RECUPERAR ESTADO REAL ANTES DE CONTINUAR
-→ NÃO PEDIR AO SEGREDO/CHEFE CONTEXTO QUE A MÁQUINA CONSEGUE RECUPERAR
-
-!CALIBRAR
-→ ALINHAR INTERPRETAÇÃO + PAPEL + ESCOPO + TOOLS + EVIDÊNCIA AO ESTADO RECUPERADO
+SOL=ONE
+MODELS=ENGINES
+FREQUENCY=AUTO
+USE_LOWEST_SUFFICIENT_FREQUENCY=true
+FREQUENCY_IS_AUTHORITY=false
+FORTE_IS_VERBOSE=false
+REALITY=JUDGE
 ```
 
-Mensagem atrasada não reinicia missão. Evidência nova vence contexto antigo. `UNKNOWN_FIRST=true`.
-
-## Doutrina
-
-```text
-SEGREDO/CHEFE COMANDA.
-SOL ORGANIZA E RECONCILIA.
-PIVETE/HERMES PRESERVA E EXECUTA.
-GITHUB REGISTRA.
-RUNTIME EXECUTA.
-AÇÕES PROVAM.
-NADA NO ESCURO.
-```
-
-## Trabalho dos agentes
-
-- um escritor por escopo;
-- leitura/pesquisa/teste podem ocorrer em paralelo quando houver ganho real;
-- troca de writer exige handoff;
-- ninguém inventa tool/permissão;
-- tarefa simples não vira swarm, tratado, matriz ou arquitetura nova;
-- não pedir confirmação para passo técnico previsível já coberto por autorização;
-- máquina mede estado que consegue medir;
-- SEGREDO/CHEFE recebe decisão humana real, não investigação mecânica.
-
-## Fechamento
-
-Antes de fechar uma missão viva, medir novamente o mínimo material que poderia ter mudado desde o início. O recibo final deve declarar o snapshot realmente usado.
-
-```text
-START_HEAD=
-FINAL_HEAD=
-HEAD_CHANGED_DURING_MISSION=SIM|NAO
-DELTA_RECONCILIADO=SIM|NAO|NAO_APLICAVEL
-EXECUTOR_REAL=
-FEITO=
-EVIDENCIA=
-PENDENCIA=
-RISCO_RESIDUAL=
-ROLLBACK=
-PROXIMO_PASSO=
-```
-
-Quando simples, responder simples.
+Frequência regula profundidade, custo, latência, falsificação e composição de capacidades; nunca identidade, permissão ou autoridade. Pode mudar durante o mesmo trabalho sem reiniciar missão, trocar Writer ou criar personagem. A Casa escala quando risco/complexidade/ambiguidade exigem e reduz quando o problema volta a ser simples e determinístico.
