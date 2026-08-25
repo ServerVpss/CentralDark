@@ -97,7 +97,7 @@ def converge(payload, max_rounds=10):
     state = {"items": items}
     previous = None
     trace = []
-    fixed_point = False
+    hash_fixed_point = False
 
     for round_index in range(1, max_rounds + 1):
         order = LENSES if round_index % 2 else list(reversed(LENSES))
@@ -122,18 +122,22 @@ def converge(payload, max_rounds=10):
         )
 
         if previous == digest:
-            fixed_point = True
+            hash_fixed_point = True
             break
         previous = digest
 
     crystals = [x for x in state["items"] if x.get("crystal_status") == "CRYSTAL"]
     candidates = [x for x in state["items"] if x.get("crystal_status") == "GOLD_CANDIDATE"]
     raw = [x for x in state["items"] if x.get("crystal_status") == "RAW"]
+    material_unknown = bool(candidates or raw)
+    semantic_fixed_point = hash_fixed_point and not material_unknown
 
     return {
         "schema": "centraldark.fixed-point-mine.v1",
-        "status": "PASS_FIXED_POINT" if fixed_point else "NOT_PROVEN_FIXED_POINT",
-        "fixed_point": fixed_point,
+        "status": "PASS_FIXED_POINT" if semantic_fixed_point else "NOT_PROVEN_FIXED_POINT",
+        "fixed_point": semantic_fixed_point,
+        "hash_fixed_point": hash_fixed_point,
+        "material_unknown": material_unknown,
         "max_rounds": max_rounds,
         "lenses_per_round": len(LENSES),
         "max_passes": max_rounds * len(LENSES),
@@ -148,8 +152,8 @@ def converge(payload, max_rounds=10):
     }
 
 
-def self_test():
-    complete = {
+def _complete_fixture():
+    return {
         "id": "goroma-route-recovery",
         "source_ref": "goroma",
         "observed_pattern": "route can degrade; recovery has prerequisites",
@@ -165,6 +169,10 @@ def self_test():
         "counterproof": "stale route or missing prerequisite must block",
         "compressed_rule": "ROUTE_DEGRADED -> PREREQUISITES -> RECOVER -> REMEASURE",
     }
+
+
+def self_test():
+    complete = _complete_fixture()
     incomplete = {
         "id": "unknown",
         "source_ref": "x",
@@ -172,22 +180,35 @@ def self_test():
         "abstract_function": "unknown transfer candidate",
     }
 
-    out = converge({"items": [complete, incomplete]}, max_rounds=10)
-    by_id = {x["id"]: x for x in out.get("state", {}).get("items", [])}
+    positive = converge({"items": [complete]}, max_rounds=10)
+    negative = converge({"items": [complete, incomplete]}, max_rounds=10)
+    positive_by_id = {x["id"]: x for x in positive.get("state", {}).get("items", [])}
+    negative_by_id = {x["id"]: x for x in negative.get("state", {}).get("items", [])}
     failures = []
-    if out.get("status") != "PASS_FIXED_POINT":
-        failures.append("fixed_point")
-    if by_id.get("goroma-route-recovery", {}).get("crystal_status") != "CRYSTAL":
+
+    if positive.get("status") != "PASS_FIXED_POINT" or positive.get("fixed_point") is not True:
+        failures.append("complete_not_fixed_point")
+    if positive_by_id.get("goroma-route-recovery", {}).get("crystal_status") != "CRYSTAL":
         failures.append("complete_not_crystal")
-    if by_id.get("unknown", {}).get("crystal_status") != "GOLD_CANDIDATE":
+    if positive.get("passes_executed", 0) > 120:
+        failures.append("positive_pass_bound")
+
+    if negative.get("status") != "NOT_PROVEN_FIXED_POINT" or negative.get("fixed_point") is not False:
+        failures.append("unknown_false_green")
+    if negative.get("hash_fixed_point") is not True:
+        failures.append("negative_hash_did_not_stabilize")
+    if negative.get("material_unknown") is not True:
+        failures.append("negative_unknown_not_detected")
+    if negative_by_id.get("unknown", {}).get("crystal_status") != "GOLD_CANDIDATE":
         failures.append("incomplete_not_candidate")
-    if out.get("passes_executed", 0) > 120:
-        failures.append("pass_bound")
+    if negative.get("passes_executed", 0) > 120:
+        failures.append("negative_pass_bound")
 
     return {
         "status": "PASS" if not failures else "FAIL",
         "failures": failures,
-        "observed": out,
+        "positive": positive,
+        "negative": negative,
     }
 
 
