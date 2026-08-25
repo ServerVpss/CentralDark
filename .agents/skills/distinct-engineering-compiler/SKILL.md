@@ -257,6 +257,151 @@ TRANSFER_REQUIRES_NEW_CONTEXT=true
 NO_BLIND_ANALOGY=true
 ```
 
+## Garimpo total — Goroma como prova de transferência
+
+Goroma fornece matéria de engenharia, não identidade. O padrão útil extraído é:
+
+```text
+ROTA NORMAL
+→ PERTURBAÇÃO / DESVIO
+→ ESTADO DEGRADADO
+→ PRÉ-REQUISITOS DE RECUPERAÇÃO
+→ REPARO
+→ ROTA RESTAURADA
+→ REMEDIÇÃO
+```
+
+A página também declara que mapas/rotas podem mudar quando uma Mini World Change está ativa. Portanto:
+
+```text
+ROUTE_DOCUMENTED != ROUTE_CURRENT
+ENVIRONMENT_MUTATION_INVALIDATES_ROUTE_ASSUMPTION=true
+RECOVERY_REQUIRES_PREREQUISITES=true
+RECOVERY_ACTION != RECOVERY_PROVEN
+```
+
+Generalização CentralDark:
+
+```text
+RUNTIME_ROUTE | TOOL_ROUTE | OWNER_ROUTE | HANDOFF_ROUTE
+→ MEASURE_CURRENT_ROUTE
+→ DETECT_DEGRADED_PATH
+→ RESOLVE_PREREQUISITES
+→ RECOVER_USING_EXISTING_OWNER
+→ REMEASURE_SAME_ROUTE
+→ COUNTERPROOF
+→ CRYSTALLIZE_IF_REUSABLE
+```
+
+## 10 × 12 bidirecional — convergência até ponto fixo
+
+Não significa repetir texto 120 vezes. Significa aplicar até 10 rodadas de 12 lentes, alternando direção para procurar resíduos diferentes.
+
+As 12 lentes:
+
+```text
+1  PROVENANCE
+2  SIGNAL
+3  ABSTRACTION
+4  REMOVE_DOMAIN_LORE
+5  SEMANTIC_LOCATION
+6  CAPABILITY
+7  OWNER
+8  CONSUMER
+9  BOUNDARY_WRITER
+10 PROOF
+11 COUNTERPROOF
+12 COMPRESSION
+```
+
+Execução:
+
+```text
+ROUND_1  → 1..12
+ROUND_2  → 12..1
+ROUND_3  → 1..12
+...
+ROUND_10 → 12..1
+```
+
+Máximo teórico: `10 × 12 = 120` passes. Pode parar antes.
+
+```text
+STATE_N
+→ 12 LENSES
+→ NORMALIZE
+→ HASH
+→ STATE_N+1
+
+HASH_N == HASH_N+1
+→ NO_NEW_INFORMATION
+→ NO_CHANGE
+→ FIXED_POINT_CANDIDATE
+```
+
+O ponto fixo só é válido se:
+
+```text
+NO_NEW_MATERIAL_GAP
+AND NO_NEW_OWNER
+AND NO_NEW_CONSUMER
+AND NO_NEW_PROOF_TARGET
+AND NO_NEW_COUNTEREXAMPLE
+AND NO_MATERIAL_UNKNOWN_FOR_PROMOTION
+→ FIXED_POINT
+```
+
+Se o hash estabilizar mas existir `UNKNOWN` material:
+
+```text
+HASH_STABLE + MATERIAL_UNKNOWN
+→ NOT_PROVEN_FIXED_POINT
+```
+
+Runtime executável:
+
+```text
+python .agents/skills/distinct-engineering-compiler/scripts/fixed_point_miner.py --self-test
+python .agents/skills/distinct-engineering-compiler/scripts/fixed_point_miner.py --input material.json --rounds 10
+```
+
+Estados da matéria:
+
+```text
+RAW
+→ GOLD_CANDIDATE
+→ CRYSTAL
+```
+
+`CRYSTAL` exige source_ref + abstract_function + capability + canonical_owner + consumer + proof_target + counterproof. Sem isso, ouro não vira cânone.
+
+## Pós-cristalização — replicar o fluxo sem reconstruir raciocínio
+
+Depois do fixed point, não repetir o garimpo inteiro por hábito. Transformar o cristal em regra reutilizável:
+
+```text
+NOVO_EVENTO
+→ SIGNATURE_MATCH?
+   SIM → REUSE_CRYSTAL → EXECUTE → REMEASURE → JUDGE
+   NÃO → DELIBERATE → 10x12 bounded miner → NEW_CRYSTAL_OR_UNKNOWN
+```
+
+Fluxo pós-cristalizado:
+
+```text
+#ACORDAR
+→ !CALIBRAR
+→ MATCH_EXISTING_CRYSTAL
+→ CAPABILITY_CONTRACT_ROUTER
+→ HERMES
+→ REMEDIÇÃO
+→ REALITY_JUDGE
+→ RECEIPT
+→ NEXT_CURSOR
+```
+
+A inversão protege contra conclusão enviesada; a repetição é limitada; o fixed point encerra a rodada.
+
 ## Critério de sucesso
 
 ```text
@@ -281,6 +426,8 @@ RED_SCAN != RED_FIX
 MANY_AGENTS != MORE_PROOF
 MODEL_NAME != SPECIALIST_OWNER
 SELF_PROOF != PASS
+HASH_STABLE != SEMANTIC_FIXED_POINT
+120_PASSES != 120_NEW_CHANGES
 ```
 
 Se a ligação com boot/runtime ainda for apenas contratual, declarar `CONTRACT_BOUND_RUNTIME_NOT_PROVEN` até existir consumidor + teste + gate observáveis.
