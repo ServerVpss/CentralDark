@@ -52,9 +52,10 @@ SEGREDO/CHEFE_INTENT
 → WRITER_RESOLUTION
 → RUNTIME_PROBE
 → PROOF_DISCOVERY
+→ SELF_HEALING_FAILURE_LOOP
 → !META_LUPA
 → REALITY_JUDGE
-   ├─ PASS    -> RECEIPT + NEXT_CURSOR
+   ├─ PASS    -> FIXED_POINT_CHECK -> RECEIPT + NEXT_CURSOR
    ├─ FAIL    -> EXISTING_OWNER + MINIMUM_DELTA + RETEST
    └─ UNKNOWN -> READ_ONLY + DISCRIMINATING_TEST
 ```
@@ -182,6 +183,39 @@ DECLARED
 
 Saltos de nível são proibidos.
 
+## SELF_HEALING_FAILURE_LOOP
+
+O controlador canônico desta skill é:
+
+```text
+python scripts/trigger-fabric/engine_gap_fixed_point.py
+```
+
+Ele reaproveita o probe, remede e converge somente enquanto existe ganho informacional. Não faz deploy, restart, merge, troca credencial ou mutação de produção.
+
+```text
+MEASURE_CURRENT_STATE
+→ CLASSIFY_FAILURE_SIGNATURE
+→ SEARCH_EXISTING_CRYSTAL
+→ CHOOSE_DISCRIMINATING_TEST
+→ REMEASURE
+→ COUNTERPROOF
+→ REALITY_JUDGE
+→ FIXED_POINT | REMEDIATION_REQUIRED | HUMAN_OR_EXTERNAL_FRONTIER
+```
+
+Regras:
+
+```text
+SAME_FAILURE_NO_NEW_INFO -> STOP_AND_PRESERVE_FRONTIER
+UNKNOWN -> NEVER_PASS
+FAIL -> EXISTING_OWNER + MINIMUM_DELTA + RETEST
+MUTATION -> ONLY_INSIDE_AUTHORIZED_SAFE_ZONE
+HUMAN_FRONTIER -> RETURN_WITH_RECEIPT
+```
+
+O self-healing é **bounded**, não autonomia irrestrita.
+
 ## Dificuldade de prova proporcional ao risco
 
 ```text
@@ -199,12 +233,24 @@ AND WRITER_RESOLVED_FOR_MUTATION
 AND RUNTIME_CLAIM_MEASURED
 AND CI_CLAIM_HAS_APPLICABLE_EVIDENCE
 AND ENGINE_CARD_MATCHES_OBSERVED_STATE
+AND PROVIDER_INVOCATION_PROVEN
 AND NO_MATERIAL_UNKNOWN_FOR_VERDICT
 AND COUNTERPROOF_SURVIVED
 → ENGINE_GAP_FIXED_POINT
 ```
 
 Qualquer termo ausente preserva o amarelo no ponto exato.
+
+## Contraprova obrigatória
+
+O self-test deve provar os dois lados:
+
+```text
+POSITIVE: todas as condições verdadeiras -> ENGINE_GAP_FIXED_POINT
+NEGATIVE: Writer UNKNOWN ou runtime UNKNOWN -> FIXED_POINT=false
+```
+
+Se o teste negativo não bloquear falso verde, a skill falhou.
 
 ## Regra curta
 
@@ -214,7 +260,8 @@ DISCOVERY ENCONTRA.
 ECHO ALERTA.
 GUARDRAIL FILTRA.
 WRITER ESCREVE.
-RUNTIME PROVA.
+LOOP REMEDE.
 JUDGE CONTRALÊ.
 REALIDADE SENTENCIA.
+FIXED POINT ENCERRA.
 ```
