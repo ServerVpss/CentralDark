@@ -32,6 +32,9 @@ SOL = coordena/reconcilia
 WRITER ATUAL = único escritor do escopo vivo
 DELTA_PARTNER/JUDGE = revisão + contraprova, inicialmente READ_ONLY
 PIVETE/HERMES = execução/continuidade quando for o corpo aplicável
+MUSICIAN = agent role (not tool)
+INSTRUMENT = tool capability (not agent)
+JUDGE_THREE_WAY = ternary verdict (PASS | FAIL | UNKNOWN) + counterproof + receipt
 ```
 
 ```text
