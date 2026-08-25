@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from dataclasses import dataclass
 from pathlib import Path
@@ -44,6 +45,8 @@ LENSES = [
 ]
 
 ALLOWED_CELL_STATUS = {"PASS", "SKIP_JUSTIFICADO", "FAIL", "UNKNOWN"}
+PLACEHOLDERS = {"PENDING", "UNKNOWN", "NONE", "N/A", "TODO", "UNRESOLVED"}
+SHA40 = re.compile(r"^[0-9a-fA-F]{40}$")
 
 
 def _load_json(path: str) -> dict[str, Any]:
@@ -58,6 +61,11 @@ def _emit(payload: dict[str, Any]) -> None:
 
 def _missing(obj: dict[str, Any], fields: list[str]) -> list[str]:
     return [field for field in fields if obj.get(field) in (None, "")]
+
+
+def _proven_ref(value: Any) -> bool:
+    text = str(value or "").strip()
+    return bool(text) and text.upper() not in PLACEHOLDERS
 
 
 @dataclass(frozen=True)
@@ -109,8 +117,10 @@ def route_capability(payload: dict[str, Any]) -> dict[str, Any]:
     matching_territory = [p for p in matching_capability if territory in p.territories or "*" in p.territories]
     canonical = [p for p in matching_territory if p.canonical_owner]
     authorized = [p for p in canonical if scope in p.authorized_scopes or "*" in p.authorized_scopes]
-    available = [p for p in authorized if p.available is True]
-    unknown = [p for p in authorized if p.available not in (True, False)]
+    evidenced = [p for p in authorized if _proven_ref(p.evidence)]
+    available = [p for p in evidenced if p.available is True]
+    unknown = [p for p in evidenced if p.available not in (True, False)]
+    unevidenced = [p for p in authorized if not _proven_ref(p.evidence)]
 
     base = {
         "target": request["target"],
@@ -149,6 +159,14 @@ def route_capability(payload: dict[str, Any]) -> dict[str, Any]:
             "reason": "CAPABILITY_AVAILABILITY_NOT_PROVEN",
             "next_cursor": "MEASURE_CAPABILITY",
         }
+    if unevidenced:
+        return {
+            **base,
+            "status": "UNKNOWN",
+            "providers": sorted(p.name for p in unevidenced),
+            "reason": "CANONICAL_ROUTE_WITHOUT_EVIDENCE",
+            "next_cursor": "COLLECT_PROVIDER_EVIDENCE",
+        }
     return {
         **base,
         "status": "BLOCKED",
@@ -177,11 +195,36 @@ def validate_fixed_point(payload: dict[str, Any]) -> dict[str, Any]:
         key=lambda x: (x["pass"], x["lens"]),
     )
 
-    meta_required = ["target", "head_sha", "final_remeasurement_ref", "external_judge_ref"]
+    meta_required = [
+        "target",
+        "head_sha",
+        "writer",
+        "judge",
+        "final_remeasurement_ref",
+        "external_judge_ref",
+    ]
     missing_meta = _missing(payload, meta_required)
+    bad_refs: list[str] = []
+    for key in ("final_remeasurement_ref", "external_judge_ref"):
+        if key not in missing_meta and not _proven_ref(payload.get(key)):
+            bad_refs.append(key)
+    if payload.get("head_sha") and not SHA40.fullmatch(str(payload.get("head_sha"))):
+        bad_refs.append("head_sha")
+
+    writer = str(payload.get("writer", "")).strip()
+    judge = str(payload.get("judge", "")).strip()
+    circular_judge = bool(writer and judge and writer == judge)
     new_information = payload.get("new_information")
 
-    fixed = not invalid and not missing and not blockers and not missing_meta and new_information is False
+    fixed = (
+        not invalid
+        and not missing
+        and not blockers
+        and not missing_meta
+        and not bad_refs
+        and not circular_judge
+        and new_information is False
+    )
     return {
         "status": "FIXED_POINT" if fixed else "NOT_FIXED_POINT",
         "expected_cells": 120,
@@ -190,6 +233,8 @@ def validate_fixed_point(payload: dict[str, Any]) -> dict[str, Any]:
         "missing_cells": missing,
         "blockers": blockers,
         "missing_metadata": missing_meta,
+        "bad_refs": sorted(set(bad_refs)),
+        "circular_judge": circular_judge,
         "new_information": new_information,
         "self_proof_is_pass": False,
         "merge_to_main_proven": False,
@@ -216,7 +261,7 @@ def self_test() -> int:
                 "available": True,
                 "authorized_scopes": ["repo"],
                 "canonical_owner": True,
-                "evidence": "self-test-fixture",
+                "evidence": "fixture:provider-evidence",
             }
         ],
     }
@@ -231,6 +276,12 @@ def self_test() -> int:
         print("SEMANTIC_CRYSTAL_TOOL_SELF_TEST=FAIL")
         return 1
 
+    no_evidence_request = json.loads(json.dumps(request))
+    no_evidence_request["providers"][0]["evidence"] = ""
+    if route_capability(no_evidence_request).get("status") != "UNKNOWN":
+        print("SEMANTIC_CRYSTAL_TOOL_SELF_TEST=FAIL")
+        return 1
+
     cells = [
         {"pass": p, "lens": l, "status": "PASS"}
         for p in PASSES
@@ -239,8 +290,10 @@ def self_test() -> int:
     receipt = {
         "target": "fixture",
         "head_sha": "0" * 40,
+        "writer": "fixture-writer",
+        "judge": "fixture-external-judge",
         "final_remeasurement_ref": "fixture:t1",
-        "external_judge_ref": "fixture:judge",
+        "external_judge_ref": "fixture:judge-proof",
         "new_information": False,
         "cells": cells,
     }
@@ -248,8 +301,21 @@ def self_test() -> int:
         print("SEMANTIC_CRYSTAL_TOOL_SELF_TEST=FAIL")
         return 1
 
-    receipt["cells"][0]["status"] = "UNKNOWN"
-    if validate_fixed_point(receipt).get("status") != "NOT_FIXED_POINT":
+    receipt_unknown = json.loads(json.dumps(receipt))
+    receipt_unknown["cells"][0]["status"] = "UNKNOWN"
+    if validate_fixed_point(receipt_unknown).get("status") != "NOT_FIXED_POINT":
+        print("SEMANTIC_CRYSTAL_TOOL_SELF_TEST=FAIL")
+        return 1
+
+    receipt_circular = json.loads(json.dumps(receipt))
+    receipt_circular["judge"] = receipt_circular["writer"]
+    if validate_fixed_point(receipt_circular).get("status") != "NOT_FIXED_POINT":
+        print("SEMANTIC_CRYSTAL_TOOL_SELF_TEST=FAIL")
+        return 1
+
+    receipt_placeholder = json.loads(json.dumps(receipt))
+    receipt_placeholder["external_judge_ref"] = "PENDING"
+    if validate_fixed_point(receipt_placeholder).get("status") != "NOT_FIXED_POINT":
         print("SEMANTIC_CRYSTAL_TOOL_SELF_TEST=FAIL")
         return 1
 
