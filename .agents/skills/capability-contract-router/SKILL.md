@@ -1,202 +1,214 @@
 ---
 name: capability-contract-router
-description: Roteia missões por capacidade mensurável, território semântico, owner canônico e handoff explícito. Papel, nome de agente ou motor não substituem contrato de capacidade.
+description: Roteamento determinístico e mensurável de tarefas para capacidades, papéis e handoffs no CentralDark, sem transformar modelo em identidade nem ampliar autoridade.
+status: CANONICAL
+owner: SEGREDO/CHEFE
+runtime_role: SOL_COORDINATES_HERMES_EXECUTES_ENGINES_ARE_REPLACEABLE
+boot_required: true
 ---
 
-# CAPABILITY CONTRACT ROUTER
+# Capability Contract Router
 
-## Função
+## Finalidade
 
-Converter intenção + estado vivo + capacidade requerida em uma rota determinística para owner/consumer/executor aplicável, sem confundir identidade, papel, ferramenta, motor, Writer ou autoridade.
-
-```text
-HOUSE_WIDE=true
-MODEL_NEUTRAL=true
-NEW_AUTHORITY=false
-NEW_OWNER=false
-NEW_WRITER=false
-NEW_JUDGE=false
-REUSE_BEFORE_CREATE=true
-ONE_SYSTEM_ONLY=true
-REALITY_IS_JUDGE=true
-```
-
-## Princípio
+Transformar intenção + estado vivo + capacidades observadas em uma atribuição operacional reproduzível.
 
 ```text
-PAPEL != IDENTIDADE
-NOME != CAPACIDADE
-CAPACIDADE != AUTORIDADE
-ROUTER != OWNER
-WRITER != AUTORIDADE_HUMANA
-MOTOR != OWNER
+TASK
++ REQUIRED_CAPABILITIES
++ LIVE_CANDIDATES
++ WRITER_SCOPE
++ BOUNDARY
++ PROOF_TARGET
+→ FILTER
+→ COVER
+→ ASSIGN
+→ HANDOFF_CONTRACT
+→ EXECUTE
+→ RECEIPT
+→ REMEASURE
 ```
 
-O SEGREDO/CHEFE define intenção. SOL reconcilia. Esta skill apenas resolve a rota material. HERMES executa quando aplicável. Reality Judge decide pelo efeito provado.
-
-## Entrada
-
-```yaml
-CAPABILITY_REQUEST:
-  intent: ""
-  target: ""
-  semantic_territory: ""
-  required_capability: ""
-  current_state_ref: ""
-  authority_scope: ""
-  mutation_scope: ""
-  proof_target: ""
-```
-
-## Fluxo
+Esta skill não cria personagem, autoridade ou segundo orquestrador.
 
 ```text
-CAPABILITY_REQUEST
-→ MEASURE_CURRENT_STATE
-→ RESOLVE_SEMANTIC_TERRITORY
-→ SEARCH_EXISTING_CAPABILITY
-→ IDENTIFY_CANONICAL_OWNER
-→ ENUMERATE_AVAILABLE_PROVIDERS
-→ FILTER_BY_AUTHORITY
-→ FILTER_BY_CURRENT_AVAILABILITY
-→ FILTER_BY_SCOPE
-→ FILTER_BY_PROOF_REQUIREMENTS
-→ SELECT_LOWEST_SUFFICIENT_ROUTE
-→ BUILD_HANDOFF_CONTRACT
-→ ACQUIRE_ONE_WRITER_IF_MUTATION
-→ EXECUTE_OR_HANDOFF
-→ RETEST_SAME_TARGET
-→ REALITY_JUDGE
-→ RECEIPT + NEXT_CURSOR
+MODEL != ROLE
+ROLE != IDENTITY
+ROLE != AUTHORITY
+CAPABILITY != EXECUTION
+ASSIGNMENT != PROOF
+SEGREDO/CHEFE = AUTHORITY_FINAL
+SOL = COORDINATION
+PIVETE/HERMES = EXECUTION + PRESERVATION + CONTINUITY
+REALITY = JUDGE
 ```
 
-## Contrato de capacidade
+## Origem generalizada
 
-```yaml
-CAPABILITY_CONTRACT:
-  capability: ""
-  territory: ""
-  owner: ""
-  provider: ""
-  available: true|false|unknown
-  evidence: ""
-  input_contract: ""
-  output_contract: ""
-  side_effect_scope: ""
-  writer: "NONE|id"
-  rollback: ""
-  proof_target: ""
-  next_cursor: ""
-```
+A inspiração veio de padrões observáveis de sistemas com papéis sobrepostos, contratos estáveis e progresso por limiar:
 
-## Handoff
+- uma entidade pode cumprir mais de uma função; categoria funcional não é identidade exclusiva;
+- um serviço pode manter contrato uniforme e exceções explícitas;
+- uma missão coletiva pode depender de metas, janelas temporais, sincronização e limiares mensuráveis;
+- recompensa/avanço só ocorre quando o denominador aplicável fecha.
 
-```yaml
-HANDOFF:
-  from: ""
-  to: ""
-  capability: ""
-  target: ""
-  state_ref: ""
-  authorized_scope: ""
-  expected_output: ""
-  proof_required: ""
-  return_cursor: ""
-```
+A proveniência é externa; a implementação abaixo é neutra e pertence ao método da Casa.
 
-Handoff não transfere autoridade humana e não cria novo Writer automaticamente.
+## Gatilho obrigatório
+
+Carregar quando uma missão precisar selecionar agente/modelo/tool/papel por capacidade, dividir trabalho, produzir handoff, reconciliar múltiplos candidatos ou provar que a cobertura funcional está completa.
 
 ```text
-HANDOFF != AUTHORITY_TRANSFER
-HANDOFF != WRITER_LEASE
-HANDOFF != PROOF
-```
-
-## Roteamento por território
-
-Território é contexto operacional, não pasta obrigatória.
-
-```text
-REPOSITORY
-CI_PIPELINE
-RUNTIME
-TOOLS
-MEMORY_GRAPH
-OBSERVABILITY
-VISUAL_UI
-BOUNDARY_GOVERNANCE
-DOCUMENTATION
-NETWORK_SERVICE
-UNKNOWN
-```
-
-Quando um target cruza territórios, decompor por dependência e serializar somente as mutações conflitantes.
-
-## Recuperação quando capacidade está ausente
-
-Padrão cristalizado de território degradado:
-
-```text
-REQUIRED_CAPABILITY
-→ AVAILABLE? 
-   YES → ROUTE
-   NO  → CONTAIN_SCOPE
-       → IDENTIFY_RECOVERY_OWNER
-       → MINIMUM_RECOVERY_RESOURCE
-       → REPAIR_ROUTE
-       → REMEASURE_CAPABILITY
-       → ROUTE_OR_ESCALATE_HUMAN_FRONTIER
-```
-
-```text
-CAPABILITY_NOT_MEASURED=UNKNOWN
-UNKNOWN != AVAILABLE
-DEPENDENCY_CRITICAL_MISSING != SILENT_DEGRADE
-```
-
-## Serialização
-
-```text
-PARALLEL_PERCEPTION=true
-SERIALIZE_MUTATION=true
+TRIGGER = MULTI_CANDIDATE | MULTI_ROLE | HANDOFF | CAPABILITY_GAP | ROUTING_DECISION
+BOOT_DISCOVERABLE=true
+DETERMINISTIC_ROUTING_REQUIRED=true
+MEASURABLE_COVERAGE_REQUIRED=true
+FAIL_CLOSED_ON_CAPABILITY_GAP=true
 ONE_WRITER_PER_SCOPE=true
 ```
 
-Múltiplos providers podem perceber; somente o Writer aplicável altera um escopo por vez.
+Tarefa simples, de candidato único e sem ambiguidade pode atravessar a skill em fast-path sem fan-out.
 
-## Prova
+## Contrato de entrada
 
-PASS exige:
-
-```text
-SAME_TARGET
-+ CURRENT_STATE
-+ CAPABILITY_EVIDENCE
-+ OWNER_RESOLVED
-+ AUTHORITY_PRESERVED
-+ OUTPUT_CONTRACT_SATISFIED
-+ T0_T1_WHEN_MUTATED
-+ EXTERNAL_JUDGE_WHEN_APPLICABLE
+```json
+{
+  "task": {
+    "task_id": "string",
+    "required_capabilities": ["capability"],
+    "optional_capabilities": ["capability"],
+    "forbidden_capabilities": ["capability"],
+    "writer_scope": "scope-or-null",
+    "proof_target": "observable-target-or-null"
+  },
+  "candidates": [
+    {
+      "id": "stable-id",
+      "capabilities": ["capability"],
+      "available": true,
+      "writer_conflicts": ["scope"]
+    }
+  ]
+}
 ```
 
-## Anti-teatro
+Capacidade não observada é `UNKNOWN`, nunca inventada para fechar cobertura.
+
+## Algoritmo determinístico
+
+1. Validar schema mínimo.
+2. Normalizar capacidades em lowercase, únicas e ordenadas.
+3. Remover candidatos indisponíveis, em conflito de Writer ou que atravessem capability proibida declarada.
+4. Cobrir primeiro capacidades obrigatórias ainda não atendidas.
+5. Empate: maior cobertura obrigatória → maior cobertura opcional → menor superfície total de capacidades → `id` lexicograficamente menor.
+6. Repetir até cobrir o denominador ou não existir ganho.
+7. Se faltar capacidade obrigatória: `BLOCKED_CAPABILITY_GAP`.
+8. Se fechar o denominador: `PASS_ROUTE_READY` — isso prova apenas o roteamento, não a execução.
 
 ```text
-ROLE_LABEL != CAPABILITY_PROOF
-PROVIDER_LISTED != PROVIDER_AVAILABLE
-TOOL_INSTALLED != TOOL_WORKING
-HANDOFF_CREATED != WORK_DONE
-ACTION != PROOF
-SELF_PROOF != PASS
+ROUTE_READY != TASK_DONE
+SELECTED != EXECUTED
+EXECUTED != CORRECT
+CORRECT != FIXED_POINT
 ```
 
-## Composição
+## Contrato de handoff
+
+Toda passagem entre corpos deve preservar:
 
 ```text
-BOOT/STATE       → LEIA-ME-IA.md + AGENTS.md
-GAP_DISCOVERY    → distinct-engineering-compiler
-SIGNAL/TERRITORY → signal-territory-crystallizer
-COUNTERPROOF     → meta-lupa
-EXECUTION        → centraldark-operational-method / HERMES
-TRIGGERING       → CENTRALDARK-TRIGGER-FABRIC
+TASK_ID
+ROLE_CONTRACT
+TARGET
+STATE
+EVIDENCE_REF
+NEXT_CURSOR
+WRITER_SCOPE quando aplicável
+PROOF_TARGET quando aplicável
 ```
+
+Handoff sem estado ou evidência vira `UNKNOWN_HANDOFF`, não continuidade presumida.
+
+## Métricas
+
+```text
+COVERAGE = covered_required / required_denominator
+UNRESOLVED = required - covered
+SELECTED_COUNT = número de corpos selecionados
+REJECTED_COUNT = indisponíveis/conflitantes/bloqueados
+ROUTE_STATUS = PASS_ROUTE_READY | BLOCKED_CAPABILITY_GAP | BLOCKED_INVALID_INPUT
+```
+
+Percentual só pode ser emitido quando `required_denominator > 0` e o denominador estiver explícito.
+
+## Exceções e sobreposição
+
+Um corpo pode exercer múltiplos papéis quando suas capacidades observadas cobrem o contrato e não existe conflito de Writer. Um papel pode ser exercido por corpos diferentes ao longo do tempo. Sobreposição não duplica identidade.
+
+```text
+ONE_BODY_MANY_ROLES=true
+ONE_ROLE_MANY_ELIGIBLE_BODIES=true
+ROLE_ASSIGNMENT_IS_SCOPE_BOUND=true
+ROLE_ASSIGNMENT_IS_TIME_BOUND=true
+ROLE_ASSIGNMENT_IS_NOT_AUTHORITY=true
+```
+
+## Relação com #ACORDAR / !CALIBRAR
+
+```text
+#ACORDAR
+→ medir candidatos, tools, disponibilidade, Writer e estado
+
+!CALIBRAR
+→ derivar required_capabilities + boundary + proof_target
+
+CAPABILITY_CONTRACT_ROUTER
+→ produzir rota determinística
+
+HERMES/EXECUTOR
+→ executar somente no escopo autorizado
+
+REMEDIÇÃO + REALITY_JUDGE
+→ provar efeito no alvo correto
+```
+
+O roteador não escolhe intenção humana, não altera autorização e não substitui MetaLupa, proof ownership ou execução reversível.
+
+## Runtime executável
+
+```text
+python .agents/skills/capability-contract-router/scripts/route_capabilities.py --self-test
+python .agents/skills/capability-contract-router/scripts/route_capabilities.py --input <payload.json>
+```
+
+Self-test é prova do algoritmo local conhecido, não prova integração em todo runtime.
+
+## Promotion / Fixed Point
+
+A declaração `status: CANONICAL` só tem efeito canônico quando este artefato está presente na `main` vigente e os checks aplicáveis sobrevivem. Branch/PR não substituem promoção real.
+
+Gate de promoção:
+
+```text
+SELF_TEST=PASS
++ BOOT_CONSUMER_DISCOVERABLE
++ POSITIVE_FIXTURE_PASS
++ CAPABILITY_GAP_NEGATIVE_FIXTURE_BLOCKS
++ WRITER_CONFLICT_FIXTURE_BLOCKS_AFFECTED_CANDIDATE
++ NO_DUPLICATE_OWNER_FOUND
++ MERGED_TO_MAIN
+→ CANONICAL_ACTIVE
+```
+
+Fixed point do roteamento:
+
+```text
+REQUIRED_DENOMINATOR_CLOSED
+AND NO_WRITER_CONFLICT_SELECTED
+AND NO_FORBIDDEN_CAPABILITY_SELECTED
+AND HANDOFF_CONTRACT_COMPLETE
+AND NO_MATERIAL_UNKNOWN_IN_ROUTE
+→ ROUTE_FIXED_POINT
+```
+
+Isso não declara fixed point da missão inteira.
