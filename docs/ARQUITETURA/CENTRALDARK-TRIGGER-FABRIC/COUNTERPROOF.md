@@ -16,6 +16,11 @@
 12. "ENGINE_BINDING.yml means the motor already loaded the rule" → **FALSE**: runtime inheritance requires an observed consumer/test.
 13. "FORJA/WORKING is almost PASS" → **FALSE**: visual theme/state-in-progress is not proof.
 14. "A green status, HTTP 200, exit 0, PR open, file present or log present proves end-to-end behavior" → **FALSE** unless it measures the same claim/target/layer.
+15. `MUTATION=false` junto com ordem de registrar/squash-main → **CONFLICTING_INSTRUCTION**; no CASCO VIVO a intenção explícita de promoção prevalece para GitHub, enquanto `DEPLOY=false` continua bloqueando deploy/runtime.
+16. `HIDDEN_PATHS=ZERO` → **NOT_PROVEN** como claim global sem inventário/denominador; o contrato válido é bloquear/remover bypass conhecido e proibir novo bypass oculto.
+17. `MODEL_UNAVAILABLE -> SWITCH_ENGINE` → **DOWNGRADED**; troca só é segura após medir capacidade aplicável do motor alternativo.
+18. `DEPENDENCY_FAILURE -> DEGRADE` → **DOWNGRADED**; dependência crítica exige `FAIL_CLOSED|CONTAIN`, degradação só entra quando não crítica e provada segura.
+19. `UNKNOWN_MATERIAL -> NO_MUTATION` → **OVERBROAD**; somente a mutação afetada pelo UNKNOWN material é bloqueada, preservando trabalho seguro e independente.
 
 ## Counterproof law
 
@@ -32,6 +37,24 @@ PROVEN_CLAIM
 → SURVIVES?
    YES → keep PROVEN
    NO  → FAIL
+   UNMEASURED → UNKNOWN
+```
+
+## CASCO VIVO counterproof law
+
+```text
+PRESSURE_CASE
+→ DOES_IT_PRESERVE_AUTHORITY?
+→ DOES_IT_PRESERVE_SCOPE_BOUNDARY?
+→ DOES_IT_PRESERVE_WRITER_OWNERSHIP?
+→ DOES_IT_PRESERVE_PROOF_STANDARD?
+→ DOES_THE_FALLBACK_HAVE_PROVEN_CAPABILITY?
+→ IS_DEGRADATION_SAFE_FOR_THIS_DEPENDENCY?
+→ IS_THE_UNKNOWN_MATERIAL_TO_THIS_MUTATION?
+→ IS_THE_GLOBAL_ABSENCE_CLAIM_DENOMINATED?
+→ SURVIVES?
+   YES → RESILIENCE_CANDIDATE
+   NO  → REMEDIATE_DESIGN
    UNMEASURED → UNKNOWN
 ```
 
