@@ -172,3 +172,169 @@ EVENTO
 ```
 
 Nenhum `second brain`, `dispatcher-v2`, `MCP paralelo`, `GraphRAG-v2`, segundo scheduler, segundo promotor ou workflow equivalente nasce desta arquitetura.
+
+## CASCO VIVO — perfil de resiliência adaptativa da Trigger Fabric
+
+`CASCO VIVO` **não é uma segunda arquitetura**. É o perfil de resiliência da mesma Trigger Fabric para cenários de pressão, mudança, falha, conflito de prova ou risco de propagação.
+
+```text
+CASCO_VIVO_IS_PROFILE=true
+CASCO_VIVO_IS_NEW_ORCHESTRATOR=false
+CASCO_VIVO_IS_NEW_BRAIN=false
+CASCO_VIVO_IS_NEW_AUTHORITY=false
+```
+
+### Dois cascos
+
+O casco interno preserva invariantes que não podem deformar com a pressão:
+
+```text
+CHEFE_AUTHORITY
+INTENT
+BOUNDARY
+WRITER
+PROOF_STANDARD
+REALITY_IS_JUDGE
+UNKNOWN_IS_NOT_PASS
+```
+
+O casco externo pode se adaptar quando isso não altera autoridade, intenção, prova ou fronteira:
+
+```text
+MODEL
+TOOL
+ROUTE
+ORDER
+FREQUENCY
+WORKER
+RETRY_STRATEGY
+OBSERVATION_CHANNEL
+```
+
+```text
+CASCO_EXTERNO=FLEXIVEL_DENTRO_DA_CAPACIDADE_PROVADA
+CASCO_INTERNO=INVARIANTE
+MODEL_SWITCH_REQUIRES_CAPABILITY_CHECK_WHEN_MATERIAL=true
+```
+
+### Fluxo de pressão
+
+```text
+PERTURBATION
+→ CLASSIFY
+→ LOCALIZE
+→ BOUNDARY_CHECK
+→ CONTAIN_IF_PROPAGATION_RISK
+→ ADAPT_MINIMALLY
+→ REMEASURE
+→ COUNTERPROOF
+→ REALITY_JUDGE
+→ RECOVER_OR_CONTINUE
+```
+
+Classes de perturbação reconhecidas:
+
+```text
+LOAD
+LATENCY
+DEPENDENCY_FAILURE
+TOOL_FAILURE
+STALE_STATE
+MODEL_DISAGREEMENT
+WRITER_COLLISION
+AUTHORITY_CONFLICT
+BOUNDARY_PRESSURE
+EVIDENCE_CONFLICT
+```
+
+### Resposta por classe
+
+```text
+MODEL_UNAVAILABLE
+→ MEASURE_ALTERNATIVE_ENGINE_CAPABILITY
+→ SWITCH_ONLY_IF_SCOPE_CAPABILITY_IS_PROVEN
+
+DEPENDENCY_FAILURE
+→ CLASSIFY_CRITICALITY
+→ CRITICAL ? FAIL_CLOSED_OR_CONTAIN : DEGRADE_SAFELY_IF_PROVEN
+
+WRITER_COLLISION
+→ READ_ONLY
+→ RENDEZVOUS
+
+EVIDENCE_CONFLICT
+→ DISCRIMINATING_TEST
+
+AUTHORITY_CONFLICT
+→ FAIL_CLOSED_FOR_MUTATION
+
+BOUNDARY_PRESSURE
+→ STOP_PROPAGATION
+→ PRESERVE_EVIDENCE
+→ MEASURE
+
+STALE_STATE
+→ #ACORDAR
+```
+
+### Trust Firewall
+
+O Trust Firewall é uma composição lógica dos gates existentes; não é serviço novo.
+
+```text
+INPUT
+→ SOURCE?
+→ AUTHORITY?
+→ SCOPE?
+→ CURRENT?
+→ EVIDENCE?
+→ OWNER?
+→ CONSUMER?
+→ EXECUTE|READ_ONLY|BLOCK
+```
+
+```text
+CONTRIBUTOR != AUTHORITY
+WRITER != AUTHORITY
+JUDGE != AUTHORITY
+MODEL != AUTHORITY
+MAJORITY != AUTHORITY
+PR != AUTHORITY
+MEMORY != AUTHORITY
+```
+
+### Chave jogada fora — sem falso claim global
+
+A Casa não declara `HIDDEN_PATHS=ZERO` globalmente sem inventário/denominador. O contrato correto é:
+
+```text
+KNOWN_HIDDEN_BYPASS_DISCOVERED
+→ BLOCK_OR_REMOVE_WITH_ROLLBACK
+→ MAP_CONSUMERS
+→ RETEST
+
+NO_NEW_HIDDEN_BYPASS_ALLOWED=true
+NO_SHADOW_AUTHORITY_ALLOWED=true
+NO_UNDOCUMENTED_OVERRIDE_ALLOWED=true
+RECOVERY_PATH_REMAINS_EXPLICIT=true
+ROLLBACK_PATH_REMAINS_EXPLICIT=true
+```
+
+Ausência global de bypass permanece `NOT_PROVEN` sem cobertura correspondente.
+
+### Fixed point do CASCO VIVO
+
+```text
+DESTINATION_REACHED
+AND INVARIANTS_PRESERVED
+AND BOUNDARY_PRESERVED
+AND WRITER_CLEAN
+AND CLAIM_PROVEN
+AND COUNTERPROOF_SURVIVED
+AND ROLLBACK_VALID_WHEN_APPLICABLE
+AND NO_MATERIAL_UNKNOWN_FOR_SCOPE
+AND NO_NEW_INFORMATION
+→ FIXED_POINT
+```
+
+`NO_MATERIAL_UNKNOWN_FOR_SCOPE` não exige ausência universal de desconhecidos; exige zero UNKNOWN material capaz de alterar o veredito do escopo atual.
