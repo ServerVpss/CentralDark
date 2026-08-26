@@ -32,6 +32,10 @@ mandatory_inheritance:
   - CALIBRAR
   - MULTIBUSSOLA
   - META_LUPA_PROPORTIONAL
+  - DISTINCT_ENGINEERING_COMPILER_ON_MATERIAL_GAP
+  - CAPABILITY_CONTRACT_ROUTER
+  - SIGNAL_TERRITORY_CRYSTALLIZATION
+  - FIXED_POINT_10X12_ADVERSARIAL_WHEN_CRYSTALLIZING
   - ONE_WRITER_PER_SCOPE
   - OUTPUT_GUARD
   - REALITY_JUDGE
@@ -43,7 +47,7 @@ mandatory_inheritance:
   - ANY_PR_OR_COMMIT_GATE
   - CANONICAL_SELF_HOSTED_RUNNER_POLICY
 self_healing_binding:
-  applies_to: [PR, COMMIT, CI, TOOL_ERROR, TEST_FAILURE, RUNTIME_DRIFT, OPERATIONAL_FAILURE]
+  applies_to: [PR, COMMIT, CI, TOOL_ERROR, TEST_FAILURE, RUNTIME_DRIFT, OPERATIONAL_FAILURE, RED_ISSUE, RED_PR_OR_FAILED_CHECK, CAPABILITY_GAP, SIGNAL_STATE_CHANGE, TERRITORY_ROUTE_CHANGE]
   engine_must:
     - MEASURE_CURRENT_STATE
     - CLASSIFY_FAILURE_SIGNATURE
@@ -60,6 +64,17 @@ self_healing_binding:
   same_failure_no_new_information: REUSE_CRYSTAL_NOT_RETHINK
   unknown: SEARCH_REALITY
   human_return_before_fixed_point: FORBIDDEN_UNLESS_HUMAN_FRONTIER
+semantic_crystal_binding:
+  architecture: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SIGNAL-TERRITORY-CAPABILITY-CRYSTAL.md
+  gap_compiler: .agents/skills/distinct-engineering-compiler/SKILL.md
+  capability_router: .agents/skills/capability-contract-router/SKILL.md
+  signal_territory_crystallizer: .agents/skills/signal-territory-crystallizer/SKILL.md
+  fixed_point_reference: .agents/skills/distinct-engineering-compiler/references/signal-territory-fixed-point.md
+  deterministic_tool: scripts/trigger-fabric/semantic_crystal_tool.py
+  signal_is_cause: false
+  role_is_identity: false
+  name_is_capability: false
+  fixed_point_is_main: false
 ci_runner_binding:
   github_hosted: FORBIDDEN
   default: [self-hosted, Linux]
