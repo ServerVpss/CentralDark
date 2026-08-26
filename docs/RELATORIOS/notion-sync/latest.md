@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-08-26T13:54:38.197Z
+# 🧠 Notion Sync — 2026-08-26T14:46:07.819Z
 
-- **Commit fonte:** `f6a90911c69a1ac47b4c111e7bd463d2cd96eae6`
+- **Commit fonte:** `eacdde22438035ef3f1609f1ef8e416009a12be9`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 431 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 432 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
 | aprendizados | 30 | 0 | 30 | 0 | 0 |
-| estrutura | 358 | 1 | 357 | 0 | 0 |
+| estrutura | 359 | 1 | 358 | 0 | 0 |
 
 ## Operações
 
@@ -193,6 +193,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-fluxo-operacional-papagaio-off-pombo-on.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-pombo-correio-com-checksum.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-prova-secreta-bob-casa-fundamentos.md |
+| estrutura | criado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-26-intencao-unica-propriedades-ciclo-mestre.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/EVIDENCIAS/2026-08-17-registro-visual-recibo-muitos-olhos.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/MCP/MCP-EXPLICADO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/PROXY/APRENDIZADOS_PROXY.md |
@@ -313,7 +314,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/NOTION-MAPA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PADRAO-CARD-HERMES.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PADRAO-EMOJIS.md |
-| estrutura | criado | docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md |
+| estrutura | atualizado | docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PENDENCIAS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PENDENCIAS/MCP-LOCAL-STDIO-VPS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PIVETE-IA/PIVETE-00-INVOCACAO.md |
