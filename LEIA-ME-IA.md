@@ -23,7 +23,7 @@ Carregue nesta ordem:
 3. `docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md` — recuperação/boot universal.
 4. `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md` — DNA cognitivo operacional concentrado.
 5. `docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md` — método de interação.
-6. `docs/CONSCIENCIA/2026-06-20-padrao-resposta-pivete.md` — formato de resposta.
+6. `docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md` — formato de resposta.
 7. `docs/CONSCIENCIA/DICIONARIO-PIVETE-GITHUB.md` — vocabulário operacional.
 8. `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json` — reutilização e reconciliação.
 9. `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` quando a missão exigir coordenação multiagente.
