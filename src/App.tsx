@@ -50,6 +50,7 @@ import MegaPainel from "@/apps/modulos/telepainel/pages/MegaPainel";
 import Cofre from "@/apps/modulos/telepainel/pages/Cofre";
 import MapaSite from "@/apps/modulos/telepainel/pages/MapaSite";
 import AiProxyConfig from "@/apps/modulos/telepainel/pages/AiProxyConfig";
+import CapabilityRouter from "@/apps/web/pages/admin/CapabilityRouter";
 
 // Hub agora é app independente em apps/modulos/hub/ — não importado aqui
 import HermesPanel from "@/apps/modulos/hermes-panel/pages/HermesPanel";
@@ -84,6 +85,7 @@ const telepainelRoutes: Array<{ path: string; element: JSX.Element; adminOnly?: 
   { path: "menu-tips", element: <MenuTips />, adminOnly: true },
   { path: "database", element: <DatabaseInfo />, adminOnly: true },
   { path: "status", element: <Status />, adminOnly: true },
+  { path: "capability-router", element: <CapabilityRouter />, adminOnly: true },
   { path: "mega-painel", element: <MegaPainel />, adminOnly: true },
   { path: "cofre", element: <Cofre />, adminOnly: true },
   { path: "teste-modulos", element: <TesteModulos />, adminOnly: true },
