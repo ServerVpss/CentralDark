@@ -64,6 +64,15 @@ jobs:
           grep -q '^BOT_ENTRY_CONTRACT=PASS$' docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/VERIFY-RESULT.txt
           grep -q '^OUTPUT_GUARD_CONTRACT=PASS$' docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/VERIFY-RESULT.txt
 
+      - name: "Verify gatilho -> aprendizado sync (novo evento exige update em APRENDIZADOS.md no mesmo diff)"
+        if: github.event_name == 'pull_request'
+        shell: bash
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          set -euo pipefail
+          python scripts/trigger-fabric/verify_gatilho_aprendizado_sync.py . "$BASE_SHA"
+
       - name: Verify distinct engineering compiler binding
         shell: bash
         run: |
