@@ -8,6 +8,10 @@ updates:
     labels:
       - "🤖 AUTO"
       - "🔄 GIT"
+      - "👑 PERMITO-SEGREDO"
+      - "🧠 AGENTE-HERMES"
+      - "✨ MELHORIA"
+      - "🤖 IA-EXECUTAR"
     commit-message:
       prefix: "chore(deps)"
     groups:
@@ -27,6 +31,10 @@ updates:
     labels:
       - "🤖 AUTO"
       - "🔄 GIT"
+      - "👑 PERMITO-SEGREDO"
+      - "🧠 AGENTE-HERMES"
+      - "✨ MELHORIA"
+      - "🤖 IA-EXECUTAR"
     commit-message:
       prefix: "chore(actions)"
     ignore:
