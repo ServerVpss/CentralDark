@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-08-26T01:09:38.879Z
-- **Commit:** `fcee04056e6f1e9a344c81e0047297b82a682a23`
+- **Gerado:** 2026-08-26T08:28:40.219Z
+- **Commit:** `b6fc4f00466b9a603aa2167abc1517225105225d`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 39 | 39 | 39 | 0 | 0 |
-| aprendizados | 28 | 0 | 0 | 28 | 0 |
+| aprendizados | 30 | 0 | 0 | 30 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **28**
+- 🟥 Faltando no Notion: **30**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -76,4 +76,6 @@
 - 25. “Menos é mais” significa menor movimento compatível com efeito, observabilidade e segurança
 - 26. Batch .bat: 4 armadilhas que passam em revisão superficial
 - 27. Grok App Builder é adapter, não cérebro — não scaffoldar app paralelo
+- 28. Ponte semântica fail-closed EXIT code=2 — não é verde; stderr engolido
+- 29. Dois mundos vivos: GitHub main 81bbfc7 ≠ VPS 5958d3ce27 (1252 atrás, dirty)
 </details>
