@@ -63,6 +63,9 @@ master_cycle_binding:
   phase_execution_is_adaptive: true
   master_trigger_is_authority: false
   master_trigger_is_mutation_permission: false
+  source_prs_reconciled: [1166, 1167, 1168, 1170]
+  second_semantic_owner: FORBIDDEN
+  graph_is_derived_not_authority: true
   source_prs_reconciled: [1166, 1167, 1168, 1169, 1170, 1172]
   second_semantic_owner: FORBIDDEN
   graph_is_derived_not_authority: true

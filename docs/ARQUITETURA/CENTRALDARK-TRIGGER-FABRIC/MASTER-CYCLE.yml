@@ -1,4 +1,5 @@
 schema: centraldark.master-cycle.v1
+status: CANDIDATE_UNTIL_MERGED_AND_GATED
 status: CANONICO
 runtime_status: UNPROVEN_UNTIL_OBSERVED
 owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml
@@ -9,6 +10,7 @@ plain_word_centraldark_does_not_trigger: true
 
 purpose: >-
   Comprimir o ciclo operacional completo da Casa em um unico gatilho humano,
+  preservando cada fase como capacidade separada, adaptativa e mensuravel.
   preservando cada fase como capacidade separada, adaptativa e mensuravel,
   sem transformar fala comprimida em autoridade nova.
 
@@ -54,6 +56,16 @@ phase_contracts:
     meaning: STOP_ONLY_AT_LOCAL_FIXED_POINT_OR_PROVEN_FRONTIER
     owner: Trigger Fabric
   REGISTRA:
+    meaning: WRITE_RECEIPT_LEARNING_PROVENANCE_NEXT_CURSOR
+    owner: continuity + learning owners
+  BOOT:
+    meaning: RETURN_NEXT_CYCLE_RECOVERABLE
+    owner: LEIA-ME-IA.md
+
+execution_model:
+  coordinator: SOL
+  executor: PIVETE/HERMES_OR_CAPABLE_PROVIDER
+  model_is_replaceable: true
     meaning: WRITE_RECEIPT_LEARNING_PROVENANCE_NEXT_CURSOR_AND_PROMOTE_WHEN_AUTHORIZED
     owner: continuity + learning owners
     promotion:
@@ -173,6 +185,8 @@ adaptive_rules:
   explicit_master_trigger_does_not_imply_mutation: true
 
 past_future_reconciliation:
+  source_prs: [1166, 1167, 1168, 1170]
+  policy: ABSORB_ONLY_USEFUL_DELTA_NO_PARALLEL_OWNER
   source_prs: [1166, 1167, 1168, 1170, 1172, 1189]
   policy: ABSORB_ONLY_USEFUL_DELTA_NO_PARALLEL_OWNER
   baseline: CURRENT_MAIN

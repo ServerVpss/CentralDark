@@ -34,6 +34,7 @@ const MASTER_TERMS = [
 
 function masterAtivo(missao) {
   const tokens = normalizar(missao).split(/\s+/);
+  return tokens.includes('!centraldark');
   return tokens.includes('!centraldark') || tokens.includes('!central-dark') || tokens.includes('!cdark');
 }
 
@@ -56,6 +57,7 @@ export function classificarCicloMestre(missao) {
   };
 }
 
+// Auto-update do grafo vivo. Chamado pelo orchestrator.
 export async function atualizarGrafo() {
   if (!existsSync(GERADOR_GRAFO)) return { ok: false, saida: 'gerador do grafo não encontrado' };
   try {
@@ -78,6 +80,7 @@ async function buscarNoGrafo(missao) {
     .sort((a, b) => b.score - a.score)
     .slice(0, MAX);
   if (!hits.length) return '';
+
   const vizinhos = (id) => edges
     .filter(e => (e.from ?? e.source) === id || (e.to ?? e.target) === id)
     .map(e => (e.from ?? e.source) === id ? (e.to ?? e.target) : (e.from ?? e.source))
@@ -95,6 +98,11 @@ function buscarLocal(missao) {
       try {
         if (statSync(p).isDirectory()) { varrer(p); continue; }
         if (!e.endsWith('.md')) continue;
+        const corpo = normalizar(readFileSync(p, 'utf8').slice(0, 4000));
+        const nome = normalizar(e);
+        const score = ts.reduce((s, t) => s + (nome.includes(t) ? 3 : 0) + (corpo.includes(t) ? 1 : 0), 0);
+        if (score > 0) ranking.push({ p, score, titulo: e });
+      } catch {}
         const raw = readFileSync(p, 'utf8').slice(0, 4000);
         const corpo = normalizar(raw);
         const nome = normalizar(e);
@@ -132,6 +140,9 @@ export { buscarContexto as contexto };
 
 function selfTest() {
   const positive = classificarCicloMestre('!CENTRALDARK fecha essa missão');
+  const negative = classificarCicloMestre('CentralDark é o nome do repo');
+  const checks = {
+    explicit_master_trigger: positive.active === true,
   const alias = classificarCicloMestre('!cdark fecha');
   const negative = classificarCicloMestre('CentralDark é o nome do repo');
   const checks = {
