@@ -10,6 +10,10 @@ updates:
       - "🔄 GIT"
     commit-message:
       prefix: "chore(deps)"
+    groups:
+      radix-ui:
+        patterns:
+          - "@radix-ui/*"
     ignore:
       - dependency-name: "*"
         update-types:
