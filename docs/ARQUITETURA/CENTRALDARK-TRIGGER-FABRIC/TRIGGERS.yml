@@ -62,6 +62,7 @@ human_triggers:
     token: "!REGISTRA"
     aliases: ["REGISTRA", "REGISTRAR", "GRAVA RECEIPT", "SALVA O OURO"]
     owner: "continuity + learning owners"
+    behavior: [WRITE_RECEIPT, PRESERVE_PROVENANCE, LEARNING_DELTA, NEXT_CURSOR]
     behavior: [WRITE_RECEIPT, PRESERVE_PROVENANCE, LEARNING_DELTA, NEXT_CURSOR, PROMOTE_MAIN_WHEN_SAME_SCOPE_AUTHORIZED_AND_GATES_PASS]
   - id: BOOT
     token: "!BOOT"

@@ -1,7 +1,15 @@
 ---
 title: "LEMBRANÇAS — índice histórico"
 status: "HISTORICAL_REDIRECT"
-updated: 2026-08-16
+updated: 2026-08-26
+tags:
+  - lembrancas
+  - historico
+  - contexto
+  - centraldark
+  - cross-chat
+  - grafo
+  - semantica
 ---
 
 # Lembranças — índice histórico
@@ -141,6 +149,12 @@ COEVOLUCAO_HUMANO_SISTEMA_E_DREAM_REVIEW
 
 JEITO_DE_FALAR_PRESSAO_EMOJIS_FECHAMENTO_E_GRAMATICA_VISUAL
 → docs/CONSCIENCIA/2026-06-20-padrao-resposta-pivete.md
+
+OURO_RECENTE_CROSS_CHAT_E_GRAFO
+→ docs/BRAIN/07-APRENDIZADOS-MEMORIAS/OURO-CHEFE.md
+→ docs/BRAIN/01-CONCEITOS/Banda/BANDA_INTENCAO_UNICA_COMPASSO.md
+→ docs/BRAIN/01-CONCEITOS/Banda/INTENT_SYNC_STATE.md
+→ docs/BRAIN/01-CONCEITOS/Banda/BANDA_COMPASSO_GLOBAL.md
 ```
 
 Termos de busca úteis para não perder o fio:
@@ -152,7 +166,14 @@ SOL
 HERMES
 #ACORDAR
 !CALIBRAR
+!CENTRALDARK
 OURO
+CROSS_CHAT
+READ_ONLY
+SEMANTIC_LINKER
+GRAPH_INVESTIGATOR
+BANDA
+COMPASSO
 REUSE_BEFORE_CREATE
 NO_V1_V2_V3
 ONE_WRITER_PER_SCOPE
@@ -190,3 +211,22 @@ O objetivo deste resumo é reduzir a distância até a história completa, não 
 **Fonte:** chat:segredo-chefe/screenshots-controles-e-jogos
 **Promovida:** SIM
 Conteúdo: As imagens mostraram um padrão generalizável: interfaces diferentes podem usar comandos físicos diferentes para a mesma ação sem mudar a intenção. A Casa deve tratar motor, janela, worker, ferramenta ou dispositivo como mudança de base/coordenada local; todos normalizam para uma semântica canônica e continuam seguindo a referência definida pelo SEGREDO/CHEFE. O estado vivo fecha o loop por feedback. Movimento útil preserva autoridade, escopo, Writer e segurança e precisa reduzir o resíduo da missão, produzir ganho de informação ou ser desvio reversível com condição explícita de retorno. Divergência entre agentes ataca claims, não pessoas; cooperação vence competição de modelo. O mapa é a referência, o caminho é a sequência de estados medidos e o controle é o feedback que mantém a trajetória convergindo. Canonizado no owner global de Frequências Operacionais da SOL.
+
+### [2026-08-26T08:49-03:00] Leitura muda contexto; registro muda continuidade
+**Data:** 2026-08-26
+**Tags:** cross-chat, contexto, memória, read-only, grafo, semântica, obsidian, centraldark
+**Tipo:** LEARNING_INDEX
+**Target:** docs/BRAIN/07-APRENDIZADOS-MEMORIAS/OURO-CHEFE.md
+**Sessão:** ChatGPT/CentralDark
+**Fonte:** conversa do SEGREDO/CHEFE + screenshots do Obsidian + reconstrução de conversas anteriores quando disponível
+**Promovida:** CANDIDATE_IN_PR
+Conteúdo: O teste mostrou que leitura `READ_ONLY` pode mudar interpretação e comportamento da sessão sem mutar a fonte. Isso exige separar `CONTEXTO_ATIVO` de `MEMORIA_CANONICA`. O CHEFE também identificou que notas importantes sem propriedades, tags e wikilinks ficam semanticamente distantes; a correção deve reutilizar `GRAPH-INVESTIGATOR → SEMANTIC-LINKER`, ligar somente relações explicáveis e manter o mapa visual separado do mecanismo de recuperação. Para múltiplos chats, recuperar memória/histórico quando a plataforma disponibilizar, dedupar e reconciliar; não declarar transporte causal oculto entre janelas sem canal provado.
+
+## Conexões Rápidas
+
+- [[OURO-CHEFE]] — ouro recente e correções do CHEFE.
+- [[BANDA_INTENCAO_UNICA_COMPASSO]] — partitura única.
+- [[INTENT_SYNC_STATE]] — estado mínimo entre superfícies.
+- [[BANDA_COMPASSO_GLOBAL]] — compasso e anti-eco.
+- [[GRAPH-INVESTIGATOR]] — auditoria de propriedades/tags/links.
+- [[SEMANTIC-LINKER]] — conexões semânticas explicáveis.
