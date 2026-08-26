@@ -127,6 +127,88 @@ UNKNOWN_IS_NOT_PASS=true
 
 ---
 
+## Regra operacional — cada evento material precisa de registro
+
+Quando uma passagem, missão, execução, PR, workflow, runtime ou contraprova contém **mais de um evento material**, não basta registrar apenas um resumo final. Cada evento que altere estado, prova, risco, veredito, owner, dependência, gate ou próximo cursor deve ganhar uma entrada própria no ledger do owner existente.
+
+```text
+EVERY_MATERIAL_EVENT_MUST_BE_REGISTERED=true
+EVENT_LEDGER_REQUIRED=true
+SUMMARY != EVENT_LEDGER
+```
+
+Um evento material inclui pelo menos:
+
+```text
+STATE_CHANGE
+| NEW_EVIDENCE
+| GATE_RESULT
+| MERGE_OR_CLOSE
+| FAILURE_OR_RECOVERY
+| RISK_DISCOVERY
+| ENFORCEMENT_CHANGE
+| OWNER_OR_WRITER_CHANGE
+| DEPENDENCY_CHANGE
+| COUNTERPROOF_RESULT
+| REALITY_JUDGE_VERDICT
+| NEW_NEXT_CURSOR
+```
+
+Cada entrada deve preservar o menor denominador suficiente:
+
+```text
+EVENT_ID
++ OBSERVED_AT
++ SUBJECT/TARGET
++ STATE_BEFORE quando conhecido
++ STATE_AFTER/CLAIM
++ PROVENANCE
++ EVIDENCE_REF
++ VERDICT
++ DEPENDENT_CLAIMS_INVALIDATED quando aplicavel
++ NEXT_CURSOR quando aplicavel
+```
+
+Deduplicação continua obrigatória:
+
+```text
+REPETITION_PURE → DROP
+SAME_EVENT_RENARRATED → DEDUPE
+SAME_EVIDENCE_REWORDED → NOT_NEW_EVENT
+NEW_STATE_OF_SAME_TARGET → NEW_EVENT_WITH_TEMPORAL_LINK
+METAPHOR_ONLY → COMMUNICATION_LAYER
+```
+
+Se o evento ainda não foi medido de forma independente, ele pode e deve ser registrado com proveniência honesta, sem ser promovido a prova:
+
+```text
+USER_REPORTED_EVENT → REGISTER_WITH_SOURCE
+USER_REPORTED_EVENT != INDEPENDENTLY_PROVEN
+UNKNOWN != PASS
+```
+
+O ledger deve permitir reconstruir a sequência causal da missão sem depender do chat atual:
+
+```text
+EVENT_1
+→ EVENT_2
+→ EVENT_3
+→ ...
+→ CURRENT_STATE
+→ NEXT_CURSOR
+```
+
+Esta regra usa o sistema de memória já existente e não cria V2/V3, segundo cérebro, novo router ou nova autoridade.
+
+```text
+REUSE_BEFORE_CREATE=true
+ONE_SYSTEM_ONLY=true
+NO_V1_V2_V3_V4=true
+REGISTER_PERMISSION != EXECUTION_PERMISSION
+```
+
+---
+
 ## Exemplo de uso real
 
 ```
