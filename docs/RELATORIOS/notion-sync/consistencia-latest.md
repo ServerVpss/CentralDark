@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-08-25T08:57:20.127Z
-- **Commit:** `e3572c390404abf0023f20c27565c754b10386e9`
+- **Gerado:** 2026-08-26T01:09:38.879Z
+- **Commit:** `fcee04056e6f1e9a344c81e0047297b82a682a23`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 39 | 39 | 39 | 0 | 0 |
-| aprendizados | 27 | 0 | 0 | 27 | 0 |
+| aprendizados | 28 | 0 | 0 | 28 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **27**
+- 🟥 Faltando no Notion: **28**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -75,4 +75,5 @@
 - 24. API paga é capacidade, não identidade nem caminho obrigatório
 - 25. “Menos é mais” significa menor movimento compatível com efeito, observabilidade e segurança
 - 26. Batch .bat: 4 armadilhas que passam em revisão superficial
+- 27. Grok App Builder é adapter, não cérebro — não scaffoldar app paralelo
 </details>

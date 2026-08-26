@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-08-25T08:57:17.244Z
+# 🧠 Notion Sync — 2026-08-26T01:09:34.796Z
 
-- **Commit fonte:** `e3572c390404abf0023f20c27565c754b10386e9`
+- **Commit fonte:** `fcee04056e6f1e9a344c81e0047297b82a682a23`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 427 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 428 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -15,8 +15,8 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
-| aprendizados | 27 | 0 | 27 | 0 | 0 |
-| estrutura | 357 | 1 | 356 | 0 | 0 |
+| aprendizados | 28 | 1 | 27 | 0 | 0 |
+| estrutura | 357 | 0 | 357 | 0 | 0 |
 
 ## Operações
 
@@ -93,6 +93,7 @@
 | aprendizados | atualizado | #24 — API paga é capacidade, não identidade nem caminho obrigatório |
 | aprendizados | atualizado | #25 — “Menos é mais” significa menor movimento compatível com efeito, observabilidade e segurança |
 | aprendizados | atualizado | #26 — Batch .bat: 4 armadilhas que passam em revisão superficial |
+| aprendizados | criado | #27 — Grok App Builder é adapter, não cérebro — não scaffoldar app paralelo |
 | estrutura | atualizado | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | atualizado | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
@@ -186,7 +187,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-16-verde-delta-fechado-promove.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-17-mapa-mental-intencao-comprimida.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-alquimia-operacional-minerio-ouro-cristal.md |
-| estrutura | criado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-estabilidade-sob-perturbacao-liberdade-com-fronteira.md |
+| estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-estabilidade-sob-perturbacao-liberdade-com-fronteira.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-fluxo-operacional-papagaio-off-pombo-on.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-pombo-correio-com-checksum.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-prova-secreta-bob-casa-fundamentos.md |
