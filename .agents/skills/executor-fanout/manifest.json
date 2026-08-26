@@ -1,0 +1,76 @@
+{
+  "skill": "centraldark.executor-fanout",
+  "version": "0.1.0",
+  "repo_canonical": "ServerVpss/CentralDark",
+  "repo_legacy_note": "analyze_workflows may point to CentralDark1VPS — treat as eye only; do not use as orchestrator",
+  "maxDocuments": 3,
+  "autoFanoutDefault": "LOCKED",
+  "contracts": {
+    "REUSE_BEFORE_CREATE": true,
+    "ONE_SYSTEM_ONLY": true,
+    "PARALLELIZE_PERCEPTION": true,
+    "SERIALIZE_MUTATION": true,
+    "ONE_WRITER_PER_SCOPE": true,
+    "UNKNOWN_IS_NOT_PASS": true
+  },
+  "entries": [
+    {
+      "id": "fanout-gate",
+      "type": "runtime",
+      "path": "runtime/fanout-gate.mjs",
+      "triggers": ["EXECUTOR_FANOUT", "FANOUT_GATE", "AUTO_FANOUT"],
+      "priority": 10
+    },
+    {
+      "id": "multi-instance-probe",
+      "type": "runtime",
+      "path": "runtime/multi-instance-probe.mjs",
+      "triggers": ["MULTI_INSTANCE_PROBE", "COLLISION_PROBE"],
+      "priority": 10
+    },
+    {
+      "id": "rendezvous",
+      "type": "runtime",
+      "path": "runtime/rendezvous.mjs",
+      "triggers": ["RENDEZVOUS_REQUIRED", "AGGREGATE_RECEIPTS"],
+      "priority": 9
+    },
+    {
+      "id": "header-guard",
+      "type": "runtime",
+      "path": "runtime/header-guard.mjs",
+      "triggers": ["SESSION_CHECKPOINT", "SESSION_RESUME", "PROTOCOL_HEADER"],
+      "priority": 11
+    },
+    {
+      "id": "analyze-workflows-eye",
+      "type": "perception",
+      "path": "runtime/analyze-workflows-adapter.mjs",
+      "triggers": ["ANALYZE_WORKFLOWS_READ"],
+      "priority": 5,
+      "mode": "READ_ONLY",
+      "notOwnerOf": ["terminal", "session", "executor", "worktree"]
+    }
+  ],
+  "gatilhosIniciais": [
+    "TEST_FAILED",
+    "NODE_CHECK_FAILED",
+    "SEMANTIC_FAILURE_WITH_SYNTAX_PASS",
+    "REGRESSION_FAILED",
+    "TIMEOUT",
+    "STATE_TRANSITION_ERROR",
+    "NON_IDEMPOTENT_RESULT",
+    "REPEATED_ERROR",
+    "SESSION_CHECKPOINT",
+    "SESSION_RESUME"
+  ],
+  "gatilhosCustom": [
+    "FANOUT_JUDGE_REQUEST",
+    "MULTI_INSTANCE_PROBE",
+    "ONE_WRITER_PER_SCOPE",
+    "RENDEZVOUS_REQUIRED",
+    "EXECUTOR_FANOUT",
+    "ANALYZE_WORKFLOWS_READ",
+    "REPO_TARGET_CHECK"
+  ]
+}
