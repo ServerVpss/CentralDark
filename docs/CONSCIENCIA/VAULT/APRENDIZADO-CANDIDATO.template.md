@@ -14,3 +14,11 @@ TESTE=descreva como provar que o erro não volta
 PRIVADO=NAO
 
 Observações opcionais abaixo desta linha.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

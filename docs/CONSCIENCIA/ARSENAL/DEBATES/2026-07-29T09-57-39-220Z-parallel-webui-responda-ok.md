@@ -35,3 +35,11 @@ OK
 ## 🧑‍⚖️ Veredito (gemini-3.1-pro-preview)
 
 OK
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

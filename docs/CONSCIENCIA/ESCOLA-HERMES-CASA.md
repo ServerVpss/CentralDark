@@ -55,3 +55,11 @@ O promotor rejeita palavras e formatos típicos de segredo. Ele nunca lê `.env`
 ## Resultado
 
 A Casa ensina. O GitHub consolida. Todas as IAs recebem o aprendizado aprovado na próxima carga da fonte da verdade.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

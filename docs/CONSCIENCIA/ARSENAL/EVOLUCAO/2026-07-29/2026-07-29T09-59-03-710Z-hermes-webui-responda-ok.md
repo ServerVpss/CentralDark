@@ -50,3 +50,11 @@ Proposta Final Consolidada:
 
 1. Receber a solicitação e validar o contexto.
 2. Emitir uma resposta primária "OK"
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

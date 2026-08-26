@@ -60,3 +60,11 @@ O gateway está OpenAI-compatible para descoberta e inferência por alias. O Cla
 ## Pendência operacional
 
 Se o cliente ainda mostrar erro vermelho, limpar/reconectar a credencial no Claude Desktop e testar novamente a descoberta. O gateway já responde catálogo OpenAI-compatible com aliases reconhecíveis.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

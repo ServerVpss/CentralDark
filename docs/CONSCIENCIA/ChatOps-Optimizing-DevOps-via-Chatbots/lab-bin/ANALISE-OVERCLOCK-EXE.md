@@ -58,4 +58,12 @@ npm create tauri-app@latest
 ## Segurança
 
 - `.gitignore` no planão ignora `*.exe` / `*.dll` (não versionar binário)  
-- Preferir manter binários só em `lab-bin/`  
+- Preferir manter binários só em `lab-bin/`
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

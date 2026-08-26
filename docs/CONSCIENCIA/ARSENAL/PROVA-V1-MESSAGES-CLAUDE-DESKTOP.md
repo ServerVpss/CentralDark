@@ -28,3 +28,11 @@ POST http://127.0.0.1:8090/v1/messages
 
 ## Ganho
 Claude Desktop, Zed, Cursor e qualquer cliente Anthropic-native passam a enxergar e usar o gateway CentralDark sem erro 404. Mantém compatibilidade OpenAI (Open WebUI, LibreChat) intacta.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre
