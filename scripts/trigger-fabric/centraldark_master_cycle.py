@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import argparse
 import json
+import re
 import unicodedata
 
 MASTER = "!CENTRALDARK"
@@ -40,8 +41,11 @@ DELTA_ALIASES = (
 
 def normalize(text: str) -> str:
     raw = unicodedata.normalize("NFKD", str(text or ""))
-    raw = "".join(ch for ch in raw if not unicodedata.combining(ch))
-    return " ".join(raw.strip().lower().split())
+    raw = "".join(ch for ch in raw if not unicodedata.combining(ch)).lower()
+    # Preserva marcadores operacionais como !, mas remove pontuação de frase.
+    # Assim "!CENTRALDARK," e "aciona !CENTRALDARK." resolvem igual.
+    raw = re.sub(r"[^a-z0-9!@/._\-\s]+", " ", raw)
+    return " ".join(raw.strip().split())
 
 
 def _contains_phrase(normalized: str, phrase: str) -> bool:
@@ -122,6 +126,8 @@ def self_test():
         ("!centraldark fecha essa missão", True),
         ("!central-dark fecha", True),
         ("!cdark", True),
+        ("!CENTRALDARK, fecha", True),
+        ("aciona !CENTRALDARK.", True),
         ("CentralDark e o nome do repo", False),
         ("fala normal", False),
     ]
