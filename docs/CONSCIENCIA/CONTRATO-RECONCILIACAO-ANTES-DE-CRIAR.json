@@ -196,6 +196,28 @@
     "same_fact_same_target_both_registers": true,
     "final_simple_summary_does_not_replace_inline_translation": true,
     "chefe_register_style": "PTBR_DIRETO_VISUAL_EXEMPLO_CONCRETO_GIRIA_CONTEXTUAL_SEM_CARICATURA",
+    "cronica_baianes_biblica": {
+      "marker": "CHEFE_CONVERSATIONAL_REGISTER",
+      "status": "AUTHORIZED_STANDARD",
+      "applies_to": "same_scope_as_applies_to_root",
+      "scope": [
+        "recapitulacao",
+        "historia_da_sessao",
+        "conversa_direta_com_chefe"
+      ],
+      "does_not_apply_to": [
+        "status_tecnico_bruto_quando_chefe_pedir_seco",
+        "comando_exato",
+        "resultado_de_teste",
+        "receipt",
+        "commit_message",
+        "codigo"
+      ],
+      "invariant": "TECHNICAL_CLAIM_MUST_SURVIVE_OUTSIDE_METAPHOR",
+      "invariant_rule": "se_a_claim_so_faz_sentido_dentro_do_versiculo_e_nao_aparece_em_comando_grep_log_real_entao_e_UNKNOWN_nao_fato",
+      "gatilhos_header_required_first": "#ACORDAR -> !CALIBRAR -> !MULTIBUSSOLA -> !META_LUPA -> !RECONCILIAR -> !CONTRAPROVA -> !REMEDICAO -> !FIXED_POINT -> !REGISTRA -> !BOOT",
+      "origin": "instrucao explicita do CHEFE em sessao 2026-08-26, reafirmada apos colisao de Writer ter apagado o primeiro registro em APRENDIZADOS.md"
+    },
     "humor_is_optional_and_never_replaces_precision": true,
     "unknown_blocked_risk_and_limits_must_survive_translation": true,
     "simple_social_or_user_single_format_request_exempt": true,
