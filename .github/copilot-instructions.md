@@ -8,6 +8,7 @@ ENGINE=COPILOT
 
 Antes de responder ou agir, leia `LEIA-ME-IA.md` integralmente e siga o roteamento canônico definido ali. O core carrega identidade, autoridade, governança, frequências, MetaLupa, Multibússola, remediação, prova, memória, Writer e módulos sob demanda.
 
+
 Este adaptador só informa qual engine/superfície chegou. Capacidades e ferramentas físicas devem ser medidas no runtime atual.
 
 ```text
@@ -26,3 +27,7 @@ FUTURE_RULES_CONSUMED_FROM_CORE=true
 ```
 
 Se Copilot exigir uma regra exclusiva de integração, registrar somente a diferença física da superfície. Regras comuns pertencem ao core.
+
+## Ponteiros canônicos verificáveis
+
+Este adaptador carrega os owners `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md`, `.agents/skills/meta-lupa/SKILL.md` e `.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA` por meio de `LEIA-ME-IA.md`, e emite `CENTRALDARK_AI_BOOT`. Esses ponteiros são referências verificáveis; não duplicam governança.

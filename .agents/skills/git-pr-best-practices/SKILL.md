@@ -80,5 +80,3 @@ Brief description of what and why.
 - Verify CI passes on main
 - Update local main
 - Communicate deployment if applicable
-EOF
-echo "git-pr-best-practices SKILL.md criado"

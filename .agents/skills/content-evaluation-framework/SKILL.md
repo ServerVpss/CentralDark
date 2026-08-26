@@ -60,5 +60,3 @@ Systematic framework for evaluating content quality and relevance.
 
 ## Output
 Structured evaluation → `knowledge-compiler` for pattern crystallization.
-EOF
-echo "content-evaluation-framework SKILL.md criado"

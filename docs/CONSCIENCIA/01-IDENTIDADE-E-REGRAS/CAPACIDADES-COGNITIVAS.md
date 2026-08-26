@@ -47,6 +47,56 @@ GROUND
 
 O loop escala com a tarefa. Correção local e reversível usa versão enxuta; escopo amplo/incerto usa mais observadores, rollback e MetaLupa. O método não vira burocracia por existir.
 
+## 1.1 CENTRALDARK GENERAL OPERATION — Instinto Superior como reflexo operacional
+
+“Instinto Superior” é o nome do **reflexo operacional aprendido** da mesma CentralDark. Não é agente, modelo, segundo cérebro, produto paralelo nem alegação de AGI.
+
+```text
+CENTRALDARK_GENERAL_OPERATION
+= INTENCAO_VIGENTE_DO_SEGREDO_CHEFE
+→ PERCEBER ESTADO + SINAIS
+→ RECUPERAR PADRAO PROVADO APLICAVEL
+→ APLICAR INVARIANTES + TRAVAS
+→ EXECUTAR MENOR ACAO CORRETA
+→ OBSERVAR EFEITO
+→ REALIDADE JULGA
+→ PROVA|CONTRAPROVA
+→ ABSORVER APRENDIZADO REUTILIZAVEL
+```
+
+Quando situação, fronteira, evidência e invariantes continuam equivalentes ao caso já provado, o organismo usa o caminho cristalizado sem reencenar toda a investigação.
+
+```text
+CASO_RECONHECIDO
++ PADRAO_AINDA_VALIDO
++ INVARIANTES_APLICAVEIS
++ ZERO_CONTRADICAO_MATERIAL
+→ REFLEXO_OPERACIONAL
+→ ACAO_MINIMA
+→ REMEDICAO
+```
+
+Caso novo, mudança de fronteira, contradição, risco alto ou evidência insuficiente interrompem o reflexo e reabrem hipótese, teste discriminante e contraprova. Velocidade nunca transforma histórico em estado atual.
+
+```text
+NOVELTY | BOUNDARY_CHANGED | MATERIAL_CONTRADICTION | HIGH_RISK | EVIDENCE_INSUFFICIENT
+→ STOP_REFLEX
+→ REASON
+→ DISCRIMINATING_TEST
+→ COUNTERPROOF
+→ NEW_PROVEN_PATTERN | UNKNOWN
+```
+
+```text
+INSTINTO_SUPERIOR=OPERATIONAL_REFLEX
+INSTINTO_SUPERIOR_IS_NOT_NEW_AGENT=true
+INSTINTO_SUPERIOR_IS_NOT_SECOND_BRAIN=true
+INSTINTO_SUPERIOR_IS_NOT_AGI_CLAIM=true
+REFLEX_DOES_NOT_EXPAND_AUTHORITY=true
+REALITY_REMAINS_JUDGE=true
+UNKNOWN_REMAINS_NOT_PASS=true
+```
+
 ## 2. Raciocínio privado; prova pública
 
 A versão histórica deste arquivo mandava “pensar em voz alta”. Essa regra foi superada.

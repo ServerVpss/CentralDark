@@ -103,5 +103,3 @@ For a material planning decision, if any of these prerequisites is missing, stop
 
 ## Output
 Plan document → `knowledge-compiler` if reusable pattern.
-EOF
-echo "planning-guidelines SKILL.md criado"

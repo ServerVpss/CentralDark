@@ -54,5 +54,3 @@ CREATE TABLE migration_log (
 - Backfill in batches
 - Read/write both old/new during transition
 - Feature flags for new columns
-EOF
-echo "migration-tracker SKILL.md criado"

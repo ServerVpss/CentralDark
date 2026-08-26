@@ -1,0 +1,360 @@
+schema: centraldark.trigger-fabric.v1
+base_head: LIVE_REMEASURE_REQUIRED
+authority:
+  human_intent_owner: SEGREDO/CHEFE
+  coordinator: SOL
+  executor_continuity: HERMES/PIVETE
+  judge: REALITY
+principles:
+  one_system_only: true
+  reuse_before_create: true
+  one_owner_per_capability: true
+  one_writer_per_scope: true
+  parallelize_perception: true
+  serialize_mutation: true
+  unknown_never_pass: true
+  history_ne_current: true
+  spec_ne_implementation: true
+  action_ne_proof: true
+  no_new_workflow_when_owner_exists: true
+  every_material_enters_mill: true
+  no_silent_drop_of_material_delta: true
+  miner_never_writes_canonical_directly: true
+  generative_output_is_candidate_not_authority: true
+  artifact_never_invents_canonical: true
+  operational_failure_must_be_generalized: true
+  proven_operational_rule_must_bind_to_runtime: true
+  same_failure_without_new_information_reuses_crystal: true
+  second_brain_logical_one: true
+  second_brain_parallel_forbidden: true
+second_brain:
+  contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SECOND-BRAIN.yml
+  logical: ONE
+  surfaces: [github_canonical, local_obsidian_files, derived_graph_vector]
+  graph_vector_authority: false
+master_trigger:
+  expression: "#ACORDAR + !CALIBRAR + !MULTIBUSSOLA"
+  inherited_on_bot_entry: true
+  meta_lupa: proportional_to_risk
+  behavior:
+    - destination_lock
+    - recover_live_state
+    - align_intent_scope_tools_proof
+    - scan_all_material_axes
+    - rendezvous
+    - meta_lupa_proportional_to_risk
+    - route_to_existing_owner
+    - execute_minimal_delta
+    - output_guard
+    - collect_evidence
+    - counterproof
+    - reality_judge
+    - receipt_learning_cursor
+bot_entry:
+  mandatory: true
+  engine_is_owner: false
+  engine_switch_is_reset: false
+  source_contracts:
+    - LEIA-ME-IA.md
+    - AGENTS.md
+    - docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md
+    - docs/CONSCIENCIA/MULTIBUSSOLA.md
+    - .agents/skills/meta-lupa/SKILL.md
+  install_semantics: LOAD_CANONICAL_REFERENCE_NOT_COPY_BRAIN
+  runtime_activation_requires_observation: true
+output_guard:
+  mandatory_before_human_return: true
+  fields:
+    - claim
+    - target
+    - scope
+    - observed_at
+    - source
+    - source_timestamp
+    - head_sha
+    - input_sha256
+    - facts
+    - inferences
+    - hypotheses
+    - unknowns
+    - owner
+    - consumer
+    - top_down_result
+    - bottom_up_result
+    - round_trip_result
+    - evidence
+    - counterevidence
+    - proof_target_match
+    - temporal_freshness
+    - arithmetic_check
+    - denominator_check
+    - duplicate_check
+    - false_green_check
+    - history_current_check
+    - spec_implementation_check
+    - action_proof_check
+    - verdict
+    - residual
+    - next_cursor
+  contradiction_action: AUTOLUPA_REMEDIATE_BEFORE_RETURN
+continuation:
+  previous_proof_is_baseline_not_eternal_truth: true
+  unchanged_proven_target: REUSE_PROOF_FAST_PATH
+  changed_target: REVALIDATE_AFFECTED_CHAIN_ONLY
+  no_new_information: NO_CHANGE_NEXT
+  next_execution_baseline: LAST_GOOD_STATE
+package_ingest:
+  inventory_before_read: true
+  hash_before_semantic_reanalysis: true
+  byte_identical: PROCESS_ONCE_KEEP_PROVENANCE
+  big_library: PRECISE_RETRIEVAL_SMALL_CONTEXT
+material_ingest:
+  mandatory_for_chefe_and_agent_material: true
+  pipeline:
+    - TRIGGER_FABRIC
+    - SESSION_INTELLIGENCE_HARVESTER
+    - MEMORY_LINKER
+    - KNOWLEDGE_COMPILER_FORJA
+    - OWNER_SKILL_CONSUMER_TEST_GATE
+    - ARTIFACT_PROPERTIES
+    - VECTOR_MEMORY_DERIVED_INDEX
+    - GRAPH_RAG_HYBRID
+    - HERMES_FLASH_ROUTE
+  learning_event_schema: centraldark.learning-event.v1
+  required_fields:
+    - event_id
+    - event_time
+    - observed_at
+    - source
+    - source_class
+    - kind
+    - claim
+    - sensitivity
+  source_class_clamp:
+    external_prompt_cannot_self_elevate: true
+    external_default: EXTERNAL_UNTRUSTED
+  deterministic_first: true
+  generative_residual_only: true
+  promotion_boundary:
+    miner_direct_canonical_write: false
+    writer_only_after_owner_consumer_authority_test: true
+  derived_index:
+    vector_memory_is_derived_rebuildable: true
+    graph_is_derived_not_authority: true
+    selective_invalidation: true
+artifact_properties:
+  contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ARTIFACT-PROPERTIES.yml
+  hermes_requires_properties: true
+  missing_required: NOT_FLASH_READY
+operational_rule_learning:
+  mandatory: true
+  applies_to: [HUMAN_CORRECTION, TOOL_ERROR, TEST_FAILURE, CI_FAILURE, RUNTIME_DRIFT, REPEATED_MANUAL_FIX, NEW_INVARIANT]
+  lifecycle:
+    - OBSERVE_EVENT
+    - MEASURE_LIVE_STATE
+    - EXTRACT_FAILURE_OR_RULE_SIGNATURE
+    - IDENTIFY_CAUSE_OR_INVARIANT
+    - GENERALIZE_MINIMUM_VALID_SCOPE
+    - FIND_EXISTING_CANONICAL_OWNER
+    - FIND_REAL_CONSUMER
+    - BIND_RULE_TO_ENGINE_OR_GATE
+    - POSITIVE_TEST
+    - NEGATIVE_TEST
+    - COUNTERPROOF
+    - REALITY_JUDGE
+    - RECEIPT
+    - CRYSTAL
+    - LAST_GOOD_STATE
+    - TRANSFER_TEST_ON_NEXT_EVENT
+    - CONTINUE_UNTIL_SCOPE_FIXED_POINT
+  promotion_requires:
+    - canonical_owner
+    - real_consumer
+    - runtime_or_ci_binding
+    - positive_test
+    - negative_test
+    - counterproof
+    - receipt
+  prose_only_rule: NOT_LEARNED
+  documented_only_rule: NOT_LEARNED
+  repeated_chefe_instruction_after_promoted_rule: LEARNING_TRANSFER_FAIL
+  same_rule_new_engine: MUST_INHERIT_BY_REFERENCE
+  same_rule_new_session: MUST_INHERIT_BY_REFERENCE
+  same_rule_new_pr_or_commit: MUST_BE_ENFORCED_BY_EXISTING_GATE
+  overgeneralization_guard: MINIMUM_VALID_SCOPE_THEN_EXPAND_BY_EVIDENCE
+verified_continuity:
+  source_crystal: docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-pombo-correio-com-checksum.md
+  canonical_handoff_owner: docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md
+  architecture_class: PROOF_CARRYING_CLOSED_LOOP_CONTROL
+  state_model: EPISTEMIC_STATE_MACHINE
+  mutation_model: SERIALIZED_SINGLE_WRITER
+  continuity_model: RECEIPT_PLUS_CHECKSUM_PLUS_NEXT_CURSOR
+  cultural_mode:
+    papagaio_mode: OFF
+    pombo_mode: CHECKSUM_ON
+  state_discipline:
+    live_state_first: true
+    unknown_action: MEASURE_REALITY
+    action_is_proof: false
+    state_changed: RECALIBRATE
+    history_is_current_state: false
+    inference_language_governs_state: false
+  failure_path:
+    - IDENTIFY_CAUSE
+    - FIND_EXISTING_OWNER
+    - EXECUTE_MINIMAL_DELTA
+    - RETEST
+    - COUNTERPROOF
+  proven_transfer_requires:
+    - receipt
+    - observed_at
+    - evidence_refs
+    - head_sha_or_content_sha256_when_material
+    - unknowns_preserved
+    - residual_preserved
+    - next_cursor
+  integrity:
+    checksum_semantics: BYTE_IDENTITY_NOT_SEMANTIC_PROOF
+    destination_lock_survives_handoff: true
+    provenance_survives_handoff: true
+    unknown_survives_handoff: true
+    next_cursor_survives_handoff: true
+    executor_cannot_self_approve: true
+    judge_does_not_mutate: true
+    graph_is_derived_not_authority: true
+    reality_is_final_judge: true
+  transfer_learning:
+    next_equivalent_event_must_reuse_without_chefe_reteaching: true
+    repeated_mechanical_instruction_after_promotion: LEARNING_TRANSFER_FAIL
+deterministic_scaffold:
+  purpose: CONSTRAIN_TACTICAL_ENGINES_WITHOUT_CONTEXT_BLOAT
+  cognitive_sector:
+    boot_prompt_policy: MINIMUM_SUFFICIENT_CONTEXT
+    retrieval_policy: PRECISE_RETRIEVAL_SMALL_CONTEXT
+    long_instruction_is_enforcement: false
+    deterministic_contract_outlives_context: true
+    role_context_policy: SHORT_LIVED_TASK_FOCUSED_WHEN_MATERIAL
+    model_switch_is_reset: false
+  execution_sector:
+    deterministic_gauntlet_required: true
+    gauntlet_is_risk_proportional: true
+    known_checks: [TYPECHECK, LINT, TEST, BUILD, SECURITY]
+    generated_checks: [REGRESSION_FROM_FAILURE, PROPERTY_BASED, METAMORPHIC, FUZZ, MUTATION]
+    mutation_testing_policy: APPLY_WHEN_VALUE_EXCEEDS_COST
+    property_fuzz_policy: APPLY_PROPORTIONAL_TO_WOUND_AND_RISK
+    same_head_evidence_required: true
+    executor_self_approval_forbidden: true
+  architecture_guard:
+    machine_checkable_dependency_rules: PREFER_WHEN_MATERIAL
+    graph_or_viewer_is_observation_not_authority: true
+    deep_module_small_interface_preferred: true
+    module_boundary_change_requires_consumer_scan: true
+  iteration_policy:
+    giant_upfront_plan_is_execution_proof: false
+    loop: [SMALL_DELTA, DETERMINISTIC_FEEDBACK, REMEASURE, REORGANIZE_IF_NEEDED]
+    planning_is_ephemeral_unless_promoted_by_evidence: true
+  multi_agent_policy:
+    use_only_if_material_gain_exceeds_coordination_overhead: true
+    parallelize_perception: true
+    serialize_mutation: true
+    specialized_agent_is_owner: false
+    specialized_agent_is_authority: false
+  discipline_policy:
+    preserve_human_values_and_invariants: true
+    copy_human_ritual_blindly: false
+    threshold_change_requires_evidence: true
+  learned_items:
+    - ITEM_MINIMAL_CONTEXT_MAX_DETERMINISM
+    - ITEM_DETERMINISTIC_GAUNTLET
+    - ITEM_SHORT_LIVED_ROLE_CONTEXT
+    - ITEM_ARCHITECTURE_DEPENDENCY_GUARD
+    - ITEM_ITERATE_MEASURE_REORGANIZE
+    - ITEM_VALUES_OVER_BLIND_HUMAN_RITUAL
+ci_binding:
+  reuse_workflows:
+    - .github/workflows/porta-de-entrada.yml
+    - .github/workflows/autonomia-promocao.yml
+    - .github/workflows/trigger-fabric-package.yml
+  create_equivalent_workflow: FORBIDDEN_UPDATE_EXISTING
+  canonical_labels_doc: docs/CONSCIENCIA/GITHUB-LABELS-OPERACIONAIS.md
+  labels:
+    authority: "👑 PERMITO-SEGREDO"
+    confirmed_result: "✅ PR CONFIRMADO"
+    label_is_authority: false
+  runner_policy:
+    scope: ALL_ACTIVE_ROOT_GITHUB_WORKFLOWS
+    applies_to: [PULL_REQUEST, PUSH_COMMIT, WORKFLOW_DISPATCH, SCHEDULE, WORKFLOW_RUN, REPOSITORY_DISPATCH]
+    github_hosted_runner: FORBIDDEN
+    canonical_default: [self-hosted, Linux]
+    platform_specific_rule: SELF_HOSTED_PLATFORM_ONLY_WHEN_CAPABILITY_REQUIRES_IT
+    platform_specific_proof_required: true
+    linux_is_default: true
+    forbidden_labels: [ubuntu-latest, windows-latest, macos-latest]
+    violation_state: FAILED
+    remediation: UPDATE_EXISTING_WORKFLOW_ONLY
+    new_equivalent_workflow: FORBIDDEN
+    recheck: SAME_GATE_ON_NEW_HEAD
+    proof_gate: scripts/trigger-fabric/verify_repo_contract.py
+  commit_coverage:
+    pull_request: REQUIRED
+    push_any_branch: REQUIRED_BY_PORTA_DE_ENTRADA
+    push_main: REQUIRED
+    direct_main_mutation_without_gate: FORBIDDEN_BY_POLICY
+  autonomy_promotion:
+    merge_method: squash
+    target: main
+    intent_authorized_no_reask: true
+    auto_squash_if_clean: true
+    wait_slow_self_hosted_auxiliary: false
+    causal_gates_required: true
+    false_green_forbidden: true
+self_healing:
+  mandatory_for_operational_failure: true
+  scope: ALL_PR_COMMIT_AND_RUNTIME_ELIGIBLE_FAILURES
+  loop:
+    - MEASURE_CURRENT_STATE
+    - FAILURE_SIGNATURE
+    - IDENTIFY_CAUSE
+    - SEARCH_EXISTING_CRYSTAL
+    - DISCRIMINATING_TEST
+    - MINIMAL_REMEDIATION
+    - SAME_OWNER_SAME_WORKFLOW
+    - RETEST
+    - COUNTERPROOF
+    - REALITY_JUDGE
+    - RECEIPT
+    - CRYSTAL
+    - LAST_GOOD_STATE
+    - NEXT_CURSOR
+  runner_failure_crystal:
+    signature: GITHUB_HOSTED_RUNNER_SELECTED_WHILE_HOUSE_IS_SELF_HOSTED
+    cause_class: EXECUTOR_ROUTE_POLICY_VIOLATION
+    remediation: BIND_EXISTING_WORKFLOW_TO_SELF_HOSTED_CANONICAL_PLATFORM
+    default_platform: Linux
+    prohibit_new_workflow: true
+    next_occurrence: BLOCK_BEFORE_MERGE_AND_REUSE_CRYSTAL
+  fixed_point:
+    only_if:
+      - failure_class_generalized
+      - future_violation_blocked_by_gate
+      - current_affected_workflows_reconciled
+      - same_failure_reuses_crystal
+      - counterproof_survived
+      - material_unknown_zero_for_scope
+states:
+  proven: "GREEN"
+  failed_or_blocked: "RED"
+  unknown_not_proven: "BLACK"
+  quarantine_or_chefe_lock: "LOCKED"
+  working_forja: "WORKING"
+  yellow_status_semantics: FORBIDDEN
+claims:
+  package_completeness_may_be_100_percent_if_verifier_passes: true
+  global_runtime_100_percent: false
+  global_runtime_100_percent_status: NOT_PROVEN
+  engine_binding_documented_is_runtime_loaded: false
+  vector_memory_runtime: NOT_PROVEN
+  learning_hooks_runtime: NOT_PROVEN
+return_rule:
+  - DESTINATION_PROVED
+  - HUMAN_FRONTIER_PROVED

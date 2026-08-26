@@ -6,7 +6,11 @@ ADAPTER_ROLE=ENGINE_DISCOVERY_ONLY
 ENGINE=CODEX
 ```
 
+## Alvo obrigatório
+
 Antes de responder ou agir, leia `LEIA-ME-IA.md` integralmente e siga o roteamento canônico definido ali. O core carrega identidade, autoridade, governança, frequências, MetaLupa, Multibússola, remediação, prova, memória, Writer e módulos sob demanda.
+
+`ServerVpss/CentralDark` é o repositório oficial e fonte estrutural da verdade.
 
 Este adaptador só informa qual engine/superfície chegou. Capacidades e ferramentas físicas devem ser medidas no runtime atual.
 
@@ -26,3 +30,11 @@ FUTURE_RULES_CONSUMED_FROM_CORE=true
 ```
 
 Regra de compatibilidade: se uma particularidade exclusiva do Codex precisar ser documentada, registrar somente a diferença física da superfície/tool. Regras comuns pertencem ao core, nunca a este arquivo.
+
+## Arquivos sensíveis
+
+Não ler, copiar, publicar ou usar valores de `.env`, `secrets/`, `tokens/`, `sessions/`, `.ssh/`, chaves privadas, cookies ou connection strings como contexto sem necessidade/autorização específica. Nunca reproduzir valores.
+
+## Ponteiros canônicos verificáveis
+
+Este adaptador carrega os owners `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md`, `.agents/skills/meta-lupa/SKILL.md` e `.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA` por meio de `LEIA-ME-IA.md`, e emite `CENTRALDARK_AI_BOOT`. Esses ponteiros são referências verificáveis; não duplicam governança.

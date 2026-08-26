@@ -11,7 +11,7 @@ import {
 } from '~/utils/constants';
 import { cubicEasingFn } from '~/utils/easings';
 import { logger } from '~/utils/logger';
-import { themeStore, type Theme } from '~/lib/stores/theme';
+import { isDarkTheme, themeStore, type Theme } from '~/lib/stores/theme';
 import { useStore } from '@nanostores/react';
 import type { ToolCallAnnotation } from '~/types/context';
 
@@ -59,7 +59,7 @@ function JsonCodeBlock({ className, code, theme }: JsonCodeBlockProps) {
       dangerouslySetInnerHTML={{
         __html: jsonHighlighter.codeToHtml(formattedCode, {
           lang: 'json',
-          theme: theme === 'dark' ? 'dark-plus' : 'light-plus',
+          theme: isDarkTheme(theme) ? 'dark-plus' : 'light-plus',
         }),
       }}
       style={{

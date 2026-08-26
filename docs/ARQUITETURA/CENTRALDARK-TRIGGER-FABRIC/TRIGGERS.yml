@@ -1,0 +1,277 @@
+schema: centraldark.trigger-map.v1
+human_triggers:
+  - id: CENTRALDARK_MASTER
+    token: "!CENTRALDARK"
+    aliases: ["!CENTRAL-DARK", "!CDARK"]
+    owner: "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml"
+    explicit_marker_required: true
+    plain_word_does_not_trigger: true
+    expands_to: [ACORDAR, CALIBRAR, MULTIBUSSOLA, META_LUPA, RECONCILIAR, CONTRAPROVA, REMEDICAO, FIXED_POINT, REGISTRA, BOOT]
+    behavior: [CONSIDER_ALL_PHASES, SKIP_ONLY_IF_JUSTIFIED, UNKNOWN_NEVER_PASS, NO_AUTHORITY_EXPANSION, NO_AUTO_MUTATION]
+  - id: DELTA_UTILS
+    token: "!DELTA UTILS"
+    aliases: ["!DELTA UTIL", "!DELTAUTIL", "!DELTAÚTIL", "DELTA ÚTIL", "DELTA UTIL", "DELTA UTILS", "DELTA DE AGORA", "TOMA ESSE DELTA", "PEGA O DELTA"]
+    owner: "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml#delta_harvest"
+    semantic_family: DELTA_HARVEST
+    behavior: [USE_ONLY_USEFUL_NOW, PRESERVE_CHEFE_INTENT, ZERO_REGRESSION, REUSE_EXISTING_OWNER, NO_V1_V2_V3, SAME_PR_WHEN_SCOPE_MATCHES, INFORMATION_GAIN_REQUIRED]
+    destination_router: .agents/skills/capability-contract-router/SKILL.md
+    match_is_new_authority: false
+    match_is_unrelated_mutation_permission: false
+  - id: ACORDAR
+    token: "#ACORDAR"
+    aliases: ["#ACORDA", "ACORDAR", "ACORDA", "ACORD"]
+    owner: "LEIA-ME-IA.md + AGENTS.md"
+    fronts: [A1_HISTORY_SOUL, A2_LIVE_REPOSITORY, A3_WRITERS_OWNERS_LOCKS, A4_RUNTIME_TOOLS_CONNECTIONS, A5_CONTINUITY_DELTA_REPLAY]
+  - id: CALIBRAR
+    token: "!CALIBRAR"
+    aliases: ["#CALIBRAR", "CALIBRAR", "CALIBAR", "CALIBRE", "CALIBR"]
+    owner: "LEIA-ME-IA.md + AGENTS.md"
+    fronts: [C1_INTENT_LANGUAGE, C2_AUTHORITY_SCOPE_PERMISSION, C3_CAPABILITIES_OWNERS_REUSE, C4_PROOF_RISK_COUNTERPROOF, C5_FREQUENCY_ENGINE_COST_LATENCY]
+  - id: MULTIBUSSOLA
+    token: "!MULTIBUSSOLA"
+    aliases: ["!MULTI-BUSSOLA", "MULTIBUSSOLA", "MULTI BUSSOLA", "MULTIBUSS", "BUSSOLA"]
+    owner: "docs/CONSCIENCIA/MULTIBUSSOLA.md"
+    behavior: [MULTIAXIS_SCAN, TOP_DOWN, BOTTOM_UP, FORWARD, REVERSE, ROUND_TRIP, TRANSVERSALS, RENDEZVOUS, COUNTERPROOF, FINAL_REMEASUREMENT]
+  - id: META_LUPA
+    token: "!META_LUPA"
+    aliases: ["!METALUPA", "META LUPA", "META-LUPA", "META LUPE", "LUPA META"]
+    owner: ".agents/skills/meta-lupa/"
+    mode: adaptive
+    temperatures: [FRIA, MEDIA, QUENTE]
+  - id: RECONCILIAR
+    token: "!RECONCILIAR"
+    aliases: ["RECONCILIAR", "RECONCILIA", "SINCRONIZAR PASSADO FUTURO"]
+    owner: "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json"
+    behavior: [REUSE_BEFORE_CREATE, ABSORB_USEFUL_DELTA, PRESERVE_PROVENANCE, REJECT_PARALLEL_OWNER]
+  - id: CONTRAPROVA
+    token: "!CONTRAPROVA"
+    aliases: ["CONTRAPROVA", "CONTRA PROVA", "TENTA DERRUBAR", "PROVA AO CONTRARIO"]
+    owner: "docs/CONSCIENCIA/PROOF-OWNERSHIP.json"
+    behavior: [INDEPENDENT_WHEN_MATERIAL, DISCRIMINATING_TEST, NO_CIRCULAR_PROOF]
+  - id: REMEDICAO
+    token: "!REMEDIÇÃO"
+    aliases: ["!REMEDICAO", "REMEDIR", "MEDE DE NOVO", "T0 T1"]
+    owner: "docs/CONSCIENCIA/REMEDICAO.md"
+    behavior: [MEASURE_T0, OBSERVE_DELTA, MEASURE_T1]
+  - id: FIXED_POINT
+    token: "!FIXED_POINT"
+    aliases: ["FIXED POINT", "PONTO FIXO", "PONTO FISXO", "ATE FECHAR"]
+    owner: "Trigger Fabric"
+    behavior: [NO_FALSE_GREEN, CONTINUE_WHILE_INFORMATION_GAIN, STOP_AT_FIXED_POINT_OR_PROVEN_FRONTIER]
+  - id: REGISTRA
+    token: "!REGISTRA"
+    aliases: ["REGISTRA", "REGISTRAR", "GRAVA RECEIPT", "SALVA O OURO"]
+    owner: "continuity + learning owners"
+    behavior: [WRITE_RECEIPT, PRESERVE_PROVENANCE, LEARNING_DELTA, NEXT_CURSOR]
+    behavior: [WRITE_RECEIPT, PRESERVE_PROVENANCE, LEARNING_DELTA, NEXT_CURSOR, PROMOTE_MAIN_WHEN_SAME_SCOPE_AUTHORIZED_AND_GATES_PASS]
+  - id: BOOT
+    token: "!BOOT"
+    aliases: ["BOOT", "REBOOT LOGICO", "PROXIMO CICLO"]
+    owner: "LEIA-ME-IA.md"
+    behavior: [RETURN_RECOVERABLE_STATE, NEXT_ACORDAR, NO_IMPLICIT_RUNTIME_RESTART]
+semantic_trigger_resolution:
+  master_cycle:
+    contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
+    resolver: scripts/trigger-fabric/centraldark_master_cycle.py
+    explicit_trigger: "!CENTRALDARK"
+    receipt_schema: centraldark.master-cycle-receipt.v1
+  delta_harvest:
+    contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml#delta_harvest
+    semantic_family: DELTA_HARVEST
+    deterministic_aliases_first: true
+    route_to_existing_owner: true
+    receipt_fields: [SOURCE, CLASSIFICATION, INFORMATION_GAIN, DESTINATION_OWNER, ACTION, EVIDENCE_REF, NEXT_CURSOR]
+  mode: DETERMINISTIC_FIRST_SEMANTIC_ENRICHMENT_OPTIONAL
+  rules:
+    - "EXPLICIT_MASTER_TRIGGER -> EXPAND_FULL_CHAIN"
+    - "PLAIN_WORD_CENTRALDARK -> NO_MASTER_TRIGGER"
+    - "DELTA_UTILS_FAMILY -> DELTA_HARVEST_NO_NEW_ROUTER"
+    - "SEMANTIC_TRIGGER_MATCH != AUTHORITY_EXPANSION"
+    - "SEMANTIC_TRIGGER_MATCH != AUTO_MUTATION"
+    - "MULTI_MATCH -> COMPOSE_APPLICABLE_TRIGGERS_NO_VOTE"
+    - "AMBIGUOUS_CONTEXT -> PRESERVE_UNKNOWN_OR_CALIBRATE_C1"
+entry_triggers:
+  - event: BOT_ENTRY
+    owner: "LEIA-ME-IA.md + AGENTS.md + docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md + Trigger Fabric"
+    behavior: [LOAD_CANONICAL_BOOT, INHERIT_MASTER_TRIGGER, MEASURE_ENGINE_AND_TOOLS, DESTINATION_LOCK, OUTPUT_GUARD_REQUIRED]
+    status: CONTRACT_AND_CI_ENFORCED_RUNTIME_ACTIVATION_MUST_BE_OBSERVED
+  - event: PRE_HUMAN_RETURN
+    owner: "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml"
+    behavior: [CLAIM_PROOF_MATCH, TEMPORAL_CHECK, TOP_DOWN_BOTTOM_UP_ROUND_TRIP, ARITHMETIC_DENOMINATOR_CHECK, FALSE_GREEN_CHECK, HISTORY_CURRENT_CHECK, SPEC_IMPLEMENTATION_CHECK, ACTION_PROOF_CHECK, SELF_COUNTERPROOF]
+    status: CONTRACT_ENFORCED
+  - event: RESUME
+    owner: "continuity/receipts/last_good_state"
+    behavior: [INPUT_DIFF, REUSE_VALID_PROOF, TARGETED_REVALIDATION, NEXT_CURSOR]
+    status: CONTRACT_ENFORCED_RUNTIME_PERSISTENCE_MUST_BE_OBSERVED
+learning_triggers:
+  - event: MATERIAL_INGEST
+    owner: ".agents/skills/session-intelligence-harvester/"
+    pipeline: [INVENTORY, HASH, SECRET_SCAN, SOURCE_CLASS_CLAMP, DEDUPE, NORMALIZE, HAND_OFF_MEMORY_LINKER]
+    may_write_canonical: false
+    status: CONTRACT_DECLARED_RUNTIME_HOOK_MUST_BE_OBSERVED
+  - event: HUMAN_CORRECTION
+    owner: ".agents/skills/session-intelligence-harvester/ + metacognição"
+    behavior: [EXTRACT_BELIEF_METHOD_CAPABILITY_DELTA, COUNTERPROOF, CANDIDATE_FOR_COMPILER]
+    may_write_canonical: false
+    status: CONTRACT_DECLARED
+  - event: TOOL_ERROR
+    owner: ".agents/skills/session-intelligence-harvester/ + scripts/memory-linker/"
+    behavior: [REGISTER_CAUSE_EVIDENCE, PROPOSE_DISCRIMINATING_TEST, SEARCH_EXISTING_CRYSTAL, ROUTE_MINIMAL_REMEDIATION]
+    may_write_canonical: false
+    status: CONTRACT_DECLARED
+  - event: TEST_FAILURE
+    owner: ".agents/skills/session-intelligence-harvester/ + scripts/memory-linker/"
+    behavior: [REGISTER_CAUSE_EVIDENCE, PROPOSE_DISCRIMINATING_TEST, SEARCH_EXISTING_CRYSTAL, ROUTE_MINIMAL_REMEDIATION]
+    may_write_canonical: false
+    status: CONTRACT_DECLARED
+  - event: CI_RUNNER_ROUTE_FAILURE
+    owner: "Trigger Fabric + existing workflow owner"
+    signature: GITHUB_HOSTED_RUNNER_SELECTED_WHILE_HOUSE_IS_SELF_HOSTED
+    behavior: [MEASURE_RUNNER_REQUIREMENT, DEFAULT_SELF_HOSTED_LINUX, PROVE_PLATFORM_EXCEPTION, UPDATE_EXISTING_WORKFLOW_ONLY, RETEST_SAME_HEAD_OR_NEXT_HEAD, COUNTERPROOF, CRYSTALIZE]
+    may_write_canonical: writer_authorized_only
+    status: CONTRACT_AND_GATE_ENFORCED
+  - event: CONTRADICTION_FOUND
+    owner: ".agents/skills/meta-lupa/"
+    behavior: [PRESERVE_CONFLICT, CHOOSE_DISCRIMINATING_TEST]
+    may_write_canonical: false
+    status: CONTRACT_DECLARED
+  - event: PATTERN_FOUND
+    owner: scripts/memory-linker/pattern-discovery.mjs
+    status: IMPLEMENTED_PIPELINE
+  - event: MEMORY_DELTA
+    owner: scripts/memory-linker/
+    status: IMPLEMENTED_PIPELINE
+  - event: KNOWLEDGE_CRYSTAL
+    owner: .agents/skills/knowledge-compiler/
+    behavior: [OWNER, SKILL, CONSUMER, TEST, GATE, ROUTE_IR, ARTIFACT_PROPERTIES]
+    may_write_canonical: writer_authorized_only
+    status: CONTRACT_AND_TESTS_EXIST
+  - event: CRYSTAL_PROMOTED
+    owner: .agents/skills/vector-memory/
+    behavior: [UPSERT_BY_CONTENT_SHA, INVALIDATE_PREVIOUS_VERSION]
+    may_write_canonical: false
+    index_only: true
+    status: CONTRACT_ONLY_RUNTIME_NOT_PROVEN
+  - event: SOURCE_CHANGED_OR_DELETED
+    owner: ".agents/skills/vector-memory/ + knowledge-compiler"
+    behavior: [INVALIDATE_AFFECTED_CHUNKS_AND_ROUTES, PRESERVE_PROVENANCE]
+    may_write_canonical: false
+    index_only: true
+    status: CONTRACT_DECLARED
+  - event: POST_MUTATION
+    owner: "remedição + session-intelligence-harvester"
+    behavior: [T0_T1, TEST, REGRESSION, IMPACT, RECEIPT]
+    may_write_canonical: false
+    status: CONTRACT_DECLARED
+  - event: RUNTIME_DRIFT
+    owner: applicable_runtime_owner
+    behavior: [INVALIDATE_DEPENDENT_PROOF, REMEASURE_SAME_TARGET]
+    may_write_canonical: scope_authorized_only
+    status: CONTRACT_DECLARED
+  - event: SESSION_END
+    owner: .agents/skills/session-intelligence-harvester/SKILL.md
+    behavior: [HARVEST_NEW_DELTA_ONLY, CHECKPOINT, NEXT_CURSOR]
+    may_write_canonical: false
+    status: DECLARED_HOOK_NOT_PROVEN
+automatic_triggers:
+  - event: ANY_PR_OR_COMMIT
+    owner: "porta-de-entrada + autonomia-promocao + Trigger Fabric"
+    behavior: [REMEASURE_HEAD, ENFORCE_CANONICAL_RUNNER_POLICY, ENFORCE_WORKFLOW_REUSE, RUN_GATES, COLLECT_FAILURE_SIGNATURE, SELF_HEAL_IF_SAFE, COUNTERPROOF, RECEIPT, CONTINUE_TO_FIXED_POINT]
+    status: CONTRACT_AND_CI_GATE
+  - event: STATE_CHANGED
+    owner: "#ACORDAR + continuity"
+    behavior: [INVALIDATE_STALE_ASSUMPTIONS, REMEASURE_LIVE_STATE, RECONCILE]
+    status: CONTRACT_DECLARED
+  - event: WRITER_CONFLICT
+    owner: "Trigger Fabric + writer ownership"
+    behavior: [ENTER_READ_ONLY, RENDEZVOUS, RESOLVE_OWNER_BEFORE_MUTATION]
+    status: CONTRACT_DECLARED
+  - event: BOUNDARY_TOUCHED
+    owner: "Trigger Fabric + applicable owner"
+    behavior: [STOP_PROPAGATION, PRESERVE_EVIDENCE, CONTAIN_AFFECTED_SCOPE, REMEASURE]
+    status: CONTRACT_DECLARED
+  - event: MATERIAL_UNKNOWN_AFFECTS_MUTATION
+    owner: "MetaLupa + applicable owner"
+    behavior: [BLOCK_AFFECTED_MUTATION_ONLY, FIND_EVIDENCE, PRESERVE_UNRELATED_SAFE_WORK]
+    status: CONTRACT_DECLARED
+  - event: PROOF_TARGET_MISMATCH
+    owner: "OUTPUT_GUARD + Reality Judge"
+    behavior: [INVALIDATE_VERDICT, MEASURE_CORRECT_TARGET]
+    status: CONTRACT_DECLARED
+  - event: ROLLBACK_UNPROVEN_FOR_MATERIAL_MUTATION
+    owner: "docs/CONSCIENCIA/EXECUCAO-REVERSIVEL.md"
+    behavior: [BLOCK_AFFECTED_MUTATION, PROVE_RECOVERY_PATH]
+    status: CONTRACT_DECLARED
+  - event: EVIDENCE_CONFLICT
+    owner: ".agents/skills/meta-lupa/"
+    behavior: [PRESERVE_CONFLICT, DISCRIMINATING_TEST]
+    status: CONTRACT_DECLARED
+  - event: MODEL_UNAVAILABLE
+    owner: "Trigger Fabric + engine capability measurement"
+    behavior: [MEASURE_ALTERNATIVE_ENGINE_CAPABILITY, SWITCH_ONLY_IF_SCOPE_CAPABILITY_PROVEN]
+    status: CONTRACT_DECLARED
+  - event: DEPENDENCY_FAILURE
+    owner: applicable_dependency_owner
+    behavior: [CLASSIFY_CRITICALITY, CRITICAL_FAIL_CLOSED_OR_CONTAIN, NONCRITICAL_DEGRADE_ONLY_IF_PROVEN]
+    status: CONTRACT_DECLARED
+  - event: MISSION_PENDING
+    owner: apps/modulos/HERMES-CORE/core/orchestrator.mjs
+    observed_interval: 5s
+    status: IMPLEMENTED_IN_REPO
+  - event: ORPHAN_MISSION
+    owner: apps/modulos/HERMES-CORE/core/orchestrator.mjs
+    observed_interval: 45s
+    status: IMPLEMENTED_IN_REPO
+  - event: GRAPH_REFRESH
+    owner: apps/modulos/HERMES-CORE/agents/GraphRAG-Master/agent.mjs
+    caller: apps/modulos/HERMES-CORE/core/orchestrator.mjs
+    observed_interval: 30m
+    status: IMPLEMENTED_IN_REPO
+  - event: DREAM_REVIEW
+    owner: scripts/memory-linker/dream-review-run.mjs
+    status: IMPLEMENTED_SCHEDULER_NOT_PROVEN
+  - event: VECTOR_MEMORY_REFRESH
+    owner: .agents/skills/vector-memory/SKILL.md
+    status: CONTRACT_ONLY_RUNTIME_NOT_PROVEN
+  - event: LEGACY_GC
+    owner: apps/modulos/HERMES-CORE/core/orchestrator.mjs
+    observed_interval: 6h
+    status: IMPLEMENTED_REQUIRES_SAFETY_RECONCILIATION
+  - event: PR_UPDATED_OR_MERGED
+    owner: existing_workflows
+    behavior: [REVALIDATE_HEAD, GATES, DERIVED_INDEX_OF_CANONICAL_CORPUS]
+    status: CONTRACT_DECLARED_EXISTING_WORKFLOWS_ONLY
+routing_rules:
+  - "NO_NEW_INFORMATION -> STOP"
+  - "UNKNOWN -> MEASURE_OR_SEARCH_REALITY"
+  - "SAME_TARGET_CONFLICT -> DISCRIMINATING_TEST"
+  - "MUTATION -> ONE_WRITER_PER_SCOPE"
+  - "PROOF_TARGET_MUST_MATCH_CLAIM"
+  - "SPEC != IMPLEMENTATION"
+  - "HISTORY != CURRENT_STATE"
+  - "ACTION != PROOF"
+  - "FRONTS_READ_ONLY_UNTIL_RENDEZVOUS"
+  - "BYTE_IDENTICAL -> PROCESS_ONCE_KEEP_PROVENANCE"
+  - "ENGINE_SWITCH != RESET"
+  - "MODEL_SWITCH -> CAPABILITY_CHECK_WHEN_MATERIAL"
+  - "NEW_EQUIVALENT_WORKFLOW -> FORBIDDEN_UPDATE_EXISTING"
+  - "WORKING_FORJA != PASS"
+  - "YELLOW_STATUS_SEMANTICS -> FORBIDDEN"
+  - "MATERIAL_OF_CHEFE_OR_AGENT -> MUST_ENTER_MILL_NO_SILENT_DROP"
+  - "MINER_NEVER_WRITES_CANONICAL_DIRECTLY"
+  - "GENERATIVE_OUTPUT_IS_CANDIDATE_NOT_AUTHORITY"
+  - "ARTIFACT_WITHOUT_REQUIRED_PROPERTIES -> NOT_FLASH_READY"
+  - "CANONICO -> ARTEFATO; ARTEFATO_NAO_INVENTA_CANONICO"
+  - "ANY_ACTIVE_ROOT_WORKFLOW -> SELF_HOSTED_PLATFORM"
+  - "DEFAULT_EXECUTOR -> SELF_HOSTED_LINUX"
+  - "GITHUB_HOSTED_RUNNER -> FAIL_CLOSED"
+  - "PLATFORM_EXCEPTION -> PROVE_CAPABILITY_REQUIREMENT + SELF_HOSTED_PLATFORM"
+  - "OPERATIONAL_FAILURE -> SIGNATURE + CAUSE + MINIMAL_REMEDIATION + RETEST + COUNTERPROOF + CRYSTAL"
+  - "SAME_FAILURE_NO_NEW_INFO -> REUSE_CRYSTAL"
+  - "KNOWN_HIDDEN_BYPASS -> BLOCK_OR_REMOVE_WITH_ROLLBACK + MAP_CONSUMERS + RETEST"
+  - "GLOBAL_HIDDEN_PATHS_ZERO_WITHOUT_DENOMINATOR -> NOT_PROVEN"
+  - "CRITICAL_DEPENDENCY_FAILURE -> FAIL_CLOSED_OR_CONTAIN"
+  - "NONCRITICAL_DEPENDENCY_FAILURE -> DEGRADE_ONLY_IF_PROVEN"
+  - "MASTER_TRIGGER -> EXPAND_CHAIN_NO_AUTHORITY_GAIN"
+  - "DELTA_UTILS -> USE_ONLY_INFORMATION_GAIN_ROUTE_TO_EXISTING_OWNER_ZERO_REGRESSION"
+  - "PAST_PR_DELTA -> ABSORB_USEFUL_ONLY_PRESERVE_PROVENANCE"

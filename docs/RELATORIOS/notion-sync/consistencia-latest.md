@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-08-18T02:11:39.056Z
-- **Commit:** `4706a9d0189b929e74c2ac9815de6735d36b1145`
+- **Gerado:** 2026-08-26T14:46:12.009Z
+- **Commit:** `eacdde22438035ef3f1609f1ef8e416009a12be9`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 39 | 39 | 39 | 0 | 0 |
-| aprendizados | 26 | 0 | 0 | 26 | 0 |
+| aprendizados | 30 | 0 | 0 | 30 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **26**
+- 🟥 Faltando no Notion: **30**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -74,4 +74,8 @@
 - 23. HTTP 200, PM2 online, DNS resolvendo ou painel verde não provam LIVE
 - 24. API paga é capacidade, não identidade nem caminho obrigatório
 - 25. “Menos é mais” significa menor movimento compatível com efeito, observabilidade e segurança
+- 26. Batch .bat: 4 armadilhas que passam em revisão superficial
+- 27. Grok App Builder é adapter, não cérebro — não scaffoldar app paralelo
+- 28. Ponte semântica fail-closed EXIT code=2 — não é verde; stderr engolido
+- 29. Dois mundos vivos: GitHub main 81bbfc7 ≠ VPS 5958d3ce27 (1252 atrás, dirty)
 </details>

@@ -1,8 +1,8 @@
 ---
 title: "Mapa Obsidian — BRAIN CentralDark"
 status: "NAVIGATION_ONLY"
-updated: 2026-08-16
-tags: ["brain", "obsidian", "mapa", "grafo", "moc"]
+updated: 2026-08-22
+tags: ["brain", "obsidian", "mapa", "grafo", "moc", "biblioteca"]
 ---
 
 # 🧠 Mapa Obsidian — BRAIN CentralDark
@@ -24,6 +24,7 @@ flowchart TD
     NOTAS["📝 07 · Reuniões & Notas"]
     REC["🔗 08 · Recursos / Memórias"]
     MORTO["🗄️ 09 · Arquivo Morto"]
+    LIB["📚 Biblioteca Cognitiva"]
 
     BRAIN --> MAPA
     BRAIN --> PEND
@@ -35,6 +36,7 @@ flowchart TD
     BRAIN --> NOTAS
     BRAIN --> REC
     BRAIN --> MORTO
+    DOC --> LIB
 
     MAPA --> GV["🕸️ Grafo Vivo"]
     MAPA --> BOTS["🤖 Mapa dos Bots"]
@@ -45,6 +47,10 @@ flowchart TD
     DOC --> TUTORIAL["📖 Tutorial Obsidian"]
     DOC --> PLUGINS["🧩 Plugins Obsidian"]
     DOC --> DIAG["📐 Diagramas CentralDark"]
+
+    LIB --> SEM["🔗 Semantic Linker"]
+    LIB --> FORJA["⛏️ Knowledge Compiler / FORJA"]
+    LIB --> REC
 
     REC --> MEM["💎 Aprendizados & Memórias"]
 
@@ -68,7 +74,8 @@ flowchart TD
 | bots e agentes | [[MAPA-DOS-BOTS]] | [[MOC-CentralDark-HubBot]], [[MOC-Skills]] |
 | GitHub e promoção | [[MOC-GitHub]] | decisões e documentação relacionadas |
 | ferramentas/MCP | [[MOC-MCP]] | [[02-ARQUITETURA]], [[MOC-Skills]] |
-| memória e aprendizado | [[BRAIN]] | `08 - Aprendizados & Memórias` |
+| memória e aprendizado | [[BRAIN]] | `07-APRENDIZADOS-MEMORIAS` |
+| fontes, livros e referências | [[BIBLIOTECA]] | [[SEMANTIC-LINKER]], Knowledge Compiler, aprendizados/memórias |
 | Obsidian físico da Casa | [[OBSIDIAN-CASA-SINCRONIZACAO]] | [[TUTORIAL-OBSIDIAN]] |
 | documentação visual | [[DIAGRAMAS-CENTRALDARK]] | [[GRAFO-VIVO]] |
 
@@ -84,6 +91,18 @@ INTENCAO
 → OWNER CANONICO
 → ESTADO VIVO QUANDO O CLAIM EXIGIR
 → CONTEXTO COMPRIMIDO
+```
+
+Para material de biblioteca:
+
+```text
+FONTE
+→ [[BIBLIOTECA]]
+→ FACETAS/TAGS
+→ WIKILINKS/BACKLINKS
+→ MOC RELEVANTE
+→ COGNICAO | SKILL_CANDIDATE | CONVERSA
+→ KNOWLEDGE COMPILER QUANDO HOUVER DELTA REUTILIZAVEL
 ```
 
 Não expandir o grafo inteiro por padrão. A beleza aqui é navegação útil, não contexto infinito.
@@ -107,6 +126,7 @@ Eles podem se cruzar por notas/owners, mas não devem ser confundidos nem fundid
 - [[BRAIN]] — entrada humana e regras de verdade.
 - [[00-MAPA]] — mapa geral reconciliado.
 - [[GRAFO-VIVO]] — topologia operacional observada.
+- [[BIBLIOTECA]] — fontes indexadas e rota cognitiva/semântica.
 - [[MOC-GitHub]] — GitHub, PRs e promoção.
 - [[MOC-MCP]] — ferramentas e integrações.
 - [[MOC-Skills]] — capacidades reutilizáveis.
@@ -115,4 +135,4 @@ Eles podem se cruzar por notas/owners, mas não devem ser confundidos nem fundid
 - [[OBSIDIAN-CASA-SINCRONIZACAO]] — topologia física/sync, separada do corpus repo-native.
 
 ---
-🔗 [[BRAIN]] · [[00-MAPA]] · [[GRAFO-VIVO]] · [[INDEX]]
+🔗 [[BRAIN]] · [[00-MAPA]] · [[GRAFO-VIVO]] · [[BIBLIOTECA]] · [[INDEX]]

@@ -1,5 +1,5 @@
-appId: com.stackblitz.bolt.diy
-productName: Bolt Local
+appId: com.centraldark.desktop
+productName: CentralDark
 directories:
   buildResources: build
   output: dist
@@ -55,10 +55,11 @@ npmRebuild: false
 
 publish:
   provider: github
-  owner: Derek-X-Wang
-  repo: bolt.local
+  owner: ServerVpss
+  repo: CentralDark
   private: true
   releaseType: release
 
 electronDownload:
   mirror: https://npmmirror.com/mirrors/electron/
+

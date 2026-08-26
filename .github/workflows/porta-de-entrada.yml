@@ -2,14 +2,14 @@ name: porta-de-entrada
 
 # Gate canônico: atualiza o mecanismo existente em vez de criar workflows
 # paralelos. Valida identidade, reconciliação, raiz única da CentralDark,
-# labels operacionais e a fronteira única da API.
+# labels operacionais, fronteira única da API e política global de executor.
 
 on:
   pull_request:
     branches: [main, program/centraldark-convergencia-omniroute-722]
     types: [opened, reopened, synchronize, ready_for_review, edited, labeled, unlabeled]
   push:
-    branches: [main]
+    branches: ['**']
   workflow_dispatch:
 
 permissions:
@@ -62,9 +62,17 @@ jobs:
             exit 1
           }
 
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-        with:
-          node-version: 24
+      - name: Setup Node 24 (fast path self-hosted)
+        uses: ./.github/actions/setup-node24-selfhosted
+
+      - name: Gate global — Trigger Fabric + runner policy + self-healing contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/trigger-fabric/verify_repo_contract.py . | tee "$RUNNER_TEMP/centraldark-contract.txt"
+          grep -q '^REPO_CONTRACT_VERIFY=PASS$' "$RUNNER_TEMP/centraldark-contract.txt"
+          grep -q '^CANONICAL_RUNNER_POLICY=PASS$' "$RUNNER_TEMP/centraldark-contract.txt"
+          grep -q '^SELF_HEALING_CONTRACT=PASS$' "$RUNNER_TEMP/centraldark-contract.txt"
 
       - name: Validar continuidade global e fronteira de autoridade da entrada
         run: node scripts/lupa/validar-continuidade-global.mjs
@@ -148,6 +156,7 @@ jobs:
             --export "$RUNNER_TEMP/CENTRALDARK-PORTABLE-KERNEL.json" \
             --json
           sha256sum "$RUNNER_TEMP/CENTRALDARK-PORTABLE-KERNEL.json"
+
       - name: Testar grafo finito de propriedade da prova
         run: node --test scripts/lupa/proof-ownership.test.mjs
 
@@ -156,6 +165,12 @@ jobs:
 
       - name: Testar Dream Review isolado do memory-linker
         run: node --test scripts/memory-linker/dream-review.test.mjs
+
+      - name: Testar biblioteca cognitiva, tags e referência contextual
+        run: |
+          set -euo pipefail
+          node --check scripts/memory-linker/library-router.mjs
+          node --test scripts/memory-linker/library-router.test.mjs
 
       - name: Validar sintaxe do Dream Review
         run: node --check scripts/memory-linker/dream-review.mjs
@@ -221,6 +236,7 @@ jobs:
         run: |
           set -uo pipefail
           status=0
+          python scripts/trigger-fabric/verify_repo_contract.py . || status=1
           node apps/modulos/mapeamento/core/validar-mapa.mjs \
             --repo-root "$GITHUB_WORKSPACE" \
             --base-sha "$BASE_SHA" \
@@ -255,7 +271,10 @@ jobs:
           set -euo pipefail
           echo "HEAD_SHA=${HEAD_SHA}"
           echo "EVENT_NAME=${EVENT_NAME}"
-          echo "EXECUTOR=self-hosted"
+          echo "EXECUTOR=self-hosted-linux"
+          echo "RUNNER_POLICY_SCOPE=ALL_ROOT_WORKFLOWS"
+          echo "GITHUB_HOSTED_RUNNER_ALLOWED=0"
+          echo "ANY_BRANCH_PUSH_GATED=1"
           echo "ROTA_PRIMARIA=self-hosted-linux"
           echo "ROTA_FALLBACK=BLOCKED_NO_HOSTED"
           echo "CENTRALDARK_ROOT_ONLY=1"
@@ -273,9 +292,12 @@ jobs:
           echo "UNREGISTERED_INVARIANT=UNPROVEN_NOT_OWNED"
           echo "DREAM_REVIEW_ISOLATED=1"
           echo "DREAM_DIRECT_CANONICAL_MUTATION=0"
+          echo "LIBRARY_COGNITION_ROUTER=1"
           echo "GIT_STATE_SAFETY_GATE=1"
           echo "GIT_FORCE_PUSH_ALLOWED=0"
           echo "GIT_RESET_HARD_OPERATIONAL_ALLOWED=0"
+          echo "SELF_HEALING_CONTRACT_REQUIRED=1"
+          echo "NODE24_FAST_PATH=1"
           echo "JOB_STATUS=${JOB_STATUS}"
           if [ "${FORK_BLOCKED:-}" = "true" ]; then
             echo "RESULTADO=BLOCKED"
@@ -291,4 +313,3 @@ jobs:
             echo "RESULTADO=BLOCKED"
             echo "CAUSE=UNKNOWN_STATUS_${JOB_STATUS}"
           fi
-          # UNKNOWN/SKIPPED/empty nunca viram PASS por este receipt.

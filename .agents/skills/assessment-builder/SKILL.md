@@ -50,5 +50,3 @@ rubric:
 - Use for code reviews, architecture reviews, agent evaluations
 - Results → `knowledge-compiler` for pattern crystallization
 - Track scores over time → trend analysis
-EOF
-echo "assessment-builder SKILL.md criado"

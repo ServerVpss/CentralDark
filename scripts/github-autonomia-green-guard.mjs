@@ -2,16 +2,17 @@
 /**
  * Green-first guard para a promoção canônica.
  *
- * Gate determinístico SEMPRE ligado (decisão do SEGREDO/CHEFE, 2026-08-21):
- * todo candidato READY passa por esta catraca, inclusive o fast path
- * AUTO_SQUASH_IF_CLEAN. Antes, o modo FAST pulava a revalidação e registrava
- * SKIP_FAST — ou seja, o caminho mais usado promovia sem exigir que os gates
- * obrigatórios estivessem verdes no MESMO PR e no MESMO HEAD. Isso é a porta
- * do falso verde e foi fechada.
+ * Dois denominadores explícitos:
+ * - FAST / AUTO_SQUASH_IF_CLEAN: o juiz já executou os gates causais síncronos
+ *   (autoridade, mesmo repo, segredo/caminho sensível, canonical map/consumers,
+ *   conflito, CHANGES_REQUESTED, HEAD/base). Workflows auxiliares não pertencem
+ *   ao denominador FAST e runner lento não pode transformar WAIT em bloqueio.
+ * - ADVERSARIAL: exige a régua completa dos workflows obrigatórios no mesmo PR
+ *   e no mesmo HEAD.
  *
- * Regra única: somente runs de pull_request do mesmo PR + mesmo HEAD, com a
- * invocação mais nova de cada gate realmente concluída em success, chegam ao
- * promotor. UNKNOWN, PENDING, SKIPPED e MISSING nunca são PASS.
+ * Isto NÃO converte PENDING/SKIPPED/MISSING em PASS. Quando a catraca é
+ * aplicável, todos continuam fail-closed. No FAST ela simplesmente não é parte
+ * da prova escolhida pela política autorizada.
  */
 import { mkdir, readFile, readdir, rename, writeFile } from "node:fs/promises";
 import { basename, join, resolve } from "node:path";
@@ -38,11 +39,12 @@ export function parseCsv(value, fallback = []) {
 }
 
 /**
- * Gate determinístico sempre: qualquer candidato READY é revalidado.
- * O modo (FAST/ADVERSARIAL) deixou de isentar a catraca.
+ * FAST autorizado segue pelo denominador causal do juiz e não espera runners
+ * auxiliares. Qualquer modo desconhecido continua conservador e usa green-first.
  */
 export function shouldEnforceGreenFirst(candidate) {
-  return candidate?.decision === "READY";
+  if (candidate?.decision !== "READY") return false;
+  return candidate?.mode !== "FAST";
 }
 
 export function runBelongsToPullHead(run, prNumber, headSha) {
@@ -87,7 +89,7 @@ async function api(token, method, path) {
       Authorization: `Bearer ${token}`,
       Accept: "application/vnd.github+json",
       "X-GitHub-Api-Version": "2022-11-28",
-      "User-Agent": "centraldark-autonomia-green-guard/2.0",
+      "User-Agent": "centraldark-autonomia-green-guard/2.1",
     },
   });
   const text = await response.text();
@@ -129,14 +131,20 @@ export async function main(env = process.env) {
   let checked = 0;
   let passed = 0;
   let deferred = 0;
-  const fastSkipped = 0;
+  let fastSkipped = 0;
   for (const name of names) {
     const path = join(sweepDir, name);
     const document = JSON.parse(await readFile(path, "utf8"));
     const candidate = document?.receipt?.candidates?.[0];
     if (!candidate || candidate.decision !== "READY") continue;
 
-    if (!shouldEnforceGreenFirst(candidate)) continue;
+    if (!shouldEnforceGreenFirst(candidate)) {
+      if (candidate.mode === "FAST") {
+        fastSkipped += 1;
+        console.log(`GREEN_GUARD=SKIP_FAST_CAUSAL PR=${candidate.pr_number || "UNKNOWN"} HEAD=${candidate.head_sha || "UNKNOWN"} AUXILIARY_RUNNERS_BLOCK=0`);
+      }
+      continue;
+    }
 
     const pr = Number(candidate.pr_number || 0);
     const head = String(candidate.head_sha || "");
@@ -157,7 +165,7 @@ export async function main(env = process.env) {
     const target = join(deferredDir, name);
     await rename(path, target);
     await writeFile(`${target}.green-guard.json`, `${JSON.stringify({
-      schema: "centraldark.green-first.v2",
+      schema: "centraldark.green-first.v3",
       pr_number: pr,
       head_sha: head,
       mode: candidate.mode || "UNKNOWN",
@@ -167,7 +175,7 @@ export async function main(env = process.env) {
     console.log(`GREEN_GUARD=DEFER PR=${pr} HEAD=${head} MODE=${candidate.mode || "UNKNOWN"} ${compact}`);
   }
 
-  console.log(`GREEN_GUARD_SUMMARY checked=${checked} pass=${passed} deferred=${deferred} fast_skipped=${fastSkipped} enforce=ALWAYS`);
+  console.log(`GREEN_GUARD_SUMMARY checked=${checked} pass=${passed} deferred=${deferred} fast_skipped=${fastSkipped} enforce=ADVERSARIAL_ONLY fast_policy=CAUSAL_READY`);
   if (deferred > 0) throw new Error(`GREEN_GUARD_DEFERRED:${deferred}`);
   return { checked, passed, deferred, fastSkipped };
 }

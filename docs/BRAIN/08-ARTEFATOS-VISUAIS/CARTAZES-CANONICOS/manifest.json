@@ -1,0 +1,127 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "schema_version": 1,
+  "canon_id": "centraldark.visual-posters.v1",
+  "title": "Cartazes canônicos da CentralDark",
+  "observed_at": "2026-08-24T00:00:00-03:00",
+  "authority": {
+    "human_intent": "SEGREDO/CHEFE",
+    "canonical_brain": "Git/GitHub: docs/BRAIN + owners de governança",
+    "second_brain": "CASA-VAULT/00-CANONICO como espelho; nunca autoridade paralela",
+    "executor": "HERMES/PIVETE",
+    "coordinator": "SOL",
+    "rule": "ONE_SYSTEM_ONLY"
+  },
+  "public_status_contract": {
+    "PROVED": "green",
+    "FAILED_OR_BLOCKED": "red",
+    "NOT_PROVEN": "black",
+    "QUARANTINED": "lock",
+    "FORGE_IN_PROGRESS": "fire",
+    "internal_processing_note": "yellow may exist inside the motor only; it must never be exported as a public PASS"
+  },
+  "canonical_count": 4,
+  "canonical_root": "docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS",
+  "owners": {
+    "visual_method": ".agents/skills/visual-design-method/SKILL.md",
+    "design_system": "docs/CONSCIENCIA/ARQUITETURA/DESIGN-SISTEMA.md",
+    "semantic_linking": "docs/CONSCIENCIA/ARTEFATOS/TECNICAS-DE-LINKAGEM-SEMANTICA.md",
+    "house_sync": "docs/ARQUITETURA/HERMES-CASA-OBSIDIAN-SYNC.md",
+    "canonical_map": "docs/CONSCIENCIA/MAPA-DO-CEREBRO.md"
+  },
+  "projections": {
+    "obsidian": "E:\\CentralDark\\Pivete\\CASA-VAULT\\00-CANONICO",
+    "vector_memory": ".agents/skills/vector-memory/SKILL.md",
+    "knowledge_compiler": ".agents/skills/knowledge-compiler/contract.json",
+    "graph_runtime": "scripts/grafo-vivo/gerar-grafo-vivo.mjs",
+    "graph_panel": "apps/modulos/graph-panel",
+    "graphrag": "apps/modulos/HERMES-CORE/agents/GraphRAG-Master/agent.mjs"
+  },
+  "artifacts": [
+    {
+      "id": "CD-POSTER-01-PAPAGAIO",
+      "title": "A Casa que aprendeu a não acreditar em papagaio",
+      "path": "docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/01-casa-nao-acredita-em-papagaio.webp",
+      "sha256": "760e52fa9b6e32e3c9941c78999c0ba9435b0ab5dd3969f31bb76f14603c8671",
+      "source_sha256": "f2a6dc3a3c00faf394c94aee0e2f6ff551de5941504e45fdfbf708972af990a6",
+      "storage": "WEBP_Q92_DERIVATIVE",
+      "width": 1055,
+      "height": 1491,
+      "source_class": "USER_PROVIDED_VISUAL_WITNESS",
+      "semantic_role": "epistemic-firewall",
+      "claims": ["UNKNOWN != PASS", "evidence before delivery", "CHEFE intends; SOL coordinates; HERMES executes"],
+      "relations": [
+        {"type": "owned-by", "target": ".agents/skills/visual-design-method/SKILL.md"},
+        {"type": "governed-by", "target": "LEIA-ME-IA.md"},
+        {"type": "explains", "target": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json"},
+        {"type": "mirrored-by", "target": "docs/ARQUITETURA/HERMES-CASA-OBSIDIAN-SYNC.md"}
+      ]
+    },
+    {
+      "id": "CD-POSTER-02-CAJADO",
+      "title": "O cajado da correção",
+      "path": "docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/02-cajado-da-correcao.webp",
+      "sha256": "054fcdb06b08aa6df5a7a971239b3b572459d1f3af33e64e7ca4e9ec973b94cf",
+      "source_sha256": "aa6df10ef3a45b675e4a526b8c02354911c7e7887b0e3d1767476ea960a92421",
+      "storage": "WEBP_Q92_DERIVATIVE",
+      "width": 1122,
+      "height": 1402,
+      "source_class": "USER_PROVIDED_VISUAL_WITNESS",
+      "semantic_role": "canonical-artifact-pipeline",
+      "claims": ["zero regression", "same visual family", "editable structure", "portable package"],
+      "relations": [
+        {"type": "owned-by", "target": ".agents/skills/visual-design-method/SKILL.md"},
+        {"type": "governed-by", "target": "docs/CONSCIENCIA/ARQUITETURA/DESIGN-SISTEMA.md"},
+        {"type": "explains", "target": "docs/CONSCIENCIA/ARTEFATOS/TECNICAS-DE-LINKAGEM-SEMANTICA.md"},
+        {"type": "mirrored-by", "target": "docs/ARQUITETURA/HERMES-CASA-OBSIDIAN-SYNC.md"}
+      ]
+    },
+    {
+      "id": "CD-POSTER-03-TRAJETORIA",
+      "title": "Trajetória vivida",
+      "path": "docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/03-trajetoria-vivida.webp",
+      "sha256": "7af633220155cc3a0849fd8cfe9184260eb4154fb2e4bcd2f445c4436b19f69b",
+      "source_sha256": "7a690293bda021bc3b708fab079bf7d3136af8d35f73476efc5b72f6287a973b",
+      "storage": "WEBP_Q92_DERIVATIVE",
+      "width": 1024,
+      "height": 1536,
+      "source_class": "USER_PROVIDED_VISUAL_WITNESS",
+      "semantic_role": "learning-loop",
+      "claims": ["observe", "err", "prove", "learn", "tell", "continue"],
+      "relations": [
+        {"type": "owned-by", "target": ".agents/skills/visual-design-method/SKILL.md"},
+        {"type": "governed-by", "target": "AGENTS.md"},
+        {"type": "complements", "target": "docs/CONSCIENCIA/MAPA-DO-CEREBRO.md"},
+        {"type": "mirrored-by", "target": "docs/ARQUITETURA/HERMES-CASA-OBSIDIAN-SYNC.md"}
+      ]
+    },
+    {
+      "id": "CD-POSTER-04-ARQUITETURA",
+      "title": "Arquitetura operacional da Casa",
+      "path": "docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/04-arquitetura-operacional.webp",
+      "sha256": "c6bc946fda8604f095678929439d589c0bbab800c5fdbca25fc89d8676be24fe",
+      "source_sha256": "cb40234e9c84147f04fac967a58a9d5e80b7765034ab66c3965f0e400f283d5a",
+      "storage": "WEBP_Q92_DERIVATIVE",
+      "width": 1536,
+      "height": 1024,
+      "source_class": "USER_PROVIDED_VISUAL_WITNESS",
+      "semantic_role": "operational-topology",
+      "claims": ["ONE_SYSTEM_ONLY", "REUSE_BEFORE_CREATE", "one canonical truth with rebuildable projections"],
+      "relations": [
+        {"type": "owned-by", "target": "docs/CONSCIENCIA/MAPA-DO-CEREBRO.md"},
+        {"type": "governed-by", "target": "LEIA-ME-IA.md"},
+        {"type": "explains", "target": ".agents/skills/knowledge-compiler/contract.json"},
+        {"type": "mirrored-by", "target": "docs/ARQUITETURA/HERMES-CASA-OBSIDIAN-SYNC.md"}
+      ]
+    }
+  ],
+  "observed_projection": {
+    "id": "CD-GRAPH-OBSERVED-20260824",
+    "path": "docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/semantic-graph-observed-20260824.png",
+    "sha256": "12ea66a2259ca4bc3b04c76de317fbdf4bbe694444cb97975fe5a2c067f28d20",
+    "width": 645,
+    "height": 652,
+    "authority": "DERIVED_PROJECTION_REFERENCE",
+    "rule": "may evidence topology; may not overwrite canonical owners"
+  }
+}

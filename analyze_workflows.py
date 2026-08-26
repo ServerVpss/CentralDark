@@ -6,7 +6,7 @@ import subprocess
 import concurrent.futures
 
 TOKEN = os.getenv("GH_TOKEN")
-REPO = "ServerVpss/CentralDark1VPS"
+REPO = "ServerVpss/CentralDarkVPS"
 # vps-healthcheck.yml mapping to sync-healthcheck.yml based on context
 EXCLUDE = ["sync-healthcheck.yml", "vigia-actions-vermelhos.yml", "vps-ssh-exec.yml"]
 

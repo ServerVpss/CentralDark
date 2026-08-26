@@ -99,10 +99,62 @@ Já existentes em `src/index.css`:
 | Auth / Portal | ✅ |
 | Landings de módulos (WhatsApp, CRM, Financeiro) | ✅ |
 
+## Temas globais oficiais (decisão do SEGREDO/CHEFE, 2026-08-24)
+
+```text
+CENTRALDARK_VISUAL_MODEL =
+  ONE_DESIGN_SYSTEM
+  + THREE_GLOBAL_OFFICIAL_THEMES
+
+THEMES=[emerald, operational, forge]
+THEME_SCOPE=APPLICATION_GLOBAL
+EVERY_CENTRALDARK_PAGE_INHERITS_ACTIVE_THEME=true
+THEME_SWITCH != REDESIGN
+```
+
+Não são três estilos para escolher "qual serve melhor para este artefato" —
+são três peles sempre disponíveis no seletor global. Estrutura, layout,
+componentes, navegação e conteúdo não mudam entre elas; só os valores de
+token trocam. `emerald` continua o tema padrão atual.
+
+| Tema | Registro | Fonte real |
+| --- | --- | --- |
+| `emerald` (default) | Institucional — verde esmeralda escuro, Geist | Este doc + `src/index.css` |
+| `operational` | HUD/controle — navy + ciano + vermelho de alerta | Cartão operacional (5 etapas) |
+| `forge` | Premium/lendário — shell preto/marrom, bordas bronze-dourado, tipografia mono dourada, interior pergaminho/foil claro | `.agents/skills/visual-design-method/assets/forja-de-cartas.html` (`sha256:e8f4016dcf8b2b6f9806d8ef29a5105506ef5eba5225f3aeff9b78bcb301f348`) |
+
+### Owners/consumidores vivos por superfície
+
+Reusar estes — não criar segundo sistema de design nem árvore de tokens paralela:
+
+| Superfície | Owner | Estado medido em 2026-08-24 |
+| --- | --- | --- |
+| App principal / TelePainel / portal | `src/shared/theme/ThemeProvider.tsx`, `ThemeToggle.tsx`, `src/index.css` | Só `light/dark/system`; falta dimensão de paleta |
+| Bolt / Hermes Desktop | `apps/modulos/Bolt/source/app/lib/stores/theme.ts`, `app/styles/variables.scss` | `emerald` é o default de perfil novo; `dark/light/operational/forge` continuam selecionáveis; build/render ainda precisam provar cobertura física |
+| Hub | `apps/modulos/hub/src/App.tsx` | Força tema claro; ainda sem mecanismo de tema |
+| Open WebUI | `apps/modulos/WebUI/custom-css/esmeralda.css` | Só Esmeralda, força light |
+
+`GLOBAL_COVERAGE` só é verdadeiro quando as 4 superfícies acima consumirem o
+mesmo `ThemeId` e o mesmo conjunto de tokens semânticos. Enquanto isso não
+estiver provado (build + render real de cada superfície nos 3 temas), tratar
+como `PARTIAL_COVERAGE`, nunca como concluído.
+
+
+## Cartazes canônicos e memória visual
+
+Os quatro cartazes aprovados pelo SEGREDO/CHEFE são testemunhas visuais do
+mesmo design system e estão catalogados em
+[`docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/`](../../BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/README.md).
+O `manifest.json` dessa pasta fixa hashes, proveniência e relações semânticas.
+Eles não criam paleta, runtime ou autoridade paralela: este documento continua
+o owner de design; a skill `visual-design-method` governa o método; índices e
+grafos são projeções reconstruíveis.
+
 ## Quando criar visual novo
 
 1. Confirmar com o usuário antes
-2. Adicionar tokens novos em `src/index.css` (light + dark)
+2. Adicionar tokens novos em `src/index.css` (light + dark) — e, quando for
+   token de paleta, também em `operational`/`forge`
 3. Adicionar utilitário em `src/index.css` se for reutilizável
 4. Atualizar este doc
 5. Atualizar memory `mem://design/sistema-3d-tatil` se mudou regra

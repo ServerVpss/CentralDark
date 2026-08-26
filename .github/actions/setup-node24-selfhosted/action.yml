@@ -1,0 +1,64 @@
+name: Setup Node 24 (self-hosted fast)
+description: >
+  Reusa Node 24 do sistema ou do tool-cache do runner persistente.
+  Só chama actions/setup-node quando não há hit — evita download em todo job.
+
+runs:
+  using: composite
+  steps:
+    - name: Detect Node 24 (system ou tool-cache)
+      id: detect
+      shell: bash
+      run: |
+        set -euo pipefail
+        hit=miss
+
+        if command -v node >/dev/null 2>&1; then
+          ver="$(node -v 2>/dev/null || true)"
+          if [[ "$ver" == v24.* ]]; then
+            echo "NODE_HIT=system version=$ver path=$(command -v node)"
+            echo "hit=system" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "NODE_PRESENT_NOT_24 version=$ver"
+        fi
+
+        tc="${RUNNER_TOOL_CACHE:-}"
+        if [[ -z "$tc" && -n "${AGENT_TOOLSDIRECTORY:-}" ]]; then
+          tc="$AGENT_TOOLSDIRECTORY"
+        fi
+        if [[ -n "$tc" && -d "$tc/node" ]]; then
+          # Prefer exact 24.x binary already extracted by setup-node
+          while IFS= read -r bin; do
+            [[ -z "$bin" ]] && continue
+            if "$bin" -v 2>/dev/null | grep -q '^v24\.'; then
+              dir="$(cd "$(dirname "$bin")" && pwd)"
+              echo "$dir" >> "$GITHUB_PATH"
+              echo "NODE_HIT=toolcache path=$bin"
+              echo "hit=toolcache" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+          done < <(find "$tc/node" -type f -name node 2>/dev/null | head -n 20)
+        fi
+
+        echo "NODE_HIT=miss — setup-node will download once"
+        echo "hit=miss" >> "$GITHUB_OUTPUT"
+
+    - name: Install Node 24 only on cache miss
+      if: steps.detect.outputs.hit == 'miss'
+      uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      with:
+        node-version: "24"
+        check-latest: false
+
+    - name: Prove Node 24 on PATH
+      shell: bash
+      run: |
+        set -euo pipefail
+        command -v node
+        ver="$(node -v)"
+        echo "NODE_VERSION=$ver"
+        case "$ver" in
+          v24.*) echo "NODE24_READY=1" ;;
+          *) echo "NODE24_READY=0 unexpected=$ver"; exit 1 ;;
+        esac

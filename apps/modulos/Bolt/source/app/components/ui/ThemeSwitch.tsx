@@ -19,8 +19,18 @@ const THEME_CONFIG: Record<Theme, { label: string; next: string; icon: string }>
   },
   emerald: {
     label: 'Esmeralda',
-    next: 'Escuro',
+    next: 'Operacional',
     icon: 'i-ph-leaf-duotone',
+  },
+  operational: {
+    label: 'Operacional',
+    next: 'Forja',
+    icon: 'i-ph-broadcast-duotone',
+  },
+  forge: {
+    label: 'Forja',
+    next: 'Escuro',
+    icon: 'i-ph-fire-duotone',
   },
 };
 
@@ -49,7 +59,11 @@ export const ThemeSwitch = memo(({ className }: ThemeSwitchProps) => {
             ? '#0a0a0a'
             : t === 'light'
               ? '#f5f5f5'
-              : 'hsl(152 65% 32%)';
+              : t === 'emerald'
+                ? 'hsl(152 65% 32%)'
+                : t === 'operational'
+                  ? '#4fc3ff'
+                  : '#c0902b';
 
         return (
           <button

@@ -18,7 +18,9 @@ jobs:
   generate:
     name: Gerar e provar lockfile com Node 24/npm 11
     if: github.repository == 'ServerVpss/CentralDark' && github.event.pull_request.head.repo.full_name == github.repository
-    runs-on: windows-latest
+    # Esta capacidade é realmente Windows-específica (@esbuild/win32-x64).
+    # Política da Casa: plataforma específica continua sendo SELF-HOSTED; nunca GitHub-hosted.
+    runs-on: [self-hosted, Windows, X64]
     timeout-minutes: 15
     defaults:
       run:
@@ -37,6 +39,14 @@ jobs:
           cache: npm
           cache-dependency-path: apps/modulos/mcp/package-lock.json
 
+      - name: Provar capacidade Windows antes de gerar
+        run: |
+          Set-StrictMode -Version Latest
+          $ErrorActionPreference = 'Stop'
+          if ($env:RUNNER_OS -ne 'Windows') { throw "WINDOWS_SELF_HOSTED_REQUIRED runner_os=$env:RUNNER_OS" }
+          Write-Host "EXECUTOR=self-hosted-windows-x64"
+          Write-Host "CAPABILITY=@esbuild/win32-x64"
+
       - name: Gerar lockfile com dependências opcionais (Windows nativo)
         working-directory: apps/modulos/mcp
         run: |
@@ -44,9 +54,7 @@ jobs:
           $ErrorActionPreference = 'Stop'
           node --version
           npm --version
-          # Remove lockfile existente para forçar regeneração completa
           Remove-Item -Force -ErrorAction SilentlyContinue package-lock.json
-          # Instala tudo incluindo dependências opcionais DO WINDOWS (ex: @esbuild/win32-x64)
           npm install --include=optional --ignore-scripts --no-audit --no-fund --legacy-peer-deps
 
       - name: Verificar dependências opcionais @esbuild/* (Windows)

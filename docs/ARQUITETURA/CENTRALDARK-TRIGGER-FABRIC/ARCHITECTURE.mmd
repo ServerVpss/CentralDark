@@ -1,0 +1,46 @@
+flowchart TD
+  CHEFE["SEGREDO / CHEFE\nINTENÇÃO + DESTINO"] --> LOCK["DESTINATION LOCK"]
+  LOCK --> ENTRY["BOT / AGENT ENTRY"]
+  ENTRY --> BOOT["CENTRALDARK_AI_BOOT"]
+  BOOT --> AC["#ACORDAR\nA1..A5"]
+  AC --> CAL["!CALIBRAR\nC1..C5"]
+  CAL --> MB["!MULTIBUSSOLA\nTOP-DOWN ↕ BOTTOM-UP ↔ ROUND-TRIP"]
+  MB --> RENDEZVOUS["RENDEZVOUS\nnormalize + dedupe + conflito + teste"]
+  RENDEZVOUS --> META["!META_LUPA\nFRIA | MÉDIA | QUENTE"]
+  META --> ROUTE["ROTEAR PARA OWNER EXISTENTE"]
+  ROUTE --> HERMES["Hermes Core"]
+  ROUTE --> GRAPH["GraphRAG Master"]
+  ROUTE --> MEMORY["Memory Linker\nDream Review + Pattern Discovery"]
+  ROUTE --> HARVEST["Session Harvester"]
+  ROUTE --> KNOW["Knowledge Compiler"]
+  ROUTE --> VECTOR["Vector Memory\nRUNTIME NOT_PROVEN"]
+  ROUTE --> EYE["OLHO BIÔNICO ANTI-FLASH\nperfil visual da mesma Trigger Fabric"]
+  EYE --> VINGEST["ASSAY + EXIF + ALIGNMENT\nRAW/TIFF/JPEG/FRAME"]
+  VINGEST --> VPRE["NOISE REDUCTION + STABILIZATION + NORMALIZATION"]
+  VPRE --> VISION["VISION DETECTION\nreflective surfaces + flash hotspots"]
+  VISION --> VFUSE["LOCAL FUSION\nambient source + mask + inpainting"]
+  VFUSE --> VQA["QA\nedge/white balance/histogram/SSIM when applicable"]
+  VQA --> VDERIVED["DERIVED OUTPUT\nsource binding + hash + unknown regions"]
+  VDERIVED --> WRITER
+  HERMES --> WRITER["ONE WRITER PER SCOPE"]
+  GRAPH --> WRITER
+  MEMORY --> WRITER
+  HARVEST --> WRITER
+  KNOW --> WRITER
+  VECTOR --> WRITER
+  WRITER --> EXEC["EXECUTE MINIMAL DELTA"]
+  EXEC --> GUARD["OUTPUT GUARD\nclaim↔proof · time/head · false-green · arithmetic · history/current"]
+  GUARD --> TEST["TEST + COUNTERPROOF"]
+  TEST --> JUDGE["REALITY JUDGE"]
+  JUDGE -->|PROVEN| CRYSTAL["RECEIPT + CRYSTAL + LEARNING"]
+  JUDGE -->|FAILED| REMED["REMEDIATE"]
+  JUDGE -->|UNKNOWN| SEEK["MEASURE / SEARCH REALITY"]
+  REMED --> RENDEZVOUS
+  SEEK --> RENDEZVOUS
+  CRYSTAL --> NEXT["LAST_GOOD_STATE → NEXT_CURSOR → NEXT BOOT"]
+  NEXT --> ENTRY
+  ENTRY -. contract .-> ENGINE["ENGINE_BINDING\nMODEL != OWNER"]
+  GUARD -. CI .-> CI["porta-de-entrada + autonomia-promocao + trigger-fabric-package\nREUSE WORKFLOWS"]
+  CI -. labels .-> LABELS["👑 PERMITO-SEGREDO = autoridade\n✅ PR CONFIRMADO = resultado derivado"]
+  VQA -. mirror only after gate .-> MONITORS["MONITORES DA CASA\npreview/painel = observação, não autoridade"]
+  CRYSTAL -. drift .-> EYE

@@ -83,17 +83,21 @@ export const Artifact = memo(({ artifactId }: ArtifactProps) => {
         <div className="flex">
           <button
             className="flex items-stretch bg-bolt-elements-artifacts-background hover:bg-bolt-elements-artifacts-backgroundHover w-full overflow-hidden"
+            style={{ color: 'var(--bolt-elements-artifacts-textPrimary)' }}
             onClick={() => {
               const showWorkbench = workbenchStore.showWorkbench.get();
               workbenchStore.showWorkbench.set(!showWorkbench);
             }}
           >
             <div className="px-5 p-3.5 w-full text-left">
-              <div className="w-full text-bolt-elements-textPrimary font-medium leading-5 text-sm">
+              <div className="w-full font-medium leading-5 text-sm">
                 {/* Use the dynamic title here */}
                 {dynamicTitle}
               </div>
-              <div className="w-full w-full text-bolt-elements-textSecondary text-xs mt-0.5">
+              <div
+                className="w-full text-xs mt-0.5"
+                style={{ color: 'var(--bolt-elements-artifacts-textSecondary)' }}
+              >
                 Click to open Workbench
               </div>
             </div>
@@ -107,6 +111,7 @@ export const Artifact = memo(({ artifactId }: ArtifactProps) => {
                 exit={{ width: 0 }}
                 transition={{ duration: 0.15, ease: cubicEasingFn }}
                 className="bg-bolt-elements-artifacts-background hover:bg-bolt-elements-artifacts-backgroundHover"
+                style={{ color: 'var(--bolt-elements-artifacts-textPrimary)' }}
                 onClick={toggleActions}
               >
                 <div className="p-4">

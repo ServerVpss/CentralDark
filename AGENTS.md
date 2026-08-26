@@ -15,6 +15,8 @@ SOL_FREQUENCY_CONTRACT=docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/FREQUENCIAS-OPERA
 META_LUPA_FOR_CRITICAL_SCOPE=SIM
 META_LUPA_PATH=.agents/skills/meta-lupa/SKILL.md
 META_LUPA_IDENTITY_PATH=.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA
+ESTEIRA_MOTOR_FOR_DEPLOY_RUNNER_HERMES=SIM
+ESTEIRA_MOTOR_PATH=.agents/skills/centraldark-esteira-motor/SKILL.md
 RECONCILIATION_CONTRACT=docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json
 ```
 
@@ -29,8 +31,9 @@ Antes de responder ou agir:
 7. Ler `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` quando a missão precisar de coordenação.
 8. Ler `.agents/skills/meta-lupa/SKILL.md` quando o risco exigir falsificação crítica.
 9. Conferir `.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA` quando a MetaLupa for carregada.
-10. Medir branch, HEAD, PR, runtime, writer e tools aplicáveis.
-11. Emitir uma vez o `CENTRALDARK_AI_BOOT` de `LEIA-ME-IA.md`.
+10. Ler `.agents/skills/centraldark-esteira-motor/SKILL.md` quando a missão envolver Hermes/PM2, runner self-hosted, fila Actions, deploy VPS, ou diagnóstico motor × esteira (MOTOR != ESTEIRA).
+11. Medir branch, HEAD, PR, runtime, writer e tools aplicáveis.
+12. Emitir uma vez o `CENTRALDARK_AI_BOOT` de `LEIA-ME-IA.md`.
 
 ## Identidade
 

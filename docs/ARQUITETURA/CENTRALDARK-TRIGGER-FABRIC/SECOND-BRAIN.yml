@@ -1,0 +1,62 @@
+schema: centraldark.second-brain.v1
+owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/
+status: CANONICAL_CONTRACT
+source_rule: "CANONICO -> ARTEFATO; artefato nao inventa canonico"
+
+# Intenção SEGREDO/CHEFE: um Segundo Cérebro lógico, nunca paralelo.
+second_brain:
+  logical: ONE
+  parallel_forbidden: true
+  surfaces:
+    github_canonical:
+      role: SOURCE_OF_TRUTH_AND_MEMORY_LAYER
+      paths:
+        - docs/CONSCIENCIA/
+        - docs/ARQUITETURA/
+        - .agents/skills/
+        - AGENTS.md
+        - LEIA-ME-IA.md
+      is_authority: true
+    local_obsidian_files:
+      role: CAPTURE_WORK_AND_CONSULT_SURFACE
+      is_authority: false
+      is_parallel_brain: false
+      material_enters_mill: true
+    derived_graph_vector:
+      role: DERIVED_INDEX_ONLY
+      owners:
+        - apps/modulos/HERMES-CORE/agents/GraphRAG-Master/
+        - .agents/skills/vector-memory/
+      is_authority: false
+      rebuildable: true
+
+invariants:
+  SECOND_BRAIN_LOGICAL_ONE: true
+  GITHUB_IS_NOT_JUST_OUTPUT: true
+  LOCAL_IS_NOT_PARALLEL_BRAIN: true
+  GRAPH_VECTOR_ARE_DERIVED_INDEXES: true
+  NEW_SECOND_BRAIN: false
+  NEW_AUTOBOT_V2: false
+  NEW_PARALLEL_RAG: false
+  NEW_PARALLEL_MCP: false
+
+pipeline:
+  matter_or_event:
+    - TRIGGER_FABRIC
+    - SESSION_INTELLIGENCE_HARVESTER
+    - MEMORY_LINKER
+    - KNOWLEDGE_COMPILER_FORJA
+    - OWNER_SKILL_CONSUMER_TEST_GATE
+    - GITHUB_CANONICAL_OR_CRYSTAL_BY_CLASSIFICATION
+    - VECTOR_MEMORY_DERIVED_INDEX
+    - GRAPH_RAG_HYBRID
+    - HERMES_FLASH
+    - MINIMAL_ACTION
+    - PROOF_COUNTERPROOF_REALITY
+    - LEARNING_EVENT
+
+promotion:
+  miner_writes_canonical: false
+  generative_is_candidate: true
+  flash_requires_crystal_complete: true
+  package_pass_is_runtime_pass: false

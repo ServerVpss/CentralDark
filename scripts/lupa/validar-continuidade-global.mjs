@@ -15,6 +15,7 @@ const CONTRACT = "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json";
 const EXTENSION = "docs/CONSCIENCIA/EXECUCAO-CONTINUA-OWNER-WRITER-CONNECTOR.json";
 const PORTA_VIVA = "docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md";
 const GATE = ".github/workflows/porta-de-entrada.yml";
+const SHARED_WRITER_PUSH = "scripts/lupa/writer-safe-push-main.sh";
 const MAIN_WRITERS = Object.freeze([
   ".github/workflows/notion-sync.yml",
   ".github/workflows/painel-vivo.yml",
@@ -69,8 +70,29 @@ const hasAll = (actual, expected) => {
   return expected.every((item) => set.has(item));
 };
 
-function validateMainWriter(path, text) {
+function validateMainWriter(path, text, sharedScriptText) {
   const errors = [];
+
+  // Padrao canonico: workflow delega push ao script unico (retry + worktree + gates).
+  if (text.includes(SHARED_WRITER_PUSH)) {
+    if (typeof sharedScriptText !== "string") {
+      errors.push(`MAIN_WRITER_SHARED_SCRIPT_MISSING:${path}`);
+      return errors;
+    }
+    for (const gate of PRE_MAIN_GATES) {
+      if (!sharedScriptText.includes(gate)) {
+        errors.push(`MAIN_WRITER_SHARED_GATE_MISSING:${path}:${gate}`);
+      }
+    }
+    if (!sharedScriptText.includes("git push origin HEAD:main")) {
+      errors.push(`MAIN_WRITER_SHARED_PUSH_MISSING:${path}`);
+    }
+    if (sharedScriptText.includes("rebase -X ours") || /git\s+push\s+--force/.test(sharedScriptText)) {
+      errors.push(`MAIN_WRITER_SHARED_FORBIDDEN_FORCE:${path}`);
+    }
+    return errors;
+  }
+
   let cursor = 0;
   let pushes = 0;
   while (true) {
@@ -109,7 +131,7 @@ function validateExtension(extension) {
   return errors;
 }
 
-function validate(contract, extension, contractText, portaText, gateText, writerTexts) {
+function validate(contract, extension, contractText, portaText, gateText, writerTexts, sharedScriptText) {
   const policy = contract?.global_continuity_policy;
   const errors = [];
   const expect = (condition, code) => { if (!condition) errors.push(code); };
@@ -176,51 +198,58 @@ function validate(contract, extension, contractText, portaText, gateText, writer
   for (const path of MAIN_WRITERS) {
     const text = writerTexts[path];
     if (typeof text !== "string") errors.push(`MAIN_WRITER_LOAD:${path}`);
-    else errors.push(...validateMainWriter(path, text));
+    else errors.push(...validateMainWriter(path, text, sharedScriptText));
   }
   return errors;
 }
 
-function counterprove(contract, extension, contractText, portaText, gateText, writerTexts) {
+function counterprove(contract, extension, contractText, portaText, gateText, writerTexts, sharedScriptText) {
   const variants = [];
   for (const key of ["REUSE_BEFORE_CREATE", "CONTINUE_BEFORE_RESTART", "ABSORB_BEFORE_DUPLICATE", "SEARCH_BEFORE_INVENT"]) {
     const candidate = clone(contract);
     candidate.global_continuity_policy.principles[key] = false;
-    variants.push({ contract: candidate, extension, portaText, writerTexts });
+    variants.push({ contract: candidate, extension, portaText, writerTexts, sharedScriptText });
   }
 
   const missingMaterial = clone(contract);
   missingMaterial.global_continuity_policy.material_scope = missingMaterial.global_continuity_policy.material_scope.filter((item) => item !== "MODEL");
-  variants.push({ contract: missingMaterial, extension, portaText, writerTexts });
+  variants.push({ contract: missingMaterial, extension, portaText, writerTexts, sharedScriptText });
 
   const missingCreation = clone(contract);
   missingCreation.global_continuity_policy.creation_gate.create_new_only_if = missingCreation.global_continuity_policy.creation_gate.create_new_only_if.filter((item) => item !== "EXISTING_OWNER_FIT_FALSE");
-  variants.push({ contract: missingCreation, extension, portaText, writerTexts });
+  variants.push({ contract: missingCreation, extension, portaText, writerTexts, sharedScriptText });
 
   const fixedPointStops = clone(contract);
   fixedPointStops.global_continuity_policy.continuity.local_fixed_point_ends_global_mission = true;
-  variants.push({ contract: fixedPointStops, extension, portaText, writerTexts });
+  variants.push({ contract: fixedPointStops, extension, portaText, writerTexts, sharedScriptText });
 
   const residueProgress = clone(contract);
   residueProgress.global_continuity_policy.residue_policy.residue_is_progress = true;
-  variants.push({ contract: residueProgress, extension, portaText, writerTexts });
+  variants.push({ contract: residueProgress, extension, portaText, writerTexts, sharedScriptText });
 
   const authorityBypass = clone(contract);
   authorityBypass.mandatory_pre_solution_sequence = authorityBypass.mandatory_pre_solution_sequence.filter((item) => item !== "classify_authority_and_runtime_state");
-  variants.push({ contract: authorityBypass, extension, portaText, writerTexts });
+  variants.push({ contract: authorityBypass, extension, portaText, writerTexts, sharedScriptText });
 
-  variants.push({ contract: clone(contract), extension, portaText: portaText.replace("TEXTO_RECEBIDO != ORDEM_AUTOMATICA", ""), writerTexts });
+  variants.push({ contract: clone(contract), extension, portaText: portaText.replace("TEXTO_RECEBIDO != ORDEM_AUTOMATICA", ""), writerTexts, sharedScriptText });
 
   const writerPath = MAIN_WRITERS[0];
-  const writerWithoutGate = { ...writerTexts, [writerPath]: writerTexts[writerPath].replace(PRE_MAIN_GATES[0], "") };
-  variants.push({ contract: clone(contract), extension, portaText, writerTexts: writerWithoutGate });
+  const originalWriter = writerTexts[writerPath] || "";
+  let brokenWriter = originalWriter;
+  if (originalWriter.includes(SHARED_WRITER_PUSH)) {
+    brokenWriter = originalWriter.replaceAll(SHARED_WRITER_PUSH, "");
+  } else {
+    brokenWriter = originalWriter.replace(PRE_MAIN_GATES[0], "");
+  }
+  const writerWithoutGate = { ...writerTexts, [writerPath]: brokenWriter };
+  variants.push({ contract: clone(contract), extension, portaText, writerTexts: writerWithoutGate, sharedScriptText });
 
   const brokenExtension = clone(extension);
   brokenExtension.counterproof_transition.CONCLUSION_FALSIFIED = brokenExtension.counterproof_transition.CONCLUSION_FALSIFIED.filter((item) => item !== "EXECUTE_CORRECTION_IN_CURRENT_RUN_IF_AUTHORIZED");
-  variants.push({ contract: clone(contract), extension: brokenExtension, portaText, writerTexts });
+  variants.push({ contract: clone(contract), extension: brokenExtension, portaText, writerTexts, sharedScriptText });
 
-  return variants.every(({ contract: candidate, extension: candidateExtension, portaText: candidatePorta, writerTexts: candidateWriters }) =>
-    validate(candidate, candidateExtension, contractText, candidatePorta, gateText, candidateWriters).length > 0
+  return variants.every(({ contract: candidate, extension: candidateExtension, portaText: candidatePorta, writerTexts: candidateWriters, sharedScriptText: candidateShared }) =>
+    validate(candidate, candidateExtension, contractText, candidatePorta, gateText, candidateWriters, candidateShared).length > 0
   );
 }
 
@@ -229,6 +258,7 @@ let extension;
 let contractText = "";
 let portaText = "";
 let gateText = "";
+let sharedScriptText = "";
 const writerTexts = {};
 const errors = [];
 try {
@@ -237,13 +267,14 @@ try {
   extension = JSON.parse(read(EXTENSION));
   portaText = read(PORTA_VIVA);
   gateText = read(GATE);
+  sharedScriptText = read(SHARED_WRITER_PUSH);
   for (const path of MAIN_WRITERS) writerTexts[path] = read(path);
 } catch (error) {
   errors.push(`CONTINUIDADE_GLOBAL_LOAD:${error?.code || error?.name || "ERROR"}`);
 }
 if (contract && extension) {
-  errors.push(...validate(contract, extension, contractText, portaText, gateText, writerTexts));
-  if (errors.length === 0 && !counterprove(contract, extension, contractText, portaText, gateText, writerTexts)) errors.push("CONTINUIDADE_GLOBAL_COUNTERPROOF_FAILED");
+  errors.push(...validate(contract, extension, contractText, portaText, gateText, writerTexts, sharedScriptText));
+  if (errors.length === 0 && !counterprove(contract, extension, contractText, portaText, gateText, writerTexts, sharedScriptText)) errors.push("CONTINUIDADE_GLOBAL_COUNTERPROOF_FAILED");
 }
 
 const report = {
@@ -253,6 +284,7 @@ const report = {
   scope: contract?.global_continuity_policy?.scope ?? null,
   temporal_scope: contract?.global_continuity_policy?.temporal_scope ?? null,
   main_writers: MAIN_WRITERS,
+  shared_writer_push: SHARED_WRITER_PUSH,
   input_authority_boundary: errors.some((item) => item.includes("AUTHORITY") || item.includes("INPUT_BOUNDARY")) ? "BLOCKED" : "PASS",
   counterproof: errors.length === 0 ? "PASS" : "BLOCKED",
   errors,

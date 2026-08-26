@@ -1,3 +1,26 @@
+---
+title: "Intent Sync State — Intenção Única entre Superfícies"
+status: "CONCEPT_HISTORICAL_REQUIRES_LIVE_REMEASUREMENT"
+owner: "docs/BRAIN/01-CONCEITOS/Banda/"
+updated: 2026-08-26
+truth_scope: "CONCEPTUAL_NOT_CROSS_CHAT_TRANSPORT_PROOF"
+tags:
+  - banda
+  - intencao
+  - sincronizacao
+  - cross-chat
+  - estado
+  - continuidade
+  - semantica
+  - centraldark
+related:
+  - "[[BANDA_INTENCAO_UNICA_COMPASSO]]"
+  - "[[BANDA_COMPASSO_GLOBAL]]"
+  - "[[LACUNA_BANDA_INTENCAO_UNICA]]"
+  - "[[SEMANTIC-LINKER]]"
+  - "[[BRAIN]]"
+---
+
 KKKKK CHEFE, achei a lacuna. 🔥🎼
 
 O que você quer não é “chat compartilhando contexto”. É outra coisa, mais precisa:
@@ -111,3 +134,11 @@ Próximo passo: quando #923 liberar o corredor, o menor delta é conectar `INTEN
 BOOT: `ONE_INTENT | MANY_SURFACES | SAME_STATE_REVISION | DIFFERENT_ROLES | NO_ECHO | ONE_WRITER | EVENT_ORDERED | REALITY=JUDGE`
 
 Fio da Casa: **uma intenção nasce → ganha ID → todas as janelas escutam o mesmo compasso → cada instrumento toca sua parte → um Writer resolve → o estado avança → toda a banda acompanha.** 🎼🔥💎
+
+## Conexões Rápidas
+
+- [[BANDA_INTENCAO_UNICA_COMPASSO]] — mesma intenção tratada como uma música.
+- [[BANDA_COMPASSO_GLOBAL]] — compasso, evento e estado compartilhado como metáfora operacional.
+- [[LACUNA_BANDA_INTENCAO_UNICA]] — diagnóstico histórico correlato.
+- [[SEMANTIC-LINKER]] — regra de ligação apenas quando a relação é explicável.
+- [[BRAIN]] — entrada humana do segundo cérebro.

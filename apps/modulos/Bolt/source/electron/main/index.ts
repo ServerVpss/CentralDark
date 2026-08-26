@@ -1,201 +1,226 @@
 /// <reference types="vite/client" />
 import { createRequestHandler } from '@remix-run/node';
-import electron, { app, BrowserWindow, ipcMain, protocol, session } from 'electron';
+import electron, { app, BrowserWindow, globalShortcut, ipcMain, protocol, session } from 'electron';
 import log from 'electron-log';
+import { existsSync } from 'node:fs';
 import path from 'node:path';
 import * as pkg from '../../package.json';
 import { setupAutoUpdater } from './utils/auto-update';
-import { isDev, DEFAULT_PORT } from './utils/constants';
+import {
+  CENTRALDARK_PUBLIC_URL,
+  DEFAULT_HOUSE_ROOT,
+  DEFAULT_PORT,
+  HERMES_BASE_URL,
+  SOL_WIDGET_SHORTCUT,
+  isDev,
+} from './utils/constants';
 import { initViteServer, viteServer } from './utils/vite-server';
 import { setupMenu } from './ui/menu';
-import { createWindow } from './ui/window';
+import { createSolWidget, createWindow } from './ui/window';
 import { initCookies, storeCookies } from './utils/cookie';
 import { loadServerBuild, serveAsset } from './utils/serve';
 import { reloadOnChange } from './utils/reload';
 
 Object.assign(console, log.functions);
+app.setName('CentralDark');
+if (process.platform === 'win32') app.setAppUserModelId('com.centraldark.desktop');
 
-console.debug('main: import.meta.env:', import.meta.env);
-console.log('main: isDev:', isDev);
-console.log('NODE_ENV:', global.process.env.NODE_ENV);
-console.log('isPackaged:', app.isPackaged);
+process.on('uncaughtException', (error) => console.error('UNCAUGHT_EXCEPTION', error));
+process.on('unhandledRejection', (error) => console.error('UNHANDLED_REJECTION', error));
 
-// Log unhandled errors
-process.on('uncaughtException', async (error) => {
-  console.log('Uncaught Exception:', error);
-});
+const configuredRoot = global.process.env.CENTRALDARK_HOME
+  ?? global.process.env.APP_PATH_ROOT
+  ?? import.meta.env.VITE_APP_PATH_ROOT
+  ?? (process.platform === 'win32' && existsSync(DEFAULT_HOUSE_ROOT) ? DEFAULT_HOUSE_ROOT : undefined);
 
-process.on('unhandledRejection', async (error) => {
-  console.log('Unhandled Rejection:', error);
-});
-
-(() => {
-  const root = global.process.env.APP_PATH_ROOT ?? import.meta.env.VITE_APP_PATH_ROOT;
-
-  if (root === undefined) {
-    console.log('no given APP_PATH_ROOT or VITE_APP_PATH_ROOT. default path is used.');
-    return;
-  }
-
-  if (!path.isAbsolute(root)) {
-    console.log('APP_PATH_ROOT must be absolute path.');
-    global.process.exit(1);
-  }
-
-  console.log(`APP_PATH_ROOT: ${root}`);
-
+if (configuredRoot) {
+  if (!path.isAbsolute(configuredRoot)) throw new Error('CENTRALDARK_HOME_MUST_BE_ABSOLUTE');
   const subdirName = pkg.name;
-
-  for (const [key, val] of [
-    ['appData', ''],
-    ['userData', subdirName],
-    ['sessionData', subdirName],
-  ] as const) {
-    app.setPath(key, path.join(root, val));
-  }
-
-  app.setAppLogsPath(path.join(root, subdirName, 'Logs'));
-})();
-
-console.log('appPath:', app.getAppPath());
-
-const keys: Parameters<typeof app.getPath>[number][] = ['home', 'appData', 'userData', 'sessionData', 'logs', 'temp'];
-keys.forEach((key) => console.log(`${key}:`, app.getPath(key)));
-console.log('start whenReady');
+  app.setPath('appData', configuredRoot);
+  app.setPath('userData', path.join(configuredRoot, subdirName));
+  app.setPath('sessionData', path.join(configuredRoot, subdirName));
+  app.setAppLogsPath(path.join(configuredRoot, subdirName, 'Logs'));
+}
 
 declare global {
   // eslint-disable-next-line no-var, @typescript-eslint/naming-convention
   var __electron__: typeof electron;
 }
 
-(async () => {
+let mainWindow: BrowserWindow | null = null;
+let solWidget: BrowserWindow | null = null;
+let rendererURL = '';
+
+function liveMainWindow() {
+  return mainWindow && !mainWindow.isDestroyed() ? mainWindow : null;
+}
+
+function liveWidget() {
+  return solWidget && !solWidget.isDestroyed() ? solWidget : null;
+}
+
+function ensureMainWindow() {
+  const current = liveMainWindow();
+  if (current) return current;
+  mainWindow = createWindow(rendererURL);
+  setupMenu(mainWindow);
+  return mainWindow;
+}
+
+function ensureWidget() {
+  const current = liveWidget();
+  if (current) return current;
+  solWidget = createSolWidget(rendererURL);
+  return solWidget;
+}
+
+function toggleWidget() {
+  const widget = ensureWidget();
+  if (widget.isVisible()) widget.hide();
+  else {
+    widget.showInactive();
+    widget.focus();
+  }
+}
+
+function registerBridge() {
+  const register = (channel: string, handler: (...args: any[]) => any) => {
+    ipcMain.removeHandler(channel);
+    ipcMain.handle(channel, handler);
+  };
+
+  register('centraldark:runtime:get', async () => ({
+    app_name: 'CentralDark',
+    app_version: app.getVersion(),
+    house_root: configuredRoot ?? app.getPath('userData'),
+    hermes_base_url: HERMES_BASE_URL,
+    public_url: CENTRALDARK_PUBLIC_URL,
+    widget_shortcut: SOL_WIDGET_SHORTCUT,
+    one_system_only: true,
+  }));
+
+  register('centraldark:hermes:health', async () => {
+    const started = Date.now();
+    for (const route of ['/health', '/api/health']) {
+      try {
+        const response = await fetch(new URL(route, HERMES_BASE_URL), { signal: AbortSignal.timeout(2500) });
+        if (response.ok) {
+          return { status: 'ONLINE', endpoint: HERMES_BASE_URL, latency_ms: Date.now() - started };
+        }
+      } catch (error) {
+        console.warn('HERMES_HEALTH_PROBE_FAILED', {
+          route,
+          error: error instanceof Error ? error.message : String(error),
+        });
+      }
+    }
+    return { status: 'OFFLINE', endpoint: HERMES_BASE_URL, latency_ms: Date.now() - started };
+  });
+
+  register('centraldark:main:show', async () => {
+    const win = ensureMainWindow();
+    win.show();
+    win.focus();
+    return { ok: true };
+  });
+
+  register('centraldark:widget:toggle', async () => {
+    toggleWidget();
+    return { ok: true };
+  });
+
+  register('centraldark:widget:hide', async () => {
+    liveWidget()?.hide();
+    return { ok: true };
+  });
+
+  register('centraldark:intent:open', async (_event, rawIntent: unknown) => {
+    const intent = typeof rawIntent === 'string' ? rawIntent.trim() : '';
+    if (!intent || intent.length > 8000) throw new Error('CENTRALDARK_INTENT_INVALID');
+    const win = ensureMainWindow();
+    const target = new URL('/', rendererURL);
+    target.searchParams.set('prompt', intent);
+    await win.loadURL(target.toString());
+    win.show();
+    win.focus();
+    return { ok: true };
+  });
+
+  register('ipcTest', async (_event, ...args) => {
+    console.debug('ipc: renderer -> main', args);
+    return { ok: true };
+  });
+}
+
+async function boot() {
   await app.whenReady();
-  console.log('App is ready');
-
-  // Load any existing cookies from ElectronStore, set as cookie
   await initCookies();
-
   const serverBuild = await loadServerBuild();
 
   protocol.handle('http', async (req) => {
-    console.log('Handling request for:', req.url);
-
-    if (isDev) {
-      console.log('Dev mode: forwarding to vite server');
-      return await fetch(req);
-    }
+    if (isDev) return await fetch(req);
 
     req.headers.append('Referer', req.referrer);
-
     try {
       const url = new URL(req.url);
+      if (url.port !== `${DEFAULT_PORT}`) return await fetch(req);
 
-      // Forward requests to specific local server ports
-      if (url.port !== `${DEFAULT_PORT}`) {
-        console.log('Forwarding request to local server:', req.url);
-        return await fetch(req);
-      }
-
-      // Always try to serve asset first
       const assetPath = path.join(app.getAppPath(), 'build', 'client');
-      const res = await serveAsset(req, assetPath);
+      const assetResponse = await serveAsset(req, assetPath);
+      if (assetResponse) return assetResponse;
 
-      if (res) {
-        console.log('Served asset:', req.url);
-        return res;
-      }
-
-      // Forward all cookies to remix server
       const cookies = await session.defaultSession.cookies.get({});
-
       if (cookies.length > 0) {
-        req.headers.set('Cookie', cookies.map((c) => `${c.name}=${c.value}`).join('; '));
-
-        // Store all cookies
+        req.headers.set('Cookie', cookies.map((cookie) => `${cookie.name}=${cookie.value}`).join('; '));
         await storeCookies(cookies);
       }
 
-      // Create request handler with the server build
       const handler = createRequestHandler(serverBuild, 'production');
-      console.log('Handling request with server build:', req.url);
-
-      const result = await handler(req, {
-        /*
-         * Remix app access cloudflare.env
-         * Need to pass an empty object to prevent undefined
-         */
-        // @ts-ignore:next-line
+      return await handler(req, {
+        // @ts-ignore Cloudflare context expected by the vendored Remix application.
         cloudflare: {},
       });
-
-      return result;
-    } catch (err) {
-      console.log('Error handling request:', {
+    } catch (error) {
+      console.error('CENTRALDARK_REQUEST_FAILED', {
         url: req.url,
-        error:
-          err instanceof Error
-            ? {
-                message: err.message,
-                stack: err.stack,
-                cause: err.cause,
-              }
-            : err,
+        error: error instanceof Error ? error.message : String(error),
       });
-
-      const error = err instanceof Error ? err : new Error(String(err));
-
-      return new Response(`Error handling request to ${req.url}: ${error.stack ?? error.message}`, {
-        status: 500,
-        headers: { 'content-type': 'text/plain' },
-      });
+      return new Response('CentralDark renderer request failed', { status: 500 });
     }
   });
 
-  const rendererURL = await (isDev
+  rendererURL = await (isDev
     ? (async () => {
         await initViteServer();
-
-        if (!viteServer) {
-          throw new Error('Vite server is not initialized');
-        }
-
+        if (!viteServer) throw new Error('VITE_SERVER_NOT_INITIALIZED');
         const listen = await viteServer.listen();
         global.__electron__ = electron;
         viteServer.printUrls();
-
         return `http://localhost:${listen.config.server.port}`;
       })()
     : `http://localhost:${DEFAULT_PORT}`);
 
-  console.log('Using renderer URL:', rendererURL);
+  mainWindow = createWindow(rendererURL);
+  solWidget = createSolWidget(rendererURL);
+  setupMenu(mainWindow);
+  registerBridge();
 
-  const win = await createWindow(rendererURL);
+  const registered = globalShortcut.register(SOL_WIDGET_SHORTCUT, toggleWidget);
+  if (!registered) console.warn('SOL_WIDGET_SHORTCUT_UNAVAILABLE', SOL_WIDGET_SHORTCUT);
 
-  app.on('activate', async () => {
-    if (BrowserWindow.getAllWindows().length === 0) {
-      await createWindow(rendererURL);
-    }
-  });
+  app.on('activate', () => ensureMainWindow());
+  await setupAutoUpdater();
+}
 
-  console.log('end whenReady');
-
-  return win;
-})()
-  .then((win) => {
-    // IPC samples : send and recieve.
-    let count = 0;
-    setInterval(() => win.webContents.send('ping', `hello from main! ${count++}`), 60 * 1000);
-    ipcMain.handle('ipcTest', (event, ...args) => console.log('ipc: renderer -> main', { event, ...args }));
-
-    return win;
-  })
-  .then((win) => setupMenu(win));
-
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
+boot().catch((error) => {
+  console.error('CENTRALDARK_BOOT_FAILED', error);
+  app.quit();
 });
 
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') app.quit();
+});
+
+app.on('will-quit', () => globalShortcut.unregisterAll());
+
 reloadOnChange();
-setupAutoUpdater();

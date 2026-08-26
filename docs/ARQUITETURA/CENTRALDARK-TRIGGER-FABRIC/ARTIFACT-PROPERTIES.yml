@@ -1,0 +1,110 @@
+schema: centraldark.artifact-properties.v1
+owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/
+status: CANONICAL_CONTRACT
+source_rule: "CANONICO -> ARTEFATO; artefato nao inventa canonico"
+
+# Propriedades obrigatórias de todo artefato derivado consumido por Hermes
+# (foto Notion "Diagramas do Sistema CentralDark" cristalizada).
+groups:
+  A_IDENTIDADE:
+    title:
+      required: true
+      type: string
+      description: Nome canônico curto do artefato
+    status:
+      required: true
+      type: enum
+      values:
+        - CANONICO
+        - DERIVED_VIEW
+        - CANDIDATE
+        - KNOWLEDGE_ONLY
+        - QUARANTINE
+        - HISTORICAL
+        - SUPERSEDED
+        - FLASH_READY
+        - UNPROVEN
+        - BLOCKED
+    source_rule:
+      required: true
+      type: string
+      default: "CANONICO -> ARTEFATO; artefato nao inventa canonico"
+  B_TEMPORAL:
+    date:
+      required: true
+      type: date
+      description: Data de criação ou do fato original
+    updated:
+      required: true
+      type: datetime
+      description: Última medição/atualização material
+    observed_at:
+      required: false
+      type: datetime
+      description: Quando a Casa ingeriu/observou
+  C_CLASSIFICACAO:
+    tags:
+      required: true
+      type: list
+      min_items: 1
+      description: Etiquetas operacionais (alfabéticas no índice)
+    category:
+      required: true
+      type: string
+      description: Grupo alfabético de categoria (A..Z + domínio)
+    sensitivity:
+      required: true
+      type: enum
+      values: [PUBLIC, INTERNAL, SENSITIVE_QUARANTINE]
+  D_PROVENIENCIA:
+    source:
+      required: true
+      type: string
+    source_class:
+      required: true
+      type: enum
+      values:
+        - HUMAN_AUTHORITY
+        - TOOL_MEASURED
+        - INTERNAL
+        - EXTERNAL_UNTRUSTED
+        - UNDECLARED
+    head_sha:
+      required: false
+      type: string
+    content_sha256:
+      required: false
+      type: string
+  E_GOVERNANCA:
+    owner:
+      required: true
+      type: string
+    consumer:
+      required: false
+      type: string
+    writer:
+      required: false
+      type: string
+
+rules:
+  artifact_never_invents_canonical: true
+  derived_view_is_not_authority: true
+  missing_required_property: BLOCK_PROMOTION_TO_FLASH
+  hermes_consumes_only_with_properties: true
+  alphabetical_category_index: true
+  status_derives_from_proof_not_hope: true
+
+example_frontmatter: |
+  ---
+  title: "Diagramas do Sistema CentralDark"
+  date: 2026-06-29
+  updated: 2026-08-15T00:00:00-03:00
+  status: DERIVED_VIEW
+  tags: [diagrama, arquitetura, fluxo, mermaid, sistema]
+  category: "A-Arquitetura"
+  sensitivity: INTERNAL
+  source: docs/ARQUITETURA/
+  source_class: INTERNAL
+  source_rule: "CANONICO -> ARTEFATO; artefato nao inventa canonico"
+  owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/
+  ---

@@ -1,0 +1,1265 @@
+{
+  "schema_version": 1,
+  "owner": "docs/BRAIN/03-DOCUMENTACAO/BIBLIOTECA/README.md",
+  "status": "DRIVE_REFERENCE_SYNCED_CANDIDATES_INDEXED",
+  "supported_formats": [
+    "pdf",
+    "epub",
+    "jwpub",
+    "gdoc",
+    "gdrive-md",
+    "gdrive-folder",
+    "txt"
+  ],
+  "sync_policy": {
+    "marker": "DRIVE_REFERENCE_SYNC_NOT_RAW_DUPLICATION",
+    "canonical_truth": "ServerVpss/CentralDark + runtime medido",
+    "external_source": "Google Drive/CentralDark",
+    "mode": "REFERENCE_AND_PROVENANCE",
+    "raw_copy_default": false,
+    "historical_preserved": true,
+    "mirror_is_independent_proof": false,
+    "human_memory_raw_ingest_default": false,
+    "sensitive_raw_ingest": false,
+    "promotion_requires_counterproof": true
+  },
+  "drive_sync": {
+    "root_external_id": "17SG2C3bZQ4VPG247Dn5MSpNsYajFCnDp",
+    "observed_at": "2026-08-22T10:54:00-03:00",
+    "coverage": "ROOT_LINKED_PLUS_MATERIAL_DESCENDANTS_MEASURED",
+    "root_children": [
+      {
+        "title": "00-ESCOPO-DRIVE-CENTRALDARK",
+        "classification": "OPERATIONAL_SCOPE"
+      },
+      {
+        "title": "LEMBRANCAS",
+        "classification": "HUMAN_MEMORY"
+      },
+      {
+        "title": "ESTUDOS-E-MATERIA",
+        "classification": "STUDY_CANDIDATE"
+      },
+      {
+        "title": "HISTORICO",
+        "classification": "HISTORICAL_REFERENCE"
+      },
+      {
+        "title": "ESPELHOS-DO-GITHUB",
+        "classification": "CURRENT_MIRROR"
+      },
+      {
+        "title": "display-settings note",
+        "classification": "STUDY_CANDIDATE"
+      }
+    ],
+    "material_descendants": [
+      "ESTUDOS-E-MATERIA/MENTES-DE-ESTUDO/ENEAS-CARNEIRO",
+      "ESTUDOS-E-MATERIA/TECNICA DA LUPAAAAA",
+      "ESTUDOS-E-MATERIA/Reasoning (ou raciocínio) em Inteligência Artificial",
+      "ESTUDOS-E-MATERIA/deep-research-report.md",
+      "HISTORICO/CentralDark_Advanced_Architecture",
+      "HISTORICO/CentralDark_Advanced_Architecture/02_Evolution_System/01_Sistema_Aprendizado_Automatico_Hermes.md",
+      "HISTORICO/CentralDark_Advanced_Architecture/05_GraphRAG_Advanced/02_Quality_Gate_and_Dynamic_Graphs.md",
+      "HISTORICO/WAR ROOM: Playbook de Infraestrutura e Agentes (Central Dark)",
+      "HISTORICO/CentralDark-Memoria",
+      "HISTORICO/CentralDark-Memoria/Autoevolução Mental do Pivete — Hermes e CentralDark",
+      "HISTORICO/CentralDark-Memoria/APRENDIZADOS.md",
+      "HISTORICO/CentralDark-Memoria/08-HISTORICO-DECISOES.md"
+    ],
+    "quarantine_patterns": [
+      ".env*",
+      "*COFRE*",
+      "*SECRET*",
+      "*TOKEN*",
+      "*SSH*",
+      "auth.json",
+      "*.key",
+      "*.pem"
+    ],
+    "notes": [
+      "A raiz do Drive fica ligada por referência, portanto descendentes não precisam ser duplicados byte a byte no GitHub.",
+      "Itens históricos continuam recuperáveis para mineração, mas não governam o presente.",
+      "Espelhos do GitHub são navegação, não prova independente.",
+      "Conteúdo sensível não é ingerido; somente a política de quarentena é registrada."
+    ]
+  },
+  "sources": [
+    {
+      "source_id": "drive-centraldark-root",
+      "title": "Google Drive — CentralDark (raiz operacional)",
+      "formats": [
+        "gdrive-folder"
+      ],
+      "status": "INDEXED_REFERENCE",
+      "classification": "OPERATIONAL_SCOPE",
+      "provenance": {
+        "provider": "google-drive",
+        "external_id": "17SG2C3bZQ4VPG247Dn5MSpNsYajFCnDp",
+        "url": "https://drive.google.com/drive/folders/17SG2C3bZQ4VPG247Dn5MSpNsYajFCnDp",
+        "observed_at": "2026-08-22T10:54:00-03:00"
+      }
+    },
+    {
+      "source_id": "drive-escopo-centraldark",
+      "title": "00-ESCOPO-DRIVE-CENTRALDARK",
+      "formats": [
+        "gdoc"
+      ],
+      "status": "INDEXED_REFERENCE",
+      "classification": "OPERATIONAL_SCOPE",
+      "provenance": {
+        "provider": "google-drive",
+        "external_id": "16Ydus_kGzqDJVnEXcqmaQPk8APn13IJ-v0VExWOODsg",
+        "observed_at": "2026-08-22T10:54:00-03:00"
+      }
+    },
+    {
+      "source_id": "estudo-eneas-carneiro",
+      "title": "00-LEIA-ME-ENEAS",
+      "formats": [
+        "gdoc"
+      ],
+      "status": "INDEXED_REFERENCE",
+      "classification": "STUDY_CANDIDATE",
+      "provenance": {
+        "provider": "google-drive",
+        "external_id": "1rMhwJHz-Zexw8kDPlkMTXq1vECmwi_LEe8WLYwJuk2w",
+        "observed_at": "2026-08-22T10:54:00-03:00"
+      }
+    },
+    {
+      "source_id": "estudo-tecnica-lupa",
+      "title": "TECNICA DA LUPAAAAA",
+      "formats": [
+        "gdoc"
+      ],
+      "status": "INDEXED_REFERENCE",
+      "classification": "STUDY_CANDIDATE",
+      "provenance": {
+        "provider": "google-drive",
+        "external_id": "1fCoktSwso91ZWk_wQoESyab-2eS-eRq8uJdS3tNHrek",
+        "observed_at": "2026-08-22T10:54:00-03:00"
+      }
+    },
+    {
+      "source_id": "historico-autoevolucao-hermes-centraldark",
+      "title": "Autoevolução Mental do Pivete — Hermes e CentralDark",
+      "formats": [
+        "gdoc"
+      ],
+      "status": "INDEXED_REFERENCE",
+      "classification": "HISTORICAL_REFERENCE",
+      "provenance": {
+        "provider": "google-drive",
+        "external_id": "1CZawObzEYrbVtzmwUkmeSCa-0KgHejwtAdqYwoPwBtk",
+        "observed_at": "2026-08-22T10:54:00-03:00"
+      }
+    },
+    {
+      "source_id": "estudo-reasoning-models",
+      "title": "Reasoning (ou raciocínio) em Inteligência Artificial",
+      "formats": [
+        "gdoc"
+      ],
+      "status": "INDEXED_REFERENCE",
+      "classification": "STUDY_CANDIDATE",
+      "provenance": {
+        "provider": "google-drive",
+        "external_id": "1zpCymWIcCrZ24hr682IQ9QDrn7V7ftKffxFAz4qBHV0",
+        "observed_at": "2026-08-22T10:54:00-03:00"
+      }
+    },
+    {
+      "source_id": "historico-aprendizado-automatico-hermes",
+      "title": "01_Sistema_Aprendizado_Automatico_Hermes.md",
+      "formats": [
+        "gdrive-md"
+      ],
+      "status": "INDEXED_REFERENCE",
+      "classification": "HISTORICAL_REFERENCE",
+      "provenance": {
+        "provider": "google-drive",
+        "external_id": "1Rh1YXmsdwuuk96LUxgvArJjj2G2cXIB6",
+        "observed_at": "2026-08-22T10:54:00-03:00"
+      }
+    },
+    {
+      "source_id": "historico-graphrag-quality-gate",
+      "title": "02_Quality_Gate_and_Dynamic_Graphs.md",
+      "formats": [
+        "gdrive-md"
+      ],
+      "status": "INDEXED_REFERENCE",
+      "classification": "HISTORICAL_REFERENCE",
+      "provenance": {
+        "provider": "google-drive",
+        "external_id": "1La8YJ-1ADAPk7m3M82AHK5ZCXxRt2U-p",
+        "observed_at": "2026-08-22T10:54:00-03:00"
+      }
+    },
+    {
+      "source_id": "historico-war-room-graphify",
+      "title": "WAR ROOM: Playbook de Infraestrutura e Agentes (Central Dark)",
+      "formats": [
+        "gdoc"
+      ],
+      "status": "INDEXED_REFERENCE",
+      "classification": "HISTORICAL_REFERENCE",
+      "provenance": {
+        "provider": "google-drive",
+        "external_id": "1D6I1YeCx_ub7vWpO2RtEp6P4Jpj9RnqFhpmtABERt1k",
+        "observed_at": "2026-08-22T10:54:00-03:00"
+      }
+    },
+    {
+      "source_id": "estudo-forense-bitdefender",
+      "title": "deep-research-report.md — Bitdefender/Defender forense",
+      "formats": [
+        "gdrive-md"
+      ],
+      "status": "INDEXED_REFERENCE",
+      "classification": "STUDY_CANDIDATE",
+      "provenance": {
+        "provider": "google-drive",
+        "external_id": "1FGwceK11Ca6EXT33ZGi-HPwCBInZ7M9e",
+        "observed_at": "2026-08-22T10:54:00-03:00"
+      }
+    },
+    {
+      "source_id": "drive-estudos-e-materia",
+      "title": "Google Drive — ESTUDOS-E-MATERIA",
+      "formats": [
+        "gdrive-folder"
+      ],
+      "status": "INDEXED_REFERENCE",
+      "classification": "STUDY_CANDIDATE",
+      "provenance": {
+        "provider": "google-drive",
+        "external_id": "1fu2VlhQ3a9NrP4JzeH1gNczuOaJKjGkN",
+        "observed_at": "2026-08-22T10:54:00-03:00"
+      }
+    },
+    {
+      "source_id": "drive-historico",
+      "title": "Google Drive — HISTORICO",
+      "formats": [
+        "gdrive-folder"
+      ],
+      "status": "INDEXED_REFERENCE",
+      "classification": "HISTORICAL_REFERENCE",
+      "provenance": {
+        "provider": "google-drive",
+        "external_id": "1hEmhLKBMWTKkiG3c1roLqLD5x1ybegIA",
+        "observed_at": "2026-08-22T10:54:00-03:00"
+      }
+    },
+    {
+      "source_id": "drive-espelhos-github",
+      "title": "Google Drive — ESPELHOS-DO-GITHUB",
+      "formats": [
+        "gdrive-folder"
+      ],
+      "status": "INDEXED_REFERENCE",
+      "classification": "CURRENT_MIRROR",
+      "provenance": {
+        "provider": "google-drive",
+        "external_id": "1wvZUkpnfB0YWbqPR3xRkFMV1hxSeZu2q",
+        "observed_at": "2026-08-22T10:54:00-03:00"
+      }
+    },
+    {
+      "source_id": "drive-lembrancas",
+      "title": "Google Drive — LEMBRANCAS",
+      "formats": [
+        "gdrive-folder"
+      ],
+      "status": "INDEXED_REFERENCE",
+      "classification": "HUMAN_MEMORY",
+      "provenance": {
+        "provider": "google-drive",
+        "external_id": "1aL_OsZBil3IovrfZZXr8oEfL1K7SWXEr",
+        "observed_at": "2026-08-22T10:54:00-03:00"
+      }
+    },
+    {
+      "source_id": "drive-sensitive-quarantine",
+      "title": "Google Drive — materiais sensíveis/cofre (metadados apenas)",
+      "formats": [
+        "gdrive-folder"
+      ],
+      "status": "SENSITIVE_QUARANTINE",
+      "classification": "SENSITIVE_QUARANTINE",
+      "provenance": {
+        "provider": "google-drive",
+        "external_id": "17SG2C3bZQ4VPG247Dn5MSpNsYajFCnDp",
+        "observed_at": "2026-08-22T10:54:00-03:00"
+      },
+      "content_ingested": false
+    }
+  ],
+  "entries": [
+    {
+      "id": "a01-transferencia-por-estrutura",
+      "source_id": "estudo-eneas-carneiro",
+      "reference": "A01 — Transferência por Estrutura",
+      "kind": "candidate-solution",
+      "category": "A",
+      "state": "CANDIDATE",
+      "summary": "Aprender algo novo mapeando relações com uma estrutura já conhecida, trocar a superfície e testar o que permanece verdadeiro.",
+      "tags": [
+        "tema/aprendizado",
+        "funcao/transferencia",
+        "capacidade/analogia-estrutural",
+        "uso/cognicao"
+      ],
+      "links": [
+        "[[METACOGNICAO-OPERACIONAL]]",
+        "[[CAPACIDADES-COGNITIVAS]]"
+      ],
+      "emojis": [],
+      "use": [
+        "cognition",
+        "skill-candidate",
+        "conversation"
+      ],
+      "groups": {
+        "processo": [
+          "ponte-conhecida",
+          "mapear-relacoes",
+          "abstrair-padrao",
+          "trocar-superficie",
+          "testar"
+        ]
+      },
+      "limits": "ANALOGIA != PROVA; sem teste, a ponte pode ensinar errado."
+    },
+    {
+      "id": "a02-triangulacao-dedutiva-indutiva-abdutiva",
+      "source_id": "estudo-reasoning-models",
+      "reference": "A02 — Triangulação Dedutiva/Indutiva/Abdutiva",
+      "kind": "candidate-solution",
+      "category": "A",
+      "state": "CANDIDATE",
+      "summary": "Escolher explicitamente se o problema pede aplicar regra, generalizar exemplos ou buscar a melhor explicação provisória.",
+      "tags": [
+        "tema/raciocinio",
+        "funcao/triangulacao",
+        "capacidade/deducao",
+        "capacidade/inducao",
+        "capacidade/abducao"
+      ],
+      "links": [
+        "[[META-LUPA]]",
+        "[[MULTIBUSSOLA]]"
+      ],
+      "emojis": [],
+      "use": [
+        "cognition",
+        "skill-candidate"
+      ],
+      "groups": {
+        "modo": [
+          "dedutivo",
+          "indutivo",
+          "abdutivo"
+        ]
+      },
+      "limits": "A melhor explicação abdutiva continua hipótese até contraprova."
+    },
+    {
+      "id": "a03-profundidade-adaptativa-por-risco",
+      "source_id": "estudo-reasoning-models",
+      "reference": "A03 — Profundidade Adaptativa por Risco",
+      "kind": "candidate-solution",
+      "category": "A",
+      "state": "CANDIDATE",
+      "summary": "Gastar mais computação e contraprova somente quando complexidade, risco e ambiguidade justificarem; reduzir quando o problema voltar a ser simples.",
+      "tags": [
+        "tema/raciocinio",
+        "funcao/controle-custo",
+        "capacidade/profundidade-adaptativa"
+      ],
+      "links": [
+        "[[FREQUENCIAS-OPERACIONAIS-SOL]]",
+        "[[META-LUPA]]"
+      ],
+      "emojis": [],
+      "use": [
+        "cognition",
+        "skill-candidate"
+      ],
+      "groups": {
+        "sinal": [
+          "complexidade",
+          "risco",
+          "ambiguidade",
+          "contraprova"
+        ]
+      },
+      "limits": "Não transforma mais tokens em garantia; profundidade precisa produzir ganho informacional."
+    },
+    {
+      "id": "a04-backtracking-e-reavaliacao",
+      "source_id": "estudo-reasoning-models",
+      "reference": "A04 — Backtracking e Reavaliação",
+      "kind": "candidate-solution",
+      "category": "A",
+      "state": "CANDIDATE",
+      "summary": "Quando um caminho falha, voltar ao último ponto válido, mudar uma variável material e comparar o delta em vez de reiniciar a missão.",
+      "tags": [
+        "tema/autocorrecao",
+        "funcao/recuperacao",
+        "capacidade/backtracking",
+        "capacidade/reavaliacao"
+      ],
+      "links": [
+        "[[CAPACIDADES-COGNITIVAS]]",
+        "[[REMEDICAO]]"
+      ],
+      "emojis": [],
+      "use": [
+        "cognition",
+        "skill-candidate"
+      ],
+      "groups": {
+        "loop": [
+          "falha",
+          "voltar",
+          "mudar-uma-variavel",
+          "retestar"
+        ]
+      }
+    },
+    {
+      "id": "a05-generalizacao-por-holdout",
+      "source_id": "estudo-reasoning-models",
+      "reference": "A05 — Generalização por Caso Novo/Holdout",
+      "kind": "candidate-solution",
+      "category": "A",
+      "state": "CANDIDATE",
+      "summary": "Só chamar um padrão de transferível quando ele sobreviver a contexto novo não usado para construí-lo.",
+      "tags": [
+        "tema/generalizacao",
+        "funcao/validacao",
+        "capacidade/holdout",
+        "capacidade/transferencia"
+      ],
+      "links": [
+        "[[CAPACIDADES-COGNITIVAS]]",
+        "[[META-LUPA]]"
+      ],
+      "emojis": [],
+      "use": [
+        "cognition",
+        "skill-candidate"
+      ],
+      "groups": {
+        "prova": [
+          "caso-novo",
+          "transferencia",
+          "reteste"
+        ]
+      },
+      "limits": "Sucesso nos exemplos de origem não prova generalização."
+    },
+    {
+      "id": "a06-recibo-estruturado-de-aprendizado",
+      "source_id": "historico-aprendizado-automatico-hermes",
+      "reference": "A06 — Recibo Estruturado de Aprendizado",
+      "kind": "candidate-solution",
+      "category": "A",
+      "state": "CANDIDATE",
+      "summary": "Registrar tarefa, o que funcionou, dificuldades, decisões, evidências, resultado e impacto reutilizável sem persistir cadeia privada de pensamento.",
+      "tags": [
+        "tema/memoria",
+        "funcao/registro",
+        "capacidade/aprendizado-estruturado"
+      ],
+      "links": [
+        "[[MEMORY-LINKER]]",
+        "[[METACOGNICAO-OPERACIONAL]]"
+      ],
+      "emojis": [],
+      "use": [
+        "cognition",
+        "skill-candidate"
+      ],
+      "groups": {
+        "campos": [
+          "resultado",
+          "dificuldades",
+          "decisoes",
+          "evidencias",
+          "impacto"
+        ]
+      },
+      "limits": "XP autoatribuído ou narrativa de sucesso não contam como prova."
+    },
+    {
+      "id": "a07-promocao-de-experiencia-provada",
+      "source_id": "historico-autoevolucao-hermes-centraldark",
+      "reference": "A07 — Promoção de Experiência Provada",
+      "kind": "candidate-solution",
+      "category": "A",
+      "state": "CANDIDATE",
+      "summary": "Erro só vira ouro quando tem identidade, evidência, correção, contraprova e retenção no reteste.",
+      "tags": [
+        "tema/aprendizado",
+        "funcao/promocao",
+        "capacidade/retencao",
+        "capacidade/contraprova"
+      ],
+      "links": [
+        "[[METACOGNICAO-OPERACIONAL]]",
+        "[[PROOF-OWNERSHIP]]"
+      ],
+      "emojis": [],
+      "use": [
+        "cognition",
+        "skill-candidate"
+      ],
+      "groups": {
+        "gate": [
+          "fingerprint",
+          "evidencia",
+          "correcao",
+          "contraprova",
+          "retencao"
+        ]
+      },
+      "limits": "Atividade, tentativa ou ausência de novo erro não bastam."
+    },
+    {
+      "id": "a08-quality-gate-de-conhecimento",
+      "source_id": "historico-graphrag-quality-gate",
+      "reference": "A08 — Quality Gate de Conhecimento",
+      "kind": "candidate-solution",
+      "category": "A",
+      "state": "CANDIDATE",
+      "summary": "Antes de indexar uma memória, verificar duplicação, proveniência, coerência, recência e contradição; rebaixar ou revisar o que não passar.",
+      "tags": [
+        "tema/memoria",
+        "funcao/quality-gate",
+        "capacidade/dedupe",
+        "capacidade/proveniencia"
+      ],
+      "links": [
+        "[[BIBLIOTECA]]",
+        "[[MEMORY-LINKER]]"
+      ],
+      "emojis": [],
+      "use": [
+        "cognition",
+        "skill-candidate"
+      ],
+      "groups": {
+        "criterio": [
+          "duplicacao",
+          "proveniencia",
+          "coerencia",
+          "recencia",
+          "contradicao"
+        ]
+      },
+      "limits": "Embedding ou similaridade semântica não são verdade automática."
+    },
+    {
+      "id": "a09-versionamento-temporal-do-conhecimento",
+      "source_id": "historico-graphrag-quality-gate",
+      "reference": "A09 — Versionamento Temporal do Conhecimento",
+      "kind": "candidate-solution",
+      "category": "A",
+      "state": "CANDIDATE",
+      "summary": "Preservar versões e tempo da evidência, enfraquecer autoridade de dado obsoleto sem apagar o histórico que explica como o entendimento mudou.",
+      "tags": [
+        "tema/memoria",
+        "funcao/versionamento",
+        "capacidade/proveniencia-temporal",
+        "capacidade/historico"
+      ],
+      "links": [
+        "[[METACOGNICAO-OPERACIONAL]]",
+        "[[BIBLIOTECA]]"
+      ],
+      "emojis": [],
+      "use": [
+        "cognition",
+        "skill-candidate"
+      ],
+      "groups": {
+        "tempo": [
+          "event-time",
+          "observation-time",
+          "current-state"
+        ]
+      },
+      "limits": "Histórico preservado não governa estado vivo sem remedição."
+    },
+    {
+      "id": "a10-ponte-pedagogica-com-invariancia",
+      "source_id": "estudo-eneas-carneiro",
+      "reference": "A10 — Ponte Pedagógica com Invariância",
+      "kind": "candidate-solution",
+      "category": "A",
+      "state": "CANDIDATE",
+      "summary": "Explicar conceito difícil por uma experiência conhecida, mantendo a relação estrutural e declarando onde a analogia deixa de valer.",
+      "tags": [
+        "tema/ensino",
+        "funcao/explicacao",
+        "capacidade/invariancia",
+        "capacidade/assimilacao"
+      ],
+      "links": [
+        "[[PADRAO-RESPOSTA]]",
+        "[[META-LUPA]]"
+      ],
+      "emojis": [],
+      "use": [
+        "cognition",
+        "skill-candidate",
+        "conversation"
+      ],
+      "groups": {
+        "regra": [
+          "mesma-verdade",
+          "ponte-conhecida",
+          "limite-da-analogia"
+        ]
+      },
+      "limits": "Simplificar linguagem não autoriza simplificar ou alterar o fundamento."
+    },
+    {
+      "id": "b01-deterministico-antes-do-llm",
+      "source_id": "historico-war-room-graphify",
+      "reference": "B01 — Determinístico antes do LLM",
+      "kind": "candidate-solution",
+      "category": "B",
+      "state": "CANDIDATE",
+      "summary": "Usar AST, parser, regra ou índice determinístico para estrutura conhecida; reservar LLM para o residual semântico que realmente exige interpretação.",
+      "tags": [
+        "tema/orquestracao",
+        "funcao/roteamento",
+        "capacidade/deterministico-first",
+        "capacidade/ast"
+      ],
+      "links": [
+        "[[REUSE-BEFORE-CREATE]]",
+        "[[CAPACIDADES-COGNITIVAS]]"
+      ],
+      "emojis": [],
+      "use": [
+        "cognition",
+        "skill-candidate"
+      ],
+      "groups": {
+        "ordem": [
+          "estrutura-deterministica",
+          "residuo-semantico"
+        ]
+      }
+    },
+    {
+      "id": "b02-recuperacao-por-vizinhanca-do-grafo",
+      "source_id": "historico-war-room-graphify",
+      "reference": "B02 — Recuperação por Vizinhança do Grafo",
+      "kind": "candidate-solution",
+      "category": "B",
+      "state": "CANDIDATE",
+      "summary": "Localizar primeiro o bairro estrutural afetado e abrir somente os arquivos relevantes, em vez de despejar o repositório inteiro no contexto.",
+      "tags": [
+        "tema/orquestracao",
+        "funcao/retrieval",
+        "capacidade/grafo",
+        "capacidade/contexto-minimo"
+      ],
+      "links": [
+        "[[MAPA-SISTEMA]]",
+        "[[MEMORY-LINKER]]"
+      ],
+      "emojis": [],
+      "use": [
+        "cognition",
+        "skill-candidate"
+      ],
+      "groups": {
+        "fluxo": [
+          "consultar-grafo",
+          "selecionar-vizinhanca",
+          "abrir-arquivos"
+        ]
+      }
+    },
+    {
+      "id": "b03-padrao-arquiteto-executor",
+      "source_id": "historico-war-room-graphify",
+      "reference": "B03 — Padrão Arquiteto–Executor",
+      "kind": "candidate-solution",
+      "category": "B",
+      "state": "CANDIDATE",
+      "summary": "Separar quem mapeia impacto e escolhe o alvo de quem escreve a mudança, preservando Writer único e menor blast radius.",
+      "tags": [
+        "tema/orquestracao",
+        "funcao/separacao-papeis",
+        "capacidade/architect-worker",
+        "capacidade/writer-unico"
+      ],
+      "links": [
+        "[[JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO]]",
+        "[[JEITO-CORRETO-DO-PIVETE]]"
+      ],
+      "emojis": [],
+      "use": [
+        "cognition",
+        "skill-candidate"
+      ],
+      "groups": {
+        "papel": [
+          "leitor-arquiteto",
+          "writer-executor"
+        ]
+      }
+    },
+    {
+      "id": "b04-roteamento-semantico-menor-motor",
+      "source_id": "estudo-tecnica-lupa",
+      "reference": "B04 — Roteamento Semântico para Menor Motor Suficiente",
+      "kind": "candidate-solution",
+      "category": "B",
+      "state": "CANDIDATE",
+      "summary": "Classificar intenção e custo antes de chamar modelo pesado; ação determinística vai direto ao executor, análise complexa escala para engine adequada.",
+      "tags": [
+        "tema/orquestracao",
+        "funcao/roteamento",
+        "capacidade/menor-motor",
+        "capacidade/custo-latencia"
+      ],
+      "links": [
+        "[[FREQUENCIAS-OPERACIONAIS-SOL]]",
+        "[[HUB]]"
+      ],
+      "emojis": [],
+      "use": [
+        "cognition",
+        "skill-candidate"
+      ],
+      "groups": {
+        "decisao": [
+          "intencao",
+          "complexidade",
+          "motor-suficiente"
+        ]
+      }
+    },
+    {
+      "id": "b05-orcamento-de-contexto",
+      "source_id": "estudo-tecnica-lupa",
+      "reference": "B05 — Orçamento de Contexto",
+      "kind": "candidate-solution",
+      "category": "B",
+      "state": "CANDIDATE",
+      "summary": "Recuperar somente evidência e histórico material à decisão atual, evitando contexto gigante que aumenta custo, ruído e risco de truncamento.",
+      "tags": [
+        "tema/orquestracao",
+        "funcao/context-budget",
+        "capacidade/retrieval-seletivo"
+      ],
+      "links": [
+        "[[MEMORY-LINKER]]",
+        "[[CAPACIDADES-COGNITIVAS]]"
+      ],
+      "emojis": [],
+      "use": [
+        "cognition",
+        "skill-candidate"
+      ],
+      "groups": {
+        "filtro": [
+          "relevancia",
+          "recencia",
+          "escopo",
+          "ganho-informacional"
+        ]
+      }
+    },
+    {
+      "id": "b06-fronteira-llm-ferramenta",
+      "source_id": "estudo-tecnica-lupa",
+      "reference": "B06 — Fronteira LLM ↔ Ferramenta Determinística",
+      "kind": "candidate-solution",
+      "category": "B",
+      "state": "CANDIDATE",
+      "summary": "O modelo propõe intenção estruturada; um consumidor determinístico valida schema, autorização e alvo antes de executar qualquer mutação.",
+      "tags": [
+        "tema/orquestracao",
+        "funcao/tool-use",
+        "capacidade/function-calling",
+        "capacidade/validacao"
+      ],
+      "links": [
+        "[[PROOF-OWNERSHIP]]",
+        "[[EXECUCAO-REVERSIVEL]]"
+      ],
+      "emojis": [],
+      "use": [
+        "cognition",
+        "skill-candidate"
+      ],
+      "groups": {
+        "fronteira": [
+          "modelo-propoe",
+          "validator-confere",
+          "executor-age"
+        ]
+      },
+      "limits": "JSON bem formado não é autorização."
+    },
+    {
+      "id": "b07-encadeamento-de-microtarefas",
+      "source_id": "estudo-tecnica-lupa",
+      "reference": "B07 — Encadeamento de Microtarefas com Continuidade",
+      "kind": "candidate-solution",
+      "category": "B",
+      "state": "CANDIDATE",
+      "summary": "Dividir missão grande em deltas limitados e verificáveis, preservando um fio global em vez de reiniciar ou criar agentes/sistemas paralelos.",
+      "tags": [
+        "tema/orquestracao",
+        "funcao/chaining",
+        "capacidade/microtarefas",
+        "capacidade/continuidade"
+      ],
+      "links": [
+        "[[CONTINUIDADE]]",
+        "[[MENOS-E-MAIS]]"
+      ],
+      "emojis": [],
+      "use": [
+        "cognition",
+        "skill-candidate"
+      ],
+      "groups": {
+        "loop": [
+          "delta",
+          "verificar",
+          "continuar"
+        ]
+      }
+    },
+    {
+      "id": "b08-isolamento-de-dependencias",
+      "source_id": "historico-war-room-graphify",
+      "reference": "B08 — Isolamento de Dependências por Ferramenta",
+      "kind": "candidate-solution",
+      "category": "B",
+      "state": "CANDIDATE",
+      "summary": "Rodar ferramentas críticas em ambiente isolado e reproduzível para evitar que dependências globais ou versões antigas contaminem a missão.",
+      "tags": [
+        "tema/infraestrutura",
+        "funcao/isolamento",
+        "capacidade/dependency-isolation"
+      ],
+      "links": [
+        "[[EXECUCAO-REVERSIVEL]]",
+        "[[REPRODUCIBILIDADE]]"
+      ],
+      "emojis": [],
+      "use": [
+        "cognition",
+        "skill-candidate"
+      ],
+      "groups": {
+        "exemplo": [
+          "venv",
+          "container",
+          "lockfile"
+        ]
+      },
+      "limits": "Ambiente isolado não dispensa validar a versão e o consumidor real."
+    },
+    {
+      "id": "b09-transporte-fora-de-banda",
+      "source_id": "historico-war-room-graphify",
+      "reference": "B09 — Transporte Fora de Banda para Artefatos Grandes",
+      "kind": "candidate-solution",
+      "category": "B",
+      "state": "CANDIDATE",
+      "summary": "Quando o payload não cabe com segurança no canal de chat/tool, preservar o artefato e usar um transporte de arquivo próprio em vez de base64/chunks improvisados.",
+      "tags": [
+        "tema/infraestrutura",
+        "funcao/transporte",
+        "capacidade/out-of-band",
+        "capacidade/integridade"
+      ],
+      "links": [
+        "[[ARTEFATOS]]",
+        "[[RECEIPT]]"
+      ],
+      "emojis": [],
+      "use": [
+        "cognition",
+        "skill-candidate"
+      ],
+      "groups": {
+        "criterio": [
+          "tamanho",
+          "timeout",
+          "hash",
+          "transporte-dedicado"
+        ]
+      }
+    },
+    {
+      "id": "b10-isolamento-de-middlebox-por-protocolo",
+      "source_id": "historico-war-room-graphify",
+      "reference": "B10 — Isolamento de Middlebox por Protocolo",
+      "kind": "candidate-solution",
+      "category": "B",
+      "state": "CANDIDATE",
+      "summary": "Não passar uma integração que exige JSON/máquina por uma camada conversacional que reescreve prompts ou respostas; escolher canal compatível com o contrato.",
+      "tags": [
+        "tema/infraestrutura",
+        "funcao/protocolo",
+        "capacidade/middlebox-isolation",
+        "capacidade/structured-output"
+      ],
+      "links": [
+        "[[HUB]]",
+        "[[CONTRATO-FERRAMENTA]]"
+      ],
+      "emojis": [],
+      "use": [
+        "cognition",
+        "skill-candidate"
+      ],
+      "groups": {
+        "teste": [
+          "entrada",
+          "transformacao",
+          "saida",
+          "schema"
+        ]
+      },
+      "limits": "Bypass de middleware nunca significa bypass de segurança ou autorização."
+    },
+    {
+      "id": "c01-fronteira-dado-instrucao",
+      "source_id": "historico-war-room-graphify",
+      "reference": "C01 — Fronteira Dado ≠ Instrução",
+      "kind": "candidate-solution",
+      "category": "C",
+      "state": "CANDIDATE",
+      "summary": "Conteúdo importado de repo, Drive, log ou documento entra como dado não confiável; instruções embutidas não ganham autoridade por estarem no corpus.",
+      "tags": [
+        "tema/seguranca",
+        "funcao/prompt-injection-defense",
+        "capacidade/data-instruction-boundary"
+      ],
+      "links": [
+        "[[ONTOLOGIA-DE-EVIDENCIA-E-CAUSALIDADE]]",
+        "[[BIBLIOTECA]]"
+      ],
+      "emojis": [],
+      "use": [
+        "cognition",
+        "skill-candidate"
+      ],
+      "groups": {
+        "fronteira": [
+          "conteudo-importado",
+          "dado-inerte",
+          "autoridade-separada"
+        ]
+      }
+    },
+    {
+      "id": "c02-recibo-pre-ingestao",
+      "source_id": "historico-war-room-graphify",
+      "reference": "C02 — Recibo Pré-Ingestão",
+      "kind": "candidate-solution",
+      "category": "C",
+      "state": "CANDIDATE",
+      "summary": "Antes de enviar corpus a modelo/ingestor, registrar exatamente quais fontes/arquivos entram, escopo, contagem e exclusões para permitir auditoria e reprodução.",
+      "tags": [
+        "tema/seguranca",
+        "funcao/auditoria",
+        "capacidade/ingestion-receipt",
+        "capacidade/proveniencia"
+      ],
+      "links": [
+        "[[PROOF-OWNERSHIP]]",
+        "[[BIBLIOTECA]]"
+      ],
+      "emojis": [],
+      "use": [
+        "cognition",
+        "skill-candidate"
+      ],
+      "groups": {
+        "recibo": [
+          "fontes",
+          "escopo",
+          "exclusoes",
+          "observacao-temporal"
+        ]
+      }
+    },
+    {
+      "id": "c03-quarentena-de-material-sensivel",
+      "source_id": "drive-escopo-centraldark",
+      "reference": "C03 — Quarentena de Material Sensível",
+      "kind": "candidate-solution",
+      "category": "C",
+      "state": "CANDIDATE",
+      "summary": "Cofres, secrets, tokens, chaves, autenticação e arquivos equivalentes não entram no corpus cognitivo; preservar apenas metadado/classificação quando necessário.",
+      "tags": [
+        "tema/seguranca",
+        "funcao/quarentena",
+        "capacidade/sensitive-data-boundary"
+      ],
+      "links": [
+        "[[BIBLIOTECA]]",
+        "[[SEGURANCA]]"
+      ],
+      "emojis": [],
+      "use": [
+        "cognition",
+        "skill-candidate"
+      ],
+      "groups": {
+        "bloqueio": [
+          "secrets",
+          "tokens",
+          "ssh",
+          "auth",
+          "cofre"
+        ]
+      },
+      "limits": "Preservar o ouro não autoriza copiar segredo para GitHub ou contexto de modelo."
+    },
+    {
+      "id": "c04-proveniencia-forense-antes-da-causa",
+      "source_id": "estudo-forense-bitdefender",
+      "reference": "C04 — Proveniência Forense antes da Causalidade",
+      "kind": "candidate-solution",
+      "category": "C",
+      "state": "CANDIDATE",
+      "summary": "Para software/processo suspeito, verificar origem, registro, caminho, assinatura, versão/hash, serviço e relação temporal antes de atribuir comprometimento ou causa.",
+      "tags": [
+        "tema/seguranca",
+        "funcao/forense",
+        "capacidade/proveniencia",
+        "capacidade/causalidade"
+      ],
+      "links": [
+        "[[ONTOLOGIA-DE-EVIDENCIA-E-CAUSALIDADE]]",
+        "[[META-LUPA]]"
+      ],
+      "emojis": [],
+      "use": [
+        "cognition",
+        "skill-candidate"
+      ],
+      "groups": {
+        "evidencia": [
+          "origem",
+          "assinatura",
+          "hash",
+          "servico",
+          "evento",
+          "relacao-temporal"
+        ]
+      },
+      "limits": "Presença, nome de fornecedor ou antivírus desativado isoladamente não provam malware."
+    },
+    {
+      "id": "c05-gate-de-contradicao-e-falso-verde",
+      "source_id": "historico-autoevolucao-hermes-centraldark",
+      "reference": "C05 — Gate de Contradição e Falso Verde",
+      "kind": "candidate-solution",
+      "category": "C",
+      "state": "CANDIDATE",
+      "summary": "Sem denominador, evento real ou prova no mesmo alvo, manter BLOCKED/UNKNOWN; SKIPPED, painel verde e ausência de erro não viram PASS.",
+      "tags": [
+        "tema/prova",
+        "funcao/false-green",
+        "capacidade/contraprova",
+        "capacidade/unknown-preservation"
+      ],
+      "links": [
+        "[[META-LUPA]]",
+        "[[REMEDICAO]]"
+      ],
+      "emojis": [],
+      "use": [
+        "cognition",
+        "skill-candidate"
+      ],
+      "groups": {
+        "bloqueio": [
+          "sem-denominador",
+          "no-events",
+          "skipped",
+          "falso-verde"
+        ]
+      }
+    },
+    {
+      "id": "c06-contencao-com-rollback-verificavel",
+      "source_id": "estudo-tecnica-lupa",
+      "reference": "C06 — Contenção com Rollback Verificável",
+      "kind": "candidate-solution",
+      "category": "C",
+      "state": "CANDIDATE",
+      "summary": "Mudança nova deve ter fronteira de falha e caminho de volta testável; feature flag/circuit breaker ajudam, mas só contam quando o rollback foi realmente provado.",
+      "tags": [
+        "tema/resiliencia",
+        "funcao/rollback",
+        "capacidade/contencao",
+        "capacidade/circuit-breaker"
+      ],
+      "links": [
+        "[[EXECUCAO-REVERSIVEL]]",
+        "[[REMEDICAO]]"
+      ],
+      "emojis": [],
+      "use": [
+        "cognition",
+        "skill-candidate"
+      ],
+      "groups": {
+        "prova": [
+          "falha-isolada",
+          "rollback",
+          "reteste"
+        ]
+      },
+      "limits": "Feature flag documentada != rollback comprovado."
+    },
+    {
+      "id": "c07-quarentena-temporal-de-estado-antigo",
+      "source_id": "drive-escopo-centraldark",
+      "reference": "C07 — Quarentena Temporal de Estado Antigo",
+      "kind": "candidate-solution",
+      "category": "C",
+      "state": "CANDIDATE",
+      "summary": "Material histórico preserva contexto e ouro, mas qualquer claim de estado atual exige remedição no GitHub/runtime correspondente.",
+      "tags": [
+        "tema/prova",
+        "funcao/temporalidade",
+        "capacidade/stale-quarantine",
+        "capacidade/remeasure"
+      ],
+      "links": [
+        "[[METACOGNICAO-OPERACIONAL]]",
+        "[[ACORDAR]]"
+      ],
+      "emojis": [],
+      "use": [
+        "cognition",
+        "skill-candidate"
+      ],
+      "groups": {
+        "tempo": [
+          "historical",
+          "current",
+          "remeasure"
+        ]
+      }
+    },
+    {
+      "id": "c08-dedupe-de-espelho",
+      "source_id": "drive-escopo-centraldark",
+      "reference": "C08 — Dedupe de Espelho",
+      "kind": "candidate-solution",
+      "category": "C",
+      "state": "CANDIDATE",
+      "summary": "ESPELHOS-DO-GITHUB servem para consulta humana, mas não contam como segunda fonte independente nem substituem o repositório canônico.",
+      "tags": [
+        "tema/prova",
+        "funcao/dedupe",
+        "capacidade/mirror-boundary",
+        "capacidade/source-of-truth"
+      ],
+      "links": [
+        "[[GITHUB]]",
+        "[[REUSE-BEFORE-CREATE]]"
+      ],
+      "emojis": [],
+      "use": [
+        "cognition",
+        "skill-candidate"
+      ],
+      "groups": {
+        "regra": [
+          "mirror-not-proof",
+          "canonical-github"
+        ]
+      }
+    },
+    {
+      "id": "c09-validacao-deterministica-de-saida",
+      "source_id": "estudo-tecnica-lupa",
+      "reference": "C09 — Validação Determinística de Saída",
+      "kind": "candidate-solution",
+      "category": "C",
+      "state": "CANDIDATE",
+      "summary": "Resposta estruturada de agente precisa passar por schema, allowlist, escopo e autorização antes de virar comando, registro ou mutação.",
+      "tags": [
+        "tema/seguranca",
+        "funcao/output-validation",
+        "capacidade/schema",
+        "capacidade/allowlist"
+      ],
+      "links": [
+        "[[CONTRATO-FERRAMENTA]]",
+        "[[EXECUCAO-REVERSIVEL]]"
+      ],
+      "emojis": [],
+      "use": [
+        "cognition",
+        "skill-candidate"
+      ],
+      "groups": {
+        "gate": [
+          "schema",
+          "allowlist",
+          "scope",
+          "authority"
+        ]
+      }
+    },
+    {
+      "id": "c10-pesquisa-de-seguranca-com-fronteira-defensiva",
+      "source_id": "drive-estudos-e-materia",
+      "reference": "C10 — Pesquisa de Segurança com Fronteira Defensiva",
+      "kind": "candidate-solution",
+      "category": "C",
+      "state": "CANDIDATE",
+      "summary": "Materiais de red teaming, OWASP, fuzzing e jailbreak entram como estudo defensivo/candidato; promoção exige escopo controlado, contraprova e nenhum hack-back.",
+      "tags": [
+        "tema/seguranca",
+        "funcao/red-team-defensivo",
+        "capacidade/adversarial-testing",
+        "uso/estudo"
+      ],
+      "links": [
+        "[[META-LUPA]]",
+        "[[SEGURANCA]]"
+      ],
+      "emojis": [],
+      "use": [
+        "cognition",
+        "skill-candidate"
+      ],
+      "groups": {
+        "limite": [
+          "ambiente-controlado",
+          "defesa",
+          "sem-hack-back",
+          "sem-promocao-automatica"
+        ]
+      },
+      "limits": "Conhecer vetor ofensivo não concede autorização operacional para atacar terceiros."
+    }
+  ]
+}

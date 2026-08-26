@@ -8,7 +8,12 @@
  *
  * SELO_CANONICO_DE_PROMOCAO = recibo de intenção completo +
  * 👑 PERMITO-SEGREDO + 🔄 GIT + 🤖 AUTO.
+ *
+ * PADRAO_OPERACIONAL (todos os PRs elegíveis, não só um):
+ * 🟡 IA-PRECISA-REVISAR + 🧠 AGENTE-* derivado do Writer + selo acima.
+ *
  * O selo organiza/rastreia; não substitui gates, segurança nem prova.
+ * ✅ PR CONFIRMADO e 🟢 SUCESSO são RESULTADO (pós-merge), nunca input.
  */
 import { spawnSync } from "node:child_process";
 import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
@@ -23,11 +28,30 @@ export const CANONICAL_AUTHORITY_LABEL = "👑 PERMITO-SEGREDO";
 export const CANONICAL_GIT_LABEL = "🔄 GIT";
 export const CANONICAL_AUTOMATION_LABEL = "🤖 AUTO";
 export const CANONICAL_SUCCESS_LABEL = "🟢 SUCESSO";
+export const CANONICAL_REVIEW_LABEL = "🟡 IA-PRECISA-REVISAR";
 export const REQUIRED_PROMOTION_SEAL_LABELS = Object.freeze([
   CANONICAL_AUTHORITY_LABEL,
   CANONICAL_GIT_LABEL,
   CANONICAL_AUTOMATION_LABEL,
 ]);
+/** Baseline operacional aplicado a TODO PR elegível (padrão da Casa). */
+export const OPERATIONAL_BASELINE_LABELS = Object.freeze([
+  CANONICAL_REVIEW_LABEL,
+]);
+export const WRITER_AGENT_LABELS = Object.freeze({
+  grok: "🧠 AGENTE-GROK",
+  chatgpt: "🧠 AGENTE-CHATGPT",
+  sol: "🧠 AGENTE-CHATGPT",
+  gpt: "🧠 AGENTE-CHATGPT",
+  claude: "🧠 AGENTE-CLAUDE",
+  anthropic: "🧠 AGENTE-CLAUDE",
+  codex: "🧠 AGENTE-CODEX",
+  hermes: "🧠 AGENTE-HERMES",
+  pivete: "🧠 AGENTE-HERMES",
+  jarvis: "🧠 AGENTE-JARVIS",
+  sentinela: "🧠 AGENTE-SENTINELA",
+  supabase: "🧠 AGENTE-SUPABASE",
+});
 export const SUPPORTED_SEAL_MERGE_POLICIES = Object.freeze([
   "AUTO_SQUASH_IF_CLEAN",
   "GREEN_FIRST",
@@ -62,6 +86,30 @@ export function promotionSealReceipt(pr) {
   return { valid, authority, mergePolicy, intentScope, writer, writerScope };
 }
 
+/** Deriva 🧠 AGENTE-* a partir do campo Writer do recibo (padrão global). */
+export function agentLabelsFromWriter(writer) {
+  const text = String(writer || "").toLocaleLowerCase("pt-BR");
+  const found = new Set();
+  for (const [token, label] of Object.entries(WRITER_AGENT_LABELS)) {
+    if (text.includes(token)) found.add(label);
+  }
+  return [...found];
+}
+
+/**
+ * Conjunto completo que TODO PR elegível deve carregar antes da promoção.
+ * = selo de promoção + baseline operacional + agente(s) do Writer.
+ */
+export function requiredOperationalLabels(pr) {
+  const receipt = promotionSealReceipt(pr);
+  const agents = agentLabelsFromWriter(receipt.writer);
+  return [...new Set([
+    ...REQUIRED_PROMOTION_SEAL_LABELS,
+    ...OPERATIONAL_BASELINE_LABELS,
+    ...agents,
+  ])];
+}
+
 export function promotionSealState(pr, repository, trustedAuthors = ["segredounlock"]) {
   const trusted = trustedAuthors.map((item) => item.toLowerCase());
   const receipt = promotionSealReceipt(pr);
@@ -73,7 +121,8 @@ export function promotionSealState(pr, repository, trustedAuthors = ["segredounl
     trusted.includes(String(pr?.user?.login || "").toLowerCase())
   );
   const labels = labelNames(pr);
-  const missingLabels = REQUIRED_PROMOTION_SEAL_LABELS.filter(
+  const required = requiredOperationalLabels(pr);
+  const missingLabels = required.filter(
     (label) => !labels.has(label.toLocaleLowerCase("pt-BR")),
   );
   const eligible = structurallyEligible && receipt.valid;
@@ -81,7 +130,7 @@ export function promotionSealState(pr, repository, trustedAuthors = ["segredounl
     eligible,
     complete: eligible && missingLabels.length === 0,
     receipt,
-    requiredLabels: [...REQUIRED_PROMOTION_SEAL_LABELS],
+    requiredLabels: required,
     missingLabels,
   };
 }
@@ -110,7 +159,7 @@ async function api(token, method, path, body) {
       Authorization: `Bearer ${token}`,
       Accept: "application/vnd.github+json",
       "X-GitHub-Api-Version": "2022-11-28",
-      "User-Agent": "centraldark-autonomia-varredura/3.1",
+      "User-Agent": "centraldark-autonomia-varredura/3.2",
       ...(body === undefined ? {} : { "Content-Type": "application/json" }),
     },
     body: body === undefined ? undefined : JSON.stringify(body),
@@ -323,7 +372,7 @@ async function promoteSweep() {
       const returned = new Set((Array.isArray(labels) ? labels : []).map(
         (label) => String(label?.name || label).trim().toLocaleLowerCase("pt-BR"),
       ));
-      const unverified = REQUIRED_PROMOTION_SEAL_LABELS.filter(
+      const unverified = seal.requiredLabels.filter(
         (label) => !returned.has(label.toLocaleLowerCase("pt-BR")),
       );
       if (unverified.length) {
@@ -333,19 +382,19 @@ async function promoteSweep() {
           repository,
           number,
           "PROMOTION_SEAL_NOT_VERIFIED",
-          `GitHub não confirmou o selo completo. Faltando após materialização: ${unverified.join(", ")}`,
+          `GitHub não confirmou o padrão operacional completo. Faltando após materialização: ${unverified.join(", ")}`,
         );
         continue;
       }
-      console.log(`PR=${number} PROMOTION_SEAL_MATERIALIZED=${REQUIRED_PROMOTION_SEAL_LABELS.join("|")}`);
+      console.log(`PR=${number} OPERATIONAL_LABEL_STANDARD_MATERIALIZED=${seal.requiredLabels.join("|")}`);
       await api(promoterToken, "POST", `/repos/${repository}/dispatches`, {
         event_type: "centraldark_autonomia_recheck",
-        client_payload: { pr_number: number, reason: "promotion_seal_materialized", head: livePr.head?.sha || null },
+        client_payload: { pr_number: number, reason: "operational_label_standard_materialized", head: livePr.head?.sha || null },
       });
       continue;
     }
 
-    console.log(`PR=${number} PROMOTION_SEAL=PASS`);
+    console.log(`PR=${number} OPERATIONAL_LABEL_STANDARD=PASS`);
     const promote = runEngine("promote", {
       GITHUB_TOKEN: promoterToken,
       GITHUB_EVENT_PATH: eventPath,

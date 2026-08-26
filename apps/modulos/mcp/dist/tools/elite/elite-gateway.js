@@ -34,7 +34,8 @@ export const eliteGatewayTools = [
             model: z.string().default("gpt-4o").optional().describe("Modelo (padrão: gpt-4o)"),
         }),
         handler: async (input) => {
-            if (!GATEWAY_TOKEN) return ok({ error: "ELITE_GATEWAY_TOKEN ausente no ambiente" });
+            if (!GATEWAY_TOKEN)
+                return ok({ error: "ELITE_GATEWAY_TOKEN ausente no ambiente" });
             const res = await fetch(`${GATEWAY_URL}/v1/chat/completions`, {
                 method: "POST",
                 headers: {
@@ -87,7 +88,7 @@ export const eliteGatewayTools = [
             try {
                 const t0 = Date.now();
                 const res = await fetch(`${GATEWAY_URL}/v1/models`, {
-                    headers: {'Authorization': 'Bearer ${GATEWAY_TOKEN}'},
+                    headers: { 'Authorization': 'Bearer ${GATEWAY_TOKEN}' },
                     signal: AbortSignal.timeout(8000),
                 });
                 latencyMs = Date.now() - t0;

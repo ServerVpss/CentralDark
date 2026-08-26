@@ -45,8 +45,37 @@ jobs:
               body: 'Aprovação automática — atualização do Dependabot dentro da política (sem majors).',
             });
 
+      - name: Detectar stale/conflitado e pedir rebase nativo
+        if: env.SKIP != '1'
+        id: stale
+        uses: actions/github-script@v9
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const pr = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+            });
+            const mergeable = pr.data.mergeable;
+            // mergeable === null significa UNKNOWN (GitHub ainda calculando)
+            if (mergeable === false) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.pull_request.number,
+                body: '@dependabot rebase',
+              });
+              core.exportVariable('REBASE_REQUESTED', '1');
+              console.log('::warning::PR conflitado. Solicitado rebase nativo do Dependabot. Nenhum merge até novo HEAD limpo.');
+            } else if (mergeable === null) {
+              console.log('::notice::Mergeability UNKNOWN (GitHub ainda calculando). Aguardando próximo synchronize.');
+            } else {
+              console.log('::notice::PR mergeable. Seguindo para auto-merge por política.');
+            }
+
       - name: Habilitar auto-merge somente para PATCH
-        if: env.SKIP != '1' && steps.meta.outputs.update-type == 'version-update:semver-patch'
+        if: env.SKIP != '1' && steps.meta.outputs.update-type == 'version-update:semver-patch' && env.REBASE_REQUESTED != '1'
         uses: actions/github-script@v9
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
