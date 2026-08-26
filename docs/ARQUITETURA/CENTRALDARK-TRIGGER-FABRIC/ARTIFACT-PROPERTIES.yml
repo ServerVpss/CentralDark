@@ -3,8 +3,7 @@ owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/
 status: CANONICAL_CONTRACT
 source_rule: "CANONICO -> ARTEFATO; artefato nao inventa canonico"
 
-# Propriedades obrigatórias de todo artefato derivado consumido por Hermes
-# (foto Notion "Diagramas do Sistema CentralDark" cristalizada).
+# Propriedades obrigatórias de todo artefato derivado consumido por Hermes.
 groups:
   A_IDENTIDADE:
     title:
@@ -75,6 +74,10 @@ groups:
     content_sha256:
       required: false
       type: string
+    conversation_refs:
+      required: false
+      type: list
+      description: Referências recuperáveis de chats/conversas quando forem fonte de contexto ou proveniência
   E_GOVERNANCA:
     owner:
       required: true
@@ -85,6 +88,20 @@ groups:
     writer:
       required: false
       type: string
+  F_SEMANTICA:
+    related_notes:
+      required: false
+      type: list
+      description: Notas/owners relacionados; qualidade acima de quantidade
+    relation_types:
+      required: false
+      type: list
+      values: [PARTE_DE, EXPLICA, DEPENDE_DE, COMPLEMENTA, EXEMPLO_DE, CONTRASTA_COM, EVOLUIU_PARA, FONTE_DE]
+      owner: docs/CONSCIENCIA/ARTEFATOS/TECNICAS-DE-LINKAGEM-SEMANTICA.md
+    semantic_summary:
+      required: false
+      type: string
+      description: Frase curta explicando por que os links existem
 
 rules:
   artifact_never_invents_canonical: true
@@ -93,6 +110,10 @@ rules:
   hermes_consumes_only_with_properties: true
   alphabetical_category_index: true
   status_derives_from_proof_not_hope: true
+  cross_chat_reference_is_current_state: false
+  semantic_link_is_proof: false
+  graph_is_authority: false
+  semantic_links_quality_over_quantity: true
 
 example_frontmatter: |
   ---
@@ -107,4 +128,6 @@ example_frontmatter: |
   source_class: INTERNAL
   source_rule: "CANONICO -> ARTEFATO; artefato nao inventa canonico"
   owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/
+  related_notes: [docs/CONSCIENCIA/MAPA-DO-CEREBRO.md]
+  relation_types: [PARTE_DE]
   ---

@@ -2,11 +2,11 @@
 title: "Mapa Central do Cérebro Vivo — CentralDark"
 status: CANONICO
 date: 2026-06-29
-updated: 2026-08-26T08:38:00-03:00
-tags: [navegacao, moc, mapa, consciencia, intencao, continuidade]
+updated: 2026-08-26T09:10:00-03:00
+tags: [navegacao, moc, mapa, consciencia, intencao, continuidade, cross-chat, delta-util, semantica]
 category: "M-Mapa-Sistema"
 sensitivity: INTERNAL
-source: "owners canônicos da CentralDark + estado vivo medido"
+source: "owners canônicos da CentralDark + estado vivo medido + contexto cross-chat quando recuperável"
 source_class: INTERNAL
 source_rule: "CANONICO -> ARTEFATO; artefato nao inventa canonico"
 owner: "LEIA-ME-IA.md + AGENTS.md + docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md"
@@ -130,13 +130,28 @@ ESTADO TECNICO ATUAL
 → Git/PR/HEAD + runtime/log/efeito medidos no alvo correto
 ```
 
-## Precedência temporal
+## Precedência por tipo de claim
+
+Não existe uma fila única em que documento sempre vence realidade. A precedência depende do claim:
 
 ```text
-CANONICO_ATUAL
-> ESTADO_VIVO_APLICAVEL
-> MEMORIA_RELEVANTE
-> HISTORICO
+CLAIM_DE_GOVERNANCA|IDENTIDADE|OWNER
+→ CANONICO_ATUAL > MEMORIA_RELEVANTE > HISTORICO
+
+CLAIM_DE_RUNTIME|EXECUCAO|ESTADO_ATUAL
+→ EVIDENCIA_VIVA_DO_MESMO_ALVO > ESTADO_DESEJADO_DOCUMENTADO > HISTORICO
+
+CLAIM_CROSS_CHAT
+→ CONVERSA_ATUAL + HISTORICO_CHATGPT_RECUPERADO_QUANDO_ACESSIVEL + MATERIAL_FORNECIDO
+→ DEDUPE + RECONCILIACAO
+→ NAO_RECUPERADO = UNKNOWN
+```
+
+```text
+DOCUMENTADO != EXECUTADO
+MEMORIA != ESTADO_VIVO
+GITHUB != MEMORIA_ENTRE_CHATS
+CROSS_CHAT != CURRENT_STATE
 ```
 
 Passado não é apagado. Ele entra como proveniência e delta candidato:
@@ -147,6 +162,28 @@ PASSADO
    SIM → RECONCILIAR NO OWNER ATUAL
    NAO → PRESERVAR COMO HISTORICO/SUPERSEDED QUANDO NECESSARIO
 → PRESENTE CONTINUA GOVERNANDO
+```
+
+## Reconciliação cross-chat
+
+Quando a missão pede recuperar outras conversas do ChatGPT, a Casa trata isso como **contexto read-only**, nunca como atalho para estado técnico:
+
+```text
+TEMA_ATUAL
+→ RECUPERAR_CHAT_HISTORY_QUANDO_ACESSIVEL
+→ CRUZAR_CONVERSAS_RELEVANTES
+→ DEDUPE
+→ PRESERVAR DECISOES + CORRECOES + APRENDIZADOS + PENDENCIAS
+→ SEPARAR HISTORICO DE ESTADO_ATUAL
+→ CONTRADICAO → META_LUPA + RECONCILIAR
+→ NAO_RECUPERADO → UNKNOWN
+→ SOMENTE DELTA_UTIL VAI AO OWNER EXISTENTE
+```
+
+```text
+GITHUB_MUST_NOT_SUBSTITUTE_MISSING_CHAT_MEMORY=true
+RECOVER_BEFORE_REASK=true
+CROSS_CHAT_MODE=READ_ONLY
 ```
 
 ## Um cérebro lógico, várias superfícies
@@ -165,7 +202,7 @@ N SUPERFICIES
 
 `docs/BRAIN/`, Grafo Vivo e vetores são navegação/índices/projeções. Eles não substituem os owners canônicos.
 
-## Nota boa precisa endereço
+## Nota boa precisa endereço e relação
 
 Toda nota derivada que Hermes precise consumir deve carregar as propriedades do contrato:
 
@@ -176,7 +213,16 @@ IDENTIDADE
 + PROVENIENCIA
 + OWNER
 (+ CONSUMER/WRITER quando aplicavel)
+(+ RELACOES_SEMANTICAS quando houver ganho)
 → NOTA ROTEAVEL
+```
+
+Relação semântica liga conhecimento, mas não fabrica causalidade:
+
+```text
+SEMANTIC_LINK != PROOF
+SEMANTIC_LINK != AUTHORITY
+GRAPH_EDGE != CAUSALITY
 ```
 
 Sem propriedades obrigatórias:
@@ -200,12 +246,13 @@ FALA_HUMANA
 Na apresentação ao humano, podem coexistir:
 
 ```text
-BAIANES_FACIL
+CADENCIA_DE_VERSICULO_ORIGINAL_QUANDO_UTIL
++ BAIANES_FACIL
 + PRECISAO_TECNICA
-+ PARALELISMO_NARRATIVO_QUANDO_AJUDAR
++ PARALELISMO_NARRATIVO
 ```
 
-Essa camada ajuda compreensão; **não concede autoridade nem altera governança**.
+Essa camada é apresentação. Não é autoridade religiosa, não altera prova e não substitui o contrato técnico.
 
 ## Conexões rápidas
 
@@ -216,6 +263,8 @@ Essa camada ajuda compreensão; **não concede autoridade nem altera governança
 - `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml` — ciclo mestre.
 - `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml` — gatilhos.
 - `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ARTIFACT-PROPERTIES.yml` — propriedades.
+- `docs/ARQUITETURA/CENTRALDARK-CAPABILITY-CONTRACT-ROUTER.md` — capacidade/instrumento/sinal.
+- `docs/BRAIN/01-CONCEITOS/Banda/BANDA_COMPASSO_GLOBAL.md` — semântica musical de compasso compartilhado.
 - `docs/BRAIN/00-MAPA-SISTEMA/BRAIN.md` — entrada humana do vault.
 - `docs/CONSCIENCIA/APRENDIZADOS/2026-08-17-mapa-mental-intencao-comprimida.md` — cristal histórico de compressão de intenção.
 
@@ -229,4 +278,5 @@ ONE_WRITER_PER_SCOPE=true
 UNKNOWN_IS_NOT_PASS=true
 REALITY_IS_JUDGE=true
 GRAPH_IS_DERIVED_NOT_AUTHORITY=true
+ZERO_DUPLICATE_OWNER=true
 ```
