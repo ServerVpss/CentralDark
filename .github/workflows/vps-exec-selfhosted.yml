@@ -379,3 +379,57 @@ jobs:
                 ? (deployed ? 'mapa e Hermes-Verificador promovidos e estáveis' : 'escopo sem mudança; runtime preservado')
                 : 'promoção bloqueada em fail-closed; consultar job sanitizado',
             });
+
+  vps-housekeeping:
+    name: VPS Housekeeping (varredura lixo/ouro, report-only)
+    if: github.repository == 'ServerVpss/CentralDark'
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 15
+    env:
+      REPO_DIR: /root/CentralDark
+      REPORT_DIR: /root/CentralDark/logs/housekeeping
+    steps:
+      - name: Checkout exact event SHA
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          path: .ci-housekeeping
+          fetch-depth: 1
+          submodules: false
+
+      - name: Varredura lixo/ouro (report-only, sem destruir)
+        id: scan
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$REPORT_DIR"
+          REPORT="$REPORT_DIR/$(date -u +%Y-%m-%dT%H:%M:%SZ).jsonl"
+          echo "REPORT=$REPORT" >> "$GITHUB_OUTPUT"
+          HOUSEKEEPING_SCRIPT="$GITHUB_WORKSPACE/.ci-housekeeping/scripts/vps/vps-housekeeping-scan.mjs"
+          if [[ ! -f "$HOUSEKEEPING_SCRIPT" ]]; then
+            echo "HOUSEKEEPING_SCRIPT_MISSING"
+            exit 61
+          fi
+          node "$HOUSEKEEPING_SCRIPT" --repo-dir "$REPO_DIR" --report "$REPORT"
+
+      - name: Publicar status sanitizado
+        if: always()
+        uses: actions/github-script@v9
+        env:
+          SCAN_OUTCOME: ${{ steps.scan.outcome }}
+          REPORT: ${{ steps.scan.outputs.REPORT }}
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const ok = process.env.SCAN_OUTCOME === 'success';
+            await github.rest.repos.createCommitStatus({
+              owner,
+              repo,
+              sha: context.sha,
+              state: ok ? 'success' : 'failure',
+              context: 'centraldark/vps-housekeeping',
+              target_url: `https://github.com/${owner}/${repo}/actions/runs/${process.env.GITHUB_RUN_ID}`,
+              description: ok
+                ? 'varredura lixo/ouro concluída (report-only)'
+                : 'varredura falhou; consultar job',
+            });
