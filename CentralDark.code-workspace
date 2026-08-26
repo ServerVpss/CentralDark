@@ -4,7 +4,7 @@
     { "name": "Scripts", "path": "./scripts" },
     { "name": "Apps", "path": "./apps" },
     { "name": "Docs / Consciência", "path": "./docs" },
-    { "name": "Infra", "path": "./infra" }
+    { "name": "Infra", "path": "./infra" },
   ],
   "settings": {
     "files.watcherExclude": {
@@ -15,7 +15,7 @@
       "**/apps/modulos/WebUI/**": true,
       "**/dist/**": true,
       "**/.backups/**": true,
-      "**/quarantine/**": true
+      "**/quarantine/**": true,
     },
     "search.exclude": {
       "**/node_modules": true,
@@ -24,24 +24,25 @@
       "**/apps/modulos/WebUI": true,
       "**/dist": true,
       "**/.backups": true,
-      "**/quarantine": true
+      "**/quarantine": true,
     },
     "files.exclude": {
-      "**/node_modules": true
+      "**/node_modules": true,
     },
     "editor.formatOnSave": true,
     "typescript.preferences.importModuleSpecifier": "relative",
     "git.autofetch": true,
     "git.confirmSync": false,
     "remote.autoForwardPorts": false,
-    "remote.restoreForwardedPorts": false
+    "remote.restoreForwardedPorts": false,
+    "chat.byokUtilityModelDefault": "mainAgent",
   },
   "extensions": {
     "recommendations": [
       "dbaeumer.vscode-eslint",
       "esbenp.prettier-vscode",
       "bradlc.vscode-tailwindcss",
-      "ms-python.python"
-    ]
-  }
+      "ms-python.python",
+    ],
+  },
 }
