@@ -2,8 +2,8 @@
 title: "Livro da Revelação do Portão Desarmado e da Sentença da Realidade — Event Ledger"
 status: KNOWLEDGE_ONLY
 date: 2026-08-26
-updated: 2026-08-26T18:00:00-03:00
-observed_at: 2026-08-26T18:00:00-03:00
+updated: 2026-08-26T18:16:30-03:00
+observed_at: 2026-08-26T18:16:30-03:00
 tags: [aprendizado, eventos, reality-judge, github, ci, enforcement, hermes, dependabot, registro]
 category: "A-Aprendizado-Operacional"
 sensitivity: INTERNAL
@@ -342,29 +342,118 @@ ONE_DIRECTION_ONLY=true
 
 Logo, “várias canetas” significa **várias leases coordenadas**, não corrida de escrita sobre o mesmo alvo. Isso preserva múltiplas capacidades sem criar múltiplas intenções, múltiplos owners concorrentes ou múltiplas realidades.
 
-## REALITY_JUDGE T1
+## EVENT-016 — T2: main avançou novamente
 
-```text
-MAIN_AT_EVENT_015 = 2d208055ff20e52e58bb94a9e396aed8316cad09
-PORTAO_DESARMADO = PROVADO_NESTE_EIXO
-PR_1193_MERGE = HISTORICO_PROVADO
-PR_1193_EXACT_HEAD_GATES_PASS = NAO
-HERMES_PROVIDER_BINDING_FINDING = REGISTRADO_COMO_OBSERVACAO_REPORTADA
-HERMES_PROVIDER_CANONICAL_OWNER = UNKNOWN
-COORDINATION_MODEL = MANY_EYES_HEADS_ARMS_DISJOINT_WRITERS → ONE_DIRECTION
-MISSION_STATE = NOT_YET/UNKNOWN
+```yaml
+event_id: EVENT-016
+subject: main_temporal_progression_t2
+previous_main_sha: 2d208055ff20e52e58bb94a9e396aed8316cad09
+current_main_sha: a01bd7b2d2bd3b6f367cb2d75e60c439116b3647
+current_main_message: "Fix/ouro proof architecture boot (#1212)"
+observed_at: 2026-08-26T18:16:08-03:00
+provenance: GITHUB_LIVE_BRANCH_MEASUREMENT
+verdict: PROVEN
 ```
 
-Não há `FIXED_POINT_PASS`: existe finding estável de enforcement e existe owner material ainda não localizado para o provider Hermes.
+O eixo temporal foi reaberto sem invalidar os eventos independentes anteriores.
 
-## Receipt
+## EVENT-017 — Owner repo-side do binding `nous/` localizado
+
+```yaml
+event_id: EVENT-017
+subject: hermes_provider_repo_routing_owner
+requested_route: nous/hermes-3-llama-3.1-70b
+routing_contract: docs/ARQUITETURA/CENTRALDARK-OMNI-ROUTER.md
+routing_implementation: apps/modulos/elite-gateway/scripts/centraldark_omni_router.py
+route_engine: nous
+provider_endpoint_family: Nous Research inference API
+pr_1193_is_owner: false
+repo_side_owner_status: LOCATED
+contract_status: IMPLEMENTATION_CANDIDATE
+provenance: GITHUB_LIVE_FILE_AND_CODE_SEARCH
+verdict: REPO_SIDE_TARGET_LOCATED
+```
+
+O `route_model()` do Omni Router reconhece o prefixo `nous/` e a implementação `run_nous()` usa a API de inferência Nous. Isso separa definitivamente o fluxo de provider do PR #1193.
 
 ```text
-EVENTS_RECORDED=15
+PR_1193 != HERMES_PROVIDER_OWNER
+OWNER_REPO_SIDE_LOCATED != PROVIDER_INVOCATION_PROVEN
+```
+
+## EVENT-018 — Modelo 70B reportado não está declarado no config operacional repo-side
+
+```yaml
+event_id: EVENT-018
+subject: requested_nous_model_declaration
+requested_model: hermes-3-llama-3.1-70b
+exact_operational_repo_declaration_found: false
+exact_string_found_in_ledger_history: true
+omni_router_default_nous_model: tencent/hy3:free
+huggingface_static_hermes_model: NousResearch/Hermes-3-Llama-3.1-8B
+same_provider_target: false
+provenance: GITHUB_LIVE_CODE_SEARCH_AND_PROVIDER_FILES
+verdict: REQUESTED_70B_NOT_DECLARED_IN_REPO_OPERATIONAL_CONFIG
+```
+
+Isto **não** prova indisponibilidade externa do modelo:
+
+```text
+NOT_DECLARED_IN_REPO_CONFIG != PROVIDER_UNAVAILABLE
+HUGGINGFACE_8B != NOUS_70B_ROUTE
+SAME_MODEL_FAMILY != SAME_TARGET
+```
+
+## EVENT-019 — Probe correto localizado, provider ainda não invocado
+
+```yaml
+event_id: EVENT-019
+subject: scripts/trigger-fabric/engine_gap_probe.py
+mode: READ_ONLY
+router_health_probe: true
+engine_capability_cards: true
+provider_invocation_performed: false
+provider_invocation_verdict: UNKNOWN
+mutation: false
+provenance: GITHUB_LIVE_FILE_MEASUREMENT
+verdict: CAPABILITY_PROBE_FOUND_PROVIDER_INVOCATION_UNPROVEN
+next_cursor: "executar capability-check no runtime aplicável do Omni Router/provider; health/configured não contam como invocation PASS"
+```
+
+```text
+ROUTER_HEALTH_PASS != PROVIDER_INVOCATION_PASS
+CONFIGURED != INVOCATION_PROVEN
+UNKNOWN != PASS
+```
+
+## REALITY_JUDGE T2
+
+```text
+MAIN_CURRENT_AT_T2 = a01bd7b2d2bd3b6f367cb2d75e60c439116b3647
+PORTAO_DESARMADO = PROVADO_NO_ENFORCEMENT_MEDIDO
+PR_1193 = HISTORICO_DEPENDABOT_TYPESCRIPT
+PR_1193_CHANGED_FILES = package.json + package-lock.json
+PR_1193_IS_HERMES_PROVIDER_OWNER = false
+HERMES_PROVIDER_REPO_ROUTING_OWNER = CENTRALDARK_OMNI_ROUTER
+REQUESTED_70B_DECLARED_IN_REPO_OPERATIONAL_CONFIG = false
+PROVIDER_REAL_AVAILABILITY = UNKNOWN
+PROVIDER_INVOCATION = UNKNOWN
+MISSION_FIXED_POINT = NOT_YET
+```
+
+A associação causal errada foi removida. O fluxo `fcf29b26` permanece no rio Dependabot/TypeScript; o fluxo `nous/...` corre pelo Omni Router. Só o runtime/provider do mesmo alvo pode fechar o bearing de disponibilidade.
+
+## Receipt T2
+
+```text
+EVENTS_RECORDED=19
 EVENT_LEDGER_REQUIRED=true
+CAUSAL_TRAIL_RECONSTRUCTIBLE_WITHOUT_CHAT=true
 FACT_EVIDENCE_VERDICT_SEPARATED=true
 HISTORY_CURRENT_STATE_SEPARATED=true
 TARGET_STREAMS_SEPARATED=true
+OWNER_REPO_SIDE_LOCATED=true
+PROVIDER_INVOCATION_PROVEN=false
 PARALLEL_PERCEPTION=true
 MULTIPLE_WRITERS_ACROSS_DISJOINT_SCOPES=true
 ONE_WRITER_PER_SCOPE=true
@@ -373,7 +462,7 @@ UNKNOWN_IS_NOT_PASS=true
 REUSE_BEFORE_CREATE=true
 ONE_SYSTEM_ONLY=true
 NEXT_CURSOR_1=!RECONCILIAR policy-gates ↔ GitHub enforcement
-NEXT_CURSOR_2=LOCATE_HERMES_PROVIDER_OWNER + CAPABILITY_CHECK
+NEXT_CURSOR_2=OMNI_ROUTER_RUNTIME_CAPABILITY_CHECK → PROVIDER_INVOCATION_COUNTERPROOF
 ```
 
 ## BOOT
