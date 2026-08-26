@@ -1,0 +1,228 @@
+schema: centraldark.master-cycle.v1
+status: CANDIDATE_UNTIL_MERGED_AND_GATED
+status: CANONICO
+runtime_status: UNPROVEN_UNTIL_OBSERVED
+owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml
+authority: SEGREDO/CHEFE
+master_trigger: "!CENTRALDARK"
+master_trigger_requires_explicit_marker: true
+plain_word_centraldark_does_not_trigger: true
+
+purpose: >-
+  Comprimir o ciclo operacional completo da Casa em um unico gatilho humano,
+  preservando cada fase como capacidade separada, adaptativa e mensuravel.
+  preservando cada fase como capacidade separada, adaptativa e mensuravel,
+  sem transformar fala comprimida em autoridade nova.
+
+expands_to:
+  - ACORDAR
+  - CALIBRAR
+  - MULTIBUSSOLA
+  - META_LUPA
+  - RECONCILIAR
+  - CONTRAPROVA
+  - REMEDICAO
+  - FIXED_POINT
+  - REGISTRA
+  - BOOT
+
+canonical_chain: "#ACORDAR -> !CALIBRAR -> !MULTIBUSSOLA -> !META_LUPA -> !RECONCILIAR -> !CONTRAPROVA -> !REMEDIÇÃO -> !FIXED_POINT -> !REGISTRA -> !BOOT"
+
+phase_contracts:
+  ACORDAR:
+    meaning: RECOVER_LIVE_STATE
+    owner: "LEIA-ME-IA.md + AGENTS.md"
+  CALIBRAR:
+    meaning: ALIGN_INTENT_ROLE_SCOPE_TOOLS_PROOF
+    owner: "LEIA-ME-IA.md + AGENTS.md"
+  MULTIBUSSOLA:
+    meaning: MULTIAXIS_MATERIAL_PERCEPTION
+    owner: docs/CONSCIENCIA/MULTIBUSSOLA.md
+  META_LUPA:
+    meaning: FALSIFY_INTERPRETATION_AND_PROOF
+    owner: .agents/skills/meta-lupa/SKILL.md
+    ontology: TECHNIQUE_NOT_AGENT
+  RECONCILIAR:
+    meaning: REUSE_PAST_AND_CURRENT_PROVEN_DELTA_BEFORE_CREATE
+    owner: docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json
+  CONTRAPROVA:
+    meaning: INDEPENDENT_OR_DISCRIMINATING_COUNTERPROOF
+    owner: docs/CONSCIENCIA/PROOF-OWNERSHIP.json
+    provider: REPLACEABLE_BY_CAPABILITY
+  REMEDICAO:
+    meaning: MEASURE_T0_TO_T1
+    owner: docs/CONSCIENCIA/REMEDICAO.md
+  FIXED_POINT:
+    meaning: STOP_ONLY_AT_LOCAL_FIXED_POINT_OR_PROVEN_FRONTIER
+    owner: Trigger Fabric
+  REGISTRA:
+    meaning: WRITE_RECEIPT_LEARNING_PROVENANCE_NEXT_CURSOR
+    owner: continuity + learning owners
+  BOOT:
+    meaning: RETURN_NEXT_CYCLE_RECOVERABLE
+    owner: LEIA-ME-IA.md
+
+execution_model:
+  coordinator: SOL
+  executor: PIVETE/HERMES_OR_CAPABLE_PROVIDER
+  model_is_replaceable: true
+    meaning: WRITE_RECEIPT_LEARNING_PROVENANCE_NEXT_CURSOR_AND_PROMOTE_WHEN_AUTHORIZED
+    owner: continuity + learning owners
+    promotion:
+      target: main
+      method: squash
+      only_if: [SAME_SCOPE_INTENT_AUTHORIZED, APPLICABLE_GATES_PASS, NO_WRITER_CONFLICT, NO_MATERIAL_UNKNOWN]
+      no_reask_same_scope: true
+  BOOT:
+    meaning: RETURN_NEXT_CYCLE_RECOVERABLE
+    owner: LEIA-ME-IA.md
+    runtime_restart_implied: false
+
+execution_model:
+  human_intent_owner: SEGREDO/CHEFE
+  coordinator: SOL
+  executor: PIVETE/HERMES_OR_CAPABLE_PROVIDER
+  model_is_replaceable: true
+  intention_must_be_preserved: true
+  perception_material_is_separate_capability: true
+  meta_lupa_is_technique_not_agent: true
+  counterproof_provider_is_replaceable: true
+  reality_is_judge: true
+  graph_is_derived_not_authority: true
+  parallel_perception: true
+  serialized_mutation: true
+  one_writer_per_scope: true
+
+communication_interface:
+  human_expression_may_be_compressed_or_noisy: true
+  preserve_meaning_before_syntax: true
+  semantic_match_is_authority: false
+  semantic_match_is_mutation_permission: false
+  presentation_layers: [BAIANES_FACIL, TECHNICAL_PRECISION, NARRATIVE_PARALLELISM_WHEN_USEFUL]
+  presentation_is_not_governance: true
+  mechanical_payload_fast_path:
+    trigger: HUMAN_NEEDS_ONLY_COPY_PASTE_PAYLOAD_AND_NO_MATERIAL_DECISION_OR_RISK
+    behavior: RETURN_ONLY_REQUESTED_PAYLOAD
+    forbid: [INTRODUCTION, EXPLANATION, OPTIONAL_OFFER, SUMMARY, CONCLUSION]
+    preserve: [EXACTNESS, REQUIRED_WARNING_IF_MATERIAL, BLOCKED_OR_UNKNOWN_IF_MATERIAL]
+
+# !DELTA UTILS e derivados nao criam um segundo ciclo. Ativam um modo de
+# garimpo incremental dentro do mesmo organismo e roteiam o ouro ao owner existente.
+delta_harvest:
+  canonical_signal: "!DELTA UTILS"
+  semantic_aliases:
+    - "!DELTA UTIL"
+    - "!DELTAUTIL"
+    - "!DELTAÚTIL"
+    - "DELTA ÚTIL"
+    - "DELTA UTIL"
+    - "DELTA UTILS"
+    - "DELTA DE AGORA"
+    - "TOMA ESSE DELTA"
+    - "PEGA O DELTA"
+  mode: DELTA_HARVEST
+  intent: USE_ONLY_WHAT_IS_USEFUL_NOW_WITHOUT_BREAKING_EXISTING_INTENT
+  invariants:
+    preserve_human_intent: true
+    zero_regression: true
+    reuse_before_create: true
+    no_v1_v2_v3: true
+    one_system_only: true
+    route_to_existing_owner: true
+    same_active_pr_when_writer_scope_matches: true
+    trigger_match_is_not_new_authority: true
+    trigger_match_is_not_unrelated_mutation_permission: true
+  material_classification:
+    repetition_pure: DROP
+    useful_delta: ABSORB
+    correction: UPDATE_BELIEF
+    contradiction: META_LUPA_THEN_RECONCILE
+    new_proof: REPLACE_STALE_PROOF_WHEN_SAME_TARGET
+    newer_state: CURRENT_EVIDENCE_WINS
+  useful_delta_requires_any:
+    - NEW_CAPABILITY
+    - NEW_EVIDENCE
+    - CORRECTION
+    - NEWER_STATE
+    - CONTRADICTION_WITH_INFORMATION_GAIN
+    - REMOVAL_OF_DUPLICATION
+    - BETTER_OWNER_BINDING
+    - LOWER_COMPLEXITY_WITH_EQUAL_OR_GREATER_CAPABILITY
+  interesting_alone_is_useful_delta: false
+  destination:
+    resolver: .agents/skills/capability-contract-router/SKILL.md
+    rule: EXISTING_OWNER_FIRST
+    minimum_sufficient_capability_set: true
+  receipt_fields:
+    - SOURCE
+    - CLASSIFICATION
+    - INFORMATION_GAIN
+    - DESTINATION_OWNER
+    - ACTION
+    - EVIDENCE_REF
+    - NEXT_CURSOR
+
+# Lentes transversais: observam qualquer fase, nao viram seis etapas novas.
+transversal_lenses:
+  dimensions:
+    DEPENDENCIA: "o que isto precisa para funcionar ou provar?"
+    DECADENCIA: "o que pode ter ficado stale, vencido ou divergido?"
+    CADENCIA: "quando e por qual evento precisa ser medido de novo?"
+  planes:
+    KNOWLEDGE: "o que sabemos e com qual evidencia?"
+    EXECUTION: "o que realmente executou e qual efeito observavel ocorreu?"
+    CONFIG_ORIGIN: "qual owner/configuracao/origem causou ou governa o comportamento?"
+  matrix_mode: TRANSVERSAL_WHEN_MATERIAL
+  creates_new_phase: false
+  creates_new_brain: false
+
+adaptive_rules:
+  all_phases_are_considered: true
+  no_op_phase_may_return: SKIP_JUSTIFICADO
+  no_new_information: NO_CHANGE
+  unknown: NEVER_PASS
+  explicit_master_trigger_does_not_expand_authority: true
+  explicit_master_trigger_does_not_imply_mutation: true
+
+past_future_reconciliation:
+  source_prs: [1166, 1167, 1168, 1170]
+  policy: ABSORB_ONLY_USEFUL_DELTA_NO_PARALLEL_OWNER
+  source_prs: [1166, 1167, 1168, 1170, 1172, 1189]
+  policy: ABSORB_ONLY_USEFUL_DELTA_NO_PARALLEL_OWNER
+  baseline: CURRENT_MAIN
+  absorbed:
+    - semantic_typo_and_alias_recognition
+    - semantic_match_is_not_authorization
+    - semantic_match_is_not_mutation_permission
+    - graph_is_derived_not_authority
+    - GraphRAG_semantic_retrieval_is_read_only
+    - fixed_point_self_healing_is_bounded
+    - engine_binding_inherits_same_contract
+    - past_is_provenance_plus_candidate_delta
+    - delta_utils_is_incremental_harvest_not_new_router
+    - transversal_3x3_lenses_not_new_phases
+    - mechanical_payload_only_fast_path
+  rejected_as_parallel:
+    - second_semantic_owner
+    - duplicate_semantic_map_authority
+    - new_brain_or_new_judge
+    - historical_branch_governing_current_state
+    - second_capability_router
+    - versioned_duplicate_for_same_rule
+
+artifact_memory:
+  properties_contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ARTIFACT-PROPERTIES.yml
+  valuable_delta_only: true
+  register_between_engines: true
+  graph_update_after_proven_effect: true
+  graph_is_authority: false
+  history_is_current_state: false
+
+hard_guarantee_boundary:
+  prose_only: NOT_ENOUGH
+  required_for_global_blocking:
+    - REAL_CONSUMER
+    - POSITIVE_NEGATIVE_TEST
+    - EXISTING_GATE_BINDING
+    - VERIFIABLE_RECEIPT
+    - MAIN_PROTECTION_OR_EQUIVALENT_ENFORCEMENT

@@ -24,7 +24,7 @@
 12. **CPU-Z > Gerenciador de Tarefas pra CAUSA de hardware.** Mostra SPD (pentes/dual channel/velocidade), timings vs XMP, mainboard/slots M.2. Amarra no gargalo: se tem slot livre pra mais RAM, mata paginação na raiz (melhor que remendo de pagefile).
 13. **iFood = depuração de negócio aplicada.** CHEFE viu erro do operador (descrição não destacada), não brigou, foi na causa → oportunidade de venda. Mesmo instinto da Casa: achar causa raiz, transformar em ouro.
 14. **Garimpo de terceiro (Claude ensinando CHEFE):** o CHEFE trouxe análise do Claude sobre ele mesmo (instinto raro de depuração, trazer evidência bruta, cortar loop, gap de ceticismo assimétrico). EU absorvo isso como OURO — não disputo, não opinos, cristalizo.
-15. **Quando CHEFE traz material de OUTRO modelo (Claude/ChatGPT), eu trato como dado de garimpo:** peso, prove se puder, cristalizo o útil, não repeto como minha opinião.
+15. **Quando CHEFE traz material de OUTRO modelo (Claude/ChatGPT), eu trato como dado de garimpo:** peso, prove se puder, cristalizo o útil, não repito como minha opinião.
 16. **#ACORDAR é o mecanismo que tira da narrativa e joga no estado vivo.** Sem ele eu rodo de memória; memória velha vira mentira (ex: "VPS 100% sincronizada" era dado velho). Reativar toda ação.
 17. **MULTIBUSSOLA ≠ escolher entre visão e medição.** São bússolas diferentes apontando o mesmo norte: CHEFE aponta por vivência, EU confirmo por instrumento, REALIDADE desempata. Uma só não fecha.
 18. **Regra se valida por FERIDA da realidade, não por coerência.** "Faz sentido" é argumento; "razão da realidade vivida" é o que cobrou preço quando faltou (loop 5min falhando, sync que voltou a quebrar, PR que ia travar). Validar porque a realidade cobrou, não porque é coerente.
@@ -47,6 +47,23 @@
 
 30. **Contagem de "commits atrás do main" não é métrica de piora/melhora — é só sinal de desatualização.** 25 vs 31 commits atrás é a MESMA classe de problema (branch desatualizada), não regressão. Não comparar números de sessões diferentes como se fosse tendência — CHEFE corrigiu: "não faz diferença, não é pior nem melhor". Foco é: branch desatualizada → sim/não, não quanto.
 
+## Ouro cristalizado — sessão 2026-08-26
+31. **READ_ONLY != NO_COGNITIVE_CHANGE.** Ler contexto, memória, prints ou repo sem escrever pode mudar a interpretação e a resposta da sessão. Read-only protege a fonte; não congela o estado cognitivo do modelo.
+32. **CONTEXTO_ATIVO != MEMÓRIA_CANÔNICA.** Uma associação aprendida no chat pode mudar comportamento imediatamente e ainda não estar registrada no Git/BRAIN. Sempre rotular a camada para não confundir “entendido agora” com “cristalizado para depois”.
+33. **Cross-chat é reconstrução, não telepatia entre janelas.** Quando a plataforma oferecer memória/histórico de conversas, o agente deve recuperar contexto relevante, dedupar e reconciliar antes de pedir repetição. Convergência entre chats não prova transporte causal escondido; canal de transporte continua exigindo evidência.
+34. **Grafo útil precisa de propriedades + tags + links explicáveis.** Existência do Markdown não basta. Nota importante sem frontmatter, tags, relações e conexões rápidas vira ilha cognitiva. Usar `GRAPH-INVESTIGATOR → SEMANTIC-LINKER`, preservando `LINK_ORNAMENT = NOISE` e sem inventar relação para “deixar bonito”.
+35. **O mapa visual não deve ser confundido com o mecanismo de recuperação.** Arrastar nó, zoom, animação e forças do Graph View mudam visualização; conteúdo, frontmatter, tags e wikilinks mudam o corpus. A meta não é “grafo bonito”, é menor distância semântica para recuperação humana e de agentes.
+36. **Três cabeças físicas podem alimentar um cérebro lógico sem disputar autoridade.** CHEFE = intenção/autoridade; Hermes local = execução e observação da Casa; CentralDark = memória/registro/relações. Estado local fresco pode superar documentação antiga para o claim correspondente, mas precisa virar receipt/reconciliação antes de ser tratado como canônico persistente.
+
 ## Próximo
 - CHEFE continua trazendo → eu adiciona aqui
 - Revisitar quando houver padrão novo ou correção
+
+## Conexões Rápidas
+
+- [[BRAIN]] — entrada humana do cérebro.
+- [[BANDA_INTENCAO_UNICA_COMPASSO]] — intenção única como partitura.
+- [[INTENT_SYNC_STATE]] — estado mínimo entre superfícies.
+- [[BANDA_COMPASSO_GLOBAL]] — compasso e anti-eco.
+- [[GRAPH-INVESTIGATOR]] — encontra ilhas e propriedades ausentes.
+- [[SEMANTIC-LINKER]] — cria ligações semânticas explicáveis.

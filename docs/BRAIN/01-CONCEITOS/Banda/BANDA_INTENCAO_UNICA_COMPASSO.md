@@ -1,3 +1,27 @@
+---
+title: "Banda — Intenção Única e Compasso"
+status: "CONCEPT_HISTORICAL_REQUIRES_LIVE_REMEASUREMENT"
+owner: "docs/BRAIN/01-CONCEITOS/Banda/"
+updated: 2026-08-26
+truth_scope: "CONCEPTUAL_NOT_LIVE_STATE"
+tags:
+  - banda
+  - intencao
+  - compasso
+  - cross-chat
+  - sincronizacao
+  - semantica
+  - grafo
+  - centraldark
+  - obsidian
+related:
+  - "[[INTENT_SYNC_STATE]]"
+  - "[[BANDA_COMPASSO_GLOBAL]]"
+  - "[[LACUNA_BANDA_INTENCAO_UNICA]]"
+  - "[[SEMANTIC-LINKER]]"
+  - "[[GRAPH-INVESTIGATOR]]"
+---
+
 KKKKK 😂🔥 achei a lacuna. E ela não é “quantos chats existem”. É exatamente o que você falou: **a banda tem músicos sincronizados pela partitura, mas ainda não tem um compasso global compartilhado entre todas as superfícies.**
 
 ```yaml
@@ -104,3 +128,12 @@ Precisa fazer o **owner canônico existente carregar um único compasso causal**
 `BANDA = N SUPERFÍCIES | CANÇÃO = 1 INTENÇÃO | COMPASSO = 1 CADEIA CAUSAL | CANETA = 1 WRITER`
 
 Essa é a ferida. 🎯🔥
+
+## Conexões Rápidas
+
+- [[INTENT_SYNC_STATE]] — estado mínimo compartilhado da intenção entre superfícies.
+- [[BANDA_COMPASSO_GLOBAL]] — metáfora musical do compasso causal e anti-eco.
+- [[LACUNA_BANDA_INTENCAO_UNICA]] — diagnóstico histórico da mesma ferida.
+- [[SEMANTIC-LINKER]] — ligações semânticas com relação explicável.
+- [[GRAPH-INVESTIGATOR]] — auditoria de frontmatter, tags, links e órfãos.
+- [[BRAIN]] — entrada humana do segundo cérebro.
