@@ -62,9 +62,8 @@ jobs:
             exit 1
           }
 
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-        with:
-          node-version: 24
+      - name: Setup Node 24 (fast path self-hosted)
+        uses: ./.github/actions/setup-node24-selfhosted
 
       - name: Gate global — Trigger Fabric + runner policy + self-healing contract
         shell: bash
@@ -298,6 +297,7 @@ jobs:
           echo "GIT_FORCE_PUSH_ALLOWED=0"
           echo "GIT_RESET_HARD_OPERATIONAL_ALLOWED=0"
           echo "SELF_HEALING_CONTRACT_REQUIRED=1"
+          echo "NODE24_FAST_PATH=1"
           echo "JOB_STATUS=${JOB_STATUS}"
           if [ "${FORK_BLOCKED:-}" = "true" ]; then
             echo "RESULTADO=BLOCKED"
@@ -313,4 +313,3 @@ jobs:
             echo "RESULTADO=BLOCKED"
             echo "CAUSE=UNKNOWN_STATUS_${JOB_STATUS}"
           fi
-          # UNKNOWN/SKIPPED/empty nunca viram PASS por este receipt.

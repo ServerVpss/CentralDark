@@ -77,3 +77,82 @@ python centraldark_omni_router.py --self-test
 ```
 
 A execução real de Claude/OpenAI/Hermes exige que cada engine esteja configurado no runtime local correspondente.
+
+## Fechamento de lacunas amarelas
+
+O Omni Router permanece o único owner de roteamento. A skill `.agents/skills/engine-gap-closure/SKILL.md` adiciona procedimento de diagnóstico e fechamento sem criar novo motor.
+
+```text
+YELLOW_GAP
+→ DISCOVERY
+→ ENGINE_CAPABILITY_CARD
+→ SAFE_ZONE_CHECK
+→ BOUNDARY_GUARD_PROFILE
+→ WRITER_RESOLUTION
+→ RUNTIME_PROBE
+→ PROOF_DISCOVERY
+→ META_LUPA
+→ REALITY_JUDGE
+```
+
+### Boundary Guard derivado
+
+`GuardiaoCasa` pode ser usado como linguagem/alias visual para a fronteira, mas não ganha owner físico separado.
+
+```text
+BOUNDARY_GUARD_PROFILE
+= TRUST_FIREWALL
++ PERMISSIONS
++ META_LUPA
++ PROOF_OWNERSHIP
++ OUTPUT_GUARD
+```
+
+Pergunta discriminante:
+
+```text
+ESTA_ACAO_PODE_ATRAVESSAR_ESTA_FRONTEIRA?
+```
+
+### Engine capability card
+
+Cada engine deve separar declaração, configuração e execução observada:
+
+```text
+DECLARED
+→ CONFIGURED
+→ ROUTER_OBSERVED
+→ INVOCATION_OBSERVED
+→ COUNTERPROOF_SURVIVED
+```
+
+`CONFIGURED != INVOCATION_PROVEN`.
+
+### Probe read-only
+
+```text
+python scripts/trigger-fabric/engine_gap_probe.py
+```
+
+O probe mede branch/HEAD e `GET /health`, produz cards de capacidade e mantém Writer/CI/provider invocation como `UNKNOWN` quando não possui evidência correspondente.
+
+```text
+ROUTER_HEALTH_PASS != PROVIDER_INVOCATION_PASS
+NO_STATUS_OBSERVED != CI_PASS
+WRITER_UNKNOWN != WRITER_NONE
+```
+
+### Fixed point do motor
+
+```text
+BOUNDARY_GUARD_BOUND
+AND WRITER_RESOLVED_FOR_MUTATION
+AND RUNTIME_CLAIM_MEASURED
+AND CI_CLAIM_HAS_APPLICABLE_EVIDENCE
+AND ENGINE_CARD_MATCHES_OBSERVED_STATE
+AND NO_MATERIAL_UNKNOWN_FOR_VERDICT
+AND COUNTERPROOF_SURVIVED
+→ ENGINE_GAP_FIXED_POINT
+```
+
+Ausência de um termo mantém somente o ponto afetado amarelo; não converte UNKNOWN em PASS e não bloqueia trabalho independente comprovadamente seguro.
