@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-08-26T08:28:37.181Z
+# 🧠 Notion Sync — 2026-08-26T13:54:38.197Z
 
-- **Commit fonte:** `b6fc4f00466b9a603aa2167abc1517225105225d`
+- **Commit fonte:** `f6a90911c69a1ac47b4c111e7bd463d2cd96eae6`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 2 criadas · ♻️ 429 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 431 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -15,8 +15,8 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
-| aprendizados | 30 | 2 | 28 | 0 | 0 |
-| estrutura | 357 | 0 | 357 | 0 | 0 |
+| aprendizados | 30 | 0 | 30 | 0 | 0 |
+| estrutura | 358 | 1 | 357 | 0 | 0 |
 
 ## Operações
 
@@ -94,8 +94,8 @@
 | aprendizados | atualizado | #25 — “Menos é mais” significa menor movimento compatível com efeito, observabilidade e segurança |
 | aprendizados | atualizado | #26 — Batch .bat: 4 armadilhas que passam em revisão superficial |
 | aprendizados | atualizado | #27 — Grok App Builder é adapter, não cérebro — não scaffoldar app paralelo |
-| aprendizados | criado | #28 — Ponte semântica fail-closed EXIT code=2 — não é verde; stderr engolido |
-| aprendizados | criado | #29 — Dois mundos vivos: GitHub main 81bbfc7 ≠ VPS 5958d3ce27 (1252 atrás, dirty) |
+| aprendizados | atualizado | #28 — Ponte semântica fail-closed EXIT code=2 — não é verde; stderr engolido |
+| aprendizados | atualizado | #29 — Dois mundos vivos: GitHub main 81bbfc7 ≠ VPS 5958d3ce27 (1252 atrás, dirty) |
 | estrutura | atualizado | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | atualizado | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
@@ -313,6 +313,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/NOTION-MAPA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PADRAO-CARD-HERMES.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PADRAO-EMOJIS.md |
+| estrutura | criado | docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PENDENCIAS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PENDENCIAS/MCP-LOCAL-STDIO-VPS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PIVETE-IA/PIVETE-00-INVOCACAO.md |
