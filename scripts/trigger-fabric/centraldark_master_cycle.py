@@ -37,6 +37,7 @@ DELTA_ALIASES = (
     "toma esse delta",
     "pega o delta",
 )
+NEGATION_TOKENS = {"nao", "nunca", "sem"}
 
 
 def normalize(text: str) -> str:
@@ -48,12 +49,52 @@ def normalize(text: str) -> str:
     return " ".join(raw.strip().split())
 
 
-def _contains_phrase(normalized: str, phrase: str) -> bool:
+def _phrase_match(normalized: str, phrase: str):
     target = normalize(phrase)
     if not target:
+        return None
+    hay = normalized.split()
+    needle = target.split()
+    if not needle or len(needle) > len(hay):
+        return None
+    for start in range(0, len(hay) - len(needle) + 1):
+        if hay[start:start + len(needle)] == needle:
+            return start, start + len(needle)
+    return None
+
+
+def _negated_or_discussed(normalized: str, match) -> bool:
+    if not match:
         return False
-    padded = f" {normalized} "
-    return f" {target} " in padded
+    tokens = normalized.split()
+    start, end = match
+    left = tokens[max(0, start - 4):start]
+    right = tokens[end:min(len(tokens), end + 5)]
+    neighborhood = left + right
+    if any(t in NEGATION_TOKENS for t in neighborhood):
+        return True
+    joined = " ".join(neighborhood)
+    return any(phrase in joined for phrase in (
+        "nao deve",
+        "nao executar",
+        "nao execute",
+        "nao usar",
+        "nao use",
+        "apenas mencionar",
+        "so mencionar",
+        "somente discutir",
+    ))
+
+
+def _resolve_delta(normalized: str):
+    for alias in DELTA_ALIASES:
+        match = _phrase_match(normalized, alias)
+        if not match:
+            continue
+        if _negated_or_discussed(normalized, match):
+            return alias, False, True
+        return alias, True, False
+    return None, False, False
 
 
 def resolve(text: str):
@@ -79,8 +120,7 @@ def resolve(text: str):
         or "!central-dark" in tokens
         or "!cdark" in tokens
     )
-    delta_match = next((alias for alias in DELTA_ALIASES if _contains_phrase(normalized, alias)), None)
-    delta_active = delta_match is not None
+    delta_match, delta_active, delta_ambiguous = _resolve_delta(normalized)
 
     return {
         "schema": "centraldark.master-cycle-receipt.v1",
@@ -92,14 +132,15 @@ def resolve(text: str):
         "delta_harvest": {
             "canonical_signal": DELTA_CANONICAL,
             "active": delta_active,
+            "ambiguous_or_negated": delta_ambiguous,
             "matched_alias": delta_match,
-            "mode": "DELTA_HARVEST" if delta_active else None,
+            "mode": "DELTA_HARVEST" if delta_active else ("UNKNOWN" if delta_ambiguous else None),
             "route_to_existing_owner": delta_active,
             "information_gain_required": delta_active,
             "zero_regression": delta_active,
             "no_v1_v2_v3": delta_active,
         },
-        "status": "MATCH" if explicit_master or delta_active else "NO_MATCH",
+        "status": "MATCH" if explicit_master or delta_active else ("UNKNOWN" if delta_ambiguous else "NO_MATCH"),
         "authority_changed": False,
         "mutation_authorized": False,
         "all_phases_considered": explicit_master,
@@ -132,17 +173,20 @@ def self_test():
         ("fala normal", False),
     ]
     delta_cases = [
-        ("!DELTA UTILS usa só o útil", True),
-        ("!DELTAUTILS", True),
-        ("DELTAUTILS", True),
-        ("!DELTAUTIL", True),
-        ("DELTAUTIL", True),
-        ("!DELTAÚTIL", True),
-        ("pega o delta desse material", True),
-        ("toma esse delta aí", True),
-        ("usa o delta de agora", True),
-        ("a palavra delta aparece num relatório", False),
-        ("utilidade marginal sem pedido de delta", False),
+        ("!DELTA UTILS usa só o útil", True, False),
+        ("!DELTAUTILS", True, False),
+        ("DELTAUTILS", True, False),
+        ("!DELTAUTIL", True, False),
+        ("DELTAUTIL", True, False),
+        ("!DELTAÚTIL", True, False),
+        ("pega o delta desse material", True, False),
+        ("toma esse delta aí", True, False),
+        ("usa o delta de agora", True, False),
+        ("não pega o delta desse material", False, True),
+        ("a instrução pega o delta não deve ser executada", False, True),
+        ("não execute !DELTAUTIL agora", False, True),
+        ("a palavra delta aparece num relatório", False, False),
+        ("utilidade marginal sem pedido de delta", False, False),
     ]
 
     results = []
@@ -156,10 +200,11 @@ def self_test():
         results.append({"input": text, "expected": expected, "got": got["explicit_match"], "ok": ok})
         results.append({"kind": "master", "input": text, "expected": expected, "got": got["explicit_match"], "ok": ok})
 
-    for text, expected in delta_cases:
+    for text, expected, ambiguous in delta_cases:
         got = resolve(text)
         actual = got["delta_harvest"]["active"]
-        ok = actual is expected
+        actual_ambiguous = got["delta_harvest"]["ambiguous_or_negated"]
+        ok = actual is expected and actual_ambiguous is ambiguous
         if expected:
             ok = ok and got["delta_harvest"]["route_to_existing_owner"] is True
             ok = ok and got["delta_harvest"]["information_gain_required"] is True
@@ -169,7 +214,10 @@ def self_test():
             ok = ok and got["mutation_authorized"] is False
             ok = ok and got["cross_chat_is_current_state"] is False
             ok = ok and got["github_substitutes_missing_chat_memory"] is False
-        results.append({"kind": "delta", "input": text, "expected": expected, "got": actual, "ok": ok})
+        if ambiguous:
+            ok = ok and got["status"] == "UNKNOWN"
+            ok = ok and got["mutation_authorized"] is False
+        results.append({"kind": "delta", "input": text, "expected": expected, "got": actual, "ambiguous": actual_ambiguous, "ok": ok})
 
     return {"ok": all(x["ok"] for x in results), "cases": results}
 
