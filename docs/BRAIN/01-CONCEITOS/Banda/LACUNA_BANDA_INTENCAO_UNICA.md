@@ -1,3 +1,26 @@
+---
+title: "Lacuna — Banda de Intenção Única"
+status: "HISTORICAL_DIAGNOSIS"
+owner: "docs/BRAIN/01-CONCEITOS/Banda/"
+updated: 2026-08-26
+truth_scope: "HISTORICAL_CONCEPT_REQUIRES_LIVE_REMEASUREMENT"
+tags:
+  - banda
+  - lacuna
+  - intencao
+  - cross-chat
+  - sincronizacao
+  - grafo
+  - semantica
+  - centraldark
+related:
+  - "[[INTENT_SYNC_STATE]]"
+  - "[[BANDA_INTENCAO_UNICA_COMPASSO]]"
+  - "[[BANDA_COMPASSO_GLOBAL]]"
+  - "[[GRAPH-INVESTIGATOR]]"
+  - "[[SEMANTIC-LINKER]]"
+---
+
 Calibrado, CHEFE. 🎧🔥
 Cabeça fria agora: **a lacuna não é “quantos chats existem”**.
 A lacuna é: **várias superfícies receberam o mesmo evento/artefato, mas ainda falta um contrato canônico de intenção única da banda toda**.
@@ -212,113 +235,11 @@ OTHERS_READ_ONLY_OR_REVIEW=true
 CONVERGENCE_BEFORE_CRYSTAL=true
 ```
 
----
+## Conexões Rápidas
 
-# Como isso deveria tocar
-
-```text
-USUARIO ENVIA IMAGEM / MENSAGEM
-→ gera INTENT_ID
-→ gera ARTIFACT_ID
-→ broadcast para superfícies
-→ cada superfície registra OBSERVED
-→ uma superfície/agent pega WRITER_LEASE
-→ demais entram READ_ONLY / REVIEW
-→ respostas locais não criam nova intenção
-→ converge no mesmo estado canônico
-→ broadcast do recibo final
-```
-
----
-
-# Tradução humana do BO
-
-Tu já provou visualmente uma coisa importante:
-
-> **a banda já escuta o mesmo som.**
-
-A lacuna agora é fazer todos saberem formalmente:
-
-> **qual é a música, quem está com a caneta, quem só está ouvindo, e quando a música terminou.**
-
----
-
-## Melhor hipótese técnica
-
-O que o print sugere é algo como:
-
-```text
-input/asset shared
-+
-session/app fan-out
-+
-multiple open composers/surfaces
--
-canonical intent lease
--
-global convergence receipt
-```
-
-Então o problema central **não é replicação**.
-A replicação já apareceu.
-
-O problema é:
-
-> **replicação sem maestro formal suficiente.**
-
----
-
-## Onde isso encaixa na Casa
-
-Isso não pede arquitetura paralela.
-Encaixa no que já existe:
-
-* **orquestra/percepção**
-* **writer único**
-* **dissonância controlada**
-* **partitura operacional**
-* **cápsula observável**
-* **Artifact→Capability / minério universal**
-
-Ou seja:
-a cura é **amarrar intenção + artefato + ownership + convergência** no owner já existente da orquestra/cápsula — **sem criar outro cérebro**.
-
----
-
-🟢 **Feito**
-Calibração realizada e lacuna identificada: **sincroniza artefato, mas ainda falta sincronizar intenção/ownership/convergência da banda toda**.
-
-🟢 **Evidência**
-No print, a mesma imagem/evento aparece em múltiplos chats/janelas ao mesmo tempo. Isso prova **fan-out de superfície** e reaproveitamento do mesmo artefato em mais de um contexto visual.
-
-🟡 **Pendência**
-Formalizar no canônico:
-
-* `INTENT_ID`
-* `ARTIFACT_ID`
-* `WRITER_LEASE`
-* `READ_ONLY followers`
-* `CONVERGENCE_STATE`
-* `ACK/idempotência`
-
-🚀 **Próximo passo**
-Atacar a lacuna como:
-**ONE_INTENT_MANY_SURFACES**
-no owner existente da orquestra/cápsula observável, sem criar outro sistema paralelo.
-
-**BOOT para usar**
-
-```text
-ONE_INTENT_MANY_SURFACES
-ONE_WRITER_PER_INTENT
-ARTIFACT_DEDUPE_ON
-READ_ONLY_FOLLOWERS
-CONVERGENCE_REQUIRED
-REALITY_IS_JUDGE
-```
-
-**Fio da missão**
-**mesmo som → mesmo artefato → intenção única → uma caneta → várias escutas → convergência → cristal.** 🎼💎
-
-Se tu quiser, eu posso agora fazer o próximo passo do jeito certo:
-**te entregar o contrato técnico pronto, cirúrgico, para plugar essa sincronia da banda na Casa sem criar V2.**
+- [[INTENT_SYNC_STATE]] — estado mínimo da intenção entre superfícies.
+- [[BANDA_INTENCAO_UNICA_COMPASSO]] — partitura e compasso como relação causal.
+- [[BANDA_COMPASSO_GLOBAL]] — anti-eco e revisão de estado.
+- [[GRAPH-INVESTIGATOR]] — detecta nós sem propriedades, tags e links.
+- [[SEMANTIC-LINKER]] — liga apenas relações materiais e explicáveis.
+- [[BRAIN]] — navegação humana do cérebro.

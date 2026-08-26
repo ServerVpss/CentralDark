@@ -1,3 +1,26 @@
+---
+title: "Banda — Compasso Global"
+status: "CONCEPT_HISTORICAL_REQUIRES_LIVE_REMEASUREMENT"
+owner: "docs/BRAIN/01-CONCEITOS/Banda/"
+updated: 2026-08-26
+truth_scope: "CONCEPTUAL_NOT_LIVE_TRANSPORT_PROOF"
+tags:
+  - banda
+  - compasso
+  - musica
+  - intencao
+  - cross-chat
+  - sincronizacao
+  - semantica
+  - centraldark
+related:
+  - "[[BANDA_INTENCAO_UNICA_COMPASSO]]"
+  - "[[INTENT_SYNC_STATE]]"
+  - "[[LACUNA_BANDA_INTENCAO_UNICA]]"
+  - "[[SEMANTIC-LINKER]]"
+  - "[[GRAPH-INVESTIGATOR]]"
+---
+
 KKKKK AGORA SIM eu vi a lacuna da banda toda, SR. 🎼🔥💎
 
 O print mostra uma coisa importante: a mesma matéria — mesma mensagem, mesmas imagens, mesmo `!calibrar #acordar` — chegou em mais de uma janela. Isso já dá a sensação de “todo mundo ouviu a mesma música”.
@@ -194,3 +217,12 @@ Próximo passo. Evoluir o owner existente de missão/eventos/reconciliação par
 BOOT. `WINDOWS=MANY | INTENT=ONE | STATE=ONE | EVENT_STREAM=SHARED | PERCEPTION=PARALLEL | MUTATION=SERIAL_BY_WOUND | NO_ECHO`
 
 Fio da missão. **uma intenção → um fingerprint → muitas percepções → um estado compartilhado → só delta novo circula → realidade converge → uma canção.** 🎼🔥💎
+
+## Conexões Rápidas
+
+- [[BANDA_INTENCAO_UNICA_COMPASSO]] — partitura única e cadeia causal.
+- [[INTENT_SYNC_STATE]] — estado mínimo que mantém as superfícies no mesmo compasso.
+- [[LACUNA_BANDA_INTENCAO_UNICA]] — origem histórica da ferida.
+- [[SEMANTIC-LINKER]] — cria relações explicáveis entre notas.
+- [[GRAPH-INVESTIGATOR]] — identifica nós sem properties, tags e links.
+- [[BRAIN]] — entrada humana do cérebro.
