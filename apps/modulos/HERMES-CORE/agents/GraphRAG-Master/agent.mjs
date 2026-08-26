@@ -9,15 +9,67 @@ import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 const pexec = promisify(execFile);
 
-const KNOWLEDGE = join(dirname(fileURLToPath(import.meta.url)), '../../knowledge');
+const HERE = dirname(fileURLToPath(import.meta.url));
+const KNOWLEDGE = join(HERE, '../../knowledge');
+const REPO_ROOT = process.env.CENTRALDARK_REPO_ROOT || '/root/CentralDark';
 const GRAPH_URL = process.env.GRAPH_PANEL_URL || 'http://127.0.0.1:3030';
-const GERADOR_GRAFO = '/root/CentralDark/scripts/grafo-vivo/gerar-grafo-vivo.mjs';
+const GERADOR_GRAFO = join(REPO_ROOT, 'scripts/grafo-vivo/gerar-grafo-vivo.mjs');
+const SEMANTIC_TRIGGER_MAP = join(REPO_ROOT, 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SEMANTIC-TRIGGERS.json');
 const MAX = 6;
 
-// ── Auto-update: o grafo se mantém vivo sozinho ──
-// Roda o gerador oficial (scripts/grafo-vivo/gerar-grafo-vivo.mjs), que recalcula o estado
-// REAL (PM2, gateway, processos vivos) e regrava o feed apps/modulos/status/graph-data.json.
-// Chamado periodicamente pelo orchestrator — nenhuma missão manual necessária.
+function normalizar(texto) {
+  return String(texto || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9@/.\-\s]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function carregarMapaSemantico() {
+  try {
+    if (!existsSync(SEMANTIC_TRIGGER_MAP)) return null;
+    const parsed = JSON.parse(readFileSync(SEMANTIC_TRIGGER_MAP, 'utf8'));
+    return parsed && typeof parsed === 'object' ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+function familiasSemanticas(missao) {
+  const mapa = carregarMapaSemantico();
+  if (!mapa?.families || typeof mapa.families !== 'object') return [];
+  const alvo = normalizar(missao);
+  const hits = [];
+  for (const [family, cfg] of Object.entries(mapa.families)) {
+    const terms = Array.isArray(cfg?.terms) ? cfg.terms : [];
+    const matched = terms.filter(term => {
+      const t = normalizar(term);
+      return t.length >= 3 && alvo.includes(t);
+    });
+    if (matched.length) hits.push({ family, matched, route: cfg.route || [] });
+  }
+  return hits;
+}
+
+function termos(missao) {
+  const base = normalizar(missao).split(/[^a-z0-9@/.\-]+/).filter(t => t.length >= 3);
+  const semantic = familiasSemanticas(missao)
+    .flatMap(hit => [hit.family.toLowerCase(), ...hit.matched.flatMap(normalizar).flatMap(x => x.split(' '))])
+    .filter(t => t.length >= 3);
+  return [...new Set([...base, ...semantic])];
+}
+
+export function classificarSemantica(missao) {
+  return {
+    mode: 'READ_ONLY',
+    authority_granted: false,
+    mutation_authorized: false,
+    families: familiasSemanticas(missao),
+  };
+}
+
 export async function atualizarGrafo() {
   if (!existsSync(GERADOR_GRAFO)) return { ok: false, saida: 'gerador do grafo não encontrado' };
   try {
@@ -29,35 +81,25 @@ export async function atualizarGrafo() {
   }
 }
 
-function termos(missao) {
-  return [...new Set(String(missao).toLowerCase().split(/[^a-z0-9@\/.\-]+/).filter(t => t.length >= 4))];
-}
-
-// ── Fonte 1: grafo vivo ──
 async function buscarNoGrafo(missao) {
   const r = await fetch(`${GRAPH_URL}/api/graph`, { signal: AbortSignal.timeout(4000) });
   if (!r.ok) throw new Error(`grafo HTTP ${r.status}`);
   const { nodes = [], edges = [] } = await r.json();
   const ts = termos(missao);
-
   const hits = nodes
-    .map(n => ({ n, score: ts.filter(t => `${n.id} ${n.label || ''} ${n.title || ''}`.toLowerCase().includes(t)).length }))
+    .map(n => ({ n, score: ts.filter(t => normalizar(`${n.id} ${n.label || ''} ${n.title || ''}`).includes(t)).length }))
     .filter(h => h.score > 0)
     .sort((a, b) => b.score - a.score)
     .slice(0, MAX);
   if (!hits.length) return '';
-
-  const ids = new Set(hits.map(h => h.n.id));
   const vizinhos = (id) => edges
     .filter(e => (e.from ?? e.source) === id || (e.to ?? e.target) === id)
     .map(e => (e.from ?? e.source) === id ? (e.to ?? e.target) : (e.from ?? e.source))
     .slice(0, 4).join(', ');
-
   return 'Grafo vivo (grafo.centralldark.com):\n' +
     hits.map(({ n }) => `- [${n.group || '?'}] ${n.label || n.id}${vizinhos(n.id) ? ` → conecta: ${vizinhos(n.id)}` : ''}`).join('\n');
 }
 
-// ── Fonte 2 (fallback): arquivos locais de knowledge/ ──
 function buscarLocal(missao) {
   const ts = termos(missao);
   const ranking = [];
@@ -67,9 +109,10 @@ function buscarLocal(missao) {
       try {
         if (statSync(p).isDirectory()) { varrer(p); continue; }
         if (!e.endsWith('.md')) continue;
-        const corpo = readFileSync(p, 'utf8').slice(0, 4000).toLowerCase();
-        const score = ts.reduce((s, t) => s + (e.toLowerCase().includes(t) ? 3 : 0) + (corpo.includes(t) ? 1 : 0), 0);
-        if (score > 0) ranking.push({ p, score, titulo: (corpo.match(/^#\s*(.+)$/m) || [])[1] || e });
+        const corpo = normalizar(readFileSync(p, 'utf8').slice(0, 4000));
+        const nome = normalizar(e);
+        const score = ts.reduce((s, t) => s + (nome.includes(t) ? 3 : 0) + (corpo.includes(t) ? 1 : 0), 0);
+        if (score > 0) ranking.push({ p, score, titulo: e });
       } catch {}
     }
   };
@@ -77,10 +120,9 @@ function buscarLocal(missao) {
   ranking.sort((a, b) => b.score - a.score);
   if (!ranking.length) return '';
   return 'Docs locais (knowledge/):\n' +
-    ranking.slice(0, MAX).map(d => `- ${relative('/root/CentralDark', d.p)} — "${String(d.titulo).slice(0, 80)}"`).join('\n');
+    ranking.slice(0, MAX).map(d => `- ${relative(REPO_ROOT, d.p)} — "${String(d.titulo).slice(0, 80)}"`).join('\n');
 }
 
-// ── API principal ──
 export async function buscarContexto(missao) {
   try {
     const doGrafo = await buscarNoGrafo(missao);
@@ -89,10 +131,27 @@ export async function buscarContexto(missao) {
   return buscarLocal(missao).slice(0, 1500);
 }
 
-// compat: nome antigo usado pelo decisor
 export { buscarContexto as contexto };
 
-// CLI standalone pra debug
+function selfTest() {
+  const typo = classificarSemantica('proar isso com meta lupe e chega no ponto fisxo');
+  const graph = classificarSemantica('sincronize o mapa mental cognitivo com o grafo');
+  const families = new Set(typo.families.map(x => x.family));
+  const graphFamilies = new Set(graph.families.map(x => x.family));
+  const checks = {
+    typo_meta_lupa: families.has('META_LUPA'),
+    typo_fixed_point: families.has('FIXED_POINT'),
+    graph_semantic: graphFamilies.has('GRAPH_COGNITIVE'),
+    semantic_match_no_authority: typo.authority_granted === false && typo.mutation_authorized === false,
+  };
+  const failed = Object.entries(checks).filter(([, ok]) => !ok).map(([name]) => name);
+  console.log(JSON.stringify({ ok: failed.length === 0, checks, failed }));
+  return failed.length ? 1 : 0;
+}
+
 if (import.meta.url === `file://${process.argv[1]}`) {
-  buscarContexto(process.argv.slice(2).join(' ') || 'telegram notificacao').then(c => console.log(c || '(sem resultados)'));
+  const args = process.argv.slice(2);
+  if (args.includes('--self-test')) process.exit(selfTest());
+  const missao = args.join(' ') || 'telegram notificacao';
+  buscarContexto(missao).then(c => console.log(c || '(sem resultados)'));
 }
