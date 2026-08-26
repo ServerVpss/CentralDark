@@ -1,0 +1,11 @@
+
+AUTHORSHIP_PROVENANCE:
+  originator: "quem originou a intenção/ideia"
+  writer: "quem materializou a alteração"
+  owner: "owner canônico da capacidade"
+  authority: "autoridade humana aplicável"
+  canonical_human_authority: SEGREDO/CHEFE
+  rules:
+    - DO_NOT_FILL_PROVENANCE_BY_GUESS
+    - WRITER_DOES_NOT_IMPLY_ORIGINATOR
+    - OWNER_DOES_NOT_IMPLY_HUMAN_AUTHORITY

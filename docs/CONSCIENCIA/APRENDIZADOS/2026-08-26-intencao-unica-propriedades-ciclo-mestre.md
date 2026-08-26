@@ -2,17 +2,20 @@
 title: "Intenção única — ciclo mestre, propriedades e memória roteável"
 status: KNOWLEDGE_ONLY
 date: 2026-08-26
-updated: 2026-08-26T09:20:00-03:00
-observed_at: 2026-08-26T09:20:00-03:00
-tags: [aprendizado, intencao, ciclo-mestre, propriedades, memoria, hermes, meta-lupa, grafo, delta-utils, capability-router]
+updated: 2026-08-26T09:34:00-03:00
+observed_at: 2026-08-26T09:34:00-03:00
+tags: [aprendizado, intencao, ciclo-mestre, propriedades, memoria, hermes, meta-lupa, grafo, delta-utils, capability-router, cross-chat, linkagem-semantica, baianes, narrativa]
 category: "A-Aprendizado-Operacional"
 sensitivity: INTERNAL
-source: "correções e intenção explícita do SEGREDO/CHEFE nesta missão"
+source: "correções e intenção explícita do SEGREDO/CHEFE nesta missão + contexto cross-chat recuperado quando acessível"
 source_class: HUMAN_AUTHORITY
 source_rule: "CANONICO -> ARTEFATO; artefato nao inventa canonico"
 owner: "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ + docs/CONSCIENCIA/MAPA-DO-CEREBRO.md"
 consumer: "qualquer IA/agente no boot; Hermes/PIVETE na execução e continuidade"
 writer: SOL
+related_notes: [docs/CONSCIENCIA/MAPA-DO-CEREBRO.md, docs/BRAIN/00-MAPA-SISTEMA/BRAIN.md, docs/CONSCIENCIA/PIVETE-IA/PIVETE-18-ROTA-MEMORIA.md, docs/CONSCIENCIA/ARTEFATOS/TECNICAS-DE-LINKAGEM-SEMANTICA.md, docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml]
+relation_types: [EXPLICA, COMPLEMENTA, DEPENDE_DE]
+semantic_summary: "Ciclo mestre, memória cross-chat, propriedades e linkagem semântica convergem para uma única direção sem criar cérebro paralelo."
 ---
 
 # Intenção única — ciclo mestre, propriedades e memória roteável
@@ -71,14 +74,19 @@ ONE_WRITER_PER_SCOPE=true
 
 O gatilho mestre comprime a interface. Ele não concede autoridade, não autoriza mutação por si só e não transforma todas as fases em ritual mecânico.
 
+Na superfície humana, `!CENTRALDARK` pode aparecer sozinho no topo como cabeçalho comprimido. A cadeia completa precisa continuar recuperável para auditoria e execução.
+
 ## !DELTA UTILS — garimpo incremental, não novo sistema
 
-`!DELTA UTILS` e formas semanticamente equivalentes significam: usar somente o que for útil agora, sem infringir a intenção vigente, sem regressão, sem V1/V2/V3 e alimentando o owner que já existe.
+As formas abaixo pertencem à mesma família semântica. Digitação rápida não deve custar um turno quando a intenção estiver suficientemente distinguível.
 
 ```text
 !DELTA UTILS
+!DELTAUTILS
+DELTAUTILS
 !DELTA UTIL
 !DELTAUTIL
+DELTAUTIL
 !DELTAÚTIL
 DELTA ÚTIL
 DELTA DE AGORA
@@ -86,6 +94,8 @@ TOMA ESSE DELTA
 PEGA O DELTA
 → DELTA_HARVEST
 ```
+
+Significado: usar somente o que for útil agora, sem infringir a intenção vigente, sem regressão, sem V1/V2/V3 e alimentando o owner que já existe.
 
 O modo classifica material:
 
@@ -130,6 +140,49 @@ ACTION
 EVIDENCE_REF
 NEXT_CURSOR
 ```
+
+## Cross-chat — memória externa, não estado vivo
+
+Quando histórico de chats, memórias salvas ou biblioteca de conversas estiverem acessíveis, a Casa deve tentar recuperar contexto antes de pedir ao CHEFE que repita matéria recuperável.
+
+```text
+CHAT_ATUAL
++ HISTORICO_CHATGPT_ACESSIVEL
++ MEMORIA_SALVA_ACESSIVEL
++ ARTEFATOS_DE_CONVERSA_ACESSIVEIS
+→ RECUPERAR
+→ DEDUPE
+→ RECONCILIAR
+→ DELTA_CANDIDATO
+```
+
+Fronteiras obrigatórias:
+
+```text
+CROSS_CHAT = CONTEXTO + PROVENIENCIA + DELTA_CANDIDATO
+CROSS_CHAT != CURRENT_STATE
+CHAT_ANTIGO != RUNTIME_ATUAL
+UNRECOVERED_CROSS_CHAT = UNKNOWN
+GITHUB_MUST_NOT_SUBSTITUTE_MISSING_CHAT_MEMORY=true
+CURRENT_LIVE_EVIDENCE_OVERRIDES_STALE_CHAT_STATE=true
+```
+
+GitHub continua sendo canônico para o que pertence ao repositório, mas não pode ser usado como desculpa para fingir que uma conversa anterior foi recuperada quando ela não foi.
+
+## Um segundo cérebro lógico, várias superfícies
+
+O aprendizado cross-chat reforça um princípio já existente: GitHub, Obsidian/BRAIN, memória local, GraphRAG, vetores, chats e Hermes podem ser superfícies do mesmo organismo, não cérebros concorrentes.
+
+```text
+SECOND_BRAIN_LOGICAL=ONE
+N_SURFACES != N_BRAINS
+OBSIDIAN = NAVEGACAO/ORGANIZACAO_DERIVADA
+GRAPH_VECTOR = INDICES_DERIVADOS
+GITHUB = CANONICO_DO_QUE_E_REPO
+REALITY = JUDGE
+```
+
+Hermes organiza e cristaliza conhecimento operacional nas superfícies aplicáveis; o CHEFE não precisa virar curador manual da memória.
 
 ## Capability Router — rota reproduzível, não feeling do modelo
 
@@ -265,14 +318,30 @@ NOTA
 + PROVENIENCIA
 + OWNER
 + CONSUMER quando aplicavel
++ RELACOES_SEMANTICAS quando úteis
 → MEMORIA_ROTEAVEL
 ```
 
-A ausência dessas propriedades não apaga a nota, mas impede promoção forte:
+A ausência das propriedades obrigatórias não apaga a nota, mas impede promoção forte:
 
 ```text
 MISSING_REQUIRED_PROPERTY -> NOT_FLASH_READY
 ```
+
+Relações semânticas são opcionais e tipadas. Reutilizam `docs/CONSCIENCIA/ARTEFATOS/TECNICAS-DE-LINKAGEM-SEMANTICA.md`:
+
+```text
+PARTE_DE | EXPLICA | DEPENDE_DE | COMPLEMENTA
+| EXEMPLO_DE | CONTRASTA_COM | EVOLUIU_PARA | FONTE_DE
+```
+
+```text
+SEMANTIC_LINK != PROOF
+GRAPH != AUTHORITY
+QUALITY_OF_LINKS > QUANTITY_OF_LINKS
+```
+
+A metáfora musical pode organizar a navegação: notas são vozes; relações tipadas são intervalos; MOCs funcionam como partitura. Isso não cria skill, owner ou verdade nova.
 
 ## Linguagem de apresentação
 
@@ -284,6 +353,8 @@ BAIANES_FACIL
 + PARALELISMO_NARRATIVO_QUANDO_UTIL
 → MENOR_ESFORCO_COGNITIVO
 ```
+
+Recapitulação/história pode usar cadência de versículo + baianês. Status técnico, evidência, comando e veredito permanecem literais para não misturar metáfora com recibo.
 
 Isso é **camada de comunicação**, não método de prova, autoridade, crença religiosa ou substituto de contrato determinístico.
 
@@ -312,6 +383,7 @@ NEXT_ENGINE
 → OWNER
 → PROPRIEDADES
 → CICLO_MESTRE
+→ CROSS_CHAT_RECOVERY_QUANDO_ACESSIVEL
 → DELTA_HARVEST_QUANDO_SINALIZADO
 → MESMA_INTENCAO_QUANDO_PROVADA
 ```
@@ -320,6 +392,8 @@ NEXT_ENGINE
 
 - `docs/CONSCIENCIA/MAPA-DO-CEREBRO.md`
 - `docs/BRAIN/00-MAPA-SISTEMA/BRAIN.md`
+- `docs/CONSCIENCIA/PIVETE-IA/PIVETE-18-ROTA-MEMORIA.md`
+- `docs/CONSCIENCIA/ARTEFATOS/TECNICAS-DE-LINKAGEM-SEMANTICA.md`
 - `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml`
 - `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml`
 - `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ARTIFACT-PROPERTIES.yml`
