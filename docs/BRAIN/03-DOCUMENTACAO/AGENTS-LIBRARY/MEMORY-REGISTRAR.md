@@ -2,7 +2,7 @@
 title: "Skill: Memory Registrar"
 date: 2026-06-29
 tags: ["skill", "memoria", "brain", "consciencia", "registro"]
-updated: 2026-06-29
+updated: 2026-08-26
 ---
 
 # 🤖 SKILL: MEMORY-REGISTRAR
@@ -54,6 +54,76 @@ Sempre que o Pivete quiser registrar algo sem pensar onde vai:
 - Incluir data e contexto mínimo
 - Confirmar onde foi salvo
 - Seguir a tabela de roteamento do `00-LEIA-PRIMEIRO.md`
+
+---
+
+## Regra operacional — concretizou, registra
+
+Quando uma informação **ganhou forma operacional estável e útil**, ela não deve depender do chat atual para sobreviver. O registro é obrigatório no owner já existente, com o menor delta suficiente.
+
+```text
+CONCRETIZED_USEFUL_INFORMATION_MUST_BE_REGISTERED=true
+REUSE_BEFORE_CREATE=true
+ONE_SYSTEM_ONLY=true
+```
+
+`CONCRETIZED` significa pelo menos uma destas condições:
+
+```text
+DECISAO_CONFIRMADA_DO_CHEFE
+| APRENDIZADO_QUE_SOBREVIVEU_A_CONTRAPROVA
+| RESULTADO_REPRODUZIVEL_COM_EVIDENCIA
+| CORRECAO_DE_ERRO_COM_CAUSA_DISCRIMINADA
+| REGRA_OPERACIONAL_ESTAVEL
+| ESTADO_HISTORICO_RELEVANTE_COM_PROVENIENCIA
+```
+
+Fluxo obrigatório:
+
+```text
+CONCRETIZOU
+→ CLASSIFICAR
+→ DEDUPE
+→ RESOLVER_OWNER_EXISTENTE
+→ PRESERVAR_PROVENIENCIA + TEMPO + ESCOPO
+→ GRAVAR_MENOR_DELTA_UTIL
+→ EMITIR_RECEIPT
+→ PROXIMO_BOOT_REUTILIZA
+```
+
+Não registrar ruído como se fosse ouro:
+
+```text
+REPETICAO_PURA → DROP
+MESMA_EVIDENCIA_REESCRITA → NAO_E_PROVA_NOVA
+HIPOTESE_NAO_TESTADA → UNVERIFIED|SKIP
+METAFORA → CAMADA_DE_COMUNICACAO
+METAFORA != PROVA_TECNICA
+REGISTRO != PASS
+HISTORICO != ESTADO_ATUAL
+```
+
+A apresentação pode usar narrativa bíblica, baianês, música ou outras metáforas quando isso ajudar a compreensão, mas o registro técnico deve manter separados fato, evidência, proveniência, tempo e veredito. O uso dessa linguagem de apresentação não implica nem registra crença pessoal do humano.
+
+Mudança de estado não apaga conhecimento independente já provado:
+
+```text
+MATERIAL_STATE_CHANGED
+→ IDENTIFICAR_CONE_CAUSAL_AFETADO
+→ INVALIDAR_SOMENTE_CLAIMS_DEPENDENTES
+→ PRESERVAR_REGISTROS_INDEPENDENTES_VALIDOS
+→ REMEDIR_O_QUE_FICOU_STALE
+```
+
+A obrigação de registrar também não amplia autoridade:
+
+```text
+REGISTER_PERMISSION != DEPLOY_PERMISSION
+REGISTER_PERMISSION != MERGE_PERMISSION
+REGISTER_PERMISSION != RESTART_PERMISSION
+REALITY_IS_JUDGE=true
+UNKNOWN_IS_NOT_PASS=true
+```
 
 ---
 
