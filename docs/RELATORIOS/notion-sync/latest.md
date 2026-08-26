@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-08-26T14:46:07.819Z
+# 🧠 Notion Sync — 2026-08-26T19:59:47.587Z
 
-- **Commit fonte:** `eacdde22438035ef3f1609f1ef8e416009a12be9`
+- **Commit fonte:** `b512b7b8cfe962bc4f87156c6b4884549a84d61b`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 432 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 2 criadas · ♻️ 432 atualizadas · ❌ 1 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
 | aprendizados | 30 | 0 | 30 | 0 | 0 |
-| estrutura | 359 | 1 | 358 | 0 | 0 |
+| estrutura | 361 | 2 | 358 | 0 | 1 |
 
 ## Operações
 
@@ -193,14 +193,16 @@
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-fluxo-operacional-papagaio-off-pombo-on.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-pombo-correio-com-checksum.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-prova-secreta-bob-casa-fundamentos.md |
-| estrutura | criado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-26-intencao-unica-propriedades-ciclo-mestre.md |
+| estrutura | criado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-26-ciclo-mestre-reconciliacao-passado-futuro.md |
+| estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-26-intencao-unica-propriedades-ciclo-mestre.md |
+| estrutura | criado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-26-multibussola-meta-convergencia-reversa.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/EVIDENCIAS/2026-08-17-registro-visual-recibo-muitos-olhos.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/MCP/MCP-EXPLICADO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/PROXY/APRENDIZADOS_PROXY.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/PROXY/CONFIGURACAO_CLINE.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/PROXY/ERRO_500_HTML.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/PROXY/METODO-SWITCH-MODEL.md |
-| estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/PROXY/PLAYBOOK-VALIDACAO-DE-ENDPOINTS.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/PROXY/PLAYBOOK-VALIDACAO-DE-ENDPOINTS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/PROXY/TUTORIAL-TERMINAL-SEM-CONTA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/conversa-mcp-webui-liberacao.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/elitehttp-vs-elite-anthropic-nao-confundir.md |
