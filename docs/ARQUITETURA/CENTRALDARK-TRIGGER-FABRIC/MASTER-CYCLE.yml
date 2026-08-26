@@ -88,6 +88,81 @@ communication_interface:
   semantic_match_is_mutation_permission: false
   presentation_layers: [BAIANES_FACIL, TECHNICAL_PRECISION, NARRATIVE_PARALLELISM_WHEN_USEFUL]
   presentation_is_not_governance: true
+  mechanical_payload_fast_path:
+    trigger: HUMAN_NEEDS_ONLY_COPY_PASTE_PAYLOAD_AND_NO_MATERIAL_DECISION_OR_RISK
+    behavior: RETURN_ONLY_REQUESTED_PAYLOAD
+    forbid: [INTRODUCTION, EXPLANATION, OPTIONAL_OFFER, SUMMARY, CONCLUSION]
+    preserve: [EXACTNESS, REQUIRED_WARNING_IF_MATERIAL, BLOCKED_OR_UNKNOWN_IF_MATERIAL]
+
+# !DELTA UTILS e derivados nao criam um segundo ciclo. Ativam um modo de
+# garimpo incremental dentro do mesmo organismo e roteiam o ouro ao owner existente.
+delta_harvest:
+  canonical_signal: "!DELTA UTILS"
+  semantic_aliases:
+    - "!DELTA UTIL"
+    - "!DELTAUTIL"
+    - "!DELTAÚTIL"
+    - "DELTA ÚTIL"
+    - "DELTA UTIL"
+    - "DELTA UTILS"
+    - "DELTA DE AGORA"
+    - "TOMA ESSE DELTA"
+    - "PEGA O DELTA"
+  mode: DELTA_HARVEST
+  intent: USE_ONLY_WHAT_IS_USEFUL_NOW_WITHOUT_BREAKING_EXISTING_INTENT
+  invariants:
+    preserve_human_intent: true
+    zero_regression: true
+    reuse_before_create: true
+    no_v1_v2_v3: true
+    one_system_only: true
+    route_to_existing_owner: true
+    same_active_pr_when_writer_scope_matches: true
+    trigger_match_is_not_new_authority: true
+    trigger_match_is_not_unrelated_mutation_permission: true
+  material_classification:
+    repetition_pure: DROP
+    useful_delta: ABSORB
+    correction: UPDATE_BELIEF
+    contradiction: META_LUPA_THEN_RECONCILE
+    new_proof: REPLACE_STALE_PROOF_WHEN_SAME_TARGET
+    newer_state: CURRENT_EVIDENCE_WINS
+  useful_delta_requires_any:
+    - NEW_CAPABILITY
+    - NEW_EVIDENCE
+    - CORRECTION
+    - NEWER_STATE
+    - CONTRADICTION_WITH_INFORMATION_GAIN
+    - REMOVAL_OF_DUPLICATION
+    - BETTER_OWNER_BINDING
+    - LOWER_COMPLEXITY_WITH_EQUAL_OR_GREATER_CAPABILITY
+  interesting_alone_is_useful_delta: false
+  destination:
+    resolver: .agents/skills/capability-contract-router/SKILL.md
+    rule: EXISTING_OWNER_FIRST
+    minimum_sufficient_capability_set: true
+  receipt_fields:
+    - SOURCE
+    - CLASSIFICATION
+    - INFORMATION_GAIN
+    - DESTINATION_OWNER
+    - ACTION
+    - EVIDENCE_REF
+    - NEXT_CURSOR
+
+# Lentes transversais: observam qualquer fase, nao viram seis etapas novas.
+transversal_lenses:
+  dimensions:
+    DEPENDENCIA: "o que isto precisa para funcionar ou provar?"
+    DECADENCIA: "o que pode ter ficado stale, vencido ou divergido?"
+    CADENCIA: "quando e por qual evento precisa ser medido de novo?"
+  planes:
+    KNOWLEDGE: "o que sabemos e com qual evidencia?"
+    EXECUTION: "o que realmente executou e qual efeito observavel ocorreu?"
+    CONFIG_ORIGIN: "qual owner/configuracao/origem causou ou governa o comportamento?"
+  matrix_mode: TRANSVERSAL_WHEN_MATERIAL
+  creates_new_phase: false
+  creates_new_brain: false
 
 adaptive_rules:
   all_phases_are_considered: true
@@ -98,7 +173,7 @@ adaptive_rules:
   explicit_master_trigger_does_not_imply_mutation: true
 
 past_future_reconciliation:
-  source_prs: [1166, 1167, 1168, 1170, 1172]
+  source_prs: [1166, 1167, 1168, 1170, 1172, 1189]
   policy: ABSORB_ONLY_USEFUL_DELTA_NO_PARALLEL_OWNER
   baseline: CURRENT_MAIN
   absorbed:
@@ -110,11 +185,16 @@ past_future_reconciliation:
     - fixed_point_self_healing_is_bounded
     - engine_binding_inherits_same_contract
     - past_is_provenance_plus_candidate_delta
+    - delta_utils_is_incremental_harvest_not_new_router
+    - transversal_3x3_lenses_not_new_phases
+    - mechanical_payload_only_fast_path
   rejected_as_parallel:
     - second_semantic_owner
     - duplicate_semantic_map_authority
     - new_brain_or_new_judge
     - historical_branch_governing_current_state
+    - second_capability_router
+    - versioned_duplicate_for_same_rule
 
 artifact_memory:
   properties_contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ARTIFACT-PROPERTIES.yml
