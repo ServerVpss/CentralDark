@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-26T14:46:31.571Z",
-  "updatedAtBR": "26/08/2026, 11:46:31 BRT",
+  "updatedAt": "2026-08-26T18:30:27.261Z",
+  "updatedAtBR": "26/08/2026, 15:30:27 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "Merge branch 'main' into pr1189",
+    "lastCommit": "Merge branch 'main' of https://github.com/ServerVpss/CentralDark",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-26T18:30:27.261Z",
+      "titulo": "Push na main · 51f7e21cc7034405a6a50352e12fff89a2f9cc00",
+      "detalhe": "Merge branch 'main' of https://github.com/ServerVpss/CentralDark",
+      "area": "Repositório",
+      "sha": "51f7e21",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-26T14:46:31.571Z",
       "titulo": "Push na main · eacdde22438035ef3f1609f1ef8e416009a12be9",
       "detalhe": "Merge branch 'main' into pr1189",
@@ -988,14 +996,6 @@
       "detalhe": "fix(dependabot): serializar PRs npm para prova causal (#1067)",
       "area": "Repositório",
       "sha": "06d0af4",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-19T01:55:39.694Z",
-      "titulo": "Push na main · 474d437fddc996d49d6e018abe8edefa3acda0ab",
-      "detalhe": "chore(deps): bump next-themes from 0.3.0 to 0.4.6 (#1046)",
-      "area": "Repositório",
-      "sha": "474d437",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-26T18:30:27.261Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 51f7e21cc7034405a6a50352e12fff89a2f9cc00 (51f7e21)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-26T14:46:31.571Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · eacdde22438035ef3f1609f1ef8e416009a12be9 (eacdde2)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-19T03:09:13.154Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 06d0af4bd608b6da694af622a0cc78acb3c83083 (06d0af4)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-19T01:55:39.694Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 474d437fddc996d49d6e018abe8edefa3acda0ab (474d437)",
       "area": "Repositório",
       "status": "sucesso"
     }
