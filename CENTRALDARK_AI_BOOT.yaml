@@ -16,3 +16,4 @@ CENTRALDARK_AI_BOOT:
   writer: "NONE"
   frequency: "LEVE"
   fronts: "ADAPTIVE_1_TO_10"
+  conflict_resolution: "PADRAO_DEPENDABOT: package.json/lock aceita MAIN + aplica BUMP do PR; core (centraldark_master_cycle.py, lupa, docs, .github) mantém MAIN; FAIL_CLOSED se não determinístico. Script: scripts/dependabot/resolve-conflicts.sh"
