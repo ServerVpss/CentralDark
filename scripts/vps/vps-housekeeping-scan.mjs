@@ -54,8 +54,10 @@ for (const p of pm2) {
 }
 
 // 2) Disco + arquivos grandes em alvos de lixo
-const diskLine = sh("df -P / | tail -1").split(/\s+/);
-const usedPct = diskLine[4] ? parseInt(diskLine[4].replace("%", ""), 10) : null;
+const diskLine = sh("df -P / | tail -1").split(/\s+/).filter(Boolean);
+// Linux df -P: [fs, blocks, used, avail, capacity%, mount]
+const capField = diskLine[4] || "";
+const usedPct = /^\d+%?$/.test(capField) ? parseInt(capField.replace("%", ""), 10) : null;
 emit("neutro", "disk", { used_pct: usedPct });
 
 const junkRoots = [
