@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import argparse
 import re
+import subprocess
 from datetime import date, datetime
 from pathlib import Path
 
@@ -78,9 +79,37 @@ def validate_text(text: str):
     return errors
 
 
+def artifact_eligible(rel: str) -> bool:
+    rel = rel.replace("\\", "/")
+    if not rel.endswith(".md"):
+        return False
+    if rel in CRITICAL:
+        return True
+    return (
+        rel.startswith("docs/CONSCIENCIA/APRENDIZADOS/")
+        or rel.startswith("docs/BRAIN/")
+    )
+
+
+def changed_artifacts(root: Path, base_sha: str):
+    if not base_sha:
+        return []
+    proc = subprocess.run(
+        ["git", "diff", "--name-only", "--diff-filter=ACMR", f"{base_sha}...HEAD", "--"],
+        cwd=root,
+        text=True,
+        capture_output=True,
+        check=False,
+        timeout=15,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"git_diff_failed:{(proc.stderr or '').strip()[:200]}")
+    return sorted({line.strip() for line in proc.stdout.splitlines() if artifact_eligible(line.strip())})
+
+
 def check_paths(root: Path, paths):
     failures = []
-    for rel in paths:
+    for rel in sorted(set(paths)):
         p = root / rel
         if not p.is_file():
             failures.append((rel, ["file_missing"]))
@@ -100,11 +129,17 @@ def self_test():
     good_errors = validate_text(good)
     enum_errors = validate_text(bad_enum)
     temporal_errors = validate_text(bad_temporal)
+    eligibility_ok = (
+        artifact_eligible("docs/CONSCIENCIA/APRENDIZADOS/novo.md")
+        and artifact_eligible("docs/BRAIN/01-CONCEITOS/Banda/x.md")
+        and not artifact_eligible("docs/ARQUITETURA/README.md")
+    )
     ok = (
         not good_errors
         and bool(enum_errors)
         and any(e.startswith("date_invalid=") for e in temporal_errors)
         and any(e.startswith("updated_invalid=") for e in temporal_errors)
+        and eligibility_ok
     )
     print(f"ARTIFACT_PROPERTIES_SELF_TEST={'PASS' if ok else 'FAIL'}")
     return ok
@@ -114,12 +149,25 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("root", nargs="?", default=".")
     parser.add_argument("--check-critical", action="store_true")
+    parser.add_argument("--changed-from", default="")
     parser.add_argument("--self-test", action="store_true")
     args = parser.parse_args()
+    root = Path(args.root).resolve()
     if args.self_test and not self_test():
         raise SystemExit(1)
-    if args.check_critical:
-        failures = check_paths(Path(args.root).resolve(), CRITICAL)
+
+    paths = list(CRITICAL if args.check_critical else [])
+    if args.changed_from:
+        try:
+            changed = changed_artifacts(root, args.changed_from)
+        except RuntimeError as exc:
+            print(f"ARTIFACT_PROPERTIES_VERIFY=FAIL error={exc}")
+            raise SystemExit(1)
+        print(f"ARTIFACT_PROPERTIES_CHANGED_DENOMINATOR={len(changed)}")
+        paths.extend(changed)
+
+    if paths:
+        failures = check_paths(root, paths)
         if failures:
             for path, errs in failures:
                 print(f"ARTIFACT_PROPERTIES_FILE=FAIL path={path} errors={';'.join(errs)}")
