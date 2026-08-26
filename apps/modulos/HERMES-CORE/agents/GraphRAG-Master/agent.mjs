@@ -2,7 +2,7 @@
 // 🕸️ GraphRAG-Master — memória oficial do Hermes Core.
 // O grafo é projeção derivada. Busca semântica/contextual nunca concede autoridade ou mutação.
 import { readdirSync, readFileSync, statSync, existsSync } from 'node:fs';
-import { join, dirname, relative } from 'node:path';
+import { join, dirname, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
@@ -10,7 +10,8 @@ const pexec = promisify(execFile);
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const KNOWLEDGE = join(HERE, '../../knowledge');
-const REPO_ROOT = process.env.CENTRALDARK_REPO_ROOT || '/root/CentralDark';
+// O checkout pode morar em qualquer caminho. /root/CentralDark não é contrato.
+const REPO_ROOT = process.env.CENTRALDARK_REPO_ROOT || resolve(HERE, '../../../../..');
 const GRAPH_URL = process.env.GRAPH_PANEL_URL || 'http://127.0.0.1:3030';
 const GERADOR_GRAFO = join(REPO_ROOT, 'scripts/grafo-vivo/gerar-grafo-vivo.mjs');
 const MASTER_CYCLE = join(REPO_ROOT, 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml');
