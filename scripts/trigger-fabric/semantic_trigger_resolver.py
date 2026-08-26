@@ -12,7 +12,7 @@ TRIGGERS = {
     },
     "CALIBRAR": {
         "canonical": "!CALIBRAR",
-        "aliases": ["!calibrar", "#calibrar", "calibrar", "calibar", "calibar", "calibr", "calibre"],
+        "aliases": ["!calibrar", "#calibrar", "calibrar", "calibar", "calibr", "calibre"],
         "symbols": ["⚙"],
     },
     "MULTIBUSSOLA": {
@@ -22,7 +22,7 @@ TRIGGERS = {
     },
     "META_LUPA": {
         "canonical": "!META_LUPA",
-        "aliases": ["!meta_lupa", "!metalupa", "meta lupa", "metalupa", "meta-lupa", "meta lupe", "meta lupe", "lupa meta"],
+        "aliases": ["!meta_lupa", "!metalupa", "meta lupa", "metalupa", "meta-lupa", "meta lupe", "lupa meta"],
         "symbols": ["⊛"],
     },
 }
@@ -42,6 +42,14 @@ def normalize(text):
     return text
 
 
+def tokenize(text):
+    return [t for t in re.findall(r"[#!]?[a-z0-9]+", normalize(text)) if t]
+
+
+def strip_marker(token):
+    return token.lstrip("#!")
+
+
 def levenshtein(a, b):
     if a == b:
         return 0
@@ -58,17 +66,18 @@ def levenshtein(a, b):
     return prev[-1]
 
 
-def tokenize(text):
-    return [t for t in re.findall(r"[#!]?[a-z0-9]+", normalize(text)) if t]
-
-
-def alias_tokens(alias):
-    return tokenize(alias)
+def exact_phrase_match(tokens, phrase_tokens):
+    if not phrase_tokens or len(phrase_tokens) > len(tokens):
+        return False
+    needle = [strip_marker(t) for t in phrase_tokens]
+    haystack = [strip_marker(t) for t in tokens]
+    width = len(needle)
+    return any(haystack[i:i + width] == needle for i in range(len(haystack) - width + 1))
 
 
 def fuzzy_token_match(token, alias_token):
-    a = token.lstrip("#!")
-    b = alias_token.lstrip("#!")
+    a = strip_marker(token)
+    b = strip_marker(alias_token)
     if min(len(a), len(b)) < 5:
         return False
     return levenshtein(a, b) <= MAX_TOKEN_EDIT_DISTANCE
@@ -89,21 +98,20 @@ def resolve(text):
                 reasons.append(f"SYMBOL:{symbol}")
                 score = max(score, 100)
 
-        canonical_norm = normalize(spec["canonical"])
-        if canonical_norm and canonical_norm in normalized:
+        canonical_tokens = tokenize(spec["canonical"])
+        if exact_phrase_match(tokens, canonical_tokens):
             reasons.append(f"CANONICAL:{spec['canonical']}")
             score = max(score, 100)
 
         for alias in spec["aliases"]:
-            an = normalize(alias)
-            if not an:
+            alias_toks = tokenize(alias)
+            if not alias_toks:
                 continue
-            if an in normalized:
+            if exact_phrase_match(tokens, alias_toks):
                 reasons.append(f"ALIAS:{alias}")
                 score = max(score, 90)
                 continue
-            ats = alias_tokens(alias)
-            if len(ats) == 1 and any(fuzzy_token_match(t, ats[0]) for t in tokens):
+            if len(alias_toks) == 1 and any(fuzzy_token_match(t, alias_toks[0]) for t in tokens):
                 reasons.append(f"FUZZY_TOKEN:{alias}")
                 score = max(score, 70)
 
@@ -135,11 +143,12 @@ def self_test():
         ("⊛ melhora a meta lupe", {"META_LUPA"}),
         ("🧭 olha por todos os lados", {"MULTIBUSSOLA"}),
         ("texto comum sem gatilho", set()),
+        ("quero desacordar esse processo", set()),
     ]
     results = []
     for text, expected in cases:
         got = set(resolve(text)["recognized"])
-        ok = expected.issubset(got) and (expected or not got)
+        ok = got == expected
         results.append({"input": text, "expected": sorted(expected), "got": sorted(got), "ok": ok})
     return {"ok": all(r["ok"] for r in results), "cases": results}
 
