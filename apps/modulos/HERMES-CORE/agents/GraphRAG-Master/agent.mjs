@@ -149,6 +149,7 @@ function selfTest() {
     explicit_master_trigger: positive.active === true,
     alias_master_trigger: alias.active === true,
     plain_word_does_not_trigger: negative.active === false,
+    contract_present: positive.contract_present === true,
     semantic_match_no_authority: positive.authority_granted === false && positive.mutation_authorized === false,
     graph_derived_not_authority: positive.graph_is_authority === false,
   };
