@@ -23,8 +23,11 @@ def normalize(text: str) -> str:
 DELTA_CANONICAL = "!DELTA UTILS"
 DELTA_ALIASES = (
     "!delta utils",
+    "!deltautils",
+    "deltautils",
     "!delta util",
     "!deltautil",
+    "deltautil",
     "!delta útil",
     "delta útil",
     "delta util",
@@ -100,6 +103,8 @@ def resolve(text: str):
         "unknown_is_pass": False,
         "graph_is_authority": False,
         "plain_word_centraldark_does_not_trigger": True,
+        "cross_chat_is_current_state": False,
+        "github_substitutes_missing_chat_memory": False,
     }
 
 
@@ -122,7 +127,10 @@ def self_test():
     ]
     delta_cases = [
         ("!DELTA UTILS usa só o útil", True),
-        ("!delta util", True),
+        ("!DELTAUTILS", True),
+        ("DELTAUTILS", True),
+        ("!DELTAUTIL", True),
+        ("DELTAUTIL", True),
         ("!DELTAÚTIL", True),
         ("pega o delta desse material", True),
         ("toma esse delta aí", True),
@@ -153,6 +161,8 @@ def self_test():
             ok = ok and got["delta_harvest"]["no_v1_v2_v3"] is True
             ok = ok and got["authority_changed"] is False
             ok = ok and got["mutation_authorized"] is False
+            ok = ok and got["cross_chat_is_current_state"] is False
+            ok = ok and got["github_substitutes_missing_chat_memory"] is False
         results.append({"kind": "delta", "input": text, "expected": expected, "got": actual, "ok": ok})
 
     return {"ok": all(x["ok"] for x in results), "cases": results}
