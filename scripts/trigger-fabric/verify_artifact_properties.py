@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 import argparse
+import json
+import os
 import re
 import subprocess
 from datetime import date, datetime
@@ -91,6 +93,17 @@ def artifact_eligible(rel: str) -> bool:
     )
 
 
+def event_base_sha() -> str:
+    path = os.getenv("GITHUB_EVENT_PATH", "").strip()
+    if not path:
+        return ""
+    try:
+        payload = json.loads(Path(path).read_text(encoding="utf-8"))
+        return str(payload.get("pull_request", {}).get("base", {}).get("sha", "")).strip()
+    except (OSError, ValueError, TypeError):
+        return ""
+
+
 def changed_artifacts(root: Path, base_sha: str):
     if not base_sha:
         return []
@@ -157,9 +170,10 @@ def main():
         raise SystemExit(1)
 
     paths = list(CRITICAL if args.check_critical else [])
-    if args.changed_from:
+    base_sha = args.changed_from.strip() or event_base_sha()
+    if base_sha:
         try:
-            changed = changed_artifacts(root, args.changed_from)
+            changed = changed_artifacts(root, base_sha)
         except RuntimeError as exc:
             print(f"ARTIFACT_PROPERTIES_VERIFY=FAIL error={exc}")
             raise SystemExit(1)
