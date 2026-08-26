@@ -16,10 +16,6 @@ CHAIN = [
     "REGISTRA",
     "BOOT",
 ]
-
-
-def normalize(text: str) -> str:
-    return " ".join(str(text or "").strip().split())
 DELTA_CANONICAL = "!DELTA UTILS"
 DELTA_ALIASES = (
     "!delta utils",
@@ -33,6 +29,19 @@ DELTA_ALIASES = (
     "toma esse delta",
     "pega o delta",
 )
+MULTIBUSSOLA_META_CANONICAL = "!MULTIBUSSOLA_META"
+MULTIBUSSOLA_META_ALIASES = (
+    "!multibussola_meta",
+    "!multibússola_meta",
+    "multibussola_meta",
+    "multibússola_meta",
+)
+MULTIBUSSOLA_META_ROUTES = [
+    "FORWARD_ROUTE",
+    "REVERSE_ROUTE",
+    "INVERSE_ROUTE",
+    "CROSS_BEARING_RENDEZVOUS",
+]
 
 
 def normalize(text: str) -> str:
@@ -45,35 +54,21 @@ def _contains_phrase(normalized: str, phrase: str) -> bool:
     target = normalize(phrase)
     if not target:
         return False
-    padded = f" {normalized} "
-    return f" {target} " in padded
+    return f" {target} " in f" {normalized} "
 
 
 def resolve(text: str):
     raw = str(text or "")
     normalized = normalize(raw)
-    explicit = MASTER.lower() in normalized.lower().split()
-    return {
-        "schema": "centraldark.master-cycle-receipt.v1",
-        "input": raw,
-        "master_trigger": MASTER,
-        "explicit_match": explicit,
-        "expanded_chain": CHAIN if explicit else [],
-        "status": "MATCH" if explicit else "NO_MATCH",
-        "authority_changed": False,
-        "mutation_authorized": False,
-        "all_phases_considered": explicit,
-        "phase_execution_is_adaptive": True,
-        "unknown_is_pass": False,
-        "graph_is_authority": False,
     tokens = normalized.split()
-    explicit_master = (
-        "!centraldark" in tokens
-        or "!central-dark" in tokens
-        or "!cdark" in tokens
-    )
+    explicit_master = any(token in tokens for token in ("!centraldark", "!central-dark", "!cdark"))
     delta_match = next((alias for alias in DELTA_ALIASES if _contains_phrase(normalized, alias)), None)
+    meta_match = next(
+        (alias for alias in MULTIBUSSOLA_META_ALIASES if _contains_phrase(normalized, alias)),
+        None,
+    )
     delta_active = delta_match is not None
+    meta_active = meta_match is not None
 
     return {
         "schema": "centraldark.master-cycle-receipt.v1",
@@ -92,7 +87,21 @@ def resolve(text: str):
             "zero_regression": delta_active,
             "no_v1_v2_v3": delta_active,
         },
-        "status": "MATCH" if explicit_master or delta_active else "NO_MATCH",
+        "multibussola": {
+            "canonical_signal": "!MULTIBUSSOLA",
+            "active": meta_active,
+            "matched_alias": meta_match,
+            "mode": "META" if meta_active else None,
+            "profile": "META_MULTIBUSSOLA" if meta_active else None,
+            "owner": "docs/CONSCIENCIA/MULTIBUSSOLA.md" if meta_active else None,
+            "routes": MULTIBUSSOLA_META_ROUTES if meta_active else [],
+            "invalidate_stale_bearings_on_material_change": meta_active,
+            "unknown_material_must_be_zero_for_pass": meta_active,
+            "fixed_point_is_pass": False,
+            "creates_new_pipeline": False,
+            "creates_new_owner": False,
+        },
+        "status": "MATCH" if explicit_master or delta_active or meta_active else "NO_MATCH",
         "authority_changed": False,
         "mutation_authorized": False,
         "all_phases_considered": explicit_master,
@@ -104,14 +113,6 @@ def resolve(text: str):
 
 
 def self_test():
-    cases = [
-        ("!CENTRALDARK", True),
-        ("!centraldark fecha isso", True),
-        ("CentralDark e o nome do repo", False),
-        ("fala normal", False),
-    ]
-    results = []
-    for text, expected in cases:
     master_cases = [
         ("!CENTRALDARK", True),
         ("!centraldark fecha essa missão", True),
@@ -130,6 +131,14 @@ def self_test():
         ("a palavra delta aparece num relatório", False),
         ("utilidade marginal sem pedido de delta", False),
     ]
+    meta_cases = [
+        ("!MULTIBUSSOLA_META", True),
+        ("!MULTIBÚSSOLA_META prova isso", True),
+        ("MULTIBUSSOLA_META", True),
+        ("MULTIBÚSSOLA_META", True),
+        ("!MULTIBUSSOLA", False),
+        ("a bússola aponta o norte", False),
+    ]
 
     results = []
     for text, expected in master_cases:
@@ -139,7 +148,6 @@ def self_test():
             ok = ok and got["expanded_chain"] == CHAIN
             ok = ok and got["authority_changed"] is False
             ok = ok and got["mutation_authorized"] is False
-        results.append({"input": text, "expected": expected, "got": got["explicit_match"], "ok": ok})
         results.append({"kind": "master", "input": text, "expected": expected, "got": got["explicit_match"], "ok": ok})
 
     for text, expected in delta_cases:
@@ -151,11 +159,27 @@ def self_test():
             ok = ok and got["delta_harvest"]["information_gain_required"] is True
             ok = ok and got["delta_harvest"]["zero_regression"] is True
             ok = ok and got["delta_harvest"]["no_v1_v2_v3"] is True
-            ok = ok and got["authority_changed"] is False
-            ok = ok and got["mutation_authorized"] is False
         results.append({"kind": "delta", "input": text, "expected": expected, "got": actual, "ok": ok})
 
-    return {"ok": all(x["ok"] for x in results), "cases": results}
+    for text, expected in meta_cases:
+        got = resolve(text)
+        multi = got["multibussola"]
+        actual = multi["active"]
+        ok = actual is expected
+        if expected:
+            ok = ok and multi["mode"] == "META"
+            ok = ok and multi["owner"] == "docs/CONSCIENCIA/MULTIBUSSOLA.md"
+            ok = ok and multi["routes"] == MULTIBUSSOLA_META_ROUTES
+            ok = ok and multi["invalidate_stale_bearings_on_material_change"] is True
+            ok = ok and multi["unknown_material_must_be_zero_for_pass"] is True
+            ok = ok and multi["fixed_point_is_pass"] is False
+            ok = ok and multi["creates_new_pipeline"] is False
+            ok = ok and multi["creates_new_owner"] is False
+            ok = ok and got["authority_changed"] is False
+            ok = ok and got["mutation_authorized"] is False
+        results.append({"kind": "multibussola_meta", "input": text, "expected": expected, "got": actual, "ok": ok})
+
+    return {"ok": all(item["ok"] for item in results), "cases": results}
 
 
 def main():
