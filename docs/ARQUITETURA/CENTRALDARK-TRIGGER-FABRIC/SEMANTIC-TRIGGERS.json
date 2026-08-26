@@ -1,0 +1,46 @@
+{
+  "schema": "centraldark.semantic-trigger-map.v1",
+  "owner": "Trigger Fabric + MetaLupa",
+  "default_mode": "READ_ONLY",
+  "semantic_match_is_not_authorization": true,
+  "semantic_match_is_not_mutation_permission": true,
+  "unknown_is_not_pass": true,
+  "families": {
+    "META_LUPA": {
+      "route": ["LOAD_META_LUPA", "READ_ONLY", "CLASSIFY_TEMPERATURE", "COUNTERPROOF"],
+      "terms": ["meta lupa", "meta lupe", "lupa", "contraprova", "falsificacao", "prova", "prove", "provar", "proar", "cade a prova", "cade prova", "quero evidencia", "confere isso", "verifica isso", "tenta derrubar", "derruba isso"]
+    },
+    "FALSE_GREEN": {
+      "route": ["LOAD_META_LUPA", "READ_ONLY", "FALSE_GREEN_CHECK"],
+      "terms": ["falso verde", "verde falso", "nao pinta de verde", "nao chama de pass", "unknown nao e pass", "unknown nao pass", "papagaio", "sem papagaio", "nao inventa verde"]
+    },
+    "ACORDAR_CALIBRAR": {
+      "route": ["ACORDAR", "CALIBRAR", "REMEASURE_LIVE_STATE"],
+      "terms": ["acordar", "acorda", "acordr", "calibrar", "calibra", "calibrara", "remedir", "mede de novo", "estado vivo", "ve agora"]
+    },
+    "MULTIBUSSOLA": {
+      "route": ["MULTIBUSSOLA", "MULTIAXIS_SCAN", "RENDEZVOUS"],
+      "terms": ["multibussola", "multi bussola", "multi bussula", "todos os lados", "por todos os lados", "outro angulo", "outros angulos", "round trip", "causa geradora"]
+    },
+    "FIXED_POINT": {
+      "route": ["SELF_HEALING_FAILURE_LOOP", "COUNTERPROOF", "REALITY_JUDGE", "FIXED_POINT_CHECK"],
+      "terms": ["ponto fixo", "ponto fisxo", "fixed point", "self healing", "self-healing", "self raeling", "autocura", "auto cura", "autocorrecao", "auto correcao", "ate fechar", "fecha a conta", "continua ate provar"]
+    },
+    "GRAPH_COGNITIVE": {
+      "route": ["GRAPH_CONTEXT", "SEMANTIC_EXPANSION", "DERIVED_NOT_AUTHORITY"],
+      "terms": ["grafo", "graphrag", "graph rag", "mapa mental", "mapa cognitivo", "mapa mental cognitivo", "sincroniza o grafo", "sincronize o grafo", "liga o grafo", "calibre o grafo"]
+    },
+    "TIC_TAC": {
+      "route": ["REMEASURE_HEAD", "CHECK_CI", "CHECK_GATES", "NO_STALE_STATUS"],
+      "terms": ["tic tac", "tic-tac", "cade o tic tac", "status agora", "ta verde", "ficou verde"]
+    }
+  },
+  "quest_graph_profile": {
+    "source_provenance": "https://www.tibiawiki.com.br/wiki/Quests",
+    "authority": false,
+    "abstraction_only": true,
+    "nodes": ["INTENT", "PREREQUISITE", "ENTRY_TRIGGER", "MISSION", "SUBTASK", "EVIDENCE", "REWARD_CAPABILITY", "UNLOCK", "RECURRENCE", "TIME_WINDOW", "FIXED_POINT"],
+    "edges": ["REQUIRES", "STARTS", "DECOMPOSES_TO", "PROVES", "UNLOCKS", "REPEATS_AFTER", "EXPIRES_AT", "CONVERGES_TO"],
+    "rules": ["LEVEL_OR_GATE_IS_ACCESS_CONSTRAINT_NOT_SUCCESS_PROOF", "REWARD_CAN_UNLOCK_CAPABILITY", "RECURRING_TASK_REQUIRES_FRESH_STATE", "QUEST_CHAIN_IS_DEPENDENCY_GRAPH_NOT_NEW_ENGINE"]
+  }
+}
