@@ -94,12 +94,16 @@ execution_model:
   one_writer_per_scope: true
 
 communication_interface:
+  preferred_human_header: "!CENTRALDARK"
+  expanded_chain_must_remain_recoverable: true
   human_expression_may_be_compressed_or_noisy: true
   preserve_meaning_before_syntax: true
   semantic_match_is_authority: false
   semantic_match_is_mutation_permission: false
   presentation_layers: [BAIANES_FACIL, TECHNICAL_PRECISION, NARRATIVE_PARALLELISM_WHEN_USEFUL]
   presentation_is_not_governance: true
+  recap_may_use_verse_cadence: true
+  technical_status_evidence_and_verdict_remain_literal: true
   mechanical_payload_fast_path:
     trigger: HUMAN_NEEDS_ONLY_COPY_PASTE_PAYLOAD_AND_NO_MATERIAL_DECISION_OR_RISK
     behavior: RETURN_ONLY_REQUESTED_PAYLOAD
@@ -111,8 +115,12 @@ communication_interface:
 delta_harvest:
   canonical_signal: "!DELTA UTILS"
   semantic_aliases:
+    - "!DELTA UTILS"
+    - "!DELTAUTILS"
+    - "DELTAUTILS"
     - "!DELTA UTIL"
     - "!DELTAUTIL"
+    - "DELTAUTIL"
     - "!DELTAÚTIL"
     - "DELTA ÚTIL"
     - "DELTA UTIL"
@@ -162,6 +170,32 @@ delta_harvest:
     - EVIDENCE_REF
     - NEXT_CURSOR
 
+cross_chat_recovery:
+  mode: READ_ONLY_CONTEXT_RECOVERY
+  use_when_accessible: true
+  recover_before_reask: true
+  sources: [CHATGPT_HISTORY, CHATGPT_SAVED_MEMORY, CONVERSATION_LIBRARY]
+  rules:
+    - "CROSS_CHAT = CONTEXT + PROVENANCE + CANDIDATE_DELTA"
+    - "CROSS_CHAT != CURRENT_STATE"
+    - "HISTORY != CURRENT_STATE"
+    - "UNRECOVERED_CROSS_CHAT -> UNKNOWN"
+    - "GITHUB_MUST_NOT_SUBSTITUTE_MISSING_CHAT_MEMORY"
+    - "DEDUPE_REPETITION_BEFORE_CRYSTALLIZE"
+    - "CONTRADICTION -> META_LUPA + RECONCILE"
+    - "CURRENT_LIVE_EVIDENCE_OVERRIDES_STALE_CHAT_STATE"
+  may_write_canonical_directly: false
+  crystal_destination: EXISTING_OWNER_AFTER_EVIDENCE_AND_DEDUPE
+
+semantic_memory_links:
+  owner: docs/CONSCIENCIA/ARTEFATOS/TECNICAS-DE-LINKAGEM-SEMANTICA.md
+  properties_contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ARTIFACT-PROPERTIES.yml
+  quality_over_quantity: true
+  typed_relations_when_useful: true
+  semantic_link_is_proof: false
+  graph_is_authority: false
+  musical_metaphor_is_navigation_only: true
+
 # Lentes transversais: observam qualquer fase, nao viram seis etapas novas.
 transversal_lenses:
   dimensions:
@@ -200,6 +234,8 @@ past_future_reconciliation:
     - engine_binding_inherits_same_contract
     - past_is_provenance_plus_candidate_delta
     - delta_utils_is_incremental_harvest_not_new_router
+    - cross_chat_is_context_not_current_state
+    - semantic_links_are_navigation_not_proof
     - transversal_3x3_lenses_not_new_phases
     - mechanical_payload_only_fast_path
   rejected_as_parallel:
