@@ -84,6 +84,36 @@ jobs:
           echo 'ENGINE_GAP_CLOSURE_CONTRACT=PASS'
           echo 'ENGINE_GAP_SELF_HEALING_FIXED_POINT=PASS'
 
+      - name: Verify semantic trigger and cognitive graph binding
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SEMANTIC-TRIGGERS.json
+          python - <<'PY'
+          import json
+          p='docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SEMANTIC-TRIGGERS.json'
+          data=json.load(open(p, encoding='utf-8'))
+          assert data['semantic_match_is_not_authorization'] is True
+          assert data['semantic_match_is_not_mutation_permission'] is True
+          assert 'META_LUPA' in data['families']
+          assert 'FIXED_POINT' in data['families']
+          assert 'GRAPH_COGNITIVE' in data['families']
+          assert 'quest_graph_profile' in data
+          print('SEMANTIC_TRIGGER_MAP=PASS')
+          PY
+          grep -q 'SEMANTIC_TRIGGER_ROUTING' docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml
+          grep -q 'SEMANTIC_MATCH_IS_NOT_AUTHORIZATION' docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml
+          grep -q 'QUEST_GRAPH_PROFILE' docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml
+          CENTRALDARK_REPO_ROOT="$PWD" node apps/modulos/HERMES-CORE/agents/GraphRAG-Master/agent.mjs --self-test \
+            | tee .artifacts-semantic-graphrag-self-test.txt
+          grep -q '"ok":true' .artifacts-semantic-graphrag-self-test.txt
+          grep -q '"typo_meta_lupa":true' .artifacts-semantic-graphrag-self-test.txt
+          grep -q '"typo_fixed_point":true' .artifacts-semantic-graphrag-self-test.txt
+          grep -q '"graph_semantic":true' .artifacts-semantic-graphrag-self-test.txt
+          grep -q '"semantic_match_no_authority":true' .artifacts-semantic-graphrag-self-test.txt
+          echo 'SEMANTIC_TRIGGER_BINDING=PASS'
+          echo 'COGNITIVE_GRAPH_SYNC=PASS'
+
       - name: Render architecture PNG from canonical Mermaid
         shell: bash
         run: |
