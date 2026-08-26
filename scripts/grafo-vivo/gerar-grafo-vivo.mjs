@@ -7,6 +7,7 @@
  *   • PM2 jlist  → status 🟢/🔴/🟡 por processo, refletido no label (render colore por type)
  *   • gateway.log → atividade recente do Elite HTTP (arestas "quentes")
  *   • processos vivos sem nó (ex.: Hermes, Zentinel, Guardiões) → viram nós novos ligados à VPS
+ *   • contratos cognitivos presentes no repo → overlay derivado, sem autoridade própria
  *   • stats + updatedAt recalculados a cada rodada
  *
  * Escreve APENAS o feed de dados apps/modulos/status/graph-data.json (não toca no render).
@@ -16,9 +17,10 @@ import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { execSync } from 'node:child_process';
 
 // Fonte canônica única (status + grafo.centralldark.com + Obsidian nota)
-const GRAPH   = '/root/CentralDark/apps/modulos/status/graph-data.json';
+const ROOT = '/root/CentralDark';
+const GRAPH   = `${ROOT}/apps/modulos/status/graph-data.json`;
 // Espelho pro graph-panel (:3030 /api/graph) — sem segundo gerador
-const GRAPH_PANEL_MIRROR = '/root/CentralDark/apps/modulos/graph-panel/data/graph.json';
+const GRAPH_PANEL_MIRROR = `${ROOT}/apps/modulos/graph-panel/data/graph.json`;
 const GWLOG   = '/var/log/centralldark/gateway.log';
 const DRY     = process.argv.includes('--dry');
 
@@ -45,12 +47,46 @@ const LIVE_EXTRA = {
   'memoria':              { label: 'Memória API',         type: 'servico',       group: 'monitoramento' },
   'telegrammtproto':      { label: 'Telegram MTProto',    type: 'servico',       group: 'edge-telegram' },
 };
+
+// Overlay cognitivo DERIVADO do canônico em disco. Presença do arquivo prova
+// que o contrato está disponível no checkout; não prova runtime/execução.
+const COGNITIVE_CONTRACTS = {
+  'trigger-fabric': {
+    label: 'Trigger Fabric', type: 'cognitivo', group: 'cognitivo',
+    path: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml',
+  },
+  'semantic-trigger-resolver': {
+    label: 'Semantic Trigger Resolver', type: 'cognitivo', group: 'cognitivo',
+    path: 'scripts/trigger-fabric/semantic_trigger_resolver.py',
+  },
+  'meta-lupa': {
+    label: 'Meta Lupa', type: 'cognitivo', group: 'cognitivo',
+    path: '.agents/skills/meta-lupa/SKILL.md',
+  },
+  'meta-lupa-semantic-guardrail': {
+    label: 'Meta Lupa · Semantic Guardrail', type: 'cognitivo', group: 'cognitivo',
+    path: '.agents/skills/meta-lupa/guardrails/semantic-triggers.md',
+  },
+  'semantic-core': {
+    label: 'Semantic Core (hint)', type: 'cognitivo', group: 'cognitivo',
+    path: 'infra/mcp/SEMANTIC-CORE.md',
+  },
+};
+
+const COGNITIVE_EDGES = [
+  ['semantic-trigger-resolver', 'trigger-fabric', 'normaliza gatilho'],
+  ['semantic-core', 'semantic-trigger-resolver', 'enriquece opcional'],
+  ['trigger-fabric', 'meta-lupa', 'ativa proporcionalmente'],
+  ['meta-lupa-semantic-guardrail', 'meta-lupa', 'restringe interpretação'],
+  ['meta-lupa', 'hermes', 'contraprova antes de executar'],
+];
+
 const norm = s => String(s || '').toLowerCase().replace(/^centraldark-/, '').replace(/[^a-z0-9]/g, '');
 const DOT = { online: '🟢', stopped: '🔴', errored: '🟡', launching: '🟡', unknown: '⚪' };
 // Remove o dot de status do label. Usa flag u (emoji = surrogate pair) e limpa lixo de corrupção anterior.
 const cleanLabel = l => String(l || '')
-  .replace(/^[\u{1F7E2}\u{1F534}\u{1F7E1}⚪]\s*/u, '')   // dot de status (pair-aware)
-  .replace(/[\uD800-\uDFFF�]/g, '')                     // surrogates órfãos + replacement chars
+  .replace(/^[\u{1F7E2}\u{1F534}\u{1F7E1}⚪]\s*/u, '')
+  .replace(/[\uD800-\uDFFF�]/g, '')
   .trim();
 
 function pm2State() {
@@ -90,6 +126,48 @@ function atividadeGateway() {
   } catch { return 0; }
 }
 
+function ensureCognitiveOverlay(g, nodesById) {
+  let addedNodes = 0;
+  let addedEdges = 0;
+
+  for (const [id, meta] of Object.entries(COGNITIVE_CONTRACTS)) {
+    const present = existsSync(`${ROOT}/${meta.path}`);
+    if (!present) continue;
+    if (!nodesById.has(id)) {
+      const node = {
+        id,
+        label: meta.label,
+        type: meta.type,
+        group: meta.group,
+        contract_path: meta.path,
+        derived: true,
+        runtime_status: 'UNPROVEN',
+      };
+      g.nodes.push(node);
+      nodesById.set(id, node);
+      addedNodes++;
+    } else {
+      const node = nodesById.get(id);
+      node.contract_path = meta.path;
+      node.derived = true;
+      if (!node.runtime_status) node.runtime_status = 'UNPROVEN';
+    }
+  }
+
+  const edgeKey = (from, to, label) => `${from}\u0000${to}\u0000${label || ''}`;
+  const existing = new Set(g.edges.map(e => edgeKey(String(e.from), String(e.to), e.label)));
+  for (const [from, to, label] of COGNITIVE_EDGES) {
+    if (!nodesById.has(from) || !nodesById.has(to)) continue;
+    const key = edgeKey(from, to, label);
+    if (existing.has(key)) continue;
+    g.edges.push({ from, to, label, weight: 2, derived: true });
+    existing.add(key);
+    addedEdges++;
+  }
+
+  return { addedNodes, addedEdges };
+}
+
 function main() {
   const g = JSON.parse(readFileSync(GRAPH, 'utf8'));
   const { procs, byNorm } = pm2State();
@@ -123,7 +201,10 @@ function main() {
     monitorados++; st.status === 'online' ? online++ : offline++;
   }
 
-  // 3) atividade real do gateway → engrossa a aresta que chega no elite-http-gateway
+  // 3) contratos cognitivos presentes → topologia derivada, sem fabricar runtime.
+  const cognitive = ensureCognitiveOverlay(g, nodesById);
+
+  // 4) atividade real do gateway → engrossa a aresta que chega no elite-http-gateway
   const hits = atividadeGateway();
   if (hits > 0) {
     for (const e of g.edges) {
@@ -131,9 +212,9 @@ function main() {
     }
   }
 
-  // 4) stats vivas
+  // 5) stats vivas + contagem do overlay cognitivo derivado
   g.updatedAt = new Date().toISOString();
-  g._note = `Grafo VIVO — regenerado por scripts/grafo-vivo/gerar-grafo-vivo.mjs. PM2: ${online} online / ${offline} off de ${monitorados} monitorados. Gateway: ${hits} req/15min.`;
+  g._note = `Grafo VIVO — regenerado por scripts/grafo-vivo/gerar-grafo-vivo.mjs. PM2: ${online} online / ${offline} off de ${monitorados} monitorados. Gateway: ${hits} req/15min. Overlay cognitivo: +${cognitive.addedNodes} nós / +${cognitive.addedEdges} arestas nesta rodada.`;
   g.stats = {
     ...(g.stats || {}),
     total_nodes: g.nodes.length,
@@ -141,10 +222,14 @@ function main() {
     processos_vivos: procs.length,
     online, offline, monitorados,
     gateway_req_15min: hits,
+    cognitive_contract_nodes: Object.keys(COGNITIVE_CONTRACTS).filter(id => nodesById.has(id)).length,
+    cognitive_overlay_added_nodes: cognitive.addedNodes,
+    cognitive_overlay_added_edges: cognitive.addedEdges,
+    cognitive_overlay_is_authority: false,
     gerado_em: g.updatedAt,
   };
 
-  const resumo = `${g.nodes.length} nós · ${g.edges.length} arestas · ${online}🟢/${offline}🔴 · ${hits} req/15min`;
+  const resumo = `${g.nodes.length} nós · ${g.edges.length} arestas · ${online}🟢/${offline}🔴 · ${hits} req/15min · cognitivo +${cognitive.addedNodes}/${cognitive.addedEdges}`;
   if (DRY) { console.log('[DRY] ' + resumo); console.log(JSON.stringify(g.stats, null, 2)); return; }
   const payload = JSON.stringify(g, null, 2);
   writeFileSync(GRAPH, payload);
