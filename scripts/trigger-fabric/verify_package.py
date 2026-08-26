@@ -23,16 +23,23 @@ for item in manifest.get('files',[]):
 
 required=[
  'README.md','ARCHITECTURE.md','ARCHITECTURE.mmd','ARCHITECTURE.png',
- 'CONTRACT.yml','TRIGGERS.yml','ENGINE_BINDING.yml','ADVERSARIAL_HANDOFF.yml','LIVE_STATE.md',
+ 'CONTRACT.yml','TRIGGERS.yml','ENGINE_BINDING.yml','MASTER-CYCLE.yml','ADVERSARIAL_HANDOFF.yml','LIVE_STATE.md',
  'HISTORY.md','COUNTERPROOF.md','RASTRO.md','RECEIPT.md','SOURCES.json',
  'OLHO-BIONICO-ANTI-FLASH.md',
+ 'scripts/trigger-fabric/centraldark_master_cycle.py',
  'build_package.py','verify_package.py','MANIFEST.json','SHA256SUMS.txt'
 ]
 for name in required:
     if not (ROOT/name).exists(): errors.append(f'REQUIRED_MISSING {name}')
 
+resolver = ROOT/'scripts'/'trigger-fabric'/'centraldark_master_cycle.py'
+if resolver.exists():
+    resolver_text = resolver.read_text(encoding='utf-8', errors='replace')
+    for token in ['MASTER = "!CENTRALDARK"', 'DELTA_CANONICAL = "!DELTA UTILS"', 'unknown_is_pass']:
+        if token not in resolver_text:
+            errors.append(f'MASTER_RESOLVER_GUARD_MISSING:{token}')
+
 # 2º CADEADO — Ontologia Musical + Judge Ternário
-# Verifica se a ontologia musical está presente no PADRAO-PARCEIRO-DELTA-JUDGE.md
 padrao_path = ROOT/'docs'/'ARQUITETURA'/'PADRAO-PARCEIRO-DELTA-JUDGE.md'
 if not padrao_path.exists():
     errors.append('REQUIRED_MISSING docs/ARQUITETURA/PADRAO-PARCEIRO-DELTA-JUDGE.md')
@@ -65,11 +72,11 @@ for token in [
     if token not in contract: errors.append(f'CONTRACT_GUARD_MISSING:{token}')
 
 triggers=(ROOT/'TRIGGERS.yml').read_text(encoding='utf-8',errors='replace') if (ROOT/'TRIGGERS.yml').exists() else ''
-for token in ['event: BOT_ENTRY','event: PRE_HUMAN_RETURN','event: RESUME']:
+for token in ['event: BOT_ENTRY','event: PRE_HUMAN_RETURN','event: RESUME','token: "!CENTRALDARK"']:
     if token not in triggers: errors.append(f'TRIGGER_MISSING:{token}')
 
 engine=(ROOT/'ENGINE_BINDING.yml').read_text(encoding='utf-8',errors='replace') if (ROOT/'ENGINE_BINDING.yml').exists() else ''
-for token in ['engine_is_owner: false','binding_mode: LOAD_REFERENCE','prompt_consumer: apps/modulos/HERMES-CORE/prompts/hermes-core.md']:
+for token in ['engine_is_owner: false','binding_mode: LOAD_REFERENCE','prompt_consumer: apps/modulos/HERMES-CORE/prompts/hermes-core.md','resolver: scripts/trigger-fabric/centraldark_master_cycle.py']:
     if token not in engine: errors.append(f'ENGINE_BINDING_GUARD_MISSING:{token}')
 
 profile=(ROOT/'OLHO-BIONICO-ANTI-FLASH.md').read_text(encoding='utf-8',errors='replace') if (ROOT/'OLHO-BIONICO-ANTI-FLASH.md').exists() else ''
@@ -99,5 +106,6 @@ print('VERIFY=PASS')
 print(f'FILES_VERIFIED={len(manifest.get("files",[]))}')
 print('BOT_ENTRY_CONTRACT=PASS')
 print('OUTPUT_GUARD_CONTRACT=PASS')
+print('MASTER_CYCLE_RESOLVER=PASS')
 print('OLHO_BIONICO_ANTI_FLASH_CONTRACT=PASS')
 print('GLOBAL_RUNTIME_100_PERCENT=NOT_PROVEN')
