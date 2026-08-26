@@ -8,6 +8,15 @@ human_triggers:
     plain_word_does_not_trigger: true
     expands_to: [ACORDAR, CALIBRAR, MULTIBUSSOLA, META_LUPA, RECONCILIAR, CONTRAPROVA, REMEDICAO, FIXED_POINT, REGISTRA, BOOT]
     behavior: [CONSIDER_ALL_PHASES, SKIP_ONLY_IF_JUSTIFIED, UNKNOWN_NEVER_PASS, NO_AUTHORITY_EXPANSION, NO_AUTO_MUTATION]
+  - id: DELTA_UTILS
+    token: "!DELTA UTILS"
+    aliases: ["!DELTA UTIL", "!DELTAUTIL", "!DELTAÚTIL", "DELTA ÚTIL", "DELTA UTIL", "DELTA UTILS", "DELTA DE AGORA", "TOMA ESSE DELTA", "PEGA O DELTA"]
+    owner: "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml#delta_harvest"
+    semantic_family: DELTA_HARVEST
+    behavior: [USE_ONLY_USEFUL_NOW, PRESERVE_CHEFE_INTENT, ZERO_REGRESSION, REUSE_EXISTING_OWNER, NO_V1_V2_V3, SAME_PR_WHEN_SCOPE_MATCHES, INFORMATION_GAIN_REQUIRED]
+    destination_router: .agents/skills/capability-contract-router/SKILL.md
+    match_is_new_authority: false
+    match_is_unrelated_mutation_permission: false
   - id: ACORDAR
     token: "#ACORDAR"
     aliases: ["#ACORDA", "ACORDAR", "ACORDA", "ACORD"]
@@ -54,6 +63,7 @@ human_triggers:
     aliases: ["REGISTRA", "REGISTRAR", "GRAVA RECEIPT", "SALVA O OURO"]
     owner: "continuity + learning owners"
     behavior: [WRITE_RECEIPT, PRESERVE_PROVENANCE, LEARNING_DELTA, NEXT_CURSOR]
+    behavior: [WRITE_RECEIPT, PRESERVE_PROVENANCE, LEARNING_DELTA, NEXT_CURSOR, PROMOTE_MAIN_WHEN_SAME_SCOPE_AUTHORIZED_AND_GATES_PASS]
   - id: BOOT
     token: "!BOOT"
     aliases: ["BOOT", "REBOOT LOGICO", "PROXIMO CICLO"]
@@ -65,10 +75,17 @@ semantic_trigger_resolution:
     resolver: scripts/trigger-fabric/centraldark_master_cycle.py
     explicit_trigger: "!CENTRALDARK"
     receipt_schema: centraldark.master-cycle-receipt.v1
+  delta_harvest:
+    contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml#delta_harvest
+    semantic_family: DELTA_HARVEST
+    deterministic_aliases_first: true
+    route_to_existing_owner: true
+    receipt_fields: [SOURCE, CLASSIFICATION, INFORMATION_GAIN, DESTINATION_OWNER, ACTION, EVIDENCE_REF, NEXT_CURSOR]
   mode: DETERMINISTIC_FIRST_SEMANTIC_ENRICHMENT_OPTIONAL
   rules:
     - "EXPLICIT_MASTER_TRIGGER -> EXPAND_FULL_CHAIN"
     - "PLAIN_WORD_CENTRALDARK -> NO_MASTER_TRIGGER"
+    - "DELTA_UTILS_FAMILY -> DELTA_HARVEST_NO_NEW_ROUTER"
     - "SEMANTIC_TRIGGER_MATCH != AUTHORITY_EXPANSION"
     - "SEMANTIC_TRIGGER_MATCH != AUTO_MUTATION"
     - "MULTI_MATCH -> COMPOSE_APPLICABLE_TRIGGERS_NO_VOTE"
@@ -256,4 +273,5 @@ routing_rules:
   - "CRITICAL_DEPENDENCY_FAILURE -> FAIL_CLOSED_OR_CONTAIN"
   - "NONCRITICAL_DEPENDENCY_FAILURE -> DEGRADE_ONLY_IF_PROVEN"
   - "MASTER_TRIGGER -> EXPAND_CHAIN_NO_AUTHORITY_GAIN"
+  - "DELTA_UTILS -> USE_ONLY_INFORMATION_GAIN_ROUTE_TO_EXISTING_OWNER_ZERO_REGRESSION"
   - "PAST_PR_DELTA -> ABSORB_USEFUL_ONLY_PRESERVE_PROVENANCE"

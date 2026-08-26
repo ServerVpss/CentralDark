@@ -66,6 +66,10 @@ master_cycle_binding:
   source_prs_reconciled: [1166, 1167, 1168, 1170]
   second_semantic_owner: FORBIDDEN
   graph_is_derived_not_authority: true
+  source_prs_reconciled: [1166, 1167, 1168, 1169, 1170, 1172]
+  second_semantic_owner: FORBIDDEN
+  graph_is_derived_not_authority: true
+  valuable_memory_requires_properties: true
 self_healing_binding:
   applies_to: [PR, COMMIT, CI, TOOL_ERROR, TEST_FAILURE, RUNTIME_DRIFT, OPERATIONAL_FAILURE, RED_ISSUE, RED_PR_OR_FAILED_CHECK, CAPABILITY_GAP, SIGNAL_STATE_CHANGE, TERRITORY_ROUTE_CHANGE]
   engine_must:

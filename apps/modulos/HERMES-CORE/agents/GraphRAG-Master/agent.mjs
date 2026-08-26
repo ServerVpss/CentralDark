@@ -35,6 +35,7 @@ const MASTER_TERMS = [
 function masterAtivo(missao) {
   const tokens = normalizar(missao).split(/\s+/);
   return tokens.includes('!centraldark');
+  return tokens.includes('!centraldark') || tokens.includes('!central-dark') || tokens.includes('!cdark');
 }
 
 function termos(missao) {
@@ -63,8 +64,8 @@ export async function atualizarGrafo() {
     const { stdout } = await pexec('node', [GERADOR_GRAFO], { timeout: 60_000, maxBuffer: 8 * 1024 * 1024 });
     const resumo = (stdout.trim().split('\n').pop() || 'grafo regenerado').slice(0, 200);
     return { ok: true, saida: resumo };
-  } catch (e) {
-    return { ok: false, saida: `falha ao regenerar grafo: ${(e.stderr || e.message || '').toString().slice(0, 200)}` };
+  } catch (error) {
+    return { ok: false, saida: `falha ao regenerar grafo: ${(error.stderr || error.message || '').toString().slice(0, 200)}` };
   }
 }
 
@@ -73,7 +74,6 @@ async function buscarNoGrafo(missao) {
   if (!r.ok) throw new Error(`grafo HTTP ${r.status}`);
   const { nodes = [], edges = [] } = await r.json();
   const ts = termos(missao);
-
   const hits = nodes
     .map(n => ({ n, score: ts.filter(t => normalizar(`${n.id} ${n.label || ''} ${n.title || ''}`).includes(t)).length }))
     .filter(h => h.score > 0)
@@ -85,7 +85,6 @@ async function buscarNoGrafo(missao) {
     .filter(e => (e.from ?? e.source) === id || (e.to ?? e.target) === id)
     .map(e => (e.from ?? e.source) === id ? (e.to ?? e.target) : (e.from ?? e.source))
     .slice(0, 4).join(', ');
-
   return 'Grafo vivo (grafo.centralldark.com):\n' +
     hits.map(({ n }) => `- [${n.group || '?'}] ${n.label || n.id}${vizinhos(n.id) ? ` → conecta: ${vizinhos(n.id)}` : ''}`).join('\n');
 }
@@ -104,9 +103,23 @@ function buscarLocal(missao) {
         const score = ts.reduce((s, t) => s + (nome.includes(t) ? 3 : 0) + (corpo.includes(t) ? 1 : 0), 0);
         if (score > 0) ranking.push({ p, score, titulo: e });
       } catch {}
+        const raw = readFileSync(p, 'utf8').slice(0, 4000);
+        const corpo = normalizar(raw);
+        const nome = normalizar(e);
+        const score = ts.reduce((s, t) => s + (nome.includes(t) ? 3 : 0) + (corpo.includes(t) ? 1 : 0), 0);
+        if (score > 0) ranking.push({ p, score, titulo: (raw.match(/^#\s*(.+)$/m) || [])[1] || e });
+      } catch (error) {
+        if (process.env.GRAPHRAG_DEBUG === '1') console.warn(`GraphRAG skip ${p}: ${error.message}`);
+        continue;
+      }
     }
   };
-  try { varrer(KNOWLEDGE); } catch { return ''; }
+  try {
+    varrer(KNOWLEDGE);
+  } catch (error) {
+    if (process.env.GRAPHRAG_DEBUG === '1') console.warn(`GraphRAG local indisponível: ${error.message}`);
+    return '';
+  }
   ranking.sort((a, b) => b.score - a.score);
   if (!ranking.length) return '';
   return 'Docs locais (knowledge/):\n' +
@@ -117,7 +130,9 @@ export async function buscarContexto(missao) {
   try {
     const doGrafo = await buscarNoGrafo(missao);
     if (doGrafo) return doGrafo.slice(0, 1500);
-  } catch { /* grafo fora do ar — cai pro local */ }
+  } catch (error) {
+    if (process.env.GRAPHRAG_DEBUG === '1') console.warn(`GraphRAG remoto indisponível: ${error.message}`);
+  }
   return buscarLocal(missao).slice(0, 1500);
 }
 
@@ -128,6 +143,11 @@ function selfTest() {
   const negative = classificarCicloMestre('CentralDark é o nome do repo');
   const checks = {
     explicit_master_trigger: positive.active === true,
+  const alias = classificarCicloMestre('!cdark fecha');
+  const negative = classificarCicloMestre('CentralDark é o nome do repo');
+  const checks = {
+    explicit_master_trigger: positive.active === true,
+    alias_master_trigger: alias.active === true,
     plain_word_does_not_trigger: negative.active === false,
     semantic_match_no_authority: positive.authority_granted === false && positive.mutation_authorized === false,
     graph_derived_not_authority: positive.graph_is_authority === false,
