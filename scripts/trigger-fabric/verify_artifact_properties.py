@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import argparse
 import re
-import sys
+from datetime import date, datetime
 from pathlib import Path
 
 REQUIRED = {
@@ -35,6 +35,25 @@ def parse_frontmatter(text: str):
     return out
 
 
+def valid_date(value: str) -> bool:
+    try:
+        parsed = date.fromisoformat(str(value))
+        return parsed.isoformat() == str(value)
+    except (TypeError, ValueError):
+        return False
+
+
+def valid_datetime(value: str) -> bool:
+    raw = str(value or "")
+    if "T" not in raw:
+        return False
+    try:
+        datetime.fromisoformat(raw.replace("Z", "+00:00"))
+        return True
+    except (TypeError, ValueError):
+        return False
+
+
 def validate_text(text: str):
     fm = parse_frontmatter(text)
     missing = sorted(k for k in REQUIRED if not fm.get(k))
@@ -47,6 +66,12 @@ def validate_text(text: str):
         errors.append("sensitivity_invalid=" + fm["sensitivity"])
     if fm.get("source_class") and fm["source_class"] not in SOURCE_CLASS:
         errors.append("source_class_invalid=" + fm["source_class"])
+    if fm.get("date") and not valid_date(fm["date"]):
+        errors.append("date_invalid=" + fm["date"])
+    if fm.get("updated") and not valid_datetime(fm["updated"]):
+        errors.append("updated_invalid=" + fm["updated"])
+    if fm.get("observed_at") and not valid_datetime(fm["observed_at"]):
+        errors.append("observed_at_invalid=" + fm["observed_at"])
     tags = fm.get("tags", "")
     if tags and not (tags.startswith("[") and tags.endswith("]") and re.search(r"[A-Za-zÀ-ÿ0-9]", tags)):
         errors.append("tags_invalid")
@@ -69,9 +94,18 @@ def check_paths(root: Path, paths):
 
 
 def self_test():
-    good = """---\ntitle: x\nstatus: KNOWLEDGE_ONLY\ndate: 2026-08-26\nupdated: 2026-08-26T08:38:00-03:00\ntags: [x]\ncategory: A-Teste\nsensitivity: INTERNAL\nsource: teste\nsource_class: INTERNAL\nsource_rule: regra\nowner: owner\n---\n"""
-    bad = "---\ntitle: x\nstatus: INVENTADO\n---\n"
-    ok = not validate_text(good) and bool(validate_text(bad))
+    good = """---\ntitle: x\nstatus: KNOWLEDGE_ONLY\ndate: 2026-08-26\nupdated: 2026-08-26T08:38:00-03:00\nobserved_at: 2026-08-26T08:39:00-03:00\ntags: [x]\ncategory: A-Teste\nsensitivity: INTERNAL\nsource: teste\nsource_class: INTERNAL\nsource_rule: regra\nowner: owner\n---\n"""
+    bad_enum = "---\ntitle: x\nstatus: INVENTADO\n---\n"
+    bad_temporal = """---\ntitle: x\nstatus: KNOWLEDGE_ONLY\ndate: definitely-not-a-date\nupdated: yesterday\ntags: [x]\ncategory: A-Teste\nsensitivity: INTERNAL\nsource: teste\nsource_class: INTERNAL\nsource_rule: regra\nowner: owner\n---\n"""
+    good_errors = validate_text(good)
+    enum_errors = validate_text(bad_enum)
+    temporal_errors = validate_text(bad_temporal)
+    ok = (
+        not good_errors
+        and bool(enum_errors)
+        and any(e.startswith("date_invalid=") for e in temporal_errors)
+        and any(e.startswith("updated_invalid=") for e in temporal_errors)
+    )
     print(f"ARTIFACT_PROPERTIES_SELF_TEST={'PASS' if ok else 'FAIL'}")
     return ok
 
