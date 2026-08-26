@@ -14,7 +14,11 @@ boot_required: true
 Transformar intenção + estado vivo + capacidades observadas em uma atribuição operacional reproduzível.
 
 ```text
-TASK
+FASE_ATUAL
++ INTENCAO
++ ESTADO_VIVO
++ RISCO
++ ESCOPO
 + REQUIRED_CAPABILITIES
 + LIVE_CANDIDATES
 + WRITER_SCOPE
@@ -23,10 +27,19 @@ TASK
 → FILTER
 → COVER
 → ASSIGN
+→ MENOR_CONJUNTO_SUFICIENTE
 → HANDOFF_CONTRACT
 → EXECUTE
 → RECEIPT
 → REMEASURE
+```
+
+Mesma entrada observável + mesmo estado + mesmas capacidades disponíveis + mesmos limites devem produzir a mesma rota determinística, salvo mudança explícita no critério de desempate ou nova evidência.
+
+```text
+SAME_INPUT_STATE_CAPABILITIES_BOUNDARY
+→ SAME_ROUTE_EXPECTED=true
+MODEL_FEELING_ROUTING=FORBIDDEN
 ```
 
 Esta skill não cria personagem, autoridade ou segundo orquestrador.
@@ -56,15 +69,16 @@ A proveniência é externa; a implementação abaixo é neutra e pertence ao mé
 
 ## Gatilho obrigatório
 
-Carregar quando uma missão precisar selecionar agente/modelo/tool/papel por capacidade, dividir trabalho, produzir handoff, reconciliar múltiplos candidatos ou provar que a cobertura funcional está completa.
+Carregar quando uma missão precisar selecionar agente/modelo/tool/papel por capacidade, dividir trabalho, produzir handoff, reconciliar múltiplos candidatos, escolher destino de um delta útil ou provar que a cobertura funcional está completa.
 
 ```text
-TRIGGER = MULTI_CANDIDATE | MULTI_ROLE | HANDOFF | CAPABILITY_GAP | ROUTING_DECISION
+TRIGGER = MULTI_CANDIDATE | MULTI_ROLE | HANDOFF | CAPABILITY_GAP | ROUTING_DECISION | DELTA_HARVEST_DESTINATION
 BOOT_DISCOVERABLE=true
 DETERMINISTIC_ROUTING_REQUIRED=true
 MEASURABLE_COVERAGE_REQUIRED=true
 FAIL_CLOSED_ON_CAPABILITY_GAP=true
 ONE_WRITER_PER_SCOPE=true
+EXISTING_OWNER_FIRST=true
 ```
 
 Tarefa simples, de candidato único e sem ambiguidade pode atravessar a skill em fast-path sem fan-out.
@@ -75,6 +89,11 @@ Tarefa simples, de candidato único e sem ambiguidade pode atravessar a skill em
 {
   "task": {
     "task_id": "string",
+    "phase": "phase-or-null",
+    "intent_ref": "current-human-intent-or-null",
+    "live_state_ref": "observed-state-or-null",
+    "risk": "R0-R4-or-null",
+    "scope": "scope-or-null",
     "required_capabilities": ["capability"],
     "optional_capabilities": ["capability"],
     "forbidden_capabilities": ["capability"],
@@ -97,19 +116,83 @@ Capacidade não observada é `UNKNOWN`, nunca inventada para fechar cobertura.
 ## Algoritmo determinístico
 
 1. Validar schema mínimo.
-2. Normalizar capacidades em lowercase, únicas e ordenadas.
-3. Remover candidatos indisponíveis, em conflito de Writer ou que atravessem capability proibida declarada.
-4. Cobrir primeiro capacidades obrigatórias ainda não atendidas.
-5. Empate: maior cobertura obrigatória → maior cobertura opcional → menor superfície total de capacidades → `id` lexicograficamente menor.
-6. Repetir até cobrir o denominador ou não existir ganho.
-7. Se faltar capacidade obrigatória: `BLOCKED_CAPABILITY_GAP`.
-8. Se fechar o denominador: `PASS_ROUTE_READY` — isso prova apenas o roteamento, não a execução.
+2. Preservar referência de fase, intenção, estado vivo, risco, escopo, Writer e proof target quando materiais.
+3. Normalizar capacidades em lowercase, únicas e ordenadas.
+4. Resolver owner existente antes de considerar novo destino.
+5. Remover candidatos indisponíveis, em conflito de Writer ou que atravessem capability proibida declarada.
+6. Cobrir primeiro capacidades obrigatórias ainda não atendidas.
+7. Empate: maior cobertura obrigatória → maior cobertura opcional → menor superfície total de capacidades → `id` lexicograficamente menor.
+8. Repetir até cobrir o denominador ou não existir ganho.
+9. Se faltar capacidade obrigatória: `BLOCKED_CAPABILITY_GAP`.
+10. Se fechar o denominador: `PASS_ROUTE_READY` — isso prova apenas o roteamento, não a execução.
 
 ```text
 ROUTE_READY != TASK_DONE
 SELECTED != EXECUTED
 EXECUTED != CORRECT
 CORRECT != FIXED_POINT
+```
+
+## !DELTA UTILS — destino do ouro, não novo router
+
+Quando o Trigger Fabric classificar fala como `DELTA_HARVEST`, esta skill recebe somente o delta com ganho informacional e escolhe o destino canônico já existente.
+
+```text
+DELTA_HARVEST
++ CURRENT_INTENT
++ CURRENT_PHASE
++ LIVE_STATE
++ RISK
++ SCOPE
++ WRITER
++ PROOF_TARGET
+→ CLASSIFY_INFORMATION_GAIN
+→ RESOLVE_EXISTING_OWNER
+→ REQUIRED_CAPABILITIES
+→ MINIMUM_SUFFICIENT_SET
+→ ROUTE
+```
+
+Classificações de entrada:
+
+```text
+REPETITION_PURE → DROP
+USEFUL_DELTA → ROUTE_TO_OWNER
+CORRECTION → UPDATE_EXISTING_OWNER
+CONTRADICTION → META_LUPA + RECONCILE
+NEW_PROOF → REPLACE_STALE_SAME_TARGET_PROOF
+NEWER_STATE → CURRENT_EVIDENCE_WINS
+```
+
+```text
+INTERESTING != USEFUL_DELTA
+DELTA_HARVEST != NEW_BRAIN
+DELTA_HARVEST != NEW_ROUTER
+DELTA_HARVEST != AUTHORITY_GAIN
+NO_V1_V2_V3=true
+ZERO_REGRESSION=true
+```
+
+## Lente transversal 3 × 3
+
+O roteamento pode usar estas lentes para derivar capacidades e checagens. Elas **não criam novas fases**.
+
+```text
+DIMENSOES:
+DEPENDENCIA → o que isto precisa?
+DECADENCIA → o que pode estar stale, vencido ou divergido?
+CADENCIA → quando/evento exige nova medição?
+
+PLANOS:
+KNOWLEDGE → o que sabemos e com qual evidência?
+EXECUTION → o que realmente executou e produziu efeito?
+CONFIG_ORIGIN → qual owner/config/origem governa ou causou?
+```
+
+```text
+3X3_IS_TRANSVERSAL_LENS=true
+3X3_IS_NEW_PIPELINE=false
+3X3_IS_NEW_ROUTER=false
 ```
 
 ## Contrato de handoff
@@ -160,10 +243,10 @@ ROLE_ASSIGNMENT_IS_NOT_AUTHORITY=true
 → medir candidatos, tools, disponibilidade, Writer e estado
 
 !CALIBRAR
-→ derivar required_capabilities + boundary + proof_target
+→ derivar fase + intenção + risco + escopo + required_capabilities + boundary + proof_target
 
 CAPABILITY_CONTRACT_ROUTER
-→ produzir rota determinística
+→ produzir rota determinística do menor conjunto suficiente
 
 HERMES/EXECUTOR
 → executar somente no escopo autorizado
