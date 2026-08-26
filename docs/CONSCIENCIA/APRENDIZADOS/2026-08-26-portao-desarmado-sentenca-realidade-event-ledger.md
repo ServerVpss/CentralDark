@@ -301,15 +301,57 @@ CANCELLED != PASS
 COMPLETED_PASS=0
 ```
 
+## EVENT-015 — Muitas cabeças, olhos, braços e canetas; uma direção
+
+```yaml
+event_id: EVENT-015
+subject: execution_coordination_model
+human_rule: "várias canetas, várias cabeças, vários braços e vários olhos em uma só direção"
+main_at_observation: 2d208055ff20e52e58bb94a9e396aed8316cad09
+provenance: HUMAN_AUTHORITY_SEGREDO_CHEFE_PLUS_EXISTING_INTENT_CONTRACT
+verdict: RECONCILED_WITH_EXISTING_OWNER
+```
+
+A metáfora foi reconciliada sem quebrar o contrato já existente de writer lease:
+
+```text
+N_CABECAS = N_AGENTES/ENGINES_PENSANDO
+N_OLHOS = N_PERCEPCOES/BEARINGS_MEDINDO
+N_BRACOS = N_EXECUTORES/CAPACIDADES_AGINDO
+N_CANETAS = N_WRITER_LEASES_EM_ESCOPOS_DISJUNTOS
+
+TODOS
+→ UMA_INTENCAO_VIGENTE_POR_MISSAO
+→ UM_DESTINO
+→ UM_PROOF_TARGET
+→ UMA_REALIDADE_COMO_JUDGE
+```
+
+A regra **não** autoriza duas canetas concorrentes no mesmo escopo material:
+
+```text
+PARALLELIZE_PERCEPTION=true
+PARALLELIZE_REASONING=true
+PARALLELIZE_EXECUTION_WHEN_SCOPES_DISJOINT=true
+MULTIPLE_WRITERS_ALLOWED_ACROSS_DISJOINT_SCOPES=true
+ONE_WRITER_PER_SCOPE=true
+CONCURRENT_WRITERS_SAME_SCOPE=false
+SERIALIZE_MUTATION_ON_SHARED_SCOPE=true
+ONE_DIRECTION_ONLY=true
+```
+
+Logo, “várias canetas” significa **várias leases coordenadas**, não corrida de escrita sobre o mesmo alvo. Isso preserva múltiplas capacidades sem criar múltiplas intenções, múltiplos owners concorrentes ou múltiplas realidades.
+
 ## REALITY_JUDGE T1
 
 ```text
-MAIN_CURRENT = 5284b414ec6163ab6540a7fa18ac5d07b6743df2
+MAIN_AT_EVENT_015 = 2d208055ff20e52e58bb94a9e396aed8316cad09
 PORTAO_DESARMADO = PROVADO_NESTE_EIXO
 PR_1193_MERGE = HISTORICO_PROVADO
 PR_1193_EXACT_HEAD_GATES_PASS = NAO
 HERMES_PROVIDER_BINDING_FINDING = REGISTRADO_COMO_OBSERVACAO_REPORTADA
 HERMES_PROVIDER_CANONICAL_OWNER = UNKNOWN
+COORDINATION_MODEL = MANY_EYES_HEADS_ARMS_DISJOINT_WRITERS → ONE_DIRECTION
 MISSION_STATE = NOT_YET/UNKNOWN
 ```
 
@@ -318,11 +360,15 @@ Não há `FIXED_POINT_PASS`: existe finding estável de enforcement e existe own
 ## Receipt
 
 ```text
-EVENTS_RECORDED=14
+EVENTS_RECORDED=15
 EVENT_LEDGER_REQUIRED=true
 FACT_EVIDENCE_VERDICT_SEPARATED=true
 HISTORY_CURRENT_STATE_SEPARATED=true
 TARGET_STREAMS_SEPARATED=true
+PARALLEL_PERCEPTION=true
+MULTIPLE_WRITERS_ACROSS_DISJOINT_SCOPES=true
+ONE_WRITER_PER_SCOPE=true
+ONE_DIRECTION_ONLY=true
 UNKNOWN_IS_NOT_PASS=true
 REUSE_BEFORE_CREATE=true
 ONE_SYSTEM_ONLY=true
