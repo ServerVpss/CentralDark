@@ -2,21 +2,45 @@ schema: centraldark.trigger-map.v1
 human_triggers:
   - id: ACORDAR
     token: "#ACORDAR"
+    aliases: ["#ACORDA", "ACORDAR", "ACORDA", "ACORD"]
+    symbols: ["☼"]
     owner: "LEIA-ME-IA.md + AGENTS.md"
     fronts: [A1_HISTORY_SOUL, A2_LIVE_REPOSITORY, A3_WRITERS_OWNERS_LOCKS, A4_RUNTIME_TOOLS_CONNECTIONS, A5_CONTINUITY_DELTA_REPLAY]
   - id: CALIBRAR
     token: "!CALIBRAR"
+    aliases: ["#CALIBRAR", "CALIBRAR", "CALIBAR", "CALIBRE", "CALIBR"]
+    symbols: ["⚙"]
     owner: "LEIA-ME-IA.md + AGENTS.md"
     fronts: [C1_INTENT_LANGUAGE, C2_AUTHORITY_SCOPE_PERMISSION, C3_CAPABILITIES_OWNERS_REUSE, C4_PROOF_RISK_COUNTERPROOF, C5_FREQUENCY_ENGINE_COST_LATENCY]
   - id: MULTIBUSSOLA
     token: "!MULTIBUSSOLA"
+    aliases: ["!MULTI-BUSSOLA", "MULTIBUSSOLA", "MULTI BUSSOLA", "MULTIBUSS", "BUSSOLA"]
+    symbols: ["🧭"]
     owner: "docs/CONSCIENCIA/MULTIBUSSOLA.md"
     behavior: [MULTIAXIS_SCAN, TOP_DOWN, BOTTOM_UP, FORWARD, REVERSE, ROUND_TRIP, TRANSVERSALS, RENDEZVOUS, COUNTERPROOF, FINAL_REMEASUREMENT]
   - id: META_LUPA
     token: "!META_LUPA"
+    aliases: ["!METALUPA", "META LUPA", "META-LUPA", "META LUPE", "LUPA META"]
+    symbols: ["⊛"]
     owner: ".agents/skills/meta-lupa/"
     mode: adaptive
     temperatures: [FRIA, MEDIA, QUENTE]
+semantic_trigger_resolution:
+  owner: scripts/trigger-fabric/semantic_trigger_resolver.py
+  guardrail: .agents/skills/meta-lupa/guardrails/semantic-triggers.md
+  mode: DETERMINISTIC_FIRST_SEMANTIC_ENRICHMENT_OPTIONAL
+  output_schema: centraldark.semantic-trigger-receipt.v1
+  rules:
+    - "EXACT_TOKEN_OR_DECLARED_ALIAS_OR_SYMBOL -> TRIGGER_CANDIDATE"
+    - "TYPO_TOKEN_LEN_GTE_5_AND_EDIT_DISTANCE_LTE_2 -> TRIGGER_CANDIDATE"
+    - "SEMANTIC_TRIGGER_MATCH != AUTHORITY_EXPANSION"
+    - "SEMANTIC_TRIGGER_MATCH != AUTO_MUTATION"
+    - "MULTI_MATCH -> COMPOSE_APPLICABLE_TRIGGERS_NO_VOTE"
+    - "AMBIGUOUS_CONTEXT -> PRESERVE_UNKNOWN_OR_CALIBRATE_C1"
+  optional_enrichment:
+    owner: infra/mcp/semantic_core.py
+    status: CANDIDATE_NOT_HARD_DEPENDENCY
+    rule: "EMBEDDING_SIMILARITY_IS_HINT_NOT_TRIGGER_AUTHORITY"
 entry_triggers:
   - event: BOT_ENTRY
     owner: "LEIA-ME-IA.md + AGENTS.md + docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md + Trigger Fabric"
@@ -199,3 +223,5 @@ routing_rules:
   - "GLOBAL_HIDDEN_PATHS_ZERO_WITHOUT_DENOMINATOR -> NOT_PROVEN"
   - "CRITICAL_DEPENDENCY_FAILURE -> FAIL_CLOSED_OR_CONTAIN"
   - "NONCRITICAL_DEPENDENCY_FAILURE -> DEGRADE_ONLY_IF_PROVEN"
+  - "SEMANTIC_TRIGGER_MATCH -> CANDIDATE_NOT_AUTHORITY"
+  - "TYPO_TOLERANCE -> RECOGNITION_ONLY_NO_PERMISSION_EXPANSION"
