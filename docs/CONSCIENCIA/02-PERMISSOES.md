@@ -203,3 +203,11 @@ SHA/build/runtime relacionado
 ```
 
 Não para na primeira correção e não exige perfeição global antes de tornar o sistema observável. Uma ferida com múltiplos consumidores deve ser fechada em todos os consumidores materiais identificados antes de declarar conclusão.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

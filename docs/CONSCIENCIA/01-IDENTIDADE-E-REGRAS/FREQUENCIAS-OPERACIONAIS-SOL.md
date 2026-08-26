@@ -660,3 +660,11 @@ INTENCAO
 → CRISTALIZAR_TODO_OURO_PROVADO_REUTILIZAVEL
 → FIXED_POINT
 ```
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

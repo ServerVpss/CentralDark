@@ -39,3 +39,11 @@ Para estado atual:
 ```
 
 O conteúdo anterior permanece preservado no histórico Git.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

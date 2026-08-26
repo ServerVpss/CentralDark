@@ -44,3 +44,11 @@ persona WebUI antiga
 ```
 
 A fonte atual de permissão é `docs/CONSCIENCIA/02-PERMISSOES.md`; a identidade vem da SOUL; runtime precisa ser medido.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

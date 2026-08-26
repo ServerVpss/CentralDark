@@ -1,3 +1,10 @@
+---
+title: "2026 08 16 Verde Delta Fechado Promove"
+date: 2026-08-26
+tags: ["consciencia"]
+updated: 2026-08-26
+---
+
 # Aprendizado — verde + delta fechado = promover
 
 Data: 2026-08-16

@@ -1,3 +1,10 @@
+---
+title: "GITHUB LABELS OPERACIONAIS"
+date: 2026-08-26
+tags: ["consciencia"]
+updated: 2026-08-26
+---
+
 # Labels Operacionais CentralDark
 
 ## Identidade e autoridade

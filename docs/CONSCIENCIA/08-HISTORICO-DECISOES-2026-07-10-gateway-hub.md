@@ -1,3 +1,10 @@
+---
+title: "08 HISTORICO DECISOES 2026 07 10 Gateway Hub"
+date: 2026-08-26
+tags: ["consciencia"]
+updated: 2026-08-26
+---
+
 # Relatório 10/07/2026 — Gateway (138 modelos) + Destravar HUB
 
 ```

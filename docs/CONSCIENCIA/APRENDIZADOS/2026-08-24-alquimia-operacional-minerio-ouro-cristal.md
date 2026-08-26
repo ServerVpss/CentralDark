@@ -358,3 +358,11 @@ UNKNOWN != PASS
 
 A promoção forte só existe quando a rota aplicável possuir owner, consumidor,
 teste, gate, evidência e contraprova no mesmo alvo.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

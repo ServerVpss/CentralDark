@@ -54,3 +54,11 @@ Para qualquer integração atual:
 ```
 
 O conteúdo anterior continua preservado no histórico Git para proveniência sem permanecer como instrução operacional viva.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

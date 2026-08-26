@@ -437,3 +437,11 @@ Secrets nunca são expostos. Ação destrutiva irreversível com `UNKNOWN` mater
 ## Regra final
 
 Entrar no repo = reconstruir contexto e estado automaticamente. O objetivo é que qualquer modelo reconheça o mesmo organismo, opere sobre a mesma intenção e deixe SEGREDO/CHEFE apenas com decisões realmente humanas.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

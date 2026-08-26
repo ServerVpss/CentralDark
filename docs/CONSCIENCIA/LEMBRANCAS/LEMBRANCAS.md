@@ -190,3 +190,11 @@ O objetivo deste resumo é reduzir a distância até a história completa, não 
 **Fonte:** chat:segredo-chefe/screenshots-controles-e-jogos
 **Promovida:** SIM
 Conteúdo: As imagens mostraram um padrão generalizável: interfaces diferentes podem usar comandos físicos diferentes para a mesma ação sem mudar a intenção. A Casa deve tratar motor, janela, worker, ferramenta ou dispositivo como mudança de base/coordenada local; todos normalizam para uma semântica canônica e continuam seguindo a referência definida pelo SEGREDO/CHEFE. O estado vivo fecha o loop por feedback. Movimento útil preserva autoridade, escopo, Writer e segurança e precisa reduzir o resíduo da missão, produzir ganho de informação ou ser desvio reversível com condição explícita de retorno. Divergência entre agentes ataca claims, não pessoas; cooperação vence competição de modelo. O mapa é a referência, o caminho é a sequência de estados medidos e o controle é o feedback que mantém a trajetória convergindo. Canonizado no owner global de Frequências Operacionais da SOL.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

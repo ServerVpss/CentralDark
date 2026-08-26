@@ -37,3 +37,11 @@ SEGREDO/CHEFE = humano e autoridade final
 Arquivos desta pasta podem ser consultados como arqueologia, decisão antiga, aprendizado ou compatibilidade, mas não podem sobrescrever SOUL/AGENTS/estado vivo.
 
 O endpoint `/pivete/consciencia` usa allowlist canônica e não glob desta pasta.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

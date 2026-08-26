@@ -128,3 +128,11 @@ Deno.serve(async (req) => {
 ---
 
 Próximo: [`03-CATALOGO-DE-MODELOS.md`](03-CATALOGO-DE-MODELOS.md)
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

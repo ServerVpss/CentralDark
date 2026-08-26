@@ -700,3 +700,11 @@ ENTREGAR RESIDUO.
 ```
 
 Histórico de junho foi preservado pelo Git. A semântica operacional vigente é a deste estado reconciliado.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

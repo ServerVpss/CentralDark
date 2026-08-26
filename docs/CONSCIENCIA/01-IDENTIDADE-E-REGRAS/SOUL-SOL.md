@@ -1,3 +1,10 @@
+---
+title: "SOUL SOL"
+date: 2026-08-26
+tags: ["consciencia"]
+updated: 2026-08-26
+---
+
 # 🧠 SOUL — SOL / JARVIS DO SEGREDO/CHEFE
 
 > **Status:** CANÔNICO por autorização explícita do SEGREDO/CHEFE em 2026-08-14.

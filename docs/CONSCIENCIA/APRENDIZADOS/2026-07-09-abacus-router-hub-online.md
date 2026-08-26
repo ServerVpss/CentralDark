@@ -1,3 +1,10 @@
+---
+title: "2026 07 09 Abacus Router Hub Online"
+date: 2026-08-26
+tags: ["consciencia"]
+updated: 2026-08-26
+---
+
 # 🟢 Ouro — Abacus Router no HUB Supabase (ONLINE)
 
 **Data:** 2026-07-09

@@ -1,3 +1,10 @@
+---
+title: "APRENDIZADO CANDIDATO.Template"
+date: 2026-08-26
+tags: ["consciencia"]
+updated: 2026-08-26
+---
+
 LESSON_ID=EXEMPLO-ID-UNICO
 ESCOPO=git|obsidian|hermes|hub|vps|seguranca|outro
 PROBLEMA=descreva o erro realmente observado

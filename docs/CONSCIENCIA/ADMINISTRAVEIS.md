@@ -165,3 +165,11 @@ NO_NEW_WORKFLOW_FOR_ADMIN_REGISTRY=true
 ```
 
 O owner visual atual é o painel MCP existente (`apps/modulos/mcp/src/admin.js`) estendido pelo injector já existente `apps/modulos/mcp/src/admin-patterns-ui.js`.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

@@ -1,3 +1,10 @@
+---
+title: "2026 07 10 Gateway 138 Modelos E Schema Real Hub"
+date: 2026-08-26
+tags: ["consciencia"]
+updated: 2026-08-26
+---
+
 # 🟢 Ouro — Gateway com 146 modelos + descoberta do schema real do HUB (PDP + OAuth maduro)
 
 **Data:** 2026-07-10

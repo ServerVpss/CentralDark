@@ -239,3 +239,11 @@ NEWER_SAME_TARGET_COUNTERPROOF_CAN_REVISE_VERDICT=true
 ```
 
 Isto registra o feito da CentralDark de forma model-neutral e falsificável. OpenAI, Anthropic e Google não são declaradas certificadoras corporativas; modelos/adaptadores dessas famílias são superfícies de percepção submetidas ao mesmo contrato, à mesma contraprova e ao mesmo Judge: a realidade observável.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

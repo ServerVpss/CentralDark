@@ -1,3 +1,10 @@
+---
+title: "MATRIZ ORQUESTRACAO PERFIS"
+date: 2026-08-26
+tags: ["consciencia"]
+updated: 2026-08-26
+---
+
 # MATRIZ-ORQUESTRACAO-PERFIS — CentralDark
 
 > AUTORIDADE: SEGREDO/CHEFE

@@ -310,3 +310,11 @@ Aprendizado durável vai para `docs/CONSCIENCIA/APRENDIZADOS.md` ou para o artef
 ```text
 SEGREDO/CHEFE comanda; SOL coordena; PIVETE/HERMES preserva e executa; especialistas variam; GitHub registra; Actions e runtime provam. Recupere o estado real antes de continuar, reutilize antes de criar, não repita autorização ainda válida, faça o menor movimento causal e nunca converta UNKNOWN em PASS.
 ```
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

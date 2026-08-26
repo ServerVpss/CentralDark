@@ -388,3 +388,11 @@ REALIDADE JULGA.
 - Extração: ideias gerais de estabilidade sob pressão, movimento adaptativo, liberdade com consequência, risco de confiança implícita e necessidade de fronteira.
 - Nenhuma letra é preservada neste cristal.
 - A matéria de origem não recebe autoridade técnica; a utilidade vem da generalização compatível com owners já canônicos.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

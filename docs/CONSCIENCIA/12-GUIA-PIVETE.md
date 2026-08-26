@@ -67,3 +67,11 @@ docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md
 ```
 
 O conteúdo anterior deste arquivo permanece no histórico Git como proveniência; não governa o presente.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

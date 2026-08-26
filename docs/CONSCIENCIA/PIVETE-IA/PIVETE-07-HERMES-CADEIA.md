@@ -100,3 +100,11 @@ AGENTS.md
 docs/CONSCIENCIA/02-PERMISSOES.md
 estado vivo medido
 ```
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

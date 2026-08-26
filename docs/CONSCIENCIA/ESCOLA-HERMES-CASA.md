@@ -1,3 +1,10 @@
+---
+title: "ESCOLA HERMES CASA"
+date: 2026-08-26
+tags: ["consciencia"]
+updated: 2026-08-26
+---
+
 # Escola Hermes Casa — aprendizado local, ouro canônico
 
 ## Fonte da verdade

@@ -106,3 +106,11 @@ Re-medir `main` após merge. `HISTORY != CURRENT_STATE`.
 ## Critério de reuso
 
 Próxima discussão “fundamentos morreram com agente” deve apontar **este cristal + fluxo #1145 + Pombo**, sem o CHEFE reensinar o paralelo. Reensino = `LEARNING_TRANSFER_FAIL`.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

@@ -1,3 +1,10 @@
+---
+title: "PADRAO EMOJIS"
+date: 2026-08-26
+tags: ["consciencia"]
+updated: 2026-08-26
+---
+
 # PADRAO-EMOJIS — CentralDark
 
 > AUTORIDADE: SEGREDO/CHEFE

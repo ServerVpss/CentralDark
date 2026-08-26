@@ -281,3 +281,11 @@ Não promovido:
 - qualquer inferência de que nome antigo concede autoridade atual.
 
 **Ouro:** proveniência não é apenas `QUEM`; quando a semântica muda, também precisa preservar `QUANDO + CONTEXTO + USO + EVIDÊNCIA`.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

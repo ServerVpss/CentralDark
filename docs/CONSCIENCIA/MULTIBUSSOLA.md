@@ -726,3 +726,11 @@ FIXED_POINT_OVER_REPETITION=true
 No jeito do CHEFE:
 
 > olha de cima, de baixo, dos dois lados, volta pelo caminho contrário, corta na diagonal, troca de posição, confere o relógio, procura a rota do pirata, junta tudo no centro, tenta provar que você mesmo está errado e, antes de falar que acabou, olha o mundo de novo.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

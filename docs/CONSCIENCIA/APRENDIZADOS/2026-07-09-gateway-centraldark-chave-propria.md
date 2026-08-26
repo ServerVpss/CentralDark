@@ -1,3 +1,10 @@
+---
+title: "2026 07 09 Gateway Centraldark Chave Propria"
+date: 2026-08-26
+tags: ["consciencia"]
+updated: 2026-08-26
+---
+
  # Ouro — Gateway CentralDark próprio (09/07/2026)
 
 **api.centralldark.com** agora tem chave própria do Pivete e roteia via Abacus RouteLLM.

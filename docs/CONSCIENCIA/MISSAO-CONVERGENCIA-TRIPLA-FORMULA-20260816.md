@@ -1,3 +1,10 @@
+---
+title: "MISSAO CONVERGENCIA TRIPLA FORMULA 20260816"
+date: 2026-08-26
+tags: ["consciencia"]
+updated: 2026-08-26
+---
+
 # MISSÃO — CONVERGÊNCIA TRIPLA DA FÓRMULA
 
 Data: 2026-08-16
