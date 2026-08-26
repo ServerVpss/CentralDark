@@ -32,6 +32,9 @@ mandatory_inheritance:
   - CALIBRAR
   - MULTIBUSSOLA
   - META_LUPA_PROPORTIONAL
+  - SEMANTIC_TRIGGER_ROUTING
+  - SEMANTIC_MATCH_IS_NOT_AUTHORIZATION
+  - QUEST_GRAPH_PROFILE
   - ONE_WRITER_PER_SCOPE
   - OUTPUT_GUARD
   - REALITY_JUDGE
@@ -42,8 +45,24 @@ mandatory_inheritance:
   - FAILURE_SIGNATURE_REUSE
   - ANY_PR_OR_COMMIT_GATE
   - CANONICAL_SELF_HOSTED_RUNNER_POLICY
+semantic_trigger_binding:
+  map: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SEMANTIC-TRIGGERS.json
+  meta_lupa_owner: .agents/skills/meta-lupa/
+  graph_consumer: apps/modulos/HERMES-CORE/agents/GraphRAG-Master/agent.mjs
+  default_mode: READ_ONLY
+  semantic_match_is_authority: false
+  semantic_match_is_mutation_permission: false
+  typo_tolerance_must_preserve_boundary: true
+  no_match: NO_FORCED_ACTIVATION
+quest_graph_binding:
+  source_profile: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SEMANTIC-TRIGGERS.json#quest_graph_profile
+  meaning: MISSION_DEPENDENCY_VIEW
+  new_engine: false
+  new_owner: false
+  nodes: [INTENT, PREREQUISITE, ENTRY_TRIGGER, MISSION, SUBTASK, EVIDENCE, REWARD_CAPABILITY, UNLOCK, RECURRENCE, TIME_WINDOW, FIXED_POINT]
+  invariant: QUEST_CHAIN_IS_DEPENDENCY_GRAPH_NOT_NEW_ENGINE
 self_healing_binding:
-  applies_to: [PR, COMMIT, CI, TOOL_ERROR, TEST_FAILURE, RUNTIME_DRIFT, OPERATIONAL_FAILURE]
+  applies_to: [PR, COMMIT, CI, TOOL_ERROR, TEST_FAILURE, RUNTIME_DRIFT, OPERATIONAL_FAILURE, SEMANTIC_TRIGGERED_INVESTIGATION]
   engine_must:
     - MEASURE_CURRENT_STATE
     - CLASSIFY_FAILURE_SIGNATURE
