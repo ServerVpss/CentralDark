@@ -3,7 +3,7 @@ name: centraldark-esteira-motor
 description: CentralDark esteira e motor Hermes — separa PM2 motor de deploy Actions, fila self-hosted, setup-node, PAPAGAIO vs POMBO. Use quando CHEFE pedir deploy, restart, runner, fila, Hermes, VPS sync, ou status do motor.
 metadata:
   type: operational
-  version: "1.0"
+  version: "1.1"
   owner: SEGREDO/CHEFE
 ---
 
@@ -14,43 +14,63 @@ metadata:
 ```
 MOTOR (Hermes PM2)  !=  ESTEIRA (GitHub Actions + runner)
 MERGED != DEPLOYED
+PM2_ONLINE != MOTOR_SAUDAVEL
 AÇÃO != PROVA
 DOCUMENTADO != EXECUTADO
 UNKNOWN != PASS
 ```
 
-PAPAGAIO_MODE = OFF (`acho`, `deve`, `parece` não governa estado).  
-POMBO_MODE = CHECKSUM_ON (SHA, horário, evidência, residual, destino).
+PAPAGAIO_MODE = OFF.  
+POMBO_MODE = CHECKSUM_ON.
 
-## O que o motor é
+## Escopo do motor
 
-Processos PM2 na VPS (fonte `central_dark___deploy_status`)
+Pedido **só o motor** = `CentralDark-Hermes` primeiro.
 
-| Nome | Papel |
-|------|--------|
-| CentralDark-Hermes | motor principal |
-| CentralDark-HermesVerificador | gate do motor |
-| CentralDark-MCP | API/admin |
+| Nome | Papel | Quando entra |
+|------|--------|----------------|
+| CentralDark-Hermes | orquestrador | sempre no pedido motor |
+| CentralDark-HermesVerificador | sidecar/gate | só se pedido ou causa incluir |
+| CentralDark-MCP | API/admin | só se pedido ou causa incluir |
 
-Se CHEFE disser **só o motor** — medir esses três. Não exigir site, painel, sync full da main, nem deploy verde.
+Sidecar parado **não** prova motor quebrado.
+
+Prova funcional do motor (mínimo aplicável):
+- PM2 status do processo pedido
+- heartbeat/ação recente **ou** log de ciclo sem erro material
+- estabilidade (restarts anormais = QUEBRADO ou UNKNOWN)
+
+`online` sozinho não fecha FIXED_POINT.
 
 ## O que a esteira é
 
-- 1 self-hosted runner (`vmi3256920-centraldark`, labels `self-hosted, Linux`)
-- Fila serial (centenas de runs queued comuns)
-- Gargalo típico — `actions/setup-node` lento ou preso em jobs antigos
-- Deploy canônico — workflow `vps-exec-selfhosted.yml` (só MCP + operational guards)
-- Autonomia `*/5` multiplica fila — cancelar zumbis/duplicados, não apagar deploy ativo
+- Runner self-hosted da org (medir agora; não congelar snapshot de sessão)
+- Fila só é serial se existir **1** runner online com o label usado
+- Gargalo típico histórico = `actions/setup-node` + fila — **hipótese**, não dogma
+- `vps-exec-selfhosted.yml` = deploy **MCP + operational guards**, **não** promove `CentralDark-Hermes`
+- Autonomia `*/5` multiplica fila — cancelar zumbis/duplicados, preservar deploy ativo e checks úteis
+
+## Rotas de deploy / restart
+
+| Pedido | Rota |
+|--------|------|
+| deploy MCP / guards | `vps-exec-selfhosted.yml` ref=`main` |
+| restart/promote Hermes | workflow ou host que **reinicie Hermes**; se não existir, REJECT + UNKNOWN de rota |
+| restart all | medir tools da sessão; só reportar limite se SSH/host/workflow write estiver ausente |
+
+Não chamar sucesso de deploy Hermes um run que só tocou MCP/Verificador.
 
 ## Erros reais desta operação (não inventar outros)
 
-1. **Hermes online mas deploy pending** — motor OK; esteira engarrafada.
-2. **setup-node in_progress longo** — cancelar job zumbi; main já tem composite `setup-node24-selfhosted` (#1164). Branches de PR antigas ainda usam setup-node direto.
-3. **VPS ~1000+ commits atrás + dirty tree** — preservar `.env` e runtime; deploy canônico preserva dirty; não `reset --hard` sem prova.
-4. **WebhookDeploy stopped** — intencional no deploy (porta 9300). Não religar sem prova de ownership da porta.
-5. **AiDiag stopped** — residual; opcional `pm2 restart` **no host** (sem tool de shell PM2 write nesta sessão).
-6. **Deploy keys Disabled by ServerVpss** — política org; não é causa da fila. GitHub App melhora governança, **não** desbloqueia runner.
-7. **Sem `pm2 restart all` via connector** — só leitura PM2 + dispatch Actions. Restart no host SSH ou via workflow que já faça restart do app alvo.
+1. Hermes PM2 online + deploy pending = motor ≠ esteira.
+2. `setup-node` longo ≠ zumbi automático — exigir idade vs timeout + log parado antes de cancelar.
+3. VPS atrasada + dirty = preservar `.env`; sem `reset --hard` sem prova.
+4. WebhookDeploy stopped = intencional no deploy (porta 9300).
+5. AiDiag stopped = residual opcional.
+6. Deploy keys Disabled = política org; não causa a fila.
+7. Limite de tool é **desta sessão** — remedir antes de bloquear.
+
+Detalhe de SHA/run da sessão: `references/sessao-erros-reais.md`.
 
 ## Procedimento obrigatório
 
@@ -59,40 +79,48 @@ Se CHEFE disser **só o motor** — medir esses três. Não exigir site, painel,
 ```
 central_dark___deploy_status
 github___get_commit sha=main
-github___actions_list status=in_progress e queued (amostra)
+github___actions_list in_progress + queued (amostra)
+medir runners registrados: online, labels, quantidade
 ```
 
-Classificar cada sintoma — motor | esteira | ambos | UNKNOWN.
+Classificar — motor | esteira | ambos | UNKNOWN.
 
 ### 2. CALIBRAR (destino)
 
-- Pedido = motor → só PM2 Hermes (+ Verificador/MCP se pedido).
-- Pedido = deploy → SHA main + run `vps-exec-selfhosted` + runner livre.
-- Pedido = restart all → informar limite de tool; orientar host ou workflow existente.
+- motor → Hermes core + prova funcional.
+- deploy → nomear o **componente**; escolher rota compatível ou recusar.
+- restart → sondar capacidade atual da sessão.
 
-### 3. MULTIBÚSSOLA (caminhos materiais)
+### 3. MULTIBÚSSOLA
 
-Prioridade mínima
+1. Cancelar `setup-node` só com prova de stall (idade + log inalterado).
+2. Cancelar autonomia duplicada sem valor.
+3. Redispatch só em SHA main atual se o run for SHA obsoleto.
+4. Não criar segundo runner/cérebro/deploy key.
 
-1. Cancelar job **in_progress** preso em setup-node (zumbi).
-2. Cancelar autonomia/cron duplicado **sem** valor (preservar deploy ativo e PR checks úteis).
-3. Redispatch deploy só em SHA main atual se run antigo for SHA obsoleto.
-4. Não criar arquitetura paralela (segundo runner, segundo cérebro, deploy key).
+### 4. META_LUPA
 
-### 4. META_LUPA (falsificar)
+Hermes quebrado? só com prova funcional, não só Actions vermelho.  
+Fila serial? só se runner único online.  
+Cache miss de Node pode ser frio legítimo.
 
-Perguntar — o deploy poderia falhar por outro motivo? cache npm resolve sozinho? (não, se o gargalo é aquisição Node no runner). Hermes quebrado? (só se PM2 status≠online).
-
-### 5. Saída obrigatória
+### 5. Saída + fechamento canônico
 
 ```
-PROVADO:
-QUEBRADO:
-EVIDÊNCIA FALTANTE:
-DELTA EXECUTADO:
-DEPLOY: (status real do run, não desejo)
-FIXED_POINT: (motor separado de sistema)
-PRÓXIMO_CURSOR:
+PROVADO=
+QUEBRADO=
+EVIDÊNCIA FALTANTE=
+DELTA EXECUTADO=
+DEPLOY= (status real do run / REJECT se rota errada)
+START_HEAD=
+FINAL_HEAD=
+HEAD_CHANGED_DURING_MISSION=SIM|NAO
+EXECUTOR_REAL=
+FIXED_POINT=
+PENDENCIA=
+RISCO_RESIDUAL=
+ROLLBACK=
+PRÓXIMO_CURSOR=
 ```
 
 ## Tools canônicas
@@ -100,7 +128,7 @@ PRÓXIMO_CURSOR:
 | Ação | Tool |
 |------|------|
 | Estado unificado | `central_dark___deploy_status` |
-| Dispatch deploy | `central_dark___github_dispatch` workflow=`vps-exec-selfhosted.yml` ref=`main` |
+| Dispatch MCP/guards | `central_dark___github_dispatch` workflow=`vps-exec-selfhosted.yml` ref=`main` |
 | Cancel run | `central_dark___github_cancel_workflow_run` |
 | Runs/jobs | `github___actions_list` / `github___actions_get` |
 | SHA main | `github___get_commit` |
@@ -108,12 +136,10 @@ PRÓXIMO_CURSOR:
 ## Anti-padrões
 
 - Declarar deploy OK porque Hermes está online.
-- Declarar motor morto porque Actions está vermelho/queued.
+- Declarar motor morto porque Actions está queued.
+- Declarar Hermes saudável só com PM2 `online`.
+- Tratar sidecar como motor quando o pedido foi só Hermes.
+- Cancelar setup-node no primeiro `in_progress` longo.
 - `pm2 restart WebhookDeploy` sem checar :9300.
-- Reset VPS dirty sem inventário de ouro.
-- Inventar causas (rede, disco, Node PATH) sem medir no user do serviço do runner.
-- Criar skill/workflow paralelo para o que o composite #1164 e o deploy canônico já cobrem.
-
-## Referência
-
-Ver `references/sessao-erros-reais.md` para o mapa condensado da sessão de prova.
+- Reset VPS dirty sem inventário.
+- Inventar causa sem medir runner/user do serviço.
