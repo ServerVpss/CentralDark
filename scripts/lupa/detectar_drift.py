@@ -3,9 +3,12 @@
 
 Falha (exit 1) se:
 - a skill canônica sumir de .agents/skills/meta-lupa/SKILL.md
-- houver diretório de skill paralela (tecnica-da-lupa, metalupa-*, lupa-premium)
+- houver diretório de skill paralela REAL (metalupa-bayesiana-canonica, lupa-premium, ou qualquer skill que se declare IS_SECOND_*=true)
 - houver skill com "lupa" no nome fora do caminho canônico
 - doc citar essas técnicas removidas como skill ativa (fora da allowlist histórica)
+
+NOTA: `tecnica-da-lupa` é COMPATIBILITY_ALIAS legítimo (frontmatter type=redirect /
+status=COMPATIBILITY_ALIAS, owner=meta-lupa). Não é skill paralela — é permitido.
 """
 from __future__ import annotations
 import re, sys
@@ -14,8 +17,24 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 CANONICA = ROOT / ".agents/skills/meta-lupa/SKILL.md"
 
-PROIBIDOS_EXATOS = {"tecnica-da-lupa", "metalupa-bayesiana-canonica", "lupa-premium"}
+PROIBIDOS_EXATOS = {"metalupa-bayesiana-canonica", "lupa-premium"}
 BASES_SKILL = [".agents/skills", ".claude/skills", ".workspace/skills"]
+
+
+def _skill_eh_alias_compat(skill_dir: Path) -> bool:
+    """Alias de compatibilidade legítimo: frontmatter type=redirect/status=COMPATIBILITY_ALIAS
+    e NENHUMA declaração IS_SECOND_*=true. Ex.: tecnica-da-lupa."""
+    skill_md = skill_dir / "SKILL.md"
+    if not skill_md.exists():
+        return False
+    try:
+        texto = skill_md.read_text(encoding="utf-8", errors="ignore")
+    except Exception:
+        return False
+    if "IS_SECOND_SKILL=true" in texto or "IS_SECOND_OWNER=true" in texto or "IS_SECOND_AUTHORITY=true" in texto:
+        return False
+    return ("type: redirect" in texto or "status: COMPATIBILITY_ALIAS" in texto
+            or "type:redirect" in texto or "status:COMPATIBILITY_ALIAS" in texto)
 
 # arquivos onde a menção é legítima (histórico/incidente/este próprio guard)
 ALLOWLIST = {
@@ -41,6 +60,9 @@ for base in BASES_SKILL:
         if not d.is_dir():
             continue
         nome = d.name.lower()
+        # alias de compatibilidade (ex.: tecnica-da-lupa) é permitido
+        if _skill_eh_alias_compat(d):
+            continue
         if nome in PROIBIDOS_EXATOS:
             erros.append(f"SKILL_REMOVIDA_REAPARECEU: {d.relative_to(ROOT)}")
         elif "lupa" in nome and nome != "meta-lupa":
@@ -48,7 +70,7 @@ for base in BASES_SKILL:
 
 # 3. referências ativas em docs
 padrao_ativo = re.compile(
-    r"(skill|habilidade|t[eé]cnica)\s*[:`\"']?\s*[`\"']?(tecnica-da-lupa|metalupa-bayesiana-canonica|lupa-premium)",
+    r"(skill|habilidade|t[eé]cnica)\s*[:`\"']?\s*[`\"']?(metalupa-bayesiana-canonica|lupa-premium)",
     re.IGNORECASE,
 )
 for docs_dir in ["docs", ".claude", ".agents", "README.md", "AGENTS.md", "CLAUDE.md"]:
