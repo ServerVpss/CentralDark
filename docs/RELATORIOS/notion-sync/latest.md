@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-08-27T04:57:35.930Z
+# 🧠 Notion Sync — 2026-08-27T16:25:07.347Z
 
-- **Commit fonte:** `4e16fc0438927698cbe189363953bc9a6c3f64ea`
+- **Commit fonte:** `d1b281dd724b77e087bce0194dcdcec3ecd1a4c4`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 2 criadas · ♻️ 435 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 437 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
 | aprendizados | 30 | 0 | 30 | 0 | 0 |
-| estrutura | 363 | 2 | 361 | 0 | 0 |
+| estrutura | 364 | 1 | 363 | 0 | 0 |
 
 ## Operações
 
@@ -196,7 +196,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-26-ciclo-mestre-reconciliacao-passado-futuro.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-26-intencao-unica-propriedades-ciclo-mestre.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-26-multibussola-meta-convergencia-reversa.md |
-| estrutura | criado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-26-portao-desarmado-sentenca-realidade-event-ledger.md |
+| estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-26-portao-desarmado-sentenca-realidade-event-ledger.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/EVIDENCIAS/2026-08-17-registro-visual-recibo-muitos-olhos.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/MCP/MCP-EXPLICADO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/PROXY/APRENDIZADOS_PROXY.md |
@@ -295,7 +295,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/INSTALADOR/backup/README.md |
 | estrutura | atualizado | docs/CONSCIENCIA/INVENTARIO-PM2-VPS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md |
-| estrutura | criado | docs/CONSCIENCIA/LEGENDA-TEMPORAL-T0-TN-TDELTA.md |
+| estrutura | atualizado | docs/CONSCIENCIA/LEGENDA-TEMPORAL-T0-TN-TDELTA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/LEMBRANCAS/2026-07-30-VIVER-EM-PAZ.md |
 | estrutura | atualizado | docs/CONSCIENCIA/LEMBRANCAS/2026-08-06-writer-provenance-gap.md |
 | estrutura | atualizado | docs/CONSCIENCIA/LEMBRANCAS/2026-08-08-SELO-DE-OURO-CONVERGENCIA-E-GRATIDAO.md |
@@ -449,6 +449,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/VAULT/PROMPT-MESTRE.md |
 | estrutura | atualizado | docs/CONSCIENCIA/VAULT/REGRAS-AUTONOMIA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/VAULT/REGRAS-DOC-CHECK.md |
+| estrutura | criado | docs/CONSCIENCIA/VISUALIZACAO-MERMAID-PADRAO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/WEBHOOK-DEPLOY-SEGURO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/agente/elite-mapper/README.md |
 | estrutura | atualizado | docs/CONSCIENCIA/relatorios/00_RESUMO_EXECUTIVO.md |
