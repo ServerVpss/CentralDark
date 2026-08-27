@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-27T06:54:29.790Z",
-  "updatedAtBR": "27/08/2026, 03:54:29 BRT",
+  "updatedAt": "2026-08-27T13:23:49.858Z",
+  "updatedAtBR": "27/08/2026, 10:23:49 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "fix(git): mapear pretty-mermaid submodule órfão",
+    "lastCommit": "feat: add vps-reboot-forensic script and workflow",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-27T13:23:49.858Z",
+      "titulo": "Push na main · bd54aaa9c9a188a6738973800f07cef9a9165bb9",
+      "detalhe": "feat: add vps-reboot-forensic script and workflow",
+      "area": "Repositório",
+      "sha": "bd54aaa",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-27T06:54:29.790Z",
       "titulo": "Push na main · 558343daf1f013304a229130cd230bb393d96b46",
       "detalhe": "fix(git): mapear pretty-mermaid submodule órfão",
@@ -988,14 +996,6 @@
       "detalhe": "sync: BRAIN vault organizado + runtime travado + 18 ouros cristalizados",
       "area": "Repositório",
       "sha": "98893dd",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-19T23:30:21.020Z",
-      "titulo": "Push na main · e54f04af576a1e450f5c40ca1b795ee868e1048e",
-      "detalhe": "fix(mapeamento): whitelist historical_roots legítimos no validar-mapa",
-      "area": "Repositório",
-      "sha": "e54f04a",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-27T13:23:49.858Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · bd54aaa9c9a188a6738973800f07cef9a9165bb9 (bd54aaa)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-27T06:54:29.790Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 558343daf1f013304a229130cd230bb393d96b46 (558343d)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-20T03:58:00.651Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 98893dde37d1255415bce9bb3d33ca64b8a06f1c (98893dd)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-19T23:30:21.020Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · e54f04af576a1e450f5c40ca1b795ee868e1048e (e54f04a)",
       "area": "Repositório",
       "status": "sucesso"
     }
