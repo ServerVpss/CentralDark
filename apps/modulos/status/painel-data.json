@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-27T21:18:36.084Z",
-  "updatedAtBR": "27/08/2026, 18:18:36 BRT",
+  "updatedAt": "2026-08-27T21:20:15.526Z",
+  "updatedAtBR": "27/08/2026, 18:20:15 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "feat(skill): absorver visual-design-method expandida (PARA-HERMES) (#1242)",
+    "lastCommit": "🏠 Canonizar árvore semântica da Casa + disciplina Obsidian/Hermes (#1243)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-27T21:20:15.526Z",
+      "titulo": "Push na main · f30a986899cd53c8a2261cb03d5001e2aab2363a",
+      "detalhe": "🏠 Canonizar árvore semântica da Casa + disciplina Obsidian/Hermes (#1243)",
+      "area": "Repositório",
+      "sha": "f30a986",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-27T21:18:36.084Z",
       "titulo": "Push na main · 9b557d96c5947e543ce096839e3a57323a586bab",
       "detalhe": "feat(skill): absorver visual-design-method expandida (PARA-HERMES) (#1242)",
@@ -988,14 +996,6 @@
       "detalhe": "🗿 SEGREDO RELÍQUIA — HUD da escavação completa (#998)",
       "area": "Repositório",
       "sha": "b401046",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-20T17:45:10.175Z",
-      "titulo": "Push na main · da5632eca969ee35a96ecd8040c5b7253fc75cef",
-      "detalhe": "aprendizado(#26): Batch .bat: 4 armadilhas que passam em revisão superficial",
-      "area": "Repositório",
-      "sha": "da5632e",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-27T21:20:15.526Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · f30a986899cd53c8a2261cb03d5001e2aab2363a (f30a986)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-27T21:18:36.084Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 9b557d96c5947e543ce096839e3a57323a586bab (9b557d9)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-21T06:49:07.567Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · b401046d10e6518a8cc4f687e2bde04b961b0451 (b401046)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-20T17:45:10.175Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · da5632eca969ee35a96ecd8040c5b7253fc75cef (da5632e)",
       "area": "Repositório",
       "status": "sucesso"
     }
