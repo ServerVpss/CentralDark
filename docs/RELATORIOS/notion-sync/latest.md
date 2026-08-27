@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-08-27T21:00:53.937Z
+# 🧠 Notion Sync — 2026-08-27T21:12:00.812Z
 
-- **Commit fonte:** `9b557d96c5947e543ce096839e3a57323a586bab`
+- **Commit fonte:** `f30a986899cd53c8a2261cb03d5001e2aab2363a`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 5 criadas · ♻️ 438 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 443 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
 | aprendizados | 30 | 0 | 30 | 0 | 0 |
-| estrutura | 369 | 5 | 364 | 0 | 0 |
+| estrutura | 370 | 1 | 369 | 0 | 0 |
 
 ## Operações
 
@@ -102,6 +102,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/FREQUENCIAS-OPERACIONAIS-SOL.md |
+| estrutura | criado | docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/LEI-ARVORE-SEMANTICA-DA-CASA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/REGRA-OFICIAL-MULTI-AGENTE-SEMANTICO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md |
 | estrutura | atualizado | docs/CONSCIENCIA/01-IDENTIDADE.md |
@@ -210,12 +211,12 @@
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/incidente-2026-07-05-mcp-dump-perdido.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/socorro-2026-07-05.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ARQUITETURA-CHAVES-AI-PROXY.md |
-| estrutura | criado | docs/CONSCIENCIA/ARQUITETURA/ARVORE-DO-PROJETO.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARQUITETURA/ARVORE-DO-PROJETO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ARQUITETURA/DESIGN-SISTEMA.md |
-| estrutura | criado | docs/CONSCIENCIA/ARQUITETURA/DOCUMENTACAO-OBRIGATORIA.md |
-| estrutura | criado | docs/CONSCIENCIA/ARQUITETURA/LEIA-PRIMEIRO.md |
-| estrutura | criado | docs/CONSCIENCIA/ARQUITETURA/MANUAL-DO-DONO.md |
-| estrutura | criado | docs/CONSCIENCIA/ARQUITETURA/PATCH-RELEVO.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARQUITETURA/DOCUMENTACAO-OBRIGATORIA.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARQUITETURA/LEIA-PRIMEIRO.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARQUITETURA/MANUAL-DO-DONO.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARQUITETURA/PATCH-RELEVO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/APRENDIZADOS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/CONSELHO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-02-2304-em-1-frase-qual-sua-fun-o.md |
