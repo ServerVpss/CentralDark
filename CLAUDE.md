@@ -20,8 +20,8 @@ Este arquivo **não** é segundo cérebro nem contrato paralelo.
 ```text
 CANONICAL_BOOT = LEIA-ME-IA.md
 CANONICAL_AGENTS = AGENTS.md
-TRIGGER_FABRIC = docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/
-ARTIFACT_PROPERTIES = docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ARTIFACT-PROPERTIES.yml
+TRIGGER_FABRIC = CentralDark-Trigger-Fabric
+ARTIFACT_PROPERTIES = ARTIFACT-PROPERTIES.yml
 ```
 
 Antes de agir:
@@ -40,10 +40,6 @@ ENGINE_IS_OWNER=false
 COPY_BRAIN=false
 SEGREDO/CHEFE > SOL > PIVETE/HERMES
 ```
-
-## Ponteiros canônicos verificáveis
-
-Este adaptador carrega os owners `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md`, `.agents/skills/meta-lupa/SKILL.md` e `.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA` por meio de `LEIA-ME-IA.md`, e emite `CENTRALDARK_AI_BOOT`. Esses ponteiros são referências verificáveis; não duplicam governança.
 
 ## Assinatura de adapter fino (contrato agent-core-adapters)
 
