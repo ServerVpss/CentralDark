@@ -1,0 +1,66 @@
+name: VPS wake via hosted SSH
+
+# Self-hosted NÃO acorda a si mesmo. Este job roda no GitHub hosted
+# (ubuntu-latest) com as chaves VPS_*_LOVABLE já no repo.
+# Autorizado: PERMITO-SEGREDO — restart VPS quando SSH local timeout.
+# NÃO usa CONTABO_* (ausentes neste repo). Se a porta 22 estiver morta
+# no provedor, este job também timeout — aí só Contabo API resolve.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  wake:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: SSH na VPS e restart runner
+        env:
+          VPS_SSH_KEY_LOVABLE: ${{ secrets.VPS_SSH_KEY_LOVABLE }}
+          VPS_HOST_LOVABLE: ${{ secrets.VPS_HOST_LOVABLE }}
+          VPS_USER_LOVABLE: ${{ secrets.VPS_USER_LOVABLE }}
+        run: |
+          set -euo pipefail
+          if [ -z "${VPS_SSH_KEY_LOVABLE:-}" ] || [ -z "${VPS_HOST_LOVABLE:-}" ] || [ -z "${VPS_USER_LOVABLE:-}" ]; then
+            echo "SECRETS_MISSING: precisa VPS_SSH_KEY_LOVABLE + VPS_HOST_LOVABLE + VPS_USER_LOVABLE"
+            exit 1
+          fi
+          KEY=/tmp/vps_wake_key
+          python3 - "$KEY" <<'PY'
+          import os, re, sys
+          raw = os.environ["VPS_SSH_KEY_LOVABLE"].strip()
+          m = re.search(
+              r"-----BEGIN ([A-Z0-9 ]+?) PRIVATE KEY-----(.*?)-----END \1 PRIVATE KEY-----",
+              raw,
+              re.S,
+          )
+          if not m:
+              sys.exit("formato de chave não reconhecido")
+          tipo, miolo = m.group(1), m.group(2)
+          b64 = re.sub(r"\s+", "", miolo)
+          linhas = [b64[i:i+70] for i in range(0, len(b64), 70)]
+          open(sys.argv[1], "w").write(
+              f"-----BEGIN {tipo} PRIVATE KEY-----\n"
+              + "\n".join(linhas)
+              + f"\n-----END {tipo} PRIVATE KEY-----\n"
+          )
+          PY
+          chmod 600 "$KEY"
+          echo "HOST=${VPS_HOST_LOVABLE} USER=${VPS_USER_LOVABLE}"
+          set +e
+          ssh -o StrictHostKeyChecking=accept-new \
+              -o BatchMode=yes \
+              -o ConnectTimeout=15 \
+              -i "$KEY" \
+              "${VPS_USER_LOVABLE}@${VPS_HOST_LOVABLE}" \
+              'hostname; uptime; systemctl is-active actions.runner.centraldark.service || true; systemctl restart actions.runner.centraldark.service; systemctl is-active actions.runner.centraldark.service || true'
+          rc=$?
+          rm -f "$KEY"
+          if [ "$rc" -ne 0 ]; then
+            echo "SSH_FAIL rc=$rc — VPS inacessível pela porta 22. Contabo API é o único reboot."
+            exit "$rc"
+          fi
+          echo "SSH_WAKE_OK"
