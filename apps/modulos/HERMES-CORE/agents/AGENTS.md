@@ -16,3 +16,27 @@ UNKNOWN_SKIPPED_PENDING_ARE_NOT_PASS=true
 ```
 
 Agentes determinísticos aplicam isso ao escolher paths/ações. Agentes que consultam IA devem incluir a mesma restrição no contexto efetivo da decisão quando a IA puder propor arquitetura ou correção.
+
+## Pendência externa — observação efêmera
+
+Quando uma ação já foi disparada e o próximo delta pertence a executor externo, agentes não devem repetir a mesma ordem nem criar monitor/daemon paralelo. Se a missão já contém intenção explícita de acompanhamento, a espera pode virar um watch temporário read-only, limitado por condição terminal e timeout, com receipt e limpeza verificada ao final.
+
+```text
+ACTION_ALREADY_DISPATCHED + EXTERNAL_EXECUTOR_OWNS_NEXT_STATE
+→ OBSERVE_NOT_REPEAT
+
+TEMPORARY_EXTERNAL_WATCH=true
+TEMP_WATCH_READ_ONLY=true
+TEMP_WATCH_TARGET_MUTATION=false
+TEMP_WATCH_REQUIRES_TERMINAL_CONDITION=true
+TEMP_WATCH_REQUIRES_TIMEOUT=true
+TEMP_WATCH_CLEANUP_REQUIRED=true
+TEMP_WATCH_CLEANUP_MUST_BE_VERIFIED=true
+SAME_SIGNAL_WITHOUT_NEW_INFORMATION=DROP_DUPLICATE
+TIMEOUT_IS_NOT_SUCCESS=true
+SILENCE_IS_NOT_SUCCESS=true
+PERSISTENT_DAEMON_FOR_EPHEMERAL_WAIT=FORBIDDEN
+UNSOLICITED_MONITOR_CREATION=FORBIDDEN
+```
+
+A autorização para acompanhar uma pendência não autoriza mutar o alvo observado. Sem intenção humana de monitoramento aplicável, não criar job por inferência. Com a intenção já dentro do escopo da mesma missão, não devolver ao CHEFE escolhas técnicas equivalentes de baixo risco: use a menor implementação reversível e somente de observação.
