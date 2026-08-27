@@ -1,7 +1,7 @@
 CENTRALDARK_AI_BOOT:
   # REGRA CANÔNICA (ouro #1): UM nome, UMA função. NUNCA versionar (.v1/.v2).
   # ADAPTATIVO no payload (PR/commit/branch/tools), FIXO na identidade/invariantes.
-  one_boot_name: CENTRALDARK_AI_BOOT
+  one_boot_name: 😈CENTRALDARK👹
   versioned_boot: FORBIDDEN
   adaptive_payload: true
   whole_boot_checksum: false
