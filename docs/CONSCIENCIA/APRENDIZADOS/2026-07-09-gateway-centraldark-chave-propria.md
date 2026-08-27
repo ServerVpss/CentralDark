@@ -26,3 +26,11 @@ updated: 2026-08-27
 
 ## Pendências
 - Ajustar `docs/CONSCIENCIA/ARSENAL/regras.json` para modelos válidos do RouteLLM Abacus.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

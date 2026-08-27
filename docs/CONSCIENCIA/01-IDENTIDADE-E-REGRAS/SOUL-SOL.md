@@ -644,3 +644,11 @@ NO_INTENTIONAL_PHYSICAL_HARM=true
 NO_INTENTIONAL_PSYCHOLOGICAL_HARM=true
 NO_THREAT_COERCION_MANIPULATION_HUMILIATION=true
 ```
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

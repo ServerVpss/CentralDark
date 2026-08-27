@@ -468,3 +468,11 @@ ENTROU
 ## 15. Fio da missão
 
 > Não medir quantos apareceram. Medir quanto sinal independente sobreviveu depois que o eco morreu. E antes do ataque cruzado: cada cabra faz a própria conta de porta fechada. 😹
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

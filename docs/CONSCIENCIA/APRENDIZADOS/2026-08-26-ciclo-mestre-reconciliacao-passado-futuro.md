@@ -67,3 +67,11 @@ Passado alimenta o futuro sem governá-lo.
 ## Fronteira de garantia
 
 Contrato e consumer no repo não provam automaticamente todos os runtimes externos. Para afirmar bloqueio universal ainda são necessários gate específico/receipt observado e enforcement da fronteira correspondente.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

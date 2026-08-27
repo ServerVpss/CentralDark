@@ -640,3 +640,11 @@ Ciclo fechado: **comandar → mapear → executar com segurança → vigiar → 
 ---
 
 _Aceita PRs. O sonho é grande e o método é paciente._
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

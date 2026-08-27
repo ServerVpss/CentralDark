@@ -44,3 +44,11 @@ updated: 2026-08-27
 
 ---
 _Fluxo de Ouro respeitado: mudança de estado registrada aqui em vez de commit direto na VPS._
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre
