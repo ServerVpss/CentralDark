@@ -1,10 +1,3 @@
----
-title: "PROVA CATALOGO CLAUDE DESKTOP"
-date: 2026-08-27
-tags: ["consciencia"]
-updated: 2026-08-27
----
-
 # Prova — catálogo compatível com Claude Desktop
 
 **Quando:** 2026-07-10
@@ -60,11 +53,3 @@ O gateway está OpenAI-compatible para descoberta e inferência por alias. O Cla
 ## Pendência operacional
 
 Se o cliente ainda mostrar erro vermelho, limpar/reconectar a credencial no Claude Desktop e testar novamente a descoberta. O gateway já responde catálogo OpenAI-compatible com aliases reconhecíveis.
-
----
-
-## Conexões Rápidas
-
-- [[00-LEIA-PRIMEIRO]] — portão de entrada
-- [[MAPA-DO-CEREBRO]] — visão geral
-- [[CONSCIENCIA]] — documento mestre
