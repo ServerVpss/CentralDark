@@ -1,3 +1,10 @@
+---
+title: "PROVA V1 MESSAGES CLAUDE DESKTOP"
+date: 2026-08-27
+tags: ["consciencia"]
+updated: 2026-08-27
+---
+
 # Prova — /v1/messages + Catálogo Expandido (Claude Desktop)
 
 **Quando:** 2026-07-10 · **Autor:** Pivete + IA

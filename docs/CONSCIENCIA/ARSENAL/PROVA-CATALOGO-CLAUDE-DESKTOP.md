@@ -1,3 +1,10 @@
+---
+title: "PROVA CATALOGO CLAUDE DESKTOP"
+date: 2026-08-27
+tags: ["consciencia"]
+updated: 2026-08-27
+---
+
 # Prova — catálogo compatível com Claude Desktop
 
 **Quando:** 2026-07-10
