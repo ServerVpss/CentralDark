@@ -26,3 +26,16 @@ test('contrato proíbe variante paralela sem gap material', () => {
   assert.match(contract, /NEW_PARALLEL_CAPABILITY_WITHOUT_PROVED_GAP=BLOCK/);
   assert.match(contract, /UNKNOWN_SKIPPED_PENDING_ARE_NOT_PASS=true/);
 });
+
+test('pendência externa usa watch temporário read-only com limpeza verificável', () => {
+  assert.match(contract, /TEMPORARY_EXTERNAL_WATCH=true/);
+  assert.match(contract, /TEMP_WATCH_READ_ONLY=true/);
+  assert.match(contract, /TEMP_WATCH_TARGET_MUTATION=false/);
+  assert.match(contract, /TEMP_WATCH_REQUIRES_TERMINAL_CONDITION=true/);
+  assert.match(contract, /TEMP_WATCH_REQUIRES_TIMEOUT=true/);
+  assert.match(contract, /TEMP_WATCH_CLEANUP_REQUIRED=true/);
+  assert.match(contract, /TEMP_WATCH_CLEANUP_MUST_BE_VERIFIED=true/);
+  assert.match(contract, /SAME_SIGNAL_WITHOUT_NEW_INFORMATION=DROP_DUPLICATE/);
+  assert.match(contract, /PERSISTENT_DAEMON_FOR_EPHEMERAL_WAIT=FORBIDDEN/);
+  assert.match(contract, /UNSOLICITED_MONITOR_CREATION=FORBIDDEN/);
+});
