@@ -57,11 +57,3 @@ Se você é leigo e quer entender do zero, siga essa ordem:
 Todo o resto é detalhe. Se entender essa frase, entendeu o DARKAI.
 
 ![Uma Chave](imagens/05-uma-chave.png)
-
----
-
-## Conexões Rápidas
-
-- [[00-LEIA-PRIMEIRO]] — portão de entrada
-- [[MAPA-DO-CEREBRO]] — visão geral
-- [[CONSCIENCIA]] — documento mestre

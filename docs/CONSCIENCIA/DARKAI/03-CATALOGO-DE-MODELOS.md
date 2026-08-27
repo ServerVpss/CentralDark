@@ -102,11 +102,3 @@ darkai --list-models
 ---
 
 Próximo: [`04-USANDO-NO-TERMINAL-LOCAL.md`](04-USANDO-NO-TERMINAL-LOCAL.md)
-
----
-
-## Conexões Rápidas
-
-- [[00-LEIA-PRIMEIRO]] — portão de entrada
-- [[MAPA-DO-CEREBRO]] — visão geral
-- [[CONSCIENCIA]] — documento mestre

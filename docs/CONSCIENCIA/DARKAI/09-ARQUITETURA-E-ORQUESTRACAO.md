@@ -159,11 +159,3 @@ Tudo isso com **guardrails**: dry-run por padrão, confirmação explícita pra 
 ---
 
 Próximo: [`10-TROUBLESHOOTING.md`](10-TROUBLESHOOTING.md)
-
----
-
-## Conexões Rápidas
-
-- [[00-LEIA-PRIMEIRO]] — portão de entrada
-- [[MAPA-DO-CEREBRO]] — visão geral
-- [[CONSCIENCIA]] — documento mestre

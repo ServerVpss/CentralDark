@@ -1,8 +1,8 @@
 ---
 title: "DESEJOS FUTUROS MEGA PACOTAO"
-date: 2026-08-26
+date: 2026-08-27
 tags: ["consciencia"]
-updated: 2026-08-26
+updated: 2026-08-27
 ---
 
 # 🗺️ MEGA PACOTÃO DE DESEJOS — CentralDark
@@ -640,11 +640,3 @@ Ciclo fechado: **comandar → mapear → executar com segurança → vigiar → 
 ---
 
 _Aceita PRs. O sonho é grande e o método é paciente._
-
----
-
-## Conexões Rápidas
-
-- [[00-LEIA-PRIMEIRO]] — portão de entrada
-- [[MAPA-DO-CEREBRO]] — visão geral
-- [[CONSCIENCIA]] — documento mestre

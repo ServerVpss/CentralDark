@@ -180,11 +180,3 @@ Copia, adapta, usa.
 ---
 
 Próximo: [`08-TECNICAS-QUE-USO.md`](08-TECNICAS-QUE-USO.md)
-
----
-
-## Conexões Rápidas
-
-- [[00-LEIA-PRIMEIRO]] — portão de entrada
-- [[MAPA-DO-CEREBRO]] — visão geral
-- [[CONSCIENCIA]] — documento mestre

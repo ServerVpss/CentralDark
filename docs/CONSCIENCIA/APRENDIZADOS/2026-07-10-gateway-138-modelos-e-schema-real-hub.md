@@ -1,8 +1,8 @@
 ---
 title: "2026 07 10 Gateway 138 Modelos E Schema Real Hub"
-date: 2026-08-26
+date: 2026-08-27
 tags: ["consciencia"]
-updated: 2026-08-26
+updated: 2026-08-27
 ---
 
 # 🟢 Ouro — Gateway com 146 modelos + descoberta do schema real do HUB (PDP + OAuth maduro)
@@ -49,11 +49,3 @@ Isso é o achado mais valioso pra evitar retrabalho futuro — **antes de criar 
 ## Referências
 - Relatório completo da sessão: `docs/CONSCIENCIA/08-HISTORICO-DECISOES-2026-07-10-gateway-hub.md`
 - Migrations tocadas: `apps/modulos/hub/supabase/migrations/20260710120000_user_roles.sql`, `20260710130000_criar_tabelas_hub_faltantes.sql`
-
----
-
-## Conexões Rápidas
-
-- [[00-LEIA-PRIMEIRO]] — portão de entrada
-- [[MAPA-DO-CEREBRO]] — visão geral
-- [[CONSCIENCIA]] — documento mestre

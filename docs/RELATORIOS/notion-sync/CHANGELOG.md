@@ -2,6 +2,39 @@
 
 > Histórico cronológico de cada execução do workflow `notion-sync.yml`.
 
+## 2026-08-26T22:29:11.323Z · EXEC · target=all · por @segredounlock
+
+- Commit fonte: `9275269c5ffab2b685832dd4bab724ddc7a3a365`
+- Bases atualizadas: regras, pendencias, decisoes, aprendizados, estrutura
+- Bases ignoradas: —
+  - **regras**: 0 criadas · 4 atualizadas · 0 ignoradas · 0 erros (Git: 4)
+  - **pendencias**: 0 criadas · 1 atualizadas · 0 ignoradas · 0 erros (Git: 1)
+  - **decisoes**: 0 criadas · 39 atualizadas · 0 ignoradas · 0 erros (Git: 39)
+  - **aprendizados**: 0 criadas · 30 atualizadas · 0 ignoradas · 0 erros (Git: 30)
+  - **estrutura**: 0 criadas · 361 atualizadas · 0 ignoradas · 0 erros (Git: 361)
+
+## 2026-08-26T14:46:07.819Z · EXEC · target=all · por @segredounlock
+
+- Commit fonte: `eacdde22438035ef3f1609f1ef8e416009a12be9`
+- Bases atualizadas: regras, pendencias, decisoes, aprendizados, estrutura
+- Bases ignoradas: —
+  - **regras**: 0 criadas · 4 atualizadas · 0 ignoradas · 0 erros (Git: 4)
+  - **pendencias**: 0 criadas · 1 atualizadas · 0 ignoradas · 0 erros (Git: 1)
+  - **decisoes**: 0 criadas · 39 atualizadas · 0 ignoradas · 0 erros (Git: 39)
+  - **aprendizados**: 0 criadas · 30 atualizadas · 0 ignoradas · 0 erros (Git: 30)
+  - **estrutura**: 1 criadas · 358 atualizadas · 0 ignoradas · 0 erros (Git: 359)
+
+## 2026-08-26T08:28:37.181Z · EXEC · target=all · por @segredounlock
+
+- Commit fonte: `b6fc4f00466b9a603aa2167abc1517225105225d`
+- Bases atualizadas: regras, pendencias, decisoes, aprendizados, estrutura
+- Bases ignoradas: —
+  - **regras**: 0 criadas · 4 atualizadas · 0 ignoradas · 0 erros (Git: 4)
+  - **pendencias**: 0 criadas · 1 atualizadas · 0 ignoradas · 0 erros (Git: 1)
+  - **decisoes**: 0 criadas · 39 atualizadas · 0 ignoradas · 0 erros (Git: 39)
+  - **aprendizados**: 2 criadas · 28 atualizadas · 0 ignoradas · 0 erros (Git: 30)
+  - **estrutura**: 0 criadas · 357 atualizadas · 0 ignoradas · 0 erros (Git: 357)
+
 ## 2026-08-25T08:57:17.244Z · EXEC · target=all · por @segredounlock
 
 - Commit fonte: `e3572c390404abf0023f20c27565c754b10386e9`

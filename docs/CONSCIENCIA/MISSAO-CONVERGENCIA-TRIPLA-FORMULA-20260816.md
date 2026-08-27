@@ -1,8 +1,8 @@
 ---
 title: "MISSAO CONVERGENCIA TRIPLA FORMULA 20260816"
-date: 2026-08-26
+date: 2026-08-27
 tags: ["consciencia"]
-updated: 2026-08-26
+updated: 2026-08-27
 ---
 
 # MISSÃO — CONVERGÊNCIA TRIPLA DA FÓRMULA
@@ -468,11 +468,3 @@ ENTROU
 ## 15. Fio da missão
 
 > Não medir quantos apareceram. Medir quanto sinal independente sobreviveu depois que o eco morreu. E antes do ataque cruzado: cada cabra faz a própria conta de porta fechada. 😹
-
----
-
-## Conexões Rápidas
-
-- [[00-LEIA-PRIMEIRO]] — portão de entrada
-- [[MAPA-DO-CEREBRO]] — visão geral
-- [[CONSCIENCIA]] — documento mestre

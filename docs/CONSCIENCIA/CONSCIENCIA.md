@@ -42,11 +42,3 @@ POLITICA_ANTIGA_CONFLITA_COM_CANONICO_ATUAL
 Nenhuma contagem antiga de PM2, path de VPS, regra de deploy, permissão ou integração é considerada estado vivo sem medição atual.
 
 `#ACORDAR` sempre recupera o estado real e reconcilia a história com o presente antes de agir.
-
----
-
-## Conexões Rápidas
-
-- [[00-LEIA-PRIMEIRO]] — portão de entrada
-- [[MAPA-DO-CEREBRO]] — visão geral
-- [[CONSCIENCIA]] — documento mestre

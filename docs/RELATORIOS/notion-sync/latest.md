@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-08-25T08:57:17.244Z
+# 🧠 Notion Sync — 2026-08-26T22:29:11.323Z
 
-- **Commit fonte:** `e3572c390404abf0023f20c27565c754b10386e9`
+- **Commit fonte:** `9275269c5ffab2b685832dd4bab724ddc7a3a365`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 427 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 435 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -15,8 +15,8 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
-| aprendizados | 27 | 0 | 27 | 0 | 0 |
-| estrutura | 357 | 1 | 356 | 0 | 0 |
+| aprendizados | 30 | 0 | 30 | 0 | 0 |
+| estrutura | 361 | 0 | 361 | 0 | 0 |
 
 ## Operações
 
@@ -93,6 +93,9 @@
 | aprendizados | atualizado | #24 — API paga é capacidade, não identidade nem caminho obrigatório |
 | aprendizados | atualizado | #25 — “Menos é mais” significa menor movimento compatível com efeito, observabilidade e segurança |
 | aprendizados | atualizado | #26 — Batch .bat: 4 armadilhas que passam em revisão superficial |
+| aprendizados | atualizado | #27 — Grok App Builder é adapter, não cérebro — não scaffoldar app paralelo |
+| aprendizados | atualizado | #28 — Ponte semântica fail-closed EXIT code=2 — não é verde; stderr engolido |
+| aprendizados | atualizado | #29 — Dois mundos vivos: GitHub main 81bbfc7 ≠ VPS 5958d3ce27 (1252 atrás, dirty) |
 | estrutura | atualizado | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | atualizado | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
@@ -186,10 +189,13 @@
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-16-verde-delta-fechado-promove.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-17-mapa-mental-intencao-comprimida.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-alquimia-operacional-minerio-ouro-cristal.md |
-| estrutura | criado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-estabilidade-sob-perturbacao-liberdade-com-fronteira.md |
+| estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-estabilidade-sob-perturbacao-liberdade-com-fronteira.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-fluxo-operacional-papagaio-off-pombo-on.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-pombo-correio-com-checksum.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-prova-secreta-bob-casa-fundamentos.md |
+| estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-26-ciclo-mestre-reconciliacao-passado-futuro.md |
+| estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-26-intencao-unica-propriedades-ciclo-mestre.md |
+| estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-26-multibussola-meta-convergencia-reversa.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/EVIDENCIAS/2026-08-17-registro-visual-recibo-muitos-olhos.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/MCP/MCP-EXPLICADO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/PROXY/APRENDIZADOS_PROXY.md |
@@ -310,6 +316,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/NOTION-MAPA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PADRAO-CARD-HERMES.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PADRAO-EMOJIS.md |
+| estrutura | atualizado | docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PENDENCIAS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PENDENCIAS/MCP-LOCAL-STDIO-VPS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PIVETE-IA/PIVETE-00-INVOCACAO.md |

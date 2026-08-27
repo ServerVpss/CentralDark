@@ -1,8 +1,8 @@
 ---
 title: "MATRIZ ORQUESTRACAO PERFIS"
-date: 2026-08-26
+date: 2026-08-27
 tags: ["consciencia"]
-updated: 2026-08-26
+updated: 2026-08-27
 ---
 
 # MATRIZ-ORQUESTRACAO-PERFIS — CentralDark
@@ -103,11 +103,3 @@ updated: 2026-08-26
 ANCORADO: CHEFE / SEGREDO 👑
 DONO: docs/CONSCIENCIA/MATRIZ-ORQUESTRACAO-PERFIS.md
 VERSAO: 1.0
-
----
-
-## Conexões Rápidas
-
-- [[00-LEIA-PRIMEIRO]] — portão de entrada
-- [[MAPA-DO-CEREBRO]] — visão geral
-- [[CONSCIENCIA]] — documento mestre

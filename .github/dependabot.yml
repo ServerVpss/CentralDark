@@ -4,12 +4,20 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-    open-pull-requests-limit: 1
+    open-pull-requests-limit: 15
     labels:
       - "🤖 AUTO"
       - "🔄 GIT"
+      - "👑 PERMITO-SEGREDO"
+      - "🧠 AGENTE-HERMES"
+      - "✨ MELHORIA"
+      - "🤖 IA-EXECUTAR"
     commit-message:
       prefix: "chore(deps)"
+    groups:
+      radix-ui:
+        patterns:
+          - "@radix-ui/*"
     ignore:
       - dependency-name: "*"
         update-types:
@@ -23,6 +31,10 @@ updates:
     labels:
       - "🤖 AUTO"
       - "🔄 GIT"
+      - "👑 PERMITO-SEGREDO"
+      - "🧠 AGENTE-HERMES"
+      - "✨ MELHORIA"
+      - "🤖 IA-EXECUTAR"
     commit-message:
       prefix: "chore(actions)"
     ignore:

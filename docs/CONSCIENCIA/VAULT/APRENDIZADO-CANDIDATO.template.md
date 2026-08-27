@@ -1,8 +1,8 @@
 ---
 title: "APRENDIZADO CANDIDATO.Template"
-date: 2026-08-26
+date: 2026-08-27
 tags: ["consciencia"]
-updated: 2026-08-26
+updated: 2026-08-27
 ---
 
 LESSON_ID=EXEMPLO-ID-UNICO
@@ -14,11 +14,3 @@ TESTE=descreva como provar que o erro não volta
 PRIVADO=NAO
 
 Observações opcionais abaixo desta linha.
-
----
-
-## Conexões Rápidas
-
-- [[00-LEIA-PRIMEIRO]] — portão de entrada
-- [[MAPA-DO-CEREBRO]] — visão geral
-- [[CONSCIENCIA]] — documento mestre

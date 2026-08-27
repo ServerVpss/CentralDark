@@ -34,11 +34,3 @@ cat arquivo.log | darkai "resume isso"
 Documentação completa em `/root/CentralDark/docs/CONSCIENCIA/DARKAI/`.
 
 ---
-
----
-
-## Conexões Rápidas
-
-- [[00-LEIA-PRIMEIRO]] — portão de entrada
-- [[MAPA-DO-CEREBRO]] — visão geral
-- [[CONSCIENCIA]] — documento mestre

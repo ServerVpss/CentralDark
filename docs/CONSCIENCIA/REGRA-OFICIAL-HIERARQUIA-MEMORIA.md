@@ -91,11 +91,3 @@ CANÔNICO DEFINE O SIGNIFICADO ATUAL.
 SEGREDO/CHEFE CONTINUA SENDO O HUMANO.
 PIVETE/HERMES CONTINUA SENDO O EXECUTOR.
 ```
-
----
-
-## Conexões Rápidas
-
-- [[00-LEIA-PRIMEIRO]] — portão de entrada
-- [[MAPA-DO-CEREBRO]] — visão geral
-- [[CONSCIENCIA]] — documento mestre

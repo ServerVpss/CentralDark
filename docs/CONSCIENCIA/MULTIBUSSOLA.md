@@ -2,6 +2,7 @@
 title: "!MULTIBUSSOLA — varredura multidirecional e multirreferencial"
 status: "CANÔNICO"
 date: 2026-08-17
+updated: 2026-08-26T15:23:00-03:00
 authority: "SEGREDO/CHEFE"
 scope: "Comando oficial de análise multidirecional, temporal, causal, espacial, adversarial e metacognitiva"
 owner: "Metacognição operacional + MetaLupa; sem novo cérebro/orquestrador"
@@ -602,6 +603,144 @@ META_TEACHER
 
 `CRISTAL` continua saída do CROSS-META, não nova lente.
 
+### 15.1 Perfil META_MULTIBUSSOLA — bearings, convergência e fixed point
+
+`!MULTIBÚSSOLA_META` é aceito como **forma humana de pedir `META_MULTIBUSSOLA`**, não como novo gatilho, skill, cérebro, router ou autoridade. O owner continua sendo este documento e os mecanismos existentes de Metacognição + MetaLupa.
+
+Entrada mínima quando material:
+
+```text
+INTENT
+DESTINATION
+CURRENT_STATE
+HISTORY
+OWNERS
+CAPABILITIES
+EVIDENCE
+RISK
+```
+
+Bearings metacognitivos, executados somente quando produzem ganho informacional material:
+
+```text
+TRUE_NORTH_LOCK
+→ congelar intenção/destino vigente antes da navegação
+
+DECLINATION_CHECK
+→ procurar descalibração do próprio instrumento/método
+
+SPATIAL_TOPOGRAPHY_SCAN
+→ conferir posições físicas/lógicas e diferenças de frame
+
+TEMPORAL_CLOCK_FIX
+→ prender evidência a T0/TΔ/T1, EVENT_TIME, OBSERVATION_TIME e HEAD/REF
+
+HISTORY_DECAY_SCAN
+→ medir envelhecimento/staleness da evidência histórica
+
+NAUTICAL_HAZARD_DEPTH_SCAN
+→ procurar bypass, recife, dependência escondida, falso farol e rota paralela
+
+INERTIAL_CONTINUITY_CHECK
+→ testar se continuidade aparente possui elo causal/observável ou é só inércia histórica
+
+EXTERNAL_REALITY_FIX
+→ preferir o referencial mais direto, atual e causalmente ligado ao claim
+
+PLANNED_VS_ACTUAL
+→ confrontar intenção/documentado/planejado com implementação, consumo, execução e efeito
+
+PROVENANCE_BEARING
+→ prender cada evidência à sua origem, tempo, ref, owner e escopo
+
+DEPENDENCY_BEARING
+→ seguir produtores, consumidores, dependentes e blast radius
+
+SEMANTIC_BEARING
+→ verificar se significado, escopo e autoridade sobreviveram à travessia entre camadas
+
+RISK_BEARING
+→ calibrar profundidade, contraprova e tolerância a UNKNOWN pelo risco material
+```
+
+Rotas mínimas:
+
+```text
+FORWARD_ROUTE
+REVERSE_ROUTE
+INVERSE_ROUTE
+→ CROSS_BEARING_RENDEZVOUS
+```
+
+`INVERSE_ROUTE` não cria direção concorrente: é a tentativa explícita de inverter premissas/causalidade/condições para procurar explicação alternativa ou falso positivo. Quando já coberta por `REVERSE`, `ROUND-TRIP` ou MetaLupa, deve ser deduplicada.
+
+Convergência:
+
+```text
+IF AXES_DISAGREE:
+  → !META_LUPA
+  → TESTE_DISCRIMINANTE
+  → !RECONCILIAR
+
+IF MATERIAL_STATE_CHANGED:
+  → IDENTIFICAR_CONE_CAUSAL_AFETADO
+  → INVALIDAR_SOMENTE_CLAIMS_DEPENDENTES
+  → PRESERVAR_PROVAS_INDEPENDENTES
+  → RE-FIX_AFFECTED_MATERIAL_AXES
+  → CROSS_BEARING_RENDEZVOUS
+```
+
+Não existe `PASS` por repetição de eixos. `FIXED_POINT` é estabilidade informacional do estado/veredito, **não sinônimo de sucesso**:
+
+```text
+FIXED_POINT != PASS
+
+FIXED_POINT_PASS
+→ todos os bearings materiais requeridos convergem
+→ UNKNOWN_MATERIAL=0 para o claim de PASS
+→ contraprova sobrevive
+→ T1 permanece estável
+
+FIXED_POINT_FAIL
+→ falha material conhecida permanece estável
+→ causa/escopo suficiente para ação está determinado
+→ nenhuma informação discriminável nova aparece
+
+FIXED_POINT_BLOCKED
+→ fronteira/impedimento material está provado
+→ nenhuma nova informação autorizada/material pode resolver agora
+```
+
+Fluxo consolidado:
+
+```text
+META_MULTIBUSSOLA
+→ TRUE_NORTH_LOCK
+→ BEARINGS_MATERIAIS
+→ FORWARD_ROUTE
+→ REVERSE_ROUTE
+→ INVERSE_ROUTE quando discriminante
+→ CROSS_BEARING_RENDEZVOUS
+→ CONFLITO? META_LUPA + TESTE + RECONCILIAR
+→ ESTADO_MUDOU? REABRIR_SOMENTE_CONE_AFETADO
+→ CONTRAPROVA
+→ REMEDIR_T1
+→ FIXED_POINT_PASS | FIXED_POINT_FAIL | FIXED_POINT_BLOCKED | RESIDUAL_MAP+NEXT_CURSOR
+```
+
+Invariantes deste perfil:
+
+```text
+META_MULTIBUSSOLA_IS_PROFILE_NOT_NEW_SYSTEM=true
+TRUE_NORTH_IS_INTENT_NOT_MODEL_OPINION=true
+HISTORY_DECAY_REQUIRES_REMEASUREMENT_WHEN_MATERIAL=true
+SAME_EVIDENCE_RELABELLED != NEW_INFORMATION
+RECURSION_DEPTH_IS_NOT_PROGRESS=true
+FIXED_POINT_IS_NOT_PASS=true
+UNKNOWN_MATERIAL_MUST_BE_ZERO_FOR_PASS=true
+MATERIAL_STATE_CHANGE_REOPENS_AFFECTED_AXES_ONLY=true
+```
+
 ## 16. Revisão revisitada
 
 A primeira convergência não encerra automaticamente a missão.
@@ -721,6 +860,8 @@ ONE_WRITER_PER_SCOPE=true
 AUTHORITY_REMAINS_WITH_SEGREDO_CHEFE=true
 META_MENOS_E_MAIS_ACTIVE=true
 FIXED_POINT_OVER_REPETITION=true
+FIXED_POINT_IS_NOT_PASS=true
+FIXED_POINT_CAN_BE_PASS_FAIL_BLOCKED=true
 ```
 
 No jeito do CHEFE:

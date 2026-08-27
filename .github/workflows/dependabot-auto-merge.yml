@@ -45,8 +45,49 @@ jobs:
               body: 'Aprovação automática — atualização do Dependabot dentro da política (sem majors).',
             });
 
+      - name: Detectar stale/conflitado e resolver deterministicamente
+        if: env.SKIP != '1'
+        id: stale
+        uses: actions/github-script@v9
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const pr = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+            });
+            const mergeable = pr.data.mergeable;
+            // mergeable === null significa UNKNOWN (GitHub ainda calculando)
+            if (mergeable === false) {
+              // PADRÃO CANÔNICO: resolver deterministicamente via script no runner self-hosted
+              console.log('::warning::PR conflitado. Resolução determinística via scripts/dependabot/resolve-conflicts.sh.');
+              core.exportVariable('RESOLVE_REQUESTED', '1');
+            } else if (mergeable === null) {
+              console.log('::notice::Mergeability UNKNOWN (GitHub ainda calculando). Aguardando próximo synchronize.');
+            } else {
+              console.log('::notice::PR mergeable. Seguindo para auto-merge por política.');
+            }
+
+      - name: Resolver conflito deterministicamente no runner
+        if: env.SKIP != '1' && env.RESOLVE_REQUESTED == '1'
+        runs-on: [self-hosted, Linux]
+        env:
+          REPO_DIR: /root/CentralDark
+        steps:
+          - name: Checkout exact event SHA
+            uses: actions/checkout@v7
+            with:
+              ref: ${{ github.sha }}
+              path: .ci-resolve
+              fetch-depth: 1
+          - name: Executar resolução determinística
+            run: |
+              set -euo pipefail
+              bash "$GITHUB_WORKSPACE/.ci-resolve/scripts/dependabot/resolve-conflicts.sh" "${{ context.payload.pull_request.number }}"
+
       - name: Habilitar auto-merge somente para PATCH
-        if: env.SKIP != '1' && steps.meta.outputs.update-type == 'version-update:semver-patch'
+        if: env.SKIP != '1' && steps.meta.outputs.update-type == 'version-update:semver-patch' && env.RESOLVE_REQUESTED != '1'
         uses: actions/github-script@v9
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}

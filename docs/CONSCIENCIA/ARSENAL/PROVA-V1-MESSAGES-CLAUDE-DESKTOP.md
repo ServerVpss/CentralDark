@@ -1,8 +1,8 @@
 ---
 title: "PROVA V1 MESSAGES CLAUDE DESKTOP"
-date: 2026-08-26
+date: 2026-08-27
 tags: ["consciencia"]
-updated: 2026-08-26
+updated: 2026-08-27
 ---
 
 # Prova — /v1/messages + Catálogo Expandido (Claude Desktop)
@@ -28,11 +28,3 @@ POST http://127.0.0.1:8090/v1/messages
 
 ## Ganho
 Claude Desktop, Zed, Cursor e qualquer cliente Anthropic-native passam a enxergar e usar o gateway CentralDark sem erro 404. Mantém compatibilidade OpenAI (Open WebUI, LibreChat) intacta.
-
----
-
-## Conexões Rápidas
-
-- [[00-LEIA-PRIMEIRO]] — portão de entrada
-- [[MAPA-DO-CEREBRO]] — visão geral
-- [[CONSCIENCIA]] — documento mestre

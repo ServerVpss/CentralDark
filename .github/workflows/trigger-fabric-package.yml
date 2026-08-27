@@ -10,6 +10,10 @@ on:
       - 'AGENTS.md'
       - 'docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md'
       - 'docs/CONSCIENCIA/MULTIBUSSOLA.md'
+      - 'docs/CONSCIENCIA/MAPA-DO-CEREBRO.md'
+      - 'docs/CONSCIENCIA/PIVETE-IA/PIVETE-18-ROTA-MEMORIA.md'
+      - 'docs/CONSCIENCIA/APRENDIZADOS/**'
+      - 'docs/BRAIN/00-MAPA-SISTEMA/BRAIN.md'
       - '.agents/skills/meta-lupa/**'
       - '.agents/skills/distinct-engineering-compiler/**'
       - '.agents/skills/capability-contract-router/**'
@@ -40,6 +44,7 @@ jobs:
       - name: Checkout exact PR state
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 0
           persist-credentials: false
 
@@ -54,6 +59,11 @@ jobs:
           test "$actual" = "$EXPECTED_HEAD"
           echo "HEAD_SHA=$actual"
 
+      - name: Setup Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v6
+        with:
+          python-version: '3.11'
+
       - name: Verify repository contract facts
         shell: bash
         run: |
@@ -63,6 +73,31 @@ jobs:
           grep -q '^REPO_CONTRACT_VERIFY=PASS$' docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/VERIFY-RESULT.txt
           grep -q '^BOT_ENTRY_CONTRACT=PASS$' docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/VERIFY-RESULT.txt
           grep -q '^OUTPUT_GUARD_CONTRACT=PASS$' docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/VERIFY-RESULT.txt
+
+      - name: Verify master cycle and artifact properties
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/trigger-fabric/centraldark_master_cycle.py --self-test \
+            | tee "$RUNNER_TEMP/master-cycle-self-test.txt"
+          grep -q '"ok": true' "$RUNNER_TEMP/master-cycle-self-test.txt"
+          python scripts/trigger-fabric/verify_artifact_properties.py --self-test
+          python scripts/trigger-fabric/verify_artifact_properties.py --check-critical .
+          node apps/modulos/HERMES-CORE/agents/GraphRAG-Master/agent.mjs --self-test \
+            | tee "$RUNNER_TEMP/graphrag-master-cycle-self-test.txt"
+          grep -q '"ok":true\|"ok": true' "$RUNNER_TEMP/graphrag-master-cycle-self-test.txt"
+          echo 'CENTRALDARK_MASTER_CYCLE=PASS'
+          echo 'ARTIFACT_PROPERTIES=PASS'
+          echo 'HERMES_GRAPHRAG_MASTER_CYCLE=PASS'
+
+      - name: "Verify gatilho -> aprendizado sync (novo evento exige update em APRENDIZADOS.md no mesmo diff)"
+        if: github.event_name == 'pull_request'
+        shell: bash
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          set -euo pipefail
+          python scripts/trigger-fabric/verify_gatilho_aprendizado_sync.py . "$BASE_SHA"
 
       - name: Verify distinct engineering compiler binding
         shell: bash
@@ -107,6 +142,7 @@ jobs:
             | tee "$RUNNER_TEMP/semantic-crystal-self-test.txt"
           grep -q '^SEMANTIC_CRYSTAL_TOOL_SELF_TEST=PASS$' "$RUNNER_TEMP/semantic-crystal-self-test.txt"
           echo 'SEMANTIC_CRYSTAL_CAPABILITY_FABRIC=PASS'
+
       - name: Verify engine gap closure contract
         shell: bash
         run: |

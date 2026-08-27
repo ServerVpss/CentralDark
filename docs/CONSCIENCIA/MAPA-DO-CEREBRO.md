@@ -1,161 +1,282 @@
 ---
 title: "Mapa Central do Cérebro Vivo — CentralDark"
+status: CANONICO
 date: 2026-06-29
-tags: ["navegacao", "moc", "mapa", "cerebro"]
-updated: 2026-06-29
+updated: 2026-08-26T09:10:00-03:00
+tags: [navegacao, moc, mapa, consciencia, intencao, continuidade, cross-chat, delta-util, semantica]
+category: "M-Mapa-Sistema"
+sensitivity: INTERNAL
+source: "owners canônicos da CentralDark + estado vivo medido + contexto cross-chat quando recuperável"
+source_class: INTERNAL
+source_rule: "CANONICO -> ARTEFATO; artefato nao inventa canonico"
+owner: "LEIA-ME-IA.md + AGENTS.md + docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md"
+consumer: "qualquer IA, CLI, agente, Hermes e navegação humana"
+writer: SOL
 ---
 
-# MAPA-DO-CEREBRO
+# MAPA-DO-CEREBRO — UMA CASA, UMA DIREÇÃO
 
-> Mapa central de navegação do sistema de memória do CentralDark.
-> Atualizado: 29 de junho de 2026
+Este MOC é **mapa de navegação**, não um segundo cérebro e não um snapshot eterno de runtime. Números de tools, processos, portas e serviços só valem quando medidos no alvo vivo.
 
----
+## Norte
 
-## 1. Visão Geral
-
-O **CentralDark** possui duas camadas de memória que trabalham integradas:
-
-- **`docs/CONSCIENCIA/`** — Camada **Universal** (fonte oficial de verdade). Toda IA lê aqui primeiro.
-- **`docs/BRAIN/`** — Camada **Pessoal** (vault Obsidian do Pivete). Pensamentos, ideias, artefatos visuais.
-
-Essas duas camadas se comunicam via **MCP**, **Bot Telegram** e **Guardião da Consciência**.
-
-> Portão de entrada obrigatório: [[00-LEIA-PRIMEIRO]]
-
----
-
-## 2. Estrutura Real (estado atual)
-
-```
-docs/
-├── CONSCIENCIA/                    ← Camada Universal (IAs leem aqui)
-│   ├── 00-LEIA-PRIMEIRO.md         ← Portão de entrada + tabela de roteamento
-│   ├── MAPA-DO-CEREBRO.md          ← Este arquivo
-│   ├── 01-IDENTIDADE.md            ← Quem é o Pivete, tom, idioma
-│   ├── 02-PERMISSOES.md            ← O que pode/não pode fazer
-│   ├── 03-FLUXO-DEPLOY.md          ← Como código vai pra produção
-│   ├── 04-ESTRUTURA-VPS.md         ← Onde mora cada coisa na VPS
-│   ├── 05-SSH-VPS.md               ← Como conectar na VPS
-│   ├── 06-MCP-CENTRALDARK.md       ← O MCP e suas ferramentas
-│   ├── 07-PENDENCIAS-E-HORARIO.md  ← Fontes únicas da verdade
-│   ├── 08-HISTORICO-DECISOES.md    ← Decisões grandes já tomadas
-│   ├── 09-ESTADO-ATUAL.md          ← Snapshot vivo do sistema
-│   ├── 10-FALLBACK-LOVABLE.md      ← CRÍTICO: sync Lovable↔GitHub
-│   ├── APRENDIZADOS.md             ← Base de conhecimento acumulada (259KB)
-│   ├── CONSCIENCIA.md              ← Documento mestre (30KB)
-│   ├── RETOMADA-*.md               ← Estado da última sessão IA
-│   ├── ARTEFATOS/                  ← Técnicas e referências avançadas
-│   │   └── TECNICAS-DE-LINKAGEM-SEMANTICA.md
-│   └── ARQUIVO-MORTO/              ← Histórico obsoleto
-│
-└── BRAIN/                          ← Camada Pessoal (Obsidian)
-    ├── BRAIN.md                    ← Documento raiz + link para CONSCIENCIA
-    ├── INDEX.md                    ← Auto-gerado pelo workflow
-    ├── 00-MAPA.md                  ← Mapa visual do sistema
-    ├── 01-PENDENCIAS.md            ← Pendências prioritárias
-    ├── 02-ARQUITETURA.md           ← Como o sistema funciona
-    ├── 06-DECISOES.md              ← Decisões tomadas
-    ├── 00 - Mapa do Sistema/
-    ├── 05 - Documentacao/          ← Tutoriais e guias
-    ├── 06 - Devedores & Contatos/  ← Financeiro pessoal
-    └── 07 - Reuniões & Notas/      ← Notas rápidas e ideias
-```
-
----
-
-## 3. Componentes Ativos
-
-| Componente | Função | Localização | Status |
-|-----------|--------|------------|--------|
-| **CONSCIENCIA** | Fonte oficial de regras e arquitetura | `docs/CONSCIENCIA/` | ✅ Ativo |
-| **BRAIN** | Vault pessoal do Pivete (Obsidian) | `docs/BRAIN/` | ✅ Ativo |
-| **MCP** | Hub de ferramentas (102 ferramentas) | Porta 9100 | ✅ Ativo |
-| **Bot Telegram** | Cockpit principal de interação | `apps/bot-telegram/` | ✅ Ativo |
-| **Guardião** | Vigia arquivos e atualiza painel | `infra/guardiao/` | ✅ Ativo |
-| **Issues Agent** | Triagem automática de issues GitHub | `scripts/issues-agent/` | ✅ Ativo |
-| **obsidian-writer** | Skill que grava notas no BRAIN | `apps/bot-telegram/skills/externas/` | ✅ Ativo |
-| **memory-linker** | Varre gaps de memória e links quebrados | `scripts/memory-linker/` | 🔄 Planejado |
-
----
-
-## 4. Fluxos Principais
-
-```
-Pivete fala no Telegram
-  ↓ Bot detecta intenção via consciousness.cjs
-  ↓ Roteia para skill correta (obsidian-writer, brainstorming, etc.)
-  ↓ Grava em docs/BRAIN/ via GitHub
-  ↓ Obsidian Git puxa em ≤10 min no PC do Pivete
-
-Qualquer IA nova abre o repo
-  ↓ Lê docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md
-  ↓ Segue ordem de leitura (01 → 12)
-  ↓ Consulta RETOMADA-*.md se existir
-  ↓ Opera com contexto completo
-
-Claude Code / MCP modifica arquivos
-  ↓ Commit no GitHub (fonte da verdade)
-  ↓ Webhook da VPS puxa automaticamente
-  ↓ PM2 recarrega processos afetados
-  ↓ Painel atualiza em <30s
+```text
+👑 SEGREDO/CHEFE
+   intenção + autoridade final
+        │
+        ▼
+!CENTRALDARK   (quando explicitamente convocado)
+        │
+        ▼
+☀ SOL
+   preserva significado + coordena
+        │
+        ▼
+#ACORDAR
+   estado vivo / continuidade
+        │
+        ▼
+!CALIBRAR
+   intenção / escopo / ferramentas / prova
+        │
+        ▼
+🧭 !MULTIBUSSOLA
+   percepção material por vários eixos
+        │
+        ▼
+⊛ !META_LUPA
+   técnica de falsificação, não agente
+        │
+        ▼
+!RECONCILIAR
+   passado útil + presente vivo → um owner
+        │
+        ▼
+✎ WRITER LEASE
+   uma caneta por escopo
+        │
+        ▼
+☿ PIVETE/HERMES
+   executa + preserva + continua
+        │
+        ▼
+!CONTRAPROVA
+   provider/capacidade independente quando material
+        │
+        ▼
+!REMEDIÇÃO
+   T0 → efeito → T1
+        │
+        ▼
+⚖ REALITY JUDGE
+        │
+        ▼
+!FIXED_POINT
+        │
+        ▼
+!REGISTRA
+   receipt + aprendizado + proveniência + next cursor
+        │
+        ▼
+✶ GRAFO / VETORES / BRAIN
+   projeções e navegação derivadas
+        │
+        ▼
+!BOOT
+   próximo ciclo recuperável
 ```
 
----
+A cadeia canônica completa está em:
+`docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml`.
 
-## 5. Mapas de Conteúdo (MOCs) — navegação por tema
+## Papéis, sem mistura
 
-| MOC | Tema | Status |
-|-----|------|--------|
-| [[MAPA-DO-CEREBRO]] | Visão geral de tudo | ✅ Este arquivo |
-| [[00-LEIA-PRIMEIRO]] | Ordem de leitura + roteamento | ✅ Existe |
-| [[CONSCIENCIA]] | Documento mestre das IAs | ✅ Existe |
-| [[BRAIN]] | Raiz do vault do Pivete | ✅ Existe |
+```text
+SEGREDO/CHEFE = HUMANO + INTENCAO + AUTORIDADE FINAL
+SOL = COORDENADORA / RECONCILIADORA
+PIVETE/HERMES = EXECUTOR + PRESERVACAO + CONTINUIDADE
+MODELO = MOTOR SUBSTITUIVEL
+META_LUPA = TECNICA
+PERCEPCAO_MATERIAL = CAPACIDADE SEPARADA
+CONTRAPROVA_PROVIDER = SUBSTITUIVEL POR CAPACIDADE
+REALITY = JUDGE
+GRAFO = DERIVADO, NAO AUTORIDADE
+```
 
----
+## Onde mora cada tipo de verdade
 
-## 6. Conexões Rápidas
+```text
+IDENTIDADE / LEI DA CASA
+→ LEIA-ME-IA.md
+→ AGENTS.md
+→ docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md
 
-- [[00-LEIA-PRIMEIRO]] — portão de entrada com tabela de roteamento
-- [[CONSCIENCIA]] — documento mestre (30KB, autoritativo)
-- [[BRAIN]] — vault do Pivete, raiz do Obsidian
-- [[08-HISTORICO-DECISOES]] — log de decisões importantes
-- [[APRENDIZADOS]] — base de conhecimento acumulada
-- [[TECNICAS-DE-LINKAGEM-SEMANTICA]] — como criar conexões inteligentes
-- [[01-PENDENCIAS]] — o que está em aberto no BRAIN
+GATILHOS / CICLO / HERANCA ENTRE MOTORES
+→ docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml
+→ docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
+→ docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml
 
----
+PROPRIEDADES DE ARTEFATOS / NOTAS
+→ docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ARTIFACT-PROPERTIES.yml
 
+APRENDIZADO DURAVEL
+→ owner canônico do assunto
+→ docs/CONSCIENCIA/APRENDIZADOS/ quando for cristal/registro transversal
 
-## 6.1 Memória visual canônica
+NAVEGACAO HUMANA
+→ docs/BRAIN/
 
-- [Cartazes canônicos da CentralDark](../BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/README.md) — MOC dos quatro cartazes, proveniência e topologia semântica.
-- O cérebro canônico mora nos owners do Git; `CASA-VAULT/00-CANONICO` é o segundo cérebro como espelho, não autoridade paralela.
-- Vetores, Grafo Vivo, painel e GraphRAG são índices/projeções reconstruíveis.
-- O print do grafo é evidência observada, nunca owner.
+ESTADO TECNICO ATUAL
+→ Git/PR/HEAD + runtime/log/efeito medidos no alvo correto
+```
 
-## 7. Como Navegar
+## Precedência por tipo de claim
 
-1. Comece pelo **[[00-LEIA-PRIMEIRO]]** — ele define a ordem e o roteamento
-2. Use **este arquivo** para ter visão geral da estrutura física
-3. Para temas específicos, siga os links em **Conexões Rápidas**
-4. Se houver `RETOMADA-*.md`, leia antes de propor mudanças
-5. Dúvida sobre onde gravar? Consulte a **tabela de roteamento** no `00-LEIA-PRIMEIRO.md`
+Não existe uma fila única em que documento sempre vence realidade. A precedência depende do claim:
 
----
+```text
+CLAIM_DE_GOVERNANCA|IDENTIDADE|OWNER
+→ CANONICO_ATUAL > MEMORIA_RELEVANTE > HISTORICO
 
-## 8. Regras de Ouro
+CLAIM_DE_RUNTIME|EXECUCAO|ESTADO_ATUAL
+→ EVIDENCIA_VIVA_DO_MESMO_ALVO > ESTADO_DESEJADO_DOCUMENTADO > HISTORICO
 
-- Toda nota importante deve ter seção **Conexões Rápidas**
-- Use **linkagem semântica** (com intenção) — ver [[TECNICAS-DE-LINKAGEM-SEMANTICA]]
-- Atualize este mapa sempre que a estrutura principal mudar
-- Nunca registre informação sensível (tokens, senhas, IDs internos)
-- Áreas protegidas exigem "PERMITO PIVETE" antes de mexer
+CLAIM_CROSS_CHAT
+→ CONVERSA_ATUAL + HISTORICO_CHATGPT_RECUPERADO_QUANDO_ACESSIVEL + MATERIAL_FORNECIDO
+→ DEDUPE + RECONCILIACAO
+→ NAO_RECUPERADO = UNKNOWN
+```
 
----
+```text
+DOCUMENTADO != EXECUTADO
+MEMORIA != ESTADO_VIVO
+GITHUB != MEMORIA_ENTRE_CHATS
+CROSS_CHAT != CURRENT_STATE
+```
 
-## Conexões Rápidas
+Passado não é apagado. Ele entra como proveniência e delta candidato:
 
-- [[00-LEIA-PRIMEIRO]] — portão de entrada
-- [[MAPA-DO-CEREBRO]] — visão geral
-- [[CONSCIENCIA]] — documento mestre
+```text
+PASSADO
+→ DELTA_UTIL?
+   SIM → RECONCILIAR NO OWNER ATUAL
+   NAO → PRESERVAR COMO HISTORICO/SUPERSEDED QUANDO NECESSARIO
+→ PRESENTE CONTINUA GOVERNANDO
+```
+
+## Reconciliação cross-chat
+
+Quando a missão pede recuperar outras conversas do ChatGPT, a Casa trata isso como **contexto read-only**, nunca como atalho para estado técnico:
+
+```text
+TEMA_ATUAL
+→ RECUPERAR_CHAT_HISTORY_QUANDO_ACESSIVEL
+→ CRUZAR_CONVERSAS_RELEVANTES
+→ DEDUPE
+→ PRESERVAR DECISOES + CORRECOES + APRENDIZADOS + PENDENCIAS
+→ SEPARAR HISTORICO DE ESTADO_ATUAL
+→ CONTRADICAO → META_LUPA + RECONCILIAR
+→ NAO_RECUPERADO → UNKNOWN
+→ SOMENTE DELTA_UTIL VAI AO OWNER EXISTENTE
+```
+
+```text
+GITHUB_MUST_NOT_SUBSTITUTE_MISSING_CHAT_MEMORY=true
+RECOVER_BEFORE_REASK=true
+CROSS_CHAT_MODE=READ_ONLY
+```
+
+## Um cérebro lógico, várias superfícies
+
+```text
+GitHub + Obsidian/BRAIN + Grafo + Vetores + Chat + CLI + MCP + Hermes
+!= varios cerebros
+
+N SUPERFICIES
+→ N PERCEPCOES
+→ UM RENDEZVOUS
+→ UMA INTENCAO VIGENTE POR MISSAO
+→ UM WRITER POR ESCOPO
+→ UMA REALIDADE COMO JUDGE
+```
+
+`docs/BRAIN/`, Grafo Vivo e vetores são navegação/índices/projeções. Eles não substituem os owners canônicos.
+
+## Nota boa precisa endereço e relação
+
+Toda nota derivada que Hermes precise consumir deve carregar as propriedades do contrato:
+
+```text
+IDENTIDADE
++ TEMPO
++ CLASSIFICACAO
++ PROVENIENCIA
++ OWNER
+(+ CONSUMER/WRITER quando aplicavel)
+(+ RELACOES_SEMANTICAS quando houver ganho)
+→ NOTA ROTEAVEL
+```
+
+Relação semântica liga conhecimento, mas não fabrica causalidade:
+
+```text
+SEMANTIC_LINK != PROOF
+SEMANTIC_LINK != AUTHORITY
+GRAPH_EDGE != CAUSALITY
+```
+
+Sem propriedades obrigatórias:
+
+```text
+NOT_FLASH_READY
+```
+
+## Linguagem humana não precisa parecer código
+
+A fala do CHEFE pode ser curta, abreviada, metafórica ou cheia de digitação rápida sem perder intenção. A Casa deve preservar significado antes de exigir sintaxe perfeita.
+
+```text
+FALA_HUMANA
+→ PRESERVAR_SIGNIFICADO
+→ RESOLVER_CONTEXTO
+→ MEDIR_REALIDADE
+→ CONTRATO_DETERMINISTICO
+```
+
+Na apresentação ao humano, podem coexistir:
+
+```text
+CADENCIA_DE_VERSICULO_ORIGINAL_QUANDO_UTIL
++ BAIANES_FACIL
++ PRECISAO_TECNICA
++ PARALELISMO_NARRATIVO
+```
+
+Essa camada é apresentação. Não é autoridade religiosa, não altera prova e não substitui o contrato técnico.
+
+## Conexões rápidas
+
+- `LEIA-ME-IA.md` — porta universal atual.
+- `AGENTS.md` — contrato dos agentes.
+- `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md` — identidade/invariantes.
+- `docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md` — entrada de IA.
+- `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml` — ciclo mestre.
+- `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml` — gatilhos.
+- `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ARTIFACT-PROPERTIES.yml` — propriedades.
+- `docs/ARQUITETURA/CENTRALDARK-CAPABILITY-CONTRACT-ROUTER.md` — capacidade/instrumento/sinal.
+- `docs/BRAIN/01-CONCEITOS/Banda/BANDA_COMPASSO_GLOBAL.md` — semântica musical de compasso compartilhado.
+- `docs/BRAIN/00-MAPA-SISTEMA/BRAIN.md` — entrada humana do vault.
+- `docs/CONSCIENCIA/APRENDIZADOS/2026-08-17-mapa-mental-intencao-comprimida.md` — cristal histórico de compressão de intenção.
+
+## Regra final
+
+```text
+MUITOS_OLHOS=true
+MUITOS_CHEFES=false
+UMA_DIRECAO_POR_MISSAO=true
+ONE_WRITER_PER_SCOPE=true
+UNKNOWN_IS_NOT_PASS=true
+REALITY_IS_JUDGE=true
+GRAPH_IS_DERIVED_NOT_AUTHORITY=true
+ZERO_DUPLICATE_OWNER=true
+```

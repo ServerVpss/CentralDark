@@ -1,8 +1,8 @@
 ---
 title: "PADRAO EMOJIS"
-date: 2026-08-26
+date: 2026-08-27
 tags: ["consciencia"]
-updated: 2026-08-26
+updated: 2026-08-27
 ---
 
 # PADRAO-EMOJIS — CentralDark
@@ -94,11 +94,3 @@ updated: 2026-08-26
 ANCORADO: CHEFE / SEGREDO 👑
 DONO: docs/CONSCIENCIA/PADRAO-EMOJIS.md
 VERSAO: 1.0 (canônica, substitui link fantasma)
-
----
-
-## Conexões Rápidas
-
-- [[00-LEIA-PRIMEIRO]] — portão de entrada
-- [[MAPA-DO-CEREBRO]] — visão geral
-- [[CONSCIENCIA]] — documento mestre

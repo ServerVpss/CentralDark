@@ -214,11 +214,3 @@ Se isso funciona mas o `darkai` não, o problema tá no script local.
 Se você leu até aqui, sabe **tudo** que precisa. Volta pra [`00-COMECE-AQUI.md`](00-COMECE-AQUI.md) e testa cada exemplo.
 
 **Uma chave. Infinitas possibilidades.** 🔑
-
----
-
-## Conexões Rápidas
-
-- [[00-LEIA-PRIMEIRO]] — portão de entrada
-- [[MAPA-DO-CEREBRO]] — visão geral
-- [[CONSCIENCIA]] — documento mestre

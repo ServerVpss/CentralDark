@@ -1,8 +1,8 @@
 ---
 title: "CONVERGENCIA OMNIROUTE CENTRALDARK"
-date: 2026-08-26
+date: 2026-08-27
 tags: ["consciencia"]
-updated: 2026-08-26
+updated: 2026-08-27
 ---
 
 # CONVERGÊNCIA OMNIROUTE → CENTRALDARK
@@ -225,11 +225,3 @@ NEW_WORK_BASE=main
 PROMOTION=CANONICAL_SQUASH_FLOW
 PARALLEL_CONTROL_PLANE=NO
 ```
-
----
-
-## Conexões Rápidas
-
-- [[00-LEIA-PRIMEIRO]] — portão de entrada
-- [[MAPA-DO-CEREBRO]] — visão geral
-- [[CONSCIENCIA]] — documento mestre
