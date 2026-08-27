@@ -44,12 +44,13 @@ function existsAt(ref, p) {
   try { git(['cat-file', '-e', `${ref}:${p}`]); return true; } catch { return false; }
 }
 
-function childDirectoriesAt(ref, parent) {
+function childDirectoriesAt(ref, parent, repoRoot) {
   try {
-    const out = git(['ls-tree', '-d', '--name-only', ref, `${parent}/`]);
-    if (!out) return [];
-    return out.split(/\r?\n/u).filter(Boolean).map(v => v.replace(/\/$/, ''));
-  } catch { return []; }
+    const out = git(['ls-tree', '-d', '--name-only', `${ref}:${parent}`], repoRoot);
+    return out ? out.split(/\r?\n/u).filter(Boolean) : [];
+  } catch {
+    return [];
+  }
 }
 
 function collectParents(file) {
@@ -96,24 +97,33 @@ export function evaluate({ base, head, repoRoot = process.cwd() }) {
 
   const files = changed ? changed.split(/\r?\n/u).filter(Boolean) : [];
   const dirs = [...new Set(files.flatMap(collectParents))].sort();
+  const checkedParents = new Set();
 
   for (const dir of dirs) {
-    if (existsAt(base, dir)) continue; // legado não é quebrado retroativamente; nova expansão é fail-closed.
-    const result = validateNewDirName(path.posix.basename(dir));
-    if (!result.ok) failures.push(`${result.reason}:${dir}`);
+    if (!existsAt(base, dir)) {
+      const result = validateNewDirName(path.posix.basename(dir));
+      if (!result.ok) failures.push(`${result.reason}:${dir}`);
+    }
 
     const parent = path.posix.dirname(dir);
-    const children = childDirectoriesAt(head, parent).filter(child => path.posix.dirname(child) === parent || child.startsWith(`${parent}/`));
-    const directNames = new Set(children.map(child => child.slice(parent.length + 1).split('/')[0]).filter(Boolean));
-    if (directNames.size > 10) failures.push(`MAX_10_DIRECT_CHILD_DIRS_EXCEEDED:${parent}:${directNames.size}`);
+    if (!checkedParents.has(parent)) {
+      checkedParents.add(parent);
+      const directChildren = childDirectoriesAt(head, parent, repoRoot);
+      if (directChildren.length > 10) {
+        failures.push(`MAX_10_DIRECT_CHILD_DIRS_EXCEEDED:${parent}:${directChildren.length}`);
+      }
+    }
   }
 
   notes.push(`CHANGED_BRAIN_FILES=${files.length}`);
-  notes.push(`NEW_OR_TOUCHED_PARENT_DIRS=${dirs.length}`);
+  notes.push(`TOUCHED_BRAIN_DIRS=${dirs.length}`);
+  notes.push(`CHECKED_DIRECT_PARENTS=${checkedParents.size}`);
   return { ok: failures.length === 0, failures, notes };
 }
 
-if (import.meta.url === `file://${process.argv[1].replaceAll('\\', '/')}`) {
+const invokedPath = process.argv[1] ? path.resolve(process.argv[1]) : '';
+const modulePath = new URL(import.meta.url).pathname;
+if (invokedPath && path.resolve(modulePath) === invokedPath) {
   const args = parseArgs(process.argv.slice(2));
   const result = evaluate({ base: args.base, head: args.head });
   if (args.json) console.log(JSON.stringify({ HOUSE_TREE_LAW: result.ok ? 'PASS' : 'FAIL', ...result }, null, 2));
