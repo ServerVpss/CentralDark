@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-27T16:33:21.864Z",
-  "updatedAtBR": "27/08/2026, 13:33:21 BRT",
+  "updatedAt": "2026-08-27T16:46:26.173Z",
+  "updatedAtBR": "27/08/2026, 13:46:26 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "docs(skills): diagramas extras Mermaid (squash-loop + garimpo) usando ambas as skills (#1221)",
+    "lastCommit": "fix(ci): Lupa Drift Guard permite alias de compatibilidade (fecha #1188) (#1231)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-27T16:46:26.173Z",
+      "titulo": "Push na main · 4abd4f3c527c9aaaeb3112ce71936e8717a3391b",
+      "detalhe": "fix(ci): Lupa Drift Guard permite alias de compatibilidade (fecha #1188) (#1231)",
+      "area": "Repositório",
+      "sha": "4abd4f3",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-27T16:33:21.864Z",
       "titulo": "Push na main · d1b281dd724b77e087bce0194dcdcec3ecd1a4c4",
       "detalhe": "docs(skills): diagramas extras Mermaid (squash-loop + garimpo) usando ambas as skills (#1221)",
@@ -988,14 +996,6 @@
       "detalhe": "chore(deps): bump the pip group across 3 directories with 8 updates (#1070)",
       "area": "Repositório",
       "sha": "1bee783",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-20T08:08:22.267Z",
-      "titulo": "Push na main · c5e9d3131fc13ca1ead71923c54aea10b6ccb3dc",
-      "detalhe": "chore(deps): bump the npm_and_yarn group across 1 directory with 14 updates (#1083)",
-      "area": "Repositório",
-      "sha": "c5e9d31",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-27T16:46:26.173Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 4abd4f3c527c9aaaeb3112ce71936e8717a3391b (4abd4f3)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-27T16:33:21.864Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · d1b281dd724b77e087bce0194dcdcec3ecd1a4c4 (d1b281d)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-20T08:55:25.497Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 1bee7837a03fa4c20eadb711f1d6379f4d983f8a (1bee783)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-20T08:08:22.267Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · c5e9d3131fc13ca1ead71923c54aea10b6ccb3dc (c5e9d31)",
       "area": "Repositório",
       "status": "sucesso"
     }
