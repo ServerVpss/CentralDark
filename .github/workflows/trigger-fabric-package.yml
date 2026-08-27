@@ -68,7 +68,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python scripts/trigger-fabric/verify_repo_contract.py . \
+          python3 scripts/trigger-fabric/verify_repo_contract.py . \
             | tee docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/VERIFY-RESULT.txt
           grep -q '^REPO_CONTRACT_VERIFY=PASS$' docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/VERIFY-RESULT.txt
           grep -q '^BOT_ENTRY_CONTRACT=PASS$' docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/VERIFY-RESULT.txt
@@ -78,11 +78,11 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python scripts/trigger-fabric/centraldark_master_cycle.py --self-test \
+          python3 scripts/trigger-fabric/centraldark_master_cycle.py --self-test \
             | tee "$RUNNER_TEMP/master-cycle-self-test.txt"
           grep -q '"ok": true' "$RUNNER_TEMP/master-cycle-self-test.txt"
-          python scripts/trigger-fabric/verify_artifact_properties.py --self-test
-          python scripts/trigger-fabric/verify_artifact_properties.py --check-critical .
+          python3 scripts/trigger-fabric/verify_artifact_properties.py --self-test
+          python3 scripts/trigger-fabric/verify_artifact_properties.py --check-critical .
           node apps/modulos/HERMES-CORE/agents/GraphRAG-Master/agent.mjs --self-test \
             | tee "$RUNNER_TEMP/graphrag-master-cycle-self-test.txt"
           grep -q '"ok":true\|"ok": true' "$RUNNER_TEMP/graphrag-master-cycle-self-test.txt"
@@ -97,7 +97,7 @@ jobs:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
           set -euo pipefail
-          python scripts/trigger-fabric/verify_gatilho_aprendizado_sync.py . "$BASE_SHA"
+          python3 scripts/trigger-fabric/verify_gatilho_aprendizado_sync.py . "$BASE_SHA"
 
       - name: Verify distinct engineering compiler binding
         shell: bash
@@ -118,7 +118,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python .agents/skills/distinct-engineering-compiler/scripts/fixed_point_miner.py --self-test \
+          python3 .agents/skills/distinct-engineering-compiler/scripts/fixed_point_miner.py --self-test \
             | tee "$RUNNER_TEMP/fixed-point-miner.txt"
           grep -q '"status": "PASS"' "$RUNNER_TEMP/fixed-point-miner.txt"
           grep -q '"fixed_point": true' "$RUNNER_TEMP/fixed-point-miner.txt"
@@ -138,7 +138,7 @@ jobs:
           grep -q 'CAPABILITY_CONTRACT_ROUTER' docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml
           grep -q 'SIGNAL_TERRITORY_CRYSTALLIZATION' docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml
           grep -q 'FIXED_POINT_10X12_ADVERSARIAL_WHEN_CRYSTALLIZING' docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml
-          python scripts/trigger-fabric/semantic_crystal_tool.py --self-test \
+          python3 scripts/trigger-fabric/semantic_crystal_tool.py --self-test \
             | tee "$RUNNER_TEMP/semantic-crystal-self-test.txt"
           grep -q '^SEMANTIC_CRYSTAL_TOOL_SELF_TEST=PASS$' "$RUNNER_TEMP/semantic-crystal-self-test.txt"
           echo 'SEMANTIC_CRYSTAL_CAPABILITY_FABRIC=PASS'
@@ -153,10 +153,10 @@ jobs:
           grep -q 'SELF_HEALING_FAILURE_LOOP' .agents/skills/engine-gap-closure/SKILL.md
           grep -q 'ENGINE_GAP_FIXED_POINT' .agents/skills/engine-gap-closure/SKILL.md
           test -s scripts/trigger-fabric/engine_gap_fixed_point.py
-          python scripts/trigger-fabric/engine_gap_probe.py --self-test \
+          python3 scripts/trigger-fabric/engine_gap_probe.py --self-test \
             | tee .artifacts-engine-gap-probe-self-test.txt
           grep -q '"ok": true' .artifacts-engine-gap-probe-self-test.txt
-          python scripts/trigger-fabric/engine_gap_fixed_point.py --self-test \
+          python3 scripts/trigger-fabric/engine_gap_fixed_point.py --self-test \
             | tee .artifacts-engine-gap-fixed-point-self-test.txt
           grep -q '"ok": true' .artifacts-engine-gap-fixed-point-self-test.txt
           grep -q 'positive_reaches_fixed_point' .artifacts-engine-gap-fixed-point-self-test.txt
@@ -181,7 +181,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p .artifacts/trigger-fabric
-          python scripts/trigger-fabric/build_package.py | tee .artifacts/trigger-fabric/build-result.txt
+          python3 scripts/trigger-fabric/build_package.py | tee .artifacts/trigger-fabric/build-result.txt
           test -s .artifacts/trigger-fabric/CENTRALDARK_TRIGGER_FABRIC_FULL_PACKAGE.zip
 
       - name: Fresh-extraction counterproof
@@ -190,13 +190,13 @@ jobs:
           set -euo pipefail
           rm -rf /tmp/trigger-fabric-verify
           mkdir -p /tmp/trigger-fabric-verify
-          python - <<'PY'
+          python3 - <<'PY'
           import zipfile
           z='.artifacts/trigger-fabric/CENTRALDARK_TRIGGER_FABRIC_FULL_PACKAGE.zip'
           with zipfile.ZipFile(z) as f:
               f.extractall('/tmp/trigger-fabric-verify')
           PY
-          python scripts/trigger-fabric/verify_package.py \
+          python3 scripts/trigger-fabric/verify_package.py \
             /tmp/trigger-fabric-verify/CENTRALDARK_TRIGGER_FABRIC_FULL_PACKAGE \
             | tee .artifacts/trigger-fabric/extracted-verify-result.txt
           grep -q '^VERIFY=PASS$' .artifacts/trigger-fabric/extracted-verify-result.txt
