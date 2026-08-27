@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-27T16:46:26.173Z",
-  "updatedAtBR": "27/08/2026, 13:46:26 BRT",
+  "updatedAt": "2026-08-27T17:30:17.619Z",
+  "updatedAtBR": "27/08/2026, 14:30:17 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "fix(ci): Lupa Drift Guard permite alias de compatibilidade (fecha #1188) (#1231)",
+    "lastCommit": "Fix hermes temp (#1232)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-27T17:30:17.619Z",
+      "titulo": "Push na main · 8348eacdcb48bb3319dc89d48249852cad3601bc",
+      "detalhe": "Fix hermes temp (#1232)",
+      "area": "Repositório",
+      "sha": "8348eac",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-27T16:46:26.173Z",
       "titulo": "Push na main · 4abd4f3c527c9aaaeb3112ce71936e8717a3391b",
       "detalhe": "fix(ci): Lupa Drift Guard permite alias de compatibilidade (fecha #1188) (#1231)",
@@ -988,14 +996,6 @@
       "detalhe": "chore(deps): bump the npm_and_yarn group across 1 directory with 3 updates (#1088)",
       "area": "Repositório",
       "sha": "f0e1415",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-20T08:55:25.497Z",
-      "titulo": "Push na main · 1bee7837a03fa4c20eadb711f1d6379f4d983f8a",
-      "detalhe": "chore(deps): bump the pip group across 3 directories with 8 updates (#1070)",
-      "area": "Repositório",
-      "sha": "1bee783",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-27T17:30:17.619Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 8348eacdcb48bb3319dc89d48249852cad3601bc (8348eac)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-27T16:46:26.173Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 4abd4f3c527c9aaaeb3112ce71936e8717a3391b (4abd4f3)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-20T09:14:56.335Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · f0e141591aefc6d1a915cdfd423e501b1c5b3d72 (f0e1415)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-20T08:55:25.497Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 1bee7837a03fa4c20eadb711f1d6379f4d983f8a (1bee783)",
       "area": "Repositório",
       "status": "sucesso"
     }
