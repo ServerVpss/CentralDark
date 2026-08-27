@@ -96,7 +96,7 @@ body{
   content:'';position:absolute;inset:0;pointer-events:none;
   background:radial-gradient(120% 100% at 50% 50%, transparent 45%, rgba(0,0,0,.72) 100%);
 }
-.suporte{position:relative;perspective:1400px;z-index:1;}
+.suporte{position:relative;perspective:800px;perspective-origin:50% 45%;z-index:1;}
 
 /* ============================================================
    A CARTA
@@ -106,8 +106,12 @@ body{
   width:var(--carta-l);height:var(--carta-a);
   border-radius:20px;
   transform-style:preserve-3d;
-  transition:transform .18s cubic-bezier(.2,.7,.3,1);
-  box-shadow:0 34px 70px -20px rgba(0,0,0,.9), 0 0 0 1px rgba(0,0,0,.6);
+  /* transform e da vanilla-tilt (data-tilt). Aqui fica so o que ela nao faz. */
+  transition:box-shadow .4s ease;
+  /* RELEVO INV-2 — a sombra contra-desloca: objeto inclina, sombra foge pro lado oposto */
+  box-shadow:
+    calc(var(--px,0) * -30px) calc(var(--py,0) * -20px + 34px) 70px -20px rgba(0,0,0,.9),
+    0 0 0 1px rgba(0,0,0,.6);
 }
 .carta-borda{
   position:absolute;inset:0;border-radius:20px;overflow:hidden;
@@ -123,6 +127,7 @@ body{
 }
 .carta-interior{
   position:relative;height:100%;border-radius:11px;overflow:hidden;
+  transform:translateZ(45px);
   padding:14px 15px 12px;
   display:flex;flex-direction:column;gap:9px;
   color:var(--tinta);
@@ -147,7 +152,8 @@ body{
 .orn-br{bottom:4px;right:4px;transform:scale(-1,-1);}
 
 /* --- topo --- */
-.carta-topo{position:relative;z-index:3;display:flex;align-items:flex-start;gap:10px;}
+.carta-topo{
+  transform:translateZ(70px);position:relative;z-index:3;display:flex;align-items:flex-start;gap:10px;}
 .selo{
   flex:0 0 auto;width:34px;height:34px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;
@@ -178,7 +184,8 @@ body{
 .nivel-sub{display:block;font-family:var(--mono);font-size:7px;letter-spacing:.1em;color:#9C8352;margin-top:1px;}
 
 /* --- arte --- */
-.carta-arte{position:relative;z-index:3;margin:0;flex:0 0 auto;height:250px;}
+.carta-arte{
+  transform:translateZ(110px);position:relative;z-index:3;margin:0;flex:0 0 auto;height:250px;}
 .arte-caixa{
   position:absolute;inset:0;border-radius:4px;overflow:hidden;
   border:2px solid rgba(122,74,20,.62);
@@ -211,6 +218,7 @@ body{
 
 /* --- regras --- */
 .carta-regras{
+  transform:translateZ(75px);
   position:relative;z-index:3;flex:1 1 auto;min-height:0;overflow:hidden;
   padding:9px 11px;border-radius:3px;
   border:1px solid rgba(122,74,20,.42);
@@ -231,6 +239,7 @@ body{
   max-height:56px;overflow:hidden;
 }
 .carta-rodape{
+  transform:translateZ(65px);
   position:relative;z-index:3;flex:0 0 auto;
   display:flex;justify-content:space-between;align-items:center;
   font-family:var(--mono);font-size:7px;letter-spacing:.16em;color:rgba(90,66,30,.72);
@@ -282,6 +291,7 @@ body{
 /* --- foil --- */
 .foil{
   position:absolute;inset:0;border-radius:20px;pointer-events:none;z-index:6;
+  transform:translateZ(150px);
   opacity:0;transition:opacity .35s ease;
   background:
     conic-gradient(from var(--ang,0deg) at 42% 38%,
@@ -295,13 +305,21 @@ body{
     transparent 34%, rgba(255,255,255,.55) 46%, rgba(150,235,255,.4) 51%, transparent 64%);
   mix-blend-mode:overlay;
 }
-.carta.foil-on .foil{opacity:.42;}
-.carta.foil-on .foil{animation:girar 9s linear infinite;}
+.carta.foil-on .foil{opacity:calc(.30 + var(--brilho,0) * .34);}
+/* FIGURINHA — sem animation: o angulo do holo vem do ponteiro, nao do relogio */
+.carta.foil-on .foil{--ang:calc(var(--px,0) * 220deg + var(--py,0) * 120deg);}
 @keyframes girar{to{--ang:360deg;}}
 @property --ang{syntax:'<angle>';inherits:false;initial-value:0deg;}
 
 /* modo export: tudo que html2canvas não entende sai de cena */
 .carta.forjando{transform:none !important;transition:none !important;box-shadow:none !important;}
+/* RELEVO — html2canvas nao entende translateZ: achatar a escada inteira no export */
+.carta.forjando .carta-interior,
+.carta.forjando .carta-topo,
+.carta.forjando .carta-arte,
+.carta.forjando .carta-regras,
+.carta.forjando .carta-rodape,
+.carta.forjando .foil{transform:none !important;}
 .carta.forjando .foil{
   animation:none !important;mix-blend-mode:normal !important;opacity:.3 !important;
   background:linear-gradient(112deg, transparent 30%, rgba(255,255,255,.5) 44%, rgba(120,220,255,.34) 52%, transparent 68%) !important;
@@ -427,12 +445,95 @@ textarea{resize:vertical;min-height:62px;line-height:1.45;}
 @media (prefers-reduced-motion:reduce){
   *{animation:none !important;transition:none !important;}
 }
+
+/* ============================================================
+   PAINEL DE AJUSTE — ferramenta de calibragem do CHEFE
+   Nao afeta a carta exportada: some no modo .forjando.
+   ============================================================ */
+#ajustePivete{
+  position:fixed;left:12px;top:12px;z-index:9999;
+  background:var(--carvao);border:1px solid var(--ouro);border-radius:10px;
+  padding:12px 14px;font-family:var(--mono);color:var(--pergaminho);
+  font-size:11px;width:236px;box-shadow:0 10px 40px rgba(0,0,0,.8);
+  transition:width .2s, padding .2s;
+}
+#ajustePivete h2{
+  margin:0 0 10px;font-size:11px;font-weight:700;letter-spacing:.12em;
+  color:var(--ouro-claro);display:flex;justify-content:space-between;align-items:center;gap:8px;
+}
+#ajustePivete button{
+  background:none;border:1px solid var(--linha);color:var(--pergaminho-fundo);
+  border-radius:4px;font-family:var(--mono);font-size:10px;cursor:pointer;padding:2px 7px;
+}
+#ajustePivete button:hover{border-color:var(--ouro);color:var(--ouro-claro);}
+#ajustePivete label{display:block;margin-bottom:9px;color:var(--pergaminho-fundo);}
+#ajustePivete input[type=range]{width:100%;accent-color:var(--ouro);margin-top:4px;}
+#ajustePivete .leitura{
+  color:var(--ambar);border-top:1px solid var(--linha);padding-top:8px;margin-top:2px;
+  display:flex;justify-content:space-between;align-items:center;gap:8px;
+}
+#ajustePivete .dica{color:var(--ouro-escuro);margin-top:7px;font-size:9.5px;line-height:1.45;}
+#ajustePivete.encolhido .corpo{display:none;}
+#ajustePivete.encolhido{width:auto;padding:8px 10px;}
+#ajustePivete.encolhido h2{margin:0;}
+.carta.forjando ~ #ajustePivete, body:has(.carta.forjando) #ajustePivete{display:none;}
+@media(max-width:520px){ #ajustePivete{position:static;width:auto;margin:10px;} }
+
+
+/* ============================================================
+   ASSINATURA DA CASA
+   ============================================================ */
+.barra-lema{
+  font-family:var(--mono);font-size:9px;font-weight:500;
+  letter-spacing:.2em;text-transform:uppercase;
+  color:var(--ouro);opacity:.85;
+  padding:3px 10px;margin-left:12px;
+  border:1px solid var(--ouro-escuro);border-radius:999px;
+  background:rgba(192,144,43,.07);white-space:nowrap;
+}
+.rodape-casa{
+  margin:34px auto 0;max-width:1180px;padding:20px 4px 0;
+  border-top:1px solid var(--linha);
+  display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;
+}
+.rodape-casa .frase{
+  font-family:var(--disp);font-size:19px;font-weight:700;letter-spacing:.02em;
+  color:var(--pergaminho-med);margin:0;
+}
+.rodape-casa .frase em{font-style:normal;color:var(--ouro-claro);}
+.rodape-casa .assina{
+  font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--ouro-escuro);margin:0;
+}
+@media(max-width:720px){.barra-lema{display:none;}}
 </style>
+<script>/* vanilla-tilt.js v1.8.1 · sha256 de6fa8d3f40dbae2726a72f7d1ae46bb0588267af05355bef1d128f737f4a282 */
+var VanillaTilt=function(){"use strict";class t{constructor(e,i={}){if(!(e instanceof Node))throw"Can't initialize VanillaTilt because "+e+" is not a Node.";this.width=null,this.height=null,this.clientWidth=null,this.clientHeight=null,this.left=null,this.top=null,this.gammazero=null,this.betazero=null,this.lastgammazero=null,this.lastbetazero=null,this.transitionTimeout=null,this.updateCall=null,this.event=null,this.updateBind=this.update.bind(this),this.resetBind=this.reset.bind(this),this.element=e,this.settings=this.extendSettings(i),this.reverse=this.settings.reverse?-1:1,this.resetToStart=t.isSettingTrue(this.settings["reset-to-start"]),this.glare=t.isSettingTrue(this.settings.glare),this.glarePrerender=t.isSettingTrue(this.settings["glare-prerender"]),this.fullPageListening=t.isSettingTrue(this.settings["full-page-listening"]),this.gyroscope=t.isSettingTrue(this.settings.gyroscope),this.gyroscopeSamples=this.settings.gyroscopeSamples,this.elementListener=this.getElementListener(),this.glare&&this.prepareGlare(),this.fullPageListening&&this.updateClientSize(),this.addEventListeners(),this.reset(),!1===this.resetToStart&&(this.settings.startX=0,this.settings.startY=0)}static isSettingTrue(t){return""===t||!0===t||1===t}getElementListener(){if(this.fullPageListening)return window.document;if("string"==typeof this.settings["mouse-event-element"]){const t=document.querySelector(this.settings["mouse-event-element"]);if(t)return t}return this.settings["mouse-event-element"]instanceof Node?this.settings["mouse-event-element"]:this.element}addEventListeners(){this.onMouseEnterBind=this.onMouseEnter.bind(this),this.onMouseMoveBind=this.onMouseMove.bind(this),this.onMouseLeaveBind=this.onMouseLeave.bind(this),this.onWindowResizeBind=this.onWindowResize.bind(this),this.onDeviceOrientationBind=this.onDeviceOrientation.bind(this),this.elementListener.addEventListener("mouseenter",this.onMouseEnterBind),this.elementListener.addEventListener("mouseleave",this.onMouseLeaveBind),this.elementListener.addEventListener("mousemove",this.onMouseMoveBind),(this.glare||this.fullPageListening)&&window.addEventListener("resize",this.onWindowResizeBind),this.gyroscope&&window.addEventListener("deviceorientation",this.onDeviceOrientationBind)}removeEventListeners(){this.elementListener.removeEventListener("mouseenter",this.onMouseEnterBind),this.elementListener.removeEventListener("mouseleave",this.onMouseLeaveBind),this.elementListener.removeEventListener("mousemove",this.onMouseMoveBind),this.gyroscope&&window.removeEventListener("deviceorientation",this.onDeviceOrientationBind),(this.glare||this.fullPageListening)&&window.removeEventListener("resize",this.onWindowResizeBind)}destroy(){clearTimeout(this.transitionTimeout),null!==this.updateCall&&cancelAnimationFrame(this.updateCall),this.element.style.willChange="",this.element.style.transition="",this.element.style.transform="",this.resetGlare(),this.removeEventListeners(),this.element.vanillaTilt=null,delete this.element.vanillaTilt,this.element=null}onDeviceOrientation(t){if(null===t.gamma||null===t.beta)return;this.updateElementPosition(),this.gyroscopeSamples>0&&(this.lastgammazero=this.gammazero,this.lastbetazero=this.betazero,null===this.gammazero?(this.gammazero=t.gamma,this.betazero=t.beta):(this.gammazero=(t.gamma+this.lastgammazero)/2,this.betazero=(t.beta+this.lastbetazero)/2),this.gyroscopeSamples-=1);const e=this.settings.gyroscopeMaxAngleX-this.settings.gyroscopeMinAngleX,i=this.settings.gyroscopeMaxAngleY-this.settings.gyroscopeMinAngleY,s=e/this.width,n=i/this.height,l=(t.gamma-(this.settings.gyroscopeMinAngleX+this.gammazero))/s,a=(t.beta-(this.settings.gyroscopeMinAngleY+this.betazero))/n;null!==this.updateCall&&cancelAnimationFrame(this.updateCall),this.event={clientX:l+this.left,clientY:a+this.top},this.updateCall=requestAnimationFrame(this.updateBind)}onMouseEnter(){this.updateElementPosition(),this.element.style.willChange="transform",this.setTransition()}onMouseMove(t){null!==this.updateCall&&cancelAnimationFrame(this.updateCall),this.event=t,this.updateCall=requestAnimationFrame(this.updateBind)}onMouseLeave(){this.setTransition(),this.settings.reset&&requestAnimationFrame(this.resetBind)}reset(){this.onMouseEnter(),this.fullPageListening?this.event={clientX:(this.settings.startX+this.settings.max)/(2*this.settings.max)*this.clientWidth,clientY:(this.settings.startY+this.settings.max)/(2*this.settings.max)*this.clientHeight}:this.event={clientX:this.left+(this.settings.startX+this.settings.max)/(2*this.settings.max)*this.width,clientY:this.top+(this.settings.startY+this.settings.max)/(2*this.settings.max)*this.height};let t=this.settings.scale;this.settings.scale=1,this.update(),this.settings.scale=t,this.resetGlare()}resetGlare(){this.glare&&(this.glareElement.style.transform="rotate(180deg) translate(-50%, -50%)",this.glareElement.style.opacity="0")}getValues(){let t,e;return this.fullPageListening?(t=this.event.clientX/this.clientWidth,e=this.event.clientY/this.clientHeight):(t=(this.event.clientX-this.left)/this.width,e=(this.event.clientY-this.top)/this.height),t=Math.min(Math.max(t,0),1),e=Math.min(Math.max(e,0),1),{tiltX:(this.reverse*(this.settings.max-t*this.settings.max*2)).toFixed(2),tiltY:(this.reverse*(e*this.settings.max*2-this.settings.max)).toFixed(2),percentageX:100*t,percentageY:100*e,angle:Math.atan2(this.event.clientX-(this.left+this.width/2),-(this.event.clientY-(this.top+this.height/2)))*(180/Math.PI)}}updateElementPosition(){let t=this.element.getBoundingClientRect();this.width=this.element.offsetWidth,this.height=this.element.offsetHeight,this.left=t.left,this.top=t.top}update(){let t=this.getValues();this.element.style.transform="perspective("+this.settings.perspective+"px) rotateX("+("x"===this.settings.axis?0:t.tiltY)+"deg) rotateY("+("y"===this.settings.axis?0:t.tiltX)+"deg) scale3d("+this.settings.scale+", "+this.settings.scale+", "+this.settings.scale+")",this.glare&&(this.glareElement.style.transform=`rotate(${t.angle}deg) translate(-50%, -50%)`,this.glareElement.style.opacity=`${t.percentageY*this.settings["max-glare"]/100}`),this.element.dispatchEvent(new CustomEvent("tiltChange",{detail:t})),this.updateCall=null}prepareGlare(){if(!this.glarePrerender){const t=document.createElement("div");t.classList.add("js-tilt-glare");const e=document.createElement("div");e.classList.add("js-tilt-glare-inner"),t.appendChild(e),this.element.appendChild(t)}this.glareElementWrapper=this.element.querySelector(".js-tilt-glare"),this.glareElement=this.element.querySelector(".js-tilt-glare-inner"),this.glarePrerender||(Object.assign(this.glareElementWrapper.style,{position:"absolute",top:"0",left:"0",width:"100%",height:"100%",overflow:"hidden","pointer-events":"none","border-radius":"inherit"}),Object.assign(this.glareElement.style,{position:"absolute",top:"50%",left:"50%","pointer-events":"none","background-image":"linear-gradient(0deg, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%)",transform:"rotate(180deg) translate(-50%, -50%)","transform-origin":"0% 0%",opacity:"0"}),this.updateGlareSize())}updateGlareSize(){if(this.glare){const t=2*(this.element.offsetWidth>this.element.offsetHeight?this.element.offsetWidth:this.element.offsetHeight);Object.assign(this.glareElement.style,{width:`${t}px`,height:`${t}px`})}}updateClientSize(){this.clientWidth=window.innerWidth||document.documentElement.clientWidth||document.body.clientWidth,this.clientHeight=window.innerHeight||document.documentElement.clientHeight||document.body.clientHeight}onWindowResize(){this.updateGlareSize(),this.updateClientSize()}setTransition(){clearTimeout(this.transitionTimeout),this.element.style.transition=this.settings.speed+"ms "+this.settings.easing,this.glare&&(this.glareElement.style.transition=`opacity ${this.settings.speed}ms ${this.settings.easing}`),this.transitionTimeout=setTimeout(()=>{this.element.style.transition="",this.glare&&(this.glareElement.style.transition="")},this.settings.speed)}extendSettings(t){let e={reverse:!1,max:15,startX:0,startY:0,perspective:1e3,easing:"cubic-bezier(.03,.98,.52,.99)",scale:1,speed:300,transition:!0,axis:null,glare:!1,"max-glare":1,"glare-prerender":!1,"full-page-listening":!1,"mouse-event-element":null,reset:!0,"reset-to-start":!0,gyroscope:!0,gyroscopeMinAngleX:-45,gyroscopeMaxAngleX:45,gyroscopeMinAngleY:-45,gyroscopeMaxAngleY:45,gyroscopeSamples:10},i={};for(var s in e)if(s in t)i[s]=t[s];else if(this.element.hasAttribute("data-tilt-"+s)){let t=this.element.getAttribute("data-tilt-"+s);try{i[s]=JSON.parse(t)}catch(e){i[s]=t}}else i[s]=e[s];return i}static init(e,i){e instanceof Node&&(e=[e]),e instanceof NodeList&&(e=[].slice.call(e)),e instanceof Array&&e.forEach(e=>{"vanillaTilt"in e||(e.vanillaTilt=new t(e,i))})}}return"undefined"!=typeof document&&(window.VanillaTilt=t,t.init(document.querySelectorAll("[data-tilt]"))),t}();
+</script>
 </head>
 <body>
 
+<div id="ajustePivete">
+  <h2>AJUSTE NA MÃO <button id="ajEncolher" title="encolher">–</button></h2>
+  <div class="corpo">
+    <label>quanto vira
+      <input id="ajVira" type="range" min="4" max="34" value="20">
+    </label>
+    <label>fundo do desenho
+      <input id="ajFundo" type="range" min="0" max="220" value="100">
+    </label>
+    <label>força do arco-íris
+      <input id="ajArco" type="range" min="0" max="200" value="100">
+    </label>
+    <div class="leitura"><span id="ajLeitura">—</span><button id="ajCopiar">copiar</button></div>
+    <div class="dica">passa o mouse na carta e mexe as barras. quando gostar, copia os números.</div>
+  </div>
+</div>
+
+
 <div class="barra">
   <span class="barra-titulo">🔥 CENTRALDARK — FORJA DE CARTAS [ATIVA]</span>
+  <span class="barra-lema">🔍 Lupa na mão · Intenção na frente</span>
   <span class="barra-nota">deck <b id="contaDeck">16</b> cartas · <b id="contaAbertos" style="color:var(--ambar)">0</b> em aberto · export PNG 2.5×</span>
 </div>
 
@@ -441,7 +542,9 @@ textarea{resize:vertical;min-height:62px;line-height:1.45;}
   <!-- ======================= PALCO ======================= -->
   <main class="palco">
     <div class="suporte">
-      <article class="carta foil-on" id="carta" data-raridade="LENDA" data-veredito="VERIFICADO">
+      <article class="carta foil-on" id="carta"
+        data-tilt data-tilt-glare data-tilt-max="20" data-tilt-speed="400"
+        data-tilt-perspective="800" data-tilt-max-glare="0.45" data-tilt-scale="1.02" data-raridade="LENDA" data-veredito="VERIFICADO">
         <div class="carta-borda">
           <div class="carta-interior">
             <img class="orn orn-tl" alt="" id="ornTL"><img class="orn orn-tr" alt="" id="ornTR">
@@ -1083,10 +1186,19 @@ if(!reduzido){
     const r = carta.getBoundingClientRect();
     const px = (ev.clientX - r.left) / r.width - .5;
     const py = (ev.clientY - r.top) / r.height - .5;
-    carta.style.transform = `rotateY(${(px*13).toFixed(2)}deg) rotateX(${(-py*13).toFixed(2)}deg) translateZ(0)`;
-    $('foil').style.setProperty('--sheen', (112 + px*70).toFixed(0) + 'deg');
+    /* FIGURINHA — o ponteiro dirige tilt, sombra, angulo do holo e brilho */
+    carta.style.setProperty('--px', px.toFixed(3));
+    carta.style.setProperty('--py', py.toFixed(3));
+    carta.style.setProperty('--brilho', Math.min(1, Math.hypot(px, py) * 2).toFixed(3));
+    carta.style.transition = 'box-shadow .08s linear';
+    $('foil').style.setProperty('--sheen', (112 + px*150).toFixed(0) + 'deg');
   });
-  palco.addEventListener('pointerleave', ()=>{ carta.style.transform = ''; });
+  palco.addEventListener('pointerleave', ()=>{
+    carta.style.transition = '';
+    carta.style.setProperty('--px', 0);
+    carta.style.setProperty('--py', 0);
+    carta.style.setProperty('--brilho', 0);
+  });
 }
 
 /* ============================================================
@@ -1120,5 +1232,85 @@ function avisar(texto, ruim){
   window.addEventListener('resize', desenharCarta);
 })();
 </script>
+<script>
+/* ============================================================
+   PAINEL DE AJUSTE — calibragem ao vivo
+   ============================================================ */
+(function(){
+  var carta = document.getElementById('carta');
+  var sup   = document.querySelector('.suporte');
+  var painel= document.getElementById('ajustePivete');
+  if(!carta || !painel) return;
+
+  var alvos = {
+    interior: document.querySelector('.carta-interior'),
+    topo:     document.querySelector('.carta-topo'),
+    regras:   document.querySelector('.carta-regras'),
+    rodape:   document.querySelector('.carta-rodape'),
+    arte:     document.querySelector('.carta-arte'),
+    foil:     document.getElementById('foil')
+  };
+  var base = { interior:45, rodape:65, topo:70, regras:75, arte:110, foil:150 };
+  var est  = { vira:20, fundo:100, arco:100 };
+
+  function aplicar(){
+    sup.style.perspective = (1600 - est.vira*40) + 'px';
+    carta.style.transform =
+      'rotateY(calc(var(--px,0) * '+est.vira+'deg)) rotateX(calc(var(--py,0) * -'+est.vira+'deg))';
+    var f = est.fundo/100;
+    for (var k in alvos){ if(alvos[k]) alvos[k].style.transform = 'translateZ('+Math.round(base[k]*f)+'px)'; }
+    if(alvos.foil){
+      var b = parseFloat(carta.style.getPropertyValue('--brilho')) || 0;
+      alvos.foil.style.opacity = ((0.30 + b*0.34) * est.arco/100).toFixed(3);
+    }
+    document.getElementById('ajLeitura').textContent =
+      'vira '+est.vira+' · fundo '+est.fundo+'% · arco '+est.arco+'%';
+  }
+
+  document.getElementById('ajVira').oninput  = function(e){ est.vira  = +e.target.value; aplicar(); };
+  document.getElementById('ajFundo').oninput = function(e){ est.fundo = +e.target.value; aplicar(); };
+  document.getElementById('ajArco').oninput  = function(e){ est.arco  = +e.target.value; aplicar(); };
+
+  document.getElementById('ajEncolher').onclick = function(){
+    painel.classList.toggle('encolhido');
+    this.textContent = painel.classList.contains('encolhido') ? '+' : '–';
+  };
+  document.getElementById('ajCopiar').onclick = function(){
+    var txt = 'vira='+est.vira+' fundo='+est.fundo+' arco='+est.arco;
+    navigator.clipboard && navigator.clipboard.writeText(txt);
+    var o = this.textContent; this.textContent = 'copiado';
+    var b = this; setTimeout(function(){ b.textContent = o; }, 1200);
+  };
+
+  /* o brilho muda a cada movimento: reaplica a opacidade do foil */
+  var palcoEl = document.querySelector('.palco');
+  if(palcoEl) palcoEl.addEventListener('pointermove', function(){
+    if(alvos.foil){
+      var b = parseFloat(carta.style.getPropertyValue('--brilho')) || 0;
+      alvos.foil.style.opacity = ((0.30 + b*0.34) * est.arco/100).toFixed(3);
+    }
+  });
+
+  aplicar();
+})();
+</script>
+<script>
+/* vanilla-tilt auto-inicia ao ser lida; como ela esta no <head>, a carta ainda
+   nao existia. Inicializacao explicita depois do DOM montado. */
+(function(){
+  function ligar(){
+    if(typeof VanillaTilt==="undefined") return;
+    var el=document.getElementById("carta");
+    if(!el||el.vanillaTilt) return;
+    VanillaTilt.init(el,{max:20,speed:400,perspective:800,scale:1.02,glare:true,"max-glare":0.45,gyroscope:false});
+  }
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",ligar);
+  else ligar();
+})();
+</script>
+<footer class="rodape-casa">
+  <p class="frase"><em>Lupa na mão.</em> Intenção na frente.</p>
+  <p class="assina">CentralDark · SEGREDO/CHEFE</p>
+</footer>
 </body>
 </html>
