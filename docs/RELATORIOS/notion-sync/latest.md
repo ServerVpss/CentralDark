@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-08-27T16:25:07.347Z
+# 🧠 Notion Sync — 2026-08-27T21:00:53.937Z
 
-- **Commit fonte:** `d1b281dd724b77e087bce0194dcdcec3ecd1a4c4`
+- **Commit fonte:** `9b557d96c5947e543ce096839e3a57323a586bab`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 437 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 5 criadas · ♻️ 438 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
 | aprendizados | 30 | 0 | 30 | 0 | 0 |
-| estrutura | 364 | 1 | 363 | 0 | 0 |
+| estrutura | 369 | 5 | 364 | 0 | 0 |
 
 ## Operações
 
@@ -210,7 +210,12 @@
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/incidente-2026-07-05-mcp-dump-perdido.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/socorro-2026-07-05.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ARQUITETURA-CHAVES-AI-PROXY.md |
+| estrutura | criado | docs/CONSCIENCIA/ARQUITETURA/ARVORE-DO-PROJETO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ARQUITETURA/DESIGN-SISTEMA.md |
+| estrutura | criado | docs/CONSCIENCIA/ARQUITETURA/DOCUMENTACAO-OBRIGATORIA.md |
+| estrutura | criado | docs/CONSCIENCIA/ARQUITETURA/LEIA-PRIMEIRO.md |
+| estrutura | criado | docs/CONSCIENCIA/ARQUITETURA/MANUAL-DO-DONO.md |
+| estrutura | criado | docs/CONSCIENCIA/ARQUITETURA/PATCH-RELEVO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/APRENDIZADOS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/CONSELHO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-02-2304-em-1-frase-qual-sua-fun-o.md |
@@ -449,7 +454,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/VAULT/PROMPT-MESTRE.md |
 | estrutura | atualizado | docs/CONSCIENCIA/VAULT/REGRAS-AUTONOMIA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/VAULT/REGRAS-DOC-CHECK.md |
-| estrutura | criado | docs/CONSCIENCIA/VISUALIZACAO-MERMAID-PADRAO.md |
+| estrutura | atualizado | docs/CONSCIENCIA/VISUALIZACAO-MERMAID-PADRAO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/WEBHOOK-DEPLOY-SEGURO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/agente/elite-mapper/README.md |
 | estrutura | atualizado | docs/CONSCIENCIA/relatorios/00_RESUMO_EXECUTIVO.md |
