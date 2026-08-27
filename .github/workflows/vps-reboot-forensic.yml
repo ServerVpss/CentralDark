@@ -1,0 +1,51 @@
+name: VPS Reboot Forensic
+
+on:
+  workflow_dispatch:
+    inputs:
+      mutation:
+        description: 'Execute reboot (MUTATION=1) or dry-run (MUTATION=0)'
+        type: boolean
+        default: false
+        required: false
+
+permissions:
+  contents: read
+
+jobs:
+  forensic:
+    name: Contabo/Cloudflare Forensics + Reboot
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      CONTABO_CLIENT_ID: ${{ secrets.CONTABO_CLIENT_ID }}
+      CONTABO_CLIENT_SECRET: ${{ secrets.CONTABO_CLIENT_SECRET }}
+      CONTABO_API_USER: ${{ secrets.CONTABO_API_USER }}
+      CONTABO_API_PASSWORD: ${{ secrets.CONTABO_API_PASSWORD }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      MUTATION: ${{ github.event.inputs.mutation == true && '1' || '0' }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 1
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: Run VPS Reboot Forensic
+        run: |
+          cd /home/runner/work/CentralDark/CentralDark
+          python3 scripts/vps-reboot-forensic.py
+
+      - name: Upload forensics artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vps-forensics-${{ github.run_id }}
+          path: |
+            /home/runner/work/CentralDark/CentralDark/.forensics/contabo/
+            /home/runner/work/CentralDark/CentralDark/.forensics/cloudflare/
+          retention-days: 30
