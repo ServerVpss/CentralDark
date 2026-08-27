@@ -66,7 +66,9 @@ jobs:
         run: |
           set -e
           test -f .agents/skills/meta-lupa/SKILL.md || { echo "❌ canônica ausente"; exit 1; }
-          for proibido in tecnica-da-lupa metalupa-bayesiana-canonica lupa-premium; do
+          # skill removida reapareceu = skill PARALALA REAL (segunda autoridade), não alias de compatibilidade.
+          # tecnica-da-lupa é COMPATIBILITY_ALIAS legítimo (owner=meta-lupa, status=COMPATIBILITY_ALIAS no frontmatter).
+          for proibido in metalupa-bayesiana-canonica lupa-premium; do
             for base in .agents/skills .claude/skills .workspace/skills; do
               if [ -d "$base/$proibido" ]; then
                 echo "❌ skill removida reapareceu: $base/$proibido"
@@ -74,7 +76,20 @@ jobs:
               fi
             done
           done
-          echo "✅ meta-lupa é a única técnica Lupa canônica ativa; outras skills legítimas podem coexistir"
+          # guard extra: bloquear qualquer skill que se declare second_owner/second_skill real (não alias redirect)
+          for base in .agents/skills .claude/skills .workspace/skills; do
+            for d in "$base"/*/; do
+              [ -f "${d}SKILL.md" ] || continue
+              if grep -qiE '^(type|status):[[:space:]]*redirect' "${d}SKILL.md" 2>/dev/null; then
+                continue  # alias de compatibilidade permitido (ex.: tecnica-da-lupa)
+              fi
+              if grep -qiE 'IS_SECOND_(SKILL|OWNER|AUTHORITY)=true' "${d}SKILL.md" 2>/dev/null; then
+                echo "❌ skill paralela com autoridade duplicada detectada: ${d}"
+                exit 1
+              fi
+            done
+          done
+          echo "✅ meta-lupa é a única técnica Lupa canônica ativa; aliases de compatibilidade e outras skills legítimas podem coexistir"
 
       - name: Gerar inventário de skills
         run: |
