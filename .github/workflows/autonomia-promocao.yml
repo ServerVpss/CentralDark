@@ -74,7 +74,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python scripts/trigger-fabric/verify_repo_contract.py . | tee "$RUNNER_TEMP/trigger-fabric-contract.txt"
+          PYTHON_CMD=$(which python); "$PYTHON_CMD" scripts/trigger-fabric/verify_repo_contract.py . | tee "$RUNNER_TEMP/trigger-fabric-contract.txt"
           grep -q '^REPO_CONTRACT_VERIFY=PASS$' "$RUNNER_TEMP/trigger-fabric-contract.txt"
           grep -q '^BOT_ENTRY_CONTRACT=PASS$' "$RUNNER_TEMP/trigger-fabric-contract.txt"
           grep -q '^OUTPUT_GUARD_CONTRACT=PASS$' "$RUNNER_TEMP/trigger-fabric-contract.txt"

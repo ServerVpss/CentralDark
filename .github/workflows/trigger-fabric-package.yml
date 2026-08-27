@@ -68,7 +68,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python scripts/trigger-fabric/verify_repo_contract.py . \
+          PYTHON_CMD=$(which python); "$PYTHON_CMD" scripts/trigger-fabric/verify_repo_contract.py . \
             | tee docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/VERIFY-RESULT.txt
           grep -q '^REPO_CONTRACT_VERIFY=PASS$' docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/VERIFY-RESULT.txt
           grep -q '^BOT_ENTRY_CONTRACT=PASS$' docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/VERIFY-RESULT.txt
