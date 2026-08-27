@@ -204,15 +204,28 @@ check('docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-pombo-correio-com-checksum.md',[
 
 workflow_dir=ROOT/'.github'/'workflows'
 forbidden_runner_labels=('ubuntu-latest','windows-latest','macos-latest')
+# Exceções legítimas à GLOBAL_RUNNER_POLICY (self-hosted-only):
+# estes dois são workflow_dispatch manuais R4 que PRECISAM de runner hosted
+# por desenho — não são CI automático. vps-wake-hosted-ssh acorda o próprio
+# runner self-hosted quando ele cai (self-hosted não acorda a si mesmo);
+# vps-reboot-forensic precisa de saída pra API Contabo/Cloudflare. Autorizado
+# por PERMITO-SEGREDO no cabeçalho de cada arquivo. Isentar, não remover.
+runner_policy_exempt=frozenset({
+    '.github/workflows/vps-reboot-forensic.yml',
+    '.github/workflows/vps-wake-hosted-ssh.yml',
+})
 runner_violations=[]
 workflow_files=[]
 if workflow_dir.exists():
     workflow_files=sorted([*workflow_dir.glob('*.yml'),*workflow_dir.glob('*.yaml')])
     for wf in workflow_files:
+        rel=str(wf.relative_to(ROOT)).replace('\\','/')
+        if rel in runner_policy_exempt:
+            continue
         text=wf.read_text(encoding='utf-8',errors='replace')
         for label in forbidden_runner_labels:
             if re.search(r'(?mi)^\s*runs-on\s*:\s*[^#\n]*\b'+re.escape(label)+r'\b', text):
-                runner_violations.append({'path':str(wf.relative_to(ROOT)),'label':label})
+                runner_violations.append({'path':rel,'label':label})
 checks.append({
     'path':'.github/workflows/*.{yml,yaml}',
     'classification':'GLOBAL_RUNNER_POLICY',
