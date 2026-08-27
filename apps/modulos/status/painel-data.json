@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-27T17:30:17.619Z",
-  "updatedAtBR": "27/08/2026, 14:30:17 BRT",
+  "updatedAt": "2026-08-27T18:40:23.001Z",
+  "updatedAtBR": "27/08/2026, 15:40:23 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "Fix hermes temp (#1232)",
+    "lastCommit": "fix(ci): python3 nos workflows (runner não tem python no PATH) (#1235)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-27T18:40:23.001Z",
+      "titulo": "Push na main · a8abfb1f5b68bd079b35efd6023637e1f356bca1",
+      "detalhe": "fix(ci): python3 nos workflows (runner não tem python no PATH) (#1235)",
+      "area": "Repositório",
+      "sha": "a8abfb1",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-27T17:30:17.619Z",
       "titulo": "Push na main · 8348eacdcb48bb3319dc89d48249852cad3601bc",
       "detalhe": "Fix hermes temp (#1232)",
@@ -988,14 +996,6 @@
       "detalhe": "feat(admin): registrar !EXECUÇÃO_REVERSÍVEL e !REMEDIÇÃO como gatilhos oficiais (#1090)",
       "area": "Repositório",
       "sha": "12ee1e9",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-20T09:14:56.335Z",
-      "titulo": "Push na main · f0e141591aefc6d1a915cdfd423e501b1c5b3d72",
-      "detalhe": "chore(deps): bump the npm_and_yarn group across 1 directory with 3 updates (#1088)",
-      "area": "Repositório",
-      "sha": "f0e1415",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-27T18:40:23.001Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · a8abfb1f5b68bd079b35efd6023637e1f356bca1 (a8abfb1)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-27T17:30:17.619Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 8348eacdcb48bb3319dc89d48249852cad3601bc (8348eac)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-20T10:08:50.502Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 12ee1e9d1ff32c2f2e0a8ecc27649f32e3b08070 (12ee1e9)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-20T09:14:56.335Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · f0e141591aefc6d1a915cdfd423e501b1c5b3d72 (f0e1415)",
       "area": "Repositório",
       "status": "sucesso"
     }
