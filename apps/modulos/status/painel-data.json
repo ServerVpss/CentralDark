@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-27T02:54:22.972Z",
-  "updatedAtBR": "26/08/2026, 23:54:22 BRT",
+  "updatedAt": "2026-08-27T03:54:18.628Z",
+  "updatedAtBR": "27/08/2026, 00:54:18 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "ci(vps): wake VPS via hosted SSH (não self-hosted) (#1217)",
+    "lastCommit": "feat(skills): integrar mermaid-skill (Kroki) + pretty-mermaid (temas) com diagramas da Casa (#1219)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,22 @@
   ],
   "events": [
     {
+      "time": "2026-08-27T03:54:18.628Z",
+      "titulo": "Push na main · f81a97861a1fec75cabbf14614583417bd9578a5",
+      "detalhe": "feat(skills): integrar mermaid-skill (Kroki) + pretty-mermaid (temas) com diagramas da Casa (#1219)",
+      "area": "Repositório",
+      "sha": "f81a978",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-08-27T03:34:29.479Z",
+      "titulo": "Push na main · c8df7c721973f5ea78035f2346eb29a57d197188",
+      "detalhe": "fix(trigger-fabric): reparar centraldark_master_cycle.py quebrado na main (#1218)",
+      "area": "Repositório",
+      "sha": "c8df7c7",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-27T02:54:22.972Z",
       "titulo": "Push na main · 4d4a1761065e02afa8eba0c9d4ffbc5fe72f08ac",
       "detalhe": "ci(vps): wake VPS via hosted SSH (não self-hosted) (#1217)",
@@ -980,22 +996,6 @@
       "detalhe": "feat(skills): integrate delta from zips - open-second-brain, skills_collection, agi-self-improvement",
       "area": "Repositório",
       "sha": "dda68c0",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-19T09:45:02.672Z",
-      "titulo": "Push na main · 05e7f3b14d56b02055cf5912947e60f7ccb53ca6",
-      "detalhe": "feat(security): delta migration + host audit scripts from PRIVATE-SECURITY-BANK-FOUNDATION",
-      "area": "Repositório",
-      "sha": "05e7f3b",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-19T08:14:54.508Z",
-      "titulo": "Push na main · e3b80f29fb0338aa9fe5fcd160685126150816e9",
-      "detalhe": "v0.0.0 fix(knowledge-compiler): adicionar authority-normalize.mjs faltante (corrige guard FAIL) (#1085)",
-      "area": "Repositório",
-      "sha": "e3b80f2",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,20 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-27T03:54:18.628Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · f81a97861a1fec75cabbf14614583417bd9578a5 (f81a978)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-08-27T03:34:29.479Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · c8df7c721973f5ea78035f2346eb29a57d197188 (c8df7c7)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-27T02:54:22.972Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 4d4a1761065e02afa8eba0c9d4ffbc5fe72f08ac (4d4a176)",
@@ -1743,20 +1757,6 @@
       "time": "2026-08-19T10:11:52.165Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · dda68c0d9e45a7a85765ca5d330e39bc584423a6 (dda68c0)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-19T09:45:02.672Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 05e7f3b14d56b02055cf5912947e60f7ccb53ca6 (05e7f3b)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-19T08:14:54.508Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · e3b80f29fb0338aa9fe5fcd160685126150816e9 (e3b80f2)",
       "area": "Repositório",
       "status": "sucesso"
     }
