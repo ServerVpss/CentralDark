@@ -1,3 +1,10 @@
+---
+title: "GITHUB LABELS OPERACIONAIS"
+date: 2026-08-27
+tags: ["consciencia"]
+updated: 2026-08-27
+---
+
 # Labels Operacionais CentralDark
 
 ## Identidade e autoridade
@@ -237,3 +244,11 @@ REALIDADE = JUIZ
 🔄 + 🤖 + 🟡 + 🧠 = PADRÃO OPERACIONAL GLOBAL
 🟢 / ✅ = RESULTADO (pós-prova)
 ```
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

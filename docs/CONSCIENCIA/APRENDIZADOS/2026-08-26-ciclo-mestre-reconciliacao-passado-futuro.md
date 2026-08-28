@@ -1,3 +1,10 @@
+---
+title: "2026 08 26 Ciclo Mestre Reconciliacao Passado Futuro"
+date: 2026-08-27
+tags: ["consciencia"]
+updated: 2026-08-27
+---
+
 # Ciclo Mestre — reconciliação passado → futuro
 
 Status: CANDIDATE_UNTIL_MERGED_AND_GATED
@@ -60,3 +67,11 @@ Passado alimenta o futuro sem governá-lo.
 ## Fronteira de garantia
 
 Contrato e consumer no repo não provam automaticamente todos os runtimes externos. Para afirmar bloqueio universal ainda são necessários gate específico/receipt observado e enforcement da fronteira correspondente.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

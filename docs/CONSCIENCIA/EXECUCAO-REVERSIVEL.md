@@ -69,3 +69,11 @@ ONE_WRITER_PER_SCOPE=true
 ```
 
 ADMINISTRABLE_COMMAND=!EXECUÇÃO_REVERSÍVEL
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

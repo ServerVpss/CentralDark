@@ -288,3 +288,11 @@ AND MATERIAL_UNKNOWN_FOR_THIS_SCOPE = 0
 
 O runtime universal de todas as superfícies continua sujeito à regra geral da
 Casa: contrato em Git não é prova de ativação física em todo corpo externo.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

@@ -145,3 +145,11 @@ CONTEXTO != PROVA_TECNICA
 Fio curto:
 
 > **Entender primeiro a intenção; corrigir o sistema quando o sistema estiver errado, não o jeito humano de falar.**
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

@@ -115,3 +115,11 @@ Se ela inventar uma resposta sem rodar o comando — cola o prompt de novo com �
 ---
 
 Próximo: [`07-EXEMPLOS-PRATICOS.md`](07-EXEMPLOS-PRATICOS.md)
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

@@ -45,3 +45,11 @@ Sem medição viva, a fronteira fica `UNKNOWN/BLOCKED`; não se escolhe um dos i
 Não publicar dump bruto de ambiente, `pm2_env`, secrets, tokens ou credenciais.
 
 SEGREDO/CHEFE permanece autoridade final para mutações fora do escopo já autorizado.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

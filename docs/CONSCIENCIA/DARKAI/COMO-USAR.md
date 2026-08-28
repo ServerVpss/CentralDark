@@ -48,3 +48,11 @@ Prompt pra ela:
 - `google/gemini-2.5-pro` — quando precisa raciocinar forte
 - `openai/gpt-5-mini` — bom pra código
 - `openai/gpt-5` — top de linha (caro)
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre
