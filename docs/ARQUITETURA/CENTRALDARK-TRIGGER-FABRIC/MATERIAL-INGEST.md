@@ -1,12 +1,12 @@
 ---
 title: "Material Ingest — moinho obrigatório"
 date: 2026-08-24
-updated: 2026-08-24T19:53:00-03:00
+updated: 2026-08-28T13:45:00-03:00
 status: CANONICO
 tags: [material, ingest, harvester, compiler, flash, propriedades]
 category: "M-Material"
 sensitivity: INTERNAL
-source: foto Notion + pacote FORJA-CRISTAL-FLASH + AGENTS.md
+source: foto Notion + pacote FORJA-CRISTAL-FLASH + AGENTS.md + snapshot Screenpipe Activity fornecido pelo CHEFE
 source_class: HUMAN_AUTHORITY
 source_rule: "CANONICO -> ARTEFATO; artefato nao inventa canonico"
 owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/
@@ -42,6 +42,111 @@ MATÉRIA (link|texto|imagem|pdf|código|log|erro|correção|evento)
 → REMEDIÇÃO T0→T1
 → PRÓXIMA EXECUÇÃO COMEÇA MAIS ALTO
 ```
+
+## Ingressos de superfície — contexto entra no mesmo moinho
+
+A reconciliação do snapshot salvo `Screenpipe Activity reshapes CentralDark integration`
+não cria Browser V2, segundo Harvester, segundo event bus ou nova memória. O delta
+útil é tornar explícito que superfícies autorizadas são **fontes/adapters de
+matéria e contexto**, nunca autoridade automática.
+
+```text
+INTENÇÃO DO CHEFE
+→ mesma missão
+→ contexto necessário?
+   → fontes locais autorizadas quando materiais
+   → fontes externas quando necessárias
+→ normalizar origem + tempo + contexto
+→ provenance
+→ sanitizar / quarentenar sensível
+→ dedupe + delta
+→ MESMO MOINHO
+```
+
+Fontes/adapters possíveis, somente quando aplicáveis e autorizados:
+
+```text
+LOCAL / OBSERVÁVEL
+├─ Screenpipe / Browser Bridge
+├─ HTML salvo
+├─ Notepad / arquivos de trabalho permitidos
+├─ Recorder/export
+├─ screenshot
+├─ Print / Print-to-PDF
+├─ runtime / logs
+├─ network observável
+└─ storage observável
+
+EXTERNO
+├─ Web
+├─ GitHub
+└─ docs/fontes específicas
+```
+
+As representações não são equivalentes:
+
+```text
+SCREENSHOT = aparência visual no instante capturado
+HTML_SALVO = estrutura/materialização da página
+RECORDER = sequência de interação registrada
+NETWORK = trânsito observado
+STORAGE = persistência observada no cliente
+PRINT_PDF = representação documental persistente
+RUNTIME_LOG = estado/efeito observado no alvo
+```
+
+Regras de prova:
+
+```text
+SOURCE != MEMORY
+TEMP_LOCALSTATE_IS_SOURCE_NOT_MEMORY=true
+SCREENPIPE_IS_SENSOR_NOT_AUTHORITY=true
+SCREENPIPE_CONTEXT != CURRENT_RUNTIME_PROOF
+SCREENSHOT != CURRENT_RUNTIME_PROOF
+PRINT_PDF != SCREENSHOT_PIXEL_IDENTICAL
+PRINT_PDF != LIVE_STATE
+PRINT_PDF != COMPLETE_CONTENT_GUARANTEE
+SAVED_HTML != LIVE_STATE
+RECORDER != EFFECT_PROOF
+```
+
+O Harvester/Memory Linker recebe somente o necessário. Diretórios temporários,
+LocalState, caches de navegador ou dados de aplicação **não** autorizam coleta
+cega. Conteúdo sensível deve ser excluído/quarentenado antes de qualquer
+promoção.
+
+```text
+NO_BLIND_TEMP_HARVEST=true
+NO_COOKIE_HARVEST=true
+NO_AUTH_SESSION_HARVEST=true
+NO_PASSWORD_OR_TOKEN_HARVEST=true
+SENSITIVE_MATERIAL → QUARANTINE
+EXTERNAL_UNTRUSTED → PROVENANCE + INDEPENDENT_CONFIRMATION
+```
+
+Screenpipe pode futuramente servir como sensor/contexto para Hermes ou outro
+consumer da Casa, mas presença visual, API configurada ou Browser Bridge ativo
+em um snapshot não prova transporte causal até Hermes.
+
+```text
+SCREENPIPE_SURFACE_OBSERVED_BY_USER=true
+SCREENPIPE_TO_HERMES_CAUSAL_TRANSPORT=UNPROVEN_BY_THIS_CONTRACT
+SCREENPIPE_RUNTIME_STATE=REMEASURE_REQUIRED
+```
+
+A seleção continua sendo por menor capacidade suficiente:
+
+```text
+preciso texto/estrutura? → HTML/texto
+preciso visual exato? → screenshot
+preciso sequência? → Recorder
+preciso documento persistente? → PDF
+preciso estado vivo? → runtime/log/network/storage
+preciso memória temporal? → sensor/memória autorizada + Harvester
+```
+
+Tudo converge para o mesmo cérebro de retaguarda e o mesmo circuito de
+promoção; adapter não vira owner.
 
 ## Máquina de estados da matéria
 
@@ -269,6 +374,10 @@ ITEM_SHORT_LIVED_ROLE_CONTEXT=true
 ITEM_ARCHITECTURE_DEPENDENCY_GUARD=true
 ITEM_ITERATE_MEASURE_REORGANIZE=true
 ITEM_VALUES_OVER_BLIND_HUMAN_RITUAL=true
+SURFACE_ADAPTER_IS_NOT_AUTHORITY=true
+TEMP_LOCALSTATE_IS_SOURCE_NOT_MEMORY=true
+SCREENPIPE_IS_SENSOR_NOT_AUTHORITY=true
+PRINT_PDF_IS_NOT_LIVE_STATE=true
 ```
 
 Interpretação operacional:
@@ -302,6 +411,9 @@ LEARNING_TRANSFER_FAIL_ON_RETEACH
 | `LEIA-ME-IA.md` | porta de entrada |
 | Hermes prompt | herda Trigger Fabric + learning route |
 | Knowledge Compiler | FORJA: matéria → ouro → cristal → rota |
+| Screenpipe / Browser Bridge | sensor/contexto autorizado quando material; não autoridade |
+| HTML/Recorder/screenshot/PDF | adapters de representação; cada um preserva uma camada diferente |
+| runtime/log/network/storage | sensores para claims de estado vivo quando medidos |
 | Handoff/Pombo | leva receipt + checksum + NEXT_CURSOR ao próximo consumidor |
 | Trigger Fabric contract | separa contexto cognitivo de enforcement determinístico |
 | Gate determinístico | impede que itens aprendidos virem prosa descartável |
@@ -311,6 +423,9 @@ LEARNING_TRANSFER_FAIL_ON_RETEACH
 - AutoBot V2
 - segundo cérebro paralelo
 - Alchemist Engine
+- Browser Harvester V2
+- Screenpipe Brain
+- PDF Harvester V2
 - UncleBobAgent / HardenerBrain paralelo
 - RAG paralelo / MCP novo / daemon novo
 - deploy / VPS / force-push nesta missão
@@ -320,8 +435,10 @@ LEARNING_TRANSFER_FAIL_ON_RETEACH
 ```text
 CONTRACT = DECLARED_IN_TRIGGER_FABRIC
 MATERIAL_STATE_MACHINE = DECLARED_AND_BOUND_TO_EXISTING_FORJA
+SURFACE_INGRESS_CONTRACT = DECLARED_IN_EXISTING_MATERIAL_INGEST
 DETERMINISTIC_SCAFFOLD = DECLARED_IN_EXISTING_CONTRACT
 IMPLEMENTATION_HOOKS = PARTIAL (owners exist; physical hooks not all proven)
 RUNTIME_HERMES_LEARNING = UNKNOWN até teste no corpo Hermes
+SCREENPIPE_TO_HERMES_TRANSPORT = UNKNOWN até teste causal
 VECTOR_MEMORY_RUNTIME = NOT_PROVEN
 ```
