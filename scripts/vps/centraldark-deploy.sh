@@ -57,8 +57,12 @@ fi
 # Este é o bloqueador real já medido: trava stash/checkout/reset com
 # "Operation not permitted" e o erro não diz que a causa é o atributo.
 log "=== guarda: procurando arquivos imutáveis ==="
+# lsattr -R intercala cabeçalhos de diretório ("Cache:") com linhas de
+# arquivo ("----i---- caminho"). Só a linha de arquivo tem o campo 1 no
+# formato de atributos; filtrar por ele evita capturar nome de pasta.
 IMUTAVEIS="$(lsattr -R -a "$REPO_DIR" 2>/dev/null \
-  | awk '$1 ~ /i/ && $2 !~ /\/\.$|\/\.\.$/ {print $2}' || true)"
+  | awk '$1 ~ /^[-aAcCdDeEFijImNPsStTux]+$/ && $1 ~ /i/ && NF>=2 \
+         && $2 !~ /\/\.\.?$/ {print $2}' || true)"
 
 if [[ -n "$IMUTAVEIS" ]]; then
   log "BLOQUEADO — arquivos com chattr +i impedem o deploy:"
