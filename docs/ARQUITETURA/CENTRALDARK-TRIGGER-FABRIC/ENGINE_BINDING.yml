@@ -4,6 +4,7 @@ trigger_fabric_owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml
 binding_mode: LOAD_REFERENCE
 copy_brain: false
 engine_is_owner: false
+
 engines:
   grok_build:
     role: REPLACEABLE_ENGINE
@@ -12,20 +13,42 @@ engines:
     memory_parallel: false
     new_permission: false
     runtime_specific_claims: MUST_BE_MEASURED
+    invocation_proven: false
   mistral_vibe:
     role: CURRENT_INTERACTIVE_ENGINE_WHEN_ACTIVE
     may_operate_via: [filesystem, terminal, git, tests]
     inherits: [LEIA-ME-IA.md, AGENTS.md, Trigger Fabric]
     runtime_specific_claims: MUST_BE_MEASURED
+  openai:
+    role: REPLACEABLE_ENGINE
+    transport_owner: apps/modulos/elite-gateway/scripts/centraldark_omni_router.py
+    runtime_specific_claims: MUST_BE_MEASURED
+  claude_code:
+    role: REPLACEABLE_ENGINE
+    transport_owner: apps/modulos/elite-gateway/scripts/centraldark_omni_router.py
+    runtime_specific_claims: MUST_BE_MEASURED
   hermes:
     role: EXECUTION_CONTINUITY_RUNTIME
     owner: PIVETE/HERMES
     prompt_consumer: apps/modulos/HERMES-CORE/prompts/hermes-core.md
+    transport_owner: apps/modulos/elite-gateway/scripts/centraldark_omni_router.py
     required_for: [hermes_mission_routing, hermes_session_continuity, hermes_runtime_memory, hermes_hooks, hermes_scheduler, hermes_learning_transfer_test]
     active_now: NOT_PROVEN_BY_THIS_DOCUMENT
+  nous:
+    role: REPLACEABLE_ENGINE
+    transport_owner: apps/modulos/elite-gateway/scripts/centraldark_omni_router.py
+    runtime_specific_claims: MUST_BE_MEASURED
+  local_ai_future:
+    role: FUTURE_LOCAL_CAPABILITY
+    status: DEFERRED_UNTIL_MEASURED
+    active_now: UNKNOWN
+    configured_is_active: false
+    health_is_invocation_proof: false
+    must_not_route_by_default_until_invocation_proven: true
   other_models:
     role: REPLACEABLE_ENGINE
     inherits: [LEIA-ME-IA.md, AGENTS.md, Trigger Fabric]
+
 mandatory_inheritance:
   - DESTINATION_LOCK
   - CENTRALDARK_MASTER_CYCLE
@@ -54,6 +77,8 @@ mandatory_inheritance:
   - TEMPORARY_EXTERNAL_WATCH
   - ANY_PR_OR_COMMIT_GATE
   - CANONICAL_SELF_HOSTED_RUNNER_POLICY
+  - MODEL_TOUCH_EVIDENCE_WHEN_CONFIGURED
+
 master_cycle_binding:
   contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
   resolver: scripts/trigger-fabric/centraldark_master_cycle.py
@@ -64,13 +89,24 @@ master_cycle_binding:
   phase_execution_is_adaptive: true
   master_trigger_is_authority: false
   master_trigger_is_mutation_permission: false
-  source_prs_reconciled: [1166, 1167, 1168, 1170]
-  second_semantic_owner: FORBIDDEN
-  graph_is_derived_not_authority: true
-  source_prs_reconciled: [1166, 1167, 1168, 1169, 1170, 1172]
+  pr_mother_provenance: 1189
+  source_prs_reconciled: [1115, 1157, 1161, 1166, 1167, 1168, 1169, 1170, 1172, 1189, 1240, 1241, 1243, 1245, 1269, 1300, 1314, 1330, 1335, 1336, 1339, 1349, 1350, 1354]
   second_semantic_owner: FORBIDDEN
   graph_is_derived_not_authority: true
   valuable_memory_requires_properties: true
+
+model_touch_binding:
+  router: apps/modulos/elite-gateway/scripts/centraldark_omni_router.py
+  evidence_owner: supabase/functions/_shared/evidence-envelope.mjs
+  evidence_entry: supabase/functions/agent-log/index.ts
+  event: model_touch
+  telemetry_is_optional_when_endpoint_unconfigured: true
+  telemetry_delivery_status_must_be_observable: true
+  telemetry_failure_is_provider_failure: false
+  telemetry_failure_may_be_hidden: false
+  mission_id_fabrication: FORBIDDEN
+  secrets_in_event: FORBIDDEN
+
 self_healing_binding:
   applies_to: [PR, COMMIT, CI, TOOL_ERROR, TEST_FAILURE, RUNTIME_DRIFT, OPERATIONAL_FAILURE, RED_ISSUE, RED_PR_OR_FAILED_CHECK, CAPABILITY_GAP, SIGNAL_STATE_CHANGE, TERRITORY_ROUTE_CHANGE]
   engine_must:
@@ -89,6 +125,7 @@ self_healing_binding:
   same_failure_no_new_information: REUSE_CRYSTAL_NOT_RETHINK
   unknown: SEARCH_REALITY
   human_return_before_fixed_point: FORBIDDEN_UNLESS_HUMAN_FRONTIER
+
 external_dependency_watch_binding:
   marker: TEMPORARY_EXTERNAL_WATCH
   applies_to: [PR, CI, DEPENDABOT, EXTERNAL_JOB, ASYNC_PROVIDER, THIRD_PARTY_EXECUTOR]
@@ -123,6 +160,7 @@ external_dependency_watch_binding:
     unknown_is_not_pass: true
     same_signal_without_new_information: DROP_DUPLICATE
     self_cleanup_must_be_verified: true
+
 semantic_crystal_binding:
   architecture: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SIGNAL-TERRITORY-CAPABILITY-CRYSTAL.md
   gap_compiler: .agents/skills/distinct-engineering-compiler/SKILL.md
@@ -134,19 +172,23 @@ semantic_crystal_binding:
   role_is_identity: false
   name_is_capability: false
   fixed_point_is_main: false
+
 ci_runner_binding:
   github_hosted: FORBIDDEN
   default: [self-hosted, Linux]
   platform_specific: SELF_HOSTED_ONLY_WITH_CAPABILITY_PROOF
   root_workflow_gate: scripts/trigger-fabric/verify_repo_contract.py
   pull_request_and_commit_entry: .github/workflows/porta-de-entrada.yml
+
 hard_guarantee_boundary:
   prose_contract_only: BEST_EFFORT
   hard_guarantee_requires: [REAL_CONSUMER, POSITIVE_NEGATIVE_TEST, BLOCKING_GATE_WHEN_APPLICABLE, VERIFIABLE_RECEIPT]
+
 ci_consumers:
   - .github/workflows/porta-de-entrada.yml
   - .github/workflows/autonomia-promocao.yml
   - .github/workflows/trigger-fabric-package.yml
+
 labels:
   canonical_taxonomy: docs/CONSCIENCIA/GITHUB-LABELS-OPERACIONAIS.md
   authority: "👑 PERMITO-SEGREDO"
