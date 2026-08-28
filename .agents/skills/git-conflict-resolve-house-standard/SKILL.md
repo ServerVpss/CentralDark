@@ -1,9 +1,9 @@
 ---
 name: git-conflict-resolve-house-standard
-description: ÚNICO padrão canônico da Casa para resolução de conflitos git/PR (inclui dependabot). Use quando um PR abrir CONFLICTING, quando main avançar sob um PR aberto, ou quando perguntarem "como resolver conflito". Não criar segundo resolvedor, não fazer merge manual fora deste padrão.
+description: Padrão único da Casa para resolver conflito de PR (dependabot ou humano). Use quando um PR abrir CONFLICTING, quando a main avançar sob um PR aberto, ou quando perguntarem como resolver conflito. Não criar segundo resolvedor, não fazer merge manual fora deste padrão.
 metadata:
   type: operational
-  version: "1.2"
+  version: "1.0"
   owner: SEGREDO/CHEFE
 ---
 
@@ -40,8 +40,7 @@ dele aceita automaticamente, sem revisão humana.
 
 | Caminho | Lado que vence | Por quê |
 |---|---|---|
-| `package.json` | **Merge inteligente** (main base + bumps do PR) | `git checkout --ours` é cego — perde TODAS as mudanças da main, não só o bump. Usa merge-base como referência |
-| `package-lock.json`, `pnpm-lock.yaml`, `yarn.lock` — qualquer diretório | **PR** (`--ours`) | lockfile é gerado, não editado manualmente |
+| `package.json`, `package-lock.json`, `pnpm-lock.yaml`, `yarn.lock` — em qualquer diretório | **PR** (`--ours`) | o PR **é** o bump; manter a main aqui apaga o motivo do PR |
 | **todo o resto** | **main** (`--theirs`) | fail-closed de verdade: PR não promove código canônico sozinho |
 
 Sem lista de exceções para core. O default já protege tudo que não é manifesto.
@@ -50,13 +49,11 @@ Sem lista de exceções para core. O default já protege tudo que não é manife
 
 ```text
 PR abre  ->  workflow dispara (ou humano roda o motor)
-        ->  motor alinha com main determinísticamente
-        ->  checks
-        ->  squash merge
-        ->  main avança
+         ->  motor alinha com main de forma determinística
+         ->  checks
+         ->  squash merge
+         ->  main avança
 ```
-
-Auto-merge squash vale para **patch**. Minor e major param para revisão humana.
 
 Na mão, quando o runner estiver fora:
 
@@ -64,17 +61,12 @@ Na mão, quando o runner estiver fora:
 ssh Segredo-VPS "cd /root/CentralDark && bash scripts/dependabot/resolve-conflicts.sh <PR>"
 ```
 
-Se o motor disser `NO_CONFLICT` mas o GitHub continuar marcando `CONFLICTING`,
-falta ao branch remoto um commit de sincronia com a main — o motor só mediu
-localmente e saiu sem empurrar nada.
-
 ## Regras de ferro
 
 ```text
 UNKNOWN != PASS
 ACTION != PROOF
 MERGED != CI_PASS
-FAIL_CLOSED_ESCRITO != FAIL_CLOSED_IMPLEMENTADO
 ```
 
 - Não criar segundo script de conflito.
@@ -83,10 +75,6 @@ FAIL_CLOSED_ESCRITO != FAIL_CLOSED_IMPLEMENTADO
   main avançar depois, medir de novo — não reusar o veredito velho.
 - Squash é o botão padrão da Casa. Mas verde do CI é medição, não formalidade:
   se um check aplicável falhou, isso é informação, não obstáculo a ignorar.
-- **FAIL_CLOSED_ESCRITO != FAIL_CLOSED_IMPLEMENTADO**: nunca canonizar um
-  padrão só pelo texto. O bug #1343 provou que o comentário dizia "mantém main"
-  mas o código aceitava o PR (`--ours`). Gravar antes de revisar o código
-  teria tornado bug em lei. Sempre validar o código, não o comentário.
 
 ## Armadilhas registradas (todas medidas, nenhuma suposta)
 
@@ -102,29 +90,14 @@ FAIL_CLOSED_ESCRITO != FAIL_CLOSED_IMPLEMENTADO
    Resolvido na origem: o manifesto agora resolve para o lado do PR, que já
    contém o bump.
 
-3. **`git checkout --ours` cego.** Provado empiricamente: usar `--ours` no
-   package.json perde TODAS as outras mudanças da main, não só o bump que o PR
-   queria fazer. **CORRIGIDO:** o motor agora usa merge inteligente com
-   merge-base — parte da main e aplica só as diferenças do PR.
-
-4. **Lockfile único = conflito em cadeia.** Vários PRs de bump no mesmo
+3. **Lockfile único = conflito em cadeia.** Vários PRs de bump no mesmo
    `pnpm-lock.yaml` conflitam entre si; `@dependabot rebase` não resolve,
    porque rebasear um recria o conflito nos outros enquanto a main avança.
    A cura é **agrupar** (`.github/dependabot.yml`), não resolver um a um.
    E `groups` sem `applies-to` cobre apenas `version-updates`: alerta de
    segurança gera `security-updates` e passa por fora do grupo.
 
-5. **22k = falso positivo de filtro.** Contar linhas com a letra "i" no
-   `lsattr` não é medir atributo `+i`. O número real era 9 (trava cirúrgica
-   de rebase antigo), não 22 mil. Filtro correto: `$1 ~ /^.*i-/`.
-
 ## Adaptação
 
 Realidade nova (outro gerenciador de pacotes, outro lockfile, outro
 ecossistema) atualiza **este arquivo e o motor no lugar**. Nunca um segundo.
-
-## Fixed Point
-
-- Todo PR Dependabot conflitado resolvido por script
-- CI green após resolução
-- Nenhum conflito manual pendente
