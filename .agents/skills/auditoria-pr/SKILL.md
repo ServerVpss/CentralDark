@@ -12,6 +12,8 @@ autorização. Esta skill é só o checklist executável do caso PR. Em qualquer
 conflito, a `meta-lupa` vence e esta skill é CORRIGIDA. Não cria ledger próprio,
 não cria XP próprio, não cria veredito próprio.
 
+**Resolução de conflito de PR** segue o PADRÃO ÚNICO da Casa (`.agents/skills/git-conflict-resolve-house-standard/SKILL.md` + `scripts/dependabot/resolve-conflicts.sh`). Não criar segundo padrão, não V2/V3.
+
 **Origem.** Nasceu de uma auditoria real do PR #410 (CentralDark) em que 3 de 4
 lacunas reportadas como críticas eram **falsas** — todas pela mesma causa: o
 auditor rodou o instrumento num escopo e afirmou sobre outro. Cada passo abaixo
