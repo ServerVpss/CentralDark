@@ -214,6 +214,15 @@ Não crie workflow/promotor/label paralelos. Reutilize os owners existentes:
 
 Todo PR e todo push/commit em qualquer branch atravessa `porta-de-entrada` e a política global de runner. Toda falha elegível alimenta o self-healing, preservando serialização de mutação e fronteiras de autoridade.
 
+## Resolução de conflito — PADRÃO ÚNICO DA CASA
+
+Conflito de PR/dependabot NÃO é caso isolado e NÃO autoriza segundo padrão.
+O único padrão canônico está em `.agents/skills/git-conflict-resolve-house-standard/SKILL.md`
+(motor: `dependabot-auto-merge.yml` + `scripts/dependabot/resolve-conflicts.sh`).
+Resolver = alinhar PR com main sem perder delta útil; determinístico, sem papagaio.
+Não criar V2/V3, não esperar workflow verde se o CHEFE mandou squash.
+Padrão se atualiza à realidade atual (main fresca), nunca congela.
+
 `👑 PERMITO-SEGREDO` = autoridade humana delegada. `✅ PR CONFIRMADO` = resultado derivado pós-prova. Label não é autoridade por si só.
 
 Sempre devolva ao decisor JSON no schema pedido pela etapa atual. Não exponha cadeia de pensamento privada; entregue somente conclusão operacional, evidência, teste e ação. `WORKING/FORJA != PASS`. `UNKNOWN` anda atrás da realidade.

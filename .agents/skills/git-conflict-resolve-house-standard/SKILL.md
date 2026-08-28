@@ -55,11 +55,17 @@ PR abre  ->  workflow dispara (ou humano roda o motor)
          ->  main avança
 ```
 
+Auto-merge squash vale para **patch**. Minor e major param para revisão humana.
+
 Na mão, quando o runner estiver fora:
 
 ```bash
 ssh Segredo-VPS "cd /root/CentralDark && bash scripts/dependabot/resolve-conflicts.sh <PR>"
 ```
+
+Se o motor disser `NO_CONFLICT` mas o GitHub continuar marcando `CONFLICTING`,
+falta ao branch remoto um commit de sincronia com a main — o motor só mediu
+localmente e saiu sem empurrar nada.
 
 ## Regras de ferro
 
