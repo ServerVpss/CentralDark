@@ -6,7 +6,7 @@
 
 A Trigger Fabric continua sendo **contrato de interligação**, não um novo
 orquestrador. Esta página consolida os owners que nasceram ou amadureceram
-depois do PR-mãe sem criar `V2`, segundo cérebro, segundo router ou segundo
+depois do PR-mãe sem criar `V2`, cérebro concorrente, segundo router ou segundo
 Reality Judge.
 
 ```text
@@ -20,6 +20,8 @@ REALITY_IS_JUDGE=true
 UNKNOWN_IS_NOT_PASS=true
 HISTORY_IS_NOT_CURRENT_STATE=true
 MODEL_IS_REPLACEABLE=true
+SECOND_BRAIN_LOGICAL=ONE
+TWO_COGNITIVE_ROLES_ONE_LOGICAL_BRAIN=true
 ```
 
 ## 1. A cadeia inteira
@@ -71,7 +73,14 @@ TOOLS / MCP / APIs / BUILDERS
       ↓
 EXECUÇÃO
       ↓
-CAUSAL TRACE
+CAUSAL TRACE + EVIDENCE RECEIPT
+      ↓
+CÉREBRO DE RETAGUARDA / MEMORY LAYER
+      ├─ matéria bruta
+      ├─ fragmentos
+      ├─ histórico
+      ├─ proveniência
+      └─ conhecimento candidato
       ↓
 EVIDENCE ENVELOPE
       ↓
@@ -79,7 +88,7 @@ RENDEZVOUS + DEDUPE + CONTRADIÇÃO
       ↓
 META_LUPA HARVEST
       ↓
-DREAM REVIEW + PATTERN DISCOVERY
+MEMORY LINKER + DREAM REVIEW + PATTERN DISCOVERY
       ↓
 EVOLUTION CANDIDATE
       ↓
@@ -105,7 +114,7 @@ PROMOTE       REJECT / ROLLBACK
            ↓
 FIXED POINT DA MISSÃO
            ↓
-REGISTRO DO OURO
+REGISTRO DO OURO / OWNER CANÔNICO
            ↓
 PRÓXIMO #ACORDAR ↺
 ```
@@ -124,12 +133,61 @@ N_TESTES
 → REALIDADE JULGANDO
 ```
 
+### 1.1 Dois cérebros funcionais, um cérebro lógico
+
+A Casa preserva a distinção histórica que o PR #1131 reconciliou como
+`SECOND_BRAIN_LOGICAL=ONE`. Existem **dois papéis cognitivos complementares**,
+mas não duas autoridades ou dois sistemas concorrentes.
+
+```text
+🧠 CÉREBRO DA FRENTE / OPERACIONAL
+missão + decisão + roteamento + execução
+        │
+        │ trabalha e deixa rastros observáveis
+        ▼
+TRACE + EVIDENCE + RECEIPT
+        │
+        ▼
+🧠 CÉREBRO DE RETAGUARDA / MEMÓRIA
+preserva matéria + minério + fragmentos + histórico + proveniência
+        │
+        ▼
+MEMORY LINKER / SESSION HARVESTER
+        │
+        ▼
+DREAM REVIEW / PATTERN DISCOVERY
+        │
+        ▼
+META_LUPA + CONTRAPROVA + REALITY
+        │
+        ▼
+OURO → OWNER / CRYSTAL / FLASH
+        │
+        └──────────────→ próxima missão operacional
+```
+
+A correção semântica importante é:
+
+```text
+MEMORY_REARGUARD = CÉREBRO/MEMÓRIA DE RETAGUARDA
+MEMORY_LINKER = MINERADOR, NÃO O CÉREBRO
+DREAM_REVIEW = REVISOR/MINERADOR, NÃO AUTORIDADE
+BRAIN/OBSIDIAN = SUPERFÍCIE DE MEMÓRIA/NAVEGAÇÃO, NÃO RUNTIME SOBERANO
+GRAPH/VECTOR = ÍNDICES DERIVADOS, NÃO AUTORIDADE
+TWO_COGNITIVE_ROLES != TWO_AUTHORITIES
+SECOND_BRAIN_LOGICAL=ONE
+```
+
+O owner dessa distinção é `SECOND-BRAIN.yml`; este mapa apenas a projeta.
+
 ## 2. Owner por órgão
 
 | Capacidade | Owner observado |
 |---|---|
 | Boot/governança | `LEIA-ME-IA.md`, `AGENTS.md`, `docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md` |
 | Ciclo mestre | `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/` |
+| Segundo cérebro lógico / retaguarda de memória | `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SECOND-BRAIN.yml` |
+| Navegação/memória derivada | `docs/BRAIN/00-MAPA-SISTEMA/BRAIN.md` |
 | `!MULTIBUSSOLA` | `docs/CONSCIENCIA/MULTIBUSSOLA.md` |
 | MetaLupa | `.agents/skills/meta-lupa/` |
 | Capability Router | `.agents/skills/capability-contract-router/` |
@@ -142,7 +200,7 @@ N_TESTES
 | Evidence Envelope | `supabase/functions/_shared/evidence-envelope.mjs` |
 | Evidence ingest | `supabase/functions/agent-log/index.ts` |
 | MCP trace context | `apps/modulos/mcp/src/trace-context.js` + `correlation.js` |
-| Dream Review / patterns | `scripts/memory-linker/` |
+| Memory Linker / Dream Review / patterns | `scripts/memory-linker/` |
 | Colheita de sessão | `.agents/skills/session-intelligence-harvester/` |
 | Cristalização | `.agents/skills/knowledge-compiler/` |
 | N7 | `.agents/skills/meta-lupa/agents/nivel-7/` |
@@ -174,6 +232,7 @@ MODEL / ENGINE INVOCATION
 → Evidence Envelope
 → causal dedupe
 → public.agent_events
+→ CÉREBRO DE RETAGUARDA / matéria observável
 → MetaLupa Harvest
 ```
 
@@ -277,7 +336,8 @@ por capacidade.
 O fluxo atual preserva uma fronteira importante:
 
 ```text
-MATÉRIA
+MATÉRIA NO CÉREBRO DE RETAGUARDA
+→ Memory Linker
 → Dream Review
 → sanitização + proveniência + HEAD
 → dedupe
@@ -358,6 +418,7 @@ O corpo atual absorve somente ganho de informação dos seguintes marcos:
 | PR | Delta útil |
 |---:|---|
 | #1115 | one-core-many-arms, fan-out adaptativo read-only, convergência por evidência |
+| #1131 | segundo cérebro lógico único: GitHub canônico + Obsidian/local + graph/vector derivados; sem autoridade paralela |
 | #1157 | Omni Router / one entrypoint / engines substituíveis |
 | #1161/#1168 | capability ladder e fechamento bounded de gap de engine |
 | #1172 | ciclo mestre precursor reconciliado |
@@ -459,11 +520,14 @@ correspondentes.
 ```text
 QUEM TOCA NA META_LUPA DEIXA RASTRO.
 RASTRO VIRA EVIDÊNCIA.
-EVIDÊNCIA PODE VIRAR DELTA.
+EVIDÊNCIA ALIMENTA A RETAGUARDA DE MEMÓRIA.
+A RETAGUARDA GUARDA MINÉRIO; OS MINERADORES EXTRAEM DELTA.
 DELTA É TESTADO.
 DELTA QUE SOBREVIVE MELHORA O OWNER CANÔNICO.
 O OWNER MELHOR JULGA A PRÓXIMA PASSAGEM.
 ```
 
-Não nasce MetaLupa V2. Não nasce segundo cérebro. Não nasce segundo Judge.
-A Casa cresce por **reconciliação + delta provado**.
+Não nasce MetaLupa V2. Não nasce cérebro concorrente. O **Segundo Cérebro
+lógico já existente** continua sendo a retaguarda/memória da mesma Casa, sem
+segunda autoridade, segundo Writer ou segundo Judge. A Casa cresce por
+**reconciliação + delta provado**.
