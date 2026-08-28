@@ -9,7 +9,10 @@
     "CLAUDE.md",
     "docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md",
     "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md",
+    "docs/CONSCIENCIA/REGRA-OFICIAL-HIERARQUIA-MEMORIA.md",
     "docs/CONSCIENCIA/MULTIBUSSOLA.md",
+    "docs/BRAIN/00-MAPA-SISTEMA/BRAIN.md",
+    "apps/modulos/mcp/docs/TOOLS-COGNITIVAS.md",
     ".agents/skills/meta-lupa/SKILL.md",
     ".agents/skills/meta-lupa/scripts/evolution_gate.py",
     ".agents/skills/meta-lupa/scripts/evolution_series_gate.py",
@@ -50,7 +53,7 @@
     ".github/workflows/trigger-fabric-package.yml",
     "docs/CONSCIENCIA/GITHUB-LABELS-OPERACIONAIS.md"
   ],
-  "provenance_prs": [1115, 1157, 1161, 1166, 1167, 1168, 1169, 1170, 1172, 1189, 1240, 1241, 1243, 1245, 1269, 1300, 1314, 1330, 1335, 1336, 1339, 1349, 1350, 1354],
+  "provenance_prs": [1115, 1131, 1157, 1161, 1166, 1167, 1168, 1169, 1170, 1172, 1189, 1240, 1241, 1243, 1245, 1269, 1300, 1314, 1330, 1335, 1336, 1339, 1349, 1350, 1354],
   "source_rules": {
     "history_is_current": false,
     "repo_presence_is_runtime_proof": false,
@@ -63,6 +66,9 @@
     "visual_projection_is_runtime_proof": false,
     "cultural_alias_is_technical_authority": false,
     "derived_visual_output_must_preserve_source_binding": true,
-    "external_reserve_is_active_runtime": false
+    "external_reserve_is_active_runtime": false,
+    "second_brain_is_second_authority": false,
+    "memory_linker_is_brain": false,
+    "two_cognitive_roles_are_two_authorities": false
   }
 }
