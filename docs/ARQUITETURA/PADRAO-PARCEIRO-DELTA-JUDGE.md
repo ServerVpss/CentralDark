@@ -4,7 +4,7 @@ status: "CANÔNICO"
 scope: "Colaboração multiagente, auto-reancoragem e autonomia contínua sem colisão de Writer"
 owner: "SEGREDO/CHEFE"
 technical_alias: "DELTA_PARTNER_PROTOCOL"
-updated: 2026-08-14
+updated: 2026-08-28
 ---
 
 # Padrão da Casa — Parceiro de Delta + Judge
@@ -195,6 +195,123 @@ HISTORICAL != ACTIVE_GOVERNANCE
 ```
 
 Para fechar finding/thread, provar **BYTE + COMPORTAMENTO + PAPEL_DO_ARTEFATO**.
+
+## 6A. Unidade verificável, autoridade durável e falha limpa
+
+Delta garimpado de práticas públicas de coordenação de agentes do projeto `swstegall/meteor-decomp`, reconciliado com os contratos existentes da Casa. A fonte externa é matéria-prima; estas regras só entram porque sobrevivem a `REUSE_BEFORE_CREATE` e fecham lacunas sem criar novo owner.
+
+### Unidade de trabalho = menor escopo independentemente verificável
+
+O projeto externo usa uma função por worker/PR para impedir colisão e tornar o resultado trivialmente verificável. Na CentralDark a unidade não precisa ser função; deve ser **o menor escopo material que possui owner, Writer e prova independentes**.
+
+```text
+UNIT_OF_WORK
+= SMALLEST_INDEPENDENTLY_VERIFIABLE_SCOPE
+
+UMA_UNIDADE
+→ UM_OWNER
+→ UM_WRITER
+→ UM_DELTA_CAUSAL
+→ UMA_PROVA_APLICAVEL
+```
+
+Não usar a unidade como desculpa para estreitar a intenção do CHEFE. A Casa decompõe internamente quantas unidades forem necessárias até satisfazer o `DESTINATION_LOCK`.
+
+```text
+UNIT_OF_WORK_IS_EXECUTION_BOUNDARY=true
+UNIT_OF_WORK_IS_NOT_INTENT_BOUNDARY=true
+NO_UNRELATED_CLEANUP_IN_ACTIVE_SCOPE=true
+```
+
+### Estado derivado não pode virar autoridade de coordenação
+
+No caso externo, o pool YAML é regenerado e por isso não pode ser o ledger de claims; a coordenação durável mora em mecanismo próprio. Generalização CentralDark:
+
+```text
+REGENERATED|DERIVED|CACHE|VIEW
+!= COORDINATION_AUTHORITY
+```
+
+Claim de Writer, lease, ownership ou progresso não deve depender de artefato que pode ser regenerado, sobrescrito ou recalculado sem preservar causalidade.
+
+```text
+COORDINATION_AUTHORITY_MUST_BE_DURABLE=true
+DERIVED_STATUS_IS_VIEW_NOT_GOVERNMENT=true
+PROFILE_IS_VIEW_NOT_GOVERNMENT=true
+```
+
+Quando o estado puder ser derivado de artefato canônico + Git + runtime, não criar flag manual concorrente só para repetir a mesma verdade.
+
+```text
+CANONICAL_ARTIFACT + GIT + RUNTIME
+→ DERIVE_STATUS_WHEN_POSSIBLE
+→ NO_SHADOW_LEDGER_WITHOUT_GAP
+```
+
+### Antes de escrever, ler irmãos provados e falhas anteriores
+
+O projeto externo manda ler exemplos já resolvidos do mesmo módulo e post-mortems anteriores antes de tentar a função. A Casa generaliza isso como retrieval local de alta precisão:
+
+```text
+ANTES_DE_MUTAR
+→ LOCALIZAR_OWNER
+→ LER_2_OU_3_EXEMPLOS_PROVADOS_DO_MESMO_CONTORNO_QUANDO_EXISTIREM
+→ LER_RECEIPTS/FALHAS_ANTERIORES_DO_MESMO_MECANISMO
+→ EXTRAIR_IDIOMA_LOCAL
+→ SÓ_ENTÃO_DELTA
+```
+
+Isso implementa `BIG_LIBRARY → PRECISE_RETRIEVAL → SMALL_CONTEXT` sem carregar o histórico inteiro.
+
+```text
+SIBLING_PROVEN_EXAMPLES_BEFORE_NOVEL_IMPLEMENTATION=true
+PRIOR_FAILURES_ARE_INPUTS=true
+LOCAL_IDIOM_BEFORE_GENERIC_PATTERN=true
+```
+
+### Parcial não é estado promovível
+
+No projeto externo, `GREEN` é terminal; `PARTIAL/MISMATCH` não podem virar commit de solução. A equivalência CentralDark é epistemológica, não byte-a-byte para todo domínio:
+
+```text
+PARTIAL|MISMATCH|UNKNOWN|ERROR
+!= PROMOTABLE_PASS
+```
+
+Se o orçamento de iteração acabar sem satisfazer o gate aplicável:
+
+```text
+NAO_PROMOVER_MEIA_SOLUCAO
+→ REVERTER_MUTACAO_NAO_PROVADA_DO_ESCOPO_QUANDO_SEGURO
+→ PRESERVAR_EVIDENCIA
+→ REGISTRAR_BLOCKED_POSTMORTEM
+→ CAUSA/HIPOTESES_TENTADAS/RESULTADOS/NEXT_CURSOR
+→ LIBERAR_WRITER_QUANDO_APLICAVEL
+```
+
+O post-mortem é aprendizado de falha, não segunda fonte da verdade.
+
+```text
+FAILED_ATTEMPT_MUST_NOT_BECOME_BASELINE=true
+LAST_GOOD_STATE_WINS_AFTER_UNPROVEN_ATTEMPT=true
+BLOCKED_POSTMORTEM_IS_PROVENANCE_NOT_PASS=true
+```
+
+### O artefato resolvido é a prova primária; status manual é projeção
+
+Quando um resultado pode ser observado diretamente no artefato canônico e validado pelo gate correspondente, evitar manter uma segunda flag manual como autoridade concorrente.
+
+```text
+SOLVED_ARTIFACT
++ APPLICABLE_VALIDATION
+= PRIMARY_COMPLETION_EVIDENCE
+
+MANUAL_STATUS
+= PROJECTION|INDEX
+!= SOURCE_OF_TRUTH
+```
+
+A regra não elimina receipts, checks ou índices; só impede que eles contradigam silenciosamente o objeto que dizem representar.
 
 ## 7. Aprendizado entre os dois
 
