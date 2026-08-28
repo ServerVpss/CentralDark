@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-27T21:20:15.526Z",
-  "updatedAtBR": "27/08/2026, 18:20:15 BRT",
+  "updatedAt": "2026-08-28T03:36:16.766Z",
+  "updatedAtBR": "28/08/2026, 00:36:16 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "🏠 Canonizar árvore semântica da Casa + disciplina Obsidian/Hermes (#1243)",
+    "lastCommit": "CONVERGÊNCIA — Resgate Lovable: só o cristal de interesse da CentralDark (#1245)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-28T03:36:16.766Z",
+      "titulo": "Push na main · 50ac2e10b4b759e73dec20c6dba1499e379bc010",
+      "detalhe": "CONVERGÊNCIA — Resgate Lovable: só o cristal de interesse da CentralDark (#1245)",
+      "area": "Repositório",
+      "sha": "50ac2e1",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-27T21:20:15.526Z",
       "titulo": "Push na main · f30a986899cd53c8a2261cb03d5001e2aab2363a",
       "detalhe": "🏠 Canonizar árvore semântica da Casa + disciplina Obsidian/Hermes (#1243)",
@@ -988,14 +996,6 @@
       "detalhe": "feat(varredura): inventário determinístico de branches não convergidas (#1095)",
       "area": "Repositório",
       "sha": "3c0d212",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-21T06:49:07.567Z",
-      "titulo": "Push na main · b401046d10e6518a8cc4f687e2bde04b961b0451",
-      "detalhe": "🗿 SEGREDO RELÍQUIA — HUD da escavação completa (#998)",
-      "area": "Repositório",
-      "sha": "b401046",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-28T03:36:16.766Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 50ac2e10b4b759e73dec20c6dba1499e379bc010 (50ac2e1)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-27T21:20:15.526Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · f30a986899cd53c8a2261cb03d5001e2aab2363a (f30a986)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-21T08:53:56.626Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 3c0d212fd57e2a439dfa21d74d3c17cc535c22f3 (3c0d212)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-21T06:49:07.567Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · b401046d10e6518a8cc4f687e2bde04b961b0451 (b401046)",
       "area": "Repositório",
       "status": "sucesso"
     }
