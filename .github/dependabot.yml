@@ -42,6 +42,17 @@ updates:
       - "🤖 IA-EXECUTAR"
     commit-message:
       prefix: "chore(deps)"
+    # Bolt/source usa pnpm-lock.yaml UNICO. Um PR por dependencia faz todos
+    # tocarem o mesmo lockfile -> conflitam entre si em cadeia, e "@dependabot
+    # rebase" nao resolve (rebasear um recria o conflito nos outros).
+    # Agrupando, o ciclo produz UM PR com o lockfile ja consistente.
+    groups:
+      bolt-source-deps:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
     ignore:
       - dependency-name: "*"
         update-types:
