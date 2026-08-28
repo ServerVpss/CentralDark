@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-28T15:57:48.623Z",
-  "updatedAtBR": "28/08/2026, 12:57:48 BRT",
+  "updatedAt": "2026-08-28T23:58:46.933Z",
+  "updatedAtBR": "28/08/2026, 20:58:46 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "chore(deps): bump dompurify from 2.5.8 to 3.4.14 in /apps/modulos/Bolt/source in the bolt-source-security group across 0 directory (#1326)",
+    "lastCommit": "🧠 CENTRALDARK — RECONCILIAR ARQUITETURA INTEIRA + SEGUNDO CÉREBRO LÓGICO (#1360)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-28T23:58:46.933Z",
+      "titulo": "Push na main · 74ee80cd8fa7573cd30c147f284dbb5b32d68351",
+      "detalhe": "🧠 CENTRALDARK — RECONCILIAR ARQUITETURA INTEIRA + SEGUNDO CÉREBRO LÓGICO (#1360)",
+      "area": "Repositório",
+      "sha": "74ee80c",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-28T15:57:48.623Z",
       "titulo": "Push na main · 4f7ea1e67e49be6be49da967a4e1d350e416d8be",
       "detalhe": "chore(deps): bump dompurify from 2.5.8 to 3.4.14 in /apps/modulos/Bolt/source in the bolt-source-security group across 0 directory (#1326)",
@@ -988,14 +996,6 @@
       "detalhe": "fix(varredura): fechar convergência e falhas de inventário (#1097)",
       "area": "Repositório",
       "sha": "ca517bd",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-21T10:54:02.038Z",
-      "titulo": "Push na main · 9ef72f4235f8eb2426062da44f266b578504f123",
-      "detalhe": "security: bloquear reintrodução de fonte externa (#1098)",
-      "area": "Repositório",
-      "sha": "9ef72f4",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-28T23:58:46.933Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 74ee80cd8fa7573cd30c147f284dbb5b32d68351 (74ee80c)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-28T15:57:48.623Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 4f7ea1e67e49be6be49da967a4e1d350e416d8be (4f7ea1e)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-21T11:32:35.635Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · ca517bdc865e0006193e8282f102397f306302fa (ca517bd)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-21T10:54:02.038Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 9ef72f4235f8eb2426062da44f266b578504f123 (9ef72f4)",
       "area": "Repositório",
       "status": "sucesso"
     }
