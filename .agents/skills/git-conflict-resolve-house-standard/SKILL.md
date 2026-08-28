@@ -20,9 +20,10 @@ Este é o ÚNICO padrão oficial. Se outro padrão aparecer, este vence.
 ## MOTOR (já existe, não duplicar)
 - `.github/workflows/dependabot-auto-merge.yml` → dispara no `pull_request` do dependabot
 - `scripts/dependabot/resolve-conflicts.sh` → resolução determinística
-  - `package.json` / `package-lock.json` / `pnpm-lock.yaml`: aceita lado do PR (theirs) — o PR É o bump
-  - core/canônico (`.github/**`, `docs/**`, `scripts/trigger-fabric/**`): mantém main (ours)
-  - default fail-closed: mantém main, não inventa
+- `package.json`: merge inteligente (parte da main + aplica só as diferenças do PR)
+- `package-lock.json` / `pnpm-lock.yaml`: aceita lado do PR (--ours) — lockfile é gerado
+- core/canônico (`.github/**`, `docs/**`, `scripts/trigger-fabric/**`): mantém main (--theirs)
+- default fail-closed: mantém main, não inventa
 - Auto-merge squash habilitado para PATCH (minor fica pra revisão humana)
 
 ## FLUXO CANÔNICO (apertar o botão, não inventar)
