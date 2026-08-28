@@ -1,6 +1,6 @@
 {
   "name": "centraldark-desktop",
-  "description": "CentralDark — uma Casa, Hermes por baixo, SOL por cima e bancada de código compartilhada.",
+  "description": "CentralDark \u2014 uma Casa, Hermes por baixo, SOL por cima e bancada de c\u00f3digo compartilhada.",
   "private": true,
   "license": "MIT",
   "sideEffects": false,
@@ -132,8 +132,6 @@
     "js-cookie": "^3.0.8",
     "jspdf": "^4.2.1",
     "jszip": "^3.10.1",
-    "lucide-react": "^0.577.0",
-    "mime": "^4.0.4",
     "lucide-react": "^0.485.0",
     "mime": "^4.1.0",
     "nanostores": "^0.10.3",
@@ -211,7 +209,8 @@
     "vite-plugin-optimize-css-modules": "^1.1.0",
     "vite-tsconfig-paths": "^4.3.2",
     "vitest": "^3.2.6",
-    "wrangler": "^4.44.0"
+    "wrangler": "^4.44.0",
+    "zod": "3.24.1"
   },
   "resolutions": {
     "@typescript-eslint/utils": "^8.0.0-alpha.30"
