@@ -69,22 +69,26 @@ jobs:
               console.log('::notice::PR mergeable. Seguindo para auto-merge por política.');
             }
 
+      # Este passo já roda no runner self-hosted declarado pelo job.
+      # A versão anterior aninhava `runs-on:` e `steps:` DENTRO de um step —
+      # chaves de job em contexto de step. O YAML aceitava, o schema do Actions
+      # não: o workflow ficava inválido e o GitHub abria um run falho a cada
+      # push, sem executar job nenhum. O motor nunca disparou por aqui.
+      - name: Checkout do SHA exato do evento
+        if: env.SKIP != '1' && env.RESOLVE_REQUESTED == '1'
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          path: .ci-resolve
+          fetch-depth: 1
+
       - name: Resolver conflito deterministicamente no runner
         if: env.SKIP != '1' && env.RESOLVE_REQUESTED == '1'
-        runs-on: [self-hosted, Linux]
         env:
           REPO_DIR: /root/CentralDark
-        steps:
-          - name: Checkout exact event SHA
-            uses: actions/checkout@v7
-            with:
-              ref: ${{ github.sha }}
-              path: .ci-resolve
-              fetch-depth: 1
-          - name: Executar resolução determinística
-            run: |
-              set -euo pipefail
-              bash "$GITHUB_WORKSPACE/.ci-resolve/scripts/dependabot/resolve-conflicts.sh" "${{ context.payload.pull_request.number }}"
+        run: |
+          set -euo pipefail
+          bash "$GITHUB_WORKSPACE/.ci-resolve/scripts/dependabot/resolve-conflicts.sh" "${{ github.event.pull_request.number }}"
 
       - name: Habilitar auto-merge somente para PATCH
         if: env.SKIP != '1' && steps.meta.outputs.update-type == 'version-update:semver-patch' && env.RESOLVE_REQUESTED != '1'
