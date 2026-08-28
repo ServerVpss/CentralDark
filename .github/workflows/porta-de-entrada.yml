@@ -69,7 +69,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python scripts/trigger-fabric/verify_repo_contract.py . | tee "$RUNNER_TEMP/centraldark-contract.txt"
+          python3 scripts/trigger-fabric/verify_repo_contract.py . | tee "$RUNNER_TEMP/centraldark-contract.txt"
           grep -q '^REPO_CONTRACT_VERIFY=PASS$' "$RUNNER_TEMP/centraldark-contract.txt"
           grep -q '^CANONICAL_RUNNER_POLICY=PASS$' "$RUNNER_TEMP/centraldark-contract.txt"
           grep -q '^SELF_HEALING_CONTRACT=PASS$' "$RUNNER_TEMP/centraldark-contract.txt"
@@ -236,7 +236,7 @@ jobs:
         run: |
           set -uo pipefail
           status=0
-          python scripts/trigger-fabric/verify_repo_contract.py . || status=1
+          python3 scripts/trigger-fabric/verify_repo_contract.py . || status=1
           node apps/modulos/mapeamento/core/validar-mapa.mjs \
             --repo-root "$GITHUB_WORKSPACE" \
             --base-sha "$BASE_SHA" \

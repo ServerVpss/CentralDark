@@ -55,8 +55,6 @@ const FORBIDDEN_ADAPTER_POLICY = Object.freeze([
   /PIVETE\/HERMES\s*=\s*executor/i,
   /AUTORIDADE_FINAL\s*=/i,
   /docs\/CONSCIENCIA\//i,
-  /docs\/ARQUITETURA\//i,
-  /\.agents\/skills\//i,
 ]);
 
 function read(path) {

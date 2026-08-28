@@ -2,7 +2,7 @@
 // 🕸️ GraphRAG-Master — memória oficial do Hermes Core.
 // O grafo é projeção derivada. Busca semântica/contextual nunca concede autoridade ou mutação.
 import { readdirSync, readFileSync, statSync, existsSync } from 'node:fs';
-import { join, dirname, relative } from 'node:path';
+import { join, dirname, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
@@ -10,7 +10,8 @@ const pexec = promisify(execFile);
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const KNOWLEDGE = join(HERE, '../../knowledge');
-const REPO_ROOT = process.env.CENTRALDARK_REPO_ROOT || '/root/CentralDark';
+// O checkout pode morar em qualquer caminho. /root/CentralDark não é contrato.
+const REPO_ROOT = process.env.CENTRALDARK_REPO_ROOT || resolve(HERE, '../../../../..');
 const GRAPH_URL = process.env.GRAPH_PANEL_URL || 'http://127.0.0.1:3030';
 const GERADOR_GRAFO = join(REPO_ROOT, 'scripts/grafo-vivo/gerar-grafo-vivo.mjs');
 const MASTER_CYCLE = join(REPO_ROOT, 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml');
@@ -98,11 +99,6 @@ function buscarLocal(missao) {
       try {
         if (statSync(p).isDirectory()) { varrer(p); continue; }
         if (!e.endsWith('.md')) continue;
-        const corpo = normalizar(readFileSync(p, 'utf8').slice(0, 4000));
-        const nome = normalizar(e);
-        const score = ts.reduce((s, t) => s + (nome.includes(t) ? 3 : 0) + (corpo.includes(t) ? 1 : 0), 0);
-        if (score > 0) ranking.push({ p, score, titulo: e });
-      } catch {}
         const raw = readFileSync(p, 'utf8').slice(0, 4000);
         const corpo = normalizar(raw);
         const nome = normalizar(e);
@@ -140,15 +136,13 @@ export { buscarContexto as contexto };
 
 function selfTest() {
   const positive = classificarCicloMestre('!CENTRALDARK fecha essa missão');
-  const negative = classificarCicloMestre('CentralDark é o nome do repo');
-  const checks = {
-    explicit_master_trigger: positive.active === true,
   const alias = classificarCicloMestre('!cdark fecha');
   const negative = classificarCicloMestre('CentralDark é o nome do repo');
   const checks = {
     explicit_master_trigger: positive.active === true,
     alias_master_trigger: alias.active === true,
     plain_word_does_not_trigger: negative.active === false,
+    contract_present: positive.contract_present === true,
     semantic_match_no_authority: positive.authority_granted === false && positive.mutation_authorized === false,
     graph_derived_not_authority: positive.graph_is_authority === false,
   };

@@ -51,6 +51,7 @@ mandatory_inheritance:
   - ARTIFACT_PROPERTIES_WHEN_DERIVED
   - SELF_HEALING_FAILURE_LOOP
   - FAILURE_SIGNATURE_REUSE
+  - TEMPORARY_EXTERNAL_WATCH
   - ANY_PR_OR_COMMIT_GATE
   - CANONICAL_SELF_HOSTED_RUNNER_POLICY
 master_cycle_binding:
@@ -88,6 +89,40 @@ self_healing_binding:
   same_failure_no_new_information: REUSE_CRYSTAL_NOT_RETHINK
   unknown: SEARCH_REALITY
   human_return_before_fixed_point: FORBIDDEN_UNLESS_HUMAN_FRONTIER
+external_dependency_watch_binding:
+  marker: TEMPORARY_EXTERNAL_WATCH
+  applies_to: [PR, CI, DEPENDABOT, EXTERNAL_JOB, ASYNC_PROVIDER, THIRD_PARTY_EXECUTOR]
+  trigger_when:
+    - ACTION_ALREADY_DISPATCHED
+    - EXTERNAL_EXECUTOR_OWNS_NEXT_STATE
+    - PENDING_REQUIRES_OBSERVATION_NOT_REPEAT
+  engine_must:
+    - MEASURE_CURRENT_STATE_ONCE
+    - DEDUPE_REPEATED_SIGNAL
+    - CREATE_TEMPORARY_READ_ONLY_WATCH_WHEN_MONITORING_INTENT_IS_EXPLICIT
+    - BOUND_WATCH_BY_TERMINAL_CONDITION_AND_TIMEOUT
+    - STOP_ON_CONFIRMED_TERMINAL_CONDITION
+    - REMEASURE_LIVE_SOURCE
+    - WRITE_RECEIPT
+    - DELETE_OR_EXPIRE_TEMPORARY_WATCH_RESOURCE
+    - VERIFY_TEMPORARY_WATCH_CLEANUP
+    - CONTINUE_NEXT_CURSOR
+  engine_must_not:
+    - REPEAT_ALREADY_DISPATCHED_COMMAND_WITHOUT_NEW_INFORMATION
+    - ASK_CHEFE_TO_CHOOSE_EQUIVALENT_LOW_RISK_IMPLEMENTATION_DETAILS
+    - TURN_OBSERVATION_INTO_MUTATION
+    - CREATE_PERSISTENT_DAEMON_FOR_EPHEMERAL_WAIT
+    - CLAIM_TERMINAL_SUCCESS_FROM_TIMEOUT_OR_SILENCE
+  authorization:
+    unsolicited_monitor_creation: FORBIDDEN
+    monitoring_intent_required: true
+    explicit_same_mission_monitoring_intent_authorizes_temporary_watch_without_per_step_reask: true
+    temporary_watch_does_not_authorize_target_mutation: true
+  proof:
+    terminal_condition_must_be_observed_on_live_source: true
+    unknown_is_not_pass: true
+    same_signal_without_new_information: DROP_DUPLICATE
+    self_cleanup_must_be_verified: true
 semantic_crystal_binding:
   architecture: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SIGNAL-TERRITORY-CAPABILITY-CRYSTAL.md
   gap_compiler: .agents/skills/distinct-engineering-compiler/SKILL.md

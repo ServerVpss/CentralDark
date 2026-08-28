@@ -22,6 +22,13 @@ for p in sorted(FAMILY.iterdir()):
 shutil.copy2(ROOT/'scripts'/'trigger-fabric'/'verify_package.py', STAGE/'verify_package.py')
 shutil.copy2(ROOT/'scripts'/'trigger-fabric'/'build_package.py', STAGE/'build_package.py')
 
+# ENGINE_BINDING.yml declara este resolver. O ZIP precisa carregar o mesmo
+# caminho relativo para não produzir binding pendurado depois da extração.
+resolver_src = ROOT/'scripts'/'trigger-fabric'/'centraldark_master_cycle.py'
+resolver_dst = STAGE/'scripts'/'trigger-fabric'/'centraldark_master_cycle.py'
+resolver_dst.parent.mkdir(parents=True, exist_ok=True)
+shutil.copy2(resolver_src, resolver_dst)
+
 def sha256(path):
     h=hashlib.sha256(); h.update(path.read_bytes()); return h.hexdigest()
 

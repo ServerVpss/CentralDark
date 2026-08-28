@@ -6,14 +6,19 @@
 //       ÚNICO modo autorizado a fechar PRs, e só quando:
 //         * merged_pr está mergeado (merged_at != null);
 //         * cada nº em supersedes está aberto;
-//         * o corpo/título do merged_pr referencia explicitamente cada superseded
-//           (via "#<n>" ou "Supersedes: #<n>");
+//         * o merged_pr carrega receipt exato de absorção do HEAD atual do ancestral:
+//             Lineage-Absorption: #<n>@<40-hex-head>=PROVEN
+//         * se o HEAD ancestral mudou depois do receipt, o fechamento é bloqueado;
 //         * DRY_RUN=false explícito.
-//       Ação: comentar no superseded citando o merged, aplicar label "superseded",
-//       e SÓ ENTÃO fechar (state=closed). Nunca fecha issues.
+//       Ação: comentar no superseded citando sucessor + HEAD absorvido, aplicar label
+//       "superseded", e SÓ ENTÃO fechar (state=closed). Nunca fecha issues.
 //   - pull_request.closed e schedule:
 //       Modo AUDITORIA. Gera relatório em docs/RELATORIOS/github-bot-controller/<data>.md.
 //       NÃO fecha nada. NÃO fecha por idade.
+//
+// Lei de linhagem:
+//   passado não é descartado; ele vira proveniência + delta candidato.
+//   citar um PR antigo NÃO prova absorção. Supersessão exige PR + HEAD exato + PROVEN.
 //
 // Segurança:
 //   - Valida BOT_EXPECTED_REPOSITORY == GITHUB_REPOSITORY.
@@ -72,14 +77,14 @@ function parseNumbers(input) {
   ));
 }
 
-function referencesNumber(text, n) {
-  if (!text) return false;
-  const re = new RegExp(`(^|[^0-9])#${n}(?![0-9])`, "m");
-  return re.test(text);
+function lineageReceipt(text, n) {
+  if (!text) return null;
+  const re = new RegExp(`(?:^|\\n)\\s*Lineage-Absorption:\\s*#${n}@([0-9a-fA-F]{40})=PROVEN\\s*(?:$|\\n)`, "m");
+  const match = text.match(re);
+  return match ? { pr: n, head: match[1].toLowerCase(), status: "PROVEN" } : null;
 }
 
 async function auditMode() {
-  // Lista PRs abertos e gera relatório read-only.
   const prs = await gh("GET", `/repos/${REPO}/pulls?state=open&per_page=100`);
   const lines = [];
   lines.push(`# Relatório GitHub Bot Controller — ${new Date().toISOString()}`);
@@ -130,22 +135,29 @@ async function closeSupersededMode() {
     const target = await gh("GET", `/repos/${REPO}/pulls/${n}`);
     if (!target) { console.warn(`[controller] PR #${n} não existe — pulando`); continue; }
     if (target.state !== "open") { console.warn(`[controller] PR #${n} não está aberto (state=${target.state}) — pulando`); continue; }
-    if (!referencesNumber(contextText, n)) {
-      console.warn(`[controller] PR #${mergedNum} não referencia explicitamente #${n} — pulando por segurança`);
+
+    const receipt = lineageReceipt(contextText, n);
+    if (!receipt) {
+      console.warn(`[controller] #${mergedNum} sem Lineage-Absorption exato para #${n} — não fecha`);
+      continue;
+    }
+    const liveHead = String(target.head?.sha || "").toLowerCase();
+    if (!liveHead || receipt.head !== liveHead) {
+      console.warn(`[controller] receipt stale para #${n}: receipt=${receipt.head} live=${liveHead || 'UNKNOWN'} — reconciliar novamente`);
       continue;
     }
 
     if (DRY_RUN) {
-      console.log(`[dry] comentaria + label superseded + fecharia PR #${n} (substituído por #${mergedNum})`);
+      console.log(`[dry] fecharia #${n} após receipt PROVEN do HEAD ${liveHead} pelo merged #${mergedNum}`);
       continue;
     }
 
     await gh("POST", `/repos/${REPO}/issues/${n}/comments`, {
-      body: `Este PR foi substituído por #${mergedNum} (mergeado). Fechando via github-bot-controller com autorização explícita.`,
+      body: `SUPERSEDED_WITH_PROOF\n\nSucessor mergeado: #${mergedNum}\nHEAD ancestral absorvido: \`${liveHead}\`\nReceipt: \`Lineage-Absorption: #${n}@${liveHead}=PROVEN\`\n\nO histórico permanece como proveniência; qualquer HEAD diferente exigiria nova reconciliação.`,
     });
     await gh("POST", `/repos/${REPO}/issues/${n}/labels`, { labels: ["superseded"] });
     await gh("PATCH", `/repos/${REPO}/pulls/${n}`, { state: "closed" });
-    console.log(`[controller] PR #${n} fechado (substituído por #${mergedNum})`);
+    console.log(`[controller] PR #${n} fechado com receipt de linhagem exato (sucessor #${mergedNum})`);
   }
 }
 
