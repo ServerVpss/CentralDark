@@ -1,8 +1,8 @@
 # CENTRALDARK — TRIGGER FABRIC FULL PACKAGE
 
 Família canônica para interligar gatilhos, owners, motores, evidência e evolução
-da Casa sem criar segundo cérebro, dispatcher, MCP, router, promotor ou workflow
-paralelo.
+da Casa sem criar cérebro concorrente, dispatcher, MCP, router, promotor ou
+workflow paralelo.
 
 ## Continuidade do PR-mãe
 
@@ -13,6 +13,8 @@ THIS_PACKAGE=CONTINUATION_ON_CURRENT_MAIN
 HISTORY_IS_NOT_CURRENT_STATE=true
 DELTA_USEFUL_ONLY=true
 ONE_SYSTEM_ONLY=true
+SECOND_BRAIN_LOGICAL=ONE
+TWO_COGNITIVE_ROLES_ONE_LOGICAL_BRAIN=true
 ```
 
 O PR #1189 foi a bancada de **INTENÇÃO ÚNICA, PROPRIEDADES E CICLO MESTRE**.
@@ -57,6 +59,7 @@ CHEFE
 → MASTER CYCLE
 → META_LUPA
 → CAPABILITY ROUTER
+→ CÉREBRO DA FRENTE / OPERACIONAL
 → JARVIS ONE CORE/MANY ARMS
 → AGENT CALL + HUB
 → OMNI ROUTER
@@ -66,20 +69,38 @@ CHEFE
 → HERMES/N7/WORKERS
 → TOOLS/BUILDERS
 → EXECUTION
-→ TRACE
-→ EVIDENCE ENVELOPE
+→ TRACE + EVIDENCE
+→ CÉREBRO DE RETAGUARDA / MEMORY LAYER
 → RENDEZVOUS
 → META_LUPA HARVEST
-→ DREAM REVIEW
+→ MEMORY LINKER / DREAM REVIEW / PATTERN DISCOVERY
 → EVOLUTION GATES
 → ONE WRITER
 → COUNTERPROOF / REGRESSION
 → REALITY JUDGE
 → PROMOTE | REJECT
 → MISSION FIXED POINT
-→ OURO
+→ OURO / OWNER / CRYSTAL / FLASH
 → NEXT #ACORDAR
 ```
+
+### Dois papéis cognitivos, uma Casa
+
+```text
+CÉREBRO DA FRENTE
+= missão + decisão + execução atual
+
+CÉREBRO DE RETAGUARDA
+= memória + minério + fragmentos + histórico + proveniência
+
+MEMORY LINKER / DREAM REVIEW
+= mineradores/revisores da retaguarda, não o cérebro nem autoridade
+
+SECOND_BRAIN_LOGICAL=ONE
+TWO_COGNITIVE_ROLES != TWO_AUTHORITIES
+```
+
+O contrato canônico dessa distinção é `SECOND-BRAIN.yml`.
 
 ## MODEL_TOUCH
 
@@ -93,6 +114,7 @@ OMNI_ROUTER_RECEIPT
 → agent-log
 → evidence-envelope
 → agent_events
+→ memory rearguard
 ```
 
 A telemetria é observação:
