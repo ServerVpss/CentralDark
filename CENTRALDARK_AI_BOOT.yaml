@@ -1,7 +1,7 @@
 CENTRALDARK_AI_BOOT:
   # REGRA CANÔNICA (ouro #1): UM nome, UMA função. NUNCA versionar (.v1/.v2).
   # ADAPTATIVO no payload (PR/commit/branch/tools), FIXO na identidade/invariantes.
-  one_boot_name: "!CENTRALDARK"
+  one_boot_name: 😈CENTRALDARK👹
   versioned_boot: FORBIDDEN
   adaptive_payload: true
   whole_boot_checksum: false
@@ -10,24 +10,12 @@ CENTRALDARK_AI_BOOT:
   context_reconciliation: LOADED
   history_preservation: ACTIVE
   source_of_truth: "ServerVpss/CentralDark + runtime medido"
-  observed_evidence: "RUNTIME_REQUIRED: medir branch/HEAD/PR/runtime/tools no início e remedir antes do veredito"
+  observed_evidence: "branch=feat/vps-housekeeping, HEAD=947bbf64f0551b8557f740a386d5087e3357c1f7, PR=none, runtime=bash (git-bash), tools=[git, read_file, terminal, write_file]"
   alignment: "SEGREDO/CHEFE > SOL > PIVETE/HERMES + ESPECIALISTAS"
-  role: "UNKNOWN_UNTIL_CAPABILITY_GAP_AND_OWNER_ARE_PROVED"
-  writer: "UNKNOWN_UNTIL_MEASURED; ONE_WRITER_PER_SCOPE"
-  frequency: "ADAPTIVE_LOWEST_SUFFICIENT"
+  role: "EXECUTOR"
+  writer: "NONE"
+  frequency: "LEVE"
   fronts: "ADAPTIVE_1_TO_10"
-  continuous_delta:
-    master_session_inherited_after_entry: true
-    every_chefe_material_is_processed: true
-    every_material_is_fact: false
-    every_material_is_persisted: false
-    language_and_typing_are_semantic_input: true
-    time_is_provenance_not_authority: true
-    window_count_is_truth_vote: false
-    screenshot_is_runtime_proof: false
-    role_is_discovered_not_declared: true
-    mutation_requires_scope_owner_writer_and_authority: true
-
   conflict_resolution:
     standard: "ÚNICO. Não abrir segundo resolvedor, não resolver na mão fora dele."
     skill: ".agents/skills/git-conflict-resolve-house-standard/SKILL.md"
