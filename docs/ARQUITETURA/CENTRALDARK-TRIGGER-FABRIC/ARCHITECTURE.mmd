@@ -32,6 +32,19 @@ flowchart TD
 
   EXEC --> TRACE["CAUSAL TRACE<br/>mission / request / correlation / trace / span"]
   TRACE --> EVID["EVIDENCE ENVELOPE<br/>sanitize + causal dedupe"]
+
+  subgraph INGRESSES["AUTHORIZED SURFACE / CONTEXT INGRESSES"]
+    SCREENPIPE["Screenpipe / Browser Bridge<br/>screen + audio + browser context"]
+    SAVED["Saved HTML / Notepad / Recorder"]
+    DOCSENSOR["Screenshot / Print-PDF"]
+    LIVEOBS["runtime / logs / network / storage"]
+  end
+  SCREENPIPE --> INGEST["MATERIAL INGEST<br/>provenance + sanitize + quarantine"]
+  SAVED --> INGEST
+  DOCSENSOR --> INGEST
+  LIVEOBS --> INGEST
+  INGEST --> REAR
+
   EVID --> REAR["CEREBRO DE RETAGUARDA / MEMORY LAYER<br/>materia + fragmentos + historico + proveniencia"]
   REAR --> EVENTS["agent_events / observable receipts"]
   EVENTS --> RENDEZ2["CROSS-ARM RENDEZVOUS<br/>dedupe + contradiction"]
@@ -56,6 +69,7 @@ flowchart TD
 
   OMNI -. MODEL_TOUCH when configured .-> EVID
   GOLD -. learned delta returns to operational front .-> FRONT
+  SCREENPIPE -. sensor/context only; not authority .-> FRONT
 
   LOGICAL["SECOND_BRAIN_LOGICAL = ONE<br/>TWO COGNITIVE ROLES != TWO AUTHORITIES"]
   FRONT -. same logical brain .- LOGICAL
