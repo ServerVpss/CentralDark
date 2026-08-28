@@ -5,7 +5,8 @@ flowchart TD
   BOOT --> META["!META_LUPA + !RECONCILIAR + !CONTRAPROVA"]
   META --> FIX["!REMEDICAO + !FIXED_POINT + !REGISTRA + !BOOT"]
   FIX --> CAP["CAPABILITY CONTRACT ROUTER<br/>minimum sufficient set"]
-  CAP --> JARVIS["JARVIS<br/>ONE CORE / MANY ARMS"]
+  CAP --> FRONT["CEREBRO DA FRENTE / OPERACIONAL<br/>missao + decisao + execucao"]
+  FRONT --> JARVIS["JARVIS<br/>ONE CORE / MANY ARMS"]
   JARVIS --> SCOUTS["READ-ONLY FANOUT<br/>SCOUTS / PERCEPCAO"]
   SCOUTS --> RENDEZ1["RENDEZVOUS<br/>normalize + dedupe + conflict test"]
   RENDEZ1 --> WRITER0["ONE WRITER PER SCOPE"]
@@ -31,10 +32,12 @@ flowchart TD
 
   EXEC --> TRACE["CAUSAL TRACE<br/>mission / request / correlation / trace / span"]
   TRACE --> EVID["EVIDENCE ENVELOPE<br/>sanitize + causal dedupe"]
-  EVID --> EVENTS["agent_events / observable receipts"]
+  EVID --> REAR["CEREBRO DE RETAGUARDA / MEMORY LAYER<br/>materia + fragmentos + historico + proveniencia"]
+  REAR --> EVENTS["agent_events / observable receipts"]
   EVENTS --> RENDEZ2["CROSS-ARM RENDEZVOUS<br/>dedupe + contradiction"]
   RENDEZ2 --> HARVEST["META_LUPA HARVEST"]
-  HARVEST --> DREAM["DREAM REVIEW + PATTERN DISCOVERY"]
+  HARVEST --> LINKER["MEMORY LINKER / SESSION HARVESTER<br/>mineradores, nao cerebro"]
+  LINKER --> DREAM["DREAM REVIEW + PATTERN DISCOVERY<br/>candidate only"]
   DREAM --> CAND["EVOLUTION CANDIDATE"]
   CAND --> GATES["EVOLUTION GATES<br/>evolution + series + AGI claim"]
   GATES --> WRITER1["ONE WRITER"]
@@ -47,11 +50,16 @@ flowchart TD
   JUDGE -->|FAILS| REJECT["REJECT / ROLLBACK"]
   PROMOTE --> FP["MISSION FIXED POINT"]
   REJECT --> FP
-  FP --> GOLD["REGISTRO DO OURO"]
+  FP --> GOLD["REGISTRO DO OURO<br/>OWNER / CRYSTAL / FLASH"]
   GOLD --> NEXT["NEXT #ACORDAR"]
   NEXT --> MASTER
 
   OMNI -. MODEL_TOUCH when configured .-> EVID
+  GOLD -. learned delta returns to operational front .-> FRONT
+
+  LOGICAL["SECOND_BRAIN_LOGICAL = ONE<br/>TWO COGNITIVE ROLES != TWO AUTHORITIES"]
+  FRONT -. same logical brain .- LOGICAL
+  REAR -. same logical brain .- LOGICAL
 
   subgraph RESERVES["FUTURE RESERVES - NOT ACTIVE BY PRESENCE"]
     ODS["ODS<br/>DEFERRED UNTIL MEASURED"]
