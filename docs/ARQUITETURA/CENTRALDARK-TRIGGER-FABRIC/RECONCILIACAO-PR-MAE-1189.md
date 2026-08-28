@@ -194,3 +194,51 @@ PAST
 
 Este receipt acompanha o pacote para impedir que uma sessão futura precise
 reconstruir a mesma reconciliação do zero.
+
+## Checkpoint de continuidade — 2026-08-28
+
+Registro solicitado por `!CALIBRAR + #ACORDAR`. Este bloco preserva o cursor;
+não executa as pendências e não transforma histórico em estado atual futuro.
+
+```yaml
+CONTINUATION_CHECKPOINT:
+  observed_main: 3c77bf7a653bc81c82c41ea7c90948e2fa9436fe
+  branch: reconciliacao/pr-mae-1189-arquitetura-inteira-20260828
+  last_good_state: a0d902fe90aad4a0edfb4f8b888ea59a769e9625
+  pr_open_observed: false
+  local_ai_runtime: UNKNOWN
+  local_ai_deferred_until_measured: true
+  pending:
+    - scripts/trigger-fabric/verify_package.py
+    - scripts/trigger-fabric/build_package.py
+    - .github/workflows/trigger-fabric-package.yml
+  next_cursor:
+    - REMEASURE_CURRENT_MAIN_AND_BRANCH
+    - RECONCILE_MAIN_DRIFT_BEFORE_MUTATION
+    - COMPLETE_ONLY_THE_THREE_PENDING_PACKAGE_GATE_FILES
+    - RUN_PACKAGE_AND_CONTRACT_GATES
+    - COUNTERPROVE_YAML_PARSE_AND_UNIQUE_KEYS
+    - REMEASURE_HEAD_AND_RESULTS
+    - OPEN_ONE_PR_AGAINST_MAIN_ONLY_IF_CLEAN
+  forbidden_as_part_of_this_checkpoint:
+    merge: true
+    deploy: true
+    restart: true
+    local_ai_activation: true
+    external_reserve_installation: true
+```
+
+Regra de retomada:
+
+```text
+LAST_GOOD_STATE
++ LIVE_MAIN
++ LIVE_BRANCH
++ PENDING_SET
+→ RECONCILE
+→ NEXT_CURSOR
+```
+
+`last_good_state` acima é o HEAD observado **antes deste próprio commit de
+checkpoint**; o novo commit passa a ser o cursor documental, não prova de que
+as três pendências foram executadas.
