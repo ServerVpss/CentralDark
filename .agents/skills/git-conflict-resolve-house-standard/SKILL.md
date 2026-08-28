@@ -3,7 +3,7 @@ name: git-conflict-resolve-house-standard
 description: Padrão único da Casa para resolver conflito de PR (dependabot ou humano). Use quando um PR abrir CONFLICTING, quando a main avançar sob um PR aberto, ou quando perguntarem como resolver conflito. Não criar segundo resolvedor, não fazer merge manual fora deste padrão.
 metadata:
   type: operational
-  version: "1.0"
+  version: "1.1"
   owner: SEGREDO/CHEFE
 ---
 
@@ -107,6 +107,10 @@ FAIL_CLOSED_ESCRITO != FAIL_CLOSED_IMPLEMENTADO
    A cura é **agrupar** (`.github/dependabot.yml`), não resolver um a um.
    E `groups` sem `applies-to` cobre apenas `version-updates`: alerta de
    segurança gera `security-updates` e passa por fora do grupo.
+
+4. **22k = falso positivo de filtro.** Contar linhas com a letra "i" no
+   `lsattr` não é medir atributo `+i`. O número real era 9 (trava cirúrgica
+   de rebase antigo), não 22 mil. Filtro correto: `$1 ~ /^.*i-/`.
 
 ## Adaptação
 
