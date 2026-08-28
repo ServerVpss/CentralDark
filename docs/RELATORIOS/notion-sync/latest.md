@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-08-28T03:31:39.303Z
+# 🧠 Notion Sync — 2026-08-28T11:06:06.540Z
 
-- **Commit fonte:** `50ac2e10b4b759e73dec20c6dba1499e379bc010`
+- **Commit fonte:** `0d51b90b29c5718748a354d1603e289133749ad0`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 2 criadas · ♻️ 444 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 446 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
 | aprendizados | 30 | 0 | 30 | 0 | 0 |
-| estrutura | 372 | 2 | 370 | 0 | 0 |
+| estrutura | 372 | 0 | 372 | 0 | 0 |
 
 ## Operações
 
@@ -252,7 +252,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/ARTEFATOS/centraldark-prompt-universal.md |
 | estrutura | atualizado | docs/CONSCIENCIA/BAIANES-E-RESENHA-REGIONAL.md |
 | estrutura | atualizado | docs/CONSCIENCIA/BOT_COMMANDS.md |
-| estrutura | criado | docs/CONSCIENCIA/COCKPIT-AVANCO.README.md |
+| estrutura | atualizado | docs/CONSCIENCIA/COCKPIT-AVANCO.README.md |
 | estrutura | atualizado | docs/CONSCIENCIA/CODEX-INTEGRADO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/CODEX-REVISAO-PRS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/CONECTOR-LIBERDADE-SEGURA.md |
@@ -282,7 +282,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/DARKAI/PROMPT-UNIVERSAL.md |
 | estrutura | atualizado | docs/CONSCIENCIA/DARKAI/QUICKSTART.md |
 | estrutura | atualizado | docs/CONSCIENCIA/DARKAI/README.md |
-| estrutura | criado | docs/CONSCIENCIA/DESAFIO-NIVEL-7-AGENTES-ERRO-ABERTO.md |
+| estrutura | atualizado | docs/CONSCIENCIA/DESAFIO-NIVEL-7-AGENTES-ERRO-ABERTO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/DESEJOS-FUTUROS-MEGA-PACOTAO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/DICIONARIO-PIVETE-GITHUB.md |
 | estrutura | atualizado | docs/CONSCIENCIA/DNS-WILDCARD-CENTRALLDARK.md |
