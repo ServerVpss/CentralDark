@@ -83,7 +83,7 @@ jobs:
           jq '.total, [.skills[].nome]' /tmp/inv.json
 
       - name: Detectar drift (skills duplicadas + menções ativas em doc)
-        run: python scripts/lupa/detectar_drift.py
+        run: python3 scripts/lupa/detectar_drift.py
 
       - name: Upload inventário
         if: success()
