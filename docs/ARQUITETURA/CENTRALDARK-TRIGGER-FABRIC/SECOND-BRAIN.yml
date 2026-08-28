@@ -3,10 +3,44 @@ owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/
 status: CANONICAL_CONTRACT
 source_rule: "CANONICO -> ARTEFATO; artefato nao inventa canonico"
 
-# Intenção SEGREDO/CHEFE: um Segundo Cérebro lógico, nunca paralelo.
+# Intenção SEGREDO/CHEFE: dois papéis cognitivos complementares, um único
+# cérebro lógico da Casa e nenhuma segunda autoridade concorrente.
 second_brain:
   logical: ONE
-  parallel_forbidden: true
+  cognitive_roles: TWO_COMPLEMENTARY
+  parallel_authority_forbidden: true
+  operational_front:
+    role: MISSION_DECISION_EXECUTION_LOOP
+    description: "camada que recebe intenção, decide rota/capacidade, executa e produz efeito observável"
+    owners:
+      - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
+      - docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md
+      - apps/modulos/HERMES-CORE/
+    emits:
+      - TRACE
+      - EVIDENCE
+      - RECEIPT
+      - LEARNING_EVENT
+    is_second_authority: false
+  memory_rearguard:
+    role: DURABLE_MATTER_MEMORY_AND_FRAGMENT_RESERVOIR
+    description: "camada de memória que preserva minério, fragmentos, experiências e conhecimento para garimpo posterior"
+    stores:
+      - RAW_MATERIAL
+      - FRAGMENTS
+      - HISTORY
+      - CANDIDATE_KNOWLEDGE
+      - PROVENANCE
+    miners:
+      - scripts/memory-linker/
+      - scripts/memory-linker/dream-review.mjs
+      - scripts/memory-linker/pattern-discovery.mjs
+      - .agents/skills/session-intelligence-harvester/
+      - .agents/skills/knowledge-compiler/
+    miners_are_brain: false
+    miners_are_authority: false
+    direct_canonical_mutation: false
+    is_second_authority: false
   surfaces:
     github_canonical:
       role: SOURCE_OF_TRUTH_AND_MEMORY_LAYER
@@ -32,6 +66,12 @@ second_brain:
 
 invariants:
   SECOND_BRAIN_LOGICAL_ONE: true
+  TWO_COGNITIVE_ROLES_ONE_LOGICAL_BRAIN: true
+  OPERATIONAL_FRONT_EXECUTES_CURRENT_MISSION: true
+  MEMORY_REARGUARD_PRESERVES_MATTER: true
+  MEMORY_LINKER_IS_MINER_NOT_BRAIN: true
+  DREAM_REVIEW_IS_MINER_NOT_AUTHORITY: true
+  SECOND_BRAIN_IS_NOT_SECOND_AUTHORITY: true
   GITHUB_IS_NOT_JUST_OUTPUT: true
   LOCAL_IS_NOT_PARALLEL_BRAIN: true
   GRAPH_VECTOR_ARE_DERIVED_INDEXES: true
@@ -39,6 +79,28 @@ invariants:
   NEW_AUTOBOT_V2: false
   NEW_PARALLEL_RAG: false
   NEW_PARALLEL_MCP: false
+
+flow:
+  operational_to_memory:
+    - CURRENT_MISSION
+    - EXECUTION
+    - OBSERVABLE_TRACE
+    - EVIDENCE_RECEIPT
+    - MEMORY_REARGUARD
+  memory_to_gold:
+    - RAW_MATERIAL_AND_FRAGMENTS
+    - MEMORY_LINKER
+    - DREAM_REVIEW
+    - PATTERN_DISCOVERY
+    - META_LUPA_COUNTERPROOF
+    - AUTHORIZED_WRITER
+    - TEST_AND_REALITY_JUDGE
+    - GOLD_CANONICAL
+  gold_to_next_mission:
+    - OWNER_CANONICAL
+    - CRYSTAL_OR_FLASH_WHEN_ELIGIBLE
+    - NEXT_ACORDAR
+    - OPERATIONAL_FRONT
 
 pipeline:
   matter_or_event:
