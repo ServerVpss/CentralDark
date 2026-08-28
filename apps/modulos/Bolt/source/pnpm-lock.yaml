@@ -356,7 +356,7 @@ importers:
     devDependencies:
       '@blitz/eslint-plugin':
         specifier: 0.1.0
-        version: 0.1.0(jiti@1.21.7)(prettier@3.6.2)(typescript@5.8.3)
+        version: 0.1.0(jiti@1.21.7)(prettier@3.9.6)(typescript@5.8.3)
       '@cloudflare/workers-types':
         specifier: ^4.20251011.0
         version: 4.20251014.0
@@ -431,7 +431,7 @@ importers:
         version: 10.1.8(eslint@9.31.0(jiti@1.21.7))
       eslint-plugin-prettier:
         specifier: ^5.2.6
-        version: 5.5.3(eslint-config-prettier@10.1.8(eslint@9.31.0(jiti@1.21.7)))(eslint@9.31.0(jiti@1.21.7))(prettier@3.6.2)
+        version: 5.5.3(eslint-config-prettier@10.1.8(eslint@9.31.0(jiti@1.21.7)))(eslint@9.31.0(jiti@1.21.7))(prettier@3.9.6)
       fast-glob:
         specifier: ^3.3.2
         version: 3.3.3
@@ -451,8 +451,8 @@ importers:
         specifier: ^10.34.4
         version: 10.34.4
       prettier:
-        specifier: ^3.5.3
-        version: 3.6.2
+        specifier: ^3.9.6
+        version: 3.9.6
       rimraf:
         specifier: ^4.4.1
         version: 4.4.1
@@ -4999,6 +4999,7 @@ packages:
   eslint@9.31.0:
     resolution: {integrity: sha512-QldCVh/ztyKJJZLr4jXNUByx3gR+TDYZCRXEktiZoUR3PGy4qCmSbkxcIle8GEwGpb5JBZazlaJ/CxLidXdEbQ==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
     peerDependencies:
       jiti: '*'
@@ -6928,8 +6929,8 @@ packages:
     engines: {node: '>=10.13.0'}
     hasBin: true
 
-  prettier@3.6.2:
-    resolution: {integrity: sha512-I7AIg5boAr5R0FFtJ6rCfD+LFsWHp81dolrFD8S79U9tb8Az2nGrJncnMSnys+bpQJfRUzqs9hnA81OAA3hCuQ==}
+  prettier@3.9.6:
+    resolution: {integrity: sha512-OpN0zzVdiaiAhxpuuj5efpIS4sY9j7bY6uR5mnj5yPzGkdkjNKSJeUThPb60Jw29QuAZgA4o+/iB49kFiaBX6g==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -9506,7 +9507,7 @@ snapshots:
       '@babel/helper-string-parser': 7.27.1
       '@babel/helper-validator-identifier': 7.27.1
 
-  '@blitz/eslint-plugin@0.1.0(jiti@1.21.7)(prettier@3.6.2)(typescript@5.8.3)':
+  '@blitz/eslint-plugin@0.1.0(jiti@1.21.7)(prettier@3.9.6)(typescript@5.8.3)':
     dependencies:
       '@stylistic/eslint-plugin-ts': 2.13.0(eslint@9.31.0(jiti@1.21.7))(typescript@5.8.3)
       '@typescript-eslint/eslint-plugin': 8.38.0(@typescript-eslint/parser@8.38.0(eslint@9.31.0(jiti@1.21.7))(typescript@5.8.3))(eslint@9.31.0(jiti@1.21.7))(typescript@5.8.3)
@@ -9516,7 +9517,7 @@ snapshots:
       eslint: 9.31.0(jiti@1.21.7)
       eslint-config-prettier: 9.1.2(eslint@9.31.0(jiti@1.21.7))
       eslint-plugin-jsonc: 2.20.1(eslint@9.31.0(jiti@1.21.7))
-      eslint-plugin-prettier: 5.5.3(eslint-config-prettier@9.1.2(eslint@9.31.0(jiti@1.21.7)))(eslint@9.31.0(jiti@1.21.7))(prettier@3.6.2)
+      eslint-plugin-prettier: 5.5.3(eslint-config-prettier@9.1.2(eslint@9.31.0(jiti@1.21.7)))(eslint@9.31.0(jiti@1.21.7))(prettier@3.9.6)
       globals: 15.15.0
       typescript-eslint: 8.38.0(eslint@9.31.0(jiti@1.21.7))(typescript@5.8.3)
     transitivePeerDependencies:
@@ -13886,19 +13887,19 @@ snapshots:
     transitivePeerDependencies:
       - '@eslint/json'
 
-  eslint-plugin-prettier@5.5.3(eslint-config-prettier@10.1.8(eslint@9.31.0(jiti@1.21.7)))(eslint@9.31.0(jiti@1.21.7))(prettier@3.6.2):
+  eslint-plugin-prettier@5.5.3(eslint-config-prettier@10.1.8(eslint@9.31.0(jiti@1.21.7)))(eslint@9.31.0(jiti@1.21.7))(prettier@3.9.6):
     dependencies:
       eslint: 9.31.0(jiti@1.21.7)
-      prettier: 3.6.2
+      prettier: 3.9.6
       prettier-linter-helpers: 1.0.0
       synckit: 0.11.11
     optionalDependencies:
       eslint-config-prettier: 10.1.8(eslint@9.31.0(jiti@1.21.7))
 
-  eslint-plugin-prettier@5.5.3(eslint-config-prettier@9.1.2(eslint@9.31.0(jiti@1.21.7)))(eslint@9.31.0(jiti@1.21.7))(prettier@3.6.2):
+  eslint-plugin-prettier@5.5.3(eslint-config-prettier@9.1.2(eslint@9.31.0(jiti@1.21.7)))(eslint@9.31.0(jiti@1.21.7))(prettier@3.9.6):
     dependencies:
       eslint: 9.31.0(jiti@1.21.7)
-      prettier: 3.6.2
+      prettier: 3.9.6
       prettier-linter-helpers: 1.0.0
       synckit: 0.11.11
     optionalDependencies:
@@ -16462,7 +16463,7 @@ snapshots:
 
   prettier@2.8.8: {}
 
-  prettier@3.6.2: {}
+  prettier@3.9.6: {}
 
   pretty-format@27.5.1:
     dependencies:
