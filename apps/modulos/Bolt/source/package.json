@@ -199,7 +199,7 @@
     "pnpm": "^10.34.4",
     "prettier": "^3.5.3",
     "rimraf": "^4.4.1",
-    "sass-embedded": "^1.81.0",
+    "sass-embedded": "^1.103.1",
     "stream-browserify": "^3.0.0",
     "typescript": "^5.7.2",
     "unified": "^11.0.5",
