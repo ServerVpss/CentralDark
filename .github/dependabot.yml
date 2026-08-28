@@ -23,6 +23,28 @@ updates:
         update-types:
           - "version-update:semver-major"
 
+  # Bolt/source concentra 100% dos alertas Dependabot abertos (pnpm-lock.yaml).
+  # Sem esta entrada o diretorio nao e vigiado e nenhum PR de correcao e criado,
+  # mesmo com fix disponivel — alertas ficam presos indefinidamente.
+  - package-ecosystem: "npm"
+    directory: "/apps/modulos/Bolt/source"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 15
+    labels:
+      - "🤖 AUTO"
+      - "🔄 GIT"
+      - "👑 PERMITO-SEGREDO"
+      - "🧠 AGENTE-HERMES"
+      - "✨ MELHORIA"
+      - "🤖 IA-EXECUTAR"
+    commit-message:
+      prefix: "chore(deps)"
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - "version-update:semver-major"
+
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
