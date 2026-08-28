@@ -78,7 +78,7 @@ jobs:
 
       - name: Gerar inventário de skills
         run: |
-          python scripts/lupa/inventario_skills.py > /tmp/inv.json
+          python3 scripts/lupa/inventario_skills.py > /tmp/inv.json
           echo "---"
           jq '.total, [.skills[].nome]' /tmp/inv.json
 
