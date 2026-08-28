@@ -385,8 +385,8 @@ importers:
         specifier: ^5.2.3
         version: 5.2.3
       '@types/dom-speech-recognition':
-        specifier: ^0.0.4
-        version: 0.0.4
+        specifier: ^0.0.12
+        version: 0.0.12
       '@types/electron':
         specifier: ^1.6.12
         version: 1.6.12
@@ -3529,8 +3529,8 @@ packages:
   '@types/diff@5.2.3':
     resolution: {integrity: sha512-K0Oqlrq3kQMaO2RhfrNQX5trmt+XLyom88zS0u84nnIcLvFnRUMRRHmrGny5GSM+kNO9IZLARsdQHDzkhAgmrQ==}
 
-  '@types/dom-speech-recognition@0.0.4':
-    resolution: {integrity: sha512-zf2GwV/G6TdaLwpLDcGTIkHnXf8JEf/viMux+khqKQKDa8/8BAUtXXZS563GnvJ4Fg0PBLGAaFf2GekEVSZ6GQ==}
+  '@types/dom-speech-recognition@0.0.12':
+    resolution: {integrity: sha512-SmLovKV3e/J71U5CBmKYe03Q75biuw7jiEWGoO1arc47CjtmxCr+W7cPJcAAwySSJFwr+jWkr/fPVuVuL+D6Dw==}
 
   '@types/electron@1.6.12':
     resolution: {integrity: sha512-NIJokDkGv9h+MStCL1IuiL1FOHYVkszoWeNxJtSI5dcEKRGbX83JcVYNAgk019qOQgJkHtz9WdP0CDXvrArrGg==}
@@ -11673,7 +11673,7 @@ snapshots:
 
   '@types/diff@5.2.3': {}
 
-  '@types/dom-speech-recognition@0.0.4': {}
+  '@types/dom-speech-recognition@0.0.12': {}
 
   '@types/electron@1.6.12':
     dependencies:
