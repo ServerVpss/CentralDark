@@ -126,7 +126,7 @@
     "framer-motion": "^11.12.0",
     "ignore": "^6.0.2",
     "isbot": "^4.4.0",
-    "isomorphic-git": "^1.27.2",
+    "isomorphic-git": "^1.41.9",
     "istextorbinary": "^9.5.0",
     "jose": "^5.9.6",
     "js-cookie": "^3.0.7",
