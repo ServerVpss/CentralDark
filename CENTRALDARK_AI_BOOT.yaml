@@ -27,7 +27,8 @@ CENTRALDARK_AI_BOOT:
     # dizia "mantém main" e usava --ours, que aceita o PR — deixando um PR
     # sobrescrever .github/, docs/ e scripts/trigger-fabric/ sem revisão.
     policy:
-      manifesto_e_lockfile: "LADO_DO_PR (--ours) — o PR É o bump. Vale em qualquer diretório: package.json, package-lock.json, pnpm-lock.yaml, yarn.lock"
+      package_json: "MERGE INTELIGENTE com merge-base — parte da main e aplica só as diferenças do PR. --ours é cego e perde TODAS as outras mudanças da main."
+      lockfile: "LADO_DO_PR (--ours) — lockfile é gerado, não editado manualmente. Vale em qualquer diretório: package-lock.json, pnpm-lock.yaml, yarn.lock"
       todo_o_resto: "LADO_DA_MAIN (--theirs) — fail-closed de verdade, sem lista de exceções"
     invariants:
       - "OURS_E_THEIRS_SAO_CONTRAINTUITIVOS_NO_MERGE"
