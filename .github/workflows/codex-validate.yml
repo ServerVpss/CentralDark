@@ -71,6 +71,7 @@ jobs:
           node --test apps/modulos/mapeamento/tests/validar-mapa.test.mjs
           node --test apps/modulos/HERMES-CORE/agents/Log-Verificador/provider-health.test.mjs
           bash -n scripts/vps/deploy-operational-guards.sh
+          bash -n scripts/vps/centraldark-deploy.sh
 
       - name: Enforce unique map and consolidated locks
         env:
