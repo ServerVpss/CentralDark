@@ -1,3 +1,10 @@
+---
+title: "2026 08 28 Meteor Decomp Pr Bot Assay"
+date: 2026-08-28
+tags: ["consciencia"]
+updated: 2026-08-28
+---
+
 # Assay externo — meteor-decomp PR/claim coordination
 
 Data: 2026-08-28

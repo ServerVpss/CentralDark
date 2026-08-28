@@ -1,3 +1,10 @@
+---
+title: "2026 08 27 MCP LISTENER LIFECYCLE RECEIPT"
+date: 2026-08-28
+tags: ["consciencia"]
+updated: 2026-08-28
+---
+
 # 2026-08-27-MCP-LISTENER-LIFECYCLE-RECEIPT.md
 
 !REGISTRA — MCP listener lifecycle

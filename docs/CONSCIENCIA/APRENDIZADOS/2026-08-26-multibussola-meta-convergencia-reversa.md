@@ -355,3 +355,11 @@ CODEX_PROVIDER_ACTIVE=UNKNOWN
 AUTHENTICATION_STATE=UNKNOWN
 CUSTOM_PROMPT_EXECUTED=UNKNOWN
 ```
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

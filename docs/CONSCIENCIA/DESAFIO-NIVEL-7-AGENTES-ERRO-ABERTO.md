@@ -1,3 +1,10 @@
+---
+title: "DESAFIO NIVEL 7 AGENTES ERRO ABERTO"
+date: 2026-08-28
+tags: ["consciencia"]
+updated: 2026-08-28
+---
+
 # DESAFIO NÍVEL 7 — AGENTES DE ERRO ABERTO
 
 **Autoria conceitual:** Pivete.

@@ -1,3 +1,10 @@
+---
+title: "COUNTERPROOF"
+date: 2026-08-28
+tags: ["consciencia"]
+updated: 2026-08-28
+---
+
 # Counterproof — AIOS/AIOX
 
 Objetivo: impedir que quantidade de arquivos, nomes sofisticados ou documentação virem prova automática de qualidade/aderência.

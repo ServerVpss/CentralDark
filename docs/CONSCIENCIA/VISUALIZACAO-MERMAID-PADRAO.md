@@ -1,3 +1,10 @@
+---
+title: "VISUALIZACAO MERMAID PADRAO"
+date: 2026-08-28
+tags: ["consciencia"]
+updated: 2026-08-28
+---
+
 # Visualização Mermaid — Padrão Obrigatório da Casa
 
 **Decisão do SEGREDO/CHEFE (PERMITO PIVETE):** toda informação estruturada na

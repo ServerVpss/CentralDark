@@ -1,3 +1,10 @@
+---
+title: "2026 08 28 Revisao Mineracao Agi E Organismo"
+date: 2026-08-28
+tags: ["consciencia"]
+updated: 2026-08-28
+---
+
 # Revisão cruzada — Mineracao AGI, MetaLupa canônica e organismo
 
 ## Status

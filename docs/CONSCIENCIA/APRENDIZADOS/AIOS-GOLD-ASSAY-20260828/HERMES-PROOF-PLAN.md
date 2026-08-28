@@ -1,3 +1,10 @@
+---
+title: "HERMES PROOF PLAN"
+date: 2026-08-28
+tags: ["consciencia"]
+updated: 2026-08-28
+---
+
 # Hermes Proof Plan — AIOS/AIOX Gold Assay
 
 Este plano não manda Hermes importar AIOS. Ele manda Hermes tentar derrubar cada candidato contra a CentralDark viva.

@@ -1,3 +1,10 @@
+---
+title: "MANUAL DO DONO"
+date: 2026-08-28
+tags: ["consciencia"]
+updated: 2026-08-28
+---
+
 # MANUAL DO DONO — temas e relevo
 
 > 🔍 **LUPA NA MÃO · INTENÇÃO NA FRENTE** — CentralDark

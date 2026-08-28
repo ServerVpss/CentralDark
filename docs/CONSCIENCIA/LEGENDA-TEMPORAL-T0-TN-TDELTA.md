@@ -293,3 +293,11 @@ PADRAO_DE_LEGENDA_PODE_SER_REUTILIZADO=true
 ```
 
 Qualquer renomeação futura deve preservar a semântica vigente ou declarar explicitamente a mudança de significado, escopo e impacto.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

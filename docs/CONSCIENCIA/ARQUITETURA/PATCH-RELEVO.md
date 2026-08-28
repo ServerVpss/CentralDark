@@ -1,3 +1,10 @@
+---
+title: "PATCH RELEVO"
+date: 2026-08-28
+tags: ["consciencia"]
+updated: 2026-08-28
+---
+
 # PATCH — devolver o relevo à forja
 
 > 🔍 **LUPA NA MÃO · INTENÇÃO NA FRENTE** — CentralDark

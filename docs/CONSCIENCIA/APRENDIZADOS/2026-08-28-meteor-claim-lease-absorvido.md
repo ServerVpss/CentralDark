@@ -1,3 +1,10 @@
+---
+title: "2026 08 28 Meteor Claim Lease Absorvido"
+date: 2026-08-28
+tags: ["consciencia"]
+updated: 2026-08-28
+---
+
 # 2026-08-28 — Meteor claim/lease: mecanismos absorvidos (não copiados)
 
 > PROVENIENCE: swstegall/meteor-decomp (AGENTS.md + claim.yml + claim-pr.yml + claim.py + reconcile.yml)

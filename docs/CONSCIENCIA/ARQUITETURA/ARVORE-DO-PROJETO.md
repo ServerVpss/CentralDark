@@ -1,3 +1,10 @@
+---
+title: "ARVORE DO PROJETO"
+date: 2026-08-28
+tags: ["consciencia"]
+updated: 2026-08-28
+---
+
 # ÁRVORE DO PROJETO — CentralDark
 
 > ⚠️ **SUPERSEDIDO PELA REGRA `ONE_DOCUMENTATION_OWNER_PER_SCOPE`**

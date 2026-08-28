@@ -1,3 +1,10 @@
+---
+title: "LEIA PRIMEIRO"
+date: 2026-08-28
+tags: ["consciencia"]
+updated: 2026-08-28
+---
+
 # PARA HERMES — pacote de absorção
 
 > 🔍 **LUPA NA MÃO · INTENÇÃO NA FRENTE** — CentralDark

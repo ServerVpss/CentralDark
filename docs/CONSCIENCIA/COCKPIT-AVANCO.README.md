@@ -1,3 +1,10 @@
+---
+title: "COCKPIT AVANCO.README"
+date: 2026-08-28
+tags: ["consciencia"]
+updated: 2026-08-28
+---
+
 # Cockpit — Avanço (fonte única)
 
 Arquivo canônico: `docs/CONSCIENCIA/COCKPIT-AVANCO.json`

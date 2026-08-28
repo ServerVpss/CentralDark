@@ -1,3 +1,10 @@
+---
+title: "DOCUMENTACAO OBRIGATORIA"
+date: 2026-08-28
+tags: ["consciencia"]
+updated: 2026-08-28
+---
+
 # DOCUMENTAÇÃO OBRIGATÓRIA — lei da Casa
 
 > 🔍 **LUPA NA MÃO · INTENÇÃO NA FRENTE** — CentralDark

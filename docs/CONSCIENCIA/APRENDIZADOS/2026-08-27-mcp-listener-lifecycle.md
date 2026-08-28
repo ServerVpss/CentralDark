@@ -160,3 +160,11 @@ bind structured log → workerId/PID
 ## Fio da missão
 
 Antes parecia que o ouvido do processo morreu. A pergunta correta vem primeiro: **aquele ouvido pertencia exatamente àquele corpo e àqueles bytes?** Somente depois dessa atribuição será legítimo julgar `LISTENER_LOST_WHILE_PROCESS_ALIVE`.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

@@ -99,3 +99,11 @@ LER_O_ARQUIVO_INTEIRO > PARSEAR_VARIOS_DE_UMA_VEZ
 
 Ler `builder.centralldark.com.Caddyfile` e `elite.centralldark.com.Caddyfile`
 diretamente desmentiu a hipótese em dois comandos.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

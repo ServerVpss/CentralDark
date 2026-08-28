@@ -308,3 +308,11 @@ HERMES_MAINTAINS_ORDER=true
 CHEFE_DEFINES_INTENT=true
 REALITY_IS_JUDGE=true
 ```
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre
