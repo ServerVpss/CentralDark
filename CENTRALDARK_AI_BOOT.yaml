@@ -16,7 +16,25 @@ CENTRALDARK_AI_BOOT:
   writer: "NONE"
   frequency: "LEVE"
   fronts: "ADAPTIVE_1_TO_10"
-  conflict_resolution: "PADRAO_DEPENDABOT: package.json/lock aceita MAIN + aplica BUMP do PR; core (centraldark_master_cycle.py, lupa, docs, .github) mantém MAIN; FAIL_CLOSED se não determinístico. Script: scripts/dependabot/resolve-conflicts.sh"
+  conflict_resolution:
+    standard: "ÚNICO. Não abrir segundo resolvedor, não resolver na mão fora dele."
+    skill: ".agents/skills/git-conflict-resolve-house-standard/SKILL.md"
+    engine: "scripts/dependabot/resolve-conflicts.sh"
+    trigger: ".github/workflows/dependabot-auto-merge.yml"
+    # O motor está NA branch do PR e faz `git merge origin/main`, portanto:
+    #   --ours = lado do PR   |   --theirs = lado da main
+    # Contraintuitivo, e já causou fail-closed invertido: a versão anterior
+    # dizia "mantém main" e usava --ours, que aceita o PR — deixando um PR
+    # sobrescrever .github/, docs/ e scripts/trigger-fabric/ sem revisão.
+    policy:
+      manifesto_e_lockfile: "LADO_DO_PR (--ours) — o PR É o bump. Vale em qualquer diretório: package.json, package-lock.json, pnpm-lock.yaml, yarn.lock"
+      todo_o_resto: "LADO_DA_MAIN (--theirs) — fail-closed de verdade, sem lista de exceções"
+    invariants:
+      - "OURS_E_THEIRS_SAO_CONTRAINTUITIVOS_NO_MERGE"
+      - "FAIL_CLOSED_ESCRITO != FAIL_CLOSED_IMPLEMENTADO"
+      - "NO_CONFLICT_AGORA != NO_CONFLICT_DEPOIS"
+      - "MERGED != CI_PASS"
+    lockfile_unico: "Vários bumps no mesmo lockfile conflitam em cadeia; @dependabot rebase não resolve. A cura é agrupar em .github/dependabot.yml — e groups sem applies-to cobre só version-updates."
 
   language:
     default: "pt-BR"

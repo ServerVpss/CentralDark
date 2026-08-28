@@ -29,30 +29,37 @@ fi
 # Listar arquivos em conflito
 mapfile -t CONFLICTS < <(git diff --name-only --diff-filter=U)
 
+# ATENÇÃO — semântica de ours/theirs neste script (provado empiricamente):
+# estamos NA branch do PR e fazemos `git merge origin/main`, portanto:
+#   --ours   = lado do PR   (HEAD)
+#   --theirs = lado da main (MERGE_HEAD)
+# A versão anterior tinha os comentários invertidos em relação ao código:
+# dizia "mantém main" e usava --ours, que aceita o PR. Isso fazia o
+# "fail-closed" falhar ABERTO — um PR podia sobrescrever .github/, docs/ e
+# scripts/trigger-fabric/ sem revisão.
 for f in "${CONFLICTS[@]}"; do
   case "$f" in
-    package.json|package-lock.json)
-      # Aceita main (theirs no merge = base) e aplica bump do PR depois
-      git checkout --theirs "$f"
-      git add "$f"
+    # Manifesto/lockfile: o PR É o bump, então o lado do PR vence.
+    package.json|package-lock.json|pnpm-lock.yaml|yarn.lock|\
+    */package.json|*/package-lock.json|*/pnpm-lock.yaml|*/yarn.lock)
+      git checkout --ours -- "$f"
+      git add -- "$f"
       ;;
-    scripts/trigger-fabric/centraldark_master_cycle.py|\
-    scripts/lupa/*.py|\
-    docs/**|.github/**)
-      # Core/canônico: mantém main (ours do merge = main atual)
-      git checkout --ours "$f"
-      git add "$f"
-      ;;
+    # Core/canônico e QUALQUER outro caminho: main vence. Fail-closed de verdade.
     *)
-      # Default fail-closed: não inventa. Mantém main.
-      git checkout --ours "$f"
-      git add "$f"
+      git checkout --theirs -- "$f"
+      git add -- "$f"
       ;;
   esac
 done
 
-# Aplicar bump do Dependabot (se package.json foi tocado)
-if printf '%s\n' "${CONFLICTS[@]}" | grep -q "package.json"; then
+# NOTA: o bloco que re-aplicava o bump por parsing do nome do branch foi
+# removido. Ele existia porque o manifesto era resolvido para o lado da main
+# (perdendo o bump) e precisava reinjetá-lo. Agora o manifesto resolve para o
+# lado do PR, que JÁ contém o bump — reinjetar seria redundante.
+# Além disso aquele bloco gravava sempre em "package.json" na RAIZ, corrompendo
+# o arquivo errado em PRs de subdiretório (ex.: apps/modulos/Bolt/source).
+if false; then
   # Extrai a versão alvo do PR (branch name ou diff)
   BRANCH=$(git branch --show-current)
   # Tenta inferir do nome do branch: typescript-5.9.3 -> typescript@5.9.3
