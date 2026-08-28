@@ -74,6 +74,22 @@ updates:
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 10
+    # Mesmo motivo da entrada npm acima: poetry.lock tambem e lockfile UNICO.
+    # Sem agrupar, cada alerta abre um PR e todos disputam o mesmo arquivo.
+    # E sem "applies-to" o grupo cobriria so version-updates, deixando os
+    # alertas de seguranca abrirem um a um.
+    groups:
+      docs-security:
+        applies-to: security-updates
+        patterns:
+          - "*"
+      docs-deps:
+        applies-to: version-updates
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
     labels:
       - "🤖 AUTO"
       - "🔄 GIT"
@@ -93,6 +109,16 @@ updates:
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 10
+    # Nao ha lockfile aqui, entao nao ha conflito em cadeia. Agrupa por outro
+    # motivo: um bump de action costuma tocar varios workflows de uma vez, e
+    # um PR por action enche a fila de um runner unico.
+    groups:
+      actions-all:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
     labels:
       - "🤖 AUTO"
       - "🔄 GIT"
