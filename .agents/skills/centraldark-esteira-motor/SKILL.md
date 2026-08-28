@@ -124,6 +124,7 @@ Não chamar sucesso de deploy Hermes um run que só tocou MCP/Verificador.
     Alerta de segurança gera `security-updates`, que passa por fora e volta a
     abrir um PR por dependência. Em lockfile único isso é conflito em cadeia,
     e `@dependabot rebase` não resolve (rebasear um recria nos outros).
+    O PADRÃO ÚNICO da Casa (`.agents/skills/git-conflict-resolve-house-standard/SKILL.md` + `scripts/dependabot/resolve-conflicts.sh`) resolve deterministicamente: aceita o bump do PR no lockfile e mantém a main no resto.
 13. Caminho do repo na VPS tem que ser medido, não presumido. `cd` para pasta
     errada quebra o deploy com `No such file or directory` — confirmar com
     `pwd` dentro da pasta real antes de escrever no workflow.

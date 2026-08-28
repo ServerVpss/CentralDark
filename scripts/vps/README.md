@@ -43,11 +43,20 @@ Dispatcher que decide se (e qual) script de deploy deve ser acionado, validando 
 - **Entradas:** `--apply` (flag), `--aceitar-divergencia` (opcional)
 - **Variáveis:** `REPO_DIR`, `BRANCH`, `MCP_HEALTH`, `SSH_KEY`
 - **Saída:** código de saída informando o que foi decidido (0 nada | 21 operational-guards | 22 centraldark-deploy)
+### `deploy-guards-dispatcher.sh` — decisão condicional de qual script executar
+
+Dispatcher que decide se (e qual) script de deploy deve ser acionado, validando estado, recursos e riscos antes de qualquer execução.
+
+- **Escopo:** leitura de scripts e ambiente antes de decidir
+- **Entradas:** `--apply` (flag), `--aceitar-divergencia` (opcional)
+- **Variáveis de ambiente:** `REPO_DIR`, `BRANCH`, `MCP_HEALTH`, `SSH_KEY`
+- **Saída:** código de saída informando a decisão (0 nada | 10..15 guard failed | 21..22 deploy executado)
 - **Leis:** REUSE_BEFORE_CREATE, ONE_WRITER_PER_SCOPE, FAIL_HIGH
 
 ### Fluxo:
 1. T0: mede estado do repo, origem, diferença, arquivos sujos
 2. Guardas: SSH key, scripts existentes, chattr +i, histórico divergente
+2. Guardas: SSH key de deploy, scripts existentes, chattr +i, histórico divergente
 3. Decisão: se nada a fazer → 0; se aplicar → executa centraldark-deploy.sh
 4. T1: health do MCP + porta 9100 LISTENING
 
@@ -58,6 +67,12 @@ Dispatcher que decide se (e qual) script de deploy deve ser acionado, validando 
 - Falha alto em vez de sobrescrever no escuro
 
 ## Segurança
+### Uso:
+```bash
+./deploy-guards-dispatcher.sh                          # dry-run: mede e diz o que faria
+./deploy-guards-dispatcher.sh --apply                  # executa na VPS
+./deploy-guards-dispatcher.sh --apply --aceitar-divergencia
+```
 
 - Dry-run é o padrão; `--apply` é explícito
 - Nunca force-push (NO_FORCE_PUSH)
