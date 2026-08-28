@@ -49,51 +49,50 @@ for f in "${CONFLICTS[@]}"; do
       python3 - "$f" <<'PY'
 import json, sys
 f = sys.argv[1]
-def read_json(branch):
+def read_json(stage):
     try:
         import subprocess
-        out = subprocess.check_output(["git", "show", f"{branch}:{f}"], stderr=subprocess.DEVNULL)
+        out = subprocess.check_output(["git", "show", f":{stage}:{f}"], stderr=subprocess.DEVNULL)
         return json.loads(out)
     except:
         return {}
-pr = read_json("HEAD")
-main = read_json("MERGE_HEAD")
-if not pr or not main:
-    # fallback: aceita PR
-    import subprocess
-    subprocess.run(["git", "checkout", "--ours", "--", f])
-    subprocess.run(["git", "add", "--", f])
-    sys.exit(0)
-# Merge inteligente: parte da main e aplica mudanças do PR
+def read_base():
+    try:
+        import subprocess
+        base = subprocess.check_output(["git", "merge-base", "HEAD", "MERGE_HEAD"], stderr=subprocess.DEVNULL).decode().strip()
+        out = subprocess.check_output(["git", "show", f"{base}:{f}"], stderr=subprocess.DEVNULL)
+        return json.loads(out)
+    except:
+        return {}
+pr = read_json("2")      # :2: = ours = HEAD = PR
+main = read_json("3")    # :3: = theirs = MERGE_HEAD = main
+base = read_base()
 result = {}
 all_keys = set(list(main.keys()) + list(pr.keys()))
 for k in sorted(all_keys):
     if k not in main:
-        result[k] = pr[k]  # PR adicionou chave nova
+        result[k] = pr[k]
     elif k not in pr:
-        result[k] = main[k]  # PR removeu, mantém main
+        result[k] = main[k]
     else:
-        # Chave existe nos dois: se package.json (deps), mergeia seções
         if k in ("dependencies", "devDependencies", "peerDependencies", "optionalDependencies", "scripts"):
             merged = {}
             all_dep_keys = set(list(main.get(k, {}).keys()) + list(pr.get(k, {}).keys()))
             for dep in sorted(all_dep_keys):
-                if dep not in main.get(k, {}):
-                    merged[dep] = pr[k][dep]  # PR adicionou dep
-                elif dep not in pr.get(k, {}):
-                    merged[dep] = main[k][dep]  # PR removeu, mantém main
-                elif main[k][dep] != pr[k][dep]:
-                    merged[dep] = pr[k][dep]  # PR mudou, aplica bump
+                base_val = base.get(k, {}).get(dep)
+                pr_val = pr[k].get(dep)
+                main_val = main[k].get(dep)
+                if pr_val != base_val:
+                    merged[dep] = pr_val  # PR mudou, aplica bump
                 else:
-                    merged[dep] = main[k][dep]  # iguais, mantém
+                    merged[dep] = main_val  # PR não mudou, mantém main
             result[k] = merged
         else:
-            # Outros campos: PR vence (é o bump)
             result[k] = pr[k]
 with open(f, "w") as fh:
     json.dump(result, fh, indent=2)
     fh.write("\n")
-print(f"MERGED {f}: main base + PR bumps")
+print(f"MERGED {f}: base + PR bumps + main preserved")
 PY
       git add -- "$f"
       ;;
