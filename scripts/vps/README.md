@@ -35,6 +35,28 @@ Dois corpos, uma Casa:
 
 Um deployment pode acionar ambos em sequência; cada um tem escopo separado e não sobrepõe mutações.
 
+## `deploy-guards-dispatcher.sh` — decisão condicional de qual script executar
+
+Dispatcher que decide se (e qual) script de deploy deve ser acionado, validando estado, recursos e riscos antes de qualquer execução.
+
+- **Escopo:** reading scripts e ambiente antes de decidir
+- **Entradas:** `--apply` (flag), `--aceitar-divergencia` (opcional)
+- **Variáveis:** `REPO_DIR`, `BRANCH`, `MCP_HEALTH`, `SSH_KEY`
+- **Saída:** código de saída informando o que foi decidido (0 nada | 21 operational-guards | 22 centraldark-deploy)
+- **Leis:** REUSE_BEFORE_CREATE, ONE_WRITER_PER_SCOPE, FAIL_HIGH
+
+### Fluxo:
+1. T0: mede estado do repo, origem, diferença, arquivos sujos
+2. Guardas: SSH key, scripts existentes, chattr +i, histórico divergente
+3. Decisão: se nada a fazer → 0; se aplicar → executa centraldark-deploy.sh
+4. T1: health do MCP + porta 9100 LISTENING
+
+### Contrato:
+- Dry-run é o padrão; `--apply` é explícito
+- Nunca force-push (NO_FORCE_PUSH)
+- Nunca reset --hard cego (NO_BLIND_OVERWRITE)
+- Falha alto em vez de sobrescrever no escuro
+
 ## Segurança
 
 - Dry-run é o padrão; `--apply` é explícito
