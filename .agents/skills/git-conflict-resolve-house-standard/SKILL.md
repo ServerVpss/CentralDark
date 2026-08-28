@@ -73,6 +73,7 @@ localmente e saiu sem empurrar nada.
 UNKNOWN != PASS
 ACTION != PROOF
 MERGED != CI_PASS
+FAIL_CLOSED_ESCRITO != FAIL_CLOSED_IMPLEMENTADO
 ```
 
 - Não criar segundo script de conflito.
@@ -81,6 +82,10 @@ MERGED != CI_PASS
   main avançar depois, medir de novo — não reusar o veredito velho.
 - Squash é o botão padrão da Casa. Mas verde do CI é medição, não formalidade:
   se um check aplicável falhou, isso é informação, não obstáculo a ignorar.
+- **FAIL_CLOSED_ESCRITO != FAIL_CLOSED_IMPLEMENTADO**: nunca canonizar um
+  padrão só pelo texto. O bug #1343 provou que o comentário dizia "mantém main"
+  mas o código aceitava o PR (`--ours`). Gravar antes de revisar o código
+  teria tornado bug em lei. Sempre validar o código, não o comentário.
 
 ## Armadilhas registradas (todas medidas, nenhuma suposta)
 
