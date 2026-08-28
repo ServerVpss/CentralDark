@@ -35,3 +35,11 @@ UNKNOWN_IS_NOT_PASS=true
 ```
 
 O conteúdo anterior deste arquivo permanece no histórico Git como proveniência.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

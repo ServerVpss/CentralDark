@@ -190,3 +190,11 @@ REALITY_IS_JUDGE = true
 Próximo boot / handoff / correção humana deve reutilizar este circuito e o cristal Pombo **sem** o CHEFE reensinar anti-papagaio. Reensino da mesma mecânica após promoção = `LEARNING_TRANSFER_FAIL`.
 
 **Baseline de medição deste commit:** main ancestral `3f3babd8fe545a9edf242ef9cfe055df706fda92` (remeasure após merge).
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

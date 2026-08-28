@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-28T03:36:16.766Z",
-  "updatedAtBR": "28/08/2026, 00:36:16 BRT",
+  "updatedAt": "2026-08-28T05:45:14.278Z",
+  "updatedAtBR": "28/08/2026, 02:45:14 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "CONVERGÊNCIA — Resgate Lovable: só o cristal de interesse da CentralDark (#1245)",
+    "lastCommit": "🛡️ FIX(DEPENDABOT): VIGIAR BOLT/SOURCE — 201 ALERTAS PRESOS SEM PR (#1246)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-28T05:45:14.278Z",
+      "titulo": "Push na main · 765014a0e99123415af5e28ce5f39afc2e330cc0",
+      "detalhe": "🛡️ FIX(DEPENDABOT): VIGIAR BOLT/SOURCE — 201 ALERTAS PRESOS SEM PR (#1246)",
+      "area": "Repositório",
+      "sha": "765014a",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-28T03:36:16.766Z",
       "titulo": "Push na main · 50ac2e10b4b759e73dec20c6dba1499e379bc010",
       "detalhe": "CONVERGÊNCIA — Resgate Lovable: só o cristal de interesse da CentralDark (#1245)",
@@ -988,14 +996,6 @@
       "detalhe": "fix(varredura): rodar no runner self-hosted da Casa (#1096)",
       "area": "Repositório",
       "sha": "7934f1e",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-21T08:53:56.626Z",
-      "titulo": "Push na main · 3c0d212fd57e2a439dfa21d74d3c17cc535c22f3",
-      "detalhe": "feat(varredura): inventário determinístico de branches não convergidas (#1095)",
-      "area": "Repositório",
-      "sha": "3c0d212",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-28T05:45:14.278Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 765014a0e99123415af5e28ce5f39afc2e330cc0 (765014a)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-28T03:36:16.766Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 50ac2e10b4b759e73dec20c6dba1499e379bc010 (50ac2e1)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-21T09:17:56.056Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 7934f1ecfb9ab2d8bb2c6793a66bde9d4957aff1 (7934f1e)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-21T08:53:56.626Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 3c0d212fd57e2a439dfa21d74d3c17cc535c22f3 (3c0d212)",
       "area": "Repositório",
       "status": "sucesso"
     }

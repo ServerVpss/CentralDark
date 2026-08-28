@@ -32,3 +32,11 @@ INTENCAO DE SEGREDO/CHEFE
 Não usar branch, path, PM2, mapa, provider, secret, painel ou ordem operacional descritos na versão histórica sem medir o estado atual.
 
 Fonte atual: `LEIA-ME-IA.md`, `AGENTS.md`, `SOUL-SOL.md` e estado vivo.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

@@ -748,3 +748,11 @@ NO_NEW_WORKFLOW_REQUIRED=true
 ```
 
 A aplicação é transversal: SOL, PIVETE/HERMES, agentes especialistas, workflows, ferramentas, modelos substituíveis e consolidação offline obedecem ao mesmo owner. Consumidores não copiam esta seção inteira; carregam `METACOGNICAO-OPERACIONAL.md` pelo boot e materializam o menor artefato no owner específico da ferida.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

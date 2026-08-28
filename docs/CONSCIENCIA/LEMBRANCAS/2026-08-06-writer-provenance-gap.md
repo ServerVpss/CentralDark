@@ -93,3 +93,11 @@ DEPLOY=NAO
 ```
 
 Este documento preserva o plano e os falsificadores do #664 até existir encaixe mínimo e moderno. Ele não cria uma segunda identidade, um segundo Writer engine ou uma nova autoridade.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

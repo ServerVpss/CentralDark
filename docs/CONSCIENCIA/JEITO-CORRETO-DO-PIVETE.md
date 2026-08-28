@@ -794,3 +794,11 @@ AGI_LIKE_RUBRIC_COVERAGE != AGI_PROOF
 Percentuais continuam sujeitos ao contrato da seção 8: sem baseline, dimensões,
 pesos, numerador, denominador, fonte e `HEAD_SHA`, o resultado é
 `NOT_MEASURED`.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

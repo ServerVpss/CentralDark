@@ -354,3 +354,11 @@ MENOS_E_MAIS=true
 
 ### SEGREDO/CHEFE
 **CentralDark — 08/08/2026**
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre
