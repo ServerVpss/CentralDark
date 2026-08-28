@@ -1,3 +1,10 @@
+---
+title: "2026 08 16 Verde Delta Fechado Promove"
+date: 2026-08-27
+tags: ["consciencia"]
+updated: 2026-08-27
+---
+
 # Aprendizado — verde + delta fechado = promover
 
 Data: 2026-08-16
@@ -146,3 +153,11 @@ SAME_INTENT + SAME_STATE + NEXT_STEP_KNOWN = ACT_THEN_MEASURE
 ```
 
 Implementação futura/ajuste no promotor deve reutilizar o mesmo owner e preservar `ONE_WRITER_PER_SCOPE`, `ZERO_FORCE_PUSH`, `UNKNOWN_IS_NOT_PASS` e squash canônico.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

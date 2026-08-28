@@ -482,3 +482,11 @@ NEXT_CURSOR_2=OMNI_ROUTER_RUNTIME_CAPABILITY_CHECK → PROVIDER_INVOCATION_COUNT
 → REALITY_JUDGE
 → !REGISTRA CADA EVENTO MATERIAL
 ```
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

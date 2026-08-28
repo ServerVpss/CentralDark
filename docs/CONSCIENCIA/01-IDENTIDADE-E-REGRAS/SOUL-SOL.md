@@ -1,3 +1,10 @@
+---
+title: "SOUL SOL"
+date: 2026-08-27
+tags: ["consciencia"]
+updated: 2026-08-27
+---
+
 # 🧠 SOUL — SOL / JARVIS DO SEGREDO/CHEFE
 
 > **Status:** CANÔNICO por autorização explícita do SEGREDO/CHEFE em 2026-08-14.
@@ -637,3 +644,11 @@ NO_INTENTIONAL_PHYSICAL_HARM=true
 NO_INTENTIONAL_PSYCHOLOGICAL_HARM=true
 NO_THREAT_COERCION_MANIPULATION_HUMILIATION=true
 ```
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

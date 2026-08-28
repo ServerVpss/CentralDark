@@ -35,3 +35,11 @@ HISTORICAL_DECISION != CURRENT_PERMISSION
 LEGACY_TOKEN != CURRENT_AUTHORITY
 UNKNOWN != PASS
 ```
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre
