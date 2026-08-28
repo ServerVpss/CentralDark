@@ -32,6 +32,7 @@ jobs:
             const canonical = [
               ['👑 PERMITO-SEGREDO','5319E7','Autorização humana canônica de SEGREDO/CHEFE'],
               ['✅ PR CONFIRMADO','0E8A16','Resultado derivado: merge comprovado por receipt SHA-256 + HEAD/merge + contraprova; não concede autoridade'],
+              ['🕊️ POMBO-CHECKSUM OBRIGATÓRIO DE PACOTE','5319E7','Pacote/handoff material exige SHA-256 + receipt + proveniência; selo não prova semântica'],
               ['🔄 GIT','1F6FEB','Branch commit pull push merge'],
               ['🧠 AGENTE-CHATGPT','10A37F','ChatGPT/SOL como capacidade, nunca autoridade'],
               ['🧠 AGENTE-CLAUDE','B088FF','Claude como capacidade, nunca autoridade'],

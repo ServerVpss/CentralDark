@@ -96,6 +96,32 @@ UNKNOWN != CONFIRMED
 
 Owner do mecanismo: `scripts/github-pr-confirmado-label.mjs`, executado dentro de `.github/workflows/autonomia-promocao.yml` depois do promotor canônico.
 
+## PARECE RESENHA, MAS É SÉRIO
+
+A etiqueta canônica de integridade de pacote é:
+
+```text
+🕊️ POMBO-CHECKSUM OBRIGATÓRIO DE PACOTE
+```
+
+Aplica-se quando PR, issue ou handoff produz ou transporta **pacote/material verificável**. Ela sinaliza que a entrega exige checksum, receipt e proveniência; não se aplica indiscriminadamente a todo conteúdo.
+
+```text
+PACKAGE_OR_MATERIAL_HANDOFF
+→ 🕊️ POMBO-CHECKSUM OBRIGATÓRIO DE PACOTE
+→ CONTENT_SHA256 / SHA256SUMS.txt
+→ RECEIPT + PROVENIÊNCIA
+→ CONTRAPROVA quando material
+
+LABEL = SINAL DE REQUISITO
+LABEL_PRESENT != CHECKSUM_VALID
+HASH_MATCH = BYTE_IDENTITY
+CHECKSUM != PROVA_SEMÂNTICA
+REALIDADE = JUIZ
+```
+
+O pombo é linguagem cultural da Casa. A integridade byte-a-byte e a continuidade verificável são o contrato técnico. **Parece resenha, mas é sério.**
+
 ## Lei do catálogo
 
 ```text
@@ -112,6 +138,7 @@ PADRAO_OPERACIONAL_APLICA_A_TODO_PR_ELEGIVEL=true
 
 - `👑 PERMITO-SEGREDO`
 - `✅ PR CONFIRMADO`
+- `🕊️ POMBO-CHECKSUM OBRIGATÓRIO DE PACOTE`
 - `🔄 GIT`, `🔄 GIT-DIVERGÊNCIA`
 - `🧠 AGENTE-CHATGPT`, `🧠 AGENTE-CLAUDE`, `🧠 AGENTE-CODEX`, `🧠 AGENTE-GROK`, `🧠 AGENTE-HERMES`, `🧠 AGENTE-JARVIS`, `🧠 AGENTE-SENTINELA`, `🧠 AGENTE-SUPABASE`
 - `🤖 AUTO`, `🤖 AGENTIC-DEVOPS`, `🤖 IA-DOCUMENTAR`, `🤖 IA-EXECUTAR`, `🤖 IA-FRONTEND`, `🤖 IA-INFRA`, `🤖 IA-PESQUISAR`, `🤖 IA-REVISAR`, `🤖 IA-VALIDAR`
