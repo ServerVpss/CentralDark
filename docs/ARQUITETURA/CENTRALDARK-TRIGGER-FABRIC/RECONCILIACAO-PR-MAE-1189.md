@@ -51,6 +51,7 @@ RUNTIME_NÃO_MEDIDO → UNKNOWN
 | PR | Disposição | Delta preservado |
 |---:|---|---|
 | #1115 | ABSORB | one-core-many-arms, fanout read-only adaptativo, rendezvous, evidência em vez de voto |
+| #1131 | ABSORB | `SECOND_BRAIN_LOGICAL=ONE`: GitHub canônico + local/Obsidian + graph/vector derivados; segundo cérebro não significa segunda autoridade |
 | #1157 | ABSORB | Omni Router: uma porta, motores substituíveis |
 | #1161 | ABSORB | capability ladder + engine-gap fixed point bounded |
 | #1166/#1167/#1168/#1169/#1170 | ALREADY_ABSORBED_BY_1189 | semântica, engine gap, GraphRAG e reconciliação histórica |
@@ -131,6 +132,37 @@ OMNI_ROUTER
 
 Classificação: `EXTEND_EXISTING_GAP`.
 
+### 4. Dois cérebros funcionais — correção de semântica
+
+A arquitetura estava resumindo `Memory Linker/Dream Review` como se fossem o
+próprio cérebro de retaguarda. O histórico e o contrato `SECOND-BRAIN.yml`
+mostram uma distinção mais precisa:
+
+```text
+CÉREBRO DA FRENTE / OPERACIONAL
+→ missão + decisão + execução
+→ deixa trace/evidence/receipt
+
+CÉREBRO DE RETAGUARDA / MEMÓRIA
+→ preserva matéria + minério + fragmentos + histórico + proveniência
+
+MEMORY LINKER / DREAM REVIEW / PATTERN DISCOVERY
+→ mineram e revisam a retaguarda
+→ NÃO são o cérebro
+→ NÃO ganham autoridade nem Writer automaticamente
+```
+
+A reconciliação preserva a regra do PR #1131:
+
+```text
+SECOND_BRAIN_LOGICAL=ONE
+TWO_COGNITIVE_ROLES_ONE_LOGICAL_BRAIN=true
+TWO_COGNITIVE_ROLES != TWO_AUTHORITIES
+NEW_SECOND_BRAIN=false
+```
+
+Classificação: `CORRECTION_AND_ABSORB_EXISTING_OWNER`.
+
 ## Reservas — guardadas, não ativadas
 
 ```text
@@ -172,7 +204,7 @@ LIVE_TARGET
 - 23 agentes fictícios a partir do catálogo Overclock;
 - segundo router;
 - segundo event bus;
-- segundo cérebro;
+- cérebro concorrente/terceiro cérebro: o `SECOND_BRAIN` lógico existente foi reconciliado no mesmo owner;
 - segundo Reality Judge;
 - raw AIOS/AIOX control plane;
 - ODS/Buzz/OpenMausBot/Open-Lovable como runtime presumido;
