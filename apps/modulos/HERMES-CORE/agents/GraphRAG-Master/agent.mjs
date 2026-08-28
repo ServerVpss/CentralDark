@@ -99,11 +99,6 @@ function buscarLocal(missao) {
       try {
         if (statSync(p).isDirectory()) { varrer(p); continue; }
         if (!e.endsWith('.md')) continue;
-        const corpo = normalizar(readFileSync(p, 'utf8').slice(0, 4000));
-        const nome = normalizar(e);
-        const score = ts.reduce((s, t) => s + (nome.includes(t) ? 3 : 0) + (corpo.includes(t) ? 1 : 0), 0);
-        if (score > 0) ranking.push({ p, score, titulo: e });
-      } catch {}
         const raw = readFileSync(p, 'utf8').slice(0, 4000);
         const corpo = normalizar(raw);
         const nome = normalizar(e);
@@ -141,9 +136,6 @@ export { buscarContexto as contexto };
 
 function selfTest() {
   const positive = classificarCicloMestre('!CENTRALDARK fecha essa missão');
-  const negative = classificarCicloMestre('CentralDark é o nome do repo');
-  const checks = {
-    explicit_master_trigger: positive.active === true,
   const alias = classificarCicloMestre('!cdark fecha');
   const negative = classificarCicloMestre('CentralDark é o nome do repo');
   const checks = {
