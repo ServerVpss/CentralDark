@@ -102,6 +102,42 @@ TWO_COGNITIVE_ROLES != TWO_AUTHORITIES
 
 O contrato canônico dessa distinção é `SECOND-BRAIN.yml`.
 
+## Ingressos de contexto e matéria — mesma Casa
+
+O material salvo `Screenpipe Activity reshapes CentralDark integration` foi
+reconciliado como **delta de ingestão**, não como Browser V2 ou segundo
+Harvester. O owner continua `MATERIAL-INGEST.md`.
+
+```text
+CONVERSA / SUPERFÍCIE AUTORIZADA
+→ contexto necessário?
+→ Screenpipe | HTML salvo | Recorder | screenshot | PDF | runtime/logs
+→ provenance + tempo + origem
+→ sanitize / quarantine sensitive
+→ dedupe + delta
+→ CÉREBRO DE RETAGUARDA
+→ Harvester / Memory Linker / Knowledge Compiler
+→ Reality Judge
+→ ouro | NO_CHANGE
+```
+
+Regras:
+
+```text
+SURFACE_ADAPTER != AUTHORITY
+TEMP_LOCALSTATE = FONTE, NÃO MEMÓRIA
+SCREENPIPE = SENSOR/CONTEXTO, NÃO CÉREBRO
+SCREENPIPE_TO_HERMES = UNKNOWN ATÉ PROVA CAUSAL
+SAVED_HTML != LIVE_STATE
+PRINT_PDF != LIVE_STATE
+SCREENSHOT != RUNTIME_PROOF
+NO_BLIND_TEMP_OR_CREDENTIAL_HARVEST=true
+```
+
+A Casa escolhe a menor representação suficiente: HTML para estrutura,
+screenshot para aparência, Recorder para sequência, PDF para documento e
+runtime/log/network/storage para estado vivo quando realmente medidos.
+
 ## MODEL_TOUCH
 
 O Omni Router reutiliza o Evidence Envelope existente. Quando a rota de
@@ -165,6 +201,7 @@ governo:
 - `ADVERSARIAL_HANDOFF.yml`
 - `ARTIFACT-PROPERTIES.yml`
 - `SECOND-BRAIN.yml`
+- `MATERIAL-INGEST.md`
 - `LIVE_STATE.md`
 - `HISTORY.md`
 - `COUNTERPROOF.md`
@@ -227,6 +264,7 @@ PACKAGE_100_PERCENT = permitido somente se o verificador do pacote passar
 GLOBAL_RUNTIME_100_PERCENT = NOT_PROVEN
 ENGINE_BINDING_DOCUMENTED != ENGINE_RUNTIME_LOADED
 LOCAL_AI_DOCUMENTED != LOCAL_AI_ACTIVE
+SCREENPIPE_CONFIGURED != SCREENPIPE_TO_HERMES_PROVEN
 ```
 
 O pacote prova integridade/reprodutibilidade do artefato e das catracas
