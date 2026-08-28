@@ -137,3 +137,11 @@ Pergunte pra IA:
 
 Se ela executar de verdade e mostrar "pong" → aprendeu.
 Se inventar resposta sem rodar → cola o prompt de novo enfatizando **"USE O COMANDO REAL, NÃO INVENTE"**.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre
