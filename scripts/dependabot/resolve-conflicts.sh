@@ -33,10 +33,11 @@ mapfile -t CONFLICTS < <(git diff --name-only --diff-filter=U)
 # estamos NA branch do PR e fazemos `git merge origin/main`, portanto:
 #   --ours   = lado do PR   (HEAD)
 #   --theirs = lado da main (MERGE_HEAD)
-# A versão anterior tinha os comentários invertidos em relação ao código:
-# dizia "mantém main" e usava --ours, que aceita o PR. Isso fazia o
-# "fail-closed" falhar ABERTO — um PR podia sobrescrever .github/, docs/ e
-# scripts/trigger-fabric/ sem revisão.
+# CORRIGIDO (PR #1343): a versão anterior tinha os comentários invertidos e
+# falhava fail-closed ABERTO — um PR podia sobrescrever .github/, docs/ e
+# scripts/trigger-fabric/. Agora: lockfile=PR (--ours), resto=main (--theirs).
+# REGRA PERMANENTE: FAIL_CLOSED_ESCRITO != FAIL_CLOSED_IMPLEMENTADO.
+# Sempre validar o código, não o comentário.
 for f in "${CONFLICTS[@]}"; do
   case "$f" in
     # Manifesto/lockfile: o PR É o bump, então o lado do PR vence.
