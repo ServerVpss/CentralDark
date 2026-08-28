@@ -109,46 +109,6 @@ PY
   esac
 done
 
-# NOTA: o bloco que re-aplicava o bump por parsing do nome do branch foi
-# removido. Ele existia porque o manifesto era resolvido para o lado da main
-# (perdendo o bump) e precisava reinjetá-lo. Agora o manifesto resolve para o
-# lado do PR, que JÁ contém o bump — reinjetar seria redundante.
-# Além disso aquele bloco gravava sempre em "package.json" na RAIZ, corrompendo
-# o arquivo errado em PRs de subdiretório (ex.: apps/modulos/Bolt/source).
-if false; then
-  # Extrai a versão alvo do PR (branch name ou diff)
-  BRANCH=$(git branch --show-current)
-  # Tenta inferir do nome do branch: typescript-5.9.3 -> typescript@5.9.3
-  PKG=$(echo "$BRANCH" | sed -E 's/.*npm_and_yarn\/([a-z0-9@/-]+)-([0-9.]+)$/\1/')
-  VER=$(echo "$BRANCH" | sed -E 's/.*npm_and_yarn\/([a-z0-9@/-]+)-([0-9.]+)$/\2/')
-  if [ -n "$PKG" ] && [ -n "$VER" ]; then
-    PKG_CLEAN=$(echo "$PKG" | sed 's/@/-/')  # radix-ui -> radix-ui
-    echo "BUMP_TARGET=$PKG_CLEAN@$VER"
-    # patch package.json
-    python3 - "$PKG_CLEAN" "$VER" <<'PY'
-import sys, json, re
-pkg, ver = sys.argv[1], sys.argv[2]
-path = "package.json"
-with open(path) as fh:
-    data = json.load(fh)
-def set_dep(section, name, version):
-    if section in data and name in data[section]:
-        data[section][name] = version
-        return True
-    return False
-name = pkg.replace("radix-ui", "@radix-ui")
-for sect in ("dependencies","devDependencies","peerDependencies","optionalDependencies"):
-    if set_dep(sect, name, ver):
-        break
-with open(path, "w") as fh:
-    json.dump(data, fh, indent=2)
-    fh.write("\n")
-print("PATCHED package.json")
-PY
-    git add package.json
-  fi
-fi
-
 git commit --no-edit
 git push origin pr_resolve_"$PR_NUM":"$(git branch --show-current)"
 echo "RESOLVED_AND_PUSHED"
