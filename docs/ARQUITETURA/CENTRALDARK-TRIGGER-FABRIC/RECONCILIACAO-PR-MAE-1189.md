@@ -274,3 +274,84 @@ LAST_GOOD_STATE
 `last_good_state` acima é o HEAD observado **antes deste próprio commit de
 checkpoint**; o novo commit passa a ser o cursor documental, não prova de que
 as três pendências foram executadas.
+
+## Reconciliação adicional — Screenpipe Activity / superfícies autorizadas
+
+Material fornecido pelo CHEFE nesta continuação:
+
+```text
+Screenpipe Activity reshapes CentralDark integration.html
+Team_Lund_script_wrapper - 2020.igem.org.html
+```
+
+O primeiro é um snapshot salvo de conversa/superfície contendo um Plug Kit
+histórico de `ONE FLOW` e a intenção de deixar a Casa consultar contexto local
+autorizado sem exigir comandos mecânicos repetidos. A referência histórica ao
+PR #1119 **não governa o presente**; o Writer atual é o PR #1360.
+
+Delta útil absorvido no owner existente `MATERIAL-INGEST.md`:
+
+```text
+N SUPERFÍCIES AUTORIZADAS
+→ mesma intenção/missão
+→ adapter mínimo suficiente
+→ provenance + event_time + observed_at
+→ sanitize / quarantine sensitive
+→ dedupe + delta
+→ cérebro de retaguarda
+→ Harvester / Memory Linker / Knowledge Compiler
+→ MetaLupa / Reality Judge
+→ ouro | NO_CHANGE
+```
+
+Representações preservadas como sensores diferentes:
+
+```text
+SCREENPIPE/BROWSER_BRIDGE = contexto de tela/browser/áudio quando medido
+SAVED_HTML = estrutura/materialização persistida
+RECORDER = sequência registrada
+SCREENSHOT = aparência visual
+PRINT_PDF = representação documental
+RUNTIME/LOG/NETWORK/STORAGE = sensores de estado vivo quando medidos
+```
+
+Travas reconciliadas:
+
+```text
+SURFACE_ADAPTER != AUTHORITY
+TEMP_LOCALSTATE = SOURCE, NOT MEMORY
+NO_BLIND_TEMP_HARVEST=true
+NO_COOKIE_HARVEST=true
+NO_AUTH_SESSION_HARVEST=true
+NO_PASSWORD_OR_TOKEN_HARVEST=true
+SCREENPIPE_TO_HERMES_CAUSAL_TRANSPORT=UNKNOWN_UNTIL_MEASURED
+SCREENSHOT != RUNTIME_PROOF
+SAVED_HTML != LIVE_STATE
+PRINT_PDF != LIVE_STATE
+```
+
+O segundo arquivo (`Team:Lund/script/wrapper`) é uma página iGEM de 2020 com
+wrapper JavaScript/minificado e dependências de apresentação. Nesta auditoria
+não foi encontrada relação causal/material com a CentralDark. Classificação:
+
+```text
+SOURCE_CLASS=EXTERNAL_UNTRUSTED
+CENTRALDARK_RELATION=UNPROVEN
+DISPOSITION=NO_CHANGE_KEEP_PROVENANCE_ONLY
+```
+
+Não foi importado código, jQuery, KaTeX, Tocbot ou wrapper dessa página para a
+Casa.
+
+Estado depois desta costura:
+
+```text
+PR_CURRENT=#1360
+PR_STATE=DRAFT_OPEN
+SCREENPIPE_MATERIAL_DELTA=ABSORBED_IN_EXISTING_OWNER
+NEW_BROWSER_SYSTEM=false
+NEW_HARVESTER=false
+NEW_MEMORY=false
+NEW_EVENT_BUS=false
+RUNTIME_SCREENPIPE_TO_HERMES=UNKNOWN
+```
