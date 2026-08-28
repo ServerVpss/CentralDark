@@ -124,6 +124,7 @@ CENTRALDARK_AI_BOOT:
   writer: "NONE|nome-do-escritor-atual"
   frequency: "LEVE|RAPIDA|MEDIA|PROFUNDA|FORTE|AVANCADA|FRIA|ORQUESTRA|ADAPTIVE"
   fronts: "ADAPTIVE_1_TO_10"
+  conflict_resolution: "git-conflict-resolve-house-standard (motor: scripts/dependabot/resolve-conflicts.sh)"
 ```
 
 O recibo prova carregamento do contrato; não inventa permissão/tool nem substitui teste.
