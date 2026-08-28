@@ -78,7 +78,7 @@
     "@codemirror/view": "^6.35.0",
     "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.2.0",
-    "@iconify-json/svg-spinners": "^1.2.1",
+    "@iconify-json/svg-spinners": "^1.2.4",
     "@lezer/highlight": "^1.2.1",
     "@modelcontextprotocol/sdk": "^1.30.0",
     "@nanostores/react": "^0.7.3",
