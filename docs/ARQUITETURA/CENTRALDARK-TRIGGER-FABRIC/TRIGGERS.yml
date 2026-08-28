@@ -67,13 +67,13 @@ human_triggers:
     token: "!REGISTRA"
     aliases: ["REGISTRA", "REGISTRAR", "GRAVA RECEIPT", "SALVA O OURO"]
     owner: "continuity + learning owners"
-    behavior: [WRITE_RECEIPT, PRESERVE_PROVENANCE, LEARNING_DELTA, NEXT_CURSOR]
     behavior: [WRITE_RECEIPT, PRESERVE_PROVENANCE, LEARNING_DELTA, NEXT_CURSOR, PROMOTE_MAIN_WHEN_SAME_SCOPE_AUTHORIZED_AND_GATES_PASS]
   - id: BOOT
     token: "!BOOT"
     aliases: ["BOOT", "REBOOT LOGICO", "PROXIMO CICLO"]
     owner: "LEIA-ME-IA.md"
     behavior: [RETURN_RECOVERABLE_STATE, NEXT_ACORDAR, NO_IMPLICIT_RUNTIME_RESTART]
+
 semantic_trigger_resolution:
   master_cycle:
     contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
@@ -103,6 +103,7 @@ semantic_trigger_resolution:
     - "SEMANTIC_TRIGGER_MATCH != AUTO_MUTATION"
     - "MULTI_MATCH -> COMPOSE_APPLICABLE_TRIGGERS_NO_VOTE"
     - "AMBIGUOUS_CONTEXT -> PRESERVE_UNKNOWN_OR_CALIBRATE_C1"
+
 entry_triggers:
   - event: BOT_ENTRY
     owner: "LEIA-ME-IA.md + AGENTS.md + docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md + Trigger Fabric"
@@ -116,6 +117,7 @@ entry_triggers:
     owner: "continuity/receipts/last_good_state"
     behavior: [INPUT_DIFF, REUSE_VALID_PROOF, TARGETED_REVALIDATION, NEXT_CURSOR]
     status: CONTRACT_ENFORCED_RUNTIME_PERSISTENCE_MUST_BE_OBSERVED
+
 learning_triggers:
   - event: MATERIAL_INGEST
     owner: ".agents/skills/session-intelligence-harvester/"
@@ -186,6 +188,7 @@ learning_triggers:
     behavior: [HARVEST_NEW_DELTA_ONLY, CHECKPOINT, NEXT_CURSOR]
     may_write_canonical: false
     status: DECLARED_HOOK_NOT_PROVEN
+
 automatic_triggers:
   - event: ANY_PR_OR_COMMIT
     owner: "porta-de-entrada + autonomia-promocao + Trigger Fabric"
@@ -254,6 +257,7 @@ automatic_triggers:
     owner: existing_workflows
     behavior: [REVALIDATE_HEAD, GATES, DERIVED_INDEX_OF_CANONICAL_CORPUS]
     status: CONTRACT_DECLARED_EXISTING_WORKFLOWS_ONLY
+
 routing_rules:
   - "NO_NEW_INFORMATION -> STOP"
   - "UNKNOWN -> MEASURE_OR_SEARCH_REALITY"
