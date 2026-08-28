@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-08-27T21:12:00.812Z
+# 🧠 Notion Sync — 2026-08-28T03:31:39.303Z
 
-- **Commit fonte:** `f30a986899cd53c8a2261cb03d5001e2aab2363a`
+- **Commit fonte:** `50ac2e10b4b759e73dec20c6dba1499e379bc010`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 443 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 2 criadas · ♻️ 444 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
 | aprendizados | 30 | 0 | 30 | 0 | 0 |
-| estrutura | 370 | 1 | 369 | 0 | 0 |
+| estrutura | 372 | 2 | 370 | 0 | 0 |
 
 ## Operações
 
@@ -102,7 +102,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/FREQUENCIAS-OPERACIONAIS-SOL.md |
-| estrutura | criado | docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/LEI-ARVORE-SEMANTICA-DA-CASA.md |
+| estrutura | atualizado | docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/LEI-ARVORE-SEMANTICA-DA-CASA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/REGRA-OFICIAL-MULTI-AGENTE-SEMANTICO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md |
 | estrutura | atualizado | docs/CONSCIENCIA/01-IDENTIDADE.md |
@@ -252,6 +252,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/ARTEFATOS/centraldark-prompt-universal.md |
 | estrutura | atualizado | docs/CONSCIENCIA/BAIANES-E-RESENHA-REGIONAL.md |
 | estrutura | atualizado | docs/CONSCIENCIA/BOT_COMMANDS.md |
+| estrutura | criado | docs/CONSCIENCIA/COCKPIT-AVANCO.README.md |
 | estrutura | atualizado | docs/CONSCIENCIA/CODEX-INTEGRADO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/CODEX-REVISAO-PRS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/CONECTOR-LIBERDADE-SEGURA.md |
@@ -281,6 +282,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/DARKAI/PROMPT-UNIVERSAL.md |
 | estrutura | atualizado | docs/CONSCIENCIA/DARKAI/QUICKSTART.md |
 | estrutura | atualizado | docs/CONSCIENCIA/DARKAI/README.md |
+| estrutura | criado | docs/CONSCIENCIA/DESAFIO-NIVEL-7-AGENTES-ERRO-ABERTO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/DESEJOS-FUTUROS-MEGA-PACOTAO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/DICIONARIO-PIVETE-GITHUB.md |
 | estrutura | atualizado | docs/CONSCIENCIA/DNS-WILDCARD-CENTRALLDARK.md |
