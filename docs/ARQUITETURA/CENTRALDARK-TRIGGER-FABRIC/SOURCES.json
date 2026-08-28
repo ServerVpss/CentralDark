@@ -69,6 +69,12 @@
     "external_reserve_is_active_runtime": false,
     "second_brain_is_second_authority": false,
     "memory_linker_is_brain": false,
-    "two_cognitive_roles_are_two_authorities": false
+    "two_cognitive_roles_are_two_authorities": false,
+    "surface_adapter_is_authority": false,
+    "temp_localstate_is_memory": false,
+    "screenpipe_configured_is_transport_proof": false,
+    "saved_html_is_live_state": false,
+    "print_pdf_is_live_state": false,
+    "blind_browser_temp_harvest_allowed": false
   }
 }
