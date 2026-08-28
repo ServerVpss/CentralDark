@@ -23,6 +23,49 @@ updates:
         update-types:
           - "version-update:semver-major"
 
+  # Bolt/source concentra 100% dos 201 alertas Dependabot abertos:
+  #   182 pnpm-lock.yaml + 13 package.json  -> ecossistema npm (entrada abaixo)
+  #     6 docs/poetry.lock                  -> ecossistema pip (entrada seguinte)
+  # Sem estas entradas o diretorio nao e vigiado e nenhum PR de correcao e criado,
+  # mesmo com fix disponivel na maioria dos alertas.
+  - package-ecosystem: "npm"
+    directory: "/apps/modulos/Bolt/source"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 15
+    labels:
+      - "🤖 AUTO"
+      - "🔄 GIT"
+      - "👑 PERMITO-SEGREDO"
+      - "🧠 AGENTE-HERMES"
+      - "✨ MELHORIA"
+      - "🤖 IA-EXECUTAR"
+    commit-message:
+      prefix: "chore(deps)"
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - "version-update:semver-major"
+
+  - package-ecosystem: "pip"
+    directory: "/apps/modulos/Bolt/source/docs"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    labels:
+      - "🤖 AUTO"
+      - "🔄 GIT"
+      - "👑 PERMITO-SEGREDO"
+      - "🧠 AGENTE-HERMES"
+      - "✨ MELHORIA"
+      - "🤖 IA-EXECUTAR"
+    commit-message:
+      prefix: "chore(deps)"
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - "version-update:semver-major"
+
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
