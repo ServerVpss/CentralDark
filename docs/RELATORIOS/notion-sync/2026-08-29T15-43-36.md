@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-08-29T15:33:07.575Z
+# 🧠 Notion Sync — 2026-08-29T15:43:36.917Z
 
-- **Commit fonte:** `842a53f19101b63749e8044ab7a00a60f74600f5`
+- **Commit fonte:** `cc78c20a833c0ec6a2ebd141ba2abf92e5ec648b`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 486 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 487 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
-| aprendizados | 32 | 1 | 31 | 0 | 0 |
+| aprendizados | 33 | 1 | 32 | 0 | 0 |
 | estrutura | 411 | 0 | 411 | 0 | 0 |
 
 ## Operações
@@ -97,7 +97,8 @@
 | aprendizados | atualizado | #28 — Ponte semântica fail-closed EXIT code=2 — não é verde; stderr engolido |
 | aprendizados | atualizado | #29 — Dois mundos vivos: GitHub main 81bbfc7 ≠ VPS 5958d3ce27 (1252 atrás, dirty) |
 | aprendizados | atualizado | #30 — Consolidacao de dominios: SPA ja e hibrido, nao falta construir path-routes |
-| aprendizados | criado | #31 — Provider sem crédito NÃO é router quebrado |
+| aprendizados | atualizado | #31 — Provider sem crédito NÃO é router quebrado |
+| aprendizados | criado | #32 — Uma capacidade = uma linhagem = um PR de promoção por escopo |
 | estrutura | atualizado | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | atualizado | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
