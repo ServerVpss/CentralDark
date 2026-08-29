@@ -1,0 +1,25 @@
+{
+  "package": "lupa-bayesiana/agents/nivel-7",
+  "version": "1.0.0",
+  "purpose": "Pacote de 3 agentes adversariais internos da skill canônica lupa-bayesiana.",
+  "canonical_skill": ".agents/skills/lupa-bayesiana/SKILL.md",
+  "artifact": "docs/CONSCIENCIA/DESAFIO-NIVEL-7-AGENTES-ERRO-ABERTO.md",
+  "agents": [
+    { "id": "01-observador-de-padroes",       "role": "observador" },
+    { "id": "02-conversor-de-erro-em-teste",  "role": "conversor" },
+    { "id": "03-orquestrador-de-evolucao-aberta", "role": "orquestrador" }
+  ],
+  "contracts": [
+    "contracts/common-contract.json",
+    "contracts/evidence-schema.json"
+  ],
+  "router": "router/ROUTER.md",
+  "evidence_ledger": "evidence/ledger.jsonl",
+  "immutability": {
+    "baseline_files_protected_between_commits": [
+      "contracts/**",
+      "**/tests/**",
+      "evidence/ledger.jsonl"
+    ]
+  }
+}

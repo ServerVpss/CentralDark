@@ -1,0 +1,117 @@
+[
+  {
+    "id": "brain_vault",
+    "name": "BRAIN VAULT",
+    "type": "storage",
+    "description": "Armazenamento persistente de conhecimento, aprendizados e contexto da Casa",
+    "location": "docs/BRAIN/",
+    "access": "filesystem",
+    "responsible": "Hermes Agent",
+    "created": "2026-08-28",
+    "provenance": "CentralDark operational docs"
+  },
+  {
+    "id": "tools_cognitivas",
+    "name": "TOOLS COGNITIVAS",
+    "type": "reasoning",
+    "description": "Ferramentas de raciocínio, análise e processamento ativo de informações",
+    "components": [
+      {
+        "name": "MetaLupa",
+        "description": "Auditoria crítica e validação de evidências",
+        "path": ".agents/skills/meta-lupa/",
+        "role": "critical_audit"
+      },
+      {
+        "name": "Kimetsu Legacy Breathing",
+        "description": "17 respirações operacionais para modos de trabalho",
+        "path": "skills/operational-method/kimetsu-legacy-breathing/",
+        "role": "operational_mode"
+      },
+      {
+        "name": "Operational Method",
+        "description": "Método de operação no CentralDark",
+        "path": "skills/operational-method/centraldark-operational-method/",
+        "role": "operational_method"
+      },
+      {
+        "name": "Skills especializadas",
+        "description": "Domínios específicos (vps, github, forensics, etc.)",
+        "path": "skills/",
+        "role": "domain_expertise"
+      }
+    ],
+    "responsible": "Hermes Agent + Skills sob demanda",
+    "created": "2026-08-28",
+    "provenance": "CentralDark operational docs"
+  },
+  {
+    "id": "omni_router",
+    "name": "OMNI ROUTER",
+    "type": "routing",
+    "description": "Roteador local que expõe API OpenAI-compatible e direciona requisições para o motor apropriado",
+    "host": "127.0.0.1",
+    "port": 8099,
+    "engines": [
+      {
+        "name": "hermes",
+        "base_url": "http://127.0.0.1:8645",
+        "configured": true,
+        "transport": "openai_compatible_http"
+      },
+      {
+        "name": "claude-code",
+        "base_url": null,
+        "configured": false,
+        "transport": "local_cli"
+      },
+      {
+        "name": "openai",
+        "base_url": "https://api.openai.com",
+        "configured": true,
+        "transport": "official_api"
+      },
+      {
+        "name": "nous",
+        "base_url": "https://inference-api.nousresearch.com/v1",
+        "configured": true,
+        "transport": "nous_inference_api"
+      }
+    ],
+    "created": "2026-08-28",
+    "provenance": "CentralDark apps/modulos/elite-gateway"
+  },
+  {
+    "id": "screenpipe",
+    "name": "SCREENPIPE",
+    "type": "perception",
+    "description": "Ferramenta de percepção da máquina: captura de tela, áudio, navegador",
+    "host": "127.0.0.1",
+    "port": 3030,
+    "capabilities": [
+      "captura de tela",
+      "gravação de áudio",
+      "ponte do navegador (Browser Bridge)",
+      "contexto visual e de áudio para agentes"
+    ],
+    "created": "2026-08-28",
+    "provenance": "Screenpipe local instance"
+  },
+  {
+    "id": "mcp_centraldark",
+    "name": "MCP CENTRALDARK",
+    "type": "tool_catalog",
+    "description": "Catálogo de ferramentas da Casa — 113 tools disponíveis",
+    "host": "127.0.0.1",
+    "port": 3100,
+    "tool_count": 113,
+    "capabilities": [
+      "ações operacionais",
+      "integração com GitHub",
+      "integração com VPS",
+      "outros serviços da Casa"
+    ],
+    "created": "2026-08-28",
+    "provenance": "CentralDark MCP server"
+  }
+]

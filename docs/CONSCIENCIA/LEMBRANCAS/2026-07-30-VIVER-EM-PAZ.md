@@ -172,3 +172,11 @@ RESULTADO DESEJADO
 A lembrança foi recuperada novamente quando o SEGREDO/CHEFE mostrou a música durante a sessão e disse que ela era a trilha sonora da própria novela. O pedido explícito foi: **guardar como lembrança recuperável — letra + história pessoal — e não como história viva da música.**
 
 Na mesma sessão, o SEGREDO/CHEFE forneceu também a cifra/estrutura harmônica e pediu que a **“música da orquestra”** fosse registrada no mesmo lugar canônico. O delta foi absorvido neste mesmo artefato, sem criar segunda memória.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

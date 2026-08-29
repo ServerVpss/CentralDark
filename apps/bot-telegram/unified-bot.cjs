@@ -10,6 +10,11 @@
  *
  * Token:        SRVER1_BOT_TOKEN || TELEGRAM_BOT_TOKEN || GUARDA_TELEGRAM_BOT_TOKEN
  * Webhook URL:  TELEGRAM_WEBHOOK_URL   (ex: https://status.centralldark.com/bot/webhook)
+ *
+ * PADRAO UNICO DE RESOLUCAO DE CONFLITO: este bot NÃO implementa lógica própria
+ * de merge/conflito. Se um PR/preview precisar resolver conflito, aponta para
+ * `.agents/skills/git-conflict-resolve-house-standard/SKILL.md` + `scripts/dependabot/resolve-conflicts.sh`.
+ * Não criar segundo padrão, não V2/V3. Padrão se adapta à realidade atual.
  * Webhook Port: BOT_WEBHOOK_PORT       (padrão: 9500)
  * PM2:          CentralDark-HubBot  (hub.ecosystem.config.cjs)
  */

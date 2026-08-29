@@ -10,6 +10,13 @@ Supported engines:
 - nous        -> Nous Research inference API (Hermes models)
 
 Legacy Zendriver->chatgpt.com transport remains frozen and is not used here.
+
+MODEL_TOUCH:
+When CENTRALDARK_AGENT_LOG_URL + AGENT_LOG_SECRET are configured, each provider
+invocation emits a sanitized observable event into the existing CentralDark
+Evidence Envelope path. Telemetry delivery is evidence about telemetry only:
+it never converts provider success into ACTION_PROOF and never creates a second
+event bus/collector.
 """
 
 from __future__ import annotations
@@ -25,10 +32,10 @@ import uuid
 from typing import Any, Dict, List, Optional, Tuple
 
 import requests
-from fastapi import FastAPI, Header, HTTPException
+from fastapi import FastAPI, Header, HTTPException, Request
 from pydantic import BaseModel
 
-APP_VERSION = "0.1.0"
+APP_VERSION = "0.2.0"
 DEFAULT_ENGINE = os.getenv("CENTRALDARK_DEFAULT_ENGINE", "claude-code").strip().lower()
 ROUTER_TOKEN = os.getenv("CENTRALDARK_ROUTER_TOKEN", "").strip()
 REQUEST_TIMEOUT = float(os.getenv("CENTRALDARK_ROUTER_TIMEOUT", "180"))
@@ -189,6 +196,129 @@ def extract_cli_text(data: Any) -> str:
     return ""
 
 
+def _header(headers: Any, name: str) -> Optional[str]:
+    value = headers.get(name)
+    if value is None:
+        return None
+    text = str(value).strip()
+    return text or None
+
+
+def build_model_touch_event(
+    headers: Any,
+    *,
+    provider: str,
+    resolved_model: str,
+    duration_ms: int,
+    result: str,
+    error: Optional[str] = None,
+) -> Dict[str, Any]:
+    """
+    Build an Evidence Envelope-compatible event from observable routing facts.
+
+    mission_id is never invented: it is copied only when the caller supplied it.
+    request/correlation ids are also reused when present and kept in context.
+    """
+    event: Dict[str, Any] = {
+        "event": "model_touch",
+        "producer": "centraldark-omni-router",
+        "target": f"{provider}/{resolved_model or 'unresolved'}",
+        "latency_ms": max(0, int(duration_ms)),
+        "result": result.upper(),
+        "context": {
+            "engine": provider,
+            "resolved_model": resolved_model or None,
+            "fallback_used": False,
+            "action_is_proof": False,
+            "request_id": _header(headers, "x-request-id"),
+            "correlation_id": _header(headers, "x-correlation-id"),
+        },
+    }
+
+    mission_id = _header(headers, "x-mission-id")
+    trace_id = _header(headers, "x-trace-id")
+    writer_scope = _header(headers, "x-writer-scope")
+    sha = _header(headers, "x-centraldark-sha") or os.getenv("CENTRALDARK_SHA", "").strip() or None
+
+    if mission_id:
+        event["mission_id"] = mission_id
+    if trace_id:
+        event["trace_id"] = trace_id
+    if writer_scope:
+        event["writer_scope"] = writer_scope
+    if sha:
+        event["sha"] = sha
+    if error:
+        event["context"]["error"] = sanitize(error)
+
+    # Remove absent context ids instead of persisting fabricated placeholders.
+    event["context"] = {k: v for k, v in event["context"].items() if v is not None}
+    return event
+
+
+def emit_model_touch(event: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Send MODEL_TOUCH to the existing agent-log/Evidence Envelope path.
+
+    This function is intentionally best-effort for the provider response:
+    telemetry failure is returned explicitly but does not rewrite a successful
+    provider invocation into a provider failure.
+    """
+    url = os.getenv("CENTRALDARK_AGENT_LOG_URL", "").strip()
+    secret = os.getenv("AGENT_LOG_SECRET", "").strip()
+
+    if not url and not secret:
+        return {
+            "configured": False,
+            "attempted": False,
+            "delivered": False,
+            "status": "NOT_CONFIGURED",
+        }
+
+    if not url or not secret:
+        return {
+            "configured": False,
+            "attempted": False,
+            "delivered": False,
+            "status": "MISCONFIGURED",
+        }
+
+    payload = {
+        "agent": "OmniRouter",
+        "area": "AI/Routing",
+        "acao": "model_touch",
+        "status": "sucesso" if event.get("result") == "PASS" else "erro",
+        "events": [event],
+    }
+
+    timeout = max(1.0, min(5.0, REQUEST_TIMEOUT))
+    try:
+        response = requests.post(
+            url,
+            headers={
+                "X-Agent-Secret": secret,
+                "Content-Type": "application/json",
+            },
+            json=payload,
+            timeout=timeout,
+        )
+    except requests.RequestException as exc:
+        return {
+            "configured": True,
+            "attempted": True,
+            "delivered": False,
+            "status": "TRANSPORT_ERROR",
+            "detail": sanitize(exc),
+        }
+
+    return {
+        "configured": True,
+        "attempted": True,
+        "delivered": bool(response.ok),
+        "status": "DELIVERED" if response.ok else f"HTTP_{response.status_code}",
+    }
+
+
 def run_openai(prompt: str, target_model: str) -> Tuple[str, str]:
     # Read env vars dynamically at request time
     openai_key = os.getenv("OPENAI_API_KEY", "").strip()
@@ -199,7 +329,6 @@ def run_openai(prompt: str, target_model: str) -> Tuple[str, str]:
         raise HTTPException(status_code=503, detail="OPENAI_API_KEY_not_configured")
 
     model = target_model or openai_model
-    # Use Chat Completions API (compatible with OpenAI, OpenRouter, and OpenAI-compatible endpoints)
     payload: Dict[str, Any] = {
         "model": model,
         "messages": [{"role": "user", "content": prompt}],
@@ -373,11 +502,11 @@ def run_nous(messages: List[ChatMessage], target_model: str) -> Tuple[str, str]:
 @app.get("/health")
 def health() -> Dict[str, Any]:
     claude_path = shutil.which(CLAUDE_BIN) or (CLAUDE_BIN if os.path.exists(CLAUDE_BIN) else None)
-    # Read env vars dynamically at request time
     openai_key = os.getenv("OPENAI_API_KEY", "").strip()
     hermes_url = os.getenv("HERMES_BASE_URL", "").rstrip("/")
-    # Check Nous token from auth.json
     nous_token = get_nous_token()
+    telemetry_url = os.getenv("CENTRALDARK_AGENT_LOG_URL", "").strip()
+    telemetry_secret = os.getenv("AGENT_LOG_SECRET", "").strip()
     return {
         "ok": True,
         "service": "centraldark-omni-router",
@@ -389,6 +518,11 @@ def health() -> Dict[str, Any]:
             "hermes": {"configured": bool(hermes_url), "transport": "openai_compatible_http"},
             "nous": {"configured": bool(nous_token), "transport": "nous_inference_api"},
         },
+        "model_touch_evidence": {
+            "configured": bool(telemetry_url and telemetry_secret),
+            "partial_configuration": bool(telemetry_url) ^ bool(telemetry_secret),
+            "delivery_proven": False,
+        },
         "legacy_zendriver_chatgpt": "FROZEN_NOT_ROUTED",
     }
 
@@ -396,7 +530,6 @@ def health() -> Dict[str, Any]:
 @app.get("/v1/models")
 def models(authorization: str = Header(default=None)) -> Dict[str, Any]:
     require_router_auth(authorization)
-    # Read env vars dynamically at request time
     openai_model = os.getenv("OPENAI_MODEL", "gpt-5.6").strip()
     hermes_model = os.getenv("HERMES_MODEL", "hermes").strip()
     nous_model = os.getenv("NOUS_MODEL", "tencent/hy3:free").strip()
@@ -415,6 +548,7 @@ def models(authorization: str = Header(default=None)) -> Dict[str, Any]:
 @app.post("/v1/chat/completions")
 def chat(
     request: ChatRequest,
+    http_request: Request,
     authorization: str = Header(default=None),
 ) -> Dict[str, Any]:
     require_router_auth(authorization)
@@ -428,16 +562,39 @@ def chat(
         raise HTTPException(status_code=400, detail="empty_messages")
 
     started = time.time()
-    if provider == "openai":
-        text, resolved_model = run_openai(prompt, target_model)
-    elif provider == "claude-code":
-        text, resolved_model = run_claude_code(prompt, target_model)
-    elif provider == "hermes":
-        text, resolved_model = run_hermes(request.messages, target_model)
-    elif provider == "nous":
-        text, resolved_model = run_nous(request.messages, target_model)
-    else:
-        raise HTTPException(status_code=400, detail=f"unsupported_engine:{sanitize(provider)}")
+    try:
+        if provider == "openai":
+            text, resolved_model = run_openai(prompt, target_model)
+        elif provider == "claude-code":
+            text, resolved_model = run_claude_code(prompt, target_model)
+        elif provider == "hermes":
+            text, resolved_model = run_hermes(request.messages, target_model)
+        elif provider == "nous":
+            text, resolved_model = run_nous(request.messages, target_model)
+        else:
+            raise HTTPException(status_code=400, detail=f"unsupported_engine:{sanitize(provider)}")
+    except HTTPException as exc:
+        duration_ms = round((time.time() - started) * 1000)
+        event = build_model_touch_event(
+            http_request.headers,
+            provider=provider,
+            resolved_model=target_model or "",
+            duration_ms=duration_ms,
+            result="FAIL",
+            error=str(exc.detail),
+        )
+        emit_model_touch(event)
+        raise
+
+    duration_ms = round((time.time() - started) * 1000)
+    event = build_model_touch_event(
+        http_request.headers,
+        provider=provider,
+        resolved_model=resolved_model,
+        duration_ms=duration_ms,
+        result="PASS",
+    )
+    evidence_delivery = emit_model_touch(event)
 
     return {
         "id": f"cd-{uuid.uuid4().hex[:16]}",
@@ -454,14 +611,40 @@ def chat(
         "centraldark": {
             "engine": provider,
             "resolved_model": resolved_model,
-            "duration_ms": round((time.time() - started) * 1000),
+            "duration_ms": duration_ms,
             "fallback_used": False,
             "action_is_proof": False,
+            "model_touch": {
+                "event": "model_touch",
+                "mission_id_present": bool(event.get("mission_id")),
+                "trace_id_present": bool(event.get("trace_id")),
+                "evidence_delivery": evidence_delivery,
+            },
         },
     }
 
 
 def self_test() -> int:
+    event_with_ids = build_model_touch_event(
+        {
+            "x-mission-id": "mission-test",
+            "x-trace-id": "trace-test",
+            "x-request-id": "request-test",
+            "x-correlation-id": "correlation-test",
+            "x-writer-scope": "scope-test",
+        },
+        provider="openai",
+        resolved_model="gpt-test",
+        duration_ms=12,
+        result="PASS",
+    )
+    event_without_ids = build_model_touch_event(
+        {},
+        provider="openai",
+        resolved_model="gpt-test",
+        duration_ms=12,
+        result="PASS",
+    )
     checks = {
         "route_openai": route_model("openai/gpt-x") == ("openai", "gpt-x"),
         "route_claude": route_model("claude:opus") == ("claude-code", "opus"),
@@ -472,6 +655,19 @@ def self_test() -> int:
             {"output": [{"content": [{"type": "output_text", "text": "ok"}]}]}
         ) == "ok",
         "cli_extract": extract_cli_text({"result": "ok"}) == "ok",
+        "model_touch_ids_reused": (
+            event_with_ids.get("mission_id") == "mission-test"
+            and event_with_ids.get("trace_id") == "trace-test"
+            and event_with_ids["context"].get("request_id") == "request-test"
+            and event_with_ids["context"].get("correlation_id") == "correlation-test"
+        ),
+        "mission_id_not_fabricated": "mission_id" not in event_without_ids,
+        "model_touch_action_not_proof": event_with_ids["context"].get("action_is_proof") is False,
+        "model_touch_event_shape": (
+            event_with_ids.get("event") == "model_touch"
+            and event_with_ids.get("producer") == "centraldark-omni-router"
+            and event_with_ids.get("result") == "PASS"
+        ),
     }
     failed = [name for name, ok in checks.items() if not ok]
     print(json.dumps({"ok": not failed, "checks": checks, "failed": failed}, ensure_ascii=False))

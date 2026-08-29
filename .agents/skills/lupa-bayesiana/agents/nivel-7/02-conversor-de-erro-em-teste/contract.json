@@ -1,0 +1,15 @@
+{
+  "agent_id": "02-conversor-de-erro-em-teste",
+  "input":  { "evidence_id": "string", "raw_error": "string" },
+  "output": {
+    "causa": "string",
+    "correcao_minima": "string",
+    "teste_path": "string",
+    "test_created": "boolean"
+  },
+  "invariants": [
+    "não modifica testes existentes",
+    "teste novo falha na baseline",
+    "correção mínima"
+  ]
+}

@@ -32,6 +32,7 @@ CENTRALDARK_AI_BOOT:
   source_of_truth: "ServerVpss/CentralDark + estado vivo"
   role: "COORDINATOR/REVIEWER"
   frequency: "FORTE/ORQUESTRA"
+  conflict_resolution: "git-conflict-resolve-house-standard (motor: scripts/dependabot/resolve-conflicts.sh)"
 ```
 
 O canônico já está quase lá. O JARVIS define `ONE_CORE_MANY_ARMS`, N percepções, um Writer, envelope comum de evidência e diz explicitamente que duas janelas repetindo a mesma fonte continuam sendo **um único cluster**, não duas provas independentes.

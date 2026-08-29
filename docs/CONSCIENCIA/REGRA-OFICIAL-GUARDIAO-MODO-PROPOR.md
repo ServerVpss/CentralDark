@@ -46,3 +46,11 @@ Para operar o Guardião hoje:
 ```
 
 O conteúdo anterior permanece no histórico Git para proveniência.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

@@ -1,0 +1,16 @@
+flowchart TD
+    START[Loop Hermes: squash PRs Dependabot] --> LIST[varre PRs abertos]
+    LIST --> CHECK{mergeable?}
+    CHECK -->|MERGEABLE| SQUASH[gh pr merge --squash]
+    CHECK -->|CONFLICTING + dependabot/*| REBASE[comenta @dependabot rebase]
+    CHECK -->|CONFLICTING + outro| SKIP[pula: nao invade branch alheio]
+    SQUASH --> LOG[registra no log NUCLEO]
+    REBASE --> WAIT[aguarda dependabot curar]
+    WAIT --> LIST
+    LOG --> WAIT2[sleep 60s]
+    SKIP --> WAIT2
+    WAIT2 --> LIST
+    style START fill:#ffd700,stroke:#333
+    style SQUASH fill:#51cf66,stroke:#333
+    style REBASE fill:#4dabf7,stroke:#333
+    style SKIP fill:#868e96,stroke:#333

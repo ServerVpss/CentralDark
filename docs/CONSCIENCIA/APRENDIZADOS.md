@@ -1,3 +1,10 @@
+---
+title: "APRENDIZADOS"
+date: 2026-08-27
+tags: ["consciencia"]
+updated: 2026-08-27
+---
+
 {{FILE:/tmp/pr316/aprendizados.md}}
 
 ### 1. Gate de CI bloqueia qualquer caminho .env.* pelo NOME, antes de olhar o conteúdo

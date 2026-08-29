@@ -96,6 +96,44 @@ NEXT_OCCURRENCE=BLOCK_BEFORE_MERGE_AND_REUSE_CRYSTAL
 
 A política vale para qualquer workflow raiz ativo e qualquer PR/commit que atravesse a Casa. Linux self-hosted é o default; necessidade real de Windows/macOS não autoriza GitHub-hosted — exige runner self-hosted da plataforma e prova da capacidade específica. Se esse runner não existir/estiver indisponível, preserve `BLOCKED/UNKNOWN`; não maquie de verde.
 
+## Espera externa ativa — monitor temporário, não repetição
+
+Quando uma ação já foi disparada e o próximo estado pertence a um executor externo (Dependabot, GitHub Actions, provider assíncrono, terceiro), não repita a ordem sem informação nova. Se o CHEFE já expressou intenção de acompanhar a pendência, transforme a espera em observação temporária e limitada; não devolva microdecisões técnicas equivalentes para o CHEFE.
+
+```text
+ACTION_ALREADY_DISPATCHED
++ EXTERNAL_EXECUTOR_OWNS_NEXT_STATE
++ MONITORING_INTENT_IN_SCOPE
+→ MEASURE_ONCE
+→ CREATE_TEMPORARY_READ_ONLY_WATCH
+→ WAIT_FOR_REAL_DELTA
+→ TERMINAL_CONDITION_OBSERVED_ON_LIVE_SOURCE
+→ REMEASURE
+→ RECEIPT
+→ DELETE_OR_EXPIRE_WATCH
+→ VERIFY_CLEANUP
+→ NEXT_CURSOR
+```
+
+Regras duras desta classe:
+
+```text
+SAME_SIGNAL_WITHOUT_NEW_INFORMATION=DROP_DUPLICATE
+REPEAT_ALREADY_DISPATCHED_COMMAND=FORBIDDEN_WITHOUT_NEW_DELTA
+TEMP_WATCH_MUTATES_TARGET=false
+TEMP_WATCH_REQUIRES_TERMINAL_CONDITION=true
+TEMP_WATCH_REQUIRES_TIMEOUT=true
+TIMEOUT != SUCCESS
+SILENCE != SUCCESS
+UNKNOWN != PASS
+PERSISTENT_DAEMON_FOR_EPHEMERAL_WAIT=FORBIDDEN
+HUMAN_RETURN_BEFORE_FIXED_POINT=FORBIDDEN_UNLESS_HUMAN_FRONTIER
+```
+
+`MONITORING_INTENT_IN_SCOPE` é obrigatório. Não inferir criação de monitor a partir de mera sugestão de UI nem criar automação sem intenção humana aplicável. Quando a intenção já foi explicitada na mesma missão, não pedir aprovação passo a passo para escolher entre implementações equivalentes de baixo risco; o motor escolhe a menor implementação reversível e somente read-only.
+
+O aprendizado só conta como transferido quando uma ocorrência futura equivalente reutiliza este padrão sem o CHEFE precisar reensinar.
+
 ## Camisa de força antes de concluir
 
 Antes de `terminou=true`, a decisão final precisa sobreviver ao `OUTPUT_GUARD` do Trigger Fabric:
@@ -175,6 +213,15 @@ Não crie workflow/promotor/label paralelos. Reutilize os owners existentes:
 - `docs/CONSCIENCIA/GITHUB-LABELS-OPERACIONAIS.md`
 
 Todo PR e todo push/commit em qualquer branch atravessa `porta-de-entrada` e a política global de runner. Toda falha elegível alimenta o self-healing, preservando serialização de mutação e fronteiras de autoridade.
+
+## Resolução de conflito — PADRÃO ÚNICO DA CASA
+
+Conflito de PR/dependabot NÃO é caso isolado e NÃO autoriza segundo padrão.
+O único padrão canônico está em `.agents/skills/git-conflict-resolve-house-standard/SKILL.md`
+(motor: `dependabot-auto-merge.yml` + `scripts/dependabot/resolve-conflicts.sh`).
+Resolver = alinhar PR com main sem perder delta útil; determinístico, sem papagaio.
+Não criar V2/V3, não esperar workflow verde se o CHEFE mandou squash.
+Padrão se atualiza à realidade atual (main fresca), nunca congela.
 
 `👑 PERMITO-SEGREDO` = autoridade humana delegada. `✅ PR CONFIRMADO` = resultado derivado pós-prova. Label não é autoridade por si só.
 

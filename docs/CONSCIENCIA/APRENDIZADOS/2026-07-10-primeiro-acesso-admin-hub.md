@@ -61,3 +61,11 @@ Pivete testando o HUB ao vivo (`hub.centralldark.com`) reportou dois problemas n
 
 ## Regra permanente
 Ao trocar/rotacionar uma anon key de qualquer projeto Supabase, **grep em todo o repo** por hardcodes dessa key (`grep -rn "<ref-do-projeto>"`) — existem múltiplos arquivos com fallback hardcoded do mesmo projeto (`hub-client.ts`, `hub-public.ts`, `src/integrations/supabase/hub-client.ts`) e é fácil um ficar desatualizado enquanto os outros são corrigidos.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

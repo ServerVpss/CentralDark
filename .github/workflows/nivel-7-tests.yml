@@ -57,11 +57,11 @@ jobs:
           python-version: "3.12"
 
       - name: Instalar dependencias minimas
-        run: python -m pip install --disable-pip-version-check pytest jsonschema
+        run: python3 -m pip install --disable-pip-version-check pytest jsonschema
 
       - name: Rodar runner isolado (agents read-only + testes)
         working-directory: .agents/skills/meta-lupa/agents/nivel-7
-        run: python runner.py
+        run: python3 runner.py
 
       - name: Auditar ausencia de __pycache__
         working-directory: .agents/skills/meta-lupa/agents/nivel-7

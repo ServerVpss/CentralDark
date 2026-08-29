@@ -8,6 +8,10 @@ updates:
     labels:
       - "🤖 AUTO"
       - "🔄 GIT"
+      - "👑 PERMITO-SEGREDO"
+      - "🧠 AGENTE-HERMES"
+      - "✨ MELHORIA"
+      - "🤖 IA-EXECUTAR"
     commit-message:
       prefix: "chore(deps)"
     groups:
@@ -19,14 +23,109 @@ updates:
         update-types:
           - "version-update:semver-major"
 
+  # Bolt/source concentra 100% dos 201 alertas Dependabot abertos:
+  #   182 pnpm-lock.yaml + 13 package.json  -> ecossistema npm (entrada abaixo)
+  #     6 docs/poetry.lock                  -> ecossistema pip (entrada seguinte)
+  # Sem estas entradas o diretorio nao e vigiado e nenhum PR de correcao e criado,
+  # mesmo com fix disponivel na maioria dos alertas.
+  - package-ecosystem: "npm"
+    directory: "/apps/modulos/Bolt/source"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 15
+    labels:
+      - "🤖 AUTO"
+      - "🔄 GIT"
+      - "👑 PERMITO-SEGREDO"
+      - "🧠 AGENTE-HERMES"
+      - "✨ MELHORIA"
+      - "🤖 IA-EXECUTAR"
+    commit-message:
+      prefix: "chore(deps)"
+    # Bolt/source usa pnpm-lock.yaml UNICO. Um PR por dependencia faz todos
+    # tocarem o mesmo lockfile -> conflitam entre si em cadeia, e "@dependabot
+    # rebase" nao resolve (rebasear um recria o conflito nos outros).
+    # Agrupando, o ciclo produz UM PR com o lockfile ja consistente.
+    #
+    # ATENCAO: "groups" sem "applies-to" cobre SOMENTE version-updates.
+    # Os 201 alertas deste diretorio geram SECURITY updates, que ignoram
+    # o grupo padrao e voltam a abrir um PR por dependencia (medido:
+    # 15 PRs CONFLICTING mesmo com o grupo ja na main). Por isso o grupo
+    # de seguranca abaixo e obrigatorio, nao redundante.
+    groups:
+      bolt-source-security:
+        applies-to: security-updates
+        patterns:
+          - "*"
+      bolt-source-deps:
+        applies-to: version-updates
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - "version-update:semver-major"
+
+  - package-ecosystem: "pip"
+    directory: "/apps/modulos/Bolt/source/docs"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    # Mesmo motivo da entrada npm acima: poetry.lock tambem e lockfile UNICO.
+    # Sem agrupar, cada alerta abre um PR e todos disputam o mesmo arquivo.
+    # E sem "applies-to" o grupo cobriria so version-updates, deixando os
+    # alertas de seguranca abrirem um a um.
+    groups:
+      docs-security:
+        applies-to: security-updates
+        patterns:
+          - "*"
+      docs-deps:
+        applies-to: version-updates
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+    labels:
+      - "🤖 AUTO"
+      - "🔄 GIT"
+      - "👑 PERMITO-SEGREDO"
+      - "🧠 AGENTE-HERMES"
+      - "✨ MELHORIA"
+      - "🤖 IA-EXECUTAR"
+    commit-message:
+      prefix: "chore(deps)"
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - "version-update:semver-major"
+
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 10
+    # Nao ha lockfile aqui, entao nao ha conflito em cadeia. Agrupa por outro
+    # motivo: um bump de action costuma tocar varios workflows de uma vez, e
+    # um PR por action enche a fila de um runner unico.
+    groups:
+      actions-all:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
     labels:
       - "🤖 AUTO"
       - "🔄 GIT"
+      - "👑 PERMITO-SEGREDO"
+      - "🧠 AGENTE-HERMES"
+      - "✨ MELHORIA"
+      - "🤖 IA-EXECUTAR"
     commit-message:
       prefix: "chore(actions)"
     ignore:

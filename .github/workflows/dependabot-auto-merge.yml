@@ -45,7 +45,7 @@ jobs:
               body: 'Aprovação automática — atualização do Dependabot dentro da política (sem majors).',
             });
 
-      - name: Detectar stale/conflitado e pedir rebase nativo
+      - name: Detectar stale/conflitado e resolver deterministicamente
         if: env.SKIP != '1'
         id: stale
         uses: actions/github-script@v9
@@ -60,22 +60,38 @@ jobs:
             const mergeable = pr.data.mergeable;
             // mergeable === null significa UNKNOWN (GitHub ainda calculando)
             if (mergeable === false) {
-              await github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: context.payload.pull_request.number,
-                body: '@dependabot rebase',
-              });
-              core.exportVariable('REBASE_REQUESTED', '1');
-              console.log('::warning::PR conflitado. Solicitado rebase nativo do Dependabot. Nenhum merge até novo HEAD limpo.');
+              // PADRÃO CANÔNICO: resolver deterministicamente via script no runner self-hosted
+              console.log('::warning::PR conflitado. Resolução determinística via scripts/dependabot/resolve-conflicts.sh.');
+              core.exportVariable('RESOLVE_REQUESTED', '1');
             } else if (mergeable === null) {
               console.log('::notice::Mergeability UNKNOWN (GitHub ainda calculando). Aguardando próximo synchronize.');
             } else {
               console.log('::notice::PR mergeable. Seguindo para auto-merge por política.');
             }
 
+      # Este passo já roda no runner self-hosted declarado pelo job.
+      # A versão anterior aninhava `runs-on:` e `steps:` DENTRO de um step —
+      # chaves de job em contexto de step. O YAML aceitava, o schema do Actions
+      # não: o workflow ficava inválido e o GitHub abria um run falho a cada
+      # push, sem executar job nenhum. O motor nunca disparou por aqui.
+      - name: Checkout do SHA exato do evento
+        if: env.SKIP != '1' && env.RESOLVE_REQUESTED == '1'
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          path: .ci-resolve
+          fetch-depth: 1
+
+      - name: Resolver conflito deterministicamente no runner
+        if: env.SKIP != '1' && env.RESOLVE_REQUESTED == '1'
+        env:
+          REPO_DIR: /root/CentralDark
+        run: |
+          set -euo pipefail
+          bash "$GITHUB_WORKSPACE/.ci-resolve/scripts/dependabot/resolve-conflicts.sh" "${{ github.event.pull_request.number }}"
+
       - name: Habilitar auto-merge somente para PATCH
-        if: env.SKIP != '1' && steps.meta.outputs.update-type == 'version-update:semver-patch' && env.REBASE_REQUESTED != '1'
+        if: env.SKIP != '1' && steps.meta.outputs.update-type == 'version-update:semver-patch' && env.RESOLVE_REQUESTED != '1'
         uses: actions/github-script@v9
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}

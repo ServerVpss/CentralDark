@@ -797,3 +797,11 @@ HUMAN_INTERFACE_SHOULD_COMPRESS_MECHANICS=true
 ## Fio em uma linha
 
 > **CHEFE sinaliza → Casa recupera → alinha → olha de todos os lados → tenta quebrar → age mínimo → prova no alvo/tempo certos → remede → aprende só o delta → preserva uma direção; palavra e prova stale nunca substituem realidade viva.**
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

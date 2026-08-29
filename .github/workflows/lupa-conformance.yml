@@ -84,21 +84,21 @@ jobs:
       - name: Instalar pytest
         run: pip install pytest
       - name: Validar hash canônico da Lupa
-        run: python scripts/lupa/validar_autolupa_hash.py
+        run: python3 scripts/lupa/validar_autolupa_hash.py
       - name: Rodar testes de conformidade
         env:
           AUTOLUPA_REPORT: .agents/skills/meta-lupa/testes/fixtures/exemplo_ok.md
         run: pytest .agents/skills/meta-lupa/testes/test_autolupa_conformance.py -v
       - name: Motor determinístico
         working-directory: .agents/skills/meta-lupa
-        run: python testes/test_lupa.py
+        run: python3 testes/test_lupa.py
       - name: Evolução verificável — fail closed
         working-directory: .agents/skills/meta-lupa
         run: |
-          python scripts/evolution_gate.py --self-test
-          python scripts/evolution_series_gate.py --self-test
-          python scripts/agi_claim_gate.py --self-test
-          python scripts/evolution_series_gate.py --scan references --repo-root ../../..
+          python3 scripts/evolution_gate.py --self-test
+          python3 scripts/evolution_series_gate.py --self-test
+          python3 scripts/agi_claim_gate.py --self-test
+          python3 scripts/evolution_series_gate.py --scan references --repo-root ../../..
           pytest testes/test_evolution_gate.py -v
       - name: Knowledge Compiler — FORJA rigorosa, runtime FLASH
         shell: bash
@@ -111,15 +111,15 @@ jobs:
             .agents/skills/knowledge-compiler/tests/contract.test.mjs
       - name: Percentual evidencial — denominador fechado + dogfood
         working-directory: .agents/skills/meta-lupa
-        run: python scripts/percentual_evidencial.py self-test
+        run: python3 scripts/percentual_evidencial.py self-test
       - name: Validador e promotor do OPERATION_RECEIPT
         run: pytest .agents/skills/meta-lupa/testes/test_operation_receipt_validator.py -v
       - name: Guardrail do selo de ponto fixo
         working-directory: .agents/skills/meta-lupa
-        run: python guardrails/validar_selo_ponto_fixo.py
+        run: python3 guardrails/validar_selo_ponto_fixo.py
       - name: Regressão do selo e do recibo de XP
         working-directory: .agents/skills/meta-lupa
-        run: python testes/test_selo_ponto_fixo.py
+        run: python3 testes/test_selo_ponto_fixo.py
 
       - name: Padrões — biblioteca longitudinal
         shell: bash
@@ -217,8 +217,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python -m pip install --disable-pip-version-check "numpy>=1.26" "safetensors>=0.4.5"
-          python -m unittest discover -s infra/mcp/tests -v
+          python3 -m pip install --disable-pip-version-check "numpy>=1.26" "safetensors>=0.4.5"
+          python3 -m unittest discover -s infra/mcp/tests -v
 
       - name: Receipt determinístico (sempre)
         if: always()

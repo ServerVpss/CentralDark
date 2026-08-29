@@ -17,6 +17,9 @@ META_LUPA_PATH=.agents/skills/meta-lupa/SKILL.md
 META_LUPA_IDENTITY_PATH=.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA
 ESTEIRA_MOTOR_FOR_DEPLOY_RUNNER_HERMES=SIM
 ESTEIRA_MOTOR_PATH=.agents/skills/centraldark-esteira-motor/SKILL.md
+GIT_CONFLICT_SINGLE_STANDARD=SIM
+GIT_CONFLICT_STANDARD_PATH=.agents/skills/git-conflict-resolve-house-standard/SKILL.md
+GIT_CONFLICT_ENGINE_PATH=scripts/dependabot/resolve-conflicts.sh
 RECONCILIATION_CONTRACT=docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json
 ```
 
@@ -32,8 +35,9 @@ Antes de responder ou agir:
 8. Ler `.agents/skills/meta-lupa/SKILL.md` quando o risco exigir falsificação crítica.
 9. Conferir `.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA` quando a MetaLupa for carregada.
 10. Ler `.agents/skills/centraldark-esteira-motor/SKILL.md` quando a missão envolver Hermes/PM2, runner self-hosted, fila Actions, deploy VPS, ou diagnóstico motor × esteira (MOTOR != ESTEIRA).
-11. Medir branch, HEAD, PR, runtime, writer e tools aplicáveis.
-12. Emitir uma vez o `CENTRALDARK_AI_BOOT` de `LEIA-ME-IA.md`.
+11. Ler `.agents/skills/git-conflict-resolve-house-standard/SKILL.md` quando houver PR em conflito, main avançando sob PR aberto, ou dependabot travado. É o **único** padrão de resolução — não abrir segundo resolvedor nem resolver na mão fora dele.
+12. Medir branch, HEAD, PR, runtime, writer e tools aplicáveis.
+13. Emitir uma vez o `CENTRALDARK_AI_BOOT` de `LEIA-ME-IA.md`.
 
 ## Identidade
 

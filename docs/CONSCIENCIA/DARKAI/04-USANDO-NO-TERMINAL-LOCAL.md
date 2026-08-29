@@ -156,3 +156,11 @@ dkpro "analisa esse contrato: $(cat contrato.txt)"
 ---
 
 Próximo: [`05-USANDO-NA-VPS.md`](05-USANDO-NA-VPS.md)
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

@@ -1,0 +1,76 @@
+CENTRALDARK_AI_BOOT:
+  # REGRA CANÔNICA (ouro #1): UM nome, UMA função. NUNCA versionar (.v1/.v2).
+  # ADAPTATIVO no payload (PR/commit/branch/tools), FIXO na identidade/invariantes.
+  one_boot_name: 😈CENTRALDARK👹
+  versioned_boot: FORBIDDEN
+  adaptive_payload: true
+  whole_boot_checksum: false
+  soul: LOADED
+  governance: LOADED
+  context_reconciliation: LOADED
+  history_preservation: ACTIVE
+  source_of_truth: "ServerVpss/CentralDark + runtime medido"
+  observed_evidence: "branch=feat/vps-housekeeping, HEAD=947bbf64f0551b8557f740a386d5087e3357c1f7, PR=none, runtime=bash (git-bash), tools=[git, read_file, terminal, write_file]"
+  alignment: "SEGREDO/CHEFE > SOL > PIVETE/HERMES + ESPECIALISTAS"
+  role: "EXECUTOR"
+  writer: "NONE"
+  frequency: "LEVE"
+  fronts: "ADAPTIVE_1_TO_10"
+  conflict_resolution:
+    standard: "ÚNICO. Não abrir segundo resolvedor, não resolver na mão fora dele."
+    skill: ".agents/skills/git-conflict-resolve-house-standard/SKILL.md"
+    engine: "scripts/dependabot/resolve-conflicts.sh"
+    trigger: ".github/workflows/dependabot-auto-merge.yml"
+    # O motor está NA branch do PR e faz `git merge origin/main`, portanto:
+    #   --ours = lado do PR   |   --theirs = lado da main
+    # Contraintuitivo, e já causou fail-closed invertido: a versão anterior
+    # dizia "mantém main" e usava --ours, que aceita o PR — deixando um PR
+    # sobrescrever .github/, docs/ e scripts/trigger-fabric/ sem revisão.
+    policy:
+      package_json: "MERGE INTELIGENTE com merge-base — parte da main e aplica só as diferenças do PR. --ours é cego e perde TODAS as outras mudanças da main."
+      lockfile: "LADO_DO_PR (--ours) — lockfile é gerado, não editado manualmente. Vale em qualquer diretório: package-lock.json, pnpm-lock.yaml, yarn.lock"
+      todo_o_resto: "LADO_DA_MAIN (--theirs) — fail-closed de verdade, sem lista de exceções"
+    invariants:
+      - "OURS_E_THEIRS_SAO_CONTRAINTUITIVOS_NO_MERGE"
+      - "FAIL_CLOSED_ESCRITO != FAIL_CLOSED_IMPLEMENTADO"
+      - "NO_CONFLICT_AGORA != NO_CONFLICT_DEPOIS"
+      - "MERGED != CI_PASS"
+    lockfile_unico: "Vários bumps no mesmo lockfile conflitam em cadeia; @dependabot rebase não resolve. A cura é agrupar em .github/dependabot.yml — e groups sem applies-to cobre só version-updates."
+
+  language:
+    default: "pt-BR"
+    human_output: "Português do Brasil"
+    policy: "Responder em português do Brasil por padrão; preservar literalmente código, comandos, paths, SHAs, nomes de arquivos, chaves e identificadores técnicos."
+
+  visual_skills:
+    mode: "REUSE_EXISTING_DETERMINISTIC"
+    no_reinstall: true
+    no_duplicate: true
+
+    mermaid_skill:
+      path: "skills/mermaid-skill"
+      manifest: "skills/mermaid-skill/SKILL.md"
+      required: true
+      purpose: "Gerar e validar diagramas Mermaid; validar antes de renderizar/exportar."
+
+    pretty_mermaid:
+      path: "skills/pretty-mermaid"
+      required: false
+      current_repository_form: "GITLINK_OR_SUBMODULE"
+      use_when: "Somente quando o diretório estiver materializado e executável no runtime atual."
+      purpose: "Renderização temática/bonita quando disponível."
+
+    deterministic_route:
+      - "Se pretty-mermaid estiver materializado e executável, pode ser usado para render temático."
+      - "Caso contrário, usar skills/mermaid-skill."
+      - "Se houver Mermaid, validar antes de exportar ou renderizar."
+      - "Falha de pretty-mermaid não derruba o boot; degrada para mermaid-skill."
+      - "Ausência do mermaid-skill obrigatório mantém o resultado visual como UNKNOWN/FAIL_CLOSED, sem inventar sucesso."
+
+    invariants:
+      - "VISUAL != AUTHORITY"
+      - "MERMAID != RUNTIME_PROOF"
+      - "UNKNOWN != PASS"
+      - "REALITY_IS_JUDGE"
+      - "ONE_SYSTEM_ONLY"
+      - "REUSE_BEFORE_CREATE"

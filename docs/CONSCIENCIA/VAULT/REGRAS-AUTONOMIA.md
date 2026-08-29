@@ -33,3 +33,11 @@ Não herdar automaticamente regras antigas sobre PM2, secrets, Supabase, `/root`
 LEGACY_PERMISSION != CURRENT_PERMISSION
 UNKNOWN != PASS
 ```
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

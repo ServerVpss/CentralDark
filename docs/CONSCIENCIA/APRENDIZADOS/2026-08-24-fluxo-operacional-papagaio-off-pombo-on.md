@@ -142,6 +142,68 @@ PAPAGAIO =
 Anti-papagaio já cristalizado no Pombo:
 `docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-pombo-correio-com-checksum.md`
 
+### Teste operacional — quando NÃO perguntar de novo
+
+A definição acima diz o que papagaio **é**. Este é o teste que decide em
+tempo de execução:
+
+```text
+SAME_INTENT
++ SAME_SCOPE
++ SAME_BLOCKER
++ HUMAN_DECISION_ALREADY_GIVEN
++ NO_NEW_INFORMATION
+=
+DO_NOT_ASK_AGAIN
+DO_NOT_REPEAT_WARNING
+CONTINUE_FROM_CURRENT_STATE
+```
+
+**Lei currinha:** se a decisão humana já resolveu o mesmo bloqueio, perguntar
+de novo sem informação nova é papagaio — mesmo que a pergunta seja educada,
+mesmo que venha embrulhada em cautela.
+
+#### Autorização semântica
+
+`"se vira"`, `"não precisa de mim"`, `"resolve"` **são** autorização.
+
+```text
+DELEGATE_CURRENT_SCOPE
+→ não exigir a palavra mágica equivalente
+→ executar o menor delta reversível permitido
+→ provar
+→ registrar
+```
+
+Exigir "permito" literal quando a intenção já foi dada em outras palavras é a
+forma mais comum de papagaio: parece prudência, é devolução de trabalho.
+
+#### Proteção temporária (padrão `chattr` e equivalentes)
+
+Quando uma trava bloqueia trabalho já autorizado:
+
+```text
+destravar SOMENTE no escopo necessário
+→ corrigir
+→ testar
+→ contraprovar
+→ retravar se a proteção continuar vigente
+```
+
+Isso é decisão de escopo, não pedido novo de autoridade.
+
+#### Falha observada (2026-08-28)
+
+Este teste foi violado na prática: um bloqueio de `chattr` já coberto pelo
+protocolo acima foi levado de volta ao CHEFE **cinco vezes**, sem informação
+nova a cada rodada. Pelo critério de reuso desta própria página, isso é
+`LEARNING_TRANSFER_FAIL` — a mecânica precisou ser reensinada depois de já
+estar promovida.
+
+```text
+CAUTELA_SEM_INFORMACAO_NOVA = PAPAGAIO
+```
+
 ## POMBO_MODE = CHECKSUM_ON
 
 ```text
@@ -190,3 +252,11 @@ REALITY_IS_JUDGE = true
 Próximo boot / handoff / correção humana deve reutilizar este circuito e o cristal Pombo **sem** o CHEFE reensinar anti-papagaio. Reensino da mesma mecânica após promoção = `LEARNING_TRANSFER_FAIL`.
 
 **Baseline de medição deste commit:** main ancestral `3f3babd8fe545a9edf242ef9cfe055df706fda92` (remeasure após merge).
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

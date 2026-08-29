@@ -360,3 +360,11 @@ AND CLAIMS_CLASSIFIED_BY_EVIDENCE
 
 Contrato em Git prova o contrato no Git. Não prova por si só que toda superfície
 externa, Windows, VPS, sessão ou runtime já o herdou fisicamente.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre
