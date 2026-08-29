@@ -632,7 +632,8 @@ Estabilidade: Plugin externo exige re-instalação manual pós-update. Ação: M
 - **Sintoma:** Auditoria enxame 04/07: faltam ícone IA nos nós, labels sempre visíveis, agrupamento por setor/módulo, partículas pulsando nas arestas, tempo real (polling/ws) e movimento visível dos agentes. Pivete vai coordenar o sistema por esse painel.
 - **Onde mexer:** apps/modulos — source não-minificado do grafo/painel; rascunho de patch em /tmp/enxame/painel-patch.md (Gemini Pro)
 - **Critério pra fechar:** Painel exibindo em tempo real: nós com label+ícone IA agrupados por setor, arestas pulsando com partículas, agentes se movendo entre nós — validado visualmente pelo Pivete
-### 24. DECISÃO SELADA: Sentry descartado, monitoramento fica 100% local via PM2 — 🟢 ABERTO (05/07/2026, 17:48 BRT)
+### 24. DECISÃO SELADA: Sentry descartado, monitoramento fica 100% local via PM2 — ✅ CONCLUÍDO em 2026-08-29
+- **Resumo do fechamento:** Fechamento por reclassificação (auditoria Fabler 29/08/2026). Item é um REGISTRO DE DECISÃO, não uma tarefa: o critério "nunca reabrir pedido de configurar Sentry" é política permanente, não entregável — nunca poderia ser marcado como feito, ficando aberto para sempre e poluindo o backlog. Decisão permanece válida e selada: monitoramento 100% local via pm2 logs + deploy_status; Sentry descartado como dependência externa desnecessária.
 - **Sintoma:** sentry_listar_issues falha por falta de SENTRY_ORG — decisão: não usar Sentry, é serviço externo desnecessário
 - **Critério pra fechar:** Nunca reabrir pedido de configurar Sentry. Monitoramento de erro é local: pm2 logs + deploy_status.
 ### 25. Hermes parou de notificar no Telegram (notify falhou no heartbeat) — 🔴 ABERTO (05/07/2026, 23:55 BRT)
