@@ -9,6 +9,7 @@ const PORTABLE_BRIDGE = "docs/CONSCIENCIA/ARTEFATOS/centraldark-prompt-universal
 const CLAUDE_BRIDGE = "CLAUDE.md";
 const CLAUDE_AUTOLOAD = ".claude/rules/00-centraldark-boot-universal.md";
 const CLAUDE_SUBAGENT_ROOT = ".claude/agents";
+const ALLOWED_ADAPTER_EDGES = new Set([`${CLAUDE_AUTOLOAD}->${CLAUDE_BRIDGE}`]);
 
 const ADAPTERS = Object.freeze([
   ["CHATGPT.md", "CHATGPT"],
@@ -101,15 +102,21 @@ test("todos os adapters ativos são finos, substituíveis e apontam somente para
   }
 });
 
-test("adapters não formam cadeia ou cérebro paralelo", () => {
+test("adapters não formam cadeia; só Claude autoload pode atravessar Claude.md antes do core", () => {
   const names = ADAPTERS.map(([path]) => path);
   for (const [path] of ADAPTERS) {
     const content = read(path);
     for (const other of names) {
       if (other === path) continue;
-      assert.equal(content.includes(other), false, `ADAPTER_CHAIN_FORBIDDEN:${path}->${other}`);
+      const edge = `${path}->${other}`;
+      if (ALLOWED_ADAPTER_EDGES.has(edge)) {
+        assert.ok(content.includes(other), `REQUIRED_ADAPTER_EDGE_MISSING:${edge}`);
+        continue;
+      }
+      assert.equal(content.includes(other), false, `ADAPTER_CHAIN_FORBIDDEN:${edge}`);
     }
   }
+  assert.deepEqual([...ALLOWED_ADAPTER_EDGES], [`${CLAUDE_AUTOLOAD}->${CLAUDE_BRIDGE}`]);
 });
 
 test("round-trip de qualquer engine termina no mesmo core", () => {
