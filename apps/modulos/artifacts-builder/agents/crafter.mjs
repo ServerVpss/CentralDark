@@ -7,7 +7,7 @@ import { writeFile, mkdir, readFile, readdir, appendFile } from 'node:fs/promise
 import { existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { notificar, linha, kv } from '/root/CentralDark/apps/modulos/artifacts-builder/utils/notify.mjs';
+import { notificar, linha, kv } from '../utils/notify.mjs';
 
 const BASE = dirname(dirname(fileURLToPath(import.meta.url)));
 const MISSIONS_DIR = join(BASE, 'missions/pendente');
@@ -369,7 +369,7 @@ async function logToFile(msg) {
 function slugify(s) {
   // Remove acentos, espaços viram hífen simples, sem duplicar
   return s.toLowerCase()
-    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .normalize('NFD').replace(/[̀-ͯ]/g, '')
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '')
     .replace(/-+/g, '-')
@@ -379,23 +379,7 @@ function slugify(s) {
 async function criarMissao(artefato) {
   const { nome, tipo, desc, requisitos, rotas, tema } = artefato;
   
-  const content = `# ${nome}
-
-## Tipo
-${tipo}
-
-## Descrição
-${desc}
-
-## Requisitos
-${requisitos.map(r => `- ${r}`).join('\n')}
-
-## Rotas
-${rotas.join('\n')}
-
-## Tema
-${tema}
-`;
+  const content = `# ${nome}\n\n## Tipo\n${tipo}\n\n## Descrição\n${desc}\n\n## Requisitos\n${requisitos.map(r => `- ${r}`).join('\n')}\n\n## Rotas\n${rotas.join('\n')}\n\n## Tema\n${tema}\n`;
 
   const slug = slugify(nome);
   const caminho = join(MISSIONS_DIR, `${slug}.md`);
