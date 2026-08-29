@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-29T10:06:52.859Z",
-  "updatedAtBR": "29/08/2026, 07:06:52 BRT",
+  "updatedAt": "2026-08-29T10:36:05.391Z",
+  "updatedAtBR": "29/08/2026, 07:36:05 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "fix(hermes): importacao corrigida em crafter.mjs — fix #29 #26",
+    "lastCommit": "fix(artifacts-builder): catch vazio em logToFile → catch(e) { console.error }",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-29T10:36:05.391Z",
+      "titulo": "Push na main · e3a34f6d08a9fc9ea43172f4c234f46ee8a92a10",
+      "detalhe": "fix(artifacts-builder): catch vazio em logToFile → catch(e) { console.error }",
+      "area": "Repositório",
+      "sha": "e3a34f6",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-29T10:06:52.859Z",
       "titulo": "Push na main · bcb88a0418ee3e4fbc18995772fe3603d058d44a",
       "detalhe": "fix(hermes): importacao corrigida em crafter.mjs — fix #29 #26",
@@ -988,14 +996,6 @@
       "detalhe": "🧠 GRAVAR MINERAÇÃO DO NOTEPAD LOCALSTATE COMO FONTE HISTÓRICA",
       "area": "Repositório",
       "sha": "07942a2",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-22T18:57:19.385Z",
-      "titulo": "Push na main · 7e64247d48ff51758127c9ef04702c9f0e613c71",
-      "detalhe": "🔌 UNIFICAR PORTA, HUB, RUBY E CÉREBRO + CONTRATO DE TÍTULO DE PR (#1104)",
-      "area": "Repositório",
-      "sha": "7e64247",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-29T10:36:05.391Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · e3a34f6d08a9fc9ea43172f4c234f46ee8a92a10 (e3a34f6)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-29T10:06:52.859Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · bcb88a0418ee3e4fbc18995772fe3603d058d44a (bcb88a0)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-22T19:43:29.799Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 07942a25af3ca2c0ea9cc3f33dfd3687678910b2 (07942a2)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-22T18:57:19.385Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 7e64247d48ff51758127c9ef04702c9f0e613c71 (7e64247)",
       "area": "Repositório",
       "status": "sucesso"
     }
