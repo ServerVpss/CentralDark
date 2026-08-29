@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-29T15:07:58.476Z",
-  "updatedAtBR": "29/08/2026, 12:07:58 BRT",
+  "updatedAt": "2026-08-29T15:33:30.336Z",
+  "updatedAtBR": "29/08/2026, 12:33:30 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "refactor(rotas): raiz por host vira tabela de redirect, nao landing duplicada",
+    "lastCommit": "aprendizado(#31): Provider sem crédito NÃO é router quebrado",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-29T15:33:30.336Z",
+      "titulo": "Push na main · 842a53f19101b63749e8044ab7a00a60f74600f5",
+      "detalhe": "aprendizado(#31): Provider sem crédito NÃO é router quebrado",
+      "area": "Repositório",
+      "sha": "842a53f",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-29T15:07:58.476Z",
       "titulo": "Push na main · eb0b10e93a4bd4cda961f94bc3383340f23476ed",
       "detalhe": "refactor(rotas): raiz por host vira tabela de redirect, nao landing duplicada",
@@ -988,14 +996,6 @@
       "detalhe": "🧠 META-GENERALIZAR ORQUESTRAÇÃO TOTAL ATÉ FIXED POINT (#1115)",
       "area": "Repositório",
       "sha": "19f2df8",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-24T10:40:08.094Z",
-      "titulo": "Push na main · ef31d948aaf9c873d3828fd9452581b355ce0ca5",
-      "detalhe": "docs: cristalizar Instinto Superior como reflexo operacional",
-      "area": "Repositório",
-      "sha": "ef31d94",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-29T15:33:30.336Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 842a53f19101b63749e8044ab7a00a60f74600f5 (842a53f)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-29T15:07:58.476Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · eb0b10e93a4bd4cda961f94bc3383340f23476ed (eb0b10e)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-24T12:01:32.191Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 19f2df82d8b8d88d97b577a45f8491a7119790bf (19f2df8)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-24T10:40:08.094Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · ef31d948aaf9c873d3828fd9452581b355ce0ca5 (ef31d94)",
       "area": "Repositório",
       "status": "sucesso"
     }
