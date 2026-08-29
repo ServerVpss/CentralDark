@@ -1,0 +1,124 @@
+schema: centraldark.screenpipe-binding.v1
+name: SCREENPIPE_GLOBAL_LIVE_OBSERVER
+status: CANONICAL_CANDIDATE
+authority: SEGREDO/CHEFE
+skill: .agents/skills/screenpipe-live-observer/SKILL.md
+megazord: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MEGAZORD-CENTRALDARK.yml
+handoff_owner: docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md
+
+runtime:
+  auto_discover: true
+  local_data_root_default: "%USERPROFILE%\\.screenpipe"
+  daemon_api_default: "http://localhost:3030"
+  mcp_http_default: "http://localhost:3031/mcp"
+  availability_requires: [HEALTH_OK, RECENT_DATA_PRESENT, TARGET_QUERY_RETURNS_USABLE_EVIDENCE]
+
+consumers:
+  sol_codex:
+    enabled: true
+    mode: READ_OBSERVE_CONTEXT
+    may_request: ALL_SCREENPIPE_CAPABILITIES
+  pivete_hermes:
+    enabled: true
+    mode: READ_OBSERVE_CONTEXT
+    may_request: ALL_SCREENPIPE_CAPABILITIES
+  any_skill:
+    enabled: true
+    through: CAPABILITY_CONTRACT_ROUTER
+    selection: MINIMUM_SUFFICIENT_SET
+
+capabilities:
+  - LIVE_DESKTOP_OBSERVATION
+  - SCREEN_HISTORY_SEARCH
+  - OCR_CONTEXT
+  - ACCESSIBILITY_CONTEXT
+  - AUDIO_TRANSCRIPT_CONTEXT
+  - INPUT_EVENT_CONTEXT
+  - CLIPBOARD_CONTEXT
+  - FRAME_CONTEXT
+  - WINDOW_APP_TIMELINE
+  - SCREENPIPE_ACTIVITY_SUMMARY
+  - SCREENPIPE_MEETING_CONTEXT
+  - SCREENPIPE_AUTOMATION_TARGETING_CONTEXT
+  - SCREENPIPE_VIDEO_EXPORT
+
+local_artifact_classes:
+  chats:
+    role: SCREENPIPE_CHAT_HISTORY_AND_IMPORTED_CONVERSATIONS
+  app_logs:
+    glob: "screenpipe-app.*.log"
+    role: SCREENPIPE_APPLICATION_LOGS
+  capture_index:
+    role: SCREENPIPE_LOCAL_CAPTURE_INDEX
+  skills:
+    role: SCREENPIPE_LOCAL_SKILLS
+    authority: NOT_CENTRALDARK_CANONICAL_BY_EXISTENCE
+  pipes:
+    role: SCREENPIPE_AUTOMATION_PIPES
+    authority: MEASURE_BEFORE_USE
+  trajectories:
+    role: SCREENPIPE_TEMPORAL_TRAJECTORIES
+  crash_dumps:
+    role: FAILURE_EVIDENCE
+  cache:
+    role: CACHE
+    authority: false
+
+observation_pipeline:
+  - DEFINE_REQUIRED_FACT
+  - MEASURE_SCREENPIPE_HEALTH
+  - FIND_MINIMUM_TIME_APP_WINDOW_SCOPE
+  - PREFER_ACCESSIBILITY_OR_STRUCTURED_SEARCH
+  - USE_OCR_AUDIO_INPUT_WHEN_REQUIRED
+  - NORMALIZE_TIMESTAMP_APP_WINDOW_FRAME_CONTENT_TYPE
+  - HASH_NORMALIZED_EVIDENCE
+  - DEDUPE
+  - CROSSCHECK_ORIGINAL_LOG_RUNTIME_FILE_WHEN_CAUSALITY_IS_MATERIAL
+  - RETURN_EVIDENCE_TO_CALLER
+
+handoff:
+  create_new_protocol: false
+  transport_claim_requires_proven_channel: true
+  screenpipe_observed_both_surfaces_is_transport_proof: false
+  normalized_evidence_fields:
+    - observed_at
+    - app_name
+    - window_name
+    - frame_id
+    - content_type
+    - query_scope
+    - evidence_fingerprint
+    - source
+  feed_existing_handoff_fields:
+    - SOURCE_SURFACE
+    - TARGET_SURFACE
+    - OBSERVED_AT
+    - EVIDENCE_REFS
+    - UNKNOWNS
+    - RESIDUAL
+    - NEXT_CURSOR
+  checksum: SHA256_WHEN_MATERIAL
+
+loop:
+  same_observation_without_new_information: DROP_DUPLICATE
+  new_material_delta: ROUTE_TO_CALLER
+  stale_frame_for_live_claim: REQUERY
+  screenpipe_failure_with_other_sensor_available: FALLBACK_TO_OTHER_SENSOR
+  no_sensor_can_discriminate_required_fact: UNKNOWN
+
+security:
+  raw_capture_is_sensitive: true
+  do_not_commit_raw_capture: true
+  do_not_commit_local_databases: true
+  do_not_commit_local_logs_by_default: true
+  do_not_include_sensitive_material_in_handoff: true
+  local_capture_does_not_grant_mutation_authority: true
+
+fixed_point:
+  scope: SCREENPIPE_OBSERVATION_ONLY
+  requires:
+    - SCREENPIPE_AVAILABLE_FOR_TARGET
+    - REQUESTED_TIME_SCOPE_COVERED
+    - REQUIRED_SCREEN_FACTS_CLASSIFIED
+    - DUPLICATE_OBSERVATIONS_COLLAPSED
+    - MATERIAL_UNKNOWN_FROM_SCREENPIPE_ZERO
