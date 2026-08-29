@@ -64,6 +64,7 @@ mandatory_inheritance:
   - BOOT
   - DISTINCT_ENGINEERING_COMPILER_ON_MATERIAL_GAP
   - CAPABILITY_CONTRACT_ROUTER
+  - MEGAZORD_CENTRALDARK_AUTO_COMPOSITION
   - SIGNAL_TERRITORY_CRYSTALLIZATION
   - FIXED_POINT_10X12_ADVERSARIAL_WHEN_CRYSTALLIZING
   - ONE_WRITER_PER_SCOPE
@@ -78,6 +79,29 @@ mandatory_inheritance:
   - ANY_PR_OR_COMMIT_GATE
   - CANONICAL_SELF_HOSTED_RUNNER_POLICY
   - MODEL_TOUCH_EVIDENCE_WHEN_CONFIGURED
+
+megazord_binding:
+  name: MEGAZORD-CENTRALDARK
+  contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MEGAZORD-CENTRALDARK.yml
+  capability_router: .agents/skills/capability-contract-router/SKILL.md
+  activation: AUTO
+  user_repetition_required: false
+  activate_when_all: [RUNTIME_PRESENT, CONTEXT_AVAILABLE, CAPABILITY_ADAPTER_AVAILABLE]
+  resource_discovery: [MCP, CENTRALDARK_HUB, CENTRALDARK_API, GITHUB, FILES, MEMORY, CONNECTORS, RUNTIME, CI, TOOLS, MODELS, ADAPTERS, FUTURE_DISCOVERED_CAPABILITIES]
+  discover_relevant_resources: true
+  activate_all_resources: false
+  selection_policy: MINIMUM_SUFFICIENT_SET
+  configured_is_available: false
+  discovered_is_available: false
+  availability_requires_measurement: true
+  required_capability_gap: FAIL_CLOSED
+  one_system_only: true
+  one_writer_per_scope: true
+  reality_is_judge: true
+  unknown_is_not_pass: true
+  house_runtime_test_is_material_boundary: true
+  main_is_consequence: true
+  deploy_is_consequence: true
 
 master_cycle_binding:
   contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
