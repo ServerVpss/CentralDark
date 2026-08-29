@@ -1,0 +1,84 @@
+# SECOND-BRAIN.yml — Segundo Cérebro Lógico da CentralDark
+# Este arquivo define o segundo cérebro da Casa: ferramentas cognitivas ativas.
+
+owner:
+  name: "CentralDark"
+  role: "Hospedeiro do Segundo Cérebro Lógico"
+  since: "2026-08-28"
+
+brains:
+  - name: "BRAIN_VAULT"
+    type: "storage"
+    description: "Armazenamento persistente de conhecimento, aprendizados e contexto"
+    location: "docs/BRAIN/"
+    access: "filesystem"
+    responsible: "Hermes Agent"
+
+  - name: "TOOLS_COGNITIVAS"
+    type: "reasoning"
+    description: "Ferramentas de raciocínio, análise e processamento ativo"
+    components:
+      - name: "MetaLupa"
+        description: "Auditoria crítica e validação de evidências"
+        path: ".agents/skills/meta-lupa/"
+      - name: "Kimetsu Legacy Breathing"
+        description: "17 respirações operacionais para modos de trabalho"
+        path: "skills/operational-method/kimetsu-legacy-breathing/"
+      - name: "Operational Method"
+        description: "Método de operação no CentralDark"
+        path: "skills/operational-method/centraldark-operational-method/"
+      - name: "Skills especializadas"
+        description: "Domínios específicos (vps, github, forensics, etc.)"
+        path: "skills/"
+    responsible: "Hermes Agent + Skills sob demanda"
+
+routing:
+  omni_router:
+    host: "127.0.0.1"
+    port: 8099
+    engines:
+      - name: "hermes"
+        base_url: "http://127.0.0.1:8645"
+        configured: true
+      - name: "claude-code"
+        base_url: null
+        configured: false
+      - name: "openai"
+        base_url: "https://api.openai.com"
+        configured: true
+      - name: "nous"
+        base_url: "https://inference-api.nousresearch.com/v1"
+        configured: true
+
+  screenpipe:
+    host: "127.0.0.1"
+    port: 3030
+    description: "Percepção da máquina: tela, áudio, navegador"
+
+  mcp_centraldark:
+    host: "127.0.0.1"
+    port: 3100
+    description: "Catalogo de ferramentas da Casa — 113 tools"
+
+integration:
+  screenpipe_to_omni:
+    description: "Screenpipe usa Omni Router como provider de IA"
+    base_url: "http://127.0.0.1:8099/v1"
+    models_url: "http://127.0.0.1:8099/v1/models"
+    provider_name: "CentralDark Hermes"
+    model: "auto"
+
+  hermes_to_screenpipe_mcp:
+    description: "Hermes usa MCP do Screenpipe para percepção da máquina"
+    mcp_server: "screenpipe-mcp"
+    capabilities:
+      - "pesquisar gravacoes de tela"
+      - "transcricoes de audio"
+      - "historico de contexto"
+
+metadata:
+  created: "2026-08-28"
+  last_updated: "2026-08-28"
+  version: "1.0.0"
+  provenance: "Boot em vc — esta skill precisa do boot para não dar errado"
+  boot_dependency: true
