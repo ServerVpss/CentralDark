@@ -1,7 +1,7 @@
 ---
 title: "CLAUDE.md"
 date: 2026-08-24
-updated: 2026-08-24T16:59:00-03:00
+updated: 2026-08-29T17:10:00-03:00
 status: DERIVED_VIEW
 tags: [boot, contrato, claude, ponte]
 category: "A-Agentes"
@@ -30,8 +30,7 @@ Antes de agir:
 2. Ler `AGENTS.md`
 3. Medir branch/HEAD/PR/writer/tools
 4. Emitir `CENTRALDARK_AI_BOOT` uma vez
-5. Todo material (link, texto, imagem, erro, correção) entra no moinho:
-   `harvester → memory-linker → knowledge-compiler`
+5. Todo material entra no moinho canônico; não criar memória/governança paralela
 6. Artefato derivado sem propriedades obrigatórias **não** é `FLASH_READY`
 
 ```text
@@ -41,11 +40,24 @@ COPY_BRAIN=false
 SEGREDO/CHEFE > SOL > PIVETE/HERMES
 ```
 
-## Ponteiros canônicos verificáveis
+## Claude ↔ subagentes, sem inversão de autoridade
 
-Este adaptador carrega os owners `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md`, `.agents/skills/meta-lupa/SKILL.md` e `.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA` por meio de `LEIA-ME-IA.md`, e emite `CENTRALDARK_AI_BOOT`. Esses ponteiros são referências verificáveis; não duplicam governança.
+```text
+SUBAGENT_ROOT=.claude/agents
+CLAUDE_DISCOVERS_SUBAGENTS=true
+SUBAGENTS_INHERIT_CLAUDE_BRIDGE=true
+SUBAGENTS_INHERIT_CANONICAL_CORE=true
+SUBAGENTS_ARE_CAPABILITY_ADAPTERS=true
+SUBAGENT_IS_AUTHORITY=false
+CAPABILITY_SELECTION_OWNER=.agents/skills/capability-contract-router/SKILL.md
+DELEGATION_OWNER=scripts/agent-call.mjs
+PROVIDER_LOCAL_MEMORY_ROLE=WORKING_CACHE_ONLY
+PROVIDER_LOCAL_MEMORY_IS_CANONICAL=false
+```
 
-## Assinatura de adapter fino (contrato agent-core-adapters)
+O “vice-versa” é descoberta de capacidade e handoff: Claude pode localizar subagentes especializados; todo subagente Claude volta por esta ponte ao core. Nem Claude nem subagente redefine intenção, autoridade, owner, Writer, memória canônica ou Judge.
+
+## Assinatura de adapter fino
 
 ```text
 CANONICAL_AGENT_CORE=LEIA-ME-IA.md
