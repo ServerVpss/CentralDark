@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-29T15:44:25.325Z",
-  "updatedAtBR": "29/08/2026, 12:44:25 BRT",
+  "updatedAt": "2026-08-29T15:46:15.045Z",
+  "updatedAtBR": "29/08/2026, 12:46:15 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "aprendizado(#32): Uma capacidade = uma linhagem = um PR de promoção por escopo",
+    "lastCommit": "feat(boot): exigir modo operacional de agente na CentralDark",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-29T15:46:15.045Z",
+      "titulo": "Push na main · 4141b427011cb31cdd69f1b3a379a8033c32bb82",
+      "detalhe": "feat(boot): exigir modo operacional de agente na CentralDark",
+      "area": "Repositório",
+      "sha": "4141b42",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-29T15:44:25.325Z",
       "titulo": "Push na main · cc78c20a833c0ec6a2ebd141ba2abf92e5ec648b",
       "detalhe": "aprendizado(#32): Uma capacidade = uma linhagem = um PR de promoção por escopo",
@@ -988,14 +996,6 @@
       "detalhe": "🧠 ENSINAR SOL/HERMES A RECONSTRUIR ESTADO E NAVIGATION TRACKING (#1119)",
       "area": "Repositório",
       "sha": "f488251",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-24T12:21:38.085Z",
-      "titulo": "Push na main · 8bcf227f020c63fa406c7dbaf006b038aaa4568b",
-      "detalhe": "🪟 TORNAR BUILD DESKTOP PORTÁTIL NO WINDOWS (#1122)",
-      "area": "Repositório",
-      "sha": "8bcf227",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-29T15:46:15.045Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 4141b427011cb31cdd69f1b3a379a8033c32bb82 (4141b42)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-29T15:44:25.325Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · cc78c20a833c0ec6a2ebd141ba2abf92e5ec648b (cc78c20)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-24T15:09:06.081Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · f488251d3ad3ba5f71e2973d9d42fef3683f4885 (f488251)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-24T12:21:38.085Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 8bcf227f020c63fa406c7dbaf006b038aaa4568b (8bcf227)",
       "area": "Repositório",
       "status": "sucesso"
     }
