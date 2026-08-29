@@ -191,3 +191,9 @@ updated: 2026-08-27
 - **Data:** 2026-08-29
 - **Contexto:** Chefe pediu verificar viabilidade de reduzir a arquitetura pra 1 dominio raiz + site + API + MCP, contra o estado atual com varios subdominios de produto (whatsapp., crm., financeiro., telepainel.) decidindo landing por hostname via hostRouting.ts.
 - **Aprendizado:** Antes de assumir que falta construir rotas por path pra consolidar dominios, ler rotasPortalPublico/rotas-portal-publico.tsx: as rotas /whatsapp, /crm, /financeiro, /telepainel ja existem em paralelo ao host-detect. A reconciliacao e so trocar RaizPorHost pra nao decidir mais por hostname, e trocar Caddy dos vhosts legados de "serve build" pra "redirect 301 pro path". Nao precisa DNS mexer. Regra canonica do projeto ja exige veredito humano antes de qualquer Caddy reload — respeitar isso mesmo com autorizacao ampla do usuario, pois e uma trava especifica e mais recente que a autorizacao geral.
+
+### 31. Provider sem crédito NÃO é router quebrado
+- **Categoria:** regra
+- **Data:** 2026-08-29
+- **Contexto:** Agentes confundiam falha de quota/auth de um provider free com falha estrutural do router/CLI/fallback engine, pintando a CentralDark de vermelho quando era o serviço externo indisponível
+- **Aprendizado:** Classificar causa real da falha (AUTH_EXPIRED, QUOTA_EXHAUSTED, RATE_LIMITED = transitória vs ROUTER_ERROR, CONFIG_ERROR = estrutural). Transitória: registrar + skip + next fallback + continuar. CHAIN_MECHANISM_PROVEN != ALL_MODELS_AVAILABLE_NOW. Nunca declarar arquitetura quebrada por falha transitória de provider.
