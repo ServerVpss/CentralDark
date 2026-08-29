@@ -74,19 +74,26 @@ clone. **Rotação é obrigatória e precede qualquer edição.**
 | `#49` | "`ui.centralldark.com` NÃO existe em `infra/caddy/`" | Existe em `mcp.Caddyfile`, **mas só como CORS Origin** — não há bloco de site | **Continua aberta** (alegação imprecisa, substância válida) |
 | `#52` | PR #142 aberto | Commit `1a537ffbf` existe apenas em `origin/fix/gateway-tool-call-id-sanitize`, ausente da `main` | **Continua aberta** |
 
-## 6. Pendência não registrada (descoberta nesta auditoria)
+## 6. Numeração dupla (achado confirmado)
 
-**`PENDENCIAS.md` tem duas fontes da verdade.** A ferramenta MCP `pendencias_close`
-grava na cópia da VPS; o clone local e o GitHub não recebem a escrita.
-Verificado: após fechar `#24`, a cópia MCP foi de 767 → 730 linhas, enquanto
-`git status docs/PENDENCIAS.md` permaneceu limpo.
+`PENDENCIAS.md` usa **duas numerações concorrentes** — `## #N` (temas) e `### N.`
+(operacionais). Existem um `#15` temático ("Consolidar módulos soltos em /root")
+e um `#15` operacional ("MCP Catalog — migration + edge function"), diferentes.
+Toda referência a "pendência 15" é ambígua. Mesma colisão em `#1`–`#5` e `#14`.
 
-Isso viola a Sincronia 4-Point e é a **razão mecânica de o backlog apodrecer**:
-fechamentos não propagam, então itens mortos parecem vivos indefinidamente.
+### Correção de um achado preliminar desta própria auditoria
 
-Sintoma secundário: o arquivo usa **duas numerações concorrentes** — `## #N` (temas)
-e `### N.` (operacionais). Existem um `#15` temático e um `#15` operacional,
-diferentes. Toda referência a "pendência 15" é ambígua.
+Durante a triagem levantei a hipótese de que `pendencias_close` gravava só na cópia
+da VPS, sem propagar pro repo — o que violaria a Sincronia 4-Point. **Isso estava
+errado e fica registrado como erro.**
+
+Evidência que derrubou a hipótese: o commit `351dfb8fc docs(pendencias): fecha #24`
+chegou ao `origin/main` pouco depois do fechamento, com o `### 24.` já convertido
+para `✅ CONCLUÍDO em 2026-08-29`. A propagação existe e é **assíncrona** — o clone
+local parecia limpo apenas porque ainda não havia feito `fetch`.
+
+Lição operacional: nesta base, "arquivo local não mudou" **não** é evidência de
+falha de escrita. Só vale como evidência depois de `git fetch`.
 
 ---
 
