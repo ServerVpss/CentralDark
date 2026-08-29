@@ -15,7 +15,30 @@ def check(path, needles=(), classification='PROVEN_IN_REPO'):
         ok=ok and not missing
     checks.append({'path':path,'classification':classification,'ok':ok,'missing':missing})
 
+def check_absent(path, forbidden=(), classification='PROVEN_ABSENT_IN_REPO'):
+    p=ROOT/path
+    ok=p.exists(); violations=[]; text=''
+    if ok:
+        text=p.read_text(encoding='utf-8',errors='replace')
+        for pattern in forbidden:
+            if re.search(pattern,text): violations.append(pattern)
+        ok=not violations
+    checks.append({'path':path,'classification':classification,'ok':ok,'missing':violations})
+
 check('LEIA-ME-IA.md',['#ACORDAR','!CALIBRAR','CENTRALDARK_AI_BOOT'])
+check('CENTRALDARK_AI_BOOT.yaml',[
+ 'adaptive_payload: true',
+ 'observed_evidence: "MEASURE_AT_RUNTIME: branch, HEAD, PR, runtime, tools, owner, writer_scope"',
+ 'role: "DISCOVER_FROM_PRESENT_GAP_AND_CAPABILITY"',
+ 'writer: "UNKNOWN_UNTIL_WRITER_SCOPE_MEASURED"',
+ 'frequency: "ADAPTIVE"',
+], classification='LIVE_BOOT_PAYLOAD_CONTRACT')
+check_absent('CENTRALDARK_AI_BOOT.yaml',[
+ r'(?mi)^\s*observed_evidence:\s*".*\bbranch=',
+ r'(?mi)^\s*observed_evidence:\s*".*\bHEAD=[0-9a-f]{7,40}\b',
+ r'(?mi)^\s*role:\s*"EXECUTOR"\s*$',
+ r'(?mi)^\s*writer:\s*"NONE"\s*$',
+], classification='NO_FROZEN_BOOT_SNAPSHOT')
 check('AGENTS.md',['#ACORDAR','!CALIBRAR','REALITY=JUDGE'])
 check('docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md',['#ACORDAR + !CALIBRAR + !MULTIBUSSOLA','MESMO_CONTRATO=SIM'])
 check('docs/CONSCIENCIA/MULTIBUSSOLA.md',['!MULTIBUSSOLA','REALITY_IS_JUDGE=true','BOTTOM-UP','ROUND-TRIP'])

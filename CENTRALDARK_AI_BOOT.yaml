@@ -10,11 +10,11 @@ CENTRALDARK_AI_BOOT:
   context_reconciliation: LOADED
   history_preservation: ACTIVE
   source_of_truth: "ServerVpss/CentralDark + runtime medido"
-  observed_evidence: "branch=feat/vps-housekeeping, HEAD=947bbf64f0551b8557f740a386d5087e3357c1f7, PR=none, runtime=bash (git-bash), tools=[git, read_file, terminal, write_file]"
+  observed_evidence: "MEASURE_AT_RUNTIME: branch, HEAD, PR, runtime, tools, owner, writer_scope"
   alignment: "SEGREDO/CHEFE > SOL > PIVETE/HERMES + ESPECIALISTAS"
-  role: "EXECUTOR"
-  writer: "NONE"
-  frequency: "LEVE"
+  role: "DISCOVER_FROM_PRESENT_GAP_AND_CAPABILITY"
+  writer: "UNKNOWN_UNTIL_WRITER_SCOPE_MEASURED"
+  frequency: "ADAPTIVE"
   fronts: "ADAPTIVE_1_TO_10"
   conflict_resolution:
     standard: "ÚNICO. Não abrir segundo resolvedor, não resolver na mão fora dele."
