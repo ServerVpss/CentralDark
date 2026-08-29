@@ -43,17 +43,6 @@ teste que efetivamente separa as hipóteses:
 Regra: para provar que algo está versionado, medir **o que um checkout limpo
 entrega** — não o que a árvore de trabalho exibe.
 
-### Falso verde de conflito resolvido
-
-Quando um PR aparece sem conflito após `resolve-conflicts.sh` mas o GitHub
-ainda marca `CONFLICTING`, o branch remoto do PR precisa de um commit de
-sincronia (`git merge --no-ff origin/main` + `git push --force-with-lease`)
-antes do squash. `NO_CONFLICT` no script local NÃO prova que o PR remoto está
-alinhado. O padrão único e determinístico de resolução de conflito da Casa
-está em `.agents/skills/git-conflict-resolve-house-standard/SKILL.md` — não
-criar segundo padrão, não V2/V3. Padrão se adapta à realidade atual (main
-fresca), nunca congela.
-
 ## Três temperaturas operacionais
 
 ### FRIA — provar o que aconteceu
