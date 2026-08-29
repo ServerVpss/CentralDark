@@ -42,11 +42,47 @@ resource_discovery:
     - TOOLS
     - MODELS
     - ADAPTERS
+    - SCREENPIPE
     - FUTURE_DISCOVERED_CAPABILITIES
   unknown_capability_is_available: false
   configured_is_active: false
   documented_is_executable: false
   discovered_resource_requires_measurement: true
+
+screenpipe:
+  role: GLOBAL_LIVE_OBSERVATION_SENSOR
+  skill: .agents/skills/screenpipe-live-observer/SKILL.md
+  handoff_owner: docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md
+  auto_discover: true
+  selectable_by_any_skill: true
+  selectable_by_sol_codex: true
+  selectable_by_hermes: true
+  mutation_authority: false
+  capabilities:
+    - LIVE_DESKTOP_OBSERVATION
+    - SCREEN_HISTORY_SEARCH
+    - OCR_CONTEXT
+    - ACCESSIBILITY_CONTEXT
+    - AUDIO_TRANSCRIPT_CONTEXT
+    - INPUT_EVENT_CONTEXT
+    - CLIPBOARD_CONTEXT
+    - FRAME_CONTEXT
+    - WINDOW_APP_TIMELINE
+    - SCREENPIPE_ACTIVITY_SUMMARY
+    - SCREENPIPE_MEETING_CONTEXT
+    - SCREENPIPE_AUTOMATION_TARGETING_CONTEXT
+    - SCREENPIPE_VIDEO_EXPORT
+  availability_requires:
+    - HEALTH_OK
+    - RECENT_DATA_PRESENT
+    - TARGET_QUERY_RETURNS_USABLE_EVIDENCE
+  rules:
+    history_is_current_state: false
+    screenshot_is_live_state: false
+    screenpipe_is_authority: false
+    screenpipe_is_handoff: false
+    cross_surface_transport_requires_proven_channel: true
+    no_information_gain: DROP_DUPLICATE
 
 composition:
   discover_all_relevant: true
@@ -97,6 +133,7 @@ context_contract:
   memory_when_relevant: true
   runtime_when_relevant: true
   connectors_when_relevant: true
+  screenpipe_when_relevant: true
   background_context_may_change_answer: true
   background_context_may_not_expand_user_output_scope: true
 
