@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-08-29T15:07:17.619Z
-- **Commit:** `84e4b6705aa7f3548b67d1f9f3deda99af0f6d99`
+- **Gerado:** 2026-08-29T15:33:12.823Z
+- **Commit:** `842a53f19101b63749e8044ab7a00a60f74600f5`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 39 | 39 | 39 | 0 | 0 |
-| aprendizados | 31 | 0 | 0 | 31 | 0 |
+| aprendizados | 32 | 0 | 0 | 32 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **31**
+- 🟥 Faltando no Notion: **32**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -79,4 +79,5 @@
 - 28. Ponte semântica fail-closed EXIT code=2 — não é verde; stderr engolido
 - 29. Dois mundos vivos: GitHub main 81bbfc7 ≠ VPS 5958d3ce27 (1252 atrás, dirty)
 - 30. Consolidacao de dominios: SPA ja e hibrido, nao falta construir path-routes
+- 31. Provider sem crédito NÃO é router quebrado
 </details>
