@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-29T09:14:57.856Z",
-  "updatedAtBR": "29/08/2026, 06:14:57 BRT",
+  "updatedAt": "2026-08-29T09:42:27.991Z",
+  "updatedAtBR": "29/08/2026, 06:42:27 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "docs(pendencias): corrige achado errado da triagem Fabler sobre 4-Point",
+    "lastCommit": "fix(ci): corrigir python→python3 no lupa-drift-guard e detectar_drift (#1366)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-29T09:42:27.991Z",
+      "titulo": "Push na main · 33091e0de9915bdce915cec876e24921422c4ccb",
+      "detalhe": "fix(ci): corrigir python→python3 no lupa-drift-guard e detectar_drift (#1366)",
+      "area": "Repositório",
+      "sha": "33091e0",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-29T09:14:57.856Z",
       "titulo": "Push na main · eb7eb7aa1887e19659f95d068316474598cbbd9e",
       "detalhe": "docs(pendencias): corrige achado errado da triagem Fabler sobre 4-Point",
@@ -988,14 +996,6 @@
       "detalhe": "🧾 GENERALIZAR PROVA DE COBERTURA E USO DE FERRAMENTAS (#1111)",
       "area": "Repositório",
       "sha": "d8ff026",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-22T16:33:24.113Z",
-      "titulo": "Push na main · b64024f5b1d33886fdf44da32e6051a599e5985a",
-      "detalhe": "🔗 GENERALIZAR CORRELATION-ID EM TRACE CAUSAL MCP (#1110)",
-      "area": "Repositório",
-      "sha": "b64024f",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-29T09:42:27.991Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 33091e0de9915bdce915cec876e24921422c4ccb (33091e0)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-29T09:14:57.856Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · eb7eb7aa1887e19659f95d068316474598cbbd9e (eb7eb7a)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-22T16:33:57.671Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · d8ff02628f8965fd44ebd131a0b9205f90be5878 (d8ff026)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-22T16:33:24.113Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · b64024f5b1d33886fdf44da32e6051a599e5985a (b64024f)",
       "area": "Repositório",
       "status": "sucesso"
     }
