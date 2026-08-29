@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-08-29T14:51:49.190Z
+# 🧠 Notion Sync — 2026-08-29T15:07:14.344Z
 
-- **Commit fonte:** `c159af1a7e687ba0d38d5963db65b82a20304e8d`
+- **Commit fonte:** `84e4b6705aa7f3548b67d1f9f3deda99af0f6d99`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 484 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 485 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -15,8 +15,8 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
-| aprendizados | 30 | 0 | 30 | 0 | 0 |
-| estrutura | 411 | 1 | 410 | 0 | 0 |
+| aprendizados | 31 | 1 | 30 | 0 | 0 |
+| estrutura | 411 | 0 | 411 | 0 | 0 |
 
 ## Operações
 
@@ -96,6 +96,7 @@
 | aprendizados | atualizado | #27 — Grok App Builder é adapter, não cérebro — não scaffoldar app paralelo |
 | aprendizados | atualizado | #28 — Ponte semântica fail-closed EXIT code=2 — não é verde; stderr engolido |
 | aprendizados | atualizado | #29 — Dois mundos vivos: GitHub main 81bbfc7 ≠ VPS 5958d3ce27 (1252 atrás, dirty) |
+| aprendizados | criado | #30 — Consolidacao de dominios: SPA ja e hibrido, nao falta construir path-routes |
 | estrutura | atualizado | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | atualizado | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
@@ -386,7 +387,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/PIVETE-IA/PIVETE-16-SECRETS-CONNECTORS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PIVETE-IA/PIVETE-17-MCPO-INTEGRATION.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PIVETE-IA/PIVETE-18-ROTA-MEMORIA.md |
-| estrutura | criado | docs/CONSCIENCIA/PLANO-RECONCILIACAO-DOMINIOS.md |
+| estrutura | atualizado | docs/CONSCIENCIA/PLANO-RECONCILIACAO-DOMINIOS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PLANO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PROGRAMAS/CONVERGENCIA-OMNIROUTE-CENTRALDARK.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PROJECT-KNOWLEDGE-CENTRALDARK-V2.md |
