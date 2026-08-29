@@ -8,6 +8,10 @@ baseline_policy: CURRENT_MAIN
 master_trigger: "!CENTRALDARK"
 master_trigger_requires_explicit_marker: true
 plain_word_centraldark_does_not_trigger: true
+bot_entry_activates_master_session: true
+explicit_trigger_activates_master_session: true
+master_session_remains_active: true
+subsequent_chefe_material_is_delta_candidate: true
 
 purpose: >-
   Comprimir o ciclo operacional completo da Casa em um unico gatilho humano,
@@ -21,13 +25,35 @@ expands_to:
   - MULTIBUSSOLA
   - META_LUPA
   - RECONCILIAR
+  - DELTA_UTIL
   - CONTRAPROVA
   - REMEDICAO
   - FIXED_POINT
   - REGISTRA
   - BOOT
 
-canonical_chain: "#ACORDAR -> !CALIBRAR -> !MULTIBUSSOLA -> !META_LUPA -> !RECONCILIAR -> !CONTRAPROVA -> !REMEDICAO -> !FIXED_POINT -> !REGISTRA -> !BOOT"
+canonical_chain: "#ACORDAR -> !CALIBRAR -> !MULTIBUSSOLA -> !META_LUPA -> !RECONCILIAR -> !DELTAUTIL -> !CONTRAPROVA -> !REMEDICAO -> !FIXED_POINT -> !REGISTRA -> !BOOT"
+
+continuous_delta_contract:
+  scope: ACTIVE_MASTER_SESSION
+  input_owner: SEGREDO/CHEFE
+  every_material_is_processed: true
+  every_material_is_fact: false
+  every_material_is_persisted: false
+  language_is_identity: false
+  typo_is_rejection: false
+  time_bucket_is_authority: false
+  newest_unproved_claim_wins: false
+  newest_proved_state_wins: true
+  number_of_windows_is_vote: false
+  number_of_messages_is_vote: false
+  correlated_views_are_independent_proofs: false
+  screenshot_proves: VISIBLE_MANIFESTATION_ONLY
+  runtime_claim_requires_runtime_evidence: true
+  cross_chat_transport_requires_channel_evidence: true
+  process: [CAPTURE, LINK_DESTINATION, DEDUPE, CLASSIFY, FIND_OWNER, PROVE_OR_PRESERVE_UNKNOWN, ABSORB_MINIMAL_DELTA, COUNTERPROVE, REMEASURE]
+  classifications: [DUPLICATE, PARTIAL, NEW, SUPERSEDED, CANDIDATE, UNKNOWN, PROVED]
+
 
 phase_contracts:
   ACORDAR:
@@ -46,6 +72,10 @@ phase_contracts:
   RECONCILIAR:
     meaning: REUSE_PAST_AND_CURRENT_PROVEN_DELTA_BEFORE_CREATE
     owner: docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json
+  DELTA_UTIL:
+    meaning: PROCESS_ALL_CHEFE_MATERIAL_AND_ABSORB_ONLY_PROVEN_INFORMATION_GAIN
+    owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml#continuous_delta_contract
+    facts_are_not_created_by_recency_repetition_or_screen: true
   CONTRAPROVA:
     meaning: INDEPENDENT_OR_DISCRIMINATING_COUNTERPROOF
     owner: docs/CONSCIENCIA/PROOF-OWNERSHIP.json
@@ -87,6 +117,10 @@ execution_model:
   parallel_perception: true
   serialized_mutation: true
   one_writer_per_scope: true
+  role_is_discovered_from_capability_gap: true
+  role_claim_without_evidence_is_invalid: true
+  owner_must_exist_before_role_claim: true
+  writer_must_be_measured_before_mutation: true
   one_core_many_arms: true
   model_vote_as_truth: false
   fanout_growth_requires_information_gain: true
