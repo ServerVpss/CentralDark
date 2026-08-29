@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-29T14:55:57.973Z",
-  "updatedAtBR": "29/08/2026, 11:55:57 BRT",
+  "updatedAt": "2026-08-29T15:07:58.476Z",
+  "updatedAtBR": "29/08/2026, 12:07:58 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "docs: plano de reconciliacao de dominios (1 site + 1 API + 1 MCP)",
+    "lastCommit": "refactor(rotas): raiz por host vira tabela de redirect, nao landing duplicada",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-29T15:07:58.476Z",
+      "titulo": "Push na main · eb0b10e93a4bd4cda961f94bc3383340f23476ed",
+      "detalhe": "refactor(rotas): raiz por host vira tabela de redirect, nao landing duplicada",
+      "area": "Repositório",
+      "sha": "eb0b10e",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-29T14:55:57.973Z",
       "titulo": "Push na main · c159af1a7e687ba0d38d5963db65b82a20304e8d",
       "detalhe": "docs: plano de reconciliacao de dominios (1 site + 1 API + 1 MCP)",
@@ -988,14 +996,6 @@
       "detalhe": "docs: cristalizar Instinto Superior como reflexo operacional",
       "area": "Repositório",
       "sha": "ef31d94",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-24T10:39:12.681Z",
-      "titulo": "Push na main · 575b4a29440fe2f28b0c32c7fa1ab6e7a887ff8d",
-      "detalhe": "docs: tornar baianês fácil o padrão automático da SOL",
-      "area": "Repositório",
-      "sha": "575b4a2",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-29T15:07:58.476Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · eb0b10e93a4bd4cda961f94bc3383340f23476ed (eb0b10e)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-29T14:55:57.973Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · c159af1a7e687ba0d38d5963db65b82a20304e8d (c159af1)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-24T10:40:08.094Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · ef31d948aaf9c873d3828fd9452581b355ce0ca5 (ef31d94)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-24T10:39:12.681Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 575b4a29440fe2f28b0c32c7fa1ab6e7a887ff8d (575b4a2)",
       "area": "Repositório",
       "status": "sucesso"
     }
