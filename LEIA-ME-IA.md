@@ -577,6 +577,7 @@ TASKS_SECRETAS
 | ontologia de evidência / causalidade | `docs/GOVERNANCA/ONTOLOGIA-DE-EVIDENCIA-E-CAUSALIDADE.md` |
 | pendências | `docs/PENDENCIAS.md` |
 | coordenação/escritor único | `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` |
+| `!CENTRALDARK` / delta útil contínuo | `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/DELTA-CONTINUO.md` |
 | MetaLupa | `.agents/skills/meta-lupa/SKILL.md` |
 | propriedade/anti-circularidade da prova | `docs/CONSCIENCIA/PROOF-OWNERSHIP.json` |
 | identidade MetaLupa | `.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA` |
