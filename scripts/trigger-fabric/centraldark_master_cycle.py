@@ -11,6 +11,7 @@ CHAIN = [
     "MULTIBUSSOLA",
     "META_LUPA",
     "RECONCILIAR",
+    "DELTA_UTIL",
     "CONTRAPROVA",
     "REMEDICAO",
     "FIXED_POINT",
@@ -151,7 +152,7 @@ def evaluate_multibussola_state(state):
     }
 
 
-def resolve(text: str):
+def resolve(text: str, master_active: bool = False, chefe_source: bool = False, bot_entry: bool = False):
     raw = str(text or "")
     normalized = normalize(raw)
     explicit_master = (
@@ -159,7 +160,11 @@ def resolve(text: str):
         or _phrase_match(normalized, "!CENTRAL-DARK") is not None
         or _phrase_match(normalized, "!CDARK") is not None
     )
+    inherited_master = bool(master_active or bot_entry)
+    master_cycle_active = bool(explicit_master or inherited_master)
+    chefe_material = bool(chefe_source and master_cycle_active)
     delta_match, delta_active, delta_ambiguous = _resolve_delta(normalized)
+    harvest_active = bool(delta_active or chefe_material)
     meta_match = next(
         (alias for alias in MULTIBUSSOLA_META_ALIASES if _phrase_match(normalized, alias) is not None),
         None,
@@ -172,17 +177,29 @@ def resolve(text: str):
         "normalized": normalized,
         "master_trigger": MASTER,
         "explicit_match": explicit_master,
-        "expanded_chain": CHAIN if explicit_master else [],
+        "master_cycle_active": master_cycle_active,
+        "activation_source": (
+            "EXPLICIT_TRIGGER" if explicit_master
+            else ("BOT_ENTRY" if bot_entry else ("INHERITED_SESSION" if master_active else None))
+        ),
+        "next_master_active": master_cycle_active,
+        "expanded_chain": CHAIN if master_cycle_active else [],
         "delta_harvest": {
             "canonical_signal": DELTA_CANONICAL,
-            "active": delta_active,
+            "active": harvest_active,
+            "explicit_signal_active": delta_active,
+            "candidate_from_chefe": chefe_material,
             "ambiguous_or_negated": delta_ambiguous,
             "matched_alias": delta_match,
-            "mode": "DELTA_HARVEST" if delta_active else ("UNKNOWN" if delta_ambiguous else None),
-            "route_to_existing_owner": delta_active,
-            "information_gain_required": delta_active,
-            "zero_regression": delta_active,
-            "no_v1_v2_v3": delta_active,
+            "mode": "DELTA_HARVEST" if harvest_active else ("UNKNOWN" if delta_ambiguous else None),
+            "route_to_existing_owner": harvest_active,
+            "information_gain_required": harvest_active,
+            "zero_regression": harvest_active,
+            "no_v1_v2_v3": harvest_active,
+            "claim_is_fact": False,
+            "screen_is_runtime_proof": False,
+            "repetition_is_independent_proof": False,
+            "temporal_label_is_authority": False,
         },
         "multibussola": {
             "canonical_signal": "!MULTIBUSSOLA",
@@ -200,12 +217,12 @@ def resolve(text: str):
             "creates_new_owner": False,
         },
         "status": (
-            "MATCH" if explicit_master or delta_active or meta_active
+            "MATCH" if master_cycle_active or harvest_active or meta_active
             else ("UNKNOWN" if delta_ambiguous else "NO_MATCH")
         ),
         "authority_changed": False,
         "mutation_authorized": False,
-        "all_phases_considered": explicit_master,
+        "all_phases_considered": master_cycle_active,
         "phase_execution_is_adaptive": True,
         "unknown_is_pass": False,
         "graph_is_authority": False,
@@ -289,6 +306,22 @@ def self_test():
             ok = ok and got["mutation_authorized"] is False
         results.append({"kind": "delta", "input": text, "expected": expected, "got": actual, "ambiguous": actual_ambiguous, "ok": ok})
 
+    session_cases = [
+        ("corrige o que mudou", True, True, False, True),
+        ("material de outra fonte", True, False, False, False),
+        ("entrada inicial do CHEFE", False, True, True, True),
+    ]
+    for text, active, chefe, bot_entry, expected_harvest in session_cases:
+        got = resolve(text, master_active=active, chefe_source=chefe, bot_entry=bot_entry)
+        ok = got["master_cycle_active"] is True
+        ok = ok and got["expanded_chain"] == CHAIN
+        ok = ok and got["delta_harvest"]["active"] is expected_harvest
+        ok = ok and got["delta_harvest"]["claim_is_fact"] is False
+        ok = ok and got["delta_harvest"]["screen_is_runtime_proof"] is False
+        ok = ok and got["delta_harvest"]["repetition_is_independent_proof"] is False
+        ok = ok and got["mutation_authorized"] is False
+        results.append({"kind": "continuous_session", "input": text, "expected_harvest": expected_harvest, "got": got["delta_harvest"]["active"], "ok": ok})
+
     for text, expected in meta_cases:
         got = resolve(text)
         multi = got["multibussola"]
@@ -321,8 +354,16 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--text")
     parser.add_argument("--self-test", action="store_true")
+    parser.add_argument("--master-active", action="store_true")
+    parser.add_argument("--chefe-source", action="store_true")
+    parser.add_argument("--bot-entry", action="store_true")
     args = parser.parse_args()
-    out = self_test() if args.self_test else resolve(args.text or "")
+    out = self_test() if args.self_test else resolve(
+        args.text or "",
+        master_active=args.master_active,
+        chefe_source=args.chefe_source,
+        bot_entry=args.bot_entry,
+    )
     print(json.dumps(out, ensure_ascii=False, indent=2, default=str))
 
 
