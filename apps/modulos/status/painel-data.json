@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-29T17:14:58.185Z",
-  "updatedAtBR": "29/08/2026, 14:14:58 BRT",
+  "updatedAt": "2026-08-29T17:16:33.678Z",
+  "updatedAtBR": "29/08/2026, 14:16:33 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "fix(claude): herdar core em todos os subagentes",
+    "lastCommit": "test(agent-core): bloquear autoridade paralela em subagentes Claude",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-29T17:16:33.678Z",
+      "titulo": "Push na main · abaaf6129588e86249437e64fd7016f32b5cb904",
+      "detalhe": "test(agent-core): bloquear autoridade paralela em subagentes Claude",
+      "area": "Repositório",
+      "sha": "abaaf61",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-29T17:14:58.185Z",
       "titulo": "Push na main · 717f6f0da1c4adf5ab68101c917d9fa863a25314",
       "detalhe": "fix(claude): herdar core em todos os subagentes",
@@ -988,14 +996,6 @@
       "detalhe": "📡 PREPARAR IPNAMES COMO INTELIGÊNCIA EXTERNA DE REDE (#1117)",
       "area": "Repositório",
       "sha": "d85a5c2",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-24T19:12:57.724Z",
-      "titulo": "Push na main · 2f20f34eaa7c10855e83bacad06fd45731cfbd5a",
-      "detalhe": "🎨 CRISTALIZAR OS 3 TEMAS GLOBAIS OFICIAIS DA CENTRALDARK (#1121)",
-      "area": "Repositório",
-      "sha": "2f20f34",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-29T17:16:33.678Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · abaaf6129588e86249437e64fd7016f32b5cb904 (abaaf61)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-29T17:14:58.185Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 717f6f0da1c4adf5ab68101c917d9fa863a25314 (717f6f0)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-24T21:03:22.897Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · d85a5c27058fa131a16783831aaacc0edb9a275d (d85a5c2)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-24T19:12:57.724Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 2f20f34eaa7c10855e83bacad06fd45731cfbd5a (2f20f34)",
       "area": "Repositório",
       "status": "sucesso"
     }
