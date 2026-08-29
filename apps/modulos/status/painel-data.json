@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-29T17:14:29.314Z",
-  "updatedAtBR": "29/08/2026, 14:14:29 BRT",
+  "updatedAt": "2026-08-29T17:14:58.185Z",
+  "updatedAtBR": "29/08/2026, 14:14:58 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "fix(agent-core): subordinar Claude e subagentes ao core canônico",
+    "lastCommit": "fix(claude): herdar core em todos os subagentes",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-29T17:14:58.185Z",
+      "titulo": "Push na main · 717f6f0da1c4adf5ab68101c917d9fa863a25314",
+      "detalhe": "fix(claude): herdar core em todos os subagentes",
+      "area": "Repositório",
+      "sha": "717f6f0",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-29T17:14:29.314Z",
       "titulo": "Push na main · 8c83b879b0ba3b42a6ceffa76563b80c1dffbfea",
       "detalhe": "fix(agent-core): subordinar Claude e subagentes ao core canônico",
@@ -988,14 +996,6 @@
       "detalhe": "🎨 CRISTALIZAR OS 3 TEMAS GLOBAIS OFICIAIS DA CENTRALDARK (#1121)",
       "area": "Repositório",
       "sha": "2f20f34",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-24T19:02:56.408Z",
-      "titulo": "Push na main · 0c5b3c7dcc8848ef1e43c95f8203c6f5644bb51b",
-      "detalhe": "✅ ADICIONAR ETIQUETA PR CONFIRMADO APÓS PROVA AUTÔNOMA (#1127)",
-      "area": "Repositório",
-      "sha": "0c5b3c7",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-29T17:14:58.185Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 717f6f0da1c4adf5ab68101c917d9fa863a25314 (717f6f0)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-29T17:14:29.314Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 8c83b879b0ba3b42a6ceffa76563b80c1dffbfea (8c83b87)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-24T19:12:57.724Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 2f20f34eaa7c10855e83bacad06fd45731cfbd5a (2f20f34)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-24T19:02:56.408Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 0c5b3c7dcc8848ef1e43c95f8203c6f5644bb51b (0c5b3c7)",
       "area": "Repositório",
       "status": "sucesso"
     }
