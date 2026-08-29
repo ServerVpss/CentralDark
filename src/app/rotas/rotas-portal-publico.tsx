@@ -22,9 +22,6 @@ function RaizPorHost() {
   const kind = detectHostKind();
   const redirect = getRootRedirectFor(kind);
   if (redirect) return <Navigate to={redirect} replace />;
-  if (kind === "whatsapp") return <LandingWhatsapp />;
-  if (kind === "crm") return <LandingCRM />;
-  if (kind === "financeiro") return <LandingFinanceiro />;
   return <LandingCentralDark />;
 }
 

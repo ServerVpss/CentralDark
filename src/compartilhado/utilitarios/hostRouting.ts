@@ -1,14 +1,17 @@
 /**
  * Roteamento por hostname — CentralDark / TelePainel / Landings
  *
- * Mesmo build SPA é servido em vários subdomínios na VPS, e o componente
- * renderizado na raiz "/" é decidido pelo hostname:
+ * Mesmo build SPA é servido em vários subdomínios na VPS. A raiz "/" de
+ * cada subdomínio legado (whatsapp./crm./financeiro./telepainel.) só
+ * redireciona (client-side, mesmo host) pro path canônico equivalente —
+ * quem decide o componente final é sempre a rota por path, nunca uma
+ * landing própria duplicada por hostname.
  *
  *   centralldark.com / www.            -> LandingCentralDark (home)
  *   telepainel.centralldark.com        -> redirect /dashboard (área logada)
- *   whatsapp.centralldark.com          -> LandingWhatsapp
- *   crm.centralldark.com               -> LandingCRM
- *   financeiro.centralldark.com        -> LandingFinanceiro
+ *   whatsapp.centralldark.com          -> redirect /whatsapp
+ *   crm.centralldark.com               -> redirect /crm
+ *   financeiro.centralldark.com        -> redirect /financeiro
  *
  * O Caddy só serve os arquivos estáticos com fallback pra index.html;
  * quem decide o que mostrar é o React, com base em window.location.hostname.
@@ -59,11 +62,14 @@ export function detectHostKind(host?: string): HostKind {
 }
 
 /**
- * Quando o usuário entra na raiz "/" do domínio telepainel, redireciona
- * direto pro dashboard (ou pra tela de login). Outros hosts não redirecionam:
- * o App escolhe qual landing renderizar pelo hostname.
+ * Redirect canônico da raiz "/" por tipo de host. Todo host legado aponta
+ * pro path equivalente — nenhum host renderiza landing própria fora da
+ * tabela de rotas por path (ver rotasPortalPublico).
  */
 export function getRootRedirectFor(kind: HostKind): string | null {
   if (kind === "telepainel") return "/dashboard";
+  if (kind === "whatsapp") return "/whatsapp";
+  if (kind === "crm") return "/crm";
+  if (kind === "financeiro") return "/financeiro";
   return null;
 }
