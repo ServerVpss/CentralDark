@@ -363,7 +363,7 @@ function log(msg) {
 async function logToFile(msg) {
   try {
     await appendFile(CRAFTER_LOG, msg + '\n', 'utf8');
-  } catch {}
+  } catch(e) { console.error("[crafter] logToFile:", e.message || e); }
 }
 
 function slugify(s) {
