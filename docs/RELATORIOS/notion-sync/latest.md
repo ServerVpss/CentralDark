@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-08-29T09:10:08.744Z
+# 🧠 Notion Sync — 2026-08-29T14:51:49.190Z
 
-- **Commit fonte:** `351dfb8fc4fea43989f90bb3bbd00796b9efbcb1`
+- **Commit fonte:** `c159af1a7e687ba0d38d5963db65b82a20304e8d`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 484 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 484 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
 | aprendizados | 30 | 0 | 30 | 0 | 0 |
-| estrutura | 410 | 0 | 410 | 0 | 0 |
+| estrutura | 411 | 1 | 410 | 0 | 0 |
 
 ## Operações
 
@@ -386,6 +386,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/PIVETE-IA/PIVETE-16-SECRETS-CONNECTORS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PIVETE-IA/PIVETE-17-MCPO-INTEGRATION.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PIVETE-IA/PIVETE-18-ROTA-MEMORIA.md |
+| estrutura | criado | docs/CONSCIENCIA/PLANO-RECONCILIACAO-DOMINIOS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PLANO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PROGRAMAS/CONVERGENCIA-OMNIROUTE-CENTRALDARK.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PROJECT-KNOWLEDGE-CENTRALDARK-V2.md |
