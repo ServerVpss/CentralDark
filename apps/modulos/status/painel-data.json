@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-29T17:19:38.751Z",
-  "updatedAtBR": "29/08/2026, 14:19:38 BRT",
+  "updatedAt": "2026-08-29T18:04:55.107Z",
+  "updatedAtBR": "29/08/2026, 15:04:55 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "fix(agent-core): permitir só a ponte Claude autoload para Claude.md",
+    "lastCommit": "docs(pendencias): nova #55 Rota de voz (TTS) morta na API central — SOL fala direto com bridge, ignorando a API",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-29T18:04:55.107Z",
+      "titulo": "Push na main · 9d369c6b7da36242a1fb111e25d346dfec386d1f",
+      "detalhe": "docs(pendencias): nova #55 Rota de voz (TTS) morta na API central — SOL fala direto com bridge, ignorando a API",
+      "area": "Repositório",
+      "sha": "9d369c6",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-29T17:19:38.751Z",
       "titulo": "Push na main · d9d05e38e98f782f8ba7c8594789f339c7cd4bbc",
       "detalhe": "fix(agent-core): permitir só a ponte Claude autoload para Claude.md",
@@ -988,14 +996,6 @@
       "detalhe": "🛡️ CASCO VIVO — resiliência adaptativa contraprovada",
       "area": "Repositório",
       "sha": "01135a7",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-25T02:05:20.538Z",
-      "titulo": "Push na main · dd0d0ea34809c8e8a005cf90de76d36b38d06d00",
-      "detalhe": "📋 REMEASURE LIVE_STATE — PONTO FIXO OPERACIONAL DESTA RODADA (#1135)",
-      "area": "Repositório",
-      "sha": "dd0d0ea",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-29T18:04:55.107Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 9d369c6b7da36242a1fb111e25d346dfec386d1f (9d369c6)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-29T17:19:38.751Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · d9d05e38e98f782f8ba7c8594789f339c7cd4bbc (d9d05e3)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-25T10:11:12.507Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 01135a7eca5ed6375860e35578a6db23deed34f9 (01135a7)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-25T02:05:20.538Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · dd0d0ea34809c8e8a005cf90de76d36b38d06d00 (dd0d0ea)",
       "area": "Repositório",
       "status": "sucesso"
     }
