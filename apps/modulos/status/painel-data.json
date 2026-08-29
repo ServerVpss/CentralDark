@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-29T09:42:27.991Z",
-  "updatedAtBR": "29/08/2026, 06:42:27 BRT",
+  "updatedAt": "2026-08-29T10:05:32.275Z",
+  "updatedAtBR": "29/08/2026, 07:05:32 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "fix(ci): corrigir python→python3 no lupa-drift-guard e detectar_drift (#1366)",
+    "lastCommit": "Merge remote-tracking branch 'origin/main'",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-29T10:05:32.275Z",
+      "titulo": "Push na main · 2c812247a389083e9b433ee61ee6de6e1f43cad4",
+      "detalhe": "Merge remote-tracking branch 'origin/main'",
+      "area": "Repositório",
+      "sha": "2c81224",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-29T09:42:27.991Z",
       "titulo": "Push na main · 33091e0de9915bdce915cec876e24921422c4ccb",
       "detalhe": "fix(ci): corrigir python→python3 no lupa-drift-guard e detectar_drift (#1366)",
@@ -988,14 +996,6 @@
       "detalhe": "🗣️ CORRIGIR O SISTEMA, NÃO A FALA DO CHEFE (#1113)",
       "area": "Repositório",
       "sha": "3185f59",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-22T16:33:57.671Z",
-      "titulo": "Push na main · d8ff02628f8965fd44ebd131a0b9205f90be5878",
-      "detalhe": "🧾 GENERALIZAR PROVA DE COBERTURA E USO DE FERRAMENTAS (#1111)",
-      "area": "Repositório",
-      "sha": "d8ff026",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-29T10:05:32.275Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 2c812247a389083e9b433ee61ee6de6e1f43cad4 (2c81224)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-29T09:42:27.991Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 33091e0de9915bdce915cec876e24921422c4ccb (33091e0)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-22T18:43:29.499Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 3185f591002201c8a6586e3625d91be4cc1b60b5 (3185f59)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-22T16:33:57.671Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · d8ff02628f8965fd44ebd131a0b9205f90be5878 (d8ff026)",
       "area": "Repositório",
       "status": "sucesso"
     }
