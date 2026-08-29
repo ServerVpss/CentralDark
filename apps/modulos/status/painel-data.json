@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-28T23:58:46.933Z",
-  "updatedAtBR": "28/08/2026, 20:58:46 BRT",
+  "updatedAt": "2026-08-29T06:45:04.618Z",
+  "updatedAtBR": "29/08/2026, 03:45:04 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "🧠 CENTRALDARK — RECONCILIAR ARQUITETURA INTEIRA + SEGUNDO CÉREBRO LÓGICO (#1360)",
+    "lastCommit": "🧿 !CENTRALDARK — sessão contínua de delta útil (#1364)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-29T06:45:04.618Z",
+      "titulo": "Push na main · 8d5f88d2bf2d4d06c34b516708a05519dce5e7c3",
+      "detalhe": "🧿 !CENTRALDARK — sessão contínua de delta útil (#1364)",
+      "area": "Repositório",
+      "sha": "8d5f88d",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-28T23:58:46.933Z",
       "titulo": "Push na main · 74ee80cd8fa7573cd30c147f284dbb5b32d68351",
       "detalhe": "🧠 CENTRALDARK — RECONCILIAR ARQUITETURA INTEIRA + SEGUNDO CÉREBRO LÓGICO (#1360)",
@@ -988,14 +996,6 @@
       "detalhe": "fix(actions): garantir artifact vazio do juiz (#1099)",
       "area": "Repositório",
       "sha": "4402931",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-21T11:32:35.635Z",
-      "titulo": "Push na main · ca517bdc865e0006193e8282f102397f306302fa",
-      "detalhe": "fix(varredura): fechar convergência e falhas de inventário (#1097)",
-      "area": "Repositório",
-      "sha": "ca517bd",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-29T06:45:04.618Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 8d5f88d2bf2d4d06c34b516708a05519dce5e7c3 (8d5f88d)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-28T23:58:46.933Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 74ee80cd8fa7573cd30c147f284dbb5b32d68351 (74ee80c)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-21T20:08:51.476Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 44029316eaafec8ddace53e203bfa607caec5f1f (4402931)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-21T11:32:35.635Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · ca517bdc865e0006193e8282f102397f306302fa (ca517bd)",
       "area": "Repositório",
       "status": "sucesso"
     }
