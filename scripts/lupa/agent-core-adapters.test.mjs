@@ -1,18 +1,21 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { resolve } from "node:path";
 import test from "node:test";
 
 const ROOT = resolve(new URL("../..", import.meta.url).pathname);
 const CORE = "LEIA-ME-IA.md";
 const PORTABLE_BRIDGE = "docs/CONSCIENCIA/ARTEFATOS/centraldark-prompt-universal.md";
+const CLAUDE_BRIDGE = "CLAUDE.md";
+const CLAUDE_AUTOLOAD = ".claude/rules/00-centraldark-boot-universal.md";
+const CLAUDE_SUBAGENT_ROOT = ".claude/agents";
 
 const ADAPTERS = Object.freeze([
   ["CHATGPT.md", "CHATGPT"],
-  ["CLAUDE.md", "CLAUDE"],
+  [CLAUDE_BRIDGE, "CLAUDE"],
   ["GEMINI.md", "GEMINI"],
   ["CODEX.md", "CODEX"],
-  [".claude/rules/00-centraldark-boot-universal.md", "CLAUDE_CODE"],
+  [CLAUDE_AUTOLOAD, "CLAUDE_CODE"],
   [".cursor/rules/centraldark-governanca.mdc", "CURSOR"],
   [".windsurfrules", "WINDSURF"],
   [".github/copilot-instructions.md", "COPILOT"],
@@ -57,8 +60,24 @@ const FORBIDDEN_ADAPTER_POLICY = Object.freeze([
   /docs\/CONSCIENCIA\//i,
 ]);
 
+const FORBIDDEN_CLAUDE_SUBAGENT_AUTHORITY = Object.freeze([
+  /SUBAGENT_IS_AUTHORITY\s*=\s*true/i,
+  /SUBAGENT_CANONICAL_OWNER\s*=\s*true/i,
+  /SUBAGENT_LOCAL_MEMORY_IS_CANONICAL\s*=\s*true/i,
+  /CANONICAL_AGENT_CORE\s*=\s*(?!LEIA-ME-IA\.md)/i,
+  /DO_NOT_DEFINE_AUTHORITY\s*=\s*false/i,
+  /DO_NOT_DEFINE_MEMORY\s*=\s*false/i,
+]);
+
 function read(path) {
   return readFileSync(resolve(ROOT, path), "utf8");
+}
+
+function claudeSubagents() {
+  return readdirSync(resolve(ROOT, CLAUDE_SUBAGENT_ROOT), { withFileTypes: true })
+    .filter((entry) => entry.isFile() && entry.name.endsWith(".md"))
+    .map((entry) => `${CLAUDE_SUBAGENT_ROOT}/${entry.name}`)
+    .sort();
 }
 
 test("LEIA-ME-IA permanece o core singleton e contém invariantes roteadores", () => {
@@ -102,6 +121,45 @@ test("round-trip de qualquer engine termina no mesmo core", () => {
     coreRefs.add(core);
   }
   assert.deepEqual([...coreRefs], [CORE]);
+});
+
+test("Claude descobre subagentes sem inverter autoridade do core", () => {
+  const bridge = read(CLAUDE_BRIDGE);
+  const autoload = read(CLAUDE_AUTOLOAD);
+
+  for (const marker of [
+    "SUBAGENT_ROOT=.claude/agents",
+    "CLAUDE_DISCOVERS_SUBAGENTS=true",
+    "SUBAGENTS_INHERIT_CANONICAL_CORE=true",
+    "SUBAGENT_IS_AUTHORITY=false",
+    "PROVIDER_LOCAL_MEMORY_IS_CANONICAL=false",
+    "CAPABILITY_SELECTION_OWNER=.agents/skills/capability-contract-router/SKILL.md",
+    "DELEGATION_OWNER=scripts/agent-call.mjs",
+  ]) {
+    assert.ok(bridge.includes(marker), `CLAUDE_BRIDGE_MARKER_MISSING:${marker}`);
+  }
+
+  for (const marker of [
+    "SUBAGENT_ROOT=.claude/agents",
+    "ALL_CLAUDE_SUBAGENTS_INHERIT_CORE=true",
+    "SUBAGENT_IS_AUTHORITY=false",
+    "SUBAGENT_CANONICAL_OWNER=false",
+    "SUBAGENT_LOCAL_MEMORY_IS_CANONICAL=false",
+    "CAPABILITY_ROUTER=.agents/skills/capability-contract-router/SKILL.md",
+    "DELEGATION_GATE=scripts/agent-call.mjs",
+    "AUTHORITY_FLOW_REVERSED=false",
+  ]) {
+    assert.ok(autoload.includes(marker), `CLAUDE_AUTOLOAD_MARKER_MISSING:${marker}`);
+  }
+
+  const subagents = claudeSubagents();
+  assert.ok(subagents.length > 0, "CLAUDE_SUBAGENT_DENOMINATOR_EMPTY");
+  for (const path of subagents) {
+    const content = read(path);
+    for (const forbidden of FORBIDDEN_CLAUDE_SUBAGENT_AUTHORITY) {
+      assert.equal(forbidden.test(content), false, `CLAUDE_SUBAGENT_AUTHORITY_DRIFT:${path}:${forbidden}`);
+    }
+  }
 });
 
 test("prompt universal é ponte gerada, não segunda governança manual", () => {
