@@ -83,6 +83,72 @@ EXISTING_OWNER_FIRST=true
 
 Tarefa simples, de candidato único e sem ambiguidade pode atravessar a skill em fast-path sem fan-out.
 
+## MEGAZORD-CENTRALDARK — composição automática de Zords
+
+`MEGAZORD-CENTRALDARK` é o nome canônico da arquitetura composta que usa este Capability Contract Router como adaptador de descoberta e composição. Não é agente novo, identidade, autoridade, cérebro, router ou orquestrador paralelo.
+
+```text
+ZORD = CAPACIDADE|FERRAMENTA|CONECTOR|RUNTIME|RECURSO observado
+MEGAZORD-CENTRALDARK = MENOR_CONJUNTO_SUFICIENTE de Zords para a intenção vigente
+```
+
+Ativação automática:
+
+```text
+RUNTIME_PRESENT
++ CONTEXT_AVAILABLE
++ CAPABILITY_ADAPTER_AVAILABLE
+→ MEGAZORD-CENTRALDARK=AUTO
+→ DISCOVER_RELEVANT_RESOURCES
+→ MEASURE_AVAILABILITY
+→ DEDUPE
+→ FILTER
+→ COVER
+→ SELECT_MINIMUM_SUFFICIENT_SET
+→ ASSIGN
+```
+
+Fontes descobríveis quando presentes e aplicáveis:
+
+```text
+MCP
+CENTRALDARK_HUB
+CENTRALDARK_API
+GITHUB
+FILES
+MEMORY
+CONNECTORS
+RUNTIME
+CI
+TOOLS
+MODELS
+ADAPTERS
+FUTURE_DISCOVERED_CAPABILITIES
+```
+
+Regras:
+
+```text
+MEGAZORD_CENTRALDARK_TOOL_ENABLED=true
+MEGAZORD_CENTRALDARK_ARCHITECTURE_ENABLED=true
+MEGAZORD_CENTRALDARK_AUTO_ACTIVATION=true
+USER_REPETITION_REQUIRED=false
+DISCOVER_RELEVANT_RESOURCES=true
+ACTIVATE_ALL_DISCOVERED=false
+MINIMUM_SUFFICIENT_SET=true
+CONFIGURED != AVAILABLE
+DISCOVERED != AVAILABLE
+AVAILABLE_REQUIRES_MEASUREMENT=true
+UNKNOWN != AVAILABLE
+UNKNOWN != PASS
+REUSE_BEFORE_CREATE=true
+ONE_SYSTEM_ONLY=true
+ONE_WRITER_PER_SCOPE=true
+NO_INFORMATION_GAIN → STOP_EXPANSION
+```
+
+O contrato executável/canônico da composição fica em `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MEGAZORD-CENTRALDARK.yml` e o binding de engine/boot fica em `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml`.
+
 ## Contrato de entrada
 
 ```json
