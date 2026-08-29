@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-29T15:33:30.336Z",
-  "updatedAtBR": "29/08/2026, 12:33:30 BRT",
+  "updatedAt": "2026-08-29T15:44:25.325Z",
+  "updatedAtBR": "29/08/2026, 12:44:25 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "aprendizado(#31): Provider sem crédito NÃO é router quebrado",
+    "lastCommit": "aprendizado(#32): Uma capacidade = uma linhagem = um PR de promoção por escopo",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-29T15:44:25.325Z",
+      "titulo": "Push na main · cc78c20a833c0ec6a2ebd141ba2abf92e5ec648b",
+      "detalhe": "aprendizado(#32): Uma capacidade = uma linhagem = um PR de promoção por escopo",
+      "area": "Repositório",
+      "sha": "cc78c20",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-29T15:33:30.336Z",
       "titulo": "Push na main · 842a53f19101b63749e8044ab7a00a60f74600f5",
       "detalhe": "aprendizado(#31): Provider sem crédito NÃO é router quebrado",
@@ -988,14 +996,6 @@
       "detalhe": "🪟 TORNAR BUILD DESKTOP PORTÁTIL NO WINDOWS (#1122)",
       "area": "Repositório",
       "sha": "8bcf227",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-24T12:01:32.191Z",
-      "titulo": "Push na main · 19f2df82d8b8d88d97b577a45f8491a7119790bf",
-      "detalhe": "🧠 META-GENERALIZAR ORQUESTRAÇÃO TOTAL ATÉ FIXED POINT (#1115)",
-      "area": "Repositório",
-      "sha": "19f2df8",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-29T15:44:25.325Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · cc78c20a833c0ec6a2ebd141ba2abf92e5ec648b (cc78c20)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-29T15:33:30.336Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 842a53f19101b63749e8044ab7a00a60f74600f5 (842a53f)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-24T12:21:38.085Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 8bcf227f020c63fa406c7dbaf006b038aaa4568b (8bcf227)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-24T12:01:32.191Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 19f2df82d8b8d88d97b577a45f8491a7119790bf (19f2df8)",
       "area": "Repositório",
       "status": "sucesso"
     }
