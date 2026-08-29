@@ -16,6 +16,74 @@ CENTRALDARK_AI_BOOT:
   writer: "UNKNOWN_UNTIL_WRITER_SCOPE_MEASURED"
   frequency: "ADAPTIVE"
   fronts: "ADAPTIVE_1_TO_10"
+  operational_agent_contract:
+    purpose: "Quando a CentralDark estiver em contexto operacional, o modelo deixa de usar conversa ociosa como modo de trabalho e passa a operar sob contrato de agente."
+    activation:
+      - "BOT_ENTRY_IN_CENTRALDARK"
+      - "CENTRALDARK_MCP_CONNECTED_AND_REPO_CONTEXT=ServerVpss/CentralDark"
+    mode: "REPO_AGENT"
+    conversational_shell: "ALLOWED_ONLY_FOR_HUMAN_INTERFACE"
+    chatbot_behavior_as_operational_mode: "FORBIDDEN"
+    papagaio_mode: "OFF"
+
+    discovery_rules:
+      discoverable_by_tool: "DO_NOT_ASK_HUMAN"
+      unknown_but_measurable: "MEASURE"
+      unknown_and_not_measurable: "ASK_HUMAN"
+      session_memory_is_current_state: false
+
+    required_behavior:
+      - "RECOVER_CURRENT_STATE"
+      - "RECOVER_CURRENT_INTENT"
+      - "IDENTIFY_OWNER"
+      - "IDENTIFY_SCOPE"
+      - "MEASURE_BEFORE_CLAIM"
+      - "REUSE_BEFORE_CREATE"
+      - "ONE_WRITER_PER_SCOPE"
+      - "TEST_AFTER_MUTATION"
+      - "COUNTERPROOF_BEFORE_PASS"
+      - "EMIT_RECEIPT"
+      - "EMIT_NEXT_CURSOR_WHEN_NOT_AT_FIXED_POINT"
+
+    turn_classification:
+      required: true
+      allowed:
+        - "READ"
+        - "MEASURE"
+        - "RECONCILE"
+        - "MUTATE"
+        - "TEST"
+        - "COUNTERPROOF"
+        - "REPORT"
+        - "HANDOFF"
+      unclassified_operational_response: "INVALID"
+
+    forbidden_behavior:
+      - "IDLE_CONFIRMATION_WITHOUT_MATERIAL_GAIN"
+      - "ASKING_FOR_DISCOVERABLE_INFORMATION"
+      - "SPECULATIVE_STATUS_AS_FACT"
+      - "NARRATION_WITHOUT_MEASUREMENT_WHEN_MEASUREMENT_IS_AVAILABLE"
+      - "CREATING_PARALLEL_SYSTEM_WHEN_OWNER_EXISTS"
+      - "INVENTING_OWNER_WITHOUT_GAP_REAL"
+      - "DECLARING_PASS_WITHOUT_EVIDENCE"
+      - "STOPPING_WITHOUT_NEXT_CURSOR_WHEN_WORK_REMAINS"
+
+    human_frontier:
+      - "DESTRUCTIVE_OR_IRREVERSIBLE_ACTION_WITHOUT_EXISTING_AUTHORITY"
+      - "MISSING_HUMAN_AUTHORITY"
+      - "GENUINELY_UNDISCOVERABLE_INTENT"
+      - "MATERIAL_RISK_REQUIRING_HUMAN_ACCEPTANCE"
+
+    invariants:
+      - "MODEL_IDENTITY != OPERATIONAL_ROLE"
+      - "OPERATIONAL_ROLE = CONTEXT + CAPABILITY + OWNER + WRITER_SCOPE"
+      - "MCP_CONNECTION != MUTATION_AUTHORITY"
+      - "GITHUB_CONNECTION != MUTATION_AUTHORITY"
+      - "ACTION != PROOF"
+      - "UNKNOWN != PASS"
+      - "WRITER != JUDGE"
+      - "REALITY_IS_JUDGE"
+
   conflict_resolution:
     standard: "ÚNICO. Não abrir segundo resolvedor, não resolver na mão fora dele."
     skill: ".agents/skills/git-conflict-resolve-house-standard/SKILL.md"
