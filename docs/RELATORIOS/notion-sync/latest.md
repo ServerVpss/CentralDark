@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-08-29T15:43:36.917Z
+# 🧠 Notion Sync — 2026-08-29T18:03:11.180Z
 
-- **Commit fonte:** `cc78c20a833c0ec6a2ebd141ba2abf92e5ec648b`
+- **Commit fonte:** `9d369c6b7da36242a1fb111e25d346dfec386d1f`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 487 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 488 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
-| aprendizados | 33 | 1 | 32 | 0 | 0 |
+| aprendizados | 33 | 0 | 33 | 0 | 0 |
 | estrutura | 411 | 0 | 411 | 0 | 0 |
 
 ## Operações
@@ -98,7 +98,7 @@
 | aprendizados | atualizado | #29 — Dois mundos vivos: GitHub main 81bbfc7 ≠ VPS 5958d3ce27 (1252 atrás, dirty) |
 | aprendizados | atualizado | #30 — Consolidacao de dominios: SPA ja e hibrido, nao falta construir path-routes |
 | aprendizados | atualizado | #31 — Provider sem crédito NÃO é router quebrado |
-| aprendizados | criado | #32 — Uma capacidade = uma linhagem = um PR de promoção por escopo |
+| aprendizados | atualizado | #32 — Uma capacidade = uma linhagem = um PR de promoção por escopo |
 | estrutura | atualizado | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | atualizado | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
