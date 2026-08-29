@@ -197,3 +197,9 @@ updated: 2026-08-27
 - **Data:** 2026-08-29
 - **Contexto:** Agentes confundiam falha de quota/auth de um provider free com falha estrutural do router/CLI/fallback engine, pintando a CentralDark de vermelho quando era o serviço externo indisponível
 - **Aprendizado:** Classificar causa real da falha (AUTH_EXPIRED, QUOTA_EXHAUSTED, RATE_LIMITED = transitória vs ROUTER_ERROR, CONFIG_ERROR = estrutural). Transitória: registrar + skip + next fallback + continuar. CHAIN_MECHANISM_PROVEN != ALL_MODELS_AVAILABLE_NOW. Nunca declarar arquitetura quebrada por falha transitória de provider.
+
+### 32. Uma capacidade = uma linhagem = um PR de promoção por escopo
+- **Categoria:** regra
+- **Data:** 2026-08-29
+- **Contexto:** Múltiplos agentes criavam PRs/issues/artifacts paralelos pra mesma capability, gerando duplicação e confusão. Issues com números diferentes podiam ser a mesma causa.
+- **Aprendizado:** CAPABILITY_FINGERPRINT antes de implementar. ONE_PROMOTION_PR_PER_SCOPE (não per-repo). Family reconciliation: OWNER/DUPLICATE/COMPLEMENTARY/SUPERSEDED/ABSORBED. Umbrella tracker permanece aberta. CLOSED != USELESS. MAIN recebe só estado promovido. TELEMETRY != SOURCE_CODE. XLSX e Mermaid no topo da #604 como painéis derivados, reconciliados com GitHub+main real.
