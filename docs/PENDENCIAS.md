@@ -771,3 +771,7 @@ Estabilidade: Plugin externo exige re-instalação manual pós-update. Ação: M
 - **Sintoma:** Arquitetura hoje expõe whatsapp./crm./financeiro./telepainel.centralldark.com como vhosts proprios servindo o mesmo build via hostname-detect, quando o path-routing equivalente ja existe no codigo.
 - **Onde mexer:** src/app/rotas/rotas-portal-publico.tsx (RaizPorHost), src/compartilhado/utilitarios/hostRouting.ts, infra/caddy/deploy-centraldark.Caddyfile (so com aprovacao humana explicita, ver docs/CONSCIENCIA/PLANO-RECONCILIACAO-DOMINIOS.md)
 - **Critério pra fechar:** RaizPorHost renderiza LandingCentralDark sempre; subdominios legados passam a 301 pro path equivalente via Caddy (apos veredito humano); api. e mcp. permanecem inalterados.
+### 55. Rota de voz (TTS) morta na API central — SOL fala direto com bridge, ignorando a API — 🟡 ABERTO (29/08/2026, 14:52 BRT)
+- **Sintoma:** api.centralldark.com/v1/audio/speech responde 503 "bridge desligado (rota morta)". O SOL (Config > Bridge TTS) fala direto com bridge.centraldark.com/v1/audio/speech, pulando a API central.
+- **Onde mexer:** apps/modulos/arsenal-openai-adapter/server.mjs (handler de /v1/audio/speech) + camada na frente (Caddy) que hoje devolve a rota morta
+- **Critério pra fechar:** Rota /v1/audio/speech na API central responde 200 fazendo proxy real pro bridge de TTS, e o SOL Config aponta pra ela em vez de falar direto com o bridge.
