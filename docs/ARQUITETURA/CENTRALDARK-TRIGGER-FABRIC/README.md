@@ -186,7 +186,7 @@ governo:
 - OpenMausBot — roster/UX sobre agentes da Casa;
 - Open-Lovable — fonte de padrão para o Builder, cujo owner continua Bolt;
 - Grok Build — futuro engine candidato;
-- AIOS/AIOX — deltas externos candidatos, sem importar control plane.
+- AIOS/AI-OX — deltas externos candidatos, sem importar control plane.
 
 `RESERVE != ACTIVE_RUNTIME`.
 

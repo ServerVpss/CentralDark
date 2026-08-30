@@ -48,7 +48,7 @@ resource_discovery:
     - MODELS
     - ADAPTERS
     - SCREENPIPE
-    - AIOX_DERIVED_CAPABILITIES
+    - AI-OX_DERIVED_CAPABILITIES
     - FUTURE_DISCOVERED_CAPABILITIES
   unknown_capability_is_available: false
   configured_is_active: false

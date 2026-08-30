@@ -1,4 +1,4 @@
-# AIOS/AIOX Gold Assay — pacote para prova do Hermes
+# AIOS/AI-OX Gold Assay — pacote para prova do Hermes
 
 Data: 2026-08-28
 
@@ -20,12 +20,12 @@ AIOS_MCP_IMPORT=false
 
 ## Destination lock
 
-Garimpar o `aiox-core.zip` fornecido pelo SEGREDO/CHEFE e preservar somente deltas que possam reforçar owners já existentes da CentralDark.
+Garimpar o `ai-ox-core.zip` fornecido pelo SEGREDO/CHEFE e preservar somente deltas que possam reforçar owners já existentes da CentralDark.
 
 O destino NÃO é instalar AIOS, conectar a runtime externo, importar personas/agentes, criar outro MCP, outro orquestrador, outra memória, outro Design System ou outro governo.
 
 ```text
-AIOX_RAW
+AI-OX_RAW
 → INVENTORY
 → ASSAY
 → COUNTERPROOF
@@ -40,7 +40,7 @@ AIOX_RAW
 ```text
 CENTRALDARK_REPO=ServerVpss/CentralDark
 CENTRALDARK_BASE=269a943b9905b907cc421c1036951a4ca6495f01
-SOURCE_ARCHIVE=aiox-core.zip
+SOURCE_ARCHIVE=ai-ox-core.zip
 SOURCE_ARCHIVE_SIZE_BYTES=452524182
 SOURCE_ARCHIVE_SHA256=fd4eebcb50259a198ca4d68a63fc1a9c4445042f47b48e64a036f597c63dd411
 ZIP_ENTRIES=49136

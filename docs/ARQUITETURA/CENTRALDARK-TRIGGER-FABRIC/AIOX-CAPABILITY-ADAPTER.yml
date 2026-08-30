@@ -1,23 +1,23 @@
 schema: centraldark.external-capability-adapter.v1
-name: AIOX-CAPABILITY-ADAPTER
+name: AI-OX-CAPABILITY-ADAPTER
 status: EXTERNAL_REFERENCE_HARVESTED
 owner: CENTRALDARK_TRIGGER_FABRIC
 consumer: MEGAZORD-CENTRALDARK
 router: .agents/skills/capability-contract-router/SKILL.md
 
 provenance:
-  repository: SynkraAI/aiox-core
+  repository: Synkra-AI/ai-ox-core
   branch: main
   inspected_sha: 4ef6530ff03b83aea953e4a426f95e012b8b70c5
-  package: "@aiox-squads/core@5.4.1"
+  package: "@ai-ox-squads/core@5.4.1"
   license: MIT
   import_policy: PATTERNS_AND_CAPABILITIES_NOT_BLIND_VENDOR_COPY
 
 semantics:
-  aiox_is_authority: false
-  aiox_is_second_brain: false
-  aiox_is_second_router: false
-  aiox_is_required_runtime: false
+  ai-ox_is_authority: false
+  ai-ox_is_second_brain: false
+  ai-ox_is_second_router: false
+  ai-ox_is_required_runtime: false
   capability_source_only: true
   centraldark_owner_wins: true
   reuse_before_create: true
@@ -27,15 +27,15 @@ semantics:
 inspection:
   inspected_sources:
     - package.json
-    - .aiox-core/core-config.yaml
-    - bin/aiox.js
-    - .aiox-core/core/ui/panel-renderer.js
-    - .aiox-core/core/orchestration/parallel-executor.js
-    - .aiox-core/core/synapse/context/context-tracker.js
-    - .aiox-core/infrastructure/scripts/collect-tool-usage.js
-    - .aiox-core/infrastructure/scripts/usage-analytics.js
-    - .aiox-core/infrastructure/scripts/llm-routing/usage-tracker/index.js
-    - .aiox-core/core/health-check/checks/local/network.js
+    - .ai-ox-core/core-config.yaml
+    - bin/ai-ox.js
+    - .ai-ox-core/core/ui/panel-renderer.js
+    - .ai-ox-core/core/orchestration/parallel-executor.js
+    - .ai-ox-core/core/synapse/context/context-tracker.js
+    - .ai-ox-core/infrastructure/scripts/collect-tool-usage.js
+    - .ai-ox-core/infrastructure/scripts/usage-analytics.js
+    - .ai-ox-core/infrastructure/scripts/llm-routing/usage-tracker/index.js
+    - .ai-ox-core/core/health-check/checks/local/network.js
   local_sandbox_clone:
     attempted: true
     result: BLOCKED_NO_NETWORK_IN_EXECUTION_SANDBOX
@@ -53,7 +53,7 @@ capabilities:
       - CONFIG_LAYERING
       - WORKER_SEARCH
     evidence:
-      - bin/aiox.js
+      - bin/ai-ox.js
       - package.json
 
   cli_presentation:
@@ -68,9 +68,9 @@ capabilities:
       - ERROR_PANEL
     implementation_notes:
       libraries: [chalk, cli-progress, ora, asciichart, ansi-to-html]
-      rune_fire_or_charizard_builtin: NOT_FOUND_IN_INSPECTED_AIOX_SOURCE
+      rune_fire_or_charizard_builtin: NOT_FOUND_IN_INSPECTED_AI-OX_SOURCE
     evidence:
-      - .aiox-core/core/ui/panel-renderer.js
+      - .ai-ox-core/core/ui/panel-renderer.js
       - package.json
 
   mcp_and_computer_access:
@@ -93,7 +93,7 @@ capabilities:
       configured_is_executed: false
       external_search_requires_api_key_when_configured: true
     evidence:
-      - .aiox-core/core-config.yaml
+      - .ai-ox-core/core-config.yaml
 
   ide_and_agent_sync:
     status: DECLARED_IN_CANONICAL_CONFIG
@@ -116,7 +116,7 @@ capabilities:
       generated_targets_are_consumers: true
       fail_on_drift: true
     evidence:
-      - .aiox-core/core-config.yaml
+      - .ai-ox-core/core-config.yaml
       - package.json
 
   context_engine:
@@ -141,8 +141,8 @@ capabilities:
       import_algorithm_verbatim: false
       preserve_existing_centraldark_handoff_owner: true
     evidence:
-      - .aiox-core/core/synapse/context/context-tracker.js
-      - .aiox-core/core-config.yaml
+      - .ai-ox-core/core/synapse/context/context-tracker.js
+      - .ai-ox-core/core-config.yaml
 
   orchestration:
     status: SOURCE_INSPECTED_AND_DECLARED
@@ -161,7 +161,7 @@ capabilities:
       mutation_parallelism: FORBIDDEN_WHEN_WRITER_SCOPE_CONFLICTS
       one_writer_per_scope: true
     evidence:
-      - .aiox-core/core/orchestration/parallel-executor.js
+      - .ai-ox-core/core/orchestration/parallel-executor.js
 
   self_healing_and_change_safety:
     status: DECLARED_IN_CANONICAL_CONFIG
@@ -192,7 +192,7 @@ capabilities:
       counterproof_required: true
       reality_judge_required: true
     evidence:
-      - .aiox-core/core-config.yaml
+      - .ai-ox-core/core-config.yaml
 
   git_and_worktrees:
     status: DECLARED_IN_CANONICAL_CONFIG
@@ -211,7 +211,7 @@ capabilities:
       do_not_create_parallel_pr_policy: true
       one_mission_one_live_pr: PRESERVE_CENTRALDARK_RULE
     evidence:
-      - .aiox-core/core-config.yaml
+      - .ai-ox-core/core-config.yaml
       - package.json
 
   decision_and_project_state:
@@ -229,7 +229,7 @@ capabilities:
       second_brain_creation: false
       route_to_existing_memory_and_receipt_owners: true
     evidence:
-      - .aiox-core/core-config.yaml
+      - .ai-ox-core/core-config.yaml
 
   analytics_local:
     status: SOURCE_INSPECTED
@@ -243,7 +243,7 @@ capabilities:
       - UNUSED_COMPONENT_DETECTION
       - CROSS_REFERENCE_ANALYSIS
     storage:
-      tool_usage: .aiox/analytics/tool-usage.json
+      tool_usage: .ai-ox/analytics/tool-usage.json
       rolling_retention_days: 30
     privacy_observed_in_collector:
       user_content_collected: false
@@ -251,8 +251,8 @@ capabilities:
       fields: [tool_name, invocation_count, token_cost_input, token_cost_output, session_id, timestamp]
       outbound_upload_in_inspected_collector: false
     evidence:
-      - .aiox-core/infrastructure/scripts/collect-tool-usage.js
-      - .aiox-core/infrastructure/scripts/usage-analytics.js
+      - .ai-ox-core/infrastructure/scripts/collect-tool-usage.js
+      - .ai-ox-core/infrastructure/scripts/usage-analytics.js
 
   llm_usage_proxy:
     status: SOURCE_INSPECTED
@@ -266,7 +266,7 @@ capabilities:
     observed_target: api.deepseek.com
     observed_bind: 127.0.0.1
     observed_default_port: 8787
-    local_usage_store: ~/.aiox/usage-tracking/deepseek-usage.json
+    local_usage_store: ~/.ai-ox/usage-tracking/deepseek-usage.json
     risk_boundary:
       request_body_is_forwarded_to_provider: true
       this_is_provider_transport_not_hidden_local_analytics: true
@@ -274,7 +274,7 @@ capabilities:
       centraldark_omni_router_remains_transport_owner: true
       no_secret_copy_to_repo: true
     evidence:
-      - .aiox-core/infrastructure/scripts/llm-routing/usage-tracker/index.js
+      - .ai-ox-core/infrastructure/scripts/llm-routing/usage-tracker/index.js
 
   network_and_updates:
     status: SOURCE_INSPECTED_AND_DECLARED
@@ -292,8 +292,8 @@ capabilities:
       health_probe_is_not_data_exfiltration_proof: true
       outbound_provider_transport_must_be_explicitly_classified: true
     evidence:
-      - .aiox-core/core/health-check/checks/local/network.js
-      - bin/aiox.js
+      - .ai-ox-core/core/health-check/checks/local/network.js
+      - bin/ai-ox.js
       - package.json
 
   framework_protection:
@@ -309,7 +309,7 @@ capabilities:
       reuse_as_pattern: true
       centraldark_path_owners_remain_authoritative: true
     evidence:
-      - .aiox-core/core-config.yaml
+      - .ai-ox-core/core-config.yaml
       - package.json
 
   pattern_learning_and_improvement:
@@ -327,7 +327,7 @@ capabilities:
       may_supply_candidates_to: META_LUPA
       may_not_self_promote_without: [TEST, COUNTERPROOF, REALITY_JUDGE]
     evidence:
-      - .aiox-core/core-config.yaml
+      - .ai-ox-core/core-config.yaml
 
 harvest_policy:
   absorb:
@@ -355,7 +355,7 @@ harvest_policy:
   reject_blind_import:
     - SECOND_ROUTER
     - SECOND_BRAIN
-    - AIOX_AUTHORITY
+    - AI-OX_AUTHORITY
     - PROVIDER_PROXY_AS_DEFAULT
     - EXTERNAL_AUTO_FIX_POLICY_WITHOUT_CENTRALDARK_GATES
     - BROAD_HOME_ACCESS_WITHOUT_RUNTIME_BOUNDARY
@@ -364,10 +364,10 @@ harvest_policy:
 
 runtime_adapter:
   discover_when_any:
-    - AIOX_CORE_PRESENT
-    - AIOX_CLI_PRESENT
-    - AIOX_CONFIG_PRESENT
-    - AIOX_DERIVED_CAPABILITY_REQUIRED
+    - AI-OX_CORE_PRESENT
+    - AI-OX_CLI_PRESENT
+    - AI-OX_CONFIG_PRESENT
+    - AI-OX_DERIVED_CAPABILITY_REQUIRED
   measure:
     - PATH
     - VERSION
@@ -378,18 +378,18 @@ runtime_adapter:
     - NETWORK_BOUNDARIES
     - MUTATION_SCOPE
   expose_to_megazord:
-    - AIOX_CLI
-    - AIOX_MCP
-    - AIOX_BROWSER_AUTOMATION
-    - AIOX_DESKTOP_OPERATIONS
-    - AIOX_IDE_SYNC
-    - AIOX_CONTEXT_BRACKETS
-    - AIOX_PARALLEL_EXECUTION
-    - AIOX_USAGE_ANALYTICS_LOCAL
-    - AIOX_COMPONENT_USAGE_ANALYSIS
-    - AIOX_CHANGE_SAFETY_PATTERNS
-    - AIOX_PROJECT_STATUS
-    - AIOX_DECISION_LOGGING
+    - AI-OX_CLI
+    - AI-OX_MCP
+    - AI-OX_BROWSER_AUTOMATION
+    - AI-OX_DESKTOP_OPERATIONS
+    - AI-OX_IDE_SYNC
+    - AI-OX_CONTEXT_BRACKETS
+    - AI-OX_PARALLEL_EXECUTION
+    - AI-OX_USAGE_ANALYTICS_LOCAL
+    - AI-OX_COMPONENT_USAGE_ANALYSIS
+    - AI-OX_CHANGE_SAFETY_PATTERNS
+    - AI-OX_PROJECT_STATUS
+    - AI-OX_DECISION_LOGGING
   configured_is_available: false
   source_present_is_runtime_active: false
   availability_requires_measurement: true
@@ -411,4 +411,4 @@ fixed_point:
   owners_mapped: true
   duplicate_architecture_created: false
   unmeasured_runtime_claims_are_unknown: true
-  result: AIOX_CAPABILITY_HARVEST_READY_FOR_CENTRALDARK_GATES
+  result: AI-OX_CAPABILITY_HARVEST_READY_FOR_CENTRALDARK_GATES

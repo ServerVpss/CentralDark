@@ -5,7 +5,7 @@ tags: ["consciencia"]
 updated: 2026-08-28
 ---
 
-# Counterproof — AIOS/AIOX
+# Counterproof — AIOS/AI-OX
 
 Objetivo: impedir que quantidade de arquivos, nomes sofisticados ou documentação virem prova automática de qualidade/aderência.
 
@@ -33,7 +33,7 @@ Veredito: `DECLARED != PRESENT`.
 
 Arquivo observado:
 
-`aiox-core/.aios-core/infrastructure/scripts/test-quality-assessment.js`
+`ai-ox-core/.aios-core/infrastructure/scripts/test-quality-assessment.js`
 
 SHA-256:
 
@@ -59,7 +59,7 @@ Logo, no máximo a matéria pode inspirar detecção/classificação read-only. 
 
 ## CP5 — licença
 
-`aiox-core/LICENSE` contém Commons Clause License Condition v1.0 seguida de texto MIT, enquanto package metadata declara MIT.
+`ai-ox-core/LICENSE` contém Commons Clause License Condition v1.0 seguida de texto MIT, enquanto package metadata declara MIT.
 
 Esta rodada adota postura conservadora:
 
