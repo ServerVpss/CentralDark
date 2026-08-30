@@ -1,8 +1,8 @@
 # Contraprova do antigo “10 frentes concluídas”
 
-**Estado:** `SUPERSEDED_FALSE_GREEN`  
-**Medição:** 2026-08-30 UTC  
-**Owner:** CentralDark Trigger Fabric  
+**Estado:** `SUPERSEDED_FALSE_GREEN`
+**Medição:** 2026-08-30 UTC
+**Owner:** CentralDark Trigger Fabric
 **Regra:** este arquivo permanece no mesmo caminho para invalidar a alegação histórica sem apagar sua proveniência.
 
 ## O que o registro anterior provava
@@ -50,7 +50,7 @@ DOCUMENTED != EXECUTED
 | Execução global do comando na Casa | `UNKNOWN` |
 | Health/invocação de todos os runtimes selecionados | `UNKNOWN` |
 | GitHub + VPS + MCP + logs + webhooks numa missão única | `UNKNOWN` |
-| CI verde no mesmo HEAD antes de promoção | `BROKEN` no PR #1375; correção em PR |
+| CI verde no mesmo HEAD antes de promoção | `BROKEN` no PR #1375; política corrigida na `main` pelo PR #1376, contraprova pós-correção pendente |
 | Fixed point global | `NOT_REACHED` |
 
 ## Critério válido de conclusão
@@ -67,6 +67,6 @@ DENOMINADOR_FECHADO
 ```
 
 A quantidade dez é teto de fanout e classificação. Nunca é prova por contagem.
-O próximo cursor causal é tornar green-first obrigatório em todos os modos,
-corrigir o self-test quebrado do GraphRAG e depois provar o consumidor vivo do
-`!CENTRALDARK` na Casa.
+O próximo cursor causal é provar que a política já incorporada bloqueia uma
+promoção enquanto qualquer gate do mesmo HEAD estiver vermelho; depois, provar
+o consumidor vivo do `!CENTRALDARK` na Casa.
