@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-30T04:31:42.969Z",
-  "updatedAtBR": "30/08/2026, 01:31:42 BRT",
+  "updatedAt": "2026-08-30T04:46:40.457Z",
+  "updatedAtBR": "30/08/2026, 01:46:40 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "fix(trigger): persistir sessão e validar origem do !CENTRALDARK (#1375)",
+    "lastCommit": "🛠️ BLOQUEAR MERGE VERMELHO E CORRIGIR PROVAS DO CICLO (#1376)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-30T04:46:40.457Z",
+      "titulo": "Push na main · e6d4619529a3364597b92db828322631fc66bb1a",
+      "detalhe": "🛠️ BLOQUEAR MERGE VERMELHO E CORRIGIR PROVAS DO CICLO (#1376)",
+      "area": "Repositório",
+      "sha": "e6d4619",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-30T04:31:42.969Z",
       "titulo": "Push na main · 469084853a5f795d1b87b883f406b25db0fed28c",
       "detalhe": "fix(trigger): persistir sessão e validar origem do !CENTRALDARK (#1375)",
@@ -988,14 +996,6 @@
       "detalhe": "Merge branch 'main' of https://github.com/ServerVpss/CentralDark",
       "area": "Repositório",
       "sha": "51f7e21",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-26T14:46:31.571Z",
-      "titulo": "Push na main · eacdde22438035ef3f1609f1ef8e416009a12be9",
-      "detalhe": "Merge branch 'main' into pr1189",
-      "area": "Repositório",
-      "sha": "eacdde2",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-30T04:46:40.457Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · e6d4619529a3364597b92db828322631fc66bb1a (e6d4619)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-30T04:31:42.969Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 469084853a5f795d1b87b883f406b25db0fed28c (4690848)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-26T18:30:27.261Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 51f7e21cc7034405a6a50352e12fff89a2f9cc00 (51f7e21)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-26T14:46:31.571Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · eacdde22438035ef3f1609f1ef8e416009a12be9 (eacdde2)",
       "area": "Repositório",
       "status": "sucesso"
     }
