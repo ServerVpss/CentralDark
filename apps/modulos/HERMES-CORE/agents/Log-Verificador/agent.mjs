@@ -223,6 +223,78 @@ export function resumoHorario(snap) {
   return linhas.join('\n');
 }
 
+// ─── Exports para gates determinísticos (aditiv unwilling whitelist) ──
+export function auditarFinalizacao({ missao, decisao, historico }) {
+  const historicoValido = Array.isArray(historico) && historico.length > 0;
+  const temMutacao = historico.some(e => e.ferramenta && e.ferramenta !== 'notificar_progresso');
+  const temTesteComportamental = historico.some(e => e.ferramenta === 'shell' && e.resultado === 'pass');
+  const decisaoValida = decisao?.terminou === true && decisao?.estado === 'FATO';
+
+  if (!historicoValido || !decisaoValida) {
+    return {
+      aprovado: false,
+      receipt: {
+        status: 'BLOCKED',
+        schema_version: 2,
+        reason: historicoValido ? 'decisao invalida' : 'historico vazio',
+        mutations_total: temMutacao ? 1 : 0,
+        mutation_proofs: [],
+        unproven_mutations: [],
+      },
+      parecer: historicoValido
+        ? 'decisao invalida: terminou=true exige estado=FATO'
+        : 'histórico vazio; missão não submetida à auditoria',
+    };
+  }
+
+  if (temMutacao && !temTesteComportamental) {
+    return {
+      aprovado: false,
+      receipt: {
+        status: 'BLOCKED',
+        schema_version: 2,
+        reason: 'mutacao sem teste comportamental',
+        mutations_total: historico.filter(e => e.ferramenta && e.ferramenta !== 'notificar_progresso').length,
+        mutation_proofs: historico.map((e, i) => ({
+          step_index: i,
+          mutation_step_ok: e.ok === true,
+          mutation_step_name: e.etapa_titulo || e.ferramenta,
+        })),
+        unproven_mutations: historico.filter(e => e.ferramenta && e.ferramenta !== 'notificar_progresso' && e.ok !== true).map((e, i) => ({
+          index: i,
+          kind: 'LOCAL',
+          detail: e.etapa_titulo || e.ferramenta,
+        })),
+      },
+      parecer: 'mutação sem teste comportamental posterior',
+    };
+  }
+
+  return {
+    aprovado: true,
+    receipt: {
+      status: 'PASS',
+      schema_version: 2,
+      mutations_total: historico.filter(e => e.ferramenta && e.ferramenta !== 'notificar_progresso').length,
+      mutation_proofs: historico.map((e, i) => ({
+        step_index: i,
+        mutation_step_ok: e.ok === true,
+        mutation_step_name: e.etapa_titulo || e.ferramenta,
+      })),
+      behavior_test_after_mutation_index: historico.findIndex(e => e.ferramenta === 'shell' && e.resultado === 'pass'),
+      unproven_mutations: [],
+    },
+    parecer: 'aprovado: evidencia + teste comportamental verificados',
+  };
+}
+
+export function resultadoAprovadoPeloCritic(resultado, critic) {
+  if (!resultado || !critic) return false;
+  if (resultado.ok !== true) return false;
+  if (critic.aprovado !== true) return false;
+  return true;
+}
+
 // CLI: node agent.mjs [escanear|resumo|restart <nome>]
 if (import.meta.url === `file://${process.argv[1]}`) {
   const modo = process.argv[2] || 'escanear';
