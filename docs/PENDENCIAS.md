@@ -775,3 +775,7 @@ Estabilidade: Plugin externo exige re-instalação manual pós-update. Ação: M
 - **Sintoma:** api.centralldark.com/v1/audio/speech responde 503 "bridge desligado (rota morta)". O SOL (Config > Bridge TTS) fala direto com bridge.centraldark.com/v1/audio/speech, pulando a API central.
 - **Onde mexer:** apps/modulos/arsenal-openai-adapter/server.mjs (handler de /v1/audio/speech) + camada na frente (Caddy) que hoje devolve a rota morta
 - **Critério pra fechar:** Rota /v1/audio/speech na API central responde 200 fazendo proxy real pro bridge de TTS, e o SOL Config aponta pra ela em vez de falar direto com o bridge.
+### 56. Commit 41f1f7e85 é falso verde — 3 canvas vazios com mensagem de prova — 🔴 ABERTO (29/08/2026, 22:44 BRT)
+- **Sintoma:** O commit 41f1f7e85 na branch reconciliacao/casa-20260829-consolidacao tem mensagem "docs(reconciliation): inventory of E:\CentralDark — SOBRA_BRAIN classification, proof of mirrors" mas contém apenas 3 arquivos canvas vazios (docs/BRAIN/Sem título*.canvas, 1 linha cada), pegos por um git add -A cego. O relatório de inventário citado na mensagem nunca entrou no repositório.
+- **Onde mexer:** PR #1369, branch reconciliacao/casa-20260829-consolidacao, commit 41f1f7e85, arquivos docs/BRAIN/Sem título*.canvas
+- **Critério pra fechar:** Os 3 canvas vazios removidos do PR #1369 (não pertencem ao escopo), e o commit reescrito ou seguido de commit corretivo cuja mensagem descreva o que realmente contém. Nenhum commit do PR anuncia prova que não esteja no diff.
