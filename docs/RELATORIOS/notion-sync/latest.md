@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-08-29T18:32:07.842Z
+# 🧠 Notion Sync — 2026-08-30T01:53:33.263Z
 
-- **Commit fonte:** `0dbb5d2d6210d70c0f0b31dbfa869007ac5cd4f3`
+- **Commit fonte:** `64a90a90374cec049954af43d81d1b5323689f52`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 488 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 488 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
-| aprendizados | 33 | 0 | 33 | 0 | 0 |
+| aprendizados | 34 | 1 | 33 | 0 | 0 |
 | estrutura | 411 | 0 | 411 | 0 | 0 |
 
 ## Operações
@@ -99,6 +99,7 @@
 | aprendizados | atualizado | #30 — Consolidacao de dominios: SPA ja e hibrido, nao falta construir path-routes |
 | aprendizados | atualizado | #31 — Provider sem crédito NÃO é router quebrado |
 | aprendizados | atualizado | #32 — Uma capacidade = uma linhagem = um PR de promoção por escopo |
+| aprendizados | criado | #33 — Opinião usada como medição gera falso verde e ação destrutiva |
 | estrutura | atualizado | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | atualizado | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
