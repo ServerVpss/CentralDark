@@ -51,3 +51,7 @@ AUTHORITY_FLOW_REVERSED=false
 Nenhum `.claude/agents/*` pode substituir `LEIA-ME-IA.md`, `AGENTS.md`, Trigger Fabric, owner canônico, Writer ou Reality Judge.
 
 PADRÃO ÚNICO DE RESOLUÇÃO DE CONFLITO (não criar segundo): `.agents/skills/git-conflict-resolve-house-standard/SKILL.md` — amarrado ao motor `dependabot-auto-merge.yml` + `scripts/dependabot/resolve-conflicts.sh`. Padrão se adapta à realidade atual.
+
+## Referências canônicas com token
+
+- [ai-universal-entrypoint] `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` — coordenação/Writer unico
