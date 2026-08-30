@@ -1,0 +1,195 @@
+schema: centraldark.runtime-plug-reconciliation.v1
+name: RUNTIME-PLUG-RECONCILIATION
+status: EVIDENCE_RECONCILED
+owner: CENTRALDARK_TRIGGER_FABRIC
+scope: "Reclassificar o estado do runtime plug cruzando main, branch, logs e provas anteriores; ausência em um único arquivo não equivale a ausência na arquitetura."
+
+proof_rule:
+  FILE_LOCAL_ABSENCE_IS_NOT_SYSTEM_ABSENCE: true
+  MAIN_EVIDENCE_HAS_HIGHEST_REPO_WEIGHT: true
+  RUNTIME_LOG_CAN_PROVE_EXECUTION_WITHOUT_PROVING_MAIN: true
+  HARNESS_PASS_CAN_PROVE_COMPONENT_WITHOUT_PROVING_GLOBAL_RUNTIME: true
+  PR_BRANCH_CAN_PROVE_IMPLEMENTED_CANDIDATE_WITHOUT_PROVING_PROMOTION: true
+  UNKNOWN_IS_NOT_PASS: true
+
+reconciled_state:
+  architecture_concept_end_to_end:
+    status: PROVEN_ARCHITECTURE
+    evidence:
+      - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ARCHITECTURE.md
+      - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MEGAZORD-CENTRALDARK.yml
+      - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml
+      - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RUNTIME-PLUG-CONTRACT.yml
+
+  deterministic_capability_selector:
+    status: IMPLEMENTED_IN_PR_BRANCH
+    evidence:
+      - .agents/skills/capability-contract-router/scripts/route_capabilities.py
+    proven_properties:
+      - INPUT_VALIDATION
+      - REQUIRED_CAPABILITY_COVERAGE
+      - OPTIONAL_CAPABILITY_TIEBREAK
+      - MINIMUM_CAPABILITY_SURFACE_TIEBREAK
+      - LEXICOGRAPHIC_DETERMINISTIC_TIEBREAK
+      - WRITER_CONFLICT_REJECTION
+      - FORBIDDEN_CAPABILITY_REJECTION
+      - CAPABILITY_GAP_FAIL_CLOSED
+      - SELF_TEST_FIXTURES
+    correction: "Do not classify deterministic selector as RED merely because RUNTIME-PLUG-CONTRACT.yml itself does not contain the algorithm."
+
+  writer_scope_and_lease_semantics:
+    status: PROVEN_IN_MAIN_FOR_WRITER_COORDINATION
+    evidence:
+      - AGENTS.md
+      - LEIA-ME-IA.md
+      - docs/CONSCIENCIA/EXECUCAO-REVERSIVEL.md
+      - docs/CONSCIENCIA/APRENDIZADOS/2026-08-28-meteor-claim-lease-absorvido.md
+    note: "This proves writer/claim coordination semantics; it does not by itself prove a generic process reference-count for every heavy runtime."
+
+  repo_contract_gate:
+    status: PROVEN_IN_MAIN
+    evidence:
+      - scripts/trigger-fabric/verify_repo_contract.py
+      - .github/workflows/porta-de-entrada.yml
+    correction: "A blocking/repository contract gate exists. The remaining question is whether runtime-plug-specific conformance is wired into that gate."
+
+  continuity_validator:
+    status: PROVEN_IN_MAIN
+    evidence:
+      - scripts/lupa/validar-continuidade-global.mjs
+    note: "Existing continuity validation must be reused before creating another continuity mechanism."
+
+  trigger_fabric_and_master_cycle:
+    status: PROVEN_IN_MAIN
+    evidence:
+      - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ARCHITECTURE.md
+      - scripts/trigger-fabric/verify_repo_contract.py
+      - LEIA-ME-IA.md
+      - AGENTS.md
+    note: "Runtime plug inherits an existing operational fabric; it is not starting from zero."
+
+  omni_router_transport:
+    status: PROVEN_COMPONENT_AND_RUNTIME_HISTORY
+    evidence:
+      - apps/modulos/elite-gateway/scripts/centraldark_omni_router.py
+    prior_runtime_proof:
+      - "127.0.0.1:8099 /health observed"
+      - "127.0.0.1:8099 /v1/models observed"
+      - "POST /v1/chat/completions observed in prior Casa session"
+    note: "This proves a real transport path for supported engines, not universal conformance for every future runtime kind."
+
+  runtime_adapter_architecture:
+    status: PROVEN_IN_PRIOR_HARNESS_AND_DOCUMENTATION
+    prior_evidence:
+      - "RuntimeAdapter protocol"
+      - "CentralDark BFF"
+      - "policy/approval/budget"
+      - "Hermes Runs/Sessions Adapter"
+      - "capability/fallback"
+      - "canonical/runtime storage and state DB"
+    note: "Reuse and reconcile these owners; do not rebuild a second adapter architecture."
+
+  harness_validation:
+    status: COMPONENT_FIXED_POINT_PREVIOUSLY_PROVEN
+    prior_evidence:
+      - "contract JSON"
+      - "response gate"
+      - "gateway middleware evidence gate/fail-closed"
+      - "Horn engine"
+      - "functional/adversarial/metamorphic tests"
+      - "tests/run_all.py"
+      - "HARNESS_FIXED_POINT=TRUE"
+    boundary: "GLOBAL_RUNTIME_FIXED_POINT was explicitly not proven by that harness alone."
+
+  screenpipe_live_observation:
+    status: CAPABILITY_CRYSTALLIZED_IN_PR_BRANCH
+    evidence:
+      - .agents/skills/screenpipe-live-observer/SKILL.md
+      - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MEGAZORD-CENTRALDARK.yml
+    note: "Global sensor capability is architecturally bound; runtime availability remains measured per host."
+
+  universal_runtime_manifest_schema:
+    status: PARTIAL_NOT_ZERO
+    existing_foundation:
+      - "capability-contract-router input schema is executable"
+      - "ENGINE_BINDING.yml catalogs engines and ownership"
+      - "CAPABILITY-READINESS-POLICY.yml defines readiness requirements"
+      - "RUNTIME-PLUG-CONTRACT.yml defines plug interface fields"
+    residual: "A single machine-validated runtime manifest schema/registry covering all runtime kinds is not yet proven as one executable artifact."
+
+  universal_binder:
+    status: PARTIAL_PROVEN_PATHS
+    existing_foundation:
+      - "Omni Router binds multiple engine transports"
+      - "ENGINE_BINDING.yml maps known engines"
+      - "Hermes runtime prompt consumer and transport owner are declared"
+      - "prior RuntimeAdapter architecture exists"
+    residual: "One generic binder proven against every declared runtime kind/future runtime is not yet demonstrated."
+
+  runtime_resource_fit:
+    status: PARTIAL
+    existing_foundation:
+      - "resource dimensions and readiness policy are defined"
+      - "Casa/VPS/CI have existing operational measurement practices and scripts"
+    residual: "A single deterministic runtime-fit probe feeding runtime selection for every host/runtime combination is not yet proven."
+
+  runtime_process_lease_reference_count:
+    status: PARTIAL
+    existing_foundation:
+      - "writer lease / one-writer semantics are proven"
+      - "temporary watch lifecycle and self-cleanup contracts exist"
+    residual: "Shared heavy runtime reference-count/consumer lease preventing unload while another mission still uses the process is not yet proven universally."
+
+  cross_engine_swap_continuity:
+    status: PARTIAL_WITH_CONTINUITY_FOUNDATION
+    existing_foundation:
+      - "global continuity validator exists"
+      - "handoff protocol preserves state/evidence/NEXT_CURSOR"
+      - "engine binding treats models as replaceable"
+      - "prior model/provider fallback and continuity requirements are documented"
+    residual: "A measured live A→B runtime swap matrix across representative engines is not yet proven as a universal conformance suite."
+
+  runtime_plug_specific_blocking_gate:
+    status: PARTIAL
+    existing_foundation:
+      - "repo contract blocking gate exists"
+      - "CI/Judge deterministic validation has prior proof"
+      - "capability router self-tests exist"
+    residual: "runtime-plug-specific manifest/bind/swap/resource-fit conformance must be wired into existing gate instead of creating another gate."
+
+corrected_dashboard:
+  ARCHITECTURE_END_TO_END: GREEN
+  TRIGGER_FABRIC_MAIN: GREEN
+  WRITER_COORDINATION_MAIN: GREEN
+  CONTINUITY_VALIDATOR_MAIN: GREEN
+  REPO_CONTRACT_GATE_MAIN: GREEN
+  OMNI_ROUTER_REAL_PATH: GREEN
+  CAPABILITY_SELECTOR_IMPLEMENTED: GREEN_BRANCH
+  HARNESS_COMPONENT_FIXED_POINT: GREEN_PRIOR_PROOF
+  SCREENPIPE_GLOBAL_SENSOR_BINDING: GREEN_BRANCH
+  UNIVERSAL_RUNTIME_MANIFEST: YELLOW
+  UNIVERSAL_BINDER_ALL_RUNTIME_KINDS: YELLOW
+  RESOURCE_FIT_UNIVERSAL_PROBE: YELLOW
+  SHARED_RUNTIME_PROCESS_LEASE: YELLOW
+  CROSS_ENGINE_SWAP_MATRIX: YELLOW
+  RUNTIME_PLUG_SPECIFIC_GATE_WIRING: YELLOW
+  GLOBAL_RUNTIME_FIXED_POINT: YELLOW_UNTIL_CASA_REMEASUREMENT
+
+next_delta:
+  principle: "Do not recreate what is already proven. Compile the residual yellow layer from existing owners."
+  actions:
+    - REUSE_CAPABILITY_ROUTER_AS_SELECTOR
+    - REUSE_ENGINE_BINDING_AS_INITIAL_REGISTRY
+    - REUSE_EXISTING_RUNTIME_ADAPTER_ARCHITECTURE
+    - REUSE_OMNI_ROUTER_FOR_SUPPORTED_TRANSPORTS
+    - REUSE_GLOBAL_CONTINUITY_VALIDATOR
+    - REUSE_EXISTING_REPO_CONTRACT_GATE
+    - ADD_MACHINE_VALIDATED_RUNTIME_MANIFEST_ONLY_IF_NO_EQUIVALENT_OWNER_EXISTS
+    - ADD_RESOURCE_FIT_PROBE_AS_INPUT_TO_EXISTING_SELECTOR
+    - ADD_SHARED_RUNTIME_CONSUMER_LEASE_ONLY_FOR_HEAVY_SHARED_PROCESSES
+    - ADD_REPRESENTATIVE_A_TO_B_SWAP_CONFORMANCE_TEST
+    - WIRE_RUNTIME_PLUG_CONFORMANCE_INTO_EXISTING_GATE
+    - REMEASURE_IN_CASA
+
+fixed_point_boundary:
+  statement: "MAIN and deploy are consequences. The remaining material boundary is TESTE_REAL_NA_CASA after reconciliation of existing proofs and residual executable gaps."
