@@ -1,0 +1,171 @@
+schema: centraldark.spiral-traversal.v1
+name: CENTRALDARK-SPIRAL-TRAVERSAL
+alias: CARACOL
+status: CANONICAL_CONTRACT_CANDIDATE
+owner: CENTRALDARK_TRIGGER_FABRIC
+consumer:
+  - LEIA-ME-IA.md
+  - MEGAZORD-CENTRALDARK
+  - GraphRAG-Master
+  - graph-panel
+  - any CentralDark runtime that needs topology navigation
+
+purpose:
+  statement: "Cobrir todos os pontos catalogados por uma travessia única, reversível e determinística sem transformar proximidade visual em causalidade."
+  visual_metaphor: CARACOL
+  navigation_overlay_only: true
+  semantic_edge: false
+  authority: false
+  second_brain: false
+  second_router: false
+  node_repositioning_required: false
+
+canonical_boundary:
+  boot_authority: LEIA-ME-IA.md
+  agent_contract: AGENTS.md
+  navigation_map: docs/CONSCIENCIA/MAPA-DO-CEREBRO.md
+  compatibility_entry: docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md
+  historical_redirect: docs/CONSCIENCIA/CONSCIENCIA.md
+  rule: "CARACOL atravessa metadados de navegação; não substitui owner, boot, runtime truth ou semantic edges."
+
+nucleus:
+  canonical_boot_adjacent: LEIA-ME-IA.md
+  navigation_triad:
+    - 00-LEIA-PRIMEIRO
+    - MAPA-DO-CEREBRO
+    - CONSCIENCIA
+  semantics:
+    00_leia_primeiro: COMPATIBILITY_REDIRECT_NOT_BOOT_OWNER
+    mapa_do_cerebro: CANONICAL_NAVIGATION_MAP
+    consciencia: HISTORICAL_REDIRECT
+  invariant: "NUCLEO_VISUAL != CADEIA_DE_AUTORIDADE"
+
+coverage:
+  all_catalogued_points_reachable: true
+  all_bodies_loaded: false
+  discovery_plane: METADATA_PATH_ID_STATUS_OWNER_RELATION_SUMMARY
+  materialization_plane: MINIMUM_SUFFICIENT_CONTEXT
+  no_fragment_drop: true
+  no_duplicate_traversal: true
+  semantic_edge_set_unchanged: true
+  graph_edge_is_causality: false
+  traversal_edge_is_semantic_edge: false
+
+ten_adaptive_fronts:
+  F1_BOOT_IDENTITY:
+    examples: [LEIA-ME-IA, AGENTS, SOUL, PORTA-DE-ENTRADA, IDENTITY]
+  F2_INTENT_MASTER_CYCLE:
+    examples: [INTENT, MASTER-CYCLE, MULTIBUSSOLA, META-LUPA, RECONCILIAR]
+  F3_MEMORY_GRAPH:
+    examples: [BRAIN, MEMORY, GRAPH, VECTOR, KNOWLEDGE, APRENDIZADOS]
+  F4_CAPABILITY_ROUTING:
+    examples: [CAPABILITY, ROUTER, MEGAZORD, ADAPTER]
+  F5_RUNTIME_ENGINE:
+    examples: [RUNTIME, ENGINE, MODEL, HERMES, CODEX, CLAUDE, NOUS]
+  F6_TOOLS_SENSORS:
+    examples: [SCREENPIPE, MCP, TOOL, BROWSER, TERMINAL, CONNECTOR]
+  F7_HANDOFF_CONTINUITY:
+    examples: [HANDOFF, RECEIPT, CHECKSUM, CURSOR, CONTINUITY]
+  F8_WRITER_EXECUTION:
+    examples: [WRITER, LEASE, EXECUTION, WORKTREE, MUTATION]
+  F9_PROOF_JUDGE:
+    examples: [PROOF, COUNTERPROOF, REMEDICAO, REALITY-JUDGE, FIXED-POINT]
+  F10_CI_DEPLOY_RESIDUAL:
+    examples: [CI, WORKFLOW, DEPLOY, RUNNER, ISSUE, PENDENCIA, UNCLASSIFIED]
+  rules:
+    adaptive: true
+    fronts_are_not_agents: true
+    node_may_have_multiple_semantics_but_one_primary_traversal_bucket: true
+    unmatched_goes_to_F10_not_drop: true
+    forward_and_reverse_required: true
+
+ordering:
+  conceptual_outer_to_inner:
+    graph_when_available: "LOW_DEGREE -> HIGH_DEGREE -> NUCLEUS"
+    catalog_fallback: "DEEPER_PATH -> SHALLOWER_PATH -> NUCLEUS"
+  reverse: "NUCLEUS -> OUTER"
+  deterministic_tiebreak: NORMALIZED_ID_LEXICOGRAPHIC
+  visual_renderer:
+    preserve_current_xy: true
+    derive_polar_radius_angle_from_current_layout: true
+    draw_single_continuous_spiral_overlay: true
+    add_to_semantic_links: false
+    influence_force_physics: false
+
+horn_verification:
+  source_reference:
+    file: tlc23.pdf
+    concepts:
+      - HORN_CLAUSE_AT_MOST_ONE_POSITIVE_LITERAL
+      - FORWARD_PROPAGATION_UNTIL_NO_NEW_FACT
+      - DEFINED_PROGRAM_FINITE_POSITIVE_HORN_CLAUSES
+      - MINIMAL_HERBRAND_MODEL
+      - NEGATIVE_GOAL_REFUTATION
+  facts:
+    - visited(first)
+    - next(A,B)
+  rule: "visited(B) <- visited(A), next(A,B)"
+  forward_fixed_point: "derive until no new visited fact"
+  reverse_fixed_point: "reverse next relation and derive until no new visited fact"
+  goal_check: "for every catalogued node N, goal <- visited(N) must be refuted by derived visited(N)"
+  pass_condition:
+    - FORWARD_CLOSURE_EQUALS_DISCOVERED_SET
+    - REVERSE_CLOSURE_EQUALS_DISCOVERED_SET
+    - DUPLICATE_TRAVERSAL_ZERO
+    - FRAGMENT_DROP_ZERO
+
+round_trip:
+  forward:
+    direction: OUTER_TO_NUCLEUS
+    objective: ALL_CATALOGUED_POINTS_VISITED
+  reverse:
+    direction: NUCLEUS_TO_OUTER
+    objective: SAME_SET_RECOVERED
+  rendezvous:
+    require_same_set: true
+    require_same_denominator: true
+    divergence_action: META_LUPA_RECONCILE_AND_RERUN
+
+context_policy:
+  catalogue_all_relevant_metadata: true
+  preload_all_bodies: false
+  retrieve_body_when:
+    - CURRENT_INTENT_REQUIRES_IT
+    - DISCRIMINATING_TEST_REQUIRES_IT
+    - OWNER_OR_PROOF_RESOLUTION_REQUIRES_IT
+  no_information_gain: STOP_EXPANSION
+  slogan: "TODOS OS PONTOS ALCANCAVEIS; SO O CONTEXTO NECESSARIO MATERIALIZADO."
+
+runtime_plug:
+  control_plane_can_exist_without_target_runtime: true
+  target_runtime_may_be_absent_before_selection: true
+  target_runtime_materialized_on_demand: true
+  traversal_contract_inherited_by_runtime: true
+  runtime_swap_preserves_traversal_cursor: true
+
+visual_graph_boundary:
+  graph_data_semantic_topology_preserved: true
+  graphrag_neighbors_unchanged: true
+  caracol_is_renderer_overlay: true
+  caracol_must_not_create_graph_data_edges: true
+  screenshot_layout_is_not_authority: true
+
+proof:
+  executable_verifier: scripts/trigger-fabric/spiral_traversal.py
+  existing_gate_owner: scripts/trigger-fabric/verify_repo_contract.py
+  positive_test_required: true
+  negative_duplicate_test_required: true
+  forward_reverse_test_required: true
+  casa_runtime_visual_test_required_for_global_fixed_point: true
+
+fixed_point:
+  local_contract_requires:
+    - ALL_REQUIRED_FILES_PRESENT
+    - SPIRAL_SELF_TEST_PASS
+    - SPIRAL_REPO_COVERAGE_PASS
+    - SEMANTIC_EDGE_SET_UNCHANGED_BY_CARACOL
+  global_requires:
+    - TESTE_REAL_NA_CASA
+    - RENDER_OVERLAY_VISIBLE
+    - NO_GRAPH_SEMANTIC_REGRESSION
+    - REALITY_JUDGE_PASS

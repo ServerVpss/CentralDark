@@ -1,0 +1,394 @@
+schema: centraldark.runtime-plug.v2
+name: CENTRALDARK-RUNTIME-PLUG-CONTRACT
+status: CANONICAL_CONTRACT_CANDIDATE
+owner: CENTRALDARK_TRIGGER_FABRIC
+architecture: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MEGAZORD-CENTRALDARK.yml
+engine_binding: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml
+readiness_policy: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CAPABILITY-READINESS-POLICY.yml
+capability_router: .agents/skills/capability-contract-router/SKILL.md
+spiral_traversal: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SPIRAL-TRAVERSAL.yml
+conformance: scripts/trigger-fabric/runtime_plug_conformance.py
+
+purpose:
+  statement: "A arquitetura CentralDark permanece completa. O control plane existe antes do motor-alvo; runtime/modelo/CLI/executor é selecionado e materializado sob demanda sem recriar a arquitetura."
+  runtime_is_replaceable: true
+  architecture_is_persistent: true
+  runtime_is_architecture_owner: false
+  runtime_is_identity: false
+  runtime_is_authority: false
+
+planes:
+  control_plane:
+    required_before_runtime_selection: true
+    contains:
+      - AUTHORITY_AND_INTENT
+      - BOOT_AND_TRIGGER_FABRIC
+      - CONTEXT_DISCOVERY
+      - SPIRAL_METADATA_TRAVERSAL
+      - CAPABILITY_ROUTING
+      - OWNER_AND_WRITER_RESOLUTION
+      - PROOF_CONTRACT
+    may_run_without_target_runtime: true
+  execution_plane:
+    materialized_on_demand: true
+    contains:
+      - SELECTED_RUNTIME
+      - TRANSPORT_ADAPTER
+      - SELECTED_TOOLS
+      - EXECUTION_CONTEXT
+      - MISSION_ACTIONS
+  evidence_plane:
+    contains:
+      - LIVE_OBSERVATION
+      - TEST
+      - COUNTERPROOF
+      - REALITY_JUDGE
+      - RECEIPT
+      - NEXT_CURSOR
+
+complete_stack:
+  layers:
+    - AUTHORITY_AND_INTENT
+    - BOOT_AND_TRIGGER_FABRIC
+    - CONTEXT_AND_MEMORY
+    - SPIRAL_METADATA_TRAVERSAL
+    - LIVE_OBSERVATION
+    - CAPABILITY_DISCOVERY
+    - CAPABILITY_ROUTING
+    - RUNTIME_SELECTION
+    - RUNTIME_MATERIALIZATION
+    - TRANSPORT_ADAPTER
+    - EXECUTION
+    - TOOLS_AND_CONNECTORS
+    - STATE_AND_HANDOFF
+    - TEST_AND_OBSERVATION
+    - COUNTERPROOF
+    - REALITY_JUDGE
+    - RECEIPT_AND_MEMORY
+    - LEASE_RELEASE_AND_OPTIONAL_UNLOAD
+    - NEXT_CURSOR
+
+end_to_end:
+  forward:
+    - RECEIVE_INTENT
+    - LOAD_CANONICAL_BOOT_MINIMUM
+    - SPIRAL_CATALOGUE_RELEVANT_METADATA
+    - MEASURE_LIVE_STATE
+    - ACTIVATE_UP_TO_10_INFORMATION_GAIN_FRONTS
+    - RENDEZVOUS
+    - CLASSIFY_REQUIREMENTS
+    - RESOLVE_EXISTING_OWNERS
+    - SELECT_MINIMUM_SUFFICIENT_CAPABILITIES
+    - SELECT_RUNTIME
+    - VERIFY_RUNTIME_RESOURCE_FIT
+    - MATERIALIZE_RUNTIME_IF_NEEDED
+    - BIND_TRANSPORT_ADAPTER
+    - ACQUIRE_RUNTIME_CONSUMER_LEASE
+    - HEALTH_CHECK_RUNTIME
+    - EXECUTE_MISSION
+    - OBSERVE_EFFECT
+    - TEST
+    - COUNTERPROOF
+    - REALITY_JUDGE
+    - WRITE_RECEIPT
+    - PERSIST_USEFUL_DELTA
+  reverse:
+    - START_FROM_PROVEN_EFFECT
+    - TRACE_RECEIPT_TO_RUNTIME
+    - TRACE_RUNTIME_TO_CAPABILITY_ASSIGNMENT
+    - TRACE_CAPABILITY_TO_OWNER
+    - TRACE_OWNER_TO_INTENT_AND_BOOT
+    - SPIRAL_REVERSE_COVERAGE
+    - REQUIRE_FORWARD_REVERSE_RENDEZVOUS
+  completion:
+    - REMEASURE_NEED
+    - RELEASE_RUNTIME_CONSUMER_LEASE
+    - STOP_OR_UNLOAD_ONLY_IF_CONSUMER_COUNT_ZERO
+    - CONTINUE_NEXT_CURSOR
+
+plug_manifest:
+  schema_version: centraldark.runtime-plug-manifest.v1
+  required_fields:
+    - runtime_id
+    - runtime_kind
+    - execution_capabilities
+    - transport
+    - health_probe
+    - resource_profile
+    - tool_access
+    - mutation_scope
+    - lifecycle
+  runtime_binding_requires_one_of:
+    - start_command
+    - provider_binding
+    - endpoint
+    - embedded_handler
+  optional_fields:
+    - model_id
+    - cli_path
+    - mcp_servers
+    - context_window
+    - session_continuity
+    - provenance
+    - version_pin
+    - artifact_sha256
+  machine_validation: scripts/trigger-fabric/runtime_plug_conformance.py
+
+runtime_kinds:
+  - LOCAL_LLM
+  - REMOTE_LLM
+  - CLI_AGENT
+  - HERMES_RUNTIME
+  - CODEX_RUNTIME
+  - CLAUDE_CODE_RUNTIME
+  - GROK_RUNTIME
+  - MISTRAL_RUNTIME
+  - NOUS_RUNTIME
+  - OPENAI_RUNTIME
+  - BROWSER_WORKER
+  - MCP_EXECUTOR
+  - SCRIPT_EXECUTOR
+  - CI_RUNNER
+  - EMBEDDED_HANDLER
+  - FUTURE_RUNTIME
+
+transport_adapters:
+  canonical_model_router: apps/modulos/elite-gateway/scripts/centraldark_omni_router.py
+  kinds:
+    OPENAI_COMPATIBLE_HTTP:
+      preferred_owner: CENTRALDARK_OMNI_ROUTER
+    CENTRALDARK_API:
+      preferred_owner: CENTRALDARK_API
+    MCP:
+      contract: MCP_PROTOCOL
+    SUBPROCESS:
+      contract: CLI_STDIO_EXIT_CODE
+    BROWSER:
+      contract: BROWSER_CONTROL_AND_OBSERVATION
+    CI:
+      contract: SELF_HOSTED_RUNNER_JOB
+    EMBEDDED:
+      contract: IN_PROCESS_CALL
+  rule: "Um runtime não precisa fingir HTTP para ser plugável. Cada transporte implementa o mesmo envelope operacional e mantém o owner existente."
+  no_second_router: true
+  direct_provider_transport_requires_existing_explicit_exception: true
+  secrets_in_repo: false
+
+inherited_contract:
+  - SEGREDO_CHEFE_AUTHORITY
+  - LEIA_ME_IA
+  - AGENTS_MD
+  - CENTRALDARK_MASTER_CYCLE
+  - SPIRAL_TRAVERSAL
+  - CAPABILITY_CONTRACT_ROUTER
+  - MEGAZORD_CENTRALDARK
+  - ONE_WRITER_PER_SCOPE
+  - UNKNOWN_IS_NOT_PASS
+  - REALITY_JUDGE
+  - HANDOFF_PROTOCOL
+  - RECEIPT_PROTOCOL
+  - SELF_HEALING_BINDING
+  - OUTPUT_GUARD
+
+forbidden_to_override:
+  - HUMAN_AUTHORITY
+  - CANONICAL_OWNER
+  - ONE_SYSTEM_ONLY
+  - ONE_WRITER_PER_SCOPE
+  - REALITY_IS_JUDGE
+  - UNKNOWN_IS_NOT_PASS
+
+runtime_selection:
+  policy: MINIMUM_SUFFICIENT_RUNTIME
+  selector_owner: .agents/skills/capability-contract-router/scripts/route_capabilities.py
+  rank_inputs:
+    - REQUIRED_CAPABILITY_COVERAGE
+    - CURRENT_AVAILABILITY
+    - RESOURCE_FIT
+    - EXISTING_RUNNING_RUNTIME_REUSE
+    - LOWER_STARTUP_COST
+    - LOWER_STEADY_STATE_COST
+    - LOWER_LATENCY_WHEN_MATERIAL
+    - REQUIRED_CONTEXT_FIT
+    - REQUIRED_TOOL_ACCESS
+    - DETERMINISTIC_ID_TIEBREAK
+  do_not_select:
+    - CAPABILITY_GAP
+    - RESOURCE_BUDGET_EXCEEDED
+    - HEALTH_UNKNOWN_WHEN_REQUIRED
+    - WRITER_CONFLICT
+    - FORBIDDEN_TOOL_OR_BOUNDARY
+
+materialization:
+  default: LAZY
+  installed_everywhere: false
+  loaded_everywhere: false
+  running_everywhere: false
+  when_runtime_already_available: REUSE
+  when_runtime_missing_but_selected:
+    steps:
+      - RESOLVE_PROVEN_INSTALL_OR_PROVIDER_PATH
+      - CHECK_RESOURCE_BUDGET
+      - MATERIALIZE_ONLY_REQUIRED_COMPONENTS
+      - VERIFY_VERSION_OR_SHA_WHEN_APPLICABLE
+      - START_OR_BIND
+      - HEALTH_CHECK
+      - REGISTER_AVAILABLE_CAPABILITIES
+  failure: BLOCKED_RUNTIME_MATERIALIZATION
+
+resource_fit:
+  dimensions:
+    - CPU
+    - RAM
+    - GPU
+    - VRAM
+    - DISK
+    - NETWORK
+    - PORTS
+    - PROCESS_COUNT
+    - STARTUP_TIME
+    - LATENCY
+    - TOKEN_OR_PROVIDER_COST
+  host_profiles:
+    CASA: MEASURE_CURRENT_MACHINE
+    VPS: MEASURE_CURRENT_VPS
+    CI: MEASURE_RUNNER
+    FUTURE_HOST: MEASURE_BEFORE_BIND
+  heavy_runtime_without_fit: FORBIDDEN
+  unknown_resource_requirement_for_heavy_runtime: BLOCKED_UNTIL_MEASURED
+
+context_binding:
+  architecture_context_source: CANONICAL_REPOSITORY
+  catalogue_all_relevant_metadata: true
+  preload_all_bodies: false
+  runtime_receives_only_relevant_context: true
+  retrieval_policy: PRECISE_RETRIEVAL_SMALL_CONTEXT
+  runtime_may_request_more_context: true
+  context_pressure_may_trigger_handoff: true
+  context_loss_must_not_redefine_architecture: true
+  fresh_runtime_can_resume_from_receipt_and_next_cursor: true
+  spiral_cursor_must_survive_swap: true
+
+sensor_and_tool_binding:
+  discoverable_sources:
+    - SCREENPIPE
+    - MCP
+    - CENTRALDARK_HUB
+    - CENTRALDARK_API
+    - GITHUB
+    - FILES
+    - MEMORY
+    - CONNECTORS
+    - BROWSER
+    - TERMINAL
+    - CI
+    - LOGS
+  activate_all: false
+  route_only_when_needed: true
+  observation_can_parallelize: true
+  mutation_serialized_by_writer_scope: true
+
+consumer_lease:
+  applies_to: SHARED_OR_HEAVY_RUNTIME
+  acquire_before_use: true
+  key: RUNTIME_ID
+  consumer_identity: MISSION_ID_OR_TASK_ID
+  refcount: true
+  duplicate_acquire_same_consumer_is_idempotent: true
+  release_after_final_effect_or_handoff: true
+  unload_requires_consumer_count_zero: true
+  stale_lease_requires_proof_before_reap: true
+  writer_lease_is_not_runtime_consumer_lease: true
+
+execution_contract:
+  before_mutation:
+    - MEASURE_CURRENT_STATE
+    - VERIFY_WRITER_SCOPE
+    - VERIFY_TARGET_OWNER
+    - VERIFY_RUNTIME_HEALTH
+    - VERIFY_RUNTIME_CONSUMER_LEASE_WHEN_REQUIRED
+  action:
+    - EXECUTE_MINIMUM_SAFE_DELTA
+  after_action:
+    - TEST
+    - OBSERVE_TARGET
+    - COUNTERPROOF
+    - REMEASURE
+    - REALITY_JUDGE
+  success_requires:
+    - TARGET_EFFECT_PROVEN
+    - NO_MATERIAL_REGRESSION
+    - RECEIPT_WRITTEN
+
+runtime_swap:
+  allowed: true
+  architecture_rebuild_required: false
+  preserve_across_swap:
+    - INTENT
+    - STATE
+    - EVIDENCE_REFS
+    - WRITER_SCOPE
+    - PROOF_TARGET
+    - RECEIPT
+    - NEXT_CURSOR
+    - SPIRAL_CURSOR
+    - UNRESOLVED_SET
+  swap_triggers:
+    - CAPABILITY_GAP
+    - CONTEXT_CRITICAL
+    - PROVIDER_LIMIT
+    - RESOURCE_PRESSURE
+    - RUNTIME_FAILURE
+    - COST_POLICY
+    - BETTER_EXISTING_RUNTIME
+  swap_is_not_failure_if_continuity_preserved: true
+  conformance_requires_representative_A_to_B_and_B_to_A: true
+
+cleanup:
+  heavy_runtime_idle_policy: RELEASE_THEN_STOP_ONLY_IF_ZERO_CONSUMERS
+  preserve:
+    - SOURCE_AND_ADAPTER
+    - INSTALL_RECIPE
+    - CONFIG_TEMPLATE
+    - RESOURCE_PROFILE
+    - TEST_AND_HEALTH_CONTRACT
+    - RECEIPT
+  remove_or_stop:
+    - TEMPORARY_PROCESS_WITH_ZERO_CONSUMERS
+    - TEMPORARY_WATCH_AFTER_TERMINAL_CONDITION
+    - TEMPORARY_WORKSPACE_AFTER_PROVEN_HANDOFF
+    - UNNEEDED_LOADED_MODEL_WITH_ZERO_CONSUMERS
+  never_remove_without_proof:
+    - USER_DATA
+    - UNKNOWN_ARTIFACT
+    - CANONICAL_OWNER
+    - RUNTIME_WITH_ACTIVE_CONSUMER
+
+proof_states:
+  CAPABILITY_READY: "programação e contrato prontos"
+  RUNTIME_MATERIALIZED: "runtime instalado ou provider ligado"
+  RUNTIME_HEALTHY: "health observado"
+  RUNTIME_BOUND: "contrato e transporte resolvidos"
+  RUNTIME_LEASED: "consumidor registrado quando compartilhado/pesado"
+  EXECUTION_PROVEN: "efeito da missão observado"
+  RUNTIME_RELEASED: "lease liberado e runtime descarregado somente se zero consumidores"
+
+fixed_point:
+  requires:
+    - ARCHITECTURE_CHAIN_COMPLETE
+    - SPIRAL_FORWARD_REVERSE_COVERAGE_PASS
+    - REQUIRED_CAPABILITIES_COVERED
+    - SELECTED_RUNTIME_HEALTHY
+    - TARGET_EFFECT_PROVEN
+    - COUNTERPROOF_PASS
+    - NO_MATERIAL_UNKNOWN
+    - REALITY_JUDGE_PASS
+    - RECEIPT_COMPLETE
+    - NO_ORPHAN_RUNTIME_LEASE
+  main_is_consequence: true
+  deploy_is_consequence: true
+  global_boundary: TESTE_REAL_NA_CASA
+
+invariant:
+  formula: "COMPLETE_CONTROL_PLANE + CATALOGUED_UNIVERSE + SELECTED_RUNTIME_PLUG -> SAME_OPERATIONAL_CONTRACT"
+  slogan: "ARQUITETURA INTEIRA; MOTOR SOB DEMANDA; CONTINUIDADE NOS DOIS SENTIDOS."

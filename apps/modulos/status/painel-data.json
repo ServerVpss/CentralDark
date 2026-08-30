@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-29T18:04:55.107Z",
-  "updatedAtBR": "29/08/2026, 15:04:55 BRT",
+  "updatedAt": "2026-08-30T01:08:06.379Z",
+  "updatedAtBR": "29/08/2026, 22:08:06 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "docs(pendencias): nova #55 Rota de voz (TTS) morta na API central — SOL fala direto com bridge, ignorando a API",
+    "lastCommit": "arch: registrar MEGAZORD-CENTRALDARK como composição automática (#1370)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,22 @@
   ],
   "events": [
     {
+      "time": "2026-08-30T01:08:06.379Z",
+      "titulo": "Push na main · 09274b75bdac602b64eecd3782b3aec533bca5e7",
+      "detalhe": "arch: registrar MEGAZORD-CENTRALDARK como composição automática (#1370)",
+      "area": "Repositório",
+      "sha": "09274b7",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-08-29T18:36:09.699Z",
+      "titulo": "Push na main · 0dbb5d2d6210d70c0f0b31dbfa869007ac5cd4f3",
+      "detalhe": "fix(governança): unificar owner operacional e rebaixar Jeito do Pivete a legado (#1368)",
+      "area": "Repositório",
+      "sha": "0dbb5d2",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-29T18:04:55.107Z",
       "titulo": "Push na main · 9d369c6b7da36242a1fb111e25d346dfec386d1f",
       "detalhe": "docs(pendencias): nova #55 Rota de voz (TTS) morta na API central — SOL fala direto com bridge, ignorando a API",
@@ -980,22 +996,6 @@
       "detalhe": "🎼 Capability Contract Router — sinais, cidades e mutações ambientais (#1163)",
       "area": "Repositório",
       "sha": "5b774de",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-25T15:57:51.711Z",
-      "titulo": "Push na main · c00926e5d569c7b8e833759836ba9ddeedfc4cf7",
-      "detalhe": "🔐 CASCO VIVO — integrar resiliência adaptativa ao loop canônico (#1158)",
-      "area": "Repositório",
-      "sha": "c00926e",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-25T10:11:12.507Z",
-      "titulo": "Push na main · 01135a7eca5ed6375860e35578a6db23deed34f9",
-      "detalhe": "🛡️ CASCO VIVO — resiliência adaptativa contraprovada",
-      "area": "Repositório",
-      "sha": "01135a7",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,20 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-30T01:08:06.379Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 09274b75bdac602b64eecd3782b3aec533bca5e7 (09274b7)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-08-29T18:36:09.699Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 0dbb5d2d6210d70c0f0b31dbfa869007ac5cd4f3 (0dbb5d2)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-29T18:04:55.107Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 9d369c6b7da36242a1fb111e25d346dfec386d1f (9d369c6)",
@@ -1743,20 +1757,6 @@
       "time": "2026-08-26T03:39:46.300Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 5b774de88d96721c6d42145388e370d4b7f4fab0 (5b774de)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-25T15:57:51.711Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · c00926e5d569c7b8e833759836ba9ddeedfc4cf7 (c00926e)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-25T10:11:12.507Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 01135a7eca5ed6375860e35578a6db23deed34f9 (01135a7)",
       "area": "Repositório",
       "status": "sucesso"
     }
