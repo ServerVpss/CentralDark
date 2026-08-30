@@ -194,9 +194,9 @@ export async function buscarContexto(missao) {
 export { buscarContexto as contexto };
 
 export function selfTest() {
-  const normalized = termos('CentralDark centraldark memória API x');
+  const normalized = termos('CentralDark centraldark memoria API x');
   const checks = {
-    token_normalization_dedupes: JSON.stringify(normalized) === JSON.stringify(['centraldark', 'memória']),
+    token_normalization_dedupes: JSON.stringify(normalized) === JSON.stringify(['centraldark', 'memoria']),
     short_tokens_are_ignored: !normalized.includes('api') && !normalized.includes('x'),
     empty_query_is_safe: termos('').length === 0,
   };
