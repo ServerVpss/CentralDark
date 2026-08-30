@@ -144,11 +144,13 @@ Implementação determinística:
 - contrato: `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml`;
 - mapa: `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml`;
 - resolver: `scripts/trigger-fabric/centraldark_master_cycle.py`;
+- consumidor de sessão: `resolve_with_session_state` com arquivo fornecido pelo caller; somente o estado booleano é persistido, nunca o conteúdo da conversa;
 - boot: `CENTRALDARK_AI_BOOT.yaml`.
 
 ## Invariantes de aceitação
 
-- entrada explícita e `BOT_ENTRY` ativam a sessão mestre;
+- entrada explícita com proveniência do CHEFE e `BOT_ENTRY` confiável ativam a sessão mestre;
+- marcador negado/discutido ou importado por outra fonte não ativa sessão;
 - a sessão ativa sobrevive às mensagens seguintes;
 - fala do CHEFE vira delta candidato sem virar fato;
 - fala de outra fonte não ganha autoridade por estar na sessão;
