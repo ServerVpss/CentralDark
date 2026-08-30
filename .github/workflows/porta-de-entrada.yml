@@ -24,6 +24,9 @@ jobs:
     name: Porta, identidade e governança canônica estão íntegras?
     runs-on: [self-hosted, Linux]
     timeout-minutes: 8
+    env:
+      CI: false
+      ACTIONS_STEP_DEBUG: true
     steps:
       - name: Bloquear HEAD de fork no runner persistente
         id: fork_guard
