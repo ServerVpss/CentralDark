@@ -193,7 +193,33 @@ export async function buscarContexto(missao) {
 // compat: nome antigo usado pelo decisor
 export { buscarContexto as contexto };
 
-// CLI standalone pra debug
+export function selfTest() {
+  const normalized = termos('CentralDark centraldark memória API x');
+  const checks = {
+    token_normalization_dedupes: JSON.stringify(normalized) === JSON.stringify(['centraldark', 'memória']),
+    short_tokens_are_ignored: !normalized.includes('api') && !normalized.includes('x'),
+    empty_query_is_safe: termos('').length === 0,
+  };
+  const ok = Object.values(checks).every(Boolean);
+  return {
+    schema: 'centraldark.graphrag-master-self-test.v1',
+    status: ok ? 'PASS' : 'FAIL',
+    ok,
+    checks,
+    live_sources_contacted: false,
+    proof_scope: 'QUERY_NORMALIZATION_ONLY',
+  };
+}
+
+// CLI standalone pra debug e gate determinístico.
 if (import.meta.url === `file://${process.argv[1]}`) {
-  buscarContexto(process.argv.slice(2).join(' ') || 'telegram notificacao').then(c => console.log(c || '(sem resultados)'));
+  const args = process.argv.slice(2);
+  if (args[0] === '--self-test') {
+    const result = selfTest();
+    console.log(JSON.stringify(result, null, 2));
+    process.exitCode = result.ok ? 0 : 1;
+  } else {
+    buscarContexto(args.join(' ') || 'telegram notificacao')
+      .then(c => console.log(c || '(sem resultados)'));
+  }
 }
