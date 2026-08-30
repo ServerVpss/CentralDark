@@ -19,7 +19,7 @@ ROOT = Path(__file__).resolve().parents[2]
 CANONICA = ROOT / ".agents/skills/meta-lupa/SKILL.md"
 
 PROIBIDOS_EXATOS = {"metalupa-bayesiana-canonica", "lupa-premium"}
-ALIASES_COMPAT = {"tecnica-da-lupa"}
+ALIASES_COMPAT = {"tecnica-da-lupa", "lupa-bayesiana"}
 BASES_SKILL = [".agents/skills", ".claude/skills", ".workspace/skills"]
 
 ALLOWLIST = {
