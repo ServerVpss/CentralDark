@@ -11,6 +11,8 @@ on:
       - codex-validate
       - lupa-conformance
       - Lupa Drift Guard
+      - Trigger Fabric Full Package
+      - PR Title Contract
       - PR auto-review (Codex + checklist)
       - Pipeline — Telegram + Painel
     types: [completed]
@@ -27,7 +29,7 @@ concurrency:
 
 env:
   BOT_TRUSTED_AUTHORS: segredounlock
-  BOT_REQUIRED_WORKFLOWS: porta-de-entrada,codex-validate,lupa-conformance,Lupa Drift Guard,PR auto-review (Codex + checklist),Pipeline — Telegram + Painel
+  BOT_REQUIRED_WORKFLOWS: porta-de-entrada,codex-validate,lupa-conformance,Lupa Drift Guard,Trigger Fabric Full Package,PR Title Contract,PR auto-review (Codex + checklist),Pipeline — Telegram + Painel
   BOT_WAIT_TIMEOUT_MINUTES: "45"
 
 jobs:
@@ -202,7 +204,7 @@ jobs:
           echo "EVENT_NAME=${EVENT_NAME}"
           echo "EXECUTOR=self-hosted-linux"
           echo "MERGE_METHOD=squash"
-          echo "FAST_GREEN_FIRST_REQUIRED=0"
+          echo "FAST_GREEN_FIRST_REQUIRED=1"
           echo "ADVERSARIAL_GREEN_FIRST_REQUIRED=1"
           echo "FAST_CAUSAL_GATES=AUTHENTICATED_ACCOUNT+SAME_REPO+INTENT_SCOPE+SECRET_SCAN+CONFLICT+CHANGES_REQUESTED+HEAD_BASE_REVALIDATION"
           echo "REASK=NO_WHEN_INTENT_RECEIPT_VALID"

@@ -2,17 +2,11 @@
 /**
  * Green-first guard para a promoção canônica.
  *
- * Dois denominadores explícitos:
- * - FAST / AUTO_SQUASH_IF_CLEAN: o juiz já executou os gates causais síncronos
- *   (autoridade, mesmo repo, segredo/caminho sensível, canonical map/consumers,
- *   conflito, CHANGES_REQUESTED, HEAD/base). Workflows auxiliares não pertencem
- *   ao denominador FAST e runner lento não pode transformar WAIT em bloqueio.
- * - ADVERSARIAL: exige a régua completa dos workflows obrigatórios no mesmo PR
- *   e no mesmo HEAD.
- *
- * Isto NÃO converte PENDING/SKIPPED/MISSING em PASS. Quando a catraca é
- * aplicável, todos continuam fail-closed. No FAST ela simplesmente não é parte
- * da prova escolhida pela política autorizada.
+ * Um único denominador técnico para promoção:
+ * - FAST e ADVERSARIAL exigem a régua completa dos workflows obrigatórios no
+ *   mesmo PR e no mesmo HEAD;
+ * - FAST reduz deliberação/revisão opcional, nunca teste material;
+ * - PENDING, SKIPPED, MISSING, FAIL e execução de outro HEAD nunca viram PASS.
  */
 import { mkdir, readFile, readdir, rename, writeFile } from "node:fs/promises";
 import { basename, join, resolve } from "node:path";
@@ -26,6 +20,8 @@ export const DEFAULT_REQUIRED_WORKFLOWS = Object.freeze([
   "codex-validate",
   "lupa-conformance",
   "Lupa Drift Guard",
+  "Trigger Fabric Full Package",
+  "PR Title Contract",
   "PR auto-review (Codex + checklist)",
   "Pipeline — Telegram + Painel",
 ]);
@@ -38,13 +34,9 @@ export function parseCsv(value, fallback = []) {
   return items.length ? items : [...fallback];
 }
 
-/**
- * FAST autorizado segue pelo denominador causal do juiz e não espera runners
- * auxiliares. Qualquer modo desconhecido continua conservador e usa green-first.
- */
+/** Todo candidato READY é revalidado contra os gates do mesmo HEAD. */
 export function shouldEnforceGreenFirst(candidate) {
-  if (candidate?.decision !== "READY") return false;
-  return candidate?.mode !== "FAST";
+  return candidate?.decision === "READY";
 }
 
 export function runBelongsToPullHead(run, prNumber, headSha) {
@@ -138,13 +130,7 @@ export async function main(env = process.env) {
     const candidate = document?.receipt?.candidates?.[0];
     if (!candidate || candidate.decision !== "READY") continue;
 
-    if (!shouldEnforceGreenFirst(candidate)) {
-      if (candidate.mode === "FAST") {
-        fastSkipped += 1;
-        console.log(`GREEN_GUARD=SKIP_FAST_CAUSAL PR=${candidate.pr_number || "UNKNOWN"} HEAD=${candidate.head_sha || "UNKNOWN"} AUXILIARY_RUNNERS_BLOCK=0`);
-      }
-      continue;
-    }
+    if (!shouldEnforceGreenFirst(candidate)) continue;
 
     const pr = Number(candidate.pr_number || 0);
     const head = String(candidate.head_sha || "");
@@ -175,7 +161,7 @@ export async function main(env = process.env) {
     console.log(`GREEN_GUARD=DEFER PR=${pr} HEAD=${head} MODE=${candidate.mode || "UNKNOWN"} ${compact}`);
   }
 
-  console.log(`GREEN_GUARD_SUMMARY checked=${checked} pass=${passed} deferred=${deferred} fast_skipped=${fastSkipped} enforce=ADVERSARIAL_ONLY fast_policy=CAUSAL_READY`);
+  console.log(`GREEN_GUARD_SUMMARY checked=${checked} pass=${passed} deferred=${deferred} fast_skipped=${fastSkipped} enforce=ALL_READY_CANDIDATES fast_policy=GREEN_FIRST`);
   if (deferred > 0) throw new Error(`GREEN_GUARD_DEFERRED:${deferred}`);
   return { checked, passed, deferred, fastSkipped };
 }

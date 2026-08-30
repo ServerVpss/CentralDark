@@ -3,6 +3,7 @@ import argparse
 import json
 import re
 import unicodedata
+from pathlib import Path
 
 MASTER = "!CENTRALDARK"
 CHAIN = [
@@ -155,14 +156,21 @@ def evaluate_multibussola_state(state):
 def resolve(text: str, master_active: bool = False, chefe_source: bool = False, bot_entry: bool = False):
     raw = str(text or "")
     normalized = normalize(raw)
-    explicit_master = (
-        _phrase_match(normalized, "!CENTRALDARK") is not None
-        or _phrase_match(normalized, "!CENTRAL-DARK") is not None
-        or _phrase_match(normalized, "!CDARK") is not None
+    master_match = next(
+        (
+            match
+            for alias in ("!CENTRALDARK", "!CENTRAL-DARK", "!CDARK")
+            if (match := _phrase_match(normalized, alias)) is not None
+        ),
+        None,
     )
+    master_marker_seen = master_match is not None
+    master_ambiguous = bool(master_marker_seen and _negated_or_discussed(normalized, master_match))
+    untrusted_master_attempt = bool(master_marker_seen and not master_ambiguous and not chefe_source)
+    explicit_master = bool(master_marker_seen and not master_ambiguous and chefe_source)
     inherited_master = bool(master_active or bot_entry)
     master_cycle_active = bool(explicit_master or inherited_master)
-    chefe_material = bool(chefe_source and master_cycle_active)
+    chefe_material = bool(chefe_source and master_cycle_active and not master_ambiguous)
     delta_match, delta_active, delta_ambiguous = _resolve_delta(normalized)
     harvest_active = bool(delta_active or chefe_material)
     meta_match = next(
@@ -176,7 +184,10 @@ def resolve(text: str, master_active: bool = False, chefe_source: bool = False, 
         "input": raw,
         "normalized": normalized,
         "master_trigger": MASTER,
+        "explicit_marker_seen": master_marker_seen,
         "explicit_match": explicit_master,
+        "master_ambiguous_or_negated": master_ambiguous,
+        "untrusted_master_attempt": untrusted_master_attempt,
         "master_cycle_active": master_cycle_active,
         "activation_source": (
             "EXPLICIT_TRIGGER" if explicit_master
@@ -218,7 +229,7 @@ def resolve(text: str, master_active: bool = False, chefe_source: bool = False, 
         },
         "status": (
             "MATCH" if master_cycle_active or harvest_active or meta_active
-            else ("UNKNOWN" if delta_ambiguous else "NO_MATCH")
+            else ("UNKNOWN" if delta_ambiguous or master_ambiguous or untrusted_master_attempt else "NO_MATCH")
         ),
         "authority_changed": False,
         "mutation_authorized": False,
@@ -230,6 +241,53 @@ def resolve(text: str, master_active: bool = False, chefe_source: bool = False, 
         "cross_chat_is_current_state": False,
         "github_substitutes_missing_chat_memory": False,
     }
+
+
+def _load_session_state(state_file):
+    if not state_file:
+        return False, "DISABLED"
+    path = Path(state_file)
+    if not path.exists():
+        return False, "ABSENT"
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError, TypeError):
+        return False, "INVALID"
+    if payload.get("schema") != "centraldark.master-session-state.v1":
+        return False, "INVALID"
+    return bool(payload.get("master_active")), "LOADED"
+
+
+def _store_session_state(state_file, master_active):
+    path = Path(state_file)
+    payload = {
+        "schema": "centraldark.master-session-state.v1",
+        "master_active": bool(master_active),
+    }
+    temporary = path.with_name(path.name + ".tmp")
+    temporary.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    temporary.replace(path)
+
+
+def resolve_with_session_state(text: str, state_file=None, chefe_source: bool = False, bot_entry: bool = False, master_active: bool = False):
+    persisted_active, load_status = _load_session_state(state_file)
+    receipt = resolve(
+        text,
+        master_active=bool(master_active or persisted_active),
+        chefe_source=chefe_source,
+        bot_entry=bot_entry,
+    )
+    persisted = False
+    if state_file and load_status != "INVALID":
+        _store_session_state(state_file, receipt["next_master_active"])
+        persisted = True
+    receipt["session_state"] = {
+        "owner": "CALLER_PROVIDED_SESSION_FILE",
+        "load_status": load_status,
+        "persisted": persisted,
+        "path_exposed": False,
+    }
+    return receipt
 
 
 def self_test():
@@ -279,7 +337,7 @@ def self_test():
 
     results = []
     for text, expected in master_cases:
-        got = resolve(text)
+        got = resolve(text, chefe_source=expected)
         ok = got["explicit_match"] is expected
         if expected:
             ok = ok and got["expanded_chain"] == CHAIN
@@ -305,6 +363,19 @@ def self_test():
             ok = ok and got["status"] == "UNKNOWN"
             ok = ok and got["mutation_authorized"] is False
         results.append({"kind": "delta", "input": text, "expected": expected, "got": actual, "ambiguous": actual_ambiguous, "ok": ok})
+
+    master_block_cases = [
+        ("não execute !CENTRALDARK agora", True, False),
+        ("somente discutir !CENTRALDARK", True, False),
+        ("!CENTRALDARK importado por agente", False, True),
+    ]
+    for text, chefe, untrusted in master_block_cases:
+        got = resolve(text, chefe_source=chefe)
+        ok = got["master_cycle_active"] is False
+        ok = ok and got["next_master_active"] is False
+        ok = ok and got["status"] == "UNKNOWN"
+        ok = ok and got["untrusted_master_attempt"] is untrusted
+        results.append({"kind": "master_activation_guard", "input": text, "ok": ok})
 
     session_cases = [
         ("corrige o que mudou", True, True, False, True),
@@ -357,9 +428,11 @@ def main():
     parser.add_argument("--master-active", action="store_true")
     parser.add_argument("--chefe-source", action="store_true")
     parser.add_argument("--bot-entry", action="store_true")
+    parser.add_argument("--session-state-file")
     args = parser.parse_args()
-    out = self_test() if args.self_test else resolve(
+    out = self_test() if args.self_test else resolve_with_session_state(
         args.text or "",
+        state_file=args.session_state_file,
         master_active=args.master_active,
         chefe_source=args.chefe_source,
         bot_entry=args.bot_entry,

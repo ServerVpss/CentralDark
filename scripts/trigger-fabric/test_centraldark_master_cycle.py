@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import importlib.util
 import pathlib
+import tempfile
 import unittest
 
 MODULE_PATH = pathlib.Path(__file__).with_name("centraldark_master_cycle.py")
@@ -55,6 +56,37 @@ class ContinuousDeltaContractTest(unittest.TestCase):
         self.assertFalse(harvest["screen_is_runtime_proof"])
         self.assertFalse(harvest["repetition_is_independent_proof"])
         self.assertFalse(harvest["temporal_label_is_authority"])
+
+    def test_negated_master_does_not_activate(self):
+        receipt = MODULE.resolve("não execute !CENTRALDARK agora", chefe_source=True)
+        self.assertFalse(receipt["master_cycle_active"])
+        self.assertFalse(receipt["next_master_active"])
+        self.assertTrue(receipt["master_ambiguous_or_negated"])
+        self.assertEqual("UNKNOWN", receipt["status"])
+
+    def test_imported_master_marker_cannot_create_chefe_session(self):
+        receipt = MODULE.resolve("!CENTRALDARK", chefe_source=False)
+        self.assertFalse(receipt["master_cycle_active"])
+        self.assertTrue(receipt["untrusted_master_attempt"])
+        self.assertEqual("UNKNOWN", receipt["status"])
+
+    def test_session_file_connects_two_independent_invocations(self):
+        with tempfile.TemporaryDirectory() as directory:
+            state_file = pathlib.Path(directory) / "master-session.json"
+            first = MODULE.resolve_with_session_state(
+                "!CENTRALDARK",
+                state_file=state_file,
+                chefe_source=True,
+            )
+            second = MODULE.resolve_with_session_state(
+                "agora mede o próximo delta",
+                state_file=state_file,
+                chefe_source=True,
+            )
+        self.assertTrue(first["session_state"]["persisted"])
+        self.assertEqual("LOADED", second["session_state"]["load_status"])
+        self.assertEqual("INHERITED_SESSION", second["activation_source"])
+        self.assertTrue(second["delta_harvest"]["candidate_from_chefe"])
 
     def test_negated_delta_alias_remains_ambiguous_without_chefe_context(self):
         receipt = MODULE.resolve("não execute !DELTAUTIL agora")
