@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-08-30T02:05:53.672Z
+# 🧠 Notion Sync — 2026-08-30T02:20:47.351Z
 
-- **Commit fonte:** `ebff4fc5e67e8a111a91192d446acd6834ff18aa`
+- **Commit fonte:** `59002731fbaea133efd8dab4f2332ded6bd3f417`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 489 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 489 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
-| aprendizados | 34 | 0 | 34 | 0 | 0 |
+| aprendizados | 35 | 1 | 34 | 0 | 0 |
 | estrutura | 411 | 0 | 411 | 0 | 0 |
 
 ## Operações
@@ -100,6 +100,7 @@
 | aprendizados | atualizado | #31 — Provider sem crédito NÃO é router quebrado |
 | aprendizados | atualizado | #32 — Uma capacidade = uma linhagem = um PR de promoção por escopo |
 | aprendizados | atualizado | #33 — Opinião usada como medição gera falso verde e ação destrutiva |
+| aprendizados | criado | #34 — Sem TURN_CLASS não há gate entre ler e agir — a impressão ocupa o slot da medição |
 | estrutura | atualizado | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | atualizado | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |

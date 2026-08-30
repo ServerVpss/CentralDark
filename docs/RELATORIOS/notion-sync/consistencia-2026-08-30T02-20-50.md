@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-08-30T02:05:56.729Z
-- **Commit:** `ebff4fc5e67e8a111a91192d446acd6834ff18aa`
+- **Gerado:** 2026-08-30T02:20:50.455Z
+- **Commit:** `59002731fbaea133efd8dab4f2332ded6bd3f417`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 39 | 39 | 39 | 0 | 0 |
-| aprendizados | 34 | 0 | 0 | 34 | 0 |
+| aprendizados | 35 | 0 | 0 | 35 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **34**
+- 🟥 Faltando no Notion: **35**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -82,4 +82,5 @@
 - 31. Provider sem crédito NÃO é router quebrado
 - 32. Uma capacidade = uma linhagem = um PR de promoção por escopo
 - 33. Opinião usada como medição gera falso verde e ação destrutiva
+- 34. Sem TURN_CLASS não há gate entre ler e agir — a impressão ocupa o slot da medição
 </details>
