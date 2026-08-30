@@ -14,18 +14,16 @@ runtime:
   availability_requires: [HEALTH_OK, RECENT_DATA_PRESENT, TARGET_QUERY_RETURNS_USABLE_EVIDENCE]
 
 consumers:
-  sol_codex:
+  any_authorized_centraldark_actor:
     enabled: true
+    includes_examples: [SOL, CODEX, PIVETE_HERMES, FUTURE_MODEL, SKILL, WORKER, RUNTIME, AUTHORIZED_PROCESS]
     mode: READ_OBSERVE_CONTEXT
     may_request: ALL_SCREENPIPE_CAPABILITIES
-  pivete_hermes:
-    enabled: true
-    mode: READ_OBSERVE_CONTEXT
-    may_request: ALL_SCREENPIPE_CAPABILITIES
-  any_skill:
-    enabled: true
     through: CAPABILITY_CONTRACT_ROUTER
     selection: MINIMUM_SUFFICIENT_SET
+  restriction:
+    screenpipe_observation_grants_mutation_authority: false
+    actor_must_keep_existing_authority_and_scope: true
 
 capabilities:
   - LIVE_DESKTOP_OBSERVATION
