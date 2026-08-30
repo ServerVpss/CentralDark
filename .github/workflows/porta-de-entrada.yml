@@ -163,6 +163,21 @@ jobs:
       - name: Bloquear prova circular e cadeia sem âncora externa
         run: node scripts/lupa/proof-ownership.mjs
 
+      - name: Testar juiz de reincidência de erro registrado
+        run: node --test scripts/lupa/erro-reincidencia.test.mjs
+
+      - name: FABLE JUDGE — erro registrado não pode reincidir
+        run: |
+          set -uo pipefail
+          BASE="${{ github.event.pull_request.base.sha || github.event.before }}"
+          HEAD_REF="${{ github.event.pull_request.head.sha || github.sha }}"
+          if [ -n "$BASE" ] && [ "$BASE" != "0000000000000000000000000000000000000000" ]; then
+            node scripts/lupa/erro-reincidencia.mjs --intervalo "$BASE..$HEAD_REF"
+          else
+            echo "REINCIDENCIA_ESCOPO=SEM_BASE — auditando apenas o HEAD"
+            node scripts/lupa/erro-reincidencia.mjs --intervalo "$HEAD_REF~1..$HEAD_REF"
+          fi
+
       - name: Testar Dream Review isolado do memory-linker
         run: node --test scripts/memory-linker/dream-review.test.mjs
 

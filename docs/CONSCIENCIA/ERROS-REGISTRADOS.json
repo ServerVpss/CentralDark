@@ -1,0 +1,165 @@
+{
+  "schema_version": 1,
+  "owner": "scripts/lupa/erro-reincidencia.mjs",
+  "principio": "ERRO_REGISTRADO_QUE_REINCIDE_E_FALHA_DE_APRENDIZADO",
+  "leis": [
+    "REGISTRAR != APRENDER",
+    "APRENDIZADO_SEM_DETECTOR = PROSA",
+    "SAME_ERROR_NO_NEW_INFO_IS_WASTE",
+    "NAO_MECANIZAVEL != IGNORADO",
+    "JUDGE_DOES_NOT_MUTATE"
+  ],
+  "nota_sobre_documentacao": "Documentar um erro nao e cometer o erro. Todo detector isenta o proprio registro, o proprio juiz e docs/CONSCIENCIA/APRENDIZADOS/, onde os erros sao descritos de proposito.",
+  "erros": [
+    {
+      "id": "E01",
+      "titulo": "Afirmou que servico funcionava sem medir",
+      "aprendizado": 33,
+      "registrado_em": "2026-08-29",
+      "detector": {
+        "tipo": "NAO_MECANIZAVEL",
+        "motivo": "Afirmacao ocorre em resposta de chat, fora de arquivo versionado. Coberto por E14 (contrato de turno)."
+      }
+    },
+    {
+      "id": "E02",
+      "titulo": "Escreveu arquivo de trabalho no disco C:",
+      "aprendizado": 33,
+      "registrado_em": "2026-08-29",
+      "detector": {
+        "tipo": "padrao_proibido",
+        "padrao": "[Cc]:\\\\\\\\Users\\\\\\\\[^\\\\\\\\\"']+\\\\\\\\AppData\\\\\\\\Local\\\\\\\\Temp",
+        "escopo": [".md", ".mjs", ".js", ".json", ".yml", ".yaml", ".sh", ".ps1"],
+        "motivo": "CASA=E:. Caminho de temp do harness no C: nunca e owner nem artefato canonico."
+      }
+    },
+    {
+      "id": "E03",
+      "titulo": "Classificou artefato como lixo por comparacao de tamanho",
+      "aprendizado": 33,
+      "registrado_em": "2026-08-29",
+      "detector": {
+        "tipo": "NAO_MECANIZAVEL",
+        "motivo": "Classificacao ocorre em raciocinio, nao em arquivo. Efeito colateral coberto por E04."
+      }
+    },
+    {
+      "id": "E04",
+      "titulo": "Script de delete apoiado em classificacao nao provada",
+      "aprendizado": 33,
+      "registrado_em": "2026-08-29",
+      "detector": {
+        "tipo": "delete_sem_recibo",
+        "escopo": [".sh", ".mjs", ".js", ".ps1"],
+        "marcadores_recibo": ["RECEIPT", "RECIBO", "PROVA", "hash", "sha256", "diff"],
+        "motivo": "DETECT != DELETE. Script com rm -rf precisa citar o recibo que autoriza."
+      }
+    },
+    {
+      "id": "E05",
+      "titulo": "Descartou saida de agente degradado sem medir",
+      "aprendizado": 33,
+      "registrado_em": "2026-08-29",
+      "detector": {
+        "tipo": "NAO_MECANIZAVEL",
+        "motivo": "Colapso de contexto de outro agente nao deixa rastro em arquivo versionado."
+      }
+    },
+    {
+      "id": "E06",
+      "titulo": "Ignorou material fornecido pelo CHEFE",
+      "aprendizado": 33,
+      "registrado_em": "2026-08-29",
+      "detector": {
+        "tipo": "NAO_MECANIZAVEL",
+        "motivo": "Depende de intencao humana no turno; nao ha sinal deterministico no repo."
+      }
+    },
+    {
+      "id": "E07",
+      "titulo": "Perguntou o que a regra ja resolvia",
+      "aprendizado": 33,
+      "registrado_em": "2026-08-29",
+      "detector": {
+        "tipo": "NAO_MECANIZAVEL",
+        "motivo": "Ocorre em chat. Coberto por E14."
+      }
+    },
+    {
+      "id": "E08",
+      "titulo": "Parou com trabalho restante e sem NEXT_CURSOR",
+      "aprendizado": 33,
+      "registrado_em": "2026-08-29",
+      "detector": {
+        "tipo": "NAO_MECANIZAVEL",
+        "motivo": "Ocorre em chat. Coberto por E14."
+      }
+    },
+    {
+      "id": "E09",
+      "titulo": "Falso verde: commit anuncia prova que o diff nao contem",
+      "aprendizado": 33,
+      "registrado_em": "2026-08-29",
+      "detector": {
+        "tipo": "commit_anuncia_prova_sem_conteudo",
+        "padrao_alegacao": "\\b(prova|proof|recibo|receipt|evidencia|evidence|inventor(y|io)|assay)\\b",
+        "minimo_linhas_substantivas": 3,
+        "motivo": "Mensagem de commit nao e prova; conteudo de commit e prova."
+      }
+    },
+    {
+      "id": "E10",
+      "titulo": "Campo de relatorio preenchido com status especulativo",
+      "aprendizado": 33,
+      "registrado_em": "2026-08-29",
+      "detector": {
+        "tipo": "padrao_proibido",
+        "padrao": "(PR_NUMBER|HEAD|SHA|STATUS)\\s*=\\s*(pending|a confirmar|to be confirmed|TBD)",
+        "escopo": [".md", ".json", ".yml", ".yaml"],
+        "motivo": "Campo sem medicao e UNKNOWN, nunca 'pending, a confirmar'."
+      }
+    },
+    {
+      "id": "E11",
+      "titulo": "Rotulo de estado antecipa decisao humana nao tomada",
+      "aprendizado": 33,
+      "registrado_em": "2026-08-29",
+      "detector": {
+        "tipo": "padrao_proibido",
+        "padrao": "\\b(DELETED_PENDING|DELETE_PENDING|APPROVED_PENDING|MERGED_PENDING)\\b",
+        "escopo": [".md", ".json", ".yml", ".yaml", ".mjs", ".js"],
+        "motivo": "Rotulo de estado nao antecipa decisao humana."
+      }
+    },
+    {
+      "id": "E12",
+      "titulo": "Allowlist de execucao arbitraria aberta sob pressao",
+      "aprendizado": 33,
+      "registrado_em": "2026-08-29",
+      "detector": {
+        "tipo": "NAO_MECANIZAVEL",
+        "motivo": "Ocorreu em .claude/settings.json fora deste repo. Owner do arquivo e a maquina local, nao o canonico."
+      }
+    },
+    {
+      "id": "E13",
+      "titulo": "Reincidiu na classe do erro apos ja ter se retratado",
+      "aprendizado": 33,
+      "registrado_em": "2026-08-29",
+      "detector": {
+        "tipo": "META",
+        "motivo": "E este juiz. A existencia do gate e a remediacao de E13."
+      }
+    },
+    {
+      "id": "E14",
+      "titulo": "Contrato de turno nunca cumprido: resposta operacional sem TURN_CLASS",
+      "aprendizado": 34,
+      "registrado_em": "2026-08-29",
+      "detector": {
+        "tipo": "NAO_MECANIZAVEL",
+        "motivo": "TURN_CLASS aparece na resposta ao humano, nao em arquivo versionado. Exigivel por contrato de boot (CENTRALDARK_AI_BOOT.yaml turn_classification.required), verificavel por auditoria de transcript, nao por CI de repo."
+      }
+    }
+  ]
+}
