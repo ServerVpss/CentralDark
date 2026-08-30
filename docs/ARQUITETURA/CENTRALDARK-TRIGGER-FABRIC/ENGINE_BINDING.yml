@@ -1,4 +1,4 @@
-schema: centraldark.engine-binding.v1
+schema: centraldark.engine-binding.v2
 contract_owner: LEIA-ME-IA.md
 trigger_fabric_owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml
 binding_mode: LOAD_REFERENCE
@@ -65,6 +65,8 @@ mandatory_inheritance:
   - DISTINCT_ENGINEERING_COMPILER_ON_MATERIAL_GAP
   - CAPABILITY_CONTRACT_ROUTER
   - MEGAZORD_CENTRALDARK_AUTO_COMPOSITION
+  - SPIRAL_TRAVERSAL_FORWARD_REVERSE
+  - RUNTIME_PLUG_CONTRACT
   - SIGNAL_TERRITORY_CRYSTALLIZATION
   - FIXED_POINT_10X12_ADVERSARIAL_WHEN_CRYSTALLIZING
   - ONE_WRITER_PER_SCOPE
@@ -84,10 +86,17 @@ megazord_binding:
   name: MEGAZORD-CENTRALDARK
   contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MEGAZORD-CENTRALDARK.yml
   capability_router: .agents/skills/capability-contract-router/SKILL.md
+  runtime_plug: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RUNTIME-PLUG-CONTRACT.yml
+  spiral_traversal: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SPIRAL-TRAVERSAL.yml
   activation: AUTO
   user_repetition_required: false
-  activate_when_all: [RUNTIME_PRESENT, CONTEXT_AVAILABLE, CAPABILITY_ADAPTER_AVAILABLE]
-  resource_discovery: [MCP, CENTRALDARK_HUB, CENTRALDARK_API, GITHUB, FILES, MEMORY, CONNECTORS, RUNTIME, CI, TOOLS, MODELS, ADAPTERS, FUTURE_DISCOVERED_CAPABILITIES]
+  control_plane_required: true
+  target_runtime_may_be_absent_before_selection: true
+  activate_when_all: [CONTROL_PLANE_PRESENT, CANONICAL_CONTEXT_DISCOVERABLE, CAPABILITY_ROUTER_DISCOVERABLE]
+  resource_discovery: [MCP, CENTRALDARK_HUB, CENTRALDARK_API, GITHUB, FILES, MEMORY, CONNECTORS, RUNTIME, CI, TOOLS, MODELS, ADAPTERS, SCREENPIPE, FUTURE_DISCOVERED_CAPABILITIES]
+  catalogue_relevant_metadata: true
+  preload_all_bodies: false
+  context_policy: MINIMUM_SUFFICIENT_CONTEXT
   discover_relevant_resources: true
   activate_all_resources: false
   selection_policy: MINIMUM_SUFFICIENT_SET
@@ -102,6 +111,30 @@ megazord_binding:
   house_runtime_test_is_material_boundary: true
   main_is_consequence: true
   deploy_is_consequence: true
+
+runtime_plug_binding:
+  contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RUNTIME-PLUG-CONTRACT.yml
+  conformance: scripts/trigger-fabric/runtime_plug_conformance.py
+  selector: .agents/skills/capability-contract-router/scripts/route_capabilities.py
+  control_plane_can_precede_target_runtime: true
+  target_runtime_materialization: ON_DEMAND
+  transport_adapter_required: true
+  shared_heavy_runtime_consumer_lease: true
+  unload_only_when_consumer_count_zero: true
+  swap_preserves: [INTENT, STATE, EVIDENCE_REFS, WRITER_SCOPE, PROOF_TARGET, RECEIPT, NEXT_CURSOR, SPIRAL_CURSOR, UNRESOLVED_SET]
+  forward_reverse_swap_conformance_required: true
+
+spiral_binding:
+  contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SPIRAL-TRAVERSAL.yml
+  verifier: scripts/trigger-fabric/spiral_traversal.py
+  navigation_overlay_only: true
+  semantic_edge_mutation: false
+  graph_force_mutation: false
+  all_catalogued_metadata_reachable: true
+  full_body_preload: false
+  forward_reverse_required: true
+  adaptive_fronts_max: 10
+  no_fragment_drop: true
 
 master_cycle_binding:
   contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
