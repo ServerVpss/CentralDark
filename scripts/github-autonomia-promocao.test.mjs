@@ -68,7 +68,7 @@ function evaluate(pr = prFixture(), overrides = {}) {
     repository: "ServerVpss/CentralDark",
     trustedAuthors: ["segredounlock"],
     requiredWorkflows: ["gate-a", "gate-b"],
-    workflowRuns: [],
+    workflowRuns: successfulRuns(["gate-a", "gate-b"]),
     unresolvedThreads: 0,
     securityFindings: [],
     canonicalValidation: {
@@ -192,15 +192,20 @@ test("PERMITO SEGREDO/PIVETE no body é histórico e não autoriza", () => {
   assert.equal(legacyLabel.legacy, true);
 });
 
-test("fast path não espera convergência/workflows externos", () => {
-  const result = evaluate();
-  assert.equal(result.mode, "FAST");
-  assert.equal(result.decision, "READY");
-  assert.deepEqual(result.workflows, []);
-  assert.deepEqual(result.waits, []);
+test("fast path espera todos os workflows obrigatórios do mesmo HEAD", () => {
+  const missing = evaluate(prFixture(), { workflowRuns: [] });
+  assert.equal(missing.mode, "FAST");
+  assert.equal(missing.decision, "WAIT");
+  assert.equal(missing.workflows.every((item) => item.state === "MISSING"), true);
+  assert.match(missing.waits.join(" "), /WORKFLOW_MISSING/);
+
+  const ready = evaluate();
+  assert.equal(ready.mode, "FAST");
+  assert.equal(ready.decision, "READY");
+  assert.equal(ready.workflows.every((item) => item.state === "PASS"), true);
 });
 
-test("green-first é uma catraca posterior ao READY e exige os seis gates no mesmo conjunto", () => {
+test("green-first revalida o READY e exige todos os gates no mesmo conjunto", () => {
   const ready = evaluate();
   assert.equal(ready.decision, "READY");
 
@@ -351,7 +356,7 @@ test("mergeability pendente espera; conflito nunca vira WAIT verde", () => {
 
 test("modo adversarial por label visual preserva workflows e contraprova completos", () => {
   const pr = prFixture({ body: "sem recibo", labels: [{ name: "👑 PERMITO-SEGREDO" }] });
-  const missing = evaluate(pr);
+  const missing = evaluate(pr, { workflowRuns: [] });
   assert.equal(missing.mode, "ADVERSARIAL");
   assert.equal(missing.decision, "WAIT");
   assert.match(missing.waits.join(" "), /WORKFLOW_MISSING/);
