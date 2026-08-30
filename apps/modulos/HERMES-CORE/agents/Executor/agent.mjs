@@ -98,7 +98,11 @@ async function _executar(ferramenta, args) {
         }
 
         // Não engolir falha do ledger: JSON sem ARSENAL não é sucesso completo.
-        registrarNoLedger('licao', `hermes-runtime cat=${categoria}`, '-', licao, 'hermes');
+                try {
+                  registrarNoLedger('licao', `hermes-runtime cat=${categoria}`, '-', licao, 'hermes');
+                } catch (e) {
+                  return { ok: false, saida: `falha ao registrar no ledger: ${e.message.slice(0, 200)}` };
+                }
 
         // Read-back dos dois destinos antes de emitir verde.
         const jsonDepois = JSON.parse(await readFile(APRENDIZADOS, 'utf8'));
@@ -134,7 +138,7 @@ async function _executar(ferramenta, args) {
           const add = limpos.length
             ? `git add ${limpos.map(x => `'${x}'`).join(' ')}`
             : `git add -u -- ':!apps/modulos/status/painel-data.json' ':!*.env' ':!*.bak'`;
-          const comando = `set -o pipefail; cd ${ROOT} && ${add} && git commit -m "${msg}" && (git push origin main || (git pull --rebase --autostash origin main && git push origin main) || { git rebase --abort >/dev/null 2>&1 || true; echo 'PUSH PENDENTE — relatar' >&2; exit 23; }) && LOCAL_HEAD="$(git rev-parse HEAD)" && REMOTE_HEAD="$(git ls-remote origin refs/heads/main | awk '{print $1}')" && test -n "$REMOTE_HEAD" && test "$LOCAL_HEAD" = "$REMOTE_HEAD" && echo "REMOTE_HEAD_VERIFIED=$LOCAL_HEAD"`;
+          const comando = `set -o pipefail cd ${ROOT} && ${add} && git commit -m "${msg}" && (git push origin main || (git pull --rebase --autostash origin main && git push origin main) || { git rebase --abort >/dev/null 2>&1 || true; echo 'PUSH PENDENTE — relatar' >&2; exit 23; }) && LOCAL_HEAD="$(git rev-parse HEAD)" && REMOTE_HEAD="$(git ls-remote origin refs/heads/main | awk '{print $1}')" && test -n "$REMOTE_HEAD" && test "$LOCAL_HEAD" = "$REMOTE_HEAD" && echo "REMOTE_HEAD_VERIFIED=$LOCAL_HEAD"`;
           const { stdout, stderr } = await pexec('bash', ['-lc', comando], { timeout: 120_000, maxBuffer: 5 * 1024 * 1024 });
           const saida = (stdout + (stderr ? `\n[stderr]\n${stderr}` : '')).slice(-4000);
           if (!/REMOTE_HEAD_VERIFIED=[0-9a-f]{40}/i.test(saida)) {
