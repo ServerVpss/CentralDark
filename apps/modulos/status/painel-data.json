@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-30T02:06:15.727Z",
-  "updatedAtBR": "29/08/2026, 23:06:15 BRT",
+  "updatedAt": "2026-08-30T02:50:36.206Z",
+  "updatedAtBR": "29/08/2026, 23:50:36 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "aprendizado(#33): Opinião usada como medição gera falso verde e ação destrutiva",
+    "lastCommit": "aprendizado(#34): Sem TURN_CLASS não há gate entre ler e agir — a impressão ocupa o slot da medição",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-30T02:50:36.206Z",
+      "titulo": "Push na main · 59002731fbaea133efd8dab4f2332ded6bd3f417",
+      "detalhe": "aprendizado(#34): Sem TURN_CLASS não há gate entre ler e agir — a impressão ocupa o slot da medição",
+      "area": "Repositório",
+      "sha": "5900273",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-30T02:06:15.727Z",
       "titulo": "Push na main · 64a90a90374cec049954af43d81d1b5323689f52",
       "detalhe": "aprendizado(#33): Opinião usada como medição gera falso verde e ação destrutiva",
@@ -988,14 +996,6 @@
       "detalhe": "feat(admin): Capability Contract Router — nova rota admin, sem novo painel",
       "area": "Repositório",
       "sha": "7124f5d",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-26T09:05:48.784Z",
-      "titulo": "Push na main · b6fc4f00466b9a603aa2167abc1517225105225d",
-      "detalhe": "aprendizado(#29): Dois mundos vivos: GitHub main 81bbfc7 ≠ VPS 5958d3ce27 (1252 atrás, dirty)",
-      "area": "Repositório",
-      "sha": "b6fc4f0",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-30T02:50:36.206Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 59002731fbaea133efd8dab4f2332ded6bd3f417 (5900273)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-30T02:06:15.727Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 64a90a90374cec049954af43d81d1b5323689f52 (64a90a9)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-26T10:20:14.721Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 7124f5d4370c6eb2a139b8a0bb80e677da8e3816 (7124f5d)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-26T09:05:48.784Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · b6fc4f00466b9a603aa2167abc1517225105225d (b6fc4f0)",
       "area": "Repositório",
       "status": "sucesso"
     }
