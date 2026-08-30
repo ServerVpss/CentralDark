@@ -1,6 +1,6 @@
 ---
 name: screenpipe-live-observer
-description: Sensor global read-only da Casa para recuperar tela, OCR, accessibility, áudio, input, clipboard, atividade, frames, URLs e contexto temporal via Screenpipe; normaliza evidência para todas as skills, SOL/Codex, HERMES e handoff canônico.
+description: Sensor global read-only da Casa para qualquer ator CentralDark autorizado recuperar tela, OCR, accessibility, áudio, input, clipboard, atividade, frames, URLs e contexto temporal via Screenpipe; normaliza evidência para o handoff canônico.
 status: CANONICAL_CANDIDATE
 owner: SEGREDO/CHEFE
 runtime_role: GLOBAL_LIVE_OBSERVATION_SENSOR
@@ -24,10 +24,10 @@ SCREENPIPE != NEW_HANDOFF_PROTOCOL
 REALITY = JUDGE
 ```
 
-Qualquer skill, SOL/Codex ou PIVETE/HERMES pode requisitar esta capacidade pelo `MEGAZORD-CENTRALDARK` / `Capability Contract Router` quando tela, histórico, input, áudio, accessibility ou contexto temporal discriminarem um fato material.
+Qualquer agente, modelo, skill, worker, runtime, superfície ou processo CentralDark **autorizado no host** pode requisitar esta capacidade pelo `MEGAZORD-CENTRALDARK` / `Capability Contract Router` quando tela, histórico, input, áudio, accessibility ou contexto temporal discriminarem um fato material. SOL/Codex e PIVETE/HERMES são apenas exemplos de consumidores, nunca limite do contrato.
 
 ```text
-ANY_SKILL
+ANY_AUTHORIZED_CENTRALDARK_ACTOR
 + NEEDS_DESKTOP_EVIDENCE
 + SCREENPIPE_AVAILABLE
 → SCREENPIPE_LIVE_OBSERVER
@@ -266,22 +266,24 @@ RESIDUAL
 NEXT_CURSOR
 ```
 
-## Handoff entre SOL/Codex e HERMES
+## Handoff entre quaisquer superfícies autorizadas
 
-Quando ambos estiverem na Casa e Screenpipe estiver saudável:
+Quando dois ou mais atores/superfícies CentralDark autorizados estiverem observáveis e Screenpipe estiver saudável:
 
 ```text
-SOL_NEEDS_HERMES_STATE
-→ SCREENPIPE locate HERMES surface
-→ extract latest delta
+SOURCE_ACTOR_NEEDS_TARGET_STATE
+→ SCREENPIPE locate target surface
+→ extract latest material delta
 → normalize evidence
-→ if direct handoff channel exists: send HANDOFF payload
+→ if proven direct handoff channel exists: send HANDOFF payload
 → else shared state / Git / memory / queue / explicit surface channel
 → prove transport channel
 
-HERMES_NEEDS_SOL_STATE
-→ same rule reversed
+TARGET_NEEDS_SOURCE_STATE
+→ mesma regra no sentido reverso
 ```
+
+SOL↔HERMES é apenas um caso particular dessa regra global.
 
 Convergência visual não prova que um agente enviou algo ao outro.
 
@@ -302,7 +304,7 @@ INTENT
 → DEDUPE
 → DELTA MATERIAL?
    ├─ NO  → NEXT
-   └─ YES → route to requesting skill/agent
+   └─ YES → route to requesting actor
               → action if authorized
               → retest
               → counterproof
@@ -364,4 +366,4 @@ SCREENPIPE_AUTOMATION_TARGETING_CONTEXT
 SCREENPIPE_VIDEO_EXPORT
 ```
 
-Qualquer skill pode requisitar uma dessas capacidades. O router seleciona Screenpipe somente quando medido disponível e necessário ao menor conjunto suficiente.
+Qualquer ator autorizado pode requisitar uma dessas capacidades. O router seleciona Screenpipe somente quando medido disponível e necessário ao menor conjunto suficiente.
