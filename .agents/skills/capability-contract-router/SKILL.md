@@ -83,6 +83,88 @@ EXISTING_OWNER_FIRST=true
 
 Tarefa simples, de candidato único e sem ambiguidade pode atravessar a skill em fast-path sem fan-out.
 
+## MEGAZORD-CENTRALDARK — composição automática de Zords
+
+`MEGAZORD-CENTRALDARK` é o nome canônico da arquitetura composta que usa este Capability Contract Router como adaptador de descoberta e composição. Não é agente novo, identidade, autoridade, cérebro, router ou orquestrador paralelo.
+
+```text
+ZORD = CAPACIDADE|FERRAMENTA|CONECTOR|RUNTIME|RECURSO observado
+MEGAZORD-CENTRALDARK = MENOR_CONJUNTO_SUFICIENTE de Zords para a intenção vigente
+```
+
+Ativação automática correta:
+
+```text
+CONTROL_PLANE_PRESENT
++ CANONICAL_CONTEXT_DISCOVERABLE
++ CAPABILITY_ROUTER_DISCOVERABLE
+→ MEGAZORD-CENTRALDARK=AUTO
+→ SPIRAL_CATALOGUE_RELEVANT_METADATA
+→ DISCOVER_RELEVANT_RESOURCES
+→ MEASURE_AVAILABILITY
+→ DEDUPE
+→ FILTER
+→ COVER
+→ SELECT_MINIMUM_SUFFICIENT_SET
+→ SELECT_OR_MATERIALIZE_TARGET_RUNTIME
+→ ASSIGN
+```
+
+O runtime-alvo **pode estar ausente antes da seleção**. Exigir `RUNTIME_PRESENT` como pré-condição formaria dependência circular e quebraria o Runtime Plug.
+
+Fontes descobríveis quando presentes e aplicáveis:
+
+```text
+MCP
+CENTRALDARK_HUB
+CENTRALDARK_API
+GITHUB
+FILES
+MEMORY
+CONNECTORS
+RUNTIME
+CI
+TOOLS
+MODELS
+ADAPTERS
+SCREENPIPE
+AIOX_DERIVED_CAPABILITIES
+FUTURE_DISCOVERED_CAPABILITIES
+```
+
+Regras:
+
+```text
+MEGAZORD_CENTRALDARK_TOOL_ENABLED=true
+MEGAZORD_CENTRALDARK_ARCHITECTURE_ENABLED=true
+MEGAZORD_CENTRALDARK_AUTO_ACTIVATION=true
+USER_REPETITION_REQUIRED=false
+DISCOVER_RELEVANT_RESOURCES=true
+ACTIVATE_ALL_DISCOVERED=false
+MINIMUM_SUFFICIENT_SET=true
+CATALOGUE_ALL_RELEVANT_METADATA=true
+PRELOAD_ALL_BODIES=false
+CONTEXT_POLICY=MINIMUM_SUFFICIENT_CONTEXT
+SPIRAL_FORWARD_REVERSE_REQUIRED=true
+SPIRAL_IS_NAVIGATION_NOT_SEMANTIC_EDGE=true
+CONFIGURED != AVAILABLE
+DISCOVERED != AVAILABLE
+AVAILABLE_REQUIRES_MEASUREMENT=true
+UNKNOWN != AVAILABLE
+UNKNOWN != PASS
+REUSE_BEFORE_CREATE=true
+ONE_SYSTEM_ONLY=true
+ONE_WRITER_PER_SCOPE=true
+NO_INFORMATION_GAIN → STOP_EXPANSION
+```
+
+Contratos:
+
+- composição: `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MEGAZORD-CENTRALDARK.yml`
+- engine/boot: `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml`
+- runtime plug: `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RUNTIME-PLUG-CONTRACT.yml`
+- travessia Caracol: `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SPIRAL-TRAVERSAL.yml`
+
 ## Contrato de entrada
 
 ```json
@@ -245,8 +327,15 @@ ROLE_ASSIGNMENT_IS_NOT_AUTHORITY=true
 !CALIBRAR
 → derivar fase + intenção + risco + escopo + required_capabilities + boundary + proof_target
 
+SPIRAL_TRAVERSAL
+→ catalogar o universo relevante em até 10 frentes sem carregar todos os corpos
+→ ida + reverso devem fechar o mesmo denominador
+
 CAPABILITY_CONTRACT_ROUTER
 → produzir rota determinística do menor conjunto suficiente
+
+RUNTIME_PLUG
+→ reutilizar ou materializar somente o motor necessário
 
 HERMES/EXECUTOR
 → executar somente no escopo autorizado
@@ -262,9 +351,11 @@ O roteador não escolhe intenção humana, não altera autorização e não subs
 ```text
 python .agents/skills/capability-contract-router/scripts/route_capabilities.py --self-test
 python .agents/skills/capability-contract-router/scripts/route_capabilities.py --input <payload.json>
+python scripts/trigger-fabric/spiral_traversal.py --self-test
+python scripts/trigger-fabric/runtime_plug_conformance.py --self-test
 ```
 
-Self-test é prova do algoritmo local conhecido, não prova integração em todo runtime.
+Self-test prova o algoritmo local conhecido, não prova integração no runtime físico da Casa.
 
 ## Promotion / Fixed Point
 
@@ -278,6 +369,8 @@ SELF_TEST=PASS
 + POSITIVE_FIXTURE_PASS
 + CAPABILITY_GAP_NEGATIVE_FIXTURE_BLOCKS
 + WRITER_CONFLICT_FIXTURE_BLOCKS_AFFECTED_CANDIDATE
++ SPIRAL_FORWARD_REVERSE_PASS
++ RUNTIME_PLUG_CONFORMANCE_PASS
 + NO_DUPLICATE_OWNER_FOUND
 + MERGED_TO_MAIN
 → CANONICAL_ACTIVE

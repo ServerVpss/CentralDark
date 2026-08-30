@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { resolve } from "node:path";
+import { spawnSync } from "node:child_process";
 import test from "node:test";
 
 const ROOT = resolve(new URL("../..", import.meta.url).pathname);
@@ -81,6 +82,27 @@ function claudeSubagents() {
     .sort();
 }
 
+function pythonSelfTest(script) {
+  const candidates = ["python3", "python"];
+  let last = null;
+  for (const command of candidates) {
+    const result = spawnSync(command, [resolve(ROOT, script), "--self-test"], {
+      cwd: ROOT,
+      encoding: "utf8",
+      timeout: 30_000,
+    });
+    if (result.error?.code === "ENOENT") {
+      last = result;
+      continue;
+    }
+    assert.equal(result.status, 0, `${script} failed\nstdout=${result.stdout}\nstderr=${result.stderr}`);
+    const parsed = JSON.parse(result.stdout);
+    assert.equal(parsed.status, "PASS", `${script} status=${parsed.status}`);
+    return parsed;
+  }
+  assert.fail(`PYTHON_RUNTIME_NOT_FOUND:${script}:${last?.error?.message || "unknown"}`);
+}
+
 test("LEIA-ME-IA permanece o core singleton e contém invariantes roteadores", () => {
   const core = read(CORE);
   for (const marker of CORE_REQUIRED_MARKERS) {
@@ -128,6 +150,21 @@ test("round-trip de qualquer engine termina no mesmo core", () => {
     coreRefs.add(core);
   }
   assert.deepEqual([...coreRefs], [CORE]);
+});
+
+test("CARACOL fecha ida e volta sem fragmento e bloqueia duplicata", () => {
+  const out = pythonSelfTest("scripts/trigger-fabric/spiral_traversal.py");
+  assert.equal(out.forward_reverse_same_denominator, true);
+  assert.equal(out.nucleus_tail_proven, true);
+  assert.equal(out.duplicate_negative_test_blocks, true);
+});
+
+test("Runtime Plug valida manifesto, resource-fit, lease e swap A↔B", () => {
+  const out = pythonSelfTest("scripts/trigger-fabric/runtime_plug_conformance.py");
+  assert.equal(out.passed, out.denominator);
+  for (const [name, value] of Object.entries(out.checks)) {
+    assert.equal(value, true, `RUNTIME_PLUG_CHECK_FAIL:${name}`);
+  }
 });
 
 test("Claude descobre subagentes sem inverter autoridade do core", () => {
