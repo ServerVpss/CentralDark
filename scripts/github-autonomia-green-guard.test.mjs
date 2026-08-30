@@ -99,8 +99,8 @@ test("paginação encontra gate válido depois da primeira página sem aceitar c
   assert.equal(runs.some((run) => run.name === "lupa-conformance"), false);
 });
 
-test("FAST autorizado não espera runners auxiliares; adversarial continua fail-closed", () => {
-  assert.equal(shouldEnforceGreenFirst({ decision: "READY", mode: "FAST" }), false);
+test("FAST e ADVERSARIAL revalidam green-first; estado não READY não promove", () => {
+  assert.equal(shouldEnforceGreenFirst({ decision: "READY", mode: "FAST" }), true);
   assert.equal(shouldEnforceGreenFirst({ decision: "READY", mode: "ADVERSARIAL" }), true);
   assert.equal(shouldEnforceGreenFirst({ decision: "READY" }), true);
   assert.equal(shouldEnforceGreenFirst({ decision: "WAIT", mode: "ADVERSARIAL" }), false);
@@ -108,12 +108,14 @@ test("FAST autorizado não espera runners auxiliares; adversarial continua fail-
   assert.equal(shouldEnforceGreenFirst(null), false);
 });
 
-test("lista padrão é exatamente a régua canônica de seis gates adversariais", () => {
+test("lista padrão é exatamente a régua canônica de oito gates", () => {
   assert.deepEqual(DEFAULT_REQUIRED_WORKFLOWS, [
     "porta-de-entrada",
     "codex-validate",
     "lupa-conformance",
     "Lupa Drift Guard",
+    "Trigger Fabric Full Package",
+    "PR Title Contract",
     "PR auto-review (Codex + checklist)",
     "Pipeline — Telegram + Painel",
   ]);
