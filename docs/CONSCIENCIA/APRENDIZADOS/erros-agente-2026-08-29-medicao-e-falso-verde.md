@@ -235,6 +235,88 @@ Recibo: commit `2dd6a7273`.
 
 ---
 
+## E14 — CAUSA DA CAUSA: contrato de turno nunca cumprido
+
+Auditoria posterior, pedida pelo SEGREDO/CHEFE, contra o próprio
+`CENTRALDARK_AI_BOOT.yaml`:
+
+```yaml
+turn_classification:
+  required: true
+  allowed: [READ, MEASURE, RECONCILE, MUTATE, TEST, COUNTERPROOF, REPORT, HANDOFF]
+  unclassified_operational_response: "INVALID"
+```
+
+Medição do transcript da sessão:
+
+```text
+respostas do agente      370
+chamadas de ferramenta   510
+TURN_CLASS declarados      1   (as outras 2 ocorrências são eco de paste)
+```
+
+**369 de 370 respostas foram INVALID pelo critério do próprio contrato.**
+
+### Por que isto é a causa e não só mais um item
+
+As classes permitidas formam um pipeline ordenado:
+
+```text
+READ → MEASURE → RECONCILE → MUTATE → TEST → COUNTERPROOF → REPORT → HANDOFF
+```
+
+Declarar a classe **obriga a nomear a posição no pipeline**. Ser forçado a
+escrever `TURN_CLASS=MUTATE` obriga a responder: *qual turno MEASURE produziu o
+fato sobre o qual estou mutando?*
+
+Sem a declaração não existe checkpoint entre ler e agir. A sequência real vira:
+
+```text
+READ → [impressão não declarada] → MUTATE
+```
+
+A impressão **ocupa silenciosamente o slot onde a medição deveria estar**. É esse
+o mecanismo de `OPINIAO_USADA_COMO_MEDICAO`: não é desatenção, é ausência de gate.
+
+Mapeamento direto dos erros ao slot vazio:
+
+| Erro | READ | slot da MEASURE | MUTATE |
+|---|---|---|---|
+| E01 | pergunta do CHEFE sobre o bridge | *"deve funcionar"* | afirmou que funciona |
+| E03 | `ls -la` no `_SOBRA_BRAIN` | *"1 byte de diferença basta"* | classificou lixo |
+| E04 | classificação de E03 | *nenhuma* | escreveu `rm -rf` |
+| E05 | saída degradada do Hermes | *"parece ruído"* | descartou |
+| E09 | `git add -A` | *nenhuma* | commitou anunciando prova |
+
+Em todos, o slot central foi preenchido por impressão, nunca por comando medido.
+
+### Violação irmã, mesma raiz
+
+```yaml
+discovery_rules:
+  session_memory_is_current_state: false
+```
+
+O agente tratou as próprias afirmações anteriores como estado vigente — disse que o
+bridge funcionava e depois raciocinou em cima disso como se fosse fato medido.
+Memória de sessão não é estado vivo; nem a do humano, nem a do próprio agente.
+
+### Remediação estrutural
+
+Toda resposta operacional passa a abrir com a classe do turno. Antes de `MUTATE`,
+apontar o comando cuja saída forçou o fato. Se não houver comando, o turno não é
+`MUTATE` — é `MEASURE`, e a mutação espera.
+
+```text
+SEM_TURN_CLASS → SEM_GATE → IMPRESSAO_VIRA_FATO
+COM_TURN_CLASS → GATE → MEASURE_OU_ESPERA
+```
+
+**Recibo desta auditoria:** 370 respostas, 510 tool calls, 1 declaração — contados
+com `grep` no transcript da própria sessão, não estimados.
+
+---
+
 ## Conexões Rápidas
 
 - [[00-LEIA-PRIMEIRO]] — portão de entrada
