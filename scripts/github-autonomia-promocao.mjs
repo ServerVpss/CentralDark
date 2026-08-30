@@ -3,10 +3,11 @@
  * Promoção autônoma e fail-closed de pull requests do CentralDark.
  *
  * Um único motor, dois modos:
- * - FAST: intenção já autorizada pelo SEGREDO/CHEFE → validação determinística mínima → squash main;
- * - ADVERSARIAL: quando solicitado → workflows/Judge/contraprova completos.
+ * - FAST: intenção já autorizada pelo SEGREDO/CHEFE → gates obrigatórios do mesmo HEAD → squash main;
+ * - ADVERSARIAL: mesmo green-first, com revisão/contraprova adicional quando solicitada.
  *
- * O código do PR nunca é executado aqui. O workflow faz checkout apenas da main confiável.
+ * O juiz lê somente a main confiável; a promoção exige que os workflows
+ * obrigatórios tenham executado e aprovado o código do PR no mesmo HEAD.
  */
 import { createHash } from "node:crypto";
 import { readFile, writeFile } from "node:fs/promises";
@@ -25,6 +26,8 @@ export const DEFAULT_REQUIRED_WORKFLOWS = Object.freeze([
   "codex-validate",
   "lupa-conformance",
   "Lupa Drift Guard",
+  "Trigger Fabric Full Package",
+  "PR Title Contract",
   "PR auto-review (Codex + checklist)",
   "Pipeline — Telegram + Painel",
 ]);
@@ -463,7 +466,7 @@ export function evaluateCandidate({
   if (pr.mergeable === false || pr.mergeable_state === "dirty") reasons.push("MERGE_CONFLICT");
   if (pr.mergeable == null || pr.mergeable_state === "unknown") waits.push("MERGEABILITY_PENDING");
 
-  const applicableWorkflows = fastPath ? [] : requiredWorkflows;
+  const applicableWorkflows = requiredWorkflows;
   const workflows = workflowVerdicts(workflowRuns, applicableWorkflows);
   for (const workflow of workflows) {
     if (workflow.state === "FAIL") reasons.push(`WORKFLOW_FAILED:${workflow.name}:${workflow.conclusion}`);
