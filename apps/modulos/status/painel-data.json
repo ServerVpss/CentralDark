@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-30T01:08:06.379Z",
-  "updatedAtBR": "29/08/2026, 22:08:06 BRT",
+  "updatedAt": "2026-08-30T02:06:15.727Z",
+  "updatedAtBR": "29/08/2026, 23:06:15 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "arch: registrar MEGAZORD-CENTRALDARK como composição automática (#1370)",
+    "lastCommit": "aprendizado(#33): Opinião usada como medição gera falso verde e ação destrutiva",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-08-30T02:06:15.727Z",
+      "titulo": "Push na main · 64a90a90374cec049954af43d81d1b5323689f52",
+      "detalhe": "aprendizado(#33): Opinião usada como medição gera falso verde e ação destrutiva",
+      "area": "Repositório",
+      "sha": "64a90a9",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-30T01:08:06.379Z",
       "titulo": "Push na main · 09274b75bdac602b64eecd3782b3aec533bca5e7",
       "detalhe": "arch: registrar MEGAZORD-CENTRALDARK como composição automática (#1370)",
@@ -988,14 +996,6 @@
       "detalhe": "aprendizado(#29): Dois mundos vivos: GitHub main 81bbfc7 ≠ VPS 5958d3ce27 (1252 atrás, dirty)",
       "area": "Repositório",
       "sha": "b6fc4f0",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-26T03:39:46.300Z",
-      "titulo": "Push na main · 5b774de88d96721c6d42145388e370d4b7f4fab0",
-      "detalhe": "🎼 Capability Contract Router — sinais, cidades e mutações ambientais (#1163)",
-      "area": "Repositório",
-      "sha": "5b774de",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-08-30T02:06:15.727Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 64a90a90374cec049954af43d81d1b5323689f52 (64a90a9)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-30T01:08:06.379Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 09274b75bdac602b64eecd3782b3aec533bca5e7 (09274b7)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-26T09:05:48.784Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · b6fc4f00466b9a603aa2167abc1517225105225d (b6fc4f0)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-26T03:39:46.300Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 5b774de88d96721c6d42145388e370d4b7f4fab0 (5b774de)",
       "area": "Repositório",
       "status": "sucesso"
     }
