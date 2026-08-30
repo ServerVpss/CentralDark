@@ -180,11 +180,14 @@ reconciled_state:
     remaining: LIVE_CONFORMANCE_ONLY_FOR_TRANSPORTS_ACTUALLY_SELECTED_BY_CURRENT_MISSION
 
   runtime_plug_specific_gate_wiring:
-    status: YELLOW
-    existing_owner:
-      - scripts/trigger-fabric/verify_repo_contract.py
+    status: GREEN_BRANCH_WIRED_TO_EXISTING_GATE
+    evidence:
       - .github/workflows/porta-de-entrada.yml
-    required_delta: "Wire spiral_traversal.py --self-test and runtime_plug_conformance.py --self-test into the existing gate; do not create another workflow."
+      - scripts/lupa/agent-core-adapters.test.mjs
+      - scripts/trigger-fabric/spiral_traversal.py
+      - scripts/trigger-fabric/runtime_plug_conformance.py
+    path: "porta-de-entrada -> node --test scripts/lupa/agent-core-adapters.test.mjs -> python self-tests"
+    new_workflow_created: false
 
   harness_validation:
     status: GREEN_PRIOR_COMPONENT_FIXED_POINT
@@ -214,11 +217,11 @@ corrected_dashboard:
   CROSS_ENGINE_SWAP_ENVELOPE: GREEN_BRANCH
   SCREENPIPE_GLOBAL_SENSOR_BINDING: GREEN_BRANCH
   SPIRAL_FORWARD_REVERSE: GREEN_BRANCH
+  RUNTIME_PLUG_GATE_WIRING: GREEN_BRANCH
   CARACOL_VISUAL_OVERLAY: GREEN_BRANCH_YELLOW_CASA
   LIVE_RESOURCE_PROBE_BINDING: YELLOW
   LIVE_SHARED_RUNTIME_LEASE_BINDING: YELLOW
   LIVE_ENGINE_SWAP_MATRIX: YELLOW
-  RUNTIME_PLUG_GATE_WIRING: YELLOW
   GLOBAL_RUNTIME_FIXED_POINT: YELLOW_UNTIL_CASA_REMEASUREMENT
 
 many_to_few:
@@ -235,9 +238,8 @@ rendezvous:
   divergence: META_LUPA_RECONCILE_AND_REPEAT
 
 next_delta:
-  principle: "Only residual executable/live gaps remain; do not rebuild proven architecture."
+  principle: "Only live same-HEAD Casa gaps remain; do not rebuild proven architecture."
   actions:
-    - WIRE_NEW_SELF_TESTS_INTO_EXISTING_PORTA_DE_ENTRADA
     - FEED_LIVE_HOST_RESOURCE_PROBE_TO_CONFORMANCE_CHECKER
     - BIND_CONSUMER_LEASE_WHEN_A_SHARED_HEAVY_RUNTIME_IS_ACTUALLY_SELECTED
     - RUN_REPRESENTATIVE_LIVE_A_TO_B_AND_B_TO_A_SWAP
@@ -245,4 +247,4 @@ next_delta:
     - REMEASURE_EXACT_HEAD
 
 fixed_point_boundary:
-  statement: "Main and deploy remain consequences. The remaining material boundary is same-HEAD TESTE_REAL_NA_CASA plus existing gate wiring and live selected-runtime conformance."
+  statement: "Main and deploy remain consequences. Remaining material boundary is same-HEAD TESTE_REAL_NA_CASA and live selected-runtime conformance."
