@@ -57,6 +57,7 @@ mandatory_inheritance:
   - MULTIBUSSOLA
   - META_LUPA_PROPORTIONAL
   - RECONCILIAR
+  - DELTA_UTIL
   - CONTRAPROVA
   - REMEDICAO
   - FIXED_POINT
@@ -84,7 +85,11 @@ master_cycle_binding:
   resolver: scripts/trigger-fabric/centraldark_master_cycle.py
   explicit_trigger: "!CENTRALDARK"
   plain_word_centraldark_does_not_trigger: true
-  expands_to: [ACORDAR, CALIBRAR, MULTIBUSSOLA, META_LUPA, RECONCILIAR, CONTRAPROVA, REMEDICAO, FIXED_POINT, REGISTRA, BOOT]
+  expands_to: [ACORDAR, CALIBRAR, MULTIBUSSOLA, META_LUPA, RECONCILIAR, DELTA_UTIL, CONTRAPROVA, REMEDICAO, FIXED_POINT, REGISTRA, BOOT]
+  session_state_consumer: scripts/trigger-fabric/centraldark_master_cycle.py#resolve_with_session_state
+  session_state_requires_caller_file: true
+  explicit_activation_requires_chefe_provenance: true
+  negated_or_discussed_master_does_not_activate: true
   all_phases_considered: true
   phase_execution_is_adaptive: true
   master_trigger_is_authority: false
