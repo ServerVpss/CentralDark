@@ -62,7 +62,7 @@ test('clean behind: observa e aplica somente fast-forward, mesmo chamado de subd
   assert.equal(result.changed, true);
   assert.equal(result.remoteSha, remoteSha);
   assert.equal(git(fx.local, 'rev-parse', 'HEAD'), remoteSha);
-  assert.equal(await readFile(join(fx.local, 'state.txt'), 'utf8'), 'remote-v2\n');
+  assert.equal((await readFile(join(fx.local, 'state.txt'), 'utf8')).replace(/\r\n/g, '\n'), 'remote-v2\n');
   assert.match(logs.join('\n'), /PASS fast-forward/);
 });
 
@@ -136,7 +136,7 @@ test('rewrite remoto: detecta linhagem quebrada após fetch e preserva branch lo
   assert.equal(result.ok, false);
   assert.equal(result.reason, 'REMOTE_REWRITE');
   assert.equal(git(fx.local, 'rev-parse', 'HEAD'), remoteV2);
-  assert.equal(await readFile(join(fx.local, 'state.txt'), 'utf8'), 'remote-v2\n');
+  assert.equal((await readFile(join(fx.local, 'state.txt'), 'utf8')).replace(/\r\n/g, '\n'), 'remote-v2\n');
 });
 
 test('branch errada ou HEAD destacado: fail-closed sem troca automática', async () => {

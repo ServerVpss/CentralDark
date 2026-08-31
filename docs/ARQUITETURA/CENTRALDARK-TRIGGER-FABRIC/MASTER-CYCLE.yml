@@ -475,7 +475,7 @@ capability_status:
     GROK_BUILD:
       status: FUTURE_ENGINE_CANDIDATE
       invocation_proven: false
-    AIOS_AIOX:
+    AIOS_[EXT_REDACTED]:
       status: CANDIDATE_EXTERNAL_LEARNING
       raw_runtime_import: false
 
