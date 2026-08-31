@@ -12,6 +12,19 @@ authority:
   sensor_only: screenpipe
   runtime_planes: [casa, vps]
   one_writer_per_scope: true
+state_library:
+  github_webhook:
+    signature: hmac_sha256
+    dedupe_key: X-GitHub-Delivery
+    persisted_projection_only: true
+  package_codec:
+    encoding: base64
+    integrity: sha256
+    encryption: false
+  consolidation_seal:
+    tamper_evident: true
+    fail_closed: true
+    absolute_admin_immutability_claim: false
 fixed_point:
   requires:
     - same_candidate_head
@@ -32,4 +45,3 @@ promotion:
   max_open_prs_to_main: 1
   tracker_reference_keyword: Refs
   tracker_close_keyword_forbidden: Closes
-

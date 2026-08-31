@@ -20,7 +20,14 @@
     "local": {"type": "object"},
     "vps": {"type": "object"},
     "github": {"type": "object"},
+    "github_webhook": {
+      "type": "object",
+      "properties": {
+        "secret_env": {"type": "string"},
+        "bind": {"type": "string"},
+        "port": {"type": "integer", "minimum": 1, "maximum": 65535}
+      }
+    },
     "screenpipe": {"type": "object"}
   }
 }
-
