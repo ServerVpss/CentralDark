@@ -2,9 +2,7 @@ name: "🧭 Fixed Point Fabric Proof"
 
 on:
   pull_request:
-    paths:
-      - "apps/modulos/fixed-point-fabric/**"
-      - ".github/workflows/centraldark-fixed-point-fabric.yml"
+    types: [opened, synchronize, reopened, ready_for_review]
   workflow_dispatch:
 
 permissions:
