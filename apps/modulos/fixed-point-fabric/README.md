@@ -16,6 +16,9 @@ convergência. Ele implementa o fluxo:
 - usa lease para um único escritor por escopo;
 - redige tokens, senhas e chaves antes de persistir;
 - fornece dashboard local, CLI, serviço VPS, instaladores Windows/Linux e testes de contraprova.
+- recebe eventos GitHub por webhook HMAC, deduplica e recupera o último estado vivo;
+- compacta pacotes com manifesto SHA-256 e transporta bytes em Base64 verificável;
+- sela caminhos consolidados e acusa qualquer alteração ou remoção.
 
 ## Plug rápido
 
@@ -45,6 +48,28 @@ centraldark-fp --config config/centraldark.fixed-point.json dashboard --port 878
 ```
 
 Abra `http://127.0.0.1:8788`.
+
+### Estado vivo por webhook
+
+```bash
+export CENTRALDARK_GITHUB_WEBHOOK_SECRET='<secret-store>'
+centraldark-fp --config config/centraldark.fixed-point.json webhook-server --port 8790
+```
+
+Configure o webhook privado para `POST /github/webhook`. Eventos repetidos são deduplicados por
+`X-GitHub-Delivery`; assinatura inválida é rejeitada antes do ledger.
+
+### Codificar, compactar e selar
+
+```bash
+centraldark-fp --config config/centraldark.fixed-point.json encode arquivo.bin > arquivo.b64.json
+centraldark-fp --config config/centraldark.fixed-point.json decode arquivo.b64.json arquivo-restaurado.bin
+centraldark-fp --config config/centraldark.fixed-point.json pack ./projeto ./projeto-validado.zip
+centraldark-fp --config config/centraldark.fixed-point.json seal . CONSOLIDATION-SEAL.json docs/ARQUITETURA contrato.yml
+centraldark-fp --config config/centraldark.fixed-point.json verify-seal . CONSOLIDATION-SEAL.json
+```
+
+Base64 é transporte, não criptografia. Segredos continuam exclusivamente no secret store.
 
 ## Prova antes de main
 

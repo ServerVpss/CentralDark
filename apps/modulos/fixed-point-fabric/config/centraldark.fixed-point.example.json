@@ -27,9 +27,13 @@
     "branch": "main",
     "token_env": "GITHUB_TOKEN"
   },
+  "github_webhook": {
+    "secret_env": "CENTRALDARK_GITHUB_WEBHOOK_SECRET",
+    "bind": "127.0.0.1",
+    "port": 8790
+  },
   "screenpipe": {
     "base_url": "http://127.0.0.1:3030",
     "recent_seconds": 300
   }
 }
-

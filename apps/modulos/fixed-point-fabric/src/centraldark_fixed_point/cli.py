@@ -2,16 +2,21 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import shutil
 import sys
 from pathlib import Path
 
 from .config import load_config
 from .dashboard import serve
+from .codec import compact_project, decode_bytes, encode_bytes
 from .engine import FixedPointEngine, receipt_json
+from .github_state import GitHubStateLibrary
 from .policy import FixedPointPolicy
 from .probes import GitHubProbe, LocalProbe, ScreenpipeProbe, VPSProbe
 from .store import EventStore
+from .seal import build_seal, verify_seal
+from .webhook import serve as serve_webhook
 
 
 def build_engine(config: dict) -> FixedPointEngine:
@@ -52,6 +57,24 @@ def main(argv=None) -> int:
     dashboard = sub.add_parser("dashboard")
     dashboard.add_argument("--host", default="127.0.0.1")
     dashboard.add_argument("--port", type=int, default=8788)
+    webhook = sub.add_parser("webhook-server")
+    webhook.add_argument("--host", default="127.0.0.1")
+    webhook.add_argument("--port", type=int, default=8790)
+    encode = sub.add_parser("encode")
+    encode.add_argument("source")
+    decode = sub.add_parser("decode")
+    decode.add_argument("envelope")
+    decode.add_argument("destination")
+    pack = sub.add_parser("pack")
+    pack.add_argument("source")
+    pack.add_argument("destination")
+    seal = sub.add_parser("seal")
+    seal.add_argument("root")
+    seal.add_argument("output")
+    seal.add_argument("paths", nargs="+")
+    verify = sub.add_parser("verify-seal")
+    verify.add_argument("root")
+    verify.add_argument("seal")
     args = parser.parse_args(argv)
 
     config = load_config(args.config)
@@ -74,8 +97,35 @@ def main(argv=None) -> int:
     elif args.command == "dashboard":
         serve(engine.store, args.host, args.port)
         return 0
+    elif args.command == "webhook-server":
+        secret_env = config.get("github_webhook", {}).get("secret_env", "CENTRALDARK_GITHUB_WEBHOOK_SECRET")
+        secret = os.getenv(secret_env)
+        if not secret:
+            print(f"missing webhook secret in {secret_env}", file=sys.stderr)
+            return 2
+        serve_webhook(GitHubStateLibrary(engine.store, secret), args.host, args.port)
+        return 0
+    elif args.command == "encode":
+        print(json.dumps(encode_bytes(Path(args.source).read_bytes()), indent=2))
+        return 0
+    elif args.command == "decode":
+        envelope = json.loads(Path(args.envelope).read_text(encoding="utf-8"))
+        Path(args.destination).write_bytes(decode_bytes(envelope))
+        return 0
+    elif args.command == "pack":
+        print(json.dumps(compact_project(Path(args.source), Path(args.destination)), indent=2))
+        return 0
+    elif args.command == "seal":
+        seal_payload = build_seal(Path(args.root), args.paths)
+        Path(args.output).write_text(json.dumps(seal_payload, indent=2), encoding="utf-8")
+        print(json.dumps(seal_payload, indent=2))
+        return 0
+    elif args.command == "verify-seal":
+        seal_payload = json.loads(Path(args.seal).read_text(encoding="utf-8"))
+        result = verify_seal(Path(args.root), seal_payload)
+        print(json.dumps(result, indent=2))
+        return 0 if result["valid"] else 4
     else:
         return 2
     print(receipt_json(snapshot, decision))
     return 0 if decision.reached else 3
-
