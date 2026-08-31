@@ -54,6 +54,8 @@ centraldark-fp --config config/centraldark.fixed-point.json verify-chain
 ```
 
 O exit code de `watch` é `0` apenas com fixed point; `3` significa reconciliação necessária.
+No repositório CentralDark, o workflow usa o runner canônico `[self-hosted, Linux]`; alterar o runner
+reinicia a prova porque receipts de outro ambiente não valem para o novo HEAD.
 
 ## Tamanho
 
@@ -65,4 +67,3 @@ Quem cresce é o banco de evidências local e o armazenamento do Screenpipe, nun
 Copie a pasta para `apps/modulos/fixed-point-fabric/` e registre
 `contracts/FIXED-POINT-FABRIC.yml` no Trigger Fabric. O contrato declara explicitamente que ele
 **estende** o MEGAZORD/Screenpipe/fixed-point existentes; não cria um sistema paralelo.
-
