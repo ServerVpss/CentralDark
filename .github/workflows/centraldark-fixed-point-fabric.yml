@@ -3,10 +3,17 @@ name: "🧭 Fixed Point Fabric Proof"
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
+    paths:
+      - 'apps/modulos/fixed-point-fabric/**'
+      - '.github/workflows/centraldark-fixed-point-fabric.yml'
   workflow_dispatch:
 
 permissions:
   contents: read
+
+concurrency:
+  group: fixed-point-fabric-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   prove-same-head:
@@ -16,9 +23,18 @@ jobs:
       run:
         working-directory: apps/modulos/fixed-point-fabric
     steps:
-      - uses: actions/checkout@v7
+      - name: Checkout exact candidate
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
           persist-credentials: false
+      - name: Prove checkout HEAD
+        if: github.event_name == 'pull_request'
+        env:
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
+        run: test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"
+        working-directory: .
       - name: Runtime contract
         run: python3 --version
       - name: Compile
