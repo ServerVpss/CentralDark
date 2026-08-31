@@ -72,6 +72,46 @@ OBSERVATION
 → VERDICT
 ```
 
+## Delta 4 — Connector Boundary / Pre-GitHub Handshake
+
+Falha antes de o GitHub receber uma chamada não é falha do GitHub. A fronteira deve ser medida por estágio antes de alterar token, workflow, runner, PR ou permissão do repositório.
+
+Medição registrada em 2026-08-31:
+
+```text
+DIRECT_GITHUB_CONNECTOR=AVAILABLE_AND_FUNCTIONAL
+CUSTOM_CONNECTOR_NAMESPACE_CENTRALDARK=NOT_EXPOSED
+CENTRALDARK_FABLE_LOOP_SKILL=AVAILABLE_UNDER_ANTHROPIC_SKILLS
+ROOT_CAUSE_OF_UI_CONNECT_FAILURE=UNKNOWN
+```
+
+Uma skill disponível dentro de outro pacote não equivale a um conector CentralDark registrado na sessão. Da mesma forma, ausência do namespace customizado delimita a falha observável, mas não prova sozinha erro de OAuth.
+
+```text
+CONNECT_CLICK
+├─ auth nem abre
+│  → registration/backend/handshake-start CANDIDATE
+├─ auth abre e retorno falha
+│  → callback/OAuth/session CANDIDATE
+├─ auth conclui mas conector não aparece
+│  → session-sync/exposure CANDIDATE
+└─ conector aparece e chamada GitHub falha
+   → token/scope/installation/repo-access CANDIDATE
+```
+
+```text
+PRE_GITHUB_FAILURE != GITHUB_FAILURE
+CUSTOM_CONNECTOR_NOT_EXPOSED != OAUTH_ROOT_CAUSE_PROVEN
+UI_ERROR != PR_FAILURE
+
+UNKNOWN_ROOT_CAUSE
+→ MEASURE_HANDSHAKE_STAGE
+→ EVIDENCE
+→ VERDICT
+```
+
+O próximo teste deve identificar o primeiro estágio quebrado do handshake. Enquanto esse estágio não for observado, `ROOT_CAUSE_OF_UI_CONNECT_FAILURE` permanece `UNKNOWN` e nenhuma mutação em GitHub, CI ou credenciais é autorizada por esse sintoma.
+
 ## Papel, owner e Writer
 
 Papel é saída da descoberta:
