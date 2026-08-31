@@ -79,6 +79,72 @@ class EventStore:
         row = self.db.execute("SELECT value FROM state WHERE key=?", (key,)).fetchone()
         return json.loads(row[0]) if row else default
 
+    def list_events(self, kind: str | None = None, limit: int = 100) -> list[dict[str, Any]]:
+        if not isinstance(limit, int) or limit < 1 or limit > 1000:
+            raise ValueError("limit must be between 1 and 1000")
+        if kind is None:
+            rows = self.db.execute(
+                "SELECT * FROM events ORDER BY sequence DESC LIMIT ?", (limit,)
+            ).fetchall()
+        else:
+            rows = self.db.execute(
+                "SELECT * FROM events WHERE kind=? ORDER BY sequence DESC LIMIT ?",
+                (kind, limit),
+            ).fetchall()
+        return [
+            {
+                "sequence": row["sequence"],
+                "created_at": row["created_at"],
+                "kind": row["kind"],
+                "payload": json.loads(row["payload"]),
+                "previous_hash": row["previous_hash"],
+                "event_hash": row["event_hash"],
+            }
+            for row in rows
+        ]
+
+    def append_once(
+        self,
+        dedupe_key: str,
+        kind: str,
+        payload: dict[str, Any],
+        state_updates: dict[str, Any] | None = None,
+    ) -> str | None:
+        try:
+            self.db.execute("BEGIN IMMEDIATE")
+            duplicate = self.db.execute(
+                "SELECT 1 FROM state WHERE key=?", (dedupe_key,)
+            ).fetchone()
+            if duplicate:
+                self.db.rollback()
+                return None
+            previous = self.db.execute(
+                "SELECT event_hash FROM events ORDER BY sequence DESC LIMIT 1"
+            ).fetchone()
+            previous_hash = previous[0] if previous else "GENESIS"
+            encoded = canonical_json(payload)
+            event_hash = hashlib.sha256(
+                f"{previous_hash}|{kind}|{encoded}".encode()
+            ).hexdigest()
+            self.db.execute(
+                "INSERT INTO events(kind,payload,previous_hash,event_hash) VALUES(?,?,?,?)",
+                (kind, encoded, previous_hash, event_hash),
+            )
+            for key, value in (state_updates or {}).items():
+                self.db.execute(
+                    "INSERT OR REPLACE INTO state(key,value) VALUES(?,?)",
+                    (key, canonical_json(value)),
+                )
+            self.db.execute(
+                "INSERT INTO state(key,value) VALUES(?,?)",
+                (dedupe_key, canonical_json(True)),
+            )
+            self.db.commit()
+            return event_hash
+        except Exception:
+            self.db.rollback()
+            raise
+
     def verify_chain(self) -> tuple[bool, int]:
         previous_hash = "GENESIS"
         count = 0
