@@ -26,6 +26,16 @@ def check_absent(path, forbidden=(), classification='PROVEN_ABSENT_IN_REPO'):
     checks.append({'path':path,'classification':classification,'ok':ok,'missing':violations})
 
 check('LEIA-ME-IA.md',['#ACORDAR','!CALIBRAR','CENTRALDARK_AI_BOOT'])
+check('LEIA-ME-IA.md',[
+ 'CAPABILITY_IS_AUTHORITY=false',
+ 'AGENT_MAY_REDUCE_HUMAN_OBJECTIVE=false',
+ 'METHOD_MAY_OPTIMIZE_OBJECTIVE_MUST_BE_PRESERVED=true',
+ 'FULL_REQUESTED_MATERIAL_MUST_BE_PROCESSED=true',
+ 'SESSION_OBSERVATION_IS_GLOBAL_CURRENT_STATE=false',
+ 'SINGLE_READER_MAY_DECLARE_GLOBAL_REALITY=false',
+ 'DIVERGENT_READERS_REQUIRE_RENDEZVOUS=true',
+ 'CURRENT_REALITY_REQUIRES_RECONCILIATION=true',
+], classification='HUMAN_OBJECTIVE_AUTHORITY_BOUNDARY')
 check('CENTRALDARK_AI_BOOT.yaml',[
  'adaptive_payload: true',
  'observed_evidence: "MEASURE_AT_RUNTIME: branch, HEAD, PR, runtime, tools, owner, writer_scope"',
@@ -176,6 +186,16 @@ check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml',[
  'head_integrity: TESTED_HEAD_EQUALS_COMMITTED_HEAD_EQUALS_PUSHED_PR_HEAD',
  'CREATE_FALSIFIER',
  'GENERALIZE_IF_REUSABLE',
+ 'capability_is_authority: false',
+ 'agent_may_reduce_human_objective: false',
+ 'objective_must_be_preserved: true',
+ 'full_requested_material_must_be_processed: true',
+ 'AGENT_REDUCED_HUMAN_OBJECTIVE_WITHOUT_AUTHORIZATION',
+ 'session_observation_is_global_current_state: false',
+ 'single_reader_may_declare_global_reality: false',
+ 'divergent_readers_require_rendezvous: true',
+ 'current_reality_requires_reconciliation: true',
+ 'reconciliation_flow: [READERS, MEASURE, RENDEZVOUS, RECONCILE, CURRENT_REALITY, ONE_WRITER, PROOF]',
 ])
 check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml',[
  'event: BOT_ENTRY','event: PRE_HUMAN_RETURN','event: RESUME',

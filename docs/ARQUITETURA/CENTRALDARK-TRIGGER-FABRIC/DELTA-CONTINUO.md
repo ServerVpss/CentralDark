@@ -30,6 +30,25 @@ SERIALIZE_MUTATION_PER_SCOPE=true
 ONE_WRITER_PER_CONFLICT_SCOPE=true
 JUDGE_INDEPENDENT_FROM_WRITER=true
 JUDGE_MAY_MUTATE=false
+CAPABILITY_IS_AUTHORITY=false
+AGENT_MAY_REDUCE_HUMAN_OBJECTIVE=false
+METHOD_MAY_OPTIMIZE=true
+OBJECTIVE_MUST_BE_PRESERVED=true
+FULL_REQUESTED_MATERIAL_MUST_BE_PROCESSED=true
+OBJECTIVE_REDUCTION_REQUIRES_EXPLICIT_HUMAN_AUTHORIZATION=true
+SESSION_OBSERVATION_IS_GLOBAL_CURRENT_STATE=false
+SINGLE_READER_MAY_DECLARE_GLOBAL_REALITY=false
+READER_COUNT_IS_TRUTH_VOTE=false
+DIVERGENT_READERS_REQUIRE_RENDEZVOUS=true
+CURRENT_REALITY_REQUIRES_RECONCILIATION=true
+
+READERS
+→ MEASURE
+→ RENDEZVOUS
+→ RECONCILE
+→ CURRENT_REALITY
+→ ONE_WRITER
+→ PROOF
 
 TESTED_HEAD == COMMITTED_HEAD == PUSHED_PR_HEAD
 
@@ -45,6 +64,10 @@ OBSERVED_FAILURE
 ```
 
 Muitos agentes podem observar. Um Writer altera cada escopo. Todos reconciliam antes da mutação. A realidade decide. O próximo agente continua pelo receipt, não pela memória do anterior.
+
+Falha cristalizada: quando um agente troca "integrar tudo no escopo autorizado" por um subconjunto escolhido por ele, ocorreu AGENT_REDUCED_HUMAN_OBJECTIVE_WITHOUT_AUTHORIZATION. Capacidade para sugerir método melhor não concede autoridade para diminuir o destino. A remediação é restaurar o objetivo humano completo, reconciliar no escopo indicado e executar os gates do mesmo HEAD.
+
+Percepção divergente não é contradição resolvida por voto. Cada sessão registra uma observação com proveniência; nenhuma sessão isolada declara a realidade global. Readers convergem no rendezvous, reconciliam alvo e tempo, e somente então um Writer atua sobre o estado corrente provado.
 
 ## Ativação e continuidade
 

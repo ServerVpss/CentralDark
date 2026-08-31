@@ -11,7 +11,6 @@ import { registrar as registrarNoLedger } from '../Knowledge-Collector/agent.mjs
 import { handle as handlerUniversal } from '../Universal-Handler/agent.mjs';
 const ROOT = '/root/CentralDark';
 const APRENDIZADOS = join(dirname(fileURLToPath(import.meta.url)), '../../knowledge/aprendizados.json');
-<<<<<<< HEAD
 const ARSENAL_APRENDIZADOS = join(ROOT, 'docs/CONSCIENCIA/ARSENAL/APRENDIZADOS.md');
 
 const BLOQUEIOS = [
@@ -97,14 +96,12 @@ async function _executar(ferramenta, args) {
           base.atualizado = new Date().toISOString().slice(0, 10);
           await writeFile(APRENDIZADOS, JSON.stringify(base, null, 2));
         }
-<<<<<<< HEAD
-
         // Não engolir falha do ledger: JSON sem ARSENAL não é sucesso completo.
-                try {
-                  registrarNoLedger('licao', `hermes-runtime cat=${categoria}`, '-', licao, 'hermes');
-                } catch (e) {
-                  return { ok: false, saida: `falha ao registrar no ledger: ${e.message.slice(0, 200)}` };
-                }
+        try {
+          registrarNoLedger('licao', `hermes-runtime cat=${categoria}`, '-', licao, 'hermes');
+        } catch (e) {
+          return { ok: false, saida: `falha ao registrar no ledger: ${e.message.slice(0, 200)}` };
+        }
 
         // Read-back dos dois destinos antes de emitir verde.
         const jsonDepois = JSON.parse(await readFile(APRENDIZADOS, 'utf8'));
@@ -123,21 +120,9 @@ async function _executar(ferramenta, args) {
           ok: true,
           saida: `LEARNING_PERSISTENCE_VERIFIED=true categoria=${categoria} json=true ledger=true`,
         };
-      } catch (e) { return { ok: false, saida: `falha ao salvar/verificar aprendizado: ${e.message.slice(0, 200)}` }; }
-=======
-        registrarNoLedger('licao', `hermes-runtime cat=${categoria}`, '-', licao, 'hermes');
-        const jsonPersistido = JSON.parse(await readFile(APRENDIZADOS, 'utf8'));
-        const ledgerPersistido = await readFile(ARSENAL_APRENDIZADOS, 'utf8');
-        const jsonOk = jsonPersistido.categorias?.[categoria]?.licoes?.includes(licao) === true;
-        const ledgerOk = ledgerPersistido.includes(licao);
-        if (!jsonOk || !ledgerOk) {
-          return { ok: false, saida: `LEARNING_PERSISTENCE_VERIFIED=false json=${jsonOk} ledger=${ledgerOk}` };
-        }
-        return { ok: true, saida: `LEARNING_PERSISTENCE_VERIFIED=true 🧠 aprendizado salvo em [${categoria}] (json + ledger ARSENAL): ${licao}` };
       } catch (e) {
         return { ok: false, saida: `LEARNING_PERSISTENCE_VERIFIED=false falha ao salvar aprendizado: ${e.message.slice(0, 200)}` };
       }
->>>>>>> 80c309354 (fix(reconciliation): absorver PR #1379 e reduzir queima de workflows)
     }
     case 'git': {
       const acao = args.acao || 'status';
@@ -154,15 +139,6 @@ async function _executar(ferramenta, args) {
           const add = limpos.length
             ? `git add ${limpos.map(x => `'${x}'`).join(' ')}`
             : `git add -u -- ':!apps/modulos/status/painel-data.json' ':!*.env' ':!*.bak'`;
-<<<<<<< HEAD
-          const comando = `set -o pipefail cd ${ROOT} && ${add} && git commit -m "${msg}" && (git push origin main || (git pull --rebase --autostash origin main && git push origin main) || { git rebase --abort >/dev/null 2>&1 || true; echo 'PUSH PENDENTE — relatar' >&2; exit 23; }) && LOCAL_HEAD="$(git rev-parse HEAD)" && REMOTE_HEAD="$(git ls-remote origin refs/heads/main | awk '{print $1}')" && test -n "$REMOTE_HEAD" && test "$LOCAL_HEAD" = "$REMOTE_HEAD" && echo "REMOTE_HEAD_VERIFIED=$LOCAL_HEAD"`;
-          const { stdout, stderr } = await pexec('bash', ['-lc', comando], { timeout: 120_000, maxBuffer: 5 * 1024 * 1024 });
-          const saida = (stdout + (stderr ? `\n[stderr]\n${stderr}` : '')).slice(-4000);
-          if (!/REMOTE_HEAD_VERIFIED=[0-9a-f]{40}/i.test(saida)) {
-            return { ok: false, saida: `REMOTE_HEAD_VERIFIED=false\n${saida}`.slice(0, 4000) };
-          }
-          return { ok: true, saida: saida.slice(0, 4000) };
-=======
           const script = [
             'set -o pipefail',
             'set -eu',
@@ -192,7 +168,6 @@ async function _executar(ferramenta, args) {
             return { ok: false, saida: 'PUSH PENDENTE — relatar: confirmação do HEAD remoto ausente' };
           }
           return { ok: true, saida: stdout.slice(-2000) };
->>>>>>> 80c309354 (fix(reconciliation): absorver PR #1379 e reduzir queima de workflows)
         }
         return { ok: false, saida: `ação git desconhecida: ${acao}` };
       } catch (e) {

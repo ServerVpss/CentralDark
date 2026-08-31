@@ -37,6 +37,18 @@ standard_flow:
   one_writer_per_conflict_scope: true
   judge_independent_from_writer: true
   judge_may_mutate: false
+  capability_is_authority: false
+  agent_may_reduce_human_objective: false
+  method_may_optimize: true
+  objective_must_be_preserved: true
+  full_requested_material_must_be_processed: true
+  objective_reduction_requires_explicit_human_authorization: true
+  session_observation_is_global_current_state: false
+  single_reader_may_declare_global_reality: false
+  reader_count_is_truth_vote: false
+  divergent_readers_require_rendezvous: true
+  current_reality_requires_reconciliation: true
+  reconciliation_flow: [READERS, MEASURE, RENDEZVOUS, RECONCILE, CURRENT_REALITY, ONE_WRITER, PROOF]
   head_integrity: TESTED_HEAD_EQUALS_COMMITTED_HEAD_EQUALS_PUSHED_PR_HEAD
   failure_flow:
     - OBSERVED_FAILURE
@@ -48,6 +60,9 @@ standard_flow:
     - COUNTERPROVE
     - REGISTER_RECEIPT
     - GENERALIZE_IF_REUSABLE
+  scope_compression_failure:
+    signature: AGENT_REDUCED_HUMAN_OBJECTIVE_WITHOUT_AUTHORIZATION
+    remediation: RESTORE_FULL_HUMAN_OBJECTIVE_AND_RECONCILE_IN_AUTHORIZED_SCOPE
 second_brain:
   contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SECOND-BRAIN.yml
   logical: ONE

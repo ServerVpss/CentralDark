@@ -242,6 +242,14 @@ def resolve(text: str, master_active: bool = False, chefe_source: bool = False, 
         ),
         "authority_changed": False,
         "mutation_authorized": False,
+        "capability_is_authority": False,
+        "agent_may_reduce_human_objective": False,
+        "objective_must_be_preserved": True,
+        "full_requested_material_must_be_processed": True,
+        "session_observation_is_global_current_state": False,
+        "single_reader_may_declare_global_reality": False,
+        "divergent_readers_require_rendezvous": True,
+        "current_reality_requires_reconciliation": True,
         "all_phases_considered": master_cycle_active,
         "phase_execution_is_adaptive": True,
         "unknown_is_pass": False,
@@ -356,6 +364,14 @@ def self_test():
             ok = ok and got["expanded_chain"] == CHAIN
             ok = ok and got["authority_changed"] is False
             ok = ok and got["mutation_authorized"] is False
+            ok = ok and got["capability_is_authority"] is False
+            ok = ok and got["agent_may_reduce_human_objective"] is False
+            ok = ok and got["objective_must_be_preserved"] is True
+            ok = ok and got["full_requested_material_must_be_processed"] is True
+            ok = ok and got["session_observation_is_global_current_state"] is False
+            ok = ok and got["single_reader_may_declare_global_reality"] is False
+            ok = ok and got["divergent_readers_require_rendezvous"] is True
+            ok = ok and got["current_reality_requires_reconciliation"] is True
         results.append({"kind": "master", "input": text, "expected": expected, "got": got["explicit_match"], "ok": ok})
 
     for text, expected, ambiguous in delta_cases:

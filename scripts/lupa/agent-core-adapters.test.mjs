@@ -1,10 +1,11 @@
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
 import test from "node:test";
 
-const ROOT = resolve(new URL("../..", import.meta.url).pathname);
+const ROOT = resolve(fileURLToPath(new URL("../..", import.meta.url)));
 const CORE = "LEIA-ME-IA.md";
 const PORTABLE_BRIDGE = "docs/CONSCIENCIA/ARTEFATOS/centraldark-prompt-universal.md";
 const CLAUDE_BRIDGE = "CLAUDE.md";
@@ -50,6 +51,14 @@ const CORE_REQUIRED_MARKERS = Object.freeze([
   "EXECUTOR_CANNOT_SELF_APPROVE=true",
   "JUDGE_DOES_NOT_MUTATE=true",
   "GRAPH_IS_DERIVED_NOT_AUTHORITY=true",
+  "CAPABILITY_IS_AUTHORITY=false",
+  "AGENT_MAY_REDUCE_HUMAN_OBJECTIVE=false",
+  "METHOD_MAY_OPTIMIZE_OBJECTIVE_MUST_BE_PRESERVED=true",
+  "FULL_REQUESTED_MATERIAL_MUST_BE_PROCESSED=true",
+  "SESSION_OBSERVATION_IS_GLOBAL_CURRENT_STATE=false",
+  "SINGLE_READER_MAY_DECLARE_GLOBAL_REALITY=false",
+  "DIVERGENT_READERS_REQUIRE_RENDEZVOUS=true",
+  "CURRENT_REALITY_REQUIRES_RECONCILIATION=true",
 ]);
 
 const FORBIDDEN_CLAUDE_SUBAGENT_AUTHORITY = Object.freeze([
@@ -90,9 +99,15 @@ function pythonSelfTest(script) {
       last = result;
       continue;
     }
-    return JSON.parse(result.stdout);
+    if (result.status !== 0 || !result.stdout?.trim()) {
+      last = result;
+      continue;
+    }
+    const parsed = JSON.parse(result.stdout);
+    assert.equal(parsed.status, "PASS", `${script} status=${parsed.status}`);
+    return parsed;
   }
-  throw last?.error || new Error("python indisponivel");
+  assert.fail(`PYTHON_SELF_TEST_FAILED:${script}:status=${last?.status}:stderr=${last?.stderr || last?.error?.message || "unknown"}`);
 }
 
 test("core canônico proíbe governança duplicada e exige autoridade humana", () => {
