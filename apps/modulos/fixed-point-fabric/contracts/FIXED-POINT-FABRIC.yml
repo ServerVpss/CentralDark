@@ -1,0 +1,35 @@
+schema_version: "1.0"
+kind: CENTRALDARK_FIXED_POINT_FABRIC
+status: CANDIDATE_REQUIRES_SAME_HEAD_PROOF
+extends:
+  - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MEGAZORD-CENTRALDARK.yml
+  - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SCREENPIPE-BINDING.yml
+  - docs/ARQUITETURA/PROOF-ARCHITECTURE/FIXED_POINT_PR.yml
+activation:
+  sequence: ["!CENTRALDARK", "#ACORDAR", "!CALIBRAR", "RECONCILIAR", "CONTRAPROVAR", "FIXED_POINT"]
+authority:
+  source_of_truth: github_main
+  sensor_only: screenpipe
+  runtime_planes: [casa, vps]
+  one_writer_per_scope: true
+fixed_point:
+  requires:
+    - same_candidate_head
+    - local_pass
+    - vps_pass
+    - github_pass
+    - screenpipe_recent_data_pass
+    - no_unknown_blocked_or_stale
+    - two_equal_material_samples
+    - hash_chain_valid
+    - counterproof_pass
+  forbids:
+    - unknown_to_pass
+    - screenshot_as_global_truth
+    - direct_secret_persistence
+    - direct_main_write_without_receipt
+promotion:
+  max_open_prs_to_main: 1
+  tracker_reference_keyword: Refs
+  tracker_close_keyword_forbidden: Closes
+
