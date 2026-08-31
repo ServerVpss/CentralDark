@@ -28,4 +28,3 @@ def redact(value: Any) -> Any:
     if isinstance(value, tuple):
         return tuple(redact(v) for v in value)
     return value
-

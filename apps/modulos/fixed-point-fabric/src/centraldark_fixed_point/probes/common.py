@@ -19,4 +19,3 @@ def fetch_json(url: str, headers: dict[str, str] | None = None, timeout: float =
         except json.JSONDecodeError:
             payload = {"error": body[:500]}
         return error.code, payload
-

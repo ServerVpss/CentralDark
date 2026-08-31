@@ -11,4 +11,3 @@ Screenpipe e checkpoints. Também mostram a contraprova que define este pacote:
 Conclusão: o sistema precisa de um ledger comum e de pelo menos duas amostras materialmente iguais,
 separadas no tempo. Screenpipe é testemunha; GitHub `main` é a fonte canônica; o runtime Casa/VPS é a
 realidade operacional; o Fixed Point Fabric apenas reconcilia e prova.
-

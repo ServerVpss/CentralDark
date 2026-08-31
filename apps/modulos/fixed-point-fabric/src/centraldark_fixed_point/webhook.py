@@ -32,4 +32,3 @@ def serve(library: GitHubStateLibrary, host: str = "127.0.0.1", port: int = 8790
             return
 
     ThreadingHTTPServer((host, port), Handler).serve_forever()
-

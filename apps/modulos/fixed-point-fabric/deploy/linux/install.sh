@@ -12,4 +12,3 @@ python3 -m venv "$INSTALL_DIR/.venv"
 install -m 0644 "$SOURCE_DIR/deploy/linux/centraldark-vps-heartbeat.service" /etc/systemd/system/centraldark-vps-heartbeat.service
 systemctl daemon-reload
 echo "Defina CENTRALDARK_HEARTBEAT_SECRET em /etc/centraldark-fixed-point.env e habilite o serviço."
-

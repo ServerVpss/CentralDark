@@ -17,4 +17,3 @@ Register-ScheduledTask -TaskName 'CentralDark-FixedPoint' -Action $Action -Trigg
 
 Write-Host "Instalado. Configure os segredos no ambiente da conta do agendador e execute:"
 Write-Host "  $Root\.venv\Scripts\centraldark-fp.exe --config $Root\config\centraldark.fixed-point.json doctor"
-

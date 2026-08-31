@@ -171,4 +171,3 @@ class EventStore:
             if current and current.get("pid") == os.getpid():
                 self.db.execute("DELETE FROM state WHERE key=?", (f"lease:{name}",))
                 self.db.commit()
-

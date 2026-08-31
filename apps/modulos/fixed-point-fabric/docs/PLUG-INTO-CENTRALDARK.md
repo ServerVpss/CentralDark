@@ -25,4 +25,3 @@ mapa do Trigger Fabric como `EXTENSION`, não como nova autoridade. O Screenpipe
 5. Duas amostras iguais, recentes e sem bloqueios emitem `FIXED_POINT_REACHED`.
 6. O receipt local é anexado ao PR; os gates do GitHub ainda precisam estar verdes no mesmo HEAD.
 7. Só então a rota de promoção pode atualizar a `main`.
-

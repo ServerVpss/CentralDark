@@ -50,4 +50,3 @@ class FixedPointPolicy:
             blockers=tuple(blockers),
             previous_signature=previous.signature if previous else None,
         )
-
