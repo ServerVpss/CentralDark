@@ -250,6 +250,23 @@ def resolve(text: str, master_active: bool = False, chefe_source: bool = False, 
         "single_reader_may_declare_global_reality": False,
         "divergent_readers_require_rendezvous": True,
         "current_reality_requires_reconciliation": True,
+        "remote_screenshot_is_remote_proof": False,
+        "session_memory_is_current_state": False,
+        "connector_failure_is_provider_failure": False,
+        "sensor_failure_is_world_failure": False,
+        "transport_failure_requires_authorized_alternate_route": True,
+        "alternate_route_must_remeasure_same_target": True,
+        "remote_write_requires_proven_gate": True,
+        "chat_only_knowledge": "FAIL",
+        "session_memory_is_durable_state": False,
+        "persistence_quorum_min": 1,
+        "preferred_redundancy": 2,
+        "mirror_is_second_owner": False,
+        "backup_is_source_of_truth": False,
+        "persistence_is_promotion": False,
+        "old_copy_is_current_reality": False,
+        "no_blind_overwrite": True,
+        "durable_continuity_requires_receipt_and_next_cursor": True,
         "all_phases_considered": master_cycle_active,
         "phase_execution_is_adaptive": True,
         "unknown_is_pass": False,
@@ -372,6 +389,23 @@ def self_test():
             ok = ok and got["single_reader_may_declare_global_reality"] is False
             ok = ok and got["divergent_readers_require_rendezvous"] is True
             ok = ok and got["current_reality_requires_reconciliation"] is True
+            ok = ok and got["remote_screenshot_is_remote_proof"] is False
+            ok = ok and got["session_memory_is_current_state"] is False
+            ok = ok and got["connector_failure_is_provider_failure"] is False
+            ok = ok and got["sensor_failure_is_world_failure"] is False
+            ok = ok and got["transport_failure_requires_authorized_alternate_route"] is True
+            ok = ok and got["alternate_route_must_remeasure_same_target"] is True
+            ok = ok and got["remote_write_requires_proven_gate"] is True
+            ok = ok and got["chat_only_knowledge"] == "FAIL"
+            ok = ok and got["session_memory_is_durable_state"] is False
+            ok = ok and got["persistence_quorum_min"] == 1
+            ok = ok and got["preferred_redundancy"] == 2
+            ok = ok and got["mirror_is_second_owner"] is False
+            ok = ok and got["backup_is_source_of_truth"] is False
+            ok = ok and got["persistence_is_promotion"] is False
+            ok = ok and got["old_copy_is_current_reality"] is False
+            ok = ok and got["no_blind_overwrite"] is True
+            ok = ok and got["durable_continuity_requires_receipt_and_next_cursor"] is True
         results.append({"kind": "master", "input": text, "expected": expected, "got": got["explicit_match"], "ok": ok})
 
     for text, expected, ambiguous in delta_cases:

@@ -49,6 +49,34 @@ standard_flow:
   divergent_readers_require_rendezvous: true
   current_reality_requires_reconciliation: true
   reconciliation_flow: [READERS, MEASURE, RENDEZVOUS, RECONCILE, CURRENT_REALITY, ONE_WRITER, PROOF]
+  remote_screenshot_is_remote_proof: false
+  session_memory_is_current_state: false
+  connector_failure_is_provider_failure: false
+  sensor_failure_is_world_failure: false
+  transport_failure_requires_authorized_alternate_route: true
+  alternate_route_must_remeasure_same_target: true
+  remote_github_trigger_flow: [ACORDAR, CALIBRAR, CENTRALDARK, MEASURE, RENDEZVOUS, RECONCILE, CURRENT_REALITY, PROOF]
+  remote_write_gate:
+    repo_confirmed: REQUIRED
+    pr_confirmed: REQUIRED
+    current_head_known: REQUIRED
+    authorized_write_route: REQUIRED
+    branch_policy_pass: REQUIRED
+    writer_collision: FORBIDDEN
+    secret_exposure: FORBIDDEN
+  durable_continuity:
+    chat_only_knowledge: FAIL
+    session_memory_is_durable_state: false
+    persistence_quorum_min: 1
+    preferred_redundancy: 2
+    mirror_is_second_owner: false
+    backup_is_source_of_truth: false
+    persistence_is_promotion: false
+    old_copy_is_current_reality: false
+    no_blind_overwrite: true
+    material_receipt_persisted: REQUIRED
+    next_cursor_persisted: REQUIRED
+    fallback_order: [DRIVE_OR_GITHUB, OTHER_AUTHORIZED_DURABLE_ROUTE, UNKNOWN_WITH_NEXT_CURSOR]
   head_integrity: TESTED_HEAD_EQUALS_COMMITTED_HEAD_EQUALS_PUSHED_PR_HEAD
   failure_flow:
     - OBSERVED_FAILURE

@@ -41,6 +41,21 @@ SINGLE_READER_MAY_DECLARE_GLOBAL_REALITY=false
 READER_COUNT_IS_TRUTH_VOTE=false
 DIVERGENT_READERS_REQUIRE_RENDEZVOUS=true
 CURRENT_REALITY_REQUIRES_RECONCILIATION=true
+REMOTE_SCREENSHOT_IS_REMOTE_PROOF=false
+SESSION_MEMORY_IS_CURRENT_STATE=false
+CONNECTOR_FAILURE_IS_PROVIDER_FAILURE=false
+SENSOR_FAILURE_IS_WORLD_FAILURE=false
+TRANSPORT_FAILURE_REQUIRES_AUTHORIZED_ALTERNATE_ROUTE=true
+ALTERNATE_ROUTE_MUST_REMEASURE_SAME_TARGET=true
+CHAT_ONLY_KNOWLEDGE=FAIL
+SESSION_MEMORY_IS_DURABLE_STATE=false
+PERSISTENCE_QUORUM_MIN=1
+PREFERRED_REDUNDANCY=2
+MIRROR_IS_SECOND_OWNER=false
+BACKUP_IS_SOURCE_OF_TRUTH=false
+PERSISTENCE_IS_PROMOTION=false
+OLD_COPY_IS_CURRENT_REALITY=false
+NO_BLIND_OVERWRITE=true
 
 READERS
 → MEASURE
@@ -49,6 +64,31 @@ READERS
 → CURRENT_REALITY
 → ONE_WRITER
 → PROOF
+
+#ACORDAR
+→ !CALIBRAR
+→ !CENTRALDARK
+→ MEASURE
+→ RENDEZVOUS
+→ RECONCILE
+→ CURRENT_REALITY
+→ PROOF
+
+PODE_ESCREVER =
+RepoConfirmado
+AND PRConfirmado
+AND HeadAtualConhecido
+AND RotaWriteAutorizada
+AND PoliticaBranchPASS
+AND NOT WriterCollision
+AND NOT SecretExposure
+
+DURABLE_CONTINUITY =
+(DRIVE_AVAILABLE
+ OR GITHUB_AVAILABLE
+ OR OTHER_AUTHORIZED_DURABLE_ROUTE_AVAILABLE)
+AND MATERIAL_RECEIPT_PERSISTED
+AND NEXT_CURSOR_PERSISTED
 
 TESTED_HEAD == COMMITTED_HEAD == PUSHED_PR_HEAD
 
@@ -68,6 +108,10 @@ Muitos agentes podem observar. Um Writer altera cada escopo. Todos reconciliam a
 Falha cristalizada: quando um agente troca "integrar tudo no escopo autorizado" por um subconjunto escolhido por ele, ocorreu AGENT_REDUCED_HUMAN_OBJECTIVE_WITHOUT_AUTHORIZATION. Capacidade para sugerir método melhor não concede autoridade para diminuir o destino. A remediação é restaurar o objetivo humano completo, reconciliar no escopo indicado e executar os gates do mesmo HEAD.
 
 Percepção divergente não é contradição resolvida por voto. Cada sessão registra uma observação com proveniência; nenhuma sessão isolada declara a realidade global. Readers convergem no rendezvous, reconciliam alvo e tempo, e somente então um Writer atua sobre o estado corrente provado.
+
+Falha de rota não autoriza conclusão sobre o provedor nem retorno à memória da sessão. Se Drive, GitHub ou outro conector autorizado falhar, buscar outra rota autorizada, remedir o mesmo alvo e manter UNKNOWN até a prova atual. Screenshot remoto é evidência de interface, não prova do estado remoto.
+
+Persistência durável exige pelo menos uma rota autorizada e receipt com next cursor; duas rotas são a redundância preferida. Espelho e backup não viram segundo owner, persistir não promove, cópia velha não declara realidade atual e nenhuma rota pode sobrescrever cegamente outra.
 
 ## Ativação e continuidade
 
