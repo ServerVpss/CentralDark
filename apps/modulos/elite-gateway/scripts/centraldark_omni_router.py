@@ -33,6 +33,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import requests
 from fastapi import FastAPI, Header, HTTPException, Request
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
 APP_VERSION = "0.2.0"
@@ -550,11 +551,8 @@ def chat(
     request: ChatRequest,
     http_request: Request,
     authorization: str = Header(default=None),
-) -> Dict[str, Any]:
+) -> Any:
     require_router_auth(authorization)
-
-    if request.stream:
-        raise HTTPException(status_code=400, detail="stream_not_implemented_yet")
 
     provider, target_model = route_model(request.model)
     prompt = flatten_messages(request.messages)
@@ -595,6 +593,38 @@ def chat(
         result="PASS",
     )
     evidence_delivery = emit_model_touch(event)
+
+    if request.stream:
+        # SSE stream: emit text in chunks, then [DONE]
+        def _gen():
+            chunk_id = f"cd-{uuid.uuid4().hex[:16]}"
+            created = int(time.time())
+            # split text into ~20-char chunks for streaming feel
+            words = text.split(" ")
+            buf = ""
+            for i, w in enumerate(words):
+                buf += (w + " ")
+                if len(buf) >= 20 or i == len(words) - 1:
+                    payload = {
+                        "id": chunk_id,
+                        "object": "chat.completion.chunk",
+                        "created": created,
+                        "model": f"{provider}/{resolved_model}",
+                        "choices": [{"index": 0, "delta": {"content": buf}, "finish_reason": None}],
+                    }
+                    yield f"data: {json.dumps(payload, ensure_ascii=False)}\n\n"
+                    buf = ""
+            # final chunk
+            final = {
+                "id": chunk_id,
+                "object": "chat.completion.chunk",
+                "created": created,
+                "model": f"{provider}/{resolved_model}",
+                "choices": [{"index": 0, "delta": {}, "finish_reason": "stop"}],
+            }
+            yield f"data: {json.dumps(final, ensure_ascii=False)}\n\n"
+            yield "data: [DONE]\n\n"
+        return StreamingResponse(_gen(), media_type="text/event-stream")
 
     return {
         "id": f"cd-{uuid.uuid4().hex[:16]}",
