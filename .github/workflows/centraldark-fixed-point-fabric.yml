@@ -1,0 +1,48 @@
+name: "🧭 Fixed Point Fabric Proof"
+
+on:
+  pull_request:
+    paths:
+      - "apps/modulos/fixed-point-fabric/**"
+      - ".github/workflows/centraldark-fixed-point-fabric.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  prove-same-head:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: apps/modulos/fixed-point-fabric
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile
+        run: python -m compileall -q src
+      - name: Unit and counterproof suite
+        env:
+          PYTHONPATH: src
+        run: python -m unittest discover -s tests -v
+      - name: Deterministic fixed-point receipt
+        env:
+          PYTHONPATH: src
+        run: python tests/ci_fixed_point.py | tee fixed-point-ci-receipt.json
+      - name: Reject embedded secrets
+        run: |
+          if grep -RIE --exclude='.env.example' --exclude='*.md' '(github_pat_|ghp_|sk-[A-Za-z0-9_-]{12,}|BEGIN (RSA|OPENSSH) PRIVATE KEY)' .; then
+            echo 'Potential secret found'
+            exit 1
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fixed-point-ci-receipt
+          path: apps/modulos/fixed-point-fabric/fixed-point-ci-receipt.json
+          if-no-files-found: error
+
