@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// 🧠 Decisor v5 — cadeia de IAs + cache + timeout por modelo + Elite Anthropic fallback
+// 🧠 Decisor v5.1 — cadeia + strategy (OmniRoute delta) + cache + Elite fallback
 // Memória oficial: GraphRAG-Master injeta contexto do knowledge/ no prompt (fail-safe).
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
@@ -8,13 +8,11 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { buscarContexto } from '../agents/GraphRAG-Master/agent.mjs';
+import { applyRoutingStrategy } from './routing-strategy.mjs';
+import { evaluatePerceptionGate } from './perception-policy.mjs';
 const pexec = promisify(execFile);
 const DIR = dirname(fileURLToPath(import.meta.url));
 
-// ═══════════════════════════════════════════════════════════════
-// APRENDIZADOS — lições que o Hermes já pagou caro pra saber
-// (knowledge/aprendizados.json; só a categoria relevante entra no prompt)
-// ═══════════════════════════════════════════════════════════════
 const APRENDIZADOS_PATH = join(DIR, '../knowledge/aprendizados.json');
 
 function licoesRelevantes(missao, historico, erros_anteriores = []) {
@@ -34,19 +32,14 @@ function licoesRelevantes(missao, historico, erros_anteriores = []) {
   } catch { return ''; }
 }
 
-// ═══════════════════════════════════════════════════════════════
-// CADEIA DE MODELOS — carregada de cadeia.json (editável em quente)
-// Painel no WebUI: fab "H" → https://api.centralldark.com/hermes/*
-// ═══════════════════════════════════════════════════════════════
 const CADEIA_PATH = join(DIR, 'cadeia.json');
 const CADEIA_TTL_MS = 60_000;
-let _cadeiaCache = { ts: 0, darkai: null, elite: null };
+let _cadeiaCache = { ts: 0, darkai: null, elite: null, strategy: 'priority' };
 
-// Fallback de segurança se cadeia.json quebrar
 const CADEIA_FALLBACK_DARKAI = [
-  { modelo: 'google/gemini-3-flash-preview', timeout_ms: 15_000 },
-  { modelo: 'google/gemini-2.5-pro',         timeout_ms: 30_000 },
-  { modelo: 'openai/gpt-5-mini',             timeout_ms: 45_000 },
+  { modelo: 'google/gemini-3-flash-preview', timeout_ms: 15_000, cost_weight: 1 },
+  { modelo: 'google/gemini-2.5-pro',         timeout_ms: 30_000, cost_weight: 3 },
+  { modelo: 'openai/gpt-5-mini',             timeout_ms: 45_000, cost_weight: 3 },
 ];
 const ELITE_FALLBACK = {
   url: 'https://api.centralldark.com/v1/messages',
@@ -54,18 +47,35 @@ const ELITE_FALLBACK = {
   timeout_ms: 30_000,
 };
 
+const ELITE_VIAS = new Set(['elite-anthropic', 'centraldark-gateway']);
+
+function isEliteVia(via) {
+  return ELITE_VIAS.has(String(via || '').toLowerCase());
+}
+
 function carregarCadeia() {
   const agora = Date.now();
   if (_cadeiaCache.darkai && (agora - _cadeiaCache.ts) < CADEIA_TTL_MS) return _cadeiaCache;
   try {
     const j = JSON.parse(readFileSync(CADEIA_PATH, 'utf8'));
+    const strategy = (j.routing && j.routing.strategy) || 'priority';
     const ativos = (j.cadeia || []).filter(m => m.ativo !== false);
-    // schema tolerante: se linha tiver via: 'elite-anthropic' vira elite;
-    // senão trata como darkai. Também aceita fallback_final separado.
-    const darkai = ativos
-      .filter(m => (m.via || 'darkai') !== 'elite-anthropic')
-      .map(m => ({ modelo: m.modelo, timeout_ms: (m.timeout_s || 30) * 1000 }));
-    const eliteRow = ativos.find(m => m.via === 'elite-anthropic');
+
+    const darkaiRaw = ativos
+      .filter(m => !isEliteVia(m.via))
+      .map(m => ({
+        modelo: m.modelo,
+        timeout_ms: (m.timeout_s || 30) * 1000,
+        cost_weight: m.cost_weight,
+        tier: m.tier,
+      }));
+
+    const darkai = applyRoutingStrategy(
+      darkaiRaw.length ? darkaiRaw : CADEIA_FALLBACK_DARKAI,
+      strategy,
+    );
+
+    const eliteRow = ativos.find(m => isEliteVia(m.via));
     const ff = j.fallback_final && j.fallback_final.ativo !== false ? j.fallback_final : null;
     const elite = eliteRow ? {
       url: (j.elite && j.elite.url) || ELITE_FALLBACK.url,
@@ -76,19 +86,17 @@ function carregarCadeia() {
       modelo: ff.modelo || ELITE_FALLBACK.modelo,
       timeout_ms: (ff.timeout_s || 30) * 1000,
     } : ELITE_FALLBACK;
-    _cadeiaCache = { ts: agora, darkai: darkai.length ? darkai : CADEIA_FALLBACK_DARKAI, elite };
+
+    _cadeiaCache = { ts: agora, darkai, elite, strategy };
   } catch (e) {
     console.error('[decisor] cadeia.json inválido, usando fallback:', e.message);
-    _cadeiaCache = { ts: agora, darkai: CADEIA_FALLBACK_DARKAI, elite: ELITE_FALLBACK };
+    _cadeiaCache = { ts: agora, darkai: CADEIA_FALLBACK_DARKAI, elite: ELITE_FALLBACK, strategy: 'priority' };
   }
   return _cadeiaCache;
 }
 
-// Cadeia darkai atual (array REAL a cada chamada — sem Proxy).
-// Nota: a versão anterior usava `new Proxy([], {get})`; slice()/in operavam no alvo vazio
-// e devolviam holes (undefined) na escalada de loop → cfg.modelo estourava. Corrigido.
 function getCadeiaDarkai() { return carregarCadeia().darkai; }
-// Vars atualizadas a cada leitura de cadeia (via refreshEliteVars)
+
 let ELITE_URL         = ELITE_FALLBACK.url;
 let ELITE_MODEL       = ELITE_FALLBACK.modelo;
 let ELITE_TIMEOUT_MS  = ELITE_FALLBACK.timeout_ms;
@@ -99,9 +107,6 @@ function refreshEliteVars() {
 refreshEliteVars();
 const ELITE_TOKEN = process.env.ELITE_ANTHROPIC_TOKEN || process.env.ANTHROPIC_AUTH_TOKEN || '';
 
-// ═══════════════════════════════════════════════════════════════
-// CACHE in-memory (Map + TTL 10min + máx 100 itens)
-// ═══════════════════════════════════════════════════════════════
 const cache = new Map();
 const CACHE_TTL_MS = 10 * 60 * 1000;
 const CACHE_MAX    = 100;
@@ -118,16 +123,18 @@ function verCache(k) {
   const it = cache.get(k);
   if (!it) return null;
   if (Date.now() - it.ts > CACHE_TTL_MS) { cache.delete(k); return null; }
-  return it.valor;
+  try {
+    return validarDecisao(it.valor);
+  } catch {
+    cache.delete(k);
+    return null;
+  }
 }
 function salvarCache(k, valor) {
   if (cache.size >= CACHE_MAX) cache.delete(cache.keys().next().value);
   cache.set(k, { ts: Date.now(), valor });
 }
 
-// ═══════════════════════════════════════════════════════════════
-// PROMPT (system + schema) — SYSTEM oficial vive em prompts/hermes-core.md
-// ═══════════════════════════════════════════════════════════════
 const FERRAMENTAS = `
 Você tem estas ferramentas disponíveis (escolha UMA por etapa):
 
@@ -166,12 +173,85 @@ DEVOLVA APENAS JSON VÁLIDO, SEM MARKDOWN, SEM \`\`\`, ASSIM:
 {
   "pensamento": "por que essa etapa agora (1-2 frases)",
   "etapa_titulo": "título curto pro Telegram (max 60 char)",
+  "estado": "TESTE|FATO|FAIL|BLOCKED|CHEFE_SEGREDO_NECESSARIO",
   "ferramenta": "shell|darkai|git|escrever_arquivo|ler_arquivo|notificar_progresso|handler|aprender",
   "args": { ... },
   "terminou": false
 }
-Quando a missão estiver 100% concluída, devolva "terminou": true e "ferramenta": "notificar_progresso" com o resumo final.
+UNKNOWN, estado vazio ou estado fora do enum são inválidos. Se falta evidência, use TESTE e escolha a ação que mais reduz a incerteza. Use FATO somente quando a evidência resolveu a dúvida. FAIL registra falha observada; BLOCKED registra impedimento externo; CHEFE_SEGREDO_NECESSARIO é reservado à única dependência humana impossível de resolver pelo organismo.
+Quando a missão estiver 100% concluída e provada, devolva "estado": "FATO", "terminou": true e "ferramenta": "notificar_progresso" com o resumo final.
 `;
+
+const ESTADOS_DECISAO = new Set(['TESTE', 'FATO', 'FAIL', 'BLOCKED', 'CHEFE_SEGREDO_NECESSARIO']);
+
+export function validarDecisao(decisao) {
+  if (!decisao || typeof decisao !== 'object' || Array.isArray(decisao)) throw new Error('decisão inválida');
+  const estado = String(decisao.estado || '').trim().toUpperCase();
+  if (!ESTADOS_DECISAO.has(estado)) throw new Error(`estado semântico inválido: ${estado || 'AUSENTE'}`);
+  if (decisao.terminou === true && estado !== 'FATO') throw new Error(`estado ${estado} não pode encerrar missão`);
+  return { ...decisao, estado };
+}
+
+function shellQuote(value) {
+  return `'${String(value ?? '').replace(/'/g, `'\\''`)}'`;
+}
+
+function perceptionProposal(decisao, scopeKey) {
+  const safe = {
+    ferramenta: String(decisao?.ferramenta || ''),
+    scope_key: scopeKey,
+    estado: String(decisao?.estado || ''),
+    etapa_titulo: String(decisao?.etapa_titulo || '').slice(0, 120),
+    pensamento: String(decisao?.pensamento || '').slice(0, 500),
+  };
+  return Buffer.from(JSON.stringify(safe), 'utf8').toString('base64url');
+}
+
+export function aplicarGatePercepcao(decisao, historico = [], { emLoop = false } = {}) {
+  const gate = evaluatePerceptionGate({ decisao, historico });
+  const loopForcesGate = emLoop === true && gate.mutation?.mutating === true && gate.status === 'NOT_REQUIRED_CLEAR_LOCAL';
+
+  if (gate.required === true || loopForcesGate) {
+    const proposal = perceptionProposal(decisao, gate.scope_key);
+    return {
+      pensamento: `gate determinístico de percepção antes de ${gate.mutation?.kind || 'MUTATION'}`,
+      etapa_titulo: 'Quatro percepções antes da caneta',
+      estado: 'TESTE',
+      ferramenta: 'shell',
+      args: {
+        comando: `HERMES_PERCEPTION_SCOPE_KEY=${shellQuote(gate.scope_key)} HERMES_PERCEPTION_PROPOSAL_B64=${shellQuote(proposal)} node apps/modulos/HERMES-CORE/core/perception-orchestra.mjs --active-mission`,
+      },
+      terminou: false,
+      _perception_gate_status: 'REQUIRE_FOUR_PERCEPTIONS',
+      _perception_original_tool: decisao.ferramenta,
+      _perception_original_scope: gate.scope_key,
+      _perception_triggers: { ...(gate.triggers || {}), loop_detected: emLoop === true },
+    };
+  }
+
+  if (gate.allow_mutation === false) {
+    const tests = (gate.active_gate?.discriminating_tests || []).slice(0, 4).join(' | ');
+    return {
+      pensamento: 'a percepção anterior ainda não provou delta suficiente; mutação continua bloqueada',
+      etapa_titulo: 'Caneta bloqueada até contraprova',
+      estado: 'TESTE',
+      ferramenta: 'notificar_progresso',
+      args: {
+        mensagem: `PERCEPTION_GATE=BLOCKED next=${gate.active_gate?.next_rule || 'TEST_REQUIRED'}${tests ? ` tests=${tests}` : ''}`.slice(0, 700),
+      },
+      terminou: false,
+      _perception_gate_status: gate.status,
+      _perception_original_tool: decisao.ferramenta,
+      _perception_original_scope: gate.scope_key,
+    };
+  }
+
+  return {
+    ...decisao,
+    _perception_gate_status: gate.status,
+    _perception_scope_key: gate.scope_key,
+  };
+}
 
 const SYSTEM_FALLBACK = `Você é o Hermes, executor autônomo da CentralDark. Pense passo-a-passo. Nunca desvie da missão. Sempre devolva JSON puro.`;
 let SYSTEM = SYSTEM_FALLBACK;
@@ -180,7 +260,6 @@ try {
   if (t) SYSTEM = t;
 } catch {}
 
-// Loop = últimas etapas com MESMA ferramenta + MESMOS args (o modelo travou numa ideia)
 function detectarLoop(historico) {
   const n = historico?.length ?? 0;
   if (n < 2) return 0;
@@ -191,8 +270,6 @@ function detectarLoop(historico) {
   return rep;
 }
 
-// Releitura = mesmo arquivo lido 3+ vezes nas últimas 6 etapas (por QUALQUER ferramenta: ler_arquivo ou shell cat)
-// — o modelo burla o detector de loop alternando ferramentas; o que importa é o EFEITO repetido
 function detectarReleituras(historico) {
   const contagem = {};
   for (const h of (historico ?? []).slice(-6)) {
@@ -210,8 +287,6 @@ function detectarReleituras(historico) {
   return top;
 }
 
-// Efeito repetido (v3) = mesmo comando shell rodado 3+x mudando só o "marcador"
-// (ex.: `tsc --noEmit && echo v1` → `... && echo v2`) — normaliza e compara o EFEITO
 function normalizarComando(cmd) {
   return String(cmd || '')
     .replace(/(&&|;|\|\|)\s*echo\s+[^&;|]*/gi, ' ')
@@ -233,8 +308,6 @@ function detectarEfeitoRepetido(historico) {
   return top;
 }
 
-// Detector v4: 2+ escritas no mesmo path nas últimas 5 etapas SEM validação entre elas
-// (tsc/node --check/json.load) — reescrever no escuro não converge; a validação diz o que falta
 function detectarEscritaSemValidacao(historico) {
   const ult = (historico ?? []).slice(-5);
   const escritas = {};
@@ -301,18 +374,12 @@ function extrairJSON(texto) {
   return JSON.parse(m[0]);
 }
 
-// ═══════════════════════════════════════════════════════════════
-// ENV VARS — darkai precisa delas no ambiente do subprocesso
-// ═══════════════════════════════════════════════════════════════
 const DARKAI_ENV = {
   ...process.env,
   DARKAI_ANON_KEY: process.env.DARKAI_ANON_KEY || '',
   DARKAI_URL: process.env.DARKAI_URL || '',
 };
 
-// ═══════════════════════════════════════════════════════════════
-// FALLBACK FINAL — Elite Anthropic Proxy
-// ═══════════════════════════════════════════════════════════════
 async function chamarEliteAnthropic(prompt) {
   refreshEliteVars();
   if (!ELITE_TOKEN) throw new Error('ELITE_ANTHROPIC_TOKEN não configurado');
@@ -346,9 +413,6 @@ async function chamarEliteAnthropic(prompt) {
   }
 }
 
-// ═══════════════════════════════════════════════════════════════
-// CHAMADA DARKAI COM RESILIÊNCIA — env vars + retry com backoff
-// ═══════════════════════════════════════════════════════════════
 async function chamarDarkaiComResiliencia(modelo, system, prompt, timeout_ms, tentativas = 2) {
   for (let t = 1; t <= tentativas; t++) {
     try {
@@ -374,11 +438,7 @@ async function chamarDarkaiComResiliencia(modelo, system, prompt, timeout_ms, te
   }
 }
 
-// ═══════════════════════════════════════════════════════════════
-// FUNÇÃO PRINCIPAL — decidir(missao, historico)
-// ═══════════════════════════════════════════════════════════════
 export async function decidir(missao, historico) {
-  // 1. Cache HIT?
   const k = chaveCache(missao, historico);
   const hit = verCache(k);
   if (hit) {
@@ -388,8 +448,6 @@ export async function decidir(missao, historico) {
 
   const historico_erros = [];
 
-  // Memória oficial (GraphRAG-Master) — antes de decisão importante: início, a cada 5 etapas,
-  // ou replanejamento (última etapa falhou). Fail-safe: sem memória a missão segue.
   let memoria = '';
   const n = historico?.length ?? 0;
   const ultimaFalhou = n > 0 && historico[n - 1]?.ok === false;
@@ -397,38 +455,27 @@ export async function decidir(missao, historico) {
     try { memoria = await buscarContexto(missao); } catch {}
   }
 
-  // ═════════════════════════════════════════════════════════════
-  // ROTEAMENTO DE MODELO (barato → caro) — a decisão de verdade:
-  //   1. cadeia.json é ORDENADA por custo: Flash (barato, ~90% das etapas) primeiro,
-  //      depois Gemini Pro, GPT-5, Opus/Sonnet/Haiku, Grok — nesta ordem.
-  //   2. Etapa normal: tenta do MAIS BARATO pro mais caro; para no 1º que responder JSON válido.
-  //   3. Escalada automática: loop/releitura/escrita-cega detectados → PULA o barato
-  //      (slice(1)) e vai direto pro modelo forte quebrar o empate.
-  //   4. Se TODOS falharem → Elite Anthropic (fallback final, fora do darkai).
-  // ═════════════════════════════════════════════════════════════
   const emLoop = detectarLoop(historico) >= 3 || !!detectarReleituras(historico) || !!detectarEfeitoRepetido(historico) || !!detectarEscritaSemValidacao(historico);
   const cadeiaDarkai = getCadeiaDarkai();
-  // slice(1) seguro: se a cadeia tiver só 1 modelo, mantém ele em vez de array vazio
-  // (array vazio faria o loop pular todos os darkai e cair direto no Elite)
   let cadeia = cadeiaDarkai;
   if (emLoop) {
     if (cadeiaDarkai.length <= 1) {
-      cadeia = cadeiaDarkai; // só tem 1 modelo, não tem pra onde escalar
+      cadeia = cadeiaDarkai;
     } else {
-      cadeia = cadeiaDarkai.slice(1); // pula o mais barato, tenta o resto
+      cadeia = cadeiaDarkai.slice(1);
     }
     console.log(`[decisor] 🔁 loop/releitura detectado — escalando (${cadeia.length} modelos restantes)`);
   }
 
-  // 2. Tenta os modelos via darkai (com env vars + retry)
   for (const cfg of cadeia) {
     const t0 = Date.now();
     try {
       const prompt = montarPrompt(missao, historico, historico_erros, memoria);
       const stdout = await chamarDarkaiComResiliencia(cfg.modelo, SYSTEM, prompt, cfg.timeout_ms);
-      const decisao = extrairJSON(stdout);
+      const bruta = validarDecisao(extrairJSON(stdout));
+      const decisao = validarDecisao(aplicarGatePercepcao(bruta, historico, { emLoop }));
       decisao._modelo_usado = cfg.modelo;
-      console.log(`[decisor] ✅ ${cfg.modelo} respondeu em ${Date.now()-t0}ms`);
+      console.log(`[decisor] ✅ ${cfg.modelo} respondeu em ${Date.now()-t0}ms gate=${decisao._perception_gate_status || 'UNKNOWN'}`);
       salvarCache(k, decisao);
       return decisao;
     } catch (e) {
@@ -438,15 +485,15 @@ export async function decidir(missao, historico) {
     }
   }
 
-  // 3. Fallback final — Elite Anthropic
   console.log('[decisor] 🚨 caiu no Elite Anthropic (fallback final)');
   const t0 = Date.now();
   try {
     const prompt = montarPrompt(missao, historico, historico_erros, memoria);
     const texto = await chamarEliteAnthropic(prompt);
-    const decisao = extrairJSON(texto);
+    const bruta = validarDecisao(extrairJSON(texto));
+    const decisao = validarDecisao(aplicarGatePercepcao(bruta, historico, { emLoop }));
     decisao._modelo_usado = `elite:${ELITE_MODEL}`;
-    console.log(`[decisor] ✅ Elite ${ELITE_MODEL} respondeu em ${Date.now()-t0}ms`);
+    console.log(`[decisor] ✅ Elite ${ELITE_MODEL} respondeu em ${Date.now()-t0}ms gate=${decisao._perception_gate_status || 'UNKNOWN'}`);
     salvarCache(k, decisao);
     return decisao;
   } catch (e) {
@@ -455,7 +502,6 @@ export async function decidir(missao, historico) {
   }
 }
 
-// CLI standalone pra debug
 if (import.meta.url === `file://${process.argv[1]}`) {
   const [,, missao = 'test', hist = '[]'] = process.argv;
   decidir(missao, JSON.parse(hist)).then(d => console.log(JSON.stringify(d, null, 2)));
