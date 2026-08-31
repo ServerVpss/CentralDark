@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-08-30T02:20:47.351Z
+# 🧠 Notion Sync — 2026-08-31T03:38:45.353Z
 
-- **Commit fonte:** `59002731fbaea133efd8dab4f2332ded6bd3f417`
+- **Commit fonte:** `8a79be14b85ac956214454ac3bcfeecca4857565`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 489 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 2 criadas · ♻️ 490 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -15,8 +15,8 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
-| aprendizados | 35 | 1 | 34 | 0 | 0 |
-| estrutura | 411 | 0 | 411 | 0 | 0 |
+| aprendizados | 35 | 0 | 35 | 0 | 0 |
+| estrutura | 413 | 2 | 411 | 0 | 0 |
 
 ## Operações
 
@@ -100,7 +100,7 @@
 | aprendizados | atualizado | #31 — Provider sem crédito NÃO é router quebrado |
 | aprendizados | atualizado | #32 — Uma capacidade = uma linhagem = um PR de promoção por escopo |
 | aprendizados | atualizado | #33 — Opinião usada como medição gera falso verde e ação destrutiva |
-| aprendizados | criado | #34 — Sem TURN_CLASS não há gate entre ler e agir — a impressão ocupa o slot da medição |
+| aprendizados | atualizado | #34 — Sem TURN_CLASS não há gate entre ler e agir — a impressão ocupa o slot da medição |
 | estrutura | atualizado | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | atualizado | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
@@ -223,6 +223,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/PROXY/TUTORIAL-TERMINAL-SEM-CONTA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/conversa-mcp-webui-liberacao.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/elitehttp-vs-elite-anthropic-nao-confundir.md |
+| estrutura | criado | docs/CONSCIENCIA/APRENDIZADOS/erros-agente-2026-08-29-medicao-e-falso-verde.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/incidente-2026-07-05-mcp-dump-perdido.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/socorro-2026-07-05.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ARQUITETURA-CHAVES-AI-PROXY.md |
@@ -487,6 +488,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/REPOSITORIO-OFICIAL.md |
 | estrutura | atualizado | docs/CONSCIENCIA/RETOMADA-Arsenal-TelePainel.md |
 | estrutura | atualizado | docs/CONSCIENCIA/RETOMADA-Issues-Agent.md |
+| estrutura | criado | docs/CONSCIENCIA/SCREENPIPE-MCP-BLOQUEIO-20260831.md |
 | estrutura | atualizado | docs/CONSCIENCIA/SCRIPTING-STANDARDS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/TESTE-CODEX-TRIGGER-HANDLERS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/TREINAMENTO-IAS/README.md |
