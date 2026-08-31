@@ -1,0 +1,12 @@
+{
+  "started_at": "2026-08-26T02:39:16.445634Z",
+  "pid": 26476,
+  "restart_count": 36,
+  "last_health": "2026-08-27T11:30:15.382611Z",
+  "last_state_save": "2026-08-29T08:34:33.662406Z",
+  "health_checks": 5,
+  "requests_served": 0,
+  "errors": 36,
+  "sha256": "e6f1d409b226877a9791c0e5fd3e2843c1d63a61f8ede200b8e6253db7743d2b",
+  "proved": true
+}
