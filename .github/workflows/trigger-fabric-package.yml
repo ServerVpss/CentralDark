@@ -170,7 +170,11 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          cat > "$RUNNER_TEMP/mermaid-puppeteer-config.json" <<'JSON'
+          {"args":["--no-sandbox","--disable-setuid-sandbox"]}
+          JSON
           npx -y @mermaid-js/mermaid-cli@11.9.0 \
+            -p "$RUNNER_TEMP/mermaid-puppeteer-config.json" \
             -i docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ARCHITECTURE.mmd \
             -o docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ARCHITECTURE.png \
             -b transparent
