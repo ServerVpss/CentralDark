@@ -12,6 +12,11 @@ Você é uma IA, agente, plugin, hub ou modelo que acabou de chegar no CentralDa
 
 ```text
 REUSE_BEFORE_CREATE_REQUIRED=true
+ARCHITECTURE_LOCK=true
+UNKNOWN_IS_NOT_PASS=true
+EXECUTOR_CANNOT_SELF_APPROVE=true
+JUDGE_DOES_NOT_MUTATE=true
+GRAPH_IS_DERIVED_NOT_AUTHORITY=true
 ```
 
 ## 1. Boot universal

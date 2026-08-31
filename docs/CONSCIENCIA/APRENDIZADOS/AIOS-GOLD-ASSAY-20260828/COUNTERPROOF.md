@@ -5,7 +5,7 @@ tags: ["consciencia"]
 updated: 2026-08-28
 ---
 
-# Counterproof — AIOS/AIOX
+# Counterproof — AIOS/[EXT_REDACTED]
 
 Objetivo: impedir que quantidade de arquivos, nomes sofisticados ou documentação virem prova automática de qualidade/aderência.
 
@@ -23,7 +23,7 @@ FIT_CANDIDATE != ABSORBED
 
 O `package.json` raiz observado declara:
 
-`validate:structure = node .aios-core/infrastructure/scripts/source-tree-guardian/index.js`
+`validate:structure = node .[EXT_REDACTED]-core/infrastructure/scripts/source-tree-guardian/index.js`
 
 A busca no ZIP medido não encontrou esse caminho.
 
@@ -33,7 +33,7 @@ Veredito: `DECLARED != PRESENT`.
 
 Arquivo observado:
 
-`aiox-core/.aios-core/infrastructure/scripts/test-quality-assessment.js`
+`[EXT_REDACTED]-core/.[EXT_REDACTED]-core/infrastructure/scripts/test-quality-assessment.js`
 
 SHA-256:
 
@@ -59,7 +59,7 @@ Logo, no máximo a matéria pode inspirar detecção/classificação read-only. 
 
 ## CP5 — licença
 
-`aiox-core/LICENSE` contém Commons Clause License Condition v1.0 seguida de texto MIT, enquanto package metadata declara MIT.
+`[EXT_REDACTED]-core/LICENSE` contém Commons Clause License Condition v1.0 seguida de texto MIT, enquanto package metadata declara MIT.
 
 Esta rodada adota postura conservadora:
 

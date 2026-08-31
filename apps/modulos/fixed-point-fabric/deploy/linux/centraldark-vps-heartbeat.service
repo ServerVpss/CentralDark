@@ -1,0 +1,19 @@
+[Unit]
+Description=CentralDark VPS signed heartbeat
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+EnvironmentFile=-/etc/centraldark-fixed-point.env
+ExecStart=/opt/centraldark-fixed-point/.venv/bin/python -m centraldark_fixed_point.vps_agent --host 127.0.0.1 --port 9119
+Restart=always
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target
+

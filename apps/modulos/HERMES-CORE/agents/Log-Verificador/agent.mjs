@@ -158,7 +158,15 @@ export function autoRestart(nome, { max24h = 3, cooldownMs = 30 * 60_000 } = {})
 
   try {
     execSync(`pm2 restart '${nome.replace(/'/g, "'\\''")}'`, { encoding: 'utf8', timeout: 30_000 });
-    try { execSync('pm2 save', { encoding: 'utf8', timeout: 15_000 }); } catch {}
+    try {
+      execSync('pm2 save', { encoding: 'utf8', timeout: 15_000 });
+    } catch (e) {
+      return {
+        ok: false,
+        motivo: `pm2 save falhou após restart: ${String(e.message).slice(0, 150)}`,
+        restart_aplicado: true,
+      };
+    }
     s.ultimoRestart = agora;
     s.restarts24h.push(agora);
     estado.set(nome, s);

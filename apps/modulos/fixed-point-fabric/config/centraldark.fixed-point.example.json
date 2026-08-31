@@ -1,0 +1,39 @@
+{
+  "data_dir": ".centraldark-fp",
+  "policy": {
+    "required_domains": ["local", "vps", "github", "screenpipe"],
+    "required_stable_samples": 2,
+    "sample_interval_seconds": 15,
+    "max_rounds": 12,
+    "max_observation_age_seconds": 120,
+    "max_open_promotion_prs": 1
+  },
+  "local": {
+    "repo_path": "${CENTRALDARK_HOME}",
+    "services": [
+      {"name": "dashboard", "url": "http://127.0.0.1:8788/health"},
+      {"name": "omni-router", "url": "http://127.0.0.1:8099/health"},
+      {"name": "guardiao", "url": "http://127.0.0.1:9119/health"}
+    ]
+  },
+  "vps": {
+    "heartbeat_url": "${CENTRALDARK_VPS_HEARTBEAT_URL}",
+    "hmac_secret": "${CENTRALDARK_HEARTBEAT_SECRET}",
+    "max_age_seconds": 120,
+    "timeout_seconds": 5
+  },
+  "github": {
+    "repository": "ServerVpss/CentralDark",
+    "branch": "main",
+    "token_env": "GITHUB_TOKEN"
+  },
+  "github_webhook": {
+    "secret_env": "CENTRALDARK_GITHUB_WEBHOOK_SECRET",
+    "bind": "127.0.0.1",
+    "port": 8790
+  },
+  "screenpipe": {
+    "base_url": "http://127.0.0.1:3030",
+    "recent_seconds": 300
+  }
+}

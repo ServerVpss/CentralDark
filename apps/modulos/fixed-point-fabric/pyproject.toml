@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "centraldark-fixed-point-fabric"
+version = "1.0.0"
+description = "Fixed-point reconciliation fabric for CentralDark Casa, VPS, GitHub and Screenpipe"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "Proprietary - ServerVpss/CentralDark"}
+dependencies = []
+
+[project.scripts]
+centraldark-fp = "centraldark_fixed_point.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
