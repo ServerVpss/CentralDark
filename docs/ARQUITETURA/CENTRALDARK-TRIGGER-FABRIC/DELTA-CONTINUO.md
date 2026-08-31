@@ -15,6 +15,37 @@ UMA_INTENCAO
 
 Não há voto por janela, mensagem, modelo ou repetição. Não há transporte causal entre chats sem canal provado.
 
+## Fluxo padrão canônico
+
+`!CENTRALDARK` e `#CENTRALDARK` são entradas equivalentes para o mesmo ciclo; nenhum deles cria outro sistema.
+
+```text
+!CENTRALDARK | #CENTRALDARK
+→ CENTRALDARK
+
+MANY_AGENTS_ALLOWED=true
+READERS_PARALLEL=true
+PARALLELIZE_PERCEPTION=true
+SERIALIZE_MUTATION_PER_SCOPE=true
+ONE_WRITER_PER_CONFLICT_SCOPE=true
+JUDGE_INDEPENDENT_FROM_WRITER=true
+JUDGE_MAY_MUTATE=false
+
+TESTED_HEAD == COMMITTED_HEAD == PUSHED_PR_HEAD
+
+OBSERVED_FAILURE
+→ FIND_OWNER
+→ CREATE_FALSIFIER
+→ PATCH_EXISTING_OWNER
+→ ADD_NEGATIVE_TEST
+→ RUN_EXISTING_TESTS
+→ COUNTERPROVE
+→ REGISTER_RECEIPT
+→ GENERALIZE_IF_REUSABLE
+```
+
+Muitos agentes podem observar. Um Writer altera cada escopo. Todos reconciliam antes da mutação. A realidade decide. O próximo agente continua pelo receipt, não pela memória do anterior.
+
 ## Ativação e continuidade
 
 ```text
