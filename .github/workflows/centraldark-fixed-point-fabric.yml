@@ -35,8 +35,16 @@ jobs:
           EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
         run: test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"
         working-directory: .
+      - name: Setup Python 3.11
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v6
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: apps/modulos/fixed-point-fabric/pyproject.toml
       - name: Runtime contract
-        run: python3 --version
+        run: |
+          python3 --version
+          python3 -c "import sys; assert sys.version_info >= (3, 11), sys.version"
       - name: Compile
         run: python3 -m compileall -q src
       - name: Unit and counterproof suite
