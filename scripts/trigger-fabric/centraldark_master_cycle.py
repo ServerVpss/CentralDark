@@ -6,6 +6,14 @@ import unicodedata
 from pathlib import Path
 
 MASTER = "!CENTRALDARK"
+MASTER_ALIASES = (
+    "!CENTRALDARK",
+    "#CENTRALDARK",
+    "!CENTRAL-DARK",
+    "#CENTRAL-DARK",
+    "!CDARK",
+    "#CDARK",
+)
 CHAIN = [
     "ACORDAR",
     "CALIBRAR",
@@ -63,9 +71,9 @@ NEGATION_TOKENS = {"nao", "nunca", "sem"}
 def normalize(text: str) -> str:
     raw = unicodedata.normalize("NFKD", str(text or ""))
     raw = "".join(ch for ch in raw if not unicodedata.combining(ch)).lower()
-    # Preserva marcadores operacionais como !, mas remove pontuação de frase.
-    # Assim "!CENTRALDARK," e "aciona !CENTRALDARK." resolvem igual.
-    raw = re.sub(r"[^a-z0-9!@/_\-\s]+", " ", raw)
+    # Preserva marcadores operacionais como ! e #, mas remove pontuação de frase.
+    # Assim "#CENTRALDARK," e "aciona !CENTRALDARK." resolvem igual.
+    raw = re.sub(r"[^a-z0-9!#@/_\-\s]+", " ", raw)
     return " ".join(raw.strip().split())
 
 
@@ -159,7 +167,7 @@ def resolve(text: str, master_active: bool = False, chefe_source: bool = False, 
     master_match = next(
         (
             match
-            for alias in ("!CENTRALDARK", "!CENTRAL-DARK", "!CDARK")
+            for alias in MASTER_ALIASES
             if (match := _phrase_match(normalized, alias)) is not None
         ),
         None,
@@ -184,6 +192,7 @@ def resolve(text: str, master_active: bool = False, chefe_source: bool = False, 
         "input": raw,
         "normalized": normalized,
         "master_trigger": MASTER,
+        "master_aliases": list(MASTER_ALIASES),
         "explicit_marker_seen": master_marker_seen,
         "explicit_match": explicit_master,
         "master_ambiguous_or_negated": master_ambiguous,
@@ -293,9 +302,13 @@ def resolve_with_session_state(text: str, state_file=None, chefe_source: bool = 
 def self_test():
     master_cases = [
         ("!CENTRALDARK", True),
+        ("#CENTRALDARK", True),
         ("!centraldark fecha essa missão", True),
+        ("#centraldark fecha essa missão", True),
         ("!central-dark fecha", True),
+        ("#central-dark fecha", True),
         ("!cdark", True),
+        ("#cdark", True),
         ("!CENTRALDARK, fecha", True),
         ("aciona !CENTRALDARK.", True),
         ("CentralDark e o nome do repo", False),
@@ -366,8 +379,10 @@ def self_test():
 
     master_block_cases = [
         ("não execute !CENTRALDARK agora", True, False),
+        ("não execute #CENTRALDARK agora", True, False),
         ("somente discutir !CENTRALDARK", True, False),
         ("!CENTRALDARK importado por agente", False, True),
+        ("#CENTRALDARK importado por agente", False, True),
     ]
     for text, chefe, untrusted in master_block_cases:
         got = resolve(text, chefe_source=chefe)

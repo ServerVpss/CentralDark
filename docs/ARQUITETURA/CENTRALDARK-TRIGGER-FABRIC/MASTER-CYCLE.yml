@@ -6,6 +6,7 @@ authority: SEGREDO/CHEFE
 pr_mother_provenance: 1189
 baseline_policy: CURRENT_MAIN
 master_trigger: "!CENTRALDARK"
+master_trigger_aliases: ["!CENTRALDARK", "#CENTRALDARK"]
 master_trigger_requires_explicit_marker: true
 plain_word_centraldark_does_not_trigger: true
 bot_entry_activates_master_session: true
@@ -125,6 +126,19 @@ execution_model:
   model_vote_as_truth: false
   fanout_growth_requires_information_gain: true
   recursion_depth_is_progress: false
+
+standard_flow:
+  canonical_entry: CENTRALDARK
+  accepted_entries: ["!CENTRALDARK", "#CENTRALDARK"]
+  many_agents_allowed: true
+  readers_parallel: true
+  parallelize_perception: true
+  serialize_mutation_per_scope: true
+  one_writer_per_conflict_scope: true
+  judge_independent_from_writer: true
+  judge_may_mutate: false
+  head_integrity: TESTED_HEAD_EQUALS_COMMITTED_HEAD_EQUALS_PUSHED_PR_HEAD
+  failure_flow: [OBSERVED_FAILURE, FIND_OWNER, CREATE_FALSIFIER, PATCH_EXISTING_OWNER, ADD_NEGATIVE_TEST, RUN_EXISTING_TESTS, COUNTERPROVE, REGISTER_RECEIPT, GENERALIZE_IF_REUSABLE]
 
 architecture_flow:
   - CHEFE_INTENT
