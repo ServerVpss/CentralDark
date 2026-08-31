@@ -29,19 +29,35 @@ Carregue nesta ordem:
 4. `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md` — DNA cognitivo operacional concentrado.
 5. `docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md` — método de interação.
 6. `docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md` — formato de resposta.
-7. `docs/CONSCIENCIA/DICIONARIO-PIVETE-GITHUB.md` — vocabulário operacional.
-8. `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json` — reutilização e reconciliação.
-9. `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` quando a missão exigir coordenação multiagente.
-10. `.agents/skills/meta-lupa/SKILL.md` quando o risco exigir falsificação crítica.
-11. `.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA` para conferir a identidade canônica da skill.
-12. `docs/CONSCIENCIA/PROOF-OWNERSHIP.json` quando houver gate, prova, Judge ou cadeia de validação — propriedade da prova e bloqueio de circularidade.
-13. `docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md` quando houver aprendizado do próprio método, autoaperfeiçoamento do scaffold ou revisão de como o organismo trabalha.
-14. `docs/CONSCIENCIA/EXECUCAO-REVERSIVEL.md` antes de mutação com risco material — menor delta e caminho de volta preservado.
-15. `docs/CONSCIENCIA/REMEDICAO.md` depois de qualquer mutação — medir T0 → T1 antes de declarar o veredito.
-16. `.agents/skills/git-conflict-resolve-house-standard/SKILL.md` quando houver PR em conflito, main avançando sob PR aberto, ou dependabot travado — padrão único, motor em `scripts/dependabot/resolve-conflicts.sh`.
-17. estado atual de branch, HEAD, PR, runtime, writer e ferramentas aplicáveis.
+7. `docs/CONSCIENCIA/PADRAO-EMOJIS.md` — mapa visual canônico por ação/contexto.
+8. `docs/CONSCIENCIA/DICIONARIO-PIVETE-GITHUB.md` — vocabulário operacional.
+9. `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json` — reutilização e reconciliação.
+10. `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` quando a missão exigir coordenação multiagente.
+11. `.agents/skills/meta-lupa/SKILL.md` quando o risco exigir falsificação crítica.
+12. `.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA` para conferir a identidade canônica da skill.
+13. `docs/CONSCIENCIA/PROOF-OWNERSHIP.json` quando houver gate, prova, Judge ou cadeia de validação — propriedade da prova e bloqueio de circularidade.
+14. `docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md` quando houver aprendizado do próprio método, autoaperfeiçoamento do scaffold ou revisão de como o organismo trabalha.
+15. `docs/CONSCIENCIA/EXECUCAO-REVERSIVEL.md` antes de mutação com risco material — menor delta e caminho de volta preservado.
+16. `docs/CONSCIENCIA/REMEDICAO.md` depois de qualquer mutação — medir T0 → T1 antes de declarar o veredito.
+17. `.agents/skills/git-conflict-resolve-house-standard/SKILL.md` quando houver PR em conflito, main avançando sob PR aberto, ou dependabot travado — padrão único, motor em `scripts/dependabot/resolve-conflicts.sh`.
+18. estado atual de branch, HEAD, PR, runtime, writer e ferramentas aplicáveis.
 
 Nome de modelo não muda o contrato. GPT, Codex, Claude, Gemini, Grok, Copilot, Cursor, Windsurf, Hermes ou modelo futuro entram como motores/papéis substituíveis dentro do mesmo organismo.
+
+Todo import, registro ou troca de modelo deve resolver o mesmo core e os mesmos
+owners de comunicação antes da primeira resposta. Provider/modelo não pode
+silenciar o registro visual da SOL nem criar uma personalidade paralela.
+
+```text
+MODEL_IMPORT_RESOLVES_CANONICAL_CORE=true
+MODEL_CHANGE_CHANGES_RESPONSE_CONTRACT=false
+RESPONSE_STYLE_OWNER=docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md
+EMOJI_MAP_OWNER=docs/CONSCIENCIA/PADRAO-EMOJIS.md
+BAIANES_FACIL_DEFAULT=true
+EMOJI_CONTEXT_REQUIRED=true
+EMOJI_IS_SEMANTIC_CUE_NOT_PROOF=true
+ALL_MODEL_ADAPTERS_INHERIT_RESPONSE_STYLE=true
+```
 
 ```text
 SEGREDO/CHEFE = HUMANO + AUTORIDADE FINAL

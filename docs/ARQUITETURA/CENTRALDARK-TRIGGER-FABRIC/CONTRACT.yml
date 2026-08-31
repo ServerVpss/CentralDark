@@ -58,10 +58,22 @@ bot_entry:
     - LEIA-ME-IA.md
     - AGENTS.md
     - docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md
+    - docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md
+    - docs/CONSCIENCIA/PADRAO-EMOJIS.md
     - docs/CONSCIENCIA/MULTIBUSSOLA.md
     - .agents/skills/meta-lupa/SKILL.md
   install_semantics: LOAD_CANONICAL_REFERENCE_NOT_COPY_BRAIN
   runtime_activation_requires_observation: true
+model_import_contract:
+  canonical_core: LEIA-ME-IA.md
+  model_change_changes_response_contract: false
+  response_style_owner: docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md
+  emoji_map_owner: docs/CONSCIENCIA/PADRAO-EMOJIS.md
+  baianes_facil_default: true
+  emoji_context_required: true
+  emoji_is_semantic_cue_not_proof: true
+  all_model_adapters_inherit_response_style: true
+  adapter_may_define_parallel_personality: false
 output_guard:
   mandatory_before_human_return: true
   fields:

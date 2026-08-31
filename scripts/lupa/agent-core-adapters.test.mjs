@@ -1,10 +1,11 @@
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
 import test from "node:test";
 
-const ROOT = resolve(new URL("../..", import.meta.url).pathname);
+const ROOT = resolve(fileURLToPath(new URL("../..", import.meta.url)));
 const CORE = "LEIA-ME-IA.md";
 const PORTABLE_BRIDGE = "docs/CONSCIENCIA/ARTEFATOS/centraldark-prompt-universal.md";
 const CLAUDE_BRIDGE = "CLAUDE.md";
@@ -50,6 +51,14 @@ const CORE_REQUIRED_MARKERS = Object.freeze([
   "EXECUTOR_CANNOT_SELF_APPROVE=true",
   "JUDGE_DOES_NOT_MUTATE=true",
   "GRAPH_IS_DERIVED_NOT_AUTHORITY=true",
+  "MODEL_IMPORT_RESOLVES_CANONICAL_CORE=true",
+  "MODEL_CHANGE_CHANGES_RESPONSE_CONTRACT=false",
+  "RESPONSE_STYLE_OWNER=docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md",
+  "EMOJI_MAP_OWNER=docs/CONSCIENCIA/PADRAO-EMOJIS.md",
+  "BAIANES_FACIL_DEFAULT=true",
+  "EMOJI_CONTEXT_REQUIRED=true",
+  "EMOJI_IS_SEMANTIC_CUE_NOT_PROOF=true",
+  "ALL_MODEL_ADAPTERS_INHERIT_RESPONSE_STYLE=true",
 ]);
 
 const FORBIDDEN_CLAUDE_SUBAGENT_AUTHORITY = Object.freeze([
@@ -90,9 +99,17 @@ function pythonSelfTest(script) {
       last = result;
       continue;
     }
-    return JSON.parse(result.stdout);
+    if (result.status !== 0 || !result.stdout?.trim()) {
+      last = result;
+      continue;
+    }
+    try {
+      return JSON.parse(result.stdout);
+    } catch {
+      last = result;
+    }
   }
-  throw last?.error || new Error("python indisponivel");
+  throw last?.error || new Error(`python self-test inválido: ${last?.stderr || last?.stdout || "sem saída"}`);
 }
 
 test("core canônico proíbe governança duplicada e exige autoridade humana", () => {
@@ -109,6 +126,20 @@ test("adapter é ponte fina, não segunda governança", () => {
     for (const marker of REQUIRED_ADAPTER_MARKERS) {
       assert.ok(content.includes(marker), `ADAPTER_MARKER_MISSING:${path}:${marker}`);
     }
+  }
+});
+
+test("todo adapter de modelo herda o padrão de resposta e emojis do core", () => {
+  const core = read(CORE);
+  assert.ok(core.includes("MODEL_IMPORT_RESOLVES_CANONICAL_CORE=true"));
+  assert.ok(core.includes("EMOJI_CONTEXT_REQUIRED=true"));
+  assert.ok(core.includes("EMOJI_MAP_OWNER=docs/CONSCIENCIA/PADRAO-EMOJIS.md"));
+
+  for (const [path, model] of ADAPTERS) {
+    const content = read(path);
+    if (content == null) continue;
+    assert.ok(content.includes(`CANONICAL_AGENT_CORE=${CORE}`), `MODEL_CORE_NOT_INHERITED:${model}:${path}`);
+    assert.ok(content.includes("FUTURE_RULES_CONSUMED_FROM_CORE=true"), `MODEL_STYLE_DRIFT_RISK:${model}:${path}`);
   }
 });
 
