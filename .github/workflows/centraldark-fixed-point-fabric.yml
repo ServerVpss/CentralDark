@@ -38,4 +38,6 @@ jobs:
             exit 1
           fi
       - name: Receipt integrity
-        run: test -s fixed-point-ci-receipt.json && grep -q '"chain_valid": true' fixed-point-ci-receipt.json
+        run: >-
+          test -s fixed-point-ci-receipt.json &&
+          grep -q '"chain_valid": true' fixed-point-ci-receipt.json
