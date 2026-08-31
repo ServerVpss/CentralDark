@@ -42,17 +42,64 @@ class StateLibraryTests(unittest.TestCase):
         with self.assertRaises(IntegrityError):
             decode_bytes(envelope)
 
-    def test_consolidation_seal_detects_change(self):
+    def test_consolidation_seal_detects_change_and_added_file(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            target = root / "contract.txt"
+            protected = root / "protected"
+            protected.mkdir()
+            target = protected / "contract.txt"
             target.write_text("fixed", encoding="utf-8")
-            seal = build_seal(root, ["contract.txt"])
+            seal = build_seal(root, ["protected"])
             self.assertTrue(verify_seal(root, seal)["valid"])
+
             target.write_text("changed", encoding="utf-8")
-            result = verify_seal(root, seal)
-            self.assertFalse(result["valid"])
-            self.assertEqual(result["changed"][0]["reason"], "content_changed")
+            changed = verify_seal(root, seal)
+            self.assertFalse(changed["valid"])
+            self.assertEqual(changed["changed"][0]["reason"], "content_changed")
+
+            target.write_text("fixed", encoding="utf-8")
+            (protected / "parallel.txt").write_text("new", encoding="utf-8")
+            added = verify_seal(root, seal)
+            self.assertFalse(added["valid"])
+            self.assertEqual(added["changed"][0]["reason"], "added")
+
+    def test_workflow_history_is_queryable_by_head(self):
+        with tempfile.TemporaryDirectory() as directory:
+            store = EventStore(Path(directory) / "state.db")
+            library = GitHubStateLibrary(store, "secret")
+            for delivery, head_sha, conclusion in (
+                ("run-1", "old-head", "failure"),
+                ("run-2", "current-head", "success"),
+            ):
+                body = json.dumps({
+                    "action": "completed",
+                    "workflow_run": {
+                        "id": 100 if delivery == "run-1" else 101,
+                        "run_number": 7,
+                        "workflow_id": 42,
+                        "status": "completed",
+                        "conclusion": conclusion,
+                        "head_sha": head_sha,
+                        "name": "gate",
+                        "html_url": f"https://example.invalid/{delivery}",
+                    },
+                }).encode()
+                signature = "sha256=" + hmac.new(
+                    b"secret", body, hashlib.sha256
+                ).hexdigest()
+                library.ingest({
+                    "X-GitHub-Delivery": delivery,
+                    "X-GitHub-Event": "workflow_run",
+                    "X-Hub-Signature-256": signature,
+                }, body)
+
+            current = library.workflow_runs("current-head")
+            self.assertEqual(len(current), 1)
+            self.assertEqual(current[0]["id"], 101)
+            self.assertEqual(current[0]["conclusion"], "success")
+            self.assertEqual(len(library.workflow_runs()), 2)
+            self.assertEqual(store.verify_chain(), (True, 2))
+            store.close()
 
 
 if __name__ == "__main__":
