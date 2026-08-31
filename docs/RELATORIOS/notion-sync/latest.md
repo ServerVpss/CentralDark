@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-08-31T03:38:45.353Z
+# 🧠 Notion Sync — 2026-08-31T05:02:41.169Z
 
-- **Commit fonte:** `8a79be14b85ac956214454ac3bcfeecca4857565`
+- **Commit fonte:** `030dd049010c1153096036117b5d828a3bfcefeb`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 2 criadas · ♻️ 490 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 491 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
 | aprendizados | 35 | 0 | 35 | 0 | 0 |
-| estrutura | 413 | 2 | 411 | 0 | 0 |
+| estrutura | 412 | 0 | 412 | 0 | 0 |
 
 ## Operações
 
@@ -223,7 +223,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/PROXY/TUTORIAL-TERMINAL-SEM-CONTA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/conversa-mcp-webui-liberacao.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/elitehttp-vs-elite-anthropic-nao-confundir.md |
-| estrutura | criado | docs/CONSCIENCIA/APRENDIZADOS/erros-agente-2026-08-29-medicao-e-falso-verde.md |
+| estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/erros-agente-2026-08-29-medicao-e-falso-verde.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/incidente-2026-07-05-mcp-dump-perdido.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/socorro-2026-07-05.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ARQUITETURA-CHAVES-AI-PROXY.md |
@@ -344,7 +344,6 @@
 | estrutura | atualizado | docs/CONSCIENCIA/INFRA-MAP.md |
 | estrutura | atualizado | docs/CONSCIENCIA/INSTALADOR/13-centraldark-portal.md |
 | estrutura | atualizado | docs/CONSCIENCIA/INSTALADOR/14-sync-monorepo.md |
-| estrutura | atualizado | docs/CONSCIENCIA/INSTALADOR/backup/README.md |
 | estrutura | atualizado | docs/CONSCIENCIA/INVENTARIO-PM2-VPS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md |
 | estrutura | atualizado | docs/CONSCIENCIA/LEGENDA-TEMPORAL-T0-TN-TDELTA.md |
@@ -488,7 +487,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/REPOSITORIO-OFICIAL.md |
 | estrutura | atualizado | docs/CONSCIENCIA/RETOMADA-Arsenal-TelePainel.md |
 | estrutura | atualizado | docs/CONSCIENCIA/RETOMADA-Issues-Agent.md |
-| estrutura | criado | docs/CONSCIENCIA/SCREENPIPE-MCP-BLOQUEIO-20260831.md |
+| estrutura | atualizado | docs/CONSCIENCIA/SCREENPIPE-MCP-BLOQUEIO-20260831.md |
 | estrutura | atualizado | docs/CONSCIENCIA/SCRIPTING-STANDARDS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/TESTE-CODEX-TRIGGER-HANDLERS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/TREINAMENTO-IAS/README.md |
