@@ -1,0 +1,177 @@
+{
+  "version": "1.0.0",
+  "timestamp": "2026-08-31T00:00:00Z",
+  "owner": "SOL/Reality Judge",
+  "library_binding": "ACTIVE",
+
+  "canonical_sources": [
+    {
+      "id": "leia-me-ia",
+      "path": "LEIA-ME-IA.md",
+      "type": "boot",
+      "size_bytes": 50000,
+      "sha256": "TODO_measure_on_deploy",
+      "owner": "SEGREDO/CHEFE",
+      "mutable": false,
+      "load_order": 1
+    },
+    {
+      "id": "agents",
+      "path": "AGENTS.md",
+      "type": "contract",
+      "size_bytes": 30000,
+      "sha256": "TODO_measure_on_deploy",
+      "owner": "SOL",
+      "mutable": false,
+      "load_order": 2
+    },
+    {
+      "id": "soul-sol",
+      "path": "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md",
+      "type": "identity",
+      "size_bytes": 25000,
+      "sha256": "TODO_measure_on_deploy",
+      "owner": "SEGREDO/CHEFE",
+      "mutable": false,
+      "load_order": 3
+    }
+  ],
+
+  "frequencies": {
+    "leve": {
+      "label": "Documentação, classificação, cache",
+      "cpu_cost": 10,
+      "latency_ms": 100,
+      "depth": 1,
+      "use_case": ["docs", "index", "classify"]
+    },
+    "rapida": {
+      "label": "Lookup, roteamento, erro simples",
+      "cpu_cost": 20,
+      "latency_ms": 500,
+      "depth": 2,
+      "use_case": ["lookup", "route", "error_simple"]
+    },
+    "media": {
+      "label": "Implementação normal, review, integração",
+      "cpu_cost": 50,
+      "latency_ms": 2000,
+      "depth": 3,
+      "use_case": ["implement", "review", "integrate"]
+    },
+    "profunda": {
+      "label": "Arquitetura, causalidade, prova pesada",
+      "cpu_cost": 100,
+      "latency_ms": 10000,
+      "depth": 4,
+      "use_case": ["architecture", "causality", "proof"]
+    },
+    "forte": {
+      "label": "Missão crítica, regression gates",
+      "cpu_cost": 200,
+      "latency_ms": 30000,
+      "depth": 5,
+      "use_case": ["critical_mission", "regression_gate"]
+    },
+    "avancada": {
+      "label": "META×META, evolução scaffold",
+      "cpu_cost": 500,
+      "latency_ms": 60000,
+      "depth": 6,
+      "use_case": ["meta_meta", "scaffold_evolution"]
+    },
+    "fria": {
+      "label": "Segurança/Judge (só evidência)",
+      "cpu_cost": 50,
+      "latency_ms": 5000,
+      "depth": 3,
+      "use_case": ["security", "judge", "verdict"]
+    }
+  },
+
+  "skills": [
+    {
+      "id": "reality-drift-detector",
+      "path": ".agents/skills/reality-drift-detector/SKILL.md",
+      "type": "automation",
+      "category": "monitoring",
+      "owner": "SOL",
+      "frequency_required": "rapida",
+      "dependencies": ["git", "filesystem"],
+      "critical": true,
+      "version": "1.0.0"
+    },
+    {
+      "id": "git-conflict-resolve-house-standard",
+      "path": ".agents/skills/git-conflict-resolve-house-standard/SKILL.md",
+      "type": "gate",
+      "category": "reconciliation",
+      "owner": "SOL",
+      "frequency_required": "profunda",
+      "dependencies": ["git", "conflict_resolution"],
+      "critical": true,
+      "version": "1.0.0"
+    },
+    {
+      "id": "meta-lupa",
+      "path": ".agents/skills/meta-lupa/SKILL.md",
+      "type": "validator",
+      "category": "falsification_guard",
+      "owner": "SOL",
+      "frequency_required": "forte",
+      "dependencies": ["proof", "evidence"],
+      "critical": true,
+      "version": "1.0.0"
+    },
+    {
+      "id": "centraldark-fable-loop",
+      "path": ".agents/skills/centraldark-fable-loop/SKILL.md",
+      "type": "orchestration",
+      "category": "coordination",
+      "owner": "SOL",
+      "frequency_required": "profunda",
+      "dependencies": ["library_index", "all_frequencies"],
+      "critical": true,
+      "version": "1.0.0"
+    }
+  ],
+
+  "gates": [
+    {
+      "id": "proof-required",
+      "applies_to": ["merge", "deploy", "main"],
+      "rule": "UNKNOWN != PASS",
+      "owner": "Reality Judge",
+      "enforce": true
+    },
+    {
+      "id": "one-writer-per-scope",
+      "applies_to": ["write", "commit"],
+      "rule": "NO_CONCURRENT_MUTATION",
+      "owner": "SOL",
+      "enforce": true
+    },
+    {
+      "id": "no-force-push",
+      "applies_to": ["push"],
+      "rule": "FORCE_PUSH_REQUIRES_APPROVAL",
+      "owner": "SEGREDO/CHEFE",
+      "enforce": true
+    }
+  ],
+
+  "knowledge_base": {
+    "aprendizados_path": "docs/CONSCIENCIA/APRENDIZADOS/",
+    "erros_path": "docs/CONSCIENCIA/ERROS-REGISTRADOS.json",
+    "deltas_path": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/DELTA-CONTINUO.md",
+    "auto_propagate": true
+  },
+
+  "orchestra": {
+    "maestro": "SEGREDO/CHEFE",
+    "conductor": "SOL",
+    "musicians": ["all_agents"],
+    "sync_frequency": "fixed",
+    "requires_calibration": false
+  }
+}
