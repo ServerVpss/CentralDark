@@ -23,3 +23,18 @@ adicione `verify-seal` à porta de entrada e proteja o workflow com ruleset/CODE
 dentro do mesmo repositório pode ser literalmente impossível de remover por um administrador; a
 garantia honesta é **detecção criptográfica + aprovação externa + gate fail-closed**.
 
+## Integração com as autoridades existentes
+
+A State Library não cria um segundo mapa de consolidação. O dono executável continua sendo
+`apps/modulos/mapeamento/config/mapa-canonico.json`, julgado por
+`apps/modulos/mapeamento/core/validar-mapa.mjs`.
+
+O selo portátil usa schema 2 e cobre tanto os conteúdos existentes quanto a lista de
+arquivos sob cada diretório selado. Alteração, remoção **ou adição** produz FAIL. Ele é
+adequado para pacotes e snapshots; a autorização de mudança em áreas protegidas continua
+sendo decidida pelo gate canônico, CODEOWNERS e ruleset.
+
+`GitHubStateLibrary.workflow_runs(head_sha=..., limit=...)` consulta a cadeia recebida de
+execuções antigas ou atuais. Cada evento preserva ID, número do run, workflow, status,
+conclusão, HEAD e URL; ingestão, dedupe e atualização do estado vivo ocorrem na mesma
+transação SQLite `BEGIN IMMEDIATE`.
