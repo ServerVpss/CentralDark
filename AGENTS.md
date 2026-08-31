@@ -771,3 +771,28 @@ Pendência.
 Próximo passo.
 BOOT.
 Fio da missão.
+
+## Cadeado de Governança — consolidado travado (2026-08-31)
+
+Tudo que já foi consolidado/cristalizado na Casa **permanece travado**: não se mexe sem o reflexo de autoridade explícito do SEGREDO/CHEFE. Agente não tem autoridade sobre o cristalizado.
+
+```text
+AUTORIDADE_FINAL=SEGREDO/CHEFE
+REFLEXO_DE_AUTORIDADE_OBRIGATORIO_ANTES_DE_MUTAR_CONSOLIDADO=SIM
+CONSOLIDADO=TRAVADO
+PROGRESSO>REGRESSAO=SIM
+ZERO_REGRESSAO=SIM
+SEM_V1_V2_V3=SIM
+MELHORAR_EXISTENTE=REVISAR_CRITICAMENTE_ANTES
+INFRA_SOB_DEMANDA=REVISAR_CRITICAMENTE+SKILL_SOB_DEMANDA
+AMARRAR_NO_MOTOR=SIM
+AMARRAR_NA_CONSCIENCIA=SIM
+ORQUESTRA_TOTAL_CENTRALDARK=SIM
+```
+
+- O que já ficou bom: só progresso, nunca regressão a zero.
+- Sem V1/V2/V3: refinar o que existe, não duplicar em nova versão.
+- Antes de qualquer melhoria de infraestrutura: revisar criticamente o que já existe.
+- Skill só sob demanda: não carregar o leque inteiro; invocar quando o caso pede.
+- Toda ação amarrada no motor (`ESTEIRA_MOTOR`) e na consciência (`SOUL`/`META_LUPA`): orquestra total, não agente solto.
+- Violação de versão paralela (jarvis-lab-v2/v3/v4, Bolt duplicado, telepainel duplicado etc) é regressão e deve ser custurada, não ignorada.
