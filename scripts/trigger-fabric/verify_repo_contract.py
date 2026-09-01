@@ -25,7 +25,16 @@ def check_absent(path, forbidden=(), classification='PROVEN_ABSENT_IN_REPO'):
         ok=not violations
     checks.append({'path':path,'classification':classification,'ok':ok,'missing':violations})
 
-check('LEIA-ME-IA.md',['#ACORDAR','!CALIBRAR','CENTRALDARK_AI_BOOT'])
+check('LEIA-ME-IA.md',[
+ '#ACORDAR','!CALIBRAR','CENTRALDARK_AI_BOOT',
+ 'MODEL_IMPORT_RESOLVES_CANONICAL_CORE=true',
+ 'MODEL_CHANGE_CHANGES_RESPONSE_CONTRACT=false',
+ 'RESPONSE_STYLE_OWNER=docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md',
+ 'EMOJI_MAP_OWNER=docs/CONSCIENCIA/PADRAO-EMOJIS.md',
+ 'BAIANES_FACIL_DEFAULT=true',
+ 'EMOJI_CONTEXT_REQUIRED=true',
+ 'ALL_MODEL_ADAPTERS_INHERIT_RESPONSE_STYLE=true',
+], classification='CANONICAL_MODEL_IMPORT_RESPONSE_STYLE')
 check('CENTRALDARK_AI_BOOT.yaml',[
  'adaptive_payload: true',
  'observed_evidence: "MEASURE_AT_RUNTIME: branch, HEAD, PR, runtime, tools, owner, writer_scope"',
@@ -169,6 +178,12 @@ check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml',[
  'ITEM_ARCHITECTURE_DEPENDENCY_GUARD',
  'ITEM_ITERATE_MEASURE_REORGANIZE',
  'ITEM_VALUES_OVER_BLIND_HUMAN_RITUAL',
+ 'model_import_contract:',
+ 'model_change_changes_response_contract: false',
+ 'response_style_owner: docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md',
+ 'emoji_map_owner: docs/CONSCIENCIA/PADRAO-EMOJIS.md',
+ 'emoji_context_required: true',
+ 'all_model_adapters_inherit_response_style: true',
 ])
 check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml',[
  'event: BOT_ENTRY','event: PRE_HUMAN_RETURN','event: RESUME',
