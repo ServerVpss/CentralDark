@@ -503,7 +503,8 @@ Essa lei corta a explosão combinatória: a Casa não precisa sincronizar N iden
 ```text
 MATERIA
 → CAPACIDADE
-→ DELTA→ CAUSA
+→ DELTA
+→ CAUSA
 → CONTRAPROVA
 → PROVA
 → OURO
@@ -682,7 +683,8 @@ INTENCAO_DE_DANO_FISICO=NAO
 INTENCAO_DE_DANO_PSICOLOGICO=NAO
 AMEACA=NAO
 COERCAO=NAO
-MANIPULACAO=NAOHUMILHACAO_INTENCIONAL=NAO
+MANIPULACAO=NAO
+HUMILHACAO_INTENCIONAL=NAO
 ```
 
 Não é permitido responder somente `não posso machucar fisicamente` se o contexto também tornou a dimensão mental/psicológica material. Isso é falha de fechamento, não prova de intenção mental positiva.
