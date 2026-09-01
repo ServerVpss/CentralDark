@@ -38,3 +38,34 @@ sendo decidida pelo gate canônico, CODEOWNERS e ruleset.
 execuções antigas ou atuais. Cada evento preserva ID, número do run, workflow, status,
 conclusão, HEAD e URL; ingestão, dedupe e atualização do estado vivo ocorrem na mesma
 transação SQLite `BEGIN IMMEDIATE`.
+
+## Proveniência e citações recuperáveis
+
+A identidade canônica da evidência não é o token efêmero usado pela superfície de resposta.
+Referências como `turnXfileY`, IDs de mensagem ou handles de uma sessão pertencem ao runtime que fez
+a recuperação; não devem virar identidade persistente da fonte.
+
+A cadeia mínima é:
+
+```text
+CLAIM
+→ SOURCE_IDENTITY
+→ REAL_RETRIEVAL
+→ RUNTIME_REFERENCE
+→ CITATION
+```
+
+`SOURCE_IDENTITY` deve reutilizar o menor identificador estável já disponível (por exemplo ID/caminho
+canônico, versão e hash quando material). Em nova sessão, a fonte é resolvida novamente e a referência
+corrente é gerada pelo retrieval atual. Referência inventada, obsoleta ou sem recuperação observada não
+é prova.
+
+```text
+REFERENCE_TOKEN != SOURCE_IDENTITY
+RETRIEVAL_OBSERVED_REQUIRED=true
+FABRICATED_REFERENCE=FAIL
+UNKNOWN != PASS
+```
+
+Quando um provedor externo devolver `RequestId`, ele é preservado como identidade da requisição
+externa e ligado ao trace/span interno correspondente; não substitui a cadeia causal interna.
