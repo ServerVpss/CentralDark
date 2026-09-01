@@ -1,6 +1,6 @@
-# 🧠 Notion Sync — 2026-08-31T05:02:41.169Z
+# 🧠 Notion Sync — 2026-08-31T12:16:48.798Z
 
-- **Commit fonte:** `030dd049010c1153096036117b5d828a3bfcefeb`
+- **Commit fonte:** `8ff68f74d33e399f5b6f76ddbeff2f7a4c3af5f3`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
@@ -209,10 +209,10 @@
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-28-meteor-claim-lease-absorvido.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-28-meteor-decomp-pr-bot-assay.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-28-revisao-mineracao-agi-e-organismo.md |
-| estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/[EXT_REDACTED]-GOLD-ASSAY-20260828/CAPABILITY-MATRIX.md |
-| estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/[EXT_REDACTED]-GOLD-ASSAY-20260828/COUNTERPROOF.md |
-| estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/[EXT_REDACTED]-GOLD-ASSAY-20260828/HERMES-PROOF-PLAN.md |
-| estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/[EXT_REDACTED]-GOLD-ASSAY-20260828/README.md |
+| estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/AIOS-GOLD-ASSAY-20260828/CAPABILITY-MATRIX.md |
+| estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/AIOS-GOLD-ASSAY-20260828/COUNTERPROOF.md |
+| estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/AIOS-GOLD-ASSAY-20260828/HERMES-PROOF-PLAN.md |
+| estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/AIOS-GOLD-ASSAY-20260828/README.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/EVIDENCIAS/2026-08-17-registro-visual-recibo-muitos-olhos.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/MCP/MCP-EXPLICADO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/PROXY/APRENDIZADOS_PROXY.md |
