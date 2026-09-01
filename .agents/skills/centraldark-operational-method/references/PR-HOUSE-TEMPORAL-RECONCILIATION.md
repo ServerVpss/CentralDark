@@ -262,7 +262,140 @@ Falhas históricas observadas servem como fixtures de contraprova, não como est
 - PATH/CLI e bindings de autenticação devem ser medidos na sessão atual;
 - segredos nunca entram em PR, log, skill ou receipt em texto bruto.
 
-## 9. Fixed Point
+O snapshot estrutural `CentralDark-Arvores.zip`, gerado em 2026-08-22, prova historicamente que `E:\CentralDark\hermes-mcp-centraldark-fixed.bat` existia naquele snapshot (aprox. 3,01 KiB, modificado em 2026-08-20 14:02:20). O ZIP não contém os bytes desse BAT, portanto:
+
+```text
+HISTORICAL_PATH_EXISTENCE=PROVEN
+CURRENT_PATH_EXISTENCE=UNKNOWN
+BAT_CONTENT=UNKNOWN
+BAT_BEHAVIOR=UNKNOWN
+```
+
+O arquivo `hermes-mcp-centraldark-fixed(1).bat` continua não localizado nas fontes medidas desta rodada.
+
+## 9. Delta útil dos pacotes de Casa / auditoria / cleanup
+
+Os três ZIPs entregues nesta reconciliação são **fontes históricas**, não estado vivo. Seus SHA-256 de ingestão desta rodada são:
+
+```text
+CentralDark-Arvores.zip
+SHA256=a7ae1466976733bc76e1906ce5958b267a0648d87b6af8195d740738ff413fdb
+
+CentralDark-Cleanup-ProofDriven-20260824-114754.zip
+SHA256=3ac861fa672aa065edc9a62bb53b96f2099f68dccfb3b95c740778aca2b94233
+
+CentralDark_Fluxo_Bidirecional_Auditoria_RECUPERADO_2026-08-24.zip
+SHA256=6b29c83c734cad95ef5a31484ed0d1bff24ee64eb38e5c461ac1ab87a42a9eb4
+```
+
+### 9.1 Árvore histórica = mapa de busca, não runtime atual
+
+O snapshot `CentralDark-Arvores.zip` declara `ROOT=E:\CentralDark` e `GENERATED=2026-08-22 20:50:54`. Ele mostra que já existiam, naquela data, owners/matéria relacionados a:
+
+- `centraldark-operational-method`;
+- `hermes-regenerative-runtime.md`;
+- `kimetsu-legacy-fixed-point-predicate.md`;
+- `regenerative-self-refinement-engine.md`;
+- `GraphRAG-Master`;
+- `hermes-mcp-centraldark-fixed.bat`.
+
+Consequência operacional:
+
+```text
+TREE_SNAPSHOT → SEARCH_HINT
+TREE_SNAPSHOT != CURRENT_RUNTIME
+TREE_SNAPSHOT != CURRENT_FILE_CONTENT
+HISTORICAL_OWNER_FOUND → RECONCILE_BEFORE_CREATE
+```
+
+### 9.2 Fluxo bidirecional recuperado
+
+O pacote recuperado de 2026-08-24 preserva uma regra que complementa esta reference:
+
+```text
+LOCAL_FIRST
+→ READ_ONLY_DISCOVERY
+→ CLASSIFY
+→ FIND_REAL_OWNER
+→ ABSORB_USEFUL_DELTA
+→ COUNTERPROVE
+→ RECONCILE_HOUSE_REPO
+```
+
+Durante descoberta local:
+
+```text
+PATH_FOUND != PATH_ACTIVE != DEVE_SER_MOVIDO
+RECOVERY_PATH != MIGRATION_AUTHORIZATION
+```
+
+Portanto:
+
+- `E:\CentralDark` é Casa/alvo de reconciliação, mas não licença para mover tudo para lá;
+- estado obrigatório de aplicativo pode permanecer em AppData/perfil quando o consumidor real exigir;
+- junction/symlink exige target provado antes de qualquer decisão;
+- descoberta não inclui `git pull`, `git push`, `git reset`, deploy, move ou delete;
+- mutação só começa depois de owner, consumidor, identidade/hash, rollback e Writer serem reconciliados.
+
+O próprio pacote recuperado declara que **não é reconstrução byte-a-byte** do ZIP histórico de 2026-07-28. Logo:
+
+```text
+RECOVERED_CONTINUITY != BYTE_IDENTITY
+HISTORICAL_SHA_REFERENCE != CURRENT_PACKAGE_IDENTITY
+```
+
+### 9.3 Cleanup proof-driven
+
+O pacote de cleanup não deve ser importado como nova ferramenta paralela por padrão. O delta reutilizável é a política de segurança:
+
+```text
+SAME_NAME != DUPLICATE
+AUDIT_HASH_ALONE != DELETE_AUTHORITY
+LIVE_REPROOF_REQUIRED=true
+ACTIVE_RUNTIME_DELETE=false
+DIRTY_GIT_DELETE=false
+UNKNOWN != PASS
+```
+
+Para material candidato a remoção:
+
+```text
+CANDIDATE
+→ REPROVE SOURCE HASH
+→ PROVE IDENTICAL HOUSE COPY
+→ PROVE DESTINATION IS NOT BACKUP/QUARANTINE/TEMP/FORENSIC
+→ PROVE NOT IN USE
+→ PROVE NOT GIT/REPARSE/SENSITIVE
+→ DELETE_SAFE | QUARANTINE_REVERSIBLE | PRESERVE | UNKNOWN
+```
+
+Quarentena só é admissível para material comprovadamente dormente; eliminação final de quarentena exige decisão explícita e ocorre depois de teste de estabilidade.
+
+Números históricos de arquivos/bytes do audit de 2026-08-24 permanecem **HISTORICAL** e não podem governar cleanup atual sem nova medição.
+
+### 9.4 Classificação mínima da Casa
+
+Ao reconciliar artefatos físicos locais, usar pelo menos:
+
+```text
+ACTIVE
+COMPATIBILITY
+HISTORICAL
+BACKUP
+CANDIDATE
+UNKNOWN
+```
+
+E preservar por default quando a prova ainda não fechou:
+
+- owners canônicos;
+- receipts e histórico Git;
+- configs/runtime com consumidor ativo;
+- junctions/symlinks sem target provado;
+- material ainda não inventariado;
+- qualquer item `UNKNOWN`.
+
+## 10. Fixed Point
 
 A reconciliação temporal desta skill encerra quando:
 
