@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-08-31T11:58:33.628Z",
-  "updatedAtBR": "31/08/2026, 08:58:33 BRT",
+  "updatedAt": "2026-09-01T00:44:53.753Z",
+  "updatedAtBR": "31/08/2026, 21:44:53 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "Merge PR #1389: fix/close-external-source-gate-20260831 - funnel gate implementation",
+    "lastCommit": "☀️ FIX(CORE): HERDAR EMOJIS EM TODO MODELO (#1390)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-09-01T00:44:53.753Z",
+      "titulo": "Push na main · dce8a91f60781879bebb205f054bef45c9dab946",
+      "detalhe": "☀️ FIX(CORE): HERDAR EMOJIS EM TODO MODELO (#1390)",
+      "area": "Repositório",
+      "sha": "dce8a91",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-08-31T11:58:33.628Z",
       "titulo": "Push na main · 8ff68f74d33e399f5b6f76ddbeff2f7a4c3af5f3",
       "detalhe": "Merge PR #1389: fix/close-external-source-gate-20260831 - funnel gate implementation",
@@ -988,14 +996,6 @@
       "detalhe": "chore(deps): bump @eslint/js from 9.32.0 to 9.39.5 (#1201)",
       "area": "Repositório",
       "sha": "d4e4b95",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-27T04:49:38.311Z",
-      "titulo": "Push na main · 4e16fc0438927698cbe189363953bc9a6c3f64ea",
-      "detalhe": "docs(semântica): padronizar legenda operacional visual + T0/TΔ/Tn (#1220)",
-      "area": "Repositório",
-      "sha": "4e16fc0",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-09-01T00:44:53.753Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · dce8a91f60781879bebb205f054bef45c9dab946 (dce8a91)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-08-31T11:58:33.628Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 8ff68f74d33e399f5b6f76ddbeff2f7a4c3af5f3 (8ff68f7)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-27T06:53:38.667Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · d4e4b9540fa5aff317e767eaa3d2cbec43385413 (d4e4b95)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-27T04:49:38.311Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 4e16fc0438927698cbe189363953bc9a6c3f64ea (4e16fc0)",
       "area": "Repositório",
       "status": "sucesso"
     }
