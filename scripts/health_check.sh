@@ -5,14 +5,15 @@
 # Function to get memory usage of a process by name (sum of WorkingSet)
 get_proc_mem() {
     local name="$1"
-    local total_mem_kb=0
+    local kb
+    local total_kb=0
     while IFS= read -r line; do
-        local mem_kb=$(echo "$line" | awk -F, '{gsub(/"/,"",$5); gsub(/ K/,"",$5); sum+=$5} END {print sum+0}')
-        if [[ -n "$mem_kb" ]]; then
-            local mem_mb=$((mem_kb / 1024))
-            echo "$mem_mb"
+        kb=$(echo "$line" | awk -F, '{gsub(/"/,"",$5); gsub(/ K/,"",$5); if($5+0>0) print $5}')
+        if [[ -n "$kb" ]] && (( kb > 0 )); then
+            total_kb=$((total_kb + kb))
         fi
     done < <(tasklist /FI "IMAGENAME eq $name" /FO CSV /NH 2>/dev/null)
+    echo $((total_kb / 1024))
 }
 
 # Function to get count of processes with a name
