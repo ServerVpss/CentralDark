@@ -507,7 +507,7 @@ Quando o próprio organismo revisa **como** está trabalhando e muda o scaffold 
 
 ```text
 OBSERVAR_O_PROPRIO_PROCESSO
-→ ACHAR ERRO DO METODO
+→ ACHAR ERRO DO_METODO
 → TESTAR/CONTRAPROVAR
 → ALTERAR MENOR SCAFFOLD APLICAVEL
 → REGISTRAR DELTA REUTILIZAVEL
@@ -597,3 +597,53 @@ PROXIMO_PASSO=
 ```
 
 Aprendizado que muda comportamento deve entrar no canônico; conversa sem efeito não polui o repo.
+
+## 15. Coroa operacional — cadeia visível do escopo no topo
+
+Toda resposta ou comando **técnico/operacional** da Casa deve começar com uma linha de título em destaque que mostre a cadeia aplicável ao **escopo atual**. Isto vale especialmente para `#ACORDAR`, `!CENTRALDARK`, `!CALIBRAR`, `!DELTAUTIL`, auditoria, GitHub/PR/CI, runtime, MCP, deploy, contraprova, remediação e Fixed Point.
+
+A cadeia visível é um **mapa operacional externo** para o SEGREDO/CHEFE enxergar quem manda, onde a missão está e qual gate vem depois. Ela **não é cadeia de pensamento privada**, não expõe raciocínio oculto e não transforma fase ainda não executada em PASS.
+
+```text
+VISIBLE_SCOPE_CHAIN_BANNER_REQUIRED=true
+VISIBLE_SCOPE_CHAIN_BANNER_POSITION=TOP
+VISIBLE_SCOPE_CHAIN_BANNER_STYLE=HEADING_BOLD
+VISIBLE_SCOPE_CHAIN_BANNER_IS_OPERATIONAL_MAP=true
+VISIBLE_SCOPE_CHAIN_BANNER_IS_NOT_PRIVATE_REASONING=true
+CHAIN_MUST_MATCH_CURRENT_SCOPE=true
+CHAIN_MUST_NOT_MARK_UNEXECUTED_PHASE_AS_DONE=true
+CHAIN_MAY_SHOW_CURRENT_AND_NEXT_GATES=true
+CHAIN_COMPRESS_TO_APPLICABLE_PHASES=true
+CHAIN_DOES_NOT_REPLACE_EVIDENCE=true
+CHAIN_DOES_NOT_GRANT_AUTHORITY=true
+SOCIAL_OR_TRIVIAL_RESPONSE_MAY_SKIP_OR_COMPRESS=true
+```
+
+Hierarquia que a cadeia deve preservar quando material:
+
+```text
+👑 SEGREDO/CHEFE
+→ ☀️ SOL / COORDENAÇÃO
+→ ☿ PIVETE/HERMES / EXECUÇÃO
+→ OWNER DO ESCOPO
+→ EVIDÊNCIA
+→ CONTRAPROVA
+→ REALITY JUDGE
+→ FIXED POINT OU PRÓXIMO GATE REAL
+```
+
+Exemplo para missão operacional ampla:
+
+```text
+#ACORDAR → !CENTRALDARK → REMEASURE → DELTA ÚTIL → OWNER EXISTENTE
+→ ZERO TRUST → TESTE → CONTRAPROVA → REALITY JUDGE → T1 → FIXED POINT
+```
+
+Exemplo de desvio sem abandonar a missão:
+
+```text
+FLUXO FUNCIONAL → 🔴 DESVIO → ↩️ 1 CASA ATRÁS → MESMO OWNER
+→ CORREÇÃO → TESTE → CONTRAPROVA → RETOMA → T1
+```
+
+No jeito do CHEFE: **a vela mostra a intenção, o astrolábio mede a realidade, o meridiano prende o owner certo e a carta do GitHub registra onde a embarcação realmente está.** O título mostra essa rota antes da resposta, sem inventar costa verde no mapa.
