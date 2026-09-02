@@ -14,6 +14,16 @@ method_bindings:
     default_routing: false
     may_write_canonical: false
     promotion_gate: META_LUPA_SAME_CONTROL
+  meta_lupa:
+    owner: .agents/skills/meta-lupa/SKILL.md
+    role: FALSIFIER
+  meta_multibussola:
+    owner: docs/CONSCIENCIA/MULTIBUSSOLA.md
+    aliases: ["Meta Bússola", "Meta Bussola", "META_MULTIBUSSOLA"]
+    new_engine: false
+  metacognicao:
+    owner: docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md
+    role: BELIEF_DELTA_AND_METHOD_REVIEW
 authority:
   source_of_truth: github_main
   sensor_only: screenpipe
@@ -32,6 +42,42 @@ state_library:
     tamper_evident: true
     fail_closed: true
     absolute_admin_immutability_claim: false
+  audit_trail:
+    owner: apps/modulos/fixed-point-fabric/src/centraldark_fixed_point/store.py#record_audit_fact
+    event_kind: AUDIT_FACT
+    hash_chained: true
+    one_trail_only: true
+    raw_chain_of_thought_persisted: false
+    pass_requires_evidence: true
+    allowed_statuses: [PASS, FAIL, UNKNOWN, BLOCKED, STALE, CONTRADICTION]
+    capture:
+      - event_type
+      - claim
+      - status
+      - source
+      - methods
+      - head_sha
+      - writer
+      - provider
+      - model
+      - evidence_refs
+      - counterproof_refs
+      - blockers
+      - belief_delta
+    split_claims_required: true
+    example:
+      incident: MODEL_SWITCH_AFTER_ROUTER_API_FAILURE
+      facts:
+        - claim: SESSION_CONTINUITY
+          status: PASS
+        - claim: PROVIDER_VALIDATION
+          status: BLOCKED
+    forbids:
+      - raw_chain_of_thought
+      - private_reasoning
+      - hidden_reasoning
+      - screenshot_as_global_truth
+      - provider_selected_implies_provider_validated
 fixed_point:
   requires:
     - same_candidate_head
