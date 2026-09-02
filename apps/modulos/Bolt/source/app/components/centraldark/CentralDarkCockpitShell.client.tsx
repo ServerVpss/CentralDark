@@ -40,6 +40,19 @@ const navItems = [
   ['i-ph:squares-four', 'Personalizar'],
 ] as const;
 
+const visualWorkMarkers = [
+  ['TODO', 'coisa para fazer'],
+  ['FIXME', 'defeito confirmado'],
+  ['UNKNOWN', 'ainda não medido'],
+  ['BLOCKED', 'dependência impedindo avanço'],
+  ['PROOF', 'falta prova'],
+  ['COUNTERPROOF', 'falta contraprova'],
+  ['CANDIDATE', 'delta ainda não promovido'],
+  ['LOCKED', 'consolidado / somente leitura'],
+  ['REGRESSION', 'algo que funcionava regrediu'],
+  ['OWNER', 'dono da ferida'],
+] as const;
+
 function getBridge(): CentralDarkBridge | undefined {
   if (typeof window === 'undefined') return undefined;
   return (window as Window & { centraldark?: CentralDarkBridge }).centraldark;
@@ -177,6 +190,17 @@ export function CentralDarkCockpitShell({ children }: { children: ReactNode }) {
           <div className="cd-evidence"><span className="i-ph:lightning" /><div><strong>Hermes</strong><small>{hermes.status ?? 'UNKNOWN'}{typeof hermes.latency_ms === 'number' ? ` · ${hermes.latency_ms} ms` : ''}</small></div></div>
           <div className="cd-evidence"><span className="i-ph:eye" /><div><strong>Screenpipe</strong><small>{screenpipe.status ?? 'UNKNOWN'}{typeof screenpipe.latency_ms === 'number' ? ` · ${screenpipe.latency_ms} ms` : ''}</small></div></div>
           <div className="cd-evidence"><span className="i-ph:git-pull-request" /><div><strong>GitHub</strong><small>PR #1381 · mesmo Writer</small></div></div>
+        </section>
+
+        <section className="cd-status-card cd-status-card--list" aria-label="Mapa visual de pendências">
+          <div className="cd-status-line"><span>Mapa visual de pendências</span><strong>VISUAL</strong></div>
+          {visualWorkMarkers.map(([marker, explanation]) => (
+            <div key={marker} className="cd-evidence">
+              <span className="i-ph:list-checks" />
+              <div><strong>{marker}</strong><small>{explanation}</small></div>
+            </div>
+          ))}
+          <p className="cd-status-copy">Projeção visual inspirada em Todo Tree. Não cria tarefa, não muda owner, não executa, não prova runtime e não promove estado.</p>
         </section>
 
         <section className="cd-status-card">
