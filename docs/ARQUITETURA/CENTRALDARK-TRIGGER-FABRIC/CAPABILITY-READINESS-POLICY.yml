@@ -17,6 +17,12 @@ invariants:
   EXECUTED_IS_NOT_PROVEN: true
   DISCOVERED_IS_NOT_REQUIRED: true
   AVAILABLE_IS_NOT_ALWAYS_ON: true
+  DISABLED_IS_NOT_FAILURE: true
+  OFF_IS_NOT_FAILURE_WHEN_NOT_SELECTED: true
+  INACTIVE_UNSELECTED_IS_NEUTRAL: true
+  AVAILABLE_OFF_IS_VALID_STATE: true
+  FAILURE_REQUIRES_EXPECTED_ACTIVE_CAPABILITY: true
+  BUTTON_OFF_IS_STATE_NOT_INCIDENT: true
   LOCAL_MODEL_SUPPORTED_IS_NOT_LOCAL_MODEL_RESIDENT: true
   READINESS_DOES_NOT_REQUIRE_RESOURCE_RESIDENCY: true
 
@@ -34,8 +40,45 @@ readiness_model:
       meaning: "Serviço/modelo/tool está operacional neste instante."
     SELECTED:
       meaning: "Capability Contract Router escolheu a capacidade para a intenção vigente."
+    AVAILABLE_OFF:
+      meaning: "Capacidade disponível/instalada porém deliberadamente desligada ou não selecionada; estado neutro, sem incidente."
+    REQUIRED_UNAVAILABLE:
+      meaning: "A intenção vigente exige a capacidade, mas ela não pôde ser ativada nem substituída por fallback aplicável."
   normal_policy: CATALOGUED_OR_READY_TO_MATERIALIZE
   runtime_residency_policy: ON_DEMAND
+
+inactive_state_semantics:
+  principle: OFF_BY_ITSELF_MEANS_ONLY_OFF
+  disabled_or_off_without_selection:
+    classification: AVAILABLE_OFF
+    severity: NONE
+    alert: false
+    blocker: false
+    regression: false
+    error: false
+    action: CONTINUE_WITH_SELECTED_CAPABILITIES
+  selected_or_required_but_off:
+    first_action: TRY_CANONICAL_ACTIVATION_OR_EXISTING_FALLBACK
+    failure_only_if:
+      - CURRENT_INTENT_REQUIRES_CAPABILITY
+      - CAPABILITY_SELECTED_OR_REQUIRED
+      - ACTIVATION_OR_HEALTH_PROBE_FAILS
+      - NO_APPLICABLE_EXISTING_FALLBACK
+    classification_when_failure_proven: REQUIRED_UNAVAILABLE
+  fallback_semantics:
+    disabled_arm_with_equivalent_active_arm: CONTINUE
+    one_optional_arm_off_does_not_fail_organism: true
+    provider_or_tool_off_is_router_input_not_global_incident: true
+  hud_semantics:
+    AVAILABLE_OFF: "⚪ disponível/desligado — neutro"
+    ACTIVE: "🟢 ativo"
+    REQUIRED_UNAVAILABLE: "🔴 exigido e indisponível após ativação/fallback falhar"
+    UNKNOWN: "⚫ ainda não medido"
+  forbidden_interpretations:
+    - DISABLED_IMPLIES_BROKEN
+    - BUTTON_OFF_IMPLIES_REGRESSION
+    - OPTIONAL_TOOL_OFF_IMPLIES_SYSTEM_FAILURE
+    - UNSELECTED_PROVIDER_OFF_IMPLIES_BLOCKER
 
 artifacts_to_preserve_ready:
   - SOURCE_CODE
@@ -313,8 +356,13 @@ proof:
     - PROCESS_OR_SERVICE_OBSERVED
     - HEALTH_PASS
     - EXPECTED_VERSION_OR_SHA_WHEN_APPLICABLE
+  failure_requires:
+    - CURRENT_INTENT_REQUIRES_CAPABILITY
+    - CAPABILITY_SELECTED_OR_REQUIRED
+    - ACTIVATION_OR_HEALTH_PROBE_FAILS
+    - NO_APPLICABLE_EXISTING_FALLBACK
   unknown_is_not_pass: true
 
 slogan:
-  technical: "CAPABILITY_READY != CAPABILITY_RESIDENT"
-  operational: "ARSENAL COMPLETO, PESO SOB DEMANDA"
+  technical: "CAPABILITY_READY != CAPABILITY_RESIDENT; OFF != FAIL"
+  operational: "ARSENAL COMPLETO, PESO SOB DEMANDA; BOTÃO DESLIGADO É SÓ BOTÃO DESLIGADO"
