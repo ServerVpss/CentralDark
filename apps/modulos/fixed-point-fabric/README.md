@@ -19,6 +19,8 @@ convergência. Ele implementa o fluxo:
 - recebe eventos GitHub por webhook HMAC, deduplica e recupera o último estado vivo;
 - compacta pacotes com manifesto SHA-256 e transporta bytes em Base64 verificável;
 - sela caminhos consolidados e acusa qualquer alteração ou remoção.
+- protege o último fixed point como baseline somente leitura; candidatos que
+  regredirem são bloqueados e apontam para rollback no último estado bom.
 
 ## Plug rápido
 
@@ -58,6 +60,22 @@ centraldark-fp --config config/centraldark.fixed-point.json webhook-server --por
 
 Configure o webhook privado para `POST /github/webhook`. Eventos repetidos são deduplicados por
 `X-GitHub-Delivery`; assinatura inválida é rejeitada antes do ledger.
+
+### Baseline protegido
+
+Depois de um fixed point, o pacote grava `last_good_state` como baseline
+somente leitura. O CLI pode visualizar ou emitir um receipt de rollback, mas
+nenhum candidato altera a baseline sem fixed point, contraprova e ausência de
+regressão. A fórmula é:
+
+`MAY_ADVANCE = FIXED_POINT_REACHED AND COUNTERPROOF_PASS AND NOT MATERIAL_REGRESSION`
+
+Quando a fórmula falha:
+
+`BLOCK -> RECEIPT -> ROLLBACK_REQUIRED -> PRESERVE_LAST_GOOD_STATE`
+
+Use `centraldark-fp --config config/centraldark.fixed-point.json status` para
+ver a baseline e `... rollback` para registrar o alvo de recuperação.
 
 ### Codificar, compactar e selar
 

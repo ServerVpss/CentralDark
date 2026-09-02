@@ -51,6 +51,7 @@ def main(argv=None) -> int:
     sub.add_parser("once")
     sub.add_parser("watch")
     sub.add_parser("status")
+    sub.add_parser("rollback")
     sub.add_parser("verify-chain")
     doctor = sub.add_parser("doctor")
     doctor.add_argument("--json", action="store_true")
@@ -84,7 +85,19 @@ def main(argv=None) -> int:
     elif args.command == "watch":
         snapshot, decision = engine.run_until_fixed_point()
     elif args.command == "status":
-        print(json.dumps(engine.store.get_state("last_verdict", {}), ensure_ascii=False, indent=2))
+        print(json.dumps({
+            "last_verdict": engine.store.get_state("last_verdict", {}),
+            "last_good_state": engine.store.get_last_good_state(),
+            "rollback_target": engine.store.get_state("rollback_target"),
+        }, ensure_ascii=False, indent=2))
+        return 0
+    elif args.command == "rollback":
+        target = engine.store.get_last_good_state()
+        if not target:
+            print(json.dumps({"status": "BLOCKED", "reason": "NO_LAST_GOOD_STATE"}))
+            return 2
+        receipt = engine.store.record_rollback_required("CLI_REQUEST", target=target)
+        print(json.dumps({"status": "ROLLBACK_REQUIRED", "receipt": receipt}, ensure_ascii=False, indent=2))
         return 0
     elif args.command == "verify-chain":
         valid, count = engine.store.verify_chain()

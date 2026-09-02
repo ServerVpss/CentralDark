@@ -71,6 +71,42 @@ class FixedPointTests(unittest.TestCase):
         self.assertEqual(value["token"], "[REDACTED]")
         self.assertNotIn("supersecret", value["message"])
 
+    def test_fixed_point_locks_last_good_and_exposes_rollback_target(self):
+        _, result = self.engine(probes()).run_until_fixed_point()
+        baseline = self.store.get_last_good_state()
+        self.assertTrue(result.reached)
+        self.assertIsNotNone(baseline)
+        self.assertEqual(self.store.get_state("rollback_target"), baseline)
+        with self.assertRaises(RuntimeError):
+            self.store.set_state("last_good_state", {"signature": "tampered"})
+
+    def test_failed_candidate_preserves_baseline_and_records_rollback(self):
+        self.engine(probes()).run_until_fixed_point()
+        baseline = self.store.get_last_good_state()
+        _, result = self.engine(probes(Status.FAIL)).run_until_fixed_point()
+        self.assertFalse(result.reached)
+        self.assertEqual(self.store.get_last_good_state(), baseline)
+        self.assertEqual(self.store.get_state("rollback_target"), baseline)
+        self.assertTrue(any(event["kind"] == "ROLLBACK_REQUIRED" for event in self.store.list_events()))
+
+    def test_baseline_guard_rejects_material_regression(self):
+        snapshot, result = self.engine(probes()).run_until_fixed_point()
+        baseline = self.store.get_last_good_state()
+        candidate = snapshot.__class__(
+            snapshot_id="candidate",
+            round_number=1,
+            created_at=snapshot.created_at,
+            receipts=tuple(probe.run() for probe in probes(Status.FAIL)),
+            signature="candidate-signature",
+            material_delta=True,
+            delta={},
+        )
+        self.assertTrue(result.reached)
+        self.assertEqual(
+            self.engine([]).policy.regressions_against(baseline, candidate),
+            ["screenpipe:FAIL"],
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -9,6 +9,8 @@ from contextlib import contextmanager
 from pathlib import Path
 from typing import Any, Iterator
 
+from .models import BaselineLock, FixedPointReceipt, Snapshot
+
 
 def canonical_json(value: Any) -> str:
     return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"), default=str)
@@ -71,13 +73,62 @@ class EventStore:
         row = self.db.execute("SELECT payload FROM snapshots ORDER BY created_at DESC LIMIT 1").fetchone()
         return json.loads(row[0]) if row else None
 
-    def set_state(self, key: str, value: Any) -> None:
+    def set_state(self, key: str, value: Any, *, allow_protected: bool = False) -> None:
+        if key == "last_good_state" and not allow_protected:
+            existing = self.get_state(key)
+            if existing is not None and canonical_json(existing) != canonical_json(value):
+                raise RuntimeError("last_good_state is protected; promote a proven candidate instead")
         self.db.execute("INSERT OR REPLACE INTO state(key,value) VALUES(?,?)", (key, canonical_json(value)))
         self.db.commit()
 
     def get_state(self, key: str, default: Any = None) -> Any:
         row = self.db.execute("SELECT value FROM state WHERE key=?", (key,)).fetchone()
         return json.loads(row[0]) if row else default
+
+    def get_last_good_state(self) -> dict[str, Any] | None:
+        """Read the protected baseline without granting mutation authority."""
+        return self.get_state("last_good_state")
+
+    def promote_last_good_state(
+        self,
+        snapshot: Snapshot,
+        decision: FixedPointReceipt,
+        *,
+        scope: str = "fixed-point",
+        regressions: tuple[str, ...] = (),
+    ) -> dict[str, Any]:
+        """Advance the protected pointer only after a proven candidate.
+
+        Previous values stay in the hash-chained event ledger. A failed or
+        regressing candidate must never call this method.
+        """
+        if not decision.reached:
+            raise ValueError("cannot promote a candidate without fixed point")
+        if regressions:
+            raise ValueError(f"candidate regresses baseline: {', '.join(regressions)}")
+        candidate = BaselineLock(
+            scope=scope,
+            snapshot_id=snapshot.snapshot_id,
+            signature=snapshot.signature,
+            fixed_point_verdict=decision.verdict,
+        ).to_dict()
+        previous = self.get_last_good_state()
+        if previous and previous.get("signature") == candidate["signature"]:
+            return previous
+        self.append(
+            "BASELINE_ADVANCED" if previous else "BASELINE_LOCKED",
+            {"current": candidate, "previous": previous},
+        )
+        self.set_state("last_good_state", candidate, allow_protected=True)
+        self.set_state("rollback_target", candidate)
+        return candidate
+
+    def record_rollback_required(self, reason: str, *, target: dict[str, Any] | None = None) -> dict[str, Any]:
+        """Persist a fail-closed recovery target while preserving the baseline."""
+        payload = {"reason": reason, "target": target}
+        self.append("ROLLBACK_REQUIRED", payload)
+        self.set_state("rollback_target", target)
+        return payload
 
     def list_events(self, kind: str | None = None, limit: int = 100) -> list[dict[str, Any]]:
         if not isinstance(limit, int) or limit < 1 or limit > 1000:

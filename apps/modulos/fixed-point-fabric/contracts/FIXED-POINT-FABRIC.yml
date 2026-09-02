@@ -41,6 +41,15 @@ fixed_point:
     - screenshot_as_global_truth
     - direct_secret_persistence
     - direct_main_write_without_receipt
+baseline_guard:
+  consolidated_state: READ_ONLY
+  view_allowed: true
+  candidate_mutation_only: true
+  baseline_owner: apps/modulos/fixed-point-fabric/src/centraldark_fixed_point/store.py#last_good_state
+  candidate_requires: [fixed_point_reached, counterproof_pass, no_material_regression]
+  regression_action: [BLOCK, RECEIPT, ROLLBACK_REQUIRED, PRESERVE_BASELINE]
+  rollback_target: LAST_GOOD_STATE
+  cli_visibility: [status, rollback]
 promotion:
   max_open_prs_to_main: 1
   tracker_reference_keyword: Refs
