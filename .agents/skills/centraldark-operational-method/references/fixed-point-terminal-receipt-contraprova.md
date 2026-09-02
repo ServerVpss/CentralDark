@@ -152,3 +152,107 @@ FIXED_POINT_RECEIPT_GATE:
 ```
 
 `PASS` para promoção de repositório exige identidade do HEAD + provas do mesmo HEAD. Screenshot/terminal sozinho preserva evidência, mas não sobe de camada sem a ponte causal.
+
+## 8. Cadeado verde + Zero Trust não encerram a reconstruibilidade
+
+Verde técnico é necessário, mas não suficiente para um estado sobrevivente. Quando uma fase fica comprovadamente verde no mesmo alvo/HEAD, ela entra como `LAST_GOOD_STATE` e recebe cadeado operacional; porém o cadeado preserva também **por que** aquele estado existe.
+
+```text
+GREEN_ON_SAME_TARGET
+→ ZERO_TRUST_COUNTERPROOF
+→ PROVEN
+→ LOCK_LAST_GOOD_STATE
+→ PRESERVE_DECISION_LINEAGE
+```
+
+```text
+LOCKED != FORGOTTEN
+GREEN != SELF_EXPLANATORY
+CI_GREEN != COGNITIVE_FIXED_POINT
+```
+
+O próximo agente não deve precisar inferir intenção arquitetural a partir de arquivos soltos, nomes, commits ou sorte.
+
+## 9. Dívida cognitiva é defeito operacional mesmo com CI verde
+
+Regra canônica absorvida desta missão:
+
+> **Se o próximo agente precisa adivinhar por que algo existe, existe dívida cognitiva — mesmo que o CI esteja verde.**
+
+A unidade mínima sobrevivente precisa deixar rastro reconstruível suficiente para responder, no owner existente e sem criar documentação paralela:
+
+```text
+WHAT_EXISTS
+WHY_IT_EXISTS
+SOURCE_ORIGIN
+OWNER
+SCOPE
+DECISION_OR_CONSTRAINT
+EVIDENCE_OR_PROOF_REF
+HEAD_OR_STATE_WHERE_PROVEN
+DEPENDENCIES_AND_BLAST_RADIUS_WHEN_MATERIAL
+NEXT_VALID_CURSOR
+```
+
+Critério:
+
+```text
+NEXT_AGENT_CAN_RECONSTRUCT_WITHOUT_GUESSING=true
+```
+
+Se falso:
+
+```text
+COGNITIVE_DEBT=OPEN
+GLOBAL_FIXED_POINT=NOT_PROVEN
+```
+
+Mesmo que:
+
+```text
+CI=GREEN
+TESTS=PASS
+RUNTIME=UP
+```
+
+Isso não autoriza criar uma nova wiki, segundo cérebro ou documento V2. Aplicar `MENOS_E_MAIS`:
+
+```text
+REUSE_EXISTING_OWNER
+→ ADD_MINIMUM_MISSING_LINEAGE
+→ LINK_EXISTING_PROOF
+→ DEDUPE
+→ REMEASURE_RECONSTRUCTIBILITY
+```
+
+## 10. Um organismo, motores substituíveis, rastro reconstruível
+
+A continuidade não depende de preservar cada agente ou modelo. O que precisa sobreviver é a intenção material, o estado provado e o mapa causal suficiente para outro braço continuar sem reinvenção.
+
+```text
+ONE_ORGANISM=true
+ENGINES_REPLACEABLE=true
+DECISIONS_MUST_BE_RECONSTRUCTIBLE=true
+INVISIBLE_DECISION_DEBT_FORBIDDEN_AT_FIXED_POINT=true
+MORE_AGENTS_WITH_HIDDEN_DECISIONS != MORE_INTELLIGENCE
+```
+
+Fluxo consolidado:
+
+```text
+#ACORDAR
+→ !CENTRALDARK
+→ REMEASURE
+→ DELTA_UTIL
+→ OWNER_EXISTENTE
+→ ZERO_TRUST
+→ TESTE
+→ CONTRAPROVA
+→ REALITY_JUDGE
+→ GREEN
+→ CADEADO_LAST_GOOD_STATE
+→ DECISION_LINEAGE_RECONSTRUCTIBLE
+→ FIXED_POINT
+```
+
+O templo só conta como sobrevivente quando a estrutura fica em pé **e** o mapa das colunas permanece reconstruível no mesmo organismo.
