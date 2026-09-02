@@ -280,3 +280,47 @@ GLOBAL_FIXED_POINT=NOT_PROVEN
 ```
 
 Próximo cursor aplicável: medir a configuração ativa do Gemini/Antigravity e confirmar qual MCP está conectado; depois testar um percurso read-only pelo `GEMINI.md → LEIA-ME-IA.md → MCP/owner` sem escrever em `main`.
+
+## 11. Delta útil novo — Gemini CLI Companion oficial
+
+A nova captura do CHEFE mostra especificamente `Gemini CLI Companion`, publicado por **Google** e marcado como publisher verificado no Marketplace, com a descrição: permitir ao Gemini CLI acesso direto ao workspace da IDE.
+
+A fonte oficial do projeto confirma que o Companion não é apenas um launcher visual: ele funciona como ponte local entre Gemini CLI e VS Code, com servidor IDE local, acesso ao workspace, acompanhamento dos arquivos abertos e visualização/aplicação de diffs.
+
+```text
+CAPABILITY=IDE_WORKSPACE_BRIDGE
+PROVIDER=GOOGLE_GEMINI_CLI_COMPANION
+CLASSIFICATION=OFFICIAL_OPTIONAL_IDE_BRIDGE
+UNIQUE_DELTA:
+  - DIRECT_IDE_WORKSPACE_ACCESS
+  - OPEN_FILES_CONTEXT
+  - DIFF_VIEW_AND_APPLICATION
+  - LOCAL_IDE_SERVER_BRIDGE
+CORE_OWNER_REMAINS=CENTRALDARK
+WRITER_AUTHORITY_GRANTED=false
+```
+
+Isto **tem valor real para a CentralDark** porque reduz a distância física entre o motor Gemini e o mesmo workspace já governado por `GEMINI.md → LEIA-ME-IA.md`; porém a extensão continua sendo braço físico, não fonte da verdade.
+
+Regra generalizável extraída da tela:
+
+```text
+WHEN_EQUIVALENT_CAPABILITIES_EXIST:
+  1. REUSE_ALREADY_ACTIVE_CAPABILITY
+  2. PREFER_OFFICIAL_VERIFIED_BRIDGE_WHEN_FUNCTIONALLY_EQUIVALENT
+  3. SELECT_THIRD_PARTY_ONLY_FOR_UNIQUE_PROVEN_DELTA
+  4. DO_NOT_INSTALL_MULTIPLE_OVERLAPPING_BRIDGES_BY_DEFAULT
+  5. EXTENSION_REPUTATION_DOES_NOT_REPLACE_RUNTIME_TEST
+```
+
+Na mesma busca visual aparecem `Gemini CLI Launcher`, `Bob AI CLI`, `Antigravity for VS Code` e `Gemini CLI Chat`. Nesta rodada eles ficam apenas como `CATALOGUED_CANDIDATE`: presença no Marketplace não prova necessidade nem superioridade.
+
+```text
+OFFICIAL_GEMINI_CLI_COMPANION=USEFUL_CANDIDATE
+THIRD_PARTY_OVERLAP=CATALOGUED_ONLY
+INSTALL_ALL=false
+ENABLE_ALL=false
+RUNTIME_T1=UNKNOWN
+```
+
+Esta regra preserva `MENOS_E_MAIS`: um bridge oficial suficiente vence cinco extensões sobrepostas, salvo evidência de capacidade única que justifique outra.
