@@ -65,6 +65,40 @@ NEW_AGENT=false
 NEW_AUTHORITY=false
 ```
 
+## 4. Retomada do fio antes de continuar
+
+A recuperação do fio continua pertencendo à Porta de Entrada/Trigger Fabric; esta seção apenas amarra a retomada à remedição para impedir reinício cego ou falso contexto.
+
+```text
+#ACORDAR !CENTRALDARK
+RECUPERA O FIO ATUAL DA CENTRALDARK, RECONCILIA COM O ESTADO VIVO E CONTINUA DO ÚLTIMO CURSOR PROVADO. NÃO RECOMEÇA DO ZERO.
+```
+
+A retomada não depende de palavra mágica isolada. Ela usa contexto recuperável da sessão, owners/receipts, âncoras concretas como repo/PR/HEAD e então remede a realidade viva antes de continuar.
+
+```text
+SAME_SESSION_CONTEXT=RECOVERY_HINT
+TRIGGER_IS_NOT_PROOF=true
+REPO_PR_OWNER_ANCHORS_CONTINUITY=true
+RECOVERABLE_CONTEXT_SHOULD_NOT_BE_REASKED=true
+LAST_PROVEN_CURSOR_IS_RESUME_TARGET=true
+LIVE_REMEASURE_OVERRIDES_STALE_CONTEXT=true
+DO_NOT_RESTART_FROM_ZERO=true
+MISSING_RECOVERABLE_CONTEXT=UNKNOWN
+```
+
+Em qualquer superfície/modelo, a ordem mínima é:
+
+```text
+CONTEXTO_RECUPERÁVEL
+→ #ACORDAR / !CENTRALDARK
+→ OWNER + RECEIPT + PR/HEAD QUANDO APLICÁVEL
+→ REMEASURE
+→ RECONCILIAR DELTA
+→ ÚLTIMO CURSOR PROVADO
+→ CONTINUAR A MESMA INTENÇÃO
+```
+
 ADMINISTRABLE_COMMAND=!REMEDIÇÃO
 
 ---
