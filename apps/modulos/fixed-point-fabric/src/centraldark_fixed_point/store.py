@@ -12,8 +12,31 @@ from typing import Any, Iterator
 from .models import BaselineLock, FixedPointReceipt, Snapshot
 
 
+AUDIT_FACT_STATUSES = {"PASS", "FAIL", "UNKNOWN", "BLOCKED", "STALE", "CONTRADICTION"}
+AUDIT_FACT_FORBIDDEN_KEYS = {
+    "chain_of_thought",
+    "raw_chain_of_thought",
+    "raw_reasoning",
+    "private_reasoning",
+    "hidden_reasoning",
+}
+
+
 def canonical_json(value: Any) -> str:
     return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"), default=str)
+
+
+def _contains_forbidden_reasoning_key(value: Any) -> bool:
+    if isinstance(value, dict):
+        for key, nested in value.items():
+            if str(key).strip().lower() in AUDIT_FACT_FORBIDDEN_KEYS:
+                return True
+            if _contains_forbidden_reasoning_key(nested):
+                return True
+        return False
+    if isinstance(value, (list, tuple)):
+        return any(_contains_forbidden_reasoning_key(item) for item in value)
+    return False
 
 
 class EventStore:
@@ -61,6 +84,61 @@ class EventStore:
         )
         self.db.commit()
         return event_hash
+
+    def record_audit_fact(
+        self,
+        *,
+        event_type: str,
+        claim: str,
+        status: str,
+        source: str,
+        methods: tuple[str, ...] = (),
+        context: dict[str, Any] | None = None,
+        evidence_refs: tuple[str, ...] = (),
+        counterproof_refs: tuple[str, ...] = (),
+        blockers: tuple[str, ...] = (),
+        belief_delta: dict[str, Any] | None = None,
+    ) -> str:
+        """Append one falsifiable fact to the shared hash-chained trail.
+
+        The trail persists audit-ready facts, not private chain-of-thought.
+        A PASS without evidence is rejected. Different claims about the same
+        incident must be recorded independently (for example continuity PASS
+        while provider validation remains BLOCKED).
+        """
+        normalized_status = str(status).strip().upper()
+        normalized_event_type = str(event_type).strip().upper()
+        normalized_claim = str(claim).strip()
+        normalized_source = str(source).strip()
+
+        if normalized_status not in AUDIT_FACT_STATUSES:
+            raise ValueError(f"unsupported audit fact status: {normalized_status}")
+        if not normalized_event_type:
+            raise ValueError("event_type is required")
+        if not normalized_claim:
+            raise ValueError("claim is required")
+        if not normalized_source:
+            raise ValueError("source is required")
+        if normalized_status == "PASS" and not evidence_refs:
+            raise ValueError("PASS audit fact requires at least one evidence_ref")
+
+        payload = {
+            "schema": "CENTRALDARK_AUDIT_FACT_V1",
+            "event_type": normalized_event_type,
+            "claim": normalized_claim,
+            "status": normalized_status,
+            "source": normalized_source,
+            "methods": list(methods),
+            "context": dict(context or {}),
+            "evidence_refs": list(evidence_refs),
+            "counterproof_refs": list(counterproof_refs),
+            "blockers": list(blockers),
+            "belief_delta": dict(belief_delta or {}),
+            "raw_chain_of_thought_persisted": False,
+        }
+        if _contains_forbidden_reasoning_key(payload):
+            raise ValueError("raw/private reasoning fields are forbidden in the audit trail")
+        return self.append("AUDIT_FACT", payload)
 
     def save_snapshot(self, snapshot: dict[str, Any]) -> None:
         self.db.execute(
@@ -222,4 +300,3 @@ class EventStore:
             if current and current.get("pid") == os.getpid():
                 self.db.execute("DELETE FROM state WHERE key=?", (f"lease:{name}",))
                 self.db.commit()
-
