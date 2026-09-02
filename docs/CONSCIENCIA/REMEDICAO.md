@@ -99,6 +99,42 @@ CONTEXTO_RECUPERÁVEL
 → CONTINUAR A MESMA INTENÇÃO
 ```
 
+## 5. Remedição → !REGISTRA → ledger ativo
+
+Quando T1 produzir **delta material**, a remedição não termina em narrativa. O resultado precisa entrar no ledger do escopo já ativo antes de qualquer decisão sobre outro PR.
+
+```text
+T1 MEDIDO
+→ CLASSIFICAR DELTA
+→ SE DELTA MATERIAL: !REGISTRA
+→ REUSAR PR ATIVO DO MESMO ESCOPO
+→ COMMITAR DELTA COALESCIDO / DEDUPLICADO
+→ TESTE + CONTRAPROVA + CI DO MESMO HEAD
+→ FIXED POINT
+→ MERGE
+→ MAIN CANÔNICA
+```
+
+```text
+REGISTRA_REQUIRED_FOR_MATERIAL_DELTA=true
+REGISTRA_REQUIRED_FOR_ALL_CENTRALDARK_AGENTS_AND_SURFACES=true
+NO_MATERIAL_DELTA_NO_COMMIT_REQUIRED=true
+COMMIT_PER_MESSAGE=false
+SAME_SCOPE_ACTIVE_PR_REUSED=true
+ONE_ACTIVE_PROMOTION_PR_PER_SCOPE=true
+MANY_COMMITS_PER_ACTIVE_PR_ALLOWED=true
+NEW_PR_PER_CHAT=false
+NEW_PR_PER_COMMIT=false
+NEW_PR_ONLY_AFTER_PREVIOUS_SCOPE_PR_CLOSED_OR_MERGED=true
+NEW_PR_REQUIRES_REAL_MATERIAL_DELTA=true
+NEXT_PR_STARTS_FROM_CURRENT_MAIN=true
+DIRECT_MAIN_WRITE=false
+```
+
+`!REGISTRA` grava fato reconstruível — intenção, escopo, owner, HEAD/estado, delta, evidência, contraprova, status e próximo cursor. Não grava raciocínio privado nem segredos.
+
+Bug material detectado pode iniciar o próximo ciclo apenas depois que o PR anterior do mesmo escopo terminar e `owner + scope + evidence` estiverem provados. Feature nova não nasce autonomamente sem intenção do SEGREDO/CHEFE.
+
 ADMINISTRABLE_COMMAND=!REMEDIÇÃO
 
 ---
