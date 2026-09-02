@@ -1,5 +1,59 @@
-
 FIXED_POINT_PR:
+  lifecycle:
+    one_active_promotion_pr_per_scope: true
+    many_commits_per_active_pr_allowed: true
+    same_scope_delta_reuses_active_pr: true
+    new_pr_per_chat_or_commit: false
+    main_is_durable_canonical_baseline: true
+    pr_is_integration_vehicle_not_eternal_main: true
+    direct_main_write: false
+    merge_closes_active_pr: true
+    merged_pr_becomes_lineage: true
+    next_pr_starts_from_current_main: true
+    next_pr_requires_material_delta: true
+    auto_open_next_pr_only_if:
+      - PREVIOUS_SAME_SCOPE_PR_MERGED_OR_CLOSED
+      - NO_ACTIVE_PR_OWNS_SAME_SCOPE
+      - CURRENT_MAIN_REMEASURED
+      - MATERIAL_BUG_FEATURE_REQUIREMENT_OR_PROVEN_LEARNING_EXISTS
+      - OWNER_AND_SCOPE_RESOLVED
+      - CANDIDATE_BRANCH_CONTAINS_REAL_DELTA
+    do_not_open_next_pr_if:
+      - NO_MATERIAL_DELTA
+      - SAME_SCOPE_ACTIVE_PR_EXISTS
+      - ONLY_STATUS_OR_NARRATIVE_CHANGED
+      - HEALTHY_DEPLOY_WITHOUT_REQUESTED_CHANGE
+      - UNKNOWN_WITHOUT_ACTIONABLE_DELTA
+    autonomous_bug_cycle_requires_proven_scope_owner_and_evidence: true
+    autonomous_new_feature_without_chefe_intent: false
+
+  registra_gate:
+    trigger: "!REGISTRA"
+    required_for_material_delta: true
+    required_for_all_centraldark_agents_and_surfaces: true
+    no_material_delta_no_commit_required: true
+    register_to_active_scope_ledger_before_new_pr: true
+    commit_per_message: false
+    coalesce_same_session_same_scope: true
+    dedupe_before_write: true
+    one_writer_per_scope: true
+    record_fact_not_private_reasoning: true
+    required_fields:
+      - INTENT
+      - SCOPE
+      - OWNER
+      - CURRENT_HEAD_OR_STATE
+      - DELTA
+      - EVIDENCE_REFS
+      - COUNTERPROOF_REFS
+      - STATUS
+      - NEXT_CURSOR
+    forbidden:
+      - RAW_CHAIN_OF_THOUGHT
+      - SECRET_VALUES
+      - SCREENSHOT_AS_GLOBAL_TRUTH
+      - DUPLICATE_OWNER_CREATION
+
   required:
     INTENT_LOCKED: true
     EXACT_HEAD: true
@@ -10,7 +64,11 @@ FIXED_POINT_PR:
     MERGEABLE: true
     MATERIAL_FINDINGS: 0
     UNKNOWN_MATERIAL: 0
+    REGISTRA_MATERIAL_DELTA: PASS
+    DECISION_LINEAGE_RECONSTRUCTIBLE: true
   not_required: [DEPLOY, VPS, RUNTIME_PRODUCTION]
   result: READY_FOR_MERGE
   post_merge:
     DEPLOY: SEPARATE_ACTION
+    T1: REQUIRED_WHEN_RUNTIME_EFFECT_IS_MATERIAL
+    NEXT_PR: ONLY_ON_NEW_MATERIAL_DELTA
