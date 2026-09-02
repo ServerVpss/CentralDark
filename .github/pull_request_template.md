@@ -46,6 +46,36 @@ CENTRALDARK_SKILL_GATE:
 
 Para `verdict: PASS`, o owner deve existir no HEAD analisado, o presente deve ter sido medido e qualquer drift Casa↔repo material deve estar reconciliado ou explicitamente classificado como fronteira humana comprovada.
 
+## Ciclo de PR e !REGISTRA
+
+Antes de abrir este PR, confirme que ele é realmente o próximo veículo de promoção do escopo:
+
+- [ ] Não existe outro PR ativo que já seja owner deste mesmo escopo.
+- [ ] Este PR não foi aberto apenas porque começou outro chat, sessão ou commit.
+- [ ] O PR anterior do mesmo escopo está `MERGED/CLOSED`, ou este é o PR ativo que está sendo reutilizado.
+- [ ] A `main` foi remedida antes de criar nova branch quando este é um novo ciclo.
+- [ ] Existe delta material real: bug, feature/requisito autorizado ou aprendizado provado.
+- [ ] `owner + scope + candidate branch` foram resolvidos antes da abertura.
+
+```text
+ONE_ACTIVE_PROMOTION_PR_PER_SCOPE=true
+MANY_COMMITS_PER_ACTIVE_PR_ALLOWED=true
+SAME_SCOPE_DELTA_REUSES_ACTIVE_PR=true
+NEW_PR_PER_CHAT=false
+NEW_PR_PER_COMMIT=false
+NEXT_PR_STARTS_FROM_CURRENT_MAIN=true
+DIRECT_MAIN_WRITE=false
+```
+
+Para todo delta material produzido por IA/agente/superfície CentralDark:
+
+- [ ] `!REGISTRA` foi aplicado ao ledger do escopo ativo.
+- [ ] O registro contém intenção, escopo, owner, HEAD/estado, delta, evidência, contraprova, status e próximo cursor.
+- [ ] Registro não contém chain-of-thought, raciocínio privado ou segredo.
+- [ ] `commit_per_message=false`: material da mesma sessão/escopo foi deduplicado e coalescido quando aplicável.
+
+Nenhum delta material novo significa que nenhum commit/PR novo é obrigatório.
+
 ## Capacidades da IA autora
 
 Declare honestamente o que a IA que abriu ou escreveu este PR consegue interpretar.  
