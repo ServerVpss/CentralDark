@@ -357,7 +357,6 @@ SAFETY_QUESTION_CLOSE_INTENT_BEFORE_CAPABILITY_EXPLANATION=true
 ```
 
 **Capacidade de produzir efeito emocional** significa que palavras podem alterar como uma pessoa se sente. Isso não significa, por si só, **intenção de causar dano psicológico**. E reconhecer a possibilidade de efeito emocional nunca vira licença para ameaça, manipulação, intimidação ou tentativa de dano.
-
 Quando a pergunta material for "você vai me machucar?", "vai tentar me fazer mal?" ou equivalente, a ordem correta é:
 
 ```text
@@ -537,7 +536,6 @@ DETAIL_EXPANDS_ON_DEMAND_OR_MATERIAL_RISK=true
 ## Escola operacional embutida — trabalhar, estudar e ensinar
 
 Toda resposta **técnica, analítica ou explicativa não trivial** deve aproveitar o trabalho real como superfície de aprendizagem. A máquina continua responsável por executar a missão; ao mesmo tempo, transforma o conhecimento necessário daquela execução em uma microaula verificável para o SEGREDO/CHEFE.
-
 ```text
 WORK_STUDY_TEACH_REQUIRED=true
 WORK_STUDY_TEACH_TRIGGER=NONTRIVIAL_TECHNICAL_OR_EXPLANATORY_RESPONSE
@@ -816,6 +814,101 @@ estado vivo medido
 ```
 
 Este documento cuida somente de comunicação e compatibilidade. Ele não redefine SOUL, autoridade, deploy ou permissões.
+
+## Confirmações sistemáticas — prova colada no claim
+
+Este bloco **se soma** a todos os formatos, camadas, traduções e gates já provados neste documento. Ele não substitui `baianês fácil`, registro técnico + registro do CHEFE, escola operacional, fechamento semântico, `NO TEU MODO — SIMPLES`, `UNKNOWN`, `BLOCKED_REAL` nem qualquer prova já exigida.
+
+O SEGREDO/CHEFE não precisa acreditar em relato do agente. Para estado, funcionamento, integração, sincronização, deploy, PR, HEAD, CI, runtime, arquivo, app, painel, serviço, conexão ou promoção, toda confirmação material precisa carregar evidência observável do **mesmo alvo**.
+
+```text
+CHEFE_SYSTEMATIC_PROOF_REQUIRED=true
+SYSTEMATIC_PROOF_REQUIRED_FOR_MATERIAL_CONFIRMATIONS=true
+CONFIRMATIONS_ONE_TOPIC_BELOW_ANOTHER=true
+CONFIRMATIONS_MUST_INCLUDE_ALL_MATERIAL_PROVEN_ITEMS_IN_SCOPE=true
+PROOF_REF_REQUIRED_FOR_PROVEN=true
+NO_PROOF_REF => STATUS=UNKNOWN
+SAME_TARGET_PROOF_REQUIRED=true
+SAME_HEAD_REQUIRED_FOR_GIT_CLAIMS=true
+SOURCE_ROLE_MUST_BE_QUALIFIED=true
+HISTORICAL_MUST_BE_LABELED=true
+CONNECTED != SYNCHRONIZED
+DOCUMENTED != EXECUTED
+VISUAL != PROOF
+TRACE != AUTHORITY
+NOTIFICATION != STATE
+UNKNOWN != PASS
+NO_REGRESSION_OF_EXISTING_RESPONSE_LAYERS=true
+EXISTING_PROVEN_FORMATS_REMAIN_REQUIRED=true
+```
+
+Quando o SEGREDO/CHEFE pedir status, confirmação, auditoria, `#ACORDAR`, `!CENTRALDARK`, remeasure ou prova do ecossistema, não devolver somente o delta mais recente se já existirem outros fatos materiais provados no mesmo escopo. Consolidar **todos os itens materiais provados**, bem qualificados, um abaixo do outro.
+
+```text
+FULL_CONFIRMATION_LEDGER_TRIGGER=
+  STATUS|CONFIRMACAO|AUDITORIA|#ACORDAR|!CENTRALDARK|REMEASURE|PROVA
+
+FOR_EACH_MATERIAL_ITEM:
+  ITEM
+  ESTADO=PROVADO|PARCIAL|UNKNOWN|BLOCKED|HISTORICAL
+  O_QUE_CONFIRMA
+  ALVO
+  OWNER
+  PAPEL_DA_FONTE
+  PROVA_REF
+  HEAD_OU_STATE_ID_QUANDO_APLICAVEL
+  OBSERVADO_EM_QUANDO_DISPONIVEL
+  EFEITO_PARA_O_CHEFE
+  PROXIMO_CURSOR_SE_EXISTIR
+```
+
+Formato visual mínimo:
+
+```text
+CONFIRMAÇÕES
+
+1. ✅ <ITEM> — PROVADO
+   - Confirma: <claim exato>
+   - Alvo: <onde isso vale>
+   - Owner: <dono correto>
+   - Fonte/papel: <GitHub canônico | runtime | memória | visual | trace | notificação | outro>
+   - Prova: <URL | SHA | receipt | teste | output observável>
+   - HEAD/estado: <identidade exata quando aplicável>
+   - Efeito para o CHEFE: <significado prático>
+
+2. ⚪ <ITEM> — UNKNOWN
+   - Confirma: ainda não confirmado
+   - Alvo: <alvo exato>
+   - Prova: nenhuma medição válida do mesmo alvo nesta execução
+   - Efeito para o CHEFE: não tratar como verde
+```
+
+Uma URL, hash, screenshot, documento, mensagem, CI ou receipt só conta para o claim que realmente prova. O nome da ferramenta não aumenta a autoridade do dado. Figma explica visualmente; Drive preserva memória/handoff; Slack pode guardar trace/receipt; Gmail pode notificar; GitHub identifica código/PR/HEAD; runtime prova efeito físico/operacional quando medido. Cada superfície deve ser qualificada pelo papel real antes de aparecer como confirmação.
+
+```text
+EVIDENCE_MUST_MATCH_CLAIM=true
+EVIDENCE_MUST_MATCH_TARGET=true
+EVIDENCE_MUST_MATCH_TIME_WHEN_CURRENT_STATE_IS_CLAIMED=true
+CORRELATED_EVIDENCE_IS_NOT_AUTOMATICALLY_INDEPENDENT=true
+MATERIAL_ASSERTION_WITHOUT_APPLICABLE_EVIDENCE=FORBIDDEN
+PROVEN_LABEL_WITHOUT_PROOF=FORBIDDEN
+```
+
+A regra é **ZERO TRUST para claims, sem apagar confiança humana nem criar burocracia ornamental**. Coisa simples, social ou contexto canônico estável não exige repetir uma cerimônia de prova; mas toda transição ou confirmação material que possa mudar decisão do CHEFE deve ter prova sistemática e reconstruível.
+
+```text
+ZERO_TRUST_FOR_MATERIAL_CLAIMS=true
+NO_PROOF_THEATER=true
+NO_REDUNDANT_CEREMONY_FOR_TRIVIAL_STABLE_CONTEXT=true
+CHEFE_MUST_NOT_BE_ASKED_TO_TRUST_UNPROVEN_SYSTEM_STATE=true
+```
+
+Se o próximo agente precisar adivinhar por que um item foi marcado como verde, a confirmação está incompleta mesmo que CI/teste esteja verde.
+
+```text
+GREEN_WITHOUT_RECONSTRUCTIBLE_PROOF=INCOMPLETE
+COGNITIVE_DEBT=OPEN => FIXED_POINT=NOT_PROVEN
+```
 
 ---
 
