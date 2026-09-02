@@ -128,6 +128,88 @@ megazord_semantics:
   one_system_only: true
   one_writer_per_scope: true
 
+web_retrieval_capability:
+  capability_contract:
+    name: WEB_SEARCH_EXTRACTION
+    owner: CENTRALDARK_TRIGGER_FABRIC
+    router: .agents/skills/capability-contract-router/SKILL.md
+    provider_is_replaceable: true
+    provider_is_not_new_brain: true
+    provider_is_not_new_router: true
+    provider_is_not_authority: true
+    select_minimum_sufficient_provider: true
+
+  firecrawl:
+    classification: OPTIONAL_WEB_PROVIDER
+    capabilities:
+      - WEB_SEARCH
+      - WEB_SCRAPE
+      - WEB_CRAWL
+      - WEB_MAP
+      - WEB_INTERACT_WHEN_SUPPORTED
+    materialization: ON_DEMAND
+    install_globally_by_default: false
+    local_house_skill_observed: centraldark-casa-operations
+    local_house_observation_status: OBSERVED_NOT_GLOBAL_PROOF
+    canonical_repo_copy_of_house_skill_found: false
+    do_not_duplicate_house_skill_into_repo_without_owner_reconciliation: true
+
+    authentication_modes:
+      keyless:
+        status: OFFICIAL_CAPABILITY_AVAILABLE
+        role: FIRST_LIGHTWEIGHT_ATTEMPT_WHEN_SUPPORTED_BY_SELECTED_CLIENT
+        monthly_free_credit_claim_requires_live_provider_policy: true
+      authenticated_api:
+        status: SUPPORTED
+        secret_name: FIRECRAWL_API_KEY
+        secret_must_not_be_persisted_in_repo: true
+        api_key_absent_means_provider_auth_unavailable_not_web_capability_unavailable: true
+      agent_skill_or_mcp:
+        status: SUPPORTED_WHEN_RUNTIME_DISCOVERS_IT
+        availability_requires_runtime_measurement: true
+
+    fallback_semantics:
+      sequence:
+        - EXISTING_WEB_CAPABILITY_ALREADY_AVAILABLE
+        - FIRECRAWL_KEYLESS_WHEN_SUPPORTED
+        - FIRECRAWL_AUTHENTICATED_WHEN_SECRET_PRESENT
+        - OTHER_EXISTING_WEB_PROVIDER
+      FIRECRAWL_API_KEY_ABSENT_IS_NOT_GLOBAL_WEB_BLOCKER: true
+      FIRECRAWL_FAILURE_IS_NOT_CENTRALDARK_FAILURE: true
+      FIRECRAWL_UNAVAILABLE_IS_CAPABILITY_ROUTER_INPUT: true
+      NO_SECOND_WEB_PIPELINE: true
+
+    proof_boundaries:
+      PACKAGE_INSTALLED_IS_NOT_SEARCH_PROVEN: true
+      IMPORT_OK_IS_NOT_REMOTE_API_PROVEN: true
+      SEARCH_RESULT_IS_NOT_CRAWL_PROVEN: true
+      SCREENSHOT_IS_HOUSE_OBSERVATION_NOT_GLOBAL_RUNTIME_PROOF: true
+      PROVIDER_DOCS_IS_NOT_RUNTIME_STATE: true
+      LIVE_PROVIDER_PROBE_REQUIRED_FOR_ACTIVE_PASS: true
+
+    ci_boundary:
+      FIRECRAWL_IS_NOT_GITHUB_CI: true
+      FIRECRAWL_API_KEY_ABSENT_CANNOT_SET_CI_UNKNOWN: true
+      GITHUB_CI_MUST_BE_MEASURED_VIA_GITHUB_SURFACE_OR_CANONICAL_CI_OWNER: true
+
+    security:
+      never_log_api_key: true
+      never_commit_api_key: true
+      never_copy_browser_session_secret_to_repo: true
+      auth_failure_is_fail_closed_for_that_provider_only: true
+
+  house_observation_2026_09_02:
+    source: HERMES_CASA_SCREEN_EVIDENCE
+    observed:
+      - PYTHON_PACKAGE_INSTALL_REPORTED_SUCCESS
+      - PYTHON_IMPORT_REPORTED_OK
+      - WEB_SEARCH_RESULT_RENDERED_IN_HERMES_SESSION
+      - AUTHENTICATED_API_KEY_NOT_PROVEN_IN_REPO
+    interpretation:
+      FIRECRAWL_HOUSE_CAPABILITY_CANDIDATE: READY_OR_ACTIVE_LOCALLY_PENDING_LIVE_REMEASURE
+      GLOBAL_FIXED_POINT: NOT_PROVEN
+      CI_IMPACT: NONE_DIRECT
+
 example:
   local_llm_supported_but_not_needed:
     catalogue: PASS
