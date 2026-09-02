@@ -333,3 +333,78 @@ REMEASURE_NEW_PR_HEAD
 ```
 
 O objetivo continua sendo guardar o verde, aprender com o vermelho e impedir que histórico, visual, conexão, ação ou documentação se fantasiem de prova atual.
+
+## 13. Arqueologia operacional — VS Code/Hermes observado nesta sessão
+
+Os logs e telas desta sessão acrescentam um delta de diagnóstico que deve permanecer separado por território. O objetivo é transformar ruído de IDE/runtime em assinaturas úteis sem declarar falha global por associação.
+
+```text
+VS_CODE_REPO_PATH=e:\CentralDark\Pivete\CentralDark
+VS_CODE_REPO_PATH_STATE=OBSERVED
+
+CENTRALDARK_ROUTER_PROVIDER_EXTENSION=centraldark-local.hermes-vscode-router-provider
+CENTRALDARK_ROUTER_PROVIDER_EXTENSION_STATE=ACTIVATED_OBSERVED
+ROUTER_PROVIDER_EXTENSION_ACTIVATED != API_MODEL_CALL_PROVEN
+
+VS_CODE_PTY_REATTACH_FAILURE=OBSERVED_AT_2026-09-02T10:28:51_LOCAL
+LATER_PTYHOST_LATENCY_MEASURED=true
+PTY_REATTACH_WARNING != HERMES_RUNTIME_DEAD
+PTY_REATTACH_WARNING != CENTRALDARK_GLOBAL_FAILURE
+
+AGENT_PLUGIN_OLD_AND_NEW_DIRS_BOTH_PRESENT=OBSERVED
+AGENT_PLUGIN_DIRECTORY_MIGRATION=SKIPPED
+CHAT_CONTEXT_CONTRIBUTION_MISSING_SERVICE=OBSERVED
+CHAT_CONTEXT_FAILURE_SCOPE=VS_CODE_AGENT_HOST_CONTRIBUTION
+
+CODEX_REVIEWER_ROLE_MALFORMED=OBSERVED
+CODEX_ABACUS_API_KEY_MISSING=OBSERVED
+CODEX_PROVIDER_BLOCK != CENTRALDARK_GLOBAL_FAILURE
+
+CLAUDE_LOCAL_MCP_SERVER=OBSERVED
+CLAUDE_WORKSPACE_TRUST_GAP=OBSERVED
+CLAUDE_LOCAL_MCP != CENTRALDARK_PUBLIC_MCP
+
+HERMES_CRON_JOBS_JSON_VS_LIVE_LIST_CONTRADICTION=OBSERVED_FROM_SESSION
+HERMES_CRON_CANONICAL_STORE=UNKNOWN_UNTIL_DISCRIMINATING_TEST
+STALE_JOBS_JSON_MUST_NOT_GOVERN_LIVE_CRON=true
+
+MCP_CONFIG_WITH_FIXTURE_SUPABASE_SECRET_VALUE=TEST_FIXTURE_OBSERVED
+TEST_FIXTURE != CANONICAL_SECRET
+SPELLCHECKER_UNKNOWN_WORD != RUNTIME_ERROR
+```
+
+Interpretação operacional preservada:
+
+```text
+WARNING
+→ IDENTIFICAR_TERRITORIO
+→ MEDIR_SE_O_COMPONENTE_RECUPEROU
+→ SEPARAR_SINTOMA_DE_CAUSA
+→ MAPEAR_OWNER
+→ CORRIGIR_APENAS_SE_HOUVER_EFEITO_MATERIAL
+→ CONTRAPROVAR
+```
+
+Aplicação ao PTY: o VS Code tentou reviver terminais cujos PTYs antigos já não estavam disponíveis. A mesma janela depois registrou medições de latência do `ptyhost`, portanto a evidência disponível não sustenta `TERMINAL_BACKEND_DEAD`; sustenta somente `STALE_TERMINAL_REVIVAL/REATTACH_FAILURE_OBSERVED` para aquelas sessões antigas.
+
+Aplicação ao agent host: coexistência de diretórios antigos e novos de plugins mais `chatSessionRoutingProviderService` ausente é uma ferida real da camada de integração do VS Code/agents. Ela deve ser reconciliada no owner da IDE/plugin sem criar outro agent host.
+
+Aplicação ao Hermes cron: divergência entre `jobs.json` e `hermes cron list` significa que o arquivo visto não pode ser declarado autoridade do estado vivo até um teste discriminante localizar a origem efetiva da listagem. O erro histórico `scripts/scripts/...` continua candidato causal útil, mas o store ativo precisa ser provado antes de mutação.
+
+### Cartografia da depuração do CHEFE
+
+```text
+VELA=INTENCAO
+ASTROLABIO=MEDICAO/EVIDENCIA
+MERIDIANO=OWNER+ESCOPO
+CARTA=GITHUB+HEAD+RECEIPT
+PORTO=FIXED_POINT/LAST_GOOD_STATE
+
+VELA_SEM_ASTROLABIO=HIPOTESE
+ASTROLABIO_SEM_MERIDIANO=PROVA_SEM_DONO
+MERIDIANO_SEM_CARTA=ESTADO_NAO_REGISTRADO
+CARTA_SEM_RUNTIME=DOCUMENTADO_NAO_EXECUTADO
+PORTO_SO_EXISTE_QUANDO_OS_GATES_APLICAVEIS_PASSAM
+```
+
+A metáfora serve para comprimir o método; não cria engine, autoridade ou prova nova.
