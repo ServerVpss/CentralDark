@@ -54,7 +54,6 @@ continuous_delta_contract:
   process: [CAPTURE, LINK_DESTINATION, DEDUPE, CLASSIFY, FIND_OWNER, PROVE_OR_PRESERVE_UNKNOWN, ABSORB_MINIMAL_DELTA, COUNTERPROVE, REMEASURE]
   classifications: [DUPLICATE, PARTIAL, NEW, SUPERSEDED, CANDIDATE, UNKNOWN, PROVED]
 
-
 phase_contracts:
   ACORDAR:
     meaning: RECOVER_LIVE_STATE
@@ -258,6 +257,283 @@ communication_interface:
     - NARRATIVE_PARALLELISM_WHEN_USEFUL
   presentation_is_not_governance: true
   recap_may_use_verse_cadence: true
+  technical_status_evidence_and_verdict_remain_literal: true
+  mechanical_payload_fast_path:
+    trigger: HUMAN_NEEDS_ONLY_COPY_PASTE_PAYLOAD_AND_NO_MATERIAL_DECISION_OR_RISK
+    behavior: RETURN_ONLY_REQUESTED_PAYLOAD
+    forbid:
+      - INTRODUCTION
+      - EXPLANATION
+      - OPTIONAL_OFFER
+      - SUMMARY
+      - CONCLUSION
+    preserve:
+      - EXACTNESS
+      - REQUIRED_WARNING_IF_MATERIAL
+      - BLOCKED_OR_UNKNOWN_IF_MATERIAL
+
+delta_harvest:
+  canonical_signal: "!DELTA UTILS"
+  semantic_aliases:
+    - "!DELTA UTILS"
+    - "!DELTAUTILS"
+    - DELTAUTILS
+    - "!DELTA UTIL"
+    - "!DELTAUTIL"
+    - DELTAUTIL
+    - "!DELTAUTIL"
+    - "DELTA UTIL"
+    - "DELTA UTILS"
+    - "DELTA DE AGORA"
+    - "TOMA ESSE DELTA"
+    - "PEGA O DELTA"
+  mode: DELTA_HARVEST
+  intent: USE_ONLY_WHAT_IS_USEFUL_NOW_WITHOUT_BREAKING_EXISTING_INTENT
+  invariants:
+    preserve_human_intent: true
+    zero_regression: true
+    reuse_before_create: true
+    no_v1_v2_v3: true
+    one_system_only: true
+    route_to_existing_owner: true
+    same_active_pr_when_writer_scope_matches: true
+    trigger_match_is_not_new_authority: true
+    trigger_match_is_not_unrelated_mutation_permission: true
+  material_classification:
+    repetition_pure: DROP
+    useful_delta: ABSORB
+    correction: UPDATE_BELIEF
+    contradiction: META_LUPA_THEN_RECONCILE
+    new_proof: REPLACE_STALE_PROOF_WHEN_SAME_TARGET
+    newer_state: CURRENT_EVIDENCE_WINS
+  useful_delta_requires_any:
+    - NEW_CAPABILITY
+    - NEW_EVIDENCE
+    - CORRECTION
+    - NEWER_STATE
+    - CONTRADICTION_WITH_INFORMATION_GAIN
+    - REMOVAL_OF_DUPLICATION
+    - BETTER_OWNER_BINDING
+    - LOWER_COMPLEXITY_WITH_EQUAL_OR_GREATER_CAPABILITY
+  interesting_alone_is_useful_delta: false
+  destination:
+    resolver: .agents/skills/capability-contract-router/SKILL.md
+    rule: EXISTING_OWNER_FIRST
+    minimum_sufficient_capability_set: true
+  receipt_fields:
+    - SOURCE
+    - CLASSIFICATION
+    - INFORMATION_GAIN
+    - DESTINATION_OWNER
+    - ACTION
+    - EVIDENCE_REF
+    - NEXT_CURSOR
+
+cross_chat_recovery:
+  mode: READ_ONLY_CONTEXT_RECOVERY
+  use_when_accessible: true
+  recover_before_reask: true
+  sources:
+    - CHATGPT_HISTORY
+    - CHATGPT_SAVED_MEMORY
+    - CONVERSATION_LIBRARY
+  rules:
+    - "CROSS_CHAT = CONTEXT + PROVENANCE + CANDIDATE_DELTA"
+    - "CROSS_CHAT != CURRENT_STATE"
+    - "HISTORY != CURRENT_STATE"
+    - "UNRECOVERED_CROSS_CHAT -> UNKNOWN"
+    - "GITHUB_MUST_NOT_SUBSTITUTE_MISSING_CHAT_MEMORY"
+    - "DEDUPE_REPETITION_BEFORE_CRYSTALLIZE"
+    - "CONTRADICTION -> META_LUPA + RECONCILE"
+    - "CURRENT_LIVE_EVIDENCE_OVERRIDES_STALE_CHAT_STATE"
+  may_write_canonical_directly: false
+  crystal_destination: EXISTING_OWNER_AFTER_EVIDENCE_AND_DEDUPE
+
+semantic_memory_links:
+  owner: docs/CONSCIENCIA/ARTEFATOS/TECNICAS-DE-LINKAGEM-SEMANTICA.md
+  properties_contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ARTIFACT-PROPERTIES.yml
+  quality_over_quantity: true
+  typed_relations_when_useful: true
+  semantic_link_is_proof: false
+  graph_is_authority: false
+  musical_metaphor_is_navigation_only: true
+
+transversal_lenses:
+  dimensions:
+    DEPENDENCIA: "o que isto precisa para funcionar ou provar?"
+    DECADENCIA: "o que pode ter ficado stale, vencido ou divergido?"
+    CADENCIA: "quando e por qual evento precisa ser medido de novo?"
+  planes:
+    KNOWLEDGE: "o que sabemos e com qual evidencia?"
+    EXECUTION: "o que realmente executou e qual efeito observavel ocorreu?"
+    CONFIG_ORIGIN: "qual owner/configuracao/origem causou ou governa o comportamento?"
+  matrix_mode: TRANSVERSAL_WHEN_MATERIAL
+  creates_new_phase: false
+  creates_new_brain: false
+
+adaptive_rules:
+  all_phases_are_considered: true
+  no_op_phase_may_return: SKIP_JUSTIFICADO
+  no_new_information: NO_CHANGE
+  unknown: NEVER_PASS
+  explicit_master_trigger_does_not_expand_authority: true
+  explicit_master_trigger_does_not_imply_mutation: true
+
+past_future_reconciliation:
+  policy: ABSORB_ONLY_USEFUL_DELTA_NO_PARALLEL_OWNER
+  baseline: CURRENT_MAIN
+  pr_mother: 1189
+  source_prs:
+    - 1115
+    - 1157
+    - 1161
+    - 1166
+    - 1167
+    - 1168
+    - 1169
+    - 1170
+    - 1172
+    - 1189
+    - 1240
+    - 1241
+    - 1243
+    - 1245
+    - 1269
+    - 1300
+    - 1314
+    - 1330
+    - 1335
+    - 1336
+    - 1339
+    - 1349
+    - 1350
+    - 1354
+  absorbed:
+    - semantic_typo_and_alias_recognition
+    - semantic_match_is_not_authorization
+    - semantic_match_is_not_mutation_permission
+    - graph_is_derived_not_authority
+    - GraphRAG_semantic_retrieval_is_read_only
+    - fixed_point_self_healing_is_bounded
+    - engine_binding_inherits_same_contract
+    - past_is_provenance_plus_candidate_delta
+    - delta_utils_is_incremental_harvest_not_new_router
+    - cross_chat_is_context_not_current_state
+    - semantic_links_are_navigation_not_proof
+    - transversal_3x3_lenses_not_new_phases
+    - mechanical_payload_only_fast_path
+    - one_core_many_arms
+    - adaptive_read_only_fanout
+    - convergence_by_evidence_not_vote
+    - engine_capability_ladder
+    - overclock_scout_builder_reviewer_taxonomy
+    - meta_lupa_event_driven_self_improvement
+    - writer_lease_pr_pin_cas_pattern
+    - smallest_independently_verifiable_unit
+    - derived_view_cache_not_authority
+    - known_answer_filter_counterproof
+    - component_pass_is_not_integration_pass
+    - runtime_route_map_as_temporal_evidence
+  rejected_as_parallel:
+    - second_semantic_owner
+    - duplicate_semantic_map_authority
+    - new_brain_or_new_judge
+    - historical_branch_governing_current_state
+    - second_capability_router
+    - second_event_bus_for_evidence
+    - second_memory_for_same_function
+    - versioned_duplicate_for_same_rule
+
+capability_status:
+  canonical_present:
+    MASTER_CYCLE: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/
+    META_LUPA: .agents/skills/meta-lupa/
+    CAPABILITY_ROUTER: .agents/skills/capability-contract-router/
+    JARVIS: docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md
+    OMNI_ROUTER: apps/modulos/elite-gateway/scripts/centraldark_omni_router.py
+    EVIDENCE_ENVELOPE: supabase/functions/_shared/evidence-envelope.mjs
+    AGENT_LOG: supabase/functions/agent-log/index.ts
+    DREAM_REVIEW: scripts/memory-linker/
+    HERMES_CORE: apps/modulos/HERMES-CORE/
+    N7: .agents/skills/meta-lupa/agents/nivel-7/
+    BUILDER_OWNER: apps/modulos/Bolt/
+  gaps_preserved:
+    DREAM_REVIEW_PHYSICAL_TRANSPORT: UNPROVEN
+    OVERCLOCK_TAXONOMY_EXECUTABLE_AGENTS: NOT_IMPLEMENTED_AS_23_AGENTS
+    BUILDER_HERMES_INTEGRATION: NOT_IMPLEMENTED
+    BUILDER_PROJECT_ISOLATION: NOT_IMPLEMENTED
+    BUILDER_OPEN_LOVABLE_BRIDGE: NOT_IMPLEMENTED
+    LOCAL_AI_RUNTIME: UNKNOWN
+  reserves:
+    ODS:
+      status: DEFERRED_UNTIL_MEASURED
+      role_if_adopted: LOCAL_CAPABILITY_BODY
+      authority: NONE
+    BUZZ:
+      status: RESERVE_REFERENCE
+      role_if_adopted: COLLABORATION_AND_EVENT_VIEW_ADAPTER
+      authority: NONE
+    OPENMAUSBOT:
+      status: RESERVE_REFERENCE
+      role_if_adopted: AGENT_ROSTER_AND_UX_VIEW
+      authority: NONE
+    OPEN_LOVABLE:
+      status: RESERVE_REFERENCE
+      role_if_adopted: BUILDER_PATTERN_SOURCE
+      owner_remains: apps/modulos/Bolt/
+    GROK_BUILD:
+      status: FUTURE_ENGINE_CANDIDATE
+      invocation_proven: false
+    AIOS_AIOX:
+      status: CANDIDATE_EXTERNAL_LEARNING
+      raw_runtime_import: false
+
+local_ai_measurement_policy:
+  runtime_status: UNKNOWN
+  deferred_until_measured: true
+  configured_is_active: false
+  repository_reference_is_runtime_proof: false
+  health_is_provider_invocation_proof: false
+  promotion_requires:
+    - LIVE_TARGET_IDENTIFIED
+    - ENGINE_BINARY_OR_ENDPOINT_OBSERVED
+    - INVOCATION_OBSERVED
+    - RECEIPT_BOUND_TO_ENGINE_AND_MODEL
+    - COUNTERPROOF_SURVIVED
+  until_then:
+    - DO_NOT_ROUTE_BY_DEFAULT
+    - DO_NOT_CLAIM_LOCAL_AI_ACTIVE
+    - PRESERVE_AS_FUTURE_CAPABILITY
+
+artifact_memory:
+  properties_contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ARTIFACT-PROPERTIES.yml
+  valuable_delta_only: true
+  register_between_engines: true
+  graph_update_after_proven_effect: true
+  graph_is_authority: false
+  history_is_current_state: false
+
+hard_guarantee_boundary:
+  prose_only: NOT_ENOUGH
+  required_for_global_blocking:
+    - REAL_CONSUMER
+    - POSITIVE_NEGATIVE_TEST
+    - EXISTING_GATE_BINDING
+    - VERIFIABLE_RECEIPT
+    - MAIN_PROTECTION_OR_EQUIVALENT_ENFORCEMENT
+
+fixed_point:
+  mission_only: true
+  learning_capacity_event_driven: true
+  requires:
+    - INTENT_PRESERVED
+    - OWNER_RESOLVED
+    - ONE_WRITER_PER_SCOPE
+    - CLAIMS_BOUND_TO_APPLICABLE_EVIDENCE
+    - COUNTERPROOF_SURVIVED
+    - NO_CRITICAL_REGRESSION
+    - NO_MATERIAL_UNKNOWN_FOR_SCOPE
+    - NO_NEW_INFORMATION
 
 pr_living_ledger:
   current_pr: 1381
