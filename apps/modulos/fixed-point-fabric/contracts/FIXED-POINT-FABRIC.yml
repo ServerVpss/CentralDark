@@ -217,22 +217,127 @@ state_library:
       proven_artifact_lock_requires_reconstructibility: true
       ci_green_alone_is_insufficient: true
       last_good_state_preserved_on_failure: true
+
+failure_navigation:
+  mode: STEP_BACK_ONE_CANONICAL_PHASE
+  step_back_count: 1
+  forward_progress_on_fail: false
+  forward_progress_on_blocked: false
+  clamp_at_first_phase: true
+  revalidate_predecessor_before_retry: true
+  retry_failed_phase_only_after_predecessor_pass: true
+  preserve_intent: true
+  preserve_last_good_state: true
+  same_owner_required: true
+  restart_whole_mission: false
+  global_rollback_only_when_baseline_guard_requires: true
+  visual_signal: "🔴 → ↩️ 1 CASA"
+  formula: "recovery_index=max(failed_index-1,0)"
+
+proof_topology:
+  principle: PROVE_WHERE_EFFECT_EXISTS
+  always_on_control_plane: vps
+  casa_is_required_for_every_change: false
+  global_fixed_point_means_all_affected_required_scopes_pass: true
+  all_devices_must_be_online_simultaneously: false
+  scopes:
+    github_only:
+      required: [github_pass]
+    server_only:
+      required: [github_pass, vps_pass]
+      casa_required: false
+      screenpipe_required: false
+    casa_local:
+      required: [github_pass, local_pass]
+      casa_required: true
+      screenpipe_required_if: LOCAL_CONTEXT_OR_SCREENPIPE_IS_MATERIAL
+    cross_plane:
+      required: [github_pass, vps_pass, local_pass]
+      screenpipe_required_if: LOCAL_CONTEXT_OR_SCREENPIPE_IS_MATERIAL
+  rules:
+    affected_scope_must_be_declared_before_green: true
+    unaffected_scope_may_be_not_applicable: true
+    not_applicable_is_not_pass: true
+    casa_offline_does_not_block_server_only_proof: true
+    casa_capability_touched_requires_casa_proof: true
+    vps_can_hold_continuous_server_runtime_proof: true
+    github_ci_is_versioned_proof_not_runtime_effect: true
+    deploy_runtime_proof_requires_target_runtime_observation: true
+
+historical_reconciliation:
+  principle: PAST_ERRORS_MUST_IMPROVE_FUTURE_WITHOUT_GOVERNING_CURRENT_STATE
+  history_is_provenance_not_current_authority: true
+  before_reimplementing:
+    - discover_related_prs_commits_branches_receipts
+    - classify_merged_open_superseded_duplicate_complementary_conflicting
+    - reuse_merged_crystal_and_existing_owner
+    - absorb_only_material_delta
+  past_failure_signature_must_be_checked_when_same_wound_reappears: true
+  repeated_failure_after_proven_crystal: LEARNING_TRANSFER_FAIL
+  abandoned_branch_is_not_authority: true
+  abandoned_branch_may_contain_candidate_gold: true
+  branch_gold_requires_current_owner_and_same_head_proof_before_promotion: true
+  no_blind_copy_from_history: true
+  no_delete_history_without_proof: true
+
+pr_lifecycle:
+  active_integration_ledger: 1381
+  main_is_durable_canonical_baseline: true
+  pr_is_review_and_integration_vehicle_not_eternal_main: true
+  merge_to_main_closes_pr_by_git_semantics: true
+  durable_rules_must_live_in_canonical_owners_before_merge: true
+  merged_pr_remains_historical_provenance: true
+  direct_main_write: false
+  promotion_method: squash_if_same_head_gates_pass
+  permanent_open_pr_and_main_continuously_updated_from_same_unmerged_head: CONTRADICTION
+
+garimpo_ingest:
+  source_role: CANDIDATE_PROVENANCE
+  raw_archive_is_authority: false
+  byte_identity_is_semantic_proof: false
+  split_archive_requires_all_segments_for_complete_byte_proof: true
+  missing_segment_status: BLOCKED_INCOMPLETE_ARCHIVE
+  full_archive_pass_requires:
+    - all_segments_present
+    - archive_integrity_pass
+    - sha256_recorded
+    - inventory_complete
+    - owner_reconciliation
+  duplicate_file_action: PROCESS_ONCE_KEEP_PROVENANCE
+  historical_gold_action: ABSORB_IN_EXISTING_OWNER_AFTER_CURRENT_REMEASUREMENT
+
+logic_gate:
+  method: HORN_INSPIRED_LEAST_FIXED_POINT
+  source_role: DETERMINISTIC_GATE_ANALOGY
+  rules:
+    - "CURRENT_HEAD + TESTS_PASS + COUNTERPROOF_PASS + ROLLBACK_READY -> GREEN_CANDIDATE"
+    - "CRITICAL_UNKNOWN -> NOT_GREEN"
+    - "WRITER_COLLISION -> BLOCKED"
+    - "STALE_HEAD -> REMEASURE"
+    - "DUPLICATE_OWNER -> RECONCILE"
+  iterate_until_no_new_material_fact: true
+  green_and_not_green_simultaneously: BLOCK_PROMOTION
+  self_derived_green_is_external_proof: false
+  measured_denominator_required_for_percentage: true
+  absolute_zero_error_claim: forbidden
+  two_hundred_percent_success: METAPHOR_ONLY_NOT_METRIC
+
 fixed_point:
   requires:
     - same_candidate_head
-    - local_pass
-    - vps_pass
-    - github_pass
-    - screenpipe_recent_data_pass
-    - no_unknown_blocked_or_stale
-    - two_equal_material_samples
+    - affected_scope_declared
+    - affected_scope_proofs_pass
+    - no_unknown_blocked_or_stale_in_affected_scope
+    - two_equal_material_samples_when_temporal_stability_is_material
     - hash_chain_valid
     - counterproof_pass
+    - cognitive_debt_closed_for_material_decisions
   forbids:
     - unknown_to_pass
     - screenshot_as_global_truth
     - direct_secret_persistence
     - direct_main_write_without_receipt
+    - unaffected_scope_forced_to_fake_pass
 baseline_guard:
   consolidated_state: READ_ONLY
   view_allowed: true
