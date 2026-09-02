@@ -29,6 +29,78 @@ authority:
   sensor_only: screenpipe
   runtime_planes: [casa, vps]
   one_writer_per_scope: true
+surface_convergence:
+  canonical_public_origin: https://centralldark.com
+  one_public_origin: true
+  one_api_plane: true
+  one_mcp_plane: true
+  second_backend_for_builder: false
+  paths:
+    site: /
+    app: /app
+    builder: /builder
+    admin: /admin
+    api: /api
+    mcp: /mcp
+  builder:
+    owner: apps/modulos/Bolt/
+    public_route: /builder
+    backend_authority: canonical_api
+    direct_provider_credentials_in_renderer: forbidden
+  api:
+    existing_owner_to_reconcile: apps/modulos/arsenal-openai-adapter/
+    canonical_public_route: /api
+    all_external_capabilities_via_api: true
+    examples: [models, tts, payments, status, builder-actions, runtime-actions]
+    tts:
+      canonical_route: /api/tts
+      direct_provider_call_from_client: forbidden
+      provider_selection: server_side_only
+      provider_credentials: server_side_only
+      default_language_intent: pt-BR
+      provider_alias_key_mismatch: fail_closed
+      current_runtime_status: UNKNOWN_UNTIL_REMEASURED
+      observed_incident:
+        event_type: TTS_PROVIDER_KEY_MISMATCH
+        surface: hermes_local
+        selected_provider: openai
+        observed_key_prefix_class: openrouter_style
+        observed_result: HTTP_401_INVALID_API_KEY
+        proves:
+          - TTS_REQUEST_FAILED
+          - PROVIDER_CREDENTIAL_MISMATCH_OBSERVED
+        does_not_prove:
+          - CANONICAL_API_FAILED
+          - OPENAI_PROVIDER_REQUIRED
+          - CENTRALDARK_ROUTER_FAILED
+  mcp:
+    existing_owner: apps/modulos/mcp/
+    canonical_public_route: /mcp
+    one_server_only: true
+    access_scopes: [normal, admin]
+    admin_is_scope_not_second_mcp: true
+    authorization_must_be_server_side: true
+  legacy_routes:
+    mode: COMPATIBILITY_ALIAS_UNTIL_PROVEN_UNUSED
+    delete_before_consumer_inventory: false
+    direct_cutover_without_counterproof: false
+    examples:
+      - builder.centralldark.com
+      - mcp.centralldark.com
+      - hub.centralldark.com
+      - gateway.centralldark.com
+  fixed_point_requires:
+    - canonical_origin_reachable
+    - builder_route_reachable
+    - api_route_reachable
+    - tts_via_canonical_api_pass
+    - tts_pt_br_pass
+    - provider_secret_absent_from_client
+    - mcp_normal_scope_pass
+    - mcp_admin_scope_pass
+    - unauthorized_admin_denied
+    - legacy_consumer_inventory_complete
+    - no_material_regression
 state_library:
   github_webhook:
     signature: hmac_sha256
@@ -42,6 +114,30 @@ state_library:
     tamper_evident: true
     fail_closed: true
     absolute_admin_immutability_claim: false
+  randolf_meta_delta:
+    human_alias: RANDOLF
+    role: PR_LEDGER_BRIDGE
+    new_owner: false
+    durable_owner: apps/modulos/fixed-point-fabric/src/centraldark_fixed_point/store.py#record_audit_fact
+    reference_owner: .agents/skills/centraldark-operational-method/references/PR-HOUSE-TEMPORAL-RECONCILIATION.md
+    same_pr_first: true
+    direct_main_write: false
+    raw_chain_of_thought_persisted: false
+    record_decision_rationale_only: true
+    chat_delta_policy:
+      every_material_chat_delta_must_be_reconciled: true
+      commit_per_message: false
+      coalesce_same_session_same_scope: true
+      checkpoint_flush: true
+      dedupe_before_write: true
+      one_writer_per_scope: true
+    commit_policy:
+      canonical_subject: "🌐 feat(fixed-point): YYYY-MM-DD"
+      one_canonical_subject_per_active_pr: true
+      repeated_subject_commits_forbidden: true
+      same_checkpoint_prefers_amend: true
+      rewrite_only_if_head_matches_last_measurement: true
+      force_update_requires_same_writer_scope: true
   audit_trail:
     owner: apps/modulos/fixed-point-fabric/src/centraldark_fixed_point/store.py#record_audit_fact
     event_kind: AUDIT_FACT
@@ -65,13 +161,21 @@ state_library:
       - blockers
       - belief_delta
     split_claims_required: true
-    example:
-      incident: MODEL_SWITCH_AFTER_ROUTER_API_FAILURE
-      facts:
-        - claim: SESSION_CONTINUITY
-          status: PASS
-        - claim: PROVIDER_VALIDATION
-          status: BLOCKED
+    examples:
+      - incident: MODEL_SWITCH_AFTER_ROUTER_API_FAILURE
+        facts:
+          - claim: SESSION_CONTINUITY
+            status: PASS
+          - claim: PROVIDER_VALIDATION
+            status: BLOCKED
+      - incident: TTS_PROVIDER_KEY_MISMATCH
+        facts:
+          - claim: TTS_REQUEST
+            status: FAIL
+          - claim: PROVIDER_CREDENTIAL_MATCH
+            status: FAIL
+          - claim: CANONICAL_API_TTS_PATH_ACTIVE
+            status: UNKNOWN
     forbids:
       - raw_chain_of_thought
       - private_reasoning
