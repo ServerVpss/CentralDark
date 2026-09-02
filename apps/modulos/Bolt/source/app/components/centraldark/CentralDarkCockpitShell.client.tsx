@@ -75,6 +75,8 @@ const operationalInvariants = [
   ['CONTINUE_BEFORE_RESTART', 'interrupção não abandona missão ativa'],
   ['OBSERVED_USER_REPORT != RUNTIME_PROOF', 'relato ou screenshot abre candidato; runtime aplicável decide PASS'],
   ['PROVIDER_PANEL != PROVIDER_PUBLIC_API', 'recurso visível no painel externo não implica capability disponível na API'],
+  ['DISABLED/OFF != FAIL', 'botão, provider ou ferramenta desligada é estado neutro enquanto não estiver selecionada/exigida'],
+  ['FAIL REQUIRES EXPECTED ACTIVE', 'só vira falha quando a intenção exige a capability, ativação/probe falha e não existe fallback aplicável'],
   ['QUANTUM_ANALOGY != QUANTUM_RUNTIME', 'multi-hipótese é modelo clássico; não prova qubits'],
   ['ENTANGLEMENT != FTL_SIGNAL', 'correlação quântica não autoriza comunicação acima da luz'],
 ] as const;
@@ -308,7 +310,7 @@ export function CentralDarkCockpitShell({ children }: { children: ReactNode }) {
               <strong>REGRA</strong>
             </div>
           ))}
-          <p className="cd-status-copy">REGRA não é PASS. O HUD só mostra verde quando a evidência aplicável ao estado/HEAD correspondente existir.</p>
+          <p className="cd-status-copy">REGRA não é PASS. OFF/DISABLED não é erro por si só: fica neutro até a intenção selecionar/exigir a capability; falha só existe depois de ativação/probe/fallback aplicável falhar. O HUD só mostra verde quando a evidência aplicável ao estado/HEAD correspondente existir.</p>
         </section>
 
         <section className="cd-status-card">
