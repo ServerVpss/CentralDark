@@ -47,10 +47,31 @@ const visualWorkMarkers = [
   ['BLOCKED', 'dependência impedindo avanço'],
   ['PROOF', 'falta prova'],
   ['COUNTERPROOF', 'falta contraprova'],
+  ['COGNITIVE_DEBT', 'rastro causal insuficiente; alguém teria de adivinhar'],
   ['CANDIDATE', 'delta ainda não promovido'],
   ['LOCKED', 'consolidado / somente leitura'],
   ['REGRESSION', 'algo que funcionava regrediu'],
   ['OWNER', 'dono da ferida'],
+] as const;
+
+const cognitiveTheoryChecks = [
+  ['INTENT', 'intenção reconstruível?'],
+  ['DECISION', 'decisão explicável?'],
+  ['OWNER', 'owner conhecido?'],
+  ['RELATIONS', 'relações entre peças claras?'],
+  ['REVERSIBLE', 'mudança reversível?'],
+  ['HANDOFF', 'próximo agente continua sem adivinhar?'],
+] as const;
+
+const operationalInvariants = [
+  ['CURRENT > HISTORY', 'estado vivo vence histórico'],
+  ['UNKNOWN != PASS', 'ausência de prova não vira verde'],
+  ['DOCUMENTED != EXECUTED', 'texto não prova runtime'],
+  ['ACTION != PROOF', 'ação precisa de evidência'],
+  ['REUSE_BEFORE_CREATE', 'reusar owner antes de criar'],
+  ['ONE_SYSTEM_ONLY', 'nenhum braço vira segunda CentralDark'],
+  ['ONE_WRITER_PER_SCOPE', 'mutação serial por escopo'],
+  ['CONTINUE_BEFORE_RESTART', 'interrupção não abandona missão ativa'],
 ] as const;
 
 function getBridge(): CentralDarkBridge | undefined {
@@ -167,6 +188,7 @@ export function CentralDarkCockpitShell({ children }: { children: ReactNode }) {
             <span className="cd-chip">Writer único</span>
             <span className="cd-chip">Realidade julga</span>
             <span className="cd-chip">Reusar antes de criar</span>
+            <span className="cd-chip">Dívida cognitiva visível</span>
           </div>
         </div>
 
@@ -189,7 +211,7 @@ export function CentralDarkCockpitShell({ children }: { children: ReactNode }) {
           <div className="cd-evidence"><span className="i-ph:desktop" /><div><strong>Desktop</strong><small>{runtime ? 'DETECTADO' : 'UNKNOWN'}</small></div></div>
           <div className="cd-evidence"><span className="i-ph:lightning" /><div><strong>Hermes</strong><small>{hermes.status ?? 'UNKNOWN'}{typeof hermes.latency_ms === 'number' ? ` · ${hermes.latency_ms} ms` : ''}</small></div></div>
           <div className="cd-evidence"><span className="i-ph:eye" /><div><strong>Screenpipe</strong><small>{screenpipe.status ?? 'UNKNOWN'}{typeof screenpipe.latency_ms === 'number' ? ` · ${screenpipe.latency_ms} ms` : ''}</small></div></div>
-          <div className="cd-evidence"><span className="i-ph:git-pull-request" /><div><strong>GitHub</strong><small>PR #1381 · mesmo Writer</small></div></div>
+          <div className="cd-evidence"><span className="i-ph:git-pull-request" /><div><strong>GitHub</strong><small>PR #1381 · referência operacional</small></div></div>
         </section>
 
         <section className="cd-status-card cd-status-card--list" aria-label="Mapa visual de pendências">
@@ -203,6 +225,30 @@ export function CentralDarkCockpitShell({ children }: { children: ReactNode }) {
           <p className="cd-status-copy">Projeção visual inspirada em Todo Tree. Não cria tarefa, não muda owner, não executa, não prova runtime e não promove estado.</p>
         </section>
 
+        <section className="cd-status-card cd-status-card--list" aria-label="Teoria do sistema e dívida cognitiva">
+          <div className="cd-status-line"><span>Teoria do sistema</span><strong className="cd-warning">NÃO MEDIDA</strong></div>
+          {cognitiveTheoryChecks.map(([key, question]) => (
+            <div key={key} className="cd-evidence">
+              <span className="i-ph:brain" />
+              <div><strong>{key}</strong><small>{question}</small></div>
+              <strong className="cd-warning">UNKNOWN</strong>
+            </div>
+          ))}
+          <p className="cd-status-copy">CI verde sozinho não fecha este gate. Cada item permanece UNKNOWN até receipt/runtime fornecer evidência reconstruível.</p>
+        </section>
+
+        <section className="cd-status-card cd-status-card--list" aria-label="Confirmações sistemáticas da Casa">
+          <div className="cd-status-line"><span>Confirmações sistemáticas</span><strong>REGRA</strong></div>
+          {operationalInvariants.map(([rule, explanation]) => (
+            <div key={rule} className="cd-evidence">
+              <span className="i-ph:shield-check" />
+              <div><strong>{rule}</strong><small>{explanation}</small></div>
+              <strong>REGRA</strong>
+            </div>
+          ))}
+          <p className="cd-status-copy">REGRA não é PASS. O HUD só mostra verde quando a evidência aplicável ao estado/HEAD correspondente existir.</p>
+        </section>
+
         <section className="cd-status-card">
           <div className="cd-status-line"><span>Modo atual</span><strong>{mode}</strong></div>
           <p className="cd-status-copy">O seletor muda a forma de operar. Não muda autoridade, identidade nem transforma seleção em execução.</p>
@@ -210,7 +256,7 @@ export function CentralDarkCockpitShell({ children }: { children: ReactNode }) {
 
         <section className="cd-status-card">
           <div className="cd-status-line"><span>Ponto fixo</span><strong className="cd-warning">AINDA NÃO</strong></div>
-          <p className="cd-status-copy">Ponto fixo = o escopo terminou com prova e sem pendência material. Esta tela preserva UNKNOWN em vez de pintar verde cedo.</p>
+          <p className="cd-status-copy">Ponto fixo = o escopo terminou com prova, sem pendência material e sem dívida cognitiva material aberta. Esta tela preserva UNKNOWN em vez de pintar verde cedo.</p>
         </section>
       </aside>
     </div>
