@@ -37,6 +37,13 @@ MASTER_INGRESS_ALIASES = {
     "FABLE_LOOP": ("!fable_loop", "#fable_loop", "!fabler_loop", "#fabler_loop"),
 }
 
+# Lei Zero de nomenclatura humana: identidade/nome/BOOT/visual canônicos são únicos.
+# Versões técnicas de protocolo/API/schema continuam literais e NÃO renomeiam identidade.
+HUMAN_IDENTITY_VERSION_PATTERNS = (
+    re.compile(r"(?i)\b(?:centraldark|sol|hermes|pivete|boot)[a-z0-9_-]*(?:[_-]v[1-9][0-9]*)\b"),
+    re.compile(r"(?i)\b(?:centraldark|sol|hermes|pivete|boot|perfil|profile|identidade(?:\s+visual)?)\s+(?:v|versao|versão)\s*[1-9][0-9]*(?:\.[0-9]+)*\b"),
+)
+
 
 def normalize(text: str) -> str:
     raw = unicodedata.normalize("NFKD", str(text or ""))
@@ -87,6 +94,23 @@ def _resolve_master_ingress(normalized: str):
             (ambiguous if _negated_or_discussed(normalized, match) else active).append(item)
             break
     return active, ambiguous
+
+
+def validate_human_identity_naming(text: str):
+    raw = str(text or "")
+    violations = []
+    for pattern in HUMAN_IDENTITY_VERSION_PATTERNS:
+        for match in pattern.finditer(raw):
+            violations.append({"match": match.group(0), "start": match.start(), "end": match.end()})
+    return {
+        "schema": "centraldark.human-identity-naming-guard",
+        "ok": not violations,
+        "canonical_identity_is_single": True,
+        "canonical_visual_identity_is_single": True,
+        "human_facing_version_suffix_forbidden": True,
+        "technical_schema_api_version_is_identity": False,
+        "violations": violations,
+    }
 
 
 def evaluate_multibussola_state(state):
@@ -189,11 +213,17 @@ def resolve(text: str, master_active: bool = False, chefe_source: bool = False, 
             "route_to_existing_owner": harvest_active,
             "information_gain_required": harvest_active,
             "zero_regression": harvest_active,
-            "no_v1_v2_v3": harvest_active,
+            "no_parallel_version_identity": harvest_active,
             "claim_is_fact": False,
             "screen_is_runtime_proof": False,
             "repetition_is_independent_proof": False,
             "temporal_label_is_authority": False,
+        },
+        "identity_naming_guard": {
+            "canonical_identity_is_single": True,
+            "canonical_visual_identity_is_single": True,
+            "human_facing_version_suffix_forbidden": True,
+            "technical_schema_api_version_is_identity": False,
         },
         "multibussola": {
             "canonical_signal": "!MULTIBUSSOLA",
@@ -277,6 +307,24 @@ def self_test():
     add("plain_word_guard", not r["master_cycle_active"] and r["status"] == "NO_MATCH")
     r = resolve("!CENTRALUTIL", chefe_source=True)
     add("centralutil_delta", r["delta_harvest"]["explicit_signal_active"] and r["master_cycle_active"])
+
+    bad_identity_outputs = (
+        "BOOT_CENTRALDARK_BAIANES_V1",
+        "CentralDark V2",
+        "Hermes-v3",
+        "identidade visual versão 4",
+    )
+    for sample in bad_identity_outputs:
+        add("identity_name_guard_rejects_parallel_suffix", not validate_human_identity_naming(sample)["ok"])
+
+    technical_literals = (
+        "schema centraldark.master-cycle-receipt.v1",
+        "endpoint http://127.0.0.1:8099/v1/models",
+        "API externa versão 2026-09-01",
+    )
+    for sample in technical_literals:
+        add("identity_name_guard_preserves_technical_version", validate_human_identity_naming(sample)["ok"])
+
     return {"ok": all(x["ok"] for x in cases), "cases": cases}
 
 
@@ -288,8 +336,14 @@ def main():
     parser.add_argument("--chefe-source", action="store_true")
     parser.add_argument("--bot-entry", action="store_true")
     parser.add_argument("--session-state-file")
+    parser.add_argument("--check-human-identity-name")
     args = parser.parse_args()
-    out = self_test() if args.self_test else resolve_with_session_state(args.text or "", state_file=args.session_state_file, master_active=args.master_active, chefe_source=args.chefe_source, bot_entry=args.bot_entry)
+    if args.self_test:
+        out = self_test()
+    elif args.check_human_identity_name is not None:
+        out = validate_human_identity_naming(args.check_human_identity_name)
+    else:
+        out = resolve_with_session_state(args.text or "", state_file=args.session_state_file, master_active=args.master_active, chefe_source=args.chefe_source, bot_entry=args.bot_entry)
     print(json.dumps(out, ensure_ascii=False, indent=2, default=str))
 
 
