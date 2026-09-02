@@ -7,6 +7,13 @@ extends:
   - docs/ARQUITETURA/PROOF-ARCHITECTURE/FIXED_POINT_PR.yml
 activation:
   sequence: ["!CENTRALDARK", "#ACORDAR", "!CALIBRAR", "RECONCILIAR", "CONTRAPROVAR", "FIXED_POINT"]
+method_bindings:
+  fable_loop:
+    owner: .agents/skills/fable-loop/SKILL.md
+    mode: READ_ONLY_CALIBRATION
+    default_routing: false
+    may_write_canonical: false
+    promotion_gate: META_LUPA_SAME_CONTROL
 authority:
   source_of_truth: github_main
   sensor_only: screenpipe

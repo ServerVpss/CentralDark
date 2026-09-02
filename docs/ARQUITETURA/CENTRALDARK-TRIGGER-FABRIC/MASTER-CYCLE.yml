@@ -103,6 +103,16 @@ phase_contracts:
     owner: LEIA-ME-IA.md
     runtime_restart_implied: false
 
+supporting_methods:
+  FABLE_LOOP:
+    meaning: READ_ONLY_CALIBRATION_AND_STABILIZATION
+    owner: .agents/skills/fable-loop/SKILL.md
+    ontology: METHOD_NOT_AGENT_OR_ROUTER
+    mode: READ_ONLY
+    default_routing: false
+    may_write_canonical: false
+    promotion_gate: META_LUPA_SAME_CONTROL
+
 execution_model:
   human_intent_owner: SEGREDO/CHEFE
   coordinator: SOL
