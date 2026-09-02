@@ -48,6 +48,7 @@ const visualWorkMarkers = [
   ['PROOF', 'falta prova'],
   ['COUNTERPROOF', 'falta contraprova'],
   ['COGNITIVE_DEBT', 'rastro causal insuficiente; alguém teria de adivinhar'],
+  ['HYPOTHESIS', 'estado candidato coexistindo até medição aplicável'],
   ['CANDIDATE', 'delta ainda não promovido'],
   ['LOCKED', 'consolidado / somente leitura'],
   ['REGRESSION', 'algo que funcionava regrediu'],
@@ -72,7 +73,12 @@ const operationalInvariants = [
   ['ONE_SYSTEM_ONLY', 'nenhum braço vira segunda CentralDark'],
   ['ONE_WRITER_PER_SCOPE', 'mutação serial por escopo'],
   ['CONTINUE_BEFORE_RESTART', 'interrupção não abandona missão ativa'],
+  ['QUANTUM_ANALOGY != QUANTUM_RUNTIME', 'multi-hipótese é modelo clássico; não prova qubits'],
+  ['ENTANGLEMENT != FTL_SIGNAL', 'correlação quântica não autoriza comunicação acima da luz'],
 ] as const;
+
+const hypothesisStateDimensions = cognitiveTheoryChecks.length;
+const hypothesisStateSpace = 2 ** hypothesisStateDimensions;
 
 function getBridge(): CentralDarkBridge | undefined {
   if (typeof window === 'undefined') return undefined;
@@ -189,6 +195,7 @@ export function CentralDarkCockpitShell({ children }: { children: ReactNode }) {
             <span className="cd-chip">Realidade julga</span>
             <span className="cd-chip">Reusar antes de criar</span>
             <span className="cd-chip">Dívida cognitiva visível</span>
+            <span className="cd-chip">Multi-hipótese clássica</span>
           </div>
         </div>
 
@@ -235,6 +242,16 @@ export function CentralDarkCockpitShell({ children }: { children: ReactNode }) {
             </div>
           ))}
           <p className="cd-status-copy">CI verde sozinho não fecha este gate. Cada item permanece UNKNOWN até receipt/runtime fornecer evidência reconstruível.</p>
+        </section>
+
+        <section className="cd-status-card cd-status-card--list" aria-label="Matriz multi-hipótese clássica">
+          <div className="cd-status-line"><span>Estado multi-hipótese</span><strong>CLÁSSICO</strong></div>
+          <div className="cd-evidence"><span className="i-ph:circles-four" /><div><strong>Dimensões binárias modeladas</strong><small>{hypothesisStateDimensions} checks cognitivos</small></div><strong>{hypothesisStateDimensions}</strong></div>
+          <div className="cd-evidence"><span className="i-ph:tree-structure" /><div><strong>Espaço combinatório</strong><small>2^{hypothesisStateDimensions} configurações lógicas representáveis</small></div><strong>{hypothesisStateSpace}</strong></div>
+          <div className="cd-evidence"><span className="i-ph:git-branch" /><div><strong>Hipóteses ativas simultâneas</strong><small>bridge ainda não mede largura de busca/beam</small></div><strong className="cd-warning">UNKNOWN</strong></div>
+          <div className="cd-evidence"><span className="i-ph:waveform" /><div><strong>Qubit físico</strong><small>analogia não reivindica hardware/estado quântico</small></div><strong>NÃO</strong></div>
+          <div className="cd-evidence"><span className="i-ph:arrows-left-right" /><div><strong>Comunicação superluminal</strong><small>emaranhamento não transmite mensagem útil acima da luz</small></div><strong>NÃO</strong></div>
+          <p className="cd-status-copy">A CentralDark pode manter hipóteses incompatíveis como CANDIDATE/UNKNOWN ao mesmo tempo e resolver cada uma por evidência + contraprova + Reality Judge. Com os {hypothesisStateDimensions} checks atuais, o HUD representa {hypothesisStateSpace} combinações lógicas possíveis; isso não significa processar todas em paralelo nem obter speedup quântico.</p>
         </section>
 
         <section className="cd-status-card cd-status-card--list" aria-label="Confirmações sistemáticas da Casa">
