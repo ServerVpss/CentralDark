@@ -25,6 +25,24 @@ def check_absent(path, forbidden=(), classification='PROVEN_ABSENT_IN_REPO'):
         ok=not violations
     checks.append({'path':path,'classification':classification,'ok':ok,'missing':violations})
 
+check('docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md',[
+ 'CHEFE_SYSTEMATIC_PROOF_REQUIRED=true',
+ 'SYSTEMATIC_PROOF_REQUIRED_FOR_MATERIAL_CONFIRMATIONS=true',
+ 'CONFIRMATIONS_ONE_TOPIC_BELOW_ANOTHER=true',
+ 'PROOF_REF_REQUIRED_FOR_PROVEN=true',
+ 'NO_PROOF_REF => STATUS=UNKNOWN',
+ 'GREEN_WITHOUT_RECONSTRUCTIBLE_PROOF=INCOMPLETE',
+ 'COGNITIVE_DEBT=OPEN => FIXED_POINT=NOT_PROVEN',
+], classification='CHEFE_SYSTEMATIC_PROOF_CONTRACT')
+check('apps/modulos/fixed-point-fabric/contracts/FIXED-POINT-FABRIC.yml',[
+ 'mode: STEP_BACK_ONE_CANONICAL_PHASE',
+ 'principle: PROVE_WHERE_EFFECT_EXISTS',
+ 'casa_offline_does_not_block_server_only_proof: true',
+ 'principle: PAST_ERRORS_MUST_IMPROVE_FUTURE_WITHOUT_GOVERNING_CURRENT_STATE',
+ 'method: HORN_INSPIRED_LEAST_FIXED_POINT',
+ 'absolute_zero_error_claim: forbidden',
+ 'two_hundred_percent_success: METAPHOR_ONLY_NOT_METRIC',
+], classification='FIXED_POINT_SCOPE_HISTORY_LOGIC_CONTRACT')
 check('LEIA-ME-IA.md',['#ACORDAR','!CALIBRAR','CENTRALDARK_AI_BOOT'])
 check('CENTRALDARK_AI_BOOT.yaml',[
  'adaptive_payload: true',
@@ -278,4 +296,6 @@ print('ALCHEMICAL_OPERATIONAL_LEARNING_CRYSTAL=PASS')
 print('RESILIENT_AUTONOMY_BOUNDARY_CRYSTAL=PASS')
 print('MATERIAL_STATE_MACHINE_AND_LEARNING_BINDING=PASS')
 print('DETERMINISTIC_SCAFFOLD_CONTRACT=PASS')
+print('CHEFE_SYSTEMATIC_PROOF_CONTRACT=PASS')
+print('FIXED_POINT_SCOPE_HISTORY_LOGIC_CONTRACT=PASS')
 print('NOTE=PASS proves repository contract/path/runner-policy facts only; it does not prove live Windows/VPS/runtime inheritance.')
