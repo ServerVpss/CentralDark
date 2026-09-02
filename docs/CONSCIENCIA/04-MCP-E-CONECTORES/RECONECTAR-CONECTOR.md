@@ -2,7 +2,7 @@
 title: "RECONECTAR CONECTOR"
 date: 2026-07-05
 tags: ["consciencia"]
-updated: 2026-07-28
+updated: 2026-09-02
 ---
 
 # Conectar qualquer IA ao MCP CentralDark
@@ -43,11 +43,77 @@ Não é bug, não é cache: é o desenho de segurança.
 4. Clica em **Reconnect / Add** e cola o endereço certo:
    - uso normal → `https://mcp.centralldark.com/mcp`
    - **uso admin** → `https://mcp.centralldark.com/admin/mcp`
-5. Vai abrir a tela **"Autorizar conector"**. No modo admin ela mostra
-   *"✓ Acesso administrativo completo"*. Digite a **senha de admin**.
-   - Senha errada → a própria tela avisa **"Senha inválida."**
+5. O fluxo de autorização pode passar pela UI própria da CentralDark e/ou
+   pelo provedor OAuth configurado naquele instante. **A tela observada não
+   é autoridade sobre o estado final da conexão.**
 6. **Abre uma conversa NOVA** — a lista de ferramentas fica presa na
    conversa antiga; continuar a mesma não adianta.
+
+---
+
+## OAuth Google — tela “O Google não verificou este app”
+
+Em 2026-09-02 foi observada, durante um teste autorizado da Casa, a tela do
+Google informando que o app **CentralDark** ainda não estava verificado.
+Isso é um delta útil de diagnóstico: a tela prova que o navegador chegou ao
+provedor de autorização Google para um cliente OAuth apresentado como
+CentralDark, mas **não prova** callback concluído, token emitido ou sessão MCP
+estabelecida.
+
+```text
+GOOGLE_OAUTH_UNVERIFIED_SCREEN=OBSERVED
+OAUTH_AUTHORIZATION_PROVIDER_REACHED=PROVEN
+OAUTH_CALLBACK_COMPLETED=UNKNOWN
+ACCESS_TOKEN_ISSUED=UNKNOWN
+MCP_SESSION_ESTABLISHED=UNKNOWN
+MCP_TEST_PASS=UNKNOWN
+GLOBAL_FIXED_POINT=NOT_PROVEN
+```
+
+Regra de diagnóstico:
+
+```text
+UNVERIFIED_APP_WARNING != MCP_CONNECTION_FAILURE
+UNVERIFIED_APP_WARNING != MCP_CONNECTION_PASS
+CONSENT_SCREEN_REACHED != TOKEN_ISSUED
+TOKEN_ISSUED != MCP_TOOLS_PROVEN
+AUTH_UI != RUNTIME_PROOF
+```
+
+A documentação oficial do Google trata esse aviso como estado de
+verificação/publicação do cliente OAuth. Em desenvolvimento/teste ele pode
+aparecer sem significar defeito do aplicativo; para uso público com scopes
+sensíveis/restritos, a verificação e a correspondência exata dos scopes passam
+a ser gates de produção. Se um app já verificado voltar a exibir o aviso,
+`SCOPE_MISMATCH_OR_NEW_SCOPE` entra como hipótese a medir — nunca como causa
+assumida.
+
+Para a CentralDark, a sequência correta é:
+
+```text
+OAUTH_BROWSER_OPENED
+→ PROVIDER_CONSENT_STATE
+→ CALLBACK_RETURNED
+→ TOKEN_RECEIVED
+→ MCP_HANDSHAKE
+→ TOOL_DISCOVERY
+→ TEST
+→ CONTRAPROVA
+→ T1
+```
+
+Só depois de `TEST + CONTRAPROVA` no mesmo estado aplicável a conexão pode
+ser marcada como `PROVEN`.
+
+O helper local observado nesta sessão segue a rota canônica admin:
+
+```text
+hermes mcp add centraldark --url https://mcp.centralldark.com/admin/mcp --auth oauth
+hermes mcp test centraldark
+```
+
+O helper é transporte/automação; ele **não** vira owner e o fato de abrir o
+browser não transforma o teste em PASS.
 
 ---
 
