@@ -304,3 +304,149 @@ REMEASURE_NEW_PR_HEAD
 ```
 
 O verde existente é preservado. A frente nova só acrescenta informação quando a realidade produzir delta mensurável.
+
+## 12. Painel único — Contas/Hub + Bot + Cloudflare
+
+A remedição do repositório mostrou que as três capacidades já possuem owners reais. Portanto a decisão correta é **embutir a visão no Cockpit existente**, não criar três produtos, três backends ou três governos.
+
+### 12.1 Contas / Hub
+
+Owner observado:
+
+```text
+apps/modulos/oauth-broker/server.mjs
+```
+
+Capacidades de source observadas:
+
+```text
+/health
+/api/keys/list
+/api/providers
+/api/keys/store
+/api/keys/:id/test
+OAUTH_CONNECTIONS
+OAUTH_PROVIDERS
+ACCOUNT_LABEL
+PROVIDER_TEST
+TOKEN_ENCRYPTION_AES_256_GCM
+```
+
+O owner já contém testes de provedores como GitHub, Google/Drive/Gmail, Supabase, Cloudflare e outros. Isso comprova existência de implementação, não saúde atual de cada conta.
+
+Correção arquitetural:
+
+```text
+ACCOUNTS_HUB_OWNER=apps/modulos/oauth-broker/server.mjs
+SECOND_ACCOUNT_HUB_REQUIRED=false
+ACCOUNTS_PANEL_SHOULD_REUSE_OWNER=true
+ACCOUNT_SOURCE_IMPLEMENTATION=PROVEN
+ACCOUNT_RUNTIME_T1=UNKNOWN
+```
+
+O `PUBLIC_BASE` legado no owner ainda cita `hub.centralldark.com`; isso é **compatibilidade/legado a reconciliar**, não autorização para criar um segundo domínio público. A intenção corrente continua painel único CentralDark e compatibilidade até inventário de consumidores provar corte seguro.
+
+### 12.2 Bot Telegram
+
+Owner/runtime checker observado:
+
+```text
+apps/bot-telegram/
+scripts/checker/05-telegram-bot.sh
+```
+
+O checker atual exige:
+
+```text
+CANONICAL_PATH
+PM2_PRESENT
+JQ_PRESENT
+PROCESS_NAME=MultiZap-TelegramBot
+PM2_CWD_INSIDE_CENTRALDARK
+PM2_STATUS=online
+RECENT_LOGS_PRESENT
+KNOWN_ERROR_SIGNATURES_ABSENT
+```
+
+Logo:
+
+```text
+TELEGRAM_OWNER=apps/bot-telegram/
+TELEGRAM_RUNTIME_CHECKER=scripts/checker/05-telegram-bot.sh
+SECOND_TELEGRAM_BOT_FOR_COCKPIT_REQUIRED=false
+TELEGRAM_SOURCE_OWNER=PROVEN
+TELEGRAM_RUNTIME_T1=UNKNOWN_UNTIL_CHECKER_RUNS_ON_TARGET
+```
+
+O Cockpit deve projetar o estado deste owner/checker. Ele não deve duplicar bot nem inferir `ONLINE` só porque pasta/script existe.
+
+### 12.3 Cloudflare / DNS
+
+Owner observado:
+
+```text
+scripts/cloudflare/cf-sync.sh
+```
+
+O script já é idempotente, lê segredo fora do repo, valida token, descobre zone, lê registros A e só cria/atualiza quando necessário. Não apaga registro existente sem ação explícita.
+
+Modos existentes:
+
+```text
+--check
+--dry-run
+apply
+```
+
+Logo:
+
+```text
+CLOUDFLARE_OWNER=scripts/cloudflare/cf-sync.sh
+SECOND_CLOUDFLARE_MANAGER_REQUIRED=false
+CLOUDFLARE_SOURCE_IMPLEMENTATION=PROVEN
+CLOUDFLARE_TOKEN_STATE=UNKNOWN
+CLOUDFLARE_DNS_T1=UNKNOWN
+```
+
+O domínio oficial documentado continua `https://api.centralldark.com`; alterar DNS/Caddy/SSL/proxy real permanece ação sensível e não é inferido pela existência do script.
+
+### 12.4 Regra do Cockpit único
+
+```text
+CENTRALDARK_COCKPIT
+├─ Runtime/Desktop/Hermes/Screenpipe
+├─ Contas/Hub → oauth-broker existente
+├─ Telegram → bot/checker existente
+├─ Cloudflare/DNS → cf-sync existente
+├─ MCP normal/admin → mesmo serviço/escopos
+└─ demais capacidades → owners existentes
+```
+
+```text
+PANEL_ENTRY != NEW_BACKEND
+PANEL_ENTRY != NEW_OWNER
+OWNER_MAPPED != RUNTIME_PASS
+CONNECTED != SYNCHRONIZED
+ACCOUNT_CONFIGURED != PROVIDER_HEALTHY
+BOT_SOURCE_PRESENT != BOT_ONLINE
+CLOUDFLARE_SCRIPT_PRESENT != DNS_PROVEN
+```
+
+O status visual dessas três frentes deve começar em `OWNER MAPEADO / RUNTIME UNKNOWN` até bridge/probe/receipt vivo medir o território correspondente.
+
+## 13. Próximo cursor após o encaixe do painel
+
+```text
+UPDATE_EXISTING_COCKPIT_OWNER_MAP
+→ REMEASURE_NEW_PR_HEAD
+→ RUN STATIC/TYPE TESTS APPLICABLE TO COCKPIT
+→ CI/status/workflow SAME HEAD
+→ T1 ACCOUNTS/HUB WHEN TARGET AVAILABLE
+→ T1 TELEGRAM VIA EXISTING CHECKER
+→ T1 CLOUDFLARE VIA --check BEFORE ANY APPLY
+→ COUNTERPROOF
+→ REALITY_JUDGE
+→ FIXED_POINT OR EXACT BLOCKER
+```
+
+A regra final permanece: **um painel pode mostrar muitos braços; isso não cria muitos sistemas.**
