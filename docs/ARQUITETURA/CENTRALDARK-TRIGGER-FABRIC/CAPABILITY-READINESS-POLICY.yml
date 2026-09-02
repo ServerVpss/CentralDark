@@ -128,6 +128,81 @@ megazord_semantics:
   one_system_only: true
   one_writer_per_scope: true
 
+agent_operational_quality:
+  intent: "Absorver práticas de arquitetura de agentes como comportamento do ciclo existente, sem criar ferramenta, cérebro, cargo soberano ou pipeline paralelo."
+  owner: CENTRALDARK_TRIGGER_FABRIC
+  runtime_owner: apps/modulos/fixed-point-fabric/
+  metacognition_owner: docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md
+  new_tool: false
+  new_engine: false
+  new_authority: false
+  ai_architect_semantics:
+    classification: GOVERNANCE_VIEW
+    creates_new_human_authority: false
+    creates_new_agent_identity: false
+    purpose:
+      - ALIGN_AGENT_BEHAVIOR_WITH_CHEFE_INTENT
+      - ALIGN_OUTPUT_WITH_PRODUCT_AND_BUSINESS_CONSTRAINTS
+      - KEEP_OWNER_AND_SYSTEM_THEORY_RECONSTRUCTIBLE
+  pre_promotion_simulation:
+    reuse_existing_test_and_counterproof_harness: true
+    implementation_surface: apps/modulos/fixed-point-fabric/tests/test_counterproof.py
+    scenario_matrix_required_when_material: true
+    persona_is_test_fixture_not_identity: true
+    scenario_is_test_input_not_live_state: true
+    simulated_pass_is_not_runtime_pass: true
+    minimum_scenario_classes:
+      - HAPPY_PATH
+      - REGRESSION_AFTER_PRIOR_PASS
+      - UNKNOWN_DEPENDENCY
+      - BLOCKED_EXTERNAL_GATE
+      - STALE_EVIDENCE
+      - MODEL_OR_PROVIDER_CHANGE_WHEN_APPLICABLE
+      - PERMISSION_OR_AUTH_FAILURE_WHEN_APPLICABLE
+      - HANDOFF_TO_NEXT_AGENT_WITHOUT_GUESSING
+    promotion_requires_real_evidence_after_simulation: true
+  closed_loop_improvement:
+    enabled_as_existing_method: true
+    flow:
+      - OBSERVE_REAL_RESULT
+      - CAPTURE_EVIDENCE
+      - CLASSIFY_DEVIATION
+      - MAP_TO_EXISTING_OWNER
+      - APPLY_MINIMAL_DELTA
+      - RUN_REGRESSION_SCENARIOS
+      - COUNTERPROVE
+      - REMEASURE_T1
+      - REGISTER_LEARNING_DELTA
+      - CONTINUE_UNTIL_FIXED_POINT
+    conversation_or_runtime_sample_is_evidence_input_not_authority: true
+    feedback_without_discriminating_evidence_is_not_learning: true
+    past_error_must_improve_future: true
+  agent_iceberg:
+    visible_surface_is_not_total_cost: true
+    below_surface_checks:
+      - REGRESSION_TESTS
+      - MODEL_MIGRATION_COMPATIBILITY
+      - PROVIDER_FALLBACK
+      - EXCEPTION_AND_TIMEOUT_HANDLING
+      - AUTHORIZATION_BOUNDARIES
+      - RESOURCE_BUDGET
+      - OBSERVABILITY
+      - ROLLBACK
+      - DECISION_LINEAGE
+      - COGNITIVE_DEBT
+      - OWNER_HANDOFF
+    simple_ui_does_not_imply_simple_runtime: true
+    hidden_complexity_does_not_authorize_new_architecture: true
+    response: REUSE_OWNER_AND_TEST_THE_ICEBERG
+  proof_boundaries:
+    SIMULATION_IS_NOT_PRODUCTION_PROOF: true
+    MANY_PERSONAS_IS_NOT_COVERAGE_PROOF: true
+    FEEDBACK_LOOP_EXISTS_IS_NOT_FEEDBACK_QUALITY_PROVEN: true
+    CONVERSATION_AUDIT_IS_NOT_RUNTIME_HEALTH: true
+    MODEL_MIGRATION_IS_NOT_SAFE_UNTIL_REGRESSION_PASS: true
+    CI_GREEN_IS_NOT_COGNITIVE_DEBT_CLOSED: true
+    FIXED_POINT_REQUIRES_RECONSTRUCTIBLE_THEORY: true
+
 web_retrieval_capability:
   capability_contract:
     name: WEB_SEARCH_EXTRACTION
