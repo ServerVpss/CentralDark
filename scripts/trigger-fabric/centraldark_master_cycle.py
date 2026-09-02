@@ -2,11 +2,41 @@
 import argparse
 import json
 import re
+import sys
 import unicodedata
 from pathlib import Path
 
 MASTER = "!CENTRALDARK"
 CHAIN = ["ACORDAR", "CALIBRAR", "MULTIBUSSOLA", "META_LUPA", "RECONCILIAR", "DELTA_UTIL", "CONTRAPROVA", "REMEDICAO", "FIXED_POINT", "REGISTRA", "BOOT"]
+
+# HUD/telemetria guiada: método operacional, não decoração.
+# Toda superfície que passa pelo Master Cycle recebe a mesma trilha copiável.
+GUIDED_TELEMETRY_PHASES = [
+    ("ACORDAR", "#ACORDAR"),
+    ("CENTRALDARK", "!CENTRALDARK"),
+    ("REMEASURE", "REMEASURE"),
+    ("INTENT_SCOPE", "INTENÇÃO/ESCOPO"),
+    ("RENDEZVOUS", "RENDEZVOUS"),
+    ("OWNER", "OWNER"),
+    ("ZERO_TRUST", "ZERO TRUST"),
+    ("META_LUPA", "META LUPA"),
+    ("TEST", "TESTE"),
+    ("CI_SAME_HEAD", "CI MESMO HEAD"),
+    ("REALITY_JUDGE", "REALITY JUDGE"),
+    ("FIXED_POINT", "FIXED POINT"),
+    ("LOCK", "CADEADO"),
+    ("PROMOTION", "PROMOTION"),
+]
+GUIDED_TELEMETRY_STATUSES = {"UNKNOWN", "ACTIVE", "PASS", "FAIL", "BLOCKED", "SKIPPED"}
+GUIDED_TELEMETRY_ICONS = {
+    "UNKNOWN": "⚪",
+    "ACTIVE": "🔵",
+    "PASS": "✅",
+    "FAIL": "❌",
+    "BLOCKED": "⛔",
+    "SKIPPED": "➖",
+}
+GUIDED_TELEMETRY_SURFACES = ["CLI", "CHAT", "API", "MCP", "WEB", "DESKTOP", "TELEGRAM"]
 
 DELTA_CANONICAL = "!DELTA UTILS"
 DELTA_ALIASES = (
@@ -97,6 +127,131 @@ def _resolve_master_ingress(normalized: str):
     return active, ambiguous
 
 
+def _normalized_phase_status(phase_status):
+    normalized = {}
+    for key, value in (phase_status or {}).items():
+        phase = str(key or "").strip().upper()
+        status = str(value or "UNKNOWN").strip().upper()
+        normalized[phase] = status if status in GUIDED_TELEMETRY_STATUSES else "UNKNOWN"
+    return normalized
+
+
+def build_guided_telemetry(
+    master_cycle_active: bool,
+    matched_trigger_ids=None,
+    phase_status=None,
+    intent_ok=None,
+    intent_reason=None,
+    previous_failure=None,
+):
+    matched_trigger_ids = list(matched_trigger_ids or [])
+    supplied = _normalized_phase_status(phase_status)
+    steps = []
+
+    for phase, label in GUIDED_TELEMETRY_PHASES:
+        status = supplied.get(phase, "UNKNOWN")
+        if phase == "CENTRALDARK" and master_cycle_active and phase not in supplied:
+            status = "PASS"
+        if phase == "ACORDAR" and "ACORDAR" in matched_trigger_ids and phase not in supplied:
+            status = "PASS"
+        if phase == "INTENT_SCOPE":
+            if intent_ok is True:
+                status = "PASS"
+            elif intent_ok is False:
+                status = "FAIL"
+        steps.append({"phase": phase, "label": label, "status": status})
+
+    failure = None
+    if intent_ok is False:
+        failure = {
+            "phase": "INTENT_SCOPE",
+            "status": "FAIL",
+            "reason": str(intent_reason or "Desvio da intenção original detectado."),
+        }
+    if failure is None:
+        for step in steps:
+            if step["status"] in ("FAIL", "BLOCKED"):
+                failure = {
+                    "phase": step["phase"],
+                    "status": step["status"],
+                    "reason": f"{step['label']} marcou {step['status']}.",
+                }
+                break
+
+    mandatory = [step for step in steps if step["status"] != "SKIPPED"]
+    if failure:
+        overall = "FAIL" if failure["status"] == "FAIL" else "BLOCKED"
+    elif master_cycle_active and mandatory and all(step["status"] == "PASS" for step in mandatory):
+        overall = "PASS"
+    elif master_cycle_active:
+        overall = "IN_PROGRESS"
+    else:
+        overall = "INACTIVE"
+
+    next_cursor = failure["phase"] if failure else next(
+        (step["phase"] for step in steps if step["status"] == "UNKNOWN"),
+        None,
+    )
+    visual_chain = " → ".join(
+        f"{GUIDED_TELEMETRY_ICONS[step['status']]} {step['label']}" for step in steps
+    )
+    copyable_chain = " → ".join(label for _, label in GUIDED_TELEMETRY_PHASES)
+
+    return {
+        "schema": "centraldark.guided-telemetry.v1",
+        "render_required": bool(master_cycle_active),
+        "rendering_is_operational_method_not_decoration": True,
+        "surfaces": GUIDED_TELEMETRY_SURFACES,
+        "status": overall,
+        "copyable_chain": copyable_chain,
+        "visual_chain": visual_chain,
+        "steps": steps,
+        "failure": failure,
+        "previous_failure": previous_failure,
+        "next_cursor": next_cursor,
+        "red_x_on_failure": True,
+        "exact_failed_phase_required": True,
+        "intent_scope_must_be_evaluated": True,
+        "unknown_is_pass": False,
+        "previous_failure_stitches_next_execution": True,
+        "same_path_can_be_replayed_by_another_agent": True,
+        "telemetry_is_authority": False,
+        "telemetry_requires_external_proof_for_green": True,
+    }
+
+
+def render_guided_telemetry(telemetry, ansi: bool = False) -> str:
+    if not telemetry or not telemetry.get("render_required"):
+        return ""
+    bold = "\033[1m" if ansi else ""
+    red = "\033[91m" if ansi else ""
+    yellow = "\033[93m" if ansi else ""
+    green = "\033[92m" if ansi else ""
+    reset = "\033[0m" if ansi else ""
+
+    lines = [
+        f"{bold}# !CENTRALDARK — TELEMETRIA GUIADA{reset}",
+        telemetry.get("visual_chain", ""),
+    ]
+    failure = telemetry.get("failure")
+    previous = telemetry.get("previous_failure")
+    if failure:
+        lines.extend([
+            f"{red}{bold}❌ FORA DO PADRÃO — {failure.get('phase', 'UNKNOWN')}{reset}",
+            f"{red}CAUSA: {failure.get('reason', 'não informada')}{reset}",
+            f"{yellow}PRÓXIMO CURSOR: {telemetry.get('next_cursor') or 'UNKNOWN'}{reset}",
+        ])
+    elif telemetry.get("status") == "PASS":
+        lines.append(f"{green}{bold}✅ CADEIA FECHADA SOB STATUS INFORMADO{reset}")
+    else:
+        lines.append(f"{yellow}⚠️ CADEIA EM ANDAMENTO — próximo cursor: {telemetry.get('next_cursor') or 'UNKNOWN'}{reset}")
+    if previous:
+        lines.append(
+            f"🧵 COSTURA DO PASSADO: {previous.get('phase', 'UNKNOWN')} — {previous.get('reason', 'sem detalhe')}"
+        )
+    return "\n".join(lines)
+
+
 def validate_human_identity_naming(text: str):
     raw = str(text or "")
     violations = []
@@ -145,7 +300,16 @@ def evaluate_multibussola_state(state):
     }
 
 
-def resolve(text: str, master_active: bool = False, chefe_source: bool = False, bot_entry: bool = False):
+def resolve(
+    text: str,
+    master_active: bool = False,
+    chefe_source: bool = False,
+    bot_entry: bool = False,
+    phase_status=None,
+    intent_ok=None,
+    intent_reason=None,
+    previous_failure=None,
+):
     raw = str(text or "")
     normalized = normalize(raw)
     ingress, ambiguous_ingress = _resolve_master_ingress(normalized)
@@ -177,6 +341,14 @@ def resolve(text: str, master_active: bool = False, chefe_source: bool = False, 
     harvest_active = bool(delta_active or chefe_material)
     meta_match = next((a for a in MULTIBUSSOLA_META_ALIASES if _phrase_match(normalized, a)), None)
     meta_active = meta_match is not None
+    guided_telemetry = build_guided_telemetry(
+        master_cycle_active,
+        matched_trigger_ids=ids,
+        phase_status=phase_status,
+        intent_ok=intent_ok,
+        intent_reason=intent_reason,
+        previous_failure=previous_failure,
+    )
 
     return {
         "schema": "centraldark.master-cycle-receipt.v1",
@@ -191,6 +363,7 @@ def resolve(text: str, master_active: bool = False, chefe_source: bool = False, 
         "activation_source": activation_source,
         "next_master_active": master_cycle_active,
         "expanded_chain": CHAIN if master_cycle_active else [],
+        "guided_telemetry": guided_telemetry,
         "master_funnel": {
             "canonical_entry": MASTER,
             "matched_trigger_ids": ids,
@@ -271,22 +444,72 @@ def _load_session_state(state_file):
     return bool(payload.get("master_active")), "LOADED"
 
 
-def _store_session_state(state_file, master_active):
+def _load_previous_failure(state_file):
+    if not state_file:
+        return None
     path = Path(state_file)
-    payload = {"schema": "centraldark.master-session-state.v1", "master_active": bool(master_active)}
+    if not path.exists():
+        return None
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError, TypeError):
+        return None
+    if payload.get("schema") != "centraldark.master-session-state.v1":
+        return None
+    failure = payload.get("last_failure")
+    return failure if isinstance(failure, dict) else None
+
+
+def _store_session_state(state_file, master_active, last_failure=None):
+    path = Path(state_file)
+    payload = {
+        "schema": "centraldark.master-session-state.v1",
+        "master_active": bool(master_active),
+        "last_failure": last_failure,
+    }
     temporary = path.with_name(path.name + ".tmp")
     temporary.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     temporary.replace(path)
 
 
-def resolve_with_session_state(text: str, state_file=None, chefe_source: bool = False, bot_entry: bool = False, master_active: bool = False):
+def resolve_with_session_state(
+    text: str,
+    state_file=None,
+    chefe_source: bool = False,
+    bot_entry: bool = False,
+    master_active: bool = False,
+    phase_status=None,
+    intent_ok=None,
+    intent_reason=None,
+):
     persisted_active, load_status = _load_session_state(state_file)
-    receipt = resolve(text, master_active=bool(master_active or persisted_active), chefe_source=chefe_source, bot_entry=bot_entry)
+    previous_failure = _load_previous_failure(state_file)
+    receipt = resolve(
+        text,
+        master_active=bool(master_active or persisted_active),
+        chefe_source=chefe_source,
+        bot_entry=bot_entry,
+        phase_status=phase_status,
+        intent_ok=intent_ok,
+        intent_reason=intent_reason,
+        previous_failure=previous_failure,
+    )
     persisted = False
     if state_file and load_status != "INVALID":
-        _store_session_state(state_file, receipt["next_master_active"])
+        current_failure = receipt["guided_telemetry"].get("failure")
+        if receipt["guided_telemetry"].get("status") == "PASS":
+            next_failure = None
+        else:
+            next_failure = current_failure or previous_failure
+        _store_session_state(state_file, receipt["next_master_active"], last_failure=next_failure)
         persisted = True
-    receipt["session_state"] = {"owner": "CALLER_PROVIDED_SESSION_FILE", "load_status": load_status, "persisted": persisted, "path_exposed": False}
+    receipt["session_state"] = {
+        "owner": "CALLER_PROVIDED_SESSION_FILE",
+        "load_status": load_status,
+        "persisted": persisted,
+        "path_exposed": False,
+        "previous_failure_loaded": bool(previous_failure),
+    }
     return receipt
 
 
@@ -300,6 +523,20 @@ def self_test():
         add("master_funnel", r["master_cycle_active"] and r["activation_source"] == "SUBTRIGGER_FUNNEL" and phase in r["master_funnel"]["matched_trigger_ids"])
     r = resolve("!CENTRALDARK", chefe_source=True)
     add("master", r["explicit_match"] and r["expanded_chain"] == CHAIN)
+    add("guided_telemetry_required", r["guided_telemetry"]["render_required"] and r["guided_telemetry"]["next_cursor"] == "ACORDAR")
+    r = resolve("#ACORDAR !CENTRALDARK", chefe_source=True)
+    add("guided_telemetry_acordar_and_master", r["guided_telemetry"]["steps"][0]["status"] == "PASS" and r["guided_telemetry"]["steps"][1]["status"] == "PASS")
+    r = resolve(
+        "#ACORDAR !CENTRALDARK",
+        chefe_source=True,
+        phase_status={"REMEASURE": "PASS"},
+        intent_ok=False,
+        intent_reason="Saiu do escopo original",
+    )
+    add("guided_telemetry_red_x_exact_phase", r["guided_telemetry"]["status"] == "FAIL" and r["guided_telemetry"]["failure"]["phase"] == "INTENT_SCOPE" and "Saiu do escopo" in render_guided_telemetry(r["guided_telemetry"]))
+    all_pass = {phase: "PASS" for phase, _ in GUIDED_TELEMETRY_PHASES}
+    r = resolve("!CENTRALDARK", chefe_source=True, phase_status=all_pass, intent_ok=True)
+    add("guided_telemetry_pass_requires_all_steps", r["guided_telemetry"]["status"] == "PASS" and r["guided_telemetry"]["failure"] is None)
     r = resolve("não execute #ACORDAR agora", chefe_source=True)
     add("negated_subtrigger", not r["master_cycle_active"] and r["status"] == "UNKNOWN")
     r = resolve("#ACORDAR", chefe_source=False)
@@ -336,7 +573,37 @@ def self_test():
     for sample in technical_literals:
         add("identity_name_guard_preserves_technical_version", validate_human_identity_naming(sample)["ok"])
 
+    with Path(__file__).with_name(".centraldark-telemetry-self-test.json").open("w", encoding="utf-8") as handle:
+        json.dump({"schema": "centraldark.master-session-state.v1", "master_active": True, "last_failure": {"phase": "TEST", "status": "FAIL", "reason": "falha anterior"}}, handle)
+    try:
+        state_path = Path(__file__).with_name(".centraldark-telemetry-self-test.json")
+        r = resolve_with_session_state("continua", state_file=state_path, chefe_source=True)
+        add("guided_telemetry_stitches_previous_failure", r["guided_telemetry"]["previous_failure"]["phase"] == "TEST" and r["session_state"]["previous_failure_loaded"])
+    finally:
+        try:
+            Path(__file__).with_name(".centraldark-telemetry-self-test.json").unlink()
+        except OSError:
+            pass
+
     return {"ok": all(x["ok"] for x in cases), "cases": cases}
+
+
+def _parse_phase_status(raw):
+    if not raw:
+        return None
+    try:
+        payload = json.loads(raw)
+    except (TypeError, ValueError) as exc:
+        raise SystemExit(f"--phase-status-json inválido: {exc}")
+    if not isinstance(payload, dict):
+        raise SystemExit("--phase-status-json deve ser um objeto JSON.")
+    return payload
+
+
+def _parse_intent_ok(raw):
+    if raw is None or raw == "unknown":
+        return None
+    return raw == "true"
 
 
 def main():
@@ -348,13 +615,31 @@ def main():
     parser.add_argument("--bot-entry", action="store_true")
     parser.add_argument("--session-state-file")
     parser.add_argument("--check-human-identity-name")
+    parser.add_argument("--telemetry", action="store_true", help="Exibe HUD/telemetria guiada antes do receipt JSON.")
+    parser.add_argument("--phase-status-json", help="Mapa JSON de fase→UNKNOWN|ACTIVE|PASS|FAIL|BLOCKED|SKIPPED.")
+    parser.add_argument("--intent-ok", choices=("true", "false", "unknown"), default="unknown")
+    parser.add_argument("--intent-reason")
     args = parser.parse_args()
     if args.self_test:
         out = self_test()
     elif args.check_human_identity_name is not None:
         out = validate_human_identity_naming(args.check_human_identity_name)
     else:
-        out = resolve_with_session_state(args.text or "", state_file=args.session_state_file, master_active=args.master_active, chefe_source=args.chefe_source, bot_entry=args.bot_entry)
+        out = resolve_with_session_state(
+            args.text or "",
+            state_file=args.session_state_file,
+            master_active=args.master_active,
+            chefe_source=args.chefe_source,
+            bot_entry=args.bot_entry,
+            phase_status=_parse_phase_status(args.phase_status_json),
+            intent_ok=_parse_intent_ok(args.intent_ok),
+            intent_reason=args.intent_reason,
+        )
+    if args.telemetry and isinstance(out, dict) and out.get("guided_telemetry"):
+        rendered = render_guided_telemetry(out["guided_telemetry"], ansi=sys.stdout.isatty())
+        if rendered:
+            print(rendered)
+            print()
     print(json.dumps(out, ensure_ascii=False, indent=2, default=str))
 
 
