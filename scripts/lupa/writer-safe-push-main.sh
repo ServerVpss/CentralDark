@@ -117,6 +117,34 @@ for TRY in $(seq 1 "$MAX_TRIES"); do
     if [ -f scripts/trigger-fabric/verify_repo_contract.py ]; then
       python scripts/trigger-fabric/verify_repo_contract.py .
     fi
+
+    RESPONSE_CONTRACT="docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md"
+    test -f "$RESPONSE_CONTRACT" || {
+      echo "CHEFE_SYSTEMATIC_PROOF_CONTRACT=FAIL reason=MISSING_OWNER"
+      exit 1
+    }
+    for needle in \
+      'CHEFE_SYSTEMATIC_PROOF_REQUIRED=true' \
+      'SYSTEMATIC_PROOF_REQUIRED_FOR_MATERIAL_CONFIRMATIONS=true' \
+      'CONFIRMATIONS_ONE_TOPIC_BELOW_ANOTHER=true' \
+      'CONFIRMATIONS_MUST_INCLUDE_ALL_MATERIAL_PROVEN_ITEMS_IN_SCOPE=true' \
+      'PROOF_REF_REQUIRED_FOR_PROVEN=true' \
+      'SAME_TARGET_PROOF_REQUIRED=true' \
+      'SAME_HEAD_REQUIRED_FOR_GIT_CLAIMS=true' \
+      'SOURCE_ROLE_MUST_BE_QUALIFIED=true' \
+      'NO_REGRESSION_OF_EXISTING_RESPONSE_LAYERS=true' \
+      'EXISTING_PROVEN_FORMATS_REMAIN_REQUIRED=true' \
+      'EVIDENCE_MUST_MATCH_CLAIM=true' \
+      'ZERO_TRUST_FOR_MATERIAL_CLAIMS=true' \
+      'GREEN_WITHOUT_RECONSTRUCTIBLE_PROOF=INCOMPLETE'
+    do
+      grep -Fq "$needle" "$RESPONSE_CONTRACT" || {
+        echo "CHEFE_SYSTEMATIC_PROOF_CONTRACT=FAIL missing=$needle"
+        exit 1
+      }
+    done
+    echo "CHEFE_SYSTEMATIC_PROOF_CONTRACT=PASS"
+
     node scripts/lupa/validar-continuidade-global.mjs
     node scripts/lupa/validar-porta-de-entrada.mjs
 
