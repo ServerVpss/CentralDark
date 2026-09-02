@@ -11,6 +11,7 @@ import {
   DEFAULT_HOUSE_ROOT,
   DEFAULT_PORT,
   HERMES_BASE_URL,
+  SCREENPIPE_BASE_URL,
   SOL_WIDGET_SHORTCUT,
   isDev,
 } from './utils/constants';
@@ -83,6 +84,25 @@ function toggleWidget() {
   }
 }
 
+async function probeHealth(endpoint: string, routes: string[]) {
+  const started = Date.now();
+  for (const route of routes) {
+    try {
+      const response = await fetch(new URL(route, endpoint), { signal: AbortSignal.timeout(2500) });
+      if (response.ok) {
+        return { status: 'ONLINE', endpoint, route, latency_ms: Date.now() - started };
+      }
+    } catch (error) {
+      console.warn('CENTRALDARK_HEALTH_PROBE_FAILED', {
+        endpoint,
+        route,
+        error: error instanceof Error ? error.message : String(error),
+      });
+    }
+  }
+  return { status: 'OFFLINE', endpoint, latency_ms: Date.now() - started };
+}
+
 function registerBridge() {
   const register = (channel: string, handler: (...args: any[]) => any) => {
     ipcMain.removeHandler(channel);
@@ -94,28 +114,15 @@ function registerBridge() {
     app_version: app.getVersion(),
     house_root: configuredRoot ?? app.getPath('userData'),
     hermes_base_url: HERMES_BASE_URL,
+    screenpipe_base_url: SCREENPIPE_BASE_URL,
     public_url: CENTRALDARK_PUBLIC_URL,
     widget_shortcut: SOL_WIDGET_SHORTCUT,
     one_system_only: true,
   }));
 
-  register('centraldark:hermes:health', async () => {
-    const started = Date.now();
-    for (const route of ['/health', '/api/health']) {
-      try {
-        const response = await fetch(new URL(route, HERMES_BASE_URL), { signal: AbortSignal.timeout(2500) });
-        if (response.ok) {
-          return { status: 'ONLINE', endpoint: HERMES_BASE_URL, latency_ms: Date.now() - started };
-        }
-      } catch (error) {
-        console.warn('HERMES_HEALTH_PROBE_FAILED', {
-          route,
-          error: error instanceof Error ? error.message : String(error),
-        });
-      }
-    }
-    return { status: 'OFFLINE', endpoint: HERMES_BASE_URL, latency_ms: Date.now() - started };
-  });
+  register('centraldark:hermes:health', async () => probeHealth(HERMES_BASE_URL, ['/health', '/api/health']));
+
+  register('centraldark:screenpipe:health', async () => probeHealth(SCREENPIPE_BASE_URL, ['/health']));
 
   register('centraldark:main:show', async () => {
     const win = ensureMainWindow();
