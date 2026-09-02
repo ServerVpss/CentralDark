@@ -101,7 +101,72 @@ class StateLibraryTests(unittest.TestCase):
             self.assertEqual(store.verify_chain(), (True, 2))
             store.close()
 
+    def test_audit_fact_separates_session_continuity_from_provider_validation(self):
+        with tempfile.TemporaryDirectory() as directory:
+            store = EventStore(Path(directory) / "state.db")
+            methods = ("FABLE_LOOP", "META_LUPA", "META_MULTIBUSSOLA", "METACOGNICAO")
+            context = {
+                "head_sha": "candidate-head",
+                "writer": "PR-1381",
+                "provider": "OpenRouter",
+                "model": "anthropic/claude-fable-5",
+            }
+            continuity_hash = store.record_audit_fact(
+                event_type="MODEL_SWITCH",
+                claim="session continuity survived provider/model switch",
+                status="PASS",
+                source="terminal-observation",
+                methods=methods,
+                context=context,
+                evidence_refs=("terminal:model-switched",),
+                belief_delta={"before": "continuity_unknown", "after": "continuity_observed"},
+            )
+            validation_hash = store.record_audit_fact(
+                event_type="PROVIDER_VALIDATION",
+                claim="selected provider/model is currently validated by the router API",
+                status="BLOCKED",
+                source="terminal-observation",
+                methods=methods,
+                context=context,
+                blockers=("router_api_unreachable",),
+                counterproof_refs=("terminal:api-call-failed-after-3-retries",),
+                belief_delta={"before": "provider_assumed", "after": "provider_validation_blocked"},
+            )
+            facts = store.list_events("AUDIT_FACT")
+            self.assertEqual(len(facts), 2)
+            self.assertEqual(facts[0]["payload"]["status"], "BLOCKED")
+            self.assertEqual(facts[1]["payload"]["status"], "PASS")
+            self.assertNotEqual(continuity_hash, validation_hash)
+            self.assertEqual(store.verify_chain(), (True, 2))
+            store.close()
+
+    def test_audit_fact_rejects_false_green_without_evidence(self):
+        with tempfile.TemporaryDirectory() as directory:
+            store = EventStore(Path(directory) / "state.db")
+            with self.assertRaises(ValueError):
+                store.record_audit_fact(
+                    event_type="MODEL_SWITCH",
+                    claim="provider validated",
+                    status="PASS",
+                    source="terminal-observation",
+                )
+            self.assertEqual(store.list_events("AUDIT_FACT"), [])
+            store.close()
+
+    def test_audit_fact_rejects_private_reasoning_fields(self):
+        with tempfile.TemporaryDirectory() as directory:
+            store = EventStore(Path(directory) / "state.db")
+            with self.assertRaises(ValueError):
+                store.record_audit_fact(
+                    event_type="META_DELTA",
+                    claim="candidate insight",
+                    status="UNKNOWN",
+                    source="agent",
+                    context={"raw_reasoning": "must not persist"},
+                )
+            self.assertEqual(store.list_events("AUDIT_FACT"), [])
+            store.close()
+
 
 if __name__ == "__main__":
     unittest.main()
-
