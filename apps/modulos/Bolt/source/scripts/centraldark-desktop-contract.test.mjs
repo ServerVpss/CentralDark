@@ -27,6 +27,18 @@ test('site, app e widget usam a mesma alma Hermes', () => {
   assert.match(widget, /openIntent/);
 });
 
+test('Screenpipe entra como sensor local, não como autoridade no renderer', () => {
+  const constants = read(`${root}/electron/main/utils/constants.ts`);
+  const main = read(`${root}/electron/main/index.ts`);
+  const preload = read(`${root}/electron/preload/index.ts`);
+
+  assert.match(constants, /http:\/\/127\.0\.0\.1:3030/);
+  assert.match(main, /centraldark:screenpipe:health/);
+  assert.match(main, /SCREENPIPE_BASE_URL/);
+  assert.match(preload, /getScreenpipeHealth/);
+  assert.doesNotMatch(preload, /search-content|activity-summary|frame-context|cookie|token/i);
+});
+
 test('a ponte Electron é estreita e o renderer não ganha Node', () => {
   const windowSource = read(`${root}/electron/main/ui/window.ts`);
   const preload = read(`${root}/electron/preload/index.ts`);
