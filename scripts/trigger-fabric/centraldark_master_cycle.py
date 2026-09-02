@@ -25,6 +25,7 @@ MASTER_INGRESS_ALIASES = {
     "CENTRALDARK_MASTER": ("!centraldark", "!central-dark", "!cdark"),
     "ACORDAR": ("#acordar", "#acorda", "!acordar", "!acorda"),
     "CALIBRAR": ("!calibrar", "#calibrar"),
+    "CRISTALIZAR": ("#cristalizar", "!cristalizar", "#crystalizar", "!crystalizar", "#crystalaizar", "!crystalaizar"),
     "MULTIBUSSOLA": ("!multibussola", "!multibússola", "!multi-bussola", "!multibussola_meta", "!multibússola_meta"),
     "META_LUPA": ("!meta_lupa", "!metalupa"),
     "RECONCILIAR": ("!reconciliar",),
@@ -197,8 +198,10 @@ def resolve(text: str, master_active: bool = False, chefe_source: bool = False, 
             "ambiguous_trigger_ids": ambiguous_ids,
             "normalized_to_master": bool(explicit_subtrigger and not inherited),
             "master_reentry_guard": bool(inherited and ids),
-            "requested_phases": [i for i in ids if i not in ("CENTRALDARK_MASTER", "FABLE_LOOP")],
+            "requested_phases": [i for i in ids if i not in ("CENTRALDARK_MASTER", "FABLE_LOOP", "CRISTALIZAR")],
             "requested_methods": [i for i in ids if i == "FABLE_LOOP"],
+            "phase_markers": [i for i in ids if i == "CRISTALIZAR"],
+            "cristalizar_is_phase_marker_not_engine": True,
             "markerless_alias_opens_master": False,
             "all_explicit_human_triggers_enter_master_once": True,
         },
@@ -307,6 +310,14 @@ def self_test():
     add("plain_word_guard", not r["master_cycle_active"] and r["status"] == "NO_MATCH")
     r = resolve("!CENTRALUTIL", chefe_source=True)
     add("centralutil_delta", r["delta_harvest"]["explicit_signal_active"] and r["master_cycle_active"])
+
+    for token in ("#CRISTALIZAR", "!CRISTALIZAR", "#CRYSTALIZAR", "#CRYSTALAIZAR"):
+        r = resolve(token, chefe_source=True)
+        add("cristalizar_funnels_once", r["master_cycle_active"] and r["activation_source"] == "SUBTRIGGER_FUNNEL" and r["master_funnel"]["phase_markers"] == ["CRISTALIZAR"] and r["master_funnel"]["cristalizar_is_phase_marker_not_engine"])
+    r = resolve("#CRISTALIZAR", master_active=True, chefe_source=True)
+    add("cristalizar_reentry_guard", r["master_funnel"]["master_reentry_guard"] and r["activation_source"] == "INHERITED_SESSION")
+    r = resolve("não execute #CRISTALIZAR agora", chefe_source=True)
+    add("cristalizar_negation_guard", not r["master_cycle_active"] and r["status"] == "UNKNOWN")
 
     bad_identity_outputs = (
         "BOOT_CENTRALDARK_BAIANES_V1",
