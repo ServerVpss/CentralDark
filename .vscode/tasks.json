@@ -1,0 +1,27 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "CentralDark: Bootstrap",
+      "type": "process",
+      "command": "python",
+      "args": [
+        "scripts/trigger-fabric/centraldark_master_cycle.py",
+        "--text",
+        "#ACORDAR !CENTRALDARK",
+        "--chefe-source",
+        "--telemetry"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "clear": false,
+        "focus": false
+      }
+    }
+  ]
+}
