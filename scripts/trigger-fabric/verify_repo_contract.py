@@ -43,6 +43,21 @@ check('apps/modulos/fixed-point-fabric/contracts/FIXED-POINT-FABRIC.yml',[
  'absolute_zero_error_claim: forbidden',
  'two_hundred_percent_success: METAPHOR_ONLY_NOT_METRIC',
 ], classification='FIXED_POINT_SCOPE_HISTORY_LOGIC_CONTRACT')
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CAPABILITY-READINESS-POLICY.yml',[
+ 'DISABLED_IS_NOT_FAILURE: true',
+ 'OFF_IS_NOT_FAILURE_WHEN_NOT_SELECTED: true',
+ 'AVAILABLE_OFF_IS_VALID_STATE: true',
+ 'FAILURE_REQUIRES_EXPECTED_ACTIVE_CAPABILITY: true',
+ 'BUTTON_OFF_IS_STATE_NOT_INCIDENT: true',
+ 'principle: OFF_BY_ITSELF_MEANS_ONLY_OFF',
+ 'one_optional_arm_off_does_not_fail_organism: true',
+ 'classification_when_failure_proven: REQUIRED_UNAVAILABLE',
+], classification='CAPABILITY_OFF_NEUTRALITY_CONTRACT')
+check('apps/modulos/Bolt/source/app/components/centraldark/CentralDarkCockpitShell.client.tsx',[
+ 'DISABLED/OFF != FAIL',
+ 'FAIL REQUIRES EXPECTED ACTIVE',
+ 'OFF/DISABLED não é erro por si só',
+], classification='COCKPIT_OFF_NEUTRALITY_HUD')
 check('LEIA-ME-IA.md',['#ACORDAR','!CALIBRAR','CENTRALDARK_AI_BOOT'])
 check('CENTRALDARK_AI_BOOT.yaml',[
  'adaptive_payload: true',
@@ -298,4 +313,6 @@ print('MATERIAL_STATE_MACHINE_AND_LEARNING_BINDING=PASS')
 print('DETERMINISTIC_SCAFFOLD_CONTRACT=PASS')
 print('CHEFE_SYSTEMATIC_PROOF_CONTRACT=PASS')
 print('FIXED_POINT_SCOPE_HISTORY_LOGIC_CONTRACT=PASS')
+print('CAPABILITY_OFF_NEUTRALITY_CONTRACT=PASS')
+print('COCKPIT_OFF_NEUTRALITY_HUD=PASS')
 print('NOTE=PASS proves repository contract/path/runner-policy facts only; it does not prove live Windows/VPS/runtime inheritance.')
