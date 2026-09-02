@@ -124,6 +124,29 @@ state_library:
     direct_main_write: false
     raw_chain_of_thought_persisted: false
     record_decision_rationale_only: true
+    registra_policy:
+      trigger_alias: "!REGISTRA"
+      required_for_all_centraldark_agents_and_surfaces: true
+      material_delta_only: true
+      material_delta_requires_reconciliation: true
+      no_material_delta_no_commit_required: true
+      register_to_active_scope_ledger_before_new_pr: true
+      register_fact_not_private_reasoning: true
+      required_fields:
+        - intent
+        - scope
+        - owner
+        - current_head_or_state
+        - delta
+        - evidence_refs
+        - counterproof_refs
+        - status
+        - next_cursor
+      forbidden:
+        - raw_chain_of_thought
+        - secret_values
+        - screenshot_as_global_truth
+        - duplicate_owner_creation
     chat_delta_policy:
       every_material_chat_delta_must_be_reconciled: true
       commit_per_message: false
@@ -282,6 +305,10 @@ historical_reconciliation:
 
 pr_lifecycle:
   active_integration_ledger: 1381
+  one_active_promotion_pr_per_scope: true
+  many_commits_per_active_pr_allowed: true
+  same_scope_delta_reuses_active_pr: true
+  new_pr_is_not_opened_for_each_chat_or_commit: true
   main_is_durable_canonical_baseline: true
   pr_is_review_and_integration_vehicle_not_eternal_main: true
   merge_to_main_closes_pr_by_git_semantics: true
@@ -290,6 +317,28 @@ pr_lifecycle:
   direct_main_write: false
   promotion_method: squash_if_same_head_gates_pass
   permanent_open_pr_and_main_continuously_updated_from_same_unmerged_head: CONTRADICTION
+  next_cycle:
+    auto_prepare_when_material_delta_exists: true
+    auto_open_pr_only_when:
+      - previous_same_scope_pr_is_merged_or_closed
+      - no_active_pr_already_owns_same_scope
+      - current_main_remeasured
+      - material_bug_feature_requirement_or_proven_learning_exists
+      - owner_and_scope_resolved
+      - candidate_branch_contains_real_delta
+    do_not_open_when:
+      - no_material_delta
+      - deployment_is_healthy_and_no_change_is_requested
+      - same_scope_active_pr_exists
+      - only_status_or_narrative_changed
+      - evidence_is_unknown_without_actionable_delta
+    new_pr_starts_from_current_main: true
+    inherit_canonical_rules_and_hud_contract: true
+    inherit_old_pr_number: false
+    old_pr_is_lineage_not_live_owner: true
+    human_request_can_start_new_cycle: true
+    autonomous_detected_bug_can_start_new_cycle_if_scope_and_owner_are_proven: true
+    autonomous_new_feature_without_chefe_intent: false
 
 garimpo_ingest:
   source_role: CANDIDATE_PROVENANCE
