@@ -73,6 +73,8 @@ const operationalInvariants = [
   ['ONE_SYSTEM_ONLY', 'nenhum braço vira segunda CentralDark'],
   ['ONE_WRITER_PER_SCOPE', 'mutação serial por escopo'],
   ['CONTINUE_BEFORE_RESTART', 'interrupção não abandona missão ativa'],
+  ['OBSERVED_USER_REPORT != RUNTIME_PROOF', 'relato ou screenshot abre candidato; runtime aplicável decide PASS'],
+  ['PROVIDER_PANEL != PROVIDER_PUBLIC_API', 'recurso visível no painel externo não implica capability disponível na API'],
   ['QUANTUM_ANALOGY != QUANTUM_RUNTIME', 'multi-hipótese é modelo clássico; não prova qubits'],
   ['ENTANGLEMENT != FTL_SIGNAL', 'correlação quântica não autoriza comunicação acima da luz'],
 ] as const;
@@ -98,6 +100,13 @@ const integratedCapabilitySurfaces = [
     icon: 'i-ph:cloud',
     owner: 'scripts/cloudflare/cf-sync.sh',
     detail: 'sync idempotente existente; token/DNS continuam UNKNOWN até --check/T1 no território correto',
+  },
+  {
+    key: 'CONTABO_VPS',
+    label: 'Contabo / VPS',
+    icon: 'i-ph:server',
+    owner: 'apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js + apps/modulos/oauth-broker/server.mjs',
+    detail: 'Hub/Broker/MCP Admin já existem para instâncias, snapshots e audits; ações destrutivas exigem gate + receipt; painel externo não vira capability API por inferência',
   },
 ] as const;
 
@@ -254,7 +263,7 @@ export function CentralDarkCockpitShell({ children }: { children: ReactNode }) {
               <strong className="cd-warning">RUNTIME UNKNOWN</strong>
             </div>
           ))}
-          <p className="cd-status-copy">O Cockpit apenas projeta owners já existentes. Contas/Hub, Telegram e Cloudflare continuam braços do mesmo organismo; source mapeado não vira saúde runtime nem cria backend paralelo.</p>
+          <p className="cd-status-copy">O Cockpit apenas projeta owners já existentes. Contas/Hub, Telegram, Cloudflare e Contabo/VPS continuam braços do mesmo organismo; source mapeado não vira saúde runtime nem cria backend paralelo.</p>
         </section>
 
         <section className="cd-status-card cd-status-card--list" aria-label="Mapa visual de pendências">
