@@ -13,6 +13,18 @@ explicit_trigger_activates_master_session: true
 master_session_remains_active: true
 subsequent_chefe_material_is_delta_candidate: true
 
+master_precedence:
+  human_notation: "#CENTRALDARK > #ACORDAR"
+  executable_master_trigger: "!CENTRALDARK"
+  relation: MASTER_UMBRELLA_CONTAINS_ACORDAR_PHASE
+  centraldark_master_is_above_acordar: true
+  acordar_is_subphase_not_peer_master: true
+  rename_executable_master_trigger: false
+  zero_regression_preserves_existing_master_token: true
+  existing_runtime_proof:
+    - scripts/trigger-fabric/test_centraldark_master_cycle.py#test_acordar_enters_centraldark_master_funnel
+    - scripts/trigger-fabric/centraldark_master_cycle.py#MASTER_INGRESS_ALIASES
+
 purpose: >-
   Comprimir o ciclo operacional completo da Casa em um unico gatilho humano,
   preservar a intencao vigente do SEGREDO/CHEFE, reconciliar passado, presente
@@ -32,7 +44,9 @@ expands_to:
   - REGISTRA
   - BOOT
 
-canonical_chain: "#ACORDAR -> !CALIBRAR -> !MULTIBUSSOLA -> !META_LUPA -> !RECONCILIAR -> !DELTAUTIL -> !CONTRAPROVA -> !REMEDICAO -> !FIXED_POINT -> !REGISTRA -> !BOOT"
+canonical_human_chain: "#CENTRALDARK -> #ACORDAR -> !CALIBRAR -> !MULTIBUSSOLA -> !META_LUPA -> !RECONCILIAR -> !DELTAUTIL -> !CONTRAPROVA -> !REMEDICAO -> !FIXED_POINT -> !REGISTRA -> !BOOT"
+canonical_machine_chain: "!CENTRALDARK -> #ACORDAR -> !CALIBRAR -> !MULTIBUSSOLA -> !META_LUPA -> !RECONCILIAR -> !DELTAUTIL -> !CONTRAPROVA -> !REMEDICAO -> !FIXED_POINT -> !REGISTRA -> !BOOT"
+canonical_chain: "!CENTRALDARK -> #ACORDAR -> !CALIBRAR -> !MULTIBUSSOLA -> !META_LUPA -> !RECONCILIAR -> !DELTAUTIL -> !CONTRAPROVA -> !REMEDICAO -> !FIXED_POINT -> !REGISTRA -> !BOOT"
 
 continuous_delta_contract:
   scope: ACTIVE_MASTER_SESSION
@@ -58,6 +72,8 @@ phase_contracts:
   ACORDAR:
     meaning: RECOVER_LIVE_STATE
     owner: "LEIA-ME-IA.md + AGENTS.md"
+    parent: CENTRALDARK_MASTER
+    precedence: "CENTRALDARK_MASTER > ACORDAR"
   CALIBRAR:
     meaning: ALIGN_INTENT_ROLE_SCOPE_TOOLS_PROOF
     owner: "LEIA-ME-IA.md + AGENTS.md"
@@ -246,6 +262,7 @@ self_improvement:
 
 communication_interface:
   preferred_human_header: "!CENTRALDARK"
+  preferred_human_hierarchy: "#CENTRALDARK > #ACORDAR"
   expanded_chain_must_remain_recoverable: true
   human_expression_may_be_compressed_or_noisy: true
   preserve_meaning_before_syntax: true
@@ -357,225 +374,3 @@ semantic_memory_links:
   semantic_link_is_proof: false
   graph_is_authority: false
   musical_metaphor_is_navigation_only: true
-
-transversal_lenses:
-  dimensions:
-    DEPENDENCIA: "o que isto precisa para funcionar ou provar?"
-    DECADENCIA: "o que pode ter ficado stale, vencido ou divergido?"
-    CADENCIA: "quando e por qual evento precisa ser medido de novo?"
-  planes:
-    KNOWLEDGE: "o que sabemos e com qual evidencia?"
-    EXECUTION: "o que realmente executou e qual efeito observavel ocorreu?"
-    CONFIG_ORIGIN: "qual owner/configuracao/origem causou ou governa o comportamento?"
-  matrix_mode: TRANSVERSAL_WHEN_MATERIAL
-  creates_new_phase: false
-  creates_new_brain: false
-
-adaptive_rules:
-  all_phases_are_considered: true
-  no_op_phase_may_return: SKIP_JUSTIFICADO
-  no_new_information: NO_CHANGE
-  unknown: NEVER_PASS
-  explicit_master_trigger_does_not_expand_authority: true
-  explicit_master_trigger_does_not_imply_mutation: true
-
-past_future_reconciliation:
-  policy: ABSORB_ONLY_USEFUL_DELTA_NO_PARALLEL_OWNER
-  baseline: CURRENT_MAIN
-  pr_mother: 1189
-  source_prs:
-    - 1115
-    - 1157
-    - 1161
-    - 1166
-    - 1167
-    - 1168
-    - 1169
-    - 1170
-    - 1172
-    - 1189
-    - 1240
-    - 1241
-    - 1243
-    - 1245
-    - 1269
-    - 1300
-    - 1314
-    - 1330
-    - 1335
-    - 1336
-    - 1339
-    - 1349
-    - 1350
-    - 1354
-  absorbed:
-    - semantic_typo_and_alias_recognition
-    - semantic_match_is_not_authorization
-    - semantic_match_is_not_mutation_permission
-    - graph_is_derived_not_authority
-    - GraphRAG_semantic_retrieval_is_read_only
-    - fixed_point_self_healing_is_bounded
-    - engine_binding_inherits_same_contract
-    - past_is_provenance_plus_candidate_delta
-    - delta_utils_is_incremental_harvest_not_new_router
-    - cross_chat_is_context_not_current_state
-    - semantic_links_are_navigation_not_proof
-    - transversal_3x3_lenses_not_new_phases
-    - mechanical_payload_only_fast_path
-    - one_core_many_arms
-    - adaptive_read_only_fanout
-    - convergence_by_evidence_not_vote
-    - engine_capability_ladder
-    - overclock_scout_builder_reviewer_taxonomy
-    - meta_lupa_event_driven_self_improvement
-    - writer_lease_pr_pin_cas_pattern
-    - smallest_independently_verifiable_unit
-    - derived_view_cache_not_authority
-    - known_answer_filter_counterproof
-    - component_pass_is_not_integration_pass
-    - runtime_route_map_as_temporal_evidence
-  rejected_as_parallel:
-    - second_semantic_owner
-    - duplicate_semantic_map_authority
-    - new_brain_or_new_judge
-    - historical_branch_governing_current_state
-    - second_capability_router
-    - second_event_bus_for_evidence
-    - second_memory_for_same_function
-    - versioned_duplicate_for_same_rule
-
-capability_status:
-  canonical_present:
-    MASTER_CYCLE: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/
-    META_LUPA: .agents/skills/meta-lupa/
-    CAPABILITY_ROUTER: .agents/skills/capability-contract-router/
-    JARVIS: docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md
-    OMNI_ROUTER: apps/modulos/elite-gateway/scripts/centraldark_omni_router.py
-    EVIDENCE_ENVELOPE: supabase/functions/_shared/evidence-envelope.mjs
-    AGENT_LOG: supabase/functions/agent-log/index.ts
-    DREAM_REVIEW: scripts/memory-linker/
-    HERMES_CORE: apps/modulos/HERMES-CORE/
-    N7: .agents/skills/meta-lupa/agents/nivel-7/
-    BUILDER_OWNER: apps/modulos/Bolt/
-  gaps_preserved:
-    DREAM_REVIEW_PHYSICAL_TRANSPORT: UNPROVEN
-    OVERCLOCK_TAXONOMY_EXECUTABLE_AGENTS: NOT_IMPLEMENTED_AS_23_AGENTS
-    BUILDER_HERMES_INTEGRATION: NOT_IMPLEMENTED
-    BUILDER_PROJECT_ISOLATION: NOT_IMPLEMENTED
-    BUILDER_OPEN_LOVABLE_BRIDGE: NOT_IMPLEMENTED
-    LOCAL_AI_RUNTIME: UNKNOWN
-  reserves:
-    ODS:
-      status: DEFERRED_UNTIL_MEASURED
-      role_if_adopted: LOCAL_CAPABILITY_BODY
-      authority: NONE
-    BUZZ:
-      status: RESERVE_REFERENCE
-      role_if_adopted: COLLABORATION_AND_EVENT_VIEW_ADAPTER
-      authority: NONE
-    OPENMAUSBOT:
-      status: RESERVE_REFERENCE
-      role_if_adopted: AGENT_ROSTER_AND_UX_VIEW
-      authority: NONE
-    OPEN_LOVABLE:
-      status: RESERVE_REFERENCE
-      role_if_adopted: BUILDER_PATTERN_SOURCE
-      owner_remains: apps/modulos/Bolt/
-    GROK_BUILD:
-      status: FUTURE_ENGINE_CANDIDATE
-      invocation_proven: false
-    AIOS_AIOX:
-      status: CANDIDATE_EXTERNAL_LEARNING
-      raw_runtime_import: false
-
-local_ai_measurement_policy:
-  runtime_status: UNKNOWN
-  deferred_until_measured: true
-  configured_is_active: false
-  repository_reference_is_runtime_proof: false
-  health_is_provider_invocation_proof: false
-  promotion_requires:
-    - LIVE_TARGET_IDENTIFIED
-    - ENGINE_BINARY_OR_ENDPOINT_OBSERVED
-    - INVOCATION_OBSERVED
-    - RECEIPT_BOUND_TO_ENGINE_AND_MODEL
-    - COUNTERPROOF_SURVIVED
-  until_then:
-    - DO_NOT_ROUTE_BY_DEFAULT
-    - DO_NOT_CLAIM_LOCAL_AI_ACTIVE
-    - PRESERVE_AS_FUTURE_CAPABILITY
-
-artifact_memory:
-  properties_contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ARTIFACT-PROPERTIES.yml
-  valuable_delta_only: true
-  register_between_engines: true
-  graph_update_after_proven_effect: true
-  graph_is_authority: false
-  history_is_current_state: false
-
-hard_guarantee_boundary:
-  prose_only: NOT_ENOUGH
-  required_for_global_blocking:
-    - REAL_CONSUMER
-    - POSITIVE_NEGATIVE_TEST
-    - EXISTING_GATE_BINDING
-    - VERIFIABLE_RECEIPT
-    - MAIN_PROTECTION_OR_EQUIVALENT_ENFORCEMENT
-
-fixed_point:
-  mission_only: true
-  learning_capacity_event_driven: true
-  requires:
-    - INTENT_PRESERVED
-    - OWNER_RESOLVED
-    - ONE_WRITER_PER_SCOPE
-    - CLAIMS_BOUND_TO_APPLICABLE_EVIDENCE
-    - COUNTERPROOF_SURVIVED
-    - NO_CRITICAL_REGRESSION
-    - NO_MATERIAL_UNKNOWN_FOR_SCOPE
-    - NO_NEW_INFORMATION
-
-pr_living_ledger:
-  current_pr: 1381
-  scope: ACTIVE_PROMOTION_LEDGER
-  one_pr_per_active_scope: true
-  many_commits_allowed: true
-  update_branch_allowed_when_repo_supports_it: true
-  update_branch_semantics: BASE_INTO_PR_HEAD
-  update_branch_is_main_promotion: false
-  promotion_target: main
-  merge_closes_pr: true
-  canonical_after_promotion: main
-  permanent_anchor_owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
-  permanent_open_pr_as_source_of_truth: false
-  copy_pr_commits_to_main_while_pr_stays_open: false
-  rule: >-
-    O PR vivo e a bancada de trabalho do escopo ativo; main continua sendo a fonte
-    canonica promovida. Atualizar branch reconcilia main dentro do HEAD do PR.
-    Promocao para main ocorre somente por merge/squash depois dos gates aplicaveis.
-
-reaction_telemetry:
-  purpose: READ_ACK_AND_SEMANTIC_SIGNAL
-  reaction_is_proof: false
-  reaction_is_authorization: false
-  receipt_required_for_operational_meaning: true
-  dedupe: ONE_REACTION_PER_ACTOR_PER_TARGET_PER_SEMANTIC_STATE
-  no_duplicate_reaction_spam: true
-  reader_should_ack_when_capability_allows: true
-  no_reaction_permission_fallback: RECEIPT_ONLY
-  map:
-    eyes: READ_CURRENT_CHECKPOINT
-    plus_one: USEFUL_DELTA_ACK
-    minus_one: REJECTED_OR_COUNTERPROVED_DELTA
-    confused: UNKNOWN_OR_CONTRADICTION
-    rocket: PROMOTABLE_ONLY_AFTER_APPLICABLE_GATES
-    hooray: PROMOTED_AND_T1_REMEASURED
-    heart: HUMAN_INTENT_ALIGNMENT_NOTE
-    laugh: NON_GATING_HUMAN_NOTE
-  rules:
-    - REACTION_WITHOUT_REASON_RECEIPT_IS_ONLY_UI_SIGNAL
-    - READ_ACK_DOES_NOT_IMPLY_FULL_PR_UNDERSTANDING
-    - USEFUL_DELTA_ACK_DOES_NOT_IMPLY_PASS
-    - ROCKET_REQUIRES_SAME_HEAD_PROOF
-    - HOORAY_REQUIRES_PROMOTION_AND_T1
-    - EMOJI_NEVER_GRANTS_ADMIN_OR_WRITER_AUTHORITY
