@@ -77,6 +77,30 @@ const operationalInvariants = [
   ['ENTANGLEMENT != FTL_SIGNAL', 'correlação quântica não autoriza comunicação acima da luz'],
 ] as const;
 
+const integratedCapabilitySurfaces = [
+  {
+    key: 'ACCOUNTS_HUB',
+    label: 'Contas / Hub',
+    icon: 'i-ph:key',
+    owner: 'apps/modulos/oauth-broker/server.mjs',
+    detail: 'providers + connections + OAuth/API-key; saúde viva ainda não medida pelo bridge do Cockpit',
+  },
+  {
+    key: 'TELEGRAM',
+    label: 'Bot Telegram',
+    icon: 'i-ph:paper-plane-tilt',
+    owner: 'apps/bot-telegram/ + checker existente',
+    detail: 'runtime deve ser provado pelo checker/PM2 no alvo; presença de source não significa ONLINE',
+  },
+  {
+    key: 'CLOUDFLARE',
+    label: 'Cloudflare / DNS',
+    icon: 'i-ph:cloud',
+    owner: 'scripts/cloudflare/cf-sync.sh',
+    detail: 'sync idempotente existente; token/DNS continuam UNKNOWN até --check/T1 no território correto',
+  },
+] as const;
+
 const hypothesisStateDimensions = cognitiveTheoryChecks.length;
 const hypothesisStateSpace = 2 ** hypothesisStateDimensions;
 
@@ -219,6 +243,18 @@ export function CentralDarkCockpitShell({ children }: { children: ReactNode }) {
           <div className="cd-evidence"><span className="i-ph:lightning" /><div><strong>Hermes</strong><small>{hermes.status ?? 'UNKNOWN'}{typeof hermes.latency_ms === 'number' ? ` · ${hermes.latency_ms} ms` : ''}</small></div></div>
           <div className="cd-evidence"><span className="i-ph:eye" /><div><strong>Screenpipe</strong><small>{screenpipe.status ?? 'UNKNOWN'}{typeof screenpipe.latency_ms === 'number' ? ` · ${screenpipe.latency_ms} ms` : ''}</small></div></div>
           <div className="cd-evidence"><span className="i-ph:git-pull-request" /><div><strong>GitHub</strong><small>PR #1381 · referência operacional</small></div></div>
+        </section>
+
+        <section className="cd-status-card cd-status-card--list" aria-label="Braços integrados no painel único">
+          <div className="cd-status-line"><span>Braços integrados</span><strong>OWNER MAP</strong></div>
+          {integratedCapabilitySurfaces.map(({ key, label, icon, owner, detail }) => (
+            <div key={key} className="cd-evidence">
+              <span className={icon} />
+              <div><strong>{label}</strong><small>{owner} · {detail}</small></div>
+              <strong className="cd-warning">RUNTIME UNKNOWN</strong>
+            </div>
+          ))}
+          <p className="cd-status-copy">O Cockpit apenas projeta owners já existentes. Contas/Hub, Telegram e Cloudflare continuam braços do mesmo organismo; source mapeado não vira saúde runtime nem cria backend paralelo.</p>
         </section>
 
         <section className="cd-status-card cd-status-card--list" aria-label="Mapa visual de pendências">
