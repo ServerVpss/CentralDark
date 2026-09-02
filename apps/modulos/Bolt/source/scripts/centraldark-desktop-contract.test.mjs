@@ -49,6 +49,20 @@ test('a ponte Electron é estreita e o renderer não ganha Node', () => {
   assert.doesNotMatch(preload, /process\.env/);
 });
 
+test('painel único projeta contas, Telegram e Cloudflare sem inventar runtime verde', () => {
+  const cockpit = read(`${root}/app/components/centraldark/CentralDarkCockpitShell.client.tsx`);
+
+  assert.match(cockpit, /Contas \/ Hub/);
+  assert.match(cockpit, /apps\/modulos\/oauth-broker\/server\.mjs/);
+  assert.match(cockpit, /Bot Telegram/);
+  assert.match(cockpit, /apps\/bot-telegram\/ \+ checker existente/);
+  assert.match(cockpit, /Cloudflare \/ DNS/);
+  assert.match(cockpit, /scripts\/cloudflare\/cf-sync\.sh/);
+  assert.match(cockpit, /RUNTIME UNKNOWN/);
+  assert.match(cockpit, /source mapeado não vira saúde runtime nem cria backend paralelo/);
+  assert.doesNotMatch(cockpit, /ACCOUNTS_HUB[^\n]*ONLINE|CLOUDFLARE[^\n]*ONLINE|TELEGRAM[^\n]*ONLINE/);
+});
+
 test('o build da CentralDark funciona no Windows sem depender de rm Unix', () => {
   const pkg = JSON.parse(read(`${root}/package.json`));
   const clean = read(`${root}/scripts/clean-electron-output.mjs`);
