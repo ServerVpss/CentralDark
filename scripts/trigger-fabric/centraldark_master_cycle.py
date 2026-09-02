@@ -6,66 +6,42 @@ import unicodedata
 from pathlib import Path
 
 MASTER = "!CENTRALDARK"
-CHAIN = [
-    "ACORDAR",
-    "CALIBRAR",
-    "MULTIBUSSOLA",
-    "META_LUPA",
-    "RECONCILIAR",
-    "DELTA_UTIL",
-    "CONTRAPROVA",
-    "REMEDICAO",
-    "FIXED_POINT",
-    "REGISTRA",
-    "BOOT",
-]
+CHAIN = ["ACORDAR", "CALIBRAR", "MULTIBUSSOLA", "META_LUPA", "RECONCILIAR", "DELTA_UTIL", "CONTRAPROVA", "REMEDICAO", "FIXED_POINT", "REGISTRA", "BOOT"]
 
 DELTA_CANONICAL = "!DELTA UTILS"
 DELTA_ALIASES = (
-    "!delta utils",
-    "!deltautils",
-    "deltautils",
-    "!delta util",
-    "!deltautil",
-    "deltautil",
-    "!delta útil",
-    "delta útil",
-    "delta util",
-    "delta utils",
-    "delta de agora",
-    "toma esse delta",
-    "pega o delta",
+    "!delta utils", "!deltautils", "deltautils", "!delta util", "!deltautil", "deltautil",
+    "!delta útil", "delta útil", "delta util", "delta utils", "!centralutil",
+    "delta de agora", "toma esse delta", "pega o delta",
 )
-MULTIBUSSOLA_META_CANONICAL = "!MULTIBUSSOLA_META"
-MULTIBUSSOLA_META_ALIASES = (
-    "!multibussola_meta",
-    "!multibússola_meta",
-    "multibussola_meta",
-    "multibússola_meta",
-)
-MULTIBUSSOLA_META_ROUTES = [
-    "FORWARD_ROUTE",
-    "REVERSE_ROUTE",
-    "INVERSE_ROUTE",
-    "CROSS_BEARING_RENDEZVOUS",
-]
-MULTIBUSSOLA_PROOF_GATES = [
-    "PROOF_TARGET_MATCH",
-    "PROOF_OWNERSHIP",
-    "INDEPENDENT_COUNTERPROOF",
-    "EXTERNAL_ANCHOR_WHEN_APPLICABLE",
-    "REMEDICAO_T1",
-    "REALITY_JUDGE",
-]
+MULTIBUSSOLA_META_ALIASES = ("!multibussola_meta", "!multibússola_meta", "multibussola_meta", "multibússola_meta")
+MULTIBUSSOLA_META_ROUTES = ["FORWARD_ROUTE", "REVERSE_ROUTE", "INVERSE_ROUTE", "CROSS_BEARING_RENDEZVOUS"]
+MULTIBUSSOLA_PROOF_GATES = ["PROOF_TARGET_MATCH", "PROOF_OWNERSHIP", "INDEPENDENT_COUNTERPROOF", "EXTERNAL_ANCHOR_WHEN_APPLICABLE", "REMEDICAO_T1", "REALITY_JUDGE"]
 NEGATION_TOKENS = {"nao", "nunca", "sem"}
+
+# Regra de porteira única: todo gatilho humano EXPLÍCITO reconhecido entra uma vez
+# em !CENTRALDARK. Dentro de sessão ativa, vira apenas fase/método e não reentra.
+MASTER_INGRESS_ALIASES = {
+    "CENTRALDARK_MASTER": ("!centraldark", "!central-dark", "!cdark"),
+    "ACORDAR": ("#acordar", "#acorda", "!acordar", "!acorda"),
+    "CALIBRAR": ("!calibrar", "#calibrar"),
+    "MULTIBUSSOLA": ("!multibussola", "!multibússola", "!multi-bussola", "!multibussola_meta", "!multibússola_meta"),
+    "META_LUPA": ("!meta_lupa", "!metalupa"),
+    "RECONCILIAR": ("!reconciliar",),
+    "DELTA_UTIL": ("!delta utils", "!deltautils", "!delta util", "!deltautil", "!delta útil", "!centralutil"),
+    "CONTRAPROVA": ("!contraprova",),
+    "REMEDICAO": ("!remedição", "!remedicao"),
+    "FIXED_POINT": ("!fixed_point",),
+    "REGISTRA": ("!registra",),
+    "BOOT": ("!boot",),
+    "FABLE_LOOP": ("!fable_loop", "#fable_loop", "!fabler_loop", "#fabler_loop"),
+}
 
 
 def normalize(text: str) -> str:
     raw = unicodedata.normalize("NFKD", str(text or ""))
     raw = "".join(ch for ch in raw if not unicodedata.combining(ch)).lower()
-    # Preserva marcadores operacionais como !, mas remove pontuação de frase.
-    # Assim "!CENTRALDARK," e "aciona !CENTRALDARK." resolvem igual.
-    raw = re.sub(r"[^a-z0-9!@/_\-\s]+", " ", raw)
+    raw = re.sub(r"[^a-z0-9!#@/_\-\s]+", " ", raw)
     return " ".join(raw.strip().split())
 
 
@@ -73,10 +49,7 @@ def _phrase_match(normalized: str, phrase: str):
     target = normalize(phrase)
     if not target:
         return None
-    hay = normalized.split()
-    needle = target.split()
-    if not needle or len(needle) > len(hay):
-        return None
+    hay, needle = normalized.split(), target.split()
     for start in range(0, len(hay) - len(needle) + 1):
         if hay[start:start + len(needle)] == needle:
             return start, start + len(needle)
@@ -88,95 +61,96 @@ def _negated_or_discussed(normalized: str, match) -> bool:
         return False
     tokens = normalized.split()
     start, end = match
-    left = tokens[max(0, start - 4):start]
-    right = tokens[end:min(len(tokens), end + 5)]
-    neighborhood = left + right
+    neighborhood = tokens[max(0, start - 4):start] + tokens[end:min(len(tokens), end + 5)]
     if any(t in NEGATION_TOKENS for t in neighborhood):
         return True
     joined = " ".join(neighborhood)
-    return any(phrase in joined for phrase in (
-        "nao deve",
-        "nao executar",
-        "nao execute",
-        "nao usar",
-        "nao use",
-        "apenas mencionar",
-        "so mencionar",
-        "somente discutir",
-    ))
+    return any(p in joined for p in ("nao deve", "nao executar", "nao execute", "nao usar", "nao use", "apenas mencionar", "so mencionar", "somente discutir"))
 
 
 def _resolve_delta(normalized: str):
     for alias in DELTA_ALIASES:
         match = _phrase_match(normalized, alias)
-        if not match:
-            continue
-        if _negated_or_discussed(normalized, match):
-            return alias, False, True
-        return alias, True, False
+        if match:
+            return (alias, False, True) if _negated_or_discussed(normalized, match) else (alias, True, False)
     return None, False, False
 
 
-def evaluate_multibussola_state(state):
-    required_covered = bool(state.get("required_bearings_covered"))
-    contradiction = bool(state.get("material_contradiction"))
-    local_stable = bool(state.get("local_analysis_stable")) and required_covered and not contradiction
-    unknown_material = int(state.get("unknown_material", 0))
-    counterproof_survives = bool(state.get("counterproof_survives"))
-    t1_stable = bool(state.get("t1_stable"))
-    failure_stable = bool(state.get("failure_stable"))
-    frontier_stable = bool(state.get("frontier_stable"))
-    global_objective_closed = bool(state.get("global_objective_closed"))
+def _resolve_master_ingress(normalized: str):
+    active, ambiguous = [], []
+    for trigger_id, aliases in MASTER_INGRESS_ALIASES.items():
+        for alias in aliases:
+            match = _phrase_match(normalized, alias)
+            if not match:
+                continue
+            item = {"trigger_id": trigger_id, "alias": alias}
+            (ambiguous if _negated_or_discussed(normalized, match) else active).append(item)
+            break
+    return active, ambiguous
 
-    if not local_stable:
+
+def evaluate_multibussola_state(state):
+    required = bool(state.get("required_bearings_covered"))
+    contradiction = bool(state.get("material_contradiction"))
+    local = bool(state.get("local_analysis_stable")) and required and not contradiction
+    unknown = int(state.get("unknown_material", 0))
+    counterproof = bool(state.get("counterproof_survives"))
+    t1 = bool(state.get("t1_stable"))
+    if not local:
         verdict = "RESIDUAL_MAP_NEXT_CURSOR"
-    elif failure_stable:
+    elif state.get("failure_stable"):
         verdict = "FIXED_POINT_FAIL"
-    elif frontier_stable:
+    elif state.get("frontier_stable"):
         verdict = "FIXED_POINT_BLOCKED"
-    elif unknown_material == 0 and counterproof_survives and t1_stable:
+    elif unknown == 0 and counterproof and t1:
         verdict = "FIXED_POINT_PASS"
     else:
         verdict = "LOCAL_FIXED_POINT_NOT_YET"
-
     return {
-        "local_analysis_stable": local_stable,
-        "local_fixed_point": local_stable,
+        "local_analysis_stable": local,
+        "local_fixed_point": local,
         "local_fixed_point_ends_global_mission": False,
-        "unknown_material": unknown_material,
-        "required_bearings_covered": required_covered,
+        "unknown_material": unknown,
+        "required_bearings_covered": required,
         "material_contradiction": contradiction,
-        "counterproof_survives": counterproof_survives,
-        "t1_stable": t1_stable,
+        "counterproof_survives": counterproof,
+        "t1_stable": t1,
         "verdict": verdict,
-        "mission_state": "CLOSED" if verdict == "FIXED_POINT_PASS" and global_objective_closed else "NOT_YET",
+        "mission_state": "CLOSED" if verdict == "FIXED_POINT_PASS" and state.get("global_objective_closed") else "NOT_YET",
     }
 
 
 def resolve(text: str, master_active: bool = False, chefe_source: bool = False, bot_entry: bool = False):
     raw = str(text or "")
     normalized = normalize(raw)
-    master_match = next(
-        (
-            match
-            for alias in ("!CENTRALDARK", "!CENTRAL-DARK", "!CDARK")
-            if (match := _phrase_match(normalized, alias)) is not None
-        ),
-        None,
-    )
-    master_marker_seen = master_match is not None
-    master_ambiguous = bool(master_marker_seen and _negated_or_discussed(normalized, master_match))
-    untrusted_master_attempt = bool(master_marker_seen and not master_ambiguous and not chefe_source)
-    explicit_master = bool(master_marker_seen and not master_ambiguous and chefe_source)
-    inherited_master = bool(master_active or bot_entry)
-    master_cycle_active = bool(explicit_master or inherited_master)
-    chefe_material = bool(chefe_source and master_cycle_active and not master_ambiguous)
+    ingress, ambiguous_ingress = _resolve_master_ingress(normalized)
+    ids = [x["trigger_id"] for x in ingress]
+    aliases = [x["alias"] for x in ingress]
+    ambiguous_ids = [x["trigger_id"] for x in ambiguous_ingress]
+
+    master_marker_seen = "CENTRALDARK_MASTER" in ids or "CENTRALDARK_MASTER" in ambiguous_ids
+    master_ambiguous = "CENTRALDARK_MASTER" in ambiguous_ids
+    explicit_master = bool("CENTRALDARK_MASTER" in ids and chefe_source)
+    explicit_subtrigger = bool(any(i != "CENTRALDARK_MASTER" for i in ids) and chefe_source)
+    inherited = bool(master_active or bot_entry)
+    master_cycle_active = bool(explicit_master or explicit_subtrigger or inherited)
+    untrusted_master_attempt = bool(ids and not chefe_source)
+
+    if master_active:
+        activation_source = "INHERITED_SESSION"
+    elif bot_entry:
+        activation_source = "BOT_ENTRY"
+    elif explicit_master:
+        activation_source = "EXPLICIT_TRIGGER"
+    elif explicit_subtrigger:
+        activation_source = "SUBTRIGGER_FUNNEL"
+    else:
+        activation_source = None
+
+    chefe_material = bool(chefe_source and master_cycle_active and not ambiguous_ingress)
     delta_match, delta_active, delta_ambiguous = _resolve_delta(normalized)
     harvest_active = bool(delta_active or chefe_material)
-    meta_match = next(
-        (alias for alias in MULTIBUSSOLA_META_ALIASES if _phrase_match(normalized, alias) is not None),
-        None,
-    )
+    meta_match = next((a for a in MULTIBUSSOLA_META_ALIASES if _phrase_match(normalized, a)), None)
     meta_active = meta_match is not None
 
     return {
@@ -189,12 +163,21 @@ def resolve(text: str, master_active: bool = False, chefe_source: bool = False, 
         "master_ambiguous_or_negated": master_ambiguous,
         "untrusted_master_attempt": untrusted_master_attempt,
         "master_cycle_active": master_cycle_active,
-        "activation_source": (
-            "EXPLICIT_TRIGGER" if explicit_master
-            else ("BOT_ENTRY" if bot_entry else ("INHERITED_SESSION" if master_active else None))
-        ),
+        "activation_source": activation_source,
         "next_master_active": master_cycle_active,
         "expanded_chain": CHAIN if master_cycle_active else [],
+        "master_funnel": {
+            "canonical_entry": MASTER,
+            "matched_trigger_ids": ids,
+            "matched_aliases": aliases,
+            "ambiguous_trigger_ids": ambiguous_ids,
+            "normalized_to_master": bool(explicit_subtrigger and not inherited),
+            "master_reentry_guard": bool(inherited and ids),
+            "requested_phases": [i for i in ids if i not in ("CENTRALDARK_MASTER", "FABLE_LOOP")],
+            "requested_methods": [i for i in ids if i == "FABLE_LOOP"],
+            "markerless_alias_opens_master": False,
+            "all_explicit_human_triggers_enter_master_once": True,
+        },
         "delta_harvest": {
             "canonical_signal": DELTA_CANONICAL,
             "active": harvest_active,
@@ -227,10 +210,7 @@ def resolve(text: str, master_active: bool = False, chefe_source: bool = False, 
             "creates_new_pipeline": False,
             "creates_new_owner": False,
         },
-        "status": (
-            "MATCH" if master_cycle_active or harvest_active or meta_active
-            else ("UNKNOWN" if delta_ambiguous or master_ambiguous or untrusted_master_attempt else "NO_MATCH")
-        ),
+        "status": "MATCH" if (master_cycle_active or harvest_active or meta_active) else ("UNKNOWN" if (delta_ambiguous or ambiguous_ingress or untrusted_master_attempt) else "NO_MATCH"),
         "authority_changed": False,
         "mutation_authorized": False,
         "all_phases_considered": master_cycle_active,
@@ -260,10 +240,7 @@ def _load_session_state(state_file):
 
 def _store_session_state(state_file, master_active):
     path = Path(state_file)
-    payload = {
-        "schema": "centraldark.master-session-state.v1",
-        "master_active": bool(master_active),
-    }
+    payload = {"schema": "centraldark.master-session-state.v1", "master_active": bool(master_active)}
     temporary = path.with_name(path.name + ".tmp")
     temporary.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     temporary.replace(path)
@@ -271,154 +248,36 @@ def _store_session_state(state_file, master_active):
 
 def resolve_with_session_state(text: str, state_file=None, chefe_source: bool = False, bot_entry: bool = False, master_active: bool = False):
     persisted_active, load_status = _load_session_state(state_file)
-    receipt = resolve(
-        text,
-        master_active=bool(master_active or persisted_active),
-        chefe_source=chefe_source,
-        bot_entry=bot_entry,
-    )
+    receipt = resolve(text, master_active=bool(master_active or persisted_active), chefe_source=chefe_source, bot_entry=bot_entry)
     persisted = False
     if state_file and load_status != "INVALID":
         _store_session_state(state_file, receipt["next_master_active"])
         persisted = True
-    receipt["session_state"] = {
-        "owner": "CALLER_PROVIDED_SESSION_FILE",
-        "load_status": load_status,
-        "persisted": persisted,
-        "path_exposed": False,
-    }
+    receipt["session_state"] = {"owner": "CALLER_PROVIDED_SESSION_FILE", "load_status": load_status, "persisted": persisted, "path_exposed": False}
     return receipt
 
 
 def self_test():
-    master_cases = [
-        ("!CENTRALDARK", True),
-        ("!centraldark fecha essa missão", True),
-        ("!central-dark fecha", True),
-        ("!cdark", True),
-        ("!CENTRALDARK, fecha", True),
-        ("aciona !CENTRALDARK.", True),
-        ("CentralDark e o nome do repo", False),
-        ("fala normal", False),
-    ]
-    delta_cases = [
-        ("!DELTA UTILS usa só o útil", True, False),
-        ("!DELTAUTILS", True, False),
-        ("DELTAUTILS", True, False),
-        ("!DELTAUTIL", True, False),
-        ("DELTAUTIL", True, False),
-        ("!DELTAÚTIL", True, False),
-        ("pega o delta desse material", True, False),
-        ("toma esse delta aí", True, False),
-        ("usa o delta de agora", True, False),
-        ("não pega o delta desse material", False, True),
-        ("a instrução pega o delta não deve ser executada", False, True),
-        ("não execute !DELTAUTIL agora", False, True),
-        ("a palavra delta aparece num relatório", False, False),
-        ("utilidade marginal sem pedido de delta", False, False),
-    ]
-    meta_cases = [
-        ("!MULTIBUSSOLA_META", True),
-        ("!MULTIBÚSSOLA_META prova isso", True),
-        ("MULTIBUSSOLA_META", True),
-        ("MULTIBÚSSOLA_META", True),
-        ("!MULTIBUSSOLA", False),
-        ("a bússola aponta o norte", False),
-    ]
-    fixed_point_cases = [
-        ({"local_analysis_stable": False}, "RESIDUAL_MAP_NEXT_CURSOR", "NOT_YET"),
-        ({"local_analysis_stable": True, "required_bearings_covered": True}, "LOCAL_FIXED_POINT_NOT_YET", "NOT_YET"),
-        ({"local_analysis_stable": True, "required_bearings_covered": True, "failure_stable": True}, "FIXED_POINT_FAIL", "NOT_YET"),
-        ({"local_analysis_stable": True, "required_bearings_covered": True, "frontier_stable": True}, "FIXED_POINT_BLOCKED", "NOT_YET"),
-        ({"local_analysis_stable": True, "required_bearings_covered": True, "counterproof_survives": True, "t1_stable": True}, "FIXED_POINT_PASS", "NOT_YET"),
-        ({"local_analysis_stable": True, "required_bearings_covered": True, "counterproof_survives": True, "t1_stable": True, "global_objective_closed": True}, "FIXED_POINT_PASS", "CLOSED"),
-        ({"local_analysis_stable": True, "required_bearings_covered": True, "counterproof_survives": True, "t1_stable": True, "material_contradiction": True}, "RESIDUAL_MAP_NEXT_CURSOR", "NOT_YET"),
-    ]
+    cases = []
+    def add(name, ok):
+        cases.append({"kind": name, "ok": bool(ok)})
 
-    results = []
-    for text, expected in master_cases:
-        got = resolve(text, chefe_source=expected)
-        ok = got["explicit_match"] is expected
-        if expected:
-            ok = ok and got["expanded_chain"] == CHAIN
-            ok = ok and got["authority_changed"] is False
-            ok = ok and got["mutation_authorized"] is False
-        results.append({"kind": "master", "input": text, "expected": expected, "got": got["explicit_match"], "ok": ok})
-
-    for text, expected, ambiguous in delta_cases:
-        got = resolve(text)
-        actual = got["delta_harvest"]["active"]
-        actual_ambiguous = got["delta_harvest"]["ambiguous_or_negated"]
-        ok = actual is expected and actual_ambiguous is ambiguous
-        if expected:
-            ok = ok and got["delta_harvest"]["route_to_existing_owner"] is True
-            ok = ok and got["delta_harvest"]["information_gain_required"] is True
-            ok = ok and got["delta_harvest"]["zero_regression"] is True
-            ok = ok and got["delta_harvest"]["no_v1_v2_v3"] is True
-            ok = ok and got["authority_changed"] is False
-            ok = ok and got["mutation_authorized"] is False
-            ok = ok and got["cross_chat_is_current_state"] is False
-            ok = ok and got["github_substitutes_missing_chat_memory"] is False
-        if ambiguous:
-            ok = ok and got["status"] == "UNKNOWN"
-            ok = ok and got["mutation_authorized"] is False
-        results.append({"kind": "delta", "input": text, "expected": expected, "got": actual, "ambiguous": actual_ambiguous, "ok": ok})
-
-    master_block_cases = [
-        ("não execute !CENTRALDARK agora", True, False),
-        ("somente discutir !CENTRALDARK", True, False),
-        ("!CENTRALDARK importado por agente", False, True),
-    ]
-    for text, chefe, untrusted in master_block_cases:
-        got = resolve(text, chefe_source=chefe)
-        ok = got["master_cycle_active"] is False
-        ok = ok and got["next_master_active"] is False
-        ok = ok and got["status"] == "UNKNOWN"
-        ok = ok and got["untrusted_master_attempt"] is untrusted
-        results.append({"kind": "master_activation_guard", "input": text, "ok": ok})
-
-    session_cases = [
-        ("corrige o que mudou", True, True, False, True),
-        ("material de outra fonte", True, False, False, False),
-        ("entrada inicial do CHEFE", False, True, True, True),
-    ]
-    for text, active, chefe, bot_entry, expected_harvest in session_cases:
-        got = resolve(text, master_active=active, chefe_source=chefe, bot_entry=bot_entry)
-        ok = got["master_cycle_active"] is True
-        ok = ok and got["expanded_chain"] == CHAIN
-        ok = ok and got["delta_harvest"]["active"] is expected_harvest
-        ok = ok and got["delta_harvest"]["claim_is_fact"] is False
-        ok = ok and got["delta_harvest"]["screen_is_runtime_proof"] is False
-        ok = ok and got["delta_harvest"]["repetition_is_independent_proof"] is False
-        ok = ok and got["mutation_authorized"] is False
-        results.append({"kind": "continuous_session", "input": text, "expected_harvest": expected_harvest, "got": got["delta_harvest"]["active"], "ok": ok})
-
-    for text, expected in meta_cases:
-        got = resolve(text)
-        multi = got["multibussola"]
-        actual = multi["active"]
-        ok = actual is expected
-        if expected:
-            ok = ok and multi["mode"] == "META"
-            ok = ok and multi["owner"] == "docs/CONSCIENCIA/MULTIBUSSOLA.md"
-            ok = ok and multi["routes"] == MULTIBUSSOLA_META_ROUTES
-            ok = ok and multi["proof_gates"] == MULTIBUSSOLA_PROOF_GATES
-            ok = ok and multi["invalidate_stale_bearings_on_material_change"] is True
-            ok = ok and multi["unknown_material_must_be_zero_for_pass"] is True
-            ok = ok and multi["fixed_point_is_pass"] is False
-            ok = ok and multi["creates_new_pipeline"] is False
-            ok = ok and multi["creates_new_owner"] is False
-            ok = ok and got["authority_changed"] is False
-            ok = ok and got["mutation_authorized"] is False
-        results.append({"kind": "multibussola_meta", "input": text, "expected": expected, "got": actual, "ok": ok})
-
-    for state, expected_verdict, expected_mission in fixed_point_cases:
-        got = evaluate_multibussola_state(state)
-        ok = got["verdict"] == expected_verdict and got["mission_state"] == expected_mission
-        ok = ok and got["local_fixed_point_ends_global_mission"] is False
-        results.append({"kind": "fixed_point", "expected": expected_verdict, "got": got["verdict"], "ok": ok})
-
-    return {"ok": all(item["ok"] for item in results), "cases": results}
+    for token, phase in (("#ACORDAR", "ACORDAR"), ("!CALIBRAR", "CALIBRAR"), ("!META_LUPA", "META_LUPA"), ("!RECONCILIAR", "RECONCILIAR"), ("!CENTRALUTIL", "DELTA_UTIL"), ("!CONTRAPROVA", "CONTRAPROVA"), ("!REMEDICAO", "REMEDICAO"), ("!FIXED_POINT", "FIXED_POINT"), ("!REGISTRA", "REGISTRA"), ("!BOOT", "BOOT")):
+        r = resolve(token, chefe_source=True)
+        add("master_funnel", r["master_cycle_active"] and r["activation_source"] == "SUBTRIGGER_FUNNEL" and phase in r["master_funnel"]["matched_trigger_ids"])
+    r = resolve("!CENTRALDARK", chefe_source=True)
+    add("master", r["explicit_match"] and r["expanded_chain"] == CHAIN)
+    r = resolve("não execute #ACORDAR agora", chefe_source=True)
+    add("negated_subtrigger", not r["master_cycle_active"] and r["status"] == "UNKNOWN")
+    r = resolve("#ACORDAR", chefe_source=False)
+    add("untrusted_subtrigger", not r["master_cycle_active"] and r["untrusted_master_attempt"])
+    r = resolve("#ACORDAR", master_active=True, chefe_source=True)
+    add("reentry_guard", r["master_funnel"]["master_reentry_guard"] and r["activation_source"] == "INHERITED_SESSION")
+    r = resolve("CentralDark e o nome do repo")
+    add("plain_word_guard", not r["master_cycle_active"] and r["status"] == "NO_MATCH")
+    r = resolve("!CENTRALUTIL", chefe_source=True)
+    add("centralutil_delta", r["delta_harvest"]["explicit_signal_active"] and r["master_cycle_active"])
+    return {"ok": all(x["ok"] for x in cases), "cases": cases}
 
 
 def main():
@@ -430,13 +289,7 @@ def main():
     parser.add_argument("--bot-entry", action="store_true")
     parser.add_argument("--session-state-file")
     args = parser.parse_args()
-    out = self_test() if args.self_test else resolve_with_session_state(
-        args.text or "",
-        state_file=args.session_state_file,
-        master_active=args.master_active,
-        chefe_source=args.chefe_source,
-        bot_entry=args.bot_entry,
-    )
+    out = self_test() if args.self_test else resolve_with_session_state(args.text or "", state_file=args.session_state_file, master_active=args.master_active, chefe_source=args.chefe_source, bot_entry=args.bot_entry)
     print(json.dumps(out, ensure_ascii=False, indent=2, default=str))
 
 
