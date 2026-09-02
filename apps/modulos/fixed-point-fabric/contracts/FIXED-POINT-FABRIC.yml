@@ -182,6 +182,41 @@ state_library:
       - hidden_reasoning
       - screenshot_as_global_truth
       - provider_selected_implies_provider_validated
+  cognitive_debt_guard:
+    owner: docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md
+    role: RECONSTRUCTIBLE_SYSTEM_THEORY_GUARD
+    new_owner: false
+    principle: GREEN_CODE_WITHOUT_RECONSTRUCTIBLE_INTENT_IS_NOT_FIXED_POINT
+    requires:
+      - intent_reconstructible
+      - decision_rationale_reconstructible
+      - owner_locatable
+      - evidence_traceable
+      - counterproof_traceable
+      - change_path_explainable
+      - next_agent_can_continue_without_guessing
+    forbids:
+      - green_ci_implies_shared_understanding
+      - undocumented_decision_as_canonical
+      - hidden_reasoning_as_required_dependency
+      - new_memory_system_for_cognitive_debt
+    audit_projection:
+      - claim
+      - source
+      - evidence_refs
+      - counterproof_refs
+      - belief_delta
+      - blockers
+      - decision_rationale
+    hud:
+      label: COGNITIVE_DEBT
+      statuses: [PASS, UNKNOWN, FAIL, BLOCKED]
+      pass_meaning: system theory reconstructible from canonical evidence without guessing
+      unknown_is_pass: false
+    lock_gate:
+      proven_artifact_lock_requires_reconstructibility: true
+      ci_green_alone_is_insufficient: true
+      last_good_state_preserved_on_failure: true
 fixed_point:
   requires:
     - same_candidate_head
