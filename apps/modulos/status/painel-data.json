@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-09-01T00:44:53.753Z",
-  "updatedAtBR": "31/08/2026, 21:44:53 BRT",
+  "updatedAt": "2026-09-02T04:42:11.704Z",
+  "updatedAtBR": "02/09/2026, 01:42:11 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "☀️ FIX(CORE): HERDAR EMOJIS EM TODO MODELO (#1390)",
+    "lastCommit": "fix(health): get_proc_mem soma KB e retorna int; adiciona teste unitário",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-09-02T04:42:11.704Z",
+      "titulo": "Push na main · b5f821359484f260304d96d04fe439820e0e3877",
+      "detalhe": "fix(health): get_proc_mem soma KB e retorna int; adiciona teste unitário",
+      "area": "Repositório",
+      "sha": "b5f8213",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-09-01T00:44:53.753Z",
       "titulo": "Push na main · dce8a91f60781879bebb205f054bef45c9dab946",
       "detalhe": "☀️ FIX(CORE): HERDAR EMOJIS EM TODO MODELO (#1390)",
@@ -988,14 +996,6 @@
       "detalhe": "fix(git): mapear pretty-mermaid submodule órfão",
       "area": "Repositório",
       "sha": "558343d",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-27T06:53:38.667Z",
-      "titulo": "Push na main · d4e4b9540fa5aff317e767eaa3d2cbec43385413",
-      "detalhe": "chore(deps): bump @eslint/js from 9.32.0 to 9.39.5 (#1201)",
-      "area": "Repositório",
-      "sha": "d4e4b95",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-09-02T04:42:11.704Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · b5f821359484f260304d96d04fe439820e0e3877 (b5f8213)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-09-01T00:44:53.753Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · dce8a91f60781879bebb205f054bef45c9dab946 (dce8a91)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-27T06:54:29.790Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 558343daf1f013304a229130cd230bb393d96b46 (558343d)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-27T06:53:38.667Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · d4e4b9540fa5aff317e767eaa3d2cbec43385413 (d4e4b95)",
       "area": "Repositório",
       "status": "sucesso"
     }
