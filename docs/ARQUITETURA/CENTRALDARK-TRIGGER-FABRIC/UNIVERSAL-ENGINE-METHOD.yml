@@ -17,6 +17,9 @@ canonical_references:
   - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
   - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml
   - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml
+  - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SEMANTIC-GREEN-GATE.yml
+  - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/NOTE-STITCHING-CONTRACT.yml
+  - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PEGATUDO-HISTORY.yml
   - docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md
 
 universal_chain:
@@ -27,15 +30,18 @@ universal_chain:
   - CALIBRAR
   - MULTIBUSSOLA
   - PEGATUDO
+  - PEGATUDO_HISTORY
   - DEBITO_COGNITIVO
   - READERS_MEASURE
   - RENDEZVOUS
   - RECONCILE
+  - STITCH
   - OWNER
   - ONE_WRITER
   - PATCH
   - TESTE
   - CONTRAPROVA
+  - SEMANTIC_GREEN_GATE
   - REALITY_JUDGE
   - FIXED_POINT
   - TLC23_CLOSE
@@ -72,14 +78,44 @@ material_loop:
     - DEDUPE
     - CLASSIFY
     - PEGATUDO
+    - PEGATUDO_HISTORY_WHEN_GIT_HISTORY_MATERIAL
     - DEBITO_COGNITIVO
+    - STITCH_TO_CANONICAL_ROUTE
     - FIND_EXISTING_OWNER
     - TEST_BELIEF
     - ABSORB_MINIMUM_USEFUL_DELTA
     - COUNTERPROOF
+    - SEMANTIC_GREEN_GATE
     - REMEASURE
     - RECEIPT
     - NEXT_CURSOR
+
+semantic_green:
+  contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SEMANTIC-GREEN-GATE.yml
+  validator: apps/modulos/HERMES-CORE/core/semantic-green-gate.mjs
+  required_before_semantic_green_claim: true
+  formula: TRAIL_AND_VERSE_AND_DIRECTION_AND_INTENT_AND_STYLE_AND_PROOF_BOUNDARY
+  verse_valid_alone_is_green: false
+  technical_green_implies_semantic_green: false
+  semantic_green_implies_runtime_green: false
+  fail_closed: true
+
+note_stitching:
+  contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/NOTE-STITCHING-CONTRACT.yml
+  scanner: scripts/trigger-fabric/stitch_all_notes.py
+  marker: "🪡"
+  every_discovered_note_gets_receipt: true
+  logical_binding_not_mass_rewrite: true
+  one_logical_second_brain: true
+
+pegatudo_history:
+  contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PEGATUDO-HISTORY.yml
+  scanner: scripts/trigger-fabric/pegatudo_history.py
+  sources: [BRANCHES, REMOTES, TAGS, PR_HEADS_WHEN_DISCOVERABLE, COMMITS]
+  history_is_current_state: false
+  discovered_ref_is_crystal: false
+  proven_useful_delta_only: true
+  forgotten_material_is_silent_drop: false
 
 engine_contract:
   engine_is_replaceable: true
@@ -92,6 +128,9 @@ engine_contract:
   same_method_required_for_future_engine: true
   engine_specific_capability_may_extend_execution: true
   engine_specific_capability_may_bypass_contract: false
+  universal_method_must_survive_provider_switch: true
+  semantic_green_gate_must_survive_provider_switch: true
+  pegatudo_and_stitch_must_survive_provider_switch: true
 
 skin_contract:
   skin_is_presentation_adapter: true
@@ -112,6 +151,7 @@ skin_contract:
     - WRITER_SCOPE
     - PROOF_REQUIREMENTS
     - UNKNOWN_SEMANTICS
+    - SEMANTIC_GREEN_RULE
     - FIXED_POINT_RULE
     - NO_DIRECT_MAIN_WRITE
   pressure_continuity: true
@@ -125,20 +165,29 @@ operational_trace:
   show_phase_evidence_and_next_cursor_when_material: true
   aureola_reference: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml
   bible_reference_is_semantic_cue_not_software_proof: true
+  stitch_event_marker: "🪡"
 
 hermes_binding:
   runtime_owner: apps/modulos/HERMES-CORE/
-  validator: apps/modulos/HERMES-CORE/core/universal-method-contract.mjs
+  universal_validator: apps/modulos/HERMES-CORE/core/universal-method-contract.mjs
+  semantic_validator: apps/modulos/HERMES-CORE/core/semantic-green-gate.mjs
+  note_scanner: scripts/trigger-fabric/stitch_all_notes.py
+  history_scanner: scripts/trigger-fabric/pegatudo_history.py
   self_test: "node apps/modulos/HERMES-CORE/core/universal-method-contract.mjs --self-test"
   fail_closed_on_missing_contract: true
   validates_engine_registry: true
   validates_canonical_chain: true
   validates_skin_boundary: true
+  validates_semantic_green: true
+  validates_note_stitching: true
+  validates_pegatudo_history: true
 
 future_engine_gate:
   registry: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml
   new_engine_without_trigger_fabric_inheritance: FAIL
   new_engine_without_universal_method_visibility: FAIL
+  new_engine_without_semantic_green_gate: FAIL
+  new_engine_without_pegatudo_stitch_visibility: FAIL
   new_engine_may_define_new_authority: false
   new_engine_may_define_parallel_brain: false
 
@@ -146,6 +195,9 @@ promotion:
   prose_only: NOT_FUNCTIONAL
   file_exists_only: NOT_FUNCTIONAL
   hermes_self_test_required: true
+  semantic_negative_counterproof_required: true
+  note_stitch_self_test_required: true
+  pegatudo_history_self_test_required: true
   fixed_point_ci_test_required: true
   same_head_ci_required: true
   runtime_activation_claim_requires_observation: true
