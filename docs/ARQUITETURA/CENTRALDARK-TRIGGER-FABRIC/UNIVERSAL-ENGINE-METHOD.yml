@@ -1,0 +1,151 @@
+schema: centraldark.universal-engine-method.v1
+status: CANDIDATE_UNTIL_SAME_HEAD_CI
+owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
+authority: SEGREDO/CHEFE
+applies_to: ALL_CURRENT_AND_FUTURE_ENGINES
+
+purpose: >-
+  Garantir que qualquer engine/modelo/superficie substituivel opere sobre o mesmo
+  contrato CentralDark, independentemente de provider, skin, CLI, IDE, chat ou
+  estilo de resposta. O motor pode mudar; a trilha operacional nao muda.
+
+canonical_references:
+  - LEIA-ME-IA.md
+  - AGENTS.md
+  - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml
+  - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml
+  - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
+  - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml
+  - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml
+  - docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md
+
+universal_chain:
+  - CENTRALDARK
+  - TLC23_OPEN
+  - DESTINATION_LOCK
+  - ACORDAR
+  - CALIBRAR
+  - MULTIBUSSOLA
+  - PEGATUDO
+  - DEBITO_COGNITIVO
+  - READERS_MEASURE
+  - RENDEZVOUS
+  - RECONCILE
+  - OWNER
+  - ONE_WRITER
+  - PATCH
+  - TESTE
+  - CONTRAPROVA
+  - REALITY_JUDGE
+  - FIXED_POINT
+  - TLC23_CLOSE
+  - REGISTRA
+  - HANDOFF
+  - BOOT
+
+execution_semantics:
+  all_phases_are_considered: true
+  phases_execute_only_when_materially_applicable: true
+  skipped_phase_requires_reason: true
+  unknown_is_not_pass: true
+  documented_is_not_executed: true
+  action_is_not_proof: true
+  current_live_state_beats_history: true
+  reuse_before_create: true
+  one_system_only: true
+  one_writer_per_scope: true
+  parallel_perception: true
+  serialized_mutation: true
+  reality_is_judge: true
+  same_head_proof_required_for_git_green: true
+  next_cursor_required_when_not_fixed_point: true
+  failure_returns_one_canonical_phase: true
+
+material_loop:
+  every_chefe_material_enters_mill: true
+  every_material_is_fact: false
+  every_material_is_persisted: false
+  flow:
+    - CAPTURE
+    - PROVENANCE
+    - SECRET_SCREEN
+    - DEDUPE
+    - CLASSIFY
+    - PEGATUDO
+    - DEBITO_COGNITIVO
+    - FIND_EXISTING_OWNER
+    - TEST_BELIEF
+    - ABSORB_MINIMUM_USEFUL_DELTA
+    - COUNTERPROOF
+    - REMEASURE
+    - RECEIPT
+    - NEXT_CURSOR
+
+engine_contract:
+  engine_is_replaceable: true
+  engine_is_owner: false
+  provider_is_authority: false
+  model_name_changes_contract: false
+  engine_switch_is_reset: false
+  session_switch_is_reset: false
+  same_method_required_for_new_engine: true
+  same_method_required_for_future_engine: true
+  engine_specific_capability_may_extend_execution: true
+  engine_specific_capability_may_bypass_contract: false
+
+skin_contract:
+  skin_is_presentation_adapter: true
+  skin_is_not_identity_authority: true
+  skin_is_not_owner: true
+  skin_is_not_permission: true
+  skin_may_change:
+    - TONE
+    - DIRECTNESS
+    - VISUAL_STYLE
+    - METAPHOR_DENSITY
+    - RESPONSE_COMPRESSION
+  skin_must_not_change:
+    - HUMAN_AUTHORITY
+    - SAFETY_BOUNDARIES
+    - FACT_STATUS
+    - OWNER
+    - WRITER_SCOPE
+    - PROOF_REQUIREMENTS
+    - UNKNOWN_SEMANTICS
+    - FIXED_POINT_RULE
+    - NO_DIRECT_MAIN_WRITE
+  pressure_continuity: true
+  abusive_or_degrading_language_is_not_required_by_skin: true
+
+operational_trace:
+  visible_to_chefe: true
+  private_chain_of_thought_required: false
+  private_chain_of_thought_must_not_be_exposed: true
+  show_operational_chain_on_explicit_centraldark: true
+  show_phase_evidence_and_next_cursor_when_material: true
+  aureola_reference: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml
+  bible_reference_is_semantic_cue_not_software_proof: true
+
+hermes_binding:
+  runtime_owner: apps/modulos/HERMES-CORE/
+  validator: apps/modulos/HERMES-CORE/core/universal-method-contract.mjs
+  self_test: "node apps/modulos/HERMES-CORE/core/universal-method-contract.mjs --self-test"
+  fail_closed_on_missing_contract: true
+  validates_engine_registry: true
+  validates_canonical_chain: true
+  validates_skin_boundary: true
+
+future_engine_gate:
+  registry: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml
+  new_engine_without_trigger_fabric_inheritance: FAIL
+  new_engine_without_universal_method_visibility: FAIL
+  new_engine_may_define_new_authority: false
+  new_engine_may_define_parallel_brain: false
+
+promotion:
+  prose_only: NOT_FUNCTIONAL
+  file_exists_only: NOT_FUNCTIONAL
+  hermes_self_test_required: true
+  fixed_point_ci_test_required: true
+  same_head_ci_required: true
+  runtime_activation_claim_requires_observation: true
