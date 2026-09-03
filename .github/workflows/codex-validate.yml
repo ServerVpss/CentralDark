@@ -376,7 +376,7 @@ jobs:
         shell: bash
         working-directory: .ci-bot-router
         env:
-          ACTOR: ${{ github.actor }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
           MAP_RESULT: ${{ needs.validate-canonical-map.result }}
           CODEX_RESULT: ${{ needs.validate.result }}
           MCP_RESULT: ${{ needs.validate-admin-guard.result }}
@@ -399,7 +399,9 @@ jobs:
           bash -n "$engine"
           grep -Fq 'Owner do motor: `scripts/dependabot/resolve-conflicts.sh`' "$skill"
           grep -Fq 'scripts/dependabot/resolve-conflicts.sh' "$dependabot_flow"
-          grep -Fq "github.actor != 'dependabot[bot]'" "$dependabot_flow"
+          grep -Fq 'pull_request_target:' "$dependabot_flow"
+          grep -Fq "github.event.pull_request.user.login == 'dependabot[bot]'" "$dependabot_flow"
+          grep -Fq 'github.event.pull_request.base.sha' "$dependabot_flow"
 
           green=1
           for result in "$MAP_RESULT" "$CODEX_RESULT" "$MCP_RESULT"; do
@@ -408,7 +410,7 @@ jobs:
             fi
           done
 
-          echo "BOT_ACTOR=$ACTOR"
+          echo "PR_AUTHOR=$PR_AUTHOR"
           echo 'UNIVERSAL_VALIDATION_OWNER=.github/workflows/codex-validate.yml'
           echo 'GIT_CONFLICT_SKILL=.agents/skills/git-conflict-resolve-house-standard/SKILL.md'
           echo 'GIT_CONFLICT_ENGINE=scripts/dependabot/resolve-conflicts.sh'
@@ -423,7 +425,7 @@ jobs:
             exit 0
           fi
 
-          case "$ACTOR" in
+          case "$PR_AUTHOR" in
             'dependabot[bot]')
               echo 'BOT_KIND=DEPENDABOT'
               echo 'BOT_FALLBACK_OWNER=.github/workflows/dependabot-auto-merge.yml'
