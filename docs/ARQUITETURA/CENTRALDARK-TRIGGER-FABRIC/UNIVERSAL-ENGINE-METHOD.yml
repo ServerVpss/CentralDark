@@ -20,6 +20,7 @@ canonical_references:
   - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SEMANTIC-GREEN-GATE.yml
   - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/NOTE-STITCHING-CONTRACT.yml
   - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PEGATUDO-HISTORY.yml
+  - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/GROK-BUILD-ADAPTER.yml
   - docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md
 
 universal_chain:
@@ -117,6 +118,20 @@ pegatudo_history:
   proven_useful_delta_only: true
   forgotten_material_is_silent_drop: false
 
+engine_adapters:
+  grok_build:
+    contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/GROK-BUILD-ADAPTER.yml
+    runtime: apps/modulos/HERMES-CORE/core/grok-build-adapter.mjs
+    owner_remains: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml#grok_build
+    modes: [HEADLESS, READ_ONLY_AUDIT, INTERACTIVE_PTY, ACP_STDIO]
+    default_mode: HEADLESS
+    inspect_preflight_when_material: true
+    no_auto_update_in_automation: true
+    writer_scope_required_for_mutation: true
+    auth_isolated_from_hermes_xai: true
+    same_centraldark_contract: true
+    adapter_is_new_brain: false
+
 engine_contract:
   engine_is_replaceable: true
   engine_is_owner: false
@@ -171,9 +186,11 @@ hermes_binding:
   runtime_owner: apps/modulos/HERMES-CORE/
   universal_validator: apps/modulos/HERMES-CORE/core/universal-method-contract.mjs
   semantic_validator: apps/modulos/HERMES-CORE/core/semantic-green-gate.mjs
+  grok_build_adapter: apps/modulos/HERMES-CORE/core/grok-build-adapter.mjs
   note_scanner: scripts/trigger-fabric/stitch_all_notes.py
   history_scanner: scripts/trigger-fabric/pegatudo_history.py
   self_test: "node apps/modulos/HERMES-CORE/core/universal-method-contract.mjs --self-test"
+  grok_build_self_test: "node apps/modulos/HERMES-CORE/core/grok-build-adapter.mjs --self-test"
   fail_closed_on_missing_contract: true
   validates_engine_registry: true
   validates_canonical_chain: true
@@ -181,6 +198,7 @@ hermes_binding:
   validates_semantic_green: true
   validates_note_stitching: true
   validates_pegatudo_history: true
+  validates_grok_build_adapter: true
 
 future_engine_gate:
   registry: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml
@@ -195,6 +213,7 @@ promotion:
   prose_only: NOT_FUNCTIONAL
   file_exists_only: NOT_FUNCTIONAL
   hermes_self_test_required: true
+  grok_build_self_test_required: true
   semantic_negative_counterproof_required: true
   note_stitch_self_test_required: true
   pegatudo_history_self_test_required: true
