@@ -1,0 +1,133 @@
+name: "🧿 CentralDark Signal / Bug / Delta"
+description: "Registrar sinal, bug, regressão ou melhoria candidata sem confundir observação com prova."
+title: "[CENTRALDARK-SIGNAL]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🧿 CentralDark Signal
+        Use este formulário para transformar material bruto em um sinal rastreável.
+
+        **Regra:** `CANDIDATE != PROVEN`, `UNKNOWN != PASS`, `DOCUMENTED != EXECUTED`.
+
+  - type: dropdown
+    id: signal-state
+    attributes:
+      label: "Estado epistemológico"
+      description: "Escolha o estado que a evidência realmente sustenta agora."
+      options:
+        - "⚪ UNKNOWN — ainda não medido"
+        - "🔵 OBSERVED — observado, causa ainda não provada"
+        - "🟣 CANDIDATE — delta em avaliação"
+        - "🟠 BLOCKED — dependência impede avanço"
+        - "🔴 FAIL / REGRESSION — falha material observada"
+        - "🟢 PROVEN — prova aplicável disponível"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: source
+    attributes:
+      label: "Fonte do sinal"
+      options:
+        - "✉️ Email / encaminhamento autorizado"
+        - "🤖 Dependabot / bot / PR"
+        - "🧠 HERMES-CORE"
+        - "🧪 CI / teste / log"
+        - "🖥️ Casa / runtime"
+        - "🌐 Serviço externo"
+        - "📚 Biblioteca / documento"
+        - "Outro"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: surface
+    attributes:
+      label: "Superfície afetada"
+      options:
+        - "Hermes"
+        - "GitHub / CI"
+        - "Telegram"
+        - "Desktop / Bolt"
+        - "MCP / Router"
+        - "Obsidian / Biblioteca"
+        - "Multi-superfície"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: kind
+    attributes:
+      label: "Tipo de delta"
+      options:
+        - "Bug / regressão"
+        - "Melhoria candidata"
+        - "Performance"
+        - "Fallback silencioso"
+        - "Erro de parsing / sintaxe"
+        - "Dependência / update"
+        - "Documentação / dívida cognitiva"
+        - "Segurança"
+    validations:
+      required: true
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: "Resumo curto"
+      description: "O que aconteceu sem interpretar além da evidência?"
+      placeholder: "Ex.: arquivo JS ignorado pelo lint contém erro de parsing detectado por node --check."
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: "Evidência / proveniência"
+      description: "Inclua SHA, PR, log, comando, caminho ou referência. NÃO cole tokens, senhas, cookies ou conteúdo privado bruto."
+      placeholder: |
+        HEAD/PR:
+        Caminho:
+        Teste/comando:
+        Resultado observado:
+    validations:
+      required: true
+
+  - type: textarea
+    id: owner
+    attributes:
+      label: "Owner existente / escopo"
+      description: "Aponte o owner atual. Se desconhecido, escreva UNKNOWN — não crie arquitetura paralela."
+      placeholder: "apps/modulos/HERMES-CORE/..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: counterproof
+    attributes:
+      label: "Contraprova"
+      description: "Qual observação falsificaria esta hipótese ou provaria que o delta não se aplica?"
+      placeholder: "Ex.: node --check em todos os arquivos aplicáveis passa e teste de resolução prova o import correto."
+    validations:
+      required: true
+
+  - type: textarea
+    id: next-cursor
+    attributes:
+      label: "Próximo cursor válido"
+      placeholder: "MEASURE → OWNER → TEST → COUNTERPROOF → REMEASURE"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: guards
+    attributes:
+      label: "Travas"
+      options:
+        - label: "Não incluí segredo, token, senha, cookie ou credencial."
+          required: true
+        - label: "Este registro não declara PASS apenas porque está documentado."
+          required: true
+        - label: "REUSE_BEFORE_CREATE foi considerado antes de propor novo owner."
+          required: true
