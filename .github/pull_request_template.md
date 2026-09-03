@@ -46,6 +46,40 @@ CENTRALDARK_SKILL_GATE:
 
 Para `verdict: PASS`, o owner deve existir no HEAD analisado, o presente deve ter sido medido e qualquer drift Casa↔repo material deve estar reconciliado ou explicitamente classificado como fronteira humana comprovada.
 
+## Regra global — registrar antes de relatar
+
+A CentralDark usa o mesmo método operacional em Casa, GitHub, VPS, MCP, Desktop, Web, Telegram, IDE e superfícies futuras. O território da prova muda; a disciplina não.
+
+```text
+REGISTER_BEFORE_REPORT=true
+PERSIST_BEFORE_FINAL_REPORT=true
+REPORT_IS_PROJECTION_OF_PERSISTED_STATE=true
+SAME_OPERATING_STANDARD=true
+PROOF_TARGET_IS_SCOPE_BOUND=true
+```
+
+Para delta material persistível:
+
+```text
+INTENÇÃO
+→ #ACORDAR
+→ MEDIR
+→ OWNER
+→ AÇÃO
+→ !REMEDIÇÃO
+→ !REGISTRA
+→ COMMIT/LEDGER/RECEIPT
+→ READ-BACK
+→ SÓ ENTÃO RELATO FINAL
+```
+
+- [ ] O delta material foi persistido antes do relato final.
+- [ ] O registro foi lido novamente depois da escrita.
+- [ ] O fechamento humano aponta SHA/ref/receipt real.
+- [ ] Se não houve delta material, nenhum commit artificial foi criado.
+
+`CHAT_REPORT_WITHOUT_PERSISTED_RECEIPT=INVALID_FOR_MATERIAL_DELTA`.
+
 ## Ciclo de PR e !REGISTRA
 
 Antes de abrir este PR, confirme que ele é realmente o próximo veículo de promoção do escopo:
@@ -142,6 +176,127 @@ Liste os testes realizados e seus resultados.
 - [ ] O handoff final informa arquivos, testes, riscos e próximo passo.
 - [ ] `ACTION != PROOF` e `DOCUMENTED != EXECUTED` foram respeitados.
 
-## Prova
+## Prova — fileiras separadas por tópico
 
-Inclua commit SHA, resultado do pipeline e evidências relevantes do mesmo HEAD.
+Cada claim material deve ocupar sua própria fileira/bloco. Não misture prova de GitHub, Casa e VPS na mesma linha.
+
+```text
+[TÓPICO]
+CLAIM=
+SCOPE=
+OWNER=
+T0=
+ACTION=
+T1=
+EVIDENCE_REF=
+COMMIT_SHA=
+FILE_BLOB_SHA=
+SHA256=
+TEST=
+COUNTERPROOF=
+CI_SAME_HEAD=
+RUNTIME_PROOF=
+STATUS=PROVEN|UNKNOWN|NOT_PROVEN|BLOCKED
+NEXT_CURSOR=
+```
+
+### TÓPICO 1 — GOVERNANÇA / CONTRATO
+
+```text
+CLAIM=
+SCOPE=GITHUB_ONLY|CROSS_PLANE|OUTRO
+OWNER=
+COMMIT_SHA=
+FILE_BLOB_SHA=
+SHA256=
+TEST=
+COUNTERPROOF=
+STATUS=
+```
+
+### TÓPICO 2 — GITHUB / PR / HEAD
+
+```text
+PR=
+BRANCH=
+BASE_SHA=
+HEAD_SHA=
+MERGEABLE=
+COMMIT_SHA=
+CI_SAME_HEAD=
+WORKFLOW_RUN=
+STATUS=
+```
+
+### TÓPICO 3 — CASA LOCAL
+
+```text
+CLAIM=
+RUNTIME_FINGERPRINT=
+FILE_OR_PROCESS=
+SHA256=
+T0=
+T1=
+TEST=
+RECEIPT=
+STATUS=
+```
+
+### TÓPICO 4 — VPS
+
+```text
+CLAIM=
+RUNTIME_FINGERPRINT=
+SERVICE_OR_ENDPOINT=
+DEPLOY_SHA=
+T0=
+T1=
+SANITIZED_LOG_REF=
+TEST=
+STATUS=
+```
+
+### TÓPICO 5 — MCP / API / DESKTOP / WEB / TELEGRAM / IDE
+
+```text
+SURFACE=
+CLAIM=
+OWNER=
+ENDPOINT_OR_COMPONENT=
+EVIDENCE_REF=
+TEST=
+COUNTERPROOF=
+STATUS=
+```
+
+### TÓPICO 6 — FIXED POINT / LOCK
+
+```text
+SEMANTIC_GREEN=
+MULTIBUSSOLA=
+COUNTERPROOF=
+REALITY_JUDGE=
+CI_SAME_HEAD=
+DECISION_LINEAGE=
+LAST_GOOD_STATE=
+POST_GREEN_LOCK=
+GLOBAL_FIXED_POINT=
+```
+
+Regras de prova:
+
+```text
+ONE_TOPIC_ONE_PROOF_ROW=true
+CLAIM_PROOF_COLOCATION=true
+CHECKSUM_WHEN_BYTES_ARE_MATERIAL=true
+COMMIT_SHA_WHEN_GIT_MUTATED=true
+FILE_BLOB_SHA_WHEN_GITHUB_CONTENT_MUTATED=true
+SAME_HEAD_REQUIRED_FOR_CI_CLAIM=true
+UNKNOWN_FIELDS_REMAIN_UNKNOWN=true
+MISSING_CHECKSUM_MUST_NOT_BE_INVENTED=true
+HASH_IDENTITY != RUNTIME_PROOF
+COMMIT_SHA != RUNTIME_PROOF
+WORKFLOW_GREEN != GLOBAL_FIXED_POINT
+```
+
+Inclua commit SHA, resultado do pipeline e evidências relevantes do mesmo HEAD. O primeiro resumo do PR deve apontar o que **já está persistido**, nunca prometer persistência futura como se já tivesse acontecido.
