@@ -54,12 +54,20 @@ class AureolaSemanticLockTests(unittest.TestCase):
         self.assertIn("runtime_validator: apps/modulos/HERMES-CORE/core/semantic-green-gate.mjs", semantic)
         self.assertIn("runtime_gate: apps/modulos/HERMES-CORE/core/scope-lock-gate.mjs", lock)
 
-        # Todas as engines já herdam o Trigger Fabric/Master Cycle; esta prova evita
-        # criar binding paralelo só para a AURÉOLA.
-        self.assertIn("CENTRALDARK_MASTER_CYCLE", engine)
-        self.assertIn("MULTIBUSSOLA", engine)
-        self.assertIn("FIXED_POINT", engine)
-        self.assertIn("REALITY_JUDGE", engine)
+        # Binding universal: trocar Claude/Grok/Gemini/Codex/Hermes não troca a lei.
+        for token in (
+            "CENTRALDARK_MASTER_CYCLE",
+            "MULTIBUSSOLA",
+            "AUREOLA_BAHIA_BIBLICA",
+            "SEMANTIC_GREEN_GATE",
+            "FIXED_POINT",
+            "POST_GREEN_LOCK",
+            "REALITY_JUDGE",
+        ):
+            self.assertIn(token, engine)
+        self.assertIn("applies_to_all_engines: true", engine)
+        self.assertIn("post_green_default: LOCKED_READ_ONLY", engine)
+        self.assertIn("locked_scope_mutation_without_explicit_chefe_intent: DENY", engine)
 
 
 if __name__ == "__main__":
