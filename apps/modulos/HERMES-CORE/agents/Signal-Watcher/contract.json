@@ -1,0 +1,71 @@
+{
+  "schema": "centraldark.signal-watch.contract.v1",
+  "status": "CANDIDATE",
+  "owner": "apps/modulos/HERMES-CORE/agents/Signal-Watcher/agent.mjs",
+  "purpose": "Classificar sinais externos autorizados e vigiar o proprio HERMES-CORE sem transformar fonte externa em autoridade.",
+  "sources": [
+    "AUTHORIZED_EMAIL_FORWARD_OR_CONNECTOR_EVENT",
+    "DEPENDABOT_PR_EVENT",
+    "HERMES_CORE_SOURCE_SCAN"
+  ],
+  "pipeline": [
+    "INGEST_AUTHORIZED_SIGNAL",
+    "REDACT_SECRETS",
+    "CLASSIFY",
+    "NODE_CHECK_WHEN_CODE_APPLIES",
+    "SILENT_FALLBACK_CANDIDATE_SCAN",
+    "MAP_TO_EXISTING_OWNER",
+    "TEST",
+    "COUNTERPROOF",
+    "REGISTER_RECEIPT",
+    "NOTIFY_SURFACE"
+  ],
+  "states": ["NO_DELTA", "OBSERVED", "CANDIDATE", "PROVEN", "FAIL", "BLOCKED"],
+  "invariants": {
+    "source_is_provenance_not_authority": true,
+    "candidate_is_not_proven": true,
+    "unknown_is_not_pass": true,
+    "documented_is_not_executed": true,
+    "one_system_only": true,
+    "one_writer_per_scope": true,
+    "no_direct_main_write": true,
+    "raw_email_is_not_committed": true,
+    "secrets_are_redacted": true,
+    "static_fallback_candidate_is_not_runtime_failure": true
+  },
+  "dependabot_policy": {
+    "patch": "AUTO_MERGE_ONLY_AFTER_APPLICABLE_GATES",
+    "minor": "HUMAN_REVIEW",
+    "major": "BLOCKED_BY_EXISTING_DEPENDABOT_POLICY",
+    "conflict": "EXISTING_HOUSE_RESOLVER",
+    "same_head_proof_required": true
+  },
+  "external_patterns_absorbed": [
+    {
+      "source": "SynkraAI/aiox-core PR 842 forwarded evidence",
+      "delta": ["NODE_CHECK_SWEEP", "SILENT_FALLBACK_AUDIT"],
+      "raw_private_email_committed": false
+    },
+    {
+      "source": "https://github.com/ahmadnassri/action-dependabot-auto-merge",
+      "delta": ["SEMVER_POLICY_CLASSIFICATION", "AUTO_APPROVE_MERGE_PATTERN", "EXPLICIT_FALLBACK_CONCEPT"],
+      "direct_external_action_dependency": false,
+      "reason": "CentralDark already has a safer trusted-base flow using GITHUB_TOKEN; do not add PAT/push secret or external Docker runtime when reuse suffices."
+    },
+    {
+      "source": "https://github.com/IBM/ibm-bob/blob/main/.github/ISSUE_TEMPLATE/bug_report.yml",
+      "delta": ["STRUCTURED_VISUAL_ISSUE_FORM"],
+      "direct_code_copy": false
+    }
+  ],
+  "telegram_visual_contract": {
+    "gamified": true,
+    "semantic_state_preserved": true,
+    "green_only_for_proven": true,
+    "candidate_icon": "🟣",
+    "unknown_icon": "⚪",
+    "fail_icon": "🔴",
+    "blocked_icon": "🟠",
+    "proven_icon": "🟢"
+  }
+}
