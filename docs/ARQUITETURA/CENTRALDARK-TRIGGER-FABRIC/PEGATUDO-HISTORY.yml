@@ -1,0 +1,89 @@
+schema: centraldark.pegatudo-history.v1
+status: CANDIDATE_UNTIL_SAME_HEAD_CI
+owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
+authority: SEGREDO/CHEFE
+marker: "🪡"
+
+purpose: >-
+  Inventariar e reconciliar material historico potencialmente esquecido em branches,
+  refs remotas, tags, PR heads e commits acessiveis, sem confundir historia com estado
+  atual e sem promover material bruto diretamente ao canone.
+
+sources:
+  - LOCAL_HEADS
+  - LOCAL_REMOTES
+  - TAGS
+  - REMOTE_HEADS
+  - REMOTE_TAGS
+  - REMOTE_PULL_HEADS_WHEN_DISCOVERABLE
+  - COMMITS_REACHABLE_FROM_DISCOVERED_REFS
+
+pipeline:
+  - DISCOVER_REFS_READ_ONLY
+  - NORMALIZE_REF
+  - CAPTURE_OBJECT_SHA
+  - DEDUPE_BY_SHA_AND_REF
+  - CLASSIFY_CURRENT_VS_HISTORICAL
+  - PRESERVE_PROVENANCE
+  - FIND_MATERIAL_DELTA
+  - ROUTE_PEGATUDO
+  - ROUTE_DEBITO_COGNITIVO
+  - FIND_EXISTING_OWNER
+  - TEST_BELIEF
+  - COUNTERPROOF
+  - CRYSTALIZE_ONLY_PROVEN_DELTA
+  - STITCH_RECEIPT
+  - NEXT_CURSOR
+
+invariants:
+  HISTORY_IS_NOT_CURRENT_STATE: true
+  REF_EXISTS_IS_NOT_USEFUL_DELTA: true
+  OLD_PR_IS_NOT_OWNER: true
+  OLD_BRANCH_IS_NOT_CANONICAL: true
+  COMMIT_MESSAGE_IS_NOT_PROOF: true
+  SHA_IDENTITY_IS_BYTE_OBJECT_IDENTITY_NOT_SEMANTIC_AUTHORITY: true
+  MATERIAL_DELTA_REQUIRED_FOR_PROMOTION: true
+  REUSE_BEFORE_CREATE: true
+  ONE_SYSTEM_ONLY: true
+  ONE_WRITER_PER_SCOPE: true
+  PARALLEL_DISCOVERY_ALLOWED: true
+  PARALLEL_MUTATION_FORBIDDEN: true
+  READ_ONLY_DISCOVERY_FIRST: true
+  UNKNOWN_IS_NOT_PASS: true
+  NO_SILENT_DROP_OF_DISCOVERED_REF: true
+  DUPLICATE_CONTENT_MAY_COLLAPSE_BUT_PROVENANCE_SURVIVES: true
+  SECRET_SCAN_BEFORE_CONTENT_PROMOTION: true
+
+classification:
+  CURRENT_HEAD: LIVE_CANDIDATE_ONLY_IF_MEASURED
+  CURRENT_MAIN: LIVE_BASELINE_ONLY_IF_MEASURED
+  HISTORICAL_REACHABLE: HISTORY
+  REMOTE_ONLY_REF: CANDIDATE_UNKNOWN_CONTENT_UNTIL_OBJECT_AVAILABLE
+  PR_HEAD_REMOTE: CANDIDATE_HISTORY_UNLESS_CURRENT_PR
+  DANGLING_OR_UNREACHABLE: UNKNOWN_UNTIL_EXPLICIT_OBJECT_DISCOVERY
+
+runtime:
+  scanner: scripts/trigger-fabric/pegatudo_history.py
+  self_test: "python3 scripts/trigger-fabric/pegatudo_history.py --self-test"
+  inventory: "python3 scripts/trigger-fabric/pegatudo_history.py --inventory"
+  remote_discovery: "python3 scripts/trigger-fabric/pegatudo_history.py --inventory --remote"
+  remote_discovery_is_mutation: false
+  fetch_objects_implicitly: false
+
+receipt_schema:
+  name: centraldark.pegatudo-history-receipt.v1
+  required_fields:
+    - ref
+    - sha
+    - source
+    - classification
+    - object_available_locally
+    - current_state_claim
+    - stitch_marker
+    - provenance
+
+promotion_boundary:
+  inventory_is_crystal: false
+  discovered_ref_is_crystal: false
+  proven_useful_delta_after_owner_test_can_be_crystal: true
+  direct_main_write: false
