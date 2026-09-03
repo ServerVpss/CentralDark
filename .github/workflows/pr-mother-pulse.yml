@@ -1,0 +1,122 @@
+name: PR Mother Pulse
+
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize, ready_for_review, review_requested, labeled, unlabeled, closed]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'PR de origem para pulsar manualmente'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  pull-requests: read
+  issues: write
+
+concurrency:
+  group: pr-mother-pulse-${{ github.event.pull_request.number || inputs.pr_number || github.run_id }}
+  cancel-in-progress: false
+
+jobs:
+  pulse:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Reagir no PR-mãe e registrar quem movimentou
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { owner, repo } = context.repo;
+            const manual = context.eventName === 'workflow_dispatch';
+            const sourceNumber = manual
+              ? Number(context.payload.inputs?.pr_number || 0)
+              : Number(context.payload.pull_request?.number || 0);
+
+            if (!Number.isInteger(sourceNumber) || sourceNumber <= 0) {
+              core.setFailed('PR_MOTHER_PULSE_SOURCE_PR_INVALID');
+              return;
+            }
+
+            const source = manual
+              ? (await github.rest.pulls.get({ owner, repo, pull_number: sourceNumber })).data
+              : context.payload.pull_request;
+
+            const corpus = `${source.title || ''}\n${source.body || ''}`;
+            const explicit = corpus.match(/\bPR[_ -]?(?:MAE|MÃE|MOTHER)\s*[:=]\s*#?(\d+)\b/i);
+            const selfDeclared = /PR[-_ ]?M[ÃA]E\s+VIVO|ONE_PR_LEDGER\s*=\s*true/i.test(corpus);
+
+            if (!explicit && !selfDeclared) {
+              core.notice(`PR_MOTHER_PULSE_SKIP source=#${sourceNumber} reason=NO_MOTHER_BINDING`);
+              return;
+            }
+
+            const motherNumber = explicit ? Number(explicit[1]) : sourceNumber;
+            if (!Number.isInteger(motherNumber) || motherNumber <= 0) {
+              core.setFailed('PR_MOTHER_PULSE_MOTHER_PR_INVALID');
+              return;
+            }
+
+            const action = manual ? 'manual_pulse' : String(context.payload.action || 'unknown');
+            const merged = Boolean(source.merged);
+            const reaction = action === 'review_requested' ? 'eyes'
+              : action === 'ready_for_review' ? 'rocket'
+              : action === 'closed' && merged ? 'hooray'
+              : action === 'closed' ? 'confused'
+              : action === 'opened' || action === 'reopened' ? 'eyes'
+              : '+1';
+
+            const state = action === 'closed' && merged ? 'PROMOTED_CANDIDATE_EVENT'
+              : action === 'closed' ? 'CLOSED_WITHOUT_MERGE'
+              : action === 'review_requested' ? 'REVIEW_SIGNAL'
+              : action === 'ready_for_review' ? 'READY_SIGNAL'
+              : 'MOVEMENT_OBSERVED';
+
+            try {
+              await github.rest.reactions.createForIssue({
+                owner,
+                repo,
+                issue_number: motherNumber,
+                content: reaction,
+              });
+            } catch (error) {
+              core.warning(`PR_MOTHER_REACTION_NON_FATAL: ${error.message}`);
+            }
+
+            const actor = context.actor || context.payload.sender?.login || 'UNKNOWN';
+            const sender = context.payload.sender?.login || actor;
+            const head = source.head?.sha || 'UNKNOWN';
+            const base = source.base?.sha || 'UNKNOWN';
+            const sourceUrl = source.html_url || `https://github.com/${owner}/${repo}/pull/${sourceNumber}`;
+            const marker = `<!-- centraldark-pr-mother-pulse run=${context.runId} attempt=${context.runAttempt} -->`;
+
+            const body = [
+              marker,
+              `### 🪡 PR-MOTHER PULSE · ${reaction}`,
+              '',
+              `- **estado:** \`${state}\``,
+              `- **PR-mãe:** #${motherNumber}`,
+              `- **origem:** [#${sourceNumber}](${sourceUrl})`,
+              `- **evento:** \`${action}\``,
+              `- **quem disparou:** @${actor}`,
+              `- **sender observado:** \`${sender}\``,
+              `- **HEAD origem:** \`${head}\``,
+              `- **BASE origem:** \`${base}\``,
+              `- **run:** \`${context.runId}/${context.runAttempt}\``,
+              '',
+              '`REACTION_IS_TELEMETRY_NOT_PROOF=true`  ',
+              '`REACTION_ACTOR_MAY_BE_GITHUB_ACTIONS_BOT=true`  ',
+              '`EVENT_ACTOR_IS_RECORDED_SEPARATELY=true`  ',
+              '`UNKNOWN_IS_NOT_PASS=true`',
+            ].join('\n');
+
+            await github.rest.issues.createComment({
+              owner,
+              repo,
+              issue_number: motherNumber,
+              body,
+            });
+
+            core.notice(`PR_MOTHER_PULSE mother=#${motherNumber} source=#${sourceNumber} actor=${actor} action=${action} reaction=${reaction} head=${head}`);
