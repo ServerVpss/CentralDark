@@ -31,18 +31,21 @@ class AureolaBahiaBiblicaContractTest(unittest.TestCase):
 
     def test_full_display_chain_preserves_chefe_order(self):
         aureola = AUREOLA.read_text(encoding="utf-8")
+        start = aureola.index("full_display_chain:")
+        end = aureola.index("\nreference_map:", start)
+        chain = aureola[start:end]
         required = [
-            '!CENTRALDARK', '!tlc23', 'DESTINATION_LOCK', '#ACORDAR', '!CALIBRAR',
-            '!MULTIBUSSOLA', 'PEGATUDO', 'DEBITO_COGNITIVO', 'READERS_MEASURE',
-            'RENDEZVOUS', 'RECONCILE', 'OWNER', 'ONE_WRITER', 'PATCH', 'TESTE',
-            'CONTRAPROVA', 'REALITY_JUDGE', 'FIXED_POINT', 'REGISTRA', 'HANDOFF', 'BOOT',
+            '  - "!CENTRALDARK"', '  - "!tlc23"', '  - DESTINATION_LOCK', '  - "#ACORDAR"',
+            '  - "!CALIBRAR"', '  - "!MULTIBUSSOLA"', '  - PEGATUDO', '  - DEBITO_COGNITIVO',
+            '  - READERS_MEASURE', '  - RENDEZVOUS', '  - RECONCILE', '  - OWNER', '  - ONE_WRITER',
+            '  - PATCH', '  - TESTE', '  - CONTRAPROVA', '  - REALITY_JUDGE', '  - FIXED_POINT',
+            '  - "!tlc23"', '  - REGISTRA', '  - HANDOFF', '  - BOOT',
         ]
-        positions = []
+        cursor = 0
         for token in required:
-            pos = aureola.find(token)
+            pos = chain.find(token, cursor)
             self.assertGreaterEqual(pos, 0, token)
-            positions.append(pos)
-        self.assertEqual(positions, sorted(positions))
+            cursor = pos + len(token)
 
     def test_reference_map_has_real_book_chapter_verse_references(self):
         aureola = AUREOLA.read_text(encoding="utf-8")
