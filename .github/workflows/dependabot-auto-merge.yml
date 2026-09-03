@@ -3,9 +3,9 @@
 #
 # Este workflow é o mutator especializado do fluxo universal de bots.
 # Usa pull_request_target porque pull_request não roda enquanto o PR está
-# conflitado. Segurança: nunca executa código do HEAD do PR; o resolver vem
-# sempre do BASE SHA confiável e o escopo é restrito a PR cujo autor é
-# dependabot[bot] no próprio repositório.
+# conflitado. Segurança: nunca executa código do HEAD do PR; todo código de
+# automação vem sempre do BASE SHA confiável e o escopo é restrito a PR cujo
+# autor é dependabot[bot] no próprio repositório.
 name: Dependabot Auto-Merge (só patches)
 
 on:
@@ -44,11 +44,51 @@ jobs:
           echo "DEPENDABOT_SCOPE=PASS"
           echo "PR_HEAD_REF=$PR_HEAD_REF"
 
+      - name: Checkout somente do BASE SHA confiável
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: .ci-house
+          persist-credentials: false
+          fetch-depth: 1
+          submodules: false
+
       - name: Coletar metadados do PR do Dependabot
         id: meta
         uses: dependabot/fetch-metadata@v3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Classificar sinal no HERMES Signal Watcher
+        shell: bash
+        env:
+          DEPENDENCY_NAMES: ${{ steps.meta.outputs.dependency-names }}
+          DEPENDENCY_TYPE: ${{ steps.meta.outputs.dependency-type }}
+          UPDATE_TYPE: ${{ steps.meta.outputs.update-type }}
+          PREVIOUS_VERSION: ${{ steps.meta.outputs.previous-version }}
+          NEW_VERSION: ${{ steps.meta.outputs.new-version }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          EVENT_B64="$(node - <<'NODE'
+          const event = {
+            source: 'dependabot_pr',
+            subject: `Dependabot PR #${process.env.PR_NUMBER}: ${process.env.DEPENDENCY_NAMES || 'dependency update'}`,
+            body: [
+              `dependency_type=${process.env.DEPENDENCY_TYPE || 'UNKNOWN'}`,
+              `update_type=${process.env.UPDATE_TYPE || 'UNKNOWN'}`,
+              `previous=${process.env.PREVIOUS_VERSION || 'UNKNOWN'}`,
+              `new=${process.env.NEW_VERSION || 'UNKNOWN'}`,
+              `head=${process.env.PR_HEAD_SHA || 'UNKNOWN'}`,
+            ].join(' '),
+            url: process.env.PR_URL || '',
+          };
+          process.stdout.write(Buffer.from(JSON.stringify(event), 'utf8').toString('base64url'));
+          NODE
+          )"
+          node "$GITHUB_WORKSPACE/.ci-house/scripts/hermes/signal-watch-notify.mjs" --event-b64 "$EVENT_B64" --notify
 
       - name: Aprovar PR do Dependabot dentro da política
         uses: actions/github-script@v9
@@ -94,16 +134,6 @@ jobs:
               core.exportVariable('MERGEABILITY_STATE', 'MERGEABLE');
             }
 
-      - name: Checkout somente do BASE SHA confiável
-        if: env.RESOLVE_REQUESTED == '1'
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          ref: ${{ github.event.pull_request.base.sha }}
-          path: .ci-resolve
-          persist-credentials: false
-          fetch-depth: 1
-          submodules: false
-
       - name: Resolver conflito pelo motor único da Casa
         if: env.RESOLVE_REQUESTED == '1'
         env:
@@ -111,7 +141,7 @@ jobs:
           PR_HEAD_REF: ${{ github.event.pull_request.head.ref }}
         run: |
           set -euo pipefail
-          bash "$GITHUB_WORKSPACE/.ci-resolve/scripts/dependabot/resolve-conflicts.sh" "${{ github.event.pull_request.number }}"
+          bash "$GITHUB_WORKSPACE/.ci-house/scripts/dependabot/resolve-conflicts.sh" "${{ github.event.pull_request.number }}"
 
       - name: Habilitar auto-merge somente para PATCH
         if: steps.meta.outputs.update-type == 'version-update:semver-patch' && env.RESOLVE_REQUESTED != '1' && env.MERGEABILITY_STATE == 'MERGEABLE'
@@ -161,5 +191,11 @@ jobs:
           echo 'TRIGGER=pull_request_target'
           echo 'TRUSTED_CODE_SOURCE=BASE_SHA'
           echo 'UNTRUSTED_PR_CODE_EXECUTED=0'
+          echo 'SIGNAL_WATCHER=apps/modulos/HERMES-CORE/agents/Signal-Watcher/agent.mjs'
+          echo 'SIGNAL_SURFACE=TELEGRAM_GAMIFIED_CARD'
+          echo 'AUTO_MERGE_POLICY=PATCH_ONLY'
+          echo 'EXTERNAL_AUTO_MERGE_PATTERN=ABSORBED_NOT_DEPENDENCY'
+          echo 'EXTERNAL_PAT_REQUIRED=0'
+          echo 'EXTERNAL_DOCKER_ACTION_REQUIRED=0'
           echo 'FALLBACK_ENGINE=scripts/dependabot/resolve-conflicts.sh'
           echo 'DEPENDABOT_IS_SPECIALIZED_FALLBACK_NOT_SECOND_BRAIN=1'
