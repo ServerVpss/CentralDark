@@ -1,9 +1,15 @@
 # Auto-merge dos PRs do Dependabot — só patches (semver-patch).
 # Minor fica aberto pra revisão humana. Major nem chega (bloqueado no dependabot.yml).
+#
+# Este workflow é o mutator especializado do fluxo universal de bots.
+# Usa pull_request_target porque pull_request não roda enquanto o PR está
+# conflitado. Segurança: nunca executa código do HEAD do PR; o resolver vem
+# sempre do BASE SHA confiável e o escopo é restrito a PR cujo autor é
+# dependabot[bot] no próprio repositório.
 name: Dependabot Auto-Merge (só patches)
 
 on:
-  pull_request:
+  pull_request_target:
     types: [opened, reopened, synchronize, ready_for_review]
 
 permissions:
@@ -16,23 +22,35 @@ concurrency:
 
 jobs:
   auto-merge-patch:
+    if: >-
+      github.repository == 'ServerVpss/CentralDark' &&
+      github.event.pull_request.user.login == 'dependabot[bot]' &&
+      github.event.pull_request.head.repo.full_name == github.repository
     runs-on: [self-hosted, Linux]
     steps:
-      - name: Sair limpo se não for Dependabot
-        if: github.actor != 'dependabot[bot]' || github.repository != 'ServerVpss/CentralDark'
+      - name: Provar escopo do mutator especializado
+        shell: bash
+        env:
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
+          BASE_REPO: ${{ github.repository }}
+          PR_HEAD_REF: ${{ github.event.pull_request.head.ref }}
         run: |
-          echo "::notice::Disparo fora do escopo (autor=${{ github.actor }}). Saindo sem erro."
-          echo "SKIP=1" >> "$GITHUB_ENV"
+          set -euo pipefail
+          test "$PR_AUTHOR" = 'dependabot[bot]'
+          test "$HEAD_REPO" = "$BASE_REPO"
+          test -n "$PR_HEAD_REF"
+          test "$PR_HEAD_REF" != 'main'
+          echo "DEPENDABOT_SCOPE=PASS"
+          echo "PR_HEAD_REF=$PR_HEAD_REF"
 
       - name: Coletar metadados do PR do Dependabot
-        if: env.SKIP != '1'
         id: meta
         uses: dependabot/fetch-metadata@v3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Aprovar PR (sempre que for Dependabot)
-        if: env.SKIP != '1'
+      - name: Aprovar PR do Dependabot dentro da política
         uses: actions/github-script@v9
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -45,53 +63,58 @@ jobs:
               body: 'Aprovação automática — atualização do Dependabot dentro da política (sem majors).',
             });
 
-      - name: Detectar stale/conflitado e resolver deterministicamente
-        if: env.SKIP != '1'
+      - name: Medir mergeability e decidir fallback
         id: stale
         uses: actions/github-script@v9
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const pr = await github.rest.pulls.get({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: context.payload.pull_request.number,
-            });
-            const mergeable = pr.data.mergeable;
-            // mergeable === null significa UNKNOWN (GitHub ainda calculando)
-            if (mergeable === false) {
-              // PADRÃO CANÔNICO: resolver deterministicamente via script no runner self-hosted
-              console.log('::warning::PR conflitado. Resolução determinística via scripts/dependabot/resolve-conflicts.sh.');
-              core.exportVariable('RESOLVE_REQUESTED', '1');
-            } else if (mergeable === null) {
-              console.log('::notice::Mergeability UNKNOWN (GitHub ainda calculando). Aguardando próximo synchronize.');
-            } else {
-              console.log('::notice::PR mergeable. Seguindo para auto-merge por política.');
+            let pr;
+            for (let attempt = 1; attempt <= 5; attempt++) {
+              pr = await github.rest.pulls.get({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: context.payload.pull_request.number,
+              });
+              if (pr.data.mergeable !== null) break;
+              console.log(`::notice::Mergeability UNKNOWN tentativa=${attempt}/5`);
+              await new Promise(resolve => setTimeout(resolve, 2000));
             }
 
-      # Este passo já roda no runner self-hosted declarado pelo job.
-      # A versão anterior aninhava `runs-on:` e `steps:` DENTRO de um step —
-      # chaves de job em contexto de step. O YAML aceitava, o schema do Actions
-      # não: o workflow ficava inválido e o GitHub abria um run falho a cada
-      # push, sem executar job nenhum. O motor nunca disparou por aqui.
-      - name: Checkout do SHA exato do evento
-        if: env.SKIP != '1' && env.RESOLVE_REQUESTED == '1'
-        uses: actions/checkout@v7
-        with:
-          ref: ${{ github.sha }}
-          path: .ci-resolve
-          fetch-depth: 1
+            const mergeable = pr.data.mergeable;
+            if (mergeable === false) {
+              console.log('::warning::PR conflitado. Encaminhando ao motor único da Casa.');
+              core.exportVariable('RESOLVE_REQUESTED', '1');
+              core.exportVariable('MERGEABILITY_STATE', 'CONFLICTING');
+            } else if (mergeable === null) {
+              console.log('::notice::Mergeability continuou UNKNOWN. Fail-closed; nenhuma mutação.');
+              core.exportVariable('MERGEABILITY_STATE', 'UNKNOWN');
+            } else {
+              console.log('::notice::PR mergeable. Seguindo política de auto-merge.');
+              core.exportVariable('MERGEABILITY_STATE', 'MERGEABLE');
+            }
 
-      - name: Resolver conflito deterministicamente no runner
-        if: env.SKIP != '1' && env.RESOLVE_REQUESTED == '1'
+      - name: Checkout somente do BASE SHA confiável
+        if: env.RESOLVE_REQUESTED == '1'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: .ci-resolve
+          persist-credentials: false
+          fetch-depth: 1
+          submodules: false
+
+      - name: Resolver conflito pelo motor único da Casa
+        if: env.RESOLVE_REQUESTED == '1'
         env:
           REPO_DIR: /root/CentralDark
+          PR_HEAD_REF: ${{ github.event.pull_request.head.ref }}
         run: |
           set -euo pipefail
           bash "$GITHUB_WORKSPACE/.ci-resolve/scripts/dependabot/resolve-conflicts.sh" "${{ github.event.pull_request.number }}"
 
       - name: Habilitar auto-merge somente para PATCH
-        if: env.SKIP != '1' && steps.meta.outputs.update-type == 'version-update:semver-patch' && env.RESOLVE_REQUESTED != '1'
+        if: steps.meta.outputs.update-type == 'version-update:semver-patch' && env.RESOLVE_REQUESTED != '1' && env.MERGEABILITY_STATE == 'MERGEABLE'
         uses: actions/github-script@v9
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -107,7 +130,7 @@ jobs:
             });
 
       - name: Comentar quando for MINOR (fica pra revisão humana)
-        if: env.SKIP != '1' && steps.meta.outputs.update-type == 'version-update:semver-minor'
+        if: steps.meta.outputs.update-type == 'version-update:semver-minor' && github.event.action != 'synchronize'
         uses: actions/github-script@v9
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -116,5 +139,27 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.payload.pull_request.number,
-              body: '🟡 Atualização **minor** detectada — aprovei, mas o merge fica pra revisão humana (política: auto-merge só pra patch).',
+              body: '🟡 Atualização **minor** detectada — aprovada, mas o merge fica pra revisão humana (política: auto-merge só pra patch).',
             });
+
+      - name: Receipt determinístico do fluxo Dependabot
+        if: always()
+        shell: bash
+        env:
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PR_HEAD_REF: ${{ github.event.pull_request.head.ref }}
+          MERGEABILITY_STATE: ${{ env.MERGEABILITY_STATE }}
+          RESOLVE_REQUESTED: ${{ env.RESOLVE_REQUESTED }}
+          JOB_STATUS: ${{ job.status }}
+        run: |
+          set -euo pipefail
+          echo "HEAD_SHA=$HEAD_SHA"
+          echo "PR_HEAD_REF=$PR_HEAD_REF"
+          echo "MERGEABILITY_STATE=${MERGEABILITY_STATE:-UNKNOWN}"
+          echo "RESOLVE_REQUESTED=${RESOLVE_REQUESTED:-0}"
+          echo "JOB_STATUS=$JOB_STATUS"
+          echo 'TRIGGER=pull_request_target'
+          echo 'TRUSTED_CODE_SOURCE=BASE_SHA'
+          echo 'UNTRUSTED_PR_CODE_EXECUTED=0'
+          echo 'FALLBACK_ENGINE=scripts/dependabot/resolve-conflicts.sh'
+          echo 'DEPENDABOT_IS_SPECIALIZED_FALLBACK_NOT_SECOND_BRAIN=1'
