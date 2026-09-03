@@ -76,6 +76,8 @@ export function evaluateSemanticGreen(input = {}) {
   const actualRoute = normalizeRoute(input.actual_route ?? input.intent_route);
   const style = normalizeToken(input.human_style);
   const technicalProofSeparate = input.technical_proof_separate === true;
+  const multibussolaAxisId = normalizeToken(input.multibussola_axis_id);
+  const multibussolaAlignment = normalizeToken(input.multibussola_alignment);
 
   const reasons = [];
   const unknowns = [];
@@ -102,6 +104,12 @@ export function evaluateSemanticGreen(input = {}) {
     reasons.push('INTENT_ROUTE_MISMATCH');
   }
 
+  if (!multibussolaAxisId) unknowns.push('MULTIBUSSOLA_AXIS_ID_MISSING');
+  if (!multibussolaAlignment) unknowns.push('MULTIBUSSOLA_ALIGNMENT_MISSING');
+  if (multibussolaAlignment && multibussolaAlignment !== 'ALIGNED') {
+    reasons.push('MULTIBUSSOLA_AXIS_MISALIGNED');
+  }
+
   if (!style) unknowns.push('HUMAN_STYLE_MISSING');
   if (style && !STYLE_ALLOWED.has(style)) reasons.push('HUMAN_STYLE_MISMATCH');
 
@@ -112,7 +120,7 @@ export function evaluateSemanticGreen(input = {}) {
   else if (unknowns.length) verdict = 'UNKNOWN';
 
   return {
-    schema: 'centraldark.semantic-green-result.v1',
+    schema: 'centraldark.semantic-green-result.v2',
     verdict,
     green: verdict === 'GREEN',
     phase,
@@ -121,6 +129,8 @@ export function evaluateSemanticGreen(input = {}) {
     registered_direction: registeredDirection ?? null,
     intent_route: intentRoute || null,
     actual_route: actualRoute || null,
+    multibussola_axis_id: multibussolaAxisId || null,
+    multibussola_alignment: multibussolaAlignment || null,
     human_style: style || null,
     technical_proof_separate: technicalProofSeparate,
     reasons,
@@ -145,13 +155,20 @@ export function runSelfTest() {
     'MODEL_CANNOT_REWRITE_INTENT: true',
     'TECHNICAL_GREEN_DOES_NOT_IMPLY_SEMANTIC_GREEN: true',
     'SEMANTIC_GREEN_DOES_NOT_IMPLY_RUNTIME_GREEN: true',
+    'MULTIBUSSOLA_AXIS_ALIGNMENT_REQUIRED: true',
     'FAIL_CLOSED: true',
   ]) assertSelfTest(contract.includes(token), `CONTRACT_TOKEN:${token}`);
 
   assertSelfTest(aureola.includes('reference: "1Ts 5:21"'), 'AUREOLA_REGISTRY_PRESENT');
   assertSelfTest(stitch.includes('reference: "Ec 3:7"'), 'STITCH_REGISTRY_PRESENT');
 
+  const base = {
+    multibussola_axis_id: 'INTENT_DIRECTION',
+    multibussola_alignment: 'ALIGNED',
+  };
+
   const positive = evaluateSemanticGreen({
+    ...base,
     phase: 'TESTE',
     verse_reference: 'Mt 7:16',
     verse_direction: 'RESULT_REVEALS_TREE',
@@ -163,6 +180,7 @@ export function runSelfTest() {
   assertSelfTest(positive.verdict === 'GREEN', 'POSITIVE_GREEN');
 
   const wrongPhase = evaluateSemanticGreen({
+    ...base,
     phase: 'TESTE',
     verse_reference: 'Hc 2:2',
     verse_direction: 'WRITE_THE_VISION_CLEARLY',
@@ -174,6 +192,7 @@ export function runSelfTest() {
   assertSelfTest(wrongPhase.verdict === 'FAIL' && wrongPhase.reasons.includes('VERSE_DIRECTION_NOT_ALLOWED_FOR_PHASE'), 'REAL_VERSE_WRONG_PHASE_FAILS');
 
   const wrongDirection = evaluateSemanticGreen({
+    ...base,
     phase: 'ACORDAR',
     verse_reference: '1Ts 5:21',
     verse_direction: 'ORDER_NOT_CONFUSION',
@@ -185,6 +204,7 @@ export function runSelfTest() {
   assertSelfTest(wrongDirection.verdict === 'FAIL' && wrongDirection.reasons.includes('VERSE_DIRECTION_DOES_NOT_MATCH_REFERENCE'), 'WRONG_DIRECTION_FAILS');
 
   const wrongIntent = evaluateSemanticGreen({
+    ...base,
     phase: 'TESTE',
     verse_reference: 'Mt 7:16',
     verse_direction: 'RESULT_REVEALS_TREE',
@@ -195,7 +215,32 @@ export function runSelfTest() {
   });
   assertSelfTest(wrongIntent.verdict === 'FAIL' && wrongIntent.reasons.includes('INTENT_ROUTE_MISMATCH'), 'WRONG_INTENT_FAILS');
 
+  const wrongAxis = evaluateSemanticGreen({
+    ...base,
+    multibussola_alignment: 'MISALIGNED',
+    phase: 'TESTE',
+    verse_reference: 'Mt 7:16',
+    verse_direction: 'RESULT_REVEALS_TREE',
+    intent_route: 'centraldark/pr-1381/test',
+    actual_route: 'centraldark/pr-1381/test',
+    human_style: 'BAIANES_FACIL',
+    technical_proof_separate: true,
+  });
+  assertSelfTest(wrongAxis.verdict === 'FAIL' && wrongAxis.reasons.includes('MULTIBUSSOLA_AXIS_MISALIGNED'), 'WRONG_AXIS_FAILS');
+
+  const missingAxis = evaluateSemanticGreen({
+    phase: 'TESTE',
+    verse_reference: 'Mt 7:16',
+    verse_direction: 'RESULT_REVEALS_TREE',
+    intent_route: 'centraldark/pr-1381/test',
+    actual_route: 'centraldark/pr-1381/test',
+    human_style: 'BAIANES_FACIL',
+    technical_proof_separate: true,
+  });
+  assertSelfTest(missingAxis.verdict === 'UNKNOWN' && missingAxis.unknowns.includes('MULTIBUSSOLA_AXIS_ID_MISSING'), 'MISSING_AXIS_IS_UNKNOWN');
+
   const wrongStyle = evaluateSemanticGreen({
+    ...base,
     phase: 'TESTE',
     verse_reference: 'Mt 7:16',
     verse_direction: 'RESULT_REVEALS_TREE',
@@ -207,6 +252,7 @@ export function runSelfTest() {
   assertSelfTest(wrongStyle.verdict === 'FAIL' && wrongStyle.reasons.includes('HUMAN_STYLE_MISMATCH'), 'WRONG_STYLE_FAILS');
 
   const missingProofBoundary = evaluateSemanticGreen({
+    ...base,
     phase: 'TESTE',
     verse_reference: 'Mt 7:16',
     verse_direction: 'RESULT_REVEALS_TREE',
@@ -218,13 +264,15 @@ export function runSelfTest() {
   assertSelfTest(missingProofBoundary.verdict === 'FAIL' && missingProofBoundary.reasons.includes('TECHNICAL_PROOF_BOUNDARY_MISSING'), 'PROOF_BOUNDARY_FAILS');
 
   return {
-    schema: 'centraldark.semantic-green-self-test.v1',
+    schema: 'centraldark.semantic-green-self-test.v2',
     ok: true,
     positive: positive.verdict,
     counterproofs: {
       real_verse_wrong_phase: wrongPhase.verdict,
       wrong_direction: wrongDirection.verdict,
       wrong_intent: wrongIntent.verdict,
+      wrong_axis: wrongAxis.verdict,
+      missing_axis: missingAxis.verdict,
       wrong_style: wrongStyle.verdict,
       missing_proof_boundary: missingProofBoundary.verdict,
     },
@@ -250,7 +298,7 @@ function main() {
     const input = parseInputArg();
     if (!input) {
       console.log(JSON.stringify({
-        schema: 'centraldark.semantic-green-cli.v1',
+        schema: 'centraldark.semantic-green-cli.v2',
         usage: 'node apps/modulos/HERMES-CORE/core/semantic-green-gate.mjs --self-test | --input-json <json>',
       }, null, 2));
       return;
