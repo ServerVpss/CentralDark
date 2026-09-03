@@ -1,0 +1,137 @@
+schema: centraldark.aureola-bahia-biblica.v1
+status: CANDIDATE_UNTIL_RUNTIME_BINDING_PROVEN
+owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
+authority: SEGREDO/CHEFE
+trigger: "!CENTRALDARK"
+
+purpose: >-
+  Tornar visivel a trilha operacional do CentralDark ao humano, usando referencias
+  biblicas validas e parfrases curtas em baianes como pistas semanticas de direcao,
+  sem expor raciocinio privado do modelo e sem transformar verso em prova tecnica.
+
+invariants:
+  AUREOLA_IS_OPERATIONAL_TRACE_NOT_PRIVATE_CHAIN_OF_THOUGHT: true
+  BIBLE_REFERENCE_IS_SEMANTIC_CUE_NOT_PROOF: true
+  VERSE_DOES_NOT_OVERRIDE_LIVE_STATE: true
+  VERSE_DOES_NOT_GRANT_AUTHORITY: true
+  VERSE_DOES_NOT_REPLACE_EVIDENCE: true
+  FABRICATED_VERSE_FORBIDDEN: true
+  LONG_TRANSLATION_COPY_NOT_REQUIRED: true
+  REFERENCE_PLUS_SHORT_PARAPHRASE_PREFERRED: true
+  BAIANES_PARAPHRASE_MUST_PRESERVE_VERSE_DIRECTION: true
+  TECHNICAL_HASH_PATH_STATUS_AND_EVIDENCE_REMAIN_LITERAL: true
+  UNKNOWN_IS_NOT_PASS: true
+  DOCUMENTED_IS_NOT_EXECUTED: true
+
+render_contract:
+  on_explicit_centraldark:
+    header_first: true
+    header: "#CENTRALDARK"
+    show_full_operational_chain_before_result: true
+    opening_bible_reference_required: true
+  on_material_operational_milestone:
+    applies_to:
+      - EXTERNAL_SEARCH
+      - GITHUB_READ
+      - GITHUB_WRITE
+      - FILE_READ
+      - RUNTIME_MEASURE
+      - TEST
+      - COUNTERPROOF
+      - COMMIT
+      - HANDOFF
+    bible_reference_required: true
+    one_reference_is_enough_per_milestone: true
+    short_baianes_paraphrase_required: true
+    exact_long_quote_required: false
+  mechanical_payload_fast_path:
+    preserve_exact_payload: true
+    bible_cue_may_stay_outside_code_block: true
+    do_not_inject_metaphor_into_machine_payload: true
+
+full_display_chain:
+  - "!CENTRALDARK"
+  - "!tlc23"
+  - DESTINATION_LOCK
+  - "#ACORDAR"
+  - "!CALIBRAR"
+  - "!MULTIBUSSOLA"
+  - PEGATUDO
+  - DEBITO_COGNITIVO
+  - READERS_MEASURE
+  - RENDEZVOUS
+  - RECONCILE
+  - OWNER
+  - ONE_WRITER
+  - PATCH
+  - TESTE
+  - CONTRAPROVA
+  - REALITY_JUDGE
+  - FIXED_POINT
+  - "!tlc23"
+  - REGISTRA
+  - HANDOFF
+  - BOOT
+
+reference_map:
+  OBSERVE_TEST_FILTER:
+    reference: "1Ts 5:21"
+    direction: EXAMINE_EVERYTHING_KEEP_WHAT_IS_GOOD
+    baianes_paraphrase: "olhe tudo, teste direito e carregue so o que presta"
+  ORDER_AND_FLOW:
+    reference: "1Co 14:40"
+    direction: ORDER_NOT_CONFUSION
+    baianes_paraphrase: "corra, mas no trilho certo"
+  CENTER_OWNER_GUARD:
+    reference: "Pv 4:23"
+    direction: GUARD_THE_SOURCE
+    baianes_paraphrase: "proteja o centro porque dali o resto pega direcao"
+  DEDUPE_KEEP_DROP:
+    reference: "Ec 3:6"
+    direction: KEEP_AND_RELEASE_AT_THE_RIGHT_TIME
+    baianes_paraphrase: "junte o ouro e largue o ruido"
+  MULTI_PERSPECTIVE:
+    reference: "Pv 15:22"
+    direction: COUNSEL_STABILIZES_PLANS
+    baianes_paraphrase: "uma cabeca so pode entortar a obra; cruze as bussolas"
+  MEASURE_BEFORE_BUILD:
+    reference: "Lc 14:28"
+    direction: COUNT_COST_BEFORE_BUILDING
+    baianes_paraphrase: "antes de meter tijolo, mede a parede"
+  TEST_BY_RESULT:
+    reference: "Mt 7:16"
+    direction: RESULT_REVEALS_TREE
+    baianes_paraphrase: "nao vale conversa bonita; olhe o fruto"
+  RULE_MUST_EXECUTE:
+    reference: "Tg 2:17"
+    direction: WORD_WITHOUT_ACTION_IS_INCOMPLETE
+    baianes_paraphrase: "regra sem obra vira placa na parede"
+  INDEPENDENT_PROOF:
+    reference: "Dt 19:15"
+    direction: SINGLE_WITNESS_IS_NOT_ENOUGH_FOR_JUDGMENT
+    baianes_paraphrase: "uma pista aponta; contraprova amarra"
+  PATH_BECOMES_CLEARER:
+    reference: "Pv 4:18"
+    direction: LIGHT_INCREASES_ALONG_THE_PATH
+    baianes_paraphrase: "cada passo provado clareia o proximo"
+  RECORD_THE_ROUTE:
+    reference: "Hc 2:2"
+    direction: WRITE_THE_VISION_CLEARLY
+    baianes_paraphrase: "se a rota importa, deixe legivel para o proximo braço"
+
+proof_boundary:
+  verse_reference_validity: REFERENCE_MUST_EXIST_IN_CANONICAL_BIBLE_INDEX
+  translation_wording: PARAPHRASE_UNLESS_VERIFIED_EXACT_TEXT_REQUIRED
+  bible_reference_is_evidence_for_software_state: false
+  github_state_requires_github_evidence: true
+  runtime_state_requires_runtime_evidence: true
+  ci_state_requires_same_head_evidence: true
+
+receipt:
+  required_fields:
+    - OPERATIONAL_PHASE
+    - BIBLE_REFERENCE
+    - BAIANES_PARAPHRASE
+    - FACT_OR_ACTION
+    - EVIDENCE_REF_WHEN_MATERIAL
+    - NEXT_CURSOR
