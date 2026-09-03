@@ -1,13 +1,15 @@
-schema: centraldark.semantic-green-gate.v1
-status: CANDIDATE_UNTIL_SAME_HEAD_CI
+schema: centraldark.semantic-green-gate.v2
+status: CANONICAL_SOURCE_CONTRACT
+runtime_status: UNKNOWN_UNTIL_SAME_HEAD_CI
 owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
 authority: SEGREDO/CHEFE
 runtime_validator: apps/modulos/HERMES-CORE/core/semantic-green-gate.mjs
 
 purpose: >-
-  Impedir verde semantico quando trilha, verso, direcao, intencao vigente e
-  estilo humano nao convergem. Referencia biblica valida mas usada na fase
-  errada ou apontando para outra direcao deve falhar deterministicamente.
+  Impedir verde semantico quando trilha, verso, direcao, intencao vigente,
+  eixo da MULTIBUSSOLA e estilo humano nao convergem. Referencia biblica valida
+  mas usada na fase errada, em eixo errado ou apontando para outra direcao deve
+  falhar deterministicamente.
 
 formula:
   required_all:
@@ -15,6 +17,7 @@ formula:
     - VERSE_REFERENCE_VALID
     - VERSE_DIRECTION_ALLOWED_FOR_PHASE
     - INTENT_ROUTE_MATCH
+    - MULTIBUSSOLA_AXIS_ALIGNMENT
     - HUMAN_STYLE_MATCH
     - TECHNICAL_PROOF_SEPARATE
   all_true: SEMANTIC_GREEN
@@ -31,11 +34,15 @@ invariants:
   VERSE_DOES_NOT_REPLACE_TECHNICAL_EVIDENCE: true
   TECHNICAL_GREEN_DOES_NOT_IMPLY_SEMANTIC_GREEN: true
   SEMANTIC_GREEN_DOES_NOT_IMPLY_RUNTIME_GREEN: true
+  MULTIBUSSOLA_AXIS_ALIGNMENT_REQUIRED: true
+  MULTIBUSSOLA_MISALIGNED_IS_FAIL: true
+  MULTIBUSSOLA_UNKNOWN_IS_NOT_GREEN: true
   UNKNOWN_IS_NOT_PASS: true
   FAIL_CLOSED: true
 
 human_style:
   canonical_profile: BAIANES_FACIL
+  teaching_grammar_owner: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml
   accepts: [BAIANES_FACIL, PTBR_TECNICO_DIRETO]
   must_preserve:
     - CHEFE_INTENT
@@ -43,6 +50,19 @@ human_style:
     - TECHNICAL_LITERALITY_FOR_PROOF
     - REGIONAL_METAPHOR_WHEN_CONTEXTUAL
   style_is_authority: false
+
+multibussola_alignment:
+  owner: docs/CONSCIENCIA/MULTIBUSSOLA.md
+  required_fields: [multibussola_axis_id, multibussola_alignment]
+  alignment_values: [ALIGNED, MISALIGNED, UNKNOWN]
+  green_requires: ALIGNED
+  missing_axis: UNKNOWN
+  misaligned_axis: FAIL
+  purpose: >-
+    Mostrar em qual eixo a execucao esta sendo julgada e impedir que uma seta
+    tecnicamente valida caminhe para fora da direcao vigente do SEGREDO/CHEFE.
+  axis_is_private_reasoning: false
+  axis_is_operational_trace: true
 
 phase_direction_map:
   ACORDAR: [EXAMINE_EVERYTHING_KEEP_WHAT_IS_GOOD, ORDER_NOT_CONFUSION]
@@ -71,11 +91,14 @@ intent_match:
   missing_intent_route: UNKNOWN
 
 verse_registry_source: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml
+post_green_lock: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/POST-GREEN-LOCK.yml
 semantic_result_values: [GREEN, FAIL, UNKNOWN]
 
 negative_counterproof:
   verse_real_wrong_phase_must_fail: true
   verse_real_wrong_direction_must_fail: true
   correct_verse_wrong_intent_must_fail: true
+  correct_verse_wrong_multibussola_axis_must_fail: true
+  missing_multibussola_axis_must_be_unknown: true
   correct_trail_wrong_style_must_fail: true
   missing_technical_proof_boundary_must_not_green: true
