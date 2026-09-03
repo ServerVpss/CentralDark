@@ -355,3 +355,113 @@ jobs:
           elif [ "${JOB_STATUS}" = "failure" ]; then echo "RESULTADO=FAIL";
           elif [ "${JOB_STATUS}" = "success" ]; then echo "RESULTADO=PASS";
           else echo "RESULTADO=BLOCKED"; echo "CAUSE=UNKNOWN_STATUS_${JOB_STATUS}"; fi
+
+  bot-fallback-router:
+    name: Universal bot flow — deterministic fallback router
+    needs: [validate-canonical-map, validate, validate-admin-guard]
+    if: ${{ always() && github.event_name == 'pull_request' }}
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 5
+    steps:
+      - name: Checkout exact PR HEAD without writer credentials
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          path: .ci-bot-router
+          persist-credentials: false
+          fetch-depth: 1
+          submodules: false
+
+      - name: Classificar resultado e apontar fallback canônico
+        shell: bash
+        working-directory: .ci-bot-router
+        env:
+          ACTOR: ${{ github.actor }}
+          MAP_RESULT: ${{ needs.validate-canonical-map.result }}
+          CODEX_RESULT: ${{ needs.validate.result }}
+          MCP_RESULT: ${{ needs.validate-admin-guard.result }}
+        run: |
+          set -euo pipefail
+
+          skill='.agents/skills/git-conflict-resolve-house-standard/SKILL.md'
+          engine='scripts/dependabot/resolve-conflicts.sh'
+          dependabot_flow='.github/workflows/dependabot-auto-merge.yml'
+
+          for path in "$skill" "$engine" "$dependabot_flow"; do
+            test -f "$path" || {
+              echo "BOT_ROUTER_CONTRACT_FAIL missing=$path"
+              exit 1
+            }
+          done
+
+          # Um único motor de conflito; vários bots podem consumir o mesmo código.
+          # Permissão de escrita NÃO é compartilhada com o gate read-only.
+          bash -n "$engine"
+          grep -Fq 'Owner do motor: `scripts/dependabot/resolve-conflicts.sh`' "$skill"
+          grep -Fq 'scripts/dependabot/resolve-conflicts.sh' "$dependabot_flow"
+          grep -Fq "github.actor != 'dependabot[bot]'" "$dependabot_flow"
+
+          green=1
+          for result in "$MAP_RESULT" "$CODEX_RESULT" "$MCP_RESULT"; do
+            if [ "$result" != 'success' ]; then
+              green=0
+            fi
+          done
+
+          echo "BOT_ACTOR=$ACTOR"
+          echo 'UNIVERSAL_VALIDATION_OWNER=.github/workflows/codex-validate.yml'
+          echo 'GIT_CONFLICT_SKILL=.agents/skills/git-conflict-resolve-house-standard/SKILL.md'
+          echo 'GIT_CONFLICT_ENGINE=scripts/dependabot/resolve-conflicts.sh'
+          echo 'BOT_CODE_SHARED=1'
+          echo 'BOT_PERMISSION_SHARED=0'
+          echo 'BOT_FAILURE_DOES_NOT_CREATE_NEW_BOT=1'
+
+          if [ "$green" -eq 1 ]; then
+            echo 'BOT_KIND=ANY'
+            echo 'BOT_FALLBACK=NONE'
+            echo 'BOT_ROUTER=PASS'
+            exit 0
+          fi
+
+          case "$ACTOR" in
+            'dependabot[bot]')
+              echo 'BOT_KIND=DEPENDABOT'
+              echo 'BOT_FALLBACK_OWNER=.github/workflows/dependabot-auto-merge.yml'
+              echo 'BOT_FALLBACK_ENGINE=scripts/dependabot/resolve-conflicts.sh'
+              echo 'BOT_FALLBACK_REASON=VALIDATION_NOT_GREEN'
+              ;;
+            *\[bot\])
+              echo 'BOT_KIND=GENERIC_BOT'
+              echo 'BOT_FALLBACK_OWNER=OWNER_BY_FAILED_GATE'
+              echo 'BOT_FALLBACK_ENGINE=NONE'
+              echo 'BOT_FALLBACK_REASON=NO_SPECIALIZED_MUTATOR'
+              ;;
+            *)
+              echo 'BOT_KIND=HUMAN_OR_SERVICE'
+              echo 'BOT_FALLBACK_OWNER=OWNER_BY_FAILED_GATE'
+              echo 'BOT_FALLBACK_ENGINE=NONE'
+              echo 'BOT_FALLBACK_REASON=NO_BOT_MUTATION_REQUIRED'
+              ;;
+          esac
+
+          echo 'BOT_ROUTER=ROUTED'
+
+      - name: Receipt determinístico do router
+        if: always()
+        shell: bash
+        env:
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          MAP_RESULT: ${{ needs.validate-canonical-map.result }}
+          CODEX_RESULT: ${{ needs.validate.result }}
+          MCP_RESULT: ${{ needs.validate-admin-guard.result }}
+          ROUTER_STATUS: ${{ job.status }}
+        run: |
+          set -euo pipefail
+          echo "HEAD_SHA=${HEAD_SHA}"
+          echo "MAP_RESULT=${MAP_RESULT}"
+          echo "CODEX_RESULT=${CODEX_RESULT}"
+          echo "MCP_RESULT=${MCP_RESULT}"
+          echo "ROUTER_STATUS=${ROUTER_STATUS}"
+          echo 'UNIVERSAL_BOT_FLOW=1'
+          echo 'DEPENDABOT_IS_SPECIALIZED_FALLBACK_NOT_SECOND_BRAIN=1'
+          echo 'UNKNOWN_OR_SKIPPED_IS_NOT_PASS=1'
