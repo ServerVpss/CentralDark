@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url));
 export const DEFAULT_REPO_ROOT = resolve(SCRIPT_DIR, '../../../../');
-export const MANIFEST_PATH = 'docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/manifest.json';
+export const MANIFEST_PATH = 'docs/BRAIN/08-ARTEFATOS-VISUAIS/01-CARTAZES-CANONICOS/manifest.json';
 
 const EXPECTED_RELATIONS = {
   'CD-POSTER-01-PAPAGAIO': {
