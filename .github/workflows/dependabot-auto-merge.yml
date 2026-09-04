@@ -31,7 +31,11 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Aprovar PR (sempre que for Dependabot)
+      # NOTA: remoção do passo "Aprovar PR" em 2026-09-04.
+      # O createReview({event:'APPROVE'}) falhava com 422 "GitHub Actions is not
+      # permitted to approve pull requests" em repositório privado, derrubando o CI.
+      # O auto-merge via GraphQL (próximo passo) não exige review prévio e é
+      # suficiente para a política de patches.
         if: env.SKIP != '1'
         uses: actions/github-script@v9
         with:
