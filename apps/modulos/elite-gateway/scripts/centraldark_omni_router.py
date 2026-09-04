@@ -57,7 +57,7 @@ HERMES_MODEL = os.getenv("HERMES_MODEL", "hermes").strip()
 
 # Nous Research (Hermes) - read from auth.json dynamically
 NOUS_INFERENCE_BASE_URL = "https://inference-api.nousresearch.com/v1"
-NOUS_MODEL = os.getenv("NOUS_MODEL", "tencent/hy3:free").strip()
+NOUS_MODEL = os.getenv("NOUS_MODEL", "").strip()
 
 _REDACTIONS = [
     (re.compile(r"(bearer\s+)[A-Za-z0-9._~+/=-]+", re.I), r"\1[REDACTED]"),
@@ -533,7 +533,7 @@ def models(authorization: str = Header(default=None)) -> Dict[str, Any]:
     require_router_auth(authorization)
     openai_model = os.getenv("OPENAI_MODEL", "gpt-5.6").strip()
     hermes_model = os.getenv("HERMES_MODEL", "hermes").strip()
-    nous_model = os.getenv("NOUS_MODEL", "tencent/hy3:free").strip()
+    nous_model = os.getenv("NOUS_MODEL", "").strip()
     return {
         "object": "list",
         "data": [
