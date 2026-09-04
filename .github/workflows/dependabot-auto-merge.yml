@@ -31,6 +31,24 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
+      # NOTA: remoção do passo "Aprovar PR" em 2026-09-04.
+      # O createReview({event:'APPROVE'}) falhava com 422 "GitHub Actions is not
+      # permitted to approve pull requests" em repositório privado, derrubando o CI.
+      # O auto-merge via GraphQL (próximo passo) não exige review prévio e é
+      # suficiente para a política de patches.
+        if: env.SKIP != '1'
+        uses: actions/github-script@v9
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            await github.rest.pulls.createReview({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+              event: 'APPROVE',
+              body: 'Aprovação automática — atualização do Dependabot dentro da política (sem majors).',
+            });
+
       - name: Detectar stale/conflitado e resolver deterministicamente
         if: env.SKIP != '1'
         id: stale
