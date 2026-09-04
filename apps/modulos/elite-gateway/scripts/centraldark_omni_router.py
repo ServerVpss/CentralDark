@@ -59,6 +59,12 @@ HERMES_MODEL = os.getenv("HERMES_MODEL", "hermes").strip()
 NOUS_INFERENCE_BASE_URL = "https://inference-api.nousresearch.com/v1"
 NOUS_MODEL = os.getenv("NOUS_MODEL", "").strip()
 
+# Google / Gemini (OpenAI-compatible endpoint when available)
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY", "").strip()
+GOOGLE_BASE_URL = os.getenv("GOOGLE_BASE_URL", "https://generativelanguage.googleapis.com/v1beta").rstrip("/")
+GOOGLE_MODEL = os.getenv("GOOGLE_MODEL", "gemini-2.0-flash").strip()
+GOOGLE_TRANSPORT = os.getenv("GOOGLE_TRANSPORT", "openai_compatible").strip().lower()
+
 _REDACTIONS = [
     (re.compile(r"(bearer\s+)[A-Za-z0-9._~+/=-]+", re.I), r"\1[REDACTED]"),
     (re.compile(r"(sk-[A-Za-z0-9_-]{8,})"), "[OPENAI_KEY_REDACTED]"),
@@ -126,7 +132,7 @@ def route_model(model: str) -> Tuple[str, str]:
         if sep in raw:
             prefix, target = raw.split(sep, 1)
             p = prefix.strip().lower()
-            if p in {"openai", "claude", "claude-code", "hermes", "nous"}:
+            if p in {"openai", "claude", "claude-code", "hermes", "nous", "google"}:
                 if p == "claude":
                     p = "claude-code"
                 return p, target.strip()
@@ -500,6 +506,69 @@ def run_nous(messages: List[ChatMessage], target_model: str) -> Tuple[str, str]:
     return text.strip(), model
 
 
+def run_google(messages: List[ChatMessage], target_model: str) -> Tuple[str, str]:
+    google_key = os.getenv("GOOGLE_API_KEY", "").strip()
+    google_base = os.getenv("GOOGLE_BASE_URL", "https://generativelanguage.googleapis.com/v1beta").rstrip("/")
+    google_model = os.getenv("GOOGLE_MODEL", "gemini-2.0-flash").strip()
+    google_transport = os.getenv("GOOGLE_TRANSPORT", "openai_compatible").strip().lower()
+
+    if not google_key:
+        raise HTTPException(status_code=503, detail="GOOGLE_API_KEY_not_configured")
+
+    model = target_model or google_model
+
+    if google_transport == "openai_compatible":
+        endpoint = f"{google_base}/openai/chat/completions"
+        payload = {
+            "model": model,
+            "messages": [
+                {"role": m.role, "content": message_text(m.content)} for m in messages
+            ],
+            "stream": False,
+        }
+        headers = {
+            "Authorization": f"Bearer {google_key}",
+            "Content-Type": "application/json",
+        }
+    else:
+        endpoint = f"{google_base}/models/{model}:generateContent?key={google_key}"
+        payload = {
+            "contents": [
+                {"role": m.role, "parts": [{"text": message_text(m.content)}]} for m in messages
+            ]
+        }
+        headers = {"Content-Type": "application/json"}
+
+    try:
+        response = requests.post(endpoint, headers=headers, json=payload, timeout=REQUEST_TIMEOUT)
+    except requests.RequestException as exc:
+        raise HTTPException(status_code=502, detail=f"google_transport:{sanitize(exc)}") from exc
+
+    if not response.ok:
+        raise HTTPException(
+            status_code=502,
+            detail=f"google_http_{response.status_code}:{sanitize(response.text)}",
+        )
+
+    data = response.json()
+    text = ""
+    if google_transport == "openai_compatible":
+        try:
+            text = data["choices"][0]["message"]["content"]
+        except (KeyError, IndexError, TypeError) as exc:
+            raise HTTPException(status_code=502, detail="google_invalid_response") from exc
+    else:
+        candidates = data.get("candidates") or []
+        if not candidates:
+            raise HTTPException(status_code=502, detail="google_invalid_response")
+        parts = candidates[0].get("content", {}).get("parts") or []
+        text = "\n".join(part.get("text", "") for part in parts if isinstance(part, dict)).strip()
+
+    if not text:
+        raise HTTPException(status_code=502, detail="google_empty_output")
+    return text.strip(), model
+
+
 @app.get("/health")
 def health() -> Dict[str, Any]:
     claude_path = shutil.which(CLAUDE_BIN) or (CLAUDE_BIN if os.path.exists(CLAUDE_BIN) else None)
@@ -518,6 +587,7 @@ def health() -> Dict[str, Any]:
             "claude-code": {"configured": bool(claude_path), "transport": "local_cli"},
             "hermes": {"configured": bool(hermes_url), "transport": "openai_compatible_http"},
             "nous": {"configured": bool(nous_token), "transport": "nous_inference_api"},
+            "google": {"configured": bool(google_key), "transport": google_transport},
         },
         "model_touch_evidence": {
             "configured": bool(telemetry_url and telemetry_secret),
@@ -542,6 +612,7 @@ def models(authorization: str = Header(default=None)) -> Dict[str, Any]:
             {"id": "claude-code", "object": "model", "owned_by": "local-cli"},
             {"id": f"hermes/{hermes_model}", "object": "model", "owned_by": "local-runtime"},
             {"id": f"nous/{nous_model}", "object": "model", "owned_by": "nous-research"},
+            {"id": f"google/{google_model}", "object": "model", "owned_by": "google"},
         ],
     }
 
@@ -569,6 +640,8 @@ def chat(
             text, resolved_model = run_hermes(request.messages, target_model)
         elif provider == "nous":
             text, resolved_model = run_nous(request.messages, target_model)
+        elif provider == "google":
+            text, resolved_model = run_google(request.messages, target_model)
         else:
             raise HTTPException(status_code=400, detail=f"unsupported_engine:{sanitize(provider)}")
     except HTTPException as exc:
@@ -679,6 +752,7 @@ def self_test() -> int:
         "route_openai": route_model("openai/gpt-x") == ("openai", "gpt-x"),
         "route_claude": route_model("claude:opus") == ("claude-code", "opus"),
         "route_nous": route_model("nous/tencent/hy3:free") == ("nous", "tencent/hy3:free"),
+        "route_google": route_model("google/gemini-2.0-flash") == ("google", "gemini-2.0-flash"),
         "redaction": "sekret" not in sanitize("Authorization: ***"),
         "flatten": "[USER]" in flatten_messages([ChatMessage(role="user", content="oi")]),
         "openai_extract": extract_openai_text(

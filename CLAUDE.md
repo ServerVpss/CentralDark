@@ -270,3 +270,5 @@ Nunca expor secrets ou service_role_key em logs/mensagens.
 
 **Última atualização:** 2026-08-31 | **Versão:** Canônica Multi-Agente v1.2.0
 **Aplicável a:** Claude Code, Hermes, CLI, MCP, GitHub Actions, Telegram, WebUI, futuros motores
+docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md
+.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA

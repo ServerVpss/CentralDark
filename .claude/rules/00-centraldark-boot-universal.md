@@ -55,3 +55,5 @@ PADRÃO ÚNICO DE RESOLUÇÃO DE CONFLITO (não criar segundo): `.agents/skills/
 ## Referências canônicas com token
 
 - [ai-universal-entrypoint] `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` — coordenação/Writer unico
+CENTRALDARK_AI_BOOT
+.agents/skills/meta-lupa/SKILL.md

@@ -27,3 +27,4 @@ Notas operacionais:
   https://github.com/ServerVpss/CentralDark/pull/new/feat/coderabbit-bridge
 
 Evidência: todos os arquivos e registros estão em files/ e commits no branch.
+\nPR_CREATED: https://github.com/ServerVpss/CentralDark/pull/1406
