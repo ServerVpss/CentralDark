@@ -21,7 +21,7 @@
     "internal_processing_note": "yellow may exist inside the motor only; it must never be exported as a public PASS"
   },
   "canonical_count": 4,
-  "canonical_root": "docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS",
+  "canonical_root": "docs/BRAIN/08-ARTEFATOS-VISUAIS/01-CARTAZES-CANONICOS",
   "owners": {
     "visual_method": ".agents/skills/visual-design-method/SKILL.md",
     "design_system": "docs/CONSCIENCIA/ARQUITETURA/DESIGN-SISTEMA.md",
