@@ -62,9 +62,7 @@ jobs:
               pull_number: context.payload.pull_request.number,
             });
             const mergeable = pr.data.mergeable;
-            // mergeable === null significa UNKNOWN (GitHub ainda calculando)
             if (mergeable === false) {
-              // PADRÃO CANÔNICO: resolver deterministicamente via script no runner self-hosted
               console.log('::warning::PR conflitado. Resolução determinística via scripts/dependabot/resolve-conflicts.sh.');
               core.exportVariable('RESOLVE_REQUESTED', '1');
             } else if (mergeable === null) {
@@ -74,10 +72,8 @@ jobs:
             }
 
       # Este passo já roda no runner self-hosted declarado pelo job.
-      # A versão anterior aninhava `runs-on:` e `steps:` DENTRO de um step —
-      # chaves de job em contexto de step. O YAML aceitava, o schema do Actions
-      # não: o workflow ficava inválido e o GitHub abria um run falho a cada
-      # push, sem executar job nenhum. O motor nunca disparou por aqui.
+      # A versão anterior aninhava `runs-on:` e `steps:` DENTRO de um step — chaves de job em contexto de step.
+      # O YAML aceitava, o schema do Actions não: o workflow ficava inválido e o GitHub abria um run falho.
       - name: Checkout do SHA exato do evento
         if: env.SKIP != '1' && env.RESOLVE_REQUESTED == '1'
         uses: actions/checkout@v7
