@@ -144,7 +144,7 @@ def self_test():
     temporal_errors = validate_text(bad_temporal)
     eligibility_ok = (
         artifact_eligible("docs/CONSCIENCIA/APRENDIZADOS/novo.md")
-        and artifact_eligible("docs/BRAIN/01-CONCEITOS/Banda/x.md")
+        and artifact_eligible("docs/BRAIN/01-CONCEITOS/02-BANDA/x.md")
         and not artifact_eligible("docs/ARQUITETURA/README.md")
     )
     ok = (
