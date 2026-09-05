@@ -5,6 +5,7 @@ authority: SEGREDO/CHEFE
 skill: .agents/skills/screenpipe-live-observer/SKILL.md
 megazord: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MEGAZORD-CENTRALDARK.yml
 handoff_owner: docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md
+pegatudo_reference: .agents/skills/distinct-engineering-compiler/references/pegatudo-cross-surface.md
 
 runtime:
   auto_discover: true
@@ -12,6 +13,9 @@ runtime:
   daemon_api_default: "http://localhost:3030"
   mcp_http_default: "http://localhost:3031/mcp"
   availability_requires: [HEALTH_OK, RECENT_DATA_PRESENT, TARGET_QUERY_RETURNS_USABLE_EVIDENCE]
+  create_parallel_port: false
+  create_second_api: false
+  unavailable_does_not_block_independent_fronts: true
 
 consumers:
   any_authorized_centraldark_actor:
@@ -39,6 +43,18 @@ capabilities:
   - SCREENPIPE_MEETING_CONTEXT
   - SCREENPIPE_AUTOMATION_TARGETING_CONTEXT
   - SCREENPIPE_VIDEO_EXPORT
+
+cross_surface_fronts:
+  - CHATGPT
+  - GITHUB_COPILOT
+  - HERMES
+  - BROWSER
+  - IDE
+  - TERMINAL
+  - OBSIDIAN
+  - KANBAN_TASKS
+  - GITHUB
+  - MCP_HUB
 
 local_artifact_classes:
   chats:
@@ -74,6 +90,20 @@ observation_pipeline:
   - CROSSCHECK_ORIGINAL_LOG_RUNTIME_FILE_WHEN_CAUSALITY_IS_MATERIAL
   - RETURN_EVIDENCE_TO_CALLER
 
+reanchor_visual_snapshot:
+  enabled: true
+  triggers: [ACORDAR, CALIBRAR, REANCHOR]
+  health_first: true
+  query_terms_source: ACTIVE_MISSION_AND_CURRENT_GAPS
+  prefer_activity_summary_or_keyword_search: true
+  prefer_accessibility_before_ocr: true
+  latest_frame_only_when_needed: true
+  output: VISUAL_DELTA
+  feed_caracol_as_metadata_only: true
+  visual_proximity_creates_semantic_edge: false
+  crosscheck_git_runtime_original_file_when_material: true
+  no_new_information: DROP_DUPLICATE
+
 handoff:
   create_new_protocol: false
   transport_claim_requires_proven_channel: true
@@ -101,8 +131,27 @@ loop:
   same_observation_without_new_information: DROP_DUPLICATE
   new_material_delta: ROUTE_TO_CALLER
   stale_frame_for_live_claim: REQUERY
-  screenpipe_failure_with_other_sensor_available: FALLBACK_TO_OTHER_SENSOR
+  screenpipe_failure_with_other_sensor_available: FALLBACK_TO_OTHER_EXISTING_SENSOR
   no_sensor_can_discriminate_required_fact: UNKNOWN
+  tool_or_api_down_means_whole_house_down: false
+  alternate_route_requires_capability_proof: true
+
+browser_session_context:
+  authenticated_session_can_be_context_source: true
+  session_is_not_authority: true
+  extract_cookies: false
+  extract_auth_tokens: false
+  extract_private_state_tokens: false
+  extract_session_storage_secrets: false
+  extract_local_storage_secrets: false
+  extract_extension_storage_secrets: false
+  commit_browser_secret_state: false
+
+browser_policy:
+  csp_report_only_event_is_observation: true
+  csp_report_only_event_is_functional_failure: false
+  router_warning_is_router_failure: false
+  promote_root_cause_only_after_same_target_discriminating_evidence: true
 
 security:
   raw_capture_is_sensitive: true
@@ -111,6 +160,8 @@ security:
   do_not_commit_local_logs_by_default: true
   do_not_include_sensitive_material_in_handoff: true
   local_capture_does_not_grant_mutation_authority: true
+  do_not_expose_screenpipe_api_key: true
+  do_not_persist_browser_auth_state: true
 
 fixed_point:
   scope: SCREENPIPE_OBSERVATION_ONLY
@@ -120,3 +171,4 @@ fixed_point:
     - REQUIRED_SCREEN_FACTS_CLASSIFIED
     - DUPLICATE_OBSERVATIONS_COLLAPSED
     - MATERIAL_UNKNOWN_FROM_SCREENPIPE_ZERO
+  recommendation_count_is_not_fixed_point: true
