@@ -151,13 +151,42 @@ micro_deploy:
   receipt_required: true
   receipt_chain: [SOURCE_SHA, ARTIFACT, DEPLOY_SCOPE, RUNTIME, NEXT_CURSOR]
 
+realtime_feedback:
+  role: LIVE_MISSION_FEEDBACK_SIGNAL
+  activation: WITH_ACTIVE_MISSION
+  persistent_per_mission: true
+  user_repetition_required: false
+  accepted_sources: [CHEFE_MESSAGE, SCREENSHOT, LOG, TERMINAL_OUTPUT, PR_STATE, COMMIT_STATE, CI_STATE, RUNTIME_OBSERVATION, TOOL_RESULT]
+  command_and_feedback_are_independent: true
+  feedback_is_authority: false
+  feedback_is_mutation_permission: false
+  evidence_scope_must_be_preserved: true
+  raw_evidence_ref_required_when_material: true
+  route_material_signal_to: PERSISTENT_GAP_SWEEP
+  process:
+    - INGEST_FEEDBACK
+    - CLASSIFY_SIGNAL_SCOPE
+    - COMPARE_LAST_PROVEN_STATE
+    - DEDUPE_SAME_SIGNAL
+    - REOPEN_AFFECTED_CONE_ONLY
+    - META_LUPA
+    - RECONCILE_CURRENT_REALITY
+    - CONTINUE_PERSISTENT_GAP_SWEEP
+  no_information_gain: REUSE_PROOF_OR_DROP_DUPLICATE
+  already_proven_without_reopen_cause: REUSE_PROOF
+  new_failure: OPEN_CAUSAL_CONE
+  repeated_failure_same_signature: REUSE_CRYSTAL_NOT_RETHINK
+  learning_output: [REFUTED_MINERAL, UNRESOLVED_MINERAL, CRYSTAL_GOLD]
+  silent_discard: FORBIDDEN
+  next_cursor_required: true
+
 persistent_gap_sweep:
   role: AUTONOMOUS_SELF_HEALING_ZORD
   activation: WITH_MEGAZORD
   persistent_per_mission: true
   user_repetition_required: false
   inherit_current_configuration: true
-  scan_surfaces: [PR, COMMIT, CI, DEPENDABOT, WORKFLOW, JOB, RUNNER, TOOL_ERROR, TEST_FAILURE, RUNTIME_DRIFT, CAPABILITY_GAP, OPEN_RESIDUAL]
+  scan_surfaces: [REALTIME_FEEDBACK, PR, COMMIT, CI, DEPENDABOT, WORKFLOW, JOB, RUNNER, TOOL_ERROR, TEST_FAILURE, RUNTIME_DRIFT, CAPABILITY_GAP, OPEN_RESIDUAL]
   process:
     - MEASURE_CURRENT_STATE
     - CLASSIFY_FAILURE_SIGNATURE
