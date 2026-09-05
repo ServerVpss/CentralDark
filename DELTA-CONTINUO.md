@@ -11,10 +11,9 @@
 
 | Campo | Valor |
 |---|---|
-| HEAD_LOCAL | `400afde4d` |
+| HEAD_LOCAL | `1550280c0` |
 | REMOTO_MAIN | `4ee1c2d9b` |
-| BEHIND/AHEAD | 100 behind / 6 ahead |
-| BRANCH_ATUAL | `release/local-owner-test-20260905` |
+| BRANCH | `release/local-owner-test-20260905` |
 | PR_1416 | OPEN (segredounlock) |
 | PR_1414 | OPEN (segredounlock) |
 | PR_1415 | OPEN (dependabot) |
@@ -25,8 +24,7 @@
 ### PR #1416 — CANDIDATO ÚNICO PARA TESTE LOCAL DO DONO
 - **Autor:** SEGREDO/CHEFE (segredounlock)
 - **Branch:** `release/local-owner-test-20260905`
-- **HEAD:** `400afde4d`
-- **Merge-base com main:** `a9382b439`
+- **HEAD:** `1550280c0` (após reset --hard ao remoto)
 - **Delta:** 5 files, 194 insertions, 130 deletions
 - **Arquivos modificados:**
   - `.github/dependabot.yml`
@@ -40,27 +38,20 @@
 - Workflow `Autonomia — promoção segura` falha em `main` HEAD
 - Workflow `porta-de-entrada` falha em `main` HEAD
 - **CLASSIFICAÇÃO:** BASE FAILURE — NÃO DELTA FAILURE
-- Prova: PR #1382 (DELTA-CONTINUO) já foi mergeado via squash
-- O vermelho é da base, não do delta do PR #1416
 - **AÇÃO:** Não bloquear PR #1416 por CI vermelho de base
 
 ### WORKTREES
 - 4 worktrees com `locked initializing` (resíduo)
-- `worktrees/pr1393-porta-tokens` DELETADO (branch removida)
-- Worktrees restantes necessários para outros agents
-
-### LIXO LIMPO
-- `apps/modulos/elite-gateway/test-local/logs/` removido
-- `worktrees/pr1393-porta-tokens` removido
+- `worktrees/pr1393-porta-tokens` DELETADO
 
 ---
 
 ## NEXT_CURSOR
 
-1. **FIXED POINT:** Aguardar merge do PR #1416 + CI green on main
-2. **DELTA-CONTINUO.md:** Criado como owner canônico — `!CENTRALDARK SHARED`
-3. **WORKTREES LOCKED:** Investigar remoção forçada dos 4 residual
-4. **CI BASE:** Reportar ao CHEFE — 2 workflows falham na base main, não em delta
+1. **FIXED POINT:** Aguardar CI green no PR #1416 + squash merge
+2. **DELTA-CONTINUO.md:** Recriado como owner canônico
+3. **CI BASE:** Reportar ao CHEFE — 2 workflows falham na base main
+4. **WORKTREES LOCKED:** Investigar remoção forçada dos 4 residual
 
 ---
 
@@ -68,9 +59,9 @@
 
 ```text
 MISSION_ID=SHARED_RECONCILIAR_20260905
-TIMESTAMP=2026-09-05T18:30:00Z
+TIMESTAMP=2026-09-05T18:50:00Z
 WRITER=PRIMARY_1416
-HEAD=400afde4d
+HEAD=1550280c0
 MAIN=4ee1c2d9b
 DELTA=PR#1416 (5 files, 194+/-130)
 CI_BASE_FAILURES=2 (Autonomia+painel)
