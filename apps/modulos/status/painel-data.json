@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-09-04T10:36:52.057Z",
-  "updatedAtBR": "04/09/2026, 07:36:52 BRT",
+  "updatedAt": "2026-09-05T08:18:23.283Z",
+  "updatedAtBR": "05/09/2026, 05:18:23 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "chore(deps): bump fast-uri from 3.1.5 to 3.1.7 in /apps/modulos/mcp in the npm_and_yarn group across 1 directory (#1397)",
+    "lastCommit": "🧠 SOUL REANCHOR + CARACOL RECONCILED (absorbed into graph-panel + spiral_traversal) (#1413)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-09-05T08:18:23.283Z",
+      "titulo": "Push na main · 05340cece49d3c6e34cbff8739676f72aa13df05",
+      "detalhe": "🧠 SOUL REANCHOR + CARACOL RECONCILED (absorbed into graph-panel + spiral_traversal) (#1413)",
+      "area": "Repositório",
+      "sha": "05340ce",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-09-04T10:36:52.057Z",
       "titulo": "Push na main · 450b59a9b00466f8609d5b2865fb79a4176695c0",
       "detalhe": "chore(deps): bump fast-uri from 3.1.5 to 3.1.7 in /apps/modulos/mcp in the npm_and_yarn group across 1 directory (#1397)",
@@ -988,14 +996,6 @@
       "detalhe": "fix(ci): Lupa Drift Guard permite alias de compatibilidade (fecha #1188) (#1231)",
       "area": "Repositório",
       "sha": "4abd4f3",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-27T16:33:21.864Z",
-      "titulo": "Push na main · d1b281dd724b77e087bce0194dcdcec3ecd1a4c4",
-      "detalhe": "docs(skills): diagramas extras Mermaid (squash-loop + garimpo) usando ambas as skills (#1221)",
-      "area": "Repositório",
-      "sha": "d1b281d",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-09-05T08:18:23.283Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 05340cece49d3c6e34cbff8739676f72aa13df05 (05340ce)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-09-04T10:36:52.057Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 450b59a9b00466f8609d5b2865fb79a4176695c0 (450b59a)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-27T16:46:26.173Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 4abd4f3c527c9aaaeb3112ce71936e8717a3391b (4abd4f3)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-27T16:33:21.864Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · d1b281dd724b77e087bce0194dcdcec3ecd1a4c4 (d1b281d)",
       "area": "Repositório",
       "status": "sucesso"
     }
