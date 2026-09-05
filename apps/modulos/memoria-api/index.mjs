@@ -1,8 +1,6 @@
 // CentralDark — Memória API
-// Servidor HTTP simples que expõe a memória viva (docs/) para consumidores autorizados.
-// Rotas: GET /openapi.json, GET /listar, GET /ler, POST /buscar, POST /ingest.
-// Whitelist absoluta em /root/CentralDark/docs/ — bloqueia path traversal.
-// /ingest recebe matéria como CANDIDATE; nunca escreve diretamente na main.
+// Leitura da memória viva + ingestão autenticada de matéria CANDIDATE.
+// RANDOLF/session/profile são proveniência; nunca autoridade nem promoção direta.
 
 import http from 'node:http';
 import { appendFile, mkdir, readFile, readdir, stat } from 'node:fs/promises';
@@ -12,7 +10,7 @@ import path from 'node:path';
 const PORT = Number(process.env.PORT || 3101);
 const RAIZ = path.resolve('/root/CentralDark/docs');
 const INGEST_DIR = path.join(RAIZ, 'BRAIN', '09-INGESTAO');
-const MAX_BYTES = 200 * 1024; // 200 KB máx. por arquivo lido
+const MAX_BYTES = 200 * 1024;
 const MAX_INGEST_BYTES = 256 * 1024;
 const MAX_EVENT_TEXT = 64 * 1024;
 
@@ -30,12 +28,9 @@ function jsonResp(res, code, body) {
   res.end(s);
 }
 
-// Whitelist: resolve o path e confirma que está DENTRO da raiz.
 function pathSeguro(rel) {
   const abs = path.resolve(RAIZ, rel || '.');
-  if (!abs.startsWith(RAIZ + path.sep) && abs !== RAIZ) {
-    return null;
-  }
+  if (!abs.startsWith(RAIZ + path.sep) && abs !== RAIZ) return null;
   return abs;
 }
 
@@ -66,12 +61,13 @@ async function lerArquivo(rel) {
   if (!abs) throw new Error('path_bloqueado');
   const s = await stat(abs);
   if (!s.isFile()) throw new Error('nao_e_arquivo');
-  if (s.size > MAX_BYTES) {
-    const buf = await readFile(abs, { encoding: 'utf8' });
-    return { path: rel, bytes: s.size, truncado: true, conteudo: buf.slice(0, MAX_BYTES) };
-  }
   const buf = await readFile(abs, 'utf8');
-  return { path: rel, bytes: s.size, truncado: false, conteudo: buf };
+  return {
+    path: rel,
+    bytes: s.size,
+    truncado: s.size > MAX_BYTES,
+    conteudo: s.size > MAX_BYTES ? buf.slice(0, MAX_BYTES) : buf,
+  };
 }
 
 async function buscar(query, maxResultados = 20) {
@@ -81,23 +77,20 @@ async function buscar(query, maxResultados = 20) {
   async function varrer(rel) {
     const abs = pathSeguro(rel);
     if (!abs) return;
-    const itens = await readdir(abs, { withFileTypes: true });
-    for (const it of itens) {
+    for (const it of await readdir(abs, { withFileTypes: true })) {
       if (it.name.startsWith('.')) continue;
       const p = path.join(rel, it.name);
       const full = path.join(abs, it.name);
       if (it.isDirectory()) {
         await varrer(p);
-      } else if (it.name.match(/\.(md|txt|json|jsonl)$/i)) {
+      } else if (/\.(md|txt|json|jsonl)$/i.test(it.name)) {
         try {
           const s = await stat(full);
           if (s.size > MAX_BYTES) continue;
           const buf = await readFile(full, 'utf8');
-          const lower = buf.toLowerCase();
-          const idx = lower.indexOf(q);
+          const idx = buf.toLowerCase().indexOf(q);
           if (idx >= 0) {
-            const trecho = buf.slice(Math.max(0, idx - 80), idx + 180);
-            resultados.push({ path: p, trecho });
+            resultados.push({ path: p, trecho: buf.slice(Math.max(0, idx - 80), idx + 180) });
             if (resultados.length >= maxResultados) return;
           }
         } catch {}
@@ -169,6 +162,7 @@ function metadataSegura(metadata) {
     'branch', 'head_sha', 'pr', 'event', 'provider', 'model', 'status',
     'tags', 'source_ref', 'plugin_version', 'file_mtime', 'file_size',
     'vault', 'workspace', 'runtime', 'component', 'owner',
+    'source_surface', 'session_id', 'profile_id', 'profile_display', 'next_cursor',
   ]);
   const out = {};
   for (const [key, value] of Object.entries(metadata)) {
@@ -186,6 +180,17 @@ function detectarCodificacaoSuspeita(text) {
   return /\uFFFD|Ã.|Â.|â(?:€|€™|€œ|€|€“|€”)/u.test(String(text || ''));
 }
 
+function contextoContinuidade(body) {
+  return {
+    source_surface: normalizarIdentificador(body.source_surface, '', 128) || undefined,
+    session_id: normalizarIdentificador(body.session_id, '', 160) || undefined,
+    profile_id: normalizarIdentificador(body.profile_id, '', 128) || undefined,
+    profile_display: normalizarTexto(body.profile_display, 256) || undefined,
+    head_sha: normalizarIdentificador(body.head_sha, '', 128) || undefined,
+    next_cursor: normalizarTexto(body.next_cursor, 512) || undefined,
+  };
+}
+
 async function ingerirEvento(body, raw) {
   const source = normalizarIdentificador(body.source, 'unknown');
   const kind = normalizarIdentificador(body.kind, 'material.ingest');
@@ -196,9 +201,14 @@ async function ingerirEvento(body, raw) {
   const intentGoal = normalizarTexto(body.intent_goal ?? body.intent, 2048);
   const owner = normalizarTexto(body.owner, 512);
   const provenance = normalizarTexto(body.provenance, 4096);
+  const continuity = contextoContinuidade(body);
+  const metadata = metadataSegura({ ...(body.metadata ?? {}), ...continuity });
   const rawChecksum = sha256(raw);
   const observedAt = new Date().toISOString();
-  const stableBasis = JSON.stringify({ source, kind, title, text, path: eventPath, url, intentGoal, owner, provenance });
+  const stableBasis = JSON.stringify({
+    source, kind, title, text, path: eventPath, url, intentGoal, owner, provenance,
+    ...continuity,
+  });
   const contentChecksum = sha256(stableBasis);
   const eventId = normalizarIdentificador(body.event_id, `evt-${contentChecksum.slice(0, 24)}`, 128);
 
@@ -217,7 +227,8 @@ async function ingerirEvento(body, raw) {
     intent_goal: intentGoal || undefined,
     owner: owner || undefined,
     provenance: provenance || undefined,
-    metadata: metadataSegura(body.metadata),
+    ...continuity,
+    metadata,
     raw_checksum: rawChecksum,
     content_checksum: contentChecksum,
     encoding_suspect: detectarCodificacaoSuspeita(body.text ?? body.content ?? ''),
@@ -234,6 +245,13 @@ async function ingerirEvento(body, raw) {
     event_id: eventId,
     status: 'CANDIDATE',
     canonical: false,
+    context_preserved: true,
+    source_surface: envelope.source_surface,
+    session_id: envelope.session_id,
+    profile_id: envelope.profile_id,
+    profile_display: envelope.profile_display,
+    head_sha: envelope.head_sha,
+    next_cursor: envelope.next_cursor,
     raw_checksum: rawChecksum,
     content_checksum: contentChecksum,
     encoding_suspect: envelope.encoding_suspect,
@@ -247,35 +265,28 @@ const OPENAPI = {
   info: {
     title: 'CentralDark Memória API',
     description: 'Leitura da memória viva e ingestão autenticada de matéria candidata para o Hub único de conhecimento.',
-    version: '1.1.0',
+    version: '1.2.0',
   },
   servers: [{ url: 'https://api.centralldark.com/memoria' }],
-  components: {
-    securitySchemes: {
-      bearerAuth: { type: 'http', scheme: 'bearer' },
-    },
-  },
+  components: { securitySchemes: { bearerAuth: { type: 'http', scheme: 'bearer' } } },
   paths: {
     '/listar': {
       get: {
-        operationId: 'listar',
-        summary: 'Lista arquivos e pastas dentro da memória',
-        parameters: [{ name: 'path', in: 'query', schema: { type: 'string' }, description: 'Caminho relativo (opcional)' }],
+        operationId: 'listar', summary: 'Lista arquivos e pastas dentro da memória',
+        parameters: [{ name: 'path', in: 'query', schema: { type: 'string' } }],
         responses: { 200: { description: 'OK' } },
       },
     },
     '/ler': {
       get: {
-        operationId: 'ler',
-        summary: 'Lê o conteúdo de um arquivo da memória',
+        operationId: 'ler', summary: 'Lê o conteúdo de um arquivo da memória',
         parameters: [{ name: 'path', in: 'query', required: true, schema: { type: 'string' } }],
         responses: { 200: { description: 'OK' } },
       },
     },
     '/buscar': {
       post: {
-        operationId: 'buscar',
-        summary: 'Busca por texto dentro da memória',
+        operationId: 'buscar', summary: 'Busca por texto dentro da memória',
         requestBody: {
           required: true,
           content: { 'application/json': { schema: { type: 'object', properties: { query: { type: 'string' } }, required: ['query'] } } },
@@ -286,7 +297,7 @@ const OPENAPI = {
     '/ingest': {
       post: {
         operationId: 'ingerirMaterial',
-        summary: 'Recebe evento/material como CANDIDATE no Hub de conhecimento; não promove diretamente para main',
+        summary: 'Recebe evento/material como CANDIDATE; preserva contexto RANDOLF sem torná-lo autoridade',
         security: [{ bearerAuth: [] }],
         requestBody: {
           required: true,
@@ -296,15 +307,11 @@ const OPENAPI = {
                 type: 'object',
                 required: ['source', 'kind'],
                 properties: {
-                  source: { type: 'string' },
-                  kind: { type: 'string' },
-                  title: { type: 'string' },
-                  text: { type: 'string' },
-                  path: { type: 'string' },
-                  url: { type: 'string' },
-                  intent_goal: { type: 'string' },
-                  owner: { type: 'string' },
-                  provenance: { type: 'string' },
+                  source: { type: 'string' }, kind: { type: 'string' }, title: { type: 'string' },
+                  text: { type: 'string' }, path: { type: 'string' }, url: { type: 'string' },
+                  intent_goal: { type: 'string' }, owner: { type: 'string' }, provenance: { type: 'string' },
+                  source_surface: { type: 'string' }, session_id: { type: 'string' }, profile_id: { type: 'string' },
+                  profile_display: { type: 'string' }, head_sha: { type: 'string' }, next_cursor: { type: 'string' },
                   metadata: { type: 'object' },
                 },
               },
@@ -325,7 +332,6 @@ const server = http.createServer(async (req, res) => {
   try {
     if (req.method === 'OPTIONS') return jsonResp(res, 204, {});
     const url = new URL(req.url, `http://localhost:${PORT}`);
-    // Remove prefixo /memoria (Caddy pode ou não repassar).
     const rota = url.pathname.replace(/^\/memoria/, '') || '/';
 
     if (rota === '/openapi.json') return jsonResp(res, 200, OPENAPI);
@@ -337,29 +343,24 @@ const server = http.createServer(async (req, res) => {
           enabled: Boolean(String(process.env.MEMORIA_INGEST_TOKEN || '').trim()),
           route: '/ingest',
           canonical_write: false,
+          continuity_context_preserved: true,
         },
       });
     }
 
     if (rota === '/listar' && req.method === 'GET') {
       const p = url.searchParams.get('path') || '';
-      const itens = await listarDir(p);
-      return jsonResp(res, 200, { path: p, itens });
+      return jsonResp(res, 200, { path: p, itens: await listarDir(p) });
     }
-
     if (rota === '/ler' && req.method === 'GET') {
       const p = url.searchParams.get('path');
       if (!p) return jsonResp(res, 400, { error: 'parâmetro path obrigatório' });
-      const data = await lerArquivo(p);
-      return jsonResp(res, 200, data);
+      return jsonResp(res, 200, await lerArquivo(p));
     }
-
     if (rota === '/buscar' && req.method === 'POST') {
       const { body } = await lerJsonBody(req);
-      const r = await buscar(body.query, body.max || 20);
-      return jsonResp(res, 200, { query: body.query, resultados: r });
+      return jsonResp(res, 200, { query: body.query, resultados: await buscar(body.query, body.max || 20) });
     }
-
     if (rota === '/ingest' && req.method === 'POST') {
       const auth = autorizarIngest(req);
       if (!auth.ok) {
@@ -367,13 +368,9 @@ const server = http.createServer(async (req, res) => {
         return jsonResp(res, code, { error: auth.reason, canonical_write: false });
       }
       const { body, raw } = await lerJsonBody(req);
-      if (!body.source || !body.kind) {
-        return jsonResp(res, 400, { error: 'source e kind são obrigatórios' });
-      }
-      const receipt = await ingerirEvento(body, raw);
-      return jsonResp(res, 202, receipt);
+      if (!body.source || !body.kind) return jsonResp(res, 400, { error: 'source e kind são obrigatórios' });
+      return jsonResp(res, 202, await ingerirEvento(body, raw));
     }
-
     return jsonResp(res, 404, { error: 'rota não encontrada', rota });
   } catch (e) {
     const msg = String(e.message || e);

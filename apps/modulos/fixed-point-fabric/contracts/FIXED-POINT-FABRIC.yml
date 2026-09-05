@@ -7,8 +7,6 @@ extends:
   - docs/ARQUITETURA/PROOF-ARCHITECTURE/FIXED_POINT_PR.yml
 activation:
   sequence: ["!CENTRALDARK", "#ACORDAR", "!CALIBRAR", "RECONCILIAR", "CONTRAPROVAR", "FIXED_POINT"]
-<<<<<<< HEAD
-=======
 method_bindings:
   fable_loop:
     owner: .agents/skills/fable-loop/SKILL.md
@@ -26,14 +24,11 @@ method_bindings:
   metacognicao:
     owner: docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md
     role: BELIEF_DELTA_AND_METHOD_REVIEW
->>>>>>> origin/feat/fixed-point-fabric-proof-20260831
 authority:
   source_of_truth: github_main
   sensor_only: screenpipe
   runtime_planes: [casa, vps]
   one_writer_per_scope: true
-<<<<<<< HEAD
-=======
 surface_convergence:
   canonical_public_origin: https://centralldark.com
   one_public_origin: true
@@ -106,7 +101,6 @@ surface_convergence:
     - unauthorized_admin_denied
     - legacy_consumer_inventory_complete
     - no_material_regression
->>>>>>> origin/feat/fixed-point-fabric-proof-20260831
 state_library:
   github_webhook:
     signature: hmac_sha256
@@ -120,19 +114,6 @@ state_library:
     tamper_evident: true
     fail_closed: true
     absolute_admin_immutability_claim: false
-<<<<<<< HEAD
-fixed_point:
-  requires:
-    - same_candidate_head
-    - local_pass
-    - vps_pass
-    - github_pass
-    - screenpipe_recent_data_pass
-    - no_unknown_blocked_or_stale
-    - two_equal_material_samples
-    - hash_chain_valid
-    - counterproof_pass
-=======
   randolf_meta_delta:
     human_alias: RANDOLF
     role: PR_LEDGER_BRIDGE
@@ -400,18 +381,11 @@ fixed_point:
     - hash_chain_valid
     - counterproof_pass
     - cognitive_debt_closed_for_material_decisions
->>>>>>> origin/feat/fixed-point-fabric-proof-20260831
   forbids:
     - unknown_to_pass
     - screenshot_as_global_truth
     - direct_secret_persistence
     - direct_main_write_without_receipt
-<<<<<<< HEAD
-promotion:
-  max_open_prs_to_main: 1
-  tracker_reference_keyword: Refs
-  tracker_close_keyword_forbidden: Closes
-=======
     - unaffected_scope_forced_to_fake_pass
 baseline_guard:
   consolidated_state: READ_ONLY
@@ -426,4 +400,3 @@ promotion:
   max_open_prs_to_main: 1
   tracker_reference_keyword: Refs
   tracker_close_keyword_forbidden: Closes
->>>>>>> origin/feat/fixed-point-fabric-proof-20260831

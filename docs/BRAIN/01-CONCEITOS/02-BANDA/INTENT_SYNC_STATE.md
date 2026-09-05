@@ -1,8 +1,8 @@
 ---
 title: "Intent Sync State — Intenção Única entre Superfícies"
 status: "CONCEPT_HISTORICAL_REQUIRES_LIVE_REMEASUREMENT"
-owner: "docs/BRAIN/01-CONCEITOS/Banda/"
-updated: 2026-08-26
+owner: "docs/BRAIN/01-CONCEITOS/02-BANDA/"
+updated: 2026-09-05
 truth_scope: "CONCEPTUAL_NOT_CROSS_CHAT_TRANSPORT_PROOF"
 tags:
   - banda

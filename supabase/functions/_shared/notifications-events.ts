@@ -1,11 +1,6 @@
 // Helper compartilhado entre edge functions para notificações com catálogo,
 // agrupamento (debounce) e fallback. Runtime: Deno.
-//
-// Uso:
-//   import { notify, registerEvent } from "../_shared/notifications-events.ts";
-//
-//   await registerEvent({ event_key: "vps.deploy.ok", category: "deploy", severity_default: "sucesso" });
-//   await notify({ event_key: "vps.deploy.ok", title: "Deploy concluído", body: "main -> VPS" });
+// Toda notificação é projeção do estado; não é autoridade nem prova por si só.
 
 import { createClient } from "jsr:@supabase/supabase-js@2";
 
@@ -19,26 +14,35 @@ export interface EventDefinition {
   body_template?: string;
 }
 
+export interface CentralContext {
+  ia?: string;
+  recurso?: string;
+  acao?: string;
+  status?: string;
+  source_surface?: string;
+  session_id?: string;
+  profile_id?: string;
+  profile_display?: string;
+  intent_goal?: string;
+  owner?: string;
+  head_sha?: string;
+  knowledge_event_id?: string;
+  next_cursor?: string;
+  runtime?: string;
+}
+
 export interface NotifyInput {
   event_key: string;
   severity?: Severity;
   title?: string;
   body?: string;
   link?: string;
-  payload?: Record<string, unknown> & {
-    ia?: string;
-    recurso?: string;
-    acao?: string;
-    status?: string;
-  };
+  payload?: Record<string, unknown> & CentralContext;
   group_key?: string;
   debounce_seconds?: number;
 }
 
-// Canal CentralDark — Status (também replica para Monitoramento via Telegram nativo)
 const STATUS_CHAT_ID = -1003669176367;
-
-// Cache em memória do catálogo (60s)
 const eventCache = new Map<string, { row: EventDefinition; expires: number }>();
 const CACHE_TTL_MS = 60_000;
 
@@ -56,15 +60,26 @@ function nowSP(): string {
   return new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
 }
 
+function short(value: unknown, fallback = "-"): string {
+  const s = String(value ?? "").trim();
+  return (s || fallback).slice(0, 500);
+}
+
 function buildBody(input: NotifyInput): string {
   const p = input.payload ?? {};
   return [
-    `🤖 IA: ${p.ia ?? "-"}`,
-    `📁 Recurso: ${p.recurso ?? "-"}`,
-    `⚙️ Ação: ${p.acao ?? "-"}`,
-    `✅ Status: ${p.status ?? "-"}`,
+    `🤖 IA: ${short(p.ia)}`,
+    `🌐 Superfície: ${short(p.source_surface)}`,
+    `😎 Perfil: ${short(p.profile_display ?? p.profile_id)}`,
+    `🧵 Sessão: ${short(p.session_id)}`,
+    `🎯 Intenção/GOAL: ${short(p.intent_goal)}`,
+    `📁 Recurso: ${short(p.recurso)}`,
+    `⚙️ Ação: ${short(p.acao)}`,
+    `✅ Status: ${short(p.status)}`,
+    `🧭 Próximo cursor: ${short(p.next_cursor)}`,
+    `🧠 Evento Hub: ${short(p.knowledge_event_id)}`,
     `🕒 Quando: ${nowSP()}`,
-    `📝 Detalhe: ${input.body ?? "-"}`,
+    `📝 Detalhe: ${short(input.body)}`,
   ].join("\n");
 }
 
@@ -134,8 +149,6 @@ export async function notify(input: NotifyInput): Promise<void> {
     const mensagem = buildBody(input);
     const sb = getServiceClient();
 
-    // Agrupamento por debounce: se já houve evento com mesmo group_key
-    // dentro da janela, só incrementa o contador e sai.
     if (input.group_key && input.debounce_seconds && input.debounce_seconds > 0) {
       const since = new Date(Date.now() - input.debounce_seconds * 1000).toISOString();
       const { data: recent } = await sb
@@ -155,7 +168,6 @@ export async function notify(input: NotifyInput): Promise<void> {
       }
     }
 
-    // Insere log centralizado
     await sb.from("notifications_log").insert({
       origem: "central",
       tipo: severity,
@@ -167,7 +179,6 @@ export async function notify(input: NotifyInput): Promise<void> {
       group_key: input.group_key ?? null,
     });
 
-    // Dispara notify-telegram fire-and-forget
     const url = `${getEnv("HUB_SUPABASE_URL")}/functions/v1/notify-telegram`;
     const notifyKey = Deno.env.get("NOTIFY_API_KEY") ?? "";
     const resp = await fetch(url, {
@@ -187,7 +198,6 @@ export async function notify(input: NotifyInput): Promise<void> {
     });
 
     if (!resp.ok) {
-      // Fallback: registra em audit_logs e tenta gateway direto
       await sb.from("audit_logs").insert({
         action: "notify_fallback",
         entity_type: "notification",

@@ -2,8 +2,8 @@
 title: "Regenerative Self-Refinement Engine — 17 Respirações Integradas"
 status: "OPERATIONAL_REFERENCE"
 owner: ".agents/skills/centraldark-operational-method/SKILL.md"
-machine_contract: "docs/BRAIN/01-CONCEITOS/Banda/BANDA_COMPASSO_GLOBAL.json"
-updated: 2026-08-31
+machine_contract: "docs/BRAIN/01-CONCEITOS/02-BANDA/BANDA_COMPASSO_GLOBAL.json"
+updated: 2026-09-05
 ---
 
 # 17 Respirações integradas à Banda CentralDark
@@ -48,13 +48,29 @@ Cada nota material usa o contrato:
 
 ```text
 BREATH
+→ META_LUPA_FRIA
+→ CLAIM_SEAL_PREFLIGHT
 → VERSE
 → TRIGGER
 → ACTION
 → OBSERVATION
+→ AUTOLUPA
 → EVIDENCE
 → VERDICT
+→ COUNTERPROOF
 → NEXT_BREATH
+```
+
+Se houver contradição, a temperatura sobe para `META_LUPA_MEDIA`. Antes de promoção, consolidação, merge, runtime crítico ou selo definitivo, sobe para `META_LUPA_QUENTE`.
+
+```text
+NON_TEMPORAL_CLAIM=SEALED
++ SAME_TARGET
++ NO_REOPEN_CAUSE
+→ NOTA_REPETIDA=DROP_DUPLICATE
+
+TEMPORAL_CLAIM=HISTORICAL_SEAL
+→ REMEASURE_CURRENT
 ```
 
 ## Rastro do Trovão
@@ -84,10 +100,13 @@ Regras:
 NO_NEW_EVENT_BUS=true
 REUSE_AGENT_CALL_TRAIL=true
 SAME_EVENT_ID=DEDUPE
+SAME_PROVED_NON_TEMPORAL_CLAIM=DEDUPE
 STALE_HEAD=BLOCK
 ROUTE_DRIFT=BLOCK
 UNKNOWN!=PASS
 ONE_WRITER_PER_SCOPE=true
+REOPEN_REQUIRES_CAUSE_REF=true
+META_LUPA_FOLLOWS_MATERIAL_TRAJECTORY=true
 ```
 
 O envelope máquina deve permanecer parseável. Falha técnica não é engolida:
@@ -103,13 +122,17 @@ O envelope máquina deve permanecer parseável. Falha técnica não é engolida:
 }
 ```
 
-## Biblioteca, aprendizado e grafo
+## Biblioteca, aprendizado, lacres e grafo
 
 ```text
 BANDA_COMPASSO_GLOBAL.json
         ↓ partitura fixa
+META_LUPA
+        ↓ falsifica / AutoLupa
+CLAIM_SEALS
+        ↓ prova preservada
 GraphRAG-Master
-        ↔ memória dinâmica
+        ↔ memória dinâmica + Agent Library
 APRENDIZADOS.md
         ↓ cristalização
 grafo vivo (DERIVED_NOT_AUTHORITY)
@@ -118,6 +141,53 @@ grafo vivo (DERIVED_NOT_AUTHORITY)
 O GraphRAG deve validar a partitura sem depender de busca semântica. O grafo apenas projeta as
 ligações e nunca vira autoridade.
 
+## CARACOL / VERTEX — regeneração sem apagar ouro
+
+Quando uma nota material falha ou drift é provado:
+
+```text
+FAIL/DRIFT
+→ IDENTIFICAR CLAIM AFETADO
+→ REOPEN COM cause_ref
+→ VERTEX_INVERSO / CARACOL_REVERSO
+→ VOLTAR AO ÚLTIMO CURSOR PROVADO
+→ PRESERVAR CLAIMS INDEPENDENTES
+→ CORRIGIR MENOR CONE CAUSAL
+→ TESTAR
+→ CONTRAPROVA
+→ AUTOLUPA
+→ RESEAL
+→ RETOMAR A TRAJETÓRIA
+```
+
+Isso é regeneração monotônica: melhorar sem apagar prova independente nem recomeçar a missão inteira.
+
+## Ponto fixo
+
+`Continuar até Fixed Point` não significa loop ornamental. A AutoLupa repete enquanto uma nova passagem muda materialmente:
+
+```text
+HIPOTESE
+BLOQUEIO
+RISCO_RESIDUAL
+PROXIMO_TESTE
+VEREDITO
+CLAIMS_A_REABRIR
+```
+
+Quando a próxima passagem não produz delta material:
+
+```text
+PONTO_FIXO_ATINGIDO=sim
+```
+
+Se ainda existe delta:
+
+```text
+PONTO_FIXO_ATINGIDO=nao
+NEXT_BREATH=<respiração material seguinte>
+```
+
 ## Contraprova obrigatória
 
 O self-test deve rejeitar, no mínimo:
@@ -125,6 +195,7 @@ O self-test deve rejeitar, no mínimo:
 - quantidade diferente de 17;
 - IDs duplicados;
 - `trail_id` sem owner/protocolo canônico;
+- binding da MetaLupa/lacres ausente;
 - binding de aprendizado ausente;
 - ligação do grafo ausente;
 - envelope de erro que permita falha silenciosa.
@@ -139,7 +210,7 @@ Se o caso negativo passar, o gate é falso-verde.
 
 **BAIANES_VERSE:** “Oxe, cada nota deixa pegada no trilho; muda o instrumento, mas o compasso não se perde.”
 
-**TECHNICAL_PROOF:** `BANDA_COMPASSO_GLOBAL.json` + `GraphRAG-Master/agent.mjs` + `gerar-grafo-vivo.mjs` + CI do mesmo HEAD.
+**TECHNICAL_PROOF:** `BANDA_COMPASSO_GLOBAL.json` + `MetaLupa` + `claim-seals.jsonl` + `GraphRAG-Master/agent.mjs` + `gerar-grafo-vivo.mjs` + CI do mesmo HEAD.
 
 ```text
 POESIA != PROVA

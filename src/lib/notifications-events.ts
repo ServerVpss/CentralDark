@@ -14,18 +14,30 @@ export interface EventDefinition {
   body_template?: string;
 }
 
+export interface CentralContext {
+  ia?: string;
+  recurso?: string;
+  acao?: string;
+  status?: string;
+  source_surface?: string;
+  session_id?: string;
+  profile_id?: string;
+  profile_display?: string;
+  intent_goal?: string;
+  owner?: string;
+  head_sha?: string;
+  knowledge_event_id?: string;
+  next_cursor?: string;
+  runtime?: string;
+}
+
 export interface NotifyInput {
   event_key: string;
   severity?: Severity;
   title?: string;
   body?: string;
   link?: string;
-  payload?: Record<string, unknown> & {
-    ia?: string;
-    recurso?: string;
-    acao?: string;
-    status?: string;
-  };
+  payload?: Record<string, unknown> & CentralContext;
   group_key?: string;
   debounce_seconds?: number;
 }
