@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-09-05T10:02:34.911Z",
-  "updatedAtBR": "05/09/2026, 07:02:34 BRT",
+  "updatedAt": "2026-09-05T10:05:09.435Z",
+  "updatedAtBR": "05/09/2026, 07:05:09 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "feat(sentinela): reconhecer modelo expirado e selar rotas de erro",
+    "lastCommit": "docs(comite): absorver failover, Codex e modelo expirado no receipt",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-09-05T10:05:09.435Z",
+      "titulo": "Push na main · ff96d19b1fde30b03caa2b99a2da6dbca86efac9",
+      "detalhe": "docs(comite): absorver failover, Codex e modelo expirado no receipt",
+      "area": "Repositório",
+      "sha": "ff96d19",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-09-05T10:02:34.911Z",
       "titulo": "Push na main · fcfc7cd20850ec1e32e235f97affb3b3e9471f8a",
       "detalhe": "feat(sentinela): reconhecer modelo expirado e selar rotas de erro",
@@ -988,14 +996,6 @@
       "detalhe": "fix(ci): corrigir python→python3 no lupa-drift-guard e detectar_drift (#1366)",
       "area": "Repositório",
       "sha": "33091e0",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-29T09:14:57.856Z",
-      "titulo": "Push na main · eb7eb7aa1887e19659f95d068316474598cbbd9e",
-      "detalhe": "docs(pendencias): corrige achado errado da triagem Fabler sobre 4-Point",
-      "area": "Repositório",
-      "sha": "eb7eb7a",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-09-05T10:05:09.435Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · ff96d19b1fde30b03caa2b99a2da6dbca86efac9 (ff96d19)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-09-05T10:02:34.911Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · fcfc7cd20850ec1e32e235f97affb3b3e9471f8a (fcfc7cd)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-29T09:42:27.991Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 33091e0de9915bdce915cec876e24921422c4ccb (33091e0)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-29T09:14:57.856Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · eb7eb7aa1887e19659f95d068316474598cbbd9e (eb7eb7a)",
       "area": "Repositório",
       "status": "sucesso"
     }
