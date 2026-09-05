@@ -23,7 +23,7 @@ for item in manifest.get('files',[]):
 
 required=[
  'README.md','ARCHITECTURE.md','ARCHITECTURE.mmd','ARCHITECTURE.png',
- 'CONTRACT.yml','TRIGGERS.yml','ENGINE_BINDING.yml','MASTER-CYCLE.yml','ADVERSARIAL_HANDOFF.yml','LIVE_STATE.md',
+ 'CONTRACT.yml','TRIGGERS.yml','ENGINE_BINDING.yml','MASTER-CYCLE.yml','MEGAZORD-CENTRALDARK.yml','ADVERSARIAL_HANDOFF.yml','LIVE_STATE.md',
  'HISTORY.md','COUNTERPROOF.md','RASTRO.md','RECEIPT.md','SOURCES.json',
  'OLHO-BIONICO-ANTI-FLASH.md',
  'scripts/trigger-fabric/centraldark_master_cycle.py',
@@ -79,6 +79,21 @@ engine=(ROOT/'ENGINE_BINDING.yml').read_text(encoding='utf-8',errors='replace') 
 for token in ['engine_is_owner: false','binding_mode: LOAD_REFERENCE','prompt_consumer: apps/modulos/HERMES-CORE/prompts/hermes-core.md','resolver: scripts/trigger-fabric/centraldark_master_cycle.py']:
     if token not in engine: errors.append(f'ENGINE_BINDING_GUARD_MISSING:{token}')
 
+megazord=(ROOT/'MEGAZORD-CENTRALDARK.yml').read_text(encoding='utf-8',errors='replace') if (ROOT/'MEGAZORD-CENTRALDARK.yml').exists() else ''
+for token in [
+ 'realtime_feedback:',
+ 'role: LIVE_MISSION_FEEDBACK_SIGNAL',
+ 'persistent_per_mission: true',
+ 'user_repetition_required: false',
+ 'route_material_signal_to: PERSISTENT_GAP_SWEEP',
+ 'REOPEN_AFFECTED_CONE_ONLY',
+ 'REALTIME_FEEDBACK',
+ 'loop_until: FIXED_POINT_OR_PROVEN_HUMAN_FRONTIER',
+ 'failed_candidate_becomes: REFUTED_MINERAL',
+ 'proven_improvement_becomes: CRYSTAL_GOLD',
+]:
+    if token not in megazord: errors.append(f'REALTIME_FEEDBACK_BINDING_MISSING:{token}')
+
 profile=(ROOT/'OLHO-BIONICO-ANTI-FLASH.md').read_text(encoding='utf-8',errors='replace') if (ROOT/'OLHO-BIONICO-ANTI-FLASH.md').exists() else ''
 for token in [
  'OLHO_BIONICO_IS_PROFILE=true',
@@ -107,5 +122,6 @@ print(f'FILES_VERIFIED={len(manifest.get("files",[]))}')
 print('BOT_ENTRY_CONTRACT=PASS')
 print('OUTPUT_GUARD_CONTRACT=PASS')
 print('MASTER_CYCLE_RESOLVER=PASS')
+print('REALTIME_FEEDBACK_PERSISTENT_BINDING=PASS')
 print('OLHO_BIONICO_ANTI_FLASH_CONTRACT=PASS')
 print('GLOBAL_RUNTIME_100_PERCENT=NOT_PROVEN')
