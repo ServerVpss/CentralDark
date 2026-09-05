@@ -22,8 +22,33 @@ DEFAULT_INTERVAL = 5.0
 SEAL = "🧿"
 NOTE_SEAL = "🪡🧿"
 
+TRIGGER_SEALS = {
+    "TOOL_ERROR": "🛠️",
+    "TEST_FAILURE": "🧪",
+    "CI_RUNNER_ROUTE_FAILURE": "🏗️",
+    "CONTRADICTION_FOUND": "⚔️",
+    "POST_MUTATION": "🔁",
+    "RUNTIME_DRIFT": "🛰️",
+    "ANY_PR_OR_COMMIT": "🌿",
+    "STATE_CHANGED": "🔄",
+    "WRITER_CONFLICT": "✍️",
+    "BOUNDARY_TOUCHED": "🧱",
+    "MATERIAL_UNKNOWN_AFFECTS_MUTATION": "🟡",
+    "PROOF_TARGET_MISMATCH": "🎯",
+    "EVIDENCE_CONFLICT": "⚖️",
+    "MODEL_UNAVAILABLE": "🧠",
+    "DEPENDENCY_FAILURE": "🧩",
+    "META_LUPA": "⊛",
+    "CARACOL_REVERSO": "🐚",
+    "RECONCILIAR": "🪡",
+    "FAILOVER_ALLOWED_ROUTE": "🔀",
+    "RETEST": "🧪",
+}
+
 ERROR_SIGNATURES = [
     ("PROVIDER_SPENDING_LIMIT", re.compile(r"personal-team-blocked:spending-limit|run out of credits|need a Grok subscription|out of credits", re.I)),
+    ("MODEL_EXPIRED", re.compile(r"free period has ended|select a different model|model(?:\s+is)?\s+expired|free(?:\s+access|\s+period).*ended", re.I)),
+    ("MISSING_PROVIDER_KEY", re.compile(r"missing environment variable\s*:\s*`?[A-Z0-9_]+_API_KEY`?|[A-Z0-9_]+_API_KEY.*(?:missing|ausente|not configured)", re.I)),
     ("HOUSE_PATH_DRIFT", re.compile(r"(?:^|[\s'\"])(?:C:\\\\CentralDark|C:\\CentralDark)(?:\\|/|$)", re.I)),
     ("SURFACE_ROUTE_DRIFT", re.compile(r"bypass.*omni|direct provider|provider.*direct|route.*outside.*omni", re.I)),
     ("HTTP_403", re.compile(r"HTTP\s*403|request was blocked|forbidden", re.I)),
@@ -38,6 +63,8 @@ ERROR_SIGNATURES = [
 
 TRIGGER_ROUTE = {
     "PROVIDER_SPENDING_LIMIT": ["MODEL_UNAVAILABLE", "MARK_ROUTE_BROKEN", "MEASURE_ALTERNATIVE_ENGINE_CAPABILITY", "FAILOVER_ALLOWED_ROUTE", "RETEST"],
+    "MODEL_EXPIRED": ["MODEL_UNAVAILABLE", "REFRESH_MODEL_CATALOG", "MARK_ROUTE_BROKEN", "MEASURE_ALTERNATIVE_ENGINE_CAPABILITY", "FAILOVER_ALLOWED_ROUTE", "RETEST"],
+    "MISSING_PROVIDER_KEY": ["DEPENDENCY_FAILURE", "MARK_OPTIONAL_ROUTE_UNCONFIGURED", "SURFACE_ROUTE_DRIFT_CHECK", "TRY_NEXT_PROVEN_ALLOWED_ROUTE", "RETEST"],
     "HOUSE_PATH_DRIFT": ["STATE_CHANGED", "META_LUPA", "CLASSIFY_HOUSE_VS_EXTERNAL_DEPENDENCY", "CARACOL_REVERSO", "RECONCILIAR"],
     "SURFACE_ROUTE_DRIFT": ["EVIDENCE_CONFLICT", "META_LUPA", "RESOLVE_SINGLE_ROUTER_ENTRYPOINT", "CARACOL_REVERSO", "RECONCILIAR"],
     "HTTP_403": ["META_LUPA", "IDENTIFY_BLOCKING_LAYER", "RECONCILIAR"],
@@ -88,11 +115,16 @@ def classify_signature(text: str) -> str:
     return "UNKNOWN_ERROR"
 
 
+def route_seals(route: list[str]) -> list[dict[str, str]]:
+    return [{"trigger": trigger, "seal": TRIGGER_SEALS.get(trigger, "•")} for trigger in route]
+
+
 def normalize_event(raw: dict[str, Any]) -> dict[str, Any]:
     error_text = str(raw.get("error_text") or raw.get("message") or raw.get("detail") or "")
     signature = str(raw.get("signature") or classify_signature(error_text))
     state = str(raw.get("state") or "FAILURE").upper()
     source_surface = str(raw.get("source_surface") or raw.get("surface") or "UNKNOWN")
+    route = TRIGGER_ROUTE.get(signature, TRIGGER_ROUTE["UNKNOWN_ERROR"])
     event = {
         "schema": "centraldark.sentinel-event.v1",
         "seal": SEAL,
@@ -105,7 +137,8 @@ def normalize_event(raw: dict[str, Any]) -> dict[str, Any]:
         "goal_ref": raw.get("goal_ref") or os.getenv("CENTRALDARK_GOAL_REF") or "UNKNOWN",
         "last_proven_cursor": raw.get("last_proven_cursor") or os.getenv("CENTRALDARK_LAST_PROVEN_CURSOR") or "UNKNOWN",
         "owner": raw.get("owner") or "EXISTING_OWNER_REQUIRED",
-        "route": TRIGGER_ROUTE.get(signature, TRIGGER_ROUTE["UNKNOWN_ERROR"]),
+        "route": route,
+        "route_seals": route_seals(route),
         "caracol_reverse": True,
         "invalidate_dependent_claims_only": True,
         "preserve_independent_proofs": True,
@@ -208,6 +241,8 @@ def self_test() -> int:
     cases = {
         "403": classify_signature("HTTP 403: Your request was blocked") == "HTTP_403",
         "spending_limit": classify_signature('HTTP 403: {"code":"personal-team-blocked:spending-limit","error":"You have run out of credits"}') == "PROVIDER_SPENDING_LIMIT",
+        "model_expired": classify_signature('nous_http_404:{"status":404,"message":"This model free period has ended. Please select a different model to continue!"}') == "MODEL_EXPIRED",
+        "missing_provider_key": classify_signature("Missing environment variable: `ABACUS_API_KEY`") == "MISSING_PROVIDER_KEY",
         "house_path_drift": classify_signature(r"owner ainda aponta C:\CentralDark\Pivete") == "HOUSE_PATH_DRIFT",
         "surface_route_drift": classify_signature("direct provider bypass Omni Router") == "SURFACE_ROUTE_DRIFT",
         "lock": classify_signature("RuntimeError: cannot release un-acquired lock") == "PYTHON_LOCK_RELEASE",
@@ -217,7 +252,9 @@ def self_test() -> int:
         "unknown": classify_signature("weird local failure") == "UNKNOWN_ERROR",
     }
     sample = normalize_event({"source_surface": "SOL_APP", "message": "HTTP 403: Your request was blocked"})
+    expired = normalize_event({"source_surface": "SOL_APP", "message": "This model free period has ended"})
     cases["caracol"] = sample["caracol_reverse"] is True and sample["route"][0] == "META_LUPA"
+    cases["sealed_route"] = bool(expired["route_seals"]) and expired["route_seals"][0]["seal"] == "🧠"
     cases["no_auto_authority"] = sample["auto_mutation_authority"] is False
     cases["contract_exists"] = CONTRACT.exists()
     cases["stitcher_exists"] = STITCHER.exists()
