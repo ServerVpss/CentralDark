@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-09-05T11:02:43.856Z
+# 🧠 Notion Sync — 2026-09-05T11:17:38.058Z
 
-- **Commit fonte:** `452419072bffebd2828c0eafdeb9502d80567888`
+- **Commit fonte:** `aea5a6707ae1449d55639de2efdee856c13a9b73`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 491 atualizadas · ❌ 2 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 491 atualizadas · ❌ 3 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
 | aprendizados | 35 | 0 | 35 | 0 | 0 |
-| estrutura | 414 | 0 | 412 | 0 | 2 |
+| estrutura | 415 | 0 | 412 | 0 | 3 |
 
 ## Operações
 
@@ -399,6 +399,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/PROMPT-MESTRE-MULTI-IA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PROTOCOLO-INICIALIZACAO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PROTOCOLO-ORQUESTRACAO-PIVETE.md |
+| estrutura | erro | docs/CONSCIENCIA/RANDOLF-CONTINUIDADE.md |
 | estrutura | atualizado | docs/CONSCIENCIA/README.md |
 | estrutura | atualizado | docs/CONSCIENCIA/REGISTRO-GUARDIAO-DECISOR-V3.md |
 | estrutura | atualizado | docs/CONSCIENCIA/REGRA-OFICIAL-GUARDIAO-MODO-PROPOR.md |
