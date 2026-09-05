@@ -23,6 +23,9 @@ SEAL = "🧿"
 NOTE_SEAL = "🪡🧿"
 
 ERROR_SIGNATURES = [
+    ("PROVIDER_SPENDING_LIMIT", re.compile(r"personal-team-blocked:spending-limit|run out of credits|need a Grok subscription|out of credits", re.I)),
+    ("HOUSE_PATH_DRIFT", re.compile(r"(?:^|[\s'\"])(?:C:\\\\CentralDark|C:\\CentralDark)(?:\\|/|$)", re.I)),
+    ("SURFACE_ROUTE_DRIFT", re.compile(r"bypass.*omni|direct provider|provider.*direct|route.*outside.*omni", re.I)),
     ("HTTP_403", re.compile(r"HTTP\s*403|request was blocked|forbidden", re.I)),
     ("PYTHON_LOCK_RELEASE", re.compile(r"cannot release un-acquired lock", re.I)),
     ("TOOL_PROTOCOL_LEAK", re.compile(r"<longcat_tool_call>|<longcat_arg_key>|<longcat_arg_value>", re.I)),
@@ -34,6 +37,9 @@ ERROR_SIGNATURES = [
 ]
 
 TRIGGER_ROUTE = {
+    "PROVIDER_SPENDING_LIMIT": ["MODEL_UNAVAILABLE", "MARK_ROUTE_BROKEN", "MEASURE_ALTERNATIVE_ENGINE_CAPABILITY", "FAILOVER_ALLOWED_ROUTE", "RETEST"],
+    "HOUSE_PATH_DRIFT": ["STATE_CHANGED", "META_LUPA", "CLASSIFY_HOUSE_VS_EXTERNAL_DEPENDENCY", "CARACOL_REVERSO", "RECONCILIAR"],
+    "SURFACE_ROUTE_DRIFT": ["EVIDENCE_CONFLICT", "META_LUPA", "RESOLVE_SINGLE_ROUTER_ENTRYPOINT", "CARACOL_REVERSO", "RECONCILIAR"],
     "HTTP_403": ["META_LUPA", "IDENTIFY_BLOCKING_LAYER", "RECONCILIAR"],
     "PYTHON_LOCK_RELEASE": ["META_LUPA", "OWNER_RUNTIME", "MINIMAL_REMEDIATION", "RETEST"],
     "TOOL_PROTOCOL_LEAK": ["BOUNDARY_TOUCHED", "SANITIZE_RENDER_PATH", "RETEST"],
@@ -201,6 +207,9 @@ def ingest_event_json(payload: str) -> dict[str, Any]:
 def self_test() -> int:
     cases = {
         "403": classify_signature("HTTP 403: Your request was blocked") == "HTTP_403",
+        "spending_limit": classify_signature('HTTP 403: {"code":"personal-team-blocked:spending-limit","error":"You have run out of credits"}') == "PROVIDER_SPENDING_LIMIT",
+        "house_path_drift": classify_signature(r"owner ainda aponta C:\CentralDark\Pivete") == "HOUSE_PATH_DRIFT",
+        "surface_route_drift": classify_signature("direct provider bypass Omni Router") == "SURFACE_ROUTE_DRIFT",
         "lock": classify_signature("RuntimeError: cannot release un-acquired lock") == "PYTHON_LOCK_RELEASE",
         "tool_leak": classify_signature("<longcat_tool_call>vision_analyze") == "TOOL_PROTOCOL_LEAK",
         "rate_limit": classify_signature("429 rate limit") == "PROVIDER_RATE_LIMIT",
