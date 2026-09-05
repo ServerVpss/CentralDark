@@ -10,8 +10,18 @@ principle:
   one_hub_only: true
   one_writer_per_scope: true
   graph_is_projection_not_authority: true
+  notification_is_projection_not_authority: true
+  session_is_provenance_not_authority: true
+  profile_is_presentation_not_authority: true
   unknown_is_not_pass: true
   current_gt_history: true
+
+canonical_profile:
+  id: ORQUESTRACAO_SOL
+  display: "😎 Orquestração SOL 🌞"
+  owner: docs/CONSCIENCIA/RANDOLF-CONTINUIDADE.md
+  model_is_profile: false
+  session_is_profile: false
 
 canonical_owners:
   memory_api: apps/modulos/memoria-api/
@@ -21,6 +31,10 @@ canonical_owners:
   obsidian_plugin: apps/modulos/obsidian-plugin-grafo-vivo/
   graph_rag: apps/modulos/HERMES-CORE/agents/GraphRAG-Master/
   hermes_core: apps/modulos/HERMES-CORE/
+  master_cycle: scripts/trigger-fabric/centraldark_master_cycle.py
+  notification_client: src/lib/notifications-events.ts
+  notification_edge_helper: supabase/functions/_shared/notifications-events.ts
+  notification_contract: docs/NOTIFY/README.md
   boot: CENTRALDARK_AI_BOOT.yaml
   randolf: docs/CONSCIENCIA/RANDOLF-CONTINUIDADE.md
   deploy_policy: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/DEPLOY-READINESS.yml
@@ -45,8 +59,53 @@ unified_flow:
   - REALITY_JUDGE
   - FIXED_POINT
   - REGISTER_RECEIPT_GRAPH_CURSOR
+  - NOTIFICATION_PROJECTION
   - DEPLOY_BY_CAUSAL_SCOPE
   - BOOT_NEXT_CYCLE
+
+master_ingress:
+  owner: scripts/trigger-fabric/centraldark_master_cycle.py
+  voice_is_modality_not_second_router: true
+  text:
+    explicit_examples:
+      - "#ACORDAR"
+      - "!CENTRALDARK"
+      - "!CENTRALDARK SOL ACORDAR"
+    plain_word_centraldark_without_marker_does_not_trigger: true
+  voice:
+    input_mode: voice
+    examples:
+      - "acordar"
+      - "centraldark"
+      - "sol acordar"
+      - "centraldark sol acordar"
+    route: SAME_MASTER_FUNNEL
+  invariant:
+    - ONE_COMMAND_FAMILY
+    - ONE_MISSION
+    - MASTER_REENTRY_GUARD
+    - UNKNOWN_IS_NOT_PASS
+
+session_provenance:
+  owner: docs/CONSCIENCIA/RANDOLF-CONTINUIDADE.md
+  observed_aliases:
+    - id: "20260905_031340_68bd10"
+      classification: CANDIDATE_ANCHOR
+      profile_display: "😎 Orquestração SOL 🌞"
+    - id: "20260905_030855_9d0c93"
+      classification: OBSERVED_SESSION_ALIAS
+    - id: "20260905_010608_8c07f9"
+      classification: OBSERVED_SESSION_ALIAS
+    - id: "20260902_231220_48846d"
+      classification: OBSERVED_SESSION_ALIAS
+    - id: "20260830_050658_252bc7"
+      classification: OBSERVED_SESSION_ALIAS
+  rules:
+    session_id_is_authority: false
+    session_id_is_current_state: false
+    exact_panel_binding_requires_runtime_evidence: true
+    session_change_is_new_mission: false
+    model_change_resets_mission: false
 
 caracol_reverse:
   enabled: true
@@ -69,6 +128,18 @@ entry_surfaces:
     route: CENTRALDARK_AI_BOOT
     event_class: MATERIAL_INGEST
     direct_canonical_write: false
+  voice:
+    route: MASTER_CYCLE_VOICE_MODE
+    event_class: VOICE_COMMAND_OR_MATERIAL
+    direct_canonical_write: false
+  hermes_desktop:
+    route: MASTER_CYCLE_AND_RANDOLF
+    event_class: SESSION_MATERIAL
+    direct_canonical_write: false
+  sol_app:
+    route: MASTER_CYCLE_AND_RANDOLF
+    event_class: SESSION_MATERIAL
+    direct_canonical_write: false
   github:
     route: EXISTING_GITHUB_WORKFLOWS_AND_RECEIPTS
     event_class: PR_COMMIT_WORKFLOW_RUNTIME_EVIDENCE
@@ -89,6 +160,10 @@ entry_surfaces:
     route: "POST /memoria/ingest"
     event_class: RUNTIME_EVENT
     authentication: BEARER_RUNTIME_SECRET
+    direct_canonical_write: false
+  notification_events:
+    route: EXISTING_NOTIFICATION_SYSTEM
+    event_class: MATERIAL_STATE_PROJECTION
     direct_canonical_write: false
   firecrawl:
     route: CAPABILITY_CONTRACT_ROUTER
@@ -145,6 +220,12 @@ knowledge_event_envelope:
     - intent_goal
     - owner
     - provenance
+    - source_surface
+    - session_id
+    - profile_id
+    - profile_display
+    - head_sha
+    - next_cursor
     - metadata
     - raw_checksum
     - encoding_suspect
@@ -157,6 +238,36 @@ knowledge_event_envelope:
     authorization_header_must_not_be_persisted: true
     cookies_must_not_be_persisted: true
     unknown_fields_may_be_preserved_only_after_secret_scrub: true
+
+notification_projection:
+  owner:
+    - src/lib/notifications-events.ts
+    - supabase/functions/_shared/notifications-events.ts
+    - docs/NOTIFY/README.md
+  context_fields:
+    - event_key
+    - severity
+    - source_surface
+    - session_id
+    - profile_id
+    - profile_display
+    - intent_goal
+    - owner
+    - head_sha
+    - knowledge_event_id
+    - next_cursor
+    - runtime
+  route:
+    - NOTIFICATIONS_LOG
+    - MEGA_PANEL_REALTIME
+    - TELEGRAM_WHEN_CONFIGURED
+  rules:
+    notification_is_authority: false
+    notification_delivery_is_runtime_proof: false
+    event_key_is_identity_not_verdict: true
+    secret_values_must_not_be_logged: true
+    dedupe_before_fanout: true
+    same_material_event_should_keep_same_context: true
 
 self_correction:
   encoding_and_spelling:
@@ -208,6 +319,7 @@ proof_boundaries:
   endpoint_documented_is_not_endpoint_live: true
   event_accepted_is_not_learning_promoted: true
   graph_visible_is_not_runtime_causality_proven: true
+  notification_visible_is_not_causality_proven: true
   provider_docs_is_not_provider_runtime_proven: true
   merged_is_not_deployed: true
   workflow_green_is_not_runtime_receipt: true
