@@ -67,11 +67,13 @@ function fromZendriveReceipt(raw) {
 }
 
 async function loadInput() {
+  const encoded = argValue('--event-b64');
+  if (encoded) return JSON.parse(Buffer.from(encoded, 'base64url').toString('utf8'));
   const file = argValue('--event-file');
   if (file) return JSON.parse(await readFile(resolve(file), 'utf8'));
   let data = '';
   for await (const chunk of process.stdin) data += chunk;
-  if (!data.trim()) throw new Error('use --event-file ou stdin JSON');
+  if (!data.trim()) throw new Error('use --event-b64, --event-file ou stdin JSON');
   return JSON.parse(data);
 }
 
