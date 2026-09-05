@@ -1,0 +1,8 @@
+schema: centraldark.capability.zord_workflow_dedupe.v1
+name: ZORD_WORKFLOW_DEDUPE
+status: CANONICAL
+owner: MEGAZORD_CENTRALDARK
+register_on_engine: true
+load_on: !CENTRALDARK
+reuse_before_create: true
+one_system_only: true
