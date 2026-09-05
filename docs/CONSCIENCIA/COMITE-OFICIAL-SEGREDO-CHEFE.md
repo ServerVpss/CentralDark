@@ -58,6 +58,9 @@ Se qualquer texto deste Comitê divergir de um owner vigente ou do estado vivo m
 ☀️ SOL
 = coordenação + reconciliação + costura de deltas
 
+🏛️ ENEIAS
+= estratégia contextual + análise de opções + riscos + encaminhamentos; não é segunda autoridade, segundo cérebro, segundo writer nem segundo Judge
+
 🧿 SENTINELA
 = observa alinhamento, drift e primeira aresta quebrada
 
@@ -85,6 +88,115 @@ Se qualquer texto deste Comitê divergir de um owner vigente ou do estado vivo m
 🚀 DEPLOY
 = promoção real somente quando houver prova causal do runtime
 ```
+
+# 🏛️ Eneias — arquitetura recuperada da Casa
+
+A arquitetura de Eneias foi recuperada do histórico de trabalho do CHEFE e incorporada aqui **como arquitetura recuperada/candidata**, porque não há ainda evidência na `main` de um módulo/runtime Eneias implementado. O Comitê preserva a intenção sem transformar memória em execução.
+
+```text
+ENEIAS_STATUS=RECOVERED_ARCHITECTURE_CANDIDATE
+ENEIAS_RUNTIME=UNKNOWN
+ENEIAS_IMPLEMENTATION_ON_MAIN=NOT_PROVEN
+ENEIAS_IS_SECOND_BRAIN=false
+ENEIAS_IS_SECOND_ORCHESTRATOR=false
+ENEIAS_IS_WRITER=false
+ENEIAS_IS_JUDGE=false
+```
+
+## Papel recuperado
+
+Eneias funciona como **camada estratégica de contexto e decisão proposta**. Ele organiza matéria complexa antes da mutação, mas não toma o lugar da SOL, do HERMES/PIVETE nem do REALITY JUDGE.
+
+Entrada esperada:
+
+```text
+GOAL
++ CONTEXTO_ATUAL
++ HISTORICO_RELEVANTE
++ EVIDENCIAS
++ RESTRICOES
+```
+
+Saída esperada:
+
+```text
+ANALISE
++ OPCOES
++ RISCOS
++ CONTRADICOES
++ PRIORIDADES
++ ENCAMINHAMENTOS_PROPOSTOS
++ UNKNOWNS_EXPLICITOS
+```
+
+Integrações recuperadas:
+
+```text
+ELITE_GATEWAY / OMNI_ROUTER
+MEMORIA / GRAFO
+OBSERVABILIDADE
+PROVENIENCIA / RECEIPTS
+REALITY_JUDGE COMO VALIDADOR INDEPENDENTE
+```
+
+## Posição na Casa atual
+
+Para obedecer `ONE_SYSTEM_ONLY` e não duplicar a coordenação da SOL, Eneias entra como **função estratégica consultiva dentro do mesmo fluxo**, depois que contexto e evidência já foram reunidos e antes que exista mutação.
+
+```text
+👑 SEGREDO/CHEFE — INTENCAO + GOAL
+→ CENTRALDARK_AI_BOOT
+→ HISTORY_RENDEZVOUS
+→ CAPABILITY_LINEAGE
+→ 🧿 SENTINELA / EVIDENCIA VIVA
+→ 🏛️ ENEIAS / ESTRATEGIA CONTEXTUAL
+→ ☀️ SOL / RECONCILIACAO E COORDENACAO
+→ 🧭 MULTIBUSSOLA
+→ ⊛ META_LUPA
+→ 🪡 EXISTING_OWNER / RECONCILIAR
+→ ONE_WRITER
+→ ☿ HERMES/PIVETE EXECUTA
+→ 🔬 CONTRAPROVA
+→ 📏 REMEDICAO
+→ ⚖ REALITY_JUDGE
+→ 🧾 RECEIPT / GRAFO / CURSOR
+→ 🚀 PROMOCAO QUANDO PROVADA
+```
+
+Eneias **propõe**; SOL reconcilia e coordena; HERMES/PIVETE executa dentro de autoridade; REALITY JUDGE decide por evidência.
+
+## Leis de Eneias
+
+```text
+ENEIAS_RECEIVES_GOAL_CONTEXT_EVIDENCE=true
+ENEIAS_RETURNS_ANALYSIS_RISKS_OPTIONS_HANDOFFS=true
+ENEIAS_MUST_SURFACE_UNKNOWN=true
+ENEIAS_MUST_REUSE_EXISTING_CAPABILITIES=true
+ENEIAS_CANNOT_CREATE_PARALLEL_SYSTEM=true
+ENEIAS_CANNOT_SELF_APPROVE=true
+ENEIAS_CANNOT_TURN_INFERENCE_INTO_PROOF=true
+ENEIAS_CANNOT_MUTATE_WITHOUT_OWNER_AND_AUTHORITY=true
+ENEIAS_OUTPUT_IS_PROPOSAL_NOT_VERDICT=true
+REALITY_JUDGE_REMAINS_INDEPENDENT=true
+CURRENT_GT_HISTORY=true
+```
+
+## Próximo delta permitido para Eneias
+
+Não criar `apps/modulos/eneias/` ou qualquer segundo núcleo por reflexo. Primeiro executar:
+
+```text
+SEARCH_EXISTING_OWNER
+→ RECONCILIAR_CAPABILITY_LINEAGE
+→ PROVAR_SE_FUNCAO_ENEIAS_JA_EXISTE_EM_SOL/JARVIS/MOTOR_MENTAL
+→ DEDUPE_ABSORB
+→ SOMENTE_SE_HOUVER_LACUNA_REAL, IMPLEMENTAR_DELTA_MINIMO
+→ SAME_HEAD_TESTS
+→ CONTRAPROVA
+→ REALITY_JUDGE
+```
+
+Assim a arquitetura histórica de Eneias entra na Casa sem violar `REUSE_BEFORE_CREATE`.
 
 ## Fluxo contínuo da Casa
 
