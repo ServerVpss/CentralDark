@@ -133,6 +133,18 @@ Eles podem se cruzar por notas/owners, mas não devem ser confundidos nem fundid
 - [[MOC-PM2]] — processos/runtime.
 - [[MOC-CentralDark-HubBot]] — HubBot e consumidores.
 - [[OBSIDIAN-CASA-SINCRONIZACAO]] — topologia física/sync, separada do corpus repo-native.
+- [[2026-09-03-numeracao-01-10-vault]] — regra 10×10 (número+nome; teto 10; sem gaveta vazia).
+- [[2026-09-03-mandato-preservar-ouro-chefe]] — vault é do CHEFE e do agente.
+- [[2026-09-03-garimpo-chefe-inventario]] — GARIMPO medido.
+- [[2026-09-03-ouro-chatgpt-warp-orquestrador]] — ouro ChatGPT extraído.
+- [[ARVORE-SEMANTICA-DA-CASA]] — estava órfã (0 in / 0 out).
+- [[IPNAMES-EXTERNAL-NETWORK-REFERENCE]] — órfã na Biblioteca.
+
+## Endereço 10×10 (amarrado 2026-09-03)
+
+Número+nome. Teto 10 irmãos/nível. Camada nova só se o item não encaixar na categoria existente. Sem pasta vazia pra completar 10.
+
+Mermaid acima = HISTÓRICO (01 Pendências…). Disco atual = 00-MAPA … 08-ARTEFATOS. **Mapa ≠ disco.** Não fundir.
 
 ---
 🔗 [[BRAIN]] · [[00-MAPA]] · [[GRAFO-VIVO]] · [[BIBLIOTECA]] · [[INDEX]]

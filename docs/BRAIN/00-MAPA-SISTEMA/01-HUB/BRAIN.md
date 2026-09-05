@@ -102,6 +102,7 @@ PERMISSAO_HISTORICA != PERMISSAO_ATUAL
 | `05-DEVEDORES-CONTATOS` | domínio humano específico |
 | `06-REUNIOES-NOTAS` | notas humanas |
 | `07-APRENDIZADOS-MEMORIAS` | derivados de aprendizado/memória |
+| `08-ARTEFATOS-VISUAIS` | cartazes/grafo visual |
 
 ## Propriedades
 
@@ -131,5 +132,10 @@ SEM_PROPRIEDADES_OBRIGATORIAS
 - `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml`
 - `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ARTIFACT-PROPERTIES.yml`
 - `docs/CONSCIENCIA/APRENDIZADOS/`
+- [[MAPA-OBSIDIAN-BRAIN]]
+- [[BIBLIOTECA]]
+- [[2026-09-03-numeracao-01-10-vault]]
+- [[2026-09-03-mandato-preservar-ouro-chefe]]
+- [[ARVORE-SEMANTICA-DA-CASA]]
 
 O histórico Git preserva versões antigas desta superfície sem permitir que elas governem o presente.
