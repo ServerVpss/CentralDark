@@ -253,3 +253,65 @@ MATERIAL_NOVO
 + REALIDADE JULGA
 = CONTINUIDADE DA CASA
 ```
+
+## Reuso de prova por identidade causal
+
+Uma prova já fechada não deve ser refeita por rotina quando a identidade causal continua a mesma.
+
+```text
+PROOF_REUSE=true
+
+SAME_CLAIM
++ SAME_OWNER
++ SAME_SCOPE
++ SAME_CAUSAL_IDENTITY
++ NO_MATERIAL_CHANGE
+→ REUSE_EXISTING_RECEIPT
+→ DO_NOT_REPROVE
+
+HEAD_CHANGED
+OR RUNTIME_CHANGED
+OR OWNER_CHANGED
+OR CLAIM_CHANGED
+OR EVIDENCE_EXPIRED
+→ REMEASURE_REQUIRED
+```
+
+Para estado de repositório/build, `HEAD_SHA` participa da identidade causal. Para runtime, usar `RUNTIME_ID` ou observação equivalente.
+
+Receipt mínimo reutilizável:
+
+```text
+CLAIM=
+OWNER=
+SCOPE=
+HEAD_SHA_OR_RUNTIME_ID=
+EVIDENCE=
+RESULT=
+RECEIPT=
+```
+
+A `main` guarda o aprendizado uma vez; agentes/Hermes reutilizam o receipt quando a identidade causal ainda corresponde. Reuso não transforma história em CURRENT.
+
+## Semáforo operacional e Esmeralda Total
+
+```text
+GREEN_SINGLE_CHECK = um check aplicável passou
+ESMERALDA_TOTAL = ALL_APPLICABLE_GATES_PASS_ON_SAME_HEAD
+
+ESMERALDA_TOTAL != DEPLOYED
+ESMERALDA_TOTAL != GLOBAL_RUNTIME_FIXED_POINT
+WORKFLOW_GREEN != RUNTIME_PROOF
+```
+
+`Esmeralda Total` é vocabulário humano da Casa para “todos os gates aplicáveis passaram no mesmo HEAD”. A prova técnica permanece nos checks e receipts.
+
+## Consumo local
+
+```text
+CANONICAL_RECEIPT_ON_MAIN → REUSABLE_BY_AGENTS_WHEN_CAUSAL_IDENTITY_MATCHES
+LOCAL_HERMES_CONSUMPTION → REQUIRES_RUNTIME_OBSERVATION
+REPO_LEARNING != LOCAL_RUNTIME_APPLIED
+```
+
+A `main` registra o aprendizado; consoles locais devem consumir o receipt em vez de repetir a mesma contraprova, salvo gatilho de remedição.
