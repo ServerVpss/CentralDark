@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-09-05T11:43:30.841Z",
-  "updatedAtBR": "05/09/2026, 08:43:30 BRT",
+  "updatedAt": "2026-09-05T11:46:55.004Z",
+  "updatedAtBR": "05/09/2026, 08:46:55 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "watch: atualiza Omni Router para HEALTHY (health 200, models 200, chat 200, Nous free + Claude Code)",
+    "lastCommit": "🎙️ trigger: restaurar funil e unificar fala, sessão e perfil SOL",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-09-05T11:46:55.004Z",
+      "titulo": "Push na main · f050f3e92e3f5c0d61604ecb981748062b691f09",
+      "detalhe": "🎙️ trigger: restaurar funil e unificar fala, sessão e perfil SOL",
+      "area": "Repositório",
+      "sha": "f050f3e",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-09-05T11:43:30.841Z",
       "titulo": "Push na main · 5fee0dd5520182af7a30389837ec36f59e588509",
       "detalhe": "watch: atualiza Omni Router para HEALTHY (health 200, models 200, chat 200, Nous free + Claude Code)",
@@ -988,14 +996,6 @@
       "detalhe": "feat(boot): exigir modo operacional de agente na CentralDark",
       "area": "Repositório",
       "sha": "4141b42",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-29T15:44:25.325Z",
-      "titulo": "Push na main · cc78c20a833c0ec6a2ebd141ba2abf92e5ec648b",
-      "detalhe": "aprendizado(#32): Uma capacidade = uma linhagem = um PR de promoção por escopo",
-      "area": "Repositório",
-      "sha": "cc78c20",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-09-05T11:46:55.004Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · f050f3e92e3f5c0d61604ecb981748062b691f09 (f050f3e)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-09-05T11:43:30.841Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 5fee0dd5520182af7a30389837ec36f59e588509 (5fee0dd)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-29T15:46:15.045Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 4141b427011cb31cdd69f1b3a379a8033c32bb82 (4141b42)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-29T15:44:25.325Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · cc78c20a833c0ec6a2ebd141ba2abf92e5ec648b (cc78c20)",
       "area": "Repositório",
       "status": "sucesso"
     }
