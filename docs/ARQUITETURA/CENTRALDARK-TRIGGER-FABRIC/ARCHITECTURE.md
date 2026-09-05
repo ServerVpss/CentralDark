@@ -393,7 +393,7 @@ ativo.
 | OpenMausBot | `RESERVE_REFERENCE` | roster/UX de agentes | view sobre JARVIS/Hub |
 | Open-Lovable | `RESERVE_REFERENCE` | fonte de padrão para Builder | owner continua Bolt |
 | Grok Build | `FUTURE_ENGINE_CANDIDATE` | motor substituível | invocação precisa ser medida |
-| AIOS/AIOX | `CANDIDATE_EXTERNAL_LEARNING` | deltas de impacto/gates/mapa | raw runtime/control-plane rejeitado |
+| AIOS/[EXT_REDACTED] | `CANDIDATE_EXTERNAL_LEARNING` | deltas de impacto/gates/mapa | raw runtime/control-plane rejeitado |
 
 Preservar no mapa não significa instalar, ligar ou promover.
 
@@ -431,7 +431,7 @@ O corpo atual absorve somente ganho de informação dos seguintes marcos:
 | #1300 | taxonomia `scout/builder/reviewer` do Overclock |
 | #1314 | organismo regenerativo MetaLupa + mineração AGI reconciliada |
 | #1330 | claim/lease/CAS/writer-scope como padrão de coordenação |
-| #1335 | AIOX: impacto, gate dinâmico, digest e inventory como candidatos |
+| #1335 | [EXT_REDACTED]: impacto, gate dinâmico, digest e inventory como candidatos |
 | #1336 | Hermes Core consolidado |
 | #1339 | smallest independently verifiable unit + cache/view != autoridade |
 | #1349 | filtro não testado contra caso conhecido = fonte de falso-verde |

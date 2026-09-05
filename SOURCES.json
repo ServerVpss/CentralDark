@@ -24,26 +24,33 @@
       },
       {
         "name": "Kimetsu Legacy Breathing",
-        "description": "17 respirações operacionais para modos de trabalho",
-        "path": "skills/operational-method/kimetsu-legacy-breathing/",
+        "description": "17 respirações operacionais integradas ao método e à Banda",
+        "path": ".agents/skills/centraldark-operational-method/references/regenerative-self-refinement-engine.md",
+        "contract": "docs/BRAIN/01-CONCEITOS/Banda/BANDA_COMPASSO_GLOBAL.json",
         "role": "operational_mode"
       },
       {
         "name": "Operational Method",
         "description": "Método de operação no CentralDark",
-        "path": "skills/operational-method/centraldark-operational-method/",
+        "path": ".agents/skills/centraldark-operational-method/",
         "role": "operational_method"
       },
       {
         "name": "Skills especializadas",
         "description": "Domínios específicos (vps, github, forensics, etc.)",
-        "path": "skills/",
+        "path": ".agents/skills/",
         "role": "domain_expertise"
       }
     ],
+    "bindings": {
+      "graphrag": "apps/modulos/HERMES-CORE/agents/GraphRAG-Master/agent.mjs",
+      "learning": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "trail_owner": "scripts/agent-call.mjs",
+      "graph_generator": "scripts/grafo-vivo/gerar-grafo-vivo.mjs"
+    },
     "responsible": "Hermes Agent + Skills sob demanda",
     "created": "2026-08-28",
-    "provenance": "CentralDark operational docs"
+    "provenance": "CentralDark operational docs + live repository reconciliation 2026-08-31"
   },
   {
     "id": "omni_router",

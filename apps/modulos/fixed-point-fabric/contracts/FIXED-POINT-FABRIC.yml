@@ -1,0 +1,429 @@
+schema_version: "1.0"
+kind: CENTRALDARK_FIXED_POINT_FABRIC
+status: CANDIDATE_REQUIRES_SAME_HEAD_PROOF
+extends:
+  - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MEGAZORD-CENTRALDARK.yml
+  - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SCREENPIPE-BINDING.yml
+  - docs/ARQUITETURA/PROOF-ARCHITECTURE/FIXED_POINT_PR.yml
+activation:
+  sequence: ["!CENTRALDARK", "#ACORDAR", "!CALIBRAR", "RECONCILIAR", "CONTRAPROVAR", "FIXED_POINT"]
+<<<<<<< HEAD
+=======
+method_bindings:
+  fable_loop:
+    owner: .agents/skills/fable-loop/SKILL.md
+    mode: READ_ONLY_CALIBRATION
+    default_routing: false
+    may_write_canonical: false
+    promotion_gate: META_LUPA_SAME_CONTROL
+  meta_lupa:
+    owner: .agents/skills/meta-lupa/SKILL.md
+    role: FALSIFIER
+  meta_multibussola:
+    owner: docs/CONSCIENCIA/MULTIBUSSOLA.md
+    aliases: ["Meta Bússola", "Meta Bussola", "META_MULTIBUSSOLA"]
+    new_engine: false
+  metacognicao:
+    owner: docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md
+    role: BELIEF_DELTA_AND_METHOD_REVIEW
+>>>>>>> origin/feat/fixed-point-fabric-proof-20260831
+authority:
+  source_of_truth: github_main
+  sensor_only: screenpipe
+  runtime_planes: [casa, vps]
+  one_writer_per_scope: true
+<<<<<<< HEAD
+=======
+surface_convergence:
+  canonical_public_origin: https://centralldark.com
+  one_public_origin: true
+  one_api_plane: true
+  one_mcp_plane: true
+  second_backend_for_builder: false
+  paths:
+    site: /
+    app: /app
+    builder: /builder
+    admin: /admin
+    api: /api
+    mcp: /mcp
+  builder:
+    owner: apps/modulos/Bolt/
+    public_route: /builder
+    backend_authority: canonical_api
+    direct_provider_credentials_in_renderer: forbidden
+  api:
+    existing_owner_to_reconcile: apps/modulos/arsenal-openai-adapter/
+    canonical_public_route: /api
+    all_external_capabilities_via_api: true
+    examples: [models, tts, payments, status, builder-actions, runtime-actions]
+    tts:
+      canonical_route: /api/tts
+      direct_provider_call_from_client: forbidden
+      provider_selection: server_side_only
+      provider_credentials: server_side_only
+      default_language_intent: pt-BR
+      provider_alias_key_mismatch: fail_closed
+      current_runtime_status: UNKNOWN_UNTIL_REMEASURED
+      observed_incident:
+        event_type: TTS_PROVIDER_KEY_MISMATCH
+        surface: hermes_local
+        selected_provider: openai
+        observed_key_prefix_class: openrouter_style
+        observed_result: HTTP_401_INVALID_API_KEY
+        proves:
+          - TTS_REQUEST_FAILED
+          - PROVIDER_CREDENTIAL_MISMATCH_OBSERVED
+        does_not_prove:
+          - CANONICAL_API_FAILED
+          - OPENAI_PROVIDER_REQUIRED
+          - CENTRALDARK_ROUTER_FAILED
+  mcp:
+    existing_owner: apps/modulos/mcp/
+    canonical_public_route: /mcp
+    one_server_only: true
+    access_scopes: [normal, admin]
+    admin_is_scope_not_second_mcp: true
+    authorization_must_be_server_side: true
+  legacy_routes:
+    mode: COMPATIBILITY_ALIAS_UNTIL_PROVEN_UNUSED
+    delete_before_consumer_inventory: false
+    direct_cutover_without_counterproof: false
+    examples:
+      - builder.centralldark.com
+      - mcp.centralldark.com
+      - hub.centralldark.com
+      - gateway.centralldark.com
+  fixed_point_requires:
+    - canonical_origin_reachable
+    - builder_route_reachable
+    - api_route_reachable
+    - tts_via_canonical_api_pass
+    - tts_pt_br_pass
+    - provider_secret_absent_from_client
+    - mcp_normal_scope_pass
+    - mcp_admin_scope_pass
+    - unauthorized_admin_denied
+    - legacy_consumer_inventory_complete
+    - no_material_regression
+>>>>>>> origin/feat/fixed-point-fabric-proof-20260831
+state_library:
+  github_webhook:
+    signature: hmac_sha256
+    dedupe_key: X-GitHub-Delivery
+    persisted_projection_only: true
+  package_codec:
+    encoding: base64
+    integrity: sha256
+    encryption: false
+  consolidation_seal:
+    tamper_evident: true
+    fail_closed: true
+    absolute_admin_immutability_claim: false
+<<<<<<< HEAD
+fixed_point:
+  requires:
+    - same_candidate_head
+    - local_pass
+    - vps_pass
+    - github_pass
+    - screenpipe_recent_data_pass
+    - no_unknown_blocked_or_stale
+    - two_equal_material_samples
+    - hash_chain_valid
+    - counterproof_pass
+=======
+  randolf_meta_delta:
+    human_alias: RANDOLF
+    role: PR_LEDGER_BRIDGE
+    new_owner: false
+    durable_owner: apps/modulos/fixed-point-fabric/src/centraldark_fixed_point/store.py#record_audit_fact
+    reference_owner: .agents/skills/centraldark-operational-method/references/PR-HOUSE-TEMPORAL-RECONCILIATION.md
+    same_pr_first: true
+    direct_main_write: false
+    raw_chain_of_thought_persisted: false
+    record_decision_rationale_only: true
+    registra_policy:
+      trigger_alias: "!REGISTRA"
+      required_for_all_centraldark_agents_and_surfaces: true
+      material_delta_only: true
+      material_delta_requires_reconciliation: true
+      no_material_delta_no_commit_required: true
+      register_to_active_scope_ledger_before_new_pr: true
+      register_fact_not_private_reasoning: true
+      required_fields:
+        - intent
+        - scope
+        - owner
+        - current_head_or_state
+        - delta
+        - evidence_refs
+        - counterproof_refs
+        - status
+        - next_cursor
+      forbidden:
+        - raw_chain_of_thought
+        - secret_values
+        - screenshot_as_global_truth
+        - duplicate_owner_creation
+    chat_delta_policy:
+      every_material_chat_delta_must_be_reconciled: true
+      commit_per_message: false
+      coalesce_same_session_same_scope: true
+      checkpoint_flush: true
+      dedupe_before_write: true
+      one_writer_per_scope: true
+    commit_policy:
+      canonical_subject: "🌐 feat(fixed-point): YYYY-MM-DD"
+      one_canonical_subject_per_active_pr: true
+      repeated_subject_commits_forbidden: true
+      same_checkpoint_prefers_amend: true
+      rewrite_only_if_head_matches_last_measurement: true
+      force_update_requires_same_writer_scope: true
+  audit_trail:
+    owner: apps/modulos/fixed-point-fabric/src/centraldark_fixed_point/store.py#record_audit_fact
+    event_kind: AUDIT_FACT
+    hash_chained: true
+    one_trail_only: true
+    raw_chain_of_thought_persisted: false
+    pass_requires_evidence: true
+    allowed_statuses: [PASS, FAIL, UNKNOWN, BLOCKED, STALE, CONTRADICTION]
+    capture:
+      - event_type
+      - claim
+      - status
+      - source
+      - methods
+      - head_sha
+      - writer
+      - provider
+      - model
+      - evidence_refs
+      - counterproof_refs
+      - blockers
+      - belief_delta
+    split_claims_required: true
+    examples:
+      - incident: MODEL_SWITCH_AFTER_ROUTER_API_FAILURE
+        facts:
+          - claim: SESSION_CONTINUITY
+            status: PASS
+          - claim: PROVIDER_VALIDATION
+            status: BLOCKED
+      - incident: TTS_PROVIDER_KEY_MISMATCH
+        facts:
+          - claim: TTS_REQUEST
+            status: FAIL
+          - claim: PROVIDER_CREDENTIAL_MATCH
+            status: FAIL
+          - claim: CANONICAL_API_TTS_PATH_ACTIVE
+            status: UNKNOWN
+    forbids:
+      - raw_chain_of_thought
+      - private_reasoning
+      - hidden_reasoning
+      - screenshot_as_global_truth
+      - provider_selected_implies_provider_validated
+  cognitive_debt_guard:
+    owner: docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md
+    role: RECONSTRUCTIBLE_SYSTEM_THEORY_GUARD
+    new_owner: false
+    principle: GREEN_CODE_WITHOUT_RECONSTRUCTIBLE_INTENT_IS_NOT_FIXED_POINT
+    requires:
+      - intent_reconstructible
+      - decision_rationale_reconstructible
+      - owner_locatable
+      - evidence_traceable
+      - counterproof_traceable
+      - change_path_explainable
+      - next_agent_can_continue_without_guessing
+    forbids:
+      - green_ci_implies_shared_understanding
+      - undocumented_decision_as_canonical
+      - hidden_reasoning_as_required_dependency
+      - new_memory_system_for_cognitive_debt
+    audit_projection:
+      - claim
+      - source
+      - evidence_refs
+      - counterproof_refs
+      - belief_delta
+      - blockers
+      - decision_rationale
+    hud:
+      label: COGNITIVE_DEBT
+      statuses: [PASS, UNKNOWN, FAIL, BLOCKED]
+      pass_meaning: system theory reconstructible from canonical evidence without guessing
+      unknown_is_pass: false
+    lock_gate:
+      proven_artifact_lock_requires_reconstructibility: true
+      ci_green_alone_is_insufficient: true
+      last_good_state_preserved_on_failure: true
+
+failure_navigation:
+  mode: STEP_BACK_ONE_CANONICAL_PHASE
+  step_back_count: 1
+  forward_progress_on_fail: false
+  forward_progress_on_blocked: false
+  clamp_at_first_phase: true
+  revalidate_predecessor_before_retry: true
+  retry_failed_phase_only_after_predecessor_pass: true
+  preserve_intent: true
+  preserve_last_good_state: true
+  same_owner_required: true
+  restart_whole_mission: false
+  global_rollback_only_when_baseline_guard_requires: true
+  visual_signal: "🔴 → ↩️ 1 CASA"
+  formula: "recovery_index=max(failed_index-1,0)"
+
+proof_topology:
+  principle: PROVE_WHERE_EFFECT_EXISTS
+  always_on_control_plane: vps
+  casa_is_required_for_every_change: false
+  global_fixed_point_means_all_affected_required_scopes_pass: true
+  all_devices_must_be_online_simultaneously: false
+  scopes:
+    github_only:
+      required: [github_pass]
+    server_only:
+      required: [github_pass, vps_pass]
+      casa_required: false
+      screenpipe_required: false
+    casa_local:
+      required: [github_pass, local_pass]
+      casa_required: true
+      screenpipe_required_if: LOCAL_CONTEXT_OR_SCREENPIPE_IS_MATERIAL
+    cross_plane:
+      required: [github_pass, vps_pass, local_pass]
+      screenpipe_required_if: LOCAL_CONTEXT_OR_SCREENPIPE_IS_MATERIAL
+  rules:
+    affected_scope_must_be_declared_before_green: true
+    unaffected_scope_may_be_not_applicable: true
+    not_applicable_is_not_pass: true
+    casa_offline_does_not_block_server_only_proof: true
+    casa_capability_touched_requires_casa_proof: true
+    vps_can_hold_continuous_server_runtime_proof: true
+    github_ci_is_versioned_proof_not_runtime_effect: true
+    deploy_runtime_proof_requires_target_runtime_observation: true
+
+historical_reconciliation:
+  principle: PAST_ERRORS_MUST_IMPROVE_FUTURE_WITHOUT_GOVERNING_CURRENT_STATE
+  history_is_provenance_not_current_authority: true
+  before_reimplementing:
+    - discover_related_prs_commits_branches_receipts
+    - classify_merged_open_superseded_duplicate_complementary_conflicting
+    - reuse_merged_crystal_and_existing_owner
+    - absorb_only_material_delta
+  past_failure_signature_must_be_checked_when_same_wound_reappears: true
+  repeated_failure_after_proven_crystal: LEARNING_TRANSFER_FAIL
+  abandoned_branch_is_not_authority: true
+  abandoned_branch_may_contain_candidate_gold: true
+  branch_gold_requires_current_owner_and_same_head_proof_before_promotion: true
+  no_blind_copy_from_history: true
+  no_delete_history_without_proof: true
+
+pr_lifecycle:
+  active_integration_ledger: 1381
+  one_active_promotion_pr_per_scope: true
+  many_commits_per_active_pr_allowed: true
+  same_scope_delta_reuses_active_pr: true
+  new_pr_is_not_opened_for_each_chat_or_commit: true
+  main_is_durable_canonical_baseline: true
+  pr_is_review_and_integration_vehicle_not_eternal_main: true
+  merge_to_main_closes_pr_by_git_semantics: true
+  durable_rules_must_live_in_canonical_owners_before_merge: true
+  merged_pr_remains_historical_provenance: true
+  direct_main_write: false
+  promotion_method: squash_if_same_head_gates_pass
+  permanent_open_pr_and_main_continuously_updated_from_same_unmerged_head: CONTRADICTION
+  next_cycle:
+    auto_prepare_when_material_delta_exists: true
+    auto_open_pr_only_when:
+      - previous_same_scope_pr_is_merged_or_closed
+      - no_active_pr_already_owns_same_scope
+      - current_main_remeasured
+      - material_bug_feature_requirement_or_proven_learning_exists
+      - owner_and_scope_resolved
+      - candidate_branch_contains_real_delta
+    do_not_open_when:
+      - no_material_delta
+      - deployment_is_healthy_and_no_change_is_requested
+      - same_scope_active_pr_exists
+      - only_status_or_narrative_changed
+      - evidence_is_unknown_without_actionable_delta
+    new_pr_starts_from_current_main: true
+    inherit_canonical_rules_and_hud_contract: true
+    inherit_old_pr_number: false
+    old_pr_is_lineage_not_live_owner: true
+    human_request_can_start_new_cycle: true
+    autonomous_detected_bug_can_start_new_cycle_if_scope_and_owner_are_proven: true
+    autonomous_new_feature_without_chefe_intent: false
+
+garimpo_ingest:
+  source_role: CANDIDATE_PROVENANCE
+  raw_archive_is_authority: false
+  byte_identity_is_semantic_proof: false
+  split_archive_requires_all_segments_for_complete_byte_proof: true
+  missing_segment_status: BLOCKED_INCOMPLETE_ARCHIVE
+  full_archive_pass_requires:
+    - all_segments_present
+    - archive_integrity_pass
+    - sha256_recorded
+    - inventory_complete
+    - owner_reconciliation
+  duplicate_file_action: PROCESS_ONCE_KEEP_PROVENANCE
+  historical_gold_action: ABSORB_IN_EXISTING_OWNER_AFTER_CURRENT_REMEASUREMENT
+
+logic_gate:
+  method: HORN_INSPIRED_LEAST_FIXED_POINT
+  source_role: DETERMINISTIC_GATE_ANALOGY
+  rules:
+    - "CURRENT_HEAD + TESTS_PASS + COUNTERPROOF_PASS + ROLLBACK_READY -> GREEN_CANDIDATE"
+    - "CRITICAL_UNKNOWN -> NOT_GREEN"
+    - "WRITER_COLLISION -> BLOCKED"
+    - "STALE_HEAD -> REMEASURE"
+    - "DUPLICATE_OWNER -> RECONCILE"
+  iterate_until_no_new_material_fact: true
+  green_and_not_green_simultaneously: BLOCK_PROMOTION
+  self_derived_green_is_external_proof: false
+  measured_denominator_required_for_percentage: true
+  absolute_zero_error_claim: forbidden
+  two_hundred_percent_success: METAPHOR_ONLY_NOT_METRIC
+
+fixed_point:
+  requires:
+    - same_candidate_head
+    - affected_scope_declared
+    - affected_scope_proofs_pass
+    - no_unknown_blocked_or_stale_in_affected_scope
+    - two_equal_material_samples_when_temporal_stability_is_material
+    - hash_chain_valid
+    - counterproof_pass
+    - cognitive_debt_closed_for_material_decisions
+>>>>>>> origin/feat/fixed-point-fabric-proof-20260831
+  forbids:
+    - unknown_to_pass
+    - screenshot_as_global_truth
+    - direct_secret_persistence
+    - direct_main_write_without_receipt
+<<<<<<< HEAD
+promotion:
+  max_open_prs_to_main: 1
+  tracker_reference_keyword: Refs
+  tracker_close_keyword_forbidden: Closes
+=======
+    - unaffected_scope_forced_to_fake_pass
+baseline_guard:
+  consolidated_state: READ_ONLY
+  view_allowed: true
+  candidate_mutation_only: true
+  baseline_owner: apps/modulos/fixed-point-fabric/src/centraldark_fixed_point/store.py#last_good_state
+  candidate_requires: [fixed_point_reached, counterproof_pass, no_material_regression]
+  regression_action: [BLOCK, RECEIPT, ROLLBACK_REQUIRED, PRESERVE_BASELINE]
+  rollback_target: LAST_GOOD_STATE
+  cli_visibility: [status, rollback]
+promotion:
+  max_open_prs_to_main: 1
+  tracker_reference_keyword: Refs
+  tracker_close_keyword_forbidden: Closes
+>>>>>>> origin/feat/fixed-point-fabric-proof-20260831

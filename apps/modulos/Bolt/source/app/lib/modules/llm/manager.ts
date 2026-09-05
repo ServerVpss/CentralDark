@@ -5,42 +5,74 @@ import * as providers from './registry';
 import { createScopedLogger } from '~/utils/logger';
 
 const logger = createScopedLogger('LLMManager');
+const CENTRAL_PROVIDER = 'OpenAILike';
+const FALSE_VALUES = new Set(['0', 'false', 'off', 'no']);
+
 export class LLMManager {
   private static _instance: LLMManager;
   private _providers: Map<string, BaseProvider> = new Map();
   private _modelList: ModelInfo[] = [];
   private _env: Record<string, string> = {};
+  private _centralRouterOnly = true;
 
   private constructor(_env: Record<string, string>) {
-    this._registerProvidersFromDirectory();
     this._env = _env;
+    this._centralRouterOnly = this._resolveCentralRouterOnly(_env);
+    this._registerProvidersFromDirectory();
   }
 
   static getInstance(env: Record<string, string> = {}): LLMManager {
     if (!LLMManager._instance) {
       LLMManager._instance = new LLMManager(env);
     } else if (Object.keys(env).length > 0) {
-      // Update env on subsequent calls so Cloudflare Workers get fresh bindings
+      const nextMode = LLMManager._instance._resolveCentralRouterOnly(env);
       LLMManager._instance._env = env;
+
+      if (nextMode !== LLMManager._instance._centralRouterOnly) {
+        LLMManager._instance._centralRouterOnly = nextMode;
+        LLMManager._instance._providers.clear();
+        LLMManager._instance._modelList = [];
+        LLMManager._instance._registerProvidersFromDirectory();
+      }
     }
 
     return LLMManager._instance;
   }
+
   get env() {
     return this._env;
   }
 
-  private async _registerProvidersFromDirectory() {
+  get centralRouterOnly() {
+    return this._centralRouterOnly;
+  }
+
+  private _resolveCentralRouterOnly(env: Record<string, string> = {}) {
+    const raw =
+      env.CENTRALDARK_ONE_ROUTER ??
+      env.VITE_CENTRALDARK_ONE_ROUTER ??
+      process?.env?.CENTRALDARK_ONE_ROUTER ??
+      process?.env?.VITE_CENTRALDARK_ONE_ROUTER ??
+      'true';
+
+    return !FALSE_VALUES.has(String(raw).trim().toLowerCase());
+  }
+
+  private _registerProvidersFromDirectory() {
     try {
       /*
-       * Dynamically import all files from the providers directory
-       * const providerModules = import.meta.glob('./providers/*.ts', { eager: true });
+       * CentralDark is ONE_SYSTEM_ONLY. In normal Casa mode every visible model
+       * is obtained from the OpenAI-compatible CentralDark gateway/Omni Router.
+       * Upstream/direct providers stay in the tree for compatibility and can be
+       * re-enabled only with CENTRALDARK_ONE_ROUTER=false for explicit diagnostics.
        */
-
-      // Look for exported classes that extend BaseProvider
       for (const exportedItem of Object.values(providers)) {
         if (typeof exportedItem === 'function' && exportedItem.prototype instanceof BaseProvider) {
           const provider = new exportedItem();
+
+          if (this._centralRouterOnly && provider.name !== CENTRAL_PROVIDER) {
+            continue;
+          }
 
           try {
             this.registerProvider(provider);
@@ -48,6 +80,10 @@ export class LLMManager {
             logger.warn('Failed To Register Provider: ', provider.name, 'error:', error.message);
           }
         }
+      }
+
+      if (this._centralRouterOnly && !this._providers.has(CENTRAL_PROVIDER)) {
+        throw new Error(`CENTRAL_ROUTER_PROVIDER_MISSING:${CENTRAL_PROVIDER}`);
       }
     } catch (error) {
       logger.error('Error registering providers:', error);
@@ -87,7 +123,7 @@ export class LLMManager {
     let enabledProviders = Array.from(this._providers.values()).map((p) => p.name);
 
     if (providerSettings && Object.keys(providerSettings).length > 0) {
-      enabledProviders = enabledProviders.filter((p) => providerSettings[p].enabled);
+      enabledProviders = enabledProviders.filter((p) => providerSettings[p]?.enabled !== false);
     }
 
     // Get dynamic models from all providers that support them
@@ -133,9 +169,11 @@ export class LLMManager {
 
     return modelList;
   }
+
   getStaticModelList() {
     return [...this._providers.values()].flatMap((p) => p.staticModels || []);
   }
+
   async getModelListFromProvider(
     providerArg: BaseProvider,
     options: {
@@ -190,6 +228,7 @@ export class LLMManager {
 
     return modelList;
   }
+
   getStaticModelListFromProvider(providerArg: BaseProvider) {
     const provider = this._providers.get(providerArg.name);
 

@@ -1,0 +1,69 @@
+schema: centraldark.pr-mother-pulse.v1
+status: CANDIDATE
+owner: CENTRALDARK_TRIGGER_FABRIC
+workflow: .github/workflows/pr-mother-pulse.yml
+
+intent: >-
+  Tornar movimento material relacionado ao PR-mãe visível por reação nativa do GitHub
+  e por receipt compacto que preserve ator, evento, PR de origem e HEAD, sem converter
+  reação em prova técnica ou autoridade.
+
+mother_resolution:
+  explicit_markers:
+    - PR_MAE=#<number>
+    - PR_MÃE=#<number>
+    - PR_MOTHER=#<number>
+  self_markers:
+    - PR-mãe vivo
+    - ONE_PR_LEDGER=true
+  no_marker: SKIP
+
+reactions:
+  opened: eyes
+  reopened: eyes
+  synchronize: +1
+  labeled: +1
+  unlabeled: +1
+  review_requested: eyes
+  ready_for_review: rocket
+  closed_merged: hooray
+  closed_unmerged: confused
+  manual_pulse: +1
+
+receipt_required_fields:
+  - mother_pr
+  - source_pr
+  - event_action
+  - event_actor
+  - sender
+  - head_sha
+  - base_sha
+  - workflow_run_id
+
+laws:
+  REACTION_IS_TELEMETRY_NOT_PROOF: true
+  REACTION_IS_NOT_APPROVAL: true
+  REACTION_IS_NOT_FIXED_POINT: true
+  REACTION_IS_NOT_AUTHORITY: true
+  REACTION_ACTOR_MAY_BE_GITHUB_ACTIONS_BOT: true
+  EVENT_ACTOR_MUST_BE_RECORDED_SEPARATELY: true
+  HEAD_REQUIRED_FOR_MOVEMENT_RECEIPT: true
+  UNKNOWN_IS_NOT_PASS: true
+  ONE_SYSTEM_ONLY: true
+  NO_DIRECT_MAIN_WRITE: true
+
+security:
+  event: pull_request_target
+  checkout_pr_head: false
+  execute_pr_head_code: false
+  write_scope:
+    - issue_reaction
+    - issue_comment
+  secrets_from_pr_head: false
+
+meaning:
+  eyes: movimento_aberto_ou_revisao
+  +1: delta_ou_sincronizacao_observada
+  rocket: pronto_para_revisao_nao_promovido
+  hooray: evento_de_merge_observado_nao_prova_runtime
+  confused: fechamento_sem_merge_ou_estado_que_exige_reconciliacao

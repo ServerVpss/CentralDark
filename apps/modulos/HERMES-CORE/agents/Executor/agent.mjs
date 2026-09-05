@@ -98,11 +98,11 @@ async function _executar(ferramenta, args) {
         }
 
         // Não engolir falha do ledger: JSON sem ARSENAL não é sucesso completo.
-                try {
-                  registrarNoLedger('licao', `hermes-runtime cat=${categoria}`, '-', licao, 'hermes');
-                } catch (e) {
-                  return { ok: false, saida: `falha ao registrar no ledger: ${e.message.slice(0, 200)}` };
-                }
+        try {
+          registrarNoLedger('licao', `hermes-runtime cat=${categoria}`, '-', licao, 'hermes');
+        } catch (e) {
+          return { ok: false, saida: `falha ao registrar no ledger: ${e.message.slice(0, 200)}` };
+        }
 
         // Read-back dos dois destinos antes de emitir verde.
         const jsonDepois = JSON.parse(await readFile(APRENDIZADOS, 'utf8'));
@@ -121,7 +121,18 @@ async function _executar(ferramenta, args) {
           ok: true,
           saida: `LEARNING_PERSISTENCE_VERIFIED=true categoria=${categoria} json=true ledger=true`,
         };
-      } catch (e) { return { ok: false, saida: `falha ao salvar/verificar aprendizado: ${e.message.slice(0, 200)}` }; }
+      } catch (e) {
+        return { ok: false, saida: `falha ao salvar/verificar aprendizado: ${e.message.slice(0, 200)}` };
+      }      }
+<<<<<<< HEAD
+>>>>>>> 80c309354 (fix(reconciliation): absorver PR #1379 e reduzir queima de workflows)
+=======
+>>>>>>> origin/feat/fixed-point-fabric-proof-20260831
+=======
+      } catch (e) {
+        return { ok: false, saida: `LEARNING_PERSISTENCE_VERIFIED=false falha ao salvar aprendizado: ${e.message.slice(0, 200)}` };
+      }
+>>>>>>> codex/pr1389-bind-standard-flow
     }
     case 'git': {
       const acao = args.acao || 'status';
@@ -131,20 +142,50 @@ async function _executar(ferramenta, args) {
           return { ok: true, saida: stdout || '(limpo)' };
         }
         if (acao === 'commit_push') {
-          const msg = (args.mensagem || 'chore(hermes): auto-commit').replace(/"/g, '\\"');
+          const msg = String(args.mensagem || 'chore(hermes): auto-commit').slice(0, 200);
           // Git cirúrgico: NUNCA add -A. paths explícitos; fallback = só tracked, excluindo disputados.
           const brutos = Array.isArray(args.paths) ? args.paths : [];
           const limpos = brutos.map(x => String(x).replace(/[^\w@\/.\-]/g, '')).filter(Boolean);
           const add = limpos.length
             ? `git add ${limpos.map(x => `'${x}'`).join(' ')}`
             : `git add -u -- ':!apps/modulos/status/painel-data.json' ':!*.env' ':!*.bak'`;
-          const comando = `set -o pipefail cd ${ROOT} && ${add} && git commit -m "${msg}" && (git push origin main || (git pull --rebase --autostash origin main && git push origin main) || { git rebase --abort >/dev/null 2>&1 || true; echo 'PUSH PENDENTE — relatar' >&2; exit 23; }) && LOCAL_HEAD="$(git rev-parse HEAD)" && REMOTE_HEAD="$(git ls-remote origin refs/heads/main | awk '{print $1}')" && test -n "$REMOTE_HEAD" && test "$LOCAL_HEAD" = "$REMOTE_HEAD" && echo "REMOTE_HEAD_VERIFIED=$LOCAL_HEAD"`;
-          const { stdout, stderr } = await pexec('bash', ['-lc', comando], { timeout: 120_000, maxBuffer: 5 * 1024 * 1024 });
-          const saida = (stdout + (stderr ? `\n[stderr]\n${stderr}` : '')).slice(-4000);
-          if (!/REMOTE_HEAD_VERIFIED=[0-9a-f]{40}/i.test(saida)) {
-            return { ok: false, saida: `REMOTE_HEAD_VERIFIED=false\n${saida}`.slice(0, 4000) };
+          const script = [
+            'set -o pipefail',
+            'set -eu',
+            `cd ${ROOT}`,
+            add,
+            'git commit -m "$HERMES_COMMIT_MSG"',
+            'if ! git push origin main; then',
+            '  if ! git pull --rebase --autostash origin main || ! git push origin main; then',
+            "    git rebase --abort >/dev/null 2>&1 || true",
+            "    echo 'PUSH PENDENTE — relatar'",
+            '    exit 23',
+            '  fi',
+            'fi',
+            'LOCAL_HEAD="$(git rev-parse HEAD)"',
+            'REMOTE_HEAD="$(git ls-remote origin refs/heads/main | cut -f1)"',
+            'test "$LOCAL_HEAD" = "$REMOTE_HEAD" || {',
+            "  echo 'PUSH PENDENTE — relatar'",
+            '  exit 23',
+            '}',
+            'echo "REMOTE_HEAD_VERIFIED=$REMOTE_HEAD"',
+          ].join('\n');
+          const { stdout } = await pexec('bash', ['-lc', script], {
+            env: { ...process.env, HERMES_COMMIT_MSG: msg },
+            timeout: 120_000,
+          });
+          if (!/REMOTE_HEAD_VERIFIED=[0-9a-f]{40}/.test(stdout)) {
+            return { ok: false, saida: 'PUSH PENDENTE — relatar: confirmação do HEAD remoto ausente' };
           }
-          return { ok: true, saida: saida.slice(0, 4000) };
+          return { ok: true, saida: stdout.slice(0, 4000) };
+          return { ok: true, saida: stdout.slice(-2000) };
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> 80c309354 (fix(reconciliation): absorver PR #1379 e reduzir queima de workflows)
+=======
+>>>>>>> origin/feat/fixed-point-fabric-proof-20260831
+=======
+>>>>>>> codex/pr1389-bind-standard-flow
         }
         return { ok: false, saida: `ação git desconhecida: ${acao}` };
       } catch (e) {

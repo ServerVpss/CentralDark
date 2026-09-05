@@ -20,6 +20,7 @@ on:
       - '.agents/skills/signal-territory-crystallizer/**'
       - '.agents/skills/engine-gap-closure/**'
       - 'apps/modulos/HERMES-CORE/**'
+      - 'apps/modulos/fixed-point-fabric/**'
       - 'scripts/memory-linker/**'
       - '.agents/skills/session-intelligence-harvester/**'
       - '.agents/skills/knowledge-compiler/**'
@@ -63,6 +64,33 @@ jobs:
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v6
         with:
           python-version: '3.11'
+
+      - name: Prove Fixed Point Fabric inside existing workflow
+        if: github.event_name != 'pull_request' || github.event.pull_request.draft == false || github.event.pull_request.draft == true
+        shell: bash
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          set -euo pipefail
+          if [ "$EVENT_NAME" = "pull_request" ] && git diff --quiet "$BASE_SHA" "$HEAD_SHA" -- apps/modulos/fixed-point-fabric/ .github/workflows/trigger-fabric-package.yml; then
+            echo 'FIXED_POINT_FABRIC=SKIP_NOT_TOUCHED'
+            exit 0
+          fi
+          cd apps/modulos/fixed-point-fabric
+          python3 --version
+          python3 -c "import sys; assert sys.version_info >= (3, 11), sys.version"
+          python3 -m compileall -q src
+          PYTHONPATH=src python3 -m unittest discover -s tests -v
+          PYTHONPATH=src python3 tests/ci_fixed_point.py | tee fixed-point-ci-receipt.json
+          test -s fixed-point-ci-receipt.json
+          grep -q '"chain_valid": true' fixed-point-ci-receipt.json
+          if grep -RIE --exclude='.env.example' --exclude='*.md' '(github_pat_|ghp_|sk-[A-Za-z0-9_-]{12,}|BEGIN (RSA|OPENSSH) PRIVATE KEY)' .; then
+            echo 'Potential secret found'
+            exit 1
+          fi
+          echo 'FIXED_POINT_FABRIC=PASS_REUSED_WORKFLOW'
 
       - name: Verify repository contract facts
         shell: bash
@@ -170,7 +198,11 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          cat > "$RUNNER_TEMP/mermaid-puppeteer-config.json" <<'JSON'
+          {"args":["--no-sandbox","--disable-setuid-sandbox"]}
+          JSON
           npx -y @mermaid-js/mermaid-cli@11.9.0 \
+            -p "$RUNNER_TEMP/mermaid-puppeteer-config.json" \
             -i docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ARCHITECTURE.mmd \
             -o docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ARCHITECTURE.png \
             -b transparent

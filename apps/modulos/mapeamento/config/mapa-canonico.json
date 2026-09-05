@@ -129,7 +129,7 @@
     {
       "id": "inteligencia",
       "label": "INTELIGÊNCIA",
-      "paths": ["apps/modulos/graph-panel/", "apps/modulos/mapeamento/", "apps/modulos/obsidian-plugin-grafo-vivo/"]
+      "paths": ["apps/modulos/graph-panel/", "apps/modulos/mapeamento/", "apps/modulos/fixed-point-fabric/", "apps/modulos/obsidian-plugin-grafo-vivo/"]
     },
     {
       "id": "memoria",

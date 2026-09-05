@@ -1,4 +1,4 @@
-# AIOS/AIOX Gold Assay — pacote para prova do Hermes
+# AIOS/[EXT_REDACTED] Gold Assay — pacote para prova do Hermes
 
 Data: 2026-08-28
 
@@ -20,12 +20,12 @@ AIOS_MCP_IMPORT=false
 
 ## Destination lock
 
-Garimpar o `aiox-core.zip` fornecido pelo SEGREDO/CHEFE e preservar somente deltas que possam reforçar owners já existentes da CentralDark.
+Garimpar o `[EXT_REDACTED]-core.zip` fornecido pelo SEGREDO/CHEFE e preservar somente deltas que possam reforçar owners já existentes da CentralDark.
 
 O destino NÃO é instalar AIOS, conectar a runtime externo, importar personas/agentes, criar outro MCP, outro orquestrador, outra memória, outro Design System ou outro governo.
 
 ```text
-AIOX_RAW
+[EXT_REDACTED]_RAW
 → INVENTORY
 → ASSAY
 → COUNTERPROOF
@@ -40,7 +40,7 @@ AIOX_RAW
 ```text
 CENTRALDARK_REPO=ServerVpss/CentralDark
 CENTRALDARK_BASE=269a943b9905b907cc421c1036951a4ca6495f01
-SOURCE_ARCHIVE=aiox-core.zip
+SOURCE_ARCHIVE=[EXT_REDACTED]-core.zip
 SOURCE_ARCHIVE_SIZE_BYTES=452524182
 SOURCE_ARCHIVE_SHA256=fd4eebcb50259a198ca4d68a63fc1a9c4445042f47b48e64a036f597c63dd411
 ZIP_ENTRIES=49136
@@ -122,7 +122,7 @@ RAW_PACKAGE_VENDORING=REJECT
 
 ## Contraprovas encontradas na própria fonte
 
-1. `package.json` declara `validate:structure` apontando para `.aios-core/infrastructure/scripts/source-tree-guardian/index.js`, mas esse caminho não foi encontrado no ZIP medido. `DECLARED != PRESENT`.
+1. `package.json` declara `validate:structure` apontando para `.[EXT_REDACTED]-core/infrastructure/scripts/source-tree-guardian/index.js`, mas esse caminho não foi encontrado no ZIP medido. `DECLARED != PRESENT`.
 2. `test-quality-assessment.js` contém múltiplos métodos que recebem `_content` e referenciam `content`; portanto essa implementação não é ouro confiável sem correção independente.
 3. `semantic-merge-engine.js` contém arquitetura de merge multiagente/AI. Isso não recebe caneta na CentralDark; conflito pode ser observado, mas mutação continua serializada.
 4. O `LICENSE` do pacote combina Commons Clause Condition v1.0 com texto MIT, enquanto `package.json` declara MIT. Por prudência, nenhum código bruto é copiado.
