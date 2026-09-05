@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-09-05T17:09:11.683Z",
-  "updatedAtBR": "05/09/2026, 14:09:11 BRT",
+  "updatedAt": "2026-09-05T19:02:51.511Z",
+  "updatedAtBR": "05/09/2026, 16:02:51 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "feat(vscode): cristalizar Git Intelligence no Hermes",
+    "lastCommit": "🔒 shared: cristalizar contraprova do writer e exigir lease real",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-09-05T19:02:51.511Z",
+      "titulo": "Push na main · b8504ba0b6913facaa3396ed5e5838ff6ee19877",
+      "detalhe": "🔒 shared: cristalizar contraprova do writer e exigir lease real",
+      "area": "Repositório",
+      "sha": "b8504ba",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-09-05T17:09:11.683Z",
       "titulo": "Push na main · 259b0471a2adf41aacbbe55b9190d7fab8ab990a",
       "detalhe": "feat(vscode): cristalizar Git Intelligence no Hermes",
@@ -988,14 +996,6 @@
       "detalhe": "Merge PR #1389: fix/close-external-source-gate-20260831 - funnel gate implementation",
       "area": "Repositório",
       "sha": "8ff68f7",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-31T05:06:36.745Z",
-      "titulo": "Push na main · 030dd049010c1153096036117b5d828a3bfcefeb",
-      "detalhe": "docs: consolidar 12 paralelos V2/V3/V4 para archive/legacy (lei #1384) (#1386)",
-      "area": "Repositório",
-      "sha": "030dd04",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-09-05T19:02:51.511Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · b8504ba0b6913facaa3396ed5e5838ff6ee19877 (b8504ba)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-09-05T17:09:11.683Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 259b0471a2adf41aacbbe55b9190d7fab8ab990a (259b047)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-31T11:58:33.628Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 8ff68f74d33e399f5b6f76ddbeff2f7a4c3af5f3 (8ff68f7)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-31T05:06:36.745Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 030dd049010c1153096036117b5d828a3bfcefeb (030dd04)",
       "area": "Repositório",
       "status": "sucesso"
     }

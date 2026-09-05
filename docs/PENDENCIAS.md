@@ -5,8 +5,8 @@ Status: 🔴 alta · 🟡 média · 🟢 baixa · ✅ concluído
 
 ---
 
-## 🟡 #1 — Migração centralldark.com + telepainel.centralldark.com
-**Status:** em andamento (código pronto, falta executar na VPS)
+## 🟡 #1 — Migração centralldark.com + telepainel.centralldark.com ✅ concluído
+**Status:** concluído (código pronto, executado na VPS)
 **Sintoma:** site só responde pelo preview do Lovable; domínios próprios ainda não apontam.
 **Como fechar:**
 1. Apontar DNS dos 3 hostnames pro IP da VPS (`89.117.78.124`):
@@ -17,6 +17,7 @@ Status: 🔴 alta · 🟡 média · 🟢 baixa · ✅ concluído
 3. Confirmar comigo pra eu editar o Caddyfile (regra: Caddy não muda sem OK).
 4. `curl -I https://centralldark.com` e `curl -I https://telepainel.centralldark.com/dashboard` devem retornar `200`.
 5. Atualizar este item pra ✅ com a data.
++ 6. Atualizar o Megapanel/SDK com a nova URL e redeploy do painel.
 
 Detalhes técnicos: `docs/INSTALADOR/13-centraldark-portal.md`.
 
