@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-09-05T16:37:32.109Z",
-  "updatedAtBR": "05/09/2026, 13:37:32 BRT",
+  "updatedAt": "2026-09-05T16:38:03.377Z",
+  "updatedAtBR": "05/09/2026, 13:38:03 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "🧠 hermes: amarrar MetaLupa contínua, lacres e autoaprendizado",
+    "lastCommit": "🎼 respirações: alinhar contrato vivo, MetaLupa e lacres",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-09-05T16:38:03.377Z",
+      "titulo": "Push na main · 31b3fe30d85efac9b081e066e9c455f094ba8b0c",
+      "detalhe": "🎼 respirações: alinhar contrato vivo, MetaLupa e lacres",
+      "area": "Repositório",
+      "sha": "31b3fe3",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-09-05T16:37:32.109Z",
       "titulo": "Push na main · 240ecdc3b514ca363a797f4b4522f18e535873ca",
       "detalhe": "🧠 hermes: amarrar MetaLupa contínua, lacres e autoaprendizado",
@@ -988,14 +996,6 @@
       "detalhe": "📚 REGISTRAR DELTA 4 DO HANDSHAKE NO OWNER CANÔNICO (#1382)",
       "area": "Repositório",
       "sha": "4feeac5",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-31T03:42:38.885Z",
-      "titulo": "Push na main · 8a79be14b85ac956214454ac3bcfeecca4857565",
-      "detalhe": "feat(reality-drift-detector): Auto-reconciliation on git drift",
-      "area": "Repositório",
-      "sha": "8a79be1",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-09-05T16:38:03.377Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 31b3fe30d85efac9b081e066e9c455f094ba8b0c (31b3fe3)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-09-05T16:37:32.109Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 240ecdc3b514ca363a797f4b4522f18e535873ca (240ecdc)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-31T04:34:42.900Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 4feeac5f3c5714307263dadab13584335713cc91 (4feeac5)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-31T03:42:38.885Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 8a79be14b85ac956214454ac3bcfeecca4857565 (8a79be1)",
       "area": "Repositório",
       "status": "sucesso"
     }
