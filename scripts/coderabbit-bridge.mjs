@@ -127,9 +127,9 @@ async function mineralize(signalReceipt) {
   if (!fs.existsSync(MINERALIZER)) {
     return { state: 'QUEBRADO', reason: 'MINERALIZER_ABSENT', receipt: null };
   }
+  const encoded = Buffer.from(JSON.stringify(signalReceipt), 'utf8').toString('base64url');
   try {
-    const child = await pexec(process.execPath, [MINERALIZER], {
-      input: JSON.stringify(signalReceipt),
+    const child = await pexec(process.execPath, [MINERALIZER, '--event-b64', encoded], {
       timeout: 30_000,
       maxBuffer: 2 * 1024 * 1024,
     });
