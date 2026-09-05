@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-09-05T12:15:25.999Z",
-  "updatedAtBR": "05/09/2026, 09:15:26 BRT",
+  "updatedAt": "2026-09-05T12:23:19.325Z",
+  "updatedAtBR": "05/09/2026, 09:23:19 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "test(handoff): provar pontos ligados no Trigger Fabric existente",
+    "lastCommit": "fix(fixed-point): restaurar BaselineLock perdido em reconciliação",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-09-05T12:23:19.325Z",
+      "titulo": "Push na main · 2cfe3a059ba4d66226df8791520ec4a72727704e",
+      "detalhe": "fix(fixed-point): restaurar BaselineLock perdido em reconciliação",
+      "area": "Repositório",
+      "sha": "2cfe3a0",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-09-05T12:15:25.999Z",
       "titulo": "Push na main · fb124620e5582b36e31c52b79bbfb23afc90af3b",
       "detalhe": "test(handoff): provar pontos ligados no Trigger Fabric existente",
@@ -988,14 +996,6 @@
       "detalhe": "arch: registrar MEGAZORD-CENTRALDARK como composição automática (#1370)",
       "area": "Repositório",
       "sha": "09274b7",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-29T18:36:09.699Z",
-      "titulo": "Push na main · 0dbb5d2d6210d70c0f0b31dbfa869007ac5cd4f3",
-      "detalhe": "fix(governança): unificar owner operacional e rebaixar Jeito do Pivete a legado (#1368)",
-      "area": "Repositório",
-      "sha": "0dbb5d2",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-09-05T12:23:19.325Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 2cfe3a059ba4d66226df8791520ec4a72727704e (2cfe3a0)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-09-05T12:15:25.999Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · fb124620e5582b36e31c52b79bbfb23afc90af3b (fb12462)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-30T01:08:06.379Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 09274b75bdac602b64eecd3782b3aec533bca5e7 (09274b7)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-29T18:36:09.699Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 0dbb5d2d6210d70c0f0b31dbfa869007ac5cd4f3 (0dbb5d2)",
       "area": "Repositório",
       "status": "sucesso"
     }
