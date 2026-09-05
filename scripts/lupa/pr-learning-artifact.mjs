@@ -93,9 +93,12 @@ export function classifyFiles(files = []) {
     sensitive_paths: 0,
   };
   const sensitive = /(^|\/)(\.env(?:\.|$)|secrets?(\/|$)|tokens?(\/|$)|sessions?(\/|$)|\.ssh(\/|$)|[^/]+\.(pem|key)$)/i;
+  const backupException = /^scripts\/backup-.*\.sh$/i;
 
   for (const file of files) {
     const name = String(file?.filename ?? '');
+    if (backupException.test(name)) {}
+    else
     if (sensitive.test(name)) {
       categories.sensitive_paths++;
       continue;

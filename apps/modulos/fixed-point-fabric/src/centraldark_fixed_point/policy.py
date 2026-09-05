@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import Iterable
 
-from .models import FixedPointReceipt, ProbeReceipt, Snapshot, Status
+from .models import BaselineLock, FixedPointReceipt, ProbeReceipt, Snapshot, Status
 
 
 def _age_seconds(timestamp: str) -> float:
@@ -33,6 +33,26 @@ class FixedPointPolicy:
                 blockers.append(f"{domain}:STALE")
             blockers.extend(f"{domain}:{item}" for item in receipt.blockers)
         return sorted(set(blockers))
+
+    def regressions_against(self, baseline: BaselineLock | dict, snapshot: Snapshot) -> list[str]:
+        """Return only material downgrades from a protected baseline.
+
+        The baseline remains untouched when this returns a non-empty list. A
+        candidate may improve or add evidence, but it may not turn a proven
+        domain into a non-PASS state.
+        """
+        baseline_id = baseline.snapshot_id if isinstance(baseline, BaselineLock) else baseline.get("snapshot_id")
+        if not baseline_id:
+            return ["baseline:INVALID"]
+        candidate = {receipt.domain: receipt for receipt in snapshot.receipts}
+        regressions: list[str] = []
+        for domain in self.required_domains:
+            receipt = candidate.get(domain)
+            if receipt is None:
+                regressions.append(f"{domain}:MISSING")
+            elif receipt.status is not Status.PASS:
+                regressions.append(f"{domain}:{receipt.status.value}")
+        return sorted(set(regressions))
 
     def decide(self, snapshot: Snapshot, previous: Snapshot | None, stable_samples: int) -> FixedPointReceipt:
         blockers = self.blockers_for(snapshot.receipts)

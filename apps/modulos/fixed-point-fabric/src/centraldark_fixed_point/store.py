@@ -9,9 +9,34 @@ from contextlib import contextmanager
 from pathlib import Path
 from typing import Any, Iterator
 
+from .models import BaselineLock, FixedPointReceipt, Snapshot
+
+
+AUDIT_FACT_STATUSES = {"PASS", "FAIL", "UNKNOWN", "BLOCKED", "STALE", "CONTRADICTION"}
+AUDIT_FACT_FORBIDDEN_KEYS = {
+    "chain_of_thought",
+    "raw_chain_of_thought",
+    "raw_reasoning",
+    "private_reasoning",
+    "hidden_reasoning",
+}
+
 
 def canonical_json(value: Any) -> str:
     return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"), default=str)
+
+
+def _contains_forbidden_reasoning_key(value: Any) -> bool:
+    if isinstance(value, dict):
+        for key, nested in value.items():
+            if str(key).strip().lower() in AUDIT_FACT_FORBIDDEN_KEYS:
+                return True
+            if _contains_forbidden_reasoning_key(nested):
+                return True
+        return False
+    if isinstance(value, (list, tuple)):
+        return any(_contains_forbidden_reasoning_key(item) for item in value)
+    return False
 
 
 class EventStore:
@@ -60,6 +85,61 @@ class EventStore:
         self.db.commit()
         return event_hash
 
+    def record_audit_fact(
+        self,
+        *,
+        event_type: str,
+        claim: str,
+        status: str,
+        source: str,
+        methods: tuple[str, ...] = (),
+        context: dict[str, Any] | None = None,
+        evidence_refs: tuple[str, ...] = (),
+        counterproof_refs: tuple[str, ...] = (),
+        blockers: tuple[str, ...] = (),
+        belief_delta: dict[str, Any] | None = None,
+    ) -> str:
+        """Append one falsifiable fact to the shared hash-chained trail.
+
+        The trail persists audit-ready facts, not private chain-of-thought.
+        A PASS without evidence is rejected. Different claims about the same
+        incident must be recorded independently (for example continuity PASS
+        while provider validation remains BLOCKED).
+        """
+        normalized_status = str(status).strip().upper()
+        normalized_event_type = str(event_type).strip().upper()
+        normalized_claim = str(claim).strip()
+        normalized_source = str(source).strip()
+
+        if normalized_status not in AUDIT_FACT_STATUSES:
+            raise ValueError(f"unsupported audit fact status: {normalized_status}")
+        if not normalized_event_type:
+            raise ValueError("event_type is required")
+        if not normalized_claim:
+            raise ValueError("claim is required")
+        if not normalized_source:
+            raise ValueError("source is required")
+        if normalized_status == "PASS" and not evidence_refs:
+            raise ValueError("PASS audit fact requires at least one evidence_ref")
+
+        payload = {
+            "schema": "CENTRALDARK_AUDIT_FACT_V1",
+            "event_type": normalized_event_type,
+            "claim": normalized_claim,
+            "status": normalized_status,
+            "source": normalized_source,
+            "methods": list(methods),
+            "context": dict(context or {}),
+            "evidence_refs": list(evidence_refs),
+            "counterproof_refs": list(counterproof_refs),
+            "blockers": list(blockers),
+            "belief_delta": dict(belief_delta or {}),
+            "raw_chain_of_thought_persisted": False,
+        }
+        if _contains_forbidden_reasoning_key(payload):
+            raise ValueError("raw/private reasoning fields are forbidden in the audit trail")
+        return self.append("AUDIT_FACT", payload)
+
     def save_snapshot(self, snapshot: dict[str, Any]) -> None:
         self.db.execute(
             "INSERT OR REPLACE INTO snapshots(snapshot_id,created_at,signature,payload) VALUES(?,?,?,?)",
@@ -71,13 +151,62 @@ class EventStore:
         row = self.db.execute("SELECT payload FROM snapshots ORDER BY created_at DESC LIMIT 1").fetchone()
         return json.loads(row[0]) if row else None
 
-    def set_state(self, key: str, value: Any) -> None:
+    def set_state(self, key: str, value: Any, *, allow_protected: bool = False) -> None:
+        if key == "last_good_state" and not allow_protected:
+            existing = self.get_state(key)
+            if existing is not None and canonical_json(existing) != canonical_json(value):
+                raise RuntimeError("last_good_state is protected; promote a proven candidate instead")
         self.db.execute("INSERT OR REPLACE INTO state(key,value) VALUES(?,?)", (key, canonical_json(value)))
         self.db.commit()
 
     def get_state(self, key: str, default: Any = None) -> Any:
         row = self.db.execute("SELECT value FROM state WHERE key=?", (key,)).fetchone()
         return json.loads(row[0]) if row else default
+
+    def get_last_good_state(self) -> dict[str, Any] | None:
+        """Read the protected baseline without granting mutation authority."""
+        return self.get_state("last_good_state")
+
+    def promote_last_good_state(
+        self,
+        snapshot: Snapshot,
+        decision: FixedPointReceipt,
+        *,
+        scope: str = "fixed-point",
+        regressions: tuple[str, ...] = (),
+    ) -> dict[str, Any]:
+        """Advance the protected pointer only after a proven candidate.
+
+        Previous values stay in the hash-chained event ledger. A failed or
+        regressing candidate must never call this method.
+        """
+        if not decision.reached:
+            raise ValueError("cannot promote a candidate without fixed point")
+        if regressions:
+            raise ValueError(f"candidate regresses baseline: {', '.join(regressions)}")
+        candidate = BaselineLock(
+            scope=scope,
+            snapshot_id=snapshot.snapshot_id,
+            signature=snapshot.signature,
+            fixed_point_verdict=decision.verdict,
+        ).to_dict()
+        previous = self.get_last_good_state()
+        if previous and previous.get("signature") == candidate["signature"]:
+            return previous
+        self.append(
+            "BASELINE_ADVANCED" if previous else "BASELINE_LOCKED",
+            {"current": candidate, "previous": previous},
+        )
+        self.set_state("last_good_state", candidate, allow_protected=True)
+        self.set_state("rollback_target", candidate)
+        return candidate
+
+    def record_rollback_required(self, reason: str, *, target: dict[str, Any] | None = None) -> dict[str, Any]:
+        """Persist a fail-closed recovery target while preserving the baseline."""
+        payload = {"reason": reason, "target": target}
+        self.append("ROLLBACK_REQUIRED", payload)
+        self.set_state("rollback_target", target)
+        return payload
 
     def list_events(self, kind: str | None = None, limit: int = 100) -> list[dict[str, Any]]:
         if not isinstance(limit, int) or limit < 1 or limit > 1000:
@@ -171,4 +300,3 @@ class EventStore:
             if current and current.get("pid") == os.getpid():
                 self.db.execute("DELETE FROM state WHERE key=?", (f"lease:{name}",))
                 self.db.commit()
-

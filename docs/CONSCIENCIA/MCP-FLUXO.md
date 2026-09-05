@@ -2,7 +2,7 @@
 title: "MCP FLUXO"
 date: 2026-07-05
 tags: ["consciencia"]
-updated: 2026-07-05
+updated: 2026-09-03
 ---
 
 # 🔒 MCP OAuth — Fluxo Oficial (onde cada coisa roda)
@@ -71,6 +71,56 @@ chmod 600 /root/CentralDark/secrets/mcp-admin.password
 - 🟢 **ok** — PM2 online + senha carregada + `/authorize` sem "ausente"
 - 🟡 **senha_nao_carregada** — processo up mas `.env` não foi injetado (rodar sync)
 - 🔴 **falha** — processo caído ou domínio fora do ar
+
+## 🪡 WebMCP / Fragment Bridge — mesma Casa, sem segundo MCP
+
+Material WebMCP, bundles de navegador e envelopes JSON entram como **fonte de capacidade/proveniência**, nunca como nova autoridade ou novo cérebro. O contrato executável desta costura vive em:
+
+`docs/CONSCIENCIA/04-MCP-E-CONECTORES/WEBMCP-FRAGMENT-BRIDGE.yml`
+
+O consumidor determinístico vive em:
+
+`.agents/skills/knowledge-compiler/scripts/fragment-bridge.mjs`
+
+Fluxo:
+
+```text
+WEB PAGE / BUNDLE / SESSION JSON
+→ HASH + PROVENIÊNCIA
+→ SECRET SCREEN
+→ EXTRAÇÃO DE TOOL/SÍMBOLOS
+→ DEDUP_BY_HASH
+→ KNOWLEDGE COMPILER
+→ METACOGNIÇÃO OPERACIONAL
+→ OWNER EXISTENTE
+→ MCP QUANDO A CAPACIDADE FOR TOOL/CONNECTOR
+→ TESTE
+→ CONTRAPROVA
+→ CRISTAL
+```
+
+WebMCP observado expõe o padrão de ferramenta de página (`ModelContext`, `ScriptTool`, registro imperativo/declarativo, schema, cancelamento e telemetria). A CentralDark absorve **a capacidade**, não copia um segundo runtime de navegador.
+
+```text
+WEBMCP_IS_CAPABILITY_NOT_NEW_BRAIN=true
+WEBMCP_IS_NOT_SECOND_MCP=true
+SOURCE_IS_PROVENANCE_NOT_AUTHORITY=true
+RAW_BUNDLE_IS_NOT_RUNTIME_PROOF=true
+TOOL_DECLARATION_IS_NOT_TOOL_EXECUTION_PROOF=true
+```
+
+Estado de conector também fica fail-closed e separado:
+
+```text
+UNKNOWN | CONNECTED | SYNCING | SYNCED | PARTIAL | FAILED | NOT_SYNCED
+
+CONNECTED != SYNCHRONIZED
+SYNCING != PASS
+PARTIAL != PASS
+SYNCED exige evidência aplicável
+```
+
+`MRP` literal permanece `UNRESOLVED`; não criar componente a partir de token não provado.
 
 ---
 

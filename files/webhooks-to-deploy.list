@@ -1,0 +1,3 @@
+# Example webhook targets. Replace with real URLs when available.
+https://httpbin.org/post
+# Add one URL per line

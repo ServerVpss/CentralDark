@@ -16,6 +16,7 @@ const ipc = {
 const centraldark = Object.freeze({
   getRuntime: () => ipcRenderer.invoke('centraldark:runtime:get'),
   getHermesHealth: () => ipcRenderer.invoke('centraldark:hermes:health'),
+  getScreenpipeHealth: () => ipcRenderer.invoke('centraldark:screenpipe:health'),
   openIntent: (intent: string) => ipcRenderer.invoke('centraldark:intent:open', intent),
   showMain: () => ipcRenderer.invoke('centraldark:main:show'),
   toggleWidget: () => ipcRenderer.invoke('centraldark:widget:toggle'),

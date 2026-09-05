@@ -81,3 +81,17 @@ class FixedPointReceipt:
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
 
+
+@dataclass(frozen=True)
+class BaselineLock:
+    """Read-only pointer to the last fixed-point state that survived proof."""
+
+    scope: str
+    snapshot_id: str
+    signature: str
+    fixed_point_verdict: str
+    locked_at: str = field(default_factory=utc_now)
+
+    def to_dict(self) -> dict[str, Any]:
+        return asdict(self)
+

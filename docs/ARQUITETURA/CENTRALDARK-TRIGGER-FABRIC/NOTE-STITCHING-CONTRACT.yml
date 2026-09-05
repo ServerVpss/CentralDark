@@ -1,0 +1,99 @@
+schema: centraldark.note-stitching.v1
+status: CANDIDATE_UNTIL_SAME_HEAD_CI
+owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SECOND-BRAIN.yml
+authority: SEGREDO/CHEFE
+marker: "🪡"
+cultural_phrase: "vai #rasgando que eu vou costurando"
+biblical_anchor:
+  reference: "Ec 3:7"
+  direction: TEAR_AND_SEW_AT_THE_RIGHT_TIME
+  baianes_paraphrase: "vai rasgando que eu vou costurando"
+
+purpose: >-
+  Garantir que toda nota textual pertencente ao conhecimento CentralDark seja
+  descoberta, roteada e indexada para o mesmo cerebro logico, sem exigir edicao
+  manual de cada nota e sem criar segunda memoria, segundo owner ou segunda verdade.
+
+note_roots:
+  - docs/BRAIN
+  - docs/CONSCIENCIA
+  - docs/ARQUITETURA
+  - docs/RELATORIOS
+  - .agents/skills
+
+extensions: [.md, .markdown, .yml, .yaml, .json]
+
+exclude_path_fragments:
+  - node_modules
+  - vendor
+  - dist
+  - build
+  - .git
+  - __pycache__
+  - .artifacts
+  - package-lock.json
+  - pnpm-lock.yaml
+  - yarn.lock
+
+stitch_target:
+  master_cycle: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
+  universal_method: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/UNIVERSAL-ENGINE-METHOD.yml
+  material_ingest: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MATERIAL-INGEST.md
+  second_brain: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SECOND-BRAIN.yml
+  response_owner: docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md
+
+pipeline:
+  - DISCOVER_NOTE
+  - NORMALIZE_REPO_RELATIVE_PATH
+  - SHA256_BYTES
+  - CLASSIFY_SOURCE
+  - PRESERVE_PROVENANCE
+  - DEDUPE_BY_SHA256
+  - ROUTE_PEGATUDO
+  - ROUTE_COGNITIVE_DEBT
+  - ROUTE_EXISTING_OWNER
+  - BIND_MASTER_CYCLE
+  - INDEX_DERIVED_GRAPH_VECTOR
+  - EMIT_STITCH_RECEIPT
+
+invariants:
+  EVERY_DISCOVERED_NOTE_GETS_STITCH_RECEIPT: true
+  STITCH_IS_LOGICAL_BINDING_NOT_CONTENT_REWRITE: true
+  NOTE_CONTENT_IS_NOT_AUTHORITY_BY_EXISTENCE: true
+  NOTE_IS_NOT_CURRENT_STATE_WITHOUT_REMEASURE: true
+  GRAPH_IS_DERIVED_NOT_AUTHORITY: true
+  VECTOR_IS_DERIVED_NOT_AUTHORITY: true
+  ONE_LOGICAL_SECOND_BRAIN: true
+  PARALLEL_SECOND_BRAIN_FORBIDDEN: true
+  REUSE_BEFORE_CREATE: true
+  ONE_SYSTEM_ONLY: true
+  ONE_WRITER_PER_SCOPE: true
+  UNKNOWN_IS_NOT_PASS: true
+  DOCUMENTED_IS_NOT_EXECUTED: true
+  SECRET_SCAN_BEFORE_PROMOTION: true
+
+receipt_schema:
+  name: centraldark.note-stitch-receipt.v1
+  required_fields:
+    - path
+    - sha256
+    - root
+    - source_class
+    - stitch_marker
+    - master_cycle
+    - universal_method
+    - owner_resolution
+    - derived_index_only
+
+visual_contract:
+  when_stitching_event_visible: "🪡"
+  phrase_when_contextual: "vai #rasgando que eu vou costurando"
+  emoji_is_semantic_marker_not_proof: true
+
+runtime:
+  scanner: scripts/trigger-fabric/stitch_all_notes.py
+  hermes_validator: apps/modulos/HERMES-CORE/core/universal-method-contract.mjs
+  self_test: "python3 scripts/trigger-fabric/stitch_all_notes.py --self-test"
+  inventory: "python3 scripts/trigger-fabric/stitch_all_notes.py --inventory"
+  fail_closed_on_unreadable_note: true
+  fail_closed_on_duplicate_path: true

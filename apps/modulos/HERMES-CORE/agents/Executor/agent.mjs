@@ -12,7 +12,11 @@ import { handle as handlerUniversal } from '../Universal-Handler/agent.mjs';
 const ROOT = '/root/CentralDark';
 const APRENDIZADOS = join(dirname(fileURLToPath(import.meta.url)), '../../knowledge/aprendizados.json');
 <<<<<<< HEAD
+<<<<<<< HEAD
 const ARSENAL_APRENDIZADOS = join(ROOT, 'docs/CONSCIENCIA/ARSENAL/APRENDIZADOS.md');
+=======
+const ARSENAL_APRENDIZADOS = '/root/CentralDark/docs/CONSCIENCIA/ARSENAL/APRENDIZADOS.md';
+>>>>>>> origin/feat/fixed-point-fabric-proof-20260831
 
 const BLOQUEIOS = [
   /\breboot\b/i, /\bshutdown\b/i, /\bhalt\b/i, /\bpoweroff\b/i,
@@ -98,6 +102,7 @@ async function _executar(ferramenta, args) {
           await writeFile(APRENDIZADOS, JSON.stringify(base, null, 2));
         }
 <<<<<<< HEAD
+<<<<<<< HEAD
 
         // Não engolir falha do ledger: JSON sem ARSENAL não é sucesso completo.
                 try {
@@ -125,6 +130,8 @@ async function _executar(ferramenta, args) {
         };
       } catch (e) { return { ok: false, saida: `falha ao salvar/verificar aprendizado: ${e.message.slice(0, 200)}` }; }
 =======
+=======
+>>>>>>> origin/feat/fixed-point-fabric-proof-20260831
         registrarNoLedger('licao', `hermes-runtime cat=${categoria}`, '-', licao, 'hermes');
         const jsonPersistido = JSON.parse(await readFile(APRENDIZADOS, 'utf8'));
         const ledgerPersistido = await readFile(ARSENAL_APRENDIZADOS, 'utf8');
@@ -137,7 +144,10 @@ async function _executar(ferramenta, args) {
       } catch (e) {
         return { ok: false, saida: `LEARNING_PERSISTENCE_VERIFIED=false falha ao salvar aprendizado: ${e.message.slice(0, 200)}` };
       }
+<<<<<<< HEAD
 >>>>>>> 80c309354 (fix(reconciliation): absorver PR #1379 e reduzir queima de workflows)
+=======
+>>>>>>> origin/feat/fixed-point-fabric-proof-20260831
     }
     case 'git': {
       const acao = args.acao || 'status';
@@ -155,6 +165,7 @@ async function _executar(ferramenta, args) {
             ? `git add ${limpos.map(x => `'${x}'`).join(' ')}`
             : `git add -u -- ':!apps/modulos/status/painel-data.json' ':!*.env' ':!*.bak'`;
 <<<<<<< HEAD
+<<<<<<< HEAD
           const comando = `set -o pipefail cd ${ROOT} && ${add} && git commit -m "${msg}" && (git push origin main || (git pull --rebase --autostash origin main && git push origin main) || { git rebase --abort >/dev/null 2>&1 || true; echo 'PUSH PENDENTE — relatar' >&2; exit 23; }) && LOCAL_HEAD="$(git rev-parse HEAD)" && REMOTE_HEAD="$(git ls-remote origin refs/heads/main | awk '{print $1}')" && test -n "$REMOTE_HEAD" && test "$LOCAL_HEAD" = "$REMOTE_HEAD" && echo "REMOTE_HEAD_VERIFIED=$LOCAL_HEAD"`;
           const { stdout, stderr } = await pexec('bash', ['-lc', comando], { timeout: 120_000, maxBuffer: 5 * 1024 * 1024 });
           const saida = (stdout + (stderr ? `\n[stderr]\n${stderr}` : '')).slice(-4000);
@@ -163,6 +174,8 @@ async function _executar(ferramenta, args) {
           }
           return { ok: true, saida: saida.slice(0, 4000) };
 =======
+=======
+>>>>>>> origin/feat/fixed-point-fabric-proof-20260831
           const script = [
             'set -o pipefail',
             'set -eu',
@@ -192,7 +205,10 @@ async function _executar(ferramenta, args) {
             return { ok: false, saida: 'PUSH PENDENTE — relatar: confirmação do HEAD remoto ausente' };
           }
           return { ok: true, saida: stdout.slice(-2000) };
+<<<<<<< HEAD
 >>>>>>> 80c309354 (fix(reconciliation): absorver PR #1379 e reduzir queima de workflows)
+=======
+>>>>>>> origin/feat/fixed-point-fabric-proof-20260831
         }
         return { ok: false, saida: `ação git desconhecida: ${acao}` };
       } catch (e) {

@@ -1,0 +1,71 @@
+name: Hermes Core Signal Watch
+
+on:
+  pull_request:
+    paths:
+      - 'apps/modulos/HERMES-CORE/**'
+      - 'scripts/hermes/signal-watch-notify.mjs'
+      - 'scripts/webhook/lib/notify-telegram.mjs'
+  push:
+    branches: [main]
+    paths:
+      - 'apps/modulos/HERMES-CORE/**'
+      - 'scripts/hermes/signal-watch-notify.mjs'
+      - 'scripts/webhook/lib/notify-telegram.mjs'
+  schedule:
+    - cron: '17 7 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: hermes-core-signal-watch-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout same HEAD
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+          submodules: false
+
+      - name: Provar parser e classificador do Signal Watcher
+        run: |
+          set -euo pipefail
+          node --check apps/modulos/HERMES-CORE/agents/Signal-Watcher/agent.mjs
+          node --test apps/modulos/HERMES-CORE/agents/Signal-Watcher/agent.test.mjs
+
+      - name: Varrer HERMES-CORE byte/source aplicável
+        id: scan
+        run: |
+          set -euo pipefail
+          set +e
+          node apps/modulos/HERMES-CORE/agents/Signal-Watcher/agent.mjs --scan-core \
+            > "$RUNNER_TEMP/hermes-signal.json"
+          code=$?
+          set -e
+          cat "$RUNNER_TEMP/hermes-signal.json"
+          echo '## 🧿 Hermes Core Signal Watch' >> "$GITHUB_STEP_SUMMARY"
+          echo '```json' >> "$GITHUB_STEP_SUMMARY"
+          cat "$RUNNER_TEMP/hermes-signal.json" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          if [ "$code" -eq 2 ]; then
+            echo 'NODE_CHECK_FAIL=1' >> "$GITHUB_ENV"
+            exit 2
+          fi
+
+      - name: Receipt
+        if: always()
+        run: |
+          echo "HEAD_SHA=${GITHUB_SHA}"
+          echo "SIGNAL_WATCHER=apps/modulos/HERMES-CORE/agents/Signal-Watcher/agent.mjs"
+          echo "NODE_CHECK_FAIL=${NODE_CHECK_FAIL:-0}"
+          echo 'STATIC_FALLBACK_CANDIDATE_IS_NOT_RUNTIME_FAILURE=1'
+          echo 'CANDIDATE_IS_NOT_PROVEN=1'
+          echo 'UNKNOWN_IS_NOT_PASS=1'

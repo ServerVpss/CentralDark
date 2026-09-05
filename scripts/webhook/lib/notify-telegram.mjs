@@ -56,23 +56,18 @@ export async function getHeadInfo(repoPath) {
   }
 }
 
-export async function notifyVpsUpdated({ sha, msg }) {
+async function sendTelegramHtml(text, chatOverride = '') {
   const { token, chat } = loadCfg();
-  if (!token || !chat) {
-    return { ok: false, reason: 'token/chat ausente' };
-  }
-  const shortSha = (sha || '').slice(0, 7);
-  const text =
-    `🚀 <b>VPS ATUALIZADA</b> — CentralDark\n` +
-    `🔄 <b>${escapeHtml(msg)}</b>\n` +
-    `🧾 <code>${shortSha}</code>\n` +
-    `✅ <i>Deploy automático concluído via webhook</i>`;
+  const target = chatOverride || chat;
+  if (!token || !target) return { ok: false, reason: 'token/chat ausente' };
+
   const body = JSON.stringify({
-    chat_id: chat,
+    chat_id: target,
     parse_mode: 'HTML',
     text,
     disable_web_page_preview: true,
   });
+
   try {
     const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: 'POST',
@@ -84,6 +79,36 @@ export async function notifyVpsUpdated({ sha, msg }) {
   } catch (e) {
     return { ok: false, reason: e.message };
   }
+}
+
+export async function notifyVpsUpdated({ sha, msg }) {
+  const shortSha = (sha || '').slice(0, 7);
+  const text =
+    `🚀 <b>VPS ATUALIZADA</b> — CentralDark\n` +
+    `🔄 <b>${escapeHtml(msg)}</b>\n` +
+    `🧾 <code>${shortSha}</code>\n` +
+    `✅ <i>Deploy automático concluído via webhook</i>`;
+  return sendTelegramHtml(text);
+}
+
+// Cartão gamificado do mesmo padrão epistemológico da Casa.
+// Visual NÃO muda o significado: CANDIDATE continua sem prova, UNKNOWN nunca vira PASS.
+export async function notifyCentralDarkSignal({ state = 'UNKNOWN', title = 'Signal Watch', card = '', source = '' } = {}) {
+  const normalized = String(state || 'UNKNOWN').toUpperCase();
+  const icon = normalized === 'PROVEN' ? '🟢'
+    : normalized === 'FAIL' ? '🔴'
+      : normalized === 'BLOCKED' ? '🟠'
+        : normalized === 'CANDIDATE' ? '🟣'
+          : '⚪';
+  const safeCard = String(card || '').slice(0, 3200);
+  const text = [
+    `🧿 <b>CENTRALDARK</b> · ${escapeHtml(title)}`,
+    `${icon} <b>STATE=${escapeHtml(normalized)}</b>`,
+    source ? `🎯 SOURCE=<code>${escapeHtml(source)}</code>` : '',
+    safeCard ? `<pre>${escapeHtml(safeCard)}</pre>` : '',
+    '<i>CANDIDATE != PROVEN · UNKNOWN != PASS · DOCUMENTED != EXECUTED</i>',
+  ].filter(Boolean).join('\n');
+  return sendTelegramHtml(text, process.env.NOTIFY_CHAT_ID || '');
 }
 
 function escapeHtml(s) {

@@ -25,16 +25,40 @@ def check_absent(path, forbidden=(), classification='PROVEN_ABSENT_IN_REPO'):
         ok=not violations
     checks.append({'path':path,'classification':classification,'ok':ok,'missing':violations})
 
-check('LEIA-ME-IA.md',[
- '#ACORDAR','!CALIBRAR','CENTRALDARK_AI_BOOT',
- 'MODEL_IMPORT_RESOLVES_CANONICAL_CORE=true',
- 'MODEL_CHANGE_CHANGES_RESPONSE_CONTRACT=false',
- 'RESPONSE_STYLE_OWNER=docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md',
- 'EMOJI_MAP_OWNER=docs/CONSCIENCIA/PADRAO-EMOJIS.md',
- 'BAIANES_FACIL_DEFAULT=true',
- 'EMOJI_CONTEXT_REQUIRED=true',
- 'ALL_MODEL_ADAPTERS_INHERIT_RESPONSE_STYLE=true',
-], classification='CANONICAL_MODEL_IMPORT_RESPONSE_STYLE')
+check('docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md',[
+ 'CHEFE_SYSTEMATIC_PROOF_REQUIRED=true',
+ 'SYSTEMATIC_PROOF_REQUIRED_FOR_MATERIAL_CONFIRMATIONS=true',
+ 'CONFIRMATIONS_ONE_TOPIC_BELOW_ANOTHER=true',
+ 'PROOF_REF_REQUIRED_FOR_PROVEN=true',
+ 'NO_PROOF_REF => STATUS=UNKNOWN',
+ 'GREEN_WITHOUT_RECONSTRUCTIBLE_PROOF=INCOMPLETE',
+ 'COGNITIVE_DEBT=OPEN => FIXED_POINT=NOT_PROVEN',
+], classification='CHEFE_SYSTEMATIC_PROOF_CONTRACT')
+check('apps/modulos/fixed-point-fabric/contracts/FIXED-POINT-FABRIC.yml',[
+ 'mode: STEP_BACK_ONE_CANONICAL_PHASE',
+ 'principle: PROVE_WHERE_EFFECT_EXISTS',
+ 'casa_offline_does_not_block_server_only_proof: true',
+ 'principle: PAST_ERRORS_MUST_IMPROVE_FUTURE_WITHOUT_GOVERNING_CURRENT_STATE',
+ 'method: HORN_INSPIRED_LEAST_FIXED_POINT',
+ 'absolute_zero_error_claim: forbidden',
+ 'two_hundred_percent_success: METAPHOR_ONLY_NOT_METRIC',
+], classification='FIXED_POINT_SCOPE_HISTORY_LOGIC_CONTRACT')
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CAPABILITY-READINESS-POLICY.yml',[
+ 'DISABLED_IS_NOT_FAILURE: true',
+ 'OFF_IS_NOT_FAILURE_WHEN_NOT_SELECTED: true',
+ 'AVAILABLE_OFF_IS_VALID_STATE: true',
+ 'FAILURE_REQUIRES_EXPECTED_ACTIVE_CAPABILITY: true',
+ 'BUTTON_OFF_IS_STATE_NOT_INCIDENT: true',
+ 'principle: OFF_BY_ITSELF_MEANS_ONLY_OFF',
+ 'one_optional_arm_off_does_not_fail_organism: true',
+ 'classification_when_failure_proven: REQUIRED_UNAVAILABLE',
+], classification='CAPABILITY_OFF_NEUTRALITY_CONTRACT')
+check('apps/modulos/Bolt/source/app/components/centraldark/CentralDarkCockpitShell.client.tsx',[
+ 'DISABLED/OFF != FAIL',
+ 'FAIL REQUIRES EXPECTED ACTIVE',
+ 'OFF/DISABLED não é erro por si só',
+], classification='COCKPIT_OFF_NEUTRALITY_HUD')
+check('LEIA-ME-IA.md',['#ACORDAR','!CALIBRAR','CENTRALDARK_AI_BOOT'])
 check('CENTRALDARK_AI_BOOT.yaml',[
  'adaptive_payload: true',
  'observed_evidence: "MEASURE_AT_RUNTIME: branch, HEAD, PR, runtime, tools, owner, writer_scope"',
@@ -178,12 +202,6 @@ check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml',[
  'ITEM_ARCHITECTURE_DEPENDENCY_GUARD',
  'ITEM_ITERATE_MEASURE_REORGANIZE',
  'ITEM_VALUES_OVER_BLIND_HUMAN_RITUAL',
- 'model_import_contract:',
- 'model_change_changes_response_contract: false',
- 'response_style_owner: docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md',
- 'emoji_map_owner: docs/CONSCIENCIA/PADRAO-EMOJIS.md',
- 'emoji_context_required: true',
- 'all_model_adapters_inherit_response_style: true',
 ])
 check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml',[
  'event: BOT_ENTRY','event: PRE_HUMAN_RETURN','event: RESUME',
@@ -293,4 +311,8 @@ print('ALCHEMICAL_OPERATIONAL_LEARNING_CRYSTAL=PASS')
 print('RESILIENT_AUTONOMY_BOUNDARY_CRYSTAL=PASS')
 print('MATERIAL_STATE_MACHINE_AND_LEARNING_BINDING=PASS')
 print('DETERMINISTIC_SCAFFOLD_CONTRACT=PASS')
+print('CHEFE_SYSTEMATIC_PROOF_CONTRACT=PASS')
+print('FIXED_POINT_SCOPE_HISTORY_LOGIC_CONTRACT=PASS')
+print('CAPABILITY_OFF_NEUTRALITY_CONTRACT=PASS')
+print('COCKPIT_OFF_NEUTRALITY_HUD=PASS')
 print('NOTE=PASS proves repository contract/path/runner-policy facts only; it does not prove live Windows/VPS/runtime inheritance.')

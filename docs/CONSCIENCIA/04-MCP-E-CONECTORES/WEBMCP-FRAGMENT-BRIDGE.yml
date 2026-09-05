@@ -1,0 +1,152 @@
+schema: centraldark.webmcp-fragment-bridge.v1
+status: CANDIDATE
+
+owners:
+  transport: docs/CONSCIENCIA/MCP-FLUXO.md
+  cognition: docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md
+  compiler: .agents/skills/knowledge-compiler/SKILL.md
+  executable_bridge: .agents/skills/knowledge-compiler/scripts/fragment-bridge.mjs
+
+intent: >-
+  Absorver fragmentos de WebMCP, bundles e envelopes de sessão como matéria de mineração,
+  preservando proveniência e deduplicação, e transformá-los em candidatos de rota para o
+  MCP e o motor cognitivo existentes sem criar segundo cérebro, segundo MCP ou autoridade nova.
+
+source_provenance:
+  - name: WebMCP Chromium Design Doc.md
+    sha256: a24ffdbe32d8aa86e8d6f864681e1b63f888b66367e9b495afe1e923643b85dd
+    class: USER_PROVIDED_OFFICIAL_DESIGN_MATERIAL
+    authority: false
+  - name: 2340486e-hpg4hay6kru8ymfa.js
+    sha256: ad5eed757feaa0b9e018e08e47ec08a6afd2f855a837e4ff51a21c1e095d3c50
+    class: USER_PROVIDED_BUNDLE_FRAGMENT
+    authority: false
+  - name: 4813494d-m3ykw98vzdk0ypm2.js
+    sha256: b419d45f66af22833262a8a52bd338c02f9f4a50cbcc57dfc2c9af83ff8dc632
+    class: USER_PROVIDED_BUNDLE_FRAGMENT
+    authority: false
+  - name: CRISTAL_EXTRACAO_1788413483957.json
+    sha256: 2e32a782e6e6a54f646519e795d5d99f24895ee143a2fd240da7d2f7d8fae665
+    class: USER_PROVIDED_SESSION_ENVELOPE
+    authority: false
+
+webmcp_delta:
+  page_tool_registry:
+    imperative_api: document.modelContext.registerTool
+    declarative_form_attributes:
+      - toolname
+      - tooldescription
+    route_role: PAGE_CAPABILITY_DISCOVERY
+  browser_agent_bridge:
+    concepts:
+      - Annotated_Page_Content_APC
+      - ScriptTool
+      - ScriptToolHost
+      - ModelContext
+      - execution_id
+      - cancellation
+      - cross_document_result
+      - devtools_live_events
+    house_mapping:
+      discovery: MCP_TOOL_DISCOVERY_CANDIDATE
+      execution: EXISTING_MCP_TOOL_EXECUTION_BOUNDARY
+      telemetry: RECEIPT_AND_OBSERVABILITY
+  declarative_safety:
+    schema_validate_before_mutation: true
+    invalid_input_must_not_partially_modify_form: true
+    manual_review_when_autosubmit_absent: true
+    autosubmit_is_explicit_page_policy: true
+    cancellation_is_first_class: true
+
+fragment_ingestion:
+  session_envelope:
+    required_fields:
+      - timestamp
+      - session_id
+      - source
+      - blocks
+    block_identity: SHA256_NORMALIZED_CONTENT
+    blank_blocks: DROP
+    duplicate_blocks: REFERENCE_FIRST_HASH
+    thought_blocks:
+      canonical_content: false
+      preserve:
+        - id
+        - type
+        - declared_length
+        - content_sha256
+      reason: PRIVATE_OR_INTERMEDIATE_REASONING_IS_NOT_REQUIRED_FOR_OPERATIONAL_CRYSTAL
+    text_blocks:
+      canonical_candidate: true
+      requires_owner_and_counterproof: true
+  observed_fixture_stats:
+    block_count: 52
+    unique_nonempty_content_hashes: 31
+    duplicated_hash_groups: 10
+
+bundle_mining:
+  symbols_are_candidates_not_runtime_proof: true
+  observed_candidate_capabilities:
+    - CONNECTOR_TAXONOMY
+    - CONNECTOR_SYNC_STATE_MACHINE
+    - MEMORY_IN_SEARCH
+    - FILE_LIBRARY_AUTO_REFERENCE
+    - REMOTE_BROWSER_DATA
+    - CONVERSATION_CLASSIFIER
+    - GMAIL_CONNECTOR
+    - GITHUB_CONNECTOR
+    - NOTION_CONNECTOR
+    - SLACK_CONNECTOR
+  forbidden_inference:
+    - BUNDLE_SYMBOL_IMPLIES_ENABLED
+    - BUNDLE_SYMBOL_IMPLIES_CONNECTED
+    - CONNECTED_IMPLIES_SYNCHRONIZED
+
+connector_state_machine:
+  states:
+    - UNKNOWN
+    - CONNECTED
+    - SYNCING
+    - SYNCED
+    - PARTIAL
+    - FAILED
+    - NOT_SYNCED
+  laws:
+    CONNECTED_IS_NOT_SYNCHRONIZED: true
+    SYNCING_IS_NOT_PASS: true
+    PARTIAL_IS_NOT_PASS: true
+    FAILED_IS_NOT_UNKNOWN: true
+    NOT_SYNCED_IS_NOT_CONNECTION_FAILURE: true
+    SYNCED_REQUIRES_APPLICABLE_EVIDENCE: true
+
+route:
+  - RAW_FRAGMENT
+  - HASH_PROVENANCE
+  - SECRET_SCREEN
+  - EXTRACT_SYMBOLS_AND_TOOL_DESCRIPTORS
+  - DEDUP_BY_HASH
+  - CLASSIFY_PROVEN_CANDIDATE_UNKNOWN_DROP
+  - KNOWLEDGE_COMPILER
+  - METACOGNICAO
+  - SELECT_EXISTING_OWNER
+  - MCP_ROUTE_WHEN_TOOL_CAPABILITY
+  - TEST
+  - COUNTERPROOF
+  - CRYSTALLIZE
+  - FLASH_ROUTE
+
+name_resolution:
+  MRP_LITERAL: UNRESOLVED
+  MCP: EXISTING_OWNER_PROVEN
+  rule: DO_NOT_CREATE_COMPONENT_FROM_UNRESOLVED_TOKEN
+
+laws:
+  SOURCE_IS_PROVENANCE_NOT_AUTHORITY: true
+  RAW_BUNDLE_IS_NOT_CANONICAL_SOURCE: true
+  RAW_SESSION_IS_IMMUTABLE_INPUT: true
+  DEDUP_BEFORE_CRYSTALLIZE: true
+  WEBMCP_IS_CAPABILITY_NOT_NEW_BRAIN: true
+  WEBMCP_IS_NOT_SECOND_MCP: true
+  ONE_SYSTEM_ONLY: true
+  REUSE_BEFORE_CREATE: true
+  UNKNOWN_IS_NOT_PASS: true

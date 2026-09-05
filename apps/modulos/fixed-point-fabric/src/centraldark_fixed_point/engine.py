@@ -69,6 +69,10 @@ class FixedPointEngine:
             decision = self.policy.decide(snapshot, None, 1)
             self.store.append("VERDICT", decision.to_dict())
             self.store.set_state("last_verdict", decision.to_dict())
+<<<<<<< HEAD
+=======
+            self._finalize_baseline(snapshot, decision)
+>>>>>>> origin/feat/fixed-point-fabric-proof-20260831
             return snapshot, decision
 
     def run_until_fixed_point(self) -> tuple[Snapshot, FixedPointReceipt]:
@@ -83,12 +87,37 @@ class FixedPointEngine:
                 self.store.append("VERDICT", last_decision.to_dict())
                 self.store.set_state("last_verdict", last_decision.to_dict())
                 if last_decision.reached:
+<<<<<<< HEAD
+=======
+                    self._finalize_baseline(snapshot, last_decision)
+>>>>>>> origin/feat/fixed-point-fabric-proof-20260831
                     return snapshot, last_decision
                 previous = snapshot
                 if round_number < self.max_rounds:
                     time.sleep(self.sample_interval_seconds)
+<<<<<<< HEAD
         assert previous is not None and last_decision is not None
         return previous, last_decision
+=======
+            assert previous is not None and last_decision is not None
+            self._finalize_baseline(previous, last_decision)
+            return previous, last_decision
+
+    def _finalize_baseline(self, snapshot: Snapshot, decision: FixedPointReceipt) -> None:
+        baseline = self.store.get_last_good_state()
+        if not decision.reached:
+            if baseline:
+                self.store.record_rollback_required(
+                    ";".join(decision.blockers) or decision.verdict,
+                    target=baseline,
+                )
+            return
+        regressions = tuple(self.policy.regressions_against(baseline, snapshot)) if baseline else ()
+        if regressions:
+            self.store.record_rollback_required(";".join(regressions), target=baseline)
+            return
+        self.store.promote_last_good_state(snapshot, decision, regressions=regressions)
+>>>>>>> origin/feat/fixed-point-fabric-proof-20260831
 
 
 def receipt_json(snapshot: Snapshot, decision: FixedPointReceipt) -> str:

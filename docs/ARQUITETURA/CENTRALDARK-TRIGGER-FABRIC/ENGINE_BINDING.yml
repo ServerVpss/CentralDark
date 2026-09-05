@@ -1,4 +1,4 @@
-schema: centraldark.engine-binding.v2
+schema: centraldark.engine-binding.v3
 contract_owner: LEIA-ME-IA.md
 trigger_fabric_owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml
 binding_mode: LOAD_REFERENCE
@@ -55,12 +55,15 @@ mandatory_inheritance:
   - ACORDAR
   - CALIBRAR
   - MULTIBUSSOLA
+  - AUREOLA_BAHIA_BIBLICA
+  - SEMANTIC_GREEN_GATE
   - META_LUPA_PROPORTIONAL
   - RECONCILIAR
   - DELTA_UTIL
   - CONTRAPROVA
   - REMEDICAO
   - FIXED_POINT
+  - POST_GREEN_LOCK
   - REGISTRA
   - BOOT
   - DISTINCT_ENGINEERING_COMPILER_ON_MATERIAL_GAP
@@ -142,7 +145,7 @@ master_cycle_binding:
   resolver: scripts/trigger-fabric/centraldark_master_cycle.py
   explicit_trigger: "!CENTRALDARK"
   plain_word_centraldark_does_not_trigger: true
-  expands_to: [ACORDAR, CALIBRAR, MULTIBUSSOLA, META_LUPA, RECONCILIAR, DELTA_UTIL, CONTRAPROVA, REMEDICAO, FIXED_POINT, REGISTRA, BOOT]
+  expands_to: [ACORDAR, CALIBRAR, MULTIBUSSOLA, AUREOLA_BAHIA_BIBLICA, META_LUPA, RECONCILIAR, DELTA_UTIL, CONTRAPROVA, REMEDICAO, SEMANTIC_GREEN, FIXED_POINT, POST_GREEN_LOCK, REGISTRA, BOOT]
   session_state_consumer: scripts/trigger-fabric/centraldark_master_cycle.py#resolve_with_session_state
   session_state_requires_caller_file: true
   explicit_activation_requires_chefe_provenance: true
@@ -156,6 +159,25 @@ master_cycle_binding:
   second_semantic_owner: FORBIDDEN
   graph_is_derived_not_authority: true
   valuable_memory_requires_properties: true
+
+aureola_semantic_lock_binding:
+  visible_route_contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml
+  semantic_green_contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SEMANTIC-GREEN-GATE.yml
+  semantic_green_runtime: apps/modulos/HERMES-CORE/core/semantic-green-gate.mjs
+  post_green_lock_contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/POST-GREEN-LOCK.yml
+  post_green_lock_runtime: apps/modulos/HERMES-CORE/core/scope-lock-gate.mjs
+  applies_to_all_engines: true
+  model_switch_changes_contract: false
+  provider_switch_changes_contract: false
+  skin_switch_changes_contract: false
+  operational_trace_is_private_reasoning: false
+  operational_trace_is_visible_debug_route: true
+  multibussola_axis_required_for_semantic_green: true
+  same_head_ci_required_before_lock: true
+  post_green_default: LOCKED_READ_ONLY
+  locked_scope_mutation_without_explicit_chefe_intent: DENY
+  explicit_reopen: WARN_THEN_NEW_CANDIDATE_CYCLE
+  previous_last_good_state_preserved: true
 
 model_touch_binding:
   router: apps/modulos/elite-gateway/scripts/centraldark_omni_router.py
