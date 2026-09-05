@@ -2,21 +2,31 @@ import type { MetaFunction } from '@remix-run/cloudflare';
 import { useEffect, useMemo, useState, type CSSProperties, type FormEvent } from 'react';
 
 type Locale = 'pt-BR' | 'en' | 'es' | 'fr';
-type HermesHealth = { status: 'ONLINE' | 'OFFLINE' | 'UNKNOWN'; endpoint?: string; latency_ms?: number };
-type RuntimeInfo = { hermes_base_url: string; house_root: string; public_url: string; widget_shortcut: string };
+type CentralHealth = { status: 'ONLINE' | 'OFFLINE' | 'UNKNOWN'; endpoint?: string; route?: string; latency_ms?: number };
+type RuntimeInfo = {
+  omni_router_base_url: string;
+  hermes_base_url: string;
+  house_root: string;
+  public_api_url: string;
+  public_url: string;
+  widget_shortcut: string;
+  one_system_only?: boolean;
+  one_router_only?: boolean;
+};
 type CentralDarkBridge = {
   getRuntime(): Promise<RuntimeInfo>;
-  getHermesHealth(): Promise<HermesHealth>;
+  getCentralHealth?(): Promise<CentralHealth>;
+  getHermesHealth(): Promise<CentralHealth>;
   openIntent(intent: string): Promise<{ ok: boolean }>;
   showMain(): Promise<{ ok: boolean }>;
   hideWidget(): Promise<{ ok: boolean }>;
 };
 
 const copy = {
-  'pt-BR': { title: 'SOL', subtitle: 'uma Casa · muitos braços', placeholder: 'Qual é a intenção, CHEFE?', send: 'Executar', open: 'Abrir CentralDark', online: 'Hermes acordado', offline: 'Hermes esperando o motor local', unknown: 'Medindo Hermes', speak: 'Ouvir SOL', hide: 'Esconder' },
-  en: { title: 'SOL', subtitle: 'one House · many arms', placeholder: 'What is the intent, CHIEF?', send: 'Execute', open: 'Open CentralDark', online: 'Hermes is awake', offline: 'Hermes awaits the local engine', unknown: 'Measuring Hermes', speak: 'Hear SOL', hide: 'Hide' },
-  es: { title: 'SOL', subtitle: 'una Casa · muchos brazos', placeholder: '¿Cuál es la intención, JEFE?', send: 'Ejecutar', open: 'Abrir CentralDark', online: 'Hermes está despierto', offline: 'Hermes espera el motor local', unknown: 'Midiendo Hermes', speak: 'Escuchar a SOL', hide: 'Ocultar' },
-  fr: { title: 'SOL', subtitle: 'une Maison · plusieurs bras', placeholder: "Quelle est l'intention, CHEF ?", send: 'Exécuter', open: 'Ouvrir CentralDark', online: 'Hermes est éveillé', offline: 'Hermes attend le moteur local', unknown: 'Mesure de Hermes', speak: 'Écouter SOL', hide: 'Masquer' },
+  'pt-BR': { title: 'SOL', subtitle: 'uma Casa · muitos braços', placeholder: 'Qual é a intenção, CHEFE?', send: 'Executar', open: 'Abrir CentralDark', online: 'CentralDark acordada', offline: 'Omni Router fora da linha', unknown: 'Medindo a porta única', speak: 'Ouvir SOL', hide: 'Esconder' },
+  en: { title: 'SOL', subtitle: 'one House · many arms', placeholder: 'What is the intent, CHIEF?', send: 'Execute', open: 'Open CentralDark', online: 'CentralDark is awake', offline: 'Omni Router is out of line', unknown: 'Measuring the single gateway', speak: 'Hear SOL', hide: 'Hide' },
+  es: { title: 'SOL', subtitle: 'una Casa · muchos brazos', placeholder: '¿Cuál es la intención, JEFE?', send: 'Ejecutar', open: 'Abrir CentralDark', online: 'CentralDark está despierta', offline: 'Omni Router fuera de línea', unknown: 'Midiendo la puerta única', speak: 'Escuchar a SOL', hide: 'Ocultar' },
+  fr: { title: 'SOL', subtitle: 'une Maison · plusieurs bras', placeholder: "Quelle est l'intention, CHEF ?", send: 'Exécuter', open: 'Ouvrir CentralDark', online: 'CentralDark est éveillée', offline: 'Omni Router hors ligne', unknown: 'Mesure de la porte unique', speak: 'Écouter SOL', hide: 'Masquer' },
 } as const;
 
 export const meta: MetaFunction = () => [
@@ -32,7 +42,7 @@ const noDrag = { WebkitAppRegion: 'no-drag' } as CSSProperties;
 
 export default function SolWidget() {
   const [locale, setLocale] = useState<Locale>('pt-BR');
-  const [health, setHealth] = useState<HermesHealth>({ status: 'UNKNOWN' });
+  const [health, setHealth] = useState<CentralHealth>({ status: 'UNKNOWN' });
   const [runtime, setRuntime] = useState<RuntimeInfo | null>(null);
   const [intent, setIntent] = useState('');
   const [sending, setSending] = useState(false);
@@ -43,7 +53,10 @@ export default function SolWidget() {
     const api = bridge();
     if (!api) return;
     api.getRuntime().then(setRuntime).catch(() => setRuntime(null));
-    const measure = () => api.getHermesHealth().then(setHealth).catch(() => setHealth({ status: 'UNKNOWN' }));
+    const measure = () => {
+      const probe = api.getCentralHealth ? api.getCentralHealth() : api.getHermesHealth();
+      return probe.then(setHealth).catch(() => setHealth({ status: 'UNKNOWN' }));
+    };
     measure();
     const timer = window.setInterval(measure, 10_000);
     return () => window.clearInterval(timer);
@@ -69,7 +82,8 @@ export default function SolWidget() {
     window.speechSynthesis.speak(utterance);
   }
 
-  const statusColor = health.status === 'ONLINE' ? '#4ade80' : health.status === 'OFFLINE' ? '#fbbf24' : '#94a3b8';
+  const statusColor = health.status === 'ONLINE' ? '#4ade80' : health.status === 'OFFLINE' ? '#f87171' : '#fbbf24';
+  const centralEndpoint = runtime?.omni_router_base_url ?? 'http://127.0.0.1:8099';
 
   return (
     <main style={{ minHeight: '100vh', padding: 10, color: '#ecfdf5', fontFamily: 'Geist, Inter, system-ui, sans-serif', background: 'transparent' }}>
@@ -85,7 +99,9 @@ export default function SolWidget() {
         <div style={{ padding: '8px 18px 18px' }}>
           <div style={{ padding: 14, borderRadius: 18, background: 'rgba(6,78,59,.24)', border: '1px solid rgba(52,211,153,.16)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 9, fontSize: 13 }}><span style={{ width: 9, height: 9, borderRadius: 999, background: statusColor, boxShadow: `0 0 18px ${statusColor}` }} />{statusText}</div>
-            <div style={{ marginTop: 7, color: '#6ee7b7', fontSize: 11, overflow: 'hidden', textOverflow: 'ellipsis' }}>{runtime?.hermes_base_url ?? 'http://127.0.0.1:8787'}{health.latency_ms ? ` · ${health.latency_ms}ms` : ''}</div>
+            <div style={{ marginTop: 7, color: '#6ee7b7', fontSize: 11, overflow: 'hidden', textOverflow: 'ellipsis' }}>{centralEndpoint}{health.latency_ms ? ` · ${health.latency_ms}ms` : ''}</div>
+            <div style={{ marginTop: 4, color: '#a7f3d0', fontSize: 10, opacity: .78 }}>SOL → CentralDark → Omni Router → braços/providers</div>
+            <div style={{ marginTop: 3, color: '#a7f3d0', fontSize: 10, opacity: .72 }}>Casa: {runtime?.house_root ?? 'E:\\CentralDark'}</div>
           </div>
 
           <form onSubmit={submit} style={{ marginTop: 16 }}>
