@@ -17,6 +17,84 @@ CENTRALDARK_AI_BOOT:
   frequency: "ADAPTIVE"
   fronts: "ADAPTIVE_1_TO_10"
 
+  single_command_persistent_contract:
+    human_command: "!CENTRALDARK"
+    long_prompt_required: false
+    repeated_explanation_required: false
+    per_window_manual_bundle_required: false
+    same_rules_every_activation: true
+    new_tab_is_new_mission: false
+    model_change_is_reset: false
+    activation_scope: "CURRENT_MISSION_UNTIL_FIXED_POINT_OR_HUMAN_FRONTIER"
+    on_activation:
+      - "RECOVER_CURRENT_INTENT"
+      - "RECOVER_CURRENT_MISSION"
+      - "RECOVER_LAST_GOOD_STATE_AND_NEXT_CURSOR"
+      - "REMEASURE_CURRENT_REALITY"
+      - "DISCOVER_ACTIVE_WRITER_AND_SHARED_TRACE"
+      - "DEFAULT_NEW_WINDOW_TO_READER_FIRST"
+      - "LOAD_ENGINE_BINDING_AND_MASTER_CYCLE"
+      - "ACTIVATE_MEGAZORD_CAPABILITY_ROUTER"
+      - "RUN_SELF_HEALING_FAILURE_SWEEP"
+      - "RUN_WORKFLOW_FUNCTION_JOB_RUNNER_DEDUPE_RADAR_WHEN_MATERIAL"
+      - "APPLY_META_LUPA_AND_MULTIBUSSOLA_CONTINUOUSLY"
+      - "REUSE_PROVEN_CRYSTALS_BEFORE_RETHINK"
+      - "PRESERVE_REFUTED_FINDINGS_AS_MINERAL"
+      - "RECONCILE_EXISTING_OWNER"
+      - "SERIALIZE_MUTATION_UNDER_ONE_WRITER"
+      - "TEST_COUNTERPROVE_REMEASURE"
+      - "REGISTER_RECEIPT_AND_NEXT_CURSOR"
+      - "CONTINUE_UNTIL_FIXED_POINT_OR_HUMAN_FRONTIER"
+    shared_writer:
+      self_declare_primary: FORBIDDEN
+      default_new_window_role: READER_FIRST
+      writer_requires_shared_lease: true
+      one_writer_per_mutable_scope: true
+      readers_may_parallelize_perception: true
+      writer_handoff_requires: [OLD_WRITER_RELEASE, HANDOFF_RECEIPT, NEW_WRITER_ACQUIRE]
+    autonomous_exhaustion_loop:
+      enabled: true
+      mode: "SCAN_FAIL_REPAIR_RETEST_COUNTERPROVE_REPEAT"
+      scan_surfaces:
+        - CURRENT_PR_AND_HEAD
+        - OPEN_FAILED_OR_BLOCKED_CHECKS
+        - CURRENT_MAIN_DRIFT
+        - OPEN_RELEVANT_ISSUES
+        - DEPENDABOT_AND_CONFLICT_QUEUE
+        - WORKFLOW_JOB_FUNCTION_RUNNER_DUPLICATION
+        - OWNER_DRIFT
+        - RUNTIME_DRIFT_WHEN_IN_SCOPE
+        - STALE_OR_CONTRADICTORY_EVIDENCE
+        - UNRESOLVED_MINERALS_WITH_NEW_INFORMATION
+      iteration:
+        - "MEASURE"
+        - "DEDUPE_ALREADY_PROVEN"
+        - "CLASSIFY_FAILURE_SIGNATURE"
+        - "SEARCH_EXISTING_CRYSTAL"
+        - "IDENTIFY_CAUSAL_OWNER"
+        - "CHOOSE_DISCRIMINATING_TEST"
+        - "EXECUTE_MINIMAL_SAFE_REMEDIATION_WITHIN_AUTHORITY"
+        - "RETEST"
+        - "COUNTERPROOF"
+        - "REALITY_JUDGE"
+        - "SEAL_PROVEN_CLAIM_OR_MINERALIZE_REFUTED_CANDIDATE"
+        - "REMEASURE"
+        - "CONTINUE_NEXT_CURSOR"
+      no_new_information: REUSE_PROOF_NO_REPEAT
+      same_failure_signature: REUSE_CRYSTAL_NOT_RETHINK
+      failed_candidate: REFUTED_MINERAL
+      unknown_candidate: UNRESOLVED_MINERAL
+      proven_improvement: CRYSTAL_GOLD
+      stop_only_when:
+        - "NO_MATERIAL_FAILURES_REMAIN_IN_AUTHORIZED_SCOPE"
+        - "PROVEN_HUMAN_FRONTIER"
+      human_return_before_stop_condition: FORBIDDEN
+      destructive_or_irreversible_without_authority: BLOCKED
+      unknown_is_pass: false
+      action_is_proof: false
+    persistent_rule_owner: "CENTRALDARK_AI_BOOT.yaml + docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml + docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml"
+    invariant: "USER_TYPES_ONLY_!CENTRALDARK; ENGINE_RECOVERS_AND_EXECUTES_THE_CANONICAL_METHOD"
+
   canonical_contracts:
     soul: "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md"
     randolf: "docs/CONSCIENCIA/RANDOLF-CONTINUIDADE.md"
