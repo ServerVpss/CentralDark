@@ -106,8 +106,8 @@
 
 ## 07-APRENDIZADOS-MEMORIAS
 
-- [[2026-08-19]]
-- [[2026-08-16-gaveta-duravel-cristalizacao]]
-- [[2026-08-16-verde-delta-fechado-promove]]
 - [[OURO-CHEFE]]
+- [[2026-09-03-mandato-preservar-ouro-chefe]]
+- [[2026-09-03-garimpo-chefe-inventario]]
+- [[2026-09-03-ouro-chatgpt-warp-orquestrador]]
 - [[README]] (07-APRENDIZADOS)

@@ -55,9 +55,12 @@
 35. **O mapa visual não deve ser confundido com o mecanismo de recuperação.** Arrastar nó, zoom, animação e forças do Graph View mudam visualização; conteúdo, frontmatter, tags e wikilinks mudam o corpus. A meta não é “grafo bonito”, é menor distância semântica para recuperação humana e de agentes.
 36. **Três cabeças físicas podem alimentar um cérebro lógico sem disputar autoridade.** CHEFE = intenção/autoridade; Hermes local = execução e observação da Casa; CentralDark = memória/registro/relações. Estado local fresco pode superar documentação antiga para o claim correspondente, mas precisa virar receipt/reconciliação antes de ser tratado como canônico persistente.
 
+37. **[Garimpo 2026-09-03]** ChatGPT HTML de 40 bytes no Chrome ≠ ouro. Ouro real: `GARIMPO-CHEFE/ChatGPT_ Chat, Work, Create & Code with AI.html` (1074421 bytes, sha256 `5c5b28c7…ae7fb5`). Conceito: terminal≠tarefa; workspace casual até main; UNKNOWN trava mutação; cristaliza em arquivo, não em chat. Notas: [[2026-09-03-ouro-chatgpt-warp-orquestrador]] [[2026-09-03-garimpo-chefe-inventario]]. Inventário 221 arquivos / 86 hashed; extração do resto = PARCIAL.
+
 ## Próximo
 - CHEFE continua trazendo → eu adiciona aqui
 - Revisitar quando houver padrão novo ou correção
+- Peneirar CANDIDATE do inventário GARIMPO (YouTube Uber/NASA, cristalize HTML, OURO.pdf) — sem fingir PASS
 
 ## Conexões Rápidas
 

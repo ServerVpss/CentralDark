@@ -57,3 +57,5 @@ PADRÃO ÚNICO DE RESOLUÇÃO DE CONFLITO (não criar segundo): `.agents/skills/
 - [ai-universal-entrypoint] `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` — coordenação/Writer unico
 CENTRALDARK_AI_BOOT
 .agents/skills/meta-lupa/SKILL.md
+.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA
+docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json
