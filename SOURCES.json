@@ -8,32 +8,42 @@
     "access": "filesystem",
     "responsible": "Hermes Agent",
     "created": "2026-08-28",
-    "provenance": "CentralDark operational docs"
+    "provenance": "CentralDark operational docs",
+    "truth_role": "MEMORY_NOT_REALITY"
   },
   {
     "id": "tools_cognitivas",
     "name": "TOOLS COGNITIVAS",
     "type": "reasoning",
-    "description": "Ferramentas de raciocínio, análise e processamento ativo de informações",
+    "description": "Ferramentas de raciocínio, análise, falsificação, memória e processamento ativo de informações",
     "components": [
       {
         "name": "MetaLupa",
-        "description": "Auditoria crítica e validação de evidências",
+        "description": "Auditoria crítica, falsificação contínua e AutoLupa até ponto fixo",
         "path": ".agents/skills/meta-lupa/",
+        "engine": ".agents/skills/meta-lupa/scripts/meta_lupa.py",
+        "usage_ledger": ".agents/skills/meta-lupa/references/uso-ledger.jsonl",
+        "claim_seals": ".agents/skills/meta-lupa/references/claim-seals.jsonl",
         "role": "critical_audit"
       },
       {
-        "name": "Kimetsu Legacy Breathing",
-        "description": "17 respirações operacionais integradas ao método e à Banda",
+        "name": "Kimetsu Legacy Breathing / Banda",
+        "description": "17 respirações operacionais integradas ao método e ao compasso global",
         "path": ".agents/skills/centraldark-operational-method/references/regenerative-self-refinement-engine.md",
-        "contract": "docs/BRAIN/01-CONCEITOS/Banda/BANDA_COMPASSO_GLOBAL.json",
+        "contract": "docs/BRAIN/01-CONCEITOS/02-BANDA/BANDA_COMPASSO_GLOBAL.json",
         "role": "operational_mode"
       },
       {
         "name": "Operational Method",
-        "description": "Método de operação no CentralDark",
+        "description": "Método único de operação no CentralDark",
         "path": ".agents/skills/centraldark-operational-method/",
         "role": "operational_method"
+      },
+      {
+        "name": "Agent Library",
+        "description": "Catálogo de capacidades scout/builder/reviewer/swarm; não é autoridade de realidade",
+        "path": "docs/BRAIN/03-DOCUMENTACAO/01-AGENTS-LIBRARY/2026-07-13-overclock-swarm-tier-catalog.json",
+        "role": "capability_catalog"
       },
       {
         "name": "Skills especializadas",
@@ -45,12 +55,15 @@
     "bindings": {
       "graphrag": "apps/modulos/HERMES-CORE/agents/GraphRAG-Master/agent.mjs",
       "learning": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "claim_seals": ".agents/skills/meta-lupa/references/claim-seals.jsonl",
+      "band": "docs/BRAIN/01-CONCEITOS/02-BANDA/BANDA_COMPASSO_GLOBAL.json",
       "trail_owner": "scripts/agent-call.mjs",
-      "graph_generator": "scripts/grafo-vivo/gerar-grafo-vivo.mjs"
+      "graph_generator": "scripts/grafo-vivo/gerar-grafo-vivo.mjs",
+      "memory_linker": "scripts/memory-linker/memory-linker-agent.mjs"
     },
     "responsible": "Hermes Agent + Skills sob demanda",
     "created": "2026-08-28",
-    "provenance": "CentralDark operational docs + live repository reconciliation 2026-08-31"
+    "provenance": "CentralDark operational docs + live repository reconciliation 2026-09-05"
   },
   {
     "id": "omni_router",
@@ -59,29 +72,34 @@
     "description": "Roteador local que expõe API OpenAI-compatible e direciona requisições para o motor apropriado",
     "host": "127.0.0.1",
     "port": 8099,
+    "runtime_status": "UNKNOWN_UNTIL_LIVE_MEASUREMENT",
     "engines": [
       {
         "name": "hermes",
         "base_url": "http://127.0.0.1:8645",
-        "configured": true,
+        "configured_in_source": true,
+        "runtime_proven": false,
         "transport": "openai_compatible_http"
       },
       {
         "name": "claude-code",
         "base_url": null,
-        "configured": false,
+        "configured_in_source": false,
+        "runtime_proven": false,
         "transport": "local_cli"
       },
       {
         "name": "openai",
         "base_url": "https://api.openai.com",
-        "configured": true,
+        "configured_in_source": true,
+        "runtime_proven": false,
         "transport": "official_api"
       },
       {
         "name": "nous",
         "base_url": "https://inference-api.nousresearch.com/v1",
-        "configured": true,
+        "configured_in_source": true,
+        "runtime_proven": false,
         "transport": "nous_inference_api"
       }
     ],
@@ -92,33 +110,56 @@
     "id": "screenpipe",
     "name": "SCREENPIPE",
     "type": "perception",
-    "description": "Ferramenta de percepção da máquina: captura de tela, áudio, navegador",
+    "description": "Contrato de percepção da máquina: captura de tela, áudio, navegador",
     "host": "127.0.0.1",
     "port": 3030,
-    "capabilities": [
+    "status": "SOURCE_CONTRACT_RUNTIME_UNKNOWN",
+    "capabilities_declared": [
       "captura de tela",
       "gravação de áudio",
       "ponte do navegador (Browser Bridge)",
       "contexto visual e de áudio para agentes"
     ],
+    "end_to_end_hermes": "UNKNOWN",
     "created": "2026-08-28",
-    "provenance": "Screenpipe local instance"
+    "provenance": "CentralDark source contract; live runtime requires fresh proof"
   },
   {
     "id": "mcp_centraldark",
     "name": "MCP CENTRALDARK",
     "type": "tool_catalog",
-    "description": "Catálogo de ferramentas da Casa — 113 tools disponíveis",
+    "description": "Catálogo de ferramentas da Casa; contagem e disponibilidade precisam de medição viva",
     "host": "127.0.0.1",
     "port": 3100,
-    "tool_count": 113,
-    "capabilities": [
+    "status": "SOURCE_CONTRACT_RUNTIME_REMEASURE_REQUIRED",
+    "tool_count": "UNKNOWN_UNTIL_LIVE_MEASUREMENT",
+    "capabilities_declared": [
       "ações operacionais",
       "integração com GitHub",
       "integração com VPS",
       "outros serviços da Casa"
     ],
     "created": "2026-08-28",
-    "provenance": "CentralDark MCP server"
+    "provenance": "CentralDark MCP server source contract"
+  },
+  {
+    "id": "surface_sync",
+    "name": "CASA ↔ VPS ↔ GITHUB MAIN",
+    "type": "synchronization",
+    "source_of_truth": "ServerVpss/CentralDark@main",
+    "casa_script": "scripts/casa/sync-hermes-obsidian.ps1",
+    "vps_script": "scripts/vps/centraldark-deploy.sh",
+    "webhook_role": "PING_SIGNAL_AND_RECEIPT_ONLY",
+    "legacy_webhook_deployer": "RETIRED",
+    "canonical_deploy": "GITHUB_ACTIONS",
+    "runtime_status": "UNKNOWN_UNTIL_SURFACE_RECEIPTS",
+    "invariants": [
+      "DIRTY_WORKTREE_BLOCKS_SYNC",
+      "NO_BLIND_OVERWRITE",
+      "META_LUPA_AND_CLAIM_SEALS_REQUIRED",
+      "PONG_AFTER_REMEASURE"
+    ],
+    "created": "2026-09-05",
+    "provenance": "Banda compasso + canonical Casa/VPS owners"
   }
 ]
