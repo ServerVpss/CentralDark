@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-09-05T12:23:19.325Z",
-  "updatedAtBR": "05/09/2026, 09:23:19 BRT",
+  "updatedAt": "2026-09-05T12:28:41.601Z",
+  "updatedAtBR": "05/09/2026, 09:28:41 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "fix(fixed-point): restaurar BaselineLock perdido em reconciliação",
+    "lastCommit": "🛡️ ci: alinhar Signal Watcher ao runner canônico",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-09-05T12:28:41.601Z",
+      "titulo": "Push na main · f832c58276a2592606b47947b800603fc7b6c94b",
+      "detalhe": "🛡️ ci: alinhar Signal Watcher ao runner canônico",
+      "area": "Repositório",
+      "sha": "f832c58",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-09-05T12:23:19.325Z",
       "titulo": "Push na main · 2cfe3a059ba4d66226df8791520ec4a72727704e",
       "detalhe": "fix(fixed-point): restaurar BaselineLock perdido em reconciliação",
@@ -988,14 +996,6 @@
       "detalhe": "aprendizado(#33): Opinião usada como medição gera falso verde e ação destrutiva",
       "area": "Repositório",
       "sha": "64a90a9",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-30T01:08:06.379Z",
-      "titulo": "Push na main · 09274b75bdac602b64eecd3782b3aec533bca5e7",
-      "detalhe": "arch: registrar MEGAZORD-CENTRALDARK como composição automática (#1370)",
-      "area": "Repositório",
-      "sha": "09274b7",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-09-05T12:28:41.601Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · f832c58276a2592606b47947b800603fc7b6c94b (f832c58)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-09-05T12:23:19.325Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 2cfe3a059ba4d66226df8791520ec4a72727704e (2cfe3a0)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-30T02:06:15.727Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 64a90a90374cec049954af43d81d1b5323689f52 (64a90a9)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-30T01:08:06.379Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 09274b75bdac602b64eecd3782b3aec533bca5e7 (09274b7)",
       "area": "Repositório",
       "status": "sucesso"
     }
