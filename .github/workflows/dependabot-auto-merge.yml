@@ -6,6 +6,15 @@
 # Segurança: pull_request_target nunca executa código do HEAD não confiável.
 # Toda automação vem do BASE SHA e só atua em PR do dependabot[bot] no mesmo repo.
 name: 🤖 Dependabot — auto-merge seguro de patches
+# Auto-merge dos PRs do Dependabot — somente patches (semver-patch).
+# Minor permanece aberto para revisão humana. Major é bloqueado no dependabot.yml.
+#
+# Este workflow é o mutator especializado do fluxo universal de bots.
+# Usa pull_request_target porque pull_request não executa enquanto o PR está
+# conflitado. Segurança: nunca executa código do HEAD do PR; todo código de
+# automação vem sempre do BASE SHA confiável e o escopo é restrito a PR cujo
+# autor é dependabot[bot] no próprio repositório.
+name: Dependabot Auto-Merge (somente patches)
 
 on:
   pull_request_target:
@@ -91,6 +100,10 @@ jobs:
             console.log(`TITULO_PTBR=${titulo}`);
 
       - name: 🧠 Classificar sinal no HERMES Signal Watcher
+      # A aprovação automática foi removida em 2026-09-04.
+      # createReview({event:'APPROVE'}) retornava 422 em repositório privado.
+      # O auto-merge via GraphQL não depende desse review prévio.
+      - name: Classificar sinal no HERMES Signal Watcher
         shell: bash
         env:
           DEPENDENCY_NAMES: ${{ steps.meta.outputs.dependency-names }}
@@ -122,6 +135,8 @@ jobs:
           node "$GITHUB_WORKSPACE/.ci-house/scripts/hermes/signal-watch-notify.mjs" --event-b64 "$EVENT_B64" --notify
 
       - name: 🧭 Medir mergeabilidade e decidir próximo passo
+      - name: Medir mergeability e decidir fallback
+        id: stale
         uses: actions/github-script@v9
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -148,6 +163,7 @@ jobs:
               core.exportVariable('MERGEABILITY_STATE', 'UNKNOWN');
             } else {
               console.log('::notice::PR mergeável. Seguindo política do Dependabot.');
+              console.log('::notice::PR mergeable. Seguindo a política de auto-merge.');
               core.exportVariable('MERGEABILITY_STATE', 'MERGEABLE');
             }
 
@@ -196,6 +212,7 @@ jobs:
             });
 
       - name: 🟡 Avisar quando for MINOR
+      - name: Comentar quando for MINOR (fica para revisão humana)
         if: steps.meta.outputs.update-type == 'version-update:semver-minor' && github.event.action != 'synchronize'
         uses: actions/github-script@v9
         with:
@@ -206,6 +223,7 @@ jobs:
               repo: context.repo.repo,
               issue_number: context.payload.pull_request.number,
               body: '🟡 Atualização **minor** detectada — fica para revisão humana. Política: auto-merge somente para patch.',
+              body: '🟡 Atualização **minor** detectada — o merge permanece para revisão humana (política: auto-merge somente para patch).',
             });
 
       - name: 🧾 Receipt determinístico do fluxo Dependabot

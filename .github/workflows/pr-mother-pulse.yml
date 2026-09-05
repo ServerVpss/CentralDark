@@ -21,7 +21,7 @@ concurrency:
 
 jobs:
   pulse:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux]
     timeout-minutes: 5
     steps:
       - name: Reagir no PR-mãe e registrar quem movimentou

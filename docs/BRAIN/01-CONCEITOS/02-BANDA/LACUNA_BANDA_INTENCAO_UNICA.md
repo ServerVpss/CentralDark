@@ -1,8 +1,8 @@
 ---
 title: "Lacuna — Banda de Intenção Única"
 status: "HISTORICAL_DIAGNOSIS"
-owner: "docs/BRAIN/01-CONCEITOS/Banda/"
-updated: 2026-08-26
+owner: "docs/BRAIN/01-CONCEITOS/02-BANDA/"
+updated: 2026-09-05
 truth_scope: "HISTORICAL_CONCEPT_REQUIRES_LIVE_REMEASUREMENT"
 tags:
   - banda

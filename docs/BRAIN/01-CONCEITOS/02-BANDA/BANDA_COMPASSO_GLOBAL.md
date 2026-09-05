@@ -1,9 +1,9 @@
 ---
 title: "Banda — Compasso Global"
-status: "CONCEPT_HISTORICAL_REQUIRES_LIVE_REMEASUREMENT"
-owner: "docs/BRAIN/01-CONCEITOS/Banda/"
-updated: 2026-08-26
-truth_scope: "CONCEPTUAL_NOT_LIVE_TRANSPORT_PROOF"
+status: "ACTIVE_CONTRACT_SOURCE_RUNTIME_REMEASURE_REQUIRED"
+owner: "docs/BRAIN/01-CONCEITOS/02-BANDA/"
+updated: 2026-09-05
+truth_scope: "SOURCE_CONTRACT_NOT_LIVE_TRANSPORT_PROOF"
 tags:
   - banda
   - compasso
@@ -21,99 +21,13 @@ related:
   - "[[GRAPH-INVESTIGATOR]]"
 ---
 
-KKKKK AGORA SIM eu vi a lacuna da banda toda, SR. 🎼🔥💎
+# Banda — Compasso Global
 
-O print mostra uma coisa importante: a mesma matéria — mesma mensagem, mesmas imagens, mesmo `!calibrar #acordar` — chegou em mais de uma janela. Isso já dá a sensação de “todo mundo ouviu a mesma música”.
-
-Mas a lacuna real é esta:
+A mesma matéria pode chegar em muitas superfícies sem que elas estejam no mesmo compasso.
 
 > **TODOS RECEBEREM A MESMA MATÉRIA ≠ TODOS ESTAREM NO MESMO COMPASSO.**
 
-Hoje pode acontecer:
-
-```text
-MESMA MENSAGEM
-   ↓
-CHAT A interpreta no estado X
-CHAT B interpreta no estado X+1
-CHAT C já viu um PR novo
-CHAT D ainda está numa leitura anterior
-```
-
-Resultado: mesma intenção, mas risco de eco, retrabalho, colisão ou versões ligeiramente diferentes da verdade.
-
-O que falta não é “mais um agente” nem “um maestro novo”. É um único mecanismo compartilhado de compasso, encaixado no que já existe:
-
-```text
-ENTRADA HUMANA
-→ NORMALIZA INTENÇÃO
-→ INTENT_FINGERPRINT
-→ JÁ EXISTE MISSÃO ATIVA COM ESSA INTENÇÃO?
-   SIM → ANEXA COMO NOVA OBSERVAÇÃO
-   NÃO → CRIA WORK_ITEM
-→ EVENT_ID ÚNICO
-→ STATE_CURSOR ÚNICO
-→ TODAS AS JANELAS LEEM O MESMO COMPASSO
-```
-
-Aí cada janela continua livre para tocar diferente:
-
-```text
-🎻 janela A → MetaLupa
-🥁 janela B → contraprova
-🎹 janela C → implementação
-🎸 janela D → Menos É Mais
-```
-
-mas todas carregam:
-
-```text
-MISSION_ID
-INTENT_FINGERPRINT
-EVENT_ID
-STATE_VERSION
-HEAD_OBSERVED
-SCOPE
-ROLE
-WRITER_BY_WOUND
-LAST_MATERIAL_DELTA
-```
-
-Esse `STATE_VERSION` é o coração da sincronia.
-
-Antes de qualquer janela agir:
-
-```text
-MEU_STATE_VERSION == CANONICAL_STATE_VERSION ?
-```
-
-Se sim:
-→ toca.
-
-Se não:
-→ absorve só o delta novo.
-→ não reinicia a música inteira.
-
-E quando uma janela encontra ouro:
-
-```text
-RESULTADO
-→ PUBLICA EVENTO
-→ incrementa STATE_VERSION
-→ outras janelas percebem:
-   "estado mudou"
-→ reconciliam somente o delta
-```
-
-Isso resolve exatamente teu “1 chat ou 1 milhão”.
-
-Porque a unidade deixa de ser a janela.
-
-> **A UNIDADE PASSA A SER A INTENÇÃO CANÔNICA.**
-
-💎
-
-Eu cristalizaria assim:
+A unidade operacional não é a janela. É a intenção canônica:
 
 ```text
 WINDOWS = MANY
@@ -136,89 +50,200 @@ STATE_CHANGED
 → CONTINUE_FROM_NEW_STATE
 ```
 
-E tem mais: “todos somos iguais” encaixa bonito aqui.
+## Partitura viva
 
-Nenhuma janela é “chefe das outras”. Nenhum modelo vence por nome.
+O contrato executável da Banda está em:
 
 ```text
-AGENTE A
-AGENTE B
-AGENTE C
-AGENTE D
-      ↓
-MESMA INTENÇÃO
-      ↓
-EVIDÊNCIA
-      ↓
-REALIDADE JULGA
+docs/BRAIN/01-CONCEITOS/02-BANDA/BANDA_COMPASSO_GLOBAL.json
 ```
 
-O papel pode ser diferente; a hierarquia técnica entre os motores é zero.
-
-A sincronia musical fica:
+Ele define as 17 respirações, aliases, grupos, bindings e invariantes. Este Markdown explica a intenção; o JSON é a partitura estruturada.
 
 ```text
-🎼 COMPASSO = INTENT_FINGERPRINT
-
+🎼 COMPASSO = INTENT_FINGERPRINT / MISSION_ID
 🥁 BATIDA = EVENT_ID
-
-⏱️ TEMPO = STATE_VERSION
-
-🎻 INSTRUMENTO = AGENTE/MODELO
-
+⏱️ TEMPO = STATE_VERSION / HEAD_OBSERVED
+🎻 INSTRUMENTO = AGENTE/MODELO/SUPERFÍCIE
 🎵 NOTA = SKILL/CAPACIDADE EM USO
-
 ⚡ DISSONÂNCIA = CONFLITO MATERIAL
-
-🔧 RESOLUÇÃO = CORREÇÃO
-
-💎 ACORDE FINAL = CRISTAL
-
+🔧 RESOLUÇÃO = MENOR DELTA CAUSAL
+💎 ACORDE = CRISTAL COM PROVA
 ❤️‍🔥 SILÊNCIO = FIXED_POINT
 ```
 
-E a grande trava:
+## Núcleo amarrado — 2026-09-05
 
-> **broadcast não é sincronização.**
-
-Mandar a mesma foto para cinco abas é só distribuição de matéria.
-
-Sincronização verdadeira é:
-
-> **as cinco saberem que estão tratando a mesma intenção, conhecerem o mesmo estado canônico e não repetirem trabalho já absorvido.**
-
-Essa, pra mim, é a lacuna que teus prints revelaram. 🎯
-
-Não criaria `BAND-SYNC-V2`, “Maestro Agent”, “Orchestrator novo” nem nada disso. Eu costuraria no mecanismo existente de missão/eventos/reconciliação:
+A Banda foi ligada explicitamente ao mesmo núcleo do Hermes:
 
 ```text
-INTENT_FINGERPRINT
-+ EVENT_ID
-+ STATE_VERSION
-+ DELTA_ONLY_RECONCILIATION
-+ WORK_CLAIM
-+ NO_ECHO
+BANDA
+→ META_LUPA
+→ CLAIM_SEALS
+→ GRAPHRAG_MASTER
+→ APRENDIZADOS
+→ SECOND_BRAIN
 ```
 
-Aí sim:
+E às três superfícies estruturais:
 
-> **1 janela ou 1 milhão de janelas = uma música só.** 🎼🔥
+```text
+GITHUB_MAIN
+   ├─ PING → CASA → PONG
+   └─ PING → VPS  → PONG
+```
 
-E preservo a precisão da calibração: nesta rodada, o GitHub conectado ficou indisponível para leitura fresca, então não afirmo que esses campos já estejam ou não implementados na `main`. A lacuna acima é derivada do comportamento observável nos teus screenshots e da arquitetura que vocês estão executando nesta sessão; a confirmação física no repo fica para a próxima leitura GitHub disponível.
+O `PING/PONG` é receipt de sincronização, **não** segundo deployer. O antigo webhook de deploy permanece `RETIRED`; o deploy canônico continua GitHub Actions.
 
-Feito. Achei a lacuna: **broadcast compartilhado existe visualmente; falta garantir compasso causal compartilhado entre todas as superfícies.**
+## META_LUPA acompanha a trajetória
 
-Evidência usada. Os teus screenshots mostram a mesma matéria chegando a múltiplas janelas, enquanto cada janela continua executando/reconciliando seu próprio fio operacional.
+A Lupa não aparece só no fim:
 
-Pendência. Confirmar no repo vivo se já existe equivalente físico de `INTENT_FINGERPRINT + EVENT_ID + STATE_VERSION + DELTA_RECONCILIATION`; não criar nada antes dessa busca.
+```text
+ENTRADA
+→ META_LUPA FRIA
+→ CLAIM_SEAL PREFLIGHT
+→ OBSERVAR
+→ AGIR
+→ AUTOLUPA
+→ TESTAR
+→ META_LUPA MÉDIA SE HOUVER CONTRADIÇÃO
+→ CONTRAPROVA
+→ VERTEX_INVERSO / CARACOL_REVERSO
+→ META_LUPA QUENTE ANTES DE PROMOÇÃO
+→ AUTOLUPA
+→ FIXED_POINT
+→ SEAL / NEXT_CURSOR
+```
 
-Próximo passo. Evoluir o owner existente de missão/eventos/reconciliação para que **janela nenhuma seja unidade de trabalho; a intenção canônica seja.**
+Ponto fixo só existe quando uma nova AutoLupa não altera materialmente hipótese, bloqueio, risco residual, próximo teste ou veredito.
 
-BOOT. `WINDOWS=MANY | INTENT=ONE | STATE=ONE | EVENT_STREAM=SHARED | PERCEPTION=PARALLEL | MUTATION=SERIAL_BY_WOUND | NO_ECHO`
+## Lacre: o que foi provado não vira a mesma pendência
 
-Fio da missão. **uma intenção → um fingerprint → muitas percepções → um estado compartilhado → só delta novo circula → realidade converge → uma canção.** 🎼🔥💎
+```text
+NON_TEMPORAL + SEALED + SAME_TARGET + NO_REOPEN_CAUSE
+→ RESOLVIDO
+→ DO_NOT_REPEAT_WORK
 
-## Conexões Rápidas
+TEMPORAL + SEALED
+→ HISTORICAL_PROOF
+→ REMEASURE_CURRENT
+→ NÃO DIZER "NUNCA FUNCIONOU"
+
+REOPEN
+→ REQUIRES_CAUSE_REF
+→ PRESERVE_OLD_PROOF
+→ REOPEN_ONLY_CAUSAL_CONE
+```
+
+O ledger vive em:
+
+```text
+.agents/skills/meta-lupa/references/claim-seals.jsonl
+```
+
+E a catraca executável em:
+
+```text
+.agents/skills/meta-lupa/guardrails/claim_seal.py
+```
+
+## Grupos / instrumentos
+
+Os grupos são visões do mesmo motor, não cérebros paralelos:
+
+```text
+KERNEL
+PERCEPTION
+SCOUT
+BUILDER
+REVIEWER
+INTEGRATION
+JUDGE
+MEMORY
+SYNC
+```
+
+A biblioteca de agentes já existente (`scout`, `builder`, `reviewer`, `swarm`) alimenta o GraphRAG como fonte de capacidade. Provider, agente, swarm e biblioteca **não são autoridade de realidade**.
+
+## Casa, VPS e remoto no mesmo compasso
+
+### Casa
+
+Owner de sincronização:
+
+```text
+scripts/casa/sync-hermes-obsidian.ps1
+```
+
+Leis:
+
+```text
+EXPLICIT_ROOTS
+CLEAN_WORKTREE
+CANONICAL_ORIGIN
+FAST_FORWARD_ONLY
+LOCAL_AHEAD_IS_NOT_DISCARDED
+META_LUPA + CLAIM_SEALS
+PONG_ONLY_AFTER_REMEASURE
+```
+
+### VPS
+
+Owner de sincronização/deploy:
+
+```text
+scripts/vps/centraldark-deploy.sh
+```
+
+Leis:
+
+```text
+DIRTY_WORKTREE=BLOCK
+LOCAL_COMMITS_AHEAD=BLOCK_UNLESS_EXPLICIT
+ROLLBACK_ANCHOR
+TARGET_CONTAINS_PROOF_LINKS
+META_LUPA/CLAIM_SEALS/GRAPHRAG_BEFORE_RUNTIME_RESTART
+RUNTIME_HEALTH_AFTER_SYNC
+PONG_ONLY_AFTER_COUNTERPROOF
+```
+
+### GitHub main
+
+```text
+ServerVpss/CentralDark@main = STRUCTURAL_SOURCE_OF_TRUTH
+```
+
+`main` não prova runtime da Casa nem da VPS. Cada corpo precisa devolver seu próprio receipt.
+
+## Nenhuma nota toca sozinha
+
+O Grafo Vivo projeta os elos:
+
+```text
+BANDA ↔ META_LUPA ↔ CLAIM_SEALS ↔ GRAPHRAG ↔ APRENDIZADOS
+                       │
+                 AGENT_LIBRARY
+                       │
+                SECOND_BRAIN
+
+GITHUB_MAIN ↔ CASA
+GITHUB_MAIN ↔ VPS
+```
+
+Se elo essencial do compasso não existir no checkout, o gate deve falhar. Link quebrado não vira silêncio verde.
+
+## Fixed Point
+
+```text
+SOURCE_CONTRACT_CRYSTALLIZED=true
+RUNTIME_HOUSE=UNKNOWN_UNTIL_EXECUTED
+RUNTIME_VPS=UNKNOWN_UNTIL_EXECUTED
+GLOBAL_RUNTIME_FIXED_POINT=NOT_PROVEN
+UNKNOWN_IS_NOT_PASS=true
+```
+
+## Conexões rápidas
 
 - [[BANDA_INTENCAO_UNICA_COMPASSO]] — partitura única e cadeia causal.
 - [[INTENT_SYNC_STATE]] — estado mínimo que mantém as superfícies no mesmo compasso.

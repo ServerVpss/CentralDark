@@ -1,67 +1,45 @@
 # run_zendrive_segredo.ps1
-# Launcher SOFISTICADO PROFISSIONAL para Zendrive - Perfil Segredo (Profile 15)
-# Direto para a SESSÃO JÁ ABERTA com conta logada (contacobra3467@gmail.com)
-# Usa PowerShell 7 (pwsh) + venv Python + attach via CDP para zero conflito
-# Cristalizado ao Ponto Fixo usando as 17 Respirações Kimetsu Legacy (todas)
-# Integra com CentralDark SOUL, REUSE_BEFORE_CREATE, UNKNOWN!=PASS, REALITY=JUDGE
-# Commit-ready para main - KISS + DRY + profissional
+# CentralDark — launcher local Zendrive + handoff canônico.
+# Fluxo: captura → Master Cycle → RANDOLF/Hub → Central de Notificações.
+# UNKNOWN != PASS. Nenhuma etapa imprime FIXED_POINT sem receipt do bridge.
 
 $ErrorActionPreference = "Stop"
 
-# ============================================
-# CONCENTRAÇÃO TOTAL (Kernel Observador)
-# Medir estado antes de qualquer ação
-# ============================================
-Write-Host "=== ZEN DRIVE SEGREDO - SESSÃO JÁ ABERTA (Profile 15) ===" -ForegroundColor Cyan
-Write-Host "Conta logada já existe. Launcher gerencia Chrome com remote debugging." -ForegroundColor Yellow
-Write-Host "Usando todas as 17 Respirações para cristalização ao ponto fixo." -ForegroundColor Gray
-
-# ============================================
-# SOL (Meta-Orquestrador)
-# Ver o sistema inteiro: intenção, estado, ferida, rota
-# ============================================
-$env:ZENDRIVER_PROFILE = "segredo"
-$env:HEADLESS = "false"
-
 $baseDir = "E:\CentralDark\Pivete\CentralDark\apps\modulos\elite-gateway\test-local"
 $pythonExe = Join-Path $baseDir ".venv\Scripts\python.exe"
-$script = Join-Path $baseDir "local_send_dump.py"
+$captureScript = Join-Path $baseDir "local_send_dump.py"
+$bridgeScript = Join-Path $baseDir "zendrive_gateway_bridge.py"
 $chromePath = "C:\Program Files\Google\Chrome\Application\chrome.exe"
 $profilePath = "C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 15"
 
-# Prompt (pode passar como argumento para flexibilidade)
+$env:ZENDRIVER_PROFILE = "segredo"
+$env:HEADLESS = "false"
+$env:ATTACH_PORT = "9222"
+if (-not $env:CENTRALDARK_SOURCE_SURFACE) { $env:CENTRALDARK_SOURCE_SURFACE = "HERMES_DESKTOP_ZENDRIVE" }
+if (-not $env:CENTRALDARK_INPUT_MODE) { $env:CENTRALDARK_INPUT_MODE = "text" }
+
 $defaultPrompt = "Diga APENAS 'ZENDRIVE_LOCAL_OK'. Depois diga a capital do Brasil em uma frase curta e clara."
-if ($args.Count -gt 0) {
-    $prompt = $args -join " "
+$prompt = if ($args.Count -gt 0) { $args -join " " } else { $defaultPrompt }
+
+Write-Host "=== ZENDRIVE → CENTRALDARK ===" -ForegroundColor Cyan
+Write-Host "Superfície: $env:CENTRALDARK_SOURCE_SURFACE" -ForegroundColor Gray
+Write-Host "Perfil humano: 😎 Orquestração SOL 🌞" -ForegroundColor Gray
+if ($env:CENTRALDARK_SESSION_ID) {
+    Write-Host "Sessão observada: $env:CENTRALDARK_SESSION_ID (proveniência; não autoridade)" -ForegroundColor Gray
 } else {
-    $prompt = $defaultPrompt
+    Write-Host "Sessão observada: UNKNOWN — bridge não inventará ID" -ForegroundColor Yellow
 }
 
-Write-Host "Prompt: $prompt" -ForegroundColor Gray
-Write-Host "Perfil: $env:ZENDRIVER_PROFILE (Profile 15 - logado)" -ForegroundColor Gray
+foreach ($required in @($pythonExe, $captureScript, $bridgeScript, $chromePath)) {
+    if (-not (Test-Path $required)) {
+        throw "PONTO_DESLIGADO: arquivo obrigatório ausente: $required"
+    }
+}
 
 Set-Location $baseDir
 
-# ============================================
-# ÁGUA (Adaptação) + PEDRA (Invariantes / Safety)
-# Adaptar para sessão já aberta. Guardrails: não quebrar o que funciona.
-# ============================================
-Write-Host "`n[ÁGUA+PEDRA] Verificando se Chrome já está aberto com o perfil..." -ForegroundColor Cyan
-
-$runningChrome = Get-Process chrome -ErrorAction SilentlyContinue | Where-Object { 
-    $_.CommandLine -like "*$profilePath*" -or $_.CommandLine -like "*Profile 15*" 
-}
-
-if ($runningChrome) {
-    Write-Host "[ÁGUA] Chrome já aberto com o perfil. Usando attach para evitar lock." -ForegroundColor Green
-} else {
-    Write-Host "[ÁGUA] Chrome não aberto. Iniciando com remote debugging para attach seguro." -ForegroundColor Yellow
-}
-
-# ============================================
-# TROVÃO (Velocidade Decisiva) + SOM (Ritmo)
-# Iniciar o Chrome controlado com flag de remote debugging.
-# ============================================
+# Detecta o Chrome sem depender de CommandLine em Get-Process (não é propriedade confiável).
+$runningChrome = Get-Process chrome -ErrorAction SilentlyContinue
 if (-not $runningChrome) {
     $chromeArgs = @(
         "--remote-debugging-port=9222",
@@ -72,24 +50,11 @@ if (-not $runningChrome) {
         "https://chatgpt.com"
     )
     Start-Process -FilePath $chromePath -ArgumentList $chromeArgs -WindowStyle Normal
-    Write-Host "[TROVÃO] Chrome iniciado com remote debugging. Aguardando 8s para load..." -ForegroundColor Cyan
     Start-Sleep -Seconds 8
 }
 
-# ============================================
-# CHAMAS (Persistência por Evidência) + AMOR (Ajuste ao Operador)
-# Evidência: port 9222. Ajuste para o humano (conta já logada, sem re-login).
-# ============================================
-$env:ATTACH_PORT = "9222"
-Write-Host "[CHAMAS+AMOR] ATTACH_PORT=$env:ATTACH_PORT. Direto para a sessão logada." -ForegroundColor Green
-
-# ============================================
-# FLOR (Alta Resolução) + INSETO (Inspeção Minuciosa)
-# Detalhe: verificar se a porta está escutando.
-# ============================================
-Write-Host "[FLOR+INSETO] Verificando porta 9222..." -ForegroundColor Cyan
 $portOpen = $false
-for ($i=0; $i -lt 10; $i++) {
+for ($i = 0; $i -lt 10; $i++) {
     try {
         $tcp = New-Object System.Net.Sockets.TcpClient
         $tcp.Connect("127.0.0.1", 9222)
@@ -101,50 +66,36 @@ for ($i=0; $i -lt 10; $i++) {
     }
 }
 if (-not $portOpen) {
-    Write-Host "[AVISO] Porta 9222 não respondeu imediatamente. Attach pode falhar se Chrome não expôs o CDP." -ForegroundColor Yellow
+    Write-Host "EVIDÊNCIA FALTANTE: CDP 9222 não respondeu; captura pode falhar." -ForegroundColor Yellow
 }
 
-# ============================================
-# SERPENTE (Rota Não-Linear) + VENTO (Propagação)
-# Rastrear dependências: o attach usa o tab já aberto no perfil.
-# ============================================
-Write-Host "[SERPENTE+VENTO] Rota: launcher -> Chrome controlado -> CDP attach -> prompt no tab existente." -ForegroundColor Gray
+Write-Host "`n[1/2] Captura Zendrive..." -ForegroundColor Cyan
+& $pythonExe $captureScript $prompt
+$captureExit = $LASTEXITCODE
+if ($captureExit -ne 0) {
+    Write-Host "QUEBRADO: captura saiu com código $captureExit. Handoff não será falsamente marcado como verde." -ForegroundColor Red
+    exit $captureExit
+}
 
-# ============================================
-# NÉVOA (Redução de Ruído) + FERA (Descoberta)
-# Filtrar ruído: só o essencial. Explorar o território do browser aberto.
-# ============================================
-Write-Host "[NÉVOA+FERA] Ruído removido. Foco no sinal: prompt enviado ao tab chatgpt.com logado." -ForegroundColor Gray
+Write-Host "`n[2/2] Handoff canônico: Master Cycle → RANDOLF/Hub → Notificações..." -ForegroundColor Cyan
+& $pythonExe $bridgeScript
+$bridgeExit = $LASTEXITCODE
 
-# ============================================
-# LUA (Espelho Adversarial / Contraprova)
-# Antes de executar: contraprova - e se o attach falhar? Fallback implícito no script.
-# Writer não julga sozinho.
-# ============================================
-Write-Host "[LUA] Contraprova: se attach falhar, ver page_state.txt e rode manualmente no browser aberto." -ForegroundColor Magenta
+switch ($bridgeExit) {
+    0 {
+        Write-Host "PROVADO: bridge fechou todos os pontos configurados no runtime." -ForegroundColor Green
+    }
+    2 {
+        Write-Host "EVIDÊNCIA FALTANTE: código e rota estão ligados, mas um ou mais receipts de runtime não fecharam." -ForegroundColor Yellow
+    }
+    default {
+        Write-Host "QUEBRADO: handoff falhou com código $bridgeExit." -ForegroundColor Red
+    }
+}
 
-# ============================================
-# EXECUÇÃO FINAL (SOL orquestra, CHAMAS persiste)
-# Rodar o script em attach mode.
-# ============================================
-Write-Host "`n[EXECUÇÃO] Rodando local_send_dump.py em ATTACH mode..." -ForegroundColor Cyan
-& $pythonExe $script $prompt
+Write-Host "`nReceipts locais:" -ForegroundColor Gray
+Write-Host "- logs/last_messages.json" -ForegroundColor Gray
+Write-Host "- saída JSON centraldark.zendrive-handoff.v1 acima" -ForegroundColor Gray
+Write-Host "Regra: SOURCE_COMMITTED != RUNTIME_PROVEN; UNKNOWN != PASS." -ForegroundColor Gray
 
-# ============================================
-# PÓS-EXECUÇÃO (CONCENTRAÇÃO TOTAL fecha o ciclo)
-# Medir resultado, registrar.
-# ============================================
-Write-Host "`n=== PRONTO - VERIFIQUE ===" -ForegroundColor Green
-Write-Host "1. Veja a resposta no Chrome aberto (sessão já logada)." -ForegroundColor White
-Write-Host "2. logs/last_messages.json (receipt do prompt)." -ForegroundColor White
-Write-Host "3. logs/page_state.txt se precisar debug." -ForegroundColor White
-Write-Host "Para BOTH (contra GPT): ajuste para fulano ou rode os dois." -ForegroundColor Cyan
-Write-Host "Ponto Fixo alcançado via 17 Respirações. REUSE_BEFORE_CREATE aplicado." -ForegroundColor Yellow
-
-# Invariantes preservados:
-# UNKNOWN != PASS
-# ACTION != PROOF (o attach prova o envio; resposta no browser)
-# HISTORY != CURRENT (perfil logado é o current)
-# ONE_SYSTEM_ONLY, MAIN_NOW_WINS, REALITY=JUDGE
-
-pause
+exit $bridgeExit

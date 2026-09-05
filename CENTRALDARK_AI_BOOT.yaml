@@ -16,6 +16,89 @@ CENTRALDARK_AI_BOOT:
   writer: "UNKNOWN_UNTIL_WRITER_SCOPE_MEASURED"
   frequency: "ADAPTIVE"
   fronts: "ADAPTIVE_1_TO_10"
+
+  canonical_contracts:
+    soul: "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md"
+    randolf: "docs/CONSCIENCIA/RANDOLF-CONTINUIDADE.md"
+    knowledge_hub: "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/KNOWLEDGE-HUB.yml"
+    deploy_readiness: "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/DEPLOY-READINESS.yml"
+    trigger_fabric: "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml"
+    capability_readiness: "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CAPABILITY-READINESS-POLICY.yml"
+
+  unified_entry_pipeline:
+    applies_to:
+      - BOT_ENTRY
+      - SESSION_RESUME
+      - NEW_TAB
+      - MODEL_CHANGE
+      - AGENT_HANDOFF
+      - CENTRALDARK_MCP_CONTEXT
+    flow:
+      - "SEGREDO/CHEFE_INTENT_GOAL"
+      - "!CENTRALDARK"
+      - "CENTRALDARK_AI_BOOT"
+      - "HISTORY_RENDEZVOUS"
+      - "RANDOLF_CONTINUITY_LAST_GOOD_STATE_NEXT_CURSOR"
+      - "CAPABILITY_LINEAGE"
+      - "DEDUPE_ABSORB"
+      - "ONE_SURVIVING_DELTA"
+      - "ENEIAS_STRATEGY_WHEN_MATERIAL"
+      - "SOL_COORDINATION"
+      - "MULTIBUSSOLA"
+      - "META_LUPA"
+      - "RECONCILIAR_EXISTING_OWNER"
+      - "ONE_WRITER"
+      - "HERMES_EXECUTION"
+      - "COUNTERPROOF"
+      - "REMEASUREMENT"
+      - "REALITY_JUDGE"
+      - "FIXED_POINT"
+      - "REGISTER_KNOWLEDGE_HUB_GRAPH_RECEIPT_CURSOR"
+      - "MICRO_DEPLOY_OR_FULL_DEPLOY_BY_CAUSAL_SCOPE"
+      - "BOOT_NEXT_CYCLE"
+    caracol_reverse:
+      enabled: true
+      on:
+        - MATERIAL_DIVERGENCE
+        - STALE_EVIDENCE
+        - NEW_HEAD
+        - OWNER_DRIFT
+        - RUNTIME_DRIFT
+        - CONTRADICTORY_EVIDENCE
+      behavior:
+        - "RETURN_TO_LAST_PROVEN_CURSOR"
+        - "PRESERVE_INDEPENDENT_PROOF"
+        - "INVALIDATE_ONLY_DEPENDENT_STALE_CLAIMS"
+        - "REMEASURE_AFFECTED_CONE"
+    role_boundaries:
+      randolf: "CONTINUITY_NOT_WRITER_NOT_JUDGE_NOT_SECOND_BRAIN"
+      eneias: "STRATEGY_PROPOSAL_NOT_WRITER_NOT_JUDGE"
+      sol: "COORDINATION_RECONCILIATION"
+      hermes: "EXECUTION_PRESERVATION_CONTINUITY"
+      reality_judge: "EVIDENCE_VERDICT"
+
+  knowledge_hub:
+    one_hub_only: true
+    memory_api: "apps/modulos/memoria-api/"
+    graph_projection: "apps/modulos/graph-panel/"
+    obsidian_plugin: "apps/modulos/obsidian-plugin-grafo-vivo/"
+    obsidian_and_runtime_webhook_ingest: "POST https://api.centralldark.com/memoria/ingest"
+    graph_read: "https://grafo.centralldark.com/api/graph?mode=vivo"
+    raw_event_is_not_canonical: true
+    direct_raw_event_to_main: false
+    promotion_requires_existing_owner_and_one_writer: true
+    firecrawl_is_optional_replaceable_web_provider: true
+    firecrawl_is_not_second_brain: true
+
+  deploy_readiness:
+    controlled_use_percent_range: "80-90_WHEN_DENOMINATOR_DEFINED"
+    percent_is_not_proof: true
+    main_promotion_requires_applicable_gates: true
+    noncritical_unknowns_may_remain_visible_yellow: true
+    micro_deploy_default: true
+    full_deploy_only_when_causal_cone_requires: true
+    local_test_ready_is_not_production_ready: true
+
   operational_agent_contract:
     purpose: "Quando a CentralDark estiver em contexto operacional, o modelo deixa de usar conversa ociosa como modo de trabalho e passa a operar sob contrato de agente."
     activation:
@@ -35,6 +118,7 @@ CENTRALDARK_AI_BOOT:
     required_behavior:
       - "RECOVER_CURRENT_STATE"
       - "RECOVER_CURRENT_INTENT"
+      - "RECOVER_LAST_GOOD_STATE_AND_NEXT_CURSOR"
       - "IDENTIFY_OWNER"
       - "IDENTIFY_SCOPE"
       - "MEASURE_BEFORE_CLAIM"
@@ -67,6 +151,8 @@ CENTRALDARK_AI_BOOT:
       - "INVENTING_OWNER_WITHOUT_GAP_REAL"
       - "DECLARING_PASS_WITHOUT_EVIDENCE"
       - "STOPPING_WITHOUT_NEXT_CURSOR_WHEN_WORK_REMAINS"
+      - "RAW_WEBHOOK_DIRECT_TO_MAIN"
+      - "RAW_OBSIDIAN_NOTE_DIRECT_TO_MAIN"
 
     human_frontier:
       - "DESTRUCTIVE_OR_IRREVERSIBLE_ACTION_WITHOUT_EXISTING_AUTHORITY"
@@ -83,6 +169,11 @@ CENTRALDARK_AI_BOOT:
       - "UNKNOWN != PASS"
       - "WRITER != JUDGE"
       - "REALITY_IS_JUDGE"
+      - "NEW_TAB != NEW_BRAIN"
+      - "MODEL_CHANGE != RESET"
+      - "RANDOLF != SECOND_BRAIN"
+      - "ENEIAS != SECOND_ORCHESTRATOR"
+      - "GRAPH != AUTHORITY"
 
   conflict_resolution:
     standard: "ÚNICO. Não abrir segundo resolvedor, não resolver na mão fora dele."
