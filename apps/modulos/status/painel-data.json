@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-09-05T09:54:22.687Z",
-  "updatedAtBR": "05/09/2026, 06:54:22 BRT",
+  "updatedAt": "2026-09-05T09:55:23.110Z",
+  "updatedAtBR": "05/09/2026, 06:55:23 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "feat(sentinela): detectar drift de Casa e spending-limit de provider",
+    "lastCommit": "docs(comite): cristalizar convergência Casa E, Omni e Sentinela",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-09-05T09:55:23.110Z",
+      "titulo": "Push na main · a039bf88003fe1c12b70fe956327457769086a9c",
+      "detalhe": "docs(comite): cristalizar convergência Casa E, Omni e Sentinela",
+      "area": "Repositório",
+      "sha": "a039bf8",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-09-05T09:54:22.687Z",
       "titulo": "Push na main · 328d1554fce868cd2cccca24c92a8a9fd191ec5b",
       "detalhe": "feat(sentinela): detectar drift de Casa e spending-limit de provider",
@@ -988,14 +996,6 @@
       "detalhe": "chore: synchronize branch with origin/main, update documentation and handoff materials",
       "area": "Repositório",
       "sha": "5b44ece",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-29T07:36:33.818Z",
-      "titulo": "Push na main · 6529386050d5a9adc215fbe1823f939d4a50ff57",
-      "detalhe": "👑 CHEFE · Casa · Realidade — centro operacional e prova material (#1365)",
-      "area": "Repositório",
-      "sha": "6529386",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-09-05T09:55:23.110Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · a039bf88003fe1c12b70fe956327457769086a9c (a039bf8)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-09-05T09:54:22.687Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 328d1554fce868cd2cccca24c92a8a9fd191ec5b (328d155)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-29T08:23:31.605Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 5b44ece73a73cc25caabff504c2e82904e4a4a16 (5b44ece)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-29T07:36:33.818Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 6529386050d5a9adc215fbe1823f939d4a50ff57 (6529386)",
       "area": "Repositório",
       "status": "sucesso"
     }
