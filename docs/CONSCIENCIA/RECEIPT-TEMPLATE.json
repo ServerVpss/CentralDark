@@ -1,0 +1,27 @@
+{
+  "POMBO_ID": "20260905",
+  "REVISION": 2,
+  "CHEFE_INTENT": "<intent>",
+  "DESTINATION_LOCK": "<destination>",
+  "SOURCE_SURFACE": "<surface>",
+  "TARGET_SURFACE": "<surface>",
+  "OBSERVED_AT": "<ISO8601>",
+  "HEAD_SHA": "<sha-or-null>",
+  "CONTENT_SHA256": "<64hex-or-null>",
+  "OWNER": "<canonical-owner>",
+  "WRITER_SCOPE": "<scope>",
+  "STATE": "EVIDENCIA_FALTANTE",
+  "EVIDENCE_REFS": [],
+  "UNKNOWNS": [],
+  "RESIDUAL": [],
+  "NEXT_CURSOR": "<cursor>",
+  "NEXT_ACTION": "<single-next-action>",
+  "claims": {
+    "DESTINATION_PRESERVED": "UNKNOWN",
+    "PROVENANCE_PRESERVED": "UNKNOWN",
+    "UNKNOWN_PRESERVED": "PASS",
+    "NEXT_CURSOR_PRESERVED": "PASS",
+    "NO_PARALLEL_OWNER_CREATED": "UNKNOWN",
+    "CHECKSUM_IS_NOT_SEMANTIC_PROOF": "PASS"
+  }
+}
