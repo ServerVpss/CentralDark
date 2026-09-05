@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-09-05T08:18:23.283Z",
-  "updatedAtBR": "05/09/2026, 05:18:23 BRT",
+  "updatedAt": "2026-09-05T08:28:50.913Z",
+  "updatedAtBR": "05/09/2026, 05:28:50 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "🧠 SOUL REANCHOR + CARACOL RECONCILED (absorbed into graph-panel + spiral_traversal) (#1413)",
+    "lastCommit": "include: audio mapping in CentralDark Reconciliation Watch.html - MAPEAR AUDIO + USAR O MESMO AUDIO ORIGINAL QUANDO APERTA PLAY! (original_*.mp3 placeholders, <audio controls> with src original, no re",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-09-05T08:28:50.913Z",
+      "titulo": "Push na main · 0277db3dd28646959c2290ddf1ddf1f94285f360",
+      "detalhe": "include: audio mapping in CentralDark Reconciliation Watch.html - MAPEAR AUDIO + USAR O MESMO AUDIO ORIGINAL QUANDO APERTA PLAY! (original_*.mp3 placeholders, <audio controls> with src original, no regen). Per instruction + ChatGPT context ",
+      "area": "Repositório",
+      "sha": "0277db3",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-09-05T08:18:23.283Z",
       "titulo": "Push na main · 05340cece49d3c6e34cbff8739676f72aa13df05",
       "detalhe": "🧠 SOUL REANCHOR + CARACOL RECONCILED (absorbed into graph-panel + spiral_traversal) (#1413)",
@@ -988,14 +996,6 @@
       "detalhe": "Fix hermes temp (#1232)",
       "area": "Repositório",
       "sha": "8348eac",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-27T16:46:26.173Z",
-      "titulo": "Push na main · 4abd4f3c527c9aaaeb3112ce71936e8717a3391b",
-      "detalhe": "fix(ci): Lupa Drift Guard permite alias de compatibilidade (fecha #1188) (#1231)",
-      "area": "Repositório",
-      "sha": "4abd4f3",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-09-05T08:28:50.913Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 0277db3dd28646959c2290ddf1ddf1f94285f360 (0277db3)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-09-05T08:18:23.283Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 05340cece49d3c6e34cbff8739676f72aa13df05 (05340ce)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-27T17:30:17.619Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 8348eacdcb48bb3319dc89d48249852cad3601bc (8348eac)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-27T16:46:26.173Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 4abd4f3c527c9aaaeb3112ce71936e8717a3391b (4abd4f3)",
       "area": "Repositório",
       "status": "sucesso"
     }
