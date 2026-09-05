@@ -2,7 +2,11 @@
 
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
-import { classifyLabels, labelsForDecision } from './label-gate.mjs';
+import {
+  classifyAuthorityAction,
+  classifyLabels,
+  labelsForDecision,
+} from './label-gate.mjs';
 
 const event = JSON.parse(readFileSync(process.env.GITHUB_EVENT_PATH, 'utf8'));
 const baseSha = process.env.BASE_SHA || event.pull_request?.base?.sha || '';
@@ -65,4 +69,22 @@ if (result.authorityCompat.length > 0) {
   console.log(`LABEL_GATE_COMPAT_AUTHORITY=${result.authorityCompat.length} aguardando_migracao_issue_707=1`);
   console.log(`LABEL_GATE_AUTHORITY_SEGREDO=${result.authorityCompat.length}`);
 }
+
+const actionClass = String(process.env.CENTRALDARK_ACTION_CLASS || '').trim();
+const authorityAction = classifyAuthorityAction({
+  labels,
+  actionClass,
+  intentAuthorized: String(process.env.CENTRALDARK_INTENT_AUTHORIZED || '').toLowerCase() === 'true',
+  target: process.env.CENTRALDARK_DEPLOY_TARGET || '',
+  rollbackReady: String(process.env.CENTRALDARK_ROLLBACK_READY || '').toLowerCase() === 'true',
+});
+
+if (authorityAction.status === 'BLOCK') {
+  console.error(`PERMITO_SEGREDO_ACTION=BLOCK reason=${authorityAction.reason} class=${authorityAction.actionClass || 'UNKNOWN'}`);
+  process.exit(1);
+}
+if (authorityAction.status === 'PASS') {
+  console.log(`PERMITO_SEGREDO_ACTION=PASS class=${authorityAction.actionClass} permit=${authorityAction.permit}`);
+}
+
 console.log(`LABEL_GATE=PASS canonical=${result.canonicalPresent.length} catalog=${canonical.size}`);
