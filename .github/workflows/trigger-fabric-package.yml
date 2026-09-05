@@ -1,4 +1,4 @@
-name: Trigger Fabric Full Package
+name: 🧠 Trigger Fabric — pacote e contraprova
 
 on:
   pull_request:
@@ -8,12 +8,17 @@ on:
       - '.github/workflows/trigger-fabric-package.yml'
       - 'LEIA-ME-IA.md'
       - 'AGENTS.md'
+      - 'CENTRALDARK_AI_BOOT.yaml'
       - 'docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md'
       - 'docs/CONSCIENCIA/MULTIBUSSOLA.md'
+      - 'docs/CONSCIENCIA/RANDOLF-CONTINUIDADE.md'
       - 'docs/CONSCIENCIA/MAPA-DO-CEREBRO.md'
       - 'docs/CONSCIENCIA/PIVETE-IA/PIVETE-18-ROTA-MEMORIA.md'
       - 'docs/CONSCIENCIA/APRENDIZADOS/**'
       - 'docs/BRAIN/00-MAPA-SISTEMA/BRAIN.md'
+      - 'src/lib/notifications-events.ts'
+      - 'supabase/functions/_shared/notifications-events.ts'
+      - 'apps/modulos/obsidian-plugin-grafo-vivo/**'
       - '.agents/skills/meta-lupa/**'
       - '.agents/skills/distinct-engineering-compiler/**'
       - '.agents/skills/capability-contract-router/**'
@@ -28,6 +33,19 @@ on:
       - 'docs/CONSCIENCIA/GITHUB-LABELS-OPERACIONAIS.md'
       - '.github/workflows/autonomia-promocao.yml'
       - '.github/workflows/porta-de-entrada.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/**'
+      - 'scripts/trigger-fabric/**'
+      - '.github/workflows/trigger-fabric-package.yml'
+      - 'CENTRALDARK_AI_BOOT.yaml'
+      - 'docs/CONSCIENCIA/RANDOLF-CONTINUIDADE.md'
+      - 'src/lib/notifications-events.ts'
+      - 'supabase/functions/_shared/notifications-events.ts'
+      - 'apps/modulos/obsidian-plugin-grafo-vivo/**'
+      - 'apps/modulos/HERMES-CORE/**'
+      - 'apps/modulos/fixed-point-fabric/**'
   workflow_dispatch:
 
 permissions:
@@ -39,38 +57,40 @@ concurrency:
 
 jobs:
   build-counterproof-package:
+    name: 🧪 Provar pacote, funil e contraprova no HEAD exato
     runs-on: [self-hosted, Linux]
     timeout-minutes: 15
     steps:
-      - name: Checkout exact PR state
+      - name: 📥 Checkout do HEAD exato
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Prove checkout HEAD
-        if: github.event_name == 'pull_request'
+      - name: 🧾 Provar checkout no mesmo HEAD do evento
         shell: bash
         env:
-          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
           set -euo pipefail
           actual="$(git rev-parse HEAD)"
-          test "$actual" = "$EXPECTED_HEAD"
+          test "$actual" = "$EXPECTED_HEAD" || {
+            echo "HEAD_MISMATCH expected=$EXPECTED_HEAD actual=$actual"
+            exit 1
+          }
           echo "HEAD_SHA=$actual"
 
-      - name: Setup Python
+      - name: 🐍 Preparar Python
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v6
         with:
           python-version: '3.11'
 
-      - name: Prove Fixed Point Fabric inside existing workflow
-        if: github.event_name != 'pull_request' || github.event.pull_request.draft == false || github.event.pull_request.draft == true
+      - name: ⚖️ Provar Fixed Point Fabric no workflow existente
         shell: bash
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
-          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
           EVENT_NAME: ${{ github.event_name }}
         run: |
           set -euo pipefail
@@ -92,7 +112,7 @@ jobs:
           fi
           echo 'FIXED_POINT_FABRIC=PASS_REUSED_WORKFLOW'
 
-      - name: Verify repository contract facts
+      - name: 🧭 Verificar contratos do repositório
         shell: bash
         run: |
           set -euo pipefail
@@ -102,23 +122,27 @@ jobs:
           grep -q '^BOT_ENTRY_CONTRACT=PASS$' docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/VERIFY-RESULT.txt
           grep -q '^OUTPUT_GUARD_CONTRACT=PASS$' docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/VERIFY-RESULT.txt
 
-      - name: Verify master cycle and artifact properties
+      - name: 🎙️ Provar Master Cycle, voz e propriedades dos artefatos
         shell: bash
         run: |
           set -euo pipefail
           python3 scripts/trigger-fabric/centraldark_master_cycle.py --self-test \
             | tee "$RUNNER_TEMP/master-cycle-self-test.txt"
           grep -q '"ok": true' "$RUNNER_TEMP/master-cycle-self-test.txt"
+          grep -q '"kind": "voice_funnels_once"' "$RUNNER_TEMP/master-cycle-self-test.txt"
+          grep -q '"kind": "voice_reentry_guard"' "$RUNNER_TEMP/master-cycle-self-test.txt"
           python3 scripts/trigger-fabric/verify_artifact_properties.py --self-test
           python3 scripts/trigger-fabric/verify_artifact_properties.py --check-critical .
           node apps/modulos/HERMES-CORE/agents/GraphRAG-Master/agent.mjs --self-test \
             | tee "$RUNNER_TEMP/graphrag-master-cycle-self-test.txt"
           grep -q '"ok":true\|"ok": true' "$RUNNER_TEMP/graphrag-master-cycle-self-test.txt"
           echo 'CENTRALDARK_MASTER_CYCLE=PASS'
+          echo 'VOICE_MASTER_FUNNEL=PASS'
+          echo 'SESSION_REENTRY_GUARD=PASS'
           echo 'ARTIFACT_PROPERTIES=PASS'
           echo 'HERMES_GRAPHRAG_MASTER_CYCLE=PASS'
 
-      - name: "Verify gatilho -> aprendizado sync (novo evento exige update em APRENDIZADOS.md no mesmo diff)"
+      - name: "🧠 Verificar gatilho → aprendizado no mesmo diff"
         if: github.event_name == 'pull_request'
         shell: bash
         env:
@@ -127,7 +151,7 @@ jobs:
           set -euo pipefail
           python3 scripts/trigger-fabric/verify_gatilho_aprendizado_sync.py . "$BASE_SHA"
 
-      - name: Verify distinct engineering compiler binding
+      - name: 🧬 Verificar binding do compilador de engenharia distinta
         shell: bash
         run: |
           set -euo pipefail
@@ -142,7 +166,7 @@ jobs:
           grep -q 'RED_PR_OR_FAILED_CHECK' docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml
           echo 'DISTINCT_ENGINEERING_COMPILER_BINDING=PASS'
 
-      - name: Counterprove bounded 10x12 fixed-point miner
+      - name: 🧪 Contraprovar minerador 10x12 limitado
         shell: bash
         run: |
           set -euo pipefail
@@ -152,7 +176,7 @@ jobs:
           grep -q '"fixed_point": true' "$RUNNER_TEMP/fixed-point-miner.txt"
           echo 'FIXED_POINT_MINER_10X12=PASS'
 
-      - name: Verify semantic crystal capability fabric
+      - name: 💎 Verificar tecido de cristais semânticos
         shell: bash
         run: |
           set -euo pipefail
@@ -171,7 +195,7 @@ jobs:
           grep -q '^SEMANTIC_CRYSTAL_TOOL_SELF_TEST=PASS$' "$RUNNER_TEMP/semantic-crystal-self-test.txt"
           echo 'SEMANTIC_CRYSTAL_CAPABILITY_FABRIC=PASS'
 
-      - name: Verify engine gap closure contract
+      - name: 🪡 Verificar contrato de fechamento de gap do motor
         shell: bash
         run: |
           set -euo pipefail
@@ -194,7 +218,7 @@ jobs:
           echo 'ENGINE_GAP_CLOSURE_CONTRACT=PASS'
           echo 'ENGINE_GAP_SELF_HEALING_FIXED_POINT=PASS'
 
-      - name: Render architecture PNG from canonical Mermaid
+      - name: 🗺️ Renderizar arquitetura a partir do Mermaid canônico
         shell: bash
         run: |
           set -euo pipefail
@@ -208,7 +232,7 @@ jobs:
             -b transparent
           test -s docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ARCHITECTURE.png
 
-      - name: Build deterministic full ZIP
+      - name: 📦 Construir ZIP completo determinístico
         shell: bash
         run: |
           set -euo pipefail
@@ -216,7 +240,7 @@ jobs:
           python3 scripts/trigger-fabric/build_package.py | tee .artifacts/trigger-fabric/build-result.txt
           test -s .artifacts/trigger-fabric/CENTRALDARK_TRIGGER_FABRIC_FULL_PACKAGE.zip
 
-      - name: Fresh-extraction counterproof
+      - name: 🔬 Contraprova por extração fresca
         shell: bash
         run: |
           set -euo pipefail
@@ -235,7 +259,7 @@ jobs:
           grep -q '^BOT_ENTRY_CONTRACT=PASS$' .artifacts/trigger-fabric/extracted-verify-result.txt
           grep -q '^OUTPUT_GUARD_CONTRACT=PASS$' .artifacts/trigger-fabric/extracted-verify-result.txt
 
-      - name: Prove one final ZIP only
+      - name: 🔐 Provar um único ZIP final
         shell: bash
         run: |
           set -euo pipefail
@@ -244,7 +268,7 @@ jobs:
           sha256sum .artifacts/trigger-fabric/CENTRALDARK_TRIGGER_FABRIC_FULL_PACKAGE.zip \
             | tee .artifacts/trigger-fabric/ZIP-SHA256.txt
 
-      - name: Upload canonical ZIP
+      - name: 📤 Publicar artefato canônico do gate
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: CENTRALDARK_TRIGGER_FABRIC_FULL_PACKAGE
