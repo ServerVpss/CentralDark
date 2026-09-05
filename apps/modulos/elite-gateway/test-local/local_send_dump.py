@@ -18,6 +18,9 @@ import time
 import zendriver as uc
 from dotenv import load_dotenv
 
+import aiohttp
+import websockets
+
 # Real profiles support (from system measurement)
 # Segredo (Cobra Conta): Profile 15
 # Fulano: Profile 14
@@ -31,12 +34,75 @@ BROWSER = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
 LOGS_DIR = os.path.join(os.getcwd(), "logs")
 print(f"[INFO] Using real profile: {PROFILE_NAME} -> {PROFILE}")
 
+ATTACH_PORT = os.getenv("ATTACH_PORT")
+
 # Optional: load .env if present (for future)
 load_dotenv(os.path.join(os.getcwd(), "..", "config", ".env"), override=False)
+
+
+async def send_prompt_via_cdp(port, prompt):
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(f"http://localhost:{port}/json") as resp:
+                tabs = await resp.json()
+        tab = None
+        for t in tabs:
+            if "chatgpt.com" in t.get("url", ""):
+                tab = t
+                break
+        if not tab and tabs:
+            tab = tabs[0]
+        if not tab:
+            print("[ERR] No tab found in attach mode")
+            return False
+        ws_url = tab["webSocketDebuggerUrl"]
+        safe_prompt = prompt.replace("`", "\`").replace("{", "{{").replace("}", "}}")
+        js = f"""
+        (function() {{
+            const el = document.querySelector('div[contenteditable="true"]') || document.querySelector('textarea');
+            if (!el) return false;
+            el.focus();
+            if (el.tagName === 'TEXTAREA') {{
+                el.value = `{safe_prompt}`;
+            }} else {{
+                el.innerText = `{safe_prompt}`;
+            }}
+            const ev = new InputEvent('input', {{bubbles:true}});
+            el.dispatchEvent(ev);
+            const enterEvent = new KeyboardEvent('keydown', {{key: 'Enter', code: 'Enter', bubbles:true}});
+            el.dispatchEvent(enterEvent);
+            return true;
+        }})();
+        """
+        async with websockets.connect(ws_url) as ws:
+            await ws.send(json.dumps({
+                "id": 1,
+                "method": "Runtime.evaluate",
+                "params": {"expression": js, "returnByValue": true}
+            }))
+            await ws.recv()
+            print("[INFO] Prompt sent via CDP to existing session")
+            return True
+    except Exception as e:
+        print(f"[ERR] Attach CDP failed: {e}")
+        return False
+
 
 async def run(prompt: str):
     browser = None
     try:
+        if ATTACH_PORT:
+            print(f"[INFO] ATTACH mode to existing session on port {ATTACH_PORT}")
+            success = await send_prompt_via_cdp(ATTACH_PORT, prompt)
+            if not success:
+                print("[ERR] Failed to send to existing session")
+                return
+            print("[INFO] Prompt sent to the already open session.")
+            os.makedirs(LOGS_DIR, exist_ok=True)
+            with open(os.path.join(LOGS_DIR, "last_messages.json"), "w", encoding="utf-8") as f:
+                json.dump([{"role": "user", "text": prompt}, {"role": "assistant", "text": "Response visible in the open browser (attach mode - see chat)"}], f, ensure_ascii=False, indent=2)
+            return
+        # LAUNCH mode (original)
         print(f"[INFO] Starting zendriver with profile: {PROFILE}")
         print(f"[INFO] Browser: {BROWSER}")
         print(f"[INFO] Prompt: {prompt[:100]}...")
@@ -45,11 +111,11 @@ async def run(prompt: str):
             user_data_dir=PROFILE,
             browser_executable_path=BROWSER,
             no_sandbox=True,
-            headless=True,  # change to False for debug if needed
-            # args=["--disable-blink-features=AutomationControlled"]  # optional stealth
+            headless=False,  # visible for debug
         )
         page = await browser.get("https://chatgpt.com")
         await asyncio.sleep(8)  # wait for load / possible login screen
+
 
         # JS inject prompt (from fix) - pre-escape to avoid f-string issues
         safe_prompt = prompt.replace("`", "\\`").replace("{", "{{").replace("}", "}}")
