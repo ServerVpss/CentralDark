@@ -92,6 +92,66 @@ jobs:
       - name: Motor determinístico
         working-directory: .agents/skills/meta-lupa
         run: python3 testes/test_lupa.py
+      - name: Lacre de claims — anti-repetição e reopen causal
+        working-directory: .agents/skills/meta-lupa
+        run: |
+          set -euo pipefail
+          python3 guardrails/claim_seal.py --self-test
+          python3 guardrails/claim_seal.py validate references/claim-seals.jsonl
+      - name: Banda + GraphRAG + links do compasso
+        shell: bash
+        run: |
+          set -euo pipefail
+          node apps/modulos/HERMES-CORE/agents/GraphRAG-Master/agent.mjs --self-test
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          root = Path('.')
+          score_path = root / 'docs/BRAIN/01-CONCEITOS/02-BANDA/BANDA_COMPASSO_GLOBAL.json'
+          score = json.loads(score_path.read_text(encoding='utf-8'))
+          assert score['status'] == 'ACTIVE_CONTRACT'
+          assert score['breaths']['total'] == 17
+          assert len(score['breaths']['items']) == 17
+          assert score['bindings']['meta_lupa']['claim_seals'] == '.agents/skills/meta-lupa/references/claim-seals.jsonl'
+          assert score['bindings']['surface_sync']['webhook_signal']['legacy_deployer'] == 'RETIRED'
+          assert score['bindings']['surface_sync']['webhook_signal']['canonical_deploy'] == 'GITHUB_ACTIONS'
+
+          refs = []
+          refs.extend(score.get('source_of_truth', {}).values())
+          refs.extend([
+              score['bindings']['meta_lupa']['path'],
+              score['bindings']['meta_lupa']['engine'],
+              score['bindings']['meta_lupa']['usage_ledger'],
+              score['bindings']['meta_lupa']['claim_seals'],
+              score['bindings']['meta_lupa']['claim_seal_guard'],
+              score['bindings']['graphrag']['path'],
+              score['bindings']['learning']['path'],
+              score['bindings']['agent_libraries']['tier_catalog'],
+              score['bindings']['agent_libraries']['swarm_investigator'],
+              score['bindings']['graph']['generator'],
+              score['bindings']['surface_sync']['casa']['script'],
+              score['bindings']['surface_sync']['vps']['script'],
+          ])
+          broken = []
+          for ref in refs:
+              if not isinstance(ref, str):
+                  continue
+              path = ref.split('#', 1)[0]
+              if path.startswith('http') or path in {'main'}:
+                  continue
+              if not (root / path).exists():
+                  broken.append(path)
+          if broken:
+              raise SystemExit('BROKEN_COMPASS_LINKS=' + ','.join(sorted(set(broken))))
+
+          second = (root / 'SECOND-BRAIN.yml').read_text(encoding='utf-8')
+          if '01-CONCEITOS/Banda/' in second:
+              raise SystemExit('SECOND_BRAIN_STALE_BANDA_PATH')
+          if 'END_TO_END_UNKNOWN' not in second:
+              raise SystemExit('SECOND_BRAIN_MISSING_RUNTIME_BOUNDARY')
+          print('BANDA_COMPASS_LINKS=PASS')
+          PY
       - name: Evolução verificável — fail closed
         working-directory: .agents/skills/meta-lupa
         run: |
@@ -237,6 +297,8 @@ jobs:
           echo "ROTA_PRIMARIA=self-hosted-linux"
           echo "ROTA_FALLBACK=BLOCKED_NO_HOSTED"
           echo "KNOWLEDGE_COMPILER_GATE=1"
+          echo "CLAIM_SEAL_GATE=1"
+          echo "BANDA_COMPASS_GATE=1"
           echo "MINING_ONCE_CRYSTALLIZE_ONCE_REUSE_N=1"
           echo "DELTA_AFFECTED_ONLY=1"
           echo "JOB_STATUS=${JOB_STATUS}"
