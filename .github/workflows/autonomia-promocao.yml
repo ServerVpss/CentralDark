@@ -1,41 +1,53 @@
 name: Autonomia — promoção segura
-
-on:
-  workflow_dispatch:
+true:
+  workflow_dispatch: null
   pull_request_target:
-    types: [opened, reopened, ready_for_review, synchronize, edited, labeled, unlabeled]
-    branches: [main]
+    types:
+    - opened
+    - reopened
+    - ready_for_review
+    - synchronize
+    - edited
+    - labeled
+    - unlabeled
+    branches:
+    - main
   workflow_run:
     workflows:
-      - porta-de-entrada
-      - codex-validate
-      - lupa-conformance
-      - Lupa Drift Guard
-      - Trigger Fabric Full Package
-      - PR Title Contract
-      - PR auto-review (Codex + checklist)
-      - Pipeline — Telegram + Painel
-    types: [completed]
+    - porta-de-entrada
+    - codex-validate
+    - lupa-conformance
+    - Lupa Drift Guard
+    - Trigger Fabric Full Package
+    - PR Title Contract
+    - PR auto-review (Codex + checklist)
+    - Pipeline — Telegram + Painel
+    types:
+    - completed
   repository_dispatch:
-    types: [centraldark_autonomia_recheck, centraldark_post_merge]
+    types:
+    - centraldark_autonomia_recheck
+    - centraldark_post_merge
   schedule:
-    - cron: "*/5 * * * *"
-
+  - cron: '*/5 * * * *'
 permissions: {}
-
 concurrency:
-  group: autonomia-promocao-${{ github.event.pull_request.number || github.event.workflow_run.head_sha || github.event.client_payload.pr_number || github.event.client_payload.merge_sha || github.ref }}
+  group: autonomia-promocao-${{ github.event.pull_request.number || github.event.workflow_run.head_sha
+    || github.event.client_payload.pr_number || github.event.client_payload.merge_sha
+    || github.ref }}
   cancel-in-progress: false
-
 env:
   BOT_TRUSTED_AUTHORS: segredounlock
-  BOT_REQUIRED_WORKFLOWS: porta-de-entrada,codex-validate,lupa-conformance,Lupa Drift Guard,Trigger Fabric Full Package,PR Title Contract,PR auto-review (Codex + checklist),Pipeline — Telegram + Painel
-  BOT_WAIT_TIMEOUT_MINUTES: "45"
-
+  BOT_REQUIRED_WORKFLOWS: porta-de-entrada,codex-validate,lupa-conformance,Lupa Drift
+    Guard,Trigger Fabric Full Package,PR Title Contract,PR auto-review (Codex + checklist),Pipeline
+    — Telegram + Painel
+  BOT_WAIT_TIMEOUT_MINUTES: '45'
 jobs:
   judge:
     name: Juiz determinístico — intenção + estado + segurança
-    runs-on: [self-hosted, Linux]
+    runs-on:
+    - self-hosted
+    - Linux
     timeout-minutes: 10
     permissions:
       contents: read
@@ -43,96 +55,128 @@ jobs:
       issues: read
       actions: read
       checks: read
-
     steps:
-      - name: Checkout exclusivo da main confiável
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          ref: ${{ github.event.pull_request.base.sha || github.sha }}
-          fetch-depth: 1
-          persist-credentials: false
+    - name: Checkout exclusivo da main confiável
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      with:
+        ref: ${{ github.event.pull_request.base.sha || github.sha }}
+        fetch-depth: 1
+        persist-credentials: false
+    - name: Setup Node 24 (fast path self-hosted)
+      uses: ./.github/actions/setup-node24-selfhosted
+    - name: Provar presença de canais opcionais sem mostrar valor
+      shell: bash
+      run: 'set -euo pipefail
 
-      - name: Setup Node 24 (fast path self-hosted)
-        uses: ./.github/actions/setup-node24-selfhosted
+        echo "PROMOTION_TOKEN=${{ secrets.PROMOTION_TOKEN != '''' && ''present'' ||
+        ''absent_active_agent_can_still_promote'' }}"
 
-      - name: Provar presença de canais opcionais sem mostrar valor
-        shell: bash
-        run: |
-          set -euo pipefail
-          echo "PROMOTION_TOKEN=${{ secrets.PROMOTION_TOKEN != '' && 'present' || 'absent_active_agent_can_still_promote' }}"
-          echo "TELEGRAM=${{ secrets.TELEGRAM_BOT_TOKEN != '' && secrets.TELEGRAM_CHAT_ID != '' && 'present' || 'absent' }}"
-          echo "WEBHOOK=${{ secrets.NOTIFY_WEBHOOK_URL != '' && 'present' || 'absent' }}"
+        echo "TELEGRAM=${{ secrets.TELEGRAM_BOT_TOKEN != '''' && secrets.TELEGRAM_CHAT_ID
+        != '''' && ''present'' || ''absent'' }}"
 
-      - name: Testar motor canônico e fronteira de autoridade delegada
-        run: |
-          set -euo pipefail
-          node --test scripts/lupa/authority-approval.test.mjs
-          node --test scripts/github-autonomia-promocao.test.mjs
-          node --test scripts/github-autonomia-varredura.test.mjs
-          node --test scripts/github-autonomia-green-guard.test.mjs
-          node --test scripts/github-pr-confirmado-label.test.mjs
+        echo "WEBHOOK=${{ secrets.NOTIFY_WEBHOOK_URL != '''' && ''present'' || ''absent''
+        }}"
 
-      - name: Verificar Trigger Fabric canônica antes de qualquer promoção
-        shell: bash
-        run: |
-          set -euo pipefail
-          python3 scripts/trigger-fabric/verify_repo_contract.py . | tee "$RUNNER_TEMP/trigger-fabric-contract.txt"
-          grep -q '^REPO_CONTRACT_VERIFY=PASS$' "$RUNNER_TEMP/trigger-fabric-contract.txt"
-          grep -q '^BOT_ENTRY_CONTRACT=PASS$' "$RUNNER_TEMP/trigger-fabric-contract.txt"
-          grep -q '^OUTPUT_GUARD_CONTRACT=PASS$' "$RUNNER_TEMP/trigger-fabric-contract.txt"
-          grep -q '^WORKFLOW_REUSE_CONTRACT=PASS$' "$RUNNER_TEMP/trigger-fabric-contract.txt"
+        '
+    - name: Testar motor canônico e fronteira de autoridade delegada
+      run: 'set -euo pipefail
 
-      - name: Avaliar PRs autorizados em read-only
-        env:
-          BOT_SWEEP_DIR: ${{ runner.temp }}/centraldark-autonomia
-          JUDGE_TOKEN: ${{ github.token }}
-          GITHUB_TOKEN: ${{ github.token }}
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          NOTIFY_WEBHOOK_URL: ${{ secrets.NOTIFY_WEBHOOK_URL }}
-        run: node scripts/github-autonomia-varredura.mjs judge
+        node --test scripts/lupa/authority-approval.test.mjs
 
-      - name: Garantir artifact mesmo sem candidatos elegíveis
-        if: always()
-        shell: bash
-        run: |
-          set -euo pipefail
-          mkdir -p "${{ runner.temp }}/centraldark-autonomia"
-          touch "${{ runner.temp }}/centraldark-autonomia/EMPTY"
+        node --test scripts/github-autonomia-promocao.test.mjs
 
-      - name: Publicar recibos do juiz
-        if: always()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: autonomia-judge-${{ github.run_id }}
-          path: ${{ runner.temp }}/centraldark-autonomia
-          if-no-files-found: error
-          retention-days: 14
+        node --test scripts/github-autonomia-varredura.test.mjs
 
-      - name: Receipt determinístico
-        if: always()
-        shell: bash
-        env:
-          JOB_STATUS: ${{ job.status }}
-          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.event.workflow_run.head_sha || github.sha }}
-          EVENT_NAME: ${{ github.event_name }}
-        run: |
-          set -euo pipefail
-          echo "HEAD_SHA=${HEAD_SHA}"
-          echo "EVENT_NAME=${EVENT_NAME}"
-          echo "EXECUTOR=self-hosted-linux"
-          echo "TRIGGER_FABRIC_CONTRACT_REQUIRED=1"
-          echo "BOT_ENTRY_CONTRACT_REQUIRED=1"
-          echo "OUTPUT_GUARD_CONTRACT_REQUIRED=1"
-          echo "WORKFLOW_REUSE_REQUIRED=1"
-          echo "NODE24_FAST_PATH=1"
-          echo "JOB_STATUS=${JOB_STATUS}"
-          test "${JOB_STATUS}" = "success" && echo "RESULTADO=PASS" || echo "RESULTADO=BLOCKED"
+        node --test scripts/github-autonomia-green-guard.test.mjs
 
+        node --test scripts/github-pr-confirmado-label.test.mjs
+
+        '
+    - name: Verificar Trigger Fabric canônica antes de qualquer promoção
+      shell: bash
+      run: 'set -euo pipefail
+
+        python3 scripts/trigger-fabric/verify_repo_contract.py . | tee "$RUNNER_TEMP/trigger-fabric-contract.txt"
+
+        grep -q ''^REPO_CONTRACT_VERIFY=PASS$'' "$RUNNER_TEMP/trigger-fabric-contract.txt"
+
+        grep -q ''^BOT_ENTRY_CONTRACT=PASS$'' "$RUNNER_TEMP/trigger-fabric-contract.txt"
+
+        grep -q ''^OUTPUT_GUARD_CONTRACT=PASS$'' "$RUNNER_TEMP/trigger-fabric-contract.txt"
+
+        grep -q ''^WORKFLOW_REUSE_CONTRACT=PASS$'' "$RUNNER_TEMP/trigger-fabric-contract.txt"
+
+        '
+    - name: Avaliar PRs autorizados em read-only
+      env:
+        BOT_SWEEP_DIR: ${{ runner.temp }}/centraldark-autonomia
+        JUDGE_TOKEN: ${{ github.token }}
+        GITHUB_TOKEN: ${{ github.token }}
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        NOTIFY_WEBHOOK_URL: ${{ secrets.NOTIFY_WEBHOOK_URL }}
+        CENTRALDARK_ACTION_CLASS: DEPLOY
+        CENTRALDARK_INTENT_AUTHORIZED: 'true'
+        CENTRALDARK_ROLLBACK_READY: 'true'
+      run: node scripts/github-autonomia-varredura.mjs judge
+    - name: Garantir artifact mesmo sem candidatos elegíveis
+      if: always()
+      shell: bash
+      run: 'set -euo pipefail
+
+        mkdir -p "${{ runner.temp }}/centraldark-autonomia"
+
+        touch "${{ runner.temp }}/centraldark-autonomia/EMPTY"
+
+        '
+    - name: Publicar recibos do juiz
+      if: always()
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+      with:
+        name: autonomia-judge-${{ github.run_id }}
+        path: ${{ runner.temp }}/centraldark-autonomia
+        if-no-files-found: error
+        retention-days: 14
+    - name: Receipt determinístico
+      if: always()
+      shell: bash
+      env:
+        JOB_STATUS: ${{ job.status }}
+        HEAD_SHA: ${{ github.event.pull_request.head.sha || github.event.workflow_run.head_sha
+          || github.sha }}
+        EVENT_NAME: ${{ github.event_name }}
+        CENTRALDARK_ACTION_CLASS: DEPLOY
+        CENTRALDARK_INTENT_AUTHORIZED: 'true'
+        CENTRALDARK_ROLLBACK_READY: 'true'
+      run: 'set -euo pipefail
+
+        echo "HEAD_SHA=${HEAD_SHA}"
+
+        echo "EVENT_NAME=${EVENT_NAME}"
+
+        echo "EXECUTOR=self-hosted-linux"
+
+        echo "TRIGGER_FABRIC_CONTRACT_REQUIRED=1"
+
+        echo "BOT_ENTRY_CONTRACT_REQUIRED=1"
+
+        echo "OUTPUT_GUARD_CONTRACT_REQUIRED=1"
+
+        echo "WORKFLOW_REUSE_REQUIRED=1"
+
+        echo "NODE24_FAST_PATH=1"
+
+        echo "JOB_STATUS=${JOB_STATUS}"
+
+        test "${JOB_STATUS}" = "success" && echo "RESULTADO=PASS" || echo "RESULTADO=BLOCKED"
+
+        '
   promote:
     name: Promotor — revalidar e squash main
     needs: judge
-    runs-on: [self-hosted, Linux]
+    runs-on:
+    - self-hosted
+    - Linux
     timeout-minutes: 10
     permissions:
       contents: write
@@ -140,76 +184,83 @@ jobs:
       issues: write
       actions: write
       checks: read
-
     steps:
-      - name: Checkout exclusivo da main confiável
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          ref: ${{ github.event.pull_request.base.sha || github.sha }}
-          fetch-depth: 1
-          persist-credentials: false
+    - name: Checkout exclusivo da main confiável
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      with:
+        ref: ${{ github.event.pull_request.base.sha || github.sha }}
+        fetch-depth: 1
+        persist-credentials: false
+    - name: Setup Node 24 (fast path self-hosted)
+      uses: ./.github/actions/setup-node24-selfhosted
+    - name: Baixar recibos produzidos pelo juiz
+      uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
+      with:
+        name: autonomia-judge-${{ github.run_id }}
+        path: ${{ runner.temp }}/centraldark-autonomia
+    - name: Aplicar guard proporcional à política escolhida
+      env:
+        BOT_SWEEP_DIR: ${{ runner.temp }}/centraldark-autonomia
+        PROMOTER_TOKEN: ${{ secrets.PROMOTION_TOKEN }}
+        GITHUB_TOKEN: ${{ github.token }}
+      run: node scripts/github-autonomia-green-guard.mjs
+    - name: Promover somente recibos válidos e estado vivo idêntico
+      env:
+        BOT_SWEEP_DIR: ${{ runner.temp }}/centraldark-autonomia
+        PROMOTER_TOKEN: ${{ secrets.PROMOTION_TOKEN }}
+        GITHUB_TOKEN: ${{ github.token }}
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        NOTIFY_WEBHOOK_URL: ${{ secrets.NOTIFY_WEBHOOK_URL }}
+      run: node scripts/github-autonomia-varredura.mjs promote
+    - name: Materializar ✅ PR CONFIRMADO somente após prova observada
+      env:
+        BOT_SWEEP_DIR: ${{ runner.temp }}/centraldark-autonomia
+        PROMOTER_TOKEN: ${{ secrets.PROMOTION_TOKEN }}
+        GITHUB_TOKEN: ${{ github.token }}
+      run: node scripts/github-pr-confirmado-label.mjs reconcile
+    - name: Publicar resultado sanitizado
+      if: always()
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+      with:
+        name: autonomia-promote-${{ github.run_id }}
+        path: ${{ runner.temp }}/centraldark-autonomia
+        if-no-files-found: warn
+        retention-days: 14
+    - name: Receipt determinístico
+      if: always()
+      shell: bash
+      env:
+        JOB_STATUS: ${{ job.status }}
+        HEAD_SHA: ${{ github.event.pull_request.head.sha || github.event.workflow_run.head_sha
+          || github.sha }}
+        EVENT_NAME: ${{ github.event_name }}
+      run: 'set -euo pipefail
 
-      - name: Setup Node 24 (fast path self-hosted)
-        uses: ./.github/actions/setup-node24-selfhosted
+        echo "HEAD_SHA=${HEAD_SHA}"
 
-      - name: Baixar recibos produzidos pelo juiz
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
-        with:
-          name: autonomia-judge-${{ github.run_id }}
-          path: ${{ runner.temp }}/centraldark-autonomia
+        echo "EVENT_NAME=${EVENT_NAME}"
 
-      - name: Aplicar guard proporcional à política escolhida
-        env:
-          BOT_SWEEP_DIR: ${{ runner.temp }}/centraldark-autonomia
-          PROMOTER_TOKEN: ${{ secrets.PROMOTION_TOKEN }}
-          GITHUB_TOKEN: ${{ github.token }}
-        run: node scripts/github-autonomia-green-guard.mjs
+        echo "EXECUTOR=self-hosted-linux"
 
-      - name: Promover somente recibos válidos e estado vivo idêntico
-        env:
-          BOT_SWEEP_DIR: ${{ runner.temp }}/centraldark-autonomia
-          PROMOTER_TOKEN: ${{ secrets.PROMOTION_TOKEN }}
-          GITHUB_TOKEN: ${{ github.token }}
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          NOTIFY_WEBHOOK_URL: ${{ secrets.NOTIFY_WEBHOOK_URL }}
-        run: node scripts/github-autonomia-varredura.mjs promote
+        echo "MERGE_METHOD=squash"
 
-      - name: Materializar ✅ PR CONFIRMADO somente após prova observada
-        env:
-          BOT_SWEEP_DIR: ${{ runner.temp }}/centraldark-autonomia
-          PROMOTER_TOKEN: ${{ secrets.PROMOTION_TOKEN }}
-          GITHUB_TOKEN: ${{ github.token }}
-        run: node scripts/github-pr-confirmado-label.mjs reconcile
+        echo "FAST_GREEN_FIRST_REQUIRED=1"
 
-      - name: Publicar resultado sanitizado
-        if: always()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: autonomia-promote-${{ github.run_id }}
-          path: ${{ runner.temp }}/centraldark-autonomia
-          if-no-files-found: warn
-          retention-days: 14
+        echo "ADVERSARIAL_GREEN_FIRST_REQUIRED=1"
 
-      - name: Receipt determinístico
-        if: always()
-        shell: bash
-        env:
-          JOB_STATUS: ${{ job.status }}
-          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.event.workflow_run.head_sha || github.sha }}
-          EVENT_NAME: ${{ github.event_name }}
-        run: |
-          set -euo pipefail
-          echo "HEAD_SHA=${HEAD_SHA}"
-          echo "EVENT_NAME=${EVENT_NAME}"
-          echo "EXECUTOR=self-hosted-linux"
-          echo "MERGE_METHOD=squash"
-          echo "FAST_GREEN_FIRST_REQUIRED=1"
-          echo "ADVERSARIAL_GREEN_FIRST_REQUIRED=1"
-          echo "FAST_CAUSAL_GATES=AUTHENTICATED_ACCOUNT+SAME_REPO+INTENT_SCOPE+SECRET_SCAN+CONFLICT+CHANGES_REQUESTED+HEAD_BASE_REVALIDATION"
-          echo "REASK=NO_WHEN_INTENT_RECEIPT_VALID"
-          echo "PR_CONFIRMED_LABEL=DERIVED_POST_MERGE_ONLY"
-          echo "TRIGGER_FABRIC_VERIFIED_BY_JUDGE=1"
-          echo "NODE24_FAST_PATH=1"
-          echo "JOB_STATUS=${JOB_STATUS}"
-          test "${JOB_STATUS}" = "success" && echo "RESULTADO=PASS" || echo "RESULTADO=BLOCKED"
+        echo "FAST_CAUSAL_GATES=AUTHENTICATED_ACCOUNT+SAME_REPO+INTENT_SCOPE+SECRET_SCAN+CONFLICT+CHANGES_REQUESTED+HEAD_BASE_REVALIDATION"
+
+        echo "REASK=NO_WHEN_INTENT_RECEIPT_VALID"
+
+        echo "PR_CONFIRMED_LABEL=DERIVED_POST_MERGE_ONLY"
+
+        echo "TRIGGER_FABRIC_VERIFIED_BY_JUDGE=1"
+
+        echo "NODE24_FAST_PATH=1"
+
+        echo "JOB_STATUS=${JOB_STATUS}"
+
+        test "${JOB_STATUS}" = "success" && echo "RESULTADO=PASS" || echo "RESULTADO=BLOCKED"
+
+        '
