@@ -18,4 +18,3 @@ publique-o apenas por túnel/Tailscale/reverse proxy autenticado. Não exponha o
 
 Somente um receipt com `reached=true`, cadeia válida e gates do PR verdes autoriza merge. O receipt
 local não substitui os checks do GitHub. O PR deve usar `Refs #<issue>`; nunca `Closes` no tracker.
-

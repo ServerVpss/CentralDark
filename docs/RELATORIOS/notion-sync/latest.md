@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-09-05T07:55:49.039Z
+# 🧠 Notion Sync — 2026-09-05T21:55:02.479Z
 
-- **Commit fonte:** `7555c2fb8ea64d6b351ce9d65a9392b489717c8c`
+- **Commit fonte:** `95ab9e72a98b342122818c0efd83318c4ee09387`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 491 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 491 atualizadas · ❌ 9 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
 | aprendizados | 35 | 0 | 35 | 0 | 0 |
-| estrutura | 412 | 0 | 412 | 0 | 0 |
+| estrutura | 421 | 0 | 412 | 0 | 9 |
 
 ## Operações
 
@@ -209,6 +209,8 @@
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-28-meteor-claim-lease-absorvido.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-28-meteor-decomp-pr-bot-assay.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-28-revisao-mineracao-agi-e-organismo.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-05-SHARED-WRITER-LEASE-CONTRAPROVA.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-05-VERTEX-INVERSO-PEPITAS-PROVADAS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/AIOS-GOLD-ASSAY-20260828/CAPABILITY-MATRIX.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/AIOS-GOLD-ASSAY-20260828/COUNTERPROOF.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/AIOS-GOLD-ASSAY-20260828/HERMES-PROOF-PLAN.md |
@@ -296,6 +298,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/COCKPIT-AVANCO.README.md |
 | estrutura | atualizado | docs/CONSCIENCIA/CODEX-INTEGRADO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/CODEX-REVISAO-PRS.md |
+| estrutura | erro | docs/CONSCIENCIA/COMITE-OFICIAL-SEGREDO-CHEFE.md |
 | estrutura | atualizado | docs/CONSCIENCIA/CONECTOR-LIBERDADE-SEGURA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/CONSCIENCIA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/CONSOLIDACAO-CENTRALDARK-V2.md |
@@ -335,6 +338,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/ESPELHO-CLONE-DECK-PASSIVO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/EXECUCAO-REVERSIVEL.md |
 | estrutura | atualizado | docs/CONSCIENCIA/EXPANSAO-DE-DOMINIO.md |
+| estrutura | erro | docs/CONSCIENCIA/GAPS-ONLY.md |
 | estrutura | atualizado | docs/CONSCIENCIA/GITHUB-LABELS-OPERACIONAIS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/GITHUB-PR-OBSERVAR-CODEX.md |
 | estrutura | atualizado | docs/CONSCIENCIA/GITHUB-PROFISSIONAL-AUTOMACAO-CONTINUA.md |
@@ -393,13 +397,17 @@
 | estrutura | atualizado | docs/CONSCIENCIA/PIVETE-IA/PIVETE-18-ROTA-MEMORIA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PLANO-RECONCILIACAO-DOMINIOS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PLANO.md |
+| estrutura | erro | docs/CONSCIENCIA/POMBO-LINEAGE-RULE.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PROGRAMAS/CONVERGENCIA-OMNIROUTE-CENTRALDARK.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PROJECT-KNOWLEDGE-CENTRALDARK-V2.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PROMPT-MESTRE-MULTI-IA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PROTOCOLO-INICIALIZACAO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PROTOCOLO-ORQUESTRACAO-PIVETE.md |
+| estrutura | erro | docs/CONSCIENCIA/PROTOCOLO-PROVA-RASTRO-ANTI-PENDENCIA.md |
+| estrutura | erro | docs/CONSCIENCIA/RANDOLF-CONTINUIDADE.md |
 | estrutura | atualizado | docs/CONSCIENCIA/README.md |
 | estrutura | atualizado | docs/CONSCIENCIA/REGISTRO-GUARDIAO-DECISOR-V3.md |
+| estrutura | erro | docs/CONSCIENCIA/REGRA-COMITE-DELTA-CONTINUO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/REGRA-OFICIAL-GUARDIAO-MODO-PROPOR.md |
 | estrutura | atualizado | docs/CONSCIENCIA/REGRA-OFICIAL-GUARDIAO-V2-ANALISTA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/REGRA-OFICIAL-HIERARQUIA-MEMORIA.md |
@@ -505,6 +513,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/VISUALIZACAO-MERMAID-PADRAO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/WEBHOOK-DEPLOY-SEGURO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/agente/elite-mapper/README.md |
+| estrutura | erro | docs/CONSCIENCIA/centraldark-gpt-prompt.md |
 | estrutura | atualizado | docs/CONSCIENCIA/relatorios/00_RESUMO_EXECUTIVO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/relatorios/01_MAPEAMENTO_ESTRUTURA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/relatorios/02_LIXO_PARA_DELETAR.md |

@@ -9,15 +9,21 @@ import { execSync } from 'node:child_process';
 const ROOT = '/root/CentralDark';
 const GRAPH = `${ROOT}/apps/modulos/status/graph-data.json`;
 const GRAPH_PANEL_MIRROR = `${ROOT}/apps/modulos/graph-panel/data/graph.json`;
-const BAND_SCORE = `${ROOT}/docs/BRAIN/01-CONCEITOS/Banda/BANDA_COMPASSO_GLOBAL.json`;
+const BAND_SCORE = `${ROOT}/docs/BRAIN/01-CONCEITOS/02-BANDA/BANDA_COMPASSO_GLOBAL.json`;
 const APRENDIZADOS = `${ROOT}/docs/CONSCIENCIA/APRENDIZADOS.md`;
 const GRAPHRAG = `${ROOT}/apps/modulos/HERMES-CORE/agents/GraphRAG-Master/agent.mjs`;
+const META_LUPA = `${ROOT}/.agents/skills/meta-lupa/SKILL.md`;
+const CLAIM_SEALS = `${ROOT}/.agents/skills/meta-lupa/references/claim-seals.jsonl`;
+const AGENT_LIBRARY = `${ROOT}/docs/BRAIN/03-DOCUMENTACAO/01-AGENTS-LIBRARY/2026-07-13-overclock-swarm-tier-catalog.json`;
+const SECOND_BRAIN = `${ROOT}/SECOND-BRAIN.yml`;
 const GWLOG = '/var/log/centralldark/gateway.log';
 const DRY = process.argv.includes('--dry');
 
 const ALIAS = {
   elitehttp: 'elite-http-gateway', mcp: 'mcp-server', hubbot: 'bot-telegram', botserver: 'bot-telegram',
   graphpanel: 'graph-panel', webhookdeploy: 'webhook-deploy', telepaineldeploy: 'painel-status',
+  hermescore: 'hermes', metalupa: 'meta-lupa', autolupa: 'meta-lupa', claimseals: 'claim-seals',
+  githubmain: 'github-main', originmain: 'github-main', casa: 'casa', house: 'casa',
 };
 const LIVE_EXTRA = {
   hermes: { label: 'Hermes (executor)', type: 'orquestrador', group: 'monitoramento' },
@@ -89,12 +95,31 @@ function main() {
   };
 
   const breathTotal = bandBreathTotal();
-  ensureNode('band-score', { label: `Banda · ${breathTotal} Respirações`, type: 'contrato', group: 'cognicao', source: 'docs/BRAIN/01-CONCEITOS/Banda/BANDA_COMPASSO_GLOBAL.json', authority: false });
+  ensureNode('band-score', { label: `Banda · ${breathTotal} Respirações`, type: 'contrato', group: 'cognicao', source: 'docs/BRAIN/01-CONCEITOS/02-BANDA/BANDA_COMPASSO_GLOBAL.json', authority: false, file_present: existsSync(BAND_SCORE) });
+  ensureNode('meta-lupa', { label: 'META LUPA · falsificação contínua', type: 'raciocinio', group: 'cognicao', source: '.agents/skills/meta-lupa/SKILL.md', authority: false, file_present: existsSync(META_LUPA) });
+  ensureNode('claim-seals', { label: 'Lacres · claims provados', type: 'memoria', group: 'cognicao', source: '.agents/skills/meta-lupa/references/claim-seals.jsonl', authority: false, file_present: existsSync(CLAIM_SEALS) });
   ensureNode('graphrag-master', { label: 'GraphRAG Master · Biblioteca', type: 'memoria', group: 'cognicao', source: 'apps/modulos/HERMES-CORE/agents/GraphRAG-Master/agent.mjs', file_present: existsSync(GRAPHRAG), authority: false });
+  ensureNode('agent-library', { label: 'Agents Library · scout/builder/reviewer/swarm', type: 'biblioteca', group: 'cognicao', source: 'docs/BRAIN/03-DOCUMENTACAO/01-AGENTS-LIBRARY/2026-07-13-overclock-swarm-tier-catalog.json', file_present: existsSync(AGENT_LIBRARY), authority: false });
   ensureNode('aprendizados', { label: 'Aprendizados Curados', type: 'memoria', group: 'cognicao', source: 'docs/CONSCIENCIA/APRENDIZADOS.md', file_present: existsSync(APRENDIZADOS), authority: false });
+  ensureNode('second-brain', { label: 'Segundo Cérebro · mapa lógico', type: 'mapa', group: 'cognicao', source: 'SECOND-BRAIN.yml', file_present: existsSync(SECOND_BRAIN), authority: false });
+  ensureNode('casa', { label: 'Casa · clone/Obsidian/Hermes', type: 'surface', group: 'sincronizacao', source: 'scripts/casa/sync-hermes-obsidian.ps1', authority: false });
+  ensureNode('github-main', { label: 'GitHub main · verdade estrutural', type: 'source-of-truth', group: 'sincronizacao', source: 'ServerVpss/CentralDark@main', authority: true });
+  ensureNode('vps', { label: 'VPS · runtime/deploy', type: 'runtime', group: 'sincronizacao', source: 'scripts/vps/centraldark-deploy.sh', authority: false });
+
+  ensureEdge('band-score', 'meta-lupa', 'compasso / falsificação', 4);
+  ensureEdge('meta-lupa', 'claim-seals', 'sela somente prova', 4);
+  ensureEdge('claim-seals', 'graphrag-master', 'memória provada', 4);
   ensureEdge('band-score', 'graphrag-master', 'partitura fixa', 4);
+  ensureEdge('agent-library', 'graphrag-master', 'capacidades agrupadas', 3);
   ensureEdge('graphrag-master', 'aprendizados', 'consulta / aprende', 3);
   ensureEdge('aprendizados', 'band-score', 'cristaliza delta provado', 2);
+  ensureEdge('second-brain', 'band-score', 'mapa lógico', 3);
+  ensureEdge('github-main', 'casa', 'PING: head oficial', 3);
+  ensureEdge('casa', 'github-main', 'PONG: head/receipt', 3);
+  ensureEdge('github-main', 'vps', 'PING: head oficial', 3);
+  ensureEdge('vps', 'github-main', 'PONG: head/receipt', 3);
+  ensureEdge('casa', 'meta-lupa', 'mesmo protocolo', 3);
+  ensureEdge('vps', 'meta-lupa', 'mesmo protocolo', 3);
 
   let online = 0, offline = 0, monitorados = 0;
   for (const n of g.nodes) {
@@ -117,11 +142,20 @@ function main() {
   const hits = atividadeGateway();
   if (hits > 0) for (const e of g.edges) if (e.to === 'elite-http-gateway') e.weight = Math.min(9, 3 + Math.ceil(hits / 2));
 
+  const compassLinks = [BAND_SCORE, META_LUPA, CLAIM_SEALS, GRAPHRAG, AGENT_LIBRARY, APRENDIZADOS, SECOND_BRAIN].map(path => ({ path: path.replace(`${ROOT}/`, ''), present: existsSync(path) }));
+  const brokenCompassLinks = compassLinks.filter(item => !item.present);
+
   g.updatedAt = new Date().toISOString();
-  g._note = `Grafo VIVO — regenerado por scripts/grafo-vivo/gerar-grafo-vivo.mjs. PM2: ${online} online / ${offline} off de ${monitorados} monitorados. Gateway: ${hits} req/15min. Banda: ${breathTotal} respirações declaradas.`;
-  g.stats = { ...(g.stats || {}), total_nodes: g.nodes.length, total_edges: g.edges.length, processos_vivos: procs.length, online, offline, monitorados, gateway_req_15min: hits, band_breaths_declared: breathTotal, gerado_em: g.updatedAt };
-  const resumo = `${g.nodes.length} nós · ${g.edges.length} arestas · ${online}🟢/${offline}🔴 · ${hits} req/15min · banda=${breathTotal}`;
+  g._note = `Grafo VIVO — regenerado por scripts/grafo-vivo/gerar-grafo-vivo.mjs. PM2: ${online} online / ${offline} off de ${monitorados} monitorados. Gateway: ${hits} req/15min. Banda: ${breathTotal} respirações declaradas. Compass links quebrados: ${brokenCompassLinks.length}.`;
+  g.stats = { ...(g.stats || {}), total_nodes: g.nodes.length, total_edges: g.edges.length, processos_vivos: procs.length, online, offline, monitorados, gateway_req_15min: hits, band_breaths_declared: breathTotal, compass_links_total: compassLinks.length, compass_links_broken: brokenCompassLinks.length, gerado_em: g.updatedAt };
+  g.compass_links = compassLinks;
+  const resumo = `${g.nodes.length} nós · ${g.edges.length} arestas · ${online}🟢/${offline}🔴 · ${hits} req/15min · banda=${breathTotal} · links_quebrados=${brokenCompassLinks.length}`;
   if (DRY) { console.log('[DRY] ' + resumo); console.log(JSON.stringify(g.stats, null, 2)); return; }
+  if (brokenCompassLinks.length) {
+    console.error('[grafo-vivo] BLOQUEADO_COMPASS_LINKS=' + brokenCompassLinks.map(item => item.path).join(','));
+    process.exitCode = 2;
+    return;
+  }
   const payload = JSON.stringify(g, null, 2);
   writeFileSync(GRAPH, payload);
   try { writeFileSync(GRAPH_PANEL_MIRROR, payload); }

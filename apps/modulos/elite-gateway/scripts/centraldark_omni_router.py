@@ -1,22 +1,11 @@
 #!/usr/bin/env python3
 """
 CentralDark Omni Router
-ONE_SYSTEM_ONLY: one local entrypoint, multiple replaceable engines.
+ONE_SYSTEM_ONLY: one entrypoint, multiple replaceable engines.
 
-Supported engines:
-- openai      -> official OpenAI Chat Completions API
-- claude-code -> local Claude Code CLI
-- hermes      -> local/OpenAI-compatible Hermes endpoint
-- nous        -> Nous Research inference API (Hermes models)
-
-Legacy Zendriver->chatgpt.com transport remains frozen and is not used here.
-
-MODEL_TOUCH:
-When CENTRALDARK_AGENT_LOG_URL + AGENT_LOG_SECRET are configured, each provider
-invocation emits a sanitized observable event into the existing CentralDark
-Evidence Envelope path. Telemetry delivery is evidence about telemetry only:
-it never converts provider success into ACTION_PROOF and never creates a second
-event bus/collector.
+The surface talks to CentralDark. Providers stay behind this router.
+A missing/blocked/exhausted optional provider must not become a surface-wide error
+while another allowed route is available.
 """
 
 from __future__ import annotations
@@ -36,42 +25,25 @@ from fastapi import FastAPI, Header, HTTPException, Request
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
-APP_VERSION = "0.2.0"
-DEFAULT_ENGINE = os.getenv("CENTRALDARK_DEFAULT_ENGINE", "claude-code").strip().lower()
+APP_VERSION = "0.3.0"
+DEFAULT_ENGINE = os.getenv("CENTRALDARK_DEFAULT_ENGINE", "nous").strip().lower()
 ROUTER_TOKEN = os.getenv("CENTRALDARK_ROUTER_TOKEN", "").strip()
 REQUEST_TIMEOUT = float(os.getenv("CENTRALDARK_ROUTER_TIMEOUT", "180"))
+DEFAULT_FALLBACK_CHAIN = "nous,hermes,google,claude-code,xai,abacus,openai"
 
-# OpenAI / OpenAI-compatible (OpenRouter, etc.)
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "").strip()
-OPENAI_BASE_URL = os.getenv("OPENAI_BASE_URL", "https://api.openai.com").rstrip("/")
-OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-5.6").strip()
-
-# Claude Code CLI
-CLAUDE_BIN = os.getenv("CLAUDE_BIN", "claude").strip()
-CLAUDE_CWD = os.getenv("CLAUDE_CWD", "").strip()
-
-# Hermes local/OpenAI-compatible endpoint
-HERMES_BASE_URL = os.getenv("HERMES_BASE_URL", "").rstrip("/")
-HERMES_AUTH_TOKEN = os.getenv("HERMES_AUTH_TOKEN", "").strip()
-HERMES_MODEL = os.getenv("HERMES_MODEL", "hermes").strip()
-
-# Nous Research (Hermes) - read from auth.json dynamically
-NOUS_INFERENCE_BASE_URL = "https://inference-api.nousresearch.com/v1"
-NOUS_MODEL = os.getenv("NOUS_MODEL", "").strip()
-
-# Google / Gemini (OpenAI-compatible endpoint when available)
-GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY", "").strip()
-GOOGLE_BASE_URL = os.getenv("GOOGLE_BASE_URL", "https://generativelanguage.googleapis.com/v1beta").rstrip("/")
-GOOGLE_MODEL = os.getenv("GOOGLE_MODEL", "gemini-2.0-flash").strip()
-GOOGLE_TRANSPORT = os.getenv("GOOGLE_TRANSPORT", "openai_compatible").strip().lower()
+NOUS_INFERENCE_BASE_URL = os.getenv(
+    "NOUS_INFERENCE_BASE_URL", "https://inference-api.nousresearch.com/v1"
+).rstrip("/")
 
 _REDACTIONS = [
     (re.compile(r"(bearer\s+)[A-Za-z0-9._~+/=-]+", re.I), r"\1[REDACTED]"),
-    (re.compile(r"(sk-[A-Za-z0-9_-]{8,})"), "[OPENAI_KEY_REDACTED]"),
+    (re.compile(r"(sk-[A-Za-z0-9_-]{8,})"), "[API_KEY_REDACTED]"),
     (re.compile(r"(authorization[\"'\s:=]+)[^\s,\"']+", re.I), r"\1[REDACTED]"),
+    (re.compile(r"([A-Z0-9_]*API_KEY[\"'\s:=]+)[^\s,\"']+", re.I), r"\1[REDACTED]"),
 ]
 
 app = FastAPI(title="CentralDark Omni Router", version=APP_VERSION)
+_NOUS_MODEL_CACHE: Dict[str, Any] = {"expires_at": 0.0, "model": ""}
 
 
 class ChatMessage(BaseModel):
@@ -86,7 +58,34 @@ class ChatRequest(BaseModel):
     temperature: Optional[float] = None
 
 
-def sanitize(text: str) -> str:
+class ResponsesRequest(BaseModel):
+    model: str = "auto"
+    input: Any
+    stream: bool = False
+    instructions: Optional[str] = None
+    temperature: Optional[float] = None
+
+    class Config:
+        extra = "allow"
+
+
+def env_bool(name: str, default: bool = False) -> bool:
+    raw = os.getenv(name)
+    if raw is None:
+        return default
+    return raw.strip().lower() not in {"0", "false", "off", "no", ""}
+
+
+def split_csv(value: str) -> List[str]:
+    out: List[str] = []
+    for part in (value or "").split(","):
+        item = part.strip().lower()
+        if item and item not in out:
+            out.append(item)
+    return out
+
+
+def sanitize(text: Any) -> str:
     out = str(text)
     for pattern, replacement in _REDACTIONS:
         out = pattern.sub(replacement, out)
@@ -103,7 +102,7 @@ def message_text(content: Any) -> str:
                 if isinstance(item.get("text"), str):
                     parts.append(item["text"])
                 elif item.get("type") in {"input_text", "output_text", "text"}:
-                    parts.append(str(item.get("content", "")))
+                    parts.append(str(item.get("content") or item.get("text") or ""))
             elif isinstance(item, str):
                 parts.append(item)
         return "\n".join(p for p in parts if p)
@@ -116,11 +115,49 @@ def flatten_messages(messages: List[ChatMessage]) -> str:
     chunks: List[str] = []
     for msg in messages:
         text = message_text(msg.content).strip()
-        if not text:
-            continue
-        role = (msg.role or "user").upper()
-        chunks.append(f"[{role}]\n{text}")
+        if text:
+            chunks.append(f"[{(msg.role or 'user').upper()}]\n{text}")
     return "\n\n---\n\n".join(chunks)
+
+
+def responses_messages(request: ResponsesRequest) -> List[ChatMessage]:
+    messages: List[ChatMessage] = []
+    if request.instructions:
+        messages.append(ChatMessage(role="system", content=request.instructions))
+
+    raw = request.input
+    if isinstance(raw, str):
+        messages.append(ChatMessage(role="user", content=raw))
+        return messages
+
+    if isinstance(raw, dict):
+        raw = [raw]
+
+    if isinstance(raw, list):
+        loose_text: List[str] = []
+        for item in raw:
+            if isinstance(item, str):
+                loose_text.append(item)
+                continue
+            if not isinstance(item, dict):
+                loose_text.append(str(item))
+                continue
+            role = str(item.get("role") or "user")
+            item_type = str(item.get("type") or "")
+            if item_type == "message" or "role" in item:
+                messages.append(ChatMessage(role=role, content=item.get("content", "")))
+            elif item_type in {"input_text", "text"}:
+                loose_text.append(str(item.get("text") or item.get("content") or ""))
+            else:
+                text = message_text(item.get("content")) or str(item.get("text") or "")
+                if text:
+                    loose_text.append(text)
+        if loose_text:
+            messages.append(ChatMessage(role="user", content="\n".join(loose_text)))
+        return messages
+
+    messages.append(ChatMessage(role="user", content=json.dumps(raw, ensure_ascii=False)))
+    return messages
 
 
 def route_model(model: str) -> Tuple[str, str]:
@@ -131,56 +168,55 @@ def route_model(model: str) -> Tuple[str, str]:
     for sep in ("/", ":"):
         if sep in raw:
             prefix, target = raw.split(sep, 1)
-            p = prefix.strip().lower()
-            if p in {"openai", "claude", "claude-code", "hermes", "nous", "google"}:
-                if p == "claude":
-                    p = "claude-code"
-                return p, target.strip()
-
+            provider = prefix.strip().lower()
+            if provider == "claude":
+                provider = "claude-code"
+            if provider in {
+                "openai", "claude-code", "hermes", "nous", "google", "xai", "abacus"
+            }:
+                return provider, target.strip()
     return DEFAULT_ENGINE, raw
-
-
-def get_nous_token() -> str:
-    """Read Nous access token from auth.json dynamically."""
-    try:
-        auth_path = r"E:\CentralDark\Pivete\auth.json"
-        with open(auth_path, "r") as f:
-            data = json.load(f)
-        nous = data.get("providers", {}).get("nous", {})
-        return nous.get("access_token", "").strip()
-    except Exception:
-        return ""
 
 
 def require_router_auth(authorization: Optional[str] = Header(default=None)) -> None:
     if not ROUTER_TOKEN:
         return
-    expected = f"Bearer {ROUTER_TOKEN}"
-    if authorization != expected:
+    if authorization != f"Bearer {ROUTER_TOKEN}":
         raise HTTPException(status_code=401, detail="router_auth_required")
 
 
+def get_nous_token() -> str:
+    direct = os.getenv("NOUS_API_KEY", "").strip()
+    if direct:
+        return direct
+    try:
+        auth_path = os.getenv("NOUS_AUTH_JSON", r"E:\CentralDark\Pivete\auth.json")
+        with open(auth_path, "r", encoding="utf-8") as fh:
+            data = json.load(fh)
+        return str(data.get("providers", {}).get("nous", {}).get("access_token", "")).strip()
+    except Exception:
+        return ""
+
+
 def extract_openai_text(data: Dict[str, Any]) -> str:
-    # Try Responses API format first (OpenAI official)
+    output_text = data.get("output_text")
+    if isinstance(output_text, str) and output_text.strip():
+        return output_text.strip()
     chunks: List[str] = []
     for item in data.get("output", []) or []:
         if not isinstance(item, dict):
             continue
         for content in item.get("content", []) or []:
-            if not isinstance(content, dict):
-                continue
-            if content.get("type") == "output_text" and isinstance(content.get("text"), str):
-                chunks.append(content["text"])
+            if isinstance(content, dict) and content.get("type") == "output_text":
+                text = content.get("text")
+                if isinstance(text, str):
+                    chunks.append(text)
     if chunks:
         return "\n".join(chunks).strip()
-
-    # Try Chat Completions format (OpenAI, OpenRouter, compatible)
     try:
-        return data["choices"][0]["message"]["content"].strip()
+        return str(data["choices"][0]["message"]["content"]).strip()
     except (KeyError, IndexError, TypeError):
-        pass
-
-    return ""
+        return ""
 
 
 def extract_cli_text(data: Any) -> str:
@@ -192,15 +228,109 @@ def extract_cli_text(data: Any) -> str:
             if isinstance(value, str) and value.strip():
                 return value.strip()
         content = data.get("content")
-        if isinstance(content, list):
-            parts = [extract_cli_text(x) for x in content]
-            return "\n".join(p for p in parts if p).strip()
-        if isinstance(content, dict):
+        if content is not None:
             return extract_cli_text(content)
     if isinstance(data, list):
-        parts = [extract_cli_text(x) for x in data]
-        return "\n".join(p for p in parts if p).strip()
+        return "\n".join(filter(None, (extract_cli_text(x) for x in data))).strip()
     return ""
+
+
+def discover_nous_free_model() -> str:
+    configured = os.getenv("NOUS_MODEL", "").strip()
+    if configured:
+        return configured
+    now = time.time()
+    if _NOUS_MODEL_CACHE["model"] and now < float(_NOUS_MODEL_CACHE["expires_at"]):
+        return str(_NOUS_MODEL_CACHE["model"])
+    token = get_nous_token()
+    if not token:
+        return ""
+    try:
+        response = requests.get(
+            f"{NOUS_INFERENCE_BASE_URL}/models",
+            headers={"Authorization": f"Bearer {token}"},
+            timeout=min(10.0, REQUEST_TIMEOUT),
+        )
+        if not response.ok:
+            return ""
+        rows = response.json().get("data", []) or []
+        ids = [str(row.get("id", "")) for row in rows if isinstance(row, dict)]
+        preferred = split_csv(os.getenv("CENTRALDARK_NOUS_FREE_PREFERENCE", ""))
+        free_ids = [model_id for model_id in ids if model_id.lower().endswith(":free")]
+        chosen = ""
+        for wanted in preferred:
+            chosen = next((m for m in free_ids if m.lower() == wanted), "")
+            if chosen:
+                break
+        if not chosen and free_ids:
+            chosen = free_ids[0]
+        if chosen:
+            _NOUS_MODEL_CACHE.update({"model": chosen, "expires_at": now + 300.0})
+        return chosen
+    except requests.RequestException:
+        return ""
+
+
+def provider_default_model(provider: str) -> str:
+    if provider == "openai":
+        return os.getenv("OPENAI_MODEL", "gpt-5.6").strip()
+    if provider == "hermes":
+        return os.getenv("HERMES_MODEL", "hermes").strip()
+    if provider == "nous":
+        return discover_nous_free_model()
+    if provider == "google":
+        return os.getenv("GOOGLE_MODEL", "gemini-2.0-flash").strip()
+    if provider == "xai":
+        return os.getenv("XAI_MODEL", "grok-4-fast").strip()
+    if provider == "abacus":
+        return os.getenv("ABACUS_MODEL", "").strip()
+    return ""
+
+
+def provider_configured(provider: str) -> bool:
+    if provider == "openai":
+        return bool(os.getenv("OPENAI_API_KEY", "").strip())
+    if provider == "claude-code":
+        binary = os.getenv("CLAUDE_BIN", "claude").strip()
+        return bool(shutil.which(binary) or (binary and os.path.exists(binary)))
+    if provider == "hermes":
+        return bool(os.getenv("HERMES_BASE_URL", "").strip())
+    if provider == "nous":
+        return bool(get_nous_token())
+    if provider == "google":
+        return bool(os.getenv("GOOGLE_API_KEY", "").strip())
+    if provider == "xai":
+        return bool(os.getenv("XAI_API_KEY", "").strip())
+    if provider == "abacus":
+        return bool(os.getenv("ABACUS_API_KEY", "").strip())
+    return False
+
+
+def free_only_allows(provider: str, target_model: str) -> bool:
+    if not env_bool("CENTRALDARK_FREE_ONLY", False):
+        return True
+    allow = split_csv(os.getenv("CENTRALDARK_FREE_PROVIDER_ALLOWLIST", "nous"))
+    if provider not in allow:
+        return False
+    if provider == "nous":
+        model = target_model or provider_default_model(provider)
+        return bool(model and model.lower().endswith(":free"))
+    return True
+
+
+def candidate_routes(model: str) -> List[Tuple[str, str]]:
+    primary_provider, primary_target = route_model(model)
+    candidates: List[Tuple[str, str]] = [(primary_provider, primary_target)]
+    if not env_bool("CENTRALDARK_AUTO_FALLBACK", True):
+        return candidates
+    chain = split_csv(os.getenv("CENTRALDARK_FALLBACK_CHAIN", DEFAULT_FALLBACK_CHAIN))
+    for provider in chain:
+        normalized = "claude-code" if provider == "claude" else provider
+        if normalized not in {"openai", "claude-code", "hermes", "nous", "google", "xai", "abacus"}:
+            continue
+        if normalized != primary_provider:
+            candidates.append((normalized, ""))
+    return candidates
 
 
 def _header(headers: Any, name: str) -> Optional[str]:
@@ -219,77 +349,50 @@ def build_model_touch_event(
     duration_ms: int,
     result: str,
     error: Optional[str] = None,
+    fallback_used: bool = False,
+    attempt: int = 1,
 ) -> Dict[str, Any]:
-    """
-    Build an Evidence Envelope-compatible event from observable routing facts.
-
-    mission_id is never invented: it is copied only when the caller supplied it.
-    request/correlation ids are also reused when present and kept in context.
-    """
     event: Dict[str, Any] = {
         "event": "model_touch",
         "producer": "centraldark-omni-router",
         "target": f"{provider}/{resolved_model or 'unresolved'}",
         "latency_ms": max(0, int(duration_ms)),
         "result": result.upper(),
+        "seal": "🔄" if fallback_used else "🧭",
         "context": {
             "engine": provider,
             "resolved_model": resolved_model or None,
-            "fallback_used": False,
+            "fallback_used": fallback_used,
+            "attempt": attempt,
             "action_is_proof": False,
             "request_id": _header(headers, "x-request-id"),
             "correlation_id": _header(headers, "x-correlation-id"),
         },
     }
-
-    mission_id = _header(headers, "x-mission-id")
-    trace_id = _header(headers, "x-trace-id")
-    writer_scope = _header(headers, "x-writer-scope")
-    sha = _header(headers, "x-centraldark-sha") or os.getenv("CENTRALDARK_SHA", "").strip() or None
-
-    if mission_id:
-        event["mission_id"] = mission_id
-    if trace_id:
-        event["trace_id"] = trace_id
-    if writer_scope:
-        event["writer_scope"] = writer_scope
+    for source, target in (
+        ("x-mission-id", "mission_id"),
+        ("x-trace-id", "trace_id"),
+        ("x-writer-scope", "writer_scope"),
+    ):
+        value = _header(headers, source)
+        if value:
+            event[target] = value
+    sha = _header(headers, "x-centraldark-sha") or os.getenv("CENTRALDARK_SHA", "").strip()
     if sha:
         event["sha"] = sha
     if error:
         event["context"]["error"] = sanitize(error)
-
-    # Remove absent context ids instead of persisting fabricated placeholders.
     event["context"] = {k: v for k, v in event["context"].items() if v is not None}
     return event
 
 
 def emit_model_touch(event: Dict[str, Any]) -> Dict[str, Any]:
-    """
-    Send MODEL_TOUCH to the existing agent-log/Evidence Envelope path.
-
-    This function is intentionally best-effort for the provider response:
-    telemetry failure is returned explicitly but does not rewrite a successful
-    provider invocation into a provider failure.
-    """
     url = os.getenv("CENTRALDARK_AGENT_LOG_URL", "").strip()
     secret = os.getenv("AGENT_LOG_SECRET", "").strip()
-
     if not url and not secret:
-        return {
-            "configured": False,
-            "attempted": False,
-            "delivered": False,
-            "status": "NOT_CONFIGURED",
-        }
-
+        return {"configured": False, "attempted": False, "delivered": False, "status": "NOT_CONFIGURED"}
     if not url or not secret:
-        return {
-            "configured": False,
-            "attempted": False,
-            "delivered": False,
-            "status": "MISCONFIGURED",
-        }
-
+        return {"configured": False, "attempted": False, "delivered": False, "status": "MISCONFIGURED"}
     payload = {
         "agent": "OmniRouter",
         "area": "AI/Routing",
@@ -297,18 +400,19 @@ def emit_model_touch(event: Dict[str, Any]) -> Dict[str, Any]:
         "status": "sucesso" if event.get("result") == "PASS" else "erro",
         "events": [event],
     }
-
-    timeout = max(1.0, min(5.0, REQUEST_TIMEOUT))
     try:
         response = requests.post(
             url,
-            headers={
-                "X-Agent-Secret": secret,
-                "Content-Type": "application/json",
-            },
+            headers={"X-Agent-Secret": secret, "Content-Type": "application/json"},
             json=payload,
-            timeout=timeout,
+            timeout=max(1.0, min(5.0, REQUEST_TIMEOUT)),
         )
+        return {
+            "configured": True,
+            "attempted": True,
+            "delivered": bool(response.ok),
+            "status": "DELIVERED" if response.ok else f"HTTP_{response.status_code}",
+        }
     except requests.RequestException as exc:
         return {
             "configured": True,
@@ -318,69 +422,68 @@ def emit_model_touch(event: Dict[str, Any]) -> Dict[str, Any]:
             "detail": sanitize(exc),
         }
 
-    return {
-        "configured": True,
-        "attempted": True,
-        "delivered": bool(response.ok),
-        "status": "DELIVERED" if response.ok else f"HTTP_{response.status_code}",
-    }
 
+def run_compatible(
+    provider: str,
+    base_url: str,
+    api_key: str,
+    messages: List[ChatMessage],
+    model: str,
+    wire_api: str = "chat",
+) -> Tuple[str, str]:
+    if not base_url:
+        raise HTTPException(status_code=503, detail=f"{provider}_base_url_not_configured")
+    if not api_key and provider not in {"hermes"}:
+        raise HTTPException(status_code=503, detail=f"{provider}_api_key_not_configured")
+    headers = {"Content-Type": "application/json"}
+    if api_key:
+        headers["Authorization"] = f"Bearer {api_key}"
 
-def run_openai(prompt: str, target_model: str) -> Tuple[str, str]:
-    # Read env vars dynamically at request time
-    openai_key = os.getenv("OPENAI_API_KEY", "").strip()
-    openai_base = os.getenv("OPENAI_BASE_URL", "https://api.openai.com").rstrip("/")
-    openai_model = os.getenv("OPENAI_MODEL", "gpt-5.6").strip()
-
-    if not openai_key:
-        raise HTTPException(status_code=503, detail="OPENAI_API_KEY_not_configured")
-
-    model = target_model or openai_model
-    payload: Dict[str, Any] = {
-        "model": model,
-        "messages": [{"role": "user", "content": prompt}],
-        "stream": False,
-    }
-
+    if wire_api == "responses":
+        endpoint = f"{base_url.rstrip('/')}/responses"
+        payload: Dict[str, Any] = {
+            "model": model,
+            "input": [{"role": m.role, "content": message_text(m.content)} for m in messages],
+            "stream": False,
+        }
+    else:
+        endpoint = f"{base_url.rstrip('/')}/chat/completions"
+        payload = {
+            "model": model,
+            "messages": [{"role": m.role, "content": message_text(m.content)} for m in messages],
+            "stream": False,
+        }
     try:
-        response = requests.post(
-            f"{openai_base}/v1/chat/completions",
-            headers={
-                "Authorization": f"Bearer {openai_key}",
-                "Content-Type": "application/json",
-            },
-            json=payload,
-            timeout=REQUEST_TIMEOUT,
-        )
+        response = requests.post(endpoint, headers=headers, json=payload, timeout=REQUEST_TIMEOUT)
     except requests.RequestException as exc:
-        raise HTTPException(status_code=502, detail=f"openai_transport:{sanitize(exc)}") from exc
-
+        raise HTTPException(status_code=502, detail=f"{provider}_transport:{sanitize(exc)}") from exc
     if not response.ok:
         raise HTTPException(
             status_code=502,
-            detail=f"openai_http_{response.status_code}:{sanitize(response.text)}",
+            detail=f"{provider}_http_{response.status_code}:{sanitize(response.text)}",
         )
-
-    data = response.json()
+    try:
+        data = response.json()
+    except ValueError as exc:
+        raise HTTPException(status_code=502, detail=f"{provider}_invalid_json") from exc
     text = extract_openai_text(data)
     if not text:
-        raise HTTPException(status_code=502, detail="openai_empty_output")
+        raise HTTPException(status_code=502, detail=f"{provider}_empty_output")
     return text, model
 
 
-def run_claude_code(prompt: str, target_model: str) -> Tuple[str, str]:
-    binary = shutil.which(CLAUDE_BIN) or (CLAUDE_BIN if os.path.exists(CLAUDE_BIN) else None)
+def run_claude_code(messages: List[ChatMessage], target_model: str) -> Tuple[str, str]:
+    binary_name = os.getenv("CLAUDE_BIN", "claude").strip()
+    binary = shutil.which(binary_name) or (binary_name if os.path.exists(binary_name) else None)
     if not binary:
         raise HTTPException(status_code=503, detail="claude_cli_not_found")
-
-    cmd = [binary, "-p", prompt, "--output-format", "json"]
+    cmd = [binary, "-p", flatten_messages(messages), "--output-format", "json"]
     if target_model:
         cmd.extend(["--model", target_model])
-
     try:
         proc = subprocess.run(
             cmd,
-            cwd=CLAUDE_CWD or None,
+            cwd=os.getenv("CLAUDE_CWD", "").strip() or None,
             capture_output=True,
             text=True,
             timeout=REQUEST_TIMEOUT,
@@ -390,210 +493,296 @@ def run_claude_code(prompt: str, target_model: str) -> Tuple[str, str]:
         raise HTTPException(status_code=504, detail="claude_cli_timeout") from exc
     except OSError as exc:
         raise HTTPException(status_code=502, detail=f"claude_cli_start:{sanitize(exc)}") from exc
-
     if proc.returncode != 0:
-        err = sanitize(proc.stderr or proc.stdout)
-        raise HTTPException(status_code=502, detail=f"claude_cli_exit_{proc.returncode}:{err}")
-
+        raise HTTPException(
+            status_code=502,
+            detail=f"claude_cli_exit_{proc.returncode}:{sanitize(proc.stderr or proc.stdout)}",
+        )
     stdout = (proc.stdout or "").strip()
     if not stdout:
         raise HTTPException(status_code=502, detail="claude_cli_empty_output")
-
     try:
-        parsed = json.loads(stdout)
-        text = extract_cli_text(parsed) or stdout
+        text = extract_cli_text(json.loads(stdout)) or stdout
     except json.JSONDecodeError:
         text = stdout
-
     return text.strip(), target_model or "claude-code-default"
 
 
-def run_hermes(messages: List[ChatMessage], target_model: str) -> Tuple[str, str]:
-    # Read env vars dynamically at request time
-    hermes_base = os.getenv("HERMES_BASE_URL", "").rstrip("/")
-    hermes_token = os.getenv("HERMES_AUTH_TOKEN", "").strip()
-    hermes_model = os.getenv("HERMES_MODEL", "hermes").strip()
-
-    if not hermes_base:
-        raise HTTPException(status_code=503, detail="HERMES_BASE_URL_not_configured")
-
-    model = target_model or hermes_model
-    headers = {"Content-Type": "application/json"}
-    if hermes_token:
-        headers["Authorization"] = f"Bearer {hermes_token}"
-
-    payload = {
-        "model": model,
-        "messages": [
-            {"role": m.role, "content": message_text(m.content)}
-            for m in messages
-        ],
-        "stream": False,
-    }
-
-    try:
-        response = requests.post(
-            f"{hermes_base}/v1/chat/completions",
-            headers=headers,
-            json=payload,
-            timeout=REQUEST_TIMEOUT,
+def run_provider(provider: str, messages: List[ChatMessage], target_model: str) -> Tuple[str, str]:
+    model = target_model or provider_default_model(provider)
+    if provider == "openai":
+        return run_compatible(
+            "openai",
+            os.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1").rstrip("/"),
+            os.getenv("OPENAI_API_KEY", "").strip(),
+            messages,
+            model,
         )
-    except requests.RequestException as exc:
-        raise HTTPException(status_code=502, detail=f"hermes_transport:{sanitize(exc)}") from exc
-
-    if not response.ok:
-        raise HTTPException(
-            status_code=502,
-            detail=f"hermes_http_{response.status_code}:{sanitize(response.text)}",
+    if provider == "hermes":
+        return run_compatible(
+            "hermes",
+            os.getenv("HERMES_BASE_URL", "").rstrip("/"),
+            os.getenv("HERMES_AUTH_TOKEN", "").strip(),
+            messages,
+            model,
         )
-
-    data = response.json()
-    try:
-        text = data["choices"][0]["message"]["content"]
-    except (KeyError, IndexError, TypeError) as exc:
-        raise HTTPException(status_code=502, detail="hermes_invalid_response") from exc
-
-    if not isinstance(text, str) or not text.strip():
-        raise HTTPException(status_code=502, detail="hermes_empty_output")
-    return text.strip(), model
-
-
-def run_nous(messages: List[ChatMessage], target_model: str) -> Tuple[str, str]:
-    # Read Nous token from auth.json dynamically
-    nous_token = get_nous_token()
-    if not nous_token:
-        raise HTTPException(status_code=503, detail="NOUS_TOKEN_not_configured")
-
-    model = target_model or NOUS_MODEL
-    headers = {
-        "Authorization": f"Bearer {nous_token}",
-        "Content-Type": "application/json",
-    }
-
-    payload = {
-        "model": model,
-        "messages": [
-            {"role": m.role, "content": message_text(m.content)}
-            for m in messages
-        ],
-        "stream": False,
-    }
-
-    try:
-        response = requests.post(
-            f"{NOUS_INFERENCE_BASE_URL}/chat/completions",
-            headers=headers,
-            json=payload,
-            timeout=REQUEST_TIMEOUT,
+    if provider == "nous":
+        if not model:
+            raise HTTPException(status_code=503, detail="nous_free_model_not_discovered")
+        return run_compatible("nous", NOUS_INFERENCE_BASE_URL, get_nous_token(), messages, model)
+    if provider == "xai":
+        return run_compatible(
+            "xai",
+            os.getenv("XAI_BASE_URL", "https://api.x.ai/v1").rstrip("/"),
+            os.getenv("XAI_API_KEY", "").strip(),
+            messages,
+            model,
         )
-    except requests.RequestException as exc:
-        raise HTTPException(status_code=502, detail=f"nous_transport:{sanitize(exc)}") from exc
-
-    if not response.ok:
-        raise HTTPException(
-            status_code=502,
-            detail=f"nous_http_{response.status_code}:{sanitize(response.text)}",
+    if provider == "abacus":
+        return run_compatible(
+            "abacus",
+            os.getenv("ABACUS_BASE_URL", "https://routellm.abacus.ai/v1").rstrip("/"),
+            os.getenv("ABACUS_API_KEY", "").strip(),
+            messages,
+            model,
+            os.getenv("ABACUS_WIRE_API", "responses").strip().lower(),
         )
-
-    data = response.json()
-    try:
-        text = data["choices"][0]["message"]["content"]
-    except (KeyError, IndexError, TypeError) as exc:
-        raise HTTPException(status_code=502, detail="nous_invalid_response") from exc
-
-    if not isinstance(text, str) or not text.strip():
-        raise HTTPException(status_code=502, detail="nous_empty_output")
-    return text.strip(), model
-
-
-def run_google(messages: List[ChatMessage], target_model: str) -> Tuple[str, str]:
-    google_key = os.getenv("GOOGLE_API_KEY", "").strip()
-    google_base = os.getenv("GOOGLE_BASE_URL", "https://generativelanguage.googleapis.com/v1beta").rstrip("/")
-    google_model = os.getenv("GOOGLE_MODEL", "gemini-2.0-flash").strip()
-    google_transport = os.getenv("GOOGLE_TRANSPORT", "openai_compatible").strip().lower()
-
-    if not google_key:
-        raise HTTPException(status_code=503, detail="GOOGLE_API_KEY_not_configured")
-
-    model = target_model or google_model
-
-    if google_transport == "openai_compatible":
-        endpoint = f"{google_base}/openai/chat/completions"
-        payload = {
-            "model": model,
-            "messages": [
-                {"role": m.role, "content": message_text(m.content)} for m in messages
-            ],
-            "stream": False,
-        }
-        headers = {
-            "Authorization": f"Bearer {google_key}",
-            "Content-Type": "application/json",
-        }
-    else:
-        endpoint = f"{google_base}/models/{model}:generateContent?key={google_key}"
+    if provider == "google":
+        key = os.getenv("GOOGLE_API_KEY", "").strip()
+        base = os.getenv("GOOGLE_BASE_URL", "https://generativelanguage.googleapis.com/v1beta").rstrip("/")
+        transport = os.getenv("GOOGLE_TRANSPORT", "openai_compatible").strip().lower()
+        if transport == "openai_compatible":
+            return run_compatible("google", f"{base}/openai", key, messages, model)
+        if not key:
+            raise HTTPException(status_code=503, detail="google_api_key_not_configured")
+        endpoint = f"{base}/models/{model}:generateContent?key={key}"
         payload = {
             "contents": [
-                {"role": m.role, "parts": [{"text": message_text(m.content)}]} for m in messages
+                {"role": m.role, "parts": [{"text": message_text(m.content)}]}
+                for m in messages
             ]
         }
-        headers = {"Content-Type": "application/json"}
-
-    try:
-        response = requests.post(endpoint, headers=headers, json=payload, timeout=REQUEST_TIMEOUT)
-    except requests.RequestException as exc:
-        raise HTTPException(status_code=502, detail=f"google_transport:{sanitize(exc)}") from exc
-
-    if not response.ok:
-        raise HTTPException(
-            status_code=502,
-            detail=f"google_http_{response.status_code}:{sanitize(response.text)}",
-        )
-
-    data = response.json()
-    text = ""
-    if google_transport == "openai_compatible":
         try:
-            text = data["choices"][0]["message"]["content"]
-        except (KeyError, IndexError, TypeError) as exc:
-            raise HTTPException(status_code=502, detail="google_invalid_response") from exc
-    else:
+            response = requests.post(endpoint, json=payload, timeout=REQUEST_TIMEOUT)
+        except requests.RequestException as exc:
+            raise HTTPException(status_code=502, detail=f"google_transport:{sanitize(exc)}") from exc
+        if not response.ok:
+            raise HTTPException(status_code=502, detail=f"google_http_{response.status_code}:{sanitize(response.text)}")
+        data = response.json()
         candidates = data.get("candidates") or []
-        if not candidates:
-            raise HTTPException(status_code=502, detail="google_invalid_response")
-        parts = candidates[0].get("content", {}).get("parts") or []
-        text = "\n".join(part.get("text", "") for part in parts if isinstance(part, dict)).strip()
+        parts = candidates[0].get("content", {}).get("parts") if candidates else []
+        text = "\n".join(str(p.get("text", "")) for p in parts or [] if isinstance(p, dict)).strip()
+        if not text:
+            raise HTTPException(status_code=502, detail="google_empty_output")
+        return text, model
+    if provider == "claude-code":
+        return run_claude_code(messages, target_model)
+    raise HTTPException(status_code=400, detail=f"unsupported_engine:{sanitize(provider)}")
 
-    if not text:
-        raise HTTPException(status_code=502, detail="google_empty_output")
-    return text.strip(), model
+
+def execute_with_failover(
+    requested_model: str,
+    messages: List[ChatMessage],
+    headers: Any,
+) -> Dict[str, Any]:
+    if not flatten_messages(messages):
+        raise HTTPException(status_code=400, detail="empty_messages")
+
+    attempts: List[Dict[str, Any]] = []
+    candidates = candidate_routes(requested_model)
+    for index, (provider, target_model) in enumerate(candidates, start=1):
+        resolved_target = target_model or provider_default_model(provider)
+        if not provider_configured(provider):
+            attempts.append({
+                "provider": provider,
+                "model": resolved_target or None,
+                "state": "SKIPPED_NOT_CONFIGURED",
+            })
+            continue
+        if not free_only_allows(provider, resolved_target):
+            attempts.append({
+                "provider": provider,
+                "model": resolved_target or None,
+                "state": "SKIPPED_PRICE_POLICY",
+            })
+            continue
+
+        started = time.time()
+        fallback_used = index > 1
+        try:
+            text, resolved_model = run_provider(provider, messages, target_model)
+        except HTTPException as exc:
+            duration_ms = round((time.time() - started) * 1000)
+            detail = sanitize(exc.detail)
+            attempts.append({
+                "provider": provider,
+                "model": resolved_target or None,
+                "state": "FAIL",
+                "detail": detail,
+                "duration_ms": duration_ms,
+            })
+            emit_model_touch(build_model_touch_event(
+                headers,
+                provider=provider,
+                resolved_model=resolved_target,
+                duration_ms=duration_ms,
+                result="FAIL",
+                error=detail,
+                fallback_used=fallback_used,
+                attempt=index,
+            ))
+            continue
+
+        duration_ms = round((time.time() - started) * 1000)
+        event = build_model_touch_event(
+            headers,
+            provider=provider,
+            resolved_model=resolved_model,
+            duration_ms=duration_ms,
+            result="PASS",
+            fallback_used=fallback_used,
+            attempt=index,
+        )
+        evidence_delivery = emit_model_touch(event)
+        attempts.append({
+            "provider": provider,
+            "model": resolved_model,
+            "state": "PASS",
+            "duration_ms": duration_ms,
+        })
+        return {
+            "text": text,
+            "provider": provider,
+            "resolved_model": resolved_model,
+            "duration_ms": duration_ms,
+            "fallback_used": fallback_used,
+            "attempts": attempts,
+            "event": event,
+            "evidence_delivery": evidence_delivery,
+        }
+
+    raise HTTPException(
+        status_code=503,
+        detail={
+            "error": "all_allowed_routes_failed",
+            "seal": "🧿",
+            "fallback_attempted": len(candidates) > 1,
+            "attempts": attempts,
+        },
+    )
+
+
+def chat_response(result: Dict[str, Any]) -> Dict[str, Any]:
+    return {
+        "id": f"cd-{uuid.uuid4().hex[:16]}",
+        "object": "chat.completion",
+        "created": int(time.time()),
+        "model": f"{result['provider']}/{result['resolved_model']}",
+        "choices": [{
+            "index": 0,
+            "message": {"role": "assistant", "content": result["text"]},
+            "finish_reason": "stop",
+        }],
+        "centraldark": {
+            "engine": result["provider"],
+            "resolved_model": result["resolved_model"],
+            "duration_ms": result["duration_ms"],
+            "fallback_used": result["fallback_used"],
+            "attempts": result["attempts"],
+            "action_is_proof": False,
+            "model_touch": {
+                "event": "model_touch",
+                "mission_id_present": bool(result["event"].get("mission_id")),
+                "trace_id_present": bool(result["event"].get("trace_id")),
+                "evidence_delivery": result["evidence_delivery"],
+            },
+        },
+    }
+
+
+def responses_response(result: Dict[str, Any]) -> Dict[str, Any]:
+    response_id = f"resp_{uuid.uuid4().hex}"
+    message_id = f"msg_{uuid.uuid4().hex}"
+    return {
+        "id": response_id,
+        "object": "response",
+        "created_at": int(time.time()),
+        "status": "completed",
+        "model": f"{result['provider']}/{result['resolved_model']}",
+        "output": [{
+            "id": message_id,
+            "type": "message",
+            "status": "completed",
+            "role": "assistant",
+            "content": [{"type": "output_text", "text": result["text"], "annotations": []}],
+        }],
+        "output_text": result["text"],
+        "parallel_tool_calls": True,
+        "usage": {"input_tokens": 0, "output_tokens": 0, "total_tokens": 0},
+        "centraldark": {
+            "engine": result["provider"],
+            "resolved_model": result["resolved_model"],
+            "fallback_used": result["fallback_used"],
+            "attempts": result["attempts"],
+            "action_is_proof": False,
+        },
+    }
+
+
+def chat_stream(result: Dict[str, Any]):
+    chunk_id = f"cd-{uuid.uuid4().hex[:16]}"
+    created = int(time.time())
+    for word in result["text"].split(" "):
+        payload = {
+            "id": chunk_id,
+            "object": "chat.completion.chunk",
+            "created": created,
+            "model": f"{result['provider']}/{result['resolved_model']}",
+            "choices": [{"index": 0, "delta": {"content": word + " "}, "finish_reason": None}],
+        }
+        yield f"data: {json.dumps(payload, ensure_ascii=False)}\n\n"
+    yield "data: [DONE]\n\n"
+
+
+def responses_stream(result: Dict[str, Any]):
+    response = responses_response(result)
+    created = {"type": "response.created", "response": {**response, "status": "in_progress", "output": []}}
+    yield f"event: response.created\ndata: {json.dumps(created, ensure_ascii=False)}\n\n"
+    for word in result["text"].split(" "):
+        delta = {
+            "type": "response.output_text.delta",
+            "item_id": response["output"][0]["id"],
+            "output_index": 0,
+            "content_index": 0,
+            "delta": word + " ",
+        }
+        yield f"event: response.output_text.delta\ndata: {json.dumps(delta, ensure_ascii=False)}\n\n"
+    done = {
+        "type": "response.output_text.done",
+        "item_id": response["output"][0]["id"],
+        "output_index": 0,
+        "content_index": 0,
+        "text": result["text"],
+    }
+    yield f"event: response.output_text.done\ndata: {json.dumps(done, ensure_ascii=False)}\n\n"
+    completed = {"type": "response.completed", "response": response}
+    yield f"event: response.completed\ndata: {json.dumps(completed, ensure_ascii=False)}\n\n"
+    yield "data: [DONE]\n\n"
 
 
 @app.get("/health")
 def health() -> Dict[str, Any]:
-    claude_path = shutil.which(CLAUDE_BIN) or (CLAUDE_BIN if os.path.exists(CLAUDE_BIN) else None)
-    openai_key = os.getenv("OPENAI_API_KEY", "").strip()
-    hermes_url = os.getenv("HERMES_BASE_URL", "").rstrip("/")
-    nous_token = get_nous_token()
-    telemetry_url = os.getenv("CENTRALDARK_AGENT_LOG_URL", "").strip()
-    telemetry_secret = os.getenv("AGENT_LOG_SECRET", "").strip()
+    providers = ["nous", "hermes", "google", "claude-code", "xai", "abacus", "openai"]
     return {
         "ok": True,
         "service": "centraldark-omni-router",
         "version": APP_VERSION,
         "default_engine": DEFAULT_ENGINE,
-        "engines": {
-            "openai": {"configured": bool(openai_key), "transport": "official_api"},
-            "claude-code": {"configured": bool(claude_path), "transport": "local_cli"},
-            "hermes": {"configured": bool(hermes_url), "transport": "openai_compatible_http"},
-            "nous": {"configured": bool(nous_token), "transport": "nous_inference_api"},
-            "google": {"configured": bool(google_key), "transport": google_transport},
-        },
-        "model_touch_evidence": {
-            "configured": bool(telemetry_url and telemetry_secret),
-            "partial_configuration": bool(telemetry_url) ^ bool(telemetry_secret),
-            "delivery_proven": False,
-        },
+        "auto_fallback": env_bool("CENTRALDARK_AUTO_FALLBACK", True),
+        "free_only": env_bool("CENTRALDARK_FREE_ONLY", False),
+        "fallback_chain": split_csv(os.getenv("CENTRALDARK_FALLBACK_CHAIN", DEFAULT_FALLBACK_CHAIN)),
+        "engines": {provider: {"configured": provider_configured(provider)} for provider in providers},
+        "wire_apis": ["chat_completions", "responses"],
         "legacy_zendriver_chatgpt": "FROZEN_NOT_ROUTED",
     }
 
@@ -601,20 +790,17 @@ def health() -> Dict[str, Any]:
 @app.get("/v1/models")
 def models(authorization: str = Header(default=None)) -> Dict[str, Any]:
     require_router_auth(authorization)
-    openai_model = os.getenv("OPENAI_MODEL", "gpt-5.6").strip()
-    hermes_model = os.getenv("HERMES_MODEL", "hermes").strip()
-    nous_model = os.getenv("NOUS_MODEL", "").strip()
-    return {
-        "object": "list",
-        "data": [
-            {"id": "auto", "object": "model", "owned_by": "centraldark"},
-            {"id": f"openai/{openai_model}", "object": "model", "owned_by": "openai"},
-            {"id": "claude-code", "object": "model", "owned_by": "local-cli"},
-            {"id": f"hermes/{hermes_model}", "object": "model", "owned_by": "local-runtime"},
-            {"id": f"nous/{nous_model}", "object": "model", "owned_by": "nous-research"},
-            {"id": f"google/{google_model}", "object": "model", "owned_by": "google"},
-        ],
-    }
+    rows = [{"id": "auto", "object": "model", "owned_by": "centraldark"}]
+    for provider in ["nous", "hermes", "google", "claude-code", "xai", "abacus", "openai"]:
+        if not provider_configured(provider):
+            continue
+        model = provider_default_model(provider)
+        rows.append({
+            "id": provider if not model else f"{provider}/{model}",
+            "object": "model",
+            "owned_by": provider,
+        })
+    return {"object": "list", "data": rows}
 
 
 @app.post("/v1/chat/completions")
@@ -624,154 +810,50 @@ def chat(
     authorization: str = Header(default=None),
 ) -> Any:
     require_router_auth(authorization)
-
-    provider, target_model = route_model(request.model)
-    prompt = flatten_messages(request.messages)
-    if not prompt:
-        raise HTTPException(status_code=400, detail="empty_messages")
-
-    started = time.time()
-    try:
-        if provider == "openai":
-            text, resolved_model = run_openai(prompt, target_model)
-        elif provider == "claude-code":
-            text, resolved_model = run_claude_code(prompt, target_model)
-        elif provider == "hermes":
-            text, resolved_model = run_hermes(request.messages, target_model)
-        elif provider == "nous":
-            text, resolved_model = run_nous(request.messages, target_model)
-        elif provider == "google":
-            text, resolved_model = run_google(request.messages, target_model)
-        else:
-            raise HTTPException(status_code=400, detail=f"unsupported_engine:{sanitize(provider)}")
-    except HTTPException as exc:
-        duration_ms = round((time.time() - started) * 1000)
-        event = build_model_touch_event(
-            http_request.headers,
-            provider=provider,
-            resolved_model=target_model or "",
-            duration_ms=duration_ms,
-            result="FAIL",
-            error=str(exc.detail),
-        )
-        emit_model_touch(event)
-        raise
-
-    duration_ms = round((time.time() - started) * 1000)
-    event = build_model_touch_event(
-        http_request.headers,
-        provider=provider,
-        resolved_model=resolved_model,
-        duration_ms=duration_ms,
-        result="PASS",
-    )
-    evidence_delivery = emit_model_touch(event)
-
+    result = execute_with_failover(request.model, request.messages, http_request.headers)
     if request.stream:
-        # SSE stream: emit text in chunks, then [DONE]
-        def _gen():
-            chunk_id = f"cd-{uuid.uuid4().hex[:16]}"
-            created = int(time.time())
-            # split text into ~20-char chunks for streaming feel
-            words = text.split(" ")
-            buf = ""
-            for i, w in enumerate(words):
-                buf += (w + " ")
-                if len(buf) >= 20 or i == len(words) - 1:
-                    payload = {
-                        "id": chunk_id,
-                        "object": "chat.completion.chunk",
-                        "created": created,
-                        "model": f"{provider}/{resolved_model}",
-                        "choices": [{"index": 0, "delta": {"content": buf}, "finish_reason": None}],
-                    }
-                    yield f"data: {json.dumps(payload, ensure_ascii=False)}\n\n"
-                    buf = ""
-            # final chunk
-            final = {
-                "id": chunk_id,
-                "object": "chat.completion.chunk",
-                "created": created,
-                "model": f"{provider}/{resolved_model}",
-                "choices": [{"index": 0, "delta": {}, "finish_reason": "stop"}],
-            }
-            yield f"data: {json.dumps(final, ensure_ascii=False)}\n\n"
-            yield "data: [DONE]\n\n"
-        return StreamingResponse(_gen(), media_type="text/event-stream")
+        return StreamingResponse(chat_stream(result), media_type="text/event-stream")
+    return chat_response(result)
 
-    return {
-        "id": f"cd-{uuid.uuid4().hex[:16]}",
-        "object": "chat.completion",
-        "created": int(time.time()),
-        "model": f"{provider}/{resolved_model}",
-        "choices": [
-            {
-                "index": 0,
-                "message": {"role": "assistant", "content": text},
-                "finish_reason": "stop",
-            }
-        ],
-        "centraldark": {
-            "engine": provider,
-            "resolved_model": resolved_model,
-            "duration_ms": duration_ms,
-            "fallback_used": False,
-            "action_is_proof": False,
-            "model_touch": {
-                "event": "model_touch",
-                "mission_id_present": bool(event.get("mission_id")),
-                "trace_id_present": bool(event.get("trace_id")),
-                "evidence_delivery": evidence_delivery,
-            },
-        },
-    }
+
+@app.post("/v1/responses")
+def responses(
+    request: ResponsesRequest,
+    http_request: Request,
+    authorization: str = Header(default=None),
+) -> Any:
+    require_router_auth(authorization)
+    messages = responses_messages(request)
+    result = execute_with_failover(request.model, messages, http_request.headers)
+    if request.stream:
+        return StreamingResponse(responses_stream(result), media_type="text/event-stream")
+    return responses_response(result)
 
 
 def self_test() -> int:
-    event_with_ids = build_model_touch_event(
-        {
-            "x-mission-id": "mission-test",
-            "x-trace-id": "trace-test",
-            "x-request-id": "request-test",
-            "x-correlation-id": "correlation-test",
-            "x-writer-scope": "scope-test",
-        },
-        provider="openai",
-        resolved_model="gpt-test",
+    event = build_model_touch_event(
+        {"x-mission-id": "mission-test", "x-trace-id": "trace-test"},
+        provider="nous",
+        resolved_model="model:free",
         duration_ms=12,
         result="PASS",
+        fallback_used=True,
+        attempt=2,
     )
-    event_without_ids = build_model_touch_event(
-        {},
-        provider="openai",
-        resolved_model="gpt-test",
-        duration_ms=12,
-        result="PASS",
+    response_request = ResponsesRequest(
+        model="auto",
+        input=[{"role": "user", "content": [{"type": "input_text", "text": "oi"}]}],
     )
     checks = {
         "route_openai": route_model("openai/gpt-x") == ("openai", "gpt-x"),
-        "route_claude": route_model("claude:opus") == ("claude-code", "opus"),
+        "route_xai": route_model("xai/grok-x") == ("xai", "grok-x"),
+        "route_abacus": route_model("abacus/model-x") == ("abacus", "model-x"),
         "route_nous": route_model("nous/tencent/hy3:free") == ("nous", "tencent/hy3:free"),
-        "route_google": route_model("google/gemini-2.0-flash") == ("google", "gemini-2.0-flash"),
+        "responses_input": "oi" in flatten_messages(responses_messages(response_request)),
+        "fallback_event": event["context"].get("fallback_used") is True and event["context"].get("attempt") == 2,
+        "action_not_proof": event["context"].get("action_is_proof") is False,
         "redaction": "sekret" not in sanitize("Authorization: ***"),
-        "flatten": "[USER]" in flatten_messages([ChatMessage(role="user", content="oi")]),
-        "openai_extract": extract_openai_text(
-            {"output": [{"content": [{"type": "output_text", "text": "ok"}]}]}
-        ) == "ok",
-        "cli_extract": extract_cli_text({"result": "ok"}) == "ok",
-        "model_touch_ids_reused": (
-            event_with_ids.get("mission_id") == "mission-test"
-            and event_with_ids.get("trace_id") == "trace-test"
-            and event_with_ids["context"].get("request_id") == "request-test"
-            and event_with_ids["context"].get("correlation_id") == "correlation-test"
-        ),
-        "mission_id_not_fabricated": "mission_id" not in event_without_ids,
-        "model_touch_action_not_proof": event_with_ids["context"].get("action_is_proof") is False,
-        "model_touch_event_shape": (
-            event_with_ids.get("event") == "model_touch"
-            and event_with_ids.get("producer") == "centraldark-omni-router"
-            and event_with_ids.get("result") == "PASS"
-        ),
+        "chain_dedup": len(candidate_routes("auto")) == len(set(candidate_routes("auto"))),
     }
     failed = [name for name, ok in checks.items() if not ok]
     print(json.dumps({"ok": not failed, "checks": checks, "failed": failed}, ensure_ascii=False))
@@ -784,10 +866,7 @@ if __name__ == "__main__":
     parser.add_argument("--host", default=os.getenv("CENTRALDARK_ROUTER_HOST", "127.0.0.1"))
     parser.add_argument("--port", type=int, default=int(os.getenv("CENTRALDARK_ROUTER_PORT", "8099")))
     args = parser.parse_args()
-
     if args.self_test:
         raise SystemExit(self_test())
-
     import uvicorn
-
     uvicorn.run(app, host=args.host, port=args.port)

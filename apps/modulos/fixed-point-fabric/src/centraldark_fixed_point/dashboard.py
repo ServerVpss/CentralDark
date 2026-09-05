@@ -38,4 +38,3 @@ def serve(store, host: str, port: int) -> None:
             return
 
     ThreadingHTTPServer((host, port), Handler).serve_forever()
-

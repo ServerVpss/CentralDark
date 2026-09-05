@@ -1,0 +1,12 @@
+{
+  "timestamp": "2026-09-05T08:09:44.402529Z",
+  "session_id": "20260905_010608_8c07f9",
+  "source": "ZENDRIVE-CHAT GPT (mock for test)",
+  "user_prompt": "Conversa especializada CentralDark: capture esta resposta e transforme em gateway para o organismo CentralDark. Responda com 'ZENDRIVE_CD_AGENT_OK' + resumo da missão atual.",
+  "assistant_response": "ZENDRIVE_CD_AGENT_OK - Specialized agent capture complete. GPT responses transformed and ready for CentralDark (PEGATUDO F4 BROWSER_CHAT / elite-gateway). Continuous delta for SOL reanchor. Nothing left behind.",
+  "transformed_for_cd": {
+    "type": "gateway_feed",
+    "target": "CentralDark via elite-gateway / omni-router",
+    "format": "PEGATUDO compatible receipt"
+  }
+}

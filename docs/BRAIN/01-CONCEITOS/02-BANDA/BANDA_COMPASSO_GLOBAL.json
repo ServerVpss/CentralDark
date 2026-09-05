@@ -10,9 +10,38 @@
   },
   "source_of_truth": {
     "operational_method": ".agents/skills/centraldark-operational-method/SKILL.md",
+    "meta_lupa": ".agents/skills/meta-lupa/SKILL.md",
+    "claim_seals": ".agents/skills/meta-lupa/references/claim-seals.jsonl",
     "breathing_reference": ".agents/skills/centraldark-operational-method/references/regenerative-self-refinement-engine.md",
-    "band_concept": "docs/BRAIN/01-CONCEITOS/Banda/BANDA_INTENCAO_UNICA_COMPASSO.md",
-    "intent_state": "docs/BRAIN/01-CONCEITOS/Banda/INTENT_SYNC_STATE.md"
+    "band_concept": "docs/BRAIN/01-CONCEITOS/02-BANDA/BANDA_INTENCAO_UNICA_COMPASSO.md",
+    "intent_state": "docs/BRAIN/01-CONCEITOS/02-BANDA/INTENT_SYNC_STATE.md",
+    "temporal_scroll": ".agents/skills/centraldark-operational-method/references/2026-09-02-pergaminhos-do-tempo-jornal-temporal.md",
+    "proof_protocol": "docs/CONSCIENCIA/PROTOCOLO-PROVA-RASTRO-ANTI-PENDENCIA.md"
+  },
+  "aliases": {
+    "BANDA": "BANDA_COMPASSO_GLOBAL",
+    "COMPASSO": "BANDA_COMPASSO_GLOBAL",
+    "BANDA_GLOBAL": "BANDA_COMPASSO_GLOBAL",
+    "META_LUPA": ".agents/skills/meta-lupa/SKILL.md",
+    "AUTOLUPA": ".agents/skills/meta-lupa/SKILL.md#9-executar-a-autolupa",
+    "VERTEX": "VERTEX_INVERSO",
+    "VERTEX_INVERSO": "CARACOL_REVERSO_CAUSAL",
+    "CARACOL": "CARACOL_REVERSO_CAUSAL",
+    "MULTIBUSSOLA": "docs/CONSCIENCIA/MULTIBUSSOLA.md",
+    "REGISTRO_DO_OURO": "docs/CONSCIENCIA/APRENDIZADOS.md",
+    "CLAIM_SEAL": ".agents/skills/meta-lupa/references/claim-seals.jsonl",
+    "SEGUNDO_CEREBRO": "SECOND-BRAIN.yml"
+  },
+  "groups": {
+    "KERNEL": ["concentracao-total", "regeneracao-monotonica", "continuar-ate-fixed-point"],
+    "PERCEPTION": ["nevoa", "fera", "som"],
+    "SCOUT": ["vento", "serpente", "trovao"],
+    "BUILDER": ["chamas", "pedra", "flor", "inseto"],
+    "REVIEWER": ["lua", "agua"],
+    "INTEGRATION": ["amor", "sol"],
+    "JUDGE": ["realidade"],
+    "MEMORY": ["graphrag-master", "aprendizados", "claim-seals", "pergaminhos"],
+    "SYNC": ["casa", "vps", "github-main"]
   },
   "breaths": {
     "total": 17,
@@ -59,23 +88,68 @@
     "route_drift": "BLOCK"
   },
   "bindings": {
+    "meta_lupa": {
+      "path": ".agents/skills/meta-lupa/SKILL.md",
+      "engine": ".agents/skills/meta-lupa/scripts/meta_lupa.py",
+      "usage_ledger": ".agents/skills/meta-lupa/references/uso-ledger.jsonl",
+      "claim_seals": ".agents/skills/meta-lupa/references/claim-seals.jsonl",
+      "claim_seal_guard": ".agents/skills/meta-lupa/guardrails/claim_seal.py",
+      "mode": "CONTINUOUS_CHECKPOINTS_TO_FIXED_POINT"
+    },
     "graphrag": {
       "path": "apps/modulos/HERMES-CORE/agents/GraphRAG-Master/agent.mjs",
       "mode": "FIXED_SCORE_PLUS_DYNAMIC_MEMORY"
     },
     "learning": {
       "path": "docs/CONSCIENCIA/APRENDIZADOS.md",
-      "mode": "CURATED_LEARNING"
+      "mode": "CURATED_LEARNING",
+      "promotion": "PROOF_THEN_CRYSTALLIZE"
+    },
+    "agent_libraries": {
+      "tier_catalog": "docs/BRAIN/03-DOCUMENTACAO/01-AGENTS-LIBRARY/2026-07-13-overclock-swarm-tier-catalog.json",
+      "swarm_investigator": "docs/BRAIN/03-DOCUMENTACAO/01-AGENTS-LIBRARY/02-AGENTES/SWARM-INVESTIGADOR-GRAFO.md",
+      "provider_adapter": "apps/modulos/arsenal-openai-adapter/",
+      "policy": "LIBRARY_IS_CAPABILITY_SOURCE_NOT_REALITY_AUTHORITY"
     },
     "graph": {
       "generator": "scripts/grafo-vivo/gerar-grafo-vivo.mjs",
       "derived_not_authority": true,
-      "required_nodes": ["band-score", "graphrag-master", "aprendizados"],
+      "required_nodes": ["band-score", "graphrag-master", "aprendizados", "meta-lupa", "claim-seals", "agent-library", "casa", "vps", "github-main"],
       "required_edges": [
         ["band-score", "graphrag-master"],
         ["graphrag-master", "aprendizados"],
-        ["aprendizados", "band-score"]
+        ["aprendizados", "band-score"],
+        ["meta-lupa", "claim-seals"],
+        ["claim-seals", "graphrag-master"],
+        ["agent-library", "graphrag-master"],
+        ["casa", "github-main"],
+        ["vps", "github-main"]
       ]
+    },
+    "surface_sync": {
+      "github_main": {
+        "role": "STRUCTURAL_SOURCE_OF_TRUTH",
+        "ref": "main"
+      },
+      "casa": {
+        "script": "scripts/casa/sync-hermes-obsidian.ps1",
+        "policy": "EXPLICIT_ROOTS_CLEAN_WORKTREE_FAST_FORWARD_ONLY",
+        "runtime_status": "UNKNOWN_UNTIL_EXECUTED_ON_HOUSE"
+      },
+      "vps": {
+        "script": "scripts/vps/centraldark-deploy.sh",
+        "policy": "ORIGIN_MAIN_PLUS_ROLLBACK_PLUS_RUNTIME_COUNTERPROOF",
+        "runtime_status": "UNKNOWN_UNTIL_EXECUTED_ON_VPS"
+      },
+      "webhook_signal": {
+        "legacy_deployer": "RETIRED",
+        "canonical_deploy": "GITHUB_ACTIONS",
+        "role": "PING_SIGNAL_AND_RECEIPT_ONLY",
+        "must_not_be_second_deployer": true
+      },
+      "handshake": {
+        "sequence": ["PING_REMOTE_HEAD", "MEASURE_LOCAL", "BLOCK_IF_DIRTY", "FAST_FORWARD_OR_DEPLOY_CANONICAL", "PONG_WITH_HEAD_AND_RECEIPT", "META_LUPA", "FIXED_POINT_OR_NEXT_CURSOR"]
+      }
     }
   },
   "response_envelope": {
@@ -93,6 +167,14 @@
     "POETRY_IS_NOT_PROOF",
     "GRAPH_IS_DERIVED_NOT_AUTHORITY",
     "NO_NEW_EVENT_BUS",
-    "REALITY_IS_JUDGE"
+    "REALITY_IS_JUDGE",
+    "CLAIM_SEALED_NON_TEMPORAL_NOT_REPEATED",
+    "TEMPORAL_PROOF_REMEASURE_CURRENT",
+    "REOPEN_REQUIRES_CAUSE_REF",
+    "HOUSE_VPS_REMOTE_SAME_PROTOCOL",
+    "DIRTY_WORKTREE_BLOCKS_SYNC",
+    "NO_BROKEN_CANONICAL_LINKS",
+    "PING_PONG_IS_RECEIPT_NOT_SECOND_DEPLOYER",
+    "META_LUPA_FOLLOWS_EVERY_MATERIAL_TRAJECTORY_TO_FIXED_POINT"
   ]
 }

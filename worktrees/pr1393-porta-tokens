@@ -1,7 +1,0 @@
-# pr1393-porta-tokens — referência histórica
-
-Este caminho era um gitlink órfão para o commit `60b7c7add9d9af688f56ffeacd2c66e7c4fba62e`, introduzido durante a reconciliação do #1381.
-
-Ele não possui definição correspondente em `.gitmodules` e quebrava `actions/checkout` no runner self-hosted com `fatal: No url found for submodule path`.
-
-A referência é preservada como texto/proveniência, sem submódulo ativo e sem apagar o SHA histórico.

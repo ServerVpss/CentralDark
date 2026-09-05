@@ -11,7 +11,8 @@ Reduzir limitacoes locais simples durante auditorias e correcoes seguras:
 - validar workflows do GitHub Actions;
 - validar scripts shell;
 - evitar aliases quebrados do WindowsApps;
-- manter ferramentas locais separadas de secrets e producao.
+- manter ferramentas locais separadas de secrets e producao;
+- impedir bypass de provider quando a missao exige a porta unica CentralDark.
 
 ## Ferramentas recomendadas
 
@@ -76,106 +77,109 @@ Nao colar token no chat.
 Nao salvar token manualmente em arquivo do repo.
 Nao commitar arquivos gerados por autenticacao.
 
-## Codex no VS Code: Conta Google e provedor Abacus
+## Codex no VS Code: conta OpenAI/Google e porta unica CentralDark
 
-Existem duas autenticacoes independentes neste arranjo:
+Existem duas coisas diferentes:
 
 ```text
 CONTA CODEX/OPENAI VIA GOOGLE
 !=
-CREDENCIAL DO MODEL_PROVIDER ABACUS
+ROTA DE MODELO DA CENTRALDARK
 ```
 
-O login em **Conta** no Codex autentica a superficie Codex/OpenAI. Ele nao
-preenche automaticamente credenciais de um provedor de modelo customizado.
-Da mesma forma, habilitar MCPs ou plugins nao autentica o `model_provider`.
+O login em **Conta** autentica a superficie Codex/OpenAI. A rota de modelo da Casa deve obedecer ao contrato atual:
 
-### Quero usar minha conta Google no Codex, sem Abacus
+```text
+CODEX
+  -> CENTRALDARK OMNI ROUTER
+     -> provider permitido/disponivel
+        -> failover quando aplicavel
+```
 
-Para esse caso, nao configurar um provider customizado. No `config.toml`:
+`ABACUS_API_KEY`, `XAI_API_KEY`, `NOUS_API_KEY` e demais credenciais de upstream pertencem ao router/owner do provider. Elas nao devem ser requisito direto da superficie Codex quando `ONE_ROUTER_ENTRYPOINT=true`.
 
-1. remover a linha `model_provider = "abacus"`;
-2. remover todo o bloco `[model_providers.abacus]`;
-3. remover `review_model = "grok-4.5"`, porque esse modelo nao pertence a
-   sessao Codex/OpenAI;
-4. manter `model = "gpt-5.6-sol"` somente se ele aparecer como disponivel para
-   a conta autenticada; disponibilidade nao deve ser presumida pelo texto local;
-5. fechar e abrir novamente o VS Code;
-6. abrir **Codex Settings -> Conta -> Entrar** e, na pagina de autenticacao,
-   escolher **Continuar com Google** usando a conta desejada.
+### Perfil oficial da Casa: Codex -> CentralDark
 
-Configuracao minima candidata:
+O Omni Router atual oferece API OpenAI-compativel em `http://127.0.0.1:8099/v1` e suporta `responses` e `chat/completions`.
+
+Configuracao candidata no `~/.codex/config.toml`:
 
 ```toml
-model = "gpt-5.6-sol"
-model_reasoning_effort = "high"
-service_tier = "default"
-approvals_reviewer = "user"
-personality = "pragmatic"
+model = "auto"
+model_provider = "centraldark"
+
+[model_providers.centraldark]
+name = "CentralDark Omni Router"
+base_url = "http://127.0.0.1:8099/v1"
+wire_api = "responses"
+requires_openai_auth = false
+request_max_retries = 0
 ```
 
-Nao copiar cookie, token OAuth ou `auth.json` para o `config.toml`. O navegador
-conclui a autenticacao e o Codex guarda a sessao fora do repositorio. Se
-`gpt-5.6-sol` nao aparecer na conta depois do login, selecionar na interface um
-modelo realmente oferecido para aquela conta; trocar o nome no arquivo nao
-concede acesso ao modelo.
+Nao definir `env_key` quando o router local estiver sem autenticacao propria.
 
-As telas **Servidores MCP** e **Plug-ins** nao sao a tela de login. Elas conectam
-ferramentas e extensoes depois que a Conta ja esta autenticada.
+Se `CENTRALDARK_ROUTER_TOKEN` estiver habilitado no runtime, usar somente a credencial do router:
 
-### Quero usar Abacus como provider customizado
+```toml
+[model_providers.centraldark]
+name = "CentralDark Omni Router"
+base_url = "http://127.0.0.1:8099/v1"
+wire_api = "responses"
+env_key = "CENTRALDARK_ROUTER_TOKEN"
+requires_openai_auth = false
+request_max_retries = 0
+```
 
-Quando o `config.toml` tiver:
+Assim o Codex conhece uma credencial de entrada da Casa; ele nao precisa conhecer credenciais dos providers internos.
+
+### Por que Abacus direto deixou de ser o padrao
+
+Este arranjo antigo:
 
 ```toml
 model_provider = "abacus"
 
 [model_providers.abacus]
-name = "Abacus RouteLLM"
 base_url = "https://routellm.abacus.ai/v1"
 wire_api = "responses"
 env_key = "ABACUS_API_KEY"
 ```
 
-o Codex procura `ABACUS_API_KEY` no ambiente do processo. O fluxo correto no
-Windows e:
+faz a superficie parar antes de chegar ao Omni Router quando a variavel esta ausente. Isso e `SURFACE_ROUTE_DRIFT` para a politica atual da Casa.
 
-1. Em **Codex Settings -> Conta**, entrar na conta Codex/OpenAI e escolher Google
-   quando essa opcao estiver disponivel.
-2. Configurar separadamente a credencial do Abacus como variavel do usuario,
-   sem gravar o valor no `config.toml`:
+Abacus continua podendo existir como provider interno do Omni Router. Nesse papel, se a chave estiver ausente ou a rota falhar, o router pode classificar a tentativa e seguir para outra rota permitida em vez de transformar um provider opcional em falha global da superficie.
 
-```powershell
-$abacusKey = Read-Host "ABACUS_API_KEY"
-[Environment]::SetEnvironmentVariable("ABACUS_API_KEY", $abacusKey, "User")
-Remove-Variable abacusKey
-```
+### Quero usar a conta OpenAI/Google sem o router da Casa
 
-3. Fechar **todas** as janelas do VS Code e abrir novamente. A extensao herda
-   variaveis do processo que iniciou o VS Code; apenas recarregar a janela pode
-   manter o ambiente antigo.
-4. Verificar somente a presenca, nunca o valor:
+Isso continua possivel somente como diagnostico/uso explicitamente fora do fluxo `ONE_ROUTER_ENTRYPOINT`.
 
-```powershell
-if ([string]::IsNullOrWhiteSpace([Environment]::GetEnvironmentVariable("ABACUS_API_KEY", "User"))) {
-  Write-Error "ABACUS_API_KEY ausente"
-} else {
-  Write-Host "ABACUS_API_KEY configurada"
-}
-```
+Nesse caso, remova `model_provider = "centraldark"`, entre em **Codex Settings -> Conta**, e use apenas os modelos realmente disponibilizados para a conta autenticada.
 
-Nao apontar um provider customizado esperando que ele reutilize o OAuth da
-Conta Codex/OpenAI.
+Nao confundir essa opcao com o fluxo operacional da CentralDark.
 
-Regras de seguranca:
+### Reinicio e verificacao
+
+Aplicativos desktop e extensoes podem manter configuracao/ambiente do processo antigo. Depois de alterar `~/.codex/config.toml`:
+
+1. fechar todas as janelas do VS Code/Codex;
+2. garantir que o Omni Router esteja no endpoint esperado;
+3. abrir novamente;
+4. iniciar uma sessao nova;
+5. confirmar no status do Codex que o provider e `centraldark`;
+6. provocar uma chamada simples e verificar no receipt do Omni qual provider respondeu e se `fallback_used` mudou.
+
+A ausencia de `ABACUS_API_KEY` na superficie Codex nao deve mais ser tratada como falha quando o provider configurado e `centraldark`.
+
+## Regras de seguranca
 
 - nao colar API key em chat, issue, PR, log ou screenshot;
-- nao colocar o valor da key em `config.toml`;
-- nao adicionar a key em `[shell_environment_policy.set]`, pois esse bloco e
-  configuracao persistida em texto;
+- nao colocar valores de secrets no `config.toml`;
+- nao adicionar secret em `[shell_environment_policy.set]`;
 - credencial exposta deve ser revogada/rotacionada no servico que a emitiu;
-- depois da rotacao, atualizar somente o armazenamento local seguro e reiniciar
-  o VS Code.
+- cada provider interno guarda sua propria credencial no owner apropriado;
+- a superficie conhece no maximo a credencial da porta CentralDark quando ela existir;
+- `MISSING_OPTIONAL_PROVIDER_KEY != GLOBAL_SURFACE_FAILURE`;
+- `UNKNOWN != PASS`.
 
 ## Python
 
@@ -196,3 +200,13 @@ powershell -ExecutionPolicy Bypass -File scripts/dev/check-codex-tools.ps1
 ```
 
 O script e read-only: nao instala, nao autentica, nao toca secrets e nao altera o repo.
+
+Para o roteamento CentralDark, a verificacao material adicional e:
+
+```text
+GET  http://127.0.0.1:8099/health
+GET  http://127.0.0.1:8099/v1/models
+POST http://127.0.0.1:8099/v1/responses
+```
+
+Esses endpoints documentados nao provam runtime por si so; o PASS exige resposta observada no runtime atual.

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // 🕸️  GraphRAG-Master — memória oficial do Hermes Core.
-// Partitura fixa (Banda/17 Respirações) + memória dinâmica (grafo/knowledge/aprendizados).
+// Partitura fixa (Banda/17 Respirações) + memória dinâmica (grafo/knowledge/aprendizados/lacres/bibliotecas).
 import { readdirSync, readFileSync, statSync, existsSync } from 'node:fs';
 import { join, dirname, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -13,7 +13,10 @@ const REPO_ROOT = join(BASE, '../../..');
 const KNOWLEDGE = join(BASE, 'knowledge');
 const GRAPH_URL = process.env.GRAPH_PANEL_URL || 'http://127.0.0.1:3030';
 const GERADOR_GRAFO = join(REPO_ROOT, 'scripts/grafo-vivo/gerar-grafo-vivo.mjs');
-const BAND_SCORE_PATH = join(REPO_ROOT, 'docs/BRAIN/01-CONCEITOS/Banda/BANDA_COMPASSO_GLOBAL.json');
+const BAND_SCORE_PATH = join(REPO_ROOT, 'docs/BRAIN/01-CONCEITOS/02-BANDA/BANDA_COMPASSO_GLOBAL.json');
+const CLAIM_SEALS_PATH = join(REPO_ROOT, '.agents/skills/meta-lupa/references/claim-seals.jsonl');
+const AGENT_LIBRARY_PATH = join(REPO_ROOT, 'docs/BRAIN/03-DOCUMENTACAO/01-AGENTS-LIBRARY/2026-07-13-overclock-swarm-tier-catalog.json');
+const META_LUPA_PATH = join(REPO_ROOT, '.agents/skills/meta-lupa/SKILL.md');
 const AGENT_CALL_PATH = join(REPO_ROOT, 'scripts/agent-call.mjs');
 const MAX = 6;
 
@@ -52,9 +55,14 @@ function validarPartituraObjeto(score) {
     note_fields_complete: requiredNoteFields.every(field => noteFields.includes(field)),
     learning_binding_present: score?.bindings?.learning?.path === 'docs/CONSCIENCIA/APRENDIZADOS.md',
     graphrag_binding_present: score?.bindings?.graphrag?.path === 'apps/modulos/HERMES-CORE/agents/GraphRAG-Master/agent.mjs',
+    meta_lupa_binding_present: score?.bindings?.meta_lupa?.path === '.agents/skills/meta-lupa/SKILL.md',
+    claim_seal_binding_present: score?.bindings?.meta_lupa?.claim_seals === '.agents/skills/meta-lupa/references/claim-seals.jsonl',
+    agent_library_binding_present: score?.bindings?.agent_libraries?.tier_catalog === 'docs/BRAIN/03-DOCUMENTACAO/01-AGENTS-LIBRARY/2026-07-13-overclock-swarm-tier-catalog.json',
+    surface_sync_contract_present: score?.bindings?.surface_sync?.handshake?.sequence?.includes('PONG_WITH_HEAD_AND_RECEIPT') === true,
     graph_is_derived: score?.bindings?.graph?.derived_not_authority === true,
     graph_band_to_graphrag: graphEdges.some(edge => edge?.[0] === 'band-score' && edge?.[1] === 'graphrag-master'),
     graph_graphrag_to_learning: graphEdges.some(edge => edge?.[0] === 'graphrag-master' && edge?.[1] === 'aprendizados'),
+    graph_lupa_to_seals: graphEdges.some(edge => edge?.[0] === 'meta-lupa' && edge?.[1] === 'claim-seals'),
     envelope_parseable: score?.response_envelope?.always_parseable === true,
     error_not_swallowed: score?.response_envelope?.error_policy === 'STRUCTURED_NOT_SWALLOWED',
     fail_closed: score?.response_envelope?.fail_closed === true,
@@ -92,11 +100,14 @@ function contextoPartitura() {
   const loaded = carregarPartitura();
   if (!loaded.ok) return `Partitura fixa CentralDark: ${loaded.status}; FAIL_CLOSED=true; error=${JSON.stringify(loaded.error)}`;
   const names = loaded.score.breaths.items.map(item => item.name).join(', ');
+  const groups = Object.keys(loaded.score.groups || {}).join(', ');
   return [
     'Partitura fixa CentralDark:',
     `- schema=${loaded.score.schema}; breaths=17; writer=ONE_WRITER_PER_SCOPE; judge=REALIDADE`,
     `- thunder_trail=${loaded.score.thunder_trail.protocol}; owner=${loaded.score.thunder_trail.owner}`,
+    `- grupos=${groups || 'UNKNOWN'}`,
     `- respirações=${names}`,
+    '- prova selada não temporal não vira tarefa igual sem REOPEN_CAUSE; prova temporal exige REMEASURE_CURRENT',
   ].join('\n');
 }
 
@@ -223,8 +234,49 @@ function buscarAprendizados(missao) {
   } catch { return ''; }
 }
 
+function buscarLacres(missao) {
+  if (!existsSync(CLAIM_SEALS_PATH)) return '';
+  const ts = termos(missao);
+  try {
+    const rows = readFileSync(CLAIM_SEALS_PATH, 'utf8').split(/\r?\n/).filter(Boolean).map(line => JSON.parse(line));
+    const ranking = rows.map(rec => {
+      const hay = `${rec.claim_key || ''} ${rec.claim || ''} ${(rec.evidence_refs || []).join(' ')}`.toLowerCase();
+      const score = ts.reduce((s, t) => s + (hay.includes(t) ? 1 : 0), 0);
+      return { rec, score };
+    }).filter(x => x.score > 0).sort((a, b) => b.score - a.score).slice(0, MAX);
+    if (!ranking.length) return '';
+    return 'Claims selados (prova preservada; não reexecutar sem causa quando não temporal):\n' + ranking.map(({ rec }) =>
+      `- ${rec.claim_key} — ${rec.temporal ? 'HISTORICAL/REMEASURE_CURRENT' : 'SEALED'} — ${String(rec.claim || '').slice(0, 120)}`
+    ).join('\n');
+  } catch { return 'Claims selados: LEDGER_INVALIDO — META_LUPA deve bloquear promoção'; }
+}
+
+function buscarAgentLibrary(missao) {
+  if (!existsSync(AGENT_LIBRARY_PATH)) return '';
+  const ts = termos(missao);
+  try {
+    const catalog = JSON.parse(readFileSync(AGENT_LIBRARY_PATH, 'utf8'));
+    const items = Array.isArray(catalog.items) ? catalog.items : [];
+    const ranking = items.map(item => {
+      const hay = `${item.name || ''} ${item.kind || ''} ${item.tier || ''} ${item.blurb || ''}`.toLowerCase();
+      const score = ts.reduce((s, t) => s + (hay.includes(t) ? 1 : 0), 0);
+      return { item, score };
+    }).filter(x => x.score > 0).sort((a, b) => b.score - a.score).slice(0, MAX);
+    if (!ranking.length) return '';
+    return 'Biblioteca de agentes (capacidade, não autoridade):\n' + ranking.map(({ item }) =>
+      `- [${item.tier || '?'}] ${item.name}`
+    ).join('\n');
+  } catch { return 'Biblioteca de agentes: CATALOGO_INVALIDO'; }
+}
+
 function buscarCondefonteUniversal(missao) {
-  return [buscarDebates(missao), buscarMissoesConcluidas(missao), buscarAprendizados(missao)].filter(Boolean).join('\n\n');
+  return [
+    buscarLacres(missao),
+    buscarAgentLibrary(missao),
+    buscarDebates(missao),
+    buscarMissoesConcluidas(missao),
+    buscarAprendizados(missao),
+  ].filter(Boolean).join('\n\n');
 }
 
 export async function buscarContexto(missao) {
@@ -233,7 +285,7 @@ export async function buscarContexto(missao) {
   try { base = await buscarNoGrafo(missao); } catch {}
   if (!base) base = buscarLocal(missao);
   const universal = buscarCondefonteUniversal(missao);
-  return [partitura, base, universal].filter(Boolean).join('\n\n').slice(0, 2400);
+  return [partitura, base, universal].filter(Boolean).join('\n\n').slice(0, 4000);
 }
 
 export { buscarContexto as contexto };
@@ -254,27 +306,42 @@ export function selfTest() {
     wrongTrail.thunder_trail.protocol = 'WRONG';
     inverseTrailProtocolRejected = validarPartituraObjeto(wrongTrail).ok === false;
   }
+  let sealsParse = false;
+  try {
+    const rows = readFileSync(CLAIM_SEALS_PATH, 'utf8').split(/\r?\n/).filter(Boolean);
+    sealsParse = rows.length > 0 && rows.every(line => Boolean(JSON.parse(line).claim_key));
+  } catch {}
+  let agentLibraryParse = false;
+  try {
+    const catalog = JSON.parse(readFileSync(AGENT_LIBRARY_PATH, 'utf8'));
+    agentLibraryParse = Array.isArray(catalog.items) && catalog.items.length > 0;
+  } catch {}
   const checks = {
     token_normalization_dedupes: JSON.stringify(normalized) === JSON.stringify(['centraldark', 'memoria']),
     short_tokens_are_ignored: !normalized.includes('api') && !normalized.includes('x'),
     empty_query_is_safe: termos('').length === 0,
+    band_score_path_is_live_02_banda: BAND_SCORE_PATH.includes('/01-CONCEITOS/02-BANDA/'),
     band_score_loads_and_validates: loaded.ok === true,
     band_score_has_17_unique_breaths: loaded.ok === true && loaded.score.breaths.items.length === 17,
+    meta_lupa_present: existsSync(META_LUPA_PATH),
+    claim_seals_parse: sealsParse,
+    agent_library_parse: agentLibraryParse,
     agent_call_trail_owner_exists: /CENTRALDARK_AGENT_CALL_V1/.test(agentCallSource) && /trail_id/.test(agentCallSource),
     graph_binding_band_to_graphrag: /band-score/.test(graphSource) && /graphrag-master/.test(graphSource),
+    graph_binding_meta_lupa_claim_seals: /meta-lupa/.test(graphSource) && /claim-seals/.test(graphSource),
     graph_binding_learning: /aprendizados/.test(graphSource),
     counterproof_missing_breath_is_rejected: inverseMissingBreathRejected,
     counterproof_wrong_trail_protocol_is_rejected: inverseTrailProtocolRejected,
   };
   const ok = Object.values(checks).every(Boolean);
   return {
-    schema: 'centraldark.graphrag-master-self-test.v2',
+    schema: 'centraldark.graphrag-master-self-test.v3',
     status: ok ? 'PASS' : 'FAIL',
     ok,
     checks,
     band_validation: loaded.validation,
     live_sources_contacted: false,
-    proof_scope: 'STATIC_BAND_SCORE_AND_QUERY_CONTRACT_ONLY',
+    proof_scope: 'STATIC_BAND_SCORE_CLAIM_SEALS_AGENT_LIBRARY_AND_QUERY_CONTRACT_ONLY',
   };
 }
 

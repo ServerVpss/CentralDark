@@ -4,4 +4,3 @@ from .screenpipe import ScreenpipeProbe
 from .vps import VPSProbe
 
 __all__ = ["GitHubProbe", "LocalProbe", "ScreenpipeProbe", "VPSProbe"]
-

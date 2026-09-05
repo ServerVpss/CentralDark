@@ -7,10 +7,20 @@ import unicodedata
 from pathlib import Path
 
 MASTER = "!CENTRALDARK"
-CHAIN = ["ACORDAR", "CALIBRAR", "MULTIBUSSOLA", "META_LUPA", "RECONCILIAR", "DELTA_UTIL", "CONTRAPROVA", "REMEDICAO", "FIXED_POINT", "REGISTRA", "BOOT"]
+CHAIN = [
+    "ACORDAR",
+    "CALIBRAR",
+    "MULTIBUSSOLA",
+    "META_LUPA",
+    "RECONCILIAR",
+    "DELTA_UTIL",
+    "CONTRAPROVA",
+    "REMEDICAO",
+    "FIXED_POINT",
+    "REGISTRA",
+    "BOOT",
+]
 
-# HUD/telemetria guiada: método operacional, não decoração.
-# Toda superfície que passa pelo Master Cycle recebe a mesma trilha copiável.
 GUIDED_TELEMETRY_PHASES = [
     ("ACORDAR", "#ACORDAR"),
     ("CENTRALDARK", "!CENTRALDARK"),
@@ -36,7 +46,9 @@ GUIDED_TELEMETRY_ICONS = {
     "BLOCKED": "⛔",
     "SKIPPED": "➖",
 }
-GUIDED_TELEMETRY_SURFACES = ["CLI", "CHAT", "API", "MCP", "WEB", "DESKTOP", "TELEGRAM"]
+GUIDED_TELEMETRY_SURFACES = [
+    "CLI", "CHAT", "VOICE", "API", "MCP", "WEB", "DESKTOP", "SOL", "HERMES", "TELEGRAM"
+]
 
 DELTA_CANONICAL = "!DELTA UTILS"
 DELTA_ALIASES = (
@@ -44,15 +56,24 @@ DELTA_ALIASES = (
     "!delta útil", "delta útil", "delta util", "delta utils", "!centralutil",
     "delta de agora", "toma esse delta", "pega o delta",
 )
-MULTIBUSSOLA_META_ALIASES = ("!multibussola_meta", "!multibússola_meta", "multibussola_meta", "multibússola_meta")
-MULTIBUSSOLA_META_ROUTES = ["FORWARD_ROUTE", "REVERSE_ROUTE", "INVERSE_ROUTE", "CROSS_BEARING_RENDEZVOUS"]
-MULTIBUSSOLA_PROOF_GATES = ["PROOF_TARGET_MATCH", "PROOF_OWNERSHIP", "INDEPENDENT_COUNTERPROOF", "EXTERNAL_ANCHOR_WHEN_APPLICABLE", "REMEDICAO_T1", "REALITY_JUDGE"]
+MULTIBUSSOLA_META_ALIASES = (
+    "!multibussola_meta", "!multibússola_meta", "multibussola_meta", "multibússola_meta"
+)
+MULTIBUSSOLA_META_ROUTES = [
+    "FORWARD_ROUTE", "REVERSE_ROUTE", "INVERSE_ROUTE", "CROSS_BEARING_RENDEZVOUS"
+]
+MULTIBUSSOLA_PROOF_GATES = [
+    "PROOF_TARGET_MATCH",
+    "PROOF_OWNERSHIP",
+    "INDEPENDENT_COUNTERPROOF",
+    "EXTERNAL_ANCHOR_WHEN_APPLICABLE",
+    "REMEDICAO_T1",
+    "REALITY_JUDGE",
+]
 NEGATION_TOKENS = {"nao", "nunca", "sem"}
 
-# Regra de porteira única: todo gatilho humano EXPLÍCITO reconhecido entra uma vez
-# em !CENTRALDARK. Dentro de sessão ativa, vira apenas fase/método e não reentra.
 MASTER_INGRESS_ALIASES = {
-    "CENTRALDARK_MASTER": ("!centraldark", "!central-dark", "!cdark"),
+    "CENTRALDARK_MASTER": ("!centraldark", "#centraldark", "!central-dark", "#central-dark", "!cdark", "#cdark"),
     "ACORDAR": ("#acordar", "#acorda", "!acordar", "!acorda"),
     "CALIBRAR": ("!calibrar", "#calibrar"),
     "CRISTALIZAR": ("#cristalizar", "!cristalizar", "#crystalizar", "!crystalizar", "#crystalaizar", "!crystalaizar"),
@@ -68,8 +89,30 @@ MASTER_INGRESS_ALIASES = {
     "FABLE_LOOP": ("!fable_loop", "#fable_loop", "!fabler_loop", "#fabler_loop"),
 }
 
-# Lei Zero de nomenclatura humana: identidade/nome/BOOT/visual canônicos são únicos.
-# Versões técnicas de protocolo/API/schema continuam literais e NÃO renomeiam identidade.
+VOICE_INGRESS_ALIASES = {
+    "CENTRALDARK_MASTER": (
+        "centraldark",
+        "central dark",
+        "centraldark sol",
+        "central dark sol",
+    ),
+    "ACORDAR": (
+        "acordar",
+        "acorda",
+        "sol acordar",
+        "sol acorda",
+        "centraldark acordar",
+        "central dark acordar",
+        "centraldark sol acordar",
+        "central dark sol acordar",
+        "acordar centraldark",
+        "acorda centraldark",
+    ),
+}
+
+CANONICAL_SOL_PROFILE_ID = "ORQUESTRACAO_SOL"
+CANONICAL_SOL_PROFILE_DISPLAY = "😎 Orquestração SOL 🌞"
+
 HUMAN_IDENTITY_VERSION_PATTERNS = (
     re.compile(r"(?i)\b(?:centraldark|sol|hermes|pivete|boot)[a-z0-9_-]*(?:[_-]v[1-9][0-9]*)\b"),
     re.compile(r"(?i)\b(?:centraldark|sol|hermes|pivete|boot|perfil|profile|identidade(?:\s+visual)?)\s+(?:v|versao|versão)\s*[1-9][0-9]*(?:\.[0-9]+)*\b"),
@@ -103,7 +146,19 @@ def _negated_or_discussed(normalized: str, match) -> bool:
     if any(t in NEGATION_TOKENS for t in neighborhood):
         return True
     joined = " ".join(neighborhood)
-    return any(p in joined for p in ("nao deve", "nao executar", "nao execute", "nao usar", "nao use", "apenas mencionar", "so mencionar", "somente discutir"))
+    return any(
+        p in joined
+        for p in (
+            "nao deve",
+            "nao executar",
+            "nao execute",
+            "nao usar",
+            "nao use",
+            "apenas mencionar",
+            "so mencionar",
+            "somente discutir",
+        )
+    )
 
 
 def _resolve_delta(normalized: str):
@@ -114,9 +169,9 @@ def _resolve_delta(normalized: str):
     return None, False, False
 
 
-def _resolve_master_ingress(normalized: str):
+def _collect_alias_matches(normalized: str, alias_map):
     active, ambiguous = [], []
-    for trigger_id, aliases in MASTER_INGRESS_ALIASES.items():
+    for trigger_id, aliases in alias_map.items():
         for alias in aliases:
             match = _phrase_match(normalized, alias)
             if not match:
@@ -124,6 +179,24 @@ def _resolve_master_ingress(normalized: str):
             item = {"trigger_id": trigger_id, "alias": alias}
             (ambiguous if _negated_or_discussed(normalized, match) else active).append(item)
             break
+    return active, ambiguous
+
+
+def _resolve_master_ingress(normalized: str, input_mode: str = "text"):
+    active, ambiguous = _collect_alias_matches(normalized, MASTER_INGRESS_ALIASES)
+    if input_mode == "voice":
+        voice_active, voice_ambiguous = _collect_alias_matches(normalized, VOICE_INGRESS_ALIASES)
+        seen = {(item["trigger_id"], item["alias"]) for item in active + ambiguous}
+        for item in voice_active:
+            key = (item["trigger_id"], item["alias"])
+            if key not in seen:
+                active.append({**item, "voice": True})
+                seen.add(key)
+        for item in voice_ambiguous:
+            key = (item["trigger_id"], item["alias"])
+            if key not in seen:
+                ambiguous.append({**item, "voice": True})
+                seen.add(key)
     return active, ambiguous
 
 
@@ -309,10 +382,19 @@ def resolve(
     intent_ok=None,
     intent_reason=None,
     previous_failure=None,
+    input_mode: str = "text",
+    source_surface=None,
+    session_id=None,
+    profile_id=None,
+    profile_display=None,
 ):
     raw = str(text or "")
     normalized = normalize(raw)
-    ingress, ambiguous_ingress = _resolve_master_ingress(normalized)
+    mode = str(input_mode or "text").strip().lower()
+    if mode not in {"text", "voice"}:
+        mode = "text"
+
+    ingress, ambiguous_ingress = _resolve_master_ingress(normalized, input_mode=mode)
     ids = [x["trigger_id"] for x in ingress]
     aliases = [x["alias"] for x in ingress]
     ambiguous_ids = [x["trigger_id"] for x in ambiguous_ingress]
@@ -330,9 +412,9 @@ def resolve(
     elif bot_entry:
         activation_source = "BOT_ENTRY"
     elif explicit_master:
-        activation_source = "EXPLICIT_TRIGGER"
+        activation_source = "VOICE_TRIGGER" if mode == "voice" else "EXPLICIT_TRIGGER"
     elif explicit_subtrigger:
-        activation_source = "SUBTRIGGER_FUNNEL"
+        activation_source = "VOICE_SUBTRIGGER_FUNNEL" if mode == "voice" else "SUBTRIGGER_FUNNEL"
     else:
         activation_source = None
 
@@ -341,6 +423,7 @@ def resolve(
     harvest_active = bool(delta_active or chefe_material)
     meta_match = next((a for a in MULTIBUSSOLA_META_ALIASES if _phrase_match(normalized, a)), None)
     meta_active = meta_match is not None
+
     guided_telemetry = build_guided_telemetry(
         master_cycle_active,
         matched_trigger_ids=ids,
@@ -350,10 +433,17 @@ def resolve(
         previous_failure=previous_failure,
     )
 
+    session_ref = str(session_id or "").strip() or None
+    canonical_profile_id = str(profile_id or "").strip() or CANONICAL_SOL_PROFILE_ID
+    canonical_profile_display = str(profile_display or "").strip() or CANONICAL_SOL_PROFILE_DISPLAY
+    surface = str(source_surface or "").strip().upper() or ("VOICE" if mode == "voice" else "UNKNOWN")
+
     return {
         "schema": "centraldark.master-cycle-receipt.v1",
         "input": raw,
         "normalized": normalized,
+        "input_mode": mode,
+        "source_surface": surface,
         "master_trigger": MASTER,
         "explicit_marker_seen": master_marker_seen,
         "explicit_match": explicit_master,
@@ -364,6 +454,16 @@ def resolve(
         "next_master_active": master_cycle_active,
         "expanded_chain": CHAIN if master_cycle_active else [],
         "guided_telemetry": guided_telemetry,
+        "session_provenance": {
+            "session_id": session_ref,
+            "profile_id": canonical_profile_id,
+            "profile_display": canonical_profile_display,
+            "session_id_is_authority": False,
+            "profile_is_authority": False,
+            "session_change_is_new_mission": False,
+            "model_change_resets_mission": False,
+            "route": "RANDOLF -> KNOWLEDGE_HUB -> NOTIFICATION_HUB",
+        },
         "master_funnel": {
             "canonical_entry": MASTER,
             "matched_trigger_ids": ids,
@@ -375,7 +475,8 @@ def resolve(
             "requested_methods": [i for i in ids if i == "FABLE_LOOP"],
             "phase_markers": [i for i in ids if i == "CRISTALIZAR"],
             "cristalizar_is_phase_marker_not_engine": True,
-            "markerless_alias_opens_master": False,
+            "voice_is_modality_not_second_trigger_system": True,
+            "markerless_alias_opens_master": mode == "voice",
             "all_explicit_human_triggers_enter_master_once": True,
         },
         "delta_harvest": {
@@ -416,14 +517,41 @@ def resolve(
             "creates_new_pipeline": False,
             "creates_new_owner": False,
         },
-        "status": "MATCH" if (master_cycle_active or harvest_active or meta_active) else ("UNKNOWN" if (delta_ambiguous or ambiguous_ingress or untrusted_master_attempt) else "NO_MATCH"),
+        "status": "MATCH" if (master_cycle_active or harvest_active or meta_active) else (
+            "UNKNOWN" if (delta_ambiguous or ambiguous_ingress or untrusted_master_attempt) else "NO_MATCH"
+        ),
         "authority_changed": False,
         "mutation_authorized": False,
+        "capability_is_authority": False,
+        "agent_may_reduce_human_objective": False,
+        "objective_must_be_preserved": True,
+        "full_requested_material_must_be_processed": True,
+        "session_observation_is_global_current_state": False,
+        "single_reader_may_declare_global_reality": False,
+        "divergent_readers_require_rendezvous": True,
+        "current_reality_requires_reconciliation": True,
+        "remote_screenshot_is_remote_proof": False,
+        "session_memory_is_current_state": False,
+        "connector_failure_is_provider_failure": False,
+        "sensor_failure_is_world_failure": False,
+        "transport_failure_requires_authorized_alternate_route": True,
+        "alternate_route_must_remeasure_same_target": True,
+        "remote_write_requires_proven_gate": True,
+        "chat_only_knowledge": "FAIL",
+        "session_memory_is_durable_state": False,
+        "persistence_quorum_min": 1,
+        "preferred_redundancy": 2,
+        "mirror_is_second_owner": False,
+        "backup_is_source_of_truth": False,
+        "persistence_is_promotion": False,
+        "old_copy_is_current_reality": False,
+        "no_blind_overwrite": True,
+        "durable_continuity_requires_receipt_and_next_cursor": True,
         "all_phases_considered": master_cycle_active,
         "phase_execution_is_adaptive": True,
         "unknown_is_pass": False,
         "graph_is_authority": False,
-        "plain_word_centraldark_does_not_trigger": True,
+        "plain_word_centraldark_does_not_trigger": mode != "voice",
         "cross_chat_is_current_state": False,
         "github_substitutes_missing_chat_memory": False,
     }
@@ -481,6 +609,11 @@ def resolve_with_session_state(
     phase_status=None,
     intent_ok=None,
     intent_reason=None,
+    input_mode: str = "text",
+    source_surface=None,
+    session_id=None,
+    profile_id=None,
+    profile_display=None,
 ):
     persisted_active, load_status = _load_session_state(state_file)
     previous_failure = _load_previous_failure(state_file)
@@ -493,14 +626,16 @@ def resolve_with_session_state(
         intent_ok=intent_ok,
         intent_reason=intent_reason,
         previous_failure=previous_failure,
+        input_mode=input_mode,
+        source_surface=source_surface,
+        session_id=session_id,
+        profile_id=profile_id,
+        profile_display=profile_display,
     )
     persisted = False
     if state_file and load_status != "INVALID":
         current_failure = receipt["guided_telemetry"].get("failure")
-        if receipt["guided_telemetry"].get("status") == "PASS":
-            next_failure = None
-        else:
-            next_failure = current_failure or previous_failure
+        next_failure = None if receipt["guided_telemetry"].get("status") == "PASS" else (current_failure or previous_failure)
         _store_session_state(state_file, receipt["next_master_active"], last_failure=next_failure)
         persisted = True
     receipt["session_state"] = {
@@ -515,17 +650,44 @@ def resolve_with_session_state(
 
 def self_test():
     cases = []
+
     def add(name, ok):
         cases.append({"kind": name, "ok": bool(ok)})
 
-    for token, phase in (("#ACORDAR", "ACORDAR"), ("!CALIBRAR", "CALIBRAR"), ("!META_LUPA", "META_LUPA"), ("!RECONCILIAR", "RECONCILIAR"), ("!CENTRALUTIL", "DELTA_UTIL"), ("!CONTRAPROVA", "CONTRAPROVA"), ("!REMEDICAO", "REMEDICAO"), ("!FIXED_POINT", "FIXED_POINT"), ("!REGISTRA", "REGISTRA"), ("!BOOT", "BOOT")):
+    for token, phase in (
+        ("#ACORDAR", "ACORDAR"),
+        ("!CALIBRAR", "CALIBRAR"),
+        ("!META_LUPA", "META_LUPA"),
+        ("!RECONCILIAR", "RECONCILIAR"),
+        ("!CENTRALUTIL", "DELTA_UTIL"),
+        ("!CONTRAPROVA", "CONTRAPROVA"),
+        ("!REMEDICAO", "REMEDICAO"),
+        ("!FIXED_POINT", "FIXED_POINT"),
+        ("!REGISTRA", "REGISTRA"),
+        ("!BOOT", "BOOT"),
+    ):
         r = resolve(token, chefe_source=True)
-        add("master_funnel", r["master_cycle_active"] and r["activation_source"] == "SUBTRIGGER_FUNNEL" and phase in r["master_funnel"]["matched_trigger_ids"])
+        add(
+            "master_funnel",
+            r["master_cycle_active"]
+            and r["activation_source"] == "SUBTRIGGER_FUNNEL"
+            and phase in r["master_funnel"]["matched_trigger_ids"],
+        )
+
     r = resolve("!CENTRALDARK", chefe_source=True)
     add("master", r["explicit_match"] and r["expanded_chain"] == CHAIN)
-    add("guided_telemetry_required", r["guided_telemetry"]["render_required"] and r["guided_telemetry"]["next_cursor"] == "ACORDAR")
+    add(
+        "guided_telemetry_required",
+        r["guided_telemetry"]["render_required"] and r["guided_telemetry"]["next_cursor"] == "ACORDAR",
+    )
+
     r = resolve("#ACORDAR !CENTRALDARK", chefe_source=True)
-    add("guided_telemetry_acordar_and_master", r["guided_telemetry"]["steps"][0]["status"] == "PASS" and r["guided_telemetry"]["steps"][1]["status"] == "PASS")
+    add(
+        "guided_telemetry_acordar_and_master",
+        r["guided_telemetry"]["steps"][0]["status"] == "PASS"
+        and r["guided_telemetry"]["steps"][1]["status"] == "PASS",
+    )
+
     r = resolve(
         "#ACORDAR !CENTRALDARK",
         chefe_source=True,
@@ -533,55 +695,119 @@ def self_test():
         intent_ok=False,
         intent_reason="Saiu do escopo original",
     )
-    add("guided_telemetry_red_x_exact_phase", r["guided_telemetry"]["status"] == "FAIL" and r["guided_telemetry"]["failure"]["phase"] == "INTENT_SCOPE" and "Saiu do escopo" in render_guided_telemetry(r["guided_telemetry"]))
+    add(
+        "guided_telemetry_red_x_exact_phase",
+        r["guided_telemetry"]["status"] == "FAIL"
+        and r["guided_telemetry"]["failure"]["phase"] == "INTENT_SCOPE"
+        and "Saiu do escopo" in render_guided_telemetry(r["guided_telemetry"]),
+    )
+
     all_pass = {phase: "PASS" for phase, _ in GUIDED_TELEMETRY_PHASES}
     r = resolve("!CENTRALDARK", chefe_source=True, phase_status=all_pass, intent_ok=True)
-    add("guided_telemetry_pass_requires_all_steps", r["guided_telemetry"]["status"] == "PASS" and r["guided_telemetry"]["failure"] is None)
+    add(
+        "guided_telemetry_pass_requires_all_steps",
+        r["guided_telemetry"]["status"] == "PASS" and r["guided_telemetry"]["failure"] is None,
+    )
+
     r = resolve("não execute #ACORDAR agora", chefe_source=True)
     add("negated_subtrigger", not r["master_cycle_active"] and r["status"] == "UNKNOWN")
+
     r = resolve("#ACORDAR", chefe_source=False)
     add("untrusted_subtrigger", not r["master_cycle_active"] and r["untrusted_master_attempt"])
+
     r = resolve("#ACORDAR", master_active=True, chefe_source=True)
-    add("reentry_guard", r["master_funnel"]["master_reentry_guard"] and r["activation_source"] == "INHERITED_SESSION")
+    add(
+        "reentry_guard",
+        r["master_funnel"]["master_reentry_guard"] and r["activation_source"] == "INHERITED_SESSION",
+    )
+
     r = resolve("CentralDark e o nome do repo")
     add("plain_word_guard", not r["master_cycle_active"] and r["status"] == "NO_MATCH")
+
     r = resolve("!CENTRALUTIL", chefe_source=True)
     add("centralutil_delta", r["delta_harvest"]["explicit_signal_active"] and r["master_cycle_active"])
 
     for token in ("#CRISTALIZAR", "!CRISTALIZAR", "#CRYSTALIZAR", "#CRYSTALAIZAR"):
         r = resolve(token, chefe_source=True)
-        add("cristalizar_funnels_once", r["master_cycle_active"] and r["activation_source"] == "SUBTRIGGER_FUNNEL" and r["master_funnel"]["phase_markers"] == ["CRISTALIZAR"] and r["master_funnel"]["cristalizar_is_phase_marker_not_engine"])
-    r = resolve("#CRISTALIZAR", master_active=True, chefe_source=True)
-    add("cristalizar_reentry_guard", r["master_funnel"]["master_reentry_guard"] and r["activation_source"] == "INHERITED_SESSION")
-    r = resolve("não execute #CRISTALIZAR agora", chefe_source=True)
-    add("cristalizar_negation_guard", not r["master_cycle_active"] and r["status"] == "UNKNOWN")
+        add(
+            "cristalizar_funnels_once",
+            r["master_cycle_active"]
+            and r["activation_source"] == "SUBTRIGGER_FUNNEL"
+            and r["master_funnel"]["phase_markers"] == ["CRISTALIZAR"]
+            and r["master_funnel"]["cristalizar_is_phase_marker_not_engine"],
+        )
 
-    bad_identity_outputs = (
+    for phrase in ("#acordar", "!centraldark", "!centraldark sol acordar"):
+        r = resolve(phrase, chefe_source=True)
+        add("spoken_explicit_text_trigger", r["master_cycle_active"])
+
+    for phrase in ("acordar", "centraldark", "centraldark sol acordar", "sol acordar"):
+        r = resolve(
+            phrase,
+            chefe_source=True,
+            input_mode="voice",
+            source_surface="HERMES_DESKTOP",
+            session_id="20260905_031340_68bd10",
+        )
+        add(
+            "voice_funnels_once",
+            r["master_cycle_active"]
+            and r["activation_source"] in {"VOICE_TRIGGER", "VOICE_SUBTRIGGER_FUNNEL"}
+            and r["session_provenance"]["profile_id"] == CANONICAL_SOL_PROFILE_ID
+            and r["master_funnel"]["voice_is_modality_not_second_trigger_system"],
+        )
+
+    r = resolve("centraldark", chefe_source=True, input_mode="text")
+    add("plain_text_word_still_guarded", not r["master_cycle_active"])
+
+    r = resolve(
+        "centraldark sol acordar",
+        chefe_source=True,
+        input_mode="voice",
+        master_active=True,
+    )
+    add(
+        "voice_reentry_guard",
+        r["master_cycle_active"]
+        and r["activation_source"] == "INHERITED_SESSION"
+        and r["master_funnel"]["master_reentry_guard"],
+    )
+
+    for sample in (
         "BOOT_CENTRALDARK_BAIANES_V1",
         "CentralDark V2",
         "Hermes-v3",
         "identidade visual versão 4",
-    )
-    for sample in bad_identity_outputs:
+    ):
         add("identity_name_guard_rejects_parallel_suffix", not validate_human_identity_naming(sample)["ok"])
 
-    technical_literals = (
+    for sample in (
         "schema centraldark.master-cycle-receipt.v1",
         "endpoint http://127.0.0.1:8099/v1/models",
         "API externa versão 2026-09-01",
-    )
-    for sample in technical_literals:
+    ):
         add("identity_name_guard_preserves_technical_version", validate_human_identity_naming(sample)["ok"])
 
-    with Path(__file__).with_name(".centraldark-telemetry-self-test.json").open("w", encoding="utf-8") as handle:
-        json.dump({"schema": "centraldark.master-session-state.v1", "master_active": True, "last_failure": {"phase": "TEST", "status": "FAIL", "reason": "falha anterior"}}, handle)
+    state_path = Path(__file__).with_name(".centraldark-telemetry-self-test.json")
+    with state_path.open("w", encoding="utf-8") as handle:
+        json.dump(
+            {
+                "schema": "centraldark.master-session-state.v1",
+                "master_active": True,
+                "last_failure": {"phase": "TEST", "status": "FAIL", "reason": "falha anterior"},
+            },
+            handle,
+        )
     try:
-        state_path = Path(__file__).with_name(".centraldark-telemetry-self-test.json")
         r = resolve_with_session_state("continua", state_file=state_path, chefe_source=True)
-        add("guided_telemetry_stitches_previous_failure", r["guided_telemetry"]["previous_failure"]["phase"] == "TEST" and r["session_state"]["previous_failure_loaded"])
+        add(
+            "guided_telemetry_stitches_previous_failure",
+            r["guided_telemetry"]["previous_failure"]["phase"] == "TEST"
+            and r["session_state"]["previous_failure_loaded"],
+        )
     finally:
         try:
-            Path(__file__).with_name(".centraldark-telemetry-self-test.json").unlink()
+            state_path.unlink()
         except OSError:
             pass
 
@@ -619,7 +845,13 @@ def main():
     parser.add_argument("--phase-status-json", help="Mapa JSON de fase→UNKNOWN|ACTIVE|PASS|FAIL|BLOCKED|SKIPPED.")
     parser.add_argument("--intent-ok", choices=("true", "false", "unknown"), default="unknown")
     parser.add_argument("--intent-reason")
+    parser.add_argument("--input-mode", choices=("text", "voice"), default="text")
+    parser.add_argument("--source-surface")
+    parser.add_argument("--session-id")
+    parser.add_argument("--profile-id")
+    parser.add_argument("--profile-display")
     args = parser.parse_args()
+
     if args.self_test:
         out = self_test()
     elif args.check_human_identity_name is not None:
@@ -634,7 +866,13 @@ def main():
             phase_status=_parse_phase_status(args.phase_status_json),
             intent_ok=_parse_intent_ok(args.intent_ok),
             intent_reason=args.intent_reason,
+            input_mode=args.input_mode,
+            source_surface=args.source_surface,
+            session_id=args.session_id,
+            profile_id=args.profile_id,
+            profile_display=args.profile_display,
         )
+
     if args.telemetry and isinstance(out, dict) and out.get("guided_telemetry"):
         rendered = render_guided_telemetry(out["guided_telemetry"], ansi=sys.stdout.isatty())
         if rendered:
