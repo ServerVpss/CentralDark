@@ -1,12 +1,11 @@
-# Auto-merge dos PRs do Dependabot — só patches (semver-patch).
-# Minor fica aberto pra revisão humana. Major nem chega (bloqueado no dependabot.yml).
+# 🤖 Dependabot — automação segura de patches.
+# PATCH: pode habilitar squash automático quando mergeável.
+# MINOR: permanece para revisão humana.
+# MAJOR: bloqueado em .github/dependabot.yml.
 #
-# Este workflow é o mutator especializado do fluxo universal de bots.
-# Usa pull_request_target porque pull_request não roda enquanto o PR está
-# conflitado. Segurança: nunca executa código do HEAD do PR; todo código de
-# automação vem sempre do BASE SHA confiável e o escopo é restrito a PR cujo
-# autor é dependabot[bot] no próprio repositório.
-name: Dependabot Auto-Merge (só patches)
+# Segurança: pull_request_target nunca executa código do HEAD não confiável.
+# Toda automação vem do BASE SHA e só atua em PR do dependabot[bot] no mesmo repo.
+name: 🤖 Dependabot — auto-merge seguro de patches
 
 on:
   pull_request_target:
@@ -22,13 +21,16 @@ concurrency:
 
 jobs:
   auto-merge-patch:
+    name: 🤖 Validar e promover patch do Dependabot
     if: >-
       github.repository == 'ServerVpss/CentralDark' &&
       github.event.pull_request.user.login == 'dependabot[bot]' &&
       github.event.pull_request.head.repo.full_name == github.repository
     runs-on: [self-hosted, Linux]
+    timeout-minutes: 10
+
     steps:
-      - name: Provar escopo do mutator especializado
+      - name: 🛡️ Provar escopo do mutator especializado
         shell: bash
         env:
           PR_AUTHOR: ${{ github.event.pull_request.user.login }}
@@ -44,7 +46,7 @@ jobs:
           echo "DEPENDABOT_SCOPE=PASS"
           echo "PR_HEAD_REF=$PR_HEAD_REF"
 
-      - name: Checkout somente do BASE SHA confiável
+      - name: 📥 Checkout somente do BASE SHA confiável
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.event.pull_request.base.sha }}
@@ -53,21 +55,42 @@ jobs:
           fetch-depth: 1
           submodules: false
 
-      - name: Coletar metadados do PR do Dependabot
+      - name: 🔎 Coletar metadados do Dependabot
         id: meta
         uses: dependabot/fetch-metadata@v3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-<<<<<<< HEAD
-      # NOTA: remoção do passo "Aprovar PR" em 2026-09-04.
-      # O createReview({event:'APPROVE'}) falhava com 422 "GitHub Actions is not
-      # permitted to approve pull requests" em repositório privado, derrubando o CI.
-      # O auto-merge via GraphQL (próximo passo) não exige review prévio e é
-      # suficiente para a política de patches.
-        if: env.SKIP != '1'
-=======
-      - name: Classificar sinal no HERMES Signal Watcher
+      - name: 🇧🇷 Padronizar título em PT-BR com selo semântico
+        id: titulo
+        uses: actions/github-script@v9
+        env:
+          DEPENDENCY_NAMES: ${{ steps.meta.outputs.dependency-names }}
+          UPDATE_TYPE: ${{ steps.meta.outputs.update-type }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const nomes = (process.env.DEPENDENCY_NAMES || 'DEPENDÊNCIAS').trim();
+            const tipo = (process.env.UPDATE_TYPE || 'ATUALIZAÇÃO')
+              .replace('version-update:semver-', '')
+              .toUpperCase();
+            const texto = `DEPENDABOT · ATUALIZA ${nomes} · ${tipo}`
+              .toLocaleUpperCase('pt-BR')
+              .slice(0, 230);
+            const titulo = `🤖 ${texto}`;
+            const atual = context.payload.pull_request.title || '';
+            if (atual !== titulo) {
+              await github.rest.pulls.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: context.payload.pull_request.number,
+                title: titulo,
+              });
+            }
+            core.setOutput('titulo', titulo);
+            console.log(`TITULO_PTBR=${titulo}`);
+
+      - name: 🧠 Classificar sinal no HERMES Signal Watcher
         shell: bash
         env:
           DEPENDENCY_NAMES: ${{ steps.meta.outputs.dependency-names }}
@@ -83,12 +106,12 @@ jobs:
           EVENT_B64="$(node - <<'NODE'
           const event = {
             source: 'dependabot_pr',
-            subject: `Dependabot PR #${process.env.PR_NUMBER}: ${process.env.DEPENDENCY_NAMES || 'dependency update'}`,
+            subject: `🤖 Dependabot PR #${process.env.PR_NUMBER}: ${process.env.DEPENDENCY_NAMES || 'dependências'}`,
             body: [
-              `dependency_type=${process.env.DEPENDENCY_TYPE || 'UNKNOWN'}`,
-              `update_type=${process.env.UPDATE_TYPE || 'UNKNOWN'}`,
-              `previous=${process.env.PREVIOUS_VERSION || 'UNKNOWN'}`,
-              `new=${process.env.NEW_VERSION || 'UNKNOWN'}`,
+              `tipo_dependencia=${process.env.DEPENDENCY_TYPE || 'UNKNOWN'}`,
+              `tipo_atualizacao=${process.env.UPDATE_TYPE || 'UNKNOWN'}`,
+              `anterior=${process.env.PREVIOUS_VERSION || 'UNKNOWN'}`,
+              `novo=${process.env.NEW_VERSION || 'UNKNOWN'}`,
               `head=${process.env.PR_HEAD_SHA || 'UNKNOWN'}`,
             ].join(' '),
             url: process.env.PR_URL || '',
@@ -98,62 +121,20 @@ jobs:
           )"
           node "$GITHUB_WORKSPACE/.ci-house/scripts/hermes/signal-watch-notify.mjs" --event-b64 "$EVENT_B64" --notify
 
-      - name: Aprovar PR do Dependabot dentro da política
->>>>>>> origin/feat/fixed-point-fabric-proof-20260831
+      - name: 🧭 Medir mergeabilidade e decidir próximo passo
         uses: actions/github-script@v9
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            await github.rest.pulls.createReview({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: context.payload.pull_request.number,
-              event: 'APPROVE',
-              body: 'Aprovação automática — atualização do Dependabot dentro da política (sem majors).',
-            });
-
-      - name: Medir mergeability e decidir fallback
-        id: stale
-        uses: actions/github-script@v9
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-<<<<<<< HEAD
-            const pr = await github.rest.pulls.get({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: context.payload.pull_request.number,
-            });
-            const mergeable = pr.data.mergeable;
-            if (mergeable === false) {
-              console.log('::warning::PR conflitado. Resolução determinística via scripts/dependabot/resolve-conflicts.sh.');
-              core.exportVariable('RESOLVE_REQUESTED', '1');
-            } else if (mergeable === null) {
-              console.log('::notice::Mergeability UNKNOWN (GitHub ainda calculando). Aguardando próximo synchronize.');
-            } else {
-              console.log('::notice::PR mergeable. Seguindo para auto-merge por política.');
-            }
-
-      # Este passo já roda no runner self-hosted declarado pelo job.
-      # A versão anterior aninhava `runs-on:` e `steps:` DENTRO de um step — chaves de job em contexto de step.
-      # O YAML aceitava, o schema do Actions não: o workflow ficava inválido e o GitHub abria um run falho.
-      - name: Checkout do SHA exato do evento
-        if: env.SKIP != '1' && env.RESOLVE_REQUESTED == '1'
-        uses: actions/checkout@v7
-        with:
-          ref: ${{ github.sha }}
-          path: .ci-resolve
-          fetch-depth: 1
-=======
             let pr;
-            for (let attempt = 1; attempt <= 5; attempt++) {
+            for (let tentativa = 1; tentativa <= 5; tentativa++) {
               pr = await github.rest.pulls.get({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 pull_number: context.payload.pull_request.number,
               });
               if (pr.data.mergeable !== null) break;
-              console.log(`::notice::Mergeability UNKNOWN tentativa=${attempt}/5`);
+              console.log(`::notice::Mergeabilidade UNKNOWN tentativa=${tentativa}/5`);
               await new Promise(resolve => setTimeout(resolve, 2000));
             }
 
@@ -163,15 +144,14 @@ jobs:
               core.exportVariable('RESOLVE_REQUESTED', '1');
               core.exportVariable('MERGEABILITY_STATE', 'CONFLICTING');
             } else if (mergeable === null) {
-              console.log('::notice::Mergeability continuou UNKNOWN. Fail-closed; nenhuma mutação.');
+              console.log('::notice::Mergeabilidade continuou UNKNOWN. Fail-closed; nenhuma mutação.');
               core.exportVariable('MERGEABILITY_STATE', 'UNKNOWN');
             } else {
-              console.log('::notice::PR mergeable. Seguindo política de auto-merge.');
+              console.log('::notice::PR mergeável. Seguindo política do Dependabot.');
               core.exportVariable('MERGEABILITY_STATE', 'MERGEABLE');
             }
->>>>>>> origin/feat/fixed-point-fabric-proof-20260831
 
-      - name: Resolver conflito pelo motor único da Casa
+      - name: 🪡 Resolver conflito pelo motor único da Casa
         if: env.RESOLVE_REQUESTED == '1'
         env:
           REPO_DIR: /root/CentralDark
@@ -180,23 +160,42 @@ jobs:
           set -euo pipefail
           bash "$GITHUB_WORKSPACE/.ci-house/scripts/dependabot/resolve-conflicts.sh" "${{ github.event.pull_request.number }}"
 
-      - name: Habilitar auto-merge somente para PATCH
+      - name: 🟢 Habilitar squash automático somente para PATCH
         if: steps.meta.outputs.update-type == 'version-update:semver-patch' && env.RESOLVE_REQUESTED != '1' && env.MERGEABILITY_STATE == 'MERGEABLE'
         uses: actions/github-script@v9
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
+            const pr = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+            });
+            const headline = pr.data.title;
+            const body = [
+              '🤖 Atualização automática do Dependabot dentro da política da Casa.',
+              '🟢 Classe: PATCH',
+              `🔗 PR #${context.payload.pull_request.number}`,
+              '⚖️ Squash condicionado aos checks e à mergeabilidade do GitHub.',
+            ].join('\n');
             await github.graphql(`
-              mutation($pullRequestId: ID!) {
-                enablePullRequestAutoMerge(input: {pullRequestId: $pullRequestId, mergeMethod: SQUASH}) {
+              mutation($pullRequestId: ID!, $headline: String!, $body: String!) {
+                enablePullRequestAutoMerge(input: {
+                  pullRequestId: $pullRequestId,
+                  mergeMethod: SQUASH,
+                  commitHeadline: $headline,
+                  commitBody: $body
+                }) {
                   pullRequest { number autoMergeRequest { enabledAt mergeMethod } }
                 }
               }
             `, {
               pullRequestId: context.payload.pull_request.node_id,
+              headline,
+              body,
             });
 
-      - name: Comentar quando for MINOR (fica pra revisão humana)
+      - name: 🟡 Avisar quando for MINOR
         if: steps.meta.outputs.update-type == 'version-update:semver-minor' && github.event.action != 'synchronize'
         uses: actions/github-script@v9
         with:
@@ -206,10 +205,10 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.payload.pull_request.number,
-              body: '🟡 Atualização **minor** detectada — aprovada, mas o merge fica pra revisão humana (política: auto-merge só pra patch).',
+              body: '🟡 Atualização **minor** detectada — fica para revisão humana. Política: auto-merge somente para patch.',
             });
 
-      - name: Receipt determinístico do fluxo Dependabot
+      - name: 🧾 Receipt determinístico do fluxo Dependabot
         if: always()
         shell: bash
         env:
@@ -220,19 +219,16 @@ jobs:
           JOB_STATUS: ${{ job.status }}
         run: |
           set -euo pipefail
-          echo "HEAD_SHA=$HEAD_SHA"
-          echo "PR_HEAD_REF=$PR_HEAD_REF"
-          echo "MERGEABILITY_STATE=${MERGEABILITY_STATE:-UNKNOWN}"
-          echo "RESOLVE_REQUESTED=${RESOLVE_REQUESTED:-0}"
-          echo "JOB_STATUS=$JOB_STATUS"
+          echo "🤖 DEPENDABOT_HEAD_SHA=$HEAD_SHA"
+          echo "🔄 PR_HEAD_REF=$PR_HEAD_REF"
+          echo "🧭 MERGEABILITY_STATE=${MERGEABILITY_STATE:-UNKNOWN}"
+          echo "🪡 RESOLVE_REQUESTED=${RESOLVE_REQUESTED:-0}"
+          echo "⚖️ JOB_STATUS=$JOB_STATUS"
           echo 'TRIGGER=pull_request_target'
           echo 'TRUSTED_CODE_SOURCE=BASE_SHA'
           echo 'UNTRUSTED_PR_CODE_EXECUTED=0'
-          echo 'SIGNAL_WATCHER=apps/modulos/HERMES-CORE/agents/Signal-Watcher/agent.mjs'
-          echo 'SIGNAL_SURFACE=TELEGRAM_GAMIFIED_CARD'
           echo 'AUTO_MERGE_POLICY=PATCH_ONLY'
-          echo 'EXTERNAL_AUTO_MERGE_PATTERN=ABSORBED_NOT_DEPENDENCY'
-          echo 'EXTERNAL_PAT_REQUIRED=0'
-          echo 'EXTERNAL_DOCKER_ACTION_REQUIRED=0'
+          echo 'SQUASH_COMMIT_LANGUAGE=PT_BR'
+          echo 'SQUASH_COMMIT_SEMANTIC_SEAL=REQUIRED'
           echo 'FALLBACK_ENGINE=scripts/dependabot/resolve-conflicts.sh'
           echo 'DEPENDABOT_IS_SPECIALIZED_FALLBACK_NOT_SECOND_BRAIN=1'
