@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-09-05T12:28:41.601Z",
-  "updatedAtBR": "05/09/2026, 09:28:41 BRT",
+  "updatedAt": "2026-09-05T12:30:18.745Z",
+  "updatedAtBR": "05/09/2026, 09:30:18 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "🛡️ ci: alinhar Signal Watcher ao runner canônico",
+    "lastCommit": "🛡️ ci: alinhar PR Mother Pulse ao runner canônico",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-09-05T12:30:18.745Z",
+      "titulo": "Push na main · 77d324034d148509f1a8f93cb124107ca19feb40",
+      "detalhe": "🛡️ ci: alinhar PR Mother Pulse ao runner canônico",
+      "area": "Repositório",
+      "sha": "77d3240",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-09-05T12:28:41.601Z",
       "titulo": "Push na main · f832c58276a2592606b47947b800603fc7b6c94b",
       "detalhe": "🛡️ ci: alinhar Signal Watcher ao runner canônico",
@@ -988,14 +996,6 @@
       "detalhe": "aprendizado(#34): Sem TURN_CLASS não há gate entre ler e agir — a impressão ocupa o slot da medição",
       "area": "Repositório",
       "sha": "5900273",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-30T02:06:15.727Z",
-      "titulo": "Push na main · 64a90a90374cec049954af43d81d1b5323689f52",
-      "detalhe": "aprendizado(#33): Opinião usada como medição gera falso verde e ação destrutiva",
-      "area": "Repositório",
-      "sha": "64a90a9",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-09-05T12:30:18.745Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 77d324034d148509f1a8f93cb124107ca19feb40 (77d3240)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-09-05T12:28:41.601Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · f832c58276a2592606b47947b800603fc7b6c94b (f832c58)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-30T02:50:36.206Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 59002731fbaea133efd8dab4f2332ded6bd3f417 (5900273)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-30T02:06:15.727Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 64a90a90374cec049954af43d81d1b5323689f52 (64a90a9)",
       "area": "Repositório",
       "status": "sucesso"
     }
