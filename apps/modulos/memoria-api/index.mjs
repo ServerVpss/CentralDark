@@ -1,16 +1,20 @@
-// CentralDark — Memoria API
-// Servidor HTTP simples que expõe a memória viva (docs/)
-// pro Open WebUI consumir como Tool OpenAPI.
-// Rotas: GET /openapi.json, GET /listar, GET /ler, POST /buscar
+// CentralDark — Memória API
+// Servidor HTTP simples que expõe a memória viva (docs/) para consumidores autorizados.
+// Rotas: GET /openapi.json, GET /listar, GET /ler, POST /buscar, POST /ingest.
 // Whitelist absoluta em /root/CentralDark/docs/ — bloqueia path traversal.
+// /ingest recebe matéria como CANDIDATE; nunca escreve diretamente na main.
 
 import http from 'node:http';
-import { readFile, readdir, stat } from 'node:fs/promises';
+import { appendFile, mkdir, readFile, readdir, stat } from 'node:fs/promises';
+import { createHash, timingSafeEqual } from 'node:crypto';
 import path from 'node:path';
 
 const PORT = Number(process.env.PORT || 3101);
 const RAIZ = path.resolve('/root/CentralDark/docs');
-const MAX_BYTES = 200 * 1024; // 200KB máx por arquivo
+const INGEST_DIR = path.join(RAIZ, 'BRAIN', '09-INGESTAO');
+const MAX_BYTES = 200 * 1024; // 200 KB máx. por arquivo lido
+const MAX_INGEST_BYTES = 256 * 1024;
+const MAX_EVENT_TEXT = 64 * 1024;
 
 function jsonResp(res, code, body) {
   const s = JSON.stringify(body);
@@ -19,12 +23,14 @@ function jsonResp(res, code, body) {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Cache-Control': 'no-store',
+    'X-Content-Type-Options': 'nosniff',
     'Content-Length': Buffer.byteLength(s),
   });
   res.end(s);
 }
 
-// Whitelist: resolve o path e confirma que está DENTRO da raiz
+// Whitelist: resolve o path e confirma que está DENTRO da raiz.
 function pathSeguro(rel) {
   const abs = path.resolve(RAIZ, rel || '.');
   if (!abs.startsWith(RAIZ + path.sep) && abs !== RAIZ) {
@@ -82,7 +88,7 @@ async function buscar(query, maxResultados = 20) {
       const full = path.join(abs, it.name);
       if (it.isDirectory()) {
         await varrer(p);
-      } else if (it.name.match(/\.(md|txt|json)$/i)) {
+      } else if (it.name.match(/\.(md|txt|json|jsonl)$/i)) {
         try {
           const s = await stat(full);
           if (s.size > MAX_BYTES) continue;
@@ -103,14 +109,152 @@ async function buscar(query, maxResultados = 20) {
   return resultados;
 }
 
+function normalizarTexto(value, max = MAX_EVENT_TEXT) {
+  return String(value ?? '')
+    .normalize('NFC')
+    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '')
+    .slice(0, max)
+    .trim();
+}
+
+function normalizarIdentificador(value, fallback, max = 96) {
+  const v = String(value ?? '')
+    .normalize('NFC')
+    .replace(/[^\p{L}\p{N}._:/@+-]+/gu, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, max);
+  return v || fallback;
+}
+
+function sha256(value) {
+  return createHash('sha256').update(value).digest('hex');
+}
+
+function igualConstante(a, b) {
+  const aa = Buffer.from(String(a || ''));
+  const bb = Buffer.from(String(b || ''));
+  return aa.length === bb.length && timingSafeEqual(aa, bb);
+}
+
+function autorizarIngest(req) {
+  const expected = String(process.env.MEMORIA_INGEST_TOKEN || '').trim();
+  if (!expected) return { ok: false, reason: 'MEMORIA_INGEST_TOKEN_UNCONFIGURED' };
+  const header = String(req.headers.authorization || '');
+  const match = header.match(/^Bearer\s+(.+)$/i);
+  if (!match) return { ok: false, reason: 'BEARER_REQUIRED' };
+  return igualConstante(match[1].trim(), expected)
+    ? { ok: true }
+    : { ok: false, reason: 'BEARER_INVALID' };
+}
+
+async function lerJsonBody(req) {
+  const chunks = [];
+  let total = 0;
+  for await (const chunk of req) {
+    total += chunk.length;
+    if (total > MAX_INGEST_BYTES) throw new Error('payload_grande');
+    chunks.push(chunk);
+  }
+  const raw = Buffer.concat(chunks).toString('utf8');
+  try {
+    return { body: JSON.parse(raw || '{}'), raw };
+  } catch {
+    throw new Error('json_invalido');
+  }
+}
+
+function metadataSegura(metadata) {
+  if (!metadata || typeof metadata !== 'object' || Array.isArray(metadata)) return {};
+  const allowed = new Set([
+    'branch', 'head_sha', 'pr', 'event', 'provider', 'model', 'status',
+    'tags', 'source_ref', 'plugin_version', 'file_mtime', 'file_size',
+    'vault', 'workspace', 'runtime', 'component', 'owner',
+  ]);
+  const out = {};
+  for (const [key, value] of Object.entries(metadata)) {
+    if (!allowed.has(key)) continue;
+    if (Array.isArray(value)) {
+      out[key] = value.slice(0, 20).map((item) => normalizarTexto(item, 256));
+    } else if (value === null || ['string', 'number', 'boolean'].includes(typeof value)) {
+      out[key] = typeof value === 'string' ? normalizarTexto(value, 1024) : value;
+    }
+  }
+  return out;
+}
+
+function detectarCodificacaoSuspeita(text) {
+  return /\uFFFD|Ã.|Â.|â(?:€|€™|€œ|€|€“|€”)/u.test(String(text || ''));
+}
+
+async function ingerirEvento(body, raw) {
+  const source = normalizarIdentificador(body.source, 'unknown');
+  const kind = normalizarIdentificador(body.kind, 'material.ingest');
+  const title = normalizarTexto(body.title, 512);
+  const text = normalizarTexto(body.text ?? body.content, MAX_EVENT_TEXT);
+  const eventPath = normalizarTexto(body.path, 2048);
+  const url = normalizarTexto(body.url, 4096);
+  const intentGoal = normalizarTexto(body.intent_goal ?? body.intent, 2048);
+  const owner = normalizarTexto(body.owner, 512);
+  const provenance = normalizarTexto(body.provenance, 4096);
+  const rawChecksum = sha256(raw);
+  const observedAt = new Date().toISOString();
+  const stableBasis = JSON.stringify({ source, kind, title, text, path: eventPath, url, intentGoal, owner, provenance });
+  const contentChecksum = sha256(stableBasis);
+  const eventId = normalizarIdentificador(body.event_id, `evt-${contentChecksum.slice(0, 24)}`, 128);
+
+  const envelope = {
+    schema: 'centraldark.knowledge-event.v1',
+    event_id: eventId,
+    source,
+    kind,
+    observed_at: observedAt,
+    status: 'CANDIDATE',
+    canonical: false,
+    title: title || undefined,
+    text: text || undefined,
+    path: eventPath || undefined,
+    url: url || undefined,
+    intent_goal: intentGoal || undefined,
+    owner: owner || undefined,
+    provenance: provenance || undefined,
+    metadata: metadataSegura(body.metadata),
+    raw_checksum: rawChecksum,
+    content_checksum: contentChecksum,
+    encoding_suspect: detectarCodificacaoSuspeita(body.text ?? body.content ?? ''),
+    next_route: 'scripts/memory-linker -> knowledge-compiler -> existing owner -> one writer -> applicable main gate',
+  };
+
+  await mkdir(INGEST_DIR, { recursive: true });
+  const day = observedAt.slice(0, 10);
+  const file = path.join(INGEST_DIR, `${day}.jsonl`);
+  await appendFile(file, `${JSON.stringify(envelope)}\n`, { encoding: 'utf8', mode: 0o600 });
+
+  return {
+    accepted: true,
+    event_id: eventId,
+    status: 'CANDIDATE',
+    canonical: false,
+    raw_checksum: rawChecksum,
+    content_checksum: contentChecksum,
+    encoding_suspect: envelope.encoding_suspect,
+    receipt_path: path.relative(RAIZ, file).split(path.sep).join('/'),
+    next_route: envelope.next_route,
+  };
+}
+
 const OPENAPI = {
   openapi: '3.1.0',
   info: {
-    title: 'CentralDark Memoria API',
-    description: 'Acesso somente-leitura à memória viva (docs/) — regras, aprendizados, pendências, decisões.',
-    version: '1.0.0',
+    title: 'CentralDark Memória API',
+    description: 'Leitura da memória viva e ingestão autenticada de matéria candidata para o Hub único de conhecimento.',
+    version: '1.1.0',
   },
   servers: [{ url: 'https://api.centralldark.com/memoria' }],
+  components: {
+    securitySchemes: {
+      bearerAuth: { type: 'http', scheme: 'bearer' },
+    },
+  },
   paths: {
     '/listar': {
       get: {
@@ -139,6 +283,41 @@ const OPENAPI = {
         responses: { 200: { description: 'OK' } },
       },
     },
+    '/ingest': {
+      post: {
+        operationId: 'ingerirMaterial',
+        summary: 'Recebe evento/material como CANDIDATE no Hub de conhecimento; não promove diretamente para main',
+        security: [{ bearerAuth: [] }],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                required: ['source', 'kind'],
+                properties: {
+                  source: { type: 'string' },
+                  kind: { type: 'string' },
+                  title: { type: 'string' },
+                  text: { type: 'string' },
+                  path: { type: 'string' },
+                  url: { type: 'string' },
+                  intent_goal: { type: 'string' },
+                  owner: { type: 'string' },
+                  provenance: { type: 'string' },
+                  metadata: { type: 'object' },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          202: { description: 'Evento aceito como candidato' },
+          401: { description: 'Bearer ausente ou inválido' },
+          503: { description: 'Token de ingestão ainda não configurado no runtime' },
+        },
+      },
+    },
   },
 };
 
@@ -146,11 +325,21 @@ const server = http.createServer(async (req, res) => {
   try {
     if (req.method === 'OPTIONS') return jsonResp(res, 204, {});
     const url = new URL(req.url, `http://localhost:${PORT}`);
-    // remove prefixo /memoria (Caddy pode ou não repassar)
-    let rota = url.pathname.replace(/^\/memoria/, '') || '/';
+    // Remove prefixo /memoria (Caddy pode ou não repassar).
+    const rota = url.pathname.replace(/^\/memoria/, '') || '/';
 
     if (rota === '/openapi.json') return jsonResp(res, 200, OPENAPI);
-    if (rota === '/health' || rota === '/') return jsonResp(res, 200, { ok: true, raiz: RAIZ });
+    if (rota === '/health' || rota === '/') {
+      return jsonResp(res, 200, {
+        ok: true,
+        raiz: RAIZ,
+        ingest: {
+          enabled: Boolean(String(process.env.MEMORIA_INGEST_TOKEN || '').trim()),
+          route: '/ingest',
+          canonical_write: false,
+        },
+      });
+    }
 
     if (rota === '/listar' && req.method === 'GET') {
       const p = url.searchParams.get('path') || '';
@@ -160,30 +349,38 @@ const server = http.createServer(async (req, res) => {
 
     if (rota === '/ler' && req.method === 'GET') {
       const p = url.searchParams.get('path');
-      if (!p) return jsonResp(res, 400, { error: 'param path obrigatório' });
+      if (!p) return jsonResp(res, 400, { error: 'parâmetro path obrigatório' });
       const data = await lerArquivo(p);
       return jsonResp(res, 200, data);
     }
 
     if (rota === '/buscar' && req.method === 'POST') {
-      let raw = '';
-      req.on('data', (c) => (raw += c));
-      req.on('end', async () => {
-        try {
-          const body = JSON.parse(raw || '{}');
-          const r = await buscar(body.query, body.max || 20);
-          jsonResp(res, 200, { query: body.query, resultados: r });
-        } catch (e) {
-          jsonResp(res, 400, { error: String(e.message || e) });
-        }
-      });
-      return;
+      const { body } = await lerJsonBody(req);
+      const r = await buscar(body.query, body.max || 20);
+      return jsonResp(res, 200, { query: body.query, resultados: r });
+    }
+
+    if (rota === '/ingest' && req.method === 'POST') {
+      const auth = autorizarIngest(req);
+      if (!auth.ok) {
+        const code = auth.reason === 'MEMORIA_INGEST_TOKEN_UNCONFIGURED' ? 503 : 401;
+        return jsonResp(res, code, { error: auth.reason, canonical_write: false });
+      }
+      const { body, raw } = await lerJsonBody(req);
+      if (!body.source || !body.kind) {
+        return jsonResp(res, 400, { error: 'source e kind são obrigatórios' });
+      }
+      const receipt = await ingerirEvento(body, raw);
+      return jsonResp(res, 202, receipt);
     }
 
     return jsonResp(res, 404, { error: 'rota não encontrada', rota });
   } catch (e) {
     const msg = String(e.message || e);
-    const code = msg === 'path_bloqueado' ? 403 : 500;
+    const code = msg === 'path_bloqueado' ? 403
+      : msg === 'payload_grande' ? 413
+        : ['json_invalido', 'query_curta'].includes(msg) ? 400
+          : 500;
     return jsonResp(res, code, { error: msg });
   }
 });
