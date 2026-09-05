@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-09-05T11:58:57.940Z",
-  "updatedAtBR": "05/09/2026, 08:58:57 BRT",
+  "updatedAt": "2026-09-05T12:00:00.315Z",
+  "updatedAtBR": "05/09/2026, 09:00:00 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "📨 notify: propagar contexto RANDOLF e sessão no Hub central",
+    "lastCommit": "📨 gate: incluir contrato da Central de Notificações no mesmo HEAD",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-09-05T12:00:00.315Z",
+      "titulo": "Push na main · 41e8c658c3b6babf87c32ef6bc7b306d9972f3a6",
+      "detalhe": "📨 gate: incluir contrato da Central de Notificações no mesmo HEAD",
+      "area": "Repositório",
+      "sha": "41e8c65",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-09-05T11:58:57.940Z",
       "titulo": "Push na main · e37ee27af8ed853ef66284dd63456ba754797cdd",
       "detalhe": "📨 notify: propagar contexto RANDOLF e sessão no Hub central",
@@ -988,14 +996,6 @@
       "detalhe": "fix(claude): herdar core em todos os subagentes",
       "area": "Repositório",
       "sha": "717f6f0",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-29T17:14:29.314Z",
-      "titulo": "Push na main · 8c83b879b0ba3b42a6ceffa76563b80c1dffbfea",
-      "detalhe": "fix(agent-core): subordinar Claude e subagentes ao core canônico",
-      "area": "Repositório",
-      "sha": "8c83b87",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-09-05T12:00:00.315Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 41e8c658c3b6babf87c32ef6bc7b306d9972f3a6 (41e8c65)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-09-05T11:58:57.940Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · e37ee27af8ed853ef66284dd63456ba754797cdd (e37ee27)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-29T17:14:58.185Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 717f6f0da1c4adf5ab68101c917d9fa863a25314 (717f6f0)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-29T17:14:29.314Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 8c83b879b0ba3b42a6ceffa76563b80c1dffbfea (8c83b87)",
       "area": "Repositório",
       "status": "sucesso"
     }
