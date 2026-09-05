@@ -1,4 +1,5 @@
-const BRIDGE = "https://bridge.centralldark.com";
+const API = "https://api.centralldark.com";
+const LEGACY_BRIDGE = "https://bridge.centralldark.com";
 const DEFAULTS = {
   ativo: true,
   apiKey: "",
@@ -15,7 +16,6 @@ const status = (msg, tipo = "") => {
   el.className = "status " + tipo;
 };
 
-// Carregar config
 chrome.storage.local.get(DEFAULTS, (v) => {
   $("ativo").checked = v.ativo;
   $("apiKey").value = v.apiKey || "";
@@ -23,7 +23,6 @@ chrome.storage.local.get(DEFAULTS, (v) => {
   $("instrucoes").value = v.instrucoes || DEFAULTS.instrucoes;
 });
 
-// Salvar
 $("salvar").addEventListener("click", () => {
   const cfg = {
     ativo: $("ativo").checked,
@@ -35,42 +34,69 @@ $("salvar").addEventListener("click", () => {
   chrome.storage.local.set(cfg, () => status("✅ salvo", "ok"));
 });
 
-// Testar voz
+function headers(key) {
+  return {
+    "authorization": `Bearer ${key}`,
+    "x-arsenal-key": key,
+    "x-api-key": key,
+    "content-type": "application/json",
+    "x-centraldark-surface": "centraldark-voice-popup",
+  };
+}
+
+async function fetchSpeech(base, key, body) {
+  const response = await fetch(`${base}/v1/audio/speech`, {
+    method: "POST",
+    headers: headers(key),
+    body: JSON.stringify(body),
+  });
+  if (!response.ok) {
+    const detail = await response.text().catch(() => "");
+    throw new Error(`${response.status}: ${detail.slice(0, 100)}`);
+  }
+  return response.blob();
+}
+
 $("testar").addEventListener("click", async () => {
   const key = $("apiKey").value.trim();
-  if (!key) return status("⚠️ cola a chave primeiro", "erro");
-  status("⏳ gerando áudio...");
+  if (!key) return status("⚠️ configure a chave de entrada da Casa", "erro");
+
+  const body = {
+    model: DEFAULTS.modelo,
+    voice: $("voz").value,
+    input: "Opa Pivete! Teste de voz passando primeiro pela API oficial da CentralDark.",
+    response_format: "mp3",
+    instructions: $("instrucoes").value.trim() || DEFAULTS.instrucoes,
+  };
+
+  status("⏳ testando API oficial...");
+  let blob;
+  let route = "CENTRAL_API";
   try {
-    const r = await fetch(`${BRIDGE}/v1/audio/speech`, {
-      method: "POST",
-      headers: { "x-api-key": key, "content-type": "application/json" },
-      body: JSON.stringify({
-        model: DEFAULTS.modelo,
-        voice: $("voz").value,
-        input:
-          "Opa Pivete! Aqui é a voz " +
-          $("voz").value +
-          " em português brasileiro nativo, direto do bridge CentralDark.",
-        response_format: "mp3",
-        instructions: $("instrucoes").value.trim() || DEFAULTS.instrucoes,
-      }),
-    });
-    if (!r.ok) {
-      const t = await r.text().catch(() => "");
-      return status(`❌ ${r.status}: ${t.slice(0, 80)}`, "erro");
+    blob = await fetchSpeech(API, key, body);
+  } catch (primaryError) {
+    console.warn("[CentralDark Voice] 🧿 TTS_ROUTE_DRIFT", primaryError);
+    status("🟡 API falhou; testando bridge legado...");
+    route = "LEGACY_BRIDGE_FALLBACK";
+    try {
+      blob = await fetchSpeech(LEGACY_BRIDGE, key, body);
+    } catch (fallbackError) {
+      return status(`❌ TTS_ALL_ROUTES_FAILED: ${fallbackError.message}`, "erro");
     }
-    const blob = await r.blob();
-    const url = URL.createObjectURL(blob);
-    const audio = new Audio(url);
-    audio.addEventListener("ended", () => URL.revokeObjectURL(url));
+  }
+
+  const url = URL.createObjectURL(blob);
+  const audio = new Audio(url);
+  audio.addEventListener("ended", () => URL.revokeObjectURL(url));
+  try {
     await audio.play();
-    status("🎧 tocando", "ok");
-  } catch (e) {
-    status("❌ " + e.message, "erro");
+    status(route === "CENTRAL_API" ? "🎧 API oficial OK" : "🟡 bridge legado em uso", route === "CENTRAL_API" ? "ok" : "");
+  } catch (error) {
+    URL.revokeObjectURL(url);
+    status(`❌ reprodução falhou: ${error.message}`, "erro");
   }
 });
 
-// Toggle auto-save
 $("ativo").addEventListener("change", () => {
   chrome.storage.local.set({ ativo: $("ativo").checked }, () => {
     status($("ativo").checked ? "✅ ativado" : "⏸️ pausado", "ok");
