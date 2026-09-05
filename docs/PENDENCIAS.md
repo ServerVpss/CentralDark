@@ -17,6 +17,7 @@ Status: 🔴 alta · 🟡 média · 🟢 baixa · ✅ concluído
 3. Confirmar comigo pra eu editar o Caddyfile (regra: Caddy não muda sem OK).
 4. `curl -I https://centralldark.com` e `curl -I https://telepainel.centralldark.com/dashboard` devem retornar `200`.
 5. Atualizar este item pra ✅ com a data.
++ 6. Atualizar o Megapanel/SDK com a nova URL e redeploy do painel.
 
 Detalhes técnicos: `docs/INSTALADOR/13-centraldark-portal.md`.
 
