@@ -1,0 +1,46 @@
+{
+  "schema": "centraldark.workflow-reuse-registry.v1",
+  "policy": {
+    "reuse_before_create": true,
+    "same_runner_is_not_duplication": true,
+    "parallel_runners_allowed_when_logic_differs": true,
+    "exact_duplicate_job": "REUSE_CANDIDATE",
+    "repeated_step_block": "REUSE_CANDIDATE",
+    "unknown_is_not_pass": true,
+    "auto_refactor": false
+  },
+  "runner_pools": {
+    "SELF_HOSTED_LINUX": {
+      "labels": [
+        "self-hosted",
+        "Linux"
+      ],
+      "role": "shared_execution_pool",
+      "parallel_allowed": true
+    }
+  },
+  "reuse_order": [
+    "existing_script_or_action",
+    "existing_reusable_workflow",
+    "matrix_job",
+    "composite_action",
+    "reusable_workflow",
+    "new_code_last"
+  ],
+  "known_candidates": [
+    {
+      "id": "fork_guard",
+      "pattern": "Bloquear HEAD de fork no runner persistente",
+      "classification": "REUSE_CANDIDATE",
+      "observed_in": [
+        ".github/workflows/porta-de-entrada.yml",
+        ".github/workflows/codex-validate.yml",
+        ".github/workflows/pr-auto-review.yml",
+        ".github/workflows/lupa-conformance.yml",
+        ".github/workflows/lupa-drift-guard.yml"
+      ],
+      "owner": "UNRESOLVED",
+      "next": "measure exact semantic equivalence before extraction"
+    }
+  ]
+}
