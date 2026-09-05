@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-09-05T09:49:27.622Z",
-  "updatedAtBR": "05/09/2026, 06:49:27 BRT",
+  "updatedAt": "2026-09-05T09:52:41.233Z",
+  "updatedAtBR": "05/09/2026, 06:52:41 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "feat(desktop): medir Omni Router como saúde central",
+    "lastCommit": "feat(sol): projetar Omni Router e Casa E como estado único",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-09-05T09:52:41.233Z",
+      "titulo": "Push na main · 6b01b30fc6b1dab177fe4d2fb767daea302e63d5",
+      "detalhe": "feat(sol): projetar Omni Router e Casa E como estado único",
+      "area": "Repositório",
+      "sha": "6b01b30",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-09-05T09:49:27.622Z",
       "titulo": "Push na main · 846600543d9b9e9a7f71b4aa1a62c5f4bab67797",
       "detalhe": "feat(desktop): medir Omni Router como saúde central",
@@ -988,14 +996,6 @@
       "detalhe": "🧿 !CENTRALDARK — sessão contínua de delta útil (#1364)",
       "area": "Repositório",
       "sha": "8d5f88d",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-28T23:58:46.933Z",
-      "titulo": "Push na main · 74ee80cd8fa7573cd30c147f284dbb5b32d68351",
-      "detalhe": "🧠 CENTRALDARK — RECONCILIAR ARQUITETURA INTEIRA + SEGUNDO CÉREBRO LÓGICO (#1360)",
-      "area": "Repositório",
-      "sha": "74ee80c",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-09-05T09:52:41.233Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 6b01b30fc6b1dab177fe4d2fb767daea302e63d5 (6b01b30)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-09-05T09:49:27.622Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 846600543d9b9e9a7f71b4aa1a62c5f4bab67797 (8466005)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-29T06:45:04.618Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 8d5f88d2bf2d4d06c34b516708a05519dce5e7c3 (8d5f88d)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-28T23:58:46.933Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 74ee80cd8fa7573cd30c147f284dbb5b32d68351 (74ee80c)",
       "area": "Repositório",
       "status": "sucesso"
     }
