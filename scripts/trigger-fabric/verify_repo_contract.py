@@ -281,6 +281,21 @@ check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml',[
  'engine_is_owner: false','prompt_consumer: apps/modulos/HERMES-CORE/prompts/hermes-core.md','LOAD_REFERENCE',
  'SELF_HEALING_FAILURE_LOOP','ANY_PR_OR_COMMIT_GATE','CANONICAL_SELF_HOSTED_RUNNER_POLICY'
 ])
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml',[
+ 'UNIVERSAL_EVOLUTION_CARACOL',
+ 'ALL_CURRENT_SKILLS',
+ 'ALL_FUTURE_DISCOVERED_SKILLS',
+ 'CURRENT_ARCHITECTURE',
+ 'FUTURE_DISCOVERED_ARCHITECTURE',
+ 'automatic_for_discovered_capability: true',
+ 'future_skill_must_inherit_control_plane: true',
+ 'future_architecture_must_bind_existing_control_plane: true',
+ 'learning_never_discarded: true',
+ 'failed_candidate: REFUTED_MINERAL',
+ 'mode: FORWARD_REVERSE_UNTIL_FIXED_POINT',
+ 'no_infinite_retry_without_information_gain: true',
+ 'gate: ANY_PR_OR_COMMIT_GATE',
+], classification='UNIVERSAL_EVOLUTION_CARACOL_CONTRACT')
 check('apps/modulos/HERMES-CORE/prompts/hermes-core.md',[
  'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml','OUTPUT_GUARD','LAST_GOOD_STATE','WORKING/FORJA != PASS',
  'Self-healing operacional universal','SAME_FAILURE_REUSES_CRYSTAL=true','GITHUB_HOSTED_RUNNER_ALLOWED=false'
@@ -391,6 +406,7 @@ print('OUTPUT_GUARD_CONTRACT=PASS')
 print('WORKFLOW_REUSE_CONTRACT=PASS')
 print('CANONICAL_RUNNER_POLICY=PASS')
 print('SELF_HEALING_CONTRACT=PASS')
+print('UNIVERSAL_EVOLUTION_CARACOL_CONTRACT=PASS')
 print('OPERATIONAL_RULE_LEARNING_CONTRACT=PASS')
 print('CANONICAL_HANDOFF_POMBO_CHECKSUM=PASS')
 print('POMBO_CHECKSUM_HANDOFF_CONTRACT=PASS')
