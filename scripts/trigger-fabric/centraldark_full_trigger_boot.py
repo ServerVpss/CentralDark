@@ -5,6 +5,11 @@ Sem dependencias externas. O loader le os owners canonicos existentes,
 normaliza comandos humanos e produz um plano deterministico. O subcomando
 `seal`/`reopen-check` implementa a chave estavel claim+owner.
 
+Tambem classifica feedback realtime da missao sem converter feedback em
+autoridade ou permissao de mutacao. O feedback material e roteado para o
+Persistent Gap Sweep do MEGAZORD; sinal repetido sem ganho de informacao
+reutiliza prova/cristal em vez de recomeçar raciocinio.
+
 Nao executa mutacao de negocio, merge, deploy ou runtime. Ele resolve o fluxo,
 protege claims e devolve JSON para o consumidor real do motor.
 """
@@ -21,6 +26,7 @@ FABRIC = Path("docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC")
 TRIGGERS = FABRIC / "TRIGGERS.yml"
 MASTER = FABRIC / "MASTER-CYCLE.yml"
 ENGINE = FABRIC / "ENGINE_BINDING.yml"
+MEGAZORD = FABRIC / "MEGAZORD-CENTRALDARK.yml"
 LOCK_CONTRACT = FABRIC / "PROVEN-DETERMINISTIC-LOCK.yml"
 DEFAULT_REGISTRY = FABRIC / "PROVEN-CLAIMS.lock.json"
 
@@ -58,9 +64,28 @@ def explicit_command_context(value: str) -> bool:
     return normalized in known
 
 
+def classify_realtime_feedback(value: str) -> dict:
+    """Classifica entrada humana/live como sinal da missao, sem conceder escrita."""
+    active = bool(value.strip())
+    return {
+        "active": active,
+        "kind": "REALTIME_FEEDBACK_SIGNAL" if active else "EMPTY",
+        "route_to": "PERSISTENT_GAP_SWEEP" if active else "NONE",
+        "user_repetition_required": False,
+        "feedback_is_authority": False,
+        "feedback_is_mutation_permission": False,
+        "command_and_feedback_are_independent": True,
+        "reopen_scope": "AFFECTED_CONE_ONLY",
+        "no_information_gain": "REUSE_PROOF_OR_DROP_DUPLICATE",
+        "repeated_failure_same_signature": "REUSE_CRYSTAL_NOT_RETHINK",
+        "learning_outputs": ["REFUTED_MINERAL", "UNRESOLVED_MINERAL", "CRYSTAL_GOLD"],
+        "next_cursor_required": True,
+    }
+
+
 def require_files(repo: Path) -> dict[str, str]:
     result = {}
-    for rel in (TRIGGERS, MASTER, ENGINE, LOCK_CONTRACT):
+    for rel in (TRIGGERS, MASTER, ENGINE, MEGAZORD, LOCK_CONTRACT):
         p = repo / rel
         if not p.exists():
             raise SystemExit(f"MISSING_CANONICAL_OWNER={rel.as_posix()}")
@@ -118,6 +143,7 @@ def cmd_boot(args: argparse.Namespace) -> int:
         "canonical_chain": CANONICAL_CHAIN,
         "discovered": registry,
         "source_sha256": source_hashes,
+        "feedback": classify_realtime_feedback(args.input),
         "rules": {
             "case_insensitive": True,
             "bang_hash_equivalent_at_command_entry": True,
@@ -126,10 +152,24 @@ def cmd_boot(args: argparse.Namespace) -> int:
             "no_new_information": "REUSE_PROOF",
             "failed_candidate": "REFUTED_MINERAL",
             "one_writer_per_scope": True,
+            "realtime_feedback_persistent_per_mission": True,
+            "realtime_feedback_user_repetition_required": False,
         },
     }
     print(json.dumps(result, indent=2, ensure_ascii=False))
     return 0 if active else 4
+
+
+def cmd_feedback(args: argparse.Namespace) -> int:
+    repo = Path(args.repo).resolve()
+    source_hashes = require_files(repo)
+    result = {
+        "schema": "centraldark.realtime-feedback.v1",
+        "source_sha256": source_hashes,
+        "feedback": classify_realtime_feedback(args.input),
+    }
+    print(json.dumps(result, indent=2, ensure_ascii=False))
+    return 0 if result["feedback"]["active"] else 4
 
 
 def cmd_seal(args: argparse.Namespace) -> int:
@@ -197,6 +237,11 @@ def build_parser() -> argparse.ArgumentParser:
     b.add_argument("--repo", default=".")
     b.add_argument("--input", required=True)
     b.set_defaults(func=cmd_boot)
+
+    f = sub.add_parser("feedback")
+    f.add_argument("--repo", default=".")
+    f.add_argument("--input", required=True)
+    f.set_defaults(func=cmd_feedback)
 
     s = sub.add_parser("seal")
     s.add_argument("--repo", default=".")
