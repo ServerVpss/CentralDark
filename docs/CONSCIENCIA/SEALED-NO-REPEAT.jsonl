@@ -1,0 +1,5 @@
+{"claim_key": "BASE_PACKAGE::BYTE_IDENTITY", "state": "SEALED", "evidence_ref": "BASE-SELADA/CENTRALDARK-PACOTAO-OURO-20260905-r01.zip", "sha256": "3fb9cd2bf7eff428a36ef488e0aa8795d45142553e97088cad3d97434506af51", "reopen_only_with": "HASH_MISMATCH_OR_NEW_CAUSAL_EVIDENCE"}
+{"claim_key": "HERMES_CORE::SOURCE_EXISTS", "state": "SEALED_REUSE", "evidence_ref": "r01/evidence/SESSION-CLAIMS.jsonl", "reopen_only_with": "REOPEN_CAUSE_REF"}
+{"claim_key": "OMNI_ROUTER::SOURCE_EXISTS", "state": "SEALED_REUSE", "evidence_ref": "r01/evidence/SESSION-CLAIMS.jsonl", "reopen_only_with": "REOPEN_CAUSE_REF"}
+{"claim_key": "ZENDRIVE::PRESERVE_ROLE", "state": "SEALED_REUSE", "evidence_ref": "r01/evidence/SESSION-CLAIMS.jsonl", "reopen_only_with": "REOPEN_CAUSE_REF"}
+{"claim_key": "POMBO_HANDOFF::CANONICAL_CONTRACT_EXISTS", "state": "SEALED_REUSE", "evidence_ref": "docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md", "reopen_only_with": "CANONICAL_OWNER_CHANGED"}

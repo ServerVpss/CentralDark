@@ -1,0 +1,15 @@
+{
+  "schema": "centraldark-pombo-lineage-v1",
+  "POMBO_ID": "20260905",
+  "REVISION": 2,
+  "PARENT_REVISION": 1,
+  "parent_designation": "r01_legacy_seed",
+  "parent_package_sha256": "3fb9cd2bf7eff428a36ef488e0aa8795d45142553e97088cad3d97434506af51",
+  "parent_bytes_preserved": true,
+  "identity_policy": "POMBO_ID_IMMUTABLE_REVISION_MONOTONIC",
+  "canonical_owner": "docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md",
+  "canonical_repo_gate": "scripts/trigger-fabric/verify_repo_contract.py",
+  "current_zip_checksum_location": "external POMBO64 envelope to avoid self-reference",
+  "open_runtime_gaps_count": 6,
+  "sealed_reused_claims_count": 5
+}
