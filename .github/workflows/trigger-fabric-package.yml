@@ -19,6 +19,9 @@ on:
       - 'docs/NOTIFY/**'
       - 'src/lib/notifications-events.ts'
       - 'supabase/functions/_shared/notifications-events.ts'
+      - 'apps/modulos/elite-gateway/test-local/zendrive_gateway_bridge.py'
+      - 'apps/modulos/elite-gateway/test-local/run_zendrive_segredo.ps1'
+      - 'apps/modulos/memoria-api/**'
       - 'apps/modulos/obsidian-plugin-grafo-vivo/**'
       - '.agents/skills/meta-lupa/**'
       - '.agents/skills/distinct-engineering-compiler/**'
@@ -45,6 +48,9 @@ on:
       - 'docs/NOTIFY/**'
       - 'src/lib/notifications-events.ts'
       - 'supabase/functions/_shared/notifications-events.ts'
+      - 'apps/modulos/elite-gateway/test-local/zendrive_gateway_bridge.py'
+      - 'apps/modulos/elite-gateway/test-local/run_zendrive_segredo.ps1'
+      - 'apps/modulos/memoria-api/**'
       - 'apps/modulos/obsidian-plugin-grafo-vivo/**'
       - 'apps/modulos/HERMES-CORE/**'
       - 'apps/modulos/fixed-point-fabric/**'
@@ -143,6 +149,24 @@ jobs:
           echo 'SESSION_REENTRY_GUARD=PASS'
           echo 'ARTIFACT_PROPERTIES=PASS'
           echo 'HERMES_GRAPHRAG_MASTER_CYCLE=PASS'
+
+      - name: 🔌 Provar conexões Zendrive → Master Cycle → RANDOLF/Hub
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile apps/modulos/elite-gateway/test-local/zendrive_gateway_bridge.py
+          python3 apps/modulos/elite-gateway/test-local/zendrive_gateway_bridge.py --self-test \
+            | tee "$RUNNER_TEMP/zendrive-handoff-self-test.txt"
+          grep -q '"ok": true' "$RUNNER_TEMP/zendrive-handoff-self-test.txt"
+          node --check apps/modulos/memoria-api/index.mjs
+          grep -q 'context_preserved: true' apps/modulos/memoria-api/index.mjs
+          grep -q 'session_id' apps/modulos/memoria-api/index.mjs
+          grep -q 'profile_id' apps/modulos/memoria-api/index.mjs
+          grep -q 'next_cursor' apps/modulos/memoria-api/index.mjs
+          grep -q 'zendrive_gateway_bridge.py' apps/modulos/elite-gateway/test-local/run_zendrive_segredo.ps1
+          echo 'ZENDRIVE_MASTER_CYCLE_BINDING=PASS'
+          echo 'RANDOLF_HUB_CONTEXT_BINDING=PASS'
+          echo 'LAUNCHER_HANDOFF_BINDING=PASS'
 
       - name: "🧠 Verificar gatilho → aprendizado no mesmo diff"
         if: github.event_name == 'pull_request'

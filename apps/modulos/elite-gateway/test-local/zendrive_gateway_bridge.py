@@ -1,13 +1,9 @@
 #!/usr/bin/env python3
 """CentralDark Zendrive handoff.
 
-Reutiliza o resolver canônico e os owners existentes. O bridge não cria outro
-router, Hub ou sistema de notificação: ele transforma o dump local em receipt,
-passa pelo ``centraldark_master_cycle.py``, publica matéria CANDIDATE no Hub de
-conhecimento e projeta o mesmo contexto na Central de Notificações quando o
-runtime tem as credenciais necessárias.
-
-UNKNOWN != PASS: ausência de token/endpoint nunca vira verde.
+Uma rota real, sem resolver paralelo:
+Zendrive → centraldark_master_cycle.py → contexto RANDOLF → Hub CANDIDATE
+→ Central de Notificações. UNKNOWN != PASS.
 """
 
 import argparse
@@ -17,14 +13,13 @@ import os
 import subprocess
 import sys
 from pathlib import Path
-
-import requests
+from urllib.error import HTTPError, URLError
+from urllib.request import Request, urlopen
 
 BASE_DIR = Path(__file__).resolve().parent
 REPO_ROOT = Path(__file__).resolve().parents[4]
 LOGS_DIR = BASE_DIR / "logs"
 MASTER_CYCLE = REPO_ROOT / "scripts" / "trigger-fabric" / "centraldark_master_cycle.py"
-
 CANONICAL_PROFILE_ID = "ORQUESTRACAO_SOL"
 CANONICAL_PROFILE_DISPLAY = "😎 Orquestração SOL 🌞"
 DEFAULT_HUB_URL = "https://api.centralldark.com/memoria/ingest"
@@ -32,11 +27,11 @@ DEFAULT_HUB_URL = "https://api.centralldark.com/memoria/ingest"
 
 def load_dump(filename="last_messages.json"):
     path = LOGS_DIR / filename
-    if path.exists():
-        with path.open("r", encoding="utf-8") as handle:
-            payload = json.load(handle)
-        return payload if isinstance(payload, list) else []
-    return []
+    if not path.exists():
+        return []
+    with path.open("r", encoding="utf-8") as handle:
+        payload = json.load(handle)
+    return payload if isinstance(payload, list) else []
 
 
 def get_last_message(dump, role):
@@ -60,55 +55,49 @@ def current_head_sha():
         return None
 
 
+def post_json(url, payload, headers, timeout=20):
+    data = json.dumps(payload, ensure_ascii=False).encode("utf-8")
+    request = Request(url, data=data, headers=headers, method="POST")
+    try:
+        with urlopen(request, timeout=timeout) as response:
+            raw = response.read().decode("utf-8", errors="replace")
+            status = int(response.status)
+    except HTTPError as exc:
+        raw = exc.read().decode("utf-8", errors="replace")
+        status = int(exc.code)
+    except (URLError, TimeoutError, OSError) as exc:
+        return {"transport_ok": False, "status": None, "body": None, "error": str(exc)}
+    try:
+        body = json.loads(raw or "{}")
+    except ValueError:
+        body = {"raw": raw[:2048]}
+    return {"transport_ok": True, "status": status, "body": body, "error": None}
+
+
 def resolve_master_cycle(trigger_text, input_mode, source_surface, session_id):
     if not MASTER_CYCLE.exists():
-        return {
-            "status": "QUEBRADO",
-            "reason": "MASTER_CYCLE_ABSENT",
-            "receipt": None,
-        }
-
+        return {"status": "QUEBRADO", "reason": "MASTER_CYCLE_ABSENT", "receipt": None}
     command = [
-        sys.executable,
-        str(MASTER_CYCLE),
-        "--text",
-        trigger_text or "",
+        sys.executable, str(MASTER_CYCLE),
+        "--text", trigger_text or "",
         "--chefe-source",
-        "--input-mode",
-        input_mode,
-        "--source-surface",
-        source_surface,
-        "--profile-id",
-        CANONICAL_PROFILE_ID,
-        "--profile-display",
-        CANONICAL_PROFILE_DISPLAY,
+        "--input-mode", input_mode,
+        "--source-surface", source_surface,
+        "--profile-id", CANONICAL_PROFILE_ID,
+        "--profile-display", CANONICAL_PROFILE_DISPLAY,
     ]
     if session_id:
         command.extend(["--session-id", session_id])
-
     try:
-        proc = subprocess.run(
-            command,
-            check=False,
-            capture_output=True,
-            text=True,
-            timeout=30,
-        )
+        proc = subprocess.run(command, check=False, capture_output=True, text=True, timeout=30)
     except (OSError, subprocess.SubprocessError) as exc:
         return {"status": "QUEBRADO", "reason": f"MASTER_CYCLE_EXEC_ERROR:{exc}", "receipt": None}
-
     if proc.returncode != 0:
-        return {
-            "status": "QUEBRADO",
-            "reason": f"MASTER_CYCLE_EXIT_{proc.returncode}",
-            "receipt": None,
-        }
-
+        return {"status": "QUEBRADO", "reason": f"MASTER_CYCLE_EXIT_{proc.returncode}", "receipt": None}
     try:
         receipt = json.loads(proc.stdout)
     except json.JSONDecodeError:
         return {"status": "QUEBRADO", "reason": "MASTER_CYCLE_INVALID_JSON", "receipt": None}
-
     active = bool(receipt.get("master_cycle_active"))
     return {
         "status": "PROVADO" if active else "EVIDENCIA_FALTANTE",
@@ -182,30 +171,19 @@ def publish_hub(event):
     token = os.getenv("MEMORIA_INGEST_TOKEN", "").strip()
     url = os.getenv("CENTRALDARK_KNOWLEDGE_HUB_URL", DEFAULT_HUB_URL).strip()
     if not token or not url:
-        return {
-            "status": "EVIDENCIA_FALTANTE",
-            "reason": "HUB_TOKEN_OR_URL_UNCONFIGURED",
-            "receipt": None,
-        }
-    try:
-        response = requests.post(
-            url,
-            headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"},
-            json=event,
-            timeout=20,
-        )
-    except requests.RequestException as exc:
-        return {"status": "QUEBRADO", "reason": f"HUB_REQUEST_ERROR:{exc}", "receipt": None}
-
-    try:
-        body = response.json()
-    except ValueError:
-        body = {"http_status": response.status_code}
-
-    ok = response.status_code == 202 and bool(body.get("accepted"))
+        return {"status": "EVIDENCIA_FALTANTE", "reason": "HUB_TOKEN_OR_URL_UNCONFIGURED", "receipt": None}
+    result = post_json(
+        url,
+        event,
+        {"Authorization": f"Bearer {token}", "Content-Type": "application/json"},
+    )
+    if not result["transport_ok"]:
+        return {"status": "QUEBRADO", "reason": f"HUB_REQUEST_ERROR:{result['error']}", "receipt": None}
+    body = result["body"] or {}
+    ok = result["status"] == 202 and bool(body.get("accepted"))
     return {
         "status": "PROVADO" if ok else "QUEBRADO",
-        "reason": None if ok else f"HUB_HTTP_{response.status_code}",
+        "reason": None if ok else f"HUB_HTTP_{result['status']}",
         "receipt": body,
     }
 
@@ -214,11 +192,7 @@ def project_notification(context, hub_result):
     base = os.getenv("HUB_SUPABASE_URL", "").strip().rstrip("/")
     anon = os.getenv("HUB_SUPABASE_ANON_KEY", "").strip()
     if not base or not anon:
-        return {
-            "status": "EVIDENCIA_FALTANTE",
-            "reason": "NOTIFICATION_RUNTIME_ENV_UNCONFIGURED",
-        }
-
+        return {"status": "EVIDENCIA_FALTANTE", "reason": "NOTIFICATION_RUNTIME_ENV_UNCONFIGURED"}
     hub_receipt = hub_result.get("receipt") or {}
     payload = {
         **context,
@@ -228,41 +202,27 @@ def project_notification(context, hub_result):
         "acao": "SESSION_HANDOFF",
         "ia": "SOL/HERMES",
     }
-    request_body = {
-        "event_key": "centraldark.session.handoff",
-        "severity": "sucesso" if hub_result.get("status") == "PROVADO" else "aviso",
-        "title": "SOL · sessão encaminhada pelo Hub",
-        "body": "Zendrive → Master Cycle → RANDOLF/Hub → Central de Notificações",
-        "payload": payload,
-        "group_key": f"centraldark-session-{context.get('session_id') or 'unknown'}",
-        "debounce_seconds": 30,
-    }
-
-    try:
-        response = requests.post(
-            f"{base}/functions/v1/notify-event",
-            headers={
-                "Authorization": f"Bearer {anon}",
-                "apikey": anon,
-                "Content-Type": "application/json",
-            },
-            json=request_body,
-            timeout=20,
-        )
-    except requests.RequestException as exc:
-        return {"status": "QUEBRADO", "reason": f"NOTIFICATION_REQUEST_ERROR:{exc}"}
-
-    return {
-        "status": "PROVADO" if response.ok else "QUEBRADO",
-        "reason": None if response.ok else f"NOTIFICATION_HTTP_{response.status_code}",
-    }
+    result = post_json(
+        f"{base}/functions/v1/notify-event",
+        {
+            "event_key": "centraldark.session.handoff",
+            "severity": "sucesso" if hub_result.get("status") == "PROVADO" else "aviso",
+            "title": "SOL · sessão encaminhada pelo Hub",
+            "body": "Zendrive → Master Cycle → RANDOLF/Hub → Central de Notificações",
+            "payload": payload,
+            "group_key": f"centraldark-session-{context.get('session_id') or 'unknown'}",
+            "debounce_seconds": 30,
+        },
+        {"Authorization": f"Bearer {anon}", "apikey": anon, "Content-Type": "application/json"},
+    )
+    if not result["transport_ok"]:
+        return {"status": "QUEBRADO", "reason": f"NOTIFICATION_REQUEST_ERROR:{result['error']}"}
+    ok = result["status"] is not None and 200 <= result["status"] < 300
+    return {"status": "PROVADO" if ok else "QUEBRADO", "reason": None if ok else f"NOTIFICATION_HTTP_{result['status']}"}
 
 
 def self_test():
-    dump = [
-        {"role": "user", "text": "!CENTRALDARK"},
-        {"role": "assistant", "text": "ok"},
-    ]
+    dump = [{"role": "user", "text": "!CENTRALDARK"}, {"role": "assistant", "text": "ok"}]
     fake_master = {
         "status": "PROVADO",
         "receipt": {
@@ -285,6 +245,7 @@ def self_test():
         "session_preserved": event.get("session_id") == "test-session",
         "next_cursor_preserved": event.get("next_cursor") == "ACORDAR",
         "owner_is_existing_bridge": event.get("owner", "").endswith("zendrive_gateway_bridge.py"),
+        "network_not_required_for_self_test": True,
     }
     return {"ok": all(checks.values()), "checks": checks}
 
@@ -292,19 +253,16 @@ def self_test():
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--self-test", action="store_true")
-    parser.add_argument("--no-publish", action="store_true", help="Gera receipt sem publicar Hub/notificações.")
+    parser.add_argument("--no-publish", action="store_true")
     args = parser.parse_args()
-
     if args.self_test:
         print(json.dumps(self_test(), ensure_ascii=False, indent=2))
         return 0
 
-    print("=== Zendrive → CentralDark · handoff vivo ===")
     dump = load_dump("reconciled_both.json") or load_dump("last_messages.json")
     if not dump:
         print(json.dumps({"status": "QUEBRADO", "reason": "DUMP_ABSENT"}, ensure_ascii=False))
         return 1
-
     assistant_text = get_last_message(dump, "assistant")
     trigger_text = get_last_message(dump, "user") or os.getenv("CENTRALDARK_TRIGGER_TEXT", "")
     if not assistant_text:
@@ -320,7 +278,6 @@ def main():
     master_result = resolve_master_cycle(trigger_text, input_mode, source_surface, session_id)
     context = build_context(master_result, session_id, source_surface, trigger_text)
     event = build_knowledge_event(assistant_text, context)
-
     if args.no_publish:
         hub_result = {"status": "EVIDENCIA_FALTANTE", "reason": "PUBLISH_DISABLED", "receipt": None}
         notification_result = {"status": "EVIDENCIA_FALTANTE", "reason": "PUBLISH_DISABLED"}
@@ -328,12 +285,6 @@ def main():
         hub_result = publish_hub(event)
         notification_result = project_notification(context, hub_result)
 
-    openai_response = {
-        "id": event["event_id"],
-        "object": "chat.completion",
-        "model": "zendrive/contra",
-        "choices": [{"message": {"role": "assistant", "content": assistant_text}}],
-    }
     receipt = {
         "schema": "centraldark.zendrive-handoff.v1",
         "master_cycle": master_result,
@@ -341,7 +292,12 @@ def main():
         "knowledge_event": {k: v for k, v in event.items() if k != "text"},
         "hub": hub_result,
         "notification": notification_result,
-        "gateway_response": openai_response,
+        "gateway_response": {
+            "id": event["event_id"],
+            "object": "chat.completion",
+            "model": "zendrive/contra",
+            "choices": [{"message": {"role": "assistant", "content": assistant_text}}],
+        },
         "all_points_connected": (
             master_result.get("status") == "PROVADO"
             and hub_result.get("status") == "PROVADO"
