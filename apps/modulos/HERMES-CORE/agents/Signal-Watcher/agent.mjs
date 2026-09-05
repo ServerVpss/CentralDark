@@ -47,6 +47,7 @@ export function classifyExternalSignal(raw = {}) {
 
   const isForwarded = /(^|\s)(fwd:|fw:|enc:|mensagem encaminhada)/i.test(`${event.subject}\n${event.body}`);
   const isDependabot = /dependabot/.test(hay);
+  const isZendrive = /zendrive/.test(hay);
   const isAios = /(synkraai|synkra|skynkra|aiox(?:-core)?)/.test(hay);
   const hasSyntaxSignal = /(syntaxerror|does not parse|node --check|parse error|non-async|await inside)/.test(hay);
   const hasSilentFallback = /(fallback|degrad(?:e|ed|a)|silently|silencios|try\/catch|try\s*\{|lazy require|require\(|dynamic import)/.test(hay);
@@ -58,6 +59,13 @@ export function classifyExternalSignal(raw = {}) {
     state: 'OBSERVED',
     summary: 'Mensagem encaminhada detectada; classificar pelo conteúdo encapsulado, não só pelo remetente externo.',
     next: 'PRESERVE_PROVENANCE_AND_CLASSIFY_BODY',
+  });
+
+  if (isZendrive) findings.push({
+    id: 'ZENDRIVE_CODE_REVIEW',
+    state: 'CANDIDATE',
+    summary: 'Revisão Zendrive/ChatGPT observada. É finding consultivo: Hermes deve reproduzir, testar e contraprovar antes de qualquer promoção.',
+    next: 'HERMES_REPRODUCE_TEST_AND_COUNTERPROVE',
   });
 
   if (isAios && hasFix) findings.push({
@@ -109,6 +117,10 @@ export function classifyExternalSignal(raw = {}) {
       'SOURCE_IS_PROVENANCE_NOT_AUTHORITY',
       'UNKNOWN_IS_NOT_PASS',
       'DOCUMENTED_IS_NOT_EXECUTED',
+      'REVIEW_IS_NOT_PROOF',
+      'ZENDRIVE_REVIEWS_ONLY',
+      'HERMES_PROVES_AND_TESTS',
+      'NEVER_DISCARD_LEARNING',
       'ONE_SYSTEM_ONLY',
       'ONE_WRITER_PER_SCOPE',
       'NO_DIRECT_MAIN_WRITE',
@@ -231,7 +243,8 @@ export function renderGamifiedCard(result) {
     result.subject ? `✉️ ${clean(result.subject, 180)}` : null,
     Number.isFinite(result.files_scanned) ? `🧩 FILES=${result.files_scanned} NODE_CHECK_FAIL=${result.node_check_failed} FALLBACK_CANDIDATES=${result.silent_fallback_candidates}` : null,
     ...rows,
-    '🧠 CANDIDATE != PROVEN',
+    '🧠 CANDIDATE != PROVEN · REFUTED != LIXO',
+    '💎 falha útil -> REFUTED_MINERAL -> memória -> nova evidência pode reabrir',
     '🔒 UNKNOWN != PASS · DOCUMENTED != EXECUTED',
   ].filter(Boolean).join('\n');
 }

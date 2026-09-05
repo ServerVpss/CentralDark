@@ -1,0 +1,99 @@
+{
+  "schema": "centraldark.workflow-reuse-registry.v2",
+  "policy": {
+    "reuse_before_create": true,
+    "same_runner_is_not_duplication": true,
+    "parallel_runners_allowed_when_logic_differs": true,
+    "exact_duplicate_job": "REUSE_CANDIDATE",
+    "repeated_step_block": "REUSE_CANDIDATE",
+    "unknown_is_not_pass": true,
+    "auto_refactor": false,
+    "learning_never_discarded": true,
+    "failed_candidate": "REFUTED_MINERAL",
+    "unresolved_candidate": "UNRESOLVED_MINERAL",
+    "proven_improvement": "CRYSTAL_GOLD",
+    "same_failure_no_new_information": "REUSE_CRYSTAL_NOT_RETHINK",
+    "no_infinite_retry_without_information_gain": true
+  },
+  "persistent_engine_binding": {
+    "role": "ZORD_WORKFLOW_DEDUPE",
+    "megazord_owner": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MEGAZORD-CENTRALDARK.yml#persistent_gap_sweep",
+    "engine_owner": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml#self_healing_binding",
+    "radar_script": "scripts/ci/workflow_dedupe_radar.py",
+    "radar_workflow": ".github/workflows/workflow-dedupe-radar.yml",
+    "activation": "WITH_MEGAZORD",
+    "persistent_per_mission": true,
+    "user_repetition_required": false,
+    "scan_surfaces": [
+      "WORKFLOW",
+      "JOB",
+      "RUNNER",
+      "REUSABLE_WORKFLOW",
+      "COMPOSITE_ACTION",
+      "HELPER_SCRIPT",
+      "CI_FAILURE",
+      "OPEN_RESIDUAL"
+    ],
+    "process": [
+      "MEASURE_CURRENT_STATE",
+      "RUN_DEDUPE_RADAR",
+      "CLASSIFY_UNIQUE_REUSE_OR_INTENTIONAL_PARALLEL",
+      "SEARCH_EXISTING_OWNER",
+      "REUSE_BEFORE_CREATE",
+      "EXECUTE_MINIMAL_SAFE_REMEDIATION_WHEN_AUTHORIZED",
+      "RETEST",
+      "COUNTERPROOF",
+      "REMEASURE_EXACT_HEAD",
+      "CRYSTALLIZE_LEARNING",
+      "WRITE_RECEIPT",
+      "CONTINUE_NEXT_CURSOR"
+    ],
+    "autonomous_remediation": "MINIMAL_SAFE_EXISTING_OWNER_ONLY",
+    "mutation_requires_single_writer": true,
+    "parallel_read_only_fronts_allowed": true,
+    "exact_head_remeasurement_required": true,
+    "already_proven_without_reopen_cause": "REUSE_PROOF",
+    "same_signal_without_new_information": "DROP_DUPLICATE",
+    "stop_conditions": [
+      "FIXED_POINT",
+      "HUMAN_FRONTIER",
+      "BLOCKED_WITH_EXPLICIT_CAUSE",
+      "NO_NEW_INFORMATION"
+    ],
+    "one_shot_mode": false
+  },
+  "runner_pools": {
+    "SELF_HOSTED_LINUX": {
+      "labels": [
+        "self-hosted",
+        "Linux"
+      ],
+      "role": "shared_execution_pool",
+      "parallel_allowed": true
+    }
+  },
+  "reuse_order": [
+    "existing_script_or_action",
+    "existing_reusable_workflow",
+    "matrix_job",
+    "composite_action",
+    "reusable_workflow",
+    "new_code_last"
+  ],
+  "known_candidates": [
+    {
+      "id": "fork_guard",
+      "pattern": "Bloquear HEAD de fork no runner persistente",
+      "classification": "REUSE_CANDIDATE",
+      "observed_in": [
+        ".github/workflows/porta-de-entrada.yml",
+        ".github/workflows/codex-validate.yml",
+        ".github/workflows/pr-auto-review.yml",
+        ".github/workflows/lupa-conformance.yml",
+        ".github/workflows/lupa-drift-guard.yml"
+      ],
+      "owner": "UNRESOLVED",
+      "next": "measure exact semantic equivalence before extraction"
+    }
+  ]
+}

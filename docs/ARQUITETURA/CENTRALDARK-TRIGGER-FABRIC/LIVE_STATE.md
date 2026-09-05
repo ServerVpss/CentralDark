@@ -2,70 +2,87 @@
 
 Last remeasured `main`:
 
-`bc916c2aa7ecdc5f31dc0f703de0dfa86aae6ba2`
+`72a0cbbc269a80ca1fcf086007c5aa1999fde91a`
 
 Observation time:
 
-`2026-08-24T21:00:00Z` / `24/08/2026 18:00:00 BRT`
+`2026-09-05T07:58:07Z`
 
-## Session delta closed on main (this rodada)
+## Reconciliação viva desta rodada
 
-| PR | Título | Status |
-|----|--------|--------|
-| #1131 | Camisa de força operacional na Trigger Fabric | MERGED |
-| #1132 | Writer-safe-push (fim BLOCKED_DIVERGENCE cego) | MERGED |
-| #1133 | Fast path autonomia (não espera runner auxiliar lento) | MERGED |
-| #1134 | Ponteiros canônicos dos consumidores do mapa | MERGED |
+| PR | Papel nesta rodada | Estado vivo |
+|----|--------------------|-------------|
+| #1413 | CARACOL + SOUL reanchor reconciliado | MERGED |
+| #1408 | reanchor visual + PEGATUDO cross-surface | MERGED |
+| #1381 | fixed-point fabric + CARACOL + SOUL + provas acumuladas | MERGED |
+| #1409 | dependências npm/yarn | MERGED |
 
-Open residual PRs:
-
-| PR | Status | Nota |
-|----|--------|------|
-| #1116 | draft conceitual | Agentes por dia — sem runtime; aguarda Olho de Deus |
-
-## Repository facts (remeasured)
-
-- `LEIA-ME-IA.md`, `AGENTS.md`, `docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md` = entry/governance canônicos.
-- `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md` = SOUL canônico (não `owners/SOUL-SOL.md`).
-- `#ACORDAR + !CALIBRAR + !MULTIBUSSOLA + !META_LUPA` = compound canônico; sem segunda linguagem de trigger.
-- MetaLupa = skill/scripts/guardrails reais; bloqueia falso-verde.
-- Trigger Fabric owner = `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/` (mesma família).
-- Writer automático na main = owner único `scripts/lupa/writer-safe-push-main.sh` (notion-sync, estado-retomada, painel-vivo, painel-validacao, linear-pendencias-sync).
-- Labels operacionais = padrão global em todo PR elegível (`scripts/github-autonomia-varredura.mjs`).
-- Autonomia FAST (`AUTO_SQUASH_IF_CLEAN`) não espera workflows auxiliares lentos; ADVERSARIAL permanece green-first fail-closed.
-- Runner: self-hosted Linux default; GitHub-hosted = FORBIDDEN no contrato.
-- Consumidores do mapa canônico: ponteiros obrigatórios reconciliados em #1134 (19/19 no T1 do PR).
-
-## Classification
+A convergência de repositório chegou à `main`; os PRs acima são agora proveniência da linha principal, não owners paralelos.
 
 ```text
-REPO_OPERATIONAL_FIXED_POINT_THIS_SESSION = PASS
-  (writer-safe + labels global + trigger fabric camisa + fast path + map consumers)
-
-BOT_ENTRY_CONTRACT = IMPLEMENTED_ON_MAIN
-OUTPUT_GUARD_CONTRACT = IMPLEMENTED_ON_MAIN
-MATERIAL_INGEST_CONTRACT = IMPLEMENTED_ON_MAIN
-SECOND_BRAIN_LOGICAL_ONE = IMPLEMENTED_ON_MAIN
-WRITER_SAFE_PUSH = IMPLEMENTED_ON_MAIN
-OPERATIONAL_LABEL_STANDARD = IMPLEMENTED_ON_MAIN
-AUTONOMIA_FAST_PATH = IMPLEMENTED_ON_MAIN
-MAP_CONSUMER_POINTERS = IMPLEMENTED_ON_MAIN
-
-WINDOWS_LOCAL_RUNTIME_STATE = NOT_PROVEN
-VPS_RUNTIME_CURRENT_STATE = NOT_PROVEN
-ALL_ENGINES_RUNTIME_INHERITANCE = NOT_PROVEN
-SESSION_END_HOOK_PHYSICAL_WIRING = NOT_PROVEN
-VECTOR_MEMORY_RUNTIME = NOT_PROVEN
-HERMES_LOCAL_PROFILE_SOL_RUNTIME = NOT_PROVEN
-LOCAL_SKILLS_ABSORPTION = NOT_PROVEN (FASE 1 READ_ONLY pendente)
-GLOBAL_RUNTIME_100_PERCENT = NOT_PROVEN
+CURRENT_BASELINE=main@72a0cbbc269a80ca1fcf086007c5aa1999fde91a
+PR_1413=MERGED
+PR_1408=MERGED
+PR_1381=MERGED
+PR_1409=MERGED
+PR_MAE_ACTIVE=NONE_PROVEN
+MAIN_IS_DURABLE_BASELINE=true
+HISTORY_IS_NOT_CURRENT_STATE=true
 ```
 
+## Estado estrutural reconciliado
+
 ```text
-IMPLEMENTED_ON_MAIN != RUNNING_NOW
-FILE_EXISTS != RUNTIME_PASS
+CARACOL_REPOSITORY_INTEGRATION=PROVEN_ON_MAIN
+SOUL_SOL_RECONCILIATION=PROVEN_ON_MAIN
+FIXED_POINT_FABRIC_INTEGRATION=PROVEN_ON_MAIN
+PEGATUDO_REANCHOR_INTEGRATION=PROVEN_ON_MAIN
+DEPENDENCY_RECONCILIATION=PROVEN_ON_MAIN
+ONE_SYSTEM_ONLY=PRESERVED
+REUSE_BEFORE_CREATE=PRESERVED
+ONE_WRITER_PER_SCOPE=PRESERVED_AS_POLICY
+```
+
+## Fronteira que NÃO pode virar falso 100%
+
+A reconciliação do repositório não equivale a ponto fixo global de runtime.
+
+```text
+REPOSITORY_RECONCILIATION_FIXED_POINT=PROVEN_FOR_THIS_MAIN
+GLOBAL_RUNTIME_FIXED_POINT=NOT_PROVEN
+GPU_LIVE_PROBE=YELLOW/RESIDUAL
+OMNI_HEALTH=ERROR_REPORTED_ON_CURRENT_RECONCILIATION
+ONLINE_RUNTIME_STATE=UNKNOWN
+DEPLOY_SHA_TO_ARTIFACT_TO_RUNTIME=NOT_PROVEN
 UNKNOWN != PASS
-LOCAL_FIXED_POINT_ENDS_GLOBAL_MISSION = false
+MERGED != DEPLOYED
+DOCUMENTED != EXECUTED
+IMPLEMENTED_ON_MAIN != RUNNING_NOW
+```
+
+## Lei de continuidade após absorção do PR-mãe
+
+O #1381 cumpriu a função de ledger/bancada e foi absorvido na `main`. A continuidade não reabre o PR histórico por padrão.
+
+```text
+PR_MAE_HISTORICAL=#1381
+PR_MAE_HISTORICAL_STATUS=MERGED
+CURRENT_OWNER_OF_CONSOLIDATED_STATE=main
+NEW_PR_MOTHER_ONLY_IF_NEW_MISSION_REQUIRES_AND_IS_PROVEN=true
+PAST_PR != CURRENT_STATE
+CURRENT_MAIN = BASELINE
+```
+
+## Próximo cursor
+
+```text
+main atual
+→ medir runtime vivo aplicável
+→ GPU/live probe
+→ Omni health
+→ vínculo SHA→artefato/deployment→runtime quando houver deploy
+→ contraprova
+→ só então avaliar GLOBAL_RUNTIME_FIXED_POINT
 ```
 
 This file is current only for the measured `main` SHA above.
