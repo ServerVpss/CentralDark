@@ -7,15 +7,15 @@ import shutil
 import sys
 from pathlib import Path
 
+from .codec import compact_project, decode_bytes, encode_bytes
 from .config import load_config
 from .dashboard import serve
-from .codec import compact_project, decode_bytes, encode_bytes
 from .engine import FixedPointEngine, receipt_json
 from .github_state import GitHubStateLibrary
 from .policy import FixedPointPolicy
 from .probes import GitHubProbe, LocalProbe, ScreenpipeProbe, VPSProbe
-from .store import EventStore
 from .seal import build_seal, verify_seal
+from .store import EventStore
 from .webhook import serve as serve_webhook
 
 
@@ -51,46 +51,49 @@ def main(argv=None) -> int:
     sub.add_parser("once")
     sub.add_parser("watch")
     sub.add_parser("status")
-<<<<<<< HEAD
-=======
     sub.add_parser("rollback")
->>>>>>> origin/feat/fixed-point-fabric-proof-20260831
     sub.add_parser("verify-chain")
+
     doctor = sub.add_parser("doctor")
     doctor.add_argument("--json", action="store_true")
+
     dashboard = sub.add_parser("dashboard")
     dashboard.add_argument("--host", default="127.0.0.1")
     dashboard.add_argument("--port", type=int, default=8788)
+
     webhook = sub.add_parser("webhook-server")
     webhook.add_argument("--host", default="127.0.0.1")
     webhook.add_argument("--port", type=int, default=8790)
+
     encode = sub.add_parser("encode")
     encode.add_argument("source")
+
     decode = sub.add_parser("decode")
     decode.add_argument("envelope")
     decode.add_argument("destination")
+
     pack = sub.add_parser("pack")
     pack.add_argument("source")
     pack.add_argument("destination")
+
     seal = sub.add_parser("seal")
     seal.add_argument("root")
     seal.add_argument("output")
     seal.add_argument("paths", nargs="+")
+
     verify = sub.add_parser("verify-seal")
     verify.add_argument("root")
     verify.add_argument("seal")
-    args = parser.parse_args(argv)
 
+    args = parser.parse_args(argv)
     config = load_config(args.config)
     engine = build_engine(config)
+
     if args.command == "once":
         snapshot, decision = engine.run_once()
     elif args.command == "watch":
         snapshot, decision = engine.run_until_fixed_point()
     elif args.command == "status":
-<<<<<<< HEAD
-        print(json.dumps(engine.store.get_state("last_verdict", {}), ensure_ascii=False, indent=2))
-=======
         print(json.dumps({
             "last_verdict": engine.store.get_state("last_verdict", {}),
             "last_good_state": engine.store.get_last_good_state(),
@@ -104,15 +107,23 @@ def main(argv=None) -> int:
             return 2
         receipt = engine.store.record_rollback_required("CLI_REQUEST", target=target)
         print(json.dumps({"status": "ROLLBACK_REQUIRED", "receipt": receipt}, ensure_ascii=False, indent=2))
->>>>>>> origin/feat/fixed-point-fabric-proof-20260831
         return 0
     elif args.command == "verify-chain":
         valid, count = engine.store.verify_chain()
         print(json.dumps({"valid": valid, "events": count}))
         return 0 if valid else 2
     elif args.command == "doctor":
-        result = {"python": sys.version.split()[0], "git": shutil.which("git"), "config": str(Path(args.config).resolve()), "store": str(engine.store.path.resolve())}
-        print(json.dumps(result, ensure_ascii=False, indent=2) if args.json else "\n".join(f"{k}: {v}" for k, v in result.items()))
+        result = {
+            "python": sys.version.split()[0],
+            "git": shutil.which("git"),
+            "config": str(Path(args.config).resolve()),
+            "store": str(engine.store.path.resolve()),
+        }
+        print(
+            json.dumps(result, ensure_ascii=False, indent=2)
+            if args.json
+            else "\n".join(f"{key}: {value}" for key, value in result.items())
+        )
         return 0 if result["git"] else 2
     elif args.command == "dashboard":
         serve(engine.store, args.host, args.port)
@@ -147,5 +158,6 @@ def main(argv=None) -> int:
         return 0 if result["valid"] else 4
     else:
         return 2
+
     print(receipt_json(snapshot, decision))
     return 0 if decision.reached else 3
