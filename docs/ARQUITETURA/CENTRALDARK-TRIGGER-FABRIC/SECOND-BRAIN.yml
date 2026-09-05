@@ -41,6 +41,37 @@ second_brain:
     miners_are_authority: false
     direct_canonical_mutation: false
     is_second_authority: false
+    garimpo:
+      local_workspace_example: 'E:\CentralDark\_MAPA_CASA\GARIMPO-CHEFE'
+      role: RAW_MATERIAL_RESERVOIR_NOT_AUTHORITY
+      always_evaluate_for_crystallization: true
+      blind_crystallize_everything: false
+      raw_source_policy: PRESERVE_PROVENANCE
+      sequence:
+        - RAW_MATERIAL
+        - NORMALIZE
+        - DEDUPE
+        - UNIQUE_DELTA
+        - GOLD
+        - ATOMIZE
+        - PROVENANCE
+        - EXISTING_OWNER
+        - META_LUPA_COUNTERPROOF
+        - AUTHORIZED_WRITER
+        - TEST_AND_REALITY_JUDGE
+        - CRYSTAL
+      retrieval_order:
+        - CRYSTAL
+        - GOLD_CANONICAL
+        - CANDIDATE_KNOWLEDGE
+        - RAW_MATERIAL_ON_DEMAND
+      rules:
+        crystal_is_summary_only: false
+        duplicate_is_promoted: false
+        raw_is_deleted_because_crystal_exists: false
+        history_overrides_current_state: false
+        runtime_observation_can_invalidate_candidate: true
+        runtime_observation_becomes_canonical_only_after_receipt_and_promotion: true
   surfaces:
     github_canonical:
       role: SOURCE_OF_TRUTH_AND_MEMORY_LAYER
@@ -75,6 +106,16 @@ invariants:
   GITHUB_IS_NOT_JUST_OUTPUT: true
   LOCAL_IS_NOT_PARALLEL_BRAIN: true
   GRAPH_VECTOR_ARE_DERIVED_INDEXES: true
+  GARIMPO_WORKSPACE_IS_RESERVOIR_NOT_AUTHORITY: true
+  ALWAYS_EVALUATE_FOR_CRYSTALLIZATION: true
+  BLIND_CRYSTALLIZE_ALL: false
+  DEDUPE_BEFORE_CRYSTAL: true
+  CRYSTAL_REQUIRES_UNIQUE_DELTA: true
+  CRYSTAL_REQUIRES_PROVENANCE: true
+  CRYSTAL_REQUIRES_OWNER: true
+  CRYSTAL_REQUIRES_COUNTERPROOF: true
+  RAW_SOURCE_PRESERVED_AS_PROVENANCE: true
+  CURRENT_STATE_BEATS_HISTORY: true
   NEW_SECOND_BRAIN: false
   NEW_AUTOBOT_V2: false
   NEW_PARALLEL_RAG: false
@@ -89,15 +130,20 @@ flow:
     - MEMORY_REARGUARD
   memory_to_gold:
     - RAW_MATERIAL_AND_FRAGMENTS
+    - NORMALIZE
+    - DEDUPE
+    - UNIQUE_DELTA
     - MEMORY_LINKER
     - DREAM_REVIEW
     - PATTERN_DISCOVERY
     - META_LUPA_COUNTERPROOF
+    - OWNER_RESOLUTION
     - AUTHORIZED_WRITER
     - TEST_AND_REALITY_JUDGE
     - GOLD_CANONICAL
   gold_to_next_mission:
     - OWNER_CANONICAL
+    - CRYSTAL_ELIGIBILITY_GATE
     - CRYSTAL_OR_FLASH_WHEN_ELIGIBLE
     - NEXT_ACORDAR
     - OPERATIONAL_FRONT
@@ -120,5 +166,11 @@ pipeline:
 promotion:
   miner_writes_canonical: false
   generative_is_candidate: true
+  garimpo_workspace_writes_canonical_directly: false
+  raw_material_is_authority: false
+  crystal_requires_unique_delta: true
+  crystal_requires_provenance: true
+  crystal_requires_existing_owner_or_proven_gap: true
+  crystal_requires_counterproof: true
   flash_requires_crystal_complete: true
   package_pass_is_runtime_pass: false
