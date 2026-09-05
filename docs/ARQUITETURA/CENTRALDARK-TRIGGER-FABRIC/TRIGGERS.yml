@@ -2,7 +2,7 @@ schema: centraldark.trigger-map.v1
 human_triggers:
   - id: CENTRALDARK_MASTER
     token: "!CENTRALDARK"
-    aliases: ["!CENTRAL-DARK", "!CDARK"]
+    aliases: ["#CENTRALDARK", "!CENTRAL-DARK", "#CENTRAL-DARK", "!CDARK", "#CDARK"]
     owner: "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml"
     explicit_marker_required: true
     plain_word_does_not_trigger: true
@@ -79,7 +79,7 @@ semantic_trigger_resolution:
   master_cycle:
     contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
     resolver: scripts/trigger-fabric/centraldark_master_cycle.py
-    explicit_trigger: "!CENTRALDARK"
+    explicit_triggers: ["!CENTRALDARK", "#CENTRALDARK"]
     receipt_schema: centraldark.master-cycle-receipt.v1
   delta_harvest:
     contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml#delta_harvest

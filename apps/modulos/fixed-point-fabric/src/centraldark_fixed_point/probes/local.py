@@ -43,4 +43,3 @@ class LocalProbe:
                 blockers.append(f"SERVICE_{name}_UNREACHABLE")
         status = Status.PASS if not blockers else Status.FAIL
         return ProbeReceipt(self.domain, status, f"{len(evidence)} evidências locais", tuple(evidence), tuple(blockers))
-
