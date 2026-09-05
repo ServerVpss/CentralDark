@@ -28,7 +28,7 @@ import {
 } from "@/compartilhado/ui/select";
 import { toast } from "sonner";
 import { useAuthContext } from "@/compartilhado/auth/AuthProvider";
-import { BackupManager } from "@/funcionalidades/telepainel/components/backup/BackupManager";
+import { BackupManager } from "@/apps/modulos/telepainel/components/backup/BackupManager";
 import { CleanupSettings } from "@/funcionalidades/telepainel/components/settings/CleanupSettings";
 import { SignupToggle } from "@/funcionalidades/telepainel/components/settings/SignupToggle";
 import { Trash2 } from "lucide-react";
