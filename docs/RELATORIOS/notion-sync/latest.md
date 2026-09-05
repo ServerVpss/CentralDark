@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-09-05T07:55:49.039Z
+# 🧠 Notion Sync — 2026-09-05T11:02:43.856Z
 
-- **Commit fonte:** `7555c2fb8ea64d6b351ce9d65a9392b489717c8c`
+- **Commit fonte:** `452419072bffebd2828c0eafdeb9502d80567888`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 491 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 491 atualizadas · ❌ 2 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
 | aprendizados | 35 | 0 | 35 | 0 | 0 |
-| estrutura | 412 | 0 | 412 | 0 | 0 |
+| estrutura | 414 | 0 | 412 | 0 | 2 |
 
 ## Operações
 
@@ -296,6 +296,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/COCKPIT-AVANCO.README.md |
 | estrutura | atualizado | docs/CONSCIENCIA/CODEX-INTEGRADO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/CODEX-REVISAO-PRS.md |
+| estrutura | erro | docs/CONSCIENCIA/COMITE-OFICIAL-SEGREDO-CHEFE.md |
 | estrutura | atualizado | docs/CONSCIENCIA/CONECTOR-LIBERDADE-SEGURA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/CONSCIENCIA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/CONSOLIDACAO-CENTRALDARK-V2.md |
@@ -505,6 +506,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/VISUALIZACAO-MERMAID-PADRAO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/WEBHOOK-DEPLOY-SEGURO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/agente/elite-mapper/README.md |
+| estrutura | erro | docs/CONSCIENCIA/centraldark-gpt-prompt.md |
 | estrutura | atualizado | docs/CONSCIENCIA/relatorios/00_RESUMO_EXECUTIVO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/relatorios/01_MAPEAMENTO_ESTRUTURA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/relatorios/02_LIXO_PARA_DELETAR.md |

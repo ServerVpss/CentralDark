@@ -15,7 +15,9 @@ const ipc = {
 
 const centraldark = Object.freeze({
   getRuntime: () => ipcRenderer.invoke('centraldark:runtime:get'),
-  getHermesHealth: () => ipcRenderer.invoke('centraldark:hermes:health'),
+  getCentralHealth: () => ipcRenderer.invoke('centraldark:omni:health'),
+  // Alias legado preservado: agora mede a porta única da CentralDark, não Hermes direto.
+  getHermesHealth: () => ipcRenderer.invoke('centraldark:omni:health'),
   getScreenpipeHealth: () => ipcRenderer.invoke('centraldark:screenpipe:health'),
   openIntent: (intent: string) => ipcRenderer.invoke('centraldark:intent:open', intent),
   showMain: () => ipcRenderer.invoke('centraldark:main:show'),

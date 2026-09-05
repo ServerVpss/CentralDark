@@ -26,4 +26,3 @@ CentralDark e fornece a peça executável que faltava: um denominador temporal �
 4. Segredos entram por ambiente e são redigidos antes do ledger.
 5. Main só muda por PR provado no mesmo HEAD.
 6. Duas amostras iguais são o mínimo; aumente para três em ambientes instáveis.
-

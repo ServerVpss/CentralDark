@@ -7,10 +7,12 @@ import path from 'node:path';
 import * as pkg from '../../package.json';
 import { setupAutoUpdater } from './utils/auto-update';
 import {
+  CENTRALDARK_PUBLIC_API_URL,
   CENTRALDARK_PUBLIC_URL,
   DEFAULT_HOUSE_ROOT,
   DEFAULT_PORT,
   HERMES_BASE_URL,
+  OMNI_ROUTER_BASE_URL,
   SCREENPIPE_BASE_URL,
   SOL_WIDGET_SHORTCUT,
   isDev,
@@ -113,14 +115,20 @@ function registerBridge() {
     app_name: 'CentralDark',
     app_version: app.getVersion(),
     house_root: configuredRoot ?? app.getPath('userData'),
+    omni_router_base_url: OMNI_ROUTER_BASE_URL,
     hermes_base_url: HERMES_BASE_URL,
     screenpipe_base_url: SCREENPIPE_BASE_URL,
+    public_api_url: CENTRALDARK_PUBLIC_API_URL,
     public_url: CENTRALDARK_PUBLIC_URL,
     widget_shortcut: SOL_WIDGET_SHORTCUT,
     one_system_only: true,
+    one_router_only: true,
   }));
 
-  register('centraldark:hermes:health', async () => probeHealth(HERMES_BASE_URL, ['/health', '/api/health']));
+  register('centraldark:omni:health', async () => probeHealth(OMNI_ROUTER_BASE_URL, ['/health', '/v1/models']));
+
+  // Canal legado preservado para não quebrar consumidores antigos.
+  register('centraldark:hermes:health', async () => probeHealth(OMNI_ROUTER_BASE_URL, ['/health', '/v1/models']));
 
   register('centraldark:screenpipe:health', async () => probeHealth(SCREENPIPE_BASE_URL, ['/health']));
 

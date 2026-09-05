@@ -90,4 +90,3 @@ class GitHubStateLibrary:
                 "html_url": run.get("html_url"),
             }
         return {"action": payload.get("action"), "repository": payload.get("repository", {}).get("full_name")}
-

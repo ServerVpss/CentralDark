@@ -59,6 +59,30 @@ const CORE_REQUIRED_MARKERS = Object.freeze([
   "EMOJI_CONTEXT_REQUIRED=true",
   "EMOJI_IS_SEMANTIC_CUE_NOT_PROOF=true",
   "ALL_MODEL_ADAPTERS_INHERIT_RESPONSE_STYLE=true",
+  "CAPABILITY_IS_AUTHORITY=false",
+  "AGENT_MAY_REDUCE_HUMAN_OBJECTIVE=false",
+  "METHOD_MAY_OPTIMIZE_OBJECTIVE_MUST_BE_PRESERVED=true",
+  "FULL_REQUESTED_MATERIAL_MUST_BE_PROCESSED=true",
+  "SESSION_OBSERVATION_IS_GLOBAL_CURRENT_STATE=false",
+  "SINGLE_READER_MAY_DECLARE_GLOBAL_REALITY=false",
+  "DIVERGENT_READERS_REQUIRE_RENDEZVOUS=true",
+  "CURRENT_REALITY_REQUIRES_RECONCILIATION=true",
+  "REMOTE_SCREENSHOT_IS_REMOTE_PROOF=false",
+  "SESSION_MEMORY_IS_CURRENT_STATE=false",
+  "CONNECTOR_FAILURE_IS_PROVIDER_FAILURE=false",
+  "SENSOR_FAILURE_IS_WORLD_FAILURE=false",
+  "TRANSPORT_FAILURE_REQUIRES_AUTHORIZED_ALTERNATE_ROUTE=true",
+  "REMOTE_WRITE_REQUIRES_PROVEN_GATE=true",
+  "CHAT_ONLY_KNOWLEDGE=FAIL",
+  "SESSION_MEMORY_IS_DURABLE_STATE=false",
+  "PERSISTENCE_QUORUM_MIN=1",
+  "PREFERRED_REDUNDANCY=2",
+  "MIRROR_IS_SECOND_OWNER=false",
+  "BACKUP_IS_SOURCE_OF_TRUTH=false",
+  "PERSISTENCE_IS_PROMOTION=false",
+  "OLD_COPY_IS_CURRENT_REALITY=false",
+  "NO_BLIND_OVERWRITE=true",
+  "DURABLE_CONTINUITY_REQUIRES_RECEIPT_AND_NEXT_CURSOR=true",
 ]);
 
 const FORBIDDEN_CLAUDE_SUBAGENT_AUTHORITY = Object.freeze([
@@ -103,13 +127,11 @@ function pythonSelfTest(script) {
       last = result;
       continue;
     }
-    try {
-      return JSON.parse(result.stdout);
-    } catch {
-      last = result;
-    }
+    const parsed = JSON.parse(result.stdout);
+    assert.equal(parsed.status, "PASS", `${script} status=${parsed.status}`);
+    return parsed;
   }
-  throw last?.error || new Error(`python self-test inválido: ${last?.stderr || last?.stdout || "sem saída"}`);
+  assert.fail(`PYTHON_SELF_TEST_FAILED:${script}:status=${last?.status}:stderr=${last?.stderr || last?.error?.message || "unknown"}`);
 }
 
 test("core canônico proíbe governança duplicada e exige autoridade humana", () => {

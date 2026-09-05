@@ -1,5 +1,5 @@
 // Plugin CentralDark Grafo Vivo — ponto de entrada.
-// Registra a view lateral, comandos e o auto-atualizador.
+// Registra views, comandos, Hub de conhecimento e autoatualizador.
 
 import { Notice, Platform, Plugin, WorkspaceLeaf } from "obsidian";
 import { GrafoVivoView, VIEW_TYPE_GRAFO_VIVO } from "./view";
@@ -7,14 +7,17 @@ import { Grafo3DView, VIEW_TYPE_GRAFO_3D } from "./view3d";
 import { DEFAULT_SETTINGS, GrafoVivoSettings, GrafoVivoSettingTab } from "./settings";
 import { AutoAtualizador } from "./autoUpdater";
 import { SemanticClient } from "./semantic";
+import { KnowledgeHubClient } from "./knowledgeHub";
 
 export default class GrafoVivoPlugin extends Plugin {
   settings: GrafoVivoSettings = DEFAULT_SETTINGS;
   autoUpdater!: AutoAtualizador;
   semanticClient: SemanticClient | null = null;
+  knowledgeHubClient: KnowledgeHubClient | null = null;
 
   async onload() {
     await this.loadSettings();
+    this.knowledgeHubClient = new KnowledgeHubClient(this);
 
     this.registerView(
       VIEW_TYPE_GRAFO_VIVO,
@@ -47,6 +50,21 @@ export default class GrafoVivoPlugin extends Plugin {
     });
 
     this.addCommand({
+      id: "publicar-nota-no-hub-centraldark",
+      name: "Enviar nota ativa para o Hub de conhecimento",
+      callback: async () => {
+        try {
+          const receipt = await this.knowledgeHubClient!.publishActiveNote();
+          const eventId = receipt.event_id || "evento aceito";
+          const status = receipt.status || "CANDIDATE";
+          new Notice(`Hub CentralDark: ${status} · ${eventId}`, 10000);
+        } catch (error: any) {
+          new Notice(`Hub CentralDark indisponível: ${error?.message || error}`, 10000);
+        }
+      },
+    });
+
+    this.addCommand({
       id: "checar-atualizacao-grafo-vivo",
       name: "Checar atualização do plugin agora",
       callback: () => this.autoUpdater.checarComPrompt(),
@@ -54,7 +72,7 @@ export default class GrafoVivoPlugin extends Plugin {
 
     this.addCommand({
       id: "rollback-grafo-vivo",
-      name: "↩️ Rollback: voltar pra versão anterior do plugin",
+      name: "Rollback: voltar para a versão anterior do plugin",
       callback: () => this.autoUpdater.fazerRollback(),
     });
 
@@ -108,6 +126,7 @@ export default class GrafoVivoPlugin extends Plugin {
   async onunload() {
     this.semanticClient?.stop();
     this.semanticClient = null;
+    this.knowledgeHubClient = null;
     this.autoUpdater?.parar();
   }
 

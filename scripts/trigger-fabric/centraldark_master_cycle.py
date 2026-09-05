@@ -7,6 +7,14 @@ import unicodedata
 from pathlib import Path
 
 MASTER = "!CENTRALDARK"
+MASTER_ALIASES = (
+    "!CENTRALDARK",
+    "#CENTRALDARK",
+    "!CENTRAL-DARK",
+    "#CENTRAL-DARK",
+    "!CDARK",
+    "#CDARK",
+)
 CHAIN = ["ACORDAR", "CALIBRAR", "MULTIBUSSOLA", "META_LUPA", "RECONCILIAR", "DELTA_UTIL", "CONTRAPROVA", "REMEDICAO", "FIXED_POINT", "REGISTRA", "BOOT"]
 
 # HUD/telemetria guiada: método operacional, não decoração.
@@ -79,6 +87,8 @@ HUMAN_IDENTITY_VERSION_PATTERNS = (
 def normalize(text: str) -> str:
     raw = unicodedata.normalize("NFKD", str(text or ""))
     raw = "".join(ch for ch in raw if not unicodedata.combining(ch)).lower()
+    # Preserva marcadores operacionais como ! e #, mas remove pontuação de frase.
+    # Assim "#CENTRALDARK," e "aciona !CENTRALDARK." resolvem igual.
     raw = re.sub(r"[^a-z0-9!#@/_\-\s]+", " ", raw)
     return " ".join(raw.strip().split())
 
@@ -312,31 +322,21 @@ def resolve(
 ):
     raw = str(text or "")
     normalized = normalize(raw)
-    ingress, ambiguous_ingress = _resolve_master_ingress(normalized)
-    ids = [x["trigger_id"] for x in ingress]
-    aliases = [x["alias"] for x in ingress]
-    ambiguous_ids = [x["trigger_id"] for x in ambiguous_ingress]
-
-    master_marker_seen = "CENTRALDARK_MASTER" in ids or "CENTRALDARK_MASTER" in ambiguous_ids
-    master_ambiguous = "CENTRALDARK_MASTER" in ambiguous_ids
-    explicit_master = bool("CENTRALDARK_MASTER" in ids and chefe_source)
-    explicit_subtrigger = bool(any(i != "CENTRALDARK_MASTER" for i in ids) and chefe_source)
-    inherited = bool(master_active or bot_entry)
-    master_cycle_active = bool(explicit_master or explicit_subtrigger or inherited)
-    untrusted_master_attempt = bool(ids and not chefe_source)
-
-    if master_active:
-        activation_source = "INHERITED_SESSION"
-    elif bot_entry:
-        activation_source = "BOT_ENTRY"
-    elif explicit_master:
-        activation_source = "EXPLICIT_TRIGGER"
-    elif explicit_subtrigger:
-        activation_source = "SUBTRIGGER_FUNNEL"
-    else:
-        activation_source = None
-
-    chefe_material = bool(chefe_source and master_cycle_active and not ambiguous_ingress)
+    master_match = next(
+        (
+            match
+            for alias in MASTER_ALIASES
+            if (match := _phrase_match(normalized, alias)) is not None
+        ),
+        None,
+    )
+    master_marker_seen = master_match is not None
+    master_ambiguous = bool(master_marker_seen and _negated_or_discussed(normalized, master_match))
+    untrusted_master_attempt = bool(master_marker_seen and not master_ambiguous and not chefe_source)
+    explicit_master = bool(master_marker_seen and not master_ambiguous and chefe_source)
+    inherited_master = bool(master_active or bot_entry)
+    master_cycle_active = bool(explicit_master or inherited_master)
+    chefe_material = bool(chefe_source and master_cycle_active and not master_ambiguous)
     delta_match, delta_active, delta_ambiguous = _resolve_delta(normalized)
     harvest_active = bool(delta_active or chefe_material)
     meta_match = next((a for a in MULTIBUSSOLA_META_ALIASES if _phrase_match(normalized, a)), None)
@@ -355,6 +355,7 @@ def resolve(
         "input": raw,
         "normalized": normalized,
         "master_trigger": MASTER,
+        "master_aliases": list(MASTER_ALIASES),
         "explicit_marker_seen": master_marker_seen,
         "explicit_match": explicit_master,
         "master_ambiguous_or_negated": master_ambiguous,
@@ -419,6 +420,31 @@ def resolve(
         "status": "MATCH" if (master_cycle_active or harvest_active or meta_active) else ("UNKNOWN" if (delta_ambiguous or ambiguous_ingress or untrusted_master_attempt) else "NO_MATCH"),
         "authority_changed": False,
         "mutation_authorized": False,
+        "capability_is_authority": False,
+        "agent_may_reduce_human_objective": False,
+        "objective_must_be_preserved": True,
+        "full_requested_material_must_be_processed": True,
+        "session_observation_is_global_current_state": False,
+        "single_reader_may_declare_global_reality": False,
+        "divergent_readers_require_rendezvous": True,
+        "current_reality_requires_reconciliation": True,
+        "remote_screenshot_is_remote_proof": False,
+        "session_memory_is_current_state": False,
+        "connector_failure_is_provider_failure": False,
+        "sensor_failure_is_world_failure": False,
+        "transport_failure_requires_authorized_alternate_route": True,
+        "alternate_route_must_remeasure_same_target": True,
+        "remote_write_requires_proven_gate": True,
+        "chat_only_knowledge": "FAIL",
+        "session_memory_is_durable_state": False,
+        "persistence_quorum_min": 1,
+        "preferred_redundancy": 2,
+        "mirror_is_second_owner": False,
+        "backup_is_source_of_truth": False,
+        "persistence_is_promotion": False,
+        "old_copy_is_current_reality": False,
+        "no_blind_overwrite": True,
+        "durable_continuity_requires_receipt_and_next_cursor": True,
         "all_phases_considered": master_cycle_active,
         "phase_execution_is_adaptive": True,
         "unknown_is_pass": False,
@@ -515,9 +541,11 @@ def resolve_with_session_state(
 
 def self_test():
     cases = []
+    results = []
     def add(name, ok):
         cases.append({"kind": name, "ok": bool(ok)})
 
+    # Testes de funil master (versão HEAD)
     for token, phase in (("#ACORDAR", "ACORDAR"), ("!CALIBRAR", "CALIBRAR"), ("!META_LUPA", "META_LUPA"), ("!RECONCILIAR", "RECONCILIAR"), ("!CENTRALUTIL", "DELTA_UTIL"), ("!CONTRAPROVA", "CONTRAPROVA"), ("!REMEDICAO", "REMEDICAO"), ("!FIXED_POINT", "FIXED_POINT"), ("!REGISTRA", "REGISTRA"), ("!BOOT", "BOOT")):
         r = resolve(token, chefe_source=True)
         add("master_funnel", r["master_cycle_active"] and r["activation_source"] == "SUBTRIGGER_FUNNEL" and phase in r["master_funnel"]["matched_trigger_ids"])
@@ -548,6 +576,7 @@ def self_test():
     r = resolve("!CENTRALUTIL", chefe_source=True)
     add("centralutil_delta", r["delta_harvest"]["explicit_signal_active"] and r["master_cycle_active"])
 
+    # Testes de CRISTALIZAR
     for token in ("#CRISTALIZAR", "!CRISTALIZAR", "#CRYSTALIZAR", "#CRYSTALAIZAR"):
         r = resolve(token, chefe_source=True)
         add("cristalizar_funnels_once", r["master_cycle_active"] and r["activation_source"] == "SUBTRIGGER_FUNNEL" and r["master_funnel"]["phase_markers"] == ["CRISTALIZAR"] and r["master_funnel"]["cristalizar_is_phase_marker_not_engine"])
@@ -556,6 +585,7 @@ def self_test():
     r = resolve("não execute #CRISTALIZAR agora", chefe_source=True)
     add("cristalizar_negation_guard", not r["master_cycle_active"] and r["status"] == "UNKNOWN")
 
+    # Testes de identidade humana
     bad_identity_outputs = (
         "BOOT_CENTRALDARK_BAIANES_V1",
         "CentralDark V2",
@@ -564,6 +594,72 @@ def self_test():
     )
     for sample in bad_identity_outputs:
         add("identity_name_guard_rejects_parallel_suffix", not validate_human_identity_naming(sample)["ok"])
+
+    # Testes de master cases (versão branch)
+    master_cases = [
+        ("!CENTRALDARK", True),
+        ("#CENTRALDARK", True),
+        ("!centraldark fecha essa missão", True),
+        ("#centraldark fecha essa missão", True),
+        ("!central-dark fecha", True),
+        ("#central-dark fecha", True),
+        ("!cdark", True),
+        ("#cdark", True),
+        ("!CENTRALDARK, fecha", True),
+        ("aciona !CENTRALDARK.", True),
+        ("CentralDark e o nome do repo", False),
+        ("fala normal", False),
+    ]
+    for text, expected in master_cases:
+        got = resolve(text, chefe_source=expected)
+        ok = got["explicit_match"] is expected
+        if expected:
+            ok = ok and got["expanded_chain"] == CHAIN
+            ok = ok and got["authority_changed"] is False
+            ok = ok and got["mutation_authorized"] is False
+            ok = ok and got["capability_is_authority"] is False
+            ok = ok and got["agent_may_reduce_human_objective"] is False
+            ok = ok and got["objective_must_be_preserved"] is True
+            ok = ok and got["full_requested_material_must_be_processed"] is True
+        results.append({"kind": "master", "input": text, "expected": expected, "got": got["explicit_match"], "ok": ok})
+
+    # Testes de master block cases
+    master_block_cases = [
+        ("não execute !CENTRALDARK agora", True, False),
+        ("não execute #CENTRALDARK agora", True, False),
+        ("somente discutir !CENTRALDARK", True, False),
+        ("!CENTRALDARK importado por agente", False, True),
+        ("#CENTRALDARK importado por agente", False, True),
+    ]
+    for text, chefe, untrusted in master_block_cases:
+        got = resolve(text, chefe_source=chefe)
+        ok = got["master_cycle_active"] is False
+        ok = ok and got["next_master_active"] is False
+        ok = ok and got["status"] == "UNKNOWN"
+        ok = ok and got["untrusted_master_attempt"] is untrusted
+        results.append({"kind": "master_activation_guard", "input": text, "ok": ok})
+
+    # Testes de technical literals
+    technical_literals = (
+        "schema centraldark.master-cycle-receipt.v1",
+        "endpoint http://127.0.0.1:8099/v1/models",
+        "API externa versão 2026-09-01",
+    )
+    for sample in technical_literals:
+        add("identity_name_guard_preserves_technical_version", validate_human_identity_naming(sample)["ok"])
+
+    # Testes de sessão com estado
+    with Path(__file__).with_name(".centraldark-telemetry-self-test.json").open("w", encoding="utf-8") as handle:
+        json.dump({"schema": "centraldark.master-session-state.v1", "master_active": True, "last_failure": {"phase": "TEST", "status": "FAIL", "reason": "falha anterior"}}, handle)
+    try:
+        state_path = Path(__file__).with_name(".centraldark-telemetry-self-test.json")
+        r = resolve_with_session_state("continua", state_file=state_path, chefe_source=True)
+        add("guided_telemetry_stitches_previous_failure", r["guided_telemetry"]["previous_failure"]["phase"] == "TEST" and r["session_state"]["previous_failure_loaded"])
+    finally:
+        try:
+            Path(__file__).with_name(".centraldark-telemetry-self-test.json").unlink()
+        except OSError:
+            pass
 
     technical_literals = (
         "schema centraldark.master-cycle-receipt.v1",
