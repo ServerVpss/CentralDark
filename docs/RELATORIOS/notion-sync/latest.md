@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-09-05T18:57:13.128Z
+# 🧠 Notion Sync — 2026-09-05T21:55:02.479Z
 
-- **Commit fonte:** `b8504ba0b6913facaa3396ed5e5838ff6ee19877`
+- **Commit fonte:** `95ab9e72a98b342122818c0efd83318c4ee09387`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 491 atualizadas · ❌ 7 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 491 atualizadas · ❌ 9 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
 | aprendizados | 35 | 0 | 35 | 0 | 0 |
-| estrutura | 419 | 0 | 412 | 0 | 7 |
+| estrutura | 421 | 0 | 412 | 0 | 9 |
 
 ## Operações
 
@@ -338,6 +338,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/ESPELHO-CLONE-DECK-PASSIVO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/EXECUCAO-REVERSIVEL.md |
 | estrutura | atualizado | docs/CONSCIENCIA/EXPANSAO-DE-DOMINIO.md |
+| estrutura | erro | docs/CONSCIENCIA/GAPS-ONLY.md |
 | estrutura | atualizado | docs/CONSCIENCIA/GITHUB-LABELS-OPERACIONAIS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/GITHUB-PR-OBSERVAR-CODEX.md |
 | estrutura | atualizado | docs/CONSCIENCIA/GITHUB-PROFISSIONAL-AUTOMACAO-CONTINUA.md |
@@ -396,6 +397,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/PIVETE-IA/PIVETE-18-ROTA-MEMORIA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PLANO-RECONCILIACAO-DOMINIOS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PLANO.md |
+| estrutura | erro | docs/CONSCIENCIA/POMBO-LINEAGE-RULE.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PROGRAMAS/CONVERGENCIA-OMNIROUTE-CENTRALDARK.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PROJECT-KNOWLEDGE-CENTRALDARK-V2.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PROMPT-MESTRE-MULTI-IA.md |

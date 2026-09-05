@@ -1,0 +1,72 @@
+name: 🧬 Workflow Dedupe Radar
+
+on:
+  push:
+    paths:
+      - ".github/workflows/**"
+      - ".github/workflow-reuse-registry.json"
+      - "scripts/ci/workflow_dedupe_radar.py"
+  workflow_dispatch:
+  schedule:
+    - cron: "23 3 * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: workflow-dedupe-radar-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  radar:
+    name: 🧬 Detectar duplicação e candidatos de reuso
+    if: github.repository == 'ServerVpss/CentralDark'
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 5
+
+    steps:
+      - name: 📥 Checkout exato do commit
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+          persist-credentials: false
+          submodules: false
+
+      - name: 🧪 Self-test do radar
+        run: python3 scripts/ci/workflow_dedupe_radar.py --self-test
+
+      - name: 🔎 Medir workflows/jobs/steps/runners
+        run: |
+          set -euo pipefail
+          python3 scripts/ci/workflow_dedupe_radar.py \
+            --root . \
+            --json-out "$RUNNER_TEMP/workflow-dedupe.json" \
+            --markdown-out "$RUNNER_TEMP/workflow-dedupe.md"
+
+      - name: 📋 Publicar resumo determinístico
+        if: always()
+        run: |
+          {
+            echo "HEAD=${GITHUB_SHA}"
+            echo "RADAR_MODE=ADVISORY_NO_MUTATION"
+            echo "REUSE_BEFORE_CREATE=true"
+            echo "SAME_RUNNER_IS_NOT_DUPLICATION=true"
+            echo "UNKNOWN_IS_NOT_PASS=true"
+            if [ -f "$RUNNER_TEMP/workflow-dedupe.md" ]; then
+              cat "$RUNNER_TEMP/workflow-dedupe.md"
+            else
+              echo "RADAR_RESULT=UNKNOWN"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: 🧾 Receipt
+        if: always()
+        run: |
+          set -euo pipefail
+          echo "SCHEMA=centraldark.workflow-dedupe-radar.v1"
+          echo "HEAD=${GITHUB_SHA}"
+          echo "MUTATION=false"
+          echo "AUTO_REFACTOR=false"
+          echo "PARALLEL_RUNNERS_ALLOWED_WHEN_LOGIC_DIFFERS=true"
+          echo "VERDICT=${{ job.status }}"
