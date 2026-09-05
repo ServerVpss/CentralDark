@@ -6,11 +6,13 @@
 # serviços declarados. NÃO substitui deploy-operational-guards.sh, que é
 # estreito (só HermesVerificador + mapeamento). Este cobre o repo.
 #
-# Leis aplicadas (.agents/skills/centraldark-esteira-motor):
-#   MERGED != DEPLOYED   -> prova é HEAD da VPS == origin/main, medido em T1
-#   AÇÃO != PROVA        -> T0 antes, T1 depois, health real
-#   NO_FORCE_PUSH        -> nunca escreve no remoto
-#   NO_BLIND_OVERWRITE   -> histórico divergente exige flag explícita
+# Leis:
+#   MERGED != DEPLOYED
+#   AÇÃO != PROVA
+#   UNKNOWN != PASS
+#   DIRTY_WORKTREE != DESCARTAR
+#   HOUSE_VPS_REMOTE_SAME_PROTOCOL
+#   META_LUPA + CLAIM_SEALS acompanham a trajetória até o ponto fixo
 #
 # Uso:
 #   bash centraldark-deploy.sh                    # dry-run (padrão)
@@ -20,16 +22,14 @@
 #
 # Saídas:
 #   0 ok   10 repo inválido   11 fetch   12 chattr +i   13 divergência
-#   14 health   15 SHA não bateu   63 lock   64 origin errado
+#   14 health   15 SHA não bateu   16 proof guard   17 dirty worktree
+#   63 lock   64 origin errado
 # ══════════════════════════════════════════════════════════════════════
 set -Eeuo pipefail
 
 REPO_DIR="${REPO_DIR:-/root/CentralDark}"
 BRANCH="${BRANCH:-main}"
 MCP_HEALTH="${MCP_HEALTH:-http://127.0.0.1:9100/health}"
-# Só os serviços que este deploy promete reiniciar. O script NÃO reinicia
-# tudo: os demais seguem com o código antigo em memória até quem os
-# governa promovê-los. Ajuste via APPS="a b c".
 APPS="${APPS:-CentralDark-MCP}"
 
 APPLY=0
@@ -45,17 +45,56 @@ done
 log() { printf '%s %s\n' "$(date -u '+%H:%M:%SZ')" "$*"; }
 die() { log "FALHA: $*"; exit "${2:-1}"; }
 
-# Conta caminhos RASTREADOS divergentes do índice/HEAD, incluindo
-# modificação já staged ("M ") — que é exatamente o estado que um hotfix
-# manual na VPS produz.
-contar_sujos() { git status --porcelain | grep -cE '^([MARCD ][MARCD]|[MARCD] )' || true; }
+# Worktree suja não é lixo. Nada é resetado/limpo automaticamente.
+listar_sujos() { git status --porcelain --untracked-files=all || true; }
+contar_sujos() { listar_sujos | sed '/^$/d' | wc -l | tr -d ' '; }
 
-# ─── Lock (mesma trava do script irmão para não pisar na mesma árvore) ─
+proof_guard_paths_exist_on_ref() {
+  local ref="$1"
+  local required=(
+    "scripts/lupa/validar_autolupa_hash.py"
+    ".agents/skills/meta-lupa/SKILL.md"
+    ".agents/skills/meta-lupa/guardrails/claim_seal.py"
+    ".agents/skills/meta-lupa/references/claim-seals.jsonl"
+    "docs/BRAIN/01-CONCEITOS/02-BANDA/BANDA_COMPASSO_GLOBAL.json"
+  )
+  local path
+  for path in "${required[@]}"; do
+    git cat-file -e "${ref}:${path}" 2>/dev/null || {
+      log "PROOF_LINK_MISSING ref=${ref} path=${path}"
+      return 1
+    }
+  done
+}
+
+validate_proof_guards_live() {
+  log "=== META_LUPA / CLAIM_SEAL ==="
+  python3 scripts/lupa/validar_autolupa_hash.py || return 1
+  python3 .agents/skills/meta-lupa/guardrails/claim_seal.py --self-test || return 1
+  python3 .agents/skills/meta-lupa/guardrails/claim_seal.py validate \
+    .agents/skills/meta-lupa/references/claim-seals.jsonl || return 1
+  node apps/modulos/HERMES-CORE/agents/GraphRAG-Master/agent.mjs --self-test || return 1
+  log "META_LUPA_AND_CLAIM_SEALS=PASS"
+}
+
+runtime_health() {
+  local http
+  http="$(curl -s -o /dev/null -w '%{http_code}' --max-time 10 "$MCP_HEALTH" 2>/dev/null || true)"
+  [[ -n "$http" ]] || http=000
+  log "MCP_HEALTH=$http"
+  [[ "$http" == "200" ]] || return 1
+  ss -tlnp 2>/dev/null | grep -q ':9100' || return 1
+  log "PORTA_9100=LISTENING"
+}
+
+# ─── Lock ─────────────────────────────────────────────────────────────
 exec 9>/tmp/centraldark-repo-deploy.lock
 flock -w 90 9 || die "outro deploy segurando a trava" 63
 
 # ─── T0 ───────────────────────────────────────────────────────────────
 log "=== T0 (antes) ==="
+log "SURFACE=VPS"
+log "PROTOCOL=BANDA_META_LUPA_CLAIM_SEAL_SYNC_V1"
 [[ -d "$REPO_DIR/.git" ]] || die "REPO_DIR sem .git: $REPO_DIR" 10
 cd "$REPO_DIR"
 
@@ -63,6 +102,7 @@ ORIGIN_URL="$(git remote get-url origin 2>/dev/null || echo '')"
 [[ "$ORIGIN_URL" =~ github\.com[:/]ServerVpss/CentralDark(\.git)?$ ]] \
   || die "origin não é ServerVpss/CentralDark: $ORIGIN_URL" 64
 
+log "PING=origin/$BRANCH"
 git fetch --prune origin "$BRANCH" --quiet || die "fetch de origin/$BRANCH falhou" 11
 
 HEAD_ANTES="$(git rev-parse HEAD)"
@@ -73,17 +113,30 @@ SUJOS="$(contar_sujos)"
 
 log "HEAD_ANTES=$HEAD_ANTES"
 log "ALVO=$ALVO"
-log "ATRAS=$ATRAS  AFRENTE=$AFRENTE  RASTREADOS_SUJOS=$SUJOS"
+log "ATRAS=$ATRAS AFRENTE=$AFRENTE WORKTREE_DIRTY=$SUJOS"
 
-if [[ "$HEAD_ANTES" == "$ALVO" && "$SUJOS" -eq 0 ]]; then
-  log "JA_SINCRONIZADO — nada a fazer"
+if [[ "$SUJOS" -gt 0 ]]; then
+  log "BLOQUEADO_DIRTY_WORKTREE — nada será resetado/limpo automaticamente"
+  listar_sujos | sed 's/^/  /'
+  log "NEXT=RECONCILIAR_TRABALHO_LOCAL_COM_OWNER_CANONICO"
+  die "DIRTY_WORKTREE" 17
+fi
+
+# O alvo remoto precisa conter o protocolo antes de qualquer reset.
+proof_guard_paths_exist_on_ref "origin/$BRANCH" \
+  || die "origin/$BRANCH não contém todos os elos do compasso" 16
+
+# Se já está sincronizado, ainda se prova o source guard e o runtime atual.
+if [[ "$HEAD_ANTES" == "$ALVO" ]]; then
+  validate_proof_guards_live || die "proof guard falhou em árvore já sincronizada" 16
+  runtime_health || die "runtime health falhou apesar de source sincronizado" 14
+  log "PONG=vps=$HEAD_ANTES remote=$ALVO dirty=0"
+  log "PONTO_FIXO_SYNC=PASS"
+  log "DEPLOY_ACTION=NO_CHANGE"
   exit 0
 fi
 
 # ─── Guarda: imutáveis, só entre arquivos RASTREADOS ──────────────────
-# chattr +i trava reset/checkout com "Operation not permitted" sem dizer
-# a causa. Escopo limitado ao que o deploy realmente reescreve — um
-# `chattr +i .env` não deve bloquear deploy nenhum.
 log "=== guarda: imutáveis entre arquivos rastreados ==="
 IMUTAVEIS="$(git ls-files -z \
   | xargs -0 -r lsattr -d 2>/dev/null \
@@ -93,8 +146,6 @@ IMUTAVEIS="$(git ls-files -z \
 if [[ -n "$IMUTAVEIS" ]]; then
   log "BLOQUEADO — arquivos rastreados com chattr +i:"
   while IFS= read -r f; do printf '  %s\n' "$f"; done <<< "$IMUTAVEIS"
-  log "Para liberar (reversível com chattr +i):"
-  log "  cd $REPO_DIR && git ls-files -z | xargs -0 -r chattr -i 2>/dev/null"
   die "IMUTAVEL_BLOQUEIA_DEPLOY" 12
 fi
 log "nenhum rastreado imutável — ok"
@@ -102,35 +153,41 @@ log "nenhum rastreado imutável — ok"
 # ─── Guarda: histórico divergente ─────────────────────────────────────
 if [[ "$AFRENTE" -gt 0 && "$ACEITAR_DIVERGENCIA" -eq 0 ]]; then
   log "A VPS tem $AFRENTE commit(s) que origin/$BRANCH não tem."
-  log "Eles NÃO são promovidos por este script e sairão do HEAD."
-  log "Ficam recuperáveis pela tag âncora criada abaixo."
-  log "Para prosseguir mesmo assim: --aceitar-divergencia"
+  log "Eles NÃO serão apagados sem --aceitar-divergencia."
+  log "NEXT=RECONCILIAR_OU_PROMOVER_COMMITS_LOCAIS"
   die "HISTORICO_DIVERGENTE" 13
 fi
 
-# ─── Dry-run para aqui ────────────────────────────────────────────────
+# ─── Dry-run ──────────────────────────────────────────────────────────
 if [[ "$APPLY" -eq 0 ]]; then
   log "=== DRY-RUN — nada alterado. Use --apply para executar. ==="
-  log "faria: tag âncora -> reset --hard origin/$BRANCH -> restart [$APPS] -> health"
+  log "faria: âncora -> reset origin/$BRANCH -> proof guards -> restart [$APPS] -> health -> PONG"
   exit 0
 fi
 
 # ─── Âncora de rollback ───────────────────────────────────────────────
 ANCORA="vps-pre-deploy-$(date -u +%Y%m%d-%H%M%S)"
 git tag -f "$ANCORA" HEAD >/dev/null
-log "ANCORA=$ANCORA  (rollback: git reset --hard $ANCORA)"
+log "ANCORA=$ANCORA"
+
+rollback() {
+  log "ROLLBACK=$ANCORA"
+  git reset --hard "$ANCORA" --quiet || true
+}
 
 # ─── Aplicar ──────────────────────────────────────────────────────────
-# reset --hard move o HEAD de verdade e remove arquivos apagados upstream.
-# Untracked (.env, logs, caches) NÃO é tocado — não usamos git clean.
 log "=== aplicando ==="
 git reset --hard "origin/$BRANCH" --quiet || die "reset para origin/$BRANCH falhou" 13
 
 HEAD_DEPOIS="$(git rev-parse HEAD)"
-[[ "$HEAD_DEPOIS" == "$ALVO" ]] || die "HEAD não chegou no alvo ($HEAD_DEPOIS != $ALVO)" 15
-log "HEAD_DEPOIS=$HEAD_DEPOIS  == ALVO ✓"
+[[ "$HEAD_DEPOIS" == "$ALVO" ]] || { rollback; die "HEAD não chegou no alvo ($HEAD_DEPOIS != $ALVO)" 15; }
+[[ "$(contar_sujos)" -eq 0 ]] || { rollback; die "worktree ficou suja após sync" 17; }
+log "HEAD_DEPOIS=$HEAD_DEPOIS == ALVO"
 
-# ─── Reiniciar os serviços declarados ─────────────────────────────────
+# MetaLupa/lacres são catraca antes de reiniciar runtime.
+validate_proof_guards_live || { rollback; die "META_LUPA/CLAIM_SEAL/GraphRAG falharam; rollback aplicado" 16; }
+
+# ─── Reiniciar serviços declarados ───────────────────────────────────
 log "=== reiniciando: $APPS ==="
 for APP in $APPS; do
   if pm2 describe "$APP" >/dev/null 2>&1; then
@@ -144,21 +201,26 @@ for APP in $APPS; do
     log "$APP ausente no PM2 — pulado"
   fi
 done
-log "NAO_REINICIADOS: demais apps seguem com código antigo em memória"
+log "NAO_REINICIADOS=demais apps seguem com código antigo em memória"
 
-# ─── T1 (contraprova) ─────────────────────────────────────────────────
+# ─── T1 / contraprova ─────────────────────────────────────────────────
 log "=== T1 (depois) ==="
-log "RASTREADOS_SUJOS=$(contar_sujos)  (era $SUJOS)"
-log "SHA_VPS == SHA_MAIN ................ PROVADO"
+FINAL_HEAD="$(git rev-parse HEAD)"
+FINAL_REMOTE="$(git rev-parse "origin/$BRANCH")"
+FINAL_DIRTY="$(contar_sujos)"
+log "FINAL_HEAD=$FINAL_HEAD"
+log "FINAL_REMOTE=$FINAL_REMOTE"
+log "FINAL_DIRTY=$FINAL_DIRTY"
+[[ "$FINAL_HEAD" == "$FINAL_REMOTE" && "$FINAL_DIRTY" -eq 0 ]] \
+  || { rollback; die "sync não atingiu ponto fixo source" 15; }
 
-HTTP="$(curl -s -o /dev/null -w '%{http_code}' --max-time 10 "$MCP_HEALTH" 2>/dev/null || true)"
-[[ -n "$HTTP" ]] || HTTP=000
-log "MCP_HEALTH=$HTTP"
-[[ "$HTTP" == "200" ]] || die "health do MCP != 200 (rollback: git reset --hard $ANCORA)" 14
+runtime_health || { rollback; die "health do MCP/porta falhou; rollback aplicado" 14; }
+validate_proof_guards_live || { rollback; die "proof guard final falhou; rollback aplicado" 16; }
 
-ss -tlnp 2>/dev/null | grep -q ':9100' \
-  || die "porta 9100 sem listener (rollback: git reset --hard $ANCORA)" 14
-log "PORTA_9100=LISTENING"
-
-log "=== DEPLOY_PROVADO ==="
+log "PONG=vps=$FINAL_HEAD remote=$FINAL_REMOTE dirty=$FINAL_DIRTY"
+log "PONTO_FIXO_SYNC=PASS"
+log "SHA_VPS_EQ_SHA_MAIN=PROVADO"
+log "META_LUPA_FINAL=PASS"
+log "CLAIM_SEALS_FINAL=PASS"
 log "ANCORA_ROLLBACK=$ANCORA"
+log "=== DEPLOY_PROVADO_NO_ESCOPO_DECLARADO ==="
