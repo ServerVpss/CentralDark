@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-09-05T07:55:49.039Z
+# 🧠 Notion Sync — 2026-09-05T09:12:47.645Z
 
-- **Commit fonte:** `7555c2fb8ea64d6b351ce9d65a9392b489717c8c`
+- **Commit fonte:** `1878a45fc44c46f76c27c5215fbb96eec212eb4d`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 491 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 491 atualizadas · ❌ 1 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
 | aprendizados | 35 | 0 | 35 | 0 | 0 |
-| estrutura | 412 | 0 | 412 | 0 | 0 |
+| estrutura | 413 | 0 | 412 | 0 | 1 |
 
 ## Operações
 
@@ -505,6 +505,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/VISUALIZACAO-MERMAID-PADRAO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/WEBHOOK-DEPLOY-SEGURO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/agente/elite-mapper/README.md |
+| estrutura | erro | docs/CONSCIENCIA/centraldark-gpt-prompt.md |
 | estrutura | atualizado | docs/CONSCIENCIA/relatorios/00_RESUMO_EXECUTIVO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/relatorios/01_MAPEAMENTO_ESTRUTURA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/relatorios/02_LIXO_PARA_DELETAR.md |
