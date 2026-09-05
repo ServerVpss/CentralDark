@@ -2,7 +2,7 @@
 title: "Mapa do Segundo Cérebro CentralDark"
 date: 2026-06-29
 tags: ["navegacao", "mapa", "centraldark", "obsidian", "cerebro-de-aco"]
-updated: 2026-06-29
+updated: 2026-09-05
 ---
 
 # 🗺️ MAPA — Segundo Cérebro CentralDark
@@ -66,7 +66,7 @@ updated: 2026-06-29
 
 ### Fluxo unificado do Cérebro de Aço
 
-```
+```text
 Pivete
   ├─ pensa / explora  →  🧠 NEXUS COGNITIVO   (ui.centralldark.com)
   ├─ cria / codifica  →  🛠️ FÁBRICA DE ARTEFATOS (builder.centralldark.com)
@@ -89,7 +89,7 @@ Pivete
 
 ## Mapa operacional
 
-```txt
+```text
 Usuário / Pivete
       ↓
 ChatGPT / Claude / agentes
@@ -105,22 +105,32 @@ Mega Painel / Relatórios / Obsidian Git
 
 ---
 
-## Como usar no Obsidian
+## Como usar no Obsidian — CURRENT
 
-1. Abrir o vault `C:\CentralDark\Pivete\CentralDark\docs\BRAIN`.
+1. Abrir o vault vivo `E:\CentralDark\Pivete\CentralDark\docs\BRAIN`.
 2. Rodar `Obsidian Git: Pull`.
 3. Começar por `docs/BRAIN/00-MAPA-SISTEMA/BRAIN.md`.
 4. Consultar `docs/BRAIN/00-MAPA-SISTEMA/INDEX.md` para navegação completa.
 5. Consultar `docs/BRAIN/04-DECISOES/01-PENDENCIAS.md` antes de decidir próxima tarefa.
 6. Consultar `docs/BRAIN/00-MAPA-SISTEMA/02-ARQUITETURA.md` antes de mexer em fluxo, webhook, MCP ou VPS.
 
+### Política de disco da Casa
+
+- `E:\CentralDark` = **CASA OPERACIONAL VIVA** no Windows.
+- `C:\CentralDark` = **LEGADO / FONTE A RECONCILIAR**, nunca baseline viva por padrão.
+- Caminhos do Windows em `C:\Program Files` e `C:\Users\...\AppData` podem continuar em `C:` quando pertencem a software/perfil externo (Chrome, Claude, Hermes, Windows). Isso não cria uma segunda Casa.
+- Dado próprio da CentralDark encontrado sob `C:\CentralDark` deve emitir `HOUSE_PATH_DRIFT` e passar por `META_LUPA → CARACOL_REVERSO → RECONCILIAR` antes de mover, apagar ou reescrever.
+- Relatórios históricos podem citar `C:\CentralDark`; história não é CURRENT.
+
 ---
 
 ## Regra de ouro
 
-```txt
-Se não está no GitHub, não é fonte oficial.
+```text
+Se não está no GitHub, não é fonte oficial estrutural.
+Se é runtime Windows da Casa, E:\CentralDark é a casa operacional vigente.
 Se é decisão operacional, precisa virar doc, pendência, relatório ou memória.
+CURRENT > HISTORY. UNKNOWN != PASS.
 ```
 
 ---
