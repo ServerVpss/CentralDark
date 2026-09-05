@@ -30,10 +30,16 @@ def _signature(receipts: Iterable[ProbeReceipt]) -> str:
 
 
 def _material_delta(previous: Snapshot | None, receipts: tuple[ProbeReceipt, ...]) -> tuple[bool, dict]:
-    current = {r.domain: {"status": r.status.value, "blockers": sorted(r.blockers)} for r in receipts}
+    current = {
+        receipt.domain: {"status": receipt.status.value, "blockers": sorted(receipt.blockers)}
+        for receipt in receipts
+    }
     if previous is None:
         return True, {"from": None, "to": current}
-    before = {r.domain: {"status": r.status.value, "blockers": sorted(r.blockers)} for r in previous.receipts}
+    before = {
+        receipt.domain: {"status": receipt.status.value, "blockers": sorted(receipt.blockers)}
+        for receipt in previous.receipts
+    }
     return before != current, {"from": before, "to": current} if before != current else {}
 
 
@@ -69,42 +75,42 @@ class FixedPointEngine:
             decision = self.policy.decide(snapshot, None, 1)
             self.store.append("VERDICT", decision.to_dict())
             self.store.set_state("last_verdict", decision.to_dict())
-<<<<<<< HEAD
-=======
             self._finalize_baseline(snapshot, decision)
->>>>>>> origin/feat/fixed-point-fabric-proof-20260831
             return snapshot, decision
 
     def run_until_fixed_point(self) -> tuple[Snapshot, FixedPointReceipt]:
         previous: Snapshot | None = None
         stable_samples = 0
         last_decision: FixedPointReceipt | None = None
-        with self.store.writer_lease(ttl_seconds=max(120, int(self.max_rounds * self.sample_interval_seconds + 30))):
+        ttl_seconds = max(120, int(self.max_rounds * self.sample_interval_seconds + 30))
+
+        with self.store.writer_lease(ttl_seconds=ttl_seconds):
             for round_number in range(1, self.max_rounds + 1):
                 snapshot = self.collect(round_number, previous)
-                stable_samples = stable_samples + 1 if previous and previous.signature == snapshot.signature else 1
+                stable_samples = (
+                    stable_samples + 1
+                    if previous and previous.signature == snapshot.signature
+                    else 1
+                )
                 last_decision = self.policy.decide(snapshot, previous, stable_samples)
                 self.store.append("VERDICT", last_decision.to_dict())
                 self.store.set_state("last_verdict", last_decision.to_dict())
+
                 if last_decision.reached:
-<<<<<<< HEAD
-=======
                     self._finalize_baseline(snapshot, last_decision)
->>>>>>> origin/feat/fixed-point-fabric-proof-20260831
                     return snapshot, last_decision
+
                 previous = snapshot
                 if round_number < self.max_rounds:
                     time.sleep(self.sample_interval_seconds)
-<<<<<<< HEAD
-        assert previous is not None and last_decision is not None
-        return previous, last_decision
-=======
+
             assert previous is not None and last_decision is not None
             self._finalize_baseline(previous, last_decision)
             return previous, last_decision
 
     def _finalize_baseline(self, snapshot: Snapshot, decision: FixedPointReceipt) -> None:
         baseline = self.store.get_last_good_state()
+
         if not decision.reached:
             if baseline:
                 self.store.record_rollback_required(
@@ -112,13 +118,18 @@ class FixedPointEngine:
                     target=baseline,
                 )
             return
+
         regressions = tuple(self.policy.regressions_against(baseline, snapshot)) if baseline else ()
         if regressions:
             self.store.record_rollback_required(";".join(regressions), target=baseline)
             return
+
         self.store.promote_last_good_state(snapshot, decision, regressions=regressions)
->>>>>>> origin/feat/fixed-point-fabric-proof-20260831
 
 
 def receipt_json(snapshot: Snapshot, decision: FixedPointReceipt) -> str:
-    return json.dumps({"snapshot": snapshot.to_dict(), "fixed_point": decision.to_dict()}, ensure_ascii=False, indent=2)
+    return json.dumps(
+        {"snapshot": snapshot.to_dict(), "fixed_point": decision.to_dict()},
+        ensure_ascii=False,
+        indent=2,
+    )
