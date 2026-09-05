@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-09-05T16:22:56.783Z",
-  "updatedAtBR": "05/09/2026, 13:22:56 BRT",
+  "updatedAt": "2026-09-05T16:37:32.109Z",
+  "updatedAtBR": "05/09/2026, 13:37:32 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "💎 acordar: cristalizar pepitas provadas pelo vertex inverso",
+    "lastCommit": "🧠 hermes: amarrar MetaLupa contínua, lacres e autoaprendizado",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-09-05T16:37:32.109Z",
+      "titulo": "Push na main · 240ecdc3b514ca363a797f4b4522f18e535873ca",
+      "detalhe": "🧠 hermes: amarrar MetaLupa contínua, lacres e autoaprendizado",
+      "area": "Repositório",
+      "sha": "240ecdc",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-09-05T16:22:56.783Z",
       "titulo": "Push na main · d72624ba3b9ad5a4c437d5146e8d7455ae0c1f81",
       "detalhe": "💎 acordar: cristalizar pepitas provadas pelo vertex inverso",
@@ -988,14 +996,6 @@
       "detalhe": "feat(reality-drift-detector): Auto-reconciliation on git drift",
       "area": "Repositório",
       "sha": "8a79be1",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-30T04:54:50.640Z",
-      "titulo": "Push na main · d0846b78aff41098969b70a792935f9cf615778d",
-      "detalhe": "🧹 CORRIGIR PROVA E TESTAR BLOQUEIO GREEN-FIRST (#1377)",
-      "area": "Repositório",
-      "sha": "d0846b7",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-09-05T16:37:32.109Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 240ecdc3b514ca363a797f4b4522f18e535873ca (240ecdc)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-09-05T16:22:56.783Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · d72624ba3b9ad5a4c437d5146e8d7455ae0c1f81 (d72624b)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-31T03:42:38.885Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 8a79be14b85ac956214454ac3bcfeecca4857565 (8a79be1)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-30T04:54:50.640Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · d0846b78aff41098969b70a792935f9cf615778d (d0846b7)",
       "area": "Repositório",
       "status": "sucesso"
     }
