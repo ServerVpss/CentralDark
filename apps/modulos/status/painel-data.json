@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-09-05T12:11:51.480Z",
-  "updatedAtBR": "05/09/2026, 09:11:51 BRT",
+  "updatedAt": "2026-09-05T12:15:25.999Z",
+  "updatedAtBR": "05/09/2026, 09:15:26 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "fix(handoff): fechar launcher Zendrive e preservar contexto RANDOLF no Hub",
+    "lastCommit": "test(handoff): provar pontos ligados no Trigger Fabric existente",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-09-05T12:15:25.999Z",
+      "titulo": "Push na main · fb124620e5582b36e31c52b79bbfb23afc90af3b",
+      "detalhe": "test(handoff): provar pontos ligados no Trigger Fabric existente",
+      "area": "Repositório",
+      "sha": "fb12462",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-09-05T12:11:51.480Z",
       "titulo": "Push na main · ade7a2d02c7c56af1f0c7524a5558588b3370f2c",
       "detalhe": "fix(handoff): fechar launcher Zendrive e preservar contexto RANDOLF no Hub",
@@ -988,14 +996,6 @@
       "detalhe": "fix(governança): unificar owner operacional e rebaixar Jeito do Pivete a legado (#1368)",
       "area": "Repositório",
       "sha": "0dbb5d2",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-29T18:04:55.107Z",
-      "titulo": "Push na main · 9d369c6b7da36242a1fb111e25d346dfec386d1f",
-      "detalhe": "docs(pendencias): nova #55 Rota de voz (TTS) morta na API central — SOL fala direto com bridge, ignorando a API",
-      "area": "Repositório",
-      "sha": "9d369c6",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-09-05T12:15:25.999Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · fb124620e5582b36e31c52b79bbfb23afc90af3b (fb12462)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-09-05T12:11:51.480Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · ade7a2d02c7c56af1f0c7524a5558588b3370f2c (ade7a2d)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-29T18:36:09.699Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 0dbb5d2d6210d70c0f0b31dbfa869007ac5cd4f3 (0dbb5d2)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-29T18:04:55.107Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 9d369c6b7da36242a1fb111e25d346dfec386d1f (9d369c6)",
       "area": "Repositório",
       "status": "sucesso"
     }
