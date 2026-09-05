@@ -5,8 +5,8 @@ Status: 🔴 alta · 🟡 média · 🟢 baixa · ✅ concluído
 
 ---
 
-## 🟡 #1 — Migração centralldark.com + telepainel.centralldark.com
-**Status:** em andamento (código pronto, falta executar na VPS)
+## 🟡 #1 — Migração centralldark.com + telepainel.centralldark.com ✅ concluído
+**Status:** concluído (código pronto, executado na VPS)
 **Sintoma:** site só responde pelo preview do Lovable; domínios próprios ainda não apontam.
 **Como fechar:**
 1. Apontar DNS dos 3 hostnames pro IP da VPS (`89.117.78.124`):
