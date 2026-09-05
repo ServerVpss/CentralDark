@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-09-05T16:38:03.377Z",
-  "updatedAtBR": "05/09/2026, 13:38:03 BRT",
+  "updatedAt": "2026-09-05T16:39:47.782Z",
+  "updatedAtBR": "05/09/2026, 13:39:47 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "branch": "main",
-    "lastCommit": "🎼 respirações: alinhar contrato vivo, MetaLupa e lacres",
+    "lastCommit": "🔗 lupa: bloquear wikilinks quebrados com Memory Linker canônico",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -599,6 +599,14 @@
   ],
   "events": [
     {
+      "time": "2026-09-05T16:39:47.782Z",
+      "titulo": "Push na main · 0d0e605fa8d3d101f93b1028557602632273c5b9",
+      "detalhe": "🔗 lupa: bloquear wikilinks quebrados com Memory Linker canônico",
+      "area": "Repositório",
+      "sha": "0d0e605",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-09-05T16:38:03.377Z",
       "titulo": "Push na main · 31b3fe30d85efac9b081e066e9c455f094ba8b0c",
       "detalhe": "🎼 respirações: alinhar contrato vivo, MetaLupa e lacres",
@@ -988,14 +996,6 @@
       "detalhe": "docs(agents): travar cadeado de governanca — consolidado intocavel (#1384)",
       "area": "Repositório",
       "sha": "0982a55",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-31T04:34:42.900Z",
-      "titulo": "Push na main · 4feeac5f3c5714307263dadab13584335713cc91",
-      "detalhe": "📚 REGISTRAR DELTA 4 DO HANDSHAKE NO OWNER CANÔNICO (#1382)",
-      "area": "Repositório",
-      "sha": "4feeac5",
       "actor": "segredounlock"
     }
   ],
@@ -1411,6 +1411,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-09-05T16:39:47.782Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 0d0e605fa8d3d101f93b1028557602632273c5b9 (0d0e605)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-09-05T16:38:03.377Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 31b3fe30d85efac9b081e066e9c455f094ba8b0c (31b3fe3)",
@@ -1750,13 +1757,6 @@
       "time": "2026-08-31T04:53:33.506Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 0982a558ed9775c182fe98b4fd8d983e3a1e24f1 (0982a55)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-08-31T04:34:42.900Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 4feeac5f3c5714307263dadab13584335713cc91 (4feeac5)",
       "area": "Repositório",
       "status": "sucesso"
     }
