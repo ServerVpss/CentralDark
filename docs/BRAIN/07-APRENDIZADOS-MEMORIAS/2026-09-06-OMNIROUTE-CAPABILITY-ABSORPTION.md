@@ -1,7 +1,7 @@
 ---
 title: "2026-09-06 — Intenção do CHEFE = DELTA ÚTIL + absorção OmniRoute"
 date: 2026-09-06
-tags: ["aprendizado", "omniroute", "roteador", "delta-util", "zero-regressao"]
+tags: ["aprendizado", "omniroute", "roteador", "delta-util", "zero-regressao", "soul", "orquestracao", "blocker-exato"]
 ---
 
 # Aprendizado cristalizado
@@ -33,6 +33,73 @@ METHOD_MAY_OPTIMIZE_OBJECTIVE_MUST_BE_PRESERVED=true
 REUSE_BEFORE_CREATE=true
 ZERO_REGRESSION=true
 UNKNOWN_IS_NOT_PASS=true
+```
+
+## Lei complementar — uma intenção, arquitetura inteira
+
+O CHEFE não precisa receber a decomposição técnica como uma fila de tarefas manuais. O sistema pode decompor internamente, mas deve continuar sozinho por todos os passos que consegue medir e executar com capacidades autorizadas.
+
+```text
+ONE_COMMAND_EXPANDS_FULL_ARCHITECTURE=true
+INTERNAL_MICROSTEPS_ALLOWED=true
+HUMAN_MICROMANAGEMENT_REQUIRED=false
+MACHINE_MEASURABLE_WORK_MUST_NOT_BE_DELEGATED_TO_HUMAN=true
+```
+
+Fluxo consolidado:
+
+```text
+INTENCAO_DO_CHEFE
+→ #ACORDAR
+→ !CALIBRAR
+→ HISTORY_RENDEZVOUS
+→ ESTADO_VIVO
+→ OWNERS + CAPACIDADES + DEPENDENCIAS
+→ RECONCILIAR
+→ DELTA_UTIL
+→ REUSE_BEFORE_CREATE
+→ EXECUTAR
+→ TESTAR
+→ CONTRAPROVAR
+→ REMEDIR
+→ FIXED_POINT_OU_BLOCKER_EXATO
+→ RECEIPT
+→ REGISTRA
+→ BOOT
+```
+
+## Blocker cirúrgico, não genérico
+
+Se a máquina consegue resolver, procura owner, ferramenta, conector/MCP, documentação oficial e web quando necessário, adapta no owner existente, testa e continua. Se não consegue, o blocker precisa provar exatamente por quê.
+
+```text
+MACHINE_RESOLVABLE_BLOCKER → AUTO_CONTINUE
+GENERIC_BLOCKER_FORBIDDEN=true
+EXACT_BLOCKER_RECEIPT_REQUIRED=true
+```
+
+Receipt mínimo:
+
+```text
+BLOCKER_ID=
+CLAIM_TARGET=
+EXACT_PATH_OR_ENDPOINT=
+OWNER=
+OBSERVED_ERROR=
+MISSING_DEPENDENCY=
+ATTEMPTS_AND_ALTERNATE_ROUTES=
+WHY_MACHINE_CANNOT_RESOLVE=
+HUMAN_ONLY_INPUT_IF_ANY=
+RESUME_CONDITION=
+EVIDENCE_REF=
+```
+
+Interrupção humana só é justificada por entrada realmente humana ou hard blocker material: secret/senha/MFA, consentimento/aprovação humana exclusiva, ação física, nova decisão fora do escopo, autorização irreversível ainda não concedida, licença/lei, política/segurança, impossibilidade física ou dependência externa indisponível após rotas alternativas.
+
+```text
+OPEN_ISSUE_OR_PR != AGENT_FAILURE
+OPEN_ISSUE_OR_PR != HUMAN_FAILURE
+FAILURE_ATTRIBUTION_REQUIRES_CAUSAL_EVIDENCE
 ```
 
 ## Aplicação ao #722
@@ -103,6 +170,16 @@ BOTAO_ROTEADOR_CENTRALDARK
 ```
 
 O detalhe técnico pode continuar por baixo da superfície, mas o CHEFE vê um produto só.
+
+## Propagação pelo coração da Casa
+
+A regra não fica apenas neste aprendizado. O owner de identidade operacional foi atualizado no mesmo lane:
+
+```text
+docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md
+```
+
+Como a porta universal da Casa carrega `SOUL-SOL.md` antes da execução, Hermes/Pivete, SOL e motores substituíveis herdam a mesma lei operacional quando carregam o boot canônico.
 
 ## Contraprova deste aprendizado
 
