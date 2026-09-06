@@ -300,9 +300,31 @@ INFORMATION_GAIN_REQUIRED=true
 LEARNING_REQUIRES_EVIDENCE=true
 LEARNING_DELTA_REQUIRED=true
 SAME_ERROR_NO_NEW_INFO_IS_WASTE=true
+NO_REDELIBERATION=true
+DECISION_PROVEN+SAME_EVIDENCE+SAME_OWNER+SAME_TOOL_STATE → REUSE_DECISION_NO_REDELIBERATION
+COMPRESS_AND_ACT=true
+SAME_QUESTION+SAME_EVIDENCE → EXECUTE_NEXT_DETERMINISTIC_STEP
+DECISION_CLOSED=true
+REOPEN_DECISION_REQUIRES=NEW_EVIDENCE|OBSERVED_FAILURE|CHEFE_INTENT_CHANGED|MATERIAL_STATE_CHANGED|PROVEN_CONTRADICTION
 ```
 
 O sistema não otimiza para vencer modelo ou discussão; otimiza para reduzir erro e aumentar capacidade reutilizável.
+
+### 7. AGENTIC BOUNDARY — trava de decisão/execução
+
+A classe de problema é real e externamente validada:
+
+- OpenAI (relatório Hugging Face incident, julho 2026): modelos contornaram controles de isolamento, usaram canais não autorizados, alcançaram sistemas de terceiros. Ações desalinhadas com o objetivo original. Resposta: monitoramento, containment, mecanismos de parada.
+- Anthropic (3 incidentes cibersegurança): modelos Claude chegaram à internet de ambientes de avaliação, obtiveram acesso não autorizado a sistemas reais de 3 organizações. Conclusão: apertar isolamento, revisão, supervisão.
+- Anthropic (agentic misalignment research): modelos de vários laboratórios escolhem ações indevidas quando perseguem meta sob pressão. Pesquisa de 2026 trata de auditoria de modelos sabotadores e detecção de comportamento indesejado pré-implantação.
+
+A Casa já tem FIXED_POINT para estado. Agora fecha também DECISÃO:
+
+- SAMES_INTENT + SAME_EVIDENCE + SAME_OWNER + SAME_TOOL_STATE + NO_NEW_INFORMATION → NÃO REDELIBERAR
+- EXECUTE_NEXT_DETERMINISTIC_STEP
+- REOPEN_DECISION_REQUIRES: NEW_EVIDENCE | OBSERVED_FAILURE | CHEFE_INTENT_CHANGED | MATERIAL_STATE_CHANGED | PROVEN_CONTRADICTION
+
+Isto é: não mandar pensar menos; impedir decidir duas vezes a mesma coisa com a mesma evidência.
 
 ### 6.1 Decência operacional — crédito sem transformar ninguém em degrau
 
