@@ -81,8 +81,16 @@ function scanDir(dir) {
   return out;
 }
 
+function markdownWithoutCode(content) {
+  return content
+    .replace(/```[\s\S]*?```/g, '')
+    .replace(/~~~[\s\S]*?~~~/g, '')
+    .replace(/`[^`\n]*`/g, '');
+}
+
 function wikilinks(content) {
-  return [...content.matchAll(/\[\[([^\]|#\n]+?)(?:[|#][^\]]*)?]]/g)]
+  const semanticMarkdown = markdownWithoutCode(content);
+  return [...semanticMarkdown.matchAll(/\[\[([^\]|#\n]+?)(?:[|#][^\]]*)?]]/g)]
     .map(m => m[1].trim().toUpperCase());
 }
 
