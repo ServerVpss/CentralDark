@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-09-05T22:21:18.435Z
+# 🧠 Notion Sync — 2026-09-06T00:51:15.848Z
 
-- **Commit fonte:** `14c024e5ab542b637b640cf5be67dc5aaec75284`
+- **Commit fonte:** `8eef40b50ac1d7567d3052b021b7c521a2d826ef`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 491 atualizadas · ❌ 11 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 491 atualizadas · ❌ 12 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
 | aprendizados | 35 | 0 | 35 | 0 | 0 |
-| estrutura | 423 | 0 | 412 | 0 | 11 |
+| estrutura | 424 | 0 | 412 | 0 | 12 |
 
 ## Operações
 
@@ -211,6 +211,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-28-revisao-mineracao-agi-e-organismo.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-05-LOCAL-PUBLICADO-ZENDRIVE-RABBIT-MINERAL.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-05-SHARED-WRITER-LEASE-CONTRAPROVA.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-05-STATUS-BADGE-FABRIC-FIXED-POINT.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-05-VERTEX-INVERSO-PEPITAS-PROVADAS.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-05-WORKFLOW-DEDUPE-RADAR.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/AIOS-GOLD-ASSAY-20260828/CAPABILITY-MATRIX.md |
