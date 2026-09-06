@@ -3,7 +3,7 @@ name: git-conflict-resolve-house-standard
 description: Padrão único da Casa para detectar e resolver conflito de PR (dependabot ou humano). Todo PR aberto passa pelo radar global; não criar segundo resolvedor nem fazer merge manual fora deste padrão.
 metadata:
   type: operational
-  version: "1.1"
+  version: "1.2"
   owner: SEGREDO/CHEFE
 ---
 
@@ -152,3 +152,117 @@ Para conflito humano, o comentário no PR é proveniência/ledger, nunca fonte d
 ## 8. Adaptação
 
 Realidade nova (outro gerenciador, lockfile, tipo de PR ou regra de conflito) atualiza **este arquivo, este radar e este motor no lugar**. Nunca um segundo sistema.
+
+## 9. Evolução planejada — inteligência adaptativa por trás do Hub, sem perder o caminho determinístico
+
+A direção autorizada pelo SEGREDO/CHEFE é integrar, quando o Hub/API estiverem realmente online e medidos, uma camada de inteligência da própria CentralDark atrás das superfícies de revisão e dependências. A superfície chamada Rabbit e o fluxo de Dependabot continuam sendo partes do organismo da Casa; nenhum fornecedor, modelo ou engine externa recebe autoridade arquitetural.
+
+```text
+RABBIT_SURFACE
++ DEPENDABOT_SURFACE
++ RADAR_GLOBAL
+→ CENTRALDARK_HUB/API
+→ CAPABILITY/MODEL_ROUTER
+→ FRONTIER_FIRST
+→ FALLBACK_DOWN_CHAIN
+→ SAME_CONFLICT_ENGINE
+→ TEST
+→ COUNTERPROOF
+→ RECEIPT
+```
+
+### 9.1 Determinismo primeiro
+
+O objetivo não é chamar IA em todo conflito. O primeiro caminho continua obrigatório e reproduzível:
+
+```text
+CONFLICT
+→ FINGERPRINT
+→ KNOWN_RULE?
+   → YES: MINIMAL_DETERMINISTIC_FIX
+          → TEST
+          → COUNTERPROOF
+          → RECEIPT
+          → AI_CALLED=0
+   → NO: UNKNOWN_CONFLICT
+```
+
+Conflito conhecido não deve voltar a depender de modelo, chat ou disponibilidade externa.
+
+### 9.2 IA somente como escalada de conflito desconhecido
+
+Quando a assinatura ainda não tiver regra provada, o Hub pode convocar uma capacidade de análise. A escolha de modelo pertence ao roteador da CentralDark, não ao workflow de conflito.
+
+```text
+UNKNOWN_CONFLICT
+→ HUB_CAPABILITY_REQUEST
+→ AVAILABLE_MODELS_MEASURED
+→ FRONTIER_MODEL_FIRST
+→ FALLBACK_ORDERED_BY_CAPABILITY
+→ ANALYZE_CAUSE
+→ PROPOSE_MINIMAL_FIX
+→ APPLY_ONLY_WITH_WRITER/AUTHORITY
+→ TEST_ON_EXACT_HEAD
+→ COUNTERPROOF
+```
+
+Se o modelo de fronteira estiver indisponível, o roteador desce a cadeia por capacidade comprovada. `MODEL_UNAVAILABLE != MISSION_FAILURE` quando existe fallback autorizado e equivalente; `UNKNOWN != PASS` continua valendo.
+
+### 9.3 Aprendizado obrigatório após uma correção nova
+
+Uma correção resolvida por IA não fecha a missão sozinha. Ela só vira aprendizado da Casa quando for transferida para o caminho determinístico:
+
+```text
+NEW_CONFLICT_CLASS
+→ AI/HUMAN_ANALYSIS
+→ MINIMAL_FIX_PROVED
+→ EXTRACT_CONFLICT_FINGERPRINT
+→ CHOOSE_EXISTING_OWNER
+   → dependabot.yml        quando a causa for geração/agrupamento de updates
+   → .coderabbit.yaml      quando a causa for regra/sinal de revisão
+   → reconcile-open-prs.sh quando a causa for detecção/varredura
+   → resolve-conflicts.sh  quando a causa for resolução determinística
+   → SKILL.md              para contrato/política/armadilha aprendida
+→ ADD/UPDATE TEST FIXTURE
+→ REPRODUCE SAME CLASS
+→ PROVE AI_CALLED=0
+→ RECEIPT
+```
+
+Lei:
+
+```text
+AI_FIXED_ONCE
++ SAME_CLASS_REQUIRES_AI_AGAIN
+= LEARNING_NOT_TRANSFERRED
+```
+
+### 9.4 Função dos YAMLs — trabalham juntos, não se substituem
+
+`.github/dependabot.yml` continua dono da política de abertura, agrupamento e classe das atualizações de dependência. `.coderabbit.yaml` continua dono da superfície de revisão/sinais. O Radar Global mede todos os PRs. O resolver continua sendo o único mutator determinístico de conflito.
+
+```text
+DEPENDABOT_YAML = PRODUZ + AGRUPA + CLASSIFICA UPDATES
+RABBIT_YAML     = OBSERVA + REVISA + SINALIZA CAUSA/RISCO
+RADAR           = DETECTA GLOBALMENTE
+RESOLVER        = CORRIGE DETERMINISTICAMENTE
+HUB/API         = ROTEIA CAPACIDADE QUANDO ESCALADA FOR NECESSÁRIA
+MODEL           = SUBSTITUÍVEL
+REALITY_JUDGE   = VEREDITO
+```
+
+O fato de a superfície Rabbit poder usar inteligência da própria CentralDark no futuro **não autoriza** ligar hoje autofix, resolução de conflito ou MCP externo sem Hub/API online, allowlist, writer lease, testes e receipt.
+
+### 9.5 Fronteira atual de prova
+
+```text
+RADAR_GLOBAL_DESIGN=PROVED_ON_PR_BRANCH
+ONE_CONFLICT_ENGINE=PROVED_BY_REPO_CONTRACT
+RABBIT_CURRENT_CONFIG=REVIEW_ONLY
+DEPENDABOT_CURRENT_CONFIG=UPDATE_POLICY
+CENTRALDARK_HUB_AI_CONFLICT_ROUTING=PLANNED_NOT_EXECUTED
+FRONTIER_FIRST_MODEL_ROUTING=INTENT_LOCKED_NOT_RUNTIME_PROVEN
+AUTONOMOUS_AI_SELF_FIX=NOT_ENABLED
+```
+
+Até o Hub estar online e a rota real ser medida, esta seção é contrato de evolução, não afirmação de runtime.
