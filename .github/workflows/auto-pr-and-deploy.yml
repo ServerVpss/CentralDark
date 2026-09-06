@@ -1,51 +1,63 @@
 name: Auto PR + Micro Deploy
-true:
+
+on:
   push:
     branches:
-    - feat/**
+      - 'feat/**'
+
 permissions:
   contents: write
   pull-requests: write
   checks: write
+
 jobs:
   create_pr_and_deploy:
-    runs-on:
-    - self-hosted
-    - Linux
+    runs-on: [self-hosted, Linux]
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-    - name: Ensure PR exists (create if missing)
-      uses: actions/github-script@v7
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        script: "const branch = process.env.GITHUB_REF.replace('refs/heads/', '');\n\
-          const owner = context.repo.owner;\nconst repo = context.repo.repo;\nconst\
-          \ prs = await github.rest.pulls.list({ owner, repo, head: `${owner}:${branch}`\
-          \ });\nif (prs.data.length === 0) {\n  const bodyPath = '.github/PR_BODY.md';\n\
-          \  let body = '';\n  try {\n    body = require('fs').readFileSync(bodyPath,\
-          \ 'utf8');\n  } catch (e) {\n    body = 'Auto-generated PR for ' + branch;\n\
-          \  }\n  await github.rest.pulls.create({ owner, repo, title: `Auto PR: ${branch}`,\
-          \ head: branch, base: 'main', body });\n  core.info(`Created PR for ${branch}`);\n\
-          } else {\n  core.info(`PR already exists for ${branch}: ${prs.data[0].html_url}`);\n\
-          }\n"
-    - name: Run tests (if present)
-      run: "if [ -f ./scripts/test.sh ]; then\n  chmod +x ./scripts/test.sh\n  ./scripts/test.sh\n\
-        else\n  echo \"No test.sh found, skipping tests\"\nfi\n"
-    - name: Micro deploy (dry-run)
-      env:
-        DRY_RUN: true
-        CENTRALDARK_ACTION_CLASS: MICRO_DEPLOY
-        CENTRALDARK_INTENT_AUTHORIZED: 'true'
-        CENTRALDARK_DEPLOY_TARGET: ${{ github.ref }}
-        CENTRALDARK_ROLLBACK_READY: 'true'
-      run: 'chmod +x ./scripts/micro_deploy.sh || true
+      - name: Checkout
+        uses: actions/checkout@v4
 
-        ./scripts/micro_deploy.sh "$GITHUB_REF" "$GITHUB_SHA"
+      - name: Ensure PR exists (create if missing)
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const branch = process.env.GITHUB_REF.replace('refs/heads/', '');
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const prs = await github.rest.pulls.list({ owner, repo, head: `${owner}:${branch}` });
+            if (prs.data.length === 0) {
+              const bodyPath = '.github/PR_BODY.md';
+              let body = '';
+              try {
+                body = require('fs').readFileSync(bodyPath, 'utf8');
+              } catch (e) {
+                body = 'Auto-generated PR for ' + branch;
+              }
+              await github.rest.pulls.create({ owner, repo, title: `Auto PR: ${branch}`, head: branch, base: 'main', body });
+              core.info(`Created PR for ${branch}`);
+            } else {
+              core.info(`PR already exists for ${branch}: ${prs.data[0].html_url}`);
+            }
 
-        '
-    - name: Upload deploy log
-      uses: actions/upload-artifact@v4
-      with:
-        name: micro-deploy-log
-        path: files/deploy-*.log
+      - name: Run tests (if present)
+        run: |
+          if [ -f ./scripts/test.sh ]; then
+            chmod +x ./scripts/test.sh
+            ./scripts/test.sh
+          else
+            echo "No test.sh found, skipping tests"
+          fi
+
+      - name: Micro deploy (dry-run)
+        env:
+          DRY_RUN: true
+        run: |
+          chmod +x ./scripts/micro_deploy.sh || true
+          ./scripts/micro_deploy.sh "$GITHUB_REF" "$GITHUB_SHA"
+
+      - name: Upload deploy log
+        uses: actions/upload-artifact@v4
+        with:
+          name: micro-deploy-log
+          path: files/deploy-*.log

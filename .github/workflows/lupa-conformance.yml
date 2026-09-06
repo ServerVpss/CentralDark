@@ -202,7 +202,6 @@ jobs:
           node --check apps/modulos/mcp/src/admin-patterns-ui.js
           node --test apps/modulos/mcp/src/admin-patterns-ui.test.mjs
 
-      if: github.head_ref != 'absorcao/pombo-r02-lineage-20260905'
       - name: Memory Linker — sintaxe + mineração determinística
         shell: bash
         run: |
@@ -325,7 +324,6 @@ jobs:
     name: Cartazes canônicos — hashes e elos semânticos
     if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: [self-hosted, Linux]
-    if: github.head_ref != 'absorcao/pombo-r02-lineage-20260905'
     timeout-minutes: 5
     permissions:
       contents: read
