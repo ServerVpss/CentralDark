@@ -326,3 +326,160 @@ STATUS=UNKNOWN_OR_PENDING
 ```
 
 O ouro histórico entra como candidato. A realidade viva decide o que sobrevive.
+
+## 12. Garimpo técnico adicional — Horn, continuidade e observabilidade
+
+Quatro materiais adicionais foram reconciliados contra os owners atuais sem criar motor novo.
+
+### Horn / ponto fixo
+
+O material que descreve fatos, regras, propagação, modelo mínimo e contradições reforça uma capacidade que **já existe** na Casa através de `SPIRAL-TRAVERSAL.yml`, `spiral_traversal.py` e Fixed Point Fabric.
+
+```text
+HORN_INSPIRATION = REUSE_EXISTING_OWNER
+CREATE_NEW_HORN_ENGINE = false
+FORWARD_FIXED_POINT = KEEP
+REVERSE_FIXED_POINT = KEEP
+NEGATIVE_GOAL_REFUTATION = KEEP
+FRAGMENT_DROP_ZERO = KEEP
+DUPLICATE_TRAVERSAL_ZERO = KEEP
+```
+
+A referência externa é minério de fundamentação. Ela não substitui owner, boot, runtime truth, CARACOL, MetaLupa ou Fixed Point Fabric.
+
+### JARVIS / FRIDAY
+
+Os materiais de JARVIS/FRIDAY são aproveitados somente onde descrevem **continuidade, modularidade, isolamento de falha, percepção → decisão → ação → integridade e troca de braço sem perder estado**.
+
+```text
+MODEL_CHANGE != MEMORY_RESET
+ENGINE_CHANGE != MISSION_RESET
+ARM_FAILURE → PRESERVE_LAST_GOOD_STATE + NEXT_CURSOR
+FRIDAY_AS_NEW_SOUL = false
+FRIDAY_AS_NEW_CORE = false
+FRIDAY_RUNTIME_CLAIMS_WITHOUT_RECEIPT = UNKNOWN
+EXTERNAL_FICTION_OR_ANALOGY = CONCEPTUAL_MINERAL_ONLY
+```
+
+A Casa já possui o owner `JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md`; portanto a melhoria deve ser absorvida nesse organismo e não fundar identidade concorrente.
+
+### DevTools / rastro operacional
+
+A inspeção de UI mostrou uma diferença que deve permanecer canônica:
+
+```text
+VISIBLE_AGENT_STATUS != PRIVATE_REASONING
+EXECUTION_TRACE != CHAIN_OF_THOUGHT
+CLASS_NAME != COMPUTED_BEHAVIOR
+```
+
+Um elemento chamado `loading-shimmer-tertiary` foi observado com `animation-name: none` e `background-image: none`; nome visual não prova animação efetiva.
+
+O painel CentralDark deve preferir rastro operacional verificável:
+
+```text
+STATE
+ACTION
+TARGET
+TOOL_OR_CAPABILITY
+OBSERVED_RESULT
+EVIDENCE_REF
+STATUS
+COUNTERPROOF
+RECEIPT
+NEXT_CURSOR
+```
+
+Nunca depender de exposição de raciocínio privado para auditabilidade. O que interessa é a cadeia observável de ação, evidência, teste e resultado.
+
+## 13. Teste vivo do fallback de revisão — PR #1444
+
+Em `2026-09-06T13:27:35Z`, no PR #1444, o `chatgpt-codex-connector[bot]` publicou que o limite de uso de Codex para code reviews foi atingido.
+
+```text
+PR=1444
+PR_HEAD_AT_EVENT=7bc061bf80f2e94427927ffae6dc769d8c33ee83
+CODEX_REVIEW_STATE=UNUSABLE
+CAUSE=USAGE_LIMIT_REACHED
+FALLBACK_TRIGGER_PRESENT=true
+```
+
+O contrato existente já determina:
+
+```text
+CODEX_REVIEW_WHEN_AVAILABLE_AND_MEASURED
+→ ZENDRIVE_REVIEW_FALLBACK_WHEN_CODEX_UNAVAILABLE_OR_UNUSABLE
+→ CODERABBIT_REVIEW_AS_PARALLEL_OR_SECONDARY_CONSULTATIVE_SIGNAL
+→ SIGNAL_WATCHER
+→ HERMES_REPRODUCE_AND_TEST
+→ META_LUPA_COUNTERPROOF
+→ RECEIPT
+```
+
+O bridge existente lê Rabbit A, Rabbit B e Zendrive de forma independente. Falha/ausência de Rabbit não deve impedir o receipt Zendrive de seguir para Signal Watcher e mineralizer.
+
+```text
+RABBIT_UNAVAILABLE_DOES_NOT_BLOCK_ZENDRIVE=true
+CODEX_USAGE_LIMIT_COUNTS_AS_UNUSABLE=true
+ZENDRIVE_ROLE=REVIEW_ONLY
+ZENDRIVE_IS_NOT_MERGE_AUTHORITY=true
+```
+
+Dependabot permanece um mutador especializado de dependências. Zendrive não o substitui como mutador; quando Dependabot falha, Zendrive pode entrar como diagnóstico/revisão consultiva e o owner/Writer existente executa a remediação após teste.
+
+```text
+DEPENDABOT_FAILURE
+→ PERSISTENT_GAP_SWEEP
+→ CAUSE + OWNER
+→ ZENDRIVE/CODERABBIT/CODEX AS CONSULTATIVE_CAPABILITIES_WHEN_APPLICABLE
+→ HERMES_TEST
+→ WRITER_MINIMAL_REMEDIATION
+→ COUNTERPROOF
+```
+
+### Estado do E2E neste receipt
+
+```text
+CODEX_FAILURE_EVENT=PROVED
+FALLBACK_CONTRACT=PROVED_IN_SOURCE
+ZENDRIVE_BRIDGE=PROVED_IN_SOURCE
+ZENDRIVE_AUTOMATIC_ENTRY_AFTER_THIS_EVENT=EVIDENCE_MISSING_UNTIL_RUNTIME_RECEIPT
+STATUS=FALLBACK_TRIGGER_PRESENT_E2E_PENDING_RECEIPT
+```
+
+Não transformar ausência de receipt imediato em falha definitiva: a Casa pode estar processando. Remedir antes de qualquer veredito.
+
+## 14. Lei fundamental — tudo que tocar deve cristalizar o aprendizado material
+
+A partir deste ponto, cada alteração material feita no organismo deve deixar um rastro reutilizável no **owner existente**, sem fabricar documento, regra, job ou arquitetura paralela somente para registrar atividade.
+
+```text
+MATERIAL_TOUCH
+→ MEASURE_BEFORE
+→ OWNER
+→ CAUSE_OR_INTENT
+→ MINIMAL_DELTA
+→ TEST
+→ COUNTERPROOF
+→ MEASURE_AFTER
+→ RECEIPT
+→ CRYSTALLIZE_IN_EXISTING_OWNER
+→ REUSE_ON_NEXT_MATCH
+```
+
+Se a peça foi tocada e houve aprendizado material, esse aprendizado deve sobreviver à sessão/modelo/agente. Se não houve ganho informacional, registrar `NO_CHANGE` quando necessário e **não** criar commit artificial.
+
+```text
+EVERY_MATERIAL_TOUCH_MUST_LEAVE_RECEIPT=true
+EVERY_PROVEN_IMPROVEMENT_MUST_CRYSTALLIZE=true
+EVERY_REFUTED_HYPOTHESIS_MUST_MINERALIZE=true
+EVERY_UNKNOWN_MUST_KEEP_REOPEN_CONDITION=true
+CRYSTALLIZATION_TARGET=EXISTING_CANONICAL_OWNER
+NO_NEW_INFORMATION_NO_NEW_RULE=true
+NO_NEW_INFORMATION_NO_NEW_COMMIT=true
+NO_NEW_INFORMATION_NO_NEW_PR=true
+```
+
+O objetivo da regra é evitar repetir investigação, evitar regressão e fazer a Casa começar cada ciclo acima do último estado comprovado.
+
+A formulação administrativa normativa vive em `docs/SEGURANCA/ADM-INVENTARIO-COMANDO-UNIVERSAL.md` e deve ser carregada no boot/reconciliação.
