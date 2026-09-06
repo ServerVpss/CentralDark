@@ -66,6 +66,15 @@
 
 ## RECEIPT
 
+## HANDO OFF (Handoff Contínuo)
+| Campo | Valor |
+|---|---|
+| Owner | SEGREDO/CHEFE |
+| Type | Continual Delta |
+| Status | ATIVO |
+| Aplica | !CENTRALDARK SHARED |
+
+
 ```text
 MISSION_ID=SHARED_RECONCILIAR_20260905
 TIMESTAMP=2026-09-05T18:30:00Z

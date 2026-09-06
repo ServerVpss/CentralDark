@@ -124,8 +124,8 @@ supporting_methods:
     meaning: READ_ONLY_CALIBRATION_AND_STABILIZATION
     owner: .agents/skills/fable-loop/SKILL.md
     ontology: METHOD_NOT_AGENT_OR_ROUTER
-    mode: READ_ONLY
-    default_routing: false
+    mode: READ_ONLY_CALIBRATION
+    default_routing: true
     may_write_canonical: false
     promotion_gate: META_LUPA_SAME_CONTROL
 
@@ -151,6 +151,26 @@ execution_model:
   model_vote_as_truth: false
   fanout_growth_requires_information_gain: true
   recursion_depth_is_progress: false
+
+  EXECUTION_LOOP:
+  - MEASURE_CURRENT_STATE
+  - MULTIBUSSOLA
+  - META_LUPA
+  - FABLE_LOOP
+  - SEARCH_EXISTING_CRYSTAL
+  - SEARCH_EXISTING_OWNER
+  - CLASSIFY_FAILURE_SIGNATURE
+  - IDENTIFY_CAUSE
+  - CHOOSE_DISCRIMINATING_TEST
+  - EXECUTE_MINIMAL_SAFE_REMEDIATION
+  - RETEST
+  - COUNTERPROOF
+  - VERTEX_INVERSO
+  - REMEASURE_AFFECTED_CONE
+  - REALITY_JUDGE
+  - CLAIM_SEAL
+  - WRITE_RECEIPT
+  - NEXT_CURSOR
 
 standard_flow:
   canonical_entry: CENTRALDARK
