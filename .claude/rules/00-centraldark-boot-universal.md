@@ -4,9 +4,12 @@
 CANONICAL_AGENT_CORE=LEIA-ME-IA.md
 ADAPTER_ROLE=AUTOLOAD_POINTER_ONLY
 ENGINE=CLAUDE_CODE
+REUSE_BEFORE_CREATE_REQUIRED=true
+CONTEXT_RECONCILIATION_CONTRACT=docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json
+FALHA_DE_RECONCILIACAO_DE_CONTEXTO=BLOCK_AND_REANCHOR
 ```
 
-Esta regra existe somente para garantir descoberta automática no Claude Code. Antes de responder ou agir, leia `LEIA-ME-IA.md` integralmente e execute o roteamento canônico definido ali.
+Esta regra existe somente para garantir descoberta automática no Claude Code. Antes de responder ou agir, leia `LEIA-ME-IA.md` integralmente e execute o roteamento canônico definido ali. Se o contexto material não reconciliar com o estado vivo, bloqueie a mutação e volte ao owner/cursor provado antes de continuar.
 
 ```text
 ONE_SOL=true
