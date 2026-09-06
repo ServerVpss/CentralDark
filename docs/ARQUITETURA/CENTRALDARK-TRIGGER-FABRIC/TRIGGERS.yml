@@ -2,7 +2,7 @@ schema: centraldark.trigger-map.v1
 human_triggers:
   - id: CENTRALDARK_MASTER
     token: "!CENTRALDARK"
-    aliases: ["!CENTRAL-DARK", "!CDARK"]
+    aliases: ["#CENTRALDARK", "!CENTRAL-DARK", "#CENTRAL-DARK", "!CDARK", "#CDARK"]
     owner: "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml"
     explicit_marker_required: true
     plain_word_does_not_trigger: true
@@ -79,7 +79,7 @@ semantic_trigger_resolution:
   master_cycle:
     contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
     resolver: scripts/trigger-fabric/centraldark_master_cycle.py
-    explicit_trigger: "!CENTRALDARK"
+    explicit_triggers: ["!CENTRALDARK", "#CENTRALDARK"]
     receipt_schema: centraldark.master-cycle-receipt.v1
   delta_harvest:
     contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml#delta_harvest
@@ -99,6 +99,7 @@ semantic_trigger_resolution:
     - "PLAIN_WORD_CENTRALDARK_WITHOUT_ACTIVE_SESSION -> NO_MASTER_TRIGGER"
     - "DELTA_UTILS_FAMILY -> DELTA_HARVEST_NO_NEW_ROUTER"
     - "MULTIBUSSOLA_META -> MULTIBUSSOLA_OWNER_META_MODE_NO_NEW_PIPELINE"
+    - "FABLE_LOOP -> READ_ONLY_CALIBRATION_NO_NEW_ROUTER"
     - "MULTIBUSSOLA_META -> FORWARD_REVERSE_INVERSE_CROSS_BEARING_RENDEZVOUS"
     - "MATERIAL_STATE_CHANGED -> INVALIDATE_ONLY_DEPENDENT_STALE_BEARINGS_AND_REFIX"
     - "SEMANTIC_TRIGGER_MATCH != AUTHORITY_EXPANSION"
@@ -131,6 +132,16 @@ learning_triggers:
     behavior: [EXTRACT_BELIEF_METHOD_CAPABILITY_DELTA, COUNTERPROOF, CANDIDATE_FOR_COMPILER]
     may_write_canonical: false
     status: CONTRACT_DECLARED
+  - event: FABLE_LOOP
+    aliases: ["!FABLE_LOOP", "#FABLE_LOOP", "FABLE_LOOP"]
+    owner: ".agents/skills/fable-loop/SKILL.md"
+    semantic_family: CALIBRATION_METHOD
+    behavior: [MAP, READ_CANONICAL, CROSS_CHECK, DISCRIMINATING_TEST, COUNTERPROOF, CONSOLIDATE_PROVEN_DELTA, REINDEX, FIXED_POINT]
+    mode: READ_ONLY
+    default_routing: false
+    may_write_canonical: false
+    promotion_gate: META_LUPA_SAME_CONTROL
+    status: CONTRACT_DECLARED_METHOD_NOT_ROUTER
   - event: TOOL_ERROR
     owner: ".agents/skills/session-intelligence-harvester/ + scripts/memory-linker/"
     behavior: [REGISTER_CAUSE_EVIDENCE, PROPOSE_DISCRIMINATING_TEST, SEARCH_EXISTING_CRYSTAL, ROUTE_MINIMAL_REMEDIATION]

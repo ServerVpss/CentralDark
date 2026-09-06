@@ -49,6 +49,7 @@ resource_discovery:
     - ADAPTERS
     - SCREENPIPE
     - AI-OX_DERIVED_CAPABILITIES
+    - [EXT_REDACTED]_DERIVED_CAPABILITIES
     - FUTURE_DISCOVERED_CAPABILITIES
   unknown_capability_is_available: false
   configured_is_active: false
@@ -114,6 +115,108 @@ composition:
   serialize_mutation: true
   capability_gap: FAIL_CLOSED
   no_information_gain: STOP_EXPANSION
+
+micro_deploy:
+  role: CAUSAL_PROMOTION_ZORD
+  policy_owner: docs/CONSCIENCIA/03-FLUXO-DEPLOY.md
+  script: scripts/micro_deploy.sh
+  auto_select_when_applicable: true
+  user_repetition_required: false
+  inherit_engine_binding: true
+  inherit_runtime_plug: true
+  inherit_current_intent: true
+  inherit_writer_scope: true
+  inherit_proof_target: true
+  inherit_evidence_refs: true
+  inherit_next_cursor: true
+  connection_policy: REUSE_MEASURED_AVAILABLE_CONNECTION
+  connection_must_be_measured: true
+  new_connection_when_equivalent_exists: false
+  full_deploy_by_default: false
+  prefer_when:
+    - OWNER_IDENTIFIABLE
+    - CAUSAL_SCOPE_ISOLATABLE
+    - AFFECTED_DEPENDENCIES_KNOWN
+    - ROLLBACK_TARGET_EXISTS
+    - SAME_SHA_RUNTIME_PROOF_POSSIBLE
+  escalate_when:
+    - SHARED_CONTRACT_CHANGED
+    - GLOBAL_SCHEMA_CHANGED
+    - ARTIFACT_MONOLITHIC
+    - COORDINATED_MIGRATION_REQUIRED
+    - PARTIAL_PROMOTION_WOULD_BREAK_COMPATIBILITY
+    - REALITY_JUDGE_EXPANDS_CAUSAL_CONE
+  dry_run_default: true
+  real_promotion_requires_existing_authorization: true
+  unknown_is_not_pass: true
+  receipt_required: true
+  receipt_chain: [SOURCE_SHA, ARTIFACT, DEPLOY_SCOPE, RUNTIME, NEXT_CURSOR]
+
+realtime_feedback:
+  role: LIVE_MISSION_FEEDBACK_SIGNAL
+  activation: WITH_ACTIVE_MISSION
+  persistent_per_mission: true
+  user_repetition_required: false
+  accepted_sources: [CHEFE_MESSAGE, SCREENSHOT, LOG, TERMINAL_OUTPUT, PR_STATE, COMMIT_STATE, CI_STATE, RUNTIME_OBSERVATION, TOOL_RESULT]
+  command_and_feedback_are_independent: true
+  feedback_is_authority: false
+  feedback_is_mutation_permission: false
+  evidence_scope_must_be_preserved: true
+  raw_evidence_ref_required_when_material: true
+  route_material_signal_to: PERSISTENT_GAP_SWEEP
+  process:
+    - INGEST_FEEDBACK
+    - CLASSIFY_SIGNAL_SCOPE
+    - COMPARE_LAST_PROVEN_STATE
+    - DEDUPE_SAME_SIGNAL
+    - REOPEN_AFFECTED_CONE_ONLY
+    - META_LUPA
+    - RECONCILE_CURRENT_REALITY
+    - CONTINUE_PERSISTENT_GAP_SWEEP
+  no_information_gain: REUSE_PROOF_OR_DROP_DUPLICATE
+  already_proven_without_reopen_cause: REUSE_PROOF
+  new_failure: OPEN_CAUSAL_CONE
+  repeated_failure_same_signature: REUSE_CRYSTAL_NOT_RETHINK
+  learning_output: [REFUTED_MINERAL, UNRESOLVED_MINERAL, CRYSTAL_GOLD]
+  silent_discard: FORBIDDEN
+  next_cursor_required: true
+
+persistent_gap_sweep:
+  role: AUTONOMOUS_SELF_HEALING_ZORD
+  activation: WITH_MEGAZORD
+  persistent_per_mission: true
+  user_repetition_required: false
+  inherit_current_configuration: true
+  scan_surfaces: [REALTIME_FEEDBACK, PR, COMMIT, CI, DEPENDABOT, WORKFLOW, JOB, RUNNER, TOOL_ERROR, TEST_FAILURE, RUNTIME_DRIFT, CAPABILITY_GAP, OPEN_RESIDUAL]
+  process:
+    - MEASURE_CURRENT_STATE
+    - CLASSIFY_FAILURE_SIGNATURE
+    - SEARCH_EXISTING_CRYSTAL
+    - DEDUPE_ALREADY_PROVEN
+    - IDENTIFY_CAUSE
+    - SELECT_MINIMUM_SUFFICIENT_CAPABILITIES
+    - EXECUTE_MINIMAL_SAFE_REMEDIATION
+    - RETEST
+    - COUNTERPROOF
+    - REALITY_JUDGE
+    - MICRO_DEPLOY_WHEN_CAUSAL_SCOPE_SUPPORTS
+    - VERIFY_RUNTIME_OR_LIVE_SOURCE
+    - CRYSTALLIZE_LEARNING
+    - WRITE_RECEIPT
+    - CONTINUE_NEXT_CURSOR
+  loop_until: FIXED_POINT_OR_PROVEN_HUMAN_FRONTIER
+  same_failure_no_new_information: REUSE_CRYSTAL_NOT_RETHINK
+  already_proven_without_reopen_cause: REUSE_PROOF
+  failed_candidate_becomes: REFUTED_MINERAL
+  unresolved_candidate_becomes: UNRESOLVED_MINERAL
+  proven_improvement_becomes: CRYSTAL_GOLD
+  silent_discard: FORBIDDEN
+  no_material_delta: NO_ARTIFICIAL_MUTATION
+  mutation_requires_single_writer: true
+  parallel_read_only_fronts_allowed: true
+  exact_head_remeasurement_before_promotion: true
+  next_cursor_required: true
+  human_return_before_fixed_point: FORBIDDEN_UNLESS_HUMAN_FRONTIER
 
 adapter_contract:
   adapter: CAPABILITY_CONTRACT_ROUTER

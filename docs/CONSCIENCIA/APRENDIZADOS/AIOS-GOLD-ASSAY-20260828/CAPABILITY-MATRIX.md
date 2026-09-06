@@ -6,6 +6,7 @@ updated: 2026-08-28
 ---
 
 # Capability Matrix — AIOS/AI-OX × CentralDark
+# Capability Matrix — AIOS/[EXT_REDACTED] × CentralDark
 
 Esta matriz é uma bancada de reconciliação. `GAP_CANDIDATE` não significa que a CentralDark não possui a capacidade; significa que a comparação ainda exige abertura do owner/consumer real e teste discriminante.
 

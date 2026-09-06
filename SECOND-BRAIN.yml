@@ -1,5 +1,5 @@
 # SECOND-BRAIN.yml — Segundo Cérebro Lógico da CentralDark
-# Este arquivo define o segundo cérebro da Casa: ferramentas cognitivas ativas.
+# Define o mapa lógico do cérebro. MEMORY != REALITY; runtime exige prova própria.
 
 owner:
   name: "CentralDark"
@@ -16,69 +16,174 @@ brains:
 
   - name: "TOOLS_COGNITIVAS"
     type: "reasoning"
-    description: "Ferramentas de raciocínio, análise e processamento ativo"
+    description: "Ferramentas de raciocínio, prova, reconciliação e processamento ativo"
     components:
       - name: "MetaLupa"
-        description: "Auditoria crítica e validação de evidências"
+        description: "Auditoria crítica, falsificação contínua e AutoLupa até ponto fixo"
         path: ".agents/skills/meta-lupa/"
-      - name: "Kimetsu Legacy Breathing"
-        description: "17 respirações operacionais para modos de trabalho"
-        path: "skills/operational-method/kimetsu-legacy-breathing/"
+        engine: ".agents/skills/meta-lupa/scripts/meta_lupa.py"
+        usage_ledger: ".agents/skills/meta-lupa/references/uso-ledger.jsonl"
+        claim_seals: ".agents/skills/meta-lupa/references/claim-seals.jsonl"
+      - name: "Banda / Kimetsu Legacy Breathing"
+        description: "17 respirações operacionais integradas ao método e à Banda"
+        path: ".agents/skills/centraldark-operational-method/references/regenerative-self-refinement-engine.md"
+        contract: "docs/BRAIN/01-CONCEITOS/02-BANDA/BANDA_COMPASSO_GLOBAL.json"
       - name: "Operational Method"
-        description: "Método de operação no CentralDark"
-        path: "skills/operational-method/centraldark-operational-method/"
+        description: "Método único de operação no CentralDark"
+        path: ".agents/skills/centraldark-operational-method/"
+      - name: "GraphRAG Master"
+        description: "Biblioteca/memória oficial do Hermes Core; consome Banda, aprendizados e rastro"
+        path: "apps/modulos/HERMES-CORE/agents/GraphRAG-Master/agent.mjs"
+      - name: "Agent Library"
+        description: "Catálogo de agentes por função; capacidade, não autoridade"
+        path: "docs/BRAIN/03-DOCUMENTACAO/01-AGENTS-LIBRARY/2026-07-13-overclock-swarm-tier-catalog.json"
+        groups: ["scout", "builder", "reviewer", "swarm"]
       - name: "Skills especializadas"
         description: "Domínios específicos (vps, github, forensics, etc.)"
-        path: "skills/"
+        path: ".agents/skills/"
     responsible: "Hermes Agent + Skills sob demanda"
+
+compass:
+  aliases:
+    BANDA: "docs/BRAIN/01-CONCEITOS/02-BANDA/BANDA_COMPASSO_GLOBAL.json"
+    COMPASSO: "docs/BRAIN/01-CONCEITOS/02-BANDA/BANDA_COMPASSO_GLOBAL.json"
+    META_LUPA: ".agents/skills/meta-lupa/SKILL.md"
+    AUTOLUPA: ".agents/skills/meta-lupa/SKILL.md"
+    VERTEX: "VERTEX_INVERSO"
+    CARACOL: "CARACOL_REVERSO_CAUSAL"
+    MULTIBUSSOLA: "docs/CONSCIENCIA/MULTIBUSSOLA.md"
+    CLAIM_SEAL: ".agents/skills/meta-lupa/references/claim-seals.jsonl"
+  groups:
+    PERCEPTION: ["screenpipe", "browser", "audio", "screen", "logs"]
+    SCOUT: ["qa-swarm-scout", "graph-investigator", "vento", "trovao"]
+    BUILDER: ["qa-swarm-builder", "qa-swarm-worker", "chamas", "pedra", "inseto"]
+    REVIEWER: ["qa-swarm-reviewer", "qa-swarm-observer", "meta-lupa", "lua"]
+    JUDGE: ["REALIDADE"]
+    MEMORY: ["GraphRAG-Master", "BRAIN_VAULT", "APRENDIZADOS", "CLAIM_SEALS", "PERGAMINHOS"]
+    SYNC: ["CASA", "VPS", "GITHUB_MAIN"]
 
 routing:
   omni_router:
     host: "127.0.0.1"
     port: 8099
+    runtime_status: "UNKNOWN_UNTIL_LIVE_MEASUREMENT"
     engines:
       - name: "hermes"
         base_url: "http://127.0.0.1:8645"
-        configured: true
+        configured_in_source: true
+        runtime_proven: false
       - name: "claude-code"
         base_url: null
-        configured: false
+        configured_in_source: false
+        runtime_proven: false
       - name: "openai"
         base_url: "https://api.openai.com"
-        configured: true
+        configured_in_source: true
+        runtime_proven: false
       - name: "nous"
         base_url: "https://inference-api.nousresearch.com/v1"
-        configured: true
+        configured_in_source: true
+        runtime_proven: false
 
   screenpipe:
     host: "127.0.0.1"
     port: 3030
     description: "Percepção da máquina: tela, áudio, navegador"
+    status: "CONTRACT_CANDIDATE_RUNTIME_UNKNOWN"
 
   mcp_centraldark:
     host: "127.0.0.1"
     port: 3100
-    description: "Catalogo de ferramentas da Casa — 113 tools"
+    description: "Catálogo de ferramentas da Casa"
+    status: "SOURCE_CONTRACT_RUNTIME_REMEASURE_REQUIRED"
 
 integration:
+  band_to_graphrag:
+    score: "docs/BRAIN/01-CONCEITOS/02-BANDA/BANDA_COMPASSO_GLOBAL.json"
+    library: "apps/modulos/HERMES-CORE/agents/GraphRAG-Master/agent.mjs"
+    learning: "docs/CONSCIENCIA/APRENDIZADOS.md"
+    claim_seals: ".agents/skills/meta-lupa/references/claim-seals.jsonl"
+    trail_owner: "scripts/agent-call.mjs"
+    status: "SOURCE_CONTRACT"
+
+  hermes_learning_loop:
+    method: ".agents/skills/centraldark-operational-method/SKILL.md"
+    meta_lupa: ".agents/skills/meta-lupa/SKILL.md"
+    sequence:
+      - "CLAIM_SEAL_PREFLIGHT"
+      - "META_LUPA_FRIA"
+      - "OBSERVE"
+      - "ACT"
+      - "AUTOLUPA"
+      - "TEST"
+      - "COUNTERPROOF"
+      - "VERTEX_INVERSO_IF_NEEDED"
+      - "META_LUPA_QUENTE_BEFORE_PROMOTION"
+      - "FIXED_POINT"
+      - "SEAL_OR_NEXT_CURSOR"
+    duplicate_policy: "PROVED_NON_TEMPORAL_SAME_TARGET_NO_REOPEN_CAUSE => DO_NOT_REPEAT"
+
+  agent_library_to_graphrag:
+    catalog: "docs/BRAIN/03-DOCUMENTACAO/01-AGENTS-LIBRARY/2026-07-13-overclock-swarm-tier-catalog.json"
+    swarm_reference: "docs/BRAIN/03-DOCUMENTACAO/01-AGENTS-LIBRARY/02-AGENTES/SWARM-INVESTIGADOR-GRAFO.md"
+    provider_adapter: "apps/modulos/arsenal-openai-adapter/"
+    policy: "LIBRARY_AND_PROVIDER_PATTERNS_ARE_INPUTS_FOR_LEARNING_NOT_REALITY_AUTHORITY"
+
   screenpipe_to_omni:
-    description: "Screenpipe usa Omni Router como provider de IA"
+    description: "Contrato para Screenpipe usar Omni Router como provider de IA"
     base_url: "http://127.0.0.1:8099/v1"
     models_url: "http://127.0.0.1:8099/v1/models"
     provider_name: "CentralDark Hermes"
     model: "auto"
+    status: "SOURCE_CONTRACT_RUNTIME_UNKNOWN"
 
   hermes_to_screenpipe_mcp:
-    description: "Hermes usa MCP do Screenpipe para percepção da máquina"
+    description: "Contrato para Hermes consumir percepção do Screenpipe por MCP"
     mcp_server: "screenpipe-mcp"
-    capabilities:
-      - "pesquisar gravacoes de tela"
-      - "transcricoes de audio"
-      - "historico de contexto"
+    capabilities_declared:
+      - "pesquisar gravações de tela"
+      - "transcrições de áudio"
+      - "histórico de contexto"
+    status: "END_TO_END_UNKNOWN"
+    required_proof: "SCREENPIPE_CAPTURE -> MCP -> HERMES -> RECEIPT_WITH_PROVENANCE"
+
+surface_sync:
+  source_of_truth: "ServerVpss/CentralDark@main"
+  casa:
+    script: "scripts/casa/sync-hermes-obsidian.ps1"
+    policy: "EXPLICIT_ROOTS + CLEAN_WORKTREE + FAST_FORWARD_ONLY + META_LUPA + CLAIM_SEALS"
+    runtime_status: "UNKNOWN_UNTIL_EXECUTED_ON_HOUSE"
+  vps:
+    script: "scripts/vps/centraldark-deploy.sh"
+    policy: "ORIGIN_MAIN + CLEAN_WORKTREE + ROLLBACK + META_LUPA + RUNTIME_COUNTERPROOF"
+    runtime_status: "UNKNOWN_UNTIL_EXECUTED_ON_VPS"
+  webhook:
+    legacy_deployer: "RETIRED"
+    canonical_deploy: "GITHUB_ACTIONS"
+    role: "PING_SIGNAL_AND_RECEIPT_ONLY"
+  handshake:
+    - "PING_REMOTE_HEAD"
+    - "MEASURE_LOCAL_HEAD_AND_DIRTY_STATE"
+    - "BLOCK_IF_DIRTY"
+    - "SYNC_BY_CANONICAL_SURFACE"
+    - "PONG_HEAD_AND_RECEIPT"
+    - "META_LUPA"
+    - "FIXED_POINT_OR_NEXT_CURSOR"
+
+invariants:
+  - "MEMORY != REALITY"
+  - "CURRENT > HISTORICAL"
+  - "UNKNOWN != PASS"
+  - "MANY_SURFACES_ONE_SONG"
+  - "NO_BROKEN_CANONICAL_LINKS"
+  - "DIRTY_WORKTREE_BLOCKS_SYNC"
+  - "REOPEN_REQUIRES_CAUSE_REF"
+  - "TEMPORAL_PROOF_REMEASURE_CURRENT"
+  - "PING_PONG_IS_RECEIPT_NOT_SECOND_DEPLOYER"
 
 metadata:
   created: "2026-08-28"
-  last_updated: "2026-08-28"
-  version: "1.0.0"
-  provenance: "Boot em vc — esta skill precisa do boot para não dar errado"
+  last_updated: "2026-09-05"
+  version: "1.2.0"
+  provenance: "Boot + owners canônicos medidos no repositório; runtime separado de source"
   boot_dependency: true

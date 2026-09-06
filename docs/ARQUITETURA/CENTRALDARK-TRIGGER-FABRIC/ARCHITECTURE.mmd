@@ -82,6 +82,7 @@ flowchart TD
     LOVE["Open-Lovable<br/>builder pattern source"]
     GROK["Grok Build<br/>future engine candidate"]
     AI-OX["AIOS/AI-OX<br/>external learning candidates"]
+    [EXT_REDACTED]["AIOS/[EXT_REDACTED]<br/>external learning candidates"]
   end
 
   ODS -. capability only after measurement .-> OMNI
@@ -90,5 +91,6 @@ flowchart TD
   LOVE -. reference only .-> TOOLS
   GROK -. invocation must be proven .-> OMNI
   AI-OX -. delta only / no control plane .-> HARVEST
+  [EXT_REDACTED] -. delta only / no control plane .-> HARVEST
 
   LOCAL["LOCAL AI RUNTIME<br/>UNKNOWN / DEFERRED"] -. measure first .-> ODS

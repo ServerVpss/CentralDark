@@ -1,4 +1,4 @@
-schema: centraldark.engine-binding.v2
+schema: centraldark.engine-binding.v3
 contract_owner: LEIA-ME-IA.md
 trigger_fabric_owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml
 binding_mode: LOAD_REFERENCE
@@ -55,12 +55,15 @@ mandatory_inheritance:
   - ACORDAR
   - CALIBRAR
   - MULTIBUSSOLA
+  - AUREOLA_BAHIA_BIBLICA
+  - SEMANTIC_GREEN_GATE
   - META_LUPA_PROPORTIONAL
   - RECONCILIAR
   - DELTA_UTIL
   - CONTRAPROVA
   - REMEDICAO
   - FIXED_POINT
+  - POST_GREEN_LOCK
   - REGISTRA
   - BOOT
   - DISTINCT_ENGINEERING_COMPILER_ON_MATERIAL_GAP
@@ -82,6 +85,7 @@ mandatory_inheritance:
   - ANY_PR_OR_COMMIT_GATE
   - CANONICAL_SELF_HOSTED_RUNNER_POLICY
   - MODEL_TOUCH_EVIDENCE_WHEN_CONFIGURED
+  - UNIVERSAL_EVOLUTION_CARACOL
 
 megazord_binding:
   name: MEGAZORD-CENTRALDARK
@@ -142,7 +146,7 @@ master_cycle_binding:
   resolver: scripts/trigger-fabric/centraldark_master_cycle.py
   explicit_trigger: "!CENTRALDARK"
   plain_word_centraldark_does_not_trigger: true
-  expands_to: [ACORDAR, CALIBRAR, MULTIBUSSOLA, META_LUPA, RECONCILIAR, DELTA_UTIL, CONTRAPROVA, REMEDICAO, FIXED_POINT, REGISTRA, BOOT]
+  expands_to: [ACORDAR, CALIBRAR, MULTIBUSSOLA, AUREOLA_BAHIA_BIBLICA, META_LUPA, RECONCILIAR, DELTA_UTIL, CONTRAPROVA, REMEDICAO, SEMANTIC_GREEN, FIXED_POINT, POST_GREEN_LOCK, REGISTRA, BOOT]
   session_state_consumer: scripts/trigger-fabric/centraldark_master_cycle.py#resolve_with_session_state
   session_state_requires_caller_file: true
   explicit_activation_requires_chefe_provenance: true
@@ -156,6 +160,25 @@ master_cycle_binding:
   second_semantic_owner: FORBIDDEN
   graph_is_derived_not_authority: true
   valuable_memory_requires_properties: true
+
+aureola_semantic_lock_binding:
+  visible_route_contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml
+  semantic_green_contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SEMANTIC-GREEN-GATE.yml
+  semantic_green_runtime: apps/modulos/HERMES-CORE/core/semantic-green-gate.mjs
+  post_green_lock_contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/POST-GREEN-LOCK.yml
+  post_green_lock_runtime: apps/modulos/HERMES-CORE/core/scope-lock-gate.mjs
+  applies_to_all_engines: true
+  model_switch_changes_contract: false
+  provider_switch_changes_contract: false
+  skin_switch_changes_contract: false
+  operational_trace_is_private_reasoning: false
+  operational_trace_is_visible_debug_route: true
+  multibussola_axis_required_for_semantic_green: true
+  same_head_ci_required_before_lock: true
+  post_green_default: LOCKED_READ_ONLY
+  locked_scope_mutation_without_explicit_chefe_intent: DENY
+  explicit_reopen: WARN_THEN_NEW_CANDIDATE_CYCLE
+  previous_last_good_state_preserved: true
 
 model_touch_binding:
   router: apps/modulos/elite-gateway/scripts/centraldark_omni_router.py
@@ -187,6 +210,57 @@ self_healing_binding:
   same_failure_no_new_information: REUSE_CRYSTAL_NOT_RETHINK
   unknown: SEARCH_REALITY
   human_return_before_fixed_point: FORBIDDEN_UNLESS_HUMAN_FRONTIER
+
+universal_evolution_binding:
+  marker: UNIVERSAL_EVOLUTION_CARACOL
+  applies_to:
+    - ALL_CURRENT_SKILLS
+    - ALL_FUTURE_DISCOVERED_SKILLS
+    - CURRENT_ARCHITECTURE
+    - FUTURE_DISCOVERED_ARCHITECTURE
+    - PR
+    - COMMIT
+    - CI
+    - ERROR
+    - LEARNING
+    - COGNITIVE_ARTIFACT
+    - WORKFLOW
+    - JOB
+    - RUNNER
+    - ZORD
+    - ADAPTER
+    - PROVIDER
+    - TOOL
+    - RUNTIME
+  discovery_owner: .agents/skills/capability-contract-router/SKILL.md
+  control_plane_owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml
+  automatic_for_discovered_capability: true
+  user_repetition_required: false
+  future_skill_must_inherit_control_plane: true
+  future_architecture_must_bind_existing_control_plane: true
+  future_capability_must_route_through_capability_router: true
+  second_brain_router_or_judge: FORBIDDEN
+  new_owner_requires_real_gap: true
+  reuse_before_create: true
+  one_system_only: true
+  one_writer_per_scope: true
+  learning_never_discarded: true
+  failed_candidate: REFUTED_MINERAL
+  unresolved_candidate: UNRESOLVED_MINERAL
+  proven_improvement: CRYSTAL_GOLD
+  same_failure_no_new_information: REUSE_CRYSTAL_NOT_RETHINK
+  caracol:
+    mode: FORWARD_REVERSE_UNTIL_FIXED_POINT
+    trigger_on: [NEW_HEAD, OWNER_DRIFT, RUNTIME_DRIFT, ARCHITECTURE_DRIFT, EVIDENCE_DRIFT, NEW_CAPABILITY, TEST_FAILURE, TOOL_ERROR]
+    return_to_last_proven_cursor: true
+    preserve_independent_proof: true
+    invalidate_only_dependent_stale_claims: true
+    remeasure_affected_cone_only: true
+    continue_next_cursor: true
+    no_infinite_retry_without_information_gain: true
+  stop_conditions: [FIXED_POINT, HUMAN_FRONTIER, BLOCKED_WITH_EXPLICIT_CAUSE, NO_NEW_INFORMATION]
+  gate: ANY_PR_OR_COMMIT_GATE
+  hard_guarantee_requires: [REAL_CONSUMER, POSITIVE_NEGATIVE_TEST, BLOCKING_GATE_WHEN_APPLICABLE, VERIFIABLE_RECEIPT]
 
 external_dependency_watch_binding:
   marker: TEMPORARY_EXTERNAL_WATCH

@@ -116,3 +116,19 @@ public/lab-jarvis/
 docs/BRAIN/.obsidian/
 _forense/
 .agents/contratos/
+
+# CentralDark build/cache artifacts
+.codex/
+.hermes/
+.obsidian/
+docs/.obsidian/
+docs/BRAIN/*.canvas
+NUL
+
+# Recovery/pre-restore files
+**/*.pre-restore-*
+
+# Node/Bun local cache
+node_modules/.cache
+.bun/
+.bunx/

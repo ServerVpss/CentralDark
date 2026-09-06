@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-08-30T02:20:47.351Z
+# 🧠 Notion Sync — 2026-09-06T03:19:41.659Z
 
-- **Commit fonte:** `59002731fbaea133efd8dab4f2332ded6bd3f417`
+- **Commit fonte:** `ab8509ec1d3c77705e5fd5dc6b7e49f1cb87c57c`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 489 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 491 atualizadas · ❌ 16 erros
 
 ## Por base
 
@@ -15,8 +15,8 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
-| aprendizados | 35 | 1 | 34 | 0 | 0 |
-| estrutura | 411 | 0 | 411 | 0 | 0 |
+| aprendizados | 35 | 0 | 35 | 0 | 0 |
+| estrutura | 428 | 0 | 412 | 0 | 16 |
 
 ## Operações
 
@@ -100,7 +100,7 @@
 | aprendizados | atualizado | #31 — Provider sem crédito NÃO é router quebrado |
 | aprendizados | atualizado | #32 — Uma capacidade = uma linhagem = um PR de promoção por escopo |
 | aprendizados | atualizado | #33 — Opinião usada como medição gera falso verde e ação destrutiva |
-| aprendizados | criado | #34 — Sem TURN_CLASS não há gate entre ler e agir — a impressão ocupa o slot da medição |
+| aprendizados | atualizado | #34 — Sem TURN_CLASS não há gate entre ler e agir — a impressão ocupa o slot da medição |
 | estrutura | atualizado | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | atualizado | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
@@ -209,6 +209,15 @@
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-28-meteor-claim-lease-absorvido.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-28-meteor-decomp-pr-bot-assay.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-28-revisao-mineracao-agi-e-organismo.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-05-FULL-TRIGGER-BOOT-PROVEN-LOCK.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-05-LOCAL-PUBLICADO-ZENDRIVE-RABBIT-MINERAL.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-05-PERMITO-SEGREDO-DEPLOY-CLASSES.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-05-SHARED-WRITER-LEASE-CONTRAPROVA.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-05-STATUS-BADGE-FABRIC-FIXED-POINT.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-05-VERTEX-INVERSO-PEPITAS-PROVADAS.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-05-WINDOWS-INSTALLER-AUTOUPDATE.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-05-WORKFLOW-DEDUPE-RADAR.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-05-WORKFLOW-STARTUP-FAILURE-MINERAL.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/AIOS-GOLD-ASSAY-20260828/CAPABILITY-MATRIX.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/AIOS-GOLD-ASSAY-20260828/COUNTERPROOF.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/AIOS-GOLD-ASSAY-20260828/HERMES-PROOF-PLAN.md |
@@ -223,6 +232,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/PROXY/TUTORIAL-TERMINAL-SEM-CONTA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/conversa-mcp-webui-liberacao.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/elitehttp-vs-elite-anthropic-nao-confundir.md |
+| estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/erros-agente-2026-08-29-medicao-e-falso-verde.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/incidente-2026-07-05-mcp-dump-perdido.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/socorro-2026-07-05.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ARQUITETURA-CHAVES-AI-PROXY.md |
@@ -295,6 +305,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/COCKPIT-AVANCO.README.md |
 | estrutura | atualizado | docs/CONSCIENCIA/CODEX-INTEGRADO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/CODEX-REVISAO-PRS.md |
+| estrutura | erro | docs/CONSCIENCIA/COMITE-OFICIAL-SEGREDO-CHEFE.md |
 | estrutura | atualizado | docs/CONSCIENCIA/CONECTOR-LIBERDADE-SEGURA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/CONSCIENCIA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/CONSOLIDACAO-CENTRALDARK-V2.md |
@@ -334,6 +345,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/ESPELHO-CLONE-DECK-PASSIVO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/EXECUCAO-REVERSIVEL.md |
 | estrutura | atualizado | docs/CONSCIENCIA/EXPANSAO-DE-DOMINIO.md |
+| estrutura | erro | docs/CONSCIENCIA/GAPS-ONLY.md |
 | estrutura | atualizado | docs/CONSCIENCIA/GITHUB-LABELS-OPERACIONAIS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/GITHUB-PR-OBSERVAR-CODEX.md |
 | estrutura | atualizado | docs/CONSCIENCIA/GITHUB-PROFISSIONAL-AUTOMACAO-CONTINUA.md |
@@ -343,7 +355,6 @@
 | estrutura | atualizado | docs/CONSCIENCIA/INFRA-MAP.md |
 | estrutura | atualizado | docs/CONSCIENCIA/INSTALADOR/13-centraldark-portal.md |
 | estrutura | atualizado | docs/CONSCIENCIA/INSTALADOR/14-sync-monorepo.md |
-| estrutura | atualizado | docs/CONSCIENCIA/INSTALADOR/backup/README.md |
 | estrutura | atualizado | docs/CONSCIENCIA/INVENTARIO-PM2-VPS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md |
 | estrutura | atualizado | docs/CONSCIENCIA/LEGENDA-TEMPORAL-T0-TN-TDELTA.md |
@@ -393,13 +404,17 @@
 | estrutura | atualizado | docs/CONSCIENCIA/PIVETE-IA/PIVETE-18-ROTA-MEMORIA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PLANO-RECONCILIACAO-DOMINIOS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PLANO.md |
+| estrutura | erro | docs/CONSCIENCIA/POMBO-LINEAGE-RULE.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PROGRAMAS/CONVERGENCIA-OMNIROUTE-CENTRALDARK.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PROJECT-KNOWLEDGE-CENTRALDARK-V2.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PROMPT-MESTRE-MULTI-IA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PROTOCOLO-INICIALIZACAO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PROTOCOLO-ORQUESTRACAO-PIVETE.md |
+| estrutura | erro | docs/CONSCIENCIA/PROTOCOLO-PROVA-RASTRO-ANTI-PENDENCIA.md |
+| estrutura | erro | docs/CONSCIENCIA/RANDOLF-CONTINUIDADE.md |
 | estrutura | atualizado | docs/CONSCIENCIA/README.md |
 | estrutura | atualizado | docs/CONSCIENCIA/REGISTRO-GUARDIAO-DECISOR-V3.md |
+| estrutura | erro | docs/CONSCIENCIA/REGRA-COMITE-DELTA-CONTINUO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/REGRA-OFICIAL-GUARDIAO-MODO-PROPOR.md |
 | estrutura | atualizado | docs/CONSCIENCIA/REGRA-OFICIAL-GUARDIAO-V2-ANALISTA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/REGRA-OFICIAL-HIERARQUIA-MEMORIA.md |
@@ -487,6 +502,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/REPOSITORIO-OFICIAL.md |
 | estrutura | atualizado | docs/CONSCIENCIA/RETOMADA-Arsenal-TelePainel.md |
 | estrutura | atualizado | docs/CONSCIENCIA/RETOMADA-Issues-Agent.md |
+| estrutura | atualizado | docs/CONSCIENCIA/SCREENPIPE-MCP-BLOQUEIO-20260831.md |
 | estrutura | atualizado | docs/CONSCIENCIA/SCRIPTING-STANDARDS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/TESTE-CODEX-TRIGGER-HANDLERS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/TREINAMENTO-IAS/README.md |
@@ -504,6 +520,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/VISUALIZACAO-MERMAID-PADRAO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/WEBHOOK-DEPLOY-SEGURO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/agente/elite-mapper/README.md |
+| estrutura | erro | docs/CONSCIENCIA/centraldark-gpt-prompt.md |
 | estrutura | atualizado | docs/CONSCIENCIA/relatorios/00_RESUMO_EXECUTIVO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/relatorios/01_MAPEAMENTO_ESTRUTURA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/relatorios/02_LIXO_PARA_DELETAR.md |

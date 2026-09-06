@@ -187,6 +187,7 @@ governo:
 - Open-Lovable — fonte de padrão para o Builder, cujo owner continua Bolt;
 - Grok Build — futuro engine candidato;
 - AIOS/AI-OX — deltas externos candidatos, sem importar control plane.
+- AIOS/[EXT_REDACTED] — deltas externos candidatos, sem importar control plane.
 
 `RESERVE != ACTIVE_RUNTIME`.
 

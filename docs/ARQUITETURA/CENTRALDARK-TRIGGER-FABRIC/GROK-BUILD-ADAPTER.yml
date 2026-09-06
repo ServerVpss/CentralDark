@@ -1,0 +1,161 @@
+schema: centraldark.grok-build-adapter.v1
+status: CANDIDATE_UNTIL_SAME_HEAD_CI
+owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml#grok_build
+authority: SEGREDO/CHEFE
+engine: GROK_BUILD
+engine_is_owner: false
+adapter_is_new_brain: false
+
+provenance:
+  source_repo: NousResearch/hermes-agent
+  source_path: website/docs/user-guide/skills/optional/autonomous-ai-agents/autonomous-ai-agents-grok.md
+  source_commit: c49fa88b80753071e7b7bb83e2882232e43e87c0
+  source_observed_at: 2026-09-03
+  source_version: "0.1.1"
+  source_license: MIT
+  source_class: EXTERNAL_REFERENCE
+  source_is_authority: false
+
+purpose: >-
+  Absorver as capacidades operacionais uteis do guia Grok Build do Hermes Agent
+  dentro do mesmo organismo CentralDark. Grok permanece engine substituivel;
+  Trigger Fabric, owner, writer, prova e Reality Judge permanecem canônicos.
+
+modes:
+  HEADLESS:
+    preferred_for: [ONE_SHOT, FEATURE, REFACTOR, PR_REVIEW, BATCH_FIX, CI_AUTOMATION]
+    command_shape: [grok, --no-auto-update, -p, PROMPT, --cwd, WORKDIR, --output-format, json]
+    default: true
+  READ_ONLY_AUDIT:
+    command_shape: [grok, --no-auto-update, -p, PROMPT, --cwd, WORKDIR, --output-format, json]
+    always_approve: false
+    mutation_allowed: false
+    stable_input_snapshot_first: true
+  INTERACTIVE_PTY:
+    preferred_for: [MULTI_TURN, TUI]
+    pty_required: true
+    tmux_recommended_for_monitoring: true
+    no_alt_screen_when_inline_capture: true
+  ACP_STDIO:
+    command_shape: [grok, agent, stdio]
+    transport: JSON_RPC_STDIO
+    preferred_for: [IDE_INTEGRATION, TOOL_INTEGRATION, DESKTOP_COCKPIT_ADAPTER]
+
+headless_contract:
+  no_auto_update_required: true
+  workdir_required: true
+  output_format_default: json
+  output_formats: [plain, json, streaming-json]
+  max_turns_may_be_bounded: true
+  one_shot_is_default: true
+  no_pty_required: true
+
+mutation_contract:
+  auto_approve_default: false
+  always_approve_requires:
+    - MUTATION_INTENT
+    - WRITER_SCOPE_PROVEN
+    - ONE_WRITER_PER_SCOPE
+    - TARGET_WORKDIR_PROVEN
+    - ROLLBACK_OR_RECOVERY_PATH_WHEN_MATERIAL
+  read_only_audit_forbids_always_approve: true
+  engine_commit_is_proof: false
+  engine_push_is_promotion: false
+  no_direct_main_write: true
+
+session_contract:
+  fresh_session:
+    flag: --session-id
+    value: NEW_UNUSED_UUID
+    resumes_existing: false
+  resume:
+    flag: --resume
+    value: EXISTING_UUID_OR_MOST_RECENT
+  continue:
+    flag: --continue
+    value: MOST_RECENT_IN_CURRENT_DIRECTORY
+  fork:
+    flag: --fork-session
+    requires_resume_or_continue: true
+  session_id_is_mission_id: false
+  model_session_is_centraldark_state: false
+  centraldark_receipt_survives_session_switch: true
+
+context_contract:
+  grok_auto_reads: [CLAUDE.md, .claude, AGENTS.md]
+  incidental_auto_read_is_contract_proof: false
+  centraldark_universal_method_still_required: true
+  inspect_preflight:
+    command_shape: [grok, inspect]
+    observes: [CONFIG_SOURCES, INSTRUCTIONS, SKILLS, PLUGINS, HOOKS, MCP_SERVERS]
+    inspect_is_runtime_health: false
+    inspect_is_invocation_proof: false
+
+review_contract:
+  quick_diff_review: HEADLESS_READ_ONLY
+  clone_to_temp_review: PREFERRED_WHEN_REPO_MUTATION_MUST_BE_ISOLATED
+  review_result_is_candidate_not_authority: true
+  posting_review_is_separate_action: true
+
+parallel_worktree_contract:
+  worktrees_allowed: true
+  parallel_perception: true
+  parallel_mutation_same_scope: false
+  parallel_mutation_distinct_scopes_requires_distinct_writer_scope: true
+  each_worktree_has_independent_target: true
+  rendezvous_before_shared_owner_mutation: true
+  cleanup_required: true
+
+background_contract:
+  long_task_may_run_background: true
+  completion_notification_is_execution_signal_not_proof: true
+  monitor_via_process_receipt: true
+  timeout_is_success: false
+  silence_is_success: false
+  kill_is_available_for_stuck_task: true
+
+auth_contract:
+  grok_cli_auth_is_hermes_xai_auth: false
+  hermes_x_search_working_implies_grok_cli_logged_in: false
+  auth_state_requires_own_probe: true
+  auth_file_presence_is_token_validity: false
+  secrets_in_receipt: false
+  api_key_fallback_is_optional_transport_not_identity: true
+
+installation_contract:
+  runtime_installation_is_not_performed_by_this_contract: true
+  npm_package_reference: "@xai-official/grok"
+  installer_choice_is_not_architecture: true
+  configured_is_installed: false
+  installed_is_authenticated: false
+  authenticated_is_invocation_proven: false
+
+centraldark_binding:
+  universal_method: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/UNIVERSAL-ENGINE-METHOD.yml
+  engine_registry: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml
+  runtime_adapter: apps/modulos/HERMES-CORE/core/grok-build-adapter.mjs
+  self_test: "node apps/modulos/HERMES-CORE/core/grok-build-adapter.mjs --self-test"
+  semantic_green_gate: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SEMANTIC-GREEN-GATE.yml
+  note_stitching: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/NOTE-STITCHING-CONTRACT.yml
+  pegatudo_history: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PEGATUDO-HISTORY.yml
+
+rules_for_hermes:
+  - PREFER_HEADLESS_FOR_SINGLE_TASK
+  - ALWAYS_PROVE_WORKDIR
+  - ALWAYS_DISABLE_AUTO_UPDATE_IN_AUTOMATION
+  - AUTO_APPROVE_ONLY_WITH_PROVEN_WRITER_SCOPE
+  - BACKGROUND_LONG_TASKS_WITH_OBSERVABLE_RECEIPT
+  - PTY_TMUX_FOR_INTERACTIVE_MULTI_TURN
+  - VERIFY_GROK_AUTH_SEPARATELY
+  - REPORT_FACTUAL_RESULT_AND_RESIDUAL
+  - RUN_INSPECT_WHEN_CONTEXT_DISCOVERY_IS_MATERIAL
+  - PRESERVE_CENTRALDARK_RECEIPT_ACROSS_GROK_SESSION_CHANGES
+
+promotion:
+  source_doc_read: PROVEN
+  adapter_contract: CANDIDATE
+  runtime_adapter_self_test_required: true
+  actual_grok_binary_present: UNKNOWN_UNTIL_RUNTIME_PROBE
+  actual_grok_auth_valid: UNKNOWN_UNTIL_RUNTIME_PROBE
+  actual_grok_invocation: UNKNOWN_UNTIL_RUNTIME_PROBE
+  same_head_ci_required: true

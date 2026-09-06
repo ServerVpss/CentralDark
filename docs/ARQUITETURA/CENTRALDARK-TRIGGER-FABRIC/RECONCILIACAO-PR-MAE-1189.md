@@ -172,6 +172,7 @@ OPENMAUSBOT=RESERVE_REFERENCE
 OPEN_LOVABLE=RESERVE_REFERENCE
 GROK_BUILD=FUTURE_ENGINE_CANDIDATE
 AIOS_AI-OX=CANDIDATE_EXTERNAL_LEARNING
+AIOS_[EXT_REDACTED]=CANDIDATE_EXTERNAL_LEARNING
 ```
 
 Esses itens preservam disponibilidade futura. Nenhum deles vira cérebro,
@@ -207,6 +208,7 @@ LIVE_TARGET
 - cérebro concorrente/terceiro cérebro: o `SECOND_BRAIN` lógico existente foi reconciliado no mesmo owner;
 - segundo Reality Judge;
 - raw AIOS/AI-OX control plane;
+- raw AIOS/[EXT_REDACTED] control plane;
 - ODS/Buzz/OpenMausBot/Open-Lovable como runtime presumido;
 - local AI como `PASS` sem medição.
 

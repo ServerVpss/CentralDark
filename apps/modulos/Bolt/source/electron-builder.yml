@@ -32,8 +32,10 @@ mac:
 win:
   icon: assets/icons/icon.ico
   target:
-    - nsis
-  artifactName: ${name}-${version}-${os}-${arch}.${ext}
+    - target: nsis
+      arch:
+        - x64
+  artifactName: CentralDark-${version}-Windows-${arch}.${ext}
 
 linux:
   icon: assets/icons/icon.png
@@ -45,11 +47,17 @@ linux:
 
 nsis:
   oneClick: false
+  perMachine: false
+  allowElevation: true
   allowToChangeInstallationDirectory: true
-  createDesktopShortcut: true
+  installerIcon: assets/icons/icon.ico
+  uninstallerIcon: assets/icons/icon.ico
+  installerHeaderIcon: assets/icons/icon.ico
+  createDesktopShortcut: always
   createStartMenuShortcut: true
-  shortcutName: ${productName}
-  artifactName: ${name}-${version}-${os}-${arch}-setup.${ext}
+  shortcutName: CentralDark
+  runAfterFinish: true
+  artifactName: CentralDark-Setup-${version}-${arch}.${ext}
 
 npmRebuild: false
 
@@ -62,4 +70,3 @@ publish:
 
 electronDownload:
   mirror: https://npmmirror.com/mirrors/electron/
-

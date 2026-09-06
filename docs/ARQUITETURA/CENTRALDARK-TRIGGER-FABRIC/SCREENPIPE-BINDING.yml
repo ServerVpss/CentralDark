@@ -1,10 +1,41 @@
-schema: centraldark.screenpipe-binding.v1
+schema: centraldark.screenpipe-binding.v2
 name: SCREENPIPE_GLOBAL_LIVE_OBSERVER
 status: CANONICAL_CANDIDATE
 authority: SEGREDO/CHEFE
 skill: .agents/skills/screenpipe-live-observer/SKILL.md
 megazord: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MEGAZORD-CENTRALDARK.yml
 handoff_owner: docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md
+pegatudo_reference: .agents/skills/distinct-engineering-compiler/references/pegatudo-cross-surface.md
+
+intent_goal_spine:
+  rule: INTENT_AND_GOAL_ARE_ONE_ACTIVE_MISSION
+  flow:
+    - SEGREDO_CHEFE_INTENT
+    - GOAL_LOCK
+    - CENTRALDARK_AI_BOOT
+    - HISTORY_RENDEZVOUS
+    - CAPABILITY_LINEAGE
+    - SENSOR_DISCOVERY
+    - MINIMUM_SUFFICIENT_OBSERVATION
+    - NORMALIZE_AND_DEDUPE
+    - ROUTE_TO_EXISTING_OWNER
+    - SOL_COORDINATES
+    - MULTIBUSSOLA
+    - META_LUPA
+    - ONE_WRITER
+    - HERMES_EXECUTES_WHEN_MUTATION_AUTHORIZED
+    - COUNTERPROOF
+    - REMEASURE
+    - REALITY_JUDGE
+    - FIXED_POINT
+    - REGISTER_GRAPH_RECEIPT_CURSOR
+    - BOOT_CONTINUITY
+  reverse_on_material_divergence:
+    enabled: true
+    mode: CARACOL_REVERSO
+    return_to: LAST_PROVEN_CURSOR
+    preserve_independent_proofs: true
+    invalidate_only_dependent_claims: true
 
 runtime:
   auto_discover: true
@@ -12,6 +43,10 @@ runtime:
   daemon_api_default: "http://localhost:3030"
   mcp_http_default: "http://localhost:3031/mcp"
   availability_requires: [HEALTH_OK, RECENT_DATA_PRESENT, TARGET_QUERY_RETURNS_USABLE_EVIDENCE]
+  create_parallel_port: false
+  create_second_api: false
+  unavailable_does_not_block_independent_fronts: true
+  mcp_transport_is_optional_when_direct_local_api_is_proven: true
 
 consumers:
   any_authorized_centraldark_actor:
@@ -40,6 +75,67 @@ capabilities:
   - SCREENPIPE_AUTOMATION_TARGETING_CONTEXT
   - SCREENPIPE_VIDEO_EXPORT
 
+observation_spine:
+  purpose: >-
+    Representar a espinha dorsal completa de observação sem confundir sensor, superfície,
+    transporte, memória, ação ou autoridade.
+  vertices:
+    TIME:
+      fields: [observed_at, start_time, end_time, freshness]
+    SURFACE:
+      fields: [surface_type, app_name, window_name, process_name]
+    FRAME:
+      fields: [frame_id, image_ref, frame_fingerprint]
+    TEXT:
+      fields: [accessibility_text, parsed_text, ocr_text, copied_text]
+    NAVIGATION:
+      fields: [url, deeplink, route, tab_or_session_ref]
+    INPUT:
+      fields: [keyboard_event, click_event, clipboard_event]
+    AUDIO:
+      fields: [transcript, speaker_ref, device_ref]
+    ACTIVITY:
+      fields: [timeline_event, activity_summary, app_transition]
+    TERMINAL:
+      fields: [command_observation, stdout_observation, stderr_observation, process_context]
+    REPOSITORY:
+      fields: [repo, branch, head_sha, path, pr, workflow_or_check_ref]
+    RECEIPT:
+      fields: [evidence_ref, evidence_fingerprint, source_surface, target_surface, next_cursor]
+  edge_rule: OBSERVED_PROXIMITY_DOES_NOT_CREATE_CAUSAL_EDGE
+  causal_edge_requires: PROVEN_RELATION_OR_DISCRIMINATING_CROSSCHECK
+
+frame_surface_contract:
+  observed_user_frame_capabilities:
+    - COPY_IMAGE
+    - COPY_TEXT
+    - COPY_DEEPLINK
+    - ASK_ABOUT_FRAME
+    - PROCESS_WINDOW_CONTEXT
+    - TIME_RANGE_CONTEXT
+  status: OBSERVED_IN_USER_PROVIDED_FRAME
+  provider_attribution: UNKNOWN_UNTIL_PROVEN
+  law: TIMELINE_OR_FRAME_UI_CAPABILITY != SCREENPIPE_PROVIDER_PROOF
+  accepted_role: EXTERNAL_VISUAL_OBSERVATION_SURFACE
+  integration_rule: >-
+    Normalize the evidence and route it through the same observation spine; attribute it to
+    Screenpipe only when runtime/log/config evidence proves Screenpipe produced or indexed it.
+
+cross_surface_fronts:
+  - CHATGPT
+  - GITHUB_COPILOT
+  - HERMES
+  - BROWSER
+  - IDE
+  - TERMINAL
+  - OBSIDIAN
+  - KANBAN_TASKS
+  - GITHUB
+  - MCP_HUB
+  - DESKTOP_TIMELINE
+  - CENTRALDARK_DESKTOP
+  - SOL_WIDGET
+
 local_artifact_classes:
   chats:
     role: SCREENPIPE_CHAT_HISTORY_AND_IMPORTED_CONVERSATIONS
@@ -63,16 +159,94 @@ local_artifact_classes:
     authority: false
 
 observation_pipeline:
-  - DEFINE_REQUIRED_FACT
-  - MEASURE_SCREENPIPE_HEALTH
+  - DEFINE_REQUIRED_FACT_FROM_INTENT_AND_GOAL
+  - MEASURE_SENSOR_HEALTH
+  - IDENTIFY_SOURCE_SURFACE_AND_PROVIDER_ATTRIBUTION
   - FIND_MINIMUM_TIME_APP_WINDOW_SCOPE
   - PREFER_ACCESSIBILITY_OR_STRUCTURED_SEARCH
   - USE_OCR_AUDIO_INPUT_WHEN_REQUIRED
-  - NORMALIZE_TIMESTAMP_APP_WINDOW_FRAME_CONTENT_TYPE
+  - ADD_FRAME_PROCESS_URL_TERMINAL_CONTEXT_WHEN_MATERIAL
+  - NORMALIZE_TIMESTAMP_APP_WINDOW_PROCESS_FRAME_CONTENT_TYPE
   - HASH_NORMALIZED_EVIDENCE
   - DEDUPE
-  - CROSSCHECK_ORIGINAL_LOG_RUNTIME_FILE_WHEN_CAUSALITY_IS_MATERIAL
+  - CROSSCHECK_ORIGINAL_LOG_RUNTIME_FILE_GIT_WHEN_CAUSALITY_IS_MATERIAL
+  - CLASSIFY_FACT_INFERENCE_HYPOTHESIS_UNKNOWN
   - RETURN_EVIDENCE_TO_CALLER
+  - UPDATE_GRAPH_ONLY_WITH_PROVEN_OR_EXPLICITLY_UNKNOWN_EDGES
+
+trajectories:
+  forward:
+    - INTENT_GOAL
+    - LIVE_OR_HISTORY_QUERY
+    - SENSOR
+    - NORMALIZED_EVIDENCE
+    - EXISTING_OWNER
+    - ACTION_IF_AUTHORIZED
+    - COUNTERPROOF
+    - REMEASURE
+    - REALITY_JUDGE
+    - RECEIPT
+  reverse:
+    - FAILURE_OR_CONTRADICTION
+    - IDENTIFY_FIRST_BROKEN_EDGE
+    - TRACE_TO_LAST_PROVEN_CURSOR
+    - INVALIDATE_DEPENDENT_CLAIMS_ONLY
+    - REQUERY_FRESH_EVIDENCE
+    - REENTER_FORWARD_ROUTE
+  cross_surface:
+    - SOURCE_SURFACE
+    - NORMALIZED_EVIDENCE
+    - PROVEN_TRANSPORT_CHANNEL
+    - TARGET_SURFACE
+    - TARGET_ACK_OR_OBSERVED_EFFECT
+    - RECEIPT
+  visual_to_causal:
+    - VISUAL_OBSERVATION
+    - PROVIDER_ATTRIBUTION_CHECK
+    - ORIGINAL_SOURCE_CROSSCHECK
+    - CAUSAL_EDGE_IF_PROVEN
+  lost_street:
+    - EXPECTED_VERTEX_OR_EDGE
+    - NO_USABLE_EVIDENCE
+    - MARK_UNKNOWN_OR_BLOCKED
+    - FLASH_LOCAL_ALERT_ONLY
+    - KEEP_INDEPENDENT_GRAPH_GREEN
+    - NEXT_DISCRIMINATING_QUERY
+
+hud_projection:
+  graph_is_live_projection_not_authority: true
+  node_status:
+    PROVEN: GREEN
+    FAILURE: RED
+    UNKNOWN: YELLOW
+    PENDING: YELLOW
+    HISTORICAL: GRAY
+  alert_behavior:
+    flash_only_broken_or_unknown_local_edge: true
+    whole_system_red_only_if_global_condition_is_proven: true
+    stale_snapshot_must_be_visually_deemphasized: true
+  required_hover_or_detail_fields:
+    - source
+    - observed_at
+    - owner
+    - state
+    - evidence_ref
+    - head_or_runtime_ref_when_material
+    - next_cursor
+
+reanchor_visual_snapshot:
+  enabled: true
+  triggers: [ACORDAR, CALIBRAR, REANCHOR, GOAL_CHANGE, OWNER_CHANGE, HEAD_CHANGE]
+  health_first: true
+  query_terms_source: ACTIVE_MISSION_AND_CURRENT_GAPS
+  prefer_activity_summary_or_keyword_search: true
+  prefer_accessibility_before_ocr: true
+  latest_frame_only_when_needed: true
+  output: VISUAL_DELTA
+  feed_caracol_as_metadata_only: true
+  visual_proximity_creates_semantic_edge: false
+  crosscheck_git_runtime_original_file_when_material: true
+  no_new_information: DROP_DUPLICATE
 
 handoff:
   create_new_protocol: false
@@ -82,10 +256,13 @@ handoff:
     - observed_at
     - app_name
     - window_name
+    - process_name
     - frame_id
     - content_type
+    - url_or_deeplink_when_safe
     - query_scope
     - evidence_fingerprint
+    - provider_attribution
     - source
   feed_existing_handoff_fields:
     - SOURCE_SURFACE
@@ -101,8 +278,28 @@ loop:
   same_observation_without_new_information: DROP_DUPLICATE
   new_material_delta: ROUTE_TO_CALLER
   stale_frame_for_live_claim: REQUERY
-  screenpipe_failure_with_other_sensor_available: FALLBACK_TO_OTHER_SENSOR
+  screenpipe_failure_with_other_sensor_available: FALLBACK_TO_OTHER_EXISTING_SENSOR
   no_sensor_can_discriminate_required_fact: UNKNOWN
+  tool_or_api_down_means_whole_house_down: false
+  alternate_route_requires_capability_proof: true
+  unresolved_provider_attribution: KEEP_SOURCE_GENERIC
+
+browser_session_context:
+  authenticated_session_can_be_context_source: true
+  session_is_not_authority: true
+  extract_cookies: false
+  extract_auth_tokens: false
+  extract_private_state_tokens: false
+  extract_session_storage_secrets: false
+  extract_local_storage_secrets: false
+  extract_extension_storage_secrets: false
+  commit_browser_secret_state: false
+
+browser_policy:
+  csp_report_only_event_is_observation: true
+  csp_report_only_event_is_functional_failure: false
+  router_warning_is_router_failure: false
+  promote_root_cause_only_after_same_target_discriminating_evidence: true
 
 security:
   raw_capture_is_sensitive: true
@@ -111,6 +308,20 @@ security:
   do_not_commit_local_logs_by_default: true
   do_not_include_sensitive_material_in_handoff: true
   local_capture_does_not_grant_mutation_authority: true
+  do_not_expose_screenpipe_api_key: true
+  do_not_persist_browser_auth_state: true
+  redact_before_persistence: true
+  imported_frame_or_text_must_be_minimum_necessary: true
+
+runtime_proof_matrix:
+  binding_documented: PROVEN_BY_REPOSITORY
+  skill_documented: PROVEN_BY_REPOSITORY
+  direct_probe_health_and_recent_data: IMPLEMENTED
+  full_capability_probe: NOT_PROVEN
+  screenpipe_mcp_transport_current: UNKNOWN_UNTIL_REMEASURED
+  timeline_frame_surface_current: OBSERVED_FROM_USER_FRAME
+  timeline_provider_is_screenpipe: UNKNOWN
+  end_to_end_intent_goal_to_screenpipe_to_owner_to_action_to_receipt: NOT_PROVEN
 
 fixed_point:
   scope: SCREENPIPE_OBSERVATION_ONLY
@@ -118,5 +329,8 @@ fixed_point:
     - SCREENPIPE_AVAILABLE_FOR_TARGET
     - REQUESTED_TIME_SCOPE_COVERED
     - REQUIRED_SCREEN_FACTS_CLASSIFIED
+    - PROVIDER_ATTRIBUTION_CLASSIFIED_WHEN_MATERIAL
     - DUPLICATE_OBSERVATIONS_COLLAPSED
     - MATERIAL_UNKNOWN_FROM_SCREENPIPE_ZERO
+  recommendation_count_is_not_fixed_point: true
+  full_house_requires_separate_reality_judge: true

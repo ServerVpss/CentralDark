@@ -6,12 +6,25 @@ authority: SEGREDO/CHEFE
 pr_mother_provenance: 1189
 baseline_policy: CURRENT_MAIN
 master_trigger: "!CENTRALDARK"
+master_trigger_aliases: ["!CENTRALDARK", "#CENTRALDARK"]
 master_trigger_requires_explicit_marker: true
 plain_word_centraldark_does_not_trigger: true
 bot_entry_activates_master_session: true
 explicit_trigger_activates_master_session: true
 master_session_remains_active: true
 subsequent_chefe_material_is_delta_candidate: true
+
+master_precedence:
+  human_notation: "#CENTRALDARK > #ACORDAR"
+  executable_master_trigger: "!CENTRALDARK"
+  relation: MASTER_UMBRELLA_CONTAINS_ACORDAR_PHASE
+  centraldark_master_is_above_acordar: true
+  acordar_is_subphase_not_peer_master: true
+  rename_executable_master_trigger: false
+  zero_regression_preserves_existing_master_token: true
+  existing_runtime_proof:
+    - scripts/trigger-fabric/test_centraldark_master_cycle.py#test_acordar_enters_centraldark_master_funnel
+    - scripts/trigger-fabric/centraldark_master_cycle.py#MASTER_INGRESS_ALIASES
 
 purpose: >-
   Comprimir o ciclo operacional completo da Casa em um unico gatilho humano,
@@ -32,7 +45,9 @@ expands_to:
   - REGISTRA
   - BOOT
 
-canonical_chain: "#ACORDAR -> !CALIBRAR -> !MULTIBUSSOLA -> !META_LUPA -> !RECONCILIAR -> !DELTAUTIL -> !CONTRAPROVA -> !REMEDICAO -> !FIXED_POINT -> !REGISTRA -> !BOOT"
+canonical_human_chain: "#CENTRALDARK -> #ACORDAR -> !CALIBRAR -> !MULTIBUSSOLA -> !META_LUPA -> !RECONCILIAR -> !DELTAUTIL -> !CONTRAPROVA -> !REMEDICAO -> !FIXED_POINT -> !REGISTRA -> !BOOT"
+canonical_machine_chain: "!CENTRALDARK -> #ACORDAR -> !CALIBRAR -> !MULTIBUSSOLA -> !META_LUPA -> !RECONCILIAR -> !DELTAUTIL -> !CONTRAPROVA -> !REMEDICAO -> !FIXED_POINT -> !REGISTRA -> !BOOT"
+canonical_chain: "!CENTRALDARK -> #ACORDAR -> !CALIBRAR -> !MULTIBUSSOLA -> !META_LUPA -> !RECONCILIAR -> !DELTAUTIL -> !CONTRAPROVA -> !REMEDICAO -> !FIXED_POINT -> !REGISTRA -> !BOOT"
 
 continuous_delta_contract:
   scope: ACTIVE_MASTER_SESSION
@@ -54,11 +69,12 @@ continuous_delta_contract:
   process: [CAPTURE, LINK_DESTINATION, DEDUPE, CLASSIFY, FIND_OWNER, PROVE_OR_PRESERVE_UNKNOWN, ABSORB_MINIMAL_DELTA, COUNTERPROVE, REMEASURE]
   classifications: [DUPLICATE, PARTIAL, NEW, SUPERSEDED, CANDIDATE, UNKNOWN, PROVED]
 
-
 phase_contracts:
   ACORDAR:
     meaning: RECOVER_LIVE_STATE
     owner: "LEIA-ME-IA.md + AGENTS.md"
+    parent: CENTRALDARK_MASTER
+    precedence: "CENTRALDARK_MASTER > ACORDAR"
   CALIBRAR:
     meaning: ALIGN_INTENT_ROLE_SCOPE_TOOLS_PROOF
     owner: "LEIA-ME-IA.md + AGENTS.md"
@@ -103,6 +119,16 @@ phase_contracts:
     owner: LEIA-ME-IA.md
     runtime_restart_implied: false
 
+supporting_methods:
+  FABLE_LOOP:
+    meaning: READ_ONLY_CALIBRATION_AND_STABILIZATION
+    owner: .agents/skills/fable-loop/SKILL.md
+    ontology: METHOD_NOT_AGENT_OR_ROUTER
+    mode: READ_ONLY_CALIBRATION
+    default_routing: true
+    may_write_canonical: false
+    promotion_gate: META_LUPA_SAME_CONTROL
+
 execution_model:
   human_intent_owner: SEGREDO/CHEFE
   coordinator: SOL
@@ -125,6 +151,71 @@ execution_model:
   model_vote_as_truth: false
   fanout_growth_requires_information_gain: true
   recursion_depth_is_progress: false
+
+  EXECUTION_LOOP:
+  - MEASURE_CURRENT_STATE
+  - MULTIBUSSOLA
+  - META_LUPA
+  - FABLE_LOOP
+  - SEARCH_EXISTING_CRYSTAL
+  - SEARCH_EXISTING_OWNER
+  - CLASSIFY_FAILURE_SIGNATURE
+  - IDENTIFY_CAUSE
+  - CHOOSE_DISCRIMINATING_TEST
+  - EXECUTE_MINIMAL_SAFE_REMEDIATION
+  - RETEST
+  - COUNTERPROOF
+  - VERTEX_INVERSO
+  - REMEASURE_AFFECTED_CONE
+  - REALITY_JUDGE
+  - CLAIM_SEAL
+  - WRITE_RECEIPT
+  - NEXT_CURSOR
+
+standard_flow:
+  canonical_entry: CENTRALDARK
+  accepted_entries: ["!CENTRALDARK", "#CENTRALDARK"]
+  many_agents_allowed: true
+  readers_parallel: true
+  parallelize_perception: true
+  serialize_mutation_per_scope: true
+  one_writer_per_conflict_scope: true
+  judge_independent_from_writer: true
+  judge_may_mutate: false
+  capability_is_authority: false
+  agent_may_reduce_human_objective: false
+  method_may_optimize: true
+  objective_must_be_preserved: true
+  full_requested_material_must_be_processed: true
+  objective_reduction_requires_explicit_human_authorization: true
+  session_observation_is_global_current_state: false
+  single_reader_may_declare_global_reality: false
+  reader_count_is_truth_vote: false
+  divergent_readers_require_rendezvous: true
+  current_reality_requires_reconciliation: true
+  reconciliation_flow: [READERS, MEASURE, RENDEZVOUS, RECONCILE, CURRENT_REALITY, ONE_WRITER, PROOF]
+  remote_screenshot_is_remote_proof: false
+  session_memory_is_current_state: false
+  connector_failure_is_provider_failure: false
+  sensor_failure_is_world_failure: false
+  transport_failure_requires_authorized_alternate_route: true
+  alternate_route_must_remeasure_same_target: true
+  remote_github_trigger_flow: [ACORDAR, CALIBRAR, CENTRALDARK, MEASURE, RENDEZVOUS, RECONCILE, CURRENT_REALITY, PROOF]
+  remote_write_gate: [REPO_CONFIRMED, PR_CONFIRMED, CURRENT_HEAD_KNOWN, AUTHORIZED_WRITE_ROUTE, BRANCH_POLICY_PASS, NO_WRITER_COLLISION, NO_SECRET_EXPOSURE]
+  durable_continuity:
+    chat_only_knowledge: FAIL
+    session_memory_is_durable_state: false
+    persistence_quorum_min: 1
+    preferred_redundancy: 2
+    mirror_is_second_owner: false
+    backup_is_source_of_truth: false
+    persistence_is_promotion: false
+    old_copy_is_current_reality: false
+    no_blind_overwrite: true
+    requires: [AUTHORIZED_DURABLE_ROUTE, MATERIAL_RECEIPT_PERSISTED, NEXT_CURSOR_PERSISTED]
+  head_integrity: TESTED_HEAD_EQUALS_COMMITTED_HEAD_EQUALS_PUSHED_PR_HEAD
+  failure_flow: [OBSERVED_FAILURE, FIND_OWNER, CREATE_FALSIFIER, PATCH_EXISTING_OWNER, ADD_NEGATIVE_TEST, RUN_EXISTING_TESTS, COUNTERPROVE, REGISTER_RECEIPT, GENERALIZE_IF_REUSABLE]
+  scope_compression_failure: AGENT_REDUCED_HUMAN_OBJECTIVE_WITHOUT_AUTHORIZATION
 
 architecture_flow:
   - CHEFE_INTENT
@@ -237,6 +328,7 @@ self_improvement:
 
 communication_interface:
   preferred_human_header: "!CENTRALDARK"
+  preferred_human_hierarchy: "#CENTRALDARK > #ACORDAR"
   expanded_chain_must_remain_recoverable: true
   human_expression_may_be_compressed_or_noisy: true
   preserve_meaning_before_syntax: true
