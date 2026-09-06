@@ -406,3 +406,158 @@ ONE_SHOT=false
 ### Princípio final
 
 **A CentralDark não cresce por duplicação. Cresce por reconciliação, compressão, prova e cristalização.**
+
+---
+
+## 11. Lei fundamental de cristalização operacional
+
+A partir desta regra, **cada peça materialmente tocada deve devolver aprendizado reutilizável ao owner canônico correspondente**. “Cada parafuso” é metáfora operacional para qualquer arquivo, função, job, workflow, rota, contrato, painel, runtime, bridge, skill, sensor, adapter ou processo que sofra uma mudança material.
+
+A lei não autoriza ruído documental, commits vazios ou uma nova camada de governança. Ela exige que mudança real deixe memória verificável e reaproveitável.
+
+```text
+CRYSTALLIZATION_IS_FUNDAMENTAL_RULE=true
+EVERY_MATERIAL_TOUCH_MUST_LEAVE_RECEIPT=true
+EVERY_PROVEN_IMPROVEMENT_MUST_CRYSTALLIZE=true
+EVERY_REFUTED_HYPOTHESIS_MUST_MINERALIZE=true
+EVERY_UNKNOWN_MUST_PRESERVE_REOPEN_CONDITION=true
+CRYSTALLIZATION_TARGET=EXISTING_CANONICAL_OWNER
+NEW_PARALLEL_MEMORY_FOR_SAME_OWNER=false
+NEW_PARALLEL_RULE_FOR_SAME_OWNER=false
+```
+
+### Cadeia obrigatória de qualquer toque material
+
+```text
+TOUCH
+→ MEASURE_BEFORE
+→ TARGET + OWNER
+→ INTENT_OR_CAUSE
+→ WRITER_SCOPE
+→ MINIMAL_DELTA
+→ TEST
+→ COUNTERPROOF
+→ MEASURE_AFTER
+→ RECEIPT
+→ CRYSTALLIZE
+→ REUSE_ON_NEXT_CAUSAL_MATCH
+```
+
+Receipt mínimo:
+
+```text
+TARGET=
+OWNER=
+BEFORE_STATE=
+AFTER_STATE=
+CAUSE_OR_INTENT=
+ACTION=
+TEST=
+COUNTERPROOF=
+EVIDENCE_REF=
+HEAD_OR_RUNTIME_ID=
+ROLLBACK_OR_LAST_GOOD_STATE=
+LEARNING_CLASS=CRYSTAL_GOLD|REFUTED_MINERAL|UNRESOLVED_MINERAL|NO_CHANGE
+REOPEN_CONDITION=
+NEXT_CURSOR=
+```
+
+### Anti-papagaio da própria cristalização
+
+```text
+NO_INFORMATION_GAIN → NO_CHANGE
+NO_INFORMATION_GAIN → REUSE_EXISTING_RECEIPT
+NO_INFORMATION_GAIN → NO_NEW_RULE
+NO_INFORMATION_GAIN → NO_NEW_COMMIT
+NO_INFORMATION_GAIN → NO_NEW_PR
+SAME_CAUSAL_IDENTITY + SEALED_CLAIM → DO_NOT_REPROVE
+```
+
+O objetivo é fazer o próximo agente, modelo ou runtime começar acima do último ponto comprovado, e não repetir investigação já encerrada.
+
+### Falhas de capacidades externas também cristalizam
+
+Falha de ferramenta/modelo não pode sumir como incidente isolado. Deve gerar uma assinatura reutilizável de disponibilidade/fallback, sem transformar reviewer consultivo em autoridade de merge.
+
+```text
+CODEX_USAGE_LIMIT_COUNTS_AS_UNUSABLE=true
+CODEX_UNAVAILABLE_OR_UNUSABLE → ZENDRIVE_REVIEW_FALLBACK
+RABBIT_UNAVAILABLE_DOES_NOT_BLOCK_ZENDRIVE=true
+ZENDRIVE_ROLE=REVIEW_ONLY
+CODERABBIT_ROLE=REVIEW_ONLY
+REVIEWER_NEVER_MERGES=true
+```
+
+Para Dependabot:
+
+```text
+DEPENDABOT_FAILURE
+→ CLASSIFY_CAUSE
+→ EXISTING_RESOLVER_OR_WRITER
+→ ZENDRIVE/CODERABBIT/CODEX MAY_SUPPLY_FINDINGS
+→ HERMES_REPRODUCES_AND_TESTS
+→ MINIMAL_REMEDIATION
+→ COUNTERPROOF
+→ RECEIPT
+```
+
+Zendrive **não substitui Dependabot como mutador**. Ele é fallback de revisão/diagnóstico quando aplicável; a mutação continua no owner/Writer correto.
+
+### Prova viva que originou esta cristalização
+
+No PR #1444, HEAD `7bc061bf80f2e94427927ffae6dc769d8c33ee83`, o `chatgpt-codex-connector[bot]` registrou em `2026-09-06T13:27:35Z` que o limite de uso de Codex para code reviews foi atingido.
+
+```text
+CODEX_REVIEW_EVENT=PROVED_UNUSABLE
+CAUSE=USAGE_LIMIT_REACHED
+FALLBACK_TRIGGER_PRESENT=true
+ZENDRIVE_AUTOMATIC_FALLBACK_E2E=EVIDENCE_MISSING_UNTIL_RUNTIME_RECEIPT
+```
+
+Não declarar `FAIL` definitivo só porque o receipt ainda não apareceu: remedir porque a Casa pode estar processando. Também não declarar `PASS` sem o receipt.
+
+### Observabilidade sem expor raciocínio privado
+
+A cristalização deve guardar **rastro operacional**, nunca depender de “chain of thought” ou conteúdo privado de raciocínio.
+
+```text
+VISIBLE_AGENT_STATUS != PRIVATE_REASONING
+EXECUTION_TRACE != CHAIN_OF_THOUGHT
+AUDITABILITY_REQUIRES_OBSERVABLE_TRACE=true
+```
+
+Campos recomendados para painel/ledger:
+
+```text
+STATE
+ACTION
+TARGET
+TOOL_OR_CAPABILITY
+OBSERVED_RESULT
+EVIDENCE_REF
+STATUS
+COUNTERPROOF
+RECEIPT
+NEXT_CURSOR
+```
+
+### Herança entre modelos/motores
+
+```text
+MODEL_CHANGE != MEMORY_RESET
+ENGINE_CHANGE != MISSION_RESET
+ARM_FAILURE → PRESERVE_LAST_GOOD_STATE + NEXT_CURSOR
+```
+
+Capacidades úteis de materiais externos devem ser absorvidas no owner existente. Metáfora, nome externo ou ficção nunca criam nova SOUL, novo core ou runtime sem prova.
+
+### Regra de encerramento
+
+```text
+MATERIAL_TOUCH_WITHOUT_RECEIPT = INCOMPLETE
+PROVEN_LEARNING_NOT_CRYSTALLIZED = INCOMPLETE
+REFUTED_HYPOTHESIS_NOT_MINERALIZED = INCOMPLETE
+UNKNOWN_WITHOUT_REOPEN_CONDITION = INCOMPLETE
+```
+
+**O parafuso pode ser pequeno; a memória do que ele ensinou não pode evaporar.**
