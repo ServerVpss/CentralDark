@@ -1,7 +1,7 @@
 ---
 title: "Regra Oficial — História + Delta Útil + Comitê + Registro no PR"
 status: "CANONICAL"
-updated: 2026-09-05
+updated: 2026-09-06
 intent_authority: "SEGREDO/CHEFE"
 owner_family: "docs/CONSCIENCIA"
 extends:
@@ -315,3 +315,207 @@ REPO_LEARNING != LOCAL_RUNTIME_APPLIED
 ```
 
 A `main` registra o aprendizado; consoles locais devem consumir o receipt em vez de repetir a mesma contraprova, salvo gatilho de remedição.
+
+## Lei global de ZERO REGRESSÃO territorial + correção contínua
+
+Esta passagem incorpora integralmente a ordem do SEGREDO/CHEFE de aplicar a mesma régua sobre **todo o território CentralDark**, sem criar owner paralelo. O owner desta lei continua sendo este contrato de Comitê, estendendo o contrato global de reconciliação já existente.
+
+```text
+RULE_ID=HOUSE_GLOBAL_ZERO_REGRESSION_TERRITORY
+AUTHORITY=SEGREDO/CHEFE
+SCOPE=ALL_CENTRALDARK_TERRITORY
+ZERO_REGRESSION_REQUIRED=true
+ONE_SYSTEM_ONLY=true
+ONE_CORE=true
+REUSE_BEFORE_CREATE=true
+OWNER_BEFORE_OPINION=true
+REVIEW_BEFORE_CRITIQUE=true
+REVIEW_BEFORE_RECOMMENDATION=true
+REVIEW_BEFORE_MUTATION=true
+REVIEW_BEFORE_REGISTRATION=true
+CURRENT_GT_HISTORY=true
+UNKNOWN_IS_NOT_PASS=true
+DONE_REQUIRES_CURRENT_EVIDENCE=true
+EXECUTOR_CANNOT_SELF_APPROVE=true
+PAPAGAIO=OFF
+NO_BLIND_MAIN_WRITE=true
+NO_BLIND_OVERWRITE=true
+ONE_WRITER_PER_CONFLICT_SCOPE=true
+```
+
+### Ordem obrigatória antes de qualquer crítica, recomendação, mutação ou registro
+
+```text
+MATERIAL_NOVO
+→ RECUPERAR_INTENCAO_VIGENTE
+→ #ACORDAR
+→ MEDIR_CURRENT_DO_ALVO
+→ MAPEAR_TERRITORIO_RELEVANTE
+→ BUSCAR_OWNER_EXISTENTE
+→ LER_REGRAS_DO_OWNER
+→ CRUZAR_PR_ISSUE_COMMIT_WORKFLOW_RUNTIME_QUANDO_APLICAVEL
+→ SEPARAR_HISTORY_DE_CURRENT
+→ CLASSIFICAR_PROVADO_REFUTADO_UNKNOWN
+→ IDENTIFICAR_WRITER_E_JUDGE
+→ CONTRAPROVAR
+→ SO_ENTAO_CRITICAR_RECOMENDAR_MUTAR_OU_REGISTRAR
+```
+
+A regra vale para agentes, modelos, plugins, CI, scripts, workflows, GitHub, Casa, VPS, BRAIN/Obsidian, HUB/API/MCP, Kanban, Screenpipe, deploys e futuras superfícies que herdem a CentralDark.
+
+```text
+ALL_AGENTS_IN_SCOPE=true
+PR_RULES_BIND_ACTIVE_AGENT=true
+ISSUE_RULES_BIND_ACTIVE_AGENT=true
+OWNER_RULES_BIND_ACTIVE_AGENT=true
+LEDGER_RULES_BIND_ACTIVE_AGENT=true
+RUNTIME_RULES_REQUIRE_RUNTIME_EVIDENCE=true
+```
+
+### Lacuna material não pode desaparecer nem virar comentário ornamental
+
+Quando uma lacuna material sobreviver à revisão e contraprova, ela deve voltar ao **mesmo PR compatível com a intenção vigente** como receipt de estado. Se houver autorização e capability de escrita segura, a correção mínima deve ser aplicada no owner real e reprovada no mesmo ciclo.
+
+```text
+MATERIAL_GAP_PROVEN
+→ REPORT_TO_ACTIVE_COMPATIBLE_PR
+→ IDENTIFY_CANONICAL_OWNER
+→ IDENTIFY_SINGLE_WRITER
+→ APPLY_MINIMAL_REVERSIBLE_FIX_WHEN_AUTHORIZED_AND_TOOL_AVAILABLE
+→ REMEASURE_SAME_TARGET
+→ COUNTERPROOF
+→ APPEND_RECEIPT
+→ NEXT_CURSOR
+```
+
+Nunca fingir correção quando a ferramenta, permissão, runtime ou causalidade não estiver disponível:
+
+```text
+TOOL_UNAVAILABLE_OR_SCOPE_UNPROVEN
+→ STATUS=BLOCKED_OR_UNKNOWN
+→ REPORT_SAME_PR
+→ NO_FALSE_FIXED_POINT
+```
+
+### Correção em tempo real significa ciclo fechado, não mutação cega
+
+```text
+REALTIME_CORRECTION=true
+REALTIME_CORRECTION != BLIND_WRITE
+REALTIME_CORRECTION != DIRECT_MAIN_BY_DEFAULT
+REALTIME_CORRECTION = CURRENT_MEASUREMENT + AUTHORIZATION + OWNER + SINGLE_WRITER + MINIMAL_FIX + REMEASUREMENT + COUNTERPROOF + RECEIPT
+```
+
+Mudança de `main`, PR, HEAD, workflow ou runtime invalida somente claims dependentes. Provas independentes permanecem preservadas.
+
+```text
+STATE_CHANGED
+→ INVALIDATE_ONLY_DEPENDENT_CLAIMS
+→ PRESERVE_INDEPENDENT_PROOFS
+→ REMEASURE_AFFECTED_AXES
+→ UPDATE_RECEIPT
+```
+
+### Toda peça alterada precisa de recibo verificável
+
+Para cada mutação material, o receipt no PR compatível deve deixar, quando aplicável:
+
+```text
+PATH=
+OWNER=
+WRITER=
+BASE_SHA=
+NEW_COMMIT_SHA=
+PR_HEAD_SHA=
+COMMIT_LINK=
+FILE_OR_DIFF_LINK=
+WORKFLOW_RUN_ID=
+CHECK_OR_JOB_ID=
+TEST=
+RESULT=
+COUNTERPROOF=
+STATUS=
+NEXT_CURSOR=
+```
+
+Se um campo não puder ser medido, registrar `UNKNOWN`; nunca preencher por inferência.
+
+### ZERO REGRESSÃO por território
+
+A correção só é candidata a PASS quando preserva capacidades anteriores relevantes e não cria sistema paralelo.
+
+```text
+BEFORE_CAPABILITIES
++ PROPOSED_DELTA
+→ CHECK_EXISTING_OWNERS
+→ CHECK_DEPENDENTS
+→ APPLY_MINIMAL_DELTA
+→ RUN_APPLICABLE_REGRESSION_CHECKS
+→ COMPARE_BEFORE_AFTER
+→ ZERO_KNOWN_REGRESSION
+→ CANDIDATE_PASS
+```
+
+```text
+NEW_FEATURE_WORKS + OLD_CAPABILITY_BREAKS = FAILURE
+GREEN_CHECK + MATERIAL_UNKNOWN_HIDDEN = NOT_PASS
+SAME_HEAD_GATES_REQUIRED_WHEN_GIT_APPLIES=true
+MERGED != DEPLOYED
+DOCUMENTED != EXECUTED
+OLD_HEAD != NEW_HEAD_PROOF
+```
+
+### Aprendizado obrigatório do próprio agente
+
+Erro de interpretação, crítica prematura ou recomendação que ignorou owner também é delta do sistema e deve corrigir o agente no ciclo seguinte.
+
+```text
+AGENT_ERROR
+→ IDENTIFY_IGNORED_RULE
+→ REVIEW_OWNER_AND_TERRITORY
+→ CORRECT_INTERPRETATION_OR_PLAN
+→ CRYSTALLIZE_REUSABLE_DELTA_IN_EXISTING_OWNER_WHEN_PROVEN
+→ APPLY_ON_NEXT_CYCLE
+```
+
+```text
+VER_PRINT
+→ INFERIR
+→ RESPONDER
+→ DESCOBRIR_DEPOIS
+= REGRESSION_PATTERN_FORBIDDEN
+
+VER_MATERIAL
+→ RECUPERAR_INTENCAO
+→ MEDIR_CURRENT
+→ BUSCAR_OWNER
+→ CRUZAR_EVIDENCIA
+→ PROVADO_REFUTADO_UNKNOWN
+→ RESPONDER_OU_AGIR
+= REQUIRED_PATTERN
+```
+
+### Fixed point desta lei
+
+A lei só pode ser declarada plenamente aplicada em um território quando houver evidência do consumidor correspondente. Documento e comentário não bastam para provar execução universal.
+
+```text
+LAW_DOCUMENTED=PROVABLE_BY_COMMIT
+LAW_USED_BY_AGENT=PROVABLE_BY_BEHAVIOR_AND_RECEIPT
+LAW_ENFORCED_BY_CI=REQUIRES_GATE_CONSUMER_PROOF
+LAW_ENFORCED_IN_RUNTIME=REQUIRES_RUNTIME_HOOK_PROOF
+DOCUMENTED_RULE != UNIVERSAL_RUNTIME_ENFORCEMENT
+```
+
+A regra final permanece:
+
+```text
+REVISAR_PRIMEIRO
+→ REUTILIZAR_OWNER_EXISTENTE
+→ CORRIGIR_MENOR_CAUSA_PROVADA
+→ ZERO_REGRESSAO
+→ REMEDIR
+→ CONTRAPROVAR
+→ REGISTRAR_NO_MESMO_PR_COMPATIVEL
+→ REALIDADE_JULGA
+```
