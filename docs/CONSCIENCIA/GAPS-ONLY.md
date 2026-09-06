@@ -63,4 +63,26 @@ Este r02 não repete investigação de:
 - `SCREENPIPE_AUDIO_TO_MCP_TO_HERMES=UNKNOWN`
 - `GLOBAL_RUNTIME_FIXED_POINT=NOT_PROVEN`
 - `TRIGGER_FABRIC_CONTRACT_CURRENT=BLOCKED` nos marcadores já identificados
-- `MAIN_BRANCH_PROTECTION=OFF` é estado observado/política, não reabre source provado.
+
+## Reclassificação — proteção nativa da `main`
+
+A medição remota mostrou `main.protected=false` e required status checks nativos desligados. Isso é **estado observado**, não falha automática.
+
+```text
+GITHUB_NATIVE_MAIN_PROTECTION=OFF
+CLASS=NEUTRAL_POLICY_STATE
+RISK_FROM_OFF_ALONE=NOT_PROVEN
+NATIVE_ENFORCEMENT_REQUIRED=false
+CUSTOM_CENTRALDARK_MAIN_ENFORCEMENT=COVERAGE_UNKNOWN_UNTIL_MEASURED
+```
+
+A CentralDark pode usar governança própria para controlar promoção, desde que a cobertura seja provada no mecanismo real. Portanto:
+
+```text
+BRANCH_PROTECTION_OFF != REGRESSION
+BRANCH_PROTECTION_OFF != SECURITY_FAILURE_BY_ITSELF
+CUSTOM_GUARD_DOCUMENTED != CUSTOM_GUARD_ENFORCED
+CUSTOM_MAIN_PROTECTION=PASS somente com prova do consumidor/gate que impede promoção inválida
+```
+
+Visualmente, `GITHUB_NATIVE_MAIN_PROTECTION=OFF` deve ser tratado como **cinza/neutro** enquanto não houver evidência de dano material associado. O próximo cursor correto não é “ligar o botão”; é medir o enforcement próprio da CentralDark e fechar somente a cobertura que faltar.
