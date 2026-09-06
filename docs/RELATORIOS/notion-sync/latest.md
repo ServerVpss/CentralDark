@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-09-06T02:04:01.389Z
+# 🧠 Notion Sync — 2026-09-06T03:19:41.659Z
 
-- **Commit fonte:** `46a3f8a28f46bf42420e7ea9c290d850a0eb7369`
+- **Commit fonte:** `ab8509ec1d3c77705e5fd5dc6b7e49f1cb87c57c`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 491 atualizadas · ❌ 14 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 491 atualizadas · ❌ 16 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
 | aprendizados | 35 | 0 | 35 | 0 | 0 |
-| estrutura | 426 | 0 | 412 | 0 | 14 |
+| estrutura | 428 | 0 | 412 | 0 | 16 |
 
 ## Operações
 
@@ -215,7 +215,9 @@
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-05-SHARED-WRITER-LEASE-CONTRAPROVA.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-05-STATUS-BADGE-FABRIC-FIXED-POINT.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-05-VERTEX-INVERSO-PEPITAS-PROVADAS.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-05-WINDOWS-INSTALLER-AUTOUPDATE.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-05-WORKFLOW-DEDUPE-RADAR.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-05-WORKFLOW-STARTUP-FAILURE-MINERAL.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/AIOS-GOLD-ASSAY-20260828/CAPABILITY-MATRIX.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/AIOS-GOLD-ASSAY-20260828/COUNTERPROOF.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/AIOS-GOLD-ASSAY-20260828/HERMES-PROOF-PLAN.md |

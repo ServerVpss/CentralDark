@@ -2,16 +2,27 @@
 
 > Histórico cronológico de cada execução do workflow `notion-sync.yml`.
 
-## 2026-09-06T02:04:01.389Z · EXEC · target=all · por @segredounlock
+## 2026-09-06T03:19:41.659Z · EXEC · target=all · por @segredounlock
 
-- Commit fonte: `46a3f8a28f46bf42420e7ea9c290d850a0eb7369`
+- Commit fonte: `ab8509ec1d3c77705e5fd5dc6b7e49f1cb87c57c`
 - Bases atualizadas: regras, pendencias, decisoes, aprendizados, estrutura
 - Bases ignoradas: —
   - **regras**: 0 criadas · 4 atualizadas · 0 ignoradas · 0 erros (Git: 4)
   - **pendencias**: 0 criadas · 1 atualizadas · 0 ignoradas · 0 erros (Git: 1)
   - **decisoes**: 0 criadas · 39 atualizadas · 0 ignoradas · 0 erros (Git: 39)
   - **aprendizados**: 0 criadas · 35 atualizadas · 0 ignoradas · 0 erros (Git: 35)
-  - **estrutura**: 0 criadas · 412 atualizadas · 0 ignoradas · 14 erros (Git: 426)
+  - **estrutura**: 0 criadas · 412 atualizadas · 0 ignoradas · 16 erros (Git: 428)
+
+## 2026-09-06T00:51:15.848Z · EXEC · target=all · por @segredounlock
+
+- Commit fonte: `8eef40b50ac1d7567d3052b021b7c521a2d826ef`
+- Bases atualizadas: regras, pendencias, decisoes, aprendizados, estrutura
+- Bases ignoradas: —
+  - **regras**: 0 criadas · 4 atualizadas · 0 ignoradas · 0 erros (Git: 4)
+  - **pendencias**: 0 criadas · 1 atualizadas · 0 ignoradas · 0 erros (Git: 1)
+  - **decisoes**: 0 criadas · 39 atualizadas · 0 ignoradas · 0 erros (Git: 39)
+  - **aprendizados**: 0 criadas · 35 atualizadas · 0 ignoradas · 0 erros (Git: 35)
+  - **estrutura**: 0 criadas · 412 atualizadas · 0 ignoradas · 12 erros (Git: 424)
 
 ## 2026-09-05T22:21:18.435Z · EXEC · target=all · por @segredounlock
 
