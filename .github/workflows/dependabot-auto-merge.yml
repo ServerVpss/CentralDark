@@ -1,14 +1,16 @@
-# 🤖 Dependabot — automação segura de patches + radar de reconciliação.
+# 🤖 Dependabot — automação segura de patches + radar GLOBAL de conflitos.
 #
 # Regras:
 # - update-branch é sincronização, não aprovação; checks amarelos não bloqueiam.
-# - conflito real vai para scripts/dependabot/resolve-conflicts.sh.
-# - radar varre TODOS os PRs abertos do dependabot[bot], inclusive antigos.
+# - TODO PR aberto passa pelo radar global, independentemente do autor.
+# - conflito real vai para scripts/dependabot/resolve-conflicts.sh (motor único da Casa).
+# - Dependabot pode auto-reconciliar somente pela política especializada do motor.
+# - PR humano/non-dependabot é medido, recebe receipt e fica fail-closed para Writer semântico.
 # - Zendrive/CodeRabbit são revisão consultiva; Hermes/testes provam.
-# - somente PATCH pode receber auto-merge; MINOR fica humano; MAJOR é bloqueado no dependabot.yml.
+# - somente PATCH do Dependabot pode receber auto-merge; MINOR fica humano; MAJOR é bloqueado no dependabot.yml.
 # - pull_request_target nunca executa código do HEAD não confiável.
 
-name: 🤖 Dependabot — radar, reconciliação e auto-merge seguro
+name: 🤖 Dependabot + Radar Global — reconciliação e auto-merge seguro
 
 on:
   pull_request_target:
@@ -20,6 +22,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  issues: write
 
 concurrency:
   group: dependabot-${{ github.event_name }}-${{ github.event.pull_request.number || 'radar' }}
@@ -190,10 +193,11 @@ jobs:
               core.exportVariable('MERGEABILITY_STATE', 'MERGEABLE');
             }
 
-      - name: 🪡 Resolver conflito pelo motor único da Casa
+      - name: 🪡 Resolver conflito Dependabot pelo motor único da Casa
         if: env.RESOLVE_REQUESTED == '1'
         env:
           REPO_DIR: /root/CentralDark
+          PR_KIND: dependabot
           PR_HEAD_REF: ${{ github.event.pull_request.head.ref }}
         run: |
           set -euo pipefail
@@ -281,10 +285,16 @@ jobs:
           echo 'NEVER_DISCARD_LEARNING=1'
 
   radar-open-prs:
-    name: 📡 Radar — reconciliar PRs Dependabot antigos e atuais
-    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    name: 📡 Radar Global — todo conflito de PR passa por uma direção
+    if: >-
+      github.event_name == 'schedule' ||
+      github.event_name == 'workflow_dispatch' ||
+      github.event_name == 'pull_request_target'
     runs-on: [self-hosted, Linux]
     timeout-minutes: 20
+    concurrency:
+      group: centraldark-repository-conflict-radar
+      cancel-in-progress: true
 
     steps:
       - name: 📥 Checkout confiável da main
@@ -296,7 +306,7 @@ jobs:
           fetch-depth: 1
           submodules: false
 
-      - name: 📡 Varredura oldest-first dos PRs Dependabot abertos
+      - name: 📡 Varredura oldest-first de TODOS os PRs abertos
         shell: bash
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -304,6 +314,7 @@ jobs:
           REPO_DIR: /root/CentralDark
           RESOLVER: scripts/dependabot/resolve-conflicts.sh
           MAX_PRS: '100'
+          MAIN_REF: main
         run: |
           set -euo pipefail
           bash "$GITHUB_WORKSPACE/.ci-house/scripts/dependabot/reconcile-open-prs.sh"
