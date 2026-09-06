@@ -125,7 +125,7 @@ supporting_methods:
     owner: .agents/skills/fable-loop/SKILL.md
     ontology: METHOD_NOT_AGENT_OR_ROUTER
     mode: READ_ONLY_CALIBRATION
-    default_routing: true
+    default_routing: false
     may_write_canonical: false
     promotion_gate: META_LUPA_SAME_CONTROL
 
