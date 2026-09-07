@@ -1,13 +1,26 @@
 # CENTRALDARK REMOTE MCP GATEWAY
-status: MEDIDO_2026-09-07
-writer: GROK_SESSION
-mutation: false
+status: ATIVO_2026-09-07
+owner: CENTRALDARK
 
-## O que esta de pe
+## Rota operacional
 
-MCP CentralDark (VPS) em https://mcp.centraldark.com ja e o control plane.
-Desktop Commander Remote no PC SEGREDO e transporte local, nao segundo cerebro.
+- MCP da Casa: `https://mcp.centralldark.com/mcp`
+- Remote Desktop Commander: `https://mcp.desktopcommander.app/mcp`
+- Screenpipe local: `http://127.0.0.1:3030`
+- Device: `SEGREDO`
 
-Nao substituir o MCP da Casa. Nao fundir shell do PC no MCP publico sem allowlist.
+## Regra
 
-Ver artefato de sessao e CENTRALDARK-REMOTE-BRIDGE.config.json no workdir local.
+Desktop Commander e transporte/capacidade local. CentralDark continua owner/control plane.
+Nao expor token do Screenpipe, shell irrestrito ou secrets no repo.
+
+## Contexto local pelo MCP remoto
+
+`CentralDark-Context-Sidecar.ps1` consulta o Screenpipe autenticado e grava um snapshot enxuto em
+`GARIMPO-CHEFE/context/screenpipe-latest.json`. O Desktop Commander remoto pode ler esse arquivo
+quando o agente precisar de contexto recente de tela/navegador, mantendo o dado na Casa.
+
+`CentralDark-Remote-Bridge.ps1` sobe o sidecar e mantem `@wonderwhy-er/desktop-commander@latest remote`
+reconectando sempre pela rota oficial do Desktop Commander.
+
+Config canônica: `scripts/remote-bridge/CENTRALDARK-REMOTE-BRIDGE.config.json`.
