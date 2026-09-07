@@ -1,3 +1,16 @@
+---
+title: "GARIMPO-CHEFE → ONE SITE / ONE MCP / ONE ADMIN — reconciliação 2026-09-06"
+status: KNOWLEDGE_ONLY
+date: 2026-09-06
+updated: 2026-09-07T05:46:00-03:00
+tags: [brain, garimpo, site, mcp, admin, reconciliacao]
+category: BRAIN-APRENDIZADO
+sensitivity: INTERNAL
+source: "PR #1444 + GARIMPO-CHEFE + estado GitHub medido"
+source_class: INTERNAL
+source_rule: "CURRENT > HISTORY; UNKNOWN != PASS; REUSE_BEFORE_CREATE"
+owner: "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/"
+---
 # GARIMPO-CHEFE → ONE SITE / ONE MCP / ONE ADMIN — reconciliação 2026-09-06
 
 **Natureza:** aprendizado + plano de reconciliação no BRAIN existente.  
