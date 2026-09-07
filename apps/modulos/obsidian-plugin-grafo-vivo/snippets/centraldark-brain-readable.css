@@ -1,0 +1,77 @@
+/* 🧼🧽 CentralDark BRAIN — snippet legível para Obsidian
+   Instalação local:
+   1. copiar para <vault>/.obsidian/snippets/centraldark-brain-readable.css
+   2. Obsidian → Configurações → Aparência → CSS snippets → ativar
+
+   Escopo: melhora leitura das notas e headings. Não altera dados, não prova runtime.
+*/
+
+body {
+  --centraldark-accent: #10b981;
+  --centraldark-accent-2: #8b5cf6;
+  --centraldark-warn: #f59e0b;
+  --centraldark-danger: #ef4444;
+}
+
+.markdown-preview-view,
+.markdown-source-view.mod-cm6 .cm-scroller {
+  font-size: 17px;
+  line-height: 1.72;
+}
+
+.markdown-preview-view h1,
+.markdown-source-view.mod-cm6 .HyperMD-header-1 {
+  font-size: 2.15em;
+  letter-spacing: 0.01em;
+  color: var(--centraldark-accent);
+}
+
+.markdown-preview-view h2,
+.markdown-source-view.mod-cm6 .HyperMD-header-2 {
+  font-size: 1.68em;
+  color: var(--centraldark-accent-2);
+}
+
+.markdown-preview-view h3,
+.markdown-source-view.mod-cm6 .HyperMD-header-3 {
+  font-size: 1.32em;
+  color: var(--centraldark-warn);
+}
+
+.markdown-preview-view code,
+.markdown-source-view.mod-cm6 .cm-inline-code {
+  font-size: 0.98em;
+  border-radius: 6px;
+  padding: 0.1em 0.35em;
+}
+
+.markdown-preview-view pre,
+.markdown-source-view.mod-cm6 .HyperMD-codeblock {
+  font-size: 0.96em;
+  border-left: 3px solid var(--centraldark-accent);
+}
+
+.markdown-preview-view a.tag,
+.cm-hashtag {
+  font-size: 0.95em;
+  font-weight: 750;
+  border-radius: 999px;
+  padding: 0.08em 0.45em;
+  background: rgba(16, 185, 129, 0.13);
+  color: var(--centraldark-accent);
+}
+
+.markdown-preview-view blockquote {
+  border-left: 4px solid var(--centraldark-accent-2);
+  background: rgba(139, 92, 246, 0.08);
+  padding: 0.45em 0.9em;
+  border-radius: 8px;
+}
+
+.markdown-preview-view table {
+  font-size: 0.98em;
+}
+
+.markdown-preview-view strong {
+  color: var(--text-accent);
+}
