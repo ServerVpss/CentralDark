@@ -110,3 +110,11 @@ Hermes deve bloquear qualquer proposta que resulte em:
 - Writer automático de semantic merge;
 - Red Team importado;
 - PASS sem teste no owner/consumer correspondente.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

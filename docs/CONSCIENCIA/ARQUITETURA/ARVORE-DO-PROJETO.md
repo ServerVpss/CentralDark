@@ -228,3 +228,11 @@ gh api "repos/ServerVpss/CentralDark/git/trees/main?recursive=1" --jq '[.tree[]|
 🔍  LUPA NA MÃO · INTENÇÃO NA FRENTE
     CentralDark · SEGREDO/CHEFE
 ```
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre
