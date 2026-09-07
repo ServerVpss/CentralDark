@@ -37,6 +37,11 @@ function lower(value) {
   return String(value ?? '').toLowerCase();
 }
 
+function argValue(name) {
+  const index = process.argv.indexOf(name);
+  return index >= 0 ? process.argv[index + 1] : null;
+}
+
 export function classifyExternalSignal(raw = {}) {
   const event = {
     source: clean(raw.source || raw.kind || 'external', 80),
@@ -53,6 +58,7 @@ export function classifyExternalSignal(raw = {}) {
   const isDependabot = /dependabot/.test(hay);
   const isZendrive = /zendrive/.test(hay);
   const isAios = EXTERNAL_AI_SOURCE_RX.test(hay);
+  const isAios = /(external[-_ ]?project|external[-_ ]?repo|external[-_ ]?codebase)/.test(hay);
   const hasSyntaxSignal = /(syntaxerror|does not parse|node --check|parse error|non-async|await inside)/.test(hay);
   const hasSilentFallback = /(fallback|degrad(?:e|ed|a)|silently|silencios|try\/catch|try\s*\{|lazy require|require\(|dynamic import)/.test(hay);
   const hasFix = /\b(fix|bug|regression|correction|corre[cç][aã]o|patch|pr\s*#?\d+)/.test(hay);
@@ -251,11 +257,6 @@ export function renderGamifiedCard(result) {
     '💎 falha útil -> REFUTED_MINERAL -> memória -> nova evidência pode reabrir',
     '🔒 UNKNOWN != PASS · DOCUMENTED != EXECUTED',
   ].filter(Boolean).join('\n');
-}
-
-function argValue(name) {
-  const index = process.argv.indexOf(name);
-  return index >= 0 ? process.argv[index + 1] : null;
 }
 
 async function cli() {

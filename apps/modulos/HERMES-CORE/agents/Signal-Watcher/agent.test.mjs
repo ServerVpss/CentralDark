@@ -8,6 +8,10 @@ test('forwarded Synkra fix becomes candidate and preserves epistemic state', () 
   const result = classifyExternalSignal({
     source: 'gmail_forward',
     subject: `Fwd: [${externalSource}] fix: parser`,
+test('forwarded external project fix becomes candidate and preserves epistemic state', () => {
+  const result = classifyExternalSignal({
+    source: 'gmail_forward',
+    subject: 'Fwd: [external-project] fix: parser',
     body: 'SyntaxError. node --check failed. lazy require silently falls back inside try/catch.',
   });
   assert.equal(result.state, 'CANDIDATE');
