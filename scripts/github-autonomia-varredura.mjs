@@ -10,7 +10,11 @@
  * 👑 PERMITO-SEGREDO + 🔄 GIT + 🤖 AUTO.
  *
  * PADRAO_OPERACIONAL (todos os PRs elegíveis, não só um):
- * 🟡 IA-PRECISA-REVISAR + 🧠 AGENTE-* derivado do Writer + selo acima.
+ * 🟡 IA-PRECISA-REVISAR + selo acima.
+ *
+ * Nome de modelo/agente é proveniência opcional, nunca requisito, autoridade,
+ * capacidade presumida ou gate de promoção. Capacidade nasce do escopo e das
+ * labels funcionais 🤖 IA-* quando aplicáveis.
  *
  * O selo organiza/rastreia; não substitui gates, segurança nem prova.
  * ✅ PR CONFIRMADO e 🟢 SUCESSO são RESULTADO (pós-merge), nunca input.
@@ -38,6 +42,10 @@ export const REQUIRED_PROMOTION_SEAL_LABELS = Object.freeze([
 export const OPERATIONAL_BASELINE_LABELS = Object.freeze([
   CANONICAL_REVIEW_LABEL,
 ]);
+/**
+ * Compatibilidade de proveniência histórica. Estas labels podem existir para
+ * auditoria/linhagem, mas jamais entram no conjunto obrigatório da promoção.
+ */
 export const WRITER_AGENT_LABELS = Object.freeze({
   grok: "🧠 AGENTE-GROK",
   chatgpt: "🧠 AGENTE-CHATGPT",
@@ -86,7 +94,11 @@ export function promotionSealReceipt(pr) {
   return { valid, authority, mergePolicy, intentScope, writer, writerScope };
 }
 
-/** Deriva 🧠 AGENTE-* a partir do campo Writer do recibo (padrão global). */
+/**
+ * Compatibilidade de auditoria: deriva proveniência histórica do Writer.
+ * Não usar o retorno desta função para autorização, capability, roteamento
+ * obrigatório ou gate de promoção.
+ */
 export function agentLabelsFromWriter(writer) {
   const text = String(writer || "").toLocaleLowerCase("pt-BR");
   const found = new Set();
@@ -98,15 +110,15 @@ export function agentLabelsFromWriter(writer) {
 
 /**
  * Conjunto completo que TODO PR elegível deve carregar antes da promoção.
- * = selo de promoção + baseline operacional + agente(s) do Writer.
+ * = selo de promoção + baseline operacional model-neutral.
+ *
+ * Writer continua obrigatório para lease/proveniência do recibo, mas o nome
+ * do executor não altera requisitos de promoção.
  */
-export function requiredOperationalLabels(pr) {
-  const receipt = promotionSealReceipt(pr);
-  const agents = agentLabelsFromWriter(receipt.writer);
+export function requiredOperationalLabels(_pr) {
   return [...new Set([
     ...REQUIRED_PROMOTION_SEAL_LABELS,
     ...OPERATIONAL_BASELINE_LABELS,
-    ...agents,
   ])];
 }
 
