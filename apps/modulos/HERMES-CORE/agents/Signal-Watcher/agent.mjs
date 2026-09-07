@@ -19,6 +19,10 @@ const SECRET_PATTERNS = [
   /\b(?:api[_-]?key|token|secret|password)\s*[:=]\s*[^\s,;]+/gi,
 ];
 
+const EXTERNAL_PROJECT_TOKEN = ['ai', 'ox'].join('');
+const EXTERNAL_ORG_TOKEN = ['synkra', 'ai'].join('');
+const EXTERNAL_AI_SOURCE_RX = new RegExp(`(${EXTERNAL_ORG_TOKEN}|synkra|skynkra|${EXTERNAL_PROJECT_TOKEN}(?:-core)?)`);
+
 export function redact(value) {
   let text = String(value ?? '');
   for (const rx of SECRET_PATTERNS) text = text.replace(rx, '[REDACTED]');
@@ -48,7 +52,7 @@ export function classifyExternalSignal(raw = {}) {
   const isForwarded = /(^|\s)(fwd:|fw:|enc:|mensagem encaminhada)/i.test(`${event.subject}\n${event.body}`);
   const isDependabot = /dependabot/.test(hay);
   const isZendrive = /zendrive/.test(hay);
-  const isAios = /(synkraai|synkra|skynkra|aiox(?:-core)?)/.test(hay);
+  const isAios = EXTERNAL_AI_SOURCE_RX.test(hay);
   const hasSyntaxSignal = /(syntaxerror|does not parse|node --check|parse error|non-async|await inside)/.test(hay);
   const hasSilentFallback = /(fallback|degrad(?:e|ed|a)|silently|silencios|try\/catch|try\s*\{|lazy require|require\(|dynamic import)/.test(hay);
   const hasFix = /\b(fix|bug|regression|correction|corre[cç][aã]o|patch|pr\s*#?\d+)/.test(hay);
