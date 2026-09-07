@@ -276,7 +276,7 @@ capability_inventory:
   ODS: { state: DEFERRED, preserved: true }
   OPENMAUSBOT: { state: RESERVE, preserved: true, role: agent_roster_ux_reference }
   OPEN_LOVABLE: { state: RESERVE, preserved: true, role: builder_pattern_reference }
-  AIOX: { state: CANDIDATE, preserved: true, adapter_required: true }
+  EXTERNAL_PROJECT: { state: CANDIDATE, preserved: true, adapter_required: true }
   OMEGA: { state: AVAILABLE, role: adversarial_autocorrection }
   ENXAME: { state: AVAILABLE_OR_RESERVED, role: multi_agent_execution_mode }
   FUTURE_ENGINES: { state: RESERVE }
@@ -584,7 +584,7 @@ session_gold_to_preserve:
   - Buzz_as_rooms_event_view
   - Grok_Build_as_replaceable_engine_candidate
   - Hermes_plus_Grok_Build_as_complementary_capacity
-  - AIOX_as_adapter_source_not_replacement
+  - EXTERNAL_PROJECT_as_adapter_source_not_replacement
   - local_AI_preserved_deferred_until_measured
   - ODS_preserved
   - OpenMausBot_preserved
@@ -646,7 +646,7 @@ hermes_reconciliation_command:
       3. classificar cada nó como NATIVE | OWNER_EXISTS | ADAPTATION_REQUIRED | OWNER_DISCOVERY_REQUIRED | RUNTIME_UNKNOWN
       4. garimpar branches/issues/PRs antigos somente por delta exclusivo
       5. não ressuscitar branch inteira quando a main já venceu
-      6. preservar Buzz, Grok Build, IA local, ODS, OpenMausBot, Open-Lovable, AIOX, Enxame e Omega
+      6. preservar Buzz, Grok Build, IA local, ODS, OpenMausBot, Open-Lovable, EXTERNAL_PROJECT, Enxame e Omega
       7. registrar cada capacidade administrável no registry existente
       8. dar a cada setor ID + owner + hash + POMBO_ID + revision + lock_state + evidence_ref
       9. conectar Admin/Cockpit/Rooms/Voice/Missions/Forge/Maintenance ao mesmo Core
@@ -729,7 +729,7 @@ master_tree: |
               │   ├── ODS
               │   ├── OpenMausBot
               │   ├── Open-Lovable
-              │   ├── AIOX
+              │   ├── EXTERNAL_PROJECT
               │   ├── Enxame
               │   └── Omega
               ├── GARIMPO / ABSORÇÃO
