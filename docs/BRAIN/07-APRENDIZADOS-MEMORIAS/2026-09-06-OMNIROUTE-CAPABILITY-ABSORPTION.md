@@ -1,7 +1,15 @@
 ---
 title: "2026-09-06 — Intenção do CHEFE = DELTA ÚTIL + absorção OmniRoute"
+status: KNOWLEDGE_ONLY
 date: 2026-09-06
+updated: 2026-09-07T05:46:09-03:00
 tags: ["aprendizado", "omniroute", "roteador", "delta-util", "zero-regressao", "soul", "orquestracao", "blocker-exato"]
+category: "B-Aprendizados"
+sensitivity: INTERNAL
+source: "PR #1445 + intenção do SEGREDO/CHEFE + OmniRoute release/v3.8.51"
+source_class: HUMAN_AUTHORITY
+source_rule: "INTENCAO_DO_CHEFE_IS_DELTA_UTIL"
+owner: "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md"
 ---
 
 # Aprendizado cristalizado
