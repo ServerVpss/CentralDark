@@ -249,11 +249,6 @@ export function renderGamifiedCard(result) {
   ].filter(Boolean).join('\n');
 }
 
-function argValue(name) {
-  const index = process.argv.indexOf(name);
-  return index >= 0 ? process.argv[index + 1] : null;
-}
-
 async function cli() {
   if (process.argv.includes('--scan-core')) {
     const root = argValue('--core') || DEFAULT_CORE;
