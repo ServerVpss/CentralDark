@@ -1,6 +1,6 @@
 ---
 title: "Setor Horn — Lógica & Prova"
-status: "CANDIDATE_IN_PR"
+status: "CANDIDATE_IN_PR_EXECUTABLE_BINDING"
 owner: "docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/README.md"
 writer: "SOL"
 writer_scope: "BRAIN_LIBRARY_LOGIC_PROOF"
@@ -9,7 +9,7 @@ tags: ["brain", "biblioteca", "logica", "prova", "horn", "herbrand", "contraprov
 
 # 🧮 SETOR HORN · LÓGICA & PROVA
 
-Este setor é uma gaveta semântica da **Biblioteca Cognitiva existente**. Não cria novo cérebro, novo owner ou nova autoridade.
+Este setor é uma gaveta semântica da **Biblioteca Cognitiva existente** e agora também uma fronteira determinística consumida pelo motor cognitivo. Não cria novo cérebro, novo owner ou nova autoridade.
 
 ```text
 REUSE_BEFORE_CREATE=true
@@ -30,15 +30,49 @@ Transformar fontes de lógica formal, verificação e prova em material reutiliz
 - construir testes discriminantes e contraprovas;
 - alimentar skills e contratos somente quando houver evidência.
 
+## 🔒 Amarração executável
+
+```text
+BIBLIOTECA
+→ scripts/memory-linker/library-router.mjs
+→ apps/modulos/HERMES-CORE/core/horn-proof-gate.mjs
+→ SECTOR_HORN_ROUTED
+→ LIBRARY_ENTRY_ACCEPTED
+→ COGNITIVE_COUNCIL
+→ PERCEPTION_ORCHESTRA
+→ HORN_WRITER_GATE
+→ ONE_WRITER
+→ REALIDADE
+```
+
+Bindings:
+
+```text
+HORN_ENGINE=apps/modulos/HERMES-CORE/core/horn-proof-gate.mjs
+LIBRARY_OWNER=scripts/memory-linker/library-router.mjs
+COGNITIVE_OWNER=apps/modulos/HERMES-CORE/core/cognitive-council.mjs
+RUNTIME_CONSUMER=apps/modulos/HERMES-CORE/core/perception-orchestra.mjs
+MENTAL_LOCK=docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/HORN-COGNITIVE-LOCK.md
+PDF_CONFORMANCE=SETORES/LOGICA-E-PROVA/PDF-CONFORMANCE-CC2003.md
+```
+
+Toda `entry` aceita pelo catálogo passa pelo gate Horn. O motor cognitivo carrega o mesmo lock e a prontidão do Writer é derivada por cláusula Horn; se as premissas não forem marcadas, o resultado fica `UNKNOWN`, nunca falso verde.
+
+```text
+LIBRARY_GATE_REQUIRED=true
+COGNITIVE_GATE_REQUIRED=true
+HORN_GATE_BYPASS_FOR_CLAIM_PROMOTION=false
+```
+
 ## Lentes da equipe
 
 A Mesa de Convergência já mapeia quatro participantes do núcleo do debate para lentes funcionais existentes:
 
 ```text
-Geoff Huntley  → AUTOMATION_FACTORY
+Geoff Huntley   → AUTOMATION_FACTORY
 Ian Livingstone → STRUCTURAL_SKEPTIC
-Dex Horthy     → HUMAN_AGENT_COORDINATION
-Greg Pstrucha  → OBSERVABILITY_PROOF
+Dex Horthy      → HUMAN_AGENT_COORDINATION
+Greg Pstrucha   → OBSERVABILITY_PROOF
 ```
 
 Neste setor:
@@ -122,6 +156,38 @@ NAO_MARCADO != FALSO
 NAO_MARCADO != LIXO
 NAO_MARCADO = NAO_PROVADO_NESTE_FECHO
 ```
+
+## Conformidade com o PDF
+
+Denominador explícito do comportamento implementado:
+
+```text
+H1 cláusula negativa força contradição
+H2 regra positiva propaga conclusão
+H3 não marcado permanece UNKNOWN
+H4 iteração termina em fixed point
+
+D={H1,H2,H3,H4}
+```
+
+Teste executável: `apps/modulos/HERMES-CORE/core/horn-proof-gate.test.mjs`.
+
+```text
+PDF_SUBSET_TARGET=4/4=100%
+UNIVERSAL_LOGIC_COVERAGE=UNPROVEN
+```
+
+O exemplo do PDF `p ∧ ¬q ∧ (q ∨ ¬p)` vira:
+
+```text
+p
+p → q
+q → F
+
+{p} → {p,q} → CONTRADIÇÃO
+```
+
+A prova same-head do PR decide se o alvo de 4/4 foi realmente atingido pela implementação atual.
 
 ## Roteamento por agente
 
