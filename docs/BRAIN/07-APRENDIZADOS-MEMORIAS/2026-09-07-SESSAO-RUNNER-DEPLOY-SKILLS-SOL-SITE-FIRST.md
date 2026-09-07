@@ -1,3 +1,16 @@
+---
+title: "SESSÃO 2026-09-07 — runner, deploy, skills, SOL e prioridade SITE-FIRST"
+status: KNOWLEDGE_ONLY
+date: 2026-09-07
+updated: 2026-09-07T05:46:00-03:00
+tags: [brain, sessao, runner, deploy, skills, sol, site-first]
+category: BRAIN-APRENDIZADO
+sensitivity: INTERNAL
+source: "PR #1444 + GitHub Actions + reconciliação da sessão"
+source_class: INTERNAL
+source_rule: "CURRENT > HISTORY; UNKNOWN != PASS; REUSE_BEFORE_CREATE"
+owner: "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/"
+---
 # SESSÃO 2026-09-07 — runner, deploy, skills, SOL e prioridade SITE-FIRST
 
 **Natureza:** receipt de reconciliação da sessão; **não é novo owner**, não cria segundo cérebro, segundo router, segundo deploy ou V2/V3.  
