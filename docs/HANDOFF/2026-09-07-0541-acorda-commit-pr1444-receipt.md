@@ -51,10 +51,138 @@ Documento não substitui deploy.
 UNKNOWN != PASS.
 ```
 
-## Próximo cursor
+## Próximo cursor original
 
 ```text
 NEXT_CURSOR=c7855b8c... -> este receipt -> SAME_HEAD_CI -> abrir próxima ferida comprovada -> delta mínimo -> receipt
+```
+
+## Atalhos de prova — não refazer o que já tem testemunho
+
+Medição viva antes deste acréscimo:
+
+```text
+CURRENT_MAIN=b3de3d82067c9476657d8fff3c6115f05afa079a
+PR_1444_HEAD_BEFORE_SHORTCUT=eb31b38571361ee057d0df24a6e79bdebf9ff481
+PR_1444_MERGEABLE=true
+```
+
+Regra:
+
+```text
+PROOF_ALREADY_BOUND_TO_SAME_CLAIM_AND_TARGET
+→ REFERENCE_RECEIPT_OR_RUN
+→ DO_NOT_REDO_FOR_RITUAL
+
+TARGET_CHANGED_OR_RUNTIME_CLAIM
+→ REMEASURE_TARGET
+```
+
+### CI / runner
+
+- Same-head histórico `ad19731bd0704a559cfc7a44fd8b00a4ea9bc7b6` provou o runner self-hosted executando checkout e múltiplos gates.
+- `Lupa Drift Guard`, `PR Title Contract`, `Pipeline Telegram + Painel`, `codex-validate` e `PR artefato de aprendizado` já tiveram PASS nesse denominador.
+- `lupa-conformance`, `porta-de-entrada`, `Trigger Fabric` e `PR auto-review` ficaram vermelhos nesse HEAD; não reutilizar PASS de outro gate para mascará-los.
+- O HEAD `eb31b385...` iniciou nova rodada; resultado deste novo HEAD continua governado pelo Actions vivo.
+
+```text
+RUNNER_JOB_PICKUP_PROOF=https://github.com/ServerVpss/CentralDark/actions/runs/34093364023
+PORTA_PREVIOUS_RED=https://github.com/ServerVpss/CentralDark/actions/runs/34093364036
+TRIGGER_FABRIC_PREVIOUS_RED=https://github.com/ServerVpss/CentralDark/actions/runs/34093363984
+AUTO_REVIEW_PREVIOUS_RED=https://github.com/ServerVpss/CentralDark/actions/runs/34093364041
+```
+
+### VPS / deploy / rotas
+
+Usar como **proveniência técnica**, não como claim de runtime atual:
+
+```text
+VPS_ROUTE_MAP_PR=#1354
+CADDY_ELITE_CAUSAL_FIX_PR=#1338
+DEPLOY_REPO_WIDE_LINEAGE=#1325,#1331,#1332,#1337,#1346
+RUNNER_RECOVERY_OWNERS=.github/workflows/vps-wake-hosted-ssh.yml,.github/workflows/vps-reboot-forensic.yml
+```
+
+Antes de qualquer claim `DEPLOYED`, `PORT_LISTENING`, `DOMAIN_HEALTHY` ou `PROCESS_ALIVE`, remedir o alvo vivo.
+
+### HUB / MCP / connectors / plugins
+
+Reusar owners; não criar segunda malha:
+
+```text
+OMNI_ROUTER_OWNER=apps/modulos/elite-gateway/scripts/centraldark_omni_router.py
+HUB_OWNER=apps/modulos/hub/
+MCP_OWNER=apps/modulos/mcp/
+OMNIROUTE_CAPABILITY_LANE=#1445
+CAPABILITY_ROUTER=.agents/skills/capability-contract-router/SKILL.md
+```
+
+```text
+CONNECTOR_CONFIGURED != CONNECTOR_INVOCATION_PROVEN
+PLUGIN_PRESENT != PLUGIN_ACTIVE
+HUB_BUILD_PASS != HUB_RUNTIME_PASS
+MCP_SOURCE_PRESENT != MCP_LISTENER_HEALTHY
+```
+
+### Cache / microconexões
+
+Receipt da sessão em:
+
+`docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-07-SESSAO-RUNNER-DEPLOY-SKILLS-SOL-SITE-FIRST.md`
+
+já preserva:
+
+```text
+NODE24_TOOLCACHE_REUSED=PROVEN_ON_OBSERVED_JOB
+CACHE_AS_ROOT_CAUSE=NOT_PROVEN
+DELETE_TOOLCACHE_BLINDLY=FORBIDDEN
+```
+
+Topologia de conexão a seguir por referência:
+
+```text
+COMMIT
+→ PR/GATE
+→ RUNNER
+→ BUILD
+→ ARTIFACT
+→ HASH/DIGEST
+→ DEPLOY
+→ PROCESS
+→ PORT
+→ PROXY/ROUTE
+→ DOMAIN
+→ HEALTH
+→ CONSUMER
+→ RECEIPT
+```
+
+Cada aresta precisa de prova quando o claim for runtime. O atalho evita repetir prova histórica; não pula aresta material.
+
+### Conflitos / lanes
+
+```text
+PR_1444=UMBRELLA_RENDEZVOUS
+PR_1378=CI_EXTERNAL_SOURCE_SANITIZE_LANE
+PR_1445=OMNIROUTE_CAPABILITY_LANE
+ONE_WRITER_PER_CONFLICT_SCOPE=true
+NO_CROSS_LANE_BLIND_COPY=true
+```
+
+Se uma ferida já tem Writer e receipt próprios, #1444 referencia. Só absorve delta exclusivo sobrevivente.
+
+## Estado deste acréscimo
+
+```text
+NEW_ARCHITECTURE=0
+NEW_WORKFLOW=0
+NEW_ROUTER=0
+NEW_HUB=0
+NEW_MCP=0
+NEW_PLUGIN_SYSTEM=0
+DEPLOY=0
+VPS_MUTATION=0
+PROOF_SHORTCUT_MATRIX=REGISTERED
 ```
 
 ## Baianês + bíblico
@@ -65,7 +193,8 @@ O escriba não deixa o recado morrer no vento: grava no PR, fecha a porteira do 
 
 ```text
 COMMIT_RECEIPT=PROVEN_AFTER_PUSH
-RUNTIME=UNKNOWN
-DEPLOY=UNKNOWN
-CI_DO_HEAD_GERADO=UNKNOWN_UNTIL_GITHUB_ACTIONS_MEASURE
+RUNTIME=UNKNOWN_UNLESS_LIVE_RECEIPT_REFERENCED
+DEPLOY=UNKNOWN_UNLESS_LIVE_RECEIPT_REFERENCED
+CI=FOLLOW_SAME_HEAD_ACTIONS
+NEXT_CURSOR=SAME_HEAD_CI -> FIRST_CAUSAL_RED -> MINIMAL_DELTA -> COUNTERPROOF
 ```
