@@ -21,6 +21,7 @@ DO_NOT_DEFINE_MERGE_POLICY=true
 DO_NOT_DEFINE_MEMORY=true
 DO_NOT_CREATE_PARALLEL_AGENT=true
 FUTURE_RULES_CONSUMED_FROM_CORE=true
+REUSE_BEFORE_CREATE_REQUIRED=true
 ```
 
 Somente particularidades físicas exclusivas do autoload/Claude Code podem permanecer aqui. Toda regra comum pertence ao core ou ao owner que o core carregar sob demanda.
@@ -59,3 +60,4 @@ CENTRALDARK_AI_BOOT
 .agents/skills/meta-lupa/SKILL.md
 .agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA
 docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json
+FALHA_DE_RECONCILIACAO_DE_CONTEXTO
