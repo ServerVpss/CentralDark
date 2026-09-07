@@ -2,7 +2,7 @@
 title: "GITHUB LABELS OPERACIONAIS"
 date: 2026-08-27
 tags: ["consciencia"]
-updated: 2026-08-27
+updated: 2026-09-07
 ---
 
 # Labels Operacionais CentralDark
@@ -12,7 +12,7 @@ updated: 2026-08-27
 ```text
 SEGREDO/CHEFE = humano e autoridade final
 SOL = coordenadora
-PIVETE/HERMES = executor, preservação e continuidade
+PIVETE/HERMES = papel histórico/operacional quando aplicável
 MODELO = capacidade substituível
 REALIDADE = juiz
 ```
@@ -27,6 +27,23 @@ A autorização humana canônica é:
 
 `permito-pivete`, `PERMITO-PIVETE` e outros aliases históricos não pertencem à taxonomia operacional ativa. O histórico permanece nos registros antigos, sem promover PIVETE/HERMES/modelo/bot a autoridade.
 
+## Regra model-neutral
+
+A CentralDark não deriva obrigação, capacidade, permissão, Writer ou rota operacional a partir do nome do modelo.
+
+```text
+MODEL_NAME = PROVENIENCIA_OPCIONAL
+MODEL_NAME != AUTHORITY
+MODEL_NAME != CAPABILITY
+MODEL_NAME != WRITER_LEASE
+MODEL_NAME != ROUTING_KEY
+MODEL_NAME != PROMOTION_GATE
+
+ROUTING_INPUT = INTENCAO + ESCOPO + CAPACIDADES_NECESSARIAS + SUPERFICIE + PERMISSOES + WRITER_SCOPE
+```
+
+As labels `🧠 AGENTE-*` permanecem aceitas somente para proveniência/auditoria histórica e compatibilidade. Elas não entram no baseline obrigatório, não escolhem executor e não podem bloquear ou liberar promoção.
+
 ## Padrão operacional global (TODO PR elegível)
 
 Não é opcional e não vale só para um PR. O motor de autonomia materializa o padrão em **todos** os PRs com recibo válido.
@@ -39,20 +56,22 @@ SELO_CANONICO_DE_PROMOCAO
 
 BASELINE_OPERACIONAL
 = 🟡 IA-PRECISA-REVISAR
-+ 🧠 AGENTE-* derivado do campo Writer
 
-PADRAO_COMPLETO = SELO + BASELINE + AGENTE(S)
+PADRAO_COMPLETO = SELO + BASELINE
 ```
 
-Derivação de agente (determinística a partir de `Writer:` no body):
+Capacidades são expressas por labels funcionais quando materiais ao escopo:
 
 ```text
-grok        → 🧠 AGENTE-GROK
-chatgpt/sol → 🧠 AGENTE-CHATGPT
-claude      → 🧠 AGENTE-CLAUDE
-codex       → 🧠 AGENTE-CODEX
-hermes/pivete → 🧠 AGENTE-HERMES
-…
+🤖 IA-PESQUISAR
+🤖 IA-REVISAR
+🤖 IA-VALIDAR
+🤖 IA-DOCUMENTAR
+🤖 IA-EXECUTAR
+🤖 IA-INFRA
+🤖 IA-FRONTEND
+🤖 AGENTIC-DEVOPS
+🔧 SELF-HEAL
 ```
 
 Owner: `scripts/github-autonomia-varredura.mjs` (`requiredOperationalLabels` + promote sweep).
@@ -63,6 +82,8 @@ PR_ELEGIVEL + RECIBO_VALIDO
 → recheck autonomia
 → só então promove
 ```
+
+O campo `Writer:` continua necessário como receipt de caneta/lease/proveniência no escopo, mas o texto desse campo não adiciona requisito por marca/modelo.
 
 ## Resultado confirmado de PR
 
@@ -137,17 +158,19 @@ LABEL_OPERACIONAL = MAIÚSCULAS
 ALIAS_LEGADO = MIGRAR_ANTES_DE_APAGAR
 SEM_CONSUMIDOR + SEM_ROTEAMENTO + SEM_VALOR_OPERACIONAL = REMOVER
 PADRAO_OPERACIONAL_APLICA_A_TODO_PR_ELEGIVEL=true
+MODEL_LABEL_IS_PROVENANCE_ONLY=true
 ```
 
 `🧠 AGENTE-LOVABLE` e `assign:lovable` são obsoletos e não recebem novos trabalhos.
 
 ## Núcleo canônico
 
+### Autoridade / estado / capacidade
+
 - `👑 PERMITO-SEGREDO`
 - `✅ PR CONFIRMADO`
 - `🕊️ POMBO-CHECKSUM OBRIGATÓRIO DE PACOTE`
 - `🔄 GIT`, `🔄 GIT-DIVERGÊNCIA`
-- `🧠 AGENTE-CHATGPT`, `🧠 AGENTE-CLAUDE`, `🧠 AGENTE-CODEX`, `🧠 AGENTE-GROK`, `🧠 AGENTE-HERMES`, `🧠 AGENTE-JARVIS`, `🧠 AGENTE-SENTINELA`, `🧠 AGENTE-SUPABASE`
 - `🤖 AUTO`, `🤖 AGENTIC-DEVOPS`, `🤖 IA-DOCUMENTAR`, `🤖 IA-EXECUTAR`, `🤖 IA-FRONTEND`, `🤖 IA-INFRA`, `🤖 IA-PESQUISAR`, `🤖 IA-REVISAR`, `🤖 IA-VALIDAR`
 - `🐞 BUG`, `♻️ DUPLICADO`, `✨ MELHORIA`, `❓ DÚVIDA`, `🆘 AJUDA-NECESSÁRIA`, `🌱 BOM-PARA-INICIAR`, `🎨 FRONTEND`, `📚 DOCS`
 - `🔐 SEGURANÇA`, `🔧 SELF-HEAL`, `🔴 ERRO`, `🔴 FALTA-EVIDÊNCIA`, `🔴 PRIORIDADE-ALTA`, `🔴 RISCO-SERVIDOR`, `🛠️ INFRA`
@@ -155,14 +178,20 @@ PADRAO_OPERACIONAL_APLICA_A_TODO_PR_ELEGIVEL=true
 - `🟢 CORREÇÃO-SEGURA`, `🟢 PRIORIDADE-BAIXA`, `🟢 PRONTO-PARA-IA`, `🟢 SUCESSO`, `🟢 SUPABASE`
 - `🕸️ GRAPHIFY`, `🚫 INVÁLIDO`, `🧊 NÃO-FAZER`, `🧊 PARADO`, `🧩 DIVERGÊNCIA`, `🧭 PAINEL`, `SUPERSEDED`
 
+### Proveniência histórica opcional
+
+- `🧠 AGENTE-CHATGPT`, `🧠 AGENTE-CLAUDE`, `🧠 AGENTE-CODEX`, `🧠 AGENTE-GROK`, `🧠 AGENTE-HERMES`, `🧠 AGENTE-JARVIS`, `🧠 AGENTE-SENTINELA`, `🧠 AGENTE-SUPABASE`
+
+Essas labels não participam de decisão de autoridade, capacidade, Writer lease, roteamento obrigatório ou gate de promoção.
+
 ## Alias legado → canônico
 
 ```text
-assign:chatgpt      → 🧠 AGENTE-CHATGPT
-assign:claude       → 🧠 AGENTE-CLAUDE
-assign:codex        → 🧠 AGENTE-CODEX
-assign:grok         → 🧠 AGENTE-GROK
-assign:supabase-bot → 🧠 AGENTE-SUPABASE
+assign:chatgpt      → 🧠 AGENTE-CHATGPT   (proveniência somente)
+assign:claude       → 🧠 AGENTE-CLAUDE    (proveniência somente)
+assign:codex        → 🧠 AGENTE-CODEX     (proveniência somente)
+assign:grok         → 🧠 AGENTE-GROK      (proveniência somente)
+assign:supabase-bot → 🧠 AGENTE-SUPABASE  (proveniência somente)
 auto                 → 🤖 AUTO
 bug                  → 🐞 BUG
 p1                   → 🔴 PRIORIDADE-ALTA
@@ -186,6 +215,7 @@ LABEL_RECEBIDA
 → alias conhecido: converter para destino canônico
 → alias de autoridade SEGREDO: 👑 PERMITO-SEGREDO
 → alias de autoridade PIVETE/HERMES: descartar
+→ assign:* conhecido: preservar somente como proveniência, nunca roteamento/gate
 → assign:* desconhecido: descartar, não inventar agente
 → dedupe
 → GitHub recebe somente o conjunto normalizado
@@ -204,6 +234,8 @@ TEXT_ALIAS_IS_COMPATIBILITY_NOT_SECOND_LABEL=true
 CONFIRMED_RESULT_LABEL=✅ PR CONFIRMADO
 CONFIRMED_RESULT_LABEL_IS_NOT_AUTHORITY=true
 OPERATIONAL_STANDARD_IS_GLOBAL=true
+MODEL_NAME_IS_PROVENANCE_ONLY=true
+CAPABILITY_ROUTING_IS_MODEL_NEUTRAL=true
 ```
 
 O HUB já descobre ferramentas pelo MCP; portanto herda a semântica do tool GitHub existente. Não duplicar catálogo, regra de autoridade ou normalizador dentro da interface.
@@ -238,10 +270,12 @@ LABEL = SINAL
 INTENÇÃO = SEGREDO/CHEFE
 ESTADO = EVIDÊNCIA
 EXECUÇÃO = CAPACIDADE AUTORIZADA
+MODELO = PROVENIÊNCIA SUBSTITUÍVEL
 REALIDADE = JUIZ
 
 👑 = AUTORIDADE
-🔄 + 🤖 + 🟡 + 🧠 = PADRÃO OPERACIONAL GLOBAL
+🔄 + 🤖 + 🟡 = PADRÃO OPERACIONAL GLOBAL
+🧠 AGENTE-* = PROVENIÊNCIA OPCIONAL
 🟢 / ✅ = RESULTADO (pós-prova)
 ```
 
