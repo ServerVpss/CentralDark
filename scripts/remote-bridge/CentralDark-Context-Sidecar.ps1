@@ -26,13 +26,21 @@ while ($true) {
   try {
     $health = Invoke-RestMethod -Method Get -Uri "$base/health" -TimeoutSec 5
     $start = [uri]::EscapeDataString("$WindowMinutes`m ago")
-    $uri = "$base/activity-summary?start_time=$start&end_time=now&include_key_texts=false&max_snippets=12&max_snippet_chars=800&max_memories=8"
-    $ctx = Invoke-RestMethod -Method Get -Uri $uri -Headers $headers -TimeoutSec 15
-    $payload = [ordered]@{ generated_at=$now; source='screenpipe'; device='SEGREDO'; health=$health; context=$ctx }
+    $mode = 'activity-summary'
+    try {
+      $uri = "$base/activity-summary?start_time=$start&end_time=now&include_recording=false&include_memories=false&include_key_texts=false&include_guidance=false&max_snippets=8&max_snippet_chars=500"
+      $ctx = Invoke-RestMethod -Method Get -Uri $uri -Headers $headers -TimeoutSec 30
+    } catch {
+      $mode = 'search-fallback'
+      $fields = [uri]::EscapeDataString('type,content.timestamp,content.app_name,content.window_name,content.text')
+      $uri = "$base/search?content_type=accessibility&limit=12&start_time=$start&fields=$fields"
+      $ctx = Invoke-RestMethod -Method Get -Uri $uri -Headers $headers -TimeoutSec 12
+    }
+    $payload = [ordered]@{ generated_at=$now; source='screenpipe'; mode=$mode; device='SEGREDO'; health=$health; context=$ctx }
     $tmp = "$latest.tmp"
     $payload | ConvertTo-Json -Depth 30 | Set-Content -Encoding UTF8 $tmp
     Move-Item -Force $tmp $latest
-    [ordered]@{ generated_at=$now; ok=$true; latest=$latest; remote_mcp='https://mcp.desktopcommander.app/mcp' } | ConvertTo-Json | Set-Content -Encoding UTF8 $status
+    [ordered]@{ generated_at=$now; ok=$true; mode=$mode; latest=$latest; remote_mcp='https://mcp.desktopcommander.app/mcp' } | ConvertTo-Json | Set-Content -Encoding UTF8 $status
   } catch {
     [ordered]@{ generated_at=$now; ok=$false; error=$_.Exception.Message; remote_mcp='https://mcp.desktopcommander.app/mcp' } | ConvertTo-Json | Set-Content -Encoding UTF8 $status
   }
