@@ -61,3 +61,11 @@ Budget exhaust → reverte tentativa + post-mortem, não fabrica verde.
 ## FIXED_POINT deste doc
 DOCUMENTADO=true, PROVENANCE=true, NO_NEW_SYSTEM=true, MECHANISMS_MAPPED=true.
 IMPLEMENTATION_PENDING=true (fora do escopo deste commit).
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

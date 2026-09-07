@@ -1,3 +1,10 @@
+---
+title: "GAPS ONLY"
+date: 2026-09-07
+tags: ["consciencia"]
+updated: 2026-09-07
+---
+
 # DELTA ÚTIL — só o que faltava no r01
 
 Base selada: `3fb9cd2bf7eff428a36ef488e0aa8795d45142553e97088cad3d97434506af51`  

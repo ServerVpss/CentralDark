@@ -1,3 +1,10 @@
+---
+title: "2026 09 05 WORKFLOW DEDUPE RADAR"
+date: 2026-09-07
+tags: ["consciencia"]
+updated: 2026-09-07
+---
+
 # 2026-09-05 — Workflow Dedupe Radar / Compressão sem regressão
 
 📜 **“Ajunta os pedaços que sobraram, para que nada se perca.”**

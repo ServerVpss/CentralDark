@@ -1,3 +1,10 @@
+---
+title: "POMBO LINEAGE RULE"
+date: 2026-09-07
+tags: ["consciencia"]
+updated: 2026-09-07
+---
+
 # LEI DO POMBO EVOLUTIVO — identidade fixa, revisão monotônica
 
 ## Regra
