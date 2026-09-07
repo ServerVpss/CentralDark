@@ -519,3 +519,10 @@ REVISAR_PRIMEIRO
 → REGISTRAR_NO_MESMO_PR_COMPATIVEL
 → REALIDADE_JULGA
 ```
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

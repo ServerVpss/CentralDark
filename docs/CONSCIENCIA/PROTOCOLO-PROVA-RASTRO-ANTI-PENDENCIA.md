@@ -345,3 +345,11 @@ HISTORY_IS_PRESERVED=true
 UNKNOWN_IS_NOT_PASS=true
 ONE_RESPONSE_STANDARD_OWNER=true
 ```
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

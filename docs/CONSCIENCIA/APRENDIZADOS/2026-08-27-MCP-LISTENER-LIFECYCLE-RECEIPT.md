@@ -99,3 +99,11 @@ bind structured log → workerId/PID
 ## Fio da missão
 
 Antes parecia que o ouvido do processo morreu. Agora a pergunta correta é anterior: provar que aquele ouvido pertencia exatamente àquele corpo. Se a atribuição fechar, então poderá ser julgado o claim `LISTENER_LOST_WHILE_PROCESS_ALIVE`; até lá, a causa permanece `UNKNOWN`.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre
