@@ -158,6 +158,21 @@ export const painelTools = [
             const resumo = alteracoes.length ? alteracoes.join(", ") : "atualização";
             const msg = input.commit_msg ||
                 `chore(painel): IA atualiza painel — ${resumo}`;
+            // EMERGENCY_FREEZE 2026-09-07 MAIN_CHURN_FAIL_CLOSED: push to main disabled
+            if (process.env.PAINEL_GIT_PUSH !== "1") {
+                notifyTelegramPainel({
+                    evento: input.evento ?? input.commit_msg ?? "Painel local sem push (FREEZE)",
+                    commit: msg,
+                    pushed: false,
+                }).catch(() => { });
+                return ok({
+                    ok: true,
+                    alteracoes,
+                    pushed: false,
+                    commitMsg: msg,
+                    note: "PAINEL_GIT_PUSH!=1 — main freeze ativo; arquivo local salvo sem commit/push",
+                });
+            }
             let pushed = false;
             let gitError = "";
             try {
