@@ -33,6 +33,11 @@ function lower(value) {
   return String(value ?? '').toLowerCase();
 }
 
+function argValue(name) {
+  const index = process.argv.indexOf(name);
+  return index >= 0 ? process.argv[index + 1] : null;
+}
+
 export function classifyExternalSignal(raw = {}) {
   const event = {
     source: clean(raw.source || raw.kind || 'external', 80),
