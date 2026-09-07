@@ -287,7 +287,7 @@ A Camada 2 deve processar por família para evitar 494 leituras sem direção:
 F1  OMNI_ROUTER / CAPABILITY_ROUTER / PROVIDERS / FALLBACK
 F2  SOL / VOICE / DESKTOP / HUMAN_FRONT_DOOR
 F3  HERMES / GROK_BUILD / ENGINES / ARSENAL
-F4  AIOX_DERIVED / SKILLS / ACTIVATION / SYNC / DRIFT
+F4  AI_OX_DERIVED / SKILLS / ACTIVATION / SYNC / DRIFT
 F5  BRAIN / OBSIDIAN / RAG / GRAPH / MEMORY
 F6  CARACOL / MEGAZORD / FIXED_POINT / PROOF
 F7  CI / SELF_HOSTED_RUNNER / ACTIONS / SENTINELA
@@ -323,7 +323,7 @@ LOCAL_AI
 ODS
 OPENMAUSBOT
 OPEN_LOVABLE
-AIOX_DERIVED_CAPABILITIES
+AI_OX_DERIVED_CAPABILITIES
 HERMES
 SOL
 OBSIDIAN
@@ -531,9 +531,9 @@ CHECKSUM!=RUNTIME_PROOF
 CHECKSUM!=SEMANTIC_OWNER
 ```
 
-## 12.5 AWS DevOps Agent Skills + AIOX
+## 12.5 AWS DevOps Agent Skills + AI-OX
 
-O cruzamento AWS/AIOX não autoriza outro cérebro, router ou runtime. O ganho é formalizar seleção, lifecycle, sync e topologia.
+O cruzamento AWS/AI-OX não autoriza outro cérebro, router ou runtime. O ganho é formalizar seleção, lifecycle, sync e topologia.
 
 Quatro deltas ficaram preservados:
 
@@ -565,7 +565,7 @@ RUNTIME=QUEM_EXECUTA
 REALITY_JUDGE=QUEM_PROVA
 ```
 
-AIOX continua fonte de capacidades derivadas, com `SKILL_SYNC`, drift validation, contexto/handoff, paralelismo, worktrees, self-healing e afins, sem virar segundo sistema.
+AI-OX continua fonte de capacidades derivadas, com `SKILL_SYNC`, drift validation, contexto/handoff, paralelismo, worktrees, self-healing e afins, sem virar segundo sistema.
 
 ## 12.6 Pipeline topology e CARACOL
 
@@ -619,7 +619,7 @@ LOCAL_AI=PRESERVED
 ODS=PRESERVED
 OPENMAUSBOT=PRESERVED
 OPEN_LOVABLE=PRESERVED
-AIOX_DERIVED=PRESERVED
+AI_OX_DERIVED=PRESERVED
 FUTURE_ENGINES=PRESERVED
 ```
 
@@ -902,7 +902,7 @@ Não altera runtime, VPS, deploy, owner FABLE ou rota de produção.
 SESSION_CRYSTALLIZED_IN_PR=true
 RUNNER_DIAGNOSIS_PRESERVED=true
 DEPLOY_ARCHITECTURE_PRESERVED=true
-AWS_AIOX_DELTAS_PRESERVED=true
+AWS_AI_OX_DELTAS_PRESERVED=true
 PLAN_RESERVES_PRESERVED=true
 SITE_FIRST_PRESERVED=true
 SOL_PAPAGAIO_CONTRACT_PRESERVED=true
