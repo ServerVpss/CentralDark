@@ -1,3 +1,16 @@
+---
+title: "CASA + VPS + KANBAN — handoff por host sem segundo cérebro"
+status: KNOWLEDGE_ONLY
+date: 2026-09-06
+updated: 2026-09-07T05:46:00-03:00
+tags: [brain, casa, vps, kanban, handoff]
+category: BRAIN-APRENDIZADO
+sensitivity: INTERNAL
+source: "PR #1444 + sessão operacional Casa/VPS"
+source_class: INTERNAL
+source_rule: "CURRENT > HISTORY; UNKNOWN != PASS; REUSE_BEFORE_CREATE"
+owner: "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/"
+---
 # CASA + VPS + KANBAN — handoff por host sem segundo cérebro
 
 **Data:** 2026-09-06  
