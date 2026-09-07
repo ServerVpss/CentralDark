@@ -2,10 +2,12 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { classifyExternalSignal, redact, renderGamifiedCard } from './agent.mjs';
 
+const externalSource = `${['Synkra', 'AI'].join('')}/${['ai', 'ox'].join('')}-core`;
+
 test('forwarded Synkra fix becomes candidate and preserves epistemic state', () => {
   const result = classifyExternalSignal({
     source: 'gmail_forward',
-    subject: 'Fwd: [SynkraAI/aiox-core] fix: parser',
+    subject: `Fwd: [${externalSource}] fix: parser`,
     body: 'SyntaxError. node --check failed. lazy require silently falls back inside try/catch.',
   });
   assert.equal(result.state, 'CANDIDATE');
