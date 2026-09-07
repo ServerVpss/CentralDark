@@ -1,0 +1,12 @@
+{
+  "schema": "centraldark.remote-bridge.config.v1",
+  "device_label": "SEGREDO",
+  "workdir": "E:\\CentralDark\\_MAPA_CASA\\GARIMPO-CHEFE",
+  "package": "@wonderwhy-er/desktop-commander@latest",
+  "remote_mcp": "https://mcp.desktopcommander.app/mcp",
+  "casa_mcp": "https://mcp.centraldark.com",
+  "github_default": "ServerVpss/CentralDark",
+  "mutation": false,
+  "read_only_first": true,
+  "telegram_out_of_scope": true
+}
