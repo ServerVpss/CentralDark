@@ -1,10 +1,10 @@
 # 🏺📦 Sinfonia de inventário — branches + Issues + fontes de ouro
 
-**Data:** 2026-09-07  
-**PR / Writer lane:** #1445 — `feat/omniroute-capability-surface-722`  
-**Autoridade de intenção:** SEGREDO/CHEFE  
-**Natureza:** CAMADA 1 — inventário e mapa de fontes.  
-**Revisão profunda de diffs:** **AINDA NÃO EXECUTADA**.  
+**Data:** 2026-09-07
+**PR / Writer lane:** #1445 — `feat/omniroute-capability-surface-722`
+**Autoridade de intenção:** SEGREDO/CHEFE
+**Natureza:** CAMADA 1 — inventário e mapa de fontes.
+**Revisão profunda de diffs:** **AINDA NÃO EXECUTADA**.
 
 > 📜 “E antes de julgar os pergaminhos, o rei mandou contar todas as prateleiras; pois ouro perdido continua ouro, ainda que ninguém lembre em qual sala o deixou.”
 
@@ -333,9 +333,9 @@ MEGAZORD
 FUTURE_DISCOVERED_CAPABILITIES
 ```
 
-`DEFERRED != CANCELLED`  
-`RESERVE != DEAD`  
-`CANDIDATE != DISCARDED`  
+`DEFERRED != CANCELLED`
+`RESERVE != DEAD`
+`CANDIDATE != DISCARDED`
 `NOT_YET_REVIEWED != USELESS`
 
 ## 10. Estado desta entrega
@@ -385,3 +385,548 @@ MATERIALIZE_FULL_BRANCH_LEDGER
 > 📜 “Nenhum instrumento será expulso da orquestra só porque ainda não chegou sua parte; primeiro se lê a partitura inteira, depois se decide quem realmente toca.”
 
 🏺 **Baianês:** oxente, branch, Issue, PR velho, comentário, tag e release agora entram na mesma feira. Mas ninguém vai catar tudo no grito: primeiro conta os sacos, depois abre um por um e vê onde tem ouro de verdade.
+
+---
+
+# 12. 🔥 Cristal da sessão inteira — Runner, deploy, skills, site, SOL e sinfonia
+
+Este bloco preserva o fio completo desta sessão para que o valor não dependa da conversa continuar aberta.
+
+```text
+MISSION_ID=CASA_GITHUB_CARACOL_RECONCILIATION
+SESSION_CRYSTAL=2026-09-07
+WRITER_LANE=#1445
+CHEFE_CAN_PAPAGAIO=true
+SOL_MUST_NOT_PAPAGAIO=true
+NO_PLAN_LOSS=true
+REUSE_BEFORE_CREATE=true
+UNKNOWN_IS_NOT_PASS=true
+SITE_FIRST=true
+```
+
+## 12.1 Runner self-hosted e issue actions/runner#3609
+
+A hipótese inicial foi comparar o comportamento do self-hosted VPS runner com o GitHub Actions Runner issue `actions/runner#3609`.
+
+O sintoma relevante daquele problema é runner aparentemente online que não pega o próximo job até restart. A observação atual da CentralDark não reproduziu esse sintoma:
+
+```text
+RUNNER_NAME=vmi3256920-centraldark
+RUNNER_VERSION_OBSERVED_NOW=2.337.0
+JOB_PICKUP=PROVED
+EXACT_HEAD_CHECKOUT=PROVED
+WORKSPACE_CLEAN=PROVED_BY_ACTIONS_CHECKOUT
+RUNNER_STUCK_SYMPTOM=NOT_OBSERVED
+CACHE_AS_ROOT_CAUSE=NOT_PROVED
+```
+
+O runner recebeu os jobs, limpou o workspace, fez fetch e checkout do HEAD exato e executou testes. Portanto:
+
+```text
+RUNNER_WORKING=true
+DO_NOT_PURGE_TOOLCACHE_BLINDLY=true
+DO_NOT_RM_RF_RUNNER_ROOT=true
+CAUSE_FIRST=true
+```
+
+Node/toolcache e limpeza de VPS só devem ser alterados após medição causal. `_work/_tool` é recurso reutilizável; `_runner`, credenciais, runtime e diagnósticos não entram em limpeza cega.
+
+## 12.2 Casa ligada / Casa desligada
+
+A arquitetura convergiu para **um pipeline com braços opcionais**, não dois pipelines concorrentes:
+
+```text
+                         CENTRALDARK
+                              │
+                       GITHUB / MAIN
+                              │
+                     OWNER + RECEIPT
+                              │
+                  CARACOL / CAPABILITY ROUTER
+                              │
+             ┌────────────────┴────────────────┐
+             │                                 │
+          CASA ON                           CASA OFF
+   SOL/Hermes/local/Grok               braço local ausente
+             │                                 │
+             └────────────────┬────────────────┘
+                              │
+                     VPS SELF-HOSTED
+                              │
+                       BUILD / TEST
+                              │
+                   IMMUTABLE ARTIFACT
+                              │
+                      SHA / DIGEST
+                              │
+                          DEPLOY
+                              │
+                  PROCESS / PORT / ROUTE
+                              │
+                         SITE REAL
+                              │
+                   HEALTH / LOG / ACTION
+                              │
+                     COUNTERPROOF
+                              │
+                     REALITY JUDGE
+```
+
+```text
+PC_OFF != PIPELINE_OFF
+HERMES_DESKTOP_OFF != PRODUCTION_OFF
+CASA_ON=ADDITIONAL_CAPACITY
+CASA_OFF=VPS_GITHUB_CONTINUE
+ONE_SYSTEM_ONLY=true
+```
+
+## 12.3 Ouro de CI/CD, Docker e artifact plane
+
+As referências de self-hosted/CI-CD/Docker/registry discutidas nesta sessão foram tratadas como **fonte de capacidade**, nunca como autorização para importar arquitetura legada inteira.
+
+O ouro preservado:
+
+```text
+BUILD_SEPARATED_FROM_RUNTIME=true
+BUILD_ONCE_PROMOTE_EXACT_BYTES=true
+IMMUTABLE_ARTIFACT=true
+SOURCE_SHA_BOUND_TO_ARTIFACT=true
+IMAGE_OR_PACKAGE_DIGEST=true
+LAST_KNOWN_GOOD=true
+ROLLBACK_RECEIPT=true
+MEASURED_GC=true
+```
+
+O que NÃO é autorização automática:
+
+```text
+NEW_SWARM=false
+NEW_SHIPYARD=false
+DOCKER_MACHINE_LEGACY=false
+INSECURE_REGISTRY=false
+DOCKERIZE_EVERYTHING=false
+```
+
+Docker permanece uma capability opcional. O contrato importante é proveniência `source → build → artifact → runtime`, independentemente do empacotamento escolhido.
+
+## 12.4 POMBO_CHECKSUM com função correta
+
+O POMBO continua útil, mas checksum não vira prova funcional:
+
+```text
+SOURCE_SHA=
+BUILD_SHA=
+ARTIFACT_DIGEST=
+CONFIG_SHA=
+TEST_RECEIPT_SHA=
+DEPLOY_TARGET=
+PREVIOUS_GOOD_DIGEST=
+HEALTH_RESULT=
+COUNTERPROOF=
+```
+
+```text
+CHECKSUM=BYTE_IDENTITY_RECEIPT
+CHECKSUM!=RUNTIME_PROOF
+CHECKSUM!=SEMANTIC_OWNER
+```
+
+## 12.5 AWS DevOps Agent Skills + AIOX
+
+O cruzamento AWS/AIOX não autoriza outro cérebro, router ou runtime. O ganho é formalizar seleção, lifecycle, sync e topologia.
+
+Quatro deltas ficaram preservados:
+
+```text
+DELTA_1=skill_lifecycle_activation
+DELTA_2=skill_sync_sha_checksum
+DELTA_3=pipeline_topology_derived
+DELTA_4=runner_off_auto_recovery
+
+IMPLEMENT_ONLY_WHEN_RUNTIME_OR_CI_MAKES_IT_MATERIAL=true
+```
+
+Estados conceituais desejados:
+
+```text
+SKILL_AVAILABLE
+SKILL_ACTIVE
+SKILL_SELECTED
+SKILL_LOADED
+```
+
+E separação:
+
+```text
+SKILL=COMO_AGIR
+MEMORY=O_QUE_SABEMOS
+HANDOFF=O_QUE_ACONTECEU_NA_MISSAO
+RUNTIME=QUEM_EXECUTA
+REALITY_JUDGE=QUEM_PROVA
+```
+
+AIOX continua fonte de capacidades derivadas, com `SKILL_SYNC`, drift validation, contexto/handoff, paralelismo, worktrees, self-healing e afins, sem virar segundo sistema.
+
+## 12.6 Pipeline topology e CARACOL
+
+A topologia desejada é derivada dos owners atuais, não uma nova autoridade:
+
+```text
+PR
+→ SAME_HEAD_GATES
+→ MERGE_MAIN
+→ PATH_IMPACT
+→ WORKFLOW_OWNER
+→ RUNNER_CLASS
+→ BUILD
+→ ARTIFACT
+→ PROMOTION
+→ PROCESS
+→ PORT
+→ PROXY
+→ DOMAIN
+→ HEALTH
+→ CONSUMER
+```
+
+Reverso:
+
+```text
+CONSUMER
+→ DOMAIN
+→ PROXY
+→ PORT
+→ PROCESS
+→ ARTIFACT
+→ BUILD
+→ WORKFLOW
+→ COMMIT
+```
+
+```text
+PIPELINE_TOPOLOGY=DERIVED_NOT_AUTHORITY
+CARACOL_TRAVERSAL!=SEMANTIC_CAUSALITY
+```
+
+## 12.7 Planos preservados
+
+Nenhum reforço desta sessão autoriza remover planos existentes:
+
+```text
+BUZZ=PRESERVED
+GROK_BUILD=PRESERVED
+LOCAL_AI=PRESERVED
+ODS=PRESERVED
+OPENMAUSBOT=PRESERVED
+OPEN_LOVABLE=PRESERVED
+AIOX_DERIVED=PRESERVED
+FUTURE_ENGINES=PRESERVED
+```
+
+Grok Build e Hermes permanecem destinados a trabalhar juntos quando material após o site vivo, respeitando escopo, handoff e contraprova.
+
+```text
+CANDIDATE!=DISCARDED
+DEFERRED!=CANCELLED
+RESERVE!=DEAD
+UNKNOWN!=REMOVED
+```
+
+## 12.8 SITE FIRST
+
+A prioridade operacional escolhida nesta sessão é:
+
+```text
+PRIORIDADE_ATUAL=SITE_NO_AR
+```
+
+Ordem:
+
+```text
+IDENTIFY_SITE_OWNER
+→ IDENTIFY_DEPLOY_WORKFLOW_OWNER
+→ IDENTIFY_RUNNER
+→ IDENTIFY_ARTIFACT
+→ IDENTIFY_VPS_PROCESS
+→ IDENTIFY_PORT
+→ IDENTIFY_PROXY_ROUTE
+→ IDENTIFY_DOMAIN
+→ DEPLOY_MINIMUM_CAUSAL_SCOPE_WHEN_AUTHORIZED
+→ PROVE_SITE_VISIBLE
+→ PROVE_SOURCE_SHA_ARTIFACT_RUNTIME_BINDING
+→ PROVE_ONE_MINIMUM_REAL_ACTION
+→ LOG_HEALTH
+→ COUNTERPROOF
+→ REALITY_JUDGE
+```
+
+Os deltas futuros de skills/topologia/recovery não sequestram esta prioridade antes de se tornarem materiais.
+
+## 12.9 SOL: CHEFE pode papagaiar; SOL não
+
+O contrato corrigido nesta sessão:
+
+```text
+CHEFE_CAN_PAPAGAIO=true
+SOL_MUST_NOT_PAPAGAIO=true
+CHEFE_INPUT=LIVRE
+SOL_DEDUPLICATES=true
+SOL_RECOVERS_STATE=true
+SOL_SEPARATES_PAST_PRESENT_FUTURE=true
+SOL_EXTRACTS_DELTA_UTIL=true
+SOL_CHOSES_TECHNICAL_DIRECTION_WHEN_MACHINE_RESOLVABLE=true
+SOL_ASKS_HUMAN_ONLY_AT_REAL_HUMAN_FRONTIER=true
+```
+
+Metáfora pedagógica preservada:
+
+> **“E o rei falou tudo que lhe veio à boca; à serva coube separar o ouro da areia.”** 🏺👑
+
+Em técnico:
+
+```text
+INPUT_DO_CHEFE=LIVRE
+MACHINE_FILTER=RECONCILIATION+DEDUP+DIRECTION
+OUTPUT=DELTA_UTIL
+```
+
+## 12.10 Linguagem pedagógica da Casa
+
+A sessão registrou como direção canônica de apresentação:
+
+```text
+BAIANES=true
+BIBLICAL_NARRATIVE=true
+EGYPTIAN_IMAGERY=true
+RESENHA_CONTEXTUAL=true
+TECHNICAL_POSTURE_PRESERVED=true
+NARRATIVE_MUST_TEACH=true
+NARRATIVE_MUST_NOT_REPLACE_EVIDENCE=true
+METAPHOR_IS_NOT_PROOF=true
+HUMOR_MUST_NOT_HIDE_FAILURE=true
+```
+
+Fluxo pedagógico:
+
+```text
+FATO_TECNICO
+→ HISTORIA/METAFORA
+→ TRADUCAO_BAIANES
+→ IMAGEM_SIMBOLICA
+→ EXPLICACAO_DO_CONCEITO
+→ PROVA_REAL
+```
+
+Regra:
+
+> **“Contarás a história para que seja lembrada; explicarás em baianês para que seja entendida; desenharás o Egito para que seja vista; farás resenha para que permaneça viva; mas diante do altar da prova apresentarás HEAD, teste e evidência.”**
+
+## 12.11 Inventário como sinfonia
+
+O pedido evoluiu de branches para um denominador maior:
+
+```text
+BRANCHES
++ ISSUES
++ PRS
++ COMMITS
++ COMMENTS
++ REVIEWS
++ ACTIONS
++ LOGS
++ ARTIFACTS
++ TAGS
++ RELEASES
++ HANDOFFS
++ BRAIN
++ DOCS
++ SKILLS
++ CASA
++ VPS
+```
+
+A regra permanece:
+
+```text
+INVENTORY_FIRST
+DEEP_DIFF_SECOND
+NO_DELETE_BY_NAME
+NO_CLOSE_BY_SIMILARITY
+NO_ABSORB_WITHOUT_DIFF
+NO_PLAN_LOSS
+```
+
+# 13. 🧿 Placar causal SAME-HEAD — `fdc8a3871058037ee17672d22ccddc7a6aa9a8b5`
+
+Medição do HEAD exato antes deste novo commit:
+
+```text
+HEAD=fdc8a3871058037ee17672d22ccddc7a6aa9a8b5
+RUNNER=vmi3256920-centraldark
+RUNNER_VERSION=2.337.0
+```
+
+### Verdes comprovados nesse HEAD
+
+```text
+Hermes Core Signal Watch=SUCCESS
+Lupa Drift Guard=SUCCESS
+```
+
+### Vermelhos comprovados nesse HEAD
+
+```text
+Trigger Fabric Full Package=FAILURE
+PR auto-review=FAILURE
+```
+
+### Ainda sem sentença naquele momento
+
+```text
+porta-de-entrada=IN_PROGRESS
+codex-validate=QUEUED
+PR Title Contract=QUEUED
+PR aprendizado=QUEUED
+Pipeline Telegram+Painel=PENDING
+lupa-conformance=QUEUED
+CodeQL=SKIPPED
+```
+
+```text
+FIXED_POINT=false
+UNKNOWN_IS_NOT_PASS=true
+```
+
+## 13.1 Causa do PR auto-review
+
+Causa reproduzida no log:
+
+```text
+COMMAND=git diff --check
+FILE=docs/HANDOFF/2026-09-07-branches-issues-sinfonia-inventory-handoff.md
+CAUSE=TRAILING_WHITESPACE
+```
+
+Linhas afetadas foram as linhas Markdown com dois espaços finais usadas para quebra visual e três linhas de regras com espaços finais. Este commit remove esses espaços.
+
+```text
+CAUSE_OWNED_BY_THIS_PASSAGE=true
+MINIMAL_REMEDIATION=REMOVE_TRAILING_WHITESPACE
+```
+
+## 13.2 Causa do Trigger Fabric
+
+O runner executou 41 testes e apenas um falhou:
+
+```text
+FAILED_TEST=test_master_chain_remains_single_and_fable_is_supporting_method
+EXPECTED=default_routing:false
+OBSERVED=default_routing:true
+```
+
+A busca na `main@b3de3d82067c9476657d8fff3c6115f05afa079a` encontrou divergência interna:
+
+```text
+.agents/skills/fable-loop/SKILL.md                     default_routing=false
+docs/.../TRIGGERS.yml                                  default_routing=false
+apps/modulos/fixed-point-fabric/contracts/...          default_routing=false
+docs/.../MASTER-CYCLE.yml                              default_routing=true
+```
+
+Portanto:
+
+```text
+FABLE_DEFAULT_ROUTING_INCONSISTENCY=PROVED_ON_BASE_MAIN
+ROOT_CAUSE_IS_RUNNER_CACHE=false
+ROOT_CAUSE_IS_RUNNER_STUCK=false
+PR_1445_INTRODUCED_CONTRACT_VALUE=NOT_PROVED
+PR_1445_TOUCHED_WORKFLOW_AND_MADE_TEST_APPLICABLE=true
+```
+
+A correção semântica do owner FABLE/MASTER-CYCLE não é feita às cegas nesta passagem. Primeiro deve ser reconciliado qual contrato é canônico e qual Writer possui esse escopo.
+
+## 13.3 O que passou dentro do Trigger Fabric antes da falha
+
+Mesmo com o job vermelho, múltiplos contratos passaram antes do único failure:
+
+```text
+AUREOLA_BAHIA_BIBLICA_TESTS=PASS
+FALSE_GREEN_GUARDS=PASS
+SCREENPIPE_BLOCKS_FALSE_GREEN=PASS
+UNKNOWN_NEVER_PASS=PASS
+WRITER_LEASE=PASS
+GROK_BUILD_ADAPTER_TESTS=PASS
+SOL_TEACHING_GRAMMAR_TESTS=PASS
+SECRETS_REDACTED_TEST=PASS
+```
+
+Isso é evidência parcial e não converte o workflow global para PASS.
+
+# 14. Regra de continuação autônoma
+
+Ordem do CHEFE cristalizada nesta sessão:
+
+```text
+CONTINUE_AUTONOMAMENTE=true
+WHILE=NEW_INFORMATION_AND_SAFE_ACTION_WITHIN_GRANTED_AUTHORITY
+STOP_ONLY_ON:
+  - FIXED_POINT
+  - HUMAN_FRONTIER_PROVED
+  - BLOCKED_WITH_EXPLICIT_CAUSE
+```
+
+A máquina não deve parar só porque encontrou um vermelho se ainda existe medição read-only ou remediação mínima causal dentro do Writer atual.
+
+Também não deve atravessar silenciosamente owner conflitante:
+
+```text
+SAFE_SAME_SCOPE_FIX=CONTINUE
+READ_ONLY_DIAGNOSIS=CONTINUE
+RECEIPT_HANDOFF=CONTINUE
+CROSS_OWNER_MUTATION_WITHOUT_RECONCILIATION=STOP_OR_HANDOFF
+DESTRUCTIVE_RUNTIME_ACTION_WITHOUT_EXPLICIT_SCOPE=STOP
+```
+
+# 15. Estado depois deste cristal
+
+Este update tem duas funções materiais:
+
+```text
+1. REMOVER_TRAILING_WHITESPACE_DO_HANDOFF
+2. CRISTALIZAR_SESSAO_INTEIRA_NO_PR_1445
+```
+
+Não altera runtime, VPS, deploy, owner FABLE ou rota de produção.
+
+```text
+SESSION_CRYSTALLIZED_IN_PR=true
+RUNNER_DIAGNOSIS_PRESERVED=true
+DEPLOY_ARCHITECTURE_PRESERVED=true
+AWS_AIOX_DELTAS_PRESERVED=true
+PLAN_RESERVES_PRESERVED=true
+SITE_FIRST_PRESERVED=true
+SOL_PAPAGAIO_CONTRACT_PRESERVED=true
+HOUSE_TEACHING_STYLE_PRESERVED=true
+BRANCH_ISSUE_SINFONIA_PRESERVED=true
+CURRENT_CI_CAUSES_PRESERVED=true
+
+DEPLOY_PERFORMED=false
+VPS_MUTATION=false
+FABLE_OWNER_MUTATED=false
+FIXED_POINT=false
+```
+
+## NEXT_CURSOR atualizado
+
+```text
+NEXT_CURSOR=
+WAIT_AND_REMEASURE_SAME_HEAD
+→ verify PR auto-review after whitespace remediation
+→ remeasure porta-de-entrada/codex/lupa/title/pipeline
+→ keep #1446 linked to exact FABLE inconsistency
+→ reconcile FABLE/MASTER-CYCLE owner before mutation
+→ continue full branch ledger/inventory work only when it does not steal SITE_FIRST material priority
+→ SITE_DEPLOY_RUNTIME_OBSERVATION remains operational destination
+```
+
+> 📜🏺 **“E o rei falou tudo que lhe veio à boca; à serva coube separar o ouro da areia. E quando a areia já estava separada, ninguém chamou o saco de ouro antes de pesá-lo.”**
