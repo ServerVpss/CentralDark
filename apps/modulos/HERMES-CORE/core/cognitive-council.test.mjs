@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import './horn-proof-gate.test.mjs';
 
 import {
   CANDIDATE_POOL_PR_1104,
