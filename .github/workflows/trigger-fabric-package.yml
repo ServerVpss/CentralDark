@@ -1,3 +1,6 @@
+# CONTRACT_MARKERS:
+# Trigger Fabric Full Package
+# Fresh-extraction counterproof
 name: 🧠 Trigger Fabric — pacote e contraprova
 
 on:
