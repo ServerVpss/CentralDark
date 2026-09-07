@@ -81,35 +81,76 @@ function scanDir(dir) {
   return out;
 }
 
-function markdownWithoutCode(content) {
-  return content
+function normalizeWikiTarget(value) {
+  return String(value || '')
+    .trim()
+    .replace(/\\/g, '/')
+    .replace(/^\.\/+/, '')
+    .replace(/\.md$/i, '')
+    .replace(/\/{2,}/g, '/')
+    .toUpperCase();
+}
+
+function stripCodeExamples(content) {
+  return String(content || '')
+    // Fenced examples frequently contain shell [[ ... ]] conditionals. They are
+    // executable/documentation examples, not Obsidian wikilinks.
     .replace(/```[\s\S]*?```/g, '')
     .replace(/~~~[\s\S]*?~~~/g, '')
+    // Inline code is also descriptive text, not a navigational memory edge.
     .replace(/`[^`\n]*`/g, '');
 }
 
+function isWikiTargetCandidate(target) {
+  if (!target || target === '...') return false;
+  // Shell tests / placeholders such as [[ -n "$VAR" ]] must not become links.
+  if (target.startsWith('-')) return false;
+  if (/[$"'`;]|&&|\|\|/.test(target)) return false;
+  return true;
+}
+
 function wikilinks(content) {
-  const semanticMarkdown = markdownWithoutCode(content);
-  return [...semanticMarkdown.matchAll(/\[\[([^\]|#\n]+?)(?:[|#][^\]]*)?]]/g)]
-    .map(m => m[1].trim().toUpperCase());
+  const navigationalText = stripCodeExamples(content);
+  return [...navigationalText.matchAll(/\[\[([^\]|#\n]+?)(?:[|#][^\]]*)?]]/g)]
+    .map(m => normalizeWikiTarget(m[1]))
+    .filter(isWikiTargetCandidate);
 }
 
 const SKIP_PASTA = ['ARQUIVO-MORTO', '_LEGADO_ROOT_DOCS_CONFLITOS'];
 const SKIP_PREFIXO = ['INDEX', 'README'];
+const CONSCIENCIA_ROOT = path.join(RAIZ, 'docs/CONSCIENCIA');
+const BRAIN_ROOT = path.join(RAIZ, 'docs/BRAIN');
 
 const allFiles = [
-  ...scanDir(path.join(RAIZ, 'docs/CONSCIENCIA')),
-  ...scanDir(path.join(RAIZ, 'docs/BRAIN')),
+  ...scanDir(CONSCIENCIA_ROOT),
+  ...scanDir(BRAIN_ROOT),
 ];
 
 // Um basename pode existir em mais de uma pasta. Para resolução de wikilink,
 // qualquer destino real com aquele basename satisfaz o elo; duplicidade é
-// problema de owner/dedupe separado, não "link quebrado".
+// problema de owner/dedupe separado, não "link quebrado". Caminhos relativos
+// também são aliases válidos para não marcar [[04-DECISOES/01-PENDENCIAS]]
+// como quebrado quando o arquivo existe materialmente.
 const fileIndex = new Map();
-for (const f of allFiles) {
-  const key = path.basename(f, '.md').toUpperCase();
+function indexAlias(alias, file) {
+  const key = normalizeWikiTarget(alias);
+  if (!key) return;
   if (!fileIndex.has(key)) fileIndex.set(key, []);
-  fileIndex.get(key).push(f);
+  fileIndex.get(key).push(file);
+}
+
+for (const f of allFiles) {
+  indexAlias(path.basename(f, '.md'), f);
+
+  for (const root of [CONSCIENCIA_ROOT, BRAIN_ROOT]) {
+    const rel = path.relative(root, f);
+    if (rel.startsWith('..') || path.isAbsolute(rel)) continue;
+    const relPosix = rel.split(path.sep).join('/').replace(/\.md$/i, '');
+    indexAlias(relPosix, f);
+  }
+
+  const repoRel = path.relative(RAIZ, f).split(path.sep).join('/').replace(/\.md$/i, '');
+  indexAlias(repoRel, f);
 }
 
 const allMentioned = new Set();
@@ -142,7 +183,7 @@ for (const f of allFiles) {
 }
 
 const orfas = [];
-for (const f of scanDir(path.join(RAIZ, 'docs/CONSCIENCIA'))) {
+for (const f of scanDir(CONSCIENCIA_ROOT)) {
   const rel = path.relative(RAIZ, f);
   const name = path.basename(f, '.md');
   if (SKIP_PASTA.some(p => rel.includes(p))) continue;
