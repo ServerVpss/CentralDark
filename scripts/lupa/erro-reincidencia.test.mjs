@@ -221,6 +221,16 @@ test('commit que não alega prova nenhuma não é julgado por este detector', ()
   assert.equal(avaliarCommit(ERRO_COMMIT, 'chore: bump deps', diffVazio), null);
 });
 
+test('metadado automático de conflito com inventory não é alegação de prova', () => {
+  const mensagemDeMerge = [
+    'Merge remote-tracking branch origin/feature into fix/feature',
+    '',
+    '# Conflicts:',
+    '#\tdocs/HANDOFF/inventory.md',
+  ].join('\n');
+  assert.equal(avaliarCommit(ERRO_COMMIT, mensagemDeMerge, ''), null);
+});
+
 // ── juiz ────────────────────────────────────────────────────────────────────
 test('juiz agrega e conta mecanizados vs não-mecanizáveis', () => {
   const raiz = repoFalso([

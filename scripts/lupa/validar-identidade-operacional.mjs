@@ -452,7 +452,7 @@ export function validateExternalSourceBoundary(repoRoot) {
     if (text == null) {
       findings.push({
         code: "EXTERNAL_SOURCE_FILE_UNSCANNABLE",
-        path: relative(repoRoot, file),
+        path: relative(repoRoot, file).replace(/\\/g, "/"),
         line: null,
         excerpt: "Arquivo textual ilegível ou maior que o limite de 16 MiB.",
       });
@@ -461,7 +461,7 @@ export function validateExternalSourceBoundary(repoRoot) {
     findings.push(...findForbidden(
       text,
       EXTERNAL_SOURCE_RULES,
-      relative(repoRoot, file),
+      relative(repoRoot, file).replace(/\\/g, "/"),
       { redactExcerpt: true, redactedExcerpt: "[EXTERNAL_SOURCE_REFERENCE_REDACTED]" },
     ));
   }

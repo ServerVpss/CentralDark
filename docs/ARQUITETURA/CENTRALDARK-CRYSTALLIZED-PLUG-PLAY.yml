@@ -1,0 +1,745 @@
+schema: centraldark.architecture/v1
+kind: CRYSTALLIZED_PLUG_AND_PLAY
+status: CANDIDATE_ARCHITECTURE
+authority: SEGREDO/CHEFE
+authority_marker: PERMITO-SEGREDO
+source_session: 2026-09-07
+
+baseline:
+  repository: ServerVpss/CentralDark
+  pull_request: 1445
+  branch: feat/omniroute-capability-surface-722
+  measured_head_before_this_commit: 462b884baa9a6844bb64fb442948ece4b106b92d
+  measured_base_main: b3de3d82067c9476657d8fff3c6115f05afa079a
+  mergeable_before_this_commit: true
+  draft_before_this_commit: false
+  runtime_claim: UNKNOWN_UNTIL_REMEASURED
+
+confidence:
+  architectural_confidence_target: 0.90
+  classification: DESIGN_CONFIDENCE_NOT_RUNTIME_PROOF
+  rule: "90% basta para cristalizar estrutura; os 10% restantes dependem de visualização e runtime vivo."
+
+intent:
+  one_system: true
+  preserve_all_useful_gold: true
+  nothing_material_left_behind: true
+  reuse_before_create: true
+  improve_existing_first: true
+  no_parallel_products: true
+  no_v2_v3: true
+  no_blind_overwrite: true
+  unknown_is_not_pass: true
+  merged_is_not_deployed: true
+  documented_is_not_executed: true
+  button_exists_is_not_runtime_proof: true
+  locality_first: true
+  causal_cone_only: true
+  expand_scope_only_if_causal: true
+
+public_surface:
+  identity: CentralDark
+  rule: ONE_PUBLIC_DOOR
+  target_domain: centralldark.com
+  routes:
+    home: /
+    admin: /admin
+    cockpit: /cockpit
+    rooms: /rooms
+    missions: /missions
+    router: /roteador
+    api: /api
+    mcp: /mcp
+    voice: /voice
+    graph: /graph
+    maintenance: /maintenance
+    capabilities: /capabilities
+    evidence: /evidence
+  internal_services:
+    allowed_multiple_ports: true
+    allowed_multiple_processes: true
+    allowed_multiple_containers: true
+    rule: "interno pode ser distribuído; externamente continua uma Casa."
+
+core:
+  id: CORE-CENTRALDARK-01
+  responsibilities:
+    - intent_resolution
+    - context_resolution
+    - policy
+    - authorization
+    - routing
+    - orchestration
+    - state
+    - evidence_linking
+    - reconciliation
+  invariants:
+    SECOND_ROUTER: false
+    SECOND_BRAIN: false
+    SECOND_MCP: false
+    SECOND_HUB: false
+    SECOND_APP: false
+  master_flow:
+    - INTENT
+    - RESOLVE_ROUTE
+    - RESOLVE_SECTOR
+    - RESOLVE_OWNER
+    - EXECUTE
+    - TEST
+    - COUNTERPROOF
+    - REALITY_JUDGE
+    - RECEIPT
+
+components:
+  hub:
+    id: HUB-CONTEXT-01
+    purpose:
+      - context
+      - connectors
+      - state
+      - safe_snapshots
+      - capability_registry
+      - admin_projection
+
+  omni_router:
+    id: ROUTER-OMNI-01
+    existing_owner: apps/modulos/elite-gateway/scripts/centraldark_omni_router.py
+    public_surface: /roteador
+    capabilities:
+      - chat
+      - responses
+      - streaming
+      - models
+      - provider_selection
+      - fallback
+      - free_only
+      - health
+      - model_touch
+      - capability_routing
+    engines_are_replaceable: true
+    engine_is_authority: false
+
+  api:
+    id: API-CENTRAL-01
+    one_api_surface: true
+    no_parallel_gateway_identity: true
+
+  mcp:
+    id: MCP-CENTRAL-01
+    one_mcp_surface: true
+    tools_can_have_multiple_owners: true
+    second_mcp_forbidden: true
+
+  evidence:
+    id: EVIDENCE-CORE-01
+    stores:
+      - receipts
+      - logs
+      - hashes
+      - test_results
+      - runtime_observations
+      - counterproof
+      - provenance
+
+  reality_judge:
+    id: REALITY-JUDGE-01
+    verdicts:
+      - PROVADO
+      - QUEBRADO
+      - EVIDENCIA_FALTANTE
+      - UNKNOWN
+    forbidden:
+      - false_green
+      - narrative_only_pass
+
+trigger_fabric:
+  id: TRIGGER-FABRIC-01
+  inputs:
+    webhook: { enabled: true, role: reacao_imediata }
+    cron: { enabled: true, role: patrulha_periodica }
+    repository_dispatch: { enabled: true }
+    health_events: { enabled: true }
+    runtime_signals: { enabled: true }
+  signal_watcher:
+    id: SIGNAL-WATCHER-01
+    flow:
+      - INGEST
+      - REDACT
+      - CLASSIFY
+      - RESOLVE_SECTOR
+      - RESOLVE_OWNER
+      - CALCULATE_CAUSAL_CONE
+      - TEST
+      - COUNTERPROOF
+      - RECEIPT
+      - NOTIFY
+  locality_policy:
+    default: WAKE_AFFECTED_ROOM_ONLY
+    expansion_condition: CAUSE_CROSSES_SECTOR_BOUNDARY
+    expansion_action: WAKE_DEPENDENT_ROOM
+    wake_every_agent_for_every_change: false
+
+buzz:
+  id: BUZZ-ROOMS-01
+  state: RESERVE_REFERENCE
+  role:
+    - workspace
+    - rooms
+    - event_view
+    - agent_roster_view
+    - evidence_view
+    - mission_view
+  reuse:
+    hub: true
+    evidence: true
+    trigger_fabric: true
+  create_new_event_bus: false
+  room_contract:
+    metadata_required:
+      - sector_id
+      - owner
+      - state
+      - hash
+      - pombo_id
+      - revision
+      - lock_state
+      - last_seen
+      - evidence_ref
+    roles:
+      P1: executor_investigator
+      P2: reviewer
+      P3: counterproof_adversarial
+      P4: final_local_validator
+    modes:
+      MINIMAL: [P1]
+      REVIEW: [P1, P2]
+      CRITICAL: [P1, P2, P3]
+      FULL: [P1, P2, P3, P4]
+      SWARM: ENXAME
+      OMEGA: OMEGA_ADVERSARIAL
+    closure_requires:
+      - test
+      - counterproof_when_applicable
+      - receipt
+
+sectors:
+  security:
+    id: SECURITY-01
+    room: buzz/security
+    capabilities: [authentication, authorization, permissions, secret_policy, audit, security_events]
+    lockable: true
+  backend:
+    id: BACKEND-01
+    room: buzz/backend
+    capabilities: [services, workers, queues, database_interfaces, api_logic, integrations]
+    lockable: true
+  routing:
+    id: ROUTING-01
+    room: buzz/routing
+    capabilities: [omni_router, models, providers, fallback, cost_policy, capability_router]
+    lockable: true
+  memory:
+    id: MEMORY-01
+    room: buzz/memory
+    capabilities: [memory_linker, graph_rag, knowledge_graph, obsidian, canonical_docs, learned_patterns, memory_dream]
+    lockable: true
+  voice_sol:
+    id: VOICE-SOL-01
+    room: buzz/voice
+    capabilities: [microphone, speech_to_text, text_input, text_to_speech, mission_control, sol_bridge]
+    lockable: true
+  runtime:
+    id: RUNTIME-01
+    room: buzz/runtime
+    capabilities: [vps, containers, services, deploy, rollback, health, logs]
+    lockable: true
+  github:
+    id: GITHUB-01
+    room: buzz/github
+    capabilities: [repository, branches, issues, pull_requests, workflows, releases, provenance]
+    lockable: true
+  forge:
+    id: FORGE-01
+    room: buzz/forge
+    capabilities: [maintenance, backup, repair, install, uninstall, integrity_check, package_validation]
+    lockable: true
+  capability_lab:
+    id: CAPABILITY-LAB-01
+    room: buzz/capabilities
+    capabilities: [external_source_ingestion, repository_analysis, gold_extraction, compatibility, owner_discovery, adaptation, crystallization]
+    lockable: true
+
+capability_inventory:
+  BUZZ: { state: RESERVE, preserved: true, role: rooms_event_view }
+  GROK_BUILD: { state: CANDIDATE, preserved: true, engine_is_authority: false, activation: ON_DEMAND }
+  LOCAL_AI: { state: DEFERRED, preserved: true, activate_when_measured: true }
+  ODS: { state: DEFERRED, preserved: true }
+  OPENMAUSBOT: { state: RESERVE, preserved: true, role: agent_roster_ux_reference }
+  OPEN_LOVABLE: { state: RESERVE, preserved: true, role: builder_pattern_reference }
+  AI-OX: { state: CANDIDATE, preserved: true, adapter_required: true }
+  OMEGA: { state: AVAILABLE, role: adversarial_autocorrection }
+  ENXAME: { state: AVAILABLE_OR_RESERVED, role: multi_agent_execution_mode }
+  FUTURE_ENGINES: { state: RESERVE }
+
+capability_states:
+  AVAILABLE: catalogado_e_disponivel
+  DEFERRED: preservado_aguarda_medicao_ou_necessidade
+  RESERVE: referencia_ou_plano_preservado
+  CANDIDATE: pode_entrar_mediante_gate
+  LOADED: carregado_no_processo
+  ACTIVE: executando_agora
+  UNAVAILABLE: nao_disponivel_no_ambiente_medido
+  REJECTED: nao_deve_ser_usado_neste_estado
+
+absorption_pipeline:
+  accepted_sources:
+    - github_repository
+    - local_repository
+    - zip
+    - docs
+    - drive_document
+    - conversation
+    - screenshot
+    - architecture_reference
+    - api_spec
+  stages:
+    - REGISTER_SOURCE
+    - READ_END_TO_END
+    - INVENTORY_ARCHITECTURE
+    - EXTRACT_CAPABILITIES
+    - CLASSIFY_PEPITAS
+    - COMPARE_WITH_CENTRALDARK
+    - RESOLVE_EXISTING_OWNER
+    - MAP_COMPATIBILITY
+    - ADAPT_IN_PLACE
+    - REGISTER_ADMINISTRABLE
+    - TEST_EXACT_HEAD
+    - COUNTERPROOF
+    - CRYSTALLIZE
+    - RECEIPT
+    - DISCARD_TEMPORARY_CARCASS_WHEN_SAFE
+  inspect_end_to_end:
+    - architecture
+    - backend
+    - frontend_when_needed
+    - modules
+    - routes
+    - APIs
+    - configs
+    - dependencies
+    - states
+    - buttons_and_effects
+    - data_model
+    - tests
+    - integrations
+  decisions:
+    - NATIVE
+    - OWNER_EXISTS
+    - ADAPTATION_REQUIRED
+    - OWNER_DISCOVERY_REQUIRED
+    - RUNTIME_UNKNOWN
+  forbidden:
+    - second_router
+    - second_hub
+    - second_mcp
+    - duplicate_service
+    - v2
+    - v3
+    - final_final
+
+source_policy:
+  study_architecture_and_behavior: true
+  preserve_provenance_when_material_reuse_occurs: true
+  prefer_adaptation_or_reimplementation_in_centraldark_owner: true
+  no_blind_copy: true
+
+plug_play_contract:
+  required_files:
+    - manifest.yml
+    - capabilities.yml
+    - owners.yml
+    - dependencies.yml
+    - install.yml
+    - uninstall.yml
+    - rollback.yml
+    - tests.yml
+    - receipt.yml
+  lifecycle:
+    install_idempotent: true
+    upgrade_preserve_state: true
+    uninstall_remove_only_owned_material: true
+    repair_scoped: true
+    rollback_required: true
+  manifest_fields:
+    - package_id
+    - sector_id
+    - component_id
+    - owner
+    - version
+    - revision
+    - created_at
+    - source_sha
+    - package_sha256
+    - manifest_sha256
+    - parent_package_sha256
+    - delta_manifest_sha256
+    - dependencies
+    - consumers
+    - install_hooks
+    - uninstall_hooks
+    - rollback_hooks
+    - tests
+    - lock_policy
+
+pombo:
+  display_name_format: POMBO64-YYYYMMDD-HHMM
+  example_display_name: POMBO64-20260907-0208
+  policy:
+    POMBO_ID_IMMUTABLE: true
+    REVISION_MONOTONIC: true
+    date_time_name_is_locator_not_identity: true
+    checksum_alone_is_not_genealogy: true
+    one_package_per_crystallization: true
+  identity:
+    POMBO_ID: POMBO-CENTRALDARK
+    REVISION: MONOTONIC
+  integrity_required:
+    - PACKAGE_SHA256
+    - MANIFEST_SHA256
+    - PARENT_PACKAGE_SHA256
+    - DELTA_MANIFEST_SHA256
+  envelope:
+    checksum_location: external
+    reason: avoid_self_reference
+  package_contains:
+    - manifest
+    - sector_inventory
+    - component_inventory
+    - hashes
+    - receipts
+    - dependencies
+    - install_map
+    - rollback_map
+
+locks:
+  states:
+    OPEN: mudanca_permitida_no_writer_correto
+    STABLE: funcional_observavel_ainda_evolutivo
+    CONSOLIDATED: nao_tocar_sem_causa_material
+    SEALED: alteracao_exige_gate_explicito
+  opening_conditions:
+    - proven_regression
+    - dependency_break
+    - security_issue
+    - explicit_new_requirement
+    - runtime_drift
+  forbidden_reasons:
+    - curiosity_only
+    - refactor_for_style_only
+    - parallel_rewrite
+    - version_bump_without_value
+
+admin:
+  id: ADMIN-CENTRALDARK-01
+  route: /admin
+  auth_required: true
+  one_registry: true
+  auto_render_cards: true
+  sector_card_fields:
+    - id
+    - owner
+    - state
+    - hash
+    - pombo_id
+    - revision
+    - lock_state
+    - last_seen
+    - evidence_ref
+  navigation:
+    dashboard: "🏠 Visão Geral"
+    missions: "🧭 Missões"
+    rooms: "🐝 Buzz / Salas"
+    agents: "🤖 Agentes"
+    routing: "🔀 Router / Modelos"
+    providers: "🌐 Providers"
+    security: "🔐 Segurança"
+    automation: "📡 Automação"
+    memory: "🧠 Memória"
+    voice: "🎙 Voz / SOL"
+    graph: "🕸 Grafo"
+    runtime: "🖥 Runtime"
+    github: "🐙 GitHub"
+    capability_lab: "⛏ Garimpo"
+    forge: "🔥 Forja"
+    maintenance: "🛠 Manutenção"
+    evidence: "📜 Evidence"
+    settings: "⚙ Configurações"
+
+inventory_engine:
+  global_search: true
+  indexes: [id, title, sector, owner, capability, tag, hash, pombo_id, state, date]
+  filters: [sector, status, environment, risk, owner, engine, active, locked, capability_type]
+  sort: [name_asc, name_desc, id_asc, id_desc, date_newest, date_oldest, hash, status, sector, dependency_count]
+  views: [cards, table, tree, graph, timeline, rooms]
+
+forge:
+  id: FORGE-01
+  purpose: [build, inspect, repair, harden, crystallize, package, verify]
+  preserve_existing_identity: true
+  visual_policy:
+    style: professional_youthful_forge
+    preserve_existing_three_skins: true
+    improve_without_losing_originality: true
+  forge_card_fields: [item_id, owner, status, health, heat, revision, hash, pombo_id, last_test, repair_action]
+
+maintenance:
+  id: MAINTENANCE-01
+  route: /maintenance
+  mode: GAMIFIED_ADMIN
+  actions: [scan, repair, backup, restore, synchronize, verify, lock, unlock_with_reason]
+  experience:
+    XP_enabled: true
+    XP_sources: [successful_repair, verified_backup, regression_removed, documentation_reconciled, dependency_fixed]
+    levels: [INSPECTION, REPAIR, HARDENED, CONSOLIDATED]
+  safety:
+    no_fake_game_state: true
+    game_ui_does_not_override_reality: true
+
+backup:
+  internal: true
+  local_sync: true
+  repository_sync_supported: true
+  plugin_backup: true
+  metadata_required: [source, destination, timestamp, sha256, pombo_id, revision, restore_test]
+  copied_is_not_proven: true
+  restore_test_required: true
+
+repository_importer:
+  id: REPO-IMPORTER-01
+  route: /capabilities/import
+  input: [repository_url, optional_ref]
+  action_button: "⛏ GARIMPAR"
+  pipeline:
+    - VALIDATE_SOURCE
+    - PIN_REF
+    - INVENTORY
+    - MAP_ARCHITECTURE
+    - EXTRACT_CAPABILITIES
+    - COMPARE_EXISTING
+    - FIND_OWNER
+    - BUILD_COMPATIBILITY_MATRIX
+    - EXTRACT_PEPITAS
+    - CRYSTALLIZE
+    - PACKAGE
+    - TEST
+    - RECEIPT
+  compatibility_states: [NATIVE, COMPATIBLE, ADAPTATION_REQUIRED, CONFLICT, UNKNOWN]
+  decisions: [REUSE, REFINE, ABSORB, DEFER, REJECT]
+
+documentation:
+  one_canonical_owner_per_subject: true
+  stores: [architecture, decisions, pending, evidence, lessons, operations, handoff, manifests]
+  pending_registry_required: true
+  stale_detection: true
+  reconciliation:
+    repo_vs_docs: true
+    docs_vs_runtime: true
+    issue_vs_code: true
+    pr_vs_main: true
+
+memory_system:
+  graph_rag: PRESERVE_AND_REUSE
+  memory_linker: ENABLED
+  obsidian: INTEGRATED_OR_RECONCILE
+  memory_dream: BACKGROUND_CONSOLIDATION
+  evolution_ledger: ENABLED
+  retrieval: LOAD_RELEVANT_CONTEXT_ONLY
+  forbidden: LOAD_ENTIRE_BRAIN_FOR_EVERY_REQUEST
+
+missions:
+  route: /missions
+  required_fields: [mission_id, intent, sector, owner, writer, executor, judge, source_head, target, proof_target, status]
+  state_machine: [CREATED, MEASURING, RUNNING, TESTING, COUNTERPROOF, BLOCKED, PROVEN, CLOSED]
+
+voice_sol:
+  route: /voice
+  inputs: [voice, text]
+  outputs: [text, speech]
+  voice_to_mission: true
+  flow: [RECEIVE_INTENT, PARSE, RESOLVE_ROUTE, CREATE_OR_UPDATE_MISSION, EXECUTE, REPORT]
+  direct_bridge: FALLBACK_ONLY_WHEN_NEEDED
+
+agent_orchestration:
+  same_model_multiple_roles_allowed: true
+  multiple_providers_required: false
+  escalation:
+    level_0: { method: deterministic, use_when: known_mechanical }
+    level_1: { agents: 1, use_when: normal_analysis }
+    level_2: { agents: 2, use_when: review_needed }
+    level_3: { agents: 4, use_when: critical }
+    level_swarm: { engine: ENXAME, use_when: broad_but_bounded }
+    level_omega: { engine: OMEGA, use_when: adversarial_final_counterproof }
+
+session_gold_to_preserve:
+  - Buzz_as_rooms_event_view
+  - Grok_Build_as_replaceable_engine_candidate
+  - Hermes_plus_Grok_Build_as_complementary_capacity
+  - AI-OX_as_adapter_source_not_replacement
+  - local_AI_preserved_deferred_until_measured
+  - ODS_preserved
+  - OpenMausBot_preserved
+  - Open_Lovable_preserved
+  - future_engines_preserved
+  - Caracol_discovery_before_activation
+  - capability_router_measure_before_materialize
+  - minimum_sufficient_set
+  - P1_P2_P3_P4_local_room_roles
+  - causal_cone_revalidation
+  - one_writer_per_scope
+  - rendezvous
+  - counterproof
+  - reality_judge
+  - memory_dream
+  - graph_rag
+  - evolution_ledger
+  - knowledge_ingestor
+  - voice_text_mission_control
+  - admin_cards_with_ids_hash_pombo_lock
+  - forge_card_and_three_skins_identity
+  - gamified_maintenance
+  - backup_restore
+  - global_search_filter_sort
+  - external_repository_garimpo_pepitas_crystallization
+  - lock_consolidated_sectors
+  - preserve_originality_while_improving_design
+
+hermes_reconciliation_command:
+  name: CENTRALDARK_CRYSTALLIZED_RECONCILE
+  command: |
+    !CENTRALDARK
+    #ACORDAR
+    !CALIBRAR
+    !MULTIBUSSOLA
+    !META_LUPA
+    !RECONCILIAR
+
+    INTENT=RECONCILE_CRYSTALLIZED_PLUG_PLAY_ARCHITECTURE
+    REPO=ServerVpss/CentralDark
+    PR=1445
+    CONTRACT=docs/ARQUITETURA/CENTRALDARK-CRYSTALLIZED-PLUG-PLAY.yml
+
+    RULES:
+      MEASURE_FIRST=true
+      REUSE_BEFORE_CREATE=true
+      ONE_SYSTEM_ONLY=true
+      NO_V2_V3=true
+      NO_BLIND_OVERWRITE=true
+      UNKNOWN_IS_NOT_PASS=true
+      PRESERVE_ALL_USEFUL_GOLD=true
+      ONE_WRITER_PER_SCOPE=true
+      CAUSAL_CONE_ONLY=true
+      EXPAND_ONLY_IF_CAUSAL=true
+
+    EXECUTION:
+      1. medir main + HEAD exato do PR #1445
+      2. inventariar owners existentes para cada nó deste contrato
+      3. classificar cada nó como NATIVE | OWNER_EXISTS | ADAPTATION_REQUIRED | OWNER_DISCOVERY_REQUIRED | RUNTIME_UNKNOWN
+      4. garimpar branches/issues/PRs antigos somente por delta exclusivo
+      5. não ressuscitar branch inteira quando a main já venceu
+      6. preservar Buzz, Grok Build, IA local, ODS, OpenMausBot, Open-Lovable, AI-OX, Enxame e Omega
+      7. registrar cada capacidade administrável no registry existente
+      8. dar a cada setor ID + owner + hash + POMBO_ID + revision + lock_state + evidence_ref
+      9. conectar Admin/Cockpit/Rooms/Voice/Missions/Forge/Maintenance ao mesmo Core
+      10. rodar testes do cone causal e contraprova no HEAD exato
+      11. criar receipt e pacote POMBO externo com linhagem
+      12. bloquear setores consolidados apenas depois de prova
+      13. deixar runtime/visualização não medidos como UNKNOWN, nunca PASS
+      14. parar quando a arquitetura estiver >=90% reconciliada e listar somente o delta visual/runtime restante
+
+    OUTPUT:
+      SOURCE_OF_TRUTH_MATRIX
+      OWNERSHIP_MATRIX
+      CAPABILITY_MATRIX
+      ADMINISTRABLE_MATRIX
+      BRANCH_GOLD_MATRIX
+      POMBO_LINEAGE
+      TEST_RECEIPTS
+      RUNTIME_UNKNOWN_LIST
+      VISUAL_REMAINING_DELTA
+      FINAL_VERDICT
+
+final_gate:
+  architecture:
+    one_system_only: required
+    reuse_before_create: required
+    no_parallel_v2_v3: required
+    all_material_gold_classified: required
+    every_sector_has_id_owner_hash_pombo_lock: required
+    admin_projection_defined: required
+    rollback_defined: required
+    evidence_path_defined: required
+  runtime:
+    full_runtime_required_for_architecture_commit: false
+    unknown_runtime_must_remain_unknown: true
+  closure:
+    architectural_target: ">=90%"
+    remaining: VISUAL_AND_RUNTIME_REMEASUREMENT
+
+master_tree: |
+  SEGREDO/CHEFE
+  └── CENTRALDARK.COM
+      ├── /api
+      ├── /mcp
+      ├── /admin
+      ├── /cockpit
+      ├── /rooms
+      ├── /missions
+      ├── /roteador
+      ├── /voice
+      ├── /graph
+      └── /maintenance
+          │
+          └── CENTRALDARK CORE
+              ├── HUB / CONTEXTO
+              ├── OMNI ROUTER
+              ├── API + MCP
+              ├── EVIDENCE / RECEIPTS
+              ├── TRIGGER FABRIC / SIGNAL WATCHER
+              ├── REALITY JUDGE
+              ├── ADMIN / COCKPIT
+              ├── BUZZ / SALAS
+              │   ├── SECURITY [P1 P2 P3 P4]
+              │   ├── BACKEND  [P1 P2 P3 P4]
+              │   ├── ROUTING  [P1 P2 P3 P4]
+              │   ├── MEMORY   [P1 P2 P3 P4]
+              │   ├── VOICE    [P1 P2 P3 P4]
+              │   ├── RUNTIME  [P1 P2 P3 P4]
+              │   ├── GITHUB   [P1 P2 P3 P4]
+              │   └── FORGE    [P1 P2 P3 P4]
+              ├── MEMORY / GRAPH
+              │   ├── GraphRAG
+              │   ├── Memory Linker
+              │   ├── Obsidian
+              │   ├── Memory Dream
+              │   └── Evolution Ledger
+              ├── ENGINES / RESERVAS
+              │   ├── Hermes
+              │   ├── Grok Build
+              │   ├── IA Local
+              │   ├── ODS
+              │   ├── OpenMausBot
+              │   ├── Open-Lovable
+              │   ├── AI-OX
+              │   ├── Enxame
+              │   └── Omega
+              ├── GARIMPO / ABSORÇÃO
+              │   └── fonte → inventário → pepitas → owner → adaptação → teste → receipt
+              └── FORJA / MANUTENÇÃO
+                  └── backup → repair → harden → crystallize → package → lock
+
+receipt_policy:
+  after_this_commit:
+    claim: ARCHITECTURE_CRYSTALLIZED_IN_PR
+    runtime: MUST_BE_REMEASURED
+    visual: PENDING_USER_REVIEW
+    promotion: NOT_AUTOMATIC
