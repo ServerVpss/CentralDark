@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import { Menu, X, Languages } from "lucide-react";
+import { Menu, X, Languages, Waypoints } from "lucide-react";
 import { LANGS, useI18n, type Lang } from "@/lib/i18n";
 import { Button } from "@/components/ui/button";
 import { ExportPdf } from "./ExportPdf";
-
 
 const SECTIONS = [
   { id: "evolucao", key: "nav.evolucao" },
@@ -14,6 +13,12 @@ const SECTIONS = [
   { id: "selo", key: "nav.selo" },
   { id: "pacotao", key: "nav.pacotao" },
 ];
+
+const ROUTER_LABEL: Record<Lang, string> = {
+  "pt-BR": "Roteador",
+  "en-US": "Router",
+  "es-ES": "Enrutador",
+};
 
 export function Header() {
   const { t, lang, setLang } = useI18n();
@@ -36,7 +41,7 @@ export function Header() {
       }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
-        <a href="#top" className="flex items-center gap-2.5">
+        <a href="/" className="flex items-center gap-2.5">
           <span className="relative flex size-8 items-center justify-center rounded-md border border-primary/40 bg-surface">
             <span className="animate-soft-pulse size-2.5 rounded-full bg-primary" />
           </span>
@@ -54,12 +59,19 @@ export function Header() {
           {SECTIONS.map((s) => (
             <a
               key={s.id}
-              href={`#${s.id}`}
+              href={`/#${s.id}`}
               className="rounded-md px-3 py-2 text-xs font-medium text-muted-foreground transition-colors hover:bg-surface hover:text-foreground"
             >
               {t(s.key)}
             </a>
           ))}
+          <a
+            href="/roteador"
+            className="ml-1 inline-flex items-center gap-1.5 rounded-md border border-primary/30 bg-primary/10 px-3 py-2 text-xs font-medium text-primary transition-colors hover:bg-primary/15 hover:text-foreground"
+          >
+            <Waypoints className="size-3.5" />
+            {ROUTER_LABEL[lang]}
+          </a>
         </nav>
 
         <div className="flex items-center gap-2">
@@ -114,13 +126,21 @@ export function Header() {
             {SECTIONS.map((s) => (
               <a
                 key={s.id}
-                href={`#${s.id}`}
+                href={`/#${s.id}`}
                 onClick={() => setOpen(false)}
                 className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-surface hover:text-foreground"
               >
                 {t(s.key)}
               </a>
             ))}
+            <a
+              href="/roteador"
+              onClick={() => setOpen(false)}
+              className="inline-flex items-center gap-2 rounded-md border border-primary/30 bg-primary/10 px-3 py-2.5 text-sm text-primary"
+            >
+              <Waypoints className="size-4" />
+              {ROUTER_LABEL[lang]}
+            </a>
           </nav>
           <div
             role="group"
@@ -146,7 +166,6 @@ export function Header() {
           </div>
         </div>
       ) : null}
-
     </header>
   );
 }
