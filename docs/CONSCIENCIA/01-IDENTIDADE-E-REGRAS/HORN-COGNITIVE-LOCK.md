@@ -46,6 +46,34 @@ A Biblioteca não é só depósito: cada `entry` validada deriva deterministicam
 
 A Mesa Cognitiva carrega `HORN_PROOF_LOCK`; a Orquestra de Percepção usa o mesmo motor para derivar `WRITER_READY` somente quando todas as premissas materiais exigidas estão marcadas.
 
+## 🧠 Checksum visual preservado
+
+A camada visual do Setor Horn serve para recuperação e auditoria humana; ela não substitui o gate executável.
+
+```text
+👑 intenção
+→ 📚 fonte
+→ 🔍 investigação
+→ 🧮 regra
+→ ⚙️ execução
+→ 🧪 teste
+→ 📜 evidência
+→ ⚖️ veredito
+→ 🔒 cristalização
+→ 🔁 reutilização
+```
+
+Invariantes visuais:
+
+```text
+🟢 sem 📜 = FALSO_VERDE
+⚙️ sem 🧪 = EXECUCAO_NAO_PROVADA
+🟡 = UNKNOWN / PENDENTE
+🔴 = QUEBRADO
+```
+
+O símbolo é um checksum mental. O estado real continua vindo de fatos, testes, receipts e `REALITY_IS_JUDGE=true`.
+
 ## Semântica preservada do PDF
 
 ```text
