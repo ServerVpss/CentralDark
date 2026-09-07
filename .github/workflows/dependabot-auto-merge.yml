@@ -1,13 +1,14 @@
 # 🤖 Dependabot — automação segura de patches + radar GLOBAL de conflitos.
 #
 # Regras:
-# - update-branch é sincronização, não aprovação; checks amarelos não bloqueiam.
+# - update-branch é sincronização, não aprovação; checks amarelos não bloqueiam a sincronização.
 # - TODO PR aberto passa pelo radar global, independentemente do autor.
 # - conflito real vai para scripts/dependabot/resolve-conflicts.sh (motor único da Casa).
 # - Dependabot pode auto-reconciliar somente pela política especializada do motor.
 # - PR humano/non-dependabot é medido, recebe receipt e fica fail-closed para Writer semântico.
 # - Zendrive/CodeRabbit são revisão consultiva; Hermes/testes provam.
-# - somente PATCH do Dependabot pode receber auto-merge; MINOR fica humano; MAJOR é bloqueado no dependabot.yml.
+# - somente PATCH do Dependabot pode ser promovido automaticamente; MINOR fica humano; MAJOR é bloqueado no dependabot.yml.
+# - PATCH só faz squash depois que TODOS os gates aplicáveis do MESMO HEAD concluírem success.
 # - pull_request_target nunca executa código do HEAD não confiável.
 
 name: 🤖 Dependabot + Radar Global — reconciliação e auto-merge seguro
@@ -15,6 +16,15 @@ name: 🤖 Dependabot + Radar Global — reconciliação e auto-merge seguro
 on:
   pull_request_target:
     types: [opened, reopened, synchronize, ready_for_review]
+  workflow_run:
+    workflows:
+      - porta-de-entrada
+      - codex-validate
+      - lupa-conformance
+      - Lupa Drift Guard
+      - PR auto-review (Codex + checklist)
+      - Pipeline — Telegram + Painel
+    types: [completed]
   workflow_dispatch:
   schedule:
     - cron: '17,47 * * * *'
@@ -23,14 +33,15 @@ permissions:
   contents: write
   pull-requests: write
   issues: write
+  actions: read
 
 concurrency:
-  group: dependabot-${{ github.event_name }}-${{ github.event.pull_request.number || 'radar' }}
+  group: dependabot-${{ github.event_name }}-${{ github.event.pull_request.number || github.event.workflow_run.head_sha || 'radar' }}
   cancel-in-progress: false
 
 jobs:
   auto-merge-patch:
-    name: 🤖 Sincronizar, reconciliar e validar PR Dependabot
+    name: 🤖 Sincronizar, reconciliar e classificar PR Dependabot
     if: >-
       github.event_name == 'pull_request_target' &&
       github.repository == 'ServerVpss/CentralDark' &&
@@ -72,7 +83,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 🇧🇷 Padronizar título em PT-BR com selo semântico
-        uses: actions/github-script@v9
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         env:
           DEPENDENCY_NAMES: ${{ steps.meta.outputs.dependency-names }}
           UPDATE_TYPE: ${{ steps.meta.outputs.update-type }}
@@ -129,7 +140,7 @@ jobs:
 
       - name: 🔄 Tentar Update branch antes de julgar conflito
         id: update_branch
-        uses: actions/github-script@v9
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -169,7 +180,7 @@ jobs:
 
       - name: 🧭 Remedir mergeabilidade quando Update branch não criou novo HEAD
         if: env.UPDATE_BRANCH_STATE != 'REQUESTED' && env.RESOLVE_REQUESTED != '1'
-        uses: actions/github-script@v9
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -203,48 +214,27 @@ jobs:
           set -euo pipefail
           bash "$GITHUB_WORKSPACE/.ci-house/scripts/dependabot/resolve-conflicts.sh" "${{ github.event.pull_request.number }}"
 
-      - name: 🟢 Habilitar squash automático somente para PATCH
+      - name: 🔒 Registrar PATCH elegível para o promotor SAME_HEAD
         if: >-
           steps.meta.outputs.update-type == 'version-update:semver-patch' &&
           env.UPDATE_BRANCH_STATE != 'REQUESTED' &&
           env.RESOLVE_REQUESTED != '1' &&
           env.MERGEABILITY_STATE == 'MERGEABLE'
-        uses: actions/github-script@v9
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const pr = await github.rest.pulls.get({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: context.payload.pull_request.number,
-            });
-            const headline = pr.data.title;
-            const body = [
-              '🤖 Atualização automática do Dependabot dentro da política da Casa.',
-              '🟢 Classe: PATCH',
-              `🔗 PR #${context.payload.pull_request.number}`,
-              '⚖️ Squash condicionado aos checks e à mergeabilidade do GitHub.',
-            ].join('\n');
-            await github.graphql(`
-              mutation($pullRequestId: ID!, $headline: String!, $body: String!) {
-                enablePullRequestAutoMerge(input: {
-                  pullRequestId: $pullRequestId,
-                  mergeMethod: SQUASH,
-                  commitHeadline: $headline,
-                  commitBody: $body
-                }) {
-                  pullRequest { number autoMergeRequest { enabledAt mergeMethod } }
-                }
-              }
-            `, {
-              pullRequestId: context.payload.pull_request.node_id,
-              headline,
-              body,
-            });
+        shell: bash
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          echo "DEPENDABOT_PATCH_CANDIDATE=1"
+          echo "PR_NUMBER=$PR_NUMBER"
+          echo "HEAD_SHA=$HEAD_SHA"
+          echo "PROMOTION=WAIT_SAME_HEAD_GATES"
+          echo "AUTO_MERGE_EARLY=FORBIDDEN"
 
       - name: 🟡 Avisar quando for MINOR
         if: steps.meta.outputs.update-type == 'version-update:semver-minor' && github.event.action != 'synchronize'
-        uses: actions/github-script@v9
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -265,6 +255,7 @@ jobs:
           UPDATE_BRANCH_STATE: ${{ env.UPDATE_BRANCH_STATE }}
           RESOLVE_REQUESTED: ${{ env.RESOLVE_REQUESTED }}
           JOB_STATUS: ${{ job.status }}
+          UPDATE_TYPE: ${{ steps.meta.outputs.update-type }}
         run: |
           set -euo pipefail
           echo "🤖 DEPENDABOT_HEAD_SHA=$HEAD_SHA"
@@ -273,16 +264,171 @@ jobs:
           echo "🧭 MERGEABILITY_STATE=${MERGEABILITY_STATE:-UNKNOWN}"
           echo "🪡 RESOLVE_REQUESTED=${RESOLVE_REQUESTED:-0}"
           echo "⚖️ JOB_STATUS=$JOB_STATUS"
+          echo "UPDATE_TYPE=${UPDATE_TYPE:-UNKNOWN}"
           echo 'TRIGGER=pull_request_target'
           echo 'TRUSTED_CODE_SOURCE=BASE_SHA'
           echo 'UNTRUSTED_PR_CODE_EXECUTED=0'
           echo 'CHECKS_PENDING_BLOCK_UPDATE_BRANCH=0'
-          echo 'AUTO_MERGE_POLICY=PATCH_ONLY'
+          echo 'PATCH_PROMOTION_REQUIRES_SAME_HEAD_GATES=1'
+          echo 'AUTO_MERGE_EARLY=0'
           echo 'ZENDRIVE_ROLE=REVIEW_ONLY'
           echo 'RABBIT_ROLE=REVIEW_ONLY'
           echo 'HERMES_ROLE=PROVE_AND_TEST'
           echo 'UNKNOWN_IS_PASS=0'
           echo 'NEVER_DISCARD_LEARNING=1'
+
+  same-head-promote-patch:
+    name: 🔒 Dependabot PATCH — provar SAME_HEAD e só então squash
+    if: >-
+      github.event_name == 'workflow_run' &&
+      github.event.workflow_run.event == 'pull_request' &&
+      github.repository == 'ServerVpss/CentralDark'
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: read
+      actions: read
+
+    steps:
+      - name: ⚖️ Revalidar HEAD, classe PATCH, mergeabilidade e gates
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        env:
+          REQUIRED_WORKFLOWS: porta-de-entrada,codex-validate,lupa-conformance,Lupa Drift Guard,PR auto-review (Codex + checklist),Pipeline — Telegram + Painel
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const headSha = context.payload.workflow_run.head_sha;
+            const sameRepo = `${owner}/${repo}`;
+            const required = (process.env.REQUIRED_WORKFLOWS || '')
+              .split(',').map(v => v.trim()).filter(Boolean);
+
+            if (!headSha || !/^[0-9a-f]{40}$/i.test(headSha)) {
+              core.notice('DEPENDABOT_SAME_HEAD=NO_VALID_HEAD');
+              return;
+            }
+
+            const candidateNumbers = new Set(
+              (context.payload.workflow_run.pull_requests || [])
+                .map(pr => Number(pr.number))
+                .filter(Number.isInteger)
+            );
+
+            if (!candidateNumbers.size) {
+              const open = await github.rest.pulls.list({ owner, repo, state: 'open', per_page: 100 });
+              for (const pr of open.data) {
+                if (pr.head?.sha === headSha) candidateNumbers.add(Number(pr.number));
+              }
+            }
+
+            if (!candidateNumbers.size) {
+              core.notice(`DEPENDABOT_SAME_HEAD=NO_OPEN_PR head=${headSha}`);
+              return;
+            }
+
+            for (const number of candidateNumbers) {
+              let response = await github.rest.pulls.get({ owner, repo, pull_number: number });
+              let pr = response.data;
+
+              if (pr.state !== 'open') continue;
+              if (pr.user?.login !== 'dependabot[bot]') continue;
+              if (pr.head?.repo?.full_name !== sameRepo) continue;
+              if (pr.base?.ref !== 'main') continue;
+              if (pr.head?.sha !== headSha) {
+                core.notice(`PR=${number} HEAD_MOVED expected=${headSha} current=${pr.head?.sha || 'UNKNOWN'}`);
+                continue;
+              }
+              if (!/·\s*PATCH\s*$/iu.test(String(pr.title || '').trim())) {
+                core.notice(`PR=${number} NOT_PATCH_CLASSIFIED title=${pr.title || ''}`);
+                continue;
+              }
+
+              for (let attempt = 1; attempt <= 4 && pr.mergeable === null; attempt++) {
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                response = await github.rest.pulls.get({ owner, repo, pull_number: number });
+                pr = response.data;
+              }
+
+              if (pr.head?.sha !== headSha) {
+                core.notice(`PR=${number} HEAD_MOVED_DURING_REVALIDATION`);
+                continue;
+              }
+              if (pr.mergeable !== true || pr.mergeable_state === 'dirty') {
+                core.notice(`PR=${number} MERGEABLE=${pr.mergeable} STATE=${pr.mergeable_state || 'UNKNOWN'} PROMOTION=WAIT`);
+                continue;
+              }
+
+              const runsResponse = await github.request('GET /repos/{owner}/{repo}/actions/runs', {
+                owner,
+                repo,
+                head_sha: headSha,
+                per_page: 100,
+              });
+              const exactRuns = (runsResponse.data.workflow_runs || [])
+                .filter(run => run.head_sha === headSha);
+
+              const latestNonSkipped = (name) => exactRuns
+                .filter(run => run.name === name && run.conclusion !== 'skipped')
+                .sort((a, b) => {
+                  const n = Number(b.run_number || 0) - Number(a.run_number || 0);
+                  if (n) return n;
+                  return String(b.updated_at || b.created_at || '')
+                    .localeCompare(String(a.updated_at || a.created_at || ''));
+                })[0] || null;
+
+              const verdicts = required.map(name => {
+                const run = latestNonSkipped(name);
+                if (!run) return { name, state: 'MISSING', run_id: null };
+                if (run.status !== 'completed') return { name, state: 'PENDING', run_id: run.id };
+                if (run.conclusion === 'success') return { name, state: 'PASS', run_id: run.id };
+                return { name, state: 'FAIL', conclusion: run.conclusion || 'UNKNOWN', run_id: run.id };
+              });
+
+              console.log(`PR=${number} SAME_HEAD=${headSha}`);
+              console.log(`SAME_HEAD_VERDICTS=${JSON.stringify(verdicts)}`);
+
+              const allPass = verdicts.length === required.length && verdicts.every(v => v.state === 'PASS');
+              if (!allPass) {
+                const residue = verdicts.filter(v => v.state !== 'PASS');
+                core.notice(`PR=${number} PROMOTION=WAIT_SAME_HEAD residual=${JSON.stringify(residue)}`);
+                continue;
+              }
+
+              const finalCheck = await github.rest.pulls.get({ owner, repo, pull_number: number });
+              const live = finalCheck.data;
+              if (live.state !== 'open' || live.head?.sha !== headSha || live.mergeable !== true || live.mergeable_state === 'dirty') {
+                core.notice(`PR=${number} LIVE_REVALIDATION_CHANGED PROMOTION=ABORT`);
+                continue;
+              }
+
+              const merged = await github.rest.pulls.merge({
+                owner,
+                repo,
+                pull_number: number,
+                sha: headSha,
+                merge_method: 'squash',
+                commit_title: `${live.title} (#${number})`,
+                commit_message: [
+                  'Promoção Dependabot PATCH após gates aplicáveis PASS no mesmo HEAD.',
+                  `Validated-Head: ${headSha}`,
+                  `Gates: ${required.join(' | ')}`,
+                  'UNKNOWN_IS_PASS=0',
+                ].join('\n'),
+              });
+
+              if (!merged.data.merged) {
+                core.setFailed(`PR=${number} MERGE_REJECTED:${merged.data.message || 'UNKNOWN'}`);
+                return;
+              }
+
+              console.log(`PR=${number} DEPENDABOT_PATCH_SQUASH=PASS MERGE_SHA=${merged.data.sha}`);
+              console.log(`VALIDATED_HEAD=${headSha}`);
+              console.log('SAME_HEAD_REQUIRED_GATES=PASS');
+              console.log('REALITY_IS_JUDGE=1');
+            }
 
   radar-open-prs:
     name: 📡 Radar Global — todo conflito de PR passa por uma direção
