@@ -23,6 +23,32 @@ Fonte de estudo observada pelo CHEFE e usada para estruturar o Setor Horn · Ló
 - modelo mínimo de Herbrand;
 - resolução para cláusulas de Horn.
 
+## Subconjunto transferido para o motor
+
+O motor não tenta fingir que implementa todo o PDF. Ele absorve um subconjunto finito, determinístico e testável:
+
+```text
+¬p1 ∨ ... ∨ ¬pn ∨ p
+≡
+(p1 ∧ ... ∧ pn) → p
+
+sem literal positivo:
+(p1 ∧ ... ∧ pn) → F
+```
+
+Algoritmo operacional absorvido:
+
+```text
+FATOS
+→ MARCAR
+→ PROPAGAR REGRAS FORÇADAS
+→ REPETIR
+→ PARAR QUANDO NADA MUDA
+→ CONTRADIÇÃO SE REGRA NEGATIVA FOR FORÇADA
+```
+
+`NÃO MARCADO` permanece `UNKNOWN`; não vira falso por ausência de derivação.
+
 ## Transferência operacional já existente na CentralDark
 
 A Casa já registrou, em `docs/CONSCIENCIA/APRENDIZADOS/erros-agente-2026-08-29-medicao-e-falso-verde.md`, a adaptação da marcação de Horn até ponto fixo:
@@ -41,6 +67,16 @@ Lei preservada:
 NAO_MARCADO != FALSO
 NAO_MARCADO != LIXO
 UNKNOWN != PASS
+```
+
+## Bindings atuais
+
+```text
+ENGINE=apps/modulos/HERMES-CORE/core/horn-proof-gate.mjs
+LIBRARY=scripts/memory-linker/library-router.mjs
+COGNITIVE_COUNCIL=apps/modulos/HERMES-CORE/core/cognitive-council.mjs
+PERCEPTION=apps/modulos/HERMES-CORE/core/perception-orchestra.mjs
+CONFORMANCE=PDF-CONFORMANCE-CC2003.md
 ```
 
 ## Proveniência
