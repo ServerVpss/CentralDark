@@ -6,7 +6,7 @@ name: porta-de-entrada
 
 on:
   pull_request:
-    branches: [main, program/centraldark-convergencia-omniroute-722]
+    branches: [main, program/centraldark-convergencia-omniroute-722, reconcile/garimpo-one-site-one-mcp-admin-20260906]
     types: [opened, reopened, synchronize, ready_for_review, edited, labeled, unlabeled]
   push:
     branches: ['**']
