@@ -23,7 +23,7 @@ concurrency:
 jobs:
   contract:
     name: 📜 Installer contract
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux]
     steps:
       - uses: actions/checkout@v4
       - name: 🔎 Verificar contrato do instalador
@@ -32,7 +32,7 @@ jobs:
   build-windows:
     name: 🪟 Build Setup.exe
     needs: contract
-    runs-on: windows-latest
+    runs-on: [self-hosted, Windows]
     defaults:
       run:
         working-directory: apps/modulos/Bolt/source
