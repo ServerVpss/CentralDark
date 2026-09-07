@@ -30,6 +30,62 @@ Transformar fontes de lógica formal, verificação e prova em material reutiliz
 - construir testes discriminantes e contraprovas;
 - alimentar skills e contratos somente quando houver evidência.
 
+## 🧠 Memória visual · checksum semântico
+
+Os símbolos abaixo são âncoras estáveis de leitura e recuperação, não decoração. Eles tornam saltos de raciocínio e falso-verde visualmente detectáveis sem substituir a prova técnica.
+
+```text
+👑 = intenção / CHEFE
+🧠 = conhecimento / cognição
+📚 = biblioteca / fonte
+🔍 = investigação
+🧮 = lógica / cálculo
+🛡️ = guardrail / limite
+🔁 = loop / repetição
+⚙️ = execução
+🧪 = teste
+📜 = evidência / receipt
+⚖️ = realidade / julgamento
+🔒 = regra cristalizada
+🟢 = provado
+🟡 = UNKNOWN / pendente
+🔴 = quebrado
+```
+
+Mapa mental preferencial:
+
+```text
+👑 INTENÇÃO
+→ 📚 FONTE
+→ 🔍 INVESTIGAÇÃO
+→ 🧮 REGRA
+→ ⚙️ EXECUÇÃO
+→ 🧪 TESTE
+→ 📜 EVIDÊNCIA
+→ ⚖️ VEREDITO
+→ 🔒 CRISTALIZAÇÃO
+→ 🔁 REUTILIZAÇÃO
+```
+
+Checks visuais:
+
+```text
+🟢 sem 📜 = FALSO_VERDE
+⚙️ sem 🧪 = EXECUCAO_NAO_PROVADA
+📚 sem 🔍 = FONTE_NAO_ANALISADA
+🧮 sem fato = LOGICA_SOLTA
+⚖️ sem rastro = JULGAMENTO_INVALIDO
+🔁 sem ganho = REPETICAO_INUTIL
+```
+
+Regra de memória:
+
+```text
+VER → ASSOCIAR → RECUPERAR_SEM_OLHAR → USAR → REVISITAR
+```
+
+Não repetir paredes de texto. Repetir a estrutura. O emoji facilita recuperação e auditoria humana; o estado técnico continua sendo decidido por fatos, testes, receipts e `REALITY=JUDGE`.
+
 ## 🔒 Amarração executável
 
 ```text
