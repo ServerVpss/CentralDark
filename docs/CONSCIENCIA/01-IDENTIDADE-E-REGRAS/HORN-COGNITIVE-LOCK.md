@@ -12,6 +12,11 @@ source: "Lógica Computacional 23 — Nelma Moreira"
 Este contrato amarra o **Setor Horn · Lógica & Prova** ao organismo existente. Não cria outro cérebro.
 
 ```text
+SOUL-SOL + CAPACIDADES-COGNITIVAS
+→ HERMES CORE
+→ COGNITIVE COUNCIL
+→ HORN PROOF GATE
+
 BIBLIOTECA
 → scripts/memory-linker/library-router.mjs
 → HORN_PROOF_GATE
@@ -26,12 +31,16 @@ BIBLIOTECA
 ## Bindings executáveis
 
 ```text
+SOUL_BINDING=docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md
+COGNITIVE_DNA_BINDING=docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md
 HORN_ENGINE=apps/modulos/HERMES-CORE/core/horn-proof-gate.mjs
 LIBRARY_CONSUMER=scripts/memory-linker/library-router.mjs
 COGNITIVE_CONSUMER=apps/modulos/HERMES-CORE/core/cognitive-council.mjs
 RUNTIME_CONSUMER=apps/modulos/HERMES-CORE/core/perception-orchestra.mjs
 TEST_GATE=apps/modulos/HERMES-CORE/core/cognitive-council.test.mjs
 ```
+
+`SOUL-SOL.md` não é reescrita nesta lane porque outra lane ativa já toca esse owner. O binding fica no **motor executável** e no contrato cognitivo retornado pelo council, preservando `ONE_WRITER_PER_SCOPE` em vez de criar colisão documental.
 
 A Biblioteca não é só depósito: cada `entry` validada deriva deterministicamente `SECTOR_HORN_ROUTED → LIBRARY_ENTRY_ACCEPTED` antes de seguir.
 
