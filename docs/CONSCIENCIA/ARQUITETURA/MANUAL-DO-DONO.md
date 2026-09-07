@@ -170,3 +170,11 @@ problema em dois minutos — sem ele, leva uma hora.
 🔍  LUPA NA MÃO · INTENÇÃO NA FRENTE
     CentralDark · SEGREDO/CHEFE
 ```
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

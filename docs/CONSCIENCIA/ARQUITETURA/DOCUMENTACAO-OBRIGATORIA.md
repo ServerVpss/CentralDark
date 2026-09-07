@@ -217,3 +217,11 @@ REGRA_SEM_GATE_NAO_E_LEI=true
 🔍  LUPA NA MÃO · INTENÇÃO NA FRENTE
     CentralDark · SEGREDO/CHEFE
 ```
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

@@ -315,3 +315,11 @@ REPO_LEARNING != LOCAL_RUNTIME_APPLIED
 ```
 
 A `main` registra o aprendizado; consoles locais devem consumir o receipt em vez de repetir a mesma contraprova, salvo gatilho de remedição.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre
