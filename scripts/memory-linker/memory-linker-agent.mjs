@@ -244,7 +244,6 @@ const report = {
   nextRunMin: delayMin,
   ...findings,
 };
-atomicWriteUtf8Sync(STATE_FILE, String(now + delayMin * 60 * 1000), { skipIfUnchanged: true });
 atomicWriteUtf8Sync(REPORT, `${JSON.stringify(report, null, 2)}\n`, { skipIfUnchanged: true });
 console.log(`MEMORY_SCOUT=DELTA FINDINGS=${report.total} UNSAFE_PATHS=${findings.unsafePaths.length} FINGERPRINT=${currentFingerprint}`);
 
