@@ -1,7 +1,4 @@
-# CONTRACT_MARKERS:
-# Trigger Fabric Full Package
-# Fresh-extraction counterproof
-name: 🧠 Trigger Fabric — pacote e contraprova
+name: 🧠 Trigger Fabric Full Package — pacote e contraprova
 
 on:
   pull_request:
@@ -269,7 +266,7 @@ jobs:
           python3 scripts/trigger-fabric/build_package.py | tee .artifacts/trigger-fabric/build-result.txt
           test -s .artifacts/trigger-fabric/CENTRALDARK_TRIGGER_FABRIC_FULL_PACKAGE.zip
 
-      - name: 🔬 Contraprova por extração fresca
+      - name: 🔬 Fresh-extraction counterproof — contraprova por extração fresca
         shell: bash
         run: |
           set -euo pipefail
