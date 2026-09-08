@@ -45,6 +45,14 @@ flowchart TD
   LIVEOBS --> INGEST
   INGEST --> REAR
 
+  subgraph OLHO_BIONICO["OLHO BIÔNICO ANTI-FLASH"]
+    DERIVED["DERIVED OUTPUT"]
+    MONITORES["MONITORES DA CASA"]
+    DERIVED --> MONITORES
+  end
+  INGEST --> OLHO_BIONICO
+  OLHO_BIONICO --> REAR
+
   EVID --> REAR["CEREBRO DE RETAGUARDA / MEMORY LAYER<br/>materia + fragmentos + historico + proveniencia"]
   REAR --> EVENTS["agent_events / observable receipts"]
   EVENTS --> RENDEZ2["CROSS-ARM RENDEZVOUS<br/>dedupe + contradiction"]

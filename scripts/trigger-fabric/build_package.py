@@ -19,6 +19,14 @@ for p in sorted(FAMILY.iterdir()):
     if p.is_file():
         shutil.copy2(p, STAGE / p.name)
 
+# O verificador também valida o contrato canônico parceiro/Judge, que é
+# owner fora da pasta Trigger Fabric. Preservar o caminho relativo no pacote
+# evita um requisito pendurado após a extração.
+partner_contract = ROOT / 'docs' / 'ARQUITETURA' / 'PADRAO-PARCEIRO-DELTA-JUDGE.md'
+partner_destination = STAGE / 'docs' / 'ARQUITETURA' / partner_contract.name
+partner_destination.parent.mkdir(parents=True, exist_ok=True)
+shutil.copy2(partner_contract, partner_destination)
+
 shutil.copy2(ROOT/'scripts'/'trigger-fabric'/'verify_package.py', STAGE/'verify_package.py')
 shutil.copy2(ROOT/'scripts'/'trigger-fabric'/'build_package.py', STAGE/'build_package.py')
 

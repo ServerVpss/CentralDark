@@ -9,8 +9,8 @@ metadata:
 
 # Conflito de PR — padrão único da Casa
 
-Owner do motor: `scripts/dependabot/resolve-conflicts.sh`  
-Radar global: `scripts/dependabot/reconcile-open-prs.sh`  
+Owner do motor: `scripts/dependabot/resolve-conflicts.sh`
+Radar global: `scripts/dependabot/reconcile-open-prs.sh`
 Gatilho: `.github/workflows/dependabot-auto-merge.yml`
 
 O nome histórico `dependabot` permanece por compatibilidade/proveniência. A função do radar é **global do repositório**: nenhum PR aberto, humano ou bot, deve ficar invisível ao circuito de reconciliação.

@@ -13,11 +13,11 @@ owner: "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/"
 ---
 # CASA + VPS + KANBAN — handoff por host sem segundo cérebro
 
-**Data:** 2026-09-06  
-**Autoridade de intenção:** SEGREDO/CHEFE  
-**PR:** #1444  
-**Baseline anterior desta rodada:** `main@f60ad71810fb9009bcc1a576d77305d61f9d1add`, `PR_HEAD@3aa9f3b50d4cdced390ffe667e20f09aeffacdec`  
-**Natureza:** cristalização de arquitetura operacional + próximo cursor.  
+**Data:** 2026-09-06
+**Autoridade de intenção:** SEGREDO/CHEFE
+**PR:** #1444
+**Baseline anterior desta rodada:** `main@f60ad71810fb9009bcc1a576d77305d61f9d1add`, `PR_HEAD@3aa9f3b50d4cdced390ffe667e20f09aeffacdec`
+**Natureza:** cristalização de arquitetura operacional + próximo cursor.
 **Este commit não executa deploy, restart, DNS, PM2, Docker, secret ou cutover.**
 
 ## 1. Correção de entendimento

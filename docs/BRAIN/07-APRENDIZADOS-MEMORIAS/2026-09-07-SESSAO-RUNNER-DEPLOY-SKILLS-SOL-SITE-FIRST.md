@@ -13,10 +13,10 @@ owner: "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/"
 ---
 # SESSÃO 2026-09-07 — runner, deploy, skills, SOL e prioridade SITE-FIRST
 
-**Natureza:** receipt de reconciliação da sessão; **não é novo owner**, não cria segundo cérebro, segundo router, segundo deploy ou V2/V3.  
-**Autoridade de intenção:** SEGREDO/CHEFE.  
-**PR-mãe de rendezvous:** #1444.  
-**Writer desta cristalização:** ChatGPT/GPT-5.6 Sol, escopo documental BRAIN/arquitetura da sessão.  
+**Natureza:** receipt de reconciliação da sessão; **não é novo owner**, não cria segundo cérebro, segundo router, segundo deploy ou V2/V3.
+**Autoridade de intenção:** SEGREDO/CHEFE.
+**PR-mãe de rendezvous:** #1444.
+**Writer desta cristalização:** ChatGPT/GPT-5.6 Sol, escopo documental BRAIN/arquitetura da sessão.
 **Regra:** estado vivo medido vence histórico deste documento.
 
 ```text
@@ -266,7 +266,7 @@ Material legado de `docker-machine`, Shipyard, Swarm clássico e registry HTTP i
 
 O mapa de runtime atual já contém serviços Docker e não-Docker; nenhuma migração big-bang é autorizada por este aprendizado.
 
-## 8. AWS DevOps Agent Skills + AIOX: delta útil sem segundo sistema
+## 8. AWS DevOps Agent Skills + AI-OX: delta útil sem segundo sistema
 
 O estudo de AWS DevOps Agent Skills reforçou capacidades que se encaixam nos owners existentes:
 
@@ -281,7 +281,7 @@ SKILL != MEMORY
 PIPELINE_TOPOLOGY
 ```
 
-AIOX já foi absorvido como fonte de padrões/capacidades na arquitetura CentralDark; não vira autoridade, brain, router ou runtime obrigatório.
+AI-OX já foi absorvido como fonte de padrões/capacidades na arquitetura CentralDark; não vira autoridade, brain, router ou runtime obrigatório.
 
 Quatro deltas ficam **preservados, mas não implementados só por terem sido descobertos**:
 
@@ -349,7 +349,7 @@ OPENMAUSBOT
 OPEN_LOVABLE
 LOCAL_AI
 GROK_BUILD
-AIOX_DERIVED_CAPABILITIES
+AI-OX_DERIVED_CAPABILITIES
 FUTURE_DISCOVERED_CAPABILITIES
 ```
 
@@ -578,7 +578,7 @@ RUNNER_CACHE_HYPOTHESIS
 → REUSE_EXISTING_RECOVERY
 → BUILD_ONCE_ARTIFACT_PROVENANCE
 → AWS_SKILL_LIFECYCLE_AND_SYNC
-→ AIOX_ALREADY_ABSORBED
+→ AI-OX_ALREADY_ABSORBED
 → PRESERVE_BUZZ_GROK_LOCAL_AND_RESERVES
 → SITE_FIRST
 → SOL_UI_OBSERVED
