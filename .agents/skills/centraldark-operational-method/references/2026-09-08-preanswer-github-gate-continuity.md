@@ -1,135 +1,228 @@
-# CentralDark Preanswer GitHub Gate — continuidade viva
+# CENTRALDARK_PREANSWER_GATE_RAW_CONTRACT
 
-**Owner canônico:** `.agents/skills/centraldark-operational-method/SKILL.md`  
-**Tipo:** reference subordinada / receipt operacional  
-**Status:** `CANDIDATE_RULE_TESTED`  
-**Data:** 2026-09-08  
-**Fonte da intenção:** sessão do CHEFE com `#ACORDAR !CENTRALDARK !MEDIR !ALINHAR !CONTEMPLAR !RECONCILIAR`.
-
-## Dor tampada
-
-Falha observada: resposta operacional sobre CentralDark saiu pobre quando não mediu GitHub/PR/issues antes de responder.
+owner: `.agents/skills/centraldark-operational-method/SKILL.md`  
+refs: `#1444`, `#1189`, `#1454`, `#1463`  
+status: `CANDIDATE_FUNCTIONAL_MODE`  
+mode: `RAW_DEV_CONTRACT`  
+reason: `tampa ferida: resposta operacional sem GitHub/PR/issues medidos`
 
 ```text
-OLD_BAD_FLOW:
-PEDIDO -> RACIOCÍNIO -> RESPOSTA -> GITHUB_DEPOIS
+#ACORDAR != TEXTO_BONITO
+#ACORDAR == MEDIR -> ALINHAR -> RECONCILIAR -> RESPONDER
 ```
 
-Fluxo correto:
+## 0_BOOT_BIBLICO_TECNICO
 
 ```text
-NEW_REQUIRED_FLOW:
-PEDIDO -> MEDIR -> GITHUB -> PRS -> ISSUES -> WORKFLOWS/CHECKS -> ARQUIVOS -> RUNTIME/CASA_SE_DISPONÍVEL -> RECONCILIAR -> RESPONDER
+# Pv 18:13 aplicado:
+# responder antes de ouvir/medir = falha operacional.
+
+# 1Ts 5:21 aplicado:
+# examinar tudo -> segurar só o que passa na prova.
+
+# Mt 7:16 aplicado:
+# árvore se conhece pelo fruto -> sistema se conhece por log/teste/runtime.
+
+# Tg 1:22 aplicado:
+# ouvir/documentar não basta -> tem que executar/provar.
+
+# baianês técnico:
+# antes de cantar vitória, mede o terreiro.
 ```
 
-## Regra da Casa
-
-Quando o pedido envolver estado vivo do `ServerVpss/CentralDark`, PR, issue, workflow, deploy, runtime, casa, site, agenda operacional ou `#ACORDAR/!CENTRALDARK`, a resposta deve passar pelo gate abaixo.
+## 1_FACTS_REQUIRED
 
 ```yaml
-CENTRALDARK_PREANSWER_GATE:
-  required_before_answer:
-    - repo_confirmed
-    - main_head_measured
-    - relevant_prs_measured
-    - relevant_issues_measured_when_material
-    - workflows_or_checks_measured_when_material
-  optional_but_mark_if_missing:
-    - runtime_measured
-    - remote_desktop_measured
-    - deploy_measured
-    - site_measured
-  fail_closed:
-    - no_github_measurement_blocks_operational_answer
-    - unknown_is_not_pass
-    - skipped_without_reason_is_not_pass
-    - historical_green_does_not_approve_new_head
-  output_shape:
-    - PROVADO
-    - QUEBRADO
-    - EVIDENCIA_FALTANTE
-    - RAIZ
-    - ARQUIVO_OU_WORKFLOW
-    - NEXT_CURSOR
+FACTS_REQUIRED_BEFORE_OPERATIONAL_ANSWER:
+  repo_confirmed: required
+  main_head_measured: required
+  relevant_prs_measured: required
+  relevant_issues_measured_when_material: required
+  workflows_or_checks_measured_when_material: required
+
+FACTS_OPTIONAL_BUT_EXPLICIT:
+  remote_desktop_measured: optional_mark_unknown_or_blocked
+  runtime_measured: optional_mark_unknown_or_blocked
+  deploy_measured: optional_mark_unknown_or_blocked
+  site_measured: optional_mark_unknown_or_blocked
+  attachment_materialized: optional_mark_evidence_missing
 ```
 
-## Base lógica Horn aplicada
+## 2_HORN_RULES
 
-Do PDF `Lógica Computacional 23`, foi usado apenas o subconjunto operacional de Horn:
+```prolog
+% p1 && ... && pn -> p
+% p1 && ... && pn -> false
 
-```text
-(p1 ∧ ... ∧ pn) -> p
-(p1 ∧ ... ∧ pn) -> F
-forward chaining ate fixed point
+centraldark_command :- token_acordar.
+centraldark_command :- token_centraldark.
+centraldark_command :- asks_repo_state.
+centraldark_command :- asks_pr_or_issue.
+centraldark_command :- asks_runtime_or_deploy.
+centraldark_command :- asks_operational_agenda.
+
+answer_blocked :- centraldark_command, not_github_measured.
+answer_blocked :- centraldark_command, relevant_issues_material, not_issues_measured.
+answer_blocked :- centraldark_command, workflows_material, not_workflows_measured.
+
+repo_context_ready :- github_measured, repo_confirmed, main_head_measured.
+pr_context_ready :- relevant_prs_measured.
+issue_context_ready :- issues_measured_or_not_material.
+workflow_context_ready :- workflows_measured_or_not_material.
+
+answer_allowed :-
+  centraldark_command,
+  repo_context_ready,
+  pr_context_ready,
+  issue_context_ready,
+  workflow_context_ready.
 ```
 
-Aplicação:
+## 3_EXECUTION_PIPE
 
 ```text
-centraldark_command ∧ not_github_measured -> answer_blocked
-centraldark_command ∧ repo_context_ready ∧ skill_context_ready ∧ pdf_logic_ready -> answer_allowed
+INPUT
+  ↓
+CLASSIFY_TRIGGER
+  ↓
+IF centraldark_command == true
+  ↓
+  MEASURE_GITHUB
+    repo
+    main_head
+    prs
+    issues
+    workflows/checks
+    commits/files_when_material
+  ↓
+  MEASURE_LOCAL_IF_AVAILABLE
+    remote_desktop
+    runtime
+    deploy
+    site
+  ↓
+  MARK_MISSING_AS_UNKNOWN_OR_BLOCKED
+  ↓
+  HORN_CLOSE_FACTS_UNTIL_FIXED_POINT
+  ↓
+  IF answer_blocked == true
+      RETURN BLOCKED_WITH_CAUSE
+  ELSE
+      RETURN OPERATIONAL_ANSWER
 ```
 
-`UNKNOWN` não vira `FALSE` automaticamente e não vira `PASS`. Ele permanece `UNKNOWN` até medição ou bloqueio explícito.
+## 4_OUTPUT_SHAPE
 
-## Continuidade por prints e anexos
-
-Novo padrão aprovado nesta sessão:
-
-```text
-PRINT_OU_ANEXO_NOVO != INTERRUPÇÃO
-PRINT_OU_ANEXO_NOVO = DELTA_CANDIDATO
+```yaml
+ANSWER_SHAPE:
+  PROVADO:
+    - fato
+    - evidencia
+    - fonte
+  QUEBRADO:
+    - sintoma
+    - causa_quando_provada
+    - arquivo_ou_workflow_quando_existir
+  EVIDENCIA_FALTANTE:
+    - lacuna
+    - porque_nao_foi_medida
+  RAIZ:
+    - primeiro_elo_vermelho_ou_unknown_material
+  NEXT_CURSOR:
+    - exatamente_um_proximo_passo
 ```
 
-Procedimento:
+## 5_ATTACHMENT_CONTINUITY
 
 ```text
-LER -> COMPREENDER -> COSTURAR_COM_ESTADO_VIVO -> CLASSIFICAR -> CONTINUAR
+PRINT_NOVO != PARA_FLUXO
+PRINT_NOVO == DELTA_CANDIDATO
+ANEXO_NOVO != PARA_FLUXO
+ANEXO_NOVO == DELTA_CANDIDATO
+
+LER
+  ↓
+COMPREENDER
+  ↓
+COSTURAR_COM_ESTADO_VIVO
+  ↓
+CLASSIFICAR
+  ↓
+CONTINUAR
 ```
 
-Se o print/anexo traz evidência nova, ele entra no denominador. Se não for legível ou não estiver acessível, registrar como `EVIDENCIA_FALTANTE`, sem inventar conteúdo.
-
-## Evidência desta sessão
+## 6_LINK_AND_SHORTCUT_INVARIANTS
 
 ```text
-REPO=ServerVpss/CentralDark
-MAIN_HEAD_MEDIDO=ad4ed0ac76cb2361b005684c9c1323876a5174a5
-PR_1189=closed+merged
-PR_1444=umbrella/rendezvous atual
-REMOTE_SKILL_FOUND=.agents/skills/centraldark-operational-method/SKILL.md
-PDF_BASE=tlc23(2).pdf
-BRIDGE_SCRIPT=CentralDark-Remote-Bridge(1).ps1
-BRIDGE_SESSION_JSON=bridge-session-20260907-100639.json
-REMOTE_DESKTOP_COMMANDER=TIMEOUT_NO_RESPONSE_FROM_DEVICE
-ZIP_GITHUB_ACTIONS_FTP=EVIDENCIA_FALTANTE_NAO_ANEXADA_NESTA_CONVERSA
-GITHUB_COPILOT_LNK=EVIDENCIA_FALTANTE_NAO_ANEXADO_NESTA_CONVERSA
+LINK != CAPABILITY_PROVEN
+LNK_FILE != TARGET_PROVEN
+ZIP_FILE != WORKFLOW_PROVEN
+SCREENSHOT != RUNTIME_PROVEN
+SESSION_JSON_BOOTING != BRIDGE_ONLINE
+MERGED != DEPLOYED
+DOCUMENTED != EXECUTED
+UNKNOWN != PASS
+SKIPPED_WITHOUT_REASON != PASS
+HISTORICAL_GREEN + NEW_HEAD -> REMEASURE
 ```
 
-## Invariantes preservadas
+## 7_CURRENT_SESSION_TRACE
 
-```text
-REALITY_IS_JUDGE=true
-UNKNOWN_IS_NOT_PASS=true
-CURRENT_GT_HISTORICAL=true
-REUSE_BEFORE_CREATE=true
-EXTEND_EXISTING_NOT_REPLACE=true
-ONE_WRITER_PER_CONFLICT_SCOPE=true
-MANY_READERS=true
-NO_BLIND_OVERWRITE=true
-NO_V2_V3_PARALLEL_SYSTEMS=true
-DOCUMENTED_NOT_EXECUTED=true
-MERGED_NOT_DEPLOYED=true
-PRINT_IS_DELTA_CANDIDATE=true
-ANSWER_AFTER_MEASURE=true
+```yaml
+trace:
+  repo: ServerVpss/CentralDark
+  main_head_measured: ad4ed0ac76cb2361b005684c9c1323876a5174a5
+  pr_1189: closed_merged_historical_lineage
+  pr_1444: umbrella_rendezvous_current
+  pr_1463: open_candidate_preanswer_gate
+  skill_owner_found: .agents/skills/centraldark-operational-method/SKILL.md
+  pdf_base: tlc23(2).pdf
+  horn_subset: implication_and_fail_closed_negative_clause
+  bridge_script: CentralDark-Remote-Bridge(1).ps1
+  bridge_session_json: BOOTING_no_attempts
+  remote_desktop_commander: timeout_no_response_from_device
+  github_actions_ftp_zip: evidence_missing_not_listed_in_conversation_files
+  github_copilot_lnk: evidence_missing_not_listed_in_conversation_files
 ```
 
-## Próximo cursor
+## 8_TEST_EXPECTATION
 
 ```text
-NEXT_CURSOR:
-1. manter este receipt subordinado ao owner existente;
-2. rodar test/ci/centraldark-preanswer-gate quando disponível;
-3. se Remote Desktop voltar a responder, medir E:\CentralDark\_MAPA_CASA\GARIMPO-CHEFE;
-4. se ZIP/LNK forem anexados de fato, materializar e classificar links/capacidades;
-5. cruzar PR + issue + workflow + arquivo antes de qualquer novo plano operacional.
+TEST_FILE=scripts/ci/centraldark-preanswer-gate.test.mjs
+
+CASE_1:
+  centraldark_command=true
+  github_measured=false
+  EXPECT answer_blocked=true
+
+CASE_2:
+  centraldark_command=true
+  github_measured=true
+  repo_confirmed=true
+  main_head_measured=true
+  relevant_prs_measured=true
+  issues_measured_or_not_material=true
+  EXPECT answer_allowed=true
+
+CASE_3:
+  centraldark_command=true
+  github_measured=true
+  relevant_prs_measured=true
+  issues_materiality_unknown=true
+  EXPECT answer_allowed=false
+```
+
+## 9_HOUSE_RULE
+
+```text
+DEVELOPER_MODE:
+  pretty_text: false
+  evidence_first: true
+  arrows_visible: true
+  raw_contract_first: true
+  biblical_refs_as_guardrails: true
+  baianes_comment_only: true
+
+# baianês técnico:
+# se não mediu, não enfeita. Se mediu, aponta o caminho da dor.
 ```
