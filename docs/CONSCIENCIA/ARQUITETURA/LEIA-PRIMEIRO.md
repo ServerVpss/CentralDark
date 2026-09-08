@@ -186,3 +186,11 @@ Enquanto este pacote estiver parado nesta pasta, é `RAW` — não `CRYSTAL`.
 🔍  LUPA NA MÃO · INTENÇÃO NA FRENTE
     CentralDark · SEGREDO/CHEFE
 ```
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

@@ -1,3 +1,10 @@
+---
+title: "Centraldark Gpt Prompt"
+date: 2026-09-07
+tags: ["consciencia"]
+updated: 2026-09-07
+---
+
 # CENTRALDARK — Prompt para GPT (revisado)
 
 **Revisão do "CENTRALDARK - Revisar prompt CentralDark.html" do GARIMPO-CHEFE**

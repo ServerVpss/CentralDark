@@ -77,3 +77,11 @@ Todo o resto = modulo/servico interno, sem virar dominio publico proprio.
 - Proxima rodada: aplicar a mudanca de `RaizPorHost` (frontend, baixo risco)
   como diff revisavel; so depois avancar pra Caddy com aprovacao explicita
   linha a linha.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

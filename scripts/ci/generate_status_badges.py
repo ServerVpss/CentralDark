@@ -3,7 +3,7 @@
 
 Gera um índice determinístico de badges GitHub Actions a partir da realidade observável:
 - workflows presentes em .github/workflows;
-- workflow runs históricos;
+- janela recente de workflow runs;
 - branches ainda existentes;
 - PRs abertos/fechados/mergeados.
 
@@ -22,11 +22,16 @@ from urllib.parse import quote
 REPO = os.environ.get("GITHUB_REPOSITORY", "ServerVpss/CentralDark")
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "docs" / "STATUS-BADGES.md"
+RECENT_RUN_LIMIT = 100
 
 
-def gh_json(endpoint: str):
+def gh_json(endpoint: str, *, paginate: bool = True):
+    args = ["gh", "api"]
+    if paginate:
+        args.append("--paginate")
+    args.append(endpoint)
     p = subprocess.run(
-        ["gh", "api", "--paginate", endpoint],
+        args,
         cwd=ROOT,
         text=True,
         capture_output=True,
@@ -88,8 +93,15 @@ def main() -> int:
             }
         )
 
+    # Badge é telemetria, não ledger. Paginar dezenas de milhares de runs
+    # monopolizava o runner self-hosted sem aumentar a força da prova.
+    # A janela recente é explícita e suficiente para mostrar atividade observada;
+    # branches sem run nessa janela permanecem NO_OBSERVED_WORKFLOW_RUN.
     runs = flatten_pages(
-        gh_json(f"repos/{REPO}/actions/runs?per_page=100&exclude_pull_requests=false"),
+        gh_json(
+            f"repos/{REPO}/actions/runs?per_page={RECENT_RUN_LIMIT}&exclude_pull_requests=false",
+            paginate=False,
+        ),
         "workflow_runs",
     )
 
@@ -124,7 +136,7 @@ def main() -> int:
         "",
         f"Total atual: **{len(branch_names)}**.",
         "",
-        "Cada branch abaixo lista apenas combinações workflow/evento que realmente aparecem no histórico de Actions. Isso evita fabricar badge de execução que nunca existiu.",
+        f"A telemetria abaixo considera as **{RECENT_RUN_LIMIT} execuções mais recentes**. Isso evita varrer dezenas de milhares de runs históricos só para fabricar um painel visual. Branch sem execução nessa janela permanece explicitamente não observada.",
         "",
     ]
 
@@ -133,7 +145,7 @@ def main() -> int:
         lines.append(f"### `{branch}`")
         if not combos:
             lines.append("")
-            lines.append("`NO_OBSERVED_WORKFLOW_RUN` — branch existe, mas nenhuma execução foi encontrada no histórico consultado.")
+            lines.append("`NO_OBSERVED_WORKFLOW_RUN` — branch existe, mas nenhuma execução foi encontrada na janela recente consultada.")
             lines.append("")
             continue
         lines.append("")
@@ -149,7 +161,7 @@ def main() -> int:
     lines += [
         "## PRs — passado + presente",
         "",
-        "PR não possui um `badge.svg` nativo próprio. A Badge Fabric preserva o PR e sua head branch; quando houve workflow run nessa branch, os badges estão na seção da branch acima.",
+        "PR não possui um `badge.svg` nativo próprio. A Badge Fabric preserva o PR e sua head branch; quando houve workflow run recente nessa branch, os badges estão na seção da branch acima.",
         "",
         "| PR | Estado | Head | Base |",
         "|---:|---|---|---|",
@@ -167,7 +179,8 @@ def main() -> int:
         "BADGE_SOURCE=GITHUB_ACTIONS_NATIVE_SVG",
         "BADGE_IS_TELEMETRY_NOT_PROOF=true",
         "WORKFLOW_BADGE_COVERAGE=ALL_WORKFLOW_FILES",
-        "BRANCH_BADGE_COVERAGE=ONLY_OBSERVED_RUNS",
+        f"WORKFLOW_RUN_WINDOW=LATEST_{RECENT_RUN_LIMIT}",
+        "BRANCH_BADGE_COVERAGE=ONLY_OBSERVED_RUNS_IN_WINDOW",
         "PR_HISTORY=ALL_PRS_RETURNED_BY_GITHUB_API",
         "DELETED_BRANCH_WITHOUT_RUN_HISTORY=HISTORICAL_UNKNOWN",
         "SAME_HEAD_PROOF_REQUIRED_FOR_CI_CLAIM=true",
@@ -183,6 +196,7 @@ def main() -> int:
     print(f"WORKFLOWS={len(workflows)}")
     print(f"BRANCHES={len(branch_names)}")
     print(f"PRS={len(pr_rows)}")
+    print(f"RUN_WINDOW={len(runs)}/{RECENT_RUN_LIMIT}")
     print(f"OBSERVED_BRANCH_WORKFLOW_COMBOS={sum(len(v) for v in observed.values())}")
     return 0
 

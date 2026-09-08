@@ -67,3 +67,11 @@ Cannot find module 'C:\Users\danda\AppData\Local\Temp\bunx-4230130355-screenpipe
 - Screenpipe install: `C:\Users\danda\AppData\Local\screenpipe\`
 - Bloqueio bunx cache: `C:\Users\danda\AppData\Local\Temp\bunx-*`
 - Histórico erro: Logs 2026-08-31T00:58:47Z
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

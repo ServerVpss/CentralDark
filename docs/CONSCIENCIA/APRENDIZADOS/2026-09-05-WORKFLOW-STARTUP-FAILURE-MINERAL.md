@@ -1,3 +1,10 @@
+---
+title: "2026 09 05 WORKFLOW STARTUP FAILURE MINERAL"
+date: 2026-09-07
+tags: ["consciencia"]
+updated: 2026-09-07
+---
+
 # 🧿 WORKFLOW STARTUP FAILURE — mineral de reconciliação
 
 ## Intenção

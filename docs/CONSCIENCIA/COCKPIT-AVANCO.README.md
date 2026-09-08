@@ -75,3 +75,11 @@ O script lê o SHA256 do arquivo em `HEAD` (antes) e do working tree (depois), p
 3. **Feynman** — dá pra explicar em 3 linhas leigas? Se não, volta pro rascunho.
 4. **AutoLupa** — item parado > 7 dias sem mudança de `atualizado_em` → o painel destaca com selo amarelo.
 5. **Dependência** — se `depende_de` aponta pra um item não-feito, este item vira "travado por N" no painel.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

@@ -1,3 +1,10 @@
+---
+title: "2026 09 05 WINDOWS INSTALLER AUTOUPDATE"
+date: 2026-09-07
+tags: ["consciencia"]
+updated: 2026-09-07
+---
+
 # 📦 CentralDark Windows Installer — contrato persistente
 
 📜 **“Tudo seja feito com ordem.”**

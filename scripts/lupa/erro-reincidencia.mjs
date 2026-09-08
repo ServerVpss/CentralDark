@@ -160,7 +160,11 @@ export function linhasSubstantivas(diff) {
 // acusado de ser o próprio falso verde que estava consertando.
 export function avaliarCommit(erro, mensagem, diff) {
   const re = new RegExp(erro.detector.padrao_alegacao, 'i');
-  if (!re.test(mensagem)) return null;
+  // O Git acrescenta a lista de conflitos resolvidos como comentário de
+  // metadado. Nome de arquivo com "inventory" nessa lista não é alegação
+  // humana de prova e não pode virar falso positivo E09.
+  const mensagemSemMetadadosDeConflito = mensagem.replace(/\n# Conflicts:\n(?:#.*\n?)*$/m, '');
+  if (!re.test(mensagemSemMetadadosDeConflito)) return null;
   const { adicoes_substantivas: adicoes, remocoes } = medirDiff(diff);
   if (adicoes >= erro.detector.minimo_linhas_substantivas) return null;
   if (remocoes > 0) return null;

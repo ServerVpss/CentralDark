@@ -1,3 +1,10 @@
+---
+title: "2026 09 05 LOCAL PUBLICADO ZENDRIVE RABBIT MINERAL"
+date: 2026-09-07
+tags: ["consciencia"]
+updated: 2026-09-07
+---
+
 # 2026-09-05 — Casa local, superfície publicada, Zendrive/Rabbit e minério
 
 📜 **“Examinai tudo; retende o que é bom.”**
