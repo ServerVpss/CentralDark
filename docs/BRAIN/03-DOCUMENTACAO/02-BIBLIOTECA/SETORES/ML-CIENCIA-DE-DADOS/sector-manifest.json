@@ -1,0 +1,160 @@
+{
+  "schema_version": 1,
+  "sector_id": "ml-ciencia-de-dados",
+  "title": "ML e Ciencia de Dados",
+  "status": "CANDIDATE_SECTOR",
+  "owner": "docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/SETORES/ML-CIENCIA-DE-DADOS/README.md",
+  "created_at": "2026-09-07T22:57:00-03:00",
+  "policy": {
+    "reuse_before_create": true,
+    "one_system_only": true,
+    "raw_copy_default": false,
+    "unknown_is_not_pass": true,
+    "license_unknown_quarantine": true,
+    "source_reference_is_not_authority": true
+  },
+  "sources": [
+    {
+      "source_id": "github-leandromineti-ml-journey",
+      "title": "Machine Learning Journey",
+      "source_kind": "github-repo",
+      "status": "INDEXED_REFERENCE",
+      "classification": "STUDY_CANDIDATE",
+      "license_observed": "Unlicense",
+      "locator": {
+        "provider": "github",
+        "repo": "leandromineti/ml-journey",
+        "ref": "master",
+        "path": "README.md"
+      },
+      "capability_tags": [
+        "tema/machine-learning",
+        "tema/ciencia-de-dados",
+        "capacidade/trilha-de-estudo",
+        "capacidade/roteamento-de-recurso"
+      ]
+    },
+    {
+      "source_id": "github-iml-wg-hepml-livingreview",
+      "title": "A Living Review of Machine Learning for Particle Physics",
+      "source_kind": "github-repo",
+      "status": "INDEXED_REFERENCE_ARCHIVE",
+      "classification": "SPECIALIZED_BIBLIOGRAPHY",
+      "license_observed": "NO_REPO_LICENSE_OBSERVED",
+      "locator": {
+        "provider": "github",
+        "repo": "iml-wg/HEPML-LivingReview",
+        "ref": "master",
+        "path": "README.md"
+      },
+      "coverage_note": "literature coverage frozen as of 2026-06-01 per upstream README",
+      "capability_tags": [
+        "tema/scientific-ml",
+        "tema/particle-physics",
+        "capacidade/bibliography-radar",
+        "capacidade/source-not-endorsement-guard"
+      ]
+    },
+    {
+      "source_id": "github-iml-wg-hepml-livingguide",
+      "title": "HEPML Living Guide",
+      "source_kind": "github-repo",
+      "status": "FOLLOWUP_SOURCE_CANDIDATE",
+      "classification": "SPECIALIZED_BIBLIOGRAPHY_CURRENT_CANDIDATE",
+      "license_observed": "NOASSERTION",
+      "locator": {
+        "provider": "github",
+        "repo": "iml-wg/HEPML-LivingGuide",
+        "ref": "main"
+      },
+      "capability_tags": [
+        "tema/scientific-ml",
+        "capacidade/current-source-radar"
+      ]
+    },
+    {
+      "source_id": "upload-hepml-livingreview-master-zip",
+      "title": "HEPML-LivingReview-master.zip",
+      "source_kind": "conversation-upload",
+      "status": "EXTRACTION_PENDING",
+      "classification": "LOCAL_UPLOAD_REFERENCE",
+      "observed_size_bytes": 604254,
+      "content_ingested": false,
+      "raw_committed": false,
+      "required_next_proof": [
+        "sha256",
+        "zip_entry_inventory",
+        "license_check",
+        "dedupe_with_github_source"
+      ]
+    },
+    {
+      "source_id": "upload-dev-livros-main-zip",
+      "title": "dev-livros-main.zip",
+      "source_kind": "conversation-upload",
+      "status": "LICENSE_UNKNOWN_QUARANTINE",
+      "classification": "Q_LICENSE_QUARANTINE",
+      "observed_size_bytes": 373429080,
+      "content_ingested": false,
+      "raw_committed": false,
+      "required_next_proof": [
+        "sha256",
+        "zip_entry_inventory",
+        "license_check_per_item",
+        "copyright_safe_metadata_only"
+      ]
+    }
+  ],
+  "categories": [
+    "A_FOUNDATIONS",
+    "B_COMPUTING_FOR_DATA",
+    "C_MACHINE_LEARNING_CORE",
+    "D_DATA_MODALITIES",
+    "E_SCIENTIFIC_ML",
+    "F_BIBLIOGRAPHY_RADAR",
+    "Q_LICENSE_QUARANTINE"
+  ],
+  "capability_candidates": [
+    {
+      "id": "ml-study-path-router",
+      "source_id": "github-leandromineti-ml-journey",
+      "state": "CANDIDATE",
+      "summary": "Roteia lacunas de aprendizado para fundamentos, computacao, ML core ou modalidades de dados.",
+      "owner_candidate": "scripts/memory-linker/library-router.mjs"
+    },
+    {
+      "id": "hands-on-resource-selector",
+      "source_id": "github-leandromineti-ml-journey",
+      "state": "CANDIDATE",
+      "summary": "Prioriza recursos visuais e praticos quando o objetivo for aprender operando.",
+      "owner_candidate": "docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/catalog.json"
+    },
+    {
+      "id": "hep-ml-paper-radar",
+      "source_id": "github-iml-wg-hepml-livingreview",
+      "state": "CANDIDATE",
+      "summary": "Classifica perguntas de ML cientifico para revisoes, benchmarks, simulacao, anomaly detection e interpretabilidade.",
+      "owner_candidate": "scripts/memory-linker/library-router.mjs"
+    },
+    {
+      "id": "bibliography-not-endorsement-guard",
+      "source_id": "github-iml-wg-hepml-livingreview",
+      "state": "CANDIDATE",
+      "summary": "Impede que uma fonte listada em bibliografia seja tratada como validada pela CentralDark.",
+      "owner_candidate": ".agents/skills/meta-lupa/"
+    },
+    {
+      "id": "license-quarantine-gate",
+      "source_id": "upload-dev-livros-main-zip",
+      "state": "CANDIDATE",
+      "summary": "Mantem livros/PDFs de licenca desconhecida fora do corpus bruto e permite apenas triagem segura de metadados.",
+      "owner_candidate": "scripts/memory-linker/library-router.mjs"
+    }
+  ],
+  "next_cursor": [
+    "measure_zip_sha256_and_inventory_when_runtime_available",
+    "dedupe_hepml_zip_against_github_repo",
+    "extend_library_router_source_kind_only_if_tests_are_added",
+    "promote_candidates_one_by_one_after_counterproof"
+  ]
+}
