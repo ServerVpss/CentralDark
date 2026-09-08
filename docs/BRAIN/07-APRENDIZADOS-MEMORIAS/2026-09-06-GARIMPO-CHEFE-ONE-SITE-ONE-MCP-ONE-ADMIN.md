@@ -13,10 +13,10 @@ owner: "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/"
 ---
 # GARIMPO-CHEFE → ONE SITE / ONE MCP / ONE ADMIN — reconciliação 2026-09-06
 
-**Natureza:** aprendizado + plano de reconciliação no BRAIN existente.  
-**Autoridade de intenção:** SEGREDO/CHEFE.  
-**Owner:** `docs/BRAIN/07-APRENDIZADOS-MEMORIAS/`.  
-**Baseline medido:** `main@f60ad71810fb9009bcc1a576d77305d61f9d1add`.  
+**Natureza:** aprendizado + plano de reconciliação no BRAIN existente.
+**Autoridade de intenção:** SEGREDO/CHEFE.
+**Owner:** `docs/BRAIN/07-APRENDIZADOS-MEMORIAS/`.
+**Baseline medido:** `main@f60ad71810fb9009bcc1a576d77305d61f9d1add`.
 **Escopo desta entrega:** desenho, inventário, reconciliação e guardas. **Sem deploy, restart, DNS, Caddy/Nginx, banco, secret ou cutover.**
 
 ```text
