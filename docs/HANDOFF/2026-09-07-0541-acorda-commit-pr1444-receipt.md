@@ -198,3 +198,38 @@ DEPLOY=UNKNOWN_UNLESS_LIVE_RECEIPT_REFERENCED
 CI=FOLLOW_SAME_HEAD_ACTIONS
 NEXT_CURSOR=SAME_HEAD_CI -> FIRST_CAUSAL_RED -> MINIMAL_DELTA -> COUNTERPROOF
 ```
+
+## CURRENT — receipt de correção CI e ouro reutilizável (2026-09-08)
+
+```text
+REPO=ServerVpss/CentralDark
+PR=#1444
+BRANCH=reconcile/garimpo-one-site-one-mcp-admin-20260906
+HEAD_BEFORE_RECEIPT=8519ea6d890e3ffea889f89e8fa0e1af54c85e3c
+MAIN_MEASURED=ad4ed0ac76cb2361b005684c9c1323876a5174a5
+BASE_RECONCILED=true
+PORTA_SAME_HEAD=PASS
+CODEX_VALIDATE_PARTIAL=RUNNING_AT_RECEIPT
+RUNTIME=NOT_CLAIMED
+DEPLOY=NOT_PERFORMED
+SECRETS=NOT_TOUCHED
+
+CAUSE_01=noncanonical_PR_labels_blocked_label_gate
+FIX_01=remove_only_four_invalid_labels; preserve_canonical_catalog
+CAUSE_02=version_marker_in_handoff_filename_triggered_parallel_path_guard
+FIX_02=rename_without_content_change; preserve_git_lineage
+CAUSE_03=model_agent_label_was_stale_test_expectation
+FIX_03=remove_obsolete_assertion; keep_agent_label_provenance_only
+
+REUSABLE_RULE=model_agent_labels_are_provenance_not_promotion_requirements
+REUSABLE_RULE=handoff_filenames_must_not_introduce_versioned_parallel_owner_markers
+REUSABLE_RULE=canonical_label_gate_must_measure_exact_catalog
+REUSABLE_RULE=timeout_of_watcher_is_not_CI_FAILURE
+NO_GATE_WEAKENING=true
+NO_NEW_OWNER=true
+NO_V2_V3_V4=true
+ONE_WRITER_PER_SCOPE=true
+
+RECEIPT_PERSISTED=true
+NEXT_CURSOR=WAIT_FOR_ALL_REQUIRED_CHECKS_ON_FINAL_HEAD -> COUNTERPROOF -> REMEASURE -> FIXED_POINT
+```
