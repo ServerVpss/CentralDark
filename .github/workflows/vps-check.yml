@@ -20,7 +20,8 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           eval "$(ssh-agent -s)"
-          echo "$VPS_SSH_KEY_LOVABLE" | tr -d '\r' | ssh-add - >
+          # Ensure key does not have Windows line endings
+          printf '%s' "$VPS_SSH_KEY_LOVABLE" | ssh-add -
           ssh-keyscan -H $VPS_HOST_LOVABLE >> ~/.ssh/known_hosts 2>/dev/null || true
       - name: Check runner service on VPS
         run: |
