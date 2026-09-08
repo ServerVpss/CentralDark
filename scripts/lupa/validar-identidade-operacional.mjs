@@ -643,7 +643,22 @@ function changedPathMetadataFindings(repoRoot, baseRef, headRef) {
   return findings;
 }
 
+export function isNullOid(value) {
+  return /^0{40}$/.test(String(value || "").trim());
+}
+
 export function validateExternalDelta(repoRoot, { baseRef = null, headRef = null } = {}) {
+  // FABLE JUDGE / push-new-branch: github.event.before is 40 zeros — safe no-base, never merge-base/diff.
+  if (isNullOid(baseRef)) {
+    return {
+      status: "NOT_APPLICABLE_NO_DIFF_REFS",
+      base_ref: null,
+      head_ref: headRef || null,
+      additions: 0,
+      findings: [],
+      scope: "SEM_BASE",
+    };
+  }
   if (!baseRef && !headRef) {
     return { status: "NOT_APPLICABLE_NO_DIFF_REFS", base_ref: null, head_ref: null, additions: 0, findings: [] };
   }

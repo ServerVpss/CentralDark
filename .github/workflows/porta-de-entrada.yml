@@ -144,9 +144,17 @@ jobs:
           BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before || github.sha }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
-          node scripts/lupa/validar-identidade-operacional.mjs \
-            --base-ref "$BASE_SHA" \
-            --head-ref "$HEAD_SHA"
+          set -euo pipefail
+          # FABLE JUDGE: before=40 zeros → SEM_BASE — do not pass null OID as merge-base/diff base
+          if [ -n "${BASE_SHA}" ] && [ "${BASE_SHA}" != "0000000000000000000000000000000000000000" ]; then
+            node scripts/lupa/validar-identidade-operacional.mjs \
+              --base-ref "$BASE_SHA" \
+              --head-ref "$HEAD_SHA"
+          else
+            echo "IDENTIDADE_ESCOPO=SEM_BASE — auditando apenas o HEAD (no merge-base)"
+            node scripts/lupa/validar-identidade-operacional.mjs \
+              --head-ref "$HEAD_SHA"
+          fi
 
       - name: Testar kernel portátil e entrada multimodal
         run: node --test scripts/lupa/portable-kernel.test.mjs
