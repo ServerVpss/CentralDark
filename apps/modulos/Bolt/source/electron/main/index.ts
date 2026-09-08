@@ -2,11 +2,12 @@
 import { createRequestHandler } from '@remix-run/node';
 import electron, { app, BrowserWindow, globalShortcut, ipcMain, protocol, session } from 'electron';
 import log from 'electron-log';
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import * as pkg from '../../package.json';
 import { setupAutoUpdater } from './utils/auto-update';
 import {
+  CENTRALDARK_BRIDGE_STATE_FILE,
   CENTRALDARK_PUBLIC_API_URL,
   CENTRALDARK_PUBLIC_URL,
   DEFAULT_HOUSE_ROOT,
@@ -105,6 +106,25 @@ async function probeHealth(endpoint: string, routes: string[]) {
   return { status: 'OFFLINE', endpoint, latency_ms: Date.now() - started };
 }
 
+function readBridgeState() {
+  try {
+    if (!existsSync(CENTRALDARK_BRIDGE_STATE_FILE)) {
+      return { ok: false, status: 'UNKNOWN', reason: 'BRIDGE_STATE_FILE_MISSING', path: CENTRALDARK_BRIDGE_STATE_FILE };
+    }
+    const raw = readFileSync(CENTRALDARK_BRIDGE_STATE_FILE, 'utf8');
+    const parsed = JSON.parse(raw);
+    return { ok: true, status: 'MEASURED', path: CENTRALDARK_BRIDGE_STATE_FILE, state: parsed };
+  } catch (error) {
+    return {
+      ok: false,
+      status: 'UNKNOWN',
+      reason: 'BRIDGE_STATE_READ_FAILED',
+      path: CENTRALDARK_BRIDGE_STATE_FILE,
+      error: error instanceof Error ? error.message : String(error),
+    };
+  }
+}
+
 function registerBridge() {
   const register = (channel: string, handler: (...args: any[]) => any) => {
     ipcMain.removeHandler(channel);
@@ -118,16 +138,19 @@ function registerBridge() {
     omni_router_base_url: OMNI_ROUTER_BASE_URL,
     hermes_base_url: HERMES_BASE_URL,
     screenpipe_base_url: SCREENPIPE_BASE_URL,
+    bridge_state_file: CENTRALDARK_BRIDGE_STATE_FILE,
     public_api_url: CENTRALDARK_PUBLIC_API_URL,
     public_url: CENTRALDARK_PUBLIC_URL,
     widget_shortcut: SOL_WIDGET_SHORTCUT,
     one_system_only: true,
     one_router_only: true,
+    external_providers_required: false,
   }));
 
   register('centraldark:omni:health', async () => probeHealth(OMNI_ROUTER_BASE_URL, ['/health', '/v1/models']));
+  register('centraldark:bridge:state', async () => readBridgeState());
 
-  // Canal legado preservado para não quebrar consumidores antigos.
+  // Canal legado preservado para não quebrar consumidores antigos. A medição continua no Omni.
   register('centraldark:hermes:health', async () => probeHealth(OMNI_ROUTER_BASE_URL, ['/health', '/v1/models']));
 
   register('centraldark:screenpipe:health', async () => probeHealth(SCREENPIPE_BASE_URL, ['/health']));
