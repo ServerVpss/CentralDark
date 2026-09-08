@@ -4,12 +4,23 @@
 
 Dar ao painel privado da CentralDark capacidade ampla sobre providers sem entregar segredo bruto aos agentes, mantendo um único owner por provider e um único plano de controle.
 
+## Owner e registro canônico
+
+```text
+POLICY_OWNER=docs/CONSCIENCIA/02-PERMISSOES.md
+DETAIL_ARTIFACT=docs/CONSCIENCIA/2026-09-07-provider-access-lease-cristalizado.md
+BOOT_REGISTRY=docs/CONSCIENCIA/README.md
+PROVIDER_ADAPTER=apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js
+```
+
+Este arquivo detalha o lease. Ele não cria um segundo owner de permissões, vault, painel ou plano de controle.
+
 ## Princípios cristalizados
 
 - `CAPABILITY_ACCESS != RAW_SECRET_ACCESS`
 - `REUSE_BEFORE_CREATE=true`
 - `ONE_COCKPIT=true`
-- `ONE_SECRET_OWNER=true`
+- `ONE_SECRET_OWNER_TARGET=true`
 - `ONE_PROVIDER_CONTROL_PLANE=true`
 - `NO_NEW_PANEL=true`
 - `NO_NEW_VAULT=true`
@@ -39,7 +50,26 @@ Permite somente:
 Bloqueia `provider_mutate`.
 
 ### FULL_TEMPORARY
-Mesmas capacidades de `FULL`, com TTL obrigatório e retorno automático para `READ_ONLY` ao expirar.
+Mesmas capacidades de `FULL`, com TTL obrigatório.
+
+O lease temporário precisa capturar o modo imediatamente anterior antes de elevar acesso:
+
+```text
+PREVIOUS_MODE=<OFF|READ_ONLY|FULL>
+FULL_TEMPORARY
+→ TTL
+→ RESTORE_EXACT(PREVIOUS_MODE)
+```
+
+Regras de segurança:
+
+```text
+EXPIRY != FORCE_READ_ONLY
+PREVIOUS_MODE=UNKNOWN → FAIL_CLOSED
+TTL_EXPIRED → RESTORE_EXACT(PREVIOUS_MODE)
+```
+
+Exemplo: se o baseline era `OFF`, a expiração volta para `OFF`; nunca pode ampliar acesso para `READ_ONLY` apenas porque o TTL terminou.
 
 ### FULL
 Permite mutações somente pelos gates já existentes e provados no owner canônico:
@@ -66,27 +96,45 @@ FINANCIAL
 
 Ter acesso amplo não implica manter todas as classes ativas ao mesmo tempo.
 
-## Cloudflare
+## Cloudflare / Contabo — estado real dos consumidores de credencial
 
-### Owners existentes
+### Owners e consumidores observados
 
 ```text
 Provider control: apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js
 Admin bridge:     apps/modulos/mcp/src/provider-admin-bridge.js
 Painel:           src/apps/modulos/telepainel/components/cofre/ProviderControlPlane.tsx
-Hub/Vault:        OAuthBroker / oauth_connections
+Hub/Vault alvo:   OAuthBroker / oauth_connections
 DNS sync:         scripts/cloudflare/cf-sync.sh
 Cofre VPS legado: /root/CentralDark/secrets/cloudflare.env
 ```
 
-Aliases históricos de credencial:
+### Contraprova fechada: owner desejado != injeção runtime já provada
+
+O provider adapter atual lê credenciais pelo ambiente do processo (`process.env`). Para Cloudflare, aceita os aliases históricos:
 
 ```text
 CLOUDFLARE_API_TOKEN
 CF_API_TOKEN
 ```
 
-O valor nunca deve aparecer no chat, UI, logs, Git ou memória de agente. Consumidores recebem capability ou injeção server-side, não posse do segredo.
+Para Contabo, o adapter também consulta variáveis de ambiente específicas do provider.
+
+Separadamente, o `cf-sync.sh` consome o arquivo VPS legado `/root/CentralDark/secrets/cloudflare.env`.
+
+Portanto, até existir prova de ligação runtime, é incorreto afirmar que `OAuthBroker / oauth_connections` já injeta as credenciais no provider adapter.
+
+```text
+TARGET_SECRET_OWNER=OAuthBroker/oauth_connections
+CURRENT_PROVIDER_ADAPTER_INPUT=process.env
+CURRENT_CF_SYNC_INPUT=/root/CentralDark/secrets/cloudflare.env
+OAUTH_TO_PROVIDER_RUNTIME_BRIDGE=NOT_PROVEN
+ONE_SECRET_OWNER_RUNTIME=NOT_PROVEN
+```
+
+O alvo arquitetural continua sendo um owner lógico único de segredo, mas a migração/ponte precisa ser medida e provada antes de promover esse alvo como estado atual.
+
+O valor secreto nunca deve aparecer no chat, UI, logs, Git ou memória de agente. Consumidores recebem capability ou injeção server-side, não posse do segredo.
 
 ## Regra para agentes
 
@@ -142,4 +190,11 @@ ONE_ACTIVE_WRITER_PER_SCOPE=true
 
 ## Fixed point deste documento
 
-Este documento cristaliza somente a política e o desenho já observados no repositório e na operação. Não declara deploy, runtime ou mutações de provider como provados.
+Este documento cristaliza somente política, owners e distinções já observadas no repositório. Não declara deploy, runtime, ponte OAuth→provider, owner físico único de secrets ou mutações de provider como provados.
+
+```text
+POLICY_COUNTERPROOF=CLOSED
+RUNTIME_SECRET_BRIDGE=NOT_PROVEN
+PROVIDER_RUNTIME_MUTATION=NOT_PROVEN
+GLOBAL_FIXED_POINT=FALSE
+```
