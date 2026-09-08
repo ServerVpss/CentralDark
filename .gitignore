@@ -51,7 +51,7 @@ quarantine/
 # Backups e temporários
 # Regra da Casa: IDENTIDADE FICA; CONTEUDO EVOLUI; HISTORICO = GIT.
 # Backup local é efêmero/rollback pontual, nunca árvore genealógica nem versão canônica.
-# O nome ativo permanece canônico; v2/v3/final/old não substituem o histórico do Git.
+# O nome ativo permanece canônico; v2/v3/final/old não substitui o histórico do Git.
 *.bak
 *.bak-*
 *.bak.*
@@ -124,6 +124,12 @@ _forense/
 docs/.obsidian/
 docs/BRAIN/*.canvas
 NUL
+
+# Biblioteca offline local — conteúdo inteiro para estudo/RAG/treino fica só na Casa
+_BIBLIOTECA_OFFLINE/
+.local-corpus/
+local-corpus/
+docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/SETORES/ML-CIENCIA-DE-DADOS/LOCAL-CORPUS/
 
 # Recovery/pre-restore files
 **/*.pre-restore-*
