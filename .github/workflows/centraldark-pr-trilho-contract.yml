@@ -1,0 +1,46 @@
+name: CENTRALDARK PR TRILHO CONTRACT
+
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  pr-trilho-contract:
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Collect changed files
+        id: files
+        shell: bash
+        run: |
+          git diff --name-only "${{ github.event.pull_request.base.sha }}" "${{ github.event.pull_request.head.sha }}" > /tmp/pr-files.txt || true
+          {
+            echo 'files<<EOF'
+            cat /tmp/pr-files.txt
+            echo 'EOF'
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Validate CentralDark PR trilho contract
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+          PR_FILES: ${{ steps.files.outputs.files }}
+        run: node scripts/ci/centraldark-pr-trilho-contract.mjs
+
+      - name: Run CentralDark PR trilho tests
+        run: node --test scripts/ci/centraldark-pr-trilho-contract.test.mjs
