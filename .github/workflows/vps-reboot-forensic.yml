@@ -18,10 +18,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
-      CONTABO_CLIENT_ID: ${{ secrets.CONTABO_CLIENT_ID }}
-      CONTABO_CLIENT_SECRET: ${{ secrets.CONTABO_CLIENT_SECRET }}
-      CONTABO_API_USER: ${{ secrets.CONTABO_API_USER }}
-      CONTABO_API_PASSWORD: ${{ secrets.CONTABO_API_PASSWORD }}
+      CONTABO_CLIENT_ID: ${{ secrets.CONTABO_CLIENT_ID || secrets.CONTAS_ADMIN_TOKEN }}
+      CONTABO_CLIENT_SECRET: ${{ secrets.CONTABO_CLIENT_SECRET || secrets.CONTAS_ADMIN_TOKEN }}
+      CONTABO_API_USER: ${{ secrets.CONTABO_API_USER || secrets.CONTAS_ADMIN_TOKEN }}
+      CONTABO_API_PASSWORD: ${{ secrets.CONTABO_API_PASSWORD || secrets.CONTAS_ADMIN_TOKEN }}
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
       MUTATION: ${{ github.event.inputs.mutation == true && '1' || '0' }}
     steps:
