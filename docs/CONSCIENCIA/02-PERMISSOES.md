@@ -2,7 +2,7 @@
 title: "02 PERMISSOES"
 date: 2026-06-29
 tags: ["consciencia"]
-updated: 2026-08-17
+updated: 2026-09-07
 ---
 
 # 02 — Permissões
@@ -51,6 +51,44 @@ AUTHENTICATED_GITHUB_EVENT
 ```
 
 A label `👑 PERMITO-SEGREDO` é selo/rastro persistente dessa autoridade; ela **não precisa ser um clique manual** quando a delegação autenticada já foi provada. `🧠 AGENTE-*`, `🤖 AUTO`, `🔄 GIT` e `🟢 SUCESSO` registram capacidade, automação, operação e resultado; não competem com a autoridade do SEGREDO/CHEFE.
+
+## Provider Access Lease — política canônica
+
+Este arquivo é o **owner canônico da política de permissão**. O desenho detalhado do lease de providers fica em [`2026-09-07-provider-access-lease-cristalizado.md`](./2026-09-07-provider-access-lease-cristalizado.md), sem criar segundo plano de controle.
+
+```text
+CAPABILITY_ACCESS != RAW_SECRET_ACCESS
+AGENT_GETS=CAPABILITY
+AGENT_GETS_RAW_SECRET=false
+SECRETS=SERVER_ONLY
+```
+
+Modos canônicos de provider:
+
+```text
+OFF
+READ_ONLY
+FULL_TEMPORARY
+FULL
+```
+
+`FULL_TEMPORARY` é uma elevação com TTL, não uma troca definitiva de baseline. Antes de elevar, deve preservar o modo imediatamente anterior; ao expirar, restaura **exatamente** esse modo.
+
+```text
+PREVIOUS_MODE=<OFF|READ_ONLY|FULL>
+FULL_TEMPORARY
+→ TTL
+→ RESTORE_EXACT(PREVIOUS_MODE)
+
+PREVIOUS_MODE=UNKNOWN → FAIL_CLOSED
+EXPIRY != FORCE_READ_ONLY
+```
+
+Assim, um baseline `OFF` nunca pode virar `READ_ONLY` só porque um lease temporário expirou.
+
+Mutações de provider permanecem condicionadas aos gates aplicáveis do owner existente, incluindo sessão/autorização compatível, capability allowlist, guardas destrutivas, confirmação quando exigida, idempotência, compensação/rollback e receipt/auditoria.
+
+O alvo é `ONE_SECRET_OWNER`, mas **alvo arquitetural não é prova de wiring atual**. Enquanto consumidores reais ainda lerem fontes diferentes, a ponte de injeção e a convergência física de segredo ficam `NOT_PROVEN`. Nenhum documento pode promover `OAuthBroker/oauth_connections` a fonte runtime já integrada sem medir o caminho real do consumidor.
 
 ## ✅ PODE fazer sem perguntar dentro do escopo vigente da CentralDark
 
