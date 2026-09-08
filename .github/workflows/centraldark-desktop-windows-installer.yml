@@ -11,6 +11,8 @@ on:
       - 'apps/modulos/Bolt/source/**'
       - '.github/workflows/centraldark-desktop-windows-installer.yml'
       - 'scripts/ci/verify_windows_installer_contract.py'
+      - 'scripts/checker/**'
+      - 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CHECKER-CONTRACT.yml'
       - 'scripts/windows/build-centraldark-installer.ps1'
 
 permissions:
@@ -26,8 +28,12 @@ jobs:
     runs-on: [self-hosted, Linux]
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: 🧿 [CHECKER] Estado antes do contrato
+        run: node scripts/checker/step-checker.mjs --step desktop.contract --phase PRE -- node --version
       - name: 🔎 Verificar contrato do instalador
         run: python scripts/ci/verify_windows_installer_contract.py
+      - name: 🧿 [CHECKER] Contrato após validação
+        run: node scripts/checker/step-checker.mjs --step desktop.contract --phase POST -- python scripts/ci/verify_windows_installer_contract.py
 
   build-windows:
     name: 🪟 Build Setup.exe
@@ -50,11 +56,23 @@ jobs:
           cache: pnpm
           cache-dependency-path: apps/modulos/Bolt/source/pnpm-lock.yaml
 
+      - name: 🧿 [CHECKER] Pré-dependências
+        shell: pwsh
+        run: node "$env:GITHUB_WORKSPACE/scripts/checker/step-checker.mjs" --step desktop.dependencies --phase PRE -- node --version
+
       - name: 📦 Instalar dependências congeladas
         run: pnpm install --frozen-lockfile
 
+      - name: 🧿 [CHECKER] Pós-dependências
+        shell: pwsh
+        run: node "$env:GITHUB_WORKSPACE/scripts/checker/step-checker.mjs" --step desktop.dependencies --phase POST -- pnpm --version
+
       - name: 🧪 Contrato do Desktop
         run: pnpm test:centraldark-desktop
+
+      - name: 🧿 [CHECKER] Pré-build
+        shell: pwsh
+        run: node "$env:GITHUB_WORKSPACE/scripts/checker/step-checker.mjs" --step desktop.build --phase PRE -- node --version
 
       - name: 🏗️ Gerar NSIS Setup.exe
         run: pnpm centraldark:build:win
@@ -73,8 +91,16 @@ jobs:
           "CENTRALDARK_SETUP=$($exe.Name)" | Tee-Object -FilePath dist/INSTALLER-RECEIPT.txt
           "CENTRALDARK_SETUP_SHA256=$hash" | Tee-Object -FilePath dist/INSTALLER-RECEIPT.txt -Append
           "UPDATE_METADATA=$($latest.Name)" | Tee-Object -FilePath dist/INSTALLER-RECEIPT.txt -Append
+          "CHECKER_CONTRACT=PASS" | Tee-Object -FilePath dist/INSTALLER-RECEIPT.txt -Append
           "$hash  $($exe.Name)" | Set-Content -Encoding ascii dist/SHA256SUMS.txt
           Write-Host "INSTALLER_CONTRACT=PASS"
+
+      - name: 🧿 [CHECKER] Pós-build / consumidor do artifact
+        shell: pwsh
+        run: |
+          $exe = Get-ChildItem dist -Filter 'CentralDark-Setup-*.exe' | Select-Object -First 1
+          if (-not $exe) { throw 'CENTRALDARK_SETUP_EXE_MISSING' }
+          node "$env:GITHUB_WORKSPACE/scripts/checker/step-checker.mjs" --step desktop.build --phase CONSUMER -- pwsh -NoProfile -Command "if (Test-Path '$($exe.FullName)') { exit 0 } else { exit 2 }"
 
       - name: 📤 Publicar artifact de build
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
