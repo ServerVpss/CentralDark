@@ -3,29 +3,20 @@ name: Autonomia — promoção segura
 on:
   workflow_dispatch:
   pull_request_target:
-    types: [opened, reopened, ready_for_review, synchronize, edited, labeled, unlabeled]
+    types: [opened, reopened, ready_for_review, synchronize]
     branches: [main]
   workflow_run:
     workflows:
       - porta-de-entrada
-      - codex-validate
-      - lupa-conformance
-      - Lupa Drift Guard
-      - Trigger Fabric Full Package
-      - PR Title Contract
-      - PR auto-review (Codex + checklist)
-      - Pipeline — Telegram + Painel
     types: [completed]
   repository_dispatch:
     types: [centraldark_autonomia_recheck, centraldark_post_merge]
-  schedule:
-    - cron: "*/5 * * * *"
 
 permissions: {}
 
 concurrency:
   group: autonomia-promocao-${{ github.event.pull_request.number || github.event.workflow_run.head_sha || github.event.client_payload.pr_number || github.event.client_payload.merge_sha || github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 env:
   BOT_TRUSTED_AUTHORS: segredounlock
