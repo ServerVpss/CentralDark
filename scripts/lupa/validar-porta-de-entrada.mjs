@@ -99,6 +99,10 @@ function shaValido(value) {
   return /^[0-9a-f]{40}$/i.test(String(value || ""));
 }
 
+function isNullOid(value) {
+  return /^0{40}$/.test(String(value || "").trim());
+}
+
 function caminhosCitados(texto) {
   const encontrados = new Set();
   const padroes = [
@@ -388,7 +392,10 @@ for (const file of BOUNDARY_ENFORCED_FILES) {
 
 // Não criar workflow paralelo. Em PRs com BASE/HEAD conhecidos, qualquer novo
 // arquivo de workflow é bloqueado para forçar extensão do mecanismo existente.
-if (shaValido(BASE_SHA) && shaValido(HEAD_SHA)) {
+// FABLE JUDGE: before=40 zeros → SEM_BASE (push de branch nova) — não merge-base/diff.
+if (isNullOid(BASE_SHA)) {
+  // safe no-base path — skip workflow delta gate
+} else if (shaValido(BASE_SHA) && shaValido(HEAD_SHA)) {
   const baseExiste = gitCommitExiste(BASE_SHA);
   const headExiste = gitCommitExiste(HEAD_SHA);
   if (!baseExiste) errors.push(`WORKFLOW_BASE_SHA_INDISPONIVEL:${BASE_SHA}`);
