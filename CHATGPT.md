@@ -24,6 +24,7 @@ DO_NOT_DEFINE_MERGE_POLICY=true
 DO_NOT_DEFINE_MEMORY=true
 DO_NOT_CREATE_PARALLEL_AGENT=true
 FUTURE_RULES_CONSUMED_FROM_CORE=true
+REUSE_BEFORE_CREATE_REQUIRED=true
 ```
 
 Regra de compatibilidade: se uma particularidade exclusiva do ChatGPT precisar ser documentada, registrar somente a diferença física da superfície/tool. Regras comuns pertencem ao core, nunca a este arquivo.
@@ -31,3 +32,5 @@ docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md
 CENTRALDARK_AI_BOOT
 .agents/skills/meta-lupa/SKILL.md
 .agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA
+FALHA_DE_RECONCILIACAO_DE_CONTEXTO
+docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json
