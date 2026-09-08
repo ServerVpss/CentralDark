@@ -248,3 +248,34 @@ WEBHOOK_SOMENTE_COM_SCHEMA_EVENTO_SUPORTADO
 PROVAR_CASA != PROVAR_SITE
 PROVAR_SITE != PROVAR_CASA
 ```
+
+## 11_LABEL_GATE_DELTA_UTIL
+
+```text
+LABEL_GATE_RECEIPT=.agents/skills/centraldark-operational-method/references/2026-09-08-label-gate-delta-util-audit.md
+LABEL_GATE=scripts/lupa/label-gate.mjs
+LABEL_GATE_TEST=scripts/lupa/label-gate.test.mjs
+LABEL_GATE_WORKFLOW=.github/workflows/centraldark-label-gate.yml
+AUTONOMIA_TEST=scripts/github-autonomia-varredura.test.mjs
+```
+
+```text
+GPT_IS_REQUIRED_AS_JUDGE=false
+AGENTE_CHATGPT_AS_OLD_TEST_REQUIREMENT=true
+AGENT_LABEL_AS_PROVENANCE=true
+CONTRACTS_CONFLICTING=true
+```
+
+```text
+PROMOTION = 👑 PERMITO-SEGREDO + 🔄 GIT + 🤖 AUTO + 🟡 IA-PRECISA-REVISAR
+PROVENANCE = 🧠 AGENTE-*
+CAPABILITY = 🤖 IA-* / AGENTIC-DEVOPS
+CATEGORY = assunto do PR
+STATUS = telemetria/triagem
+RESULT = pós-prova/pós-merge
+
+PROVENANCE != AUTHORITY
+STATUS != PROOF
+RESULT != PROMOTION_INPUT
+UNKNOWN_LABEL_CONSUMER != PASS
+```
