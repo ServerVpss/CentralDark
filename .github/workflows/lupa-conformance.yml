@@ -222,10 +222,10 @@ jobs:
           set -e
           printf '%s\n' "${memory_link_output}"
           if [ "${memory_link_status}" -ne 0 ]; then
-            if [ "${GITHUB_EVENT_NAME}" = "push" ] && \
+            if { [ "${GITHUB_EVENT_NAME}" = "push" ] || [ "${GITHUB_EVENT_NAME}" = "pull_request" ]; } && \
                printf '%s\n' "${memory_link_output}" | grep -q 'MEMORY_LINK_CHECK=FAIL' && \
                printf '%s\n' "${memory_link_output}" | grep -q 'UNSAFE_PATHS=0'; then
-              echo "::warning title=MEMORY_LINK_BASELINE_DEBT::Dívida histórica de links permanece visível, mas não bloqueia push da main; novas regressões continuam sob a catraca de delta."
+              echo "::warning title=MEMORY_LINK_BASELINE_DEBT::Dívida histórica de links permanece visível, mas não bloqueia push/PR; novas regressões (UNSAFE_PATHS>0) continuam sob a catraca de delta."
             else
               exit "${memory_link_status}"
             fi
