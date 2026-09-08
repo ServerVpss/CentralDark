@@ -226,3 +226,25 @@ DEVELOPER_MODE:
 # baianês técnico:
 # se não mediu, não enfeita. Se mediu, aponta o caminho da dor.
 ```
+
+## 10_RULE_ZERO_AND_CONNECTOR_DEMAND
+
+```text
+REGRA_ZERO_RECEIPT=.agents/skills/centraldark-operational-method/references/2026-09-08-rule-zero-horn-connector-demand.md
+HORN_LINE_GATE=scripts/ci/centraldark-horn-line-gate.mjs
+HORN_LINE_GATE_TEST=scripts/ci/centraldark-horn-line-gate.test.mjs
+CONNECTOR_DEMAND_ROUTER=scripts/ci/centraldark-connector-demand-router.mjs
+CONNECTOR_DEMAND_ROUTER_TEST=scripts/ci/centraldark-connector-demand-router.test.mjs
+```
+
+```text
+CHEFE_INTENT -> CENTRALDARK -> LIVE_STATE -> ALIGNMENT -> MINIMAL_DELTA -> EVIDENCE -> COUNTERPROOF -> REALITY_JUDGE
+```
+
+```text
+NAO_ACIONAR_TODOS_CONECTORES_CEGAMENTE
+ACIONAR_CONECTOR_SOMENTE_POR_DEMANDA_MATERIAL
+WEBHOOK_SOMENTE_COM_SCHEMA_EVENTO_SUPORTADO
+PROVAR_CASA != PROVAR_SITE
+PROVAR_SITE != PROVAR_CASA
+```
