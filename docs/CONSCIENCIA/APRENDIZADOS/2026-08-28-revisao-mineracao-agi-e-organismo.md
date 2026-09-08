@@ -379,3 +379,11 @@ O que falta para o organismo vc descreveu ficar completo:
 Arquivo: `docs/CONSCIENCIA/APRENDIZADOS/2026-08-28-revisao-mineracao-agi-e-organismo.md`
 Data: 2026-08-28
 Contexto: revisão cruzada entre canônico CentralDark e worktree pr-1165-esteira-motor
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

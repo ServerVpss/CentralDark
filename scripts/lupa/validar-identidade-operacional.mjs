@@ -452,7 +452,7 @@ export function validateExternalSourceBoundary(repoRoot) {
     if (text == null) {
       findings.push({
         code: "EXTERNAL_SOURCE_FILE_UNSCANNABLE",
-        path: relative(repoRoot, file),
+        path: relative(repoRoot, file).replace(/\\/g, "/"),
         line: null,
         excerpt: "Arquivo textual ilegível ou maior que o limite de 16 MiB.",
       });
@@ -461,7 +461,7 @@ export function validateExternalSourceBoundary(repoRoot) {
     findings.push(...findForbidden(
       text,
       EXTERNAL_SOURCE_RULES,
-      relative(repoRoot, file),
+      relative(repoRoot, file).replace(/\\/g, "/"),
       { redactExcerpt: true, redactedExcerpt: "[EXTERNAL_SOURCE_REFERENCE_REDACTED]" },
     ));
   }
@@ -643,7 +643,22 @@ function changedPathMetadataFindings(repoRoot, baseRef, headRef) {
   return findings;
 }
 
+export function isNullOid(value) {
+  return /^0{40}$/.test(String(value || "").trim());
+}
+
 export function validateExternalDelta(repoRoot, { baseRef = null, headRef = null } = {}) {
+  // FABLE JUDGE / push-new-branch: github.event.before is 40 zeros — safe no-base, never merge-base/diff.
+  if (isNullOid(baseRef)) {
+    return {
+      status: "NOT_APPLICABLE_NO_DIFF_REFS",
+      base_ref: null,
+      head_ref: headRef || null,
+      additions: 0,
+      findings: [],
+      scope: "SEM_BASE",
+    };
+  }
   if (!baseRef && !headRef) {
     return { status: "NOT_APPLICABLE_NO_DIFF_REFS", base_ref: null, head_ref: null, additions: 0, findings: [] };
   }

@@ -42,7 +42,7 @@
   },
   "external_patterns_absorbed": [
     {
-      "source": "SynkraAI/aiox-core PR 842 forwarded evidence",
+      "source": "external project PR forwarded evidence",
       "delta": ["NODE_CHECK_SWEEP", "SILENT_FALLBACK_AUDIT"],
       "raw_private_email_committed": false
     },

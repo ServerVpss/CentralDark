@@ -214,3 +214,11 @@ Depois, executar somente o teste discriminante de contenção multi-janela e sel
 → !REGISTRA
 → !BOOT
 ```
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

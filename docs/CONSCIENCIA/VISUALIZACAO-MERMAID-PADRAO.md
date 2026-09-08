@@ -47,3 +47,11 @@ Ver `skills/README.md` para comandos exatos.
 
 - `skills/mermaid-skill/examples/centraldark-fluxo-canonico.{mmd,svg,png}`
 - `skills/pretty-mermaid/examples/centraldark-arquitetura.{mmd,svg,png}`
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

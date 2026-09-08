@@ -1,3 +1,10 @@
+---
+title: "2026 09 05 PERMITO SEGREDO DEPLOY CLASSES"
+date: 2026-09-07
+tags: ["consciencia"]
+updated: 2026-09-07
+---
+
 # 👑 PERMITO-SEGREDO — classes persistentes de deploy
 
 📜 *“Cada porta com sua chave; cada chave com seu destino.”*
