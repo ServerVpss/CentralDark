@@ -1,3 +1,10 @@
+---
+title: "2026 09 06 VERTEX INVERSO RODADA3 PEPITAS PROVADAS"
+date: 2026-09-07
+tags: ["consciencia"]
+updated: 2026-09-07
+---
+
 # VERTEX INVERSO — RODADA 3 — PEPITAS PROVADAS RECUPERADAS
 
 > “E voltou pelo caminho por onde veio, conferindo pedra por pedra.” 📜
