@@ -7,6 +7,74 @@
 
 ---
 
+## CURRENT — medido 2026-09-08
+
+```text
+MAIN=ad4ed0ac76cb2361b005684c9c1323876a5174a5
+PR_1444_HEAD=81d183c1bc7ab6fdc50197347b313e70ca3a13d1
+PR_1444_BASE=ad4ed0ac76cb2361b005684c9c1323876a5174a5
+PR_1444_TOPOLOGY=AHEAD_69_BEHIND_0
+PR_1444_MERGEABLE=true
+PR_1444_READY=false
+PR_1444_GATES=9_SUCCESS_0_FAILURE_1_SKIPPED
+PR_1444_CODEQL=SKIPPED_NOT_PROVEN_NOT_APPLICABLE
+PR_1445=MERGED_AT_631c891061fd38072bbf0de1550c5b2cca35ab45
+CURRENT_GT_HISTORY=true
+UNKNOWN_IS_NOT_PASS=true
+MERGEABLE_IS_NOT_READY=true
+ACTION_IS_NOT_PROOF=true
+```
+
+## ERROS CRISTALIZADOS — sessão Codex
+
+- Medir GitHub antes de concluir; HEAD antigo nunca cobre HEAD atual.
+- Não responder só com narrativa: exigir SHA, workflow, conclusão e topologia.
+- Não tratar `MERGEABLE=true` como autorização de merge.
+- Não tratar `SKIPPED`, `UNKNOWN`, fila ou ausência de run como PASS sem não-aplicabilidade comprovada.
+- Não criar commit sem owner de branch, caminho exato e SHA do blob confirmados.
+- Não escrever diretamente na `main` quando o delta pertence ao PR.
+- Distinguir `MERGED` de `DEPLOYED`; ação/documentação não substituem prova de runtime.
+- Preservar um writer por escopo e reutilizar o registro existente antes de criar outro.
+
+## CONTRAPROVA
+
+```text
+CURRENT_HEAD_ONLY=true
+OLD_HEAD_EVIDENCE=INVALID
+CODEQL_APPLICABILITY=UNPROVEN
+MAIN_PROTECTION=UNKNOWN
+SAME_HEAD_GREEN=false
+NO_MERGE=true
+NO_DEPLOY=true
+NO_FORCE_PUSH=true
+```
+
+Este registro é documentação de governança. Ele não aprova merge, deploy ou runtime.
+
+## NEXT_CURSOR
+
+```text
+PROVE_CODEQL_NOT_APPLICABLE_OR_EXECUTE
+→ MEASURE_MAIN_PROTECTION_AND_RULESETS
+→ RECHECK_SAME_HEAD_81d183c
+→ ONLY_THEN_DECIDE_READY
+```
+
+---
+
+## HISTÓRICO PRESERVADO
+
+O conteúdo histórico abaixo permanece como proveniência e não governa CURRENT.
+
+# DELTA-CONTINUO — CentralDark
+
+> **Owner canônico:** SEGREDO/CHEFE
+> **Status:** ATIVO
+> **MISSÃO:** Shared Reconciliation — `!CENTRALDARK SHARED`
+> **Regra FIXED-POINT-SHARED:** FIRST_WRITER_WINS, ONE_WRITER_PER_SCOPE
+
+---
+
 ## CURRENT — medido 2026-09-06
 
 ```text
