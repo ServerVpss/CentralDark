@@ -44,3 +44,11 @@ Esta matriz é uma bancada de reconciliação. `GAP_CANDIDATE` não significa qu
 ```
 
 A ordem prioriza ganho material e possibilidade de prova determinística. Não autoriza implementação em lote.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

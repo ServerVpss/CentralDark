@@ -190,3 +190,11 @@ FALSE_RUNTIME_PROMOTIONS=0
 SOURCE_CLAIMS_REOPENED_WITHOUT_CAUSE=0
 NEXT_CURSOR=CONTINUE_BACKWARD
 ```
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

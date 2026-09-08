@@ -158,3 +158,11 @@ FIXED_POINT=
 ```
 
 `FIXED_POINT=TRUE` apenas quando todos os candidatos materiais tiverem classificação provada e UNKNOWN material for zero. Isso não autoriza implementação ou merge por si só.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

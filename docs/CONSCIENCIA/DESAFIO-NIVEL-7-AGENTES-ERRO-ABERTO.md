@@ -80,3 +80,11 @@ Ausência de qualquer termo desqualifica a evolução; vira teatro.
 
 O nível 7 só é atribuível quando os 6 critérios acima estiverem verdes em pelo menos
 uma missão adversarial independente. Até lá, `NÍVEL=6, TENDÊNCIA=+ / PROVA_PENDENTE`.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

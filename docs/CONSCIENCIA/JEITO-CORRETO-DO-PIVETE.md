@@ -53,3 +53,11 @@ REFERENCIA_LEGADA_A_ESTE_PATH
 ```
 
 Histórico Git preserva a evolução anterior. Conteúdo útil novo vai para o owner atual, sem V1/V2/V3 e sem segunda constituição.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre
