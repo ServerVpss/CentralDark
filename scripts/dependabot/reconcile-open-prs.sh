@@ -9,9 +9,26 @@ REPO="${REPO:-ServerVpss/CentralDark}"
 REPO_DIR="${REPO_DIR:-/root/CentralDark}"
 RESOLVER="${RESOLVER:-scripts/dependabot/resolve-conflicts.sh}"
 MAX_PRS="${MAX_PRS:-100}"
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+
+# Código confiável e repositório mutável são fronteiras diferentes.
+# Em CI, este radar roda do checkout confiável .ci-house, enquanto REPO_DIR
+# aponta para a Casa persistente usada pelo resolver para fetch/worktree/push.
+# Preferimos o resolver irmão do próprio radar e preservamos override/fallback.
+if [ -n "${RESOLVER_PATH:-}" ]; then
+  :
+elif [ -f "$SCRIPT_DIR/$(basename "$RESOLVER")" ]; then
+  RESOLVER_PATH="$SCRIPT_DIR/$(basename "$RESOLVER")"
+else
+  RESOLVER_PATH="$REPO_DIR/$RESOLVER"
+fi
 
 command -v gh >/dev/null || { echo 'BLOCKED_GH_ABSENT'; exit 2; }
-[ -x "$REPO_DIR/$RESOLVER" ] || { echo "BLOCKED_RESOLVER_ABSENT=$REPO_DIR/$RESOLVER"; exit 2; }
+[ -f "$RESOLVER_PATH" ] || { echo "BLOCKED_RESOLVER_ABSENT=$RESOLVER_PATH"; exit 2; }
+[ -d "$REPO_DIR/.git" ] || [ -f "$REPO_DIR/.git" ] || { echo "BLOCKED_REPO_NOT_FOUND=$REPO_DIR"; exit 2; }
+
+echo "🧭 RESOLVER_SOURCE=$RESOLVER_PATH"
+echo "🏠 REPO_DIR=$REPO_DIR"
 
 mapfile -t PRS < <(
   gh api --paginate "repos/$REPO/pulls?state=open&per_page=100" \
@@ -63,7 +80,7 @@ for row in "${PRS[@]}"; do
   if [ "$mergeable" = "false" ] || [ "$mergeable_state" = "dirty" ]; then
     echo "🪡 CONFLICT_DETECTED=1 — acionando motor único da Casa"
     set +e
-    PR_HEAD_REF="$head_ref" REPO_DIR="$REPO_DIR" bash "$REPO_DIR/$RESOLVER" "$pr"
+    PR_HEAD_REF="$head_ref" REPO_DIR="$REPO_DIR" bash "$RESOLVER_PATH" "$pr"
     resolve_rc=$?
     set -e
     if [ "$resolve_rc" -eq 0 ]; then
