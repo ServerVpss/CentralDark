@@ -42,6 +42,83 @@ const RECEIPT_MAX_AGE_MS = 15 * 60 * 1000;
 const API = "https://api.github.com";
 export const DEFAULT_WAIT_TIMEOUT_MS = 45 * 60 * 1000;
 
+
+// Fechamento monotônico inspirado em forward chaining de cláusulas de Horn:
+// só adiciona fatos derivados de observações externas e para quando nenhum
+// fato novo puder ser acrescentado. Não implementa o modelo de Herbrand
+// completo; é um gate finito de promoção preso ao HEAD/base observados.
+export const SQUASH_FIXED_POINT_GOAL = "SQUASH_READY";
+export const SQUASH_HORN_RULES = Object.freeze([
+  Object.freeze({
+    head: "JUDGE_BOUND",
+    body: Object.freeze(["SEALED_RECEIPT", "JUDGE_READY", "CANDIDATE_HEAD_MATCH", "CANDIDATE_BASE_MATCH"]),
+  }),
+  Object.freeze({
+    head: "LIVE_BOUND",
+    body: Object.freeze(["LIVE_READY", "LIVE_HEAD_MATCH", "LIVE_BASE_MATCH", "MERGEABLE_LIVE", "NO_BLOCKERS"]),
+  }),
+  Object.freeze({
+    head: SQUASH_FIXED_POINT_GOAL,
+    body: Object.freeze(["JUDGE_BOUND", "LIVE_BOUND", "AUTHORITY_VALID", "CANONICAL_PASS"]),
+  }),
+]);
+
+
+export function deriveHornFixedPoint(seedFacts = [], rules = SQUASH_HORN_RULES) {
+  const facts = new Set([...seedFacts].map(String).filter(Boolean));
+  const universe = new Set([...facts, ...rules.map((rule) => String(rule.head))]);
+  const trace = [];
+  const maxRounds = universe.size + 1;
+
+  for (let round = 1; round <= maxRounds; round += 1) {
+    const snapshot = new Set(facts);
+    const additions = [];
+    for (const rule of rules) {
+      const head = String(rule.head);
+      const body = [...(rule.body || [])].map(String);
+      if (!snapshot.has(head) && body.every((fact) => snapshot.has(fact))) additions.push(head);
+    }
+    const unique = [...new Set(additions)].filter((fact) => !facts.has(fact)).sort();
+    if (!unique.length) {
+      return { fixed_point: true, rounds: round, facts: [...facts].sort(), trace,
+        progress_measure: facts.size, universe_size: universe.size };
+    }
+    for (const fact of unique) facts.add(fact);
+    trace.push({ round, added: unique });
+  }
+
+  return { fixed_point: false, rounds: maxRounds, facts: [...facts].sort(), trace,
+    progress_measure: facts.size, universe_size: universe.size };
+}
+
+
+export function squashFixedPointProof({ candidate, live, pr, receiptSha }) {
+  const seed = new Set();
+  if (/^[a-f0-9]{64}$/i.test(String(receiptSha || ""))) seed.add("SEALED_RECEIPT");
+  if (candidate?.decision === "READY") seed.add("JUDGE_READY");
+  if (candidate?.head_sha && candidate.head_sha === pr?.head?.sha) seed.add("CANDIDATE_HEAD_MATCH");
+  if (candidate?.base_sha && candidate.base_sha === pr?.base?.sha) seed.add("CANDIDATE_BASE_MATCH");
+  if (live?.decision === "READY") seed.add("LIVE_READY");
+  if (live?.head_sha && live.head_sha === pr?.head?.sha) seed.add("LIVE_HEAD_MATCH");
+  if (live?.base_sha && live.base_sha === pr?.base?.sha) seed.add("LIVE_BASE_MATCH");
+  if (live?.mergeable === true && !["dirty", "unknown"].includes(String(live?.mergeable_state || ""))) seed.add("MERGEABLE_LIVE");
+  if (!(live?.reasons || []).length && !(live?.waits || []).length) seed.add("NO_BLOCKERS");
+  if (live?.authorization?.authorized === true) seed.add("AUTHORITY_VALID");
+  if (live?.canonical_validation?.verdict === "PASS") seed.add("CANONICAL_PASS");
+
+  const closure = deriveHornFixedPoint(seed);
+  const ready = closure.fixed_point && closure.facts.includes(SQUASH_FIXED_POINT_GOAL);
+  const pending = candidate?.decision === "WAIT" || live?.decision === "WAIT" || live?.mergeable == null;
+  return {
+    ready,
+    verdict: ready ? "PROVED_IN_SCOPE" : (pending || !closure.fixed_point ? "UNKNOWN" : "REFUTED_IN_SCOPE"),
+    basis: "HORN_MONOTONE_CLOSURE",
+    achilles_guard: "FINITE_MONOTONE_PROGRESS",
+    self_reference_guard: "EXTERNAL_FACTS_ONLY_NO_GOAL_SEED",
+    ...closure,
+  };
+}
+
 const SENSITIVE_PATH = /(^|\/)(?:\.env(?:\.|$)|secrets?(?:\/|$)|tokens?(?:\/|$)|sessions?(?:\/|$)|\.ssh(?:\/|$)|credentials?(?:\/|$)|keys?(?:\/|$))/i;
 const SECRET_PATTERNS = Object.freeze([
   { code: "GITHUB_TOKEN_LITERAL", pattern: /\b(?:gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,})\b/ },
@@ -753,7 +830,7 @@ async function upsertBlockComment(client, repository, candidate) {
   else await client.request("POST", `/repos/${repository}/issues/${candidate.pr_number}/comments`, { body: lines.join("\n") });
 }
 
-async function upsertSuccessComment(client, repository, candidate, mergeSha, receiptSha) {
+async function upsertSuccessComment(client, repository, candidate, mergeSha, receiptSha, squashProof) {
   const marker = "<!-- centraldark-autonomia-promocao-success -->";
   const body = [
     marker,
@@ -767,6 +844,11 @@ async function upsertSuccessComment(client, repository, candidate, mergeSha, rec
     `JUDGE_RECEIPT_SHA256=\`${receiptSha}\``,
     `CANONICAL_MAP_BLOB=\`${candidate.canonical_validation?.map_blob_sha || "UNKNOWN"}\``,
     `CANONICAL_CONTRACTS=\`${candidate.canonical_validation?.summary?.passed || 0}/${candidate.canonical_validation?.summary?.total || 0}\``,
+    `SQUASH_FIXED_POINT=\`${squashProof?.verdict || "UNKNOWN"}\``,
+    `SQUASH_LOGIC=\`${squashProof?.basis || "UNKNOWN"}\``,
+    `SQUASH_FIXED_POINT_ROUNDS=\`${squashProof?.rounds ?? "UNKNOWN"}\``,
+    `ACHILLES_GUARD=\`${squashProof?.achilles_guard || "UNKNOWN"}\``,
+    `SELF_REFERENCE_GUARD=\`${squashProof?.self_reference_guard || "UNKNOWN"}\``,
     "REASK=`NAO`",
   ].join("\n");
   await client.request("POST", `/repos/${repository}/issues/${candidate.pr_number}/comments`, { body });
@@ -849,6 +931,19 @@ async function runPromote() {
       continue;
     }
 
+    const squashProof = squashFixedPointProof({ candidate, live, pr, receiptSha: sealed.sha256 });
+    console.log(`PR=${pr.number} SQUASH_FIXED_POINT=${squashProof.verdict} ROUNDS=${squashProof.rounds} PROGRESS=${squashProof.progress_measure}/${squashProof.universe_size}`);
+    if (!squashProof.ready) {
+      if (squashProof.verdict === "REFUTED_IN_SCOPE") {
+        await upsertBlockComment(client, repository, {
+          ...live,
+          decision: "BLOCKED",
+          reasons: [...(live.reasons || []), "SQUASH_FIXED_POINT_NOT_PROVED"],
+        });
+      }
+      continue;
+    }
+
     const result = await client.request("PUT", `/repos/${repository}/pulls/${pr.number}/merge`, {
       sha: pr.head.sha,
       merge_method: "squash",
@@ -862,11 +957,15 @@ async function runPromote() {
         `Judge-Receipt-SHA256: ${sealed.sha256}`,
         `Authorization: ${live.authorization.authority || "UNKNOWN"}`,
         `Intent-Scope: ${live.authorization.intent_scope || "label-persistente"}`,
+        `Squash-Fixed-Point: ${squashProof.verdict}`,
+        `Squash-Logic: ${squashProof.basis}`,
+        `Achilles-Guard: ${squashProof.achilles_guard}`,
+        `Self-Reference-Guard: ${squashProof.self_reference_guard}`,
       ].join("\n"),
     });
     if (!result.merged) throw new Error(`MERGE_REJECTED:${pr.number}:${result.message || "unknown"}`);
     console.log(`PR=${pr.number} MERGED_SHA=${result.sha}`);
-    await upsertSuccessComment(client, repository, live, result.sha, sealed.sha256);
+    await upsertSuccessComment(client, repository, live, result.sha, sealed.sha256, squashProof);
 
     await client.request("POST", `/repos/${repository}/dispatches`, {
       event_type: "centraldark_post_merge",

@@ -4,6 +4,7 @@ import json
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 from .github_state import GitHubStateLibrary, WebhookRejected
+from .centraldark_gate import validate_webhook_gate
 
 
 def serve(library: GitHubStateLibrary, host: str = "127.0.0.1", port: int = 8790) -> None:
@@ -14,6 +15,16 @@ def serve(library: GitHubStateLibrary, host: str = "127.0.0.1", port: int = 8790
                 return
             length = int(self.headers.get("Content-Length", "0"))
             body = self.rfile.read(length)
+            gate = validate_webhook_gate(dict(self.headers.items()), body)
+            if not gate.get("accepted", True):
+                payload = json.dumps(gate, ensure_ascii=False).encode()
+                self.send_response(422)
+                self.send_header("Content-Type", "application/json")
+                self.send_header("Cache-Control", "no-store")
+                self.send_header("Content-Length", str(len(payload)))
+                self.end_headers()
+                self.wfile.write(payload)
+                return
             try:
                 result = library.ingest(dict(self.headers.items()), body)
                 status = 202

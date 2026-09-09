@@ -1,0 +1,52 @@
+name: installer-deterministic
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/installer/centraldark-installer-deterministic-beta1.sh'
+      - 'scripts/installer/centraldark-installer-deterministic-beta1.test.sh'
+      - 'scripts/installer/full-package.manifest.json'
+      - 'docs/INSTALADOR/30-deterministic-full-package.md'
+      - '.github/workflows/installer-deterministic.yml'
+  pull_request:
+    paths:
+      - 'scripts/installer/centraldark-installer-deterministic-beta1.sh'
+      - 'scripts/installer/centraldark-installer-deterministic-beta1.test.sh'
+      - 'scripts/installer/full-package.manifest.json'
+      - 'docs/INSTALADOR/30-deterministic-full-package.md'
+      - '.github/workflows/installer-deterministic.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: installer-deterministic-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  deterministic-beta1:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Bash syntax
+        run: |
+          bash -n scripts/installer/centraldark-installer-deterministic-beta1.sh
+          bash -n scripts/installer/centraldark-installer-deterministic-beta1.test.sh
+      - name: Providerless tokenless and Horn contract
+        env:
+          OPENAI_API_KEY: ''
+          ANTHROPIC_API_KEY: ''
+          OPENROUTER_API_KEY: ''
+          NVIDIA_API_KEY: ''
+        run: bash scripts/installer/centraldark-installer-deterministic-beta1.test.sh
+      - name: Validate full package manifest
+        run: |
+          jq -e '.one_system_only == true' scripts/installer/full-package.manifest.json
+          jq -e '.reuse_before_create == true' scripts/installer/full-package.manifest.json
+          jq -e '.unknown_is_not_pass == true' scripts/installer/full-package.manifest.json
+          jq -e '.provider_required_for_installer == false' scripts/installer/full-package.manifest.json
+          jq -e '.horn.method == "HORN_FORWARD_CHAINING_TO_FIXED_POINT"' scripts/installer/full-package.manifest.json
+          jq -e '.horn.source_sha256 == "b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1"' scripts/installer/full-package.manifest.json
