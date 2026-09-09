@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-09-09T01:04:55.980Z
+# 🧠 Notion Sync — 2026-09-09T03:22:30.255Z
 
-- **Commit fonte:** `e4539c9ecceb0e3d332fea2d57f58613ff40d20f`
+- **Commit fonte:** `7b1861ae05d6b967e7b9362f69ac2882068ce2f7`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 491 atualizadas · ❌ 19 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 491 atualizadas · ❌ 22 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
 | aprendizados | 36 | 0 | 35 | 0 | 1 |
-| estrutura | 430 | 0 | 412 | 0 | 18 |
+| estrutura | 433 | 0 | 412 | 0 | 21 |
 
 ## Operações
 
@@ -221,6 +221,9 @@
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-05-WORKFLOW-STARTUP-FAILURE-MINERAL.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-06-VERTEX-INVERSO-RODADA2-PEPITAS-PROVADAS.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-06-VERTEX-INVERSO-RODADA3-PEPITAS-PROVADAS.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-06-VERTEX-INVERSO-RODADA4-PEPITAS-PROVADAS.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-08-CI-MENOS-E-MAIS-JUIZ-PORTA.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-08-GARIMPO-CHEFE-PR-MAIN-DELTA-CONTINUO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/AIOS-GOLD-ASSAY-20260828/CAPABILITY-MATRIX.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/AIOS-GOLD-ASSAY-20260828/COUNTERPROOF.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/AIOS-GOLD-ASSAY-20260828/HERMES-PROOF-PLAN.md |
