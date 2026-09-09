@@ -56,8 +56,9 @@ def _log_chamada(reg: dict) -> None:
     try:
         with CHAMADAS.open("a", encoding="utf-8") as f:
             f.write(json.dumps(reg, ensure_ascii=False) + "\n")
-    except Exception:
-        pass
+    except Exception as exc:
+        _STATS_APP["erros"] = _STATS_APP.get("erros", 0) + 1
+        print(f"LOG_CHAMADA_ERRO={type(exc).__name__}", flush=True)
 
 def _read_provider_bearer(req: Request) -> str | None:
     """Resolve bearer sem registrar ou devolver o valor.
