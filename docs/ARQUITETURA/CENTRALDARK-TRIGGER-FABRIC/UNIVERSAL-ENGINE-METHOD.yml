@@ -21,6 +21,7 @@ canonical_references:
   - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/NOTE-STITCHING-CONTRACT.yml
   - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PEGATUDO-HISTORY.yml
   - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/GROK-BUILD-ADAPTER.yml
+  - docs/BRAIN/01-CONCEITOS/02-BANDA/BANDA_COMPASSO_GLOBAL.json
   - docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md
 
 universal_chain:
@@ -34,6 +35,9 @@ universal_chain:
   - PEGATUDO_HISTORY
   - DEBITO_COGNITIVO
   - READERS_MEASURE
+  - META_LUPA
+  - SCOPE_TEMPERATURE
+  - DELTA_MINIMUM
   - RENDEZVOUS
   - RECONCILE
   - STITCH
@@ -61,6 +65,8 @@ execution_semantics:
   reuse_before_create: true
   one_system_only: true
   one_writer_per_scope: true
+  model_identity_is_provenance_only: true
+  model_identity_must_not_block_scope: true
   parallel_perception: true
   serialized_mutation: true
   reality_is_judge: true
@@ -83,6 +89,9 @@ material_loop:
     - DEBITO_COGNITIVO
     - STITCH_TO_CANONICAL_ROUTE
     - FIND_EXISTING_OWNER
+    - META_LUPA
+    - MEASURE_SCOPE_TEMPERATURE
+    - APPLY_17_BREATHS_AS_OPERATIONAL_DISCIPLINE
     - TEST_BELIEF
     - ABSORB_MINIMUM_USEFUL_DELTA
     - COUNTERPROOF
@@ -90,6 +99,28 @@ material_loop:
     - REMEASURE
     - RECEIPT
     - NEXT_CURSOR
+
+scope_temperature:
+  owner: scripts/agent-call.mjs
+  purpose: HUMAN_IN_THE_LOOP_AND_MULTI_AGENT_COLLISION_AVOIDANCE
+  identity_policy: AGENT_NAME_IS_PROVENANCE_NOT_GATE
+  applies_to: MUTATION_OF_SAME_SCOPE
+  read_only_parallelism: ALLOWED
+  clock_source: OBSERVED_TOUCH_TIMESTAMP
+  hot_window_ms: 60000
+  warm_window_ms: 120000
+  hot_or_warm_other_actor: WAIT_NEXT_ROUND
+  cold_scope: MAY_ACQUIRE_WRITER_SCOPE_IF_OTHER_GATES_PASS
+  unknown_temperature: PRESERVE_EXISTING_STATIC_WRITER_GUARD
+  recheck: EACH_ROUND
+  human_touch_counts_as_touch: true
+  same_actor_continuation: ALLOWED
+  meta_lupa_required: true
+  breaths_total: 17
+  delta_minimum_required: true
+  no_agent_monopoly_by_identity: true
+  no_parallel_mutation_same_scope: true
+  receipt_fields: [scope_temperature, scope_temperature_age_ms, scope_temperature_actor, retry_after_ms]
 
 semantic_green:
   contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SEMANTIC-GREEN-GATE.yml
@@ -199,6 +230,7 @@ hermes_binding:
   validates_note_stitching: true
   validates_pegatudo_history: true
   validates_grok_build_adapter: true
+  validates_scope_temperature: true
 
 future_engine_gate:
   registry: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml
@@ -206,6 +238,7 @@ future_engine_gate:
   new_engine_without_universal_method_visibility: FAIL
   new_engine_without_semantic_green_gate: FAIL
   new_engine_without_pegatudo_stitch_visibility: FAIL
+  new_engine_without_scope_temperature_visibility: FAIL
   new_engine_may_define_new_authority: false
   new_engine_may_define_parallel_brain: false
 

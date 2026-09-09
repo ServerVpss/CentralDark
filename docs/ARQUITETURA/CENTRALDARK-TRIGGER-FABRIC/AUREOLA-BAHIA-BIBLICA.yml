@@ -34,6 +34,9 @@ invariants:
   LOCKED_SCOPE_REOPEN_REQUIRES_EXPLICIT_CHEFE_INTENT: true
   UNKNOWN_IS_NOT_PASS: true
   DOCUMENTED_IS_NOT_EXECUTED: true
+  CONVERSATION_IS_EXECUTION_GUIDE_NOT_DECORATIVE_NARRATION: true
+  CASA_AND_VPS_SHARE_CONTRACT_NOT_STATE: true
+  NEXT_INTELLIGENCE_MUST_RESUME_FROM_RECEIPT: true
 
 render_contract:
   on_explicit_centraldark:
@@ -113,6 +116,108 @@ multibussola_route_trace:
   semantic_green_requires: ALIGNED
   misaligned_action: STOP_AND_RECONCILE
   unknown_action: MEASURE_BEFORE_GREEN
+
+continuous_autonomous_mode:
+  scope_rule: AUTHORIZED_SCOPE_ONLY
+  continue_without_intermediate_confirmation: true
+  return_control_only_when:
+    - FIXED_POINT_SCOPE
+    - HUMAN_DECISION_REQUIRED
+    - NEW_INTENT_REQUIRED
+    - PUBLICATION_OR_SPEND_REQUIRES_AUTHORITY
+    - SECRET_OR_AUTH_MISSING
+    - IRREVERSIBLE_RISK
+    - TOOL_BOUNDARY_PROVEN
+  pending_queue:
+    classes:
+      - ORIGINAL_PROBLEM
+      - DISCOVERED_RELATED_FAILURE
+      - TEST_FAILURE
+      - SELF_INTRODUCED_REGRESSION
+      - RELATED_CONTRACT_INCONSISTENCY
+    rules:
+      - ENQUEUE_RELATED_FINDING
+      - RESOLVE_ONLY_WITH_EVIDENCE
+      - DO_NOT_HIDE_ERROR
+      - DO_NOT_WEAKEN_VALIDATION
+      - DO_NOT_EDIT_TEST_ONLY_TO_FORCE_GREEN
+      - CONTINUE_UNTIL_QUEUE_EMPTY_OR_PROVEN_BOUNDARY
+  execution_loop:
+    - INVESTIGATE_ROOT_CAUSE
+    - INSPECT_EXISTING_OWNER_CODE_TESTS_CONFIG_CONTRACTS
+    - APPLY_MINIMAL_CORRECTION
+    - RUN_RELEVANT_TESTS
+    - ENQUEUE_RELATED_FAILURES
+    - FIX_RELATED_FAILURES
+    - SCAN_DIRECT_REGRESSIONS
+    - RERUN_RELEVANT_SUITE
+    - COUNTERPROOF
+    - REMEASURE_CURRENT_TARGET
+    - FIXED_POINT_OR_PROVEN_BOUNDARY
+
+guided_code_path:
+  purpose: HUMAN_SEES_WHERE_THE_EXECUTION_IS_AND_WHERE_IT_GOES_NEXT
+  visible_trace:
+    - FASE
+    - OWNER
+    - ARQUIVO_OU_FUNCAO
+    - ACAO
+    - TESTE
+    - RESULTADO
+    - FERIDA
+    - NEXT_CURSOR
+  language: PT_BR_TECNICO_COM_BAIANES_SECO_CONTEXTUAL
+  decorative_narration: false
+  bible_usage: SEMANTIC_DIRECTION_CUE
+  expose_private_reasoning: false
+  metaphor_must_not_enter_machine_payload: true
+
+runtime_surface_contract:
+  shared_contract: true
+  surfaces:
+    CASA:
+      independent_state: true
+      independent_evidence: true
+      receipt_required_when_material: true
+      expected_fields: [OBSERVED_AT, WORKDIR, HEAD_SHA, PROCESS, TESTS, RESULT, EVIDENCE_REFS, NEXT_CURSOR]
+    VPS:
+      independent_state: true
+      independent_evidence: true
+      receipt_required_when_material: true
+      expected_fields: [OBSERVED_AT, REPO, HEAD_SHA, PROCESS, PORT_OR_HEALTH, TESTS, RESULT, EVIDENCE_REFS, NEXT_CURSOR]
+  invariants:
+    - CASA_STATE_NE_VPS_STATE
+    - CASA_PROOF_NE_VPS_PROOF
+    - SAME_CONTRACT_DOES_NOT_MEAN_SAME_RUNTIME
+    - CONVERGE_AT_RENDEZVOUS_WITH_SEPARATE_RECEIPTS
+    - UNKNOWN_ON_ONE_SURFACE_DOES_NOT_ERASE_PROOF_ON_ANOTHER
+
+entry_resume_contract:
+  entry_points:
+    - LEIA-ME-IA.md
+    - docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md
+    - docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md
+  read_before_new_work:
+    - CHEFE_INTENT
+    - DESTINATION_LOCK
+    - MISSION_ID
+    - SCOPE
+    - LAST_GOOD_STATE
+    - LAST_PROVEN_HEAD
+    - PENDING
+    - EVIDENCE_REFS
+    - NEXT_CURSOR
+    - CASA_STATE
+    - VPS_STATE
+    - FIXED_POINT_STATUS
+  behavior:
+    - RESUME_FROM_NEXT_CURSOR
+    - REVALIDATE_ONLY_STALE_OR_MATERIAL_STATE
+    - DO_NOT_RESTART_MISSION_ON_MODEL_OR_SESSION_SWITCH
+    - DO_NOT_RECREATE_OWNER_BY_CONTEXT_LOSS
+    - PRESERVE_UNKNOWN
+  durable_learning_route: EXISTING_CONTINUITY_AND_LEARNING_OWNERS
+  unmeasured_vault_name_does_not_create_new_owner: true
 
 post_green_behavior:
   lock_contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/POST-GREEN-LOCK.yml
