@@ -73,13 +73,30 @@ jobs:
             echo "RUNNER_SERVICE_NOT_FOUND"
             exit 3
           fi
-          if [ "${#services[@]}" -ne 1 ]; then
-            echo "RUNNER_SERVICE_AMBIGUOUS count=${#services[@]}"
-            printf 'RUNNER_SERVICE_CANDIDATE=%s\n' "${services[@]}"
-            exit 4
+          active=()
+          for candidate in "${services[@]}"; do
+            if systemctl is-active --quiet "$candidate"; then
+              active+=("$candidate")
+            fi
+          done
+          if [ "${#active[@]}" -eq 1 ]; then
+            service="${active[0]}"
+          else
+            preferred=()
+            for candidate in "${services[@]}"; do
+              case "$candidate" in
+                *-centraldark.service) preferred+=("$candidate") ;;
+              esac
+            done
+            if [ "${#preferred[@]}" -eq 1 ]; then
+              service="${preferred[0]}"
+            else
+              echo "RUNNER_SERVICE_AMBIGUOUS total=${#services[@]} active=${#active[@]} preferred=${#preferred[@]}"
+              printf 'RUNNER_SERVICE_CANDIDATE=%s\n' "${services[@]}"
+              exit 4
+            fi
           fi
-          service="${services[0]}"
-          echo "RUNNER_SERVICE_FOUND=1"
+          echo "RUNNER_SERVICE_SELECTED=1"
           systemctl restart "$service"
           systemctl is-active --quiet "$service"
           echo "RUNNER_SERVICE_ACTIVE=1"
