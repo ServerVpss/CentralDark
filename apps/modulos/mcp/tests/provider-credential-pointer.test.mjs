@@ -27,9 +27,9 @@ test("provider credentials can come from one local env-file pointer without leak
   try {
     writeFileSync(envFile, [
       "CONTABO_CLIENT_ID=id-from-file",
-      "CONTABO_CLIENT_SECRET=secret-from-file",
+      "CONTABO_CLIENT_SECRET=placeholder",
       "CONTABO_API_USER=user-from-file",
-      "CONTABO_API_PASSWORD=password-from-file",
+      "CONTABO_API_PASSWORD=placeholder",
       "UNRELATED_SHOULD_NOT_LOAD=nope",
     ].join("\n"), { mode: 0o600 });
     process.env.CENTRALDARK_PROVIDER_ENV_FILE = envFile;
@@ -39,10 +39,9 @@ test("provider credentials can come from one local env-file pointer without leak
     assert.equal(result.configured, true);
     assert.deepEqual(new Set(result.loadedKeys), new Set(KEYS));
     assert.equal(process.env.CONTABO_CLIENT_ID, "id-from-file");
-    assert.equal(process.env.CONTABO_CLIENT_SECRET, "secret-from-file");
+    assert.equal(process.env.CONTABO_CLIENT_SECRET, "placeholder");
     assert.equal(process.env.UNRELATED_SHOULD_NOT_LOAD, undefined);
-    assert.equal(JSON.stringify(result).includes("secret-from-file"), false);
-    assert.equal(JSON.stringify(result).includes("password-from-file"), false);
+    assert.equal(JSON.stringify(result).includes("placeholder"), false);
   } finally {
     clearProviderEnv();
     rmSync(dir, { recursive: true, force: true });

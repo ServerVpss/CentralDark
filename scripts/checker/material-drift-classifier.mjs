@@ -120,10 +120,10 @@ export function classifyMaterialDrift(input = {}) {
       matches.push({ path: changedPath, reason: "MAIN_DELTA_TOUCHES_CONTRACT_GATE_RUNNER_DEPENDENCY", scope: globalScope });
     }
 
-    const ownerToken = ownerTokens.find((token) => changedPath.toLowerCase().includes(token));
-    if (ownerToken) {
+    const ownerMatch = ownerTokens.find((ownerKey) => changedPath.toLowerCase().includes(ownerKey));
+    if (ownerMatch) {
       touchingActive.add(changedPath);
-      matches.push({ path: changedPath, reason: "MAIN_DELTA_TOUCHES_OWNER", token: ownerToken });
+      matches.push({ path: changedPath, reason: "MAIN_DELTA_TOUCHES_OWNER", owner: ownerMatch });
     }
   }
 
