@@ -1,0 +1,107 @@
+# 🧿 PDF-CONFORMANCE-CC2003
+
+**Fonte:** `tlc23(3).pdf` / Lógica Computacional (CC2003), Nelma Moreira, Lógica Computacional 23.
+
+**SHA-256 esperado:** `b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1`
+
+**Tamanho esperado:** `206674` bytes.
+
+**Páginas:** `8`.
+
+## Intenção
+
+Amarrar o material CC2003 ao Harness CentralDark como regra simples, reutilizável e determinística para decisões do tipo `REUSE_BEFORE_CREATE`.
+
+O PDF não é tratado como oráculo de verdade absoluta. Ele fornece uma estrutura formal útil: cláusulas de Horn, satisfazibilidade, modelo mínimo de Herbrand e resolução. A CentralDark traduz isso para engenharia operacional com escopo, evidência, contraprova e estado atual.
+
+## Correspondência CentralDark
+
+```text
+CLÁUSULA DE HORN  → regra operacional determinística
+FATO              → evidência medida no escopo atual
+OBJETIVO          → claim/intenção a provar
+CONTRADIÇÃO       → fail closed
+MODELO MÍNIMO     → menor conjunto de fatos necessários
+PONTO FIXO        → repetir derivação até não surgir fato novo
+RESOLUÇÃO         → atacar objetivo com regras + fatos até prova/refutação/UNKNOWN
+```
+
+## Regra obrigatória
+
+```text
+CAPABILITY_REQUEST
+→ MEASURE_CURRENT_STATE
+→ LOAD_DURABLE_FACTS
+→ FIND_EXISTING_OWNER
+→ APPLY_HORN_REUSE_GATE
+→ DECIDE:
+   REUSE
+   EXTEND_EXISTING
+   REUSE_LEARNED_REMEDY
+   CREATE_MINIMAL
+   FAIL_CLOSED
+   UNKNOWN
+→ POST_PROBE
+→ COUNTERPROOF
+→ RECEIPT
+```
+
+## Matemática operacional do `REUSE_BEFORE_CREATE`
+
+```text
+EXISTS(owner) ∧ SATISFIES(owner, capability)
+→ REUSE(owner)
+
+EXISTS(owner) ∧ PARTIAL(owner, capability) ∧ EXTENSIBLE(owner)
+→ EXTEND_EXISTING(owner)
+
+ERROR(signature) ∧ REMEDY_PROVED(signature)
+→ REUSE_LEARNED_REMEDY(signature)
+
+¬EXISTS(owner) ∧ GAP_PROVED(capability) ∧ ¬EXTENSIBLE(existing)
+→ CREATE_MINIMAL(capability)
+
+CONTRADICTION(scope)
+→ FAIL_CLOSED(scope)
+
+INSUFFICIENT_EVIDENCE(scope)
+→ UNKNOWN(scope)
+```
+
+## Trava de verdade
+
+```text
+SUPPORTED != VERDADE_ABSOLUTA
+PROVED_IN_SCOPE != VERDADE_ABSOLUTA
+FIXED_POINT != VERDADE_METAFÍSICA
+UNKNOWN != PASS
+ACTION != PROOF
+DOCUMENTED != EXECUTED
+```
+
+## Aplicação obrigatória daqui para frente
+
+Toda nova arquitetura, CLI, MCP, CI/CD, workflow, `.exe`, app, site, bridge, router, provider ou pacote full deve passar por este gate antes de criar peça nova.
+
+O fluxo correto é sempre:
+
+```text
+REUSE → EXTEND → CREATE_MINIMAL
+```
+
+Nunca:
+
+```text
+IDEIA NOVA → SISTEMA PARALELO
+```
+
+## Estado desta cristalização
+
+```text
+PDF_IDENTITY_CONFIRMED=true
+PDF_SHA256=b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1
+PDF_SIZE_BYTES=206674
+CANONICAL_CONFORMANCE_DOC=docs/CONSCIENCIA/04-MCP-E-CONECTORES/PDF-CONFORMANCE-CC2003.md
+BINARY_SOURCE_COMMIT_STATUS=NOT_COMMITTED_BY_THIS_CONNECTOR
+REASON=binary upload requires Git blob/base64 path outside the simple UTF-8 contents write used here
+```
