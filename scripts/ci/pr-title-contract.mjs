@@ -14,6 +14,10 @@ const DEFAULT_ALLOWED_PREFIXES = [
   '🐞',
 ];
 
+function leadingEmojiPrefix(title) {
+  return title.match(/^\p{Extended_Pictographic}\uFE0F?/u)?.[0] ?? '';
+}
+
 export function validatePrTitle(rawTitle, options = {}) {
   const title = String(rawTitle ?? '').trim();
   const allowedPrefixes = options.allowedPrefixes ?? DEFAULT_ALLOWED_PREFIXES;
@@ -26,10 +30,9 @@ export function validatePrTitle(rawTitle, options = {}) {
     return { ok: false, title, prefix: '', rest: '', errors };
   }
 
-  const chars = Array.from(title);
-  const prefix = chars[0] ?? '';
+  const prefix = leadingEmojiPrefix(title);
 
-  if (!/\p{Extended_Pictographic}/u.test(prefix)) {
+  if (!prefix) {
     errors.push('PR_TITLE_MISSING_EMOJI_PREFIX');
   }
 
@@ -65,11 +68,9 @@ export function suggestedPrTitle(rawTitle, fallbackPrefix = '🧿') {
   const title = String(rawTitle ?? '').trim();
   if (!title) return `${fallbackPrefix} PR TITLE REQUIRED`;
 
-  const chars = Array.from(title);
-  const first = chars[0] ?? '';
-  const hasEmoji = /\p{Extended_Pictographic}/u.test(first);
-  const prefix = hasEmoji ? first : fallbackPrefix;
-  const rest = (hasEmoji ? title.slice(first.length) : title).trim();
+  const detectedPrefix = leadingEmojiPrefix(title);
+  const prefix = detectedPrefix || fallbackPrefix;
+  const rest = (detectedPrefix ? title.slice(detectedPrefix.length) : title).trim();
 
   return `${prefix} ${rest.toLocaleUpperCase('pt-BR')}`.trim();
 }
