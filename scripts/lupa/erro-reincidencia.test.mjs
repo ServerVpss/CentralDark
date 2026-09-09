@@ -4,6 +4,10 @@ import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
+// Global REUSE_BEFORE_CREATE math is executed by the already-canonical
+// error/reincidence gate. This keeps one gate instead of creating a parallel workflow.
+import './horn-reuse-fixed-point.test.mjs';
+
 import {
   REGISTRY_PATH,
   carregarRegistro,
