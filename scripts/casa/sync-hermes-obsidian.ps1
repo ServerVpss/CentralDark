@@ -7,9 +7,7 @@ param(
     [string]$RepoRoot,
 
     [Parameter(Mandatory = $false)]
-    [string]$VaultRoot,
-
-    [string]$Branch = 'main'
+    [string]$VaultRoot
 )
 
 Set-StrictMode -Version Latest
@@ -19,191 +17,299 @@ function Out-Kv([string]$Key, $Value) {
     Write-Output ("{0}={1}" -f $Key, $Value)
 }
 
-function Invoke-Git([string[]]$GitArgs) {
-    $output = & git -C $repoFull @GitArgs 2>&1
-    if ($LASTEXITCODE -ne 0) {
-        throw "git $($GitArgs -join ' ') falhou: $($output -join ' ')"
+function Ensure-Directory([string]$Path) {
+    if (-not (Test-Path -LiteralPath $Path -PathType Container)) {
+        New-Item -ItemType Directory -Path $Path -Force | Out-Null
     }
-    return ($output -join "`n").Trim()
+}
+
+function Get-Sha256([string]$Path) {
+    return (Get-FileHash -LiteralPath $Path -Algorithm SHA256).Hash.ToLowerInvariant()
+}
+
+function Get-FileMap([string]$Root) {
+    $map = @{}
+    if (-not (Test-Path -LiteralPath $Root -PathType Container)) { return $map }
+    Get-ChildItem -LiteralPath $Root -File -Recurse -Force | ForEach-Object {
+        $relative = [System.IO.Path]::GetRelativePath($Root, $_.FullName).Replace('\', '/')
+        $map[$relative] = [ordered]@{ path = $_.FullName; hash = Get-Sha256 $_.FullName }
+    }
+    return $map
+}
+
+function Copy-Preserved([string]$Source, [string]$Destination) {
+    Ensure-Directory (Split-Path -Parent $Destination)
+    Copy-Item -LiteralPath $Source -Destination $Destination -Force
 }
 
 function Test-CanonicalOrigin([string]$Url) {
     return $Url -match 'github\.com[:/]ServerVpss/CentralDark(\.git)?$'
 }
 
-function Invoke-PythonGuard([string[]]$Args) {
-    $python = Get-Command python -ErrorAction SilentlyContinue
-    if (-not $python) {
-        Out-Kv 'META_LUPA_GUARD' 'BLOCKED_PYTHON_NOT_FOUND'
+function Test-SuspectSecret([string]$Path) {
+    $name = [System.IO.Path]::GetFileName($Path)
+    if ($name -match '(?i)^\.env($|\.)|secret|credential|private[-_ ]?key|client[-_ ]?secret|api[-_ ]?key|token') {
+        return $true
+    }
+    $ext = [System.IO.Path]::GetExtension($Path).ToLowerInvariant()
+    if ($ext -notin @('.md', '.txt', '.json', '.yml', '.yaml', '.toml', '.ini', '.cfg', '.ps1', '.js', '.mjs', '.ts', '.tsx', '.py', '.sh')) {
         return $false
     }
-    $output = & $python.Source @Args 2>&1
-    $code = $LASTEXITCODE
-    foreach ($line in $output) { Write-Output $line }
-    return ($code -eq 0)
+    try {
+        $text = Get-Content -LiteralPath $Path -Raw -ErrorAction Stop
+        return $text -match '(?im)(BEGIN [A-Z ]*PRIVATE KEY|(?:api[_ -]?key|client[_ -]?secret|access[_ -]?token|refresh[_ -]?token|password)\s*[:=]\s*["''][^"'']{8,})'
+    } catch {
+        return $false
+    }
 }
 
-# Não reativar defaults físicos por memória histórica. O caller fornece roots
-# medidos na Casa. Isso mantém MEMORY != REALITY.
+function Save-Conflict([string]$RelativePath, [string]$RepoFile, [string]$VaultFile, [string]$ConflictRoot) {
+    $safe = $RelativePath.Replace('/', [System.IO.Path]::DirectorySeparatorChar)
+    if ($RepoFile -and (Test-Path -LiteralPath $RepoFile)) {
+        Copy-Preserved $RepoFile (Join-Path $ConflictRoot ($safe + '.repo'))
+    }
+    if ($VaultFile -and (Test-Path -LiteralPath $VaultFile)) {
+        Copy-Preserved $VaultFile (Join-Path $ConflictRoot ($safe + '.vault'))
+    }
+}
+
+function Initialize-Vault([string]$Repo, [string]$Vault) {
+    foreach ($folder in @(
+        $Vault,
+        (Join-Path $Vault '00-CANONICO'),
+        (Join-Path $Vault '10-MEMORIA-PRIVADA'),
+        (Join-Path $Vault '20-INBOX-HERMES'),
+        (Join-Path $Vault '30-ANEXOS'),
+        (Join-Path $Vault '90-CONFLITOS'),
+        (Join-Path $Vault '.hermes-sync'),
+        (Join-Path $Vault '.obsidian')
+    )) { Ensure-Directory $folder }
+
+    $obsidianSource = Join-Path $Repo 'docs\CONSCIENCIA\VAULT\obsidian.json'
+    $obsidianTarget = Join-Path $Vault '.obsidian\app.json'
+    if ((Test-Path -LiteralPath $obsidianSource) -and -not (Test-Path -LiteralPath $obsidianTarget)) {
+        Copy-Preserved $obsidianSource $obsidianTarget
+    }
+
+    $readmes = @{
+        (Join-Path $Vault 'README.md') = "# CASA-VAULT`n`n00-CANONICO sincroniza com docs/BRAIN. Memoria privada, inbox, anexos e conflitos permanecem locais por padrao.`n"
+        (Join-Path $Vault '10-MEMORIA-PRIVADA\README.md') = "# Memoria privada`n`nNunca sincronizar automaticamente com Git.`n"
+        (Join-Path $Vault '20-INBOX-HERMES\README.md') = "# Inbox Hermes`n`nAprendizados candidatos aguardam classificacao, prova e promocao ao owner canonico.`n"
+    }
+    foreach ($path in $readmes.Keys) {
+        if (-not (Test-Path -LiteralPath $path)) {
+            $readmes[$path] | Set-Content -LiteralPath $path -Encoding utf8
+        }
+    }
+}
+
+function Save-StateAtomic([string]$StatePath, [array]$Entries, [string]$Repo, [string]$Vault) {
+    Ensure-Directory (Split-Path -Parent $StatePath)
+    $payload = [ordered]@{
+        contract_id = 'CENTRALDARK_HERMES_OBSIDIAN_SYNC'
+        state_format = 'centraldark.hermes-obsidian-sync'
+        updated_at = (Get-Date).ToString('o')
+        repo_root = $Repo
+        vault_root = $Vault
+        files = $Entries
+    }
+    $tmp = "$StatePath.tmp"
+    $payload | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath $tmp -Encoding utf8
+    Move-Item -LiteralPath $tmp -Destination $StatePath -Force
+}
+
 if ([string]::IsNullOrWhiteSpace($RepoRoot) -or [string]::IsNullOrWhiteSpace($VaultRoot)) {
     Out-Kv 'CASA_SYNC_STATUS' 'BLOCKED_LOCAL_PATHS_UNPROVEN'
     Out-Kv 'REPO_ROOT' 'UNKNOWN'
     Out-Kv 'VAULT_ROOT' 'UNKNOWN'
-    Out-Kv 'NEXT' 'INSPECIONAR_C_E_READ_ONLY_E_FORNECER_ROOTS_PROVADAS'
     exit 3
 }
 
-$repoFull = [System.IO.Path]::GetFullPath($RepoRoot)
-$vaultFull = [System.IO.Path]::GetFullPath($VaultRoot)
-$repoExists = Test-Path -LiteralPath $repoFull -PathType Container
-$vaultExists = Test-Path -LiteralPath $vaultFull -PathType Container
+$repoFull = [System.IO.Path]::GetFullPath($RepoRoot).TrimEnd('\')
+$vaultFull = [System.IO.Path]::GetFullPath($VaultRoot).TrimEnd('\')
+$repoCanonical = Join-Path $repoFull 'docs\BRAIN'
+$vaultCanonical = Join-Path $vaultFull '00-CANONICO'
+$statePath = Join-Path $vaultFull '.hermes-sync\state.json'
+$timestamp = Get-Date -Format 'yyyyMMdd-HHmmss'
+$conflictRoot = Join-Path $vaultFull ("90-CONFLITOS\$timestamp")
 
 Out-Kv 'SURFACE' 'CASA'
-Out-Kv 'PROTOCOL' 'BANDA_META_LUPA_CLAIM_SEAL_SYNC_V1'
+Out-Kv 'PROTOCOL' 'BANDA_META_LUPA_CLAIM_SEAL_SYNC'
 Out-Kv 'REQUESTED_MODE' $Mode
 Out-Kv 'REPO_ROOT' $repoFull
-Out-Kv 'REPO_EXISTS' $repoExists
 Out-Kv 'VAULT_ROOT' $vaultFull
-Out-Kv 'VAULT_EXISTS' $vaultExists
 
-if (-not $repoExists -or -not (Test-Path -LiteralPath (Join-Path $repoFull '.git'))) {
+if (-not (Test-Path -LiteralPath $repoFull -PathType Container) -or -not (Test-Path -LiteralPath (Join-Path $repoFull '.git'))) {
     Out-Kv 'CASA_SYNC_STATUS' 'BLOCKED_REPO_INVALID'
     exit 10
 }
-if (-not $vaultExists) {
-    Out-Kv 'CASA_SYNC_STATUS' 'BLOCKED_VAULT_ABSENT'
+if (-not (Test-Path -LiteralPath $repoCanonical -PathType Container)) {
+    Out-Kv 'CASA_SYNC_STATUS' 'BLOCKED_REPO_CANONICAL_ABSENT'
     exit 11
 }
 
-$repoPrefix = $repoFull.TrimEnd('\') + '\'
+$repoPrefix = $repoFull + '\'
+$vaultPrefix = $vaultFull + '\'
 $vaultInsideRepo = $vaultFull.StartsWith($repoPrefix, [System.StringComparison]::OrdinalIgnoreCase) -or ($vaultFull -ieq $repoFull)
-Out-Kv 'VAULT_INSIDE_REPO' $vaultInsideRepo
-if (-not $vaultInsideRepo) {
-    Out-Kv 'CASA_SYNC_STATUS' 'BLOCKED_SPLIT_BRAIN_VAULT_OUTSIDE_REPO'
-    Out-Kv 'REASON' 'NENHUMA_NOTA_DEVE_TOCAR_SOZINHA_SEM_VINCULO_PROVADO_AO_REPO'
+$repoInsideVault = $repoFull.StartsWith($vaultPrefix, [System.StringComparison]::OrdinalIgnoreCase)
+Out-Kv 'VAULT_SEPARATE_FROM_REPO' (-not $vaultInsideRepo -and -not $repoInsideVault)
+if ($vaultInsideRepo -or $repoInsideVault) {
+    Out-Kv 'CASA_SYNC_STATUS' 'BLOCKED_PRIVATE_BOUNDARY_COLLAPSED'
+    Out-Kv 'REASON' 'CASA_VAULT_DEVE_SER_SEPARADO_DO_REPO_E_SOMENTE_00_CANONICO_SINCRONIZA'
     exit 12
 }
 
-$origin = Invoke-Git @('remote', 'get-url', 'origin')
-Out-Kv 'ORIGIN' $origin
-if (-not (Test-CanonicalOrigin $origin)) {
+$origin = (& git -C $repoFull remote get-url origin 2>$null | Select-Object -First 1)
+if ($LASTEXITCODE -ne 0 -or -not (Test-CanonicalOrigin $origin)) {
     Out-Kv 'CASA_SYNC_STATUS' 'BLOCKED_NON_CANONICAL_ORIGIN'
     exit 13
 }
+Out-Kv 'ORIGIN_CANONICAL' $true
 
-$branchNow = Invoke-Git @('branch', '--show-current')
-$headBefore = Invoke-Git @('rev-parse', 'HEAD')
-$dirtyLines = @(Invoke-Git @('status', '--porcelain') -split "`n" | Where-Object { $_ -ne '' })
-$dirtyCount = $dirtyLines.Count
-
-Out-Kv 'BRANCH_LOCAL' $branchNow
-Out-Kv 'HEAD_BEFORE' $headBefore
-Out-Kv 'DIRTY_COUNT_BEFORE' $dirtyCount
-Out-Kv 'PING' "origin/$Branch"
-
-# Status puro não muda nada, mas ainda mede remoto para detectar drift.
-try {
-    Invoke-Git @('fetch', '--prune', 'origin', $Branch) | Out-Null
-} catch {
-    Out-Kv 'CASA_SYNC_STATUS' 'BLOCKED_FETCH_FAILED'
-    Out-Kv 'ERROR' $_.Exception.Message
+if ($Mode -eq 'Init') {
+    Initialize-Vault $repoFull $vaultFull
+} elseif (-not (Test-Path -LiteralPath $vaultFull -PathType Container)) {
+    Out-Kv 'CASA_SYNC_STATUS' 'BLOCKED_VAULT_ABSENT'
     exit 14
 }
 
-$originHead = Invoke-Git @('rev-parse', "origin/$Branch")
-$behind = [int](Invoke-Git @('rev-list', '--count', "HEAD..origin/$Branch"))
-$ahead = [int](Invoke-Git @('rev-list', '--count', "origin/$Branch..HEAD"))
-Out-Kv 'REMOTE_HEAD' $originHead
-Out-Kv 'BEHIND' $behind
-Out-Kv 'AHEAD' $ahead
-
-$metaLupaHash = Join-Path $repoFull 'scripts/lupa/validar_autolupa_hash.py'
-$claimGuard = Join-Path $repoFull '.agents/skills/meta-lupa/guardrails/claim_seal.py'
-$claimLedger = Join-Path $repoFull '.agents/skills/meta-lupa/references/claim-seals.jsonl'
-
-if (-not (Test-Path -LiteralPath $metaLupaHash) -or -not (Test-Path -LiteralPath $claimGuard) -or -not (Test-Path -LiteralPath $claimLedger)) {
-    Out-Kv 'CASA_SYNC_STATUS' 'BLOCKED_META_LUPA_LINK_BROKEN'
+if (-not (Test-Path -LiteralPath $vaultCanonical -PathType Container)) {
+    Out-Kv 'CASA_SYNC_STATUS' 'BLOCKED_VAULT_CANONICAL_ABSENT'
     exit 15
 }
 
-$metaOk = Invoke-PythonGuard @($metaLupaHash)
-$sealSelfOk = Invoke-PythonGuard @($claimGuard, '--self-test')
-$sealLedgerOk = Invoke-PythonGuard @($claimGuard, 'validate', $claimLedger)
-Out-Kv 'META_LUPA_HASH_OK' $metaOk
-Out-Kv 'CLAIM_SEAL_SELF_TEST_OK' $sealSelfOk
-Out-Kv 'CLAIM_SEAL_LEDGER_OK' $sealLedgerOk
-if (-not $metaOk -or -not $sealSelfOk -or -not $sealLedgerOk) {
-    Out-Kv 'CASA_SYNC_STATUS' 'BLOCKED_PROOF_GUARD'
-    exit 16
+$state = @{}
+if (Test-Path -LiteralPath $statePath) {
+    try {
+        $loaded = Get-Content -LiteralPath $statePath -Raw | ConvertFrom-Json
+        foreach ($entry in @($loaded.files)) {
+            if ($entry.path -and $entry.hash) { $state[[string]$entry.path] = [string]$entry.hash }
+        }
+    } catch {
+        Out-Kv 'CASA_SYNC_STATUS' 'BLOCKED_STATE_INVALID'
+        exit 16
+    }
 }
 
-if ($Mode -in @('Sync', 'Pull', 'Push') -and $dirtyCount -gt 0) {
-    Out-Kv 'CASA_SYNC_STATUS' 'BLOCKED_DIRTY_WORKTREE'
-    Out-Kv 'RULE' 'NUNCA_RESETAR_OU_LIMPAR_AUTOMATICAMENTE_TRABALHO_LOCAL'
-    exit 20
+$repoMap = Get-FileMap $repoCanonical
+$vaultMap = Get-FileMap $vaultCanonical
+$allPaths = @($repoMap.Keys + $vaultMap.Keys | Sort-Object -Unique)
+$plan = [System.Collections.Generic.List[object]]::new()
+$counts = [ordered]@{ equal = 0; repo_to_vault = 0; vault_to_repo = 0; conflicts = 0; deletion_candidates = 0; blocked_secrets = 0; untouched = 0 }
+
+foreach ($relative in $allPaths) {
+    $hasRepo = $repoMap.ContainsKey($relative)
+    $hasVault = $vaultMap.ContainsKey($relative)
+    $repoFile = if ($hasRepo) { [string]$repoMap[$relative].path } else { $null }
+    $vaultFile = if ($hasVault) { [string]$vaultMap[$relative].path } else { $null }
+    $repoHash = if ($hasRepo) { [string]$repoMap[$relative].hash } else { $null }
+    $vaultHash = if ($hasVault) { [string]$vaultMap[$relative].hash } else { $null }
+    $baseHash = if ($state.ContainsKey($relative)) { [string]$state[$relative] } else { $null }
+
+    if ($hasRepo -and $hasVault -and $repoHash -eq $vaultHash) {
+        $counts.equal++
+        $plan.Add([pscustomobject]@{ kind='equal'; relative=$relative; repo=$repoFile; vault=$vaultFile; base=$repoHash })
+        continue
+    }
+
+    if ($hasRepo -xor $hasVault) {
+        if ($baseHash) {
+            $counts.deletion_candidates++
+            $plan.Add([pscustomobject]@{ kind='deletion'; relative=$relative; repo=$repoFile; vault=$vaultFile; base=$baseHash })
+            continue
+        }
+        if ($hasRepo -and $Mode -in @('Init','Sync','Pull')) {
+            $counts.repo_to_vault++
+            $plan.Add([pscustomobject]@{ kind='repo_to_vault'; relative=$relative; repo=$repoFile; vault=(Join-Path $vaultCanonical $relative); base=$null })
+            continue
+        }
+        if ($hasVault -and $Mode -in @('Init','Sync','Push')) {
+            if (Test-SuspectSecret $vaultFile) {
+                $counts.blocked_secrets++
+                $plan.Add([pscustomobject]@{ kind='blocked_secret'; relative=$relative; repo=(Join-Path $repoCanonical $relative); vault=$vaultFile; base=$null })
+            } else {
+                $counts.vault_to_repo++
+                $plan.Add([pscustomobject]@{ kind='vault_to_repo'; relative=$relative; repo=(Join-Path $repoCanonical $relative); vault=$vaultFile; base=$null })
+            }
+            continue
+        }
+        $counts.untouched++
+        $plan.Add([pscustomobject]@{ kind='untouched'; relative=$relative; repo=$repoFile; vault=$vaultFile; base=$baseHash })
+        continue
+    }
+
+    if (-not $baseHash) {
+        $counts.conflicts++
+        $plan.Add([pscustomobject]@{ kind='conflict'; relative=$relative; repo=$repoFile; vault=$vaultFile; base=$null })
+        continue
+    }
+
+    $repoChanged = $repoHash -ne $baseHash
+    $vaultChanged = $vaultHash -ne $baseHash
+    if ($repoChanged -and -not $vaultChanged -and $Mode -in @('Sync','Pull')) {
+        $counts.repo_to_vault++
+        $plan.Add([pscustomobject]@{ kind='repo_to_vault'; relative=$relative; repo=$repoFile; vault=$vaultFile; base=$baseHash })
+    } elseif ($vaultChanged -and -not $repoChanged -and $Mode -in @('Sync','Push')) {
+        if (Test-SuspectSecret $vaultFile) {
+            $counts.blocked_secrets++
+            $plan.Add([pscustomobject]@{ kind='blocked_secret'; relative=$relative; repo=$repoFile; vault=$vaultFile; base=$baseHash })
+        } else {
+            $counts.vault_to_repo++
+            $plan.Add([pscustomobject]@{ kind='vault_to_repo'; relative=$relative; repo=$repoFile; vault=$vaultFile; base=$baseHash })
+        }
+    } elseif ($repoChanged -and $vaultChanged) {
+        $counts.conflicts++
+        $plan.Add([pscustomobject]@{ kind='conflict'; relative=$relative; repo=$repoFile; vault=$vaultFile; base=$baseHash })
+    } else {
+        $counts.untouched++
+        $plan.Add([pscustomobject]@{ kind='untouched'; relative=$relative; repo=$repoFile; vault=$vaultFile; base=$baseHash })
+    }
 }
 
-if ($Mode -eq 'Status' -or $Mode -eq 'Init') {
-    $fixed = ($headBefore -eq $originHead -and $dirtyCount -eq 0 -and $metaOk -and $sealLedgerOk)
+foreach ($key in $counts.Keys) { Out-Kv ($key.ToUpperInvariant()) $counts[$key] }
+
+if ($Mode -eq 'Status') {
     Out-Kv 'CASA_SYNC_STATUS' 'READ_ONLY_MEASURED'
-    Out-Kv 'PONTO_FIXO_SYNC' ($(if ($fixed) { 'PASS' } else { 'NOT_YET' }))
-    Out-Kv 'PONG' "local=$headBefore remote=$originHead dirty=$dirtyCount"
+    Out-Kv 'PONTO_FIXO_SYNC' ($(if ($counts.conflicts -eq 0 -and $counts.blocked_secrets -eq 0 -and $counts.deletion_candidates -eq 0 -and $counts.repo_to_vault -eq 0 -and $counts.vault_to_repo -eq 0) { 'PASS' } else { 'NOT_YET' }))
     exit 0
 }
 
-if ($Mode -in @('Sync', 'Pull')) {
-    if ($ahead -gt 0) {
-        Out-Kv 'CASA_SYNC_STATUS' 'BLOCKED_LOCAL_AHEAD'
-        Out-Kv 'REASON' 'COMMITS_LOCAIS_NAO_SAO_DESCARTADOS_POR_SYNC'
-        Out-Kv 'NEXT' 'RECONCILIAR_E_PROMOVER_POR_PR_OU_PUSH_EXPLICITO'
-        exit 21
-    }
-    if ($behind -gt 0) {
-        Invoke-Git @('merge', '--ff-only', "origin/$Branch") | Out-Null
-    }
-}
-elseif ($Mode -eq 'Push') {
-    if ($behind -gt 0) {
-        Out-Kv 'CASA_SYNC_STATUS' 'BLOCKED_BEHIND_REMOTE'
-        Out-Kv 'NEXT' 'PULL_FF_ONLY_ANTES_DE_PUSH'
-        exit 22
-    }
-    if ($branchNow -ne $Branch) {
-        Out-Kv 'CASA_SYNC_STATUS' 'BLOCKED_PUSH_FROM_NON_CANONICAL_BRANCH'
-        Out-Kv 'NEXT' 'USE_PR_PARA_BRANCH_DE_TRABALHO'
-        exit 23
-    }
-    if ($ahead -gt 0) {
-        Invoke-Git @('push', 'origin', "HEAD:$Branch") | Out-Null
-        Invoke-Git @('fetch', '--prune', 'origin', $Branch) | Out-Null
-    }
+if ($counts.blocked_secrets -gt 0) {
+    foreach ($item in $plan | Where-Object kind -eq 'blocked_secret') { Out-Kv 'BLOCKED_SECRET_PATH' $item.relative }
+    Out-Kv 'CASA_SYNC_STATUS' 'BLOCKED_SECRET_SUSPECT'
+    exit 17
 }
 
-$headAfter = Invoke-Git @('rev-parse', 'HEAD')
-$remoteAfter = Invoke-Git @('rev-parse', "origin/$Branch")
-$dirtyAfter = @(Invoke-Git @('status', '--porcelain') -split "`n" | Where-Object { $_ -ne '' }).Count
-$behindAfter = [int](Invoke-Git @('rev-list', '--count', "HEAD..origin/$Branch"))
-$aheadAfter = [int](Invoke-Git @('rev-list', '--count', "origin/$Branch..HEAD"))
-
-# Revalidar guardas no estado final: ação não é prova.
-$sealFinalOk = Invoke-PythonGuard @($claimGuard, 'validate', $claimLedger)
-$fixedPoint = ($headAfter -eq $remoteAfter -and $dirtyAfter -eq 0 -and $behindAfter -eq 0 -and $aheadAfter -eq 0 -and $sealFinalOk)
-
-Out-Kv 'HEAD_AFTER' $headAfter
-Out-Kv 'REMOTE_AFTER' $remoteAfter
-Out-Kv 'DIRTY_COUNT_AFTER' $dirtyAfter
-Out-Kv 'BEHIND_AFTER' $behindAfter
-Out-Kv 'AHEAD_AFTER' $aheadAfter
-Out-Kv 'CLAIM_SEAL_FINAL_OK' $sealFinalOk
-Out-Kv 'PONG' "local=$headAfter remote=$remoteAfter dirty=$dirtyAfter"
-Out-Kv 'PONTO_FIXO_SYNC' ($(if ($fixedPoint) { 'PASS' } else { 'NOT_YET' }))
-
-if (-not $fixedPoint) {
-    Out-Kv 'CASA_SYNC_STATUS' 'BLOCKED_NOT_FIXED_POINT'
-    exit 30
+if ($counts.conflicts -gt 0) {
+    Ensure-Directory $conflictRoot
+    foreach ($item in $plan | Where-Object kind -eq 'conflict') {
+        Save-Conflict $item.relative $item.repo $item.vault $conflictRoot
+    }
+    Out-Kv 'CONFLICT_ROOT' $conflictRoot
+    Out-Kv 'CASA_SYNC_STATUS' 'BLOCKED_CONFLICT_PRESERVED'
+    exit 2
 }
+
+foreach ($item in $plan) {
+    if ($item.kind -eq 'repo_to_vault') { Copy-Preserved $item.repo $item.vault }
+    elseif ($item.kind -eq 'vault_to_repo') { Copy-Preserved $item.vault $item.repo }
+}
+
+$repoAfter = Get-FileMap $repoCanonical
+$vaultAfter = Get-FileMap $vaultCanonical
+$entries = [System.Collections.Generic.List[object]]::new()
+foreach ($relative in @($repoAfter.Keys + $vaultAfter.Keys | Sort-Object -Unique)) {
+    if ($repoAfter.ContainsKey($relative) -and $vaultAfter.ContainsKey($relative)) {
+        $rh = [string]$repoAfter[$relative].hash
+        $vh = [string]$vaultAfter[$relative].hash
+        if ($rh -eq $vh) { $entries.Add([ordered]@{ path=$relative; hash=$rh }) }
+    } elseif ($state.ContainsKey($relative)) {
+        $entries.Add([ordered]@{ path=$relative; hash=[string]$state[$relative] })
+    }
+}
+Save-StateAtomic $statePath $entries.ToArray() $repoFull $vaultFull
 
 Out-Kv 'CASA_SYNC_STATUS' 'PASS'
-Out-Kv 'META_LUPA' 'REMEASURED_AFTER_ACTION'
-Out-Kv 'NEXT_CURSOR' 'NONE_FOR_SYNC_SCOPE'
+Out-Kv 'DELETION_CANDIDATES_PRESERVED' $counts.deletion_candidates
+Out-Kv 'NEXT_CURSOR' ($(if ($counts.deletion_candidates -gt 0) { 'REVIEW_DELETION_CANDIDATES' } else { 'NONE_FOR_SYNC_SCOPE' }))
 exit 0
