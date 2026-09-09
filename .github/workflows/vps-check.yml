@@ -1,0 +1,30 @@
+name: VPS Check Runner Status
+
+on:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      VPS_SSH_KEY_LOVABLE: ${{ secrets.VPS_SSH_KEY_LOVABLE }}
+      VPS_USER_LOVABLE: ${{ secrets.VPS_USER_LOVABLE }}
+      VPS_HOST_LOVABLE: ${{ secrets.VPS_HOST_LOVABLE }}
+    steps:
+      - name: Checkout repository (not really needed but keeps env)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up SSH agent and add key
+        run: |
+          mkdir -p ~/.ssh
+          eval "$(ssh-agent -s)"
+          # Ensure key does not have Windows line endings
+          printf '%s' "$VPS_SSH_KEY_LOVABLE" | ssh-add -
+          ssh-keyscan -H $VPS_HOST_LOVABLE >> ~/.ssh/known_hosts 2>/dev/null || true
+      - name: Check runner service on VPS
+        run: |
+          ssh -o BatchMode=yes -o ConnectTimeout=10 $VPS_USER_LOVABLE@$VPS_HOST_LOVABLE "systemctl is-active actions.runner.centraldark.service || echo 'runner not active'; systemctl status actions.runner.centraldark.service --no-pager -l"
+        env:
+          SSH_AUTH_SOCK: ${{ runner.debug }}
