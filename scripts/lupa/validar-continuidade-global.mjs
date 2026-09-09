@@ -22,9 +22,7 @@ const MAIN_WRITERS = Object.freeze([
   ".github/workflows/obsidian-index.yml",
   ".github/workflows/estado-retomada.yml",
   ".github/workflows/painel-validacao.yml",
-  ".github/workflows/painel-auto-update.yml",
-  ".github/workflows/linear-pendencias-sync.yml",
-]);
+  ".github/workflows/painel-auto-update.yml",]);
 const PRE_MAIN_GATES = Object.freeze([
   "node scripts/lupa/validar-continuidade-global.mjs",
   "node scripts/lupa/validar-porta-de-entrada.mjs",
