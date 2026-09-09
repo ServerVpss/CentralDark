@@ -1,6 +1,30 @@
 import crypto from 'node:crypto';
 
-export const PDF_CORE_VERSION = 'centraldark.pdf-harness-core.v1';
+export const PDF_CORE_VERSION = 'centraldark.pdf-harness-core.v2';
+export const PDF_FIXED_POINT_VERSION = 'centraldark.pdf-harness-fixed-point.v1';
+
+export const EXECUTOR_SURFACES = Object.freeze([
+  'HERMES',
+  'CASA',
+  'VPS',
+  'GITHUB_CI',
+  'MCP',
+  'CHATGPT_CONNECTOR',
+  'CODEX',
+  'CLAUDE',
+  'FUTURE_AGENT',
+]);
+
+export const AUTHORITY_INVARIANTS = Object.freeze({
+  centraldark_coordinates: true,
+  capability_scope_selects_executor: true,
+  model_is_provenance_only: true,
+  executor_is_not_authority: true,
+  hermes_is_not_required: true,
+  mcp_is_bridge_not_brain: true,
+  unknown_is_not_pass: true,
+  one_owner_per_capability: true,
+});
 
 const TASK_RULES = [
   {
@@ -59,6 +83,12 @@ export function chooseAuthoringFormat(text) {
   return 'PDF_SKILL_DEFAULT';
 }
 
+export function normalizeExecutor(executor) {
+  const value = String(executor ?? 'AUTO').trim().toUpperCase().replace(/[^A-Z0-9]+/g, '_');
+  if (value === 'AUTO' || value === '') return 'AUTO';
+  return EXECUTOR_SURFACES.includes(value) ? value : 'EXTERNAL_COMPATIBLE_EXECUTOR';
+}
+
 export function classifyPdfTask(input) {
   const text = [input?.intent, input?.operation, input?.notes, input?.filename].filter(Boolean).join('\n');
   const rule = TASK_RULES.find((candidate) => candidate.match.test(text)) ?? {
@@ -84,6 +114,7 @@ export function buildPdfPlan(input = {}) {
     filename: input.filename ?? '',
     notes: input.notes ?? '',
   })).slice(0, 16);
+  const requestedExecutor = normalizeExecutor(input.executor);
 
   return {
     schema: PDF_CORE_VERSION,
@@ -100,11 +131,29 @@ export function buildPdfPlan(input = {}) {
     authoring_format: classification.authoringFormat,
     owner_hint: classification.ownerHint,
     pipeline: classification.pipeline,
+    executor_policy: {
+      requested_executor: requestedExecutor,
+      executor_neutral: true,
+      hermes_only: false,
+      allowed_surfaces: EXECUTOR_SURFACES,
+      selection_rule: 'CAPABILITY_SCOPE_SELECTS_EXECUTOR',
+      authority_rule: 'EXECUTOR_NE_AUTHORITY_AND_MODEL_NE_AUTHORITY',
+    },
+    bridge_contract: {
+      harness: true,
+      mcp: true,
+      casa: true,
+      vps: true,
+      github_ci: true,
+      local_cli: true,
+      open_source_drop_in: true,
+    },
     gates: [
       'RENDER_BEFORE_OPERATE_WHEN_INPUT_PDF',
       'VERIFY_RENDER_AFTER_OUTPUT',
       'TRUE_REDACTION_FOR_REDACTION',
       'NO_CLIPPED_TEXT_OR_BROKEN_GLYPHS',
+      'EXECUTOR_NEUTRALITY_REQUIRED',
       'RECEIPT_WITH_NEXT_CURSOR',
     ],
     next_cursor: 'EXECUTE_SMALLEST_PDF_TASK_THROUGH_RENDER_VERIFY_LOOP',
@@ -118,6 +167,34 @@ export function validatePdfPlan(plan) {
   if (!Array.isArray(plan?.pipeline) || plan.pipeline.length === 0) errors.push('PIPELINE_EMPTY');
   if (plan?.task === 'REDACT' && !plan.pipeline.includes('true_redaction')) errors.push('REDACTION_WITHOUT_TRUE_REDACTION');
   if (plan?.render_loop_required && !plan.pipeline.some((s) => s.includes('render'))) errors.push('RENDER_LOOP_MISSING');
+  if (plan?.executor_policy?.executor_neutral !== true) errors.push('EXECUTOR_NEUTRALITY_MISSING');
+  if (plan?.executor_policy?.hermes_only !== false) errors.push('HERMES_ONLY_FORBIDDEN');
+  if (!plan?.bridge_contract?.mcp || !plan?.bridge_contract?.harness) errors.push('MCP_HARNESS_BRIDGE_MISSING');
   if (!plan?.next_cursor) errors.push('NEXT_CURSOR_MISSING');
   return { ok: errors.length === 0, errors };
+}
+
+export function buildPdfFixedPointReceipt(input = {}) {
+  const plan = buildPdfPlan(input);
+  const validation = validatePdfPlan(plan);
+  return {
+    schema: PDF_FIXED_POINT_VERSION,
+    fixed_point_class: 'LOCAL_PLAN_FIXED_POINT',
+    status: validation.ok ? 'PASS' : 'FAIL',
+    material_id: plan.material_id,
+    task: plan.task,
+    executor_neutral: plan.executor_policy.executor_neutral,
+    hermes_only: plan.executor_policy.hermes_only,
+    measurable_gates: {
+      plan_valid: validation.ok,
+      unknown_is_not_pass: plan.unknown_is_not_pass === true,
+      render_loop_required: plan.render_loop_required === true,
+      executor_neutral: plan.executor_policy.executor_neutral === true,
+      mcp_bridge_present: plan.bridge_contract.mcp === true,
+      harness_present: plan.bridge_contract.harness === true,
+      next_cursor_present: Boolean(plan.next_cursor),
+    },
+    failures: validation.errors,
+    next_cursor: validation.ok ? 'WIRE_REAL_PDF_OPERATION_RECEIPTS_TO_CASA_VPS_MCP' : 'FIX_PLAN_CONTRACT',
+  };
 }
