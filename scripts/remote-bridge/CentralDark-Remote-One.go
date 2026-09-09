@@ -232,7 +232,7 @@ func runStreaming(ctx context.Context, cmd *exec.Cmd, log *Logger) (exitCode int
 		s.Buffer(make([]byte, 4096), 1024*1024)
 		for s.Scan() {
 			line := s.Text()
-			log.Printf("REMOTE", "%s", line)
+			log.Printf("REMOTO", "%s", line)
 			bufMu.Lock()
 			buf.WriteString(line)
 			buf.WriteByte('\n')
@@ -256,16 +256,16 @@ func runStreaming(ctx context.Context, cmd *exec.Cmd, log *Logger) (exitCode int
 }
 
 func runRepair(ctx context.Context, workdir string, log *Logger) {
-	log.Printf("REPAIR", "npm cache verify + isolated cache on next attempt")
+	log.Printf("REPARO", "npm cache verify + isolated cache on next attempt")
 	if look("npm.cmd") != "" {
 		cctx, cancel := context.WithTimeout(ctx, 60*time.Second)
 		out, err := exec.CommandContext(cctx, "npm.cmd", "cache", "verify").CombinedOutput()
 		cancel()
 		if err != nil {
-			log.Printf("REPAIR", "npm cache verify failed: %v", err)
+			log.Printf("REPARO", "npm cache verify failed: %v", err)
 		}
 		if len(out) > 0 {
-			log.Printf("REPAIR", "%s", strings.TrimSpace(string(out)))
+			log.Printf("REPARO", "%s", strings.TrimSpace(string(out)))
 		}
 	}
 	_ = ensureDir(filepath.Join(workdir, "cache", "desktop-commander-isolated"))
@@ -317,18 +317,18 @@ func main() {
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer cancel()
 
-	log.Printf("BOOT", "CENTRALDARK_REMOTE_ONE=START version=%s", appVersion)
-	log.Printf("MODE", "OLD_METHOD=true ONE_EXE_ORCHESTRATOR=true")
-	log.Printf("ENDPOINT", "REMOTE_MCP_CONNECT=%s", oldEndpoint)
-	log.Printf("ENDPOINT", "CENTRALDARK_MCP=%s enabled=false", centraldarkMCP)
-	log.Printf("WORKDIR", "%s", workdir)
+	log.Printf("INICIO", "CENTRALDARK_REMOTE_ONE=START version=%s", appVersion)
+	log.Printf("MODO", "OLD_METHOD=true ONE_EXE_ORCHESTRATOR=true")
+	log.Printf("ROTA", "REMOTE_MCP_CONNECT=%s", oldEndpoint)
+	log.Printf("ROTA", "CENTRALDARK_MCP=%s enabled=false", centraldarkMCP)
+	log.Printf("DIRETORIO", "%s", workdir)
 
 	node := look("node.exe")
 	npx := look("npx.cmd")
-	log.Printf("PREFLIGHT", "NODE=%s", envOrPath(node, "MISSING"))
-	log.Printf("PREFLIGHT", "NPX=%s", envOrPath(npx, "MISSING"))
+	log.Printf("PRE-CHECAGEM", "NODE=%s", envOrPath(node, "MISSING"))
+	log.Printf("PRE-CHECAGEM", "NPX=%s", envOrPath(npx, "MISSING"))
 	if node == "" || npx == "" {
-		log.Printf("BLOCKED", "Node.js/npx ausente. Nenhum falso verde.")
+		log.Printf("BLOQUEADO", "Node.js/npx ausente. Nenhum falso verde.")
 		os.Exit(2)
 	}
 
@@ -355,7 +355,7 @@ func main() {
 
 	for ctx.Err() == nil {
 		attempt++
-		log.Printf("CONNECT", "ATTEMPT=%d PACKAGE=%s", attempt, desktopPkg)
+		log.Printf("CONEXAO", "ATTEMPT=%d PACKAGE=%s", attempt, desktopPkg)
 
 		cmd := exec.CommandContext(ctx, npx, "-y", "--prefer-online", desktopPkg, "remote")
 		cmd.Dir = workdir
@@ -363,7 +363,7 @@ func main() {
 		if repaired {
 			iso := filepath.Join(workdir, "cache", "desktop-commander-isolated")
 			cmd.Env = append(cmd.Env, "npm_config_cache="+iso)
-			log.Printf("CONNECT", "ISOLATED_NPM_CACHE=%s", iso)
+			log.Printf("CONEXAO", "ISOLATED_NPM_CACHE=%s", iso)
 		}
 
 		exit, output, err := runStreaming(ctx, cmd, log)
@@ -384,7 +384,7 @@ func main() {
 			st.Status = "REMOTE_PROCESS_EXITED_0"
 		}
 		_ = atomicJSON(statusPath, st)
-		log.Printf("EXIT", "REMOTE_MCP_EXIT=%d UNEXPECTED_JSON=%v MCP_32603=%v", exit, unexpected, mcp32603)
+		log.Printf("SAIDA", "REMOTE_MCP_EXIT=%d UNEXPECTED_JSON=%v MCP_32603=%v", exit, unexpected, mcp32603)
 
 		if ctx.Err() != nil {
 			break
@@ -393,14 +393,14 @@ func main() {
 			repaired = true
 			runRepair(ctx, workdir, log)
 		}
-		log.Printf("RETRY", "in=%ds", next)
+		log.Printf("NOVA-TENTATIVA", "in=%ds", next)
 		select {
 		case <-ctx.Done():
 			break
 		case <-time.After(time.Duration(next) * time.Second):
 		}
 	}
-	log.Printf("SHUTDOWN", "CENTRALDARK_REMOTE_ONE=STOP")
+	log.Printf("ENCERRAMENTO", "CENTRALDARK_REMOTE_ONE=STOP")
 }
 
 func envOrPath(v, fallback string) string {
