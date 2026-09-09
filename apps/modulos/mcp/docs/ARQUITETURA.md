@@ -113,3 +113,86 @@ rodar testes, e então passar a editar o `src/`. O `package.json` já aponta `bu
 - Saída sanitizada (IPs, chaves, tokens, paths `/root/...`).
 - Log auditado por chamada em `audit-logger.js` (perms 0600, redação de segredos).
 - Ações sensíveis (PM2, deploy, escrita) exigem autorização explícita.
+
+---
+
+## 8. Tool Call Lens — observabilidade sem criar outra verdade
+
+A interface de uma IA pode mostrar blocos de **tool call**, e um adaptador local pode expandir
+esses blocos para facilitar leitura. Isso é uma **projeção visual**. Não é a autoridade da
+execução.
+
+O MCP já possui o trilho certo para transformar esse sinal em telemetria nativa da Casa:
+
+```text
+TOOL CALL
+   │
+   ├── UI / DOM / bookmarklet         → visualização observada
+   │
+   └── MCP CallToolRequestSchema
+          → auditToolExecution(...)
+          → audit-logger.js
+          → log sanitizado
+          → observabilidade ao vivo / receipt
+          → CentralDark App / Obsidian / painel
+```
+
+Regras de autoridade:
+
+```text
+DOM_UI_OBSERVED          != EXECUTION_PROVEN
+SCREENSHOT_OBSERVED      != EXECUTION_PROVEN
+AUDIT_EVENT_RECORDED     = EXECUTION_BOUNDARY_OBSERVED
+RECEIPT_MATCHED          = PROOF_FOR_THE_MATCHED_CLAIM
+CENTRALDARK_APP_VIEW     = DERIVED_PROJECTION
+OBSIDIAN_GRAPH_VIEW      = DERIVED_PROJECTION
+UNKNOWN                  != PASS
+```
+
+`audit-logger.js` é o ponto de captura da execução MCP porque registra `method`, `toolName`,
+entrada, resultado, duração, `exitCode` e `ok`, passando pelo mesmo mecanismo de redação de
+segredos. A rota administrativa existente `/admin/logs/stream` fornece um canal SSE de
+observabilidade ao vivo. Nenhuma UI precisa raspar HTML para virar fonte da verdade.
+
+Uma projeção de Tool Inspector pode reutilizar os eventos existentes e apresentar, quando os
+campos estiverem disponíveis:
+
+```text
+🔧 TOOL
+🟢|🔴 RESULTADO
+⏱ DURAÇÃO
+📥 INPUT SANITIZADO
+📤 OUTPUT SANITIZADO
+🔒 readOnlyHint / destructiveHint / openWorldHint / idempotentHint
+🎯 mission_id / correlation_id
+🧾 receipt_ref
+```
+
+Modos de visualização recomendados, todos sobre a mesma telemetria:
+
+```text
+👁 AO_VIVO            → eventos entrando em ordem temporal
+🧠 POR_MISSAO         → várias calls comprimidas sob um mission/correlation id
+🔎 FORENSE            → entrada + saída + duração + erro + receipt + proveniência
+```
+
+O bookmarklet/DOM continua útil como **adaptador de visão** quando a interface externa esconde
+blocos ou quando uma chamada não atravessa o MCP CentralDark. Nesses casos o evento deve ficar
+rotulado como `UI_OBSERVED` até existir correlação com audit/receipt. Mudar o HTML do provedor
+pode quebrar o adaptador visual sem quebrar o sistema de prova.
+
+Integração arquitetural correta:
+
+```text
+DOM            = VISÃO
+MCP AUDIT      = FATO OBSERVADO NA FRONTEIRA DE EXECUÇÃO
+SCREENPIPE     = MEMÓRIA VISUAL
+RECEIPT        = PROVA DO CLAIM CORRELACIONADO
+CENTRALDARK APP= PAINEL/HUD
+OBSIDIAN/GRAFO = PROJEÇÃO NAVEGÁVEL
+```
+
+Isso **não cria um segundo cérebro, dispatcher ou barramento**. Reutiliza `auditToolExecution`,
+`audit-logger.js`, o stream administrativo já existente e as superfícies visuais existentes.
+Qualquer evolução deve preservar `REUSE_BEFORE_CREATE`, `ONE_SYSTEM_ONLY`, sanitização,
+autorização e a regra de que representação visual não substitui realidade medida.
