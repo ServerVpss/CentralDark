@@ -33,8 +33,8 @@ CANONICAL_RUNNER_POLICY=self-hosted Linux
 
 ## Validacao local
 
-python scripts/trigger-fabric/verify_repo_contract.py . = PASS esperado antes do push
-node scripts/lupa/validar-continuidade-global.mjs --json = PASS esperado antes do push
+python scripts/trigger-fabric/verify_repo_contract.py . = PASS observado antes do push
+node scripts/lupa/validar-continuidade-global.mjs --json = PASS observado antes do push
 
 ## NEXT_CURSOR
 
