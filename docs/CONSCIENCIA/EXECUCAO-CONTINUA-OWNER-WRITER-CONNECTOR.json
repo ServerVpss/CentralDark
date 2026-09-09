@@ -131,7 +131,75 @@
     "PENDING_NE_PASS": true,
     "QUEUED_NE_PASS": true,
     "SKIPPED_NE_PASS": true,
-    "CANCELLED_NE_PASS": true
+    "CANCELLED_NE_PASS": true,
+    "DURABLE_FACTS_SURVIVE_SESSIONS": true,
+    "REMEASURE_ONLY_TEMPORAL_EDGES": true,
+    "SENSOR_FAILURE_DOES_NOT_ERASE_DURABLE_FACT": true,
+    "GLOBAL_LEARNING_PROMOTES_TO_CANONICAL_OWNER": true,
+    "READER_FRONT_NE_WRITER": true,
+    "FANOUT_MUST_FANIN": true
+  },
+  "evidence_lifetime": {
+    "marker": "DURABLE_FACT_TEMPORAL_EDGE_SPLIT",
+    "durable_fact_rule": "PROVED_ONCE_NON_TEMPORAL + SAME_TARGET + NO_REOPEN_CAUSE -> REUSE_WITH_PROVENANCE",
+    "temporal_fact_rule": "REMEASURE_MUTABLE_EDGE_ONLY",
+    "rediscovery_rule": "FORBIDDEN_WHEN_DURABLE_FACT_AND_PROVENANCE_EXIST",
+    "sensor_failure_action": "USE_AUTHORIZED_ALTERNATE_ROUTE_DO_NOT_ERASE_DURABLE_FACT",
+    "pr_receipt_is_global_memory": false,
+    "reusable_learning_pr_only": "INSUFFICIENT_PROMOTE_TO_CANONICAL_OWNER",
+    "reopen_causes": [
+      "TARGET_CHANGED",
+      "OWNER_CHANGED",
+      "CODE_CHANGED",
+      "RUNTIME_CHANGED",
+      "CONTRADICTORY_EVIDENCE",
+      "PROOF_EXPIRED_BY_NATURE"
+    ],
+    "bridge_fact_policy": {
+      "bridge_exists_after_repository_proof": "DURABLE_FACT",
+      "bridge_family_inventory_after_repository_proof": "DURABLE_FACT",
+      "bridge_current_binding": "TEMPORAL_FACT",
+      "bridge_current_process": "TEMPORAL_FACT",
+      "voice_to_intent_to_router_to_receipt_path": "TEMPORAL_BINDING_CHAIN"
+    },
+    "current_binding_chain": [
+      "PROCESS",
+      "BRIDGE",
+      "INPUT_OR_VOICE",
+      "INTENT",
+      "ROUTER",
+      "ACTION",
+      "RECEIPT"
+    ],
+    "current_binding_rule": "START_FROM_FIRST_MUTABLE_UNKNOWN_OR_REOPENED_EDGE",
+    "known_prefix_rule": "DO_NOT_REMEASURE_STABLE_PREFIX_WITHOUT_REOPEN_CAUSE",
+    "unknown_suffix_rule": "MEASURE_FORWARD_UNTIL_CLAIM_TARGET_IS_PROVED_OR_BLOCKED",
+    "persistence_target": "CANONICAL_OWNER_NOT_PR_ONLY"
+  },
+  "axis_sweep": {
+    "marker": "TEN_AXIS_GLOBAL_SWEEP",
+    "scope": "GLOBAL",
+    "mode": "READ_PARALLEL_FANIN_SINGLE_WRITER",
+    "axes": [
+      "INTENT_AUTHORITY",
+      "OWNER_WRITER_LEASE",
+      "REPO_PR_MAIN_DRIFT",
+      "CI_WORKFLOW_RUNNER",
+      "RUNTIME_VPS_PROCESS",
+      "BRIDGE_MCP_TOOLING",
+      "INPUT_VOICE_INTENT",
+      "ROUTER_PROVIDER_MODEL",
+      "MEMORY_RECEIPT_CONTINUITY",
+      "SECURITY_SECRET_BOUNDARY"
+    ],
+    "reader_parallelism": true,
+    "reader_mutation": false,
+    "writer_parallelism_same_scope": false,
+    "fan_in": "CURRENT_REALITY_RENDEZVOUS",
+    "mutation_after_fan_in": true,
+    "resume_rule": "CONTINUE_FROM_FIRST_MUTABLE_UNKNOWN_OR_REOPENED_EDGE",
+    "unknown_is_pass": false,
+    "no_new_owner_when_existing_owner_fits": true
   },
   "boot": [
     "ACORDAR_MEASURE_LIVE_STATE",
