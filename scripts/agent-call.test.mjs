@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import assert from "node:assert/strict";
 import {
+  scopeTemperature,
   validateAgentCall,
   validateDelegationGate,
   validateDelegationResult,
@@ -54,6 +55,49 @@ check(validateAgentCall({ ...base, to: "codex", requested_role: "EXECUTOR", writ
 check(validateAgentCall({ ...base, to: "hermes", requested_role: "EXECUTOR", write_requested: true }, state).status, "ACCEPTED");
 check(validateAgentCall({ ...base, to: "hermes", requested_role: "EXECUTOR", write_requested: true, writer_handoff_required: true }, state).status, "BLOCKED_MISSING_HANDOFF");
 check(validateAgentCall({ ...base, to: "hermes", requested_role: "EXECUTOR", write_requested: true, writer_handoff_required: true, writer_handoff_valid: true }, state).status, "ACCEPTED");
+
+// MetaLupa temporal: identidade é proveniência; colisão temporal do mesmo escopo
+// decide se outro ator espera ou pode assumir a caneta na rodada seguinte.
+const NOW = Date.parse("2026-09-09T09:00:00.000Z");
+const writeCall = {
+  ...base,
+  scope: ["src:x"],
+  requested_action: "corrigir src:x",
+  requested_role: "EXECUTOR",
+  write_requested: true,
+};
+const hotState = {
+  ...state,
+  scope_activity: [{ actor: "codex", scope: ["src:x"], touched_at: "2026-09-09T08:59:30.000Z" }],
+};
+check(scopeTemperature({ ...writeCall, to: "hermes" }, hotState, NOW).temperature, "HOT");
+check(validateAgentCall({ ...writeCall, to: "hermes" }, hotState, NOW).status, "WAIT_SCOPE_HOT");
+check(validateAgentCall({ ...base, to: "reviewer", scope: ["src:x"], write_requested: false }, hotState, NOW).status, "ACCEPTED");
+
+const warmState = {
+  ...state,
+  scope_activity: [{ actor: "codex", scope: ["src:x"], touched_at: "2026-09-09T08:58:30.000Z" }],
+};
+check(scopeTemperature({ ...writeCall, to: "hermes" }, warmState, NOW).temperature, "WARM");
+check(validateAgentCall({ ...writeCall, to: "hermes" }, warmState, NOW).status, "WAIT_SCOPE_HOT");
+
+const selfHotState = {
+  ...state,
+  scope_activity: [{ actor: "hermes", scope: ["src:x"], touched_at: "2026-09-09T08:59:45.000Z" }],
+};
+check(scopeTemperature({ ...writeCall, to: "hermes" }, selfHotState, NOW).temperature, "SELF");
+check(validateAgentCall({ ...writeCall, to: "hermes" }, selfHotState, NOW).status, "ACCEPTED");
+
+const coldState = {
+  ...state,
+  scope_activity: [{ actor: "hermes", scope: ["src:x"], touched_at: "2026-09-09T08:57:30.000Z" }],
+};
+check(scopeTemperature({ ...writeCall, to: "codex" }, coldState, NOW).temperature, "COLD");
+const coldTakeover = validateAgentCall({ ...writeCall, to: "codex" }, coldState, NOW);
+check(coldTakeover.status, "ACCEPTED");
+check(coldTakeover.writer_takeover, true);
+check(coldTakeover.breaths_total, 17);
+check(coldTakeover.delta_minimum, true);
 
 const nested = {
   ...base,
