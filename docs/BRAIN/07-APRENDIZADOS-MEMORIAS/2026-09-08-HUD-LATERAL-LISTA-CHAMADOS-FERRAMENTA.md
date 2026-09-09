@@ -1,3 +1,16 @@
+---
+title: "HUD lateral — lista de chamados de ferramenta"
+status: KNOWLEDGE_ONLY
+date: 2026-09-08
+updated: 2026-09-08T00:00:00-03:00
+tags: [hud, tool-call-ledger, lista, ferramentas, centraldark]
+category: BRAIN-APRENDIZADOS
+sensitivity: INTERNAL
+source: "screenshot de sessão viva e contrato de consumo do live JSON"
+source_class: HUMAN_AUTHORITY
+source_rule: "VISUAL_SNAPSHOT_IS_INTAKE; ACTION_IS_NOT_PROOF; NO_SECRET_IN_UI_LOG_OR_RECEIPT"
+owner: "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/"
+---
 # 🧿 HUD LATERAL · LISTA DE CHAMADOS DE FERRAMENTA
 
 Data: 2026-09-08

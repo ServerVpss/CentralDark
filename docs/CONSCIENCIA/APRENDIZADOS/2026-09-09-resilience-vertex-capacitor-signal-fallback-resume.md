@@ -1,3 +1,16 @@
+---
+title: "Resilience Vertex — continuidade causal"
+status: KNOWLEDGE_ONLY
+date: 2026-09-09
+updated: 2026-09-09T00:00:00-03:00
+tags: [resilience-vertex, continuidade, fallback, handoff, centraldark]
+category: CONSCIENCIA-APRENDIZADOS
+sensitivity: INTERNAL
+source: "handoff interno do PR-mãe sobre continuidade causal"
+source_class: INTERNAL
+source_rule: "REALITY_IS_JUDGE; UNKNOWN_IS_NOT_PASS; REUSE_BEFORE_CREATE"
+owner: "docs/CONSCIENCIA/APRENDIZADOS/"
+---
 # 🧿 RESILIENCE VERTEX · CONTINUIDADE CAUSAL
 
 Refs #1444

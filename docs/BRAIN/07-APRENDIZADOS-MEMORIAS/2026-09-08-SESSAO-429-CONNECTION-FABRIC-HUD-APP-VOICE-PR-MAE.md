@@ -1,3 +1,16 @@
+---
+title: "Receipt-mãe — 429, conexões, HUD, app e voz"
+status: KNOWLEDGE_ONLY
+date: 2026-09-08
+updated: 2026-09-08T00:00:00-03:00
+tags: [receipt-mae, 429, connection-fabric, hud, voice, pr-mae]
+category: BRAIN-APRENDIZADOS
+sensitivity: INTERNAL
+source: "sessão viva do CHEFE e trilha do PR-mãe"
+source_class: HUMAN_AUTHORITY
+source_rule: "ONE_WRITER_PER_CONFLICT_SCOPE; UNKNOWN_IS_NOT_PASS; ACTION_IS_NOT_PROOF"
+owner: "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/"
+---
 # 🧿 CENTRALDARK · RECEIPT-MÃE · 429 + CONEXÕES + HUD + APP + VOZ
 
 Data: 2026-09-08
@@ -68,7 +81,7 @@ O avanço da `main` invalida qualquer verde antigo que dependia de base/HEAD ant
 ```text
 REPO_LOCAL_DE_EDICAO=E:\CentralDark\Pivete\CentralDark
 GARIMPO_CHEFE=E:\CentralDark\_MAPA_CASA\GARIMPO-CHEFE
-VPS_REPO=/root/CentralDark
+VPS_REPO=<caminho-vps>
 ```
 
 `E:\CentralDark\Pivete` sozinho não é a raiz Git. `GARIMPO-CHEFE` é diretório operacional/intake/receipts, não substitui o working copy Git.

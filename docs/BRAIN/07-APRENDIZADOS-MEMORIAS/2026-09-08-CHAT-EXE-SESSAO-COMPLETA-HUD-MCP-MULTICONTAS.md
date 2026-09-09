@@ -1,3 +1,16 @@
+---
+title: "CHAT/.EXE — sessão completa HUD/MCP/multicontas"
+status: KNOWLEDGE_ONLY
+date: 2026-09-08
+updated: 2026-09-08T00:00:00-03:00
+tags: [chat-exe, hud, mcp, multicontas, pr-mae, centraldark]
+category: BRAIN-APRENDIZADOS
+sensitivity: INTERNAL
+source: "sessão viva do CHEFE e export Chrome DevTools AI Assistance"
+source_class: HUMAN_AUTHORITY
+source_rule: "ONE_SYSTEM_ONLY; REUSE_BEFORE_CREATE; UNKNOWN_IS_NOT_PASS; ACTION_IS_NOT_PROOF"
+owner: "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/"
+---
 # 👑 !AUREULA · CENTRALDARK CHAT/.EXE · SESSÃO COMPLETA
 
 Data: 2026-09-08

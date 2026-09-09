@@ -1,3 +1,16 @@
+---
+title: "Prompt de execução — Resilience Vertex"
+status: KNOWLEDGE_ONLY
+date: 2026-09-09
+updated: 2026-09-09T00:00:00-03:00
+tags: [resilience-vertex, prompt, execucao, handoff, centraldark]
+category: CONSCIENCIA-APRENDIZADOS
+sensitivity: INTERNAL
+source: "prompt de execução interno para o PR-mãe"
+source_class: INTERNAL
+source_rule: "MODE=MEASURE_RECONCILE_IMPLEMENT_TEST_COUNTERPROVE; NO_V2_V3_PARALLEL_SYSTEMS"
+owner: "docs/CONSCIENCIA/APRENDIZADOS/"
+---
 # 🚀 PROMPT DE EXECUÇÃO · RESILIENCE VERTEX
 
 Refs #1444

@@ -1,3 +1,16 @@
+---
+title: "Delta útil — reciclo passado, presente e futuro"
+status: KNOWLEDGE_ONLY
+date: 2026-09-08
+updated: 2026-09-08T00:00:00-03:00
+tags: [delta-util, reciclo, handoff, pr-mae, centraldark]
+category: BRAIN-APRENDIZADOS
+sensitivity: INTERNAL
+source: "sessão viva do CHEFE sobre delta útil e handoff material"
+source_class: HUMAN_AUTHORITY
+source_rule: "CURRENT > HISTORY; MATERIAL_DELTA_REQUIRED; UNKNOWN_IS_NOT_PASS"
+owner: "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/"
+---
 # 👑 !AUREULA · DELTA ÚTIL · RECICLO PASSADO → PRESENTE → FUTURO
 
 Data: 2026-09-08

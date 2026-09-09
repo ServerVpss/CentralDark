@@ -1,3 +1,16 @@
+---
+title: "CentralDark — HUD MCP, multicontas e gatilhos bíblicos"
+status: KNOWLEDGE_ONLY
+date: 2026-09-08
+updated: 2026-09-08T00:00:00-03:00
+tags: [hud, mcp, multicontas, gatilhos, centraldark]
+category: BRAIN-APRENDIZADOS
+sensitivity: INTERNAL
+source: "sessão viva do CHEFE e snapshots visuais de navegação"
+source_class: HUMAN_AUTHORITY
+source_rule: "ONE_SYSTEM_ONLY; REUSE_BEFORE_CREATE; VISUAL_SNAPSHOT_IS_INTAKE; UNKNOWN_IS_NOT_PASS"
+owner: "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/"
+---
 # 🧿 CENTRALDARK · HUD MCP + MULTICONTAS + GATILHOS BÍBLICOS
 
 Data: 2026-09-08

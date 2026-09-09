@@ -1,3 +1,16 @@
+---
+title: "CentralDark — sources e results drawer"
+status: KNOWLEDGE_ONLY
+date: 2026-09-08
+updated: 2026-09-08T00:00:00-03:00
+tags: [hud, sources, results, work-drawer, centraldark]
+category: BRAIN-APRENDIZADOS
+sensitivity: INTERNAL
+source: "sessão viva do CHEFE sobre HUD, fontes e painel de resultados"
+source_class: HUMAN_AUTHORITY
+source_rule: "UI_SURFACE != PROOF; UNKNOWN_IS_NOT_PASS; REUSE_BEFORE_CREATE"
+owner: "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/"
+---
 # 👑 !AUREULA · CENTRALDARK · SOURCES + RESULTS DRAWER
 
 Data: 2026-09-08
