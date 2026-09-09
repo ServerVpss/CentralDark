@@ -1,0 +1,125 @@
+schema: centraldark.material-drift-policy.v1
+owner: CENTRALDARK_AI_BOOT
+engine: scripts/checker/material-drift-classifier.mjs
+source_logic:
+  reference: "tlc23(2).pdf"
+  concept: "Horn clause/body -> head; minimum model derives only facts proven by rules."
+
+summary: >
+  MAIN_ADVANCED sozinho nao deriva RECONCILE. Avanco da main e telemetria ate
+  provar intersecao material com escopo ativo, owner, contrato, gate, runner,
+  dependencia, conflito real ou fix requerido pelo PR.
+
+axioms:
+  - "MAIN_ADVANCED != PROBLEMA"
+  - "BEHIND_TOTAL = TELEMETRY"
+  - "BEHIND_TOUCHING_ACTIVE_SCOPE = RELEVANCE"
+  - "MATERIAL_BEHIND = DECISION"
+  - "CURRENT > HISTORY"
+  - "UNKNOWN != PASS"
+  - "ACTION != PROOF"
+  - "MERGEABLE != READY"
+  - "ONE_WRITER_PER_CONFLICT_SCOPE"
+
+receipt_fields:
+  - MAIN_SHA
+  - PR_NUMBER
+  - PR_HEAD_SHA
+  - BEHIND_TOTAL
+  - BEHIND_TOUCHING_ACTIVE_SCOPE
+  - MATERIAL_BEHIND
+  - MAIN_DELTA_PATHS
+  - ACTIVE_SCOPE_PATHS
+  - DECISION
+  - NEXT_CURSOR
+
+horn_rules:
+  - head: RECONCILE_OR_REMEASURE
+    body:
+      - MAIN_ADVANCED
+      - MAIN_DELTA_TOUCHES_ACTIVE_SCOPE
+  - head: RECONCILE_OR_REMEASURE
+    body:
+      - MAIN_ADVANCED
+      - MAIN_DELTA_TOUCHES_OWNER
+  - head: RECONCILE_OR_REMEASURE
+    body:
+      - MAIN_ADVANCED
+      - MAIN_DELTA_TOUCHES_CONTRACT_GATE_RUNNER_DEPENDENCY
+  - head: RECONCILE_OR_REMEASURE
+    body:
+      - MAIN_ADVANCED
+      - MAIN_DELTA_INVALIDATES_SAME_HEAD_PROOF
+  - head: RECONCILE_OR_REMEASURE
+    body:
+      - MAIN_ADVANCED
+      - MAIN_DELTA_CREATES_REAL_CONFLICT
+  - head: RECONCILE_OR_REMEASURE
+    body:
+      - MAIN_ADVANCED
+      - MAIN_DELTA_CONTAINS_FIX_REQUIRED_BY_PR
+  - head: IGNORE_AND_CONTINUE_PREVIOUS_FLOW
+    body:
+      - MAIN_ADVANCED
+      - MAIN_DELTA_CLASSIFIED_UNRELATED
+      - BEHIND_TOUCHING_ACTIVE_SCOPE_IS_ZERO
+  - head: MEASURE_NOT_PASS
+    body:
+      - MAIN_ADVANCED
+      - MAIN_DELTA_PATHS_UNKNOWN
+
+global_material_scopes:
+  - CENTRALDARK_AI_BOOT.yaml
+  - LEIA-ME-IA.md
+  - .agents/skills/
+  - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/
+  - scripts/checker/
+  - scripts/ci/
+  - .github/workflows/
+  - package.json
+  - package-lock.json
+  - pnpm-lock.yaml
+  - yarn.lock
+  - apps/modulos/Bolt/source/package.json
+  - apps/modulos/Bolt/source/pnpm-lock.yaml
+
+decision_table:
+  - condition: "BEHIND_TOTAL=0 AND MAIN_DELTA_PATHS=[]"
+    status: NO_DRIFT
+    action: CONTINUE_PREVIOUS_FLOW
+  - condition: "BEHIND_TOTAL>0 AND MAIN_DELTA_PATHS_UNKNOWN"
+    status: UNKNOWN_DRIFT
+    action: MEASURE_NOT_PASS
+  - condition: "MAIN_DELTA_TOUCHES_ACTIVE_SCOPE_OR_GLOBAL_MATERIAL_SCOPE"
+    status: MATERIAL_DRIFT
+    action: RECONCILE_OR_REMEASURE
+  - condition: "MAIN_DELTA_CLASSIFIED_UNRELATED"
+    status: UNRELATED_DRIFT
+    action: IGNORE_AND_CONTINUE_PREVIOUS_FLOW
+
+forbidden:
+  - "REBASE_OR_UPDATE_BRANCH_ONLY_BECAUSE_BEHIND_TOTAL_CHANGED"
+  - "RESET_CI_ONLY_BECAUSE_MAIN_ADVANCED"
+  - "DECLARE_READY_FROM_MERGEABLE_TRUE"
+  - "COUNT_SKIPPED_OR_UNKNOWN_AS_PASS"
+  - "OPEN_SECOND_CONFLICT_RESOLVER"
+
+examples:
+  - input:
+      behind_total: 8
+      main_delta_paths:
+        - docs/notion-report.md
+      active_scope_paths:
+        - apps/modulos/Bolt/source/
+    output:
+      status: UNRELATED_DRIFT
+      action: IGNORE_AND_CONTINUE_PREVIOUS_FLOW
+  - input:
+      behind_total: 1
+      main_delta_paths:
+        - .github/workflows/test-vps-ssh.yml
+      active_scope_paths:
+        - apps/modulos/Bolt/source/
+    output:
+      status: MATERIAL_DRIFT
+      action: RECONCILE_OR_REMEASURE

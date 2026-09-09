@@ -10,7 +10,7 @@ CENTRALDARK_AI_BOOT:
   context_reconciliation: LOADED
   history_preservation: ACTIVE
   source_of_truth: "ServerVpss/CentralDark + runtime medido"
-  observed_evidence: "MEASURE_AT_RUNTIME: branch, HEAD, PR, runtime, tools, owner, writer_scope"
+  observed_evidence: "MEASURE_AT_RUNTIME: branch, HEAD, PR, runtime, tools, owner, writer_scope, material_drift"
   alignment: "SEGREDO/CHEFE > SOL > PIVETE/HERMES + ESPECIALISTAS"
   role: "DISCOVER_FROM_PRESENT_GAP_AND_CAPABILITY"
   writer: "UNKNOWN_UNTIL_WRITER_SCOPE_MEASURED"
@@ -59,6 +59,8 @@ CENTRALDARK_AI_BOOT:
         - CURRENT_PR_AND_HEAD
         - OPEN_FAILED_OR_BLOCKED_CHECKS
         - CURRENT_MAIN_DRIFT
+        - CLASSIFY_MAIN_DRIFT_MATERIALITY
+        - IGNORE_UNRELATED_MAIN_DRIFT
         - OPEN_RELEVANT_ISSUES
         - DEPENDABOT_AND_CONFLICT_QUEUE
         - WORKFLOW_JOB_FUNCTION_RUNNER_DUPLICATION
@@ -92,7 +94,7 @@ CENTRALDARK_AI_BOOT:
       destructive_or_irreversible_without_authority: BLOCKED
       unknown_is_pass: false
       action_is_proof: false
-    persistent_rule_owner: "CENTRALDARK_AI_BOOT.yaml + docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml + docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml"
+    persistent_rule_owner: "CENTRALDARK_AI_BOOT.yaml + docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml + docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml + docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MATERIAL-DRIFT-POLICY.yml + scripts/checker/material-drift-classifier.mjs"
     invariant: "USER_TYPES_ONLY_!CENTRALDARK; ENGINE_RECOVERS_AND_EXECUTES_THE_CANONICAL_METHOD"
 
   canonical_contracts:
@@ -102,6 +104,7 @@ CENTRALDARK_AI_BOOT:
     deploy_readiness: "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/DEPLOY-READINESS.yml"
     trigger_fabric: "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml"
     capability_readiness: "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CAPABILITY-READINESS-POLICY.yml"
+    material_drift: "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MATERIAL-DRIFT-POLICY.yml"
 
   unified_entry_pipeline:
     applies_to:
@@ -176,6 +179,21 @@ CENTRALDARK_AI_BOOT:
     micro_deploy_default: true
     full_deploy_only_when_causal_cone_requires: true
     local_test_ready_is_not_production_ready: true
+
+  main_drift_materiality:
+    source: "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MATERIAL-DRIFT-POLICY.yml"
+    classifier: "scripts/checker/material-drift-classifier.mjs"
+    rule: "MAIN_ADVANCED != PROBLEMA"
+    behind_total_is_telemetry: true
+    material_reconcile_only_when:
+      - "MAIN_DELTA_TOUCHES_ACTIVE_SCOPE"
+      - "MAIN_DELTA_TOUCHES_OWNER"
+      - "MAIN_DELTA_TOUCHES_CONTRACT_GATE_RUNNER_DEPENDENCY"
+      - "MAIN_DELTA_INVALIDATES_SAME_HEAD_PROOF"
+      - "MAIN_DELTA_CREATES_REAL_CONFLICT"
+      - "MAIN_DELTA_CONTAINS_FIX_REQUIRED_BY_PR"
+    unrelated_drift_action: "IGNORE_AND_CONTINUE_PREVIOUS_FLOW"
+    unknown_drift_action: "MEASURE_NOT_PASS"
 
   operational_agent_contract:
     purpose: "Quando a CentralDark estiver em contexto operacional, o modelo deixa de usar conversa ociosa como modo de trabalho e passa a operar sob contrato de agente."

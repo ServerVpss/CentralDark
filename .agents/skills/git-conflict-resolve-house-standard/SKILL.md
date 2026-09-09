@@ -42,6 +42,27 @@ PR_OPEN_OR_UPDATED
 
 O radar é repositório-global, não “um job por PR Dependabot”. O job especializado de auto-merge continua exclusivo do Dependabot; isso não impede que PRs humanos atravessem o mesmo radar de conflitos.
 
+## 1.1 Drift material antes de update-branch
+
+Antes de chamar update-branch, rebase ou merge porque a main andou, classificar o delta:
+
+```text
+MAIN_ADVANCED != PROBLEMA
+BEHIND_TOTAL = TELEMETRIA
+BEHIND_TOUCHING_ACTIVE_SCOPE = RELEVANCIA
+MATERIAL_BEHIND = DECISAO
+
+MAIN_CHANGED
+→ CHECKER
+→ MATERIAL_TO_ACTIVE_SCOPE?
+   → NAO: IGNORE_AND_CONTINUE_PREVIOUS_FLOW
+   → SIM: RECONCILE_OR_REMEASURE
+   → UNKNOWN: MEASURE_NOT_PASS
+```
+
+A main so vira acao quando tocar escopo ativo, owner, contrato, gate, runner, dependencia, conflito real ou fix requerido pelo PR. Caso contrario, o fluxo anterior continua e o HEAD do PR nao deve ser reiniciado so por contagem de behind.
+
+
 ## 2. A regra que quase ninguém acerta
 
 O motor está na branch do PR e faz `git merge origin/main`. Logo:
@@ -85,7 +106,8 @@ O radar deixa receipt idempotente no próprio PR e aplica `🔄 GIT-DIVERGÊNCIA
 PR abre/anda
 → radar global dispara
 → main/head/mergeability medidos
-→ update-branch quando aplicável
+→ classificar MATERIAL_BEHIND
+→ update-branch/rebase somente se MATERIAL_DRIFT ou UNKNOWN medido exigir
 → conflito passa pelo motor único
 → Writer semântico só quando necessário
 → checks no mesmo HEAD
@@ -118,7 +140,7 @@ CONFLICT_SEEN != CONFLICT_RESOLVED
 - Não criar segundo script de conflito.
 - Não `force push` em `main`.
 - `NO_CONFLICT` significa apenas que naquele instante não havia divergência.
-- Se a main avançar, medir de novo.
+- Se a main avançar, classificar materialidade antes de mexer no HEAD; behind total sozinho é telemetria.
 - PR humano não recebe resolução cega de arquivos conflitantes.
 - Job skipped por filtro especializado não significa que o PR saiu do radar global.
 - Squash é padrão de promoção quando aplicável; checks continuam sendo evidência, não decoração.
