@@ -16,6 +16,14 @@ on:
   pull_request_target:
     types: [opened, reopened, synchronize, ready_for_review]
   workflow_dispatch:
+  workflow_run:
+    workflows:
+      - '🤖 Dependabot — radar, compatibilidade e squash seguro'
+    types:
+      - completed
+  repository_dispatch:
+    types:
+      - dependabot_alert
   schedule:
     - cron: '17,47 * * * *'
 
@@ -365,6 +373,92 @@ jobs:
           echo "free_tier_decision=$DECISION" >> "$GITHUB_OUTPUT"
           echo "free_tier_provider=$PROVIDER" >> "$GITHUB_OUTPUT"
           echo "free_tier_attempts=$TOTAL_ATTEMPTS" >> "$GITHUB_OUTPUT"
+
+  free-tier-alert:
+    name: 🚨 Dependabot free-tier alert
+    if: >-
+      (github.event_name == 'workflow_run' &&
+       github.event.workflow_run.workflow == '🤖 Dependabot — radar, compatibilidade e squash seguro' &&
+       (github.event.workflow_run.conclusion == 'failure' || github.event.workflow_run.conclusion == 'success')) ||
+      (github.event_name == 'repository_dispatch' &&
+       github.event.client_payload.trigger == 'dependabot_alert')
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 5
+    steps:
+      - name: 📥 Checkout confiável da main
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          path: .ci-house
+          persist-credentials: false
+          fetch-depth: 1
+          submodules: false
+
+      - name: 🚨 Preparar alerta determinístico
+        id: alert
+        shell: bash
+        env:
+          NOTIFY_WEBHOOK_URL: ${{ secrets.NOTIFY_WEBHOOK_URL }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          set -euo pipefail
+          CONCLUSION="${{ github.event.workflow_run.conclusion || '' }}"
+          HEAD_SHA="${{ github.event.workflow_run.head_sha || github.event.client_payload.head_sha || '' }}"
+          PR_NUMBER="${{ github.event.workflow_run.pull_requests[0].number || github.event.client_payload.pr_number || '' }}"
+          RUN_ID="${{ github.event.workflow_run.id || github.event.client_payload.run_id || '' }}"
+          DECISION="${{ github.event.client_payload.decision || 'UNKNOWN' }}"
+          PROVIDER="${{ github.event.client_payload.provider || 'UNKNOWN' }}"
+          ATTEMPTS="${{ github.event.client_payload.attempts || '0' }}"
+          TEXT="🚨 Dependabot alert: workflow=${CONCLUSION} pr=${PR_NUMBER} head=${HEAD_SHA} provider=${PROVIDER} decision=${DECISION} attempts=${ATTEMPTS} run=${RUN_ID}"
+          echo "text=${TEXT}" >> "$GITHUB_OUTPUT"
+          if [ -n "$NOTIFY_WEBHOOK_URL" ]; then
+            curl -sS -X POST -H 'Content-Type: application/json' -d "{\"text\":\"${TEXT}\"}" "$NOTIFY_WEBHOOK_URL" || true
+          fi
+          if [ -n "$TELEGRAM_BOT_TOKEN" ] && [ -n "$TELEGRAM_CHAT_ID" ]; then
+            curl -sS -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage"               -d chat_id="$TELEGRAM_CHAT_ID"               --data-urlencode "text=${TEXT}" || true
+          fi
+
+      - name: 📝 Postar receipt no PR quando houver número
+        if: >-
+          (github.event_name == 'repository_dispatch' && github.event.client_payload.pr_number != '') ||
+          (github.event_name == 'workflow_run' && github.event.workflow_run.pull_requests != '' && github.event.workflow_run.pull_requests[0].number != '')
+        uses: actions/github-script@v9
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            let prNumber = null;
+            if (context.eventName === 'repository_dispatch') {
+              prNumber = context.payload?.client_payload?.pr_number ?? null;
+            } else if (context.eventName === 'workflow_run') {
+              const prs = context.payload?.workflow_run?.pull_requests;
+              prNumber = prs?.[0]?.number ?? null;
+            }
+            if (!prNumber) return;
+            const marker = '<!-- centraldark-dependabot-free-tier-alert -->';
+            const decision = context.payload?.client_payload?.decision || 'UNKNOWN';
+            const provider = context.payload?.client_payload?.provider || 'UNKNOWN';
+            const attempts = context.payload?.client_payload?.attempts ?? '?';
+            const conclusion = context.eventName === 'workflow_run' ? context.payload.workflow_run.conclusion : 'dispatch';
+            const body = [
+              marker,
+              '## 🚨 CentralDark · Dependabot Free-tier Alert',
+              '',
+              `PR: #${prNumber}`,
+              `WORKFLOW: ${context.eventName}`,
+              `CONCLUSION: ${conclusion}`,
+              `DECISION: ${decision}`,
+              `PROVIDER: ${provider}`,
+              `ATTEMPTS: ${attempts}`,
+              '',
+              '`UNKNOWN != PASS`',
+            ].join('\n');
+            const comments = await github.paginate(github.rest.issues.listComments, {owner, repo, issue_number: prNumber, per_page: 100});
+            const existing = comments.find(c => c.user?.type === 'Bot' && String(c.body || '').includes(marker));
+            if (existing) await github.rest.issues.updateComment({owner, repo, comment_id: existing.id, body});
+            else await github.rest.issues.createComment({owner, repo, issue_number: prNumber, body});
 
   hosted-compatibility-gate:
     name: 🧮 Compatibilidade viva + same-head + squash
