@@ -259,23 +259,52 @@ LABEL_GATE_WORKFLOW=.github/workflows/centraldark-label-gate.yml
 AUTONOMIA_TEST=scripts/github-autonomia-varredura.test.mjs
 ```
 
+## 12_LIVE_RECEIPT_2026_09_09_PAPAGAIO_OFF
+
 ```text
-GPT_IS_REQUIRED_AS_JUDGE=false
-AGENTE_CHATGPT_AS_OLD_TEST_REQUIREMENT=true
-AGENT_LABEL_AS_PROVENANCE=true
-CONTRACTS_CONFLICTING=true
+TRIGGER=#ACORDAR
+REQUEST=FAZ_O_COMMIT_NO_PR
+WRITER=SOL
+PR=1463
+PAPAGAIO_MODE=OFF
+POMBO_CHECKSUM=ON
 ```
 
-```text
-PROMOTION = 👑 PERMITO-SEGREDO + 🔄 GIT + 🤖 AUTO + 🟡 IA-PRECISA-REVISAR
-PROVENANCE = 🧠 AGENTE-*
-CAPABILITY = 🤖 IA-* / AGENTIC-DEVOPS
-CATEGORY = assunto do PR
-STATUS = telemetria/triagem
-RESULT = pós-prova/pós-merge
+A execução repetiu a regra do próprio gate antes de escrever:
 
-PROVENANCE != AUTHORITY
-STATUS != PROOF
-RESULT != PROMOTION_INPUT
-UNKNOWN_LABEL_CONSUMER != PASS
+```text
+T0_MAIN=281408eb57d5b3a56f77dc9a393a1fa440c4e0f1
+T1_MAIN=a89a8de7e70616d9a3fb3532d7f55a0c15230cba
+STATE_CHANGED_DURING_MEASUREMENT=true
+```
+
+O delta discriminante foi que a `main` avançou durante o próprio `#ACORDAR`. Por isso, evidência de T0 não foi reutilizada como se ainda fosse T1.
+
+Também foi encontrado no canônico o receipt histórico completo da sessão de 2026-08-26 e os aprendizados `READ_ONLY != NO_COGNITIVE_CHANGE`, `CONTEXTO_ATIVO != MEMÓRIA_CANÔNICA` e cross-chat como reconstrução. Logo, não foi criado segundo receipt para repetir o mesmo ouro.
+
+```text
+REUSE_BEFORE_CREATE=PASS
+DUPLICATE_SESSION_RECEIPT_CREATED=false
+HISTORICAL_RECEIPT_CURRENT_STATE_AUTHORITY=false
+CURRENT_MAIN_REMEASURED=true
+PR_1463_OPEN=true
+PR_1463_MERGEABLE=false
+ACTION=APPEND_LIVE_PREANSWER_RECEIPT_TO_EXISTING_OWNER
+UNKNOWN != PASS
+```
+
+Contraprova:
+
+```text
+MAIN_CHANGED_AFTER_T0 -> T0_CANNOT_GOVERN_T1
+EXISTING_RECEIPT_FOUND -> DO_NOT_CLONE_HISTORY
+COMMIT_CREATED != CI_PASS
+COMMIT_CREATED != MERGEABLE
+COMMIT_CREATED != MERGED
+```
+
+NEXT_CURSOR:
+
+```text
+SAME_HEAD_CI -> FIX_ROOT_CAUSES -> RETEST -> REVIEW -> REALITY_JUDGE
 ```
