@@ -18,6 +18,7 @@ const FILES = {
 const REQUIRED_CHAIN = [
   'CENTRALDARK', 'TLC23_OPEN', 'DESTINATION_LOCK', 'ACORDAR', 'CALIBRAR',
   'MULTIBUSSOLA', 'PEGATUDO', 'DEBITO_COGNITIVO', 'READERS_MEASURE',
+  'META_LUPA', 'SCOPE_TEMPERATURE', 'DELTA_MINIMUM',
   'RENDEZVOUS', 'RECONCILE', 'OWNER', 'ONE_WRITER', 'PATCH', 'TESTE',
   'CONTRAPROVA', 'REALITY_JUDGE', 'FIXED_POINT', 'TLC23_CLOSE', 'REGISTRA',
   'HANDOFF', 'BOOT',
@@ -84,6 +85,16 @@ export function validateUniversalMethod() {
     'private_chain_of_thought_must_not_be_exposed: true',
     'hermes_self_test_required: true',
     'same_head_ci_required: true',
+    'owner: scripts/agent-call.mjs',
+    'hot_window_ms: 60000',
+    'warm_window_ms: 120000',
+    'hot_or_warm_other_actor: WAIT_NEXT_ROUND',
+    'unknown_temperature: PRESERVE_EXISTING_STATIC_WRITER_GUARD',
+    'human_touch_counts_as_touch: true',
+    'meta_lupa_required: true',
+    'breaths_total: 17',
+    'delta_minimum_required: true',
+    'model_identity_must_not_block_scope: true',
   ], 'UNIVERSAL_CONTRACT');
 
   let previous = -1;
@@ -141,6 +152,11 @@ export function validateUniversalMethod() {
     skin_changes_governance: false,
     private_reasoning_exposed: false,
     reality_is_judge: true,
+    scope_temperature_owner: 'scripts/agent-call.mjs',
+    scope_temperature_hot_ms: 60000,
+    scope_temperature_warm_ms: 120000,
+    breaths_total: 17,
+    delta_minimum_required: true,
   };
 }
 
