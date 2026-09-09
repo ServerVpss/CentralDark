@@ -1,0 +1,81 @@
+{
+  "schema": "centraldark.installer.full-package.v1",
+  "version": "0.1.0-beta.1",
+  "date": "2026-09-09",
+  "one_system_only": true,
+  "green_rule": "ACTION_AND_POST_PROBE_MUST_PASS",
+  "unknown_is_not_pass": true,
+  "provider_required_for_installer": false,
+  "components": [
+    {
+      "id": "vps-base",
+      "owner": "install.sh",
+      "required": true,
+      "install": "./install.sh --install",
+      "proof": "node+npm+pm2+caddy+docker+git+curl+jq present"
+    },
+    {
+      "id": "structure",
+      "owner": "install.sh",
+      "required": true,
+      "install": "./install.sh --install",
+      "proof": "/root/CentralDark/apps + infra + secrets exist"
+    },
+    {
+      "id": "mcp",
+      "owner": "install.sh",
+      "required": true,
+      "install": "./install.sh --mcp",
+      "proof": "infra/mcp exists and runtime health/listener is observable"
+    },
+    {
+      "id": "cloudflare-dns",
+      "owner": "install.sh",
+      "required": false,
+      "state_without_token": "SETUP",
+      "install": "./install.sh --cloudflare",
+      "proof": "token validated before ACTIVE/PROVED"
+    },
+    {
+      "id": "auto-update-webhook",
+      "owner": "existing deploy/webhook owner",
+      "required": false,
+      "state_without_listener": "READY",
+      "proof": "port 9003 health/listener responds"
+    },
+    {
+      "id": "ai-provider",
+      "owner": "CentralDark router/provider adapters",
+      "required": false,
+      "state_without_provider": "OPTIONAL",
+      "proof": "provider/router health is measured; installer remains deterministic without it"
+    },
+    {
+      "id": "obsidian",
+      "owner": "apps/modulos/obsidian-plugin-grafo-vivo",
+      "required": false,
+      "release": "obsidian-plugin-v0.5.0",
+      "proof": "installed plugin version matches manifest and self-update channel"
+    },
+    {
+      "id": "hermes",
+      "owner": "apps/modulos/HERMES-CORE",
+      "required": false,
+      "integration": "reuse existing owner; no fork",
+      "proof": "runtime/provider/skills health measured independently"
+    },
+    {
+      "id": "desktop-remote",
+      "owner": "existing Remote Bridge/Tray lineage",
+      "required": false,
+      "proof": "PROCESS_ACTIVE != DEVICE_ONLINE; ping/health required"
+    },
+    {
+      "id": "site-apps-cli",
+      "owner": "DISCOVER_BEFORE_INSTALL",
+      "required": false,
+      "state": "OWNER_GAP",
+      "rule": "do not create parallel package until canonical owners are mapped"
+    }
+  ]
+}
