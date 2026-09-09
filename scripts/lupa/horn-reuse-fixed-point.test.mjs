@@ -1,7 +1,25 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { readFileSync } from "node:fs";
 
 import { decideReuse, deriveFixedPoint } from "./horn-reuse-fixed-point.mjs";
+
+const CONTRACT_PATH = "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json";
+const LOGIC_REFERENCE_PATH = "docs/CONSCIENCIA/REFERENCIA-LOGICA-HORN-REUSE-FIXED-POINT.md";
+const SOURCE_NAME = "tlc23(2).pdf";
+const SOURCE_SHA256 = "b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1";
+
+test("base lógica do PDF fica ligada ao owner canônico sem criar segunda autoridade", () => {
+  const reference = readFileSync(LOGIC_REFERENCE_PATH, "utf8");
+  const contract = JSON.parse(readFileSync(CONTRACT_PATH, "utf8"));
+
+  assert.match(reference, new RegExp(SOURCE_NAME.replace(/[()]/g, "\\$&")));
+  assert.ok(reference.includes(SOURCE_SHA256));
+  assert.ok(reference.includes(CONTRACT_PATH));
+  assert.equal(contract.marker, "REUSE_BEFORE_CREATE_REQUIRED");
+  assert.equal(contract.global_continuity_policy?.principles?.REUSE_BEFORE_CREATE, true);
+  assert.equal(contract.global_continuity_policy?.principles?.GLOBAL_LEARNING_PROMOTES_TO_CANONICAL_OWNER, true);
+});
 
 test("reusa owner existente quando intenção e fit completo coincidem", () => {
   const result = decideReuse({ existingOwner: true, sameIntent: true, fullFit: true });
