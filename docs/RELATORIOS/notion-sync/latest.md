@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-09-09T17:40:58.081Z
+# 🧠 Notion Sync — 2026-09-09T20:41:44.573Z
 
-- **Commit fonte:** `a2acf5fcd28b00d4274038b05a80e9daa0510b02`
+- **Commit fonte:** `918efbef01a20e8da59e0db50f34fe4f1d1c605f`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 491 atualizadas · ❌ 24 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 491 atualizadas · ❌ 25 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
 | aprendizados | 36 | 0 | 35 | 0 | 1 |
-| estrutura | 435 | 0 | 412 | 0 | 23 |
+| estrutura | 436 | 0 | 412 | 0 | 24 |
 
 ## Operações
 
@@ -119,6 +119,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/04-MCP-E-CONECTORES/ARQUITETURA-MCP-V2.md |
 | estrutura | atualizado | docs/CONSCIENCIA/04-MCP-E-CONECTORES/BOAS-PRATICAS-MCP.md |
 | estrutura | erro | docs/CONSCIENCIA/04-MCP-E-CONECTORES/MCP-REUSE-HORN-FIXED-POINT.md |
+| estrutura | erro | docs/CONSCIENCIA/04-MCP-E-CONECTORES/PDF-CONFORMANCE-CC2003.md |
 | estrutura | atualizado | docs/CONSCIENCIA/04-MCP-E-CONECTORES/RECONECTAR-CONECTOR.md |
 | estrutura | atualizado | docs/CONSCIENCIA/04-MCP-E-CONECTORES/SYSTEM-PROMPT-ADMIN.md |
 | estrutura | atualizado | docs/CONSCIENCIA/04-MCP-E-CONECTORES/SYSTEM-PROMPT-USUARIO.md |
