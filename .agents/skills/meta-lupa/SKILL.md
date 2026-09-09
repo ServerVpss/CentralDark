@@ -566,3 +566,60 @@ python scripts/percentual_evidencial.py self-test
 
 A saída pode declarar `100%` **somente dentro daquele denominador fechado e reproduzível**. Isso não contradiz a proibição de prometer certeza universal: `100% do contrato medido` é diferente de `100% de certeza sobre o mundo`.
 menos duas seeds válidas por braço.
+
+## Gate Horn-Caracol TLC23
+
+Este gate transforma a intuicao do CHEFE em clausulas operacionais pequenas.
+Base matematica: formulas de Horn tem no maximo um literal positivo; regras do tipo
+`corpo -> cabeca` podem ser fechadas repetindo derivacoes ate nada novo aparecer.
+No CentralDark, isso vira um bloqueio profissional antes de qualquer acao material.
+
+Sequencia obrigatoria antes de tocar ferramenta da Casa em escopo tecnico:
+
+```text
+#ACORDAR -> !CALIBRAR -> !MULTIBUSSOLA -> !META_LUPA -> MENOS_E_MAIS
+         -> OWNER_EXISTENTE -> WRITER_SCOPE -> EVIDENCIA -> ACAO
+```
+
+Fatos minimos:
+
+```text
+acordar_done
+calibrar_done
+multibussola_done
+meta_lupa_done
+menos_e_mais_done
+owner_resolved
+writer_scope_valid
+evidence_bound
+no_destructive_bypass
+```
+
+Clausulas canonicas:
+
+```text
+boot_gate_done :- acordar_done, calibrar_done, multibussola_done, meta_lupa_done, menos_e_mais_done.
+work_gate_done :- boot_gate_done, owner_resolved, writer_scope_valid, evidence_bound.
+centraldark_action_gate_pass :- work_gate_done, no_destructive_bypass.
+```
+
+Se qualquer fato faltar, o veredito e `BLOCKED`, nao `WARN`.
+O agente deve catar o coquinho do chao: registrar o missing, resolver o missing minimo,
+rodar novamente o gate e seguir para a proxima pendencia.
+
+### Caracol canonico
+
+Cada achado passa por cinco voltas, sem danificar o presente:
+
+```text
+A       = alegacao/intencao fixada
+CORPO   = estado vivo, owner, writer, arquivo, PID, workflow ou runtime real
+SOMBRA  = contraprova, regressao, dependencia e falso-verde possivel
+ALMA    = aprendizado minimo reutilizavel
+VOLTA   = refazer melhor, menor e mais conectado ao owner existente
+```
+
+Desfazer/refazer significa remover excesso conceitual, nao apagar historia util.
+Historico vira `superseded_by`; presente recebe apenas o delta sobrevivente.
+
+Script deterministico: `.agents/skills/meta-lupa/scripts/horn_caracol_gate.py`.

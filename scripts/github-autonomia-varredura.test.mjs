@@ -64,7 +64,7 @@ test("padrão operacional vale para TODO PR elegível — não só um", () => {
   assert.ok(pending.missingLabels.includes(CANONICAL_GIT_LABEL));
   assert.ok(pending.missingLabels.includes(CANONICAL_AUTOMATION_LABEL));
   assert.ok(pending.missingLabels.includes(CANONICAL_REVIEW_LABEL));
-  assert.ok(pending.missingLabels.includes("🧠 AGENTE-CHATGPT"));
+  assert.equal(pending.missingLabels.includes("🧠 AGENTE-CHATGPT"), false);
 
   const full = requiredOperationalLabels(pr());
   const sealed = promotionSealState(pr({

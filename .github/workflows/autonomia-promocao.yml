@@ -62,6 +62,8 @@ jobs:
           node --test scripts/github-autonomia-varredura.test.mjs
           node --test scripts/github-autonomia-green-guard.test.mjs
           node --test scripts/github-pr-confirmado-label.test.mjs
+          node --test scripts/agent-call.test.mjs
+          node apps/modulos/HERMES-CORE/core/universal-method-contract.mjs --self-test
 
       - name: Verificar Trigger Fabric canônica antes de qualquer promoção
         shell: bash
@@ -117,6 +119,8 @@ jobs:
           echo "OUTPUT_GUARD_CONTRACT_REQUIRED=1"
           echo "WORKFLOW_REUSE_REQUIRED=1"
           echo "NODE24_FAST_PATH=1"
+          echo "SCOPE_TEMPERATURE_GATE=HOT_60S+WARM_120S+COLD_TAKEOVER"
+          echo "META_LUPA_17_BREATHS_DELTA_MINIMUM=1"
           echo "JOB_STATUS=${JOB_STATUS}"
           test "${JOB_STATUS}" = "success" && echo "RESULTADO=PASS" || echo "RESULTADO=BLOCKED"
 
@@ -148,6 +152,53 @@ jobs:
         with:
           name: autonomia-judge-${{ github.run_id }}
           path: ${{ runner.temp }}/centraldark-autonomia
+
+      - name: Isolar receipts investigativos sem selo completo
+        shell: bash
+        env:
+          BOT_SWEEP_DIR: ${{ runner.temp }}/centraldark-autonomia
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import { readdir, readFile, rm } from "node:fs/promises";
+          import { join } from "node:path";
+
+          const dir = process.env.BOT_SWEEP_DIR;
+          const names = (await readdir(dir)).filter((name) => /^receipt-pr-\d+\.json$/.test(name)).sort();
+          const skipped = [];
+          const kept = [];
+          const supportedPolicies = new Set([
+            "AUTO_SQUASH_IF_CLEAN",
+            "GREEN_FIRST",
+            "GREEN_FIRST_6_OF_6_THEN_SQUASH",
+          ]);
+
+          for (const name of names) {
+            const doc = JSON.parse(await readFile(join(dir, name), "utf8"));
+            const candidate = doc?.receipt?.candidates?.[0] || {};
+            const auth = candidate?.authorization || {};
+            const fullPromotionReceipt = Boolean(
+              auth.authorized === true
+              && auth.viaBody === true
+              && supportedPolicies.has(auth.merge_policy)
+              && auth.intent_scope
+              && auth.writer
+              && auth.writer_scope
+            );
+
+            const number = Number(name.match(/^receipt-pr-(\d+)\.json$/)?.[1] || 0);
+            if (fullPromotionReceipt) {
+              kept.push(number);
+              continue;
+            }
+
+            skipped.push(number);
+            await rm(join(dir, name), { force: true });
+            await rm(join(dir, `event-pr-${number}.json`), { force: true });
+          }
+
+          console.log(`PROMOTION_RECEIPT_FILTER=PASS kept=${kept.join(",") || "none"} investigation_only=${skipped.join(",") || "none"}`);
+          NODE
 
       - name: Aplicar guard proporcional à política escolhida
         env:
@@ -200,6 +251,7 @@ jobs:
           echo "FAST_CAUSAL_GATES=AUTHENTICATED_ACCOUNT+SAME_REPO+INTENT_SCOPE+SECRET_SCAN+CONFLICT+CHANGES_REQUESTED+HEAD_BASE_REVALIDATION"
           echo "REASK=NO_WHEN_INTENT_RECEIPT_VALID"
           echo "PR_CONFIRMED_LABEL=DERIVED_POST_MERGE_ONLY"
+          echo "INVESTIGATION_ONLY_RECEIPTS_DO_NOT_FAIL_PROMOTION_BATCH=1"
           echo "TRIGGER_FABRIC_VERIFIED_BY_JUDGE=1"
           echo "NODE24_FAST_PATH=1"
           echo "JOB_STATUS=${JOB_STATUS}"
