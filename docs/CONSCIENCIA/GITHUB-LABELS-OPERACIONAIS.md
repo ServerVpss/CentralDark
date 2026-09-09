@@ -2,7 +2,7 @@
 title: "GITHUB LABELS OPERACIONAIS"
 date: 2026-08-27
 tags: ["consciencia"]
-updated: 2026-09-07
+updated: 2026-09-09
 ---
 
 # Labels Operacionais CentralDark
@@ -203,6 +203,25 @@ superseded           → SUPERSEDED
 permito-segredo      → 👑 PERMITO-SEGREDO
 📚 DOC               → 📚 DOCS
 ```
+
+## Catálogo físico GitHub
+
+No GitHub existe **uma etiqueta física por significado**. Compatibilidade com nomes antigos acontece na entrada, antes de tocar no catálogo.
+
+```text
+GITHUB_LABEL_CATALOG_CANONICAL_ONLY=true
+CANONICAL_AUTHORITY_LABEL=👑 PERMITO-SEGREDO
+LEGACY_AUTHORITY_TEXT_ALIAS=permito-segredo
+LEGACY_AUTHORITY_PHYSICAL_LABEL=false
+CANONICAL_CODEX_PROVENANCE_LABEL=🧠 AGENTE-CODEX
+LEGACY_CODEX_TEXT_ALIAS=codex
+LEGACY_CODEX_PHYSICAL_LABEL=false
+ALIAS_COMPATIBILITY_REMAINS_AT_INGRESS=true
+MIGRATE_EXISTING_USAGE_BEFORE_DELETE=true
+NEVER_CREATE_SECOND_PHYSICAL_ALIAS_LABEL=true
+```
+
+Assim, agentes e integrações antigas ainda podem dizer `permito-segredo` ou `codex`; o normalizador converte para `👑 PERMITO-SEGREDO` ou `🧠 AGENTE-CODEX`. O GitHub, porém, guarda somente a forma canônica. Isso preserva compatibilidade sem manter etiquetas duplicadas.
 
 ## Enforcement global de entrada
 
