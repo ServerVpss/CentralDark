@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-09-07T22:16:35.428Z
+# 🧠 Notion Sync — 2026-09-09T01:04:55.980Z
 
-- **Commit fonte:** `cc5af475e4eee4811e7ca66c3bedb3be496ff995`
+- **Commit fonte:** `e4539c9ecceb0e3d332fea2d57f58613ff40d20f`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 491 atualizadas · ❌ 18 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 491 atualizadas · ❌ 19 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
-| aprendizados | 35 | 0 | 35 | 0 | 0 |
+| aprendizados | 36 | 0 | 35 | 0 | 1 |
 | estrutura | 430 | 0 | 412 | 0 | 18 |
 
 ## Operações
@@ -101,6 +101,7 @@
 | aprendizados | atualizado | #32 — Uma capacidade = uma linhagem = um PR de promoção por escopo |
 | aprendizados | atualizado | #33 — Opinião usada como medição gera falso verde e ação destrutiva |
 | aprendizados | atualizado | #34 — Sem TURN_CLASS não há gate entre ler e agir — a impressão ocupa o slot da medição |
+| aprendizados | erro | #35 — T3: ponte semântica EXIT 1, três catálogos, VPS na main 8 atrás |
 | estrutura | atualizado | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | atualizado | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
