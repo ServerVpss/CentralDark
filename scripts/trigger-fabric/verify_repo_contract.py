@@ -363,7 +363,33 @@ def hosted_diagnostic_allowed(rel, text):
     return bool(workflow_dispatch_only(text) and touches_secret_or_ssh)
 
 def job_block_for_runner(text, match_start):
-    starts = [m for m in re.finditer(r'(?m)^  [A-Za-z0-9_-]+:\s*# Isenção temporária para branches com falha herdada da base (R2)
+    starts = [m for m in re.finditer(r'(?m)^  [A-Za-z0-9_-]+:\s*$', text)]
+    start = 0
+    end = len(text)
+    for idx, marker in enumerate(starts):
+        if marker.start() <= match_start:
+            start = marker.start()
+            if idx + 1 < len(starts):
+                end = starts[idx + 1].start()
+            else:
+                end = len(text)
+    return text[start:end]
+
+
+def hosted_control_plane_allowed(rel, text, match_start):
+    if rel != '.github/workflows/dependabot-auto-merge.yml':
+        return False
+    block = job_block_for_runner(text, match_start)
+    if 'uses: actions/github-script' not in block:
+        return False
+    if 'uses: actions/checkout' in block:
+        return False
+    if re.search(r'(?mi)^\s*run\s*:', block):
+        return False
+    return True
+
+
+# Isenção temporária para branches com falha herdada da base (R2)
 # PR #1418: absorcao/pombo-r02-lineage-20260905 - delta Pombo r02, falha herdada do main
 branch_exempt=frozenset({
     'absorcao/pombo-r02-lineage-20260905',
