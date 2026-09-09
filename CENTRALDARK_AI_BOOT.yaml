@@ -10,7 +10,7 @@ CENTRALDARK_AI_BOOT:
   context_reconciliation: LOADED
   history_preservation: ACTIVE
   source_of_truth: "ServerVpss/CentralDark + runtime medido"
-  observed_evidence: "MEASURE_AT_RUNTIME: branch, HEAD, PR, runtime, tools, owner, writer_scope, material_drift"
+  observed_evidence: "MEASURE_AT_RUNTIME: branch, HEAD, PR, runtime, tools, owner, writer_scope"
   alignment: "SEGREDO/CHEFE > SOL > PIVETE/HERMES + ESPECIALISTAS"
   role: "DISCOVER_FROM_PRESENT_GAP_AND_CAPABILITY"
   writer: "UNKNOWN_UNTIL_WRITER_SCOPE_MEASURED"

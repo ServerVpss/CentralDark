@@ -23,7 +23,6 @@ const MAIN_WRITERS = Object.freeze([
   ".github/workflows/estado-retomada.yml",
   ".github/workflows/painel-validacao.yml",
   ".github/workflows/painel-auto-update.yml",
-  ".github/workflows/linear-pendencias-sync.yml",
 ]);
 const PRE_MAIN_GATES = Object.freeze([
   "node scripts/lupa/validar-continuidade-global.mjs",
