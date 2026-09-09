@@ -241,6 +241,130 @@ jobs:
           echo 'HERMES_ROLE=PROVE_AND_TEST'
           echo 'UNKNOWN_IS_PASS=0'
           echo 'NEVER_DISCARD_LEARNING=1'
+          echo 'FREE_TIER_ROLLOVER=ENABLED'
+          echo 'FREE_TIER_MAX_TOTAL_ATTEMPTS=4'
+          echo 'FREE_TIER_MAX_SAME_PROVIDER_ATTEMPTS=1'
+          echo 'FREE_TIER_PROVIDERS=centraldark,github'
+          echo 'FREE_TIER_LOG=logs/free-tier-rollover.jsonl'
+          echo 'FREE_TIER_IDEMPOTENCY=STATE_FILE_BY_PR_AND_HEAD_SHA'
+
+  free-tier-rollover:
+    name: 🧪 Free-tier rollover — adapters existentes + JSONL simples
+    if: >-
+      github.event_name == 'pull_request_target' &&
+      github.repository == 'ServerVpss/CentralDark' &&
+      github.event.pull_request.user.login == 'dependabot[bot]' &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 10
+    outputs:
+      free_tier_decision: ${{ steps.rollover.outputs.decision }}
+      free_tier_provider: ${{ steps.rollover.outputs.provider }}
+      free_tier_attempts: ${{ steps.rollover.outputs.attempts }}
+    steps:
+      - name: 📥 Checkout confiável da main
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          path: .ci-house
+          persist-credentials: false
+          fetch-depth: 1
+          submodules: false
+
+      - name: 🧪 Free-tier rollover controlado
+        id: rollover
+        shell: bash
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          RUN_ID: ${{ github.run_id }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CENTRALDARK_HUB_BASE: https://hub.centralldark.com
+          CENTRALDARK_API_KEY: ${{ secrets.CENTRALDARK_API_KEY }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$GITHUB_WORKSPACE/.ci-house/logs"
+          LOG="$GITHUB_WORKSPACE/.ci-house/logs/free-tier-rollover.jsonl"
+          STATE_FILE="$GITHUB_WORKSPACE/.ci-house/.free-tier-${PR_NUMBER}-${HEAD_SHA}.json"
+          TS="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          jsonl() {
+            printf '%s\n' "{\"ts\":\"${TS}\",\"event\":\"${1}\",\"pr\":${PR_NUMBER},\"run_id\":\"${RUN_ID}\",\"head_sha\":\"${HEAD_SHA}\",\"provider\":\"${2:-UNKNOWN}\",\"attempt\":${3:-0},\"status\":\"${4:-UNKNOWN}\",\"retryable\":${5:-false}}" >> "$LOG"
+          }
+          if [ -f "$STATE_FILE" ]; then
+            DECISION=$(jq -r '.decision' "$STATE_FILE")
+            PROVIDER=$(jq -r '.provider' "$STATE_FILE")
+            ATTEMPTS=$(jq -r '.attempts' "$STATE_FILE")
+            jsonl free_tier_skipped_idempotent "$PROVIDER" "$ATTEMPTS" idempotent false
+            echo "free_tier_decision=$DECISION" >> "$GITHUB_OUTPUT"
+            echo "free_tier_provider=$PROVIDER" >> "$GITHUB_OUTPUT"
+            echo "free_tier_attempts=$ATTEMPTS" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          PROVIDER=""; ATTEMPT=0; STATUS="UNKNOWN"; RETRYABLE=false
+          TOTAL_ATTEMPTS=0
+          MAX_TOTAL_ATTEMPTS=4
+          MAX_SAME_PROVIDER_ATTEMPTS=1
+          DECISION="failed"
+          FINAL_EVENT="free_tier_failed"
+          for provider in centraldark github; do
+            [ "$TOTAL_ATTEMPTS" -ge "$MAX_TOTAL_ATTEMPTS" ] && break
+            SAME_ATTEMPTS=0
+            while [ "$SAME_ATTEMPTS" -lt "$MAX_SAME_PROVIDER_ATTEMPTS" ] && [ "$TOTAL_ATTEMPTS" -lt "$MAX_TOTAL_ATTEMPTS" ]; do
+              SAME_ATTEMPTS=$((SAME_ATTEMPTS+1))
+              TOTAL_ATTEMPTS=$((TOTAL_ATTEMPTS+1))
+              ATTEMPT="$TOTAL_ATTEMPTS"
+              PROVIDER="$provider"
+              STATUS="attempt"; RETRYABLE=false
+              jsonl provider_attempt "$PROVIDER" "$ATTEMPT" "$STATUS" "$RETRYABLE"
+              if [ "$provider" = "github" ]; then
+                HTTP_CODE=$(curl -sS -o /dev/null -w "%{http_code}" \
+                  -H "Authorization: Bearer $GITHUB_TOKEN" \
+                  -H "Accept: application/vnd.github+json" \
+                  "https://api.github.com/repos/${{ github.repository }}/pulls/${PR_NUMBER}" 2>/dev/null || echo "000")
+                if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "304" ]; then
+                  STATUS="success"; RETRYABLE=false; DECISION="success"; FINAL_EVENT="free_tier_complete"
+                  jsonl provider_success "$PROVIDER" "$ATTEMPT" "$STATUS" "$RETRYABLE"
+                  break
+                else
+                  STATUS="github_api_failure"; RETRYABLE=false; DECISION="failed"; FINAL_EVENT="free_tier_failed"
+                  jsonl provider_error "$PROVIDER" "$ATTEMPT" "$STATUS" "$RETRYABLE"
+                  break
+                fi
+              else
+                HTTP_CODE=$(curl -sS -o /dev/null -w "%{http_code}" \
+                  -H "Authorization: Bearer $CENTRALDARK_API_KEY" \
+                  "${CENTRALDARK_HUB_BASE}/api/keys/list?user_id=CentralDark" 2>/dev/null || echo "000")
+                if [ "$HTTP_CODE" = "200" ]; then
+                  STATUS="success"; RETRYABLE=false; DECISION="success"; FINAL_EVENT="free_tier_complete"
+                  jsonl provider_success "$PROVIDER" "$ATTEMPT" "$STATUS" "$RETRYABLE"
+                  break
+                elif echo "$HTTP_CODE" | grep -E '^(429|502|503|504)$' >/dev/null 2>&1; then
+                  STATUS="http_${HTTP_CODE}"; RETRYABLE=true
+                  jsonl provider_error "$PROVIDER" "$ATTEMPT" "$STATUS" "$RETRYABLE"
+                elif echo "$HTTP_CODE" | grep -E '^(400|401|403)$' >/dev/null 2>&1; then
+                  STATUS="http_${HTTP_CODE}"; RETRYABLE=false; DECISION="failed"; FINAL_EVENT="free_tier_failed"
+                  jsonl provider_error "$PROVIDER" "$ATTEMPT" "$STATUS" "$RETRYABLE"
+                  break
+                else
+                  STATUS="http_${HTTP_CODE}"; RETRYABLE=false; DECISION="failed"; FINAL_EVENT="free_tier_failed"
+                  jsonl provider_error "$PROVIDER" "$ATTEMPT" "$STATUS" "$RETRYABLE"
+                  break
+                fi
+              fi
+            done
+            if [ "$STATUS" = "success" ] || [ "$RETRYABLE" = "false" ]; then
+              break
+            fi
+            if [ "$TOTAL_ATTEMPTS" -lt "$MAX_TOTAL_ATTEMPTS" ]; then
+              jsonl rollover "$PROVIDER" "$TOTAL_ATTEMPTS" rollover true
+            fi
+          done
+          jsonl "$FINAL_EVENT" "$PROVIDER" "$TOTAL_ATTEMPTS" "$DECISION" false
+          jq -n --arg decision "$DECISION" --arg provider "$PROVIDER" --argjson attempts "$TOTAL_ATTEMPTS" --arg head_sha "$HEAD_SHA" --argjson pr "$PR_NUMBER" --argjson run_id "$RUN_ID" \
+            '{decision:$decision,provider:$provider,attempts:$attempts,head_sha:$head_sha,pr:$pr,run_id:$run_id}' > "$STATE_FILE"
+          echo "free_tier_decision=$DECISION" >> "$GITHUB_OUTPUT"
+          echo "free_tier_provider=$PROVIDER" >> "$GITHUB_OUTPUT"
+          echo "free_tier_attempts=$TOTAL_ATTEMPTS" >> "$GITHUB_OUTPUT"
 
   hosted-compatibility-gate:
     name: 🧮 Compatibilidade viva + same-head + squash
