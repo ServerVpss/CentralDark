@@ -49,7 +49,12 @@ jobs:
           )
           PY
           chmod 600 "$KEY"
-          TARGET_HOST="${VPS_HOST_LOVABLE}"`n          if ! getent hosts "$TARGET_HOST" >/dev/null 2>&1; then`n            TARGET_HOST="89.117.78.124"`n            echo "HOST_RESOLUTION_FALLBACK=VPS_CANONICAL_IP"`n          fi`n          echo "TARGET_HOST_SELECTED=1 USER_PRESENT=$([ -n "${VPS_USER_LOVABLE:-}" ] && echo 1 || echo 0)"
+          TARGET_HOST="${VPS_HOST_LOVABLE}"
+          if ! getent hosts "$TARGET_HOST" >/dev/null 2>&1; then
+            TARGET_HOST="89.117.78.124"
+            echo "HOST_RESOLUTION_FALLBACK=VPS_CANONICAL_IP"
+          fi
+          echo "TARGET_HOST_SELECTED=1 USER_PRESENT=$([ -n "${VPS_USER_LOVABLE:-}" ] && echo 1 || echo 0)"
           set +e
           ssh -o StrictHostKeyChecking=accept-new \
               -o BatchMode=yes \
