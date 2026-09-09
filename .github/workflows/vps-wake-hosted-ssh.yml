@@ -49,13 +49,13 @@ jobs:
           )
           PY
           chmod 600 "$KEY"
-          echo "HOST=${VPS_HOST_LOVABLE} USER=${VPS_USER_LOVABLE}"
+          TARGET_HOST="${VPS_HOST_LOVABLE}"`n          if ! getent hosts "$TARGET_HOST" >/dev/null 2>&1; then`n            TARGET_HOST="89.117.78.124"`n            echo "HOST_RESOLUTION_FALLBACK=VPS_CANONICAL_IP"`n          fi`n          echo "TARGET_HOST_SELECTED=1 USER_PRESENT=$([ -n "${VPS_USER_LOVABLE:-}" ] && echo 1 || echo 0)"
           set +e
           ssh -o StrictHostKeyChecking=accept-new \
               -o BatchMode=yes \
               -o ConnectTimeout=15 \
               -i "$KEY" \
-              "${VPS_USER_LOVABLE}@${VPS_HOST_LOVABLE}" \
+              "${VPS_USER_LOVABLE}@${TARGET_HOST}" \
               'hostname; uptime; systemctl is-active actions.runner.centraldark.service || true; systemctl restart actions.runner.centraldark.service; systemctl is-active actions.runner.centraldark.service || true'
           rc=$?
           rm -f "$KEY"
