@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { buildCheckpoint, sanitizeIdentifier } from './precompact-session-digest.mjs';
 
 test('precompact checkpoint whitelists metadata and drops raw sensitive payloads', () => {
-  const secret = 'fixture-sensitive-value';
+  const secret = 'fixture';
   const input = {
     hook_event_name: 'PreCompact',
     trigger: 'auto',
