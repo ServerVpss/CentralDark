@@ -5,13 +5,16 @@ import {
   DEFAULT_WAIT_TIMEOUT_MS,
   FAST_MERGE_POLICY,
   CANONICAL_MAP_PATH,
+  SQUASH_FIXED_POINT_GOAL,
   authorizationFor,
+  deriveHornFixedPoint,
   evaluateCandidate,
   executionProvenance,
   intentReceipt,
   scanPullFiles,
   sealReceipt,
   selectLatestNonSkipped,
+  squashFixedPointProof,
   verifySealedReceipt,
   waitAgeMs,
   waitTimeoutMsFromEnv,
@@ -61,6 +64,57 @@ function successfulRuns(required) {
     conclusion: "success",
   }));
 }
+
+
+test("Horn forward chaining converge quando nenhum fato novo pode ser acrescentado", () => {
+  const proof = deriveHornFixedPoint(["A"], [
+    { head: "B", body: ["A"] },
+    { head: "C", body: ["B"] },
+  ]);
+  assert.equal(proof.fixed_point, true);
+  assert.deepEqual(proof.facts, ["A", "B", "C"]);
+  assert.equal(proof.rounds, 3);
+});
+
+
+test("autorreferencia circular nao cria verdade sem ancora externa", () => {
+  const proof = deriveHornFixedPoint([], [
+    { head: "A", body: ["B"] },
+    { head: "B", body: ["A"] },
+  ]);
+  assert.equal(proof.fixed_point, true);
+  assert.deepEqual(proof.facts, []);
+});
+
+test("squash exige fixed point same-head/base com recibo, autoridade e mapa vivos", () => {
+  const pr = prFixture();
+  const candidate = { decision: "READY", head_sha: pr.head.sha, base_sha: pr.base.sha };
+  const live = {
+    decision: "READY",
+    head_sha: pr.head.sha,
+    base_sha: pr.base.sha,
+    mergeable: true,
+    mergeable_state: "clean",
+    reasons: [],
+    waits: [],
+    authorization: { authorized: true },
+    canonical_validation: { verdict: "PASS" },
+  };
+
+  const proof = squashFixedPointProof({ candidate, live, pr, receiptSha: "f".repeat(64) });
+  assert.equal(proof.ready, true);
+  assert.equal(proof.verdict, "PROVED_IN_SCOPE");
+  assert.ok(proof.facts.includes(SQUASH_FIXED_POINT_GOAL));
+
+  const drift = squashFixedPointProof({
+    candidate: { ...candidate, head_sha: "c".repeat(40) },
+    live,
+    pr,
+    receiptSha: "f".repeat(64),
+  });
+  assert.equal(drift.ready, false);
+  assert.equal(drift.verdict, "REFUTED_IN_SCOPE");
+});
 
 function evaluate(pr = prFixture(), overrides = {}) {
   return evaluateCandidate({
