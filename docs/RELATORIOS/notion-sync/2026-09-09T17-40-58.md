@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-09-09T17:06:38.884Z
+# 🧠 Notion Sync — 2026-09-09T17:40:58.081Z
 
-- **Commit fonte:** `b4dd1e7daf84bbef333b86a0bb98cafeab364cce`
+- **Commit fonte:** `a2acf5fcd28b00d4274038b05a80e9daa0510b02`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 491 atualizadas · ❌ 23 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 491 atualizadas · ❌ 24 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
 | aprendizados | 36 | 0 | 35 | 0 | 1 |
-| estrutura | 434 | 0 | 412 | 0 | 22 |
+| estrutura | 435 | 0 | 412 | 0 | 23 |
 
 ## Operações
 
@@ -343,6 +343,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/DARKAI/PROMPT-UNIVERSAL.md |
 | estrutura | atualizado | docs/CONSCIENCIA/DARKAI/QUICKSTART.md |
 | estrutura | atualizado | docs/CONSCIENCIA/DARKAI/README.md |
+| estrutura | erro | docs/CONSCIENCIA/DELTA-UTIL-FULL-CENTRALDARK-HARNESS-20260909.md |
 | estrutura | atualizado | docs/CONSCIENCIA/DESAFIO-NIVEL-7-AGENTES-ERRO-ABERTO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/DESEJOS-FUTUROS-MEGA-PACOTAO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/DICIONARIO-PIVETE-GITHUB.md |
