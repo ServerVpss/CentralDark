@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-09-07T22:16:39.111Z
-- **Commit:** `cc5af475e4eee4811e7ca66c3bedb3be496ff995`
+- **Gerado:** 2026-09-09T07:27:35.949Z
+- **Commit:** `0dfe5bb3a719f022d8e9e12b348411ffe45cf41c`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 39 | 39 | 39 | 0 | 0 |
-| aprendizados | 35 | 0 | 0 | 35 | 0 |
+| aprendizados | 36 | 0 | 0 | 36 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **35**
+- 🟥 Faltando no Notion: **36**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -83,4 +83,5 @@
 - 32. Uma capacidade = uma linhagem = um PR de promoção por escopo
 - 33. Opinião usada como medição gera falso verde e ação destrutiva
 - 34. Sem TURN_CLASS não há gate entre ler e agir — a impressão ocupa o slot da medição
+- 35. T3: ponte semântica EXIT 1, três catálogos, VPS na main 8 atrás
 </details>

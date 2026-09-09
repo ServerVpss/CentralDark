@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-09-07T22:16:35.428Z
+# 🧠 Notion Sync — 2026-09-09T07:27:32.379Z
 
-- **Commit fonte:** `cc5af475e4eee4811e7ca66c3bedb3be496ff995`
+- **Commit fonte:** `0dfe5bb3a719f022d8e9e12b348411ffe45cf41c`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 491 atualizadas · ❌ 18 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 491 atualizadas · ❌ 22 erros
 
 ## Por base
 
@@ -15,8 +15,8 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
-| aprendizados | 35 | 0 | 35 | 0 | 0 |
-| estrutura | 430 | 0 | 412 | 0 | 18 |
+| aprendizados | 36 | 0 | 35 | 0 | 1 |
+| estrutura | 433 | 0 | 412 | 0 | 21 |
 
 ## Operações
 
@@ -101,6 +101,7 @@
 | aprendizados | atualizado | #32 — Uma capacidade = uma linhagem = um PR de promoção por escopo |
 | aprendizados | atualizado | #33 — Opinião usada como medição gera falso verde e ação destrutiva |
 | aprendizados | atualizado | #34 — Sem TURN_CLASS não há gate entre ler e agir — a impressão ocupa o slot da medição |
+| aprendizados | erro | #35 — T3: ponte semântica EXIT 1, três catálogos, VPS na main 8 atrás |
 | estrutura | atualizado | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | atualizado | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
@@ -220,6 +221,9 @@
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-05-WORKFLOW-STARTUP-FAILURE-MINERAL.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-06-VERTEX-INVERSO-RODADA2-PEPITAS-PROVADAS.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-06-VERTEX-INVERSO-RODADA3-PEPITAS-PROVADAS.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-06-VERTEX-INVERSO-RODADA4-PEPITAS-PROVADAS.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-08-CI-MENOS-E-MAIS-JUIZ-PORTA.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-08-GARIMPO-CHEFE-PR-MAIN-DELTA-CONTINUO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/AIOS-GOLD-ASSAY-20260828/CAPABILITY-MATRIX.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/AIOS-GOLD-ASSAY-20260828/COUNTERPROOF.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/AIOS-GOLD-ASSAY-20260828/HERMES-PROOF-PLAN.md |
