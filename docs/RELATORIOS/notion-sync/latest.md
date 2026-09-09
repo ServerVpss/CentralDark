@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-09-09T03:22:30.255Z
+# 🧠 Notion Sync — 2026-09-09T20:41:44.573Z
 
-- **Commit fonte:** `7b1861ae05d6b967e7b9362f69ac2882068ce2f7`
+- **Commit fonte:** `918efbef01a20e8da59e0db50f34fe4f1d1c605f`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 491 atualizadas · ❌ 22 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 491 atualizadas · ❌ 25 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
 | aprendizados | 36 | 0 | 35 | 0 | 1 |
-| estrutura | 433 | 0 | 412 | 0 | 21 |
+| estrutura | 436 | 0 | 412 | 0 | 24 |
 
 ## Operações
 
@@ -118,6 +118,8 @@
 | estrutura | atualizado | docs/CONSCIENCIA/03-FLUXO-DEPLOY.md |
 | estrutura | atualizado | docs/CONSCIENCIA/04-MCP-E-CONECTORES/ARQUITETURA-MCP-V2.md |
 | estrutura | atualizado | docs/CONSCIENCIA/04-MCP-E-CONECTORES/BOAS-PRATICAS-MCP.md |
+| estrutura | erro | docs/CONSCIENCIA/04-MCP-E-CONECTORES/MCP-REUSE-HORN-FIXED-POINT.md |
+| estrutura | erro | docs/CONSCIENCIA/04-MCP-E-CONECTORES/PDF-CONFORMANCE-CC2003.md |
 | estrutura | atualizado | docs/CONSCIENCIA/04-MCP-E-CONECTORES/RECONECTAR-CONECTOR.md |
 | estrutura | atualizado | docs/CONSCIENCIA/04-MCP-E-CONECTORES/SYSTEM-PROMPT-ADMIN.md |
 | estrutura | atualizado | docs/CONSCIENCIA/04-MCP-E-CONECTORES/SYSTEM-PROMPT-USUARIO.md |
@@ -342,6 +344,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/DARKAI/PROMPT-UNIVERSAL.md |
 | estrutura | atualizado | docs/CONSCIENCIA/DARKAI/QUICKSTART.md |
 | estrutura | atualizado | docs/CONSCIENCIA/DARKAI/README.md |
+| estrutura | erro | docs/CONSCIENCIA/DELTA-UTIL-FULL-CENTRALDARK-HARNESS-20260909.md |
 | estrutura | atualizado | docs/CONSCIENCIA/DESAFIO-NIVEL-7-AGENTES-ERRO-ABERTO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/DESEJOS-FUTUROS-MEGA-PACOTAO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/DICIONARIO-PIVETE-GITHUB.md |

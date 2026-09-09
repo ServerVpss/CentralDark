@@ -16,6 +16,14 @@ const EXTENSION = "docs/CONSCIENCIA/EXECUCAO-CONTINUA-OWNER-WRITER-CONNECTOR.jso
 const PORTA_VIVA = "docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md";
 const GATE = ".github/workflows/porta-de-entrada.yml";
 const SHARED_WRITER_PUSH = "scripts/lupa/writer-safe-push-main.sh";
+const REMOVED_MAIN_WRITERS = Object.freeze([
+  {
+    path: ".github/workflows/linear-pendencias-sync.yml",
+    decision: "REMOVED_BY_DESIGN",
+    owner: "docs/CAPACIDADES/pendencias-painel-centraldark.md",
+  },
+]);
+
 const MAIN_WRITERS = Object.freeze([
   ".github/workflows/notion-sync.yml",
   ".github/workflows/painel-vivo.yml",
@@ -287,6 +295,7 @@ const report = {
   scope: contract?.global_continuity_policy?.scope ?? null,
   temporal_scope: contract?.global_continuity_policy?.temporal_scope ?? null,
   main_writers: MAIN_WRITERS,
+  removed_main_writers: REMOVED_MAIN_WRITERS,
   shared_writer_push: SHARED_WRITER_PUSH,
   input_authority_boundary: errors.some((item) => item.includes("AUTHORITY") || item.includes("INPUT_BOUNDARY")) ? "BLOCKED" : "PASS",
   counterproof: errors.length === 0 ? "PASS" : "BLOCKED",

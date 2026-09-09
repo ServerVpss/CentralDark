@@ -101,3 +101,28 @@ Proteções:
 - ❌ Nunca expor o WEBHOOK_SECRET
 - ✅ Para testar: `curl https://hook.multizap.dev/health`
 - ✅ Para ver logs: `tail -f /var/log/clone-deck-webhook.log`
+
+## Gate Horn-Caracol para eventos CentralDark
+
+Webhooks comuns do GitHub continuam sendo ingeridos como observacao. Para eventos que
+tentam executar acao operacional CentralDark, o emissor deve declarar:
+
+```json
+{
+  "centraldark_gate_required": true,
+  "centraldark_gate": {
+    "acordar_done": true,
+    "calibrar_done": true,
+    "multibussola_done": true,
+    "meta_lupa_done": true,
+    "menos_e_mais_done": true,
+    "owner_resolved": true,
+    "writer_scope_valid": true,
+    "evidence_bound": true,
+    "no_destructive_bypass": true
+  }
+}
+```
+
+Sem esses fatos, o receptor retorna `422` com `gate=HORN_CARACOL`.
+Isso evita que um PING, comentario, agenda ou modelo externo vire permissao de trabalho.

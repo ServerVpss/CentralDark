@@ -1,49 +1,16 @@
 {
-  "schema": "centraldark.remote-bridge.config.v4",
+  "schema": "centraldark.remote-bridge.config.v2",
   "device_label": "SEGREDO",
   "workdir": "E:\\CentralDark\\_MAPA_CASA\\GARIMPO-CHEFE",
-  "github_default": "ServerVpss/CentralDark",
-  "one_system_only": true,
-  "one_router_only": true,
-  "omni_router_url": "http://127.0.0.1:8099",
-  "omni_messages_url": "http://127.0.0.1:8099/v1/messages",
-  "omni_autonomy_url": "http://127.0.0.1:8099/v1/autonomy",
-  "omni_launcher": "scripts\\launch_omni_router.py",
-  "local_primary_engine": "hermes",
-  "external_providers_required": false,
-  "package": "@wonderwhy-er/desktop-commander@latest",
+  "package": "@wonderwhy-er/desktop-commander@0.2.48",
   "remote_mcp": "https://mcp.desktopcommander.app/mcp",
-  "remote_mcp_required_for_core": false,
   "centraldark_mcp": "https://mcp.centralldark.com/mcp",
+  "github_default": "ServerVpss/CentralDark",
   "screenpipe_url": "http://127.0.0.1:3030",
   "screenpipe_context_file": "context\\screenpipe-latest.json",
   "screenpipe_status_file": "context\\screenpipe-status.json",
-  "bridge_state_file": "context\\centraldark-live-state.json",
   "screenpipe_window_minutes": 15,
   "read_only_first": true,
   "secrets_in_repo": false,
-  "telegram_out_of_scope": true,
-  "resilience_vertex": {
-    "enabled": true,
-    "owner": "apps/modulos/fixed-point-fabric/src/centraldark_fixed_point/resilience.py",
-    "signal_ttl_seconds": 90,
-    "heartbeat_seconds": 5,
-    "stable_samples": 2,
-    "state_capacitor": true,
-    "resume_from_cursor": true,
-    "user_suspended_never_auto_resume": true,
-    "unknown_never_pass": true,
-    "auth_401_same_credential_retry": false,
-    "pong_means_remote_reachable_not_app_ready": true,
-    "model_switch_is_not_reset": true,
-    "session_switch_is_not_reset": true
-  },
-  "log_contract": {
-    "human_format": "[ICON CATEGORY][object_type:object_id][STATE] message",
-    "persistent_format": "JSONL",
-    "categories": [
-      "AUTHORITY", "INTENT", "SENSOR", "RECEIVER", "CAPACITOR", "FALLBACK", "RESUME",
-      "ROUTER", "REMOTE", "CASA", "VPS", "GITHUB", "APP", "VOICE", "SECURITY", "RECEIPT", "REALITY"
-    ]
-  }
+  "telegram_out_of_scope": true
 }
