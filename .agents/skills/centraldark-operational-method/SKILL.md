@@ -1577,3 +1577,44 @@ filepath = os.path.join(destino_abs, base_name)
 - references/mcp-local-bootstrap.md — procedimento validado para subir MCP CentralDark localmente (health, status.json, 110 tools)
 - references/soul-config-divergence-runtime-block.md — padrão de divergência SOUL/config quando runtime lê de UserProfile (AppData) vs canônico
 - references/soul-hermes-casa-local-adapter-only.md — SOUL HERMES-CASA/pivete existe só como adaptador local, não no GitHub canônico
+
+## !CENTRALDARK Gate Oficial
+
+Quando o CHEFE invocar `!CENTRALDARK`, `#ACORDAR`, `!CALIBRAR`, `!MULTIBUSSOLA`
+ou variantes evidentes, a Casa nao pode pegar ferramenta material antes do gate:
+
+```text
+CHEFE_INPUT
+-> DESTINATION_LOCK
+-> #ACORDAR
+-> !CALIBRAR
+-> !MULTIBUSSOLA
+-> !META_LUPA
+-> MENOS_E_MAIS
+-> OWNER_EXISTENTE
+-> WRITER_SCOPE
+-> EVIDENCE_BOUND
+-> TOOL_CALL
+-> RECEIPT
+```
+
+`!META_LUPA` nao e enfeite de relatorio. Em escopo tecnico da CentralDark ela e
+precondicao operacional para evitar que o agente entre em ruas aleatorias.
+
+Microetapas obrigatorias por agente:
+
+```text
+A       -> declarar claim/objetivo exato
+CORPO   -> fotografar estado vivo e owner
+SOMBRA  -> procurar contradicao/falso-verde/regressao
+ALMA    -> extrair aprendizado reutilizavel
+VOLTA   -> refazer menor no owner correto
+```
+
+Se um agente corrigiu um erro simples uma vez, a proxima execucao deve procurar o
+mesmo padrao primeiro, antes de redesenhar a arquitetura. Isso e aprendizado
+operacional, nao memoria decorativa.
+
+Ferramentas, webhooks e bots que queiram executar acao CentralDark podem declarar
+`centraldark_gate_required=true` e anexar `centraldark_gate` com os fatos do gate.
+Sem os fatos obrigatorios, o receptor deve falhar fechado.

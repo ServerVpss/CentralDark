@@ -1,0 +1,28 @@
+name: Test VPS SSH by IP
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-ssh-ip:
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 10
+    env:
+      VPS_SSH_KEY_LOVABLE: ${{ secrets.VPS_SSH_KEY_LOVABLE }}
+      VPS_USER_LOVABLE: ${{ secrets.VPS_USER_LOVABLE }}
+    steps:
+      - name: Checkout repository (not really needed but keeps env)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up SSH agent and add key
+        run: |
+          mkdir -p ~/.ssh
+          eval "$(ssh-agent -s)"
+          printf '%s' "$VPS_SSH_KEY_LOVABLE" | ssh-add -
+          ssh-keyscan -H 89.117.78.124 >> ~/.ssh/known_hosts 2>/dev/null || true
+      - name: Test SSH connection to IP
+        run: |
+          ssh -o BatchMode=yes -o ConnectTimeout=10 -o StrictHostKeyChecking=accept-new $VPS_USER_LOVABLE@89.117.78.124 "echo 'SSH connection successful'; hostname"
+        env:
+          SSH_AUTH_SOCK: ${{ runner.debug }}

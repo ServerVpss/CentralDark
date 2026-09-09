@@ -18,6 +18,8 @@ const WRITE_ROLES = new Set(["EXECUTOR", "HERMES"]);
 const DELEGATION_ROLES = new Set(["DEBUGGER", "REVIEWER", "JUDGE", "READ_ONLY"]);
 const CLOSED_FRONTIER_STATES = new Set(["CLOSED", "DONE", "RESOLVED"]);
 const HEALING_LEVELS = ["WELD", "REBUILD_LOCAL", "JUMP_BRIDGE"];
+export const SCOPE_HOT_MS = 60_000;
+export const SCOPE_WARM_MS = 120_000;
 
 function nonEmpty(value) {
   return typeof value === "string" && value.trim().length > 0;
@@ -25,6 +27,114 @@ function nonEmpty(value) {
 
 function nonEmptyArray(value) {
   return Array.isArray(value) && value.length > 0 && value.every(nonEmpty);
+}
+
+function asScopeList(value) {
+  if (Array.isArray(value)) return value.filter(nonEmpty);
+  return nonEmpty(value) ? [value] : [];
+}
+
+function activityActor(activity) {
+  return activity?.actor || activity?.agent || activity?.writer || null;
+}
+
+function activityScopes(activity, fallback = []) {
+  const explicit = asScopeList(activity?.scope ?? activity?.scopes);
+  return explicit.length ? explicit : fallback;
+}
+
+/**
+ * Temperatura MetaLupa do escopo. A identidade do agente é somente proveniência:
+ * o gate olha colisão temporal no mesmo escopo, não marca/modelo.
+ *
+ * HOT  <= 60s  -> outro ator espera a próxima rodada.
+ * WARM <= 120s -> outro ator ainda espera a próxima rodada.
+ * COLD > 120s  -> takeover pode seguir se os demais gates passarem.
+ * UNKNOWN      -> mantém o guard estático legado, evitando falso-verde.
+ */
+export function scopeTemperature(call, state, now = Date.now()) {
+  const requestedScope = asScopeList(call?.scope);
+  const activities = Array.isArray(state?.scope_activity)
+    ? state.scope_activity.filter((item) => item && typeof item === "object")
+    : [];
+
+  if (state?.writer?.touched_at) {
+    activities.push({
+      actor: state.writer.agent || null,
+      touched_at: state.writer.touched_at,
+      scope: state.writer.scope || requestedScope,
+      source: "writer-fallback",
+    });
+  }
+
+  const relevant = activities
+    .map((activity) => {
+      const stamp = Date.parse(String(activity?.touched_at || activity?.timestamp || ""));
+      if (!Number.isFinite(stamp)) return null;
+      const scopes = activityScopes(activity, requestedScope);
+      if (requestedScope.length && scopes.length && !scopes.some((scope) => requestedScope.includes(scope))) return null;
+      return {
+        actor: activityActor(activity),
+        touched_at: new Date(stamp).toISOString(),
+        age_ms: Math.max(0, now - stamp),
+        scopes,
+        source: activity?.source || "scope_activity",
+      };
+    })
+    .filter(Boolean)
+    .sort((a, b) => a.age_ms - b.age_ms);
+
+  const latest = relevant[0];
+  if (!latest) {
+    return {
+      temperature: "UNKNOWN",
+      actor: null,
+      age_ms: null,
+      retry_after_ms: null,
+      touched_at: null,
+      source: null,
+    };
+  }
+
+  if (latest.actor && latest.actor === call?.to) {
+    return {
+      temperature: "SELF",
+      actor: latest.actor,
+      age_ms: latest.age_ms,
+      retry_after_ms: 0,
+      touched_at: latest.touched_at,
+      source: latest.source,
+    };
+  }
+
+  if (latest.age_ms <= SCOPE_HOT_MS) {
+    return {
+      temperature: "HOT",
+      actor: latest.actor,
+      age_ms: latest.age_ms,
+      retry_after_ms: SCOPE_WARM_MS - latest.age_ms + 1,
+      touched_at: latest.touched_at,
+      source: latest.source,
+    };
+  }
+  if (latest.age_ms <= SCOPE_WARM_MS) {
+    return {
+      temperature: "WARM",
+      actor: latest.actor,
+      age_ms: latest.age_ms,
+      retry_after_ms: SCOPE_WARM_MS - latest.age_ms + 1,
+      touched_at: latest.touched_at,
+      source: latest.source,
+    };
+  }
+  return {
+    temperature: "COLD",
+    actor: latest.actor,
+    age_ms: latest.age_ms,
+    retry_after_ms: 0,
+    touched_at: latest.touched_at,
+    source: latest.source,
+  };
 }
 
 function fail(reason, call, extra = {}) {
@@ -491,7 +601,7 @@ export function validateHealingResult(result, state) {
   };
 }
 
-export function validateAgentCall(call, state) {
+export function validateAgentCall(call, state, now = Date.now()) {
   if (!call || typeof call !== "object") return fail("BLOCKED_INVALID_CALL", call);
   if (!state || typeof state !== "object") return fail("BLOCKED_UNKNOWN_MISSION", call);
 
@@ -519,6 +629,7 @@ export function validateAgentCall(call, state) {
   if (requestedScope.some((x) => denied.includes(x))) return fail("BLOCKED_OUT_OF_SCOPE", call);
   if (allowed.length && requestedScope.some((x) => !allowed.includes(x))) return fail("BLOCKED_OUT_OF_SCOPE", call);
 
+  const temperature = scopeTemperature(call, state, now);
   const nested = Boolean(call.parent_call_id);
   if (nested) {
     if (!call.frontier_id || !Number.isInteger(call.depth) || call.depth < 1) {
@@ -534,9 +645,30 @@ export function validateAgentCall(call, state) {
 
   if (writeRequested) {
     if (!WRITE_ROLES.has(call.requested_role)) return fail("BLOCKED_ROLE_CANNOT_WRITE", call);
+
+    if (["HOT", "WARM"].includes(temperature.temperature) && temperature.actor !== call.to) {
+      return fail("WAIT_SCOPE_HOT", call, {
+        scope_temperature: temperature.temperature,
+        scope_temperature_age_ms: temperature.age_ms,
+        scope_temperature_actor: temperature.actor,
+        scope_temperature_touch: temperature.touched_at,
+        retry_after_ms: temperature.retry_after_ms,
+        next_round: "REMEASURE_SCOPE_TEMPERATURE",
+        meta_lupa: true,
+        breaths_total: 17,
+        delta_minimum: true,
+      });
+    }
+
     const writer = state?.writer?.agent;
     if (!writer || writer === "NONE") return fail("BLOCKED_NO_WRITER", call);
-    if (writer !== call.to) return fail("BLOCKED_WRITER_CONFLICT", call, { current_writer: writer });
+    if (writer !== call.to && temperature.temperature === "UNKNOWN") {
+      return fail("BLOCKED_WRITER_CONFLICT", call, {
+        current_writer: writer,
+        scope_temperature: "UNKNOWN",
+        next_round: "REQUIRE_TOUCH_TIMESTAMP_OR_HANDOFF",
+      });
+    }
     if (call.writer_handoff_required === true && call.writer_handoff_valid !== true) {
       return fail("BLOCKED_MISSING_HANDOFF", call);
     }
@@ -560,6 +692,14 @@ export function validateAgentCall(call, state) {
     trail_id: call.trail_id || routeId,
     scope: requestedScope,
     requested_action: call.requested_action,
+    scope_temperature: temperature.temperature,
+    scope_temperature_age_ms: temperature.age_ms,
+    scope_temperature_actor: temperature.actor,
+    retry_after_ms: temperature.retry_after_ms,
+    writer_takeover: Boolean(writeRequested && state?.writer?.agent && state.writer.agent !== call.to && temperature.temperature === "COLD"),
+    meta_lupa: true,
+    breaths_total: 17,
+    delta_minimum: true,
     return_mode: "DELTA_MESSAGE",
     radio_mode: "DELTA_ONLY",
   };
