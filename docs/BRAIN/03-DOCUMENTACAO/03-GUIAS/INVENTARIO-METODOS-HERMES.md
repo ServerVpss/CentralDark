@@ -1,73 +1,89 @@
 ---
-title: "Inventário de Métodos Hermes"
-status: "CANDIDATO"
-updated: 2026-08-17
-tags: ["hermes", "inventario", "metodos", "obsidian", "dream-review", "percepcao", "telemetria"]
+title: "⚡ Inventário de Métodos Hermes"
+status: "CANDIDATO_RECONCILIADO"
+date: 2026-08-17
+updated: 2026-09-10
+owner: "docs/BRAIN/03-DOCUMENTACAO/03-GUIAS/INVENTARIO-METODOS-HERMES.md"
+truth_scope: "HERMES_METHOD_NAVIGATION_NOT_RUNTIME_PROOF"
+canonical: false
+tags:
+  - hermes
+  - inventario
+  - metodos
+  - obsidian
+  - dream-review
+  - percepcao
+  - telemetria
+  - centraldark
+related:
+  - "[[HERMES-CADEIA-OPERACIONAL]]"
+  - "[[PADRAO-GRAFO-VIVO-MARKDOWN]]"
+links:
+  - "docs/CONSCIENCIA/HERMES-CADEIA-OPERACIONAL.md"
+  - "apps/modulos/HERMES-CORE/core/perception-orchestra.mjs"
+  - "apps/modulos/HERMES-CORE/core/routing-strategy.mjs"
+  - "apps/modulos/HERMES-CORE/core/continuity-guard.mjs"
+  - "scripts/memory-linker/"
 ---
 
-# Inventário de Métodos Hermes
+# ⚡ Inventário de Métodos Hermes
 
-Esta nota é a gaveta legível no BRAIN/Obsidian para localizar **nome → setor → quando usa → o que mede → efeito → limite**. O owner operacional continua sendo o arquivo de código/documento indicado; esta nota não vira segunda fonte de verdade.
+Esta nota é a gaveta legível no BRAIN/Obsidian para localizar **nome → setor → quando usa → o que mede → efeito → limite**. O owner operacional continua sendo o código/documento indicado em cada linha; esta nota não vira segunda fonte de verdade.
 
-## Mapa seco
+## 🧭 Mapa seco
 
-| Método | Setor | Usa quando | Mede | O que acontece | Limite real |
+| Método | Setor | Usa quando | Mede | Efeito | Limite real |
 |---|---|---|---|---|---|
-| Percepção Paralela | Cognição Hermes | Antes de mutação material com incerteza | `elapsed_ms`, `all_four_completed`, `missing_roles`, `unproven_roles`, `material_findings`, `ready_for_writer` | 4 braços READ_ONLY atacam a mesma intenção e podem liberar 1 slot de Writer | 4 respostas não são 4 provas; não escreve |
-| Independência de Evidência | Prova e contraprova | Quando vários agentes/modelos concordam | `independence_key`, `evidence_ref`, `effective_independent_count`, `correlated_clusters`, `confidence_can_increase` | Eco/correlação é agrupado para não inflar confiança | Modelo/provider diferente não prova independência causal |
-| Roteamento de Modelos | Orquestração de modelos | Antes de escolher qual modelo entra primeiro | `priority/order`, `cost_weight`, `timeout_ms`, offset do round-robin | Reordena pool por priority/cost/latency configurada/round-robin | `cost_weight` não é custo real; `timeout_ms` não é latência real medida |
-| Continuity Guard | Continuidade de estado | Ao retomar missão/sessão antes de DECIDE/APPLY | `head_sha`, baseline, backup, rollback, receipt, reasons, fingerprint | READY se tudo fecha no mesmo HEAD; senão BLOCKED | Não prova VPS/aparelho/runtime externo sozinho |
-| Memory Linker | Memória e aprendizado | Quando experiência/achado precisa ser comparado com o que já existe | fingerprint, `NO_NEW_INFORMATION|DELTA`, receipts | Corta repetição e encaminha só delta material | Não promove aprendizado sozinho |
-| Dream Review | Memória / sonho | Revisão ociosa de eventos normalizados | `CANDIDATE|QUARANTINE`, `AUTO_ABSORB_ELIGIBLE`, owner/consumer evidence, source class | Produz candidato ou quarentena para MetaLupa/Writer | `DIRECT_CANONICAL_MUTATION=false`; código não prova scheduler ativo |
-| SOURCE_DELTA | Mineração | Quando uma fonte antiga é lida de novo | fingerprint, `NO_CHANGE|MATERIAL_DELTA` | Fonte velha pode gerar ouro novo se o cruzamento produzir delta material | Delta ainda não é verdade nem ouro promovido |
-| Cristalização / Fixed Point | Cristalização | Quando teste/contraprova fechou e não há informação nova | pass/fail, verdict, fixed-point flags, record hash | Fecha a rodada e preserva ouro reutilizável | Evidência/HEAD novo pode reabrir |
-| Observabilidade / Telemetria da Cápsula | Observabilidade | Quando mutação/aprendizado precisa deixar recibo | run/candidate IDs, pass/fail, fingerprint, promotion readiness | Gera ledger/snapshot observável | Não controla logs internos de iOS/Windows/navegador/serviço externo |
+| Percepção Paralela | Cognição Hermes | antes de mutação material com incerteza | `elapsed_ms`, papéis, achados, readiness | braços READ_ONLY atacam a mesma intenção | respostas múltiplas não são provas múltiplas |
+| Independência de Evidência | Prova | quando agentes/modelos concordam | `independence_key`, correlação, evidência | corta eco que inflaria confiança | modelo/provider diferente não prova independência causal |
+| Roteamento de Modelos | Orquestração | antes de escolher modelo | prioridade, custo configurado, timeout, rotação | reordena pool | configuração não é latência/custo real medido |
+| Continuity Guard | Continuidade | ao retomar missão antes de APPLY | HEAD, baseline, rollback, receipt, fingerprint | libera ou bloqueia continuação | não prova runtime externo sozinho |
+| Memory Linker | Memória | quando achado precisa ser comparado | fingerprint, delta, receipts | corta repetição | não promove aprendizado sozinho |
+| Dream Review | Memória | revisão de eventos normalizados | candidate/quarantine, owner/consumer evidence | produz candidato/quarentena | não prova scheduler ativo |
+| SOURCE_DELTA | Mineração | releitura de fonte | fingerprint, mudança material | extrai delta útil | delta ainda não é verdade promovida |
+| Cristalização / Fixed Point | Cristalização | testes e contraprovam fecharam | verdict, fixed-point flags, record hash | fecha rodada | evidência nova reabre |
+| Telemetria da Cápsula | Observabilidade | mutação/aprendizado precisa de rastro | IDs, pass/fail, fingerprint | produz ledger/snapshot | não controla logs externos sozinho |
 
-## Hermes/Trismegisto — efeito técnico possível de contexto
+## 🔎 Hermes/Trismegisto como contexto
 
-```text
-TEXTO HISTORICO|HERMETICO|SIMBOLICO
-+ ENTRA DE VERDADE EM PROMPT|MEMORIA|RAG|EXEMPLO|NOTA RECUPERADA
-→ PODE ALTERAR SAIDA DO MODELO
-```
-
-Efeitos técnicos possíveis: mudar **saliência**, vocabulário, estilo, analogias, associação entre conceitos, priorização de hipóteses e padrão de resposta. Isso é influência de contexto normal de modelo de linguagem.
+Conteúdo histórico/simbólico carregado em prompt, memória, RAG, exemplo ou nota pode alterar saliência, vocabulário, analogias e priorização de hipóteses. Isso é efeito de contexto, não prova de poder externo.
 
 ```text
 CONTEUDO_CARREGADO → EFEITO_TEXTUAL_POSSIVEL
-CONTEUDO_EXISTE_NO_REPO ≠ CONTEUDO_FOI_CARREGADO
-EFEITO_TEXTUAL ≠ PODER_SOBRENATURAL
-EFEITO_TEXTUAL ≠ ACESSO_FISICO_A_TELEFONE_PC
+CONTEUDO_EXISTE_NO_REPO != CONTEUDO_FOI_CARREGADO
+EFEITO_TEXTUAL != ACESSO_FISICO_A_DISPOSITIVO
+NOME|SIMBOLO|PERSONA != PROVA
 ```
-
-Riscos práticos a observar quando esse material entra no contexto:
-
-- **persona/style drift** — resposta começa a imitar mais a linguagem/personagem do material;
-- **over-association** — liga coisas só porque compartilham símbolo/nome/tema;
-- **confirmation bias contextual** — passa a procurar mais evidência compatível com o enquadramento carregado;
-- **causalidade inventada** — associação textual pode parecer causal sem prova;
-- **salience loop** — o mesmo tema reaparece porque memória/RAG o recupera repetidamente.
 
 Guardrail:
 
 ```text
-NOME|SIMBOLO|PERSONA != PROVA
 FONTE → DECODIFICAR → PROVENIENCIA → CONSUMO_REAL → CONTRAPROVA
 SEM CONSUMO PROVADO → EFEITO_CAUSAL=UNKNOWN
 ```
 
-## Owners reais
+## 🧬 Owners reais
 
 - Percepção/independência: `apps/modulos/HERMES-CORE/core/perception-orchestra.mjs`
 - Roteamento: `apps/modulos/HERMES-CORE/core/routing-strategy.mjs`
 - Continuidade: `apps/modulos/HERMES-CORE/core/continuity-guard.mjs`
 - Memory Linker/Dream Review: `scripts/memory-linker/`
-- Trismegisto/proveniência: `docs/CONSCIENCIA/PIVETE-IA/PIVETE-07-HERMES-CADEIA.md`
+- Cadeia Hermes e proveniência: `docs/CONSCIENCIA/HERMES-CADEIA-OPERACIONAL.md`
 - Inventário visual: `apps/modulos/hub/src/components/inventory/InventoryTab.tsx`
 
-## Relação com Obsidian
+## 🧠 Relação com Obsidian
 
-Este arquivo vive em `docs/BRAIN`, portanto pertence à camada documental usada pelo vault/Obsidian. **Estar no BRAIN não prova sincronização física atual com o iPhone nem prova que o Dream Review o consumiu numa execução específica.** Essas duas coisas continuam exigindo medição do sync/consumer quando forem materiais.
+Estar em `docs/BRAIN` torna esta nota pesquisável pelo grafo documental quando o vault correspondente a inclui. Isso **não prova** sincronização física atual nem consumo por Dream Review numa execução específica.
 
-[[MOC-MCP]]
-[[02-ARQUITETURA]]
+```text
+DOCUMENTED != EXECUTED
+EXISTS != RUNNING
+UNKNOWN != PASS
+```
+
+## 🔗 Conexões
+
+- [[HERMES-CADEIA-OPERACIONAL]]
+- [[PADRAO-GRAFO-VIVO-MARKDOWN]]
+- [[MOC-MCP]]
+- [[02-ARQUITETURA]]
