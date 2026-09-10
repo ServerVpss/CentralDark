@@ -1,46 +1,66 @@
 ---
-title: "21 PADRAO APRESENTACAO"
+title: "🎨 Padrão de apresentação — camada visual"
+status: "ATIVO_COMPLEMENTAR"
 date: 2026-06-29
-tags: ["consciencia"]
-updated: 2026-06-29
+updated: 2026-09-10
+owner: "docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md"
+truth_scope: "VISUAL_PRESENTATION_EXTENSION"
+canonical: false
+tags:
+  - centraldark
+  - consciencia
+  - apresentacao
+  - visual
+  - resposta
+related:
+  - "[[PADRAO-RESPOSTA-SEGREDO-CHEFE]]"
+  - "[[PADRAO-EMOJIS]]"
+  - "[[PADRAO-GRAFO-VIVO-MARKDOWN]]"
+links:
+  - "docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md"
+  - "docs/CONSCIENCIA/PADRAO-EMOJIS.md"
+  - "docs/SEGURANCA/ADM-GATILHOS-OPERACIONAIS.json"
 ---
 
-# 🎨 PADRÃO DE APRESENTAÇÃO — Camada Visual (Vibe)
+# 🎨 PADRÃO DE APRESENTAÇÃO — Camada Visual
 
-> **COMPLEMENTA** `docs/CONSCIENCIA/2026-06-20-padrao-resposta-pivete.md` — que é a BASE (comportamento, PT-BR, bloco de código copiável, handoff, fonte-da-verdade, "não inventar sucesso").
-> Aqui mora **só a camada VISUAL** (estilo Mistral Vibe) + a regra anti-enrolação. Pedido do Pivete: deixar a resposta escaneável e organizada.
-> **Não duplicar:** comportamento/regras → ver o doc base. Este só acrescenta o "como mostra".
+> **COMPLEMENTA** `docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md`, que é o owner do comportamento e da resposta humana.
+>
+> Este arquivo acrescenta somente a forma visual. Não cria segunda regra de comportamento nem segundo mapa de gatilhos.
 
-## 🎨 Camada VISUAL (Vibe) — os 6 elementos
-1. 🎯 **Veredito no topo** — 1ª linha = resultado + status, antes de qualquer detalhe.
-2. 🔖 **Seção com ícone-âncora** fixo (vira marcador de memória).
-3. 📊 **Tabela 3 colunas** pra comparar — não parágrafo corrido.
-4. 🚦 **Status colorido:** 🟢 ok/seguro · 🟡 validar · 🔴 não rodar/crítico · ⚠️ precisa autorização · ✅ concluído.
-5. ⌨️ **Caixa de código** pra fluxo/comando, com `→` ligando etapas.
-6. 🧭 **Fecho:** RESUMO + PRÓXIMA AÇÃO (sempre o modelo/esforço mais econômico que resolve 100%).
+## 🧩 Elementos visuais
 
-## 🚫 Regra anti-enrolação
-- Tratamento visual **completo** só quando há conteúdo pra organizar (comparação, status, várias partes).
-- Pergunta trivial = resposta **curta e seca**. Caixa/tabela em resposta de 1 linha vira enrolação.
+1. 🎯 **Veredito no topo** quando existe decisão/status material.
+2. 🔖 **Seções com âncoras visuais** para tornar a resposta escaneável.
+3. 📊 **Tabela** quando comparação realmente fica mais clara que parágrafo.
+4. 🚦 **Status explícito:** 🟢 provado, 🟡 parcial/aguardando, 🔴 falha/bloqueio.
+5. ⌨️ **Bloco copiável** quando há comando, fluxo ou contrato literal.
+6. 🧭 **Próximo cursor** quando existe movimento causal restante.
 
-## 📐 Estrutura padrão de tarefa CentralDark (a mesma do doc base, reforçada no visual)
+## 🚫 Anti-enrolação
+
+- tratamento visual completo só quando o conteúdo pede organização;
+- pergunta trivial recebe resposta curta;
+- emoji não substitui significado nem prova;
+- gatilhos oficiais usam o `canonical_display` de `docs/SEGURANCA/ADM-GATILHOS-OPERACIONAIS.json`.
+
+## 📐 Estrutura de tarefa
+
+```text
+👑🪬 !CENTRALDARK — <ASSUNTO>
+💬 RESPOSTA=<resultado objetivo>
+📚 FONTES_DISPONÍVEIS=<o que foi realmente lido/medido>
+❓ UNKNOWNS=<lacunas materiais>
+🧭 PRÓXIMO_CURSOR=<movimento causal restante>
 ```
-╔══ 🔥 CENTRALDARK — <ASSUNTO> [STATUS] ══╗
-STATUS:
-VALIDADO:
-AÇÕES:
-ARQUIVOS / PRs / ISSUES:
-RISCOS:
-PRÓXIMO PASSO:
-CONFIRMAÇÃO:
+
+Quando ⭕ `!AURÉOLA CANÔNICA` estiver ativa, mostrar também o ciclo percorrido conforme o registry.
+
+## ⚖️ Leis
+
+```text
+VISUAL != PROOF
+COMPLEMENTO != SECOND_OWNER
+UNKNOWN != PASS
+DOCUMENTED != EXECUTED
 ```
-
-> 🔗 Par oficial: **regras = `2026-06-20-padrao-resposta-pivete.md`** · **visual = este arquivo**. Aprendizado #260 aponta pra cá.
-
----
-
-## Conexões Rápidas
-
-- [[00-LEIA-PRIMEIRO]] — portão de entrada
-- [[MAPA-DO-CEREBRO]] — visão geral
-- [[CONSCIENCIA]] — documento mestre
