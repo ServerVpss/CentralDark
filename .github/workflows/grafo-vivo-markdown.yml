@@ -1,0 +1,30 @@
+name: grafo-vivo-markdown
+
+on:
+  pull_request:
+    paths:
+      - 'docs/**/*.md'
+      - 'scripts/lupa/grafo-vivo-markdown-conformance.mjs'
+      - '.github/workflows/grafo-vivo-markdown.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'docs/**/*.md'
+      - 'scripts/lupa/grafo-vivo-markdown-conformance.mjs'
+      - '.github/workflows/grafo-vivo-markdown.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  grafo-vivo-markdown:
+    name: GATE_GRAFO_VIVO_MARKDOWN
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate live markdown graph
+        run: node scripts/lupa/grafo-vivo-markdown-conformance.mjs
