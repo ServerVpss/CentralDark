@@ -380,7 +380,7 @@ ci_binding:
     applies_to: [PULL_REQUEST, PUSH_COMMIT, WORKFLOW_DISPATCH, SCHEDULE, WORKFLOW_RUN, REPOSITORY_DISPATCH]
     github_hosted_runner: FORBIDDEN
     canonical_default: [self-hosted, Linux]
-    platform_specific_rule: SELF_HOSTED_PLATFORM_ONLY_WITH_CAPABILITY_PROOF
+    platform_specific_rule: SELF_HOSTED_PLATFORM_ONLY_WHEN_CAPABILITY_REQUIRES_IT
     platform_specific_proof_required: true
     linux_is_default: true
     forbidden_labels: [ubuntu-latest, windows-latest, macos-latest]
