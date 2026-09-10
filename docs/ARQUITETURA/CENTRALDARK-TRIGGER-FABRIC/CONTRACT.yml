@@ -27,6 +27,19 @@ principles:
   same_failure_without_new_information_reuses_crystal: true
   second_brain_logical_one: true
   second_brain_parallel_forbidden: true
+normative_hierarchy:
+  human_ai_entry: LEIA-ME-IA.md
+  global_contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml
+  master_cycle_contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
+  trigger_registry: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml
+  engine_binding: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml
+  deterministic_resolver: scripts/trigger-fabric/centraldark_master_cycle.py
+  rules:
+    contract_is_global_normative_authority: true
+    master_cycle_is_authority_for_master_trigger: true
+    trigger_registry_is_discovery_not_normative_owner: true
+    engine_binding_is_binding_not_normative_owner: true
+    specialized_owners_keep_domain_authority: true
 standard_flow:
   canonical_entry: CENTRALDARK
   accepted_entries: ["!CENTRALDARK", "#CENTRALDARK"]
@@ -97,7 +110,12 @@ second_brain:
   surfaces: [github_canonical, local_obsidian_files, derived_graph_vector]
   graph_vector_authority: false
 master_trigger:
-  expression: "#ACORDAR + !CALIBRAR + !MULTIBUSSOLA"
+  expression: "!CENTRALDARK"
+  aliases: ["!CENTRALDARK", "#CENTRALDARK"]
+  source_of_truth: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
+  subordinate_entry_phases: [ACORDAR, CALIBRAR, MULTIBUSSOLA]
+  registry: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml
+  resolver: scripts/trigger-fabric/centraldark_master_cycle.py
   inherited_on_bot_entry: true
   meta_lupa: proportional_to_risk
   behavior:
@@ -362,7 +380,7 @@ ci_binding:
     applies_to: [PULL_REQUEST, PUSH_COMMIT, WORKFLOW_DISPATCH, SCHEDULE, WORKFLOW_RUN, REPOSITORY_DISPATCH]
     github_hosted_runner: FORBIDDEN
     canonical_default: [self-hosted, Linux]
-    platform_specific_rule: SELF_HOSTED_PLATFORM_ONLY_WHEN_CAPABILITY_REQUIRES_IT
+    platform_specific_rule: SELF_HOSTED_PLATFORM_ONLY_WITH_CAPABILITY_PROOF
     platform_specific_proof_required: true
     linux_is_default: true
     forbidden_labels: [ubuntu-latest, windows-latest, macos-latest]
