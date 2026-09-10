@@ -20,15 +20,17 @@
     "collapse_spaces": true,
     "case_insensitive": true,
     "prefix_optional": ["!", "#"],
+    "compound_prefix_aliases": ["!>#", "#>!", "!#", "#!"],
     "separator_equivalent": [" ", "_", "-"],
     "accent_tolerant": true,
     "typo_aliases_allowed": true,
     "emoji_optional_for_match": true,
     "emoji_restored_on_display": true
   },
-  "custom_instruction_compact": "👑🪬 !CENTRALDARK = carregar e executar o contrato canônico atual de ServerVpss/CentralDark@main. Resolver aliases por baixo do capô: com ou sem !/#, maiúsculo/minúsculo, acento, separadores e pequenas variações de digitação. A resposta exibida deve usar sempre texto visual canônico com emoji. ⭕ !AURÉOLA CANÔNICA mostra o ciclo percorrido com emojis somente nos gatilhos/campos/regras. Se fonte/ferramenta/conector não estiver disponível: UNKNOWN, nunca inventar.",
+  "custom_instruction_compact": "👑🪬 !CENTRALDARK = carregar e executar o contrato canônico atual de ServerVpss/CentralDark@main. Resolver aliases por baixo do capô: com ou sem !/#, composto !>#, maiúsculo/minúsculo, acento, separadores e pequenas variações de digitação. A resposta exibida deve usar sempre texto visual canônico com emoji. 🔗 !># INTERLIGADOS mostra que os gatilhos e camadas estão conectados em um só ciclo. ⭕ !AURÉOLA CANÔNICA mostra o ciclo percorrido com emojis somente nos gatilhos/campos/regras. Se fonte/ferramenta/conector não estiver disponível: UNKNOWN, nunca inventar.",
   "trigger_chain": [
     "👑🪬 !CENTRALDARK",
+    "🔗 !># INTERLIGADOS",
     "⭕ !AURÉOLA CANÔNICA",
     "🏛️ GITHUB MAIN VIVA",
     "🫀 SOUL ATUAL",
@@ -53,6 +55,7 @@
     "rule": "emoji aparece no início de cada gatilho/campo/regra exibida; não precisa enfeitar todas as palavras do parágrafo",
     "canonical_layers": [
       {"emoji": "👑🪬", "label": "!CENTRALDARK", "meaning": "comando raiz da Casa"},
+      {"emoji": "🔗", "label": "!># INTERLIGADOS", "meaning": "gatilho de conexão entre camadas, fontes e trilha visual"},
       {"emoji": "⭕", "label": "!AURÉOLA CANÔNICA", "meaning": "trilha visual do ciclo percorrido"},
       {"emoji": "🏛️", "label": "GITHUB MAIN VIVA", "meaning": "fonte canônica remota atual"},
       {"emoji": "🫀", "label": "SOUL ATUAL", "meaning": "estado vivo/intenção vigente"},
@@ -81,6 +84,7 @@
   "alias_engine": {
     "rule": "aliases são aceitos por baixo do capô; o texto mostrado ao usuário sempre volta para canonical_display",
     "examples": [
+      {"input": "!>#", "resolves_to": "INTERLIGADOS", "display": "🔗 !># INTERLIGADOS"},
       {"input": "!aureurla", "resolves_to": "AUREOLA_CANONICA", "display": "⭕ !AURÉOLA CANÔNICA"},
       {"input": "#centraldark", "resolves_to": "CENTRALDARK_BOOT", "display": "👑🪬 !CENTRALDARK"},
       {"input": "calibra", "resolves_to": "CALIBRAR", "display": "🎛️ !CALIBRAR"},
@@ -98,6 +102,23 @@
       "activation": {"intent": "carregar contrato canônico atual de ServerVpss/CentralDark@main e seguir Auréola Canônica → GitHub main viva → Soul atual → MCP/HUB/connectors → runtime/Casa/VPS/web → realidade", "autonomous_within_scope": true, "requires_runtime_measurement": true, "unknown_is_not_pass": true}
     },
     {
+      "id": "INTERLIGADOS",
+      "emoji": "🔗",
+      "canonical_trigger": "!># INTERLIGADOS",
+      "canonical_display": "🔗 !># INTERLIGADOS",
+      "aliases": ["!>#", "#>!", "!#", "#!", ">#", ">!", "!># INTERLIGADOS", "#>! INTERLIGADOS", "interligados", "!interligados", "#interligados", "tudo interligado", "tudo interligados", "!tudo interligado", "#tudo interligado", "ligar tudo", "!ligar tudo", "#ligar tudo", "interliga", "!interliga", "#interliga", "conectar tudo", "!conectar tudo", "#conectar tudo"],
+      "match_policy": {"case_insensitive": true, "prefix_optional": true, "compound_prefix_aliases": true, "accent_tolerant": true, "separator_equivalent": true, "emoji_optional_for_match": true, "emit_canonical_display": true},
+      "activation": {"intent": "marcar que todos os gatilhos, camadas, fontes, receipts e cursores pertencem a um único ciclo conectado, sem criar trilho paralelo", "default_scope": "gatilhos+auréola+resposta+contexto", "autonomous_within_scope": true, "requires_runtime_measurement": false, "unknown_is_not_pass": true},
+      "response_trace": {
+        "top_line": "🔗 !># INTERLIGADOS",
+        "header_only": true,
+        "show_when_triggered": true,
+        "must_show_resolved_chain": true,
+        "chain_template": ["👑🪬 !CENTRALDARK", "🔗 !># INTERLIGADOS", "⭕ !AURÉOLA CANÔNICA", "🏛️ GITHUB MAIN VIVA", "🫀 SOUL ATUAL", "🔌 MCP / HUB / CONNECTORS", "🏠 RUNTIME / CASA / VPS / WEB", "⚖️ REALIDADE"]
+      },
+      "enabled_response_shape": {"top_line": "🔗 !># INTERLIGADOS", "must_include": ["🔗 CICLO_INTERLIGADO", "📚 FONTES_DISPONIVEIS", "❓ UNKNOWNS", "💬 RESPOSTA", "🧭 PROXIMO_CURSOR"]}
+    },
+    {
       "id": "AUREOLA_CANONICA",
       "emoji": "⭕",
       "canonical_trigger": "!AURÉOLA CANÔNICA",
@@ -111,147 +132,22 @@
         "show_when_triggered": true,
         "must_show_resolved_chain": true,
         "emoji_only_on_trigger_or_status_heads": true,
-        "chain_template": [
-          "👑🪬 !CENTRALDARK",
-          "⭕ !AURÉOLA CANÔNICA",
-          "🏛️ GITHUB MAIN VIVA",
-          "🫀 SOUL ATUAL",
-          "🔌 MCP / HUB / CONNECTORS",
-          "🏠 RUNTIME / CASA / VPS / WEB",
-          "⚖️ REALIDADE",
-          "🧿 #ACORDAR",
-          "🎛️ !CALIBRAR",
-          "🧭 !MULTIBÚSSOLA",
-          "🔎 !META_LUPA",
-          "🔄 !RECONCILIAR",
-          "⚖️ !CONTRAPROVA",
-          "🧾 !REGISTRA"
-        ]
+        "chain_template": ["👑🪬 !CENTRALDARK", "🔗 !># INTERLIGADOS", "⭕ !AURÉOLA CANÔNICA", "🏛️ GITHUB MAIN VIVA", "🫀 SOUL ATUAL", "🔌 MCP / HUB / CONNECTORS", "🏠 RUNTIME / CASA / VPS / WEB", "⚖️ REALIDADE", "🧿 #ACORDAR", "🎛️ !CALIBRAR", "🧭 !MULTIBÚSSOLA", "🔎 !META_LUPA", "🔄 !RECONCILIAR", "⚖️ !CONTRAPROVA", "🧾 !REGISTRA", "⚖️ REALIDADE"]
       },
-      "enabled_response_shape": {"top_line": "⭕ !AURÉOLA CANÔNICA", "must_include": ["🔗 CICLO_PERCORRIDO", "📚 FONTES_DISPONÍVEIS", "❓ UNKNOWNS", "💬 RESPOSTA", "🧭 PRÓXIMO_CURSOR"]}
+      "enabled_response_shape": {"top_line": "⭕ !AURÉOLA CANÔNICA", "must_include": ["🔗 CICLO_PERCORRIDO", "📚 FONTES_DISPONIVEIS", "❓ UNKNOWNS", "💬 RESPOSTA", "🧭 PROXIMO_CURSOR"]}
     },
-    {
-      "id": "ACORDAR",
-      "emoji": "🧿",
-      "canonical_trigger": "#ACORDAR",
-      "canonical_display": "🧿 #ACORDAR",
-      "aliases": ["!ACORDAR", "#ACORDAR", "ACORDAR", "acordar", "#acordar", "!acordar", "#AXCORDAR", "!AXCORDAR", "#acorodar", "!acorodar", "#acordaar", "!acordaar", "#acrodar", "!acrodar", "acorda", "!acorda", "#acorda"],
-      "match_policy": {"case_insensitive": true, "prefix_optional": true, "accent_tolerant": true, "separator_equivalent": true, "emoji_optional_for_match": true, "emit_canonical_display": true},
-      "activation": {"intent": "recuperar estado real antes de responder ou mutar", "autonomous_within_scope": true, "requires_runtime_measurement": true, "unknown_is_not_pass": true}
-    },
-    {
-      "id": "CALIBRAR",
-      "emoji": "🎛️",
-      "canonical_trigger": "!CALIBRAR",
-      "canonical_display": "🎛️ !CALIBRAR",
-      "aliases": ["#CALIBRAR", "CALIBRAR", "calibrar", "!calibrar", "#calibrar", "!calibra", "#calibra", "calibra", "!calibar", "#calibar", "!calbirar", "#calbirar"],
-      "match_policy": {"case_insensitive": true, "prefix_optional": true, "accent_tolerant": true, "separator_equivalent": true, "emoji_optional_for_match": true, "emit_canonical_display": true},
-      "activation": {"intent": "confirmar intenção vigente, escopo e régua de prova", "autonomous_within_scope": true, "requires_runtime_measurement": true, "unknown_is_not_pass": true}
-    },
-    {
-      "id": "MULTIBUSSOLA",
-      "emoji": "🧭",
-      "canonical_trigger": "!MULTIBÚSSOLA",
-      "canonical_display": "🧭 !MULTIBÚSSOLA",
-      "aliases": ["#MULTIBÚSSOLA", "!MULTIBUSSOLA", "#MULTIBUSSOLA", "MULTIBÚSSOLA", "MULTIBUSSOLA", "multibússola", "multibussola", "!MULTIBÚSSOLA_META", "!MULTIBUSSOLA_META", "#MULTIBUSSOLA_META", "!MUTIBUSSULA", "!MUTIBUSSOLA", "#MUTIBUSSULA", "#MUTIBUSSOLA", "mutibussula", "multi bussola", "multi bússola"],
-      "match_policy": {"case_insensitive": true, "prefix_optional": true, "accent_tolerant": true, "separator_equivalent": true, "emoji_optional_for_match": true, "emit_canonical_display": true},
-      "activation": {"intent": "ler por múltiplas lentes sem promover voto de modelo como verdade", "autonomous_within_scope": true, "requires_runtime_measurement": true, "unknown_is_not_pass": true}
-    },
-    {
-      "id": "META_LUPA",
-      "emoji": "🔎",
-      "canonical_trigger": "!META_LUPA",
-      "canonical_display": "🔎 !META_LUPA",
-      "aliases": ["#META_LUPA", "META_LUPA", "meta_lupa", "!META-LUPA", "#META-LUPA", "meta lupa", "!METALUPA", "#METALUPA", "metalupa", "!meta lupa", "#meta lupa"],
-      "match_policy": {"case_insensitive": true, "prefix_optional": true, "accent_tolerant": true, "separator_equivalent": true, "emoji_optional_for_match": true, "emit_canonical_display": true},
-      "activation": {"intent": "examinar a própria análise, buscar lacunas, contradições e residual UNKNOWN", "autonomous_within_scope": true, "requires_runtime_measurement": true, "unknown_is_not_pass": true}
-    },
-    {
-      "id": "RECONCILIAR",
-      "emoji": "🔄",
-      "canonical_trigger": "!RECONCILIAR",
-      "canonical_display": "🔄 !RECONCILIAR",
-      "aliases": ["#RECONCILIAR", "RECONCILIAR", "reconciliar", "!reconciliar", "#reconciliar", "!RECONCILIA", "#RECONCILIA", "reconcilia"],
-      "match_policy": {"case_insensitive": true, "prefix_optional": true, "accent_tolerant": true, "separator_equivalent": true, "emoji_optional_for_match": true, "emit_canonical_display": true},
-      "activation": {"intent": "absorver delta útil no owner existente sem criar arquitetura paralela", "autonomous_within_scope": true, "requires_runtime_measurement": true, "unknown_is_not_pass": true}
-    },
-    {
-      "id": "CONTRAPROVA",
-      "emoji": "⚖️",
-      "canonical_trigger": "!CONTRAPROVA",
-      "canonical_display": "⚖️ !CONTRAPROVA",
-      "aliases": ["#CONTRAPROVA", "CONTRAPROVA", "contraprova", "!contraprova", "#contraprova", "!CONTRA-PROVA", "#CONTRA-PROVA", "contra prova", "!contra prova", "#contra prova"],
-      "match_policy": {"case_insensitive": true, "prefix_optional": true, "accent_tolerant": true, "separator_equivalent": true, "emoji_optional_for_match": true, "emit_canonical_display": true},
-      "activation": {"intent": "tentar quebrar a hipótese antes de promover verde", "autonomous_within_scope": true, "requires_runtime_measurement": true, "unknown_is_not_pass": true}
-    },
-    {
-      "id": "VERTEX_INVERSO",
-      "emoji": "🔁",
-      "canonical_trigger": "!VERTEX_INVERSO",
-      "canonical_display": "🔁 !VERTEX_INVERSO",
-      "aliases": ["#VERTEX_INVERSO", "VERTEX_INVERSO", "vertex inverso", "!VERTEX-INVERSO", "#VERTEX-INVERSO", "!VERTICE_INVERSO", "#VERTICE_INVERSO", "vértice inverso", "vertice inverso"],
-      "match_policy": {"case_insensitive": true, "prefix_optional": true, "accent_tolerant": true, "separator_equivalent": true, "emoji_optional_for_match": true, "emit_canonical_display": true},
-      "activation": {"intent": "voltar pelo caminho causal e procurar pepitas ou quebras deixadas para trás", "autonomous_within_scope": true, "requires_runtime_measurement": true, "unknown_is_not_pass": true}
-    },
-    {
-      "id": "CARACOL",
-      "emoji": "🐚",
-      "canonical_trigger": "!CARACOL",
-      "canonical_display": "🐚 !CARACOL",
-      "aliases": ["#CARACOL", "CARACOL", "caracol", "!caracol", "#caracol", "!CARACOL_LOOP", "#CARACOL_LOOP", "loop caracol", "!loop caracol", "#loop caracol"],
-      "match_policy": {"case_insensitive": true, "prefix_optional": true, "accent_tolerant": true, "separator_equivalent": true, "emoji_optional_for_match": true, "emit_canonical_display": true},
-      "activation": {"intent": "fechar ida e volta sem fragmento e sem duplicata causal", "autonomous_within_scope": true, "requires_runtime_measurement": true, "unknown_is_not_pass": true}
-    },
-    {
-      "id": "FIXED_POINT",
-      "emoji": "💠",
-      "canonical_trigger": "!FIXED_POINT",
-      "canonical_display": "💠 !FIXED_POINT",
-      "aliases": ["#FIXED_POINT", "FIXED_POINT", "fixed point", "!FIXED-POINT", "#FIXED-POINT", "!PONTO_FIXO", "#PONTO_FIXO", "ponto fixo", "!PONTO FIXO", "#PONTO FIXO", "!fixedpoint", "#fixedpoint"],
-      "match_policy": {"case_insensitive": true, "prefix_optional": true, "accent_tolerant": true, "separator_equivalent": true, "emoji_optional_for_match": true, "emit_canonical_display": true},
-      "activation": {"intent": "declarar ponto fixo somente com evidência, contraprova e residual UNKNOWN listado", "autonomous_within_scope": true, "requires_runtime_measurement": true, "unknown_is_not_pass": true}
-    },
-    {
-      "id": "REGISTRA",
-      "emoji": "🧾",
-      "canonical_trigger": "!REGISTRA",
-      "canonical_display": "🧾 !REGISTRA",
-      "aliases": ["#REGISTRA", "REGISTRA", "registra", "!registrar", "#registrar", "registrar", "!RECEIPT", "#RECEIPT", "receipt", "!recibo", "#recibo", "recibo"],
-      "match_policy": {"case_insensitive": true, "prefix_optional": true, "accent_tolerant": true, "separator_equivalent": true, "emoji_optional_for_match": true, "emit_canonical_display": true},
-      "activation": {"intent": "persistir receipt, evidência, decisão e próximo cursor", "autonomous_within_scope": true, "requires_runtime_measurement": true, "unknown_is_not_pass": true}
-    },
-    {
-      "id": "BOOT",
-      "emoji": "🚀",
-      "canonical_trigger": "!BOOT",
-      "canonical_display": "🚀 !BOOT",
-      "aliases": ["#BOOT", "BOOT", "boot", "!boot", "#boot", "!INICIAR", "#INICIAR", "iniciar", "!start", "#start", "start"],
-      "match_policy": {"case_insensitive": true, "prefix_optional": true, "accent_tolerant": true, "separator_equivalent": true, "emoji_optional_for_match": true, "emit_canonical_display": true},
-      "activation": {"intent": "executar boot operacional depois de calibrar e medir", "autonomous_within_scope": true, "requires_runtime_measurement": true, "unknown_is_not_pass": true}
-    },
-    {
-      "id": "DELTA_UTIL",
-      "emoji": "💎",
-      "canonical_trigger": "!DELTAÚTIL",
-      "canonical_display": "💎 !DELTAÚTIL",
-      "aliases": ["!DELTAUTIL", "#DELTAÚTIL", "#DELTAUTIL", "DELTAÚTIL", "DELTAUTIL", "delta útil", "delta util", "!delta util", "#delta util", "!DELTA ÚTIL", "#DELTA ÚTIL", "!DELTA", "#DELTA", "delta"],
-      "match_policy": {"case_insensitive": true, "prefix_optional": true, "accent_tolerant": true, "separator_equivalent": true, "emoji_optional_for_match": true, "emit_canonical_display": true},
-      "activation": {"intent": "extrair apenas o delta útil e descartar ruído", "autonomous_within_scope": true, "requires_runtime_measurement": true, "unknown_is_not_pass": true}
-    },
-    {
-      "id": "CENTRALDARK_ROOT_SURGERY",
-      "emoji": "🪬",
-      "canonical_trigger": "!MODO CIRURGIA DE RAIZ",
-      "canonical_display": "🪬 !MODO CIRURGIA DE RAIZ",
-      "aliases": ["!🪬 MODO CIRURGIA DE RAIZ", "#🪬 MODO CIRURGIA DE RAIZ", "🪬 MODO CIRURGIA DE RAIZ", "!MODO CIRURGIA DE RAIZ", "#MODO CIRURGIA DE RAIZ", "MODO CIRURGIA DE RAIZ", "!modo cirurgia de raiz", "#modo cirurgia de raiz", "modo cirurgia de raiz", "!MODO CIRURGIA RAIZ", "#MODO CIRURGIA RAIZ", "modo cirurgia raiz", "!CIRURGIA DE RAIZ", "#CIRURGIA DE RAIZ", "cirurgia de raiz", "cirurgia raiz", "!ROOT_SURGERY", "#ROOT_SURGERY", "ROOT_SURGERY", "root surgery", "!CENTRALDARK_ROOT_SURGERY", "#CENTRALDARK_ROOT_SURGERY", "centraldark root surgery", "!modo cirugia de raiz", "#modo cirugia de raiz", "modo cirugia de raiz", "!modo sirurgia de raiz", "#modo sirurgia de raiz", "modo sirurgia de raiz", "!modo cirurgia de rais", "#modo cirurgia de rais", "modo cirurgia de rais"],
-      "match_policy": {"case_insensitive": true, "prefix_optional": true, "accent_tolerant": true, "separator_equivalent": true, "emoji_optional_for_match": true, "emit_canonical_display": true},
-      "mode_name_pt_br": "Modo Cirurgia de Raiz",
-      "mode_name_canonical": "CENTRALDARK_ROOT_SURGERY",
-      "classification": "HUMAN_IN_THE_LOOP_ROOT_OPS",
-      "activation": {"intent": "habilitar operação assistida diretamente em VPS/Casa/runtime com o CHEFE executando comandos reais e o agente montando comandos seguros, medindo saídas e registrando receipts", "default_scope": "casa+vps+github+mcp", "autonomous_within_scope": true, "requires_human_terminal_execution": true, "agent_direct_vps_claim_without_tool": false, "requires_runtime_measurement": true, "unknown_is_not_pass": true},
-      "required_loop": ["🧭 INTENÇÃO", "📍 MEDIR_LOCAL", "🧰 GERAR_COMANDO_COLÁVEL", "🩺 EXECUTAR_PELO_CHEFE", "📡 CAPTURAR_SAÍDA", "🧾 RECEIPT", "🌿 BRANCH_OU_PR", "⚖️ REALITY_JUDGE"],
-      "safety_gates": ["🔒 NAO_PEDIR_TOKEN_SENHA_SECRET_ENV", "🧯 NAO_RESETAR_NAO_APAGAR_NAO_FORCE_PUSH", "🧪 MEDIR_ANTES_DE_MUTAR", "🧾 RECEIPT_ANTES_E_DEPOIS", "🌿 BRANCH_ANTES_DE_MAIN_QUANDO_HOUVER_CODIGO", "⚖️ UNKNOWN_NAO_E_PASS"],
-      "enabled_response_shape": {"top_line": "🪬 !MODO CIRURGIA DE RAIZ", "must_include": ["🧭 INTENÇÃO", "🧰 COMANDO_COLÁVEL", "🧯 O_QUE_NAO_MEXE", "🧪 EVIDÊNCIA_ESPERADA", "🧭 PRÓXIMO_CURSOR"]}
-    }
+    {"id":"ACORDAR","emoji":"🧿","canonical_trigger":"#ACORDAR","canonical_display":"🧿 #ACORDAR","aliases":["!ACORDAR","#ACORDAR","ACORDAR","acordar","#acordar","!acordar","#AXCORDAR","!AXCORDAR","#acorodar","!acorodar","#acordaar","!acordaar","#acrodar","!acrodar","acorda","!acorda","#acorda"],"match_policy":{"case_insensitive":true,"prefix_optional":true,"accent_tolerant":true,"separator_equivalent":true,"emoji_optional_for_match":true,"emit_canonical_display":true},"activation":{"intent":"recuperar estado real antes de responder ou mutar","autonomous_within_scope":true,"requires_runtime_measurement":true,"unknown_is_not_pass":true}},
+    {"id":"CALIBRAR","emoji":"🎛️","canonical_trigger":"!CALIBRAR","canonical_display":"🎛️ !CALIBRAR","aliases":["#CALIBRAR","CALIBRAR","calibrar","!calibrar","#calibrar","!calibra","#calibra","calibra","!calibar","#calibar","!calbirar","#calbirar"],"match_policy":{"case_insensitive":true,"prefix_optional":true,"accent_tolerant":true,"separator_equivalent":true,"emoji_optional_for_match":true,"emit_canonical_display":true},"activation":{"intent":"confirmar intenção vigente, escopo e régua de prova","autonomous_within_scope":true,"requires_runtime_measurement":true,"unknown_is_not_pass":true}},
+    {"id":"MULTIBUSSOLA","emoji":"🧭","canonical_trigger":"!MULTIBÚSSOLA","canonical_display":"🧭 !MULTIBÚSSOLA","aliases":["#MULTIBÚSSOLA","!MULTIBUSSOLA","#MULTIBUSSOLA","MULTIBÚSSOLA","MULTIBUSSOLA","multibússola","multibussola","!MULTIBÚSSOLA_META","!MULTIBUSSOLA_META","#MULTIBUSSOLA_META","!MUTIBUSSULA","!MUTIBUSSOLA","#MUTIBUSSULA","#MUTIBUSSOLA","mutibussula","multi bussola","multi bússola"],"match_policy":{"case_insensitive":true,"prefix_optional":true,"accent_tolerant":true,"separator_equivalent":true,"emoji_optional_for_match":true,"emit_canonical_display":true},"activation":{"intent":"ler por múltiplas lentes sem promover voto de modelo como verdade","autonomous_within_scope":true,"requires_runtime_measurement":true,"unknown_is_not_pass":true}},
+    {"id":"META_LUPA","emoji":"🔎","canonical_trigger":"!META_LUPA","canonical_display":"🔎 !META_LUPA","aliases":["#META_LUPA","META_LUPA","meta_lupa","!META-LUPA","#META-LUPA","meta lupa","!METALUPA","#METALUPA","metalupa","!meta lupa","#meta lupa"],"match_policy":{"case_insensitive":true,"prefix_optional":true,"accent_tolerant":true,"separator_equivalent":true,"emoji_optional_for_match":true,"emit_canonical_display":true},"activation":{"intent":"examinar a própria análise, buscar lacunas, contradições e residual UNKNOWN","autonomous_within_scope":true,"requires_runtime_measurement":true,"unknown_is_not_pass":true}},
+    {"id":"RECONCILIAR","emoji":"🔄","canonical_trigger":"!RECONCILIAR","canonical_display":"🔄 !RECONCILIAR","aliases":["#RECONCILIAR","RECONCILIAR","reconciliar","!reconciliar","#reconciliar","!RECONCILIA","#RECONCILIA","reconcilia"],"match_policy":{"case_insensitive":true,"prefix_optional":true,"accent_tolerant":true,"separator_equivalent":true,"emoji_optional_for_match":true,"emit_canonical_display":true},"activation":{"intent":"absorver delta útil no owner existente sem criar arquitetura paralela","autonomous_within_scope":true,"requires_runtime_measurement":true,"unknown_is_not_pass":true}},
+    {"id":"CONTRAPROVA","emoji":"⚖️","canonical_trigger":"!CONTRAPROVA","canonical_display":"⚖️ !CONTRAPROVA","aliases":["#CONTRAPROVA","CONTRAPROVA","contraprova","!contraprova","#contraprova","!CONTRA-PROVA","#CONTRA-PROVA","contra prova","!contra prova","#contra prova"],"match_policy":{"case_insensitive":true,"prefix_optional":true,"accent_tolerant":true,"separator_equivalent":true,"emoji_optional_for_match":true,"emit_canonical_display":true},"activation":{"intent":"tentar quebrar a hipótese antes de promover verde","autonomous_within_scope":true,"requires_runtime_measurement":true,"unknown_is_not_pass":true}},
+    {"id":"VERTEX_INVERSO","emoji":"🔁","canonical_trigger":"!VERTEX_INVERSO","canonical_display":"🔁 !VERTEX_INVERSO","aliases":["#VERTEX_INVERSO","VERTEX_INVERSO","vertex inverso","!VERTEX-INVERSO","#VERTEX-INVERSO","!VERTICE_INVERSO","#VERTICE_INVERSO","vértice inverso","vertice inverso"],"match_policy":{"case_insensitive":true,"prefix_optional":true,"accent_tolerant":true,"separator_equivalent":true,"emoji_optional_for_match":true,"emit_canonical_display":true},"activation":{"intent":"voltar pelo caminho causal e procurar pepitas ou quebras deixadas para trás","autonomous_within_scope":true,"requires_runtime_measurement":true,"unknown_is_not_pass":true}},
+    {"id":"CARACOL","emoji":"🐚","canonical_trigger":"!CARACOL","canonical_display":"🐚 !CARACOL","aliases":["#CARACOL","CARACOL","caracol","!caracol","#caracol","!CARACOL_LOOP","#CARACOL_LOOP","loop caracol","!loop caracol","#loop caracol"],"match_policy":{"case_insensitive":true,"prefix_optional":true,"accent_tolerant":true,"separator_equivalent":true,"emoji_optional_for_match":true,"emit_canonical_display":true},"activation":{"intent":"fechar ida e volta sem fragmento e sem duplicata causal","autonomous_within_scope":true,"requires_runtime_measurement":true,"unknown_is_not_pass":true}},
+    {"id":"FIXED_POINT","emoji":"💠","canonical_trigger":"!FIXED_POINT","canonical_display":"💠 !FIXED_POINT","aliases":["#FIXED_POINT","FIXED_POINT","fixed point","!FIXED-POINT","#FIXED-POINT","!PONTO_FIXO","#PONTO_FIXO","ponto fixo","!PONTO FIXO","#PONTO FIXO","!fixedpoint","#fixedpoint"],"match_policy":{"case_insensitive":true,"prefix_optional":true,"accent_tolerant":true,"separator_equivalent":true,"emoji_optional_for_match":true,"emit_canonical_display":true},"activation":{"intent":"declarar ponto fixo somente com evidência, contraprova e residual UNKNOWN listado","autonomous_within_scope":true,"requires_runtime_measurement":true,"unknown_is_not_pass":true}},
+    {"id":"REGISTRA","emoji":"🧾","canonical_trigger":"!REGISTRA","canonical_display":"🧾 !REGISTRA","aliases":["#REGISTRA","REGISTRA","registra","!registrar","#registrar","registrar","!RECEIPT","#RECEIPT","receipt","!recibo","#recibo","recibo"],"match_policy":{"case_insensitive":true,"prefix_optional":true,"accent_tolerant":true,"separator_equivalent":true,"emoji_optional_for_match":true,"emit_canonical_display":true},"activation":{"intent":"persistir receipt, evidência, decisão e próximo cursor","autonomous_within_scope":true,"requires_runtime_measurement":true,"unknown_is_not_pass":true}},
+    {"id":"BOOT","emoji":"🚀","canonical_trigger":"!BOOT","canonical_display":"🚀 !BOOT","aliases":["#BOOT","BOOT","boot","!boot","#boot","!INICIAR","#INICIAR","iniciar","!start","#start","start"],"match_policy":{"case_insensitive":true,"prefix_optional":true,"accent_tolerant":true,"separator_equivalent":true,"emoji_optional_for_match":true,"emit_canonical_display":true},"activation":{"intent":"executar boot operacional depois de calibrar e medir","autonomous_within_scope":true,"requires_runtime_measurement":true,"unknown_is_not_pass":true}},
+    {"id":"DELTA_UTIL","emoji":"💎","canonical_trigger":"!DELTAÚTIL","canonical_display":"💎 !DELTAÚTIL","aliases":["!DELTAUTIL","#DELTAÚTIL","#DELTAUTIL","DELTAÚTIL","DELTAUTIL","delta útil","delta util","!delta util","#delta util","!DELTA ÚTIL","#DELTA ÚTIL","!DELTA","#DELTA","delta"],"match_policy":{"case_insensitive":true,"prefix_optional":true,"accent_tolerant":true,"separator_equivalent":true,"emoji_optional_for_match":true,"emit_canonical_display":true},"activation":{"intent":"extrair apenas o delta útil e descartar ruído","autonomous_within_scope":true,"requires_runtime_measurement":true,"unknown_is_not_pass":true}},
+    {"id":"CENTRALDARK_ROOT_SURGERY","emoji":"🪬","canonical_trigger":"!MODO CIRURGIA DE RAIZ","canonical_display":"🪬 !MODO CIRURGIA DE RAIZ","aliases":["!🪬 MODO CIRURGIA DE RAIZ","#🪬 MODO CIRURGIA DE RAIZ","🪬 MODO CIRURGIA DE RAIZ","!MODO CIRURGIA DE RAIZ","#MODO CIRURGIA DE RAIZ","MODO CIRURGIA DE RAIZ","!modo cirurgia de raiz","#modo cirurgia de raiz","modo cirurgia de raiz","!MODO CIRURGIA RAIZ","#MODO CIRURGIA RAIZ","modo cirurgia raiz","!CIRURGIA DE RAIZ","#CIRURGIA DE RAIZ","cirurgia de raiz","cirurgia raiz","!ROOT_SURGERY","#ROOT_SURGERY","ROOT_SURGERY","root surgery","!CENTRALDARK_ROOT_SURGERY","#CENTRALDARK_ROOT_SURGERY","centraldark root surgery","!modo cirugia de raiz","#modo cirugia de raiz","modo cirugia de raiz","!modo sirurgia de raiz","#modo sirurgia de raiz","modo sirurgia de raiz","!modo cirurgia de rais","#modo cirurgia de rais","modo cirurgia de rais"],"match_policy":{"case_insensitive":true,"prefix_optional":true,"accent_tolerant":true,"separator_equivalent":true,"emoji_optional_for_match":true,"emit_canonical_display":true},"mode_name_pt_br":"Modo Cirurgia de Raiz","mode_name_canonical":"CENTRALDARK_ROOT_SURGERY","classification":"HUMAN_IN_THE_LOOP_ROOT_OPS","activation":{"intent":"habilitar operação assistida diretamente em VPS/Casa/runtime com o CHEFE executando comandos reais e o agente montando comandos seguros, medindo saídas e registrando receipts","default_scope":"casa+vps+github+mcp","autonomous_within_scope":true,"requires_human_terminal_execution":true,"agent_direct_vps_claim_without_tool":false,"requires_runtime_measurement":true,"unknown_is_not_pass":true},"required_loop":["🧭 INTENCAO","📍 MEDIR_LOCAL","🧰 GERAR_COMANDO_COLAVEL","🩺 EXECUTAR_PELO_CHEFE","📡 CAPTURAR_SAIDA","🧾 RECEIPT","🌿 BRANCH_OU_PR","⚖️ REALITY_JUDGE"],"safety_gates":["🔒 NAO_PEDIR_TOKEN_SENHA_SECRET_ENV","🧯 NAO_RESETAR_NAO_APAGAR_NAO_FORCE_PUSH","🧪 MEDIR_ANTES_DE_MUTAR","🧾 RECEIPT_ANTES_E_DEPOIS","🌿 BRANCH_ANTES_DE_MAIN_QUANDO_HOUVER_CODIGO","⚖️ UNKNOWN_NAO_E_PASS"],"enabled_response_shape":{"top_line":"🪬 !MODO CIRURGIA DE RAIZ","must_include":["INTENCAO","COMANDO_COLAVEL","O_QUE_NAO_MEXE","EVIDENCIA_ESPERADA","PROXIMO_CURSOR"]}}
   ]
 }
