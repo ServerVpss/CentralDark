@@ -36,22 +36,24 @@ jobs:
       - name: 🧪 Self-test do radar
         run: python3 scripts/ci/workflow_dedupe_radar.py --self-test
 
-      - name: 🔎 Medir workflows/jobs/steps/runners
+      - name: 🔎 Medir workflows, jobs, steps, runners e cânone visual
         run: |
           set -euo pipefail
           python3 scripts/ci/workflow_dedupe_radar.py \
             --root . \
             --json-out "$RUNNER_TEMP/workflow-dedupe.json" \
-            --markdown-out "$RUNNER_TEMP/workflow-dedupe.md"
+            --markdown-out "$RUNNER_TEMP/workflow-dedupe.md" \
+            --fail-on-visual-canon
 
       - name: 📋 Publicar resumo determinístico
         if: always()
         run: |
           {
             echo "HEAD=${GITHUB_SHA}"
-            echo "RADAR_MODE=ADVISORY_NO_MUTATION"
+            echo "RADAR_MODE=ADVISORY_DEDUPE_PLUS_VISUAL_CANON_GATE"
             echo "REUSE_BEFORE_CREATE=true"
             echo "SAME_RUNNER_IS_NOT_DUPLICATION=true"
+            echo "EMOJI_VISUAL_CANON_REQUIRED=true"
             echo "UNKNOWN_IS_NOT_PASS=true"
             if [ -f "$RUNNER_TEMP/workflow-dedupe.md" ]; then
               cat "$RUNNER_TEMP/workflow-dedupe.md"
@@ -64,9 +66,10 @@ jobs:
         if: always()
         run: |
           set -euo pipefail
-          echo "SCHEMA=centraldark.workflow-dedupe-radar.v1"
+          echo "SCHEMA=centraldark.workflow-dedupe-radar.v2"
           echo "HEAD=${GITHUB_SHA}"
           echo "MUTATION=false"
           echo "AUTO_REFACTOR=false"
+          echo "EMOJI_VISUAL_CANON_REQUIRED=true"
           echo "PARALLEL_RUNNERS_ALLOWED_WHEN_LOGIC_DIFFERS=true"
           echo "VERDICT=${{ job.status }}"
