@@ -2,6 +2,7 @@
 title: "🫀 RECEIPTS — índice vivo"
 status: "ATIVO_RECONCILIADO"
 date: 2026-09-10
+updated: 2026-09-10
 owner: "docs/RECEIPTS/README.md"
 truth_scope: "RECEIPTS_STRUCTURE_AND_GRAPH"
 canonical: true
@@ -17,8 +18,10 @@ related:
   - "[[CENTRALDARK_ZENDRIVE_OBSIDIAN_AUTOMACOES]]"
   - "[[CENTRALDARK_FONTES_GITHUB_DRIVE_RECONCILIATION]]"
   - "[[PDF_CC2003_MAIN_FIXED_POINT]]"
+  - "[[PADRAO-GRAFO-VIVO-MARKDOWN]]"
   - "[[PADRAO-RESPOSTA-SEGREDO-CHEFE]]"
 links:
+  - "docs/CONSCIENCIA/PADRAO-GRAFO-VIVO-MARKDOWN.md"
   - "docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md"
   - "docs/CONSCIENCIA/PADRAO-EMOJIS.md"
   - "docs/SEGURANCA/ADM-GATILHOS-OPERACIONAIS.json"
@@ -28,19 +31,22 @@ links:
 
 ## 🧠 Regra da Casa
 
-Os recibos atuais usam **nome estável**. A data fica nas propriedades do cabeçalho, não no nome do arquivo.
+Os recibos **atuais** usam nome estável. A data fica nas propriedades do cabeçalho, não no nome do arquivo vivo.
 
-Exemplo certo:
+Exemplo certo: `CENTRALDARK_ZENDRIVE_OBSIDIAN_AUTOMACOES.md`.
 
-`CENTRALDARK_ZENDRIVE_OBSIDIAN_AUTOMACOES.md`
+A regra geral de todos os Markdown está em [[PADRAO-GRAFO-VIVO-MARKDOWN]].
 
-A estrutura mínima de cada nota atual é:
+## 🧬 Estrutura mínima
+
+Cada recibo vivo tocado ou criado deve convergir para:
 
 - 🧠 `title`
 - ⚖️ `status`
-- 📅 `date`
+- 📅 `date` ou `updated`
 - 👑 `owner`
 - 🔎 `truth_scope`
+- 🫀 `canonical`
 - 🏷️ `tags`
 - 🔗 `related`
 - 🔗 `links`
@@ -49,13 +55,13 @@ A estrutura mínima de cada nota atual é:
 
 `related` liga notas pelo nome no Obsidian.
 
-`links` aponta para arquivos, regras e motores reais do GitHub.
+`links` aponta para arquivos, regras, testes e motores reais do GitHub.
 
-`tags` permite agrupar assuntos sem criar pastas ou arquiteturas paralelas.
+`tags` aproxima famílias de conhecimento sem criar arquitetura paralela.
 
-Emojis dentro do Markdown funcionam como pistas visuais da Casa. Emoji não substitui prova.
+Emojis dentro do Markdown são pistas visuais da Casa. Emoji não substitui prova.
 
-## 🧱 Hierarquia
+## 🧱 Hierarquia viva desta pasta
 
 ### 🏠 Casa / automação / memória
 
@@ -69,15 +75,23 @@ Emojis dentro do Markdown funcionam como pistas visuais da Casa. Emoji não subs
 
 - [[PDF_CC2003_MAIN_FIXED_POINT]]
 
-## ♻️ Legado
+## 🕰️ Legado
 
-Arquivos antigos com data no nome podem permanecer somente como **ponte de compatibilidade** apontando para o arquivo estável atual.
+O histórico continua no Git.
 
-Eles não viram segundo dono, segunda verdade ou nova arquitetura.
+Quando um arquivo datado era somente sombra/ponte de um dono estável e não havia consumidor real, ele **não permanece nesta pasta viva**. O nome antigo pode ficar em `aliases` do dono atual.
 
-Regra:
+Arquivo datado só deve existir na árvore corrente quando a data for parte da identidade histórica real, como snapshot, handoff, relatório ou auditoria. Nesse caso ele precisa declarar que é histórico e apontar para o dono atual quando houver.
 
-LEGADO → aponta para OWNER ESTÁVEL → preserva histórico → não governa estado atual.
+Regra simples:
+
+**história preservada ≠ duplicata viva preservada.**
+
+## 🎨 Emojis
+
+Os gatilhos e seus emojis vêm de `docs/SEGURANCA/ADM-GATILHOS-OPERACIONAIS.json`.
+
+Não usar mapa antigo que contradiga o registry atual.
 
 ## ⚖️ Leis
 
@@ -92,10 +106,12 @@ LEGADO → aponta para OWNER ESTÁVEL → preserva histórico → não governa e
 
 Ao tocar em recibo antigo desta pasta:
 
-1. encontrar o dono atual;
-2. manter o nome atual estável sem data;
-3. colocar data/status nas propriedades;
-4. conectar `tags`, `related` e `links`;
-5. usar emojis semânticos no corpo;
-6. preservar o caminho antigo como ponte de legado quando necessário;
-7. não criar `v1`, `v2`, `v3` nem família paralela.
+1. 🧿 medir estado e referências;
+2. 🔎 descobrir se é vivo, histórico real ou sombra;
+3. 🔄 localizar o dono atual;
+4. 🫀 manter nó vivo com nome estável;
+5. 🏷️ colocar tempo/estado nas propriedades;
+6. 🔗 conectar `tags`, `related` e `links`;
+7. 🎨 reconciliar emojis com o registry atual;
+8. 🧹 remover da pasta viva sombra datada sem consumidor, preservando o histórico no Git;
+9. 🚫 não criar família `v1`, `v2`, `v3`, `FINAL`, `NOVO` ou `COPY` para o mesmo assunto.
