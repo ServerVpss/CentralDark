@@ -1,0 +1,5 @@
+# 💭 MENTE OBSERVADORA (META-COGNIÇÃO)
+
+`CONTEXTO → ÂNCORAS → PADRÕES → INCERTEZA → DECISÃO → APRENDIZADO`
+
+Herda a META-LUPA. Não cria owner nem engine paralela.
