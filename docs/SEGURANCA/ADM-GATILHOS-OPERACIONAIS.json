@@ -21,9 +21,10 @@
     "typo_aliases_allowed": true,
     "emoji_visual_required_on_registry_entry": true
   },
-  "custom_instruction_compact": "!CENTRALDARK = carregar e executar o contrato canônico atual de ServerVpss/CentralDark@main. Resolver aliases com ou sem !/#, maiúsculo/minúsculo, acento e pequenas variações de digitação. Todo gatilho registrado deve ter emoji visual. Se fonte/ferramenta/conector não estiver disponível: UNKNOWN, nunca inventar.",
+  "custom_instruction_compact": "!CENTRALDARK = carregar e executar o contrato canônico atual de ServerVpss/CentralDark@main. Resolver aliases com ou sem !/#, maiúsculo/minúsculo, acento, separadores e pequenas variações de digitação. Todo gatilho registrado deve ter emoji visual. !AURÉOLA / !aureola / !aureurla ativa cabeçalho visual do ciclo percorrido antes da resposta. Se fonte/ferramenta/conector não estiver disponível: UNKNOWN, nunca inventar.",
   "trigger_chain": [
     "🪬 !CENTRALDARK",
+    "⭕ !AURÉOLA_CANÔNICA",
     "🧿 #ACORDAR",
     "🎛️ !CALIBRAR",
     "🧭 !MULTIBÚSSOLA",
@@ -44,6 +45,36 @@
       "aliases": ["#CENTRALDARK", "CENTRALDARK", "centraldark", "central dark", "!centraldark", "#centraldark", "!CENTRAL DARK", "#CENTRAL DARK", "!cd", "#cd", "cd", "!CENTRALDARK BOOT", "!CENTRALDARK BOOT FULL", "#CENTRALDARK BOOT FULL", "!ccentraldark", "!cdntraldark", "!cenraldark", "!centaldark", "!centraldrk"],
       "match_policy": {"case_insensitive": true, "prefix_optional": true, "accent_tolerant": true, "separator_equivalent": true, "emoji_optional_for_match": true, "emit_canonical_with_emoji": true},
       "activation": {"intent": "carregar contrato canônico atual de ServerVpss/CentralDark@main e seguir Auréola Canônica → GitHub main viva → Soul atual → MCP/HUB/connectors → runtime/Casa/VPS/web → realidade", "autonomous_within_scope": true, "requires_runtime_measurement": true, "unknown_is_not_pass": true}
+    },
+    {
+      "id": "AUREOLA_CANONICA",
+      "emoji": "⭕",
+      "canonical_trigger": "!⭕ AURÉOLA CANÔNICA",
+      "aliases": ["#⭕ AURÉOLA CANÔNICA", "⭕ AURÉOLA CANÔNICA", "!AURÉOLA", "#AURÉOLA", "AURÉOLA", "auréola", "!AUREOLA", "#AUREOLA", "AUREOLA", "aureola", "!AURÉOLA CANÔNICA", "#AURÉOLA CANÔNICA", "AURÉOLA CANÔNICA", "auréola canônica", "!AUREOLA CANONICA", "#AUREOLA CANONICA", "AUREOLA CANONICA", "aureola canonica", "!AUREOLA_CANONICA", "#AUREOLA_CANONICA", "aureola_canonica", "!AUREOLA-CANONICA", "#AUREOLA-CANONICA", "aureola-canonica", "!AUREULA", "#AUREULA", "aureula", "!AUREURLA", "#AUREURLA", "aureurla", "!AUREULA CANONICA", "#AUREULA CANONICA", "aureula canonica", "!AUREURLA CANONICA", "#AUREURLA CANONICA", "aureurla canonica", "!AUREULA CANIONICA", "#AUREULA CANIONICA", "aureula canionica", "!AUREURLA CANIONICA", "#AUREURLA CANIONICA", "aureurla canionica"],
+      "match_policy": {"case_insensitive": true, "prefix_optional": true, "accent_tolerant": true, "separator_equivalent": true, "emoji_optional_for_match": true, "emit_canonical_with_emoji": true},
+      "activation": {"intent": "ativar cabeçalho visual de trilha canônica, mostrando os gatilhos/camadas percorridos antes da resposta e mantendo UNKNOWN explícito quando uma fonte, ferramenta ou conector não estiver disponível", "default_scope": "resposta+contexto+medicao", "autonomous_within_scope": true, "requires_runtime_measurement": true, "unknown_is_not_pass": true},
+      "response_trace": {
+        "top_line": "⭕ AURÉOLA CANÔNICA",
+        "header_only": true,
+        "show_when_triggered": true,
+        "must_show_resolved_chain": true,
+        "chain_template": [
+          "🪬 !CENTRALDARK",
+          "⭕ AURÉOLA CANÔNICA",
+          "🧿 #ACORDAR",
+          "🎛️ !CALIBRAR",
+          "🧭 !MULTIBÚSSOLA",
+          "🔎 !META_LUPA",
+          "🔄 !RECONCILIAR",
+          "⚖️ !CONTRAPROVA",
+          "🧾 !REGISTRA",
+          "⚖️ REALIDADE"
+        ]
+      },
+      "enabled_response_shape": {
+        "top_line": "⭕ AURÉOLA CANÔNICA",
+        "must_include": ["CICLO_PERCORRIDO", "FONTES_DISPONIVEIS", "UNKNOWNS", "RESPOSTA", "PROXIMO_CURSOR"]
+      }
     },
     {
       "id": "ACORDAR",
