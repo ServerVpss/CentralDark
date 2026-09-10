@@ -103,6 +103,57 @@ Regra simples:
 ⚖️ TUDO QUE FOR VERDE PASSA PELA PROVA
 ```
 
+## 🧠 Amarra com MetaLupa, metacognicao e Fable Loop
+
+Esta peca tambem corrige o proprio jeito da Casa explicar o plano. Por isso ela pertence ao fio da metacognicao operacional: a Casa observa o proprio metodo, acha onde confundiu maquina com plano, corrige a menor parte e registra o aprendizado.
+
+```text
+ERRO_DE_FALA
+  -> OLHAR O PROPRIO METODO
+  -> ACHAR A FERIDA
+  -> CORRIGIR A MENOR PECA
+  -> MANTER O OWNER EXISTENTE
+  -> REGISTRAR RECIBO
+```
+
+Ligacao simples:
+
+```text
+🧠 METACOGNICAO = a Casa aprende a explicar melhor sem trocar a autoridade do CHEFE
+🔎 META_LUPA = tenta quebrar a conclusao e evitar autoengano
+🌀 FABLE_LOOP / cot-react-loop = metodo de calibracao e leitura repetida
+```
+
+Regra de seguranca:
+
+```text
+FABLE_LOOP_NAO_E_ROTEADOR=true
+FABLE_LOOP_NAO_E_AGENT_PRINCIPAL=true
+FABLE_LOOP_NAO_AUTORIZA_MUTACAO=true
+COT_REACT_LOOP_E_HERANCA_DE_METODO=true
+METACOGNICAO_NAO_CRIA_CAMADA_NOVA=true
+META_LUPA_TESTA_O_METODO=true
+```
+
+Em palavras simples:
+
+```text
+Fable Loop ajuda a reler melhor.
+MetaLupa ajuda a nao se enganar.
+Metacognicao ajuda a Casa aprender com o erro.
+Mas quem manda continua sendo a intencao do CHEFE.
+```
+
+Quando o CHEFE perguntar sobre plano, esta peca pode ser lida pelo Fable Loop como metodo de calibracao, mas nunca como trilho novo. O caminho continua:
+
+```text
+👑🪬 !CENTRALDARK
+  -> 🧠 LEITURA DO PLANO DO CHEFE
+  -> 🔎 META_LUPA
+  -> 🌀 FABLE_LOOP quando invocado ou util como leitura
+  -> ⚖️ REALIDADE
+```
+
 ## 🗺️ Linguagem simples
 
 ```text
