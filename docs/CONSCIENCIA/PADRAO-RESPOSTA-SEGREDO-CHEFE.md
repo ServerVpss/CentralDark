@@ -277,6 +277,25 @@ PRA QUE SERVE:
 
 Essa camada não esconde falha, risco, pendência ou UNKNOWN.
 
+## 🧾 Espelhamento PR antes da resposta
+
+Quando a atividade vigente estiver relacionada a um ou mais PRs, o relatório material que seria devolvido ao SEGREDO/CHEFE deve ser persistido primeiro na conversa do PR relacionado e, quando houver PR-mãe/rendezvous da mesma intenção, também nele.
+
+A resposta ao humano deve ser o espelho curto do que já ficou registrado no GitHub, não uma versão mais rica que exista apenas no chat.
+
+```text
+RELATED_PR_EXISTS=true → REPORT_TO_PR_BEFORE_CHAT=true
+SAME_MATERIAL_MESSAGE_PR_AND_CHAT=true
+RELATED_CHILD_PR → COMMENT_REQUIRED=true
+RELATED_PR_MAE → COMMENT_REQUIRED=true
+CHAT_ONLY_OPERATIONAL_REPORT=FORBIDDEN
+PR_COMMENT != GLOBAL_MEMORY
+REUSABLE_LEARNING → PROMOTE_TO_CANONICAL_OWNER=true
+NO_DUPLICATE_ECHO_WITHOUT_DELTA=true
+```
+
+Se houver vários PRs realmente relacionados ao mesmo resultado, registrar em cada um somente o delta que pertence ao seu escopo e manter no PR-mãe o resumo de convergência. Não espalhar comentário para PR sem relação material.
+
 ## 🔗 Fontes atuais
 
 - `LEIA-ME-IA.md`
