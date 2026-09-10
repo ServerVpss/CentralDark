@@ -57,6 +57,7 @@ Nenhum gancho mental substitui o owner real. Nenhum texto de PR substitui códig
 PADROES-PR/REGISTRY.json       → padrões sobreviventes da varredura de PRs
 SKILLS/MAPA-MENTAL-OPERACIONAL.md → mapa visual das skills operacionais
 RUNTIME/FRONTEIRAS-REAIS.md    → o que continua exigindo Casa/VPS/runtime/CI aplicável
+RUNTIME/API-TOOL-RESOURCE-BRIDGE.md → separa /response/turnX temporário de repo path estável e liga api_tool ao META-START-LINK
 RECEIPTS/                       → rastros desta cristalização
 ```
 
