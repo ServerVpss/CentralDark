@@ -1,0 +1,29 @@
+{
+  "generated_at_utc": "2026-09-09T04:04:39.011945+00:00",
+  "package_base": "03-trajetoria-vivida.zip",
+  "base_files_preserved_at_root": 5,
+  "chatgpt_generated_images_total": 94,
+  "chatgpt_library_images": 93,
+  "current_conversation_generated_images": 1,
+  "library_query_contract": {
+    "surfaces": [
+      "library",
+      "conversation"
+    ],
+    "include_file_types": [
+      "image"
+    ],
+    "model_generated": true
+  },
+  "github_repository": "ServerVpss/CentralDark",
+  "github_main_observed_sha": "2da720ec973649a7af9aaa8542533165b8732137",
+  "canonical_entrypoint": "LEIA-ME-IA.md",
+  "visual_method": ".agents/skills/visual-design-method/SKILL.md",
+  "canonical_posters_index": "docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/README.md",
+  "truth_rules": [
+    "REUSE_BEFORE_CREATE_REQUIRED=true",
+    "UNKNOWN_IS_NOT_PASS=true",
+    "NO_BLIND_OVERWRITE=true"
+  ],
+  "render_status": "COLLECTED_EXISTING_GENERATED_IMAGES; NO_CLAIM_OF_REGENERATION_IN_THIS_PACKAGE_BUILD"
+}
