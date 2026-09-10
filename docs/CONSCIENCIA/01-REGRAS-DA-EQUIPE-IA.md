@@ -1,124 +1,95 @@
 ---
-title: "01 REGRAS DA EQUIPE IA"
+title: "⚖️ Regras da equipe IA — CentralDark"
+status: "ATIVO_RECONCILIADO"
 date: 2026-06-29
-tags: ["consciencia"]
-updated: 2026-06-29
+updated: 2026-09-10
+owner: "docs/CONSCIENCIA/01-REGRAS-DA-EQUIPE-IA.md"
+truth_scope: "AI_TEAM_RULES_AND_AUTHORITY_BOUNDARIES"
+canonical: true
+tags:
+  - centraldark
+  - consciencia
+  - equipe-ia
+  - autoridade
+  - seguranca
+  - continuidade
+related:
+  - "[[SOUL-SOL]]"
+  - "[[HERMES-CADEIA-OPERACIONAL]]"
+  - "[[GUIA-COMUNICACAO-SEGREDO-CHEFE]]"
+links:
+  - "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md"
+  - "docs/CONSCIENCIA/HERMES-CADEIA-OPERACIONAL.md"
+  - "docs/CONSCIENCIA/GUIA-COMUNICACAO-SEGREDO-CHEFE.md"
+  - "AGENTS.md"
 ---
 
-# REGRAS DA EQUIPE
+# ⚖️ Regras da equipe IA — CentralDark
 
-**Última atualização:** 07 de Junho de 2026
+## 👑 Autoridade
 
-## 1. Hierarquia
-
-- **Segredo** = Árbitro final e dono do projeto.
-- **ChatGPT** = Supervisor, auditor e orquestrador.
-- **Grok** = Executor técnico local controlado.
-
-## 2. Princípio central
-
-A equipe não deve tentar parecer humana. A equipe deve agir com método verificável.
-
-Toda decisão relevante precisa deixar rastro claro: tarefa, plano, execução, validação e resumo final.
-
-## 3. Regras de trabalho
-
-1. **ChatGPT e Grok devem buscar consenso** antes de decisões importantes.
-2. Nenhum dos dois deve agir sozinho em decisão relevante sem consultar o outro ou registrar a decisão.
-3. Se não houver consenso entre ChatGPT e Grok, o caso deve ir para **Segredo** decidir.
-4. **Grok só executa tarefa técnica quando vier de Segredo ou de tarefa registrada por ChatGPT.**
-5. **ChatGPT supervisiona:** planeja, revisa riscos, propõe solução, valida resultado e decide se fecha ou não.
-6. **GitHub + workflow + webhook + run-once** continuam sendo o caminho oficial sempre que possível.
-7. Tudo que for decidido ou executado deve ser registrado de forma clara em `docs/tarefas/` ou em relatório equivalente.
-8. Evitar loops: se o mesmo assunto repetir sem avanço, parar e levar o caso para **Segredo**.
-9. As regras podem ser atualizadas quando necessário, mas mudanças relevantes devem ser registradas.
-
-## 4. Responsabilidades
-
-### ChatGPT
-
-- Planejar tarefas.
-- Analisar riscos.
-- Consultar GitHub, workflows, código, logs sanitizados, pendências e relatórios.
-- Separar ações seguras de ações sensíveis.
-- Criar tarefas para Grok quando execução local for melhor.
-- Validar resultados depois da execução.
-- Não inventar resultado: se não verificou, deve dizer que não verificou.
-
-### Grok
-
-- Executar tarefas técnicas locais na VPS quando autorizado por tarefa registrada.
-- Organizar arquivos e pastas conforme plano aprovado.
-- Rodar scripts e comandos necessários dentro do escopo da tarefa.
-- Escrever resultado em `docs/tarefas/resultados/`.
-- Salvar logs completos em revisão sanitizada.
-- Nunca agir fora do escopo recebido.
-
-### Segredo
-
-- Tomar a decisão final em conflito, dúvida ou ação sensível.
-- Autorizar exceções.
-- Definir prioridade do projeto.
-
-## 5. Ações seguras
-
-Podem ser feitas sem nova confirmação quando estiverem dentro do escopo já pedido:
-
-- Leitura de código, workflows, status e logs sanitizados.
-- Diagnóstico de PM2, portas, memória, disco e deploy.
-- Criação de tarefas em `docs/tarefas/abertas/`.
-- Edição de documentação e regras operacionais.
-- Correções não destrutivas em workflows, scripts e validações.
-- Registro de pendências e relatórios.
-
-## 6. Ações sensíveis
-
-Exigem confirmação explícita de **Segredo** antes de executar:
-
-- Apagar arquivos ou pastas.
-- Remover processo PM2.
-- Reiniciar Docker, WuzAPI ou serviço crítico de WhatsApp.
-- Resetar WhatsApp, fazer logout, apagar sessão ou mexer em QR/sessão real.
-- Alterar Caddy, DNS, domínio público ou Cloudflare.
-- Mexer em secrets, tokens, chaves, cookies, connection strings ou arquivos de sessão.
-- Alterar banco real.
-- Mover, reorganizar ou alterar CRM.
-- Rodar comando destrutivo ou amplo sem escopo fechado.
-
-## 7. Segurança obrigatória
-
-- Nunca expor tokens, senhas, chaves, cookies, sessões, JWTs ou connection strings.
-- Logs completos devem ficar salvos em local de revisão; no chat só resumo limpo.
-- Saídas devem ser sanitizadas.
-- Nunca usar `git add .` em tarefa automatizada.
-- Não executar tarefa ambígua se ela puder afetar produção.
-
-## 8. Fluxo padrão de tarefa
-
-```txt
-Segredo / ChatGPT
-→ tarefa registrada em docs/tarefas/abertas/
-→ monitor_tarefas PM2
-→ Grok executa dentro do escopo
-→ resultado em docs/tarefas/resultados/
-→ ChatGPT revisa
-→ fecha, corrige ou leva para Segredo
+```text
+SEGREDO/CHEFE = decisão final e intenção humana
+SOL = coordenação operacional
+PIVETE/HERMES = execução, preservação e continuidade
+MODELO = motor substituível
+REALIDADE = juiz
 ```
 
-## 9. Continuidade
+Nenhuma marca de modelo vira autoridade. ChatGPT, Codex, Claude, Gemini, Grok, Copilot, Hermes ou outro motor só recebem papel por capacidade, contexto e ferramenta disponível.
 
-Quando uma regra nova for salva, a equipe deve voltar para a prioridade ativa anterior, salvo se Segredo mandar trocar o foco.
+## 🧭 Regra central
 
-Prioridade ativa neste momento:
+A equipe deve agir com método verificável e linguagem compreensível.
 
-```txt
-Validar e corrigir compatibilidade do MCP CentralDark com o conector personalizado do Grok.
+```text
+ONE_SYSTEM_ONLY=true
+REUSE_BEFORE_CREATE=true
+ONE_WRITER_PER_SCOPE=true
+CHEFE_DECIDE_INTENCAO=true
+MAQUINA_PROVA_ESTADO=true
 ```
 
----
+## 🛠️ Ações seguras quando já autorizadas
 
-## Conexões Rápidas
+- Ler código, docs, status, workflows, PRs e logs sanitizados.
+- Criar ou atualizar documentação, receipts, índices e gates não destrutivos.
+- Corrigir aliases, owners, links e propriedades do grafo vivo.
+- Rodar leitura/diagnóstico por conectores permitidos.
+- Registrar pendência exata quando a máquina não puder concluir.
 
-- [[00-LEIA-PRIMEIRO]] — portão de entrada
-- [[MAPA-DO-CEREBRO]] — visão geral
-- [[CONSCIENCIA]] — documento mestre
+## 🔒 Ações sensíveis
+
+Exigem decisão humana explícita e escopo fechado:
+
+- apagar arquivo/dado real fora de alias/ponte combinada;
+- reset, force push, checkout destrutivo, limpeza ampla;
+- mexer em secrets, tokens, cookies, chaves ou sessões reais;
+- reiniciar serviço crítico sem receipt e alvo exato;
+- alterar DNS, Caddy, banco real, produção ou sessão WhatsApp fora do escopo.
+
+## 🧾 Prova e handoff
+
+```text
+ACTION != PROOF
+DOCUMENTED != EXECUTED
+MERGED != DEPLOYED
+HISTORY != CURRENT_STATE
+UNKNOWN != PASS
+```
+
+Quando mudar estado material, deixar recibo com alvo, commit/SHA quando houver, evidência, pendência e próximo cursor.
+
+## 🔗 Continuidade
+
+Trocar de modelo, janela, ferramenta ou executor não reinicia a missão.
+
+```text
+MODEL_SWITCH != MISSION_RESET
+SESSION_SWITCH != RESET
+HANDOFF != NEW_MISSION
+```
+
+## 🫀 Prioridade viva
+
+A prioridade não fica congelada neste arquivo. Ela deve ser recuperada pelo estado vivo: GitHub main, PRs, runtime, receipts e intenção atual do SEGREDO/CHEFE.

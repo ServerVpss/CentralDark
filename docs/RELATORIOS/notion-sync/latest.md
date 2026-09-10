@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-09-09T20:41:44.573Z
+# 🧠 Notion Sync — 2026-09-10T19:09:00.432Z
 
-- **Commit fonte:** `918efbef01a20e8da59e0db50f34fe4f1d1c605f`
+- **Commit fonte:** `5ce1d976a2af5fd91e7ee31c34c616c62ae47f04`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 491 atualizadas · ❌ 25 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 491 atualizadas · ❌ 27 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
 | aprendizados | 36 | 0 | 35 | 0 | 1 |
-| estrutura | 436 | 0 | 412 | 0 | 24 |
+| estrutura | 438 | 0 | 412 | 0 | 26 |
 
 ## Operações
 
@@ -389,6 +389,8 @@
 | estrutura | atualizado | docs/CONSCIENCIA/NOTION-MAPA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PADRAO-CARD-HERMES.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PADRAO-EMOJIS.md |
+| estrutura | erro | docs/CONSCIENCIA/PADRAO-GRAFO-VIVO-MARKDOWN.md |
+| estrutura | erro | docs/CONSCIENCIA/PADRAO-LINKS-CLICAVEIS-SEGREDO-CHEFE.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PENDENCIAS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PENDENCIAS/MCP-LOCAL-STDIO-VPS.md |
