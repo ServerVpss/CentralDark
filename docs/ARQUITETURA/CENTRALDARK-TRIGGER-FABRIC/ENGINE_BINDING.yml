@@ -1,6 +1,9 @@
 schema: centraldark.engine-binding.v3
-contract_owner: LEIA-ME-IA.md
+human_ai_entry: LEIA-ME-IA.md
+contract_owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml
 trigger_fabric_owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml
+binding_role: EXECUTION_BINDING
+binding_is_normative_owner: false
 binding_mode: LOAD_REFERENCE
 copy_brain: false
 engine_is_owner: false
@@ -146,6 +149,10 @@ master_cycle_binding:
   resolver: scripts/trigger-fabric/centraldark_master_cycle.py
   explicit_trigger: "!CENTRALDARK"
   plain_word_centraldark_does_not_trigger: true
+  core_chain_source: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml#expands_to
+  mandatory_execution_extensions: [AUREOLA_BAHIA_BIBLICA, SEMANTIC_GREEN, POST_GREEN_LOCK]
+  extensions_role: BINDING_EXECUTION_EXTENSIONS_NOT_CORE_AUTHORITY
+  expands_to_role: EFFECTIVE_EXECUTION_CHAIN_DERIVED_FROM_CORE_PLUS_BINDING_EXTENSIONS
   expands_to: [ACORDAR, CALIBRAR, MULTIBUSSOLA, AUREOLA_BAHIA_BIBLICA, META_LUPA, RECONCILIAR, DELTA_UTIL, CONTRAPROVA, REMEDICAO, SEMANTIC_GREEN, FIXED_POINT, POST_GREEN_LOCK, REGISTRA, BOOT]
   session_state_consumer: scripts/trigger-fabric/centraldark_master_cycle.py#resolve_with_session_state
   session_state_requires_caller_file: true
