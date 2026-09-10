@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
-"""CentralDark Workflow Dedupe Radar.
+"""CentralDark Workflow Dedupe + Visual Canon Radar.
 
-Deterministic scanner for GitHub Actions duplication. It does not mutate workflows.
+Deterministic scanner for GitHub Actions duplication and visual naming.
+It does not mutate workflows.
 It classifies:
 - exact duplicate jobs/steps -> REUSE_CANDIDATE
 - shared runner labels with different logic -> INTENTIONAL_PARALLEL
 - reusable workflow availability -> WORKFLOW_CALL_PRESENT/ABSENT
+- missing emoji in workflow/job/step names -> VISUAL_CANON_VIOLATION
 
 Stdlib only. UNKNOWN != PASS.
 """
@@ -24,14 +26,31 @@ STEP_RE = re.compile(r"^      - (?:name:\s*(.*)|uses:\s*(.*)|run:\s*[|>-]?\s*)$"
 RUNNER_RE = re.compile(r"^\s*runs-on:\s*(.+?)\s*$")
 TOP_RE = re.compile(r"^[A-Za-z0-9_.-]+:\s*")
 COMMENT_RE = re.compile(r"^\s*#")
+WORKFLOW_NAME_RE = re.compile(r"^name:\s*(.+?)\s*$", re.MULTILINE)
+JOB_NAME_RE = re.compile(r"^    name:\s*(.+?)\s*$", re.MULTILINE)
+STEP_NAME_RE = re.compile(r"^      - name:\s*(.+?)\s*$", re.MULTILINE)
 
 NORMALIZE_DROP_PREFIXES = (
     "name:",
     "timeout-minutes:",
 )
 
+EMOJI_RE = re.compile(
+    "["
+    "\U0001F300-\U0001FAFF"
+    "\U00002700-\U000027BF"
+    "\U00002600-\U000026FF"
+    "]"
+)
+
+
 def sha(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+
+def has_emoji(text: str) -> bool:
+    return bool(EMOJI_RE.search(text or ""))
+
 
 def normalize_lines(lines: Iterable[str]) -> str:
     out = []
@@ -43,6 +62,7 @@ def normalize_lines(lines: Iterable[str]) -> str:
             continue
         out.append(re.sub(r"\s+", " ", stripped))
     return "\n".join(out)
+
 
 def extract_jobs(text: str, path: str):
     lines = text.splitlines()
@@ -77,6 +97,7 @@ def extract_jobs(text: str, path: str):
         job["step_names"] = [m.group(1).strip() for l in job["lines"] if (m := STEP_RE.match(l)) and m.group(1)]
     return jobs
 
+
 def extract_step_blocks(text: str, path: str):
     lines = text.splitlines()
     steps = []
@@ -109,12 +130,38 @@ def extract_step_blocks(text: str, path: str):
             i += 1
     return steps
 
+
+def scan_visual_names(text: str, path: str):
+    violations = []
+
+    wf = WORKFLOW_NAME_RE.search(text)
+    if wf:
+        value = wf.group(1).strip().strip('"\'')
+        if not has_emoji(value):
+            violations.append({"path": path, "kind": "workflow", "name": value})
+    else:
+        violations.append({"path": path, "kind": "workflow", "name": "<missing>"})
+
+    for match in JOB_NAME_RE.finditer(text):
+        value = match.group(1).strip().strip('"\'')
+        if value and not has_emoji(value):
+            violations.append({"path": path, "kind": "job", "name": value})
+
+    for match in STEP_NAME_RE.finditer(text):
+        value = match.group(1).strip().strip('"\'')
+        if value and not has_emoji(value):
+            violations.append({"path": path, "kind": "step", "name": value})
+
+    return violations
+
+
 def scan(root: Path):
     workflow_dir = root / ".github" / "workflows"
     paths = sorted(list(workflow_dir.glob("*.yml")) + list(workflow_dir.glob("*.yaml")))
     all_jobs = []
     all_steps = []
     workflow_call_files = []
+    visual_violations = []
     for path in paths:
         text = path.read_text(encoding="utf-8", errors="replace")
         rel = path.relative_to(root).as_posix()
@@ -122,6 +169,7 @@ def scan(root: Path):
             workflow_call_files.append(rel)
         all_jobs.extend(extract_jobs(text, rel))
         all_steps.extend(extract_step_blocks(text, rel))
+        visual_violations.extend(scan_visual_names(text, rel))
 
     jobs_by_fp = defaultdict(list)
     for job in all_jobs:
@@ -163,7 +211,7 @@ def scan(root: Path):
         })
 
     return {
-        "schema": "centraldark.workflow-dedupe-radar.v1",
+        "schema": "centraldark.workflow-dedupe-radar.v2",
         "root": str(root),
         "workflow_count": len(paths),
         "job_count": len(all_jobs),
@@ -172,12 +220,20 @@ def scan(root: Path):
         "exact_duplicate_jobs": sorted(exact_jobs, key=lambda x: (-len(x["occurrences"]), x["fingerprint"])),
         "repeated_step_blocks": sorted(repeated_steps, key=lambda x: (-len(x["occurrences"]), x["fingerprint"])),
         "runner_usage": runners,
+        "visual_canon": {
+            "required": True,
+            "rule": "workflow/job/step display names must carry a functional emoji",
+            "violations": visual_violations,
+            "violation_count": len(visual_violations),
+        },
         "verdict": {
             "duplication_detected": bool(exact_jobs or repeated_steps),
             "reuse_candidates": len(exact_jobs) + len(repeated_steps),
-            "policy": "REUSE_BEFORE_CREATE; PARALLEL_RUNNERS_ALLOWED_WHEN_LOGIC_DIFFERS",
+            "visual_canon_ok": len(visual_violations) == 0,
+            "policy": "REUSE_BEFORE_CREATE; PARALLEL_RUNNERS_ALLOWED_WHEN_LOGIC_DIFFERS; EMOJI_VISUAL_CANON_REQUIRED",
         },
     }
+
 
 def render_markdown(report: dict) -> str:
     lines = [
@@ -187,19 +243,27 @@ def render_markdown(report: dict) -> str:
         f"- Jobs: **{report['job_count']}**",
         f"- `workflow_call`: **{report['workflow_call_count']}**",
         f"- Candidatos de reuso: **{report['verdict']['reuse_candidates']}**",
+        f"- Violações do cânone visual: **{report['visual_canon']['violation_count']}**",
         "",
-        "### Runners",
+        "### 🎨 Cânone visual",
     ]
+    if report["visual_canon"]["violations"]:
+        for item in report["visual_canon"]["violations"][:200]:
+            lines.append(f"- **VISUAL_CANON_VIOLATION** → `{item['path']}` · {item['kind']} · `{item['name']}`")
+    else:
+        lines.append("- 🟢 workflow/job/step names padronizados com emoji funcional")
+
+    lines += ["", "### 🧵 Runners"]
     for item in report["runner_usage"][:10]:
         lines.append(f"- `{item['runner']}` → {item['job_count']} jobs → **{item['classification']}**")
-    lines += ["", "### Jobs duplicados exatos"]
+    lines += ["", "### 🧩 Jobs duplicados exatos"]
     if report["exact_duplicate_jobs"]:
         for group in report["exact_duplicate_jobs"][:20]:
             refs = ", ".join(f"`{x['path']}::{x['job']}`" for x in group["occurrences"])
             lines.append(f"- **REUSE_CANDIDATE** → {refs}")
     else:
         lines.append("- nenhum")
-    lines += ["", "### Blocos de step repetidos"]
+    lines += ["", "### 🧱 Blocos de step repetidos"]
     if report["repeated_step_blocks"]:
         for group in report["repeated_step_blocks"][:20]:
             refs = ", ".join(f"`{x['path']}:{x['line']}`" for x in group["occurrences"])
@@ -209,33 +273,38 @@ def render_markdown(report: dict) -> str:
     lines += [
         "",
         "> Mesmo `runs-on` não é duplicação: é pool compartilhado. Duplicação é lógica repetida sem owner reutilizável.",
-        "> `UNKNOWN != PASS`; o radar recomenda compressão, não altera workflows sozinho.",
+        "> Emoji é contexto visual funcional, não prova. `UNKNOWN != PASS`.",
         "",
     ]
     return "\n".join(lines)
 
+
 def self_test() -> int:
-    sample = """name: x
+    sample = """name: 🧪 x
 on: push
 jobs:
   a:
+    name: 🧪 validar
     runs-on: [self-hosted, Linux]
     steps:
-      - name: Guard
+      - name: 🔎 Guard
         run: |
           echo one
           echo two
 """
     jobs = extract_jobs(sample, "a.yml")
     steps = extract_step_blocks(sample, "a.yml")
+    visual = scan_visual_names(sample, "a.yml")
     checks = [
         len(jobs) == 1,
         jobs[0]["job"] == "a",
         jobs[0]["runner"] == "[self-hosted, Linux]",
         len(steps) == 1,
+        len(visual) == 0,
     ]
     print("WORKFLOW_DEDUPE_SELF_TEST=" + ("PASS" if all(checks) else "FAIL"))
     return 0 if all(checks) else 3
+
 
 def main() -> int:
     ap = argparse.ArgumentParser()
@@ -244,6 +313,7 @@ def main() -> int:
     ap.add_argument("--markdown-out")
     ap.add_argument("--self-test", action="store_true")
     ap.add_argument("--fail-on-exact", action="store_true")
+    ap.add_argument("--fail-on-visual-canon", action="store_true")
     args = ap.parse_args()
 
     if args.self_test:
@@ -259,7 +329,10 @@ def main() -> int:
 
     if args.fail_on_exact and report["exact_duplicate_jobs"]:
         return 4
+    if args.fail_on_visual_canon and report["visual_canon"]["violations"]:
+        return 5
     return 0
+
 
 if __name__ == "__main__":
     raise SystemExit(main())

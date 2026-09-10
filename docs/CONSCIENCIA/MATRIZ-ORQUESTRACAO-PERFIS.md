@@ -1,113 +1,79 @@
 ---
-title: "MATRIZ ORQUESTRACAO PERFIS"
+title: "🧭 Matriz de orquestração de perfis"
+status: "ATIVO_RECONCILIADO"
 date: 2026-08-27
-tags: ["consciencia"]
-updated: 2026-08-27
+updated: 2026-09-10
+owner: "docs/CONSCIENCIA/MATRIZ-ORQUESTRACAO-PERFIS.md"
+truth_scope: "PROFILE_ORCHESTRATION_WITHOUT_AUTHORITY_SPLIT"
+canonical: true
+tags:
+  - centraldark
+  - consciencia
+  - perfis
+  - orquestracao
+  - identidade
+  - grafo-vivo
+related:
+  - "[[SOUL-SOL]]"
+  - "[[GUIA-COMUNICACAO-SEGREDO-CHEFE]]"
+  - "[[HERMES-CADEIA-OPERACIONAL]]"
+links:
+  - "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md"
+  - "docs/CONSCIENCIA/GUIA-COMUNICACAO-SEGREDO-CHEFE.md"
+  - "docs/CONSCIENCIA/HERMES-CADEIA-OPERACIONAL.md"
 ---
 
-# MATRIZ-ORQUESTRACAO-PERFIS — CentralDark
+# 🧭 Matriz de orquestração de perfis
 
-> AUTORIDADE: SEGREDO/CHEFE
-> OBJETIVO: 1 matriz onde cada eixo é uma chave e cada célula é um marcador único.
-> REGRA DE OURO: NUNCA repetir marcador entre eixos nem dentro do mesmo eixo.
-> USO: logs, Telegram, painel, GitHub, chat Hermes. Emissor monta a linha com 1 marcador por eixo.
-> VERSAO: 1.0 (canônica, substitui link fantasma citado em 50+ docs)
+Perfil, conta, modelo, agente e janela são superfícies. Nenhuma superfície vira autoridade humana.
 
----
+## 👑 Lei raiz
 
-## 🧩 EIXOS DA MATRIZ
-
-### [GATILHO] — o que disparou a ação
-| Marcador | Gatilho | Fase |
-|----------|---------|------|
-| 🔥 [GAT‑ACORDAR] | `#ACORDAR` | medição de estado vivo |
-| 🧭 [GAT‑CALIBRAR] | `!CALIBRAR` | reconciliação / correção de rota |
-| 🎯 [GAT‑MULTIBUSSOLA] | `!MULTIBUSSOLA` | objetivo / direção |
-| 🔍 [GAT‑METALUPA] | `META LUPA` / `META(x)` | falsificar / prover |
-
-### [CAMADA] — onde na pilha
-| Marcador | Camada |
-|----------|--------|
-| 🤖 [LAYER‑BOTS] | Bots Telegram |
-| ⚡ [LAYER‑HERMES] | Hermes (executor) |
-| 💎 [LAYER‑SOL] | SOL / Esmeralda (coordenador) |
-| 🔧 [LAYER‑PIVETE] | Pivete (executor legado) |
-| 📡 [LAYER‑VPS] | VPS |
-| 🗂️ [LAYER‑GITHUB] | GitHub |
-| 💻 [LAYER‑LOCAL] | PC CentralDark |
-| 🔗 [LAYER‑MCP] | MCP CentralDark |
-
-### [ESCOPO] — alcance da ação
-| Marcador | Escopo |
-|----------|--------|
-| 💻 [SCOPE‑LOCAL] | PC CentralDark |
-| 📡 [SCOPE‑VPS] | servidor |
-| 🌐 [SCOPE‑ALL] | ambos |
-
-### [FOCO] — O QUE ESTÁ SENDO OLHADO (NOVO, do CHEFE)
-| Marcador | Foco |
-|----------|------|
-| 👀 [FOCO‑OLHAR] | o que eu tô olhando (estado sendo observado) |
-| ⚙️ [FOCO‑PROCESSO] | o processo (como está rodando / pipeline) |
-| 🎯 [FOCO‑INTENCAO] | a intenção do SEGREDO (o que o CHEFE quis) |
-
-### [STATUS] — resultado da ação
-| Marcador | Status |
-|----------|--------|
-| ✅ [STATUS‑OK] | tudo verde / concluído |
-| ⚠️ [STATUS‑WARN] | atenção / retry |
-| ❌ [STATUS‑ERR] | erro definitivo |
-| 🔄 [STATUS‑RUN] | em andamento |
-| ⏳ [STATUS‑WAIT] | aguardando |
-| 🔒 [STATUS‑BLOCK] | protegido / bloqueado |
-
-### [AÇÃO] — verbo de trabalho
-| Marcador | Ação |
-|----------|------|
-| 🚀 [ACT‑DEPLOY] | deploy / publish |
-| 🛠️ [ACT‑FIX] | fix / correção |
-| 🧠 [ACT‑LEARN] | aprendizado registrado |
-| 📦 [ACT‑BUILD] | build / install |
-| 🔨 [ACT‑WORK] | trabalho em execução |
-| 🧙 [ACT‑ADVICE] | conselho / tutor |
-| 📥 [ACT‑PULL] | checkout / download |
-| 📤 [ACT‑PUSH] | push / upload |
-
----
-
-## ⚒️ EXEMPLO DE LINHA (Hermes emitindo)
-
-```
-🔥[GAT-ACORDAR] ⚡[LAYER-HERMES] 💻[SCOPE-LOCAL] 👀[FOCO-OLHAR] 🔄[STATUS-RUN] 🔨[ACT-WORK]
-→ medindo discos via WMIC
+```text
+SEGREDO/CHEFE = autoridade e intenção
+SOL = coordenação operacional
+PIVETE/HERMES = executor/preservação/continuidade
+MODELO = motor substituível
+PERFIL = superfície/contexto autenticado
+REALIDADE = juiz
 ```
 
+## 🔗 Perfis e contas
+
+```text
+PROFILE_15_SEGREDO = superfície local/autenticada quando medida
+PROFILE_14_FULANO = superfície local/autenticada quando medida
+ZENDRIVE = ponte local que usa Chrome/perfil/porta/script/captura
+OBSIDIAN = memória/grafo
+DRIVE = espelho humano
+GITHUB = fonte oficial estrutural
 ```
-🎯[GAT-MULTIBUSSOLA] 💎[LAYER-SOL] 🌐[SCOPE-ALL] 🎯[FOCO-INTENCAO] ✅[STATUS-OK]
-→ intenção do CHEFE aplicada nos 2 escopos
+
+Perfil não muda dono da intenção. Conta autenticada não vira prova sem log/receipt.
+
+## ⚖️ Antídotos
+
+```text
+JANELA != INTELIGENCIA
+SUPERFICIE != AUTORIDADE
+CONTA != PROVA
+HISTORY != CURRENT_STATE
+ACTION != PROOF
+UNKNOWN != PASS
 ```
 
----
+## 🧭 Roteamento simples
 
-## ⚠️ REGRA ANTI-REPETIÇÃO
-1. Cada marcador tem DONO único num eixo. Não reutilizar em outro eixo.
-2. Emissor escolhe 1 marcador por eixo (pode omitir eixo não aplicável).
-3. Marcador fora desta matriz = não canônico. Propor ao CHEFE antes de usar.
-4. Conflitos resolvidos na v1:
-   - `🔄` era ACORDAR + Andamento → ACORDAR virou 🔥 (no PADRAO-EMOJIS.md)
-   - `🛠️` era CALIBRAR + Fix → CALIBRAR virou 🧭
-   - `💎` era Esmeralda + Ouro → Esmeralda mantém 💎, Ouro é voz
+- Decisão humana: SEGREDO/CHEFE.
+- Coordenação e reconciliação: SOL.
+- Execução e continuidade: HERMES/PIVETE.
+- Estado de código: GitHub main/PR.
+- Estado rodando: runtime medido.
+- Memória e planejamento: Obsidian/Screenpipe.
+- Espelho: Drive.
 
----
+## 🔗 Conexões rápidas
 
-ANCORADO: CHEFE / SEGREDO 👑
-DONO: docs/CONSCIENCIA/MATRIZ-ORQUESTRACAO-PERFIS.md
-VERSAO: 1.0
-
----
-
-## Conexões Rápidas
-
-- [[00-LEIA-PRIMEIRO]] — portão de entrada
-- [[MAPA-DO-CEREBRO]] — visão geral
-- [[CONSCIENCIA]] — documento mestre
+- [[SOUL-SOL]]
+- [[GUIA-COMUNICACAO-SEGREDO-CHEFE]]
+- [[HERMES-CADEIA-OPERACIONAL]]
