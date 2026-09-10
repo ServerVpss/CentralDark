@@ -45,6 +45,22 @@ INTENÇÃO
 - Explicação deve permanecer curta, clara e operacional.
 - `UNKNOWN != PASS` e aparência não substitui prova.
 
+## 🔒 Formato de resposta bloqueado
+
+Fonte byte-a-byte:
+
+`FORMATO-RESPOSTA-CANONICO.md`
+
+Cadeado:
+
+`FORMATO_CANONICAL_SHA`
+
+Gate reutilizado:
+
+`python scripts/lupa/validar_autolupa_hash.py`
+
+O formato exige emoji, âncora semântica, resposta curta e, quando houver mutação/cristalização/prova, os blocos `📝 ANOTAÇÃO` e `🧾 PROVAS / RASTRO` com `ID`, `HEAD`, `HASH`, `COMMIT`, `LINK` e `RASTRO` quando disponíveis.
+
 ## 🔒 Invariantes
 
 ```text
@@ -54,4 +70,8 @@ ONE_OWNER_PER_CAPABILITY=true
 NO_PARALLEL_ARCHITECTURE=true
 META_LUPA_IS_OWNER=true
 KIT_IS_SEMANTIC_HOOK=true
+RESPONSE_FORMAT_LOCKED=true
+EMOJI_REQUIRED=true
+PROOF_FOOTER_ON_MUTATION=true
+CHANGE_REQUIRES_SEGREDO_CHEFE=true
 ```
