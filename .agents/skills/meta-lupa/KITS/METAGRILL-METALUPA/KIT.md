@@ -20,8 +20,30 @@
 ├── 🔥 META-GRILL/                    EXAME PROFUNDO
 ├── 💭 META-COGNIÇÃO/                 MENTE OBSERVADORA
 ├── 🎼 META-ORQUESTRAÇÃO/             SISTEMA NERVOSO
-└── 🔗 META-START-LINK/               CONEXÃO NERVOSA
+├── 🔗 META-START-LINK/               CONEXÃO NERVOSA
+└── 🔗 INTERLIGADOS/                  COSTURA MENTAL + OPERACIONAL
 ```
+
+## 🔗 !># INTERLIGADOS
+
+Entrada visual: `INTERLIGADOS/README.md`.
+
+```text
+👑🪬 !CENTRALDARK
+→ 🔗 !># INTERLIGADOS
+→ ⭕ !AURÉOLA CANÔNICA
+→ 🧿 #ACORDAR
+→ 🎛️ !CALIBRAR
+→ 🧭 !MULTIBÚSSOLA
+→ 🔎 !META_LUPA
+→ 🔄 !RECONCILIAR
+→ ⚖️ !CONTRAPROVA
+→ 💠 !FIXED_POINT
+→ 🧾 !REGISTRA
+→ ⚖️ REALIDADE
+```
+
+O bloco `INTERLIGADOS/` guarda apenas a **costura semântica**: mapa mental das skills, padrões duráveis extraídos dos PRs e fronteiras que continuam exigindo Casa/VPS/runtime/CI aplicável. Implementação não provada não é promovida só porque o padrão foi preservado.
 
 ## 🪝 Lei do gancho
 
@@ -70,6 +92,10 @@ ONE_OWNER_PER_CAPABILITY=true
 NO_PARALLEL_ARCHITECTURE=true
 META_LUPA_IS_OWNER=true
 KIT_IS_SEMANTIC_HOOK=true
+INTERLIGADOS_IS_SEMANTIC_STITCH=true
+LOAD_ONLY_MATERIAL_SKILLS=true
+PR_PATTERN_IS_NOT_IMPLEMENTATION_PROMOTED=true
+SOURCE_PATTERN_IS_NOT_RUNTIME_PROOF=true
 RESPONSE_FORMAT_LOCKED=true
 EMOJI_REQUIRED=true
 PROOF_FOOTER_ON_MUTATION=true
