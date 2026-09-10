@@ -1,0 +1,58 @@
+{
+  "schema": "centraldark.adm.gatilhos-operacionais.v1",
+  "status": "CANONICAL_ON_MAIN",
+  "owner": "docs/SEGURANCA/ADM-INVENTARIO-COMANDO-UNIVERSAL.md",
+  "visual_contract": {
+    "emoji_required_for_each_trigger": true,
+    "trigger_text_must_preserve_emoji": true,
+    "unknown_is_not_pass": true,
+    "no_parallel_trigger_implementations": true
+  },
+  "triggers": [
+    {
+      "id": "CENTRALDARK_ROOT_SURGERY",
+      "emoji": "🪬",
+      "canonical_trigger": "!🪬 MODO CIRURGIA DE RAIZ",
+      "strict_text": true,
+      "aliases": [],
+      "mode_name_pt_br": "Modo Cirurgia de Raiz",
+      "mode_name_canonical": "CENTRALDARK_ROOT_SURGERY",
+      "classification": "HUMAN_IN_THE_LOOP_ROOT_OPS",
+      "activation": {
+        "intent": "habilitar operação assistida diretamente em VPS/Casa/runtime com o CHEFE executando comandos reais e o agente montando comandos seguros, medindo saídas e registrando receipts",
+        "default_scope": "casa+vps+github+mcp",
+        "autonomous_within_scope": true,
+        "requires_human_terminal_execution": true,
+        "agent_direct_vps_claim_without_tool": false
+      },
+      "required_loop": [
+        "🧭 INTENCAO",
+        "📍 MEDIR_LOCAL",
+        "🧰 GERAR_COMANDO_COLAVEL",
+        "🩺 EXECUTAR_PELO_CHEFE",
+        "📡 CAPTURAR_SAIDA",
+        "🧾 RECEIPT",
+        "🌿 BRANCH_OU_PR",
+        "⚖️ REALITY_JUDGE"
+      ],
+      "safety_gates": [
+        "🔒 NAO_PEDIR_TOKEN_SENHA_SECRET_ENV",
+        "🧯 NAO_RESETAR_NAO_APAGAR_NAO_FORCE_PUSH",
+        "🧪 MEDIR_ANTES_DE_MUTAR",
+        "🧾 RECEIPT_ANTES_E_DEPOIS",
+        "🌿 BRANCH_ANTES_DE_MAIN_QUANDO_HOUVER_CODIGO",
+        "⚖️ UNKNOWN_NAO_E_PASS"
+      ],
+      "enabled_response_shape": {
+        "top_line": "!🪬 MODO CIRURGIA DE RAIZ",
+        "must_include": [
+          "INTENCAO",
+          "COMANDO_COLAVEL",
+          "O_QUE_NAO_MEXE",
+          "EVIDENCIA_ESPERADA",
+          "PROXIMO_CURSOR"
+        ]
+      }
+    }
+  ]
+}
