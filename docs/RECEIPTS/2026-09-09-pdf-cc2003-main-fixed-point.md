@@ -1,48 +1,28 @@
-# 📜 Receipt — PDF CC2003 Main Fixed Point
+---
+title: "♻️ LEGADO — PDF CC2003 Main Fixed Point"
+status: "LEGACY_ALIAS"
+date: 2026-09-09
+owner: "docs/RECEIPTS/PDF_CC2003_MAIN_FIXED_POINT.md"
+truth_scope: "LEGACY_POINTER_ONLY"
+canonical: false
+tags:
+  - centraldark
+  - receipts
+  - legado
+  - pdf
+  - cc2003
+related:
+  - "[[PDF_CC2003_MAIN_FIXED_POINT]]"
+links:
+  - "docs/RECEIPTS/PDF_CC2003_MAIN_FIXED_POINT.md"
+---
 
-**Data:** 2026-09-09
+# ♻️ Ponte de legado
 
-**Intenção:** incorporar o PDF `tlc23(3).pdf` ao padrão operacional da CentralDark como base de conformidade para o Harness, sem criar arquitetura paralela.
+Este caminho foi preservado para não quebrar referências antigas.
 
-## Evidência da fonte
+O conteúdo atual e o dono desta informação estão em:
 
-```text
-SOURCE=tlc23(3).pdf
-SIZE_BYTES=206674
-SHA256=b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1
-PAGES=8
-TOPICS=Horn; satisfiability; Herbrand minimum model; resolution
-```
+📜 [PDF_CC2003_MAIN_FIXED_POINT.md](./PDF_CC2003_MAIN_FIXED_POINT.md)
 
-## Delta na main
-
-```text
-docs/CONSCIENCIA/04-MCP-E-CONECTORES/PDF-CONFORMANCE-CC2003.md
-scripts/lupa/pdf-conformance-cc2003.mjs
-```
-
-## Regra cristalizada
-
-```text
-REUSE_BEFORE_CREATE
-→ Horn gate
-→ menor modelo operacional
-→ ação mínima
-→ pós-prova
-→ contraprova
-→ receipt
-```
-
-## Veredito
-
-```text
-PDF_IDENTITY_CONFIRMED=PROVED_IN_SCOPE
-CONFORMANCE_DOC_ON_MAIN=PROVED_IN_SCOPE
-DETERMINISTIC_GATE_ON_MAIN=PROVED_IN_SCOPE
-SAME_HEAD_CI=UNKNOWN
-BINARY_PDF_IN_REPO=NOT_PROVED
-```
-
-## Limite
-
-Este receipt prova a cristalização textual/código na `main` e a identidade do PDF anexado por hash/tamanho. Não declara deploy, execução na VPS, nem CI pass sem medição específica.
+🕰️ Este arquivo datado é histórico, não uma segunda verdade.
