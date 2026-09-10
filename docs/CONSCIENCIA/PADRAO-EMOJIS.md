@@ -1,104 +1,97 @@
 ---
-title: "PADRAO EMOJIS"
+title: "🎨 PADRÃO DE EMOJIS — projeção visual CentralDark"
+status: "ATIVO_RECONCILIADO"
 date: 2026-08-27
-tags: ["consciencia"]
-updated: 2026-08-27
+updated: 2026-09-10
+owner: "docs/SEGURANCA/ADM-GATILHOS-OPERACIONAIS.json"
+truth_scope: "VISUAL_PROJECTION_OF_TRIGGER_REGISTRY"
+canonical: false
+tags:
+  - centraldark
+  - consciencia
+  - emojis
+  - gatilhos
+  - visual
+  - interligados
+related:
+  - "[[PADRAO-GRAFO-VIVO-MARKDOWN]]"
+  - "[[PADRAO-RESPOSTA-SEGREDO-CHEFE]]"
+links:
+  - "docs/SEGURANCA/ADM-GATILHOS-OPERACIONAIS.json"
+  - "docs/CONSCIENCIA/PADRAO-GRAFO-VIVO-MARKDOWN.md"
+  - "docs/CONSCIENCIA/MATRIZ-ORQUESTRACAO-PERFIS.md"
 ---
 
-# PADRAO-EMOJIS — CentralDark
+# 🎨 PADRÃO DE EMOJIS — CentralDark
 
-> AUTORIDADE: SEGREDO/CHEFE
-> OBJETIVO: 1 emoji = 1 ação/comando/gatilho. NUNCA repetir emoji na mesma coluna nem entre colunas.
-> USO: logs, Telegram, painel WebUI, GitHub, chat Hermes. Emissor deve usar o emoji da linha correspondente.
-> STATUS: canônico (substitui link fantasma citado em 50+ docs que apontavam para este arquivo inexistente).
+> Este Markdown é uma **projeção humana**. O owner dos gatilhos e do `canonical_display` é `docs/SEGURANCA/ADM-GATILHOS-OPERACIONAIS.json`.
+>
+> Se houver divergência, o registry vence. Este arquivo deve ser reconciliado, nunca criar um segundo mapa canônico.
 
----
+## 🧿 Gatilhos oficiais
 
-## 🎯 GATILHOS OFICIAIS (comandos da Casa)
+| Emoji | Gatilho visual canônico | Função |
+|---|---|---|
+| 👑🪬 | `!CENTRALDARK` | comando raiz da Casa |
+| 🔗 | `!># INTERLIGADOS` | conecta gatilhos, camadas, fontes e trilha |
+| ⭕ | `!AURÉOLA CANÔNICA` | mostra o ciclo percorrido |
+| 🧿 | `#ACORDAR` | medir estado vivo antes de opinar/mutar |
+| 🎛️ | `!CALIBRAR` | confirmar intenção, escopo e régua de prova |
+| 🧭 | `!MULTIBÚSSOLA` | navegar entre eixos e próximo movimento |
+| 🔎 | `!META_LUPA` | investigar, falsificar e contraprovar |
+| 🔄 | `!RECONCILIAR` | convergir estado e owner |
+| ⚖️ | `!CONTRAPROVA` | testar o claim contra realidade |
+| 🔁 | `!VERTEX_INVERSO` | inverter o percurso de prova |
+| 🐚 | `!CARACOL` | percorrer retorno/reconciliação controlada |
+| 💠 | `!FIXED_POINT` | fechar somente quando o escopo está provado |
+| 🧾 | `!REGISTRA` | registrar receipt/proveniência |
+| 🚀 | `!BOOT` | carregar o fluxo operacional aplicável |
+| 💎 | `!DELTAÚTIL` | preservar apenas delta material útil |
+| 🪬 | `!MODO CIRURGIA DE RAIZ` | operação assistida em raiz com humano no loop |
 
-| Emoji | Gatilho | Fase dominante | Quando emitir |
-|-------|---------|----------------|---------------|
-| 🔥 | `#ACORDAR` | medição de estado vivo / sincronizar | início de qualquer ação, antes de opinar |
-| 🧭 | `!CALIBRAR` | reconciliação, correção de rota | intenção × estado diverge, realinhar |
-| 🎯 | `!MULTIBUSSOLA` | navegação multieixo / próximo passo | definir objetivo corrente e direção |
-| 🔍 | `META LUPA` / `META(x)` | falsificar / prover | aplicar lupa sobre própria saída ou claim |
+## 🚦 Status de execução
 
-> Nota: 🔥 também é voz de "fogo/acordar" no chat — é o mesmo gatilho, não conflita.
+| Emoji | Significado |
+|---|---|
+| 🟢 | provado/operacional dentro do escopo medido |
+| 🟡 | parcial, aguardando ou ainda precisa prova |
+| 🔴 | falha/bloqueio confirmado |
+| 🔄 | execução/sincronização em andamento |
+| ⏳ | fila/espera externa |
+| 🔒 | protegido/bloqueado por regra ou permissão |
 
----
-
-## 🚦 STATUS (estado de execução)
-
-| Emoji | Significado | Quando usar |
-|-------|-------------|-------------|
-| ✅ | Sucesso / concluído | job ou etapa finalizada sem erro |
-| ⚠️ | Atenção / retry | precisa validação manual ou segunda tentativa |
-| ❌ | Erro definitivo | falha confirmada |
-| 🔄 | Em andamento / sincronizando | processo rodando, fila, rebuild |
-| ⏳ | Aguardando / fila | espera externa, timeout |
-| 🔒 | Protegido / bloqueado | recurso trancado, permissão faltando |
-
----
-
-## 🛠️ AÇÃO (verbos de trabalho)
+## 🛠️ Ações
 
 | Emoji | Uso típico |
-|-------|------------|
-| 🚀 | Deploy / publish |
-| 🛠️ | Fix / correção |
-| 🧠 | Aprendizado registrado |
-| 📦 | Build / install |
-| 🔨 | Trabalho em execução (Hermes) |
-| 🧙 | Conselho / tutor |
-| 📥 | Checkout / download |
-| 📤 | Push / upload |
+|---|---|
+| 🚀 | deploy / publish |
+| 🛠️ | correção |
+| 🧠 | aprendizado/contexto |
+| 📦 | build / pacote |
+| 🔨 | trabalho em execução |
+| 📥 | checkout / download |
+| 📤 | push / upload |
 
----
+## 👥 Papéis
 
-## 👥 AGENTES (quem fala)
+| Emoji | Papel |
+|---|---|
+| 👑 | SEGREDO/CHEFE, autoridade humana |
+| ⚡ | Hermes, executor |
+| 💎 | SOL, coordenação/writer quando aplicável |
+| ⚖️ | realidade/judge, não pessoa |
 
-| Emoji | Agente |
-|-------|--------|
-| 👑 | CHEFE / SEGREDO (autoridade humana final) |
-| ⚡ | Hermes (executor / energia) |
-| 💎 | SOL / Esmeralda (coordenador(a) canônico) |
-| 🔧 | Pivete (executor legado / aliases) |
+## ⚒️ Regras
 
----
+```text
+REGISTRY_OWNER=docs/SEGURANCA/ADM-GATILHOS-OPERACIONAIS.json
+MARKDOWN_IS_PROJECTION=true
+ALIAS_RESOLVES_UNDER_THE_HOOD=true
+DISPLAY_RETURNS_CANONICAL_EMOJI=true
+UNKNOWN != PASS
+ACTION != PROOF
+DOCUMENTED != EXECUTED
+HISTORY != CURRENT_STATE
+```
 
-## 🧩 MÓDULOS (onde roda)
-
-| Emoji | Módulo |
-|-------|--------|
-| 🤖 | Bots Telegram |
-| 📡 | VPS |
-| 🗂️ | GitHub |
-| 💻 | Local / PC (CentralDark) |
-| 🔗 | MCP CentralDark |
-
----
-
-## ⚒️ REGRA DE OURO (anti-repetição)
-
-1. Cada emoji acima tem DONO único. Não reutilizar em outra linha.
-2. Quem emite log/notificação escolhe o emoji pela AÇÃO ou GATILHO, não por estilo.
-3. Emoji fora desta tabela = não canônico. Se precisar de novo, propor e o CHEFE autoriza.
-4. Conflitos resolvidos nesta v1 (eram repetidos no rascunho):
-   - `🔄` era ACORDAR + Em-andamento → ACORDAR virou 🔥
-   - `🛠️` era CALIBRAR + Fix → CALIBRAR virou 🧭
-   - `🔨` era Hermes-agente + Hermes-executando → Hermes-agente virou ⚡
-   - `💎` era Esmeralda + Ouro → Ouro absorvido na voz, Esmeralda mantém 💎
-
----
-
-ANCORADO: CHEFE / SEGREDO 👑
-DONO: docs/CONSCIENCIA/PADRAO-EMOJIS.md
-VERSAO: 1.0 (canônica, substitui link fantasma)
-
----
-
-## Conexões Rápidas
-
-- [[00-LEIA-PRIMEIRO]] — portão de entrada
-- [[MAPA-DO-CEREBRO]] — visão geral
-- [[CONSCIENCIA]] — documento mestre
+Emoji acrescenta informação semântica. Emoji não substitui prova, não redefine status sozinho e não deve contradizer o registry.
