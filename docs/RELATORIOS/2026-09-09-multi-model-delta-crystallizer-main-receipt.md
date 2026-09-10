@@ -4,7 +4,7 @@ MISSION_ID=MULTI_MODEL_DELTA_CRYSTALLIZER_20260909
 REQUEST=cristalizar diferencas entre respostas/modelos como contrato da Casa
 TARGET_BRANCH=main
 BASE_MAIN_OBSERVED=5ea592457f156e4ea0fafedac10a41bee22714b5
-FINAL_COMMIT=657e279bb398189379eb322bc613d7b2ad9dcbe2
+FIRST_FULL_COMMIT=9c20992141dc92981506ad8623cbf1fb075f9cc0
 SOURCE=CHEFE + tres capturas comparando respostas de chats/modelos
 
 ## Causa
@@ -55,7 +55,7 @@ NEXT_CURSOR_REQUIRED
 ## Resultado
 
 LOCAL_CONTRACT_TEST=PASS
-MAIN_COMMIT=657e279bb398189379eb322bc613d7b2ad9dcbe2
+FIRST_FULL_COMMIT=9c20992141dc92981506ad8623cbf1fb075f9cc0
 CI_MAIN_FINAL=UNKNOWN
 
 NEXT_CURSOR=ligar este crystallizer ao START_LINK/MetaLupa para resumir multiplas respostas de agentes em intersecao, delta util e contradicao mensuravel antes de promover canon.
