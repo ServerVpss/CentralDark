@@ -9,6 +9,8 @@ composes:
   - ".agents/skills/meta-lupa/SKILL.md"
   - ".agents/skills/capability-contract-router/SKILL.md"
   - ".agents/skills/centraldark-operational-method/SKILL.md"
+  - ".agents/skills/skill-workshop/SKILL.md"
+  - ".agents/skills/openai-docs/SKILL.md"
 ---
 
 # #PEGATUDO — modo de garimpo cross-surface do owner existente
@@ -187,6 +189,66 @@ CARACOL_NAVIGATION != CAUSALITY
 VISUAL_PROXIMITY != SEMANTIC_EDGE
 ```
 
+## CARACOL evoluído — travessia de capacidades sob demanda
+
+O CARACOL não percorre apenas nós já conhecidos do grafo. Quando a volta encontra um GAP real, ele pode consultar a **prateleira canônica de capacidades** sem transformar catálogo externo em autoridade.
+
+```text
+CARACOL_CAPABILITY_AWARE=true
+CARACOL_DYNAMIC_LOAD=true
+CARACOL_LOAD_ONLY_WHAT_IS_NEEDED=true
+CATALOG_IS_SENSOR_NOT_AUTHORITY=true
+UPSTREAM_IS_PROVENANCE_NOT_GOVERNANCE=true
+EXTERNAL_DOC_IS_EVIDENCE_SOURCE_NOT_OWNER=true
+```
+
+Fluxo:
+
+```text
+🐚 !CARACOL
+→ nó/gap material atual
+→ OWNER existente?
+   ├─ SIM → continuar owner atual
+   └─ NÃO/UNKNOWN → skill-workshop FIND por capacidade
+                   → comparar candidatos com owners locais
+                   → INSPECT somente o escolhido
+                   → openai-docs quando o gap depender de produto OpenAI atual
+                   → ligar evidência à origem/commit/caminho
+                   → MetaLupa / contraprova
+                   → STITCH_DELTA no owner existente
+                   → TESTE
+                   → REALITY JUDGE
+                   → REGISTRA
+                   → nova volta
+```
+
+A **Auréola Canônica** vira o rastro visual da volta, não um segundo motor:
+
+```text
+⭕ !AURÉOLA CANÔNICA
+→ mostra fonte consultada
+→ capability escolhida
+→ owner que recebeu o delta
+→ prova/contraprova
+→ UNKNOWN restante
+→ próximo cursor do CARACOL
+```
+
+Regras de contenção:
+
+```text
+SKILL_FOUND != SKILL_NEEDED
+SKILL_PRESENT != RUNTIME_PROVEN
+DOC_FOUND != FACT_VERIFIED
+CATALOG_ENTRY != EXECUTABLE_AUTHORITY
+CARACOL_TRAVERSAL != SEMANTIC_EDGE
+NO_NEW_SKILL_IF_EXISTING_OWNER_CAN_ABSORB=true
+NO_BULK_LOAD_OF_SKILL_BODIES=true
+NO_PARALLEL_CREATOR=true
+```
+
+Resultado esperado: o CARACOL vira uma **travessia adaptativa do mesmo organismo**. Ele encontra a ferida, busca apenas a ferramenta mental necessária, devolve o delta ao owner certo e continua a volta sem carregar a biblioteca inteira nem abrir arquitetura paralela.
+
 ## Critério de fixed point
 
 Não declarar `100%` porque dez recomendações foram listadas ou executadas verbalmente.
@@ -223,6 +285,9 @@ PEGATUDO_RECEIPT:
   duplicate_deltas_dropped:
   canonical_owners:
   mutations_serialized:
+  capability_sources_consulted:
+  capability_selected:
+  aureola_trace:
   evidence_refs:
   material_unknowns:
   fixed_point: PROVEN|NOT_PROVEN
