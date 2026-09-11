@@ -1,46 +1,84 @@
 ---
-title: "21 PADRAO APRESENTACAO"
+title: "🎨 Padrão de apresentação — CentralDark"
+status: "ATIVO_RECONCILIADO"
 date: 2026-06-29
-tags: ["consciencia"]
-updated: 2026-06-29
+updated: 2026-09-10
+owner: "docs/CONSCIENCIA/21-PADRAO-APRESENTACAO.md"
+truth_scope: "HUMAN_PRESENTATION_AND_VISUAL_DELIVERY"
+canonical: true
+tags:
+  - centraldark
+  - consciencia
+  - apresentacao
+  - visual
+  - resposta
+  - grafo-vivo
+related:
+  - "[[PADRAO-RESPOSTA-SEGREDO-CHEFE]]"
+  - "[[PADRAO-EMOJIS]]"
+  - "[[PADRAO-GRAFO-VIVO-MARKDOWN]]"
+links:
+  - "docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md"
+  - "docs/CONSCIENCIA/PADRAO-EMOJIS.md"
+  - "docs/CONSCIENCIA/PADRAO-GRAFO-VIVO-MARKDOWN.md"
 ---
 
-# 🎨 PADRÃO DE APRESENTAÇÃO — Camada Visual (Vibe)
+# 🎨 Padrão de apresentação — CentralDark
 
-> **COMPLEMENTA** `docs/CONSCIENCIA/2026-06-20-padrao-resposta-pivete.md` — que é a BASE (comportamento, PT-BR, bloco de código copiável, handoff, fonte-da-verdade, "não inventar sucesso").
-> Aqui mora **só a camada VISUAL** (estilo Mistral Vibe) + a regra anti-enrolação. Pedido do Pivete: deixar a resposta escaneável e organizada.
-> **Não duplicar:** comportamento/regras → ver o doc base. Este só acrescenta o "como mostra".
+A apresentação existe para reduzir esforço mental do SEGREDO/CHEFE sem esconder prova, falha, risco ou `UNKNOWN`.
 
-## 🎨 Camada VISUAL (Vibe) — os 6 elementos
-1. 🎯 **Veredito no topo** — 1ª linha = resultado + status, antes de qualquer detalhe.
-2. 🔖 **Seção com ícone-âncora** fixo (vira marcador de memória).
-3. 📊 **Tabela 3 colunas** pra comparar — não parágrafo corrido.
-4. 🚦 **Status colorido:** 🟢 ok/seguro · 🟡 validar · 🔴 não rodar/crítico · ⚠️ precisa autorização · ✅ concluído.
-5. ⌨️ **Caixa de código** pra fluxo/comando, com `→` ligando etapas.
-6. 🧭 **Fecho:** RESUMO + PRÓXIMA AÇÃO (sempre o modelo/esforço mais econômico que resolve 100%).
+## 🧭 Ordem visual
 
-## 🚫 Regra anti-enrolação
-- Tratamento visual **completo** só quando há conteúdo pra organizar (comparação, status, várias partes).
-- Pergunta trivial = resposta **curta e seca**. Caixa/tabela em resposta de 1 linha vira enrolação.
-
-## 📐 Estrutura padrão de tarefa CentralDark (a mesma do doc base, reforçada no visual)
-```
-╔══ 🔥 CENTRALDARK — <ASSUNTO> [STATUS] ══╗
-STATUS:
-VALIDADO:
-AÇÕES:
-ARQUIVOS / PRs / ISSUES:
-RISCOS:
-PRÓXIMO PASSO:
-CONFIRMAÇÃO:
+```text
+INTENÇÃO
+→ ESTADO MEDIDO
+→ O QUE MUDOU
+→ ONDE DÓI
+→ PRÓXIMO PASSO
 ```
 
-> 🔗 Par oficial: **regras = `2026-06-20-padrao-resposta-pivete.md`** · **visual = este arquivo**. Aprendizado #260 aponta pra cá.
+Quando o assunto for CentralDark, o topo pode carregar o fio:
 
----
+```text
+👑🪬 !CENTRALDARK
+🔗 !># INTERLIGADOS
+⭕ !AURÉOLA CANÔNICA
+```
 
-## Conexões Rápidas
+## 🔗 Links
 
-- [[00-LEIA-PRIMEIRO]] — portão de entrada
-- [[MAPA-DO-CEREBRO]] — visão geral
-- [[CONSCIENCIA]] — documento mestre
+Links devem ser clicáveis, com nome humano e função clara.
+
+```text
+RAW_LINK_SOLTO=FORBIDDEN
+LINK != PROOF
+PROOF_REQUIRES_EVIDENCE
+```
+
+## 🧱 Blocos técnicos
+
+Usar bloco técnico quando for comando, trecho copiável, log, contrato ou estrutura que precisa ser vista como unidade.
+
+Se o SEGREDO/CHEFE pedir texto normal, evitar bloco ornamental.
+
+## 🫀 Grafo vivo
+
+Toda nota viva deve ajudar o grafo:
+
+```text
+NOME_ESTAVEL
++ PROPRIEDADES
++ TAGS
++ RELATED
++ LINKS
++ EMOJI_SEMANTICO
+```
+
+## ⚖️ Leis
+
+```text
+BONITO != PROVADO
+MAPA != RUNTIME
+DOCUMENTED != EXECUTED
+UNKNOWN != PASS
+```

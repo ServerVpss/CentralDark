@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-09-09T07:27:32.379Z
+# 🧠 Notion Sync — 2026-09-10T19:09:00.432Z
 
-- **Commit fonte:** `0dfe5bb3a719f022d8e9e12b348411ffe45cf41c`
+- **Commit fonte:** `5ce1d976a2af5fd91e7ee31c34c616c62ae47f04`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 491 atualizadas · ❌ 22 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 491 atualizadas · ❌ 27 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
 | aprendizados | 36 | 0 | 35 | 0 | 1 |
-| estrutura | 433 | 0 | 412 | 0 | 21 |
+| estrutura | 438 | 0 | 412 | 0 | 26 |
 
 ## Operações
 
@@ -118,6 +118,8 @@
 | estrutura | atualizado | docs/CONSCIENCIA/03-FLUXO-DEPLOY.md |
 | estrutura | atualizado | docs/CONSCIENCIA/04-MCP-E-CONECTORES/ARQUITETURA-MCP-V2.md |
 | estrutura | atualizado | docs/CONSCIENCIA/04-MCP-E-CONECTORES/BOAS-PRATICAS-MCP.md |
+| estrutura | erro | docs/CONSCIENCIA/04-MCP-E-CONECTORES/MCP-REUSE-HORN-FIXED-POINT.md |
+| estrutura | erro | docs/CONSCIENCIA/04-MCP-E-CONECTORES/PDF-CONFORMANCE-CC2003.md |
 | estrutura | atualizado | docs/CONSCIENCIA/04-MCP-E-CONECTORES/RECONECTAR-CONECTOR.md |
 | estrutura | atualizado | docs/CONSCIENCIA/04-MCP-E-CONECTORES/SYSTEM-PROMPT-ADMIN.md |
 | estrutura | atualizado | docs/CONSCIENCIA/04-MCP-E-CONECTORES/SYSTEM-PROMPT-USUARIO.md |
@@ -342,6 +344,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/DARKAI/PROMPT-UNIVERSAL.md |
 | estrutura | atualizado | docs/CONSCIENCIA/DARKAI/QUICKSTART.md |
 | estrutura | atualizado | docs/CONSCIENCIA/DARKAI/README.md |
+| estrutura | erro | docs/CONSCIENCIA/DELTA-UTIL-FULL-CENTRALDARK-HARNESS-20260909.md |
 | estrutura | atualizado | docs/CONSCIENCIA/DESAFIO-NIVEL-7-AGENTES-ERRO-ABERTO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/DESEJOS-FUTUROS-MEGA-PACOTAO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/DICIONARIO-PIVETE-GITHUB.md |
@@ -386,6 +389,8 @@
 | estrutura | atualizado | docs/CONSCIENCIA/NOTION-MAPA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PADRAO-CARD-HERMES.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PADRAO-EMOJIS.md |
+| estrutura | erro | docs/CONSCIENCIA/PADRAO-GRAFO-VIVO-MARKDOWN.md |
+| estrutura | erro | docs/CONSCIENCIA/PADRAO-LINKS-CLICAVEIS-SEGREDO-CHEFE.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PENDENCIAS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PENDENCIAS/MCP-LOCAL-STDIO-VPS.md |

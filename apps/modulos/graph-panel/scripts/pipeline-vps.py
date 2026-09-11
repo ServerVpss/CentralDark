@@ -2,12 +2,17 @@
 import json
 import os
 import pathlib
+import sys
 import time
 import urllib.request
 from datetime import datetime, timezone
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 REPO = ROOT.parents[2]
+if str(REPO) not in sys.path:
+    sys.path.insert(0, str(REPO))
+from central_horario import brasilia_now, format_brasilia  # noqa: E402
+
 DATA = ROOT / "data"
 HISTORY = DATA / "history"
 HISTORY.mkdir(parents=True, exist_ok=True)
@@ -102,16 +107,16 @@ def lovable_graph(files):
         graph["meta"] = {"source": "lovable-api", "backend": "lovable-api", "model": MODEL, "generatedAt": datetime.now(timezone.utc).isoformat()}
         return graph
     except Exception as exc:
-        (ROOT / "logs" / "pipeline-lovable-error.log").write_text(f"{datetime.now().isoformat()} {type(exc).__name__}: {exc}\n")
+        (ROOT / "logs" / "pipeline-lovable-error.log").write_text(f"{format_brasilia()} {type(exc).__name__}: {exc}\n")
         return None
 
 
 def write_outputs(graph, started):
     DATA.joinpath("graph.json").write_text(json.dumps(graph, ensure_ascii=False, indent=2))
     stats = {"nodes": len(graph.get("nodes", [])), "edges": len(graph.get("edges", [])), "communities": len({n.get("group") for n in graph.get("nodes", []) if n.get("group")})}
-    DATA.joinpath("report.md").write_text(f"# Resumo do último run\n\nMapeamento concluído em {datetime.now().strftime('%d/%m/%Y %H:%M')}.\n\n- Nós: {stats['nodes']}\n- Ligações: {stats['edges']}\n- Grupos: {stats['communities']}\n- Origem: {graph.get('meta', {}).get('source', 'desconhecida')}.\n")
+    DATA.joinpath("report.md").write_text(f"# Resumo do último run\n\nMapeamento concluído em {format_brasilia()}.\n\n- Nós: {stats['nodes']}\n- Ligações: {stats['edges']}\n- Grupos: {stats['communities']}\n- Origem: {graph.get('meta', {}).get('source', 'desconhecida')}.\n")
     DATA.joinpath("audit.md").write_text(f"# Auditoria do último run\n\n- Arquivos analisados respeitando `.graphifyignore`.\n- Caminhos sensíveis bloqueados.\n- Duração: {round(time.time() - started, 2)}s.\n- Status: concluído.\n")
-    HISTORY.joinpath(datetime.now().strftime("%Y%m%d-%H%M%S") + ".json").write_text(json.dumps({"graph": graph, "stats": stats}, ensure_ascii=False, indent=2))
+    HISTORY.joinpath(brasilia_now().strftime("%Y%m%d-%H%M%S") + ".json").write_text(json.dumps({"graph": graph, "stats": stats}, ensure_ascii=False, indent=2))
 
 
 def main():

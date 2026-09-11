@@ -14,7 +14,7 @@ import test from 'node:test';
 const ROOT = resolve(process.cwd());
 const SCRIPT = join(ROOT, 'scripts/lupa/portable-kernel.mjs');
 const CONTRACT = join(ROOT, 'docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json');
-const RESPONSE_PATTERN = join(ROOT, 'docs/CONSCIENCIA/2026-06-20-padrao-resposta-pivete.md');
+const RESPONSE_PATTERN = join(ROOT, 'docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md');
 const SOUL = join(ROOT, 'docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md');
 const COGNITION = join(ROOT, 'docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md');
 const ORCHESTRATION = join(ROOT, 'docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md');
