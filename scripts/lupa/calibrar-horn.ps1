@@ -61,7 +61,7 @@ function Get-DependencySnapshot {
 
     $node = Get-Command node -ErrorAction SilentlyContinue
     $git = Get-Command git -ErrorAction SilentlyContinue
-    $engine = Join-Path $RepoRoot "apps/modulos/mcp/src/tools/aprendizado/reuse-horn.js"
+    $engine = Join-Path $RepoRoot "apps/modulos/mcp/src/tools/aprendizado/reuse-horn-core.js"
 
     [ordered]@{
         powershell_version = $PSVersionTable.PSVersion.ToString()
