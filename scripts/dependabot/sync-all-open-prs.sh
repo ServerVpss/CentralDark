@@ -1,61 +1,50 @@
 #!/usr/bin/env bash
-# Radar Casa — sincroniza PRs abertos sem provocar loop de HEAD/CI.
-# Rodar só via workflow Dependabot (schedule/workflow_dispatch) no self-hosted VPS1.
-# update-branch = sincronização, NÃO aprovação, NÃO merge.
-# Regra anti-thrash: CI ativo no HEAD => WAIT, não muda HEAD e não rearma run.
-# Rearme considera somente runs failure/cancelled do HEAD ATUAL do PR.
-# Conflito real → CONFLICT logado e segue. UNKNOWN ≠ PASS.
+# Radar Casa — sincronização conservadora dos PRs abertos.
+# Reusa o workflow existente e separa sincronização de julgamento.
+# Regras:
+# - update-branch só quando o PR está BEHIND e o HEAD atual não tem checks/status pendentes;
+# - nunca rearma run CANCELLED, pois cancelamento pode ser concorrência/HEAD superado;
+# - rearma no máximo uma vez run FAILED do HEAD atual e somente sem run ativo;
+# - conflito é receipt material, não autorização para mutação paralela;
+# - UNKNOWN nunca vira PASS.
 
 set -euo pipefail
 
 REPO="${REPO:-ServerVpss/CentralDark}"
 MAX_PRS="${MAX_PRS:-100}"
-MAX_RERUNS_PER_BRANCH="${MAX_RERUNS_PER_BRANCH:-8}"
+MAX_RERUNS_PER_BRANCH="${MAX_RERUNS_PER_BRANCH:-2}"
 SLEEP_BETWEEN_PR="${SLEEP_BETWEEN_PR:-0.8}"
 
 command -v gh >/dev/null || { echo 'BLOCKED_GH_ABSENT'; exit 2; }
+command -v jq >/dev/null || { echo 'BLOCKED_JQ_ABSENT'; exit 2; }
 
 UPDATED=0
 NOOP=0
-WAITING_CI=0
+SKIP_NOT_BEHIND=0
+SKIP_ACTIVE_CHECKS=0
+SKIP_FORK=0
 CONFLICT=0
 OTHER_ERR=0
 RERUN_OK=0
 RERUN_SKIP=0
-RERUN_WAIT=0
 
 echo "📡 ALL_OPEN_PRS_SYNC_START repo=$REPO max=$MAX_PRS"
-echo "RULE update-branch=SYNC_ONLY approval=false merge=false active_ci=head_immutable"
+echo "RULE update-branch=BEHIND_AND_QUIET_HEAD_ONLY rerun=CURRENT_HEAD_FAILURE_ONCE cancelled=NEVER"
 
-head_has_active_ci() {
+head_activity() {
   local sha="$1"
-  local active_checks active_statuses
-
-  set +e
-  active_checks=$(gh api "repos/$REPO/commits/$sha/check-runs?per_page=100" \
-    --jq '[.check_runs[] | select(.status != "completed")] | length' 2>/dev/null)
-  local rc_checks=$?
-  active_statuses=$(gh api "repos/$REPO/commits/$sha/status" \
-    --jq '[.statuses[] | select(.state == "pending")] | length' 2>/dev/null)
-  local rc_statuses=$?
-  set -e
-
-  # Falha de medição não autoriza mutação: UNKNOWN != PASS.
-  if [ "$rc_checks" -ne 0 ] || [ "$rc_statuses" -ne 0 ]; then
-    echo "UNKNOWN"
-    return 0
-  fi
-
-  if [ "${active_checks:-0}" -gt 0 ] || [ "${active_statuses:-0}" -gt 0 ]; then
-    echo "YES"
-  else
-    echo "NO"
-  fi
+  local checks_json statuses_json
+  checks_json="$(gh api -H 'Accept: application/vnd.github+json' "repos/$REPO/commits/$sha/check-runs?per_page=100" 2>/dev/null)" || { echo UNKNOWN; return 0; }
+  statuses_json="$(gh api "repos/$REPO/commits/$sha/status" 2>/dev/null)" || { echo UNKNOWN; return 0; }
+  local pending_checks pending_statuses
+  pending_checks="$(jq '[.check_runs[]? | select(.status != "completed")] | length' <<<"$checks_json")"
+  pending_statuses="$(jq '[.statuses[]? | select(.state == "pending")] | length' <<<"$statuses_json")"
+  if [ "$pending_checks" -gt 0 ] || [ "$pending_statuses" -gt 0 ]; then echo ACTIVE; else echo QUIET; fi
 }
 
 mapfile -t PRS < <(
   gh api --paginate "repos/$REPO/pulls?state=open&per_page=100" \
-    --jq '.[] | [.number,.head.ref,.head.sha] | @tsv' \
+    --jq '.[] | [.number,.head.ref,.head.sha,.head.repo.full_name,.mergeable_state] | @tsv' \
     | head -n "$MAX_PRS"
 )
 
@@ -63,19 +52,32 @@ echo "OPEN_PRS=${#PRS[@]}"
 
 for row in "${PRS[@]:-}"; do
   [[ -z "${row:-}" ]] && continue
-  NUM=$(printf '%s' "$row" | cut -f1)
-  BR=$(printf '%s' "$row" | cut -f2)
-  SHA=$(printf '%s' "$row" | cut -f3)
+  IFS=$'\t' read -r NUM BR SHA HEAD_REPO MERGE_STATE <<<"$row"
+  echo "---- PR #$NUM branch=$BR sha=${SHA:0:10} state=${MERGE_STATE:-UNKNOWN} ----"
 
-  echo "---- PR #$NUM branch=$BR sha=${SHA:0:10} ----"
-
-  ACTIVE=$(head_has_active_ci "$SHA")
-  if [ "$ACTIVE" = "YES" ]; then
-    echo "WAIT_CI #$NUM head=${SHA:0:10} (não alterar HEAD durante julgamento)"
-    WAITING_CI=$((WAITING_CI + 1))
+  if [ "$HEAD_REPO" != "$REPO" ]; then
+    echo "SKIP_FORK #$NUM repo=$HEAD_REPO"
+    SKIP_FORK=$((SKIP_FORK + 1))
     continue
   fi
-  if [ "$ACTIVE" = "UNKNOWN" ]; then
+  if [ "${MERGE_STATE:-unknown}" = "dirty" ]; then
+    echo "CONFLICT #$NUM mergeable_state=dirty"
+    CONFLICT=$((CONFLICT + 1))
+    continue
+  fi
+  if [ "${MERGE_STATE:-unknown}" != "behind" ]; then
+    echo "SKIP_NOT_BEHIND #$NUM state=${MERGE_STATE:-UNKNOWN}"
+    SKIP_NOT_BEHIND=$((SKIP_NOT_BEHIND + 1))
+    continue
+  fi
+
+  ACTIVITY="$(head_activity "$SHA")"
+  if [ "$ACTIVITY" = "ACTIVE" ]; then
+    echo "SKIP_ACTIVE_CHECKS #$NUM head=${SHA:0:10}"
+    SKIP_ACTIVE_CHECKS=$((SKIP_ACTIVE_CHECKS + 1))
+    continue
+  fi
+  if [ "$ACTIVITY" = "UNKNOWN" ]; then
     echo "ERR_MEASURE_CI #$NUM head=${SHA:0:10}"
     OTHER_ERR=$((OTHER_ERR + 1))
     continue
@@ -85,74 +87,61 @@ for row in "${PRS[@]:-}"; do
   OUT=$(gh api -X PUT "repos/$REPO/pulls/${NUM}/update-branch" -f expected_head_sha="$SHA" 2>&1)
   RC=$?
   set -e
-
   if [ "$RC" -eq 0 ]; then
-    echo "UPDATE #$NUM OK"
+    echo "UPDATE #$NUM OK old_head=${SHA:0:10}"
     UPDATED=$((UPDATED + 1))
   elif printf '%s' "$OUT" | grep -qi 'no new commits on the base branch'; then
     echo "NOOP #$NUM already_synced"
     NOOP=$((NOOP + 1))
-  elif printf '%s' "$OUT" | grep -qi 'merge conflict'; then
-    echo "CONFLICT #$NUM (manual reconcile needed)"
+  elif printf '%s' "$OUT" | grep -Eqi 'merge conflict|not mergeable'; then
+    echo "CONFLICT #$NUM update_branch_rejected"
     CONFLICT=$((CONFLICT + 1))
   else
     echo "ERR_UPDATE #$NUM rc=$RC :: $(printf '%s' "$OUT" | tr '\n' ' ' | head -c 240)"
     OTHER_ERR=$((OTHER_ERR + 1))
   fi
-
   sleep "$SLEEP_BETWEEN_PR"
 done
 
-# Brief settle so GitHub indexes new head SHAs after legitimate update-branch merges.
-sleep 5
-
-# Refresh PR list: heads may have moved. SHA é obrigatório para não rerodar história velha.
+# Rearme conservador: somente FAIL do HEAD atual; CANCELLED não é ressuscitado.
 mapfile -t PRS2 < <(
   gh api --paginate "repos/$REPO/pulls?state=open&per_page=100" \
-    --jq '.[] | [.number,.head.ref,.head.sha] | @tsv' \
+    --jq '.[] | [.number,.head.ref,.head.sha,.head.repo.full_name] | @tsv' \
     | head -n "$MAX_PRS"
 )
 
 for row in "${PRS2[@]:-}"; do
   [[ -z "${row:-}" ]] && continue
-  NUM=$(printf '%s' "$row" | cut -f1)
-  BR=$(printf '%s' "$row" | cut -f2)
-  SHA=$(printf '%s' "$row" | cut -f3)
-  echo "---- RERUN #$NUM branch=$BR sha=${SHA:0:10} ----"
+  IFS=$'\t' read -r NUM BR SHA HEAD_REPO <<<"$row"
+  [ "$HEAD_REPO" = "$REPO" ] || continue
 
-  ACTIVE=$(head_has_active_ci "$SHA")
-  if [ "$ACTIVE" = "YES" ]; then
-    echo "RERUN_WAIT #$NUM active_ci_on_current_head"
-    RERUN_WAIT=$((RERUN_WAIT + 1))
+  ACTIVITY="$(head_activity "$SHA")"
+  if [ "$ACTIVITY" = "ACTIVE" ]; then
+    echo "RERUN_SKIP_ACTIVE #$NUM head=${SHA:0:10}"
+    RERUN_SKIP=$((RERUN_SKIP + 1))
     continue
   fi
-  if [ "$ACTIVE" = "UNKNOWN" ]; then
-    echo "RERUN_SKIP #$NUM ci_measurement_unknown"
-    RERUN_SKIP=$((RERUN_SKIP + 1))
+  if [ "$ACTIVITY" = "UNKNOWN" ]; then
+    echo "RERUN_SKIP_UNKNOWN #$NUM head=${SHA:0:10}"
     OTHER_ERR=$((OTHER_ERR + 1))
     continue
   fi
 
   mapfile -t RUNS < <(
-    {
-      gh run list --repo "$REPO" --branch "$BR" --commit "$SHA" --status failure -L "$MAX_RERUNS_PER_BRANCH" --json databaseId --jq '.[].databaseId' 2>/dev/null || true
-      gh run list --repo "$REPO" --branch "$BR" --commit "$SHA" --status cancelled -L 4 --json databaseId --jq '.[].databaseId' 2>/dev/null || true
-    } | awk 'NF' | sort -u | head -n "$MAX_RERUNS_PER_BRANCH"
+    gh run list --repo "$REPO" --commit "$SHA" --status failure -L "$MAX_RERUNS_PER_BRANCH" \
+      --json databaseId --jq '.[].databaseId' 2>/dev/null || true
   )
-
-  if [ "${#RUNS[@]}" -eq 0 ]; then
-    echo "RERUN_NONE #$NUM current_head_only"
-    continue
-  fi
-
-  for RID in "${RUNS[@]}"; do
+  for RID in "${RUNS[@]:-}"; do
+    [[ -z "${RID:-}" ]] && continue
+    ATTEMPT="$(gh api "repos/$REPO/actions/runs/$RID" --jq '.run_attempt // 1' 2>/dev/null || echo 99)"
+    if [ "$ATTEMPT" -gt 1 ]; then
+      echo "RERUN_SKIP_ALREADY_RETRIED run=$RID attempt=$ATTEMPT"
+      RERUN_SKIP=$((RERUN_SKIP + 1))
+      continue
+    fi
     set +e
     OUT=$(gh run rerun "$RID" --repo "$REPO" --failed 2>&1)
     RC=$?
-    if [ "$RC" -ne 0 ]; then
-      OUT=$(gh run rerun "$RID" --repo "$REPO" 2>&1)
-      RC=$?
-    fi
     set -e
     if [ "$RC" -eq 0 ]; then
       echo "RERUN_OK run=$RID head=${SHA:0:10}"
@@ -165,14 +154,14 @@ for row in "${PRS2[@]:-}"; do
   done
 done
 
-echo "RECEIPT UPDATED=$UPDATED NOOP=$NOOP WAITING_CI=$WAITING_CI CONFLICT=$CONFLICT OTHER_ERR=$OTHER_ERR RERUN_OK=$RERUN_OK RERUN_WAIT=$RERUN_WAIT RERUN_SKIP=$RERUN_SKIP"
-echo "ALL_OPEN_PRS_SYNC_DONE"
-# CONFLICT = sync bloqueado por conflito real (log only; sync≠resolve).
-# WAITING_CI/RERUN_WAIT = estado saudável: preservar HEAD enquanto o CI julga.
-# OTHER_ERR = falha de API/medição → fail-closed (UNKNOWN≠PASS / no false-green).
+echo "RECEIPT UPDATED=$UPDATED NOOP=$NOOP SKIP_NOT_BEHIND=$SKIP_NOT_BEHIND SKIP_ACTIVE_CHECKS=$SKIP_ACTIVE_CHECKS SKIP_FORK=$SKIP_FORK CONFLICT=$CONFLICT OTHER_ERR=$OTHER_ERR RERUN_OK=$RERUN_OK RERUN_SKIP=$RERUN_SKIP"
 if [ "$OTHER_ERR" -gt 0 ]; then
-  echo "RESULT=FAIL OTHER_ERR=$OTHER_ERR"
+  echo "RESULT=FAIL_OTHER_ERR"
   exit 1
 fi
-echo "RESULT=PASS"
+if [ "$CONFLICT" -gt 0 ]; then
+  echo "RESULT=BLOCKED_CONFLICT count=$CONFLICT"
+else
+  echo "RESULT=PASS_RADAR_EXECUTION"
+fi
 exit 0
