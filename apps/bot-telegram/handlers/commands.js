@@ -2,6 +2,8 @@
 // Cada handler recebe { type, chatId, text, from, update }
 // Retorna { reply, menu, handled }
 
+const { formatBrasilia } = require('../../../central-horario/node.cjs');
+
 module.exports = {
   // /start
   startHandler({ type, text, chatId }) {
@@ -21,7 +23,7 @@ module.exports = {
   // /status
   statusHandler({ type, text }) {
     if (type !== 'message' || text !== '/status') return null;
-    return { handled: true, reply: '📊 <b>Status do Sistema</b>\n\n✅ Bot online\n⏰ ' + new Date().toLocaleString('pt-BR') };
+    return { handled: true, reply: '📊 <b>Status do Sistema</b>\n\n✅ Bot online\n⏰ ' + formatBrasilia() };
   },
 
   // /help

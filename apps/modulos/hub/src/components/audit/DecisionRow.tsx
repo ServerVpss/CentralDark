@@ -3,6 +3,7 @@ import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
 import { CheckCircle2, XCircle, Clock, AlertTriangle } from 'lucide-react';
 import type { AuditLog } from '@/types/audit';
+import { formatBrasilia } from '@/lib/datetime';
 
 interface DecisionRowProps {
   entry: AuditLog;
@@ -26,7 +27,7 @@ export function DecisionRow({ entry: decision, onViewDetails }: DecisionRowProps
         <div className="min-w-0">
           <p className="text-sm font-medium truncate">{decision.tool} · Tier {decision.tier}</p>
           <p className="text-xs text-muted-foreground">
-            {decision.agent_identity} · {new Date(decision.ts).toLocaleString('pt-BR')}
+            {decision.agent_identity} · {formatBrasilia(decision.ts)}
           </p>
         </div>
       </div>
