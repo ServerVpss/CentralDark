@@ -12,7 +12,7 @@ CAUSA_RAIZ:
 - Main viva introduziu novo workflow .github/workflows/grafo-vivo-markdown.yml com ubuntu-latest, quebrando GLOBAL_RUNNER_POLICY.
 - Guard MetaLupa apontava para blob antigo 42691e008ba50ee55646ca81113bf0abfde87af2 enquanto o SKILL.md versionado mede 174f93eccbab846cf13d89bbf80629741f0dd803.
 - PADRAO-RESPOSTA-SEGREDO-CHEFE.md estava sem marcadores exigidos por verify_repo_contract.py e portable-kernel.mjs.
-- docs/BRAIN/cristalizacao-source-a-ledger.json e docs/BRAIN/cristalizacao-source-b-ledger.json eram raw external ledgers sem consumidores medidos; um era maior que 16 MiB e outro continha referencia externa bloqueada pelo guardrail.
+- docs/BRAIN/cristalizacao-source-a-ledger.json e docs/BRAIN/cristalizacao-source-b-ledger.json eram ledgers crus gerados sem consumidores medidos; um era maior que 16 MiB e outro continha referencia remota bloqueada pelo guardrail.
 
 CORRECAO_FEITA:
 - Merge de origin/main no branch de PR sem rebase e sem force-push.
@@ -20,7 +20,7 @@ CORRECAO_FEITA:
 - .agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA: reconciliado para o blob observado do SKILL.md versionado.
 - docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md: adicionados marcadores de prova sistematica e fronteira semantica humano/maquina.
 - docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md: ligados canonicos orfaos ao indice de fontes atuais.
-- Removidos do PR os ledgers externos crus docs/BRAIN/cristalizacao-source-a-ledger.json e docs/BRAIN/cristalizacao-source-b-ledger.json apos consumer search retornar zero referencias.
+- Removidos do PR os ledgers crus docs/BRAIN/cristalizacao-source-a-ledger.json e docs/BRAIN/cristalizacao-source-b-ledger.json apos consumer search retornar zero referencias.
 
 TESTES_LOCAIS_POS_CORRECAO:
 - python3 scripts/trigger-fabric/verify_repo_contract.py . = PASS

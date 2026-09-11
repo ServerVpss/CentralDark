@@ -1,4 +1,4 @@
-name: grafo-vivo-markdown
+name: 🧭 grafo-vivo-markdown
 
 on:
   pull_request:
@@ -20,11 +20,11 @@ permissions:
 
 jobs:
   grafo-vivo-markdown:
-    name: GATE_GRAFO_VIVO_MARKDOWN
+    name: 🧭 GATE_GRAFO_VIVO_MARKDOWN
     runs-on: [self-hosted, Linux]
     steps:
-      - name: Checkout
+      - name: 📥 Checkout
         uses: actions/checkout@v4
 
-      - name: Validate live markdown graph
+      - name: 🧪 Validate live markdown graph
         run: node scripts/lupa/grafo-vivo-markdown-conformance.mjs
