@@ -6,7 +6,8 @@
     "kind": "DEEP_RECENT_PR_PATTERN_SWEEP",
     "promotion_rule": "PROMOTE_STABLE_NON_TEMPORAL_PATTERN_ONLY; DEDUPE_SYNONYMS; KEEP_RUNTIME_SEPARATE",
     "runtime_mutation": false,
-    "history_rule": "CURRENT > HISTORY"
+    "history_rule": "CURRENT > HISTORY",
+    "latest_prs_reconciled": [1492,1491]
   },
   "patterns": [
     {"id":"ONE_SYSTEM_ONLY","emoji":"🫀","anchor":"UM CORPO","pr_refs":[1444,1445,1482,1483,1389,1381],"runtime_required":false},
@@ -14,12 +15,12 @@
     {"id":"EXTEND_EXISTING_NOT_REPLACE","emoji":"🌱","anchor":"EVOLUI O MESMO CORPO","pr_refs":[1483,1482,1465,1445,1444],"runtime_required":false},
     {"id":"NO_V2_V3_PARALLEL_SYSTEMS","emoji":"🚫","anchor":"SEM GÊMEOS","pr_refs":[1444,1482,1483,1465,1386,1384],"runtime_required":false},
     {"id":"CURRENT_OVER_HISTORY","emoji":"🕰️","anchor":"AGORA VENCE HISTÓRIA","pr_refs":[1488,1444,1479,1465,1414,1389,1381],"runtime_required":false},
-    {"id":"UNKNOWN_IS_NOT_PASS","emoji":"❓","anchor":"SEM PROVA NÃO É VERDE","pr_refs":[1490,1485,1484,1483,1482,1480,1465,1463,1458,1456,1454,1447,1444,1438,1435,1434,1431,1430,1414,1389,1381],"runtime_required":false},
+    {"id":"UNKNOWN_IS_NOT_PASS","emoji":"❓","anchor":"SEM PROVA NÃO É VERDE","pr_refs":[1492,1490,1485,1484,1483,1482,1480,1465,1463,1458,1456,1454,1447,1444,1438,1435,1434,1431,1430,1414,1389,1381],"runtime_required":false},
     {"id":"UNKNOWN_IS_NOT_FALSE","emoji":"⚪","anchor":"NÃO MARCADO CONTINUA ABERTO","pr_refs":[1454,1381],"runtime_required":false},
     {"id":"ACTION_IS_NOT_PROOF","emoji":"🧾","anchor":"FAZER NÃO PROVA","pr_refs":[1490,1482,1483,1463,1447,1444,1430,1389,1381],"runtime_required":false},
     {"id":"DOCUMENTED_IS_NOT_EXECUTED","emoji":"📄","anchor":"TEXTO NÃO RODA","pr_refs":[1488,1464,1463,1444,1438,1414,1381],"runtime_required":false},
-    {"id":"MERGED_IS_NOT_DEPLOYED","emoji":"🚀","anchor":"MERGE NÃO É PRODUÇÃO","pr_refs":[1488,1463,1444,1414,1381,1331],"runtime_required":false},
-    {"id":"SAME_HEAD_PROOF","emoji":"🧬","anchor":"PROVA NO MESMO HEAD","pr_refs":[1490,1482,1480,1463,1447,1444,1431,1416,1381,1376],"runtime_required":false},
+    {"id":"MERGED_IS_NOT_DEPLOYED","emoji":"🚀","anchor":"MERGE NÃO É PRODUÇÃO","pr_refs":[1491,1488,1463,1444,1414,1381,1331],"runtime_required":false},
+    {"id":"SAME_HEAD_PROOF","emoji":"🧬","anchor":"PROVA NO MESMO HEAD","pr_refs":[1492,1490,1482,1480,1463,1447,1444,1431,1416,1381,1376],"runtime_required":false},
     {"id":"ONE_WRITER_PER_SCOPE","emoji":"✍️","anchor":"UMA CANETA POR FERIDA","pr_refs":[1490,1483,1465,1458,1447,1444,1438,1389,1381,1330],"runtime_required":false},
     {"id":"PARALLELIZE_PERCEPTION_SERIALIZE_MUTATION","emoji":"👁️","anchor":"MUITOS OLHOS, UMA CANETA","pr_refs":[1483,1447,1444,1389],"runtime_required":false},
     {"id":"PR_MOTHER_IS_RENDEZVOUS_NOT_WRITER","emoji":"🧿","anchor":"PR-MÃE VÊ, NÃO ESCREVE TUDO","pr_refs":[1444,1483,1458,1447],"runtime_required":false},
@@ -35,7 +36,7 @@
     {"id":"PROVEN_CLAIM_REOPEN_REQUIRES_CAUSE","emoji":"🔓","anchor":"CRISTAL SÓ REABRE COM CAUSA","pr_refs":[1465,1444,1435,1434],"runtime_required":false},
     {"id":"CAPABILITY_IS_NOT_AUTHORITY","emoji":"🧩","anchor":"PODER FAZER NÃO É MANDAR","pr_refs":[1490,1458,1447,1445,1389],"runtime_required":false},
     {"id":"MODEL_IS_NOT_AUTHORITY","emoji":"🤖","anchor":"MODELO É MOTOR","pr_refs":[1447,1390,1389],"runtime_required":false},
-    {"id":"SOURCE_FEATURE_IS_NOT_RUNTIME_PROOF","emoji":"🧱","anchor":"CÓDIGO NÃO É RUNTIME","pr_refs":[1490,1482,1480,1454,1445,1414,1381],"runtime_required":false},
+    {"id":"SOURCE_FEATURE_IS_NOT_RUNTIME_PROOF","emoji":"🧱","anchor":"CÓDIGO NÃO É RUNTIME","pr_refs":[1492,1491,1490,1482,1480,1454,1445,1414,1381],"runtime_required":false},
     {"id":"PASSIVE_DISPLAY_IS_NOT_RUNTIME_PROOF","emoji":"🖼️","anchor":"PRINT NÃO PROVA MOTOR","pr_refs":[1389,1381,1360],"runtime_required":false},
     {"id":"CONNECTED_IS_NOT_SYNCHRONIZED","emoji":"🔌","anchor":"CONECTOU NÃO SIGNIFICA SINCRONIZOU","pr_refs":[1381],"runtime_required":false},
     {"id":"PROVIDER_OPTIONAL_IS_NOT_GLOBAL_FAILURE","emoji":"🔌","anchor":"BRAÇO OPCIONAL NÃO DERRUBA O CORPO","pr_refs":[1479,1458,1381],"runtime_required":false},
@@ -57,8 +58,8 @@
     {"id":"FAILURE_BECOMES_MINERAL","emoji":"⛏️","anchor":"FALHA VIRA MINÉRIO, NÃO LIXO","pr_refs":[1444,1438,1437,1435,1434],"runtime_required":false},
     {"id":"EXTERNAL_SYNC_IS_NOT_SOURCE_OF_TRUTH","emoji":"🌐","anchor":"FORA NÃO VIRA DONO","pr_refs":[1464],"runtime_required":false},
     {"id":"RAW_EXTERNAL_DUMP_IS_NOT_ACTIVE_CANON","emoji":"🧹","anchor":"DUMP BRUTO NÃO MORA NO CÂNONE ATIVO","pr_refs":[1485],"runtime_required":false},
-    {"id":"PR_PATTERN_IS_NOT_IMPLEMENTATION_PROMOTED","emoji":"📜","anchor":"PADRÃO PODE SUBIR SEM FINGIR QUE CÓDIGO SUBIU","pr_refs":[1490,1488,1485,1484,1483,1482,1480,1465,1463,1458,1456,1454,1447,1444],"runtime_required":false},
-    {"id":"ZERO_REGRESSION_REQUIRED","emoji":"🛡️","anchor":"OURO NOVO NÃO QUEBRA O ANTIGO","pr_refs":[1483,1482,1465,1445,1444,1390,1384],"runtime_required":false},
+    {"id":"PR_PATTERN_IS_NOT_IMPLEMENTATION_PROMOTED","emoji":"📜","anchor":"PADRÃO PODE SUBIR SEM FINGIR QUE CÓDIGO SUBIU","pr_refs":[1492,1490,1488,1485,1484,1483,1482,1480,1465,1463,1458,1456,1454,1447,1444],"runtime_required":false},
+    {"id":"ZERO_REGRESSION_REQUIRED","emoji":"🛡️","anchor":"OURO NOVO NÃO QUEBRA O ANTIGO","pr_refs":[1492,1483,1482,1465,1445,1444,1390,1384],"runtime_required":false},
     {"id":"MACHINE_OUTPUT_IS_DELTA_UTIL","emoji":"💠","anchor":"MÁQUINA DEVOLVE SÓ O QUE MUDA O JOGO","pr_refs":[1445,1444,1438],"runtime_required":false},
     {"id":"LAST_GOOD_STATE_IS_NEXT_BASELINE","emoji":"🏁","anchor":"ÚLTIMO BOM VIRA PRÓXIMO CHÃO","pr_refs":[1465,1444,1437,1393,1381],"runtime_required":false},
     {"id":"OPEN_ITEM_IS_NOT_MATERIAL_FAILURE","emoji":"📂","anchor":"ABERTO NÃO É FERIDA ATIVA","pr_refs":[1444],"runtime_required":false},
@@ -90,7 +91,12 @@
     {"id":"CAPABILITY_READY_IS_NOT_RESIDENT","emoji":"🧰","anchor":"CAPACIDADE PRONTA NÃO PRECISA FICAR CARREGADA","pr_refs":[1370],"runtime_required":false},
     {"id":"MINIMUM_SUFFICIENT_CONTEXT","emoji":"🧠","anchor":"CARREGA SÓ O NECESSÁRIO","pr_refs":[1370,1384],"runtime_required":false},
     {"id":"WRITER_LEASE_PIN_AND_CAS","emoji":"🔐","anchor":"CANETA TEM ESCOPO, REF E REDECISÃO","pr_refs":[1330],"runtime_required":false},
-    {"id":"NULL_OID_IS_SEM_BASE_NOT_FAILURE","emoji":"0️⃣","anchor":"OID ZERO É SEM BASE, NÃO FALHA FANTASMA","pr_refs":[1462],"runtime_required":false}
+    {"id":"NULL_OID_IS_SEM_BASE_NOT_FAILURE","emoji":"0️⃣","anchor":"OID ZERO É SEM BASE, NÃO FALHA FANTASMA","pr_refs":[1462],"runtime_required":false},
+    {"id":"PARSE_FULL_PROTOCOL_BEFORE_DISPLAY_TRUNCATION","emoji":"📡","anchor":"PARSEIA INTEIRO, MOSTRA CORTADO","pr_refs":[1491],"runtime_required":false},
+    {"id":"DISPLAY_LIMIT_MUST_NOT_MUTATE_MACHINE_TRUTH","emoji":"✂️","anchor":"CORTA A TELA, NÃO A VERDADE","pr_refs":[1491],"runtime_required":false},
+    {"id":"CANONICAL_IDENTITY_PIN_MUST_MATCH_TARGET_BLOB","emoji":"🔐","anchor":"PIN APONTA PARA O CORPO CERTO","pr_refs":[1492,1484],"runtime_required":false},
+    {"id":"SYSTEMATIC_PROOF_FIELDS_BELONG_TO_RESPONSE_CONTRACT","emoji":"🧾","anchor":"PROVA OBRIGATÓRIA NÃO SOME","pr_refs":[1492],"runtime_required":false},
+    {"id":"RUNNER_DECLARATION_MUST_MATCH_CANONICAL_RUNNER_POLICY","emoji":"🚂","anchor":"WORKFLOW USA A ESTRADA CANÔNICA","pr_refs":[1492],"runtime_required":false}
   ],
   "runtime_or_external_remeasurement_required": [
     "REMOTE_DEVICE_ONLINE_NOW",
@@ -110,7 +116,8 @@
     "PR1456_MEMORY_PUSH_KILLSWITCH_RUNTIME_BEHAVIOR",
     "PR1454_HORN_COGNITIVE_RUNTIME_E2E",
     "PR1482_UNIVERSAL_EXECUTION_SAME_HEAD",
-    "PR1483_GLOBAL_CONTINUITY_SAME_HEAD"
+    "PR1483_GLOBAL_CONTINUITY_SAME_HEAD",
+    "PR1492_GATE_FIX_SAME_HEAD_CI"
   ],
   "proof_boundary": "SOURCE_PATTERN_CRYSTALLIZED != IMPLEMENTATION_PROMOTED != CI_GREEN != RUNTIME_PROVEN != GLOBAL_FIXED_POINT"
 }
