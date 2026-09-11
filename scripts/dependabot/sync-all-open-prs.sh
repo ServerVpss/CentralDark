@@ -5,7 +5,7 @@
 # CHEFE !CENTRALDARK fechar #1498:
 # 1) preservar radar
 # 2) anti-thrash: HEAD com checks pending|queued|in_progress → sem update-branch e sem rerun
-# 3) rerun só failure|cancelled do SHA HEAD atual (--commit)
+# 3) rerun somente failure do SHA HEAD atual; cancelled não é ressuscitado
 # 4) rate-limit: remaining/reset/retry-after; remaining=0 → DEFERRED+cursor, exit 0 (não falha PR)
 # 5) OTHER_ERR>0 → FAIL; CONFLICT → receipt explícito
 
