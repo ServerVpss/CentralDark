@@ -34,12 +34,3 @@ DOCUMENTED != EXECUTED
 ```
 
 Nenhuma regra nova deve ser escrita neste arquivo. Toda evolução do padrão de resposta acontece no owner estável.
-
-```text
-# Marcadores exigidos pelo registry de proteção humana (owner vivo = PADRAO-RESPOSTA-SEGREDO-CHEFE.md)
-CAPACIDADE
-INTENCAO
-CONDUTA
-EFEITO
-```
-
