@@ -4,7 +4,10 @@
 # - update-branch é sincronização, não aprovação.
 # - conflito real vai para scripts/dependabot/resolve-conflicts.sh.
 # - radar varre TODOS os PRs abertos do dependabot[bot], inclusive antigos.
-# - radar-all-open-prs-sync (schedule/dispatch, self-hosted VPS1): Update branch em TODOS os PRs abertos + rearme failed/cancelled.
+# - radar-all-open-prs-sync (schedule/dispatch, self-hosted VPS1): Update branch em TODOS os PRs abertos + rearme failed/cancelled do HEAD atual.
+# - anti-thrash: HEAD com checks pending/queued/in_progress → sem update-branch/rerun.
+# - rate-limit: remaining=0 → DEFERRED+cursor (exit 0); NÃO classificar PR como falho.
+# - OTHER_ERR>0 → FAIL; CONFLICT → receipt; SYNC≠APPROVAL; UNKNOWN≠PASS.
 # - Um cron só neste workflow; NÃO espalhar cron em outras VPS.
 # - compatibilidade é lida do badge oficial já presente no PR, nunca inventada.
 # - PATCH exige compatibilidade >= 85; MINOR exige >= 95; MAJOR nunca faz auto-merge.
