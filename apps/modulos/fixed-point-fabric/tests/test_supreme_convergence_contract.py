@@ -94,6 +94,25 @@ class SupremeConvergenceContractTest(unittest.TestCase):
         self.assertIn("NEW_TAB != NEW_BRAIN", boot)
         self.assertIn("MODEL_CHANGE != RESET", boot)
 
+    def test_deploy_webhook_is_retired_without_killing_state_ingest(self):
+        doc = read("docs/CONSCIENCIA/WEBHOOK-DEPLOY-SEGURO.md")
+        legacy = read("scripts/webhook/github-webhook-deploy.mjs")
+        deploy = read(".github/workflows/vps-exec-selfhosted.yml")
+        state = read("apps/modulos/fixed-point-fabric/src/centraldark_fixed_point/github_state.py")
+
+        self.assertIn("GITHUB_STATE_INGEST=ACTIVE", doc)
+        self.assertIn("LEGACY_WEBHOOK_DEPLOY=RETIRED", doc)
+        self.assertIn("CANONICAL_DEPLOY=GITHUB_ACTIONS_SELF_HOSTED", doc)
+        self.assertIn("status: 'retired'", legacy)
+        self.assertIn("canonicalDeploy: 'github-actions'", legacy)
+        self.assertIn("mutatesRepository: false", legacy)
+        self.assertIn("WEBHOOK_APP: CentralDark-WebhookDeploy", deploy)
+        self.assertIn('pm2 stop "$WEBHOOK_APP"', deploy)
+        self.assertIn("PORT_9300_STILL_LISTENING", deploy)
+        self.assertIn('x-hub-signature-256', state.lower())
+        self.assertIn("hmac.compare_digest", state)
+        self.assertIn("github_delivery:", state)
+
 
 if __name__ == "__main__":
     unittest.main()
