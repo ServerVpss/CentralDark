@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   wake:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux]
     timeout-minutes: 8
     steps:
       - name: SSH na VPS e restart runner
