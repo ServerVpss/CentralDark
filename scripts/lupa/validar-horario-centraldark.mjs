@@ -15,6 +15,12 @@ const REQUIRED_OWNER_FILES = [
   'self-test.mjs',
 ];
 
+const WEB_SURFACES = [
+  { root: 'src/', bootstrap: 'src/main.tsx' },
+  { root: 'apps/modulos/hub/src/', bootstrap: 'apps/modulos/hub/src/main.tsx' },
+  { root: 'apps/modulos/mcp-admin-ui/src/', bootstrap: 'apps/modulos/mcp-admin-ui/src/main.tsx' },
+];
+
 const EXTENSIONS = new Set(['.js', '.mjs', '.cjs', '.ts', '.tsx', '.html', '.py', '.ps1', '.sh']);
 const SKIP_DIRS = new Set([
   '.git', 'node_modules', 'dist', 'build', 'coverage', '.next', '.vite',
@@ -23,9 +29,7 @@ const SKIP_DIRS = new Set([
 
 function walk(dir, out = []) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-    if (entry.name.startsWith('.') && entry.name !== '.agents') {
-      if (entry.isDirectory()) continue;
-    }
+    if (entry.name.startsWith('.') && entry.name !== '.agents' && entry.isDirectory()) continue;
     if (entry.isDirectory() && SKIP_DIRS.has(entry.name)) continue;
     const full = path.join(dir, entry.name);
     if (entry.isDirectory()) walk(full, out);
@@ -38,10 +42,20 @@ function relative(file) {
   return path.relative(ROOT, file).replaceAll('\\', '/');
 }
 
+function bootstrapOk(surface) {
+  const full = path.join(ROOT, surface.bootstrap);
+  if (!fs.existsSync(full)) return false;
+  const text = fs.readFileSync(full, 'utf8');
+  return text.includes('installCentralDarkDateFormatting') && text.includes('installCentralDarkDateFormatting();');
+}
+
 const findings = [];
 for (const ownerFile of REQUIRED_OWNER_FILES) {
   const full = path.join(OWNER_DIR, ownerFile);
   if (!fs.existsSync(full)) findings.push({ file: `central-horario/${ownerFile}`, rule: 'CANONICAL_TIME_OWNER_MISSING' });
+}
+for (const surface of WEB_SURFACES) {
+  if (!bootstrapOk(surface)) findings.push({ file: surface.bootstrap, rule: 'WEB_TIME_BOOTSTRAP_MISSING' });
 }
 
 const jsDatePtBrNoZone = /new\s+Date\s*\([^\n;]*?\)\.toLocale(?:String|DateString|TimeString)\(\s*(['"])pt-BR\1\s*\)/g;
@@ -55,8 +69,10 @@ for (const file of walk(ROOT)) {
   if (rel.startsWith('central-horario/')) continue;
   const content = fs.readFileSync(file, 'utf8');
   const ext = path.extname(file);
+  const webSurface = WEB_SURFACES.find((surface) => rel.startsWith(surface.root));
+  const webCovered = Boolean(webSurface && bootstrapOk(webSurface));
 
-  if (['.js', '.mjs', '.cjs', '.ts', '.tsx', '.html'].includes(ext)) {
+  if (['.js', '.mjs', '.cjs', '.ts', '.tsx', '.html'].includes(ext) && !webCovered) {
     for (const [regex, rule] of [
       [jsDatePtBrNoZone, 'HUMAN_DATE_PTBR_WITHOUT_BRASILIA_TZ'],
       [jsDateLocaleNoArgs, 'HUMAN_DATE_BROWSER_OR_SERVER_LOCAL_TZ'],
@@ -98,12 +114,14 @@ for (const file of walk(ROOT)) {
   }
 }
 
+const files = walk(ROOT);
 const output = {
   ok: findings.length === 0,
   canonical_timezone: 'America/Sao_Paulo',
   human_display: 'BRT',
   machine_storage: 'UTC_RFC3339',
-  scanned_files: walk(ROOT).length,
+  bootstrapped_web_surfaces: WEB_SURFACES.filter(bootstrapOk).map((surface) => surface.root),
+  scanned_files: files.length,
   findings,
 };
 
