@@ -201,3 +201,47 @@ APP_READY=NOT_PROVEN
 VOICE_E2E=NOT_PROVEN
 GLOBAL_FIXED_POINT=false
 ```
+
+## Atualização de sessão — 2026-09-11 — revisão e acesso à Casa
+
+Este bloco registra evidências obtidas nesta conversa. Estados anteriores permanecem históricos; nenhum status deste receipt vale indefinidamente.
+
+### GitHub e correção efetivamente persistida
+
+- Main observada na revisão: `9da78c4e72747c6a5f45999cdbe5a0e5e3db4ad5`.
+- Inventário retornou 15 PRs abertos: #1500, #1498, #1494, #1490, #1483, #1482, #1480, #1465, #1463, #1460, #1458, #1456, #1454, #1447 e #1444.
+- Houve leitura de diffs/arquivos em várias lanes; isso não constitui auditoria integral nem prova de ausência de erros.
+- No #1498, commit `cfc12dca49650589837e3136f1530b5e401d9403`: diagnóstico de rate-limit movido para stderr; retirada da coleta de runs cancelled; guard para não repetir runs com run_attempt diferente de 1.
+- Ajustes de comentários: `e89bff70dc75889324705ea8b2d6a163dff2d35c` e `25042a5f80961592ac0b5e6663bce218da576ef7`.
+- HEAD observado do #1498: `25042a5f80961592ac0b5e6663bce218da576ef7`, aberto e mergeable=true; checks queued/pending.
+- Verificação realizada: bash -n retornou código 0. É apenas verificação sintática; testes comportamentais do radar e CI concluído não foram provados nesta sessão.
+- A rotina de base64 usada na verificação local não era uma codificação UTF-8 correta. Revalidar bytes exatos do GitHub antes de usar essa checagem como prova reproduzível.
+- Persistência dos commits confirmada por resposta da API e leitura do diff. Nenhum merge/deploy foi executado nesta rodada.
+- Receipts de conversa: #1498 comentários 5635090565 e 5635114683; #1444 comentário 5635105719.
+
+### Acesso realmente testado pelos conectores
+
+- Desktop Commander Remote: ping executado no dispositivo SEGREDO, ID `8350bf1e-e271-48b7-bee4-095b686fea81`.
+- Resposta: `pong 2026-09-11T13:38:15.465Z`.
+- list_devices confirmou SEGREDO online, versão 0.2.50.
+- Isso prova alcance do dispositivo naquele instante. Não prova auditoria atual de processos/disco, sincronização Git local ou execução por voz.
+- CentralDark MCP: semantic_health respondeu erro `SEMANTIC_BRIDGE_EXIT code=1 signal=null`, operação semantic_health, autoridade PERCEPTION_ONLY; envelope marcou INVALID_ARGUMENT.
+- Isso prova resposta do conector e falha nessa operação específica. Não prova indisponibilidade do MCP inteiro nem identifica ainda a causa raiz.
+- As leituras GitHub via CentralDark e via conector GitHub responderam nesta sessão.
+- Não foi criada ponte entre os dois MCPs.
+
+### Screenshot fornecido pelo CHEFE
+
+Evidência observacional: tela informa OAuth concluído, initialize HTTP 200, tools/list HTTP 200 e 102 ocorrências de ferramentas. Não houve reprodução independente desses passos nesta rodada.
+
+Não persistir URL de callback, código OAuth, state, token, e-mail ou conteúdo bruto da imagem. A imagem não substitui teste vivo do protocolo completo.
+
+### Contraprova e continuidade para áudio
+
+- Corrigir o exagero do fechamento anterior: revisão parcial e sintaxe válida não equivalem a estabilização total.
+- O aprendizado confirmado: separar saída de diagnóstico da saída de controle; não reviver cancelamentos automaticamente; limitar repetição; distinguir conector alcançável de ferramenta saudável.
+- NEXT_CURSOR: receber a intenção do CHEFE por áudio; reutilizar este receipt; remedir apenas os acessos temporais necessários; investigar semantic_health no owner existente se essa for a missão; validar comportamento/CI do #1498 antes de promoção.
+- Acesso por voz ponta a ponta, sincronização Casa/main, deploy MCP e estabilidade global continuam NOT_PROVEN.
+- Não copiar PID, SHA ou estado histórico para uma ação atual sem verificar sua identidade e aplicabilidade.
+
+BOOT: !CENTRALDARK → #ACORDAR → !CALIBRAR → !MULTIBÚSSOLA → !META_LUPA → !RECONCILIAR → !CONTRAPROVA → !REGISTRA → !BOOT.
