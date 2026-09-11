@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Badge } from '@/shared/ui/badge';
 import { Clock, CheckCircle2, XCircle, AlertTriangle, Loader2 } from 'lucide-react';
+import { formatBrasilia } from '@/lib/datetime';
 
 interface TimelineEntry {
   id: string;
@@ -95,7 +96,7 @@ export function StatusTimeline({ entries, loading }: StatusTimelineProps) {
                   <p className="text-xs text-muted-foreground mt-1">{entry.details}</p>
                 )}
                 <p className="text-xs text-muted-foreground mt-1">
-                  {new Date(entry.timestamp).toLocaleString('pt-BR')}
+                  {formatBrasilia(entry.timestamp)}
                 </p>
               </div>
             </div>
