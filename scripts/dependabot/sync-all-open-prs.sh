@@ -111,5 +111,11 @@ done
 
 echo "RECEIPT UPDATED=$UPDATED NOOP=$NOOP CONFLICT=$CONFLICT OTHER_ERR=$OTHER_ERR RERUN_OK=$RERUN_OK RERUN_SKIP=$RERUN_SKIP"
 echo "ALL_OPEN_PRS_SYNC_DONE"
-# Never fail the job solely for per-PR conflicts — receipt is the truth.
+# CONFLICT = sync blocked by real merge conflict (log only; sync≠resolve).
+# OTHER_ERR = API/tool failure → fail-closed (UNKNOWN≠PASS / no false-green ✓).
+if [ "$OTHER_ERR" -gt 0 ]; then
+  echo "RESULT=FAIL OTHER_ERR=$OTHER_ERR"
+  exit 1
+fi
+echo "RESULT=PASS"
 exit 0
