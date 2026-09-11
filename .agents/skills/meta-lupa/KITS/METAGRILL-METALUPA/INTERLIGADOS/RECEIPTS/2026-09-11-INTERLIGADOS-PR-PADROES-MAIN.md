@@ -24,11 +24,12 @@ PR → CLAIM TEMPORAL/RUNTIME → FRONTEIRA CASA/VPS → REMEASURE_REQUIRED
 
 ```text
 OWNER=.agents/skills/meta-lupa/SKILL.md
+OWNER_BRIDGE=.agents/skills/meta-lupa/INTERLIGADOS.md
 KIT=.agents/skills/meta-lupa/KITS/METAGRILL-METALUPA/
 INTERLIGADOS=.agents/skills/meta-lupa/KITS/METAGRILL-METALUPA/INTERLIGADOS/
 ```
 
-Nenhum owner paralelo foi criado. Os padrões são uma camada de orientação/contrato sob o owner existente.
+Nenhum owner paralelo permanece. A árvore auxiliar criada durante a reconciliação foi absorvida em `ARVORE-VISUAL-CANONICA.md` e removida.
 
 ## 🧠 PEÇAS CRISTALIZADAS
 
@@ -39,13 +40,16 @@ Nenhum owner paralelo foi criado. Os padrões são uma camada de orientação/co
 🧠 PADRÕES-PR/ARVORE-VISUAL-CANONICA.md
    → mapa mental com emojis, gatilhos e encadeamento operacional
 
+💠 PADRÕES-PR/DELTA-PR-1491-1492.md
+   → delta semântico recente sem fingir promoção da implementação #1492
+
 🏠 RUNTIME/FRONTEIRA-CASA-VPS.md
    → tudo que ainda exige verdade temporal da Casa/VPS/externo
 ```
 
 ## 💎 DELTA DO SWEEP PROFUNDO
 
-Além dos padrões já presentes, o registry passou a cristalizar explicitamente:
+Além dos padrões já presentes, o registry cristaliza explicitamente:
 
 ```text
 🫀 ESTADO VIVO NÃO FICA CONGELADO
@@ -71,6 +75,11 @@ Além dos padrões já presentes, o registry passou a cristalizar explicitamente
 📚 PÚBLICO != COPIÁVEL
 ⚖️ LICENÇA UNKNOWN → SEM RAW INGEST
 🦜 SEM DELTA NOVO → SEM PAPAGAIO
+📡 PARSEIA PROTOCOLO COMPLETO ANTES DE TRUNCAR A TELA
+✂️ LIMITE VISUAL NÃO MUDA A VERDADE DA MÁQUINA
+🔐 PIN CANÔNICO DE IDENTIDADE APONTA PARA O BLOB CERTO
+🧾 CAMPOS DE PROVA SISTEMÁTICA NÃO SOMEM
+🚂 WORKFLOW USA A POLÍTICA CANÔNICA DE RUNNER
 ```
 
 ## 🔗 GRAFO MENTAL/OPERACIONAL
@@ -94,7 +103,7 @@ Além dos padrões já presentes, o registry passou a cristalizar explicitamente
 
 ## 🏠 NÃO PROMOVIDO COMO VERDE
 
-Permanecem fora do verde documental e exigem remedição conforme `RUNTIME/FRONTEIRA-CASA-VPS.md`:
+Permanecem fora do verde e exigem remedição conforme `RUNTIME/FRONTEIRA-CASA-VPS.md`:
 
 ```text
 REMOTE_DEVICE_ONLINE_NOW
@@ -114,8 +123,13 @@ PR1456_MEMORY_PUSH_KILLSWITCH_RUNTIME_BEHAVIOR
 PR1454_HORN_COGNITIVE_RUNTIME_E2E
 PR1482_UNIVERSAL_EXECUTION_SAME_HEAD
 PR1483_GLOBAL_CONTINUITY_SAME_HEAD
+PR1492_GATE_FIX_SAME_HEAD_CI
 GLOBAL_FIXED_POINT
 ```
+
+## 🟡 PR #1492 · LIMITE HONESTO
+
+No HEAD observado `2a7237b91cbd0395753c94fb2988430808b2a138`, havia runs `queued` e `cancelled`. Portanto esta rodada promove **os padrões semânticos**, não declara a implementação do PR aprovada.
 
 ## 🔒 PROOF BOUNDARY
 
@@ -134,13 +148,19 @@ SOURCE_PATTERN_CRYSTALLIZED
 72970419c7a0198880936269d336856961fa5b7d  → árvore visual canônica
 d62a160f61103a7993b19de2a53fc535467ac46d  → fronteira Casa/VPS
 b848de050b5e99ac9984f4f7100cddd6f24f24e6  → sweep profundo de padrões estáveis
+3da85d15db3dffbe37a280a630b35857c10db550  → ponte INTERLIGADOS no owner META-LUPA
+24823ef81539383f2a935231166c4159edde9856  → delta semântico PRs #1491/#1492
+7243814e900f619f117d2413a0363def9ad09233  → absorção na árvore visual canônica
+37f6429b05e02cec868eb6de04b0dbc1bdc25657  → remoção da árvore auxiliar após absorção
+4e5abe6723f032e69cf8f6d97a2ecfe92d1184fb  → registry atualizado #1491/#1492
+4900ae43a6776591fb01de704a80c51f50695853  → fronteira atualizada com CI #1492
 ```
 
 ## 🧭 NEXT_CURSOR
 
 ```text
 SOURCE_PATTERNS=CRYSTALLIZED
-NEXT=REMEASURE_FIRST_MUTABLE_RUNTIME_EDGE_ONLY_WHEN_RUNTIME_MISSION_IS_ACTIVE
+NEXT=REMEASURE_ONLY_WHAT_IS_LIVE_OR_SAME_HEAD
 ```
 
 ❓ `UNKNOWN != PASS`  
