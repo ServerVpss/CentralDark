@@ -1,6 +1,6 @@
 ---
 title: "OLHO BIÔNICO ANTI-FLASH — extensão canônica da Trigger Fabric"
-status: "CANÔNICO_CANDIDATO_EM_PR"
+status: "CANDIDATO_EM_PR"
 authority: "SEGREDO/CHEFE"
 owner: "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/"
 architecture_class: "VISION_RESILIENCE_PROFILE"
