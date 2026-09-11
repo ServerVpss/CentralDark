@@ -612,11 +612,7 @@ async function fazerRequest(url, opts = {}) {
         const r = await fetch(url, { redirect: "manual", ...opts, signal: AbortSignal.timeout(10000) });
         const location = r.headers.get("location");
         const texto = await r.text();
-        let json = null;
-        try {
-            json = JSON.parse(texto);
-        }
-        catch { /* ok */ }
+        const json = parseMcpJson(texto);
         return { ok: r.ok, status: r.status, ms: Math.round(performance.now() - t0), json, texto: texto.slice(0, 400), location, contentType: r.headers.get("content-type") || "" };
     }
     catch (err) {
