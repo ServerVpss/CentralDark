@@ -30,7 +30,7 @@ Nenhuma dessas visões pode inventar outro mapa.
 - módulo novo fora do mapa;
 - nomes de versão paralela como `v2`, `copy`, `backup` ou `novo`;
 - duplicidade de módulos que difiram apenas por maiúsculas/minúsculas;
-- alteração em área protegida sem a autorização canônica `permito-segredo`;
+- alteração em área protegida sem a autorização canônica `👑 PERMITO-SEGREDO`;
 - caminho absoluto, travessia `../` ou entrada duplicada no mapa;
 - selo `PROVEN` com prova incompleta, Judge igual ao Writer, teste `SKIPPED` ou alegação de eficácia 100% sem denominador reproduzível;
 - selo `PROVEN` cujo fingerprint Git material não corresponde ao alvo no HEAD da prova ou no HEAD atual;

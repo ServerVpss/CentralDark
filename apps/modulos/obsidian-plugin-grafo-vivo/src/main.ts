@@ -8,6 +8,9 @@ import { DEFAULT_SETTINGS, GrafoVivoSettings, GrafoVivoSettingTab } from "./sett
 import { AutoAtualizador } from "./autoUpdater";
 import { SemanticClient } from "./semantic";
 import { KnowledgeHubClient } from "./knowledgeHub";
+import { installCentralDarkDateFormatting } from "../../../../central-horario/frontend";
+
+installCentralDarkDateFormatting();
 
 export default class GrafoVivoPlugin extends Plugin {
   settings: GrafoVivoSettings = DEFAULT_SETTINGS;
