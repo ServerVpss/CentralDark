@@ -1,104 +1,92 @@
 ---
-title: "PADRAO EMOJIS"
+title: "🎨 Padrão de Emojis — CentralDark"
+status: "ATIVO_RECONCILIADO"
 date: 2026-08-27
-tags: ["consciencia"]
-updated: 2026-08-27
+updated: 2026-09-10
+owner: "docs/CONSCIENCIA/PADRAO-EMOJIS.md"
+truth_scope: "VISUAL_TOKENS_AND_EMOJI_SEMANTICS"
+canonical: true
+tags:
+  - centraldark
+  - consciencia
+  - emojis
+  - visual
+  - gatilhos
+  - grafo-vivo
+related:
+  - "[[PADRAO-RESPOSTA-SEGREDO-CHEFE]]"
+  - "[[PADRAO-GRAFO-VIVO-MARKDOWN]]"
+  - "[[ADM-GATILHOS-OPERACIONAIS]]"
+links:
+  - "docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md"
+  - "docs/CONSCIENCIA/PADRAO-GRAFO-VIVO-MARKDOWN.md"
+  - "docs/SEGURANCA/ADM-GATILHOS-OPERACIONAIS.json"
 ---
 
-# PADRAO-EMOJIS — CentralDark
+# 🎨 Padrão de Emojis — CentralDark
 
-> AUTORIDADE: SEGREDO/CHEFE
-> OBJETIVO: 1 emoji = 1 ação/comando/gatilho. NUNCA repetir emoji na mesma coluna nem entre colunas.
-> USO: logs, Telegram, painel WebUI, GitHub, chat Hermes. Emissor deve usar o emoji da linha correspondente.
-> STATUS: canônico (substitui link fantasma citado em 50+ docs que apontavam para este arquivo inexistente).
+Emoji na Casa é pista visual com significado. Não é decoração, não é prova e não deve contradizer o registry de gatilhos.
 
----
+## 🧿 Gatilhos canônicos
 
-## 🎯 GATILHOS OFICIAIS (comandos da Casa)
+A fonte executiva dos gatilhos é `docs/SEGURANCA/ADM-GATILHOS-OPERACIONAIS.json`.
 
-| Emoji | Gatilho | Fase dominante | Quando emitir |
-|-------|---------|----------------|---------------|
-| 🔥 | `#ACORDAR` | medição de estado vivo / sincronizar | início de qualquer ação, antes de opinar |
-| 🧭 | `!CALIBRAR` | reconciliação, correção de rota | intenção × estado diverge, realinhar |
-| 🎯 | `!MULTIBUSSOLA` | navegação multieixo / próximo passo | definir objetivo corrente e direção |
-| 🔍 | `META LUPA` / `META(x)` | falsificar / prover | aplicar lupa sobre própria saída ou claim |
+```text
+👑🪬 !CENTRALDARK
+🔗 !># INTERLIGADOS
+⭕ !AURÉOLA CANÔNICA
+🧿 #ACORDAR
+🎛️ !CALIBRAR
+🧭 !MULTIBÚSSOLA
+🔎 !META_LUPA
+🔄 !RECONCILIAR
+⚖️ !CONTRAPROVA
+🔁 !VERTEX_INVERSO
+🐚 !CARACOL
+💠 !FIXED_POINT
+🧾 !REGISTRA
+🚀 !BOOT
+💎 !DELTAÚTIL
+🪬 !MODO CIRURGIA DE RAIZ
+```
 
-> Nota: 🔥 também é voz de "fogo/acordar" no chat — é o mesmo gatilho, não conflita.
+## 🧠 Regra de uso
 
----
+```text
+EMOJI=CONTEXTO
+EMOJI != PROOF
+EMOJI_NAO_SUBSTITUI_SIGNIFICADO=true
+CANONICAL_TRIGGER_DISPLAY_MUST_MATCH_REGISTRY=true
+```
 
-## 🚦 STATUS (estado de execução)
+## 🫀 Mapa semântico mínimo
 
-| Emoji | Significado | Quando usar |
-|-------|-------------|-------------|
-| ✅ | Sucesso / concluído | job ou etapa finalizada sem erro |
-| ⚠️ | Atenção / retry | precisa validação manual ou segunda tentativa |
-| ❌ | Erro definitivo | falha confirmada |
-| 🔄 | Em andamento / sincronizando | processo rodando, fila, rebuild |
-| ⏳ | Aguardando / fila | espera externa, timeout |
-| 🔒 | Protegido / bloqueado | recurso trancado, permissão faltando |
+- 👑 autoridade humana / Chefe
+- 🧠 ideia, mente, memória, plano
+- 🫀 estado vivo da Casa
+- 🔗 conexão, interligação, grafo
+- 🏛️ GitHub / fonte oficial
+- ☁️ Drive / espelho humano
+- 🏠 Casa local
+- 🖥️ VPS / servidor
+- 🔌 MCP / conector
+- 🚪 porta / entrada técnica
+- 🧾 receipt / rastro
+- ⚖️ realidade / juiz
+- ❓ unknown
+- ⚠️ atenção / pendência
+- 🔴 falha
+- 🟡 parcial
+- 🟢 provado/ok quando medido
 
----
+## ⚖️ Leis
 
-## 🛠️ AÇÃO (verbos de trabalho)
+```text
+BIBLICAL_NARRATIVE != PROOF
+EGYPTIAN_IMAGERY != ARCHITECTURAL_AUTHORITY
+RESENHA_CONTEXTUAL != STATUS
+LINK != PROOF
+UNKNOWN != PASS
+```
 
-| Emoji | Uso típico |
-|-------|------------|
-| 🚀 | Deploy / publish |
-| 🛠️ | Fix / correção |
-| 🧠 | Aprendizado registrado |
-| 📦 | Build / install |
-| 🔨 | Trabalho em execução (Hermes) |
-| 🧙 | Conselho / tutor |
-| 📥 | Checkout / download |
-| 📤 | Push / upload |
-
----
-
-## 👥 AGENTES (quem fala)
-
-| Emoji | Agente |
-|-------|--------|
-| 👑 | CHEFE / SEGREDO (autoridade humana final) |
-| ⚡ | Hermes (executor / energia) |
-| 💎 | SOL / Esmeralda (coordenador(a) canônico) |
-| 🔧 | Pivete (executor legado / aliases) |
-
----
-
-## 🧩 MÓDULOS (onde roda)
-
-| Emoji | Módulo |
-|-------|--------|
-| 🤖 | Bots Telegram |
-| 📡 | VPS |
-| 🗂️ | GitHub |
-| 💻 | Local / PC (CentralDark) |
-| 🔗 | MCP CentralDark |
-
----
-
-## ⚒️ REGRA DE OURO (anti-repetição)
-
-1. Cada emoji acima tem DONO único. Não reutilizar em outra linha.
-2. Quem emite log/notificação escolhe o emoji pela AÇÃO ou GATILHO, não por estilo.
-3. Emoji fora desta tabela = não canônico. Se precisar de novo, propor e o CHEFE autoriza.
-4. Conflitos resolvidos nesta v1 (eram repetidos no rascunho):
-   - `🔄` era ACORDAR + Em-andamento → ACORDAR virou 🔥
-   - `🛠️` era CALIBRAR + Fix → CALIBRAR virou 🧭
-   - `🔨` era Hermes-agente + Hermes-executando → Hermes-agente virou ⚡
-   - `💎` era Esmeralda + Ouro → Ouro absorvido na voz, Esmeralda mantém 💎
-
----
-
-ANCORADO: CHEFE / SEGREDO 👑
-DONO: docs/CONSCIENCIA/PADRAO-EMOJIS.md
-VERSAO: 1.0 (canônica, substitui link fantasma)
-
----
-
-## Conexões Rápidas
-
-- [[00-LEIA-PRIMEIRO]] — portão de entrada
-- [[MAPA-DO-CEREBRO]] — visão geral
-- [[CONSCIENCIA]] — documento mestre
+Quando houver conflito entre este arquivo e o registry, o registry vence para gatilhos. Este arquivo explica o uso visual humano.
