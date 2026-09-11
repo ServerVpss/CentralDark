@@ -1,5 +1,6 @@
 import React from 'react';
 import { AlertTriangle, X } from 'lucide-react';
+import { formatBrasilia } from '@/lib/datetime';
 
 interface Alert {
   id: string;
@@ -37,7 +38,7 @@ export function AlertBanner({ alerts, onDismiss }: AlertBannerProps) {
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium">{alert.message}</p>
               <p className="text-xs text-muted-foreground mt-1">
-                {new Date(alert.timestamp).toLocaleString()}
+                {formatBrasilia(alert.timestamp)}
               </p>
             </div>
             <button
