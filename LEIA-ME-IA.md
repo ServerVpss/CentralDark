@@ -692,3 +692,19 @@ FLUXO FUNCIONAL → 🔴 DESVIO → ↩️ 1 CASA ATRÁS → MESMO OWNER
 ```
 
 No jeito do CHEFE: **a vela mostra a intenção, o astrolábio mede a realidade, o meridiano prende o owner certo e a carta do GitHub registra onde a embarcação realmente está.** O título mostra essa rota antes da resposta, sem inventar costa verde no mapa.
+
+<!-- PORTA_CANONICO_REACHABILITY -->
+## Canônicos alcançáveis (Porta)
+
+Índice mínimo para `CANONICO_ORFAO=0` — paths citados, owners existentes, sem segundo mapa.
+
+- `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MATERIAL-INGEST.md`
+- `docs/ARQUITETURA/LIBRARY-BINDING-CENTRALDARK.md`
+- `docs/BRAIN/08-ARTEFATOS-VISUAIS/01-CARTAZES-CANONICOS/README.md`
+- `docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/README.md`
+- `docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md`
+- `docs/CONSCIENCIA/ADMINISTRAVEIS.md`
+- `docs/CONSCIENCIA/BAIANES-E-RESENHA-REGIONAL.md`
+- `docs/CONSCIENCIA/MAPA-DO-CEREBRO.md`
+- `docs/GOVERNANCA/CONTEXTO-PESSOAL-E-PROVENIENCIA-TEMPORAL.md`
+- `.agents/skills/centraldark-operational-method/references/HUMAN-ACTION-DIRECT-LINK.md`
