@@ -20,6 +20,7 @@ const WEB_SURFACES = [
   { root: 'apps/modulos/hub/src/', bootstrap: 'apps/modulos/hub/src/main.tsx' },
   { root: 'apps/modulos/mcp-admin-ui/src/', bootstrap: 'apps/modulos/mcp-admin-ui/src/main.tsx' },
   { root: 'apps/modulos/obsidian-plugin-grafo-vivo/src/', bootstrap: 'apps/modulos/obsidian-plugin-grafo-vivo/src/main.ts' },
+  { root: 'apps/modulos/Bolt/source/app/', bootstrap: 'apps/modulos/Bolt/source/app/entry.client.tsx' },
 ];
 
 const EXTENSIONS = new Set(['.js', '.mjs', '.cjs', '.ts', '.tsx', '.html', '.py', '.ps1', '.sh']);
