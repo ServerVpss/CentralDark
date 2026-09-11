@@ -18,7 +18,7 @@ import {
 const baseMap = {
   schema_version: 1,
   source_of_truth: 'apps/modulos/mapeamento/config/mapa-canonico.json',
-  approval_label: 'permito-segredo',
+  approval_label: '👑 PERMITO-SEGREDO',
   rules: {},
   consolidation_evidence_policy: {
     enabled: true,
