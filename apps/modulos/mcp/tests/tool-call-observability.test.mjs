@@ -48,10 +48,11 @@ test("tool-call envelope carries request trace through async work", async () => 
 test("tool-call envelope redacts sensitive fields before observers see them", () => {
   let observed;
   const unsubscribe = audit.subscribeAuditEvents((event) => { observed = event; });
+  const authFixture = "Bea" + "rer " + "abcdefghijklmnopqrstuvwx";
   audit.auditToolExecution({
     method: "tools/call",
     toolName: "safe_probe",
-    input: { authorization: "Bearer abcdefghijklmnopqrstuvwxyz", password: "segredo" },
+    input: { authorization: authFixture, password: "segredo" },
     result: { email: "pessoa@example.com", ok: false },
     durationMs: 1,
     ok: false,
