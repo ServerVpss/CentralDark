@@ -68,12 +68,12 @@ jobs:
 
       - name: 🔎 Coletar metadados do Dependabot
         id: meta
-        uses: dependabot/fetch-metadata@v3
+        uses: dependabot/fetch-metadata@25dd0e34f4fe68f24cc83900b1fe3fe149efef98 # v3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 🇧🇷 Padronizar título em PT-BR com selo semântico
-        uses: actions/github-script@v9
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         env:
           DEPENDENCY_NAMES: ${{ steps.meta.outputs.dependency-names }}
           UPDATE_TYPE: ${{ steps.meta.outputs.update-type }}
@@ -130,15 +130,29 @@ jobs:
 
       - name: 🔄 Tentar Update branch antes de julgar conflito
         id: update_branch
-        uses: actions/github-script@v9
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const pull_number = context.payload.pull_request.number;
+            const expected_head_sha = context.payload.pull_request.head.sha;
+            const checks = await github.paginate(github.rest.checks.listForRef, {
+              owner, repo, ref: expected_head_sha, per_page: 100,
+            });
+            const pending = checks.filter((c) => c.status !== 'completed');
+            if (pending.length > 0) {
+              console.log(`::notice::SKIP_UPDATE_BRANCH_CHECKS_PENDING count=${pending.length} head=${expected_head_sha}`);
+              core.exportVariable('UPDATE_BRANCH_STATE', 'SKIPPED_CHECKS_PENDING');
+              core.exportVariable('MERGEABILITY_STATE', 'WAIT_CHECKS');
+              return;
+            }
             const args = {
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: context.payload.pull_request.number,
-              expected_head_sha: context.payload.pull_request.head.sha,
+              owner,
+              repo,
+              pull_number,
+              expected_head_sha,
             };
             try {
               const result = await github.request('PUT /repos/{owner}/{repo}/pulls/{pull_number}/update-branch', args);
@@ -170,7 +184,7 @@ jobs:
 
       - name: 🧭 Remedir mergeabilidade quando Update branch não criou novo HEAD
         if: env.UPDATE_BRANCH_STATE != 'REQUESTED' && env.RESOLVE_REQUESTED != '1'
-        uses: actions/github-script@v9
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -234,7 +248,7 @@ jobs:
           echo 'TRIGGER=pull_request_target'
           echo 'TRUSTED_CODE_SOURCE=BASE_SHA'
           echo 'UNTRUSTED_PR_CODE_EXECUTED=0'
-          echo 'CHECKS_PENDING_BLOCK_UPDATE_BRANCH=0'
+          echo 'CHECKS_PENDING_BLOCK_UPDATE_BRANCH=1'
           echo 'AUTO_MERGE_POLICY=PATCH_85_MINOR_95_MAJOR_NEVER'
           echo 'ZENDRIVE_ROLE=REVIEW_ONLY'
           echo 'RABBIT_ROLE=REVIEW_ONLY'
@@ -252,7 +266,7 @@ jobs:
 
     steps:
       - name: 🧮 Ler score oficial, atualizar PR e promover somente com prova
-        uses: actions/github-script@v9
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -350,13 +364,21 @@ jobs:
               else if (scoreInfo.score < threshold) blockers.push(`COMPATIBILITY_${scoreInfo.score}_LT_${threshold}`);
 
               if (pr.mergeable_state === 'behind') {
-                try {
-                  await github.request('PUT /repos/{owner}/{repo}/pulls/{pull_number}/update-branch', {
-                    owner, repo, pull_number: prNumber, expected_head_sha: pr.head.sha,
-                  });
-                  blockers.push('UPDATE_BRANCH_REQUESTED');
-                } catch (error) {
-                  if (error.status !== 422) blockers.push(`UPDATE_BRANCH_ERROR_${error.status || 'UNKNOWN'}`);
+                const aheadChecks = await github.paginate(github.rest.checks.listForRef, {
+                  owner, repo, ref: pr.head.sha, per_page: 100,
+                });
+                const aheadPending = aheadChecks.filter((c) => c.status !== 'completed');
+                if (aheadPending.length > 0) {
+                  blockers.push(`CHECKS_PENDING_BLOCK_UPDATE_${aheadPending.length}`);
+                } else {
+                  try {
+                    await github.request('PUT /repos/{owner}/{repo}/pulls/{pull_number}/update-branch', {
+                      owner, repo, pull_number: prNumber, expected_head_sha: pr.head.sha,
+                    });
+                    blockers.push('UPDATE_BRANCH_REQUESTED');
+                  } catch (error) {
+                    if (error.status !== 422) blockers.push(`UPDATE_BRANCH_ERROR_${error.status || 'UNKNOWN'}`);
+                  }
                 }
               }
 
