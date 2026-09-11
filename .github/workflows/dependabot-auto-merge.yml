@@ -134,11 +134,25 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const pull_number = context.payload.pull_request.number;
+            const expected_head_sha = context.payload.pull_request.head.sha;
+            const checks = await github.paginate(github.rest.checks.listForRef, {
+              owner, repo, ref: expected_head_sha, per_page: 100,
+            });
+            const pending = checks.filter((c) => c.status !== 'completed');
+            if (pending.length > 0) {
+              console.log(`::notice::SKIP_UPDATE_BRANCH_CHECKS_PENDING count=${pending.length} head=${expected_head_sha}`);
+              core.exportVariable('UPDATE_BRANCH_STATE', 'SKIPPED_CHECKS_PENDING');
+              core.exportVariable('MERGEABILITY_STATE', 'WAIT_CHECKS');
+              return;
+            }
             const args = {
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: context.payload.pull_request.number,
-              expected_head_sha: context.payload.pull_request.head.sha,
+              owner,
+              repo,
+              pull_number,
+              expected_head_sha,
             };
             try {
               const result = await github.request('PUT /repos/{owner}/{repo}/pulls/{pull_number}/update-branch', args);
@@ -234,7 +248,7 @@ jobs:
           echo 'TRIGGER=pull_request_target'
           echo 'TRUSTED_CODE_SOURCE=BASE_SHA'
           echo 'UNTRUSTED_PR_CODE_EXECUTED=0'
-          echo 'CHECKS_PENDING_BLOCK_UPDATE_BRANCH=0'
+          echo 'CHECKS_PENDING_BLOCK_UPDATE_BRANCH=1'
           echo 'AUTO_MERGE_POLICY=PATCH_85_MINOR_95_MAJOR_NEVER'
           echo 'ZENDRIVE_ROLE=REVIEW_ONLY'
           echo 'RABBIT_ROLE=REVIEW_ONLY'
@@ -350,13 +364,21 @@ jobs:
               else if (scoreInfo.score < threshold) blockers.push(`COMPATIBILITY_${scoreInfo.score}_LT_${threshold}`);
 
               if (pr.mergeable_state === 'behind') {
-                try {
-                  await github.request('PUT /repos/{owner}/{repo}/pulls/{pull_number}/update-branch', {
-                    owner, repo, pull_number: prNumber, expected_head_sha: pr.head.sha,
-                  });
-                  blockers.push('UPDATE_BRANCH_REQUESTED');
-                } catch (error) {
-                  if (error.status !== 422) blockers.push(`UPDATE_BRANCH_ERROR_${error.status || 'UNKNOWN'}`);
+                const aheadChecks = await github.paginate(github.rest.checks.listForRef, {
+                  owner, repo, ref: pr.head.sha, per_page: 100,
+                });
+                const aheadPending = aheadChecks.filter((c) => c.status !== 'completed');
+                if (aheadPending.length > 0) {
+                  blockers.push(`CHECKS_PENDING_BLOCK_UPDATE_${aheadPending.length}`);
+                } else {
+                  try {
+                    await github.request('PUT /repos/{owner}/{repo}/pulls/{pull_number}/update-branch', {
+                      owner, repo, pull_number: prNumber, expected_head_sha: pr.head.sha,
+                    });
+                    blockers.push('UPDATE_BRANCH_REQUESTED');
+                  } catch (error) {
+                    if (error.status !== 422) blockers.push(`UPDATE_BRANCH_ERROR_${error.status || 'UNKNOWN'}`);
+                  }
                 }
               }
 
