@@ -124,10 +124,60 @@ export async function materializeDerivedAuthorityLabel() {
   throw new Error(MATERIAL_DERIVED_AUTHORITY_BLOCK);
 }
 
-export async function main(env = process.env) {
+/**
+ * Em eventos `push` o payload nao traz pull_request/labels.
+ * Sem essa ponte, AUTHORITY_APPROVED fica false mesmo com PERMITO-SEGREDO
+ * no PR aberto — e a Porta falha em qualquer toque a area protegida.
+ * UNKNOWN != PASS; label no PR precisa ser lida, nao inventada.
+ */
+export async function associatedPullRequestForPush(env = process.env, fetchImpl = globalThis.fetch) {
+  const eventName = String(env.GITHUB_EVENT_NAME || "");
+  if (eventName !== "push") return null;
+  const repo = env.GITHUB_REPOSITORY || null;
+  const sha = env.GITHUB_SHA || null;
+  const token = env.GITHUB_TOKEN || env.GH_TOKEN || null;
+  if (!repo || !sha || !token || typeof fetchImpl !== "function") return null;
+
+  const response = await fetchImpl(
+    `https://api.github.com/repos/${repo}/commits/${encodeURIComponent(sha)}/pulls`,
+    {
+      headers: {
+        Accept: "application/vnd.github+json",
+        Authorization: `Bearer ${token}`,
+        "X-GitHub-Api-Version": "2022-11-28",
+        "User-Agent": "CentralDark-authority-approval",
+      },
+    },
+  );
+  if (!response.ok) {
+    console.log(`AUTHORITY_ASSOCIATED_PR_LOOKUP=HTTP_${response.status}`);
+    return null;
+  }
+  const pulls = await response.json();
+  if (!Array.isArray(pulls) || pulls.length === 0) {
+    console.log("AUTHORITY_ASSOCIATED_PR_LOOKUP=NONE");
+    return null;
+  }
+  const openSameRepo = pulls.find((pr) => {
+    const state = String(pr?.state || "").toLowerCase();
+    const headRepo = pr?.head?.repo?.full_name || null;
+    const baseRepo = pr?.base?.repo?.full_name || null;
+    return state === "open" && headRepo && baseRepo && headRepo === baseRepo && headRepo === repo;
+  }) || pulls.find((pr) => String(pr?.state || "").toLowerCase() === "open") || pulls[0];
+  console.log(`AUTHORITY_ASSOCIATED_PR=${openSameRepo?.number || "UNKNOWN"}`);
+  return openSameRepo;
+}
+
+export async function main(env = process.env, fetchImpl = globalThis.fetch) {
   const event = env.GITHUB_EVENT_PATH
     ? JSON.parse(await readFile(env.GITHUB_EVENT_PATH, "utf8"))
     : {};
+  if (!event.pull_request) {
+    const associated = await associatedPullRequestForPush(env, fetchImpl);
+    if (associated) {
+      event.pull_request = associated;
+    }
+  }
   const result = authorityApprovalForEvent(event, {
     trustedAuthors: env.BOT_TRUSTED_AUTHORS || "segredounlock",
     repository: env.GITHUB_REPOSITORY || null,

@@ -146,3 +146,51 @@ test("ausência de autoridade é BLOCKED, nunca PASS por silêncio", () => {
   assert.equal(result.authority, null);
   assert.equal(result.derivable, false);
 });
+
+
+import {
+  associatedPullRequestForPush,
+  main as authorityMain,
+} from "./authority-approval.mjs";
+import { mkdtemp, writeFile, readFile as readFileAsync } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+
+test("push sem pull_request no payload resolve label via PR associado", async () => {
+  const fetchImpl = async () => ({
+    ok: true,
+    status: 200,
+    async json() {
+      return [{
+        number: 1497,
+        state: "open",
+        labels: [{ name: CANONICAL_AUTHORITY_LABEL }],
+        head: { repo: { full_name: REPO }, sha: "abc" },
+        base: { repo: { full_name: REPO }, sha: "def" },
+        user: { login: "segredounlock" },
+        body: "",
+      }];
+    },
+  });
+  const dir = await mkdtemp(join(tmpdir(), "authority-"));
+  const eventPath = join(dir, "event.json");
+  const outPath = join(dir, "out.txt");
+  await writeFile(eventPath, JSON.stringify({ ref: "refs/heads/fix/x" }), "utf8");
+  const result = await authorityMain({
+    GITHUB_EVENT_PATH: eventPath,
+    GITHUB_OUTPUT: outPath,
+    GITHUB_EVENT_NAME: "push",
+    GITHUB_SHA: "abc",
+    GITHUB_REPOSITORY: REPO,
+    GITHUB_TOKEN: "test-token",
+  }, fetchImpl);
+  assert.equal(result.approved, true);
+  assert.equal(result.viaLabel, true);
+  const out = await readFileAsync(outPath, "utf8");
+  assert.match(out, /approved=true/);
+});
+
+test("associatedPullRequestForPush ignora eventos que nao sao push", async () => {
+  const pr = await associatedPullRequestForPush({ GITHUB_EVENT_NAME: "pull_request" });
+  assert.equal(pr, null);
+});
