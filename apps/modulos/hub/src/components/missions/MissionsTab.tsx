@@ -4,6 +4,7 @@ import { RoleGuard } from '@/components/shared/RoleGuard';
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Badge } from '@/shared/ui/badge';
+import { formatBrasilia } from '@/lib/datetime';
 
 const stateColor: Record<string, string> = {
   queued: 'bg-zinc-500/10 text-zinc-300 border border-zinc-500/30',
@@ -60,7 +61,7 @@ export function MissionsTab() {
                 {m.target && <div>Alvo: <span className="text-foreground">{m.target}</span></div>}
                 {m.branch_sha && <div>SHA: <span className="font-mono text-foreground">{m.branch_sha.slice(0, 12)}</span></div>}
                 {m.rollback && <div>Rollback: <span className="text-foreground">{m.rollback}</span></div>}
-                <div>Criado: {new Date(m.created_at).toLocaleString('pt-BR')}</div>
+                <div>Criado: {formatBrasilia(m.created_at)}</div>
               </CardContent>
             </Card>
           ))}
