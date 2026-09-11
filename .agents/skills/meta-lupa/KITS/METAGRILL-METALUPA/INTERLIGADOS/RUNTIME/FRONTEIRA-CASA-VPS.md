@@ -44,7 +44,10 @@
 ```text
 🧬 PR1482_UNIVERSAL_EXECUTION_SAME_HEAD         → REMEASURE_REQUIRED
 🧬 PR1483_GLOBAL_CONTINUITY_SAME_HEAD            → REMEASURE_REQUIRED
+🧪 PR1492_GATE_FIX_SAME_HEAD_CI                  → REMEASURE_REQUIRED
 ```
+
+`PR1492_GATE_FIX_SAME_HEAD_CI` é prova GitHub/CI, não prova Casa/VPS. Ela permanece nesta fronteira apenas para impedir que padrão semântico seja confundido com implementação aprovada.
 
 ## 💠 FECHAMENTO GLOBAL
 
