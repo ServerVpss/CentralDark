@@ -107,7 +107,8 @@ export function evaluateHornGoal({ facts = [], rules = [], goal } = {}) {
     return Object.freeze({
       state: 'CONTRADICTION',
       proven: false,
-      false_proven: true,
+      false_proven: false,
+      theory_contradiction: true,
       goal: normalizedGoal,
       closure,
     });
@@ -118,6 +119,7 @@ export function evaluateHornGoal({ facts = [], rules = [], goal } = {}) {
       state: 'PROVEN',
       proven: true,
       false_proven: false,
+      theory_contradiction: false,
       goal: normalizedGoal,
       closure,
     });
@@ -127,6 +129,7 @@ export function evaluateHornGoal({ facts = [], rules = [], goal } = {}) {
     state: 'UNKNOWN',
     proven: false,
     false_proven: false,
+    theory_contradiction: false,
     goal: normalizedGoal,
     closure,
   });
