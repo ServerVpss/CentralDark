@@ -1,5 +1,7 @@
 import fs from "node:fs";
+import os from "node:os";
 import path from "node:path";
+import { randomUUID } from "node:crypto";
 import winston from "winston";
 import DailyRotateFile from "winston-daily-rotate-file";
 // MOTIVO  > este caminho hardcoded criou uma pasta paralela de logs
@@ -25,6 +27,8 @@ const GITHUB_TOKEN_RE = /\b(?:gh[pousr]_[A-Za-z0-9_]{30,}|github_pat_[A-Za-z0-9_
 const JWT_RE = /\beyJ[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\b/g;
 const OPENAI_KEY_RE = /\bsk-[A-Za-z0-9_-]{20,}\b/g;
 const EMAIL_RE = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/g;
+const AUDIT_SCHEMA = "centraldark.mcp.tool-call.v1";
+const auditSubscribers = new Set();
 function ensureLogDir() {
     fs.mkdirSync(LOG_DIR, { recursive: true, mode: 0o700 });
     try {
@@ -163,6 +167,56 @@ const auditLogger = winston.createLogger({
 });
 appLogger.on("error", () => { });
 auditLogger.on("error", () => { });
+
+export function buildAuditEnvelope(entry = {}) {
+    const endedAtMs = Date.now();
+    const durationMs = Number.isFinite(Number(entry.durationMs))
+        ? Math.max(0, Number(entry.durationMs))
+        : null;
+    const safe = sanitizeValue(entry);
+    const source = safe && typeof safe === "object" && !Array.isArray(safe) ? safe : {};
+    const callId = typeof source.call_id === "string" && source.call_id
+        ? source.call_id
+        : (typeof source.callId === "string" && source.callId ? source.callId : randomUUID());
+    const ok = source.ok === true;
+    return {
+        schema: AUDIT_SCHEMA,
+        call_id: callId,
+        mission_id: source.mission_id ?? source.missionId ?? null,
+        correlation_id: source.correlation_id ?? source.correlationId ?? source.cid ?? null,
+        request_id: source.request_id ?? source.requestId ?? null,
+        trace_id: source.trace_id ?? source.traceId ?? null,
+        span_id: source.span_id ?? source.spanId ?? null,
+        parent_span_id: source.parent_span_id ?? source.parentSpanId ?? null,
+        actor: source.actor ?? source.callerUser ?? null,
+        channel: source.channel ?? null,
+        phase: source.phase ?? "execution",
+        method: source.method ?? "unknown",
+        toolName: source.toolName ?? "unknown",
+        policy: source.policy ?? null,
+        gate: source.gate ?? { status: "UNOBSERVED" },
+        pid: process.pid,
+        ppid: process.ppid ?? null,
+        host: os.hostname(),
+        started_at: durationMs === null ? null : new Date(endedAtMs - durationMs).toISOString(),
+        ended_at: new Date(endedAtMs).toISOString(),
+        durationMs,
+        exitCode: source.exitCode ?? null,
+        ok,
+        status: ok ? "PASS" : "FAIL",
+        input: source.input ?? null,
+        result: source.result ?? null,
+        error: source.error ?? null,
+    };
+}
+
+export function subscribeAuditEvents(listener) {
+    if (typeof listener !== "function")
+        throw new TypeError("audit subscriber must be a function");
+    auditSubscribers.add(listener);
+    return () => auditSubscribers.delete(listener);
+}
+
 export function logApp(level, event, meta) {
     try {
         appLogger.log({ level, message: event, ...(meta ?? {}) });
@@ -173,13 +227,23 @@ export function logApp(level, event, meta) {
     }
 }
 export function auditToolExecution(entry) {
+    const envelope = buildAuditEnvelope(entry);
     try {
-        auditLogger.info("mcp_tool_execution", entry);
+        auditLogger.info("mcp_tool_execution", envelope);
         secureExistingLogs();
     }
     catch {
         /* logging must never break MCP protocol */
     }
+    for (const listener of auditSubscribers) {
+        try {
+            listener(envelope);
+        }
+        catch {
+            /* observer failure must not break MCP request flow */
+        }
+    }
+    return envelope;
 }
 export function sanitizeForLog(value) {
     return sanitizeValue(value);
