@@ -64,7 +64,7 @@ probe_rate_limit() {
   local core_rem
   core_rem="$(awk 'found{print} /^[[:space:]]*$/{found=1}' "$hdr" | jq -r '.resources.core.remaining // empty' 2>/dev/null || true)"
   if [ -n "$core_rem" ]; then remaining="$core_rem"; fi
-  echo "RATE remaining=${remaining:-UNKNOWN} reset=${reset:-UNKNOWN} retry_after=${retry:--} http=${http:--} rc=$rc"
+  echo "RATE remaining=${remaining:-UNKNOWN} reset=${reset:-UNKNOWN} retry_after=${retry:--} http=${http:--} rc=$rc" >&2
   rm -f "$hdr"
   if [ "$rc" -ne 0 ] && { [ "${http:-}" = "403" ] || [ "${http:-}" = "429" ]; }; then
     echo deferred
@@ -265,7 +265,6 @@ for row in "${PRS2[@]:-}"; do
   mapfile -t RUNS < <(
     {
       gh run list --repo "$REPO" --commit "$SHA" --status failure -L "$MAX_RERUNS_PER_BRANCH" --json databaseId --jq '.[].databaseId' 2>/dev/null || true
-      gh run list --repo "$REPO" --commit "$SHA" --status cancelled -L "$MAX_RERUNS_PER_BRANCH" --json databaseId --jq '.[].databaseId' 2>/dev/null || true
     } | awk 'NF' | sort -u | head -n "$MAX_RERUNS_PER_BRANCH"
   )
 
@@ -279,6 +278,12 @@ for row in "${PRS2[@]:-}"; do
     RUN_SHA="$(gh api "repos/$REPO/actions/runs/$RID" --jq .head_sha 2>/dev/null || echo '')"
     if [ "$RUN_SHA" != "$SHA" ]; then
       echo "RERUN_SKIP_OLD_SHA run=$RID run_sha=${RUN_SHA:0:10} want=${SHA:0:10}"
+      RERUN_SKIP=$((RERUN_SKIP + 1))
+      continue
+    fi
+    RUN_ATTEMPT="$(gh api "repos/$REPO/actions/runs/$RID" --jq .run_attempt 2>/dev/null || echo '')"
+    if [ "${RUN_ATTEMPT:-}" != "1" ]; then
+      echo "RERUN_SKIP_ALREADY_RETRIED run=$RID attempt=${RUN_ATTEMPT:-UNKNOWN}"
       RERUN_SKIP=$((RERUN_SKIP + 1))
       continue
     fi
