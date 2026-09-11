@@ -68,12 +68,12 @@ jobs:
 
       - name: 🔎 Coletar metadados do Dependabot
         id: meta
-        uses: dependabot/fetch-metadata@v3
+        uses: dependabot/fetch-metadata@25dd0e34f4fe68f24cc83900b1fe3fe149efef98 # v3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 🇧🇷 Padronizar título em PT-BR com selo semântico
-        uses: actions/github-script@v9
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         env:
           DEPENDENCY_NAMES: ${{ steps.meta.outputs.dependency-names }}
           UPDATE_TYPE: ${{ steps.meta.outputs.update-type }}
@@ -130,7 +130,7 @@ jobs:
 
       - name: 🔄 Tentar Update branch antes de julgar conflito
         id: update_branch
-        uses: actions/github-script@v9
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -170,7 +170,7 @@ jobs:
 
       - name: 🧭 Remedir mergeabilidade quando Update branch não criou novo HEAD
         if: env.UPDATE_BRANCH_STATE != 'REQUESTED' && env.RESOLVE_REQUESTED != '1'
-        uses: actions/github-script@v9
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -252,7 +252,7 @@ jobs:
 
     steps:
       - name: 🧮 Ler score oficial, atualizar PR e promover somente com prova
-        uses: actions/github-script@v9
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
