@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
 import { Globe, Shield, RefreshCw } from 'lucide-react';
+import { formatBrasilia } from '@/lib/datetime';
 
 interface Connector {
   id: string;
@@ -35,7 +36,7 @@ export function GatewayCard({ connector }: GatewayCardProps) {
             <Shield className="mr-1 h-3 w-3" /> {connector.type}
           </div>
           <div className="text-xs text-muted-foreground">
-            Último ping: {new Date(connector.lastPing).toLocaleString('pt-BR')}
+            Último ping: {formatBrasilia(connector.lastPing)}
           </div>
           <Button variant="outline" size="sm" className="mt-2 w-full">
             <RefreshCw className="mr-2 h-3 w-3" /> Testar Latência
