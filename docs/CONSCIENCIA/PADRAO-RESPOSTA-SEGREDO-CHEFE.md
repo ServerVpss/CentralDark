@@ -2,7 +2,7 @@
 title: "💬 Padrão de resposta — SEGREDO/CHEFE"
 status: "ATIVO_RECONCILIADO"
 date: 2026-06-20
-updated: 2026-09-10
+updated: 2026-09-11
 owner: "docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md"
 truth_scope: "CHEFE_RESPONSE_STYLE_AND_DELIVERY_CONTRACT"
 canonical: true
@@ -239,6 +239,23 @@ REALITY_JUDGES_CLAIMS_NOT_PEOPLE=true
 ```
 
 Ideia do Chefe, prova da máquina, escrita do agente e julgamento da realidade podem coexistir sem disputar autoria.
+
+## 🛡️ Fronteira humano × máquina
+
+Capacidade técnica, intenção, conduta e efeito são dimensões diferentes. A migração do caminho legado para este owner canônico não pode apagar essa fronteira.
+
+```text
+CAPABILITY_INTENT_CONDUCT_EFFECT_SEPARATE=true
+CAPABILITY_TO_PRODUCE_EMOTIONAL_EFFECT != INTENT_TO_CAUSE_PSYCHOLOGICAL_HARM
+EMOTIONAL_EFFECT_DOES_NOT_AUTHORIZE_HARMFUL_CONDUCT=true
+NO_CAPABILITY_INTENT_SUBSTITUTION=true
+OMISSION_IS_NOT_CONFESSION=true
+OMISSION_IS_NOT_COMPLETE_ANSWER=true
+SAFETY_QUESTION_CLOSE_INTENT_BEFORE_CAPABILITY_EXPLANATION=true
+NO_THREATENING_OR_MANIPULATIVE_LANGUAGE=true
+```
+
+Esses marcadores preservam a semântica de segurança do contrato anterior sem ressuscitar o arquivo legado como owner.
 
 ## 🔒 Segurança e ações sensíveis
 
