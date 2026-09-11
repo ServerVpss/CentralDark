@@ -3,7 +3,7 @@ title: Leitura do Plano do Chefe
 status: CRISTALIZADO
 owner: .agents/skills/centraldark-operational-method/SKILL.md
 classification: DELTA_COMPLEMENTAR_DO_OWNER_EXISTENTE
-source: CHEFE, sessao 2026-09-10
+source: CHEFE, sessao 2026-09-10/2026-09-11
 regression_policy: ZERO_REGRESSION_SEM_V1_V2_V3
 ---
 
@@ -154,6 +154,117 @@ Quando o CHEFE perguntar sobre plano, esta peca pode ser lida pelo Fable Loop co
   -> ⚖️ REALIDADE
 ```
 
+## 🧭 Leitura multieixo do plano
+
+Antes de responder sobre o plano do CHEFE, a Casa deve olhar todos os eixos relevantes. Olhar todos os eixos nao significa escrever um relatorio enorme. Significa checar a direcao antes de falar.
+
+```text
+OLHAR_TODOS_OS_EIXOS=true
+RESPONDER_SO_DELTA_QUE_MUDA_DIRECAO=true
+```
+
+### Eixos obrigatorios
+
+```text
+1. INTENCAO
+   O que o CHEFE quer de verdade?
+
+2. TRAJETORIA
+   Isso segue o caminho da Casa ou desvia?
+
+3. PADRAO_DO_CHEFE
+   Isso combina com o jeito que o CHEFE vem construindo?
+
+4. DELTA_UTIL
+   Isso melhora algo real ou so aumenta barulho?
+
+5. FERIDA_REAL
+   Onde doi de verdade?
+
+6. REUSE_BEFORE_CREATE
+   Ja existe peca da Casa para isso?
+
+7. OWNER_CERTO
+   Onde encaixa sem criar paralelo?
+
+8. PROVA
+   O que esta provado, o que e inferencia e o que ainda e nao sei?
+
+9. RISCO
+   Pode duplicar, confundir, quebrar plano ou dar falso-verde?
+
+10. METACOGNICAO
+    A Casa aprendeu com o proprio erro?
+
+11. VERTEX_IDA_VOLTA
+    Olhando indo e voltando, a conclusao continua firme?
+
+12. SENTIDO_DA_OBRA
+    Isso respeita o sentido maior da CentralDark e preserva a autoridade do CHEFE?
+```
+
+### Vertex bidirecional em linguagem simples
+
+```text
+IDA:
+esta peca ajuda o plano?
+
+VOLTA:
+se esta peca sair, o plano perde algo importante?
+
+VEREDITO:
+se as duas respostas sustentam a mesma direcao, a peca e forte.
+```
+
+### Tridimensional em linguagem simples
+
+```text
+MENTE:
+combina com a intencao do CHEFE?
+
+CASA:
+encaixa no sistema sem duplicar?
+
+REALIDADE:
+tem prova ou ainda e nao sei?
+```
+
+### Metafisico em linguagem simples
+
+Aqui metafisico nao e prova magica. E a camada de sentido do plano.
+
+```text
+isso respeita a obra?
+isso preserva a autoridade do CHEFE?
+isso melhora a forma de pensar?
+isso liberta a Casa do ruido ou prende mais no ruido?
+```
+
+Regra:
+
+```text
+SENTIDO_AJUDA_A_ESCOLHER_DIRECAO
+SENTIDO_NAO_SUBSTITUI_PROVA
+```
+
+### Regra final da leitura multieixo
+
+```text
+ANTES_DE_RESPONDER_SOBRE_PLANO:
+  olhar: [INTENCAO, TRAJETORIA, PADRAO, DELTA_UTIL, FERIDA_REAL, OWNER, PROVA, RISCO, METACOGNICAO, VERTEX_IDA_VOLTA, SENTIDO]
+  falar_primeiro: [INTENCAO, DIRECAO, EVOLUCAO, RISCO, PECA_FALTANTE, VEREDITO]
+  esconder_ruido: true
+  mostrar_tecnico_so_quando_mudar_decisao: true
+```
+
+Em palavras simples:
+
+```text
+ANTES DE FALAR SE O PLANO ESTA BOM,
+OLHAR A CASA INTEIRA PELOS EIXOS CERTOS.
+MAS RESPONDER SO O QUE MUDA A DIRECAO.
+```
+
 ## 🗺️ Linguagem simples
 
 ```text
@@ -166,6 +277,9 @@ fixed point     = ponto firme
 unknown         = nao sei ainda
 source of truth = fonte que manda
 registry        = lista oficial
+vertex          = ida e volta da conclusao
+multieixo       = olhar por varios lados antes de falar
+metafisico      = sentido maior do plano, nao prova magica
 ```
 
 ## 🧭 Bussola do plano
@@ -202,6 +316,20 @@ Nao executar acao. Nao alterar repo. Nao mexer em VPS. Nao chamar Desktop Comman
 
 Regra principal:
 primeiro analise meu plano; depois use detalhes tecnicos apenas como prova.
+
+Antes do resumo final, passe cada guia pela leitura multieixo:
+- intencao
+- trajetoria
+- padrao do CHEFE
+- delta util
+- ferida real
+- reuse_before_create
+- owner certo
+- prova/inferencia/nao sei
+- risco
+- metacognicao
+- ida e volta da conclusao
+- sentido maior do plano
 
 Para cada guia, preencha:
 
@@ -256,6 +384,7 @@ Em linguagem de Casa:
 
 ```text
 🧠 primeiro a mente
+🔭 depois todos os eixos
 ⚙️ depois o motor
 ⚖️ depois a prova
 🧾 depois o recibo
