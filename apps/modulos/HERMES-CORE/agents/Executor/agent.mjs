@@ -176,7 +176,7 @@ async function _executar(ferramenta, args) {
             '-lc',
             `cd ${ROOT} && bash scripts/lupa/writer-safe-push-main.sh`,
           ], { env, timeout: 180_000 });
-          if (!/PUSH_OK.*remote=[0-9a-f]{12}/.test(stdout)) {
+          if (!/REMOTE_HEAD_VERIFIED=[0-9a-f]{40}/.test(stdout)) {
             return { ok: false, saida: `PUBLISH_BLOCKED_REMOTE_READBACK_MISSING\n${stdout.slice(0, 4000)}` };
           }
           return { ok: true, saida: stdout.slice(0, 4000) };
