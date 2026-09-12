@@ -12,9 +12,9 @@
  * PADRAO_OPERACIONAL (todos os PRs elegíveis, não só um):
  * 🟡 IA-PRECISA-REVISAR + selo acima.
  *
- * Nome de modelo/agente é proveniência operacional derivada do Writer
- * quando determinística. Isso não concede autoridade nem capacidade presumida:
- * só prende o selo ao agente canônico que assumiu o PR elegível.
+ * Nome de modelo/agente é proveniência opcional, nunca requisito, autoridade,
+ * capacidade presumida ou gate de promoção. Capacidade nasce do escopo e das
+ * labels funcionais 🤖 IA-* quando aplicáveis.
  *
  * O selo organiza/rastreia; não substitui gates, segurança nem prova.
  * ✅ PR CONFIRMADO e 🟢 SUCESSO são RESULTADO (pós-merge), nunca input.
@@ -43,9 +43,8 @@ export const OPERATIONAL_BASELINE_LABELS = Object.freeze([
   CANONICAL_REVIEW_LABEL,
 ]);
 /**
- * Compatibilidade de proveniência histórica. Quando o Writer é reconhecido,
- * a label canônica derivada entra no selo operacional para todos os PRs
- * elegíveis; a label continua sem conceder autoridade por si só.
+ * Compatibilidade de proveniência histórica. Estas labels podem existir para
+ * auditoria/linhagem, mas jamais entram no conjunto obrigatório da promoção.
  */
 export const WRITER_AGENT_LABELS = Object.freeze({
   grok: "🧠 AGENTE-GROK",
@@ -116,12 +115,10 @@ export function agentLabelsFromWriter(writer) {
  * Writer continua obrigatório para lease/proveniência do recibo, mas o nome
  * do executor não altera requisitos de promoção.
  */
-export function requiredOperationalLabels(pr) {
-  const receipt = promotionSealReceipt(pr);
+export function requiredOperationalLabels(_pr) {
   return [...new Set([
     ...REQUIRED_PROMOTION_SEAL_LABELS,
     ...OPERATIONAL_BASELINE_LABELS,
-    ...agentLabelsFromWriter(receipt.writer),
   ])];
 }
 

@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-07-05T22:40:01.899Z",
+  "atualizadoEm": "2026-09-12T02:50:02.195Z",
   "slots": {},
   "timeouts": {
     "router_s": 30,
@@ -8,80 +8,90 @@
   },
   "stats": {
     "totalDebates": 8,
-    "totalEvolucoes": 6
+    "totalEvolucoes": 8
   },
   "ultimosDebates": [
     {
-      "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-03T05-24-43-958Z-router-webui-diga-oi-em-uma-frase-curta.md",
-      "quando": "2026-07-03T09:58:32.584Z",
-      "preview": "--- · title: \"2026 07 03T05 24 43 958Z Router Webui Diga Oi Em Uma Frase Curta\" · date: 2026-07-03"
+      "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-08-04T18-48-55-971Z-router-webui-oi.md",
+      "quando": "2026-08-28T10:53:57.513Z",
+      "preview": "--- · title: \"2026 08 04T18 48 55 971Z Router Webui Oi\" · date: 2026-08-26"
     },
     {
-      "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-03T05-24-52-999Z-router-webui-diga-oi-em-uma-frase-curta.md",
-      "quando": "2026-07-03T09:58:32.584Z",
-      "preview": "--- · title: \"2026 07 03T05 24 52 999Z Router Webui Diga Oi Em Uma Frase Curta\" · date: 2026-07-03"
+      "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-08-04T18-49-47-920Z-router-webui-oi.md",
+      "quando": "2026-08-28T10:53:57.513Z",
+      "preview": "--- · title: \"2026 08 04T18 49 47 920Z Router Webui Oi\" · date: 2026-08-26"
     },
     {
-      "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-03T03-10-03-652Z-router-webui-responda-em-uma-linha-arsenal-funcionando-via-lova.md",
-      "quando": "2026-07-03T08:33:15.627Z",
-      "preview": "--- · title: \"2026 07 03T03 10 03 652Z Router Webui Responda Em Uma Linha Arsenal Funcionando Via Lova\" · date: 2026-07-03"
+      "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-08-04T18-49-52-260Z-router-webui-oi.md",
+      "quando": "2026-08-28T10:53:57.513Z",
+      "preview": "--- · title: \"2026 08 04T18 49 52 260Z Router Webui Oi\" · date: 2026-08-26"
     },
     {
-      "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-03T03-10-41-847Z-parallel-webui-em-uma-frase-qual-a-melhor-forma-de-organizar-arqu.md",
-      "quando": "2026-07-03T08:33:15.627Z",
-      "preview": "--- · title: \"2026 07 03T03 10 41 847Z Parallel Webui Em Uma Frase Qual A Melhor Forma De Organizar Arqu\" · date: 2026-07-03"
+      "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-08-04T18-49-54-457Z-parallel-webui-oi.md",
+      "quando": "2026-08-28T10:53:57.513Z",
+      "preview": "--- · title: \"2026 08 04T18 49 54 457Z Parallel Webui Oi\" · date: 2026-08-26"
     },
     {
-      "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-03T03-32-16-554Z-router-webui-teste-ao-vivo-do-webui-diga-oi-curto-no-grupo-1-fr.md",
-      "quando": "2026-07-03T08:33:15.627Z",
-      "preview": "--- · title: \"2026 07 03T03 32 16 554Z Router Webui Teste Ao Vivo Do Webui Diga Oi Curto No Grupo 1 Fr\" · date: 2026-07-03"
+      "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-08-04T18-49-56-730Z-router-webui-oi.md",
+      "quando": "2026-08-28T10:53:57.513Z",
+      "preview": "--- · title: \"2026 08 04T18 49 56 730Z Router Webui Oi\" · date: 2026-08-26"
     },
     {
-      "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-02-2304-em-1-frase-qual-sua-fun-o.md",
-      "quando": "2026-07-03T05:29:01.958Z",
-      "preview": "--- · title: \"2026 07 02 2304 Em 1 Frase Qual Sua Fun O\" · date: 2026-07-03"
+      "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-08-04T18-50-02-556Z-parallel-webui-oi.md",
+      "quando": "2026-08-28T10:53:57.513Z",
+      "preview": "--- · title: \"2026 08 04T18 50 02 556Z Parallel Webui Oi\" · date: 2026-08-26"
     },
     {
-      "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-02-232402-router-diga-s-ok.md",
-      "quando": "2026-07-03T05:29:01.958Z",
-      "preview": "--- · title: \"2026 07 02 232402 Router Diga S Ok\" · date: 2026-07-03"
+      "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-08-04T18-50-07-049Z-router-webui-oi.md",
+      "quando": "2026-08-28T10:53:57.513Z",
+      "preview": "--- · title: \"2026 08 04T18 50 07 049Z Router Webui Oi\" · date: 2026-08-26"
     },
     {
-      "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-02-233739-debate-como-resolver-a-pend-ncia-centraldark-14-n-cleo-vi.md",
-      "quando": "2026-07-03T05:29:01.958Z",
-      "preview": "--- · title: \"2026 07 02 233739 Debate Como Resolver A Pend Ncia Centraldark 14 N Cleo Vi\" · date: 2026-07-03"
+      "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-08-04T18-50-08-801Z-parallel-webui-oi.md",
+      "quando": "2026-08-28T10:53:57.513Z",
+      "preview": "--- · title: \"2026 08 04T18 50 08 801Z Parallel Webui Oi\" · date: 2026-08-26"
     }
   ],
   "ultimasEvolucoes": [
     {
-      "arquivo": "docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-07-03/aula-grafo-vivo.md",
-      "quando": "2026-07-05T18:29:02.964Z",
-      "preview": "--- · title: \"Aula Grafo Vivo\" · date: 2026-07-05"
+      "arquivo": "docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-07-29/2026-07-29T09-59-03-710Z-hermes-webui-responda-ok.md",
+      "quando": "2026-08-28T10:53:57.513Z",
+      "preview": "--- · title: \"2026 07 29T09 59 03 710Z Hermes Webui Responda Ok\" · date: 2026-08-26"
     },
     {
-      "arquivo": "docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-07-03/aulas-avancadas-gateway.md",
-      "quando": "2026-07-05T18:29:02.964Z",
-      "preview": "--- · title: \"Aulas Avancadas Gateway\" · date: 2026-07-05"
+      "arquivo": "docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-08-04/2026-08-04T18-50-40-644Z-hermes-webui-oi.md",
+      "quando": "2026-08-28T10:53:57.513Z",
+      "preview": "--- · title: \"2026 08 04T18 50 40 644Z Hermes Webui Oi\" · date: 2026-08-26"
+    },
+    {
+      "arquivo": "docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-07-02/hermes--14-n-cleo-vivo-de-ensinamentos-p-s-hub.md",
+      "quando": "2026-08-26T01:15:10.578Z",
+      "preview": "--- · title: \"Hermes  14 N Cleo Vivo De Ensinamentos P S Hub\" · date: 2026-07-03"
     },
     {
       "arquivo": "docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-07-03/aula-elite-gateway.md",
-      "quando": "2026-07-05T18:29:02.956Z",
+      "quando": "2026-08-26T01:15:10.578Z",
       "preview": "--- · title: \"Aula Elite Gateway\" · date: 2026-07-05"
     },
     {
+      "arquivo": "docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-07-03/aula-grafo-vivo.md",
+      "quando": "2026-08-26T01:15:10.578Z",
+      "preview": "--- · title: \"Aula Grafo Vivo\" · date: 2026-07-05"
+    },
+    {
       "arquivo": "docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-07-03/aula-tutor-hermes-2.md",
-      "quando": "2026-07-03T17:30:57.609Z",
+      "quando": "2026-08-26T01:15:10.578Z",
       "preview": "--- · title: \"Aula Tutor Hermes 2\" · date: 2026-07-03"
     },
     {
       "arquivo": "docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-07-03/aula-tutor-hermes.md",
-      "quando": "2026-07-03T17:30:57.609Z",
+      "quando": "2026-08-26T01:15:10.578Z",
       "preview": "--- · title: \"Aula Tutor Hermes\" · date: 2026-07-03"
     },
     {
-      "arquivo": "docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-07-02/hermes--14-n-cleo-vivo-de-ensinamentos-p-s-hub.md",
-      "quando": "2026-07-03T05:29:01.958Z",
-      "preview": "--- · title: \"Hermes  14 N Cleo Vivo De Ensinamentos P S Hub\" · date: 2026-07-03"
+      "arquivo": "docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-07-03/aulas-avancadas-gateway.md",
+      "quando": "2026-08-26T01:15:10.578Z",
+      "preview": "--- · title: \"Aulas Avancadas Gateway\" · date: 2026-07-05"
     }
   ]
 }

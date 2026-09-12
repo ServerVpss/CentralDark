@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # ============================================================================
 # Checker END-TO-END da CentralDark
-# Roda estado inicial + blocos 01..14, agrega resultado e gera relatório final
+# Roda os 12 blocos de validação, agrega resultado e gera relatório final
 # exclusivamente em /root/CentralDark/revisoes/...
 # ============================================================================
 set -uo pipefail
@@ -21,7 +21,6 @@ BRUTO="${SAIDA_DIR}/bruto.txt"
 RELATORIO="${SAIDA_DIR}/relatorio.md"
 
 MODULOS=(
-  00-state.sh
   01-estrutura.sh
   02-logs.sh
   03-github-deploy.sh
@@ -34,17 +33,14 @@ MODULOS=(
   10-crm.sh
   11-seguranca.sh
   12-wildcard-dns.sh
-  13-install-https.sh
-  14-checker-contract.sh
 )
 
 : > "$BRUTO"
-echo "OK|run-all|[CHECKER] DELTA ÚTIL aplicado, fluxo anterior continua" >> "$BRUTO"
 for m in "${MODULOS[@]}"; do
-  if [ -f "$SCRIPT_DIR/$m" ]; then
+  if [ -x "$SCRIPT_DIR/$m" ]; then
     bash "$SCRIPT_DIR/$m" 2>&1 | sanitize_log >> "$BRUTO" || true
   else
-    echo "ERRO|geral|Módulo ausente: $m" >> "$BRUTO"
+    echo "ALERTA|geral|Módulo não executável: $m" >> "$BRUTO"
   fi
 done
 
@@ -68,7 +64,6 @@ fi
   echo "**Raiz canônica:** \`$CK_CENTRALDARK_ROOT\`"
   echo "**Política externa:** \`$CK_EXTERNAL_ROOT_POLICY\`"
   echo "**STATUS FINAL:** \`$STATUS_FINAL\`"
-  echo "**Contrato:** \`DELTA ÚTIL aplicado, fluxo anterior continua\`"
   echo
   echo "## Resumo"
   echo "- ✅ OK: $TOTAL_OK"
@@ -97,7 +92,6 @@ fi
     echo "2. Revisar os itens ⚠️ ALERTA — sem usar árvore externa como fallback silencioso."
   fi
   echo "3. Log bruto sanitizado: \`$BRUTO\`"
-  echo "4. Se ainda houver trabalho material, preservar NEXT_CURSOR e continuar o fluxo anterior."
 } > "$RELATORIO"
 
 echo

@@ -343,51 +343,15 @@ check('docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-pombo-correio-com-checksum.md',[
 workflow_dir=ROOT/'.github'/'workflows'
 forbidden_runner_labels=('ubuntu-latest','windows-latest','macos-latest')
 # Exceções legítimas à GLOBAL_RUNNER_POLICY (self-hosted-only):
-# workflows manuais de recovery/diagnóstico podem usar hosted quando não rodam
-# em pull_request/push/schedule e carregam segredo/SSH. Isso evita expor chaves
-# no runner persistente sem liberar CI automático ou auto-merge hosted.
+# estes dois são workflow_dispatch manuais R4 que PRECISAM de runner hosted
+# por desenho — não são CI automático. vps-wake-hosted-ssh acorda o próprio
+# runner self-hosted quando ele cai (self-hosted não acorda a si mesmo);
+# vps-reboot-forensic precisa de saída pra API Contabo/Cloudflare. Autorizado
+# por PERMITO-SEGREDO no cabeçalho de cada arquivo. Isentar, não remover.
 runner_policy_exempt=frozenset({
     '.github/workflows/vps-reboot-forensic.yml',
     '.github/workflows/vps-wake-hosted-ssh.yml',
 })
-
-def workflow_dispatch_only(text):
-    has_manual = re.search(r'(?mi)^\s*workflow_dispatch\s*:', text)
-    has_automatic = re.search(r'(?mi)^\s*(pull_request|pull_request_target|push|schedule)\s*:', text)
-    return bool(has_manual and not has_automatic)
-
-def hosted_diagnostic_allowed(rel, text):
-    if rel in runner_policy_exempt:
-        return True
-    touches_secret_or_ssh = re.search(r'(?i)\b(secrets\.|ssh\b|ssh-agent|ssh-keyscan|ssh-add)\b', text)
-    return bool(workflow_dispatch_only(text) and touches_secret_or_ssh)
-
-def job_block_for_runner(text, match_start):
-    starts = [m for m in re.finditer(r'(?m)^  [A-Za-z0-9_-]+:\s*$', text)]
-    start = 0
-    end = len(text)
-    for idx, marker in enumerate(starts):
-        if marker.start() <= match_start:
-            start = marker.start()
-            if idx + 1 < len(starts):
-                end = starts[idx + 1].start()
-            else:
-                end = len(text)
-    return text[start:end]
-
-
-def hosted_control_plane_allowed(rel, text, match_start):
-    if rel != '.github/workflows/dependabot-auto-merge.yml':
-        return False
-    block = job_block_for_runner(text, match_start)
-    if 'uses: actions/github-script' not in block:
-        return False
-    if 'uses: actions/checkout' in block:
-        return False
-    if re.search(r'(?mi)^\s*run\s*:', block):
-        return False
-    return True
-
 
 # Isenção temporária para branches com falha herdada da base (R2)
 # PR #1418: absorcao/pombo-r02-lineage-20260905 - delta Pombo r02, falha herdada do main
@@ -400,13 +364,11 @@ if workflow_dir.exists():
     workflow_files=sorted([*workflow_dir.glob('*.yml'),*workflow_dir.glob('*.yaml')])
     for wf in workflow_files:
         rel=str(wf.relative_to(ROOT)).replace('\\','/')
-        text=wf.read_text(encoding='utf-8',errors='replace')
-        if hosted_diagnostic_allowed(rel, text):
+        if rel in runner_policy_exempt:
             continue
+        text=wf.read_text(encoding='utf-8',errors='replace')
         for label in forbidden_runner_labels:
-            for match in re.finditer(r'(?mi)^\s*runs-on\s*:\s*[^#\n]*\b'+re.escape(label)+r'\b', text):
-                if hosted_control_plane_allowed(rel, text, match.start()):
-                    continue
+            if re.search(r'(?mi)^\s*runs-on\s*:\s*[^#\n]*\b'+re.escape(label)+r'\b', text):
                 runner_violations.append({'path':rel,'label':label})
 checks.append({
     'path':'.github/workflows/*.{yml,yaml}',

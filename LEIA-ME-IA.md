@@ -691,20 +691,4 @@ FLUXO FUNCIONAL → 🔴 DESVIO → ↩️ 1 CASA ATRÁS → MESMO OWNER
 → CORREÇÃO → TESTE → CONTRAPROVA → RETOMA → T1
 ```
 
-## Owners canônicos alcançáveis
-
-A porta de entrada aponta explicitamente para os owners canônicos ativos, preservando o caminho de leitura e impedindo órfãos sem criar cópia paralela:
-
-- [Material Ingest](docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MATERIAL-INGEST.md)
-- [Olho Biónico Anti-Flash](docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/OLHO-BIONICO-ANTI-FLASH.md)
-- [Library Binding](docs/ARQUITETURA/LIBRARY-BINDING-CENTRALDARK.md)
-- [Cartazes canônicos](docs/BRAIN/08-ARTEFATOS-VISUAIS/01-CARTAZES-CANONICOS/README.md)
-- [Cartazes canônicos — compatibilidade histórica](docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/README.md)
-- [Protocolo Handoff IA](docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md)
-- [Administráveis](docs/CONSCIENCIA/ADMINISTRAVEIS.md)
-- [Baianês e resenha regional](docs/CONSCIENCIA/BAIANES-E-RESENHA-REGIONAL.md)
-- [Mapa do cérebro](docs/CONSCIENCIA/MAPA-DO-CEREBRO.md)
-- [Contexto pessoal e proveniência temporal](docs/GOVERNANCA/CONTEXTO-PESSOAL-E-PROVENIENCIA-TEMPORAL.md)
-- [Human Action Direct Link](.agents/skills/centraldark-operational-method/references/HUMAN-ACTION-DIRECT-LINK.md)
-
 No jeito do CHEFE: **a vela mostra a intenção, o astrolábio mede a realidade, o meridiano prende o owner certo e a carta do GitHub registra onde a embarcação realmente está.** O título mostra essa rota antes da resposta, sem inventar costa verde no mapa.

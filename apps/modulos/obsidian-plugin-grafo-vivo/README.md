@@ -6,78 +6,7 @@ Nada de mexer no Juggl ou no Graph nativo — esse aqui é **nosso**, sobrevive 
 
 ---
 
-## ⚡ Instalação rápida pelo release v0.5.0
-
-Release oficial:
-
-```text
-https://github.com/ServerVpss/CentralDark/releases/tag/obsidian-plugin-v0.5.0
-```
-
-Baixe os três assets e coloque na pasta do plugin dentro do vault:
-
-```text
-main.js
-manifest.json
-styles.css
-```
-
-Destino local:
-
-```text
-<seu-vault>/.obsidian/plugins/centraldark-grafo-vivo/
-├── main.js
-├── manifest.json
-└── styles.css
-```
-
-Depois:
-
-```text
-Obsidian
-→ Configurações
-→ Community plugins
-→ Reload plugins
-→ ativar "CentralDark Grafo Vivo"
-→ abrir comando "Abrir Grafo Vivo CentralDark"
-```
-
-Se já estiver instalado, use **Checar atualização agora** na aba do plugin ou substitua os três arquivos manualmente.
-
----
-
-## 🌐 Endereços para conectar agora
-
-Rota viva recomendada no plugin:
-
-```text
-https://grafo.centralldark.com/api/graph?mode=vivo
-```
-
-Fallback simples do release v0.5.0:
-
-```text
-https://status.centralldark.com/graph-data.json
-```
-
-Endpoint de auto-update usado pela configuração atual:
-
-```text
-https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/plugin-release
-```
-
-Contraprova:
-
-```text
-URL_CONFIGURADA != SITE_VISIVEL_PROVADO
-PLUGIN_INSTALADO != FEED_ATUALIZANDO
-GITHUB_RELEASE != LOCAL_OBSIDIAN_ATIVO
-UNKNOWN != PASS
-```
-
----
-
-## ⚡ Build local a partir do source
+## ⚡ Instalação rápida
 
 1. Instalar deps e buildar:
    ```bash
@@ -86,7 +15,7 @@ UNKNOWN != PASS
    npm run build
    ```
 2. Copiar a pasta pro vault:
-   ```text
+   ```
    <seu-vault>/.obsidian/plugins/centraldark-grafo-vivo/
    ├── main.js         ← gerado pelo build
    ├── manifest.json
@@ -105,8 +34,6 @@ UNKNOWN != PASS
 - **Arestas** ligando quem chama quem.
 - **Partículas** viajando pelas arestas ativas → dá pra ver as IAs se movimentando.
 - **Filtro** por categoria no topo.
-- **Origem visível** do feed na toolbar, para o operador saber que rota/IP/domínio o plugin está tentando usar.
-- **Labels maiores e mais cedo no zoom**, com fundo legível para não sumirem no Obsidian escuro.
 - **Clique** num nó com `obsidian_path` → abre a nota correspondente no vault.
 
 ### View 3D (Grafo 3D · Jarvis)
@@ -119,36 +46,15 @@ UNKNOWN != PASS
 
 ---
 
-## 🔠 Snippet opcional para notas maiores
-
-Este PR inclui um snippet de leitura para as notas do BRAIN:
-
-```text
-apps/modulos/obsidian-plugin-grafo-vivo/snippets/centraldark-brain-readable.css
-```
-
-Instalação:
-
-```text
-copiar para <seu-vault>/.obsidian/snippets/centraldark-brain-readable.css
-Obsidian → Configurações → Aparência → CSS snippets → ativar
-```
-
-Esse snippet aumenta fonte, headings, tags e blocos de código. Ele não altera dados da vault.
-
----
-
 ## ⚙️ Configuração
 
 Vai em **Configurações → CentralDark Grafo Vivo**:
 
 | Opção | Padrão |
 |-------|--------|
-| URL do grafo | `https://grafo.centralldark.com/api/graph?mode=vivo` |
-| Intervalo de atualização | 15 segundos |
+| URL do grafo | `https://status.centralldark.com/graph-data.json` |
+| Intervalo de atualização | 30 segundos |
 | Abrir nota ao clicar | ✅ ativado |
-| Hub único de conhecimento | `https://api.centralldark.com/memoria/ingest` |
-| Auto-update | ✅ ativado |
 
 ---
 
@@ -182,13 +88,10 @@ Campos:
 - **v0.2** 🔄 WebSocket direto no MCP → cada `tool call` vira partícula em tempo real (< 1s de latência).
 - **v0.3** 🔄 Sincronizar nós como notas vazias em `docs/CONSCIENCIA/00-MAPA/nodes/` pra aparecer no Graph nativo também.
 - **v0.4** ✅ Modo 3D real com `3d-force-graph` bundleado, controles, setores, glow/pulso, labels de agente.
-- **v0.5** ✅ feed vivo, A+/A−, labels visíveis, assets versionados.
-- **v0.6 candidate** 🔄 origem visível na toolbar, labels maiores, snippet BRAIN legível, receipt #1444.
+- **v0.5** 🔄 Ícones custom por categoria (SVG inline).
 
 ---
 
 ## 🔒 Área protegida
 
 Este plugin faz parte do **cérebro visual** do Pivete. Não modificar sem autorização — ver `CLAUDE.md §9`.
-
-> Ôxente, grafo bom mostra de onde vem a água. Se a URL aparece, o operador não fica procurando nascente no escuro. 🧼🧽🧠🕸️📜⚖️

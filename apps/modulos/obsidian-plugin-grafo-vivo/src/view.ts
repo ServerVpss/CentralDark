@@ -49,7 +49,6 @@ export class GrafoVivoView extends ItemView {
   private container: HTMLDivElement | null = null;
   private grafo: any = null;
   private statusEl: HTMLSpanElement | null = null;
-  private origemEl: HTMLSpanElement | null = null;
   private filtroAtual: string = "todos";
 
   constructor(leaf: WorkspaceLeaf, plugin: GrafoVivoPlugin) {
@@ -66,7 +65,7 @@ export class GrafoVivoView extends ItemView {
     root.empty();
     root.addClass("cd-grafo-vivo-root");
 
-    // Toolbar: filtro + origem + status.
+    // Toolbar: filtro + status.
     const toolbar = root.createDiv({ cls: "cd-grafo-toolbar" });
     const select = toolbar.createEl("select", { cls: "cd-grafo-filtro" });
     ["todos", "bot", "mcp", "edge", "supabase", "vps", "ia", "modulo"].forEach((cat) => {
@@ -82,7 +81,6 @@ export class GrafoVivoView extends ItemView {
     btnReload.setAttr("aria-label", "Recarregar agora");
     btnReload.addEventListener("click", () => this.carregar());
 
-    this.origemEl = toolbar.createEl("span", { cls: "cd-grafo-source", text: this.formatarOrigem() });
     this.statusEl = toolbar.createEl("span", { cls: "cd-grafo-status", text: "…" });
 
     // Container do grafo.
@@ -104,8 +102,6 @@ export class GrafoVivoView extends ItemView {
 
   private async carregar() {
     if (!this.container) return;
-    const origem = this.formatarOrigem();
-    if (this.origemEl) this.origemEl.setText(origem);
     try {
       // Usa requestUrl do Obsidian pra ignorar CORS (funciona desktop e mobile).
       const resp = await requestUrl({ url: this.plugin.settings.urlGrafo, method: "GET" });
@@ -113,22 +109,10 @@ export class GrafoVivoView extends ItemView {
       const dados = this.normalizarDados(resp.json);
       this.render(dados);
       const hora = new Date().toLocaleTimeString("pt-BR");
-      if (this.statusEl) this.statusEl.setText(`🟢 ${dados.nodes.length} nós • ${origem} • ${hora}`);
+      if (this.statusEl) this.statusEl.setText(`🟢 ${dados.nodes.length} nós • ${hora}`);
     } catch (e: any) {
-      if (this.statusEl) this.statusEl.setText(`🔴 ${origem} • erro: ${e.message ?? e}`);
+      if (this.statusEl) this.statusEl.setText(`🔴 erro: ${e.message ?? e}`);
       console.error("[GrafoVivo] falha ao carregar", e);
-    }
-  }
-
-  private formatarOrigem(): string {
-    const url = this.plugin.settings.urlGrafo?.trim();
-    if (!url) return "origem: sem URL";
-    try {
-      const parsed = new URL(url);
-      const path = parsed.pathname === "/" ? "" : parsed.pathname;
-      return `origem: ${parsed.host}${path}`;
-    } catch {
-      return `origem: ${url}`;
     }
   }
 
@@ -192,17 +176,17 @@ export class GrafoVivoView extends ItemView {
       this.grafo = ForceGraph()(this.container)
         .backgroundColor("transparent")
         .nodeLabel((n: any) => `${n.label ?? n.id}${n.category ? ` (${n.category})` : ""}`)
-        .nodeRelSize(7)
+        .nodeRelSize(6)
         // Nós desenhados na mão: pulso vivo + halo por categoria.
         .nodeCanvasObject((n: any, ctx: CanvasRenderingContext2D, escala: number) => {
           const cor = CORES[n.category ?? "default"] ?? CORES.default;
           const t = (performance.now() % 2000) / 2000; // 0→1 cíclico
           const pulso = 0.5 + 0.5 * Math.sin(t * Math.PI * 2);
-          const raioBase = 6.5;
-          const raio = raioBase + pulso * 2.4;
+          const raioBase = 6;
+          const raio = raioBase + pulso * 2;
           // Halo brilhando
           ctx.beginPath();
-          ctx.arc(n.x, n.y, raio + 7, 0, 2 * Math.PI);
+          ctx.arc(n.x, n.y, raio + 6, 0, 2 * Math.PI);
           ctx.fillStyle = cor + Math.floor(pulso * 60 + 20).toString(16).padStart(2, "0");
           ctx.fill();
           // Núcleo
@@ -210,31 +194,21 @@ export class GrafoVivoView extends ItemView {
           ctx.arc(n.x, n.y, raio, 0, 2 * Math.PI);
           ctx.fillStyle = cor;
           ctx.shadowColor = cor;
-          ctx.shadowBlur = 14;
+          ctx.shadowBlur = 12;
           ctx.fill();
           ctx.shadowBlur = 0;
-          // Label maior e mais cedo, para aparecer melhor no Obsidian.
-          if (escala > 0.55) {
-            const label = String(n.label ?? n.id);
-            const fontSize = 13 / escala;
-            const paddingX = 4 / escala;
-            const paddingY = 2 / escala;
-            ctx.font = `700 ${fontSize}px sans-serif`;
-            const largura = ctx.measureText(label).width;
-            const x = n.x - largura / 2 - paddingX;
-            const y = n.y + raio + 5 / escala;
-            ctx.fillStyle = "rgba(15, 23, 42, 0.72)";
-            ctx.fillRect(x, y, largura + paddingX * 2, fontSize + paddingY * 2);
-            ctx.fillStyle = "#f8fafc";
+          // Label
+          if (escala > 1.5) {
+            ctx.fillStyle = "#e2e8f0";
+            ctx.font = `${10 / escala}px sans-serif`;
             ctx.textAlign = "center";
-            ctx.textBaseline = "top";
-            ctx.fillText(label, n.x, y + paddingY);
+            ctx.fillText(n.label ?? n.id, n.x, n.y + raio + 8 / escala);
           }
         })
         .nodePointerAreaPaint((n: any, cor: string, ctx: CanvasRenderingContext2D) => {
           ctx.fillStyle = cor;
           ctx.beginPath();
-          ctx.arc(n.x, n.y, 12, 0, 2 * Math.PI);
+          ctx.arc(n.x, n.y, 10, 0, 2 * Math.PI);
           ctx.fill();
         })
         .linkColor((l: any) => (l.ativa ? "rgba(52, 211, 153, 0.65)" : "rgba(148, 163, 184, 0.4)"))
@@ -251,7 +225,7 @@ export class GrafoVivoView extends ItemView {
       const animar = () => {
         if (!this.grafo) return;
         this.grafo.d3ReheatSimulation?.();
-        this.grafo.nodeRelSize(7); // trigger re-paint
+        this.grafo.nodeRelSize(6); // trigger re-paint
         requestAnimationFrame(animar);
       };
       requestAnimationFrame(animar);

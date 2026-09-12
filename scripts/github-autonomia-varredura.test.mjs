@@ -67,7 +67,6 @@ test("padrão operacional vale para TODO PR elegível — não só um", () => {
   assert.equal(pending.missingLabels.includes("🧠 AGENTE-CHATGPT"), false);
 
   const full = requiredOperationalLabels(pr());
-  assert.ok(full.includes("🧠 AGENTE-CHATGPT"));
   const sealed = promotionSealState(pr({
     labels: full.map((name) => ({ name })),
   }), "ServerVpss/CentralDark");

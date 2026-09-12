@@ -8,6 +8,7 @@ files:
   - package.json
   - node_modules/**/*
   - icons/**
+  - resources/**
   - electron-update.yml
 extraMetadata:
   main: build/electron/main/index.mjs

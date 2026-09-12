@@ -1,6 +1,4 @@
 import { createHash } from "node:crypto";
-import { readFileSync, statSync } from "node:fs";
-import { isAbsolute } from "node:path";
 import { mcpAdminTools } from "./tools/core/mcp-admin.js";
 import { sanitizeOutgoingText } from "./lib/sanitize.js";
 
@@ -11,15 +9,6 @@ const PROVIDER_TOOLS = new Set([
   "provider_mutate",
 ]);
 const MAX_BODY_BYTES = 25_000;
-const MAX_LOCAL_CREDENTIAL_FILE_BYTES = 64_000;
-const PROVIDER_CREDENTIAL_KEYS = Object.freeze([
-  "CLOUDFLARE_API_TOKEN",
-  "CF_API_TOKEN",
-  "CONTABO_CLIENT_ID",
-  "CONTABO_CLIENT_SECRET",
-  "CONTABO_API_USER",
-  "CONTABO_API_PASSWORD",
-]);
 
 function hubConfig() {
   const url = String(process.env.HUB_SUPABASE_URL || process.env.SUPABASE_URL || "").replace(/\/$/, "");
@@ -39,74 +28,6 @@ export function extractBearer(value) {
 
 function safeError(error) {
   return sanitizeOutgoingText(String(error?.message || error || "provider_admin_bridge_error")).slice(0, 400);
-}
-
-function readSmallAbsoluteFile(pathValue) {
-  const path = String(pathValue || "").trim();
-  if (!path || !isAbsolute(path)) return null;
-  try {
-    const stat = statSync(path);
-    if (!stat.isFile() || stat.size <= 0 || stat.size > MAX_LOCAL_CREDENTIAL_FILE_BYTES) return null;
-    return readFileSync(path, "utf8").trim() || null;
-  } catch {
-    return null;
-  }
-}
-
-function parseEnvFile(content) {
-  const parsed = {};
-  for (const rawLine of String(content || "").split(/\r?\n/)) {
-    const line = rawLine.trim();
-    if (!line || line.startsWith("#")) continue;
-    const idx = line.indexOf("=");
-    if (idx < 1) continue;
-    const key = line.slice(0, idx).trim();
-    if (!PROVIDER_CREDENTIAL_KEYS.includes(key)) continue;
-    let value = line.slice(idx + 1).trim();
-    if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
-      value = value.slice(1, -1);
-    }
-    if (value) parsed[key] = value;
-  }
-  return parsed;
-}
-
-export function loadProviderCredentialPointers(env = process.env) {
-  const loaded = [];
-  const configuredPointers = [];
-
-  for (const key of PROVIDER_CREDENTIAL_KEYS) {
-    if (String(env[key] || "").trim()) continue;
-    const pointerName = `${key}_FILE`;
-    const pointer = String(env[pointerName] || "").trim();
-    if (!pointer) continue;
-    configuredPointers.push(pointerName);
-    const value = readSmallAbsoluteFile(pointer);
-    if (!value) continue;
-    process.env[key] = value;
-    loaded.push(key);
-  }
-
-  const envFilePath = String(env.CENTRALDARK_PROVIDER_ENV_FILE || "").trim();
-  if (envFilePath) {
-    configuredPointers.push("CENTRALDARK_PROVIDER_ENV_FILE");
-    const content = readSmallAbsoluteFile(envFilePath);
-    if (content) {
-      const fromFile = parseEnvFile(content);
-      for (const key of PROVIDER_CREDENTIAL_KEYS) {
-        if (String(process.env[key] || "").trim()) continue;
-        if (!fromFile[key]) continue;
-        process.env[key] = fromFile[key];
-        loaded.push(key);
-      }
-    }
-  }
-
-  return {
-    configured: configuredPointers.length > 0,
-    configuredPointers,
-    loadedKeys: loaded,
-  };
 }
 
 async function hubRequest(path, { method = "GET", bearer, body } = {}) {
@@ -177,10 +98,6 @@ export async function providerAdminBridge(req, res) {
     return res.status(code).json({ ok: false, status: auth.status });
   }
 
-  // Carrega somente valores apontados por arquivos locais da VPS. O caminho vem
-  // do ambiente do serviço; valores nunca entram em request, log, receipt ou GitHub.
-  loadProviderCredentialPointers(process.env);
-
   const body = req.body && typeof req.body === "object" && !Array.isArray(req.body) ? req.body : {};
   if (Buffer.byteLength(JSON.stringify(body), "utf8") > MAX_BODY_BYTES) {
     return res.status(413).json({ ok: false, status: "PROVIDER_ADMIN_INPUT_TOO_LARGE" });
@@ -218,12 +135,8 @@ export async function providerAdminBridge(req, res) {
 
 export const __test = Object.freeze({
   PROVIDER_TOOLS,
-  PROVIDER_CREDENTIAL_KEYS,
   MAX_BODY_BYTES,
-  MAX_LOCAL_CREDENTIAL_FILE_BYTES,
   hubConfig,
-  parseEnvFile,
-  loadProviderCredentialPointers,
   unwrapDispatcherResult,
   safeError,
 });
