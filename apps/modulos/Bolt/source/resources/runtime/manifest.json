@@ -1,0 +1,31 @@
+{
+  "schema": "centraldark.runtime-capsule/v1",
+  "owner": "apps/modulos/Bolt/source",
+  "entrypoint": "CentralDark.exe",
+  "source_of_truth": "ServerVpss/CentralDark@main",
+  "policy": {
+    "one_system_only": true,
+    "user_machine_package_install": false,
+    "external_global_runtime_fallback": false,
+    "external_appdata_hermes_venv_allowed": false,
+    "release_must_fail_closed_if_required_sidecar_missing": true
+  },
+  "components": {
+    "electron_node": {
+      "mode": "embedded-by-electron",
+      "bundle_status": "PROVED_BY_BUILD_OWNER"
+    },
+    "hermes": {
+      "mode": "bundled-sidecar",
+      "bundle_status": "UNKNOWN",
+      "required_for_fixed_point": true,
+      "resolution_root": "resources/runtime/hermes"
+    }
+  },
+  "laws": [
+    "INSTALLED_ON_PC != BUNDLED",
+    "PROCESS_EXISTS != RUNTIME_HEALTHY",
+    "PACKAGED != EXECUTED",
+    "UNKNOWN != PASS"
+  ]
+}
