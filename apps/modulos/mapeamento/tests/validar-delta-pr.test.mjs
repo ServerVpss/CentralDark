@@ -19,7 +19,7 @@ function write(root, relativePath, content) {
 const map = {
   schema_version: 1,
   source_of_truth: 'apps/modulos/mapeamento/config/mapa-canonico.json',
-  approval_label: 'permito-segredo',
+  approval_label: '👑 PERMITO-SEGREDO',
   consolidation_evidence_policy: {
     enabled: true,
     legacy_without_proof: 'PROTECTED_UNPROVEN',

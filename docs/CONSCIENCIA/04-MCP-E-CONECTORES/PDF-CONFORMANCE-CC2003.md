@@ -1,6 +1,6 @@
 # 🧿 PDF-CONFORMANCE-CC2003
 
-**Fonte:** `tlc23(3).pdf` / Lógica Computacional (CC2003), Nelma Moreira, Lógica Computacional 23.
+**Fonte:** [tlc23.pdf](./tlc23.pdf), recebido como `tlc23(2).pdf` (alias histórico: `tlc23(3).pdf`) / Lógica Computacional (CC2003), Nelma Moreira, Lógica Computacional 23.
 
 **SHA-256 esperado:** `b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1`
 
@@ -102,6 +102,14 @@ PDF_IDENTITY_CONFIRMED=true
 PDF_SHA256=b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1
 PDF_SIZE_BYTES=206674
 CANONICAL_CONFORMANCE_DOC=docs/CONSCIENCIA/04-MCP-E-CONECTORES/PDF-CONFORMANCE-CC2003.md
-BINARY_SOURCE_COMMIT_STATUS=NOT_COMMITTED_BY_THIS_CONNECTOR
-REASON=binary upload requires Git blob/base64 path outside the simple UTF-8 contents write used here
+BINARY_SOURCE_COMMIT_STATUS=COMMITTED
+SOURCE_ID=cc2003-logica-computacional-23-nelma-moreira
+SOURCE_STATUS=INGESTED
+BINARY_CANONICAL_PATH=docs/CONSCIENCIA/04-MCP-E-CONECTORES/tlc23.pdf
+BINARY_GIT_BLOB_SHA=ab84cb54a77bfd4647b487e526b1714223c12c96
+BINARY_COMMIT=1fd16f186f880858a39b98701859c48e30fbfb9f
+VERIFIED_AT=2026-09-10
+VERIFICATION=local SHA-256 + size + pdfinfo pages; GitHub blob equals local git hash-object
+SCOPE=SOURCE_BINARY_PROVENANCE_ONLY
+FULL_PDF_ALGORITHM_CONFORMANCE=NOT_PROVEN
 ```

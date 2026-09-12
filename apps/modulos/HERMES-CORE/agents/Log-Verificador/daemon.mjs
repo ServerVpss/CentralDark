@@ -65,6 +65,7 @@ function salvarEstado(s) {
 const INTERVALO_SCAN_MS = 60_000;             // 1 min
 const INTERVALO_RESUMO_MS = 60 * 60_000;      // 1h
 const AUTO_RESTART_HABILITADO = true;
+const NOME_PROPRIO = 'CentralDark-HermesVerificador';
 
 let estado = carregarEstado();
 
@@ -76,7 +77,7 @@ function chaveAlerta(s) {
 }
 
 async function ciclo() {
-  const snap = escanear();
+  const snap = escanear({ ignorarNomes: [NOME_PROPRIO] });
   const agora = Date.now();
   const novosAlertas = [];
 
