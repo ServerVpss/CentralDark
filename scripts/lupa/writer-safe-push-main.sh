@@ -65,7 +65,7 @@ if [ "$AUTO_DISCOVER" = "1" ]; then
         exit 2 ;;
     esac
   done
-  mapfile -d '' -t RAW_PATH_ARR < <(git diff --name-only -z --diff-filter=ACMRTUXB -- .)
+  mapfile -d '' -t RAW_PATH_ARR < <(git diff HEAD --name-only -z --diff-filter=ACMRTUXB -- .)
   PATH_ARR=()
   for p in "${RAW_PATH_ARR[@]}"; do
     in_scope=0
@@ -77,7 +77,7 @@ if [ "$AUTO_DISCOVER" = "1" ]; then
     [ "$in_scope" -eq 1 ] || continue
     base=$(basename "$p")
     case "$p" in
-      .env|.env.*|*/.env|*/.env.*|*secret*|*token*|*credential*|*password*|*.pem|*.key|*.crt|*.p12|*.pfx|*/node_modules/*|*/.venv/*|*/__pycache__/*|*/.pytest_cache/*|*/dist/*|*/build/*|*/status/*|*/logs/*|*/missions/*|*.next_run|*.state.json|*.estado.json|*analyst-decision.json|*last-report.json|*graph.json|status.json|*/status.json|*-health.json|*-status.json|*.jsonl)
+      .env|.env.*|*/.env|*/.env.*|*secret*|*token*|*credential*|*password*|*.pem|*.key|*.crt|*.p12|*.pfx|*/node_modules/*|*/.venv/*|*/__pycache__/*|*/.pytest_cache/*|*/dist/*|*/build/*|*/status/*|*/logs/*|*/missions/*|*.next_run|*.state.json|*.estado.json|*analyst-decision.json|*last-report.json|*graph.json|status.json|*/status.json|*-health.json|*-status.json|*.jsonl|*.npmrc|*.netrc|id_rsa|kubeconfig|*.pem|*.pub|*.p12|*.pfx|*.jks|*.keystore|*.truststore|*.cer|*.sig|*.asc|*.gpg|*.gnupg|*.b64|*.base64|*.env.local|*.env.production|*.env.staging|*.env.test|*.env.development|*.credentials|*credentials*|*credential*|*auth*token*|*access*token*|*refresh*token*|*api*key*|*apikey*|*private*key*|*public*key*|*ssh*key*|*id_*|*.ssh*|*.ssh/config|*.ssh/known_hosts|*.ssh/id_*|*.ssh/agent|*.ssh/authorized_keys|*.ssh/id_ed25519|*.ssh/id_rsa|*.ssh/id_ecdsa|*.ssh/id_dsa|*.ssh/id_xmss|*.ssh/id_bliss|*.ssh/id_gssapi_krb5|*.ssh/id_whatevs)
         continue ;;
     esac
     case "$base" in
@@ -92,7 +92,10 @@ if [ "$AUTO_DISCOVER" = "1" ]; then
   printf '🔎 %s AUTO_DISCOVER_PATHS=%s\n' "$WRITER_TAG" "${PATH_ARR[*]}"
 else
   [ -n "$PATHS" ] || { echo "PATHS ou AUTO_DISCOVER=1 obrigatorio" >&2; exit 2; }
-  read -r -a PATH_ARR <<< "$PATHS"
+  PATH_ARR=()
+  while IFS= read -r -d '' p; do
+    PATH_ARR+=("$p")
+  done < <(printf '%s\0' "$PATHS" | tr '\0' '\n' | sed 's|^[[:space:]]*||;s|[[:space:]]*$||' | awk 'NF')
 fi
 
 for p in "${PATH_ARR[@]}"; do
