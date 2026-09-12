@@ -136,5 +136,5 @@ test('T14 Executor: commit_push falha fechado e só fica verde após ler o HEAD 
   assert.match(trecho, /git ls-remote origin refs\/heads\/main/);
   assert.match(trecho, /test "\$LOCAL_HEAD" = "\$REMOTE_HEAD"/);
   assert.match(trecho, /REMOTE_HEAD_VERIFIED=/);
-  assert.match(trecho, /if \(!\/REMOTE_HEAD_VERIFIED=/);
+  assert.match(trecho, /if \[ "\$REMOTE_HEAD" != "\$HEAD_SHA" \]/);
 });
