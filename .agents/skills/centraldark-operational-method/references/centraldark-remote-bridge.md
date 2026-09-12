@@ -59,18 +59,19 @@ O `secrets/mcp-state.json` contém:
 - `authCodes[]` — codes autorizados
 
 ### Token de administrador (válido nesta sessão)
-```
-at_d8e43d36e6924d85f385b352c330fff7526c915a2da8cbb84749a5ea93aa1604
-expiresAt: 1789165088867
+
+Não registrar valores de access token ou refresh token em Git, skill, memória ou receipt.
+Registrar apenas metadados sanitizados:
+
+```text
+client_id: <client_id observado>
+expires_in: 3599s
 scope: admin
 gh_scope: owner-admin
+store: secrets/mcp-state.json ou DPAPI_CURRENT_USER
 ```
 
-### Refresh token correspondente
-```
-rt_1434e36d944d76b7e5079f89e6d61b35bdada03c27e1b0d096e97c823ef27323
-expiresAt: 1791753488867
-```
+Para validar sessão, consultar presença/expiração no cofre local sem imprimir valores.
 
 ## Remote Bridge Script
 
