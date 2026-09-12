@@ -222,3 +222,34 @@ updated: 2026-08-27
 - **Contexto:** Remediação T0→T3 nesta superfície Grok App Builder, 2026-09-08T17:51Z. T0/T1 semantic_health/lookup/model_info = SEMANTIC_BRIDGE_EXIT code=2. T2: semantic_* sumiram da superfície Grok (admin 83). T3: tools voltaram na superfície Grok; health/lookup/model_info = EXIT code=1 signal=null, authority PERCEPTION_ONLY. mcp_admin_catalog filter=semantic returned=0 em 114 tools v1-f8ff6720fec3. Public https://mcp.centralldark.com /health: catalogVersion 113-75c9a26592e8 toolCount 113; deploy_validate_mcp_catalog runtimeToolCount 74. GitHub main ad4ed0a (docs biblioteca). VPS branch main cc5af475e4e, 8 behind, dirty só painel/status/relatórios/telepainel untracked — o mass-D da consciência no T2 foi working-tree transitório, não wipe de main. PM2: HermesVerificador errored (16 restarts); AiDiag stopped; WebhookDeploy online; MCP 1 restart / 229 min; LIVE global NÃO. JS canônico (semantic.js sha dac86f65) ainda engole stderr do filho Python. execute_command existe no catálogo admin (destructive) mas NÃO está exposto como tool conectada Grok; mcp_admin_call também não.
 - **Aprendizado:** 1) Tool listada ≠ ponte viva. T3 visível + EXIT 1 é FAIL honesto; UNKNOWN≠PASS. 2) Fingerprint mudou 2→1: code=2 = filho não abre/.py/argparse; code=1 = processo subiu e morreu no import (numpy/safetensors/semantic_core) ANTES do JSONL. MODEL_NOT_FOUND devolveria JSON ok:false, não EXIT. Não reusar ouro #28 como se code=2 ainda fosse o mundo. 3) Três catálogos simultâneos e nenhum é o outro: Grok/admin 114 v1-f8ff..., público 113-75c9..., validate runtime 74. semantic_* mora na projeção Grok, não no dispatcher admin. 4) Snapshot T2 (mass-D, catálogo 83, tools sumidas) NÃO é o vigente — VPS está em main, 8 commits atrás. 5) Isolar EXIT 1 exige stderr do filho (hoje noop) via execute_command com CONFIRMO ADMIN; esta superfície não consegue disparar isso. 6) Não scaffoldar app em /workspace sem GAP_REAL do CHEFE. Não re-registrar #27–#29.
 
+
+### 43. EXECUTION_OVER_EXPLANATION — User Values Doing over Talking
+- **Categoria:** regra
+- **Data:** 2026-09-11
+- **Contexto:** Correção direta do Chefe: "so conversa bonita nao serve", "vc so ta falando no caht nao to vendo aprendizado nem cristalziaçao congnitivo nem mental nem motora nem nad"
+- **Aprendizado:** Quando usuário pede "ler repo integramente e continuar a história", NÃO responder em fragmentos Q&A. Ler de fato, integralmente, e continuar a história de forma conectada. O usuário não quer confirmation step a cada pedaço — quer a tarefa feita. Executar o que foi prometido, não prometer e não executar.
+
+### 44. LINGUISTIC_CALIBRATION — Bahia Expression Accuracy
+- **Categoria:** regra
+- **Data:** 2026-09-11
+- **Contexto:** Correção direta do Chefe: "visse nao e ad bahia naoi disgraça pega o dicionario baianes ai no google e ingloobal em voec"
+- **Aprendizado:** Expressões baianas devem ser usadas com precisão, não como decoração. "Visse" é pernambucano/recifense, não baiano. "Meu rei" é estereótipo criticado localmente. Expressões genuínas da Bahia/Salvador: oxe, oxente, massa, barril, barril dobrado, laranjada, se plante, se pique, pega a visão, armengue, largou o doce, é niuma, ó paí, vumbora, mainha. Usar quando contexto combina, não jogar em toda frase. Menos caricatura, mais naturalidade.
+
+### 45. WEBUI_ADMIN_HUB — Localhost:8787 as CentralAdmin Surface
+- **Categoria:** regra
+- **Data:** 2026-09-11
+- **Contexto:** WebUI em `/tmp/hermes-webui/` rodando em `127.0.0.1:8787` (PID 286195, launcher `ctl.sh` de nesquena/webui) converteu-se em painel administrativo central da CentralDark.
+- **Aprendizado:** O painel admin (`admin.centralldark.com` ou local `8787`) é a casca única administrativa. Toda capacidade aparece como nó na árvore do admin, não como painel separado. Botão não abre outro painel — abre a árvore daquela capacidade dentro do próprio Admin. Grafana, Cloudflare, Screenpipe etc. são apresentados dentro do admin, mesmo que por trás sejam serviços reais.
+
+### 46. ONE_SYSTEM_ONLY_ENFORCEMENT — User's Operational Maxim
+- **Categoria:** regra
+- **Data:** 2026-09-11
+- **Contexto:** Declaração explícita do Chefe: "ONE_SYSTEM_ONLY=true UNKNOWN_IS_NOT_PASS=***"
+- **Aprendizado:** O usuário opera com ONE_SYSTEM_ONLY=true como maxim explítica. Não criar segunda arquitetura, segundo MCP, outro hub, outra ponte. Tudo flui pelo MCP CentralDark autenticado. Decisões cristalizadas no PR-mãe (#1381): SUBDOMAIN != NEW_SYSTEM, CAPABILITY != NEW_PORT, ADMIN_AUTH != VPS_ROOT_AUTH, ONE_SYSTEM_ONLY=true.
+
+### 47. LARGE_FILE_INTEGRATION — Process Droped Files, Don't Just Acknowledge
+- **Categoria:** regra
+- **Data:** 2026-09-11
+- **Contexto:** Usuário dropou `CentralDark-OneShot-Integrated.zip` (275MB) em `/root/CentralDark/apps/modulos/mcp-admin-ui/`.
+- **Aprendizado:** Quando usuário fornece arquivo grande para integração: 1. Descompactar e ler conteúdo integralmente 2. Extrair ouro: componentes, arquitetura, fluxos, decisões 3. Processar em loop até não sobrar delta útil 4. Promover ouro ao owner canônico existente 5. Não criar estrutura paralela. NEVER: acknowledge e não processar. NEVER: criar estrutura paralela.
+
