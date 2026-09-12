@@ -22,6 +22,9 @@
 #   PATHS             paths relativos separados por espaco (escopo do writer)
 #
 # Env opcional:
+#   AUTO_DISCOVER     1 = descobrir delta rastreado elegível no mesmo owner
+#   AUTO_DISCOVER_SCOPE prefixes relativos separados por virgula (obrigatorio com AUTO_DISCOVER)
+#   DRY_RUN            1 = mostrar seleção e não criar worktree/commit/push
 #   REGENERATE_CMD    comando rodado DENTRO do worktree antes do git add
 #   MAX_TRIES         default 3
 #   GIT_AUTHOR_NAME   default CentralDark Bot
@@ -32,7 +35,10 @@ set -euo pipefail
 
 WRITER_TAG="${WRITER_TAG:?WRITER_TAG obrigatorio}"
 COMMIT_MESSAGE="${COMMIT_MESSAGE:?COMMIT_MESSAGE obrigatorio}"
-PATHS="${PATHS:?PATHS obrigatorio}"
+AUTO_DISCOVER="${AUTO_DISCOVER:-0}"
+AUTO_DISCOVER_SCOPE="${AUTO_DISCOVER_SCOPE:-}"
+DRY_RUN="${DRY_RUN:-0}"
+PATHS="${PATHS:-}"
 REGENERATE_CMD="${REGENERATE_CMD:-}"
 MAX_TRIES="${MAX_TRIES:-3}"
 GIT_AUTHOR_NAME="${GIT_AUTHOR_NAME:-CentralDark Bot}"
@@ -42,7 +48,46 @@ REPO_ROOT="$(git rev-parse --show-toplevel)"
 cd "$REPO_ROOT"
 
 # shellcheck disable=SC2206
-PATH_ARR=($PATHS)
+if [ "$AUTO_DISCOVER" = "1" ]; then
+  if [ -n "$PATHS" ]; then
+    echo "${WRITER_TAG}_AUTO_DISCOVER_PATHS_CONFLICT=1" >&2
+    exit 2
+  fi
+  [ -n "$AUTO_DISCOVER_SCOPE" ] || {
+    echo "${WRITER_TAG}_AUTO_DISCOVER_SCOPE_REQUIRED=1" >&2
+    exit 2
+  }
+  IFS=',' read -r -a SCOPE_ARR <<< "$AUTO_DISCOVER_SCOPE"
+  mapfile -d '' -t RAW_PATH_ARR < <(git diff --name-only -z --diff-filter=ACMRTUXB -- .)
+  PATH_ARR=()
+  for p in "${RAW_PATH_ARR[@]}"; do
+    in_scope=0
+    for prefix in "${SCOPE_ARR[@]}"; do
+      case "$p" in
+        "$prefix"|"$prefix"/*) in_scope=1; break ;;
+      esac
+    done
+    [ "$in_scope" -eq 1 ] || continue
+    case "$p" in
+      .env|.env.*|*/.env|*/.env.*|*secret*|*token*|*credential*|*password*|*.pem|*.key|*.crt|*.p12|*.pfx|*/node_modules/*|*/.venv/*|*/__pycache__/*|*/.pytest_cache/*|*/dist/*|*/build/*|*/status/*|*/logs/*|*/missions/*|*.next_run|*.state.json|*.estado.json|*analyst-decision.json|*last-report.json|*graph.json|status.json|*/status.json|*-health.json|*-status.json|*.jsonl)
+        continue ;;
+    esac
+    PATH_ARR+=("$p")
+  done
+  if [ "${#PATH_ARR[@]}" -eq 0 ]; then
+    echo "${WRITER_TAG}_NO_ELIGIBLE_TRACKED_DELTA=1"
+    exit 0
+  fi
+  printf '🔎 %s AUTO_DISCOVER_PATHS=%s\n' "$WRITER_TAG" "${PATH_ARR[*]}"
+else
+  [ -n "$PATHS" ] || { echo "PATHS ou AUTO_DISCOVER=1 obrigatorio" >&2; exit 2; }
+  PATH_ARR=($PATHS)
+fi
+
+if [ "$DRY_RUN" = "1" ]; then
+  printf '🧾 %s DRY_RUN=1; nenhuma worktree, alteração, commit ou publicação será feita\n' "$WRITER_TAG"
+  exit 0
+fi
 
 has_payload() {
   local p
