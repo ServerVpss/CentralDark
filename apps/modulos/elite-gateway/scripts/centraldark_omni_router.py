@@ -15,9 +15,11 @@ import json
 import os
 import re
 import shutil
+import sqlite3
 import subprocess
 import time
 import uuid
+from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 import requests
@@ -30,6 +32,14 @@ DEFAULT_ENGINE = os.getenv("CENTRALDARK_DEFAULT_ENGINE", "nous").strip().lower()
 ROUTER_TOKEN = os.getenv("CENTRALDARK_ROUTER_TOKEN", "").strip()
 REQUEST_TIMEOUT = float(os.getenv("CENTRALDARK_ROUTER_TIMEOUT", "180"))
 DEFAULT_FALLBACK_CHAIN = "nous,hermes,google,claude-code,xai,abacus,openai"
+ANTIGRAVITY_AGENTAPI = os.getenv(
+    "ANTIGRAVITY_AGENTAPI",
+    "/root/snap/antigravity-cli/common/.gemini/antigravity-cli/bin/agentapi",
+).strip()
+ANTIGRAVITY_CONVERSATIONS = Path(os.getenv(
+    "ANTIGRAVITY_CONVERSATIONS",
+    "/root/snap/antigravity-cli/common/.gemini/antigravity-cli/conversations",
+))
 
 NOUS_INFERENCE_BASE_URL = os.getenv(
     "NOUS_INFERENCE_BASE_URL", "https://inference-api.nousresearch.com/v1"
@@ -56,6 +66,10 @@ class ChatRequest(BaseModel):
     messages: List[ChatMessage]
     stream: bool = False
     temperature: Optional[float] = None
+    tools: Optional[List[Dict[str, Any]]] = None
+    tool_choice: Any = None
+    max_tokens: Optional[int] = None
+    max_completion_tokens: Optional[int] = None
 
 
 class ResponsesRequest(BaseModel):
@@ -64,6 +78,7 @@ class ResponsesRequest(BaseModel):
     stream: bool = False
     instructions: Optional[str] = None
     temperature: Optional[float] = None
+    tools: Optional[List[Dict[str, Any]]] = None
 
     class Config:
         extra = "allow"
@@ -172,7 +187,7 @@ def route_model(model: str) -> Tuple[str, str]:
             if provider == "claude":
                 provider = "claude-code"
             if provider in {
-                "openai", "claude-code", "hermes", "nous", "google", "xai", "abacus"
+                "antigravity", "openai", "claude-code", "hermes", "nous", "google", "xai", "abacus"
             }:
                 return provider, target.strip()
     return DEFAULT_ENGINE, raw
@@ -272,6 +287,8 @@ def discover_nous_free_model() -> str:
 
 
 def provider_default_model(provider: str) -> str:
+    if provider == "antigravity":
+        return os.getenv("ANTIGRAVITY_MODEL", "flash_lite").strip()
     if provider == "openai":
         return os.getenv("OPENAI_MODEL", "gpt-5.6").strip()
     if provider == "hermes":
@@ -288,6 +305,8 @@ def provider_default_model(provider: str) -> str:
 
 
 def provider_configured(provider: str) -> bool:
+    if provider == "antigravity":
+        return bool(ANTIGRAVITY_AGENTAPI and os.path.exists(ANTIGRAVITY_AGENTAPI))
     if provider == "openai":
         return bool(os.getenv("OPENAI_API_KEY", "").strip())
     if provider == "claude-code":
@@ -326,7 +345,7 @@ def candidate_routes(model: str) -> List[Tuple[str, str]]:
     chain = split_csv(os.getenv("CENTRALDARK_FALLBACK_CHAIN", DEFAULT_FALLBACK_CHAIN))
     for provider in chain:
         normalized = "claude-code" if provider == "claude" else provider
-        if normalized not in {"openai", "claude-code", "hermes", "nous", "google", "xai", "abacus"}:
+        if normalized not in {"antigravity", "openai", "claude-code", "hermes", "nous", "google", "xai", "abacus"}:
             continue
         if normalized != primary_provider:
             candidates.append((normalized, ""))
@@ -508,6 +527,127 @@ def run_claude_code(messages: List[ChatMessage], target_model: str) -> Tuple[str
     return text.strip(), target_model or "claude-code-default"
 
 
+def _antigravity_model(target_model: str) -> str:
+    requested = (target_model or "flash_lite").strip().lower()
+    aliases = {
+        "gemini-3.1-flash-lite": "flash_lite",
+        "flash-lite": "flash_lite",
+        "gemini-flash-lite": "flash_lite",
+        "gemini-flash": "flash",
+        "gemini-pro": "pro",
+    }
+    if requested in {"gpt-oss-120b", "gpt-oss-120b-medium"}:
+        raise HTTPException(status_code=400, detail="antigravity_model_not_supported:gpt-oss-120b")
+    resolved = aliases.get(requested, requested)
+    if resolved not in {"flash_lite", "flash", "pro"}:
+        raise HTTPException(status_code=400, detail=f"antigravity_model_not_supported:{sanitize(target_model)}")
+    return resolved
+
+
+def _length_delimited(data: bytes, tag: int) -> List[str]:
+    """Read printable protobuf strings for one field number."""
+    values: List[str] = []
+    i = 0
+    while i < len(data):
+        pos = data.find(bytes([tag]), i)
+        if pos < 0 or pos + 1 >= len(data):
+            break
+        j = pos + 1
+        length = 0
+        shift = 0
+        while j < len(data) and shift < 35:
+            byte = data[j]
+            j += 1
+            length |= (byte & 0x7F) << shift
+            if not byte & 0x80:
+                break
+            shift += 7
+        end = j + length
+        if length > 0 and end <= len(data):
+            raw = data[j:end]
+            try:
+                text = raw.decode("utf-8").strip()
+            except UnicodeDecodeError:
+                text = ""
+            if text and all(ch.isprintable() or ch in "\n\r\t" for ch in text):
+                values.append(text)
+        i = pos + 1
+    return values
+
+
+def _read_antigravity_response(conversation_id: str) -> str:
+    db = ANTIGRAVITY_CONVERSATIONS / f"{conversation_id}.db"
+    if not db.exists():
+        return ""
+    try:
+        with sqlite3.connect(db) as conn:
+            errors = conn.execute("SELECT data FROM gen_metadata ORDER BY idx DESC LIMIT 3").fetchall()
+            for (blob,) in errors:
+                if blob and b"RESOURCE_EXHAUSTED" in blob:
+                    raise RuntimeError("antigravity_quota_exhausted")
+            rows = conn.execute(
+                "SELECT step_payload FROM steps "
+                "WHERE step_payload IS NOT NULL AND step_type = 15 AND status = 3 "
+                "ORDER BY idx DESC LIMIT 1"
+            ).fetchall()
+    except sqlite3.Error as exc:
+        raise RuntimeError(f"antigravity_conversation_db:{exc}") from exc
+
+    for (blob,) in rows:
+        if not blob:
+            continue
+        # Read only this conversation's completed response step. The filename
+        # is the correlation key returned by agentapi; do not search other DBs.
+        candidates = _length_delimited(blob, 0x42)
+        if candidates:
+            return candidates[-1]
+    return ""
+
+
+def run_antigravity(messages: List[ChatMessage], target_model: str) -> Tuple[str, str]:
+    if not ANTIGRAVITY_AGENTAPI or not os.path.exists(ANTIGRAVITY_AGENTAPI):
+        raise HTTPException(status_code=503, detail="antigravity_agentapi_not_found")
+    prompt = flatten_messages(messages)
+    model = _antigravity_model(target_model)
+    env = os.environ.copy()
+    env.setdefault("ANTIGRAVITY_LS_ADDRESS", "127.0.0.1:37859")
+    env.setdefault("ANTIGRAVITY_PROJECT_ID", "default-cli-project")
+    try:
+        proc = subprocess.run(
+            [ANTIGRAVITY_AGENTAPI, "new-conversation", f"--model={model}", "--title=hermes-router", prompt],
+            capture_output=True,
+            text=True,
+            timeout=REQUEST_TIMEOUT,
+            check=False,
+            env=env,
+        )
+    except subprocess.TimeoutExpired as exc:
+        raise HTTPException(status_code=504, detail="antigravity_timeout") from exc
+    if proc.returncode != 0:
+        detail = sanitize(proc.stdout or proc.stderr or "unknown_error")
+        raise HTTPException(status_code=502, detail=f"antigravity_agentapi_exit_{proc.returncode}:{detail}")
+    try:
+        payload = json.loads(proc.stdout)
+        conversation_id = payload["response"]["newConversation"]["conversationId"]
+    except (ValueError, KeyError, TypeError) as exc:
+        raise HTTPException(status_code=502, detail="antigravity_invalid_agentapi_response") from exc
+
+    deadline = time.time() + min(REQUEST_TIMEOUT, 60.0)
+    last_error: Optional[Exception] = None
+    while time.time() < deadline:
+        try:
+            text = _read_antigravity_response(conversation_id)
+        except RuntimeError as exc:
+            last_error = exc
+            break
+        if text:
+            return text, model
+        time.sleep(0.25)
+    if last_error:
+        raise HTTPException(status_code=502, detail=str(last_error)) from last_error
+    raise HTTPException(status_code=502, detail="antigravity_empty_output")
+
+
 def run_provider(provider: str, messages: List[ChatMessage], target_model: str) -> Tuple[str, str]:
     model = target_model or provider_default_model(provider)
     if provider == "openai":
@@ -577,6 +717,8 @@ def run_provider(provider: str, messages: List[ChatMessage], target_model: str) 
         return text, model
     if provider == "claude-code":
         return run_claude_code(messages, target_model)
+    if provider == "antigravity":
+        return run_antigravity(messages, target_model)
     raise HTTPException(status_code=400, detail=f"unsupported_engine:{sanitize(provider)}")
 
 
@@ -772,7 +914,7 @@ def responses_stream(result: Dict[str, Any]):
 
 @app.get("/health")
 def health() -> Dict[str, Any]:
-    providers = ["nous", "hermes", "google", "claude-code", "xai", "abacus", "openai"]
+    providers = ["antigravity", "nous", "hermes", "google", "claude-code", "xai", "abacus", "openai"]
     return {
         "ok": True,
         "service": "centraldark-omni-router",
@@ -791,7 +933,7 @@ def health() -> Dict[str, Any]:
 def models(authorization: str = Header(default=None)) -> Dict[str, Any]:
     require_router_auth(authorization)
     rows = [{"id": "auto", "object": "model", "owned_by": "centraldark"}]
-    for provider in ["nous", "hermes", "google", "claude-code", "xai", "abacus", "openai"]:
+    for provider in ["antigravity", "nous", "hermes", "google", "claude-code", "xai", "abacus", "openai"]:
         if not provider_configured(provider):
             continue
         model = provider_default_model(provider)
@@ -810,6 +952,8 @@ def chat(
     authorization: str = Header(default=None),
 ) -> Any:
     require_router_auth(authorization)
+    if request.tools or request.tool_choice not in (None, "none"):
+        raise HTTPException(status_code=501, detail="antigravity_tools_not_supported")
     result = execute_with_failover(request.model, request.messages, http_request.headers)
     if request.stream:
         return StreamingResponse(chat_stream(result), media_type="text/event-stream")
@@ -823,6 +967,8 @@ def responses(
     authorization: str = Header(default=None),
 ) -> Any:
     require_router_auth(authorization)
+    if request.tools:
+        raise HTTPException(status_code=501, detail="antigravity_tools_not_supported")
     messages = responses_messages(request)
     result = execute_with_failover(request.model, messages, http_request.headers)
     if request.stream:
