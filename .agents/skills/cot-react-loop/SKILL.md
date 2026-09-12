@@ -554,6 +554,13 @@ Quando JSONL for canônico:
 Nunca registrar cadeia de pensamento, segredo, token, `.env` integral ou
 memória pessoal desnecessária.
 
+### 10.1 SEGRET_REDOACTION — Redaction Rule
+**Regra:** Quando o CheFE diz "permito segredo", valores nunca são exibidos ou preservados. Substituir tudo que seja segredo, token, senha, API key, credential ou connection string por `[REDACTED]` em todo output, artifact, diff, receipt, log ou arquivo. Isso inclui screenshots — borrar ou omitir valores sensíveis antes de descrever.
+
+```text
+QUALQUER_VALOR_SECRETO → [REDACTED]
+```
+
 ## 11. Integração com a Casa
 
 - `raciocinio-deliberado`: entrega somente tarefa complexa já autorizada.

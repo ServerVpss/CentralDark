@@ -1791,6 +1791,58 @@ NUNCA:
 
 **Pitfall:** assumir que `git pull --ff-only` atualiza tudo. Quando o branch local está atrás, o ff-only não funciona e o merge é necessário. Quando o branch local está à frente, o ff-only não aplica e o push pode rejeitar. Sempre medir antes.
 
+### 51. SEGRET_REDOACTION — Redaction and Scope-Limiting Instructions
+**Correção direta do Chefe (2026-09-11):** "permito segredo" — valores nunca exibidos ou preservados; substituir por `[REDACTED]`.
+
+**Regra cristalizada:** Nunca exibir, logar, copiar ou preservar em output, artifact, diff, comentario, receipt ou arquivo qualquer valor que seja segredo, token, senha, API key, credential ou connection string. Substituir por `[REDACTED]`. Isso inclui screenshots que contenham valores sensíveis — borrar ou omitir antes de descrever.
+
+```text
+QUALQUER_VALOR_SECRETO → [REDACTED]
+NUNCA_EXIBIR = true
+NUNCA_PRESERVAR_EM_ARQUIVO = true
+NUNCA_LOGAR = true
+```
+
+**Escopo:** todos os canais — chat, terminal, arquivos, screenshots, receipts, PRs, commments, logs.
+
+**Scope-limiting (`mira somente lá`):** quando o Chefe limita a busca a um diretório ou escopo específico, obedecer rigorosamente. Não expandir a busca para outros diretórios, repositórios ou sistemas sem autorização explícita. Isso aplica-se a todas as classes de tarefa — busca de arquivos, investigação de erros, descoberta de capacidades.
+
+```text
+MIRA_SOMENTE_LA = escopo_exato_do_CHEFE
+NAO_EXPANDIR_SEM_AUTORIZACAO = true
+```
+
+### 52. SAFE_OPERATIONAL_PREFLIGHT — Evidence Before Mutation
+**Correção direta do Chefe (2026-09-11):** preflight de segurança com leitura-only primeiro, evidência concreta, depois a menor mutação autorizada, depois verificar.
+
+**Regra cristalizada:** Para mudanças operacionais que afetam estado (deploy, merge, config, runtime), a sequência obrigatória é:
+
+```text
+PASSO 1 — READ-ONLY PREFLIGHT
+  → medir estado atual (HEAD, branch, runtime, portas, processos)
+  → confirmar que o alvo existe e está acessível
+  → classificar risco e escopo
+
+PASSO 2 — EVIDÊNCIA CONCRETA
+  → prova do estado antes da mutação
+  → baseline medido, não presumido
+  → se screenshot/imagem: OCR é HIPÓTESE, não FATO — rebaixar para hipótese se borrado
+
+PASSO 3 — MENOR MUTAÇÃO AUTORIZADA
+  → delta mínimo que resolve a causa comprovada
+  → testar local antes de publicar
+  → node --check + node --test (42/42) antes de qualquer push
+
+PASSO 4 — VERIFICAR DEPOIS
+  → medir estado pós-mutação
+  → confirmar que o runtime responde ao esperado
+  → registrar SHA, testes, evidence
+
+REGRA: se a direção se perder, TRAVAR ANTES DE MUTAR NO ESCURO, recarregar SOUL + intenção + estado vivo, reconciliar e continuar.
+```
+
+**Pitfall:** executar mutação sem preflight de leitura. Cada mutação sem baseline medido é um tiro no escuro — mesmo que funcione, não há prova de que o efeito foi o pretendido.
+
 ---
 
 Ferramentas, webhooks e bots que queiram executar acao CentralDark podem declarar
