@@ -27,6 +27,7 @@ import { supabaseTools } from "../supabase/supabase.js";
 import { vpsFileTools } from "../vps/vps-files.js";
 import { vpsLazyTools } from "../vps/vps-lazy.js";
 import { vpsRunOnceTools } from "../vps/vps-run-once.js";
+import { youtubeMediaTools } from "../media/youtube-transcript.js";
 import {
     ADMIN_CONFIRMATIONS,
     CATALOG_VERSION,
@@ -92,6 +93,7 @@ const runtimeTools = [
     ...integrationsTools,
     ...painelTools,
     ...piveteTools,
+    ...youtubeMediaTools,
 ];
 const registry = new Map(runtimeTools.map((tool) => [tool.name, tool]));
 function safeToolInfo(tool) {
