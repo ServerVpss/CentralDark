@@ -194,7 +194,13 @@ for TRY in $(seq 1 "$MAX_TRIES"); do
     node scripts/lupa/validar-porta-de-entrada.mjs
 
     if git push origin HEAD:main; then
-      echo "✅ ${WRITER_TAG}_PUSH_OK tentativa=$TRY head=${HEAD_SHA:0:12}"
+      REMOTE_HEAD="$(git ls-remote origin refs/heads/main | cut -f1)"
+      if [ "$REMOTE_HEAD" != "$HEAD_SHA" ]; then
+        echo "❌ ${WRITER_TAG}_REMOTE_HEAD_MISMATCH expected=$HEAD_SHA observed=$REMOTE_HEAD"
+        exit 1
+      fi
+      echo "REMOTE_HEAD_VERIFIED=$REMOTE_HEAD"
+      echo "✅ ${WRITER_TAG}_PUSH_OK tentativa=$TRY head=${HEAD_SHA:0:12} remote=${REMOTE_HEAD:0:12}"
       exit 0
     fi
 
