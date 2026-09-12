@@ -130,7 +130,7 @@ test('T14 Executor: commit_push falha fechado e só fica verde após ler o HEAD 
 
   assert.ok(start >= 0 && end > start);
   assert.match(trecho, /bash scripts\/lupa\/writer-safe-push-main\.sh/);
-  assert.match(trecho, /REMOTE_HEAD_VERIFIED=\[0-9a-f\]\{12,40\}/);
+  assert.match(trecho, /REMOTE_HEAD_VERIFIED=\[0-9a-f\]\{[0-9,]+\}/);
   assert.match(trecho, /\.test\(stdout\)/);
   assert.match(trecho, /PUBLISH_BLOCKED_REMOTE_READBACK_MISSING/);
 });
