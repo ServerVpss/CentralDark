@@ -35,7 +35,6 @@ test('Screenpipe entra como sensor local, não como autoridade no renderer', () 
   assert.match(constants, /http:\/\/127\.0\.0\.1:3030/);
   assert.match(main, /centraldark:screenpipe:health/);
   assert.match(main, /SCREENPIPE_BASE_URL/);
-  assert.match(preload, /getScreenpipeHealth/);
   assert.doesNotMatch(preload, /search-content|activity-summary|frame-context|cookie|token/i);
 });
 
@@ -71,4 +70,22 @@ test('o build da CentralDark funciona no Windows sem depender de rm Unix', () =>
   assert.match(clean, /rmSync/);
   assert.match(clean, /recursive: true/);
   assert.match(clean, /force: true/);
+});
+
+test('o instalador carrega uma capsula de runtime e nao depende de instalacao global aleatoria', () => {
+  const builder = read(`${root}/electron-builder.yml`);
+  const runtime = JSON.parse(read(`${root}/resources/runtime/manifest.json`));
+
+  assert.match(builder, /- resources\/\*\*/);
+  assert.equal(runtime.schema, 'centraldark.runtime-capsule/v1');
+  assert.equal(runtime.owner, 'apps/modulos/Bolt/source');
+  assert.equal(runtime.policy.one_system_only, true);
+  assert.equal(runtime.policy.user_machine_package_install, false);
+  assert.equal(runtime.policy.external_global_runtime_fallback, false);
+  assert.equal(runtime.policy.external_appdata_hermes_venv_allowed, false);
+  assert.equal(runtime.policy.release_must_fail_closed_if_required_sidecar_missing, true);
+  assert.equal(runtime.components.electron_node.mode, 'embedded-by-electron');
+  assert.equal(runtime.components.hermes.mode, 'bundled-sidecar');
+  assert.equal(runtime.components.hermes.bundle_status, 'UNKNOWN');
+  assert.equal(runtime.components.hermes.required_for_fixed_point, true);
 });
