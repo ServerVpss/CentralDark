@@ -68,6 +68,54 @@ INSUFFICIENT_EVIDENCE(scope)
 → UNKNOWN(scope)
 ```
 
+## Identidade de artefato — aprendizado cristalizado
+
+O erro de depender de nomes transitórios de upload não pode reaparecer em Hermes local, Hermes VPS, CI/CD, MCP ou qualquer outro executor.
+
+```text
+ARTIFACT_NAME_IS_NOT_IDENTITY=true
+UPLOAD_SUFFIX_IS_TRANSIENT=true
+DISCOVER_BY_HASH_FIRST=true
+KNOWN_LOCATIONS_FIRST=true
+EMPTY_PATH_WITH_KNOWN_IDENTITY=RESOLVE_REFERENCE
+EMPTY_PATH != ARTIFACT_MISSING
+SAME_HASH_AND_SIZE_DIFFERENT_NAME=SAME_ARTIFACT
+SAME_NAME_DIFFERENT_HASH=FAIL_CLOSED
+UNRESOLVED_KNOWN_IDENTITY=UNKNOWN
+```
+
+Fluxo obrigatório:
+
+```text
+EXPLICIT_PATH?
+├─ SIM → medir bytes + tamanho + SHA-256
+└─ NÃO → procurar somente em locais autorizados conhecidos
+          → filtrar por tamanho quando conhecido
+          → confirmar SHA-256
+          → resolver referência
+
+MATCH → PROVED_IN_SCOPE
+MISMATCH → REFUTED_IN_SCOPE / FAIL_CLOSED
+NÃO ENCONTRADO → UNKNOWN
+```
+
+O nome do arquivo continua útil para apresentação e proveniência, mas nunca é prova de identidade. Sufixos como `(2)` e `(3)` são aliases de transporte, não novos artefatos.
+
+## Herança entre Hermes VPS e Hermes Casa
+
+```text
+HERMES_VPS encontra ferida
+→ prova causa/remédio
+→ cristaliza no owner canônico
+→ teste + receipt
+→ main
+→ HERMES_LOCAL sincroniza
+→ carrega ARTIFACT-PROPERTIES.yml + owners + gates
+→ reutiliza o aprendizado sem repetir a ferida
+```
+
+Isso é transferência por código/contrato/prova, não memória privada de sessão.
+
 ## Trava de verdade
 
 ```text
@@ -95,6 +143,12 @@ Nunca:
 IDEIA NOVA → SISTEMA PARALELO
 ```
 
+## Implementação viva
+
+- `scripts/lupa/pdf-conformance-cc2003.mjs` resolve o PDF por identidade quando `--pdf` não é fornecido.
+- `scripts/lupa/pdf-conformance-cc2003.test.mjs` contraprova nome diferente, hash divergente, path vazio resolvível e path vazio desconhecido.
+- `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ARTIFACT-PROPERTIES.yml` torna a regra global e carregável pelo Hermes.
+
 ## Estado desta cristalização
 
 ```text
@@ -110,6 +164,6 @@ BINARY_GIT_BLOB_SHA=ab84cb54a77bfd4647b487e526b1714223c12c96
 BINARY_COMMIT=1fd16f186f880858a39b98701859c48e30fbfb9f
 VERIFIED_AT=2026-09-10
 VERIFICATION=local SHA-256 + size + pdfinfo pages; GitHub blob equals local git hash-object
-SCOPE=SOURCE_BINARY_PROVENANCE_ONLY
+SCOPE=SOURCE_BINARY_PROVENANCE_PLUS_ARTIFACT_IDENTITY_POLICY
 FULL_PDF_ALGORITHM_CONFORMANCE=NOT_PROVEN
 ```
