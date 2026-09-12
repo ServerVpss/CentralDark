@@ -1,6 +1,6 @@
 # HERMES-CORE / agents — contrato herdado
 
-Este arquivo **refina**, não substitui, `/LEIA-ME-IA.md` e `/AGENTS.md`. Ele vale para todos os agentes sob este diretório: `Auto-Diagnostico`, `Critic`, `Deploy-Watcher`, `Executor`, `GraphRAG-Master`, `Knowledge-Collector`, `Log-Verificador` e `Universal-Handler`.
+Este arquivo refina, não substitui, `/LEIA-ME-IA.md` e `/AGENTS.md`. Ele vale para todos os agentes sob este diretório: `Auto-Diagnostico`, `Critic`, `Deploy-Watcher`, `Executor`, `GraphRAG-Master`, `Knowledge-Collector`, `Log-Verificador`, `Signal-Watcher` e `Universal-Handler`.
 
 ## EXTEND-ONLY obrigatório
 

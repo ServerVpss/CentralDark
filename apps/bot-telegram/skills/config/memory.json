@@ -277,6 +277,27 @@
       "msgCount": 6,
       "lastMsg": "Não tenho acesso a essa informação. Meu funcionamento não depende de e-mail — estou rodando no servidor VPS e você está ",
       "timestamp": 1782828359402
+    },
+    {
+      "input": "SSS",
+      "skill": "find-skills",
+      "result": "success",
+      "timestamp": 1789175868945
+    },
+    {
+      "input": "/STARTOI",
+      "skill": "find-skills",
+      "result": "success",
+      "timestamp": 1789175904004
+    },
+    {
+      "type": "session",
+      "chatId": 1901426549,
+      "agent": "orquestrador",
+      "cogMode": null,
+      "msgCount": 2,
+      "lastMsg": "❌ Resposta vazia da API.",
+      "timestamp": 1789177707301
     }
   ]
 }
