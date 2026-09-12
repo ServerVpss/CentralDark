@@ -116,6 +116,44 @@ Mesmo erro + zero informação nova + zero mudança = desperdício. Evidência q
 mata hipótese/regra deve fazê-la mudar ou morrer; nunca ajustar teste ou
 rebaixar canônico só para produzir verde.
 
+### 2.2 Contexto estrutural antes da busca ampla
+
+Quando a tarefa envolve código, a descoberta deve começar pelo mapa já existente
+antes de varrer o repositório com `grep`, `glob` ou leituras amplas:
+
+```text
+INTENÇÃO
+→ ÍNDICE/GRAFO/ROTA EXISTENTE
+→ CANDIDATOS POR SIGNIFICADO
+→ RELAÇÕES: callers, callees, imports, consumidores, testes
+→ OWNER + ESCOPO
+→ CONTEXTO MÍNIMO
+→ BUSCA AMPLA SOMENTE SE O MAPA NÃO RESOLVER
+```
+
+Busca semântica só produz candidatos. Ela não escolhe sozinha entre funções que
+compartilham vocabulário mas possuem efeitos opostos. O grafo é projeção; contrato,
+consumidor, teste e runtime confirmam o alvo. Se não houver índice ou relação
+suficiente, manter `UNKNOWN` e escalar a busca de forma explícita — nunca inventar
+que o primeiro resultado é o owner.
+
+```text
+SEMANTIC_MATCH != OWNER_PROOF
+GRAPH_RELATION != AUTHORITY
+INDEX_MISS != FILE_ABSENCE
+BROAD_SCAN_IS_FALLBACK=true
+CONTEXT_MINIMUM_BEFORE_MODEL=true
+```
+
+A seleção do Bolt aplica essa regra com pré-classificação barata por caminho e
+nome antes da chamada ao modelo, preservando a lista completa como fallback e
+validando qualquer arquivo retornado contra o inventário original. O objetivo é
+reduzir tokens e rodadas, não trocar prova estrutural por uma heurística lexical.
+
+Quando a rota já foi provada para a mesma intenção, owner, ferramenta e estado,
+reutilizar a decisão e executar o próximo passo determinístico. Reabrir somente
+com nova evidência, falha observada, mudança material ou contradição provada.
+
 ## 3. Gate de entrada
 
 Antes do primeiro uso de ferramenta, fixar:
