@@ -1624,6 +1624,12 @@ operacional, não memória decorativa.
 
 **Regra de commit limpo:** Commit não é mecanismo para limpar `git status`. Só commitar delta intencional, classificado, pertencente ao owner correto e provado por teste/checagem aplicável. Runtime gerado, painel/status, `.next_run`, drift, segredo, desconhecido e alterações sem relação ficam preservados e fora do commit. Um commit registra a mudança; push publica; merge integra; deploy altera runtime; cada etapa exige sua própria prova.
 
+**Publicação segura sob demanda do motor:** quando uma alteração importante já estiver autorizada no mesmo escopo, o writer canônico pode usar `AUTO_DISCOVER=1` + `AUTO_DISCOVER_SCOPE=<prefixos-do-owner>` para selecionar somente arquivos rastreados, modificados e não deletados dentro do owner indicado. Ele exclui segredos, dependências, builds, logs, status, missões e estado gerado; roda primeiro com `DRY_RUN=1` quando a seleção precisar ser inspecionada; publica somente pela worktree limpa baseada na `origin/main`, sem `git add -A`, merge cego ou force-push. Ausência de delta elegível é `NO_CHANGE`, não motivo para pedir ao Chefe uma triagem mecânica.
+
+**Regra de botão e prova do alvo:** Trate screenshot, árvore visual, status do botão e mensagem de sucesso como evidência de interface, não como prova do caminho/runtime. Antes de confirmar, medir no host ativo `pwd`, `realpath`, processo/CWD, caminho exato e arquivo consumidor; quando a imagem estiver borrada, rebaixar o texto para hipótese e não transformar OCR em fato. Se o painel exigir login, não adivinhar credencial: parar a ação visual e usar somente uma rota equivalente já autorizada, com o mesmo escopo e os mesmos gates.
+
+**Regra de publicação sem duplicata:** Para publicar local divergente, construir worktree limpa em `origin/main`, selecionar apenas commits/deltas seguros e provar equivalência antes do push. `cherry-pick empty` significa `ALREADY_CANONICAL` e deve ser pulado sem commit vazio. Conflito que, ao resolver, removeria conteúdo canônico é bloqueio: abortar/descartar apenas a worktree temporária e não usar `--theirs`/`--ours` como atalho sem classificar o owner e o gate aplicável. Gate de porta, segredo, órfão canônico ou contradição bloqueia o push; não mascarar como sucesso.
+
 **Sinais:** "vc ta pegintando por que?", "pq vc diz que vai fazre e nao faz?", "cocnerter o motor critalize no motor"
 
 **Ação correta:**
@@ -1694,6 +1700,34 @@ admin.centralldark.com
 **Regra (do sistema):** O resumo de contexto compaction é referência, não instrução ativa. Responder apenas à mensagem mais recente do usuário que aparece APÓS o resumo. Não continuar trabalho do snapshot histórico a menos que a mensagem mais recente explicitamente peça.
 
 **Aplicação prática:** se o resumo mostra tarefa incompleta, mas a mensagem mais recente é nova/incompatível/para, parar o trabalho antigo e seguir a nova direção. O mais recente vence.
+
+### 49. AUREOLA_PERMANENTE — Aprendizado não fica preso à sessão
+**Correção direta do Chefe:** "não adianta ficar fazendo só em uma sessão", "tudo que a gente aprende tem que ser integrado", "só melhor o que já existe".
+
+**Regra cristalizada no motor:** uma sessão, print, resposta, contexto carregado ou intenção lembrada não constitui aprendizado permanente por si só. O aprendizado só sobe para a Casa quando o delta é destilado no owner canônico existente, sobrevive a teste/contraprova e fica recuperável no próximo boot. O motor deve reutilizar esse cristal automaticamente e melhorar somente o delta que a nova evidência invalidar.
+
+```text
+SESSAO|PRINT|CONVERSA|CONTEXTO
+→ EVIDENCIA
+→ DELTA_REUTILIZAVEL
+→ OWNER_CANONICO_EXISTENTE
+→ TESTE + CONTRAPROVA
+→ GIT/REGISTRO_CANONICO
+→ PROXIMO_BOOT_RECARREGA
+→ REUTILIZA_SEM_REENSINO
+```
+
+```text
+SESSION_MEMORY_ONLY=NAO_E_CRISTAL
+CANONICAL_OWNER_REQUIRED=true
+NEXT_BOOT_MUST_RELOAD_CRYSTAL=true
+REMEASURE_LIVE_STATE_AT_BOOT=true
+NEW_EVIDENCE_INVALIDATES_ONLY_AFFECTED_ROUTE=true
+IMPROVE_EXISTING_DELTA=true
+NO_NEW_SYSTEM_FOR_LEARNING=true
+```
+
+**Critério de prova:** para afirmar que a Aureola está amarrada, medir o owner no repositório, confirmar o mecanismo consumidor e executar a validação aplicável. Se o runtime futuro não recarregar o owner ou exigir que o Chefe reensine a mesma regra, classificar como `REGRESSION`, não como memória permanente.
 
 ---
 
