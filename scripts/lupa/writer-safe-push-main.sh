@@ -75,9 +75,13 @@ if [ "$AUTO_DISCOVER" = "1" ]; then
       esac
     done
     [ "$in_scope" -eq 1 ] || continue
+    base=$(basename "$p")
     case "$p" in
       .env|.env.*|*/.env|*/.env.*|*secret*|*token*|*credential*|*password*|*.pem|*.key|*.crt|*.p12|*.pfx|*/node_modules/*|*/.venv/*|*/__pycache__/*|*/.pytest_cache/*|*/dist/*|*/build/*|*/status/*|*/logs/*|*/missions/*|*.next_run|*.state.json|*.estado.json|*analyst-decision.json|*last-report.json|*graph.json|status.json|*/status.json|*-health.json|*-status.json|*.jsonl)
         continue ;;
+    esac
+    case "$base" in
+      GRAFO-VIVO.md|latest.md|ESTADO-DA-RETOMADA.md) continue ;;
     esac
     PATH_ARR+=("$p")
   done
