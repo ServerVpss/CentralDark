@@ -78,7 +78,7 @@ export function analisarTexto(txt) {
 }
 
 // ─── Escaneia TODOS os processos PM2 ──────────────────────────────────
-export function escanear({ ignorarPmIds = [1] } = {}) {
+export function escanear({ ignorarPmIds = [1], ignorarNomes = [] } = {}) {
   const jlist = shJSON('pm2 jlist');
   if (!jlist) return { ok: false, erro: 'pm2 jlist falhou', servicos: [] };
 
@@ -88,6 +88,7 @@ export function escanear({ ignorarPmIds = [1] } = {}) {
   for (const p of jlist) {
     if (ignorarPmIds.includes(p.pm_id)) continue;
     const nome = p.name;
+    if (ignorarNomes.includes(nome)) continue;
     const st = p.pm2_env?.status || 'unknown';
     const restarts = p.pm2_env?.restart_time ?? 0;
     const uptimeMs = p.pm2_env?.pm_uptime ? (agora - p.pm2_env.pm_uptime) : 0;
