@@ -3,7 +3,7 @@ name: centraldark-esteira-motor
 description: CentralDark esteira e motor Hermes — separa PM2 motor de deploy Actions, fila self-hosted, setup-node, PAPAGAIO vs POMBO. Use quando CHEFE pedir deploy, restart, runner, fila, Hermes, VPS sync, ou status do motor.
 metadata:
   type: operational
-  version: "1.2"
+  version: "1.3"
   owner: SEGREDO/CHEFE
 ---
 
@@ -25,6 +25,53 @@ SINTOMA_SUMIU != CAUSA_RESOLVIDA
 
 PAPAGAIO_MODE = OFF.  
 POMBO_MODE = CHECKSUM_ON.
+
+## Lei da cristalização contínua + micro-deploy
+
+Ferida comprovada não pode morrer em chat, comentário, sessão ou memória privada.
+Quando a correção estiver dentro da autoridade e houver owner canônico, o fechamento obrigatório é:
+
+```
+FERIDA_PROVADA
+→ CAUSA_RAIZ
+→ SOLUÇÃO_NO_OWNER_EXISTENTE
+→ TESTE
+→ CONTRAPROVA
+→ COMMIT
+→ PUSH
+→ MAIN
+→ MICRO_DEPLOY_DO_ESCOPO_AFETADO
+→ REMEDIÇÃO_RUNTIME
+→ RECEIPT
+→ FIXED_POINT
+```
+
+Regras:
+
+- `FERIDA_PROVADA && DELTA_SEGURO` exige commit; explicação sem cristalização é incompleta.
+- Commit deve ser mínimo, atômico e ligado à causa raiz; não acumular pacote gigante sem necessidade.
+- Push/merge na `main` não encerra a missão: `MERGED != DEPLOYED` continua obrigatório.
+- Micro-deploy significa promover **somente** o componente afetado pela mudança, usando a rota canônica existente daquele componente.
+- Mudança de docs/skill/policy não autoriza restart de runtime não afetado.
+- Mudança MCP/guards usa a rota canônica MCP/guards; mudança Hermes core exige rota que realmente promova/reinicie Hermes core.
+- Se a rota de deploy do componente não existir ou não estiver disponível: `DEPLOY_ROUTE_UNKNOWN` / `HUMAN_FRONTIER`; nunca chamar outro workflow de equivalente.
+- Depois do deploy, provar SHA/runtime/health do componente aplicável; `ACTION != PROOF`.
+- Se o deploy falhar, preservar o commit válido na `main`, registrar a falha de produção e continuar pela causa do deploy sem desfazer aprendizado correto por reflexo.
+- Receipts devem registrar `START_HEAD`, `COMMIT_SHA`, `MAIN_HEAD`, `DEPLOYED_SHA` e `RUNTIME_SHA` quando aplicáveis.
+- `DEPLOYED_SHA != MAIN_HEAD` mantém `FIXED_POINT=FALSE`, salvo quando o escopo da mudança não possui runtime implantável; nesse caso declarar explicitamente `DEPLOY_NOT_APPLICABLE` com causa.
+- Toda repetição futura deve reutilizar o mesmo owner e o mesmo fluxo; proibido criar V2/V3 ou solução paralela para contornar deploy quebrado.
+
+Princípio contínuo:
+
+```
+PEQUENO DELTA PROVADO
+→ PEQUENO COMMIT
+→ MAIN
+→ PEQUENO DEPLOY COMPATÍVEL
+→ PROVA FRESCA
+```
+
+Isso é micro-deploy contínuo; não significa reiniciar tudo a cada commit.
 
 ## Escopo do motor
 
@@ -133,6 +180,22 @@ Detalhe de SHA/run da sessão: `references/sessao-erros-reais.md`.
 
 ## Procedimento obrigatório
 
+### 0. CRISTALIZAR FERIDA (quando houver delta comprovado)
+
+```
+FERIDA → CAUSA → OWNER → PATCH → TESTE → CONTRAPROVA
+→ COMMIT → PUSH → MAIN → MICRO_DEPLOY APLICÁVEL
+→ REMEDIÇÃO → RECEIPT
+```
+
+Só pular `MICRO_DEPLOY` com uma destas classificações explícitas:
+
+- `DEPLOY_NOT_APPLICABLE` — mudança sem runtime implantável.
+- `DEPLOY_ROUTE_UNKNOWN` — componente possui runtime, mas não existe rota provada nesta sessão.
+- `HUMAN_FRONTIER` — ação exige autoridade/intervenção não disponível.
+
+Nenhuma delas equivale a `DEPLOYED`.
+
 ### 1. ACORDAR (medir)
 
 ```
@@ -170,7 +233,11 @@ PROVADO=
 QUEBRADO=
 EVIDÊNCIA FALTANTE=
 DELTA EXECUTADO=
-DEPLOY= (status real do run / REJECT se rota errada)
+COMMIT_SHA=
+MAIN_HEAD=
+DEPLOY= (status real do run / DEPLOY_NOT_APPLICABLE / REJECT se rota errada)
+DEPLOYED_SHA=
+RUNTIME_SHA=
 START_HEAD=
 FINAL_HEAD=
 HEAD_CHANGED_DURING_MISSION=SIM|NAO
@@ -194,6 +261,10 @@ PRÓXIMO_CURSOR=
 
 ## Anti-padrões
 
+- Deixar ferida comprovada somente no chat quando existe owner canônico e delta seguro para cristalizar.
+- Acumular várias correções independentes num mega-deploy quando micro-deploys separados são possíveis.
+- Reiniciar componente não afetado só para poder dizer que houve deploy.
+- Declarar `DEPLOYED` sem provar a rota e o SHA/runtime correspondente.
 - Declarar deploy OK porque Hermes está online.
 - Declarar motor morto porque Actions está queued.
 - Declarar Hermes saudável só com PM2 `online`.
