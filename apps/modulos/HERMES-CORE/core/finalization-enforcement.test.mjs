@@ -129,12 +129,8 @@ test('T14 Executor: commit_push falha fechado e só fica verde após ler o HEAD 
   const trecho = executorSource.slice(start, end);
 
   assert.ok(start >= 0 && end > start);
-  assert.match(trecho, /set -o pipefail/);
-  assert.match(trecho, /PUSH PENDENTE — relatar/);
-  assert.match(trecho, /exit 23/);
-  assert.match(trecho, /git rev-parse HEAD/);
-  assert.match(trecho, /git ls-remote origin refs\/heads\/main/);
-  assert.match(trecho, /test "\$LOCAL_HEAD" = "\$REMOTE_HEAD"/);
-  assert.match(trecho, /REMOTE_HEAD_VERIFIED=/);
-  assert.match(trecho, /if \[ "\$REMOTE_HEAD" != "\$HEAD_SHA" \]/);
+  assert.match(trecho, /bash scripts\/lupa\/writer-safe-push-main\.sh/);
+  assert.match(trecho, /REMOTE_HEAD_VERIFIED=\[0-9a-f\]\{40\}/);
+  assert.match(trecho, /\.test\(stdout\)/);
+  assert.match(trecho, /PUBLISH_BLOCKED_REMOTE_READBACK_MISSING/);
 });
