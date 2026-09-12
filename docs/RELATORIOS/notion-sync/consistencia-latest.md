@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-09-12T18:04:39.628Z
-- **Commit:** `5e9624e9fd765016c7b91104074e6729c88fdb68`
+- **Gerado:** 2026-09-12T18:27:17.465Z
+- **Commit:** `48463499497c8318287de7d7ff6eaa844ee5bbf4`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 39 | 39 | 39 | 0 | 0 |
-| aprendizados | 42 | 0 | 0 | 42 | 0 |
+| aprendizados | 43 | 0 | 0 | 43 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **42**
+- 🟥 Faltando no Notion: **43**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -90,4 +90,5 @@
 - 46. ONE_SYSTEM_ONLY_ENFORCEMENT — User's Operational Maxim
 - 47. LARGE_FILE_INTEGRATION — Process Droped Files, Don't Just Acknowledge
 - 48. COMMIT_LIMPO — Commit não é vassoura de git status
+- 49. AUREOLA_PERMANENTE — Publicação segura e continuidade do aprendizado
 </details>

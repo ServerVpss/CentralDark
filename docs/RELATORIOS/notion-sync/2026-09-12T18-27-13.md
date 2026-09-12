@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-09-12T18:04:36.320Z
+# 🧠 Notion Sync — 2026-09-12T18:27:13.355Z
 
-- **Commit fonte:** `5e9624e9fd765016c7b91104074e6729c88fdb68`
+- **Commit fonte:** `48463499497c8318287de7d7ff6eaa844ee5bbf4`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 490 atualizadas · ❌ 36 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 490 atualizadas · ❌ 37 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
-| aprendizados | 42 | 0 | 34 | 0 | 8 |
+| aprendizados | 43 | 0 | 34 | 0 | 9 |
 | estrutura | 440 | 0 | 412 | 0 | 28 |
 
 ## Operações
@@ -108,6 +108,7 @@
 | aprendizados | erro | #46 — ONE_SYSTEM_ONLY_ENFORCEMENT — User's Operational Maxim |
 | aprendizados | erro | #47 — LARGE_FILE_INTEGRATION — Process Droped Files, Don't Just Acknowledge |
 | aprendizados | erro | #48 — COMMIT_LIMPO — Commit não é vassoura de git status |
+| aprendizados | erro | #49 — AUREOLA_PERMANENTE — Publicação segura e continuidade do aprendizado |
 | estrutura | atualizado | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | atualizado | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
