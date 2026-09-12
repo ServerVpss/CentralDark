@@ -1577,6 +1577,7 @@ filepath = os.path.join(destino_abs, base_name)
 - references/mcp-local-bootstrap.md — procedimento validado para subir MCP CentralDark localmente (health, status.json, 110 tools)
 - references/soul-config-divergence-runtime-block.md — padrão de divergência SOUL/config quando runtime lê de UserProfile (AppData) vs canônico
 - references/soul-hermes-casa-local-adapter-only.md — SOUL HERMES-CASA/pivete existe só como adaptador local, não no GitHub canônico
+- references/git-push-sequence.md — sequência obrigatória de publicação (fetch, merge, test, push, PR-mãe)
 
 ## !CENTRALDARK Gate Oficial
 
@@ -1728,6 +1729,67 @@ NO_NEW_SYSTEM_FOR_LEARNING=true
 ```
 
 **Critério de prova:** para afirmar que a Aureola está amarrada, medir o owner no repositório, confirmar o mecanismo consumidor e executar a validação aplicável. Se o runtime futuro não recarregar o owner ou exigir que o Chefe reensine a mesma regra, classificar como `REGRESSION`, não como memória permanente.
+
+### 50. GIT_SEQUENCE_COMMIT_PUSH — Fetch Before Push, Never Reset
+**Cenário (2026-09-12):** Tentativa de `git push origin main` falhou porque o remote já tinha commits mais novos. Reset hard para commit antigo destruiu trabalho em `fix/writer-canonical-40`. `gh pr create` falhou porque branch não existia remotamente. Forçou branch a partir de `main` local (stale).
+
+**Regra cristalizada — sequência de publicação obrigatória:**
+```text
+ANTES DE QUALQUER PUSH/PULL/MERGE:
+  1. git fetch --no-tags origin refs/heads/main  (atualiza remote-tracking)
+  2. git status --short --branch                  (verifica ahead/behind)
+  3. git rev-parse HEAD && git ls-remote origin refs/heads/main  (compara SHAs)
+
+SE LOCAL == REMOTE:
+  → git add + git commit --amend + git push origin main
+
+SE LOCAL BEHIND REMOTE:
+  → git merge origin/main --strategy=recursive --strategy-option=theirs
+  → resolver conflitos se houver
+  → git diff --check
+  → node --check + node --test
+  → git add + git commit --amend + git push origin main
+
+SE AHEAD DO REMOTO (branch próprio):
+  → git push origin <branch> (sem -f)
+  → se rejeitado: git pull --rebase origin <branch> ou git push -f (com prova)
+  → nunca reset --hard a menos que o branch inteiro seja descartado
+
+NUNCA:
+  → git reset --hard <commit-antigo>  (destrói trabalho não publicado)
+  → git push -f origin <branch> sem verificar se remote tem commits novos
+  → criar branch a partir de main local sem primeiro merge origin/main
+  → git push origin main sem antes verificar se remote está atrasado
+```
+
+**Para criar PR-mãe:**
+```text
+1. git fetch origin main
+2. git merge origin/main --no-edit --strategy=recursive --strategy-option=theirs
+3. git diff --check + node --check + node --test (42/42)
+4. git add -A files-changes
+5. git commit --amend --no-edit
+6. git branch -f fix/writer-canonical-40 HEAD
+7. git push -f origin fix/writer-canonical-40
+8. gh pr create --base main --head fix/writer-canonical-40
+```
+
+**Pitfall crítico:** `main` local pode estar AHEAD de `origin/main` se o push anterior subiu o commit. O branch `fix/writer-canonical-40` criado a partir de `main` local inclui o commit já publicado, fazendo com que `origin/main` esteja AHEAD do branch. Solução: sempre criar branch a partir de `origin/main`, não de `main` local. Ou, se o commit já está em `origin/main`, o branch não precisa existir — o trabalho já está publicado.
+
+**Regra de publicação segura sob demanda do motor:** quando uma alteração importante já estiver autorizada no mesmo escopo, o writer canônico pode usar `AUTO_DISCOVER=1` + `AUTO_DISCOVER_SCOPE=<prefixos-do-owner>` para selecionar somente arquivos rastreados, modificados e não deletados dentro do owner indicado. Ele exclui segredos, dependências, builds, logs, status, missões e estado gerado; roda primeiro com `DRY_RUN=1` quando a seleção precisar ser inspecionada; publica somente pela worktree limpa baseada na `origin/main`, sem `git add -A`, merge cego ou force-push. Ausência de delta elegível é `NO_CHANGE`, não motivo para pedir ao Chefe uma triagem mecânica.
+
+**Sinais:** "faz comit main", "pr mãe", "tá comit", "merge"
+
+**Ação correta:**
+- Sempre `git fetch` antes de qualquer operação de push/pull/merge
+- Sempre comparar `HEAD` local vs `origin/main` antes de commit/push
+- Se branch precisa existir: `git branch <name> origin/main` (não `main` local)
+- Se trabalho já está em `origin/main`: não criar branch, deletar branch local
+- Testar (node --check, node --test) antes de publicar
+- Commit `--amend --no-edit` para consolidar no HEAD atual
+- Verificar `git status --porcelain | wc -l` para confirmar estado limpo
+
+**Pitfall:** assumir que `git pull --ff-only` atualiza tudo. Quando o branch local está atrás, o ff-only não funciona e o merge é necessário. Quando o branch local está à frente, o ff-only não aplica e o push pode rejeitar. Sempre medir antes.
 
 ---
 
