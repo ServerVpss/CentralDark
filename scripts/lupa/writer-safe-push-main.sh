@@ -58,6 +58,13 @@ if [ "$AUTO_DISCOVER" = "1" ]; then
     exit 2
   }
   IFS=',' read -r -a SCOPE_ARR <<< "$AUTO_DISCOVER_SCOPE"
+  for prefix in "${SCOPE_ARR[@]}"; do
+    case "$prefix" in
+      ""|.|/*|*../*|../*|*"$'\n'"*|*"$'\r'"*)
+        echo "${WRITER_TAG}_AUTO_DISCOVER_SCOPE_INVALID=1" >&2
+        exit 2 ;;
+    esac
+  done
   mapfile -d '' -t RAW_PATH_ARR < <(git diff --name-only -z --diff-filter=ACMRTUXB -- .)
   PATH_ARR=()
   for p in "${RAW_PATH_ARR[@]}"; do
@@ -81,8 +88,19 @@ if [ "$AUTO_DISCOVER" = "1" ]; then
   printf '🔎 %s AUTO_DISCOVER_PATHS=%s\n' "$WRITER_TAG" "${PATH_ARR[*]}"
 else
   [ -n "$PATHS" ] || { echo "PATHS ou AUTO_DISCOVER=1 obrigatorio" >&2; exit 2; }
-  PATH_ARR=($PATHS)
+  read -r -a PATH_ARR <<< "$PATHS"
 fi
+
+for p in "${PATH_ARR[@]}"; do
+  case "$p" in
+    ""|/*|*..*|*"$'\n'"*|*"$'\r'"*|*[[:space:]]*)
+      echo "${WRITER_TAG}_PATH_INVALID=1" >&2
+      exit 2 ;;
+    .env|.env.*|*/.env|*/.env.*|*secret*|*token*|*credential*|*password*|*.pem|*.key|*.crt|*.p12|*.pfx|*/node_modules/*|*/.venv/*|*/__pycache__/*|*/.pytest_cache/*|*/dist/*|*/build/*|*/status/*|*/logs/*|*/missions/*|*.next_run|*.state.json|*.estado.json|*analyst-decision.json|*last-report.json|*graph.json|status.json|*/status.json|*-health.json|*-status.json|*.jsonl)
+      echo "${WRITER_TAG}_PATH_FORBIDDEN=1" >&2
+      exit 2 ;;
+  esac
+done
 
 if [ "$DRY_RUN" = "1" ]; then
   printf '🧾 %s DRY_RUN=1; nenhuma worktree, alteração, commit ou publicação será feita\n' "$WRITER_TAG"

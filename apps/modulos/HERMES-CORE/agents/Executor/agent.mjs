@@ -152,7 +152,14 @@ async function _executar(ferramenta, args) {
         if (acao === 'commit_push') {
           const msg = String(args.mensagem || 'chore(hermes): auto-commit').slice(0, 200);
           const brutos = Array.isArray(args.paths) ? args.paths : [];
-          const limpos = brutos.map(x => String(x).replace(/[^\w@\/.\-]/g, '')).filter(Boolean);
+          const invalidPath = brutos.find((value) => {
+            const raw = String(value);
+            return !raw || raw.startsWith('/') || raw.includes('..') || /[\0\r\n\s]/.test(raw);
+          });
+          if (invalidPath !== undefined) {
+            return { ok: false, saida: 'PUBLISH_BLOCKED_PATH_FORMAT: caminho relativo sem .., whitespace ou controle' };
+          }
+          const limpos = brutos.map(x => String(x)).filter(Boolean);
           const scope = String(args.scope || '').trim();
           const env = {
             ...process.env,
