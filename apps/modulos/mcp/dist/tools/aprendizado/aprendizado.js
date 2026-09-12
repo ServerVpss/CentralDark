@@ -185,6 +185,12 @@ export const aprendizadoTools = [
                 .enum(["erro-correcao", "atalho", "regra", "armadilha", "outro"])
                 .optional()
                 .describe("Tipo de aprendizado"),
+            source_ref: z.string().max(240).optional().describe("Referência estável da fonte, sem conteúdo bruto"),
+            source_url: z.string().url().max(500).optional().describe("URL pública da fonte"),
+            source_sha256: z.string().regex(/^[a-f0-9]{64}$/i).optional().describe("Hash do conteúdo normalizado"),
+            evidence_ref: z.string().max(500).optional().describe("Referência da evidência observável"),
+            counterproof_ref: z.string().max(500).optional().describe("Referência da contraprova"),
+            promotion_status: z.enum(["CANDIDATE", "PROVEN"]).optional().describe("PROVEN exige evidência e contraprova"),
         }),
         handler: async (rawInput, ctx) => {
             const limpo = sanitizeFields({
@@ -193,6 +199,15 @@ export const aprendizadoTools = [
                 aprendizado: rawInput.aprendizado,
             });
             const categoria = rawInput.categoria ?? "outro";
+            const promotionStatus = rawInput.promotion_status ?? "CANDIDATE";
+            if (promotionStatus === "PROVEN" && (!rawInput.evidence_ref || !rawInput.counterproof_ref)) {
+                return textBlock(JSON.stringify({
+                    ok: false,
+                    status: "BLOCKED_MISSING_COUNTERPROOF",
+                    promotion_status: promotionStatus,
+                    required: ["evidence_ref", "counterproof_ref"],
+                }, null, 2));
+            }
             const atual = await lerArquivo(ctx.token, APRENDIZADOS_PATH);
             const base = atual.trim() ||
                 [
@@ -211,6 +226,12 @@ export const aprendizadoTools = [
                 `### ${proximo}. ${limpo.titulo}`,
                 `- **Categoria:** ${categoria}`,
                 `- **Data:** ${dataBR()}`,
+                `- **Status de promoção:** ${promotionStatus}`,
+                ...(rawInput.source_ref ? [`- **Fonte:** ${sanitizeFields({ source_ref: rawInput.source_ref }).source_ref}`] : []),
+                ...(rawInput.source_url ? [`- **URL da fonte:** ${rawInput.source_url}`] : []),
+                ...(rawInput.source_sha256 ? [`- **Hash da fonte:** ${rawInput.source_sha256}`] : []),
+                ...(rawInput.evidence_ref ? [`- **Evidência:** ${sanitizeFields({ evidence_ref: rawInput.evidence_ref }).evidence_ref}`] : []),
+                ...(rawInput.counterproof_ref ? [`- **Contraprova:** ${sanitizeFields({ counterproof_ref: rawInput.counterproof_ref }).counterproof_ref}`] : []),
                 `- **Contexto:** ${limpo.contexto}`,
                 `- **Aprendizado:** ${limpo.aprendizado}`,
                 ``,
