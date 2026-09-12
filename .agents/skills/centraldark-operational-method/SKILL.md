@@ -1611,9 +1611,87 @@ ALMA    -> extrair aprendizado reutilizavel
 VOLTA   -> refazer menor no owner correto
 ```
 
-Se um agente corrigiu um erro simples uma vez, a proxima execucao deve procurar o
-mesmo padrao primeiro, antes de redesenhar a arquitetura. Isso e aprendizado
-operacional, nao memoria decorativa.
+Se um agente corrigiu um erro simples uma vez, a próxima execução deve procurar o
+mesmo padrão primeiro, antes de redesenhar a arquitetura. Isso é aprendizado
+operacional, não memória decorativa.
+
+### 43. EXECUTION_OVER_EXPLANATION — User Values Doing over Talking
+**Correção direta do Chefe (2026-09-11):** "so conversa bonita nao serve", "vc so ta falando no caht nao to vendo aprendizado nem cristalziaçao congnitivo nem mental nem motora nem nad"
+
+**Regra cristalizada:** Quando usuário pede "ler repo integramente e continuar a história", NÃO responder em fragmentos Q&A. Ler de fato, integralmente, e continuar a história de forma conectada. O usuário não quer confirmation step a cada pedaço — quer a tarefa feita.
+
+**Sinais:** "vc ta pegintando por que?", "pq vc diz que vai fazre e nao faz?", "cocnerter o motor critalize no motor"
+
+**Ação correta:**
+- Ler documentos completos, não apenas cabeçalhos
+- Ler git log integralmente, não apenas últimos 5 commits
+- Compreender contexto antes de responder às perguntas do usuário
+- Executar o que foi prometido, não prometer e não executar
+- Quando usuário dizer "pare de falar e faça", parar de narrar e executar
+
+**Pitfall:** fragmentar uma leitura integral em múltiplas perguntas pontuais. Isso é o erro exato que o Chefe corrigiu.
+
+### 44. LINGUISTIC_CALIBRATION — Bahia Expression Accuracy
+**Correção direta do Chefe (2026-09-11):** "visse nao e ad bahia naoi disgraça pega o dicionario baianes ai no google e ingloobal em voec"
+
+**Regra cristalizada:** Expressões baianas devem ser usadas com precisão, não como decoração. "Visse" é pernambucano/recifense, não baiano. "Meu rei" é estereótipo criticado localmente.
+
+**Expressões genuínas da Bahia/Salvador:** oxe, oxente, massa, barril, barril dobrado, laranjada, se plante, se pique, pega a visão, armengue, largou o doce, é niuma, ó paí, vumbora, mainha.
+
+**Regra:** usar quando contexto combina, não jogar em toda frase. Menos caricatura, mais naturalidade. Pesquisa confirmatória antes de assumir origem regional de expressão.
+
+### 45. WEBUI_ADMIN_HUB — Localhost:8787 as CentralAdmin Surface
+**Contexto (2026-09-11):** WebUI em `/tmp/hermes-webui/` rodando em `127.0.0.1:8787` (PID 286195, launcher `ctl.sh` de nesquena/webui) converteu-se em painel administrativo central da CentralDark.
+
+**Regra:** O painel admin (`admin.centralldark.com` ou local `8787`) é a casca única administrativa. Toda capacidade aparece como nó na árvore do admin, não como painel separado.
+
+**Árvore do admin:**
+```
+admin.centralldark.com
+→ 🏠 Visão geral
+→ 🔌 MCP (OAuth, tools, capabilities)
+→ 🧠 Hub (memória, eventos, consumers)
+→ 📊 Observabilidade (Grafana embutido, métricas, logs, traces)
+→ ☁️ Cloudflare (builds, bindings, observability)
+→ 🖥️ VPS (PM2, deploy, health)
+→ 👁️ Screenpipe (local, via MCP, captura ON/OFF)
+→ 🤖 IA/Providers (catálogo, ativação sob demanda)
+→ 🔐 Segurança (Basic Auth, OAuth Admin, sessões, auditoria)
+```
+
+**Botão não abre outro painel — abre a árvore daquela capacidade dentro do próprio Admin.** Grafana, Cloudflare, Screenpipe etc. são apresentados dentro do admin, mesmo que por trás sejam serviços reais.
+
+### 46. ONE_SYSTEM_ONLY_ENFORCEMENT — User's Operational Maxim
+**Declaração explícita do Chefe (2026-09-11):** "ONE_SYSTEM_ONLY=true UNKNOWN_IS_NOT_PASS=***"
+
+**Regra cristalizada:** O usuário opera com ONE_SYSTEM_ONLY=true como maxim explícita. Não criar segunda arquitetura, segundo MCP, outro hub, outra ponte. Tudo flui pelo MCP CentralDark autenticado.
+
+**Decisões cristalizadas no PR-mãe (#1381, comentários 5641853866 e 5641904907):**
+- `SUBDOMAIN != NEW_SYSTEM`
+- `CAPABILITY != NEW_PORT`
+- `ADMIN_AUTH != VPS_ROOT_AUTH`
+- `ONE_SYSTEM_ONLY=true`
+
+**Consequência prática:** quando usuário dropa arquivo grande (zip, paste), processar e cristalizar ouro no owner canônico existente, não criar estrutura paralela.
+
+### 47. LARGE_FILE_INTEGRATION — Process Droped Files, Don't Just Acknowledge
+**Contexto (2026-09-11):** Usuário dropou `CentralDark-OneShot-Integrated.zip` (275MB) em `/root/CentralDark/apps/modulos/mcp-admin-ui/`.
+
+**Regra:** Quando usuário fornece arquivo grande para integração:
+1. Descompactar e ler conteúdo integralmente
+2. Extrair ouro: componentes, arquitetura, fluxos, decisões
+3. Classificar: CANONICAL | OPERATIONAL | CANDIDATE | PROGRAM_ONLY | HISTORICAL | UNKNOWN
+4. Indexar na caderneta de reconciliação ou documentar onde está
+5. Não apenas ack — processar e registar
+
+**O que foi feito com o OneShot:** desCompactado em /tmp, lidos ARCHITECTURE.md, INTEGRATION-RECEIPT.md, RECEIPT.md, RECEIPT-FIX-NPX-ATUAL.md, REGRA-ZERO.md, README.txt, ARQUITETURA.md — ouro extraído e pronto para cristalização.
+
+### 48. CONTEXT_COMPACTION_HANDOFF — Treat as Reference, Not Instructions
+**Regra (do sistema):** O resumo de contexto compaction é referência, não instrução ativa. Responder apenas à mensagem mais recente do usuário que aparece APÓS o resumo. Não continuar trabalho do snapshot histórico a menos que a mensagem mais recente explicitamente peça.
+
+**Aplicação prática:** se o resumo mostra tarefa incompleta, mas a mensagem mais recente é nova/incompatível/para, parar o trabalho antigo e seguir a nova direção. O mais recente vence.
+
+---
 
 Ferramentas, webhooks e bots que queiram executar acao CentralDark podem declarar
 `centraldark_gate_required=true` e anexar `centraldark_gate` com os fatos do gate.

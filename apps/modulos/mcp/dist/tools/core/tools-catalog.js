@@ -19,6 +19,7 @@ import { conscienciaTools } from "../consciencia/consciencia.js";
 import { pendenciasTools } from "../pendencias/pendencias.js";
 import { deployTools } from "../deploy/deploy.js";
 import { aprendizadoTools } from "../aprendizado/aprendizado.js";
+import { reuseHornTools } from "../aprendizado/reuse-horn.js";
 import { skillTools } from "../skills/skill.js";
 import { supabaseTools } from "../supabase/supabase.js";
 import { mcpAdminTools } from "./mcp-admin.js";
@@ -34,6 +35,7 @@ import { geminiTools } from "../gemini/gemini.js";
 const TOOL_NAME_PATTERN = /^[a-zA-Z0-9_-]{1,64}$/;
 const RAW_TOOLS = [
     ...aprendizadoTools,
+    ...reuseHornTools,
     ...conscienciaTools,
     ...skillTools,
     ...githubReadTools,
