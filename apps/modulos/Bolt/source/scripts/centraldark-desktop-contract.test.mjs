@@ -89,3 +89,29 @@ test('o instalador carrega uma capsula de runtime e nao depende de instalacao gl
   assert.equal(runtime.components.hermes.bundle_status, 'UNKNOWN');
   assert.equal(runtime.components.hermes.required_for_fixed_point, true);
 });
+
+test('providers externos entram por capability sem virar dependencias rigidas do exe', () => {
+  const runtime = JSON.parse(read(`${root}/resources/runtime/manifest.json`));
+  const desktop = runtime.capability_providers.desktop_commander;
+  const screenpipe = runtime.capability_providers.screenpipe;
+
+  assert.equal(runtime.capability_router, '.agents/skills/capability-contract-router/SKILL.md');
+  assert.equal(runtime.policy.optional_provider_failure_must_not_kill_core, true);
+  assert.equal(runtime.policy.selected_provider_requires_fresh_health, true);
+  assert.equal(runtime.policy.third_party_binary_bundle_requires_license_version_and_hash_proof, true);
+
+  assert.equal(desktop.mode, 'external-mcp-provider');
+  assert.equal(desktop.required_for_core_start, false);
+  assert.equal(desktop.package_pin, '@wonderwhy-er/desktop-commander@0.2.48');
+  assert.match(desktop.remote_mcp, /^https:\/\//);
+  assert.ok(desktop.capabilities.includes('FILESYSTEM_READ'));
+  assert.ok(desktop.capabilities.includes('TERMINAL_EXECUTION'));
+  assert.ok(desktop.capabilities.includes('REMOTE_DEVICE_CONTROL'));
+
+  assert.equal(screenpipe.mode, 'local-sensor-provider');
+  assert.equal(screenpipe.required_for_core_start, false);
+  assert.equal(screenpipe.local_api, 'http://127.0.0.1:3030');
+  assert.ok(screenpipe.capabilities.includes('LIVE_DESKTOP_OBSERVATION'));
+  assert.ok(screenpipe.capabilities.includes('ACCESSIBILITY_CONTEXT'));
+  assert.ok(screenpipe.capabilities.includes('AUTOMATION_TARGETING_CONTEXT'));
+});
