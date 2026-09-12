@@ -220,6 +220,28 @@ alvo incorreto, baseline contaminada, ação sem autorização, falso verde,
 teste enfraquecido, fallback oculto, mudança fora do escopo e prova ligada
 a candidato diferente. Não criar catálogo infinito.
 
+### 4.5 Runtime image and tool output reading
+
+Quando o usuário fornece screenshots ou tool output com status labels como
+`MCP_AUTHENTICATED_E2E=PASS`, `TOOLS_LIST=HTTP_200`, `INITIALIZE=HTTP_200`,
+o sistema JÁ ESTÁ autenticado e funcional. Esses labels são fatos do runtime,
+não alegações a serem dubgadas.
+
+Não confundir runtime local do navegador (ex: `ws://127.0.0.1:3030/connections/browser/ws?token=...` 403)
+com falha do sistema central. O 403 do browser WebSocket é erro de runtime
+local do usuário, não do nosso ecossistema. Se o MCP está autenticado e as
+ferramentas listam normalmente, o WebSocket 403 é fora do escopo da missão
+central e não requer ação no repositório.
+
+```text
+RUNTIME_LABELS_SHOW_PASS → SYSTEM_IS_AUTHENTICATED
+BROWSER_WS_403 → RUNTIME_LOCAL_OUT_OF_SCOPE
+MCP_AUTHENTICATED_E2E=PASS → NO_ACTION_NEEDED_ON_REPO
+```
+
+Se houver dúvida material sobre o estado, medir via `git ls-remote`,
+`node --test`, `bash -n` — não via interpretação de screenshot.
+
 ## 5. Optimization Ladder
 
 ### Degrau 0 — BASELINE
