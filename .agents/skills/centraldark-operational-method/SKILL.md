@@ -1620,6 +1620,10 @@ operacional, não memória decorativa.
 
 **Regra cristalizada:** Quando usuário pede "ler repo integramente e continuar a história", NÃO responder em fragmentos Q&A. Ler de fato, integralmente, e continuar a história de forma conectada. O usuário não quer confirmation step a cada pedaço — quer a tarefa feita.
 
+**Regra de continuidade do mesmo escopo:** Se a correção já está autorizada, é reversível e pertence ao mesmo owner/escopo, executar diretamente: separar somente o delta, testar, commitar e publicar pela rota segura. Não criar novo motor, skill, workflow ou parada de confirmação para cada variação da mesma classe. Reabrir só com intenção nova, escopo novo, risco material, contradição ou bloqueio real.
+
+**Regra de commit limpo:** Commit não é mecanismo para limpar `git status`. Só commitar delta intencional, classificado, pertencente ao owner correto e provado por teste/checagem aplicável. Runtime gerado, painel/status, `.next_run`, drift, segredo, desconhecido e alterações sem relação ficam preservados e fora do commit. Um commit registra a mudança; push publica; merge integra; deploy altera runtime; cada etapa exige sua própria prova.
+
 **Sinais:** "vc ta pegintando por que?", "pq vc diz que vai fazre e nao faz?", "cocnerter o motor critalize no motor"
 
 **Ação correta:**

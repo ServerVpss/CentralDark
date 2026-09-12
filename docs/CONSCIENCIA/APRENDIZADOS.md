@@ -253,3 +253,9 @@ updated: 2026-08-27
 - **Contexto:** Usuário dropou `CentralDark-OneShot-Integrated.zip` (275MB) em `/root/CentralDark/apps/modulos/mcp-admin-ui/`.
 - **Aprendizado:** Quando usuário fornece arquivo grande para integração: 1. Descompactar e ler conteúdo integralmente 2. Extrair ouro: componentes, arquitetura, fluxos, decisões 3. Processar em loop até não sobrar delta útil 4. Promover ouro ao owner canônico existente 5. Não criar estrutura paralela. NEVER: acknowledge e não processar. NEVER: criar estrutura paralela.
 
+### 48. COMMIT_LIMPO — Commit não é vassoura de git status
+- **Categoria:** regra
+- **Data:** 2026-09-12
+- **Contexto:** Na reconciliação `CASA → VPS → MAIN`, o runtime local tinha alterações misturadas: arquivos gerados de status/grafo, cursores `.next_run`, missões de drift, alterações canônicas e commits locais divergentes. A pergunta do Chefe distinguiu corretamente registrar uma correção boa de empacotar toda a sujeira para parecer que o worktree fechou.
+- **Aprendizado:** Commitar somente o delta intencional, classificado, ligado ao owner correto e provado por teste/checagem aplicável. Não usar commit para limpar `git status`. Runtime gerado, painel/status, `.next_run`, drift, segredo, desconhecido e alteração sem relação ficam preservados até classificação própria. Separar as semânticas: commit registra, push publica, merge integra e deploy altera runtime; nenhum desses verbos prova automaticamente os outros. Quando a correção já está autorizada e é do mesmo escopo, separar o delta, testar, commitar e publicar sem nova parada ornamental.
+
