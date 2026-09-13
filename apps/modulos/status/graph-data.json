@@ -1,6 +1,6 @@
 {
-  "_note": "Grafo VIVO — regenerado por scripts/grafo-vivo/gerar-grafo-vivo.mjs. PM2: 7 online / 0 off de 7 monitorados. Gateway: 0 req/15min.",
-  "updatedAt": "2026-07-05T22:41:53.887Z",
+  "_note": "Grafo VIVO — regenerado por scripts/grafo-vivo/gerar-grafo-vivo.mjs. PM2: 8 online / 1 off de 9 monitorados. Gateway: 0 req/15min. Banda: 17 respirações declaradas. Compass links quebrados: 0.",
+  "updatedAt": "2026-09-12T02:52:53.123Z",
   "nodes": [
     {
       "id": "mcp-server",
@@ -32,9 +32,11 @@
     },
     {
       "id": "vps",
-      "label": "VPS (Ubuntu/PM2)",
-      "type": "storage",
-      "group": "infra"
+      "label": "VPS · runtime/deploy",
+      "type": "runtime",
+      "group": "sincronizacao",
+      "source": "scripts/vps/centraldark-deploy.sh",
+      "authority": false
     },
     {
       "id": "bot-telegram",
@@ -82,9 +84,11 @@
     },
     {
       "id": "webhook-deploy",
-      "label": "Webhook Deploy",
+      "label": "🔴 Webhook Deploy",
       "type": "servico",
-      "group": "bots"
+      "group": "bots",
+      "status": "stopped",
+      "pm2": "CentralDark-WebhookDeploy"
     },
     {
       "id": "issues-agent",
@@ -374,9 +378,11 @@
     },
     {
       "id": "guardiaoconsciencia",
-      "label": "Guardião Consciência",
+      "label": "🟢 Guardião Consciência",
       "type": "monitoramento",
-      "group": "monitoramento"
+      "group": "monitoramento",
+      "status": "online",
+      "pm2": "CentralDark-GuardiaoConsciencia"
     },
     {
       "id": "guardiaoanalista",
@@ -423,6 +429,85 @@
       "label": "Telegram MTProto",
       "type": "servico",
       "group": "edge-telegram"
+    },
+    {
+      "id": "band-score",
+      "label": "Banda · 17 Respirações",
+      "type": "contrato",
+      "group": "cognicao",
+      "source": "docs/BRAIN/01-CONCEITOS/02-BANDA/BANDA_COMPASSO_GLOBAL.json",
+      "authority": false,
+      "file_present": true
+    },
+    {
+      "id": "meta-lupa",
+      "label": "META LUPA · falsificação contínua",
+      "type": "raciocinio",
+      "group": "cognicao",
+      "source": ".agents/skills/meta-lupa/SKILL.md",
+      "authority": false,
+      "file_present": true
+    },
+    {
+      "id": "claim-seals",
+      "label": "Lacres · claims provados",
+      "type": "memoria",
+      "group": "cognicao",
+      "source": ".agents/skills/meta-lupa/references/claim-seals.jsonl",
+      "authority": false,
+      "file_present": true
+    },
+    {
+      "id": "graphrag-master",
+      "label": "GraphRAG Master · Biblioteca",
+      "type": "memoria",
+      "group": "cognicao",
+      "source": "apps/modulos/HERMES-CORE/agents/GraphRAG-Master/agent.mjs",
+      "file_present": true,
+      "authority": false
+    },
+    {
+      "id": "agent-library",
+      "label": "Agents Library · scout/builder/reviewer/swarm",
+      "type": "biblioteca",
+      "group": "cognicao",
+      "source": "docs/BRAIN/03-DOCUMENTACAO/01-AGENTS-LIBRARY/2026-07-13-overclock-swarm-tier-catalog.json",
+      "file_present": true,
+      "authority": false
+    },
+    {
+      "id": "aprendizados",
+      "label": "Aprendizados Curados",
+      "type": "memoria",
+      "group": "cognicao",
+      "source": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "file_present": true,
+      "authority": false
+    },
+    {
+      "id": "second-brain",
+      "label": "Segundo Cérebro · mapa lógico",
+      "type": "mapa",
+      "group": "cognicao",
+      "source": "SECOND-BRAIN.yml",
+      "file_present": true,
+      "authority": false
+    },
+    {
+      "id": "casa",
+      "label": "Casa · clone/Obsidian/Hermes",
+      "type": "surface",
+      "group": "sincronizacao",
+      "source": "scripts/casa/sync-hermes-obsidian.ps1",
+      "authority": false
+    },
+    {
+      "id": "github-main",
+      "label": "GitHub main · verdade estrutural",
+      "type": "source-of-truth",
+      "group": "sincronizacao",
+      "source": "ServerVpss/CentralDark@main",
+      "authority": true
     }
   ],
   "edges": [
@@ -953,11 +1038,95 @@
       "to": "vps",
       "label": "roda na",
       "weight": 2
+    },
+    {
+      "from": "band-score",
+      "to": "meta-lupa",
+      "label": "compasso / falsificação",
+      "weight": 4
+    },
+    {
+      "from": "meta-lupa",
+      "to": "claim-seals",
+      "label": "sela somente prova",
+      "weight": 4
+    },
+    {
+      "from": "claim-seals",
+      "to": "graphrag-master",
+      "label": "memória provada",
+      "weight": 4
+    },
+    {
+      "from": "band-score",
+      "to": "graphrag-master",
+      "label": "partitura fixa",
+      "weight": 4
+    },
+    {
+      "from": "agent-library",
+      "to": "graphrag-master",
+      "label": "capacidades agrupadas",
+      "weight": 3
+    },
+    {
+      "from": "graphrag-master",
+      "to": "aprendizados",
+      "label": "consulta / aprende",
+      "weight": 3
+    },
+    {
+      "from": "aprendizados",
+      "to": "band-score",
+      "label": "cristaliza delta provado",
+      "weight": 2
+    },
+    {
+      "from": "second-brain",
+      "to": "band-score",
+      "label": "mapa lógico",
+      "weight": 3
+    },
+    {
+      "from": "github-main",
+      "to": "casa",
+      "label": "PING: head oficial",
+      "weight": 3
+    },
+    {
+      "from": "casa",
+      "to": "github-main",
+      "label": "PONG: head/receipt",
+      "weight": 3
+    },
+    {
+      "from": "github-main",
+      "to": "vps",
+      "label": "PING: head oficial",
+      "weight": 3
+    },
+    {
+      "from": "vps",
+      "to": "github-main",
+      "label": "PONG: head/receipt",
+      "weight": 3
+    },
+    {
+      "from": "casa",
+      "to": "meta-lupa",
+      "label": "mesmo protocolo",
+      "weight": 3
+    },
+    {
+      "from": "vps",
+      "to": "meta-lupa",
+      "label": "mesmo protocolo",
+      "weight": 3
     }
   ],
   "stats": {
-    "total_nodes": 68,
-    "total_edges": 88,
+    "total_nodes": 77,
+    "total_edges": 102,
     "hubs": [
       {
         "node": "supabase",
@@ -997,11 +1166,44 @@
       "Sentinela: sentinela → MCP /health /tools.json → gh issue se divergência",
       "Health: fn-health-check → OPTIONS 10 EFs → fn-notify-telegram → Canal Telegram"
     ],
-    "processos_vivos": 14,
-    "online": 7,
-    "offline": 0,
-    "monitorados": 7,
+    "processos_vivos": 23,
+    "online": 8,
+    "offline": 1,
+    "monitorados": 9,
     "gateway_req_15min": 0,
-    "gerado_em": "2026-07-05T22:41:53.887Z"
-  }
+    "gerado_em": "2026-09-12T02:52:53.123Z",
+    "band_breaths_declared": 17,
+    "compass_links_total": 7,
+    "compass_links_broken": 0
+  },
+  "compass_links": [
+    {
+      "path": "docs/BRAIN/01-CONCEITOS/02-BANDA/BANDA_COMPASSO_GLOBAL.json",
+      "present": true
+    },
+    {
+      "path": ".agents/skills/meta-lupa/SKILL.md",
+      "present": true
+    },
+    {
+      "path": ".agents/skills/meta-lupa/references/claim-seals.jsonl",
+      "present": true
+    },
+    {
+      "path": "apps/modulos/HERMES-CORE/agents/GraphRAG-Master/agent.mjs",
+      "present": true
+    },
+    {
+      "path": "docs/BRAIN/03-DOCUMENTACAO/01-AGENTS-LIBRARY/2026-07-13-overclock-swarm-tier-catalog.json",
+      "present": true
+    },
+    {
+      "path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "present": true
+    },
+    {
+      "path": "SECOND-BRAIN.yml",
+      "present": true
+    }
+  ]
 }

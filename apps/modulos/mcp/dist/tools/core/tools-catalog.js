@@ -32,6 +32,7 @@ import { piveteTools } from "../pivete/pivete-tools.js";
 import { cognitivoTools } from "../cognitivo/cognitivo.js";
 import { semanticTools } from "../cognitivo/semantic.js";
 import { geminiTools } from "../gemini/gemini.js";
+import { youtubeMediaTools } from "../media/youtube-transcript.js";
 const TOOL_NAME_PATTERN = /^[a-zA-Z0-9_-]{1,64}$/;
 const RAW_TOOLS = [
     ...aprendizadoTools,
@@ -58,6 +59,7 @@ const RAW_TOOLS = [
     ...cognitivoTools,
     ...semanticTools,
     ...geminiTools,
+    ...youtubeMediaTools,
 ];
 function isToolDefinition(tool) {
     return (typeof tool === "object" &&

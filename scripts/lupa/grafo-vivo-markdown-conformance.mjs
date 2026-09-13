@@ -120,6 +120,31 @@ for (const file of requiredStableOwners) {
   if (/^\+{1,3}\s*#{1,6}\s/m.test(txt) || /^\+\s*→/m.test(txt)) errors.push(`${file}: patch artifact line beginning with + found`);
 }
 
+const visualGraphOwner = 'docs/CONSCIENCIA/PADRAO-GRAFO-VIVO-MARKDOWN.md';
+if (exists(visualGraphOwner)) {
+  const visual = read(visualGraphOwner);
+  requireIncludes(visualGraphOwner, visual, [
+    'VISUAL_AUTHORING_SURFACE=true',
+    'VISUAL_IS_TRUTH=false',
+    'VISUAL_MUST_REUSE_GRAFO_VIVO=true',
+    'VISUAL_MUST_NOT_CREATE_SECOND_ROUTER=true',
+    'owner',
+    'gate',
+    'proof_key',
+    'fallback',
+    'next_cursor',
+    '→  CONTINUE',
+    '↺  RETRY_OR_LOOP',
+    '↩  RETURN_TO_PREVIOUS_PROVEN_STAGE',
+    '⊣  BLOCK',
+    '⇢  OPTIONAL',
+    '⇄  SYNCHRONIZE',
+    'DRAG_DROP_AUTHORING_RUNTIME=UNKNOWN',
+    'VISUAL_TO_CANONICAL_COMPILER=UNKNOWN',
+    'ROUND_TRIP_EDIT_TELEMETRY_FIXED_POINT=UNKNOWN',
+  ]);
+}
+
 for (const file of legacyPointers) {
   if (!exists(file)) {
     warnings.push(`${file}: legacy pointer absent; ok only if every consumer already moved`);

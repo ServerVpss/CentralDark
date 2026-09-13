@@ -34,7 +34,7 @@ const INDEX = {
 
 test('registro global é fechado, pinado e sem ids duplicados', () => {
   assert.equal(REGISTRY.schema_version, 1);
-  assert.equal(SOURCES.length, 6);
+  assert.equal(SOURCES.length, 5);
   assert.equal(new Set(SOURCES.map((source) => source.id)).size, SOURCES.length);
   for (const source of SOURCES) assert.match(source.commit, /^[0-9a-f]{40}$/);
 });
@@ -63,7 +63,15 @@ test('árvore externa vira catálogo de SKILL.md sem executar conteúdo', () => 
 });
 
 test('capability-doc entra no mesmo catálogo com fonte e evidência', () => {
-  const source = SOURCES.find((item) => item.id === 'skills-manage');
+  const source = {
+    id: 'fixture-capability-doc',
+    repository: 'example/fixture',
+    commit: '0123456789abcdef0123456789abcdef01234567',
+    kind: 'capability-doc',
+    document_path: 'README.md',
+    license: 'MIT',
+    capabilities: [{ name: 'fixture-capability', category: 'testing', description: 'Fixture.' }],
+  };
   const entries = normalizeCapabilities(source);
   assert.ok(entries.length >= 1);
   assert.equal(entries[0].entry_type, 'CAPABILITY');
@@ -128,7 +136,7 @@ test('catálogo global mede cada fonte e preserva DEGRADED se uma falhar', async
     throw new Error(`unexpected url ${url}`);
   };
   const result = await loadCatalog(fetchImpl);
-  assert.equal(result.summary.sources_defined, 6);
+  assert.equal(result.summary.sources_defined, 5);
   assert.equal(result.summary.sources_fail, 1);
   assert.equal(result.summary.catalog_status, 'DEGRADED');
 });

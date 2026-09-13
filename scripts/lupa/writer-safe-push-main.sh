@@ -22,6 +22,9 @@
 #   PATHS             paths relativos separados por espaco (escopo do writer)
 #
 # Env opcional:
+#   AUTO_DISCOVER     1 = descobrir delta rastreado elegível no mesmo owner
+#   AUTO_DISCOVER_SCOPE prefixes relativos separados por virgula (obrigatorio com AUTO_DISCOVER)
+#   DRY_RUN            1 = mostrar seleção e não criar worktree/commit/push
 #   REGENERATE_CMD    comando rodado DENTRO do worktree antes do git add
 #   MAX_TRIES         default 3
 #   GIT_AUTHOR_NAME   default CentralDark Bot
@@ -32,7 +35,10 @@ set -euo pipefail
 
 WRITER_TAG="${WRITER_TAG:?WRITER_TAG obrigatorio}"
 COMMIT_MESSAGE="${COMMIT_MESSAGE:?COMMIT_MESSAGE obrigatorio}"
-PATHS="${PATHS:?PATHS obrigatorio}"
+AUTO_DISCOVER="${AUTO_DISCOVER:-0}"
+AUTO_DISCOVER_SCOPE="${AUTO_DISCOVER_SCOPE:-}"
+DRY_RUN="${DRY_RUN:-0}"
+PATHS="${PATHS:-}"
 REGENERATE_CMD="${REGENERATE_CMD:-}"
 MAX_TRIES="${MAX_TRIES:-3}"
 GIT_AUTHOR_NAME="${GIT_AUTHOR_NAME:-CentralDark Bot}"
@@ -42,7 +48,80 @@ REPO_ROOT="$(git rev-parse --show-toplevel)"
 cd "$REPO_ROOT"
 
 # shellcheck disable=SC2206
-PATH_ARR=($PATHS)
+if [ "$AUTO_DISCOVER" = "1" ]; then
+  if [ -n "$PATHS" ]; then
+    echo "${WRITER_TAG}_AUTO_DISCOVER_PATHS_CONFLICT=1" >&2
+    exit 2
+  fi
+  [ -n "$AUTO_DISCOVER_SCOPE" ] || {
+    echo "${WRITER_TAG}_AUTO_DISCOVER_SCOPE_REQUIRED=1" >&2
+    exit 2
+  }
+  IFS=',' read -r -a SCOPE_ARR <<< "$AUTO_DISCOVER_SCOPE"
+  for prefix in "${SCOPE_ARR[@]}"; do
+    case "$prefix" in
+      ""|.|/*|*../*|../*|*"$'\n'"*|*"$'\r'"*)
+        echo "${WRITER_TAG}_AUTO_DISCOVER_SCOPE_INVALID=1" >&2
+        exit 2 ;;
+    esac
+  done
+  mapfile -d '' -t RAW_PATH_ARR < <(git diff HEAD --name-only -z --diff-filter=ACMRTUXB -- .)
+  PATH_ARR=()
+  for p in "${RAW_PATH_ARR[@]}"; do
+    in_scope=0
+    for prefix in "${SCOPE_ARR[@]}"; do
+      case "$p" in
+        "$prefix"|"$prefix"/*) in_scope=1; break ;;
+      esac
+    done
+    [ "$in_scope" -eq 1 ] || continue
+    base=$(basename "$p")
+    case "$p" in
+      .env|.env.*|*/.env|*/.env.*|*secret*|*token*|*credential*|*password*|*.pem|*.key|*.crt|*.p12|*.pfx|.venv_status|*/.venv_status/*|node_modules|*/node_modules/*|.venv|*/.venv/*|__pycache__|*/__pycache__/*|.pytest_cache|*/.pytest_cache/*|dist|*/dist/*|build|*/build/*|*.zip|*.7z|*.tar|*.tgz|*.gz|*/status/*|status/*|*/logs/*|logs/*|*/missions/*|missions/*|*.next_run|*.state.json|*.estado.json|*analyst-decision.json|*last-report.json|*graph.json|status.json|*/status.json|*-health.json|*-status.json|*.jsonl|*.npmrc|*.netrc|id_rsa|kubeconfig|*.pem|*.pub|*.p12|*.pfx|*.jks|*.keystore|*.truststore|*.cer|*.sig|*.asc|*.gpg|*.gnupg|*.b64|*.base64|*.env.local|*.env.production|*.env.staging|*.env.test|*.env.development|*.credentials|*credentials*|*credential*|*auth*token*|*access*token*|*refresh*token*|*api*key*|*apikey*|*private*key*|*public*key*|*ssh*key*|*id_*|*.ssh*|*.ssh/config|*.ssh/known_hosts|*.ssh/id_*|*.ssh/agent|*.ssh/authorized_keys|*.ssh/id_ed25519|*.ssh/id_rsa|*.ssh/id_ecdsa|*.ssh/id_dsa|*.ssh/id_xmss|*.ssh/id_bliss|*.ssh/id_gssapi_krb5|*.ssh/id_whatevs)
+        continue ;;
+    esac
+    case "$base" in
+      GRAFO-VIVO.md|latest.md|ESTADO-DA-RETOMADA.md) continue ;;
+    esac
+    PATH_ARR+=("$p")
+  done
+  if [ "${#PATH_ARR[@]}" -eq 0 ]; then
+    echo "${WRITER_TAG}_NO_ELIGIBLE_TRACKED_DELTA=1"
+    exit 0
+  fi
+  printf '🔎 %s AUTO_DISCOVER_PATHS=%s\n' "$WRITER_TAG" "${PATH_ARR[*]}"
+else
+  [ -n "$PATHS" ] || { echo "PATHS ou AUTO_DISCOVER=1 obrigatorio" >&2; exit 2; }
+  read -r -a PATH_ARR <<< "$PATHS"
+fi
+
+for p in "${PATH_ARR[@]}"; do
+  case "$p" in
+    ""|.|./|*./|*/.|*/./*|/*|*..*|*"$'\n'"*|*"$'\r'"*|*[[:space:]]*)
+      echo "${WRITER_TAG}_PATH_INVALID=1" >&2
+      exit 2 ;;
+  esac
+  if [[ "$p" =~ (^|/)\./?($|/) ]]; then
+    echo "${WRITER_TAG}_PATH_INVALID=1" >&2
+    exit 2
+  fi
+  if [[ "$p" == *'*'* || "$p" == *'?'* || "$p" == *'['* || "$p" == *']'* || "$p" == *'{'* || "$p" == *'}'* || "$p" == *';'* || "$p" == *'='* || "$p" == *'\\'* || "$p" == *'('* || "$p" == *')'* ]]; then
+    echo "${WRITER_TAG}_PATH_INVALID=1" >&2
+    exit 2
+  fi
+  if [[ "$p" != apps/modulos/mcp/dist/* ]]; then
+    case "$p" in
+      .env|.env.*|*/.env|*/.env.*|*secret*|*token*|*credential*|*password*|.venv_status|*/.venv_status/*|node_modules|*/node_modules/*|.venv|*/.venv/*|__pycache__|*/__pycache__/*|.pytest_cache|*/.pytest_cache/*|dist|*/dist/*|build|*/build/*|*.zip|*.7z|*.tar|*.tgz|*.gz|*/status/*|status/*|*/logs/*|logs/*|*/missions/*|missions/*|*.next_run|*.state.json|*.estado.json|*analyst-decision.json|*last-report.json|*graph.json|status.json|*/status.json|*-health.json|*-status.json|*.jsonl|*.npmrc|*.netrc|id_rsa|kubeconfig|*.pem|*.pub|*.p12|*.pfx|*.jks|*.keystore|*.truststore|*.cer|*.sig|*.asc|*.gpg|*.gnupg|*.b64|*.base64|*.env.local|*.env.production|*.env.staging|*.env.test|*.env.development|*.credentials|*credentials*|*credential*|*auth*token*|*access*token*|*refresh*token*|*api*key*|*apikey*|*private*key*|*public*key*|*ssh*key*|*id_*|*.ssh*|*.ssh/config|*.ssh/known_hosts|*.ssh/id_*|*.ssh/agent|*.ssh/authorized_keys|*.ssh/id_ed25519|*.ssh/id_rsa|*.ssh/id_ecdsa|*.ssh/id_dsa|*.ssh/id_xmss|*.ssh/id_bliss|*.ssh/id_gssapi_krb5|*.ssh/id_whatevs)
+        echo "${WRITER_TAG}_PATH_FORBIDDEN=1" >&2
+        exit 2 ;;
+    esac
+  fi
+done
+
+if [ "$DRY_RUN" = "1" ]; then
+  printf '🧾 %s DRY_RUN=1; nenhuma worktree, alteração, commit ou publicação será feita\n' "$WRITER_TAG"
+  exit 0
+fi
 
 has_payload() {
   local p
@@ -149,7 +228,13 @@ for TRY in $(seq 1 "$MAX_TRIES"); do
     node scripts/lupa/validar-porta-de-entrada.mjs
 
     if git push origin HEAD:main; then
-      echo "✅ ${WRITER_TAG}_PUSH_OK tentativa=$TRY head=${HEAD_SHA:0:12}"
+      REMOTE_HEAD="$(git ls-remote origin refs/heads/main | cut -f1)"
+      if [ "$REMOTE_HEAD" != "$HEAD_SHA" ]; then
+        echo "❌ ${WRITER_TAG}_REMOTE_HEAD_MISMATCH expected=$HEAD_SHA observed=$REMOTE_HEAD"
+        exit 1
+      fi
+      echo "REMOTE_HEAD_VERIFIED=$REMOTE_HEAD"
+      echo "✅ ${WRITER_TAG}_PUSH_OK tentativa=$TRY head=${HEAD_SHA:0:12} remote=${REMOTE_HEAD:0:12}"
       exit 0
     fi
 
