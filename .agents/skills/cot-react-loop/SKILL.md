@@ -345,6 +345,22 @@ novo motor, skill, workflow ou parada de confirmação para cada variação da
 mesma classe. Reabrir só com intenção nova, escopo novo, risco material,
 contradição ou bloqueio real.
 
+### 4.8 Source Code Corruption — Literal Strings in Source Files
+
+**Regra:** When source code files contain literal `***` or other placeholder strings that should be environment variable values (e.g., `apikey: ***` in JS headers), the file has been corrupted — either by markdown rendering, editor substitution, or prior session artifacts. NEVER treat `***` as a valid value. Always verify the actual bytes with `cat -A`, `xxd`, or `python` byte inspection. Fix by replacing the literal with the correct variable reference (`serviceRoleKey`, `${serviceRoleKey}`, etc.).
+
+**Pitfall — Node-level verification gives false negatives:** `node --check <file>` and `content.includes('***')` BOTH report false negatives after patching because the corrupt lines are ADJACENT to but distinct from the variable reference. The `include()` check may report `false` even though `***` still exists in the file on a different line. A simple grep or `include()` check on a string literal may report `false` because the variable reference (`serviceRoleKey`) is present elsewhere in the file — the corrupted lines may be adjacent but distinct.
+
+**CORREÇÃO — use Python byte-level verification:** After patching, verify with `(content.match(/\*\*\*/g) || []).length === 0` AND inspect the specific lines with `cat -A` or `sed -n '<line>p' | cat -A`. The regex `match(/\*\*\*/g)` catches the literal asterisks regardless of adjacent context. Also verify the specific header lines contain the correct variable name, not `***`.
+
+**Verification sequence that works:**
+1. Read file bytes with Python: `content.encode()` → search for `b'***'`
+2. After patch: `(content.match(/\*\*\*/g) || []).length === 0`
+3. Inspect specific lines: `sed -n '80,85p' file | cat -A`
+4. Confirm the file has NO `b'***'` bytes AND the target lines contain `serviceRoleKey`
+
+**Correção:** Use Python to do byte-level replacement. After patching, verify with: `(content.match(/\*\*\*\//g) || []).length === 0` AND the specific lines contain the correct variable name.
+
 ## 5. Optimization Ladder
 
 ### Degrau 0 — BASELINE
@@ -784,14 +800,30 @@ Finalizar e parar.
 
 ```text
 RACIOCINIO-DELIBERADO → decide antes
+FABLE-LOOP            → calibra antes, somente leitura
 COT-REACT-LOOP        → executa, mede e corrige durante
+17 RESPIRAÇÕES        → checklist de cada giro, dona em BANDA_COMPASSO_GLOBAL.json
 META-LUPA             → tenta derrubar depois
-SEGREDO/CHEFE          → autoridade final para promoção
+SEGREDO/CHEFE         → autoridade final para promoção
 ```
 
 ```text
 ANTES → DURANTE → DEPOIS
-DECIDIR → EXECUTAR/MEDIR/CORRIGIR → FALSIFICAR/SELAR
+DECIDIR → CALIBRAR → EXECUTAR/MEDIR/CORRIGIR → FALSIFICAR/SELAR
+```
+
+As 17 respirações moram em `docs/BRAIN/01-CONCEITOS/02-BANDA/BANDA_COMPASSO_GLOBAL.json`
+e são o checklist obrigatório de cada giro PLAN → ACT → OBSERVE → CRITIQUE → REFINE → DECIDE:
+PLAN usa 1, 2, 11, 12, 13, 14. ACT usa 14, uma ação por ciclo. OBSERVE usa 3, 4, 6, 7, 8, 15.
+CRITIQUE usa 9, 10, 16. REFINE usa 5, 12, 13. DECIDE usa 17. A lista não é duplicada aqui;
+o JSON é a partitura, esta skill é o motor. FABLE-LOOP calibra antes sem escrever;
+META-LUPA falsifica depois sem executar. Nenhum segundo loop dirige.
+
+```text
+COT_17_BINDING_REQUIRED=true
+ALL_SESSIONS_INHERIT_COT_17=true
+ALL_MODELS_INHERIT_COT_17=true
+FABLE_BEFORE_WRITE_PROHIBITED=true
 ```
 
 Não é pensar muito, repetir ferramenta, escrever logs bonitos ou autoaprovar.
