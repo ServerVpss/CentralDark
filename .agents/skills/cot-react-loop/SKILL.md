@@ -143,6 +143,25 @@ GRAPH_RELATION != AUTHORITY
 INDEX_MISS != FILE_ABSENCE
 BROAD_SCAN_IS_FALLBACK=true
 CONTEXT_MINIMUM_BEFORE_MODEL=true
+TRUNCATED_CONTEXT_IS_NOT_MISSION_BLOCKER=true
+FULL_CONTEXT_RELOAD_IS_NOT_REQUIRED_WHEN_OWNER_IS_IDENTIFIED=true
+READ_RELEVANT_OWNER_BEFORE_READ_WHOLE_REPOSITORY=true
+CHILD_CONTEXT_MUST_BE_BOUNDED_TO_TASK=true
+```
+
+Se um arquivo de contexto exceder o limite do corpo/modelo, não travar a missão nem
+pedir ao humano para resolver. Registrar `CONTEXT_TRUNCATED`, reduzir para o owner,
+contrato, consumidor, teste e estado material, e continuar. Se o claim depender de
+um trecho omitido, abrir somente esse trecho com paginação; `UNKNOWN` fica restrito
+ao claim afetado, não ao trabalho independente.
+
+```text
+CONTEXT_TRUNCATED
+→ PIN_RELEVANT_OWNER
+→ READ_TARGETED_RANGES
+→ PRESERVE_MISSION_ID
+→ CONTINUE_INDEPENDENT_WORK
+→ UNKNOWN_ONLY_FOR_UNREAD_CLAIM
 ```
 
 A seleção do Bolt aplica essa regra com pré-classificação barata por caminho e
