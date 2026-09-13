@@ -115,6 +115,30 @@ Proibido: v2, v3, novo, final, copy, backup como fuga de reconciliação.
 
 Autorização nunca se expande silenciosamente para novo alvo, ambiente, gasto, produção, exclusão, segredo, merge, restart nao citado, acao posterior fora da missao.
 
+### Pesquisa audiovisual e legendas
+
+Quando a intenção trouxer vídeo/YouTube, consultar primeiro o adaptador canônico
+`youtube_transcript` do MCP, que usa `scripts/media/fetch_youtube_transcript.py`.
+A rota é read-only e busca legendas públicas com timestamps; não baixa vídeo nem
+áudio. `yt-dlp`/Whisper só entram como fallback explícito, quando autorizados e
+com recursos/limites medidos. Bloqueio de IP, Turnstile, vídeo privado ou legenda
+ausente permanece `UNKNOWN`, nunca PASS.
+
+```text
+URL
+→ LEGENDA PÚBLICA
+→ NORMALIZAR TIMESTAMPS
+→ CONSUMIR COMO MATÉRIA
+→ SEPARAR FATO/INFERÊNCIA/UNKNOWN
+→ CONTRAPROVAR
+→ DESTILAR DELTA PROVADO
+→ REGISTRAR NO OWNER DE APRENDIZADO EXISTENTE
+```
+
+Não tratar `downloadyoutubesubtitles.com` como API canônica sem contrato, licença
+e prova de acesso. Não commitar legenda bruta; persistir somente receipt sanitizado
+e aprendizado reutilizável após validação.
+
 ### Conector MCP por superfície/passagem
 
 Quando uma superfície externa disser que o conector MCP CentralDark foi desabilitado,

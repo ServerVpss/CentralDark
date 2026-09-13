@@ -3,7 +3,28 @@
 // Chat: Central Dark - Grupo da Evolução (-1003669176367)
 
 const CHAT_ID = process.env.EVOLUCAO_CHAT_ID || '-1003669176367';
-const BOT_TOKEN = process.env.BOT_TOKEN_CLAUDE || '8057486730:AAEhAwrzyc5jR6pEMqBXHITnZwoahTc6WRY';
+const BOT_TOKEN = process.env.BOT_TOKEN_CLAUDE || '';
+
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+let nextTelegramAllowedAt = 0;
+
+function parseRetryAfter(texto) {
+  try {
+    const parsed = JSON.parse(texto);
+    return Number(parsed?.parameters?.retry_after || 0);
+  } catch {
+    const m = String(texto).match(/retry after\s+(\d+)/i);
+    return m ? Number(m[1]) : 0;
+  }
+}
+
+async function respectTelegramBackoff() {
+  const now = Date.now();
+  if (now >= nextTelegramAllowedAt) return;
+  const waitMs = nextTelegramAllowedAt - now;
+  console.error(`[notify] aguardando backoff Telegram: ${Math.ceil(waitMs / 1000)}s`);
+  await sleep(waitMs);
+}
 
 function esc(s) {
   return String(s)
@@ -48,6 +69,7 @@ export async function notificarSimples(texto, opts = {}) {
 
 async function enviar(texto, chatId, token) {
   try {
+    await respectTelegramBackoff();
     const r = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -60,7 +82,13 @@ async function enviar(texto, chatId, token) {
     });
     if (!r.ok) {
       const err = await r.text().catch(() => '');
-      console.error(`[notify] HTTP ${r.status}: ${err.slice(0, 200)}`);
+      if (r.status === 429) {
+        const retryAfter = parseRetryAfter(err) || 30;
+        nextTelegramAllowedAt = Date.now() + (retryAfter + 1) * 1000;
+        console.error(`[notify] rate_limited retry_after=${retryAfter}`);
+      } else {
+        console.error(`[notify] HTTP ${r.status}: ${err.slice(0, 200)}`);
+      }
       return false;
     }
     return true;
