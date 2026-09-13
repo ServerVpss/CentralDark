@@ -196,3 +196,15 @@ UNKNOWN_IS_NOT_PASS=true
 DOCUMENTED_IS_NOT_EXECUTED=true
 SIMULATION_IS_NOT_RUNTIME_PROOF=true
 ```
+
+---
+
+## Testing Pattern: JS Source Code Regex Literal Matching
+
+When testing JavaScript source code with `assert.match(trecho, /{40}/)`, the `trecho` variable is a **string literal** inside source code, not a regex pattern. Characters like `{40}` inside a JS string are literal characters, not quantifiers.
+
+**Rule:** When verifying regex markers in source code, the pattern must match the string representation, not the intended regex. For a marker like `REMOTE_HEAD_VERIFIED=<40-hex-hash>` in JS source, use `/{[0-9a-f]{40}}/` only if the source stores the regex pattern itself. If the source stores the literal string, use `/REMOTE_HEAD_VERIFIED=\[[0-9,]+\]/` or the exact string form.
+
+**Verification:** Run `node --check` on the source file, then `node --test` on the test file. If T14 or similar tests fail on regex matching, inspect the actual string value with a debug print before widening the assertion.
+
+**Why this matters:** Hand-rolled assertions that match source code string literals instead of runtime values will pass locally but fail in CI where the string representation differs. Always test the runtime value, not the source representation.
