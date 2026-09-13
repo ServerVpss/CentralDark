@@ -23,6 +23,7 @@ export function installCentralDarkDateFormatting(): void {
   const nativeToLocaleTimeString = Date.prototype.toLocaleTimeString;
 
   Date.prototype.toLocaleString = function (
+    this: Date,
     locales?: Intl.LocalesArgument,
     options?: Intl.DateTimeFormatOptions,
   ) {
@@ -30,6 +31,7 @@ export function installCentralDarkDateFormatting(): void {
   } as typeof nativeToLocaleString;
 
   Date.prototype.toLocaleDateString = function (
+    this: Date,
     locales?: Intl.LocalesArgument,
     options?: Intl.DateTimeFormatOptions,
   ) {
@@ -37,6 +39,7 @@ export function installCentralDarkDateFormatting(): void {
   } as typeof nativeToLocaleDateString;
 
   Date.prototype.toLocaleTimeString = function (
+    this: Date,
     locales?: Intl.LocalesArgument,
     options?: Intl.DateTimeFormatOptions,
   ) {

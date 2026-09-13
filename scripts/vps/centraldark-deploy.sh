@@ -16,7 +16,8 @@
 #
 # Uso:
 #   bash centraldark-deploy.sh                    # dry-run (padrão)
-#   bash centraldark-deploy.sh --apply            # executa
+#   bash centraldark-deploy.sh --apply            # executa + runtime declarado
+#   bash centraldark-deploy.sh --apply --source-only # sincroniza fonte sem restart
 #   bash centraldark-deploy.sh --apply --aceitar-divergencia
 #   APPS="CentralDark-MCP CentralDark-Memoria" bash centraldark-deploy.sh --apply
 #
@@ -34,10 +35,12 @@ APPS="${APPS:-CentralDark-MCP}"
 
 APPLY=0
 ACEITAR_DIVERGENCIA=0
+SOURCE_ONLY=0
 for arg in "$@"; do
   case "$arg" in
     --apply)                APPLY=1 ;;
     --aceitar-divergencia)  ACEITAR_DIVERGENCIA=1 ;;
+    --source-only)          SOURCE_ONLY=1 ;;
     *) echo "argumento desconhecido: $arg"; exit 2 ;;
   esac
 done
@@ -87,6 +90,22 @@ runtime_health() {
   log "PORTA_9100=LISTENING"
 }
 
+source_only_fixed_point() {
+  local final_head final_remote final_dirty
+  final_head="$(git rev-parse HEAD)"
+  final_remote="$(git rev-parse "origin/$BRANCH")"
+  final_dirty="$(contar_sujos)"
+  log "FINAL_HEAD=$final_head"
+  log "FINAL_REMOTE=$final_remote"
+  log "FINAL_DIRTY=$final_dirty"
+  [[ "$final_head" == "$final_remote" && "$final_dirty" -eq 0 ]] || return 1
+  validate_proof_guards_live || return 1
+  log "SOURCE_SYNC_ONLY=PASS"
+  log "RUNTIME_RESTART=NONE"
+  log "PONTO_FIXO_SOURCE=PASS"
+  log "SHA_VPS_EQ_SHA_MAIN=PROVADO"
+}
+
 # ─── Lock ─────────────────────────────────────────────────────────────
 exec 9>/tmp/centraldark-repo-deploy.lock
 flock -w 90 9 || die "outro deploy segurando a trava" 63
@@ -95,6 +114,7 @@ flock -w 90 9 || die "outro deploy segurando a trava" 63
 log "=== T0 (antes) ==="
 log "SURFACE=VPS"
 log "PROTOCOL=BANDA_META_LUPA_CLAIM_SEAL_SYNC_V1"
+log "SOURCE_ONLY=$SOURCE_ONLY"
 [[ -d "$REPO_DIR/.git" ]] || die "REPO_DIR sem .git: $REPO_DIR" 10
 cd "$REPO_DIR"
 
@@ -126,8 +146,14 @@ fi
 proof_guard_paths_exist_on_ref "origin/$BRANCH" \
   || die "origin/$BRANCH não contém todos os elos do compasso" 16
 
-# Se já está sincronizado, ainda se prova o source guard e o runtime atual.
+# Se já está sincronizado, prova apenas o escopo pedido.
 if [[ "$HEAD_ANTES" == "$ALVO" ]]; then
+  if [[ "$SOURCE_ONLY" -eq 1 ]]; then
+    source_only_fixed_point || die "source-only não atingiu ponto fixo" 16
+    log "PONG=vps=$HEAD_ANTES remote=$ALVO dirty=0"
+    log "DEPLOY_ACTION=NO_CHANGE_SOURCE_ONLY"
+    exit 0
+  fi
   validate_proof_guards_live || die "proof guard falhou em árvore já sincronizada" 16
   runtime_health || die "runtime health falhou apesar de source sincronizado" 14
   log "PONG=vps=$HEAD_ANTES remote=$ALVO dirty=0"
@@ -161,7 +187,11 @@ fi
 # ─── Dry-run ──────────────────────────────────────────────────────────
 if [[ "$APPLY" -eq 0 ]]; then
   log "=== DRY-RUN — nada alterado. Use --apply para executar. ==="
-  log "faria: âncora -> reset origin/$BRANCH -> proof guards -> restart [$APPS] -> health -> PONG"
+  if [[ "$SOURCE_ONLY" -eq 1 ]]; then
+    log "faria: âncora -> reset origin/$BRANCH -> proof guards -> SEM restart -> prova SHA/dirty"
+  else
+    log "faria: âncora -> reset origin/$BRANCH -> proof guards -> restart [$APPS] -> health -> PONG"
+  fi
   exit 0
 fi
 
@@ -184,8 +214,17 @@ HEAD_DEPOIS="$(git rev-parse HEAD)"
 [[ "$(contar_sujos)" -eq 0 ]] || { rollback; die "worktree ficou suja após sync" 17; }
 log "HEAD_DEPOIS=$HEAD_DEPOIS == ALVO"
 
-# MetaLupa/lacres são catraca antes de reiniciar runtime.
+# MetaLupa/lacres são catraca antes de qualquer runtime.
 validate_proof_guards_live || { rollback; die "META_LUPA/CLAIM_SEAL/GraphRAG falharam; rollback aplicado" 16; }
+
+# Micro-deploy de fonte/policy: atualiza checkout, não reinicia serviço alheio.
+if [[ "$SOURCE_ONLY" -eq 1 ]]; then
+  source_only_fixed_point || { rollback; die "source-only final falhou; rollback aplicado" 16; }
+  log "PONG=vps=$(git rev-parse HEAD) remote=$(git rev-parse "origin/$BRANCH") dirty=$(contar_sujos)"
+  log "ANCORA_ROLLBACK=$ANCORA"
+  log "=== MICRO_DEPLOY_SOURCE_PROVADO ==="
+  exit 0
+fi
 
 # ─── Reiniciar serviços declarados ───────────────────────────────────
 log "=== reiniciando: $APPS ==="

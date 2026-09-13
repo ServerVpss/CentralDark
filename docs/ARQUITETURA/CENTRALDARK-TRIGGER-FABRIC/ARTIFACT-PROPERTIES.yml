@@ -114,6 +114,45 @@ rules:
   semantic_link_is_proof: false
   graph_is_authority: false
   semantic_links_quality_over_quantity: true
+  artifact_name_is_not_identity: true
+  upload_suffix_is_transient: true
+  discover_by_hash_first: true
+  known_locations_first: true
+  empty_path_with_known_identity: RESOLVE_REFERENCE
+  empty_path_is_not_artifact_missing: true
+  same_hash_and_size_different_name: SAME_ARTIFACT
+  same_name_different_hash: FAIL_CLOSED
+  unresolved_known_identity: UNKNOWN
+  unknown_is_not_pass: true
+
+identity_resolution:
+  applies_to: ALL_ENGINES_AND_SURFACES
+  consumers: [HERMES_LOCAL, HERMES_VPS, CI_CD, MCP, CLI, DESKTOP, SITE, API, HARNESS]
+  source_of_identity_priority:
+    - content_sha256
+    - size_bytes
+    - provenance
+    - canonical_owner
+    - display_name
+  algorithm:
+    - ACCEPT_EXPLICIT_PATH_WHEN_PROVIDED
+    - ELSE_SEARCH_AUTHORIZED_KNOWN_LOCATIONS_ONLY
+    - FILTER_BY_SIZE_WHEN_KNOWN
+    - VERIFY_SHA256
+    - MATCHED_IDENTITY_IS_REUSABLE
+    - MISMATCH_IS_FAIL_CLOSED
+    - NOT_FOUND_IS_UNKNOWN_NOT_MISSING
+  forbidden:
+    - TRUST_UPLOAD_SUFFIX_AS_IDENTITY
+    - GLOBAL_BLIND_DISK_SCAN
+    - SECRET_DIRECTORY_SCAN_WITHOUT_SCOPE
+    - NAME_ONLY_GREEN
+  learned_example:
+    source: tlc23.pdf
+    historical_aliases: ["tlc23(2).pdf", "tlc23(3).pdf"]
+    expected_size_bytes: 206674
+    expected_sha256: b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1
+    owner: scripts/lupa/pdf-conformance-cc2003.mjs
 
 example_frontmatter: |
   ---

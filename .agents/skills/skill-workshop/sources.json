@@ -52,7 +52,8 @@
       "kind": "capability-doc",
       "document_path": "README.md",
       "license": "Apache-2.0",
-      "enabled": true,
+      "enabled": false,
+      "disabled_reason": "UPSTREAM_REPOSITORY_UNAVAILABLE_404_CONFIRMED_BY_GIT_AND_RAW_CHANNELS_2026-09-12",
       "capabilities": [
         {"name":"central-skill-library","category":"skill-management","description":"Biblioteca central de skills com instalação por plataforma a partir de uma fonte comum."},
         {"name":"skill-collections","category":"skill-management","description":"Coleções reutilizáveis para organizar e instalar conjuntos de skills."},

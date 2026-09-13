@@ -151,39 +151,33 @@ async function _executar(ferramenta, args) {
         }
         if (acao === 'commit_push') {
           const msg = String(args.mensagem || 'chore(hermes): auto-commit').slice(0, 200);
-          // Git cirúrgico: nunca usar add -A. Paths explícitos; fallback = somente tracked, excluindo disputados.
           const brutos = Array.isArray(args.paths) ? args.paths : [];
-          const limpos = brutos.map(x => String(x).replace(/[^\w@\/.\-]/g, '')).filter(Boolean);
-          const add = limpos.length
-            ? `git add ${limpos.map(x => `'${x}'`).join(' ')}`
-            : `git add -u -- ':!apps/modulos/status/painel-data.json' ':!*.env' ':!*.bak'`;
-          const script = [
-            'set -o pipefail',
-            'set -eu',
-            `cd ${ROOT}`,
-            add,
-            'git commit -m "$HERMES_COMMIT_MSG"',
-            'if ! git push origin main; then',
-            '  if ! git pull --rebase --autostash origin main || ! git push origin main; then',
-            "    git rebase --abort >/dev/null 2>&1 || true",
-            "    echo 'PUSH PENDENTE — relatar'",
-            '    exit 23',
-            '  fi',
-            'fi',
-            'LOCAL_HEAD="$(git rev-parse HEAD)"',
-            'REMOTE_HEAD="$(git ls-remote origin refs/heads/main | cut -f1)"',
-            'test "$LOCAL_HEAD" = "$REMOTE_HEAD" || {',
-            "  echo 'PUSH PENDENTE — relatar'",
-            '  exit 23',
-            '}',
-            'echo "REMOTE_HEAD_VERIFIED=$REMOTE_HEAD"',
-          ].join('\n');
-          const { stdout } = await pexec('bash', ['-lc', script], {
-            env: { ...process.env, HERMES_COMMIT_MSG: msg },
-            timeout: 120_000,
+          const invalidPath = brutos.find((value) => {
+            const raw = String(value);
+            return !raw || raw.startsWith('/') || raw.includes('..') || /[\0\r\n\s]/.test(raw);
           });
+          if (invalidPath !== undefined) {
+            return { ok: false, saida: 'PUBLISH_BLOCKED_PATH_FORMAT: caminho relativo sem .., whitespace ou controle' };
+          }
+          const limpos = brutos.map(x => String(x)).filter(Boolean);
+          const scope = String(args.scope || '').trim();
+          const env = {
+            ...process.env,
+            WRITER_TAG: 'HERMES_EXECUTOR',
+            COMMIT_MESSAGE: msg,
+            ...(limpos.length
+              ? { PATHS: limpos.join(' ') }
+              : { AUTO_DISCOVER: '1', AUTO_DISCOVER_SCOPE: scope }),
+          };
+          if (!limpos.length && !scope) {
+            return { ok: false, saida: 'PUBLISH_BLOCKED_SCOPE_REQUIRED: informe scope do owner ou paths explícitos' };
+          }
+          const { stdout } = await pexec('bash', [
+            '-lc',
+            `cd ${ROOT} && bash scripts/lupa/writer-safe-push-main.sh`,
+          ], { env, timeout: 180_000 });
           if (!/REMOTE_HEAD_VERIFIED=[0-9a-f]{40}/.test(stdout)) {
-            return { ok: false, saida: 'PUSH PENDENTE — relatar: confirmação do HEAD remoto ausente' };
+            return { ok: false, saida: `PUBLISH_BLOCKED_REMOTE_READBACK_MISSING\n${stdout.slice(0, 4000)}` };
           }
           return { ok: true, saida: stdout.slice(0, 4000) };
         }
