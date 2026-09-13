@@ -30,6 +30,7 @@ jobs:
         shell: bash
         run: |
           set -Eeuo pipefail
+          echo "CANDIDATE_HEAD=${GITHUB_SHA}"
           [[ -d /root/CentralDark/.git ]] || { echo 'VPS_REPO_MISSING'; exit 20; }
           command -v tailscale >/dev/null || { echo 'TAILSCALE_MISSING'; exit 21; }
           command -v pm2 >/dev/null || { echo 'PM2_MISSING'; exit 22; }
