@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-09-12T19:08:12.245Z
+# 🧠 Notion Sync — 2026-09-13T23:39:26.231Z
 
-- **Commit fonte:** `91a9e0c978538b6854a8de0b901d7de452162f85`
+- **Commit fonte:** `589b6181c92a317abe590a9999f2109c88c51ee7`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 490 atualizadas · ❌ 37 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 490 atualizadas · ❌ 40 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
 | aprendizados | 43 | 0 | 34 | 0 | 9 |
-| estrutura | 440 | 0 | 412 | 0 | 28 |
+| estrutura | 443 | 0 | 412 | 0 | 31 |
 
 ## Operações
 
@@ -389,6 +389,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/MATRIZ-ORQUESTRACAO-PERFIS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/MCP-FLUXO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/MEGA-PAINEL-SUGESTOES-IA.md |
+| estrutura | erro | docs/CONSCIENCIA/MEGAZORD-001-RECEIPT.md |
 | estrutura | atualizado | docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md |
 | estrutura | atualizado | docs/CONSCIENCIA/MISSAO-CONVERGENCIA-TRIPLA-FORMULA-20260816.md |
 | estrutura | atualizado | docs/CONSCIENCIA/MODO-SEGREDO.md |
@@ -396,6 +397,8 @@
 | estrutura | atualizado | docs/CONSCIENCIA/NOTIFY/INSTALAR-VPS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/NOTIFY/README.md |
 | estrutura | atualizado | docs/CONSCIENCIA/NOTION-MAPA.md |
+| estrutura | erro | docs/CONSCIENCIA/OMNI-MEGAZORD-AUTONOMY-V3.md |
+| estrutura | erro | docs/CONSCIENCIA/OMNI-MEGAZORD-LOOP.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PADRAO-CARD-HERMES.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PADRAO-EMOJIS.md |
 | estrutura | erro | docs/CONSCIENCIA/PADRAO-GRAFO-VIVO-MARKDOWN.md |

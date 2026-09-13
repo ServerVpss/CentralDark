@@ -115,6 +115,52 @@ Proibido: v2, v3, novo, final, copy, backup como fuga de reconciliação.
 
 Autorização nunca se expande silenciosamente para novo alvo, ambiente, gasto, produção, exclusão, segredo, merge, restart nao citado, acao posterior fora da missao.
 
+### Pesquisa audiovisual e legendas
+
+Quando a intenção trouxer vídeo/YouTube, consultar primeiro o adaptador canônico
+`youtube_transcript` do MCP, que usa `scripts/media/fetch_youtube_transcript.py`.
+A rota é read-only e busca legendas públicas com timestamps; não baixa vídeo nem
+áudio. `yt-dlp`/Whisper só entram como fallback explícito, quando autorizados e
+com recursos/limites medidos. Bloqueio de IP, Turnstile, vídeo privado ou legenda
+ausente permanece `UNKNOWN`, nunca PASS.
+
+```text
+URL
+→ LEGENDA PÚBLICA
+→ NORMALIZAR TIMESTAMPS
+→ CONSUMIR COMO MATÉRIA
+→ SEPARAR FATO/INFERÊNCIA/UNKNOWN
+→ CONTRAPROVAR
+→ DESTILAR DELTA PROVADO
+→ REGISTRAR NO OWNER DE APRENDIZADO EXISTENTE
+```
+
+Não tratar `downloadyoutubesubtitles.com` como API canônica sem contrato, licença
+e prova de acesso. Não commitar legenda bruta; persistir somente receipt sanitizado
+e aprendizado reutilizável após validação.
+
+### Conector MCP por superfície/passagem
+
+Quando uma superfície externa disser que o conector MCP CentralDark foi desabilitado,
+tratar como evidência daquela passagem, não como falha global do servidor. A falha
+pode ocorrer em voz, texto, conversa longa, modelo, workspace, plano, autorização ou
+estado da própria plataforma. Não culpar automaticamente voz nem OAuth; medir outro
+corpo autorizado contra o mesmo alvo antes do veredito.
+
+```text
+CONNECTOR_DISABLED_IN_SURFACE
+→ ACCEPT_AS_SURFACE_EVIDENCE
+→ DO_NOT_PROMOTE_TO_SERVER_FAILURE
+→ TEST_SAME_TARGET_VIA_HERMES_OR_MCP_DIRECT
+→ TEST_FRESH_TEXT_CONVERSATION_WHEN_APPLICABLE
+→ CLASSIFY: SURFACE_BLOCK | AUTH_BLOCK | SERVER_FAIL | UNKNOWN
+```
+
+`kit_boas_vindas`/`puxar_aprendizados` bloqueados em uma passagem não provam
+`CentralDark-MCP` quebrado. Prova de servidor exige health/runtime/log ou chamada
+MCP direta. Se outro corpo autorizado invoca a mesma tool com sucesso, o blocker é
+da superfície/passagem observada até prova contrária.
+
 ## Gate de falsificação (MetaLupa)
 
 UNKNOWN, ANOMALY, ACHADO_PENDENTE, BLOCKED (incluindo reason: SKIPPED), timeout, ausência de log ou ausência de revisão nunca equivalem a PASS.
