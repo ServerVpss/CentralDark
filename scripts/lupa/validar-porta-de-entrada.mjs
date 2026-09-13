@@ -427,6 +427,7 @@ for (const entrypoint of ENTRADAS) {
 
 const canonicalDocuments = canonicos();
 const reachable = new Set();
+const reachableFrom = new Map();
 const canonicalDeclaration = (document) => {
   const lines = ler(document).split(/\r?\n/);
   const index = lines.findIndex((line) => /^status:\s*"?CAN[OÔ]NICO"?/i.test(line));
