@@ -781,3 +781,7 @@ Estabilidade: Plugin externo exige re-instalação manual pós-update. Ação: M
 - **Sintoma:** O commit 41f1f7e85 na branch reconciliacao/casa-20260829-consolidacao tem mensagem "docs(reconciliation): inventory of E:\CentralDark — SOBRA_BRAIN classification, proof of mirrors" mas contém apenas 3 arquivos canvas vazios (docs/BRAIN/Sem título*.canvas, 1 linha cada), pegos por um git add -A cego. O relatório de inventário citado na mensagem nunca entrou no repositório.
 - **Onde mexer:** PR #1369, branch reconciliacao/casa-20260829-consolidacao, commit 41f1f7e85, arquivos docs/BRAIN/Sem título*.canvas
 - **Critério pra fechar:** Os 3 canvas vazios removidos do PR #1369 (não pertencem ao escopo), e o commit reescrito ou seguido de commit corretivo cuja mensagem descreva o que realmente contém. Nenhum commit do PR anuncia prova que não esteja no diff.
+### 57. goal systemd-smoke pausado — gateway-durable-check pendente — 🟡 ABERTO (13/09/2026, 15:55 BRT)
+- **Sintoma:** Webhook 'goal_paused' chegou com reason=gateway-durable-check. Goal systemd-smoke deve ficar pausado até reavaliação.
+- **Onde mexer:** docs/PENDENCIAS.md (seção em andamento) e /root/[oculto]
+- **Critério pra fechar:** Reavaliar após gateway-durable-check completo; não reativar automaticamente sem evidência de que o gateway passou.
