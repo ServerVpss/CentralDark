@@ -66,6 +66,18 @@ Carregue nesta ordem:
 17. `.agents/skills/git-conflict-resolve-house-standard/SKILL.md` quando houver PR em conflito, main avançando sob PR aberto, ou dependabot travado — padrão único, motor em `scripts/dependabot/resolve-conflicts.sh`.
 18. estado atual de branch, HEAD, PR, runtime, writer e ferramentas aplicáveis.
 
+Referências canônicas de apoio que a porta precisa manter alcançáveis para o gate estrutural:
+
+- `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MATERIAL-INGEST.md`
+- `docs/ARQUITETURA/LIBRARY-BINDING-CENTRALDARK.md`
+- `docs/BRAIN/08-ARTEFATOS-VISUAIS/01-CARTAZES-CANONICOS/README.md`
+- `docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/README.md`
+- `docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md`
+- `docs/CONSCIENCIA/ADMINISTRAVEIS.md`
+- `docs/CONSCIENCIA/BAIANES-E-RESENHA-REGIONAL.md`
+- `docs/GOVERNANCA/CONTEXTO-PESSOAL-E-PROVENIENCIA-TEMPORAL.md`
+- `.agents/skills/centraldark-operational-method/references/HUMAN-ACTION-DIRECT-LINK.md`
+
 Nome de modelo não muda o contrato. GPT, Codex, Claude, Gemini, Grok, Copilot, Cursor, Windsurf, Hermes ou modelo futuro entram como motores/papéis substituíveis dentro do mesmo organismo.
 
 Todo import, registro ou troca de modelo deve resolver o mesmo core e os mesmos

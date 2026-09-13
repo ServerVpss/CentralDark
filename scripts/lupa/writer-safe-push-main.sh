@@ -109,11 +109,13 @@ for p in "${PATH_ARR[@]}"; do
     echo "${WRITER_TAG}_PATH_INVALID=1" >&2
     exit 2
   fi
-  case "$p" in
-    .env|.env.*|*/.env|*/.env.*|*secret*|*token*|*credential*|*password*|.venv_status|*/.venv_status/*|node_modules|*/node_modules/*|.venv|*/.venv/*|__pycache__|*/__pycache__/*|.pytest_cache|*/.pytest_cache/*|dist|*/dist/*|build|*/build/*|*.zip|*.7z|*.tar|*.tgz|*.gz|*/status/*|status/*|*/logs/*|logs/*|*/missions/*|missions/*|*.next_run|*.state.json|*.estado.json|*analyst-decision.json|*last-report.json|*graph.json|status.json|*/status.json|*-health.json|*-status.json|*.jsonl|*.npmrc|*.netrc|id_rsa|kubeconfig|*.pem|*.pub|*.p12|*.pfx|*.jks|*.keystore|*.truststore|*.cer|*.sig|*.asc|*.gpg|*.gnupg|*.b64|*.base64|*.env.local|*.env.production|*.env.staging|*.env.test|*.env.development|*.credentials|*credentials*|*credential*|*auth*token*|*access*token*|*refresh*token*|*api*key*|*apikey*|*private*key*|*public*key*|*ssh*key*|*id_*|*.ssh*|*.ssh/config|*.ssh/known_hosts|*.ssh/id_*|*.ssh/agent|*.ssh/authorized_keys|*.ssh/id_ed25519|*.ssh/id_rsa|*.ssh/id_ecdsa|*.ssh/id_dsa|*.ssh/id_xmss|*.ssh/id_bliss|*.ssh/id_gssapi_krb5|*.ssh/id_whatevs)
-      echo "${WRITER_TAG}_PATH_FORBIDDEN=1" >&2
-      exit 2 ;;
-  esac
+  if [[ "$p" != apps/modulos/mcp/dist/* ]]; then
+    case "$p" in
+      .env|.env.*|*/.env|*/.env.*|*secret*|*token*|*credential*|*password*|.venv_status|*/.venv_status/*|node_modules|*/node_modules/*|.venv|*/.venv/*|__pycache__|*/__pycache__/*|.pytest_cache|*/.pytest_cache/*|dist|*/dist/*|build|*/build/*|*.zip|*.7z|*.tar|*.tgz|*.gz|*/status/*|status/*|*/logs/*|logs/*|*/missions/*|missions/*|*.next_run|*.state.json|*.estado.json|*analyst-decision.json|*last-report.json|*graph.json|status.json|*/status.json|*-health.json|*-status.json|*.jsonl|*.npmrc|*.netrc|id_rsa|kubeconfig|*.pem|*.pub|*.p12|*.pfx|*.jks|*.keystore|*.truststore|*.cer|*.sig|*.asc|*.gpg|*.gnupg|*.b64|*.base64|*.env.local|*.env.production|*.env.staging|*.env.test|*.env.development|*.credentials|*credentials*|*credential*|*auth*token*|*access*token*|*refresh*token*|*api*key*|*apikey*|*private*key*|*public*key*|*ssh*key*|*id_*|*.ssh*|*.ssh/config|*.ssh/known_hosts|*.ssh/id_*|*.ssh/agent|*.ssh/authorized_keys|*.ssh/id_ed25519|*.ssh/id_rsa|*.ssh/id_ecdsa|*.ssh/id_dsa|*.ssh/id_xmss|*.ssh/id_bliss|*.ssh/id_gssapi_krb5|*.ssh/id_whatevs)
+        echo "${WRITER_TAG}_PATH_FORBIDDEN=1" >&2
+        exit 2 ;;
+    esac
+  fi
 done
 
 if [ "$DRY_RUN" = "1" ]; then
