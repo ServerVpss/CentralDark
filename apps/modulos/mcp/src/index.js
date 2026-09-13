@@ -1,4 +1,5 @@
 // Entrypoint do servidor MCP CentralDark.
+// MICRO_DEPLOY_GATE_PROBE: same-SHA runtime promotion check.
 import { readFileSync, writeFileSync } from "node:fs";
 import express from "express";
 import { config } from "./config.js";
