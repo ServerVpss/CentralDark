@@ -170,6 +170,36 @@ MAPEAR
 
 Se a ação estiver fora da autorização vigente ou envolver decisão humana nova, aí sim SEGREDO/CHEFE decide.
 
+## Fronteira Windows — prova humana sob demanda
+
+Quando um bloqueio depender materialmente de Windows, Casa Windows, filesystem Windows, desktop Windows, Obsidian/Explorer Windows, runner Windows, dispositivo Windows ou qualquer efeito que só possa ser medido nessa superfície, a Casa não converte a ausência dessa prova em falha global nem força o SEGREDO/CHEFE a provar agora.
+
+```text
+WINDOWS_DEPENDENT_CLAIM
++ PROOF_NOT_AVAILABLE_HERE
+→ STATUS=PENDING_WINDOWS_PROOF
+→ UNKNOWN_IS_NOT_PASS
+→ NO_FALSE_GREEN
+→ CONTINUE_INDEPENDENT_NON_WINDOWS_WORK
+```
+
+A prova do lado Windows fica reservada ao SEGREDO/CHEFE e pode ser fornecida quando ele quiser, sem prazo artificial, sem renovação automática de receipt e sem transformar a pendência em culpa humana ou falha do restante do organismo.
+
+```text
+WINDOWS_PROOF_OWNER=SEGREDO/CHEFE
+WINDOWS_PROOF_ON_DEMAND=true
+WINDOWS_PROOF_REQUIRED_ONLY_WHEN_CHEFE_REQUESTS_OR_CLAIM_NEEDS_CLOSURE=true
+WINDOWS_DEPENDENT_BLOCKER_REMAINS_PENDING=true
+WINDOWS_PENDING_DOES_NOT_BLOCK_INDEPENDENT_WORK=true
+WINDOWS_PENDING != PASS
+WINDOWS_PENDING != GLOBAL_FAILURE
+WINDOWS_PENDING != HUMAN_FAILURE
+NO_AUTOMATIC_WINDOWS_PROOF_REQUEST=true
+NO_SYNTHETIC_WINDOWS_PROOF=true
+```
+
+Quando o SEGREDO/CHEFE decidir provar, a prova deve ser medida no alvo Windows aplicável e reconciliada com o claim exato. Até lá, registrar o blocker específico, preservar o cursor e manter o estado como `PENDING_WINDOWS_PROOF`.
+
 ## Regra de logs
 
 Antes de mostrar/salvar log, sanitizar valores sensíveis. Nunca retornar secret salvo ao painel/chat.
