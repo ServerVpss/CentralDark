@@ -28,7 +28,7 @@ interface SyncRun {
   tools_updated: number;
 }
 
-// Fallback estático: converte as 83 tools do MCP num shape compatível com <ToolCard>
+// Fallback estático legado: só entra se o manifesto remoto não estiver disponível.
 function buildFallbackTools(): Tool[] {
   return MCP_TOOLS_FALLBACK.map((t, i) => ({
     id: `mcp-${i}-${t.name}`,
@@ -38,8 +38,36 @@ function buildFallbackTools(): Tool[] {
     tags: t.tags,
     version: '1.0.0',
     is_deprecated: false,
-    health_status: 'healthy' as const,
+    health_status: 'unknown' as const,
   }));
+}
+
+// O manifesto remoto é a fonte atual do catálogo; não congelar uma cópia no Hub.
+async function buildRemoteFallbackTools(): Promise<Tool[] | null> {
+  try {
+    const response = await fetch('https://mcp.centralldark.com/tools.json', {
+      headers: { Accept: 'application/json' },
+    });
+    if (!response.ok) return null;
+    const manifest = await response.json() as {
+      tools?: Array<{ name?: string; description?: string; readOnly?: boolean; destructive?: boolean }>;
+    };
+    if (!Array.isArray(manifest.tools) || manifest.tools.length === 0) return null;
+    return manifest.tools
+      .filter(tool => typeof tool.name === 'string' && tool.name.length > 0)
+      .map((tool, i) => ({
+        id: `mcp-remote-${i}-${tool.name}`,
+        name: tool.name!,
+        description: tool.description ?? '',
+        category: tool.name!.split('_', 1)[0] || 'mcp',
+        tags: ['mcp', tool.readOnly ? 'readonly' : 'write', tool.destructive ? 'destructive' : 'safe'],
+        version: manifest.tools?.length ? String(manifest.tools.length) : '1.0.0',
+        is_deprecated: false,
+        health_status: 'unknown' as const,
+      }));
+  } catch {
+    return null;
+  }
 }
 
 export function CatalogTab() {
@@ -61,12 +89,13 @@ export function CatalogTab() {
       if (data && data.length > 0) {
         setTools(data);
       } else {
-        // Banco vazio ou indisponível → mostra as 83 tools reais do MCP
-        setTools(buildFallbackTools());
+        const remoteTools = await buildRemoteFallbackTools();
+        setTools(remoteTools ?? buildFallbackTools());
       }
     } catch (err) {
-      console.error('Erro ao carregar tools, usando fallback MCP:', err);
-      setTools(buildFallbackTools());
+      console.error('Erro ao carregar tools do Hub, tentando manifesto MCP:', err);
+      const remoteTools = await buildRemoteFallbackTools();
+      setTools(remoteTools ?? buildFallbackTools());
     } finally {
       setLoading(false);
     }

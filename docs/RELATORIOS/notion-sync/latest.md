@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-09-10T19:09:00.432Z
+# 🧠 Notion Sync — 2026-09-12T19:08:12.245Z
 
-- **Commit fonte:** `5ce1d976a2af5fd91e7ee31c34c616c62ae47f04`
+- **Commit fonte:** `91a9e0c978538b6854a8de0b901d7de452162f85`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 491 atualizadas · ❌ 27 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 490 atualizadas · ❌ 37 erros
 
 ## Por base
 
@@ -15,8 +15,8 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
-| aprendizados | 36 | 0 | 35 | 0 | 1 |
-| estrutura | 438 | 0 | 412 | 0 | 26 |
+| aprendizados | 43 | 0 | 34 | 0 | 9 |
+| estrutura | 440 | 0 | 412 | 0 | 28 |
 
 ## Operações
 
@@ -91,7 +91,7 @@
 | aprendizados | atualizado | #22 — Painel Admin precisa ser observabilidade operacional, não só configuração |
 | aprendizados | atualizado | #23 — HTTP 200, PM2 online, DNS resolvendo ou painel verde não provam LIVE |
 | aprendizados | atualizado | #24 — API paga é capacidade, não identidade nem caminho obrigatório |
-| aprendizados | atualizado | #25 — “Menos é mais” significa menor movimento compatível com efeito, observabilidade e segurança |
+| aprendizados | erro | #25 — "Menos é mais" significa menor movimento compatível com efeito, observabilidade e segurança |
 | aprendizados | atualizado | #26 — Batch .bat: 4 armadilhas que passam em revisão superficial |
 | aprendizados | atualizado | #27 — Grok App Builder é adapter, não cérebro — não scaffoldar app paralelo |
 | aprendizados | atualizado | #28 — Ponte semântica fail-closed EXIT code=2 — não é verde; stderr engolido |
@@ -102,6 +102,13 @@
 | aprendizados | atualizado | #33 — Opinião usada como medição gera falso verde e ação destrutiva |
 | aprendizados | atualizado | #34 — Sem TURN_CLASS não há gate entre ler e agir — a impressão ocupa o slot da medição |
 | aprendizados | erro | #35 — T3: ponte semântica EXIT 1, três catálogos, VPS na main 8 atrás |
+| aprendizados | erro | #43 — EXECUTION_OVER_EXPLANATION — User Values Doing over Talking |
+| aprendizados | erro | #44 — LINGUISTIC_CALIBRATION — Bahia Expression Accuracy |
+| aprendizados | erro | #45 — WEBUI_ADMIN_HUB — Localhost:8787 as CentralAdmin Surface |
+| aprendizados | erro | #46 — ONE_SYSTEM_ONLY_ENFORCEMENT — User's Operational Maxim |
+| aprendizados | erro | #47 — LARGE_FILE_INTEGRATION — Process Droped Files, Don't Just Acknowledge |
+| aprendizados | erro | #48 — COMMIT_LIMPO — Commit não é vassoura de git status |
+| aprendizados | erro | #49 — AUREOLA_PERMANENTE — Publicação segura e continuidade do aprendizado |
 | estrutura | atualizado | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | atualizado | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
@@ -361,6 +368,8 @@
 | estrutura | atualizado | docs/CONSCIENCIA/GITHUB-PROFISSIONAL-E-INTELIGENCIA-VIVA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/GRUPO-EVOLUCAO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/GUARDIAO-DA-CONSCIENCIA.md |
+| estrutura | erro | docs/CONSCIENCIA/GUIA-COMUNICACAO-SEGREDO-CHEFE.md |
+| estrutura | erro | docs/CONSCIENCIA/HERMES-CADEIA-OPERACIONAL.md |
 | estrutura | atualizado | docs/CONSCIENCIA/INFRA-MAP.md |
 | estrutura | atualizado | docs/CONSCIENCIA/INSTALADOR/13-centraldark-portal.md |
 | estrutura | atualizado | docs/CONSCIENCIA/INSTALADOR/14-sync-monorepo.md |
