@@ -202,6 +202,64 @@
       "single_global_owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json"
     }
   },
+  "capability_security_model": {
+    "principle": "NEVER_CLASSIFY_AN_ENTIRE_CAPABILITY_AS_DANGEROUS_ONLY_BECAUSE_PART_IS_DUAL_USE",
+    "analysis_before_decision": [
+      "INSPECT",
+      "UNDERSTAND",
+      "CLASSIFY",
+      "TRACE_INPUTS",
+      "TRACE_OUTPUTS",
+      "IDENTIFY_SIDE_EFFECTS",
+      "IDENTIFY_EXTERNAL_NETWORK_ACCESS",
+      "IDENTIFY_SECRET_ACCESS",
+      "IDENTIFY_COMMAND_EXECUTION",
+      "IDENTIFY_DESTRUCTIVE_OPERATIONS"
+    ],
+    "decision": {
+      "SAFE": "EXECUTE",
+      "SAFE_WITH_GUARDRAILS": "ADAPT_AND_EXECUTE",
+      "DUAL_USE": "EXECUTE_ONLY_WITH_AUTHORIZED_TARGET_PURPOSE_AND_BLAST_RADIUS",
+      "DANGEROUS_COMPONENT": "ISOLATE_PRESERVE_SAFE_CAPABILITY_ADAPT_RETEST",
+      "MALICIOUS": "QUARANTINE_DO_NOT_EXECUTE"
+    },
+    "repair": [
+      "INSPECT_ORIGINAL",
+      "PRESERVE_PROVENANCE",
+      "IDENTIFY_UNSAFE_OPERATION",
+      "CREATE_SAFE_ADAPTER_IN_EXISTING_OWNER",
+      "REMOVE_UNNECESSARY_EXTERNAL_SIDE_EFFECT",
+      "SANDBOX",
+      "TEST_EQUIVALENT_BEHAVIOR",
+      "NEGATIVE_TEST",
+      "COUNTERPROOF",
+      "CRYSTALLIZE_ADAPTER"
+    ],
+    "installation_checks": [
+      "INSPECT_SOURCE_INSTALL_SCRIPT_DEPENDENCIES_NETWORK_PERMISSIONS_PERSISTENCE_SECRET_ACCESS",
+      "VERIFY_BINARY_VERSION_HASH_WHEN_AVAILABLE",
+      "SMOKE_TEST",
+      "VERIFY_NO_UNEXPECTED_PERSISTENCE",
+      "VERIFY_NO_SECRET_EXFILTRATION"
+    ],
+    "autonomy": {
+      "dual_use_alone_is_not_a_blocker": true,
+      "block_or_escalate_on": [
+        "UNAUTHORIZED_TARGET",
+        "IRREVERSIBLE_DESTRUCTIVE_ACTION",
+        "SECRET_EXPOSURE",
+        "MATERIAL_EXTERNAL_SIDE_EFFECT",
+        "AMBIGUOUS_SCOPE",
+        "MALICIOUS_BEHAVIOR"
+      ]
+    },
+    "invariant": "SECURITY_MUST_REDUCE_RISK_WITHOUT_DESTROYING_VALID_CAPABILITY",
+    "applies_to": ["SKILLS", "MCP", "API", "PROVIDER", "SCRIPT", "TOOL", "FUTURE_CAPABILITY"],
+    "model_neutral": true,
+    "runtime_owns_execution_within_scope": true,
+    "human_interrupt_only_for_material_boundary": true,
+    "no_security_bypass": true
+  },
   "language_policy": {
     "normalize_human_speech_before_reasoning": false,
     "slang_metaphor_abbreviation_are_context_signals": true,

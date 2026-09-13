@@ -459,6 +459,12 @@ for (const entrypoint of ENTRADAS) {
 
 const canonicalDocuments = canonicos();
 const reachable = new Set();
+const reachableFrom = new Map();
+const canonicalDeclaration = (document) => {
+  const lines = ler(document).split(/\r?\n/);
+  const index = lines.findIndex((line) => /^status:\s*"?CAN[OÔ]NICO"?/i.test(line));
+  return index >= 0 ? index + 1 : 1;
+};
 let currentLevel = ENTRADAS.filter(existe);
 for (let depth = 0; depth < 2; depth += 1) {
   const nextLevel = [];
@@ -466,14 +472,22 @@ for (let depth = 0; depth < 2; depth += 1) {
     for (const cited of caminhosCitados(ler(document))) {
       if (ehGerado(cited) || reachable.has(cited) || !existe(cited)) continue;
       reachable.add(cited);
+      reachableFrom.set(cited, { document, depth: depth + 1 });
       if (/\.mdc?$/.test(cited)) nextLevel.push(cited);
     }
   }
   currentLevel = nextLevel;
 }
 
+const checkedEntrypoints = ENTRADAS.filter(existe).join(",");
 for (const canonical of canonicalDocuments) {
-  if (!reachable.has(canonical)) errors.push(`CANONICO_ORFAO:${canonical}`);
+  if (!reachable.has(canonical)) {
+    errors.push(
+      `CANONICO_ORFAO:path=${canonical}:declaracao_linha=${canonicalDeclaration(canonical)}:` +
+      `referencias_verificadas=${checkedEntrypoints}:profundidade_maxima=2:` +
+      "acao=adicionar_referencia_a_partir_de_uma_entrada_canonica_ou_remover_status_CANONICO_apos_reconciliacao",
+    );
+  }
 }
 
 const report = {

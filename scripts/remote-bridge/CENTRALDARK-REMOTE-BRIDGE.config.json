@@ -5,6 +5,19 @@
   "package": "@wonderwhy-er/desktop-commander@0.2.48",
   "remote_mcp": "https://mcp.desktopcommander.app/mcp",
   "centraldark_mcp": "https://mcp.centralldark.com/mcp",
+  "centraldark_oauth": {
+    "protected_resource_metadata": "https://mcp.centralldark.com/.well-known/oauth-protected-resource",
+    "authorization_server_metadata": "https://mcp.centralldark.com/.well-known/oauth-authorization-server",
+    "scope": "mcp",
+    "pkce_method": "S256",
+    "redirect_uri": "http://127.0.0.1:62607/",
+    "token_storage": "desktop-commander-native-secure-store"
+  },
+  "centraldark_headers": {
+    "X-CentralDark-Scope": "all",
+    "X-CentralDark-Client": "centraldark-universal-mcp-client",
+    "X-CentralDark-Origin": "composio-custom-mcp"
+  },
   "github_default": "ServerVpss/CentralDark",
   "screenpipe_url": "http://127.0.0.1:3030",
   "screenpipe_context_file": "context\\screenpipe-latest.json",
