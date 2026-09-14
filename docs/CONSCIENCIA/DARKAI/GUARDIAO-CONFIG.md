@@ -79,7 +79,7 @@ Não usar `grok logout` para “trocar de conta”: isso zera a sessão do CLI. 
 Cada botão tem mini-hub. Se cair, o bot mostra o **motivo** (`TIMEOUT`, `REDE`, `AUTH`, `ARQUIVO`, `TELEGRAM`, `ORPHAO`).
 
 - Menu → **📊 Logs** ou `/logs`
-- **🔒 Cristal** = o que já foi amarrado (usar pode, redesenhar não)
+- **🔒 Cristal** = o que já foi amarrado. **Usar pode. Redesenhar não. Melhorar o que já existe.** Botões de usar (X/Grok, Escudo, Liberar, Fail2ban) saem desse menu.
 - Arquivos: `/var/log/centraldark-guarda/buttons.jsonl` e `runtime/guardiao-crystal-lock.json`
 - Sem token no log.
 - PM2: `CentralDark-GuardiaoBot` via `apps/bot-telegram/guardiao.ecosystem.config.cjs`

@@ -277,3 +277,9 @@ updated: 2026-08-27
 - **Data:** 2026-09-14
 - **Contexto:** Chefe pediu mini-hub de log em cada botão, motivo quando cai, cadeado no que já cristalizou, menu completo, commit+push+main+micro-deploy.
 - **Aprendizado:** Observabilidade do `@Guardiaonotify_bot` vive no próprio bot (`guardiao-button-hub.cjs`): JSONL sanitizado, reflexo com código (TIMEOUT/REDE/AUTH/…), menu 📊 Logs / 🔒 Cristal. Cristalizado = usar pode, redesenhar não. Deploy é só `pm2 restart CentralDark-GuardiaoBot`.
+
+### 52. Usar pode, redesenhar não — melhorar o que já existe
+- **Categoria:** regra
+- **Data:** 2026-09-14
+- **Contexto:** Chefe reforçou no Guardião: usar o cristalizado, não redesenhar, melhorar o owner existente.
+- **Aprendizado:** Menu 🔒 Cristal passa a oferecer os botões de USO (X/Grok, Escudo, Liberar, Fail2ban). Catálogo de logs nasce no boot, sem esperar primeiro toque. Sem V2.

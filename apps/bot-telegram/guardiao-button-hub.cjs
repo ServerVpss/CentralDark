@@ -134,7 +134,7 @@ function crystalDefaults() {
   return {
     locked: true,
     updated_at: new Date().toISOString(),
-    policy: 'CRYSTAL_LOCK — usar pode; redesenhar/apagar owner não',
+    policy: 'Usar pode. Redesenhar não. Melhorar o que já existe.',
     items: HUBS.filter((h) => h.crystal).map((h) => ({
       id: h.id, label: h.label, hub: h.hub, lock: 'LOCKED',
     })),
@@ -154,8 +154,31 @@ function loadCrystal() {
   return seeded;
 }
 
+function seedCatalog() {
+  const state = loadLatest();
+  state.buttons = state.buttons || {};
+  let changed = !state.updated_at;
+  for (const h of HUBS) {
+    if (state.buttons[h.id]) continue;
+    state.buttons[h.id] = {
+      taps: 0, oks: 0, fails: 0, label: h.label, hub: h.hub, crystal: h.crystal, last_kind: 'none',
+    };
+    changed = true;
+  }
+  if (changed) {
+    state.updated_at = new Date().toISOString();
+    writeLatest(state);
+  }
+  return state;
+}
+
+function boot() {
+  loadCrystal();
+  return seedCatalog();
+}
+
 function snapshot() {
-  const latest = loadLatest();
+  const latest = seedCatalog();
   const crystal = loadCrystal();
   const rows = HUBS.map((h) => {
     const st = (latest.buttons || {})[h.id] || { taps: 0, oks: 0, fails: 0 };
@@ -186,6 +209,8 @@ module.exports = {
   sanitize,
   logEvent,
   loadCrystal,
+  seedCatalog,
+  boot,
   snapshot,
   one,
   LOG_JSONL,
