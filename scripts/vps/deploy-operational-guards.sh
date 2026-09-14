@@ -11,6 +11,8 @@ umask 077
 MAP_DIR="$REPO_DIR/apps/modulos/mapeamento"
 VERIFIER_DIR="$REPO_DIR/apps/modulos/HERMES-CORE/agents/Log-Verificador"
 PM2_APP="CentralDark-HermesVerificador"
+POLICY_PATH=".agents/skills/centraldark-esteira-motor/SKILL.md"
+SOURCE_DEPLOY_PATH="scripts/vps/centraldark-deploy.sh"
 
 [[ "$TARGET_SHA" =~ ^[0-9a-f]{40}$ ]] || { echo "TARGET_SHA_INVALID"; exit 61; }
 [[ -d "$REPO_DIR/.git" ]] || { echo "REPO_DIR_INVALID"; exit 62; }
@@ -39,6 +41,43 @@ ORIGIN_URL="$(git remote get-url origin)"
 git fetch --prune origin main
 ORIGIN_SHA="$(git rev-parse origin/main)"
 git merge-base --is-ancestor "$TARGET_SHA" "$ORIGIN_SHA" || { echo "EVENT_SHA_NOT_IN_MAIN"; exit 65; }
+
+# Micro-deploy de fonte/policy. Usa o script do SHA do evento, não uma cópia
+# potencialmente velha da VPS. Não reinicia runtime: apenas sincroniza a fonte
+# canônica e prova HEAD/dirty/proof-guards.
+SOURCE_SYNC_REQUIRED=0
+if [[ "${GITHUB_EVENT_NAME:-}" == "workflow_dispatch" ]]; then
+  SOURCE_SYNC_REQUIRED=1
+elif [[ "${GITHUB_EVENT_NAME:-}" == "push" && "${BEFORE_SHA:-}" =~ ^[0-9a-f]{40}$ && ! "${BEFORE_SHA}" =~ ^0{40}$ ]]; then
+  if git cat-file -e "$BEFORE_SHA^{commit}" 2>/dev/null && ! git diff --quiet "$BEFORE_SHA" "$TARGET_SHA" -- \
+    "$POLICY_PATH" \
+    "$SOURCE_DEPLOY_PATH" \
+    scripts/vps/deploy-operational-guards.sh \
+    .github/workflows/vps-exec-selfhosted.yml; then
+    SOURCE_SYNC_REQUIRED=1
+  fi
+fi
+
+if [[ "$SOURCE_SYNC_REQUIRED" -eq 1 ]]; then
+  SOURCE_SYNC_SCRIPT="$(mktemp "$RUNNER_TEMP/centraldark-source-sync.XXXXXX")"
+  chmod 700 "$SOURCE_SYNC_SCRIPT"
+  git show "$TARGET_SHA:$SOURCE_DEPLOY_PATH" > "$SOURCE_SYNC_SCRIPT" || {
+    rm -f "$SOURCE_SYNC_SCRIPT"
+    echo "SOURCE_SYNC_SCRIPT_UNAVAILABLE"
+    exit 88
+  }
+  REPO_DIR="$REPO_DIR" BRANCH=main bash "$SOURCE_SYNC_SCRIPT" --apply --source-only
+  rm -f "$SOURCE_SYNC_SCRIPT"
+  echo "source_synced=true" >> "$GITHUB_OUTPUT"
+  echo "MICRO_DEPLOY_SOURCE_SYNC=PROVED"
+else
+  echo "source_synced=false" >> "$GITHUB_OUTPUT"
+  echo "MICRO_DEPLOY_SOURCE_SYNC=NOT_REQUIRED"
+fi
+
+git fetch --prune origin main
+ORIGIN_SHA="$(git rev-parse origin/main)"
+git merge-base --is-ancestor "$TARGET_SHA" "$ORIGIN_SHA" || { echo "EVENT_SHA_LEFT_MAIN"; exit 89; }
 git diff --quiet "$TARGET_SHA" "$ORIGIN_SHA" -- \
   apps/modulos/mapeamento \
   apps/modulos/HERMES-CORE/agents/Log-Verificador \

@@ -2,7 +2,7 @@
 title: "Grafo Vivo — Visão em Tempo Real"
 date: 2026-07-03
 tags: ["grafo", "arquitetura", "saude", "tempo-real", "mermaid", "sistema"]
-updated: 2026-08-28
+updated: 2026-09-12
 ---
 
 # 🕸️ Grafo Vivo — Visão em Tempo Real
@@ -12,9 +12,9 @@ updated: 2026-08-28
 
 ```
 ┌────────────────────────────────────────────────────────┐
-│  🕸️ GRAFO VIVO · atualizado 28/08/2026, 01:12:19    │
-│   68 nós ·  88 arestas ·  7 🟢 online ·  2 🔴 off       │
-│  21 processos PM2 ·   0 req ChatGPT/15min                │
+│  🕸️ GRAFO VIVO · atualizado 11/09/2026, 23:37:53    │
+│   77 nós · 102 arestas ·  8 🟢 online ·  1 🔴 off       │
+│  23 processos PM2 ·   0 req ChatGPT/15min                │
 └────────────────────────────────────────────────────────┘
 ```
 
@@ -34,7 +34,7 @@ flowchart LR
     graph_panel["🟢 Graph Panel"]
     guardiaoanalista["Guardião Analista"]
     guardiaoconsciencia["🟢 Guardião Consciência"]
-    hermes["🔴 Hermes (executor)"]
+    hermes["🟢 Hermes (executor)"]
     linear_api["Linear API"]
     lovable_connector["Lovable Connector"]
     lovable_gateway["Lovable AI Gateway"]
@@ -52,20 +52,12 @@ flowchart LR
     tool_supabase["MCP: supabase"]
     tool_vps["MCP: vps_*"]
     veiculosapi["VeiculosAPI"]
-    vps["VPS (Ubuntu/PM2)"]
     webhook_deploy["🔴 Webhook Deploy"]
     zentinel["Zentinel (latência)"]
-    arsenaladapter -->|roda na| vps
     bot_telegram -->|webhook updates| supabase
     elite_http_gateway -->|roteia AI models| lovable_gateway
-    eliteanthropic -->|roda na| vps
-    elitews -->|roda na| vps
-    evolucaoias -->|roda na| vps
     fn_ai_proxy -->|chat/completions| lovable_gateway
     fn_webapp_format -->|format AI| lovable_gateway
-    guardiaoanalista -->|roda na| vps
-    guardiaoconsciencia -->|roda na| vps
-    hermes -->|roda na| vps
     mcp_server -->|invoca| tool_elite
     mcp_server -->|invoca| tool_gemini
     mcp_server -->|invoca| tool_github
@@ -74,7 +66,6 @@ flowchart LR
     mcp_server -->|invoca| tool_painel
     mcp_server -->|invoca| tool_supabase
     mcp_server -->|invoca| tool_vps
-    memoria -->|roda na| vps
     painel_status -->|GET status via proxy| mcp_server
     tool_elite -->|POST chat/completions| elite_http_gateway
     tool_github -->|Contents/Issues/PRs| github_api
@@ -83,18 +74,16 @@ flowchart LR
     tool_notion -->|databases/pages| notion_api
     tool_painel -->|edita painel-data| painel_status
     tool_supabase -->|REST admin| supabase
-    tool_vps -->|read/write| vps
     webhook_deploy -->|recebe push → git pull| github_api
-    zentinel -->|roda na| vps
     classDef caido stroke:#ef4444,stroke-width:3px,color:#ef4444;
-    class hermes,webhook_deploy caido;
+    class webhook_deploy caido;
 ```
 
 > Vermelho = processo caído. O diagrama é derivado; divergência visual vira achado para investigação, não autoridade.
 
 ## 🔎 Auditoria visual das relações
 
-- 🟡 **Ciclo dirigido detectado:** `mcp-server`, `painel-status`, `tool-painel`. Ciclo é achado, não erro automático.
+- 🟡 **Ciclo dirigido detectado:** `aprendizados`, `band-score`, `casa`, `claim-seals`, `github-main`, `graphrag-master`, `mcp-server`, `meta-lupa`, `painel-status`, `tool-painel`, `vps`. Ciclo é achado, não erro automático.
 
 ## 🩺 Saúde dos processos monitorados
 
@@ -105,14 +94,13 @@ flowchart LR
 | 🟢 | Elite HTTP Gateway | `CentralDark-EliteHTTP` | online |
 | 🟢 | Graph Panel | `CentralDark-GraphPanel` | online |
 | 🟢 | Guardião Consciência | `CentralDark-GuardiaoConsciencia` | online |
-| 🔴 | Hermes (executor) | `CentralDark-Hermes` | stopped |
+| 🟢 | Hermes (executor) | `CentralDark-Hermes` | online |
 | 🟢 | MCP CentralDark | `CentralDark-MCP` | online |
 | 🟢 | Memória API | `CentralDark-Memoria` | online |
 | 🔴 | Webhook Deploy | `CentralDark-WebhookDeploy` | stopped |
 
 ## 🚨 Anomalias
 
-- 🔴 **Hermes (executor)** (`CentralDark-Hermes`) — status `stopped`.
 - 🔴 **Webhook Deploy** (`CentralDark-WebhookDeploy`) — status `stopped`.
 
 ## 🔀 Fluxos críticos
@@ -127,16 +115,16 @@ flowchart LR
 
 ```text
 PROJECTION_SOURCE=/root/CentralDark/apps/modulos/status/graph-data.json
-GRAPH_FINGERPRINT=15fe2639a967434d409c1dff08de26817a53f5f2de04b3350f62dbb9c29bfc2d
+GRAPH_FINGERPRINT=b8fa63825de5bad551e303c1431b2a3271b55e2f433f11bc08ba0cddd8d909fa
 MERMAID_KIND=flowchart
 MERMAID_STRUCTURAL_VALIDATION=PASS
 VISUAL_IS_TRUTH=false
-FOCUS_NODES=33
-FOCUS_EDGES=31
+FOCUS_NODES=32
+FOCUS_EDGES=21
 DANGLING_EDGES=0
 DUPLICATE_EDGES=0
 SELF_LOOPS=0
-CYCLE_NODES=3
+CYCLE_NODES=11
 ISOLATED_NODES=0
 WRITE=UPDATED
 ```
