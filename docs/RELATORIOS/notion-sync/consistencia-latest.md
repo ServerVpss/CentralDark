@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-09-14T03:56:46.139Z
-- **Commit:** `100c07af1f19f68e09eccfbcd804784807c9f017`
+- **Gerado:** 2026-09-14T04:19:54.515Z
+- **Commit:** `a9f8ea187eb9620b09ccf6b6f04e1580bd5b1360`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 39 | 39 | 39 | 0 | 0 |
-| aprendizados | 45 | 0 | 0 | 45 | 0 |
+| aprendizados | 46 | 0 | 0 | 46 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **45**
+- 🟥 Faltando no Notion: **46**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -93,4 +93,5 @@
 - 49. AUREOLA_PERMANENTE — Publicação segura e continuidade do aprendizado
 - 50. X/Grok no Guardião usa o pool Hermes (igual Codex); CLI de feedback não colide evento
 - 51. Guardião: log/reflexo por botão + cadeado no cristalizado
+- 52. Usar pode, redesenhar não — melhorar o que já existe
 </details>

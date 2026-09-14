@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-09-14T03:56:41.994Z
+# 🧠 Notion Sync — 2026-09-14T04:19:51.344Z
 
-- **Commit fonte:** `100c07af1f19f68e09eccfbcd804784807c9f017`
+- **Commit fonte:** `a9f8ea187eb9620b09ccf6b6f04e1580bd5b1360`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 490 atualizadas · ❌ 42 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 490 atualizadas · ❌ 43 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
-| aprendizados | 45 | 0 | 34 | 0 | 11 |
+| aprendizados | 46 | 0 | 34 | 0 | 12 |
 | estrutura | 443 | 0 | 412 | 0 | 31 |
 
 ## Operações
@@ -111,6 +111,7 @@
 | aprendizados | erro | #49 — AUREOLA_PERMANENTE — Publicação segura e continuidade do aprendizado |
 | aprendizados | erro | #50 — X/Grok no Guardião usa o pool Hermes (igual Codex); CLI de feedback não colide evento |
 | aprendizados | erro | #51 — Guardião: log/reflexo por botão + cadeado no cristalizado |
+| aprendizados | erro | #52 — Usar pode, redesenhar não — melhorar o que já existe |
 | estrutura | atualizado | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | atualizado | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
