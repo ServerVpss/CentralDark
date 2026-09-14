@@ -7,8 +7,8 @@ promoted_by: SEGREDO/CHEFE
 promoted_at: 2026-09-14
 
 intent:
-  statement: "Estar capacitado para usar uma capacidade nÃ£o significa manter essa capacidade instalada, carregada ou ativa o tempo todo."
-  goal: "Preservar o conteÃºdo, programaÃ§Ã£o, contratos, adapters, manifests e procedimentos completos para ativaÃ§Ã£o futura sob demanda, sem sobrecarregar Casa ou VPS."
+  statement: "Estar capacitado para usar uma capacidade não significa manter essa capacidade instalada, carregada ou ativa o tempo todo."
+  goal: "Preservar o conteúdo, programação, contratos, adapters, manifests e procedimentos completos para ativação futura sob demanda, sem sobrecarregar Casa ou VPS."
 
 invariants:
   CAPABILITY_CATALOGUED_IS_NOT_INSTALLED: true
@@ -169,19 +169,19 @@ readiness_model:
     CATALOGUED:
       meaning: "Capacidade conhecida, classificada e com owner/destino definido."
     READY_TO_MATERIALIZE:
-      meaning: "CÃ³digo, configuraÃ§Ã£o, adapters, comandos, manifests e testes necessÃ¡rios existem ou tÃªm origem determinÃ­stica para instalaÃ§Ã£o/ativaÃ§Ã£o."
+      meaning: "Código, configuração, adapters, comandos, manifests e testes necessários existem ou têm origem determinística para instalação/ativação."
     INSTALLED:
-      meaning: "DependÃªncia/binÃ¡rio/modelo estÃ¡ fisicamente presente no runtime alvo."
+      meaning: "Dependência/binário/modelo está fisicamente presente no runtime alvo."
     LOADED:
-      meaning: "EstÃ¡ consumindo memÃ³ria/CPU/GPU/disco/processos do runtime."
+      meaning: "Está consumindo memória/CPU/GPU/disco/processos do runtime."
     ACTIVE:
-      meaning: "ServiÃ§o/modelo/tool estÃ¡ operacional neste instante."
+      meaning: "Serviço/modelo/tool está operacional neste instante."
     SELECTED:
-      meaning: "Capability Contract Router escolheu a capacidade para a intenÃ§Ã£o vigente."
+      meaning: "Capability Contract Router escolheu a capacidade para a intenção vigente."
     AVAILABLE_OFF:
-      meaning: "Capacidade disponÃ­vel/instalada porÃ©m deliberadamente desligada ou nÃ£o selecionada; estado neutro, sem incidente."
+      meaning: "Capacidade disponível/instalada porém deliberadamente desligada ou não selecionada; estado neutro, sem incidente."
     REQUIRED_UNAVAILABLE:
-      meaning: "A intenÃ§Ã£o vigente exige a capacidade, mas ela nÃ£o pÃ´de ser ativada nem substituÃ­da por fallback aplicÃ¡vel."
+      meaning: "A intenção vigente exige a capacidade, mas ela não pôde ser ativada nem substituída por fallback aplicável."
   normal_policy: CATALOGUED_OR_READY_TO_MATERIALIZE
   runtime_residency_policy: ON_DEMAND
 
@@ -424,7 +424,7 @@ public_surface_policy:
     pm2_services_default: INTERNAL
 
 node_dependency_lock_policy:
-  purpose: "Reprodutibilidade de dependÃªncias; nÃ£o Ã© controle de acesso."
+  purpose: "Reprodutibilidade de dependências; não é controle de acesso."
   package_json_versioned: true
   package_lock_versioned_when_node_owner_uses_npm: true
   ci_install_mode: NPM_CI
@@ -435,7 +435,7 @@ node_dependency_lock_policy:
   auth_gate_and_dependency_lock_are_independent_layers: true
 
 agent_operational_quality:
-  intent: "Absorver prÃ¡ticas de arquitetura de agentes como comportamento do ciclo existente, sem criar ferramenta, cÃ©rebro, cargo soberano ou pipeline paralelo."
+  intent: "Absorver práticas de arquitetura de agentes como comportamento do ciclo existente, sem criar ferramenta, cérebro, cargo soberano ou pipeline paralelo."
   owner: CENTRALDARK_TRIGGER_FABRIC
   runtime_owner: apps/modulos/fixed-point-fabric/
   metacognition_owner: docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md
@@ -634,6 +634,3 @@ proof:
 slogan:
   technical: "CAPABILITY_READY != CAPABILITY_RESIDENT; OFF != FAIL"
   operational: "ARSENAL COMPLETO, PESO SOB DEMANDA; BOTÃƒO DESLIGADO Ã‰ SÃ“ BOTÃƒO DESLIGADO"
-
-
-

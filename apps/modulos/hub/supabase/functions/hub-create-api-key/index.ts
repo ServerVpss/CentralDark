@@ -71,7 +71,7 @@ Deno.serve(async (req) => {
     .single();
   if (error) return json({ error: error.message }, 500);
 
-  await admin
+  const { error: auditError } = await admin
     .from('audit_log_api')
     .insert({
       request_id: crypto.randomUUID(),
@@ -81,8 +81,8 @@ Deno.serve(async (req) => {
       status: 201,
       model: 'admin-op',
       error_code: null,
-    })
-    .then(() => {}, () => {});
+    });
+  if (auditError) console.warn('AUDIT_LOG_API_INSERT_FAILED', auditError.message);
 
   return json(
     {
