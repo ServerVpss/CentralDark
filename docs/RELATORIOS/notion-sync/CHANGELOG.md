@@ -2,6 +2,28 @@
 
 > Histórico cronológico de cada execução do workflow `notion-sync.yml`.
 
+## 2026-09-14T04:19:51.344Z · EXEC · target=all · por @segredounlock
+
+- Commit fonte: `a9f8ea187eb9620b09ccf6b6f04e1580bd5b1360`
+- Bases atualizadas: regras, pendencias, decisoes, aprendizados, estrutura
+- Bases ignoradas: —
+  - **regras**: 0 criadas · 4 atualizadas · 0 ignoradas · 0 erros (Git: 4)
+  - **pendencias**: 0 criadas · 1 atualizadas · 0 ignoradas · 0 erros (Git: 1)
+  - **decisoes**: 0 criadas · 39 atualizadas · 0 ignoradas · 0 erros (Git: 39)
+  - **aprendizados**: 0 criadas · 34 atualizadas · 0 ignoradas · 12 erros (Git: 46)
+  - **estrutura**: 0 criadas · 412 atualizadas · 0 ignoradas · 31 erros (Git: 443)
+
+## 2026-09-14T03:56:41.994Z · EXEC · target=all · por @segredounlock
+
+- Commit fonte: `100c07af1f19f68e09eccfbcd804784807c9f017`
+- Bases atualizadas: regras, pendencias, decisoes, aprendizados, estrutura
+- Bases ignoradas: —
+  - **regras**: 0 criadas · 4 atualizadas · 0 ignoradas · 0 erros (Git: 4)
+  - **pendencias**: 0 criadas · 1 atualizadas · 0 ignoradas · 0 erros (Git: 1)
+  - **decisoes**: 0 criadas · 39 atualizadas · 0 ignoradas · 0 erros (Git: 39)
+  - **aprendizados**: 0 criadas · 34 atualizadas · 0 ignoradas · 11 erros (Git: 45)
+  - **estrutura**: 0 criadas · 412 atualizadas · 0 ignoradas · 31 erros (Git: 443)
+
 ## 2026-09-14T00:37:09.543Z · EXEC · target=all · por @segredounlock
 
 - Commit fonte: `e48be24c2436bc3259ff7f942553ed1eeaedd7f4`
