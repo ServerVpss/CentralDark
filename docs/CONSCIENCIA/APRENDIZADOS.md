@@ -271,3 +271,9 @@ updated: 2026-08-27
 - **Data:** 2026-09-14
 - **Contexto:** Chefe pediu conta Grok no Hermes e várias contas no `@Guardiaonotify_bot` igual Codex. O bot de segurança estava órfão (token vivo, código fora do disco). `grok logout` apagava tudo. O ledger de satisfação gravava todo CLI com o mesmo `event_id` (`source_ref=cli`), então `+2 pontos` virava duplicata.
 - **Aprendizado:** Owner de várias contas X/Grok é `hermes auth xai-oauth`. O Guardião só opera o pool: adicionar não apaga; 🚪 remove só uma; ↪️ troca a ativa e copia o token da ativa para `~/.grok/auth.json` sem logar valor. Não criar segundo login. Satisfação do CHEFE: `event_id` forte só com `message_id` ou `source_ref` distinto de `source`/`surface`; senão hasheia a mensagem. Saudade/coração/de volta também é sinal. `SATISFACAO != XP MetaLupa`.
+
+### 51. Guardião: log/reflexo por botão + cadeado no cristalizado
+- **Categoria:** regra
+- **Data:** 2026-09-14
+- **Contexto:** Chefe pediu mini-hub de log em cada botão, motivo quando cai, cadeado no que já cristalizou, menu completo, commit+push+main+micro-deploy.
+- **Aprendizado:** Observabilidade do `@Guardiaonotify_bot` vive no próprio bot (`guardiao-button-hub.cjs`): JSONL sanitizado, reflexo com código (TIMEOUT/REDE/AUTH/…), menu 📊 Logs / 🔒 Cristal. Cristalizado = usar pode, redesenhar não. Deploy é só `pm2 restart CentralDark-GuardiaoBot`.

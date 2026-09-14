@@ -17,6 +17,7 @@ const fs   = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const { execSync, execFile, execFileSync, spawn } = require('child_process');
+const btnHub = require('./guardiao-button-hub.cjs');
 
 function loadEnv(p) {
   try {
@@ -766,6 +767,7 @@ function buildMenu(chatId) {
 
   Escolhe cérebro → liga conversa → bola o plano.
   Grok API: ${XAI_KEY ? 'key ok' : 'falta XAI_API_KEY no secrets'}
+  Cadeado: ${btnHub.loadCrystal().items.length} cristalizados
 </pre>`;
 
   return {
@@ -794,7 +796,14 @@ function buildMenu(chatId) {
         { text: authLive ? '♻️ Renovar sessão' : '✅ Ativar sessão IA', callback_data: 'sec:auth:on' },
         { text: '⏹️ Encerrar sessão', callback_data: 'sec:auth:off' },
       ],
-      [{ text: '📜 Liberados', callback_data: 'sec:lista' }],
+      [
+        { text: '📜 Liberados', callback_data: 'sec:lista' },
+        { text: '🛡️ Escudo', callback_data: 'sec:escudo' },
+      ],
+      [
+        { text: '📊 Logs', callback_data: 'sec:logs' },
+        { text: '🔒 Cristal', callback_data: 'sec:crystal' },
+      ],
       [{ text: '🏠 Menu', callback_data: 'sec:menu' }],
     ],
   };
@@ -1218,12 +1227,132 @@ function processLiberar(kind, value, fromId) {
   return { ok: false, msg: '❌ tipo desconhecido' };
 }
 
+function cardBtnFail(data, reason) {
+  const hub = btnHub.resolveHub(data);
+  return `<pre>╔══════════════════════════════════╗
+║  🔎  REFLEXO DO BOTÃO            ║
+╚══════════════════════════════════╝
+
+  ${esc(hub.label)}
+  código  ${esc(reason.code)}
+  motivo  ${esc(wrapText(reason.why, 32))}
+
+  Cadeado: ${hub.crystal ? '🔒 cristalizado' : 'livre'}</pre>`;
+}
+
+function buildLogsMenu() {
+  const snap = btnHub.snapshot();
+  const lines = snap.rows
+    .filter((r) => r.taps || r.fails)
+    .slice(0, 12)
+    .map((r) => {
+      const st = r.fails ? '🔴' : (r.last_kind === 'ok' ? '🟢' : '⬜');
+      const why = r.last_reason ? r.last_reason.code : 'ok';
+      return `  ${st} ${r.label.slice(0, 18).padEnd(18)} ${why} f=${r.fails}`;
+    });
+  const body = lines.length ? lines.join('\n') : '  (nenhum toque ainda)';
+  const buttons = snap.rows.filter((r) => r.fails).slice(0, 6).map((r) => ([
+    { text: `🔎 ${r.label}`.slice(0, 34), callback_data: `sec:log:${r.id}` },
+  ]));
+  buttons.push([{ text: '🔒 Cristal', callback_data: 'sec:crystal' }, { text: '🏠 Menu', callback_data: 'sec:menu' }]);
+  return {
+    text:
+`<pre>╔══════════════════════════════════╗
+║  📊  LOGS · REFLEXO              ║
+╚══════════════════════════════════╝
+
+  Cada botão tem mini-hub.
+  Caiu → aparece o MOTIVO.
+
+${body}</pre>`,
+    buttons,
+  };
+}
+
+function buildCrystalMenu() {
+  const c = btnHub.loadCrystal();
+  const lines = (c.items || []).map((i) => `  🔒 ${i.label}`).join('\n');
+  return {
+    text:
+`<pre>╔══════════════════════════════════╗
+║  🔒  CRISTALIZADO · CADEADO      ║
+╚══════════════════════════════════╝
+
+  Usar pode. Redesenhar não.
+  ${esc(c.policy || '')}
+
+${lines || '  (vazio)'}</pre>`,
+    buttons: [
+      [{ text: '📊 Logs', callback_data: 'sec:logs' }],
+      [{ text: '🏠 Menu', callback_data: 'sec:menu' }],
+    ],
+  };
+}
+
+function buildLogOne(id) {
+  const row = btnHub.one(id);
+  if (!row) {
+    return {
+      text: cardBtnFail(id, { code: 'UNKNOWN', why: 'botão sem histórico' }),
+      buttons: [[{ text: '📊 Logs', callback_data: 'sec:logs' }]],
+    };
+  }
+  const why = row.last_reason ? `${row.last_reason.code}: ${row.last_reason.why}` : 'sem falha registrada';
+  return {
+    text:
+`<pre>╔══════════════════════════════════╗
+║  🔎  ${esc(String(row.label).slice(0, 26))}
+╚══════════════════════════════════╝
+
+  hub      ${esc(row.hub)}
+  toques   ${row.taps}  ok ${row.oks}  falhas ${row.fails}
+  último   ${esc(row.last_kind)} ${esc(row.last_ts || '-')}
+  motivo   ${esc(wrapText(why, 32))}
+  cadeado  ${row.crystal ? '🔒' : 'livre'}</pre>`,
+    buttons: [
+      [{ text: '📊 Todos', callback_data: 'sec:logs' }, { text: '🏠 Menu', callback_data: 'sec:menu' }],
+    ],
+  };
+}
+
 async function handleCallback(cq) {
   const chatId = cq.message?.chat?.id;
   const msgId  = cq.message?.message_id;
   const fromId = cq.from?.id;
   const data   = cq.data || '';
+  const t0 = Date.now();
   await tg('answerCallbackQuery', { callback_query_id: cq.id });
+  if (!ADMIN_ID || fromId !== ADMIN_ID) {
+    btnHub.logEvent({ data, kind: 'fail', reason: { code: 'AUTH', why: 'não é admin' }, fromId });
+    return send(chatId, '⛔ Só o admin (Pivete).');
+  }
+  btnHub.logEvent({ data, kind: 'tap', fromId });
+  try {
+    const handled = await handleCallbackInner(cq);
+    if (handled === false) {
+      const r = { code: 'ORPHAO', why: 'botão sem handler' };
+      btnHub.logEvent({ data, kind: 'fail', reason: r, ms: Date.now() - t0, fromId });
+      return edit(chatId, msgId, cardBtnFail(data, r), [
+        [{ text: '📊 Logs', callback_data: 'sec:logs' }, { text: '🏠 Menu', callback_data: 'sec:menu' }],
+      ]);
+    }
+    btnHub.logEvent({ data, kind: 'ok', ms: Date.now() - t0, fromId });
+  } catch (e) {
+    const r = btnHub.reflectReason(e, { data });
+    btnHub.logEvent({ data, kind: 'fail', reason: r, ms: Date.now() - t0, fromId });
+    console.error('[GuardiaoBot] btn fail', data, r.code, r.why);
+    return send(chatId, cardBtnFail(data, r), [
+      [{ text: `🔎 ${btnHub.resolveHub(data).label}`.slice(0, 34), callback_data: `sec:log:${btnHub.resolveHub(data).id}` }],
+      [{ text: '🏠 Menu', callback_data: 'sec:menu' }],
+    ]);
+  }
+}
+
+async function handleCallbackInner(cq) {
+  const chatId = cq.message?.chat?.id;
+  const msgId  = cq.message?.message_id;
+  const fromId = cq.from?.id;
+  const data   = cq.data || '';
 
   if (!ADMIN_ID || fromId !== ADMIN_ID) {
     return send(chatId, '⛔ Só o admin (Pivete).');
@@ -1414,6 +1543,19 @@ async function handleCallback(cq) {
     s.history = [];
     return edit(chatId, msgId, '🧹 Histórico IA limpo.', back);
   }
+  if (data === 'sec:logs') {
+    const m = buildLogsMenu();
+    return edit(chatId, msgId, m.text, m.buttons);
+  }
+  if (data === 'sec:crystal') {
+    const m = buildCrystalMenu();
+    return edit(chatId, msgId, m.text, m.buttons);
+  }
+  if (data.startsWith('sec:log:')) {
+    const m = buildLogOne(data.slice('sec:log:'.length));
+    return edit(chatId, msgId, m.text, m.buttons);
+  }
+  return false;
 }
 
 /**
@@ -1585,6 +1727,18 @@ async function handleMessage(msg) {
     const m = buildClaudeMenu(chatId);
     return send(chatId, m.text, m.buttons);
   }
+  if (cmd === '/logs' || cmd === '/log' || cmd === '/hub') {
+    const m = buildLogsMenu();
+    return send(chatId, m.text, m.buttons);
+  }
+  if (cmd === '/cristal' || cmd === '/cadeado') {
+    const m = buildCrystalMenu();
+    return send(chatId, m.text, m.buttons);
+  }
+  if (cmd === '/x' || cmd === '/grok') {
+    const m = buildXMenu();
+    return send(chatId, m.text, m.buttons);
+  }
 
   // /ip 1.2.3.4
   if (cmd === '/ip' && text.split(/\s+/)[1]) {
@@ -1687,6 +1841,7 @@ async function main() {
     a.ips.push('187.15.72.86');
     saveAllow(a);
   }
+  btnHub.loadCrystal();
   console.log(`[GuardiaoBot] ✅ @Guardiaonotify_bot · admin=${ADMIN_ID}`);
   for (;;) await poll();
 }

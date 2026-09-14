@@ -73,7 +73,16 @@ hermes auth remove xai-oauth <id>
 ```
 
 Não usar `grok logout` para “trocar de conta”: isso zera a sessão do CLI. Troca = pool Hermes.
-PM2: `CentralDark-GuardiaoBot` via `apps/bot-telegram/guardiao.ecosystem.config.cjs`.
+
+## 📊 Logs / reflexo por botão + cadeado
+
+Cada botão tem mini-hub. Se cair, o bot mostra o **motivo** (`TIMEOUT`, `REDE`, `AUTH`, `ARQUIVO`, `TELEGRAM`, `ORPHAO`).
+
+- Menu → **📊 Logs** ou `/logs`
+- **🔒 Cristal** = o que já foi amarrado (usar pode, redesenhar não)
+- Arquivos: `/var/log/centraldark-guarda/buttons.jsonl` e `runtime/guardiao-crystal-lock.json`
+- Sem token no log.
+- PM2: `CentralDark-GuardiaoBot` via `apps/bot-telegram/guardiao.ecosystem.config.cjs`
 
 ---
 

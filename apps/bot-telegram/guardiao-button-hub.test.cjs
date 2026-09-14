@@ -1,0 +1,30 @@
+'use strict';
+const assert = require('node:assert/strict');
+const fs = require('fs');
+const os = require('os');
+const path = require('path');
+const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'guardiao-hub-'));
+process.env.GUARDIAO_BTN_LOG = path.join(dir, 'buttons.jsonl');
+process.env.GUARDIAO_BTN_LATEST = path.join(dir, 'buttons-latest.json');
+process.env.GUARDIAO_CRYSTAL_LOCK = path.join(dir, 'crystal.json');
+const hub = require('./guardiao-button-hub.cjs');
+
+assert.equal(hub.resolveHub('sec:xmenu').id, 'xmenu');
+assert.equal(hub.resolveHub('sec:xuse:abc123').id, 'xuse');
+assert.equal(hub.resolveHub('sec:xuse:abc123').crystal, true);
+assert.match(hub.sanitize('Bearer eyJaaaaaaaaaaaaaaaaaaaa'), /\[REDACTED\]|\[JWT\]/);
+assert.doesNotMatch(hub.sanitize('Bearer eyJaaaaaaaaaaaaaaaaaaaa'), /eyJaaa/);
+assert.equal(hub.reflectReason(new Error('connect ECONNREFUSED 127.0.0.1:9')).code, 'REDE');
+assert.equal(hub.reflectReason(new Error('Timeout waiting')).code, 'TIMEOUT');
+assert.equal(hub.reflectReason('botão sem handler').code, 'ORPHAO');
+
+hub.logEvent({ data: 'sec:f2b', kind: 'tap', fromId: 1 });
+hub.logEvent({ data: 'sec:f2b', kind: 'fail', reason: hub.reflectReason('ECONNREFUSED'), fromId: 1 });
+const row = hub.one('f2b');
+assert.equal(row.fails, 1);
+assert.equal(row.last_reason.code, 'REDE');
+const crystal = hub.loadCrystal();
+assert.equal(crystal.locked, true);
+assert.ok(crystal.items.some((i) => i.id === 'xmenu'));
+fs.rmSync(dir, { recursive: true, force: true });
+console.log('guardiao-button-hub.test.cjs PASS');
