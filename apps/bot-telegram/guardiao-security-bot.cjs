@@ -767,7 +767,8 @@ function buildMenu(chatId) {
 
   Escolhe cérebro → liga conversa → bola o plano.
   Grok API: ${XAI_KEY ? 'key ok' : 'falta XAI_API_KEY no secrets'}
-  Cadeado: ${btnHub.loadCrystal().items.length} cristalizados
+  Cadeado: usar pode · redesenhar não
+  Cristal: ${btnHub.loadCrystal().items.length} amarrados
 </pre>`;
 
   return {
@@ -1242,18 +1243,22 @@ function cardBtnFail(data, reason) {
 
 function buildLogsMenu() {
   const snap = btnHub.snapshot();
-  const lines = snap.rows
-    .filter((r) => r.taps || r.fails)
-    .slice(0, 12)
-    .map((r) => {
-      const st = r.fails ? '🔴' : (r.last_kind === 'ok' ? '🟢' : '⬜');
-      const why = r.last_reason ? r.last_reason.code : 'ok';
-      return `  ${st} ${r.label.slice(0, 18).padEnd(18)} ${why} f=${r.fails}`;
-    });
-  const body = lines.length ? lines.join('\n') : '  (nenhum toque ainda)';
-  const buttons = snap.rows.filter((r) => r.fails).slice(0, 6).map((r) => ([
+  const ranked = [...snap.rows].sort((a, b) => (b.fails - a.fails) || (b.taps - a.taps));
+  const lines = ranked.slice(0, 14).map((r) => {
+    const st = r.fails ? '🔴' : (r.last_kind === 'ok' ? '🟢' : (r.crystal ? '🔒' : '⬜'));
+    const why = r.last_reason ? r.last_reason.code : (r.taps ? 'ok' : 'pronto');
+    return `  ${st} ${r.label.slice(0, 18).padEnd(18)} ${why}`;
+  });
+  const failed = ranked.filter((r) => r.fails).slice(0, 4);
+  const buttons = failed.map((r) => ([
     { text: `🔎 ${r.label}`.slice(0, 34), callback_data: `sec:log:${r.id}` },
   ]));
+  if (!failed.length) {
+    buttons.push([
+      { text: '🔎 X/Grok', callback_data: 'sec:log:xmenu' },
+      { text: '🔎 Escudo', callback_data: 'sec:log:central' },
+    ]);
+  }
   buttons.push([{ text: '🔒 Cristal', callback_data: 'sec:crystal' }, { text: '🏠 Menu', callback_data: 'sec:menu' }]);
   return {
     text:
@@ -1261,30 +1266,43 @@ function buildLogsMenu() {
 ║  📊  LOGS · REFLEXO              ║
 ╚══════════════════════════════════╝
 
-  Cada botão tem mini-hub.
-  Caiu → aparece o MOTIVO.
+  Usar pode. Redesenhar não.
+  Caiu → MOTIVO no próprio botão.
 
-${body}</pre>`,
+${lines.join('\n')}</pre>`,
     buttons,
   };
 }
 
 function buildCrystalMenu() {
   const c = btnHub.loadCrystal();
-  const lines = (c.items || []).map((i) => `  🔒 ${i.label}`).join('\n');
+  const byHub = {};
+  for (const i of (c.items || [])) {
+    (byHub[i.hub] || (byHub[i.hub] = [])).push(i.label);
+  }
+  const lines = Object.entries(byHub).map(([hub, labels]) =>
+    `  🔒 ${hub}\n     ${labels.slice(0, 4).join(' · ')}`).join('\n');
   return {
     text:
 `<pre>╔══════════════════════════════════╗
-║  🔒  CRISTALIZADO · CADEADO      ║
+║  🔒  CRISTAL · USAR PODE         ║
 ╚══════════════════════════════════╝
 
-  Usar pode. Redesenhar não.
-  ${esc(c.policy || '')}
+  ${esc(c.policy || 'Usar pode. Redesenhar não.')}
 
-${lines || '  (vazio)'}</pre>`,
+${lines || '  (vazio)'}
+
+  Abaixo: usar o que já existe.</pre>`,
     buttons: [
-      [{ text: '📊 Logs', callback_data: 'sec:logs' }],
-      [{ text: '🏠 Menu', callback_data: 'sec:menu' }],
+      [
+        { text: '🔐 Usar X/Grok', callback_data: 'sec:xmenu' },
+        { text: '🛡️ Usar Escudo', callback_data: 'sec:central' },
+      ],
+      [
+        { text: '🔓 Usar Liberar', callback_data: 'sec:liberar' },
+        { text: '🚨 Usar Fail2ban', callback_data: 'sec:f2b' },
+      ],
+      [{ text: '📊 Logs', callback_data: 'sec:logs' }, { text: '🏠 Menu', callback_data: 'sec:menu' }],
     ],
   };
 }
@@ -1841,7 +1859,7 @@ async function main() {
     a.ips.push('187.15.72.86');
     saveAllow(a);
   }
-  btnHub.loadCrystal();
+  btnHub.boot();
   console.log(`[GuardiaoBot] ✅ @Guardiaonotify_bot · admin=${ADMIN_ID}`);
   for (;;) await poll();
 }
