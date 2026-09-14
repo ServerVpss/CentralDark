@@ -113,6 +113,15 @@ check('LEIA-ME-IA.md',[
 ], classification='HUMAN_OBJECTIVE_AND_REMOTE_REALITY_BOUNDARY')
 check('CENTRALDARK_AI_BOOT.yaml',[
  'adaptive_payload: true',
+ 'source_of_truth: "ServerVpss/CentralDark + runtime medido"',
+ 'model: LIVING_CANON',
+ 'persistent_canon: ServerVpss/CentralDark',
+ 'live_state: MEASURED_RUNTIME',
+ 'final_judge: REALITY',
+ 'owner: central-horario',
+ 'timezone: America/Sao_Paulo',
+ 'human_display_label: BRT',
+ 'machine_storage: UTC_RFC3339',
  'observed_evidence: "MEASURE_AT_RUNTIME: branch, HEAD, PR, runtime, tools, owner, writer_scope"',
  'role: "DISCOVER_FROM_PRESENT_GAP_AND_CAPABILITY"',
  'writer: "UNKNOWN_UNTIL_WRITER_SCOPE_MEASURED"',

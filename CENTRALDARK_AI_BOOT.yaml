@@ -10,6 +10,22 @@ CENTRALDARK_AI_BOOT:
   context_reconciliation: LOADED
   history_preservation: ACTIVE
   source_of_truth: "ServerVpss/CentralDark + runtime medido"
+  source_of_truth_contract:
+    model: LIVING_CANON
+    persistent_canon: ServerVpss/CentralDark
+    live_state: MEASURED_RUNTIME
+    precedence:
+      - LIVE_EVIDENCE_FOR_CURRENT_STATE
+      - CANONICAL_REPO_FOR_PERSISTED_CONTRACT
+    final_judge: REALITY
+  time_reference:
+    owner: central-horario
+    timezone: America/Sao_Paulo
+    human_display_label: BRT
+    machine_storage: UTC_RFC3339
+    offset_rule: DERIVE_FROM_CANONICAL_TIMEZONE
+    convert_before_human_time_comparison_or_report: true
+    browser_server_local_timezone_is_not_authority: true
   observed_evidence: "MEASURE_AT_RUNTIME: branch, HEAD, PR, runtime, tools, owner, writer_scope"
   alignment: "SEGREDO/CHEFE > SOL > PIVETE/HERMES + ESPECIALISTAS"
   role: "DISCOVER_FROM_PRESENT_GAP_AND_CAPABILITY"
