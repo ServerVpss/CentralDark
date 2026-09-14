@@ -1,19 +1,18 @@
 {
-  "updatedAt": "2026-07-02T00:00:00Z",
+  "updatedAt": "2026-09-12T02:54:01Z",
   "url": "https://mcp.centralldark.com/health",
   "lastCheck": {
-    "status": "pending_install",
-    "httpCode": 0,
-    "latencyMs": 0,
+    "status": "ok",
+    "httpCode": 200,
+    "latencyMs": 152,
     "restarted": false
   },
   "last24h": {
-    "checks": 0,
-    "failures": 0,
+    "checks": 4,
+    "failures": 2,
     "autoRestarts": 0,
-    "uptimePct": 100.0
+    "uptimePct": 50.00
   },
-  "lastFailureAt": null,
-  "lastRestartAt": null,
-  "_note": "Este arquivo é reescrito automaticamente pelo scripts/watchdog/mcp-watchdog.sh (cron 1min)."
+  "lastFailureAt": "2026-09-12T01:16:14Z",
+  "lastRestartAt": null
 }

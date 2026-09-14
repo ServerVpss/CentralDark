@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-09-10T19:09:05.073Z
-- **Commit:** `5ce1d976a2af5fd91e7ee31c34c616c62ae47f04`
+- **Gerado:** 2026-09-14T04:19:54.515Z
+- **Commit:** `a9f8ea187eb9620b09ccf6b6f04e1580bd5b1360`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 39 | 39 | 39 | 0 | 0 |
-| aprendizados | 36 | 0 | 0 | 36 | 0 |
+| aprendizados | 46 | 0 | 0 | 46 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **36**
+- 🟥 Faltando no Notion: **46**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -73,7 +73,7 @@
 - 22. Painel Admin precisa ser observabilidade operacional, não só configuração
 - 23. HTTP 200, PM2 online, DNS resolvendo ou painel verde não provam LIVE
 - 24. API paga é capacidade, não identidade nem caminho obrigatório
-- 25. “Menos é mais” significa menor movimento compatível com efeito, observabilidade e segurança
+- 25. "Menos é mais" significa menor movimento compatível com efeito, observabilidade e segurança
 - 26. Batch .bat: 4 armadilhas que passam em revisão superficial
 - 27. Grok App Builder é adapter, não cérebro — não scaffoldar app paralelo
 - 28. Ponte semântica fail-closed EXIT code=2 — não é verde; stderr engolido
@@ -84,4 +84,14 @@
 - 33. Opinião usada como medição gera falso verde e ação destrutiva
 - 34. Sem TURN_CLASS não há gate entre ler e agir — a impressão ocupa o slot da medição
 - 35. T3: ponte semântica EXIT 1, três catálogos, VPS na main 8 atrás
+- 43. EXECUTION_OVER_EXPLANATION — User Values Doing over Talking
+- 44. LINGUISTIC_CALIBRATION — Bahia Expression Accuracy
+- 45. WEBUI_ADMIN_HUB — Localhost:8787 as CentralAdmin Surface
+- 46. ONE_SYSTEM_ONLY_ENFORCEMENT — User's Operational Maxim
+- 47. LARGE_FILE_INTEGRATION — Process Droped Files, Don't Just Acknowledge
+- 48. COMMIT_LIMPO — Commit não é vassoura de git status
+- 49. AUREOLA_PERMANENTE — Publicação segura e continuidade do aprendizado
+- 50. X/Grok no Guardião usa o pool Hermes (igual Codex); CLI de feedback não colide evento
+- 51. Guardião: log/reflexo por botão + cadeado no cristalizado
+- 52. Usar pode, redesenhar não — melhorar o que já existe
 </details>
