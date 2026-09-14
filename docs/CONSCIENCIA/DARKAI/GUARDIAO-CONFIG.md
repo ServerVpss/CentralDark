@@ -53,18 +53,27 @@ updated: 2026-07-14
 
 ---
 
-## 🔐 Login / Logout da Plataforma X (Grok)
+## 🔐 Contas X / Grok (pool Hermes, igual Codex)
 
-Fluxo **device-code OAuth** (oficial x.ai, seguro — não captura senha):
+Várias contas no mesmo pool `xai-oauth` do Hermes. Adicionar **não** apaga as outras.
 
-1. Aperte **🔐 Entrar na X/Grok**.
-2. O bot manda um **link + código**.
-3. Abra o link no navegador, cole o código, autorize na X.
-4. O bot avisa **✅ LOGADO**. Pronto — o terminal Grok usa esse acesso.
+1. **🔐 X/Grok** no `/menu`
+2. **➕ Adicionar conta** → o bot manda link + código (device-code oficial)
+3. Autorize no navegador → entra no pool (`grok-principal`, `grok-2`, …)
+4. **↪️** numa conta = ela vira a ativa do terminal 🟣 Grok
+5. **🚪** remove **só** aquela conta
 
-**Sair:** 🚪 Logout (pede confirmação, pois desconecta o terminal Grok até logar de novo).
+CLI equivalente (mesmo owner):
 
-CLI equivalente: `grok login --device-auth` / `grok logout`.
+```text
+hermes auth add xai-oauth --no-browser --label grok-2
+hermes auth list xai-oauth
+hermes auth priority xai-oauth <id> 0
+hermes auth remove xai-oauth <id>
+```
+
+Não usar `grok logout` para “trocar de conta”: isso zera a sessão do CLI. Troca = pool Hermes.
+PM2: `CentralDark-GuardiaoBot` via `apps/bot-telegram/guardiao.ecosystem.config.cjs`.
 
 ---
 
