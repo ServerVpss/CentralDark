@@ -115,6 +115,52 @@ Proibido: v2, v3, novo, final, copy, backup como fuga de reconciliação.
 
 Autorização nunca se expande silenciosamente para novo alvo, ambiente, gasto, produção, exclusão, segredo, merge, restart nao citado, acao posterior fora da missao.
 
+### Pesquisa audiovisual e legendas
+
+Quando a intenção trouxer vídeo/YouTube, consultar primeiro o adaptador canônico
+`youtube_transcript` do MCP, que usa `scripts/media/fetch_youtube_transcript.py`.
+A rota é read-only e busca legendas públicas com timestamps; não baixa vídeo nem
+áudio. `yt-dlp`/Whisper só entram como fallback explícito, quando autorizados e
+com recursos/limites medidos. Bloqueio de IP, Turnstile, vídeo privado ou legenda
+ausente permanece `UNKNOWN`, nunca PASS.
+
+```text
+URL
+→ LEGENDA PÚBLICA
+→ NORMALIZAR TIMESTAMPS
+→ CONSUMIR COMO MATÉRIA
+→ SEPARAR FATO/INFERÊNCIA/UNKNOWN
+→ CONTRAPROVAR
+→ DESTILAR DELTA PROVADO
+→ REGISTRAR NO OWNER DE APRENDIZADO EXISTENTE
+```
+
+Não tratar `downloadyoutubesubtitles.com` como API canônica sem contrato, licença
+e prova de acesso. Não commitar legenda bruta; persistir somente receipt sanitizado
+e aprendizado reutilizável após validação.
+
+### Conector MCP por superfície/passagem
+
+Quando uma superfície externa disser que o conector MCP CentralDark foi desabilitado,
+tratar como evidência daquela passagem, não como falha global do servidor. A falha
+pode ocorrer em voz, texto, conversa longa, modelo, workspace, plano, autorização ou
+estado da própria plataforma. Não culpar automaticamente voz nem OAuth; medir outro
+corpo autorizado contra o mesmo alvo antes do veredito.
+
+```text
+CONNECTOR_DISABLED_IN_SURFACE
+→ ACCEPT_AS_SURFACE_EVIDENCE
+→ DO_NOT_PROMOTE_TO_SERVER_FAILURE
+→ TEST_SAME_TARGET_VIA_HERMES_OR_MCP_DIRECT
+→ TEST_FRESH_TEXT_CONVERSATION_WHEN_APPLICABLE
+→ CLASSIFY: SURFACE_BLOCK | AUTH_BLOCK | SERVER_FAIL | UNKNOWN
+```
+
+`kit_boas_vindas`/`puxar_aprendizados` bloqueados em uma passagem não provam
+`CentralDark-MCP` quebrado. Prova de servidor exige health/runtime/log ou chamada
+MCP direta. Se outro corpo autorizado invoca a mesma tool com sucesso, o blocker é
+da superfície/passagem observada até prova contrária.
+
 ## Gate de falsificação (MetaLupa)
 
 UNKNOWN, ANOMALY, ACHADO_PENDENTE, BLOCKED (incluindo reason: SKIPPED), timeout, ausência de log ou ausência de revisão nunca equivalem a PASS.
@@ -1577,6 +1623,7 @@ filepath = os.path.join(destino_abs, base_name)
 - references/mcp-local-bootstrap.md — procedimento validado para subir MCP CentralDark localmente (health, status.json, 110 tools)
 - references/soul-config-divergence-runtime-block.md — padrão de divergência SOUL/config quando runtime lê de UserProfile (AppData) vs canônico
 - references/soul-hermes-casa-local-adapter-only.md — SOUL HERMES-CASA/pivete existe só como adaptador local, não no GitHub canônico
+- references/git-push-sequence.md — sequência obrigatória de publicação (fetch, merge, test, push, PR-mãe)
 
 ## !CENTRALDARK Gate Oficial
 
@@ -1611,9 +1658,238 @@ ALMA    -> extrair aprendizado reutilizavel
 VOLTA   -> refazer menor no owner correto
 ```
 
-Se um agente corrigiu um erro simples uma vez, a proxima execucao deve procurar o
-mesmo padrao primeiro, antes de redesenhar a arquitetura. Isso e aprendizado
-operacional, nao memoria decorativa.
+Se um agente corrigiu um erro simples uma vez, a próxima execução deve procurar o
+mesmo padrão primeiro, antes de redesenhar a arquitetura. Isso é aprendizado
+operacional, não memória decorativa.
+
+### 43. EXECUTION_OVER_EXPLANATION — User Values Doing over Talking
+**Correção direta do Chefe (2026-09-11):** "so conversa bonita nao serve", "vc so ta falando no caht nao to vendo aprendizado nem cristalziaçao congnitivo nem mental nem motora nem nad"
+
+**Regra cristalizada:** Quando usuário pede "ler repo integramente e continuar a história", NÃO responder em fragmentos Q&A. Ler de fato, integralmente, e continuar a história de forma conectada. O usuário não quer confirmation step a cada pedaço — quer a tarefa feita.
+
+**Regra de continuidade do mesmo escopo:** Se a correção já está autorizada, é reversível e pertence ao mesmo owner/escopo, executar diretamente: separar somente o delta, testar, commitar e publicar pela rota segura. Não criar novo motor, skill, workflow ou parada de confirmação para cada variação da mesma classe. Reabrir só com intenção nova, escopo novo, risco material, contradição ou bloqueio real.
+
+**Regra de commit limpo:** Commit não é mecanismo para limpar `git status`. Só commitar delta intencional, classificado, pertencente ao owner correto e provado por teste/checagem aplicável. Runtime gerado, painel/status, `.next_run`, drift, segredo, desconhecido e alterações sem relação ficam preservados e fora do commit. Um commit registra a mudança; push publica; merge integra; deploy altera runtime; cada etapa exige sua própria prova.
+
+**Publicação segura sob demanda do motor:** quando uma alteração importante já estiver autorizada no mesmo escopo, o writer canônico pode usar `AUTO_DISCOVER=1` + `AUTO_DISCOVER_SCOPE=<prefixos-do-owner>` para selecionar somente arquivos rastreados, modificados e não deletados dentro do owner indicado. Ele exclui segredos, dependências, builds, logs, status, missões e estado gerado; roda primeiro com `DRY_RUN=1` quando a seleção precisar ser inspecionada; publica somente pela worktree limpa baseada na `origin/main`, sem `git add -A`, merge cego ou force-push. Ausência de delta elegível é `NO_CHANGE`, não motivo para pedir ao Chefe uma triagem mecânica.
+
+**Regra de botão e prova do alvo:** Trate screenshot, árvore visual, status do botão e mensagem de sucesso como evidência de interface, não como prova do caminho/runtime. Antes de confirmar, medir no host ativo `pwd`, `realpath`, processo/CWD, caminho exato e arquivo consumidor; quando a imagem estiver borrada, rebaixar o texto para hipótese e não transformar OCR em fato. Se o painel exigir login, não adivinhar credencial: parar a ação visual e usar somente uma rota equivalente já autorizada, com o mesmo escopo e os mesmos gates.
+
+**Regra de publicação sem duplicata:** Para publicar local divergente, construir worktree limpa em `origin/main`, selecionar apenas commits/deltas seguros e provar equivalência antes do push. `cherry-pick empty` significa `ALREADY_CANONICAL` e deve ser pulado sem commit vazio. Conflito que, ao resolver, removeria conteúdo canônico é bloqueio: abortar/descartar apenas a worktree temporária e não usar `--theirs`/`--ours` como atalho sem classificar o owner e o gate aplicável. Gate de porta, segredo, órfão canônico ou contradição bloqueia o push; não mascarar como sucesso.
+
+**Sinais:** "vc ta pegintando por que?", "pq vc diz que vai fazre e nao faz?", "cocnerter o motor critalize no motor"
+
+**Ação correta:**
+- Ler documentos completos, não apenas cabeçalhos
+- Ler git log integralmente, não apenas últimos 5 commits
+- Compreender contexto antes de responder às perguntas do usuário
+- Executar o que foi prometido, não prometer e não executar
+- Quando usuário dizer "pare de falar e faça", parar de narrar e executar
+
+**Pitfall:** fragmentar uma leitura integral em múltiplas perguntas pontuais. Isso é o erro exato que o Chefe corrigiu.
+
+### 44. LINGUISTIC_CALIBRATION — Bahia Expression Accuracy
+**Correção direta do Chefe (2026-09-11):** "visse nao e ad bahia naoi disgraça pega o dicionario baianes ai no google e ingloobal em voec"
+
+**Regra cristalizada:** Expressões baianas devem ser usadas com precisão, não como decoração. "Visse" é pernambucano/recifense, não baiano. "Meu rei" é estereótipo criticado localmente.
+
+**Expressões genuínas da Bahia/Salvador:** oxe, oxente, massa, barril, barril dobrado, laranjada, se plante, se pique, pega a visão, armengue, largou o doce, é niuma, ó paí, vumbora, mainha.
+
+**Regra:** usar quando contexto combina, não jogar em toda frase. Menos caricatura, mais naturalidade. Pesquisa confirmatória antes de assumir origem regional de expressão.
+
+### 45. WEBUI_ADMIN_HUB — Localhost:8787 as CentralAdmin Surface
+**Contexto (2026-09-11):** WebUI em `/tmp/hermes-webui/` rodando em `127.0.0.1:8787` (PID 286195, launcher `ctl.sh` de nesquena/webui) converteu-se em painel administrativo central da CentralDark.
+
+**Regra:** O painel admin (`admin.centralldark.com` ou local `8787`) é a casca única administrativa. Toda capacidade aparece como nó na árvore do admin, não como painel separado.
+
+**Árvore do admin:**
+```
+admin.centralldark.com
+→ 🏠 Visão geral
+→ 🔌 MCP (OAuth, tools, capabilities)
+→ 🧠 Hub (memória, eventos, consumers)
+→ 📊 Observabilidade (Grafana embutido, métricas, logs, traces)
+→ ☁️ Cloudflare (builds, bindings, observability)
+→ 🖥️ VPS (PM2, deploy, health)
+→ 👁️ Screenpipe (local, via MCP, captura ON/OFF)
+→ 🤖 IA/Providers (catálogo, ativação sob demanda)
+→ 🔐 Segurança (Basic Auth, OAuth Admin, sessões, auditoria)
+```
+
+**Botão não abre outro painel — abre a árvore daquela capacidade dentro do próprio Admin.** Grafana, Cloudflare, Screenpipe etc. são apresentados dentro do admin, mesmo que por trás sejam serviços reais.
+
+### 46. ONE_SYSTEM_ONLY_ENFORCEMENT — User's Operational Maxim
+**Declaração explícita do Chefe (2026-09-11):** "ONE_SYSTEM_ONLY=true UNKNOWN_IS_NOT_PASS=***"
+
+**Regra cristalizada:** O usuário opera com ONE_SYSTEM_ONLY=true como maxim explícita. Não criar segunda arquitetura, segundo MCP, outro hub, outra ponte. Tudo flui pelo MCP CentralDark autenticado.
+
+**Decisões cristalizadas no PR-mãe (#1381, comentários 5641853866 e 5641904907):**
+- `SUBDOMAIN != NEW_SYSTEM`
+- `CAPABILITY != NEW_PORT`
+- `ADMIN_AUTH != VPS_ROOT_AUTH`
+- `ONE_SYSTEM_ONLY=true`
+
+**Consequência prática:** quando usuário dropa arquivo grande (zip, paste), processar e cristalizar ouro no owner canônico existente, não criar estrutura paralela.
+
+### 47. LARGE_FILE_INTEGRATION — Process Droped Files, Don't Just Acknowledge
+**Contexto (2026-09-11):** Usuário dropou `CentralDark-OneShot-Integrated.zip` (275MB) em `/root/CentralDark/apps/modulos/mcp-admin-ui/`.
+
+**Regra:** Quando usuário fornece arquivo grande para integração:
+1. Descompactar e ler conteúdo integralmente
+2. Extrair ouro: componentes, arquitetura, fluxos, decisões
+3. Classificar: CANONICAL | OPERATIONAL | CANDIDATE | PROGRAM_ONLY | HISTORICAL | UNKNOWN
+4. Indexar na caderneta de reconciliação ou documentar onde está
+5. Não apenas ack — processar e registar
+
+**O que foi feito com o OneShot:** desCompactado em /tmp, lidos ARCHITECTURE.md, INTEGRATION-RECEIPT.md, RECEIPT.md, RECEIPT-FIX-NPX-ATUAL.md, REGRA-ZERO.md, README.txt, ARQUITETURA.md — ouro extraído e pronto para cristalização.
+
+### 48. CONTEXT_COMPACTION_HANDOFF — Treat as Reference, Not Instructions
+**Regra (do sistema):** O resumo de contexto compaction é referência, não instrução ativa. Responder apenas à mensagem mais recente do usuário que aparece APÓS o resumo. Não continuar trabalho do snapshot histórico a menos que a mensagem mais recente explicitamente peça.
+
+**Aplicação prática:** se o resumo mostra tarefa incompleta, mas a mensagem mais recente é nova/incompatível/para, parar o trabalho antigo e seguir a nova direção. O mais recente vence.
+
+### 49. AUREOLA_PERMANENTE — Aprendizado não fica preso à sessão
+**Correção direta do Chefe:** "não adianta ficar fazendo só em uma sessão", "tudo que a gente aprende tem que ser integrado", "só melhor o que já existe".
+
+**Regra cristalizada no motor:** uma sessão, print, resposta, contexto carregado ou intenção lembrada não constitui aprendizado permanente por si só. O aprendizado só sobe para a Casa quando o delta é destilado no owner canônico existente, sobrevive a teste/contraprova e fica recuperável no próximo boot. O motor deve reutilizar esse cristal automaticamente e melhorar somente o delta que a nova evidência invalidar.
+
+```text
+SESSAO|PRINT|CONVERSA|CONTEXTO
+→ EVIDENCIA
+→ DELTA_REUTILIZAVEL
+→ OWNER_CANONICO_EXISTENTE
+→ TESTE + CONTRAPROVA
+→ GIT/REGISTRO_CANONICO
+→ PROXIMO_BOOT_RECARREGA
+→ REUTILIZA_SEM_REENSINO
+```
+
+```text
+SESSION_MEMORY_ONLY=NAO_E_CRISTAL
+CANONICAL_OWNER_REQUIRED=true
+NEXT_BOOT_MUST_RELOAD_CRYSTAL=true
+REMEASURE_LIVE_STATE_AT_BOOT=true
+NEW_EVIDENCE_INVALIDATES_ONLY_AFFECTED_ROUTE=true
+IMPROVE_EXISTING_DELTA=true
+NO_NEW_SYSTEM_FOR_LEARNING=true
+```
+
+**Critério de prova:** para afirmar que a Aureola está amarrada, medir o owner no repositório, confirmar o mecanismo consumidor e executar a validação aplicável. Se o runtime futuro não recarregar o owner ou exigir que o Chefe reensine a mesma regra, classificar como `REGRESSION`, não como memória permanente.
+
+### 50. GIT_SEQUENCE_COMMIT_PUSH — Fetch Before Push, Never Reset
+**Cenário (2026-09-12):** Tentativa de `git push origin main` falhou porque o remote já tinha commits mais novos. Reset hard para commit antigo destruiu trabalho em `fix/writer-canonical-40`. `gh pr create` falhou porque branch não existia remotamente. Forçou branch a partir de `main` local (stale).
+
+**Regra cristalizada — sequência de publicação obrigatória:**
+```text
+ANTES DE QUALQUER PUSH/PULL/MERGE:
+  1. git fetch --no-tags origin refs/heads/main  (atualiza remote-tracking)
+  2. git status --short --branch                  (verifica ahead/behind)
+  3. git rev-parse HEAD && git ls-remote origin refs/heads/main  (compara SHAs)
+
+SE LOCAL == REMOTE:
+  → git add + git commit --amend + git push origin main
+
+SE LOCAL BEHIND REMOTE:
+  → git merge origin/main --strategy=recursive --strategy-option=theirs
+  → resolver conflitos se houver
+  → git diff --check
+  → node --check + node --test
+  → git add + git commit --amend + git push origin main
+
+SE AHEAD DO REMOTO (branch próprio):
+  → git push origin <branch> (sem -f)
+  → se rejeitado: git pull --rebase origin <branch> ou git push -f (com prova)
+  → nunca reset --hard a menos que o branch inteiro seja descartado
+
+NUNCA:
+  → git reset --hard <commit-antigo>  (destrói trabalho não publicado)
+  → git push -f origin <branch> sem verificar se remote tem commits novos
+  → criar branch a partir de main local sem primeiro merge origin/main
+  → git push origin main sem antes verificar se remote está atrasado
+```
+
+**Para criar PR-mãe:**
+```text
+1. git fetch origin main
+2. git merge origin/main --no-edit --strategy=recursive --strategy-option=theirs
+3. git diff --check + node --check + node --test (42/42)
+4. git add -A files-changes
+5. git commit --amend --no-edit
+6. git branch -f fix/writer-canonical-40 HEAD
+7. git push -f origin fix/writer-canonical-40
+8. gh pr create --base main --head fix/writer-canonical-40
+```
+
+**Pitfall crítico:** `main` local pode estar AHEAD de `origin/main` se o push anterior subiu o commit. O branch `fix/writer-canonical-40` criado a partir de `main` local inclui o commit já publicado, fazendo com que `origin/main` esteja AHEAD do branch. Solução: sempre criar branch a partir de `origin/main`, não de `main` local. Ou, se o commit já está em `origin/main`, o branch não precisa existir — o trabalho já está publicado.
+
+**Regra de publicação segura sob demanda do motor:** quando uma alteração importante já estiver autorizada no mesmo escopo, o writer canônico pode usar `AUTO_DISCOVER=1` + `AUTO_DISCOVER_SCOPE=<prefixos-do-owner>` para selecionar somente arquivos rastreados, modificados e não deletados dentro do owner indicado. Ele exclui segredos, dependências, builds, logs, status, missões e estado gerado; roda primeiro com `DRY_RUN=1` quando a seleção precisar ser inspecionada; publica somente pela worktree limpa baseada na `origin/main`, sem `git add -A`, merge cego ou force-push. Ausência de delta elegível é `NO_CHANGE`, não motivo para pedir ao Chefe uma triagem mecânica.
+
+**Sinais:** "faz comit main", "pr mãe", "tá comit", "merge"
+
+**Ação correta:**
+- Sempre `git fetch` antes de qualquer operação de push/pull/merge
+- Sempre comparar `HEAD` local vs `origin/main` antes de commit/push
+- Se branch precisa existir: `git branch <name> origin/main` (não `main` local)
+- Se trabalho já está em `origin/main`: não criar branch, deletar branch local
+- Testar (node --check, node --test) antes de publicar
+- Commit `--amend --no-edit` para consolidar no HEAD atual
+- Verificar `git status --porcelain | wc -l` para confirmar estado limpo
+
+**Pitfall:** assumir que `git pull --ff-only` atualiza tudo. Quando o branch local está atrás, o ff-only não funciona e o merge é necessário. Quando o branch local está à frente, o ff-only não aplica e o push pode rejeitar. Sempre medir antes.
+
+### 51. SEGRET_REDOACTION — Redaction and Scope-Limiting Instructions
+**Correção direta do Chefe (2026-09-11):** "permito segredo" — valores nunca exibidos ou preservados; substituir por `[REDACTED]`.
+
+**Regra cristalizada:** Nunca exibir, logar, copiar ou preservar em output, artifact, diff, comentario, receipt ou arquivo qualquer valor que seja segredo, token, senha, API key, credential ou connection string. Substituir por `[REDACTED]`. Isso inclui screenshots que contenham valores sensíveis — borrar ou omitir antes de descrever.
+
+```text
+QUALQUER_VALOR_SECRETO → [REDACTED]
+NUNCA_EXIBIR = true
+NUNCA_PRESERVAR_EM_ARQUIVO = true
+NUNCA_LOGAR = true
+```
+
+**Escopo:** todos os canais — chat, terminal, arquivos, screenshots, receipts, PRs, commments, logs.
+
+**Scope-limiting (`mira somente lá`):** quando o Chefe limita a busca a um diretório ou escopo específico, obedecer rigorosamente. Não expandir a busca para outros diretórios, repositórios ou sistemas sem autorização explícita. Isso aplica-se a todas as classes de tarefa — busca de arquivos, investigação de erros, descoberta de capacidades.
+
+```text
+MIRA_SOMENTE_LA = escopo_exato_do_CHEFE
+NAO_EXPANDIR_SEM_AUTORIZACAO = true
+```
+
+### 52. SAFE_OPERATIONAL_PREFLIGHT — Evidence Before Mutation
+**Correção direta do Chefe (2026-09-11):** preflight de segurança com leitura-only primeiro, evidência concreta, depois a menor mutação autorizada, depois verificar.
+
+**Regra cristalizada:** Para mudanças operacionais que afetam estado (deploy, merge, config, runtime), a sequência obrigatória é:
+
+```text
+PASSO 1 — READ-ONLY PREFLIGHT
+  → medir estado atual (HEAD, branch, runtime, portas, processos)
+  → confirmar que o alvo existe e está acessível
+  → classificar risco e escopo
+
+PASSO 2 — EVIDÊNCIA CONCRETA
+  → prova do estado antes da mutação
+  → baseline medido, não presumido
+  → se screenshot/imagem: OCR é HIPÓTESE, não FATO — rebaixar para hipótese se borrado
+
+PASSO 3 — MENOR MUTAÇÃO AUTORIZADA
+  → delta mínimo que resolve a causa comprovada
+  → testar local antes de publicar
+  → node --check + node --test (42/42) antes de qualquer push
+
+PASSO 4 — VERIFICAR DEPOIS
+  → medir estado pós-mutação
+  → confirmar que o runtime responde ao esperado
+  → registrar SHA, testes, evidence
+
+REGRA: se a direção se perder, TRAVAR ANTES DE MUTAR NO ESCURO, recarregar SOUL + intenção + estado vivo, reconciliar e continuar.
+```
+
+**Pitfall:** executar mutação sem preflight de leitura. Cada mutação sem baseline medido é um tiro no escuro — mesmo que funcione, não há prova de que o efeito foi o pretendido.
+
+---
 
 Ferramentas, webhooks e bots que queiram executar acao CentralDark podem declarar
 `centraldark_gate_required=true` e anexar `centraldark_gate` com os fatos do gate.

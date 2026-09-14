@@ -3,7 +3,7 @@ name: centraldark-esteira-motor
 description: CentralDark esteira e motor Hermes — separa PM2 motor de deploy Actions, fila self-hosted, setup-node, PAPAGAIO vs POMBO. Use quando CHEFE pedir deploy, restart, runner, fila, Hermes, VPS sync, ou status do motor.
 metadata:
   type: operational
-  version: "1.2"
+  version: "1.3"
   owner: SEGREDO/CHEFE
 ---
 
@@ -25,6 +25,79 @@ SINTOMA_SUMIU != CAUSA_RESOLVIDA
 
 PAPAGAIO_MODE = OFF.  
 POMBO_MODE = CHECKSUM_ON.
+
+## Ordem explícita → main → micro-deploy → prova
+
+Quando a ordem do CHEFE cobre o escopo, não parar em `READY_FOR_MERGE` nem tratar
+merge como conclusão:
+
+```text
+ORDEM_EXPLICITA
+→ MENOR_COMMIT_NA_MAIN
+→ BUILD/TESTE_NO_SHA_EXATO
+→ MICRO_DEPLOY_DO_MESMO_SHA
+→ PROVA_RUNTIME
+→ RECEIPT
+→ FIXED_POINT
+```
+
+```text
+COMMIT_TO_MAIN_REQUIRED=true
+MICRO_DEPLOY_SAME_COMMIT_REQUIRED=true
+MERGED_WITHOUT_MICRO_DEPLOY=MISSION_OPEN
+COMMIT_WITHOUT_RUNTIME_PROOF=NOT_FINISHED
+DEPLOY_FAILURE=REMEDIATE_AND_CONTINUE
+```
+
+Falha da primeira tentativa mantém o commit válido na `main` e abre remediação;
+não vira conclusão nem autoriza abandonar o delta. Só `DEPLOY_ROUTE_UNKNOWN` ou
+blocker material exato depois das rotas autorizadas pode interromper.
+
+
+Ferida comprovada não pode morrer em chat, comentário, sessão ou memória privada.
+Quando a correção estiver dentro da autoridade e houver owner canônico, o fechamento obrigatório é:
+
+```
+FERIDA_PROVADA
+→ CAUSA_RAIZ
+→ SOLUÇÃO_NO_OWNER_EXISTENTE
+→ TESTE
+→ CONTRAPROVA
+→ COMMIT
+→ PUSH
+→ MAIN
+→ MICRO_DEPLOY_DO_ESCOPO_AFETADO
+→ REMEDIÇÃO_RUNTIME
+→ RECEIPT
+→ FIXED_POINT
+```
+
+Regras:
+
+- `FERIDA_PROVADA && DELTA_SEGURO` exige commit; explicação sem cristalização é incompleta.
+- Commit deve ser mínimo, atômico e ligado à causa raiz; não acumular pacote gigante sem necessidade.
+- Push/merge na `main` não encerra a missão: `MERGED != DEPLOYED` continua obrigatório.
+- Micro-deploy significa promover **somente** o componente afetado pela mudança, usando a rota canônica existente daquele componente.
+- Mudança de docs/skill/policy não autoriza restart de runtime não afetado.
+- Mudança MCP/guards usa a rota canônica MCP/guards; mudança Hermes core exige rota que realmente promova/reinicie Hermes core.
+- Se a rota de deploy do componente não existir ou não estiver disponível: `DEPLOY_ROUTE_UNKNOWN` / `HUMAN_FRONTIER`; nunca chamar outro workflow de equivalente.
+- Depois do deploy, provar SHA/runtime/health do componente aplicável; `ACTION != PROOF`.
+- Se o deploy falhar, preservar o commit válido na `main`, registrar a falha de produção e continuar pela causa do deploy sem desfazer aprendizado correto por reflexo.
+- Receipts devem registrar `START_HEAD`, `COMMIT_SHA`, `MAIN_HEAD`, `DEPLOYED_SHA` e `RUNTIME_SHA` quando aplicáveis.
+- `DEPLOYED_SHA != MAIN_HEAD` mantém `FIXED_POINT=FALSE`, salvo quando o escopo da mudança não possui runtime implantável; nesse caso declarar explicitamente `DEPLOY_NOT_APPLICABLE` com causa.
+- Toda repetição futura deve reutilizar o mesmo owner e o mesmo fluxo; proibido criar V2/V3 ou solução paralela para contornar deploy quebrado.
+
+Princípio contínuo:
+
+```
+PEQUENO DELTA PROVADO
+→ PEQUENO COMMIT
+→ MAIN
+→ PEQUENO DEPLOY COMPATÍVEL
+→ PROVA FRESCA
+```
+
+Isso é micro-deploy contínuo; não significa reiniciar tudo a cada commit.
 
 ## Escopo do motor
 
@@ -128,10 +201,45 @@ Não chamar sucesso de deploy Hermes um run que só tocou MCP/Verificador.
 13. Caminho do repo na VPS tem que ser medido, não presumido. `cd` para pasta
     errada quebra o deploy com `No such file or directory` — confirmar com
     `pwd` dentro da pasta real antes de escrever no workflow.
+14. **PM2 NÃO RECARREGA `.env` — restart ≠ reload de variáveis.**
+    `pm2 restart CentralDark-MCP` NÃO pega novas variáveis do `.env`. O processo
+    continua com o ambiente original da primeira inicialização.
+    **Correção:** `pm2 delete CentralDark-MCP` → `pm2 start <entry> --cwd <dir>`
+    com `export $(grep -E '^[A-Za-z_][A-Za-z0-9_]*=' .env | sed 's/^/export /')`
+    ANTES do start, OU usar `pm2 start` com `ecosystem.config.cjs` contendo
+    `env: { ... }` com todas as variáveis. **Nunca confiar em `pm2 restart` para
+    **Nunca confiar em `pm2 restart` para atualizar env vars** — é o mecanismo mais comum de "configurei mas não pegou".
+    **Prova:** medir `/proc/<PID>/environ` após restart para confirmar a nova var está presente.
+
+    **PITFALL — PM2 env var loading: restart ≠ reload, delete + fresh start required:**
+    `pm2 restart <name>` does NOT pick up new env vars from `.env` — the child process retains the original environment.
+    **CORREÇÃO CRÍTICA — source .env, don't export via grep:** The `export $(grep -E '^[A-Za-z_][A-Za-z0-9_]*=' .env | sed 's/^/export /')` pattern FAILS when `.env` values contain special characters (dots, hyphens, slashes — e.g. `Segredo199420`, `https://...`, `sb_secret_...-...`). Bash interprets dots/hyphens in values as invalid identifiers, producing `bash: export: 'read:org': not a valid identifier`.
+    **USE INSTEAD:** `source .env` (Bash/Shell) — the safest approach — OR `pm2 start` with `ecosystem.config.cjs` containing `env: { ... }` block with all variables explicitly. If using Node.js, read the file and inject via `child_process.exec` with the full env. Never use `export $(grep ...)` when `.env` values are not guaranteed to be shell-safe identifiers.
+    **Prova:** `pm2 env <PID>` must show the new variable. If `/proc/<PID>/environ` lacks the var, the env was not loaded — `pm2 kill` + `source .env` + fresh start is required.
+    **Correção:** `pm2 kill` → `pm2 start <entry> --cwd <dir>` with env vars injected via `ecosystem.config.cjs` `env: {}` block OR background process with `export $(grep ...)` pattern. Never assume `pm2 restart` loads new env vars.
+15. `chattr +i` trava o deploy inteiro. Bloqueia `git stash`, `checkout` e
+    `reset` com `Operation not permitted`. Protege o arquivo de corromper **e**
+    de evoluir. Antes de culpar git/rede, rodar `lsattr` nos arquivos do erro.
 
 Detalhe de SHA/run da sessão: `references/sessao-erros-reais.md`.
 
 ## Procedimento obrigatório
+
+### 0. CRISTALIZAR FERIDA (quando houver delta comprovado)
+
+```
+FERIDA → CAUSA → OWNER → PATCH → TESTE → CONTRAPROVA
+→ COMMIT → PUSH → MAIN → MICRO_DEPLOY APLICÁVEL
+→ REMEDIÇÃO → RECEIPT
+```
+
+Só pular `MICRO_DEPLOY` com uma destas classificações explícitas:
+
+- `DEPLOY_NOT_APPLICABLE` — mudança sem runtime implantável.
+- `DEPLOY_ROUTE_UNKNOWN` — componente possui runtime, mas não existe rota provada nesta sessão.
+- `HUMAN_FRONTIER` — ação exige autoridade/intervenção não disponível.
+
+Nenhuma delas equivale a `DEPLOYED`.
 
 ### 1. ACORDAR (medir)
 
@@ -170,7 +278,11 @@ PROVADO=
 QUEBRADO=
 EVIDÊNCIA FALTANTE=
 DELTA EXECUTADO=
-DEPLOY= (status real do run / REJECT se rota errada)
+COMMIT_SHA=
+MAIN_HEAD=
+DEPLOY= (status real do run / DEPLOY_NOT_APPLICABLE / REJECT se rota errada)
+DEPLOYED_SHA=
+RUNTIME_SHA=
 START_HEAD=
 FINAL_HEAD=
 HEAD_CHANGED_DURING_MISSION=SIM|NAO
@@ -194,6 +306,10 @@ PRÓXIMO_CURSOR=
 
 ## Anti-padrões
 
+- Deixar ferida comprovada somente no chat quando existe owner canônico e delta seguro para cristalizar.
+- Acumular várias correções independentes num mega-deploy quando micro-deploys separados são possíveis.
+- Reiniciar componente não afetado só para poder dizer que houve deploy.
+- Declarar `DEPLOYED` sem provar a rota e o SHA/runtime correspondente.
 - Declarar deploy OK porque Hermes está online.
 - Declarar motor morto porque Actions está queued.
 - Declarar Hermes saudável só com PM2 `online`.

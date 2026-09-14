@@ -1,8 +1,10 @@
 schema: centraldark.capability-readiness.v1
 name: CAPABILITY-READINESS-POLICY
-status: CANONICAL_CONTRACT_CANDIDATE
+status: CANONICAL
 owner: CENTRALDARK_TRIGGER_FABRIC
 consumer: MEGAZORD-CENTRALDARK
+promoted_by: SEGREDO/CHEFE
+promoted_at: 2026-09-11
 
 intent:
   statement: "Estar capacitado para usar uma capacidade não significa manter essa capacidade instalada, carregada ou ativa o tempo todo."
@@ -25,6 +27,12 @@ invariants:
   BUTTON_OFF_IS_STATE_NOT_INCIDENT: true
   LOCAL_MODEL_SUPPORTED_IS_NOT_LOCAL_MODEL_RESIDENT: true
   READINESS_DOES_NOT_REQUIRE_RESOURCE_RESIDENCY: true
+  SUBDOMAIN_IS_NOT_NEW_SYSTEM: true
+  CAPABILITY_IS_NOT_NEW_PUBLIC_PORT: true
+  OAUTH_CONNECTED_IS_NOT_ALWAYS_ACTIVE: true
+  EDGE_BLOCKED_CLIENT_IS_NOT_PROVIDER_DOWN: true
+  DIRECT_CLIENT_403_IS_NOT_GLOBAL_MCP_FAILURE: true
+  LOCAL_FILESYSTEM_ACCESS_IS_SEPARATE_CAPABILITY: true
 
 readiness_model:
   states:
@@ -170,6 +178,90 @@ megazord_semantics:
   reusable_capability_blueprints: true
   one_system_only: true
   one_writer_per_scope: true
+
+external_capability_binding:
+  principle: "INTEGRAR UMA VEZ; AUTORIZAR E ATIVAR SOB DEMANDA"
+  provider_binding:
+    catalogue_after_discovery: true
+    oauth_or_equivalent_binding_supported: true
+    binding_does_not_force_activation: true
+    connected_provider_is_router_input: true
+    direct_provider_access_not_required_when_canonical_mcp_route_exists: true
+    client_specific_edge_block_does_not_invalidate_other_working_routes: true
+    local_filesystem_requires_explicit_local_bridge_capability: true
+  routing:
+    preferred_entrypoint: CENTRALDARK_MCP
+    preserve_provider_specific_adapters: true
+    no_second_router: true
+    no_parallel_brain: true
+    select_only_when_intent_requires: true
+    stop_or_release_when_idle: true
+  proof_semantics:
+    OAUTH_AUTHORIZE_PASS_IS_BINDING_EVIDENCE: true
+    TOKEN_PASS_IS_BINDING_EVIDENCE: true
+    TOOLS_LIST_PASS_IS_MCP_CAPABILITY_EVIDENCE: true
+    ONE_CLIENT_EDGE_403_IS_EDGE_BLOCKED_NOT_GLOBAL_DOWN: true
+    CONNECTED_PROVIDER_IS_NOT_ALL_OPERATIONS_PROVEN: true
+
+public_surface_policy:
+  principle: "POUCAS SUPERFICIES PUBLICAS; CAPACIDADES INTERNAS POR BAIXO DOS PANOS"
+  surfaces:
+    human_public: "https://centralldark.com"
+    human_admin_private: "https://admin.centralldark.com"
+    machine_api: "https://api.centralldark.com"
+    mcp_external: "https://mcp.centralldark.com/mcp"
+  routing:
+    https_public_port: 443
+    host_based_routing: true
+    subdomain_requires_new_public_port: false
+    internal_capability_requires_public_subdomain: false
+    internal_capability_requires_public_port: false
+    create_public_surface_only_for_real_access_boundary: true
+  admin_surface:
+    private_single_owner_intent: true
+    edge_basic_auth_or_equivalent_pre_app_gate: REQUIRED
+    centraldark_admin_oauth_or_session: REQUIRED
+    critical_action_reauthentication: REQUIRED
+    vps_root_credentials_in_browser: FORBIDDEN
+    default_public_exposure: DENY
+    audit_access: true
+    rate_limit: true
+    controls:
+      - ENABLED
+      - LOCAL_ONLY
+      - LAN_ALLOWED
+      - MCP_ONLY
+      - PUBLIC
+      - OAUTH_REQUIRED
+      - ADMIN_REAUTH_REQUIRED
+      - AUTO_ACTIVATE_ON_DEMAND
+      - STOP_AFTER_USE
+      - FALLBACK_ALLOWED
+      - RESOURCE_LIMITS
+      - HEALTH_STATUS
+    public_enable_requires:
+      - EXPLICIT_ADMIN_ACTION
+      - AUTHENTICATED_ADMIN_SESSION
+      - APPLICABLE_EDGE_POLICY
+      - AUDIT_RECEIPT
+  internal_service_policy:
+    screenpipe_default: INTERNAL_BEHIND_MCP
+    hub_default: INTERNAL
+    models_default: INTERNAL_ON_DEMAND
+    adapters_default: INTERNAL
+    databases_default: INTERNAL_UNLESS_EXPLICITLY_REQUIRED
+    pm2_services_default: INTERNAL
+
+node_dependency_lock_policy:
+  purpose: "Reprodutibilidade de dependências; não é controle de acesso."
+  package_json_versioned: true
+  package_lock_versioned_when_node_owner_uses_npm: true
+  ci_install_mode: NPM_CI
+  lockfile_change_requires_dependency_review: true
+  copy_lockfile_from_unrelated_project: false
+  lockfile_is_not_authentication: true
+  lockfile_is_not_authorization: true
+  auth_gate_and_dependency_lock_are_independent_layers: true
 
 agent_operational_quality:
   intent: "Absorver práticas de arquitetura de agentes como comportamento do ciclo existente, sem criar ferramenta, cérebro, cargo soberano ou pipeline paralelo."

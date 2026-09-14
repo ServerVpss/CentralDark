@@ -2,6 +2,7 @@ name: 🧠 Notion Sync (docs/CONSCIENCIA → Notion)
 # Espelha automaticamente o conteúdo de docs/CONSCIENCIA/ para o Notion
 # usando UPSERT (cria se não existe, atualiza se existe).
 ## Lei vigente: Git é fonte da verdade. Notion é painel humano.
+## Política temporária: best-effort. Falha do Notion não bloqueia CI/main.
 
 on:
   push:
@@ -41,9 +42,10 @@ concurrency:
 
 jobs:
   sync:
-    name: Espelhar para o Notion
+    name: Espelhar para o Notion (best-effort)
     runs-on: [self-hosted, Linux, X64]
     timeout-minutes: 20
+    continue-on-error: true
     steps:
       - name: 📥 Checkout do repositório
         uses: actions/checkout@v7
@@ -56,10 +58,12 @@ jobs:
           node-version: '24'
 
       - name: 📦 Instalar @notionhq/client
+        continue-on-error: true
         working-directory: scripts/notion-sync
         run: npm install --omit=dev
 
-      - name: 🧠 Executar sync (UPSERT)
+      - name: 🧠 Executar sync (UPSERT) — opcional
+        continue-on-error: true
         env:
           NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
           DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
@@ -69,6 +73,7 @@ jobs:
         run: node scripts/notion-sync/sync.mjs
 
       - name: 🧹 Cleanup de órfãos (opcional)
+        continue-on-error: true
         if: github.event.inputs.cleanup_orphans != 'no' && github.event.inputs.cleanup_orphans != ''
         env:
           NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
@@ -78,7 +83,8 @@ jobs:
           GITHUB_ACTOR: ${{ github.actor }}
         run: node scripts/notion-sync/cleanup-orphans.mjs
 
-      - name: 📊 Relatório de consistência (Git ↔ Notion)
+      - name: 📊 Relatório de consistência (Git ↔ Notion) — opcional
+        continue-on-error: true
         if: always()
         env:
           NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
@@ -86,7 +92,8 @@ jobs:
           GITHUB_ACTOR: ${{ github.actor }}
         run: node scripts/notion-sync/report-consistency.mjs
 
-      - name: 📝 Publicar relatórios sem falso verde (padrao writer-safe)
+      - name: 📝 Publicar relatórios sem bloquear a main
+        continue-on-error: true
         if: always() && github.event.inputs.dry_run != 'true'
         shell: bash
         env:
