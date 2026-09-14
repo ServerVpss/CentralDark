@@ -4,7 +4,7 @@ status: CANONICAL
 owner: CENTRALDARK_TRIGGER_FABRIC
 consumer: MEGAZORD-CENTRALDARK
 promoted_by: SEGREDO/CHEFE
-promoted_at: 2026-09-11
+promoted_at: 2026-09-14
 
 intent:
   statement: "Estar capacitado para usar uma capacidade não significa manter essa capacidade instalada, carregada ou ativa o tempo todo."
@@ -33,6 +33,136 @@ invariants:
   EDGE_BLOCKED_CLIENT_IS_NOT_PROVIDER_DOWN: true
   DIRECT_CLIENT_403_IS_NOT_GLOBAL_MCP_FAILURE: true
   LOCAL_FILESYSTEM_ACCESS_IS_SEPARATE_CAPABILITY: true
+  OPTIONAL_EXTERNAL_OFF_IS_NOT_GLOBAL_FAILURE: true
+  OPTIONAL_EXTERNAL_OFF_MUST_NOT_BLOCK_BOOT: true
+  OPTIONAL_EXTERNAL_OFF_WITH_FALLBACK_IS_NON_BLOCKING: true
+  REQUIRED_CAPABILITY_FAILURE_NEEDS_FALLBACK_EXHAUSTED: true
+  TOOL_CATALOG_IS_NOT_MODEL_CATALOG: true
+  MODEL_CATALOG_IS_NOT_TOOL_CATALOG: true
+  HERMES_AGENT_BODY_IS_NOT_REPLACEABLE_MODEL: true
+  MODEL_IS_REPLACEABLE_ENGINE: true
+  GATEWAY_IS_INFERENCE_ROUTE_NOT_AGENT_BODY: true
+  NO_PARALLEL_MARKETPLACE: true
+  NO_PARALLEL_ROUTER: true
+
+system_topology:
+  principle: "ONE SYSTEM; HERMES AS AGENT BODY; ENGINES AND TOOLS ARE PLUGGABLE"
+  one_system_only: true
+  one_gateway: true
+  one_tool_catalog: true
+  no_parallel_marketplace: true
+  agent_body:
+    owner: HERMES
+    preserves:
+      - SOUL
+      - MEMORY
+      - WORKSPACE
+      - PLANNING
+      - LOOPS
+      - TOOLS
+      - SKILLS
+      - EXECUTION
+      - CONTINUITY
+  inference_gateway:
+    role: MODEL_BACKEND_ROUTE
+    public_entrypoint: "https://api.centralldark.com"
+    replace_agent_body: false
+  tool_catalog:
+    role: SHARED_CAPABILITY_CATALOG
+    preferred_entrypoint: CENTRALDARK_MCP
+    clients_may_consume_same_catalog: true
+  model_catalog:
+    role: REPLACEABLE_INFERENCE_ENGINES
+    may_include_external_providers: true
+    provider_off_is_router_input: true
+
+capability_classification:
+  CORE:
+    meaning: "Required for the selected mission path; absence can block only after activation/recovery and applicable fallback fail."
+  OPTIONAL_EXTERNAL:
+    meaning: "External or plug-in capability that may be off without failing the organism."
+    off_state: AVAILABLE_OFF
+    blocking: false
+    alert_by_default: false
+    boot_must_continue: true
+  REQUIRED_EXTERNAL:
+    meaning: "External capability explicitly required by current intent."
+    first_action: TRY_EXISTING_FALLBACK_OR_CANONICAL_ACTIVATION
+    block_only_when_no_fallback: true
+
+boot_and_mission_policy:
+  optional_external_off:
+    classification: AVAILABLE_OFF
+    mission_continue: true
+    boot_continue: true
+    global_health_impact: NONE
+  optional_external_failed_with_equivalent_fallback:
+    classification: DEGRADED_NON_BLOCKING
+    mission_continue: true
+    boot_continue: true
+    global_health_impact: DEGRADED
+  required_capability_unavailable:
+    sequence:
+      - CONFIRM_CURRENT_INTENT_REQUIRES_CAPABILITY
+      - TRY_CANONICAL_ACTIVATION
+      - TRY_APPLICABLE_EXISTING_FALLBACK
+      - HEALTH_PROBE_SELECTED_PATH
+      - BLOCK_ONLY_IF_ALL_APPLICABLE_PATHS_FAIL
+    terminal_classification: REQUIRED_UNAVAILABLE
+  unknown:
+    classification: UNKNOWN
+    pass: false
+    fail: false
+    action: MEASURE_OR_CONTINUE_INDEPENDENT_SAFE_WORK
+
+catalog_contract:
+  split_catalogs:
+    tool_catalog:
+      examples: [GITHUB, VPS, FILES, LOGS, DEPLOY, BROWSER, MEMORY, SKILLS, DATABASES, OBSERVABILITY]
+      owner_surface: CENTRALDARK_MCP
+    model_catalog:
+      examples: [GROK, GPT, CLAUDE, GEMINI, NOUS, ABACUS, OTHER_ENGINES]
+      owner_surface: CENTRALDARK_GATEWAY
+  discovery_is_not_health: true
+  listed_is_not_active: true
+  health_is_per_capability: true
+  minimum_health_fields:
+    - DISCOVERY
+    - AUTH
+    - HEALTH
+    - LAST_PROOF
+    - OWNER
+    - TARGET_RUNTIME
+  catalogue_once_consume_everywhere: true
+  client_specific_marketplace_copy: false
+
+hermes_gateway_contract:
+  hermes_controls:
+    - INTENT_EXECUTION
+    - TOOL_SELECTION
+    - TOOL_INVOCATION
+    - MEMORY
+    - WORKSPACE
+    - CONTINUITY
+  gateway_controls:
+    - ENGINE_SELECTION
+    - ENGINE_FALLBACK
+  forbidden:
+    - HERMES_AS_ORDINARY_ENGINE_WHEN_HERMES_IS_CALLER
+    - HERMES_TO_GATEWAY_TO_HERMES_RECURSION
+    - GATEWAY_REPLACES_HERMES_AGENT_LOOP
+  promotion_gate:
+    require_end_to_end_proof:
+      - TOOLS_FIELD_PRESERVED
+      - TOOL_CHOICE_PRESERVED
+      - TOOL_CALLS_PRESERVED
+      - TOOL_CALL_ID_PRESERVED
+      - ARGUMENTS_PRESERVED
+      - TOOL_RESULT_CONTINUATION_PRESERVED
+      - STREAMING_PRESERVED_WHEN_USED
+      - TIMEOUT_AND_ERROR_SEMANTICS_PRESERVED
+      - FALLBACK_DOES_NOT_REENTER_CALLER_HERMES
+    failure_means: DO_NOT_PROMOTE_GATEWAY_AS_HERMES_BACKEND_YET
 
 readiness_model:
   states:
@@ -454,6 +584,11 @@ proof:
     - ACTIVATION_OR_HEALTH_PROBE_FAILS
     - NO_APPLICABLE_EXISTING_FALLBACK
   unknown_is_not_pass: true
+
+  optional_external_off_is_not_pass: true
+  optional_external_off_is_not_global_fail: true
+  degraded_non_blocking_requires_working_fallback: true
+  required_unavailable_requires_no_applicable_fallback: true
 
 slogan:
   technical: "CAPABILITY_READY != CAPABILITY_RESIDENT; OFF != FAIL"
