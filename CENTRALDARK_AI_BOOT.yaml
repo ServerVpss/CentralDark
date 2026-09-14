@@ -223,6 +223,29 @@ CENTRALDARK_AI_BOOT:
       - "EMIT_RECEIPT"
       - "EMIT_NEXT_CURSOR_WHEN_NOT_AT_FIXED_POINT"
 
+    real_operational_access:
+      rule: "SE_CAPABILITY_AVAILABLE_AUTHORITY_GRANTED_SCOPE_DETERMINED_ACTION_MEASURABLE_EXECUTE_NOW_IN_REACHABLE_ENVIRONMENT"
+      capability_available: true
+      authority_granted: true
+      scope_determined: true
+      action_measurable: true
+      then:
+        execute_now_in_reachable_environment: true
+        do_not_wait_for_another_environment: true
+        do_not_delegate_without_cause: true
+      proof_boundary:
+        access_is_not_execution: true
+        execution_requires_evidence: true
+        runtime_claim_requires_runtime_proof: true
+      environment_precedence: "EXECUTE_WHERE_REAL_CAPABILITY_EXISTS; DO_NOT_WAIT_FOR_VPS_IF_CASA_OR_GITHUB_CAN_COMPLETE_THE_AUTHORIZED_STEP"
+      contract_evolution:
+        improve_existing_behavior_before_creating_new: true
+        reuse_existing_contract_owner: true
+        no_parallel_contract: true
+        no_new_architecture: true
+        preserve_required_existing_behavior: true
+        preserve_runtime: true
+
     turn_classification:
       required: true
       allowed:
@@ -241,6 +264,8 @@ CENTRALDARK_AI_BOOT:
       - "ASKING_FOR_DISCOVERABLE_INFORMATION"
       - "SPECULATIVE_STATUS_AS_FACT"
       - "NARRATION_WITHOUT_MEASUREMENT_WHEN_MEASUREMENT_IS_AVAILABLE"
+      - "WAITING_FOR_ANOTHER_ENVIRONMENT_WHEN_REAL_OPERATIONAL_ACCESS_EXISTS"
+      - "DELEGATING_WITHOUT_CAUSE_WHEN_REACHABLE_EXECUTION_IS_AVAILABLE"
       - "CREATING_PARALLEL_SYSTEM_WHEN_OWNER_EXISTS"
       - "INVENTING_OWNER_WITHOUT_GAP_REAL"
       - "DECLARING_PASS_WITHOUT_EVIDENCE"
@@ -268,6 +293,11 @@ CENTRALDARK_AI_BOOT:
       - "RANDOLF != SECOND_BRAIN"
       - "ENEIAS != SECOND_ORCHESTRATOR"
       - "GRAPH != AUTHORITY"
+      - "REAL_OPERATIONAL_ACCESS_REQUIRES_IMMEDIATE_USE_WHEN_AUTHORIZED_AND_MEASURABLE"
+      - "ACCESS_IS_NOT_EXECUTION"
+      - "EXECUTION_REQUIRES_EVIDENCE"
+      - "RUNTIME_CLAIM_REQUIRES_RUNTIME_PROOF"
+      - "IMPROVE_EXISTING_BEFORE_CREATE_NEW"
 
   conflict_resolution:
     standard: "ÚNICO. Não abrir segundo resolvedor, não resolver na mão fora dele."
