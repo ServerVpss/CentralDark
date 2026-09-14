@@ -7,8 +7,8 @@ promoted_by: SEGREDO/CHEFE
 promoted_at: 2026-09-14
 
 intent:
-  statement: "Estar capacitado para usar uma capacidade não significa manter essa capacidade instalada, carregada ou ativa o tempo todo."
-  goal: "Preservar o conteúdo, programação, contratos, adapters, manifests e procedimentos completos para ativação futura sob demanda, sem sobrecarregar Casa ou VPS."
+  statement: "Estar capacitado para usar uma capacidade nÃ£o significa manter essa capacidade instalada, carregada ou ativa o tempo todo."
+  goal: "Preservar o conteÃºdo, programaÃ§Ã£o, contratos, adapters, manifests e procedimentos completos para ativaÃ§Ã£o futura sob demanda, sem sobrecarregar Casa ou VPS."
 
 invariants:
   CAPABILITY_CATALOGUED_IS_NOT_INSTALLED: true
@@ -169,19 +169,19 @@ readiness_model:
     CATALOGUED:
       meaning: "Capacidade conhecida, classificada e com owner/destino definido."
     READY_TO_MATERIALIZE:
-      meaning: "Código, configuração, adapters, comandos, manifests e testes necessários existem ou têm origem determinística para instalação/ativação."
+      meaning: "CÃ³digo, configuraÃ§Ã£o, adapters, comandos, manifests e testes necessÃ¡rios existem ou tÃªm origem determinÃ­stica para instalaÃ§Ã£o/ativaÃ§Ã£o."
     INSTALLED:
-      meaning: "Dependência/binário/modelo está fisicamente presente no runtime alvo."
+      meaning: "DependÃªncia/binÃ¡rio/modelo estÃ¡ fisicamente presente no runtime alvo."
     LOADED:
-      meaning: "Está consumindo memória/CPU/GPU/disco/processos do runtime."
+      meaning: "EstÃ¡ consumindo memÃ³ria/CPU/GPU/disco/processos do runtime."
     ACTIVE:
-      meaning: "Serviço/modelo/tool está operacional neste instante."
+      meaning: "ServiÃ§o/modelo/tool estÃ¡ operacional neste instante."
     SELECTED:
-      meaning: "Capability Contract Router escolheu a capacidade para a intenção vigente."
+      meaning: "Capability Contract Router escolheu a capacidade para a intenÃ§Ã£o vigente."
     AVAILABLE_OFF:
-      meaning: "Capacidade disponível/instalada porém deliberadamente desligada ou não selecionada; estado neutro, sem incidente."
+      meaning: "Capacidade disponÃ­vel/instalada porÃ©m deliberadamente desligada ou nÃ£o selecionada; estado neutro, sem incidente."
     REQUIRED_UNAVAILABLE:
-      meaning: "A intenção vigente exige a capacidade, mas ela não pôde ser ativada nem substituída por fallback aplicável."
+      meaning: "A intenÃ§Ã£o vigente exige a capacidade, mas ela nÃ£o pÃ´de ser ativada nem substituÃ­da por fallback aplicÃ¡vel."
   normal_policy: CATALOGUED_OR_READY_TO_MATERIALIZE
   runtime_residency_policy: ON_DEMAND
 
@@ -208,10 +208,10 @@ inactive_state_semantics:
     one_optional_arm_off_does_not_fail_organism: true
     provider_or_tool_off_is_router_input_not_global_incident: true
   hud_semantics:
-    AVAILABLE_OFF: "⚪ disponível/desligado — neutro"
-    ACTIVE: "🟢 ativo"
-    REQUIRED_UNAVAILABLE: "🔴 exigido e indisponível após ativação/fallback falhar"
-    UNKNOWN: "⚫ ainda não medido"
+    AVAILABLE_OFF: "âšª disponÃ­vel/desligado â€” neutro"
+    ACTIVE: "ðŸŸ¢ ativo"
+    REQUIRED_UNAVAILABLE: "ðŸ”´ exigido e indisponÃ­vel apÃ³s ativaÃ§Ã£o/fallback falhar"
+    UNKNOWN: "âš« ainda nÃ£o medido"
   forbidden_interpretations:
     - DISABLED_IMPLIES_BROKEN
     - BUTTON_OFF_IMPLIES_REGRESSION
@@ -335,11 +335,16 @@ external_capability_binding:
 
 public_surface_policy:
   principle: "POUCAS SUPERFICIES PUBLICAS; CAPACIDADES INTERNAS POR BAIXO DOS PANOS"
-  surfaces:
+  public_surfaces:
     human_public: "https://centralldark.com"
-    human_admin_private: "https://admin.centralldark.com"
     machine_api: "https://api.centralldark.com"
     mcp_external: "https://mcp.centralldark.com/mcp"
+  max_normal_public_surfaces: 3
+  private_admin_surface: "https://admin.centralldark.com"
+  private_admin_not_counted_as_normal_public: true
+  total_named_canonical_surfaces: 4
+  legacy_hub_surface: "https://hub.centralldark.com"
+  legacy_hub_policy: COMPATIBILITY_ONLY_UNTIL_REDIRECT_OR_RETIREMENT
   routing:
     https_public_port: 443
     host_based_routing: true
@@ -347,6 +352,42 @@ public_surface_policy:
     internal_capability_requires_public_subdomain: false
     internal_capability_requires_public_port: false
     create_public_surface_only_for_real_access_boundary: true
+  single_direction_flow:
+    permanent: true
+    ingress:
+      human_public: CENTRALDARK_PUBLIC
+      human_admin: CENTRALDARK_HUB
+      machine_inference: CENTRALDARK_API
+      tools_and_actions: CENTRALDARK_MCP
+    canonical_adapter: MCP_CENTRALDARK
+    tool_discovery: tools/list
+    tool_execution: tools/call
+    admin_dispatcher: mcp_admin_call
+    internal_capabilities_via_adapter:
+      - HERMES
+      - ZENDRIVER
+      - ELITE_GATEWAY
+      - OAUTH_BROKER
+      - ARSENAL
+      - ARTIFACTS_BUILDER
+      - DARKAI
+      - LOVABLE_PROXY
+      - GITHUB
+      - VPS
+      - FILES
+      - LOGS
+      - DEPLOY
+      - BROWSER
+      - SKILLS
+      - MEMORY
+    direct_public_subdomain_per_capability: false
+    legacy_subdomains_policy: COMPATIBILITY_ONLY_UNTIL_REDIRECT_OR_RETIREMENT
+    new_clients_must_use_canonical_surfaces: true
+    no_second_router: true
+    no_parallel_marketplace: true
+    no_client_specific_tool_catalog: true
+    hermes_controls_execution: true
+    reality_is_judge: true
   admin_surface:
     private_single_owner_intent: true
     edge_basic_auth_or_equivalent_pre_app_gate: REQUIRED
@@ -383,7 +424,7 @@ public_surface_policy:
     pm2_services_default: INTERNAL
 
 node_dependency_lock_policy:
-  purpose: "Reprodutibilidade de dependências; não é controle de acesso."
+  purpose: "Reprodutibilidade de dependÃªncias; nÃ£o Ã© controle de acesso."
   package_json_versioned: true
   package_lock_versioned_when_node_owner_uses_npm: true
   ci_install_mode: NPM_CI
@@ -394,7 +435,7 @@ node_dependency_lock_policy:
   auth_gate_and_dependency_lock_are_independent_layers: true
 
 agent_operational_quality:
-  intent: "Absorver práticas de arquitetura de agentes como comportamento do ciclo existente, sem criar ferramenta, cérebro, cargo soberano ou pipeline paralelo."
+  intent: "Absorver prÃ¡ticas de arquitetura de agentes como comportamento do ciclo existente, sem criar ferramenta, cÃ©rebro, cargo soberano ou pipeline paralelo."
   owner: CENTRALDARK_TRIGGER_FABRIC
   runtime_owner: apps/modulos/fixed-point-fabric/
   metacognition_owner: docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md
@@ -592,4 +633,7 @@ proof:
 
 slogan:
   technical: "CAPABILITY_READY != CAPABILITY_RESIDENT; OFF != FAIL"
-  operational: "ARSENAL COMPLETO, PESO SOB DEMANDA; BOTÃO DESLIGADO É SÓ BOTÃO DESLIGADO"
+  operational: "ARSENAL COMPLETO, PESO SOB DEMANDA; BOTÃƒO DESLIGADO Ã‰ SÃ“ BOTÃƒO DESLIGADO"
+
+
+
