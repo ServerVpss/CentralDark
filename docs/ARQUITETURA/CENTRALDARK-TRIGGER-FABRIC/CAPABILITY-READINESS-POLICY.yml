@@ -180,6 +180,8 @@ readiness_model:
       meaning: "Capability Contract Router escolheu a capacidade para a intenção vigente."
     AVAILABLE_OFF:
       meaning: "Capacidade disponível/instalada porém deliberadamente desligada ou não selecionada; estado neutro, sem incidente."
+    DEGRADED_NON_BLOCKING:
+      meaning: "Capacidade opcional selecionada falhou, mas fallback equivalente está ativo; missão e boot continuam com saúde global degradada e observável."
     REQUIRED_UNAVAILABLE:
       meaning: "A intenção vigente exige a capacidade, mas ela não pôde ser ativada nem substituída por fallback aplicável."
   normal_policy: CATALOGUED_OR_READY_TO_MATERIALIZE
@@ -209,6 +211,7 @@ inactive_state_semantics:
     provider_or_tool_off_is_router_input_not_global_incident: true
   hud_semantics:
     AVAILABLE_OFF: "âšª disponÃ­vel/desligado â€” neutro"
+    DEGRADED_NON_BLOCKING: "ðŸŸ¡ fallback equivalente ativo â€” degradado, nÃ£o bloqueante"
     ACTIVE: "ðŸŸ¢ ativo"
     REQUIRED_UNAVAILABLE: "ðŸ”´ exigido e indisponÃ­vel apÃ³s ativaÃ§Ã£o/fallback falhar"
     UNKNOWN: "âš« ainda nÃ£o medido"

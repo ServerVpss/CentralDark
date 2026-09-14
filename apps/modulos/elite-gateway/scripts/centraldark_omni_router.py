@@ -31,7 +31,7 @@ APP_VERSION = "0.3.0"
 DEFAULT_ENGINE = os.getenv("CENTRALDARK_DEFAULT_ENGINE", "nous").strip().lower()
 ROUTER_TOKEN = os.getenv("CENTRALDARK_ROUTER_TOKEN", "").strip()
 REQUEST_TIMEOUT = float(os.getenv("CENTRALDARK_ROUTER_TIMEOUT", "180"))
-DEFAULT_FALLBACK_CHAIN = "nous,hermes,google,claude-code,xai,abacus,openai"
+DEFAULT_FALLBACK_CHAIN = "nous,google,claude-code,xai,abacus,openai"
 ANTIGRAVITY_AGENTAPI = os.getenv(
     "ANTIGRAVITY_AGENTAPI",
     "/root/snap/antigravity-cli/common/.gemini/antigravity-cli/bin/agentapi",
@@ -186,8 +186,10 @@ def route_model(model: str) -> Tuple[str, str]:
             provider = prefix.strip().lower()
             if provider == "claude":
                 provider = "claude-code"
+            if provider == "hermes":
+                raise HTTPException(status_code=400, detail="hermes_is_agent_runtime_not_engine")
             if provider in {
-                "antigravity", "openai", "claude-code", "hermes", "nous", "google", "xai", "abacus"
+                "antigravity", "openai", "claude-code", "nous", "google", "xai", "abacus"
             }:
                 return provider, target.strip()
     return DEFAULT_ENGINE, raw
@@ -291,8 +293,6 @@ def provider_default_model(provider: str) -> str:
         return os.getenv("ANTIGRAVITY_MODEL", "flash_lite").strip()
     if provider == "openai":
         return os.getenv("OPENAI_MODEL", "gpt-5.6").strip()
-    if provider == "hermes":
-        return os.getenv("HERMES_MODEL", "hermes").strip()
     if provider == "nous":
         return discover_nous_free_model()
     if provider == "google":
@@ -312,8 +312,6 @@ def provider_configured(provider: str) -> bool:
     if provider == "claude-code":
         binary = os.getenv("CLAUDE_BIN", "claude").strip()
         return bool(shutil.which(binary) or (binary and os.path.exists(binary)))
-    if provider == "hermes":
-        return bool(os.getenv("HERMES_BASE_URL", "").strip())
     if provider == "nous":
         return bool(get_nous_token())
     if provider == "google":
@@ -345,7 +343,9 @@ def candidate_routes(model: str) -> List[Tuple[str, str]]:
     chain = split_csv(os.getenv("CENTRALDARK_FALLBACK_CHAIN", DEFAULT_FALLBACK_CHAIN))
     for provider in chain:
         normalized = "claude-code" if provider == "claude" else provider
-        if normalized not in {"antigravity", "openai", "claude-code", "hermes", "nous", "google", "xai", "abacus"}:
+        if normalized == "hermes":
+            continue
+        if normalized not in {"antigravity", "openai", "claude-code", "nous", "google", "xai", "abacus"}:
             continue
         if normalized != primary_provider:
             candidates.append((normalized, ""))
@@ -452,7 +452,7 @@ def run_compatible(
 ) -> Tuple[str, str]:
     if not base_url:
         raise HTTPException(status_code=503, detail=f"{provider}_base_url_not_configured")
-    if not api_key and provider not in {"hermes"}:
+    if not api_key:
         raise HTTPException(status_code=503, detail=f"{provider}_api_key_not_configured")
     headers = {"Content-Type": "application/json"}
     if api_key:
@@ -655,14 +655,6 @@ def run_provider(provider: str, messages: List[ChatMessage], target_model: str) 
             "openai",
             os.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1").rstrip("/"),
             os.getenv("OPENAI_API_KEY", "").strip(),
-            messages,
-            model,
-        )
-    if provider == "hermes":
-        return run_compatible(
-            "hermes",
-            os.getenv("HERMES_BASE_URL", "").rstrip("/"),
-            os.getenv("HERMES_AUTH_TOKEN", "").strip(),
             messages,
             model,
         )
@@ -914,7 +906,7 @@ def responses_stream(result: Dict[str, Any]):
 
 @app.get("/health")
 def health() -> Dict[str, Any]:
-    providers = ["antigravity", "nous", "hermes", "google", "claude-code", "xai", "abacus", "openai"]
+    providers = ["antigravity", "nous", "google", "claude-code", "xai", "abacus", "openai"]
     return {
         "ok": True,
         "service": "centraldark-omni-router",
@@ -933,7 +925,7 @@ def health() -> Dict[str, Any]:
 def models(authorization: str = Header(default=None)) -> Dict[str, Any]:
     require_router_auth(authorization)
     rows = [{"id": "auto", "object": "model", "owned_by": "centraldark"}]
-    for provider in ["antigravity", "nous", "hermes", "google", "claude-code", "xai", "abacus", "openai"]:
+    for provider in ["antigravity", "nous", "google", "claude-code", "xai", "abacus", "openai"]:
         if not provider_configured(provider):
             continue
         model = provider_default_model(provider)

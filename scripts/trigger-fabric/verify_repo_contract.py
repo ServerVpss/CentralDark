@@ -53,6 +53,22 @@ check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CAPABILITY-READINESS-POLICY.y
  'one_optional_arm_off_does_not_fail_organism: true',
  'classification_when_failure_proven: REQUIRED_UNAVAILABLE',
 ], classification='CAPABILITY_OFF_NEUTRALITY_CONTRACT')
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CAPABILITY-READINESS-POLICY.yml',[
+ 'HERMES_AGENT_BODY_IS_NOT_REPLACEABLE_MODEL: true',
+ 'OPTIONAL_EXTERNAL_OFF_MUST_NOT_BLOCK_BOOT: true',
+ 'classification: DEGRADED_NON_BLOCKING',
+ 'DEGRADED_NON_BLOCKING:',
+ 'TOOLS_FIELD_PRESERVED',
+ 'TOOL_CHOICE_PRESERVED',
+ 'TOOL_CALLS_PRESERVED',
+ 'TOOL_CALL_ID_PRESERVED',
+ 'ARGUMENTS_PRESERVED',
+ 'TOOL_RESULT_CONTINUATION_PRESERVED',
+ 'STREAMING_PRESERVED_WHEN_USED',
+ 'TIMEOUT_AND_ERROR_SEMANTICS_PRESERVED',
+ 'FALLBACK_DOES_NOT_REENTER_CALLER_HERMES',
+ 'failure_means: DO_NOT_PROMOTE_GATEWAY_AS_HERMES_BACKEND_YET',
+], classification='HERMES_GATEWAY_PROMOTION_CONTRACT')
 check('apps/modulos/Bolt/source/app/components/centraldark/CentralDarkCockpitShell.client.tsx',[
  'DISABLED/OFF != FAIL',
  'FAIL REQUIRES EXPECTED ACTIVE',
@@ -279,8 +295,20 @@ check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml',[
 ])
 check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml',[
  'engine_is_owner: false','prompt_consumer: apps/modulos/HERMES-CORE/prompts/hermes-core.md','LOAD_REFERENCE',
+ 'agent_runtimes:', 'role: EXECUTION_CONTINUITY_RUNTIME', 'model_catalog_member: false', 'selectable_as_engine: false',
  'SELF_HEALING_FAILURE_LOOP','ANY_PR_OR_COMMIT_GATE','CANONICAL_SELF_HOSTED_RUNNER_POLICY'
-])
+], classification='ENGINE_AND_AGENT_RUNTIME_SPLIT')
+check('apps/modulos/elite-gateway/scripts/centraldark_omni_router.py',[
+ 'DEFAULT_FALLBACK_CHAIN = "nous,google,claude-code,xai,abacus,openai"',
+ 'hermes_is_agent_runtime_not_engine',
+ 'if normalized == "hermes":',
+], classification='OMNI_ROUTER_HERMES_NOT_ENGINE')
+check_absent('apps/modulos/elite-gateway/scripts/centraldark_omni_router.py',[
+ r'HERMES_BASE_URL|HERMES_AUTH_TOKEN|HERMES_MODEL',
+ r'DEFAULT_FALLBACK_CHAIN\s*=\s*["\'][^"\']*hermes',
+ r'providers\s*=\s*\[[^\]]*["\']hermes["\']',
+ r'for provider in \[[^\]]*["\']hermes["\']',
+], classification='OMNI_ROUTER_NO_HERMES_MODEL_SURFACE')
 check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml',[
  'UNIVERSAL_EVOLUTION_CARACOL',
  'ALL_CURRENT_SKILLS',
