@@ -28,7 +28,10 @@ from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
 APP_VERSION = "0.3.0"
-DEFAULT_ENGINE = os.getenv("CENTRALDARK_DEFAULT_ENGINE", "nous").strip().lower()
+ENGINE_PROVIDERS = frozenset({"antigravity", "openai", "claude-code", "nous", "google", "xai", "abacus"})
+CONFIGURED_DEFAULT_ENGINE = os.getenv("CENTRALDARK_DEFAULT_ENGINE", "nous").strip().lower() or "nous"
+DEFAULT_ENGINE_CONFIG_VALID = CONFIGURED_DEFAULT_ENGINE in ENGINE_PROVIDERS
+DEFAULT_ENGINE = CONFIGURED_DEFAULT_ENGINE if DEFAULT_ENGINE_CONFIG_VALID else "nous"
 ROUTER_TOKEN = os.getenv("CENTRALDARK_ROUTER_TOKEN", "").strip()
 REQUEST_TIMEOUT = float(os.getenv("CENTRALDARK_ROUTER_TIMEOUT", "180"))
 DEFAULT_FALLBACK_CHAIN = "nous,google,claude-code,xai,abacus,openai"
@@ -188,9 +191,7 @@ def route_model(model: str) -> Tuple[str, str]:
                 provider = "claude-code"
             if provider == "hermes":
                 raise HTTPException(status_code=400, detail="hermes_is_agent_runtime_not_engine")
-            if provider in {
-                "antigravity", "openai", "claude-code", "nous", "google", "xai", "abacus"
-            }:
+            if provider in ENGINE_PROVIDERS:
                 return provider, target.strip()
     return DEFAULT_ENGINE, raw
 
@@ -345,7 +346,7 @@ def candidate_routes(model: str) -> List[Tuple[str, str]]:
         normalized = "claude-code" if provider == "claude" else provider
         if normalized == "hermes":
             continue
-        if normalized not in {"antigravity", "openai", "claude-code", "nous", "google", "xai", "abacus"}:
+        if normalized not in ENGINE_PROVIDERS:
             continue
         if normalized != primary_provider:
             candidates.append((normalized, ""))
@@ -912,6 +913,8 @@ def health() -> Dict[str, Any]:
         "service": "centraldark-omni-router",
         "version": APP_VERSION,
         "default_engine": DEFAULT_ENGINE,
+        "configured_default_engine": CONFIGURED_DEFAULT_ENGINE,
+        "default_engine_config_valid": DEFAULT_ENGINE_CONFIG_VALID,
         "auto_fallback": env_bool("CENTRALDARK_AUTO_FALLBACK", True),
         "free_only": env_bool("CENTRALDARK_FREE_ONLY", False),
         "fallback_chain": split_csv(os.getenv("CENTRALDARK_FALLBACK_CHAIN", DEFAULT_FALLBACK_CHAIN)),
@@ -987,6 +990,7 @@ def self_test() -> int:
         "route_xai": route_model("xai/grok-x") == ("xai", "grok-x"),
         "route_abacus": route_model("abacus/model-x") == ("abacus", "model-x"),
         "route_nous": route_model("nous/tencent/hy3:free") == ("nous", "tencent/hy3:free"),
+        "default_engine_is_model_provider": DEFAULT_ENGINE in ENGINE_PROVIDERS and DEFAULT_ENGINE != "hermes",
         "responses_input": "oi" in flatten_messages(responses_messages(response_request)),
         "fallback_event": event["context"].get("fallback_used") is True and event["context"].get("attempt") == 2,
         "action_not_proof": event["context"].get("action_is_proof") is False,

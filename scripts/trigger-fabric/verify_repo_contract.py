@@ -321,6 +321,8 @@ check('apps/modulos/elite-gateway/scripts/centraldark_omni_router.py',[
  'DEFAULT_FALLBACK_CHAIN = "nous,google,claude-code,xai,abacus,openai"',
  'hermes_is_agent_runtime_not_engine',
  'if normalized == "hermes":',
+ 'ENGINE_PROVIDERS = frozenset(',
+ 'default_engine_config_valid',
 ], classification='OMNI_ROUTER_HERMES_NOT_ENGINE')
 check_absent('apps/modulos/elite-gateway/scripts/centraldark_omni_router.py',[
  r'HERMES_BASE_URL|HERMES_AUTH_TOKEN|HERMES_MODEL',
@@ -328,6 +330,25 @@ check_absent('apps/modulos/elite-gateway/scripts/centraldark_omni_router.py',[
  r'providers\s*=\s*\[[^\]]*["\']hermes["\']',
  r'for provider in \[[^\]]*["\']hermes["\']',
 ], classification='OMNI_ROUTER_NO_HERMES_MODEL_SURFACE')
+check_absent('scripts/boot_omni_router.py',[
+ r'HERMES_BASE_URL',
+ r'CENTRALDARK_DEFAULT_ENGINE.{0,16}hermes',
+], classification='OMNI_LAUNCHER_HERMES_NOT_ENGINE')
+check_absent('scripts/launch_omni_router_direct.py',[
+ r'HERMES_BASE_URL',
+ r'CENTRALDARK_DEFAULT_ENGINE.{0,16}hermes',
+], classification='OMNI_LAUNCHER_HERMES_NOT_ENGINE')
+check_absent('scripts/launch_omni_router.sh',[
+ r'HERMES_BASE_URL',
+ r'CENTRALDARK_DEFAULT_ENGINE=\"hermes\"',
+], classification='OMNI_LAUNCHER_HERMES_NOT_ENGINE')
+check_absent('scripts/auto-redeploy-failover.mjs',[
+ r'fallbackChain:\s*\[[^\]]*[\"\']hermes[\"\']',
+], classification='OMNI_FAILOVER_HERMES_NOT_ENGINE')
+check('docs/ARQUITETURA/CENTRALDARK-OMNI-ROUTER.md',[
+ 'Hermes permanece fora do cat',
+ 'provider/engine do cat',
+], classification='OMNI_DOC_HERMES_NOT_ENGINE')
 check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml',[
  'UNIVERSAL_EVOLUTION_CARACOL',
  'ALL_CURRENT_SKILLS',

@@ -193,8 +193,8 @@ O self-test valida sem provedores externos:
 - ausência de `mission_id` fabricado;
 - `action_is_proof=false`.
 
-Execução real de Claude/OpenAI/Hermes/Nous exige configuração e invocação no
-runtime correspondente.
+Execução real de Claude/OpenAI/Nous/Google/XAI/Abacus exige configuração e invocação no
+runtime correspondente. Hermes consome o router como corpo agente quando o contrato E2E de tools estiver provado; n?o ? provider/engine do cat?logo.
 
 ## Fechamento de lacunas amarelas
 
