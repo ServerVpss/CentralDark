@@ -61,3 +61,15 @@ Toda informação de outro agente é `DELTA_UTIL` até ser reconciliada com arqu
 
 ## Fixed point
 Só declarar verde quando CI do HEAD exato, runtime e contraprova concordarem. Falha ou estado desconhecido impede promoção para `main`.
+
+## 🔒 Cristal adicional — ChatGPT ↔ Casa do SEGREDO
+
+`CHATGPT_CAN_OPERATE_CASA_SEGREDO=true`.
+
+Prova viva em 2026-09-14: o Remote Desktop Commander listou `SEGREDO` como `online`, com autenticação válida, respondeu `pong` e aceitou execução remota no Windows da Casa. A mesma sessão mediu GitHub `200`, MCP `200` e Tailscale direto Casa ↔ VPS.
+
+Fluxo cristalizado:
+
+`ChatGPT → Remote Desktop Commander → SEGREDO/Casa → arquivos/processos/terminal → GitHub/MCP/VPS conforme a rota disponível → REALIDADE`.
+
+A capacidade é oficial; o estado de cada transporte continua temporal e deve ser remedido antes de alegar saúde atual.
