@@ -31,6 +31,11 @@ principles:
   new_contract_requires_no_existing_owner: true
   second_brain_logical_one: true
   second_brain_parallel_forbidden: true
+  discover_existing_channels_before_blocked: true
+  ephemeral_helper_is_not_canonical_asset: true
+  safe_cleanup_after_use_required: true
+  user_report_is_signal_not_proof: true
+  meaningful_discovery_must_compare_canonical_owner: true
 normative_hierarchy:
   human_ai_entry: LEIA-ME-IA.md
   global_contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml
@@ -72,6 +77,12 @@ standard_flow:
   sensor_failure_is_world_failure: false
   transport_failure_requires_authorized_alternate_route: true
   alternate_route_must_remeasure_same_target: true
+  operational_channel_discovery:
+    before_declaring_blocked: true
+    read_only_discovery_first: true
+    existing_live_authorized_channel_preferred: true
+    new_attempt_failed_is_existing_channel_dead: false
+    connection_exists_is_command_execution: false
   remote_github_trigger_flow: [ACORDAR, CALIBRAR, CENTRALDARK, MEASURE, RENDEZVOUS, RECONCILE, CURRENT_REALITY, PROOF]
   remote_write_gate:
     repo_confirmed: REQUIRED
@@ -303,12 +314,33 @@ artifact_properties:
   contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ARTIFACT-PROPERTIES.yml
   hermes_requires_properties: true
   missing_required: NOT_FLASH_READY
+workspace_artifact_lifecycle:
+  casa_root: E:\CentralDark
+  casa_engineering_repo: E:\CentralDark\CentralDark
+  casa_worktrees: E:\CentralDark\worktrees
+  casa_tmp: E:\CentralDark\_tmp
+  casa_cache: E:\CentralDark\cache
+  casa_site_build_preview: C:\CentralDark
+  vps_root: CENTRALDARK_VPS_ROOT
+  vps_tmp: CENTRALDARK_VPS_ROOT/_tmp
+  vps_cache: CENTRALDARK_VPS_ROOT/cache
+  same_taxonomy_not_same_state: true
+  desktop_or_os_temp_for_agent_helpers: FORBIDDEN_WHEN_CENTRALDARK_TMP_AVAILABLE
+  os_or_tool_internal_temp: ALLOWED_NOT_CANONICAL
+  npx_npm_cache_node_modules: RECONSTRUCTIBLE_PACKAGE_MANAGER_CACHE
+  package_cache_must_not_be_absorbed_wholesale_into_apps_modulos: true
+  dependencies_enter_canonical_only_through_manifest_or_existing_owner: true
+  temp_without_consumer_after_persisted_result: SAFE_DELETE_AFTER_VERIFICATION
+  cache_without_reuse_value: EXPIRE_OR_CLEAN
+  repo_or_worktree: PRESERVE_BY_GIT_OWNER_POLICY
 operational_rule_learning:
   mandatory: true
-  applies_to: [HUMAN_CORRECTION, TOOL_ERROR, TEST_FAILURE, CI_FAILURE, RUNTIME_DRIFT, REPEATED_MANUAL_FIX, NEW_INVARIANT]
+  applies_to: [HUMAN_CORRECTION, USER_REPORTED_ERROR, NEW_DISCOVERY, TOOL_ERROR, TEST_FAILURE, CI_FAILURE, RUNTIME_DRIFT, REPEATED_MANUAL_FIX, NEW_INVARIANT]
   lifecycle:
     - OBSERVE_EVENT
     - MEASURE_LIVE_STATE
+    - COMPARE_CANONICAL_OWNER
+    - DISCOVER_EXISTING_CHANNELS_WHEN_ACCESS_RELATED
     - EXTRACT_FAILURE_OR_RULE_SIGNATURE
     - IDENTIFY_CAUSE_OR_INVARIANT
     - GENERALIZE_MINIMUM_VALID_SCOPE
@@ -321,6 +353,7 @@ operational_rule_learning:
     - REALITY_JUDGE
     - RECEIPT
     - CRYSTAL
+    - CLEAN_EPHEMERAL_HELPERS_AFTER_PROOF
     - LAST_GOOD_STATE
     - TRANSFER_TEST_ON_NEXT_EVENT
     - CONTINUE_UNTIL_SCOPE_FIXED_POINT
@@ -339,6 +372,24 @@ operational_rule_learning:
   same_rule_new_session: MUST_INHERIT_BY_REFERENCE
   same_rule_new_pr_or_commit: MUST_BE_ENFORCED_BY_EXISTING_GATE
   overgeneralization_guard: MINIMUM_VALID_SCOPE_THEN_EXPAND_BY_EVIDENCE
+  user_report:
+    semantics: SIGNAL_REQUIRES_MEASUREMENT
+    promote_without_measurement: false
+    confirmed_error_enters_learning_loop: true
+  continuous_crystallization:
+    mode: EVENT_DRIVEN
+    meaningful_discovery: COMPARE_EXISTING_CANONICAL_OWNER
+    generalizable_gap: UPDATE_EXISTING_OWNER_AND_BIND_CONSUMER_TEST_GATE
+    local_only_gap: FIX_LOCALLY_AND_RECEIPT_ONLY
+    no_material_delta: NO_CHANGE
+    fixed_point_stops_loop: true
+  ephemeral_artifact_lifecycle:
+    temp_used_is_canonical_asset: false
+    preserve_if_needed_for_receipt_or_rollback: true
+    cleanup_requires_result_persisted: true
+    cleanup_requires_no_active_consumer: true
+    no_post_task_value: SAFE_DELETE
+    cleanup_must_be_verified: true
 verified_continuity:
   source_crystal: docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-pombo-correio-com-checksum.md
   canonical_handoff_owner: docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md
