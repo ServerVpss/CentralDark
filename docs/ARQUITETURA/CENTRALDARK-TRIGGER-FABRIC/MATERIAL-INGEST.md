@@ -442,3 +442,20 @@ RUNTIME_HERMES_LEARNING = UNKNOWN até teste no corpo Hermes
 SCREENPIPE_TO_HERMES_TRANSPORT = UNKNOWN até teste causal
 VECTOR_MEMORY_RUNTIME = NOT_PROVEN
 ```
+
+## Auto-Ingestão Delta Útil — extensão 2026-09-15
+
+A ingestão autônoma usa este mesmo moinho. Ela pode abrir múltiplas frentes de leitura para buscar contexto, provenance, lineage, owner, falhas antigas e contraprovas, mas a escrita continua serializada por escopo.
+
+Contrato complementar: `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUTO-INGESTAO-DELTA-UTIL.md`.
+
+```text
+AUTO_INGESTAO_DELTA_UTIL=true
+READERS_MAX_PER_SIDE=50
+READERS_PARALLEL=true
+WRITER_COUNT_PER_CONFLICT_SCOPE=1
+MODEL_OUTPUT_IS_NOT_USER_INPUT=true
+TOOL_OUTPUT_IS_NOT_USER_INPUT=true
+RENDERED_TEXT_AS_USER_TURN=FAIL
+CRYSTAL_REQUIRES_OWNER_CONSUMER_TEST_GATE=true
+```
