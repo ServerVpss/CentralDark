@@ -18,9 +18,9 @@ export interface GrafoVivoSettings {
 }
 
 export const DEFAULT_SETTINGS: GrafoVivoSettings = {
-  // Padrão 2026: plugin consome o mesmo Grafo Vivo e envia matéria candidata ao Hub único.
-  // mode=vivo = PM2 operacional (leve, tempo real). UI full: /api/graph
-  urlGrafo: "https://grafo.centralldark.com/api/graph?mode=vivo",
+  // Padrão 2026-09-15: consumidores internos passam pela API única CentralDark.
+  // A API segura encaminha /api/graph ao GraphPanel; grafo.centralldark.com fica origem interna/legado.
+  urlGrafo: "https://api.centralldark.com/api/graph?mode=vivo",
   intervaloSegundos: 15,
   abrirNotaAoClicar: true,
   knowledgeHubPublishEnabled: true,
@@ -48,7 +48,7 @@ export class GrafoVivoSettingTab extends PluginSettingTab {
 
     new Setting(containerEl)
       .setName("URL do grafo")
-      .setDesc("Endpoint que retorna o JSON {nodes, edges}.")
+      .setDesc("Endpoint seguro/autenticado da API única CentralDark que retorna o JSON {nodes, edges}.")
       .addText((txt) =>
         txt
           .setValue(this.plugin.settings.urlGrafo)
@@ -103,8 +103,8 @@ export class GrafoVivoSettingTab extends PluginSettingTab {
       );
 
     new Setting(containerEl)
-      .setName("Token local do Hub")
-      .setDesc("Fica apenas nas configurações locais do Obsidian. Não versionar nem colar no repositório.")
+      .setName("Segredo local da API/Hub")
+      .setDesc("Usado como Bearer na API e no Hub. Fica somente no Obsidian; nunca versionar.")
       .addText((txt) => {
         txt.inputEl.type = "password";
         txt
