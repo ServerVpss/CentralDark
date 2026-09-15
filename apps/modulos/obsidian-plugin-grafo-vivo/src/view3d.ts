@@ -165,9 +165,13 @@ export class Grafo3DView extends ItemView {
 
   private async carregar() {
     try {
+      const headers = this.plugin.settings.knowledgeHubToken
+        ? { Authorization: `Bearer ${this.plugin.settings.knowledgeHubToken}` }
+        : undefined;
       const resp = await requestUrl({
         url: this.plugin.settings.urlGrafo,
         method: "GET",
+        headers,
       });
       if (resp.status < 200 || resp.status >= 300) throw new Error(`HTTP ${resp.status}`);
       const raw = resp.json;
