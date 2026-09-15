@@ -13,6 +13,7 @@ import { getCatalogSummary, CATALOG_VERSION } from "./tools/core/tools-catalog.j
 import { handleSkillsList, handleSkillManifest, handleSkillRaw, handleSkillInstaller, } from "./skills-public.js";
 import { correlationMiddleware, withCid } from "./correlation.js";
 import { healthDeep } from "./health-deep.js";
+import { createDevicePairingRouter } from "./device-pairing.js";
 import { startHubMissionConsumer } from "./hub-mission-consumer.js";
 import { providerAdminBridge } from "./provider-admin-bridge.js";
 import { adminGet, adminLogin, adminLogout, adminRotas, adminTools, adminLogsStream, adminTestarSse, adminBuscarLogs, adminMetricas, adminE2E, adminE2EPublico, bootstrapAdminLogCapture, } from "./admin.js";
@@ -80,6 +81,8 @@ app.use(express.json({ limit: "2mb" }));
 app.use(express.urlencoded({ extended: false, limit: "1mb" }));
 // V2: Correlation-ID + request logger estruturado (rastreia OAuth→token→tools/list→SSE)
 app.use(correlationMiddleware);
+// Device pairing da Casa: approval -> token one-shot -> heartbeat -> registry.
+app.use("/connections/centraldark", createDevicePairingRouter());
 // ─────────────────────────────── Health ──────────────────────────────────
 app.get("/health", (_req, res) => {
     res.json({

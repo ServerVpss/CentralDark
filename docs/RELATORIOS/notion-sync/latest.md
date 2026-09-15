@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-09-13T19:04:58.416Z
+# 🧠 Notion Sync — 2026-09-15T02:04:39.491Z
 
-- **Commit fonte:** `9a7d9468158c3e94b982a3ceab25e9693e012151`
+- **Commit fonte:** `5f7b095f186fc33d781936f569e05cfd02a4d480`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 490 atualizadas · ❌ 40 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 490 atualizadas · ❌ 44 erros
 
 ## Por base
 
@@ -15,8 +15,8 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
-| aprendizados | 43 | 0 | 34 | 0 | 9 |
-| estrutura | 443 | 0 | 412 | 0 | 31 |
+| aprendizados | 46 | 0 | 34 | 0 | 12 |
+| estrutura | 444 | 0 | 412 | 0 | 32 |
 
 ## Operações
 
@@ -109,6 +109,9 @@
 | aprendizados | erro | #47 — LARGE_FILE_INTEGRATION — Process Droped Files, Don't Just Acknowledge |
 | aprendizados | erro | #48 — COMMIT_LIMPO — Commit não é vassoura de git status |
 | aprendizados | erro | #49 — AUREOLA_PERMANENTE — Publicação segura e continuidade do aprendizado |
+| aprendizados | erro | #50 — X/Grok no Guardião usa o pool Hermes (igual Codex); CLI de feedback não colide evento |
+| aprendizados | erro | #51 — Guardião: log/reflexo por botão + cadeado no cristalizado |
+| aprendizados | erro | #52 — Usar pode, redesenhar não — melhorar o que já existe |
 | estrutura | atualizado | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | atualizado | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
@@ -233,6 +236,7 @@
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-06-VERTEX-INVERSO-RODADA4-PEPITAS-PROVADAS.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-08-CI-MENOS-E-MAIS-JUIZ-PORTA.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-08-GARIMPO-CHEFE-PR-MAIN-DELTA-CONTINUO.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-14-descoberta-canais-operacionais-xp.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/AIOS-GOLD-ASSAY-20260828/CAPABILITY-MATRIX.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/AIOS-GOLD-ASSAY-20260828/COUNTERPROOF.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/AIOS-GOLD-ASSAY-20260828/HERMES-PROOF-PLAN.md |

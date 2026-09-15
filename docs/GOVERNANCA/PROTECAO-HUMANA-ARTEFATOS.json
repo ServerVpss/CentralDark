@@ -26,8 +26,8 @@
     },
     {
       "role": "response_contract",
-      "path": "docs/CONSCIENCIA/2026-06-20-padrao-resposta-pivete.md",
-      "required_markers": ["CAPACIDADE", "INTENCAO", "CONDUTA", "EFEITO"]
+      "path": "docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md",
+      "required_markers": ["CAPABILITY_INTENT_CONDUCT_EFFECT_SEPARATE=true", "NO_CAPABILITY_INTENT_SUBSTITUTION=true", "OMISSION_IS_NOT_CONFESSION=true", "SAFETY_QUESTION_CLOSE_INTENT_BEFORE_CAPABILITY_EXPLANATION=true"]
     },
     {
       "role": "incident_forensics_human_safety",

@@ -5,6 +5,7 @@ import { buildCheckpoint, sanitizeIdentifier } from './precompact-session-digest
 
 test('precompact checkpoint whitelists metadata and drops raw sensitive payloads', () => {
   const secret = 'fixture';
+  const secret = 'DO_NOT_PERSIST_THIS_SECRET';
   const input = {
     hook_event_name: 'PreCompact',
     trigger: 'auto',

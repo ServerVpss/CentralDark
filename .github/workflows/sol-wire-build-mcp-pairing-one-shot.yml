@@ -1,0 +1,78 @@
+name: SOL — ligar pairing MCP e regenerar dist (one-shot)
+
+on:
+  push:
+    branches: [sol/tailscale-mcp-pairing-20260913]
+    paths:
+      - ".github/workflows/sol-wire-build-mcp-pairing-one-shot.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sol-wire-build-mcp-pairing-one-shot
+  cancel-in-progress: false
+
+jobs:
+  wire-build-commit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Ligar router no owner existente
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('apps/modulos/mcp/src/index.js')
+          s = p.read_text(encoding='utf-8')
+          import_line = 'import { createDevicePairingRouter } from "./device-pairing.js";'
+          if import_line not in s:
+              needle = 'import { healthDeep } from "./health-deep.js";'
+              assert s.count(needle) == 1, f'import needle count={s.count(needle)}'
+              s = s.replace(needle, needle + '\n' + import_line, 1)
+          mount_line = 'app.use("/connections/centraldark", createDevicePairingRouter());'
+          if mount_line not in s:
+              needle = 'app.use(correlationMiddleware);'
+              assert s.count(needle) == 1, f'mount needle count={s.count(needle)}'
+              s = s.replace(needle, needle + '\n// Device pairing da Casa: approval -> token one-shot -> heartbeat -> registry.\n' + mount_line, 1)
+          p.write_text(s, encoding='utf-8')
+          print('PAIRING_ROUTER_WIRED=PASS')
+          PY
+
+      - name: Build e testes no toolchain pinado
+        shell: bash
+        working-directory: apps/modulos/mcp
+        env:
+          MCP_LOG_DIR: ${{ runner.temp }}/centraldark-mcp-logs
+        run: |
+          set -Eeuo pipefail
+          npm ci
+          npm run typecheck
+          node --test tests/*.test.mjs
+          rm -rf dist
+          npm run build
+          test -f dist/device-pairing.js
+          grep -Fq 'createDevicePairingRouter' dist/index.js
+          echo 'MCP_TESTS=PASS'
+          echo 'MCP_DIST_REGENERATED=PASS'
+
+      - name: Commitar somente source + dist gerado
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          git config user.name 'CentralDark SOL Bot'
+          git config user.email 'bot@centralldark.com'
+          git add apps/modulos/mcp/src/index.js apps/modulos/mcp/dist
+          if git diff --cached --quiet; then
+            echo 'NO_BUILD_DELTA=PASS'
+            exit 0
+          fi
+          git commit -m '🔌 MCP: ligar device pairing e regenerar dist exato'
+          git push origin HEAD:${GITHUB_REF_NAME}
+          echo 'SOURCE_DIST_COMMIT=PASS'

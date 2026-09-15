@@ -163,6 +163,31 @@
       "unknown_suffix_rule": "MEASURE_FORWARD_UNTIL_CLAIM_TARGET_IS_PROVED_OR_BLOCKED",
       "persistence_target": "CANONICAL_OWNER_NOT_PR_ONLY"
     },
+    "axis_sweep": {
+      "marker": "TEN_AXIS_GLOBAL_SWEEP",
+      "scope": "GLOBAL",
+      "mode": "READ_PARALLEL_FANIN_SINGLE_WRITER",
+      "axes": [
+        "INTENT_AUTHORITY",
+        "OWNER_WRITER_LEASE",
+        "REPO_PR_MAIN_DRIFT",
+        "CI_WORKFLOW_RUNNER",
+        "RUNTIME_VPS_PROCESS",
+        "BRIDGE_MCP_TOOLING",
+        "INPUT_VOICE_INTENT",
+        "ROUTER_PROVIDER_MODEL",
+        "MEMORY_RECEIPT_CONTINUITY",
+        "SECURITY_SECRET_BOUNDARY"
+      ],
+      "reader_parallelism": true,
+      "reader_mutation": false,
+      "writer_parallelism_same_scope": false,
+      "fan_in": "CURRENT_REALITY_RENDEZVOUS",
+      "mutation_after_fan_in": true,
+      "resume_rule": "CONTINUE_FROM_FIRST_MUTABLE_UNKNOWN_OR_REOPENED_EDGE",
+      "unknown_is_pass": false,
+      "no_new_owner_when_existing_owner_fits": true
+    },
     "creation_gate": {
       "mode": "ALL",
       "create_new_only_if": [
@@ -195,7 +220,10 @@
     },
     "enforcement": {
       "consumer": "scripts/lupa/validar-porta-de-entrada.mjs",
+      "global_guardrail": "scripts/lupa/validar-continuidade-global.mjs",
       "gate": ".github/workflows/porta-de-entrada.yml",
+      "shell_writer_gate": "scripts/lupa/writer-safe-push-main.sh",
+      "writer_push_must_run_global_guardrail": true,
       "fail_closed": true,
       "counterproof_required": true,
       "future_execution_required": true,
@@ -336,6 +364,7 @@
     "cross_reference_capabilities_with_request",
     "classify_authority_and_runtime_state",
     "find_first_mutable_unknown_or_reopened_edge",
+    "measure_mutable_edge_only",
     "measure_available_tools",
     "normalize_evidence_scope_time_and_provenance",
     "arbitrate_conflict_by_discriminating_test_if_needed",
@@ -689,6 +718,12 @@
   "internal_receipt_fields": [
     "USER_INTENT",
     "RECOVERED_CONTEXT",
+    "DURABLE_FACT_PREFIX",
+    "FIRST_MUTABLE_EDGE",
+    "CURRENT_BINDING_CHAIN",
+    "AXIS_SWEEP",
+    "REOPEN_CAUSE",
+    "PERSISTENCE_TARGET",
     "EXISTING_CAPABILITIES",
     "EVIDENCE_OPENED",
     "AUTHORITY_CLASSIFICATION",

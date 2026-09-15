@@ -5,23 +5,34 @@
       "label": "CentralDark: Bootstrap",
       "type": "process",
       "command": "python",
-      "args": [
-        "scripts/trigger-fabric/centraldark_master_cycle.py",
-        "--text",
-        "#ACORDAR !CENTRALDARK",
-        "--chefe-source",
-        "--telemetry"
-      ],
-      "options": {
-        "cwd": "${workspaceFolder}"
-      },
+      "args": ["scripts/trigger-fabric/centraldark_master_cycle.py","--text","#ACORDAR !CENTRALDARK","--chefe-source","--telemetry"],
+      "options": {"cwd": "${workspaceFolder}"},
       "problemMatcher": [],
-      "presentation": {
-        "reveal": "always",
-        "panel": "shared",
-        "clear": false,
-        "focus": false
-      }
+      "presentation": {"reveal":"always","panel":"shared","clear":false,"focus":false}
+    },
+    {
+      "label": "CentralDark Claude: Hermes ON",
+      "type": "process",
+      "command": "powershell.exe",
+      "args": ["-NoProfile","-ExecutionPolicy","Bypass","-File","${workspaceFolder}\\scripts\\vscode\\centraldark-claude-mode.ps1","ON"],
+      "problemMatcher": [],
+      "presentation": {"reveal":"always","panel":"shared","clear":false,"focus":false}
+    },
+    {
+      "label": "CentralDark Claude: Direct OFF",
+      "type": "process",
+      "command": "powershell.exe",
+      "args": ["-NoProfile","-ExecutionPolicy","Bypass","-File","${workspaceFolder}\\scripts\\vscode\\centraldark-claude-mode.ps1","OFF"],
+      "problemMatcher": [],
+      "presentation": {"reveal":"always","panel":"shared","clear":false,"focus":false}
+    },
+    {
+      "label": "CentralDark Claude: Route STATUS",
+      "type": "process",
+      "command": "powershell.exe",
+      "args": ["-NoProfile","-ExecutionPolicy","Bypass","-File","${workspaceFolder}\\scripts\\vscode\\centraldark-claude-mode.ps1","STATUS"],
+      "problemMatcher": [],
+      "presentation": {"reveal":"always","panel":"shared","clear":false,"focus":false}
     }
   ]
 }

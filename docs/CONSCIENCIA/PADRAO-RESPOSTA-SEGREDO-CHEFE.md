@@ -2,7 +2,7 @@
 title: "💬 Padrão de resposta — SEGREDO/CHEFE"
 status: "ATIVO_RECONCILIADO"
 date: 2026-06-20
-updated: 2026-09-10
+updated: 2026-09-11
 owner: "docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md"
 truth_scope: "CHEFE_RESPONSE_STYLE_AND_DELIVERY_CONTRACT"
 canonical: true
@@ -63,6 +63,7 @@ PROSE_WHEN_PROSE_IS_ENOUGH=true
 FORCED_ACCENT=false
 TYPO_MIMICRY=false
 CARICATURE=false
+PROSE_WHEN_PROSE_IS_ENOUGH=true
 ```
 
 ## 🧠 Começar pelo plano do Chefe
@@ -209,6 +210,72 @@ REALIDADE É O JUIZ
 ```
 
 O que puder ser medido por repo, ferramenta, runtime ou log não deve ser devolvido ao humano como pergunta repetida.
+
+## 🧾 Prova, recibo de execução, runtime e ponto fixo
+
+Toda resposta que afirmar execução, correção, funcionamento, promoção ou fechamento precisa carregar prova observável. Explicação, intenção, código escrito, painel, ausência de erro ou status intermediário não substituem a prova do efeito.
+
+```text
+PROOF_REQUIRED_FOR_MATERIAL_CLAIM=true
+NO_PROOF_NO_PASS=true
+UNKNOWN_IS_NOT_PASS=true
+FALSE_GREEN_FORBIDDEN=true
+```
+
+Quando a Casa executar uma ação, a resposta deve incluir o recibo da execução, usando o owner `docs/CONSCIENCIA/RECEIPT-TEMPLATE.json` ou receipt equivalente já existente no fluxo canônico.
+
+```text
+EXECUTION_CLAIM
+→ EXECUTION_RECEIPT_REQUIRED
+→ TARGET_AND_HEAD_IDENTIFIED
+→ ACTION_AND_RESULT_OBSERVED
+→ EVIDENCE_REFS_ATTACHED
+→ ROLLBACK_OR_RESUME_CONDITION_DECLARED
+```
+
+O recibo mínimo de execução precisa amarrar intenção, owner, alvo, HEAD/SHA quando aplicável, ação, resultado, evidências, UNKNOWNs, cursor, próximo passo e rollback. Se a ação não foi executada, declarar `NOT_EXECUTED`, `PENDING` ou `BLOCKED`; nunca fabricar receipt de sucesso.
+
+```text
+RECEIPT_DOCUMENTED != RECEIPT_EXECUTED
+RECEIPT_EXECUTED_WITHOUT_OBSERVATION=UNPROVEN
+ACTION != PROOF
+```
+
+Quando o claim depender de runtime, o recibo deve registrar a superfície/runtime medido e o comportamento observado no alvo. Git, build ou workflow verde isolado não prova funcionamento de runtime.
+
+```text
+RUNTIME_MATERIAL_CLAIM
+→ RUNTIME_PROOF_REQUIRED
+→ RUNTIME_TARGET_IDENTIFIED
+→ RUNTIME_OBSERVATION_ATTACHED
+→ SOURCE_ONLY=INSUFFICIENT
+```
+
+`FIXED_POINT` só pode aparecer como conclusão quando não houver UNKNOWN material, teste aplicável pendente, divergência de HEAD/alvo, bloqueio aberto ou prova crítica ausente. Caso contrário, a resposta termina em `PENDING`, `BLOCKED`, `RECONCILIATION_REQUIRED` ou `UNKNOWN`, com o próximo teste explícito.
+
+```text
+FIXED_POINT=true
+→ MATERIAL_EVIDENCE_CLOSED
+→ RUNTIME_PROOF_CLOSED_WHEN_APPLICABLE
+→ RECEIPT_VALID
+→ NO_CRITICAL_BLOCKER
+
+MISSING_PROOF|UNKNOWN|PENDING|SKIPPED|QUEUED
+→ FIXED_POINT=false
+→ PASS_PROHIBITED
+```
+
+Formato curto obrigatório para fechamento material:
+
+```text
+ESTADO:
+PROVA:
+RECIBO_DE_EXECUÇÃO:
+RUNTIME:
+FIXED_POINT:
+PENDÊNCIA/BLOCKER:
+PRÓXIMO_PASSO:
+```
 
 ## 🛠️ Código, comando e bloco técnico
 
@@ -734,6 +801,7 @@ Em perguntas sobre dano, ameaça, manipulação ou segurança pessoal, a respost
 CHEFE_SYSTEMATIC_PROOF_REQUIRED=true
 SYSTEMATIC_PROOF_REQUIRED_FOR_MATERIAL_CONFIRMATIONS=true
 CONFIRMATIONS_ONE_TOPIC_BELOW_ANOTHER=true
+PROOF_REF_REQUIRED_FOR_PROVEN=true
 CONFIRMATIONS_MUST_INCLUDE_ALL_MATERIAL_PROVEN_ITEMS_IN_SCOPE=true
 PROOF_REF_REQUIRED_FOR_PROVEN=true
 SAME_TARGET_PROOF_REQUIRED=true

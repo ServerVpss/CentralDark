@@ -30,6 +30,7 @@ const MAIN_WRITERS = Object.freeze([
   ".github/workflows/obsidian-index.yml",
   ".github/workflows/estado-retomada.yml",
   ".github/workflows/painel-validacao.yml",
+  ".github/workflows/painel-auto-update.yml",]);
   ".github/workflows/painel-auto-update.yml",
 ]);
 const PRE_MAIN_GATES = Object.freeze([
@@ -68,6 +69,19 @@ const REQUIRED = {
     "THINK", "ACT", "OBSERVE", "UPDATE_STATE", "COUNTERPROVE", "REMEDY", "REMEASURE", "FIXED_POINT", "RECEIPT", "CONTINUITY",
   ],
   roles: ["CHEFE", "OWNER", "WRITER", "CONNECTOR", "MODEL", "JUDGE"],
+  axis_sweep: [
+    "INTENT_AUTHORITY",
+    "OWNER_WRITER_LEASE",
+    "REPO_PR_MAIN_DRIFT",
+    "CI_WORKFLOW_RUNNER",
+    "RUNTIME_VPS_PROCESS",
+    "BRIDGE_MCP_TOOLING",
+    "INPUT_VOICE_INTENT",
+    "ROUTER_PROVIDER_MODEL",
+    "MEMORY_RECEIPT_CONTINUITY",
+    "SECURITY_SECRET_BOUNDARY",
+  ],
+  current_binding_chain: ["PROCESS", "BRIDGE", "INPUT_OR_VOICE", "INTENT", "ROUTER", "ACTION", "RECEIPT"],
 };
 
 const read = (path) => readFileSync(join(ROOT, path), "utf8");
@@ -80,7 +94,6 @@ const hasAll = (actual, expected) => {
 function validateMainWriter(path, text, sharedScriptText) {
   const errors = [];
 
-  // Padrao canonico: workflow delega push ao script unico (retry + worktree + gates).
   if (text.includes(SHARED_WRITER_PUSH)) {
     if (typeof sharedScriptText !== "string") {
       errors.push(`MAIN_WRITER_SHARED_SCRIPT_MISSING:${path}`);
@@ -94,8 +107,6 @@ function validateMainWriter(path, text, sharedScriptText) {
     if (!sharedScriptText.includes("git push origin HEAD:main")) {
       errors.push(`MAIN_WRITER_SHARED_PUSH_MISSING:${path}`);
     }
-    // Remove shell comments (# ...) before scanning for forbidden commands,
-    // so a comment like "# - ZERO rebase -X ours" is not flagged as a real command.
     const stripComments = (src) => src.split("\n").filter((l) => !l.trim().startsWith("#")).join("\n");
     const scanned = stripComments(sharedScriptText);
     if (scanned.includes("rebase -X ours") || /git\s+push\s+--force/.test(scanned)) {
@@ -133,12 +144,40 @@ function validateExtension(extension) {
   expect(extension?.invariants?.ONE_WRITER_PER_SCOPE === true, "EXECUTION_EXTENSION_ONE_WRITER");
   expect(extension?.invariants?.MODEL_NE_AUTHORITY === true, "EXECUTION_EXTENSION_MODEL_AUTHORITY");
   expect(extension?.invariants?.CONNECTOR_NE_AUTHORITY === true, "EXECUTION_EXTENSION_CONNECTOR_AUTHORITY");
+  expect(extension?.invariants?.DURABLE_FACTS_SURVIVE_SESSIONS === true, "EXECUTION_EXTENSION_DURABLE_FACTS");
+  expect(extension?.invariants?.REMEASURE_ONLY_TEMPORAL_EDGES === true, "EXECUTION_EXTENSION_TEMPORAL_REMEASURE");
+  expect(extension?.invariants?.SENSOR_FAILURE_DOES_NOT_ERASE_DURABLE_FACT === true, "EXECUTION_EXTENSION_SENSOR_FAILURE");
+  expect(extension?.invariants?.GLOBAL_LEARNING_PROMOTES_TO_CANONICAL_OWNER === true, "EXECUTION_EXTENSION_GLOBAL_LEARNING");
+  expect(extension?.invariants?.READER_FRONT_NE_WRITER === true, "EXECUTION_EXTENSION_READER_NOT_WRITER");
+  expect(extension?.invariants?.FANOUT_MUST_FANIN === true, "EXECUTION_EXTENSION_FANIN_REQUIRED");
   expect(hasAll(extension?.execution_loop, REQUIRED.execution_loop), "EXECUTION_EXTENSION_REACT_LOOP");
   expect(extension?.counterproof_transition?.CONCLUSION_FALSIFIED?.includes("EXECUTE_CORRECTION_IN_CURRENT_RUN_IF_AUTHORIZED"), "EXECUTION_EXTENSION_CURRENT_RUN_REMEDY");
   expect(extension?.error_discovered?.flow?.includes("RECORD_EXACT_CONTINUITY_RECEIPT"), "EXECUTION_EXTENSION_CONTINUITY_RECEIPT");
   expect(extension?.adapter_policy?.thin_adapter_only === true, "EXECUTION_EXTENSION_THIN_ADAPTER");
   expect(extension?.adapter_policy?.model_change_changes_owner === false, "EXECUTION_EXTENSION_MODEL_OWNER_STABLE");
   expect(extension?.writer_collision?.same_scope_writer_exists?.includes("DO_NOT_COMPETE"), "EXECUTION_EXTENSION_WRITER_COLLISION");
+
+  const lifetime = extension?.evidence_lifetime;
+  expect(lifetime?.marker === "DURABLE_FACT_TEMPORAL_EDGE_SPLIT", "EXECUTION_EXTENSION_EVIDENCE_LIFETIME");
+  expect(lifetime?.pr_receipt_is_global_memory === false, "EXECUTION_EXTENSION_PR_NOT_GLOBAL_MEMORY");
+  expect(lifetime?.reusable_learning_pr_only === "INSUFFICIENT_PROMOTE_TO_CANONICAL_OWNER", "EXECUTION_EXTENSION_PROMOTE_LEARNING");
+  expect(hasAll(lifetime?.current_binding_chain, REQUIRED.current_binding_chain), "EXECUTION_EXTENSION_CURRENT_BINDING_CHAIN");
+  expect(lifetime?.current_binding_rule === "START_FROM_FIRST_MUTABLE_UNKNOWN_OR_REOPENED_EDGE", "EXECUTION_EXTENSION_CURRENT_BINDING_RULE");
+  expect(lifetime?.known_prefix_rule === "DO_NOT_REMEASURE_STABLE_PREFIX_WITHOUT_REOPEN_CAUSE", "EXECUTION_EXTENSION_STABLE_PREFIX");
+
+  const sweep = extension?.axis_sweep;
+  const axes = Array.isArray(sweep?.axes) ? sweep.axes : [];
+  expect(sweep?.marker === "TEN_AXIS_GLOBAL_SWEEP", "EXECUTION_EXTENSION_AXIS_MARKER");
+  expect(sweep?.scope === "GLOBAL", "EXECUTION_EXTENSION_AXIS_SCOPE");
+  expect(sweep?.mode === "READ_PARALLEL_FANIN_SINGLE_WRITER", "EXECUTION_EXTENSION_AXIS_MODE");
+  expect(axes.length === 10 && new Set(axes).size === 10 && hasAll(axes, REQUIRED.axis_sweep), "EXECUTION_EXTENSION_AXIS_TEN_UNIQUE");
+  expect(sweep?.reader_parallelism === true, "EXECUTION_EXTENSION_AXIS_READER_PARALLEL");
+  expect(sweep?.reader_mutation === false, "EXECUTION_EXTENSION_AXIS_READER_NO_MUTATION");
+  expect(sweep?.writer_parallelism_same_scope === false, "EXECUTION_EXTENSION_AXIS_ONE_WRITER");
+  expect(sweep?.fan_in === "CURRENT_REALITY_RENDEZVOUS", "EXECUTION_EXTENSION_AXIS_FANIN");
+  expect(sweep?.mutation_after_fan_in === true, "EXECUTION_EXTENSION_AXIS_MUTATION_AFTER_FANIN");
+  expect(sweep?.unknown_is_pass === false, "EXECUTION_EXTENSION_AXIS_UNKNOWN_NOT_PASS");
+  expect(sweep?.no_new_owner_when_existing_owner_fits === true, "EXECUTION_EXTENSION_AXIS_REUSE_OWNER");
   return errors;
 }
 
@@ -259,6 +298,22 @@ function counterprove(contract, extension, contractText, portaText, gateText, wr
   brokenExtension.counterproof_transition.CONCLUSION_FALSIFIED = brokenExtension.counterproof_transition.CONCLUSION_FALSIFIED.filter((item) => item !== "EXECUTE_CORRECTION_IN_CURRENT_RUN_IF_AUTHORIZED");
   variants.push({ contract: clone(contract), extension: brokenExtension, portaText, writerTexts, sharedScriptText });
 
+  const missingAxis = clone(extension);
+  missingAxis.axis_sweep.axes = missingAxis.axis_sweep.axes.filter((item) => item !== "SECURITY_SECRET_BOUNDARY");
+  variants.push({ contract: clone(contract), extension: missingAxis, portaText, writerTexts, sharedScriptText });
+
+  const competingWriter = clone(extension);
+  competingWriter.axis_sweep.writer_parallelism_same_scope = true;
+  variants.push({ contract: clone(contract), extension: competingWriter, portaText, writerTexts, sharedScriptText });
+
+  const brokenFanIn = clone(extension);
+  brokenFanIn.axis_sweep.fan_in = "PARALLEL_UNKNOWN_SINK";
+  variants.push({ contract: clone(contract), extension: brokenFanIn, portaText, writerTexts, sharedScriptText });
+
+  const lostDurableFact = clone(extension);
+  lostDurableFact.invariants.DURABLE_FACTS_SURVIVE_SESSIONS = false;
+  variants.push({ contract: clone(contract), extension: lostDurableFact, portaText, writerTexts, sharedScriptText });
+
   return variants.every(({ contract: candidate, extension: candidateExtension, portaText: candidatePorta, writerTexts: candidateWriters, sharedScriptText: candidateShared }) =>
     validate(candidate, candidateExtension, contractText, candidatePorta, gateText, candidateWriters, candidateShared).length > 0
   );
@@ -294,6 +349,8 @@ const report = {
   extension: EXTENSION,
   scope: contract?.global_continuity_policy?.scope ?? null,
   temporal_scope: contract?.global_continuity_policy?.temporal_scope ?? null,
+  axis_sweep: extension?.axis_sweep?.axes ?? [],
+  current_binding_chain: extension?.evidence_lifetime?.current_binding_chain ?? [],
   main_writers: MAIN_WRITERS,
   removed_main_writers: REMOVED_MAIN_WRITERS,
   shared_writer_push: SHARED_WRITER_PUSH,
@@ -304,6 +361,6 @@ const report = {
 };
 
 if (JSON_OUT) console.log(JSON.stringify(report, null, 2));
-else console.log(`CONTINUIDADE_GLOBAL=${report.ok ? "PASS" : "BLOCKED"} MAIN_WRITERS=${MAIN_WRITERS.length} EXTENSION=${extension ? "PASS" : "BLOCKED"} INPUT_AUTHORITY=${report.input_authority_boundary} COUNTERPROOF=${report.counterproof} ERRORS=${errors.length}`);
+else console.log(`CONTINUIDADE_GLOBAL=${report.ok ? "PASS" : "BLOCKED"} AXES=${report.axis_sweep.length} MAIN_WRITERS=${MAIN_WRITERS.length} EXTENSION=${extension ? "PASS" : "BLOCKED"} INPUT_AUTHORITY=${report.input_authority_boundary} COUNTERPROOF=${report.counterproof} ERRORS=${errors.length}`);
 for (const error of errors) console.error(`ERRO ${error}`);
 process.exit(report.ok ? 0 : 1);
