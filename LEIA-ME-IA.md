@@ -66,6 +66,7 @@ Carregue nesta ordem:
 17. `.agents/skills/git-conflict-resolve-house-standard/SKILL.md` quando houver PR em conflito, main avançando sob PR aberto, ou dependabot travado — padrão único, motor em `scripts/dependabot/resolve-conflicts.sh`.
 18. estado atual de branch, HEAD, PR, runtime, writer e ferramentas aplicáveis.
 
+Consulta sob demanda: para perguntas sobre recursos, limites, modelos, configuração ou comportamento de ChatGPT/Work, Codex e APIs OpenAI, carregar `.agents/skills/openai-docs/SKILL.md`. Não carregar o corpo em tarefas alheias; usar busca + abertura de documentação oficial + evidência antes de responder. Casos de avaliação acompanham a skill.
 Referências canônicas de apoio que a porta precisa manter alcançáveis para o gate estrutural:
 
 - `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MATERIAL-INGEST.md`
