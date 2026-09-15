@@ -104,7 +104,10 @@ export class GrafoVivoView extends ItemView {
     if (!this.container) return;
     try {
       // Usa requestUrl do Obsidian pra ignorar CORS (funciona desktop e mobile).
-      const resp = await requestUrl({ url: this.plugin.settings.urlGrafo, method: "GET" });
+      const headers = this.plugin.settings.knowledgeHubToken
+        ? { Authorization: `Bearer ${this.plugin.settings.knowledgeHubToken}` }
+        : undefined;
+      const resp = await requestUrl({ url: this.plugin.settings.urlGrafo, method: "GET", headers });
       if (resp.status < 200 || resp.status >= 300) throw new Error(`HTTP ${resp.status}`);
       const dados = this.normalizarDados(resp.json);
       this.render(dados);
