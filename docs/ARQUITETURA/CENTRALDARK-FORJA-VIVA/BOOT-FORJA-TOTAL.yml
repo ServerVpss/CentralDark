@@ -1,0 +1,60 @@
+schema: centraldark.forja-viva.boot-forja-total.v1
+status: CANDIDATE_UNTIL_VPS_WORKFLOW_PASS
+owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
+authority: SEGREDO/CHEFE
+trigger: "!BOOT-FORJA-TOTAL"
+canonical_trigger: "!CENTRALDARK"
+profile: FORJA_TOTAL
+
+reuse:
+  trigger_fabric: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
+  fixed_point_runner: apps/modulos/fixed-point-fabric/
+  drive_runtime: CentralDark-SyncDrive
+  drive_ingest: scripts/drive-ingest-once.sh
+  ingestion_destination: scripts/memory-linker/inbox/
+  forja_visual_owner: docs/ARQUITETURA/CENTRALDARK-FORJA-VIVA/FORJA_VIVA_CONTINUIDADE.md
+  visual_names: docs/ARQUITETURA/CENTRALDARK-FORJA-VIVA/VISUAL-NAMING-REGISTRY.yml
+  dependabot: .github/workflows/dependabot-auto-merge.yml
+
+invariants:
+  second_brain: false
+  second_router: false
+  second_judge: false
+  second_fixed_point_runner: false
+  raw_drive_material_is_canonical: false
+  drive_direct_overwrite: false
+  provenance_required: true
+  sha256_required: true
+  dedupe_required: true
+  secret_scan_required: true
+  meta_lupa_required: true
+  counterproof_required: true
+  reality_judge_required: true
+  fixed_point_required: true
+  unknown_is_pass: false
+
+vps_flow:
+  - DRIVE_READ
+  - SECRET_SCAN
+  - SHA256
+  - DEDUPE
+  - MEMORY_LINKER_INBOX
+  - DREAM_REVIEW
+  - META_LUPA
+  - OWNER
+  - TESTE
+  - CONTRAPROVA
+  - REALITY_JUDGE
+  - FIXED_POINT
+  - REGISTRA
+
+proof:
+  workflow: .github/workflows/centraldark-fixed-point-fabric.yml
+  required:
+    - DRIVE_INGEST_SELF_TEST=PASS
+    - TRIGGER_ADAPTER_TEST=PASS
+    - FIXED_POINT_PACKAGE_TESTS=PASS
+    - VPS_HEARTBEAT_HEALTH=PASS
+    - DRIVE_INGEST_RUNTIME=PASS
+    - CENTRALDARK_SYNC_DRIVE=ONLINE
+  fixed_point_claim_before_all_required: forbidden
