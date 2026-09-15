@@ -80,10 +80,10 @@ deploy_drive_owner() {
 
   rollback_drive() {
     local rc=$?
-    trap - ERR
+    trap - EXIT ERR
     if [[ "$rc" -ne 0 && "$mutated" == "1" ]]; then
-      if [[ "$sync_existed" == "1" ]]; then install -m 0755 "$backup_dir/sync-loop.sh" "$target_sync"; else rm -f "$target_sync"; fi
-      if [[ "$ingest_existed" == "1" ]]; then install -m 0755 "$backup_dir/drive-ingest-once.sh" "$target_ingest"; else rm -f "$target_ingest"; fi
+      if [[ "$sync_existed" == "1" ]]; then install -m 0755 "$backup_dir/sync-loop.sh" "$target_sync" || true; else rm -f "$target_sync"; fi
+      if [[ "$ingest_existed" == "1" ]]; then install -m 0755 "$backup_dir/drive-ingest-once.sh" "$target_ingest" || true; else rm -f "$target_ingest"; fi
       pm2 restart "$PROCESS_NAME" >/dev/null 2>&1 || true
       pm2 save --force >/dev/null 2>&1 || true
       log "DRIVE_ROLLBACK=ATTEMPTED"
@@ -91,7 +91,7 @@ deploy_drive_owner() {
     rm -rf "$backup_dir"
     exit "$rc"
   }
-  trap rollback_drive ERR
+  trap rollback_drive EXIT ERR
 
   install -m 0755 "$SOURCE_ROOT/scripts/sync-loop.sh" "$target_sync"
   install -m 0755 "$SOURCE_ROOT/scripts/drive-ingest-once.sh" "$target_ingest"
@@ -122,7 +122,7 @@ deploy_drive_owner() {
   grep -Eq '^DRIVE_INGEST_SENTINEL=(PASS|NO_CHANGE)$' /tmp/centraldark-drive-ingest-routed.txt || fail "Memory Linker sentinel não confirmou roteamento" 25
 
   mutated=0
-  trap - ERR
+  trap - EXIT ERR
   rm -rf "$backup_dir"
   log "CENTRALDARK_SYNC_DRIVE=ONLINE"
   log "DRIVE_INGEST_RUNTIME=PASS"
@@ -165,7 +165,9 @@ main() {
   install_missing_deps
   preflight
   deploy_drive_owner
-  if ! deploy_heartbeat; then
+  if deploy_heartbeat; then
+    :
+  else
     rc=$?
     log "FORJA_TOTAL_STATUS=PARTIAL_DRIVE_PASS_HEARTBEAT_BLOCKED"
     exit "$rc"

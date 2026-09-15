@@ -14,7 +14,7 @@ case "${1:-}" in
     printf '[{"Name":"DELTAUNIFICADOCENTRALDARK.md","Path":"DELTAUNIFICADOCENTRALDARK.md"}]\n'
     ;;
   cat)
-    if [[ "${FAKE_SECRET:-0}" == "1" ]]; then
+    if [[ "${FAKE_FLAG:-0}" == "1" ]]; then
       printf 'password=%s\n' "$(printf 'A%.0s' {1..20})"
     else
       printf '%s\n' '# DELTA UNIFICADO' 'BOOT-FORJA-TOTAL' 'fixed point com provenance'
@@ -26,7 +26,13 @@ case "${1:-}" in
     ;;
 esac
 FAKE
-chmod +x "$TMP/bin/rclone"
+
+cat >"$TMP/bin/node" <<'FAKE'
+#!/usr/bin/env bash
+set -euo pipefail
+printf 'fake inbox sentinel pass\n' >/dev/null
+FAKE
+chmod +x "$TMP/bin/rclone" "$TMP/bin/node"
 
 export PATH="$TMP/bin:$PATH"
 export CENTRALDARK_REPO_ROOT="$ROOT"
@@ -44,14 +50,25 @@ second="$($ROOT/scripts/drive-ingest-once.sh)"
 grep -q '^DRIVE_INGEST_STATUS=NO_CHANGE$' <<<"$second"
 test "$(find "$TMP/inbox" -maxdepth 1 -type f -name '*.txt' | wc -l)" -eq 1
 
-rm -f "$TMP/state/last.sha256"
-export FAKE_SECRET=1
+# Contraprova do bug histórico: um probe com sentinel desligado NÃO pode impedir
+# a mesma SHA de ser roteada quando o daemon ligar o sentinel depois.
+export CENTRALDARK_DRIVE_INGEST_RUN_SENTINEL=1
+routed="$($ROOT/scripts/drive-ingest-once.sh)"
+grep -q '^DRIVE_INGEST_STATUS=NO_CHANGE$' <<<"$routed"
+grep -q '^DRIVE_INGEST_SENTINEL=PASS$' <<<"$routed"
+
+routed_again="$($ROOT/scripts/drive-ingest-once.sh)"
+grep -q '^DRIVE_INGEST_SENTINEL=NO_CHANGE$' <<<"$routed_again"
+
+rm -f "$TMP/state/last-ingested.sha256" "$TMP/state/last-payload-name" "$TMP/state/last-routed.sha256"
+export CENTRALDARK_DRIVE_INGEST_RUN_SENTINEL=0
+export FAKE_FLAG=1
 set +e
-third="$($ROOT/scripts/drive-ingest-once.sh 2>&1)"
+blocked="$($ROOT/scripts/drive-ingest-once.sh 2>&1)"
 rc=$?
 set -e
 test "$rc" -eq 27
-grep -q '^DRIVE_INGEST_STATUS=BLOCKED_SECRET$' <<<"$third"
+grep -q '^DRIVE_INGEST_STATUS=BLOCKED_SECRET$' <<<"$blocked"
 test "$(find "$TMP/inbox" -maxdepth 1 -type f -name '*.txt' | wc -l)" -eq 1
 
 echo "DRIVE_INGEST_SELF_TEST=PASS"
