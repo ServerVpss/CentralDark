@@ -17,6 +17,7 @@ const REGRAS_PATH = process.env.REGRAS_PATH || '/root/CentralDark/docs/CONSCIENC
 const DEBATES_DIR = '/root/CentralDark/docs/CONSCIENCIA/ARSENAL/DEBATES';
 const EVOLUCAO_DIR = '/root/CentralDark/docs/CONSCIENCIA/ARSENAL/EVOLUCAO';
 const PENDENCIAS_PATH = '/root/CentralDark/docs/PENDENCIAS.md';
+const GRAPH_PANEL_URL = process.env.GRAPH_PANEL_URL || 'http://127.0.0.1:3030/api/graph';
 
 const MODELS = [
   { id: 'arsenal-router',   name: '🎯 Arsenal Router (rápido)' },
@@ -309,6 +310,22 @@ const server = http.createServer(async (req, res) => {
       return res.end(body);
     } catch {
       return json(res, 502, { error: 'graph_upstream_unavailable', request_id: requestId });
+    }
+  }
+
+  // Grafo Vivo atrás da API única CentralDark. Consumidores internos não chamam grafo.centralldark.com diretamente.
+  if (req.method === 'GET' && pathOnly === '/api/graph') {
+    try {
+      const query = rawUrl.includes('?') ? rawUrl.slice(rawUrl.indexOf('?')) : '';
+      const upstream = `${GRAPH_PANEL_URL}${query}`;
+      const r = await fetch(upstream, { headers: { 'accept': 'application/json' } });
+      const text = await r.text();
+      res.statusCode = r.status;
+      res.setHeader('content-type', r.headers.get('content-type') || 'application/json; charset=utf-8');
+      res.setHeader('cache-control', 'no-store');
+      return res.end(text);
+    } catch (e) {
+      return json(res, 502, { error: 'graph_proxy_failed', message: e.message, request_id: requestId });
     }
   }
 

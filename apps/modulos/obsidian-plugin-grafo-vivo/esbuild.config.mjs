@@ -5,6 +5,7 @@ import process from "node:process";
 import builtins from "builtin-modules";
 
 const prod = process.argv[2] === "production";
+const nodeBuiltins = builtins.map((m) => `node:${m}`);
 
 const context = await esbuild.context({
   entryPoints: ["src/main.ts"],
@@ -24,6 +25,7 @@ const context = await esbuild.context({
     "@lezer/highlight",
     "@lezer/lr",
     ...builtins,
+    ...nodeBuiltins,
   ],
   format: "cjs",
   target: "es2020",
@@ -33,7 +35,6 @@ const context = await esbuild.context({
   minify: prod,
   outfile: "main.js",
 });
-
 if (prod) {
   await context.rebuild();
   await context.dispose();

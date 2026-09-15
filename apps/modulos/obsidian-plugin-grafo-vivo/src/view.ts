@@ -13,12 +13,17 @@ interface NoGrafo {
   obsidian_path?: string;
   x?: number;
   y?: number;
+  fx?: number;
+  fy?: number;
+  val?: number;
+  coreRank?: number;
 }
 
 interface ArestaGrafo {
   source: string;
   target: string;
   ativa?: boolean;
+  visual?: boolean;
 }
 
 interface DadosGrafo {
@@ -105,7 +110,7 @@ export class GrafoVivoView extends ItemView {
     try {
       // Usa requestUrl do Obsidian pra ignorar CORS (funciona desktop e mobile).
       const headers = this.plugin.settings.knowledgeHubToken
-        ? { Authorization: `Bearer ${this.plugin.settings.knowledgeHubToken}` }
+        ? { Authorization: `Bearer ${this.plugin.settings.knowledgeHubToken}`, "x-api-key": this.plugin.settings.knowledgeHubToken }
         : undefined;
       const resp = await requestUrl({ url: this.plugin.settings.urlGrafo, method: "GET", headers });
       if (resp.status < 200 || resp.status >= 300) throw new Error(`HTTP ${resp.status}`);
@@ -146,12 +151,22 @@ export class GrafoVivoView extends ItemView {
         ? bruto.links
         : [];
 
-    const nodes: NoGrafo[] = nodesBrutos.map((n: any) => ({
+    const coreIds = new Map<string, { x: number; y: number; val: number; coreRank: number }>([
+      ["CONSCIÊNCIA", { x: 0, y: 0, val: 13, coreRank: 1 }],
+      ["CONSCIENCIA", { x: 0, y: 0, val: 13, coreRank: 1 }],
+      ["MAPA-DO-CÉREBRO", { x: -44, y: -26, val: 9, coreRank: 2 }],
+      ["MAPA-DO-CEREBRO", { x: -44, y: -26, val: 9, coreRank: 2 }],
+      ["00-LEIA-PRIMEIRO", { x: -38, y: 36, val: 9, coreRank: 3 }],
+      ["INDEX", { x: 46, y: 26, val: 9, coreRank: 4 }],
+    ]);
+
+    const nodesBase: NoGrafo[] = nodesBrutos.map((n: any) => ({
       id: String(n.id),
       label: n.label ?? n.id,
       category: n.category ?? this.mapearCategoria(n.type, n.group),
       obsidian_path: n.obsidian_path,
     }));
+    const nodes = this.aplicarLayoutCaracol(nodesBase, coreIds);
 
     const edges: ArestaGrafo[] = edgesBrutas.map((e: any) => {
       const source = e.source ?? e.from;
@@ -164,7 +179,44 @@ export class GrafoVivoView extends ItemView {
       return { source: String(source), target: String(target), ativa };
     }).filter((e): e is ArestaGrafo => Boolean(e?.source && e?.target));
 
-    return { nodes, edges };
+    return { nodes, edges: this.amarrarCaracol(nodes, edges) };
+  }
+
+  private aplicarLayoutCaracol(nodes: NoGrafo[], coreIds: Map<string, { x: number; y: number; val: number; coreRank: number }>): NoGrafo[] {
+    const norm = (v?: string) => String(v ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
+    const ordered = [...nodes].sort((a, b) => norm(a.label ?? a.id).localeCompare(norm(b.label ?? b.id)));
+    const total = Math.max(ordered.length, 1);
+    const golden = Math.PI * (3 - Math.sqrt(5));
+    return ordered.map((n, i) => {
+      const key = norm(n.label ?? n.id);
+      const core = coreIds.get(key);
+      if (core) return { ...n, x: core.x, y: core.y, fx: core.x, fy: core.y, val: core.val, coreRank: core.coreRank, category: "mcp" };
+      const t = (i + 1) / total;
+      const theta = i * golden + t * Math.PI * 7.0;
+      const radius = 90 + Math.sqrt(t) * 470;
+      return { ...n, x: Math.cos(theta) * radius, y: Math.sin(theta) * radius, val: 2 + (i % 9 === 0 ? 2 : 0) };
+    });
+  }
+
+  private amarrarCaracol(nodes: NoGrafo[], edges: ArestaGrafo[]): ArestaGrafo[] {
+    const existing = new Set(edges.map((e) => `${this.idEndpoint(e.source)}→${this.idEndpoint(e.target)}`));
+    const result: ArestaGrafo[] = [...edges];
+    const add = (source?: string, target?: string, ativa = false) => {
+      if (!source || !target || source === target) return;
+      const key = `${source}→${target}`;
+      if (existing.has(key)) return;
+      existing.add(key);
+      result.push({ source, target, ativa, visual: true });
+    };
+    const byCore = nodes.filter((n) => n.coreRank).sort((a, b) => (a.coreRank ?? 99) - (b.coreRank ?? 99));
+    for (let i = 0; i < byCore.length; i += 1) add(byCore[i].id, byCore[(i + 1) % byCore.length]?.id, true);
+    const outer = nodes.filter((n) => !n.coreRank).sort((a, b) => (Math.atan2(a.y ?? 0, a.x ?? 0) - Math.atan2(b.y ?? 0, b.x ?? 0)));
+    for (let i = 1; i < outer.length; i += 1) add(outer[i - 1].id, outer[i].id, false);
+    const anchors = byCore.length ? byCore : nodes.slice(0, 1);
+    outer.forEach((n, i) => {
+      if (i % 4 === 0) add(n.id, anchors[i % anchors.length]?.id, false);
+    });
+    return result;
   }
 
   private dadosCache: DadosGrafo | null = null;
@@ -214,12 +266,12 @@ export class GrafoVivoView extends ItemView {
           ctx.arc(n.x, n.y, 10, 0, 2 * Math.PI);
           ctx.fill();
         })
-        .linkColor((l: any) => (l.ativa ? "rgba(52, 211, 153, 0.65)" : "rgba(148, 163, 184, 0.4)"))
-        .linkWidth((l: any) => (l.ativa ? 2.4 : 1.1))
+        .linkColor((l: any) => (l.ativa ? "rgba(168, 85, 247, 0.75)" : l.visual ? "rgba(139, 92, 246, 0.28)" : "rgba(148, 163, 184, 0.36)"))
+        .linkWidth((l: any) => (l.ativa ? 2.4 : l.visual ? 0.7 : 1.1))
         .linkDirectionalParticles((l: any) => (l.ativa ? 5 : 2))
         .linkDirectionalParticleSpeed(0.009)
         .linkDirectionalParticleWidth((l: any) => (l.ativa ? 3.5 : 2))
-        .linkDirectionalParticleColor((l: any) => (l.ativa ? "#34d399" : "#94a3b8"))
+        .linkDirectionalParticleColor((l: any) => (l.ativa ? "#a855f7" : "#94a3b8"))
         .onNodeClick((n: any) => this.aoClicarNo(n))
         .cooldownTicks(120)
         .warmupTicks(40);
