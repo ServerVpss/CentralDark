@@ -34,7 +34,7 @@ RERUN_SKIP=0
 DEFERRED=0
 
 echo "📡 ALL_OPEN_PRS_SYNC_START repo=$REPO max=$MAX_PRS"
-echo "RULE update-branch=BEHIND_AND_QUIET_HEAD_ONLY"
+echo "RULE update-branch=SAME_REPO_QUIET_HEAD_API_DECIDES_UPDATE_OR_NOOP"
 echo "RULE rerun=CURRENT_HEAD_FAILURE_OR_CANCELLED"
 echo "RULE rate_limit=DEFER_SAVE_CURSOR_NOT_FAIL"
 echo "RULE SYNC!=APPROVAL UNKNOWN!=PASS"
@@ -203,14 +203,6 @@ for row in "${PRS[@]:-}"; do
     continue
   fi
 
-  if [ "${MERGE_STATE:-unknown}" != "behind" ]; then
-    echo "SKIP_NOT_BEHIND #$NUM state=${MERGE_STATE:-UNKNOWN}"
-    SKIP_NOT_BEHIND=$((SKIP_NOT_BEHIND + 1))
-    # still may need rerun pass later; mark cursor and continue update phase
-    save_cursor "$NUM"
-    continue
-  fi
-
   ACTIVITY="$(head_activity "$SHA")"
   if [ "$ACTIVITY" = "RATE_LIMITED" ]; then
     echo "DEFERRED_ACTIVITY #$NUM"
@@ -244,7 +236,7 @@ for row in "${PRS[@]:-}"; do
   if [ "$RC" -eq 0 ]; then
     echo "UPDATE #$NUM OK old_head=${SHA:0:10}"
     UPDATED=$((UPDATED + 1))
-  elif printf '%s' "$OUT" | grep -qi 'no new commits on the base branch'; then
+  elif printf '%s' "$OUT" | grep -Eqi 'no new commits on the base branch|not behind|up[ -]?to[ -]?date'; then
     echo "NOOP #$NUM already_synced"
     NOOP=$((NOOP + 1))
   elif printf '%s' "$OUT" | grep -Eqi 'merge conflict|not mergeable'; then

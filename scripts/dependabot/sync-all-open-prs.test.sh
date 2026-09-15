@@ -20,7 +20,7 @@ if [[ "$args" == *"--paginate repos/ServerVpss/CentralDark/pulls?state=open&per_
   exit 0
 fi
 if [[ "$args" == "api repos/ServerVpss/CentralDark/pulls/100" ]]; then
-  printf '{"head":{"sha":"sha100","repo":{"full_name":"ServerVpss/CentralDark"}},"mergeable_state":"behind"}\n'
+  printf '{"head":{"sha":"sha100","repo":{"full_name":"ServerVpss/CentralDark"}},"mergeable_state":"UNKNOWN"}\n'
   exit 0
 fi
 if [[ "$args" == "api repos/ServerVpss/CentralDark/pulls/200" ]]; then
@@ -35,6 +35,9 @@ if [[ "$args" == "api repos/ServerVpss/CentralDark/commits/sha100/status" ]]; th
 fi
 if [[ "$args" == *"api -X PUT repos/ServerVpss/CentralDark/pulls/100/update-branch"* ]]; then
   printf '{"message":"Updating pull request branch"}\n'; exit 0
+fi
+if [[ "$args" == *"api -X PUT repos/ServerVpss/CentralDark/pulls/200/update-branch"* ]]; then
+  echo 'Validation Failed: branch is not behind the base branch' >&2; exit 1
 fi
 if [[ "$args" == "run list --repo ServerVpss/CentralDark --commit sha100 --status failure -L 4 --json databaseId --jq .[].databaseId" ]]; then exit 0; fi
 if [[ "$args" == "run list --repo ServerVpss/CentralDark --commit sha200 --status failure -L 4 --json databaseId --jq .[].databaseId" ]]; then exit 0; fi
@@ -53,7 +56,8 @@ line100="$(grep -n -- '---- PR #100 ' "$OUT" | cut -d: -f1)"
 line200="$(grep -n -- '---- PR #200 ' "$OUT" | cut -d: -f1)"
 [ -n "$line100" ] && [ -n "$line200" ] && [ "$line100" -lt "$line200" ]
 grep -q 'UPDATE #100 OK' "$OUT"
-grep -q 'SKIP_NOT_BEHIND #200 state=clean' "$OUT"
+! grep -q 'SKIP_NOT_BEHIND #100' "$OUT"
+grep -q 'NOOP #200 already_synced' "$OUT"
 grep -q 'RESULT=PASS_RADAR_EXECUTION' "$OUT"
 # Cursor resume: #100 already done, #200 must still be visited; no starvation of newer/remaining items.
 printf '100\n' > "$CURSOR"
