@@ -12,6 +12,7 @@ const PORT = process.env.PORT || 8090;
 const AUTH_KEY = process.env.ARSENAL_ADAPTER_KEY || 'arsenal-key-local';
 const PROVIDER_BASE = process.env.PROVIDER_BASE || 'https://openrouter.ai/api/v1';
 const PROVIDER_KEY = process.env.PROVIDER_KEY || '';
+const GRAPH_PANEL_BASE = (process.env.GRAPH_PANEL_URL || 'http://127.0.0.1:3030').replace(/\/+$/, '');
 const REGRAS_PATH = process.env.REGRAS_PATH || '/root/CentralDark/docs/CONSCIENCIA/ARSENAL/regras.json';
 const DEBATES_DIR = '/root/CentralDark/docs/CONSCIENCIA/ARSENAL/DEBATES';
 const EVOLUCAO_DIR = '/root/CentralDark/docs/CONSCIENCIA/ARSENAL/EVOLUCAO';
@@ -288,6 +289,28 @@ const server = http.createServer(async (req, res) => {
   });
   req._auditSetModel = (m) => { modelForAudit = m; };
 
+  // Leitura sanitizada do grafo pela API oficial, após o mesmo gate de autenticação.
+  // O GraphPanel continua sendo o único owner interno em 127.0.0.1:3030.
+  if (req.method === 'GET' && pathOnly === '/api/graph') {
+    try {
+      const incoming = new URL(rawUrl, 'http://centraldark.local');
+      const upstreamUrl = new URL('/api/graph', `${GRAPH_PANEL_BASE}/`);
+      incoming.searchParams.forEach((value, key) => upstreamUrl.searchParams.append(key, value));
+      const upstream = await fetch(upstreamUrl, {
+        headers: { Accept: 'application/json' },
+        signal: AbortSignal.timeout(5000),
+      });
+      const body = await upstream.text();
+      res.writeHead(upstream.status, {
+        'Content-Type': upstream.headers.get('content-type') || 'application/json; charset=utf-8',
+        'Cache-Control': 'no-store',
+        'X-Request-Id': requestId,
+      });
+      return res.end(body);
+    } catch {
+      return json(res, 502, { error: 'graph_upstream_unavailable', request_id: requestId });
+    }
+  }
 
   if (pathOnly === '/v1/chat/completions' || pathOnly === '/chat/completions') {
     let body = '';
