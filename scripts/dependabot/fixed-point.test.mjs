@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { dependabotFixedPointProof } from "./fixed-point.mjs";
+import { dependabotFixedPointProof, dependabotReconciliationChance } from "./fixed-point.mjs";
 
 const ready = {
   kind: "patch",
@@ -41,4 +41,38 @@ test("autorreferência não injeta o goal", () => {
   assert.equal(proof.ready, false);
   assert.equal(proof.facts.includes("DEPENDABOT_SQUASH_READY"), false);
   assert.equal(proof.self_reference_guard, "EXTERNAL_FACTS_ONLY_NO_GOAL_SEED");
+});
+
+test("chance viva sobe quando checks e mergeabilidade melhoram", () => {
+  const pending = dependabotReconciliationChance({
+    score: 90,
+    threshold: 85,
+    mergeable: null,
+    mergeState: "unknown",
+    pendingChecks: 2,
+    successChecks: 0,
+  });
+  const green = dependabotReconciliationChance({
+    score: 90,
+    threshold: 85,
+    mergeable: true,
+    mergeState: "clean",
+    pendingChecks: 0,
+    successChecks: 4,
+    previousChance: pending.chance,
+  });
+  assert.equal(green.trend, "UP");
+  assert.ok(green.chance > pending.chance);
+  assert.equal(green.confidence, "HIGH");
+});
+
+test("chance viva cai quando aparece blocker material", () => {
+  const proof = dependabotFixedPointProof({
+    ...ready,
+    previousChance: 100,
+    blockers: ["CHANGES_REQUESTED"],
+    changesRequested: true,
+  });
+  assert.equal(proof.reconciliation.trend, "DOWN");
+  assert.ok(proof.reconciliation.chance < 100);
 });

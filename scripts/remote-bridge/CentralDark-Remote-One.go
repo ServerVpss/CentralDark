@@ -22,11 +22,11 @@ import (
 )
 
 const (
-	appVersion     = "2026.09.09-temp1"
+	appVersion     = "2026.09.15-tailscale-oauth1"
 	oldEndpoint    = "https://mcp.desktopcommander.app/mcp"
 	centraldarkMCP = "https://mcp.centralldark.com/mcp"
 	defaultWorkdir = `E:\CentralDark\_MAPA_CASA\GARIMPO-CHEFE`
-	desktopPkg     = "@wonderwhy-er/desktop-commander@latest"
+	desktopPkg     = "@wonderwhy-er/desktop-commander@0.2.48"
 )
 
 type State struct {
@@ -42,6 +42,8 @@ type State struct {
 	ExitCode              int    `json:"exit_code"`
 	UnexpectedJSON        bool   `json:"unexpected_json"`
 	MCP32603              bool   `json:"mcp_32603"`
+	Tailscale             string `json:"tailscale"`
+	GitHubAuth            string `json:"github_auth"`
 	Screenpipe            string `json:"screenpipe"`
 	NextRetrySeconds      int    `json:"next_retry_seconds"`
 	Note                  string `json:"note,omitempty"`
@@ -61,6 +63,85 @@ func (l *Logger) Printf(cat, f string, a ...any) {
 		_, _ = fmt.Fprintln(l.file, line)
 		_ = l.file.Sync()
 	}
+}
+
+func runQuick(ctx context.Context, timeout time.Duration, name string, args ...string) (string, error) {
+	p := look(name)
+	if p == "" {
+		return "", fmt.Errorf("%s_MISSING", name)
+	}
+	cctx, cancel := context.WithTimeout(ctx, timeout)
+	defer cancel()
+	out, err := exec.CommandContext(cctx, p, args...).CombinedOutput()
+	return strings.TrimSpace(string(out)), err
+}
+
+func writeHumanStatus(workdir, component, state, message string) {
+	path := filepath.Join(workdir, "context", "bridge-human-status.json")
+	_ = atomicJSON(path, map[string]any{
+		"generated_at": time.Now().Format(time.RFC3339Nano),
+		"component":    component,
+		"state":        state,
+		"message":      message,
+		"legend": map[string]string{
+			"green":  "🟢 ok/provado no escopo",
+			"yellow": "🟡 atencao/pendente ou opcional",
+			"red":    "🔴 falha observada",
+		},
+	})
+}
+
+func setupTailscale(ctx context.Context, workdir string, log *Logger) string {
+	if look("tailscale.exe") == "" && look("tailscale") == "" {
+		writeHumanStatus(workdir, "TAILSCALE_SERVE", "🟡", "tailscale nao encontrado; bridge remoto continua sem tunel local.")
+		return "MISSING"
+	}
+	bin := "tailscale"
+	if look("tailscale.exe") != "" {
+		bin = "tailscale.exe"
+	}
+	status := "CONFIGURED"
+	if out, err := runQuick(ctx, 20*time.Second, bin, "serve", "--tcp", "9100", "tcp://127.0.0.1:9100"); err != nil {
+		log.Printf("TAILSCALE", "mcp-local failed: %v %s", err, out)
+		status = "ERROR"
+	} else {
+		log.Printf("TAILSCALE", "mcp-local tcp://tailnet:9100 -> 127.0.0.1:9100")
+	}
+	if out, err := runQuick(ctx, 20*time.Second, bin, "serve", "--bg", "--http", "443", "8787"); err != nil {
+		log.Printf("TAILSCALE", "hermes-dashboard optional failed: %v %s", err, out)
+	} else {
+		log.Printf("TAILSCALE", "hermes-dashboard https tailnet -> 127.0.0.1:8787")
+	}
+	vsPort := strings.TrimSpace(os.Getenv("CENTRALDARK_VSCODE_TAILSCALE_PORT"))
+	vsTarget := strings.TrimSpace(os.Getenv("CENTRALDARK_VSCODE_LOCAL_TARGET"))
+	if vsPort != "" && vsTarget != "" {
+		if out, err := runQuick(ctx, 20*time.Second, bin, "serve", "--tcp", vsPort, "tcp://"+vsTarget); err != nil {
+			log.Printf("TAILSCALE", "vscode optional failed: %v %s", err, out)
+		} else {
+			log.Printf("TAILSCALE", "vscode tcp://tailnet:%s -> %s", vsPort, vsTarget)
+		}
+	}
+	writeHumanStatus(workdir, "TAILSCALE_SERVE", "🟢", "Tuneis configurados pelo proprio bridge. Isso prova rota/porta; autenticacao de cada app continua separada.")
+	return status
+}
+
+func checkGitHubAuth(ctx context.Context, workdir string, log *Logger) string {
+	if look("gh.exe") == "" && look("gh") == "" {
+		writeHumanStatus(workdir, "GITHUB_AUTH", "🟡", "gh nao encontrado; nao copiar refresh token. Autentique gh neste host se GitHub for necessario.")
+		return "GH_MISSING"
+	}
+	bin := "gh"
+	if look("gh.exe") != "" {
+		bin = "gh.exe"
+	}
+	out, err := runQuick(ctx, 20*time.Second, bin, "auth", "status")
+	log.Printf("GITHUB", "%s", out)
+	if err != nil {
+		writeHumanStatus(workdir, "GITHUB_AUTH", "🟡", "gh existe, mas auth status ainda nao provou login. Use gh auth login/device flow neste host.")
+		return "GH_AUTH_UNKNOWN"
+	}
+	writeHumanStatus(workdir, "GITHUB_AUTH", "🟢", "gh auth status PASS neste host. Fluxo correto: reutilizar gh/keyring local; nao copiar refresh token.")
+	return "GH_AUTH_OK"
 }
 
 func envOr(key, fallback string) string {
@@ -322,6 +403,8 @@ func main() {
 	log.Printf("ROTA", "REMOTE_MCP_CONNECT=%s", oldEndpoint)
 	log.Printf("ROTA", "CENTRALDARK_MCP=%s enabled=false", centraldarkMCP)
 	log.Printf("DIRETORIO", "%s", workdir)
+	tailscaleState := setupTailscale(ctx, workdir, log)
+	githubAuthState := checkGitHubAuth(ctx, workdir, log)
 
 	node := look("node.exe")
 	npx := look("npx.cmd")
@@ -377,7 +460,7 @@ func main() {
 		st := State{
 			Timestamp: time.Now().Format(time.RFC3339Nano), Version: appVersion, Device: "SEGREDO", Mode: "OLD_METHOD",
 			Endpoint: oldEndpoint, CentralDarkMCPEnabled: false, Workdir: workdir, Attempt: attempt,
-			Status: "OFFLINE", ExitCode: exit, UnexpectedJSON: unexpected, MCP32603: mcp32603,
+			Status: "OFFLINE", ExitCode: exit, UnexpectedJSON: unexpected, MCP32603: mcp32603, Tailscale: tailscaleState, GitHubAuth: githubAuthState,
 			Screenpipe: spState.Load().(string), NextRetrySeconds: next, Note: note,
 		}
 		if exit == 0 {
@@ -390,6 +473,7 @@ func main() {
 			break
 		}
 		if unexpected && !repaired {
+			writeHumanStatus(workdir, "DESKTOP_COMMANDER_CONFIG", "🔴", "Desktop Commander remoto conectou, mas leu JSON local quebrado/vazio. Ponte online != config saudavel; reparar config local do Desktop Commander na Casa.")
 			repaired = true
 			runRepair(ctx, workdir, log)
 		}

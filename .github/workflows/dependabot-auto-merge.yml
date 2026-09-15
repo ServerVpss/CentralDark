@@ -309,6 +309,77 @@ jobs:
               return 101;
             }
 
+            function clampPercent(value) {
+              if (!Number.isFinite(value)) return null;
+              return Math.max(0, Math.min(100, Math.round(value)));
+            }
+
+            function reconciliationChance({ score, threshold, mergeable, mergeState, pendingChecks = 0, failedChecks = 0, badStatuses = 0, successChecks = 0, changesRequested = false, blockers = [], previousChance = null }) {
+              const rawScore = clampPercent(score);
+              const required = Number.isFinite(threshold) && threshold <= 100 ? threshold : 100;
+              let multiplier = rawScore == null ? 0 : Math.min(1, rawScore / required);
+              const reasons = [];
+
+              if (rawScore == null) reasons.push('COMPATIBILITY_UNKNOWN');
+              if (mergeable === true && !['dirty', 'blocked'].includes(String(mergeState || '').toLowerCase())) {
+                multiplier *= 1;
+              } else if (mergeable == null || String(mergeState || '').toLowerCase() === 'unknown') {
+                multiplier *= 0.55;
+                reasons.push('MERGEABILITY_UNKNOWN');
+              } else {
+                multiplier *= 0.2;
+                reasons.push('MERGEABILITY_NOT_READY');
+              }
+
+              if (failedChecks > 0 || badStatuses > 0) {
+                multiplier *= 0.25;
+                reasons.push('CHECKS_FAILED_OR_STATUS_BAD');
+              } else if (pendingChecks > 0) {
+                multiplier *= 0.65;
+                reasons.push('CHECKS_PENDING');
+              } else if (successChecks > 0) {
+                multiplier *= 1;
+              } else {
+                multiplier *= 0.5;
+                reasons.push('NO_SUCCESS_CHECK_ON_HEAD');
+              }
+
+              if (changesRequested) {
+                multiplier *= 0.2;
+                reasons.push('CHANGES_REQUESTED');
+              }
+
+              const materialBlockers = blockers.filter((item) => !/^COMPATIBILITY_\d+_LT_\d+$/.test(String(item)));
+              if (materialBlockers.length > 0) {
+                multiplier *= Math.max(0.1, 1 - Math.min(materialBlockers.length, 5) * 0.16);
+                reasons.push('MATERIAL_BLOCKERS_PRESENT');
+              }
+
+              const chance = clampPercent(multiplier * 100) ?? 0;
+              const previous = clampPercent(previousChance);
+              const delta = previous == null ? null : chance - previous;
+              const trend = delta == null ? 'BASELINE' : delta > 0 ? 'UP' : delta < 0 ? 'DOWN' : 'FLAT';
+              return {
+                chance,
+                trend,
+                delta,
+                confidence: rawScore == null ? 'LOW' : (successChecks > 0 && pendingChecks === 0 && failedChecks === 0 && badStatuses === 0 ? 'HIGH' : 'MEDIUM'),
+                reasons: [...new Set(reasons)],
+              };
+            }
+
+            function previousChanceFromComment(body) {
+              const m = String(body || '').match(/RECONCILIATION_CHANCE:\s*\*\*(\d{1,3})%\*\*/);
+              return m ? Number(m[1]) : null;
+            }
+
+            async function currentReceipt(prNumber) {
+              const comments = await github.paginate(github.rest.issues.listComments, {
+                owner, repo, issue_number: prNumber, per_page: 100,
+              });
+              return comments.find(c => c.user?.type === 'Bot' && String(c.body || '').includes(marker)) || null;
+            }
+
             async function upsertReceipt(prNumber, body) {
               const comments = await github.paginate(github.rest.issues.listComments, {
                 owner, repo, issue_number: prNumber, per_page: 100,
@@ -368,6 +439,8 @@ jobs:
               const kind = classifyUpdate(previous, next);
               const threshold = thresholdFor(kind);
               const blockers = [];
+              const priorReceipt = await currentReceipt(prNumber);
+              const previousChance = previousChanceFromComment(priorReceipt?.body);
 
               if (pr.draft) blockers.push('DRAFT');
               if (kind === 'major') blockers.push('MAJOR_AUTO_MERGE_FORBIDDEN');
@@ -435,6 +508,21 @@ jobs:
                 }
 
                 const uniqueBlockers = [...new Set(blockers)];
+                const changesRequested = uniqueBlockers.includes('CHANGES_REQUESTED');
+                const liveChance = reconciliationChance({
+                  score: scoreInfo.score,
+                  threshold,
+                  mergeable: pr.mergeable,
+                  mergeState: pr.mergeable_state,
+                  pendingChecks: pendingChecks.length,
+                  failedChecks: failedChecks.length,
+                  badStatuses: badStatuses.length,
+                  successChecks: successChecks.length,
+                  changesRequested,
+                  blockers: uniqueBlockers,
+                  previousChance,
+                });
+                const deltaText = liveChance.delta == null ? 'baseline' : `${liveChance.delta >= 0 ? '+' : ''}${liveChance.delta}pp`;
                 const scoreText = scoreInfo.score == null ? `UNKNOWN (${scoreInfo.reason})` : `${scoreInfo.score}%`;
                 const decision = uniqueBlockers.length === 0 ? 'READY_TO_SQUASH' : 'WAIT';
                 const receipt = [
@@ -445,6 +533,8 @@ jobs:
                   `HEAD: \`${headSha}\``,
                   `UPDATE_CLASS: **${kind.toUpperCase()}**`,
                   `COMPATIBILITY: **${scoreText}**`,
+                  `RECONCILIATION_CHANCE: **${liveChance.chance}%** (${liveChance.trend}, ${deltaText}, confidence=${liveChance.confidence})`,
+                  `RECONCILIATION_SIGNAL: \`${liveChance.reasons.length ? liveChance.reasons.join(' | ') : 'CLEAR'}\``,
                   `THRESHOLD: **${threshold > 100 ? 'N/A' : `${threshold}%`}**`,
                   `MERGEABLE: **${String(pr.mergeable)} / ${pr.mergeable_state || 'UNKNOWN'}**`,
                   `CHECKS: success=${successChecks.length} pending=${pendingChecks.length} failed=${failedChecks.length} skipped_or_neutral=${skippedChecks.length}`,
@@ -482,6 +572,16 @@ jobs:
               }
 
               const scoreText = scoreInfo.score == null ? `UNKNOWN (${scoreInfo.reason})` : `${scoreInfo.score}%`;
+              const waitBlockers = [...new Set(blockers)];
+              const liveChance = reconciliationChance({
+                score: scoreInfo.score,
+                threshold,
+                mergeable: pr.mergeable,
+                mergeState: pr.mergeable_state,
+                blockers: waitBlockers,
+                previousChance,
+              });
+              const deltaText = liveChance.delta == null ? 'baseline' : `${liveChance.delta >= 0 ? '+' : ''}${liveChance.delta}pp`;
               await upsertReceipt(prNumber, [
                 marker,
                 '## 🤖 CentralDark · Dependabot Compatibility Gate',
@@ -490,9 +590,11 @@ jobs:
                 `HEAD: \`${pr.head.sha}\``,
                 `UPDATE_CLASS: **${kind.toUpperCase()}**`,
                 `COMPATIBILITY: **${scoreText}**`,
+                `RECONCILIATION_CHANCE: **${liveChance.chance}%** (${liveChance.trend}, ${deltaText}, confidence=${liveChance.confidence})`,
+                `RECONCILIATION_SIGNAL: \`${liveChance.reasons.length ? liveChance.reasons.join(' | ') : 'CLEAR'}\``,
                 `THRESHOLD: **${threshold > 100 ? 'N/A' : `${threshold}%`}**`,
                 'DECISION: **WAIT**',
-                `BLOCKERS: \`${[...new Set(blockers)].join(' | ')}\``,
+                `BLOCKERS: \`${waitBlockers.join(' | ')}\``,
                 '',
                 '`UPDATE_BRANCH != PASS`  ',
                 '`UNKNOWN != PASS`',
