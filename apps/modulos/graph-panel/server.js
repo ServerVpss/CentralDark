@@ -105,7 +105,7 @@ async function api(req, res, pathname, url) {
       ui: countGraph(ui),
       vivo: countGraph(vivo),
       full: countGraph(full),
-      plugin_url_recomendado: "https://grafo.centralldark.com/api/graph?mode=vivo",
+      plugin_url_recomendado: "https://api.centralldark.com/api/graph?mode=vivo",
       time: new Date().toISOString(),
     });
   }

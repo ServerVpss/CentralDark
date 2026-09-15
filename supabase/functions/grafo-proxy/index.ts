@@ -9,7 +9,7 @@ const corsHeaders = {
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
   try {
-    const r = await fetch("https://grafo.centralldark.com/api/graph", {
+    const r = await fetch("https://api.centralldark.com/api/graph", {
       headers: { "accept": "application/json" },
     });
     const body = await r.text();

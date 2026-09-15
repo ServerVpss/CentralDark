@@ -146,7 +146,7 @@ entry_surfaces:
     direct_canonical_write: writer_authorized_only
   obsidian_plugin:
     route:
-      read_graph: "https://grafo.centralldark.com/api/graph?mode=vivo"
+      read_graph: "https://api.centralldark.com/api/graph?mode=vivo"
       knowledge_ingest: "https://api.centralldark.com/memoria/ingest"
     event_class: OBSIDIAN_NOTE_OR_PLUGIN_EVENT
     authentication: BEARER_RUNTIME_SECRET
