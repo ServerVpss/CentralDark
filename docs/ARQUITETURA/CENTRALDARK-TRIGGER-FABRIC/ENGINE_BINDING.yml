@@ -27,13 +27,6 @@ engines:
     role: REPLACEABLE_ENGINE
     transport_owner: apps/modulos/elite-gateway/scripts/centraldark_omni_router.py
     runtime_specific_claims: MUST_BE_MEASURED
-  hermes:
-    role: EXECUTION_CONTINUITY_RUNTIME
-    owner: PIVETE/HERMES
-    prompt_consumer: apps/modulos/HERMES-CORE/prompts/hermes-core.md
-    transport_owner: apps/modulos/elite-gateway/scripts/centraldark_omni_router.py
-    required_for: [hermes_mission_routing, hermes_session_continuity, hermes_runtime_memory, hermes_hooks, hermes_scheduler, hermes_learning_transfer_test]
-    active_now: NOT_PROVEN_BY_THIS_DOCUMENT
   nous:
     role: REPLACEABLE_ENGINE
     transport_owner: apps/modulos/elite-gateway/scripts/centraldark_omni_router.py
@@ -48,6 +41,16 @@ engines:
   other_models:
     role: REPLACEABLE_ENGINE
     inherits: [LEIA-ME-IA.md, AGENTS.md, Trigger Fabric]
+
+agent_runtimes:
+  hermes:
+    role: EXECUTION_CONTINUITY_RUNTIME
+    owner: PIVETE/HERMES
+    prompt_consumer: apps/modulos/HERMES-CORE/prompts/hermes-core.md
+    model_catalog_member: false
+    selectable_as_engine: false
+    required_for: [hermes_mission_routing, hermes_session_continuity, hermes_runtime_memory, hermes_hooks, hermes_scheduler, hermes_learning_transfer_test]
+    active_now: NOT_PROVEN_BY_THIS_DOCUMENT
 
 mandatory_inheritance:
   - DESTINATION_LOCK
