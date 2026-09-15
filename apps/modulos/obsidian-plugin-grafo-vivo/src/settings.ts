@@ -20,7 +20,7 @@ export interface GrafoVivoSettings {
 export const DEFAULT_SETTINGS: GrafoVivoSettings = {
   // Padrão 2026: plugin consome o mesmo Grafo Vivo e envia matéria candidata ao Hub único.
   // mode=vivo = PM2 operacional (leve, tempo real). UI full: /api/graph
-  urlGrafo: "https://grafo.centralldark.com/api/graph?mode=vivo",
+  urlGrafo: "https://api.centralldark.com/api/graph?mode=vivo",
   intervaloSegundos: 15,
   abrirNotaAoClicar: true,
   knowledgeHubPublishEnabled: true,
