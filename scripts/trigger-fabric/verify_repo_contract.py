@@ -228,6 +228,15 @@ check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml',[
  'scope: ALL_PR_COMMIT_AND_RUNTIME_ELIGIBLE_FAILURES',
  'operational_rule_learning:',
  'proven_operational_rule_must_bind_to_runtime: true',
+ 'discover_existing_channels_before_blocked: true',
+ 'ephemeral_helper_is_not_canonical_asset: true',
+ 'user_report_is_signal_not_proof: true',
+ 'meaningful_discovery_must_compare_canonical_owner: true',
+ 'USER_REPORTED_ERROR',
+ 'NEW_DISCOVERY',
+ 'CLEAN_EPHEMERAL_HELPERS_AFTER_PROOF',
+ 'mode: EVENT_DRIVEN',
+ 'no_post_task_value: SAFE_DELETE',
  'BIND_RULE_TO_ENGINE_OR_GATE',
  'POSITIVE_TEST',
  'NEGATIVE_TEST',
@@ -307,6 +316,8 @@ check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml',[
 check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml',[
  'event: BOT_ENTRY','event: PRE_HUMAN_RETURN','event: RESUME',
  'event: ANY_PR_OR_COMMIT','event: CI_RUNNER_ROUTE_FAILURE',
+ 'event: USER_REPORTED_ERROR','event: NEW_DISCOVERY',
+ 'report_is_proof: false','no_material_delta: NO_CHANGE',
  'BYTE_IDENTICAL -> PROCESS_ONCE_KEEP_PROVENANCE',
  'GITHUB_HOSTED_RUNNER -> FAIL_CLOSED',
  'SAME_FAILURE_NO_NEW_INFO -> REUSE_CRYSTAL',
@@ -366,7 +377,10 @@ check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml',[
 ], classification='UNIVERSAL_EVOLUTION_CARACOL_CONTRACT')
 check('apps/modulos/HERMES-CORE/prompts/hermes-core.md',[
  'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml','OUTPUT_GUARD','LAST_GOOD_STATE','WORKING/FORJA != PASS',
- 'Self-healing operacional universal','SAME_FAILURE_REUSES_CRYSTAL=true','GITHUB_HOSTED_RUNNER_ALLOWED=false'
+ 'Self-healing operacional universal','SAME_FAILURE_REUSES_CRYSTAL=true','GITHUB_HOSTED_RUNNER_ALLOWED=false',
+ 'DISCOVER_EXISTING_CHANNELS_BEFORE_BLOCKED=true','USER_REPORTED_ERROR_IS_SIGNAL_NOT_PROOF=true',
+ 'EPHEMERAL_HELPER_IS_CANONICAL_ASSET=false','SAFE_TEMP_CLEANUP_AFTER_PROOF=true',
+ 'MEANINGFUL_DISCOVERY_COMPARE_CANONICAL_OWNER=true'
 ])
 check('apps/modulos/HERMES-CORE/core/orchestrator.mjs',[
  'const INTERVAL  = 5000',
@@ -377,6 +391,15 @@ check('apps/modulos/HERMES-CORE/core/orchestrator.mjs',[
 ])
 check('apps/modulos/HERMES-CORE/agents/GraphRAG-Master/agent.mjs',['export async function atualizarGrafo()','export async function buscarContexto'])
 check('scripts/memory-linker/README.md',['NO_NEW_INFORMATION=STOP=true','DIRECT_CANONICAL_MUTATION=false','AUTONOMY_QUEUE_DIRECT_APPLY=false'])
+check('scripts/casa/discover-operational-channels.ps1',[
+ 'NEW_ATTEMPT_FAILED != EXISTING_CHANNEL_DEAD','Get-NetTCPConnection -State Established','OwningProcess'
+], classification='OPERATIONAL_CHANNEL_DISCOVERY_RUNTIME')
+check('docs/CONSCIENCIA/APRENDIZADOS/2026-09-14-descoberta-canais-operacionais-xp.md',[
+ 'NEW_ATTEMPT_FAILED != EXISTING_CHANNEL_DEAD',
+ 'DISCOVER_EXISTING_CHANNELS -> CLASSIFY -> REUSE_BEFORE_CREATE',
+ 'XP é métrica do sistema, não autoridade',
+ 'TEMP_USED != CANONICAL_ASSET','TEMP_HELPER_CLEANUP=PASS'
+], classification='OPERATIONAL_CHANNEL_DISCOVERY_CRYSTAL')
 check('scripts/memory-linker/dream-review-run.mjs')
 check('scripts/memory-linker/pattern-discovery.mjs')
 check('.agents/skills/session-intelligence-harvester/SKILL.md',['Run on session end (hook).'],'DECLARED_HOOK_NOT_RUNTIME_PROOF')
