@@ -5,24 +5,45 @@
   "package": "@wonderwhy-er/desktop-commander@0.2.48",
   "remote_mcp": "https://mcp.desktopcommander.app/mcp",
   "centraldark_mcp": "https://mcp.centralldark.com/mcp",
-  "centraldark_oauth": {
-    "protected_resource_metadata": "https://mcp.centralldark.com/.well-known/oauth-protected-resource",
-    "authorization_server_metadata": "https://mcp.centralldark.com/.well-known/oauth-authorization-server",
-    "scope": "mcp",
-    "pkce_method": "S256",
-    "redirect_uri": "http://127.0.0.1:62607/",
-    "token_storage": "desktop-commander-native-secure-store"
-  },
-  "centraldark_headers": {
-    "X-CentralDark-Scope": "all",
-    "X-CentralDark-Client": "centraldark-universal-mcp-client",
-    "X-CentralDark-Origin": "composio-custom-mcp"
-  },
   "github_default": "ServerVpss/CentralDark",
+  "github_auth_mode": "gh-keyring-local",
+  "github_auth_note": "Medir gh auth status na propria VPS/Casa e reutilizar gh/keyring; nao copiar refresh token para .env, log ou arquivo.",
   "screenpipe_url": "http://127.0.0.1:3030",
   "screenpipe_context_file": "context\\screenpipe-latest.json",
   "screenpipe_status_file": "context\\screenpipe-status.json",
   "screenpipe_window_minutes": 15,
+  "tailscale": {
+    "serve_enabled": true,
+    "human_note": "O Tailscale Serve abre tuneis privados da tailnet para capacidades locais. Ele prova porta viva; nao prova autenticacao interna do app.",
+    "routes": [
+      {
+        "name": "mcp-local",
+        "protocol": "tcp",
+        "public_port": 9100,
+        "target": "127.0.0.1:9100",
+        "human_purpose": "Expor o MCP local da Casa/VPS para a tailnet sem jogar token em arquivo."
+      },
+      {
+        "name": "hermes-dashboard",
+        "protocol": "http",
+        "host": "127.0.0.1",
+        "target_port": 8787,
+        "human_purpose": "Abrir o painel Hermes oficial pela tailnet quando o motor PM2 estiver vivo."
+      },
+      {
+        "name": "vscode-server-temporario",
+        "protocol": "tcp",
+        "public_port_env": "CENTRALDARK_VSCODE_TAILSCALE_PORT",
+        "target_env": "CENTRALDARK_VSCODE_LOCAL_TARGET",
+        "human_purpose": "Ponte temporaria para VSCode server; exige porta/token do VSCode vivo e pode ser desligada sem afetar o bridge."
+      }
+    ]
+  },
+  "notifications": {
+    "enabled": true,
+    "status_file": "context\\bridge-human-status.json",
+    "human_note": "Notificacao persistida localmente com bolinhas; Telegram continua fora deste script se token/chat nao estiverem configurados."
+  },
   "read_only_first": true,
   "secrets_in_repo": false,
   "telegram_out_of_scope": true
