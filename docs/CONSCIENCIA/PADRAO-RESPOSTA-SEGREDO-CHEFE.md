@@ -2,7 +2,7 @@
 title: "💬 Padrão de resposta — SEGREDO/CHEFE"
 status: "ATIVO_RECONCILIADO"
 date: 2026-06-20
-updated: 2026-09-10
+updated: 2026-09-11
 owner: "docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md"
 truth_scope: "CHEFE_RESPONSE_STYLE_AND_DELIVERY_CONTRACT"
 canonical: true
@@ -63,6 +63,7 @@ PROSE_WHEN_PROSE_IS_ENOUGH=true
 FORCED_ACCENT=false
 TYPO_MIMICRY=false
 CARICATURE=false
+PROSE_WHEN_PROSE_IS_ENOUGH=true
 ```
 
 ## 🧠 Começar pelo plano do Chefe

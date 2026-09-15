@@ -1,123 +1,130 @@
 ---
 title: "WEBHOOK DEPLOY SEGURO"
 date: 2026-06-29
-tags: ["consciencia"]
-updated: 2026-06-29
+updated: 2026-09-11
+status: "LEGACY_DEPLOY_RETIRED_STATE_INGEST_ACTIVE"
+canonical: true
+tags: ["consciencia", "webhook", "deploy", "fixed-point"]
 ---
 
 # Webhook Deploy Seguro
 
-Este documento registra o desenho oficial para deploy rapido sem GitHub Actions.
+Este owner separa dois usos que antes estavam misturados sob a palavra `webhook`.
 
-## Arquitetura
+## Estado canônico atual
 
-```txt
-GitHub/Lovable push
--> Webhook HTTPS
--> deploy.centralldark.com/github
--> Caddy
--> 127.0.0.1:9300
--> CentralDark-WebhookDeploy
--> valida HMAC SHA256
--> valida branch main
--> lock anti-duplo
--> fila pending
--> deploy-job.sh
--> logs em revisoes
--> validacao de dominios
+```text
+GITHUB_STATE_INGEST=ACTIVE
+LEGACY_WEBHOOK_DEPLOY=RETIRED
+CANONICAL_DEPLOY=GITHUB_ACTIONS_SELF_HOSTED
+LEGACY_PORT_9300_MUST_NOT_REMAIN_LISTENING=true
+UNKNOWN != PASS
 ```
 
-## Seguranca
+### 1. Webhook de estado — ativo
 
-- O secret nao fica no repo.
-- Arquivo local previsto: `/root/CentralDark/secrets/webhook.env`.
-- Header obrigatorio: `X-Hub-Signature-256`.
-- Algoritmo: HMAC SHA256.
-- Evento aceito para deploy: `push`.
-- Branch aceita: `refs/heads/main`.
-- `ping` assinado responde 200.
-- Assinatura ausente ou invalida responde 401.
-- Payload nunca vira comando.
-- O deploy local decide quais passos executar.
+O Fixed Point Fabric continua aceitando eventos GitHub para estado/auditoria por meio de:
 
-## Arquivos
+- `apps/modulos/fixed-point-fabric/src/centraldark_fixed_point/github_state.py`
+- `apps/modulos/fixed-point-fabric/src/centraldark_fixed_point/webhook.py`
+- `apps/modulos/fixed-point-fabric/tests/test_state_library.py`
+
+Contrato material já existente:
+
+```text
+X-GitHub-Delivery=REQUIRED
+X-GitHub-Event=REQUIRED
+X-Hub-Signature-256=REQUIRED
+HMAC_SHA256=REQUIRED
+INVALID_SIGNATURE=REJECT
+INVALID_JSON=REJECT
+DELIVERY_DEDUPE=REQUIRED
+EVENT_HISTORY=QUERYABLE
+```
+
+O segredo não fica no repo e não deve ser exposto em chat, issue, commit, PR ou log.
+
+### 2. Webhook de deploy — legado aposentado
+
+O caminho antigo de deploy via `deploy.centralldark.com/github -> 127.0.0.1:9300 -> CentralDark-WebhookDeploy` não é mais a autoridade de deploy.
+
+O arquivo `scripts/webhook/github-webhook-deploy.mjs` existe somente como serviço legado inerte:
+
+- `POST /webhook` responde `410` e declara `status: retired`;
+- `GET /health` pode responder `200` apenas para identificar o legado como `RETIRED`;
+- o serviço declara `canonicalDeploy: github-actions` e `mutatesRepository: false`.
+
+Portanto:
+
+```text
+HTTP_200_ON_LEGACY_HEALTH != DEPLOY_ACTIVE
+LEGACY_WEBHOOK_ALIVE != CANONICAL_DEPLOY
+DO_NOT_REGISTER_NEW_DEPLOY_WEBHOOK_TO_PORT_9300=true
+DO_NOT_RESURRECT_RETIRED_DEPLOY_PATH=true
+```
+
+## Deploy canônico atual
+
+Owner operacional:
+
+- `.github/workflows/vps-exec-selfhosted.yml`
+
+Fluxo:
+
+```text
+main
+-> GitHub Actions
+-> runner self-hosted Linux
+-> checkout/validação do SHA alvo
+-> build/teste isolado
+-> promoção atômica do dist
+-> restart controlado do CentralDark-MCP
+-> health/audit/stability gates
+-> receipt/status
+```
+
+Antes de qualquer mutação de deploy, o workflow canônico trata explicitamente o serviço legado `CentralDark-WebhookDeploy`: valida ownership conhecido, para o processo legado quando presente e exige que a porta `9300` deixe de escutar. Isso impede dois mecanismos de deploy concorrentes.
+
+```text
+ONE_DEPLOY_AUTHORITY=true
+LEGACY_WEBHOOK_STOP_BEFORE_CANONICAL_DEPLOY=true
+PORT_9300_CLOSED_BEFORE_MUTATION=true
+PAYLOAD_NEVER_BECOMES_COMMAND=true
+```
+
+## Arquivos relacionados
+
+Ativos/canônicos:
+
+- `.github/workflows/vps-exec-selfhosted.yml`
+- `apps/modulos/fixed-point-fabric/src/centraldark_fixed_point/github_state.py`
+- `apps/modulos/fixed-point-fabric/src/centraldark_fixed_point/webhook.py`
+- `apps/modulos/fixed-point-fabric/tests/test_state_library.py`
+
+Legado preservado para identificação/retirada segura:
 
 - `scripts/webhook/github-webhook-deploy.mjs`
 - `scripts/webhook/deploy-job.sh`
 - `scripts/run-once/instalar-webhook-deploy-seguro.sh`
 - `scripts/run-once/testar-webhook-deploy-local.sh`
-- `infra/caddy/deploy-centraldark.Caddyfile`
 
-## Como cadastrar webhook no GitHub
+Referências antigas que descrevem o webhook de deploy como ativo são história/proveniência e não substituem o estado material atual.
 
-Cadastrar somente depois de veredito humano:
+## Regra de prova
 
-- Payload URL: `https://deploy.centralldark.com/github`
-- Content type: `application/json`
-- Secret: valor local de `/root/CentralDark/secrets/webhook.env`
-- Events: `push`
-- SSL verification: enabled
-
-Nao colar o secret em chat, issue, commit, PR, painel ou log.
-
-## Como testar
-
-Validacoes locais:
-
-```bash
-node --check scripts/webhook/github-webhook-deploy.mjs
-bash -n scripts/webhook/deploy-job.sh
-bash -n scripts/run-once/instalar-webhook-deploy-seguro.sh
-bash -n scripts/run-once/testar-webhook-deploy-local.sh
+```text
+DOCUMENTED != EXECUTED
+SERVICE_EXISTS != ACTIVE_AUTHORITY
+MERGED != DEPLOYED
+WORKFLOW_EXISTS != WORKFLOW_SUCCEEDED
+DEPLOY_PROVEN_REQUIRES_EXACT_SHA_RUNTIME_EVIDENCE=true
 ```
 
-Teste local do endpoint:
+Para afirmar deploy real, medir o workflow do SHA exato e a evidência de runtime produzida pelos gates. Sem essa evidência, o estado permanece `UNKNOWN` ou `BLOCKED` conforme o caso.
 
-```bash
-bash scripts/run-once/testar-webhook-deploy-local.sh
-```
+## Conexões rápidas
 
-## Logs
-
-Logs completos:
-
-```txt
-/root/Multizap/revisoes/YYYYMMDD-HHMMSS/webhook-deploy/
-```
-
-Chat e relatorios devem mostrar apenas resumo sanitizado.
-
-## Desativar PM2
-
-Somente com veredito humano:
-
-```bash
-pm2 stop CentralDark-WebhookDeploy
-pm2 delete CentralDark-WebhookDeploy
-pm2 save
-```
-
-## O que pode fazer
-
-- Receber `ping`.
-- Receber `push` da `main`.
-- Validar assinatura.
-- Enfileirar deploy se ja houver execucao.
-- Rodar script local controlado.
-- Salvar logs sanitizados.
-
-## O que nao pode fazer
-
-- Executar comando vindo do payload.
-- Expor secret.
-- Fazer Caddy reload sem aprovacao.
-- Mexer em Docker, WuzAPI, WhatsApp, banco real, CRM ou PM2 sensivel sem aprovacao.
-- Cadastrar webhook real sem veredito.
-
----
-
-## Conexões Rápidas
-
-- [[00-LEIA-PRIMEIRO]] — portão de entrada
-- [[MAPA-DO-CEREBRO]] — visão geral
-- [[CONSCIENCIA]] — documento mestre
+- `AGENTS.md` — roteamento operacional
+- `.github/workflows/vps-exec-selfhosted.yml` — autoridade atual de deploy VPS/MCP
+- `apps/modulos/fixed-point-fabric/src/centraldark_fixed_point/github_state.py` — ingestão autenticada de eventos GitHub
+- `docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md` — padrão de prova e comunicação
