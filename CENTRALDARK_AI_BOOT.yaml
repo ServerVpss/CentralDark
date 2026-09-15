@@ -186,7 +186,7 @@ CENTRALDARK_AI_BOOT:
     graph_projection: "apps/modulos/graph-panel/"
     obsidian_plugin: "apps/modulos/obsidian-plugin-grafo-vivo/"
     obsidian_and_runtime_webhook_ingest: "POST https://api.centralldark.com/memoria/ingest"
-    graph_read: "https://grafo.centralldark.com/api/graph?mode=vivo"
+    graph_read: "https://api.centralldark.com/api/graph?mode=vivo"
     raw_event_is_not_canonical: true
     direct_raw_event_to_main: false
     promotion_requires_existing_owner_and_one_writer: true
