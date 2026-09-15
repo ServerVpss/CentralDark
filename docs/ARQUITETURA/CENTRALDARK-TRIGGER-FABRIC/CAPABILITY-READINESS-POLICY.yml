@@ -1,8 +1,10 @@
 schema: centraldark.capability-readiness.v1
 name: CAPABILITY-READINESS-POLICY
-status: CANONICAL_CONTRACT_CANDIDATE
+status: CANONICAL
 owner: CENTRALDARK_TRIGGER_FABRIC
 consumer: MEGAZORD-CENTRALDARK
+promoted_by: SEGREDO/CHEFE
+promoted_at: 2026-09-14
 
 intent:
   statement: "Estar capacitado para usar uma capacidade não significa manter essa capacidade instalada, carregada ou ativa o tempo todo."
@@ -25,6 +27,142 @@ invariants:
   BUTTON_OFF_IS_STATE_NOT_INCIDENT: true
   LOCAL_MODEL_SUPPORTED_IS_NOT_LOCAL_MODEL_RESIDENT: true
   READINESS_DOES_NOT_REQUIRE_RESOURCE_RESIDENCY: true
+  SUBDOMAIN_IS_NOT_NEW_SYSTEM: true
+  CAPABILITY_IS_NOT_NEW_PUBLIC_PORT: true
+  OAUTH_CONNECTED_IS_NOT_ALWAYS_ACTIVE: true
+  EDGE_BLOCKED_CLIENT_IS_NOT_PROVIDER_DOWN: true
+  DIRECT_CLIENT_403_IS_NOT_GLOBAL_MCP_FAILURE: true
+  LOCAL_FILESYSTEM_ACCESS_IS_SEPARATE_CAPABILITY: true
+  OPTIONAL_EXTERNAL_OFF_IS_NOT_GLOBAL_FAILURE: true
+  OPTIONAL_EXTERNAL_OFF_MUST_NOT_BLOCK_BOOT: true
+  OPTIONAL_EXTERNAL_OFF_WITH_FALLBACK_IS_NON_BLOCKING: true
+  REQUIRED_CAPABILITY_FAILURE_NEEDS_FALLBACK_EXHAUSTED: true
+  TOOL_CATALOG_IS_NOT_MODEL_CATALOG: true
+  MODEL_CATALOG_IS_NOT_TOOL_CATALOG: true
+  HERMES_AGENT_BODY_IS_NOT_REPLACEABLE_MODEL: true
+  MODEL_IS_REPLACEABLE_ENGINE: true
+  GATEWAY_IS_INFERENCE_ROUTE_NOT_AGENT_BODY: true
+  NO_PARALLEL_MARKETPLACE: true
+  NO_PARALLEL_ROUTER: true
+
+system_topology:
+  principle: "ONE SYSTEM; HERMES AS AGENT BODY; ENGINES AND TOOLS ARE PLUGGABLE"
+  one_system_only: true
+  one_gateway: true
+  one_tool_catalog: true
+  no_parallel_marketplace: true
+  agent_body:
+    owner: HERMES
+    preserves:
+      - SOUL
+      - MEMORY
+      - WORKSPACE
+      - PLANNING
+      - LOOPS
+      - TOOLS
+      - SKILLS
+      - EXECUTION
+      - CONTINUITY
+  inference_gateway:
+    role: MODEL_BACKEND_ROUTE
+    public_entrypoint: "https://api.centralldark.com"
+    replace_agent_body: false
+  tool_catalog:
+    role: SHARED_CAPABILITY_CATALOG
+    preferred_entrypoint: CENTRALDARK_MCP
+    clients_may_consume_same_catalog: true
+  model_catalog:
+    role: REPLACEABLE_INFERENCE_ENGINES
+    may_include_external_providers: true
+    provider_off_is_router_input: true
+
+capability_classification:
+  CORE:
+    meaning: "Required for the selected mission path; absence can block only after activation/recovery and applicable fallback fail."
+  OPTIONAL_EXTERNAL:
+    meaning: "External or plug-in capability that may be off without failing the organism."
+    off_state: AVAILABLE_OFF
+    blocking: false
+    alert_by_default: false
+    boot_must_continue: true
+  REQUIRED_EXTERNAL:
+    meaning: "External capability explicitly required by current intent."
+    first_action: TRY_EXISTING_FALLBACK_OR_CANONICAL_ACTIVATION
+    block_only_when_no_fallback: true
+
+boot_and_mission_policy:
+  optional_external_off:
+    classification: AVAILABLE_OFF
+    mission_continue: true
+    boot_continue: true
+    global_health_impact: NONE
+  optional_external_failed_with_equivalent_fallback:
+    classification: DEGRADED_NON_BLOCKING
+    mission_continue: true
+    boot_continue: true
+    global_health_impact: DEGRADED
+  required_capability_unavailable:
+    sequence:
+      - CONFIRM_CURRENT_INTENT_REQUIRES_CAPABILITY
+      - TRY_CANONICAL_ACTIVATION
+      - TRY_APPLICABLE_EXISTING_FALLBACK
+      - HEALTH_PROBE_SELECTED_PATH
+      - BLOCK_ONLY_IF_ALL_APPLICABLE_PATHS_FAIL
+    terminal_classification: REQUIRED_UNAVAILABLE
+  unknown:
+    classification: UNKNOWN
+    pass: false
+    fail: false
+    action: MEASURE_OR_CONTINUE_INDEPENDENT_SAFE_WORK
+
+catalog_contract:
+  split_catalogs:
+    tool_catalog:
+      examples: [GITHUB, VPS, FILES, LOGS, DEPLOY, BROWSER, MEMORY, SKILLS, DATABASES, OBSERVABILITY]
+      owner_surface: CENTRALDARK_MCP
+    model_catalog:
+      examples: [GROK, GPT, CLAUDE, GEMINI, NOUS, ABACUS, OTHER_ENGINES]
+      owner_surface: CENTRALDARK_GATEWAY
+  discovery_is_not_health: true
+  listed_is_not_active: true
+  health_is_per_capability: true
+  minimum_health_fields:
+    - DISCOVERY
+    - AUTH
+    - HEALTH
+    - LAST_PROOF
+    - OWNER
+    - TARGET_RUNTIME
+  catalogue_once_consume_everywhere: true
+  client_specific_marketplace_copy: false
+
+hermes_gateway_contract:
+  hermes_controls:
+    - INTENT_EXECUTION
+    - TOOL_SELECTION
+    - TOOL_INVOCATION
+    - MEMORY
+    - WORKSPACE
+    - CONTINUITY
+  gateway_controls:
+    - ENGINE_SELECTION
+    - ENGINE_FALLBACK
+  forbidden:
+    - HERMES_AS_ORDINARY_ENGINE_WHEN_HERMES_IS_CALLER
+    - HERMES_TO_GATEWAY_TO_HERMES_RECURSION
+    - GATEWAY_REPLACES_HERMES_AGENT_LOOP
+  promotion_gate:
+    require_end_to_end_proof:
+      - TOOLS_FIELD_PRESERVED
+      - TOOL_CHOICE_PRESERVED
+      - TOOL_CALLS_PRESERVED
+      - TOOL_CALL_ID_PRESERVED
+      - ARGUMENTS_PRESERVED
+      - TOOL_RESULT_CONTINUATION_PRESERVED
+      - STREAMING_PRESERVED_WHEN_USED
+      - TIMEOUT_AND_ERROR_SEMANTICS_PRESERVED
+      - FALLBACK_DOES_NOT_REENTER_CALLER_HERMES
+    failure_means: DO_NOT_PROMOTE_GATEWAY_AS_HERMES_BACKEND_YET
 
 readiness_model:
   states:
@@ -42,6 +180,8 @@ readiness_model:
       meaning: "Capability Contract Router escolheu a capacidade para a intenção vigente."
     AVAILABLE_OFF:
       meaning: "Capacidade disponível/instalada porém deliberadamente desligada ou não selecionada; estado neutro, sem incidente."
+    DEGRADED_NON_BLOCKING:
+      meaning: "Capacidade opcional selecionada falhou, mas fallback equivalente está ativo; missão e boot continuam com saúde global degradada e observável."
     REQUIRED_UNAVAILABLE:
       meaning: "A intenção vigente exige a capacidade, mas ela não pôde ser ativada nem substituída por fallback aplicável."
   normal_policy: CATALOGUED_OR_READY_TO_MATERIALIZE
@@ -70,10 +210,11 @@ inactive_state_semantics:
     one_optional_arm_off_does_not_fail_organism: true
     provider_or_tool_off_is_router_input_not_global_incident: true
   hud_semantics:
-    AVAILABLE_OFF: "⚪ disponível/desligado — neutro"
-    ACTIVE: "🟢 ativo"
-    REQUIRED_UNAVAILABLE: "🔴 exigido e indisponível após ativação/fallback falhar"
-    UNKNOWN: "⚫ ainda não medido"
+    AVAILABLE_OFF: "âšª disponÃ­vel/desligado â€” neutro"
+    DEGRADED_NON_BLOCKING: "ðŸŸ¡ fallback equivalente ativo â€” degradado, nÃ£o bloqueante"
+    ACTIVE: "ðŸŸ¢ ativo"
+    REQUIRED_UNAVAILABLE: "ðŸ”´ exigido e indisponÃ­vel apÃ³s ativaÃ§Ã£o/fallback falhar"
+    UNKNOWN: "âš« ainda nÃ£o medido"
   forbidden_interpretations:
     - DISABLED_IMPLIES_BROKEN
     - BUTTON_OFF_IMPLIES_REGRESSION
@@ -170,6 +311,131 @@ megazord_semantics:
   reusable_capability_blueprints: true
   one_system_only: true
   one_writer_per_scope: true
+
+external_capability_binding:
+  principle: "INTEGRAR UMA VEZ; AUTORIZAR E ATIVAR SOB DEMANDA"
+  provider_binding:
+    catalogue_after_discovery: true
+    oauth_or_equivalent_binding_supported: true
+    binding_does_not_force_activation: true
+    connected_provider_is_router_input: true
+    direct_provider_access_not_required_when_canonical_mcp_route_exists: true
+    client_specific_edge_block_does_not_invalidate_other_working_routes: true
+    local_filesystem_requires_explicit_local_bridge_capability: true
+  routing:
+    preferred_entrypoint: CENTRALDARK_MCP
+    preserve_provider_specific_adapters: true
+    no_second_router: true
+    no_parallel_brain: true
+    select_only_when_intent_requires: true
+    stop_or_release_when_idle: true
+  proof_semantics:
+    OAUTH_AUTHORIZE_PASS_IS_BINDING_EVIDENCE: true
+    TOKEN_PASS_IS_BINDING_EVIDENCE: true
+    TOOLS_LIST_PASS_IS_MCP_CAPABILITY_EVIDENCE: true
+    ONE_CLIENT_EDGE_403_IS_EDGE_BLOCKED_NOT_GLOBAL_DOWN: true
+    CONNECTED_PROVIDER_IS_NOT_ALL_OPERATIONS_PROVEN: true
+
+public_surface_policy:
+  principle: "POUCAS SUPERFICIES PUBLICAS; CAPACIDADES INTERNAS POR BAIXO DOS PANOS"
+  public_surfaces:
+    human_public: "https://centralldark.com"
+    machine_api: "https://api.centralldark.com"
+    mcp_external: "https://mcp.centralldark.com/mcp"
+  max_normal_public_surfaces: 3
+  private_admin_surface: "https://admin.centralldark.com"
+  private_admin_not_counted_as_normal_public: true
+  total_named_canonical_surfaces: 4
+  legacy_hub_surface: "https://hub.centralldark.com"
+  legacy_hub_policy: COMPATIBILITY_ONLY_UNTIL_REDIRECT_OR_RETIREMENT
+  routing:
+    https_public_port: 443
+    host_based_routing: true
+    subdomain_requires_new_public_port: false
+    internal_capability_requires_public_subdomain: false
+    internal_capability_requires_public_port: false
+    create_public_surface_only_for_real_access_boundary: true
+  single_direction_flow:
+    permanent: true
+    ingress:
+      human_public: CENTRALDARK_PUBLIC
+      human_admin: CENTRALDARK_HUB
+      machine_inference: CENTRALDARK_API
+      tools_and_actions: CENTRALDARK_MCP
+    canonical_adapter: MCP_CENTRALDARK
+    tool_discovery: tools/list
+    tool_execution: tools/call
+    admin_dispatcher: mcp_admin_call
+    internal_capabilities_via_adapter:
+      - HERMES
+      - ZENDRIVER
+      - ELITE_GATEWAY
+      - OAUTH_BROKER
+      - ARSENAL
+      - ARTIFACTS_BUILDER
+      - DARKAI
+      - LOVABLE_PROXY
+      - GITHUB
+      - VPS
+      - FILES
+      - LOGS
+      - DEPLOY
+      - BROWSER
+      - SKILLS
+      - MEMORY
+    direct_public_subdomain_per_capability: false
+    legacy_subdomains_policy: COMPATIBILITY_ONLY_UNTIL_REDIRECT_OR_RETIREMENT
+    new_clients_must_use_canonical_surfaces: true
+    no_second_router: true
+    no_parallel_marketplace: true
+    no_client_specific_tool_catalog: true
+    hermes_controls_execution: true
+    reality_is_judge: true
+  admin_surface:
+    private_single_owner_intent: true
+    edge_basic_auth_or_equivalent_pre_app_gate: REQUIRED
+    centraldark_admin_oauth_or_session: REQUIRED
+    critical_action_reauthentication: REQUIRED
+    vps_root_credentials_in_browser: FORBIDDEN
+    default_public_exposure: DENY
+    audit_access: true
+    rate_limit: true
+    controls:
+      - ENABLED
+      - LOCAL_ONLY
+      - LAN_ALLOWED
+      - MCP_ONLY
+      - PUBLIC
+      - OAUTH_REQUIRED
+      - ADMIN_REAUTH_REQUIRED
+      - AUTO_ACTIVATE_ON_DEMAND
+      - STOP_AFTER_USE
+      - FALLBACK_ALLOWED
+      - RESOURCE_LIMITS
+      - HEALTH_STATUS
+    public_enable_requires:
+      - EXPLICIT_ADMIN_ACTION
+      - AUTHENTICATED_ADMIN_SESSION
+      - APPLICABLE_EDGE_POLICY
+      - AUDIT_RECEIPT
+  internal_service_policy:
+    screenpipe_default: INTERNAL_BEHIND_MCP
+    hub_default: INTERNAL
+    models_default: INTERNAL_ON_DEMAND
+    adapters_default: INTERNAL
+    databases_default: INTERNAL_UNLESS_EXPLICITLY_REQUIRED
+    pm2_services_default: INTERNAL
+
+node_dependency_lock_policy:
+  purpose: "Reprodutibilidade de dependências; não é controle de acesso."
+  package_json_versioned: true
+  package_lock_versioned_when_node_owner_uses_npm: true
+  ci_install_mode: NPM_CI
+  lockfile_change_requires_dependency_review: true
+  copy_lockfile_from_unrelated_project: false
+  lockfile_is_not_authentication: true
+  lockfile_is_not_authorization: true
+  auth_gate_and_dependency_lock_are_independent_layers: true
 
 agent_operational_quality:
   intent: "Absorver práticas de arquitetura de agentes como comportamento do ciclo existente, sem criar ferramenta, cérebro, cargo soberano ou pipeline paralelo."
@@ -363,6 +629,11 @@ proof:
     - NO_APPLICABLE_EXISTING_FALLBACK
   unknown_is_not_pass: true
 
+  optional_external_off_is_not_pass: true
+  optional_external_off_is_not_global_fail: true
+  degraded_non_blocking_requires_working_fallback: true
+  required_unavailable_requires_no_applicable_fallback: true
+
 slogan:
   technical: "CAPABILITY_READY != CAPABILITY_RESIDENT; OFF != FAIL"
-  operational: "ARSENAL COMPLETO, PESO SOB DEMANDA; BOTÃO DESLIGADO É SÓ BOTÃO DESLIGADO"
+  operational: "ARSENAL COMPLETO, PESO SOB DEMANDA; BOTÃƒO DESLIGADO Ã‰ SÃ“ BOTÃƒO DESLIGADO"

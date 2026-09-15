@@ -2,7 +2,7 @@
 title: "00 PORTA DE ENTRADA IA"
 date: 2026-06-29
 tags: ["consciencia"]
-updated: 2026-08-17
+updated: 2026-09-11
 status: "CANÔNICO"
 ---
 
@@ -12,6 +12,8 @@ Este arquivo é a primeira camada de sincronização entre agentes, modelos, plu
 
 ```text
 REUSE_BEFORE_CREATE_REQUIRED=true
+REUSE_PROVEN_DECISION_REQUIRED=true
+NO_REDUNDANT_REPROOF=true
 ```
 
 ## Agentes/modelos
@@ -55,6 +57,8 @@ RETOMAR MISSAO
 
 `!MULTIBUSSOLA` significa aplicar a matriz multidirecional e multirreferencial oficial da Casa, com remedição temporal e revisão revisitada antes do fechamento. O owner canônico do comando é `docs/CONSCIENCIA/MULTIBUSSOLA.md`. O comando reutiliza a Metacognição Operacional e a MetaLupa; não cria novo cérebro, agente ou orquestrador.
 
+`!AURÉOLA CANÔNICA` significa o refinamento adaptativo de !CENTRALDARK. Modo não ritualístico: `RITUAL_MODE=OFF`, `PERTINENCE_FIRST=true`, `MINIMUM_SUFFICIENT_LOOP=true`. Seleciona dinamicamente o menor ciclo suficiente (REACT, FABLE, META_LUPA, MULTIBUSSOLA, RECONCILIAR, CONTRAPROVA, REGISTRA) com base na pertinência do contexto. Pular etapa não pertinente é operação válida. O seletor canônico de BOOT é: AUREOLA_CENTRALDARK_MINIMUM_LOOP → REALIDADE.
+
 ```text
 #ACORDAR + !CALIBRAR + !MULTIBUSSOLA
 → RECUPERAR ESTADO
@@ -79,14 +83,98 @@ Todos os eixos são considerados; somente os eixos materiais são executados. Ei
 5. Ler `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json`.
 6. Ler `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md`.
 7. Quando outro Writer já estiver ativo ou houver colaboração multiagente, carregar `docs/ARQUITETURA/PADRAO-PARCEIRO-DELTA-JUDGE.md`.
-8. Ler `docs/CONSCIENCIA/APRENDIZADOS.md` e `docs/PENDENCIAS.md` quando relevantes.
+8. Ler `docs/CONSCIENCIA/MAPA-DO-CEREBRO.md`, `docs/CONSCIENCIA/APRENDIZADOS.md` e `docs/PENDENCIAS.md` quando relevantes; o mapa contém o registro de provas reutilizáveis e seus critérios de invalidação.
 9. Quando a missão projetar contexto + ferramentas + observabilidade para um ambiente delimitado, carregar `docs/CONSCIENCIA/EXPANSAO-DE-DOMINIO.md`.
 10. Quando `!MULTIBUSSOLA` for invocado, carregar `docs/CONSCIENCIA/MULTIBUSSOLA.md`.
 11. Consultar GitHub Actions quando envolver CI/PR/merge/deploy.
-12. Medir branch, HEAD, escopo, escritor atual, runtime e ferramentas aplicáveis.
+12. Medir branch, HEAD, escopo, escritor atual, runtime e ferramentas aplicáveis somente onde o registro de prova estiver ausente, expirado ou invalidado.
 13. Emitir uma vez o `CENTRALDARK_AI_BOOT` definido em `LEIA-ME-IA.md`.
 14. Executar a reconciliação antes de propor qualquer solução nova.
 15. Continuar do ponto real sem pedir novamente estado que a própria máquina consegue medir.
+
+## Cristalização operacional útil — runtime, GitHub e VPS limpos
+
+Quando uma ação executada no runtime produzir delta útil, seguro e provado, a Casa não deixa a VPS acumular sujeira operacional indefinidamente. O delta deve ser cristalizado no owner existente, commitado e enviado ao GitHub após validação aplicável.
+
+```text
+USEFUL_RUNTIME_DELTA
+→ LOCALIZAR_OWNER_CANONICO
+→ APLICAR_MENOR_DELTA_SEGURO
+→ TESTAR|VALIDAR_CLAIM_APLICAVEL
+→ REMOVER_SECRET_LITERAL_E_LIXO_OPERACIONAL
+→ COMMITAR_DELTA_COESO
+→ PUSHAR_SEM_FORCE
+→ RECONCILIAR_COM_MAIN
+→ VPS_SEM_SUJEIRA_DO_ESCOPO_FECHADO
+```
+
+Regras:
+
+```text
+CRYSTALLIZE_USEFUL_RUNTIME_DELTA=true
+COMMIT_USEFUL_OPERATIONAL_DELTA=true
+PUSH_AFTER_VERIFIED_COMMIT=true
+KEEP_VPS_SYNCED_WITH_GITHUB_MAIN=true
+NO_DIRTY_ACCUMULATION_ON_VPS=true
+FORCE_PUSH=false
+COMMIT_SECRETS=false
+```
+
+Isto não autoriza empacotar alterações aleatórias, outputs de runtime, caches, `.env`, tokens ou sujeira de outro Writer. Se a worktree já estiver suja, o Writer separa o escopo, commita só o delta provado, preserva o restante e registra pendência exata.
+
+```text
+WORKTREE_DIRTY_EXISTING=true
+→ CLASSIFICAR_ESCOPO
+→ STAGE_ONLY_VERIFIED_DELTA
+→ LEAVE_UNRELATED_DIRTY_UNTOUCHED
+→ REPORT_REMAINING_DIRT_BY_SCOPE
+```
+
+## Reutilização de prova — passagem livre sem falso verde
+
+Prova válida não vira cerimônia repetida. Se o mesmo alvo, HEAD/runtime/contrato e identidade material da evidência continuam iguais, o agente **reutiliza a decisão já provada** e trabalha apenas no trecho ainda não fechado.
+
+```text
+PROVEN_DECISION + SAME_PROOF_KEY + NO_CONTRADICTION
+→ REUSE_DECISION
+→ SKIP_REDUNDANT_REPROOF
+→ CONTINUE_FROM_NEXT_UNPROVEN_DELTA
+```
+
+A `PROOF_KEY` é formada somente pelos campos que podem invalidar aquela conclusão, por exemplo:
+
+```text
+REPO + PR + HEAD_SHA
+RUNTIME + PID|PORT|BUILD_SHA
+MCP_CATALOG_VERSION + POLICY_VERSION
+SOURCE_REVISION + RECEIPT_HASH
+```
+
+Reabrir prova apenas quando houver pelo menos um destes eventos:
+
+```text
+HEAD_CHANGED
+PR_HEAD_CHANGED
+RUNTIME_ID_CHANGED
+PID_OR_PORT_CHANGED
+CATALOG_OR_POLICY_CHANGED
+SOURCE_REVISION_CHANGED
+PROOF_EXPIRED_BY_ITS_OWN_CONTRACT
+NEW_MATERIAL_CONTRADICTION
+COUNTERPROOF_INVALIDATED_DECISION
+```
+
+```text
+SAME_TARGET_SAME_PROOF_KEY_NO_DELTA=REUSE
+PASSAGE_FREE_MEANS_NO_REDUNDANT_PROOF=true
+PASSAGE_FREE_MEANS_BYPASS_SECURITY=false
+PASSAGE_FREE_MEANS_BYPASS_CURRENT_INVALIDATION=false
+NO_NEW_GATE_FOR_ALREADY_PROVEN_FACT=true
+```
+
+O owner do mapa de provas é `docs/CONSCIENCIA/MAPA-DO-CEREBRO.md`. Não criar workflow, gate, skill, V2/V3 ou registro paralelo só para lembrar algo já comprovado. Gates existentes consomem a evidência válida e testam somente o que ficou novo, ausente, expirado ou invalidado.
+
+Nome de modelo não muda o contrato. GPT, Codex, Claude, Gemini, Grok, Copilot, Cursor, Windsurf, Hermes ou modelo futuro entram como motores/papéis substituíveis dentro do mesmo organismo.
 
 ## DNA operacional concentrado
 
@@ -417,6 +505,7 @@ Regras:
 | Identidade e continuidade SOL | `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md` |
 | Método cognitivo operacional | `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md` |
 | Regra/erro/padrão reutilizável | `docs/CONSCIENCIA/APRENDIZADOS.md` |
+| Mapa + registro de provas reutilizáveis | `docs/CONSCIENCIA/MAPA-DO-CEREBRO.md` |
 | Reconciliação antes de criar | `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json` |
 | Expansão de Domínio / envelope de missão | `docs/CONSCIENCIA/EXPANSAO-DE-DOMINIO.md` |
 | `!MULTIBUSSOLA` / eixos + bússolas + revisão revisitada | `docs/CONSCIENCIA/MULTIBUSSOLA.md` |
@@ -436,12 +525,12 @@ Secrets nunca são expostos. Ação destrutiva irreversível com `UNKNOWN` mater
 
 ## Regra final
 
-Entrar no repo = reconstruir contexto e estado automaticamente. O objetivo é que qualquer modelo reconheça o mesmo organismo, opere sobre a mesma intenção e deixe SEGREDO/CHEFE apenas com decisões realmente humanas.
+Entrar no repo = reconstruir contexto, carregar provas ainda válidas e medir somente o delta invalidado. O objetivo é que qualquer modelo reconheça o mesmo organismo, opere sobre a mesma intenção e deixe SEGREDO/CHEFE apenas com decisões realmente humanas.
 
 ---
 
 ## Conexões Rápidas
 
 - [[00-LEIA-PRIMEIRO]] — portão de entrada
-- [[MAPA-DO-CEREBRO]] — visão geral
+- [[MAPA-DO-CEREBRO]] — visão geral + provas reutilizáveis
 - [[CONSCIENCIA]] — documento mestre

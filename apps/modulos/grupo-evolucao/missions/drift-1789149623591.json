@@ -1,0 +1,13 @@
+{
+  "id": "drift-1789149623591",
+  "tema": "Drift detectado (1 mudanças)",
+  "contexto": {
+    "drift": [
+      {
+        "tipo": "pm2-status-mudou",
+        "detalhe": "CentralDark-HermesVerificador: stopped → errored"
+      }
+    ]
+  },
+  "origem": "cartografo"
+}

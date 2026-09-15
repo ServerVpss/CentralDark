@@ -25,6 +25,10 @@ principles:
   operational_failure_must_be_generalized: true
   proven_operational_rule_must_bind_to_runtime: true
   same_failure_without_new_information_reuses_crystal: true
+  contract_evolution_is_structural: true
+  contract_gap_must_be_validated_before_crystallize: true
+  reusable_contract_gap_updates_existing_owner: true
+  new_contract_requires_no_existing_owner: true
   second_brain_logical_one: true
   second_brain_parallel_forbidden: true
 normative_hierarchy:
@@ -101,9 +105,68 @@ standard_flow:
     - COUNTERPROVE
     - REGISTER_RECEIPT
     - GENERALIZE_IF_REUSABLE
+  contract_evolution_flow:
+    - DISCOVER_MISSING_RULE
+    - VALIDATE_AGAINST_LIVING_CANON
+    - MEASURE_RUNTIME_WHEN_APPLICABLE
+    - GENERALIZE_MINIMUM_REUSABLE_SCOPE
+    - FIND_EXISTING_CONTRACT_OWNER
+    - UPDATE_EXISTING_OWNER
+    - POSITIVE_TEST
+    - NEGATIVE_TEST
+    - COUNTERPROOF
+    - COMMIT
+    - SAME_HEAD_CI
+    - MERGE_MAIN_WHEN_GREEN
+    - RUNTIME_PROOF_WHEN_APPLICABLE
+    - PERSIST_RECEIPT
+  contract_evolution_guard:
+    discover_missing_rule: true
+    validate_before_crystallize: true
+    generalize_reusable_rules: true
+    update_existing_contract_owner: true
+    create_new_contract_only_if_no_existing_owner: true
+    new_owner_requires_proven_gap_and_governance_gate: true
+    preserve_required_existing_behavior: true
+    preserve_runtime: true
+    prose_only_rule: NOT_LEARNED
+    documented_only_rule: NOT_LEARNED
+    repeated_chefe_instruction_after_promotion: LEARNING_TRANSFER_FAIL
   scope_compression_failure:
     signature: AGENT_REDUCED_HUMAN_OBJECTIVE_WITHOUT_AUTHORIZATION
     remediation: RESTORE_FULL_HUMAN_OBJECTIVE_AND_RECONCILE_IN_AUTHORIZED_SCOPE
+event_driven_autonomy:
+  owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PERSISTENT-AUTONOMOUS-ZORDS.yml
+  first_execution_layer: HERMES
+  resident_contract: true
+  healthy_state: IDLE
+  wake_sources:
+    webhook: WAKE_AND_CLASSIFY
+    health_events: WAKE_AND_CLASSIFY
+    runtime_signals: WAKE_AND_CLASSIFY
+    repository_dispatch: WAKE_AND_CLASSIFY
+    cron: FAILSAFE_PATROL
+  webhook_is_mutation_permission: false
+  cron_is_failsafe_only: true
+  wake_scope: AFFECTED_CONE_ONLY
+  expand_scope_only_when_causal_cone_crosses_boundary: true
+  no_work_when_healthy: true
+  return_to_idle_after_fixed_point: true
+  runtime_residency_claim_requires_runtime_proof: true
+  duplicate_signal_without_information_gain: REUSE_PROOF_OR_DROP
+elastic_execution:
+  owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PERSISTENT-AUTONOMOUS-ZORDS.yml
+  enabled: true
+  default_parallelism: 1
+  scale_with_complexity: true
+  max_concurrency_ceiling: 20
+  allocate_by: [FAILURE_SEVERITY, DEPENDENCY_COUNT, SCOPE_SIZE, UNCERTAINTY, REQUIRED_INDEPENDENT_PROOFS]
+  minimum_sufficient_set: true
+  parallelize_perception: true
+  serialize_mutation_per_scope: true
+  no_duplicate_investigation_without_information_gain: true
+  specialized_worker_is_not_owner: true
+  specialized_worker_is_not_authority: true
 second_brain:
   contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SECOND-BRAIN.yml
   logical: ONE

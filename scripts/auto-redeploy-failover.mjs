@@ -4,7 +4,7 @@
  * 
  * Monitora upstream (GitHub, Omni Router, VPS, MCP, Screenpipe, Hub)
  * Detecta falha → dispara alarme → aciona failover automático entre:
- *   - Omni Router (providers: nous, hermes, google, claude-code, xai, abacus, openai)
+ *   - Omni Router (providers: nous, google, claude-code, xai, abacus, openai)
  *   - Arsenal Adapter (Abacus RouteLLM)
  *   - Hermes Coletivo
  *   - Grok / Codex / Claude / ChatGPT via dispatcher
@@ -21,6 +21,7 @@ import { execSync, spawn } from 'node:child_process';
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { formatBrasilia } from '../central-horario/node.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const RAIZ = resolve(__dirname, '..', '..');
@@ -74,7 +75,6 @@ const CONFIG = {
   // Fallback chain do Omni Router (ordem de preferência)
   fallbackChain: [
     'nous',
-    'hermes',
     'google',
     'claude-code',
     'xai',
@@ -198,7 +198,7 @@ async function httpCheck(url, timeoutMs) {
 
 function checkCredential(provider) {
   const envKey = CONFIG.providerCredentials[provider];
-  if (!envKey) return true; // provider local (hermes, claude-code)
+  if (!envKey) return true; // provider local/CLI explicitamente listado na cadeia
   const val = process.env[envKey];
   return !!val && val.length > 10;
 }
@@ -233,7 +233,7 @@ function shouldFailover(results) {
 
 // ============ ALARMES ============
 async function fireAlarms(trigger, reason, details = {}) {
-  const msg = `🚨 CENTRALDARK FAILOVER\nTrigger: ${trigger}\nReason: ${reason}\nTime: ${new Date().toISOString()}\nDetails: ${JSON.stringify(details, null, 2)}`;
+  const msg = `🚨 CENTRALDARK FAILOVER\nTrigger: ${trigger}\nReason: ${reason}\nTime: ${formatBrasilia(new Date())}\nDetails: ${JSON.stringify(details, null, 2)}`;
 
   // Telegram
   if (CONFIG.alarms.telegram.enabled) {
@@ -322,6 +322,9 @@ async function selectNextProvider() {
 }
 
 async function triggerOmniRouterFailover(newProvider) {
+  if (String(newProvider).toLowerCase() === 'hermes') {
+    throw new Error('hermes_is_agent_runtime_not_engine');
+  }
   // O Omni Router já faz fallback automático via CENTRALDARK_FALLBACK_CHAIN
   // Aqui apenas garantimos que a variável de ambiente reflete a escolha
   process.env.CENTRALDARK_FALLBACK_CHAIN = CONFIG.fallbackChain.join(',');
