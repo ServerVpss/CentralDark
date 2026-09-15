@@ -170,7 +170,8 @@ NO_PARALLEL_POLICY=true
 
 - `scripts/lupa/horn-reuse-fixed-point.mjs`
 - `scripts/lupa/horn-reuse-fixed-point.test.mjs`
-- `.github/workflows/porta-de-entrada.yml` chama a contraprova no gate canônico.
+- `.github/workflows/porta-de-entrada.yml` chama `scripts/lupa/validar-continuidade-global.mjs`; esse guardrail executa o Horn Gate no mesmo fluxo canônico, incluindo self-test, `UNKNOWN` fail-closed e contradição fail-closed.
+- `scripts/lupa/writer-safe-push-main.sh` chama o mesmo guardrail antes de publicar `main`; PR e writer automático convergem no mesmo Horn Gate.
 
 O owner de autoridade continua sendo:
 
