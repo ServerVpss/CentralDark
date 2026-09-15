@@ -48,7 +48,7 @@ export class GrafoVivoSettingTab extends PluginSettingTab {
 
     new Setting(containerEl)
       .setName("URL do grafo")
-      .setDesc("Endpoint que retorna o JSON {nodes, edges}.")
+      .setDesc("Endpoint autenticado da API CentralDark que retorna {nodes, edges}.")
       .addText((txt) =>
         txt
           .setValue(this.plugin.settings.urlGrafo)
@@ -103,8 +103,8 @@ export class GrafoVivoSettingTab extends PluginSettingTab {
       );
 
     new Setting(containerEl)
-      .setName("Token local do Hub")
-      .setDesc("Fica apenas nas configurações locais do Obsidian. Não versionar nem colar no repositório.")
+      .setName("Segredo local da API/Hub")
+      .setDesc("Usado como Bearer na API e no Hub. Fica somente no Obsidian; nunca versionar.")
       .addText((txt) => {
         txt.inputEl.type = "password";
         txt
