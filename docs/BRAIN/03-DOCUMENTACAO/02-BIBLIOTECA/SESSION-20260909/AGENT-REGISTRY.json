@@ -1,0 +1,17 @@
+{
+  "schema": "centraldark.agent-registry.delta.v1",
+  "owner": "docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA",
+  "rule": "BOT != KNOWLEDGE_DATABASE",
+  "agents": [
+    {"id":"geoff","display":"Geoff Huntley","role":"ORCHESTRATOR_OF_LOOPS","primary":["loops","automation","continuity"]},
+    {"id":"ian","display":"Ian Livingstone","role":"ARCHITECT_OF_GUARDRAILS","primary":["guardrails","logic-proof","structural-skeptic"]},
+    {"id":"greg","display":"Greg Pstrucha","role":"DETERMINISTIC_AUDITOR","primary":["tests","observability","evidence"]},
+    {"id":"dex","display":"Dex Horthy","role":"DEPLOY_GOVERNOR","primary":["deploy","state","hold","promotion"]},
+    {"id":"forge","display":"Forja","role":"BOT_FORGE","primary":["bot-templates","skills","routines","setup"]},
+    {"id":"growth","display":"Mesa de Growth","role":"GROWTH_DESK","primary":["draft-only-growth","routines","review"]},
+    {"id":"chief","display":"Chefe de Gabinete","role":"CHIEF_OF_STAFF","primary":["triage","agenda","routines","coordination"]},
+    {"id":"hermes","display":"Hermes","role":"EXECUTOR_CONTINUITY","primary":["execution","preservation","resume","receipts"]}
+  ],
+  "required_fields_per_agent":["identity","role","limits","pointers","last_good_state","receipts"],
+  "knowledge_event":{"fields":["agent","timestamp","source","claim","evidence","sector","status","supersedes","sha"],"no_silent_overwrite":true}
+}
