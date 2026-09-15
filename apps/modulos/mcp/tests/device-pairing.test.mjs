@@ -60,3 +60,28 @@ test("pairing expira sem falso verde", () => {
     assert.equal(f.store.approve({ pairId: pair.pairId, code: pair.code }).ok, false);
   } finally { f.cleanup(); }
 });
+test("token de device expira e refresh renova sem novo pairing", () => {
+  const f = fixture();
+  try {
+    const pair = f.store.start({ deviceName: "SEGREDO", executor: "hermes", surface: "casa" });
+    f.store.approve({ pairId: pair.pairId, code: pair.code });
+    const auth = f.store.status({ pairId: pair.pairId, pairSecret: pair.pairSecret });
+    assert.ok(auth.token);
+    assert.ok(auth.refresh_token);
+    assert.ok(auth.token_expires_at);
+    assert.equal(f.store.heartbeat({ token: auth.token }).ok, true);
+
+    f.advance(30 * 24 * 60 * 60_000 + 1);
+    assert.equal(f.store.heartbeat({ token: auth.token }).error, "device_token_expired");
+
+    const renewed = f.store.refresh({ refreshToken: auth.refresh_token });
+    assert.equal(renewed.ok, true);
+    assert.ok(renewed.token);
+    assert.notEqual(renewed.token, auth.token);
+    assert.equal(f.store.heartbeat({ token: renewed.token }).ok, true);
+
+    const [device] = f.store.listDevices();
+    assert.equal("token_hash" in device, false);
+    assert.equal("refresh_token_hash" in device, false);
+  } finally { f.cleanup(); }
+});

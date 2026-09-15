@@ -303,6 +303,25 @@ artifact_properties:
   contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ARTIFACT-PROPERTIES.yml
   hermes_requires_properties: true
   missing_required: NOT_FLASH_READY
+workspace_artifact_lifecycle:
+  casa_root: E:\CentralDark
+  casa_engineering_repo: E:\CentralDark\CentralDark
+  casa_worktrees: E:\CentralDark\worktrees
+  casa_tmp: E:\CentralDark\_tmp
+  casa_cache: E:\CentralDark\cache
+  casa_site_build_preview: C:\CentralDark
+  vps_root: CENTRALDARK_VPS_ROOT
+  vps_tmp: CENTRALDARK_VPS_ROOT/_tmp
+  vps_cache: CENTRALDARK_VPS_ROOT/cache
+  same_taxonomy_not_same_state: true
+  desktop_or_os_temp_for_agent_helpers: FORBIDDEN_WHEN_CENTRALDARK_TMP_AVAILABLE
+  os_or_tool_internal_temp: ALLOWED_NOT_CANONICAL
+  npx_npm_cache_node_modules: RECONSTRUCTIBLE_PACKAGE_MANAGER_CACHE
+  package_cache_must_not_be_absorbed_wholesale_into_apps_modulos: true
+  dependencies_enter_canonical_only_through_manifest_or_existing_owner: true
+  temp_without_consumer_after_persisted_result: SAFE_DELETE_AFTER_VERIFICATION
+  cache_without_reuse_value: EXPIRE_OR_CLEAN
+  repo_or_worktree: PRESERVE_BY_GIT_OWNER_POLICY
 operational_rule_learning:
   mandatory: true
   applies_to: [HUMAN_CORRECTION, TOOL_ERROR, TEST_FAILURE, CI_FAILURE, RUNTIME_DRIFT, REPEATED_MANUAL_FIX, NEW_INVARIANT]
