@@ -84,3 +84,25 @@ REPO_CONTRACT=PERSISTED
 NEXT_CURSOR=localizar cada wrapper/launcher que imprime texto humano -> aplicar mapa PT-BR -> testar renderização -> contraprova -> receipt
 
 `DOCUMENTED != EXECUTED`: este contrato fixa o padrão do repositório. Scripts locais ainda não presentes no GitHub ou wrappers gerados fora do repo precisam ser medidos antes de declarar a tradução aplicada fisicamente.
+
+## 🔒 Cristal — ChatGPT opera a Casa do SEGREDO
+
+```text
+CHATGPT_CAN_OPERATE_CASA_SEGREDO=true
+TRANSPORT=REMOTE_DESKTOP_COMMANDER
+DEVICE=SEGREDO
+DIRECT_FILE_OPERATIONS=true
+DIRECT_PROCESS_EXECUTION=true
+DIRECT_TERMINAL_EXECUTION=true
+DIRECT_SEARCH_AND_INSPECTION=true
+OBSERVABLE_ACTIONS_REQUIRED=true
+CENTRALDARK_REMAINS_CONTROL_PLANE=true
+```
+
+Isto significa: uma sessão ChatGPT com o conector Remote Desktop Commander autorizado e o device `SEGREDO` online consegue operar diretamente a Casa — ler/escrever arquivos, pesquisar, executar processos/comandos e medir o estado local — sem depender de narrativa de outro agente.
+
+Não significa presença física nem funcionamento quando o device estiver offline. O estado vivo deve ser remedido; a capacidade em si fica cristalizada como parte oficial da arquitetura da Casa.
+
+### Receipt 2026-09-14
+
+`DEVICE_SEGREDO=ONLINE`; `AUTH_TOKEN=VALID`; `REMOTE_PING=PONG`; comando remoto observou `hostname=SEGREDO` e `whoami=segredo\danda`; GitHub respondeu `200`; MCP CentralDark respondeu `200` com catálogo ativo. A operação da Casa por ChatGPT foi, portanto, observada no runtime e não apenas documentada.
