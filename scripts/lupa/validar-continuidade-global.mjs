@@ -2,6 +2,7 @@
 
 import { readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
+import { decideReuse, deriveFixedPoint, selfTest as hornSelfTest } from "./horn-reuse-fixed-point.mjs";
 
 const argv = process.argv.slice(2);
 const at = (name, fallback) => {
@@ -16,6 +17,12 @@ const EXTENSION = "docs/CONSCIENCIA/EXECUCAO-CONTINUA-OWNER-WRITER-CONNECTOR.jso
 const PORTA_VIVA = "docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md";
 const GATE = ".github/workflows/porta-de-entrada.yml";
 const SHARED_WRITER_PUSH = "scripts/lupa/writer-safe-push-main.sh";
+const BOOT = "CENTRALDARK_AI_BOOT.yaml";
+const HORN_REFERENCE = "docs/CONSCIENCIA/REFERENCIA-LOGICA-HORN-REUSE-FIXED-POINT.md";
+const HORN_ENGINE = "scripts/lupa/horn-reuse-fixed-point.mjs";
+const HORN_TEST = "scripts/lupa/horn-reuse-fixed-point.test.mjs";
+const HORN_SOURCE_SHA256 = "b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1";
+const HORN_BOOT_TOKEN = "RUN_REUSE_HORN_FIXED_POINT_GATE_BEFORE_NEW_OWNER_OR_CAPABILITY";
 const REMOVED_MAIN_WRITERS = Object.freeze([
   {
     path: ".github/workflows/linear-pendencias-sync.yml",
@@ -30,7 +37,6 @@ const MAIN_WRITERS = Object.freeze([
   ".github/workflows/obsidian-index.yml",
   ".github/workflows/estado-retomada.yml",
   ".github/workflows/painel-validacao.yml",
-  ".github/workflows/painel-auto-update.yml",]);
   ".github/workflows/painel-auto-update.yml",
 ]);
 const PRE_MAIN_GATES = Object.freeze([
@@ -129,6 +135,42 @@ function validateMainWriter(path, text, sharedScriptText) {
     cursor = pushAt + 1;
   }
   if (pushes === 0) errors.push(`MAIN_WRITER_PUSH_NOT_FOUND:${path}`);
+  return errors;
+}
+
+function validateHornGate(referenceText, bootText) {
+  const errors = [];
+  const expect = (condition, code) => { if (!condition) errors.push(code); };
+
+  expect(referenceText.includes("tlc23(2).pdf"), "HORN_GATE_SOURCE_NAME");
+  expect(referenceText.includes(HORN_SOURCE_SHA256), "HORN_GATE_SOURCE_SHA256");
+  expect(referenceText.includes(CONTRACT), "HORN_GATE_CANONICAL_OWNER");
+  expect(referenceText.includes(HORN_ENGINE), "HORN_GATE_ENGINE_REFERENCE");
+  expect(referenceText.includes(HORN_TEST), "HORN_GATE_TEST_REFERENCE");
+  expect(bootText.includes(HORN_BOOT_TOKEN), "HORN_GATE_BOOT_TOKEN");
+  expect(bootText.includes(HORN_REFERENCE), "HORN_GATE_BOOT_REFERENCE");
+
+  try {
+    hornSelfTest();
+  } catch (error) {
+    errors.push(`HORN_GATE_SELF_TEST:${error?.code || error?.message || error?.name || "ERROR"}`);
+  }
+
+  try {
+    const unknown = decideReuse({});
+    expect(unknown?.fixedPoint === true, "HORN_GATE_UNKNOWN_FIXED_POINT");
+    expect(unknown?.decision === "UNKNOWN", "HORN_GATE_UNKNOWN_NOT_PASS");
+  } catch (error) {
+    errors.push(`HORN_GATE_UNKNOWN_CASE:${error?.code || error?.message || error?.name || "ERROR"}`);
+  }
+
+  let contradictionBlocked = false;
+  try {
+    deriveFixedPoint({ facts: ["EXISTING_OWNER", "NO_EXISTING_OWNER_PROVED"] });
+  } catch (error) {
+    contradictionBlocked = error?.code === "HORN_CONTRADICTION";
+  }
+  expect(contradictionBlocked, "HORN_GATE_CONTRADICTION_FAIL_CLOSED");
   return errors;
 }
 
@@ -325,6 +367,8 @@ let contractText = "";
 let portaText = "";
 let gateText = "";
 let sharedScriptText = "";
+let hornReferenceText = "";
+let bootText = "";
 const writerTexts = {};
 const errors = [];
 try {
@@ -334,11 +378,14 @@ try {
   portaText = read(PORTA_VIVA);
   gateText = read(GATE);
   sharedScriptText = read(SHARED_WRITER_PUSH);
+  hornReferenceText = read(HORN_REFERENCE);
+  bootText = read(BOOT);
   for (const path of MAIN_WRITERS) writerTexts[path] = read(path);
 } catch (error) {
   errors.push(`CONTINUIDADE_GLOBAL_LOAD:${error?.code || error?.name || "ERROR"}`);
 }
 if (contract && extension) {
+  errors.push(...validateHornGate(hornReferenceText, bootText));
   errors.push(...validate(contract, extension, contractText, portaText, gateText, writerTexts, sharedScriptText));
   if (errors.length === 0 && !counterprove(contract, extension, contractText, portaText, gateText, writerTexts, sharedScriptText)) errors.push("CONTINUIDADE_GLOBAL_COUNTERPROOF_FAILED");
 }
@@ -354,6 +401,8 @@ const report = {
   main_writers: MAIN_WRITERS,
   removed_main_writers: REMOVED_MAIN_WRITERS,
   shared_writer_push: SHARED_WRITER_PUSH,
+  horn_gate: errors.some((item) => item.startsWith("HORN_GATE_")) ? "BLOCKED" : "PASS",
+  horn_source_sha256: HORN_SOURCE_SHA256,
   input_authority_boundary: errors.some((item) => item.includes("AUTHORITY") || item.includes("INPUT_BOUNDARY")) ? "BLOCKED" : "PASS",
   counterproof: errors.length === 0 ? "PASS" : "BLOCKED",
   errors,
@@ -361,6 +410,6 @@ const report = {
 };
 
 if (JSON_OUT) console.log(JSON.stringify(report, null, 2));
-else console.log(`CONTINUIDADE_GLOBAL=${report.ok ? "PASS" : "BLOCKED"} AXES=${report.axis_sweep.length} MAIN_WRITERS=${MAIN_WRITERS.length} EXTENSION=${extension ? "PASS" : "BLOCKED"} INPUT_AUTHORITY=${report.input_authority_boundary} COUNTERPROOF=${report.counterproof} ERRORS=${errors.length}`);
+else console.log(`CONTINUIDADE_GLOBAL=${report.ok ? "PASS" : "BLOCKED"} AXES=${report.axis_sweep.length} MAIN_WRITERS=${MAIN_WRITERS.length} HORN_GATE=${report.horn_gate} EXTENSION=${extension ? "PASS" : "BLOCKED"} INPUT_AUTHORITY=${report.input_authority_boundary} COUNTERPROOF=${report.counterproof} ERRORS=${errors.length}`);
 for (const error of errors) console.error(`ERRO ${error}`);
 process.exit(report.ok ? 0 : 1);
