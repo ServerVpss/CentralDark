@@ -5,6 +5,7 @@
 # CHEFE !CENTRALDARK fechar #1498:
 # 1) preservar radar
 # 2) anti-thrash: HEAD com checks pending|queued|in_progress → sem update-branch e sem rerun
+# 2a) fila oldest-first + cursor monotônico; detalhe individual do PR decide mergeable_state
 # 3) rerun somente failure do SHA HEAD atual; cancelled não é ressuscitado
 # 4) rate-limit: remaining/reset/retry-after; remaining=0 → DEFERRED+cursor, exit 0 (não falha PR)
 # 5) OTHER_ERR>0 → FAIL; CONFLICT → receipt explícito
@@ -33,7 +34,7 @@ RERUN_SKIP=0
 DEFERRED=0
 
 echo "📡 ALL_OPEN_PRS_SYNC_START repo=$REPO max=$MAX_PRS"
-echo "RULE update-branch=BEHIND_AND_QUIET_HEAD_ONLY"
+echo "RULE update-branch=SAME_REPO_QUIET_HEAD_API_DECIDES_UPDATE_OR_NOOP"
 echo "RULE rerun=CURRENT_HEAD_FAILURE_OR_CANCELLED"
 echo "RULE rate_limit=DEFER_SAVE_CURSOR_NOT_FAIL"
 echo "RULE SYNC!=APPROVAL UNKNOWN!=PASS"
@@ -123,7 +124,8 @@ fi
 
 mapfile -t PRS < <(
   gh api --paginate "repos/$REPO/pulls?state=open&per_page=100" \
-    --jq '.[] | [.number,.head.ref,.head.sha,.head.repo.full_name,.mergeable_state] | @tsv' \
+    --jq '.[] | [.number,.head.ref,.head.sha,.head.repo.full_name] | @tsv' \
+    | sort -n -k1,1 \
     | head -n "$MAX_PRS"
 )
 
@@ -131,7 +133,7 @@ echo "OPEN_PRS=${#PRS[@]}"
 
 for row in "${PRS[@]:-}"; do
   [[ -z "${row:-}" ]] && continue
-  IFS=$'\t' read -r NUM BR SHA HEAD_REPO MERGE_STATE <<<"$row"
+  IFS=$'\t' read -r NUM BR SHA HEAD_REPO <<<"$row"
 
   if [ "$NUM" -le "$CURSOR_START" ] 2>/dev/null; then
     echo "SKIP_BEFORE_CURSOR #$NUM cursor=$CURSOR_START"
@@ -156,17 +158,47 @@ for row in "${PRS[@]:-}"; do
     continue
   fi
 
-  if [ "${MERGE_STATE:-unknown}" = "dirty" ]; then
-    echo "CONFLICT #$NUM mergeable_state=dirty"
-    CONFLICT=$((CONFLICT + 1))
+  # A listagem de PRs não é autoridade para mergeable_state.
+  # Remeça o PR individualmente para não transformar UNKNOWN em SKIP.
+  set +e
+  PR_JSON="$(gh api "repos/$REPO/pulls/$NUM" 2>&1)"
+  PR_RC=$?
+  set -e
+  if is_rate_limit_error "$PR_JSON"; then
+    echo "DEFERRED_PR_DETAIL #$NUM"
+    save_cursor "$((NUM - 1))"
+    DEFERRED=1
+    break
+  fi
+  if [ "$PR_RC" -ne 0 ]; then
+    echo "ERR_PR_DETAIL #$NUM rc=$PR_RC"
+    OTHER_ERR=$((OTHER_ERR + 1))
     save_cursor "$NUM"
     continue
   fi
+  LIVE_SHA="$(jq -r '.head.sha // empty' <<<"$PR_JSON")"
+  LIVE_HEAD_REPO="$(jq -r '.head.repo.full_name // empty' <<<"$PR_JSON")"
+  MERGE_STATE="$(jq -r '.mergeable_state // "UNKNOWN"' <<<"$PR_JSON")"
+  if [ -z "$LIVE_SHA" ] || [ -z "$LIVE_HEAD_REPO" ]; then
+    echo "ERR_PR_DETAIL_INCOMPLETE #$NUM"
+    OTHER_ERR=$((OTHER_ERR + 1))
+    save_cursor "$NUM"
+    continue
+  fi
+  if [ "$LIVE_HEAD_REPO" != "$REPO" ]; then
+    echo "SKIP_FORK_LIVE #$NUM repo=$LIVE_HEAD_REPO"
+    SKIP_FORK=$((SKIP_FORK + 1))
+    save_cursor "$NUM"
+    continue
+  fi
+  if [ "$LIVE_SHA" != "$SHA" ]; then
+    echo "REMOTE_MOVED_BEFORE_DECISION #$NUM old=${SHA:0:10} new=${LIVE_SHA:0:10}"
+    SHA="$LIVE_SHA"
+  fi
 
-  if [ "${MERGE_STATE:-unknown}" != "behind" ]; then
-    echo "SKIP_NOT_BEHIND #$NUM state=${MERGE_STATE:-UNKNOWN}"
-    SKIP_NOT_BEHIND=$((SKIP_NOT_BEHIND + 1))
-    # still may need rerun pass later; mark cursor and continue update phase
+  if [ "${MERGE_STATE:-unknown}" = "dirty" ]; then
+    echo "CONFLICT #$NUM mergeable_state=dirty"
+    CONFLICT=$((CONFLICT + 1))
     save_cursor "$NUM"
     continue
   fi
@@ -204,7 +236,7 @@ for row in "${PRS[@]:-}"; do
   if [ "$RC" -eq 0 ]; then
     echo "UPDATE #$NUM OK old_head=${SHA:0:10}"
     UPDATED=$((UPDATED + 1))
-  elif printf '%s' "$OUT" | grep -qi 'no new commits on the base branch'; then
+  elif printf '%s' "$OUT" | grep -Eqi 'no new commits on the base branch|not behind|up[ -]?to[ -]?date'; then
     echo "NOOP #$NUM already_synced"
     NOOP=$((NOOP + 1))
   elif printf '%s' "$OUT" | grep -Eqi 'merge conflict|not mergeable'; then
