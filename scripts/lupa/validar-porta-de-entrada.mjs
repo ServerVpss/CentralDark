@@ -249,12 +249,38 @@ if (!contract) {
   if (contract.status !== "CANONICAL") errors.push("CONTRATO_RECONCILIACAO_NAO_CANONICO");
   if (contract.marker !== "REUSE_BEFORE_CREATE_REQUIRED") errors.push("CONTRATO_RECONCILIACAO_MARKER_INVALIDO");
 
+  const continuity = contract.global_continuity_policy ?? {};
+  if (continuity.marker !== "GLOBAL_CONTINUITY_HARD_GATE") errors.push("CONTINUIDADE_GLOBAL_MARKER_AUSENTE");
+  if (continuity.scope !== "GLOBAL") errors.push("CONTINUIDADE_GLOBAL_ESCOPO_INVALIDO");
+  if (continuity.temporal_scope !== "CONTINUOUS") errors.push("CONTINUIDADE_GLOBAL_TEMPORAL_INVALIDA");
+  const principles = continuity.principles ?? {};
+  if (principles.DURABLE_FACTS_SURVIVE_SESSIONS !== true) errors.push("CONTINUIDADE_FATO_DURAVEL_NAO_PERSISTE");
+  if (principles.REMEASURE_ONLY_TEMPORAL_EDGES !== true) errors.push("CONTINUIDADE_REMEDE_TUDO_EM_VEZ_DO_DELTA");
+  if (principles.SENSOR_FAILURE_DOES_NOT_ERASE_DURABLE_FACT !== true) errors.push("CONTINUIDADE_SENSOR_APAGA_FATO_DURAVEL");
+  if (principles.GLOBAL_LEARNING_PROMOTES_TO_CANONICAL_OWNER !== true) errors.push("CONTINUIDADE_APRENDIZADO_PRESO_NO_PR");
+
+  const lifetime = continuity.evidence_lifetime ?? {};
+  if (lifetime.marker !== "DURABLE_FACT_TEMPORAL_EDGE_SPLIT") errors.push("CONTINUIDADE_LIFETIME_MARKER_AUSENTE");
+  if (lifetime.rediscovery_rule !== "FORBIDDEN_WHEN_DURABLE_FACT_AND_PROVENANCE_EXIST") errors.push("CONTINUIDADE_REDESCOBERTA_NAO_BLOQUEADA");
+  if (lifetime.sensor_failure_action !== "USE_AUTHORIZED_ALTERNATE_ROUTE_DO_NOT_ERASE_DURABLE_FACT") errors.push("CONTINUIDADE_FALLBACK_SENSOR_INVALIDO");
+  if (lifetime.current_binding_rule !== "START_FROM_FIRST_MUTABLE_UNKNOWN_OR_REOPENED_EDGE") errors.push("CONTINUIDADE_CURRENT_BINDING_NAO_INCREMENTAL");
+  if (lifetime.known_prefix_rule !== "DO_NOT_REMEASURE_STABLE_PREFIX_WITHOUT_REOPEN_CAUSE") errors.push("CONTINUIDADE_PREFIXO_ESTAVEL_REMEDIDO");
+  if (lifetime.persistence_target !== "CANONICAL_OWNER_NOT_PR_ONLY") errors.push("CONTINUIDADE_PERSISTENCIA_SO_NO_PR");
+  const bindingChain = lifetime.current_binding_chain ?? [];
+  const expectedBindingChain = ["PROCESS", "BRIDGE", "INPUT_OR_VOICE", "INTENT", "ROUTER", "ACTION", "RECEIPT"];
+  if (!Array.isArray(bindingChain) || expectedBindingChain.some((step, index) => bindingChain[index] !== step)) {
+    errors.push("CONTINUIDADE_CURRENT_BINDING_CHAIN_INVALIDA");
+  }
+
   const requiredSequence = [
     "resolve_user_intent",
+    "recover_relevant_context",
+    "load_durable_proven_facts",
     "search_existing_capabilities",
     "open_primary_implementation_files",
     "cross_reference_capabilities_with_request",
     "classify_authority_and_runtime_state",
+    "find_first_mutable_unknown_or_reopened_edge",
     "normalize_evidence_scope_time_and_provenance",
     "arbitrate_conflict_by_discriminating_test_if_needed",
     "reuse_or_extend_before_create",
@@ -281,6 +307,12 @@ if (!contract) {
   if (rules.model_vote_is_truth_mechanism !== false) errors.push("ARQUITETURA_VOTACAO_DE_MODELO_COMO_VERDADE");
   if (rules.same_finding_without_new_evidence !== "DROP_DUPLICATE") errors.push("ARQUITETURA_ANTI_ECO_AUSENTE");
   if (rules.derived_projection_is_source_of_truth !== false) errors.push("ARQUITETURA_PROJECAO_DERIVADA_COMO_AUTORIDADE");
+  if (rules.proved_once_non_temporal_same_target_no_reopen !== "REUSE_DO_NOT_REPEAT_WORK") errors.push("CONTINUIDADE_FATO_DURAVEL_REDESCOBERTO");
+  if (rules.temporal_binding !== "REMEASURE_ONLY_MUTABLE_EDGE") errors.push("CONTINUIDADE_BINDING_TEMPORAL_INVALIDO");
+  if (rules.sensor_or_connector_unavailable !== "USE_AUTHORIZED_ALTERNATE_ROUTE_DO_NOT_ERASE_PROVEN_FACT") errors.push("CONTINUIDADE_SENSOR_SEM_ROTA_ALTERNATIVA");
+  if (rules.reusable_learning_pr_only !== "PROMOTE_TO_CANONICAL_OWNER") errors.push("CONTINUIDADE_APRENDIZADO_NAO_PROMOVIDO");
+  if (rules.bridge_exists_fact !== "DURABLE_AFTER_REPOSITORY_PROOF") errors.push("CONTINUIDADE_BRIDGE_EXISTENCE_NAO_DURAVEL");
+  if (rules.bridge_current_binding !== "TEMPORAL_REMEASURE_REQUIRED") errors.push("CONTINUIDADE_BRIDGE_CURRENT_NAO_TEMPORAL");
   if (contract.complexity_policy?.never_expose_internal_governance_as_user_bureaucracy !== true) {
     errors.push("CONTRATO_RECONCILIACAO_GOVERNANCA_EXPOSTA_AO_USUARIO");
   }
@@ -468,6 +500,8 @@ const report = {
   contrato_reconciliacao_schema_expected: RECONCILIATION_SCHEMA_VERSION,
   contrato_reconciliacao_schema_observed: contract?.schema_version ?? null,
   arquitetura_padrao_marker: contract?.standard_architecture?.marker ?? null,
+  continuidade_global_marker: contract?.global_continuity_policy?.marker ?? null,
+  durable_fact_temporal_edge_marker: contract?.global_continuity_policy?.evidence_lifetime?.marker ?? null,
   identidade_lupa: IDENTIDADE_LUPA,
   reuse_before_create_required: true,
   centraldark_root_only_required: true,
@@ -495,6 +529,8 @@ else {
       `CENTRALDARK_ROOT_ONLY=${report.centraldark_root_only_required ? 1 : 0} ` +
       `WORKFLOW_REUSE=${report.workflow_reuse_required ? 1 : 0} ` +
       `AI_DETERMINISTIC_FALLBACK=${report.ai_deterministic_fallback_required ? 1 : 0} ` +
+      `CONTINUIDADE_GLOBAL=${report.continuidade_global_marker || "MISSING"} ` +
+      `DURABLE_TEMPORAL=${report.durable_fact_temporal_edge_marker || "MISSING"} ` +
       `ARCHITECTURE=${report.arquitetura_padrao_marker || "MISSING"} ` +
       `SCHEMA=${report.contrato_reconciliacao_schema_observed}/${report.contrato_reconciliacao_schema_expected} ` +
       `ADAPTADORES=${report.adaptadores_encontrados.length}/${report.adaptadores_obrigatorios.length} ` +

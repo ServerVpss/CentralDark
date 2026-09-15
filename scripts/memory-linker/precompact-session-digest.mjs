@@ -117,6 +117,8 @@ async function main() {
     const checkpoint = buildCheckpoint(input, observed);
     persistCheckpoint(checkpoint, observed.gitDir);
   } catch (error) {
+    // Context compaction must not be blocked because the local checkpoint degraded.
+    // The failure stays visible while the canonical state remains unchanged.
     const code = error instanceof Error ? error.message : String(error);
     process.stderr.write(`CENTRALDARK_PRECOMPACT=DEGRADED reason=${code}\n`);
   }
