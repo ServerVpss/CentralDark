@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026-09-12T02:54:49.364Z",
-  "updatedAtBR": "11/09/2026, 23:54:49 BRT",
+  "updatedAt": "2026-09-15T13:42:05.616Z",
+  "updatedAtBR": "15/09/2026, 10:42:05 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
@@ -150,11 +150,11 @@
       "titulo": "Proxy Anthropic configurado — Claude Sonnet ativo no PR Review Multi-IA",
       "status": "concluido",
       "prioridade": "media",
-      "detalhe": "ANTHROPIC_API_KEY no GitHub Secrets + proxy configurado no pr-agent.yml. Testado: sonnet-4-6, opus-4-8, haiku-4-5, sonnet-4-5 → todos HTTP 200 (28/06/2026)"
+      "detalhe": "ANTHROPIC_API_KEY ***OCULTO*** GitHub Secrets + proxy configurado no pr-agent.yml. Testado: sonnet-4-6, opus-4-8, haiku-4-5, sonnet-4-5 → todos HTTP 200 (28/06/2026)"
     },
     {
       "id": "LINEAR-KEY",
-      "titulo": "LINEAR_API_KEY adicionada — Linear configurado em português",
+      "titulo": "LINEAR_API_KEY ***OCULTO*** — Linear configurado em português",
       "status": "concluido",
       "prioridade": "media",
       "detalhe": "22 labels + 9 estados + 10 projetos criados via linear-setup.mjs"
@@ -233,7 +233,7 @@
     },
     {
       "id": "F4",
-      "titulo": "Token GitHub com workflow scope (GITHUB_PAT_PERFIL)",
+      "titulo": "Token ***OCULTO*** com workflow scope (<nome-de-segredo>)",
       "status": "concluido"
     },
     {
@@ -519,7 +519,7 @@
   ],
   "blockers": [
     "10 issues sentinela abertas (automáticas — sem falha real, mas precisam ser fechadas)",
-    "ANTHROPIC_API_KEY ausente — Claude Sonnet inativo no PR Review",
+    "ANTHROPIC_API_KEY ***OCULTO*** — Claude Sonnet inativo no PR Review",
     "MultiZap-BOT errored — não crítico",
     "Pendência A9: executar tela Arsenal de Skills no Lovable"
   ],
@@ -537,7 +537,7 @@
     "proxAcao": "Corrigir 6 workflows vermelhos (SEG-41) — próxima sessão",
     "issuesCriadas": [
       "SEG-41: 6 workflows vermelhos no GitHub Actions (urgente)",
-      "SEG-42: ANTHROPIC_API_KEY ausente — Claude inativo no PR Review (alta)",
+      "SEG-42: ANTHROPIC_API_KEY ***OCULTO*** — Claude inativo no PR Review (alta)",
       "SEG-43: MultiZap-BOT errored — investigar causa raiz (média)"
     ]
   },
@@ -598,6 +598,13 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-09-15T13:42:05.633Z",
+      "title": "Codex Reviewer global aplicado aos 107 issues/PRs abertos; automação futura proposta no PR #1541",
+      "area": "GitHub / Review Fabric",
+      "status": "feito",
+      "detail": ""
+    },
     {
       "time": "2026-09-05T19:02:51.511Z",
       "titulo": "Push na main · b8504ba0b6913facaa3396ed5e5838ff6ee19877",
@@ -665,7 +672,7 @@
     {
       "time": "2026-09-05T15:10:30.765Z",
       "titulo": "Push na main · a146ce36d48ae9671cd8baaed0375c0dbbdc14f3",
-      "detalhe": "fix: add submodule definition and debug token step; switch PR Mother Pulse to pull_request; add submodules false to checkout",
+      "detalhe": "fix: add submodule definition and debug token ***OCULTO***; switch PR Mother Pulse to pull_request; add submodules false to checkout",
       "area": "Repositório",
       "sha": "a146ce3",
       "actor": "segredounlock"
@@ -829,174 +836,6 @@
       "area": "Repositório",
       "sha": "fcfc7cd",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-09-05T10:01:22.825Z",
-      "titulo": "Push na main · e288306d7e188b372cc7264223584fb1fa131983",
-      "detalhe": "docs(codex): trocar Abacus direto pela porta única CentralDark",
-      "area": "Repositório",
-      "sha": "e288306",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-09-05T10:00:25.033Z",
-      "titulo": "Push na main · 94327e01f214758e8f1e5ae20ecf758a3bcb0cca",
-      "detalhe": "feat(router): failover automático e Responses API na porta única",
-      "area": "Repositório",
-      "sha": "94327e0",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-09-05T09:55:23.110Z",
-      "titulo": "Push na main · a039bf88003fe1c12b70fe956327457769086a9c",
-      "detalhe": "docs(comite): cristalizar convergência Casa E, Omni e Sentinela",
-      "area": "Repositório",
-      "sha": "a039bf8",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-09-05T09:54:22.687Z",
-      "titulo": "Push na main · 328d1554fce868cd2cccca24c92a8a9fd191ec5b",
-      "detalhe": "feat(sentinela): detectar drift de Casa e spending-limit de provider",
-      "area": "Repositório",
-      "sha": "328d155",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-09-05T09:52:41.233Z",
-      "titulo": "Push na main · 6b01b30fc6b1dab177fe4d2fb767daea302e63d5",
-      "detalhe": "feat(sol): projetar Omni Router e Casa E como estado único",
-      "area": "Repositório",
-      "sha": "6b01b30",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-09-05T09:49:27.622Z",
-      "titulo": "Push na main · 846600543d9b9e9a7f71b4aa1a62c5f4bab67797",
-      "detalhe": "feat(desktop): medir Omni Router como saúde central",
-      "area": "Repositório",
-      "sha": "8466005",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-09-05T09:48:36.522Z",
-      "titulo": "Push na main · 6634e2db1760baf8b12ce96d4ff9a296da64a1b0",
-      "detalhe": "feat(router): impor porta única CentralDark no site e desktop",
-      "area": "Repositório",
-      "sha": "6634e2d",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-09-05T09:47:18.504Z",
-      "titulo": "Push na main · 5ebbbe6eb8a94765e753cdda869e52208f4638a3",
-      "detalhe": "chore: atualiza SOUL-SOL fluxo operacional + deps",
-      "area": "Repositório",
-      "sha": "5ebbbe6",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-09-05T09:38:27.939Z",
-      "titulo": "Push na main · 854a48b4bf68c73614c3f551f56f508fa342c187",
-      "detalhe": "docs(comite): registrar sentinela sistêmica e caracol reverso",
-      "area": "Repositório",
-      "sha": "854a48b",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-09-05T09:37:05.474Z",
-      "titulo": "Push na main · fece1d3b037c1d12402e1ba2624304552368b818",
-      "detalhe": "feat(sentinela): executar watch de notas e eventos sistêmicos",
-      "area": "Repositório",
-      "sha": "fece1d3",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-09-05T09:35:07.064Z",
-      "titulo": "Push na main · 4143940a0a4a9368a9ce4afefeb9ccc3838d92fc",
-      "detalhe": "feat(sentinela): vigiar desalinhamento global e reconciliar pelo CARACOL",
-      "area": "Repositório",
-      "sha": "4143940",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-09-05T09:19:22.507Z",
-      "titulo": "Push na main · 1878a45fc44c46f76c27c5215fbb96eec212eb4d",
-      "detalhe": "micro: deltas painel + worktree para pacote main remoto. Pronto pro ao vivo como desejo.",
-      "area": "Repositório",
-      "sha": "1878a45",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-09-05T08:46:54.036Z",
-      "titulo": "Push na main · c2db842dd77628bc3a7bc88ed809373178cde935",
-      "detalhe": "caracol: RODANDO EM BACKGROUND ATÉ 09:00 05/09/2026. Banner anotado no watch pra todos saberem. Commit main. Audio original preservado no play. Verifier executado.",
-      "area": "Repositório",
-      "sha": "c2db842",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-09-05T08:28:50.913Z",
-      "titulo": "Push na main · 0277db3dd28646959c2290ddf1ddf1f94285f360",
-      "detalhe": "include: audio mapping in CentralDark Reconciliation Watch.html - MAPEAR AUDIO + USAR O MESMO AUDIO ORIGINAL QUANDO APERTA PLAY! (original_*.mp3 placeholders, <audio controls> with src original, no regen). Per instruction + ChatGPT context ",
-      "area": "Repositório",
-      "sha": "0277db3",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-09-05T08:18:23.283Z",
-      "titulo": "Push na main · 05340cece49d3c6e34cbff8739676f72aa13df05",
-      "detalhe": "🧠 SOUL REANCHOR + CARACOL RECONCILED (absorbed into graph-panel + spiral_traversal) (#1413)",
-      "area": "Repositório",
-      "sha": "05340ce",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-09-04T10:36:52.057Z",
-      "titulo": "Push na main · 450b59a9b00466f8609d5b2865fb79a4176695c0",
-      "detalhe": "chore(deps): bump fast-uri from 3.1.5 to 3.1.7 in /apps/modulos/mcp in the npm_and_yarn group across 1 directory (#1397)",
-      "area": "Repositório",
-      "sha": "450b59a",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-09-04T09:31:13.557Z",
-      "titulo": "Push na main · 1e903a9e7a6184c56c1baf2e6ff5325d5181e2f5",
-      "detalhe": "fix(dependabot): CI sempre verde — sistema autonomo com 20 frentes cristalizadas (#1407)",
-      "area": "Repositório",
-      "sha": "1e903a9",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-09-04T05:54:21.698Z",
-      "titulo": "Push na main · eb8169783ddfacc9293482ed3f4f410ee28f5dd6",
-      "detalhe": "Auto PR: feat/coderabbit-bridge (#1406)",
-      "area": "Repositório",
-      "sha": "eb81697",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-09-02T04:42:11.704Z",
-      "titulo": "Push na main · b5f821359484f260304d96d04fe439820e0e3877",
-      "detalhe": "fix(health): get_proc_mem soma KB e retorna int; adiciona teste unitário",
-      "area": "Repositório",
-      "sha": "b5f8213",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-09-01T00:44:53.753Z",
-      "titulo": "Push na main · dce8a91f60781879bebb205f054bef45c9dab946",
-      "detalhe": "☀️ FIX(CORE): HERDAR EMOJIS EM TODO MODELO (#1390)",
-      "area": "Repositório",
-      "sha": "dce8a91",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-31T11:58:33.628Z",
-      "titulo": "Push na main · 8ff68f74d33e399f5b6f76ddbeff2f7a4c3af5f3",
-      "detalhe": "Merge PR #1389: fix/close-external-source-gate-20260831 - funnel gate implementation",
-      "area": "Repositório",
-      "sha": "8ff68f7",
-      "actor": "segredounlock"
     }
   ],
   "agents": [
@@ -1026,7 +865,7 @@
       "name": "Claude — Sonnet 4.6 (PR)",
       "role": "PR Reviewer (Anthropic)",
       "power": 90,
-      "description": "Review de PRs via pr-agent + ANTHROPIC_API_KEY. ~$0.01/PR. Aguardando secret para ativar."
+      "description": "Review de PRs via pr-agent + ANTHROPIC_API_KEY. ~$0.01/PR. Aguardando secret ***OCULTO*** ativar."
     }
   ],
   "iaCards": [
@@ -1059,7 +898,7 @@
       "owner": "Groq",
       "status": "ativo",
       "severity": "p3",
-      "evidence": "Review automático de PRs via GitHub Actions. GROQ_API_KEY configurado. Gratuito (100 req/dia).",
+      "evidence": "Review automático de PRs via GitHub Actions. GROQ_API_KEY ***OCULTO*** Gratuito (100 req/dia).",
       "progress": 100,
       "criteriaDone": 1,
       "criteriaTotal": 1,
@@ -1080,7 +919,7 @@
       "owner": "Google",
       "status": "ativo",
       "severity": "p3",
-      "evidence": "Review automático de PRs via Google AI Studio. GEMINI_API_KEY configurado. Gratuito no tier básico.",
+      "evidence": "Review automático de PRs via Google AI Studio. GEMINI_API_KEY ***OCULTO*** Gratuito no tier básico.",
       "progress": 100,
       "criteriaDone": 1,
       "criteriaTotal": 1,
@@ -1101,11 +940,11 @@
       "owner": "Anthropic",
       "status": "pendente",
       "severity": "p2",
-      "evidence": "ANTHROPIC_API_KEY não configurado no GitHub Secrets. Job pula graciosamente até ser ativado.",
+      "evidence": "ANTHROPIC_API_KEY ***OCULTO***ão configurado no GitHub Secrets. Job pula graciosamente até ser ativado.",
       "progress": 0,
       "criteriaDone": 0,
       "criteriaTotal": 1,
-      "nextAction": "Adicionar ANTHROPIC_API_KEY em Settings › Secrets › Actions",
+      "nextAction": "Adicionar ANTHROPIC_API_KEY ***OCULTO*** Settings › Secrets › Actions",
       "source": "GitHub Actions: review-claude",
       "links": [
         {
@@ -1379,7 +1218,7 @@
       "kind": "Issue",
       "number": 124,
       "title": "PR Review Multi-IA falhou — workflow pr-agent",
-      "summary": "GitHub Actions: review-groq, review-gemini ou review-claude falharam num PR recente. Verificar log e se os secrets GROQ_API_KEY / GEMINI_API_KEY estão válidos.",
+      "summary": "GitHub Actions: review-groq, review-gemini ou review-claude falharam num PR recente. Verificar log e se os secrets GROQ_API_KEY ***OCULTO*** GEMINI_API_KEY ***OCULTO***ão válidos.",
       "status": "aguardando_revisao_humana",
       "severity": "p2",
       "bot": "Vigia",
@@ -1400,12 +1239,12 @@
     {
       "kind": "Config",
       "number": 0,
-      "title": "LINEAR_API_KEY não configurada",
+      "title": "LINEAR_API_KEY ***OCULTO***ão configurada",
       "summary": "Para listar issues do Linear no painel, precisa de uma API key. Gerar em linear.app/settings/api e adicionar nas variáveis de ambiente do MCP como LINEAR_API_KEY.",
       "status": "aguardando_revisao_humana",
       "severity": "p3",
       "bot": "MCP",
-      "nextAction": "Gerar LINEAR_API_KEY em linear.app/settings/api e adicionar ao mcp.env",
+      "nextAction": "Gerar LINEAR_API_KEY ***OCULTO*** linear.app/settings/api e adicionar ao mcp.env",
       "url": "https://linear.app/settings/api"
     }
   ],
