@@ -41,7 +41,7 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[yaml]": {
-    "editor.defaultFormatter": "prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "eslint.enable": true,
   "eslint.validate": [
