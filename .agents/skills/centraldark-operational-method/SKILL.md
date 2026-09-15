@@ -290,6 +290,28 @@ TOOLS
 
 **Novo Profile Sem House Boot:** FAIL_CLOSED.
 
+
+### 3.1 BOT PROFILE IS CONFIGURATION, NOT PROCESS
+**Regra direta do Chefe:** o futuro Builder de Bots da CentralDark configura perfis sobre o mesmo organismo; não cria um processo, PID, governo ou cérebro por persona.
+
+```text
+PROFILE != PROCESS
+PROFILE != PID
+PROFILE != OWNER
+PROFILE != GOVERNANCE
+BOT_PROFILE = VIEW + SPECIALIZATION + CAPABILITY_SELECTION + SKILL_SELECTION + TOOL_POLICY + ROUTINE_BINDING
+```
+
+**Runtime canônico:** `BOT_PROFILE -> CAPABILITY_ROUTER -> OWNER_EXISTENTE -> WORKER_POOL_EXISTENTE -> ONE_WRITER_PER_SCOPE -> EVIDENCE -> REALITY_JUDGE`.
+
+**Pode variar por Bot:** nome, rótulo, descrição/persona, especialização, modelo preferido, capabilities, skills, tools e routines permitidas.
+
+**Não pode variar por Bot:** Regra Zero, autoridade do CHEFE, SOL/HERMES, owner canônico, writer único, proof rules, Reality Judge, fixed point, segurança e `REUSE_BEFORE_CREATE`.
+
+**PID policy:** persona não recebe daemon/PID próprio por padrão. Processo novo só existe quando uma capability exige isolamento/runtime próprio e a ausência de owner/worker equivalente foi PROVADA.
+
+**Persistência:** salvar somente o delta de configuração do profile; não copiar constituição, skills canônicas ou memória global para cada Bot.
+
 ### 4. CSP/Chrome Freeze — Metodologia Cirúrgica
 - CSP bloqueando `eval` **não é bug** — é a catraca funcionando
 - Não assumir vírus, não editar bundle externo, não relaxar CSP
