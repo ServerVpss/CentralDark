@@ -28,6 +28,8 @@ test("pairing exige segredo de posse e entrega token uma única vez", () => {
     const first = f.store.status({ pairId: pair.pairId, pairSecret: pair.pairSecret });
     assert.equal(first.status, "approved");
     assert.ok(first.token);
+    assert.ok(first.refresh_token);
+    assert.ok(first.token_expires_at);
     const second = f.store.status({ pairId: pair.pairId, pairSecret: pair.pairSecret });
     assert.equal(second.status, "approved");
     assert.equal("token" in second, false);
@@ -46,6 +48,8 @@ test("heartbeat autentica device e lista sem expor token hash", () => {
     assert.equal(device.status, "online");
     assert.equal(device.device_name, "SEGREDO");
     assert.equal("token_hash" in device, false);
+    assert.equal("refresh_token_hash" in device, false);
+    assert.ok(device.token_expires_at);
     f.advance(46_000);
     assert.equal(f.store.listDevices()[0].status, "offline");
   } finally { f.cleanup(); }
