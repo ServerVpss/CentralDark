@@ -1,0 +1,13 @@
+{
+  "id": "drift-1789147819864",
+  "tema": "Drift detectado (1 mudanças)",
+  "contexto": {
+    "drift": [
+      {
+        "tipo": "pm2-novo",
+        "detalhe": "CentralDark-LovableProxy"
+      }
+    ]
+  },
+  "origem": "cartografo"
+}

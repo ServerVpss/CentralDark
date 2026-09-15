@@ -69,7 +69,7 @@ required_windows = [
 ]
 required_workflow = [
     'CentralDark Desktop — Windows Installer',
-    'windows-latest',
+    'runs-on: [self-hosted, Windows, X64]',
     'pnpm test:centraldark-desktop',
     'pnpm centraldark:build:win',
     'CentralDark-Setup-*.exe',

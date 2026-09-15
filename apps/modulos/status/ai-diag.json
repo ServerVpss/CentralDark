@@ -1,17 +1,17 @@
 {
-  "gerado_em": "2026-07-05T22:43:00.781Z",
-  "gerado_em_br": "05/07/2026, 19:43:00",
+  "gerado_em": "2026-09-12T02:54:00.559Z",
+  "gerado_em_br": "11/09/2026, 23:54:00",
   "versao_tick": "2.0",
   "ambiente": {
-    "tem_chave_lovable": false,
+    "tem_chave_lovable": true,
     "proxy_ativo": {
-      "nome": "CentralDark-ArsenalProxy",
-      "url": "http://127.0.0.1:3101"
+      "nome": "CentralDark-LovableProxy",
+      "url": "http://127.0.0.1:3102"
     },
     "proxies_conhecidos": [
       {
         "nome": "CentralDark-LovableProxy",
-        "status": "ausente"
+        "status": "online"
       },
       {
         "nome": "CentralDark-ArsenalProxy",
@@ -23,32 +23,32 @@
     "proxy": {
       "label": "proxy /health (local)",
       "ok": true,
-      "ms": 61,
-      "proxy": "CentralDark-ArsenalProxy",
-      "url": "http://127.0.0.1:3101",
+      "ms": 118,
+      "proxy": "CentralDark-LovableProxy",
+      "url": "http://127.0.0.1:3102",
       "status": 200,
       "corpo": {
         "ok": true,
-        "raiz": "/root/CentralDark/docs"
+        "service": "lovable-proxy"
       }
     },
     "gateway": {
       "label": "gateway publico (ping)",
       "ok": true,
-      "ms": 436,
+      "ms": 202,
       "status": 404,
       "alcancavel": true
     },
     "chat": {
       "label": "chat completion end-to-end",
       "ok": false,
-      "ms": 0,
-      "erro": "aguardando_chave: LOVABLE_API_KEY nao configurada no PM2"
+      "ms": 166,
+      "erro": "HTTP 401: {\"status\":401,\"type\":\"unauthorized\",\"title\":\"Invalid API key. The key could not be decrypted.\",\"message\":\"Invalid API key. The key could not be decrypted.\",\"details\":\"\",\"request_id\":\"c504a9d5b684b2c2a"
     },
     "erros_recentes": {
-      "label": "logs de erro (CentralDark-ArsenalProxy)",
-      "existe": false,
-      "arquivo": "/root/.pm2/logs/CentralDark-ArsenalProxy-error.log",
+      "label": "logs de erro (CentralDark-LovableProxy)",
+      "existe": true,
+      "arquivo": "/root/.pm2/logs/CentralDark-LovableProxy-error.log",
       "linhas": []
     }
   },
