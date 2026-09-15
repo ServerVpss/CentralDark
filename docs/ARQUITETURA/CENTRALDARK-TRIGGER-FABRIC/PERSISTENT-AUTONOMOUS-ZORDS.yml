@@ -47,6 +47,25 @@ persistent_activation:
   same_failure_signature: REUSE_CRYSTAL_NOT_RETHINK
   already_proven_without_reopen_cause: REUSE_PROOF
 
+residency_and_wake:
+  first_execution_layer: HERMES
+  resident_contract: true
+  healthy_state: IDLE
+  wake_on_event: true
+  wake_sources:
+    webhook: WAKE_AND_CLASSIFY
+    health_event: WAKE_AND_CLASSIFY
+    runtime_signal: WAKE_AND_CLASSIFY
+    repository_dispatch: WAKE_AND_CLASSIFY
+    cron: FAILSAFE_PATROL
+  webhook_is_mutation_permission: false
+  cron_is_mutation_permission: false
+  wake_scope: AFFECTED_CONE_ONLY
+  expand_scope_only_when_causal_cone_crosses_boundary: true
+  no_work_when_healthy: true
+  return_to_idle_after_fixed_point: true
+  runtime_residency_requires_runtime_proof: true
+
 zords:
   ZORD_WORKFLOW_DEDUPE:
     role: DETERMINISTIC_STRUCTURE_DEDUPLICATION
@@ -182,6 +201,21 @@ persistent_failure_sweep:
   destructive_or_irreversible_without_authority: BLOCKED
   infinite_retry_without_information_gain: FORBIDDEN
 
+elastic_execution:
+  enabled: true
+  default_parallelism: 1
+  scale_with_complexity: true
+  max_concurrency_ceiling: 20
+  allocate_by: [FAILURE_SEVERITY, DEPENDENCY_COUNT, SCOPE_SIZE, UNCERTAINTY, REQUIRED_INDEPENDENT_PROOFS]
+  minimum_sufficient_set: true
+  parallelize_perception: true
+  serialize_mutation_per_scope: true
+  no_duplicate_investigation_without_information_gain: true
+  specialized_worker_is_not_owner: true
+  specialized_worker_is_not_authority: true
+  idle_after_fixed_point: true
+  runtime_capacity_must_be_measured_before_scaling: true
+
 main_promotion_boundary:
   deterministic_checks_remain_authority: true
   ai_review_is_consultative: true
@@ -203,7 +237,8 @@ proof_status_at_creation:
   autonomous_zero_failure_global_fixed_point: NOT_PROVEN_UNTIL_CURRENT_SWEEP_COMPLETES
 
 invariant: >-
-  CENTRALDARK_BOOT -> MEGAZORD -> MINIMUM_SUFFICIENT_ZORDS -> DEDUPE/REVIEW ->
-  HERMES_TEST -> META_LUPA -> REALITY_JUDGE -> CRYSTAL_OR_MINERAL -> RECEIPT ->
-  NEXT_CURSOR -> REPEAT_UNTIL_FIXED_POINT; sem descartar aprendizado e sem repetir
-  claim ja selado sem causa nova.
+  CENTRALDARK_BOOT -> MEGAZORD -> HERMES_RESIDENT_IDLE -> EVENT_WAKE ->
+  MINIMUM_SUFFICIENT_ZORDS -> DEDUPE/REVIEW -> HERMES_TEST -> META_LUPA ->
+  REALITY_JUDGE -> CRYSTAL_OR_MINERAL -> RECEIPT -> NEXT_CURSOR ->
+  REPEAT_UNTIL_FIXED_POINT; sem descartar aprendizado e sem repetir claim ja selado
+  sem causa nova.
