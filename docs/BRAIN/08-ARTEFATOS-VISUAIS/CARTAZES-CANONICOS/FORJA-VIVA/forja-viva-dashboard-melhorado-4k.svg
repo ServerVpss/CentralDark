@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="3840" height="2160" viewBox="0 0 3840 2160" role="img" aria-label="CentralDark Forja Viva 4K">
+<defs><radialGradient id="bg"><stop offset="0" stop-color="#17102b"/><stop offset="0.58" stop-color="#070b14"/><stop offset="1" stop-color="#020306"/></radialGradient>
+<linearGradient id="fire" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffb000"/><stop offset=".45" stop-color="#ff4d00"/><stop offset="1" stop-color="#7a0800"/></linearGradient>
+<linearGradient id="violet" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d8b4fe"/><stop offset=".48" stop-color="#8b5cf6"/><stop offset="1" stop-color="#22d3ee"/></linearGradient>
+<filter id="glow"><feGaussianBlur stdDeviation="10" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<rect width="3840" height="2160" fill="#020306"/>
+<rect x="28" y="28" width="3784" height="2104" rx="34" fill="none" stroke="url(#fire)" stroke-width="8"/>
+<text x="110" y="150" fill="#f8fafc" font-family="Arial" font-size="78" font-weight="800">CENTRALDARK</text>
+<text x="110" y="265" fill="url(#fire)" font-family="Arial" font-size="128" font-weight="900" filter="url(#glow)">FORJA VIVA</text>
+<text x="112" y="330" fill="#f59e0b" font-family="Arial" font-size="32">UMA PROVA. UMA VERDADE. UM FIXED POINT.</text>
+<circle cx="420" cy="850" r="300" fill="#090b10" stroke="#ff6a00" stroke-width="14"/>
+<path d="M190 700 Q420 420 650 700 L610 1120 Q420 1280 230 1120Z" fill="#08090d" stroke="#ff4d00" stroke-width="16"/>
+<path d="M265 595 L175 425 L320 520 M575 595 L665 425 L520 520" fill="none" stroke="#ff4d00" stroke-width="22"/>
+<path d="M305 800 Q355 755 400 800 M440 800 Q490 755 535 800" fill="none" stroke="#ff9d00" stroke-width="34" stroke-linecap="round" filter="url(#glow)"/>
+<line x1="650" y1="610" x2="820" y2="1180" stroke="#ff7a00" stroke-width="18"/><path d="M820 1180 l-55 -120 m55 120 l55 -120" stroke="#ff7a00" stroke-width="18" fill="none"/>
+<rect x="900" y="80" width="1600" height="330" rx="24" fill="#07101a" fill-opacity=".92" stroke="#22d3ee" stroke-width="4"/>
+<text x="930" y="135" fill="#22d3ee" font-family="Arial" font-size="34" font-weight="700">ARQUITETURA CANÔNICA</text>
+<rect x="2540" y="80" width="1180" height="690" rx="24" fill="#07101a" fill-opacity=".92" stroke="#22d3ee" stroke-width="4"/>
+<text x="2570" y="135" fill="#22d3ee" font-family="Arial" font-size="34" font-weight="700">CLI — COCKPIT DA FORJA VIVA</text>
+<rect x="900" y="440" width="1600" height="300" rx="24" fill="#07101a" fill-opacity=".92" stroke="#f59e0b" stroke-width="4"/>
+<text x="930" y="495" fill="#f59e0b" font-family="Arial" font-size="34" font-weight="700">RUNNER: BOOT END-TO-END FIXED POINT</text>
+<rect x="900" y="770" width="1600" height="390" rx="24" fill="#07101a" fill-opacity=".92" stroke="#f59e0b" stroke-width="4"/>
+<text x="930" y="825" fill="#f59e0b" font-family="Arial" font-size="34" font-weight="700">REGRAS DE OURO</text>
+<rect x="900" y="1190" width="790" height="400" rx="24" fill="#07101a" fill-opacity=".92" stroke="#f59e0b" stroke-width="4"/>
+<text x="930" y="1245" fill="#f59e0b" font-family="Arial" font-size="34" font-weight="700">CONTINUIDADE DIRETA DA MAIN</text>
+<rect x="1710" y="1190" width="790" height="400" rx="24" fill="#07101a" fill-opacity=".92" stroke="#ef4444" stroke-width="4"/>
+<text x="1740" y="1245" fill="#ef4444" font-family="Arial" font-size="34" font-weight="700">MODAL DE FALHA</text>
+<rect x="2540" y="800" width="1180" height="440" rx="24" fill="#07101a" fill-opacity=".92" stroke="#f59e0b" stroke-width="4"/>
+<text x="2570" y="855" fill="#f59e0b" font-family="Arial" font-size="34" font-weight="700">3 PELES CANÔNICAS</text>
+<rect x="2540" y="1270" width="1180" height="320" rx="24" fill="#07101a" fill-opacity=".92" stroke="#f59e0b" stroke-width="4"/>
+<text x="2570" y="1325" fill="#f59e0b" font-family="Arial" font-size="34" font-weight="700">17 RESPIRAÇÕES DA FORJA</text>
+<rect x="900" y="1620" width="820" height="440" rx="24" fill="#07101a" fill-opacity=".92" stroke="#f59e0b" stroke-width="4"/>
+<text x="930" y="1675" fill="#f59e0b" font-family="Arial" font-size="34" font-weight="700">MODAL DE SUCESSO</text>
+<rect x="1750" y="1620" width="820" height="440" rx="24" fill="#07101a" fill-opacity=".92" stroke="#f59e0b" stroke-width="4"/>
+<text x="1780" y="1675" fill="#f59e0b" font-family="Arial" font-size="34" font-weight="700">INTEGRAÇÕES</text>
+<rect x="2600" y="1620" width="1120" height="440" rx="24" fill="#07101a" fill-opacity=".92" stroke="#f59e0b" stroke-width="4"/>
+<text x="2630" y="1675" fill="#f59e0b" font-family="Arial" font-size="34" font-weight="700">MAPA MENTAL — FLUXO TOTAL</text>
+<circle cx="1100" cy="250" r="50" fill="#0d1726" stroke="#22d3ee" stroke-width="6"/>
+<text x="1100" y="335" text-anchor="middle" fill="#e5e7eb" font-family="Arial" font-size="26">Dependabot</text>
+<path d="M1155 250 H1325" stroke="#a7f3d0" stroke-width="5" marker-end="url(#none)"/>
+<circle cx="1380" cy="250" r="50" fill="#0d1726" stroke="#22d3ee" stroke-width="6"/>
+<text x="1380" y="335" text-anchor="middle" fill="#e5e7eb" font-family="Arial" font-size="26">GitHub Actions</text>
+<path d="M1435 250 H1605" stroke="#a7f3d0" stroke-width="5" marker-end="url(#none)"/>
+<circle cx="1660" cy="250" r="50" fill="#0d1726" stroke="#22d3ee" stroke-width="6"/>
+<text x="1660" y="335" text-anchor="middle" fill="#e5e7eb" font-family="Arial" font-size="26">Bot_AI</text>
+<path d="M1715 250 H1885" stroke="#a7f3d0" stroke-width="5" marker-end="url(#none)"/>
+<circle cx="1940" cy="250" r="50" fill="#0d1726" stroke="#22d3ee" stroke-width="6"/>
+<text x="1940" y="335" text-anchor="middle" fill="#e5e7eb" font-family="Arial" font-size="26">CLI</text>
+<path d="M1995 250 H2165" stroke="#a7f3d0" stroke-width="5" marker-end="url(#none)"/>
+<circle cx="2220" cy="250" r="50" fill="#0d1726" stroke="#22d3ee" stroke-width="6"/>
+<text x="2220" y="335" text-anchor="middle" fill="#e5e7eb" font-family="Arial" font-size="26">Runner</text>
+<circle cx="980" cy="610" r="24" fill="#07120c" stroke="#22c55e" stroke-width="5"/><text x="980" y="619" text-anchor="middle" fill="#fff" font-family="Arial" font-size="20">01</text>
+<circle cx="1062" cy="610" r="24" fill="#07120c" stroke="#22c55e" stroke-width="5"/><text x="1062" y="619" text-anchor="middle" fill="#fff" font-family="Arial" font-size="20">02</text>
+<circle cx="1144" cy="610" r="24" fill="#07120c" stroke="#22c55e" stroke-width="5"/><text x="1144" y="619" text-anchor="middle" fill="#fff" font-family="Arial" font-size="20">03</text>
+<circle cx="1226" cy="610" r="24" fill="#07120c" stroke="#22c55e" stroke-width="5"/><text x="1226" y="619" text-anchor="middle" fill="#fff" font-family="Arial" font-size="20">04</text>
+<circle cx="1308" cy="610" r="24" fill="#07120c" stroke="#22c55e" stroke-width="5"/><text x="1308" y="619" text-anchor="middle" fill="#fff" font-family="Arial" font-size="20">05</text>
+<circle cx="1390" cy="610" r="24" fill="#07120c" stroke="#22c55e" stroke-width="5"/><text x="1390" y="619" text-anchor="middle" fill="#fff" font-family="Arial" font-size="20">06</text>
+<circle cx="1472" cy="610" r="24" fill="#07120c" stroke="#22c55e" stroke-width="5"/><text x="1472" y="619" text-anchor="middle" fill="#fff" font-family="Arial" font-size="20">07</text>
+<circle cx="1554" cy="610" r="24" fill="#07120c" stroke="#22c55e" stroke-width="5"/><text x="1554" y="619" text-anchor="middle" fill="#fff" font-family="Arial" font-size="20">08</text>
+<circle cx="1636" cy="610" r="24" fill="#07120c" stroke="#22c55e" stroke-width="5"/><text x="1636" y="619" text-anchor="middle" fill="#fff" font-family="Arial" font-size="20">09</text>
+<circle cx="1718" cy="610" r="24" fill="#07120c" stroke="#22c55e" stroke-width="5"/><text x="1718" y="619" text-anchor="middle" fill="#fff" font-family="Arial" font-size="20">10</text>
+<circle cx="1800" cy="610" r="24" fill="#07120c" stroke="#22c55e" stroke-width="5"/><text x="1800" y="619" text-anchor="middle" fill="#fff" font-family="Arial" font-size="20">11</text>
+<circle cx="1882" cy="610" r="24" fill="#07120c" stroke="#22c55e" stroke-width="5"/><text x="1882" y="619" text-anchor="middle" fill="#fff" font-family="Arial" font-size="20">12</text>
+<circle cx="1964" cy="610" r="24" fill="#07120c" stroke="#f59e0b" stroke-width="5"/><text x="1964" y="619" text-anchor="middle" fill="#fff" font-family="Arial" font-size="20">13</text>
+<circle cx="2046" cy="610" r="24" fill="#07120c" stroke="#f59e0b" stroke-width="5"/><text x="2046" y="619" text-anchor="middle" fill="#fff" font-family="Arial" font-size="20">14</text>
+<circle cx="2128" cy="610" r="24" fill="#07120c" stroke="#f59e0b" stroke-width="5"/><text x="2128" y="619" text-anchor="middle" fill="#fff" font-family="Arial" font-size="20">15</text>
+<circle cx="2210" cy="610" r="24" fill="#07120c" stroke="#ef4444" stroke-width="5"/><text x="2210" y="619" text-anchor="middle" fill="#fff" font-family="Arial" font-size="20">16</text>
+<circle cx="2292" cy="610" r="24" fill="#07120c" stroke="#ef4444" stroke-width="5"/><text x="2292" y="619" text-anchor="middle" fill="#fff" font-family="Arial" font-size="20">17</text>
+<text x="960" y="855" fill="#22c55e" font-family="Consolas" font-size="28">● REUSE_BEFORE_CREATE</text>
+<text x="1680" y="855" fill="#22c55e" font-family="Consolas" font-size="28">● ONE_SYSTEM_ONLY</text>
+<text x="960" y="925" fill="#22c55e" font-family="Consolas" font-size="28">● ONE_WRITER_PER_SCOPE</text>
+<text x="1680" y="925" fill="#22c55e" font-family="Consolas" font-size="28">● ACTION != PROOF</text>
+<text x="960" y="995" fill="#ef4444" font-family="Consolas" font-size="28">● UNKNOWN != PASS</text>
+<text x="1680" y="995" fill="#ef4444" font-family="Consolas" font-size="28">● MERGED != DEPLOYED</text>
+<text x="960" y="1065" fill="#22c55e" font-family="Consolas" font-size="28">● REALITY = JUDGE</text>
+<text x="1680" y="1065" fill="#22c55e" font-family="Consolas" font-size="28">● CONTRAPROVA SEMPRE</text>
+<text x="940" y="1295" dy="0" fill="#d1fae5" font-family="Arial" font-size="27">✓ PR #1540 → MAIN</text>
+<text x="940" y="1295" dy="60" fill="#d1fae5" font-family="Arial" font-size="27">✓ Mermaid + arte 4K</text>
+<text x="940" y="1295" dy="120" fill="#d1fae5" font-family="Arial" font-size="27">✓ 3 peles definidas</text>
+<text x="940" y="1295" dy="180" fill="#d1fae5" font-family="Arial" font-size="27">✓ sem segundo grafo</text>
+<text x="1750" y="1295" dy="0" fill="#fecaca" font-family="Arial" font-size="27">⚠ GraphPanel global skins</text>
+<text x="1750" y="1295" dy="60" fill="#fecaca" font-family="Arial" font-size="27">⚠ 2D / 3D / Celestial / Vault</text>
+<text x="1750" y="1295" dy="120" fill="#fecaca" font-family="Arial" font-size="27">⚠ hardcoded colors restantes</text>
+<text x="1750" y="1295" dy="180" fill="#fecaca" font-family="Arial" font-size="27">⚠ LACUNA ABERTA</text>
+<rect x="2600" y="900" width="300" height="210" rx="28" fill="#071014" stroke="#10b981" stroke-width="8"/>
+<circle cx="2750" cy="980" r="52" fill="#10b981" filter="url(#glow)"/><text x="2750" y="1075" text-anchor="middle" fill="#fff" font-family="Arial" font-size="28" font-weight="700">EMERALD</text>
+<rect x="2950" y="900" width="300" height="210" rx="28" fill="#071014" stroke="#22d3ee" stroke-width="8"/>
+<circle cx="3100" cy="980" r="52" fill="#22d3ee" filter="url(#glow)"/><text x="3100" y="1075" text-anchor="middle" fill="#fff" font-family="Arial" font-size="28" font-weight="700">OPERATIONAL</text>
+<rect x="3300" y="900" width="300" height="210" rx="28" fill="#071014" stroke="#f97316" stroke-width="8"/>
+<circle cx="3450" cy="980" r="52" fill="#f97316" filter="url(#glow)"/><text x="3450" y="1075" text-anchor="middle" fill="#fff" font-family="Arial" font-size="28" font-weight="700">FORGE</text>
+<text x="2600" y="1170" fill="#4ade80" font-family="Arial" font-size="30">DEFINIDAS = SIM</text>
+<text x="3010" y="1170" fill="#fbbf24" font-family="Arial" font-size="30">GLOBAL = NÃO</text>
+<text x="2810" y="2030" fill="#f59e0b" font-family="Arial" font-size="34" font-weight="700">REALIDADE JULGA.</text>
+</svg>
