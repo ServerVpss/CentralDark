@@ -138,3 +138,6 @@ docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/SETORES/ML-CIENCIA-DE-DADOS/LOCAL-CORPU
 node_modules/.cache
 .bun/
 .bunx/
+# CentralDark workspace lifecycle (Casa/VPS runtime state; never canonical source)
+_tmp/
+cache/

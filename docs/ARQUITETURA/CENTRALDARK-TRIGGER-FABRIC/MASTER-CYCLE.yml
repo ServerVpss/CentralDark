@@ -39,16 +39,34 @@ purpose: >-
 # Cadeia normativa CORE do contrato mestre. Extensoes obrigatorias de execucao
 # pertencem ao ENGINE_BINDING.yml e nao redefinem esta autoridade.
 expands_to:
+  - TLC23_OPEN
+  - DESTINATION_LOCK
   - ACORDAR
   - CALIBRAR
   - MULTIBUSSOLA
+  - PEGATUDO
+  - PEGATUDO_HISTORY
+  - DEBITO_COGNITIVO
+  - READERS_MEASURE
   - META_LUPA
-  - RECONCILIAR
+  - SCOPE_TEMPERATURE
+  - DELTA_MINIMUM
   - DELTA_UTIL
+  - RENDEZVOUS
+  - RECONCILE
+  - STITCH
+  - OWNER
+  - ONE_WRITER
+  - PATCH
+  - TESTE
   - CONTRAPROVA
   - REMEDICAO
+  - SEMANTIC_GREEN_GATE
+  - REALITY_JUDGE
   - FIXED_POINT
+  - TLC23_CLOSE
   - REGISTRA
+  - HANDOFF
   - BOOT
 
 chain_semantics:
@@ -56,11 +74,11 @@ chain_semantics:
   core_chain_owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
   mandatory_binding_extensions_owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml
   binding_extensions_are_second_core_authority: false
-  effective_execution_chain_is_core_plus_applicable_binding_extensions: true
+  effective_chain_is_derived_by_binding: true
 
-canonical_human_chain: "#CENTRALDARK -> #ACORDAR -> !CALIBRAR -> !MULTIBUSSOLA -> !META_LUPA -> !RECONCILIAR -> !DELTAUTIL -> !CONTRAPROVA -> !REMEDICAO -> !FIXED_POINT -> !REGISTRA -> !BOOT"
-canonical_machine_chain: "!CENTRALDARK -> #ACORDAR -> !CALIBRAR -> !MULTIBUSSOLA -> !META_LUPA -> !RECONCILIAR -> !DELTAUTIL -> !CONTRAPROVA -> !REMEDICAO -> !FIXED_POINT -> !REGISTRA -> !BOOT"
-canonical_chain: "!CENTRALDARK -> #ACORDAR -> !CALIBRAR -> !MULTIBUSSOLA -> !META_LUPA -> !RECONCILIAR -> !DELTAUTIL -> !CONTRAPROVA -> !REMEDICAO -> !FIXED_POINT -> !REGISTRA -> !BOOT"
+canonical_human_chain: "#CENTRALDARK -> !tlc23 -> DESTINATION_LOCK -> #ACORDAR -> !CALIBRAR -> !MULTIBUSSOLA -> PEGATUDO -> DEBITO_COGNITIVO -> READERS_MEASURE -> !META_LUPA -> RENDEZVOUS -> RECONCILE -> OWNER -> ONE_WRITER -> PATCH -> TESTE -> !CONTRAPROVA -> !REMEDICAO -> REALITY_JUDGE -> !FIXED_POINT -> !tlc23 -> !REGISTRA -> HANDOFF -> !BOOT"
+canonical_machine_chain: "!CENTRALDARK -> TLC23_OPEN -> DESTINATION_LOCK -> ACORDAR -> CALIBRAR -> MULTIBUSSOLA -> PEGATUDO -> PEGATUDO_HISTORY -> DEBITO_COGNITIVO -> READERS_MEASURE -> META_LUPA -> SCOPE_TEMPERATURE -> DELTA_MINIMUM -> DELTA_UTIL -> RENDEZVOUS -> RECONCILE -> STITCH -> OWNER -> ONE_WRITER -> PATCH -> TESTE -> CONTRAPROVA -> REMEDICAO -> SEMANTIC_GREEN_GATE -> REALITY_JUDGE -> FIXED_POINT -> TLC23_CLOSE -> REGISTRA -> HANDOFF -> BOOT"
+canonical_chain: "!CENTRALDARK -> TLC23_OPEN -> DESTINATION_LOCK -> ACORDAR -> CALIBRAR -> MULTIBUSSOLA -> PEGATUDO -> PEGATUDO_HISTORY -> DEBITO_COGNITIVO -> READERS_MEASURE -> META_LUPA -> SCOPE_TEMPERATURE -> DELTA_MINIMUM -> DELTA_UTIL -> RENDEZVOUS -> RECONCILE -> STITCH -> OWNER -> ONE_WRITER -> PATCH -> TESTE -> CONTRAPROVA -> REMEDICAO -> SEMANTIC_GREEN_GATE -> REALITY_JUDGE -> FIXED_POINT -> TLC23_CLOSE -> REGISTRA -> HANDOFF -> BOOT"
 
 continuous_delta_contract:
   scope: ACTIVE_MASTER_SESSION
@@ -83,6 +101,14 @@ continuous_delta_contract:
   classifications: [DUPLICATE, PARTIAL, NEW, SUPERSEDED, CANDIDATE, UNKNOWN, PROVED]
 
 phase_contracts:
+  TLC23_OPEN:
+    meaning: OPEN_HORN_GATE_AND_LOAD_MEASURED_FACTS
+    owner: docs/CONSCIENCIA/04-MCP-E-CONECTORES/tlc23.pdf
+    executable_gate: apps/modulos/fixed-point-fabric/src/centraldark_fixed_point/centraldark_gate.py
+    semantics: FACTS_PLUS_HORN_RULES_CLOSE_UNTIL_NO_NEW_FACTS
+  DESTINATION_LOCK:
+    meaning: LOCK_CURRENT_HUMAN_DESTINATION_BEFORE_EXECUTION
+    owner: Trigger Fabric
   ACORDAR:
     meaning: RECOVER_LIVE_STATE
     owner: "LEIA-ME-IA.md + AGENTS.md"
@@ -112,9 +138,17 @@ phase_contracts:
   REMEDICAO:
     meaning: MEASURE_T0_TO_T1
     owner: docs/CONSCIENCIA/REMEDICAO.md
+  REALITY_JUDGE:
+    meaning: JUDGE_CURRENT_MEASURED_RESULT_BEFORE_FIXED_POINT
+    owner: REALITY
+    writer_may_self_approve: false
   FIXED_POINT:
-    meaning: STOP_ONLY_AT_LOCAL_FIXED_POINT_OR_PROVEN_FRONTIER
+    meaning: STOP_ONLY_AFTER_REALITY_JUDGE_AND_NO_NEW_MATERIAL_FACTS
     owner: Trigger Fabric
+  TLC23_CLOSE:
+    meaning: CLOSE_HORN_GATE_ONLY_AFTER_NO_CONTRADICTION_AND_FIXED_POINT
+    owner: docs/CONSCIENCIA/04-MCP-E-CONECTORES/tlc23.pdf
+    contradiction_blocks_close: true
   REGISTRA:
     meaning: WRITE_RECEIPT_LEARNING_PROVENANCE_NEXT_CURSOR_AND_PROMOTE_WHEN_AUTHORIZED
     owner: continuity + learning owners
