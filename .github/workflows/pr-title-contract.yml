@@ -2,6 +2,12 @@ name: PR Title Contract
 
 on:
   pull_request:
+    types: [opened, edited, reopened, synchronize, labeled, unlabeled]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: read
     types: [opened, edited, reopened, synchronize]
   workflow_dispatch:
   schedule:
@@ -14,6 +20,47 @@ permissions:
 jobs:
   normalize-and-validate-title:
     runs-on: [self-hosted, Linux]
+    timeout-minutes: 12
+    steps:
+      - name: Checkout imutável
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 2
+
+      - name: Setup Node 24 pelo owner local
+        uses: ./.github/actions/setup-node24-selfhosted
+
+      - name: Collect changed files
+        id: files
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            git diff --name-only "${{ github.event.pull_request.base.sha }}" "${{ github.event.pull_request.head.sha }}" > /tmp/pr-files.txt || true
+          else
+            git diff --name-only HEAD^ HEAD > /tmp/pr-files.txt || true
+          fi
+          {
+            echo 'files<<EOF'
+            cat /tmp/pr-files.txt
+            echo 'EOF'
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Validate emoji prefix and uppercase title
+        if: github.event_name == 'pull_request'
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: node scripts/ci/pr-title-contract.mjs
+
+      - name: Validate PR handoff contract
+        if: github.event_name == 'pull_request'
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+          PR_FILES: ${{ steps.files.outputs.files }}
+        run: node scripts/ci/pr-handoff-contract.mjs
+
+      - name: Validate PR trilho contract
+        if: github.event_name == 'pull_request'
     timeout-minutes: 5
     steps:
       - name: Normalize current or all open PR titles
@@ -23,7 +70,23 @@ jobs:
           EVENT_NAME: ${{ github.event_name }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
           PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+          PR_FILES: ${{ steps.files.outputs.files }}
+        run: node scripts/ci/centraldark-pr-trilho-contract.mjs
+
+      - name: Test contracts absorbed into existing workflow
         run: |
+          node --test scripts/ci/pr-title-contract.test.mjs
+          node --test scripts/ci/pr-handoff-contract.test.mjs
+          node --test scripts/ci/centraldark-pr-trilho-contract.test.mjs
+          node --test scripts/ci/centraldark-horn-line-gate.test.mjs
+          node --test scripts/ci/centraldark-connector-demand-router.test.mjs
+          node --test scripts/ci/centraldark-queue-fabric.test.mjs
+          node --test scripts/ci/centraldark-preanswer-gate.test.mjs
+          node scripts/lupa/label-gate.test.mjs
+
+      - name: Validate queue fabric manifest
+        run: node scripts/ci/centraldark-queue-fabric.mjs
           node <<'NODE'
           const token = process.env.GH_TOKEN;
           const repo = process.env.GH_REPOSITORY;
