@@ -82,7 +82,7 @@ export function validatePrTrilho(input = {}) {
   }
 
   const mentionsSite = /\b(site|deploy|artifact|artefato|http|dom[ií]nio)\b/iu.test(body);
-  const mentionsCasa = /\b(casa|remote desktop|runtime local|hermes|workdir|processo local)\b/iu.test(body);
+  const mentionsCasa = mentionsSite || /\b(casa|remote desktop|runtime local|hermes|workdir|processo local)\b/iu.test(body);
   if (mentionsSite && !/PROVAR_SITE\s*!=\s*PROVAR_CASA|SITE\s*!=\s*CASA|CASA\s*!=\s*SITE/iu.test(body)) {
     warnings.push('PR_TRILHO_SITE_CASA_DISTINCTION_NOT_EXPLICIT');
   }
