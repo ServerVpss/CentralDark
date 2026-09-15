@@ -119,12 +119,39 @@ function statusPM2() {
   return null;
 }
 
+function contratoOperacionalCanonico() {
+  const agents = lerArquivoSeguro('AGENTS.md', Number.POSITIVE_INFINITY) || '';
+  const leia = lerArquivoSeguro('LEIA-ME-IA.md', Number.POSITIVE_INFINITY) || '';
+  const deploy = lerArquivoSeguro('docs/CONSCIENCIA/03-FLUXO-DEPLOY.md', Number.POSITIVE_INFINITY) || '';
+  const corpus = `${agents}\n${leia}\n${deploy}`;
+  const gates = {
+    AUTO_SQUASH_IF_CLEAN: corpus.includes('AUTO_SQUASH_IF_CLEAN'),
+    NO_HUMAN_REASK_FOR_MERGE: corpus.includes('NO_HUMAN_REASK_FOR_MERGE'),
+    MERGED_NOT_DEPLOYED: corpus.includes('MERGED != DEPLOYED'),
+    FIXED_POINT: corpus.includes('FIXED_POINT'),
+  };
+  const faltantes = Object.entries(gates).filter(([, ok]) => !ok).map(([k]) => k);
+  if (faltantes.length) {
+    return `CONTRATO_OPERACIONAL=UNKNOWN faltando=${faltantes.join(',')}`;
+  }
+  return [
+    'CONTRATO OPERACIONAL CANONICO:',
+    'AUTO_SQUASH_IF_CLEAN=PROVEN',
+    'NO_HUMAN_REASK_FOR_MERGE=PROVEN',
+    'MERGED != DEPLOYED',
+    'TESTE -> CONTRAPROVA -> REALITY_JUDGE -> FIXED_POINT',
+    'MERGE_OK nao encerra deploy/runtime proof.',
+  ].join('\n');
+}
+
 // =========================================================================
 // MONTAGEM DO BLOCO DE CONTEXTO
 // =========================================================================
 
 function montarContexto() {
   const partes = [];
+
+  partes.push(contratoOperacionalCanonico());
 
   const commits = ultimosCommits(5);
   if (commits) {
@@ -263,5 +290,6 @@ module.exports = {
     pendenciasAbertas,
     statusGraphify,
     statusPM2,
+    contratoOperacionalCanonico,
   },
 };

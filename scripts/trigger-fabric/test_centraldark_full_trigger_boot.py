@@ -89,11 +89,16 @@ def test_registry_roundtrip():
 
 def test_canonical_chain_contains_full_core_flow():
     required = {
-        "DESTINATION_LOCK", "ACORDAR", "CALIBRAR", "MULTIBUSSOLA", "META_LUPA",
-        "RECONCILIAR", "DELTA_UTIL", "CONTRAPROVA", "REMEDICAO", "FIXED_POINT",
-        "POST_GREEN_LOCK", "REGISTRA", "BOOT",
+        "TLC23_OPEN", "DESTINATION_LOCK", "ACORDAR", "CALIBRAR", "MULTIBUSSOLA",
+        "PEGATUDO", "DEBITO_COGNITIVO", "READERS_MEASURE", "META_LUPA",
+        "RENDEZVOUS", "OWNER", "ONE_WRITER", "PATCH", "TESTE", "CONTRAPROVA",
+        "REMEDICAO", "REALITY_JUDGE", "FIXED_POINT", "TLC23_CLOSE",
+        "POST_GREEN_LOCK", "REGISTRA", "HANDOFF", "BOOT",
     }
     assert required.issubset(set(mod.CANONICAL_CHAIN))
+    assert mod.CANONICAL_CHAIN[0] == "TLC23_OPEN"
+    assert mod.CANONICAL_CHAIN.index("REALITY_JUDGE") < mod.CANONICAL_CHAIN.index("FIXED_POINT")
+    assert mod.CANONICAL_CHAIN.index("FIXED_POINT") < mod.CANONICAL_CHAIN.index("TLC23_CLOSE")
 
 
 if __name__ == "__main__":
