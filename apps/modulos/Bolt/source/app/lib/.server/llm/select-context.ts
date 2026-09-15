@@ -12,6 +12,69 @@ import { LLMManager } from '~/lib/modules/llm/manager';
 const ig = ignore().add(IGNORE_PATTERNS);
 const logger = createScopedLogger('select-context');
 
+/**
+ * Reduz a lista de candidatos antes da chamada ao modelo.
+ *
+ * A lista completa continua sendo a fonte de fallback: esta etapa só faz
+ * pré-classificação barata por caminho/nome e nunca decide o owner sozinha.
+ * O modelo recebe o subconjunto quando há sinal suficiente; sem sinal,
+ * preservamos o comportamento amplo para não transformar ausência de match
+ * lexical em falso "arquivo inexistente".
+ */
+export function rankContextCandidates(filePaths: string[], query: string, limit = 120): string[] {
+  if (filePaths.length <= limit) {
+    return filePaths;
+  }
+
+  const terms = [
+    ...new Set(
+      query
+        .toLowerCase()
+        .split(/[^a-z0-9_./-]+/)
+        .filter((term) => term.length >= 3),
+    ),
+  ];
+
+  if (!terms.length) {
+    return filePaths;
+  }
+
+  const ranked = filePaths.map((path, index) => {
+    const normalized = path.toLowerCase().replace('/home/project/', '');
+    const basename = normalized.split('/').pop() || normalized;
+
+    const score = terms.reduce((total, term) => {
+      if (basename === term || basename.startsWith(`${term}.`)) {
+        return total + 8;
+      }
+
+      if (basename.includes(term)) {
+        return total + 5;
+      }
+
+      if (normalized.includes(`/${term}/`)) {
+        return total + 4;
+      }
+
+      if (normalized.includes(term)) {
+        return total + 2;
+      }
+
+      return total;
+    }, 0);
+
+    return { path, score, index };
+  });
+
+  const matches = ranked.filter((item) => item.score > 0).sort((a, b) => b.score - a.score || a.index - b.index);
+
+  if (!matches.length) {
+    return filePaths;
+  }
+
+  return matches.slice(0, limit).map((item) => item.path);
+}
+
 export async function selectContext(props: {
   messages: Message[];
   env?: Env;
@@ -118,6 +181,18 @@ export async function selectContext(props: {
     throw new Error('No user message found');
   }
 
+  const lastUserText = extractTextContent(lastUserMessage);
+  const candidateFilePaths = rankContextCandidates(filePaths, `${summaryText}\n${lastUserText}`);
+
+  /*
+   * The model chooses among pre-classified candidates; validation below still
+   * compares against the complete filePaths inventory.
+   */
+  const candidateReduction = filePaths.length - candidateFilePaths.length;
+  logger.info(
+    `Context candidates: ${candidateFilePaths.length}/${filePaths.length}${candidateReduction > 0 ? ` (reduced ${candidateReduction})` : ''}`,
+  );
+
   // select files from the list of code file from the project that might be useful for the current request from the user
   const resp = await generateText({
     system: `
@@ -125,7 +200,7 @@ export async function selectContext(props: {
 
         AVAILABLE FILES PATHS
         ---
-        ${filePaths.map((path) => `- ${path}`).join('\n')}
+        ${candidateFilePaths.map((path) => `- ${path}`).join('\n')}
         ---
 
         You have following code loaded in the context buffer that you can refer to:

@@ -29,6 +29,7 @@
     "**/*.map": true
   },
   "editor.formatOnSave": true,
+  "claudeCode.claudeProcessWrapper": "E:\\CentralDark\\CentralDark\\scripts\\vscode\\centraldark-claude-wrapper.cmd",
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"

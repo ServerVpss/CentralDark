@@ -40,3 +40,18 @@ SERVER_LOCAL_TZ_IS_NOT_AUTHORITY=true
 BROWSER_LOCAL_TZ_IS_NOT_AUTHORITY=true
 UNKNOWN_TIME_SOURCE_IS_NOT_PASS=true
 ```
+
+## Escopo global permanente
+
+`central-horario/` é o único owner de tempo para toda a CentralDark: Casa, VPS, HUB, MCP, Hermes, Gateway, automações, agentes, superfícies atuais e arquitetura futura.
+
+```text
+ONE_TIME_SYSTEM_ONLY=true
+CANONICAL_TIME_OWNER=central-horario
+FUTURE_COMPONENTS_MUST_REUSE_CANONICAL_TIME_OWNER=true
+PARALLEL_TIME_SYSTEM_FORBIDDEN=true
+LEGACY_TIME_DEBT_MUST_BE_VISIBLE=true
+NEW_TIME_DRIFT_IS_BLOCKING=true
+```
+
+O gate varre o repositório inteiro. Dívida histórica permanece explícita e não vira falso-verde; qualquer novo delta que introduza hora fora deste owner é bloqueado. Corrigir legado significa migrá-lo para este mesmo owner, nunca criar outro sistema de horário.

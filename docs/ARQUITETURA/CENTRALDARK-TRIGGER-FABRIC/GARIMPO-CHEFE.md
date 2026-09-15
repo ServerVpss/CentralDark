@@ -37,5 +37,8 @@ Leis:
 
 Fronteira atual:
 - `GARIMPO-CHEFE` como fonte de garimpo: PROVADO por material salvo.
-- Wiring automático completo da pasta até cristalização: NOT_PROVEN.
+- Drop operacional único na VPS/Linux: `scripts/memory-linker/inbox/`.
+- Links de conveniência da inbox apontam para evolução, aprendizados, contrato GARIMPO-CHEFE e Dream Review.
+- Wiring automático completo da pasta até cristalização: PARCIAL — sentinel Kanban pode identificar matéria pendente; cristalização continua exigindo Dream Review + MetaLupa + Writer autorizado.
 - Runtime global: NOT_PROVEN sem receipt SHA→artefato/deployment→runtime.
+- Checkout canônico da VPS deve permanecer espelho limpo; mineração útil trabalha em worktree isolada e volta por commit/push/PR.

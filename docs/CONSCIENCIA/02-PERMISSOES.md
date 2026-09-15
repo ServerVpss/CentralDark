@@ -2,7 +2,7 @@
 title: "02 PERMISSOES"
 date: 2026-06-29
 tags: ["consciencia"]
-updated: 2026-08-17
+updated: 2026-09-07
 ---
 
 # 02 — Permissões
@@ -51,6 +51,44 @@ AUTHENTICATED_GITHUB_EVENT
 ```
 
 A label `👑 PERMITO-SEGREDO` é selo/rastro persistente dessa autoridade; ela **não precisa ser um clique manual** quando a delegação autenticada já foi provada. `🧠 AGENTE-*`, `🤖 AUTO`, `🔄 GIT` e `🟢 SUCESSO` registram capacidade, automação, operação e resultado; não competem com a autoridade do SEGREDO/CHEFE.
+
+## Provider Access Lease — política canônica
+
+Este arquivo é o **owner canônico da política de permissão**. O desenho detalhado do lease de providers fica em [`2026-09-07-provider-access-lease-cristalizado.md`](./2026-09-07-provider-access-lease-cristalizado.md), sem criar segundo plano de controle.
+
+```text
+CAPABILITY_ACCESS != RAW_SECRET_ACCESS
+AGENT_GETS=CAPABILITY
+AGENT_GETS_RAW_SECRET=false
+SECRETS=SERVER_ONLY
+```
+
+Modos canônicos de provider:
+
+```text
+OFF
+READ_ONLY
+FULL_TEMPORARY
+FULL
+```
+
+`FULL_TEMPORARY` é uma elevação com TTL, não uma troca definitiva de baseline. Antes de elevar, deve preservar o modo imediatamente anterior; ao expirar, restaura **exatamente** esse modo.
+
+```text
+PREVIOUS_MODE=<OFF|READ_ONLY|FULL>
+FULL_TEMPORARY
+→ TTL
+→ RESTORE_EXACT(PREVIOUS_MODE)
+
+PREVIOUS_MODE=UNKNOWN → FAIL_CLOSED
+EXPIRY != FORCE_READ_ONLY
+```
+
+Assim, um baseline `OFF` nunca pode virar `READ_ONLY` só porque um lease temporário expirou.
+
+Mutações de provider permanecem condicionadas aos gates aplicáveis do owner existente, incluindo sessão/autorização compatível, capability allowlist, guardas destrutivas, confirmação quando exigida, idempotência, compensação/rollback e receipt/auditoria.
+
+O alvo é `ONE_SECRET_OWNER`, mas **alvo arquitetural não é prova de wiring atual**. Enquanto consumidores reais ainda lerem fontes diferentes, a ponte de injeção e a convergência física de segredo ficam `NOT_PROVEN`. Nenhum documento pode promover `OAuthBroker/oauth_connections` a fonte runtime já integrada sem medir o caminho real do consumidor.
 
 ## ✅ PODE fazer sem perguntar dentro do escopo vigente da CentralDark
 
@@ -169,6 +207,36 @@ MAPEAR
 ```
 
 Se a ação estiver fora da autorização vigente ou envolver decisão humana nova, aí sim SEGREDO/CHEFE decide.
+
+## Fronteira Windows — prova humana sob demanda
+
+Quando um bloqueio depender materialmente de Windows, Casa Windows, filesystem Windows, desktop Windows, Obsidian/Explorer Windows, runner Windows, dispositivo Windows ou qualquer efeito que só possa ser medido nessa superfície, a Casa não converte a ausência dessa prova em falha global nem força o SEGREDO/CHEFE a provar agora.
+
+```text
+WINDOWS_DEPENDENT_CLAIM
++ PROOF_NOT_AVAILABLE_HERE
+→ STATUS=PENDING_WINDOWS_PROOF
+→ UNKNOWN_IS_NOT_PASS
+→ NO_FALSE_GREEN
+→ CONTINUE_INDEPENDENT_NON_WINDOWS_WORK
+```
+
+A prova do lado Windows fica reservada ao SEGREDO/CHEFE e pode ser fornecida quando ele quiser, sem prazo artificial, sem renovação automática de receipt e sem transformar a pendência em culpa humana ou falha do restante do organismo.
+
+```text
+WINDOWS_PROOF_OWNER=SEGREDO/CHEFE
+WINDOWS_PROOF_ON_DEMAND=true
+WINDOWS_PROOF_REQUIRED_ONLY_WHEN_CHEFE_REQUESTS_OR_CLAIM_NEEDS_CLOSURE=true
+WINDOWS_DEPENDENT_BLOCKER_REMAINS_PENDING=true
+WINDOWS_PENDING_DOES_NOT_BLOCK_INDEPENDENT_WORK=true
+WINDOWS_PENDING != PASS
+WINDOWS_PENDING != GLOBAL_FAILURE
+WINDOWS_PENDING != HUMAN_FAILURE
+NO_AUTOMATIC_WINDOWS_PROOF_REQUEST=true
+NO_SYNTHETIC_WINDOWS_PROOF=true
+```
+
+Quando o SEGREDO/CHEFE decidir provar, a prova deve ser medida no alvo Windows aplicável e reconciliada com o claim exato. Até lá, registrar o blocker específico, preservar o cursor e manter o estado como `PENDING_WINDOWS_PROOF`.
 
 ## Regra de logs
 

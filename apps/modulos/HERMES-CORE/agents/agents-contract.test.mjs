@@ -8,7 +8,7 @@ const DIR = dirname(fileURLToPath(import.meta.url));
 const contract = readFileSync(join(DIR, 'AGENTS.md'), 'utf8');
 const expected = [
   'Auto-Diagnostico', 'Critic', 'Deploy-Watcher', 'Executor',
-  'GraphRAG-Master', 'Knowledge-Collector', 'Log-Verificador', 'Universal-Handler',
+  'GraphRAG-Master', 'Knowledge-Collector', 'Log-Verificador', 'Signal-Watcher', 'Universal-Handler',
 ];
 
 test('todos os agentes vivos são cobertos pelo contrato herdado', () => {

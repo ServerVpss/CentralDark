@@ -1,5 +1,5 @@
 // Agregador do gate admin já executado por codex-validate.
-// Preserva o teste histórico byte a byte em admin-guard-core.test.mjs e
-// acrescenta o contrato de administráveis sem criar novo workflow.
+// Preserva os testes históricos e acrescenta observabilidade Tool Call sem novo workflow.
 import './admin-guard-core.test.mjs';
 import './admin-administrables.test.mjs';
+import './tool-call-observability.test.mjs';
