@@ -29,7 +29,7 @@ export default class GrafoVivoPlugin extends Plugin {
 
     this.registerView(
       VIEW_TYPE_GRAFO_3D,
-      (leaf) => new Grafo3DView(leaf),
+      (leaf) => new Grafo3DView(leaf, this),
     );
 
     this.addRibbonIcon("git-fork", "Abrir Grafo Vivo CentralDark", () => {
