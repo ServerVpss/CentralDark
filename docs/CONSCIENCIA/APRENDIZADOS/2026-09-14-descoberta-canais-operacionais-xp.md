@@ -18,3 +18,8 @@ A descoberta é somente leitura. Não encerra, sequestra nem altera sessões exi
 
 ## Telemetria de experiência
 XP, nível, missões, taxa de sucesso, erros, ferramentas, tarefas, duração e feedback podem ser registrados como telemetria operacional CentralDark. XP é métrica do sistema, não autoridade e não substitui prova.
+
+## Receipt de erro de mutação desta cristalização
+Durante a correção do gate de horário, uma atualização por conteúdo completo truncou acidentalmente `scripts/auto-redeploy-failover.mjs`. A alteração defeituosa não foi promovida: o branch foi imediatamente restaurado ao HEAD anterior `9b6f128fdf420b42cc7c478e36fbfa16e70104ad` antes de continuar.
+
+Regra reforçada: `SURGICAL_EDIT_REQUIRED -> DO_NOT_REPLACE_UNKNOWN_FULL_FILE`; após qualquer mutação estrutural, medir diff/conteúdo antes de promoção. Rollback realizado não transforma a tentativa defeituosa em PASS; ela permanece registrada como erro operacional e aprendizado.
