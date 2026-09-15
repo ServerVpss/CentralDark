@@ -3,7 +3,7 @@ title: "LEIA-ME-IA"
 status: "CANÔNICO"
 scope: "Porta de entrada única para qualquer IA que conectar no CentralDark"
 source_of_truth: "Este arquivo + SOUL canônica + estado real medido"
-updated: 2026-08-17
+updated: 2026-09-11
 ---
 
 # LEIA-ME-IA — comece por aqui
@@ -65,6 +65,19 @@ Carregue nesta ordem:
 16. `docs/CONSCIENCIA/REMEDICAO.md` depois de qualquer mutação — medir T0 → T1 antes de declarar o veredito.
 17. `.agents/skills/git-conflict-resolve-house-standard/SKILL.md` quando houver PR em conflito, main avançando sob PR aberto, ou dependabot travado — padrão único, motor em `scripts/dependabot/resolve-conflicts.sh`.
 18. estado atual de branch, HEAD, PR, runtime, writer e ferramentas aplicáveis.
+
+Consulta sob demanda: para perguntas sobre recursos, limites, modelos, configuração ou comportamento de ChatGPT/Work, Codex e APIs OpenAI, carregar `.agents/skills/openai-docs/SKILL.md`. Não carregar o corpo em tarefas alheias; usar busca + abertura de documentação oficial + evidência antes de responder. Casos de avaliação acompanham a skill.
+Referências canônicas de apoio que a porta precisa manter alcançáveis para o gate estrutural:
+
+- `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MATERIAL-INGEST.md`
+- `docs/ARQUITETURA/LIBRARY-BINDING-CENTRALDARK.md`
+- `docs/BRAIN/08-ARTEFATOS-VISUAIS/01-CARTAZES-CANONICOS/README.md`
+- `docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/README.md`
+- `docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md`
+- `docs/CONSCIENCIA/ADMINISTRAVEIS.md`
+- `docs/CONSCIENCIA/BAIANES-E-RESENHA-REGIONAL.md`
+- `docs/GOVERNANCA/CONTEXTO-PESSOAL-E-PROVENIENCIA-TEMPORAL.md`
+- `.agents/skills/centraldark-operational-method/references/HUMAN-ACTION-DIRECT-LINK.md`
 
 Nome de modelo não muda o contrato. GPT, Codex, Claude, Gemini, Grok, Copilot, Cursor, Windsurf, Hermes ou modelo futuro entram como motores/papéis substituíveis dentro do mesmo organismo.
 
@@ -692,3 +705,19 @@ FLUXO FUNCIONAL → 🔴 DESVIO → ↩️ 1 CASA ATRÁS → MESMO OWNER
 ```
 
 No jeito do CHEFE: **a vela mostra a intenção, o astrolábio mede a realidade, o meridiano prende o owner certo e a carta do GitHub registra onde a embarcação realmente está.** O título mostra essa rota antes da resposta, sem inventar costa verde no mapa.
+
+## Índice canônico alcançável pela porta (anti-ORFAO)
+
+Documentos com `status: CANÔNICO` que precisam permanecer no grafo da porta (depth≤2 a partir de `LEIA-ME-IA.md` / adaptadores). Não apagar; só reconciliar/linkar.
+
+1. `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MATERIAL-INGEST.md`
+2. `docs/ARQUITETURA/LIBRARY-BINDING-CENTRALDARK.md`
+3. `docs/BRAIN/08-ARTEFATOS-VISUAIS/01-CARTAZES-CANONICOS/README.md`
+4. `docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/README.md`
+5. `docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md`
+6. `docs/CONSCIENCIA/ADMINISTRAVEIS.md`
+7. `docs/CONSCIENCIA/BAIANES-E-RESENHA-REGIONAL.md`
+8. `docs/CONSCIENCIA/MAPA-DO-CEREBRO.md`
+9. `docs/GOVERNANCA/CONTEXTO-PESSOAL-E-PROVENIENCIA-TEMPORAL.md`
+10. `.agents/skills/centraldark-operational-method/references/HUMAN-ACTION-DIRECT-LINK.md`
+

@@ -11,6 +11,7 @@ import {
   evaluateUsefulCeiling,
   validateCognitiveCouncilPlan,
 } from './cognitive-council.mjs';
+import { evaluateHornGoal } from './horn-proof-gate.mjs';
 
 const pexec = promisify(execFile);
 const DIR = dirname(fileURLToPath(import.meta.url));
@@ -265,6 +266,24 @@ function perceptionCeilingGaps(results, confrontation, materialFindings) {
   return gaps;
 }
 
+function hornWriterReadiness({ confrontation, unprovenFindings, materialFindings }) {
+  const facts = [];
+  if (confrontation.all_four_completed) facts.push('ALL_FOUR_COMPLETED');
+  if (confrontation.unproven_roles.length === 0) facts.push('NO_UNPROVEN_ROLES');
+  if (unprovenFindings.length === 0) facts.push('NO_RAW_UNPROVEN_FINDINGS');
+  if (materialFindings.length > 0) facts.push('HAS_MATERIAL_FINDING');
+
+  return evaluateHornGoal({
+    facts,
+    rules: [{
+      id: 'writer-ready-after-four-angle-proof',
+      if: ['ALL_FOUR_COMPLETED', 'NO_UNPROVEN_ROLES', 'NO_RAW_UNPROVEN_FINDINGS', 'HAS_MATERIAL_FINDING'],
+      then: 'WRITER_READY',
+    }],
+    goal: 'WRITER_READY',
+  });
+}
+
 export function buildPerceptionPacket({ mission, results }) {
   const deduped = dedupePerceptionFindings(results);
   const confrontation = confrontPerceptionEvidence(results);
@@ -274,10 +293,8 @@ export function buildPerceptionPacket({ mission, results }) {
     && item.evidence_ref.toUpperCase() !== 'UNKNOWN'
   ));
   const unprovenFindings = collectRawUnprovenFindings(results);
-  const readyForWriter = confrontation.all_four_completed
-    && confrontation.unproven_roles.length === 0
-    && unprovenFindings.length === 0
-    && materialFindings.length > 0;
+  const hornWriterGate = hornWriterReadiness({ confrontation, unprovenFindings, materialFindings });
+  const readyForWriter = hornWriterGate.state === 'PROVEN';
 
   const cognitiveCouncil = buildCognitiveCouncilPlan();
   const councilValidation = validateCognitiveCouncilPlan(cognitiveCouncil);
@@ -311,6 +328,7 @@ export function buildPerceptionPacket({ mission, results }) {
     counterproof_required: true,
     gold_requires_counterproof: true,
     cognitive_council: cognitiveCouncil,
+    horn_writer_gate: hornWriterGate,
     useful_ceiling: usefulCeiling,
     results,
     deduped_findings: deduped,

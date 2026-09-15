@@ -34,3 +34,13 @@ DOCUMENTED != EXECUTED
 ```
 
 Nenhuma regra nova deve ser escrita neste arquivo. Toda evolução do padrão de resposta acontece no owner estável.
+
+```text
+# Marcadores de proteção humana exigidos pelo registry (legado aponta; owner vivo governa)
+CAPACIDADE
+INTENCAO
+CONDUTA
+EFEITO
+CAPABILITY_INTENT_CONDUCT_EFFECT_SEPARATE=true
+LEGACY_POINTER_PRESERVES_REQUIRED_MARKERS=true
+```

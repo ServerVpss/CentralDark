@@ -53,6 +53,32 @@ check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CAPABILITY-READINESS-POLICY.y
  'one_optional_arm_off_does_not_fail_organism: true',
  'classification_when_failure_proven: REQUIRED_UNAVAILABLE',
 ], classification='CAPABILITY_OFF_NEUTRALITY_CONTRACT')
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CAPABILITY-READINESS-POLICY.yml',[
+ 'HERMES_AGENT_BODY_IS_NOT_REPLACEABLE_MODEL: true',
+ 'OPTIONAL_EXTERNAL_OFF_MUST_NOT_BLOCK_BOOT: true',
+ 'classification: DEGRADED_NON_BLOCKING',
+ 'DEGRADED_NON_BLOCKING:',
+ 'TOOLS_FIELD_PRESERVED',
+ 'TOOL_CHOICE_PRESERVED',
+ 'TOOL_CALLS_PRESERVED',
+ 'TOOL_CALL_ID_PRESERVED',
+ 'ARGUMENTS_PRESERVED',
+ 'TOOL_RESULT_CONTINUATION_PRESERVED',
+ 'STREAMING_PRESERVED_WHEN_USED',
+ 'TIMEOUT_AND_ERROR_SEMANTICS_PRESERVED',
+ 'FALLBACK_DOES_NOT_REENTER_CALLER_HERMES',
+ 'failure_means: DO_NOT_PROMOTE_GATEWAY_AS_HERMES_BACKEND_YET',
+], classification='HERMES_GATEWAY_PROMOTION_CONTRACT')
+check('docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md',[
+ 'CHATGPT_CAN_OPERATE_CASA_SEGREDO=true',
+ 'TRANSPORT=REMOTE_DESKTOP_COMMANDER',
+ 'DEVICE=SEGREDO',
+ 'DIRECT_FILE_OPERATIONS=true',
+ 'DIRECT_PROCESS_EXECUTION=true',
+ 'DIRECT_TERMINAL_EXECUTION=true',
+ 'OBSERVABLE_ACTIONS_REQUIRED=true',
+ 'CENTRALDARK_REMAINS_CONTROL_PLANE=true',
+], classification='CHATGPT_CASA_OPERATION_CONTRACT')
 check('apps/modulos/Bolt/source/app/components/centraldark/CentralDarkCockpitShell.client.tsx',[
  'DISABLED/OFF != FAIL',
  'FAIL REQUIRES EXPECTED ACTIVE',
@@ -87,6 +113,15 @@ check('LEIA-ME-IA.md',[
 ], classification='HUMAN_OBJECTIVE_AND_REMOTE_REALITY_BOUNDARY')
 check('CENTRALDARK_AI_BOOT.yaml',[
  'adaptive_payload: true',
+ 'source_of_truth: "ServerVpss/CentralDark + runtime medido"',
+ 'model: LIVING_CANON',
+ 'persistent_canon: ServerVpss/CentralDark',
+ 'live_state: MEASURED_RUNTIME',
+ 'final_judge: REALITY',
+ 'owner: central-horario',
+ 'timezone: America/Sao_Paulo',
+ 'human_display_label: BRT',
+ 'machine_storage: UTC_RFC3339',
  'observed_evidence: "MEASURE_AT_RUNTIME: branch, HEAD, PR, runtime, tools, owner, writer_scope"',
  'role: "DISCOVER_FROM_PRESENT_GAP_AND_CAPABILITY"',
  'writer: "UNKNOWN_UNTIL_WRITER_SCOPE_MEASURED"',
@@ -279,8 +314,41 @@ check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml',[
 ])
 check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml',[
  'engine_is_owner: false','prompt_consumer: apps/modulos/HERMES-CORE/prompts/hermes-core.md','LOAD_REFERENCE',
+ 'agent_runtimes:', 'role: EXECUTION_CONTINUITY_RUNTIME', 'model_catalog_member: false', 'selectable_as_engine: false',
  'SELF_HEALING_FAILURE_LOOP','ANY_PR_OR_COMMIT_GATE','CANONICAL_SELF_HOSTED_RUNNER_POLICY'
-])
+], classification='ENGINE_AND_AGENT_RUNTIME_SPLIT')
+check('apps/modulos/elite-gateway/scripts/centraldark_omni_router.py',[
+ 'DEFAULT_FALLBACK_CHAIN = "nous,google,claude-code,xai,abacus,openai"',
+ 'hermes_is_agent_runtime_not_engine',
+ 'if normalized == "hermes":',
+ 'ENGINE_PROVIDERS = frozenset(',
+ 'default_engine_config_valid',
+], classification='OMNI_ROUTER_HERMES_NOT_ENGINE')
+check_absent('apps/modulos/elite-gateway/scripts/centraldark_omni_router.py',[
+ r'HERMES_BASE_URL|HERMES_AUTH_TOKEN|HERMES_MODEL',
+ r'DEFAULT_FALLBACK_CHAIN\s*=\s*["\'][^"\']*hermes',
+ r'providers\s*=\s*\[[^\]]*["\']hermes["\']',
+ r'for provider in \[[^\]]*["\']hermes["\']',
+], classification='OMNI_ROUTER_NO_HERMES_MODEL_SURFACE')
+check_absent('scripts/boot_omni_router.py',[
+ r'HERMES_BASE_URL',
+ r'CENTRALDARK_DEFAULT_ENGINE.{0,16}hermes',
+], classification='OMNI_LAUNCHER_HERMES_NOT_ENGINE')
+check_absent('scripts/launch_omni_router_direct.py',[
+ r'HERMES_BASE_URL',
+ r'CENTRALDARK_DEFAULT_ENGINE.{0,16}hermes',
+], classification='OMNI_LAUNCHER_HERMES_NOT_ENGINE')
+check_absent('scripts/launch_omni_router.sh',[
+ r'HERMES_BASE_URL',
+ r'CENTRALDARK_DEFAULT_ENGINE=\"hermes\"',
+], classification='OMNI_LAUNCHER_HERMES_NOT_ENGINE')
+check_absent('scripts/auto-redeploy-failover.mjs',[
+ r'fallbackChain:\s*\[[^\]]*[\"\']hermes[\"\']',
+], classification='OMNI_FAILOVER_HERMES_NOT_ENGINE')
+check('docs/ARQUITETURA/CENTRALDARK-OMNI-ROUTER.md',[
+ 'Hermes permanece fora do cat',
+ 'provider/engine do cat',
+], classification='OMNI_DOC_HERMES_NOT_ENGINE')
 check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml',[
  'UNIVERSAL_EVOLUTION_CARACOL',
  'ALL_CURRENT_SKILLS',

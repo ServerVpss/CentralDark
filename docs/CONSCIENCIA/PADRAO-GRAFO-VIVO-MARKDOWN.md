@@ -2,7 +2,7 @@
 title: "🫀 Padrão do Grafo Vivo Markdown — CentralDark"
 status: "ATIVO_RECONCILIADO"
 date: 2026-09-10
-updated: 2026-09-10
+updated: 2026-09-12
 owner: "docs/CONSCIENCIA/PADRAO-GRAFO-VIVO-MARKDOWN.md"
 truth_scope: "DOCS_MARKDOWN_STRUCTURE_GRAPH_AND_VISUAL_CONTRACT"
 canonical: true
@@ -138,6 +138,112 @@ Ao encontrar Markdown fora do padrão:
 
 Versões técnicas necessárias de API, schema, protocolo ou dependência podem continuar **dentro do conteúdo/código** quando fazem parte da compatibilidade real. A proibição é contra criar uma família concorrente de documentos correntes.
 
+## 🎛️ Autoria visual do mesmo Grafo Vivo
+
+A superfície visual é uma forma humana de declarar intenção e relação; ela **não vira segunda fonte de verdade** e não escreve estado runtime diretamente.
+
+```text
+VISUAL_AUTHORING_SURFACE=true
+VISUAL_IS_TRUTH=false
+VISUAL_MUST_REUSE_GRAFO_VIVO=true
+VISUAL_MUST_NOT_CREATE_SECOND_ROUTER=true
+VISUAL_MUST_NOT_WRITE_RUNTIME_STATE_DIRECTLY=true
+```
+
+Fluxo canônico:
+
+```text
+HUMAN_VISUAL_INTENT
+→ GRAPH_EDIT
+→ VALIDATE_OWNER_AND_CONTRACT
+→ COMPILE_TO_EXISTING_CANONICAL_OWNERS
+→ TEST/GATE
+→ COMMIT/PUSH/MAIN
+→ RUNTIME
+→ TELEMETRY
+→ SAME_GRAPH_STATUS_PROJECTION
+→ REALITY_JUDGE
+```
+
+A UI pode esconder complexidade sem apagar semântica. Cada nó visual deve poder carregar, quando aplicável:
+
+```text
+owner
+gate
+entrada
+saida
+condicao
+permissao
+proof_key
+fallback
+next_cursor
+```
+
+Esses campos podem ficar recolhidos no clique do nó; a ausência visual deles não autoriza a runtime a inventar valores.
+
+### 🔀 Semântica mínima das setas
+
+```text
+→  CONTINUE
+↺  RETRY_OR_LOOP
+↩  RETURN_TO_PREVIOUS_PROVEN_STAGE
+⊣  BLOCK
+⇢  OPTIONAL
+⇄  SYNCHRONIZE
+```
+
+A seta é contrato, não decoração. Mudança de sentido ou tipo de aresta é mudança semântica e deve passar pelo mesmo gate de qualquer outra mutação.
+
+### 🧠 IA como designer/compilador, não como dona da intenção
+
+A IA pode:
+
+```text
+AUTO_LAYOUT
+ALIGN_SPACING
+DRAW_CURVES
+GROUP_SECTORS
+VALIDATE_SCHEMA
+GENERATE_PATCH_PROPOSAL
+COMPILE_VISUAL_INTENT
+```
+
+A IA não pode, sem prova/autorização do fluxo:
+
+```text
+CHANGE_CHEFE_INTENT
+REASSIGN_OWNER_SILENTLY
+BYPASS_GATE
+PROMOTE_UNKNOWN_TO_PASS
+CREATE_PARALLEL_ARCHITECTURE
+```
+
+### 🌈 Telemetria de volta ao mesmo mapa
+
+O runtime pode projetar estado observado sobre os mesmos nós e arestas:
+
+```text
+GREEN  = PASS fresco no escopo
+YELLOW = UNKNOWN | PENDING | STALE | BLOCKED_EXTERNAL
+RED    = FAIL comprovado
+```
+
+Cor não é verdade eterna. Toda cor material precisa carregar timestamp, fonte/proof key e vínculo com a revisão/HEAD quando aplicável.
+
+### 🟡 Estado atual desta capacidade
+
+Já existem Grafo Vivo, `graph-data.json`, gerador, painel, plugin e gates relacionados. O **editor visual drag-and-drop bidirecional** descrito acima ainda não está provado como runtime existente.
+
+```text
+GRAFO_VIVO_EXISTENTE=PROVED_BY_REPO
+VISUAL_STATUS_PROJECTION=PROVED_BY_REPO
+DRAG_DROP_AUTHORING_RUNTIME=UNKNOWN
+VISUAL_TO_CANONICAL_COMPILER=UNKNOWN
+ROUND_TRIP_EDIT_TELEMETRY_FIXED_POINT=UNKNOWN
+```
+
+Portanto, implementar essa capacidade futura deve começar em `REUSE_BEFORE_CREATE`: medir painel/plugin/gerador atuais, escolher owner e estender o mínimo necessário.
+
 ## ⚖️ Leis
 
 - ❓ UNKNOWN != PASS
@@ -146,5 +252,7 @@ Versões técnicas necessárias de API, schema, protocolo ou dependência podem 
 - 🚀 MERGED != DEPLOYED
 - 🕰️ HISTORY != CURRENT_STATE
 - 🔗 LINK != PROOF
+- 🎛️ VISUAL != TRUTH
+- 🧭 ARROW_SEMANTICS != DECORATION
 - 🫀 NÓ VIVO = um dono estável evoluindo
 - ⚖️ REALIDADE É O JUIZ

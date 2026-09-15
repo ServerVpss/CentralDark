@@ -188,6 +188,39 @@ SCREENPIPE_TARGET_CONTEXT + COMPUTER_CONTROL_TOOL → UI_ACTION_CANDIDATE
 SCREENPIPE_WITHOUT_CONTROL_TOOL → OBSERVATION_ONLY
 ```
 
+## Dependências de automação e token do router
+
+Uma automação Screenpipe pode consumir capacidades extras da CentralDark, mas isso não torna toda variável opcional do router uma pré-condição global do sensor.
+
+```text
+SCREENPIPE_LOCAL_OBSERVATION
+!= CENTRALDARK_ROUTER_AUTH
+
+CENTRALDARK_ROUTER_TOKEN_MISSING
+!= SCREENPIPE_DOWN
+!= SCREENPIPE_DATA_INVALID
+!= GLOBAL_AUTOMATION_FAILURE
+```
+
+`CENTRALDARK_ROUTER_TOKEN` só é obrigatório para uma etapa quando o runtime/endpoint selecionado provar que exige autenticação por esse token. O repositório aceita configuração em que o token do router está vazio/opcional; portanto um validador não pode rejeitar uma timeline local apenas porque a variável não existe, salvo quando aquela timeline realmente chama uma rota autenticada que exige o token.
+
+Classificação fail-closed:
+
+```text
+TOKEN_REQUIRED_BY_SELECTED_ROUTE=true
++ TOKEN_ABSENT
+→ SELECTED_ROUTE_AUTH_BLOCKED
+
+TOKEN_REQUIRED_BY_SELECTED_ROUTE=false
++ SCREENPIPE_LOCAL_API_HEALTHY
+→ CONTINUE_LOCAL_OBSERVATION
+
+TOKEN_REQUIREMENT_UNKNOWN
+→ UNKNOWN
+```
+
+Quando uma UI/pipeline disser apenas `Missing environment variable: CENTRALDARK_ROUTER_TOKEN`, registrar como `AUTOMATION_DEPENDENCY_BLOCKED` para aquela execução; não promover para causa raiz do Screenpipe nem do sistema inteiro sem prova do consumidor que exigiu a variável.
+
 ## API direta e compressão
 
 Quando MCP não estiver disponível, a API local pode ser usada como fallback autorizado após medir `http://localhost:3030/health`.

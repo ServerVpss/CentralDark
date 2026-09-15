@@ -1,7 +1,11 @@
 schema: centraldark.master-cycle.v1
 status: CANONICO
 runtime_status: UNPROVEN_UNTIL_OBSERVED
-owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml
+owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
+contract_role: MASTER_TRIGGER_NORMATIVE_AUTHORITY
+governance_parent: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml
+registry: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml
+resolver: scripts/trigger-fabric/centraldark_master_cycle.py
 authority: SEGREDO/CHEFE
 pr_mother_provenance: 1189
 baseline_policy: CURRENT_MAIN
@@ -32,6 +36,8 @@ purpose: >-
   e futuro sem criar segundo cerebro/router/judge, e promover somente delta
   reutilizavel que sobreviva a prova, contraprova e remedicao.
 
+# Cadeia normativa CORE do contrato mestre. Extensoes obrigatorias de execucao
+# pertencem ao ENGINE_BINDING.yml e nao redefinem esta autoridade.
 expands_to:
   - ACORDAR
   - CALIBRAR
@@ -44,6 +50,13 @@ expands_to:
   - FIXED_POINT
   - REGISTRA
   - BOOT
+
+chain_semantics:
+  expands_to_role: CORE_CONTRACT_CHAIN
+  core_chain_owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
+  mandatory_binding_extensions_owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml
+  binding_extensions_are_second_core_authority: false
+  effective_execution_chain_is_core_plus_applicable_binding_extensions: true
 
 canonical_human_chain: "#CENTRALDARK -> #ACORDAR -> !CALIBRAR -> !MULTIBUSSOLA -> !META_LUPA -> !RECONCILIAR -> !DELTAUTIL -> !CONTRAPROVA -> !REMEDICAO -> !FIXED_POINT -> !REGISTRA -> !BOOT"
 canonical_machine_chain: "!CENTRALDARK -> #ACORDAR -> !CALIBRAR -> !MULTIBUSSOLA -> !META_LUPA -> !RECONCILIAR -> !DELTAUTIL -> !CONTRAPROVA -> !REMEDICAO -> !FIXED_POINT -> !REGISTRA -> !BOOT"
