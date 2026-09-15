@@ -115,3 +115,21 @@ test('no-op nao toca conteudo nem mtime', () => {
     fs.rmSync(base, { recursive: true, force: true });
   }
 });
+
+test('memory executor bloqueia push por padrao e exige MEMORY_GIT_PUSH=1 exato', () => {
+  const executor = fs.readFileSync(new URL('./memory-executor-agent.mjs', import.meta.url), 'utf8');
+  const guard = "if (process.env.MEMORY_GIT_PUSH !== '1')";
+  const blocked = "pushStatus = 'BLOCKED_BY_MEMORY_GIT_PUSH'";
+  const push = "execFileSync('git', ['-C', RAIZ, 'push', 'origin', 'main']";
+
+  const guardIndex = executor.indexOf(guard);
+  const blockedIndex = executor.indexOf(blocked);
+  const pushIndex = executor.indexOf(push);
+
+  assert.ok(guardIndex >= 0, 'MEMORY_GIT_PUSH exact gate must exist');
+  assert.ok(blockedIndex > guardIndex, 'blocked status must be inside/after the fail-closed guard');
+  assert.ok(pushIndex > blockedIndex, 'git push must only appear after the blocked branch');
+  assert.equal(executor.split(push).length - 1, 1, 'there must be exactly one direct push origin/main site');
+  assert.match(executor.slice(blockedIndex, pushIndex), /\}\s*else\s*\{/s, 'push must live in the explicit allowed branch');
+  assert.doesNotMatch(executor, /MEMORY_GIT_PUSH\s*(?:===|==)\s*['"](?:true|yes|on)['"]/i);
+});
