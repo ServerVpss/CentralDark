@@ -4,6 +4,11 @@
 # - update-branch é sincronização, não aprovação.
 # - conflito real vai para scripts/dependabot/resolve-conflicts.sh.
 # - radar varre TODOS os PRs abertos do dependabot[bot], inclusive antigos.
+# - radar-all-open-prs-sync (schedule/dispatch, self-hosted VPS1): Update branch em TODOS os PRs abertos + rearme somente de failure do HEAD atual; cancelled não é ressuscitado.
+# - anti-thrash: HEAD com checks pending/queued/in_progress → sem update-branch/rerun.
+# - rate-limit: remaining=0 → DEFERRED+cursor (exit 0); NÃO classificar PR como falho.
+# - OTHER_ERR>0 → FAIL; CONFLICT → receipt; SYNC≠APPROVAL; UNKNOWN≠PASS.
+# - Um cron só neste workflow; NÃO espalhar cron em outras VPS.
 # - compatibilidade é lida do badge oficial já presente no PR, nunca inventada.
 # - PATCH exige compatibilidade >= 85; MINOR exige >= 95; MAJOR nunca faz auto-merge.
 # - compatibilidade sozinha NÃO aprova: mesmo HEAD precisa estar mergeável e sem checks pendentes/falhos.
@@ -22,6 +27,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  actions: write
   checks: read
   statuses: read
 
@@ -537,3 +543,30 @@ jobs:
         run: |
           set -euo pipefail
           bash "$GITHUB_WORKSPACE/.ci-house/scripts/dependabot/reconcile-open-prs.sh"
+
+  radar-all-open-prs-sync:
+    name: 📡 Radar — Update branch + rearme (todos PRs)
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 25
+
+    steps:
+      - name: 📥 Checkout confiável da main
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          path: .ci-house
+          persist-credentials: false
+          fetch-depth: 1
+          submodules: false
+
+      - name: 🔁 Sync all open PRs + rerun failed jobs
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          MAX_PRS: '100'
+          MAX_RERUNS_PER_BRANCH: '8'
+        run: |
+          set -euo pipefail
+          bash "$GITHUB_WORKSPACE/.ci-house/scripts/dependabot/sync-all-open-prs.sh"

@@ -1,5 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import './horn-proof-gate.test.mjs';
+import './horn-library-bridge.test.mjs';
 
 import {
   CANDIDATE_POOL_PR_1104,
@@ -23,6 +25,9 @@ test('seis lentes funcionais cabem nos quatro ataques existentes sem novo writer
   assert.equal(plan.authority_plane.final_authority, 'SEGREDO/CHEFE');
   assert.equal(plan.authority_plane.coordinator, 'SOL');
   assert.equal(plan.perception_plane.model_vote_is_truth, false);
+  assert.equal(plan.horn_logic_lock.cognitive_gate_required, true);
+  assert.equal(plan.horn_logic_lock.library_gate_required, true);
+  assert.equal(plan.attack_coverage.percent, 100);
   assert.equal(validateCognitiveCouncilPlan(plan).ok, true);
 });
 
