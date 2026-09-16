@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -13,7 +14,10 @@ const FILES = {
   master: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml',
   engine: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml',
   hermesPrompt: 'apps/modulos/HERMES-CORE/prompts/hermes-core.md',
+  tlc23: 'docs/CONSCIENCIA/04-MCP-E-CONECTORES/tlc23.pdf',
 };
+
+const TLC23_CANONICAL_SHA256 = 'b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1';
 
 const REQUIRED_CHAIN = [
   'CENTRALDARK', 'TLC23_OPEN', 'DESTINATION_LOCK', 'ACORDAR', 'CALIBRAR',
@@ -42,12 +46,23 @@ const REQUIRED_GLOBAL_INHERITANCE = [
   'OUTPUT_GUARD',
   'REALITY_JUDGE',
   'RECEIPT_AND_CONTINUATION',
+  'SELF_HEALING_FAILURE_LOOP',
 ];
 
 function read(rel) {
   const abs = path.join(ROOT, rel);
   if (!fs.existsSync(abs)) throw new Error(`MISSING_FILE:${rel}`);
   return fs.readFileSync(abs, 'utf8');
+}
+
+function readBuffer(rel) {
+  const abs = path.join(ROOT, rel);
+  if (!fs.existsSync(abs)) throw new Error(`MISSING_FILE:${rel}`);
+  return fs.readFileSync(abs);
+}
+
+function sha256(buffer) {
+  return crypto.createHash('sha256').update(buffer).digest('hex');
 }
 
 function requireTokens(text, tokens, scope) {
@@ -75,6 +90,11 @@ export function validateUniversalMethod() {
   const master = read(FILES.master);
   const engine = read(FILES.engine);
   const hermesPrompt = read(FILES.hermesPrompt);
+  const tlc23Hash = sha256(readBuffer(FILES.tlc23));
+
+  if (tlc23Hash !== TLC23_CANONICAL_SHA256) {
+    throw new Error(`TLC23_SOURCE_HASH_MISMATCH:${tlc23Hash}`);
+  }
 
   requireTokens(universal, [
     'applies_to: ALL_CURRENT_AND_FUTURE_ENGINES',
@@ -95,6 +115,7 @@ export function validateUniversalMethod() {
     'breaths_total: 17',
     'delta_minimum_required: true',
     'model_identity_must_not_block_scope: true',
+    'next_cursor_required_when_not_fixed_point: true',
   ], 'UNIVERSAL_CONTRACT');
 
   let previous = -1;
@@ -119,6 +140,10 @@ export function validateUniversalMethod() {
     'model_is_replaceable: true',
     'one_writer_per_scope: true',
     'reality_is_judge: true',
+    'runtime_claim_requires_runtime_evidence: true',
+    'mission_fixed_point_stops_learning_capacity: false',
+    'NEXT_ACORDAR',
+    'NEXT_CURSOR',
   ], 'MASTER_CYCLE');
 
   requireTokens(engine, REQUIRED_GLOBAL_INHERITANCE, 'ENGINE_GLOBAL_INHERITANCE');
@@ -129,6 +154,9 @@ export function validateUniversalMethod() {
     'master_cycle_binding:',
     'explicit_trigger: "!CENTRALDARK"',
     'second_semantic_owner: FORBIDDEN',
+    'same_failure_no_new_information: REUSE_CRYSTAL_NOT_RETHINK',
+    'human_return_before_fixed_point: FORBIDDEN_UNLESS_HUMAN_FRONTIER',
+    'CONTINUE_NEXT_CURSOR',
   ], 'ENGINE_BINDING');
 
   requireTokens(hermesPrompt, [
@@ -149,6 +177,16 @@ export function validateUniversalMethod() {
     universal_chain: REQUIRED_CHAIN,
     method_owner: FILES.master,
     hermes_runtime_validator: FILES.universal,
+    tlc23_source: FILES.tlc23,
+    tlc23_source_sha256: tlc23Hash,
+    tlc23_source_gate: 'PASS',
+    persistent_operational_regime_contract: true,
+    fixed_point_is_checkpoint: true,
+    fixed_point_is_end: false,
+    next_cycle_required_while_runtime_exists: true,
+    self_correction_is_runtime_internal: true,
+    measured_100_percent_or_exact_blocker: true,
+    runtime_activation_proven_by_self_test: false,
     skin_changes_governance: false,
     private_reasoning_exposed: false,
     reality_is_judge: true,
