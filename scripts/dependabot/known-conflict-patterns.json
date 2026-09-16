@@ -22,7 +22,7 @@
       "EXPECTED_RESULT": "Package manifest keeps the Dependabot bump from the PR branch.",
       "COUNTERPROOF": "resolve-conflicts-policy.test.sh asserts package.json keeps version from PR.",
       "RUNTIME_APPLICABLE": "SOURCE_ONLY",
-      "LAST_PROVED_SHA": "PENDING_THIS_CHANGE",
+      "LAST_PROVED_SHA": "365c95696d53abb206ce04347b197fea962ac67d",
       "LAST_PROVED_AT": "2026-09-16"
     },
     {
@@ -37,7 +37,7 @@
       "EXPECTED_RESULT": "Lockfile side comes from PR; checks prove consistency.",
       "COUNTERPROOF": "dependabot integration and policy tests.",
       "RUNTIME_APPLICABLE": "SOURCE_ONLY",
-      "LAST_PROVED_SHA": "PENDING_THIS_CHANGE",
+      "LAST_PROVED_SHA": "365c95696d53abb206ce04347b197fea962ac67d",
       "LAST_PROVED_AT": "2026-09-16"
     },
     {
@@ -52,7 +52,7 @@
       "EXPECTED_RESULT": "pnpm lockfile remains aligned with the PR dependency update.",
       "COUNTERPROOF": "dependabot integration and policy tests.",
       "RUNTIME_APPLICABLE": "SOURCE_ONLY",
-      "LAST_PROVED_SHA": "PENDING_THIS_CHANGE",
+      "LAST_PROVED_SHA": "365c95696d53abb206ce04347b197fea962ac67d",
       "LAST_PROVED_AT": "2026-09-16"
     },
     {
@@ -67,7 +67,7 @@
       "EXPECTED_RESULT": "Yarn lockfile remains aligned with the PR dependency update.",
       "COUNTERPROOF": "dependabot integration and policy tests.",
       "RUNTIME_APPLICABLE": "SOURCE_ONLY",
-      "LAST_PROVED_SHA": "PENDING_THIS_CHANGE",
+      "LAST_PROVED_SHA": "365c95696d53abb206ce04347b197fea962ac67d",
       "LAST_PROVED_AT": "2026-09-16"
     },
     {
@@ -82,7 +82,7 @@
       "EXPECTED_RESULT": "main boot remains authoritative and references the single registry/engine.",
       "COUNTERPROOF": "resolve-conflicts-policy.test.sh asserts main side wins.",
       "RUNTIME_APPLICABLE": "RUNTIME_APPLICABLE",
-      "LAST_PROVED_SHA": "PENDING_THIS_CHANGE",
+      "LAST_PROVED_SHA": "365c95696d53abb206ce04347b197fea962ac67d",
       "LAST_PROVED_AT": "2026-09-16"
     },
     {
@@ -97,7 +97,7 @@
       "EXPECTED_RESULT": "LEIA-ME-IA keeps single-owner routing.",
       "COUNTERPROOF": "grep in integration test validates single registry reference.",
       "RUNTIME_APPLICABLE": "RUNTIME_APPLICABLE",
-      "LAST_PROVED_SHA": "PENDING_THIS_CHANGE",
+      "LAST_PROVED_SHA": "365c95696d53abb206ce04347b197fea962ac67d",
       "LAST_PROVED_AT": "2026-09-16"
     },
     {
@@ -112,7 +112,7 @@
       "EXPECTED_RESULT": "No PR bot overwrites skill law without review.",
       "COUNTERPROOF": "Known-path receipt plus main-side policy.",
       "RUNTIME_APPLICABLE": "SOURCE_ONLY",
-      "LAST_PROVED_SHA": "PENDING_THIS_CHANGE",
+      "LAST_PROVED_SHA": "365c95696d53abb206ce04347b197fea962ac67d",
       "LAST_PROVED_AT": "2026-09-16"
     },
     {
@@ -127,7 +127,7 @@
       "EXPECTED_RESULT": "Source file remains canonical from main during automated conflict resolution.",
       "COUNTERPROOF": "Known-path receipt plus main-side policy.",
       "RUNTIME_APPLICABLE": "RUNTIME_REQUIRED",
-      "LAST_PROVED_SHA": "PENDING_THIS_CHANGE",
+      "LAST_PROVED_SHA": "365c95696d53abb206ce04347b197fea962ac67d",
       "LAST_PROVED_AT": "2026-09-16"
     },
     {
@@ -142,7 +142,7 @@
       "EXPECTED_RESULT": "Automated resolver does not promote stale generated artifact.",
       "COUNTERPROOF": "Known-path receipt plus main-side policy.",
       "RUNTIME_APPLICABLE": "RUNTIME_REQUIRED",
-      "LAST_PROVED_SHA": "PENDING_THIS_CHANGE",
+      "LAST_PROVED_SHA": "365c95696d53abb206ce04347b197fea962ac67d",
       "LAST_PROVED_AT": "2026-09-16"
     },
     {
@@ -157,7 +157,7 @@
       "EXPECTED_RESULT": "Architecture doc keeps current source-of-truth wording.",
       "COUNTERPROOF": "resolve-conflicts-policy.test.sh asserts main side wins.",
       "RUNTIME_APPLICABLE": "RUNTIME_APPLICABLE",
-      "LAST_PROVED_SHA": "PENDING_THIS_CHANGE",
+      "LAST_PROVED_SHA": "365c95696d53abb206ce04347b197fea962ac67d",
       "LAST_PROVED_AT": "2026-09-16"
     },
     {
@@ -172,7 +172,7 @@
       "EXPECTED_RESULT": "No automated PR rewrites learning history silently.",
       "COUNTERPROOF": "Known-path receipt plus main-side policy.",
       "RUNTIME_APPLICABLE": "SOURCE_ONLY",
-      "LAST_PROVED_SHA": "PENDING_THIS_CHANGE",
+      "LAST_PROVED_SHA": "365c95696d53abb206ce04347b197fea962ac67d",
       "LAST_PROVED_AT": "2026-09-16"
     },
     {
@@ -187,7 +187,7 @@
       "EXPECTED_RESULT": "Reports remain consistent with current main receipts.",
       "COUNTERPROOF": "Known-path receipt plus main-side policy.",
       "RUNTIME_APPLICABLE": "SOURCE_ONLY",
-      "LAST_PROVED_SHA": "PENDING_THIS_CHANGE",
+      "LAST_PROVED_SHA": "365c95696d53abb206ce04347b197fea962ac67d",
       "LAST_PROVED_AT": "2026-09-16"
     },
     {
@@ -202,7 +202,7 @@
       "EXPECTED_RESULT": "Current main discovery script remains intact.",
       "COUNTERPROOF": "Known-path receipt plus main-side policy.",
       "RUNTIME_APPLICABLE": "RUNTIME_APPLICABLE",
-      "LAST_PROVED_SHA": "PENDING_THIS_CHANGE",
+      "LAST_PROVED_SHA": "365c95696d53abb206ce04347b197fea962ac67d",
       "LAST_PROVED_AT": "2026-09-16"
     },
     {
@@ -217,7 +217,7 @@
       "EXPECTED_RESULT": "Automated resolver preserves current validator behavior.",
       "COUNTERPROOF": "Integration test asserts registry covers this path.",
       "RUNTIME_APPLICABLE": "RUNTIME_APPLICABLE",
-      "LAST_PROVED_SHA": "PENDING_THIS_CHANGE",
+      "LAST_PROVED_SHA": "365c95696d53abb206ce04347b197fea962ac67d",
       "LAST_PROVED_AT": "2026-09-16"
     },
     {
@@ -232,7 +232,7 @@
       "EXPECTED_RESULT": "Script remains aligned with main.",
       "COUNTERPROOF": "Known-path receipt plus main-side policy.",
       "RUNTIME_APPLICABLE": "RUNTIME_APPLICABLE",
-      "LAST_PROVED_SHA": "PENDING_THIS_CHANGE",
+      "LAST_PROVED_SHA": "365c95696d53abb206ce04347b197fea962ac67d",
       "LAST_PROVED_AT": "2026-09-16"
     },
     {
@@ -247,7 +247,7 @@
       "EXPECTED_RESULT": "No bot PR silently replaces IDE operational mode.",
       "COUNTERPROOF": "Known-path receipt plus main-side policy.",
       "RUNTIME_APPLICABLE": "SOURCE_ONLY",
-      "LAST_PROVED_SHA": "PENDING_THIS_CHANGE",
+      "LAST_PROVED_SHA": "365c95696d53abb206ce04347b197fea962ac67d",
       "LAST_PROVED_AT": "2026-09-16"
     },
     {
@@ -262,7 +262,7 @@
       "EXPECTED_RESULT": "No bot PR silently replaces IDE wrapper behavior.",
       "COUNTERPROOF": "Known-path receipt plus main-side policy.",
       "RUNTIME_APPLICABLE": "SOURCE_ONLY",
-      "LAST_PROVED_SHA": "PENDING_THIS_CHANGE",
+      "LAST_PROVED_SHA": "365c95696d53abb206ce04347b197fea962ac67d",
       "LAST_PROVED_AT": "2026-09-16"
     },
     {
@@ -292,7 +292,7 @@
       "EXPECTED_RESULT": "Workflow continues to call the single resolver and avoids untrusted HEAD execution.",
       "COUNTERPROOF": "codex-validate grep + integration tests.",
       "RUNTIME_APPLICABLE": "SOURCE_ONLY",
-      "LAST_PROVED_SHA": "PENDING_THIS_CHANGE",
+      "LAST_PROVED_SHA": "365c95696d53abb206ce04347b197fea962ac67d",
       "LAST_PROVED_AT": "2026-09-16"
     }
   ]
