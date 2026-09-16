@@ -141,5 +141,5 @@ test('HUD unificado reusa o cockpit, move, redimensiona e nao inventa quota', ()
   assert.match(inventory, /POSTHOG/);
   assert.match(inventory, /DATADOG/);
   assert.match(inventory, /ADAPTER_REQUIRED/);
-  assert.doesNotMatch(inventory, /quota:\s*'OBSERVABLE'.*ChatGPT/s);
+  assert.match(inventory, /id: 'CHATGPT'[\s\S]*?quota: 'ADAPTER_REQUIRED'/);
 });
