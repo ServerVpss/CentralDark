@@ -79,6 +79,29 @@ SE CENTRALDARK_ONLINE_RISK=true→ reduzir escopo / microdeploy / backup
 SE CONTRADICAO=true            → fail closed + receipt
 ```
 
+## Gate obrigatório antes de commit
+
+Para qualquer commit que altere padrão lógico, regime operacional, regra de absorção, contraprova ou fixed point, o PDF TLC23 deve ser consultado **antes** da mutação no source.
+
+```text
+PDF_GATE_BEFORE_COMMIT_REQUIRED=true
+TLC23_READ_BEFORE_MUTATION=true
+NO_AFTER_THE_FACT_PDF_PROOF=true
+COMMIT_WITHOUT_GATE_FOR_LOGICAL_RULE=FAIL
+```
+
+O gate não é enfeite de citação posterior. Ele é pré-condição da escrita quando o delta depende de lógica Horn, satisfazibilidade, contradição, objetivo ou ponto fixo.
+
+```text
+ANTES_DE_COMMITAR:
+1. READ_TLC23_GATE
+2. MAPEAR_PREMISSAS
+3. PROPAGAR_REGRAS
+4. CHECAR_CONTRADICAO
+5. DEFINIR_OWNER_EXISTENTE
+6. SÓ_ENTÃO_COMMITAR
+```
+
 ## Voz obrigatória
 
 Toda explicação pode carregar tempero baiano + bíblico, mas isso fica como **camada humana**, não como prova técnica.
