@@ -71,12 +71,13 @@ function requireTokens(text, tokens, scope) {
 }
 
 function parseEngineNames(engineText) {
-  const start = engineText.indexOf('\nengines:\n');
-  const end = engineText.indexOf('\nmandatory_inheritance:\n');
+  const normalized = engineText.replace(/\r\n/g, '\n');
+  const start = normalized.indexOf('\nengines:\n');
+  const end = normalized.indexOf('\nmandatory_inheritance:\n');
   if (start < 0 || end < 0 || end <= start) throw new Error('ENGINE_REGISTRY_SECTION_MISSING');
-  const section = engineText.slice(start, end);
+  const section = normalized.slice(start, end);
   const names = [];
-  for (const line of section.split(/\r?\n/)) {
+  for (const line of section.split('\n')) {
     const m = line.match(/^  ([a-zA-Z0-9_]+):\s*$/);
     if (m) names.push(m[1]);
   }
