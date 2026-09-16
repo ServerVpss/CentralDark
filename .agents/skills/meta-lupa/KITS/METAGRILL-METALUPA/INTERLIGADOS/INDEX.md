@@ -11,11 +11,13 @@
 🌳 ARQUITETURA        → PADROES-PR/ARVORE-VISUAL-CANONICA.md
 🧭 MAPA MENTAL        → SKILLS/MAPA-MENTAL-OPERACIONAL.md
 🎼 INTERLIGAÇÃO       → SKILLS/INTERLIGACAO-OPERACIONAL.json
+🧩 REGISTRY SKILLS    → SKILLS/REGISTRY.json
 🫀 CÂNONE             → CANONE-OPERACIONAL.md
 👀 MEMÓRIA VISUAL     → PADROES-PR/VISUAL-MEMORY.md
 🏠 RUNTIME/REALIDADE  → RUNTIME/FRONTEIRAS-REAIS.md
 🧾 RECEIPTS           → RECEIPTS/
 🧾 RECEIPT ATUAL      → RECEIPTS/2026-09-16-PADROES-PR-INTERLIGADOS-MAIN.md
+🧩 RECEIPT SKILLS     → RECEIPTS/2026-09-16-SKILL-MATERIALIZATION-MAIN.md
 ```
 
 ## 🧿 Rastro vivo · mesma linhagem
@@ -27,6 +29,9 @@ SOURCE_COMMIT=29874315fe6642959ebee6266b7c22c5d46091ea
 RECEIPT_HASH=bf82c3251f092ea9b45ac8bb440f15a26e1eee84
 ARCH_COMMIT=02e283d5356d0d1c258812138f06cd44dcb17aa4
 ARVORE_HASH=3f169e698266b7fe51dec9acadfba36ace47f557
+SKILL_GRAPH_COMMIT=677ff908f8f40551dd42b917efe3f7335ae3943b
+SKILL_REGISTRY_COMMIT=35eafb224901b4040112b146501c052b35682da6
+SKILL_RECEIPT_COMMIT=d470496f706be2d6aba087c50399c44a0f3512d6
 RASTRO=PRs → PADRÕES → SKILLS → CÂNONE → RUNTIME-FRONTIER → RECEIPT → INDEX → ÁRVORE-VISUAL
 ```
 
@@ -43,6 +48,9 @@ RASTRO=PRs → PADRÕES → SKILLS → CÂNONE → RUNTIME-FRONTIER → RECEIPT 
 → 29874315fe6642959ebee6266b7c22c5d46091ea  receipt final da passagem
 → 37b600c36de7cc7a294b358ff10f6f4a2112e60b  INDEX evoluído no mesmo rastro
 → 02e283d5356d0d1c258812138f06cd44dcb17aa4  arquitetura unificada cristalizada
+→ 677ff908f8f40551dd42b917efe3f7335ae3943b  skill selecionada → SKILL.md + ponte visual
+→ 35eafb224901b4040112b146501c052b35682da6  registry aplica ordem de leitura material
+→ d470496f706be2d6aba087c50399c44a0f3512d6  receipt da materialização
 ```
 
 ## 🌳 Árvore mental operacional
@@ -83,6 +91,23 @@ RASTRO=PRs → PADRÕES → SKILLS → CÂNONE → RUNTIME-FRONTIER → RECEIPT 
 → ⚖️ REALIDADE
 ```
 
+## 🧩 Materialização de cada skill
+
+```text
+SKILL selecionada
+→ SKILL.md                         # contrato funcional
+→ INTERLIGADOS.md se existir      # gancho visual + entrada/retorno
+→ REGISTRY + MAPA MENTAL se não existir ponte
+→ CAPABILITY-CONTRACT-ROUTER
+→ menor conjunto suficiente
+→ ONE_WRITER_PER_SCOPE
+→ execução/medição material
+→ CONTRAPROVA
+→ RECEIPT
+```
+
+A ponte `INTERLIGADOS.md` **não é segundo owner** e não carrega todas as skills. Ela torna visível a mesma fórmula operacional em linguagem mental/emoji.
+
 ## 🔒 Cadeados
 
 ```text
@@ -92,6 +117,8 @@ META_LUPA = OLHO_CANONICO
 META_ORQUESTRACAO != CAPABILITY_ROUTER
 BRAIN_MEMORY != CAPABILITY_ROUTER
 META_START_LINK != MEMORY_OWNER
+SKILL.md = CONTRATO FUNCIONAL
+INTERLIGADOS.md = PONTE VISUAL-OPERACIONAL
 PATTERN_ON_MAIN != RUNNING_NOW
 DOCUMENTED != EXECUTED
 MERGED != DEPLOYED
