@@ -254,6 +254,84 @@ PostHog encaixa no Hub para product analytics, feature flags, errors e LLM analy
 
 Não criar um app parecido com ChatGPT/Codex. O owner já existe. O trabalho é absorver, gradualmente, as capacidades úteis dessas superfícies para o cockpit canônico do `CentralDark.exe`, mantendo um organismo único e promovendo `SOURCE → RUNTIME → PASS` somente com medição aplicável.
 
+## 🌳 Arquitetura unificada canônica · vínculo com INTERLIGADOS
+
+Este PR projeta o HUD dentro da arquitetura já cristalizada na `main`; ele não redefine owner, memória, roteamento ou autoridade.
+
+```text
+👑 CHEFE / INTENÇÃO
+→ 👑🪬 !CENTRALDARK
+→ 🔗 !># INTERLIGADOS
+→ 🔎 META-LUPA              = OLHO CANÔNICO
+   ├─ 🔥 META-GRILL          = encontra a ferida
+   ├─ 💭 META-COGNIÇÃO       = organiza entendimento
+   ├─ 🎼 META-ORQUESTRAÇÃO   = resolve encaminhamento lógico
+   └─ 📡 META-START-LINK     = direção + proveniência + cursor
+→ 🔄 !RECONCILIAR
+→ 🎼 CAPABILITY-CONTRACT-ROUTER = roteamento operacional
+   ├─ 🔁 COT-REACT-LOOP
+   ├─ ⚖️ AUDITORIA-PR
+   ├─ 🚂 ESTEIRA-MOTOR
+   ├─ 🧠 BRAIN-MEMORY       = continuidade/memória
+   ├─ 🪢 CONFLITO-GIT
+   └─ 🧪 SANDBOX
+→ 📚 CAPABILITY / TOOLS
+→ 📡 TRANSPORTES
+→ 🏠 CASA / VPS
+→ ⚙️ HERMES / MCP / TOOLS / SERVIÇOS
+→ ⚖️ !CONTRAPROVA
+→ 💠 !FIXED_POINT
+→ 🧾 !REGISTRA
+→ ⚖️ REALIDADE
+```
+
+### Papéis sem sobreposição
+
+```text
+META_LUPA                 = OLHO_CANONICO
+META_ORQUESTRACAO         = ENCAMINHAMENTO_LOGICO
+CAPABILITY_CONTRACT_ROUTER = ROTEAMENTO_OPERACIONAL
+BRAIN_MEMORY              = MEMORIA_CONTINUIDADE
+META_START_LINK           = DIRECAO_PROVENIENCIA_CURSOR
+TRANSPORT                 = CARREGA_SINAL_NAO_GOVERNA
+EXECUTOR                  = HERMES_MCP_TOOLS_SERVICOS
+REALIDADE                 = JUIZ
+```
+
+### Proveniência desta arquitetura
+
+```text
+ID=PR_PATTERNS_INTERLIGADOS_MAIN_20260916
+MAIN_CANONICAL_HEAD=13a59e49c59574ffe631efb15848c3e14f39554c
+ARCH_COMMIT=02e283d5356d0d1c258812138f06cd44dcb17aa4
+ARVORE_HASH=3f169e698266b7fe51dec9acadfba36ace47f557
+INDEX_COMMIT=13a59e49c59574ffe631efb15848c3e14f39554c
+INDEX_HASH=912b1b8e1fbbb0672ae51a3dbcb7256f92e3449a
+RECEIPT_HASH=bf82c3251f092ea9b45ac8bb440f15a26e1eee84
+RASTRO=PRs → PADRÕES → SKILLS → CÂNONE → RUNTIME-FRONTIER → RECEIPT → INDEX → ÁRVORE-VISUAL → PR1551
+```
+
+### Cadeados herdados pelo HUD
+
+```text
+INTERLIGADOS != EXECUTAR_TUDO
+ONE_SYSTEM_ONLY=true
+REUSE_BEFORE_CREATE=true
+ONE_WRITER_PER_SCOPE=true
+NO_PARALLEL_ARCHITECTURE=true
+META_ORCHESTRATION_IS_NOT_CAPABILITY_ROUTER=true
+BRAIN_MEMORY_IS_NOT_ROUTER=true
+META_START_LINK_IS_NOT_MEMORY_OWNER=true
+TRANSPORT_IS_NOT_AUTHORITY=true
+CAPABILITY_IS_NOT_AUTHORITY=true
+DOCUMENTED != EXECUTED
+SOURCE != RUNTIME_NOW
+UNKNOWN != PASS
+REALIDADE = JUIZ
+```
+
+O HUD do #1551 é uma projeção/observador desse organismo: mostra capacidades, sinais e lacunas; não vira cérebro, router normativo ou juiz.
+
 ## Próximo cursor
 
 Depois deste PR ficar verde:
