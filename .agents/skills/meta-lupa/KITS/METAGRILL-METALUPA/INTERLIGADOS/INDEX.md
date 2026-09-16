@@ -8,6 +8,7 @@
 📜 PADRÕES-PR BASE    → PADROES-PR/REGISTRY.json
 🔥 DELTA PR ATUAL     → PADROES-PR/DELTA-PR-1493-1550.md
 ⚙️ REFRESH MÁQUINA    → PADROES-PR/REFRESH-2026-09-16.json
+🌳 ARQUITETURA        → PADROES-PR/ARVORE-VISUAL-CANONICA.md
 🧭 MAPA MENTAL        → SKILLS/MAPA-MENTAL-OPERACIONAL.md
 🎼 INTERLIGAÇÃO       → SKILLS/INTERLIGACAO-OPERACIONAL.json
 🫀 CÂNONE             → CANONE-OPERACIONAL.md
@@ -24,7 +25,9 @@ ID=PR_PATTERNS_INTERLIGADOS_MAIN_20260916
 SOURCE_MAIN=29874315fe6642959ebee6266b7c22c5d46091ea
 SOURCE_COMMIT=29874315fe6642959ebee6266b7c22c5d46091ea
 RECEIPT_HASH=bf82c3251f092ea9b45ac8bb440f15a26e1eee84
-RASTRO=PRs → PADRÕES → SKILLS → CÂNONE → RUNTIME-FRONTIER → RECEIPT → INDEX
+ARCH_COMMIT=02e283d5356d0d1c258812138f06cd44dcb17aa4
+ARVORE_HASH=3f169e698266b7fe51dec9acadfba36ace47f557
+RASTRO=PRs → PADRÕES → SKILLS → CÂNONE → RUNTIME-FRONTIER → RECEIPT → INDEX → ÁRVORE-VISUAL
 ```
 
 ### 🔗 Proveniência da passagem
@@ -38,6 +41,8 @@ RASTRO=PRs → PADRÕES → SKILLS → CÂNONE → RUNTIME-FRONTIER → RECEIPT 
 → cccebd065d2fb0c53f660fe16977951041004746  indexação semântica
 → 24b68dc801c129820161a1ecc5fbb6762d939a6f  índice visual
 → 29874315fe6642959ebee6266b7c22c5d46091ea  receipt final da passagem
+→ 37b600c36de7cc7a294b358ff10f6f4a2112e60b  INDEX evoluído no mesmo rastro
+→ 02e283d5356d0d1c258812138f06cd44dcb17aa4  arquitetura unificada cristalizada
 ```
 
 ## 🌳 Árvore mental operacional
@@ -46,11 +51,13 @@ RASTRO=PRs → PADRÕES → SKILLS → CÂNONE → RUNTIME-FRONTIER → RECEIPT 
 👑 INTENÇÃO
 └─ 👑🪬 !CENTRALDARK
    └─ 🔗 !># INTERLIGADOS
-      ├─ 🧿 META-LUPA · owner
+      ├─ 🧿 META-LUPA · OLHO CANÔNICO / owner
       │  ├─ 🔥 META-GRILL · encontra a ferida
       │  ├─ 💭 META-COGNIÇÃO · organiza entendimento
-      │  ├─ 🎼 META-ORQUESTRAÇÃO · encaminha ao owner
-      │  └─ 📡 META-START-LINK · preserva direção + cursor
+      │  ├─ 🎼 META-ORQUESTRAÇÃO · resolve encaminhamento
+      │  └─ 📡 META-START-LINK · preserva direção + proveniência + cursor
+      ├─ 🎼 CAPABILITY-CONTRACT-ROUTER · roteamento operacional
+      ├─ 🧠 BRAIN-MEMORY · continuidade/memória
       ├─ 📜 PADRÕES-PR · proveniência reutilizável
       ├─ 🎼 SKILLS · interligação operacional
       ├─ 🫀 CÂNONE · leis estáveis
@@ -69,6 +76,7 @@ RASTRO=PRs → PADRÕES → SKILLS → CÂNONE → RUNTIME-FRONTIER → RECEIPT 
 → 🧭 !MULTIBÚSSOLA
 → 🔎 !META_LUPA
 → 🔄 !RECONCILIAR
+→ 🎼 CAPABILITY-CONTRACT-ROUTER
 → ⚖️ !CONTRAPROVA
 → 💠 !FIXED_POINT
 → 🧾 !REGISTRA
@@ -80,6 +88,10 @@ RASTRO=PRs → PADRÕES → SKILLS → CÂNONE → RUNTIME-FRONTIER → RECEIPT 
 ```text
 MAIN = leis + owners + gatilhos + costura + proveniência
 CASA/VPS = estado temporal + execução viva
+META_LUPA = OLHO_CANONICO
+META_ORQUESTRACAO != CAPABILITY_ROUTER
+BRAIN_MEMORY != CAPABILITY_ROUTER
+META_START_LINK != MEMORY_OWNER
 PATTERN_ON_MAIN != RUNNING_NOW
 DOCUMENTED != EXECUTED
 MERGED != DEPLOYED
