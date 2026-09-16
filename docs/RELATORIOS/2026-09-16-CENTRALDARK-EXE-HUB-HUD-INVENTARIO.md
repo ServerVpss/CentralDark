@@ -1,8 +1,8 @@
 # 👑🪬 CentralDark.exe · inventário do Hub/HUD unificado
 
-Data: 2026-09-16  
-Base medida: `ServerVpss/CentralDark@c0a33271228bbb77168dca4ae64d4aa8e1201898`  
-Owner desktop: `apps/modulos/Bolt/source`  
+Data: 2026-09-16
+Base medida: `ServerVpss/CentralDark@c0a33271228bbb77168dca4ae64d4aa8e1201898`
+Owner desktop: `apps/modulos/Bolt/source`
 Regra: `REUSE_BEFORE_CREATE` + `ONE_SYSTEM_ONLY` + `UNKNOWN != PASS`
 
 ## Objetivo
@@ -78,6 +78,51 @@ Ele entrega:
 7. **CodeRabbit Event Feed** — review vira sinal/recomendação, não autoridade.
 8. **HUD Receipt Stream** — cada mudança relevante com timestamp, source_ref, causa e cursor.
 9. **Conta/limite multi-provider real** — continua `ADAPTER_REQUIRED` até haver API/conector autorizado.
+10. **Canonical Label Trace** — rastrear labels exigidas, labels presentes, labels faltando, ator e superfície de aplicação.
+
+## 🧷 Rastreio de labels canônicas
+
+O erro de label não deve depender de leitura manual de tela, CLI solto ou agente lembrar de aplicar etiqueta.
+
+O HUD deve exibir um bloco próprio para PRs:
+
+```text
+PR_LABEL_TRACE
+├── REQUIRED_LABELS      = labels exigidas pelo contrato do PR
+├── PRESENT_LABELS       = labels realmente presentes no GitHub
+├── MISSING_LABELS       = diferença exigidas - presentes
+├── EXTRA_LABELS         = labels informativas, não bloqueantes
+├── APPLIED_BY           = user | bot | cli | connector | unknown
+├── APPLIED_FROM         = GitHub UI | GitHub CLI | ChatGPT connector | workflow | unknown
+├── LABEL_SOURCE         = registry | workflow | manual | inferred
+├── LABEL_CANONICAL      = true | false | unknown
+├── LABEL_FORCED         = true | false
+└── RECEIPT_REF          = commit/comment/run que provou a aplicação
+```
+
+Regra:
+
+```text
+LABEL_APPLIED != LABEL_CANONICAL
+LABEL_PRESENT != LABEL_SCOPE_CORRECT
+USER_FORCED_LABEL != CONTRACT_SATISFIED
+MISSING_REQUIRED_LABEL != PASS
+OPTIONAL_LABEL_MISSING != FAILURE
+```
+
+O defeito que este PR deve rastrear é:
+
+```text
+FALTA_DE_LABEL_CANONICA
+→ identificar PR afetado
+→ calcular labels obrigatórias
+→ comparar com GitHub atual
+→ mostrar faltantes no HUD
+→ abrir próximo cursor
+→ só aplicar automaticamente se contrato permitir
+```
+
+O HUD não deve criar nova taxonomia de labels. Ele deve consumir a fonte canônica existente e mostrar divergência.
 
 ## 📊 Dependabot e analytics
 
@@ -157,13 +202,16 @@ UNKNOWN_TO_PASS=false
 DEPENDABOT_AS_RUNTIME_AUTHORITY=false
 CODERABBIT_AS_RUNTIME_AUTHORITY=false
 OPTIONAL_ANALYTICS_REQUIRED_FOR_CORE=false
+LABEL_PRESENT_TO_PASS=false
+LABEL_FORCED_TO_PASS=false
+LABEL_TRACE_REQUIRED=true
 ```
 
 ## 📌 Receipt do PR #1551
 
-PR: `#1551 — feat(desktop): Hub HUD unificado + inventário de capacidades do CentralDark.exe`  
-Branch: `feat/centraldark-unified-hud-inventory-20260916`  
-Base do PR: `c0a33271228bbb77168dca4ae64d4aa8e1201898`  
+PR: `#1551 — feat(desktop): Hub HUD unificado + inventário de capacidades do CentralDark.exe`
+Branch: `feat/centraldark-unified-hud-inventory-20260916`
+Base do PR: `c0a33271228bbb77168dca4ae64d4aa8e1201898`
 Head imediatamente anterior a este receipt: `811fe1964107bbcb1dad732f6a97a71c9ee34fa9`
 
 ### Placar do inventário implementado
@@ -180,6 +228,7 @@ DESKTOP COMMANDER PROFILES    = 2
 
 GAPS EXPLÍCITOS               = 8
 PLUGINS ANALÍTICOS OPCIONAIS  = 2
+LABEL_TRACE_REQUIRED          = 1
 ```
 
 ### O que o HUD do PR faz materialmente
@@ -219,7 +268,8 @@ CENTRALDARK.EXE
     ├── MCP live snapshot
     ├── Dependabot event feed
     ├── CodeRabbit event feed
-    └── receipt stream
+    ├── receipt stream
+    └── canonical label trace
 ```
 
 ### Estado de validação no momento deste receipt
@@ -233,6 +283,7 @@ RESIZE              = SOURCE_PROVED
 AUTO_GROW_STATS     = SOURCE_PROVED
 PERSISTENCIA_LAYOUT = SOURCE_PROVED
 ANTI_FAKE_QUOTA     = SOURCE_PROVED
+LABEL_TRACE         = DOCUMENTED_GAP
 
 CI_HEAD             = QUEUED/PENDING
 MERGE               = NOT_DONE
@@ -340,4 +391,5 @@ Depois deste PR ficar verde:
 2. criar adapters de uso/limites um provedor por vez;
 3. alimentar HUD com Dependabot/CodeRabbit/receipts;
 4. integrar contas ao `oauth-broker` existente;
-5. somente depois promover claims de runtime com prova viva.
+5. implementar `PR_LABEL_TRACE` usando o registry canônico de labels;
+6. somente depois promover claims de runtime com prova viva.
