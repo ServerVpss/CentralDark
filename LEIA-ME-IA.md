@@ -63,7 +63,7 @@ Carregue nesta ordem:
 14. `docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md` quando houver aprendizado do próprio método, autoaperfeiçoamento do scaffold ou revisão de como o organismo trabalha.
 15. `docs/CONSCIENCIA/EXECUCAO-REVERSIVEL.md` antes de mutação com risco material — menor delta e caminho de volta preservado.
 16. `docs/CONSCIENCIA/REMEDICAO.md` depois de qualquer mutação — medir T0 → T1 antes de declarar o veredito.
-17. `.agents/skills/git-conflict-resolve-house-standard/SKILL.md` quando houver PR em conflito, main avançando sob PR aberto, ou dependabot travado — padrão único, motor em `scripts/dependabot/resolve-conflicts.sh`.
+17. `.agents/skills/git-conflict-resolve-house-standard/SKILL.md` quando houver PR em conflito, main avançando sob PR aberto, ou dependabot travado — padrão único, motor em `scripts/dependabot/resolve-conflicts.sh` e registry estruturado em `scripts/dependabot/known-conflict-patterns.json`.
 18. estado atual de branch, HEAD, PR, runtime, writer e ferramentas aplicáveis.
 
 ### 1.0 Índice de owners canônicos especializados
@@ -184,7 +184,7 @@ CENTRALDARK_AI_BOOT:
   writer: "NONE|nome-do-escritor-atual"
   frequency: "LEVE|RAPIDA|MEDIA|PROFUNDA|FORTE|AVANCADA|FRIA|ORQUESTRA|ADAPTIVE"
   fronts: "ADAPTIVE_1_TO_10"
-  conflict_resolution: "git-conflict-resolve-house-standard (motor: scripts/dependabot/resolve-conflicts.sh)"
+  conflict_resolution: "git-conflict-resolve-house-standard (motor: scripts/dependabot/resolve-conflicts.sh; registry: scripts/dependabot/known-conflict-patterns.json)"
 ```
 
 O recibo prova carregamento do contrato; não inventa permissão/tool nem substitui teste.

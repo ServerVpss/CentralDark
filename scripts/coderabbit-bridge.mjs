@@ -25,6 +25,7 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(HERE, '..');
 const SIGNAL_WATCH = resolve(REPO_ROOT, 'scripts', 'hermes', 'signal-watch-notify.mjs');
 const MINERALIZER = resolve(REPO_ROOT, 'scripts', 'hermes', 'signal-mineralize.mjs');
+const KNOWN_CONFLICTS_FILE = resolve(REPO_ROOT, 'scripts', 'dependabot', 'known-conflict-patterns.json');
 const LOGDIR = resolve(process.env.LOGDIR || './logs');
 const LOGFILE = resolve(LOGDIR, 'coderabbit-bridge.log');
 
@@ -97,6 +98,28 @@ async function loadZendriveReceipt() {
     return { source: 'zendrive_chatgpt_review', state: 'PROVADO', reason: null, payload };
   } catch (error) {
     return { source: 'zendrive_chatgpt_review', state: 'QUEBRADO', reason: redact(error?.message || error), payload: null };
+  }
+}
+
+async function loadKnownConflictPaths() {
+  try {
+    const registry = JSON.parse(await readFile(KNOWN_CONFLICTS_FILE, 'utf8'));
+    const patterns = Array.isArray(registry.patterns) ? registry.patterns : [];
+    return {
+      state: 'PROVADO',
+      file: 'scripts/dependabot/known-conflict-patterns.json',
+      schema: registry.schema || null,
+      count: patterns.length,
+      conflict_ids: patterns.map((entry) => entry.CONFLICT_ID).filter(Boolean),
+      role: 'ROUTING_RECEIPT_ONLY',
+    };
+  } catch (error) {
+    return {
+      state: 'UNKNOWN',
+      file: 'scripts/dependabot/known-conflict-patterns.json',
+      reason: redact(error?.message || error),
+      role: 'ROUTING_RECEIPT_ONLY',
+    };
   }
 }
 
@@ -223,10 +246,11 @@ async function notifyCentral(payload) {
 }
 
 async function runOnce(directEvent = null) {
-  const [rabbitA, rabbitB, zendrive] = await Promise.all([
+  const [rabbitA, rabbitB, zendrive, knownConflictPaths] = await Promise.all([
     getJson(RABBIT_A, 'rabbit_a'),
     getJson(RABBIT_B, 'rabbit_b'),
     loadZendriveReceipt(),
+    loadKnownConflictPaths(),
   ]);
 
   const balA = numericBalance(rabbitA);
@@ -252,6 +276,7 @@ async function runOnce(directEvent = null) {
     timestamp: new Date().toISOString(),
     role: 'REVIEW_ONLY',
     sources: { rabbit_a: rabbitA, rabbit_b: rabbitB, zendrive },
+    known_conflict_paths: knownConflictPaths,
     legacy_numeric_aggregate: {
       state: hasAnyBalance ? 'PROVADO' : 'UNKNOWN',
       value: aggregated,
@@ -272,6 +297,7 @@ async function runOnce(directEvent = null) {
       'MISSING_DATA_IS_NOT_ZERO',
       'UNKNOWN_IS_NOT_PASS',
       'NEVER_DISCARD_LEARNING',
+      'KNOWN_CONFLICT_REGISTRY_IS_NOT_SECOND_RESOLVER',
     ],
   };
 

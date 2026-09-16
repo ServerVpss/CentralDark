@@ -385,20 +385,22 @@ CENTRALDARK_AI_BOOT:
     skill: ".agents/skills/git-conflict-resolve-house-standard/SKILL.md"
     engine: "scripts/dependabot/resolve-conflicts.sh"
     trigger: ".github/workflows/dependabot-auto-merge.yml"
+    known_conflict_registry: "scripts/dependabot/known-conflict-patterns.json"
     # O motor está NA branch do PR e faz `git merge origin/main`, portanto:
     #   --ours = lado do PR   |   --theirs = lado da main
     # Contraintuitivo, e já causou fail-closed invertido: a versão anterior
     # dizia "mantém main" e usava --ours, que aceita o PR — deixando um PR
     # sobrescrever .github/, docs/ e scripts/trigger-fabric/ sem revisão.
     policy:
-      package_json: "MERGE INTELIGENTE com merge-base — parte da main e aplica só as diferenças do PR. --ours é cego e perde TODAS as outras mudanças da main."
-      lockfile: "LADO_DO_PR (--ours) — lockfile é gerado, não editado manualmente. Vale em qualquer diretório: package-lock.json, pnpm-lock.yaml, yarn.lock"
+      manifests_and_lockfiles: "LADO_DO_PR (--ours) quando o conflito é o bump. Merge inteligente futuro deve atualizar o motor e este contrato juntos; contrato escrito não pode divergir do runtime."
       todo_o_resto: "LADO_DA_MAIN (--theirs) — fail-closed de verdade, sem lista de exceções"
     invariants:
       - "OURS_E_THEIRS_SAO_CONTRAINTUITIVOS_NO_MERGE"
       - "FAIL_CLOSED_ESCRITO != FAIL_CLOSED_IMPLEMENTADO"
       - "NO_CONFLICT_AGORA != NO_CONFLICT_DEPOIS"
       - "MERGED != CI_PASS"
+      - "KNOWN_CONFLICT_REGISTRY != SECOND_RESOLVER"
+      - "UNKNOWN_CONFLICT_PATH_BLOCKS_AUTOMERGE"
     lockfile_unico: "Vários bumps no mesmo lockfile conflitam em cadeia; @dependabot rebase não resolve. A cura é agrupar em .github/dependabot.yml — e groups sem applies-to cobre só version-updates."
 
   language:
