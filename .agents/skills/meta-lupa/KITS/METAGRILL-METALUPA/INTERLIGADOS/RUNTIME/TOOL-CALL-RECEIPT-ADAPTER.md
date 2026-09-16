@@ -168,6 +168,77 @@ AGENTE OU USUÁRIO ACIONA CAPACIDADE
 
 ---
 
+## 🔁 Prova dual-side · Casa/VPS e binding Remote
+
+Em 2026-09-16, o CHEFE forneceu uma prova runtime local/externa indicando:
+
+```text
+MCP_CENTRALDARK_HEALTH_OK=true
+SERVICE=mcp-centraldark
+VERSION=0.4.0
+CATALOG_VERSION=115-d6d3af7bb117
+TOOL_COUNT=115
+REMOTE_DEVICE_NAME=vmi3256920
+REMOTE_DEVICE_AUTHORIZED=true
+REMOTE_CHANNEL_SUBSCRIBED=true
+REMOTE_PRESENCE_ONLINE=true
+```
+
+A mesma passagem mediu, pelo conector Remote Desktop Commander desta sessão ChatGPT, que a identidade/canal atual do ChatGPT ainda não enxergava esse device recém-autorizado como online.
+
+```text
+USER_RUNTIME_SIDE              = ONLINE / AUTHORIZED_BY_USER_EVIDENCE
+CHATGPT_CONNECTOR_SIDE          = NO_DEVICE_AVAILABLE_IN_THIS_CHAT
+REMOTE_BINDING_SPLIT_SUSPECTED  = true
+RUNTIME_FAILURE                 = not_proven
+CONNECTOR_BINDING_GAP           = proven
+```
+
+Interpretação canônica:
+
+```text
+DEVICE_VERIFIED_BY_USER != CHATGPT_CONNECTOR_ATTACHED
+CHATGPT_CONNECTOR_OFFLINE != VPS_RUNTIME_DOWN
+MCP_HEALTH_OK != ALL_CAPABILITIES_ACTIVE
+```
+
+O adapter deve funcionar tanto **lá** quanto **cá**, mas precisa registrar qual superfície observou cada evento:
+
+```text
+source_surface = user_runtime | mcp_admin | remote_tray | chatgpt_connector | drive | github | screenpipe
+```
+
+Assim, se a VPS/Casa está viva mas o ChatGPT está em outra conta/canal Remote, o HUD mostra **BINDING_SPLIT** em vez de falso vermelho de runtime.
+
+---
+
+## 🧭 Fluxo de acoplamento esperado
+
+```text
+VPS/CASA MCP /health OK
+→ Remote device autorizado
+→ channel subscribed
+→ presence online
+→ ChatGPT connector lista o mesmo device online
+→ ping retorna pong
+→ read-only tool-call executa
+→ audit_event aparece em /admin/logs/stream
+→ receipt_candidate é emitido
+→ Drive/PR recebe apenas receipt/cursor aprovado
+→ Meta-Lupa contraprova
+→ Realidade julga
+```
+
+Quando uma etapa quebra:
+
+```text
+MCP OK + REMOTE AUTH OK + CHATGPT DEVICE OFFLINE
+→ status=BINDING_SPLIT
+→ ação=alinhar identidade/canal Remote, não reiniciar VPS
+```
+
+---
+
 ## ⚖️ Cadeados
 
 ```text
@@ -195,10 +266,13 @@ API_TOOL_RESOURCE_BRIDGE                = SOURCE
 FILES_TOOL_CALL_DATA_JSON               = SOURCE
 LIBRARY_REMOTE_TRAY_HISTORY             = SOURCE
 GOOGLE_DRIVE_SEARCH                     = EXECUTED
-REMOTE_DESKTOP_COMMANDER_NOW            = NO_DEVICES_AVAILABLE_IN_THIS_CHAT
-VPS_RUNTIME_NOW                         = UNKNOWN
-CASA_RUNTIME_NOW                        = UNKNOWN
-SCREENPIPE_RUNTIME_NOW                  = UNKNOWN
+USER_PROVIDED_MCP_HEALTH                = OK / 115_TOOLS
+USER_PROVIDED_REMOTE_DEVICE             = AUTHORIZED_ONLINE
+REMOTE_DESKTOP_COMMANDER_THIS_CHAT      = NO_DEVICES_AVAILABLE_IN_THIS_CHAT
+REMOTE_BINDING_SPLIT                    = PROVEN_BY_DUAL_MEASUREMENT
+VPS_RUNTIME_NOW                         = PARTIAL_USER_PROOF
+CASA_RUNTIME_NOW                        = UNKNOWN_UNLESS_MEASURED_LOCALLY
+SCREENPIPE_RUNTIME_NOW                  = UNKNOWN_UNLESS_MEASURED_LOCALLY
 ```
 
 ---
@@ -206,14 +280,14 @@ SCREENPIPE_RUNTIME_NOW                  = UNKNOWN
 ## 🧭 Próximo cursor
 
 ```text
-Quando Remote Control ou VPS estiver comunicável:
+Quando Remote Control ou VPS estiver comunicável pelo mesmo canal desta sessão:
 1. medir MCP 9100 /health e /tools.json;
 2. medir /admin/logs/stream;
 3. medir processo Remote Tray / Remote Control;
 4. medir Screenpipe e porta/timeline real;
 5. emitir tool-call teste read-only;
 6. casar tool_event ↔ audit_event ↔ screenpipe_event ↔ receipt;
-7. só então promover RUNTIME_NOW de UNKNOWN para PASS/FAIL.
+7. só então promover RUNTIME_NOW de PARTIAL_USER_PROOF/UNKNOWN para PASS/FAIL.
 ```
 
 📜 **Narrativa não é prova. Adapter não é juiz. O ouro é a chamada que volta com recibo e aguenta contraprova.**
