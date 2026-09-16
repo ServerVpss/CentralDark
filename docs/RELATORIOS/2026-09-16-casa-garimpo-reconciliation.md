@@ -1,9 +1,9 @@
 # Reconciliação Casa → GitHub main → VPS
 
-Data: 2026-09-16  
-Fonte canônica: `ServerVpss/CentralDark@main`  
-Casa medida: `E:\CentralDark\_MAPA_CASA\GARIMPO-CHEFE`  
-VPS canônica: `/var/lib/centraldark/canonical-main`  
+Data: 2026-09-16
+Fonte canônica: `ServerVpss/CentralDark@main`
+Casa medida: `E:\CentralDark\_MAPA_CASA\GARIMPO-CHEFE`
+VPS canônica: `/var/lib/centraldark/canonical-main`
 VPS runtime operacional: `/root/CentralDark`
 
 ## Regra aplicada
