@@ -162,8 +162,12 @@ for TRY in $(seq 1 "$MAX_TRIES"); do
 
   git worktree add --detach "$WORKTREE" "$BASE_SHA"
 
+  # Não execute o corpo dentro de `if ( ... )`: Bash desativa `errexit`
+  # para comandos usados como condição, o que pode transformar gate vermelho
+  # em push falso-verde. Execute a subshell fora da condição e capture RC.
   STATUS=0
-  if (
+  set +e
+  (
     set -euo pipefail
     cd "$WORKTREE"
     git config user.name "$GIT_AUTHOR_NAME"
@@ -238,11 +242,9 @@ for TRY in $(seq 1 "$MAX_TRIES"); do
 
     echo "⚠️ ${WRITER_TAG}_PUSH_REJECTED tentativa=$TRY — concorrencia; observando main de novo"
     exit 75
-  ); then
-    STATUS=0
-  else
-    STATUS=$?
-  fi
+  )
+  STATUS=$?
+  set -e
 
   if ! git worktree remove --force "$WORKTREE" 2>/dev/null; then
     rm -rf "$WORKTREE" || true
