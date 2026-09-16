@@ -4,7 +4,8 @@
 # Política:
 #   - trabalha em worktree isolado: nunca troca a branch da Casa principal;
 #   - manifestos/lockfiles: preserva o lado do PR (o bump é o delta útil);
-#   - qualquer outro conflito: preserva main (fail-closed);
+#   - conflitos conhecidos não-manifesto: preserva main (fail-closed);
+#   - conflito desconhecido: bloqueia e escala para review;
 #   - nunca inventa branch de destino: o workflow fornece PR_HEAD_REF;
 #   - nunca empurra para main;
 #   - conflito/refutação vira receipt/minério; não some em silêncio.
@@ -17,6 +18,7 @@ REPO_DIR="${REPO_DIR:-/root/CentralDark}"
 FETCH_REF="refs/centraldark/pr/${PR_NUM}"
 WORKTREE_ROOT="${CENTRALDARK_DEPENDABOT_WORKTREES:-${TMPDIR:-/tmp}/centraldark-dependabot}"
 WORKTREE="${WORKTREE_ROOT}/pr-${PR_NUM}-$$"
+KNOWN_CONFLICTS_FILE="${KNOWN_CONFLICTS_FILE:-scripts/dependabot/known-conflict-patterns.json}"
 
 if [ -z "$PR_HEAD_REF" ]; then
   echo "BLOCKED_MISSING_PR_HEAD_REF"
@@ -51,12 +53,65 @@ echo "🧭 RESOLVER_PR=$PR_NUM"
 echo "🔄 PR_HEAD_REF=$PR_HEAD_REF"
 echo "🏠 CASA_WORKTREE_MUTATED=0"
 echo "🧱 ISOLATED_WORKTREE=$WORKTREE"
+echo "🧾 KNOWN_CONFLICTS_FILE=$KNOWN_CONFLICTS_FILE"
 
 git -C "$REPO_DIR" fetch --prune origin main
 git -C "$REPO_DIR" fetch --force origin "refs/pull/${PR_NUM}/head:${FETCH_REF}"
 git -C "$REPO_DIR" worktree add --detach "$WORKTREE" "$FETCH_REF"
 
 cd "$WORKTREE"
+
+lookup_known_conflict() {
+  local candidate="$1"
+  local registry="$KNOWN_CONFLICTS_FILE"
+
+  [ -f "$registry" ] || {
+    echo "REGISTRY_MISSING"
+    return 1
+  }
+
+  node - "$registry" "$candidate" <<'NODE'
+const fs = require('node:fs');
+const [registryPath, candidate] = process.argv.slice(2);
+
+function escapeRegex(value) {
+  return String(value).replace(/[|\\{}()[\]^$+?.]/g, '\\$&');
+}
+
+function patternToRegex(pattern) {
+  const normalizedPattern = String(pattern).replace(/\\/g, '/');
+  let out = '^';
+  for (let i = 0; i < normalizedPattern.length;) {
+    if (normalizedPattern.startsWith('**/', i)) {
+      out += '(?:.*/)?';
+      i += 3;
+    } else if (normalizedPattern.startsWith('**', i)) {
+      out += '.*';
+      i += 2;
+    } else if (normalizedPattern[i] === '*') {
+      out += '[^/]*';
+      i += 1;
+    } else {
+      out += escapeRegex(normalizedPattern[i]);
+      i += 1;
+    }
+  }
+  out += '$';
+  return new RegExp(out);
+}
+
+const registry = JSON.parse(fs.readFileSync(registryPath, 'utf8'));
+const patterns = Array.isArray(registry.patterns) ? registry.patterns : [];
+const normalized = candidate.replace(/\\/g, '/');
+const match = patterns.find((entry) => patternToRegex(entry.PATH_PATTERN).test(normalized));
+
+if (!match) {
+  process.exitCode = 1;
+} else {
+  process.stdout.write(JSON.stringify(match));
+}
+NODE
+}
 
 set +e
 MERGE_OUTPUT="$(git merge --no-commit --no-ff origin/main 2>&1)"
@@ -85,21 +140,56 @@ if [ "${#CONFLICTS[@]}" -eq 0 ]; then
   exit 3
 fi
 
+UNKNOWN_CONFLICTS=()
+for f in "${CONFLICTS[@]}"; do
+  if ! info="$(lookup_known_conflict "$f")"; then
+    echo "UNKNOWN_CONFLICT_PATH path=$f action=BLOCK_REVIEW"
+    UNKNOWN_CONFLICTS+=("$f")
+    continue
+  fi
+
+  node - "$info" "$f" <<'NODE'
+const entry = JSON.parse(process.argv[2]);
+const actual = process.argv[3] || '';
+console.log(`KNOWN_CONFLICT_PATH=true path=${entry.PATH_PATTERN} actual=${actual}`);
+console.log(`CONFLICT_ID=${entry.CONFLICT_ID}`);
+console.log(`OWNER=${entry.OWNER}`);
+console.log(`CONFLICT_CLASS=${entry.CONFLICT_CLASS}`);
+console.log(`RESOLUTION_POLICY=${entry.SAFE_RESOLUTION}`);
+console.log(`SOURCE_REF=${entry.SOURCE_REF}`);
+console.log(`RUNTIME_APPLICABLE=${entry.RUNTIME_APPLICABLE}`);
+NODE
+done
+
+if [ "${#UNKNOWN_CONFLICTS[@]}" -gt 0 ]; then
+  echo "BLOCKED_UNKNOWN_CONFLICTS count=${#UNKNOWN_CONFLICTS[@]}"
+  printf 'UNKNOWN_CONFLICT=%s\n' "${UNKNOWN_CONFLICTS[@]}"
+  git merge --abort 2>/dev/null || true
+  exit 5
+fi
+
 # Estamos no HEAD do PR e fazemos merge de origin/main:
 #   --ours   = PR
 #   --theirs = main
 for f in "${CONFLICTS[@]}"; do
-  case "$f" in
-    package.json|package-lock.json|pnpm-lock.yaml|yarn.lock|\
-    */package.json|*/package-lock.json|*/pnpm-lock.yaml|*/yarn.lock)
+  info="$(lookup_known_conflict "$f")"
+  policy="$(node -e "const entry = JSON.parse(process.argv[1]); process.stdout.write(entry.SAFE_RESOLUTION);" "$info")"
+
+  case "$policy" in
+    USE_PR_SIDE)
       echo "RESOLVE path=$f winner=PR"
       git checkout --ours -- "$f"
       git add -- "$f"
       ;;
-    *)
+    USE_MAIN_SIDE)
       echo "RESOLVE path=$f winner=MAIN fail_closed=1"
       git checkout --theirs -- "$f"
       git add -- "$f"
+      ;;
+    *)
+      echo "BLOCKED_UNSUPPORTED_RESOLUTION_POLICY path=$f policy=$policy"
+      git merge --abort 2>/dev/null || true
+      exit 6
       ;;
   esac
 done
