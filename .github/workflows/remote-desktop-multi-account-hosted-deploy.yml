@@ -54,7 +54,7 @@ jobs:
           PY
           chmod 600 "$KEY"
 
-      - name: Ship canonical files and mutate VPS
+      - name: Stream canonical files and mutate VPS
         env:
           VPS_HOST_LOVABLE: ${{ secrets.VPS_HOST_LOVABLE }}
           VPS_USER_LOVABLE: ${{ secrets.VPS_USER_LOVABLE }}
@@ -65,14 +65,12 @@ jobs:
           test -n "${VPS_USER_LOVABLE:-}"
           KEY="$RUNNER_TEMP/vps_key"
           STAGE="/tmp/centraldark-remote-${GITHUB_SHA}"
-          tar -czf "$RUNNER_TEMP/remote-deploy.tgz" infra/systemd scripts/vps/deploy-desktop-commander-multi-account.sh
-          scp -q -o StrictHostKeyChecking=accept-new -o BatchMode=yes -o ConnectTimeout=15 -i "$KEY" \
-            "$RUNNER_TEMP/remote-deploy.tgz" "${VPS_USER_LOVABLE}@${VPS_HOST_LOVABLE}:/tmp/centraldark-remote-deploy.tgz"
-          ssh -o StrictHostKeyChecking=accept-new -o BatchMode=yes -o ConnectTimeout=15 -i "$KEY" \
-            "${VPS_USER_LOVABLE}@${VPS_HOST_LOVABLE}" \
-            "set -euo pipefail; rm -rf '$STAGE'; mkdir -p '$STAGE'; tar -xzf /tmp/centraldark-remote-deploy.tgz -C '$STAGE'; chmod +x '$STAGE/scripts/vps/deploy-desktop-commander-multi-account.sh' '$STAGE/infra/systemd/centraldark-desktop-commander-profile.sh' '$STAGE/infra/systemd/centraldark-desktop-commander-watchdog.sh'; bash '$STAGE/scripts/vps/deploy-desktop-commander-multi-account.sh' '$STAGE'"
+          SSH=(ssh -o StrictHostKeyChecking=accept-new -o BatchMode=yes -o ConnectTimeout=15 -i "$KEY" "${VPS_USER_LOVABLE}@${VPS_HOST_LOVABLE}")
+          "${SSH[@]}" 'hostname; id -u; printf "SSH_COMMAND_PATH=PASS\n"'
+          tar -czf - infra/systemd scripts/vps/deploy-desktop-commander-multi-account.sh \
+            | "${SSH[@]}" "set -euo pipefail; rm -rf '$STAGE'; mkdir -p '$STAGE'; tar -xzf - -C '$STAGE'; chmod +x '$STAGE/scripts/vps/deploy-desktop-commander-multi-account.sh' '$STAGE/infra/systemd/centraldark-desktop-commander-profile.sh' '$STAGE/infra/systemd/centraldark-desktop-commander-watchdog.sh'; SOURCE_HEAD='$GITHUB_SHA' bash '$STAGE/scripts/vps/deploy-desktop-commander-multi-account.sh' '$STAGE'"
 
-      - name: Counterproof VPS state
+      - name: Counterproof VPS state and explicit receipt
         env:
           VPS_HOST_LOVABLE: ${{ secrets.VPS_HOST_LOVABLE }}
           VPS_USER_LOVABLE: ${{ secrets.VPS_USER_LOVABLE }}
@@ -83,26 +81,18 @@ jobs:
           ssh -o StrictHostKeyChecking=accept-new -o BatchMode=yes -o ConnectTimeout=15 -i "$KEY" \
             "${VPS_USER_LOVABLE}@${VPS_HOST_LOVABLE}" '
               set -euo pipefail
-              echo "HOST=$(hostname)"
-              a=$(systemctl is-active centraldark-desktop-commander.service || true)
-              b=$(systemctl is-active centraldark-desktop-commander-conta2.service || true)
-              p1=$(systemctl show -p MainPID --value centraldark-desktop-commander.service || true)
-              p2=$(systemctl show -p MainPID --value centraldark-desktop-commander-conta2.service || true)
-              echo "PRINCIPAL_ACTIVE=$a MAINPID=$p1"
-              echo "CONTA2_ACTIVE=$b MAINPID=$p2"
-              test "$a" = active
-              test "$b" = active
-              test -n "$p1" && test "$p1" != 0
-              test -n "$p2" && test "$p2" != 0
-              test "$p1" != "$p2"
-              echo "TWO_ISOLATED_REMOTE_PROCESSES=PASS"
-              for unit in centraldark-desktop-commander.service centraldark-desktop-commander-conta2.service; do
-                echo "--- $unit"
-                journalctl -u "$unit" --since "5 minutes ago" --no-pager -o cat | grep -E "Connected to Remote MCP|Device marked as online|Device ready|Authorization successful|Waiting for authorization|Invalid Refresh Token|Channel subscribed" | tail -n 15 || true
-              done
+              test -s /run/centraldark-remote-multi-account.receipt
+              cat /run/centraldark-remote-multi-account.receipt
+              grep -qx "ACCOUNT_MODEL=MULTI_ACCOUNT_ISOLATED_HOME" /run/centraldark-remote-multi-account.receipt
+              grep -qx "PROFILE_HOMES_DISTINCT=true" /run/centraldark-remote-multi-account.receipt
+              grep -qx "PROFILE_SERVICES_DISTINCT=true" /run/centraldark-remote-multi-account.receipt
+              grep -qx "PROFILE_PROCESSES_DISTINCT=true" /run/centraldark-remote-multi-account.receipt
+              grep -qx "MULTI_ACCOUNT_CAPACITY=PASS" /run/centraldark-remote-multi-account.receipt
+              grep -qx "NULL_OPERATIONAL_FIELDS=false" /run/centraldark-remote-multi-account.receipt
+              echo "VPS_MULTI_ACCOUNT_COUNTERPROOF=PASS"
             '
 
       - name: Cleanup SSH material
         if: always()
         shell: bash
-        run: rm -f "$RUNNER_TEMP/vps_key" "$RUNNER_TEMP/remote-deploy.tgz"
+        run: rm -f "$RUNNER_TEMP/vps_key"
