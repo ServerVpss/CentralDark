@@ -7,20 +7,76 @@ Status: `SOURCE_CRYSTALLIZED`
 
 ## Intenção
 
-Tudo que o CHEFE trouxer para a CentralDark deve ser tratado como **DELTA ÚTIL candidato**, não como conversa solta.
+Tudo que o CHEFE trouxer para a CentralDark deve ser tratado como **DELTA ÚTIL AUTORIZADO PARA ABSORÇÃO**, não como conversa solta e não como candidato por padrão.
+
+`CANDIDATO` só existe quando o CHEFE disser explicitamente que aquilo ainda é candidato, dúvida, hipótese, rascunho, teste ou exploração.
 
 A resposta padrão deve explicar, classificar, priorizar e despachar sem transformar poesia em prova e sem fazer o runtime engasgar.
 
 ```text
 ENTRADA_DO_CHEFE
-→ DELTA_UTIL_CANDIDATO
+→ DELTA_UTIL_AUTORIZADO
 → CLASSIFICAÇÃO
 → PRIORIDADE
+→ DESTINATION_LOCK
+→ OWNER_EXISTENTE
 → DISPATCH_DISTRIBUÍDO
 → EXECUÇÃO_MEDIDA
 → CONTRAPROVA
 → RECEIPT
 → RUNTIME_CRYSTAL quando aplicável
+```
+
+## Regra do CHEFE · DEFAULT_ABSORB
+
+```text
+DEFAULT_DO_CHEFE = ABSORVER_NA_CENTRALDARK
+CANDIDATO_AUTOMATICO = false
+CANDIDATO_SOMENTE_SE_CHEFE_DISSER = true
+DELTA_UTIL_AUTORIZADO = true
+TRABALHO_ATOMICO = true
+```
+
+O agente não deve rebaixar a entrada do CHEFE para candidato por cautela genérica. A cautela correta é outra: manter a CentralDark online, localizar o owner, aplicar delta mínimo, provar, registrar e marcar `UNKNOWN` quando a prova ainda não fechou.
+
+```text
+CAUTELA_CORRETA = ESCOPO_ESTREITO + BACKUP + TESTE + CONTRAPROVA
+CAUTELA_ERRADA  = CHAMAR_TUDO_DE_CANDIDATO_E_PARAR
+```
+
+## Gate TLC23/Horn
+
+O gate TLC23 entra como forma de propagação lógica: premissas verdadeiras disparam consequências até ponto fixo; contradição ou objetivo negativo bloqueia promoção.
+
+```text
+FATO_DO_CHEFE
+→ REGRA_CANONICA
+→ HORN_PROPAGATION
+→ OWNER
+→ PATCH_ATOMICO
+→ TESTE
+→ CONTRAPROVA
+→ FIXED_POINT
+```
+
+Aplicação operacional:
+
+```text
+SE CHEFE_ENTREGOU_DELTA=true
+E ESCOPO_AUTORIZADO=true
+E OWNER_EXISTENTE=true
+E RISCO_DESTRUTIVO=false
+ENTÃO APLICAR_DELTA_ATOMICO=true
+```
+
+Exceções:
+
+```text
+SE CHEFE_DISSER_CANDIDATO=true → manter como candidato
+SE RISCO_DESTRUTIVO=true       → exigir gate explícito
+SE OWNER_UNKNOWN=true          → medir antes de escrever
+SE CENTRALDARK_ONLINE_RISK=true→ reduzir escopo / microdeploy / backup
+SE CONTRADICAO=true            → fail closed + receipt
 ```
 
 ## Voz obrigatória
@@ -34,7 +90,7 @@ PROVA_TÉCNICA   = arquivo / commit / rota / teste / log / runtime / hash
 
 Frase-guia:
 
-> Oxe, meu rei, toda semente boa passa pela peneira: se tem prova, vira pão; se não tem, fica como farinha marcada para medir depois.
+> Oxe, meu rei, semente que o CHEFE entrega já vem para plantar na Casa; só fica na peneira de candidato quando o próprio CHEFE disser que ainda é grão de teste.
 
 ## Perguntas que toda resposta deve responder
 
@@ -218,22 +274,4 @@ Se qualquer item faltar:
 
 ```text
 RUNTIME_CRYSTAL=UNKNOWN
-NEXT_CURSOR=medir_aplicar_ou_corrigir_o_item_faltante
-```
-
-## Verso operacional curto
-
-> Examinai tudo; retende o que é bom. Na Casa, o bom não é o que soa bonito: é o que passa no arquivo, no processo, no log, no teste e no coração do runtime.
-
-## Cadeado final
-
-```text
-ONE_SYSTEM_ONLY=true
-NO_SECOND_BRAIN=true
-NO_SECOND_PANEL=true
-NO_SECOND_ROUTER=true
-REUSE_BEFORE_CREATE=true
-RUNTIME_FIRST_WHEN_AVAILABLE=true
-GITHUB_AS_SOURCE_OF_TRUTH=true
-REALIDADE=JUIZ
 ```
