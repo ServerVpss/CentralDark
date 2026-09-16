@@ -10,11 +10,22 @@
     "physical_paths_case": "PRESERVE_EXISTING_PATHS",
     "visual_labels": "UPPERCASE_WITH_EMOJI"
   },
+  "materialization": {
+    "functional_contract": "SKILL.md",
+    "visual_operational_bridge": "INTERLIGADOS.md_IF_PRESENT",
+    "load_order": [
+      "SKILL.md",
+      "INTERLIGADOS.md_IF_PRESENT"
+    ],
+    "fallback_when_bridge_absent": "USE_THIS_REGISTRY_AND_MAPA_MENTAL; DO_NOT_AUTO_CREATE",
+    "authority_rule": "SKILL.md_OWNS_BEHAVIOR; INTERLIGADOS.md_IS_VISUAL_OPERATIONAL_BRIDGE; REGISTRY_IS_DISCOVERY"
+  },
   "decision_chain": [
     "SIGNAL",
     "CLASSIFY_TERRITORY",
     "RESOLVE_CANDIDATE_SKILLS",
-    "READ_SKILL_METADATA",
+    "READ_SKILL_MD",
+    "READ_INTERLIGADOS_MD_IF_PRESENT",
     "CAPABILITY_ROUTE",
     "MINIMUM_SUFFICIENT_SET",
     "PRESERVE_WRITER_SCOPE",
@@ -24,7 +35,7 @@
     "RECEIPT",
     "NEXT_CURSOR"
   ],
-  "selection_rule": "INTERLIGADOS routes by materiality. It never means load every skill. Candidate names come from this registry; actual behavior/entry conditions remain owned by each skill's SKILL.md.",
+  "selection_rule": "INTERLIGADOS routes by materiality. It never means load every skill. Candidate names come from this registry; actual behavior/entry conditions remain owned by each skill's SKILL.md. When a sibling INTERLIGADOS.md exists, read it as the visual entry/return bridge, never as a second owner.",
   "families": [
     {
       "id": "CORE_GOVERNANCE",
@@ -124,7 +135,9 @@
   "locks": [
     "INTERLIGADOS != LOAD_ALL_SKILLS",
     "SKILL_REGISTRY != SECOND_ROUTER",
+    "SKILL_MD + INTERLIGADOS_MD != SECOND_OWNER",
     "MENTAL_LABEL != EXECUTION",
+    "MENTAL_TRIGGER != PRIVATE_CHAIN_OF_THOUGHT",
     "SKILL_NAME != AUTHORITY",
     "CAPABILITY != AUTHORITY",
     "MODEL != AUTHORITY",
