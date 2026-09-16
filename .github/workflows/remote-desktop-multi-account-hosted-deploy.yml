@@ -1,0 +1,99 @@
+name: Remote Desktop multi-account hosted deploy
+
+on:
+  push:
+    branches:
+      - fix/desktop-commander-pid-census-20260916
+    paths:
+      - 'infra/systemd/**'
+      - 'scripts/vps/deploy-desktop-commander-multi-account.sh'
+      - '.github/workflows/remote-desktop-multi-account-hosted-deploy.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact HEAD
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          fetch-depth: 1
+
+      - name: Prepare SSH key
+        env:
+          VPS_SSH_KEY_LOVABLE: ${{ secrets.VPS_SSH_KEY_LOVABLE }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "${VPS_SSH_KEY_LOVABLE:-}"
+          KEY="$RUNNER_TEMP/vps_key"
+          python3 - "$KEY" <<'PY'
+          import os, re, sys
+          raw = os.environ['VPS_SSH_KEY_LOVABLE'].strip()
+          m = re.search(r'-----BEGIN ([A-Z0-9 ]+?) PRIVATE KEY-----(.*?)-----END \\1 PRIVATE KEY-----', raw, re.S)
+          if not m:
+              raise SystemExit('PRIVATE_KEY_FORMAT_INVALID')
+          kind, body = m.group(1), re.sub(r'\\s+', '', m.group(2))
+          lines = [body[i:i+70] for i in range(0, len(body), 70)]
+          open(sys.argv[1], 'w').write(f'-----BEGIN {kind} PRIVATE KEY-----\\n' + '\\n'.join(lines) + f'\\n-----END {kind} PRIVATE KEY-----\\n')
+          PY
+          chmod 600 "$KEY"
+
+      - name: Ship canonical files and mutate VPS
+        env:
+          VPS_HOST_LOVABLE: ${{ secrets.VPS_HOST_LOVABLE }}
+          VPS_USER_LOVABLE: ${{ secrets.VPS_USER_LOVABLE }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "${VPS_HOST_LOVABLE:-}"
+          test -n "${VPS_USER_LOVABLE:-}"
+          KEY="$RUNNER_TEMP/vps_key"
+          STAGE="/tmp/centraldark-remote-${GITHUB_SHA}"
+          tar -czf "$RUNNER_TEMP/remote-deploy.tgz" infra/systemd scripts/vps/deploy-desktop-commander-multi-account.sh
+          scp -q -o StrictHostKeyChecking=accept-new -o BatchMode=yes -o ConnectTimeout=15 -i "$KEY" \
+            "$RUNNER_TEMP/remote-deploy.tgz" "${VPS_USER_LOVABLE}@${VPS_HOST_LOVABLE}:/tmp/centraldark-remote-deploy.tgz"
+          ssh -o StrictHostKeyChecking=accept-new -o BatchMode=yes -o ConnectTimeout=15 -i "$KEY" \
+            "${VPS_USER_LOVABLE}@${VPS_HOST_LOVABLE}" \
+            "set -euo pipefail; rm -rf '$STAGE'; mkdir -p '$STAGE'; tar -xzf /tmp/centraldark-remote-deploy.tgz -C '$STAGE'; chmod +x '$STAGE/scripts/vps/deploy-desktop-commander-multi-account.sh' '$STAGE/infra/systemd/centraldark-desktop-commander-profile.sh' '$STAGE/infra/systemd/centraldark-desktop-commander-watchdog.sh'; bash '$STAGE/scripts/vps/deploy-desktop-commander-multi-account.sh' '$STAGE'"
+
+      - name: Counterproof VPS state
+        env:
+          VPS_HOST_LOVABLE: ${{ secrets.VPS_HOST_LOVABLE }}
+          VPS_USER_LOVABLE: ${{ secrets.VPS_USER_LOVABLE }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          KEY="$RUNNER_TEMP/vps_key"
+          ssh -o StrictHostKeyChecking=accept-new -o BatchMode=yes -o ConnectTimeout=15 -i "$KEY" \
+            "${VPS_USER_LOVABLE}@${VPS_HOST_LOVABLE}" '
+              set -euo pipefail
+              echo "HOST=$(hostname)"
+              a=$(systemctl is-active centraldark-desktop-commander.service || true)
+              b=$(systemctl is-active centraldark-desktop-commander-conta2.service || true)
+              p1=$(systemctl show -p MainPID --value centraldark-desktop-commander.service || true)
+              p2=$(systemctl show -p MainPID --value centraldark-desktop-commander-conta2.service || true)
+              echo "PRINCIPAL_ACTIVE=$a MAINPID=$p1"
+              echo "CONTA2_ACTIVE=$b MAINPID=$p2"
+              test "$a" = active
+              test "$b" = active
+              test -n "$p1" && test "$p1" != 0
+              test -n "$p2" && test "$p2" != 0
+              test "$p1" != "$p2"
+              echo "TWO_ISOLATED_REMOTE_PROCESSES=PASS"
+              for unit in centraldark-desktop-commander.service centraldark-desktop-commander-conta2.service; do
+                echo "--- $unit"
+                journalctl -u "$unit" --since "5 minutes ago" --no-pager -o cat | grep -E "Connected to Remote MCP|Device marked as online|Device ready|Authorization successful|Waiting for authorization|Invalid Refresh Token|Channel subscribed" | tail -n 15 || true
+              done
+            '
+
+      - name: Cleanup SSH material
+        if: always()
+        shell: bash
+        run: rm -f "$RUNNER_TEMP/vps_key" "$RUNNER_TEMP/remote-deploy.tgz"
