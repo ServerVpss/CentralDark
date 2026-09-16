@@ -36,11 +36,14 @@ APPS="${APPS:-CentralDark-MCP}"
 APPLY=0
 ACEITAR_DIVERGENCIA=0
 SOURCE_ONLY=0
+CANONICAL_CACHE=0
+CANONICAL_CACHE_DIR="${CANONICAL_CACHE_DIR:-/var/lib/centraldark/canonical-main}"
 for arg in "$@"; do
   case "$arg" in
     --apply)                APPLY=1 ;;
     --aceitar-divergencia)  ACEITAR_DIVERGENCIA=1 ;;
     --source-only)          SOURCE_ONLY=1 ;;
+    --canonical-cache)      CANONICAL_CACHE=1 ;;
     *) echo "argumento desconhecido: $arg"; exit 2 ;;
   esac
 done
@@ -134,6 +137,37 @@ SUJOS="$(contar_sujos)"
 log "HEAD_ANTES=$HEAD_ANTES"
 log "ALVO=$ALVO"
 log "ATRAS=$ATRAS AFRENTE=$AFRENTE WORKTREE_DIRTY=$SUJOS"
+
+# Cache canônico limpo para consumidores de SOUL/skills/runtime. Ele é uma
+# projeção descartável de origin/main e NÃO substitui o checkout operacional.
+# Isso permite reancoragem mesmo quando /root/CentralDark contém estado vivo
+# ainda não reconciliado. O fluxo reverso continua passando pelo writer
+# canônico; nunca promovemos a árvore suja por rsync/reset cego.
+if [[ "$CANONICAL_CACHE" -eq 1 ]]; then
+  log "=== CANONICAL CACHE ==="
+  if [[ "$APPLY" -eq 0 ]]; then
+    log "DRY_RUN: atualizaria $CANONICAL_CACHE_DIR para $ALVO sem tocar $REPO_DIR"
+    exit 0
+  fi
+  mkdir -p "$(dirname "$CANONICAL_CACHE_DIR")"
+  if git worktree list --porcelain | grep -Fxq "worktree $CANONICAL_CACHE_DIR"; then
+    git -C "$CANONICAL_CACHE_DIR" reset --hard "$ALVO" --quiet
+    git -C "$CANONICAL_CACHE_DIR" clean -fdx --quiet
+  else
+    [[ ! -e "$CANONICAL_CACHE_DIR" ]] || die "cache existe mas não é worktree registrada: $CANONICAL_CACHE_DIR" 13
+    git worktree add --detach "$CANONICAL_CACHE_DIR" "$ALVO" --quiet
+  fi
+  CACHE_HEAD="$(git -C "$CANONICAL_CACHE_DIR" rev-parse HEAD)"
+  CACHE_DIRTY="$(git -C "$CANONICAL_CACHE_DIR" status --porcelain | wc -l | tr -d ' ')"
+  [[ "$CACHE_HEAD" == "$ALVO" && "$CACHE_DIRTY" -eq 0 ]] || die "cache canônico não convergiu" 15
+  proof_guard_paths_exist_on_ref "origin/$BRANCH" || die "origin/$BRANCH sem elos do compasso" 16
+  (cd "$CANONICAL_CACHE_DIR" && validate_proof_guards_live) || die "proof guard falhou no cache canônico" 16
+  log "CANONICAL_CACHE_HEAD=$CACHE_HEAD"
+  log "CANONICAL_CACHE_DIRTY=$CACHE_DIRTY"
+  log "OPERATIONAL_WORKTREE_MUTATED=false"
+  log "CANONICAL_CACHE_SYNC=PASS"
+  exit 0
+fi
 
 if [[ "$SUJOS" -gt 0 ]]; then
   log "BLOQUEADO_DIRTY_WORKTREE — nada será resetado/limpo automaticamente"

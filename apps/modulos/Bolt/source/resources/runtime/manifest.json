@@ -35,6 +35,22 @@
       "activation": "CAPABILITY_CONTRACT_ROUTER",
       "package_pin": "@wonderwhy-er/desktop-commander@0.2.48",
       "remote_mcp": "https://mcp.desktopcommander.app/mcp",
+      "login_url": "https://mcp.desktopcommander.app/device/verify",
+      "account_model": "MULTI_ACCOUNT_ISOLATED_HOME",
+      "profiles": [
+        {
+          "id": "principal",
+          "home": "/root",
+          "service": "centraldark-desktop-commander.service",
+          "watchdog_timer": "centraldark-desktop-commander-watchdog.timer"
+        },
+        {
+          "id": "conta2",
+          "home": "/root/.desktop-commander-profiles/conta2",
+          "service": "centraldark-desktop-commander-conta2.service",
+          "watchdog_timer": "centraldark-desktop-commander-conta2-watchdog.timer"
+        }
+      ],
       "capabilities": [
         "FILESYSTEM_READ",
         "FILESYSTEM_WRITE",

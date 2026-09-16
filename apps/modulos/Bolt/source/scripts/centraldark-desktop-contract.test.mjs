@@ -104,6 +104,12 @@ test('providers externos entram por capability sem virar dependencias rigidas do
   assert.equal(desktop.required_for_core_start, false);
   assert.equal(desktop.package_pin, '@wonderwhy-er/desktop-commander@0.2.48');
   assert.match(desktop.remote_mcp, /^https:\/\//);
+  assert.equal(desktop.login_url, 'https://mcp.desktopcommander.app/device/verify');
+  assert.equal(desktop.account_model, 'MULTI_ACCOUNT_ISOLATED_HOME');
+  assert.deepEqual(desktop.profiles.map((profile) => profile.id), ['principal', 'conta2']);
+  assert.match(desktop.profiles[0].service, /centraldark-desktop-commander\.service/);
+  assert.match(desktop.profiles[1].home, /desktop-commander-profiles\/conta2/);
+  assert.match(desktop.profiles[1].watchdog_timer, /conta2-watchdog\.timer/);
   assert.ok(desktop.capabilities.includes('FILESYSTEM_READ'));
   assert.ok(desktop.capabilities.includes('TERMINAL_EXECUTION'));
   assert.ok(desktop.capabilities.includes('REMOTE_DEVICE_CONTROL'));

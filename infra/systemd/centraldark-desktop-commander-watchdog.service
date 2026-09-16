@@ -1,0 +1,8 @@
+[Unit]
+Description=CentralDark Desktop Commander watchdog
+After=network-online.target centraldark-desktop-commander.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/centraldark-desktop-commander-watchdog.sh
