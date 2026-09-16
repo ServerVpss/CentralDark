@@ -16,6 +16,16 @@ on:
   pull_request_target:
     types: [opened, reopened, synchronize, ready_for_review]
   workflow_dispatch:
+  workflow_run:
+    workflows:
+      - porta-de-entrada
+      - PR auto-review (Codex + checklist)
+      - codex-validate
+      - lupa-conformance
+      - Lupa Drift Guard
+    types: [completed]
+  repository_dispatch:
+    types: [centraldark_dependabot_reconcile]
   schedule:
     - cron: '17,47 * * * *'
 
@@ -26,7 +36,7 @@ permissions:
   statuses: read
 
 concurrency:
-  group: dependabot-${{ github.event_name }}-${{ github.event.pull_request.number || 'radar' }}
+  group: dependabot-${{ github.event_name }}-${{ github.event.pull_request.number || github.event.workflow_run.head_sha || github.event.client_payload.pr_number || 'radar' }}
   cancel-in-progress: false
 
 jobs:
@@ -138,16 +148,7 @@ jobs:
             const repo = context.repo.repo;
             const pull_number = context.payload.pull_request.number;
             const expected_head_sha = context.payload.pull_request.head.sha;
-            const checks = await github.paginate(github.rest.checks.listForRef, {
-              owner, repo, ref: expected_head_sha, per_page: 100,
-            });
-            const pending = checks.filter((c) => c.status !== 'completed');
-            if (pending.length > 0) {
-              console.log(`::notice::SKIP_UPDATE_BRANCH_CHECKS_PENDING count=${pending.length} head=${expected_head_sha}`);
-              core.exportVariable('UPDATE_BRANCH_STATE', 'SKIPPED_CHECKS_PENDING');
-              core.exportVariable('MERGEABILITY_STATE', 'WAIT_CHECKS');
-              return;
-            }
+            console.log(`::notice::UPDATE_BRANCH_POLICY=SYNC_INDEPENDENT_OF_CHECKS head=${expected_head_sha}`);
             const args = {
               owner,
               repo,
@@ -248,7 +249,7 @@ jobs:
           echo 'TRIGGER=pull_request_target'
           echo 'TRUSTED_CODE_SOURCE=BASE_SHA'
           echo 'UNTRUSTED_PR_CODE_EXECUTED=0'
-          echo 'CHECKS_PENDING_BLOCK_UPDATE_BRANCH=1'
+          echo 'CHECKS_PENDING_BLOCK_UPDATE_BRANCH=0'
           echo 'AUTO_MERGE_POLICY=PATCH_85_MINOR_95_MAJOR_NEVER'
           echo 'ZENDRIVE_ROLE=REVIEW_ONLY'
           echo 'RABBIT_ROLE=REVIEW_ONLY'
@@ -265,7 +266,9 @@ jobs:
          github.event.pull_request.user.login == 'dependabot[bot]' &&
          github.event.pull_request.head.repo.full_name == github.repository) ||
         github.event_name == 'schedule' ||
-        github.event_name == 'workflow_dispatch'
+        github.event_name == 'workflow_dispatch' ||
+        github.event_name == 'workflow_run' ||
+        github.event_name == 'repository_dispatch'
       )
     runs-on: [self-hosted, Linux]
     timeout-minutes: 12
@@ -370,21 +373,13 @@ jobs:
               else if (scoreInfo.score < threshold) blockers.push(`COMPATIBILITY_${scoreInfo.score}_LT_${threshold}`);
 
               if (pr.mergeable_state === 'behind') {
-                const aheadChecks = await github.paginate(github.rest.checks.listForRef, {
-                  owner, repo, ref: pr.head.sha, per_page: 100,
-                });
-                const aheadPending = aheadChecks.filter((c) => c.status !== 'completed');
-                if (aheadPending.length > 0) {
-                  blockers.push(`CHECKS_PENDING_BLOCK_UPDATE_${aheadPending.length}`);
-                } else {
-                  try {
-                    await github.request('PUT /repos/{owner}/{repo}/pulls/{pull_number}/update-branch', {
-                      owner, repo, pull_number: prNumber, expected_head_sha: pr.head.sha,
-                    });
-                    blockers.push('UPDATE_BRANCH_REQUESTED');
-                  } catch (error) {
-                    if (error.status !== 422) blockers.push(`UPDATE_BRANCH_ERROR_${error.status || 'UNKNOWN'}`);
-                  }
+                try {
+                  await github.request('PUT /repos/{owner}/{repo}/pulls/{pull_number}/update-branch', {
+                    owner, repo, pull_number: prNumber, expected_head_sha: pr.head.sha,
+                  });
+                  blockers.push('UPDATE_BRANCH_REQUESTED');
+                } catch (error) {
+                  if (error.status !== 422) blockers.push(`UPDATE_BRANCH_ERROR_${error.status || 'UNKNOWN'}`);
                 }
               }
 
@@ -502,17 +497,21 @@ jobs:
               prNumbers = openPrs.filter(pr => pr.user?.login === 'dependabot[bot]').map(pr => pr.number);
             }
 
+            const gateErrors = [];
             for (const prNumber of prNumbers) {
               try {
                 await evaluate(prNumber);
               } catch (error) {
-                core.warning(`PR #${prNumber}: gate falhou fechado: ${String(error?.message || error)}`);
+                const message = `PR #${prNumber}: gate falhou fechado: ${String(error?.message || error)}`;
+                gateErrors.push(message);
+                core.warning(message);
               }
             }
+            if (gateErrors.length) core.setFailed(gateErrors.join(' | '));
 
   radar-open-prs:
     name: 📡 Radar — reconciliar PRs Dependabot antigos e atuais
-    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_run' || github.event_name == 'repository_dispatch'
     runs-on: [self-hosted, Linux]
     timeout-minutes: 20
 

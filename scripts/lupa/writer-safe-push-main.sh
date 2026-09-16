@@ -174,7 +174,20 @@ for TRY in $(seq 1 "$MAX_TRIES"); do
     git config user.email "$GIT_AUTHOR_EMAIL"
 
     if [ -n "$REGENERATE_CMD" ]; then
-      bash -lc "$REGENERATE_CMD"
+      # Não carregar perfil/rc/BASH_ENV aqui. Bootstrap de shell pode executar `cd` e tirar
+      # o regenerate do worktree limpo, aplicando delta no checkout operacional.
+      # A subshell já está posicionada no worktree canônico desta tentativa.
+      REGENERATE_CWD="$(pwd -P)"
+      EXPECTED_WORKTREE="$(cd "$WORKTREE" && pwd -P)"
+      if [ "$REGENERATE_CWD" != "$EXPECTED_WORKTREE" ]; then
+        echo "${WRITER_TAG}_REGENERATE_CWD_MISMATCH expected=$EXPECTED_WORKTREE observed=$REGENERATE_CWD" >&2
+        exit 1
+      fi
+      env -u BASH_ENV -u ENV /bin/bash --noprofile --norc -c "$REGENERATE_CMD"
+      if [ "$(pwd -P)" != "$EXPECTED_WORKTREE" ]; then
+        echo "${WRITER_TAG}_REGENERATE_ESCAPED_WORKTREE expected=$EXPECTED_WORKTREE observed=$(pwd -P)" >&2
+        exit 1
+      fi
     else
       for p in "${PATH_ARR[@]}"; do
         if [ -e "$PAYLOAD_DIR/$p" ]; then
