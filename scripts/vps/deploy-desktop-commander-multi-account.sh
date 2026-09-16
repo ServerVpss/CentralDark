@@ -71,10 +71,12 @@ fi
 
 TMP="$(mktemp "${RECEIPT}.XXXXXX")"
 {
-  printf 'SCHEMA=centraldark.remote.multi-account.receipt.v1\n'
+  printf 'SCHEMA=centraldark.remote.multi-account.receipt.v2\n'
   printf 'OBSERVED_AT=%s\n' "$(date -Is)"
   printf 'SOURCE_HEAD=%s\n' "$SOURCE_HEAD"
   printf 'HOST=%s\n' "$(hostname)"
+  printf 'SYSTEMD_DAEMON_RELOAD=PASS\n'
+  printf 'SYSTEMD_UNIT_ACTION=ENABLE_AND_RESTART\n'
   printf 'ACCOUNT_MODEL=MULTI_ACCOUNT_ISOLATED_HOME\n'
   printf 'PROFILE_1=principal\n'
   printf 'PROFILE_1_SERVICE=%s\n' "$P1_SERVICE"
@@ -91,8 +93,24 @@ TMP="$(mktemp "${RECEIPT}.XXXXXX")"
   printf 'PROFILE_PROCESSES_DISTINCT=%s\n' "$PROCESSES_DISTINCT"
   printf 'MULTI_ACCOUNT_CAPACITY=%s\n' "$CAPACITY_VERDICT"
   printf 'MULTI_ACCOUNT_AUTH=%s\n' "$AUTH_VERDICT"
-  printf 'NULL_OPERATIONAL_FIELDS=false\n'
+  printf 'RAW_NULL_POLICY=PRESERVE_PROVIDER_RAW_AND_NORMALIZE_SEMANTICS\n'
+  printf 'ERROR_NULL_NORMALIZATION=NO_ERROR\n'
+  printf 'ERROR_DATA_NULL_NORMALIZATION=NO_ERROR_DATA\n'
+  printf 'ERROR_CODE_NULL_NORMALIZATION=NO_ERROR_CODE\n'
+  printf 'CLASSIFICATION_ID_NULL_NORMALIZATION=UNCLASSIFIED\n'
+  printf 'JSON_RPC_ERROR_CODE_NULL_NORMALIZATION=NO_JSON_RPC_ERROR\n'
+  printf 'ERROR_HTTP_STATUS_NULL_NORMALIZATION=NO_HTTP_ERROR_STATUS\n'
+  printf 'ERROR_HTTP_HEADERS_NULL_NORMALIZATION=NO_HTTP_ERROR_HEADERS\n'
+  printf 'CLAMP_ERRORS_NULL_NORMALIZATION=NONE\n'
+  printf 'CLAMP_REWRITES_NULL_NORMALIZATION=NONE\n'
 } > "$TMP"
+
+NULL_OPERATIONAL_FIELDS=false
+if grep -Eiq '^[A-Z0-9_]+=(null)?[[:space:]]*$' "$TMP"; then
+  NULL_OPERATIONAL_FIELDS=true
+fi
+printf 'NULL_OPERATIONAL_FIELDS=%s\n' "$NULL_OPERATIONAL_FIELDS" >> "$TMP"
+
 chmod 0644 "$TMP"
 mv -f "$TMP" "$RECEIPT"
 
@@ -104,4 +122,5 @@ for service in "$P1_SERVICE" "$P2_SERVICE"; do
     | tail -n 12 || true
 done
 
+test "$NULL_OPERATIONAL_FIELDS" = false
 test "$CAPACITY_VERDICT" = PASS
