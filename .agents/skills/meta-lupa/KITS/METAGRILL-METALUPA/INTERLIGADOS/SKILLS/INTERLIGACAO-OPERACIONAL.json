@@ -1,0 +1,136 @@
+{
+  "schema": "centraldark.meta-lupa.interligados.skill-graph.v1",
+  "status": "CANONICAL_DECISION_GRAPH_ON_MAIN",
+  "owner": ".agents/skills/meta-lupa/SKILL.md",
+  "root_trigger": "🔗 !># INTERLIGADOS",
+  "visual_rule": "UPPERCASE_PLUS_EMOJI_IS_MEMORY_LAYER_ONLY; PHYSICAL_PATHS_STAY_UNCHANGED",
+  "entry_chain": [
+    "👑🪬 !CENTRALDARK",
+    "🔗 !># INTERLIGADOS",
+    "⭕ !AURÉOLA CANÔNICA",
+    "🧿 #ACORDAR",
+    "🎛️ !CALIBRAR",
+    "🧭 !MULTIBÚSSOLA",
+    "🔎 !META_LUPA",
+    "🔄 !RECONCILIAR"
+  ],
+  "decision_edges": [
+    {
+      "when": "ANY_CENTRALDARK_MISSION",
+      "to": "centraldark-operational-method",
+      "anchor": "🧭 CORPO OPERACIONAL"
+    },
+    {
+      "when": "MULTIPLE_CAPABILITIES_OR_HANDOFF",
+      "to": "capability-contract-router",
+      "anchor": "🎼 SISTEMA NERVOSO"
+    },
+    {
+      "when": "COMPLEX_TASK_ERROR_DRIFT_MULTI_TOOL",
+      "to": "cot-react-loop",
+      "anchor": "🔁 REFLEXO CONTROLADO"
+    },
+    {
+      "when": "PR_DIFF_CI_REF",
+      "to": "auditoria-pr",
+      "anchor": "⚖️ JUIZ DE PR"
+    },
+    {
+      "when": "RUNNER_VPS_DEPLOY_HERMES_PM2",
+      "to": "centraldark-esteira-motor",
+      "anchor": "🚂 MOTOR E ESTEIRA"
+    },
+    {
+      "when": "MEMORY_PREFERENCE_DURABLE_CORRECTION",
+      "to": "brain-memory",
+      "anchor": "🧠 MEMÓRIA OBSERVADORA"
+    },
+    {
+      "when": "CRITICAL_CLAIM_PROMOTION_FALSIFICATION",
+      "to": "meta-lupa",
+      "anchor": "🧿 OLHO CANÔNICO"
+    },
+    {
+      "when": "GIT_CONFLICT",
+      "to": "git-conflict-resolve-house-standard",
+      "anchor": "🪢 NÓ DE CONFLITO"
+    },
+    {
+      "when": "ISOLATED_CODE_VALIDATION",
+      "to": "code-validation-sandbox",
+      "anchor": "🧪 CÂMARA DE TESTE"
+    },
+    {
+      "when": "SCATTERED_CONTEXT",
+      "to": "context-synthesis",
+      "anchor": "🧵 COSTURA DE CONTEXTO"
+    },
+    {
+      "when": "SKILL_GAP_REAL",
+      "to": "skill-workshop",
+      "anchor": "🛠️ OFICINA DE CAPACIDADE"
+    },
+    {
+      "when": "LIVE_SCREEN_CONTEXT",
+      "to": "screenpipe-live-observer",
+      "anchor": "👀 SENSOR DE TELA"
+    },
+    {
+      "when": "REALITY_DRIFT",
+      "to": "reality-drift-detector",
+      "anchor": "📡 DERIVA DA REALIDADE"
+    },
+    {
+      "when": "NEED_SIMPLIFY_DELTA",
+      "to": "delta-simplify",
+      "anchor": "✂️ DELTA ÚTIL"
+    }
+  ],
+  "skill_materialization": {
+    "functional_contract": "SELECTED_SKILL/SKILL.md",
+    "visual_operational_bridge": "SELECTED_SKILL/INTERLIGADOS.md_IF_PRESENT",
+    "load_order": [
+      "READ_SELECTED_SKILL_MD",
+      "READ_SIBLING_INTERLIGADOS_MD_IF_PRESENT",
+      "FALLBACK_TO_CENTRAL_SKILL_REGISTRY_IF_ABSENT"
+    ],
+    "rule": "SKILL_MD_OWNS_FUNCTION; INTERLIGADOS_MD_OWNS_VISUAL_ENTRY_RETURN; CENTRAL_REGISTRY_OWNS_DISCOVERY_ONLY",
+    "auto_create_missing_bridge": false
+  },
+  "handoff_chain": [
+    "CLASSIFY_TERRITORY",
+    "RESOLVE_EXISTING_OWNER",
+    "READ_MATERIAL_SKILL_MD",
+    "READ_SIBLING_INTERLIGADOS_MD_IF_PRESENT",
+    "SELECT_MINIMUM_SUFFICIENT_SET",
+    "PRESERVE_ONE_WRITER_PER_SCOPE",
+    "EXECUTE_OR_MEASURE",
+    "OBSERVE_RESULT",
+    "COUNTERPROOF",
+    "REGISTER_RECEIPT",
+    "NEXT_CURSOR"
+  ],
+  "visible_operational_trace": [
+    "DECISION",
+    "EVIDENCE",
+    "ACTION",
+    "RESULT",
+    "GAP",
+    "NEXT_TEST"
+  ],
+  "runtime_boundary": "IF CLAIM DEPENDS ON CASA/VPS/DEVICE/SERVICE NOW, ROUTE TO RUNTIME REMEASURE; SOURCE ALONE CANNOT GREEN IT",
+  "locks": [
+    "INTERLIGADOS != LOAD_ALL_SKILLS",
+    "SKILL_GRAPH != SECOND_ROUTER",
+    "SKILL_MD + INTERLIGADOS_MD != SECOND_OWNER",
+    "MENTAL_TRIGGER != PRIVATE_CHAIN_OF_THOUGHT",
+    "VISIBLE_OPERATIONAL_TRACE != PRIVATE_CHAIN_OF_THOUGHT",
+    "EMOJI != PROOF",
+    "MODEL != AUTHORITY",
+    "CAPABILITY != AUTHORITY",
+    "ONE_WRITER_PER_SCOPE=true",
+    "REUSE_BEFORE_CREATE=true",
+    "UNKNOWN != PASS",
+    "REALITY_IS_JUDGE=true"
+  ]
+}

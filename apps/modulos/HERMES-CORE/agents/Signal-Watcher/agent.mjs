@@ -53,6 +53,7 @@ export function classifyExternalSignal(raw = {}) {
   const isForwarded = /(^|\s)(fwd:|fw:|enc:|mensagem encaminhada)/i.test(`${event.subject}\n${event.body}`);
   const isDependabot = /dependabot/.test(hay);
   const isZendrive = /zendrive/.test(hay);
+  const isCodeRabbit = /(coderabbit|code rabbit|coderabbitai)/.test(hay);
   const isAios = /(external[-_ ]?project|external[-_ ]?repo|external[-_ ]?codebase)/.test(hay);
   const hasSyntaxSignal = /(syntaxerror|does not parse|node --check|parse error|non-async|await inside)/.test(hay);
   const hasSilentFallback = /(fallback|degrad(?:e|ed|a)|silently|silencios|try\/catch|try\s*\{|lazy require|require\(|dynamic import)/.test(hay);
@@ -71,6 +72,13 @@ export function classifyExternalSignal(raw = {}) {
     state: 'CANDIDATE',
     summary: 'Revisão Zendrive/ChatGPT observada. É finding consultivo: Hermes deve reproduzir, testar e contraprovar antes de qualquer promoção.',
     next: 'HERMES_REPRODUCE_TEST_AND_COUNTERPROVE',
+  });
+
+  if (isCodeRabbit) findings.push({
+    id: 'CODERABBIT_REVIEW',
+    state: 'CANDIDATE',
+    summary: 'Revisão CodeRabbit observada. É sinal consultivo: normalizar, deduplicar e reproduzir/testar antes de qualquer promoção.',
+    next: 'NORMALIZE_DEDUPE_THEN_REPRODUCE_TEST',
   });
 
   if (isAios && hasFix) findings.push({
@@ -124,6 +132,7 @@ export function classifyExternalSignal(raw = {}) {
       'DOCUMENTED_IS_NOT_EXECUTED',
       'REVIEW_IS_NOT_PROOF',
       'ZENDRIVE_REVIEWS_ONLY',
+      'CODERABBIT_REVIEWS_ONLY',
       'HERMES_PROVES_AND_TESTS',
       'NEVER_DISCARD_LEARNING',
       'ONE_SYSTEM_ONLY',
