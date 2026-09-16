@@ -35,13 +35,22 @@ jobs:
           KEY="$RUNNER_TEMP/vps_key"
           python3 - "$KEY" <<'PY'
           import os, re, sys
-          raw = os.environ['VPS_SSH_KEY_LOVABLE'].strip()
-          m = re.search(r'-----BEGIN ([A-Z0-9 ]+?) PRIVATE KEY-----(.*?)-----END \\1 PRIVATE KEY-----', raw, re.S)
+          raw = os.environ["VPS_SSH_KEY_LOVABLE"].strip()
+          m = re.search(
+              r"-----BEGIN ([A-Z0-9 ]+?) PRIVATE KEY-----(.*?)-----END \1 PRIVATE KEY-----",
+              raw,
+              re.S,
+          )
           if not m:
-              raise SystemExit('PRIVATE_KEY_FORMAT_INVALID')
-          kind, body = m.group(1), re.sub(r'\\s+', '', m.group(2))
-          lines = [body[i:i+70] for i in range(0, len(body), 70)]
-          open(sys.argv[1], 'w').write(f'-----BEGIN {kind} PRIVATE KEY-----\\n' + '\\n'.join(lines) + f'\\n-----END {kind} PRIVATE KEY-----\\n')
+              sys.exit("PRIVATE_KEY_FORMAT_INVALID")
+          tipo, miolo = m.group(1), m.group(2)
+          b64 = re.sub(r"\s+", "", miolo)
+          linhas = [b64[i:i+70] for i in range(0, len(b64), 70)]
+          open(sys.argv[1], "w").write(
+              f"-----BEGIN {tipo} PRIVATE KEY-----\n"
+              + "\n".join(linhas)
+              + f"\n-----END {tipo} PRIVATE KEY-----\n"
+          )
           PY
           chmod 600 "$KEY"
 
