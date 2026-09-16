@@ -101,15 +101,16 @@ export function CentralDarkUnifiedHud() {
   const [events, setEvents] = useState<HudEvent[]>([]);
   const [changes, setChanges] = useState(0);
   const [position, setPosition] = useState({ left: 24, top: 92 });
-  const [size, setSize] = useState({ width: 420, height: 620 });
+  const [size, setSize] = useState({ width: 420, height: 520 });
 
   useEffect(() => {
-    const layout = safeParse(localStorage.getItem(LAYOUT_KEY), { left: 24, top: 92, width: 420, height: 620 });
+    const layout = safeParse(localStorage.getItem(LAYOUT_KEY), { left: 24, top: 92, width: 420, height: 520 });
     const storedEvents = safeParse<HudEvent[]>(localStorage.getItem(EVENTS_KEY), []);
     setPosition({ left: layout.left, top: layout.top });
     setSize({ width: layout.width, height: layout.height });
     setEvents(storedEvents);
     setChanges(storedEvents.length);
+    previousSignature.current = storedEvents[0]?.signature ?? '';
   }, []);
 
   useEffect(() => {
@@ -168,7 +169,7 @@ export function CentralDarkUnifiedHud() {
 
   const measure = useCallback(async () => {
     const api = bridge();
-    let runtimeNext: RuntimeSnapshot | null = runtime;
+    let runtimeNext: RuntimeSnapshot | null = null;
     let centralNext: HealthSnapshot = { status: 'UNKNOWN' };
     let screenpipeNext: HealthSnapshot = { status: 'UNKNOWN' };
     let githubNext: GitHubSnapshot | null = null;
@@ -200,7 +201,7 @@ export function CentralDarkUnifiedHud() {
       github: githubNext?.error ? 'UNKNOWN' : `${githubNext?.publicRepos ?? 0}:${githubNext?.privateRepos ?? 0}`,
     });
     recordSnapshot('snapshot operacional mudou', signature);
-  }, [recordSnapshot, runtime]);
+  }, [recordSnapshot]);
 
   useEffect(() => {
     void measure();
@@ -218,12 +219,13 @@ export function CentralDarkUnifiedHud() {
   const passCount = observedSignals.filter((state) => state === 'ONLINE').length;
   const observablePct = Math.round((passCount / observedSignals.length) * 100);
   const totalRepos = (github?.publicRepos ?? 0) + (github?.privateRepos ?? 0);
+  const adaptiveHeight = Math.min(780, Math.max(size.height, 460 + Math.min(events.length, 16) * 14));
 
   return (
     <section
       ref={rootRef}
       className={`cd-uhud ${expanded ? 'is-expanded' : 'is-collapsed'}`}
-      style={{ left: position.left, top: position.top, width: size.width, height: expanded ? size.height : 48 }}
+      style={{ left: position.left, top: position.top, width: size.width, height: expanded ? adaptiveHeight : 48 }}
       aria-label="CentralDark Hub HUD"
     >
       <header className="cd-uhud-head" onPointerDown={beginDrag}>
