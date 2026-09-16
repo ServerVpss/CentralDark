@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-09-12T19:08:12.245Z
+# 🧠 Notion Sync — 2026-09-16T00:16:54.411Z
 
-- **Commit fonte:** `91a9e0c978538b6854a8de0b901d7de452162f85`
+- **Commit fonte:** `622309caaef3df2eed894f807212735d4b46ddac`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 490 atualizadas · ❌ 37 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 490 atualizadas · ❌ 38 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
 | aprendizados | 43 | 0 | 34 | 0 | 9 |
-| estrutura | 440 | 0 | 412 | 0 | 28 |
+| estrutura | 441 | 0 | 412 | 0 | 29 |
 
 ## Operações
 
@@ -233,6 +233,7 @@
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-06-VERTEX-INVERSO-RODADA4-PEPITAS-PROVADAS.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-08-CI-MENOS-E-MAIS-JUIZ-PORTA.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-08-GARIMPO-CHEFE-PR-MAIN-DELTA-CONTINUO.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-14-descoberta-canais-operacionais-xp.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/AIOS-GOLD-ASSAY-20260828/CAPABILITY-MATRIX.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/AIOS-GOLD-ASSAY-20260828/COUNTERPROOF.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/AIOS-GOLD-ASSAY-20260828/HERMES-PROOF-PLAN.md |
