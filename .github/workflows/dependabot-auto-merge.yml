@@ -107,7 +107,7 @@ jobs:
             }
             console.log(`TITULO_PTBR=${titulo}`);
 
-      - name: 🧠 Classificar sinal no HERMES Signal Watcher
+      - name: 🧠 Normalizar finding Dependabot → bridge → HERMES
         shell: bash
         env:
           DEPENDENCY_NAMES: ${{ steps.meta.outputs.dependency-names }}
@@ -118,6 +118,7 @@ jobs:
           PR_NUMBER: ${{ github.event.pull_request.number }}
           PR_URL: ${{ github.event.pull_request.html_url }}
           PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
           set -euo pipefail
           EVENT_B64="$(node - <<'NODE'
@@ -132,11 +133,35 @@ jobs:
               `head=${process.env.PR_HEAD_SHA || 'UNKNOWN'}`,
             ].join(' '),
             url: process.env.PR_URL || '',
+            observed_at: new Date().toISOString(),
+            metadata: {
+              pr_number: process.env.PR_NUMBER || null,
+              head_sha: process.env.PR_HEAD_SHA || null,
+              base_sha: process.env.PR_BASE_SHA || null,
+              scope: 'dependency',
+              change_type: process.env.UPDATE_TYPE || 'dependency_update',
+              category: 'dependency_update',
+            },
+            intent: {
+              pr_number: process.env.PR_NUMBER || null,
+              head_sha: process.env.PR_HEAD_SHA || null,
+              base_sha: process.env.PR_BASE_SHA || null,
+              scope: 'dependency',
+              change_type: process.env.UPDATE_TYPE || 'dependency_update',
+              acceptance_criteria: [
+                'same HEAD mergeable',
+                'required checks green',
+                'compatibility threshold satisfied',
+                'unknown conflict path blocks',
+              ],
+            },
           };
           process.stdout.write(Buffer.from(JSON.stringify(event), 'utf8').toString('base64url'));
           NODE
           )"
-          node "$GITHUB_WORKSPACE/.ci-house/scripts/hermes/signal-watch-notify.mjs" --event-b64 "$EVENT_B64" --notify
+          CENTRALDARK_API_URL="" node "$GITHUB_WORKSPACE/.ci-house/scripts/coderabbit-bridge.mjs" --once --json-only --event-b64 "$EVENT_B64" > "$RUNNER_TEMP/dependabot-review-receipt.json"
+          cat "$RUNNER_TEMP/dependabot-review-receipt.json"
+          node -e "const r=require(process.argv[1]); if(r.review_finding?.schema!=='centraldark.review-finding.v1') process.exit(3); console.log('REVIEW_FINDING_STATE='+r.review_finding.state); console.log('REVIEW_FINDING_OWNER='+r.review_finding.routing.owner);" "$RUNNER_TEMP/dependabot-review-receipt.json"
 
       - name: 🔄 Tentar Update branch antes de julgar conflito
         id: update_branch
