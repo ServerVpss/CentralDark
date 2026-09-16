@@ -16,7 +16,7 @@
 🔎 !META_LUPA             → FALSIFICAR / JULGAR CLAIMS
 🔄 !RECONCILIAR           → ABSORVER DELTA NO OWNER CERTO
 ⚖️ !CONTRAPROVA          → TENTAR QUEBRAR O VERDE
-💠 !FIXED_POINT           → PARAR QUANDO NÃO HÁ DELTA MATERIAL
+💠 !FIXED_POINT           → FECHAR A RODADA SEM MATAR APRENDIZADO
 🧾 !REGISTRA              → PERSISTIR RECEIPT / PRÓXIMO CURSOR
 🚀 !BOOT                  → RETOMAR O CORPO PELO CÂNONE
 ⚖️ REALIDADE              → JUIZ FINAL
@@ -54,12 +54,15 @@ Nenhum gancho mental substitui o owner real. Nenhum texto de PR substitui códig
 ## 📚 ÍNDICES DESTE BLOCO
 
 ```text
-PADROES-PR/REGISTRY.json          → 49 padrões sobreviventes/deduplicados observados na varredura atual de PRs
-SKILLS/REGISTRY.json              → inventário mental determinístico das 52 skills atuais em 6 famílias
-SKILLS/MAPA-MENTAL-OPERACIONAL.md → mapa visual das skills, gatilhos e cadeia de decisão
-RUNTIME/FRONTEIRAS-REAIS.md       → o que continua exigindo Casa/VPS/runtime/CI aplicável
-RUNTIME/API-TOOL-RESOURCE-BRIDGE.md → separa /response/turnX temporário de repo path estável e liga api_tool ao META-START-LINK
-RECEIPTS/                         → rastros desta cristalização
+PADROES-PR/REGISTRY.json             → base histórica deduplicada até a varredura anterior
+PADROES-PR/DELTA-PR-1493-1550.md     → padrões sobreviventes recentes com gatilhos/emojis
+PADROES-PR/REFRESH-2026-09-16.json   → delta machine-readable dos padrões recentes
+SKILLS/REGISTRY.json                 → inventário mental determinístico das skills cristalizadas
+SKILLS/INTERLIGACAO-OPERACIONAL.json → cadeia máquina: intenção → skill → handoff → prova
+SKILLS/MAPA-MENTAL-OPERACIONAL.md    → mapa visual das skills, gatilhos e cadeia de decisão
+RUNTIME/FRONTEIRAS-REAIS.md          → somente o que ainda precisa Casa/VPS/runtime atual
+RUNTIME/API-TOOL-RESOURCE-BRIDGE.md  → ponte recurso temporário ↔ path estável
+RECEIPTS/                            → rastros desta cristalização
 ```
 
 ## 🔗 REGRA UNIVERSAL DE SKILL
@@ -70,6 +73,7 @@ RECEIPTS/                         → rastros desta cristalização
 → CLASSIFICAR TERRITÓRIO
 → SKILLS/REGISTRY.json
 → LER SKILL.md MATERIAL
+→ SKILLS/INTERLIGACAO-OPERACIONAL.json
 → CAPABILITY-CONTRACT-ROUTER
 → MENOR CONJUNTO SUFICIENTE
 → ONE_WRITER_PER_SCOPE
