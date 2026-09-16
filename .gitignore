@@ -141,3 +141,6 @@ scratch/
 node_modules/.cache
 .bun/
 .bunx/
+
+# PostHog setup session cache (local, not application source)
+.posthog-wizard-cache/
