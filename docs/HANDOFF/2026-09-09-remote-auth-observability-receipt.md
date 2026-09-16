@@ -27,6 +27,19 @@ O owner `scripts/remote-bridge/CENTRALDARK-REMOTE-BRIDGE.config.json` deve usar 
 
 `latest` não substitui automaticamente uma versão comprovada.
 
+## Multi-conta autorizada em 2026-09-16
+
+O segundo usuário do Remote Desktop Commander foi autenticado usando o mesmo corredor
+Remote MCP/Desktop Commander, mas com sessão isolada em outro `HOME`.
+
+```text
+principal -> /root/.desktop-commander-device/device.json
+conta2    -> /root/.desktop-commander-profiles/conta2/.desktop-commander-device/device.json
+```
+
+Cada perfil deve ter serviço e watchdog próprios. Não compartilhar `device.json`,
+refresh token ou HOME entre contas.
+
 ## Padrão de observabilidade preservado
 
 Para PostHog/Sentry ou equivalentes na CentralDark:

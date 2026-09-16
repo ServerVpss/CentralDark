@@ -20,8 +20,15 @@ Nao expor token do Screenpipe, shell irrestrito ou secrets no repo.
 `GARIMPO-CHEFE/context/screenpipe-latest.json`. O Desktop Commander remoto pode ler esse arquivo
 quando o agente precisar de contexto recente de tela/navegador, mantendo o dado na Casa.
 
-`CentralDark-Remote-Bridge.ps1` sobe o sidecar e mantem `@wonderwhy-er/desktop-commander@latest remote`
-reconectando sempre pela rota oficial do Desktop Commander.
+`CentralDark-Remote-Bridge.ps1` sobe o sidecar e deve manter o pin provado
+`@wonderwhy-er/desktop-commander@0.2.48 remote` até nova versão ser remensurada.
+O pacote da Casa `CentralDark-Remote-Tray-NPX-ATUAL-FIX-20260909` preserva o mesmo owner,
+login URL e parser de device code, mas `latest` ali é evidência histórica/operacional,
+não substitui automaticamente o pin canônico.
+
+Para mais de uma conta, o modelo canônico é `MULTI_ACCOUNT_ISOLATED_HOME`: cada conta
+usa um `HOME` próprio, um `device.json` próprio e um serviço/watchdog próprio, todos
+passando pelo mesmo corredor Remote MCP/Desktop Commander.
 
 Config canônica: `scripts/remote-bridge/CENTRALDARK-REMOTE-BRIDGE.config.json`.
 
