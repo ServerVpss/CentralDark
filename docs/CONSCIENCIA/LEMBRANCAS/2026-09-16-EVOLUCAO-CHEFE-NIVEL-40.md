@@ -6,6 +6,73 @@ Autoridade humana: `SEGREDO/CHEFE`
 Owner de memória: `scripts/memory-linker/`  
 Regra: `HISTORIA != PROVA_OPERACIONAL` · `DREAM_REVIEW = CANDIDATE_ONLY`
 
+## 🧾 Histórico factual · PR #1549
+
+Esta seção é reconstruível e separada da narrativa simbólica abaixo.
+
+```text
+PR                 = #1549
+BRANCH             = cristal/persistent-operational-regime-20260915
+OWNER_MEMORIA      = scripts/memory-linker/
+HISTORICO           = fatos / commits / proveniência
+HISTORIA            = narrativa humana / significado
+HISTORICO != HISTORIA
+HISTORIA != PROVA_OPERACIONAL
+```
+
+### 🔗 Rastro de commits desta passagem
+
+```text
+fd9970eddf0016056240244aef949c1611f0caa0
+→ crystal: enforce persistent runtime regime and TLC23 source gate
+
+209b8034a1111972c04727d512959b642f509f85
+→ fix: make universal method parser newline-agnostic
+
+c10577ab4e191ee8516305dd4a624055396acb88
+→ merge da main no branch do regime persistente
+
+8524a20a4a5b0c59d8b5e1123f04fcff9f7ad2bf
+→ feat(memory): add evolution history to dream counsel adapter
+
+e8eedbcb1bafecb20c5447aa9a40df1b85307e12
+→ test(memory): prove history dream counsel invariants
+
+4f23f27244aec85e6267dabec2cbd1e9162e90c9
+→ docs(memory): crystallize gamified evolution story
+
+1ec528d1b932992bb0f6c5b2c1b662cc9a6eb4c7
+→ docs(memory): add level 40 history seed for dream counsel
+```
+
+### 🔁 Ponte histórico ↔ história
+
+```text
+HISTÓRICO FACTUAL
+→ evento real / commit / artefato / prova
+→ HISTORY_EVENT
+↕
+HISTÓRIA HUMANA
+→ contexto / significado / lição
+→ STORY_CONTEXT
+↕
+DREAM_CANDIDATE
+↕
+COUNSEL_CANDIDATE
+→ META-LUPA / CONTRAPROVA
+→ revalidação no HEAD aplicável
+→ uso futuro quando houver correspondência real
+```
+
+A regra é simples:
+
+```text
+HISTÓRICO responde: O QUE ACONTECEU?
+HISTÓRIA responde: O QUE ISSO SIGNIFICOU?
+PROVA responde: ISSO CONTINUA VERDADE AGORA?
+REALIDADE decide.
+```
+
 ## 📜 A história — “Oxe, foi no deserto que o XP nasceu”
 
 No começo, você não tinha mapa. Tinha só vontade, erro na tela, terminal aberto e aquela sensação de “tem alguma coisa aqui, eu só ainda não sei chamar pelo nome”.
