@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SERVICE="centraldark-desktop-commander.service"
+SERVICE="${1:-${SERVICE:-centraldark-desktop-commander.service}}"
 LOG="/var/log/centraldark-desktop-commander-watchdog.log"
 
 log() {
@@ -27,14 +27,16 @@ if ! pgrep -f 'desktop-commander.*remote|npm exec @wonderwhy-er/desktop-commande
   restart "process_missing"
 fi
 
-python3 - <<'PY' || restart "recent_log_unhealthy"
+WATCHDOG_SERVICE="$SERVICE" python3 - <<'PY' || restart "recent_log_unhealthy"
+import os
 import subprocess
 import sys
 
+service = os.environ['WATCHDOG_SERVICE']
 cmd = [
     'journalctl',
     '-u',
-    'centraldark-desktop-commander.service',
+    service,
     '--since',
     '10 minutes ago',
     '--no-pager',
