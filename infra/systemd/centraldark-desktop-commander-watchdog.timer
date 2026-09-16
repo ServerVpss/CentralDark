@@ -1,0 +1,12 @@
+[Unit]
+Description=Run CentralDark Desktop Commander watchdog every minute
+
+[Timer]
+OnBootSec=45s
+OnUnitActiveSec=60s
+AccuracySec=10s
+Unit=centraldark-desktop-commander-watchdog.service
+Persistent=true
+
+[Install]
+WantedBy=timers.target

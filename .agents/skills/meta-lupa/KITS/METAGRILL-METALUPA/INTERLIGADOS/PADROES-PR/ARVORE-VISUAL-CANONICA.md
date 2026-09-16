@@ -211,3 +211,144 @@ SINAL DO CHEFE
 
 `INTERLIGADOS != CARREGAR TUDO`.  
 `INTERLIGADOS = SABER QUAL NÓ ACIONAR E EM QUAL ORDEM.`
+
+## 🧬 ARQUITETURA UNIFICADA · ANATOMIA FINAL
+
+> 🧭 **REGRA DE NOMENCLATURA:** percepção, cognição, encaminhamento, roteamento, memória, transporte e execução são funções diferentes do mesmo organismo. Nenhuma delas ganha autoridade só por existir.
+
+```text
+👑 SEGREDO / CHEFE
+│  INTENÇÃO + AUTORIDADE HUMANA
+▼
+👑🪬 !CENTRALDARK
+│  TRONCO / COMANDO MESTRE
+▼
+🔗 !># INTERLIGADOS
+│  COSTURA MENTAL + OPERACIONAL
+▼
+⭕ !AURÉOLA CANÔNICA
+▼
+🧿 #ACORDAR
+▼
+🎛️ !CALIBRAR
+▼
+🧭 !MULTIBÚSSOLA
+▼
+🔎 !META_LUPA  ← OLHO CANÔNICO / OWNER META
+│
+├─ 🔥 META-GRILL
+│  └─ encontra e pressiona a ferida material
+├─ 💭 META-COGNIÇÃO
+│  └─ organiza hipótese, evidência e UNKNOWN
+├─ 🎼 META-ORQUESTRAÇÃO
+│  └─ resolve qual owner/capacidade deve receber a missão
+└─ 📡 META-START-LINK
+   └─ POSIÇÃO → DIREÇÃO → PROVENIÊNCIA → DELTA → CONFIANÇA → CURSOR
+
+▼
+🔄 !RECONCILIAR
+│  REUSE → EXTEND → CREATE SOMENTE SE GAP PROVADO
+▼
+🎼 CAPABILITY-CONTRACT-ROUTER
+│  ROTEAMENTO OPERACIONAL DETERMINÍSTICO
+│
+├─ 🔁 COT-REACT-LOOP ........ execução / medir / corrigir
+├─ ⚖️ AUDITORIA-PR .......... refs / diff / CI / prova
+├─ 🚂 ESTEIRA-MOTOR ......... build / deploy / runtime
+├─ 🧠 BRAIN-MEMORY .......... continuidade / memória
+├─ 🪢 CONFLITO-GIT .......... reconciliação sem cópia cega
+└─ 🧪 SANDBOX ............... teste isolado sem chamar de produção
+
+▼
+📚 CAPABILITY / TOOL LAYER
+│  catálogo e capacidades existentes; ferramenta não vira autoridade
+│
+├─ /tools.json
+├─ GitHub / Drive / Gmail / Plugins
+├─ MCP / Hermes / serviços
+└─ demais executores autorizados
+
+▼
+📡 TRANSPORTE / ENTRADA
+│  rota não é owner e disponibilidade é temporal
+│
+├─ OpenAI Secure MCP Tunnel
+├─ Tailscale
+├─ Remote MCP / Desktop Commander
+├─ Voice / Proxy
+└─ outros adapters autorizados
+
+▼
+🏠 RUNTIME REAL
+├─ CASA / SEGREDO
+└─ VPS
+
+▼
+⚙️ EXECUTOR
+├─ Hermes
+├─ MCP
+├─ tools
+└─ serviços
+
+▼
+⚖️ !CONTRAPROVA
+▼
+💠 !FIXED_POINT
+▼
+🧾 !REGISTRA
+├─ receipt
+└─ NEXT_CURSOR
+▼
+⚖️ REALIDADE
+└─ próximo ciclo volta pelo META-START-LINK quando houver delta material
+```
+
+### 🧠 Papéis sem sobreposição
+
+```text
+👑 CHEFE                     = define intenção e autoridade
+🔎 META-LUPA                 = percebe / observa / falsifica
+🔥 META-GRILL                = pressiona a cadeia causal
+💭 META-COGNIÇÃO             = organiza entendimento
+🎼 META-ORQUESTRAÇÃO         = resolve encaminhamento lógico
+🎼 CAPABILITY-CONTRACT-ROUTER = efetua roteamento operacional
+🧠 BRAIN-MEMORY              = preserva continuidade/memória
+📡 META-START-LINK           = preserva direção/proveniência/cursor
+📚 CAPABILITY/TOOLS          = oferecem capacidade
+📡 TRANSPORTES               = carregam sinal; não governam
+⚙️ HERMES/TOOLS/SERVIÇOS    = executam
+⚖️ REALIDADE                 = julga
+```
+
+### 🔒 Cadeados da arquitetura unificada
+
+```text
+META_LUPA_IS_CANONICAL_OWNER=true
+META_ORCHESTRATION_IS_NOT_CAPABILITY_ROUTER=true
+BRAIN_MEMORY_IS_NOT_ROUTER=true
+META_START_LINK_IS_NOT_MEMORY_OWNER=true
+TRANSPORT_IS_NOT_AUTHORITY=true
+CAPABILITY_IS_NOT_AUTHORITY=true
+MODEL_IS_NOT_AUTHORITY=true
+ONE_SYSTEM_ONLY=true
+REUSE_BEFORE_CREATE=true
+ONE_WRITER_PER_SCOPE=true
+NO_PARALLEL_ARCHITECTURE=true
+DOCUMENTED != EXECUTED
+SOURCE != RUNTIME_NOW
+UNKNOWN != PASS
+REALIDADE = JUIZ
+```
+
+### 🔁 Regra de uso
+
+```text
+INTERLIGADOS != EXECUTAR TUDO
+
+INTERLIGADOS =
+SABER QUAL NÓ EXISTE
+→ QUAL NÓ É PERTINENTE
+→ EM QUAL ORDEM ACIONAR
+→ QUAL OWNER RESPONDE
+→ QUAL PROVA DEVE VOLTAR
+```

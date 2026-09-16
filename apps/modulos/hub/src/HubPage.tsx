@@ -11,6 +11,7 @@ import { AbacusTab } from './components/abacus/AbacusTab';
 import { GatewayTab } from './components/gateway/GatewayTab';
 import { HermesTab } from './components/hermes/HermesTab';
 import { MissionsTab } from './components/missions/MissionsTab';
+import { AutonomyTab } from './components/autonomy/AutonomyTab';
 import { RoleGuard } from './components/shared/RoleGuard';
 import { Sparkles, LogIn, LogOut } from 'lucide-react';
 import { ButtonLogDrawer } from './components/ButtonLogDrawer';
@@ -85,7 +86,7 @@ export default function HubPage() {
 
       <main className="container mx-auto p-6 space-y-6">
         <Tabs defaultValue="dashboard" className="space-y-6" onValueChange={(v) => logButton('hub.tab-change', { tab: v })}>
-          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 xl:grid-cols-11 h-auto p-1 card-premium gap-1">
+          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 xl:grid-cols-12 h-auto p-1 card-premium gap-1">
             <TabsTrigger value="dashboard" className="data-[state=active]:gradient-emerald data-[state=active]:text-primary-foreground data-[state=active]:shadow-3d-primary transition-all">Dashboard</TabsTrigger>
             <TabsTrigger value="hermes" className="data-[state=active]:gradient-emerald data-[state=active]:text-primary-foreground data-[state=active]:shadow-3d-primary transition-all">🧠 Hermes</TabsTrigger>
             <TabsTrigger value="inventory" className="data-[state=active]:gradient-emerald data-[state=active]:text-primary-foreground data-[state=active]:shadow-3d-primary transition-all">🧬 Inventário</TabsTrigger>
@@ -97,6 +98,7 @@ export default function HubPage() {
             <TabsTrigger value="abacus" className="data-[state=active]:gradient-emerald data-[state=active]:text-primary-foreground data-[state=active]:shadow-3d-primary transition-all">Abacus</TabsTrigger>
             <TabsTrigger value="audit" className="data-[state=active]:gradient-emerald data-[state=active]:text-primary-foreground data-[state=active]:shadow-3d-primary transition-all">Auditoria</TabsTrigger>
             <TabsTrigger value="missions" className="data-[state=active]:gradient-emerald data-[state=active]:text-primary-foreground data-[state=active]:shadow-3d-primary transition-all">Missões</TabsTrigger>
+            <TabsTrigger value="autonomy" className="data-[state=active]:gradient-emerald data-[state=active]:text-primary-foreground data-[state=active]:shadow-3d-primary transition-all">⚙️ Autonomia</TabsTrigger>
           </TabsList>
 
           <TabsContent value="dashboard"><DashboardTab /></TabsContent>
@@ -112,6 +114,7 @@ export default function HubPage() {
           <TabsContent value="abacus"><AbacusTab /></TabsContent>
           <TabsContent value="audit"><AuditTab /></TabsContent>
           <TabsContent value="missions"><MissionsTab /></TabsContent>
+          <TabsContent value="autonomy"><RoleGuard requiredRole="admin"><AutonomyTab /></RoleGuard></TabsContent>
         </Tabs>
       </main>
       <ButtonLogDrawer />

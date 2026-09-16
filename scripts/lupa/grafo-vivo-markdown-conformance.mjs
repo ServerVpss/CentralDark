@@ -1,8 +1,13 @@
 #!/usr/bin/env node
+import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 
 const ROOT = process.cwd();
+const args = process.argv.slice(2);
+const changedFromIndex = args.indexOf('--changed-from');
+const changedFrom = changedFromIndex >= 0 ? args[changedFromIndex + 1] : '';
+const selfTest = args.includes('--self-test');
 const DOCS = path.join(ROOT, 'docs');
 
 const requiredStableOwners = [
@@ -108,6 +113,94 @@ function percent(part, total) {
   return Number(((part / total) * 100).toFixed(2));
 }
 
+function isGlobalMarkdownPath(file) {
+  return (
+    file.startsWith('docs/') ||
+    file.startsWith('.agents/skills/') ||
+    file.startsWith('.github/') ||
+    (!file.includes('/') && /^README[^/]*\.md$/i.test(file))
+  ) && file.endsWith('.md');
+}
+
+function changedMarkdownFiles(baseSha) {
+  if (!/^[0-9a-f]{40}$/i.test(baseSha) || /^0{40}$/i.test(baseSha)) return [];
+  const output = execFileSync(
+    'git',
+    ['diff', '--name-only', '--diff-filter=ACMR', `${baseSha}...HEAD`, '--'],
+    { cwd: ROOT, encoding: 'utf8' },
+  );
+  return [...new Set(output.split('\n').map((file) => file.trim()).filter(isGlobalMarkdownPath))].sort();
+}
+
+function markdownHygieneErrors(file, text) {
+  const findings = [];
+  const lines = text.split('\n');
+  const ordered = new Map();
+  const headings = new Map();
+  const fences = [];
+
+  if (text && !text.endsWith('\n')) findings.push('MD047:no-final-newline');
+
+  for (let index = 0; index < lines.length; index += 1) {
+    const line = lines[index];
+    const lineNo = index + 1;
+    if (/\t/.test(line)) findings.push(`MD010:tab:${lineNo}`);
+    if (/[ \t]+$/.test(line)) findings.push(`MD009:trailing-space:${lineNo}`);
+    if (line === '' && lines[index + 1] === '' && lines[index + 2] === '') findings.push(`MD012:multiple-blank-lines:${lineNo}`);
+    if (/^\s*(?:[-+*](?![-+*])|\d+[.)])\S/.test(line)) findings.push(`MD030:marker-space:${lineNo}`);
+
+    const heading = line.match(/^(#{1,6})\s+(.+?)\s*#*\s*$/);
+    if (heading) {
+      const normalized = heading[2].trim().toLowerCase();
+      if (headings.has(normalized)) findings.push(`MD024:duplicate-heading:${lineNo}`);
+      else headings.set(normalized, lineNo);
+      if (index > 0 && lines[index - 1] !== '') findings.push(`MD022:heading-before-blank:${lineNo}`);
+      if (index + 1 < lines.length && lines[index + 1] !== '') findings.push(`MD022:heading-after-blank:${lineNo}`);
+    }
+
+    const orderedMatch = line.match(/^(\s*)(\d+)\.\s+/);
+    if (orderedMatch) {
+      const indent = orderedMatch[1].length;
+      const number = Number(orderedMatch[2]);
+      const prior = ordered.get(indent);
+      if (prior !== undefined && number !== prior + 1) findings.push(`MD029:ordered-list:${lineNo}`);
+      ordered.set(indent, number);
+    } else if (line.trim() && !/^\s*(?:[-+*]|\d+[.)])\s+/.test(line)) {
+      ordered.clear();
+    }
+
+    const fence = line.match(/^\s*(```+|~~~+)(.*)$/);
+    if (fence) {
+      if (!fences.length) {
+        if (!fence[2].trim()) findings.push(`MD040:fence-language:${lineNo}`);
+        if (index > 0 && lines[index - 1] !== '') findings.push(`MD031:fence-before-blank:${lineNo}`);
+        fences.push({ marker: fence[1][0], lineNo });
+      } else {
+        fences.pop();
+        if (index + 1 < lines.length && lines[index + 1] !== '') findings.push(`MD031:fence-after-blank:${lineNo}`);
+      }
+    }
+  }
+  for (const fence of fences) findings.push(`MD031:unclosed-fence:${fence.lineNo}`);
+  return findings;
+}
+
+function runSelfTest() {
+  const good = '# Título\n\n1. Um\n2. Dois\n\n```text\nok\n```\n';
+  const bad = '# Título\n1. Um\n15. Dois\n15. Três\n\n```\nsem linguagem\n```';
+  const goodPasses = markdownHygieneErrors('good.md', good).length === 0;
+  const badFindings = markdownHygieneErrors('bad.md', bad);
+  const badCovers = ['MD022', 'MD029', 'MD040', 'MD047'].every((code) => badFindings.some((item) => item.startsWith(code)));
+  const ok = goodPasses && badCovers;
+  console.log(`GLOBAL_MARKDOWN_CONFORMANCE_SELF_TEST=${ok ? 'PASS' : 'FAIL'}`);
+  if (!ok) process.exit(1);
+}
+
+if (selfTest) {
+  runSelfTest();
+  process.exit(0);
+}
+
 for (const file of requiredStableOwners) {
   if (!exists(file)) {
     errors.push(`${file}: stable owner missing`);
@@ -191,12 +284,29 @@ for (const file of docs) {
   }
 }
 
+const changedMarkdown = changedMarkdownFiles(changedFrom);
+const markdownHygiene = [];
+for (const file of changedMarkdown) {
+  if (!exists(file)) continue;
+  const findings = markdownHygieneErrors(file, read(file));
+  if (findings.length) {
+    markdownHygiene.push({ file, findings });
+    errors.push(`${file}: global-markdown-conformance ${findings.join(',')}`);
+  }
+}
+
 const liveMissing = liveCandidates.length - liveReady.length;
 const report = {
   schema: 'centraldark.grafo-vivo-markdown-conformance.v2',
   checked_stable_owners: requiredStableOwners.length,
   checked_legacy_pointers: legacyPointers.length,
   scanned_docs_markdown: docs.length,
+  global_changed_markdown: {
+    base_sha: changedFrom || null,
+    files_checked: changedMarkdown.length,
+    failures: markdownHygiene,
+    status: markdownHygiene.length ? 'FAIL' : (changedFrom ? 'PASS' : 'NOT_REQUESTED'),
+  },
   metrics: {
     all_docs: {
       total: docs.length,
