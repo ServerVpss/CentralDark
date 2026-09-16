@@ -159,6 +159,101 @@ CODERABBIT_AS_RUNTIME_AUTHORITY=false
 OPTIONAL_ANALYTICS_REQUIRED_FOR_CORE=false
 ```
 
+## 📌 Receipt do PR #1551
+
+PR: `#1551 — feat(desktop): Hub HUD unificado + inventário de capacidades do CentralDark.exe`  
+Branch: `feat/centraldark-unified-hud-inventory-20260916`  
+Base do PR: `c0a33271228bbb77168dca4ae64d4aa8e1201898`  
+Head imediatamente anterior a este receipt: `811fe1964107bbcb1dad732f6a97a71c9ee34fa9`
+
+### Placar do inventário implementado
+
+```text
+CAPACIDADES INVENTARIADAS     = 16
+SOURCE_PROVED                 = 11
+RUNTIME_PROBE_EXISTENTE       = 2
+PARCIAL                       = 3
+
+CONTAS/HARNESSES MAPEADOS     = 6
+ADAPTER_REQUIRED              = 4
+DESKTOP COMMANDER PROFILES    = 2
+
+GAPS EXPLÍCITOS               = 8
+PLUGINS ANALÍTICOS OPCIONAIS  = 2
+```
+
+### O que o HUD do PR faz materialmente
+
+```text
+CENTRALDARK.EXE
+│
+├── HUD FLUTUANTE
+│   ├── arrasta pelo cabeçalho
+│   ├── resize manual
+│   ├── posição persistente
+│   ├── tamanho persistente
+│   └── cresce automaticamente conforme entram mudanças
+│
+├── RESUMO
+│   ├── CentralDark.exe
+│   ├── Omni Router
+│   ├── Screenpipe
+│   └── GitHub stats
+│
+├── CONTAS
+│   ├── ChatGPT
+│   ├── Claude Code
+│   ├── Gemini
+│   ├── Codex / VS Code
+│   ├── Desktop Commander principal
+│   └── Desktop Commander conta2
+│
+├── CAPACIDADES
+│   └── source / probe / parcial
+│
+└── LACUNAS
+    ├── adapters de quota
+    ├── unified account registry
+    ├── Claude Code harness
+    ├── Codex/VSCode harness
+    ├── MCP live snapshot
+    ├── Dependabot event feed
+    ├── CodeRabbit event feed
+    └── receipt stream
+```
+
+### Estado de validação no momento deste receipt
+
+```text
+PR_OPEN             = PASS
+HUD_IMPLEMENTADO    = SOURCE_PROVED
+INVENTARIO          = SOURCE_PROVED
+DRAG                = SOURCE_PROVED
+RESIZE              = SOURCE_PROVED
+AUTO_GROW_STATS     = SOURCE_PROVED
+PERSISTENCIA_LAYOUT = SOURCE_PROVED
+ANTI_FAKE_QUOTA     = SOURCE_PROVED
+
+CI_HEAD             = QUEUED/PENDING
+MERGE               = NOT_DONE
+RUNTIME_EXE_NOVO    = UNKNOWN
+```
+
+Os workflows do PR foram disparados para o head do branch, mas ainda estavam em `queued/pending` na medição desta rodada. A tentativa anterior de executar o contrato em worktree temporária na VPS foi bloqueada pela autenticação HTTPS do `git fetch`; por isso `TEST_RUNTIME=UNKNOWN`, nunca `PASS` por inferência.
+
+### Plugins analíticos encontrados
+
+```text
+PostHog   = AVAILABLE / OPTIONAL / NON_CORE
+Datadog   = AVAILABLE / OPTIONAL / NON_CORE
+```
+
+PostHog encaixa no Hub para product analytics, feature flags, errors e LLM analytics. Datadog encaixa para observabilidade de runtime/serviços. Nenhum deles é requisito para o core da CentralDark.
+
+### Fio da missão consolidado
+
+Não criar um app parecido com ChatGPT/Codex. O owner já existe. O trabalho é absorver, gradualmente, as capacidades úteis dessas superfícies para o cockpit canônico do `CentralDark.exe`, mantendo um organismo único e promovendo `SOURCE → RUNTIME → PASS` somente com medição aplicável.
+
 ## Próximo cursor
 
 Depois deste PR ficar verde:
