@@ -3,6 +3,7 @@
 ```text
 ID=KNOWN_CONFLICT_PATTERNS_REGISTRY_20260916
 MAIN_BEFORE=49d32ab2196e8fbfc4f5f7fefdd90d78ffa31925
+MAIN_AFTER=365c95696d53abb206ce04347b197fea962ac67d
 OWNER=.agents/skills/git-conflict-resolve-house-standard/SKILL.md
 ENGINE=scripts/dependabot/resolve-conflicts.sh
 REGISTRY=scripts/dependabot/known-conflict-patterns.json
@@ -26,6 +27,12 @@ O motor agora:
 
 O CodeRabbit bridge agora inclui o registry no receipt consultivo como sinal de
 roteamento, mantendo `REVIEW_IS_NOT_PROOF`.
+
+Segundo delta aplicado após contraprova runtime:
+
+- `.gitattributes` fixa `scripts/dependabot/*.sh text eol=lf`;
+- scripts do resolver/integração/policy test ficaram executáveis (`100755`);
+- registry passou a carregar `LAST_PROVED_SHA=365c95696d53abb206ce04347b197fea962ac67d` nos padrões provados por esta passagem.
 
 ## Padrões cristalizados
 
@@ -78,11 +85,46 @@ KNOWN_CONFLICT: docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md -> USE_MAIN_S
 UNKNOWN_CONFLICT: docs/unknown-conflict.md -> BLOCK_REVIEW rc=5
 ```
 
+## Runtime VPS
+
+```text
+RUNTIME_DEPLOYED=PASS
+VPS_TARGET=/root/CentralDark
+VPS_HEAD=e81f2a89b8c2
+VPS_REMOTE_MAIN=365c95696d53abb206ce04347b197fea962ac67d
+VPS_BRANCH=DETACHED
+VPS_DIRTY_AFTER_MICRODEPLOY=70
+RESET_HARD_USED=false
+CLEAN_USED=false
+```
+
+Backups criados:
+
+```text
+/root/CentralDark-Recovery/microdeploy-known-conflict-registry-20260916T190922Z
+/root/CentralDark-Recovery/microdeploy-known-conflict-registry-20260916T191209Z
+```
+
+Contraprova na VPS:
+
+```text
+REGISTRY_DEPLOYED=PASS
+REGISTRY_SCHEMA=centraldark.dependabot.known-conflict-patterns.v1
+REGISTRY_PATTERNS=19
+RESOLVER_EXECUTABLE=PASS
+bash -n scripts/dependabot/resolve-conflicts.sh = PASS
+bash -n scripts/dependabot/resolve-conflicts-policy.test.sh = PASS
+bash -n scripts/dependabot/dependabot-integration-test.sh = PASS
+node --check scripts/coderabbit-bridge.mjs = PASS
+node --test scripts/dependabot/fixed-point.test.mjs = PASS, 4/4
+bash scripts/dependabot/resolve-conflicts-policy.test.sh = PASS
+bash scripts/dependabot/dependabot-integration-test.sh = PASS
+```
+
 ## Pendências
 
 ```text
-CI_HEAD=UNKNOWN_UNTIL_GITHUB_RUNS
-RUNTIME_DEPLOYED=NO
+CI_HEAD=UNKNOWN_UNTIL_GITHUB_RUNS_COMPLETE
 HUD_PROJECTION=NOT_UPDATED_IN_PR_1551
 GLOBAL_FIXED_POINT=NOT_PROVEN
 ```
@@ -90,8 +132,17 @@ GLOBAL_FIXED_POINT=NOT_PROVEN
 Próximo cursor:
 
 ```text
-1. push main
-2. medir CI do novo HEAD
-3. se CI verde, microdeploy apenas dos arquivos runtime-applicable para VPS/canonical-main com backup
-4. reconciliar PR #1551 para projetar esses contadores no HUD existente, sem merge enquanto HEAD/checks estiverem instáveis
+1. medir CI do HEAD 365c95696d53abb206ce04347b197fea962ac67d
+2. se CI verde, reconciliar PR #1551 para projetar contadores do registry no HUD existente
+3. manter VPS dirty/detached preservado até reconciliação ampla própria
+4. não declarar GLOBAL_FIXED_POINT enquanto CI e PR/HUD não convergirem
+```
+
+Lei operacional absorvida do delta contínuo:
+
+```text
+CHECKPOINT != FIM
+SNAPSHOT != ENCERRAMENTO
+HISTÓRIA != PROVA
+DELTA_UTIL_CONTINUA_NO_GOAL
 ```
