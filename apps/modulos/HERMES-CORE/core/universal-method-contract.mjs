@@ -2,6 +2,7 @@
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
+import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -14,6 +15,8 @@ const FILES = {
   master: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml',
   engine: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml',
   hermesPrompt: 'apps/modulos/HERMES-CORE/prompts/hermes-core.md',
+  mandatorySkill: '.agents/skills/universal-method-contract/SKILL.md',
+  mandatoryGate: '.agents/skills/universal-method-contract/scripts/gate.mjs',
   tlc23: 'docs/CONSCIENCIA/04-MCP-E-CONECTORES/tlc23.pdf',
 };
 
@@ -21,11 +24,11 @@ const TLC23_CANONICAL_SHA256 = 'b4e2a0655b7e0c85ca329c33971b377299dde6358779270c
 
 const REQUIRED_CHAIN = [
   'CENTRALDARK', 'TLC23_OPEN', 'DESTINATION_LOCK', 'ACORDAR', 'CALIBRAR',
-  'MULTIBUSSOLA', 'PEGATUDO', 'DEBITO_COGNITIVO', 'READERS_MEASURE',
-  'META_LUPA', 'SCOPE_TEMPERATURE', 'DELTA_MINIMUM',
-  'RENDEZVOUS', 'RECONCILE', 'OWNER', 'ONE_WRITER', 'PATCH', 'TESTE',
-  'CONTRAPROVA', 'REALITY_JUDGE', 'FIXED_POINT', 'TLC23_CLOSE', 'REGISTRA',
-  'HANDOFF', 'BOOT',
+  'MULTIBUSSOLA', 'PEGATUDO', 'PEGATUDO_HISTORY', 'DEBITO_COGNITIVO',
+  'READERS_MEASURE', 'META_LUPA', 'SCOPE_TEMPERATURE', 'DELTA_MINIMUM',
+  'RENDEZVOUS', 'RECONCILE', 'STITCH', 'OWNER', 'ONE_WRITER', 'PATCH',
+  'TESTE', 'CONTRAPROVA', 'SEMANTIC_GREEN_GATE', 'REALITY_JUDGE',
+  'FIXED_POINT', 'TLC23_CLOSE', 'REGISTRA', 'HANDOFF', 'BOOT',
 ];
 
 const REQUIRED_GLOBAL_INHERITANCE = [
@@ -85,12 +88,35 @@ function parseEngineNames(engineText) {
   return names;
 }
 
+function runMandatoryGateSelfTest() {
+  const gateAbs = path.join(ROOT, FILES.mandatoryGate);
+  const cp = spawnSync(process.execPath, [gateAbs, '--self-test'], {
+    cwd: ROOT,
+    encoding: 'utf8',
+  });
+  if (cp.status !== 0) {
+    throw new Error(`MANDATORY_GATE_SELF_TEST_FAILED:${cp.status}:${sha256(Buffer.from(cp.stderr || '', 'utf8'))}`);
+  }
+  let payload;
+  try {
+    payload = JSON.parse(cp.stdout);
+  } catch {
+    throw new Error('MANDATORY_GATE_SELF_TEST_INVALID_JSON');
+  }
+  if (payload?.status !== 'PASS' || payload?.no_lateral_route !== true || payload?.consolidated_lock !== true) {
+    throw new Error('MANDATORY_GATE_SELF_TEST_NOT_PASS');
+  }
+  return payload;
+}
+
 export function validateUniversalMethod() {
   const universal = read(FILES.universal);
   const aureola = read(FILES.aureola);
   const master = read(FILES.master);
   const engine = read(FILES.engine);
   const hermesPrompt = read(FILES.hermesPrompt);
+  const mandatorySkill = read(FILES.mandatorySkill);
+  const mandatoryGate = read(FILES.mandatoryGate);
   const tlc23Hash = sha256(readBuffer(FILES.tlc23));
 
   if (tlc23Hash !== TLC23_CANONICAL_SHA256) {
@@ -99,6 +125,18 @@ export function validateUniversalMethod() {
 
   requireTokens(universal, [
     'applies_to: ALL_CURRENT_AND_FUTURE_ENGINES',
+    'global_mandatory: true',
+    'no_lateral_route: true',
+    'uni_directional_requires_gate: true',
+    'bi_directional_requires_gate: true',
+    'return_path_requires_gate: true',
+    'entry_requires_gate: true',
+    'exit_requires_gate: true',
+    'gate_failure_must_diagnose_same_route: true',
+    'default_after_fixed_point: LOCKED',
+    'SAME_OBJECT_PROVEN_IMPROVEMENT',
+    'SAME_OWNER_DOMAIN_EXPANSION',
+    'mandatory_skill_self_test_required: true',
     'same_method_required_for_new_engine: true',
     'engine_specific_capability_may_bypass_contract: false',
     'skin_is_presentation_adapter: true',
@@ -118,6 +156,32 @@ export function validateUniversalMethod() {
     'model_identity_must_not_block_scope: true',
     'next_cursor_required_when_not_fixed_point: true',
   ], 'UNIVERSAL_CONTRACT');
+
+  requireTokens(mandatorySkill, [
+    'AUTHORITY_CLASS=MANDATORY_CONTRACT_ADAPTER',
+    'NO_LATERAL_ROUTE=true',
+    'UNI_DIRECTIONAL_REQUIRES_GATE=true',
+    'BI_DIRECTIONAL_REQUIRES_GATE=true',
+    'ENTRY_REQUIRES_GATE=true',
+    'EXIT_REQUIRES_GATE=true',
+    'CONSOLIDATED_STATE=LOCKED',
+    'SAME_OBJECT_PROVEN_IMPROVEMENT',
+    'SAME_OWNER_DOMAIN_EXPANSION',
+    'POMBO_MODE=CHECKSUM_ON',
+    'POMBO64_PLUS_IS_PROOF=false',
+    'UNKNOWN   = nao e PASS',
+  ], 'MANDATORY_SKILL');
+
+  requireTokens(mandatoryGate, [
+    "const ALLOWED_DIRECTIONS = new Set(['UNI', 'BI', 'RETURN'])",
+    'CONSOLIDATED_LOCK_NO_VALID_REOPEN_REASON',
+    'REOPEN_REQUIRES_NEW_MATERIAL_EVIDENCE_HASH',
+    'LATERAL_OR_UNKNOWN_ROUTE_FORBIDDEN',
+    'EXIT_REQUIRES_RESULT_HASH_OR_RESULT_FILE',
+    "mode: 'CHECKSUM_ON'",
+    "is_proof: false",
+    "process.exitCode = verdict === 'PASS' ? 0 : 2",
+  ], 'MANDATORY_GATE_RUNTIME');
 
   let previous = -1;
   for (const token of REQUIRED_CHAIN) {
@@ -169,6 +233,7 @@ export function validateUniversalMethod() {
     'UNKNOWN_SKIPPED_PENDING_ARE_NOT_PASS=true',
   ], 'HERMES_PROMPT');
 
+  const mandatoryGateSelfTest = runMandatoryGateSelfTest();
   const engines = parseEngineNames(engine);
   return {
     schema: 'centraldark.universal-engine-method.self-test.v1',
@@ -178,6 +243,16 @@ export function validateUniversalMethod() {
     universal_chain: REQUIRED_CHAIN,
     method_owner: FILES.master,
     hermes_runtime_validator: FILES.universal,
+    mandatory_skill: FILES.mandatorySkill,
+    mandatory_gate: FILES.mandatoryGate,
+    mandatory_gate_self_test: mandatoryGateSelfTest,
+    no_lateral_route: true,
+    uni_and_bi_directional_gate_required: true,
+    consolidated_state_locked_by_default: true,
+    reopen_same_object_improvement_only: true,
+    reopen_same_owner_domain_expansion_only: true,
+    pombo_mode: 'CHECKSUM_ON',
+    pombo64_plus_is_transport_only: true,
     tlc23_source: FILES.tlc23,
     tlc23_source_sha256: tlc23Hash,
     tlc23_source_gate: 'PASS',
