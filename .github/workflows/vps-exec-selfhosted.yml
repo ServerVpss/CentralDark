@@ -66,6 +66,26 @@ jobs:
               exit 0
             fi
           fi
+
+          # Toda rota MCP que pode mutar runtime passa primeiro pelo mesmo
+          # dispatcher TLC23/Universal/Meta-Lupa/Horn do próprio TARGET_SHA.
+          MCP_GATE_SCRIPT="$(mktemp "$RUNNER_TEMP/centraldark-mcp-deploy-gate.XXXXXX")"
+          chmod 700 "$MCP_GATE_SCRIPT"
+          git show "$TARGET_SHA:scripts/vps/deploy-guards-dispatcher.sh" > "$MCP_GATE_SCRIPT" || {
+            rm -f "$MCP_GATE_SCRIPT"
+            echo "CANONICAL_MCP_DEPLOY_GATE_UNAVAILABLE"
+            exit 57
+          }
+          TARGET_SHA="$TARGET_SHA" REPO_DIR="$REPO_DIR" BRANCH=main \
+            bash "$MCP_GATE_SCRIPT" --gate-only || {
+              rc=$?
+              rm -f "$MCP_GATE_SCRIPT"
+              echo "CANONICAL_TLC23_MCP_GATE=BLOCK"
+              exit "$rc"
+            }
+          rm -f "$MCP_GATE_SCRIPT"
+          echo "CANONICAL_TLC23_MCP_GATE=PASS"
+
           DIRTY_TRACKED_FILE="$(mktemp "$RUNNER_TEMP/centraldark-dirty.XXXXXX")"
           DIRTY_MCP_FLAG="$(mktemp "$RUNNER_TEMP/centraldark-mcp-dirty.XXXXXX")"
           chmod 600 "$DIRTY_TRACKED_FILE" "$DIRTY_MCP_FLAG"
@@ -276,7 +296,6 @@ jobs:
             fi
           done
 
-
           git fetch --prune origin main
           FINAL_MAIN_SHA="$(git rev-parse origin/main)"
           git merge-base --is-ancestor "$TARGET_SHA" "$FINAL_MAIN_SHA" || { echo "VALIDATED_SHA_LEFT_MAIN"; exit 44; }
@@ -324,7 +343,6 @@ jobs:
                 ? (deployed ? 'worktree, PM2, health, audit e porta 9300 comprovados' : 'escopo MCP sem mudança; runtime preservado')
                 : 'deploy bloqueado em fail-closed; consultar job sanitizado',
             });
-
 
   deploy-operational-guards:
     name: Deploy atômico do mapa e Hermes-Verificador
@@ -385,7 +403,8 @@ jobs:
 
   vps-housekeeping:
     name: VPS Housekeeping (varredura lixo/ouro, report-only)
-    if: github.repository == 'ServerVpss/CentralDark'
+    needs: [deploy-mcp, deploy-operational-guards]
+    if: always() && github.repository == 'ServerVpss/CentralDark'
     runs-on: [self-hosted, Linux]
     timeout-minutes: 15
     env:
