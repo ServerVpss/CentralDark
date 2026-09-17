@@ -1,17 +1,24 @@
 # CENTRALDARK — GUARDRAILS DO PERFIL DE MISSÃO PR #1558
 
 **Escopo:** `PR #1558`  
-**Classe:** constraint do perfil de missão; **não** é novo cérebro, owner, engine, skill raiz ou autoridade paralela.
+**Classe:** constraint subordinada e temporária do perfil de missão.  
+**Autoridade própria:** `false`.
+
+> Este arquivo NÃO é cérebro, owner, engine, skill raiz, prompt canônico ou autoridade paralela. Ele existe apenas para fechar imediatamente duas ambiguidades do `AGENTE-PREMIUM-TLC23.md` enquanto o writer local seguro não está disponível para incorporar o delta no documento principal. Após incorporação comprovada no arquivo principal, este arquivo deve ser removido no MESMO PR.
 
 ## 1. Limite de autoridade
 
 ```text
 AUTHORITY_CLASS=MISSION_PROFILE_CONSTRAINT
+AUTHORITY_OWN=false
+TEMPORARY_STITCH=true
 SCOPE=PR#1558
 INHERITS_CANONICAL_HERMES=true
 INHERITS_TLC23=true
 MAY_OVERRIDE_CANONICAL=false
 MAY_CREATE_PARALLEL_OWNER=false
+MUST_BE_FOLDED_INTO_PRIMARY_PROFILE=true
+DELETE_AFTER_FOLD_AND_PROOF=true
 ONE_SYSTEM_ONLY=true
 ONE_CORE_ONLY=true
 REUSE_BEFORE_CREATE=true
@@ -26,9 +33,10 @@ CONTRATO_CANONICO_CENTRALDARK
 > HERMES_CORE_CANONICO
 > TLC23_CANONICO
 > PERFIL_DA_MISSAO_PR1558
+> ESTE_STITCH_TEMPORARIO
 ```
 
-O perfil da missão pode **especializar contexto, ordem de trabalho e critérios do PR**, mas não pode substituir owner, autoridade, writer, judge, promotor, runtime ou gate canônico já existente.
+O perfil da missão pode especializar contexto, ordem de trabalho e critérios do PR, mas não pode substituir owner, autoridade, writer, judge, promotor, runtime ou gate canônico já existente.
 
 ## 2. Anti-cerimônia / anti-loop
 
@@ -98,11 +106,13 @@ Sem mudança material, preservar handoff e continuar sem repetir prosa equivalen
 
 ## 4. Fixed point desta correção
 
-Esta correção fecha apenas a ambiguidade de autoridade e o risco de cerimônia/loop do perfil.
-
-Não prova:
+Esta costura fecha semanticamente a ambiguidade de autoridade e o risco de cerimônia/loop, mas ainda precisa ser incorporada ao documento principal antes de FIXED_POINT deste subdelta.
 
 ```text
+PROFILE_AUTHORITY_BOUNDARY=CONTRACTED
+ANTI_CEREMONY=CONTRACTED
+FOLDED_INTO_PRIMARY_PROFILE=NOT_YET_PROVEN
+TEMPORARY_STITCH_REMOVED=false
 RUNTIME=UNKNOWN
 BOOT=UNKNOWN
 INSTALLER=UNKNOWN
@@ -111,3 +121,14 @@ CI_SAME_HEAD=UNKNOWN_UNTIL_MEASURED
 ```
 
 `UNKNOWN != PASS` · `DOCUMENTED != EXECUTED` · `REALIDADE = JUIZ`.
+
+## NEXT_CURSOR
+
+```text
+WHEN_SAFE_WRITER_AVAILABLE
+→ FOLD_THIS_DELTA_INTO_AGENTE-PREMIUM-TLC23.md
+→ DELETE_THIS_TEMPORARY_STITCH
+→ REMEASURE_SAME_HEAD
+→ CI
+→ CONTRAPROVA
+```
