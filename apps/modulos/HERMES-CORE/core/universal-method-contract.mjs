@@ -74,6 +74,11 @@ function requireTokens(text, tokens, scope) {
   if (missing.length) throw new Error(`${scope}_MISSING:${missing.join(',')}`);
 }
 
+function forbidTokens(text, tokens, scope) {
+  const present = tokens.filter((token) => text.includes(token));
+  if (present.length) throw new Error(`${scope}_LEGACY_CONTRADICTION:${present.join(',')}`);
+}
+
 function parseEngineNames(engineText) {
   const normalized = engineText.replace(/\r\n/g, '\n');
   const start = normalized.indexOf('\nengines:\n');
@@ -180,6 +185,12 @@ export function validateUniversalMethod() {
     'DELTA_UTIL_REQUIRES_DEDUPE_CLASSIFY_PROOF=true',
     'RAW_CHEFE_MATERIAL_IS_NOT_AUTOMATIC_COMMIT=true',
   ], 'SOUL_SOL');
+
+  forbidTokens(soul, [
+    'SEGREDO_CHEFE_IS_REFERENCE_NOT_ROUTER=true',
+    'INTENCAO_DO_CHEFE_IS_DELTA_UTIL=true',
+    '"pivete" regional = vocativo; não cria papel nem autorização',
+  ], 'SOUL_SOL_LEGACY');
 
   requireTokens(mandatorySkill, [
     'AUTHORITY_CLASS=MANDATORY_CONTRACT_ADAPTER',
