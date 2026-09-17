@@ -1,4 +1,4 @@
-﻿param(
+param(
     [string]$RuntimeRoot = "$env:LOCALAPPDATA\CentralDark\Remote-Tray",
     [string]$BaseUrl = "https://mcp.centralldark.com",
     [string]$Resource = "https://mcp.centralldark.com/admin/mcp",
