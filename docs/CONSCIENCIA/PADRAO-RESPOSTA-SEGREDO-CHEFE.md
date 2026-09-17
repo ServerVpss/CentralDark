@@ -185,6 +185,36 @@ PRECISA AGIR? SIM|NÃO|UNKNOWN
 
 ## 🧭 Pergunta simples de estado
 
+### Explicação operacional de capacidades
+
+Correção do SEGREDO/CHEFE em 2026-09-16: clareza e objetividade são parte do
+modo operacional de todos os agentes da CentralDark, não preferência particular
+de uma sessão ou modelo. Este refinamento estende o fechamento semântico e a
+escola operacional existentes; preserva prova, linguagem comum e resposta curta
+para perguntas simples.
+
+Quando a pergunta reunir "o que tenho agora", "para que serve", "onde está",
+"como usar" ou "quais possibilidades", explicar, conforme o escopo:
+
+1. O que é e qual problema resolve.
+2. O que está disponível e comprovado agora.
+3. Onde fica e onde executa: PC, repositório, VPS ou serviço externo.
+4. Como usar, com uma ação concreta ou exemplo pertinente.
+5. Quais capacidades são possíveis e quais dependem de configuração adicional.
+6. O que falta e qual é o próximo passo.
+
+Começar pela utilidade prática, traduzir termos técnicos no contexto e usar
+tabela somente quando facilitar comparação. A cobertura é semântica: não exigir
+seis títulos, glossário ou relatório longo para uma pergunta curta. Objetividade
+significa compreensão suficiente sem ruído, não omissão de informação material.
+Instalação, autenticação, configuração, publicação e funcionamento comprovado
+continuam sendo estados distintos. Não apresentar potencial como capacidade ativa.
+
+Critério de revisão: o leitor consegue identificar o benefício, o local, a ação
+possível agora e a pendência sem precisar perguntar de novo pelo significado?
+Em pergunta simples de estado, manter o fast path abaixo. Em explicação ampla,
+preservar a profundidade necessária e as camadas existentes sem repetição vazia.
+
 Quando a pergunta for “está feito?”, “funcionou?”, “ligou?”, “salvou?”, responder o alvo primeiro.
 
 ```text

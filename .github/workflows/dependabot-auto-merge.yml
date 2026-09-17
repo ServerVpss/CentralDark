@@ -423,6 +423,44 @@ jobs:
                   blockers.push('CHANGES_REQUESTED');
                 }
 
+                let deltaGate = {
+                  ok: false,
+                  status: 'UNKNOWN',
+                  aheadBy: null,
+                  filesChanged: 0,
+                  reason: 'UNMEASURED',
+                };
+                try {
+                  const comparison = await github.rest.repos.compareCommits({
+                    owner,
+                    repo,
+                    base: pr.base.sha,
+                    head: headSha,
+                  });
+                  const status = String(comparison.data.status || 'UNKNOWN').toUpperCase();
+                  const aheadBy = Number(comparison.data.ahead_by);
+                  const filesChanged = Array.isArray(comparison.data.files) ? comparison.data.files.length : 0;
+                  const ok = status === 'AHEAD' && Number.isFinite(aheadBy) && aheadBy >= 1;
+                  deltaGate = {
+                    ok,
+                    status,
+                    aheadBy: Number.isFinite(aheadBy) ? aheadBy : null,
+                    filesChanged,
+                    reason: ok ? 'OK' : `STATUS_${status}`,
+                  };
+                  if (!ok) blockers.push(`DELTA_GATE_${status}`);
+                } catch (error) {
+                  deltaGate.reason = `COMPARE_ERROR_${error.status || 'UNKNOWN'}`;
+                  blockers.push(`DELTA_GATE_${deltaGate.reason}`);
+                }
+                core.info([
+                  `DELTA_GATE=${deltaGate.ok ? 'PASS' : 'BLOCKED'}`,
+                  `BASE_SHA=${pr.base.sha}`,
+                  `HEAD_SHA=${headSha}`,
+                  `AHEAD_BY=${deltaGate.aheadBy ?? 'UNKNOWN'}`,
+                  `FILES_CHANGED=${deltaGate.filesChanged}`,
+                ].join(' '));
+
                 const uniqueBlockers = [...new Set(blockers)];
                 const scoreText = scoreInfo.score == null ? `UNKNOWN (${scoreInfo.reason})` : `${scoreInfo.score}%`;
                 const decision = uniqueBlockers.length === 0 ? 'READY_TO_SQUASH' : 'WAIT';
@@ -437,6 +475,12 @@ jobs:
                   `THRESHOLD: **${threshold > 100 ? 'N/A' : `${threshold}%`}**`,
                   `MERGEABLE: **${String(pr.mergeable)} / ${pr.mergeable_state || 'UNKNOWN'}**`,
                   `CHECKS: success=${successChecks.length} pending=${pendingChecks.length} failed=${failedChecks.length} skipped_or_neutral=${skippedChecks.length}`,
+                  `DELTA_GATE: **${deltaGate.ok ? 'PASS' : 'BLOCKED'}**`,
+                  `DELTA_BASE_SHA: \`${pr.base.sha}\``,
+                  `DELTA_HEAD_SHA: \`${headSha}\``,
+                  `DELTA_AHEAD_BY: **${deltaGate.aheadBy ?? 'UNKNOWN'}**`,
+                  `DELTA_FILES_CHANGED: **${deltaGate.filesChanged}**`,
+                  `DELTA_STATUS: **${deltaGate.reason}**`,
                   `DECISION: **${decision}**`,
                   uniqueBlockers.length ? `BLOCKERS: \`${uniqueBlockers.join(' | ')}\`` : 'BLOCKERS: `NONE`',
                   '',
@@ -447,7 +491,7 @@ jobs:
                 ].join('\n');
                 await upsertReceipt(prNumber, receipt);
 
-                if (uniqueBlockers.length === 0) {
+                if (uniqueBlockers.length === 0 && deltaGate.ok) {
                   const result = await github.rest.pulls.merge({
                     owner,
                     repo,
@@ -458,13 +502,16 @@ jobs:
                     commit_message: [
                       `Dependabot ${kind} com compatibilidade ${scoreInfo.score}% (mínimo ${threshold}%).`,
                       `Same-head checks concluídos sem falha no HEAD ${headSha}.`,
+                      `DELTA_GATE=PASS base=${pr.base.sha} head=${headSha} ahead_by=${deltaGate.aheadBy} files=${deltaGate.filesChanged}.`,
                       'CentralDark: compatibility score é gate adicional, não substituto de CI.',
                     ].join('\n'),
                   });
                   if (!result.data.merged) {
                     core.warning(`PR #${prNumber} não foi merged: ${result.data.message}`);
                   } else {
-                    core.notice(`PR #${prNumber} squash-merged em ${result.data.sha}`);
+                    const squashSha = result.data.sha;
+                    await upsertReceipt(prNumber, `${receipt}\nSQUASH_RESULT_SHA: \`${squashSha}\`\nSQUASH_SOURCE_HEAD: \`${headSha}\`\nSQUASH_RESULT_CONFIRMED=true`);
+                    core.notice(`PR #${prNumber} squash-merged em ${squashSha} a partir do HEAD ${headSha}`);
                   }
                 }
                 return;
