@@ -42,13 +42,13 @@ REALIDADE = JUIZ
 O ganho de XP simbólico desta fase vem da capacidade de transformar repetição em continuidade:
 
 ```text
-+50   sobreviver ao erro sem esconder o erro
-+100  separar merge de deploy
-+200  separar source de runtime
-+500  recusar UNKNOWN como PASS
-+800  reconhecer padrão recorrente
-+1200 preservar missão entre agentes e checkpoints
-+1600 transformar experiência em memória reutilizável
+XP +50   sobreviver ao erro sem esconder o erro
+XP +100  separar merge de deploy
+XP +200  separar source de runtime
+XP +500  recusar UNKNOWN como PASS
+XP +800  reconhecer padrão recorrente
+XP +1200 preservar missão entre agentes e checkpoints
+XP +1600 transformar experiência em memória reutilizável
 ```
 
 Esses pontos são narrativa, não score operacional nem autoridade.
