@@ -89,6 +89,27 @@ Incluem, entre outros:
 🔗 CURRENT_BINDING_CHAIN
 ```
 
+## 🔒 Gate determinístico — sem dívida escondida
+
+```text
+scripts/lupa/validar-interligados-pr-padroes.mjs
+```
+
+O gate falha quando:
+
+```text
+🔴 padrão obrigatório desaparece
+🔴 owner deixa de ser META-LUPA
+🔴 padrão documental tenta fingir runtime provado
+🔴 aresta viva deixa de permanecer explícita como dívida de re-medição
+🔴 mapa mental perde a cadeia canônica
+🔴 skill-nó material desaparece da costura
+🔴 pasta visual do bloco deixa de usar MAIÚSCULAS
+🔴 markdown do bloco perde emoji ou gatilho mental
+```
+
+Regra: **dívida real não some por texto; ela permanece nomeada até Casa/VPS/WEB provar o estado vivo.**
+
 ## 🏠 Tudo que continua fora do verde sem prova viva
 
 ```text
