@@ -41,6 +41,26 @@ sol_binding:
   raw_chefe_material_is_not_automatic_commit: true
   delta_util_requires_dedupe_classify_proof: true
 
+hermes_executor_contract:
+  owner: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md
+  local_profile_class: THIN_EXECUTOR_BRIDGE
+  local_profile_must_not_duplicate_soul: true
+  no_second_soul: true
+  canonical_repo: ServerVpss/CentralDark
+  canonical_ref: origin/main
+  canonical_soul_path: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md
+  canonical_cache_owner: scripts/vps/centraldark-deploy.sh
+  canonical_cache_mode: "--apply --canonical-cache"
+  vps_canonical_cache_dir: /var/lib/centraldark/canonical-main
+  boot_reads_canonical_main_first: true
+  boot_binds_main_sha: true
+  dirty_operational_worktree_is_not_soul_authority: true
+  github_main_governs_identity_structure_contracts: true
+  vps_runtime_governs_live_runtime_facts: true
+  source_is_not_runtime: true
+  canonical_main_unavailable_current_claim: UNKNOWN
+  last_good_cache_is_baseline_not_current_truth: true
+
 law_order_1:
   name: NO_LATERAL_ROUTE
   global_mandatory: true
