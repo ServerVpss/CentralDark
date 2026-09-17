@@ -31,6 +31,7 @@ PDF_GATE_BEFORE_COMMIT_REQUIRED=true
 TLC23_READ_BEFORE_MUTATION=true
 NO_AFTER_THE_FACT_PDF_PROOF=true
 ```
+
 ## Implementação adicionada
 
 Owner reutilizado:
@@ -71,6 +72,7 @@ cookie_copied=false
 cookie_copy_allowed=false
 secret_values_returned=false
 ```
+
 ## Testes executados
 
 ```text
@@ -86,6 +88,22 @@ zendrive_health_safe=true
 zendrive_simulation_oi=true
 ```
 
+## Diagrama Mermaid — Megazord Provider
+
+```mermaid
+flowchart TD
+    CHEFE["SEGREDO/CHEFE\nintenção humana"] --> SOL["SOL\ncoordenação/reconciliação"]
+    SOL --> API["CentralDark Omni Router\n/v1/chat/completions"]
+    API --> ALIAS["provider alias\nzendrive-chatgpt-local"]
+    ALIAS --> HEALTH["GET /providers/zendrive-chatgpt-local/health"]
+    ALIAS --> SIM["POST /providers/zendrive-chatgpt-local/simulate"]
+    ALIAS -. live futuro .-> WORKER["Zendrive Worker na Casa\nperfil local autorizado"]
+    WORKER --> RECEIPT["centraldark.zendrive-provider-call.v1"]
+    SIM --> RECEIPT
+    RECEIPT --> HERMES["Hermes\nexecutor/contraprova"]
+    HERMES --> REALIDADE["Realidade\nPASS / FAIL / UNKNOWN"]
+```
+
 ## O que ainda não é prova
 
 ```text
@@ -97,6 +115,14 @@ HERMES_USANDO_COMO_MODELO=false
 ```
 
 Esses estados só podem virar PASS depois de deploy, health vivo, chamada real e receipt.
+
+## Link direto no PR
+
+```text
+PR=#1549
+ARTEFATO=docs/CONSCIENCIA/APRENDIZADOS/EVIDENCIAS/2026-09-17-zendrive-provider-route-artifact.md
+ROTA=apps/modulos/elite-gateway/scripts/centraldark_omni_router.py
+```
 
 ## Como repetir
 
