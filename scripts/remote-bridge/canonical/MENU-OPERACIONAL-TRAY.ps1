@@ -6,6 +6,7 @@ $ErrorActionPreference = "Stop"
 $LoginUrl = "https://mcp.desktopcommander.app/device/verify"
 $Receipt = Join-Path $RuntimeRoot "receipts\latest.json"
 $Canonical = Join-Path $PSScriptRoot "REMOTE-TRAY-STATUS-CANONICO.md"
+$CentralDarkOAuth = Join-Path $PSScriptRoot "CENTRALDARK-OAUTH-TRAY.ps1"
 
 function Header {
     Clear-Host
@@ -88,9 +89,18 @@ function Copy-DeviceCode {
     }
 }
 
+function Invoke-CentralDarkOAuth {
+    if (-not (Test-Path $CentralDarkOAuth)) { Write-Host "OAuth do Tray ausente. QUEBRADO."; return $false }
+    try {
+        & $CentralDarkOAuth | ForEach-Object { Write-Host $_ }
+        return $true
+    } catch {
+        Write-Host ("OAuth CentralDark falhou: " + $_.Exception.Message)
+        return $false
+    }
+}
 function Reconnect-Remote {
     if (-not (Confirm-Critical "Reconectar Remote")) { return }
-
     $existing = Get-CimInstance Win32_Process -ErrorAction SilentlyContinue |
         Where-Object {
             $_.CommandLine -match 'desktop-commander' -and
@@ -98,10 +108,13 @@ function Reconnect-Remote {
         }
 
     if ($existing) {
-        Write-Host "Remote já possui processo ativo. Não foi criado concorrente."
+        Write-Host "Remote já possui processo ativo. Sessão preservada; OAuth não foi reaberto."
+        Write-Host "REMOTE_AUTH=PRESERVED"
         Write-Host "ONE_REMOTE_PROCESS_PER_PROFILE=true"
         return
     }
+
+    if (-not (Invoke-CentralDarkOAuth)) { return }
 
     $npx = (Get-Command npx.cmd -ErrorAction SilentlyContinue).Source
     if (-not $npx) { $npx = (Get-Command npx -ErrorAction SilentlyContinue).Source }
@@ -114,7 +127,7 @@ function Reconnect-Remote {
     $stamp = Get-Date -Format "yyyyMMdd-HHmmss"
     $logPath = Join-Path $RuntimeRoot "logs\desktop-commander-$stamp.log"
 
-    $cmd = "`"$npx`" --yes @wonderwhy-er/desktop-commander@latest remote *> `"$logPath`""
+    $cmd = "`"$npx`" --yes @wonderwhy-er/desktop-commander@0.2.48 remote *> `"$logPath`""
     Start-Process powershell.exe -ArgumentList "-NoProfile","-WindowStyle","Hidden","-Command",$cmd
     Write-Host "Remote iniciado sob supervisão local."
     Write-Host "LOG=$logPath"
@@ -131,6 +144,7 @@ while ($true) {
     Write-Host "[7] Rodar testes do pacote"
     Write-Host "[8] Abrir runtime local"
     Write-Host "[9] Ver contrato canônico"
+    Write-Host "[A] Autenticar CentralDark OAuth (1x + refresh)"
     Write-Host "[0] Sair"
     Write-Host ""
     $op = Read-Host "Escolha"
@@ -162,6 +176,7 @@ while ($true) {
         "9" {
             if (Test-Path $Canonical) { Start-Process notepad.exe $Canonical }
         }
+        { $_ -in "A","a" } { Invoke-CentralDarkOAuth; Read-Host "Enter para voltar" | Out-Null }
         "0" { break }
         default { Write-Host "Opção inválida."; Start-Sleep 1 }
     }
