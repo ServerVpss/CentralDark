@@ -3,6 +3,7 @@ name: 🧠 Notion Sync (docs/CONSCIENCIA → Notion)
 # usando UPSERT (cria se não existe, atualiza se existe).
 ## Lei vigente: Git é fonte da verdade. Notion é painel humano.
 ## Política temporária: best-effort. Falha do Notion não bloqueia CI/main.
+## Capacidade opcional não ocupa o runner VPS reservado aos gates/runtime.
 
 on:
   push:
@@ -43,7 +44,7 @@ concurrency:
 jobs:
   sync:
     name: Espelhar para o Notion (best-effort)
-    runs-on: [self-hosted, Linux, X64]
+    runs-on: ubuntu-latest
     timeout-minutes: 20
     continue-on-error: true
     steps:
