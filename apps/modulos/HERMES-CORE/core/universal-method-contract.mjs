@@ -10,6 +10,7 @@ const __dirname = path.dirname(__filename);
 const ROOT = path.resolve(__dirname, '..', '..', '..', '..');
 
 const FILES = {
+  soul: 'docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md',
   universal: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/UNIVERSAL-ENGINE-METHOD.yml',
   aureola: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml',
   master: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml',
@@ -110,6 +111,7 @@ function runMandatoryGateSelfTest() {
 }
 
 export function validateUniversalMethod() {
+  const soul = read(FILES.soul);
   const universal = read(FILES.universal);
   const aureola = read(FILES.aureola);
   const master = read(FILES.master);
@@ -125,6 +127,7 @@ export function validateUniversalMethod() {
 
   requireTokens(universal, [
     'applies_to: ALL_CURRENT_AND_FUTURE_ENGINES',
+    'governing_soul: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md',
     'global_mandatory: true',
     'no_lateral_route: true',
     'uni_directional_requires_gate: true',
@@ -162,6 +165,21 @@ export function validateUniversalMethod() {
     'model_identity_must_not_block_scope: true',
     'next_cursor_required_when_not_fixed_point: true',
   ], 'UNIVERSAL_CONTRACT');
+
+  requireTokens(soul, [
+    'UNIVERSAL_METHOD_CONTRACT_REQUIRED=true',
+    'NO_LATERAL_ROUTE=true',
+    'PIVETE_VOCATIVE_ROUTES_TO_HERMES=true',
+    'VOCATIVE_ROUTING_DOES_NOT_EXPAND_AUTHORITY=true',
+    'CHEFE_MAY_ROUTE_BY_VOCATIVE=true',
+    'CHEFE_NOT_REQUIRED_AS_ROUTER=true',
+    'PERMITO_SEGREDO_MISSION_SCOPE=true',
+    'PER_STEP_REASK_WITHIN_SAME_MISSION=false',
+    'ACTION_FIRST_WHEN_GATE_PASS=true',
+    'SOL_GUARD_ROLE=COORDINATE_COUNTERPROVE_NOT_STALL',
+    'DELTA_UTIL_REQUIRES_DEDUPE_CLASSIFY_PROOF=true',
+    'RAW_CHEFE_MATERIAL_IS_NOT_AUTOMATIC_COMMIT=true',
+  ], 'SOUL_SOL');
 
   requireTokens(mandatorySkill, [
     'AUTHORITY_CLASS=MANDATORY_CONTRACT_ADAPTER',
@@ -256,6 +274,7 @@ export function validateUniversalMethod() {
     engine_count: engines.length,
     universal_chain: REQUIRED_CHAIN,
     method_owner: FILES.master,
+    governing_soul: FILES.soul,
     hermes_runtime_validator: FILES.universal,
     mandatory_skill: FILES.mandatorySkill,
     mandatory_gate: FILES.mandatoryGate,
