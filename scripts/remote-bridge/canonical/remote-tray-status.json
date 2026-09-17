@@ -1,0 +1,54 @@
+{
+  "schema": "centraldark.remote-tray.status.v1",
+  "owner": "CENTRALDARK",
+  "device": "UNKNOWN",
+  "observed_at": null,
+  "summary": {
+    "verdict": "EVIDENCIA_FALTANTE",
+    "reason_codes": [],
+    "next_cursor": "AUTH_OR_REMEASURE"
+  },
+  "runtime": {
+    "windows_root": "%LOCALAPPDATA%\\CentralDark\\Remote-Tray",
+    "linux_root": "/root/CentralDark/runtime/remote-tray",
+    "wrapper_state": "INICIANDO",
+    "sensor_state": "UNKNOWN",
+    "bridge_process_pid": null,
+    "sidecar_process_pid": null,
+    "attempt": 0,
+    "retry_delay_seconds": 5,
+    "last_exit": null,
+    "process_alive_claim": false,
+    "online_proved": false
+  },
+  "auth": {
+    "local_mcp_connected": false,
+    "remote_mcp_connected": false,
+    "verification_required_seen": false,
+    "verification_url": "https://mcp.desktopcommander.app/device/verify",
+    "user_code": null,
+    "auth_successful": false,
+    "stale_refresh_token_seen": false,
+    "overwrite_live_auth": false
+  },
+  "guards": {
+    "one_remote_process_per_profile": true,
+    "one_system_only": true,
+    "reuse_before_create": true,
+    "unknown_is_pass": false,
+    "process_alive_is_device_online": false,
+    "online_claim_is_online_proved": false
+  },
+  "supervisor": {
+    "retry_with_backoff": true,
+    "retry_seconds": [5, 10, 20, 40, 60],
+    "max_retry_seconds": 60,
+    "infinite_restart": false
+  },
+  "tests": {
+    "harness_pass": null,
+    "static_guards_pass": null,
+    "exe_exists": null,
+    "exe_mz_header": null
+  }
+}
