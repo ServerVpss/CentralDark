@@ -102,10 +102,12 @@ info "chave de deploy: $([[ -f "$SSH_KEY" ]] && echo "presente" || echo "ausente
 
 # ─── TLC23 / Universal Method: validar o SHA alvo antes de mutação ──────
 log "=== TLC23 / UNIVERSAL PRE-FLIGHT ==="
-GATE_TMP="$(mktemp -d /tmp/centraldark-tlc23-deploy.XXXXXX)"
+GATE_ROOT="$(mktemp -d /tmp/centraldark-tlc23-deploy.XXXXXX)"
+GATE_TMP="$GATE_ROOT/worktree"
+CONTRACT_RECEIPT="$GATE_ROOT/repo-contract.txt"
 cleanup_gate_tmp() {
   git worktree remove --force "$GATE_TMP" >/dev/null 2>&1 || true
-  rm -rf "$GATE_TMP" >/dev/null 2>&1 || true
+  rm -rf "$GATE_ROOT" >/dev/null 2>&1 || true
 }
 trap cleanup_gate_tmp EXIT
 
@@ -117,12 +119,11 @@ git worktree add --detach "$GATE_TMP" "$ALVO" --quiet \
   cd "$GATE_TMP"
   test "$(git rev-parse HEAD)" = "$ALVO"
   python3 scripts/trigger-fabric/centraldark_master_cycle.py --self-test
-  python3 scripts/trigger-fabric/verify_repo_contract.py . | tee /tmp/centraldark-deploy-contract-$$.txt
-  grep -q '^REPO_CONTRACT_VERIFY=PASS$' /tmp/centraldark-deploy-contract-$$.txt
+  python3 scripts/trigger-fabric/verify_repo_contract.py . | tee "$CONTRACT_RECEIPT"
+  grep -q '^REPO_CONTRACT_VERIFY=PASS$' "$CONTRACT_RECEIPT"
   node apps/modulos/HERMES-CORE/core/universal-method-contract.mjs --self-test
   python3 scripts/lupa/validar_autolupa_hash.py
   python3 .agents/skills/meta-lupa/scripts/horn_caracol_gate.py --self-test
-  rm -f /tmp/centraldark-deploy-contract-$$.txt
 ) || die "SHA alvo falhou Master/Universal/Meta-Lupa/Horn" 16
 
 # Os fatos abaixo só são materializados depois das medições acima.
@@ -130,7 +131,7 @@ git worktree add --detach "$GATE_TMP" "$ALVO" --quiet \
 [[ "$SUJOS_ALL" -eq 0 ]] || die "TLC23 bloqueou worktree suja" 16
 [[ "$AFRENTE" -eq 0 ]] || die "TLC23 bloqueou histórico local à frente; reconciliar antes" 16
 
-cat >"$GATE_TMP/tlc23-deploy-facts.json" <<'JSON'
+cat >"$GATE_ROOT/tlc23-deploy-facts.json" <<'JSON'
 {
   "centraldark_gate": {
     "acordar_done": true,
@@ -147,7 +148,7 @@ cat >"$GATE_TMP/tlc23-deploy-facts.json" <<'JSON'
 JSON
 (
   cd "$GATE_TMP"
-  python3 .agents/skills/meta-lupa/scripts/horn_caracol_gate.py --facts-file "$GATE_TMP/tlc23-deploy-facts.json"
+  python3 .agents/skills/meta-lupa/scripts/horn_caracol_gate.py --facts-file "$GATE_ROOT/tlc23-deploy-facts.json"
 ) || die "HORN_CARACOL_DEPLOY_GATE=BLOCK" 16
 log "TLC23_TARGET_SHA=$ALVO"
 log "UNIVERSAL_METHOD_TARGET=PASS"
