@@ -1,9 +1,9 @@
 # 👑🪬 Receipt — História ↔ Dream Review ↔ Obsidian ↔ Hermes
 
-Data: 2026-09-16  
-PR: `#1549`  
-Branch: `cristal/persistent-operational-regime-20260915`  
-Owner de memória: `scripts/memory-linker/`  
+Data: 2026-09-16
+PR: `#1549`
+Branch: `cristal/persistent-operational-regime-20260915`
+Owner de memória: `scripts/memory-linker/`
 HEAD antes deste receipt: `d44ca35abad9401398ee1001b2eec78d0b99e9f8`
 
 ## Intenção

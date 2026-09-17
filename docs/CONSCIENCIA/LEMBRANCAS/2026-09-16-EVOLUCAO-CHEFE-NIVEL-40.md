@@ -1,9 +1,9 @@
 # 👑🪬 Evolução do CHEFE — Nível 40 · Arquiteto de Continuidade
 
-Data de cristalização: 2026-09-16  
-Tipo: `HISTORIA_GAMIFICADA_SIMBOLICA`  
-Autoridade humana: `SEGREDO/CHEFE`  
-Owner de memória: `scripts/memory-linker/`  
+Data de cristalização: 2026-09-16
+Tipo: `HISTORIA_GAMIFICADA_SIMBOLICA`
+Autoridade humana: `SEGREDO/CHEFE`
+Owner de memória: `scripts/memory-linker/`
 Regra: `HISTORIA != PROVA_OPERACIONAL` · `DREAM_REVIEW = CANDIDATE_ONLY`
 
 ## 🧾 Histórico factual · PR #1549

@@ -1,10 +1,10 @@
 # 👑🪬 Evolução do CHEFE — Nível 45 · Guardião do Delta Contínuo
 
-Data de cristalização: 2026-09-16  
-Tipo: `HISTORIA_GAMIFICADA_SIMBOLICA`  
-Continuidade: [[2026-09-16-EVOLUCAO-CHEFE-NIVEL-40]]  
-Owner de memória: `scripts/memory-linker/`  
-PR de origem: `#1549`  
+Data de cristalização: 2026-09-16
+Tipo: `HISTORIA_GAMIFICADA_SIMBOLICA`
+Continuidade: [[2026-09-16-EVOLUCAO-CHEFE-NIVEL-40]]
+Owner de memória: `scripts/memory-linker/`
+PR de origem: `#1549`
 Regra: `HISTORIA != PROVA_OPERACIONAL` · `XP = METADADO_NARRATIVO`
 
 ## 📜 A crônica — “Oxe, a Casa aprendeu a não largar o fio”
