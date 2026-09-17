@@ -12,6 +12,7 @@ purpose: >-
 canonical_references:
   - LEIA-ME-IA.md
   - AGENTS.md
+  - .agents/skills/universal-method-contract/SKILL.md
   - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml
   - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml
   - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
@@ -23,6 +24,102 @@ canonical_references:
   - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/GROK-BUILD-ADAPTER.yml
   - docs/BRAIN/01-CONCEITOS/02-BANDA/BANDA_COMPASSO_GLOBAL.json
   - docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md
+
+law_order_1:
+  name: NO_LATERAL_ROUTE
+  global_mandatory: true
+  no_lateral_route: true
+  uni_directional_requires_gate: true
+  bi_directional_requires_gate: true
+  return_path_requires_gate: true
+  entry_requires_gate: true
+  exit_requires_gate: true
+  silent_reroute: false
+  engine_specific_bypass: false
+  provider_specific_bypass: false
+  runtime_specific_bypass: false
+  direct_main_write_bypass: false
+  gate_failure_must_diagnose_same_route: true
+  gate_failure_may_switch_owner_to_escape: false
+  gate_failure_may_switch_provider_to_escape: false
+  gate_failure_may_switch_host_to_escape: false
+
+mandatory_skill:
+  path: .agents/skills/universal-method-contract/SKILL.md
+  runtime_gate: .agents/skills/universal-method-contract/scripts/gate.mjs
+  authority_class: MANDATORY_CONTRACT_ADAPTER
+  creates_owner: false
+  creates_parallel_brain: false
+  owner_remains: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
+  validator_remains: apps/modulos/HERMES-CORE/core/universal-method-contract.mjs
+  self_test: "node .agents/skills/universal-method-contract/scripts/gate.mjs --self-test"
+  entry_gate_required_for_mutation: true
+  exit_gate_required_after_mutation: true
+  pass_exit_code_only_is_insufficient: true
+  verdict_and_trace_id_required: true
+
+consolidated_lock:
+  default_after_fixed_point: LOCKED
+  lock_key: OBJECT_ID+OWNER+HEAD_OR_ARTIFACT_HASH+DEPENDENCY_FINGERPRINT
+  reopen_requires_new_material_evidence: true
+  allowed_reopen_reasons:
+    - SAME_OBJECT_PROVEN_IMPROVEMENT
+    - SAME_OWNER_DOMAIN_EXPANSION
+  forbidden_reopen_reasons:
+    - PARALLEL_REINVENTION
+    - V2_V3_COPY_BACKUP
+    - OWNER_DRIFT
+    - COSMETIC_REWRITE_WITHOUT_DELTA
+    - SAME_FAILURE_WITHOUT_NEW_INFORMATION
+  same_object_identity_required: true
+  same_owner_required_for_domain_expansion: true
+  no_new_information: NO_CHANGE_KEEP_LOCK
+
+failure_diagnosis:
+  bypass_on_block: FORBIDDEN
+  canonical_route:
+    - CENTRALDARK
+    - ACORDAR
+    - CALIBRAR
+    - MULTIBUSSOLA
+    - META_LUPA
+    - LOCATE_FAILED_PREMISE
+    - LOCATE_EXISTING_OWNER
+    - MEASURE_LOG_RUNTIME_SOURCE
+    - APPLY_MINIMUM_CAUSAL_DELTA
+    - TESTE
+    - CONTRAPROVA
+    - REMEASURE
+  evidence_dimensions:
+    - OBSERVED_AT_UTC
+    - TRACE_ID
+    - LOG_REFS
+    - BYTE_SIZE
+    - SHA256
+    - MAIN_SHA
+    - TARGET_SHA
+    - HEAD_OR_ARTIFACT_HASH
+    - DEPENDENCY_FINGERPRINT
+    - RUNTIME_FINGERPRINT
+
+pombo_transport:
+  papagaio_mode: OFF
+  pombo_mode: CHECKSUM_ON
+  pombo64_plus: BASE64URL_SANITIZED_EVIDENCE_ENVELOPE_PLUS_PLAINTEXT_SHA256
+  pombo64_plus_is_proof: false
+  base64_is_security: false
+  checksum_mismatch: BLOCK
+  secrets_in_payload: FORBIDDEN
+
+menos_e_mais:
+  formula: ESSENCE_PLUS_CLARITY_PLUS_CAPABILITY_PLUS_SAFETY_PLUS_PROOF_MINUS_EXCESS
+  same_fingerprint_reuses_valid_proof: true
+  no_delta_no_tool_replay: true
+  no_delta_no_gate_replay: true
+  no_delta_no_renarration: true
+  one_causal_blocker: true
+  existing_owner_first: true
+  minimum_blast_radius: true
 
 universal_chain:
   - CENTRALDARK
@@ -65,6 +162,9 @@ execution_semantics:
   reuse_before_create: true
   one_system_only: true
   one_writer_per_scope: true
+  no_lateral_route: true
+  entry_and_exit_are_gated: true
+  consolidated_state_is_locked_by_default: true
   model_identity_is_provenance_only: true
   model_identity_must_not_block_scope: true
   parallel_perception: true
@@ -175,6 +275,8 @@ engine_contract:
   engine_specific_capability_may_extend_execution: true
   engine_specific_capability_may_bypass_contract: false
   universal_method_must_survive_provider_switch: true
+  mandatory_skill_must_survive_provider_switch: true
+  no_lateral_route_must_survive_provider_switch: true
   semantic_green_gate_must_survive_provider_switch: true
   pegatudo_and_stitch_must_survive_provider_switch: true
 
@@ -200,6 +302,8 @@ skin_contract:
     - SEMANTIC_GREEN_RULE
     - FIXED_POINT_RULE
     - NO_DIRECT_MAIN_WRITE
+    - NO_LATERAL_ROUTE
+    - CONSOLIDATED_LOCK
   pressure_continuity: true
   abusive_or_degrading_language_is_not_required_by_skin: true
 
@@ -209,6 +313,9 @@ operational_trace:
   private_chain_of_thought_must_not_be_exposed: true
   show_operational_chain_on_explicit_centraldark: true
   show_phase_evidence_and_next_cursor_when_material: true
+  required_material_fields: [OBSERVED_AT_UTC, TRACE_ID, BYTE_SIZE, SHA256, HEAD_OR_ARTIFACT_HASH, DEPENDENCY_FINGERPRINT]
+  pombo_mode: CHECKSUM_ON
+  pombo64_plus_is_transport_only: true
   aureola_reference: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml
   bible_reference_is_semantic_cue_not_software_proof: true
   stitch_event_marker: "🪡"
@@ -216,15 +323,22 @@ operational_trace:
 hermes_binding:
   runtime_owner: apps/modulos/HERMES-CORE/
   universal_validator: apps/modulos/HERMES-CORE/core/universal-method-contract.mjs
+  mandatory_skill: .agents/skills/universal-method-contract/SKILL.md
+  mandatory_runtime_gate: .agents/skills/universal-method-contract/scripts/gate.mjs
   semantic_validator: apps/modulos/HERMES-CORE/core/semantic-green-gate.mjs
   grok_build_adapter: apps/modulos/HERMES-CORE/core/grok-build-adapter.mjs
   note_scanner: scripts/trigger-fabric/stitch_all_notes.py
   history_scanner: scripts/trigger-fabric/pegatudo_history.py
   self_test: "node apps/modulos/HERMES-CORE/core/universal-method-contract.mjs --self-test"
+  mandatory_skill_self_test: "node .agents/skills/universal-method-contract/scripts/gate.mjs --self-test"
   grok_build_self_test: "node apps/modulos/HERMES-CORE/core/grok-build-adapter.mjs --self-test"
   fail_closed_on_missing_contract: true
+  fail_closed_on_missing_mandatory_skill: true
   validates_engine_registry: true
   validates_canonical_chain: true
+  validates_no_lateral_route: true
+  validates_consolidated_lock: true
+  validates_pombo_checksum_transport: true
   validates_skin_boundary: true
   validates_semantic_green: true
   validates_note_stitching: true
@@ -236,6 +350,8 @@ future_engine_gate:
   registry: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml
   new_engine_without_trigger_fabric_inheritance: FAIL
   new_engine_without_universal_method_visibility: FAIL
+  new_engine_without_mandatory_skill_visibility: FAIL
+  new_engine_with_lateral_route: FAIL
   new_engine_without_semantic_green_gate: FAIL
   new_engine_without_pegatudo_stitch_visibility: FAIL
   new_engine_without_scope_temperature_visibility: FAIL
@@ -246,6 +362,7 @@ promotion:
   prose_only: NOT_FUNCTIONAL
   file_exists_only: NOT_FUNCTIONAL
   hermes_self_test_required: true
+  mandatory_skill_self_test_required: true
   grok_build_self_test_required: true
   semantic_negative_counterproof_required: true
   note_stitch_self_test_required: true
