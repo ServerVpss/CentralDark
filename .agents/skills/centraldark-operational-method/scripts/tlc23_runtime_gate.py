@@ -5,6 +5,7 @@ Fail-closed rules:
 - PLAN != EXECUTION
 - ACTION != PROOF
 - UNKNOWN != PASS
+- NO_NEW_INFORMATION -> NO_CHANGE -> NEXT
 - PASS requires action + post-probe + counterproof + fixed point on the same target.
 """
 
@@ -120,6 +121,28 @@ def evaluate(receipt: dict, source: dict | None = None, runtime: dict | None = N
     repeated_plan = any(phrase in narrative for phrase in PLAN_PHRASES)
     action_executed = receipt.get("action_executed") is True
 
+    previous_state_hash = receipt.get("previous_state_hash")
+    current_state_hash = receipt.get("current_state_hash")
+    same_state_hash = bool(
+        previous_state_hash
+        and current_state_hash
+        and previous_state_hash == current_state_hash
+    )
+    no_new_information = receipt.get("new_material_information") is False
+
+    if no_new_information or same_state_hash:
+        return {
+            "mode": "MISSION_GATE",
+            "verdict": "NO_CHANGE",
+            "reason": (
+                "NO_NEW_MATERIAL_INFORMATION"
+                if no_new_information
+                else "SAME_STATE_HASH_WITHOUT_DELTA"
+            ),
+            "binding": binding,
+            "law": "NO_NEW_INFORMATION -> NO_CHANGE -> KEEP_GOAL -> KEEP_NEXT_CURSOR -> NEXT",
+        }
+
     if repeated_plan and not action_executed:
         return {
             "mode": "MISSION_GATE",
@@ -183,7 +206,13 @@ def self_test() -> dict:
     assert evaluate(loop, source, runtime)["verdict"] == "BLOCKED"
     missing_runtime = dict(runtime, hermes_runtime_fingerprint=None)
     assert binding_check(source, missing_runtime)["verdict"] == "UNKNOWN"
-    return {"status": "PASS", "tests": 5}
+    no_delta = dict(good, new_material_information=False)
+    assert evaluate(no_delta, source, runtime)["verdict"] == "NO_CHANGE"
+    same_state = dict(good, previous_state_hash="state-1", current_state_hash="state-1")
+    assert evaluate(same_state, source, runtime)["verdict"] == "NO_CHANGE"
+    changed_state = dict(good, previous_state_hash="state-1", current_state_hash="state-2")
+    assert evaluate(changed_state, source, runtime)["verdict"] == "PASS"
+    return {"status": "PASS", "tests": 8}
 
 
 def load_receipt(path: str) -> dict:
@@ -209,7 +238,7 @@ def main() -> int:
         code = 0 if out["verdict"] == "PASS" else 2
     else:
         out = evaluate(load_receipt(args.receipt))
-        code = 0 if out["verdict"] == "PASS" else 2
+        code = 0 if out["verdict"] in {"PASS", "NO_CHANGE"} else 2
 
     print(json.dumps(out, ensure_ascii=False, indent=2))
     return code
