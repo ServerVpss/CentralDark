@@ -5,6 +5,7 @@ set -Eeuo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DISPATCHER="$SCRIPT_DIR/deploy-guards-dispatcher.sh"
 OPERATIONAL="$SCRIPT_DIR/deploy-operational-guards.sh"
+WORKFLOW="$SCRIPT_DIR/../../.github/workflows/vps-exec-selfhosted.yml"
 README="$SCRIPT_DIR/README.md"
 
 PASS=0
@@ -81,6 +82,23 @@ if grep -q 'SSH_KEY' "$DISPATCHER" \
   pass "guard SSH_KEY preservado"
 else
   fail "guard SSH_KEY ausente/regredido"
+fi
+
+log "=== 9. Deploy MCP passa pelo gate antes da primeira mutação PM2 ==="
+mcp_gate_line="$(grep -nF 'bash "$MCP_GATE_SCRIPT" --gate-only' "$WORKFLOW" | head -n1 | cut -d: -f1 || true)"
+pm2_stop_line="$(grep -nF 'pm2 stop "$WEBHOOK_APP"' "$WORKFLOW" | head -n1 | cut -d: -f1 || true)"
+if [[ -n "$mcp_gate_line" && -n "$pm2_stop_line" && "$mcp_gate_line" -lt "$pm2_stop_line" ]]; then
+  pass "MCP não alcança mutação PM2 antes do TLC23 gate"
+else
+  fail "rota MCP ainda pode alcançar PM2 antes do gate"
+fi
+
+log "=== 10. Housekeeping não compete com os deploys ==="
+if grep -qF 'needs: [deploy-mcp, deploy-operational-guards]' "$WORKFLOW" \
+  && grep -qF "if: always() && github.repository == 'ServerVpss/CentralDark'" "$WORKFLOW"; then
+  pass "housekeeping fica depois dos dois jobs críticos"
+else
+  fail "housekeeping ainda pode disputar a pista antes dos deploys"
 fi
 
 TOTAL=$((PASS + FAIL))
