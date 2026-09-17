@@ -101,8 +101,6 @@ function Invoke-CentralDarkOAuth {
 }
 function Reconnect-Remote {
     if (-not (Confirm-Critical "Reconectar Remote")) { return }
-    if (-not (Invoke-CentralDarkOAuth)) { return }
-
     $existing = Get-CimInstance Win32_Process -ErrorAction SilentlyContinue |
         Where-Object {
             $_.CommandLine -match 'desktop-commander' -and
@@ -110,10 +108,13 @@ function Reconnect-Remote {
         }
 
     if ($existing) {
-        Write-Host "Remote já possui processo ativo. Não foi criado concorrente."
+        Write-Host "Remote já possui processo ativo. Sessão preservada; OAuth não foi reaberto."
+        Write-Host "REMOTE_AUTH=PRESERVED"
         Write-Host "ONE_REMOTE_PROCESS_PER_PROFILE=true"
         return
     }
+
+    if (-not (Invoke-CentralDarkOAuth)) { return }
 
     $npx = (Get-Command npx.cmd -ErrorAction SilentlyContinue).Source
     if (-not $npx) { $npx = (Get-Command npx -ErrorAction SilentlyContinue).Source }
