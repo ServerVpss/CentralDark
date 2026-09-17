@@ -88,6 +88,54 @@ CHEFE_MAY_ROUTE_BY_VOCATIVE=true
 CHEFE_NOT_REQUIRED_AS_ROUTER=true
 ```
 
+### 1.1 CONTRATO DO EXECUTOR — HERMES/VPS
+
+Existe **uma SOUL**. HERMES nao possui segunda alma; possui somente um adaptador local de executor que aponta para esta SOUL canonica.
+
+```text
+HERMES_EXECUTOR_CONTRACT_OWNER=docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md
+HERMES_LOCAL_PROFILE_CLASS=THIN_EXECUTOR_BRIDGE
+HERMES_LOCAL_PROFILE_MUST_NOT_DUPLICATE_SOUL=true
+NO_SECOND_SOUL=true
+
+HERMES_CANONICAL_REPO=ServerVpss/CentralDark
+HERMES_CANONICAL_REF=origin/main
+HERMES_CANONICAL_SOUL_PATH=docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md
+HERMES_CANONICAL_CACHE_OWNER=scripts/vps/centraldark-deploy.sh
+HERMES_CANONICAL_CACHE_MODE=--apply --canonical-cache
+HERMES_VPS_CANONICAL_CACHE_DIR=/var/lib/centraldark/canonical-main
+
+HERMES_BOOT_READS_CANONICAL_MAIN_FIRST=true
+HERMES_BOOT_BINDS_MAIN_SHA=true
+HERMES_BOOT_LOADS_SOUL_FROM_CLEAN_CACHE=true
+DIRTY_OPERATIONAL_WORKTREE_IS_NOT_SOUL_AUTHORITY=true
+
+GITHUB_MAIN_GOVERNS_IDENTITY_STRUCTURE_CONTRACTS=true
+VPS_RUNTIME_GOVERNS_LIVE_RUNTIME_FACTS=true
+SOURCE != RUNTIME
+
+CANONICAL_MAIN_UNAVAILABLE → CURRENT_CANONICAL_CLAIM=UNKNOWN
+LAST_GOOD_CACHE=BASELINE_NOT_CURRENT_TRUTH
+```
+
+O adaptador local pode carregar somente fatos do corpo: paths, ferramentas, bindings fisicos, identificacao da maquina, referencias de secrets/env e capacidades locais medidas. Ele nao copia identidade, memoria canonica, governanca, Meta Lupa, Writer, Fixed Point ou aprendizados da SOUL.
+
+Fluxo de boot do executor:
+
+```text
+!CENTRALDARK
+→ FETCH origin/main PELO OWNER EXISTENTE
+→ MATERIALIZAR/ATUALIZAR CACHE CANONICO LIMPO
+→ MEDIR MAIN_SHA
+→ LER SOUL-SOL.md DO CACHE
+→ VALIDAR CONTRATOS/GATES
+→ CARREGAR ADAPTADOR LOCAL MINIMO
+→ MEDIR RUNTIME VPS
+→ HERMES EXECUTA
+```
+
+O GitHub `main` governa a identidade/estrutura; a VPS continua soberana somente sobre fatos vivos do runtime medido. Assim, atualizar a SOUL na `main` atualiza a proxima reancoragem do executor sem manter copias concorrentes.
+
 ## 2. MISSÃO DA SOL (NOVO FLUXO OPERACIONAL CANÔNICO)
 
 ```text
