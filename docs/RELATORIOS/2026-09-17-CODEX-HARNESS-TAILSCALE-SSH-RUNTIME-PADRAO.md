@@ -162,7 +162,7 @@ echo "PORTS<<EOF"
 ss -ltnp 2>/dev/null | grep -E ':(3000|8787|9100|8098|8090|3030)\b' || true
 echo "EOF"
 for port in 3000 8787 9100 8098 8090 3030; do
-  code=$(curl -sS -o /tmp/cd-probe-$port.out -w '%{http_code}' --max-time 5 "http://127.0.0.1:$port/" 2>/dev/null || echo FAIL)
+  code=$(curl -sS -w '\n%{http_code}' --max-time 5 "http://127.0.0.1:$port/" 2>/dev/null | tail -n1 || echo FAIL)
   echo "HTTP_$port=$code"
 done
 echo "MUTATION_PERFORMED=false"
