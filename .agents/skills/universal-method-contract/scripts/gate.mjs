@@ -66,6 +66,9 @@ function parseArgs(argv) {
     else if (arg === '--next-cursor') out.nextCursor = argv[++i];
     else if (arg === '--log') out.logs.push(argv[++i]);
     else if (arg === '--receipt-dir') out.receiptDir = argv[++i];
+    else if (arg === '--operating-mode') out.operatingMode = argv[++i];
+    else if (arg === '--authority') out.authority = argv[++i];
+    else if (arg === '--authorization-source') out.authorizationSource = argv[++i];
     else throw new Error(`UNKNOWN_ARGUMENT:${arg}`);
   }
   return out;
@@ -137,6 +140,16 @@ function buildReceipt(args, validator, verdict, reason, lock) {
   const phase = String(args.phase || 'DIAGNOSE').toUpperCase();
   const direction = String(args.direction || 'UNKNOWN').toUpperCase();
   const now = new Date().toISOString();
+  const operatingMode = String(
+    args.operatingMode || process.env.CENTRALDARK_OPERATING_MODE || 'STANDARD'
+  ).toUpperCase();
+  const authorityModeRaw = args.authority || process.env.CENTRALDARK_AUTHORITY_MODE || '';
+  const authorityMode = String(authorityModeRaw).trim().toUpperCase() || null;
+  const authorizationSource = args.authorizationSource || process.env.CENTRALDARK_AUTHORITY_SOURCE || null;
+  const inheritedPreprodAuthority = (
+    operatingMode === 'PRIVATE_PREPROD'
+    && authorityMode === 'PERMITO-SEGREDO'
+  );
   const head = gitRevParse('HEAD');
   const main = gitRevParse('refs/remotes/origin/main', 'refs/heads/main');
   const validatorMeta = fileMeta(path.relative(ROOT, VALIDATOR));
@@ -168,6 +181,17 @@ function buildReceipt(args, validator, verdict, reason, lock) {
     observed_at_utc: now,
     trace_id: traceId,
     law_order_1: 'NO_LATERAL_ROUTE',
+    operating_mode: operatingMode,
+    authority_mode: authorityMode,
+    authorization_source: authorizationSource,
+    inherited_preprod_authority: inheritedPreprodAuthority,
+    per_step_reask_required: !inheritedPreprodAuthority,
+    action_policy: inheritedPreprodAuthority ? 'EXECUTE_MEASURE_PROVE' : 'STANDARD_GATE_POLICY',
+    security_hardening_policy: operatingMode === 'PRIVATE_PREPROD'
+      ? 'CAUSAL_OR_REAL_EXPOSURE_ONLY'
+      : 'STANDARD',
+    secret_use_surface: 'LOCAL_AUTHENTICATED_RUNTIME_TTY_ENV_OR_SECRET_STORE',
+    secret_republication: 'FORBIDDEN',
     phase,
     direction,
     object_id: args.objectId || null,
@@ -239,6 +263,8 @@ function selfTest() {
     no_lateral_route: true,
     consolidated_lock: true,
     pombo_mode: 'CHECKSUM_ON',
+    private_preprod_action_mode: true,
+    permito_segredo_is_mission_scoped_not_per_step: true,
   };
 }
 
