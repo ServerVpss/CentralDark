@@ -121,6 +121,24 @@ menos_e_mais:
   existing_owner_first: true
   minimum_blast_radius: true
 
+preproduction_execution_mode:
+  mode: PRIVATE_PREPROD
+  authority_marker: "👑 PERMITO-SEGREDO"
+  authorization_scope: SAME_MISSION_SAME_TARGET_UNTIL_FIXED_POINT_OR_EXPLICIT_REVOCATION
+  per_step_reask_within_authorized_scope: false
+  action_first_when_gate_passes: true
+  plan_only_when_authorized_action_is_available: FORBIDDEN
+  reversible_build_test_measure_fix: EXECUTE_WITHOUT_REASK
+  coordinator_guard_role: ADVISE_ROUTE_COUNTERPROVE_NOT_STALL
+  real_block_requires_measured_cause: true
+  security_hardening_by_ceremony: FORBIDDEN
+  security_hardening_when_causal_to_failure: REQUIRED_WHEN_MATERIAL
+  security_hardening_when_real_exposure_boundary: REQUIRED_WHEN_MATERIAL
+  secret_use_surface: LOCAL_AUTHENTICATED_RUNTIME_TTY_ENV_OR_SECRET_STORE
+  secret_republication: FORBIDDEN
+  public_site_does_not_authorize_secret_or_runtime_exposure: true
+  destructive_irreversible_or_new_target_requires_current_literal_authority: true
+
 universal_chain:
   - CENTRALDARK
   - TLC23_OPEN
