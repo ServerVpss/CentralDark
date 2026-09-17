@@ -26,6 +26,16 @@ bindings:
   soul_tlc23_binding: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-TLC23-RUNTIME-BINDING.yml
   operational_skill: .agents/skills/centraldark-operational-method/SKILL.md
   runtime_gate: .agents/skills/centraldark-operational-method/scripts/tlc23_runtime_gate.py
+  mission_profile: docs/ARQUITETURA/CENTRALDARK-INSTINTO-SUPERIOR-OS/AGENTE-PREMIUM-TLC23.md
+
+profile_boundary:
+  authority_class: MISSION_PROFILE
+  authority_own: false
+  house_policy_over_profile_policy: true
+  inherits_canonical_hermes: true
+  inherits_tlc23: true
+  may_override_canonical: false
+  may_create_parallel_owner: false
 
 required_facts:
   - TLC23_SOURCE_IDENTITY_PROVED
@@ -49,6 +59,9 @@ invariants:
   SERVICE_ACTIVE_IS_DEVICE_READY: false
   SAME_TARGET_REQUIRED: true
   SAME_HEAD_OR_RUNTIME_FINGERPRINT_REQUIRED: true
+  TLC23_CHECK_ALWAYS: true
+  FULL_CHAIN_EVERY_STEP: false
+  ONLY_MATERIALLY_APPLICABLE_GATES_EXECUTE: true
 
 pass_requires:
   - source_identity_proved
@@ -64,6 +77,14 @@ pass_requires:
   - fixed_point_reached
 
 anti_loop:
+  tlc23_check: ALWAYS
+  full_tlc23_chain: MATERIAL_APPLICABILITY_ONLY
+  no_new_information:
+    verdict: NO_CHANGE
+    action: REUSE_LAST_VALID_GATE_KEEP_GOAL_AND_NEXT_CURSOR
+  same_state_hash_without_delta:
+    verdict: NO_CHANGE
+    action: DROP_DUPLICATE_NARRATION_AND_TOOL_REPLAY
   repeated_plan_without_new_evidence:
     verdict: BLOCKED
     action: EXECUTE_AUTHORIZED_MEASUREMENT_OR_RETURN_EXACT_BLOCKER
@@ -79,6 +100,7 @@ fixed_point:
   close_when: NO_NEW_MATERIAL_FACTS_AND_REQUIRED_FACTS_PROVED
   contradiction: INVALIDATE_DEPENDENT_CONE_AND_REDERIVE
   unknown: KEEP_VISIBLE_AND_BLOCK_ONLY_DEPENDENT_CLAIM
+  no_change: KEEP_MISSION_AND_NEXT_CURSOR_WITHOUT_RENARRATION
 
 receipt:
   required:
