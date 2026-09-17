@@ -5,7 +5,7 @@
 **MODO:** gancho semântico. Este kit não cria engine, owner, router, skill principal ou arquitetura paralela.
 
 ```text
-!CENTRALDARK
+👑🪬 !CENTRALDARK
 → 🧿 META-LUPA enxerga
 → 🔥 META-GRILL acha a ferida
 → 💭 META-COGNIÇÃO organiza o pensamento
@@ -13,16 +13,84 @@
 → 🔗 META-START-LINK preserva direção e próximo cursor
 ```
 
-## 🧠 Corpo conceitual
+## 🧠 Corpo conceitual completo
 
 ```text
-🧿 META-LUPA/                         OWNER · CÉREBRO-CENTRAL
-├── 🔥 META-GRILL/                    EXAME PROFUNDO
-├── 💭 META-COGNIÇÃO/                 MENTE OBSERVADORA
-├── 🎼 META-ORQUESTRAÇÃO/             SISTEMA NERVOSO
-├── 🔗 META-START-LINK/               CONEXÃO NERVOSA
-└── 🔗 INTERLIGADOS/                  COSTURA MENTAL + OPERACIONAL
+🧿 META-LUPA/
+🧠 CÉREBRO-CENTRAL · OWNER
+"Enxerga, interpreta, governa e mantém o corpo coerente."
+
+META-LUPA/
+│
+├── 🔥 META-GRILL/
+│   └── 🔬 EXAME PROFUNDO
+│       FERIDA → HIPÓTESES → 10 LENTES → CONTRAPROVA → CAUSA → DELTA ÚTIL
+│
+├── 💭 META-COGNIÇÃO/
+│   └── 🧠 MENTE OBSERVADORA
+│       CONTEXTO → ÂNCORAS → PADRÕES → INCERTEZA → DECISÃO → APRENDIZADO
+│
+├── 🎼 META-ORQUESTRAÇÃO/
+│   └── 🫀 SISTEMA NERVOSO
+│       INTENÇÃO → OWNER → AGENTE → ORDEM → EXECUÇÃO → RESULTADO
+│
+├── 🔗 META-START-LINK/
+│   └── ⚡ CONEXÃO NERVOSA
+│       POSIÇÃO → DIREÇÃO → PROVENIÊNCIA → DELTA → CONFIANÇA → CURSOR
+│
+├── 🛡️ GUARDRAILS/
+│   └── 🦠 SISTEMA IMUNOLÓGICO
+│       LIMITE → DETECÇÃO → BLOQUEIO → PROTEÇÃO → RECUPERAÇÃO
+│
+├── 🧾 RECEIPTS/
+│   └── 🩻 PRONTUÁRIO
+│       AÇÃO → PROVA → SHA → RESULTADO → ESTADO
+│
+├── 📚 LEDGER/
+│   └── 🧬 MEMÓRIA CLÍNICA
+│       HISTÓRICO → PROVENIÊNCIA → DELTAS → CONTINUIDADE
+│
+├── 🏷️ CLAIM-SEALS/
+│   └── ✅ SELO DE VALIDAÇÃO
+│       CLAIM → PROVA → ESCOPO → STATUS
+│
+├── 🤖 AGENTS/
+│   └── 🦾 ÓRGÃOS EXECUTORES
+│       MISSÃO → FERRAMENTA → AÇÃO → RECEIPT
+│
+└── 🔗 INTERLIGADOS/
+    └── 🪢 COSTURA MENTAL + OPERACIONAL
+        SINAL → GANCHO → OWNER → CAPACIDADE → PROVA → CURSOR
 ```
+
+## 🪬 Âncoras mentais
+
+```text
+🧠 CÉREBRO-CENTRAL (META-LUPA) → pensa o corpo.
+🔥 EXAME PROFUNDO (META-GRILL) → encontra onde dói.
+💭 MENTE OBSERVADORA (META-COGNIÇÃO) → observa como o corpo decide.
+🎼 SISTEMA NERVOSO (META-ORQUESTRAÇÃO) → manda o sinal certo.
+🔗 CONEXÃO NERVOSA (META-START-LINK) → não deixa o contexto se perder.
+🛡️ SISTEMA IMUNOLÓGICO (GUARDRAILS) → impede ação fora do limite.
+🧾 PRONTUÁRIO (RECEIPTS) → registra o que realmente aconteceu.
+📚 MEMÓRIA CLÍNICA (LEDGER) → preserva o histórico com proveniência.
+🏷️ SELO DE VALIDAÇÃO (CLAIM-SEALS) → marca o que está comprovado.
+🤖 ÓRGÃOS EXECUTORES (AGENTS) → fazem a ação específica.
+🪬 RESULTADO → um corpo só, várias funções, um OWNER.
+```
+
+## 🧩 Herança real sem duplicação
+
+O desenho acima é uma **camada visual/semântica** sobre capacidades já existentes. Não cria diretórios executores paralelos só para combinar com a metáfora.
+
+```text
+GUARDRAILS → herda `.agents/skills/meta-lupa/guardrails/`
+AGENTS     → herda `.agents/skills/meta-lupa/agents/`
+META-LUPA  → herda `.agents/skills/meta-lupa/SKILL.md`
+RECEIPTS / LEDGER / CLAIM-SEALS → resolvem para os owners e registros canônicos já existentes quando aplicáveis
+```
+
+Se uma capacidade não tiver owner físico próprio comprovado, permanece **gancho semântico** até reconciliação. `GANCHO != NOVO OWNER`.
 
 ## 🔗 !># INTERLIGADOS
 
@@ -100,4 +168,5 @@ RESPONSE_FORMAT_LOCKED=true
 EMOJI_REQUIRED=true
 PROOF_FOOTER_ON_MUTATION=true
 CHANGE_REQUIRES_SEGREDO_CHEFE=true
+SEMANTIC_BODY_DOES_NOT_CREATE_PARALLEL_OWNER=true
 ```
