@@ -1,5 +1,7 @@
 # 🏠⚡ RUNTIME · REMEDIR SOMENTE AQUI
 
+> Gatilho canônico: 👑🪬 !CENTRALDARK → 🔗 !># INTERLIGADOS → 🧿 #ACORDAR → 🔎 !META_LUPA → ⚖️ !CONTRAPROVA.
+
 🧠 **GANCHO MENTAL:** O CÓDIGO JÁ FOI COSTURADO; A CASA/VPS SÓ CONFIRMA O QUE É TEMPORAL.
 
 Este arquivo separa o que permanece pendente de **realidade executável** do que já pode morar como padrão estável na `main`.
