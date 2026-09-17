@@ -42,6 +42,26 @@ git fetch --prune origin main
 ORIGIN_SHA="$(git rev-parse origin/main)"
 git merge-base --is-ancestor "$TARGET_SHA" "$ORIGIN_SHA" || { echo "EVENT_SHA_NOT_IN_MAIN"; exit 65; }
 
+# Toda rota de mutação passa primeiro pelo dispatcher canônico do próprio SHA.
+# O modo gate-only não altera checkout/runtime e impede que este script vire
+# uma porta paralela para contornar TLC23/Universal/Meta-Lupa/Horn.
+CANONICAL_GATE_SCRIPT="$(mktemp "$RUNNER_TEMP/centraldark-deploy-gate.XXXXXX")"
+chmod 700 "$CANONICAL_GATE_SCRIPT"
+git show "$TARGET_SHA:scripts/vps/deploy-guards-dispatcher.sh" > "$CANONICAL_GATE_SCRIPT" || {
+  rm -f "$CANONICAL_GATE_SCRIPT"
+  echo "CANONICAL_DEPLOY_GATE_UNAVAILABLE"
+  exit 90
+}
+TARGET_SHA="$TARGET_SHA" REPO_DIR="$REPO_DIR" BRANCH=main \
+  bash "$CANONICAL_GATE_SCRIPT" --gate-only || {
+    rc=$?
+    rm -f "$CANONICAL_GATE_SCRIPT"
+    echo "CANONICAL_TLC23_DEPLOY_GATE=BLOCK"
+    exit "$rc"
+  }
+rm -f "$CANONICAL_GATE_SCRIPT"
+echo "CANONICAL_TLC23_DEPLOY_GATE=PASS"
+
 # Micro-deploy de fonte/policy. Usa o script do SHA do evento, não uma cópia
 # potencialmente velha da VPS. Não reinicia runtime: apenas sincroniza a fonte
 # canônica e prova HEAD/dirty/proof-guards.
