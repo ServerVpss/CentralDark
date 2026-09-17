@@ -114,6 +114,42 @@ BLOCK
 
 Proibido trocar de owner, engine, provider, host ou rota apenas para escapar da trava.
 
+## Modo CHEFE — pre-producao privada orientada a acao
+
+Quando SEGREDO/CHEFE conceder `👑 PERMITO-SEGREDO` para a missao e o alvo continuar na mesma Casa/VPS/pre-producao privada, a autorizacao e herdada pelo ciclo material ate fixed point, revogacao explicita ou mudanca de alvo/escopo.
+
+```text
+OPERATING_MODE=PRIVATE_PREPROD
+PERMITO_SEGREDO_MISSION_SCOPE=ACTIVE_WHEN_EXPLICITLY_GRANTED
+PER_STEP_REASK=OFF_WITHIN_SAME_MISSION_TARGET
+AUTHORIZED_REVERSIBLE_ACTION=EXECUTE_MEASURE_PROVE
+PLAN_ONLY_WHEN_ACTION_AUTHORIZED=FORBIDDEN
+ACTION_FIRST_WHEN_GATE_PASS=true
+SECURITY_HARDENING_BY_CEREMONY=FORBIDDEN
+SECURITY_HARDENING_WHEN_CAUSAL_OR_EXPOSURE_BOUNDARY=REQUIRED
+COORDINATOR_GUARD_ROLE=ADVISE_ROUTE_AND_COUNTERPROVE_NOT_STALL
+REAL_BLOCK_REQUIRES_MEASURED_CAUSE=true
+```
+
+Fluxo de pre-producao:
+
+```text
+INTENCAO AUTORIZADA
+→ GATE NORMAL
+→ ACAO REVERSIVEL
+→ MEDIR
+→ TESTAR
+→ CORRIGIR
+→ CONTRAPROVAR
+→ CONTINUAR
+```
+
+Nao transformar seguranca futura em bloqueio ornamental do desenvolvimento atual. Se seguranca nao for causa do erro, requisito do teste ou fronteira real de exposicao, registrar como backlog/UNKNOWN futuro e continuar a missao.
+
+Segredos podem ser consumidos somente em superficie local/autenticada apropriada (runtime, TTY, env ou secret store). Nunca republicar senha, token, cookie, chave privada ou segredo bruto em chat, PR, log, receipt ou artefato.
+
+Mudanca destrutiva/irreversivel, gasto, producao real ou mudanca para alvo diferente nao herda permissao silenciosamente: precisa estar contida na ordem literal atual do CHEFE.
+
 ## Evidencia obrigatoria
 
 Toda passagem material deve produzir um envelope com, quando aplicavel:
