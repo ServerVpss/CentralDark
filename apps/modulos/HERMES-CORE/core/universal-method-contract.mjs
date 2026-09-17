@@ -184,6 +184,16 @@ export function validateUniversalMethod() {
     'SOL_GUARD_ROLE=COORDINATE_COUNTERPROVE_NOT_STALL',
     'DELTA_UTIL_REQUIRES_DEDUPE_CLASSIFY_PROOF=true',
     'RAW_CHEFE_MATERIAL_IS_NOT_AUTOMATIC_COMMIT=true',
+    'HERMES_EXECUTOR_CONTRACT_OWNER=docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md',
+    'HERMES_LOCAL_PROFILE_CLASS=THIN_EXECUTOR_BRIDGE',
+    'HERMES_LOCAL_PROFILE_MUST_NOT_DUPLICATE_SOUL=true',
+    'NO_SECOND_SOUL=true',
+    'HERMES_CANONICAL_REF=origin/main',
+    'HERMES_CANONICAL_CACHE_OWNER=scripts/vps/centraldark-deploy.sh',
+    'HERMES_BOOT_READS_CANONICAL_MAIN_FIRST=true',
+    'HERMES_BOOT_BINDS_MAIN_SHA=true',
+    'GITHUB_MAIN_GOVERNS_IDENTITY_STRUCTURE_CONTRACTS=true',
+    'VPS_RUNTIME_GOVERNS_LIVE_RUNTIME_FACTS=true',
   ], 'SOUL_SOL');
 
   forbidTokens(soul, [
@@ -274,7 +284,22 @@ export function validateUniversalMethod() {
     'ONE_WRITER_PER_SCOPE=true',
     'REALITY_IS_JUDGE=true',
     'UNKNOWN_SKIPPED_PENDING_ARE_NOT_PASS=true',
+    'HERMES_LOCAL_PROFILE_CLASS=THIN_EXECUTOR_BRIDGE',
+    'HERMES_LOCAL_PROFILE_MUST_NOT_DUPLICATE_SOUL=true',
+    'NO_SECOND_SOUL=true',
+    'CANONICAL_SOURCE_REF=origin/main',
+    'CANONICAL_CACHE_OWNER=scripts/vps/centraldark-deploy.sh',
+    'BOOT_READS_CANONICAL_MAIN_FIRST=true',
+    'BOOT_BINDS_MAIN_SHA=true',
+    'CHEFE_MATERIAL_ENTERS_MILL=true',
+    'DELTA_UTIL_REQUIRES_DEDUPE_CLASSIFY_PROOF=true',
+    'RAW_CHEFE_MATERIAL_IS_NOT_AUTOMATIC_COMMIT=true',
   ], 'HERMES_PROMPT');
+
+  forbidTokens(hermesPrompt, [
+    'INTENCAO_DO_CHEFE_IS_DELTA_UTIL=true',
+    'AGENT_DECIDES_UTILITY=false',
+  ], 'HERMES_PROMPT_LEGACY');
 
   const mandatoryGateSelfTest = runMandatoryGateSelfTest();
   const engines = parseEngineNames(engine);
@@ -299,6 +324,9 @@ export function validateUniversalMethod() {
     pombo64_plus_is_transport_only: true,
     private_preprod_action_mode: true,
     permito_segredo_is_mission_scoped_not_per_step: true,
+    hermes_thin_executor_bridge: true,
+    hermes_boot_reads_origin_main_first: true,
+    no_second_soul: true,
     tlc23_source: FILES.tlc23,
     tlc23_source_sha256: tlc23Hash,
     tlc23_source_gate: 'PASS',
