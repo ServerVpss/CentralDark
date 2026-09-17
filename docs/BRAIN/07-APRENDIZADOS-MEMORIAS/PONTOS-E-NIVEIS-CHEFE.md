@@ -35,13 +35,13 @@ REALIDADE = JUIZ
 ## XP simbólico da fase atual
 
 ```text
-+50   sobreviver ao erro sem esconder o erro
-+100  separar merge de deploy
-+200  separar source de runtime
-+500  recusar UNKNOWN como PASS
-+800  reconhecer padrão recorrente
-+1200 preservar missão entre agentes e checkpoints
-+1600 transformar experiência em memória reutilizável
+XP +50   sobreviver ao erro sem esconder o erro
+XP +100  separar merge de deploy
+XP +200  separar source de runtime
+XP +500  recusar UNKNOWN como PASS
+XP +800  reconhecer padrão recorrente
+XP +1200 preservar missão entre agentes e checkpoints
+XP +1600 transformar experiência em memória reutilizável
 ```
 
 Não somar estes números para decisões operacionais. Eles existem para contar a história e destacar o tipo de aprendizado adquirido.
