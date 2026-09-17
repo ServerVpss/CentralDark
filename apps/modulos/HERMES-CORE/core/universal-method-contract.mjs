@@ -137,6 +137,12 @@ export function validateUniversalMethod() {
     'SAME_OBJECT_PROVEN_IMPROVEMENT',
     'SAME_OWNER_DOMAIN_EXPANSION',
     'mandatory_skill_self_test_required: true',
+    'mode: PRIVATE_PREPROD',
+    'per_step_reask_within_authorized_scope: false',
+    'action_first_when_gate_passes: true',
+    'plan_only_when_authorized_action_is_available: FORBIDDEN',
+    'security_hardening_by_ceremony: FORBIDDEN',
+    'secret_republication: FORBIDDEN',
     'same_method_required_for_new_engine: true',
     'engine_specific_capability_may_bypass_contract: false',
     'skin_is_presentation_adapter: true',
@@ -169,6 +175,12 @@ export function validateUniversalMethod() {
     'SAME_OWNER_DOMAIN_EXPANSION',
     'POMBO_MODE=CHECKSUM_ON',
     'POMBO64_PLUS_IS_PROOF=false',
+    'OPERATING_MODE=PRIVATE_PREPROD',
+    'PERMITO_SEGREDO_MISSION_SCOPE=ACTIVE_WHEN_EXPLICITLY_GRANTED',
+    'PER_STEP_REASK=OFF_WITHIN_SAME_MISSION_TARGET',
+    'ACTION_FIRST_WHEN_GATE_PASS=true',
+    'SECURITY_HARDENING_BY_CEREMONY=FORBIDDEN',
+    'REAL_BLOCK_REQUIRES_MEASURED_CAUSE=true',
     'UNKNOWN   = nao e PASS',
   ], 'MANDATORY_SKILL');
 
@@ -181,6 +193,8 @@ export function validateUniversalMethod() {
     "mode: 'CHECKSUM_ON'",
     "is_proof: false",
     "process.exitCode = verdict === 'PASS' ? 0 : 2",
+    "private_preprod_action_mode: true",
+    "permito_segredo_is_mission_scoped_not_per_step: true",
   ], 'MANDATORY_GATE_RUNTIME');
 
   let previous = -1;
@@ -253,6 +267,8 @@ export function validateUniversalMethod() {
     reopen_same_owner_domain_expansion_only: true,
     pombo_mode: 'CHECKSUM_ON',
     pombo64_plus_is_transport_only: true,
+    private_preprod_action_mode: true,
+    permito_segredo_is_mission_scoped_not_per_step: true,
     tlc23_source: FILES.tlc23,
     tlc23_source_sha256: tlc23Hash,
     tlc23_source_gate: 'PASS',
