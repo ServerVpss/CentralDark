@@ -594,5 +594,106 @@
     "MINIMAL_ACTION",
     "NO_CHANGE_REASON"
   ],
-  "receipt_visibility": "INTERNAL_BY_DEFAULT; SHOW_ONLY_ON_AUDIT_OR_BLOCKER"
+  "receipt_visibility": "INTERNAL_BY_DEFAULT; SHOW_ONLY_ON_AUDIT_OR_BLOCKER",
+  "pre_architecture_reconciliation": {
+    "marker": "PRE_ARCHITECTURE_RECONCILIATION_REQUIRED",
+    "owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json",
+    "applies_before": [
+      "PROPOSE_ARCHITECTURE",
+      "CREATE_COMPONENT",
+      "CREATE_OWNER",
+      "CREATE_WORKFLOW",
+      "CREATE_PUBLIC_SURFACE"
+    ],
+    "sequence": [
+      "RECOVER_CHEFE_INTENT",
+      "SEARCH_EXISTING",
+      "VERIFY_OWNER",
+      "VERIFY_CAPABILITY",
+      "VERIFY_GAP",
+      "VERIFY_CURRENT_RUNTIME",
+      "PDF_TLC23_HORN_WHEN_APPLICABLE",
+      "REALITY_JUDGE",
+      "REUSE_OR_EXTEND"
+    ],
+    "decision": {
+      "existing_complete": "REUSE",
+      "existing_partial": "EXTEND_MINIMALLY",
+      "gap_not_proven": "UNKNOWN_DO_NOT_CREATE",
+      "proven_material_gap": "CREATE_MINIMAL_INSIDE_CANONICAL_OWNER_SCOPE"
+    },
+    "invariants": {
+      "SEARCH_BEFORE_INVENT": true,
+      "REUSE_BEFORE_CREATE": true,
+      "CURRENT_OVER_HISTORY": true,
+      "UNKNOWN_IS_NOT_PASS": true,
+      "PARALLEL_ARCH_WITHOUT_PROVEN_GAP": "BLOCK",
+      "NEW_NAME_DOES_NOT_CREATE_NEW_OWNER": true,
+      "NEW_IDEA_DOES_NOT_RESET_PARENT_GOAL": true
+    }
+  },
+  "admin_authority_policy": {
+    "marker": "ADMIN_AUTHORITY_IS_NOT_PROOF",
+    "owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json",
+    "semantics": {
+      "ADMIN_AUTHENTICATED_TRUE": "AUTHORITY_TO_OPERATE_PRIVILEGED_PATHS",
+      "ADMIN_AUTHENTICATED_FALSE": "PRIVILEGED_OPERATION_FORBIDDEN",
+      "AUTHENTICATED_IS_PROVED": false,
+      "AUTHORIZED_IS_VALIDATED": false,
+      "EXECUTED_IS_PASSED": false,
+      "ADMIN_IS_BYPASS": false
+    },
+    "privileged_execution": {
+      "admin_required": true,
+      "may_execute_ci_cd_when_authorized": true,
+      "proof_gates_remain_required": true,
+      "required_gates": [
+        "SEARCH_EXISTING",
+        "VERIFY_OWNER",
+        "VERIFY_CAPABILITY",
+        "VERIFY_GAP",
+        "TEST",
+        "COUNTERPROOF",
+        "REALITY_JUDGE"
+      ]
+    },
+    "formulas": {
+      "authority_to_operate": "ADMIN_AUTHENTICATED && POLICY_ALLOWS",
+      "authority_to_claim_pass": "EVIDENCE_CURRENT && REQUIRED_GATES_PASS && REALITY_JUDGE_PASS"
+    }
+  },
+  "canonical_domain_policy": {
+    "marker": "CENTRALDARK_CANONICAL_PUBLIC_SURFACES",
+    "authority": "SEGREDO/CHEFE",
+    "owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json",
+    "canonical": {
+      "centralldark.com": "ONE_SITE_HUMAN_COCKPIT",
+      "admin.centralldark.com": "ONE_ADMIN_PANEL",
+      "api.centralldark.com": "ONE_MACHINE_API",
+      "mcp.centralldark.com": "MCP_PROTOCOL_SURFACE"
+    },
+    "internal_capabilities_under_admin": [
+      "HUB",
+      "HERMES",
+      "LOGS",
+      "VPS",
+      "PRS",
+      "GRAPH",
+      "DEVICES"
+    ],
+    "hub": {
+      "role": "INTERNAL_ADMIN_CAPABILITY",
+      "public_product": false,
+      "new_panel": false,
+      "canonical_public_destination": false,
+      "legacy_subdomain": "hub.centralldark.com",
+      "legacy_subdomain_policy": "COMPATIBILITY_ONLY_WHILE_PROVEN_CURRENT_CONSUMER_REQUIRES"
+    },
+    "expansion_rule": {
+      "historical_subdomains_do_not_become_canonical_by_existence": true,
+      "new_public_subdomain_requires_proven_material_gap": true,
+      "stale_dns_or_caddy_entry_is_not_authority": true,
+      "active_consumer_compatibility_must_be_measured_before_removal": true
+    }
+  }
 }
