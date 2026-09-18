@@ -37,6 +37,12 @@ const NOTIFY    = `${BASE}/utils/notify.mjs`;
 const INTERVAL  = 5000;
 const MAX_FALHAS = 3;
 
+async function garantirRuntimeDirs() {
+  await mkdir(PENDENTE, { recursive: true });
+  await mkdir(ANDAMENTO, { recursive: true });
+  await mkdir(CONCLUIDA, { recursive: true });
+}
+
 let ocupado = false; // trava: nunca rodar duas missões ao mesmo tempo
 
 const log = (...a) => console.log(`[${new Date().toISOString()}]`, ...a);
@@ -704,6 +710,7 @@ let ultimoGrafo = 0;
 let ultimoGrafoResumo = { ts: 0, ok: null, saida: null };
 
 async function loop() {
+  await garantirRuntimeDirs();
   log('🤖 HERMES CORE v5.0 online — vigiando missions/pendente/');
   await notificar('Hermes Core: ONLINE', '🟢 orquestrador v5.0 vivo, aguardando missões.\n\nEntregue em: <code>missions/pendente/&lt;nome&gt;.md</code>');
 
