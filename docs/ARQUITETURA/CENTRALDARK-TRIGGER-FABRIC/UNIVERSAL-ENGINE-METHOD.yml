@@ -73,6 +73,12 @@ execution_semantics:
   same_head_proof_required_for_git_green: true
   next_cursor_required_when_not_fixed_point: true
   failure_returns_one_canonical_phase: true
+  semantic_identity_is_owner_capability_scope: true
+  transient_execution_ids_are_provenance_only: true
+  same_scope_evolves_existing_owner_job: true
+  new_equivalent_job_without_material_split: false
+  local_block_does_not_freeze_independent_safe_work: true
+  human_return_requires_human_frontier_or_exact_hard_blocker: true
 
 material_loop:
   every_chefe_material_enters_mill: true
@@ -253,3 +259,110 @@ promotion:
   fixed_point_ci_test_required: true
   same_head_ci_required: true
   runtime_activation_claim_requires_observation: true
+
+
+same_body_evolution:
+  purpose: >-
+    Evoluir a capacidade existente no mesmo owner, job, workflow ou runtime
+    semanticamente equivalente, absorvendo delta util sem proliferar artefatos,
+    IDs fixos, V2/V3/V4 ou arquitetura paralela.
+  semantic_identity: [OWNER, CAPABILITY, SCOPE]
+  identity_rules:
+    owner_plus_capability_plus_scope_is_canonical_identity: true
+    workflow_name_is_implementation_detail: true
+    job_key_is_stable_semantic_slot_when_owner_uses_job: true
+    numeric_job_id_is_canonical_identity: false
+    run_id_is_canonical_identity: false
+    head_sha_is_canonical_identity: false
+    pid_is_canonical_identity: false
+    timestamp_is_canonical_identity: false
+    transient_ids_are_receipt_provenance_only: true
+    discover_transient_ids_at_runtime: true
+    hardcode_transient_execution_id_in_contract: FORBIDDEN
+
+  current_execution:
+    resolve_by:
+      - OWNER
+      - CAPABILITY
+      - SCOPE
+      - CURRENT_RUNTIME_OR_WORKFLOW
+    receipt_fields_when_available:
+      - WORKFLOW
+      - JOB_KEY
+      - RUN_ID
+      - HEAD_SHA
+      - PID
+      - OBSERVED_AT
+    receipt_does_not_redefine_identity: true
+
+  same_scope_flow:
+    - DISCOVER_EXISTING_OWNER
+    - DISCOVER_EXISTING_JOB_WORKFLOW_RUNTIME
+    - MEASURE_CURRENT_BODY
+    - CLASSIFY_DELTA
+    - PATCH_EXISTING_BODY
+    - TEST
+    - COUNTERPROOF
+    - REMEASURE
+    - UPDATE_RECEIPT_WITH_CURRENT_DYNAMIC_IDS
+    - CONTINUE_NEXT_CURSOR
+
+  evolution_policy:
+    same_scope_existing_job: PATCH_AND_EVOLVE
+    same_scope_existing_workflow: PATCH_AND_EVOLVE
+    same_scope_existing_runtime: PATCH_AND_EVOLVE
+    same_scope_existing_owner: PATCH_AND_EVOLVE
+    create_equivalent_job_because_current_run_finished: FORBIDDEN
+    create_equivalent_workflow_because_current_run_finished: FORBIDDEN
+    create_v2_v3_v4_for_same_capability: FORBIDDEN
+    duplicate_owner_for_same_capability: FORBIDDEN
+    number_of_jobs_is_progress: false
+    number_of_agents_is_progress: false
+    minimum_sufficient_body: true
+    reuse_before_create: true
+    one_system_only: true
+
+  split_gate:
+    default: KEEP_SAME_BODY
+    new_job_workflow_or_runtime_requires_material_split: true
+    split_only_when_existing_body_cannot_safely_absorb_delta: true
+    material_reasons:
+      - INDEPENDENT_PERMISSION_BOUNDARY
+      - INDEPENDENT_RUNTIME_OR_PLATFORM
+      - INDEPENDENT_LIFECYCLE
+      - INDEPENDENT_ROLLBACK_BOUNDARY
+      - PROVEN_CONCURRENCY_REQUIREMENT
+      - PROVEN_RESOURCE_ISOLATION_REQUIREMENT
+      - PROVEN_SECURITY_BOUNDARY
+    convenience_is_not_material_split: true
+    cosmetic_organization_is_not_material_split: true
+    temporary_run_id_change_is_not_material_split: true
+    new_head_sha_is_not_material_split: true
+    new_pid_is_not_material_split: true
+
+  autonomous_continuation:
+    objective_owner: SEGREDO_CHEFE
+    implementation_route_owner: HERMES_OR_CURRENT_EXECUTOR
+    machine_resolvable_blocker_auto_continue: true
+    same_scope_microapproval_required: false
+    local_block_does_not_freeze_independent_safe_work: true
+    return_only_when:
+      - HUMAN_FRONTIER
+      - EXACT_HARD_BLOCKER_AFTER_AUTHORIZED_ROUTES_EXHAUSTED
+      - NEW_HUMAN_INTENT_REQUIRED
+    human_frontier_examples:
+      - SECRET_OR_MFA_OR_EXCLUSIVE_CONSENT
+      - PHYSICAL_ACTION
+      - IRREVERSIBLE_OUT_OF_SCOPE_AUTHORIZATION
+      - GENUINE_HUMAN_CHOICE_WITHOUT_TECHNICAL_EQUIVALENT
+    technical_failure_alone_requires_human_return: false
+    queued_job_alone_requires_human_return: false
+    stale_run_id_requires_human_return: false
+    next_safe_route_should_be_attempted_before_return: true
+
+  complexity_budget:
+    prefer_patch_over_new_artifact: true
+    new_artifact_requires_net_information_or_risk_benefit: true
+    mass_job_creation_without_independent_boundaries: FORBIDDEN
+    mass_workflow_creation_without_independent_boundaries: FORBIDDEN
+    complexity_without_capability_gain: REGRESSION
