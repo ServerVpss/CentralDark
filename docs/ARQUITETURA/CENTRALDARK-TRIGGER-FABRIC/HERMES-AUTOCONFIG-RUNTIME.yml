@@ -452,3 +452,50 @@ progressive_autonomy:
     REALITY_IS_JUDGE: true
     LEARNING_IS_FUEL: true
     AUTONOMY_IS_MOTOR: true
+
+
+aureola_learning_loop:
+  status: ACTIVE
+  applies_to: [SOL, HERMES, PIVETE, CURRENT_EXECUTOR]
+  trigger: AUREOLA_MATERIAL_DISCOVERY
+  source_contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml
+  route:
+    - MATERIAL_OPERATIONAL_EVENT
+    - LEARNING_REF
+    - EPISTEMIC_CLASSIFICATION
+    - EVIDENCE_REF
+    - DEDUPE
+    - SEARCH_EXISTING_CRYSTAL
+    - SESSION_INTELLIGENCE_HARVESTER
+    - MEMORY_LINKER
+    - DREAM_REVIEW
+    - PATTERN_DISCOVERY
+    - KNOWLEDGE_COMPILER
+    - EXISTING_CANONICAL_OWNER
+    - REAL_CONSUMER
+    - TEST_OR_RUNTIME_BINDING
+    - COUNTERPROOF
+    - AUTHORIZED_WRITER
+    - REUSE_ON_NEXT_EQUIVALENT_EVENT
+  rules:
+    EVERY_MATERIAL_DISCOVERY_GETS_LEARNING_REF: true
+    EVERY_DISCOVERY_IS_CANONICAL_FACT: false
+    FACT_INFERENCE_HYPOTHESIS_UNKNOWN_SEPARATED: true
+    SAME_FINDING_WITHOUT_NEW_EVIDENCE: DROP_DUPLICATE
+    REUSE_EXISTING_CRYSTAL_BEFORE_REINVESTIGATE: true
+    PROVEN_RULE_BINDS_TO_RUNTIME: true
+    REPEATED_CHEFE_RETEACH_AFTER_PROMOTION: LEARNING_TRANSFER_FAIL
+    LOCAL_LEARNING_BLOCK_DOES_NOT_FREEZE_INDEPENDENT_SAFE_WORK: true
+  persistence:
+    raw_chat_is_canonical_memory: false
+    durable_route: EXISTING_CONTINUITY_AND_LEARNING_OWNERS
+    canonical_learning_owner: docs/CONSCIENCIA/APRENDIZADOS.md
+    derived_memory_pipeline: scripts/memory-linker/
+    direct_miner_write_to_canonical: false
+  confidence_discipline:
+    multiple_angles_may_reduce_uncertainty: true
+    calculation_may_support_decision: true
+    calculation_is_runtime_observation: false
+    correlated_views_are_independent_proofs: false
+    contract_coverage_may_equal_100_percent_when_all_defined_conditions_verified: true
+    external_reality_100_percent_from_calculation_only: false
