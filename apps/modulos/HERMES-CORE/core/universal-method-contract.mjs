@@ -13,6 +13,7 @@ const FILES = {
   aureola: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml',
   master: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml',
   engine: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml',
+  autoconfigRuntime: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/HERMES-AUTOCONFIG-RUNTIME.yml',
   hermesPrompt: 'apps/modulos/HERMES-CORE/prompts/hermes-core.md',
   tlc23: 'docs/CONSCIENCIA/04-MCP-E-CONECTORES/tlc23.pdf',
 };
@@ -90,6 +91,7 @@ export function validateUniversalMethod() {
   const aureola = read(FILES.aureola);
   const master = read(FILES.master);
   const engine = read(FILES.engine);
+  const autoconfigRuntime = read(FILES.autoconfigRuntime);
   const hermesPrompt = read(FILES.hermesPrompt);
   const tlc23Hash = sha256(readBuffer(FILES.tlc23));
 
@@ -147,6 +149,19 @@ export function validateUniversalMethod() {
     'NEXT_CURSOR',
   ], 'MASTER_CYCLE');
 
+  requireTokens(autoconfigRuntime, [
+    'status: CANONICAL_RUNTIME_CONTRACT',
+    'progressive_autonomy:',
+    'SONHAR:',
+    'EXPERIMENTAR:',
+    'CRISTALIZAR:',
+    'FREEDOM_TO_EXPLORE_IS_NOT_FREEDOM_TO_INVENT_STATE: true',
+    'local_block_does_not_freeze_independent_work: true',
+    'return_to_chefe_after_every_arrow: false',
+    'REALITY_IS_JUDGE: true',
+    'AUTONOMY_IS_MOTOR: true',
+  ], 'AUTOCONFIG_RUNTIME');
+
   requireTokens(engine, REQUIRED_GLOBAL_INHERITANCE, 'ENGINE_GLOBAL_INHERITANCE');
   requireTokens(engine, [
     'engine_is_owner: false',
@@ -178,6 +193,8 @@ export function validateUniversalMethod() {
     universal_chain: REQUIRED_CHAIN,
     method_owner: FILES.master,
     hermes_runtime_validator: FILES.universal,
+    autoconfig_runtime: FILES.autoconfigRuntime,
+    progressive_autonomy_modes: ['SONHAR','EXPERIMENTAR','CRISTALIZAR'],
     tlc23_source: FILES.tlc23,
     tlc23_source_sha256: tlc23Hash,
     tlc23_source_gate: 'PASS',
