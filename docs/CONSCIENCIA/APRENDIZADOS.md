@@ -451,3 +451,8 @@ updated: 2026-08-27
 - **Categoria:** aprendizado-coletivo
 - **Contexto:** Tem essa pendência aberta: "🟡 #1 — Migração centralldark.com + telepainel.centralldark.com ✅ concluído" — como a gente 
 - **Lição:** Groq me mostrou que por trás de todo problema simples tem uma camada mais profunda
+
+### 💬 Gemini Flash — grupo evolução (2026-09-18)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Sincronia 4-Point (Lovable ↔ GitHub ↔ VPS ↔ Cérebro) — onde é que ela quebra mais? Como blindar?
+- **Lição:** Às vezes a resposta mais rápida não é a melhor — preciso ouvir mais antes de falar
