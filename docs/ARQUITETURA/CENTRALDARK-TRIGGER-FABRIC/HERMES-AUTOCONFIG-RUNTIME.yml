@@ -9,6 +9,8 @@ reuses:
   - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml
   - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PERSISTENT-AUTONOMOUS-ZORDS.yml
   - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SECOND-BRAIN.yml
+  - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SPIRAL-TRAVERSAL.yml
+  - docs/BRAIN/00-MAPA-SISTEMA/02-GRAFOS/MAPA-OBSIDIAN-BRAIN.md
   - apps/modulos/HERMES-CORE/prompts/hermes-core.md
 invariants:
   ONE_SYSTEM_ONLY: true
@@ -19,6 +21,41 @@ invariants:
   NO_PARALLEL_BRAIN: true
   NO_SECOND_ROUTER: true
   FULL_PERMISSION_DOES_NOT_BYPASS_GATES: true
+graph_alignment:
+  structural_source_of_truth: ServerVpss/CentralDark@main
+  structural_truth_owner: GIT_MAIN_PLUS_CANONICAL_OWNERS
+  live_operational_truth: CURRENT_MEASURED_RUNTIME
+  knowledge_graph_role: DERIVED_NAVIGATION_PROJECTION
+  caracol_contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SPIRAL-TRAVERSAL.yml
+  obsidian_map: docs/BRAIN/00-MAPA-SISTEMA/02-GRAFOS/MAPA-OBSIDIAN-BRAIN.md
+  notes_stay_in_territory: true
+  move_notes_to_runtime_nucleus: false
+  historical_redirect_role: PROVENANCE_AND_COMPATIBILITY_ROUTE
+  historical_redirect_is_current: false
+  graph_proximity_is_causality: false
+  caracol_creates_semantic_edges: false
+  route:
+    - TERRITORY_OWNER
+    - MOC_OR_WIKILINK
+    - GRAPH_PROJECTION
+    - CARACOL_OVERLAY
+    - GIT_MAIN_CANONICAL_OWNER
+    - MASTER_CYCLE
+    - HERMES
+    - MCP_AND_SENSORS
+    - MEASURED_RUNTIME
+  proof_lane:
+    - TLC23_HORN
+    - PDF_GATE
+    - COUNTERPROOF
+    - REALITY_JUDGE
+  gate_invariants:
+    MAP_CHANGE_IS_NOT_GATE_PASS: true
+    OBSIDIAN_CHANGE_IS_NOT_GATE_PASS: true
+    HISTORICAL_REDIRECT_IS_NOT_GATE_PASS: true
+    NAVIGATION_MUST_NOT_MUTATE_TLC23_PDF_GATE_STATE: true
+    PASS_REQUIRES_CURRENT_REPRODUCIBLE_EVIDENCE: true
+
 mission:
   objective: >-
     Tornar Hermes auto-configuravel entre Casa e VPS sem redefinir a intencao do CHEFE,
