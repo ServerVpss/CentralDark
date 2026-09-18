@@ -203,6 +203,10 @@ test('kernel FULL deriva DNA condensado e hashes do mesmo HEAD vivo', () => {
     assert.equal(receipt.mode, 'FULL');
     assert.equal(receipt.image_sensor_policy, 'PASS');
     assert.equal(receipt.portable_boot_policy, 'PASS');
+    assert.equal(receipt.daily_checklist_gate, 'PASS');
+    assert.equal(receipt.multi_writer_policy, 'PASS');
+    assert.equal(receipt.finalizer_lease_policy, 'PASS');
+    assert.equal(receipt.goal_pai_round_trip_policy, 'PASS');
     assert.equal(receipt.runtime_claim, 'UNPROVEN_BY_PORTABLE_KERNEL');
     assert.match(receipt.head_sha, /^[0-9a-f]{40}$/i);
     assert.match(receipt.capability_dna_sha256, /^[0-9a-f]{64}$/i);
@@ -220,6 +224,12 @@ test('kernel FULL deriva DNA condensado e hashes do mesmo HEAD vivo', () => {
     assert.equal(bundle.load_strategy, 'DNA_FIRST_SOURCE_ON_DEMAND');
     assert.equal(bundle.condensed_dna.marker, 'CENTRALDARK_CONDENSED_DNA');
     assert.equal(bundle.condensed_dna.authority, 'SEGREDO/CHEFE');
+    assert.equal(bundle.condensed_dna.axioms.includes('DAILY_CHECKLIST_HEAD_BOUND_BEFORE_CODE_PROMOTION'), true);
+    assert.equal(bundle.condensed_dna.axioms.includes('MULTIPLE_WRITERS_DISJOINT_SCOPES_SINGLE_FINALIZER_PROMOTION'), true);
+    assert.equal(bundle.condensed_dna.axioms.includes('MODEL_NAME_IS_NOT_ROUTING_AUTHORITY'), true);
+    assert.equal(bundle.condensed_dna.axioms.includes('GOAL_PAI_SURVIVES_PROMOTION_DEPLOY_AND_REMEASUREMENT'), true);
+    assert.equal(bundle.condensed_dna.minimum_reproduction.includes('VERIFY_DAILY_CHECKLIST_RECEIPT_BOUND_TO_CURRENT_HEAD'), true);
+    assert.equal(bundle.condensed_dna.minimum_reproduction.includes('ACQUIRE_WRITER_OR_FINALIZER_LEASE_BY_SCOPE'), true);
     assert.equal(bundle.condensed_dna.proof_boundary.does_not_prove.includes('RUNTIME_EFFECT'), true);
     assert.equal(bundle.condensed_dna.proof_boundary.does_not_prove.includes('AGI_OR_CONSCIOUSNESS'), true);
     assert.equal(bundle.condensed_dna.capabilities.length, receipt.capabilities);
@@ -289,6 +299,39 @@ test('DNA fail-closed se um owner perder marcador de capacidade condensada', () 
     assert.equal(failure.capability, 'CROSS_META_EVOLUTION');
     assert.equal(failure.owner, METACOGNITION);
     assert.deepEqual(failure.missing, ['META_EVALUATION_REQUIRED=true']);
+  } finally {
+    rmSync(temp, { recursive: true, force: true });
+  }
+});
+
+
+test('kernel fail-closed se daily checklist ou finalizer lease regredir', () => {
+  const temp = mkdtempSync(join(tmpdir(), 'centraldark-portable-governance-drift-'));
+  const bundlePath = join(temp, 'bundle.json');
+  const fixtureRoot = join(temp, 'repo');
+  try {
+    run(['--export', bundlePath, '--json']);
+    const bundle = JSON.parse(readFileSync(bundlePath, 'utf8'));
+    mkdirSync(fixtureRoot, { recursive: true });
+    materializeBundleAsRepo(bundle, fixtureRoot);
+
+    const contractPath = join(fixtureRoot, 'docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json');
+    const contract = JSON.parse(readFileSync(contractPath, 'utf8'));
+    contract.daily_checklist_gate.per_head_attestation_required = false;
+    contract.standard_architecture.promotion.one_active_finalizer_lease = false;
+    writeFileSync(contractPath, JSON.stringify(contract, null, 2) + '\n', 'utf8');
+
+    const result = spawnSync(
+      process.execPath,
+      [SCRIPT, '--repo-root', fixtureRoot, '--json'],
+      { cwd: fixtureRoot, encoding: 'utf8' },
+    );
+    assert.equal(result.status, 2);
+    const failure = JSON.parse(result.stdout);
+    assert.equal(failure.status, 'BLOCKED');
+    assert.equal(failure.code, 'PORTABLE_CONTRACT_INVALID');
+    assert.equal(failure.errors.includes('DAILY_CHECKLIST_HEAD_BINDING_REQUIRED'), true);
+    assert.equal(failure.errors.includes('ONE_FINALIZER_LEASE_REQUIRED'), true);
   } finally {
     rmSync(temp, { recursive: true, force: true });
   }
