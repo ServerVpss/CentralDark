@@ -17,6 +17,8 @@ const FILES = {
   master: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml',
   engine: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml',
   hermesPrompt: 'apps/modulos/HERMES-CORE/prompts/hermes-core.md',
+  handoff: 'docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md',
+  harvester: '.agents/skills/session-intelligence-harvester/SKILL.md',
   mandatorySkill: '.agents/skills/universal-method-contract/SKILL.md',
   mandatoryGate: '.agents/skills/universal-method-contract/scripts/gate.mjs',
   tlc23: 'docs/CONSCIENCIA/04-MCP-E-CONECTORES/tlc23.pdf',
@@ -124,6 +126,8 @@ export function validateUniversalMethod() {
   const master = read(FILES.master);
   const engine = read(FILES.engine);
   const hermesPrompt = read(FILES.hermesPrompt);
+  const handoff = read(FILES.handoff);
+  const harvester = read(FILES.harvester);
   const mandatorySkill = read(FILES.mandatorySkill);
   const mandatoryGate = read(FILES.mandatoryGate);
   const tlc23Hash = sha256(readBuffer(FILES.tlc23));
@@ -201,6 +205,12 @@ export function validateUniversalMethod() {
     'HERMES_BOOT_BINDS_MAIN_SHA=true',
     'GITHUB_MAIN_GOVERNS_IDENTITY_STRUCTURE_CONTRACTS=true',
     'VPS_RUNTIME_GOVERNS_LIVE_RUNTIME_FACTS=true',
+    'FIO_VIVO_RECOVERY=true',
+    'HUMAN_CUE_IS_POINTER_NOT_AUTHORITY=true',
+    'PERSONAL_SYMBOL_MEANING_REQUIRES_CHEFE_DEFINITION=true',
+    'RAW_PERSONAL_MEDIA_DO_NOT_ENTER_GIT_BY_DEFAULT=true',
+    'EXTERNAL_PATTERN_MUST_ADAPT_TO_EXISTING_OWNERS=true',
+    'CANONICAL_SOUL_PRECEDENCE_OVER_EXTERNAL_SESSION_KITS=true',
   ], 'SOUL_SOL');
 
   requireTokens(teachingGrammar, [
@@ -214,7 +224,29 @@ export function validateUniversalMethod() {
     'NO_DEAD_BUREAUCRATIC_MODE: true',
     'NO_EMPTY_PRAISE_LOOP: true',
     'BAIANES_NATURAL_NOT_CARICATURE: true',
+    'VOICE_TRANSCRIPTION_IS_SEMANTIC_CANDIDATE: true',
+    'ASR_TOKEN_MAY_BE_RECONCILED_BY_CONTEXT: true',
+    'KNOWN_HUMAN_CUE_MAY_RESOLVE_EXISTING_BRIDGE: true',
   ], 'SOL_TEACHING_GRAMMAR_LIVE_COLLAB');
+
+  requireTokens(handoff, [
+    'UMA_PALAVRA_OU_SINAL',
+    'RECUPERA_CONTEXTO_MINIMO_NECESSARIO',
+    'CUE_IS_POINTER_NOT_AUTHORITY=true',
+    'RAW_PERSONAL_MEDIA_DO_NOT_ENTER_GIT_BY_DEFAULT=true',
+    'HISTORY_RECOVERED_BY_CUE != CURRENT_STATE',
+  ], 'HANDOFF_FIO_VIVO');
+
+  requireTokens(harvester, [
+    'LOAD_MINIMUM_RELEVANT_CONTEXT',
+    'DURABLE_BEHAVIOR_DELTA',
+    'SHORT_WORKING_STATE',
+    'HANDOFF_STATE',
+    'CONTEXT_SENSOR_UNKNOWN  → UNKNOWN; NO_FAKE_PERCENT',
+    'REFERENCE_SOURCE=inematds/claude-session-kit@6ffefa1d1ac838a245cade6059664728f939985b',
+    'BLIND_VENDOR_COPY=false',
+    'EXISTING_CENTRALDARK_OWNERS_KEEP_AUTHORITY=true',
+  ], 'SESSION_HARVEST_FIO_VIVO');
 
   forbidTokens(soul, [
     'SEGREDO_CHEFE_IS_REFERENCE_NOT_ROUTER=true',

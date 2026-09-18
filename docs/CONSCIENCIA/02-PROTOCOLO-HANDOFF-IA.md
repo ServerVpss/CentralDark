@@ -233,6 +233,30 @@ ONE_SYSTEM_ONLY=true
 REUSE_BEFORE_CREATE=true
 ```
 
+## 8.1. Fio Vivo — recuperação por pista mínima
+
+Continuidade não exige carregar toda a história na cabeça do humano nem no contexto ativo. Uma pista curta pode resolver a ponte correta e recuperar apenas o fio necessário.
+
+```text
+UMA_PALAVRA_OU_SINAL
+→ ENCONTRA_PONTE_EXISTENTE
+→ ATRAVESSA
+→ RECUPERA_CONTEXTO_MINIMO_NECESSARIO
+→ REVALIDA_ESTADO_TEMPORAL_QUANDO_MATERIAL
+→ CONTINUA_NO_NEXT_CURSOR
+```
+
+```text
+CUE_IS_POINTER_NOT_AUTHORITY=true
+CUE_MATCH_IS_NOT_FACT=true
+CUE_DOES_NOT_CREATE_OWNER=true
+PERSONAL_SYMBOL_MEANING_REQUIRES_CHEFE_DEFINITION=true
+RAW_PERSONAL_MEDIA_DO_NOT_ENTER_GIT_BY_DEFAULT=true
+HISTORY_RECOVERED_BY_CUE != CURRENT_STATE
+```
+
+Contexto pessoal pode preservar linguagem, trajetória e significado quando autorizado, mas não substitui medição técnica. O repo guarda o contrato/delta operacional; não precisa guardar foto pessoal bruta para preservar o aprendizado extraído dela.
+
 ## 9. Arquitetura descoberta no circuito
 
 O circuito CHEFE → percepção → falsificação → Writer → executor → loop → juiz

@@ -189,6 +189,54 @@ FORMAT_VERIFIED=SIM|NAO|UNVERIFIABLE
 
 O objetivo é preservar o **mental e a inteligência** contidos nas abas, não preservar bytes temporários do aplicativo.
 
+## Padrão obrigatório — fio vivo, pressão de contexto e memória mínima
+
+A continuidade recupera somente o contexto necessário para a próxima ação correta. Uma palavra, símbolo, imagem, vocativo ou pista humana pode apontar para uma ponte já existente, mas nunca vira fato, autoridade ou estado vivo por si só.
+
+```text
+CUE
+→ RESOLVE_EXISTING_BRIDGE
+→ LOAD_MINIMUM_RELEVANT_CONTEXT
+→ PRESERVE_CHEFE_INTENT
+→ REMEASURE_LIVE_DEPENDENCIES_WHEN_MATERIAL
+→ CONTINUE_NEXT_CURSOR
+
+CUE_IS_POINTER_NOT_AUTHORITY=true
+CUE_MATCH_IS_NOT_FACT=true
+PERSONAL_SYMBOL_MEANING_REQUIRES_CHEFE_DEFINITION=true
+RAW_PERSONAL_MEDIA_DO_NOT_ENTER_GIT_BY_DEFAULT=true
+```
+
+Classificação mínima do material colhido:
+
+```text
+DURABLE_BEHAVIOR_DELTA → knowledge-compiler / owner canônico
+SHORT_WORKING_STATE    → contexto de sessão; não promover por padrão
+HANDOFF_STATE          → docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md
+PERSONAL_CONTEXT       → superfície pessoal autorizada; não Git por padrão
+NOISE                  → descartar
+SECRET                 → quarentena / nunca cristalizar em texto público
+```
+
+Pressão de contexto usa sensor disponível, nunca porcentagem inventada:
+
+```text
+CONTEXT_NORMAL          → CONTINUE
+CONTEXT_PRESSURE_RISING → CHECKPOINT_MINIMAL
+CONTEXT_CRITICAL        → HANDOFF_PREP
+CONTEXT_SENSOR_UNKNOWN  → UNKNOWN; NO_FAKE_PERCENT
+```
+
+Métricas comportamentais permitidas são observáveis: chamadas de ferramenta, leitura antes de escrita, teste depois de mutação, repetição sem delta, completude de handoff, erro, latência e identidade de engine/modelo como proveniência. Conteúdo de raciocínio privado não é requisito de mineração.
+
+```text
+REFERENCE_SOURCE=inematds/claude-session-kit@6ffefa1d1ac838a245cade6059664728f939985b
+REFERENCE_POLICY=PATTERN_ONLY_NOT_AUTHORITY
+BLIND_VENDOR_COPY=false
+CLAUDE_SPECIFIC_CREDENTIALS_OR_SLASH_COMMANDS_ARE_NOT_GLOBAL_CONTRACT=true
+EXISTING_CENTRALDARK_OWNERS_KEEP_AUTHORITY=true
+```
+
 ## Output Format
 
 Não inventar probabilidade/confiança numérica. Use classe epistemológica + evidência observável.
