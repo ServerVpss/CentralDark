@@ -4,6 +4,7 @@ authority: SEGREDO/CHEFE
 pr_mother: 1562
 owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
 executor: apps/modulos/HERMES-CORE/
+aureola_contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml
 reuses:
   - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
   - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml
@@ -251,3 +252,76 @@ zero_regression_filter:
     missing_dependency_remains_explicit: true
     conflict_preserves_legacy_until_reconciled: true
     no_green_by_approximation: true
+
+
+typed_boundary_policy:
+  status: ACTIVE
+  intent: >-
+    Aumentar determinismo e seguranca de interfaces criticas sem reescrever
+    indiscriminadamente todo JavaScript do runtime.
+  principle:
+    STRONGER_BOUNDARIES_BEFORE_STRONGER_EVERYWHERE: true
+    MASS_JS_TO_TS_REWRITE: FORBIDDEN_WITHOUT_PROVEN_BENEFIT
+    EXISTING_STABLE_JS_MUST_NOT_BE_REWRITTEN_ONLY_FOR_STYLE: true
+    RUNTIME_SHAPES_MUST_BE_VALIDATED_AT_TRUST_BOUNDARIES: true
+  apply_first_to:
+    - MCP_TOOL_INPUT_OUTPUT
+    - RUNTIME_RECEIPTS
+    - EVENT_ENVELOPES
+    - SCHEDULER_JOB_DEFINITIONS
+    - AUTH_SESSION_METADATA_WITHOUT_SECRETS
+    - PROVIDER_CAPABILITY_RECORDS
+    - BRIDGE_TRAY_IPC
+    - GITHUB_AUTOMATION_PAYLOADS
+  preferred_mechanisms:
+    javascript:
+      - ZOD
+      - JSON_SCHEMA
+      - JSDOC_WHERE_MIGRATION_IS_NOT_JUSTIFIED
+    typescript:
+      - STRICT_TRUE
+      - NO_IMPLICIT_ANY_TRUE
+      - DISCRIMINATED_UNIONS_FOR_STATE
+    powershell:
+      - VALIDATESET
+      - TYPED_PARAMETERS
+      - EXPLICIT_EXIT_CODES
+      - STRUCTURED_JSON_RECEIPTS
+    python:
+      - DATACLASS_OR_TYPEDDICT_OR_PYDANTIC_WHEN_BOUNDARY_MATERIAL
+      - ENUMS_FOR_STATE
+      - EXPLICIT_RETURN_CONTRACTS
+    csharp:
+      - ENUMS_AND_TYPED_MODELS
+      - NULLABILITY_WHERE_SUPPORTED
+  canonical_state_vocab:
+    - PROVED_IN_SCOPE
+    - FAIL
+    - UNKNOWN
+    - BLOCKED
+    - NO_CHANGE
+  forbidden:
+    - STRINGLY_TYPED_CRITICAL_STATE_WITHOUT_VALIDATOR
+    - BOOLEAN_SOUP_FOR_MULTI_STATE_GATES
+    - IMPLICIT_TYPE_COERCION_AT_AUTH_OR_PROOF_BOUNDARIES
+    - REWRITE_ENTIRE_RUNTIME_TO_TYPESCRIPT_AS_SHORTCUT
+  migration_order:
+    - IDENTIFY_CRITICAL_BOUNDARY
+    - DEFINE_SCHEMA_OR_TYPE
+    - VALIDATE_EXISTING_PRODUCER
+    - VALIDATE_EXISTING_CONSUMER
+    - ADD_COUNTERPROOF
+    - MIGRATE_IMPLEMENTATION_ONLY_IF_DELTA_USEFUL
+  proof:
+    type_annotation_is_not_runtime_proof: true
+    schema_validation_is_not_business_proof: true
+    runtime_effect_still_requires_measurement: true
+
+aureola_runtime_visibility:
+  status: ACTIVE
+  contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml
+  conversation_is_execution_guide: true
+  bible_reference_on_material_milestone: true
+  short_baianes_paraphrase: true
+  verse_is_semantic_cue_not_software_proof: true
+  keep_machine_payload_literal: true
