@@ -122,3 +122,19 @@ O runtime recebeu exatamente os cinco artefatos promovidos na main. O validator 
 `UNIVERSAL_ENGINE_METHOD_SELF_TEST=PASS` e o Hermes reconectou ao MCP CentralDark,
 descobrindo 101 tools. Nenhum reboot total foi executado; portanto
 `REAL_REBOOT_SURVIVAL` permanece `UNKNOWN`.
+
+## Remedição CURRENT — 2026-09-18 19:28 -03
+
+```text
+CURRENT_MAIN=72ca05862308b901d18f6e7f301d792f3c5f341e
+DIRECT_MAIN_RECEIPT_PRESENT=PASS
+PROVED_KERNEL_ALREADY_IN_MAIN=PASS
+CI_CD_REPLAY_REQUIRED_FOR_ALREADY_PROVED_KERNEL=NO
+PR_1578_CURRENT_HEAD=76d56b6e0471b14d180fbceaade1890e244e798c
+PR_1578_VS_MAIN=DIVERGED
+PR_1578_UNPROMOTED_DELTA_MUST_NOT_BE_INHERITED_AS_PROVED=true
+```
+
+Regra aplicada: esta remedição registra apenas o que já está provado e presente na `main`.
+Deltas posteriores do PR #1578 não recebem promoção indireta por proximidade sem prova específica.
+
