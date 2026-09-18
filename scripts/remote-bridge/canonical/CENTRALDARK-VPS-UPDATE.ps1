@@ -36,16 +36,16 @@ echo "HOST=$(hostname)"
 echo "HEAD_BEFORE=$(git rev-parse HEAD 2>/dev/null || echo UNKNOWN)"
 echo "BRANCH_BEFORE=$(git symbolic-ref --short -q HEAD || echo DETACHED)"
 
-if [ ! -x scripts/vps/centraldark-deploy.sh ]; then
-  echo "CENTRALDARK_DEPLOY_OWNER=MISSING"
+if [ ! -x scripts/vps/deploy-guards-dispatcher.sh ]; then
+  echo "CENTRALDARK_DEPLOY_DISPATCHER=MISSING"
   exit 20
 fi
 
-echo "=== DRY RUN ==="
-./scripts/vps/centraldark-deploy.sh
+echo "=== TLC23 / UNIVERSAL DRY RUN ==="
+./scripts/vps/deploy-guards-dispatcher.sh
 
-echo "=== APPLY ==="
-./scripts/vps/centraldark-deploy.sh --apply
+echo "=== APPLY VIA CANONICAL DISPATCHER ==="
+./scripts/vps/deploy-guards-dispatcher.sh --apply
 
 if [ -f scripts/remote-bridge/canonical/INSTALL-VPS.sh ]; then
   chmod +x scripts/remote-bridge/canonical/INSTALL-VPS.sh
@@ -74,5 +74,6 @@ if ($LASTEXITCODE -ne 0) {
 Write-Host ""
 Write-Host "[PASS] CENTRALDARK_CANONICAL_HYBRID_SSH_GATE"
 Write-Host "[PASS] ROUTE=$Selected"
-Write-Host "[PASS] atualização solicitada ao owner scripts/vps/centraldark-deploy.sh"
+Write-Host "[PASS] atualização passou pelo owner scripts/vps/deploy-guards-dispatcher.sh"
+Write-Host "[PASS] TLC23/HORN/UNIVERSAL PRE-FLIGHT obrigatório antes do deploy"
 Write-Host "REALIDADE = JUIZ"
