@@ -415,11 +415,41 @@
       "rule": "ONE_WRITER_PER_SCOPE",
       "parallel_same_scope": "BLOCKED",
       "handoff_required": true,
-      "strategy": "MINIMAL_CAUSAL_MUTATION"
+      "strategy": "MINIMAL_CAUSAL_MUTATION",
+      "multiple_writers_allowed": true,
+      "concurrent_writers_disjoint_scopes": true,
+      "same_mutable_scope_requires_writer_lease": true,
+      "model_name_is_routing_key": false,
+      "model_name_is_writer_lease": false,
+      "executor_selection": [
+        "TAG_EXECUTOR",
+        "CAPABILITY_MATCH",
+        "SCOPE_MATCH",
+        "LEASE_AVAILABLE",
+        "POLICY_ALLOWED"
+      ]
     },
     "promotion": {
       "spine": "main",
-      "policy": "USE_CANONICAL_PROMOTION_POLICY_ON_MAIN"
+      "policy": "USE_CANONICAL_PROMOTION_POLICY_ON_MAIN",
+      "finalization_scope": "PR_TO_MAIN_TO_DEPLOY",
+      "one_active_finalizer_lease": true,
+      "finalizer_role": "EXECUTOR",
+      "finalizer_capability": "PROMOTION_FINALIZATION",
+      "finalizer_model_neutral": true,
+      "finalizer_location": "VPS_CONTROL_PLANE",
+      "vps_is_intent_authority": false,
+      "intent_authority": "SEGREDO/CHEFE",
+      "goal_pai_round_trip_required": true,
+      "goal_pai_id_stable": true,
+      "micro_goal_source": "CURRENT_FAILURE_SIGNATURE_AND_EVIDENCE",
+      "finalizer_selection": [
+        "TAG_EXECUTOR",
+        "CAPABILITY_MATCH",
+        "SCOPE_MATCH",
+        "LEASE_AVAILABLE",
+        "POLICY_ALLOWED"
+      ]
     },
     "execution": {
       "runtime_executes_promoted_artifact": true,
@@ -594,5 +624,45 @@
     "MINIMAL_ACTION",
     "NO_CHANGE_REASON"
   ],
-  "receipt_visibility": "INTERNAL_BY_DEFAULT; SHOW_ONLY_ON_AUDIT_OR_BLOCKER"
+  "receipt_visibility": "INTERNAL_BY_DEFAULT; SHOW_ONLY_ON_AUDIT_OR_BLOCKER",
+  "daily_checklist_gate": {
+    "marker": "DAILY_CHECKLIST_GATE_REQUIRED",
+    "authority": "SEGREDO/CHEFE",
+    "purpose": "EVERY_AI_OR_AGENT_CODE_MUTATION_MUST_CARRY_CURRENT_DAILY_CHECKLIST_RECEIPT",
+    "canonical_policy_owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json",
+    "operational_mirror": "E:\\CentralDark\\Pivete\\CASA-VAULT\\🧾CHECK-LIST DIARIO🤖.md",
+    "mirror_is_authority": false,
+    "applies_when": "AI_OR_AGENT_MUTATES_CODE",
+    "per_head_attestation_required": true,
+    "required_pr_receipt_fields": [
+      "Daily-Checklist: PASS",
+      "Daily-Checklist-Date: YYYY-MM-DD",
+      "Daily-Checklist-Head: FULL_HEAD_SHA",
+      "Daily-Checklist-Goal: NONEMPTY",
+      "Daily-Checklist-Writer: NONEMPTY"
+    ],
+    "head_binding": "Daily-Checklist-Head MUST_EQUAL CURRENT_HEAD_SHA",
+    "date_semantics": "OBSERVATION_DATE_RECORDED; HEAD_BINDING_IS_DETERMINISTIC_AUTHORITY_FOR_FRESHNESS",
+    "before_first_material_code_mutation": [
+      "LOAD_OR_CREATE_DAILY_CHECKLIST",
+      "VERIFY_GOAL_PAI",
+      "VERIFY_CURRENT_STATE",
+      "VERIFY_OWNER",
+      "VERIFY_SCOPE",
+      "VERIFY_WRITER_LEASE"
+    ],
+    "during_day_record": [
+      "MATERIAL_DELTA",
+      "PENDING_GAPS",
+      "HEAD_CHANGES",
+      "HANDOFFS",
+      "GATE_FAILURES",
+      "RESULTS",
+      "NEXT_CURSOR"
+    ],
+    "before_handoff_or_finalization": "UPDATE_DAILY_CHECKLIST_AND_BIND_RECEIPT_TO_HEAD",
+    "unknown_receipt": "BLOCK_CODE_PROMOTION",
+    "action_is_proof": false,
+    "documented_is_executed": false
+  }
 }
