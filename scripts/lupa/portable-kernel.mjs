@@ -187,7 +187,7 @@ const memberByPath = new Map(members.map((item) => [item.path, item]));
 
 const CAPABILITY_SPECS = [
   {
-    id: 'DAILY_CHECKLIST_HEAD_BOUND_GATE',
+    id: 'DAILY_CHECKLIST_DAY_BOUND_GATE',
     layer: 'GOVERNANCE',
     owner: CONTRACT,
     markers: [
@@ -198,7 +198,7 @@ const CAPABILITY_SPECS = [
       '"unknown_receipt": "BLOCK_CODE_PROMOTION"',
       '"mirror_is_authority": false',
     ],
-    reproduction: 'REQUIRE_DAILY_CHECKLIST_RECEIPT_BOUND_TO_CURRENT_HEAD_BEFORE_CODE_PROMOTION',
+    reproduction: 'REQUIRE_DAILY_CHECKLIST_RECEIPT_BOUND_TO_HEAD_COMMIT_DAY_BEFORE_CODE_PROMOTION',
   },
   {
     id: 'MODEL_NEUTRAL_MULTI_WRITER_SINGLE_FINALIZER',
