@@ -40,6 +40,16 @@ mother_resolution:
   no_marker: OBSERVE_ON_MOTHER_AND_FAIL_PROMOTION_GATE
   mismatched_marker: OBSERVE_ON_MOTHER_AND_FAIL_PROMOTION_GATE
 
+auto_binding:
+  enabled: true
+  event_owner: .github/workflows/pr-mother-pulse.yml
+  on_new_or_edited_pr: true
+  canonical_marker: PR_MOTHER=#1562
+  normalizes_mismatched_marker: true
+  writes_pr_metadata_only: true
+  grants_merge_authority: false
+  rerun_gate_via_edited_event: true
+
 child_contract:
   required: true
   merge_target: main
