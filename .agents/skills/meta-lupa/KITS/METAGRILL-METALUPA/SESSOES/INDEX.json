@@ -17,6 +17,14 @@
       "file": "2026-09-11-SESSAO-COMPLETA-CENTRALDARK.md",
       "receipt": "../INTERLIGADOS/RECEIPTS/2026-09-11-SESSAO-COMPLETA-CENTRALDARK.md",
       "status": "CRISTALIZADO_NA_MAIN"
+    },
+    {
+      "id": "SESSION_CRYSTAL_CENTRALDARK_20260918",
+      "date": "2026-09-18",
+      "file": "2026-09-18-SESSAO-PROVADA-CENTRALDARK.md",
+      "receipt": "../INTERLIGADOS/RECEIPTS/2026-09-18-SESSAO-PROVADA-PR-MAE-1562.md",
+      "pr_mother": 1562,
+      "status": "SUBPR_PENDING_MAIN"
     }
   ]
 }
