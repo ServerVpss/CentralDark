@@ -1,0 +1,161 @@
+schema: centraldark.hermes-autoconfig-runtime.v1
+status: CANDIDATE_IN_CHILD_PR
+authority: SEGREDO/CHEFE
+pr_mother: 1562
+owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
+executor: apps/modulos/HERMES-CORE/
+reuses:
+  - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
+  - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml
+  - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PERSISTENT-AUTONOMOUS-ZORDS.yml
+  - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SECOND-BRAIN.yml
+  - apps/modulos/HERMES-CORE/prompts/hermes-core.md
+invariants:
+  ONE_SYSTEM_ONLY: true
+  REUSE_BEFORE_CREATE: true
+  ONE_WRITER_PER_SCOPE: true
+  REALITY_IS_JUDGE: true
+  UNKNOWN_IS_NOT_PASS: true
+  NO_PARALLEL_BRAIN: true
+  NO_SECOND_ROUTER: true
+  FULL_PERMISSION_DOES_NOT_BYPASS_GATES: true
+mission:
+  objective: >-
+    Tornar Hermes auto-configuravel entre Casa e VPS sem redefinir a intencao do CHEFE,
+    inventariando runtime, MCPs, modelos, rotas, sandbox e eventos antes de mutar.
+  flow:
+    - CHEFE_INTENT
+    - CENTRALDARK_MASTER
+    - MEASURE_CURRENT_STATE
+    - INVENTORY_CAPABILITIES_ROUTES_MODELS_MCP_RUNTIME
+    - RECONCILE_EXISTING_OWNERS
+    - CHOOSE_MINIMUM_SUFFICIENT_RUNTIME
+    - EXECUTE
+    - EVIDENCE
+    - COUNTERPROOF
+    - REALITY_JUDGE
+    - RECEIPT
+    - HANDOFF
+    - NEXT_CURSOR
+runtime_profiles:
+  casa:
+    role:
+      - WORKSPACE
+      - SENSORS
+      - DESKTOP
+      - LOCAL_MCP
+      - OPTIONAL_LOCAL_MODEL
+    docker_role: SANDBOX_WORKLOAD_NOT_BRAIN
+    wsl_role: LINUX_EXECUTION_SURFACE_NOT_AUTHORITY
+    windows_event_viewer: SIGNAL_SOURCE
+    direct_event_to_hermes_gui: false
+  vps:
+    role:
+      - PRIMARY_HEADLESS_EXECUTOR
+      - WORKERS
+      - MCP_RUNTIME
+      - SCHEDULERS
+    root_execution: ONLY_WHEN_EXISTING_RUNTIME_REQUIRES_AND_SCOPE_IS_PROVEN
+    root_is_default_authority: false
+    prefer_least_required_privilege: true
+doctor_event_bridge:
+  flow:
+    - EVENT
+    - NORMALIZE
+    - FINGERPRINT
+    - DEDUPE
+    - COOLDOWN
+    - HERMES_DOCTOR
+    - CAPABILITY_ROUTER
+    - MINIMAL_REMEDIATION
+    - REMEASURE
+    - RECEIPT
+    - LEARN
+  same_fingerprint_no_new_info: NO_RERUN
+  wmi_5858: SIGNAL_NOT_COMMAND
+garimpo:
+  path_example: 'E:\CentralDark\_MAPA_CASA\GARIMPO-CHEFE'
+  architecture:
+    watcher: ONE
+    event_fields: [path, hash, mtime, type]
+    route: SECTOR_ROUTER_TO_EXISTING_OWNER
+  flow:
+    - NORMALIZE
+    - DEDUPE
+    - UNIQUE_DELTA
+    - TEST
+    - COUNTERPROOF
+    - CHILD_PR_1562
+    - SAME_HEAD_GATES
+    - MAIN
+    - MICRO_DEPLOY_IF_APPLICABLE
+    - RECEIPT
+    - HANDOFF
+model_routing:
+  model_is_replaceable: true
+  capability_is_authority: false
+  mcp_is_authority: false
+  provider_is_authority: false
+  inputs:
+    - capability_required
+    - runtime_required
+    - observed_latency_cost
+    - local_remote_availability
+    - tool_mcp_compatibility
+    - context_requirements
+    - privacy_scope
+    - current_health
+  record:
+    - selected_engine
+    - selected_model
+    - selected_runtime
+    - reason
+    - evidence
+    - fallback_used
+    - observed_at
+  local_llamacpp_jan: UNKNOWN_UNTIL_MEASURED
+security:
+  disable_defender_globally: false
+  controlled_folder_access:
+    observed_candidate:
+      process: pwsh.exe
+      target: '%userprofile%\AppData\LocalLow\Temp'
+      causality: UNKNOWN
+    remediation_flow:
+      - DIAGNOSE
+      - IDENTIFY_EXACT_PROCESS_PATH_OWNER
+      - MINIMUM_SAFE_ADAPTATION
+      - RETEST
+autonomy:
+  AGENT_DECIDES_UTILITY: false
+  CHEFE_DECIDES_OBJECTIVE: true
+  HERMES_DECIDES_IMPLEMENTATION_ROUTE: true
+  HERMES_MAY_AUTOCONTINUE_MACHINE_RESOLVABLE_BLOCKERS: true
+  HERMES_MAY_NOT_REDEFINE_OBJECTIVE: true
+persistent_loop:
+  flow:
+    - MEASURE
+    - FIND_NEW_DELTA
+    - FIX
+    - RETEST
+    - COUNTERPROOF
+    - RECEIPT
+    - NEXT
+  no_new_information: NO_CHANGE_WAIT_FOR_EVENT
+  infinite_retry_without_information_gain: FORBIDDEN
+fixed_point:
+  require:
+    - INVENTORY_CURRENT
+    - CASA_RUNTIME_PROFILE_PROVEN
+    - VPS_RUNTIME_PROFILE_PROVEN
+    - SANDBOX_ROUTE_PROVEN
+    - WINDOWS_EVENT_BRIDGE_PROVEN
+    - DOCTOR_ROUTE_PROVEN
+    - GARIMPO_WATCHER_PROVEN
+    - MODEL_ROUTING_PROVEN
+    - MCP_ROUTING_PROVEN
+    - RECEIPT_HANDOFF_PROVEN
+    - NO_PARALLEL_BRAIN
+    - NO_SECOND_ROUTER
+    - NO_FALSE_GREEN
+    - UNKNOWN_ZERO
