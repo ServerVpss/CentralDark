@@ -32,6 +32,7 @@ OAUTH_DISCOVERY=HTTP_200
 OAUTH_PKCE_S256=ADVERTISED
 OAUTH_GRANTS=authorization_code,refresh_token
 ADMIN_PROTECTED_RESOURCE_METADATA=HTTP_200
+E2E_PUBLICO=PASS (DCR /register 201 + discovery 200)
 ```
 
 O runtime VPS observado em `/root/CentralDark` tinha o source MCP de
