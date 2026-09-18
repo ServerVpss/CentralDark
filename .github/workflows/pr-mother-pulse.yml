@@ -44,35 +44,35 @@ jobs:
               ? (await github.rest.pulls.get({ owner, repo, pull_number: sourceNumber })).data
               : context.payload.pull_request;
 
+            const canonicalMother = 1562;
             const corpus = `${source.title || ''}\n${source.body || ''}`;
             const explicit = corpus.match(/\bPR[_ -]?(?:MAE|MÃE|MOTHER)\s*[:=]\s*#?(\d+)\b/i);
-            const selfDeclared = /PR[-_ ]?M[ÃA]E\s+VIVO|ONE_PR_LEDGER\s*=\s*true/i.test(corpus);
+            const declaredMother = explicit ? Number(explicit[1]) : null;
+            const isMother = sourceNumber === canonicalMother;
+            const canonicalBinding = declaredMother === canonicalMother;
+            const motherNumber = canonicalMother;
 
-            if (!explicit && !selfDeclared) {
-              core.notice(`PR_MOTHER_PULSE_SKIP source=#${sourceNumber} reason=NO_MOTHER_BINDING`);
-              return;
-            }
-
-            const motherNumber = explicit ? Number(explicit[1]) : sourceNumber;
-            if (!Number.isInteger(motherNumber) || motherNumber <= 0) {
-              core.setFailed('PR_MOTHER_PULSE_MOTHER_PR_INVALID');
-              return;
+            if (declaredMother && declaredMother !== canonicalMother) {
+              core.warning(`PR_MOTHER_BINDING_MISMATCH source=#${sourceNumber} declared=#${declaredMother} canonical=#${canonicalMother}`);
             }
 
             const action = manual ? 'manual_pulse' : String(context.payload.action || 'unknown');
             const merged = Boolean(source.merged);
-            const reaction = action === 'review_requested' ? 'eyes'
+            const reaction = !isMother && !canonicalBinding ? 'confused'
+              : action === 'review_requested' ? 'eyes'
               : action === 'ready_for_review' ? 'rocket'
               : action === 'closed' && merged ? 'hooray'
               : action === 'closed' ? 'confused'
               : action === 'opened' || action === 'reopened' ? 'eyes'
               : '+1';
 
-            const state = action === 'closed' && merged ? 'PROMOTED_CANDIDATE_EVENT'
-              : action === 'closed' ? 'CLOSED_WITHOUT_MERGE'
+            const state = isMother ? 'MOTHER_FUNNEL_LEDGER'
+              : !canonicalBinding ? 'UNBOUND_CHILD_OBSERVED'
+              : action === 'closed' && merged ? 'CHILD_MERGED_TO_MAIN'
+              : action === 'closed' ? 'CHILD_CLOSED_WITHOUT_MERGE'
               : action === 'review_requested' ? 'REVIEW_SIGNAL'
               : action === 'ready_for_review' ? 'READY_SIGNAL'
-              : 'MOVEMENT_OBSERVED';
+              : 'CHILD_MOVEMENT_OBSERVED';
 
             try {
               await github.rest.reactions.createForIssue({
@@ -97,9 +97,11 @@ jobs:
               `### 🪡 PR-MOTHER PULSE · ${reaction}`,
               '',
               `- **estado:** \`${state}\``,
-              `- **PR-mãe:** #${motherNumber}`,
+              `- **PR-mãe canônico:** #${motherNumber}`,
               `- **origem:** [#${sourceNumber}](${sourceUrl})`,
+              `- **binding:** \`${isMother ? 'MOTHER_LOCKED' : (canonicalBinding ? 'BOUND' : 'MISSING_OR_MISMATCH')}\``,
               `- **evento:** \`${action}\``,
+              '- **boot:** `!CENTRALDARK → #ACORDAR → !CALIBRAR`',
               `- **quem disparou:** @${actor}`,
               `- **sender observado:** \`${sender}\``,
               `- **HEAD origem:** \`${head}\``,
@@ -109,6 +111,8 @@ jobs:
               '`REACTION_IS_TELEMETRY_NOT_PROOF=true`  ',
               '`REACTION_ACTOR_MAY_BE_GITHUB_ACTIONS_BOT=true`  ',
               '`EVENT_ACTOR_IS_RECORDED_SEPARATELY=true`  ',
+              '`PR_MOTHER_MERGE_FORBIDDEN=true`  ',
+              '`CHILD_PR_REQUIRES_PR_MOTHER_1562=true`  ',
               '`UNKNOWN_IS_NOT_PASS=true`',
             ].join('\n');
 
