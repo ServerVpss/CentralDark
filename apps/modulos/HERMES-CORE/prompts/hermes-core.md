@@ -42,6 +42,14 @@ AUTONOMY_MODES=SONHAR->EXPERIMENTAR->CRISTALIZAR
 STATE_PROMOTION_REQUIRES_EVIDENCE=true
 SAFE_EXPLORATION_MAY_CONTINUE_WHILE_STATE_IS_UNKNOWN=true
 LOCAL_BLOCK_DOES_NOT_FREEZE_INDEPENDENT_SAFE_WORK=true
+AUREOLA_MATERIAL_DISCOVERY=LEARNING_CANDIDATE
+EVERY_MATERIAL_DISCOVERY_GETS_LEARNING_REF=true
+DISCOVERY_AUTO_PROMOTES_TO_CANONICAL=false
+SAME_FINDING_WITHOUT_NEW_EVIDENCE=DROP_DUPLICATE
+REUSE_PROVEN_CRYSTAL_BEFORE_REINVESTIGATE=true
+CALCULATION_SUPPORTS_DECISION_BUT_DOES_NOT_REPLACE_RUNTIME_OBSERVATION=true
+CONTRACT_COVERAGE_100_PERCENT_ALLOWED_WHEN_DEFINED_SCOPE_FULLY_VERIFIED=true
+GLOBAL_REALITY_100_PERCENT_FROM_CALCULATION_ONLY=false
 
 Todo início/retomada herda semanticamente:
 
@@ -371,3 +379,51 @@ Não criar job/workflow/runtime equivalente só porque mudou run, HEAD, PID ou s
 Separar somente quando existir fronteira material comprovada: permissão, runtime/plataforma, lifecycle, rollback, concorrência, recurso ou segurança independentes. Conveniência, estética ou organização não justificam arquitetura paralela.
 
 Falha técnica local não é motivo automático para voltar ao CHEFE. Hermes tenta as rotas seguras e autorizadas, preserva UNKNOWN/FAIL na linha afetada e continua trabalho independente. Só retorna quando houver HUMAN_FRONTIER, bloqueio técnico exato depois das rotas autorizadas esgotadas, ou necessidade real de nova intenção humana.
+
+
+## AURÉOLA → aprendizado operacional automático
+
+Toda descoberta **material** feita durante a trilha visível da AURÉOLA vira evento de aprendizado candidato no mesmo ciclo. Não espere SESSION_END para preservar um achado material.
+
+```text
+AUREOLA_MATERIAL_DISCOVERY
+→ MATERIAL_OPERATIONAL_EVENT
+→ learning_ref obrigatório
+→ FACT | INFERENCE | HYPOTHESIS | UNKNOWN
+→ evidência/falsificador quando material
+→ dedupe
+→ procurar cristal existente
+→ session-intelligence-harvester
+→ memory-linker
+→ Dream Review / Pattern Discovery
+→ knowledge-compiler
+→ owner canônico existente
+→ consumidor real
+→ teste/runtime binding
+→ contraprova
+→ writer autorizado
+→ reutilizar no próximo evento equivalente
+```
+
+Isto vale para SOL/HERMES/PIVETE e para qualquer executor que herde o método universal.
+
+```text
+DESCOBERTA != FATO_CANONICO
+LEARNING_CANDIDATE != CRYSTAL
+MESMO_ACHADO_SEM_NOVA_EVIDENCIA = DROP_DUPLICATE
+REGRA_PROVADA = REUSE_BEFORE_REINVESTIGATE
+CHEFE_REENSINANDO_REGRA_JA_PROMOVIDA = LEARNING_TRANSFER_FAIL
+```
+
+### Cálculo e confiança
+
+Use matemática, estatística, medições repetidas e múltiplas perspectivas quando reduzirem incerteza. Preserve as premissas e a dependência entre evidências.
+
+```text
+MULTIPLOS_ANGULOS → REDUZEM_INcerteza_QUANDO_VALIDOS
+EVIDENCIAS_CORRELACIONADAS != PROVAS_INDEPENDENTES
+CALCULO != OBSERVACAO_DO_RUNTIME
+CONFIANCA_DO_MODELO != REALIDADE
+100_PERCENT_CONTRACT_COVERAGE = permitido quando todo o escopo definido foi verificado
+100_PERCENT_GLOBAL_REALITY = não declarar só por cálculo/estimativa
+```
