@@ -149,7 +149,7 @@ function markdownHygieneErrors(file, text) {
     if (line === '' && lines[index + 1] === '' && lines[index + 2] === '') findings.push(`MD012:multiple-blank-lines:${lineNo}`);
     if (/^\s*(?:[-+*](?![-+*])|\d+[.)])\S/.test(line)) findings.push(`MD030:marker-space:${lineNo}`);
 
-    const heading = line.match(/^(#{1,6})\s+(.+?)\s*#*\s*$/);
+    const heading = fences.length === 0 ? line.match(/^(#{1,6})\s+(.+?)\s*#*\s*$/) : null;
     if (heading) {
       const normalized = heading[2].trim().toLowerCase();
       if (headings.has(normalized)) findings.push(`MD024:duplicate-heading:${lineNo}`);
@@ -188,10 +188,12 @@ function markdownHygieneErrors(file, text) {
 function runSelfTest() {
   const good = '# Título\n\n1. Um\n2. Dois\n\n```text\nok\n```\n';
   const bad = '# Título\n1. Um\n15. Dois\n15. Três\n\n```\nsem linguagem\n```';
+  const fencedHeading = '```text\n# CODE_COMMENT\nvalue=true\n```\n';
   const goodPasses = markdownHygieneErrors('good.md', good).length === 0;
   const badFindings = markdownHygieneErrors('bad.md', bad);
   const badCovers = ['MD022', 'MD029', 'MD040', 'MD047'].every((code) => badFindings.some((item) => item.startsWith(code)));
-  const ok = goodPasses && badCovers;
+  const fencedHeadingPasses = !markdownHygieneErrors('fenced-heading.md', fencedHeading).some((item) => item.startsWith('MD022'));
+  const ok = goodPasses && badCovers && fencedHeadingPasses;
   console.log(`GLOBAL_MARKDOWN_CONFORMANCE_SELF_TEST=${ok ? 'PASS' : 'FAIL'}`);
   if (!ok) process.exit(1);
 }
