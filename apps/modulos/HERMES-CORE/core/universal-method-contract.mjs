@@ -117,8 +117,25 @@ export function validateUniversalMethod() {
     'meta_lupa_required: true',
     'breaths_total: 17',
     'delta_minimum_required: true',
+    'semantic_identity_is_owner_capability_scope: true',
+    'transient_execution_ids_are_provenance_only: true',
+    'same_scope_evolves_existing_owner_job: true',
+    'new_equivalent_job_without_material_split: false',
+    'human_return_requires_human_frontier_or_exact_hard_blocker: true',
     'model_identity_must_not_block_scope: true',
     'next_cursor_required_when_not_fixed_point: true',
+    'same_body_evolution:',
+    'semantic_identity: [OWNER, CAPABILITY, SCOPE]',
+    'hardcode_transient_execution_id_in_contract: FORBIDDEN',
+    'same_scope_existing_job: PATCH_AND_EVOLVE',
+    'same_scope_existing_workflow: PATCH_AND_EVOLVE',
+    'create_v2_v3_v4_for_same_capability: FORBIDDEN',
+    'new_job_workflow_or_runtime_requires_material_split: true',
+    'machine_resolvable_blocker_auto_continue: true',
+    'same_scope_microapproval_required: false',
+    'EXACT_HARD_BLOCKER_AFTER_AUTHORIZED_ROUTES_EXHAUSTED',
+    'mass_job_creation_without_independent_boundaries: FORBIDDEN',
+    'complexity_without_capability_gain: REGRESSION',
   ], 'UNIVERSAL_CONTRACT');
 
   let previous = -1;
@@ -213,6 +230,8 @@ export function validateUniversalMethod() {
     scope_temperature_warm_ms: 120000,
     breaths_total: 17,
     delta_minimum_required: true,
+    same_body_evolution: true,
+    transient_execution_ids_are_provenance_only: true,
   };
 }
 
