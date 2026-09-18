@@ -150,6 +150,7 @@ Assim as “linhas da viola” ligam os territórios sem misturá-los: a informa
 | visão geral da Casa | [[BRAIN]] | [[00-MAPA]], [[02-ARQUITETURA]] |
 | topologia viva | [[GRAFO-VIVO]] | [[MOC-PM2]], [[MOC-MCP]] |
 | bots e agentes | [[MAPA-DOS-BOTS]] | [[MOC-CentralDark-HubBot]], [[MOC-Skills]] |
+| Conselho das Inteligências | [[CONSELHO-INTELIGENCIAS-CENTRALDARK]] | Grupo da Evolução, MTProto, Bot API, MCP, Biblioteca, HERMES |
 | GitHub e promoção | [[MOC-GitHub]] | decisões e documentação relacionadas |
 | ferramentas/MCP | [[MOC-MCP]] | [[02-ARQUITETURA]], [[MOC-Skills]] |
 | memória e aprendizado | [[BRAIN]] | `07-APRENDIZADOS-MEMORIAS` |
@@ -210,6 +211,7 @@ Eles podem se cruzar por notas/owners, mas não devem ser confundidos nem fundid
 - [[MOC-Skills]] — capacidades reutilizáveis.
 - [[MOC-PM2]] — processos/runtime.
 - [[MOC-CentralDark-HubBot]] — HubBot e consumidores.
+- [[CONSELHO-INTELIGENCIAS-CENTRALDARK]] — deliberação multi-IA + Telegram + MCP + Hermes, sem novo owner paralelo.
 - [[OBSIDIAN-CASA-SINCRONIZACAO]] — topologia física/sync, separada do corpus repo-native.
 - [[2026-09-03-numeracao-01-10-vault]] — regra 10×10 (número+nome; teto 10; sem gaveta vazia).
 - [[2026-09-03-mandato-preservar-ouro-chefe]] — vault é do CHEFE e do agente.
