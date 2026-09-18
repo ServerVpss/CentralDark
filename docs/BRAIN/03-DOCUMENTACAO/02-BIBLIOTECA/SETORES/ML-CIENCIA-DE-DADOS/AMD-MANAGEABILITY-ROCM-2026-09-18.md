@@ -188,3 +188,87 @@ FINALIZE_INSTALLATION_IF_PENDING
 ```
 
 PDF_GATE permanece independente e fail-closed.
+
+
+## Diagnóstico aprofundado — instalação parcial / conflito de versões
+
+### Hardware da Casa
+
+```text
+CPU=Intel(R) Core(TM) i5-10400F @ 2.90GHz
+CPU_VENDOR=GenuineIntel
+SYSTEM_VENDOR=ASUS
+```
+
+AIM-T é uma tecnologia de manageability integrada a plataformas AMD PRO. Portanto, neste host Intel, AIM-T deve ser tratado como **candidato incompatível para endpoint local** até existir evidência contrária. AMC/DASH podem continuar úteis como console/ferramenta para gerenciar alvos AMD PRO remotos.
+
+### Registro MSI — coexistência de duas AMD Manageability API
+
+Foram encontradas duas instalações registradas no mesmo local:
+
+```text
+AMD Manageability API 8.0.0.346
+ProductCode={075C3B20-F610-4F81-8438-6E63A48FA281}
+InstallLocation=C:\Program Files\AMD\Manageability API\
+
+AMD Manageability API 9.0.0.470
+ProductCode={2F7CD50D-7C99-401F-BC03-4F8CF5E9A00A}
+InstallLocation=C:\Program Files\AMD\Manageability API\
+```
+
+O binário atual em disco é v9.0.0.470. A coexistência de registros v8/v9 é **PROVED**; ser a causa do timeout do serviço permanece **HYPOTHESIS**.
+
+### AMD Manageability API — tentativa real
+
+```text
+SERVICE_START=FAIL
+SCM_EVENT=7009 timeout 180000 ms
+SCM_EVENT=7000 service did not respond in time
+MANUAL_RUN_FROM_INSTALL_DIR=EXIT_CODE_1
+PORT_8080=NO_LISTENER
+PORT_8082=NO_LISTENER
+LOG=C:\ProgramData\AMD\ManageabilityAPI\ManageabilityAPI.log
+```
+
+O log registra apenas inicialização de `AMD Manageability API v9.0.0.470` e versão do Windows, sem causa adicional.
+
+### AIM-T — instalação incompleta provada
+
+```text
+MSI_PRODUCT=AIM-T Manageability Service 6.0.0.1721
+MSI_RESULT=1603
+MSI_EVENT=11720
+ERROR_1720=VBScript permission denied (CopyInk custom action)
+PREVIOUS_ERROR_1500=another installation in progress
+SERVICE=AIMTManageabilityService
+SERVICE_STATE=STOPPED
+DEPENDENCY=AMS-MailBoxDrv
+AMS-MailBoxDrv=NOT_INSTALLED (SC 1060)
+```
+
+Conclusão atual: o serviço AIM-T ficou registrado após uma instalação que não completou corretamente. Não promover a PASS e não aplicar retry cego.
+
+### Pendências novas
+
+7. **API_DUAL_MSI_REGISTRATION**
+   - v8 ProductCode: `{075C3B20-F610-4F81-8438-6E63A48FA281}`
+   - v9 ProductCode: `{2F7CD50D-7C99-401F-BC03-4F8CF5E9A00A}`
+   - install root: `C:\Program Files\AMD\Manageability API\`
+   - estado: `PROVED_CONFLICT_CANDIDATE`
+   - ação futura: decidir repair/uninstall somente após identificar owner correto e rollback seguro.
+
+8. **AIMT_PARTIAL_INSTALL**
+   - MSI source: `C:\Users\Administrador\AppData\Local\Downloaded Installations\{E134E664-AE2C-41F6-8476-71DEFC71F1EF}\AIM-T_Manageability_Service.msi`
+   - missing dependency: `AMS-MailBoxDrv`
+   - estado: `PROVED_INSTALL_FAILURE`
+
+9. **AMD_API_TIMEOUT_ROOT_CAUSE**
+   - service: `AMDManageabilityAPI`
+   - log: `C:\ProgramData\AMD\ManageabilityAPI\ManageabilityAPI.log`
+   - estado: `UNKNOWN_ROOT_CAUSE`
+
+10. **AIMT_HOST_COMPATIBILITY**
+    - current host CPU: Intel i5-10400F
+    - AIM-T target class: AMD PRO platform
+    - estado: `LIKELY_NOT_APPLICABLE_LOCAL_ENDPOINT`
+    - não remover/repair até fechar papel desejado: local endpoint vs console para alvo remoto.
