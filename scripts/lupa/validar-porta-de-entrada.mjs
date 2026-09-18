@@ -281,6 +281,53 @@ if (!contract) {
   if (rules.model_vote_is_truth_mechanism !== false) errors.push("ARQUITETURA_VOTACAO_DE_MODELO_COMO_VERDADE");
   if (rules.same_finding_without_new_evidence !== "DROP_DUPLICATE") errors.push("ARQUITETURA_ANTI_ECO_AUSENTE");
   if (rules.derived_projection_is_source_of_truth !== false) errors.push("ARQUITETURA_PROJECAO_DERIVADA_COMO_AUTORIDADE");
+
+  const preArchitecture = contract.pre_architecture_reconciliation ?? {};
+  if (preArchitecture.marker !== "PRE_ARCHITECTURE_RECONCILIATION_REQUIRED") errors.push("PRE_ARCHITECTURE_GATE_AUSENTE");
+  if (preArchitecture.owner !== CONTRATO_RECONCILIACAO) errors.push("PRE_ARCHITECTURE_OWNER_INVALIDO");
+  const preSequence = [
+    "RECOVER_CHEFE_INTENT",
+    "SEARCH_EXISTING",
+    "VERIFY_OWNER",
+    "VERIFY_CAPABILITY",
+    "VERIFY_GAP",
+    "VERIFY_CURRENT_RUNTIME",
+    "PDF_TLC23_HORN_WHEN_APPLICABLE",
+    "REALITY_JUDGE",
+    "REUSE_OR_EXTEND",
+  ];
+  if (!Array.isArray(preArchitecture.sequence) || preSequence.some((step, index) => preArchitecture.sequence[index] !== step)) {
+    errors.push("PRE_ARCHITECTURE_SEQUENCE_INVALIDA");
+  }
+  if (preArchitecture.decision?.existing_complete !== "REUSE") errors.push("PRE_ARCHITECTURE_REUSE_INVALIDO");
+  if (preArchitecture.decision?.existing_partial !== "EXTEND_MINIMALLY") errors.push("PRE_ARCHITECTURE_EXTEND_INVALIDO");
+  if (preArchitecture.decision?.gap_not_proven !== "UNKNOWN_DO_NOT_CREATE") errors.push("PRE_ARCHITECTURE_UNKNOWN_INVALIDO");
+  if (preArchitecture.invariants?.PARALLEL_ARCH_WITHOUT_PROVEN_GAP !== "BLOCK") errors.push("PRE_ARCHITECTURE_PARALLEL_GAP_NOT_BLOCKED");
+
+  const adminAuthority = contract.admin_authority_policy ?? {};
+  if (adminAuthority.marker !== "ADMIN_AUTHORITY_IS_NOT_PROOF") errors.push("ADMIN_AUTHORITY_POLICY_AUSENTE");
+  if (adminAuthority.semantics?.ADMIN_AUTHENTICATED_TRUE !== "AUTHORITY_TO_OPERATE_PRIVILEGED_PATHS") errors.push("ADMIN_AUTH_SEM_AUTORIDADE_OPERACIONAL");
+  if (adminAuthority.semantics?.ADMIN_AUTHENTICATED_FALSE !== "PRIVILEGED_OPERATION_FORBIDDEN") errors.push("ADMIN_AUTH_FALSE_NAO_BLOQUEIA");
+  if (adminAuthority.semantics?.AUTHENTICATED_IS_PROVED !== false) errors.push("ADMIN_AUTH_VIROU_PROVA");
+  if (adminAuthority.semantics?.AUTHORIZED_IS_VALIDATED !== false) errors.push("ADMIN_AUTH_VIROU_VALIDACAO");
+  if (adminAuthority.semantics?.EXECUTED_IS_PASSED !== false) errors.push("EXECUCAO_VIROU_PASS");
+  if (adminAuthority.semantics?.ADMIN_IS_BYPASS !== false) errors.push("ADMIN_BYPASS_INDEVIDO");
+  if (adminAuthority.privileged_execution?.admin_required !== true) errors.push("ADMIN_NAO_OBRIGATORIO_PARA_PRIVILEGIADO");
+  if (adminAuthority.privileged_execution?.proof_gates_remain_required !== true) errors.push("ADMIN_REMOVEU_GATES");
+
+  const domains = contract.canonical_domain_policy ?? {};
+  if (domains.marker !== "CENTRALDARK_CANONICAL_PUBLIC_SURFACES") errors.push("CANONICAL_DOMAIN_POLICY_AUSENTE");
+  if (domains.canonical?.["centralldark.com"] !== "ONE_SITE_HUMAN_COCKPIT") errors.push("CANONICAL_SITE_INVALIDO");
+  if (domains.canonical?.["admin.centralldark.com"] !== "ONE_ADMIN_PANEL") errors.push("CANONICAL_ADMIN_INVALIDO");
+  if (domains.canonical?.["api.centralldark.com"] !== "ONE_MACHINE_API") errors.push("CANONICAL_API_INVALIDO");
+  if (domains.canonical?.["mcp.centralldark.com"] !== "MCP_PROTOCOL_SURFACE") errors.push("CANONICAL_MCP_INVALIDO");
+  if (domains.hub?.role !== "INTERNAL_ADMIN_CAPABILITY") errors.push("HUB_ROLE_INVALIDO");
+  if (domains.hub?.public_product !== false) errors.push("HUB_PUBLIC_PRODUCT_FORBIDDEN");
+  if (domains.hub?.new_panel !== false) errors.push("HUB_NEW_PANEL_FORBIDDEN");
+  if (domains.hub?.canonical_public_destination !== false) errors.push("HUB_CANONICAL_DESTINATION_FORBIDDEN");
+  if (domains.expansion_rule?.new_public_subdomain_requires_proven_material_gap !== true) errors.push("NEW_PUBLIC_SUBDOMAIN_GAP_NOT_REQUIRED");
+  if (domains.expansion_rule?.active_consumer_compatibility_must_be_measured_before_removal !== true) errors.push("LEGACY_CONSUMER_MEASUREMENT_NOT_REQUIRED");
+
   if (contract.complexity_policy?.never_expose_internal_governance_as_user_bureaucracy !== true) {
     errors.push("CONTRATO_RECONCILIACAO_GOVERNANCA_EXPOSTA_AO_USUARIO");
   }
