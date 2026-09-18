@@ -224,11 +224,11 @@ test('kernel FULL deriva DNA condensado e hashes do mesmo HEAD vivo', () => {
     assert.equal(bundle.load_strategy, 'DNA_FIRST_SOURCE_ON_DEMAND');
     assert.equal(bundle.condensed_dna.marker, 'CENTRALDARK_CONDENSED_DNA');
     assert.equal(bundle.condensed_dna.authority, 'SEGREDO/CHEFE');
-    assert.equal(bundle.condensed_dna.axioms.includes('DAILY_CHECKLIST_HEAD_BOUND_BEFORE_CODE_PROMOTION'), true);
+    assert.equal(bundle.condensed_dna.axioms.includes('DAILY_CHECKLIST_DAY_BOUND_BEFORE_CODE_PROMOTION'), true);
     assert.equal(bundle.condensed_dna.axioms.includes('MULTIPLE_WRITERS_DISJOINT_SCOPES_SINGLE_FINALIZER_PROMOTION'), true);
     assert.equal(bundle.condensed_dna.axioms.includes('MODEL_NAME_IS_NOT_ROUTING_AUTHORITY'), true);
     assert.equal(bundle.condensed_dna.axioms.includes('GOAL_PAI_SURVIVES_PROMOTION_DEPLOY_AND_REMEASUREMENT'), true);
-    assert.equal(bundle.condensed_dna.minimum_reproduction.includes('VERIFY_DAILY_CHECKLIST_RECEIPT_BOUND_TO_CURRENT_HEAD'), true);
+    assert.equal(bundle.condensed_dna.minimum_reproduction.includes('VERIFY_DAILY_CHECKLIST_RECEIPT_BOUND_TO_HEAD_COMMIT_DAY'), true);
     assert.equal(bundle.condensed_dna.minimum_reproduction.includes('ACQUIRE_WRITER_OR_FINALIZER_LEASE_BY_SCOPE'), true);
     assert.equal(bundle.condensed_dna.proof_boundary.does_not_prove.includes('RUNTIME_EFFECT'), true);
     assert.equal(bundle.condensed_dna.proof_boundary.does_not_prove.includes('AGI_OR_CONSCIOUSNESS'), true);
@@ -317,7 +317,7 @@ test('kernel fail-closed se daily checklist ou finalizer lease regredir', () => 
 
     const contractPath = join(fixtureRoot, 'docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json');
     const contract = JSON.parse(readFileSync(contractPath, 'utf8'));
-    contract.daily_checklist_gate.per_head_attestation_required = false;
+    contract.daily_checklist_gate.per_day_attestation_required = false;
     contract.standard_architecture.promotion.one_active_finalizer_lease = false;
     writeFileSync(contractPath, JSON.stringify(contract, null, 2) + '\n', 'utf8');
 
@@ -330,7 +330,7 @@ test('kernel fail-closed se daily checklist ou finalizer lease regredir', () => 
     const failure = JSON.parse(result.stdout);
     assert.equal(failure.status, 'BLOCKED');
     assert.equal(failure.code, 'PORTABLE_CONTRACT_INVALID');
-    assert.equal(failure.errors.includes('DAILY_CHECKLIST_HEAD_BINDING_REQUIRED'), true);
+    assert.equal(failure.errors.includes('DAILY_CHECKLIST_DAILY_BINDING_REQUIRED'), true);
     assert.equal(failure.errors.includes('ONE_FINALIZER_LEASE_REQUIRED'), true);
   } finally {
     rmSync(temp, { recursive: true, force: true });
