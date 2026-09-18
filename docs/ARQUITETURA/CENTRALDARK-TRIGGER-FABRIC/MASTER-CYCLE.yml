@@ -128,6 +128,17 @@ supporting_methods:
     default_routing: false
     may_write_canonical: false
     promotion_gate: META_LUPA_SAME_CONTROL
+  COT_REACT_LOOP:
+    meaning: CONTROLLED_OPERATIONAL_TRACE_DURING_COMPLEX_MULTI_TOOL_EXECUTION
+    owner: .agents/skills/cot-react-loop/SKILL.md
+    ontology: METHOD_NOT_AGENT_OR_ROUTER
+    mode: PLAN_ACT_OBSERVE_CRITIQUE_REFINE_DECIDE
+    default_routing: MATERIAL_COMPLEX_EXECUTION_ONLY
+    may_write_canonical: false
+    grants_authority: false
+    private_chain_of_thought_exposed: false
+    record_only: [DECISAO, EVIDENCIA, ACAO, RESULTADO, LACUNA, PROXIMO_TESTE]
+    promotion_gate: META_LUPA_SAME_CONTROL
 
 execution_model:
   human_intent_owner: SEGREDO/CHEFE
@@ -157,6 +168,7 @@ execution_model:
   - MULTIBUSSOLA
   - META_LUPA
   - FABLE_LOOP
+  - COT_REACT_LOOP
   - SEARCH_EXISTING_CRYSTAL
   - SEARCH_EXISTING_OWNER
   - CLASSIFY_FAILURE_SIGNATURE
@@ -341,6 +353,82 @@ communication_interface:
   presentation_is_not_governance: true
   recap_may_use_verse_cadence: true
   technical_status_evidence_and_verdict_remain_literal: true
+
+  operational_hud_protocol:
+    fixed_for_material_execution: true
+    sequence: [HUD_FIRST, TYPE_GOAL, WALK_MATERIAL_POINTS, TOOL_CALL, RESULT_MEASURED, HUD_UPDATE, NEXT_CURSOR]
+    goal_is_visible_and_updates_with_evidence: true
+    narration_material_transitions_only: true
+    narration_style: BAIANES_BIBLICO_TECNICO
+    tool_activity_named_when_available: true
+    no_useless_narration: true
+    event_snapshot_is_not_current_state: true
+    github_event_labels_are_event_snapshot: true
+    current_pr_labels_require_live_api_read: true
+    remeasure_current_after_material_external_change: true
+    invariants:
+      HUD_FIRST_BEFORE_MATERIAL_EXECUTION: true
+      GOAL_STAYS_VISIBLE_DURING_EXECUTION: true
+      TOOL_CALL_IS_ACTION_NOT_PROOF: true
+      EVENT_SNAPSHOT_IS_NOT_CURRENT: true
+      LIVE_LABEL_REMEASUREMENT_REQUIRED_FOR_CURRENT_CLAIM: true
+
+  continuity_hud:
+    enabled_for_material_execution: true
+    owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
+    creates_new_system: false
+    update_only_on_new_evidence: true
+    fields: [GOAL, HEAD_BASELINE, PROVADO, EM_CURSO_UNKNOWN, BLOQUEADO_FALHOU, FIXED_POINT, PROVA_ATUAL, PROXIMO_CURSOR]
+    state_vocab:
+      proved: "🟢"
+      in_progress_or_unknown: "🟡"
+      blocked_or_failed: "🔴"
+      fixed_point: "💎"
+    invariants:
+      HUD_IS_NOT_RECEIPT: true
+      HUD_IS_NOT_PROOF: true
+      HUD_REFLECTS_EVIDENCE: true
+      UNKNOWN_STAYS_UNKNOWN: true
+      RESOLVED_RED_MUST_NOT_RESURRECT_WITHOUT_NEW_EVIDENCE: true
+      PARTIAL_GREEN_MUST_NOT_CLOSE_PARENT_GOAL: true
+      GREEN_MUST_NOT_HIDE_RED_OR_UNKNOWN: true
+      FIXED_POINT_REOPENS_ONLY_WITH_COUNTERPROOF_OR_MATERIAL_STATE_CHANGE: true
+
+  operational_narration:
+    enabled: true
+    only_on_material_transition: true
+    sequence: [OBSERVACAO, DECISAO, ACAO, RESULTADO_MEDIDO, PROXIMO_CURSOR]
+    bahian_tone: SHORT_NATURAL_IDENTITY_CUE
+    preferred_short_verse_reference: "1Ts 5:21"
+    preferred_short_verse_text: "Examinai tudo. Retende o bem."
+    invariants:
+      BAIANES_IS_NOT_PROOF: true
+      VERSE_IS_NOT_GATE: true
+      NARRATION_IS_NOT_EXECUTION: true
+      TECHNICAL_STATE_REMAINS_LITERAL: true
+      NO_NEW_INFORMATION_NO_NARRATION_SPAM: true
+
+  preventive_continuity_staff:
+    display_name: "CAJADO_DA_CORRECAO"
+    before_every_material_mutation: true
+    checks:
+      - SAME_EXISTING_OWNER
+      - PROVEN_INVARIANTS_PRESERVED
+      - REUSE_BEFORE_CREATE
+      - ALL_PROVED_UNKNOWN_FAILED_STATES_CARRIED
+      - CURRENT_REALITY_MEASURED_WHEN_AVAILABLE
+      - SEGREDO_CHEFE_REMAINS_INTENT_OWNER
+      - SAME_PARENT_GOAL_CONTINUES
+    on_any_failure: [STOP_MUTATION, REANCHOR, RECONCILE, APPLY_MINIMAL_CORRECTION, CONTINUE]
+    invariants:
+      DOES_NOT_RESTART_MISSION: true
+      DOES_NOT_ERASE_PROGRESS: true
+      DOES_NOT_CREATE_SUBSTITUTE_ARCHITECTURE: true
+      DOES_NOT_REOPEN_FIXED_POINT_WITHOUT_COUNTERPROOF: true
+      ASKED_USER_IS_NOT_BLOCKED: true
+      WAITING_FOR_USER_IS_NOT_HUMAN_BOUNDARY: true
+      NEW_EVIDENCE_IS_NOT_NEW_CONTRACT: true
+
   mechanical_payload_fast_path:
     trigger: HUMAN_NEEDS_ONLY_COPY_PASTE_PAYLOAD_AND_NO_MATERIAL_DECISION_OR_RISK
     behavior: RETURN_ONLY_REQUESTED_PAYLOAD
