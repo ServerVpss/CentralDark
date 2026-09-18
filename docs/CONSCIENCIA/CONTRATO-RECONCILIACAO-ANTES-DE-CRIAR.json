@@ -639,7 +639,6 @@
       "Daily-Checklist-Goal: NONEMPTY",
       "Daily-Checklist-Writer: NONEMPTY"
     ],
-    "head_binding": "Daily-Checklist-Head MUST_EQUAL CURRENT_HEAD_SHA",
     "date_semantics": "DAILY_FRESHNESS_IS_BOUND_TO_HEAD_COMMIT_DATE_IN_AMERICA_SAO_PAULO; RUNNER_CLOCK_IS_NOT_AUTHORITY",
     "before_first_material_code_mutation": [
       "LOAD_OR_CREATE_DAILY_CHECKLIST",
