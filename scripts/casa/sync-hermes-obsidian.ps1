@@ -96,7 +96,12 @@ if (-not (Test-CanonicalOrigin $origin)) {
 
 $branchNow = Invoke-Git @('branch', '--show-current')
 $headBefore = Invoke-Git @('rev-parse', 'HEAD')
-$dirtyLines = @(Invoke-Git @('status', '--porcelain') -split "`n" | Where-Object { $_ -ne '' })
+$statusBefore = Invoke-Git @('status', '--porcelain=v1')
+$dirtyLines = if ([string]::IsNullOrWhiteSpace($statusBefore)) {
+    @()
+} else {
+    @($statusBefore -split "\r?\n" | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
+}
 $dirtyCount = $dirtyLines.Count
 
 Out-Kv 'BRANCH_LOCAL' $branchNow
@@ -191,7 +196,12 @@ elseif ($Mode -eq 'Push') {
 
 $headAfter = Invoke-Git @('rev-parse', 'HEAD')
 $remoteAfter = Invoke-Git @('rev-parse', "origin/$Branch")
-$dirtyAfter = @(Invoke-Git @('status', '--porcelain') -split "`n" | Where-Object { $_ -ne '' }).Count
+$statusAfter = Invoke-Git @('status', '--porcelain=v1')
+$dirtyAfter = if ([string]::IsNullOrWhiteSpace($statusAfter)) {
+    0
+} else {
+    @($statusAfter -split "\r?\n" | Where-Object { -not [string]::IsNullOrWhiteSpace($_) }).Count
+}
 $behindAfter = [int](Invoke-Git @('rev-list', '--count', "HEAD..origin/$Branch"))
 $aheadAfter = [int](Invoke-Git @('rev-list', '--count', "origin/$Branch..HEAD"))
 
