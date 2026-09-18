@@ -277,3 +277,41 @@ PRÓXIMO_CURSOR=
 - Aceitar arquivo vindo da VPS sem contar linhas e rodar o teste dos dois lados.
 - Chamar causa de resolvida porque o sintoma sumiu na hora; remedir depois.
 - Culpar git/rede por `Operation not permitted` sem checar `lsattr`.
+
+## Dashboard Hermes — porta e ciclo de vida
+
+Porta padrão do comando é **9119**; confirmar com `hermes dashboard --help` antes de assumir porta personalizada.
+
+### Verificar porta aberta
+```bash
+ss -tlnp | grep <porta>
+```
+
+Sem linha `LISTEN` = porta não está ativa.
+
+### Status do serviço
+```bash
+pm2 list | grep hermes-webui
+```
+`stopped` + pid 0 = parado.
+
+### Subir dashboard
+```bash
+hermes dashboard --port <PORTA> --host 0.0.0.0 [--no-open]
+```
+`--no-open` evita tentar abrir navegador em execução sem interface.
+
+### Comutar porta mantendo a antiga aberta
+1. Subir processo na nova porta primeiro.
+2. **Só então** matar o processo da porta antiga se o CHEFE pediu "mover o serviço".
+3. Se o CHEFE pediu "manter a porta antiga aberta", subir processo nela também — "aberta" pode significar "com listener ativo", não "livre".
+4. Verificar `ss -tlnp` nas duas portas após a mudança.
+
+### Matar processo do dashboard
+```bash
+pkill -f "hermes dashboard --port <PORTA>" 2>/dev/null || true
+```
+Match pelo `--port` para não matar outro dashboard acidentalmente.
+
+### Quem responde pela porta
+Cada processo `hermes dashboard` escuta uma porta. Dois processos = duas portas. Não existe "mudar porta do processo" — é matar e subir novo, ou subir adicional.

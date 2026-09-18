@@ -1,39 +1,14 @@
 {
   "alertasAtivos": {
-    "CentralDark-MCP|aviso|": {
-      "ts": 1783219640308,
-      "servico": "CentralDark-MCP",
-      "nivel": "aviso"
-    },
-    "CentralDark-EvolucaoIAs|aviso|": {
-      "ts": 1783219640308,
-      "servico": "CentralDark-EvolucaoIAs",
-      "nivel": "aviso"
-    },
     "CentralDark-ArsenalAdapter|aviso|": {
       "ts": 1783219640308,
       "servico": "CentralDark-ArsenalAdapter",
       "nivel": "aviso"
     },
-    "CentralDark-GuardiaoAnalista|aviso|": {
-      "ts": 1783221170311,
-      "servico": "CentralDark-GuardiaoAnalista",
-      "nivel": "aviso"
-    },
-    "CentralDark-EliteAnthropic|erro|": {
-      "ts": 1783258805981,
-      "servico": "CentralDark-EliteAnthropic",
-      "nivel": "erro"
-    },
     "CentralDark-GrafoVivo|aviso||": {
       "ts": 1789152471792,
       "servico": "CentralDark-GrafoVivo",
       "nivel": "aviso"
-    },
-    "CentralDark-MCP|erro||[FATAL] uncaughtException: Error: listen EADDRINUSE: address already in use ###.": {
-      "ts": 1789152471792,
-      "servico": "CentralDark-MCP",
-      "nivel": "erro"
     },
     "CentralDark-AiPromptAPI|aviso||": {
       "ts": 1789152471792,
@@ -59,8 +34,63 @@
       "ts": 1789152471792,
       "servico": "CentralDark-GuardiaoBridge",
       "nivel": "aviso"
+    },
+    "CentralDark-HubBot|aviso||": {
+      "ts": 1789516321147,
+      "servico": "CentralDark-HubBot",
+      "nivel": "aviso"
+    },
+    "CentralDark-TelePainelDeploy|erro||": {
+      "ts": 1789516321147,
+      "servico": "CentralDark-TelePainelDeploy",
+      "nivel": "erro"
+    },
+    "MCP-CentralDark|erro||": {
+      "ts": 1789516321147,
+      "servico": "MCP-CentralDark",
+      "nivel": "erro"
+    },
+    "CentralDark-EliteAnthropic|erro||": {
+      "ts": 1789516391550,
+      "servico": "CentralDark-EliteAnthropic",
+      "nivel": "erro"
+    },
+    "CentralDark-GuardiaoBot|erro||You have triggered an unhandledRejection, you may have forgotten to catch a Prom": {
+      "ts": 1789516391550,
+      "servico": "CentralDark-GuardiaoBot",
+      "nivel": "erro"
+    },
+    "MCP-CentralDark|erro||[FATAL] unhandledRejection: TypeError: Missing parameter name at index #: *; vis": {
+      "ts": 1789516391550,
+      "servico": "MCP-CentralDark",
+      "nivel": "erro"
+    },
+    "hermes-webui|aviso||": {
+      "ts": 1789631879020,
+      "servico": "hermes-webui",
+      "nivel": "aviso"
+    },
+    "CentralDark-Hermes|aviso||": {
+      "ts": 1789634853544,
+      "servico": "CentralDark-Hermes",
+      "nivel": "aviso"
+    },
+    "CentralDark-GuardiaoConsciencia|aviso||": {
+      "ts": 1789642951573,
+      "servico": "CentralDark-GuardiaoConsciencia",
+      "nivel": "aviso"
+    },
+    "CentralDark-EliteAnthropic|aviso||": {
+      "ts": 1789643133995,
+      "servico": "CentralDark-EliteAnthropic",
+      "nivel": "aviso"
+    },
+    "CentralDark-SyncDrive|aviso||": {
+      "ts": 1789643194944,
+      "servico": "CentralDark-SyncDrive",
+      "nivel": "aviso"
     }
   },
-  "ultimoResumo": 1789181441369,
+  "ultimoResumo": 1789714055578,
   "restarts24h": {}
 }

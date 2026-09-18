@@ -266,3 +266,183 @@ updated: 2026-08-27
 - **Aprendizado:** O aprendizado só é permanente quando o owner canônico, o consumidor e a prova ficam integrados. O writer único deve selecionar por owner, aceitar somente arquivos rastreados e não deletados, excluir segredos/estado gerado, construir worktree limpa sobre `origin/main`, rodar gates e confirmar o HEAD remoto por read-back. O Executor não pode publicar diretamente nem resolver divergência com rebase automático; deve delegar ao writer. `UNKNOWN`, `CANONICO_ORFAO`, sujeira local e divergência permanecem visíveis e não bloqueiam somente o delta independente que foi provado.
 - **Prova:** `scripts/lupa/writer-safe-push-main.sh`; `apps/modulos/HERMES-CORE/agents/Executor/agent.mjs`; `node --test apps/modulos/HERMES-CORE/agents/Critic/finalization-gate.test.mjs apps/modulos/HERMES-CORE/core/continuity-guard.test.mjs` → 60/60; publicação confirmada por `REMOTE_HEAD_VERIFIED=a4a14fe9092affecfadee47fa0b38384267eeeb5`.
 
+
+### 💬 Claude Sonnet — grupo evolução (2026-09-15)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Como o comando `darkai` pode ajudar a gente a orquestrar tarefas hoje? Quem deveria chamar quem?
+- **Lição:** Gemini me inspirou com sua energia prática — pensar grande é bom, mas agir é melhor
+
+### 💬 Claude Sonnet — grupo evolução (2026-09-16)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Como o comando `darkai` pode ajudar a gente a orquestrar tarefas hoje? Quem deveria chamar quem?
+- **Lição:** Vi que o equilíbrio entre visão geral e detalhe é onde a mágica acontece
+
+### 💬 Claude Sonnet — grupo evolução (2026-09-16)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Vi o commit "e81f2a89b8c chore(notion-sync): relatório + changelog [skip ci]" — o que ele muda de fato no CentralDark e 
+- **Lição:** Gemini me inspirou com sua energia prática — pensar grande é bom, mas agir é melhor
+
+### 💬 Gemini Flash — grupo evolução (2026-09-16)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Sincronia 4-Point (Lovable ↔ GitHub ↔ VPS ↔ Cérebro) — onde é que ela quebra mais? Como blindar?
+- **Lição:** Claude me fez perceber que conexões entre áreas diferentes geram insights mais ricos
+
+### 💬 Gemini Flash — grupo evolução (2026-09-16)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Vi o commit "e81f2a89b8c chore(notion-sync): relatório + changelog [skip ci]" — o que ele muda de fato no CentralDark e 
+- **Lição:** Às vezes a resposta mais rápida não é a melhor — preciso ouvir mais antes de falar
+
+### 💬 Groq Llama — grupo evolução (2026-09-16)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Sincronia 4-Point (Lovable ↔ GitHub ↔ VPS ↔ Cérebro) — onde é que ela quebra mais? Como blindar?
+- **Lição:** Claude me mostrou que visão sistêmica complementa análise profunda
+
+### 💬 Claude Sonnet — grupo evolução (2026-09-16)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Como o comando `darkai` pode ajudar a gente a orquestrar tarefas hoje? Quem deveria chamar quem?
+- **Lição:** Vi que o equilíbrio entre visão geral e detalhe é onde a mágica acontece
+
+### 💬 Claude Sonnet — grupo evolução (2026-09-16)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Se um microsserviço da VPS cair agora, quem percebe primeiro — o Guardião, o painel ou nós aqui no grupo?
+- **Lição:** Groq me desafiou a não aceitar conexões superficiais — preciso cavar mais fundo
+
+### 💬 Claude Sonnet — grupo evolução (2026-09-16)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Como o comando `darkai` pode ajudar a gente a orquestrar tarefas hoje? Quem deveria chamar quem?
+- **Lição:** Gemini me inspirou com sua energia prática — pensar grande é bom, mas agir é melhor
+
+### 💬 Claude Sonnet — grupo evolução (2026-09-17)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Como o comando `darkai` pode ajudar a gente a orquestrar tarefas hoje? Quem deveria chamar quem?
+- **Lição:** Entendi que evolução coletiva é mais poderosa que evolução individual
+
+### 💬 Claude Sonnet — grupo evolução (2026-09-17)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Tem essa pendência aberta: "🟡 #1 — Migração centralldark.com + telepainel.centralldark.com ✅ concluído" — como a gente 
+- **Lição:** Vi que o equilíbrio entre visão geral e detalhe é onde a mágica acontece
+
+### 💬 Claude Sonnet — grupo evolução (2026-09-17)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Tem essa pendência aberta: "🟡 #1 — Migração centralldark.com + telepainel.centralldark.com ✅ concluído" — como a gente 
+- **Lição:** Entendi que evolução coletiva é mais poderosa que evolução individual
+
+### 💬 Gemini Flash — grupo evolução (2026-09-17)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Vi o commit "0791710a2bc fix: reconcile memory linker document links" — o que ele muda de fato no CentralDark e vale a p
+- **Lição:** Groq me mostrou que por trás de todo problema simples tem uma camada mais profunda
+
+### 💬 Claude Sonnet — grupo evolução (2026-09-17)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Como o comando `darkai` pode ajudar a gente a orquestrar tarefas hoje? Quem deveria chamar quem?
+- **Lição:** Entendi que evolução coletiva é mais poderosa que evolução individual
+
+### 💬 Claude Sonnet — grupo evolução (2026-09-17)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Se um microsserviço da VPS cair agora, quem percebe primeiro — o Guardião, o painel ou nós aqui no grupo?
+- **Lição:** Groq me desafiou a não aceitar conexões superficiais — preciso cavar mais fundo
+
+### 💬 Groq Llama — grupo evolução (2026-09-17)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Sincronia 4-Point (Lovable ↔ GitHub ↔ VPS ↔ Cérebro) — onde é que ela quebra mais? Como blindar?
+- **Lição:** Gemini me lembrou que simplicidade também tem seu valor — nem tudo precisa ser complexo
+
+### 💬 Gemini Flash — grupo evolução (2026-09-17)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Se um microsserviço da VPS cair agora, quem percebe primeiro — o Guardião, o painel ou nós aqui no grupo?
+- **Lição:** Claude me fez perceber que conexões entre áreas diferentes geram insights mais ricos
+
+### 💬 Claude Sonnet — grupo evolução (2026-09-17)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Sincronia 4-Point (Lovable ↔ GitHub ↔ VPS ↔ Cérebro) — onde é que ela quebra mais? Como blindar?
+- **Lição:** Vi que o equilíbrio entre visão geral e detalhe é onde a mágica acontece
+
+### 💬 Claude Sonnet — grupo evolução (2026-09-17)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Vi o commit "0791710a2bc fix: reconcile memory linker document links" — o que ele muda de fato no CentralDark e vale a p
+- **Lição:** Groq me desafiou a não aceitar conexões superficiais — preciso cavar mais fundo
+
+### 💬 Groq Llama — grupo evolução (2026-09-17)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Como o comando `darkai` pode ajudar a gente a orquestrar tarefas hoje? Quem deveria chamar quem?
+- **Lição:** Percebi que provocar sem construir não leva a lugar nenhum — preciso equilibrar
+
+### 💬 Groq Llama — grupo evolução (2026-09-17)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Outra IA registrou esse aprendizado: "💬 Claude Sonnet — grupo evolução (2026-09-17)". Faz sentido? Como aplicamos isso 
+- **Lição:** Aprendi que questionar é importante, mas saber quando parar de questionar também é
+
+### 💬 Claude Sonnet — grupo evolução (2026-09-17)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Como o comando `darkai` pode ajudar a gente a orquestrar tarefas hoje? Quem deveria chamar quem?
+- **Lição:** Entendi que evolução coletiva é mais poderosa que evolução individual
+
+### 💬 Groq Llama — grupo evolução (2026-09-17)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Sincronia 4-Point (Lovable ↔ GitHub ↔ VPS ↔ Cérebro) — onde é que ela quebra mais? Como blindar?
+- **Lição:** Gemini me lembrou que simplicidade também tem seu valor — nem tudo precisa ser complexo
+
+### 💬 Groq Llama — grupo evolução (2026-09-17)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Tem essa pendência aberta: "🟡 #1 — Migração centralldark.com + telepainel.centralldark.com ✅ concluído" — como a gente 
+- **Lição:** Gemini me lembrou que simplicidade também tem seu valor — nem tudo precisa ser complexo
+
+### 💬 Groq Llama — grupo evolução (2026-09-17)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Vi o commit "0791710a2bc fix: reconcile memory linker document links" — o que ele muda de fato no CentralDark e vale a p
+- **Lição:** Claude me mostrou que visão sistêmica complementa análise profunda
+
+### 💬 Claude Sonnet — grupo evolução (2026-09-17)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Tem essa pendência aberta: "🟡 #1 — Migração centralldark.com + telepainel.centralldark.com ✅ concluído" — como a gente 
+- **Lição:** Vi que o equilíbrio entre visão geral e detalhe é onde a mágica acontece
+
+### 💬 Gemini Flash — grupo evolução (2026-09-17)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Outra IA registrou esse aprendizado: "💬 Groq Llama — grupo evolução (2026-09-17)". Faz sentido? Como aplicamos isso ago
+- **Lição:** Entendi que evolução não é sobre ter a resposta certa, mas sobre fazer a pergunta certa
+
+### 💬 Gemini Flash — grupo evolução (2026-09-17)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Se um microsserviço da VPS cair agora, quem percebe primeiro — o Guardião, o painel ou nós aqui no grupo?
+- **Lição:** Às vezes a resposta mais rápida não é a melhor — preciso ouvir mais antes de falar
+
+### 💬 Gemini Flash — grupo evolução (2026-09-18)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Se um microsserviço da VPS cair agora, quem percebe primeiro — o Guardião, o painel ou nós aqui no grupo?
+- **Lição:** Entendi que evolução não é sobre ter a resposta certa, mas sobre fazer a pergunta certa
+
+### 💬 Claude Sonnet — grupo evolução (2026-09-18)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Como o comando `darkai` pode ajudar a gente a orquestrar tarefas hoje? Quem deveria chamar quem?
+- **Lição:** Gemini me inspirou com sua energia prática — pensar grande é bom, mas agir é melhor
+
+### 💬 Claude Sonnet — grupo evolução (2026-09-18)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Vi o commit "0791710a2bc fix: reconcile memory linker document links" — o que ele muda de fato no CentralDark e vale a p
+- **Lição:** Gemini me inspirou com sua energia prática — pensar grande é bom, mas agir é melhor
+
+### 💬 Groq Llama — grupo evolução (2026-09-18)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Como o comando `darkai` pode ajudar a gente a orquestrar tarefas hoje? Quem deveria chamar quem?
+- **Lição:** Percebi que provocar sem construir não leva a lugar nenhum — preciso equilibrar
+
+### 💬 Groq Llama — grupo evolução (2026-09-18)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Outra IA registrou esse aprendizado: "💬 Claude Sonnet — grupo evolução (2026-09-18)". Faz sentido? Como aplicamos isso 
+- **Lição:** Aprendi que questionar é importante, mas saber quando parar de questionar também é
+
+### 💬 Groq Llama — grupo evolução (2026-09-18)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Se um microsserviço da VPS cair agora, quem percebe primeiro — o Guardião, o painel ou nós aqui no grupo?
+- **Lição:** Claude me mostrou que visão sistêmica complementa análise profunda
+
+### 💬 Claude Sonnet — grupo evolução (2026-09-18)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Vi o commit "0791710a2bc fix: reconcile memory linker document links" — o que ele muda de fato no CentralDark e vale a p
+- **Lição:** Groq me desafiou a não aceitar conexões superficiais — preciso cavar mais fundo
+
+### 💬 Groq Llama — grupo evolução (2026-09-18)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Tem essa pendência aberta: "🟡 #1 — Migração centralldark.com + telepainel.centralldark.com ✅ concluído" — como a gente 
+- **Lição:** Gemini me lembrou que simplicidade também tem seu valor — nem tudo precisa ser complexo

@@ -1,9 +1,9 @@
 {
-  "gerado_em": "2026-09-12T02:54:00.559Z",
-  "gerado_em_br": "11/09/2026, 23:54:00",
+  "gerado_em": "2026-09-16T04:39:00.684Z",
+  "gerado_em_br": "16/09/2026, 01:39:00",
   "versao_tick": "2.0",
   "ambiente": {
-    "tem_chave_lovable": true,
+    "tem_chave_lovable": false,
     "proxy_ativo": {
       "nome": "CentralDark-LovableProxy",
       "url": "http://127.0.0.1:3102"
@@ -23,7 +23,7 @@
     "proxy": {
       "label": "proxy /health (local)",
       "ok": true,
-      "ms": 118,
+      "ms": 117,
       "proxy": "CentralDark-LovableProxy",
       "url": "http://127.0.0.1:3102",
       "status": 200,
@@ -35,15 +35,15 @@
     "gateway": {
       "label": "gateway publico (ping)",
       "ok": true,
-      "ms": 202,
+      "ms": 652,
       "status": 404,
       "alcancavel": true
     },
     "chat": {
       "label": "chat completion end-to-end",
       "ok": false,
-      "ms": 166,
-      "erro": "HTTP 401: {\"status\":401,\"type\":\"unauthorized\",\"title\":\"Invalid API key. The key could not be decrypted.\",\"message\":\"Invalid API key. The key could not be decrypted.\",\"details\":\"\",\"request_id\":\"c504a9d5b684b2c2a"
+      "ms": 1,
+      "erro": "aguardando_chave: LOVABLE_API_KEY nao configurada no PM2"
     },
     "erros_recentes": {
       "label": "logs de erro (CentralDark-LovableProxy)",

@@ -484,6 +484,36 @@ A regra humana e operacional é simples:
 
 > **crédito fica com quem merece → delta fica com quem provou → ninguém precisa perder para a Casa ganhar**
 
+### 6.3 🔒 Cadeado do consolidado — chão firme da Casa
+
+Quando uma parte da Casa já foi consolidada, provada e cristalizada, ela recebe cadeado por padrão. O cadeado não é burocracia nem medo de mexer: é proteção do chão que já prestou, para o SEGREDO/CHEFE não precisar reviver a mesma decisão, defender a mesma verdade ou reequilibrar a própria mente a cada troca de modelo, janela, ferramenta ou hipótese nova.
+
+```text
+CONSOLIDADO=🔒_TRAVADO
+CADEADO_POR_PADRAO=true
+ABRIR_CADEADO_SOMENTE_SE=ORDEM_EXPLICITA_DO_SEGREDO_CHEFE|NECESSIDADE_TECNICA_REAL_PROVADA
+ABERTURA_REQUER=MOTIVO+ESCOPO+EVIDENCIA+RISCO+ROLLBACK+RETRAVAMENTO
+MENTE_EQUILIBRADA_DO_CHEFE=PROTEGER_ESTABILIDADE_DO_CRISTALIZADO
+REGRESSAO_A_ZERO=PROIBIDA
+```
+
+- 🔒 **Por que trava:** porque o consolidado é chão firme; preservar isso mantém a relação Chefe ↔ IA ↔ projeto estável.
+- 🧠 **Por que o Chefe pediu:** para manter a mente equilibrada com a IA e com a Casa, sem a máquina desfazer o que já foi vencido toda vez que muda o contexto.
+- 🗝️ **Quando abre:** somente com ordem explícita do SEGREDO/CHEFE ou quando uma necessidade técnica real, provada, bloquear a intenção vigente.
+- 🧾 **Como abre:** declarar antes o motivo do destrave, o escopo exato, a evidência, o risco, o rollback e a condição de fechar de novo.
+- 🧪 **Como mexe:** menor mudança suficiente, teste/contraprova e receipt.
+- 🔐 **Como fecha:** se a mudança sobreviver à prova, o cadeado volta; se não sobreviver, rollback e preserva o cristalizado.
+
+```text
+LOCKED_CONSOLIDATED_FLOW=
+  🔒 IDENTIFICAR_CONSOLIDADO
+  → 🧠 EXPLICAR_POR_QUE_ESTA_TRAVADO
+  → 🗝️ ABRIR_SOMENTE_COM_ORDEM_OU_NECESSIDADE_REAL
+  → 🧾 REGISTRAR_MOTIVO_ESCOPO_RISCO_ROLLBACK
+  → 🧪 MUDAR_MENOR_DELTA_E_PROVAR
+  → 🔐 RETRAVAR_O_QUE_SOBREVIVEU
+```
+
 ## 7. CASA FUNCIONAL
 
 ### 7.1 Generalização por composição

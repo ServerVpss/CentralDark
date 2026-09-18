@@ -1,0 +1,17 @@
+{
+  "id": "drift-1789524033631",
+  "tema": "Drift detectado (2 mudanças)",
+  "contexto": {
+    "drift": [
+      {
+        "tipo": "pm2-instavel",
+        "detalhe": "CentralDark-MCP: +604 restarts"
+      },
+      {
+        "tipo": "pm2-instavel",
+        "detalhe": "MCP-CentralDark: +598 restarts"
+      }
+    ]
+  },
+  "origem": "cartografo"
+}

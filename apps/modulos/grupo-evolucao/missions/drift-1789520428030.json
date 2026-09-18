@@ -1,0 +1,17 @@
+{
+  "id": "drift-1789520428030",
+  "tema": "Drift detectado (2 mudanças)",
+  "contexto": {
+    "drift": [
+      {
+        "tipo": "pm2-status-mudou",
+        "detalhe": "CentralDark-MCP: stopped → online"
+      },
+      {
+        "tipo": "pm2-instavel",
+        "detalhe": "MCP-CentralDark: +640 restarts"
+      }
+    ]
+  },
+  "origem": "cartografo"
+}

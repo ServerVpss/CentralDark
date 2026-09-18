@@ -1,0 +1,77 @@
+{
+  "id": "drift-1789642832831",
+  "tema": "Drift detectado (17 mudanças)",
+  "contexto": {
+    "drift": [
+      {
+        "tipo": "pm2-instavel",
+        "detalhe": "CentralDark-MCP: +40 restarts"
+      },
+      {
+        "tipo": "pm2-novo",
+        "detalhe": "CentralDark-WebhookDeploy"
+      },
+      {
+        "tipo": "pm2-novo",
+        "detalhe": "CentralDark-GuardiaoConsciencia"
+      },
+      {
+        "tipo": "pm2-novo",
+        "detalhe": "CentralDark-GuardiaoAnalista"
+      },
+      {
+        "tipo": "pm2-novo",
+        "detalhe": "CentralDark-ContasAdmin"
+      },
+      {
+        "tipo": "pm2-novo",
+        "detalhe": "CentralDark-Respiracao"
+      },
+      {
+        "tipo": "pm2-novo",
+        "detalhe": "CentralDark-TelePainelDeploy"
+      },
+      {
+        "tipo": "pm2-novo",
+        "detalhe": "CentralDark-EvolucaoIAs"
+      },
+      {
+        "tipo": "pm2-novo",
+        "detalhe": "CentralDark-SyncDrive"
+      },
+      {
+        "tipo": "pm2-novo",
+        "detalhe": "CentralDark-EliteAnthropic"
+      },
+      {
+        "tipo": "pm2-novo",
+        "detalhe": "CentralDark-GraphPanel"
+      },
+      {
+        "tipo": "pm2-novo",
+        "detalhe": "CentralDark-Zentinel"
+      },
+      {
+        "tipo": "pm2-novo",
+        "detalhe": "CentralDark-EliteWS"
+      },
+      {
+        "tipo": "pm2-novo",
+        "detalhe": "CentralDark-MultiZap"
+      },
+      {
+        "tipo": "pm2-novo",
+        "detalhe": "CentralDark-CloneDeck"
+      },
+      {
+        "tipo": "mapa-violacao",
+        "detalhe": "identidade worktree divergente [meta-lupa-identity]: esperado=42691e008ba50ee55646ca81113bf0abfde87af2 worktree=bec3850e0772f9d594ec986a2673a5d9c7dfd29b"
+      },
+      {
+        "tipo": "mapa-violacao",
+        "detalhe": "drift HEAD/worktree [meta-lupa-identity]: head=42691e008ba50ee55646ca81113bf0abfde87af2 worktree=bec3850e0772f9d594ec986a2673a5d9c7dfd29b"
+      }
+    ]
+  },
+  "origem": "cartografo"
+}

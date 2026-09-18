@@ -1,0 +1,21 @@
+{
+  "id": "drift-1789500638513",
+  "tema": "Drift detectado (3 mudanças)",
+  "contexto": {
+    "drift": [
+      {
+        "tipo": "pm2-status-mudou",
+        "detalhe": "CentralDark-EliteAnthropic: errored → online"
+      },
+      {
+        "tipo": "mapa-violacao",
+        "detalhe": "identidade worktree divergente [meta-lupa-identity]: esperado=42691e008ba50ee55646ca81113bf0abfde87af2 worktree=cc9a32da17a03047b2ca0245a3c0016180a00956"
+      },
+      {
+        "tipo": "mapa-violacao",
+        "detalhe": "drift HEAD/worktree [meta-lupa-identity]: head=42691e008ba50ee55646ca81113bf0abfde87af2 worktree=cc9a32da17a03047b2ca0245a3c0016180a00956"
+      }
+    ]
+  },
+  "origem": "cartografo"
+}

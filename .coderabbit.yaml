@@ -84,6 +84,12 @@ reviews:
         Verifique menor privilégio, separação de credenciais entre Writer, Judge
         e Promotor, checkout preso ao SHA esperado, ausência de código não
         confiável com token privilegiado e nenhum fallback silencioso.
+    - path: "scripts/dependabot/known-conflict-patterns.json"
+      instructions: >-
+        Trate como registry estruturado e consultivo de conflitos recorrentes do
+        motor único Dependabot. Não aceite política paralela: a resolução
+        continua em scripts/dependabot/resolve-conflicts.sh. Conflito desconhecido
+        deve bloquear como UNKNOWN_CONFLICT_PATH, não ser auto-resolvido.
     - path: "scripts/**"
       instructions: >-
         Exija evidência reproduzível, timeout explícito, erro fail-closed,

@@ -11,6 +11,7 @@ metadata:
 
 Owner do motor: `scripts/dependabot/resolve-conflicts.sh`
 Gatilho: `.github/workflows/dependabot-auto-merge.yml`
+Registry estruturado de padrões recorrentes: `scripts/dependabot/known-conflict-patterns.json`
 
 Se aparecer um segundo resolvedor, ele é o errado. Este se **atualiza**; não se
 duplica.
@@ -44,6 +45,27 @@ dele aceita automaticamente, sem revisão humana.
 | **todo o resto** | **main** (`--theirs`) | fail-closed de verdade: PR não promove código canônico sozinho |
 
 Sem lista de exceções para core. O default já protege tudo que não é manifesto.
+
+## Conflitos recorrentes conhecidos
+
+Os caminhos que já apareceram como feridas operacionais recorrentes ficam
+registrados em `scripts/dependabot/known-conflict-patterns.json`. Esse registry
+machine-readable é **telemetria/roteamento**, não autorização para um resolvedor
+paralelo e não muda a tabela `--ours`/`--theirs`.
+
+Quando um conflito tocar um caminho registrado, o motor emite receipt:
+
+```text
+KNOWN_CONFLICT_PATH=true
+CONFLICT_ID=<id>
+OWNER=<owner>
+RESOLUTION_POLICY=<policy>
+SOURCE_REF=<evidência>
+```
+
+Depois aplica a mesma política única: manifestos/lockfiles preservam o PR;
+conflitos conhecidos não-manifesto preservam a `main` fail-closed; conflito
+desconhecido bloqueia como `UNKNOWN_CONFLICT_PATH` e exige review.
 
 ## Fluxo canônico
 
