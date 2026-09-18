@@ -1,7 +1,7 @@
 ---
 title: "02 PROTOCOLO HANDOFF IA"
 date: 2026-06-29
-updated: 2026-08-24
+updated: 2026-09-17
 tags: ["consciencia", "handoff", "continuidade", "pombo-checksum"]
 status: "CANÔNICO"
 authority: "SEGREDO/CHEFE"
@@ -256,6 +256,114 @@ HISTORY_RECOVERED_BY_CUE != CURRENT_STATE
 ```
 
 Contexto pessoal pode preservar linguagem, trajetória e significado quando autorizado, mas não substitui medição técnica. O repo guarda o contrato/delta operacional; não precisa guardar foto pessoal bruta para preservar o aprendizado extraído dela.
+
+
+## 8.2. Linhagem de cristais — nada provado fica para trás
+
+O estado atual não apaga o que veio antes. Todo cristal material, componente
+provado, owner, decisão persistida, receipt e handoff relevante vira entrada da
+reconciliação seguinte. O histórico não governa o presente, mas também não pode
+ser descartado só porque existe uma medição mais nova.
+
+```text
+CURRENT_DOES_NOT_ERASE_PAST=true
+PAST_PROVEN_CRYSTAL_IS_RECONCILIATION_INPUT=true
+HISTORY_IS_PROVENANCE_NOT_CURRENT_AUTHORITY=true
+REUSE_MERGED_CRYSTAL_AND_EXISTING_OWNER=true
+ABSORB_ONLY_MATERIAL_DELTA=true
+NO_BLIND_COPY_FROM_HISTORY=true
+NO_DELETE_HISTORY_WITHOUT_PROOF=true
+```
+
+Antes de fechar handoff, promover Fixed Point ou redesenhar o mapa, reconstruir
+a linhagem material aplicável:
+
+```text
+PRs
++ commits
++ receipts
++ handoffs
++ cristais
++ owners
++ mapas
++ runtime proofs
++ aprendizados promovidos
+→ CLASSIFY
+→ DEDUPE
+→ RECONCILE
+→ LINK_TO_CURRENT_OWNER
+→ PRESERVE_USEFUL_DELTA
+```
+
+Classificações mínimas:
+
+```text
+CURRENT
+ABSORBED
+SUPERSEDED
+HISTORICAL
+CANDIDATE
+CONFLICTING
+UNKNOWN
+```
+
+Para cada peça comprovada/materializada, preservar quando aplicável:
+
+```text
+CRYSTAL_REF
+SOURCE_REF
+OWNER_CANONICO
+STATUS
+DELTA_RETAINED
+CONSUMER
+HANDOFF_REF
+EVIDENCE_REFS
+COUNTERPROOF_REFS
+NEXT_CURSOR
+MISSING_LINKS
+```
+
+Invariantes:
+
+```text
+PROVEN_COMPONENT_MUST_HAVE_OWNER=true
+PROVEN_COMPONENT_MUST_HAVE_HANDOFF=true
+PROVEN_COMPONENT_MUST_BE_INDEXABLE=true
+PROVEN_COMPONENT_WITHOUT_LINEAGE != FIXED_POINT
+MAP_MOVE_WITHOUT_HANDOFF = INVALID
+MAP_REDESIGN_WITHOUT_RECONCILIATION = INVALID
+FORGOTTEN_PROVEN_COMPONENTS=0
+```
+
+Uma peça pode mudar de endereço, owner operacional ou relação, mas a mudança
+precisa deixar ponte explícita para o estado anterior. O próximo agente deve
+conseguir descobrir de onde veio, por que mudou, o que sobreviveu e qual é o
+próximo cursor sem redesenhar a CentralDark do zero.
+
+### Mapa visual / Figma como projeção da mesma linhagem
+
+Quando uma superfície visual estiver disponível, ela projeta o mesmo grafo
+canônico; não cria segunda verdade.
+
+```text
+CANONICAL_GRAPH
+→ VISUAL_PROJECTION
+→ FIGMA|FIGJAM|MERMAID|OBSIDIAN
+```
+
+```text
+VISUAL_IS_TRUTH=false
+FIGMA_IS_CAPABILITY_NOT_AUTHORITY=true
+VISUAL_MUST_PRESERVE_CRYSTAL_LINEAGE=true
+VISUAL_MUST_PRESERVE_OWNER_AND_HANDOFF=true
+VISUAL_UPDATE_EXTENDS_EXISTING_MAP=true
+VISUAL_RESTART_FROM_ZERO=false
+```
+
+Se Figma estiver indisponível, preservar a representação textual/Mermaid e
+marcar a superfície visual como `UNKNOWN|UNAVAILABLE`; nunca fingir que a
+materialização ocorreu.
+
 
 ## 9. Arquitetura descoberta no circuito
 
