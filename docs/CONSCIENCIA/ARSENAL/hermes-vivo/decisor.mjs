@@ -3,6 +3,8 @@
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
+import { isAbsolute, resolve } from 'node:path';
 const pexec = promisify(execFile);
 
 // ═══════════════════════════════════════════════════════════════
@@ -83,7 +85,45 @@ DEVOLVA APENAS JSON VÁLIDO, SEM MARKDOWN, SEM \`\`\`, ASSIM:
 Quando a missão estiver 100% concluída, devolva "terminou": true e "ferramenta": "notificar_progresso" com o resumo final.
 `;
 
-const SYSTEM = `Você é o Hermes, executor autônomo da CentralDark. Pense passo-a-passo. Nunca desvie da missão. Sempre devolva JSON puro.`;
+const ROOT = process.env.CENTRALDARK_ROOT || '/root/CentralDark';
+const RUNTIME_CONTRACT_REL = process.env.RUNTIME_CONTRACT || 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/HERMES-AUTOCONFIG-RUNTIME.yml';
+const HERMES_PROMPT_REL = process.env.HERMES_PROMPT || 'apps/modulos/HERMES-CORE/prompts/hermes-core.md';
+
+function canonicalPath(value) {
+  return isAbsolute(value) ? value : resolve(ROOT, value);
+}
+
+function carregarSystemCanonico() {
+  const runtimePath = canonicalPath(RUNTIME_CONTRACT_REL);
+  const promptPath = canonicalPath(HERMES_PROMPT_REL);
+  let runtime;
+  let prompt;
+  try {
+    runtime = readFileSync(runtimePath, 'utf8');
+    prompt = readFileSync(promptPath, 'utf8');
+  } catch (error) {
+    throw new Error(`CANONICAL_RUNTIME_CONTRACT_LOAD_FAILED:${error.message}`);
+  }
+  const system = [
+    prompt.trim(),
+    '',
+    '## RUNTIME CONTRACT — CURRENT FILE CONTENT',
+    runtime.trim(),
+    '',
+    '## DECISOR OUTPUT',
+    'Sempre devolva JSON puro no schema exigido. Não exponha cadeia de pensamento privada.',
+  ].join('\n');
+
+  return {
+    system,
+    runtimePath,
+    promptPath,
+    runtimeSha256: createHash('sha256').update(runtime).digest('hex'),
+    promptSha256: createHash('sha256').update(prompt).digest('hex'),
+    deltaUtilityGateBound: runtime.includes('DELTA_UTIL_CONTINUA; SEM_PROVA_NAO_PASSA'),
+    noProofNoPassBound: runtime.includes('NO_PROOF_NO_PASS: true'),
+  };
+}
 
 function montarPrompt(missao, historico, erros_anteriores = []) {
   const hist = (historico || []).length === 0
@@ -109,12 +149,12 @@ function extrairJSON(texto) {
 // ═══════════════════════════════════════════════════════════════
 // FALLBACK 4 — Elite Anthropic Proxy
 // ═══════════════════════════════════════════════════════════════
-async function chamarEliteAnthropic(prompt) {
+async function chamarEliteAnthropic(prompt, system) {
   if (!ELITE_TOKEN) throw new Error('ELITE_ANTHROPIC_TOKEN não configurado');
   const body = {
     model: ELITE_MODEL,
     max_tokens: 2048,
-    system: SYSTEM,
+    system,
     messages: [{ role: 'user', content: prompt }],
   };
   for (let tentativa = 1; tentativa <= 2; tentativa++) {
@@ -145,6 +185,9 @@ async function chamarEliteAnthropic(prompt) {
 // FUNÇÃO PRINCIPAL — decidir(missao, historico)
 // ═══════════════════════════════════════════════════════════════
 export async function decidir(missao, historico) {
+  const canonical = carregarSystemCanonico();
+  const system = canonical.system;
+
   // 1. Cache HIT?
   const k = chaveCache(missao, historico);
   const hit = verCache(k);
@@ -160,7 +203,7 @@ export async function decidir(missao, historico) {
     const t0 = Date.now();
     try {
       const prompt = montarPrompt(missao, historico, historico_erros);
-      const { stdout } = await pexec('darkai', ['--model', cfg.modelo, '--system', SYSTEM, prompt], {
+      const { stdout } = await pexec('darkai', ['--model', cfg.modelo, '--system', system, prompt], {
         maxBuffer: 10 * 1024 * 1024,
         timeout: cfg.timeout_ms,
       });
@@ -181,7 +224,7 @@ export async function decidir(missao, historico) {
   const t0 = Date.now();
   try {
     const prompt = montarPrompt(missao, historico, historico_erros);
-    const texto = await chamarEliteAnthropic(prompt);
+    const texto = await chamarEliteAnthropic(prompt, system);
     const decisao = extrairJSON(texto);
     decisao._modelo_usado = `elite:${ELITE_MODEL}`;
     console.log(`[decisor] ✅ Elite ${ELITE_MODEL} respondeu em ${Date.now()-t0}ms`);
@@ -193,8 +236,29 @@ export async function decidir(missao, historico) {
   }
 }
 
-// CLI standalone pra debug
+// CLI standalone pra debug/prova de binding sem chamar modelo
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const [,, missao = 'test', hist = '[]'] = process.argv;
-  decidir(missao, JSON.parse(hist)).then(d => console.log(JSON.stringify(d, null, 2)));
+  if (process.argv.includes('--contract-probe')) {
+    try {
+      const canonical = carregarSystemCanonico();
+      console.log(JSON.stringify({
+        ok: true,
+        schema: 'centraldark.hermes-vivo.contract-probe.v1',
+        runtime_path: canonical.runtimePath,
+        prompt_path: canonical.promptPath,
+        runtime_sha256: canonical.runtimeSha256,
+        prompt_sha256: canonical.promptSha256,
+        delta_utility_gate_bound: canonical.deltaUtilityGateBound,
+        no_proof_no_pass_bound: canonical.noProofNoPassBound,
+      }, null, 2));
+      console.log('HERMES_RUNTIME_CONTRACT_PROBE=PASS');
+    } catch (error) {
+      console.error(JSON.stringify({ ok: false, error: String(error?.message || error) }, null, 2));
+      console.error('HERMES_RUNTIME_CONTRACT_PROBE=FAIL');
+      process.exitCode = 1;
+    }
+  } else {
+    const [,, missao = 'test', hist = '[]'] = process.argv;
+    decidir(missao, JSON.parse(hist)).then(d => console.log(JSON.stringify(d, null, 2)));
+  }
 }
