@@ -104,7 +104,9 @@ function validateContract(value) {
 
   if (daily.marker !== 'DAILY_CHECKLIST_GATE_REQUIRED') errors.push('DAILY_CHECKLIST_MARKER');
   if (daily.authority !== 'SEGREDO/CHEFE') errors.push('DAILY_CHECKLIST_AUTHORITY');
-  if (daily.per_head_attestation_required !== true) errors.push('DAILY_CHECKLIST_HEAD_BINDING_REQUIRED');
+  if (daily.per_day_attestation_required !== true) errors.push('DAILY_CHECKLIST_DAILY_BINDING_REQUIRED');
+  if (daily.date_binding !== 'Daily-Checklist-Date MUST_EQUAL HEAD_COMMIT_DATE_IN_AMERICA_SAO_PAULO') errors.push('DAILY_CHECKLIST_DATE_BINDING_INVALID');
+  if (daily.head_field_role !== 'OPTIONAL_PROVENANCE_NOT_GATE') errors.push('DAILY_CHECKLIST_HEAD_MUST_NOT_BE_GATE');
   if (daily.unknown_receipt !== 'BLOCK_CODE_PROMOTION') errors.push('DAILY_CHECKLIST_UNKNOWN_MUST_BLOCK');
   if (daily.mirror_is_authority !== false) errors.push('DAILY_CHECKLIST_MIRROR_MUST_NOT_BE_AUTHORITY');
 
@@ -190,7 +192,9 @@ const CAPABILITY_SPECS = [
     owner: CONTRACT,
     markers: [
       '"marker": "DAILY_CHECKLIST_GATE_REQUIRED"',
-      '"per_head_attestation_required": true',
+      '"per_day_attestation_required": true',
+      '"date_binding": "Daily-Checklist-Date MUST_EQUAL HEAD_COMMIT_DATE_IN_AMERICA_SAO_PAULO"',
+      '"head_field_role": "OPTIONAL_PROVENANCE_NOT_GATE"',
       '"unknown_receipt": "BLOCK_CODE_PROMOTION"',
       '"mirror_is_authority": false',
     ],
@@ -474,7 +478,7 @@ const condensedDna = {
     'LIVE_STATE_OVERRIDES_STALE_CONTEXT',
     'REUSE_BEFORE_CREATE',
     'PARALLELIZE_PERCEPTION_SERIALIZE_MUTATION',
-    'DAILY_CHECKLIST_HEAD_BOUND_BEFORE_CODE_PROMOTION',
+    'DAILY_CHECKLIST_DAY_BOUND_BEFORE_CODE_PROMOTION',
     'MULTIPLE_WRITERS_DISJOINT_SCOPES_SINGLE_FINALIZER_PROMOTION',
     'MODEL_NAME_IS_NOT_ROUTING_AUTHORITY',
     'GOAL_PAI_SURVIVES_PROMOTION_DEPLOY_AND_REMEASUREMENT',
@@ -503,7 +507,7 @@ const condensedDna = {
     'LOAD_OWNER_SOURCE_ON_DEMAND',
     'MEASURE_RUNTIME_TOOLS_AND_STATE',
     'RECONCILE_BEFORE_CREATE',
-    'VERIFY_DAILY_CHECKLIST_RECEIPT_BOUND_TO_CURRENT_HEAD',
+    'VERIFY_DAILY_CHECKLIST_RECEIPT_BOUND_TO_HEAD_COMMIT_DAY',
     'ACQUIRE_WRITER_OR_FINALIZER_LEASE_BY_SCOPE',
     'EXECUTE_MINIMAL_CAUSAL_DELTA_WITH_ONE_WRITER',
     'VERIFY_CLAIM_ON_SAME_TARGET',
