@@ -103,6 +103,41 @@ function isNullOid(value) {
   return /^0{40}$/.test(String(value || "").trim());
 }
 
+function lerGithubEvent() {
+  const eventPath = process.env.GITHUB_EVENT_PATH;
+  if (!eventPath) return null;
+  try {
+    return JSON.parse(readFileSync(eventPath, "utf8"));
+  } catch {
+    return null;
+  }
+}
+
+function caminhosDeCodigo(baseSha, headSha) {
+  if (!shaValido(baseSha) || !shaValido(headSha) || isNullOid(baseSha)) return [];
+  try {
+    return git(["diff", "--name-only", baseSha, headSha])
+      .split(/\r?\n/)
+      .map((item) => item.trim())
+      .filter(Boolean)
+      .filter((path) =>
+        /\.(?:cjs|mjs|js|jsx|ts|tsx|py|sh|ps1|go|rs|java|kt|cs|cpp|c|h|hpp|json|ya?ml)$/i.test(path) &&
+        !/^docs\//.test(path),
+      );
+  } catch {
+    return [];
+  }
+}
+
+function campoReceipt(body, name) {
+  const prefix = `${name}:`;
+  const line = String(body || "")
+    .split(/\r?\n/)
+    .map((item) => item.trim())
+    .find((item) => item.startsWith(prefix));
+  return line ? line.slice(prefix.length).trim() : "";
+}
+
 function caminhosCitados(texto) {
   const encontrados = new Set();
   const padroes = [
@@ -281,6 +316,16 @@ if (!contract) {
   if (rules.model_vote_is_truth_mechanism !== false) errors.push("ARQUITETURA_VOTACAO_DE_MODELO_COMO_VERDADE");
   if (rules.same_finding_without_new_evidence !== "DROP_DUPLICATE") errors.push("ARQUITETURA_ANTI_ECO_AUSENTE");
   if (rules.derived_projection_is_source_of_truth !== false) errors.push("ARQUITETURA_PROJECAO_DERIVADA_COMO_AUTORIDADE");
+
+  const dailyChecklist = contract.daily_checklist_gate ?? {};
+  if (dailyChecklist.marker !== "DAILY_CHECKLIST_GATE_REQUIRED") errors.push("DAILY_CHECKLIST_GATE_MARKER_AUSENTE");
+  if (dailyChecklist.authority !== "SEGREDO/CHEFE") errors.push("DAILY_CHECKLIST_AUTHORITY_INVALIDA");
+  if (dailyChecklist.mirror_is_authority !== false) errors.push("DAILY_CHECKLIST_MIRROR_VIROU_AUTORIDADE");
+  if (dailyChecklist.applies_when !== "AI_OR_AGENT_MUTATES_CODE") errors.push("DAILY_CHECKLIST_SCOPE_INVALIDO");
+  if (dailyChecklist.per_head_attestation_required !== true) errors.push("DAILY_CHECKLIST_HEAD_BINDING_DESATIVADO");
+  if (dailyChecklist.unknown_receipt !== "BLOCK_CODE_PROMOTION") errors.push("DAILY_CHECKLIST_UNKNOWN_NAO_BLOQUEIA");
+  if (dailyChecklist.action_is_proof !== false) errors.push("DAILY_CHECKLIST_ACTION_VIROU_PROVA");
+  if (dailyChecklist.documented_is_executed !== false) errors.push("DAILY_CHECKLIST_DOCUMENTED_VIROU_EXECUTED");
   if (contract.complexity_policy?.never_expose_internal_governance_as_user_bureaucracy !== true) {
     errors.push("CONTRATO_RECONCILIACAO_GOVERNANCA_EXPOSTA_AO_USUARIO");
   }
@@ -328,6 +373,31 @@ if (!contract) {
   if (mutation.parallel_same_scope !== "BLOCKED") errors.push("ARQUITETURA_WRITER_PARALELO_NAO_BLOQUEADO");
   if (mutation.handoff_required !== true) errors.push("ARQUITETURA_HANDOFF_NAO_OBRIGATORIO");
   if (mutation.strategy !== "MINIMAL_CAUSAL_MUTATION") errors.push("ARQUITETURA_MUTACAO_NAO_MINIMA");
+  if (mutation.multiple_writers_allowed !== true) errors.push("MULTIPLE_WRITERS_DISJOINT_SCOPES_NAO_PERMITIDOS");
+  if (mutation.concurrent_writers_disjoint_scopes !== true) errors.push("WRITERS_DISJOINT_SCOPES_NAO_CONCORRENTES");
+  if (mutation.same_mutable_scope_requires_writer_lease !== true) errors.push("WRITER_LEASE_MESMO_ESCOPO_AUSENTE");
+  if (mutation.model_name_is_routing_key !== false) errors.push("MODEL_NAME_VIROU_ROUTING_KEY");
+  if (mutation.model_name_is_writer_lease !== false) errors.push("MODEL_NAME_VIROU_WRITER_LEASE");
+  const executorSelection = ["TAG_EXECUTOR", "CAPABILITY_MATCH", "SCOPE_MATCH", "LEASE_AVAILABLE", "POLICY_ALLOWED"];
+  if (!Array.isArray(mutation.executor_selection) || executorSelection.some((item, index) => mutation.executor_selection[index] !== item) || mutation.executor_selection.length !== executorSelection.length) {
+    errors.push("EXECUTOR_SELECTION_NAO_DETERMINISTICA");
+  }
+
+  const finalization = topology.promotion ?? {};
+  if (finalization.finalization_scope !== "PR_TO_MAIN_TO_DEPLOY") errors.push("FINALIZATION_SCOPE_INVALIDO");
+  if (finalization.one_active_finalizer_lease !== true) errors.push("ONE_FINALIZER_LEASE_AUSENTE");
+  if (finalization.finalizer_role !== "EXECUTOR") errors.push("FINALIZER_ROLE_INVALIDO");
+  if (finalization.finalizer_capability !== "PROMOTION_FINALIZATION") errors.push("FINALIZER_CAPABILITY_INVALIDA");
+  if (finalization.finalizer_model_neutral !== true) errors.push("FINALIZER_PRESO_A_MODELO");
+  if (finalization.finalizer_location !== "VPS_CONTROL_PLANE") errors.push("FINALIZER_FORA_CONTROL_PLANE_VPS");
+  if (finalization.vps_is_intent_authority !== false) errors.push("VPS_VIROU_AUTORIDADE_DE_INTENCAO");
+  if (finalization.intent_authority !== "SEGREDO/CHEFE") errors.push("FINALIZER_INTENT_AUTHORITY_INVALIDA");
+  if (finalization.goal_pai_round_trip_required !== true) errors.push("GOAL_PAI_IDA_VOLTA_AUSENTE");
+  if (finalization.goal_pai_id_stable !== true) errors.push("GOAL_PAI_ID_NAO_ESTAVEL");
+  if (finalization.micro_goal_source !== "CURRENT_FAILURE_SIGNATURE_AND_EVIDENCE") errors.push("MICRO_GOAL_NAO_DERIVADO_DA_FERIDA_CURRENT");
+  if (!Array.isArray(finalization.finalizer_selection) || executorSelection.some((item, index) => finalization.finalizer_selection[index] !== item) || finalization.finalizer_selection.length !== executorSelection.length) {
+    errors.push("FINALIZER_SELECTION_NAO_DETERMINISTICA");
+  }
 
   const observability = topology.observability ?? {};
   if (observability.derived_projection_is_authority !== false) errors.push("ARQUITETURA_OBSERVABILIDADE_VIROU_AUTORIDADE");
@@ -376,6 +446,23 @@ if (!contract) {
   if (workflow.deterministic_first !== true) errors.push("AI_DETERMINISTICO_NAO_PRIORITARIO");
   if (workflow.ai_unavailable !== "DETERMINISTIC_FALLBACK_OR_FAIL_CLOSED") errors.push("AI_SEM_FALLBACK_DETERMINISTICO");
   if (workflow.rate_limit_timeout_model_offline_is_pass !== false) errors.push("AI_INDISPONIVEL_PODE_VIRAR_PASS");
+
+  const event = lerGithubEvent();
+  const pr = event?.pull_request ?? null;
+  const codePaths = caminhosDeCodigo(BASE_SHA, HEAD_SHA);
+  if (pr && codePaths.length > 0) {
+    const body = String(pr.body || "");
+    const checklist = campoReceipt(body, "Daily-Checklist");
+    const checklistDate = campoReceipt(body, "Daily-Checklist-Date");
+    const checklistHead = campoReceipt(body, "Daily-Checklist-Head");
+    const checklistGoal = campoReceipt(body, "Daily-Checklist-Goal");
+    const checklistWriter = campoReceipt(body, "Daily-Checklist-Writer");
+    if (checklist !== "PASS") errors.push("DAILY_CHECKLIST_RECEIPT_AUSENTE");
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(checklistDate)) errors.push("DAILY_CHECKLIST_DATE_INVALIDA");
+    if (checklistHead !== HEAD_SHA) errors.push(`DAILY_CHECKLIST_HEAD_MISMATCH:receipt=${checklistHead || "MISSING"}:current=${HEAD_SHA || "MISSING"}`);
+    if (!checklistGoal) errors.push("DAILY_CHECKLIST_GOAL_AUSENTE");
+    if (!checklistWriter) errors.push("DAILY_CHECKLIST_WRITER_AUSENTE");
+  }
 }
 
 // A dívida histórica pode continuar arquivada, mas estes entrypoints ativos não
