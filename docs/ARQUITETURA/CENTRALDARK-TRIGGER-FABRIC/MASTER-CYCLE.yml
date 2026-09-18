@@ -354,6 +354,25 @@ communication_interface:
   recap_may_use_verse_cadence: true
   technical_status_evidence_and_verdict_remain_literal: true
 
+  operational_hud_protocol:
+    fixed_for_material_execution: true
+    sequence: [HUD_FIRST, TYPE_GOAL, WALK_MATERIAL_POINTS, TOOL_CALL, RESULT_MEASURED, HUD_UPDATE, NEXT_CURSOR]
+    goal_is_visible_and_updates_with_evidence: true
+    narration_material_transitions_only: true
+    narration_style: BAIANES_BIBLICO_TECNICO
+    tool_activity_named_when_available: true
+    no_useless_narration: true
+    event_snapshot_is_not_current_state: true
+    github_event_labels_are_event_snapshot: true
+    current_pr_labels_require_live_api_read: true
+    remeasure_current_after_material_external_change: true
+    invariants:
+      HUD_FIRST_BEFORE_MATERIAL_EXECUTION: true
+      GOAL_STAYS_VISIBLE_DURING_EXECUTION: true
+      TOOL_CALL_IS_ACTION_NOT_PROOF: true
+      EVENT_SNAPSHOT_IS_NOT_CURRENT: true
+      LIVE_LABEL_REMEASUREMENT_REQUIRED_FOR_CURRENT_CLAIM: true
+
   continuity_hud:
     enabled_for_material_execution: true
     owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
