@@ -10,6 +10,12 @@ on:
       - "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/HERMES-AUTOCONFIG-RUNTIME.yml"
       - "apps/modulos/HERMES-CORE/prompts/hermes-core.md"
       - "apps/modulos/HERMES-CORE/core/universal-method-contract.mjs"
+      - "docs/BRAIN/01-CONCEITOS/02-BANDA/BANDA_COMPASSO_GLOBAL.json"
+      - "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml"
+      - "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml"
+      - "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml"
+      - "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/UNIVERSAL-ENGINE-METHOD.yml"
+      - ".agents/skills/centraldark-operational-method/**"
       - ".agents/skills/centraldark-esteira-motor/**"
       - "scripts/vps/centraldark-deploy.sh"
       - "scripts/vps/deploy-guards-dispatcher.sh"
@@ -47,6 +53,17 @@ jobs:
         run: |
           set -Eeuo pipefail
           umask 077
+          RUNTIME_FILES=(
+            "$RUNTIME_CONTRACT"
+            "$VALIDATOR"
+            "$HERMES_PROMPT"
+            "$OPERATIONAL_METHOD"
+            "$UNIVERSAL_METHOD"
+            "$TRIGGER_CONTRACT"
+            "$TRIGGER_MAP"
+            "$AUREOLA_CONTRACT"
+            "$BAND_SCORE"
+          )
           exec 9>/tmp/centraldark-mcp-deploy.lock
           flock -w 90 9 || { echo "DEPLOY_LOCK_TIMEOUT"; exit 21; }
 
@@ -451,6 +468,12 @@ jobs:
       RUNTIME_CONTRACT: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/HERMES-AUTOCONFIG-RUNTIME.yml
       VALIDATOR: apps/modulos/HERMES-CORE/core/universal-method-contract.mjs
       HERMES_PROMPT: apps/modulos/HERMES-CORE/prompts/hermes-core.md
+      OPERATIONAL_METHOD: .agents/skills/centraldark-operational-method/SKILL.md
+      UNIVERSAL_METHOD: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/UNIVERSAL-ENGINE-METHOD.yml
+      TRIGGER_CONTRACT: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml
+      TRIGGER_MAP: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml
+      AUREOLA_CONTRACT: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml
+      BAND_SCORE: docs/BRAIN/01-CONCEITOS/02-BANDA/BANDA_COMPASSO_GLOBAL.json
       SEMANTIC_OWNER: apps/modulos/HERMES-CORE
       SEMANTIC_CAPABILITY: HERMES_RUNTIME
       SEMANTIC_SCOPE: HERMES_RUNTIME
@@ -479,7 +502,7 @@ jobs:
             exit 74
           }
 
-          for rel in "$RUNTIME_CONTRACT" "$VALIDATOR" "$HERMES_PROMPT"; do
+          for rel in "${RUNTIME_FILES[@]}"; do
             git cat-file -e "$TARGET_SHA:$rel" 2>/dev/null || {
               echo "TARGET_FILE_MISSING=$rel"
               exit 75
@@ -505,7 +528,7 @@ jobs:
             set +e
             if [[ "$rc" -ne 0 && "$copied" == "1" ]]; then
               echo "HERMES_RUNTIME_ROLLBACK_BEGIN"
-              for rel in "$RUNTIME_CONTRACT" "$VALIDATOR" "$HERMES_PROMPT"; do
+              for rel in "${RUNTIME_FILES[@]}"; do
                 if [[ -f "$BACKUP_DIR/$rel" ]]; then
                   mkdir -p "$(dirname "$REPO_DIR/$rel")"
                   cp -a "$BACKUP_DIR/$rel" "$REPO_DIR/$rel"
@@ -532,7 +555,7 @@ jobs:
           grep -q 'AUTONOMY_MODES=SONHAR->EXPERIMENTAR->CRISTALIZAR' "$HERMES_PROMPT"
           grep -q 'FREEDOM_TO_EXPLORE_IS_NOT_FREEDOM_TO_INVENT_STATE: true' "$RUNTIME_CONTRACT"
 
-          for rel in "$RUNTIME_CONTRACT" "$VALIDATOR" "$HERMES_PROMPT"; do
+          for rel in "${RUNTIME_FILES[@]}"; do
             mkdir -p "$BACKUP_DIR/$(dirname "$rel")"
             if [[ -f "$REPO_DIR/$rel" ]]; then
               cp -a "$REPO_DIR/$rel" "$BACKUP_DIR/$rel"
@@ -586,10 +609,16 @@ jobs:
             echo "HERMES_RUNTIME_HASH_MISMATCH"
             exit 81
           }
+          LIVE_CONTRACT_SET_HASH="$(for rel in "${RUNTIME_FILES[@]}"; do printf '%s  %s\n' "$(sha256sum "$rel" | awk '{print $1}')" "$rel"; done | sha256sum | awk '{print $1}')"
+          TARGET_CONTRACT_SET_HASH="$(for rel in "${RUNTIME_FILES[@]}"; do printf '%s  %s\n' "$(git -C "$BUILD_DIR" show "$TARGET_SHA:$rel" | sha256sum | awk '{print $1}')" "$rel"; done | sha256sum | awk '{print $1}')"
+          [[ "$LIVE_CONTRACT_SET_HASH" == "$TARGET_CONTRACT_SET_HASH" ]] || {
+            echo "HERMES_CONTRACT_SET_HASH_MISMATCH"
+            exit 82
+          }
 
           RECEIPT="$REPO_DIR/logs/hermes-runtime-last-known-good.json"
           mkdir -p "$(dirname "$RECEIPT")"
-          jq -n             --arg sha "$TARGET_SHA"             --arg contract "$RUNTIME_CONTRACT"             --arg runtime_hash "$LIVE_RUNTIME_HASH"             --arg owner "$SEMANTIC_OWNER"             --arg capability "$SEMANTIC_CAPABILITY"             --arg scope "$SEMANTIC_SCOPE"             --arg run_id "$GITHUB_RUN_ID"             --arg job_key "$GITHUB_JOB"             --arg workflow_ref "$GITHUB_WORKFLOW_REF"             --argjson old_pid "$OLD_PID"             --argjson new_pid "$NEW_PID"             --arg observed_at "$(date -u +%Y-%m-%dT%H:%M:%SZ)"             '{
+          jq -n             --arg sha "$TARGET_SHA"             --arg contract "$RUNTIME_CONTRACT"             --arg runtime_hash "$LIVE_RUNTIME_HASH"             --arg contract_set_hash "$LIVE_CONTRACT_SET_HASH"             --arg owner "$SEMANTIC_OWNER"             --arg capability "$SEMANTIC_CAPABILITY"             --arg scope "$SEMANTIC_SCOPE"             --arg run_id "$GITHUB_RUN_ID"             --arg job_key "$GITHUB_JOB"             --arg workflow_ref "$GITHUB_WORKFLOW_REF"             --argjson old_pid "$OLD_PID"             --argjson new_pid "$NEW_PID"             --arg observed_at "$(date -u +%Y-%m-%dT%H:%M:%SZ)"             '{
               schema:"centraldark.hermes-runtime-deploy.v1",
               semanticIdentity:{owner:$owner,capability:$capability,scope:$scope},
               executionProvenance:{
@@ -603,6 +632,8 @@ jobs:
               validatedSha:$sha,
               contract:$contract,
               runtimeHash:$runtime_hash,
+              contractSetHash:$contract_set_hash,
+              contractCoverage:{defined:9,deployed:9,percent:100,meaning:"DEFINED_CANONICAL_RUNTIME_SET"},
               oldPid:$old_pid,
               newPid:$new_pid,
               pm2Status:"online",
@@ -622,4 +653,6 @@ jobs:
           echo "OLD_PID=$OLD_PID"
           echo "NEW_PID=$NEW_PID"
           echo "RUNTIME_HASH=$LIVE_RUNTIME_HASH"
+          echo "CONTRACT_SET_HASH=$LIVE_CONTRACT_SET_HASH"
+          echo "DEFINED_CONTRACT_COVERAGE=9/9=100%"
           echo "RECEIPT=$RECEIPT"

@@ -2,6 +2,7 @@ schema: centraldark.universal-engine-method.v1
 status: CANDIDATE_UNTIL_SAME_HEAD_CI
 owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
 authority: SEGREDO/CHEFE
+operational_method_owner: .agents/skills/centraldark-operational-method/SKILL.md
 applies_to: ALL_CURRENT_AND_FUTURE_ENGINES
 
 purpose: >-
@@ -366,3 +367,47 @@ same_body_evolution:
     mass_job_creation_without_independent_boundaries: FORBIDDEN
     mass_workflow_creation_without_independent_boundaries: FORBIDDEN
     complexity_without_capability_gain: REGRESSION
+
+
+aureola_learning_contract:
+  applies_to: [SOL, HERMES, PIVETE, CURRENT_EXECUTOR, ALL_CURRENT_AND_FUTURE_ENGINES]
+  operational_method: .agents/skills/centraldark-operational-method/SKILL.md
+  event: AUREOLA_MATERIAL_DISCOVERY
+  semantic_role: MATERIAL_LEARNING_CANDIDATE
+  flow:
+    - MATERIAL_OPERATIONAL_EVENT
+    - LEARNING_REF
+    - FACT_INFERENCE_HYPOTHESIS_UNKNOWN
+    - EVIDENCE_OR_FALSIFIER
+    - DEDUPE
+    - SEARCH_EXISTING_CRYSTAL
+    - SESSION_INTELLIGENCE_HARVESTER
+    - MEMORY_LINKER
+    - DREAM_REVIEW
+    - PATTERN_DISCOVERY
+    - KNOWLEDGE_COMPILER
+    - EXISTING_CANONICAL_OWNER
+    - REAL_CONSUMER
+    - TEST_OR_RUNTIME_BINDING
+    - COUNTERPROOF
+    - AUTHORIZED_WRITER
+    - REUSE_NEXT_EQUIVALENT_EVENT
+  invariants:
+    EVERY_MATERIAL_DISCOVERY_GETS_LEARNING_REF: true
+    DISCOVERY_IS_NOT_CANONICAL_FACT: true
+    LEARNING_CANDIDATE_IS_NOT_CRYSTAL: true
+    SAME_FINDING_WITHOUT_NEW_EVIDENCE: DROP_DUPLICATE
+    PROVEN_RULE_REUSED_BEFORE_REINVESTIGATION: true
+    SOL_AND_HERMES_SHARE_SAME_LEARNING_CONTRACT: true
+    VERSE_IS_SEMANTIC_CUE_NOT_PROOF: true
+    CALCULATION_IS_NOT_RUNTIME_OBSERVATION: true
+
+bounded_100_percent:
+  allowed: true
+  meaning: ALL_DEFINED_SCOPE_CONDITIONS_MEASURED_AND_PASSED
+  formula: PASSED_DEFINED_CHECKS / ALL_DEFINED_CHECKS
+  requires_explicit_denominator: true
+  current_scope_required: true
+  current_head_when_git_material: true
+  external_world_infallibility_claim: false
+  calculation_only_global_runtime_claim: false
