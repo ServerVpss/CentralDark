@@ -124,7 +124,7 @@ CentralDarkBridge.cs
 SHA256=74260F8D645E4219A9F50735CD69C2A2DDA5E551C3265ED8CA42C8DB1DC10B96
 
 RUN-ALL.ps1
-SHA256=FA9571533CDB32925529F2607DCDEDE6E8BAAE8DF663C33C449D032525EFA32B
+SHA256=991D582C32DD06EF5578AA063F72A635ED431E3AFA15BADFDB0BBCB702BA8826
 
 OAUTH-CONNECT.ps1
 SHA256=0035B4FDC293EAB64C78C8C1BEA5CA29DA67DD374C07B53228E062F7AF5E20BC
@@ -189,3 +189,100 @@ CHEFE clica AUTH CENTRALDARK
 → tool call real
 → receipt final
 ```
+
+
+## Re-medição CURRENT — 2026-09-18 16:06 -03:00
+
+A linha Bridge/Tray foi reexecutada na Casa após o PDF gate completo e sem criar produto paralelo.
+
+### PDF gate completo
+
+```text
+IDENTITY=PASS
+POLICY=PASS
+SELF_TEST=PASS
+NODE_TEST=5/5 PASS
+TAMPER_COUNTERPROOF=PASS
+PDF_GATE_PROMOTED=true
+RECEIPT=C:\Users\Administrador\AppData\Local\CentralDark\ScheduledJobs\receipts\PDF_GATE-latest.json
+LOG=C:\Users\Administrador\AppData\Local\CentralDark\ScheduledJobs\logs\PDF_GATE-20260918-155330.log
+```
+
+### Bridge = Tray · mesmo processo
+
+Contraprova automatizada real:
+
+```text
+visible_before=true
+visible_after_minimize=false
+state_after_minimize=TRAY_MINIMIZED
+second_launch_exited=true
+process_count_after_second_launch=1
+original_pid_still_alive=true
+visible_after_restore=true
+state_after_restore=RESTORED
+same_process_proved=true
+```
+
+Receipt local:
+
+`C:\Users\Administrador\AppData\Local\CentralDark\UnifiedRuntime\receipts\bridge-tray-same-process-latest.json`
+
+O processo legado `CentralDark-Remote-Tray.exe` não estava presente na remedição atual. O Tray é estado do próprio `CentralDarkBridge.exe`, não segundo produto/processo.
+
+### UnifiedRuntime / worker remoto
+
+```text
+UNIFIED_RUNTIME=MATERIALIZED
+REMOTE_DC=REUSED
+LEGACY_REMOTE_TRAY_LAUNCHED=false
+TRAY_OWNER_CENTRALDARK_BRIDGE=true
+BRIDGE_SINGLE_INSTANCE=true
+BRIDGE_TRAY_SAME_PROCESS_STATE=true
+SCREENPIPE_3030_API=true
+SCREENPIPE_3031_MCP_HTTP=false
+SCREENPIPE_MCP_HTTP_REQUIRED=false
+MCP_9100_LOCAL=false
+MCP_PUBLIC=HTTP_401
+MCP_ROUTE_AVAILABLE=true
+```
+
+Receipt:
+
+`C:\Users\Administrador\AppData\Local\CentralDark\UnifiedRuntime\receipts\unified-20260918-160442.json`
+
+A ausência de `3031` não é promovida a falha global porque o contrato canônico do Screenpipe define MCP HTTP como transporte opcional. A ausência de `9100` local na Casa não invalida a rota pública CentralDark quando o endpoint público está alcançável.
+
+### VPS Remote Desktop Commander
+
+Foi executada tool call real diretamente no device `vmi3256920` via Remote Desktop Commander 0.2.51.
+
+```text
+VPS_DEVICE_ONLINE=true
+REMOTE_TOOL_CALL_REAL=true
+centraldark-dc-remote@conta1.service=active/running
+centraldark-dc-remote@conta2.service=active/running
+DC_PROFILE_VERSION=0.2.51
+```
+
+Também foram observados services/processos 0.2.48 ainda ativos. A `main` atual continua fixando 0.2.48, portanto isto é classificado como:
+
+```text
+DRIFT_CANONICAL_PIN=0.2.48 <-> 0.2.51
+DO_NOT_PRUNE_BEFORE_CANONICAL_RECONCILIATION=true
+```
+
+### Hashes CURRENT da Casa
+
+```text
+CentralDarkBridge.exe
+SHA256=451259B7AB2E2B3D028E2D59D6F99F95FA20866404B39214469F8EDEDA9BB193
+
+CentralDarkBridge.cs
+SHA256=74260F8D645E4219A9F50735CD69C2A2DDA5E551C3265ED8CA42C8DB1DC10B96
+
+RUN-ALL.ps1
+SHA256=991D582C32DD06EF5578AA063F72A635ED431E3AFA15BADFDB0BBCB702BA8826
+```
+
+Este bloco prova runtime local e VPS dentro do escopo observado. Não transforma autenticação direta pós-consentimento em PASS enquanto a fronteira humana do OAuth não for concluída.
