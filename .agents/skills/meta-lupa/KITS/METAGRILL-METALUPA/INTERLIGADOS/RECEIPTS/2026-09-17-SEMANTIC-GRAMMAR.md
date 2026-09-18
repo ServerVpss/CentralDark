@@ -1,5 +1,7 @@
 # 🧾🧠 Gramática semântica
 
+👑🪬 !CENTRALDARK · 🔗 !># INTERLIGADOS · 🧿 #ACORDAR
+
 ```text
 EMOJI + GANCHO HUMANO + (TERMO TÉCNICO) → FUNÇÃO DE UMA LINHA
 ```
