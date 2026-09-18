@@ -1,10 +1,10 @@
 {
-  "updatedAt": "2026-09-18T06:54:02Z",
+  "updatedAt": "2026-09-18T07:41:01Z",
   "url": "https://mcp.centralldark.com/health",
   "lastCheck": {
     "status": "ok",
     "httpCode": 200,
-    "latencyMs": 573,
+    "latencyMs": 284,
     "restarted": false
   },
   "last24h": {
