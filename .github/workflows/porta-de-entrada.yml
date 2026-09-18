@@ -68,6 +68,45 @@ jobs:
       - name: Setup Node 24 (fast path self-hosted)
         uses: ./.github/actions/setup-node24-selfhosted
 
+      - name: Funil PR-Mãe #1562 — BOT CENTRALDARK → ACORDAR → CALIBRAR
+        if: github.event_name == 'pull_request'
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+          PR_LABELS_JSON: ${{ toJson(github.event.pull_request.labels) }}
+        run: |
+          node --input-type=module <<'NODE'
+          import {
+            CANONICAL_PR_MOTHER,
+            prMotherBinding,
+          } from "./scripts/github-autonomia-promocao.mjs";
+
+          const labels = JSON.parse(process.env.PR_LABELS_JSON || "[]");
+          const pr = {
+            number: Number(process.env.PR_NUMBER || 0),
+            title: process.env.PR_TITLE || "",
+            body: process.env.PR_BODY || "",
+            labels,
+          };
+          const binding = prMotherBinding(pr);
+
+          console.log("BOT_ENTRY=!CENTRALDARK");
+          console.log("BOOT_CHAIN=#ACORDAR>!CALIBRAR");
+          console.log("PR_MOTHER=#" + CANONICAL_PR_MOTHER);
+          console.log("PR_ROLE=" + binding.role);
+
+          if (binding.is_mother) {
+            console.error("PR_MOTHER_FUNNEL_MERGE_FORBIDDEN");
+            process.exit(1);
+          }
+          if (!binding.valid_child) {
+            console.error("PR_MOTHER_BINDING_REQUIRED:#" + CANONICAL_PR_MOTHER);
+            process.exit(1);
+          }
+          console.log("PR_MOTHER_FUNNEL=PASS");
+          NODE
+
       - name: Gate global — Trigger Fabric + runner policy + self-healing contract
         shell: bash
         run: |
