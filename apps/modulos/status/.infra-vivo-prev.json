@@ -1,26 +1,26 @@
 {
   "ok": true,
   "purpose": "infra-vivo-simples",
-  "updatedAt": "2026-09-18T06:48:01.373Z",
-  "updatedAtBR": "18/09/2026, 03:48:01",
+  "updatedAt": "2026-09-18T06:51:02.009Z",
+  "updatedAtBR": "18/09/2026, 03:51:02",
   "host": "vmi3256920",
-  "uptime_sec": 890034,
+  "uptime_sec": 890214,
   "load": {
-    "1m": "3.70",
-    "5m": "4.44",
-    "15m": "4.88"
+    "1m": "4.76",
+    "5m": "4.54",
+    "15m": "4.83"
   },
   "mem": {
     "total_gb": 25.2,
-    "used_gb": 11.8,
-    "avail_gb": 12.9,
-    "used_pct": 46.9
+    "used_gb": 12,
+    "avail_gb": 12.7,
+    "used_pct": 47.5
   },
   "disk": {
     "used_pct": 95,
-    "avail": "10514840",
+    "avail": "10496456",
     "size": "203056560",
-    "used": "192525336",
+    "used": "192543720",
     "mount": "/"
   },
   "pm2": {
@@ -41,21 +41,21 @@
         "status": "online",
         "restarts": 4,
         "mem_mb": 67,
-        "cpu": 2.6
+        "cpu": 0
       },
       {
         "name": "CentralDark-HermesVerificador",
         "status": "online",
         "restarts": 3,
-        "mem_mb": 80,
-        "cpu": 5.1
+        "mem_mb": 81,
+        "cpu": 0
       },
       {
         "name": "CentralDark-WebhookDeploy",
         "status": "online",
         "restarts": 0,
         "mem_mb": 70,
-        "cpu": 2.6
+        "cpu": 0
       },
       {
         "name": "CentralDark-GuardiaoConsciencia",
@@ -139,21 +139,21 @@
         "status": "online",
         "restarts": 0,
         "mem_mb": 50,
-        "cpu": 2.6
+        "cpu": 0
       },
       {
         "name": "CentralDark-MCP",
         "status": "online",
         "restarts": 1,
         "mem_mb": 164,
-        "cpu": 7.7
+        "cpu": 0
       },
       {
         "name": "CentralDark-EliteAnthropic",
         "status": "online",
         "restarts": 0,
         "mem_mb": 44,
-        "cpu": 2.6
+        "cpu": 0
       },
       {
         "name": "hermes-acp",
