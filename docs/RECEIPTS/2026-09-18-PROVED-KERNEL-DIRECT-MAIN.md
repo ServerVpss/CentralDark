@@ -104,3 +104,21 @@ NEW_RUNTIME_CREATED=NO
 PARALLEL_ARCHITECTURE_CREATED=NO
 UNPROVEN_UI_PROMOTED=NO
 ```
+
+
+## Validação pós-promoção
+
+```text
+PROMOTION_COMMIT=8f8d1711cafc4c6d0cae3822f244ca51eead3dc7
+RUNTIME_TARGET=/root/CentralDark
+RUNTIME_BACKUP=/root/.centraldark/runtime-backups/direct-main-kernel-20260918T221949Z
+HERMES_CORE_SELF_TEST_AFTER_MAIN=PASS
+HERMES_DIRECT_MCP_AFTER_MAIN=PASS
+HERMES_MCP_TOOLS_DISCOVERED_AFTER_MAIN=101
+VPS_REMOTE_DEVICE_RECONNECTED=PASS
+```
+
+O runtime recebeu exatamente os cinco artefatos promovidos na main. O validator retornou
+`UNIVERSAL_ENGINE_METHOD_SELF_TEST=PASS` e o Hermes reconectou ao MCP CentralDark,
+descobrindo 101 tools. Nenhum reboot total foi executado; portanto
+`REAL_REBOOT_SURVIVAL` permanece `UNKNOWN`.
