@@ -442,7 +442,7 @@ test("mergeability pendente espera; conflito nunca vira WAIT verde", () => {
 });
 
 test("modo adversarial por label visual preserva workflows e contraprova completos", () => {
-  const pr = prFixture({ body: "sem recibo", labels: [{ name: "👑 PERMITO-SEGREDO" }] });
+  const pr = prFixture({ body: "PR_MOTHER=#" + CANONICAL_PR_MOTHER + "\nsem recibo", labels: [{ name: "👑 PERMITO-SEGREDO" }] });
   const missing = evaluate(pr, { workflowRuns: [] });
   assert.equal(missing.mode, "ADVERSARIAL");
   assert.equal(missing.decision, "WAIT");
