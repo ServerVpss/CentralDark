@@ -11,6 +11,7 @@ const ROOT = path.resolve(__dirname, '..', '..', '..', '..');
 const FILES = {
   universal: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/UNIVERSAL-ENGINE-METHOD.yml',
   operationalMethod: '.agents/skills/centraldark-operational-method/SKILL.md',
+  cotReactLoop: '.agents/skills/cot-react-loop/SKILL.md',
   contract: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml',
   reconciliationContract: 'docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json',
   triggers: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml',
@@ -94,6 +95,7 @@ function parseEngineNames(engineText) {
 export function validateUniversalMethod() {
   const universal = read(FILES.universal);
   const operationalMethod = read(FILES.operationalMethod);
+  const cotReactLoop = read(FILES.cotReactLoop);
   const contract = read(FILES.contract);
   const reconciliationContract = JSON.parse(read(FILES.reconciliationContract));
   const triggers = read(FILES.triggers);
@@ -162,6 +164,23 @@ export function validateUniversalMethod() {
     'CALCULATION != RUNTIME_OBSERVATION',
   ], 'OPERATIONAL_METHOD_LEARNING');
 
+  requireTokens(cotReactLoop, [
+    '### 4.8 Standing Goal + `/goal` — continuidade material, não preâmbulo',
+    'STANDING_GOAL=ACTIVE',
+    'GOAL_PARENT=STABLE',
+    'PHASE_CONTRACT=REHYDRATE_NOT_REINVENT',
+    'PREAMBLE_IS_PROGRESS=false',
+    'ITERATION_COUNTER_IS_PROGRESS=false',
+    'MISSING_REQUIRED_EVIDENCE_FORCE_CONTINUE=true',
+    'CONTINUE_TOWARD_STANDING_GOAL',
+    '/goal RETURNS:',
+    'GOAL_STATUS=CONTINUE',
+    'REASON=NO_MATERIAL_DELIVERABLE_EVIDENCE',
+    'EXECUTE_WITH_JUDGMENT',
+    'STANDING_GOAL_SURVIVES_TOOL_FAILURE=true',
+    'CHILD_FAILURE_DOES_NOT_REPLACE_PARENT_GOAL=true',
+  ], 'COT_REACT_STANDING_GOAL');
+
   let previous = -1;
   for (const token of REQUIRED_CHAIN) {
     const needle = `  - ${token}`;
@@ -200,6 +219,16 @@ export function validateUniversalMethod() {
     'EVENT_SNAPSHOT_IS_NOT_CURRENT: true',
     'LIVE_LABEL_REMEASUREMENT_REQUIRED_FOR_CURRENT_CLAIM: true',
     'current_pr_labels_require_live_api_read: true',
+    'standing_goal_protocol:',
+    'surface: /goal',
+    'surface_role: READ_ONLY_INTROSPECTION',
+    'parent_goal: STABLE_UNTIL_MATERIAL_TERMINAL_STATE',
+    'phase_contract: REHYDRATE_NOT_REINVENT',
+    'progress_denominator: MATERIAL_DELIVERABLES_NOT_ITERATION_COUNT',
+    'PREAMBLE_IS_PROGRESS: false',
+    'MISSING_REQUIRED_EVIDENCE_FORCE_CONTINUE: true',
+    'STANDING_GOAL_SURVIVES_TURN: true',
+    'GOAL_SURFACE_DOES_NOT_EXPAND_AUTHORIZATION: true',
     'continuity_hud:',
     'HUD_IS_NOT_PROOF: true',
     'UNKNOWN_STAYS_UNKNOWN: true',
@@ -381,6 +410,10 @@ export function validateUniversalMethod() {
     live_label_remeasurement_contract: true,
     no_useless_narration_contract: true,
     cot_react_loop_bound: true,
+    cot_react_standing_goal_contract: true,
+    standing_goal_runtime_contract: true,
+    goal_surface_is_read_only_introspection: true,
+    iteration_counter_is_not_completion: true,
     continuity_hud_contract: true,
     operational_narration_contract: true,
     preventive_continuity_staff_contract: true,
