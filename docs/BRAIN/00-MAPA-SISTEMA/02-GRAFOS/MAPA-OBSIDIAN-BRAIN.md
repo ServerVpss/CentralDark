@@ -1,8 +1,19 @@
 ---
-title: "Mapa Obsidian — BRAIN CentralDark"
-status: "NAVIGATION_ONLY"
-updated: 2026-09-18
+title: "🧠 Mapa Obsidian — BRAIN CentralDark"
+status: "DERIVED_VIEW"
+date: 2026-09-18
+updated: 2026-09-18T09:55:00-03:00
 tags: ["brain", "obsidian", "mapa", "grafo", "moc", "biblioteca"]
+category: "BRAIN_NAVIGATION"
+sensitivity: "INTERNAL"
+source: "ServerVpss/CentralDark@main + canonical owners"
+source_class: "INTERNAL"
+source_rule: "GRAFO_IS_NAVIGATION_NOT_AUTHORITY"
+owner: "docs/BRAIN/00-MAPA-SISTEMA/02-GRAFOS/MAPA-OBSIDIAN-BRAIN.md"
+truth_scope: "DERIVED_NAVIGATION_PROJECTION"
+canonical: true
+related: ["docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SPIRAL-TRAVERSAL.yml"]
+links: ["docs/BRAIN/00-MAPA-SISTEMA/01-HUB/BRAIN.md"]
 ---
 
 # 🧠 Mapa Obsidian — BRAIN CentralDark
