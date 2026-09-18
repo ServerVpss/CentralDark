@@ -1,7 +1,7 @@
 ---
 title: "Mapa Obsidian — BRAIN CentralDark"
 status: "NAVIGATION_ONLY"
-updated: 2026-08-22
+updated: 2026-09-18
 tags: ["brain", "obsidian", "mapa", "grafo", "moc", "biblioteca"]
 ---
 
@@ -64,6 +64,84 @@ flowchart TD
     CASA -. "sync físico separado" .-> BRAIN
     GH -. "estado vivo" .-> BRAIN
 ```
+
+## 🌀 Caracol semântico → núcleo runtime
+
+Este mapa **não move as notas** e não achata territórios. Cada nota permanece no seu owner/pasta; o Caracol apenas dá uma rota visual e navegável até o núcleo operacional. O contrato de travessia é reutilizado de `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SPIRAL-TRAVERSAL.yml`.
+
+```mermaid
+flowchart TB
+    subgraph T1["📚 Territórios de conhecimento — permanecem separados"]
+      HIST["🗄️ HISTORICAL_REDIRECT<br/>proveniência / compatibilidade"]
+      BRAINN["🧠 docs/BRAIN<br/>memória e contexto"]
+      DOCS["📚 documentação / decisões / aprendizados"]
+      OBS["💎 CASA-VAULT / Obsidian<br/>espelho + edição local"]
+    end
+
+    subgraph T2["🧭 Navegação e projeções — não são autoridade"]
+      MOC["🗺️ MOCs / wikilinks / backlinks"]
+      GRAPH["🕸️ Grafo / GraphRAG / vetor"]
+      CARACOL["🐚 CARACOL<br/>overlay de travessia"]
+    end
+
+    subgraph T3["🏛️ Fonte estrutural da verdade"]
+      MAIN["🐙 ServerVpss/CentralDark@main"]
+      OWNERS["📜 owners / contratos canônicos"]
+    end
+
+    subgraph T4["⚙️ Núcleo runtime — verdade operacional medida"]
+      MASTER["🎼 MASTER-CYCLE / Trigger Fabric"]
+      HERMES["🪬 HERMES/PIVETE"]
+      MCP["🔌 MCP CentralDark"]
+      SENSORS["👁️ Screenpipe / Desktop / Remote / Tray"]
+      RUNTIME(("⚙️ NÚCLEO RUNTIME"))
+    end
+
+    subgraph T5["⚖️ Trilha de prova — separada da navegação"]
+      TLC["🟡 TLC23 / HORN"]
+      PDF["🔴 PDF_GATE"]
+      CP["⚖️ CONTRAPROVA"]
+      JUDGE["🟢 REALIDADE / FIXED_POINT"]
+    end
+
+    HIST -. "redirect / provenance" .-> MOC
+    BRAINN -. "wikilinks" .-> MOC
+    DOCS -. "relações explicáveis" .-> MOC
+    OBS -. "sync físico controlado" .-> BRAINN
+
+    MOC -. "navegação" .-> GRAPH
+    GRAPH -. "overlay semântico" .-> CARACOL
+    CARACOL -. "outer → inner" .-> MAIN
+
+    MAIN --> OWNERS
+    OWNERS --> MASTER
+    MASTER --> HERMES
+    HERMES --> MCP
+    MCP --> SENSORS
+    SENSORS --> RUNTIME
+
+    RUNTIME -. "evidência medida" .-> TLC
+    TLC --> PDF
+    PDF --> CP
+    CP --> JUDGE
+
+    JUDGE -. "receipt / delta útil" .-> MAIN
+```
+
+A leitura correta é:
+
+```text
+HISTORICAL_REDIRECT != CURRENT
+GRAFO != AUTORIDADE
+PROXIMIDADE_VISUAL != CAUSALIDADE
+CARACOL = NAVEGAÇÃO/OVERLAY
+GITHUB_MAIN + OWNERS = VERDADE ESTRUTURAL
+RUNTIME_MEDIDO = VERDADE OPERACIONAL DO AGORA
+TLC23/HORN → PDF_GATE → CONTRAPROVA → PASS
+MAPA/OBSIDIAN NÃO ALTERA ESTADO DO GATE
+```
+
+Assim as “linhas da viola” ligam os territórios sem misturá-los: a informação pode ser encontrada de fora para dentro e devolvida do núcleo para o owner correto, mas **nenhuma bola vira dona só porque ficou perto do centro**.
 
 ## 🧭 Rotas rápidas
 
