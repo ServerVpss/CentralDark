@@ -29,7 +29,10 @@
       1559,
       1560
     ],
-    "refreshed_from_main": "25f18bc9db61e13332dea6fbd28ab2349a2ac5ca"
+    "refreshed_from_main": "25f18bc9db61e13332dea6fbd28ab2349a2ac5ca",
+    "all_stable_pattern_delta_files_absorbed_through": "DELTA-PR-1551-1567.md",
+    "full_registry_reconciled_at_main": "373c0f3f91280f5496a844813f836dc35c1f1a8d",
+    "pattern_count": 142
   },
   "patterns": [
     {
@@ -1190,6 +1193,360 @@
       "anchor": "FIO VIVO REVALIDA SÓ O QUE É TEMPORAL",
       "pr_refs": [
         1567
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "HUMAN_TIME_HAS_ONE_OWNER",
+      "emoji": "⏰",
+      "anchor": "HORA HUMANA USA OWNER/FUSO CANÔNICO; UTC TÉCNICO CONTINUA PROVA DE MÁQUINA",
+      "pr_refs": [
+        1493
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "OBSERVABILITY_REUSES_EXISTING_TRACE",
+      "emoji": "🔎",
+      "anchor": "CORRELAÇÃO → AUDIT → LOG → SSE; OBSERVAR NÃO CRIA SEGUNDO BARRAMENTO",
+      "pr_refs": [
+        1494
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "EXTERNAL_ACTIONS_PINNED_WHEN_MATERIAL",
+      "emoji": "🔐",
+      "anchor": "AÇÃO EXTERNA FLUTUANTE NÃO ENTRA EM GATE CRÍTICO SEM IDENTIDADE IMUTÁVEL",
+      "pr_refs": [
+        1497
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "PR_SYNC_IS_NOT_APPROVAL",
+      "emoji": "📡",
+      "anchor": "SINCRONIZAR PR NÃO APROVA; PENDING ESPERA; CONFLITO BLOQUEIA; SEM CHURN INÚTIL",
+      "pr_refs": [
+        1498,
+        1537
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "LIVE_PR_STATE_BEATS_LIST_SNAPSHOT",
+      "emoji": "🧭",
+      "anchor": "ANTES DE DECIDIR, REMEDIR O PR INDIVIDUAL; LISTA COLETIVA NÃO É AUTORIDADE VIVA",
+      "pr_refs": [
+        1537
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "QUEUE_MUST_NOT_STARVE",
+      "emoji": "🧵",
+      "anchor": "FILA RETOMÁVEL USA CURSOR/FAIRNESS SEM ABANDONAR ITENS ANTIGOS APÓS RATE-LIMIT",
+      "pr_refs": [
+        1537
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "CANONICAL_OWNERS_MUST_BE_REACHABLE",
+      "emoji": "🚪",
+      "anchor": "OWNER CANÔNICO PRECISA SER ALCANÇÁVEL PELA PORTA; ÓRFÃO CONHECIDO NÃO VIRA NORMAL",
+      "pr_refs": [
+        1500
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "DOCUMENTATION_AND_CATALOG_ARE_SENSORS",
+      "emoji": "📚",
+      "anchor": "DOCS/CATÁLOGOS INFORMAM CAPACIDADE; NÃO VIRAM AUTORIDADE NEM EXECUÇÃO",
+      "pr_refs": [
+        1501,
+        1502,
+        1514
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "LOAD_CAPABILITY_ON_DEMAND",
+      "emoji": "🧩",
+      "anchor": "CARREGAR SOMENTE A SKILL NECESSÁRIA AO GAP MATERIAL; CATÁLOGO INTEIRO NÃO AUTOEXECUTA",
+      "pr_refs": [
+        1501,
+        1502,
+        1514
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "OPTIONAL_INTEGRATION_OFF_IS_NOT_GLOBAL_FAILURE",
+      "emoji": "🔌",
+      "anchor": "INTEGRAÇÃO OPCIONAL INDISPONÍVEL NÃO BLOQUEIA MISSÃO QUANDO EXISTE ROTA/FALLBACK SUFICIENTE",
+      "pr_refs": [
+        1503,
+        1523
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "SURFACE_BLOCKER_IS_NOT_CORE_SERVER_FAILURE",
+      "emoji": "🌉",
+      "anchor": "CONECTOR/SUPERFÍCIE INDISPONÍVEL NÃO PROVA FALHA DO MCP/CORE",
+      "pr_refs": [
+        1508
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "RAW_MATERIAL_ENTERS_AS_CANDIDATE",
+      "emoji": "📥",
+      "anchor": "INBOX/DRIVE/MATERIAL BRUTO ENTRA COM PROVENIÊNCIA; NÃO SOBRESCREVE CÂNONE",
+      "pr_refs": [
+        1510,
+        1546,
+        1545
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "CALIBRATE_EXECUTE_FALSIFY",
+      "emoji": "🧠",
+      "anchor": "FABLE CALIBRA ANTES; COT-REACT EXECUTA DURANTE; META-LUPA FALSIFICA DEPOIS",
+      "pr_refs": [
+        1512
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "REUSE_PREFLIGHT_BEFORE_NEW_CAPABILITY",
+      "emoji": "♻️",
+      "anchor": "MEDIR OWNER/DECISÃO/CAPACIDADE EXISTENTE ANTES DE CRIAR ALGO NOVO",
+      "pr_refs": [
+        1513,
+        1533
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "DUAL_USE_ANALYZE_BEFORE_BLOCK",
+      "emoji": "🔐",
+      "anchor": "CAPACIDADE POTENTE É INSPECIONADA POR ALVO/AUTORIDADE/RISCO ANTES DE BLOQUEIO GENÉRICO",
+      "pr_refs": [
+        1515
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "EXPLICIT_DELIVERY_USES_SAME_SHA",
+      "emoji": "🚀",
+      "anchor": "COMMIT → BUILD/TEST NO SHA EXATO → MICRO-DEPLOY DO MESMO SHA → RUNTIME PROOF → RECEIPT",
+      "pr_refs": [
+        1516,
+        1517
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "CONTEXT_TRUNCATION_DOES_NOT_END_MISSION",
+      "emoji": "🧠",
+      "anchor": "CONTEXTO GRANDE VIRA LEITURA DIRIGIDA/BOUNDED; UNKNOWN FICA RESTRITO AO CLAIM NÃO LIDO",
+      "pr_refs": [
+        1518
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "OAUTH_PUBLIC_DISCOVERY_WITHOUT_STORED_BEARER",
+      "emoji": "🔐",
+      "anchor": "DESCOBERTA PÚBLICA + PKCE/ESCOPO; NÃO CRISTALIZAR BEARER TOKEN EM CONFIG",
+      "pr_refs": [
+        1519
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "PRIVATE_TRANSPORT_DOES_NOT_CHANGE_OWNER",
+      "emoji": "🔐",
+      "anchor": "TÚNEL/PAIRING PRIVADO É TRANSPORTE; NÃO CRIA SEGUNDO CÉREBRO/ROUTER/AUTORIDADE",
+      "pr_refs": [
+        1520
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "MODEL_IS_REPLACEABLE_ENGINE",
+      "emoji": "🤖",
+      "anchor": "HERMES/CORPO AGENTE CONTINUA OWNER OPERACIONAL; MODELOS SÃO MOTORES PLUGÁVEIS",
+      "pr_refs": [
+        1523
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "TOOL_CATALOG_IS_NOT_MODEL_CATALOG",
+      "emoji": "🧰",
+      "anchor": "CATÁLOGO DE FERRAMENTAS E CATÁLOGO DE MODELOS PERMANECEM SEPARADOS",
+      "pr_refs": [
+        1523
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "SCORE_AND_BADGE_ARE_TELEMETRY",
+      "emoji": "🏷️",
+      "anchor": "SCORE/BADGE/TENDÊNCIA ORIENTAM; NUNCA SUBSTITUEM CI/PROVA",
+      "pr_refs": [
+        1530
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "ONE_WORKFLOW_PER_CONTRACT",
+      "emoji": "🧿",
+      "anchor": "REPARAR OWNER EXISTENTE; NÃO CRIAR WORKFLOW PARALELO PARA O MESMO CONTRATO",
+      "pr_refs": [
+        1531
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "HISTORICAL_ERROR_IS_NOT_CURRENT_FAILURE",
+      "emoji": "🕰️",
+      "anchor": "ERRO DE OUTRO CHAT/RECEIPT VIRA CANDIDATO DE REMEDIÇÃO ATÉ REPRODUÇÃO ATUAL",
+      "pr_refs": [
+        1532
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "HORN_REUSE_FIXED_POINT_FAILS_CLOSED",
+      "emoji": "🧠",
+      "anchor": "PREMISSAS → CONCLUSÃO; CONTRADIÇÃO/UNKNOWN NÃO PROMOVE PASS",
+      "pr_refs": [
+        1533,
+        1548,
+        1549
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "CONSUMER_INHERITS_CANONICAL_CONTRACT",
+      "emoji": "🧾",
+      "anchor": "BOT/CONSUMER HERDA CONTRATO EXISTENTE; NÃO COPIA AUTORIDADE EM PARALELO",
+      "pr_refs": [
+        1535
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "CONTENT_HASH_ANCHORS_IDENTITY_NOT_AUTHORITY",
+      "emoji": "🧬",
+      "anchor": "HASH PRENDE IDENTIDADE/PROVENIÊNCIA; FONTE PRESERVADA NÃO VIRA AUTORIDADE OPERACIONAL",
+      "pr_refs": [
+        1536
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "USER_REPORTED_ERROR_IS_PRIORITY_SIGNAL_NOT_PROOF",
+      "emoji": "📣",
+      "anchor": "RELATO DO CHEFE PRIORIZA INVESTIGAÇÃO; NÃO VIRA PASS/FAIL SEM MEDIÇÃO",
+      "pr_refs": [
+        1538
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "BEFORE_BLOCKED_MEASURE_AUTHORIZED_CHANNELS",
+      "emoji": "🧭",
+      "anchor": "ANTES DE DECLARAR BLOCKED, MEDIR CANAIS JÁ AUTORIZADOS E APLICÁVEIS",
+      "pr_refs": [
+        1538
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "PR_MOTHER_IS_SINGLE_RENDEZVOUS",
+      "emoji": "🧭",
+      "anchor": "ISSUE → DELTA ÚTIL → OWNER → TESTE → CONTRAPROVA → PR-MÃE → MAIN; SEM MÚLTIPLOS WRITERS",
+      "pr_refs": [
+        1540
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "REVIEW_ROLE_IS_CAPABILITY_NOT_AUTHORITY",
+      "emoji": "🤖",
+      "anchor": "CODEX/REVIEWER É PAPEL SUBSTITUÍVEL; INDISPONIBILIDADE PERMITE FALLBACK SEM CONCEDER AUTORIDADE",
+      "pr_refs": [
+        1541
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "HUMAN_FIRST_HUD_TECHNICAL_PRESERVED",
+      "emoji": "🎨",
+      "anchor": "LINGUAGEM HUMANA/EMOJI PRIMEIRO; TERMO TÉCNICO PERMANECE DISPONÍVEL; EMOJI NÃO É PROVA",
+      "pr_refs": [
+        1543
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "DERIVED_GRAPH_IS_NOT_AUTHORITY",
+      "emoji": "🧠",
+      "anchor": "ALINHAMENTO/GRAFO DERIVADOS AJUDAM DECISÃO; CONFLITO EQUIVALENTE PERMANECE CONFLICT/UNKNOWN",
+      "pr_refs": [
+        1544
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "INGESTION_DOES_NOT_GRANT_AUTHORITY",
+      "emoji": "🧬",
+      "anchor": "AUTO-INGESTÃO EXIGE PROVENIÊNCIA/DEDUPE/OWNER; ENTRADA NÃO GANHA AUTORIDADE SÓ POR CHEGAR",
+      "pr_refs": [
+        1546
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "ONE_LOGIN_IS_NOT_ONE_SECRET",
+      "emoji": "🔐",
+      "anchor": "UMA ENTRADA HUMANA PODE GOVERNAR N CAPACIDADES; CREDENCIAIS INTERNAS CONTINUAM POR ESCOPO",
+      "pr_refs": [
+        1547
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "IMMUTABLE_PROOF_REUSES_FINGERPRINT",
+      "emoji": "💠",
+      "anchor": "PROVA NÃO TEMPORAL PODE SER REUTILIZADA ENQUANTO PREMISSAS/FINGERPRINT NÃO MUDAREM; DEPLOY É TEMPORAL E REMEDE",
+      "pr_refs": [
+        1548
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "FIXED_POINT_IS_CHECKPOINT_NOT_END_OF_LEARNING",
+      "emoji": "🔄",
+      "anchor": "FIXED POINT FECHA A RODADA SEM DESLIGAR CAPACIDADE DE APRENDER/RETOMAR PRÓXIMO CURSOR",
+      "pr_refs": [
+        1549
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "NARRATIVE_IS_NOT_PROOF",
+      "emoji": "🔊",
+      "anchor": "NARRAÇÃO CURTA PODE ACOMPANHAR TOOL-CALL REAL; RESULTADO/RECEIPT CONTINUAM SENDO PROVA",
+      "pr_refs": [
+        1550
       ],
       "runtime_required": false
     }

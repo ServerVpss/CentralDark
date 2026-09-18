@@ -36,3 +36,15 @@ DOCUMENTED != EXECUTED
 UNKNOWN != PASS
 REALIDADE = JUIZ
 ```
+
+## 🔄 Reconciliação de registry · segunda passada
+
+```text
+BASE_MAIN_SECOND_PASS=373c0f3f91280f5496a844813f836dc35c1f1a8d
+DELTA_1493_1550_PATTERNS_EXTRACTED=38
+MISSING_FROM_REGISTRY_ADDED=38
+REGISTRY_PATTERN_COUNT_AFTER=142
+RUNTIME_MUTATION=false
+```
+
+A Meta-Lupa encontrou um gap de indexação: os padrões de `DELTA-PR-1493-1550.md` já estavam cristalizados em documentação/cânone, mas parte deles ainda não estava materializada em `PADROES-PR/REGISTRY.json`. Esta passada fecha somente esse índice, sem promover implementação nem runtime.
