@@ -1,5 +1,24 @@
 # Pull Request — CentralDark
 
+## 🔒 PR-MÃE #1562 — funil obrigatório
+
+Todo PR direcionado à `main` é **SUB-PR de promoção** do PR-mãe #1562.
+
+```text
+PR_MOTHER=#1562
+PR_ROLE=CHILD_PROMOTION_PR
+BOT_ENTRY=!CENTRALDARK
+BOOT_CHAIN=#ACORDAR → !CALIBRAR
+```
+
+- [ ] Este PR declara `PR_MOTHER=#1562`.
+- [ ] O #1562 permanece aberto como rendezvous/ledger e **não será mergeado**.
+- [ ] Este SUB-PR é o único veículo de merge do seu delta.
+- [ ] Depois do merge, o fluxo existente emite `centraldark_post_merge` e seleciona micro-deploy somente quando o cone causal exigir.
+
+`PR_MOTHER_IS_RENDEZVOUS_NOT_WRITER=true` · `PR_MOTHER_MERGE_FORBIDDEN=true` · `UNKNOWN != PASS`.
+
+
 ## Objetivo
 
 Descreva em uma frase o que esta mudança resolve no repositório oficial `ServerVpss/CentralDark`.
