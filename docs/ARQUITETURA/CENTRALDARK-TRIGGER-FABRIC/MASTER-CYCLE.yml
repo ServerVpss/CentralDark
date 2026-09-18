@@ -429,6 +429,44 @@ communication_interface:
       WAITING_FOR_USER_IS_NOT_HUMAN_BOUNDARY: true
       NEW_EVIDENCE_IS_NOT_NEW_CONTRACT: true
 
+  machine_resolvable_blocker_transition:
+    semantic_owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/UNIVERSAL-ENGINE-METHOD.yml
+    technical_blocker_is_not_human_boundary_by_itself: true
+    unknown_is_not_permission_to_mutate: true
+    self_goal_semantics: DERIVED_CAUSAL_MICRO_GOAL
+    self_goal_preserves_parent_goal: true
+    self_goal_preserves_existing_owner: true
+    same_mutable_scope_requires_writer_lease: true
+    flow:
+      - MEASURE_CURRENT
+      - CLASSIFY_FAILURE_SIGNATURE
+      - VERIFY_AUTHORIZED_SCOPE
+      - VERIFY_EXISTING_OWNER
+      - VERIFY_WRITER_LEASE
+      - DERIVE_CAUSAL_MICRO_GOAL
+      - EXECUTE_MINIMAL_SAFE_REMEDIATION
+      - RETEST
+      - COUNTERPROOF
+      - REMEASURE
+      - UPDATE_RECEIPT
+      - CONTINUE_NEXT_CURSOR
+    false_human_boundary_signals:
+      - ASKED_USER
+      - WAITING_FOR_USER
+      - NEXT_STEP_EXISTS
+      - UNKNOWN
+      - CI_FAILURE
+      - RUN_FAILURE
+      - NEED_RETRY
+      - NEED_REMEASURE
+      - NEED_RECONCILE
+      - MAIN_CHANGED
+      - CURRENT_STATE_CHANGED
+    human_return_only_when:
+      - PROVEN_HUMAN_FRONTIER
+      - EXACT_HARD_BLOCKER_AFTER_AUTHORIZED_ROUTES_EXHAUSTED
+      - NEW_HUMAN_INTENT_REQUIRED
+
   mechanical_payload_fast_path:
     trigger: HUMAN_NEEDS_ONLY_COPY_PASTE_PAYLOAD_AND_NO_MATERIAL_DECISION_OR_RISK
     behavior: RETURN_ONLY_REQUESTED_PAYLOAD
