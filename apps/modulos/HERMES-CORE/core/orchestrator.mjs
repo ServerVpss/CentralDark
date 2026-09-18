@@ -24,7 +24,7 @@ try {
 
 // Sub-agentes — o Core só orquestra; todo trabalho pesado é deles.
 // (Auto-Diagnostico e Deploy-Watcher são standalone: rodam como missão/cron, não moram no loop do Core.)
-const { decidir } = await import('./decisor.mjs');                     // cérebro (DarkAI 17 modelos + memória GraphRAG)
+const { decidir, provarContratoRuntime } = await import('./decisor.mjs'); // cérebro + probe do runtime canônico
 const { executar } = await import('../agents/Executor/agent.mjs');     // braço (com travas)
 const { auditar, auditarFinalizacao, resultadoAprovadoPeloCritic, vetar } = await import('../agents/Critic/agent.mjs'); // auditor + gate final
 const { atualizarGrafo } = await import('../agents/GraphRAG-Master/agent.mjs'); // memória viva + auto-update do grafo
@@ -36,6 +36,12 @@ const CONCLUIDA = `${BASE}/missions/concluidas`;
 const NOTIFY    = `${BASE}/utils/notify.mjs`;
 const INTERVAL  = 5000;
 const MAX_FALHAS = 3;
+
+async function garantirRuntimeDirs() {
+  await mkdir(PENDENTE, { recursive: true });
+  await mkdir(ANDAMENTO, { recursive: true });
+  await mkdir(CONCLUIDA, { recursive: true });
+}
 
 let ocupado = false; // trava: nunca rodar duas missões ao mesmo tempo
 
@@ -704,6 +710,7 @@ let ultimoGrafo = 0;
 let ultimoGrafoResumo = { ts: 0, ok: null, saida: null };
 
 async function loop() {
+  await garantirRuntimeDirs();
   log('🤖 HERMES CORE v5.0 online — vigiando missions/pendente/');
   await notificar('Hermes Core: ONLINE', '🟢 orquestrador v5.0 vivo, aguardando missões.\n\nEntregue em: <code>missions/pendente/&lt;nome&gt;.md</code>');
 
