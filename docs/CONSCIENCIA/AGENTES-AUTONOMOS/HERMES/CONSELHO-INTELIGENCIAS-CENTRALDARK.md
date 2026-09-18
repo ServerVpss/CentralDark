@@ -161,3 +161,33 @@ Mapa/Obsidian/Telegram não alteram gate por aparência. UNKNOWN permanece UNKNO
 5. provar Conselho → Telegram → MCP → Hermes → runtime sem segundo router;
 6. SAME_HEAD gates;
 7. promover para `main`.
+
+
+## Zero Regressão — Regra Zero
+
+O Conselho, Telegram, MCP e Hermes ficam submetidos ao mesmo funil antes de qualquer mutação material:
+
+```text
+CHEFE_INTENT
+→ CENTRALDARK / REGRA ZERO
+→ LIVE_STATE
+→ ALIGNMENT
+→ MINIMAL_DELTA
+→ EVIDENCE
+→ COUNTERPROOF
+→ REALITY_JUDGE
+```
+
+Absolutos:
+
+```text
+CURRENT > HISTORICAL
+REALITY = JUDGE
+UNKNOWN != PASS
+DOCUMENTED != EXECUTED
+ACTION != PROOF
+REUSE_BEFORE_CREATE=true
+ONE_SYSTEM_ONLY=true
+```
+
+O `PDF_GATE` permanece ativo durante toda a trajetória. O Conselho pode sugerir; Hermes pode executar; **somente evidência atual + contraprova no mesmo estado/HEAD pode promover PASS**.
