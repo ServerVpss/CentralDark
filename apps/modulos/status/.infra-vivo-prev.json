@@ -1,26 +1,26 @@
 {
   "ok": true,
   "purpose": "infra-vivo-simples",
-  "updatedAt": "2026-09-18T06:51:02.009Z",
-  "updatedAtBR": "18/09/2026, 03:51:02",
+  "updatedAt": "2026-09-18T06:54:01.365Z",
+  "updatedAtBR": "18/09/2026, 03:54:01",
   "host": "vmi3256920",
-  "uptime_sec": 890214,
+  "uptime_sec": 890394,
   "load": {
-    "1m": "4.76",
-    "5m": "4.54",
-    "15m": "4.83"
+    "1m": "3.80",
+    "5m": "4.22",
+    "15m": "4.65"
   },
   "mem": {
     "total_gb": 25.2,
-    "used_gb": 12,
-    "avail_gb": 12.7,
-    "used_pct": 47.5
+    "used_gb": 12.4,
+    "avail_gb": 12.3,
+    "used_pct": 49.2
   },
   "disk": {
-    "used_pct": 95,
-    "avail": "10496456",
+    "used_pct": 97,
+    "avail": "7998064",
     "size": "203056560",
-    "used": "192543720",
+    "used": "195042112",
     "mount": "/"
   },
   "pm2": {
@@ -61,8 +61,8 @@
         "name": "CentralDark-GuardiaoConsciencia",
         "status": "online",
         "restarts": 0,
-        "mem_mb": 31,
-        "cpu": 0
+        "mem_mb": 30,
+        "cpu": 84
       },
       {
         "name": "CentralDark-GuardiaoAnalista",
@@ -76,7 +76,7 @@
         "status": "online",
         "restarts": 0,
         "mem_mb": 67,
-        "cpu": 0
+        "cpu": 16
       },
       {
         "name": "CentralDark-Respiracao",
@@ -97,7 +97,7 @@
         "status": "online",
         "restarts": 0,
         "mem_mb": 81,
-        "cpu": 0
+        "cpu": 4
       },
       {
         "name": "CentralDark-SyncDrive",
@@ -146,13 +146,13 @@
         "status": "online",
         "restarts": 1,
         "mem_mb": 164,
-        "cpu": 0
+        "cpu": 12
       },
       {
         "name": "CentralDark-EliteAnthropic",
         "status": "online",
         "restarts": 0,
-        "mem_mb": 44,
+        "mem_mb": 43,
         "cpu": 0
       },
       {
@@ -166,7 +166,7 @@
   },
   "fail2ban": {
     "jail": "sshd",
-    "currently_banned": 66,
+    "currently_banned": 65,
     "total_banned": 93,
     "banned_sample": [
       "101.36.111.79",
@@ -190,5 +190,5 @@
     "Telegram: só via infra-movimento-watch (delta), não heartbeat.",
     "UI: /infra.html em status.centralldark.com"
   ],
-  "motion_fingerprint": "{\"pm2\":\"CentralDark-CloneDeck:online|CentralDark-ContasAdmin:online|CentralDark-EliteAnthropic:online|CentralDark-EliteWS:online|CentralDark-EvolucaoIAs:online|CentralDark-GraphPanel:online|CentralDark-GuardiaoAnalista:online|CentralDark-GuardiaoConsciencia:online|CentralDark-Hermes:online|CentralDark-HermesVerificador:online|CentralDark-HubBot:online|CentralDark-MCP:online|CentralDark-MultiZap:online|CentralDark-Respiracao:online|CentralDark-SyncDrive:online|CentralDark-TelePainelDeploy:errored|CentralDark-WebhookDeploy:online|CentralDark-Zentinel:online|hermes-acp:online\",\"disk\":95,\"mcp\":true,\"f2b\":66,\"stopped\":0,\"errored\":1}"
+  "motion_fingerprint": "{\"pm2\":\"CentralDark-CloneDeck:online|CentralDark-ContasAdmin:online|CentralDark-EliteAnthropic:online|CentralDark-EliteWS:online|CentralDark-EvolucaoIAs:online|CentralDark-GraphPanel:online|CentralDark-GuardiaoAnalista:online|CentralDark-GuardiaoConsciencia:online|CentralDark-Hermes:online|CentralDark-HermesVerificador:online|CentralDark-HubBot:online|CentralDark-MCP:online|CentralDark-MultiZap:online|CentralDark-Respiracao:online|CentralDark-SyncDrive:online|CentralDark-TelePainelDeploy:errored|CentralDark-WebhookDeploy:online|CentralDark-Zentinel:online|hermes-acp:online\",\"disk\":97,\"mcp\":true,\"f2b\":65,\"stopped\":0,\"errored\":1}"
 }
