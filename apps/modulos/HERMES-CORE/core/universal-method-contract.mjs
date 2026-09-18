@@ -19,6 +19,7 @@ const FILES = {
   engine: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml',
   autoconfigRuntime: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/HERMES-AUTOCONFIG-RUNTIME.yml',
   hermesPrompt: 'apps/modulos/HERMES-CORE/prompts/hermes-core.md',
+  dailyChecklistPolicy: 'docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json',
   adminChecklist: 'docs/SEGURANCA/ADM-INVENTARIO-COMANDO-UNIVERSAL.md',
   tlc23: 'docs/CONSCIENCIA/04-MCP-E-CONECTORES/tlc23.pdf',
 };
@@ -230,6 +231,8 @@ export function validateUniversalMethod() {
     'micro_deploy_requires_explicit_chefe_authorization: true',
     'daily_checklist_gate:',
     'DAILY_CHECKLIST_GATE_REQUIRED: true',
+    'DAILY_CHECKLIST_OWNER: docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json',
+    'DAILY_CHECKLIST_CONSUMER: docs/SEGURANCA/ADM-INVENTARIO-COMANDO-UNIVERSAL.md',
     'DAILY_CHECKLIST_RECORD_TARGET: ACTIVE_SCOPE_LEDGER',
     'AGENT_OR_AI_MUTATES_CODE_DURING_DAY: true',
     'LOAD_DAILY_CHECKLIST: true',
@@ -307,6 +310,8 @@ export function validateUniversalMethod() {
     'PARTIAL_AXIS_PASS_IS_GLOBAL_PASS=false',
     'MICRO_DEPLOY_REQUIRES_EXPLICIT_CHEFE_AUTH=true',
     'DAILY_CHECKLIST_GATE_REQUIRED=true',
+    'DAILY_CHECKLIST_OWNER=docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json',
+    'DAILY_CHECKLIST_CONSUMER=docs/SEGURANCA/ADM-INVENTARIO-COMANDO-UNIVERSAL.md',
     'LOAD_DAILY_CHECKLIST_BEFORE_FIRST_CODE_MUTATION_OF_DAY=true',
     'UPDATE_DAILY_CHECKLIST_BEFORE_HANDOFF_OR_FINALIZATION=true',
     'MODEL_NAME_IS_ROUTING_KEY=false',
@@ -323,7 +328,8 @@ export function validateUniversalMethod() {
 
   requireTokens(adminChecklist, [
     'DAILY_CHECKLIST_GATE_REQUIRED=true',
-    'DAILY_CHECKLIST_OWNER=docs/SEGURANCA/ADM-INVENTARIO-COMANDO-UNIVERSAL.md',
+    'DAILY_CHECKLIST_OWNER=docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json',
+    'DAILY_CHECKLIST_CONSUMER=docs/SEGURANCA/ADM-INVENTARIO-COMANDO-UNIVERSAL.md',
     'DAILY_CHECKLIST_RECORD_TARGET=ACTIVE_SCOPE_LEDGER',
     'AGENT_OR_AI_MUTATES_CODE_DURING_DAY=true',
     'LOAD_DAILY_CHECKLIST=true',
@@ -403,7 +409,8 @@ export function validateUniversalMethod() {
     three_axis_promotion_axes: ['CASA', 'GITHUB', 'VPS'],
     parallel_architecture_without_proven_gap: false,
     daily_checklist_gate_required: true,
-    daily_checklist_owner: FILES.adminChecklist,
+    daily_checklist_owner: FILES.dailyChecklistPolicy,
+    daily_checklist_consumer: FILES.adminChecklist,
     daily_checklist_record_target: 'ACTIVE_SCOPE_LEDGER',
     finalizer_lease_required: true,
   };
