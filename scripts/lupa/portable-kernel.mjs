@@ -70,6 +70,9 @@ function validateContract(value) {
   const image = value.multimodal_input_policy ?? {};
   const portable = value.portable_boot_policy ?? {};
   const language = value.language_policy ?? {};
+  const daily = value.daily_checklist_gate ?? {};
+  const mutation = value.standard_architecture?.mutation ?? {};
+  const promotion = value.standard_architecture?.promotion ?? {};
 
   if (image.marker !== 'IMAGE_INPUT_IS_OPERATIONAL') errors.push('IMAGE_MARKER');
   if (image.image_is_sensor !== true) errors.push('IMAGE_NOT_SENSOR');
@@ -98,6 +101,37 @@ function validateContract(value) {
   if (portable.never_overwrite_newer_live_state !== true) errors.push('NEWER_LIVE_STATE_MUST_WIN');
   if (!Array.isArray(value.mandatory_boot_sources) || value.mandatory_boot_sources.length < 4) errors.push('MANDATORY_BOOT_SOURCES_INVALID');
   if (!Array.isArray(value.standard_architecture?.flow) || value.standard_architecture.flow.length < 6) errors.push('STANDARD_FLOW_MISSING');
+
+  if (daily.marker !== 'DAILY_CHECKLIST_GATE_REQUIRED') errors.push('DAILY_CHECKLIST_MARKER');
+  if (daily.authority !== 'SEGREDO/CHEFE') errors.push('DAILY_CHECKLIST_AUTHORITY');
+  if (daily.per_head_attestation_required !== true) errors.push('DAILY_CHECKLIST_HEAD_BINDING_REQUIRED');
+  if (daily.unknown_receipt !== 'BLOCK_CODE_PROMOTION') errors.push('DAILY_CHECKLIST_UNKNOWN_MUST_BLOCK');
+  if (daily.mirror_is_authority !== false) errors.push('DAILY_CHECKLIST_MIRROR_MUST_NOT_BE_AUTHORITY');
+
+  const executorSelection = ['TAG_EXECUTOR', 'CAPABILITY_MATCH', 'SCOPE_MATCH', 'LEASE_AVAILABLE', 'POLICY_ALLOWED'];
+  if (mutation.multiple_writers_allowed !== true) errors.push('MULTIPLE_WRITERS_REQUIRED');
+  if (mutation.concurrent_writers_disjoint_scopes !== true) errors.push('DISJOINT_SCOPE_WRITERS_REQUIRED');
+  if (mutation.same_mutable_scope_requires_writer_lease !== true) errors.push('WRITER_LEASE_REQUIRED');
+  if (mutation.model_name_is_routing_key !== false) errors.push('MODEL_NAME_ROUTING_FORBIDDEN');
+  if (mutation.model_name_is_writer_lease !== false) errors.push('MODEL_NAME_LEASE_FORBIDDEN');
+  if (!Array.isArray(mutation.executor_selection) || executorSelection.length !== mutation.executor_selection.length || executorSelection.some((item, index) => mutation.executor_selection[index] !== item)) {
+    errors.push('EXECUTOR_SELECTION_INVALID');
+  }
+
+  if (promotion.finalization_scope !== 'PR_TO_MAIN_TO_DEPLOY') errors.push('FINALIZATION_SCOPE_INVALID');
+  if (promotion.one_active_finalizer_lease !== true) errors.push('ONE_FINALIZER_LEASE_REQUIRED');
+  if (promotion.finalizer_role !== 'EXECUTOR') errors.push('FINALIZER_ROLE_INVALID');
+  if (promotion.finalizer_capability !== 'PROMOTION_FINALIZATION') errors.push('FINALIZER_CAPABILITY_INVALID');
+  if (promotion.finalizer_model_neutral !== true) errors.push('FINALIZER_MUST_BE_MODEL_NEUTRAL');
+  if (promotion.finalizer_location !== 'VPS_CONTROL_PLANE') errors.push('FINALIZER_LOCATION_INVALID');
+  if (promotion.vps_is_intent_authority !== false) errors.push('VPS_MUST_NOT_BE_INTENT_AUTHORITY');
+  if (promotion.intent_authority !== 'SEGREDO/CHEFE') errors.push('INTENT_AUTHORITY_INVALID');
+  if (promotion.goal_pai_round_trip_required !== true) errors.push('GOAL_PAI_ROUND_TRIP_REQUIRED');
+  if (promotion.goal_pai_id_stable !== true) errors.push('GOAL_PAI_ID_MUST_BE_STABLE');
+  if (promotion.micro_goal_source !== 'CURRENT_FAILURE_SIGNATURE_AND_EVIDENCE') errors.push('MICRO_GOAL_SOURCE_INVALID');
+  if (!Array.isArray(promotion.finalizer_selection) || executorSelection.length !== promotion.finalizer_selection.length || executorSelection.some((item, index) => promotion.finalizer_selection[index] !== item)) {
+    errors.push('FINALIZER_SELECTION_INVALID');
+  }
 
   return errors;
 }
@@ -150,6 +184,33 @@ const members = SOURCE_FILES.map((path) => {
 const memberByPath = new Map(members.map((item) => [item.path, item]));
 
 const CAPABILITY_SPECS = [
+  {
+    id: 'DAILY_CHECKLIST_HEAD_BOUND_GATE',
+    layer: 'GOVERNANCE',
+    owner: CONTRACT,
+    markers: [
+      '"marker": "DAILY_CHECKLIST_GATE_REQUIRED"',
+      '"per_head_attestation_required": true',
+      '"unknown_receipt": "BLOCK_CODE_PROMOTION"',
+      '"mirror_is_authority": false',
+    ],
+    reproduction: 'REQUIRE_DAILY_CHECKLIST_RECEIPT_BOUND_TO_CURRENT_HEAD_BEFORE_CODE_PROMOTION',
+  },
+  {
+    id: 'MODEL_NEUTRAL_MULTI_WRITER_SINGLE_FINALIZER',
+    layer: 'ORCHESTRATION',
+    owner: CONTRACT,
+    markers: [
+      '"multiple_writers_allowed": true',
+      '"concurrent_writers_disjoint_scopes": true',
+      '"same_mutable_scope_requires_writer_lease": true',
+      '"one_active_finalizer_lease": true',
+      '"finalizer_model_neutral": true',
+      '"vps_is_intent_authority": false',
+      '"goal_pai_round_trip_required": true',
+    ],
+    reproduction: 'ALLOW_DISJOINT_WRITERS_SERIALIZE_FINAL_PROMOTION_WITH_ONE_MODEL_NEUTRAL_FINALIZER_LEASE',
+  },
   {
     id: 'HUMAN_AUTHORITY_MODEL_REPLACEABILITY',
     layer: 'IDENTITY',
@@ -413,6 +474,10 @@ const condensedDna = {
     'LIVE_STATE_OVERRIDES_STALE_CONTEXT',
     'REUSE_BEFORE_CREATE',
     'PARALLELIZE_PERCEPTION_SERIALIZE_MUTATION',
+    'DAILY_CHECKLIST_HEAD_BOUND_BEFORE_CODE_PROMOTION',
+    'MULTIPLE_WRITERS_DISJOINT_SCOPES_SINGLE_FINALIZER_PROMOTION',
+    'MODEL_NAME_IS_NOT_ROUTING_AUTHORITY',
+    'GOAL_PAI_SURVIVES_PROMOTION_DEPLOY_AND_REMEASUREMENT',
     'REALITY_AND_DISCRIMINATING_TEST_OVERRULE_MODEL_VOTE',
     'UNKNOWN_IS_NOT_PASS',
     'SOURCE_IS_PROVENANCE_NOT_AUTHORITY',
@@ -438,6 +503,8 @@ const condensedDna = {
     'LOAD_OWNER_SOURCE_ON_DEMAND',
     'MEASURE_RUNTIME_TOOLS_AND_STATE',
     'RECONCILE_BEFORE_CREATE',
+    'VERIFY_DAILY_CHECKLIST_RECEIPT_BOUND_TO_CURRENT_HEAD',
+    'ACQUIRE_WRITER_OR_FINALIZER_LEASE_BY_SCOPE',
     'EXECUTE_MINIMAL_CAUSAL_DELTA_WITH_ONE_WRITER',
     'VERIFY_CLAIM_ON_SAME_TARGET',
     'ABSORB_REUSABLE_DELTA_OR_NO_CHANGE',
@@ -520,6 +587,10 @@ const receipt = {
   portable_boot_policy: 'PASS',
   semantic_safety_boundary: 'PASS',
   evidence_causality_ontology: 'PASS',
+  daily_checklist_gate: 'PASS',
+  multi_writer_policy: 'PASS',
+  finalizer_lease_policy: 'PASS',
+  goal_pai_round_trip_policy: 'PASS',
   runtime_claim: 'UNPROVEN_BY_PORTABLE_KERNEL',
 };
 
@@ -572,6 +643,10 @@ if (JSON_ONLY || EXPORT_PATH) {
     'SCREENSHOT_TRIGGERS_LIVE_REMEASURE=1',
     'SEMANTIC_SAFETY_BOUNDARY=PASS',
     'EVIDENCE_CAUSALITY_ONTOLOGY=PASS',
+    'DAILY_CHECKLIST_GATE=PASS',
+    'MULTI_WRITER_POLICY=PASS',
+    'FINALIZER_LEASE_POLICY=PASS',
+    'GOAL_PAI_ROUND_TRIP_POLICY=PASS',
     'STALE_PACKAGE_ACTION=REBUILD_FROM_LIVE_REPOSITORY',
   ].join('\n') + '\n');
 }
