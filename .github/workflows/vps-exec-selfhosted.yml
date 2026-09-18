@@ -451,6 +451,9 @@ jobs:
       RUNTIME_CONTRACT: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/HERMES-AUTOCONFIG-RUNTIME.yml
       VALIDATOR: apps/modulos/HERMES-CORE/core/universal-method-contract.mjs
       HERMES_PROMPT: apps/modulos/HERMES-CORE/prompts/hermes-core.md
+      SEMANTIC_OWNER: apps/modulos/HERMES-CORE
+      SEMANTIC_CAPABILITY: HERMES_RUNTIME
+      SEMANTIC_SCOPE: HERMES_RUNTIME
     steps:
       - name: Validar, promover runtime Hermes, reiniciar e contraprovar
         shell: bash
@@ -586,8 +589,17 @@ jobs:
 
           RECEIPT="$REPO_DIR/logs/hermes-runtime-last-known-good.json"
           mkdir -p "$(dirname "$RECEIPT")"
-          jq -n             --arg sha "$TARGET_SHA"             --arg contract "$RUNTIME_CONTRACT"             --arg runtime_hash "$LIVE_RUNTIME_HASH"             --argjson old_pid "$OLD_PID"             --argjson new_pid "$NEW_PID"             --arg observed_at "$(date -u +%Y-%m-%dT%H:%M:%SZ)"             '{
+          jq -n             --arg sha "$TARGET_SHA"             --arg contract "$RUNTIME_CONTRACT"             --arg runtime_hash "$LIVE_RUNTIME_HASH"             --arg owner "$SEMANTIC_OWNER"             --arg capability "$SEMANTIC_CAPABILITY"             --arg scope "$SEMANTIC_SCOPE"             --arg run_id "$GITHUB_RUN_ID"             --arg job_key "$GITHUB_JOB"             --arg workflow_ref "$GITHUB_WORKFLOW_REF"             --argjson old_pid "$OLD_PID"             --argjson new_pid "$NEW_PID"             --arg observed_at "$(date -u +%Y-%m-%dT%H:%M:%SZ)"             '{
               schema:"centraldark.hermes-runtime-deploy.v1",
+              semanticIdentity:{owner:$owner,capability:$capability,scope:$scope},
+              executionProvenance:{
+                workflowRef:$workflow_ref,
+                jobKey:$job_key,
+                runId:$run_id,
+                headSha:$sha,
+                canonicalIdentity:false,
+                discoveredAtRuntime:true
+              },
               validatedSha:$sha,
               contract:$contract,
               runtimeHash:$runtime_hash,
@@ -604,6 +616,8 @@ jobs:
           copied=0
           restart_attempted=0
           echo "HERMES_RUNTIME_DEPLOY=PASS"
+          echo "SEMANTIC_IDENTITY=$SEMANTIC_OWNER+$SEMANTIC_CAPABILITY+$SEMANTIC_SCOPE"
+          echo "EXECUTION_PROVENANCE=run:$GITHUB_RUN_ID job:$GITHUB_JOB head:$TARGET_SHA"
           echo "VALIDATED_SHA=$TARGET_SHA"
           echo "OLD_PID=$OLD_PID"
           echo "NEW_PID=$NEW_PID"
