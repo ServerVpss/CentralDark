@@ -196,3 +196,58 @@ fixed_point:
     - NO_SECOND_ROUTER
     - NO_FALSE_GREEN
     - UNKNOWN_ZERO
+
+
+zero_regression_filter:
+  status: ACTIVE
+  authority: SEGREDO_CHEFE
+  purpose: >
+    Revisar criticamente toda mutacao de codigo/infra antes de executar,
+    impedir regressao, risco operacional e complexidade inutil, e exigir
+    extensao segura do que ja funciona.
+  sequence:
+    - CHEFE_INTENT
+    - CENTRALDARK_RULE_ZERO
+    - LIVE_STATE
+    - ALIGNMENT
+    - MINIMAL_DELTA
+    - EVIDENCE
+    - COUNTERPROOF
+    - REALITY_JUDGE
+  laws:
+    CURRENT_GT_HISTORICAL: true
+    REALITY_IS_JUDGE: true
+    UNKNOWN_IS_NOT_PASS: true
+    DOCUMENTED_IS_NOT_EXECUTED: true
+    ACTION_IS_NOT_PROOF: true
+    REUSE_BEFORE_CREATE: true
+    ONE_SYSTEM_ONLY: true
+    LEGACY_PRESERVED_WHEN_CONFLICT_UNKNOWN: true
+    IRREVERSIBLE_MUTATION_REQUIRES_EXPLICIT_AUTH: true
+  execution_contract:
+    - REVIEW_PLAN_BEFORE_MUTATION
+    - MEASURE_CURRENT_RUNTIME
+    - REUSE_EXISTING_OWNER
+    - APPLY_SMALLEST_SAFE_DELTA
+    - PROVE_EXPECTED_EFFECT
+    - PROVE_NO_REGRESSION
+    - LET_CURRENT_RUNTIME_ARBITRATE
+  proof_gate:
+    always_active: true
+    lane:
+      - TLC23_HORN
+      - PDF_GATE
+      - COUNTERPROOF
+      - PASS
+    partial_execution_is_pass: false
+    token_consumption_is_pass: false
+    visual_appearance_is_pass: false
+    stale_evidence_is_pass: false
+    map_or_obsidian_change_is_pass: false
+    same_head_required: true
+    current_reproducible_evidence_required: true
+  fail_closed:
+    unknown_blocks_promotion: true
+    missing_dependency_remains_explicit: true
+    conflict_preserves_legacy_until_reconciled: true
+    no_green_by_approximation: true
