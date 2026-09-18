@@ -423,6 +423,75 @@ if (!contract) {
   if (workflow.deterministic_first !== true) errors.push("AI_DETERMINISTICO_NAO_PRIORITARIO");
   if (workflow.ai_unavailable !== "DETERMINISTIC_FALLBACK_OR_FAIL_CLOSED") errors.push("AI_SEM_FALLBACK_DETERMINISTICO");
   if (workflow.rate_limit_timeout_model_offline_is_pass !== false) errors.push("AI_INDISPONIVEL_PODE_VIRAR_PASS");
+
+  const daily = contract.daily_checklist_gate ?? {};
+  if (daily.marker !== "DAILY_CHECKLIST_GATE_REQUIRED") errors.push("DAILY_CHECKLIST_GATE_AUSENTE");
+  if (daily.applies_when?.agent_or_ai_mutates_code_during_day !== true) errors.push("DAILY_CHECKLIST_ESCOPO_INVALIDO");
+  const beforeMutation = daily.before_first_code_mutation_of_day ?? {};
+  for (const key of ["load_daily_checklist","verify_current_state","verify_parent_goal","verify_owner","verify_scope","verify_writer_lease"]) {
+    if (beforeMutation[key] !== true) errors.push(`DAILY_CHECKLIST_BEFORE_MUTATION_AUSENTE:${key}`);
+  }
+  const duringDay = daily.during_day ?? {};
+  for (const key of ["record_material_delta","record_pending_gaps","record_head_changes","record_handoffs","record_gate_failures"]) {
+    if (duringDay[key] !== true) errors.push(`DAILY_CHECKLIST_DURING_DAY_AUSENTE:${key}`);
+  }
+  if (daily.before_handoff_or_finalization?.update_daily_checklist !== true) errors.push("DAILY_CHECKLIST_FINAL_UPDATE_AUSENTE");
+  if (daily.no_new_material_delta !== "NO_CHANGE") errors.push("DAILY_CHECKLIST_NO_CHANGE_INVALIDO");
+  if (daily.checklist_role !== "OPERATIONAL_HUD_NOT_SOURCE_OF_TRUTH") errors.push("DAILY_CHECKLIST_VIROU_FONTE_DA_VERDADE");
+
+  const executorSelection = contract.executor_selection_policy ?? {};
+  if (executorSelection.marker !== "EXECUTOR_SELECTION_BY_CAPABILITY_SCOPE_LEASE_POLICY") errors.push("EXECUTOR_SELECTION_POLICY_AUSENTE");
+  if (executorSelection.model_name_is_routing_key !== false) errors.push("MODEL_NAME_VIROU_ROUTING_KEY");
+  if (executorSelection.model_name_is_authority !== false) errors.push("MODEL_NAME_VIROU_AUTHORITY");
+  if (executorSelection.model_name_is_writer_lease !== false) errors.push("MODEL_NAME_VIROU_WRITER_LEASE");
+  const expectedExecutorSelection = ["TAG_EXECUTOR","CAPABILITY_MATCH","SCOPE_MATCH","LEASE_AVAILABLE","POLICY_ALLOWED"];
+  if (!Array.isArray(executorSelection.selection) || expectedExecutorSelection.some((item, index) => executorSelection.selection[index] !== item)) {
+    errors.push("EXECUTOR_SELECTION_INVALIDA");
+  }
+
+  const writerPolicy = contract.writer_concurrency_policy ?? {};
+  if (writerPolicy.marker !== "DISJOINT_SCOPE_CONCURRENCY_WITH_SINGLE_SCOPE_LEASE") errors.push("WRITER_CONCURRENCY_POLICY_AUSENTE");
+  if (writerPolicy.multiple_writers_allowed !== true) errors.push("MULTIPLE_WRITERS_DISALLOWED");
+  if (writerPolicy.concurrent_writers_disjoint_scopes !== true) errors.push("DISJOINT_SCOPE_WRITERS_NAO_PERMITIDOS");
+  if (writerPolicy.same_mutable_scope_requires_one_writer_lease !== true) errors.push("WRITER_LEASE_MESMO_ESCOPO_NAO_OBRIGATORIO");
+  if (writerPolicy.same_scope_parallel_mutation !== "BLOCKED") errors.push("WRITER_MESMO_ESCOPO_PARALELO_NAO_BLOQUEADO");
+  if (writerPolicy.lease_is_capability_not_persona !== true) errors.push("WRITER_LEASE_VIROU_PERSONA");
+
+  const finalization = contract.finalization_policy ?? {};
+  if (finalization.marker !== "ONE_ACTIVE_FINALIZER_LEASE") errors.push("FINALIZER_LEASE_POLICY_AUSENTE");
+  if (finalization.final_promotion_scope !== "ONE_ACTIVE_FINALIZER_LEASE") errors.push("FINALIZER_LEASE_NAO_UNICO");
+  const expectedFinalizationLane = ["PR","SAME_HEAD_GATES","MAIN","POST_MERGE","DEPLOY","REMEASURE","FINAL_RECEIPT"];
+  if (!Array.isArray(finalization.lane) || expectedFinalizationLane.some((item, index) => finalization.lane[index] !== item)) {
+    errors.push("FINALIZATION_LANE_INVALIDA");
+  }
+  if (finalization.same_head_required !== true) errors.push("FINALIZATION_SEM_SAME_HEAD");
+  if (finalization.merge_is_not_deploy !== true) errors.push("MERGE_CONFUNDIDO_COM_DEPLOY");
+  if (finalization.deploy_is_not_runtime_proof !== true) errors.push("DEPLOY_CONFUNDIDO_COM_RUNTIME_PROOF");
+
+  const goals = contract.goal_derivation_policy ?? {};
+  if (goals.marker !== "STABLE_PARENT_GOAL_DERIVED_MICRO_GOALS") errors.push("GOAL_DERIVATION_POLICY_AUSENTE");
+  if (goals.goal_pai_id !== "STABLE") errors.push("GOAL_PAI_NAO_ESTAVEL");
+  if (goals.micro_goal !== "DERIVED_FROM_CURRENT_WOUND") errors.push("MICRO_GOAL_NAO_DERIVADO_DA_FERIDA");
+  if (goals.child_failure_does_not_replace_parent_goal !== true) errors.push("FALHA_FILHA_SUBSTITUI_GOAL_PAI");
+  if (goals.current_wound_drives_next_micro_goal !== true) errors.push("FERIDA_ATUAL_NAO_DIRIGE_MICRO_GOAL");
+
+  const roleMap = contract.authority_role_map ?? {};
+  const expectedRoleMap = {
+    CHEFE: "INTENT_AUTHORITY",
+    CONTRACT: "POLICY",
+    GATES: "PROOF",
+    VPS: "EXECUTOR_RUNTIME_AND_CONTROL_PLANE",
+    REALITY: "JUDGE",
+  };
+  for (const [key, value] of Object.entries(expectedRoleMap)) {
+    if (roleMap[key] !== value) errors.push(`AUTHORITY_ROLE_INVALIDO:${key}`);
+  }
+
+  const nonEq = contract.non_equivalence_guards ?? {};
+  if (nonEq.UNKNOWN_IS_PASS !== false) errors.push("UNKNOWN_VIROU_PASS");
+  if (nonEq.ACTION_IS_PROOF !== false) errors.push("ACTION_VIROU_PROOF");
+  if (nonEq.AUTHORIZED_IS_VALIDATED !== false) errors.push("AUTHORIZED_VIROU_VALIDATED");
+  if (nonEq.MERGED_IS_DEPLOYED !== false) errors.push("MERGED_VIROU_DEPLOYED");
 }
 
 // A dívida histórica pode continuar arquivada, mas estes entrypoints ativos não
