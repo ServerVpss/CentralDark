@@ -146,3 +146,33 @@ SNAPSHOT != ENCERRAMENTO
 HISTÓRIA != PROVA
 DELTA_UTIL_CONTINUA_NO_GOAL
 ```
+
+## Remedição de 2026-09-17
+
+O registry e o resolvedor continuam na `main` oficial. Na VPS, o arquivo
+`known-conflict-patterns.json` tinha bytes de fim de linha diferentes; após
+normalizar CRLF para LF apenas para a comparação, seu SHA-256 foi
+`0a328fb12c182a5863b45ff0b962c90401bc8e3ecca91ce3e733333ae7733338`,
+idêntico ao conteúdo de `origin/main`. O resolvedor na VPS teve SHA-256
+`c7893d4e7bf130766b3da76e7edb4f441a50450e266c7371620c72e249509293`,
+idêntico ao de `origin/main`.
+
+Contraprovas executadas novamente na VPS: `resolve-conflicts-policy.test.sh`
+PASS, `dependabot-integration-test.sh` PASS e `fixed-point.test.mjs` 4/4 PASS.
+O checkout da VPS permaneceu detached em `e81f2a89b8c2` e dirty; nenhum reset
+ou limpeza foi usado. Essa correspondência prova os dois artefatos citados,
+não a convergência do checkout inteiro.
+
+O CI histórico do commit `365c95696d53abb206ce04347b197fea962ac67d`
+não ficou totalmente verde: a API de check-runs retornou 12 sucessos,
+4 falhas, 9 cancelados e 5 skipped; as quatro falhas foram no job
+`Promotor — revalidar e squash main`. Não promover `CI_HEAD=PASS` com essa prova.
+
+O PR [#1551](https://github.com/ServerVpss/CentralDark/pull/1551) foi medido
+`OPEN`, `MERGEABLE`, HEAD `5a14a9bee56866ccbde278904a8e597a7f116898`.
+Vários checks desse HEAD falharam, embora outros tenham passado. Portanto
+`HUD_PROJECTION` e `GLOBAL_FIXED_POINT` seguem pendentes.
+
+Próximo cursor: classificar os checks falhos do HEAD atual do #1551 e
+reconciliar a projeção do registry no HUD existente, preservando owner e
+checkout da VPS. Revalidar SHA/CI/runtime depois de qualquer promoção.

@@ -8,17 +8,20 @@
     "count": 52,
     "scope": "CURRENT_MAIN_DIRECTORY_INVENTORY_AT_CRYSTALLIZATION",
     "physical_paths_case": "PRESERVE_EXISTING_PATHS",
-    "visual_labels": "UPPERCASE_WITH_EMOJI"
+    "visual_labels": "UPPERCASE_WITH_EMOJI",
+    "bridge_count_expected": 52,
+    "bridge_policy": "EVERY_CURATED_TOP_LEVEL_SKILL_HAS_SIBLING_INTERLIGADOS_MD"
   },
   "materialization": {
     "functional_contract": "SKILL.md",
-    "visual_operational_bridge": "INTERLIGADOS.md_IF_PRESENT",
+    "visual_operational_bridge": "INTERLIGADOS.md",
     "load_order": [
       "SKILL.md",
-      "INTERLIGADOS.md_IF_PRESENT"
+      "INTERLIGADOS.md"
     ],
-    "fallback_when_bridge_absent": "USE_THIS_REGISTRY_AND_MAPA_MENTAL; DO_NOT_AUTO_CREATE",
-    "authority_rule": "SKILL.md_OWNS_BEHAVIOR; INTERLIGADOS.md_IS_VISUAL_OPERATIONAL_BRIDGE; REGISTRY_IS_DISCOVERY"
+    "fallback_when_bridge_absent": "REGRESSION: USE_CENTRAL_REGISTRY_READ_ONLY_AND_REPAIR_BRIDGE_IN_CANONICAL_MAIN_MAINTENANCE",
+    "authority_rule": "SKILL.md_OWNS_BEHAVIOR; INTERLIGADOS.md_IS_VISUAL_OPERATIONAL_BRIDGE; REGISTRY_IS_DISCOVERY",
+    "runtime_auto_create": false
   },
   "decision_chain": [
     "SIGNAL",
