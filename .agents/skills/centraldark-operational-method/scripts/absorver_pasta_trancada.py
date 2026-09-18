@@ -72,9 +72,10 @@ def index_repo_files(root):
         if res.returncode == 0:
             for line in res.stdout.splitlines():
                 out.add(norm_name(os.path.basename(line)))
-    except Exception:
-        pass
-    return out
+    except (subprocess.SubprocessError, OSError, TimeoutError) as e:
+        # Retorna set vazio; erro disponível para main() registrar se necessário
+        return out, e
+    return out, None
 
 
 def main():
@@ -97,7 +98,9 @@ def main():
     out["boot_evidence"].append("PASTA_TRANCADA_LIDA")
 
     if out["repo_existe"]:
-        repo_idx = index_repo_files(CLONE_CANONICO)
+        repo_idx, idx_err = index_repo_files(CLONE_CANONICO)
+        if idx_err:
+            out["boot_evidence"].append(f"REPO_INDEX_FAILED: {idx_err}")
         out["boot_evidence"].append("REPO_INDEXADO_PARA_REUSE_CHECK")
     else:
         repo_idx = set()
