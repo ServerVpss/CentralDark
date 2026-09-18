@@ -211,6 +211,21 @@ export function validateUniversalMethod() {
     'PROVEN_RULE_BINDS_TO_RUNTIME: true',
     'contract_coverage_may_equal_100_percent_when_all_defined_conditions_verified: true',
     'external_reality_100_percent_from_calculation_only: false',
+    'SEARCH_EXISTING_CRYSTAL_BEFORE_NEW: true',
+    'SEARCH_EXISTING_OWNER_BEFORE_NEW: true',
+    'VERIFY_EXISTING_CAPABILITY_BEFORE_NEW: true',
+    'SEMANTIC_DEDUPE_BEFORE_CRYSTAL: true',
+    'UNVERIFIED_ABSENCE_IS_UNKNOWN: true',
+    'PARALLEL_ARCHITECTURE_WITHOUT_PROVEN_GAP: FORBIDDEN',
+    'TLC23_HORN_BEFORE_LOGICAL_MUTATION: true',
+    'axes: [CASA, GITHUB, VPS]',
+    'same_source_commit_required: true',
+    'casa_exact_head_validation_required: true',
+    'github_same_head_gates_required: true',
+    'vps_exact_commit_deploy_required: true',
+    'counterproof_each_axis_required: true',
+    'partial_axis_pass_is_global_pass: false',
+    'micro_deploy_requires_explicit_chefe_authorization: true',
   ], 'AUTOCONFIG_RUNTIME');
 
   requireTokens(contract, [
@@ -264,6 +279,16 @@ export function validateUniversalMethod() {
     'DISCOVERY_AUTO_PROMOTES_TO_CANONICAL=false',
     'REUSE_PROVEN_CRYSTAL_BEFORE_REINVESTIGATE=true',
     'CALCULATION_SUPPORTS_DECISION_BUT_DOES_NOT_REPLACE_RUNTIME_OBSERVATION=true',
+    'CRYSTAL_NEW_REQUIRES_SEARCH_EXISTING=true',
+    'CRYSTAL_NEW_REQUIRES_EXISTING_OWNER_CHECK=true',
+    'CRYSTAL_NEW_REQUIRES_CAPABILITY_DEDUPE=true',
+    'UNVERIFIED_ABSENCE_IS_UNKNOWN=true',
+    'PARALLEL_ARCHITECTURE_WITHOUT_PROVEN_GAP=FORBIDDEN',
+    'CRYSTAL_TRUTH_GATE=PDF_GATE_TLC23_HORN',
+    'RUNTIME_PROMOTION_AXES=CASA+GITHUB+VPS',
+    'THREE_AXIS_SAME_SOURCE_REQUIRED=true',
+    'PARTIAL_AXIS_PASS_IS_GLOBAL_PASS=false',
+    'MICRO_DEPLOY_REQUIRES_EXPLICIT_CHEFE_AUTH=true',
   ], 'HERMES_PROMPT');
 
   const engines = parseEngineNames(engine);
@@ -304,6 +329,10 @@ export function validateUniversalMethod() {
     operational_method_learning: true,
     sol_and_hermes_share_learning_contract: true,
     bounded_100_percent_requires_explicit_denominator: true,
+    crystallization_truth_gate: true,
+    three_axis_atomic_promotion: true,
+    three_axis_promotion_axes: ['CASA', 'GITHUB', 'VPS'],
+    parallel_architecture_without_proven_gap: false,
   };
 }
 

@@ -1,7 +1,4 @@
 schema: centraldark.hermes-autoconfig-runtime.v1
-status: CANDIDATE_IN_CHILD_PR
-authority: SEGREDO/CHEFE
-pr_mother: 1562
 status: CANONICAL_RUNTIME_CONTRACT
 authority: SEGREDO/CHEFE
 pr_mother: 1562
@@ -386,6 +383,23 @@ progressive_autonomy:
         KEEP_CLOSE_TO_CANONICAL_OWNER: true
         AUTOMATE_WHEN_REPETITION_JUSTIFIES: true
         REUSE_BEFORE_REINVESTIGATE: true
+        SEARCH_EXISTING_CRYSTAL_BEFORE_NEW: true
+        SEARCH_EXISTING_OWNER_BEFORE_NEW: true
+        VERIFY_EXISTING_CAPABILITY_BEFORE_NEW: true
+        SEMANTIC_DEDUPE_BEFORE_CRYSTAL: true
+        UNVERIFIED_ABSENCE_IS_UNKNOWN: true
+        PARALLEL_ARCHITECTURE_WITHOUT_PROVEN_GAP: FORBIDDEN
+        TRUTH_GATE_OWNER: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/PDF-GATE-GLOBAL-CENTRALDARK.md
+        TLC23_HORN_BEFORE_LOGICAL_MUTATION: true
+        THREE_AXIS_ATOMIC_PROMOTION:
+          axes: [CASA, GITHUB, VPS]
+          same_source_commit_required: true
+          casa_exact_head_validation_required: true
+          github_same_head_gates_required: true
+          vps_exact_commit_deploy_required: true
+          counterproof_each_axis_required: true
+          partial_axis_pass_is_global_pass: false
+          micro_deploy_requires_explicit_chefe_authorization: true
 
   state_discipline:
     UNKNOWN_IS_NOT_PASS: true
