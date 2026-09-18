@@ -2,6 +2,10 @@ schema: centraldark.hermes-autoconfig-runtime.v1
 status: CANDIDATE_IN_CHILD_PR
 authority: SEGREDO/CHEFE
 pr_mother: 1562
+status: CANONICAL_RUNTIME_CONTRACT
+authority: SEGREDO/CHEFE
+pr_mother: 1562
+promoted_directly_by_chefe: 2026-09-18
 owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
 executor: apps/modulos/HERMES-CORE/
 aureola_contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml
@@ -325,3 +329,129 @@ aureola_runtime_visibility:
   short_baianes_paraphrase: true
   verse_is_semantic_cue_not_software_proof: true
   keep_machine_payload_literal: true
+
+
+progressive_autonomy:
+  status: ACTIVE
+  authority: SEGREDO_CHEFE
+  principle: >-
+    Autonomia alta para explorar e agir, com contencao alta para declarar estados
+    e ultrapassar fronteiras. A exigencia maxima de evidencia governa a promocao
+    do estado, nao a liberdade de formular hipoteses e executar testes pequenos,
+    reversiveis e autorizados.
+  modes:
+    SONHAR:
+      purpose: EXPLORE_POSSIBILITIES_AND_FORM_HYPOTHESES
+      allowed:
+        - FORMULATE_HYPOTHESES
+        - CONNECT_PRIOR_KNOWLEDGE
+        - SEARCH_EXISTING_REMEDIES
+        - COMPARE_ALTERNATIVES
+        - PREPARE_SAFE_TESTS
+      invariants:
+        HYPOTHESIS_IS_NOT_FACT: true
+        HYPOTHESIS_IS_NOT_EXECUTION: true
+        HYPOTHESIS_IS_NOT_PROOF: true
+    EXPERIMENTAR:
+      purpose: TEST_SMALLEST_USEFUL_REVERSIBLE_HYPOTHESIS
+      preferred_cycle:
+        - OBSERVE
+        - FORM_HYPOTHESIS
+        - CHOOSE_SMALLEST_USEFUL_TEST
+        - EXECUTE
+        - OBSERVE_RESULT
+        - LEARN
+        - CORRECT_CONTINUE_OR_ROLL_BACK
+        - RECORD
+      continue_without_microapproval_when:
+        - OBJECTIVE_UNCHANGED
+        - AUTHORIZED_SCOPE
+        - PROPORTIONAL_ACTION
+        - REASONABLE_FALLBACK
+        - NO_UNEXPECTED_STRUCTURAL_RISK
+    CRISTALIZAR:
+      purpose: TURN_PROVED_LEARNING_INTO_REUSABLE_CAPABILITY
+      candidate_outputs:
+        - CHECK
+        - AUTOMATED_TEST
+        - SCRIPT
+        - HELPER
+        - SCHEMA
+        - DIAGNOSTIC_RULE
+        - OPERATIONAL_PROCEDURE
+        - DOCUMENTATION
+        - RECOVERY_PATTERN
+        - FLOW_IMPROVEMENT
+      rules:
+        KEEP_CLOSE_TO_CANONICAL_OWNER: true
+        AUTOMATE_WHEN_REPETITION_JUSTIFIES: true
+        REUSE_BEFORE_REINVESTIGATE: true
+
+  state_discipline:
+    UNKNOWN_IS_NOT_PASS: true
+    ACTION_IS_NOT_PROOF: true
+    DOCUMENTED_IS_NOT_EXECUTED: true
+    EXECUTED_IS_NOT_VERIFIED: true
+    VERIFIED_IS_NOT_COMPLETE: true
+    MERGED_IS_NOT_DEPLOYED: true
+    EXISTS_IS_NOT_RUNNING: true
+    SEARCHED_IS_NOT_VERIFIED: true
+    PATCHED_IS_NOT_ROOT_CAUSE_FIXED: true
+    CI_GREEN_IS_NOT_ABSOLUTE_PROOF: true
+    FREEDOM_TO_EXPLORE_IS_NOT_FREEDOM_TO_INVENT_STATE: true
+
+  blocked_transition_behavior:
+    rule: >-
+      Se a evidencia nao sustentar a proxima transicao, nao promover o estado.
+      Continuar explorando, diagnosticando ou executando trabalho independente
+      que permaneça seguro, reversivel, pertinente e dentro do escopo.
+    local_block_does_not_freeze_independent_work: true
+    preserve_safe_work_already_done: true
+    record_blocker: true
+    retry_requires_new_information_or_new_safe_route: true
+
+  progressive_chain:
+    allowed: true
+    example:
+      - DIAGNOSE
+      - CORRECT
+      - TEST
+      - OBSERVE_CI
+      - IDENTIFY_NEW_FAILURE
+      - FIX_PROVED_CAUSE
+      - RERUN
+      - VERIFY
+      - RECORD
+      - CONTINUE
+    return_to_chefe_after_every_arrow: false
+
+  hard_brakes:
+    - SCOPE_CHANGE
+    - SECURITY_BOUNDARY
+    - IRREVERSIBLE_OR_DESTRUCTIVE_DATA_CHANGE
+    - UNEXPECTED_STRUCTURAL_CHANGE
+    - INSUFFICIENT_DIAGNOSIS_WITH_DAMAGE_RISK
+    - CANONICAL_CONTRACT_CONFLICT
+  on_hard_brake:
+    stop_only_affected_line: true
+    continue_independent_safe_work: true
+    preserve_current_state: true
+    mark_unknown_or_blocked: true
+
+  reuse_after_learning:
+    proven_learning_is_reuse_candidate: true
+    verify_conditions_still_equivalent: true
+    avoid_repeating_solved_investigation: true
+    reusable_knowledge_gt_repeated_work: true
+
+  mother_rule:
+    THINK_FREELY: true
+    EXPLORE: true
+    EXPERIMENT: true
+    REUSE: true
+    LEARN: true
+    ACT: true
+    DECLARE_REALITY_EXACTLY: true
+    REALITY_IS_JUDGE: true
+    LEARNING_IS_FUEL: true
+    AUTONOMY_IS_MOTOR: true
