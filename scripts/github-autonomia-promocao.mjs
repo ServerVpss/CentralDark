@@ -19,6 +19,9 @@ import {
 } from "../apps/modulos/mapeamento/core/validar-mapa.mjs";
 
 export const FAST_MERGE_POLICY = "AUTO_SQUASH_IF_CLEAN";
+export const CANONICAL_PR_MOTHER = 1562;
+export const PR_MOTHER_LOCK_LABEL = "🔒 PR-MÃE-FUNIL";
+const PR_MOTHER_LOCK_LABEL_NORMALIZED = PR_MOTHER_LOCK_LABEL.toLocaleLowerCase("pt-BR");
 export const CANONICAL_MAP_PATH = "apps/modulos/mapeamento/config/mapa-canonico.json";
 
 export const DEFAULT_REQUIRED_WORKFLOWS = Object.freeze([
@@ -165,6 +168,24 @@ export function normalizedLabels(pr) {
     if (name === "permito-segredo" || name === "👑 permito-segredo") return "👑 permito-segredo";
     return name;
   }));
+}
+
+export function prMotherBinding(pr) {
+  const labels = normalizedLabels(pr);
+  const corpus = String(pr?.title || "") + "\n" + String(pr?.body || "");
+  const explicit = corpus.match(/\bPR[_ -]?(?:MAE|MÃE|MOTHER)\s*[:=]\s*#?(\d+)\b/i);
+  const declaredMother = explicit ? Number(explicit[1]) : null;
+  const lockedByLabel = labels.has(PR_MOTHER_LOCK_LABEL_NORMALIZED);
+  const isMother = Number(pr?.number) === CANONICAL_PR_MOTHER || lockedByLabel;
+  const validChild = !isMother && declaredMother === CANONICAL_PR_MOTHER;
+  return {
+    canonical_mother: CANONICAL_PR_MOTHER,
+    declared_mother: declaredMother,
+    locked_by_label: lockedByLabel,
+    is_mother: isMother,
+    valid_child: validChild,
+    role: isMother ? "MOTHER_FUNNEL_LEDGER" : (validChild ? "CHILD_PROMOTION_PR" : "UNBOUND_PR"),
+  };
 }
 
 function lineMarker(body, name) {
@@ -510,6 +531,7 @@ export function evaluateCandidate({
   const waits = [];
   const labels = normalizedLabels(pr);
   const auth = authorizationFor(pr);
+  const mother = prMotherBinding(pr);
   const fastPath = auth.merge_policy === FAST_MERGE_POLICY && auth.viaBody;
   const author = String(pr.user?.login || "").toLowerCase();
   const trusted = trustedAuthors.map((value) => value.toLowerCase()).includes(author);
@@ -521,6 +543,8 @@ export function evaluateCandidate({
   if (!sameRepository) reasons.push("HEAD_EXTERNAL_REPOSITORY");
   if (!trusted) reasons.push("AUTHOR_NOT_TRUSTED");
   if (!auth.authorized) reasons.push("AUTHORITY_AUTHORIZATION_MISSING");
+  if (mother.is_mother) reasons.push("PR_MOTHER_FUNNEL_MERGE_FORBIDDEN");
+  else if (!mother.valid_child) reasons.push("PR_MOTHER_BINDING_REQUIRED:#" + CANONICAL_PR_MOTHER);
 
   for (const label of BLOCKING_LABELS) {
     if (labels.has(label)) reasons.push(`BLOCKING_LABEL:${label}`);
@@ -572,6 +596,7 @@ export function evaluateCandidate({
     decision,
     mode: fastPath ? "FAST" : "ADVERSARIAL",
     authorization: auth,
+    pr_mother: mother,
     trusted_author: trusted,
     same_repository: sameRepository,
     mergeable: pr.mergeable,
