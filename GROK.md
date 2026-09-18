@@ -28,7 +28,6 @@ FUTURE_RULES_CONSUMED_FROM_CORE=true
 Regra de compatibilidade: particularidades exclusivas do Grok ficam aqui somente como diferença física de superfície/tool. Regras comuns pertencem ao core.
 
 ```text
-GROK.md->LEIA-ME-IA.md
 CAPABILITY_SELECTION_OWNER=.agents/skills/capability-contract-router/SKILL.md
 DELEGATION_OWNER=scripts/agent-call.mjs
 PROVIDER_LOCAL_MEMORY_IS_CANONICAL=false
