@@ -2,7 +2,7 @@ name: PR Mother Pulse
 
 on:
   pull_request_target:
-    types: [opened, reopened, synchronize, ready_for_review, review_requested, labeled, unlabeled, closed]
+    types: [opened, reopened, synchronize, edited, ready_for_review, review_requested, labeled, unlabeled, closed]
   workflow_dispatch:
     inputs:
       pr_number:
@@ -12,7 +12,7 @@ on:
 
 permissions:
   contents: read
-  pull-requests: read
+  pull-requests: write
   issues: write
 
 concurrency:
@@ -45,15 +45,38 @@ jobs:
               : context.payload.pull_request;
 
             const canonicalMother = 1562;
-            const corpus = `${source.title || ''}\n${source.body || ''}`;
-            const explicit = corpus.match(/\bPR[_ -]?(?:MAE|MÃE|MOTHER)\s*[:=]\s*#?(\d+)\b/i);
-            const declaredMother = explicit ? Number(explicit[1]) : null;
+            let corpus = `${source.title || ''}\n${source.body || ''}`;
+            let explicit = corpus.match(/\bPR[_ -]?(?:MAE|MÃE|MOTHER)\s*[:=]\s*#?(\d+)\b/i);
+            let declaredMother = explicit ? Number(explicit[1]) : null;
             const isMother = sourceNumber === canonicalMother;
-            const canonicalBinding = declaredMother === canonicalMother;
+            let canonicalBinding = declaredMother === canonicalMother;
             const motherNumber = canonicalMother;
 
-            if (declaredMother && declaredMother !== canonicalMother) {
-              core.warning(`PR_MOTHER_BINDING_MISMATCH source=#${sourceNumber} declared=#${declaredMother} canonical=#${canonicalMother}`);
+            if (!isMother && !canonicalBinding) {
+              const rawBody = String(source.body || '');
+              const cleanedBody = rawBody
+                .replace(/^\s*PR[_ -]?(?:MAE|MÃE|MOTHER)\s*[:=]\s*#?\d+\s*$/gim, '')
+                .trimEnd();
+              const bindingBlock = [
+                `PR_MOTHER=#${canonicalMother}`,
+                'PR_ROLE=CHILD_PROMOTION_PR',
+                'BOT_ENTRY=!CENTRALDARK',
+                'BOOT_CHAIN=#ACORDAR → !CALIBRAR',
+              ].join('\n');
+              const nextBody = cleanedBody ? `${cleanedBody}\n\n${bindingBlock}\n` : `${bindingBlock}\n`;
+
+              await github.rest.pulls.update({
+                owner,
+                repo,
+                pull_number: sourceNumber,
+                body: nextBody,
+              });
+
+              core.notice(`PR_MOTHER_AUTO_BIND source=#${sourceNumber} canonical=#${canonicalMother}`);
+              canonicalBinding = true;
+              declaredMother = canonicalMother;
+              corpus = `${source.title || ''}\n${nextBody}`;
+              explicit = corpus.match(/\bPR[_ -]?(?:MAE|MÃE|MOTHER)\s*[:=]\s*#?(\d+)\b/i);
             }
 
             const action = manual ? 'manual_pulse' : String(context.payload.action || 'unknown');
