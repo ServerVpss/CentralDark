@@ -19,6 +19,7 @@ const FILES = {
   engine: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml',
   autoconfigRuntime: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/HERMES-AUTOCONFIG-RUNTIME.yml',
   hermesPrompt: 'apps/modulos/HERMES-CORE/prompts/hermes-core.md',
+  adminChecklist: 'docs/SEGURANCA/ADM-INVENTARIO-COMANDO-UNIVERSAL.md',
   tlc23: 'docs/CONSCIENCIA/04-MCP-E-CONECTORES/tlc23.pdf',
 };
 
@@ -101,6 +102,7 @@ export function validateUniversalMethod() {
   const engine = read(FILES.engine);
   const autoconfigRuntime = read(FILES.autoconfigRuntime);
   const hermesPrompt = read(FILES.hermesPrompt);
+  const adminChecklist = read(FILES.adminChecklist);
   const tlc23Hash = sha256(readBuffer(FILES.tlc23));
 
   if (tlc23Hash !== TLC23_CANONICAL_SHA256) {
@@ -226,6 +228,21 @@ export function validateUniversalMethod() {
     'counterproof_each_axis_required: true',
     'partial_axis_pass_is_global_pass: false',
     'micro_deploy_requires_explicit_chefe_authorization: true',
+    'daily_checklist_gate:',
+    'DAILY_CHECKLIST_GATE_REQUIRED: true',
+    'DAILY_CHECKLIST_RECORD_TARGET: ACTIVE_SCOPE_LEDGER',
+    'AGENT_OR_AI_MUTATES_CODE_DURING_DAY: true',
+    'LOAD_DAILY_CHECKLIST: true',
+    'VERIFY_PARENT_GOAL: true',
+    'VERIFY_WRITER_LEASE: true',
+    'UPDATE_DAILY_CHECKLIST: true',
+    'MODEL_NAME_IS_ROUTING_KEY: false',
+    'MODEL_NAME_IS_AUTHORITY: false',
+    'MODEL_NAME_IS_WRITER_LEASE: false',
+    'SAME_MUTABLE_SCOPE_REQUIRES_ONE_WRITER_LEASE: true',
+    'FINAL_PROMOTION_SCOPE: ONE_ACTIVE_FINALIZER_LEASE',
+    'GOAL_PAI_ID: STABLE',
+    'MICRO_GOAL: DERIVED_FROM_CURRENT_WOUND',
   ], 'AUTOCONFIG_RUNTIME');
 
   requireTokens(contract, [
@@ -289,7 +306,59 @@ export function validateUniversalMethod() {
     'THREE_AXIS_SAME_SOURCE_REQUIRED=true',
     'PARTIAL_AXIS_PASS_IS_GLOBAL_PASS=false',
     'MICRO_DEPLOY_REQUIRES_EXPLICIT_CHEFE_AUTH=true',
+    'DAILY_CHECKLIST_GATE_REQUIRED=true',
+    'LOAD_DAILY_CHECKLIST_BEFORE_FIRST_CODE_MUTATION_OF_DAY=true',
+    'UPDATE_DAILY_CHECKLIST_BEFORE_HANDOFF_OR_FINALIZATION=true',
+    'MODEL_NAME_IS_ROUTING_KEY=false',
+    'MODEL_NAME_IS_AUTHORITY=false',
+    'MODEL_NAME_IS_WRITER_LEASE=false',
+    'EXECUTOR_SELECTION=TAG_EXECUTOR+CAPABILITY_MATCH+SCOPE_MATCH+LEASE_AVAILABLE+POLICY_ALLOWED',
+    'SAME_MUTABLE_SCOPE_REQUIRES_ONE_WRITER_LEASE=true',
+    'FINAL_PROMOTION_SCOPE=ONE_ACTIVE_FINALIZER_LEASE',
+    'FINALIZATION_LANE=PR->SAME_HEAD_GATES->MAIN->POST_MERGE->DEPLOY->REMEASURE->FINAL_RECEIPT',
+    'GOAL_PAI_ID=STABLE',
+    'MICRO_GOAL=DERIVED_FROM_CURRENT_WOUND',
+    'AUTHORIZED_IS_NOT_VALIDATED=true',
   ], 'HERMES_PROMPT');
+
+  requireTokens(adminChecklist, [
+    'DAILY_CHECKLIST_GATE_REQUIRED=true',
+    'DAILY_CHECKLIST_OWNER=docs/SEGURANCA/ADM-INVENTARIO-COMANDO-UNIVERSAL.md',
+    'DAILY_CHECKLIST_RECORD_TARGET=ACTIVE_SCOPE_LEDGER',
+    'AGENT_OR_AI_MUTATES_CODE_DURING_DAY=true',
+    'LOAD_DAILY_CHECKLIST=true',
+    'VERIFY_CURRENT_STATE=true',
+    'VERIFY_PARENT_GOAL=true',
+    'VERIFY_OWNER=true',
+    'VERIFY_SCOPE=true',
+    'VERIFY_WRITER_LEASE=true',
+    'RECORD_MATERIAL_DELTA=true',
+    'RECORD_PENDING_GAPS=true',
+    'RECORD_HEAD_CHANGES=true',
+    'RECORD_HANDOFFS=true',
+    'RECORD_GATE_FAILURES=true',
+    'UPDATE_DAILY_CHECKLIST=true',
+    'MODEL_NAME_IS_ROUTING_KEY=false',
+    'MODEL_NAME_IS_AUTHORITY=false',
+    'MODEL_NAME_IS_WRITER_LEASE=false',
+    'EXECUTOR_SELECTION=TAG_EXECUTOR+CAPABILITY_MATCH+SCOPE_MATCH+LEASE_AVAILABLE+POLICY_ALLOWED',
+    'MULTIPLE_WRITERS_ALLOWED=true',
+    'CONCURRENT_WRITERS_DISJOINT_SCOPES=true',
+    'SAME_MUTABLE_SCOPE_REQUIRES_ONE_WRITER_LEASE=true',
+    'FINAL_PROMOTION_SCOPE=ONE_ACTIVE_FINALIZER_LEASE',
+    'FINALIZATION_LANE=PR->SAME_HEAD_GATES->MAIN->POST_MERGE->DEPLOY->REMEASURE->FINAL_RECEIPT',
+    'CHEFE=INTENT_AUTHORITY',
+    'CONTRACT=POLICY',
+    'GATES=PROOF',
+    'VPS=EXECUTOR_RUNTIME_AND_CONTROL_PLANE',
+    'REALITY=JUDGE',
+    'GOAL_PAI_ID=STABLE',
+    'MICRO_GOAL=DERIVED_FROM_CURRENT_WOUND',
+    'UNKNOWN != PASS',
+    'ACTION != PROOF',
+    'AUTHORIZED != VALIDATED',
+    'MERGED != DEPLOYED',
+  ], 'DAILY_CHECKLIST_ADMIN_OWNER');
 
   const engines = parseEngineNames(engine);
   return {
@@ -333,6 +402,10 @@ export function validateUniversalMethod() {
     three_axis_atomic_promotion: true,
     three_axis_promotion_axes: ['CASA', 'GITHUB', 'VPS'],
     parallel_architecture_without_proven_gap: false,
+    daily_checklist_gate_required: true,
+    daily_checklist_owner: FILES.adminChecklist,
+    daily_checklist_record_target: 'ACTIVE_SCOPE_LEDGER',
+    finalizer_lease_required: true,
   };
 }
 
