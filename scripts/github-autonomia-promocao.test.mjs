@@ -4,6 +4,8 @@ import test from "node:test";
 import {
   DEFAULT_WAIT_TIMEOUT_MS,
   FAST_MERGE_POLICY,
+  CANONICAL_PR_MOTHER,
+  PR_MOTHER_LOCK_LABEL,
   CANONICAL_MAP_PATH,
   SQUASH_FIXED_POINT_GOAL,
   authorizationFor,
@@ -11,6 +13,7 @@ import {
   evaluateCandidate,
   executionProvenance,
   intentReceipt,
+  prMotherBinding,
   scanPullFiles,
   sealReceipt,
   selectLatestNonSkipped,
@@ -27,6 +30,7 @@ import {
 } from "./github-autonomia-green-guard.mjs";
 
 const INTENT_BODY = [
+  "PR_MOTHER=#" + CANONICAL_PR_MOTHER,
   "Intent-Authorized: SEGREDO/CHEFE",
   `Merge-Policy: ${FAST_MERGE_POLICY}`,
   "Intent-Scope: TESTE_CANONICO",
@@ -134,6 +138,35 @@ function evaluate(pr = prFixture(), overrides = {}) {
     ...overrides,
   });
 }
+
+test("PR-mae #1562 e label cadeado nunca viram candidato de merge", () => {
+  const mother = prFixture({
+    number: CANONICAL_PR_MOTHER,
+    labels: [{ name: PR_MOTHER_LOCK_LABEL }],
+  });
+  const binding = prMotherBinding(mother);
+  const result = evaluate(mother);
+  assert.equal(binding.is_mother, true);
+  assert.equal(result.decision, "BLOCKED");
+  assert.ok(result.reasons.includes("PR_MOTHER_FUNNEL_MERGE_FORBIDDEN"));
+});
+
+test("PR filho sem vinculo explicito ao #1562 falha fechado", () => {
+  const unbound = prFixture({
+    body: INTENT_BODY.split("\n").filter((line) => !line.startsWith("PR_MOTHER=")).join("\n"),
+  });
+  const result = evaluate(unbound);
+  assert.equal(result.pr_mother.valid_child, false);
+  assert.equal(result.decision, "BLOCKED");
+  assert.ok(result.reasons.includes("PR_MOTHER_BINDING_REQUIRED:#" + CANONICAL_PR_MOTHER));
+});
+
+test("PR filho ligado ao #1562 preserva promocao normal quando demais gates passam", () => {
+  const result = evaluate();
+  assert.equal(result.pr_mother.valid_child, true);
+  assert.equal(result.pr_mother.role, "CHILD_PROMOTION_PR");
+  assert.equal(result.decision, "READY");
+});
 
 function canonicalFixture() {
   const identitySha = "d".repeat(40);
