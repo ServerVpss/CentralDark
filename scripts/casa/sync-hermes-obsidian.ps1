@@ -9,7 +9,9 @@ param(
     [Parameter(Mandatory = $false)]
     [string]$VaultRoot,
 
-    [string]$Branch = 'main'
+    [string]$Branch = 'main',
+
+    [string]$PrMother = '1562'
 )
 
 Set-StrictMode -Version Latest
@@ -61,6 +63,7 @@ $vaultExists = Test-Path -LiteralPath $vaultFull -PathType Container
 Out-Kv 'SURFACE' 'CASA'
 Out-Kv 'PROTOCOL' 'BANDA_META_LUPA_CLAIM_SEAL_SYNC_V1'
 Out-Kv 'REQUESTED_MODE' $Mode
+Out-Kv 'PR_MOTHER_POLICY' $PrMother
 Out-Kv 'REPO_ROOT' $repoFull
 Out-Kv 'REPO_EXISTS' $repoExists
 Out-Kv 'VAULT_ROOT' $vaultFull
@@ -163,14 +166,21 @@ if ($Mode -in @('Sync', 'Pull')) {
     }
 }
 elseif ($Mode -eq 'Push') {
+    if ($Branch -eq 'main' -or $branchNow -eq 'main') {
+        Out-Kv 'CASA_SYNC_STATUS' 'BLOCKED_PR_MOTHER_CHILD_REQUIRED'
+        Out-Kv 'RULE' 'OBSIDIAN_OUTBOUND_NEVER_PUSHES_MAIN_DIRECTLY'
+        Out-Kv 'PR_MOTHER' $PrMother
+        Out-Kv 'NEXT' 'USE_EXISTING_CHILD_PROMOTION_BRANCH_AND_PR_MOTHER_FUNNEL'
+        exit 24
+    }
     if ($behind -gt 0) {
         Out-Kv 'CASA_SYNC_STATUS' 'BLOCKED_BEHIND_REMOTE'
         Out-Kv 'NEXT' 'PULL_FF_ONLY_ANTES_DE_PUSH'
         exit 22
     }
     if ($branchNow -ne $Branch) {
-        Out-Kv 'CASA_SYNC_STATUS' 'BLOCKED_PUSH_FROM_NON_CANONICAL_BRANCH'
-        Out-Kv 'NEXT' 'USE_PR_PARA_BRANCH_DE_TRABALHO'
+        Out-Kv 'CASA_SYNC_STATUS' 'BLOCKED_BRANCH_MISMATCH'
+        Out-Kv 'NEXT' 'CHECKOUT_AUTHORIZED_CHILD_BRANCH'
         exit 23
     }
     if ($ahead -gt 0) {
