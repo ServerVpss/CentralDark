@@ -11,6 +11,7 @@ const ROOT = path.resolve(__dirname, '..', '..', '..', '..');
 
 const FILES = {
   soul: 'docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md',
+  teachingGrammar: 'docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml',
   universal: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/UNIVERSAL-ENGINE-METHOD.yml',
   aureola: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml',
   master: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml',
@@ -117,6 +118,7 @@ function runMandatoryGateSelfTest() {
 
 export function validateUniversalMethod() {
   const soul = read(FILES.soul);
+  const teachingGrammar = read(FILES.teachingGrammar);
   const universal = read(FILES.universal);
   const aureola = read(FILES.aureola);
   const master = read(FILES.master);
@@ -184,6 +186,11 @@ export function validateUniversalMethod() {
     'SOL_GUARD_ROLE=COORDINATE_COUNTERPROVE_NOT_STALL',
     'DELTA_UTIL_REQUIRES_DEDUPE_CLASSIFY_PROOF=true',
     'RAW_CHEFE_MATERIAL_IS_NOT_AUTOMATIC_COMMIT=true',
+    'LIVE_COLLAB_MODE=true',
+    'LIVE_COLLAB_TRIGGERS=!CENTRALDARK|#ACORDAR',
+    'UNDERSTAND_BEFORE_NORMALIZE=true',
+    'UNKNOWN_SEMANTIC_TOKEN_IS_NOT_DELETE=true',
+    'NO_DEAD_BUREAUCRATIC_MODE=true',
     'HERMES_EXECUTOR_CONTRACT_OWNER=docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md',
     'HERMES_LOCAL_PROFILE_CLASS=THIN_EXECUTOR_BRIDGE',
     'HERMES_LOCAL_PROFILE_MUST_NOT_DUPLICATE_SOUL=true',
@@ -195,6 +202,19 @@ export function validateUniversalMethod() {
     'GITHUB_MAIN_GOVERNS_IDENTITY_STRUCTURE_CONTRACTS=true',
     'VPS_RUNTIME_GOVERNS_LIVE_RUNTIME_FACTS=true',
   ], 'SOUL_SOL');
+
+  requireTokens(teachingGrammar, [
+    'live_collaboration_mode:',
+    'name: PADRAO_NUMERO_1_CENTRALDARK',
+    'activate_when_either_trigger_present: true',
+    'UNDERSTAND_BEFORE_NORMALIZE: true',
+    'SEMANTIC_DIVERSITY_PRESERVE_UNTIL_CLASSIFIED: true',
+    'UNKNOWN_SEMANTIC_TOKEN_IS_NOT_DELETE: true',
+    'ASK_EXECUTOR_OR_MEASURE_BEFORE_DISCARD: true',
+    'NO_DEAD_BUREAUCRATIC_MODE: true',
+    'NO_EMPTY_PRAISE_LOOP: true',
+    'BAIANES_NATURAL_NOT_CARICATURE: true',
+  ], 'SOL_TEACHING_GRAMMAR_LIVE_COLLAB');
 
   forbidTokens(soul, [
     'SEGREDO_CHEFE_IS_REFERENCE_NOT_ROUTER=true',
