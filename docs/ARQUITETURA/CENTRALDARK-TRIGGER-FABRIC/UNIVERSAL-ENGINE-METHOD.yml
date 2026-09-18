@@ -361,6 +361,58 @@ same_body_evolution:
     stale_run_id_requires_human_return: false
     next_safe_route_should_be_attempted_before_return: true
 
+  machine_resolvable_continuation:
+    semantic_name: DERIVED_CAUSAL_MICRO_GOAL
+    self_goal_alias: SELF_GOAL
+    self_goal_is_new_parent_goal: false
+    self_goal_is_new_human_intent: false
+    unknown_alone_authorizes_mutation: false
+    technical_failure_alone_is_human_frontier: false
+    current_state_change_alone_is_human_frontier: false
+    main_changed_alone_is_human_frontier: false
+    parent_goal_must_survive: true
+    existing_owner_must_survive: true
+    writer_lease_must_survive_same_mutable_scope: true
+    mutation_requires_authorized_scope: true
+    mutation_requires_causal_evidence: true
+    derive_only_after:
+      - MEASURE_CURRENT
+      - CLASSIFY_FAILURE_SIGNATURE
+      - VERIFY_AUTHORIZED_SCOPE
+      - VERIFY_EXISTING_OWNER
+      - VERIFY_WRITER_LEASE
+    flow:
+      - DERIVE_CAUSAL_MICRO_GOAL
+      - PRESERVE_PARENT_GOAL
+      - PRESERVE_EXISTING_OWNER
+      - PRESERVE_SCOPE
+      - PRESERVE_OR_ACQUIRE_VALID_WRITER_LEASE
+      - EXECUTE_MINIMAL_SAFE_REMEDIATION
+      - RETEST
+      - COUNTERPROOF
+      - REMEASURE
+      - UPDATE_RECEIPT
+      - CONTINUE_NEXT_CURSOR
+    operational_signals_are_not_human_frontier_by_themselves:
+      - ASKED_USER
+      - WAITING_FOR_USER
+      - NEXT_STEP_EXISTS
+      - UNKNOWN
+      - CI_FAILURE
+      - RUN_FAILURE
+      - NEED_RETRY
+      - NEED_REMEASURE
+      - NEED_RECONCILE
+      - MAIN_CHANGED
+      - CURRENT_STATE_CHANGED
+    on_signal:
+      action: CLASSIFY_THEN_CONTINUE_IF_MACHINE_RESOLVABLE_AND_AUTHORIZED
+      never: BLIND_PATCH
+    escalate_only_when:
+      - PROVEN_HUMAN_FRONTIER
+      - EXACT_HARD_BLOCKER_AFTER_AUTHORIZED_ROUTES_EXHAUSTED
+      - NEW_HUMAN_INTENT_REQUIRED
+
   complexity_budget:
     prefer_patch_over_new_artifact: true
     new_artifact_requires_net_information_or_risk_benefit: true
