@@ -10,6 +10,7 @@ const ROOT = path.resolve(__dirname, '..', '..', '..', '..');
 
 const FILES = {
   universal: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/UNIVERSAL-ENGINE-METHOD.yml',
+  operationalMethod: '.agents/skills/centraldark-operational-method/SKILL.md',
   contract: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml',
   triggers: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml',
   bandScore: 'docs/BRAIN/01-CONCEITOS/02-BANDA/BANDA_COMPASSO_GLOBAL.json',
@@ -91,6 +92,7 @@ function parseEngineNames(engineText) {
 
 export function validateUniversalMethod() {
   const universal = read(FILES.universal);
+  const operationalMethod = read(FILES.operationalMethod);
   const contract = read(FILES.contract);
   const triggers = read(FILES.triggers);
   const bandScore = read(FILES.bandScore);
@@ -142,7 +144,21 @@ export function validateUniversalMethod() {
     'EXACT_HARD_BLOCKER_AFTER_AUTHORIZED_ROUTES_EXHAUSTED',
     'mass_job_creation_without_independent_boundaries: FORBIDDEN',
     'complexity_without_capability_gain: REGRESSION',
+    'aureola_learning_contract:',
+    'applies_to: [SOL, HERMES, PIVETE, CURRENT_EXECUTOR, ALL_CURRENT_AND_FUTURE_ENGINES]',
+    'SOL_AND_HERMES_SHARE_SAME_LEARNING_CONTRACT: true',
+    'bounded_100_percent:',
+    'requires_explicit_denominator: true',
+    'calculation_only_global_runtime_claim: false',
   ], 'UNIVERSAL_CONTRACT');
+
+  requireTokens(operationalMethod, [
+    '## AURÉOLA DISCOVERY HARVEST — SOL + HERMES',
+    'AUREOLA_MATERIAL_DISCOVERY',
+    'SOL_AND_HERMES_SHARE_SAME_LEARNING_CONTRACT = true',
+    'CONTRACT_COVERAGE = PASSED_DEFINED_CHECKS / ALL_DEFINED_CHECKS',
+    'CALCULATION != RUNTIME_OBSERVATION',
+  ], 'OPERATIONAL_METHOD_LEARNING');
 
   let previous = -1;
   for (const token of REQUIRED_CHAIN) {
@@ -285,6 +301,9 @@ export function validateUniversalMethod() {
     material_discovery_learning_ref_required: true,
     discovery_auto_promotes_to_crystal: false,
     calculation_replaces_runtime_observation: false,
+    operational_method_learning: true,
+    sol_and_hermes_share_learning_contract: true,
+    bounded_100_percent_requires_explicit_denominator: true,
   };
 }
 
