@@ -17,6 +17,7 @@ const ADAPTERS = Object.freeze([
   ["CHATGPT.md", "CHATGPT"],
   [CLAUDE_BRIDGE, "CLAUDE"],
   ["GEMINI.md", "GEMINI"],
+  ["GROK.md", "GROK"],
   ["CODEX.md", "CODEX"],
   [CLAUDE_AUTOLOAD, "CLAUDE_CODE"],
   [".cursor/rules/centraldark-governanca.mdc", "CURSOR"],
