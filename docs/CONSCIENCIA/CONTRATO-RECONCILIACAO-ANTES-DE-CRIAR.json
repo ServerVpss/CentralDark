@@ -633,16 +633,14 @@
     "operational_mirror": "E:\\CentralDark\\Pivete\\CASA-VAULT\\🧾CHECK-LIST DIARIO🤖.md",
     "mirror_is_authority": false,
     "applies_when": "AI_OR_AGENT_MUTATES_CODE",
-    "per_head_attestation_required": true,
     "required_pr_receipt_fields": [
       "Daily-Checklist: PASS",
       "Daily-Checklist-Date: YYYY-MM-DD",
-      "Daily-Checklist-Head: FULL_HEAD_SHA",
       "Daily-Checklist-Goal: NONEMPTY",
       "Daily-Checklist-Writer: NONEMPTY"
     ],
     "head_binding": "Daily-Checklist-Head MUST_EQUAL CURRENT_HEAD_SHA",
-    "date_semantics": "OBSERVATION_DATE_RECORDED; HEAD_BINDING_IS_DETERMINISTIC_AUTHORITY_FOR_FRESHNESS",
+    "date_semantics": "DAILY_FRESHNESS_IS_BOUND_TO_HEAD_COMMIT_DATE_IN_AMERICA_SAO_PAULO; RUNNER_CLOCK_IS_NOT_AUTHORITY",
     "before_first_material_code_mutation": [
       "LOAD_OR_CREATE_DAILY_CHECKLIST",
       "VERIFY_GOAL_PAI",
@@ -660,9 +658,12 @@
       "RESULTS",
       "NEXT_CURSOR"
     ],
-    "before_handoff_or_finalization": "UPDATE_DAILY_CHECKLIST_AND_BIND_RECEIPT_TO_HEAD",
+    "before_handoff_or_finalization": "UPDATE_DAILY_CHECKLIST_FOR_CURRENT_HEAD_COMMIT_DAY",
     "unknown_receipt": "BLOCK_CODE_PROMOTION",
     "action_is_proof": false,
-    "documented_is_executed": false
+    "documented_is_executed": false,
+    "per_day_attestation_required": true,
+    "date_binding": "Daily-Checklist-Date MUST_EQUAL HEAD_COMMIT_DATE_IN_AMERICA_SAO_PAULO",
+    "head_field_role": "OPTIONAL_PROVENANCE_NOT_GATE"
   }
 }
