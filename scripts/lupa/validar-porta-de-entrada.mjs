@@ -138,6 +138,26 @@ function campoReceipt(body, name) {
   return line ? line.slice(prefix.length).trim() : "";
 }
 
+function dataCommitSaoPaulo(sha) {
+  if (!shaValido(sha) || !gitCommitExiste(sha)) return "";
+  let raw = "";
+  try {
+    raw = git(["show", "-s", "--format=%cI", sha]);
+  } catch {
+    return "";
+  }
+  const date = new Date(raw);
+  if (Number.isNaN(date.getTime())) return "";
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/Sao_Paulo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(date);
+  const values = Object.fromEntries(parts.map((part) => [part.type, part.value]));
+  return `${values.year}-${values.month}-${values.day}`;
+}
+
 function caminhosCitados(texto) {
   const encontrados = new Set();
   const padroes = [
@@ -322,7 +342,9 @@ if (!contract) {
   if (dailyChecklist.authority !== "SEGREDO/CHEFE") errors.push("DAILY_CHECKLIST_AUTHORITY_INVALIDA");
   if (dailyChecklist.mirror_is_authority !== false) errors.push("DAILY_CHECKLIST_MIRROR_VIROU_AUTORIDADE");
   if (dailyChecklist.applies_when !== "AI_OR_AGENT_MUTATES_CODE") errors.push("DAILY_CHECKLIST_SCOPE_INVALIDO");
-  if (dailyChecklist.per_head_attestation_required !== true) errors.push("DAILY_CHECKLIST_HEAD_BINDING_DESATIVADO");
+  if (dailyChecklist.per_day_attestation_required !== true) errors.push("DAILY_CHECKLIST_DAILY_BINDING_DESATIVADO");
+  if (dailyChecklist.date_binding !== "Daily-Checklist-Date MUST_EQUAL HEAD_COMMIT_DATE_IN_AMERICA_SAO_PAULO") errors.push("DAILY_CHECKLIST_DATE_BINDING_INVALIDO");
+  if (dailyChecklist.head_field_role !== "OPTIONAL_PROVENANCE_NOT_GATE") errors.push("DAILY_CHECKLIST_HEAD_VIROU_GATE");
   if (dailyChecklist.unknown_receipt !== "BLOCK_CODE_PROMOTION") errors.push("DAILY_CHECKLIST_UNKNOWN_NAO_BLOQUEIA");
   if (dailyChecklist.action_is_proof !== false) errors.push("DAILY_CHECKLIST_ACTION_VIROU_PROVA");
   if (dailyChecklist.documented_is_executed !== false) errors.push("DAILY_CHECKLIST_DOCUMENTED_VIROU_EXECUTED");
@@ -454,12 +476,15 @@ if (!contract) {
     const body = String(pr.body || "");
     const checklist = campoReceipt(body, "Daily-Checklist");
     const checklistDate = campoReceipt(body, "Daily-Checklist-Date");
-    const checklistHead = campoReceipt(body, "Daily-Checklist-Head");
     const checklistGoal = campoReceipt(body, "Daily-Checklist-Goal");
     const checklistWriter = campoReceipt(body, "Daily-Checklist-Writer");
+    const expectedDate = dataCommitSaoPaulo(HEAD_SHA);
     if (checklist !== "PASS") errors.push("DAILY_CHECKLIST_RECEIPT_AUSENTE");
     if (!/^\d{4}-\d{2}-\d{2}$/.test(checklistDate)) errors.push("DAILY_CHECKLIST_DATE_INVALIDA");
-    if (checklistHead !== HEAD_SHA) errors.push(`DAILY_CHECKLIST_HEAD_MISMATCH:receipt=${checklistHead || "MISSING"}:current=${HEAD_SHA || "MISSING"}`);
+    if (!expectedDate) errors.push("DAILY_CHECKLIST_HEAD_COMMIT_DATE_INDISPONIVEL");
+    if (expectedDate && checklistDate !== expectedDate) {
+      errors.push(`DAILY_CHECKLIST_DATE_MISMATCH:receipt=${checklistDate || "MISSING"}:head_commit_day=${expectedDate}`);
+    }
     if (!checklistGoal) errors.push("DAILY_CHECKLIST_GOAL_AUSENTE");
     if (!checklistWriter) errors.push("DAILY_CHECKLIST_WRITER_AUSENTE");
   }
