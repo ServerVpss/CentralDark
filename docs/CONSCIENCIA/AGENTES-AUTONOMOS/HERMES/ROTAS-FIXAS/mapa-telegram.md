@@ -13,7 +13,7 @@ updated: 2026-07-05
 
 ## 🎯 FOCO ATIVO (só isso importa pro Hermes)
 
-```
+```text
 🤖 Bot     @srver1bot
 📢 Canal   -1003669176367   Status CentralDark   ← POSTA AQUI
 👥 Grupo   -5365750004      Central Dark - Grupo Da Evoluçao   (espelho automático do canal)

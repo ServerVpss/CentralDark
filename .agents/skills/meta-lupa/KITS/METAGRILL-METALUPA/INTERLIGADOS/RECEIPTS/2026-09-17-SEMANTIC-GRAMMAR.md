@@ -1,5 +1,7 @@
 # 🧾🧠 Gramática semântica
 
+🔗 **!># INTERLIGADOS**
+
 ```text
 EMOJI + GANCHO HUMANO + (TERMO TÉCNICO) → FUNÇÃO DE UMA LINHA
 ```

@@ -1,5 +1,7 @@
 # 🧾🧬 Horn Gate · Universal Method · Master Cycle · Deploy Owner
 
+🔗 **!># INTERLIGADOS**
+
 ```text
 HORN_GATE=INTERLIGADO
 UNIVERSAL_METHOD=INTERLIGADO
