@@ -8,6 +8,10 @@
     "runtime_mutation": false,
     "history_rule": "CURRENT > HISTORY",
     "latest_prs_reconciled": [
+      1574,
+      1573,
+      1572,
+      1570,
       1567,
       1566,
       1565,
@@ -23,16 +27,17 @@
       1552,
       1551
     ],
-    "latest_window": "PR_1551_TO_1567_EXISTING_PRS",
+    "latest_window": "PR_1570_TO_1574_EXISTING_PRS",
     "missing_numbers_not_pull_requests": [
       1556,
       1559,
       1560
     ],
     "refreshed_from_main": "25f18bc9db61e13332dea6fbd28ab2349a2ac5ca",
-    "all_stable_pattern_delta_files_absorbed_through": "DELTA-PR-1551-1567.md",
+    "all_stable_pattern_delta_files_absorbed_through": "DELTA-PR-1570-1574.md",
     "full_registry_reconciled_at_main": "373c0f3f91280f5496a844813f836dc35c1f1a8d",
-    "pattern_count": 142
+    "pattern_count": 150,
+    "latest_pattern_sweep_base_main": "564e58b984d24b0966c9e94b01b2c243a394c571"
   },
   "patterns": [
     {
@@ -1547,6 +1552,78 @@
       "anchor": "NARRAÇÃO CURTA PODE ACOMPANHAR TOOL-CALL REAL; RESULTADO/RECEIPT CONTINUAM SENDO PROVA",
       "pr_refs": [
         1550
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "CANONICAL_ARTIFACT_PROPERTIES_USE_EXISTING_SCHEMA",
+      "emoji": "🧾",
+      "anchor": "ARTEFATO ENTRA NO SCHEMA CANÔNICO; NORMALIZA PROPRIEDADES SEM CRIAR OWNER PARALELO",
+      "pr_refs": [
+        1570
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "PR_MOTHER_MERGE_FORBIDDEN_CHILD_ONLY_PROMOTION",
+      "emoji": "🔒",
+      "anchor": "PR-MÃE/FUNIL NÃO É VEÍCULO DE PROMOÇÃO; MERGE SOMENTE POR SUB-PR VINCULADO",
+      "pr_refs": [
+        1572
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "INTERRUPTION_DOES_NOT_RESTART_MISSION",
+      "emoji": "🧵",
+      "anchor": "INTERRUPÇÃO PRESERVA OURO, MISSÃO E NEXT CURSOR; REMEDE SÓ O ESTADO TEMPORAL",
+      "pr_refs": [
+        1573
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "RUNTIME_SURFACE_IS_NOT_AUTHORITY",
+      "emoji": "🏠",
+      "anchor": "CASA/WSL/DOCKER/VPS TÊM PAPÉIS DE RUNTIME; NENHUM VIRA CÉREBRO OU AUTORIDADE",
+      "pr_refs": [
+        1574
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "EVENT_SIGNAL_IS_NOT_COMMAND",
+      "emoji": "📡",
+      "anchor": "EVENT VIEWER/WMI SÃO SINAIS; NORMALIZA → FINGERPRINT → DEDUPE → REMEDIAÇÃO MÍNIMA",
+      "pr_refs": [
+        1574
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "OBJECTIVE_AUTHORITY_ROUTE_AUTONOMY_SPLIT",
+      "emoji": "👑",
+      "anchor": "CHEFE DEFINE OBJETIVO; HERMES ESCOLHE A MENOR ROTA TÉCNICA SEM REDEFINIR A INTENÇÃO",
+      "pr_refs": [
+        1574
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "NO_RETRY_WITHOUT_INFORMATION_GAIN",
+      "emoji": "🔁",
+      "anchor": "SEM NOVA INFORMAÇÃO, NÃO REPETE LOOP; AGUARDA EVENTO OU DELTA NOVO",
+      "pr_refs": [
+        1574
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "MINIMUM_SAFE_ADAPTATION_BEFORE_GLOBAL_DISABLE",
+      "emoji": "🛡️",
+      "anchor": "ANTES DE DESLIGAR PROTEÇÃO GLOBAL, PROVA PROCESSO/PATH/OWNER E APLICA MENOR ADAPTAÇÃO",
+      "pr_refs": [
+        1574
       ],
       "runtime_required": false
     }
