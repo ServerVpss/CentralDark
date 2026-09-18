@@ -1,22 +1,56 @@
-schema: centraldark.pr-mother-pulse.v1
-status: CANDIDATE
+schema: centraldark.pr-mother-pulse.v2
+status: CANDIDATE_IN_CHILD_PR
 owner: CENTRALDARK_TRIGGER_FABRIC
 workflow: .github/workflows/pr-mother-pulse.yml
 
+canonical_mother:
+  pr: 1562
+  label: "🔒 PR-MÃE-FUNIL"
+  blocking_label: do-not-merge
+  role: RENDEZVOUS_LEDGER_NOT_WRITER
+  merge_allowed: false
+  close_by_merge: false
+  receives_all_pr_events: true
+  direct_code_promotion: false
+
 intent: >-
-  Tornar movimento material relacionado ao PR-mãe visível por reação nativa do GitHub
-  e por receipt compacto que preserve ator, evento, PR de origem e HEAD, sem converter
-  reação em prova técnica ou autoridade.
+  Tornar o PR #1562 o rendezvous/ledger permanente de todos os PRs da CentralDark.
+  O PR-mãe recebe movimento, issues, receipts, handoffs e referências de SUB-PRs,
+  mas nunca é veículo de merge. Somente PRs filhos promovem deltas para main após
+  os gates canônicos do mesmo HEAD.
+
+bot_entry:
+  entry: "!CENTRALDARK"
+  inherited_chain:
+    - "#ACORDAR"
+    - "!CALIBRAR"
+  meaning: "todo PR novo entra na mesma Casa antes de promoção"
+  new_engine: false
 
 mother_resolution:
+  canonical: 1562
   explicit_markers:
-    - PR_MAE=#<number>
-    - PR_MÃE=#<number>
-    - PR_MOTHER=#<number>
-  self_markers:
+    - PR_MAE=#1562
+    - PR_MÃE=#1562
+    - PR_MOTHER=#1562
+  mother_self_markers:
+    - "🔒 PR-MÃE-FUNIL"
     - PR-mãe vivo
     - ONE_PR_LEDGER=true
-  no_marker: SKIP
+  no_marker: OBSERVE_ON_MOTHER_AND_FAIL_PROMOTION_GATE
+  mismatched_marker: OBSERVE_ON_MOTHER_AND_FAIL_PROMOTION_GATE
+
+child_contract:
+  required: true
+  merge_target: main
+  required_marker: PR_MOTHER=#1562
+  promotion_owner: scripts/github-autonomia-promocao.mjs
+  entrance_gate: .github/workflows/porta-de-entrada.yml
+  only_child_pr_merges: true
+  mother_never_merges: true
+  child_merge_dispatches_post_merge: true
+  post_merge_event: centraldark_post_merge
+  micro_deploy: EXISTING_CAUSAL_PIPELINE_ONLY
 
 reactions:
   opened: eyes
@@ -26,13 +60,15 @@ reactions:
   unlabeled: +1
   review_requested: eyes
   ready_for_review: rocket
-  closed_merged: hooray
-  closed_unmerged: confused
+  child_closed_merged: hooray
+  child_closed_unmerged: confused
+  unbound_child: confused
   manual_pulse: +1
 
 receipt_required_fields:
   - mother_pr
   - source_pr
+  - binding
   - event_action
   - event_actor
   - sender
@@ -41,6 +77,15 @@ receipt_required_fields:
   - workflow_run_id
 
 laws:
+  PR_MOTHER_IS_SINGLE_RENDEZVOUS: true
+  PR_MOTHER_IS_RENDEZVOUS_NOT_WRITER: true
+  PR_MOTHER_MERGE_FORBIDDEN: true
+  CHILD_PR_REQUIRES_PR_MOTHER_1562: true
+  CHILD_PR_ONLY_PROMOTION_VEHICLE: true
+  ONE_WRITER_PER_SCOPE: true
+  ONE_SYSTEM_ONLY: true
+  REUSE_BEFORE_CREATE: true
+  NO_DIRECT_MAIN_WRITE: true
   REACTION_IS_TELEMETRY_NOT_PROOF: true
   REACTION_IS_NOT_APPROVAL: true
   REACTION_IS_NOT_FIXED_POINT: true
@@ -49,8 +94,8 @@ laws:
   EVENT_ACTOR_MUST_BE_RECORDED_SEPARATELY: true
   HEAD_REQUIRED_FOR_MOVEMENT_RECEIPT: true
   UNKNOWN_IS_NOT_PASS: true
-  ONE_SYSTEM_ONLY: true
-  NO_DIRECT_MAIN_WRITE: true
+  MERGED_IS_NOT_DEPLOYED: true
+  MICRO_DEPLOY_IS_NOT_GLOBAL_READY: true
 
 security:
   event: pull_request_target
@@ -65,5 +110,5 @@ meaning:
   eyes: movimento_aberto_ou_revisao
   +1: delta_ou_sincronizacao_observada
   rocket: pronto_para_revisao_nao_promovido
-  hooray: evento_de_merge_observado_nao_prova_runtime
-  confused: fechamento_sem_merge_ou_estado_que_exige_reconciliacao
+  hooray: merge_de_sub_pr_observado_nao_prova_runtime
+  confused: filho_sem_binding_fechado_sem_merge_ou_estado_que_exige_reconciliacao
