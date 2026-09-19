@@ -81,9 +81,9 @@ const CONFIG = {
 
   // Tokens de bot Telegram — cada IA tem o seu
   botTokens: {
-    gemini: process.env.BOT_TOKEN_GEMINI || '8057486730:AAEhAwrzyc5jR6pEMqBXHITnZwoahTc6WRY',
-    groq: process.env.BOT_TOKEN_GROQ || '8057486730:AAEhAwrzyc5jR6pEMqBXHITnZwoahTc6WRY',
-    claude: process.env.BOT_TOKEN_CLAUDE || '8057486730:AAEhAwrzyc5jR6pEMqBXHITnZwoahTc6WRY',
+    gemini: process.env.BOT_TOKEN_GEMINI || '',
+    groq: process.env.BOT_TOKEN_GROQ || '',
+    claude: process.env.BOT_TOKEN_CLAUDE || '',
   },
 
   // Perfil de cada bot no Telegram (nome + descrição + foto)
