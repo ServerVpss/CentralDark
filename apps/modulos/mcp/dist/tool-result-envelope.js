@@ -9,7 +9,8 @@ function asObject(value) {
 function stringifyFallback(value) {
   if (typeof value === "string") return value;
   try {
-    return JSON.stringify(value);
+    const encoded = JSON.stringify(value);
+    return encoded === undefined ? String(value) : encoded;
   } catch {
     return String(value);
   }
