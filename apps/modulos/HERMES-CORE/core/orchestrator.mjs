@@ -7,7 +7,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { join, dirname, extname, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { exec, execSync } from 'node:child_process';
-import { randomBytes } from 'node:crypto';
+import { randomBytes, createHash } from 'node:crypto';
 import { createServer as httpCreateServer } from 'node:http';
 import { renameComRetry as renameComRetryUtil } from '../utils/fs-safe.mjs';
 import { continuityBlockReceipt, validateContinuityState } from './continuity-guard.mjs';
@@ -265,6 +265,8 @@ async function rodarMissao(dir, slug, missao, historico = [], retomadas = 0, con
   let terminalState = 'RUNNING';
   let terminalReason = null;
   let finalMessage = null;
+  let lastFailureSignature = null;
+  let repeatedFailureCount = 0;
 
   while (true) {
     etapa++;
@@ -396,20 +398,35 @@ async function rodarMissao(dir, slug, missao, historico = [], retomadas = 0, con
     );
 
     if (!etapaAprovada) {
-      falhasSeguidas++;
-      if (falhasSeguidas >= MAX_FALHAS) {
+      const failureSignature = createHash('sha256').update(JSON.stringify({
+        ferramenta,
+        resultado: String(resultado.saida || '').replace(/\b\d+\b/g, '#').slice(0, 1200),
+        critic: String(parecer?.parecer || '').replace(/\b\d+\b/g, '#').slice(0, 600),
+      })).digest('hex');
+
+      if (failureSignature === lastFailureSignature) repeatedFailureCount++;
+      else {
+        lastFailureSignature = failureSignature;
+        repeatedFailureCount = 1;
+      }
+      falhasSeguidas = repeatedFailureCount;
+      await lg(`🧬 failure_signature=${failureSignature.slice(0,12)} repeats=${repeatedFailureCount}/${MAX_FALHAS}`);
+
+      if (repeatedFailureCount >= MAX_FALHAS) {
         terminalState = 'BLOCKED';
         terminalReason = 'MAX_FALHAS_EXECUTOR_OR_CRITIC';
-        await lg(`🔴 pausando após ${MAX_FALHAS} falhas/reprovações seguidas`);
+        await lg(`🔴 pausando após ${MAX_FALHAS} repetições da mesma falha/reprovação sem ganho material`);
         registrarFalha();
         await notificar(
           `Hermes: PAUSEI 🔴`,
-          `❌ <b>${slug}</b>\n${MAX_FALHAS} falhas/reprovações seguidas na etapa ${etapa}.\nÚltimo resultado:\n<pre>${String(resultado.saida || parecer?.parecer || '').slice(0,500).replace(/</g,'&lt;')}</pre>`
+          `❌ <b>${slug}</b>\n${MAX_FALHAS} repetições da mesma falha/reprovação sem ganho material na etapa ${etapa}.\nÚltimo resultado:\n<pre>${String(resultado.saida || parecer?.parecer || '').slice(0,500).replace(/</g,'&lt;')}</pre>`
         );
         break;
       }
     } else {
       falhasSeguidas = 0;
+      repeatedFailureCount = 0;
+      lastFailureSignature = null;
     }
 
     await new Promise(r => setTimeout(r, 2000));
