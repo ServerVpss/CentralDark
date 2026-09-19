@@ -221,7 +221,16 @@ jobs:
             ' || echo "MCP_PM2_DIAGNOSTIC_UNAVAILABLE"
           }
           [[ "$(jq -r '.pm2_env.pm_cwd // ""' <<<"$MCP_JSON")" == "$MCP_DIR" ]] || { echo "MCP_PM2_CWD_MISMATCH"; exit 35; }
-          [[ "$(jq -r '.pm2_env.pm_exec_path // ""' <<<"$MCP_JSON")" == "$MCP_DIR/dist/index.js" ]] || { echo "MCP_PM2_EXEC_MISMATCH"; exit 36; }
+          MCP_EXEC="$(jq -r '.pm2_env.pm_exec_path // ""' <<<"$MCP_JSON")"
+          MCP_ARGS="$(jq -r '(.pm2_env.args // []) | join(" ")' <<<"$MCP_JSON")"
+          if [[ "$MCP_EXEC" == "$MCP_DIR/dist/index.js" ]]; then
+            :
+          elif [[ "$MCP_EXEC" == *bash && "$MCP_ARGS" == *"exec node $MCP_DIR/dist/index.js"* ]]; then
+            :
+          else
+            echo "MCP_PM2_EXEC_MISMATCH"
+            exit 36
+          fi
           curl -fsS --max-time 3 "$HEALTH_URL" | jq -e '.ok == true and .service == "mcp-centraldark"' >/dev/null || { echo "PRE_DEPLOY_HEALTH_FAILED"; exit 37; }
 
           RUNTIME_STAGE="$MCP_DIR/.dist-release.${TARGET_SHA:0:12}.${BASHPID}"

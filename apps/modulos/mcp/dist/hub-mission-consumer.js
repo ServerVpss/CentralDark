@@ -495,7 +495,7 @@ async function tick() {
         await recoverStaleClaims();
         const processed = await processOneMission();
         state.status = processed ? "processed" : "idle";
-        if (!processed)
+        if (processed)
             state.lastError = null;
     }
     catch (err) {
