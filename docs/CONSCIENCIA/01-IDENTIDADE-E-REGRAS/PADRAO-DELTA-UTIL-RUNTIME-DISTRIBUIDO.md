@@ -298,3 +298,115 @@ Se qualquer item faltar:
 ```text
 RUNTIME_CRYSTAL=UNKNOWN
 ```
+
+## Compressão arquitetural — DROP / EXTEND / GOAL_PAI
+
+A CentralDark não cresce por empilhar regra, contrato ou documento. Ela cresce **por dentro do owner existente**.
+
+Antes de criar qualquer peça nova, o agente deve responder:
+
+```text
+O_OWNER_EXISTENTE_JA_COBRE_100_POR_CENTO_DA_SEMANTICA?
+```
+
+Se sim:
+
+```text
+DROP_NEW_ARTIFACT=true
+PRESERVE_PROVENANCE=true
+REUSE_EXISTING_OWNER=true
+```
+
+Se existe distinção material nova:
+
+```text
+EXTEND_EXISTING_OWNER=true
+CREATE_PARALLEL_OWNER=false
+PRESERVE_EXISTING_BEHAVIOR=true
+ADD_ONLY_MATERIAL_DELTA=true
+```
+
+Regra de compressão:
+
+```text
+SISTEMA_GRANDE
+→ EXTRAI_ESSENCIA
+→ LOCALIZA_OWNER
+→ DROP_DUPLICATE
+→ EXTEND_NOVEL_DELTA
+→ TESTE
+→ CONTRAPROVA
+→ RECEIPT
+→ NEXT_CURSOR
+```
+
+Isso vale para código, contratos, skills, agentes, prompts, docs, workflows, painéis e memória.
+
+### GOAL_PAI vive; conversa muda
+
+A conversa, o terminal, uma janela do editor ou um modelo são superfícies transitórias. A missão durável não pode depender de nenhuma delas permanecer aberta.
+
+```text
+CHAT_CONTEXT=TRANSIENT
+TERMINAL_CONTEXT=TRANSIENT
+MODEL_CONTEXT=TRANSIENT
+
+GOAL_PAI=PERSISTENT_INTENT_ANCHOR
+OWNER=PERSISTENT_SEMANTIC_HOME
+COMMIT=PERSISTENT_SOURCE_RECORD
+RECEIPT=PERSISTENT_PROOF_POINTER
+NEXT_CURSOR=PERSISTENT_CONTINUATION_POINTER
+```
+
+Continuidade correta:
+
+```text
+CHEFE_INTENT
+→ GOAL_PAI
+→ CURRENT_STATE
+→ OWNER_EXISTENTE
+→ DELTA_MINIMO
+→ TESTE
+→ CONTRAPROVA
+→ COMMIT
+→ RECEIPT
+→ NEXT_CURSOR
+→ próxima superfície/modelo continua sem adivinhar
+```
+
+Fail-closed:
+
+```text
+TERMINAL_ONLY_KNOWLEDGE=FAIL
+CHAT_ONLY_KNOWLEDGE=FAIL
+BEAUTIFUL_EXPLANATION_WITHOUT_PERSISTENCE=FAIL
+DUPLICATE_CONTRACT_WITHOUT_NEW_SEMANTICS=DROP
+NEW_SEMANTICS_WITH_EXISTING_OWNER=EXTEND
+```
+
+A mudança de conversa não encerra a missão. A mudança de modelo não reinicia a missão. A mudança de superfície não cria novo cérebro.
+
+```text
+ONE_SYSTEM_ONLY=true
+ONE_GOAL_LINEAGE=true
+OWNER_BEFORE_ARTIFACT=true
+DROP_BEFORE_CREATE=true
+EXTEND_BEFORE_PARALLEL=true
+CURRENT_OVER_HISTORY=true
+UNKNOWN_IS_NOT_PASS=true
+```
+
+### Checklist como prova operacional
+
+Checklist deixa de ser lista ornamental quando cada item resolve para estado observável e receipt.
+
+```text
+CHECK_ITEM
+→ OWNER
+→ MEASURED_STATE
+→ PASS|FAIL|PENDING|BLOCKED|UNKNOWN
+→ EVIDENCE_REF
+→ NEXT_CURSOR
+```
+
+`CHECKED_BOX != PROOF`. A prova é o estado medido + evidência + contraprova aplicável.
