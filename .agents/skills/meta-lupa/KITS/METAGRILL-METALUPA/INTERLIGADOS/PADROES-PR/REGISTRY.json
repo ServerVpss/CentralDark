@@ -36,7 +36,7 @@
     "refreshed_from_main": "25f18bc9db61e13332dea6fbd28ab2349a2ac5ca",
     "all_stable_pattern_delta_files_absorbed_through": "DELTA-PR-1570-1574.md",
     "full_registry_reconciled_at_main": "373c0f3f91280f5496a844813f836dc35c1f1a8d",
-    "pattern_count": 150,
+    "pattern_count": 152,
     "latest_pattern_sweep_base_main": "564e58b984d24b0966c9e94b01b2c243a394c571"
   },
   "patterns": [
@@ -1624,6 +1624,24 @@
       "anchor": "ANTES DE DESLIGAR PROTEÇÃO GLOBAL, PROVA PROCESSO/PATH/OWNER E APLICA MENOR ADAPTAÇÃO",
       "pr_refs": [
         1574
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "OPTIONAL_NULL_METADATA_IS_NOT_FAILURE",
+      "emoji": "0️⃣",
+      "anchor": "NULL OPCIONAL EM ENVELOPE DE SUCESSO NÃO FABRICA FALHA",
+      "pr_refs": [
+        1577
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "NULL_REQUIRED_DECISION_FIELD_STAYS_UNKNOWN",
+      "emoji": "❓",
+      "anchor": "NULL EM CAMPO DECISÓRIO OBRIGATÓRIO FICA UNKNOWN",
+      "pr_refs": [
+        1577
       ],
       "runtime_required": false
     }
