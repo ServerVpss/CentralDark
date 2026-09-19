@@ -98,6 +98,22 @@ routing:
     status: "SOURCE_CONTRACT_RUNTIME_REMEASURE_REQUIRED"
 
 integration:
+  daily_control:
+    owner: "docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md"
+    role: "HUD diário obrigatório do SEGREDO/CHEFE"
+    pr_mother: 1562
+    required_after_material_delta: true
+    update_after: ["REMEDICAO_T1", "REGISTRA", "MERGE", "DEPLOY_REMEASURE", "BLOCKER_CHANGE", "NEXT_CURSOR_CHANGE"]
+    sources: ["PR_RECEIPTS", "COMMITS", "CI_SAME_HEAD", "docs/PENDENCIAS.md", "BRAIN_VAULT", "RUNTIME_MEASURED", "LAST_GOOD_STATE"]
+    projection: "CASA-VAULT/00-CANONICO/CHECK-LIST DIARIO.md"
+    source_rule: "CANONICO -> ARTEFATO; artefato nao inventa canonico"
+    invariants:
+      - "CHECKLIST_IS_DERIVED_VIEW"
+      - "CHECKLIST_IS_NOT_SOURCE_OF_TRUTH"
+      - "CHECKLIST_DOES_NOT_OVERRIDE_LIVE_STATE"
+      - "UNKNOWN != PASS"
+      - "REGISTER_BEFORE_REPORT"
+
   band_to_graphrag:
     score: "docs/BRAIN/01-CONCEITOS/02-BANDA/BANDA_COMPASSO_GLOBAL.json"
     library: "apps/modulos/HERMES-CORE/agents/GraphRAG-Master/agent.mjs"
@@ -180,6 +196,8 @@ invariants:
   - "REOPEN_REQUIRES_CAUSE_REF"
   - "TEMPORAL_PROOF_REMEASURE_CURRENT"
   - "PING_PONG_IS_RECEIPT_NOT_SECOND_DEPLOYER"
+  - "DAILY_CHECKLIST_IS_DERIVED_VIEW"
+  - "MATERIAL_DELTA_UPDATES_DAILY_CHECKLIST"
 
 metadata:
   created: "2026-08-28"
