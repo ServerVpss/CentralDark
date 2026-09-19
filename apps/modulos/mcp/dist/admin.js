@@ -188,6 +188,30 @@ main{padding:24px 28px 40px;max-width:1400px;margin:0 auto}
 .log-box .warn{color:var(--warn)}
 .log-box .info{color:var(--info)}
 .log-box .debug{color:var(--muted)}
+.delta-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
+.delta-kpi{background:rgba(3,31,29,.55);border:1px solid var(--border);border-radius:12px;padding:11px 12px}
+.delta-kpi .lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;font-weight:700}
+.delta-kpi .val{font-size:22px;font-weight:800;margin-top:3px;color:var(--em2);font-family:ui-monospace,'SF Mono',monospace}
+.delta-toolbar{display:flex;gap:8px;align-items:center;justify-content:space-between;margin:0 0 10px;flex-wrap:wrap}
+.delta-toolbar .left{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.delta-pill{border:1px solid var(--border);background:rgba(3,31,29,.55);border-radius:999px;color:var(--muted);padding:6px 10px;font-size:11px;font-weight:700;letter-spacing:.2px}
+.delta-pill.hot{border-color:rgba(248,113,113,.5);color:#fecaca;background:rgba(248,113,113,.12)}
+.delta-table{display:grid;gap:8px;max-height:310px;overflow-y:auto;padding-right:4px}
+.delta-row{display:grid;grid-template-columns:80px minmax(160px,1.4fr) 80px minmax(220px,2fr) 125px;gap:10px;align-items:start;background:rgba(3,31,29,.58);border:1px solid var(--border);border-left:4px solid var(--info);border-radius:10px;padding:10px 12px;font-size:12px}
+.delta-row.error{border-left-color:var(--err)}
+.delta-row.warn{border-left-color:var(--warn)}
+.delta-row.info{border-left-color:var(--info)}
+.delta-sev{font-weight:800;text-transform:uppercase;font-family:ui-monospace,'SF Mono',monospace}
+.delta-row.error .delta-sev{color:var(--err)}
+.delta-row.warn .delta-sev{color:var(--warn)}
+.delta-row.info .delta-sev{color:var(--info)}
+.delta-code{color:var(--text);font-family:ui-monospace,'SF Mono',monospace;word-break:break-word}
+.delta-route{color:var(--muted);font-family:ui-monospace,'SF Mono',monospace;word-break:break-word}
+.delta-hint{color:#c8f5eb;line-height:1.45}
+.delta-last{color:var(--muted);text-align:right;font-family:ui-monospace,'SF Mono',monospace}
+.delta-empty{border:1px dashed var(--border);border-radius:10px;color:var(--muted);padding:14px;text-align:center;font-size:12px}
+.delta-raw{color:var(--muted);font-size:11px;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+@media(max-width:900px){.delta-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.delta-row{grid-template-columns:70px minmax(0,1fr)}.delta-last{text-align:left}}
 .filters{display:grid;grid-template-columns:repeat(4,1fr) auto auto;gap:8px;margin-bottom:12px}
 .filters input,.filters select{background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:8px 10px;border-radius:8px;font-size:12px;font-family:inherit}
 .filters input:focus,.filters select:focus{outline:none;border-color:var(--em)}
@@ -258,7 +282,25 @@ __PATTERN_ADMIN_STYLE__
       <div id="resultBusca" class="log-box" style="height:220px"></div>
     </div>
     <div style="height:14px"></div>
-    <div class="card"><h2>Stream ao vivo <span class="badge">SSE /admin/logs/stream</span></h2><div id="log" class="log-box"></div></div>
+    <div class="card">
+      <h2>Delta útil do stream <span class="badge">até 200 grupos recentes · resumo da sessão</span></h2>
+      <div class="delta-grid">
+        <div class="delta-kpi"><div class="lbl">Eventos vistos</div><div class="val" id="deltaTotal">0</div></div>
+        <div class="delta-kpi"><div class="lbl">Erros únicos</div><div class="val" id="deltaErrors">0</div></div>
+        <div class="delta-kpi"><div class="lbl">Top repetição</div><div class="val" id="deltaTop">0×</div></div>
+        <div class="delta-kpi"><div class="lbl">Último delta</div><div class="val" id="deltaLast">--:--</div></div>
+      </div>
+      <div class="delta-toolbar">
+        <div class="left">
+          <span class="delta-pill" id="deltaMode">agrupando por código/rota/mensagem</span>
+          <span class="delta-pill hot" id="deltaHot" style="display:none">🔥 repetição crítica</span>
+        </div>
+        <button class="btn ghost" onclick="limparDeltaUtil()">Limpar delta</button>
+      </div>
+      <div id="deltaRows" class="delta-table"><div class="delta-empty">Aguardando eventos SSE para separar ruído de ação.</div></div>
+    </div>
+    <div style="height:14px"></div>
+    <div class="card"><h2>Stream bruto ao vivo <span class="badge">SSE /admin/logs/stream</span></h2><div id="log" class="log-box"></div></div>
   </div>
 
   <div class="pane" id="p-conector">
@@ -342,6 +384,106 @@ document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
 
 __PATTERN_ADMIN_SCRIPT__
 
+const deltaState = { total: 0, groups: new Map(), lastAt: null };
+function htmlEscape(valor){
+  return String(valor ?? '').replace(/[&<>"']/g, (ch) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+function compactarTexto(valor, limite=190){
+  const texto = String(valor ?? '').replace(/\\s+/g, ' ').trim();
+  return texto.length > limite ? texto.slice(0, limite - 1) + '…' : texto;
+}
+function metaTexto(meta){
+  if (!meta) return '';
+  if (typeof meta === 'string') return meta;
+  try { return JSON.stringify(meta); } catch { return String(meta); }
+}
+function extrairRotaDelta(evento){
+  const meta = evento?.meta || {};
+  return meta.path || meta.rota || meta.route || meta.url || '-';
+}
+function extrairCodigoDelta(evento){
+  const bruto = [evento?.msg, metaTexto(evento?.meta)].join(' ');
+  const conhecidos = ['HUB_POSTGREST_401','HUB_POSTGREST_403','HUB_POSTGREST_404','HUB_POSTGREST_500','ECONNREFUSED','ETIMEDOUT','SIGTERM'];
+  for (const codigo of conhecidos) if (bruto.includes(codigo)) return codigo;
+  const http = bruto.match(/\\bHTTP[_\\s-]?(\\d{3})\\b/i) || bruto.match(/\\bstatus["':\\s]+(\\d{3})\\b/i);
+  if (http) return 'HTTP_' + http[1];
+  const erro = bruto.match(/\\b([A-Z][A-Z0-9_]{4,})\\b/);
+  return erro ? erro[1] : (evento?.msg || 'EVENTO').slice(0, 42);
+}
+function hintDelta(codigo, evento){
+  const bruto = [evento?.msg, metaTexto(evento?.meta)].join(' ');
+  if (codigo === 'HUB_POSTGREST_401' || /Invalid API key/i.test(bruto)) {
+    return 'O servidor rejeitou a credencial. Verificar se a chave pertence ao projeto Supabase configurado. Esta hipótese requer validação no serviço.';
+  }
+  if (/SIGTERM|Device shutdown|offline/i.test(bruto)) {
+    return 'Queda controlada de processo/dispositivo. Validar política de restart, heartbeat e reconexão antes de marcar runtime verde.';
+  }
+  if (/ECONNREFUSED|ETIMEDOUT/i.test(bruto)) {
+    return 'Falha de conectividade. Medir alvo, porta, tunnel e serviço antes de retentar deploy.';
+  }
+  if (String(evento?.level).toLowerCase() === 'error') return 'Erro novo/repetido: preservar evento, medir owner e abrir próximo cursor com evidência.';
+  if (String(evento?.level).toLowerCase() === 'warn') return 'Aviso operacional: observar repetição antes de promover para incidente.';
+  return 'Evento informativo: manter como contexto, sem ação se não houver repetição ou falha associada.';
+}
+function chaveDelta(evento){
+  const codigo = extrairCodigoDelta(evento);
+  const rota = extrairRotaDelta(evento);
+  const msg = compactarTexto(evento?.msg || '-', 80);
+  return { codigo, rota, msg, key: [String(evento?.level || 'info').toLowerCase(), codigo, rota, msg].join('|') };
+}
+function registrarDeltaUtil(evento){
+  if (!evento || typeof evento !== 'object' || Array.isArray(evento)) return;
+  deltaState.total += 1;
+  deltaState.lastAt = evento?.t || new Date().toISOString();
+  const dados = chaveDelta(evento);
+  const severity = String(evento?.level || 'info').toLowerCase();
+  const atual = deltaState.groups.get(dados.key) || {
+    severity, codigo: dados.codigo, rota: dados.rota, msg: dados.msg,
+    count: 0, firstAt: evento?.t || deltaState.lastAt, lastAt: evento?.t || deltaState.lastAt,
+    hint: hintDelta(dados.codigo, evento), raw: compactarTexto(metaTexto(evento?.meta), 220)
+  };
+  atual.count += 1;
+  atual.lastAt = evento?.t || deltaState.lastAt;
+  atual.raw = compactarTexto(metaTexto(evento?.meta), 220);
+  atual.hint = hintDelta(dados.codigo, evento);
+  deltaState.groups.delete(dados.key);
+  deltaState.groups.set(dados.key, atual);
+  if (deltaState.groups.size > 200) deltaState.groups.delete(deltaState.groups.keys().next().value);
+  renderDeltaUtil();
+}
+function renderDeltaUtil(){
+  const todos = [...deltaState.groups.values()];
+  const prioridade = g => g.severity === 'error' || /_(401|403|5[0-9]{2})$/.test(g.codigo) ? 2 : g.severity === 'warn' ? 1 : 0;
+  const grupos = todos.sort((a,b) => prioridade(b) - prioridade(a) || (b.count - a.count) || String(b.lastAt).localeCompare(String(a.lastAt))).slice(0, 12);
+  const errosUnicos = todos.filter(g => prioridade(g) === 2).length;
+  const top = Math.max(0, ...todos.map(g => g.count));
+  $('deltaTotal').textContent = String(deltaState.total);
+  $('deltaErrors').textContent = String(errosUnicos);
+  $('deltaTop').textContent = top + '×';
+  $('deltaLast').textContent = deltaState.lastAt ? horaBr(deltaState.lastAt).slice(0,5) : '--:--';
+  $('deltaHot').style.display = todos.some(g => prioridade(g) === 2 && g.count >= 5) ? 'inline-block' : 'none';
+  const box = $('deltaRows');
+  if (!grupos.length) {
+    box.innerHTML = '<div class="delta-empty">Aguardando eventos SSE para separar ruído de ação.</div>';
+    return;
+  }
+  box.innerHTML = grupos.map(g =>
+    '<div class="delta-row '+htmlEscape(g.severity)+'">'+
+      '<div class="delta-sev">'+htmlEscape(g.severity)+'<br><span class="delta-pill">'+g.count+'×</span></div>'+
+      '<div><div class="delta-code">'+htmlEscape(g.codigo)+'</div><div class="delta-raw">'+htmlEscape(g.msg)+'</div></div>'+
+      '<div class="delta-route">'+htmlEscape(g.rota)+'</div>'+
+      '<div class="delta-hint">'+htmlEscape(g.hint)+'<details><summary>Detalhes do evento</summary><div class="delta-code">'+htmlEscape(g.raw)+'</div><div>Primeiro: '+htmlEscape(horaBr(g.firstAt))+'</div></details></div>'+
+      '<div class="delta-last">último<br>'+htmlEscape(horaBr(g.lastAt))+'</div>'+
+    '</div>'
+  ).join('');
+}
+function limparDeltaUtil(){
+  deltaState.total = 0;
+  deltaState.groups.clear();
+  deltaState.lastAt = null;
+  renderDeltaUtil();
+}
+
 async function carregarHealth(){
   const r = await fetch('/health/deep'); const j = await r.json();
   $('ver').textContent = j.versao || j.version || '?';
@@ -385,6 +527,7 @@ function conectarLogs(){
   const box = $('log'); box.innerHTML = '';
   es.onmessage = (ev) => {
     const d = JSON.parse(ev.data);
+    registrarDeltaUtil(d);
     const el = document.createElement('div');
     el.className = d.level;
     el.textContent = '['+horaBr(d.t)+'] ['+d.level.toUpperCase()+'] '+d.msg+(d.meta?' '+JSON.stringify(d.meta):'');

@@ -1,12 +1,16 @@
 # 🧠 Notion Sync — 2026-09-15T02:04:39.491Z
 
 - **Commit fonte:** `5f7b095f186fc33d781936f569e05cfd02a4d480`
+# 🧠 Notion Sync — 2026-09-16T17:43:05.782Z
+
+- **Commit fonte:** `b6d689a75c9f87efe6e0add547e27284dc9529ec`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
 - **Resumo:** ✨ 0 criadas · ♻️ 490 atualizadas · ❌ 44 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 490 atualizadas · ❌ 38 erros
 
 ## Por base
 
@@ -17,6 +21,8 @@
 | decisoes | 39 | 0 | 39 | 0 | 0 |
 | aprendizados | 46 | 0 | 34 | 0 | 12 |
 | estrutura | 444 | 0 | 412 | 0 | 32 |
+| aprendizados | 43 | 0 | 34 | 0 | 9 |
+| estrutura | 441 | 0 | 412 | 0 | 29 |
 
 ## Operações
 

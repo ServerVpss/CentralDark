@@ -48,6 +48,11 @@ NOUS_INFERENCE_BASE_URL = os.getenv(
     "NOUS_INFERENCE_BASE_URL", "https://inference-api.nousresearch.com/v1"
 ).rstrip("/")
 
+ZENDRIVE_MODEL_ALIAS = os.getenv(
+    "ZENDRIVE_MODEL_ALIAS", "zendrive-chatgpt-local"
+).strip().lower()
+ZENDRIVE_SIMULATION_RESPONSE = os.getenv("ZENDRIVE_SIMULATION_RESPONSE", "oi").strip()
+
 _REDACTIONS = [
     (re.compile(r"(bearer\s+)[A-Za-z0-9._~+/=-]+", re.I), r"\1[REDACTED]"),
     (re.compile(r"(sk-[A-Za-z0-9_-]{8,})"), "[API_KEY_REDACTED]"),
@@ -82,6 +87,15 @@ class ResponsesRequest(BaseModel):
     instructions: Optional[str] = None
     temperature: Optional[float] = None
     tools: Optional[List[Dict[str, Any]]] = None
+
+    class Config:
+        extra = "allow"
+
+
+class ZendriveProviderRequest(BaseModel):
+    model: str = ZENDRIVE_MODEL_ALIAS
+    messages: Optional[List[ChatMessage]] = None
+    input: Any = None
 
     class Config:
         extra = "allow"
@@ -178,10 +192,118 @@ def responses_messages(request: ResponsesRequest) -> List[ChatMessage]:
     return messages
 
 
+
+def zendrive_aliases() -> set[str]:
+    aliases = {
+        ZENDRIVE_MODEL_ALIAS,
+        "zendrive",
+        "chatgpt-zendrive",
+        "zendrive-chatgpt",
+        "zendrive-sol",
+    }
+    return {item.strip().lower() for item in aliases if item.strip()}
+
+
+def zendrive_provider_health_payload() -> Dict[str, Any]:
+    live_enabled = env_bool("ZENDRIVE_PROVIDER_LIVE_ENABLED", False)
+    simulation_enabled = env_bool("ZENDRIVE_PROVIDER_SIMULATION_ENABLED", True)
+    worker_url_present = bool(os.getenv("ZENDRIVE_WORKER_URL", "").strip())
+    review_file_present = bool(os.getenv("ZENDRIVE_REVIEW_FILE", "").strip())
+    local_profile_allowed = env_bool("ZENDRIVE_ALLOW_LOCAL_PROFILE", True)
+    ok = simulation_enabled or (live_enabled and worker_url_present)
+    return {
+        "schema": "centraldark.zendrive-provider-health.v1",
+        "ok": ok,
+        "state": "LIVE_CONFIGURED" if live_enabled and worker_url_present else ("SIMULATION_READY" if simulation_enabled else "BLOCKED"),
+        "model_alias": ZENDRIVE_MODEL_ALIAS,
+        "live_enabled": live_enabled,
+        "simulation_enabled": simulation_enabled,
+        "worker_url_present": worker_url_present,
+        "review_file_present": review_file_present,
+        "local_profile_allowed": local_profile_allowed,
+        "authority": False,
+        "proof": False,
+        "requires_hermes_counterproof": True,
+        "secret_values_returned": False,
+        "cookie_copy_allowed": False,
+        "notes": [
+            "Zendrive is a local/profile surface, not authority.",
+            "Live worker requires explicit runtime health before promotion.",
+        ],
+    }
+
+
+def _zendrive_request_messages(payload: ZendriveProviderRequest) -> List[ChatMessage]:
+    if payload.messages:
+        return payload.messages
+    if payload.input is not None:
+        return responses_messages(ResponsesRequest(model=payload.model, input=payload.input))
+    return []
+
+
+def _zendrive_simulation_payload(messages: List[ChatMessage], requested_model: str = "") -> Dict[str, Any]:
+    prompt = flatten_messages(messages).strip()
+    lowered = prompt.lower()
+    response_text = ZENDRIVE_SIMULATION_RESPONSE or "oi"
+    if lowered.endswith("oi") or "\noi" in lowered or lowered == "[user]\noi":
+        response_text = "oi"
+    return {
+        "schema": "centraldark.zendrive-provider-call.v1",
+        "state": "SIMULATED_PASS",
+        "model_alias": ZENDRIVE_MODEL_ALIAS,
+        "requested_model": requested_model or ZENDRIVE_MODEL_ALIAS,
+        "response_text": response_text,
+        "authority": False,
+        "proof": False,
+        "requires_hermes_counterproof": True,
+        "secret_copied": False,
+        "cookie_copied": False,
+        "action_is_proof": False,
+        "input_present": bool(prompt),
+    }
+
+
+def run_zendrive_provider(messages: List[ChatMessage], target_model: str) -> Tuple[str, str]:
+    if env_bool("ZENDRIVE_PROVIDER_LIVE_ENABLED", False):
+        worker_url = os.getenv("ZENDRIVE_WORKER_URL", "").strip()
+        if not worker_url:
+            raise HTTPException(status_code=503, detail="zendrive_worker_url_not_configured")
+        headers = {"Content-Type": "application/json"}
+        worker_token = os.getenv("ZENDRIVE_WORKER_TOKEN", "").strip()
+        if worker_token:
+            headers["Authorization"] = f"Bearer {worker_token}"
+        payload = {
+            "model": target_model or ZENDRIVE_MODEL_ALIAS,
+            "messages": [{"role": m.role, "content": message_text(m.content)} for m in messages],
+            "no_secret_print": True,
+            "no_cookie_copy": True,
+        }
+        try:
+            response = requests.post(worker_url, headers=headers, json=payload, timeout=REQUEST_TIMEOUT)
+        except requests.RequestException as exc:
+            raise HTTPException(status_code=502, detail=f"zendrive_worker_transport:{sanitize(exc)}") from exc
+        if not response.ok:
+            raise HTTPException(status_code=502, detail=f"zendrive_worker_http_{response.status_code}:{sanitize(response.text)}")
+        try:
+            data = response.json()
+        except ValueError as exc:
+            raise HTTPException(status_code=502, detail="zendrive_worker_invalid_json") from exc
+        text = extract_openai_text(data) or extract_cli_text(data)
+        if not text:
+            raise HTTPException(status_code=502, detail="zendrive_worker_empty_output")
+        return text, target_model or ZENDRIVE_MODEL_ALIAS
+
+    if not env_bool("ZENDRIVE_PROVIDER_SIMULATION_ENABLED", True):
+        raise HTTPException(status_code=503, detail="zendrive_provider_not_enabled")
+    simulated = _zendrive_simulation_payload(messages, target_model or ZENDRIVE_MODEL_ALIAS)
+    return simulated["response_text"], ZENDRIVE_MODEL_ALIAS
+
 def route_model(model: str) -> Tuple[str, str]:
     raw = (model or "auto").strip()
     if raw.lower() == "auto":
         return DEFAULT_ENGINE, ""
+    if raw.lower() in zendrive_aliases():
+        return ZENDRIVE_MODEL_ALIAS, ""
 
     for sep in ("/", ":"):
         if sep in raw:
@@ -192,6 +314,9 @@ def route_model(model: str) -> Tuple[str, str]:
             if provider == "hermes":
                 raise HTTPException(status_code=400, detail="hermes_is_agent_runtime_not_engine")
             if provider in ENGINE_PROVIDERS:
+            if provider in {
+                "antigravity", "openai", "claude-code", "hermes", "nous", "google", "xai", "abacus", "zendrive-chatgpt-local"
+            }:
                 return provider, target.strip()
     return DEFAULT_ENGINE, raw
 
@@ -302,6 +427,8 @@ def provider_default_model(provider: str) -> str:
         return os.getenv("XAI_MODEL", "grok-4-fast").strip()
     if provider == "abacus":
         return os.getenv("ABACUS_MODEL", "").strip()
+    if provider == ZENDRIVE_MODEL_ALIAS:
+        return ZENDRIVE_MODEL_ALIAS
     return ""
 
 
@@ -321,6 +448,11 @@ def provider_configured(provider: str) -> bool:
         return bool(os.getenv("XAI_API_KEY", "").strip())
     if provider == "abacus":
         return bool(os.getenv("ABACUS_API_KEY", "").strip())
+    if provider == ZENDRIVE_MODEL_ALIAS:
+        return env_bool("ZENDRIVE_PROVIDER_SIMULATION_ENABLED", True) or (
+            env_bool("ZENDRIVE_PROVIDER_LIVE_ENABLED", False)
+            and bool(os.getenv("ZENDRIVE_WORKER_URL", "").strip())
+        )
     return False
 
 
@@ -347,6 +479,7 @@ def candidate_routes(model: str) -> List[Tuple[str, str]]:
         if normalized == "hermes":
             continue
         if normalized not in ENGINE_PROVIDERS:
+        if normalized not in {"antigravity", "openai", "claude-code", "hermes", "nous", "google", "xai", "abacus", "zendrive-chatgpt-local"}:
             continue
         if normalized != primary_provider:
             candidates.append((normalized, ""))
@@ -651,6 +784,8 @@ def run_antigravity(messages: List[ChatMessage], target_model: str) -> Tuple[str
 
 def run_provider(provider: str, messages: List[ChatMessage], target_model: str) -> Tuple[str, str]:
     model = target_model or provider_default_model(provider)
+    if provider == ZENDRIVE_MODEL_ALIAS:
+        return run_zendrive_provider(messages, target_model)
     if provider == "openai":
         return run_compatible(
             "openai",
@@ -905,9 +1040,26 @@ def responses_stream(result: Dict[str, Any]):
     yield "data: [DONE]\n\n"
 
 
+
+@app.get(f"/providers/{ZENDRIVE_MODEL_ALIAS}/health")
+def zendrive_provider_health(authorization: str = Header(default=None)) -> Dict[str, Any]:
+    require_router_auth(authorization)
+    return zendrive_provider_health_payload()
+
+
+@app.post(f"/providers/{ZENDRIVE_MODEL_ALIAS}/simulate")
+def zendrive_provider_simulate(
+    request: ZendriveProviderRequest,
+    authorization: str = Header(default=None),
+) -> Dict[str, Any]:
+    require_router_auth(authorization)
+    messages = _zendrive_request_messages(request)
+    return _zendrive_simulation_payload(messages, request.model)
+
 @app.get("/health")
 def health() -> Dict[str, Any]:
     providers = ["antigravity", "nous", "google", "claude-code", "xai", "abacus", "openai"]
+    providers = ["antigravity", "nous", "hermes", "google", "claude-code", "xai", "abacus", "openai", ZENDRIVE_MODEL_ALIAS]
     return {
         "ok": True,
         "service": "centraldark-omni-router",
@@ -921,6 +1073,7 @@ def health() -> Dict[str, Any]:
         "engines": {provider: {"configured": provider_configured(provider)} for provider in providers},
         "wire_apis": ["chat_completions", "responses"],
         "legacy_zendriver_chatgpt": "FROZEN_NOT_ROUTED",
+        "zendrive_provider": zendrive_provider_health_payload(),
     }
 
 
@@ -929,6 +1082,7 @@ def models(authorization: str = Header(default=None)) -> Dict[str, Any]:
     require_router_auth(authorization)
     rows = [{"id": "auto", "object": "model", "owned_by": "centraldark"}]
     for provider in ["antigravity", "nous", "google", "claude-code", "xai", "abacus", "openai"]:
+    for provider in ["antigravity", "nous", "hermes", "google", "claude-code", "xai", "abacus", "openai", ZENDRIVE_MODEL_ALIAS]:
         if not provider_configured(provider):
             continue
         model = provider_default_model(provider)
@@ -991,11 +1145,14 @@ def self_test() -> int:
         "route_abacus": route_model("abacus/model-x") == ("abacus", "model-x"),
         "route_nous": route_model("nous/tencent/hy3:free") == ("nous", "tencent/hy3:free"),
         "default_engine_is_model_provider": DEFAULT_ENGINE in ENGINE_PROVIDERS and DEFAULT_ENGINE != "hermes",
+        "route_zendrive_alias": route_model(ZENDRIVE_MODEL_ALIAS) == (ZENDRIVE_MODEL_ALIAS, ""),
         "responses_input": "oi" in flatten_messages(responses_messages(response_request)),
         "fallback_event": event["context"].get("fallback_used") is True and event["context"].get("attempt") == 2,
         "action_not_proof": event["context"].get("action_is_proof") is False,
         "redaction": "sekret" not in sanitize("Authorization: ***"),
         "chain_dedup": len(candidate_routes("auto")) == len(set(candidate_routes("auto"))),
+        "zendrive_health_safe": zendrive_provider_health_payload().get("proof") is False,
+        "zendrive_simulation_oi": _zendrive_simulation_payload([ChatMessage(role="user", content="oi")]).get("response_text") == "oi",
     }
     failed = [name for name, ok in checks.items() if not ok]
     print(json.dumps({"ok": not failed, "checks": checks, "failed": failed}, ensure_ascii=False))

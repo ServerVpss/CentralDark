@@ -24,6 +24,12 @@ principles:
   artifact_never_invents_canonical: true
   operational_failure_must_be_generalized: true
   proven_operational_rule_must_bind_to_runtime: true
+  aureola_material_discovery_is_learning_candidate: true
+  every_material_discovery_gets_learning_ref: true
+  material_discovery_auto_promotes_to_canonical: false
+  confidence_math_cannot_replace_runtime_observation: true
+  package_scope_may_reach_100_percent_when_contract_fully_verified: true
+  external_reality_100_percent_requires_observation: true
   same_failure_without_new_information_reuses_crystal: true
   contract_evolution_is_structural: true
   contract_gap_must_be_validated_before_crystallize: true
@@ -336,8 +342,10 @@ workspace_artifact_lifecycle:
 operational_rule_learning:
   mandatory: true
   applies_to: [HUMAN_CORRECTION, USER_REPORTED_ERROR, NEW_DISCOVERY, TOOL_ERROR, TEST_FAILURE, CI_FAILURE, RUNTIME_DRIFT, REPEATED_MANUAL_FIX, NEW_INVARIANT]
+  applies_to: [HUMAN_CORRECTION, TOOL_ERROR, TEST_FAILURE, CI_FAILURE, RUNTIME_DRIFT, REPEATED_MANUAL_FIX, NEW_INVARIANT, AUREOLA_MATERIAL_DISCOVERY]
   lifecycle:
     - OBSERVE_EVENT
+    - EMIT_LEARNING_REF
     - MEASURE_LIVE_STATE
     - COMPARE_CANONICAL_OWNER
     - DISCOVER_EXISTING_CHANNELS_WHEN_ACCESS_RELATED
@@ -566,3 +574,34 @@ claims:
 return_rule:
   - DESTINATION_PROVED
   - HUMAN_FRONTIER_PROVED
+
+
+measurement_confidence:
+  purpose: >-
+    Usar multiplos angulos quantitativos para reduzir incerteza sem converter
+    inferencia em fato nem substituir medicao direta do alvo.
+  principles:
+    independent_evidence_preferred: true
+    correlated_views_are_not_independent_proofs: true
+    confidence_interval_may_quantify_estimation_uncertainty: true
+    combined_uncertainty_may_combine_valid_components: true
+    bayesian_update_may_update_belief_not_world_state: true
+    repeated_measurements_may_reduce_uncertainty_when_model_assumptions_hold: true
+    calculation_is_not_runtime_observation: true
+    model_confidence_is_not_reality: true
+  allowed_claims:
+    - CONTRACT_COVERAGE_PERCENT
+    - TEST_COVERAGE_PERCENT
+    - OBSERVED_SAMPLE_RATE
+    - MEASURED_LATENCY
+    - MEASURED_ERROR_RATE
+    - CONFIDENCE_INTERVAL_WITH_ASSUMPTIONS
+    - COMBINED_UNCERTAINTY_WITH_COMPONENTS
+  forbidden_claims:
+    - GLOBAL_REALITY_100_PERCENT_FROM_CALCULATION_ONLY
+    - PASS_FROM_MODEL_CONFIDENCE_ONLY
+    - INDEPENDENCE_ASSUMED_FOR_CORRELATED_EVIDENCE
+  hundred_percent_semantics:
+    allowed_when: ALL_DEFINED_SCOPE_CONDITIONS_ARE_DETERMINISTICALLY_VERIFIED
+    means: DEFINED_SCOPE_CONTRACT_COMPLETE
+    does_not_mean: EXTERNAL_WORLD_INFALLIBLE

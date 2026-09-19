@@ -134,6 +134,9 @@ docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/SETORES/ML-CIENCIA-DE-DADOS/LOCAL-CORPU
 # Recovery/pre-restore files
 **/*.pre-restore-*
 
+# Scratch/local experiments are transient. Do not track as gitlinks/submodules.
+scratch/
+
 # Node/Bun local cache
 node_modules/.cache
 .bun/
@@ -141,3 +144,6 @@ node_modules/.cache
 # CentralDark workspace lifecycle (Casa/VPS runtime state; never canonical source)
 _tmp/
 cache/
+
+# PostHog setup session cache (local, not application source)
+.posthog-wizard-cache/

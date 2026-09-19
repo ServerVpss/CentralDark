@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { GatewayCard } from './GatewayCard';
 import { OAuthConnectors } from './OAuthConnectors';
+import { HybridMcpAdminCard } from './HybridMcpAdminCard';
 import { useMCP } from '@/hooks/useMCP';
 
 interface Connector {
@@ -34,6 +35,9 @@ export function ConnectorsTab() {
   return (
     <div className="space-y-6 p-6">
       <h2 className="text-2xl font-bold">Conectores</h2>
+
+      {/* 🔌 Admin híbrido: MCP público + túnel local/Remote Desktop Commander */}
+      <HybridMcpAdminCard />
 
       {/* 🔒 Bloco OAuth (Grok/Notion/Drive/GitHub) — fallback local ativo enquanto broker/DB pendente */}
       <OAuthConnectors />
