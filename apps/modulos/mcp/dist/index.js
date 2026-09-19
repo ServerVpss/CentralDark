@@ -92,6 +92,7 @@ app.get("/health", (_req, res) => {
 });
 // V2: healthcheck profundo (Health Score consumido pelo painel /admin)
 app.get("/health/deep", healthDeep);
+// Um coração: heartbeat que monitora o próprio monitor. Público via api.centralldark.com.
 const HEART_FILE = "/root/CentralDark/logs/heartbeat-api.json";
 app.get("/heartbeat", (_req, res) => {
     const nowIso = new Date().toISOString();
