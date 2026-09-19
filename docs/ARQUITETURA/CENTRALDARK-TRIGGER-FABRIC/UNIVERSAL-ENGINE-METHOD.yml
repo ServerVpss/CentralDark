@@ -81,6 +81,18 @@ execution_semantics:
   local_block_does_not_freeze_independent_safe_work: true
   human_return_requires_human_frontier_or_exact_hard_blocker: true
 
+  git_pr_semantics:
+    pr_is_material_mutation_track: true
+    commit_is_pr_state_transition: true
+    commit_is_message_to_chefe: false
+    commit_message_is_provenance_not_proof: true
+    git_author_is_agent_identity_proof: false
+    git_committer_is_agent_identity_proof: false
+    git_actor_identity_is_provenance_only: true
+    exact_agent_without_correlated_runtime_telemetry: UNKNOWN
+    head_change_invalidates_old_current_claim: true
+    ci_judges_exact_head: true
+
 material_loop:
   every_chefe_material_enters_mill: true
   every_material_is_fact: false
