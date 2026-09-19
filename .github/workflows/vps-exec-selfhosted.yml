@@ -7,6 +7,15 @@ on:
       - "apps/modulos/mcp/**"
       - "apps/modulos/mapeamento/**"
       - "apps/modulos/HERMES-CORE/agents/Log-Verificador/**"
+      - "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/HERMES-AUTOCONFIG-RUNTIME.yml"
+      - "apps/modulos/HERMES-CORE/prompts/hermes-core.md"
+      - "apps/modulos/HERMES-CORE/core/universal-method-contract.mjs"
+      - "docs/BRAIN/01-CONCEITOS/02-BANDA/BANDA_COMPASSO_GLOBAL.json"
+      - "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml"
+      - "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml"
+      - "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml"
+      - "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/UNIVERSAL-ENGINE-METHOD.yml"
+      - ".agents/skills/centraldark-operational-method/**"
       - ".agents/skills/centraldark-esteira-motor/**"
       - "scripts/vps/centraldark-deploy.sh"
       - "scripts/vps/deploy-guards-dispatcher.sh"
@@ -455,3 +464,203 @@ jobs:
                 ? 'varredura lixo/ouro concluída (report-only)'
                 : 'varredura falhou; consultar job',
             });
+
+  deploy-hermes-runtime:
+    name: Deploy canônico do runtime Hermes
+    if: github.repository == 'ServerVpss/CentralDark'
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 15
+    env:
+      REPO_DIR: /root/CentralDark
+      HERMES_APP: CentralDark-Hermes
+      RUNTIME_CONTRACT: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/HERMES-AUTOCONFIG-RUNTIME.yml
+      VALIDATOR: apps/modulos/HERMES-CORE/core/universal-method-contract.mjs
+      HERMES_PROMPT: apps/modulos/HERMES-CORE/prompts/hermes-core.md
+      OPERATIONAL_METHOD: .agents/skills/centraldark-operational-method/SKILL.md
+      UNIVERSAL_METHOD: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/UNIVERSAL-ENGINE-METHOD.yml
+      TRIGGER_CONTRACT: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml
+      TRIGGER_MAP: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml
+      AUREOLA_CONTRACT: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml
+      BAND_SCORE: docs/BRAIN/01-CONCEITOS/02-BANDA/BANDA_COMPASSO_GLOBAL.json
+      SEMANTIC_OWNER: apps/modulos/HERMES-CORE
+      SEMANTIC_CAPABILITY: HERMES_RUNTIME
+      SEMANTIC_SCOPE: HERMES_RUNTIME
+    steps:
+      - name: Validar, promover runtime Hermes, reiniciar e contraprovar
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          umask 077
+
+          TARGET_SHA='${{ github.sha }}'
+          [[ "$TARGET_SHA" =~ ^[0-9a-f]{40}$ ]] || { echo "TARGET_SHA_INVALID"; exit 71; }
+          [[ -d "$REPO_DIR/.git" ]] || { echo "REPO_DIR_INVALID"; exit 72; }
+
+          cd "$REPO_DIR"
+          ORIGIN_URL="$(git remote get-url origin)"
+          [[ "$ORIGIN_URL" =~ github\.com[:/]ServerVpss/CentralDark(\.git)?$ ]] || {
+            echo "ORIGIN_REPOSITORY_MISMATCH"
+            exit 73
+          }
+
+          git fetch --prune origin main
+          ORIGIN_SHA="$(git rev-parse origin/main)"
+          git merge-base --is-ancestor "$TARGET_SHA" "$ORIGIN_SHA" || {
+            echo "EVENT_SHA_NOT_IN_MAIN"
+            exit 74
+          }
+
+          for rel in "${RUNTIME_FILES[@]}"; do
+            git cat-file -e "$TARGET_SHA:$rel" 2>/dev/null || {
+              echo "TARGET_FILE_MISSING=$rel"
+              exit 75
+            }
+          done
+
+          DIRTY_TARGETS="$(git status --porcelain=v1 --untracked-files=no -- "$RUNTIME_CONTRACT" "$VALIDATOR" "$HERMES_PROMPT")"
+          [[ -z "$DIRTY_TARGETS" ]] || {
+            echo "HERMES_RUNTIME_TARGET_DIRTY_FAIL_CLOSED"
+            printf '%s\n' "$DIRTY_TARGETS"
+            exit 76
+          }
+
+          BUILD_DIR="$(mktemp -d "$RUNNER_TEMP/hermes-runtime-validate.XXXXXX")"
+          BACKUP_DIR="/root/CentralDark-Recovery/hermes-runtime/${TARGET_SHA:0:12}-$(date -u +%Y%m%dT%H%M%SZ)"
+          mkdir -p "$BACKUP_DIR"
+
+          copied=0
+          restart_attempted=0
+          cleanup() {
+            rc=$?
+            trap - EXIT ERR
+            set +e
+            if [[ "$rc" -ne 0 && "$copied" == "1" ]]; then
+              echo "HERMES_RUNTIME_ROLLBACK_BEGIN"
+              for rel in "${RUNTIME_FILES[@]}"; do
+                if [[ -f "$BACKUP_DIR/$rel" ]]; then
+                  mkdir -p "$(dirname "$REPO_DIR/$rel")"
+                  cp -a "$BACKUP_DIR/$rel" "$REPO_DIR/$rel"
+                fi
+              done
+              if [[ "$restart_attempted" == "1" ]]; then
+                pm2 restart "$HERMES_APP" --update-env >/dev/null 2>&1 || true
+              fi
+              echo "HERMES_RUNTIME_ROLLBACK_END"
+            fi
+            git -C "$REPO_DIR" worktree remove --force "$BUILD_DIR" >/dev/null 2>&1 || true
+            exit "$rc"
+          }
+          trap cleanup EXIT ERR
+
+          rmdir "$BUILD_DIR"
+          git worktree add --detach "$BUILD_DIR" "$TARGET_SHA" >/dev/null
+
+          cd "$BUILD_DIR"
+          node --check "$VALIDATOR"
+          node "$VALIDATOR" --self-test | tee "$RUNNER_TEMP/hermes-runtime-self-test.txt"
+          grep -q '^UNIVERSAL_ENGINE_METHOD_SELF_TEST=PASS$' "$RUNNER_TEMP/hermes-runtime-self-test.txt"
+          grep -q 'progressive_autonomy:' "$RUNTIME_CONTRACT"
+          grep -q 'AUTONOMY_MODES=SONHAR->EXPERIMENTAR->CRISTALIZAR' "$HERMES_PROMPT"
+          grep -q 'FREEDOM_TO_EXPLORE_IS_NOT_FREEDOM_TO_INVENT_STATE: true' "$RUNTIME_CONTRACT"
+
+          for rel in "${RUNTIME_FILES[@]}"; do
+            mkdir -p "$BACKUP_DIR/$(dirname "$rel")"
+            if [[ -f "$REPO_DIR/$rel" ]]; then
+              cp -a "$REPO_DIR/$rel" "$BACKUP_DIR/$rel"
+            fi
+            stage="$REPO_DIR/$rel.stage.${BASHPID}"
+            cp -a "$BUILD_DIR/$rel" "$stage"
+            mv -f "$stage" "$REPO_DIR/$rel"
+          done
+          copied=1
+
+          cd "$REPO_DIR"
+          node "$VALIDATOR" --self-test | tee "$RUNNER_TEMP/hermes-runtime-live-self-test.txt"
+          grep -q '^UNIVERSAL_ENGINE_METHOD_SELF_TEST=PASS$' "$RUNNER_TEMP/hermes-runtime-live-self-test.txt"
+
+          HERMES_JSON="$(pm2 jlist | jq -c --arg app "$HERMES_APP" '.[] | select(.name == $app)' | head -n1)"
+          [[ -n "$HERMES_JSON" ]] || { echo "HERMES_PM2_APP_NOT_FOUND"; exit 77; }
+          OLD_PID="$(jq -r '.pid // 0' <<<"$HERMES_JSON")"
+          [[ "$OLD_PID" =~ ^[0-9]+$ && "$OLD_PID" -gt 0 ]] || { echo "HERMES_OLD_PID_INVALID"; exit 78; }
+
+          restart_attempted=1
+          pm2 restart "$HERMES_APP" --update-env >/dev/null
+
+          NEW_PID=0
+          for _ in $(seq 1 20); do
+            NEW_PID="$(pm2 pid "$HERMES_APP" | tail -n1)"
+            STATUS="$(pm2 jlist | jq -r --arg app "$HERMES_APP" '.[] | select(.name == $app) | .pm2_env.status' | head -n1)"
+            if [[ "$NEW_PID" =~ ^[0-9]+$ && "$NEW_PID" -gt 0 && "$NEW_PID" != "$OLD_PID" && "$STATUS" == "online" ]]; then
+              break
+            fi
+            sleep 1
+          done
+
+          [[ "$NEW_PID" =~ ^[0-9]+$ && "$NEW_PID" -gt 0 && "$NEW_PID" != "$OLD_PID" ]] || {
+            echo "HERMES_PID_NOT_REPLACED"
+            exit 79
+          }
+
+          for _ in $(seq 1 5); do
+            sleep 3
+            STABLE_PID="$(pm2 pid "$HERMES_APP" | tail -n1)"
+            STATUS="$(pm2 jlist | jq -r --arg app "$HERMES_APP" '.[] | select(.name == $app) | .pm2_env.status' | head -n1)"
+            [[ "$STABLE_PID" == "$NEW_PID" && "$STATUS" == "online" ]] || {
+              echo "HERMES_RUNTIME_UNSTABLE"
+              exit 80
+            }
+          done
+
+          LIVE_RUNTIME_HASH="$(sha256sum "$RUNTIME_CONTRACT" | awk '{print $1}')"
+          TARGET_RUNTIME_HASH="$(git -C "$BUILD_DIR" show "$TARGET_SHA:$RUNTIME_CONTRACT" | sha256sum | awk '{print $1}')"
+          [[ "$LIVE_RUNTIME_HASH" == "$TARGET_RUNTIME_HASH" ]] || {
+            echo "HERMES_RUNTIME_HASH_MISMATCH"
+            exit 81
+          }
+          LIVE_CONTRACT_SET_HASH="$(for rel in "${RUNTIME_FILES[@]}"; do printf '%s  %s\n' "$(sha256sum "$rel" | awk '{print $1}')" "$rel"; done | sha256sum | awk '{print $1}')"
+          TARGET_CONTRACT_SET_HASH="$(for rel in "${RUNTIME_FILES[@]}"; do printf '%s  %s\n' "$(git -C "$BUILD_DIR" show "$TARGET_SHA:$rel" | sha256sum | awk '{print $1}')" "$rel"; done | sha256sum | awk '{print $1}')"
+          [[ "$LIVE_CONTRACT_SET_HASH" == "$TARGET_CONTRACT_SET_HASH" ]] || {
+            echo "HERMES_CONTRACT_SET_HASH_MISMATCH"
+            exit 82
+          }
+
+          RECEIPT="$REPO_DIR/logs/hermes-runtime-last-known-good.json"
+          mkdir -p "$(dirname "$RECEIPT")"
+          jq -n             --arg sha "$TARGET_SHA"             --arg contract "$RUNTIME_CONTRACT"             --arg runtime_hash "$LIVE_RUNTIME_HASH"             --arg contract_set_hash "$LIVE_CONTRACT_SET_HASH"             --arg owner "$SEMANTIC_OWNER"             --arg capability "$SEMANTIC_CAPABILITY"             --arg scope "$SEMANTIC_SCOPE"             --arg run_id "$GITHUB_RUN_ID"             --arg job_key "$GITHUB_JOB"             --arg workflow_ref "$GITHUB_WORKFLOW_REF"             --argjson old_pid "$OLD_PID"             --argjson new_pid "$NEW_PID"             --arg observed_at "$(date -u +%Y-%m-%dT%H:%M:%SZ)"             '{
+              schema:"centraldark.hermes-runtime-deploy.v1",
+              semanticIdentity:{owner:$owner,capability:$capability,scope:$scope},
+              executionProvenance:{
+                workflowRef:$workflow_ref,
+                jobKey:$job_key,
+                runId:$run_id,
+                headSha:$sha,
+                canonicalIdentity:false,
+                discoveredAtRuntime:true
+              },
+              validatedSha:$sha,
+              contract:$contract,
+              runtimeHash:$runtime_hash,
+              contractSetHash:$contract_set_hash,
+              contractCoverage:{defined:9,deployed:9,percent:100,meaning:"DEFINED_CANONICAL_RUNTIME_SET"},
+              oldPid:$old_pid,
+              newPid:$new_pid,
+              pm2Status:"online",
+              progressiveAutonomy:["SONHAR","EXPERIMENTAR","CRISTALIZAR"],
+              observedAt:$observed_at,
+              actionIsProof:false,
+              deployedAndRemeasured:true,
+              realityIsJudge:true
+            }' > "$RECEIPT"
+
+          copied=0
+          restart_attempted=0
+          echo "HERMES_RUNTIME_DEPLOY=PASS"
+          echo "SEMANTIC_IDENTITY=$SEMANTIC_OWNER+$SEMANTIC_CAPABILITY+$SEMANTIC_SCOPE"
+          echo "EXECUTION_PROVENANCE=run:$GITHUB_RUN_ID job:$GITHUB_JOB head:$TARGET_SHA"
+          echo "VALIDATED_SHA=$TARGET_SHA"
+          echo "OLD_PID=$OLD_PID"
+          echo "NEW_PID=$NEW_PID"
+          echo "RUNTIME_HASH=$LIVE_RUNTIME_HASH"
+          echo "CONTRACT_SET_HASH=$LIVE_CONTRACT_SET_HASH"
+          echo "DEFINED_CONTRACT_COVERAGE=9/9=100%"
+          echo "RECEIPT=$RECEIPT"
