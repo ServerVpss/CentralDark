@@ -103,3 +103,11 @@ CHEFE edita ao vivo no Obsidian
 ```
 
 Sem duplicar cérebro, sem transformar o repositório inteiro em cofre e sem publicar a memória privada da Casa.
+
+## Check-list diário (fechamento)
+
+Owner Git: `docs/BRAIN/02-ENTRADA/CHECK-LIST-DIARIO.md`  
+Note Casa: `E:\CentralDark\Pivete\CASA-VAULT\🧾CHECK-LIST DIARIO🤖.md`  
+URI: `obsidian://open?vault=CASA-VAULT&file=%F0%9F%A7%BECHECK-LIST%20DIARIO%F0%9F%A4%96`
+
+Hermes job existente `ec512c0295e2` (Daily Receipt) fecha o dia ~23:00, atualiza o owner Git e notifica o CHEFE. Sessão cristalizada = commit+push main do ouro; não deixar a VPS suja. O vault Windows recebe o delta pelo sync `00-CANONICO` — não criar segundo checklist.
