@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -51,13 +52,49 @@ function bootstrapOk(surface) {
   return text.includes('installCentralDarkDateFormatting') && text.includes('installCentralDarkDateFormatting();');
 }
 
+function git(args) {
+  return execFileSync('git', args, { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
+}
+
+function resolveCiBase() {
+  if (process.env.GITHUB_ACTIONS !== 'true') return null;
+  const event = String(process.env.GITHUB_EVENT_NAME || '');
+  const baseRef = String(process.env.GITHUB_BASE_REF || '').trim();
+  const candidate = event === 'pull_request' && baseRef ? `origin/${baseRef}` : 'HEAD^';
+  try {
+    return { ref: candidate, sha: git(['rev-parse', candidate]) };
+  } catch {
+    return { ref: candidate, sha: null };
+  }
+}
+
+function addedLinesSince(baseSha) {
+  const byFile = new Map();
+  const diff = git(['diff', '--unified=0', '--no-ext-diff', baseSha, 'HEAD', '--']);
+  let current = null;
+  for (const line of diff.split('\n')) {
+    if (line.startsWith('+++ b/')) {
+      current = line.slice(6);
+      if (!byFile.has(current)) byFile.set(current, new Set());
+      continue;
+    }
+    if (!current || !line.startsWith('@@')) continue;
+    const match = line.match(/\+(\d+)(?:,(\d+))?/);
+    if (!match) continue;
+    const start = Number(match[1]);
+    const count = match[2] === undefined ? 1 : Number(match[2]);
+    for (let offset = 0; offset < count; offset += 1) byFile.get(current).add(start + offset);
+  }
+  return byFile;
+}
+
 const findings = [];
 for (const ownerFile of REQUIRED_OWNER_FILES) {
   const full = path.join(OWNER_DIR, ownerFile);
-  if (!fs.existsSync(full)) findings.push({ file: `central-horario/${ownerFile}`, rule: 'CANONICAL_TIME_OWNER_MISSING' });
+  if (!fs.existsSync(full)) findings.push({ file: `central-horario/${ownerFile}`, rule: 'CANONICAL_TIME_OWNER_MISSING', structural: true });
 }
 for (const surface of WEB_SURFACES) {
-  if (!bootstrapOk(surface)) findings.push({ file: surface.bootstrap, rule: 'WEB_TIME_BOOTSTRAP_MISSING' });
+  if (!bootstrapOk(surface)) findings.push({ file: surface.bootstrap, rule: 'WEB_TIME_BOOTSTRAP_MISSING', structural: true });
 }
 
 const jsDatePtBrNoZone = /new\s+Date\s*\([^\n;]*?\)\.toLocale(?:String|DateString|TimeString)\(\s*(['"])pt-BR\1\s*\)/g;
@@ -66,7 +103,8 @@ const pyNaiveNow = /\b(?:datetime|dt\.datetime)\.now\(\)\.(?:strftime|isoformat)
 const psNaiveFormattedNow = /\(Get-Date\)\.ToString\s*\(/g;
 const shHumanDateWithoutTz = /(^|[^A-Za-z0-9_])date\s+['"]\+%(?:d|Y|H|I|M)/g;
 
-for (const file of walk(ROOT)) {
+const files = walk(ROOT);
+for (const file of files) {
   const rel = relative(file);
   if (rel.startsWith('central-horario/')) continue;
   const content = fs.readFileSync(file, 'utf8');
@@ -116,20 +154,55 @@ for (const file of walk(ROOT)) {
   }
 }
 
-const files = walk(ROOT);
+const ciBase = resolveCiBase();
+let mode = 'FULL_AUDIT';
+let deltaFindings = findings;
+let deltaBinding = null;
+if (ciBase) {
+  if (!ciBase.sha) {
+    mode = 'DELTA_RATCHET_UNBOUND';
+  } else {
+    mode = 'DELTA_RATCHET';
+    const changedLines = addedLinesSince(ciBase.sha);
+    deltaFindings = findings.filter((finding) => {
+      if (finding.structural) return true;
+      const lines = changedLines.get(finding.file);
+      return Boolean(lines && lines.has(finding.line));
+    });
+    deltaBinding = { base_ref: ciBase.ref, base_sha: ciBase.sha, head_sha: git(['rev-parse', 'HEAD']) };
+  }
+}
+
+const globalAuditStatus = findings.length === 0 ? 'PASS' : 'DEBT';
+const ok = mode === 'DELTA_RATCHET' ? deltaFindings.length === 0 : findings.length === 0;
 const output = {
-  ok: findings.length === 0,
+  ok,
+  mode,
   canonical_timezone: 'America/Sao_Paulo',
   human_display: 'BRT',
   machine_storage: 'UTC_RFC3339',
+  global_audit_status: globalAuditStatus,
+  global_findings_count: findings.length,
+  delta_findings_count: mode === 'DELTA_RATCHET' ? deltaFindings.length : null,
+  delta_binding: deltaBinding,
   bootstrapped_web_surfaces: WEB_SURFACES.filter(bootstrapOk).map((surface) => surface.root),
   scanned_files: files.length,
   findings,
+  delta_findings: mode === 'DELTA_RATCHET' ? deltaFindings : undefined,
 };
 
 console.log(JSON.stringify(output, null, 2));
-if (findings.length) {
-  console.error(`CENTRALDARK_TIME_GATE=FAIL findings=${findings.length}`);
-  process.exit(1);
+console.error(`CENTRALDARK_TIME_GLOBAL_AUDIT=${globalAuditStatus} findings=${findings.length}`);
+if (mode === 'DELTA_RATCHET' && ok) {
+  console.log(`CENTRALDARK_TIME_DELTA_GATE=PASS new_findings=0 global_debt=${findings.length}`);
+  console.log('CENTRALDARK_TIME_GATE=PASS scope=DELTA_RATCHET');
+  process.exit(0);
 }
-console.log('CENTRALDARK_TIME_GATE=PASS');
+if (mode === 'DELTA_RATCHET' && !ok) {
+  console.error(`CENTRALDARK_TIME_DELTA_GATE=FAIL new_findings=${deltaFindings.length} global_debt=${findings.length}`);
+} else if (mode === 'DELTA_RATCHET_UNBOUND') {
+  console.error(`CENTRALDARK_TIME_GATE=FAIL reason=CI_BASE_UNBOUND findings=${findings.length}`);
+} else {
+  console.error(`CENTRALDARK_TIME_GATE=${ok ? 'PASS' : 'FAIL'} scope=FULL_AUDIT findings=${findings.length}`);
+}
+process.exit(ok ? 0 : 1);

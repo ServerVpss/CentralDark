@@ -4,15 +4,55 @@ owner: CENTRALDARK
 
 ## Rota operacional
 
-- MCP da Casa: `https://mcp.centralldark.com/mcp`
-- Remote Desktop Commander: `https://mcp.desktopcommander.app/mcp`
-- Screenpipe local: `http://127.0.0.1:3030`
-- Device: `SEGREDO`
+- **Control plane primário:** `https://mcp.centralldark.com/mcp`
+- **OAuth CentralDark:** `https://mcp.centralldark.com/authorize` → authorization code + PKCE S256 → `/token`
+- **Remote Desktop Commander:** `https://mcp.desktopcommander.app/mcp` — legado/fallback opcional
+- **Screenpipe local:** `http://127.0.0.1:3030`
+- **Device:** `SEGREDO`
 
 ## Regra
 
-Desktop Commander e transporte/capacidade local. CentralDark continua owner/control plane.
-Nao expor token do Screenpipe, shell irrestrito ou secrets no repo.
+CentralDark MCP é o control plane oficial e o fluxo padrão da Casa. O Bridge/Tray local autentica
+diretamente no MCP CentralDark; Desktop Commander remoto deixa de ser requisito do fluxo normal e
+permanece como capability/fallback quando explicitamente necessário.
+
+```text
+PRIMARY_CONTROL_PLANE=CENTRALDARK_MCP
+DIRECT_MCP_AUTH=OAUTH2_PKCE
+OWNER_CONSENT=ADMIN_PASSWORD_ON_CENTRALDARK_AUTHORIZE
+TOKEN_EXCHANGE=AUTHORIZATION_CODE_PKCE
+LOCAL_TOKEN_STORE=DPAPI_PER_PROFILE
+LEGACY_REMOTE_ENABLED_BY_DEFAULT=false
+REMOTE_DESKTOP_COMMANDER=OPTIONAL_FALLBACK
+NPX_EBUSY_DOES_NOT_BLOCK_DIRECT_MCP=true
+```
+
+O fluxo chamado de “senha ou código” deve preservar a semântica real do OAuth atual: a senha é o
+consentimento humano no `/authorize`; o servidor emite um authorization code ligado ao PKCE; depois
+o cliente troca o code por access/refresh token e persiste localmente de forma protegida. O MCP
+CentralDark **não declara device-code grant próprio** enquanto esse grant não existir na metadata e no
+runtime vivo.
+
+Nao expor senha, access token, refresh token, Authorization header, cookie ou secret no repo/log/receipt.
+
+## Fluxo direto do Bridge da Casa
+
+```text
+CHEFE
+→ CentralDarkBridge.exe (mesmo UI + Tray)
+→ perfil Segredo/Fulano
+→ cache/refresh DPAPI, se válido
+→ senão https://mcp.centralldark.com/authorize
+→ senha admin digitada na página CentralDark
+→ authorization code + state
+→ PKCE S256 /token
+→ access + refresh protegidos por DPAPI
+→ /admin/mcp initialize
+→ tools/list
+→ tool call real
+→ receipt
+→ Reality Judge
+```
 
 ## Contexto local pelo MCP remoto
 
