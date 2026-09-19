@@ -259,6 +259,12 @@ updated: 2026-08-27
 - **Contexto:** Na reconciliação `CASA → VPS → MAIN`, o runtime local tinha alterações misturadas: arquivos gerados de status/grafo, cursores `.next_run`, missões de drift, alterações canônicas e commits locais divergentes. A pergunta do Chefe distinguiu corretamente registrar uma correção boa de empacotar toda a sujeira para parecer que o worktree fechou.
 - **Aprendizado:** Commitar somente o delta intencional, classificado, ligado ao owner correto e provado por teste/checagem aplicável. Não usar commit para limpar `git status`. Runtime gerado, painel/status, `.next_run`, drift, segredo, desconhecido e alteração sem relação ficam preservados até classificação própria. Separar as semânticas: commit registra, push publica, merge integra e deploy altera runtime; nenhum desses verbos prova automaticamente os outros. Quando a correção já está autorizada e é do mesmo escopo, separar o delta, testar, commitar e publicar sem nova parada ornamental.
 
+### 53. CONTINUIDADE OPERACIONAL — GOAL PAI vive; conversa muda; a Casa lembra pelo motor
+- **Categoria:** regra
+- **Data:** 2026-09-19
+- **Contexto:** CHEFE validou: Grok CLI na VPS recebe contexto vivo (watchers, autonomia, deploy, heartbeat) e pergunta lateral não mata a missão. Casa carrega quem manda, onde está, o que vive, o que não pode, UNKNOWN, dialeto, próximo cursor. Mais poder veio com mais freio (gate, owner, Reality Judge). “Não construir” quando não está provado = REUSE_BEFORE_CREATE.
+- **Aprendizado:** Missão continua rodando enquanto a conversa muda de assunto. Não fazer o modelo lembrar de tudo — a Casa lembra por ele. Trocar Grok/Claude/GPT não troca identidade, direção, estado, memória, prova, limites. Ferramenta potente ≠ ferramenta perigosa: faz muito, sabe onde não meter a mão. Costura onde dói. Sistema nervoso já mapeado no canônico; não inventar outro.
+
 ### 52. ORGANISMO ≠ FERRAMENTAS NA MESA — motor substituível; captura ≠ fixed point
 - **Categoria:** regra
 - **Data:** 2026-09-19
