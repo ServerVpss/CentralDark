@@ -169,3 +169,13 @@ REALIDADE = juiz final
 ```
 
 Este arquivo não declara runtime verde. Ele cristaliza somente a arquitetura mental, contratos e interligações que podem existir corretamente na `main` sem prova local.
+
+## 🔗 Materialização total das pontes de skill
+
+```text
+CURRENT_TOP_LEVEL_SKILLS=52
+SKILL_CONTRACTS=52
+VISUAL_OPERATIONAL_BRIDGES=52
+```
+
+Cada skill curada em `.agents/skills/<skill>/` deve possuir `SKILL.md` + `INTERLIGADOS.md`. A ponte carrega emoji, gatilho material, estrada, retorno e cadeados; não altera o owner funcional nem converte documentação em execução.

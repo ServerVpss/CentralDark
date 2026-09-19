@@ -88,14 +88,15 @@
   ],
   "skill_materialization": {
     "functional_contract": "SELECTED_SKILL/SKILL.md",
-    "visual_operational_bridge": "SELECTED_SKILL/INTERLIGADOS.md_IF_PRESENT",
+    "visual_operational_bridge": "SELECTED_SKILL/INTERLIGADOS.md",
     "load_order": [
       "READ_SELECTED_SKILL_MD",
-      "READ_SIBLING_INTERLIGADOS_MD_IF_PRESENT",
-      "FALLBACK_TO_CENTRAL_SKILL_REGISTRY_IF_ABSENT"
+      "READ_SIBLING_INTERLIGADOS_MD",
+      "FALLBACK_TO_CENTRAL_SKILL_REGISTRY_ONLY_ON_REGRESSION"
     ],
     "rule": "SKILL_MD_OWNS_FUNCTION; INTERLIGADOS_MD_OWNS_VISUAL_ENTRY_RETURN; CENTRAL_REGISTRY_OWNS_DISCOVERY_ONLY",
-    "auto_create_missing_bridge": false
+    "auto_create_missing_bridge": false,
+    "expected_bridge_coverage": "52/52"
   },
   "handoff_chain": [
     "CLASSIFY_TERRITORY",
