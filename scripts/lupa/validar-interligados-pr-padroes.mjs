@@ -180,7 +180,10 @@ const triggerTokens = ["!CENTRALDARK", "!># INTERLIGADOS", "#ACORDAR", "!CALIBRA
 for (const path of walkMarkdown(BASE)) {
   const text = read(path);
   if (!emojiRegex.test(text)) errors.push(`INTERLIGADOS_MD_WITHOUT_EMOJI:${path}`);
-  if (!triggerTokens.some((token) => text.includes(token))) errors.push(`INTERLIGADOS_MD_WITHOUT_TRIGGER:${path}`);
+  const isReceipt = path.startsWith(`${BASE}/RECEIPTS/`);
+  if (!isReceipt && !triggerTokens.some((token) => text.includes(token))) {
+    errors.push(`INTERLIGADOS_MD_WITHOUT_TRIGGER:${path}`);
+  }
 }
 
 const result = {
