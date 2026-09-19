@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { readFileSync } from "node:fs";
+import { execFileSync } from "node:child_process";
 import { join, resolve } from "node:path";
 
 const argv = process.argv.slice(2);
@@ -16,6 +17,7 @@ const EXTENSION = "docs/CONSCIENCIA/EXECUCAO-CONTINUA-OWNER-WRITER-CONNECTOR.jso
 const PORTA_VIVA = "docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md";
 const GATE = ".github/workflows/porta-de-entrada.yml";
 const SHARED_WRITER_PUSH = "scripts/lupa/writer-safe-push-main.sh";
+const COMMIT_COMPASS_OWNER = "DELTA-CONTINUO.md";
 const REMOVED_MAIN_WRITERS = Object.freeze([
   {
     path: ".github/workflows/linear-pendencias-sync.yml",
@@ -76,6 +78,155 @@ const hasAll = (actual, expected) => {
   const set = new Set(Array.isArray(actual) ? actual : []);
   return expected.every((item) => set.has(item));
 };
+
+
+function git(args) {
+  return execFileSync("git", args, {
+    cwd: ROOT,
+    encoding: "utf8",
+    stdio: ["ignore", "pipe", "pipe"],
+  }).trim();
+}
+
+function parseCommitCompass(message) {
+  const trailers = {};
+  for (const line of String(message || "").split("\n")) {
+    const match = line.match(/^(CentralDark-[A-Za-z-]+):\s*(.+)$/);
+    if (match) trailers[match[1]] = match[2].trim();
+  }
+  return trailers;
+}
+
+function scopeCoversPath(scopeSpec, filePath) {
+  const scopes = String(scopeSpec || "")
+    .split(";")
+    .map((item) => item.trim())
+    .filter(Boolean);
+  return scopes.some((scope) => {
+    if (scope.endsWith("/**")) return filePath.startsWith(scope.slice(0, -3));
+    return filePath === scope;
+  });
+}
+
+function compassModeActive() {
+  const messages = git(["log", "--first-parent", "-n", "200", "--format=%B%x1e", "HEAD"])
+    .split("\x1e")
+    .map((message) => message.trim())
+    .filter(Boolean);
+  for (const message of messages) {
+    const trailers = parseCommitCompass(message);
+    if (trailers["CentralDark-Compass-End"] === "true") return false;
+    if (trailers["CentralDark-Compass-Start"] === "true") return true;
+  }
+  return false;
+}
+
+function validateCompassPayload({ trailers, parentSha, changedPaths, expectedPdfSha }) {
+  const errors = [];
+  const required = [
+    "CentralDark-Compass",
+    "CentralDark-Writer",
+    "CentralDark-Scope",
+    "CentralDark-Parent",
+    "CentralDark-PR-Mother",
+    "CentralDark-PR-Child",
+    "CentralDark-Finalizer",
+    "CentralDark-PDF-Gate",
+    "CentralDark-Next",
+  ];
+  for (const key of required) {
+    if (!trailers[key]) errors.push(`COMMIT_COMPASS_TRAILER_MISSING:${key}`);
+  }
+  if (trailers["CentralDark-Compass"] && trailers["CentralDark-Compass"] !== "v1") {
+    errors.push("COMMIT_COMPASS_VERSION_INVALID");
+  }
+  if (trailers["CentralDark-Parent"] && trailers["CentralDark-Parent"] !== parentSha) {
+    errors.push(`COMMIT_COMPASS_PARENT_MISMATCH:expected=${parentSha}:actual=${trailers["CentralDark-Parent"]}`);
+  }
+  if (trailers["CentralDark-Finalizer"] && trailers["CentralDark-Finalizer"] !== "ONE") {
+    errors.push("COMMIT_COMPASS_FINALIZER_NOT_ONE");
+  }
+  if (trailers["CentralDark-PDF-Gate"] && trailers["CentralDark-PDF-Gate"] !== `PASS:${expectedPdfSha}`) {
+    errors.push("COMMIT_COMPASS_PDF_GATE_INVALID");
+  }
+  for (const path of changedPaths) {
+    if (!scopeCoversPath(trailers["CentralDark-Scope"], path)) {
+      errors.push(`COMMIT_COMPASS_SCOPE_VIOLATION:${path}`);
+    }
+  }
+  return errors;
+}
+
+function validateCommitCompass(ownerText) {
+  const errors = [];
+  const ownerTokens = [
+    "COMMIT_IS_COORDINATION_PRIMITIVE=true",
+    "COMMENTS_ARE_RECEIPTS_NOT_COORDINATION_AUTHORITY=true",
+    "MULTI_WRITER_REQUIRES_COMMIT_TRAILERS=true",
+    "TWO_WRITERS_SAME_PATH=false",
+    "FINALIZER_ONE=true",
+    "PR_MOTHER_IS_RENDEZVOUS_NOT_WRITER=true",
+    "UNKNOWN_IS_NOT_PASS=true",
+    "ACTION_IS_NOT_PROOF=true",
+  ];
+  for (const token of ownerTokens) {
+    if (!ownerText.includes(token)) errors.push(`COMMIT_COMPASS_OWNER_TOKEN_MISSING:${token}`);
+  }
+  const pdfMatch = ownerText.match(/PDF_GATE_TLC23_SHA256=([a-f0-9]{64})/);
+  if (!pdfMatch) errors.push("COMMIT_COMPASS_PDF_SHA_MISSING");
+
+  let active = false;
+  let trailers = {};
+  let changedPaths = [];
+  let parentSha = null;
+  let currentSha = null;
+  try {
+    active = compassModeActive();
+    currentSha = git(["rev-parse", "HEAD"]);
+    parentSha = git(["rev-parse", "HEAD^"]);
+    trailers = parseCommitCompass(git(["log", "-1", "--format=%B", "HEAD"]));
+    changedPaths = git(["diff-tree", "--no-commit-id", "--name-only", "-r", "HEAD^", "HEAD"])
+      .split("\n")
+      .map((path) => path.trim())
+      .filter(Boolean);
+  } catch (error) {
+    errors.push(`COMMIT_COMPASS_GIT_READ_FAILED:${error?.message || error}`);
+  }
+
+  if (active && parentSha && pdfMatch) {
+    errors.push(...validateCompassPayload({
+      trailers,
+      parentSha,
+      changedPaths,
+      expectedPdfSha: pdfMatch[1],
+    }));
+  }
+
+  return { active, currentSha, parentSha, trailers, changedPaths, errors, expectedPdfSha: pdfMatch?.[1] ?? null };
+}
+
+function counterproveCommitCompass(report) {
+  if (!report.active || report.errors.length > 0 || !report.parentSha || !report.expectedPdfSha) return !report.active;
+  const base = { ...report.trailers };
+  const variants = [];
+
+  const missingWriter = { ...base };
+  delete missingWriter["CentralDark-Writer"];
+  variants.push(missingWriter);
+
+  variants.push({ ...base, "CentralDark-Parent": "0".repeat(40) });
+  variants.push({ ...base, "CentralDark-Scope": "__forbidden__/**" });
+  variants.push({ ...base, "CentralDark-Finalizer": "MANY" });
+  variants.push({ ...base, "CentralDark-PDF-Gate": "PASS:" + "0".repeat(64) });
+
+  return variants.every((trailers) => validateCompassPayload({
+    trailers,
+    parentSha: report.parentSha,
+    changedPaths: report.changedPaths,
+    expectedPdfSha: report.expectedPdfSha,
+  }).length > 0);
+}
+
 
 function validateMainWriter(path, text, sharedScriptText) {
   const errors = [];
@@ -279,6 +430,8 @@ let contractText = "";
 let portaText = "";
 let gateText = "";
 let sharedScriptText = "";
+let commitCompassOwnerText = "";
+let commitCompassReport = { active: false, errors: [] };
 const writerTexts = {};
 const errors = [];
 try {
@@ -288,13 +441,17 @@ try {
   portaText = read(PORTA_VIVA);
   gateText = read(GATE);
   sharedScriptText = read(SHARED_WRITER_PUSH);
+  commitCompassOwnerText = read(COMMIT_COMPASS_OWNER);
   for (const path of MAIN_WRITERS) writerTexts[path] = read(path);
 } catch (error) {
   errors.push(`CONTINUIDADE_GLOBAL_LOAD:${error?.code || error?.name || "ERROR"}`);
 }
 if (contract && extension) {
   errors.push(...validate(contract, extension, contractText, portaText, gateText, writerTexts, sharedScriptText));
+  commitCompassReport = validateCommitCompass(commitCompassOwnerText);
+  errors.push(...commitCompassReport.errors);
   if (errors.length === 0 && !counterprove(contract, extension, contractText, portaText, gateText, writerTexts, sharedScriptText)) errors.push("CONTINUIDADE_GLOBAL_COUNTERPROOF_FAILED");
+  if (errors.length === 0 && !counterproveCommitCompass(commitCompassReport)) errors.push("COMMIT_COMPASS_COUNTERPROOF_FAILED");
 }
 
 const report = {
@@ -306,6 +463,17 @@ const report = {
   main_writers: MAIN_WRITERS,
   removed_main_writers: REMOVED_MAIN_WRITERS,
   shared_writer_push: SHARED_WRITER_PUSH,
+  commit_compass: {
+    owner: COMMIT_COMPASS_OWNER,
+    active: commitCompassReport.active,
+    current_sha: commitCompassReport.currentSha ?? null,
+    parent_sha: commitCompassReport.parentSha ?? null,
+    writer: commitCompassReport.trailers?.["CentralDark-Writer"] ?? null,
+    scope: commitCompassReport.trailers?.["CentralDark-Scope"] ?? null,
+    finalizer: commitCompassReport.trailers?.["CentralDark-Finalizer"] ?? null,
+    next: commitCompassReport.trailers?.["CentralDark-Next"] ?? null,
+    counterproof: commitCompassReport.active && commitCompassReport.errors.length === 0 ? "ENFORCED" : "INACTIVE_OR_BLOCKED",
+  },
   input_authority_boundary: errors.some((item) => item.includes("AUTHORITY") || item.includes("INPUT_BOUNDARY")) ? "BLOCKED" : "PASS",
   counterproof: errors.length === 0 ? "PASS" : "BLOCKED",
   errors,

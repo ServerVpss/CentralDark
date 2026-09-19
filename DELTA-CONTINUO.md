@@ -7,6 +7,49 @@
 
 ---
 
+## 🧭 COMMIT_COMPASS — coordenação multi-writer pelo próprio Git
+
+```text
+COMMIT_IS_COORDINATION_PRIMITIVE=true
+COMMENTS_ARE_RECEIPTS_NOT_COORDINATION_AUTHORITY=true
+MULTI_WRITER_REQUIRES_COMMIT_TRAILERS=true
+TWO_WRITERS_SAME_PATH=false
+FINALIZER_ONE=true
+PR_MOTHER_IS_RENDEZVOUS_NOT_WRITER=true
+PDF_GATE_TLC23_SHA256=b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1
+UNKNOWN_IS_NOT_PASS=true
+ACTION_IS_NOT_PROOF=true
+```
+
+Quando a sessão multi-writer é aberta por `CentralDark-Compass-Start: true`, cada commit seguinte até o finalizer fechar o compasso deve carregar:
+
+```text
+CentralDark-Compass: v1
+CentralDark-Writer: <writer-id>
+CentralDark-Scope: <path-exato-ou-prefix/**>;<outro-path>
+CentralDark-Parent: <primeiro-pai-real-do-commit>
+CentralDark-PR-Mother: <numero>
+CentralDark-PR-Child: <numero>
+CentralDark-Finalizer: ONE
+CentralDark-PDF-Gate: PASS:<sha256-do-TLC23>
+CentralDark-Next: <gate-ou-next-cursor>
+```
+
+O Git é o bastão entre os writers:
+
+1. o próximo writer lê HEAD + mensagem + paths do commit anterior;
+2. confirma que seu setor não colide com o setor já declarado;
+3. escreve somente no próprio setor;
+4. publica novo commit com o HEAD anterior em `CentralDark-Parent`;
+5. o gate confere mensagem, pai real e paths modificados;
+6. somente um finalizer fecha o ciclo depois dos gates do mesmo HEAD.
+
+`CentralDark-Scope` aceita caminho exato ou prefixo terminado em `/**`. Um path modificado fora do scope declarado bloqueia o compasso.
+
+Para encerrar a sessão, o finalizer usa `CentralDark-Compass-End: true` no commit final, mantendo os trailers de prova e o mesmo princípio: **commit é coordenação; comentário é receipt**.
+
+---
+
 ## STATE VIVO (medido 2026-09-05)
 
 | Campo | Valor |
