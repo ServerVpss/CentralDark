@@ -664,5 +664,48 @@
     "per_day_attestation_required": true,
     "date_binding": "Daily-Checklist-Date MUST_EQUAL HEAD_COMMIT_DATE_IN_AMERICA_SAO_PAULO",
     "head_field_role": "OPTIONAL_PROVENANCE_NOT_GATE"
+  },
+  "register_before_report_policy": {
+    "marker": "REGISTER_BEFORE_REPORT",
+    "required": true,
+    "applies_to_surfaces": [
+      "CASA_LOCAL",
+      "GITHUB_REMOTO",
+      "VPS",
+      "MCP",
+      "API",
+      "DESKTOP",
+      "WEB",
+      "TELEGRAM",
+      "IDE"
+    ],
+    "same_operating_standard": true,
+    "proof_target_is_scope_bound": true,
+    "runtime_proof_equivalence": false,
+    "persist_before_final_report": true,
+    "chat_report_without_persisted_receipt": "INVALID_FOR_MATERIAL_DELTA",
+    "no_material_delta_no_forced_commit": true,
+    "readback_required_before_say_registered": true,
+    "say_done_requires_persisted_effect": true,
+    "proof_rows_required": true,
+    "proof_row_fields": [
+      "CLAIM",
+      "SCOPE",
+      "OWNER",
+      "T0",
+      "ACTION",
+      "T1",
+      "EVIDENCE_REF",
+      "COMMIT_SHA",
+      "FILE_BLOB_SHA",
+      "SHA256",
+      "TEST",
+      "COUNTERPROOF",
+      "CI_SAME_HEAD",
+      "RUNTIME_PROOF",
+      "STATUS",
+      "NEXT_CURSOR"
+    ],
+    "closing_rule": "PERSIST -> READ_BACK -> REPORT"
   }
 }

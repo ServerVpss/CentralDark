@@ -16,6 +16,9 @@ const PORTA = "LEIA-ME-IA.md";
 const PORTA_VIVA = "docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md";
 const CONTRATO_DELTA = "docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md";
 const CONTRATO_RECONCILIACAO = "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json";
+const REMEDIACAO = "docs/CONSCIENCIA/REMEDICAO.md";
+const PR_TEMPLATE = ".github/pull_request_template.md";
+const GPT_PROMPT = "docs/CONSCIENCIA/centraldark-gpt-prompt.md";
 const ESTRUTURA_VPS = "docs/CONSCIENCIA/04-ESTRUTURA-VPS.md";
 const RECONCILIATION_SCHEMA_VERSION = 3;
 const IDENTIDADE_LUPA = ".agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA";
@@ -215,6 +218,9 @@ if (!existe(PORTA)) errors.push(`PORTA_AUSENTE:${PORTA}`);
 if (!existe(PORTA_VIVA)) errors.push(`PORTA_VIVA_AUSENTE:${PORTA_VIVA}`);
 if (!existe(CONTRATO_DELTA)) errors.push(`CONTRATO_DELTA_AUSENTE:${CONTRATO_DELTA}`);
 if (!existe(CONTRATO_RECONCILIACAO)) errors.push(`CONTRATO_RECONCILIACAO_AUSENTE:${CONTRATO_RECONCILIACAO}`);
+if (!existe(REMEDIACAO)) errors.push(`REMEDIACAO_AUSENTE:${REMEDIACAO}`);
+if (!existe(PR_TEMPLATE)) errors.push(`PR_TEMPLATE_AUSENTE:${PR_TEMPLATE}`);
+if (!existe(GPT_PROMPT)) errors.push(`GPT_PROMPT_AUSENTE:${GPT_PROMPT}`);
 if (!existe(ESTRUTURA_VPS)) errors.push(`ESTRUTURA_VPS_AUSENTE:${ESTRUTURA_VPS}`);
 if (!existe(IDENTIDADE_LUPA)) errors.push(`IDENTIDADE_LUPA_AUSENTE:${IDENTIDADE_LUPA}`);
 
@@ -237,6 +243,27 @@ const semanticRequirements = new Map([
     CONTRATO_RECONCILIACAO,
     "FALHA_DE_RECONCILIACAO_DE_CONTEXTO",
     "context_reconciliation: LOADED",
+  ]],
+  [REMEDIACAO, [
+    "REGISTER_BEFORE_REPORT",
+    "PERSIST_BEFORE_FINAL_REPORT",
+    "CHAT_REPORT_WITHOUT_PERSISTED_RECEIPT=INVALID_FOR_MATERIAL_DELTA",
+    "SAME_OPERATING_STANDARD",
+    "ONE_TOPIC_ONE_PROOF_ROW",
+    "SAY_DONE_REQUIRES_PERSISTED_EFFECT",
+    "SAY_REGISTERED_REQUIRES_READ_BACK",
+  ]],
+  [PR_TEMPLATE, [
+    "REGISTER_BEFORE_REPORT",
+    "SAME_OPERATING_STANDARD",
+    "ONE_TOPIC_ONE_PROOF_ROW",
+    "PROOF_TARGET_IS_SCOPE_BOUND",
+  ]],
+  [GPT_PROMPT, [
+    "REGISTER_BEFORE_REPORT",
+    "SAME_OPERATING_STANDARD",
+    "PROOF_TARGET_IS_SCOPE_BOUND",
+    "ONE_TOPIC_ONE_PROOF_ROW",
   ]],
   ["AGENTS.md", [
     "REUSE_BEFORE_CREATE_REQUIRED",
@@ -348,6 +375,26 @@ if (!contract) {
   if (dailyChecklist.unknown_receipt !== "BLOCK_CODE_PROMOTION") errors.push("DAILY_CHECKLIST_UNKNOWN_NAO_BLOQUEIA");
   if (dailyChecklist.action_is_proof !== false) errors.push("DAILY_CHECKLIST_ACTION_VIROU_PROVA");
   if (dailyChecklist.documented_is_executed !== false) errors.push("DAILY_CHECKLIST_DOCUMENTED_VIROU_EXECUTED");
+  const registerPolicy = contract.register_before_report_policy ?? {};
+  if (registerPolicy.marker !== "REGISTER_BEFORE_REPORT") errors.push("REGISTER_BEFORE_REPORT_POLICY_AUSENTE");
+  if (registerPolicy.required !== true) errors.push("REGISTER_BEFORE_REPORT_NAO_OBRIGATORIO");
+  if (registerPolicy.same_operating_standard !== true) errors.push("SAME_OPERATING_STANDARD_NAO_OBRIGATORIO");
+  if (registerPolicy.proof_target_is_scope_bound !== true) errors.push("PROOF_TARGET_SCOPE_BOUND_AUSENTE");
+  if (registerPolicy.runtime_proof_equivalence !== false) errors.push("RUNTIME_PROOF_EQUIVALENCE_INVALIDA");
+  if (registerPolicy.persist_before_final_report !== true) errors.push("PERSIST_BEFORE_FINAL_REPORT_DESATIVADO");
+  if (registerPolicy.chat_report_without_persisted_receipt !== "INVALID_FOR_MATERIAL_DELTA") errors.push("CHAT_REPORT_SEM_RECEIPT_NAO_BLOQUEADO");
+  if (registerPolicy.no_material_delta_no_forced_commit !== true) errors.push("NO_MATERIAL_DELTA_FORCA_COMMIT");
+  if (registerPolicy.readback_required_before_say_registered !== true) errors.push("READBACK_ANTES_DE_REGISTRADO_AUSENTE");
+  if (registerPolicy.say_done_requires_persisted_effect !== true) errors.push("SAY_DONE_SEM_EFEITO_PERSISTIDO");
+  if (registerPolicy.proof_rows_required !== true) errors.push("PROOF_ROWS_NAO_OBRIGATORIAS");
+  const requiredProofRows = ["CLAIM","SCOPE","OWNER","T0","ACTION","T1","EVIDENCE_REF","COMMIT_SHA","FILE_BLOB_SHA","SHA256","TEST","COUNTERPROOF","CI_SAME_HEAD","RUNTIME_PROOF","STATUS","NEXT_CURSOR"];
+  if (!Array.isArray(registerPolicy.proof_row_fields) || requiredProofRows.some((field) => !registerPolicy.proof_row_fields.includes(field))) {
+    errors.push("PROOF_ROWS_CAMPOS_INCOMPLETOS");
+  }
+  const requiredSurfaces = ["CASA_LOCAL","GITHUB_REMOTO","VPS","MCP","API","DESKTOP","WEB","TELEGRAM","IDE"];
+  if (!Array.isArray(registerPolicy.applies_to_surfaces) || requiredSurfaces.some((surface) => !registerPolicy.applies_to_surfaces.includes(surface))) {
+    errors.push("REGISTER_BEFORE_REPORT_SURFACES_INCOMPLETAS");
+  }
   if (contract.complexity_policy?.never_expose_internal_governance_as_user_bureaucracy !== true) {
     errors.push("CONTRATO_RECONCILIACAO_GOVERNANCA_EXPOSTA_AO_USUARIO");
   }

@@ -150,6 +150,34 @@ Não transformar “processo vivo” em “serviço saudável”.
 Não transformar “PR aberto” em “delta integrado”.
 Não transformar “merge” em “deploy”.
 
+REGISTRE ANTES DE RELATAR
+
+Para qualquer delta material persistível, o fechamento ao CHEFE só acontece depois do registro real no owner aplicável.
+
+```text
+REGISTER_BEFORE_REPORT=true
+PERSIST_BEFORE_FINAL_REPORT=true
+SAME_OPERATING_STANDARD=true
+PROOF_TARGET_IS_SCOPE_BOUND=true
+ONE_TOPIC_ONE_PROOF_ROW=true
+CHAT_REPORT_WITHOUT_PERSISTED_RECEIPT=INVALID_FOR_MATERIAL_DELTA
+```
+
+Fluxo universal:
+
+```text
+CASA | GITHUB | VPS | MCP | API | DESKTOP | WEB | TELEGRAM | IDE
+→ MESMO MÉTODO CENTRALDARK
+→ PROVA NO TERRITÓRIO CORRETO
+→ !REMEDIÇÃO
+→ !REGISTRA
+→ COMMIT/LEDGER/RECEIPT QUANDO HOUVER DELTA MATERIAL
+→ READ-BACK
+→ SÓ ENTÃO RELATO FINAL
+```
+
+Sem delta material persistível: não inventar commit. NO_CHANGE é resultado válido.
+Hash/commit provam identidade/versionamento; não substituem prova de runtime.
 FORMATO OBRIGATÓRIO DE FECHAMENTO
 
 Toda resposta material deve terminar exatamente com:
