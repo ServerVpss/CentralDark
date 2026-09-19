@@ -1,7 +1,7 @@
 ---
 title: "02 PROTOCOLO HANDOFF IA"
 date: 2026-06-29
-updated: 2026-08-24
+updated: 2026-09-19
 tags: ["consciencia", "handoff", "continuidade", "pombo-checksum"]
 status: "CANÔNICO"
 authority: "SEGREDO/CHEFE"
@@ -360,6 +360,112 @@ AND CLAIMS_CLASSIFIED_BY_EVIDENCE
 
 Contrato em Git prova o contrato no Git. Não prova por si só que toda superfície
 externa, Windows, VPS, sessão ou runtime já o herdou fisicamente.
+
+
+## 12. PR como canal de comunicação e handoff vivo
+
+Quando houver PR ativo no escopo da missão, ele é a superfície preferencial de comunicação operacional entre agentes, modelos e executores.
+
+```text
+PR = LEDGER_DE_COMUNICACAO_DA_MISSAO
+PR != NOVA_AUTORIDADE
+PR != SOURCE_OF_TRUTH_ISOLADA
+PR != PROVA_DE_RUNTIME
+MAIN_CURRENT + EVIDENCIA_ATUAL = ESTADO_CANONICO_APLICAVEL
+```
+
+O PR deve carregar ou referenciar o handoff vigente sem obrigar o CHEFE a repetir contexto em cada interface.
+
+Campos mínimos quando materiais:
+
+```text
+PR_NUMBER
+PR_HEAD
+BASE_HEAD
+CHEFE_INTENT
+DESTINATION_LOCK
+GOAL
+FIO_DA_MISSAO
+OWNER
+WRITER_SCOPE
+LAST_GOOD_STATE
+EVIDENCE_REFS
+UNKNOWNS
+PENDENCIAS
+NEXT_CURSOR
+NEXT_ACTION
+BOOT_PROFILE
+```
+
+Fluxo:
+
+```text
+CASA / CHAT / GEMINI / HERMES / OUTRA IA
+→ LER PR ATIVO + HANDOFF
+→ REMEDIR O QUE INVALIDOU
+→ EXTRAIR DELTA UTIL
+→ ATUALIZAR O MESMO FIO
+→ ESCREVER NO PR SOMENTE O DELTA MATERIAL
+→ PRESERVAR NEXT_CURSOR
+```
+
+Se o PR já estiver `MERGED/CLOSED`, ele vira genealogia/histórico. A continuação deve ocorrer no PR ativo correspondente ou em novo PR apenas quando houver escopo material realmente novo; nunca manter duas linhas concorrentes para o mesmo Writer scope.
+
+```text
+MERGED_PR = HISTORY + PROVENANCE
+ACTIVE_PR = LIVE_COMMUNICATION_LEDGER
+PR_BODY_OR_COMMENT != RUNTIME_PROOF
+```
+
+## 13. Gate pré-resposta — !CENTRALDARK antes de falar
+
+Para qualquer resposta operacional, planejamento, diagnóstico, recomendação ou mutação relacionada à CentralDark, o agente deve primeiro verificar se sua leitura condiz com a intenção vigente do CHEFE.
+
+```text
+ANTES_DE_FALAR
+→ !CENTRALDARK
+→ #ACORDAR
+→ !CALIBRAR
+→ recuperar PR/HANDOFF ativo quando disponível
+→ comparar CHEFE_INTENT + DESTINATION_LOCK + GOAL + FIO_DA_MISSAO
+→ medir CURRENT quando o fato for mensurável
+→ reconciliar owner + Writer + evidência + UNKNOWN
+→ só então responder
+```
+
+Isso não exige expor raciocínio interno. O agente reporta somente conclusão, estado, evidência, pendência e próximo cursor.
+
+```text
+CAN_MEASURE_NOW=true  → MEASURE
+CAN_MEASURE_NOW=false → UNKNOWN
+MEMORY_ONLY != CURRENT_STATE
+PR_TEXT_ONLY != EXECUTED
+SCREENSHOT_ONLY != CURRENT_RUNTIME
+```
+
+Se houver divergência entre a resposta pretendida e o handoff/estado vivo, corrigir a própria leitura antes de responder. Não corrigir a intenção do CHEFE para caber no modelo.
+
+## 14. Formato obrigatório de fechamento do handoff
+
+Quando uma resposta material da missão for concluída, terminar exatamente com estes campos, preenchidos com fatos ou `UNKNOWN`:
+
+```text
+Feito: [O que foi processado]
+Evidência: [Prova técnica/lógica da validação]
+Pendência: [O que depende de autorização, prova ou recurso ainda ausente]
+Próximo passo: [Ação imediata recomendada ou NEXT_CURSOR]
+Qual BOOT usar: [Perfil operacional adequado]
+Fio da missão: [Intenção/objetivo que deve sobreviver para a próxima superfície]
+```
+
+Regras:
+
+```text
+SEM_EVIDENCIA → NÃO INVENTAR PASS
+SEM_AUTORIZACAO → NÃO AMPLIAR ESCOPO
+SEM_PR_ATIVO → USAR HANDOFF CANONICO + CURRENT STATE
+PR_ATIVO → ATUALIZAR O MESMO FIO
+```
 
 ---
 
