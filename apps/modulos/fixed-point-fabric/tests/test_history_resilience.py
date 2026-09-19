@@ -133,11 +133,14 @@ class HistoryResilienceTests(unittest.TestCase):
         self.assertTrue(any("forbidden false-green token" in error for error in errors), errors)
 
     def test_current_without_snapshot_is_rejected(self):
-        text = HISTORY.read_text(encoding="utf-8").replace(
-            "| C10 | CURRENT | SNAPSHOT_BEFORE_COMMIT |",
+        original = HISTORY.read_text(encoding="utf-8")
+        text, substitutions = re.subn(
+            r"(?m)^\| C10 \| CURRENT \| [^|]+ \|",
             "| C10 | CURRENT | ETERNAL |",
-            1,
+            original,
+            count=1,
         )
+        self.assertEqual(substitutions, 1, "counterproof did not mutate C10")
         errors = validate_history(text, ROOT)
         self.assertTrue(any("CURRENT without snapshot" in error for error in errors), errors)
 
