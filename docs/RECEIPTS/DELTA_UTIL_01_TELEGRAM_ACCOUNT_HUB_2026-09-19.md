@@ -40,3 +40,24 @@ Levar ao @srver1bot a superfície de contas/autenticação já pertencente ao Hu
 
 PR_MOTHER=#1562
 SUB-PR -> same-head gates -> squash main -> micro-deploy causal -> remedição.
+
+
+## Prova executada na VPS em worktree isolado
+
+BASE_MAIN=b5b71b520be2742ec3b1f372725d9e798f751570
+
+- node --check unified-bot.cjs = PASS
+- node --check account-hub.cjs = PASS
+- account-hub.test.mjs = 3/3 PASS
+- hub-adm.personal-context.test.mjs = 2/2 PASS
+- git diff --check = PASS
+- scripts/trigger-fabric/verify_repo_contract.py = PASS
+- REPO_CONTRACT_VERIFY=PASS
+
+Estado runtime antes do micro-deploy:
+- CentralDark-HubBot = ONLINE
+- OAuth Broker 127.0.0.1:8098 = NOT_RUNNING
+- MICRO_DEPLOY = NOT_YET
+- MERGED = NOT_YET
+
+A VPS principal permanece detached/dirty; nenhum reset/clean foi executado.
