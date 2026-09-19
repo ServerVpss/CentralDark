@@ -100,6 +100,49 @@ Prova funcional do motor (mínimo aplicável):
 - `vps-exec-selfhosted.yml` = deploy **MCP + operational guards**, **não** promove `CentralDark-Hermes`
 - Autonomia `*/5` multiplica fila — cancelar zumbis/duplicados, preservar deploy ativo e checks úteis
 
+## Padrão econômico de vigilância — um coração, um watchdog global
+
+Este padrão absorve o comportamento útil observado no Grok CLI sem criar um segundo sistema de monitoramento.
+
+```text
+CORACAO_GLOBAL   = GET /heartbeat  (heart=one)
+WATCHDOG_GLOBAL  = detecta + classifica + solicita reconciliação
+WATCHER_LOCAL    = observador efêmero de um alvo exato
+PROBE_LOCAL      = sensor de serviço; não vira autoridade global
+ORCHESTRATOR     = executa mutação autorizada
+LOG_OWNER        = Actions / audit / receipt do componente
+```
+
+Regras obrigatórias:
+
+- Existe **um coração global de estado**. Não abrir segundo heartbeat, segundo painel ou segunda fonte global de verdade.
+- `WATCHDOG_GLOBAL` é uma autoridade lógica de detecção. Watchdogs/timers locais que um serviço precise podem continuar existindo como **probes subordinados**; eles não viram segundo coração nem coordenador concorrente.
+- Um watcher focado nasce com chave determinística `scope|target|sha|run_id`. Para a mesma chave: **no máximo um watcher ativo**.
+- Watcher de deploy acompanha o **run/SHA alvo**. Quando o alvo termina, é substituído ou deixa de ser aplicável, o watcher encerra. É proibido pular silenciosamente para qualquer run novo e ficar eterno.
+- Todo watcher tem `deadline`, condição de saída e cursor. Loop sem limite = inválido.
+- Preferir evento/sinal existente. Polling é fallback econômico: em ausência de delta, dormir; não martelar API.
+- Cadência de baixa frequência pode ser usada para autonomia longa (ex.: 10 min). Acelerar só quando há mudança material ou janela terminal curta comprovada.
+- `NO_NEW_INFORMATION` não gera mutação nem notificação.
+- Notificar só em transição material: PASS terminal, FAIL terminal, HUMAN_FRONTIER, mudança de causa, ou repetição confirmada que atingiu o limiar do owner.
+- O heartbeat carrega **estado resumido + status_key/correlation pointer**, não o log inteiro. Detalhe continua no owner: GitHub Actions, `mcp-audit-*.jsonl`, `mcp-admin-audit-*.jsonl`, crash log ou receipt correspondente.
+- `WATCHDOG DETECTA != ORCHESTRATOR EXECUTA`. Detecção nunca ganha autoridade de mutação só porque viu uma falha.
+- Watcher focado pode nascer para uma ferida específica e, ao fechar, **colapsa de volta no coração global**. Não deixar submonitor órfão.
+
+Ciclo:
+
+```text
+SINAL/HEARTBEAT
+→ CLASSIFICAR DELTA
+→ SE SEM DELTA: DORMIR
+→ SE HÁ FERIDA: WATCHER FOCADO (1 chave)
+→ LOG/RECEIPT DO OWNER
+→ ORCHESTRATOR AUTORIZADO
+→ CONTRAPROVA
+→ FECHAR WATCHER
+→ VOLTAR AO CORAÇÃO GLOBAL
+```
+
+O objetivo é reduzir custo e ruído sem perder cobertura: **um coração para enxergar o todo; watchers curtos para ampliar uma ferida; um watchdog global para decidir quando reconciliar**.
 ## Dois mecanismos independentes (não confundir)
 
 Sobreviver a reboot e receber código novo são **problemas diferentes**. Um não
