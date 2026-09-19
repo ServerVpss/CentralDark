@@ -46,6 +46,27 @@ O Git é o bastão entre os writers:
 
 `CentralDark-Scope` aceita caminho exato ou prefixo terminado em `/**`. Um path modificado fora do scope declarado bloqueia o compasso.
 
+
+### Reconciliação de commit paralelo já em voo
+
+Se um writer publicar um commit sem trailers imediatamente após o compasso ter sido aberto, o histórico não é reescrito e não há force-push. Um commit posterior compatível pode adotar aquele SHA:
+
+```text
+CentralDark-Adopt-Commit: <sha-exato>
+CentralDark-Adopt-Writer: <writer-id>
+CentralDark-Adopt-Scope: <path-exato-ou-prefix/**>
+```
+
+A adoção só passa se:
+
+- o SHA adotado estiver dentro da sessão aberta pelo `CentralDark-Compass-Start`;
+- o commit adotante vier depois do commit adotado;
+- os paths reais do commit adotado couberem integralmente em `CentralDark-Adopt-Scope`;
+- o setor adotado não colidir com path já escrito por outro writer;
+- o commit adotante também obedecer aos trailers normais do compasso.
+
+`ADOPTION != REWRITE` e `ADOPTION != PROOF_OF_CORRECTNESS`: adoção resolve coordenação/autoria de escopo; testes e Reality Judge continuam decidindo a qualidade.
+
 Para encerrar a sessão, o finalizer usa `CentralDark-Compass-End: true` no commit final, mantendo os trailers de prova e o mesmo princípio: **commit é coordenação; comentário é receipt**.
 
 ---
