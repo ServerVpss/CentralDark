@@ -257,7 +257,19 @@ jobs:
           NEW_PID="$(pm2 pid "$PM2_APP" | tail -n1)"
           [[ "$NEW_PID" =~ ^[0-9]+$ && "$NEW_PID" -gt 0 && "$NEW_PID" != "$OLD_PID" ]] || { echo "MCP_PM2_PID_NOT_REPLACED"; exit 41; }
           pm2 jlist | jq -e --arg app "$PM2_APP" --arg cwd "$MCP_DIR" --arg exec "$MCP_DIR/dist/index.js" '
-            any(.[]; .name == $app and .pm2_env.status == "online" and .pm2_env.pm_cwd == $cwd and .pm2_env.pm_exec_path == $exec and (.pid | tonumber) > 0)
+            any(.[];
+              .name == $app
+              and .pm2_env.status == "online"
+              and .pm2_env.pm_cwd == $cwd
+              and ((.pid | tonumber) > 0)
+              and (
+                .pm2_env.pm_exec_path == $exec
+                or (
+                  (.pm2_env.pm_exec_path | test("bash$"))
+                  and ((.pm2_env.args // []) | join(" ") | contains("exec node " + $exec))
+                )
+              )
+            )
           ' >/dev/null || { echo "MCP_PM2_STATE_INVALID"; exit 42; }
 
           AUDIT_FILE="$AUDIT_DIR/mcp-admin-audit-$(date -u +%F).jsonl"
