@@ -5,6 +5,87 @@ Status: 🔴 alta · 🟡 média · 🟢 baixa · ✅ concluído
 
 ---
 
+<!-- CENTRALDARK_PLACAR_VIVO_BEGIN -->
+## 🧭 PLACAR VIVO — PR-MÃE #1562 / 2026-09-18
+
+> Snapshot operacional. `CURRENT > HISTORY`. Este bloco deve ser **substituído**, não duplicado, a cada remedição material.
+
+```text
+PR_MOTHER=#1562
+PR_MOTHER_ROLE=RENDEZVOUS_LEDGER_NOT_WRITER
+PR_MOTHER_STATE=OPEN
+PR_MOTHER_MERGEABLE=true
+PR_MOTHER_HEAD=9c2284c0e665f5ffebfbe3577d62777943ae49b5
+
+ACTIVE_FINALIZER_CANDIDATE=#1579
+FINALIZER_HEAD_PRE_PLACAR_UPDATE=6dc4cd81296dba5afb1e48cb5a6f43fbaf6ae987
+DAILY_CHECKLIST=PASS
+CI_SAME_HEAD=RUNNING
+GLOBAL_FIXED_POINT=NOT_PROVEN
+```
+
+### Fileira 1 — Funil / PR-mãe
+
+| PR | Escopo | Estado vivo | Prova atual | Próximo gate |
+|---|---|---|---|---|
+| #1562 | rendezvous/ledger permanente | OPEN · mergeable=true | mãe não é writer e não deve mergear | receber receipts dos filhos |
+| #1572 | gate do funil PR-mãe | OPEN · mergeable=true | Lupa/codex/lupa-conformance PASS; `porta-de-entrada` FAIL no HEAD | corrigir ferida da porta, rerodar SAME_HEAD |
+
+### Fileira 2 — Continuidade / cérebro / runtime
+
+| PR | Escopo | Estado vivo | Prova atual | Próximo gate |
+|---|---|---|---|---|
+| #1573 | preservar ouro em missão interrompida | OPEN · mergeable=false | sem workflow SAME_HEAD observado | reconciliar mergeability antes de qualquer promoção |
+| #1574 | Hermes runtime Casa+VPS | OPEN · mergeable=true | vários gates PASS; `porta-de-entrada` e Trigger Fabric FAIL; codex ainda queued | tratar causa material comum, depois SAME_HEAD |
+| #1576 | one-core + Grok + Obsidian | OPEN · mergeable=true | codex/lupa/CodeQL/grafo PASS; `porta-de-entrada` FAIL | fechar porta-de-entrada no mesmo HEAD |
+
+### Fileira 3 — MCP / finalização
+
+| PR | Escopo | Estado vivo | Prova atual | Próximo gate |
+|---|---|---|---|---|
+| #1578 | MCP CentralDark direto como rota primária | OPEN · mergeable=false | sem workflow SAME_HEAD observado | reconciliar branch/base e obter gates |
+| #1579 | checklist diário + writer/finalizer lease | OPEN · mergeable=true | workflows SAME_HEAD estão queued/pending | esperar/medir conclusão; nenhum verde antecipado |
+
+### Feridas materiais consolidadas
+
+```text
+F1=PORTA_DE_ENTRADA_FAIL_COMPARTILHADA
+  afeta observadamente #1572 #1574 #1576
+  regra: diagnosticar causa comum antes de remendar PR por PR
+
+F2=MERGEABILITY_FALSE
+  afeta observadamente #1573 #1578
+  regra: reconciliar base/branch sem apagar delta útil
+
+F3=FINALIZER_SAME_HEAD_RUNNING
+  afeta #1579
+  regra: queued/pending != PASS
+
+F4=RUNTIME_END_TO_END
+  só depois de child PR promovido
+  main → post-merge → micro-deploy aplicável → !REMEDIÇÃO → receipt → volta ao #1562
+```
+
+### Ordem mínima do que falta
+
+1. Fechar os workflows do HEAD atual do #1579 e classificar PASS/FAIL/UNKNOWN.
+2. Abrir o log da `porta-de-entrada` e provar se #1572/#1574/#1576 compartilham a mesma causa-raiz.
+3. Resolver `mergeable=false` de #1573 e #1578 com reconciliação semântica e contraprova.
+4. Promover **somente SUB-PR comprovado**; #1562 permanece ledger, nunca veículo de merge.
+5. Após promoção: remedir `main`, executar somente o micro-deploy causal aplicável, medir runtime correspondente e devolver receipt ao #1562.
+6. Só declarar `GLOBAL_FIXED_POINT=PROVEN` quando SAME_HEAD + Reality Judge + runtime aplicável + receipt final estiverem provados.
+
+```text
+MERGEABLE=true != CI_PASS
+WORKFLOW_QUEUED != PASS
+SOURCE_PRESENT != RUNTIME_PROVEN
+PR_MOTHER_OPEN != PROMOTION_READY
+UNKNOWN != PASS
+```
+
+<!-- CENTRALDARK_PLACAR_VIVO_END -->
+
+
 ## 🟡 #1 — Migração centralldark.com + telepainel.centralldark.com ✅ concluído
 **Status:** concluído (código pronto, executado na VPS)
 **Sintoma:** site só responde pelo preview do Lovable; domínios próprios ainda não apontam.
