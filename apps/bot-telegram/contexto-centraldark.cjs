@@ -233,9 +233,21 @@ function gerarTopicoReal() {
  * Anexa um aprendizado ao arquivo APRENDIZADOS.md para que próximas IAs
  * herdem via kit_boas_vindas / puxar_aprendizados.
  */
+function podePromoverAprendizado(receipt) {
+  if (!receipt || receipt.verdict !== 'PROVED_ADOPTED') return false;
+  if (receipt.same_scope !== true) return false;
+  if (!receipt.learning_id || !receipt.before_ref || !receipt.after_ref) return false;
+  if (receipt.before_ref === receipt.after_ref) return false;
+  if (!Array.isArray(receipt.tests) || !receipt.tests.some(t => t?.status === 'PASS' && t.evidence)) return false;
+  if (!Array.isArray(receipt.counterproof) || receipt.counterproof.length === 0) return false;
+  if (!Array.isArray(receipt.regressions) || !receipt.regressions.some(t => t?.status === 'PASS' && t.evidence)) return false;
+  if (!receipt.verifier) return false;
+  return typeof receipt.receipt_sha256 === 'string' && /^[0-9a-f]{64}$/i.test(receipt.receipt_sha256);
+}
+
 function registrarAprendizadoPermanente(iaNome, aprendizado, contextoTopico = '', receipt = null) {
   try {
-    if (!receipt || receipt.verdict !== 'PROVED_ADOPTED') {
+    if (!podePromoverAprendizado(receipt)) {
       console.warn('[contexto] Aprendizado não promovido: PROVED_ADOPTED ausente');
       return false;
     }
@@ -262,6 +274,7 @@ module.exports = {
   registrarAprendizadoPermanente,
   // exports pra testes
   _internals: {
+    podePromoverAprendizado,
     ultimosCommits,
     ultimosAprendizados,
     pendenciasAbertas,
