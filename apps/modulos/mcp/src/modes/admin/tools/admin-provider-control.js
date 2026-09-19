@@ -512,7 +512,10 @@ function loadBuildkiteToken() {
 
 async function providerHeaders(provider, requestId = randomUUID()) {
   if (provider === "cloudflare") {
-    const token = process.env.CLOUDFLARE_API_TOKEN || process.env.CF_API_TOKEN;
+    const token = loadSecretFromFiles(
+      ["CLOUDFLARE_API_TOKEN", "CF_API_TOKEN"],
+      ["/root/CentralDark/secrets/cloudflare.env", "/root/CentralDark/apps/modulos/mcp/.env"],
+    );
     if (!token) throw new Error("CLOUDFLARE_CREDENTIALS_MISSING");
     return { Authorization: `Bearer ${token}`, Accept: "application/json", "Content-Type": "application/json" };
   }
