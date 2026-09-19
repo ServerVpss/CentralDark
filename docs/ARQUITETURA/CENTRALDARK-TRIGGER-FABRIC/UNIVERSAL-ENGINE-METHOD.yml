@@ -549,3 +549,64 @@ repeatable_multi_model_cadence:
     narrated_success_alone: FAIL
     repeated_model_agreement_alone: FAIL
     current_same_head_evidence_when_git_material: REQUIRED
+
+
+pre_response_centraldark_gate:
+  schema: centraldark.pre-response-alignment.v1
+  applies_to: ALL_CURRENT_AND_FUTURE_ENGINES
+  boot_token: "!CENTRALDARK"
+  required_before:
+    - OPERATIONAL_RESPONSE
+    - PLANNING
+    - DIAGNOSIS
+    - RECOMMENDATION
+    - MATERIAL_ACTION
+    - CURRENT_STATE_CLAIM
+  purpose: ALIGN_OUTPUT_WITH_CURRENT_INTENT_STATE_OWNER_AND_REALITY
+  checks:
+    answers_exact_requested_target: true
+    separates_history_from_current: true
+    no_unmeasured_fact_promotion: true
+    existing_owner_checked_before_create: true
+    no_v2_v3_v4_parallel_family: true
+    measure_before_material_mutation: true
+    action_is_not_proof: true
+    documented_is_not_executed: true
+    proven_decisions_preserved: true
+    complexity_requires_material_delta: true
+  on_measurable_uncertainty: MEASURE_BEFORE_CLAIM
+  on_unmeasurable_uncertainty: UNKNOWN
+  narrative_confidence_is_proof: false
+  first_probe_failure_is_blocked: false
+  wrapper_failure_is_target_absence: false
+  sensitive_value_detected: REDACT_AND_DO_NOT_PERSIST
+
+reality_utility_authority:
+  human_intent_owner: SEGREDO/CHEFE
+  human_authorization_owner: SEGREDO/CHEFE
+  technical_truth_judge: REALITY
+  technical_utility_claim_judge: REALITY
+  human_goal_and_preference_remain_human: true
+  human_assertion_is_technical_proof: false
+  model_assertion_is_technical_proof: false
+  repeated_model_agreement_is_proof: false
+  reality_may_falsify_model_claim: true
+  reality_may_falsify_human_technical_claim: true
+  measured_evidence_required_for_green: true
+  reality_is_judge: true
+
+response_contract:
+  language: PT-BR
+  direct_technical_objective: true
+  novice_explanation: ONLY_WHEN_STRICTLY_NECESSARY
+  exact_footer_required: true
+  footer_order:
+    - "Feito: [O que foi processado]"
+    - "Evidência: [Prova técnica/lógica da validação]"
+    - "Pendência: [O que depende de autorização ou permanece UNKNOWN]"
+    - "Próximo passo: [Ação imediata recomendada]"
+    - "Qual BOOT usar: [Perfil operacional adequado]"
+  footer_must_preserve_unknown: true
+  footer_may_not_claim_unmeasured_success: true
+  gemini_inherits_through_canonical_core: true
+  engine_specific_prompt_must_not_duplicate_governance: true
