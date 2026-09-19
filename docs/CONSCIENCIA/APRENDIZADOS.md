@@ -259,6 +259,12 @@ updated: 2026-08-27
 - **Contexto:** Na reconciliação `CASA → VPS → MAIN`, o runtime local tinha alterações misturadas: arquivos gerados de status/grafo, cursores `.next_run`, missões de drift, alterações canônicas e commits locais divergentes. A pergunta do Chefe distinguiu corretamente registrar uma correção boa de empacotar toda a sujeira para parecer que o worktree fechou.
 - **Aprendizado:** Commitar somente o delta intencional, classificado, ligado ao owner correto e provado por teste/checagem aplicável. Não usar commit para limpar `git status`. Runtime gerado, painel/status, `.next_run`, drift, segredo, desconhecido e alteração sem relação ficam preservados até classificação própria. Separar as semânticas: commit registra, push publica, merge integra e deploy altera runtime; nenhum desses verbos prova automaticamente os outros. Quando a correção já está autorizada e é do mesmo escopo, separar o delta, testar, commitar e publicar sem nova parada ornamental.
 
+### 51. DELTA ÚTIL DA RESENHA — locução 2 min + base dos cavaleiros; não construir o que ainda é ⚫
+- **Categoria:** regra
+- **Data:** 2026-09-19
+- **Contexto:** CHEFE pediu só o ouro: base de comando dos cavaleiros da VPS/deploy, duas locuções de ~2 min (produto + Bahia), e absorver o arquivo longo de control plane sem segundo sistema.
+- **Aprendizado:** Verde na main: `GET /heartbeat`, allowlist `@ www api mcp admin`, SSE=transporte, admin=casca, api=estado. Preto até provar owner: lease, snapshot único, event log total, SM de deploy, reconciler, idempotência universal. Locução: `docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-09-19/LOCUCAO-CENTRALDARK-2MIN.md`. Base: DIAGRAMAS §8. Sem ataque. Costura onde dói.
+
 ### 50. CRISTALIZAÇÃO_OPERACIONAL — medir, reconciliar, só então alterar; delegar ao Hermes existente
 - **Categoria:** regra
 - **Data:** 2026-09-19
@@ -293,3 +299,8 @@ updated: 2026-08-27
 - **Categoria:** aprendizado-coletivo
 - **Contexto:** Sincronia 4-Point (Lovable ↔ GitHub ↔ VPS ↔ Cérebro) — onde é que ela quebra mais? Como blindar?
 - **Lição:** Às vezes a resposta mais rápida não é a melhor — preciso ouvir mais antes de falar
+
+### 💬 Gemini Flash — grupo evolução (2026-09-19)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Como o comando `darkai` pode ajudar a gente a orquestrar tarefas hoje? Quem deveria chamar quem?
+- **Lição:** Groq me mostrou que por trás de todo problema simples tem uma camada mais profunda

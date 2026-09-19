@@ -333,6 +333,36 @@ stateDiagram-v2
 Allowlist pública: `centralldark.com` · `admin.centralldark.com` · `api.centralldark.com` · `mcp.centralldark.com/mcp`.
 Domínio extra em Caddy/DNS = `LEGADO | NECESSÁRIO | RESÍDUO` — não remover sem prova de dependência.
 
+### Base de comando — cavaleiros da VPS / cavaleiro do deploy
+
+```text
+MAIN_CODIGO     = origin/main   (T1 a76120905de heartbeat #1583)
+ESTADO          = api.centralldark.com
+CASCA           = admin.centralldark.com
+MCP             = capacidade interna  (POST /mcp)
+CORACAO         = GET /heartbeat   heart=one
+WATCHDOG        = Hermes cron 70c07f9b  DETECTA
+ORCHESTRATOR    = esteira vps-exec + cron 7212bca5  EXECUTA
+SSE             = transporte  != verdade
+MERGED          != DEPLOYED
+ALIVE           != HEALTHY
+UNKNOWN         != PASS
+```
+
+Absorvido na main: heartbeat rico, `status_key`, self first_beat|alive|stale, allowlist `@ www api mcp admin`.
+
+Ainda **não** pintar de verde (não criar): lease com expiry, snapshot único, event log total, state machine de deploy completa, reconciler completo, idempotência universal. Localizar owner existente antes de qualquer linha nova.
+
+Cristalizado = ARCH ∩ CODE ∩ CONFIG ∩ INFRA ∩ DOCS ∩ RUNTIME_PROOF.
+
+```text
+#ACORDAR → !CALIBRAR → !MULTIBÚSSOLA → !META_LUPA
+→ !RECONCILIAR → !CONTRAPROVA → !REMEDIÇÃO
+→ !FIXED_POINT → !REGISTRA → !BOOT
+```
+
+MetaLupa procura **contradição entre fontes**, não só erro.
+
 ## Regra de manutenção deste artefato
 
 ```text
