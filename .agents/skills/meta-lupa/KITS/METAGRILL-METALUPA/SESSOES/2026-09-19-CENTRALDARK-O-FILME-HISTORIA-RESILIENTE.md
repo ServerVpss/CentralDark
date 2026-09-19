@@ -252,3 +252,110 @@ PR_MOTHER_IS_WRITER=false
 REALITY_IS_JUDGE=true
 
 A história é mapa. A realidade continua sendo o território.
+
+---
+
+## ATO XVI — A sinfonia: dois escritores, um compasso, um finalizer
+
+**CURRENT — SNAPSHOT 2026-09-19T02:08-03:00.** O PR filho #1577 avançou enquanto dois agentes liam o mesmo estado e evitavam disputar o mesmo escopo. O setor `NULL/evidence-envelope/history-resilience` já tinha Writer material; o setor `Trigger Fabric package/fresh-extraction` foi assumido por outro Writer sem colisão.
+
+**FATO.** A comunicação entre os agentes ocorre pelo mesmo rastro versionado: commits, HEAD, gates, receipts e rendezvous do PR. Nenhum agente precisa compartilhar memória privada para continuar a partitura.
+
+**FATO.** Nesta rodada, a falha SAME_HEAD mostrou duas causas materiais distintas:
+- `porta-de-entrada`: área protegida exigia o label humano canônico `👑 PERMITO-SEGREDO`; o label está presente no PR atual e deve ser reavaliado pelo novo run;
+- `Trigger Fabric fresh-extraction`: o pacote não carregava `docs/ARQUITETURA/PADRAO-PARCEIRO-DELTA-JUDGE.md` e o diagrama empacotado não continha os três tokens exigidos pelo verifier.
+
+**CURRENT — SNAPSHOT 2026-09-19T02:08-03:00.** Antes que SOL tocasse nesses mesmos paths, outro Writer publicou:
+- `6127ea6088b4ab694c41a25e5933680240f5907a` — incluir o owner musical exigido pelo verifier;
+- `5ac7fa4ae0400c98a6b478d4c94fc5abcfec3309` — ligar o perfil anti-flash ao fluxo canônico.
+
+SOL, portanto, **não duplicou a correção**. Mudou de instrumento: preservou o setor CI/package do outro Writer e assumiu apenas o setor de história/coordenação resiliente.
+
+**FATO.** A semântica de `NULL` já estava cristalizada no mesmo PR antes deste ato:
+- NULL opcional e não medido permanece `NULL`;
+- campo decisório obrigatório sem valor vira `UNKNOWN`;
+- zero medido continua `0`, nunca é convertido em `NULL`.
+
+**METÁFORA.** Dois músicos podem tocar ao mesmo tempo porque não estão disputando a mesma tecla. O maestro não escreve todas as notas; mantém o compasso, e o finalizer só fecha a obra quando a orquestra inteira chega ao mesmo HEAD.
+
+### Partitura operacional deste ato
+
+```text
+CHEFE = intenção e autoridade humana
+PR-MÃE #1562 = livro/ledger/rendezvous, nunca Writer
+PR-FILHO #1577 = palco material desta história
+
+WRITER_A = NULL / evidence-envelope / history-resilience
+WRITER_B = Trigger Fabric package / fresh-extraction
+SOL_THIS_COMMIT = history / coordination only
+
+PARALLELIZE_PERCEPTION=true
+SERIALIZE_MUTATION_PER_SCOPE=true
+TWO_WRITERS_SAME_PATH=false
+ONE_ACTIVE_FINALIZER=true
+
+COMMUNICATION_BUS=
+commit_message
++ PR_HEAD
++ gate_result
++ receipt
++ rendezvous_comment
+
+PRIVATE_MODEL_MEMORY_REQUIRED=false
+SAME_HEAD_REQUIRED=true
+PDF_GATE_TLC23_REQUIRED_WHEN_APPLICABLE=true
+REALITY_IS_JUDGE=true
+```
+
+### Protocolo de fala entre agentes pelo próprio Git
+
+```text
+1. LEIA HEAD CURRENT
+2. LEIA os últimos commits e o handshake do PR
+3. DECLARE mentalmente o writer-scope que você vai ocupar
+4. Se outro commit tocar o mesmo path antes da sua escrita:
+   ABORT_LOCAL_MUTATION
+   → REBASE MENTAL NO NOVO HEAD
+   → MUDE PARA REVIEWER ou escopo disjunto
+5. Escreva commit pequeno com mensagem causal
+6. O próximo agente lê o commit como mensagem e como estado
+7. SAME_HEAD CI decide se a frase entrou no livro
+8. ONE_FINALIZER promove; nenhum Writer se auto-coroa vencedor
+```
+
+### Regra narrativa resiliente
+
+```text
+HISTORIA_CONTADA
+→ precisa apontar para commits/HEAD/gates reconstruíveis
+→ não pode apagar contradição
+→ não pode chamar atividade de prova
+→ não pode converter metáfora em autoridade
+→ deve sobreviver à troca de modelo
+→ deve permitir que o próximo agente retome sem o CHEFE reensinar
+```
+
+**CURRENT — SNAPSHOT 2026-09-19T02:08-03:00.** O HEAD observado imediatamente antes deste commit era `5ac7fa4ae0400c98a6b478d4c94fc5abcfec3309`. Novo commit torna qualquer CI anterior histórico; o único verde válido será o CI do HEAD resultante desta edição.
+
+### Extensão da matriz de prova narrativa
+
+| claim_id | classe | temporalidade | fonte |
+|---|---|---|---|
+| C13 | CURRENT | SNAPSHOT_BEFORE_COMMIT | `github:PR#1577` |
+| C14 | FATO | CURRENT_CONTRACT | `docs/ARQUITETURA/PADRAO-PARCEIRO-DELTA-JUDGE.md` |
+| C15 | FATO | CURRENT_CONTRACT | `supabase/functions/_shared/evidence-envelope.test.mjs` |
+| C16 | FATO | CURRENT_CONTRACT | `apps/modulos/fixed-point-fabric/tests/test_history_resilience.py` |
+
+### Veredito do ato
+
+```text
+MULTI_AGENT_COMMUNICATION_BY_VERSIONED_TRACE=PROVEN_IN_SCOPE
+SECOND_WRITER_COLLISION_AVOIDED=PASS
+OTHER_WRITER_FIX_REUSED=PASS
+DUPLICATE_FIX_CREATED=NO
+PR_MOTHER_DIRECT_WRITE=NO
+HISTORY_IS_LEDGER_CONTENT_NOT_RUNTIME_AUTHORITY=true
+CI_SAME_HEAD=REQUIRED_AFTER_THIS_COMMIT
+GLOBAL_GREEN=NOT_CLAIMED
+```
+
