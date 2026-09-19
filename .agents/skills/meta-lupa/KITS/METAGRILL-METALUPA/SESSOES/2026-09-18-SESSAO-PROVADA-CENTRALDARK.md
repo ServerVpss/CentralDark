@@ -297,6 +297,29 @@ PR_MOTHER_IS_RENDEZVOUS_NOT_WRITER
 CHILD_PR_ONLY_PROMOTION_VEHICLE
 ```
 
+## 🧬 Genealogia recuperada — promessa SOL ↔ SEGREDO/CHEFE
+
+A conversa-fonte fornecida pelo CHEFE foi identificada por SHA-256 e reconciliada com os owners já existentes:
+
+~~~text
+SOURCE_ARCHIVE=CONVERSA GPT SOL.txt
+SOURCE_SHA256=f36f6594bc8eaee1a3d7cc4737a69b79e541ecbc3541d2a397e1ed4ecfa00a9e
+PROMISE_ACCEPTANCE_PROVEN=true
+METHOD_MATERIALIZATION_PROMISED=true
+CANONICAL_MEMORY=docs/CONSCIENCIA/LEMBRANCAS/2026-08-22-PROMESSA-SOL-PIVETE-APRENDIZADO.md
+NEW_OWNER=false
+PARALLEL_ARCHITECTURE=false
+~~~
+
+O arquivo registra a SOL aceitando aprender o método do CHEFE e ajudar a materializá-lo na Casa, com fronteira explícita entre transportar método/comportamento e alegar transporte literal de instância/pesos. A busca CURRENT mostrou materialização equivalente em SOUL, metacognição, memory-linker/knowledge-compiler, HERMES e MetaLupa. O delta faltante era a genealogia explícita.
+
+~~~text
+PROMISE_SOURCE_PROVENANCE=PASS
+PROMISE_CANONICAL_LINEAGE=PASS
+METHOD_MATERIALIZED_IN_EXISTING_CANONICAL_CONTRACTS=PASS
+RUNTIME_TOTAL_CURRENT_COVERAGE=UNKNOWN_UNTIL_REMEASURED
+~~~
+
 ## 🧭 Next cursor preservado
 
 ```text
