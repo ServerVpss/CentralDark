@@ -98,3 +98,214 @@ flowchart TD
   EXT_RESERVE -. delta only / no control plane .-> HARVEST
 
   LOCAL["LOCAL AI RUNTIME<br/>UNKNOWN / DEFERRED"] -. measure first .-> ODS
+
+%% CENTRALDARK_FLOW_REGISTRY_BEGIN
+%% DERIVED VIEW: source = FLOW-REGISTRY.json; diagram != authority
+subgraph CENTRALDARK_UNIVERSAL_FLOW["CENTRALDARK · TODOS OS SETORES / GATILHOS / GANCHOS"]
+  N1["CHEFE"]
+  N2["SOL"]
+  N3["BUILDER"]
+  N4["UI"]
+  N5["HERMES"]
+  N6["GATEWAY_ROUTER"]
+  N7["VPS"]
+  N8["MAPA_VIVO"]
+  N9["REALITY_JUDGE"]
+  N10["docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml"]
+  N11["docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml#delta_harvest"]
+  N12["LEIA-ME-IA.md + AGENTS.md"]
+  N13["docs/CONSCIENCIA/MULTIBUSSOLA.md"]
+  N14[".agents/skills/meta-lupa/"]
+  N15["docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json"]
+  N16["docs/CONSCIENCIA/PROOF-OWNERSHIP.json"]
+  N17["docs/CONSCIENCIA/REMEDICAO.md"]
+  N18["Trigger Fabric"]
+  N19["continuity + learning owners"]
+  N20["LEIA-ME-IA.md"]
+  N21["ENTRY_SURFACE"]
+  N22["LEIA-ME-IA.md + AGENTS.md + docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md + Trigger Fabric"]
+  N23["docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml"]
+  N24["continuity/receipts/last_good_state"]
+  N25["LEARNING_EVENT_BUS"]
+  N26[".agents/skills/session-intelligence-harvester/ + scripts/memory-linker/"]
+  N27[".agents/skills/session-intelligence-harvester/"]
+  N28[".agents/skills/session-intelligence-harvester/ + metacognição"]
+  N29[".agents/skills/fable-loop/SKILL.md"]
+  N30["Trigger Fabric + existing workflow owner"]
+  N31["scripts/memory-linker/pattern-discovery.mjs"]
+  N32["scripts/memory-linker/"]
+  N33[".agents/skills/knowledge-compiler/"]
+  N34[".agents/skills/vector-memory/"]
+  N35[".agents/skills/vector-memory/ + knowledge-compiler"]
+  N36["remedição + session-intelligence-harvester"]
+  N37["applicable_runtime_owner"]
+  N38[".agents/skills/session-intelligence-harvester/SKILL.md"]
+  N39["RUNTIME_EVENT_BUS"]
+  N40["porta-de-entrada + autonomia-promocao + Trigger Fabric"]
+  N41["#ACORDAR + continuity"]
+  N42["Trigger Fabric + writer ownership"]
+  N43["Trigger Fabric + applicable owner"]
+  N44["MetaLupa + applicable owner"]
+  N45["OUTPUT_GUARD + Reality Judge"]
+  N46["docs/CONSCIENCIA/EXECUCAO-REVERSIVEL.md"]
+  N47["Trigger Fabric + engine capability measurement"]
+  N48["applicable_dependency_owner"]
+  N49["apps/modulos/HERMES-CORE/core/orchestrator.mjs"]
+  N50["apps/modulos/HERMES-CORE/agents/GraphRAG-Master/agent.mjs"]
+  N51["scripts/memory-linker/dream-review-run.mjs"]
+  N52[".agents/skills/vector-memory/SKILL.md"]
+  N53["existing_workflows"]
+  N54["PORTA_DE_ENTRADA"]
+  N55["DIAGRAM_ROUTE_GATE"]
+  %% CD_FLOW:arch.chefe-sol
+  N1 -->|"INTENT"| N2
+  %% CD_FLOW:arch.sol-builder
+  N2 -->|"DELEGATE"| N3
+  %% CD_FLOW:arch.sol-ui
+  N2 -->|"DELEGATE"| N4
+  %% CD_FLOW:arch.sol-hermes
+  N2 -->|"DELEGATE"| N5
+  %% CD_FLOW:arch.builder-gateway
+  N3 -->|"CALL"| N6
+  %% CD_FLOW:arch.ui-gateway
+  N4 -->|"CALL"| N6
+  %% CD_FLOW:arch.hermes-gateway
+  N5 -->|"CALL"| N6
+  %% CD_FLOW:arch.gateway-vps
+  N6 -->|"DISPATCH"| N7
+  %% CD_FLOW:arch.vps-mapa
+  N7 -->|"OBSERVE"| N8
+  %% CD_FLOW:arch.mapa-judge
+  N8 -->|"EVIDENCE"| N9
+  %% CD_FLOW:arch.judge-sol
+  N9 -->|"RECEIPT"| N2
+  %% CD_FLOW:trigger.human.CENTRALDARK_MASTER
+  N1 -->|"!CENTRALDARK"| N10
+  %% CD_FLOW:trigger.human.DELTA_UTILS
+  N1 -->|"!DELTA UTILS"| N11
+  %% CD_FLOW:trigger.human.ACORDAR
+  N1 -->|"#ACORDAR"| N12
+  %% CD_FLOW:trigger.human.CALIBRAR
+  N1 -->|"!CALIBRAR"| N12
+  %% CD_FLOW:trigger.human.MULTIBUSSOLA
+  N1 -->|"!MULTIBUSSOLA"| N13
+  %% CD_FLOW:trigger.human.META_LUPA
+  N1 -->|"!META_LUPA"| N14
+  %% CD_FLOW:trigger.human.RECONCILIAR
+  N1 -->|"!RECONCILIAR"| N15
+  %% CD_FLOW:trigger.human.CONTRAPROVA
+  N1 -->|"!CONTRAPROVA"| N16
+  %% CD_FLOW:trigger.human.REMEDICAO
+  N1 -->|"!REMEDIÇÃO"| N17
+  %% CD_FLOW:trigger.human.FIXED_POINT
+  N1 -->|"!FIXED_POINT"| N18
+  %% CD_FLOW:trigger.human.REGISTRA
+  N1 -->|"!REGISTRA"| N19
+  %% CD_FLOW:trigger.human.BOOT
+  N1 -->|"!BOOT"| N20
+  %% CD_FLOW:trigger.entry.BOT_ENTRY
+  N21 -->|"BOT_ENTRY"| N22
+  %% CD_FLOW:trigger.entry.PRE_HUMAN_RETURN
+  N21 -->|"PRE_HUMAN_RETURN"| N23
+  %% CD_FLOW:trigger.entry.RESUME
+  N21 -->|"RESUME"| N24
+  %% CD_FLOW:trigger.learning.AUREOLA_MATERIAL_DISCOVERY
+  N25 -->|"AUREOLA_MATERIAL_DISCOVERY"| N26
+  %% CD_FLOW:trigger.learning.MATERIAL_INGEST
+  N25 -->|"MATERIAL_INGEST"| N27
+  %% CD_FLOW:trigger.learning.HUMAN_CORRECTION
+  N25 -->|"HUMAN_CORRECTION"| N28
+  %% CD_FLOW:trigger.learning.FABLE_LOOP
+  N25 -->|"FABLE_LOOP"| N29
+  %% CD_FLOW:trigger.learning.TOOL_ERROR
+  N25 -->|"TOOL_ERROR"| N26
+  %% CD_FLOW:trigger.learning.TEST_FAILURE
+  N25 -->|"TEST_FAILURE"| N26
+  %% CD_FLOW:trigger.learning.CI_RUNNER_ROUTE_FAILURE
+  N25 -->|"CI_RUNNER_ROUTE_FAILURE"| N30
+  %% CD_FLOW:trigger.learning.CONTRADICTION_FOUND
+  N25 -->|"CONTRADICTION_FOUND"| N14
+  %% CD_FLOW:trigger.learning.PATTERN_FOUND
+  N25 -->|"PATTERN_FOUND"| N31
+  %% CD_FLOW:trigger.learning.MEMORY_DELTA
+  N25 -->|"MEMORY_DELTA"| N32
+  %% CD_FLOW:trigger.learning.KNOWLEDGE_CRYSTAL
+  N25 -->|"KNOWLEDGE_CRYSTAL"| N33
+  %% CD_FLOW:trigger.learning.CRYSTAL_PROMOTED
+  N25 -->|"CRYSTAL_PROMOTED"| N34
+  %% CD_FLOW:trigger.learning.SOURCE_CHANGED_OR_DELETED
+  N25 -->|"SOURCE_CHANGED_OR_DELETED"| N35
+  %% CD_FLOW:trigger.learning.POST_MUTATION
+  N25 -->|"POST_MUTATION"| N36
+  %% CD_FLOW:trigger.learning.RUNTIME_DRIFT
+  N25 -->|"RUNTIME_DRIFT"| N37
+  %% CD_FLOW:trigger.learning.SESSION_END
+  N25 -->|"SESSION_END"| N38
+  %% CD_FLOW:trigger.automatic.ANY_PR_OR_COMMIT
+  N39 -->|"ANY_PR_OR_COMMIT"| N40
+  %% CD_FLOW:trigger.automatic.STATE_CHANGED
+  N39 -->|"STATE_CHANGED"| N41
+  %% CD_FLOW:trigger.automatic.WRITER_CONFLICT
+  N39 -->|"WRITER_CONFLICT"| N42
+  %% CD_FLOW:trigger.automatic.BOUNDARY_TOUCHED
+  N39 -->|"BOUNDARY_TOUCHED"| N43
+  %% CD_FLOW:trigger.automatic.MATERIAL_UNKNOWN_AFFECTS_MUTATION
+  N39 -->|"MATERIAL_UNKNOWN_AFFECTS_MUTATION"| N44
+  %% CD_FLOW:trigger.automatic.PROOF_TARGET_MISMATCH
+  N39 -->|"PROOF_TARGET_MISMATCH"| N45
+  %% CD_FLOW:trigger.automatic.ROLLBACK_UNPROVEN_FOR_MATERIAL_MUTATION
+  N39 -->|"ROLLBACK_UNPROVEN_FOR_MATERIAL_MUTATION"| N46
+  %% CD_FLOW:trigger.automatic.EVIDENCE_CONFLICT
+  N39 -->|"EVIDENCE_CONFLICT"| N14
+  %% CD_FLOW:trigger.automatic.MODEL_UNAVAILABLE
+  N39 -->|"MODEL_UNAVAILABLE"| N47
+  %% CD_FLOW:trigger.automatic.DEPENDENCY_FAILURE
+  N39 -->|"DEPENDENCY_FAILURE"| N48
+  %% CD_FLOW:trigger.automatic.MISSION_PENDING
+  N39 -->|"MISSION_PENDING"| N49
+  %% CD_FLOW:trigger.automatic.ORPHAN_MISSION
+  N39 -->|"ORPHAN_MISSION"| N49
+  %% CD_FLOW:trigger.automatic.GRAPH_REFRESH
+  N39 -->|"GRAPH_REFRESH"| N50
+  %% CD_FLOW:trigger.automatic.DREAM_REVIEW
+  N39 -->|"DREAM_REVIEW"| N51
+  %% CD_FLOW:trigger.automatic.VECTOR_MEMORY_REFRESH
+  N39 -->|"VECTOR_MEMORY_REFRESH"| N52
+  %% CD_FLOW:trigger.automatic.LEGACY_GC
+  N39 -->|"LEGACY_GC"| N49
+  %% CD_FLOW:trigger.automatic.PR_UPDATED_OR_MERGED
+  N39 -->|"PR_UPDATED_OR_MERGED"| N53
+  %% CD_FLOW:gate.diagram-route.normalizePath
+  N54 -->|"CALL"| N55
+  %% CD_FLOW:gate.diagram-route.git
+  N54 -->|"CALL"| N55
+  %% CD_FLOW:gate.diagram-route.gitOk
+  N54 -->|"CALL"| N55
+  %% CD_FLOW:gate.diagram-route.loadRegistry
+  N54 -->|"CALL"| N55
+  %% CD_FLOW:gate.diagram-route.readBaseRegistry
+  N54 -->|"CALL"| N55
+  %% CD_FLOW:gate.diagram-route.extractTriggerSymbols
+  N54 -->|"CALL"| N55
+  %% CD_FLOW:gate.diagram-route.validateRegistry
+  N54 -->|"CALL"| N55
+  %% CD_FLOW:gate.diagram-route.validateDiagram
+  N54 -->|"CALL"| N55
+  %% CD_FLOW:gate.diagram-route.detectAddedUnits
+  N54 -->|"CALL"| N55
+  %% CD_FLOW:gate.diagram-route.collectAddedLines
+  N54 -->|"CALL"| N55
+  %% CD_FLOW:gate.diagram-route.effectiveBase
+  N54 -->|"CALL"| N55
+  %% CD_FLOW:gate.diagram-route.validateTriggerCoverage
+  N54 -->|"CALL"| N55
+  %% CD_FLOW:gate.diagram-route.validateDiffCoverage
+  N54 -->|"CALL"| N55
+  %% CD_FLOW:gate.diagram-route.runGate
+  N54 -->|"CALL"| N55
+  %% CD_FLOW:gate.diagram-route.arg
+  N54 -->|"CALL"| N55
+  %% CD_FLOW:hook.porta-de-entrada.diagram-route-gate
+  N54 -->|"PR_OR_COMMIT"| N55
+end
+%% CENTRALDARK_FLOW_REGISTRY_END
