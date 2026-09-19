@@ -233,8 +233,12 @@ function gerarTopicoReal() {
  * Anexa um aprendizado ao arquivo APRENDIZADOS.md para que próximas IAs
  * herdem via kit_boas_vindas / puxar_aprendizados.
  */
-function registrarAprendizadoPermanente(iaNome, aprendizado, contextoTopico = '') {
+function registrarAprendizadoPermanente(iaNome, aprendizado, contextoTopico = '', receipt = null) {
   try {
+    if (!receipt || receipt.verdict !== 'PROVED_ADOPTED') {
+      console.warn('[contexto] Aprendizado não promovido: PROVED_ADOPTED ausente');
+      return false;
+    }
     const filePath = path.join(REPO_ROOT, 'docs/CONSCIENCIA/APRENDIZADOS.md');
     if (!fs.existsSync(filePath)) return false;
 
