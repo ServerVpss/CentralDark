@@ -43,6 +43,12 @@ flowchart TD
   SAVED --> INGEST
   DOCSENSOR --> INGEST
   LIVEOBS --> INGEST
+
+  DOCSENSOR -. visual profile when applicable .-> OLHO["OLHO BIÔNICO ANTI-FLASH<br/>VISION RESILIENCE PROFILE<br/>not engine / not authority"]
+  OLHO --> VDERIVED["DERIVED OUTPUT<br/>marked derived + receipt"]
+  VDERIVED --> VMONITORS["MONITORES DA CASA<br/>only after applicable QA gate"]
+  OLHO -. provenance + QA evidence .-> EVID
+
   INGEST --> REAR
 
   EVID --> REAR["CEREBRO DE RETAGUARDA / MEMORY LAYER<br/>materia + fragmentos + historico + proveniencia"]
