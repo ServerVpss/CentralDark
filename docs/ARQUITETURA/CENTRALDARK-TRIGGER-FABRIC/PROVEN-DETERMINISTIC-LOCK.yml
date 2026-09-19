@@ -83,6 +83,38 @@ proven_fast_path:
     upload_suffix_is_alias_only: true
     method: HORN_FORWARD_CHAINING_TO_FIXED_POINT
 
+
+derived_oracle:
+  new_agent: false
+  source: [PROVEN_CLAIMS_LOCK, CURRENT_LIVE_STATE, MATERIAL_SIGNATURE, OWNER_MAP]
+  known_sealed_same_signature: DETERMINISTIC_FAST_PATH
+  changed_or_unknown: REOPEN_AFFECTED_CONE_ONLY
+  ai_role: RESOLVE_ONLY_UNCLOSED_FRONTIER
+  output: [ROUTE, OWNER, CLAIM_STATE, AFFECTED_CONE, PROOF_TARGET, NEXT_CURSOR]
+  output_is_proof: false
+
+checkpoint_policy:
+  family_owner: docs/BRAIN/02-ENTRADA/CHECK-LIST-DIARIO.md
+  cadences: [DAILY, WEEKLY, FIFTEEN_DAYS, MONTHLY]
+  time_elapsed_alone_reopens_claim: false
+  same_signature: REUSE_PROOF
+  changed_signature: INVALIDATE_DEPENDENTS_ONLY
+  receipt: [OBSERVED_AT, HEAD_SHA, MATERIAL_SIGNATURE, CONTENT_SHA256, OWNER, EVIDENCE_REF, NEXT_CURSOR]
+
+repository_link_policy:
+  input: GITHUB_REPOSITORY_URL
+  mining_owner: docs/BRAIN/01-CONCEITOS/05-MINERACAO/MINERACAO_API_FIRST_DELTA_ONLY.md
+  router_owner: .agents/skills/capability-contract-router/SKILL.md
+  history_owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PEGATUDO-HISTORY.yml
+  mode: API_FIRST_METADATA_FIRST_DELTA_ONLY
+  panel_role: PROJECTION_NOT_AUTHORITY
+  source_url_is_permission: false
+  same_revision_and_fingerprint: NO_REMINING
+  source_changed: MINE_DELTA_ONLY
+  absorb_only_proven_delta: true
+  abandoned_internal_branches: PEGATUDO_HISTORY
+  no_parallel_evaluator: true
+
 trigger_loader:
   owner: scripts/trigger-fabric/centraldark_full_trigger_boot.py
   sources:
