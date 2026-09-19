@@ -633,6 +633,15 @@ test("grupo evolução não pode chamar conversa aleatória de aprendizado", () 
   assert.doesNotMatch(source, /BOT_TOKEN_(?:GEMINI|GROQ|CLAUDE)\s*\|\|\s*['"]\d{8,12}:/);
 });
 
+
+test("grupo evolução exige self-test offline do ciclo de aprendizado", () => {
+  const source = readFileSync(join(process.cwd(), "apps/bot-telegram/evolucao-ias.cjs"), "utf8");
+  assert.match(source, /--self-test-learning/);
+  assert.match(source, /CANDIDATE/);
+  assert.match(source, /REPLAY_OBSERVED/);
+  assert.match(source, /PROVED_ADOPTED/);
+});
+
 test("fronteira bloqueia projeto externo em superfície rastreável", () => {
   const root = mkdtempSync(join(tmpdir(), "centraldark-boundary-"));
   const dependency = ["@", "ai", "ox", "-squads/core"].join("");
