@@ -112,6 +112,34 @@ def lock_key(claim_key: str, owner: str) -> str:
     return hashlib.sha256(payload).hexdigest()
 
 
+def material_signature(parts: list[str]) -> str:
+    normalized = sorted({part.strip() for part in parts if part.strip()})
+    payload = json.dumps(normalized, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
+    return hashlib.sha256(payload).hexdigest()
+
+
+def deterministic_reuse_verdict(entry: dict | None, supplied_signature: str, owner: str) -> dict:
+    if not entry or entry.get("state") != "SEALED_PROVEN":
+        return {"verdict": "ANALYSIS_REQUIRED", "route": "AFFECTED_CONE_ONLY", "reason": "CLAIM_NOT_SEALED"}
+    if entry.get("owner") != owner or entry.get("lock_key") != lock_key(entry.get("claim_key", ""), owner):
+        return {"verdict": "ANALYSIS_REQUIRED", "route": "AFFECTED_CONE_ONLY", "reason": "OWNER_OR_LOCK_MISMATCH"}
+    expected = str(entry.get("material_signature") or "").strip()
+    current = str(supplied_signature or "").strip()
+    if not expected:
+        return {"verdict": "TARGETED_REVALIDATION_REQUIRED", "route": "AFFECTED_CONE_ONLY", "reason": "LEGACY_SEAL_WITHOUT_MATERIAL_SIGNATURE"}
+    if not current:
+        return {"verdict": "TARGETED_REVALIDATION_REQUIRED", "route": "AFFECTED_CONE_ONLY", "reason": "CURRENT_MATERIAL_SIGNATURE_MISSING"}
+    if current != expected:
+        return {"verdict": "TARGETED_REVALIDATION_REQUIRED", "route": "AFFECTED_CONE_ONLY", "reason": "MATERIAL_SIGNATURE_CHANGED"}
+    return {
+        "verdict": "DETERMINISTIC_FAST_PATH",
+        "route": "REUSE_PROOF_AND_CONTINUE",
+        "reason": "SEALED_PROVEN_SAME_MATERIAL_SIGNATURE",
+        "llm_required": False,
+        "rewalk_full_repository": False,
+    }
+
+
 def load_registry(path: Path) -> dict:
     if not path.exists():
         return {"schema": "centraldark.proven-claims-lock.v1", "claims": {}}
@@ -193,10 +221,22 @@ def cmd_seal(args: argparse.Namespace) -> int:
         "counterproof": "PASS",
         "receipt_ref": args.receipt,
     }
+    if args.material_signature.strip():
+        entry["material_signature"] = args.material_signature.strip()
     data["claims"][args.claim] = entry
     atomic_write_json(path, data)
     print(json.dumps({"action": "SEALED", **entry}, indent=2, ensure_ascii=False))
     return 0
+
+
+def cmd_reuse_check(args: argparse.Namespace) -> int:
+    repo = Path(args.repo).resolve()
+    require_files(repo)
+    data = load_registry(repo / args.registry)
+    result = deterministic_reuse_verdict(data["claims"].get(args.claim), args.material_signature, args.owner)
+    result.update({"claim": args.claim, "owner": args.owner})
+    print(json.dumps(result, indent=2, ensure_ascii=False))
+    return 0 if result["verdict"] == "DETERMINISTIC_FAST_PATH" else 7
 
 
 def cmd_reopen_check(args: argparse.Namespace) -> int:
@@ -252,7 +292,16 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--evidence", required=True)
     s.add_argument("--observed-at", required=True)
     s.add_argument("--receipt", required=True)
+    s.add_argument("--material-signature", default="")
     s.set_defaults(func=cmd_seal)
+
+    u = sub.add_parser("reuse-check")
+    u.add_argument("--repo", default=".")
+    u.add_argument("--registry", default=DEFAULT_REGISTRY.as_posix())
+    u.add_argument("--claim", required=True)
+    u.add_argument("--owner", required=True)
+    u.add_argument("--material-signature", required=True)
+    u.set_defaults(func=cmd_reuse_check)
 
     r = sub.add_parser("reopen-check")
     r.add_argument("--repo", default=".")
