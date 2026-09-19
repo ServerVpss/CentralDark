@@ -47,6 +47,15 @@ jobs:
       AUDIT_DIR: /root/CentralDark/logs
       BEFORE_SHA: ${{ github.event.before || '' }}
     steps:
+      - name: Hydrate Cofre (GitHub secret → VPS secrets/, sem echo)
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          BUILDKITE_API_TOKEN: ${{ secrets.BUILDKITE_API_TOKEN }}
+        run: |
+          set -euo pipefail
+          bash /root/CentralDark/scripts/vps/hydrate-provider-secrets.sh
+
       - name: Validar SHA, construir isolado, promover e comprovar
         id: deploy
         shell: bash
