@@ -8,6 +8,8 @@ PR_MOTHER_ROLE=RENDEZVOUS_LEDGER_NOT_WRITER
 PR_CHILD=#1577
 PR_CHILD_BRANCH=cristal/session-provada-20260918-pr-mae-1562
 HEAD_BEFORE_THIS_HANDOFF=4f0eba99cc117a1e1a17b4f8b3d2923c68bbbdfd
+HANDOFF_COMMIT_INITIAL=8f3e0a3e5bb7ecac73bb7612007aa5752c6ac12b
+HEAD_REMEASURED_AFTER_PARALLEL_ADVANCE=a0a60e3cc1e3e38a9559c79a56a59570dbc2d39c
 AUTHORING_SURFACE=SOL_CHATGPT
 INTENT_AUTHORIZED_BY=SEGREDO/CHEFE
 ```
@@ -106,12 +108,22 @@ AGENT_FINALIZER:
   só após CI/GATES no mesmo HEAD
 ```
 
+## Observação de concorrência
+
+```text
+8f3e0a3e5bb7ecac73bb7612007aa5752c6ac12b = handoff inicial deste agente
+
+a0a60e3cc1e3e38a9559c79a56a59570dbc2d39c = HEAD observado depois de avanço paralelo da branch
+
+REGRA: qualquer comentário ou gate que cite HEAD anterior vira histórico. O alvo vivo deve ser re-medido antes de decisão final.
+```
+
 ## Próximo cursor
 
 ```text
 1. re-medir PR #1577 HEAD depois deste commit
-2. publicar handshake idempotente no PR #1577
-3. publicar ponte curta no PR-mãe #1562
+2. publicar/atualizar handshake no PR #1577
+3. publicar/atualizar ponte curta no PR-mãe #1562
 4. aguardar/medir CI do HEAD novo
 5. inventariar NULLs do envelope de tool-call
 6. corrigir apenas NULL_LACUNA_REAL no owner correspondente
