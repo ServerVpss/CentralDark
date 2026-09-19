@@ -45,6 +45,26 @@ Saída operacional ao processar input do CHEFE:
 Não criar `CONTRATO-BASE` paralelo. Este bloco estende este owner. Reconciliação-antes-de-criar continua canônica.
 
 ```text
+MATÉRIA → PEGATUDO → DEDUPE → META_LUPA → OWNER → MENOR DELTA → CONTRAPROVA → CRISTAL
+```
+
+Cada informação nova justifica a própria existência. Objetivo: **mais capacidade com menos peça**.
+
+```text
+MAIS CONHECIMENTO → MENOS DUPLICAÇÃO → MENOS OWNERS → MENOS ROTAS
+→ MAIS CAPACIDADE → MAIS PROVA → MAIS RESILIÊNCIA
+```
+
+**COMPLEXIDADE ABSORVIDA:** rigor na fundação (Git, CI, Hermes, MCP, heartbeat, gates, receipts, Reality Judge). Superfície: CHEFE aponta → Casa entende → executa → prova.
+
+`SIMPLES != BURRO`. Cortar prova, segurança, rastreio, estado ou recuperação **não** é compressão — é amputação.
+
+```text
+SIMPLICIDADE_MAXIMA_NA_SUPERFICIE
+RIGOR_MAXIMO_NA_FUNDACAO
+```
+
+```text
 ENTRADA_DO_CHEFE
 → DELTA_UTIL_AUTORIZADO
 → CLASSIFICAÇÃO

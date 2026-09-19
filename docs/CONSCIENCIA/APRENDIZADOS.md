@@ -259,6 +259,12 @@ updated: 2026-08-27
 - **Contexto:** Na reconciliação `CASA → VPS → MAIN`, o runtime local tinha alterações misturadas: arquivos gerados de status/grafo, cursores `.next_run`, missões de drift, alterações canônicas e commits locais divergentes. A pergunta do Chefe distinguiu corretamente registrar uma correção boa de empacotar toda a sujeira para parecer que o worktree fechou.
 - **Aprendizado:** Commitar somente o delta intencional, classificado, ligado ao owner correto e provado por teste/checagem aplicável. Não usar commit para limpar `git status`. Runtime gerado, painel/status, `.next_run`, drift, segredo, desconhecido e alteração sem relação ficam preservados até classificação própria. Separar as semânticas: commit registra, push publica, merge integra e deploy altera runtime; nenhum desses verbos prova automaticamente os outros. Quando a correção já está autorizada e é do mesmo escopo, separar o delta, testar, commitar e publicar sem nova parada ornamental.
 
+### 56. COMPLEXIDADE ABSORVIDA — simples na superfície, rigor na fundação; simples ≠ burro
+- **Categoria:** regra
+- **Data:** 2026-09-19
+- **Contexto:** CHEFE selou o contrato-padrão: matéria justifica existência; mais capacidade com menos peça. Owner já era PADRAO-DELTA-UTIL (#54).
+- **Aprendizado:** Não adicionar coisa. Fazer a Casa fazer mais precisando de menos. Amputar prova/segurança/rastreio não é compressão. CHEFE não administra parafuso; a Casa prova que apertou o certo.
+
 ### 55. SESSÃO NÃO MORRE SUJA — commit+push main; checklist diário; dia fecha sozinho
 - **Categoria:** regra
 - **Data:** 2026-09-19
