@@ -60,6 +60,9 @@ const TG_API       = 'https://api.telegram.org';
 const WEBHOOK_URL  = (process.env.TELEGRAM_WEBHOOK_URL || '').trim();
 const WEBHOOK_PORT = Number(process.env.BOT_WEBHOOK_PORT || '9500');
 
+// DELTA ÚTIL 01 — projeção do owner OAuth Broker no Hub Telegram
+const accountHub = require('./services/account-hub.cjs');
+
 // Secret derivado do token — estável entre restarts
 const WEBHOOK_SECRET = process.env.BOT_WEBHOOK_SECRET
   || crypto.createHash('sha256').update(TOKEN + 'centraldark').digest('hex').slice(0, 32);
@@ -613,6 +616,7 @@ ${cogLine}${termLine}  HIST.    ${String(sess.history.length).padStart(2)} msgs 
         { text: '⚙️ Config',       callback_data: 'hub:config' },
       ],
       [
+        { text: '🔐 Contas & Auth', callback_data: 'hub:accounts' },
         termBtn,
       ],
       [
@@ -627,6 +631,7 @@ async function getVPSStatus() {
   const checks = [
     { name: 'Webhook Deploy  ', url: 'http://localhost:9300/health' },
     { name: 'Contas Admin    ', url: 'http://localhost:9400/health' },
+    { name: 'OAuth Broker    ', url: 'http://localhost:8098/health' },
     { name: 'MCP CentralDark ', url: `http://localhost:${MCP_PORT}/health` },
   ];
   const results = await Promise.all(checks.map(async c => {
@@ -1154,6 +1159,43 @@ async function handleCallback(cq) {
       const p = buildPanel(chatId);
       await edit(chatId, msgId, p.text, p.buttons);
       return send(chatId, '🧹 Histórico limpo!');
+    }
+
+    // ── DELTA ÚTIL 01 — Hub de contas/autenticação (owner: OAuth Broker)
+    if (data === 'hub:accounts') {
+      const snap = await accountHub.getSnapshot(fromId || chatId);
+      return edit(
+        chatId,
+        msgId,
+        accountHub.renderHub(snap),
+        accountHub.hubButtons(snap, fromId || chatId),
+      );
+    }
+
+    if (data.startsWith('hub:acct:test:')) {
+      const connectionId = data.slice('hub:acct:test:'.length);
+      const result = await accountHub.testConnection(connectionId);
+      const icon = result.ok ? '🟢' : '🔴';
+      const human = result.ok ? 'Conexão testada com sucesso' : 'Teste da conexão falhou';
+      return send(
+        chatId,
+        icon + ' <b>' + human + '</b>\n' +
+          'HTTP: <code>' + (result.http ?? '—') + '</code>\n' +
+          'Detalhe: <code>' + String(result.detail || '—').replace(/[<>&]/g, '') + '</code>',
+        [[{ text: '🔙 Contas', callback_data: 'hub:accounts' }]],
+      );
+    }
+
+    if (data.startsWith('hub:acct:')) {
+      const providerId = data.slice('hub:acct:'.length);
+      if (!/^[a-z0-9_-]{2,32}$/.test(providerId)) return;
+      const snap = await accountHub.getSnapshot(fromId || chatId);
+      return edit(
+        chatId,
+        msgId,
+        accountHub.renderProvider(snap, providerId),
+        accountHub.providerButtons(snap, providerId, fromId || chatId),
+      );
     }
 
     // ── Terminal Claude — ativar / desativar
