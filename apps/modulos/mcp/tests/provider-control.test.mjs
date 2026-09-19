@@ -23,7 +23,7 @@ test("matriz tem chave provider+capability unica e proveniencia oficial", () => 
   const keys = PROVIDER_CAPABILITY_MATRIX.map((item) => `${item.provider}:${item.capability}`);
   assert.equal(new Set(keys).size, keys.length);
   for (const item of PROVIDER_CAPABILITY_MATRIX) {
-    assert.ok(["cloudflare", "contabo"].includes(item.provider));
+    assert.ok(["cloudflare", "contabo", "tailscale"].includes(item.provider));
     assert.match(item.lastVerifiedAt, /^\d{4}-\d{2}-\d{2}$/);
     assert.ok(typeof item.evidenceRef === "string" && item.evidenceRef.startsWith("https://"));
   }
@@ -64,6 +64,7 @@ test("status de credencial nunca devolve valor", () => {
     CONTABO_CLIENT_SECRET: "csec",
     CONTABO_API_USER: "usr",
     CONTABO_API_PASSWORD: "pwd",
+    TAILSCALE_API_KEY: "configured-not-a-secret",
   };
   const status = providerCredentialStatus(env);
   assert.deepEqual(status, {
@@ -74,9 +75,16 @@ test("status de credencial nunca devolve valor", () => {
       CONTABO_API_USER: "CONFIGURED",
       CONTABO_API_PASSWORD: "CONFIGURED",
     },
+    tailscale: { TAILSCALE_API_KEY: "CONFIGURED" },
   });
   const serialized = JSON.stringify(status);
   for (const value of Object.values(env)) assert.equal(serialized.includes(value), false);
+});
+
+test("tailscale devices.list monta path oficial", () => {
+  const req = buildProviderRequest("tailscale", "devices.list", { tailnet: "-" });
+  assert.equal(req.method, "GET");
+  assert.equal(req.path, "/tailnet/-/devices");
 });
 
 test("redaction remove token senha e material de pagamento", () => {

@@ -1164,12 +1164,7 @@ async function handleCallback(cq) {
     // ── DELTA ÚTIL 01 — Hub de contas/autenticação (owner: OAuth Broker)
     if (data === 'hub:accounts') {
       const snap = await accountHub.getSnapshot(fromId || chatId);
-      return edit(
-        chatId,
-        msgId,
-        accountHub.renderHub(snap),
-        accountHub.hubButtons(snap, fromId || chatId),
-      );
+      return edit(chatId, msgId, accountHub.renderHub(snap), accountHub.hubButtons(snap, fromId || chatId));
     }
 
     if (data.startsWith('hub:acct:test:')) {
@@ -1179,8 +1174,8 @@ async function handleCallback(cq) {
       const human = result.ok ? 'Conexão testada com sucesso' : 'Teste da conexão falhou';
       return send(
         chatId,
-        icon + ' <b>' + human + '</b>\n' +
-          'HTTP: <code>' + (result.http ?? '—') + '</code>\n' +
+        icon + ' <b>' + human + '</b>\\n' +
+          'HTTP: <code>' + (result.http ?? '—') + '</code>\\n' +
           'Detalhe: <code>' + String(result.detail || '—').replace(/[<>&]/g, '') + '</code>',
         [[{ text: '🔙 Contas', callback_data: 'hub:accounts' }]],
       );
