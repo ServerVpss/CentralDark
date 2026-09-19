@@ -13,6 +13,37 @@ Tudo que o CHEFE trouxer para a CentralDark deve ser tratado como **DELTA ÚTIL 
 
 A resposta padrão deve explicar, classificar, priorizar e despachar sem transformar poesia em prova e sem fazer o runtime engasgar.
 
+## Compressão arquitetural (CHEFE · 2026-09-19)
+
+O sistema cresce por compressão, não por inchaço. Menos por fora, mais por dentro. Não simplificar destruindo informação.
+
+```text
+MATÉRIA
+→ CRUZAR com o que já existe
+→ REDUZIR repetição/ambiguidade
+→ PRESERVAR só complexidade com função (same-head, lease, runtime, contraprova)
+→ COMPRIMIR ao menor delta útil
+→ DESTINO = owner existente + gate
+```
+
+```text
+DUAS_REGRAS_MESMA_COISA     → FUNDIR
+DOIS_SISTEMAS_MESMO_PAPEL   → RECONCILIAR_NO_MESMO_OWNER
+SEM_CAPACIDADE_NOVA         → DROP
+CAPACIDADE_CABE_NO_EXISTENTE→ EXTEND
+LACUNA_PROVADA_INSUPERÁVEL  → CRIAR (só com prova)
+```
+
+Saída operacional ao processar input do CHEFE:
+
+```text
+[OWNER]        peça existente
+[DROP/EXTEND]  o que saiu / o que ficou
+[DELTA ÚTIL]   instrução final, simples por cima, amarrada por baixo
+```
+
+Não criar `CONTRATO-BASE` paralelo. Este bloco estende este owner. Reconciliação-antes-de-criar continua canônica.
+
 ```text
 ENTRADA_DO_CHEFE
 → DELTA_UTIL_AUTORIZADO

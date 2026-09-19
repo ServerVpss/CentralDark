@@ -259,6 +259,12 @@ updated: 2026-08-27
 - **Contexto:** Na reconciliação `CASA → VPS → MAIN`, o runtime local tinha alterações misturadas: arquivos gerados de status/grafo, cursores `.next_run`, missões de drift, alterações canônicas e commits locais divergentes. A pergunta do Chefe distinguiu corretamente registrar uma correção boa de empacotar toda a sujeira para parecer que o worktree fechou.
 - **Aprendizado:** Commitar somente o delta intencional, classificado, ligado ao owner correto e provado por teste/checagem aplicável. Não usar commit para limpar `git status`. Runtime gerado, painel/status, `.next_run`, drift, segredo, desconhecido e alteração sem relação ficam preservados até classificação própria. Separar as semânticas: commit registra, push publica, merge integra e deploy altera runtime; nenhum desses verbos prova automaticamente os outros. Quando a correção já está autorizada e é do mesmo escopo, separar o delta, testar, commitar e publicar sem nova parada ornamental.
 
+### 54. COMPRESSÃO ARQUITETURAL — crescer por dentro; DROP/EXTEND; sem contrato paralelo
+- **Categoria:** regra
+- **Data:** 2026-09-19
+- **Contexto:** CHEFE selou contrato-base de compressão. Cruzamento: já existia REUSE_BEFORE_CREATE + CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR + PADRÃO DELTA ÚTIL.
+- **Aprendizado:** Não abrir segundo contrato. Estender `PADRAO-DELTA-UTIL-RUNTIME-DISTRIBUIDO.md`. Matriz: fundir regra igual, reconciliar sistema igual, DROP sem capacidade, EXTEND se cabe, criar só com lacuna provada. Resposta: OWNER / DROP-EXTEND / DELTA ÚTIL.
+
 ### 53. CONTINUIDADE OPERACIONAL — GOAL PAI vive; conversa muda; a Casa lembra pelo motor
 - **Categoria:** regra
 - **Data:** 2026-09-19
