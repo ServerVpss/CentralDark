@@ -132,3 +132,12 @@ EMOJI != PROVA
 SKILL_ROUTE_PROVEN_IN_SOURCE != SKILL_EXECUTED_NOW
 REALIDADE = JUIZ
 ```
+
+## ✅ MATERIALIZAÇÃO 52/52
+
+```text
+.agents/skills/<skill>/SKILL.md         = contrato funcional
+.agents/skills/<skill>/INTERLIGADOS.md = ponte visual-operacional
+```
+
+🧠 Toda skill do inventário atual possui gatilho/emoji/entrada/retorno explícitos por baixo da mesma fórmula. O bridge nunca substitui o `SKILL.md` e nunca expõe raciocínio privado.
