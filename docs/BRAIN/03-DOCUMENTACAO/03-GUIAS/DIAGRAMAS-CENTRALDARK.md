@@ -270,6 +270,69 @@ NO_NEW_INFORMATION + ZERO_MATERIAL_RESIDUAL = USEFUL_CEILING
 
 O código executável correspondente vive em `apps/modulos/HERMES-CORE/core/cognitive-council.mjs` e é consumido pela `perception-orchestra.mjs`.
 
+## 8. Cristalização operacional — um coração, Hermes já existente
+
+> Derivado da intenção SEGREDO/CHEFE 2026-09-19. Não é segundo painel.
+> Fontes de verdade: `origin/main` (código) · `api.centralldark.com` (estado) · `admin.centralldark.com` (casca).
+> Executores já vivos: Hermes gateway + cron `70c07f9b` Heartbeat Operacional + `7212bca5` Promotion Deploy + MCP `GET /heartbeat`.
+> SSE é transporte. Watchdog detecta; orchestrator executa. Sem segundo cérebro.
+
+```text
+NÃO CONSTRUIR PARA COBRIR UMA DÚVIDA.
+PRIMEIRO MEDIR.
+DEPOIS RECONCILIAR.
+SÓ ENTÃO ALTERAR.
+```
+
+```mermaid
+flowchart LR
+    A["ADMIN<br/>admin.centralldark.com"]
+    B["API<br/>api.centralldark.com"]
+    C["WATCHDOG<br/>Hermes cron Heartbeat"]
+    D["RECONCILIADOR<br/>Hermes cron Deploy/Kanban"]
+    E["RUNNER<br/>self-hosted"]
+    F["DEPLOY<br/>vps-exec-selfhosted"]
+    G["QUEUE<br/>Actions"]
+
+    A <--> B
+    B --> C
+    C --> B
+    E -->|"heartbeat"| B
+    B -->|"lease / command"| E
+    B --> D
+    E --> D
+    F --> D
+    G --> D
+    D -->|"STATE_MISMATCH"| B
+    B --> F
+    F --> G
+    G --> E
+    E -->|"progress"| B
+    F -->|"result"| B
+    B --> A
+```
+
+```mermaid
+stateDiagram-v2
+    [*] --> HEALTHY
+    HEALTHY --> BUSY: acquire lease
+    BUSY --> HEALTHY: job finished
+    BUSY --> SUSPECT: heartbeat stale
+    SUSPECT --> BUSY: heartbeat recovered
+    SUSPECT --> LOST: timeout
+    LOST --> RECOVERING: watchdog solicita
+    RECOVERING --> HEALTHY: runner reconciled
+    RECOVERING --> LOST: recovery failed
+    BUSY --> STATE_MISMATCH: job inexistente
+    STATE_MISMATCH --> RECONCILING: reconciliador
+    RECONCILING --> BUSY: estado confirmado
+    RECONCILING --> RECOVERING: runner inválido
+    HEALTHY --> [*]
+```
+
+Allowlist pública: `centralldark.com` · `admin.centralldark.com` · `api.centralldark.com` · `mcp.centralldark.com/mcp`.
+Domínio extra em Caddy/DNS = `LEGADO | NECESSÁRIO | RESÍDUO` — não remover sem prova de dependência.
+
 ## Regra de manutenção deste artefato
 
 ```text
