@@ -68,3 +68,14 @@ SINAL
 🏠 **Casa/VPS:** qualquer item que dependa de processo, porta, dispositivo, áudio, serviço, deploy ou runtime permanece separado para re-medição real.
 
 > 🌴 **Verso da Casa:** quem conhece a estrada não precisa inventar outra; marca o caminho, segue o rastro e deixa a realidade dizer se chegou.
+
+## ✅ COBERTURA FÍSICA DAS PONTES
+
+```text
+SKILLS=52
+SKILL.md=52
+INTERLIGADOS.md=52
+COBERTURA=52/52
+```
+
+🔗 Cada nó tem ponte visual-operacional própria. A seleção continua material e mínima; ter ponte não significa carregar a skill.

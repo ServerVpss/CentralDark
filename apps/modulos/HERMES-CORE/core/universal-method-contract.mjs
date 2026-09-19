@@ -10,9 +10,14 @@ const ROOT = path.resolve(__dirname, '..', '..', '..', '..');
 
 const FILES = {
   universal: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/UNIVERSAL-ENGINE-METHOD.yml',
+  operationalMethod: '.agents/skills/centraldark-operational-method/SKILL.md',
+  contract: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml',
+  triggers: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml',
+  bandScore: 'docs/BRAIN/01-CONCEITOS/02-BANDA/BANDA_COMPASSO_GLOBAL.json',
   aureola: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml',
   master: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml',
   engine: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml',
+  autoconfigRuntime: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/HERMES-AUTOCONFIG-RUNTIME.yml',
   hermesPrompt: 'apps/modulos/HERMES-CORE/prompts/hermes-core.md',
   tlc23: 'docs/CONSCIENCIA/04-MCP-E-CONECTORES/tlc23.pdf',
 };
@@ -87,9 +92,14 @@ function parseEngineNames(engineText) {
 
 export function validateUniversalMethod() {
   const universal = read(FILES.universal);
+  const operationalMethod = read(FILES.operationalMethod);
+  const contract = read(FILES.contract);
+  const triggers = read(FILES.triggers);
+  const bandScore = read(FILES.bandScore);
   const aureola = read(FILES.aureola);
   const master = read(FILES.master);
   const engine = read(FILES.engine);
+  const autoconfigRuntime = read(FILES.autoconfigRuntime);
   const hermesPrompt = read(FILES.hermesPrompt);
   const tlc23Hash = sha256(readBuffer(FILES.tlc23));
 
@@ -115,9 +125,40 @@ export function validateUniversalMethod() {
     'meta_lupa_required: true',
     'breaths_total: 17',
     'delta_minimum_required: true',
+    'semantic_identity_is_owner_capability_scope: true',
+    'transient_execution_ids_are_provenance_only: true',
+    'same_scope_evolves_existing_owner_job: true',
+    'new_equivalent_job_without_material_split: false',
+    'human_return_requires_human_frontier_or_exact_hard_blocker: true',
     'model_identity_must_not_block_scope: true',
     'next_cursor_required_when_not_fixed_point: true',
+    'same_body_evolution:',
+    'semantic_identity: [OWNER, CAPABILITY, SCOPE]',
+    'hardcode_transient_execution_id_in_contract: FORBIDDEN',
+    'same_scope_existing_job: PATCH_AND_EVOLVE',
+    'same_scope_existing_workflow: PATCH_AND_EVOLVE',
+    'create_v2_v3_v4_for_same_capability: FORBIDDEN',
+    'new_job_workflow_or_runtime_requires_material_split: true',
+    'machine_resolvable_blocker_auto_continue: true',
+    'same_scope_microapproval_required: false',
+    'EXACT_HARD_BLOCKER_AFTER_AUTHORIZED_ROUTES_EXHAUSTED',
+    'mass_job_creation_without_independent_boundaries: FORBIDDEN',
+    'complexity_without_capability_gain: REGRESSION',
+    'aureola_learning_contract:',
+    'applies_to: [SOL, HERMES, PIVETE, CURRENT_EXECUTOR, ALL_CURRENT_AND_FUTURE_ENGINES]',
+    'SOL_AND_HERMES_SHARE_SAME_LEARNING_CONTRACT: true',
+    'bounded_100_percent:',
+    'requires_explicit_denominator: true',
+    'calculation_only_global_runtime_claim: false',
   ], 'UNIVERSAL_CONTRACT');
+
+  requireTokens(operationalMethod, [
+    '## AURÉOLA DISCOVERY HARVEST — SOL + HERMES',
+    'AUREOLA_MATERIAL_DISCOVERY',
+    'SOL_AND_HERMES_SHARE_SAME_LEARNING_CONTRACT = true',
+    'CONTRACT_COVERAGE = PASSED_DEFINED_CHECKS / ALL_DEFINED_CHECKS',
+    'CALCULATION != RUNTIME_OBSERVATION',
+  ], 'OPERATIONAL_METHOD_LEARNING');
 
   let previous = -1;
   for (const token of REQUIRED_CHAIN) {
@@ -132,6 +173,11 @@ export function validateUniversalMethod() {
     'AUREOLA_IS_OPERATIONAL_TRACE_NOT_PRIVATE_CHAIN_OF_THOUGHT: true',
     'BIBLE_REFERENCE_IS_SEMANTIC_CUE_NOT_PROOF: true',
     'VERSE_DOES_NOT_REPLACE_EVIDENCE: true',
+    'AUREOLA_MATERIAL_DISCOVERY_EMITS_LEARNING_CANDIDATE: true',
+    'MATERIAL_DISCOVERY_REQUIRES_LEARNING_REF: true',
+    'learning_binding:',
+    'event: AUREOLA_MATERIAL_DISCOVERY',
+    'proof_then_crystallize: true',
   ], 'AUREOLA');
 
   requireTokens(master, [
@@ -143,9 +189,74 @@ export function validateUniversalMethod() {
     'reality_is_judge: true',
     'runtime_claim_requires_runtime_evidence: true',
     'mission_fixed_point_stops_learning_capacity: false',
+    'COT_REACT_LOOP:',
+    'private_chain_of_thought_exposed: false',
+    'operational_hud_protocol:',
+    'HUD_FIRST_BEFORE_MATERIAL_EXECUTION: true',
+    'GOAL_STAYS_VISIBLE_DURING_EXECUTION: true',
+    'no_useless_narration: true',
+    'EVENT_SNAPSHOT_IS_NOT_CURRENT: true',
+    'LIVE_LABEL_REMEASUREMENT_REQUIRED_FOR_CURRENT_CLAIM: true',
+    'current_pr_labels_require_live_api_read: true',
+    'continuity_hud:',
+    'HUD_IS_NOT_PROOF: true',
+    'UNKNOWN_STAYS_UNKNOWN: true',
+    'operational_narration:',
+    'NARRATION_IS_NOT_EXECUTION: true',
+    'VERSE_IS_NOT_GATE: true',
+    'preventive_continuity_staff:',
+    'display_name: "CAJADO_DA_CORRECAO"',
+    'DOES_NOT_RESTART_MISSION: true',
+    'ASKED_USER_IS_NOT_BLOCKED: true',
     'NEXT_ACORDAR',
     'NEXT_CURSOR',
   ], 'MASTER_CYCLE');
+
+  requireTokens(autoconfigRuntime, [
+    'status: CANONICAL_RUNTIME_CONTRACT',
+    'progressive_autonomy:',
+    'SONHAR:',
+    'EXPERIMENTAR:',
+    'CRISTALIZAR:',
+    'FREEDOM_TO_EXPLORE_IS_NOT_FREEDOM_TO_INVENT_STATE: true',
+    'local_block_does_not_freeze_independent_work: true',
+    'return_to_chefe_after_every_arrow: false',
+    'REALITY_IS_JUDGE: true',
+    'AUTONOMY_IS_MOTOR: true',
+    'aureola_learning_loop:',
+    'EVERY_MATERIAL_DISCOVERY_GETS_LEARNING_REF: true',
+    'EVERY_DISCOVERY_IS_CANONICAL_FACT: false',
+    'SAME_FINDING_WITHOUT_NEW_EVIDENCE: DROP_DUPLICATE',
+    'PROVEN_RULE_BINDS_TO_RUNTIME: true',
+    'contract_coverage_may_equal_100_percent_when_all_defined_conditions_verified: true',
+    'external_reality_100_percent_from_calculation_only: false',
+  ], 'AUTOCONFIG_RUNTIME');
+
+  requireTokens(contract, [
+    'aureola_material_discovery_is_learning_candidate: true',
+    'every_material_discovery_gets_learning_ref: true',
+    'material_discovery_auto_promotes_to_canonical: false',
+    'operational_rule_learning:',
+    'AUREOLA_MATERIAL_DISCOVERY',
+    'measurement_confidence:',
+    'calculation_is_not_runtime_observation: true',
+    'allowed_when: ALL_DEFINED_SCOPE_CONDITIONS_ARE_DETERMINISTICALLY_VERIFIED',
+  ], 'TRIGGER_CONTRACT_LEARNING');
+
+  requireTokens(triggers, [
+    'event: AUREOLA_MATERIAL_DISCOVERY',
+    'every_material_discovery_is_learning_candidate: true',
+    'every_material_discovery_is_canonical_fact: false',
+    'same_finding_without_new_evidence: DROP_DUPLICATE',
+    'direct_canonical_mutation: false',
+  ], 'TRIGGER_MAP_LEARNING');
+
+  requireTokens(bandScore, [
+    '"learning_candidate_event": "AUREOLA_MATERIAL_DISCOVERY"',
+    '"learning_ref_required_for_material_discovery": true',
+    '"discovery_auto_promotes_to_crystal": false',
+    '"material_discovery_routes_to_existing_learning_pipeline": true',
+  ], 'BAND_LEARNING_BINDING');
 
   requireTokens(engine, REQUIRED_GLOBAL_INHERITANCE, 'ENGINE_GLOBAL_INHERITANCE');
   requireTokens(engine, [
@@ -167,6 +278,11 @@ export function validateUniversalMethod() {
     'ONE_WRITER_PER_SCOPE=true',
     'REALITY_IS_JUDGE=true',
     'UNKNOWN_SKIPPED_PENDING_ARE_NOT_PASS=true',
+    'AUREOLA_MATERIAL_DISCOVERY=LEARNING_CANDIDATE',
+    'EVERY_MATERIAL_DISCOVERY_GETS_LEARNING_REF=true',
+    'DISCOVERY_AUTO_PROMOTES_TO_CANONICAL=false',
+    'REUSE_PROVEN_CRYSTAL_BEFORE_REINVESTIGATE=true',
+    'CALCULATION_SUPPORTS_DECISION_BUT_DOES_NOT_REPLACE_RUNTIME_OBSERVATION=true',
   ], 'HERMES_PROMPT');
 
   const engines = parseEngineNames(engine);
@@ -178,6 +294,8 @@ export function validateUniversalMethod() {
     universal_chain: REQUIRED_CHAIN,
     method_owner: FILES.master,
     hermes_runtime_validator: FILES.universal,
+    autoconfig_runtime: FILES.autoconfigRuntime,
+    progressive_autonomy_modes: ['SONHAR','EXPERIMENTAR','CRISTALIZAR'],
     tlc23_source: FILES.tlc23,
     tlc23_source_sha256: tlc23Hash,
     tlc23_source_gate: 'PASS',
@@ -196,6 +314,23 @@ export function validateUniversalMethod() {
     scope_temperature_warm_ms: 120000,
     breaths_total: 17,
     delta_minimum_required: true,
+    same_body_evolution: true,
+    transient_execution_ids_are_provenance_only: true,
+    aureola_learning_event: 'AUREOLA_MATERIAL_DISCOVERY',
+    material_discovery_learning_ref_required: true,
+    discovery_auto_promotes_to_crystal: false,
+    calculation_replaces_runtime_observation: false,
+    operational_method_learning: true,
+    sol_and_hermes_share_learning_contract: true,
+    operational_hud_first_protocol: true,
+    event_snapshot_current_separation: true,
+    live_label_remeasurement_contract: true,
+    no_useless_narration_contract: true,
+    cot_react_loop_bound: true,
+    continuity_hud_contract: true,
+    operational_narration_contract: true,
+    preventive_continuity_staff_contract: true,
+    bounded_100_percent_requires_explicit_denominator: true,
   };
 }
 
