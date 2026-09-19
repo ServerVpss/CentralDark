@@ -1,0 +1,130 @@
+# Receipt - REGISTER_BEFORE_REPORT + PDF_GATE
+
+Data: 2026-09-19
+PR_MOTHER: #1562
+PR_CHILD: #1579
+Branch: cristal/daily-checklist-finalizer-gate-20260918
+PRE_WRITE_HEAD: 21757850ed27e440ced61c42afbd534b61fd6945
+Owner: LEIA-ME-IA.md + docs/CONSCIENCIA/REMEDICAO.md + .github/pull_request_template.md
+
+## PDF Gate antes da mutacao
+
+```text
+PDF_GATE=ON
+PDF_GATE_OWNER=docs/CONSCIENCIA/04-GATES/PDF-GATE-GLOBAL-TLC23.md
+PDF_GATE_OWNER_BLOB_SHA=bfdc033ae297c98c9c0831d3e6f9d4c3e2292754
+TLC23_SOURCE=docs/CONSCIENCIA/04-MCP-E-CONECTORES/tlc23.pdf
+TLC23_LIBRARY_SOURCE=tlc23.pdf
+TLC23_PAGES_READ=8/8
+TLC23_SIZE_BYTES=206674
+TLC23_SHA256=b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1
+TLC23_READ_BEFORE_MUTATION=true
+NO_AFTER_THE_FACT_PDF_PROOF=true
+```
+
+Leitura aplicada: clausulas de Horn, propagacao ate nao haver novo fato,
+contradicao como falha e modelo minimo como disciplina de menor estrutura
+suficiente. A traducao para a CentralDark permanece subordinada ao owner
+existente e nao cria engine logica paralela.
+
+## Cristal operacional
+
+```text
+GLOBAL_HOUSE_RULE=REGISTER_BEFORE_REPORT
+REGISTER_BEFORE_REPORT=true
+PERSIST_BEFORE_FINAL_REPORT=true
+REPORT_IS_PROJECTION_OF_PERSISTED_STATE=true
+SAME_OPERATING_STANDARD=true
+SAME_METHOD_ACROSS_SURFACES=true
+PROOF_TARGET_IS_SCOPE_BOUND=true
+NO_DIRECT_MAIN_WRITE=true
+ONE_SYSTEM_ONLY=true
+REUSE_BEFORE_CREATE=true
+UNKNOWN != PASS
+DOCUMENTED != EXECUTED
+ACTION != PROOF
+```
+
+Fluxo:
+
+```text
+CHEFE_INTENT
+-> CENTRALDARK
+-> LIVE_STATE
+-> ALIGNMENT
+-> OWNER
+-> PDF_GATE quando aplicavel
+-> MINIMAL_DELTA
+-> EVIDENCE
+-> COUNTERPROOF
+-> REMEDICAO
+-> REGISTRA
+-> PERSIST
+-> READ_BACK
+-> REPORT
+```
+
+## Provas por topico
+
+### TOPICO 1 - PDF GATE
+
+```text
+CLAIM=PDF gate lido antes desta mutacao logica
+SCOPE=CROSS_PLANE_GOVERNANCE
+OWNER=docs/CONSCIENCIA/04-GATES/PDF-GATE-GLOBAL-TLC23.md
+EVIDENCE_REF=TLC23 8 paginas + owner do gate
+FILE_BLOB_SHA=bfdc033ae297c98c9c0831d3e6f9d4c3e2292754
+SHA256=b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1
+STATUS=PROVEN_FOR_PREMUTATION_READ
+```
+
+### TOPICO 2 - PORTA UNIVERSAL
+
+```text
+CLAIM=todo motor que entra pela porta canonica herda registrar-antes-de-relatar
+SCOPE=GITHUB_SOURCE
+OWNER=LEIA-ME-IA.md
+T0=regra detalhada existia em REMEDIACAO/template, mas nao na porta universal
+ACTION=bind global na porta universal
+T1=GLOBAL_HOUSE_RULE=REGISTER_BEFORE_REPORT presente em LEIA-ME-IA.md
+COMMIT_SHA=SELF
+CI_SAME_HEAD=REMEASURE_REQUIRED
+STATUS=CANDIDATE_UNTIL_SAME_HEAD_GATES
+```
+
+### TOPICO 3 - SIMETRIA DE TERRITORIOS
+
+```text
+CLAIM=Casa/GitHub/VPS/MCP/Desktop/Web/Telegram/IDE usam o mesmo metodo
+SCOPE=CROSS_PLANE
+METHOD_EQUIVALENCE=true
+RUNTIME_PROOF_EQUIVALENCE=false
+STATUS=SOURCE_CRYSTALLIZED_RUNTIME_SCOPED
+```
+
+### TOPICO 4 - FECHAMENTO HUMANO
+
+```text
+CLAIM=delta material deve estar persistido e lido de volta antes de ser relatado como feito
+SCOPE=ALL_CENTRALDARK_SURFACES
+REGISTER_BEFORE_REPORT=true
+SAY_DONE_REQUIRES_PERSISTED_EFFECT=true
+WRITE_WITHOUT_READBACK != PROVEN
+STATUS=SOURCE_CRYSTALLIZED
+```
+
+### TOPICO 5 - PR / CI
+
+```text
+PR=#1579
+PRE_WRITE_HEAD=21757850ed27e440ced61c42afbd534b61fd6945
+POST_WRITE_HEAD=REMEASURE_REQUIRED
+MERGEABLE=REMEASURE_REQUIRED
+CI_SAME_HEAD=REMEASURE_REQUIRED
+GLOBAL_FIXED_POINT=NOT_CLAIMED
+```
+
+## Fronteira
+
+Este receipt nao prova Casa/VPS runtime, deploy, boot survival ou fixed point
+global. Cada um continua exigindo prova no proprio territorio.

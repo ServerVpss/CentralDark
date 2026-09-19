@@ -43,6 +43,72 @@ NO_BLIND_OVERWRITE=true
 DURABLE_CONTINUITY_REQUIRES_RECEIPT_AND_NEXT_CURSOR=true
 ```
 
+## 0.1 Regra global - registrar antes de relatar / simetria entre territorios
+
+Esta regra e herdada por **toda a CentralDark**: Casa, GitHub, VPS, MCP,
+Desktop, Web, Telegram, IDE, agentes, automacoes e superficies futuras.
+O metodo e unico; o alvo fisico da prova continua pertencendo ao territorio
+onde o efeito foi alegado.
+
+```text
+GLOBAL_HOUSE_RULE=REGISTER_BEFORE_REPORT
+REGISTER_BEFORE_REPORT=true
+PERSIST_BEFORE_FINAL_REPORT=true
+CHAT_REPORT_WITHOUT_PERSISTED_RECEIPT=INVALID_FOR_MATERIAL_DELTA
+REPORT_IS_PROJECTION_OF_PERSISTED_STATE=true
+SAME_OPERATING_STANDARD=true
+SAME_METHOD_ACROSS_SURFACES=true
+SAME_EVIDENCE_DISCIPLINE=true
+PROOF_TARGET_IS_SCOPE_BOUND=true
+RUNTIME_PROOF_EQUIVALENCE=false
+PDF_GATE_BEFORE_COMMIT_REQUIRED_WHEN_APPLICABLE=true
+```
+
+Fluxo obrigatorio para delta material persistivel:
+
+```text
+CHEFE_INTENT
+-> !CENTRALDARK / #ACORDAR
+-> LIVE_STATE
+-> ALIGNMENT
+-> OWNER_EXISTENTE
+-> PDF_GATE/TLC23 quando o escopo exigir
+-> MINIMAL_DELTA
+-> TESTE
+-> CONTRAPROVA
+-> !REMEDICAO
+-> !REGISTRA
+-> COMMIT/LEDGER/RECEIPT
+-> READ_BACK
+-> PROVAS POR TOPICO
+-> RELATO AO CHEFE
+```
+
+A Casa nao usa conversa bonita como substituto de persistencia. Quando a
+missao produziu delta material persistivel, a primeira frase do fechamento
+deve apontar o registro que **ja existe**, com SHA/ref/receipt real. Se ainda
+nao existe registro, nao declarar `feito`.
+
+Cada territorio segue a mesma disciplina sem fabricar equivalencia de prova:
+
+```text
+CASA  -> prova local + receipt local + reconciliacao versionada quando aplicavel
+GITHUB -> PR/branch + commit SHA + blob/ref + CI do mesmo HEAD
+VPS -> fingerprint/runtime/processo/endpoint/log sanitizado + T0/T1
+MCP/API/DESKTOP/WEB/TELEGRAM/IDE -> prova na propria superficie + ledger versionado
+```
+
+```text
+HASH_IDENTITY != RUNTIME_PROOF
+COMMIT_SHA != RUNTIME_PROOF
+WORKFLOW_GREEN != GLOBAL_FIXED_POINT
+UNKNOWN != PASS
+```
+
+O formato detalhado de remedição/registro e as fileiras de prova pertencem a:
+- `docs/CONSCIENCIA/REMEDICAO.md`
+- `.github/pull_request_template.md`
+
 ## 1. Boot universal
 
 Carregue nesta ordem:
