@@ -18,7 +18,7 @@ PR_MOTHER_MERGEABLE=true
 PR_MOTHER_HEAD=9c2284c0e665f5ffebfbe3577d62777943ae49b5
 
 ACTIVE_FINALIZER_CANDIDATE=#1579
-FINALIZER_HEAD_PRE_PLACAR_UPDATE=6dc4cd81296dba5afb1e48cb5a6f43fbaf6ae987
+PLACAR_PREVIOUS_HEAD=3dec6be7936b3c9dad968eff16ac30ac0ecff8a3
 DAILY_CHECKLIST=PASS
 CI_SAME_HEAD=RUNNING
 GLOBAL_FIXED_POINT=NOT_PROVEN
@@ -29,57 +29,72 @@ GLOBAL_FIXED_POINT=NOT_PROVEN
 | PR | Escopo | Estado vivo | Prova atual | Próximo gate |
 |---|---|---|---|---|
 | #1562 | rendezvous/ledger permanente | OPEN · mergeable=true | mãe não é writer e não deve mergear | receber receipts dos filhos |
-| #1572 | gate do funil PR-mãe | OPEN · mergeable=true | Lupa/codex/lupa-conformance PASS; `porta-de-entrada` FAIL no HEAD | corrigir ferida da porta, rerodar SAME_HEAD |
+| #1572 | gate do funil PR-mãe | OPEN · mergeable=true | Lupa/codex/lupa-conformance PASS; porta falha com `INTERLIGADOS_SCAN_RULE_INVALID` + `INTERLIGADOS_PROOF_BOUNDARY_INVALID` | corrigir owner/regra Interligados e rerodar SAME_HEAD |
 
 ### Fileira 2 — Continuidade / cérebro / runtime
 
 | PR | Escopo | Estado vivo | Prova atual | Próximo gate |
 |---|---|---|---|---|
 | #1573 | preservar ouro em missão interrompida | OPEN · mergeable=false | sem workflow SAME_HEAD observado | reconciliar mergeability antes de qualquer promoção |
-| #1574 | Hermes runtime Casa+VPS | OPEN · mergeable=true | vários gates PASS; `porta-de-entrada` e Trigger Fabric FAIL; codex ainda queued | tratar causa material comum, depois SAME_HEAD |
-| #1576 | one-core + Grok + Obsidian | OPEN · mergeable=true | codex/lupa/CodeQL/grafo PASS; `porta-de-entrada` FAIL | fechar porta-de-entrada no mesmo HEAD |
+| #1574 | Hermes runtime Casa+VPS | OPEN · mergeable=true | vários gates PASS; porta bloqueia porque áreas protegidas `.agents/`, `apps/modulos/HERMES-CORE/`, `docs/CONSCIENCIA/` foram alteradas sem label `👑 PERMITO-SEGREDO`; codex ainda queued | resolver autorização/label sem burlar gate e rerodar SAME_HEAD |
+| #1576 | one-core + Grok + Obsidian | OPEN · mergeable=true | codex/lupa/CodeQL/grafo PASS; porta falha com a mesma assinatura de #1572: `INTERLIGADOS_SCAN_RULE_INVALID` + `INTERLIGADOS_PROOF_BOUNDARY_INVALID` | corrigir causa compartilhada Interligados e rerodar SAME_HEAD |
 
 ### Fileira 3 — MCP / finalização
 
 | PR | Escopo | Estado vivo | Prova atual | Próximo gate |
 |---|---|---|---|---|
 | #1578 | MCP CentralDark direto como rota primária | OPEN · mergeable=false | sem workflow SAME_HEAD observado | reconciliar branch/base e obter gates |
-| #1579 | checklist diário + writer/finalizer lease | OPEN · mergeable=true | workflows SAME_HEAD estão queued/pending | esperar/medir conclusão; nenhum verde antecipado |
+| #1579 | checklist diário + writer/finalizer lease | OPEN · mergeable=true | workflows do HEAD novo estão queued/pending | medir conclusão; nenhum verde antecipado |
 
 ### Feridas materiais consolidadas
 
 ```text
-F1=PORTA_DE_ENTRADA_FAIL_COMPARTILHADA
-  afeta observadamente #1572 #1574 #1576
-  regra: diagnosticar causa comum antes de remendar PR por PR
+F1=INTERLIGADOS_RULE_AND_PROOF_BOUNDARY
+  afeta comprovadamente #1572 e #1576
+  assinatura:
+    INTERLIGADOS_SCAN_RULE_INVALID
+    INTERLIGADOS_PROOF_BOUNDARY_INVALID
+  regra: corrigir uma causa compartilhada no owner canônico, não dois remendos
 
-F2=MERGEABILITY_FALSE
-  afeta observadamente #1573 #1578
+F2=PROTECTED_AREA_AUTHORIZATION_GATE
+  afeta comprovadamente #1574
+  causa:
+    áreas protegidas alteradas sem label 👑 PERMITO-SEGREDO
+  warnings adicionais:
+    secrets/ ausente no checkout
+    apps/modulos/clone-deck/ ausente no checkout
+  warnings != causa principal
+
+F3=MERGEABILITY_FALSE
+  afeta observadamente #1573 e #1578
   regra: reconciliar base/branch sem apagar delta útil
 
-F3=FINALIZER_SAME_HEAD_RUNNING
+F4=FINALIZER_SAME_HEAD_RUNNING
   afeta #1579
   regra: queued/pending != PASS
 
-F4=RUNTIME_END_TO_END
+F5=RUNTIME_END_TO_END
   só depois de child PR promovido
   main → post-merge → micro-deploy aplicável → !REMEDIÇÃO → receipt → volta ao #1562
 ```
 
 ### Ordem mínima do que falta
 
-1. Fechar os workflows do HEAD atual do #1579 e classificar PASS/FAIL/UNKNOWN.
-2. Abrir o log da `porta-de-entrada` e provar se #1572/#1574/#1576 compartilham a mesma causa-raiz.
-3. Resolver `mergeable=false` de #1573 e #1578 com reconciliação semântica e contraprova.
-4. Promover **somente SUB-PR comprovado**; #1562 permanece ledger, nunca veículo de merge.
-5. Após promoção: remedir `main`, executar somente o micro-deploy causal aplicável, medir runtime correspondente e devolver receipt ao #1562.
-6. Só declarar `GLOBAL_FIXED_POINT=PROVEN` quando SAME_HEAD + Reality Judge + runtime aplicável + receipt final estiverem provados.
+1. Esperar/medir os workflows do HEAD atual do #1579 e classificar PASS/FAIL/UNKNOWN.
+2. Corrigir **uma vez** o owner/regra Interligados que causa a mesma falha em #1572 e #1576; rerodar ambos no respectivo SAME_HEAD.
+3. Em #1574, resolver o gate de autorização das áreas protegidas pela via canônica (`👑 PERMITO-SEGREDO` quando realmente autorizado); não transformar warning de caminho ausente em causa-raiz.
+4. Resolver `mergeable=false` de #1573 e #1578 com reconciliação semântica e contraprova.
+5. Promover **somente SUB-PR comprovado**; #1562 permanece ledger, nunca veículo de merge.
+6. Após promoção: remedir `main`, executar somente o micro-deploy causal aplicável, medir runtime correspondente e devolver receipt ao #1562.
+7. Só declarar `GLOBAL_FIXED_POINT=PROVEN` quando SAME_HEAD + Reality Judge + runtime aplicável + receipt final estiverem provados.
 
 ```text
 MERGEABLE=true != CI_PASS
 WORKFLOW_QUEUED != PASS
 SOURCE_PRESENT != RUNTIME_PROVEN
-PR_MOTHER_OPEN != PROMOTION_READY
+WARNING != ROOT_CAUSE
+SAME_ERROR_SIGNATURE_CAN_SHARE_FIX=true
+DIFFERENT_ERROR_SIGNATURE_MUST_NOT_BE_FORCE_MERGED=true
 UNKNOWN != PASS
 ```
 
