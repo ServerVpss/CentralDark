@@ -89,9 +89,8 @@ def validate_history(text: str, root: Path) -> list[str]:
             continue
 
         if classification in {"FATO", "CURRENT"}:
-            if source.startswith("github:") or source.startswith("PR#"):
-                continue
-            if not (root / source).exists():
+            is_external_reference = source.startswith("github:") or source.startswith("PR#")
+            if not is_external_reference and not (root / source).exists():
                 errors.append(f"{claim_id}: source does not exist: {source}")
 
         if classification == "CURRENT" and "SNAPSHOT" not in temporal:
