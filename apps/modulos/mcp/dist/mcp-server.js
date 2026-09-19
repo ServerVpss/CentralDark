@@ -8,7 +8,8 @@ import { log } from "./log.js";
 import { ALL_TOOLS, CATALOG_VERSION } from "./tools/core/tools-catalog.js";
 import { readSemanticManifest, SEMANTIC_MANIFEST_URI } from "./tools/cognitivo/semantic.js";
 import { sanitizeOutgoingDeep } from "./lib/sanitize.js";
-import { auditToolExecution } from "./audit-logger.js";\nimport { decorateToolResult } from "./tool-result-envelope.js";
+import { auditToolExecution } from "./audit-logger.js";
+import { decorateToolResult } from "./tool-result-envelope.js";
 function zodTypeToJsonSchema(schema) {
     if (schema instanceof z.ZodOptional || schema instanceof z.ZodDefault) {
         return zodTypeToJsonSchema(schema._def.innerType);
