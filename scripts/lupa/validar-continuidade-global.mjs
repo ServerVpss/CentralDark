@@ -94,6 +94,15 @@ function validateMainWriter(path, text, sharedScriptText) {
     if (!sharedScriptText.includes("git push origin HEAD:main")) {
       errors.push(`MAIN_WRITER_SHARED_PUSH_MISSING:${path}`);
     }
+    if (sharedScriptText.includes('bash -lc "$REGENERATE_CMD"')) {
+      errors.push(`MAIN_WRITER_SHARED_REGENERATE_LOGIN_SHELL_FORBIDDEN:${path}`);
+    }
+    if (!sharedScriptText.includes('env -u BASH_ENV -u ENV /bin/bash --noprofile --norc -c "$REGENERATE_CMD"')) {
+      errors.push(`MAIN_WRITER_SHARED_REGENERATE_CWD_SAFE_MISSING:${path}`);
+    }
+    if (!sharedScriptText.includes('REGENERATE_CWD_MISMATCH') || !sharedScriptText.includes('REGENERATE_ESCAPED_WORKTREE')) {
+      errors.push(`MAIN_WRITER_SHARED_REGENERATE_CWD_GUARD_MISSING:${path}`);
+    }
     // Remove shell comments (# ...) before scanning for forbidden commands,
     // so a comment like "# - ZERO rebase -X ours" is not flagged as a real command.
     const stripComments = (src) => src.split("\n").filter((l) => !l.trim().startsWith("#")).join("\n");

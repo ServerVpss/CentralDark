@@ -44,6 +44,37 @@ else
     FAILED=1
 fi
 
+# Teste 2.1: Delta Gate deve bloquear squash sem delta exato base→head
+# Mantém a decisão no hosted-compatibility-gate, sem segundo promotor.
+echo ""
+echo "🧪 Teste 2.1: hosted-compatibility-gate exige delta comprovado antes do squash"
+if node - <<'NODE'
+const fs = require('node:fs');
+const workflow = fs.readFileSync('.github/workflows/dependabot-auto-merge.yml', 'utf8');
+const required = [
+  'github.rest.repos.compareCommits',
+  "status === 'AHEAD'",
+  'DELTA_GATE=',
+  'DELTA_BASE_SHA:',
+  'DELTA_HEAD_SHA:',
+  'DELTA_AHEAD_BY:',
+  'DELTA_FILES_CHANGED:',
+  'DELTA_STATUS:',
+  'uniqueBlockers.length === 0 && deltaGate.ok',
+  'SQUASH_RESULT_SHA:',
+];
+for (const token of required) {
+  if (!workflow.includes(token)) throw new Error(`DELTA_GATE token ausente: ${token}`);
+}
+console.log('  ✅ Delta Gate base→head, receipt e contraprova de squash presentes');
+NODE
+then
+    :
+else
+    echo "  ❌ Delta Gate incompleto no hosted-compatibility-gate"
+    FAILED=1
+fi
+
 # Teste 3: Verificar se resolve-conflicts.sh existe e é executável
 echo ""
 echo "🧪 Teste 3: resolve-conflicts.sh existe e é executável"

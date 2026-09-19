@@ -14,6 +14,19 @@ test('forwarded external project fix becomes candidate and preserves epistemic s
   assert.ok(result.findings.some((f) => f.id === 'SILENT_FALLBACK_AUDIT'));
 });
 
+test('CodeRabbit review vira candidato consultivo e nunca prova', () => {
+  const result = classifyExternalSignal({
+    source: 'github_pull_request_review',
+    sender: 'coderabbitai[bot]',
+    subject: 'CodeRabbit review PR #1555',
+    body: 'Potential regression: fallback silently hides a failed import.',
+  });
+  assert.equal(result.state, 'CANDIDATE');
+  assert.ok(result.findings.some((f) => f.id === 'CODERABBIT_REVIEW'));
+  assert.ok(result.invariants.includes('CODERABBIT_REVIEWS_ONLY'));
+  assert.ok(result.invariants.includes('REVIEW_IS_NOT_PROOF'));
+});
+
 test('irrelevant event stays NO_DELTA', () => {
   const result = classifyExternalSignal({ source: 'gmail', subject: 'hello', body: 'nothing material here' });
   assert.equal(result.state, 'NO_DELTA');
