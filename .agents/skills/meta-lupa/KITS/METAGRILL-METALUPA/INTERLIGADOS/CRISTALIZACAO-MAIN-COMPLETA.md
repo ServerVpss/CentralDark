@@ -89,6 +89,27 @@ Incluem, entre outros:
 🔗 CURRENT_BINDING_CHAIN
 ```
 
+## 🔒 Gate determinístico — sem dívida escondida
+
+```text
+scripts/lupa/validar-interligados-pr-padroes.mjs
+```
+
+O gate falha quando:
+
+```text
+🔴 padrão obrigatório desaparece
+🔴 owner deixa de ser META-LUPA
+🔴 padrão documental tenta fingir runtime provado
+🔴 aresta viva deixa de permanecer explícita como dívida de re-medição
+🔴 mapa mental perde a cadeia canônica
+🔴 skill-nó material desaparece da costura
+🔴 pasta visual do bloco deixa de usar MAIÚSCULAS
+🔴 markdown do bloco perde emoji ou gatilho mental
+```
+
+Regra: **dívida real não some por texto; ela permanece nomeada até Casa/VPS/WEB provar o estado vivo.**
+
 ## 🏠 Tudo que continua fora do verde sem prova viva
 
 ```text
@@ -148,3 +169,13 @@ REALIDADE = juiz final
 ```
 
 Este arquivo não declara runtime verde. Ele cristaliza somente a arquitetura mental, contratos e interligações que podem existir corretamente na `main` sem prova local.
+
+## 🔗 Materialização total das pontes de skill
+
+```text
+CURRENT_TOP_LEVEL_SKILLS=52
+SKILL_CONTRACTS=52
+VISUAL_OPERATIONAL_BRIDGES=52
+```
+
+Cada skill curada em `.agents/skills/<skill>/` deve possuir `SKILL.md` + `INTERLIGADOS.md`. A ponte carrega emoji, gatilho material, estrada, retorno e cadeados; não altera o owner funcional nem converte documentação em execução.

@@ -2,7 +2,7 @@
 title: "📜 PDF CC2003 — Main Fixed Point"
 status: "ATIVO_RECONCILIADO"
 date: 2026-09-09
-updated: 2026-09-12
+updated: 2026-09-18
 owner: "docs/RECEIPTS/PDF_CC2003_MAIN_FIXED_POINT.md"
 truth_scope: "PDF_CONFORMANCE_AND_ARTIFACT_IDENTITY_RECEIPT"
 canonical: true
@@ -98,7 +98,7 @@ Hermes já carrega `ARTIFACT-PROPERTIES.yml` no prompt canônico; portanto a tra
 - ✅ DETERMINISTIC_GATE_ON_MAIN=`PROVED_IN_SCOPE`
 - ✅ ARTIFACT_IDENTITY_POLICY_ON_MAIN=`PROVED_IN_SCOPE`
 - ✅ TEST_FILE_ON_MAIN=`PROVED_IN_SCOPE`
-- 🟡 TEST_EXECUTION_AFTER_2026_09_12_DELTA=`UNKNOWN_UNTIL_RUNTIME_OR_CI_OUTPUT`
+- ✅ TEST_EXECUTION_AFTER_2026_09_12_DELTA=`PROVED_ON_CASA_2026_09_18`
 - 🟡 SAME_HEAD_CI=`UNKNOWN_UNTIL_MEASURED`
 - 🟡 HERMES_LOCAL_RUNTIME_CONSUMPTION=`UNKNOWN_UNTIL_SYNC_AND_TEST`
 - 🟡 HERMES_VPS_RUNTIME_CONSUMPTION=`UNKNOWN_UNTIL_SYNC_AND_TEST`
@@ -106,3 +106,33 @@ Hermes já carrega `ARTIFACT-PROPERTIES.yml` no prompt canônico; portanto a tra
 ## 🧭 Limite
 
 `ON_MAIN != EXECUTED` e `DOCUMENTED != RUNTIME_PROVED`. O ponto fixo desta melhoria só sobe de **cristalização canônica** para **ponto fixo operacional cruzado** quando Casa e VPS sincronizarem a mesma main e produzirem os outputs determinísticos esperados sem regressão.
+
+
+## ✅ Execução CURRENT na Casa — 2026-09-18 16:33 -03
+
+Owner executado sem criar gate paralelo:
+
+- `E:\CentralDark\CentralDark\scripts\lupa\pdf-conformance-cc2003.mjs`
+- runner existente: `E:\CentralDark\runtime\scheduled-jobs\run-scheduled-sector.ps1 -Sector PDF_GATE`
+
+Cadeia medida:
+
+- `identity=PASS`
+- `policy=PASS`
+- `self-test=PASS`
+- `node:test=5/5 PASS`
+- `tamper counterproof=PASS`
+- `PDF_GATE_PROMOTED=true`
+- `exit_code=0`
+
+Contraprova de tamper alterou bytes mantendo nome/tamanho e recebeu `BYTE_IDENTITY_MISMATCH`, portanto o gate permaneceu fail-closed contra artefato adulterado.
+
+Receipt CURRENT:
+
+`C:\Users\Administrador\AppData\Local\CentralDark\ScheduledJobs\receipts\PDF_GATE-latest.json`
+
+Log CURRENT:
+
+`C:\Users\Administrador\AppData\Local\CentralDark\ScheduledJobs\logs\PDF_GATE-20260918-163324.log`
+
+Limite preservado: esta execução prova o PDF_GATE na Casa. Não prova, por si só, consumo Hermes VPS nem SAME-HEAD CI.
