@@ -103,3 +103,48 @@ FINALIZER:
 ```
 
 Este receipt registra a música; não declara a sinfonia concluída.
+
+## Correção de interpretação — commit vive no PR, não “fala com o CHEFE”
+
+A leitura foi corrigida pelo CHEFE e incorporada ao receipt:
+
+```text
+COMMIT_IS_PR_STATE=true
+COMMIT_IS_NOT_MESSAGE_TO_CHEFE=true
+COMMENTS_ARE_RENDEZVOUS_RECEIPTS=true
+AGENT_IDENTITY_FROM_GIT_AUTHOR=UNKNOWN_UNLESS_SEPARATELY_PROVEN
+PR_IS_THE_MATERIAL_TRACK=true
+CI_JUDGES_THE_HEAD=true
+```
+
+O que foi provado no histórico é somente que **o PR recebeu commits em sequência** e que esses commits carregaram metadados de coordenação. Isso não autoriza inferir que um commit foi “feito para o CHEFE” nem identificar o modelo exato pelo `author` Git.
+
+### CURRENT reancorado antes desta mutação
+
+```text
+HEAD_BEFORE_THIS_COMMIT=7e53de6b76917c818aee074a9c7d2631071f74dd
+PDF_GATE_CASA_BEFORE_THIS_COMMIT=PASS
+WRITER=SOL_CHATGPT
+WRITER_SCOPE=LEDGER_RECEIPT_ONLY
+OTHER_WRITER_SCOPE_NOT_TOUCHED=true
+NULL_OWNER_PATCH=NONE_REQUIRED
+NEXT=CI_SAME_HEAD
+```
+
+### Regra de compasso corrigida
+
+```text
+PR
+→ commit material
+→ novo HEAD
+→ SAME_HEAD CI
+→ blocker discriminante
+→ writer com lease do escopo
+→ microdelta
+→ novo commit no PR
+→ novo HEAD
+→ remedição
+```
+
+O PR é o trilho material. Os agentes são executores substituíveis; o `author` Git registra identidade Git, não prova sozinho qual engine/modelo operou.
+
