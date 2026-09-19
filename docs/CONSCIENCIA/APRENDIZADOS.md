@@ -259,6 +259,12 @@ updated: 2026-08-27
 - **Contexto:** Na reconciliação `CASA → VPS → MAIN`, o runtime local tinha alterações misturadas: arquivos gerados de status/grafo, cursores `.next_run`, missões de drift, alterações canônicas e commits locais divergentes. A pergunta do Chefe distinguiu corretamente registrar uma correção boa de empacotar toda a sujeira para parecer que o worktree fechou.
 - **Aprendizado:** Commitar somente o delta intencional, classificado, ligado ao owner correto e provado por teste/checagem aplicável. Não usar commit para limpar `git status`. Runtime gerado, painel/status, `.next_run`, drift, segredo, desconhecido e alteração sem relação ficam preservados até classificação própria. Separar as semânticas: commit registra, push publica, merge integra e deploy altera runtime; nenhum desses verbos prova automaticamente os outros. Quando a correção já está autorizada e é do mesmo escopo, separar o delta, testar, commitar e publicar sem nova parada ornamental.
 
+### 52. ORGANISMO ≠ FERRAMENTAS NA MESA — motor substituível; captura ≠ fixed point
+- **Categoria:** regra
+- **Data:** 2026-09-19
+- **Contexto:** CHEFE validou o desenho: intenção → SOL/Hermes → cron → Grok motor atual → fallback (cota) → gateway vivo → deploy monitorado → Telegram só fato material. Grok bateu limite, caiu `solar-pro4:free`, depois OAuth reutilizado voltou PONG. Sem `reset --hard`, sem `pm2 restart all`, sem arquitetura nova.
+- **Aprendizado:** “Meu agente usa um modelo” é frágil. “O sistema usa modelos como motores substituíveis” é a Casa. Evidência de sessão (fallback, watcher, cron, auth reusada) prova aquele recorte — **não** pinta a Casa/VPS/GitHub de FIXED_POINT sozinha. Monitor separado do executor. Se um motor falha, a tropa não senta.
+
 ### 51. DELTA ÚTIL DA RESENHA — locução 2 min + base dos cavaleiros; não construir o que ainda é ⚫
 - **Categoria:** regra
 - **Data:** 2026-09-19
