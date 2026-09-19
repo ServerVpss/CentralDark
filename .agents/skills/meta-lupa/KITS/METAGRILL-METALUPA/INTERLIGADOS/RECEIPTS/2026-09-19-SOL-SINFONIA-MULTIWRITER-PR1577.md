@@ -147,3 +147,91 @@ PR
 ```
 
 O PR é o trilho material. Os agentes são executores substituíveis; o `author` Git registra identidade Git, não prova sozinho qual engine/modelo operou.
+
+## CURRENT · HUMAN_BOUNDARY DEDUPE + GATE HANDOFF
+
+Medição no HEAD `c7db0befa6d8044b1f048d883f3caacfa741a2cd` mostrou que a proposta de criar um contrato novo para HUMAN_BOUNDARY **não sobrevive ao dedupe**.
+
+Owners existentes já cobrem a semântica útil:
+
+```text
+machine_resolvable_blocker_auto_continue=true
+same_scope_microapproval_required=false
+local_block_does_not_freeze_independent_safe_work=true
+
+return_only_when:
+  HUMAN_FRONTIER
+  EXACT_HARD_BLOCKER_AFTER_AUTHORIZED_ROUTES_EXHAUSTED
+  NEW_HUMAN_INTENT_REQUIRED
+
+human_frontier_examples:
+  SECRET_OR_MFA_OR_EXCLUSIVE_CONSENT
+  PHYSICAL_ACTION
+  IRREVERSIBLE_OUT_OF_SCOPE_AUTHORIZATION
+  GENUINE_HUMAN_CHOICE_WITHOUT_TECHNICAL_EQUIVALENT
+
+technical_failure_alone_requires_human_return=false
+queued_job_alone_requires_human_return=false
+next_safe_route_should_be_attempted_before_return=true
+CONTINUE_NEXT_CURSOR
+```
+
+Logo:
+
+```text
+NEW_HUMAN_BOUNDARY_CONTRACT=false
+CREATE_SELF_GOAL_NEW_OWNER=false
+SEMANTIC_CAPABILITY_ALREADY_EXISTS=true
+DELTA_SURVIVOR=TORNAR_EXPLICITO_QUE_UNKNOWN_NAO_E_PERMISSAO_PARA_MUTAR
+UNKNOWN != PASS
+UNKNOWN != PERMISSION_TO_MUTATE
+TECHNICAL_BLOCKER -> MEASURE -> CLASSIFY -> VERIFY_SCOPE -> VERIFY_OWNER -> VERIFY_LEASE -> DERIVE_CAUSAL_MICRO_GOAL -> MINIMAL_SAFE_ACTION -> RETEST -> REMEASURE -> CONTINUE_NEXT_CURSOR
+```
+
+### PDF_GATE/TLC23 executado neste HEAD
+
+```text
+PDF_SIZE=206674
+PDF_SHA256=b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1
+PDF_SELF_TEST=PASS
+PDF_NODE_TEST=5/5_PASS
+```
+
+### Blocker discriminante CURRENT
+
+`node scripts/lupa/validar-continuidade-global.mjs --json` no mesmo HEAD falhou fechado com:
+
+```text
+COMMIT_COMPASS_SCOPE_VIOLATION:
+  2fc971c90e1f95f3e6cc139fe3f9d43f22fb8ede
+
+COMMIT_COMPASS_UNADOPTED_COMMIT:
+  1db164c521cedc05fb6be2bb78b95ea2e230a518
+  3195b21fbfcd0e60b43d8e84e871551416250505
+  fb0a2f75dfccb386666d41c28ce33ad6f1ba0d18
+  1738b7710f87d1044a61fa99ddd16e6e1fca2c98
+  e94596a7711b99d71a94e0ddb400ee9d11311bbb
+  e9c088b87fef82ae094f2645860ae138197e5b39
+  4b78525971c108d3b82d64e722e0a4e9d35e738a
+
+COMMIT_COMPASS_CROSS_WRITER_PATH_COLLISION:
+  apps/bot-telegram/evolucao-ias.cjs
+  first=SOL_CHATGPT
+  second=SOL
+```
+
+### Handoff ao outro writer
+
+Este receipt **não toca** `scripts/lupa/validar-continuidade-global.mjs`.
+
+```text
+OTHER_WRITER_ACTION=RECONCILE_COMPASS_HISTORY_AND_ADOPTIONS_IN_VALIDATOR_OWNER
+THIS_WRITER_ACTION=REMEASURE_AFTER_OTHER_WRITER_COMMIT
+NO_FORCE_PUSH=true
+NO_HISTORY_REWRITE=true
+ONE_FINALIZER=true
+PROMOTION_READY=false
+```
+
+A música continua no mesmo PR; o próximo commit do setor COMPASS/CI deve resolver somente esses blockers e devolver novo HEAD para SAME_HEAD.
+
