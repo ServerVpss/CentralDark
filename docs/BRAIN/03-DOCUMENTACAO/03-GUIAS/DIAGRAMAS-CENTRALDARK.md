@@ -331,6 +331,8 @@ stateDiagram-v2
 ```
 
 Allowlist pública: `centralldark.com` · `admin.centralldark.com` · `api.centralldark.com` · `mcp.centralldark.com/mcp`.
+`mcp.centralldark.com/admin` = aba MCP na mesma Casa, **não** HUB.
+`hub.centralldark.com` = LEGADO (403). Não recriar subdomínio HUB.
 Domínio extra em Caddy/DNS = `LEGADO | NECESSÁRIO | RESÍDUO` — não remover sem prova de dependência.
 
 ### Base de comando — cavaleiros da VPS / cavaleiro do deploy
