@@ -53,17 +53,6 @@ jobs:
         run: |
           set -Eeuo pipefail
           umask 077
-          RUNTIME_FILES=(
-            "$RUNTIME_CONTRACT"
-            "$VALIDATOR"
-            "$HERMES_PROMPT"
-            "$OPERATIONAL_METHOD"
-            "$UNIVERSAL_METHOD"
-            "$TRIGGER_CONTRACT"
-            "$TRIGGER_MAP"
-            "$AUREOLA_CONTRACT"
-            "$BAND_SCORE"
-          )
           exec 9>/tmp/centraldark-mcp-deploy.lock
           flock -w 90 9 || { echo "DEPLOY_LOCK_TIMEOUT"; exit 21; }
 
