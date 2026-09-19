@@ -30,6 +30,8 @@ const EVIDENCE_ONTOLOGY = 'docs/GOVERNANCA/ONTOLOGIA-DE-EVIDENCIA-E-CAUSALIDADE.
 const EVOLUTION_GATE = '.agents/skills/meta-lupa/scripts/evolution_gate.py';
 const PORTABLE_SCRIPT = 'scripts/lupa/portable-kernel.mjs';
 const PORTABLE_TEST = 'scripts/lupa/portable-kernel.test.mjs';
+const UNIVERSAL_ENGINE_METHOD = 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/UNIVERSAL-ENGINE-METHOD.yml';
+const MASTER_CYCLE = 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml';
 
 function git(args) {
   return execFileSync('git', ['-C', ROOT, ...args], {
@@ -162,6 +164,8 @@ const PORTABLE_SOURCE_FILES = [
   '.agents/skills/meta-lupa/testes/test_evolution_gate.py',
   PORTABLE_SCRIPT,
   PORTABLE_TEST,
+  UNIVERSAL_ENGINE_METHOD,
+  MASTER_CYCLE,
 ];
 
 const SOURCE_FILES = [...new Set([
@@ -186,6 +190,33 @@ const members = SOURCE_FILES.map((path) => {
 const memberByPath = new Map(members.map((item) => [item.path, item]));
 
 const CAPABILITY_SPECS = [
+  {
+    id: 'MACHINE_RESOLVABLE_CONTINUATION',
+    layer: 'AUTONOMY',
+    owner: UNIVERSAL_ENGINE_METHOD,
+    markers: [
+      'machine_resolvable_continuation:',
+      'semantic_name: DERIVED_CAUSAL_MICRO_GOAL',
+      'self_goal_alias: SELF_GOAL',
+      'self_goal_is_new_parent_goal: false',
+      'unknown_alone_authorizes_mutation: false',
+      'parent_goal_must_survive: true',
+      'existing_owner_must_survive: true',
+      'writer_lease_must_survive_same_mutable_scope: true',
+      'DERIVE_CAUSAL_MICRO_GOAL',
+      'CLASSIFY_THEN_CONTINUE_IF_MACHINE_RESOLVABLE_AND_AUTHORIZED',
+      'never: BLIND_PATCH',
+    ],
+    consumer: MASTER_CYCLE,
+    consumer_markers: [
+      'machine_resolvable_blocker_transition:',
+      'technical_blocker_is_not_human_boundary_by_itself: true',
+      'unknown_is_not_permission_to_mutate: true',
+      'self_goal_semantics: DERIVED_CAUSAL_MICRO_GOAL',
+      'human_return_only_when:',
+    ],
+    reproduction: 'MEASURE_CLASSIFY_DERIVE_CAUSAL_MICRO_GOAL_PRESERVE_PARENT_OWNER_LEASE_RETEST_REMEASURE_CONTINUE',
+  },
   {
     id: 'DAILY_CHECKLIST_DAY_BOUND_GATE',
     layer: 'GOVERNANCE',
@@ -482,6 +513,9 @@ const condensedDna = {
     'MULTIPLE_WRITERS_DISJOINT_SCOPES_SINGLE_FINALIZER_PROMOTION',
     'MODEL_NAME_IS_NOT_ROUTING_AUTHORITY',
     'GOAL_PAI_SURVIVES_PROMOTION_DEPLOY_AND_REMEASUREMENT',
+    'TECHNICAL_BLOCKER_DERIVES_CAUSAL_MICRO_GOAL_BEFORE_HUMAN_RETURN',
+    'UNKNOWN_IS_NOT_PERMISSION_TO_MUTATE',
+    'HUMAN_RETURN_REQUIRES_PROVEN_FRONTIER_OR_EXHAUSTED_HARD_BLOCKER',
     'REALITY_AND_DISCRIMINATING_TEST_OVERRULE_MODEL_VOTE',
     'UNKNOWN_IS_NOT_PASS',
     'SOURCE_IS_PROVENANCE_NOT_AUTHORITY',
@@ -509,6 +543,7 @@ const condensedDna = {
     'RECONCILE_BEFORE_CREATE',
     'VERIFY_DAILY_CHECKLIST_RECEIPT_BOUND_TO_HEAD_COMMIT_DAY',
     'ACQUIRE_WRITER_OR_FINALIZER_LEASE_BY_SCOPE',
+    'CLASSIFY_BLOCKER_AND_DERIVE_MICRO_GOAL_WITHIN_AUTHORIZED_SCOPE',
     'EXECUTE_MINIMAL_CAUSAL_DELTA_WITH_ONE_WRITER',
     'VERIFY_CLAIM_ON_SAME_TARGET',
     'ABSORB_REUSABLE_DELTA_OR_NO_CHANGE',
@@ -595,6 +630,8 @@ const receipt = {
   multi_writer_policy: 'PASS',
   finalizer_lease_policy: 'PASS',
   goal_pai_round_trip_policy: 'PASS',
+  machine_resolvable_continuation_policy: 'PASS',
+  human_boundary_policy: 'PASS',
   runtime_claim: 'UNPROVEN_BY_PORTABLE_KERNEL',
 };
 
