@@ -42,7 +42,7 @@ def validate_history(text: str, root: Path) -> list[str]:
         if invariant not in text:
             errors.append(f"missing invariant: {invariant}")
 
-    acts = re.findall(r"(?m)^## ATO [IVXLCDM]+\\b", text)
+    acts = re.findall(r"(?m)^## ATO [IVXLCDM]+\b", text)
     if len(acts) < 12:
         errors.append(f"insufficient historical acts: {len(acts)}")
 
@@ -62,7 +62,7 @@ def validate_history(text: str, root: Path) -> list[str]:
             errors.append(f"missing failure taxonomy term: {term}")
 
     matrix_match = re.search(
-        r"## Matriz de prova narrativa\\n(?P<body>.*?)(?:\\n---\\n|\\n## )",
+        r"## Matriz de prova narrativa\n(?P<body>.*?)(?:\n---\n|\n## )",
         text,
         flags=re.S,
     )
@@ -72,7 +72,7 @@ def validate_history(text: str, root: Path) -> list[str]:
 
     rows = [
         line for line in matrix_match.group("body").splitlines()
-        if re.match(r"^\\| C\\d+ \\|", line.strip())
+        if re.match(r"^\| C\d+ \|", line.strip())
     ]
     if len(rows) < 10:
         errors.append(f"proof matrix too small: {len(rows)}")
@@ -82,6 +82,7 @@ def validate_history(text: str, root: Path) -> list[str]:
         if len(cells) != 4:
             errors.append(f"malformed proof row: {row}")
             continue
+
         claim_id, classification, temporal, source = cells
         if not source:
             errors.append(f"{claim_id}: empty source")
@@ -122,12 +123,12 @@ class HistoryResilienceTests(unittest.TestCase):
         self.assertTrue(any("source does not exist" in error for error in errors), errors)
 
     def test_unknown_promoted_to_pass_is_rejected(self):
-        text = HISTORY.read_text(encoding="utf-8") + "\\nUNKNOWN_IS_PASS=true\\n"
+        text = HISTORY.read_text(encoding="utf-8") + "\nUNKNOWN_IS_PASS=true\n"
         errors = validate_history(text, ROOT)
         self.assertTrue(any("forbidden false-green token" in error for error in errors), errors)
 
     def test_history_promoted_to_authority_is_rejected(self):
-        text = HISTORY.read_text(encoding="utf-8") + "\\nHISTORY_IS_AUTHORITY=true\\n"
+        text = HISTORY.read_text(encoding="utf-8") + "\nHISTORY_IS_AUTHORITY=true\n"
         errors = validate_history(text, ROOT)
         self.assertTrue(any("forbidden false-green token" in error for error in errors), errors)
 
