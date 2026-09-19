@@ -133,6 +133,46 @@ function providerSummary(snapshot, providerId) {
   return '🟡 ' + conns.length + ' conta(s), sem teste verde';
 }
 
+function connectionKey(conn, index = 0) {
+  return String(conn?.id || conn?.account_label || 'account-' + (index + 1));
+}
+
+function canFailover(reason, options = {}) {
+  const r = String(reason || '').toUpperCase();
+  if (['AUTH_EXPIRED', 'UNAUTHORIZED', 'ACCOUNT_DISABLED', 'PROVIDER_TEMPORARILY_UNAVAILABLE'].includes(r)) {
+    return true;
+  }
+  if (r === 'LIMIT_REACHED') return options.providerAllowsLimitFailover === true;
+  return false;
+}
+
+function planFailover(snapshot, providerId, options = {}) {
+  const visited = new Set((options.visitedIds || []).map(String));
+  const all = connsFor(snapshot, providerId);
+  const healthy = all
+    .map((conn, index) => ({ conn, key: connectionKey(conn, index), status: humanStatus(conn) }))
+    .filter((item) => item.status.icon === '🟢' && !visited.has(item.key));
+
+  if (options.failureReason && !canFailover(options.failureReason, options)) {
+    return { state: 'BLOCKED_POLICY', candidate: null, reserveCount: healthy.length, fallback: 'NONE' };
+  }
+
+  if (healthy.length) {
+    return {
+      state: 'ACCOUNT_CANDIDATE',
+      candidate: { id: healthy[0].key, label: healthy[0].conn.account_label || healthy[0].key },
+      reserveCount: Math.max(0, healthy.length - 1),
+      fallback: 'NONE',
+    };
+  }
+
+  if (options.freeTierAvailable === true) {
+    return { state: 'FALLBACK_FREE', candidate: null, reserveCount: 0, fallback: 'FREE_TIER' };
+  }
+
+  return { state: 'POOL_EXHAUSTED', candidate: null, reserveCount: 0, fallback: 'NONE' };
+}
+
 function renderHub(snapshot) {
   const broker = snapshot.ok
     ? '🟢 Online e respondendo (broker ' + esc(snapshot.broker.version) + ')'
@@ -191,10 +231,14 @@ function renderProvider(snapshot, providerId) {
 
   let note = '';
   if (providerId === 'claude') {
+    const plan = planFailover(snapshot, 'claude');
+    const candidate = plan.candidate ? esc(short(plan.candidate.label, 28)) : 'nenhuma conta saudável';
     note =
-      '\n\n<b>Failover:</b> DELTA 01 entrega registro/status/auth surface. ' +
-      'Alternância automática e fallback Free continuam <b>NOT_EXECUTED</b> ' +
-      'até o roteador causal ser ligado e testado.';
+      '\n\n<b>Pool Claude:</b> ' + esc(plan.state) +
+      '\n<b>Próximo candidato saudável:</b> ' + candidate +
+      '\n<b>Reservas saudáveis:</b> ' + plan.reserveCount +
+      '\n<b>Hot-swap de credencial:</b> <b>NOT_EXECUTED</b>' +
+      '\n<b>Fallback Free:</b> somente quando explicitamente disponível e permitido.';
   }
   if (providerId === 'codex') {
     note =
@@ -308,4 +352,6 @@ module.exports = {
   testConnection,
   humanStatus,
   oauthUrl,
+  canFailover,
+  planFailover,
 };

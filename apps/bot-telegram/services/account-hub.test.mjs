@@ -39,3 +39,30 @@ test('render de provider ignora campos não projetados', () => {
   assert.doesNotMatch(output, /DO_NOT_RENDER/);
   assert.match(output, /NOT_EXECUTED/);
 });
+
+test('pool Claude evita conta já visitada e escolhe próxima saudável', () => {
+  const snapshot = { connections: [
+    { id: 'a', provider_id: 'claude', account_label: 'Principal', status: 'active', last_test_status: 'pass' },
+    { id: 'b', provider_id: 'claude', account_label: 'Reserva', status: 'active', last_test_status: 'pass' },
+  ] };
+  const plan = hub.planFailover(snapshot, 'claude', { visitedIds: ['a'] });
+  assert.equal(plan.state, 'ACCOUNT_CANDIDATE');
+  assert.equal(plan.candidate.id, 'b');
+  assert.equal(plan.candidate.label, 'Reserva');
+});
+
+test('LIMIT_REACHED não troca conta sem permissão explícita do provider', () => {
+  const snapshot = { connections: [
+    { id: 'b', provider_id: 'claude', status: 'active', last_test_status: 'pass' },
+  ] };
+  assert.equal(hub.planFailover(snapshot, 'claude', { failureReason: 'LIMIT_REACHED' }).state, 'BLOCKED_POLICY');
+  assert.equal(hub.planFailover(snapshot, 'claude', { failureReason: 'LIMIT_REACHED', providerAllowsLimitFailover: true }).state, 'ACCOUNT_CANDIDATE');
+});
+
+test('fallback Free só aparece quando explicitamente disponível', () => {
+  const snapshot = { connections: [] };
+  assert.equal(hub.planFailover(snapshot, 'claude').state, 'POOL_EXHAUSTED');
+  const plan = hub.planFailover(snapshot, 'claude', { freeTierAvailable: true });
+  assert.equal(plan.state, 'FALLBACK_FREE');
+  assert.equal(plan.fallback, 'FREE_TIER');
+});

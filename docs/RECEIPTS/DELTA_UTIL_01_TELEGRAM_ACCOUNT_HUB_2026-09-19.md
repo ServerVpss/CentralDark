@@ -61,3 +61,27 @@ Estado runtime antes do micro-deploy:
 - MERGED = NOT_YET
 
 A VPS principal permanece detached/dirty; nenhum reset/clean foi executado.
+
+## Evolução 01-B — pool de contas Claude no mesmo artefato
+
+O adapter ganhou planejamento determinístico de failover sem abrir segundo router:
+
+- evita repetir conta já tentada no mesmo request (visitedIds);
+- escolhe somente conexão 🟢 Conectado e testado;
+- AUTH_EXPIRED, UNAUTHORIZED, ACCOUNT_DISABLED e indisponibilidade temporária podem seguir para próxima conta saudável;
+- LIMIT_REACHED fica BLOCKED_POLICY por padrão;
+- limite só pode trocar conta quando o provider/política declarar explicitamente providerAllowsLimitFailover=true;
+- fallback Free só aparece quando freeTierAvailable=true;
+- token, cookie e material de sessão continuam fora do Telegram.
+
+### Limite atual desta evolução
+
+POOL_SELECTION_LOGIC = IMPLEMENTED + UNIT_TESTED
+
+CLAUDE_CREDENTIAL_HOT_SWAP_RUNTIME = NOT_EXECUTED
+
+CLAUDE_OFFICIAL_LOGIN_FLOW = MUST_BE_MEASURED
+
+FREE_TIER_RUNTIME_ROUTE = NOT_EXECUTED
+
+Portanto o painel pode explicar e planejar a próxima conta, mas ainda não declara troca real de credencial em produção.
