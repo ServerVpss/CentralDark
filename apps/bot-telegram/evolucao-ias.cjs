@@ -23,6 +23,7 @@
  *   node evolucao-ias.cjs              # roda uma vez
  *   node evolucao-ias.cjs --loop       # roda em loop infinito
  *   node evolucao-ias.cjs --test       # posta mensagem de teste de cada IA
+ *   node evolucao-ias.cjs --self-test-learning # prova offline do ciclo de aprendizado
  */
 
 'use strict';
@@ -885,6 +886,99 @@ async function modoTeste() {
 }
 
 // =========================================================================
+// SELF-TEST OFFLINE — sem rede, Telegram ou escrita persistente
+// =========================================================================
+
+async function modoSelfTestLearning() {
+  const estado = normalizarEstado({});
+  const permanenteAntes = JSON.stringify(estado.aprendizados);
+
+  const candidate = criarCandidatoAprendizado(estado, {
+    sourceAgent: 'gemini',
+    targetAgent: 'claude',
+    sourceMessageId: 424242,
+    sourceTopic: 'fixture:self-test-learning',
+    claim: 'Mudança comportamental só é aprendizado após replay, teste e contraprova.',
+  });
+  if (!candidate || candidate.status !== 'CANDIDATE') {
+    throw new Error('SELF_TEST_LEARNING:CANDIDATE_NOT_CREATED');
+  }
+
+  const replay = marcarReplayObservado(estado, candidate, {
+    messageId: 424243,
+    output: 'fixture: comportamento observado no turno seguinte',
+  });
+  if (!replay || replay.status !== 'REPLAY_OBSERVED' || candidate.status !== 'REPLAY_OBSERVED') {
+    throw new Error('SELF_TEST_LEARNING:REPLAY_NOT_OBSERVED');
+  }
+  if (JSON.stringify(estado.aprendizados) !== permanenteAntes) {
+    throw new Error('SELF_TEST_LEARNING:DIRECT_PERMANENT_PROMOTION');
+  }
+
+  const gate = contextoCentralDark?._internals;
+  if (!gate?.podePromoverAprendizado || !gate?.assinarReceiptAprendizado || !gate?.receiptCurrent) {
+    throw new Error('SELF_TEST_LEARNING:PROMOTION_GATE_UNAVAILABLE');
+  }
+
+  const beforeRef = '1'.repeat(40);
+  const afterRef = '2'.repeat(40);
+  const receipt = {
+    schema_version: 1,
+    subject: 'TELEGRAM_LEARNING',
+    verdict: 'PROVED_ADOPTED',
+    same_scope: true,
+    learning_id: candidate.learning_id,
+    before_ref: beforeRef,
+    after_ref: afterRef,
+    canonical_owner: 'apps/bot-telegram/evolucao-ias.cjs',
+    claim: candidate.claim,
+    verifier: '.agents/skills/meta-lupa/scripts/evolution_gate.py',
+    new_information: ['interação real gerou candidato rastreável'],
+    capability_delta: ['replay observável sem promoção automática'],
+    before_evidence: ['fixture:CANDIDATE'],
+    after_evidence: ['fixture:REPLAY_OBSERVED'],
+    counterproof: ['hash falso e HEAD divergente devem falhar'],
+    provenance: ['fixture:self-test-learning'],
+    lost_capabilities: [],
+    tests: [{ name: 'replay', status: 'PASS', evidence: ['fixture:replay'] }],
+    regressions: [{ name: 'sem-promocao-direta', status: 'PASS', evidence: ['fixture:no-direct-promotion'] }],
+    observed_at: '2026-09-19T05:00:00.000Z',
+    validated_at: '2026-09-19T05:01:00.000Z',
+    validated_head: afterRef,
+  };
+  receipt.receipt_sha256 = gate.assinarReceiptAprendizado(receipt);
+
+  if (!gate.podePromoverAprendizado(receipt, afterRef)) {
+    throw new Error('SELF_TEST_LEARNING:PROVED_ADOPTED_REJECTED');
+  }
+  if (gate.podePromoverAprendizado({ ...receipt, verdict: 'CANDIDATE' }, afterRef)) {
+    throw new Error('SELF_TEST_LEARNING:CANDIDATE_PROMOTED');
+  }
+  if (gate.podePromoverAprendizado({ ...receipt, verdict: 'REPLAY_OBSERVED' }, afterRef)) {
+    throw new Error('SELF_TEST_LEARNING:REPLAY_PROMOTED');
+  }
+  if (gate.podePromoverAprendizado({ ...receipt, receipt_sha256: '0'.repeat(64) }, afterRef)) {
+    throw new Error('SELF_TEST_LEARNING:FAKE_HASH_ACCEPTED');
+  }
+  if (gate.podePromoverAprendizado(receipt, beforeRef)) {
+    throw new Error('SELF_TEST_LEARNING:STALE_HEAD_ACCEPTED');
+  }
+
+  console.log(JSON.stringify({
+    self_test: 'PASS',
+    CANDIDATE: 'PASS',
+    REPLAY_OBSERVED: 'PASS',
+    PROVED_ADOPTED: 'PASS',
+    fake_receipt_counterproof: 'PASS',
+    current_head_counterproof: 'PASS',
+    network_calls: 0,
+    telegram_calls: 0,
+    persistent_writes: 0,
+    learning_id: candidate.learning_id,
+  }, null, 2));
+}
+
+// =========================================================================
 // MODO LOOP — executa ciclos indefinidamente
 // =========================================================================
 
@@ -939,6 +1033,11 @@ async function modoUnico() {
 
 async function main() {
   const args = process.argv.slice(2);
+
+  if (args.includes('--self-test-learning')) {
+    await modoSelfTestLearning();
+    return;
+  }
 
   // Verifica se as chaves de API estão configuradas
   const chavesFaltando = [];
