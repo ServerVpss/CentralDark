@@ -1,17 +1,17 @@
 ---
 title: "AMD — Manageability + ROCm/HIP — realidade medida 2026-09-18"
-status: "CANDIDATE_PROVEN_PARTIAL"
-owner: "docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/SETORES/ML-CIENCIA-DE-DADOS/AMD-MANAGEABILITY-ROCM-2026-09-18.md"
+status: "CANDIDATE"
+source_rule: "CURRENT > HISTORY; EXTERNAL_SOURCE != RUNTIME_PROOF"
+date: "2026-09-18"
+updated: "2026-09-18T23:15:59-03:00"
 observed_at: "2026-09-18T12:25:11-03:00"
+tags: [amd, rocm, hip, dash-cli, manageability, biblioteca, garimpo]
+category: "ML-CIENCIA-DE-DADOS"
+sensitivity: "INTERNAL"
+source: "AMD official references + Casa runtime measurements"
+source_class: "TOOL_MEASURED"
+owner: "docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/SETORES/ML-CIENCIA-DE-DADOS/AMD-MANAGEABILITY-ROCM-2026-09-18.md"
 scope: "Casa SEGREDO / CentralDark"
-tags:
-  - amd
-  - rocm
-  - hip
-  - dash-cli
-  - manageability
-  - biblioteca
-  - garimpo
 ---
 
 # AMD — Manageability + ROCm/HIP
