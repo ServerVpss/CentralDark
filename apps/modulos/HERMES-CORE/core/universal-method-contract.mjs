@@ -171,6 +171,33 @@ export function validateUniversalMethod() {
     'calculation_only_global_runtime_claim: false',
   ], 'UNIVERSAL_CONTRACT');
 
+  requireTokens(universal, [
+    'repeatable_multi_model_cadence:',
+    'schema: centraldark.repeatable-operational-cadence.v1',
+    'applies_to: ALL_CURRENT_AND_FUTURE_ENGINES',
+    'notation: LATEX_PLUS_MACHINE_FIELDS',
+    'disciplined_progress:',
+    'green_gate:',
+    'walk_and_narrate_material_transitions: true',
+    'narration_may_drive_green: false',
+    'ACTIVITY_IS_NOT_PROOF: true',
+    'NARRATION_IS_NOT_PROOF: true',
+    'MANY_MODELS_IS_NOT_VOTE: true',
+    'OWNER_BEFORE_NEW_ARTIFACT: true',
+    'EXTEND_BEFORE_DUPLICATE: true',
+    'VALIDATOR_BEFORE_GREEN: true',
+    'COUNTERPROOF_BEFORE_GREEN: true',
+    'REPEATABLE_BY_N_MODELS: true',
+    'PARALLEL_PERCEPTION_SERIALIZED_MUTATION: true',
+    'divergent_results_require_rendezvous_and_discriminating_test: true',
+    'correlated_results_are_not_independent_proofs: true',
+    'convergence_target: SAME_CANONICAL_ROUTE_NOT_SAME_WORDING',
+    'formula: VALIDATOR_AND_TEST_AND_COUNTERPROOF_AND_REALITY_JUDGE',
+    'current_same_head_evidence_when_git_material: REQUIRED',
+    'conversation_text_sha256: f36f6594bc8eaee1a3d7cc4737a69b79e541ecbc3541d2a397e1ed4ecfa00a9e',
+    'screenshot_sha256: 7721d4474f390a56eee6adb9effa75419a22cf426fb6353332e322404fd0abb4',
+  ], 'REPEATABLE_MULTI_MODEL_CADENCE');
+
   requireTokens(operationalMethod, [
     '## AURÉOLA DISCOVERY HARVEST — SOL + HERMES',
     'AUREOLA_MATERIAL_DISCOVERY',
@@ -364,6 +391,10 @@ export function validateUniversalMethod() {
     unknown_is_not_permission_to_mutate: true,
     human_boundary_requires_proven_frontier_or_exhausted_hard_blocker: true,
     bounded_100_percent_requires_explicit_denominator: true,
+    repeatable_multi_model_cadence_contract: true,
+    latex_operational_formula_bound: true,
+    activity_is_not_proof_contract: true,
+    n_models_are_not_votes_contract: true,
   };
 }
 
