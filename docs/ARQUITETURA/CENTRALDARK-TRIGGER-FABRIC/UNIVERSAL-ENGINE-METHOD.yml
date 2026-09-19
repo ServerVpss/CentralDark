@@ -463,3 +463,89 @@ bounded_100_percent:
   current_head_when_git_material: true
   external_world_infallibility_claim: false
   calculation_only_global_runtime_claim: false
+
+
+repeatable_multi_model_cadence:
+  schema: centraldark.repeatable-operational-cadence.v1
+  status: CANDIDATE_UNTIL_SAME_HEAD_CI
+  applies_to: ALL_CURRENT_AND_FUTURE_ENGINES
+  notation: LATEX_PLUS_MACHINE_FIELDS
+  purpose: >-
+    Tornar repetivel por N modelos/engines a disciplina observada de caminhar
+    pelo estado material: descobrir, reutilizar o owner, estender o minimo,
+    validar, testar, contraprovar, remedir e seguir para a proxima ferida/cursor.
+    Narracao acompanha transicoes materiais; atividade nunca substitui prova.
+
+  provenance:
+    conversation_text_sha256: f36f6594bc8eaee1a3d7cc4737a69b79e541ecbc3541d2a397e1ed4ecfa00a9e
+    screenshot_sha256: 7721d4474f390a56eee6adb9effa75419a22cf426fb6353332e322404fd0abb4
+    source_is_provenance_not_authority: true
+
+  latex:
+    disciplined_progress: '\\mathcal{D} \\rightarrow \\mathcal{O} \\rightarrow \\Delta_{min} \\rightarrow \\mathcal{V} \\rightarrow \\mathcal{T} \\rightarrow \\mathcal{C} \\rightarrow \\mathcal{R} \\rightarrow \\mathcal{W}_{next}'
+    green_gate: '\\mathrm{GREEN} \\iff \\mathrm{VALIDATOR} \\land \\mathrm{TEST} \\land \\mathrm{COUNTERPROOF} \\land \\mathrm{REALITY\\_JUDGE}'
+    symbols:
+      D: MATERIAL_DISCOVERY
+      O: EXISTING_OWNER
+      DELTA_MIN: MINIMUM_USEFUL_EXTENSION
+      V: VALIDATOR
+      T: TEST
+      C: COUNTERPROOF
+      R: REMEASURE
+      W_NEXT: NEXT_MATERIAL_WOUND_OR_CURSOR
+
+  deterministic_cadence:
+    - OBSERVE_MATERIAL_ACTIVITY
+    - CLASSIFY_FACT_INFERENCE_HYPOTHESIS_UNKNOWN
+    - FIND_EXISTING_OWNER
+    - EXTEND_EXISTING_OWNER_MINIMALLY
+    - RUN_VALIDATOR
+    - RUN_TEST
+    - RUN_COUNTERPROOF
+    - REMEASURE_CURRENT
+    - REGISTER_RECEIPT
+    - CONTINUE_NEXT_MATERIAL_WOUND_OR_CURSOR
+
+  narration:
+    walk_and_narrate_material_transitions: true
+    narrate_every_tool_tick: false
+    narration_follows_measured_state: true
+    narration_may_drive_green: false
+    preferred_shape: OBSERVACAO_DECISAO_ACAO_RESULTADO_MEDIDO_PROXIMO_CURSOR
+
+  invariants:
+    ACTIVITY_IS_NOT_PROOF: true
+    NARRATION_IS_NOT_PROOF: true
+    MANY_ACTIONS_IS_NOT_PROGRESS_PROOF: true
+    MANY_MODELS_IS_NOT_VOTE: true
+    MANY_MODELS_IS_NOT_INDEPENDENT_PROOF_BY_DEFAULT: true
+    OWNER_BEFORE_NEW_ARTIFACT: true
+    EXTEND_BEFORE_DUPLICATE: true
+    SAME_FINDING_WITHOUT_NEW_EVIDENCE: DROP_DUPLICATE
+    VALIDATOR_BEFORE_GREEN: true
+    TEST_BEFORE_GREEN: true
+    COUNTERPROOF_BEFORE_GREEN: true
+    REALITY_JUDGE_REQUIRED_FOR_GREEN: true
+    NEXT_WOUND_IS_NOT_NEW_PARENT_GOAL: true
+    REPEATABLE_BY_N_MODELS: true
+    MODEL_AGNOSTIC: true
+    SKIN_AGNOSTIC: true
+    ONE_SYSTEM_ONLY: true
+    ONE_WRITER_PER_SCOPE: true
+    PARALLEL_PERCEPTION_SERIALIZED_MUTATION: true
+
+  n_model_repetition:
+    input: SAME_INTENT_AND_CURRENT_EVIDENCE
+    each_model_must_load_same_universal_contract: true
+    each_model_may_use_different_capabilities: true
+    each_model_must_preserve_owner_scope_and_fact_status: true
+    divergent_results_require_rendezvous_and_discriminating_test: true
+    correlated_results_are_not_independent_proofs: true
+    convergence_target: SAME_CANONICAL_ROUTE_NOT_SAME_WORDING
+
+  green_authority:
+    formula: VALIDATOR_AND_TEST_AND_COUNTERPROOF_AND_REALITY_JUDGE
+    activity_log_alone: FAIL
+    narrated_success_alone: FAIL
+    repeated_model_agreement_alone: FAIL
+    current_same_head_evidence_when_git_material: REQUIRED
