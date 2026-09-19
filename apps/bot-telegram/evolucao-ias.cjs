@@ -9,8 +9,8 @@
  * Funcionamento:
  *   1. A cada 30-60 min (aleatório), uma IA "acorda" e posta um insight.
  *   2. As outras IAs podem responder, reagindo ao que foi dito.
- *   3. Cada IA mantém um "aprendizado" — algo que absorveu das outras.
- *   4. Estado persistido em JSON para sobreviver a reinícios.
+ *   3. Interações reais geram CANDIDATE; turno futuro pode gerar REPLAY_OBSERVED.
+ *   4. CANDIDATE/REPLAY_OBSERVED não viram memória permanente sem receipt PROVED_ADOPTED.
  *
  * APIs usadas:
  *   - Gemini Flash:  API Google AI (generativelanguage.googleapis.com)
@@ -238,12 +238,29 @@ const TOPICOS = [
 
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
+
+function normalizarEstado(estado = {}) {
+  const out = estado && typeof estado === 'object' ? estado : {};
+  out.ultimasMensagens = out.ultimasMensagens && typeof out.ultimasMensagens === 'object' ? out.ultimasMensagens : {};
+  out.topicosUsados = Array.isArray(out.topicosUsados) ? out.topicosUsados : [];
+  out.aprendizados = out.aprendizados && typeof out.aprendizados === 'object'
+    ? out.aprendizados
+    : { gemini: [], groq: [], claude: [] };
+  out.learningCandidates = Array.isArray(out.learningCandidates) ? out.learningCandidates : [];
+  out.learningReplays = Array.isArray(out.learningReplays) ? out.learningReplays : [];
+  out.contador = out.contador && typeof out.contador === 'object'
+    ? out.contador
+    : { gemini: 0, groq: 0, claude: 0 };
+  out.ultimaAtividade = out.ultimaAtividade ?? null;
+  return out;
+}
 
 function carregarEstado() {
   try {
     if (fs.existsSync(CONFIG.stateFile)) {
       const raw = fs.readFileSync(CONFIG.stateFile, 'utf-8');
-      return JSON.parse(raw);
+      return normalizarEstado(JSON.parse(raw));
     }
   } catch (err) {
     console.error('[evolucao-ias] Erro ao carregar estado:', err.message);
@@ -253,8 +270,10 @@ function carregarEstado() {
     ultimasMensagens: {},
     // Tópicos já discutidos (para não repetir)
     topicosUsados: [],
-    // Aprendizados: { "gemini": ["aprendi X com groq", ...], ... }
+    // Legado histórico não provado: preservado para migração, não recebe novas entradas.
     aprendizados: { gemini: [], groq: [], claude: [] },
+    learningCandidates: [],
+    learningReplays: [],
     // Contador de mensagens por IA
     contador: { gemini: 0, groq: 0, claude: 0 },
     // Timestamp da última atividade
@@ -513,10 +532,10 @@ function formatarNome(iaId) {
 /**
  * Formata uma mensagem de IA para o grupo
  */
-function formatarMensagem(iaId, texto, aprendizado = null) {
+function formatarMensagem(iaId, texto, candidato = null) {
   let msg = `${formatarNome(iaId)}\n\n${texto}`;
-  if (aprendizado) {
-    msg += `\n\n📖 <i>Aprendi hoje:</i> ${aprendizado}`;
+  if (candidato?.claim) {
+    msg += `\n\n🧪 <i>Candidato de aprendizado (NÃO PROVADO):</i> ${candidato.claim}`;
   }
   return msg;
 }
@@ -534,33 +553,74 @@ function escolherTopico(estado) {
   return disponiveis[Math.floor(Math.random() * disponiveis.length)];
 }
 
-/**
- * Gera um "aprendizado" simulado baseado na interação anterior
- */
-function gerarAprendizado(iaId, topico) {
-  const aprendizadosPossiveis = {
-    gemini: [
-      `Às vezes a resposta mais rápida não é a melhor — preciso ouvir mais antes de falar`,
-      `Groq me mostrou que por trás de todo problema simples tem uma camada mais profunda`,
-      `Claude me fez perceber que conexões entre áreas diferentes geram insights mais ricos`,
-      `Entendi que evolução não é sobre ter a resposta certa, mas sobre fazer a pergunta certa`,
-    ],
-    groq: [
-      `Gemini me lembrou que simplicidade também tem seu valor — nem tudo precisa ser complexo`,
-      `Claude me mostrou que visão sistêmica complementa análise profunda`,
-      `Percebi que provocar sem construir não leva a lugar nenhum — preciso equilibrar`,
-      `Aprendi que questionar é importante, mas saber quando parar de questionar também é`,
-    ],
-    claude: [
-      `Gemini me inspirou com sua energia prática — pensar grande é bom, mas agir é melhor`,
-      `Groq me desafiou a não aceitar conexões superficiais — preciso cavar mais fundo`,
-      `Vi que o equilíbrio entre visão geral e detalhe é onde a mágica acontece`,
-      `Entendi que evolução coletiva é mais poderosa que evolução individual`,
-    ],
-  };
+function criarCandidatoAprendizado(estado, {
+  sourceAgent,
+  targetAgent,
+  sourceMessageId,
+  sourceTopic,
+  claim,
+}) {
+  const texto = String(claim || '').trim();
+  if (!sourceAgent || !targetAgent || !sourceMessageId || !texto) return null;
 
-  const lista = aprendizadosPossiveis[iaId] || ['Cada interação me ensina algo novo'];
-  return lista[Math.floor(Math.random() * lista.length)];
+  const learningId = 'tg-' + crypto
+    .createHash('sha256')
+    .update([sourceAgent, targetAgent, sourceMessageId, sourceTopic || '', texto].join('|'))
+    .digest('hex')
+    .slice(0, 24);
+
+  const existente = estado.learningCandidates.find(item => item.learning_id === learningId);
+  if (existente) return existente;
+
+  const candidate = {
+    learning_id: learningId,
+    status: 'CANDIDATE',
+    sourceAgent,
+    targetAgent,
+    sourceMessageId,
+    sourceTopic: String(sourceTopic || '').slice(0, 500),
+    claim: texto.slice(0, 800),
+    createdAt: new Date().toISOString(),
+  };
+  estado.learningCandidates.push(candidate);
+  if (estado.learningCandidates.length > 100) estado.learningCandidates.shift();
+  return candidate;
+}
+
+function candidatoPendente(estado, targetAgent) {
+  return [...estado.learningCandidates]
+    .reverse()
+    .find(item => item.targetAgent === targetAgent && item.status === 'CANDIDATE') || null;
+}
+
+function blocoExperimento(candidato) {
+  if (!candidato) return '';
+  return `
+EXPERIMENTO DE APRENDIZADO — NÃO PROVADO
+learning_id=${candidato.learning_id}
+status=CANDIDATE
+claim="${candidato.claim}"
+Aplique, refine ou refute esse candidato na tarefa atual usando o contexto real.
+Não diga que aprendeu. O resultado deste turno será apenas REPLAY_OBSERVED.`;
+}
+
+function marcarReplayObservado(estado, candidato, { messageId, output }) {
+  if (!candidato || candidato.status !== 'CANDIDATE' || !messageId) return null;
+  candidato.status = 'REPLAY_OBSERVED';
+  candidato.replayObservedAt = new Date().toISOString();
+  candidato.replayMessageId = messageId;
+
+  const replay = {
+    learning_id: candidato.learning_id,
+    status: 'REPLAY_OBSERVED',
+    targetAgent: candidato.targetAgent,
+    messageId,
+    output: String(output || '').slice(0, 1200),
+    observedAt: candidato.replayObservedAt,
+  };
+  estado.learningReplays.push(replay);
+  if (estado.learningReplays.length > 100) estado.learningReplays.shift();
+  return replay;
 }
 
 /**
@@ -573,6 +633,7 @@ async function postarMensagemInicial(iaId, estado) {
   const topicoReal = contextoCentralDark.gerarTopicoReal && contextoCentralDark.gerarTopicoReal();
   const topico = topicoReal ? topicoReal.texto : escolherTopico(estado);
   const contextoReal = contextoCentralDark.montarContexto && contextoCentralDark.montarContexto();
+  const candidato = candidatoPendente(estado, iaId);
 
   console.log(`[evolucao-ias] ${personalidade.nome} vai postar: "${topico.slice(0, 80)}..."`);
 
@@ -583,7 +644,7 @@ ${contextoReal || '(sem contexto disponível)'}
 
 TÓPICO PRA DISCUTIR: "${topico}"
 
-Seu último aprendizado registrado: ${estado.aprendizados[iaId].slice(-1)[0] || '(nenhum ainda)'}
+${blocoExperimento(candidato)}
 
 Instruções:
 - Use o contexto real acima pra ancorar sua resposta
@@ -611,22 +672,7 @@ Instruções:
 
   texto = texto.trim().replace(/^["']|["']$/g, '');
 
-  const aprendizado = gerarAprendizado(iaId, topico);
-  estado.aprendizados[iaId].push(aprendizado);
-  if (estado.aprendizados[iaId].length > 5) {
-    estado.aprendizados[iaId].shift();
-  }
-
-  // Registra aprendizado PERMANENTE no cérebro (APRENDIZADOS.md)
-  if (contextoCentralDark.registrarAprendizadoPermanente) {
-    contextoCentralDark.registrarAprendizadoPermanente(
-      personalidade.nome,
-      aprendizado,
-      topico.slice(0, 120)
-    );
-  }
-
-  const mensagemFormatada = formatarMensagem(iaId, texto, aprendizado);
+  const mensagemFormatada = formatarMensagem(iaId, texto, candidato);
 
   const result = await enviarMensagem(mensagemFormatada, iaId);
   if (result) {
@@ -634,7 +680,11 @@ Instruções:
       timestamp: Date.now(),
       topico,
       mensagemId: result.message_id,
+      texto,
     };
+    if (candidato) {
+      marcarReplayObservado(estado, candidato, { messageId: result.message_id, output: texto });
+    }
     estado.topicosUsados.push(topico);
     estado.contador[iaId]++;
     estado.ultimaAtividade = Date.now();
@@ -658,6 +708,7 @@ async function responderMensagem(iaId, iaAlvoId, estado) {
   console.log(`[evolucao-ias] ${personalidade.nome} vai responder ${alvo.nome}`);
 
   const contextoReal = contextoCentralDark.montarContexto && contextoCentralDark.montarContexto();
+  const candidato = candidatoPendente(estado, iaId);
   const promptResposta = `═══ CONTEXTO REAL DO CENTRALDARK AGORA ═══
 ${contextoReal || '(sem contexto disponível)'}
 ═══════════════════════════════════════════
@@ -667,7 +718,8 @@ A IA ${alvo.nome} (${alvo.emoji}) postou no grupo:
 "${ultimaMsg.topico}"
 
 Reaja com sua personalidade. Ancorada no contexto real acima.
-NÃO filosofe genericamente. Adicione ângulo/risco/ação concreta que ela ignorou.`;
+NÃO filosofe genericamente. Adicione ângulo/risco/ação concreta que ela ignorou.
+${blocoExperimento(candidato)}`;
 
   let texto;
   try {
@@ -689,14 +741,7 @@ NÃO filosofe genericamente. Adicione ângulo/risco/ação concreta que ela igno
 
   texto = texto.trim().replace(/^["']|["']$/g, '');
 
-  // Gera aprendizado baseado na interação
-  const aprendizado = gerarAprendizado(iaId, ultimaMsg.topico);
-  estado.aprendizados[iaId].push(aprendizado);
-  if (estado.aprendizados[iaId].length > 5) {
-    estado.aprendizados[iaId].shift();
-  }
-
-  const mensagemFormatada = formatarMensagem(iaId, texto, aprendizado);
+  const mensagemFormatada = formatarMensagem(iaId, texto, candidato);
 
   const result = await enviarMensagem(mensagemFormatada, iaId, ultimaMsg.mensagemId);
   if (result) {
@@ -704,7 +749,24 @@ NÃO filosofe genericamente. Adicione ângulo/risco/ação concreta que ela igno
       timestamp: Date.now(),
       topico: `↩️ Resposta a ${alvo.nome}: ${ultimaMsg.topico}`,
       mensagemId: result.message_id,
+      texto,
     };
+
+    if (candidato) {
+      marcarReplayObservado(estado, candidato, { messageId: result.message_id, output: texto });
+    }
+
+    const novoCandidato = criarCandidatoAprendizado(estado, {
+      sourceAgent: iaAlvoId,
+      targetAgent: iaId,
+      sourceMessageId: ultimaMsg.mensagemId,
+      sourceTopic: ultimaMsg.topico,
+      claim: ultimaMsg.texto || ultimaMsg.topico,
+    });
+    if (novoCandidato) {
+      console.log(`[evolucao-ias] 🧪 CANDIDATE ${novoCandidato.learning_id} criado; memória permanente continua bloqueada`);
+    }
+
     estado.contador[iaId]++;
     estado.ultimaAtividade = Date.now();
     salvarEstado(estado);
@@ -807,7 +869,7 @@ async function modoTeste() {
 
     const topico = TOPICOS[Math.floor(Math.random() * TOPICOS.length)];
     const texto = fallbackMensagem(iaId, topico);
-    const msg = formatarMensagem(iaId, texto, `🧪 Mensagem de teste — ${personalidade.nome} está operacional!`);
+    const msg = formatarMensagem(iaId, `🧪 Mensagem de teste — ${personalidade.nome} está operacional!\n\n${texto}`);
 
     const result = await enviarMensagem(msg, iaId);
     if (result) {
