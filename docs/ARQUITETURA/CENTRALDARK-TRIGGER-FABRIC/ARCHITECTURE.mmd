@@ -43,6 +43,14 @@ flowchart TD
   SAVED --> INGEST
   DOCSENSOR --> INGEST
   LIVEOBS --> INGEST
+
+  OLHO["OLHO BIÔNICO ANTI-FLASH<br/>PROFILE / NOT ENGINE"]
+  DERIVED["DERIVED OUTPUT<br/>artifact + receipt"]
+  MONITORS["MONITORES DA CASA<br/>preview / painel"]
+  DOCSENSOR -. visual source .-> OLHO
+  OLHO --> DERIVED
+  DERIVED -. derived view only .-> MONITORS
+  MONITORS -. observation feedback .-> INGEST
   INGEST --> REAR
 
   EVID --> REAR["CEREBRO DE RETAGUARDA / MEMORY LAYER<br/>materia + fragmentos + historico + proveniencia"]
