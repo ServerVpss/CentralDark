@@ -147,4 +147,3 @@ PR
 ```
 
 O PR é o trilho material. Os agentes são executores substituíveis; o `author` Git registra identidade Git, não prova sozinho qual engine/modelo operou.
-
