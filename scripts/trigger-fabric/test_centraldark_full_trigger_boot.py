@@ -71,6 +71,58 @@ def test_lock_key_is_stable_and_owner_bound():
     assert len(a) == 64
 
 
+
+def test_material_signature_is_order_insensitive_and_value_sensitive():
+    a = mod.material_signature(["owner=x", "head=abc", "payload=123"])
+    b = mod.material_signature(["payload=123", "owner=x", "head=abc"])
+    c = mod.material_signature(["payload=124", "owner=x", "head=abc"])
+    assert a == b
+    assert a != c
+    assert len(a) == 64
+
+
+def test_sealed_same_signature_uses_zero_llm_fast_path():
+    sig = mod.material_signature(["owner=owner/a", "payload=same"])
+    entry = {
+        "claim_key": "CLAIM_X",
+        "owner": "owner/a",
+        "lock_key": mod.lock_key("CLAIM_X", "owner/a"),
+        "state": "SEALED_PROVEN",
+        "material_signature": sig,
+    }
+    result = mod.deterministic_reuse_verdict(entry, sig, "owner/a")
+    assert result["verdict"] == "DETERMINISTIC_FAST_PATH"
+    assert result["llm_required"] is False
+    assert result["rewalk_full_repository"] is False
+
+
+def test_changed_signature_reopens_only_affected_cone():
+    old = mod.material_signature(["payload=old"])
+    new = mod.material_signature(["payload=new"])
+    entry = {
+        "claim_key": "CLAIM_X",
+        "owner": "owner/a",
+        "lock_key": mod.lock_key("CLAIM_X", "owner/a"),
+        "state": "SEALED_PROVEN",
+        "material_signature": old,
+    }
+    result = mod.deterministic_reuse_verdict(entry, new, "owner/a")
+    assert result["verdict"] == "TARGETED_REVALIDATION_REQUIRED"
+    assert result["route"] == "AFFECTED_CONE_ONLY"
+    assert result["reason"] == "MATERIAL_SIGNATURE_CHANGED"
+
+
+def test_legacy_seal_without_signature_never_fakes_fast_path():
+    entry = {
+        "claim_key": "CLAIM_X",
+        "owner": "owner/a",
+        "lock_key": mod.lock_key("CLAIM_X", "owner/a"),
+        "state": "SEALED_PROVEN",
+    }
+    result = mod.deterministic_reuse_verdict(entry, "abc", "owner/a")
+    assert result["verdict"] == "TARGETED_REVALIDATION_REQUIRED"
+    assert result["reason"] == "LEGACY_SEAL_WITHOUT_MATERIAL_SIGNATURE"
+
 def test_registry_roundtrip():
     with tempfile.TemporaryDirectory() as td:
         p = Path(td) / "registry.json"
@@ -104,6 +156,10 @@ if __name__ == "__main__":
         test_empty_feedback_is_not_active,
         test_megazord_persists_realtime_feedback_binding,
         test_lock_key_is_stable_and_owner_bound,
+        test_material_signature_is_order_insensitive_and_value_sensitive,
+        test_sealed_same_signature_uses_zero_llm_fast_path,
+        test_changed_signature_reopens_only_affected_cone,
+        test_legacy_seal_without_signature_never_fakes_fast_path,
         test_registry_roundtrip,
         test_canonical_chain_contains_full_core_flow,
     ]
