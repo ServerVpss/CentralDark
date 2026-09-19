@@ -57,6 +57,32 @@ reopen_denied_when:
   - REPEATED_CLAIM_WITHOUT_NEW_EVIDENCE
   - MODEL_ONLY_DISAGREEMENT
 
+proven_fast_path:
+  semantic_name: PROVEN_SEALED_FAST_PATH
+  content_identity: SHA256
+  filename_is_identity: false
+  same_content_sha_different_filename: SAME_ARTIFACT_KEEP_PROVENANCE
+  reuse_requires: [SEALED_PROVEN, SAME_LOCK_KEY, SAME_MATERIAL_SIGNATURE, NO_MATERIAL_CONTRADICTION]
+  on_reuse:
+    route: DETERMINISTIC_FAST_PATH
+    llm_required: false
+    rewalk_full_repository: false
+  reopen_when: [MATERIAL_SIGNATURE_CHANGED, MATERIAL_UNKNOWN, MATERIAL_CONTRADICTION, OWNER_GAP, NEW_CAPABILITY_DELTA]
+  on_reopen:
+    scope: AFFECTED_CONE_ONLY
+    first_route: DETERMINISTIC_RECONCILIATION
+    llm_route: ONLY_IF_UNRESOLVED_AFTER_DETERMINISTIC_RECONCILIATION
+    unaffected_sealed_claims_remain_locked: true
+  consumers:
+    applies_to_bound_hub_api_connector_engine: true
+    known_signature_without_llm: true
+    consumer_is_not_new_authority: true
+  tlc23:
+    canonical_filename: TLC23.pdf
+    source_sha256: b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1
+    upload_suffix_is_alias_only: true
+    method: HORN_FORWARD_CHAINING_TO_FIXED_POINT
+
 trigger_loader:
   owner: scripts/trigger-fabric/centraldark_full_trigger_boot.py
   sources:
