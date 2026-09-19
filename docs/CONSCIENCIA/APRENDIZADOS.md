@@ -259,6 +259,12 @@ updated: 2026-08-27
 - **Contexto:** Na reconciliação `CASA → VPS → MAIN`, o runtime local tinha alterações misturadas: arquivos gerados de status/grafo, cursores `.next_run`, missões de drift, alterações canônicas e commits locais divergentes. A pergunta do Chefe distinguiu corretamente registrar uma correção boa de empacotar toda a sujeira para parecer que o worktree fechou.
 - **Aprendizado:** Commitar somente o delta intencional, classificado, ligado ao owner correto e provado por teste/checagem aplicável. Não usar commit para limpar `git status`. Runtime gerado, painel/status, `.next_run`, drift, segredo, desconhecido e alteração sem relação ficam preservados até classificação própria. Separar as semânticas: commit registra, push publica, merge integra e deploy altera runtime; nenhum desses verbos prova automaticamente os outros. Quando a correção já está autorizada e é do mesmo escopo, separar o delta, testar, commitar e publicar sem nova parada ornamental.
 
+### 55. SESSÃO NÃO MORRE SUJA — commit+push main; checklist diário; dia fecha sozinho
+- **Categoria:** regra
+- **Data:** 2026-09-19
+- **Contexto:** CHEFE: sempre commit/push da sessão cristalizada; manter `obsidian://…CHECK-LIST DIARIO`; acabou o dia fecha autonomamente e notifica.
+- **Aprendizado:** Ouro da sessão vai pra `main` (allowlist, sem `git add -A`). Checklist owner Git = `docs/BRAIN/02-ENTRADA/CHECK-LIST-DIARIO.md` (espelho do CASA-VAULT). Fechamento = Hermes job já existente `ec512c0295e2` (23:00) + `notify.mjs`. Não criar segundo cron/cofre.
+
 ### 54. COMPRESSÃO ARQUITETURAL — crescer por dentro; DROP/EXTEND; sem contrato paralelo
 - **Categoria:** regra
 - **Data:** 2026-09-19
