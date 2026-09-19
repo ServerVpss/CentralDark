@@ -80,6 +80,9 @@ jobs:
       - name: Validar continuidade global e fronteira de autoridade da entrada
         run: node scripts/lupa/validar-continuidade-global.mjs
 
+      - name: Gate INTERLIGADOS — padrões de PR e dívida runtime explícita
+        run: node scripts/lupa/validar-interligados-pr-padroes.mjs
+
       - name: Testar decisão determinística do gate de labels
         if: github.event_name == 'pull_request'
         run: node --test scripts/lupa/label-gate.test.mjs
@@ -269,6 +272,7 @@ jobs:
             --head-sha "$HEAD_SHA" \
             --approved "$AUTHORITY_APPROVED" || status=1
           node scripts/lupa/validar-continuidade-global.mjs --json || status=1
+          node scripts/lupa/validar-interligados-pr-padroes.mjs --json || status=1
           node scripts/lupa/validar-porta-de-entrada.mjs \
             --base-sha "$BASE_SHA" \
             --head-sha "$HEAD_SHA" \
@@ -307,6 +311,7 @@ jobs:
           echo "WORKFLOW_REUSE_REQUIRED=1"
           echo "AI_DETERMINISTIC_FALLBACK_REQUIRED=1"
           echo "GLOBAL_CONTINUITY_HARD_GATE=1"
+          echo "INTERLIGADOS_PR_PATTERNS_GATE=1"
           echo "MOTHER_BRANCH_GATED=1"
           echo "CANONICAL_LABELS_REQUIRED=1"
           echo "CENTRALDARK_API_SINGLE_ENTRY=1"

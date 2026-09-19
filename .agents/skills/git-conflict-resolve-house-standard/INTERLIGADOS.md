@@ -17,3 +17,7 @@
 ```
 
 `NO_BLIND_OVERWRITE=true`, `REUSE_BEFORE_CREATE=true`.
+
+`KNOWN_CONFLICT_REGISTRY=scripts/dependabot/known-conflict-patterns.json`.
+O registry de padrões conhecidos é receipt/roteamento; a política continua no
+motor único, sem resolvedor paralelo, e `UNKNOWN_CONFLICT_PATH` bloqueia.

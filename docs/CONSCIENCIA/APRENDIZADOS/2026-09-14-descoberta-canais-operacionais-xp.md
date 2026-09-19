@@ -32,3 +32,4 @@ Regra: `TEMP_USED != CANONICAL_ASSET`. Depois que o resultado útil estiver pers
 Contraprova aplicada na Casa: os 6 auxiliares temporários criados no Desktop durante esta missão foram procurados contra processos ativos, removidos e remedidos com `TEMP_HELPERS_REMAINING=0` e `TEMP_HELPER_CLEANUP=PASS`.
 
 O bot deve continuar event-driven: descoberta material compara o owner canônico; gap generalizável atualiza o owner existente e passa por teste/gate; descoberta local recebe receipt; sem delta material termina em `NO_CHANGE/FIXED_POINT`.
+XP, nível, missões, taxa de sucesso, erros, ferramentas, tarefas, duração e feedback podem ser registrados como telemetria operacional CentralDark. XP é métrica do sistema, não autoridade e não substitui prova.

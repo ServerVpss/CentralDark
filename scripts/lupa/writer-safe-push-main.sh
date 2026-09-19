@@ -164,15 +164,32 @@ for TRY in $(seq 1 "$MAX_TRIES"); do
 
   git worktree add --detach "$WORKTREE" "$BASE_SHA"
 
+  # Não execute o corpo dentro de `if ( ... )`: Bash desativa `errexit`
+  # para comandos usados como condição, o que pode transformar gate vermelho
+  # em push falso-verde. Execute a subshell fora da condição e capture RC.
   STATUS=0
-  if (
+  set +e
+  (
     set -euo pipefail
     cd "$WORKTREE"
     git config user.name "$GIT_AUTHOR_NAME"
     git config user.email "$GIT_AUTHOR_EMAIL"
 
     if [ -n "$REGENERATE_CMD" ]; then
-      bash -lc "$REGENERATE_CMD"
+      # Não carregar perfil/rc/BASH_ENV aqui. Bootstrap de shell pode executar `cd` e tirar
+      # o regenerate do worktree limpo, aplicando delta no checkout operacional.
+      # A subshell já está posicionada no worktree canônico desta tentativa.
+      REGENERATE_CWD="$(pwd -P)"
+      EXPECTED_WORKTREE="$(cd "$WORKTREE" && pwd -P)"
+      if [ "$REGENERATE_CWD" != "$EXPECTED_WORKTREE" ]; then
+        echo "${WRITER_TAG}_REGENERATE_CWD_MISMATCH expected=$EXPECTED_WORKTREE observed=$REGENERATE_CWD" >&2
+        exit 1
+      fi
+      env -u BASH_ENV -u ENV /bin/bash --noprofile --norc -c "$REGENERATE_CMD"
+      if [ "$(pwd -P)" != "$EXPECTED_WORKTREE" ]; then
+        echo "${WRITER_TAG}_REGENERATE_ESCAPED_WORKTREE expected=$EXPECTED_WORKTREE observed=$(pwd -P)" >&2
+        exit 1
+      fi
     else
       for p in "${PATH_ARR[@]}"; do
         if [ -e "$PAYLOAD_DIR/$p" ]; then
@@ -240,11 +257,9 @@ for TRY in $(seq 1 "$MAX_TRIES"); do
 
     echo "⚠️ ${WRITER_TAG}_PUSH_REJECTED tentativa=$TRY — concorrencia; observando main de novo"
     exit 75
-  ); then
-    STATUS=0
-  else
-    STATUS=$?
-  fi
+  )
+  STATUS=$?
+  set -e
 
   if ! git worktree remove --force "$WORKTREE" 2>/dev/null; then
     rm -rf "$WORKTREE" || true

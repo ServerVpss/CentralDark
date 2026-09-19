@@ -4,6 +4,9 @@ on:
   pull_request:
     paths:
       - 'docs/**/*.md'
+      - '.agents/skills/**/*.md'
+      - '.github/**/*.md'
+      - 'README*.md'
       - 'scripts/lupa/grafo-vivo-markdown-conformance.mjs'
       - '.github/workflows/grafo-vivo-markdown.yml'
   push:
@@ -11,6 +14,9 @@ on:
       - main
     paths:
       - 'docs/**/*.md'
+      - '.agents/skills/**/*.md'
+      - '.github/**/*.md'
+      - 'README*.md'
       - 'scripts/lupa/grafo-vivo-markdown-conformance.mjs'
       - '.github/workflows/grafo-vivo-markdown.yml'
   workflow_dispatch:
@@ -25,6 +31,19 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
 
-      - name: Validate live markdown graph
-        run: node scripts/lupa/grafo-vivo-markdown-conformance.mjs
+      - name: Validate global changed Markdown + live docs graph
+        shell: bash
+        env:
+          EVENT_BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          set -euo pipefail
+          node scripts/lupa/grafo-vivo-markdown-conformance.mjs --self-test
+          base="$EVENT_BASE_SHA"
+          if ! [[ "$base" =~ ^[0-9a-f]{40}$ ]] || [[ "$base" =~ ^0{40}$ ]]; then
+            base="$(git rev-parse HEAD^)"
+          fi
+          git cat-file -e "$base^{commit}"
+          node scripts/lupa/grafo-vivo-markdown-conformance.mjs --changed-from "$base"

@@ -44,6 +44,37 @@ else
     FAILED=1
 fi
 
+# Teste 2.1: Delta Gate deve bloquear squash sem delta exato base→head
+# Mantém a decisão no hosted-compatibility-gate, sem segundo promotor.
+echo ""
+echo "🧪 Teste 2.1: hosted-compatibility-gate exige delta comprovado antes do squash"
+if node - <<'NODE'
+const fs = require('node:fs');
+const workflow = fs.readFileSync('.github/workflows/dependabot-auto-merge.yml', 'utf8');
+const required = [
+  'github.rest.repos.compareCommits',
+  "status === 'AHEAD'",
+  'DELTA_GATE=',
+  'DELTA_BASE_SHA:',
+  'DELTA_HEAD_SHA:',
+  'DELTA_AHEAD_BY:',
+  'DELTA_FILES_CHANGED:',
+  'DELTA_STATUS:',
+  'uniqueBlockers.length === 0 && deltaGate.ok',
+  'SQUASH_RESULT_SHA:',
+];
+for (const token of required) {
+  if (!workflow.includes(token)) throw new Error(`DELTA_GATE token ausente: ${token}`);
+}
+console.log('  ✅ Delta Gate base→head, receipt e contraprova de squash presentes');
+NODE
+then
+    :
+else
+    echo "  ❌ Delta Gate incompleto no hosted-compatibility-gate"
+    FAILED=1
+fi
+
 # Teste 3: Verificar se resolve-conflicts.sh existe e é executável
 echo ""
 echo "🧪 Teste 3: resolve-conflicts.sh existe e é executável"
@@ -67,6 +98,71 @@ if [ -f scripts/dependabot/dependabot-supreme-monitor.sh ]; then
     echo "  ✅ Arquivo existe"
 else
     echo "  ❌ Arquivo não existe"
+    FAILED=1
+fi
+
+# Teste 4.1: Verificar se registry estruturado de conflitos conhecidos existe
+echo ""
+echo "🧪 Teste 4.1: known-conflict-patterns.json existe e cobre arquivos críticos"
+if [ -f scripts/dependabot/known-conflict-patterns.json ]; then
+    echo "  ✅ Registro existe"
+    node - <<'NODE' || FAILED=1
+const fs = require('node:fs');
+const registry = JSON.parse(fs.readFileSync('scripts/dependabot/known-conflict-patterns.json', 'utf8'));
+const requiredFields = [
+  'CONFLICT_ID',
+  'PATH_PATTERN',
+  'OWNER',
+  'CONFLICT_CLASS',
+  'SOURCE_REF',
+  'KNOWN_CAUSE',
+  'SAFE_RESOLUTION',
+  'PRESERVE_RULE',
+  'EXPECTED_RESULT',
+  'COUNTERPROOF',
+  'RUNTIME_APPLICABLE',
+  'LAST_PROVED_SHA',
+  'LAST_PROVED_AT',
+];
+const requiredPatterns = new Set([
+  'CENTRALDARK_AI_BOOT.yaml',
+  'LEIA-ME-IA.md',
+  'docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md',
+  'scripts/lupa/validar-continuidade-global.mjs',
+]);
+
+if (registry.schema !== 'centraldark.dependabot.known-conflict-patterns.v1') {
+  throw new Error('schema inválido');
+}
+if (!Array.isArray(registry.patterns) || registry.patterns.length < 10) {
+  throw new Error('registry sem padrões suficientes');
+}
+for (const entry of registry.patterns) {
+  for (const field of requiredFields) {
+    if (!entry[field]) throw new Error(`campo obrigatório ausente: ${field} em ${entry.CONFLICT_ID || entry.PATH_PATTERN}`);
+  }
+  if (!['USE_PR_SIDE', 'USE_MAIN_SIDE', 'BLOCK_REVIEW'].includes(entry.SAFE_RESOLUTION)) {
+    throw new Error(`SAFE_RESOLUTION inválida: ${entry.SAFE_RESOLUTION}`);
+  }
+  requiredPatterns.delete(entry.PATH_PATTERN);
+}
+if (requiredPatterns.size) {
+  throw new Error(`padrões críticos ausentes: ${[...requiredPatterns].join(', ')}`);
+}
+console.log(`  ✅ Registry estruturado válido: ${registry.patterns.length} padrões`);
+NODE
+else
+    echo "  ❌ Registro não existe"
+    FAILED=1
+fi
+
+# Teste 4.2: Verificar se a política ours/theirs continua fail-closed nos caminhos conhecidos
+echo ""
+echo "🧪 Teste 4.2: política de resolução protege caminhos conhecidos"
+if [ -f scripts/dependabot/resolve-conflicts-policy.test.sh ]; then
+    bash scripts/dependabot/resolve-conflicts-policy.test.sh
+else
+    echo "  ❌ Teste de política não existe"
     FAILED=1
 fi
 

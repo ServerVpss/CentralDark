@@ -127,6 +127,15 @@ entry_triggers:
     status: CONTRACT_ENFORCED_RUNTIME_PERSISTENCE_MUST_BE_OBSERVED
 
 learning_triggers:
+  - event: AUREOLA_MATERIAL_DISCOVERY
+    owner: ".agents/skills/session-intelligence-harvester/ + scripts/memory-linker/"
+    source_contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml
+    behavior: [EMIT_MATERIAL_OPERATIONAL_EVENT, REQUIRE_LEARNING_REF, CLASSIFY_FACT_INFERENCE_HYPOTHESIS_UNKNOWN, DEDUPE, SEARCH_EXISTING_CRYSTAL, ROUTE_TO_EXISTING_OWNER, DREAM_REVIEW, PATTERN_DISCOVERY, HANDOFF_TO_AUTHORIZED_WRITER_WHEN_ELIGIBLE]
+    direct_canonical_mutation: false
+    same_finding_without_new_evidence: DROP_DUPLICATE
+    every_material_discovery_is_learning_candidate: true
+    every_material_discovery_is_canonical_fact: false
+    status: ACTIVE_CONTRACT
   - event: MATERIAL_INGEST
     owner: ".agents/skills/session-intelligence-harvester/"
     pipeline: [INVENTORY, HASH, SECRET_SCAN, SOURCE_CLASS_CLAMP, DEDUPE, NORMALIZE, HAND_OFF_MEMORY_LINKER]

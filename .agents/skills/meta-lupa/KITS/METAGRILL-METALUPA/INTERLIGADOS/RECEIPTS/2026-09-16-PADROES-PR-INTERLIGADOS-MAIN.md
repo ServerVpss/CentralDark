@@ -1,0 +1,81 @@
+# 🧾 👑🪬 RECEIPT · PADRÕES PR → MAIN · !># INTERLIGADOS
+
+```text
+👑🪬 !CENTRALDARK
+→ 🔗 !># INTERLIGADOS
+→ 🧿 #ACORDAR
+→ 🎛️ !CALIBRAR
+→ 🧭 !MULTIBÚSSOLA
+→ 🔎 !META_LUPA
+→ 🔄 !RECONCILIAR
+→ ⚖️ !CONTRAPROVA
+→ 🧾 !REGISTRA
+→ ⚖️ REALIDADE
+```
+
+MISSION_ID=PR_PATTERNS_INTERLIGADOS_MAIN_20260916
+STATUS=CRYSTALLIZED_SOURCE_LAYER
+OWNER=.agents/skills/meta-lupa/SKILL.md
+RUNTIME_MUTATION=false
+CASA_REQUIRED_FOR_THIS_SOURCE_DELTA=false
+
+## 🧿 Delta promovido
+
+```text
+PADROES-PR/DELTA-PR-1493-1550.md
+PADROES-PR/REFRESH-2026-09-16.json
+SKILLS/INTERLIGACAO-OPERACIONAL.json
+CANONE-OPERACIONAL.md
+RUNTIME/FRONTEIRAS-REAIS.md
+README.md
+INDEX.md
+```
+
+## 🔗 Commits desta passagem
+
+```text
+5dff914764d5a37bcf32478d3d43a16a1119aa72  padrões visuais PR 1493→1550
+a2aaa4d2d7893480fc3e2dbc36d0120b5ca62c7a  refresh machine-readable
+29d6a145412b670d579272cb834d32ff1fff0bef  interligação operacional das skills
+f78cdb73755a29ba1490afbd8c63522c165e0cf1  cânone interligado atualizado
+ab70f9e09e3808b156883dfa5e230b497b03cc4a  fronteira runtime atualizada
+cccebd065d2fb0c53f660fe16977951041004746  README/indexação semântica
+24b68dc801c129820161a1ecc5fbb6762d939a6f  INDEX visual atualizado
+```
+
+## 🏠 O que ficou propositalmente fora do verde de fonte
+
+```text
+PR1541_REVIEW_AUTOMATION_RUNTIME
+PR1545_DRIVE_VPS_FIXED_POINT_RUNTIME
+PR1547_LOGIN_OTP_CONTROL_PLANE_RUNTIME
+PR1549_PERSISTENT_REGIME_RUNTIME
+PR1550_NARRATED_TOOL_CALL_RUNTIME
+REMOTE_DEVICE_ONLINE_NOW
+VOICE_TO_INTENT_TO_ROUTER_TO_RECEIPT_NOW
+CENTRALDARK_EXE_RUNNING_NOW
+VPS_DEPLOYED_SHA_NOW
+GLOBAL_FIXED_POINT
+```
+
+## 🔒 Contraprova
+
+```text
+NEW_ENGINE=false
+NEW_ROUTER=false
+NEW_OWNER=false
+V2_V3_CREATED=false
+RUNTIME_CLAIM_PROMOTED=false
+PR_PATTERN_PROMOTED_AS_IMPLEMENTATION=false
+EMOJI_USED_AS_PROOF=false
+```
+
+## 🧠 Regra final
+
+```text
+MAIN = leis, owners, gatilhos, costura e proveniência estáveis
+CASA/VPS = somente estado temporal e execução viva
+PATTERN_ON_MAIN != RUNNING_NOW
+UNKNOWN != PASS
+REALIDADE = JUIZ
+```

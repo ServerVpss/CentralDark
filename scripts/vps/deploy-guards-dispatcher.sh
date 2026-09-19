@@ -14,6 +14,7 @@
 #   REUSE_BEFORE_CREATE  → reutiliza os dois scripts existentes; não duplica
 #   ONE_WRITER_PER_SCOPE → trava única por tipo de deploy
 #   FAIL_HIGH            → falha alto em vez de promover no escuro
+#   TLC23/HORN            → corpo incompleto nunca fabrica cabeça PASS
 #
 # Uso:
 #   ./deploy-guards-dispatcher.sh                          # pré-flight (idem)
@@ -22,14 +23,13 @@
 #
 # Variáveis de ambiente (opcionais):
 #   REPO_DIR             default: /root/CentralDark
-#   SSH_KEY             default: ~/.ssh/deploy_centraldark
+#   SSH_KEY              default: ~/.ssh/deploy_centraldark
 #
 # Saídas:
 #   0 ok sem alterações necessárias
 #   1 uso | 2 argumento | 10 repo inválido | 11 sem rede/fetch
 #   12 imutável | 13 divergência | 14 sem privilégio | 15 hook bloqueia
-#   21 deploy-operational-guards executado (use --apply)
-#   22 centraldark-deploy executado (use --apply)
+#   16 TLC23/universal proof gate | 21 operational | 22 repo-wide
 #
 # ══════════════════════════════════════════════════════════════════════
 set -Eeuo pipefail
@@ -60,6 +60,9 @@ info() { log "INFO: $*"; }
 contar_sujos() {
   git status --porcelain | grep -cE '^([MARCD ][MARCD]|[MARCD] )' || true
 }
+contar_sujos_todos() {
+  git status --porcelain --untracked-files=all | sed '/^$/d' | wc -l | tr -d ' '
+}
 
 # ─── Lock única por dispatcher (não conflita com os locks dos scripts) ─
 exec 9>/tmp/centraldark-dispatcher.lock
@@ -81,10 +84,11 @@ ALVO="$(git rev-parse "origin/$BRANCH")"
 ATRAS="$(git rev-list --count "HEAD..origin/$BRANCH")"
 AFRENTE="$(git rev-list --count "origin/$BRANCH..HEAD")"
 SUJOS="$(contar_sujos)"
+SUJOS_ALL="$(contar_sujos_todos)"
 
 log "HEAD_ANTES=$HEAD_ANTES"
 log "ALVO=$ALVO"
-log "ATRAS=$ATRAS  AFRENTE=$AFRENTE  RASTREADOS_SUJOS=$SUJOS"
+log "ATRAS=$ATRAS  AFRENTE=$AFRENTE  RASTREADOS_SUJOS=$SUJOS  WORKTREE_DIRTY=$SUJOS_ALL"
 
 # ─── Guarda: ssh deploy ─────────────────────────────────────────────────
 if [[ ! -f "$SSH_KEY" && "$APPLY" -eq 1 ]]; then
@@ -95,6 +99,59 @@ info "chave de deploy: $([[ -f "$SSH_KEY" ]] && echo "presente" || echo "ausente
 # ─── Guarda: scripts existentes ─────────────────────────────────────────
 [[ -x "$CENTRALDARK_DEPLOY" ]] || die "centraldark-deploy.sh ausente ou não executável" 10
 [[ -x "$OPERATIONAL_GUARDS" ]] || die "deploy-operational-guards.sh ausente ou não executável" 10
+
+# ─── TLC23 / Universal Method: validar o SHA alvo antes de mutação ──────
+log "=== TLC23 / UNIVERSAL PRE-FLIGHT ==="
+GATE_TMP="$(mktemp -d /tmp/centraldark-tlc23-deploy.XXXXXX)"
+cleanup_gate_tmp() {
+  git worktree remove --force "$GATE_TMP" >/dev/null 2>&1 || true
+  rm -rf "$GATE_TMP" >/dev/null 2>&1 || true
+}
+trap cleanup_gate_tmp EXIT
+
+git worktree add --detach "$GATE_TMP" "$ALVO" --quiet \
+  || die "não foi possível materializar SHA alvo para contraprova" 16
+
+(
+  set -euo pipefail
+  cd "$GATE_TMP"
+  test "$(git rev-parse HEAD)" = "$ALVO"
+  python3 scripts/trigger-fabric/centraldark_master_cycle.py --self-test
+  python3 scripts/trigger-fabric/verify_repo_contract.py . | tee /tmp/centraldark-deploy-contract-$$.txt
+  grep -q '^REPO_CONTRACT_VERIFY=PASS$' /tmp/centraldark-deploy-contract-$$.txt
+  node apps/modulos/HERMES-CORE/core/universal-method-contract.mjs --self-test
+  python3 scripts/lupa/validar_autolupa_hash.py
+  python3 .agents/skills/meta-lupa/scripts/horn_caracol_gate.py --self-test
+  rm -f /tmp/centraldark-deploy-contract-$$.txt
+) || die "SHA alvo falhou Master/Universal/Meta-Lupa/Horn" 16
+
+# Os fatos abaixo só são materializados depois das medições acima.
+# Divergência local ou worktree suja impede no_destructive_bypass.
+[[ "$SUJOS_ALL" -eq 0 ]] || die "TLC23 bloqueou worktree suja" 16
+[[ "$AFRENTE" -eq 0 ]] || die "TLC23 bloqueou histórico local à frente; reconciliar antes" 16
+
+cat >"$GATE_TMP/tlc23-deploy-facts.json" <<'JSON'
+{
+  "centraldark_gate": {
+    "acordar_done": true,
+    "calibrar_done": true,
+    "multibussola_done": true,
+    "meta_lupa_done": true,
+    "menos_e_mais_done": true,
+    "owner_resolved": true,
+    "writer_scope_valid": true,
+    "evidence_bound": true,
+    "no_destructive_bypass": true
+  }
+}
+JSON
+(
+  cd "$GATE_TMP"
+  python3 .agents/skills/meta-lupa/scripts/horn_caracol_gate.py --facts-file "$GATE_TMP/tlc23-deploy-facts.json"
+) || die "HORN_CARACOL_DEPLOY_GATE=BLOCK" 16
+log "TLC23_TARGET_SHA=$ALVO"
+log "UNIVERSAL_METHOD_TARGET=PASS"
+log "HORN_CARACOL_DEPLOY_GATE=PASS"
 
 # ─── Guarda: imutáveis ──────────────────────────────────────────────────
 IMUTAVEIS="$(git ls-files -z \
@@ -113,7 +170,7 @@ info "nenhum rastreado imutável — ok"
 
 # ─── Guarda: histórico divergente ───────────────────────────────────────
 if [[ "$AFRENTE" -gt 0 && "$ACEITAR_DIVERGENCIA" -eq 0 ]]; then
-  log "O dispatcher bow sala divergência de histórico."
+  log "O dispatcher bloqueia divergência de histórico."
   die "HISTORICO_DIVERGENTE" 13
 fi
 
@@ -124,26 +181,26 @@ if [[ -x "$HOOK_PREPARE" ]]; then
 fi
 
 # ─── Decisão: nada a fazer ──────────────────────────────────────────────
-if [[ "$HEAD_ANTES" == "$ALVO" && "$SUJOS" -eq 0 ]]; then
-  log "JA_SINCRONIZADO — nada a fazer"
+if [[ "$HEAD_ANTES" == "$ALVO" && "$SUJOS_ALL" -eq 0 ]]; then
+  log "JA_SINCRONIZADO — source já está no alvo; gate TLC23 foi revalidado"
   exit 0
 fi
 
 # ─── Dry-run para aqui ──────────────────────────────────────────────────
 if [[ "$APPLY" -eq 0 ]]; then
   log "=== PRÉ-FLIGHT — nada alterado. Use --apply para executar. ==="
-  log "ATRAS=$ATRAS  AFRENTE=$AFRENTE  RASTREADOS_SUJOS=$SUJOS"
+  log "ATRAS=$ATRAS  AFRENTE=$AFRENTE  WORKTREE_DIRTY=$SUJOS_ALL"
   log "caminho para origem: $ORIGIN_URL ($BRANCH)"
   log "alvo: origin/$BRANCH"
   log "scripts disponíveis: centraldark-deploy.sh, deploy-operational-guards.sh"
-  log "próxima etapa: executar --apply para decidir e aplicar"
+  log "TLC23/HORN/UNIVERSAL=PASS no SHA alvo"
   exit 0
 fi
 
 # ─── Aplicar ────────────────────────────────────────────────────────────
 log "=== APLICANDO ==="
 
-# Repo-wide com guards de imutabilidade
+# Repo-wide com guards de imutabilidade; só alcançável após TLC23 PASS.
 log "executando centraldark-deploy.sh --apply"
 "$CENTRALDARK_DEPLOY" --apply \
   || die "centraldark-deploy.sh falhou" 13
@@ -161,4 +218,5 @@ ss -tlnp 2>/dev/null | grep -q ':9100' \
   || die "porta 9100 sem listener (rollback: git reset --hard vps-pre-deploy-<timestamp>)" 14
 
 log "=== DEPLOY_PROVADO ==="
+log "TLC23/HORN/UNIVERSAL=PASS"
 log "MCP_HEALTH=200  PORTA_9100=LISTENING"
