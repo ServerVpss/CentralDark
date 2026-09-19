@@ -25,13 +25,19 @@ DIA ACABA → fechar autonomamente → atualizar este checklist → Telegram CHE
 - [x] Locução 2 min + base cavaleiros
 - [x] GOAL PAI vive; Casa lembra pelo motor
 - [x] VPS limpa: porcelain 0; skip-worktree json vivo; quarentena `/root/_QUARANTINE-vps-20260919`
+- [x] DELTA ÚTIL 01: `@srver1bot` projeta Hub de Contas/Auth no PR #1581
+- [x] Pool Claude: seleção/anti-loop/fallback-policy implementados + testes unitários no mesmo artefato
+- [ ] Claude hot-swap de credencial no runtime = NOT_EXECUTED
+- [ ] Claude login oficial multi-conta = medir fluxo suportado antes de ligar
+- [ ] Codex auth/login no Hub = medir mecanismo suportado antes de ligar
 - [ ] Deploy canônico do HEAD atual = DEPLOYED (MERGED ≠ DEPLOYED)
 - [ ] `hub_missions` 403 42501
 - [ ] Caddy leftover (elite/grafo/portal) classificado LEGADO — não remover sem prova
 - [ ] Heartbeat público vs local (janela SUSPECT/stale) — transporte ≠ morte
 
-**HEAD:** `eb94b0d89fd` = `origin/main`  
-**Deploy vivo:** `35440165274` queued no mesmo SHA  
+**Main medida nesta rodada:** `02136f7df8d0a6f6088a3d316aabdc966e9db6eb`  
+**PR de cristalização:** #1581 · DELTA ÚTIL 01 · ainda não mergeado  
+**Deploy do delta #1581:** NOT_EXECUTED (`MERGED != DEPLOYED`)  
 **Coração:** MCP local health ok; público pode `stale`  
 **Fechamento Hermes:** job Daily Receipt → 23:00, notify CHEFE  
 
