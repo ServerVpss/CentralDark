@@ -20,6 +20,8 @@ const FILES = {
   autoconfigRuntime: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/HERMES-AUTOCONFIG-RUNTIME.yml',
   hermesPrompt: 'apps/modulos/HERMES-CORE/prompts/hermes-core.md',
   tlc23: 'docs/CONSCIENCIA/04-MCP-E-CONECTORES/tlc23.pdf',
+  agentCall: 'scripts/agent-call.mjs',
+  deployDispatcher: 'scripts/vps/deploy-guards-dispatcher.sh',
 };
 
 const TLC23_CANONICAL_SHA256 = 'b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1';
@@ -101,6 +103,8 @@ export function validateUniversalMethod() {
   const engine = read(FILES.engine);
   const autoconfigRuntime = read(FILES.autoconfigRuntime);
   const hermesPrompt = read(FILES.hermesPrompt);
+  const agentCall = read(FILES.agentCall);
+  const deployDispatcher = read(FILES.deployDispatcher);
   const tlc23Hash = sha256(readBuffer(FILES.tlc23));
 
   if (tlc23Hash !== TLC23_CANONICAL_SHA256) {
@@ -210,6 +214,14 @@ export function validateUniversalMethod() {
     'ASKED_USER_IS_NOT_BLOCKED: true',
     'NEXT_ACORDAR',
     'NEXT_CURSOR',
+    'global_contract_enforcer:',
+    'marker: CENTRALDARK_GLOBAL_CONTRACT_ENFORCER_REQUIRED',
+    'mode: EXTEND_EXISTING_TRIGGER_FABRIC_AND_AGENT_CALL',
+    'mutation_gate: scripts/agent-call.mjs',
+    'deploy_gate: scripts/vps/deploy-guards-dispatcher.sh',
+    'GLOBAL_ENTRY_GATE_PASS',
+    'GLOBAL_EXIT_GATE_PASS',
+    'DELTA_CONTINUO_REQUIRED: true',
   ], 'MASTER_CYCLE');
 
   requireTokens(autoconfigRuntime, [
@@ -271,6 +283,20 @@ export function validateUniversalMethod() {
     'CONTINUE_NEXT_CURSOR',
   ], 'ENGINE_BINDING');
 
+  requireTokens(agentCall, [
+    'CENTRALDARK_GLOBAL_CONTRACT_ENFORCER_REQUIRED',
+    'GLOBAL_CONTRACT_SCOPE_ID',
+    'validateGlobalContractGate',
+    'BLOCKED_GLOBAL_CONTRACT_GATE_MISSING',
+    '--global-contract-gate',
+    'PASS_GLOBAL_CONTRACT_GATE',
+  ], 'GLOBAL_CONTRACT_AGENT_GATE');
+
+  requireTokens(deployDispatcher, [
+    'CentralDark — dispatcher condicional de scripts de deploy na VPS',
+    'TLC23 / Universal Method: validar o SHA alvo antes de mutação',
+  ], 'GLOBAL_CONTRACT_DEPLOY_OWNER');
+
   requireTokens(hermesPrompt, [
     'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml',
     'ENGINE_IS_NOT_OWNER=true',
@@ -331,6 +357,8 @@ export function validateUniversalMethod() {
     operational_narration_contract: true,
     preventive_continuity_staff_contract: true,
     bounded_100_percent_requires_explicit_denominator: true,
+    global_contract_enforcer: true,
+    continuous_delta_global: true,
   };
 }
 
