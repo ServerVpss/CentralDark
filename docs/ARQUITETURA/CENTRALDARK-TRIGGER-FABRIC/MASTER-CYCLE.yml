@@ -496,6 +496,7 @@ log_incident_crystallization:
   marker: CENTRALDARK_LOG_INCIDENT_FANOUT_CRYSTALLIZATION_REQUIRED
   sensor: /admin/api/logs
   sensor_owner: apps/modulos/mcp/src/admin.js
+  deterministic_fanout_gate: scripts/agent-call.mjs --log-incident-fanout
   use_existing_trigger_fabric: true
   creates_new_logger: false
   creates_new_orchestrator: false
