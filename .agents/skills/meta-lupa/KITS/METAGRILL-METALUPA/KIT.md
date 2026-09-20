@@ -170,3 +170,40 @@ PROOF_FOOTER_ON_MUTATION=true
 CHANGE_REQUIRES_SEGREDO_CHEFE=true
 SEMANTIC_BODY_DOES_NOT_CREATE_PARALLEL_OWNER=true
 ```
+
+## 🔁 Cristalização obrigatória após busca material
+
+Qualquer busca, inspeção, investigação ou remedição que produza delta material deve ser registrada no PR-MÃE antes da próxima busca material.
+
+```text
+BUSCA / INSPEÇÃO
+→ FATO OBSERVADO
+→ CLASSIFICAÇÃO
+→ DELTA ÚTIL
+→ RECEIPT NO PR-MÃE
+→ NEXT_CURSOR
+→ SÓ ENTÃO PRÓXIMA BUSCA
+```
+
+Regras:
+
+```text
+PR_MOTHER_SESSION_LEDGER_REQUIRED=true
+MATERIAL_SEARCH_WITHOUT_MOTHER_RECEIPT=INCOMPLETE
+CRYSTALLIZE_BEFORE_NEXT_MATERIAL_SEARCH=true
+PR_MOTHER_RECORDS=true
+PR_MOTHER_RUNTIME_WRITER=false
+CHILD_OWNER_MUTATES=true
+CURRENT_OVER_HISTORY=true
+UNKNOWN_IS_NOT_PASS=true
+REALITY_IS_JUDGE=true
+```
+
+A cristalização deve registrar também erros do próprio executor quando materiais, distinguindo:
+- TARGET_FAILURE;
+- TOOL/WRAPPER_FAILURE;
+- TEST_ENVIRONMENT_FAILURE;
+- PROVIDER_FAILURE;
+- PRODUCT_REGRESSION.
+
+Nenhum desses estados pode ser convertido no outro sem contraprova.
