@@ -28,6 +28,7 @@ import { mcpPolicyTools } from "./mcp-policy.js";
 import { integrationsTools } from "../integrations.js";
 import { painelTools } from "../painel/painel.js";
 import { eliteGatewayTools } from "../elite/elite-gateway.js";
+import { hybridObservabilityTools } from "../observability/hybrid-observability.js";
 import { piveteTools } from "../pivete/pivete-tools.js";
 import { cognitivoTools } from "../cognitivo/cognitivo.js";
 import { semanticTools } from "../cognitivo/semantic.js";
@@ -55,6 +56,7 @@ const RAW_TOOLS = [
     ...integrationsTools,
     ...painelTools,
     ...eliteGatewayTools,
+    ...hybridObservabilityTools,
     ...piveteTools,
     ...cognitivoTools,
     ...semanticTools,
