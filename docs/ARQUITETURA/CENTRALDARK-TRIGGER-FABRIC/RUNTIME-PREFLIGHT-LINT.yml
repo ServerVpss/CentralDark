@@ -1,5 +1,5 @@
 schema: centraldark.runtime-preflight-lint.v1
-status: CANDIDATE_UNTIL_EXECUTABLE_CONSUMER
+status: EXECUTABLE_CONSUMER_LOCAL_T1_PASS_AWAITING_SAME_HEAD_CI
 owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC
 authority: SEGREDO/CHEFE
 
@@ -94,3 +94,18 @@ promotion:
   same_head_ci_required_when_claimed: true
   runtime_green_requires_preflight_green: true
   preflight_green_does_not_imply_runtime_green: true
+
+local_proof:
+  observed_head: cb33f8fae3ed02719115b9808c9fe161689edd4f
+  py_compile: PASS
+  test_suite: "13/13 PASS"
+  positive_safe_command: PASS
+  negative_js_template_interpolation: FAIL_CLOSED
+  negative_powershell_pid_collision: FAIL_CLOSED
+  negative_missing_required_path: FAIL_CLOSED
+  worktree_removed: true
+  receipt: ".agents/skills/meta-lupa/KITS/METAGRILL-METALUPA/INTERLIGADOS/RECEIPTS/2026-09-20-RUNTIME-PREFLIGHT-T1-13OF13-PASS.md"
+  limitations:
+    - SAME_HEAD_CI_NOT_COMPLETE
+    - RUNTIME_EXECUTOR_ENFORCEMENT_NOT_PROVEN
+    - GLOBAL_FIXED_POINT_NOT_PROVEN
