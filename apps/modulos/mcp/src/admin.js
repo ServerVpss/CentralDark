@@ -11,7 +11,8 @@ import { getCatalogSummary } from "./tools/core/tools-catalog.js";
 import { log } from "./log.js";
 import { withCid } from "./correlation.js";
 import { config } from "./config.js";
-import { injectPatternAdmin } from "./admin-patterns-ui.js";\nimport { getOperationalSnapshot } from "./operational-telemetry.js";
+import { injectPatternAdmin } from "./admin-patterns-ui.js";
+import { getOperationalSnapshot } from "./operational-telemetry.js";
 
 const COOKIE = "cd_admin";
 const TTL_MS = 2 * 60 * 60 * 1000;
@@ -598,7 +599,8 @@ async function rodarE2E(){
 function recarregar(){ carregarHealth(); carregarTools(); carregarMetricas(); carregarOperational(); }
 recarregar();
 setInterval(carregarHealth, 15000);
-setInterval(carregarMetricas, 15000);\nsetInterval(carregarOperational, 15000);
+setInterval(carregarMetricas, 15000);
+setInterval(carregarOperational, 15000);
 conectarLogs();
 </script>
 </body></html>`;
@@ -673,7 +675,8 @@ export function adminRotas(req, res) {
             { metodo: "GET", path: "/admin/logs/stream", protegido: true },
             { metodo: "POST", path: "/admin/api/e2e", protegido: true },
             { metodo: "GET", path: "/admin/api/logs", protegido: true },
-            { metodo: "GET", path: "/admin/api/metricas", protegido: true },\n            { metodo: "GET", path: "/admin/api/operational-snapshot", protegido: true },
+            { metodo: "GET", path: "/admin/api/metricas", protegido: true },
+            { metodo: "GET", path: "/admin/api/operational-snapshot", protegido: true },
         ],
     });
 }
