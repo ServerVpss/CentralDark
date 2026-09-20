@@ -60,8 +60,24 @@ function requestTimeoutMs() {
 }
 
 function restConfig() {
-  const projectRef = String(process.env.SUPABASE_PROJECT_REF || "").trim();
+  const projectRef = String(
+    process.env.HUB_SUPABASE_PROJECT_REF ||
+    process.env.SUPABASE_PROJECT_REF ||
+    ""
+  ).trim();
   const explicitUrl = String(process.env.HUB_SUPABASE_URL || process.env.SUPABASE_URL || "").trim();
+  if (explicitUrl && projectRef) {
+    let hostname = "";
+    try {
+      hostname = new URL(explicitUrl).hostname.toLowerCase();
+    } catch {
+      throw new Error("HUB_MISSION_SUPABASE_URL_INVALID");
+    }
+    const match = hostname.match(/^([a-z0-9-]+)\.supabase\.co$/i);
+    if (match && match[1].toLowerCase() !== projectRef.toLowerCase()) {
+      throw new Error("HUB_MISSION_SUPABASE_PROJECT_MISMATCH");
+    }
+  }
   const restUrl = String(explicitUrl || (projectRef ? `https://${projectRef}.supabase.co` : "")).replace(/\/$/, "");
   const serviceRoleKey = String(
     process.env.HUB_SUPABASE_SERVICE_ROLE_KEY ||
@@ -78,9 +94,11 @@ async function rest(path, { method = "GET", body, prefer } = {}) {
   if (!serviceRoleKey) throw new Error("HUB_MISSION_SERVICE_ROLE_KEY_MISSING");
   const headers = {
     Accept: "application/json",
+    "Accept-Profile": "public",
     apikey: serviceRoleKey,
     Authorization: `Bearer ${serviceRoleKey}`,
   };
+  if (method !== "GET" && method !== "HEAD") headers["Content-Profile"] = "public";
   if (body !== undefined) headers["Content-Type"] = "application/json";
   if (prefer) headers.Prefer = prefer;
 
