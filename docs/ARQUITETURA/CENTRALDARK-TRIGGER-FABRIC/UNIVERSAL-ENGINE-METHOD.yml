@@ -318,6 +318,33 @@ hybrid_runtime_contract:
   caddy_rollback_on_validation_failure: true
   t0_t1_pid_health_receipt_required: true
 
+global_contract_enforcer:
+  marker: CENTRALDARK_GLOBAL_CONTRACT_ENFORCER_REQUIRED
+  status: MANDATORY_FOR_MUTATION
+  owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
+  deterministic_gate: scripts/agent-call.mjs
+  deploy_gate: scripts/vps/deploy-guards-dispatcher.sh
+  creates_new_dispatcher: false
+  read_only_observation_may_bypass_mutation_gate: true
+  mutable_action_requires_entry_gate: true
+  entry_requires: [CONTRACT_SCOPE, OBSERVED_HEAD, GITHUB_T0, VPS_T0, DRIFT_CLASSIFIED, OWNER, WRITER_SCOPE, PREFLIGHT, COUNTERPROOF_PLAN, ROLLBACK_REF, NEXT_CURSOR]
+  exit_requires: [GITHUB_T1, VPS_T1, COUNTERPROOF, RECEIPT_REF, HUD_UPDATE, HUD_STATE_HASH, FIXED_POINT_OR_NEXT_CURSOR]
+  promotion_requires_same_head_ci: true
+  runtime_mutation_requires_runtime_proof: true
+  queued_pending_in_progress_cancelled_unknown_are_pass: false
+  skipped_without_proven_not_applicable_is_pass: false
+  machine_continues_until_real_human_frontier: true
+
+continuous_delta_global:
+  marker: CENTRALDARK_DELTA_CONTINUO_REQUIRED
+  active_while_master_session_active: true
+  new_material_is_delta_candidate: true
+  new_material_restarts_mission: false
+  process: [CAPTURE, LINK_TO_ACTIVE_GOAL, DEDUPE, CLASSIFY, MEASURE_IF_STATEFUL, ABSORB_ONLY_USEFUL_DELTA, UPDATE_BELIEF, RECONCILE, COUNTERPROVE, UPDATE_HUD, PERSIST_NEXT_CURSOR]
+  duplicate: DROP
+  no_information_gain: NO_CHANGE_KEEP_GOAL_KEEP_NEXT_CURSOR
+  interruption: RESUME_FROM_NEXT_CURSOR_AFTER_REMEASURE
+
 operational_trace:
   visible_to_chefe: true
   private_chain_of_thought_required: false
