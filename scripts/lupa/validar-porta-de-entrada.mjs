@@ -307,6 +307,12 @@ if (!contract) {
     "COUNTERPROOF",
     "CAUSAL_MICRO_DEPLOY_IF_APPLICABLE",
     "MEASURE_GITHUB_AND_VPS_IN_PARALLEL_T1",
+    "MEASURE_CROSS_SURFACE_DRIFT",
+    "PROTECT_DIRTY_RUNTIME_ROOT",
+    "RECONCILE_DIVERGED_BRANCH_NO_FORCE_IN_ISOLATED_WORKTREE",
+    "RUN_SAME_HEAD_CI",
+    "PROMOTE_CANONICALLY",
+    "REMEASURE_PROMOTED_SHA_ON_GITHUB_AND_VPS",
     "RUNTIME_PROOF",
     "REGISTER_RECEIPT",
     "UPDATE_FIXED_HUD_WITH_LIVE_DATA",
@@ -326,6 +332,20 @@ if (!contract) {
   if (convergence.failed_job_reconciliation?.any_failed_job_requires_investigation !== true) errors.push("CONTRATO_GLOBAL_JOB_FALHO_SEM_INVESTIGACAO");
   if (convergence.failed_job_reconciliation?.reconciliation_plan_required !== true) errors.push("CONTRATO_GLOBAL_JOB_FALHO_SEM_PLANO");
   if (convergence.failed_job_reconciliation?.unknown_root_cause_stays_unknown !== true) errors.push("CONTRATO_GLOBAL_JOB_FALHO_INVENTA_CAUSA");
+
+  const crossSurface = universal.cross_surface_convergence ?? {};
+  if (crossSurface.marker !== "CROSS_SURFACE_GIT_RUNTIME_CONVERGENCE_REQUIRED") errors.push("CONTRATO_CROSS_SURFACE_MARKER_AUSENTE");
+  if (crossSurface.branch_reconciliation?.divergent_pr_requires_update_before_promotion !== true) errors.push("CONTRATO_PR_DIVERGENTE_SEM_UPDATE");
+  if (crossSurface.branch_reconciliation?.update_mode !== "NO_FORCE") errors.push("CONTRATO_UPDATE_BRANCH_COM_FORCE");
+  if (crossSurface.branch_reconciliation?.isolated_worktree_required_when_root_dirty !== true) errors.push("CONTRATO_ROOT_DIRTY_SEM_WORKTREE_ISOLADO");
+  if (crossSurface.branch_reconciliation?.reset_hard_forbidden !== true) errors.push("CONTRATO_RESET_HARD_NAO_BLOQUEADO");
+  if (crossSurface.branch_reconciliation?.force_push_forbidden !== true) errors.push("CONTRATO_FORCE_PUSH_NAO_BLOQUEADO");
+  if (crossSurface.runtime_root_safety?.delete_or_clean_without_proof !== "FORBIDDEN") errors.push("CONTRATO_DIRTY_ROOT_CLEAN_SEM_PROVA");
+  if (crossSurface.transient_channel_failure?.classify_as !== "BLOCKED_TRANSIENT") errors.push("CONTRATO_CHANNEL_TRANSIENT_CLASS_INVALIDA");
+  if (crossSurface.transient_channel_failure?.does_not_authorize_false_green !== true) errors.push("CONTRATO_CHANNEL_TRANSIENT_FALSO_VERDE");
+  if (crossSurface.ci_semantics?.cancelled !== "NOT_PASS") errors.push("CONTRATO_CI_CANCELLED_VIROU_PASS");
+  if (crossSurface.ci_semantics?.same_head_required !== true) errors.push("CONTRATO_CI_SEM_SAME_HEAD");
+  if (!Array.isArray(crossSurface.fixed_point_requires) || !crossSurface.fixed_point_requires.includes("GITHUB_AND_VPS_T1_RECONCILED")) errors.push("CONTRATO_FIXED_POINT_SEM_T1_DUAL");
 
   const micro = universal.micro_deploy ?? {};
   if (micro.policy !== "CANONICAL_WHEN_CAUSALLY_APPLICABLE") errors.push("CONTRATO_UNIVERSAL_MICRO_DEPLOY_AUSENTE");
