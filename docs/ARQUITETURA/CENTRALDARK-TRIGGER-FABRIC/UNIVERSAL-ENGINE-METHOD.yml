@@ -376,6 +376,29 @@ hybrid_telemetry_contract:
   evidence_envelope_required: [SOURCE_TYPE, SOURCE_ID, TARGET, HOST, OWNER, OBSERVED_AT, HEAD_OR_RUNTIME_FINGERPRINT, EVIDENCE_REF, CLAIM, CLASS]
   unresolved_material_contradiction: FIXED_POINT_FALSE
 
+log_incident_crystallization_contract:
+  marker: CENTRALDARK_LOG_INCIDENT_FANOUT_CRYSTALLIZATION_REQUIRED
+  sensor: /admin/api/logs
+  sensor_owner: apps/modulos/mcp/src/admin.js
+  sensor_is_global_health: false
+  correlation_fields: [cid, correlation_id, request_id, trace_id, span_id, path, status, level, msg, ms]
+  material_signal_activates_fanout: true
+  fanout_mode: PARALLEL_READ_ONLY_DIAGNOSIS
+  fronts: [AUTH_OAUTH, MCP_RUNTIME, HUB_DATABASE, ROUTING_NETWORK, PROCESS_RUNTIME, GITHUB_CI, CONFIG_PROVENANCE, SCREEN_OPTIONAL]
+  screen_unavailable_does_not_block_other_fronts: true
+  rendezvous_required_before_mutation: true
+  mutation_mode: PARALLEL_ONLY_FOR_PROVEN_DISJOINT_SCOPES_SERIAL_WITHIN_EACH_SCOPE
+  one_active_writer_per_mutable_scope: true
+  same_scope_concurrent_writers: false
+  each_mutation_requires: [OWNER, CAUSE, PREFLIGHT, ROLLBACK, T0, COUNTERPROOF_PLAN]
+  each_mutation_followed_by: [T1_SAME_TARGET, LOG_RESCAN, DEPENDENT_HEALTH_RECHECK, RECEIPT]
+  continue_until: ALL_MATERIAL_INCIDENTS_RESOLVED_OR_EXACT_BLOCKER
+  same_failure_no_new_information: REUSE_EXISTING_CRYSTAL_OR_ESCALATE_DISCRIMINATING_TEST
+  new_error_during_fix: NEW_DELTA_SAME_MISSION
+  log_silence_alone_is_pass: false
+  endpoint_200_alone_is_pass: false
+  unresolved_material_error_means_fixed_point: false
+
 global_contract_enforcer:
   marker: CENTRALDARK_GLOBAL_CONTRACT_ENFORCER_REQUIRED
   status: MANDATORY_FOR_MUTATION
