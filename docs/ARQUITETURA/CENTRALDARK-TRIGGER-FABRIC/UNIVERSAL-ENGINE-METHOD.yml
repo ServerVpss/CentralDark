@@ -216,6 +216,27 @@ skin_contract:
   pressure_continuity: true
   abusive_or_degrading_language_is_not_required_by_skin: true
 
+cross_surface_git_runtime_convergence:
+  marker: CROSS_SURFACE_GIT_RUNTIME_CONVERGENCE_REQUIRED
+  mandatory_when_operational: true
+  measure_github_main_pr_and_ci: true
+  measure_vps_root_canonical_main_runtime_and_dirty_state: true
+  compare_pr_head_against_current_main: true
+  divergent_pr_requires_no_force_update: true
+  dirty_root_requires_isolated_worktree_for_git_reconciliation: true
+  preserve_dirty_and_untracked_runtime_state: true
+  reset_hard_forbidden: true
+  force_push_forbidden: true
+  same_head_ci_required: true
+  cancelled_ci_is_pass: false
+  transient_remote_failure_class: BLOCKED_TRANSIENT
+  transient_failure_requires_partial_write_measurement: true
+  runtime_corrected_is_git_converged: false
+  git_current_is_runtime_current: false
+  process_alive_is_fixed_point: false
+  post_promotion_github_vps_remeasure_required: true
+  fixed_point_requires_dual_t1_reconciliation: true
+
 global_convergence_coordination:
   contract_marker: GLOBAL_CONVERGENCE_COORDINATION_REQUIRED
   mandatory_when_material: true
