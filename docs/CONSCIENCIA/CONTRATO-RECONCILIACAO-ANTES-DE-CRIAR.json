@@ -979,7 +979,8 @@
     "chefe_authority_ref": "this_contract.centraldark_global_contract.authority",
     "cards_on_table_ref": "this_contract.centraldark_global_contract.cards_on_table",
     "global_contract_enforcer_ref": "this_contract.global_contract_enforcer",
-    "continuous_delta_global_ref": "this_contract.continuous_delta_global"
+    "continuous_delta_global_ref": "this_contract.continuous_delta_global",
+    "vps_kernel_delta_stream_ref": "this_contract.vps_kernel_delta_stream_contract"
   },
   "centraldark_global_contract": {
     "marker": "CENTRALDARK_WHOLE_HOUSE_ONE_DIRECTION_REQUIRED",
@@ -1522,7 +1523,8 @@
       "expose_cross_surface_drift": true,
       "layout_remains_fixed": true
     },
-    "log_incident_contract_ref": "this_contract.log_incident_crystallization_contract"
+    "log_incident_contract_ref": "this_contract.log_incident_crystallization_contract",
+    "vps_kernel_delta_stream_ref": "this_contract.vps_kernel_delta_stream_contract"
   },
   "ephemeral_artifact_policy": {
     "marker": "CENTRALDARK_EPHEMERAL_WORKSPACE_CLEAN_REQUIRED",
@@ -1796,5 +1798,82 @@
       "endpoint_200_alone_is_pass": false,
       "fixed_point_if_any_required_unknown": false
     }
+  },
+  "vps_kernel_delta_stream_contract": {
+    "marker": "CENTRALDARK_VPS_KERNEL_DELTA_STREAM_REQUIRED",
+    "status": "MANDATORY_FOR_VPS_OBSERVABILITY",
+    "intent": "DELTA_UTIL_DO_STREAM_PERCORRE_VPS_PELO_MOTOR_FASTAPI_SEM_REMOVER_STREAM_BRUTO",
+    "new_parallel_service": false,
+    "engine_owner": "apps/modulos/elite-gateway/scripts/centraldark_omni_router.py",
+    "transport": "FASTAPI",
+    "public_control_api": "https://api.centralldark.com",
+    "one_heart": "https://api.centralldark.com/heartbeat",
+    "endpoints": [
+      "/kernel/vps/delta",
+      "/kernel/vps/delta/raw",
+      "/kernel/vps/delta/stream",
+      "/kernel/vps/delta/health"
+    ],
+    "source_classes": [
+      "MCP_JSONL",
+      "PM2_LOGS",
+      "CADDY_LOGS",
+      "DOCKER_JSON_LOGS",
+      "HERMES_MISSION_LOGS",
+      "RUNNER_DIAGNOSTIC_LOGS"
+    ],
+    "source_roots_allowlisted": true,
+    "bounded_tail_reads": true,
+    "raw_stream": {
+      "preserve": true,
+      "canonical_human_surface": "apps/modulos/mcp/src/admin.js:/admin/logs/stream",
+      "may_be_removed": false,
+      "derived_delta_replaces_raw": false
+    },
+    "delta_semantics": {
+      "derived_not_authority": true,
+      "action_is_proof": false,
+      "http_200_is_global_pass": false,
+      "sanitize_before_expose": true,
+      "dedupe_by_fingerprint": true,
+      "error_material": true,
+      "repeated_warn_material_threshold": 3,
+      "info_is_context_unless_cross_sensor_material": true
+    },
+    "flow": [
+      "VPS_ALLOWLISTED_SENSORS",
+      "FASTAPI_OMNI_ROUTER",
+      "SANITIZE_AND_NORMALIZE",
+      "DELTA_USEFUL_DEDUPE",
+      "TRIGGER_FABRIC_MATERIALITY",
+      "LOG_INCIDENT_FANOUT",
+      "OWNER_RENDEZVOUS",
+      "HUD_AND_RECEIPT",
+      "ONE_HEART_OBSERVABILITY"
+    ],
+    "whole_vps_rule": {
+      "read_only_first": true,
+      "no_recursive_filesystem_crawl": true,
+      "max_files_bounded": true,
+      "max_bytes_per_file_bounded": true,
+      "process_load_disk_inventory_read_only": true,
+      "unknown_source_is_not_pass": true
+    },
+    "mutation_policy": {
+      "stream_never_mutates_directly": true,
+      "material_delta_routes_to_existing_owner": true,
+      "one_writer_per_scope": true,
+      "global_contract_entry_exit_required_for_fix": true
+    },
+    "runtime_proof_required": [
+      "FASTAPI_PROCESS_OWNER",
+      "LISTENER_PORT",
+      "ROUTE_BINDING",
+      "AUTH_BOUNDARY",
+      "RAW_STREAM_STILL_AVAILABLE",
+      "DELTA_ENDPOINT_RESPONDS",
+      "SSE_STREAM_EMITS",
+      "ONE_HEART_STILL_RESPONDS"
+    ]
   }
 }
