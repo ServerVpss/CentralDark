@@ -1,7 +1,0 @@
-b3e31bdc271b53272ad42181b8246aa85f880868  .agents/skills/meta-lupa/KITS/METAGRILL-METALUPA/FORMATO-RESPOSTA-CANONICO.md
-# O_QUE_E=Cadeado de identidade do formato de resposta canônico do KIT METAGRILL-METALUPA.
-# REGRA_BYTE_A_BYTE=Qualquer alteração no formato muda o git-blob SHA1 e deve falhar no gate até reconciliação explícita.
-# AUTORIDADE=SEGREDO/CHEFE.
-# MUDANCA_SILENCIOSA=PROIBIDA.
-# COMO_VALIDAR=python scripts/lupa/validar_autolupa_hash.py
-# OWNER=.agents/skills/meta-lupa/SKILL.md

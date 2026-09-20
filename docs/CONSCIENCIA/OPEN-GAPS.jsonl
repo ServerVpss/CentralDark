@@ -1,6 +1,0 @@
-{"claim": "SCREENPIPE_CAPTURE_LIVE_IN_CENTRALDARK", "state": "UNKNOWN", "action": "E2E receipt only"}
-{"claim": "SCREENPIPE_FRAME_TO_MCP_TO_HERMES", "state": "UNKNOWN", "action": "prove frame consumption + provenance"}
-{"claim": "SCREENPIPE_AUDIO_TO_MCP_TO_HERMES", "state": "UNKNOWN", "action": "prove audio/transcript consumption + provenance"}
-{"claim": "GLOBAL_RUNTIME_FIXED_POINT", "state": "NOT_PROVEN", "action": "runtime receipt after current measurement"}
-{"claim": "TRIGGER_FABRIC_CONTRACT_CURRENT", "state": "BLOCKED", "action": "remediate only missing markers already identified"}
-{"claim": "MAIN_BRANCH_PROTECTION", "state": "OFF_OBSERVED", "action": "policy decision; do not conflate with source failure"}

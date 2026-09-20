@@ -1,1 +1,0 @@
-UPDATE public.bot_settings SET webapp_url = NULL WHERE webapp_url ILIKE '%lovableproject.com%' OR webapp_url ILIKE '%id-preview--%';

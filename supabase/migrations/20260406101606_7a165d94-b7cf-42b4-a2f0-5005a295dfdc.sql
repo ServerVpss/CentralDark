@@ -1,1 +1,0 @@
-ALTER TABLE public.paginated_results ADD COLUMN IF NOT EXISTS metadata jsonb DEFAULT '{}'::jsonb;

@@ -1,1 +1,0 @@
-ALTER TABLE public.bot_settings ADD COLUMN button_emoji_ids jsonb DEFAULT '{}'::jsonb;
