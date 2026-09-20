@@ -254,6 +254,70 @@ global_convergence_coordination:
   failed_job_unknown_root_cause_stays_unknown: true
   skipped_phase_requires_reason: true
 
+whole_house_universal_contract:
+  marker: CENTRALDARK_WHOLE_HOUSE_ONE_DIRECTION_REQUIRED
+  status: MANDATORY_GLOBAL
+  scope: ENTIRE_CENTRALDARK
+  scope_id: canon/centraldark-universal-contract-20260919
+  authority: SEGREDO/CHEFE
+  one_direction: true
+  no_parallel_contract: true
+  active_promotion_lane: canon/centraldark-universal-contract-20260919
+  after_promotion_authority: main
+  cards_on_table:
+    missing_piece_must_be_reported: true
+    exact_failure_location_required: true
+    exact_improvement_or_next_test_required: true
+    unknown_must_remain_visible: true
+    false_green_forbidden: true
+
+fixed_hud_contract:
+  marker: CENTRALDARK_FIXED_HUD_REQUIRED
+  always_show_on_centraldark_operational_response: true
+  layout: FIXED
+  data: LIVE_ONLY
+  sections_in_order: [AUREOLA_CANONICA, ACORDAR, CALIBRAR, MULTIBUSSOLA, META_LUPA, RECONCILIAR, CONTRAPROVA, T1_REMEDICAO, REALIDADE, REGISTRA, FIXED_POINT]
+  arbitrary_percent_forbidden: true
+  percent_requires_explicit_denominator: true
+  layout_change_requires_explicit_chefe_authorization: true
+
+trace_pombo64_contract:
+  marker: CENTRALDARK_HASH_TIME_POMBO64_TRACE_REQUIRED
+  observed_at_iso8601_with_offset: true
+  observed_at_utc: true
+  trace_id_formula: SHA256_OBSERVED_PHASE_DIRECTION_OBJECT_OWNER_HEAD_DEPENDENCY_24
+  event_id_format: CD-YYYYMMDDTHHMMSSO-TRACE24
+  pombo_mode: CHECKSUM_ON
+  pombo64_plus: BASE64URL_SANITIZED_ENVELOPE_PLUS_SHA256_PLAINTEXT
+  pombo64_is_proof: false
+  base64_is_security: false
+  secrets_forbidden: true
+  same_event_hash: DROP_DUPLICATE
+
+plug_and_play_inheritance:
+  marker: CENTRALDARK_PLUG_AND_PLAY_CONTRACT_INHERITANCE
+  future_executor_without_contract: FAIL_CLOSED
+  required_binding: [CONTRACT_REF, CONTRACT_SCHEMA, CONTRACT_HASH_OR_GIT_BLOB, OWNER, CAPABILITY, SCOPE, ENTRYPOINT, HEALTH_PROBE, RECEIPT_SINK, ROLLBACK_BOUNDARY, NEXT_CURSOR]
+  adapter_is_new_brain: false
+  engine_switch_is_reset: false
+  session_switch_is_reset: false
+  no_v2_v3_v4_for_same_capability: true
+
+hybrid_runtime_contract:
+  marker: CENTRALDARK_HYBRID_RUNTIME_DISCOVERY_REQUIRED
+  pm2_canonical_home: /root/.pm2
+  pm2_profile_homes_glob: /root/.centraldark/mcp-auth/profiles/*/home/.pm2
+  discover_all_pm2_homes_before_mutation: true
+  preserve_all_pm2_homes: true
+  act_only_where_owner_exists: true
+  cross_home_restart_forbidden: true
+  restart_all_forbidden: true
+  caddy_backup_before_mutation: true
+  caddy_validate_before_reload: true
+  caddy_reload_only_after_validate: true
+  caddy_rollback_on_validation_failure: true
+  t0_t1_pid_health_receipt_required: true
+
 operational_trace:
   visible_to_chefe: true
   private_chain_of_thought_required: false
