@@ -318,6 +318,53 @@ hybrid_runtime_contract:
   caddy_rollback_on_validation_failure: true
   t0_t1_pid_health_receipt_required: true
 
+desktop_agentic_kernel_contract:
+  marker: CENTRALDARK_DESKTOP_AGENTIC_KERNEL_REQUIRED
+  status: MANDATORY_WHEN_DESKTOP_TARGET_IS_MATERIAL
+  semantic_scope:
+    centraldark_core_is_logical_agentic_kernel: true
+    logical_kernel_is_centraldark_core_not_native_os_kernel: true
+    native_os_kernel_claim_requires_boot_evidence: true
+    native_os_kernel_state_without_boot_evidence: UNKNOWN
+  owner: apps/modulos/Bolt/source
+  entrypoint: CentralDark.exe
+  source_gate:
+    same_head_source_required: true
+    desktop_contract_test_required: true
+    source_present_is_runtime_pass: false
+    contract_test_pass_is_packaged_pass: false
+  package_gate:
+    packaged_runtime_required: true
+    installer_sha256_required: true
+    update_metadata_required: true
+    hermes_sidecar_required_for_fixed_point: true
+    hermes_bundle_unknown_blocks_fixed_point: true
+    exe_exists_is_fixed_point: false
+  launch_gate:
+    centraldark_exe_launch_required: true
+    renderer_visible_required: true
+    omni_router_health_required: true
+    hermes_health_required: true
+    mcp_health_required_for_fixed_point: true
+    process_exists_is_health: false
+    ui_visible_is_runtime_complete: false
+  provider_boundary:
+    optional_provider_failure_does_not_kill_core: true
+    selected_optional_provider_requires_fresh_health: true
+    desktop_commander_role: FALLBACK_AND_HUMAN_DESKTOP_BRIDGE
+    screenpipe_role: OPTIONAL_LOCAL_SENSOR
+    direct_api_mcp_primary: true
+  convergence:
+    github_casa_vps_api_rendezvous_required: true
+    casa_head_must_be_measured: true
+    vps_head_must_be_measured: true
+    api_health_must_be_measured: true
+    remote_bridge_online_is_global_fixed_point: false
+    fixed_point_requires: [SAME_HEAD_SOURCE, DESKTOP_CONTRACT_TEST, INSTALLER_SHA256, CENTRALDARK_EXE_LAUNCH, RENDERER_VISIBLE, OMNI_HEALTH, HERMES_SIDECAR_BUNDLED, MCP_HEALTH, T1, RECEIPT]
+  evidence:
+    secrets_forbidden_in_receipt: true
+    auth_material_is_telemetry: false
+    unknown_is_pass: false
 ephemeral_artifact_policy:
   marker: CENTRALDARK_EPHEMERAL_WORKSPACE_CLEAN_REQUIRED
   temporary_version_suffixes_allowed: true
