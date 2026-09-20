@@ -183,6 +183,7 @@ export function validateUniversalMethod() {
     'log_incident_crystallization_contract:',
     'CENTRALDARK_LOG_INCIDENT_FANOUT_CRYSTALLIZATION_REQUIRED',
     'sensor: /admin/api/logs',
+    'deterministic_fanout_gate: scripts/agent-call.mjs --log-incident-fanout',
     'fanout_mode: PARALLEL_READ_ONLY_DIAGNOSIS',
     'mutation_mode: PARALLEL_ONLY_FOR_PROVEN_DISJOINT_SCOPES_SERIAL_WITHIN_EACH_SCOPE',
     'one_active_writer_per_mutable_scope: true',
@@ -358,6 +359,10 @@ export function validateUniversalMethod() {
     'BLOCKED_GLOBAL_CONTRACT_GATE_MISSING',
     '--global-contract-gate',
     'PASS_GLOBAL_CONTRACT_GATE',
+    '--log-incident-fanout',
+    'validateLogIncidentFanout',
+    'PASS_LOG_INCIDENT_FANOUT_PLAN',
+    'PARALLEL_ONLY_FOR_PROVEN_DISJOINT_SCOPES_SERIAL_WITHIN_EACH_SCOPE',
   ], 'GLOBAL_CONTRACT_AGENT_GATE');
 
   requireTokens(deployDispatcher, [
@@ -452,6 +457,7 @@ export function validateUniversalMethod() {
     hybrid_telemetry_global: true,
     ephemeral_cleanup_contract: true,
     log_incident_crystallization_contract: true,
+    log_incident_fanout_gate: true,
   };
 }
 
