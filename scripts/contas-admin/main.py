@@ -26,7 +26,7 @@ GH_ID = os.environ.get("GITHUB_CLIENT_ID", "")
 GH_SECRET = os.environ.get("GITHUB_CLIENT_SECRET", "")
 GOOGLE_ID = os.environ.get("GOOGLE_CLIENT_ID", "")
 GOOGLE_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", "")
-PUBLIC_BASE = os.environ.get("CONTAS_PUBLIC_BASE", "https://status.centralldark.com")
+PUBLIC_BASE = os.environ.get("CONTAS_PUBLIC_BASE", "https://admin.centralldark.com/contas")
 
 if not TOKEN:
     raise RuntimeError("CONTAS_ADMIN_TOKEN ausente")
