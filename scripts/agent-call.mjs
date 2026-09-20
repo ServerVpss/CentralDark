@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 /**
  * CentralDark Universal Agent Call — gate determinístico.
+ * CENTRALDARK_GLOBAL_CONTRACT_ENFORCER_REQUIRED
  *
  * Não executa modelo, não concede autoridade e não escreve no escopo chamado.
  * Valida CALL, retorno de delegação, obrigação de delegar e recuperação
@@ -11,6 +12,8 @@ import { readFile } from "node:fs/promises";
 import { randomUUID } from "node:crypto";
 
 const PROTOCOL = "CENTRALDARK_AGENT_CALL_V1";
+const GLOBAL_CONTRACT_SCOPE_ID = "canon/centraldark-universal-contract-20260919";
+const GLOBAL_CONTRACT_SCHEMA_MIN = 6;
 const ALLOWED_ROLES = new Set([
   "COORDINATOR", "EXECUTOR", "DEBUGGER", "REVIEWER", "JUDGE", "HERMES", "READ_ONLY",
 ]);
@@ -146,6 +149,71 @@ function fail(reason, call, extra = {}) {
     accepted: false,
     write_authorized: false,
     ...extra,
+  };
+}
+
+export function validateGlobalContractGate(gate, state = null, expectedPhase = "ENTRY") {
+  const phase = String(expectedPhase || gate?.phase || "").toUpperCase();
+  const status = (reason, extra = {}) => ({
+    protocol: PROTOCOL,
+    gate: "GLOBAL_CONTRACT_ENFORCER",
+    phase,
+    status: reason,
+    accepted: false,
+    write_authorized: false,
+    scope_id: gate?.scope_id || null,
+    observed_head: gate?.observed_head || null,
+    ...extra,
+  });
+  if (!gate || typeof gate !== "object" || Array.isArray(gate)) return status("BLOCKED_GLOBAL_CONTRACT_GATE_MISSING");
+  if (!["ENTRY", "EXIT"].includes(phase)) return status("BLOCKED_GLOBAL_CONTRACT_PHASE_INVALID");
+  if (String(gate.phase || "").toUpperCase() !== phase) return status("BLOCKED_GLOBAL_CONTRACT_PHASE_MISMATCH");
+  if (gate.scope_id !== GLOBAL_CONTRACT_SCOPE_ID) return status("BLOCKED_GLOBAL_CONTRACT_SCOPE_MISMATCH");
+  if (!Number.isInteger(gate.contract_schema) || gate.contract_schema < GLOBAL_CONTRACT_SCHEMA_MIN) return status("BLOCKED_GLOBAL_CONTRACT_SCHEMA_STALE");
+  if (!nonEmpty(gate.observed_head)) return status("BLOCKED_GLOBAL_CONTRACT_HEAD_MISSING");
+  if (state?.head?.sha && gate.observed_head !== state.head.sha) {
+    return status("BLOCKED_STALE_HEAD", { expected_head: state.head.sha });
+  }
+  if (!nonEmpty(gate.trace_id)) return status("BLOCKED_GLOBAL_CONTRACT_TRACE_MISSING");
+  if (!nonEmpty(gate.next_cursor) && gate.fixed_point !== true) return status("BLOCKED_GLOBAL_CONTRACT_NEXT_CURSOR_MISSING");
+
+  const pass = (obj) => obj && typeof obj === "object" && obj.status === "PASS";
+  if (phase === "ENTRY") {
+    if (!pass(gate.github_t0) || !nonEmpty(gate.github_t0.head_sha)) return status("BLOCKED_GLOBAL_CONTRACT_GITHUB_T0");
+    if (!pass(gate.vps_t0) || !nonEmpty(gate.vps_t0.head_sha)) return status("BLOCKED_GLOBAL_CONTRACT_VPS_T0");
+    if (gate.cross_surface_drift_classified !== true) return status("BLOCKED_GLOBAL_CONTRACT_DRIFT_UNCLASSIFIED");
+    if (!pass(gate.owner_proof) || !nonEmpty(gate.owner_proof.owner)) return status("BLOCKED_GLOBAL_CONTRACT_OWNER_UNPROVEN");
+    if (!pass(gate.writer_scope_proof) || !nonEmpty(gate.writer_scope_proof.scope)) return status("BLOCKED_GLOBAL_CONTRACT_WRITER_UNPROVEN");
+    if (!pass(gate.preflight) || !nonEmpty(gate.preflight.evidence_ref)) return status("BLOCKED_GLOBAL_CONTRACT_PREFLIGHT");
+    if (!gate.counterproof_plan || gate.counterproof_plan.status !== "READY" || !nonEmpty(gate.counterproof_plan.evidence_ref)) return status("BLOCKED_GLOBAL_CONTRACT_COUNTERPROOF_PLAN");
+    if (!gate.rollback || gate.rollback.status !== "PREPARED" || !nonEmpty(gate.rollback.evidence_ref)) return status("BLOCKED_GLOBAL_CONTRACT_ROLLBACK");
+  } else {
+    if (!pass(gate.github_t1) || !nonEmpty(gate.github_t1.head_sha)) return status("BLOCKED_GLOBAL_CONTRACT_GITHUB_T1");
+    if (!pass(gate.vps_t1) || !nonEmpty(gate.vps_t1.head_sha)) return status("BLOCKED_GLOBAL_CONTRACT_VPS_T1");
+    if (!pass(gate.counterproof) || !nonEmpty(gate.counterproof.evidence_ref)) return status("BLOCKED_GLOBAL_CONTRACT_COUNTERPROOF");
+    if (!nonEmpty(gate.receipt_ref)) return status("BLOCKED_GLOBAL_CONTRACT_RECEIPT");
+    if (!gate.hud || gate.hud.status !== "PASS" || !nonEmpty(gate.hud.state_hash)) return status("BLOCKED_GLOBAL_CONTRACT_HUD");
+    if (gate.runtime_mutated === true && (!pass(gate.runtime_proof) || !nonEmpty(gate.runtime_proof.evidence_ref))) {
+      return status("BLOCKED_GLOBAL_CONTRACT_RUNTIME_PROOF");
+    }
+    if (gate.promotion_requested === true && (!pass(gate.same_head_ci) || gate.same_head_ci.head_sha !== gate.observed_head)) {
+      return status("BLOCKED_GLOBAL_CONTRACT_SAME_HEAD_CI");
+    }
+    if (gate.fixed_point === true && gate.aggregate_fixed_point_pass !== true) return status("BLOCKED_GLOBAL_CONTRACT_FALSE_FIXED_POINT");
+  }
+  return {
+    protocol: PROTOCOL,
+    gate: "GLOBAL_CONTRACT_ENFORCER",
+    phase,
+    status: "PASS_GLOBAL_CONTRACT_GATE",
+    accepted: true,
+    write_authorized: phase === "ENTRY",
+    scope_id: gate.scope_id,
+    contract_schema: gate.contract_schema,
+    observed_head: gate.observed_head,
+    trace_id: gate.trace_id,
+    next_cursor: gate.next_cursor || null,
+    fixed_point: gate.fixed_point === true,
   };
 }
 
@@ -639,6 +707,12 @@ export function validateAgentCall(call, state, now = Date.now()) {
   }
 
   const writeRequested = call.write_requested === true;
+  if (writeRequested) {
+    const globalGate = validateGlobalContractGate(call.global_contract_entry || state?.global_contract_entry, state, "ENTRY");
+    if (globalGate.accepted !== true) return fail(globalGate.status, call, {
+      global_contract_gate: globalGate,
+    });
+  }
   if (nested && writeRequested && call.writer_handoff_valid !== true) {
     return fail("BLOCKED_NESTED_WRITE_WITHOUT_HANDOFF", call);
   }
@@ -685,6 +759,7 @@ export function validateAgentCall(call, state, now = Date.now()) {
     status: "ACCEPTED",
     accepted: true,
     write_authorized: writeRequested,
+    global_contract_gate: writeRequested ? "PASS" : "NOT_APPLICABLE_READ_ONLY",
     from: call.from,
     to: call.to,
     requested_role: call.requested_role,
@@ -707,6 +782,19 @@ export function validateAgentCall(call, state, now = Date.now()) {
 
 async function main() {
   const args = process.argv.slice(2);
+
+  if (args[0] === "--global-contract-gate") {
+    const [phase, gatePath, statePath] = args.slice(1);
+    if (!phase || !gatePath) {
+      console.error("uso: node scripts/agent-call.mjs --global-contract-gate <ENTRY|EXIT> <gate.json> [state.json]");
+      process.exit(2);
+    }
+    const gate = await readFile(gatePath, "utf8").then(JSON.parse);
+    const state = statePath ? await readFile(statePath, "utf8").then(JSON.parse) : null;
+    const receipt = validateGlobalContractGate(gate, state, phase);
+    process.stdout.write(`${JSON.stringify(receipt, null, 2)}\n`);
+    process.exit(receipt.accepted ? 0 : 13);
+  }
 
   if (args[0] === "--delegation-gate") {
     const statePath = args[1];
