@@ -13,6 +13,8 @@
 name: 🤖 Dependabot — radar, compatibilidade e squash seguro
 
 on:
+  push:
+    branches: [main]
   pull_request_target:
     types: [opened, reopened, synchronize, ready_for_review]
   workflow_dispatch:
@@ -31,6 +33,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
   pull-requests: write
   checks: read
   statuses: read
@@ -321,3 +324,96 @@ jobs:
             // Nota: compatibilidade é lida do badge oficial, se presente.
             // Caso contrário, nenhuma aprovação ocorre — não inventar compatibilidade.
             console.log('::notice::COMPATIBILITY_GATE_ACTIVE score_must_match_official_badge');
+
+
+  reconcile-house-pr:
+    name: 🪡 Casa — reconciliar PR humano no mesmo motor
+    if: >-
+      github.event_name == 'pull_request_target' &&
+      github.repository == 'ServerVpss/CentralDark' &&
+      github.event.pull_request.user.login != 'dependabot[bot]' &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 30
+
+    steps:
+      - name: 📥 Checkout somente do BASE SHA confiável
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: .ci-house
+          persist-credentials: false
+          fetch-depth: 1
+          submodules: false
+
+      - name: 🧠 Update branch → auto-review → commit → rerun
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          TARGET_PR: ${{ github.event.pull_request.number }}
+          PROTECTED_PRS: '1562'
+          REPO_DIR: /root/CentralDark
+          RESOLVER: .ci-house/scripts/dependabot/resolve-conflicts.sh
+        run: |
+          set -euo pipefail
+          node .ci-house/scripts/dependabot/reconcile-open-prs.mjs
+
+      - name: 🧾 Receipt do reconciliador da Casa
+        if: always()
+        shell: bash
+        run: |
+          echo "PR=${{ github.event.pull_request.number }}"
+          echo "HEAD=${{ github.event.pull_request.head.sha }}"
+          echo "HOUSE_CONFLICT_OWNER=scripts/dependabot/resolve-conflicts.sh"
+          echo "AUTO_REVIEW_UNKNOWN=true"
+          echo "PR_MOTHER_1562_PROTECTED=true"
+          echo "UNKNOWN_IS_PASS=0"
+
+  reconcile-all-open-prs:
+    name: 🧭 Casa — varrer e reconciliar todos os PRs abertos
+    if: >-
+      github.repository == 'ServerVpss/CentralDark' &&
+      (
+        github.event_name == 'push' ||
+        github.event_name == 'schedule' ||
+        github.event_name == 'workflow_dispatch' ||
+        github.event_name == 'repository_dispatch'
+      )
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 60
+
+    steps:
+      - name: 📥 Checkout main confiável
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          path: .ci-house
+          persist-credentials: false
+          fetch-depth: 1
+          submodules: false
+
+      - name: 🔄 Todos PRs → update → auto-review → commit → rerun
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          PROTECTED_PRS: '1562'
+          REPO_DIR: /root/CentralDark
+          RESOLVER: .ci-house/scripts/dependabot/resolve-conflicts.sh
+        run: |
+          set -euo pipefail
+          node .ci-house/scripts/dependabot/reconcile-open-prs.mjs
+
+      - name: 🧾 Receipt repo-wide
+        if: always()
+        shell: bash
+        run: |
+          echo "SCOPE=ALL_OPEN_SAME_REPO_PRS"
+          echo "PR_MOTHER_1562_PROTECTED=true"
+          echo "UPDATE_BRANCH=true"
+          echo "AUTO_REVIEW_UNKNOWN=true"
+          echo "COMMIT_TO_PR_BRANCH=true"
+          echo "RERUN_FAILED_ONCE=true"
+          echo "DIRECT_MAIN_WRITE=0"
+          echo "UNKNOWN_IS_PASS=0"
