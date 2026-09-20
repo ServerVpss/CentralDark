@@ -224,6 +224,24 @@ delta_utility_runtime_gate:
     stop_on_no_material_delta_or_human_frontier: true
     no_information_gain: NO_CHANGE_WAIT_FOR_EVENT
 
+continuous_capability_absorption:
+  status: ACTIVE
+  owner: apps/modulos/HERMES-CORE/
+  fixed_point_is_learning_gate: false
+  approved_material_step_emits_learning_ref: true
+  proven_reusable_delta_binds_before_global_fixed_point: true
+  learning_owner: apps/modulos/HERMES-CORE/agents/Knowledge-Collector/agent.mjs
+  decision_consumer: apps/modulos/HERMES-CORE/core/decisor.mjs
+  runtime_producer: apps/modulos/HERMES-CORE/core/orchestrator.mjs
+  rules:
+    CONTINUOUS_HERMES_CAPABILITY_ABSORPTION: true
+    FIXED_POINT_IS_VERIFICATION_CHECKPOINT_NOT_LEARNING_GATE: true
+    PROVEN_REUSABLE_DELTA_BINDS_TO_CORE_BEFORE_GLOBAL_FIXED_POINT: true
+    MATERIAL_APPROVED_STEP_EMITS_LEARNING_REF: true
+    LEARNING_FAILURE_MUST_BE_VISIBLE: true
+    SAME_LEARNING_WITHOUT_NEW_EVIDENCE: DEDUPE
+    REUSE_BEFORE_CREATE: true
+
 fixed_point:
   require:
     - INVENTORY_CURRENT
