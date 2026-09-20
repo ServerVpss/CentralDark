@@ -213,9 +213,11 @@ def _normalize_delta_message(value: str) -> str:
 
 
 def parse_vps_delta_line(source: Path, raw_line: str, line_index: int = 0, mtime_ns: int = 0) -> Dict[str, Any]:
-    safe_raw = sanitize(raw_line)
+    # Parse the original line first. sanitize() intentionally truncates output,
+    # so parsing the sanitized string would break long JSON records (Caddy,
+    # Docker, structured PM2 logs) and lose route/status attribution.
     obj: Dict[str, Any] = {}
-    stripped = safe_raw.lstrip()
+    stripped = raw_line.lstrip()
     if stripped.startswith("{"):
         try:
             parsed = json.loads(stripped)
@@ -223,7 +225,9 @@ def parse_vps_delta_line(source: Path, raw_line: str, line_index: int = 0, mtime
                 obj = parsed
         except ValueError:
             obj = {}
+    safe_raw = sanitize(raw_line)
 
+    request_obj = obj.get("request") if isinstance(obj.get("request"), dict) else {}
     level = str(obj.get("level") or "").lower()
     status_raw = obj.get("status")
     try:
@@ -231,7 +235,15 @@ def parse_vps_delta_line(source: Path, raw_line: str, line_index: int = 0, mtime
     except (TypeError, ValueError):
         status = None
 
-    message = str(obj.get("event") or obj.get("message") or obj.get("msg") or safe_raw)
+    route_candidate = obj.get("path") or obj.get("route") or obj.get("url") or request_obj.get("uri") or request_obj.get("path") or "-"
+    method_candidate = obj.get("method") or request_obj.get("method") or ""
+    base_message = obj.get("event") or obj.get("message") or obj.get("msg")
+    if base_message:
+        message = str(base_message)
+    elif request_obj:
+        message = f"{method_candidate} {route_candidate} status={status if status is not None else 'unknown'}".strip()
+    else:
+        message = safe_raw
     lowered = message.lower()
     if level in {"error", "fatal", "critical"} or (status is not None and status >= 500) or re.search(r"\b(error|failed|failure|exception|traceback|fatal)\b", lowered):
         severity = "error"
@@ -240,8 +252,8 @@ def parse_vps_delta_line(source: Path, raw_line: str, line_index: int = 0, mtime
     else:
         severity = "info"
 
-    route = str(obj.get("path") or obj.get("route") or obj.get("url") or "-")
-    service = str(obj.get("service") or obj.get("app") or source.stem)
+    route = str(route_candidate)
+    service = str(obj.get("service") or obj.get("app") or obj.get("logger") or source.stem)
     normalized = _normalize_delta_message(message)
     signature = "|".join((severity, service, route, normalized))
     fingerprint = hashlib.sha256(signature.encode("utf-8", errors="replace")).hexdigest()[:24]
@@ -1492,6 +1504,14 @@ def self_test() -> int:
             parse_vps_delta_line(Path("/root/CentralDark/logs/mcp/test.jsonl"), '{"level":"warn","event":"timeout 67890"}', 2, 1),
             parse_vps_delta_line(Path("/root/CentralDark/logs/mcp/test.jsonl"), '{"level":"warn","event":"timeout 99999"}', 3, 1),
         ])[0].get("count") == 3,
+        "vps_delta_caddy_nested_route": (
+            lambda e: e.get("route") == "/health/deep" and e.get("status") == 503 and e.get("severity") == "error"
+        )(parse_vps_delta_line(
+            Path("/var/log/caddy/mcp-access.log"),
+            '{"level":"info","logger":"http.log.access.log1","msg":"handled request","request":{"method":"GET","uri":"/health/deep"},"status":503}',
+            4,
+            1,
+        )),
     }
     failed = [name for name, ok in checks.items() if not ok]
     print(json.dumps({"ok": not failed, "checks": checks, "failed": failed}, ensure_ascii=False))
