@@ -62,6 +62,58 @@ def test_megazord_persists_realtime_feedback_binding():
         assert token in text, token
 
 
+def test_runtime_preflight_contract_is_bound():
+    state = mod.runtime_preflight_contract_state(REPO)
+    assert state["status"] == "BOUND"
+    assert state["checks"]["file_present"] is True
+
+
+def test_runtime_preflight_allows_safe_literal_command():
+    result = mod.lint_runtime_command(
+        repo=REPO,
+        command="echo ok",
+        shell="bash",
+        host_mode="literal",
+        required_paths=["CENTRALDARK_AI_BOOT.yaml"],
+    )
+    assert result["status"] == "PASS"
+    assert result["reasons"] == []
+
+
+def test_runtime_preflight_blocks_js_template_shell_expansion():
+    result = mod.lint_runtime_command(
+        repo=REPO,
+        command='echo "${PIPESTATUS[0]}"',
+        shell="bash",
+        host_mode="js_template",
+    )
+    assert result["status"] == "FAIL_CLOSED"
+    assert "HOST_TEMPLATE_INTERPOLATION_RISK" in result["reasons"]
+
+
+def test_runtime_preflight_blocks_powershell_pid_collision():
+    result = mod.lint_runtime_command(
+        repo=REPO,
+        command="$pid = 123\\nWrite-Output $pid",
+        shell="powershell",
+        host_mode="literal",
+    )
+    assert result["status"] == "FAIL_CLOSED"
+    assert "POWERSHELL_PID_AUTOMATIC_VARIABLE_COLLISION" in result["reasons"]
+
+
+def test_runtime_preflight_blocks_missing_required_path():
+    result = mod.lint_runtime_command(
+        repo=REPO,
+        command="echo safe",
+        shell="bash",
+        host_mode="literal",
+        required_paths=["scripts/definitely-missing-centraldark-probe.sh"],
+    )
+    assert result["status"] == "FAIL_CLOSED"
+    assert "MISSING_REQUIRED_PATH" in result["reasons"]
+
+
 def test_lock_key_is_stable_and_owner_bound():
     a = mod.lock_key("CLAIM_X", "owner/a")
     b = mod.lock_key("CLAIM_X", "owner/a")
@@ -103,6 +155,11 @@ if __name__ == "__main__":
         test_realtime_feedback_routes_without_mutation_permission,
         test_empty_feedback_is_not_active,
         test_megazord_persists_realtime_feedback_binding,
+        test_runtime_preflight_contract_is_bound,
+        test_runtime_preflight_allows_safe_literal_command,
+        test_runtime_preflight_blocks_js_template_shell_expansion,
+        test_runtime_preflight_blocks_powershell_pid_collision,
+        test_runtime_preflight_blocks_missing_required_path,
         test_lock_key_is_stable_and_owner_bound,
         test_registry_roundtrip,
         test_canonical_chain_contains_full_core_flow,
