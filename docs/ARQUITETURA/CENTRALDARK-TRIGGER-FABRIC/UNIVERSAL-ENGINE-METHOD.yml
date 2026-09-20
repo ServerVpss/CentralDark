@@ -71,6 +71,12 @@ execution_semantics:
   parallel_perception: true
   serialized_mutation: true
   reality_is_judge: true
+  universal_operational_contract_required: true
+  github_vps_parallel_measurement_required: true
+  cross_surface_rendezvous_before_mutation: true
+  causal_micro_deploy_when_applicable: true
+  post_mutation_parallel_remeasure_required: true
+  fixed_hud_layout_live_data_required: true
   same_head_proof_required_for_git_green: true
   next_cursor_required_when_not_fixed_point: true
   failure_returns_one_canonical_phase: true
@@ -240,6 +246,8 @@ hermes_binding:
   validates_scope_temperature: true
 
 future_engine_gate:
+  universal_contract: docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json
+  new_engine_without_universal_operational_contract: FAIL
   registry: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml
   new_engine_without_trigger_fabric_inheritance: FAIL
   new_engine_without_universal_method_visibility: FAIL
