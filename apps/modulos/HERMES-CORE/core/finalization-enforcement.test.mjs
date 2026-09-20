@@ -5,6 +5,7 @@ import test from 'node:test';
 const source = await readFile(new URL('./orchestrator.mjs', import.meta.url), 'utf8');
 const executorSource = await readFile(new URL('../agents/Executor/agent.mjs', import.meta.url), 'utf8');
 const knowledgeSource = await readFile(new URL('../agents/Knowledge-Collector/agent.mjs', import.meta.url), 'utf8');
+const legacyEntrypointSource = await readFile(new URL('../../../../docs/CONSCIENCIA/ARSENAL/hermes-vivo/daemon.mjs', import.meta.url), 'utf8');
 
 test('T1: terminou=true passa pelo gate antes de qualquer conclusão', () => {
   assert.match(source, /auditarFinalizacao/);
@@ -150,4 +151,12 @@ test('T14 Executor: commit_push falha fechado e só fica verde após ler o HEAD 
   assert.match(trecho, /REMOTE_HEAD_VERIFIED=\[0-9a-f\]\{[0-9,]+\}/);
   assert.match(trecho, /\.test\(stdout\)/);
   assert.match(trecho, /PUBLISH_BLOCKED_REMOTE_READBACK_MISSING/);
+});
+
+
+test('T16 entrypoint PM2 legado converge no Core e fila antiga não cria segundo Hermes', () => {
+  assert.match(legacyEntrypointSource, /legacy-compat-to-hermes-core/);
+  assert.match(legacyEntrypointSource, /HERMES-CORE\/core\/orchestrator\.mjs/);
+  assert.match(source, /const LEGACY_PENDENTE = '\/root\/CentralDark\/missoes\/pendente'/);
+  assert.match(source, /for \(const inbox of \[PENDENTE, LEGACY_PENDENTE\]\)/);
 });
