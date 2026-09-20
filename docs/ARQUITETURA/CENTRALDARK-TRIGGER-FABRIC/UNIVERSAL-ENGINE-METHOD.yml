@@ -380,6 +380,7 @@ log_incident_crystallization_contract:
   marker: CENTRALDARK_LOG_INCIDENT_FANOUT_CRYSTALLIZATION_REQUIRED
   sensor: /admin/api/logs
   sensor_owner: apps/modulos/mcp/src/admin.js
+  deterministic_fanout_gate: scripts/agent-call.mjs --log-incident-fanout
   sensor_is_global_health: false
   correlation_fields: [cid, correlation_id, request_id, trace_id, span_id, path, status, level, msg, ms]
   material_signal_activates_fanout: true
