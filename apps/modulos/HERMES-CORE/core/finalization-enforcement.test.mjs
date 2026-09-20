@@ -4,6 +4,7 @@ import test from 'node:test';
 
 const source = await readFile(new URL('./orchestrator.mjs', import.meta.url), 'utf8');
 const executorSource = await readFile(new URL('../agents/Executor/agent.mjs', import.meta.url), 'utf8');
+const knowledgeSource = await readFile(new URL('../agents/Knowledge-Collector/agent.mjs', import.meta.url), 'utf8');
 
 test('T1: terminou=true passa pelo gate antes de qualquer conclusão', () => {
   assert.match(source, /auditarFinalizacao/);
@@ -109,18 +110,34 @@ test('BLOCKED fica em em-andamento e retomada automática respeita o bloqueio', 
   assert.match(source, /missão permanece em-andamento/);
 });
 
-test('T14 Executor: aprender não engole falha do ledger e faz read-back dos dois destinos', () => {
+test('T14 Executor: aprender persiste no owner único e faz read-back do ledger', () => {
   const start = executorSource.indexOf("case 'aprender':");
   const end = executorSource.indexOf("case 'git':", start);
   const trecho = executorSource.slice(start, end);
 
   assert.ok(start >= 0 && end > start);
   assert.match(trecho, /registrarNoLedger\(/);
-  assert.doesNotMatch(trecho, /registrarNoLedger\([^\n]+\)\s*;?\s*\}\s*catch\s*\{\s*\}/);
-  assert.match(trecho, /readFile\(APRENDIZADOS/);
   assert.match(trecho, /readFile\(ARSENAL_APRENDIZADOS/);
+  assert.doesNotMatch(trecho, /knowledge\/aprendizados\.json/);
   assert.match(trecho, /LEARNING_PERSISTENCE_VERIFIED=true/);
-  assert.match(trecho, /LEARNING_PERSISTENCE_VERIFIED=false/);
+  assert.match(trecho, /learning_ref=/);
+  assert.match(knowledgeSource, /export function consultarContexto/);
+  assert.match(knowledgeSource, /deduped: true/);
+});
+
+test('T15 Hermes aprende etapa material antes da conclusão/fixed point', () => {
+  const approved = source.indexOf('const etapaAprovada = resultadoAprovadoPeloCritic');
+  const capture = source.indexOf('registrarAprendizadoMaterial({ slug, etapa_titulo, ferramenta, resultado })', approved);
+  const learningRef = source.indexOf('entrada.learning_ref = aprendizagem.ref', capture);
+  const historyPush = source.indexOf('historico.push(entrada)', learningRef);
+  const finalGuard = source.indexOf("if (terminalState !== 'CONCLUIDA')", historyPush);
+
+  assert.ok(approved >= 0);
+  assert.ok(capture > approved, 'captura deve ocorrer depois de Executor+Critic aprovarem');
+  assert.ok(learningRef > capture, 'learning_ref precisa entrar no histórico');
+  assert.ok(historyPush > learningRef, 'histórico só é persistido depois do learning_ref');
+  assert.ok(finalGuard > historyPush, 'aprendizado ocorre antes da finalização da missão');
+  assert.match(source, /FIXED_POINT é checkpoint de verificação, não gate para capacitação do Hermes/);
 });
 
 test('T14 Executor: commit_push falha fechado e só fica verde após ler o HEAD remoto', () => {
