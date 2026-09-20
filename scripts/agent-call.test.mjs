@@ -7,6 +7,7 @@ import {
   validateDelegationResult,
   validateHealingGate,
   validateHealingResult,
+  validateGlobalContractGate,
 } from "./agent-call.mjs";
 
 const state = {
@@ -24,6 +25,23 @@ const state = {
   },
   debug_frontiers: [],
   delegation_receipts: [],
+  global_contract_entry: {
+    scope_id: "canon/centraldark-universal-contract-20260919",
+    contract_schema: 6,
+    phase: "ENTRY",
+    observed_head: "abc123",
+    trace_id: "trace-entry-001",
+    github_t0: { status: "PASS", head_sha: "abc123" },
+    vps_t0: { status: "PASS", head_sha: "vps123" },
+    cross_surface_drift_classified: true,
+    owner_proof: { status: "PASS", owner: "scripts/agent-call.mjs" },
+    writer_scope_proof: { status: "PASS", scope: "src:x" },
+    preflight: { status: "PASS", evidence_ref: "test:preflight" },
+    counterproof_plan: { status: "READY", evidence_ref: "test:counterproof-plan" },
+    rollback: { status: "PREPARED", evidence_ref: "git:rollback-anchor" },
+    next_cursor: "MUTATE_MINIMAL_THEN_T1",
+    fixed_point: false,
+  },
 };
 const base = {
   call_id: "C-1",
@@ -45,6 +63,27 @@ function check(actual, expected) {
 }
 
 check(validateAgentCall(base, state).status, "ACCEPTED");
+check(validateGlobalContractGate(state.global_contract_entry, state, "ENTRY").status, "PASS_GLOBAL_CONTRACT_GATE");
+check(validateAgentCall({ ...base, to: "hermes", requested_role: "EXECUTOR", write_requested: true, global_contract_entry: undefined }, { ...state, global_contract_entry: undefined }).status, "BLOCKED_GLOBAL_CONTRACT_GATE_MISSING");
+check(validateAgentCall({ ...base, to: "hermes", requested_role: "EXECUTOR", write_requested: true }, { ...state, global_contract_entry: { ...state.global_contract_entry, github_t0: { status: "UNKNOWN", head_sha: "abc123" } } }).status, "BLOCKED_GLOBAL_CONTRACT_GITHUB_T0");
+const exitGate = {
+  scope_id: "canon/centraldark-universal-contract-20260919",
+  contract_schema: 6,
+  phase: "EXIT",
+  observed_head: "abc123",
+  trace_id: "trace-exit-001",
+  github_t1: { status: "PASS", head_sha: "abc123" },
+  vps_t1: { status: "PASS", head_sha: "vps123" },
+  counterproof: { status: "PASS", evidence_ref: "test:counterproof" },
+  receipt_ref: "receipt:1",
+  hud: { status: "PASS", state_hash: "a".repeat(64) },
+  runtime_mutated: false,
+  promotion_requested: false,
+  fixed_point: false,
+  next_cursor: "SAME_HEAD_CI",
+};
+check(validateGlobalContractGate(exitGate, state, "EXIT").status, "PASS_GLOBAL_CONTRACT_GATE");
+check(validateGlobalContractGate({ ...exitGate, fixed_point: true, aggregate_fixed_point_pass: false }, state, "EXIT").status, "BLOCKED_GLOBAL_CONTRACT_FALSE_FIXED_POINT");
 check(validateAgentCall({ ...base, mission_id: "M-X" }, state).status, "BLOCKED_UNKNOWN_MISSION");
 check(validateAgentCall({ ...base, observed_head: "old" }, state).status, "BLOCKED_STALE_HEAD");
 check(validateAgentCall({ ...base, trail_id: undefined }, state).status, "BLOCKED_MISSING_TRAIL");
