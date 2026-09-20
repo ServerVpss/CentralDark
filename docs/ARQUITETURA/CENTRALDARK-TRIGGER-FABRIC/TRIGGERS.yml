@@ -279,6 +279,19 @@ automatic_triggers:
     owner: apps/modulos/HERMES-CORE/core/orchestrator.mjs
     observed_interval: 6h
     status: IMPLEMENTED_REQUIRES_SAFETY_RECONCILIATION
+  - event: LOG_INCIDENT_MATERIAL
+    owner: "apps/modulos/mcp/src/admin.js + Trigger Fabric"
+    sensor: /admin/api/logs
+    companion_sensors: [/health, /health/deep, /admin/api/metricas, /admin/logs/stream]
+    correlation: [cid, correlation_id, request_id, trace_id, span_id]
+    behavior: [CLASSIFY_MATERIALITY, FAN_OUT_PARALLEL_READ_ONLY_FRONTS, RENDEZVOUS_BY_TARGET_TRACE_OWNER, IDENTIFY_EXISTING_OWNER, QUEUE_CAUSAL_REMEDIATION, SERIALIZE_SAME_SCOPE_MUTATION, ALLOW_PROVEN_DISJOINT_SCOPE_PARALLELISM, T1_EACH_AFFECTED_SCOPE, RESCAN_LOGS, COUNTERPROOF, RECEIPT, CONTINUE_UNTIL_CRYSTALLIZED]
+    fronts: [AUTH_OAUTH, MCP_RUNTIME, HUB_DATABASE, ROUTING_NETWORK, PROCESS_RUNTIME, GITHUB_CI, CONFIG_PROVENANCE, SCREEN_OPTIONAL]
+    endpoint_200_is_global_pass: false
+    log_silence_is_global_pass: false
+    unresolved_material_error_fixed_point: false
+    may_write_canonical: scope_authorized_only
+    status: CONTRACT_DECLARED_EXISTING_LOG_OWNER
+
   - event: PR_UPDATED_OR_MERGED
     owner: existing_workflows
     behavior: [REVALIDATE_HEAD, GATES, DERIVED_INDEX_OF_CANONICAL_CORPUS]
@@ -324,3 +337,6 @@ routing_rules:
   - "CROSS_CHAT -> CONTEXT_NOT_CURRENT_STATE_RECOVER_BEFORE_REASK"
   - "SEMANTIC_LINK -> NAVIGATION_NOT_PROOF"
   - "PAST_PR_DELTA -> ABSORB_USEFUL_ONLY_PRESERVE_PROVENANCE"
+  - "LOG_INCIDENT_MATERIAL -> PARALLEL_READ_ONLY_DIAGNOSIS + RENDEZVOUS + OWNER_REMEDIATION + T1_RESCAN"
+  - "SAME_SCOPE_LOG_FIX -> SERIALIZE_WRITER; DISJOINT_PROVEN_SCOPES -> MAY_PROGRESS_IN_PARALLEL"
+  - "ADMIN_API_LOGS_200 != GLOBAL_HEALTH_PASS"
