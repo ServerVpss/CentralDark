@@ -2,7 +2,7 @@
 status: CANÔNICO
 authority: SEGREDO/CHEFE
 owner: docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json
-scope: observabilidade híbrida, grafo vivo, logs, Casa, VPS, MCP, Obsidian, Desktop Bridge
+scope: observabilidade híbrida, grafo vivo, logs, Casa, VPS, MCP, Obsidian, Desktop Bridge, Hermes, GPU/CPU local
 ---
 
 # Contrato híbrido — Grafo Vivo, Logs Brutais e Casa↔VPS
@@ -16,6 +16,7 @@ CASA / DESKTOP APP / OBSIDIAN / SCREENPIPE / REMOTE DESKTOP
 → CONTROL PLANE CENTRALDARK
 → MCP ADMIN / CATÁLOGO / LOGS
 → VPS / FASTAPI / OMNI ROUTER / HEARTBEAT
+→ HERMES / AGENTES / CLI / MODELOS
 → GITHUB / PRs / COMMITS / ISSUES / CI
 → GRAFO VIVO / HUD / RECEIPTS
 ```
@@ -33,6 +34,8 @@ UNKNOWN_NEVER_PASS=true
 SENSOR_FAILURE_IS_NOT_WORLD_FAILURE=true
 PERSONAL_DATA_PUBLIC_LOG=false
 SECRETS_RENDERED=false
+PATTERN_CONSUMED_BY_ALL_AGENTS=true
+HERMES_CONSUMES_GLOBAL_CONTRACT=true
 ```
 
 ## Stream bruto permanente
@@ -85,6 +88,8 @@ Obsidian/vault events
 Screenpipe events
 Remote Desktop device/process events
 Desktop app bridge events
+Local CPU/GPU/audio/video capability events
+Hermes agent/mission events
 Google Drive/Gmail only when explicit and scoped
 ```
 
@@ -125,9 +130,12 @@ screenpipe_status
 remote_desktop_bridge_status
 obsidian_live_graph_status
 centraldark_hybrid_inventory
+local_compute_status
+local_bridge_media_policy
+centraldark_data_ingest_policy
 ```
 
-Essas tools são sensores. Elas não são juiz, não reiniciam serviço e não removem logs.
+Essas tools são sensores/capacidades. Elas não são juiz, não reiniciam serviço e não removem logs.
 
 ## Obsidian e Grafo Vivo
 
@@ -185,6 +193,34 @@ LOCAL_RESOURCE_IS_NOT_PROOF=true
 GPU_JOB_REQUIRES_QUEUE_AND_THERMAL_GUARD=true
 AUDIO_VIDEO_REQUIRES_USER_SCOPE=true
 PERSONAL_DATA_REQUIRES_EXPLICIT_SOURCE_SCOPE=true
+NO_BLIND_BACKGROUND_CAPTURE=true
+LOCAL_JOB_TO_VPS_RECEIPT_REQUIRED=true
+```
+
+## Padrões do CHEFE e fluxo contínuo
+
+Toda aprendizagem operacional aprovada pelo CHEFE vira padrão consumível, não memória solta de um chat:
+
+```text
+CHEFE_DELTA_UTIL
+→ SANITIZE
+→ CLASSIFY_PATTERN
+→ OWNER_LOOKUP
+→ CONTRACT_OR_ADMINISTRABLE_REGISTRY
+→ HERMES_CONSUMES
+→ MCP_ADMIN_RENDER
+→ GRAFO_VIVO
+→ RECEIPT
+```
+
+Regras:
+
+```text
+CHATGPT_PATTERN != GLOBAL_PATTERN_UNTIL_REGISTERED
+HERMES_MUST_CONSUME_GLOBAL_CONTRACT=true
+ALL_CLI_ALL_MODEL_ALL_AGENT_USE_SAME_CONTRACT=true
+FLOW_CONTINUOUS=true
+RESUME_FROM_NEXT_CURSOR=true
 ```
 
 ## Gmail / Drive / vida pessoal
@@ -209,6 +245,7 @@ Grafo Vivo
 HUD
 Receipts
 PR/issue summaries
+Hermes/agents boot context
 ```
 
 A regra de consumo é:
@@ -235,6 +272,8 @@ ADMINISTRAVEIS_CONSUMED_BY_API
 OBSIDIAN_BRIDGE_T1_PROVEN_WHEN_CLAIMED
 REMOTE_DESKTOP_SENSOR_ATTRIBUTED
 SCREENPIPE_SENSOR_ATTRIBUTED_WHEN_USED
+LOCAL_COMPUTE_TOOLS_IN_CATALOG
+HERMES_CONSUMES_GLOBAL_CONTRACT
 GITHUB_PR_HEAD_HAS_PASSING_GATES
 NO_UNRESOLVED_MATERIAL_LOG_ERROR
 ```
