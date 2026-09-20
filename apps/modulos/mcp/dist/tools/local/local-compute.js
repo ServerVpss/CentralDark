@@ -66,7 +66,15 @@ export const localHybridTools = [
         inputSchema: z.object({}),
         handler: async () => ok({
             schema: "centraldark.local-bridge-media-policy.v1",
-            flow: ["CHEFE_INTENT", "DESKTOP_APP_BRIDGE", "AUDIO_VIDEO_OR_GPU_TASK_ENVELOPE", "LOCAL_SAFE_EXECUTION_OR_VPS_OFFLOAD", "SANITIZED_LOG_EVENT", "GRAFO_VIVO_UPSERT", "PR_OR_RECEIPT_WHEN_MATERIAL"],
+            flow: [
+                "CHEFE_INTENT",
+                "DESKTOP_APP_BRIDGE",
+                "AUDIO_VIDEO_OR_GPU_TASK_ENVELOPE",
+                "LOCAL_SAFE_EXECUTION_OR_VPS_OFFLOAD",
+                "SANITIZED_LOG_EVENT",
+                "GRAFO_VIVO_UPSERT",
+                "PR_OR_RECEIPT_WHEN_MATERIAL"
+            ],
             rules: {
                 raw_personal_media_public_log: false,
                 secret_or_token_to_graph: false,
