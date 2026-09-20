@@ -50,6 +50,10 @@ engines:
     inherits: [LEIA-ME-IA.md, AGENTS.md, Trigger Fabric]
 
 mandatory_inheritance:
+  - GLOBAL_CONTRACT_ENFORCER
+  - DELTA_CONTINUO_GLOBAL
+  - FIXED_HUD_LIVE_DATA
+  - POMBO64_TRACE
   - DESTINATION_LOCK
   - CENTRALDARK_MASTER_CYCLE
   - ACORDAR
@@ -126,7 +130,7 @@ runtime_plug_binding:
   transport_adapter_required: true
   shared_heavy_runtime_consumer_lease: true
   unload_only_when_consumer_count_zero: true
-  swap_preserves: [INTENT, STATE, EVIDENCE_REFS, WRITER_SCOPE, PROOF_TARGET, RECEIPT, NEXT_CURSOR, SPIRAL_CURSOR, UNRESOLVED_SET]
+  swap_preserves: [INTENT, STATE, EVIDENCE_REFS, WRITER_SCOPE, PROOF_TARGET, RECEIPT, GLOBAL_GATE_RECEIPT, HUD_STATE_HASH, NEXT_CURSOR, SPIRAL_CURSOR, UNRESOLVED_SET]
   forward_reverse_swap_conformance_required: true
 
 spiral_binding:
@@ -144,6 +148,13 @@ spiral_binding:
 master_cycle_binding:
   contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
   resolver: scripts/trigger-fabric/centraldark_master_cycle.py
+  global_contract: docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json
+  global_contract_enforcer: scripts/agent-call.mjs
+  deploy_gate: scripts/vps/deploy-guards-dispatcher.sh
+  future_executor_requires_global_gate: true
+  mutation_without_global_entry_gate: FAIL_CLOSED
+  delta_continuo_required: true
+  hud_fixed_live_data_required: true
   explicit_trigger: "!CENTRALDARK"
   plain_word_centraldark_does_not_trigger: true
   expands_to: [ACORDAR, CALIBRAR, MULTIBUSSOLA, AUREOLA_BAHIA_BIBLICA, META_LUPA, RECONCILIAR, DELTA_UTIL, CONTRAPROVA, REMEDICAO, SEMANTIC_GREEN, FIXED_POINT, POST_GREEN_LOCK, REGISTRA, BOOT]
