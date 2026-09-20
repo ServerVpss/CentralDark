@@ -87,6 +87,7 @@ Documentos com `status: CANÔNICO` precisam permanecer alcançáveis a partir de
 - `docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/README.md` — compatibilidade/índice visual existente.
 - `docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md` — handoff entre corpos/modelos.
 - `docs/CONSCIENCIA/ADMINISTRAVEIS.md` — capacidades administráveis.
+- docs/CONSCIENCIA/CONTRATO-HIBRIDO-GRAFO-LOGS-LOCAL.md — contrato híbrido de Grafo Vivo, logs, Casa/VPS e capacidades locais.
 - `docs/CONSCIENCIA/BAIANES-E-RESENHA-REGIONAL.md` — registro de linguagem regional.
 - `docs/GOVERNANCA/CONTEXTO-PESSOAL-E-PROVENIENCIA-TEMPORAL.md` — proveniência e contexto temporal.
 - `.agents/skills/centraldark-operational-method/references/HUMAN-ACTION-DIRECT-LINK.md` — fronteira de ação humana direta.
