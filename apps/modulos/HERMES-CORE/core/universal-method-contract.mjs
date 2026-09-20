@@ -169,6 +169,17 @@ export function validateUniversalMethod() {
     'sensor_failure_is_world_failure: false',
     'endpoint_must_be_attributed_to_screenpipe_process_before_use: true',
     'unresolved_material_contradiction: FIXED_POINT_FALSE',
+    'ephemeral_artifact_policy:',
+    'CENTRALDARK_EPHEMERAL_WORKSPACE_CLEAN_REQUIRED',
+    'temporary_version_suffixes_allowed: true',
+    'temporary_suffixes_are_architecture: false',
+    'cleanup_required_after_use: true',
+    'canonical_same_capability_version_suffix: FORBIDDEN',
+    'evolve_same_object: true',
+    'expand_domain_in_same_owner: true',
+    'create_parallel_architecture_for_domain_expansion: false',
+    'integrated_global_dedupe: true',
+    'duplicate_action: ABSORB_DELTA_INTO_EXISTING_OWNER_THEN_RETIRE_DUPLICATE',
   ], 'UNIVERSAL_CONTRACT');
 
   requireTokens(operationalMethod, [
@@ -411,6 +422,7 @@ export function validateUniversalMethod() {
     global_contract_enforcer: true,
     continuous_delta_global: true,
     hybrid_telemetry_global: true,
+    ephemeral_cleanup_contract: true,
   };
 }
 
