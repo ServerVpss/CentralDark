@@ -180,6 +180,15 @@ export function validateUniversalMethod() {
     'create_parallel_architecture_for_domain_expansion: false',
     'integrated_global_dedupe: true',
     'duplicate_action: ABSORB_DELTA_INTO_EXISTING_OWNER_THEN_RETIRE_DUPLICATE',
+    'log_incident_crystallization_contract:',
+    'CENTRALDARK_LOG_INCIDENT_FANOUT_CRYSTALLIZATION_REQUIRED',
+    'sensor: /admin/api/logs',
+    'fanout_mode: PARALLEL_READ_ONLY_DIAGNOSIS',
+    'mutation_mode: PARALLEL_ONLY_FOR_PROVEN_DISJOINT_SCOPES_SERIAL_WITHIN_EACH_SCOPE',
+    'one_active_writer_per_mutable_scope: true',
+    'continue_until: ALL_MATERIAL_INCIDENTS_RESOLVED_OR_EXACT_BLOCKER',
+    'endpoint_200_alone_is_pass: false',
+    'unresolved_material_error_means_fixed_point: false',
   ], 'UNIVERSAL_CONTRACT');
 
   requireTokens(operationalMethod, [
@@ -248,6 +257,14 @@ export function validateUniversalMethod() {
     'GLOBAL_ENTRY_GATE_PASS',
     'GLOBAL_EXIT_GATE_PASS',
     'DELTA_CONTINUO_REQUIRED: true',
+    'log_incident_crystallization:',
+    'sensor: /admin/api/logs',
+    'FAN_OUT_PARALLEL_READ_ONLY',
+    'REMEDIATE_BY_SCOPE',
+    'RESCAN_ADMIN_API_LOGS',
+    'CONTINUE_TO_CRYSTALLIZATION',
+    'ADMIN_API_LOGS_200_IS_NOT_GLOBAL_PASS: true',
+    'UNRESOLVED_MATERIAL_ERROR_BLOCKS_FIXED_POINT: true',
   ], 'MASTER_CYCLE');
 
   requireTokens(autoconfigRuntime, [
@@ -297,6 +314,17 @@ export function validateUniversalMethod() {
     'mutation_gate: ENTRY_AND_EXIT_REQUIRED',
     'BIND_GLOBAL_CONTRACT_ENFORCER',
   ], 'TRIGGER_GLOBAL_ENFORCER_BINDING');
+
+  requireTokens(triggers, [
+    'event: LOG_INCIDENT_MATERIAL',
+    'sensor: /admin/api/logs',
+    'FAN_OUT_PARALLEL_READ_ONLY_FRONTS',
+    'SERIALIZE_SAME_SCOPE_MUTATION',
+    'ALLOW_PROVEN_DISJOINT_SCOPE_PARALLELISM',
+    'CONTINUE_UNTIL_CRYSTALLIZED',
+    'endpoint_200_is_global_pass: false',
+    'unresolved_material_error_fixed_point: false',
+  ], 'TRIGGER_LOG_INCIDENT_FANOUT');
 
   requireTokens(bandScore, [
     '"learning_candidate_event": "AUREOLA_MATERIAL_DISCOVERY"',
@@ -423,6 +451,7 @@ export function validateUniversalMethod() {
     continuous_delta_global: true,
     hybrid_telemetry_global: true,
     ephemeral_cleanup_contract: true,
+    log_incident_crystallization_contract: true,
   };
 }
 
