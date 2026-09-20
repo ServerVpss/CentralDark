@@ -390,7 +390,7 @@ if (!contract) {
   if (deploy.post_deploy_parallel_remeasure_required !== true) errors.push("DEPLOY_POLICY_SEM_REMEDICAO_GITHUB_VPS");
   if (deploy.runtime_receipt_required !== true) errors.push("DEPLOY_POLICY_SEM_RECEIPT_RUNTIME");
 
-  const requiredReceiptFields = ["GITHUB_T0","VPS_T0","CROSS_SURFACE_DRIFT","PREFLIGHT_RESULT","COUNTERPROOF_RESULT","MICRO_DEPLOY_SCOPE","GITHUB_T1","VPS_T1","RUNTIME_RECEIPT","FIXED_HUD_UPDATE","NEXT_CURSOR","ACTIVE_PRS","BRANCH_COMPARISON","PRINCIPAL_PR","CONVERGENCE_RECEIPT","GLOBAL_DNA_RESULT","BUILDKITE_FUNNEL_RESULT","FAILED_JOB_ID","FAILURE_SIGNATURE","FAILED_JOB_ROOT_CAUSE_STATE","RECONCILIATION_PLAN","CONTRACT_SCOPE_ID","CONTRACT_SCHEMA","CONTRACT_BLOB_SHA","CONTRACT_COMMIT_SHA","OBSERVED_AT_LOCAL","OBSERVED_AT_UTC","TRACE_ID","EVENT_ID","POMBO64_PLUS","HEAD_SHA","ARTIFACT_OR_RESULT_SHA256","DEPENDENCY_FINGERPRINT","CARDS_ON_TABLE_GAPS","EXACT_FAILURE_LOCATION","EXACT_IMPROVEMENT","PM2_HOMES_DISCOVERED","OWNER_PM2_HOME","T0_PID","T1_PID","PID_CHANGED","CADDY_BACKUP","CADDY_VALIDATE","CADDY_RELOAD","ROLLBACK_USED","HUD_STATE_HASH","GLOBAL_GATE_PHASE","GLOBAL_GATE_STATUS","GLOBAL_GATE_TRACE_ID","GITHUB_T0_HEAD","VPS_T0_HEAD","DRIFT_CLASS","OWNER_PROOF","WRITER_SCOPE_PROOF","ROLLBACK_REF","COUNTERPROOF_PLAN_REF","GITHUB_T1_HEAD","VPS_T1_HEAD","COUNTERPROOF_REF","SAME_HEAD_CI_RESULT","RUNTIME_PROOF_RESULT","HUMAN_BOUNDARY_STATE","DELTA_CLASS","DELTA_INFORMATION_GAIN"];
+  const requiredReceiptFields = ["GITHUB_T0","VPS_T0","CROSS_SURFACE_DRIFT","PREFLIGHT_RESULT","COUNTERPROOF_RESULT","MICRO_DEPLOY_SCOPE","GITHUB_T1","VPS_T1","RUNTIME_RECEIPT","FIXED_HUD_UPDATE","NEXT_CURSOR","ACTIVE_PRS","BRANCH_COMPARISON","PRINCIPAL_PR","CONVERGENCE_RECEIPT","GLOBAL_DNA_RESULT","BUILDKITE_FUNNEL_RESULT","FAILED_JOB_ID","FAILURE_SIGNATURE","FAILED_JOB_ROOT_CAUSE_STATE","RECONCILIATION_PLAN","CONTRACT_SCOPE_ID","CONTRACT_SCHEMA","CONTRACT_BLOB_SHA","CONTRACT_COMMIT_SHA","OBSERVED_AT_LOCAL","OBSERVED_AT_UTC","TRACE_ID","EVENT_ID","POMBO64_PLUS","HEAD_SHA","ARTIFACT_OR_RESULT_SHA256","DEPENDENCY_FINGERPRINT","CARDS_ON_TABLE_GAPS","EXACT_FAILURE_LOCATION","EXACT_IMPROVEMENT","PM2_HOMES_DISCOVERED","OWNER_PM2_HOME","T0_PID","T1_PID","PID_CHANGED","CADDY_BACKUP","CADDY_VALIDATE","CADDY_RELOAD","ROLLBACK_USED","HUD_STATE_HASH","GLOBAL_GATE_PHASE","GLOBAL_GATE_STATUS","GLOBAL_GATE_TRACE_ID","GITHUB_T0_HEAD","VPS_T0_HEAD","DRIFT_CLASS","OWNER_PROOF","WRITER_SCOPE_PROOF","ROLLBACK_REF","COUNTERPROOF_PLAN_REF","GITHUB_T1_HEAD","VPS_T1_HEAD","COUNTERPROOF_REF","SAME_HEAD_CI_RESULT","RUNTIME_PROOF_RESULT","HUMAN_BOUNDARY_STATE","DELTA_CLASS","DELTA_INFORMATION_GAIN","ROOT_CONTRACT_REF","ROOT_CONTRACT_SCHEMA","ROOT_GOAL_ID","PARENT_CONTRACT_ID","CHILD_CONTRACT_ID","SELF_GOAL_ID","SELF_GOAL_STATUS","GOAL_DONE_CONDITION","GOAL_EVIDENCE_REF","GOAL_COUNTERPROOF_REF","TLC23_PDF_SHA256","TLC23_HORN_GATE_RESULT","CHILD_CONTRACT_LINEAGE_RESULT"];
   const receiptFields = contract.internal_receipt_fields ?? [];
   for (const field of requiredReceiptFields) if (!receiptFields.includes(field)) errors.push(`CONTRATO_UNIVERSAL_RECEIPT_CAMPO_AUSENTE:${field}`);
 
@@ -404,6 +404,24 @@ if (!contract) {
   if (wholeHouse.cards_on_table?.missing_piece_must_be_reported !== true) errors.push("CONTRATO_CARTAS_NA_MESA_LACUNA_OCULTA");
   if (wholeHouse.cards_on_table?.exact_failure_location_required !== true) errors.push("CONTRATO_CARTAS_NA_MESA_SEM_LOCAL_FALHA");
   if (wholeHouse.cards_on_table?.exact_improvement_or_next_test_required !== true) errors.push("CONTRATO_CARTAS_NA_MESA_SEM_MELHORIA_EXATA");
+
+  const lineage = wholeHouse.child_contract_lineage ?? {};
+  if (lineage.marker !== "CENTRALDARK_ROOT_CHILD_CONTRACT_LINEAGE_REQUIRED") errors.push("CONTRATO_CHILD_LINEAGE_MARKER_AUSENTE");
+  if (lineage.status !== "MANDATORY") errors.push("CONTRATO_CHILD_LINEAGE_NAO_OBRIGATORIO");
+  if (lineage.architecture !== "ONE_GLOBAL_ROOT_MANY_SCOPED_CHILDREN") errors.push("CONTRATO_CHILD_LINEAGE_ARQUITETURA_INVALIDA");
+  if (lineage.root_policy_owner !== "AGENTS.md") errors.push("CONTRATO_CHILD_LINEAGE_ROOT_OWNER_INVALIDO");
+  if (lineage.machine_contract_owner !== "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json") errors.push("CONTRATO_CHILD_LINEAGE_MACHINE_OWNER_INVALIDO");
+  if (lineage.runtime_enforcer !== "scripts/agent-call.mjs") errors.push("CONTRATO_CHILD_LINEAGE_ENFORCER_INVALIDO");
+  if (lineage.creates_new_control_plane !== false || lineage.creates_new_runtime !== false || lineage.creates_new_owner !== false) errors.push("CONTRATO_CHILD_LINEAGE_CRIOU_ARQUITETURA_PARALELA");
+  if (lineage.root_goal?.authority !== "SEGREDO/CHEFE" || lineage.root_goal?.mutable_by_runtime !== false) errors.push("CONTRATO_CHILD_LINEAGE_AUTORIDADE_INVALIDA");
+  if (lineage.child_contract?.scope_expansion_without_authority !== "BLOCK") errors.push("CONTRATO_CHILD_LINEAGE_SCOPE_EXPANSION_NAO_BLOQUEADA");
+  if (lineage.child_contract?.root_goal_change !== "BLOCK") errors.push("CONTRATO_CHILD_LINEAGE_ROOT_GOAL_MUTAVEL");
+  if (lineage.child_contract?.duplicate_same_goal_same_evidence !== "BLOCK") errors.push("CONTRATO_CHILD_LINEAGE_DUPLICATA_NAO_BLOQUEADA");
+  if (lineage.fixed_point?.fixed_point_is_checkpoint !== true || lineage.fixed_point?.heartbeat_continues_while_runtime_exists !== true) errors.push("CONTRATO_CHILD_LINEAGE_FIXED_POINT_TERMINAL");
+  if (lineage.tlc23_horn_gate?.required !== true) errors.push("CONTRATO_CHILD_LINEAGE_TLC23_NAO_OBRIGATORIO");
+  if (lineage.tlc23_horn_gate?.pdf_path !== "docs/CONSCIENCIA/04-MCP-E-CONECTORES/tlc23.pdf") errors.push("CONTRATO_CHILD_LINEAGE_TLC23_PATH_INVALIDO");
+  if (lineage.tlc23_horn_gate?.pdf_sha256 !== "b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1") errors.push("CONTRATO_CHILD_LINEAGE_TLC23_HASH_INVALIDO");
+
 
   const fixedHud = contract.fixed_hud_contract ?? {};
   if (fixedHud.marker !== "CENTRALDARK_FIXED_HUD_REQUIRED") errors.push("CONTRATO_HUD_FIXO_MARKER_AUSENTE");
@@ -421,6 +439,11 @@ if (!contract) {
   if (plug.marker !== "CENTRALDARK_PLUG_AND_PLAY_CONTRACT_INHERITANCE") errors.push("CONTRATO_PLUG_PLAY_MARKER_AUSENTE");
   if (plug.future_executor_without_contract !== "FAIL_CLOSED") errors.push("CONTRATO_FUTURO_EXECUTOR_SEM_FAIL_CLOSED");
   if (plug.no_v2_v3_v4_for_same_capability !== true) errors.push("CONTRATO_PLUG_PLAY_PERMITE_V2V3V4");
+
+  for (const binding of ["ROOT_CONTRACT_REF","ROOT_GOAL_ID","CHILD_CONTRACT_ID","SELF_GOAL_ID","TLC23_HORN_GATE"]) {
+    if (!Array.isArray(plug.required_binding) || !plug.required_binding.includes(binding)) errors.push(\`CONTRATO_PLUG_PLAY_BINDING_AUSENTE:\${binding}\`);
+  }
+
 
   const hybrid = contract.hybrid_runtime_contract ?? {};
   if (hybrid.marker !== "CENTRALDARK_HYBRID_RUNTIME_DISCOVERY_REQUIRED") errors.push("CONTRATO_RUNTIME_HIBRIDO_MARKER_AUSENTE");
@@ -492,6 +515,12 @@ if (!contract) {
   if (enforcer.mutation_without_entry_receipt !== "BLOCK") errors.push("CONTRATO_ENFORCER_MUTACAO_SEM_RECEIPT_NAO_BLOQUEIA");
   if (enforcer.entry_requires?.github_t0 !== "PASS" || enforcer.entry_requires?.vps_t0 !== "PASS") errors.push("CONTRATO_ENFORCER_T0_DUAL_AUSENTE");
   if (enforcer.entry_requires?.rollback_prepared_and_identified !== true) errors.push("CONTRATO_ENFORCER_ROLLBACK_AUSENTE");
+
+  if (enforcer.entry_requires?.tlc23_horn_gate !== "PASS") errors.push("CONTRATO_ENFORCER_TLC23_HORN_AUSENTE");
+  if (enforcer.entry_requires?.child_contract_lineage !== "PASS") errors.push("CONTRATO_ENFORCER_CHILD_LINEAGE_AUSENTE");
+  if (!Array.isArray(enforcer.fixed_point_aggregator?.requires) || !enforcer.fixed_point_aggregator.requires.includes("TLC23_HORN_GATE")) errors.push("CONTRATO_FIXED_POINT_SEM_TLC23");
+  if (!Array.isArray(enforcer.fixed_point_aggregator?.requires) || !enforcer.fixed_point_aggregator.requires.includes("CHILD_CONTRACT_LINEAGE")) errors.push("CONTRATO_FIXED_POINT_SEM_CHILD_LINEAGE");
+
   if (enforcer.exit_requires?.github_t1 !== "PASS" || enforcer.exit_requires?.vps_t1 !== "PASS") errors.push("CONTRATO_ENFORCER_T1_DUAL_AUSENTE");
   if (enforcer.fixed_point_aggregator?.unknown_never_green !== true) errors.push("CONTRATO_ENFORCER_UNKNOWN_GREEN");
 
@@ -500,6 +529,12 @@ if (!contract) {
   if (deltaContinuo.every_new_material_is_delta_candidate !== true) errors.push("CONTRATO_DELTA_CONTINUO_NAO_CAPTURA");
   if (deltaContinuo.new_material_does_not_restart_mission !== true) errors.push("CONTRATO_DELTA_CONTINUO_REINICIA_MISSAO");
   if (deltaContinuo.interruption !== "RESUME_FROM_NEXT_CURSOR_AFTER_REMEASURE") errors.push("CONTRATO_DELTA_CONTINUO_SEM_RESUME");
+
+  if (deltaContinuo.next_cursor_materializes_self_goal !== true) errors.push("CONTRATO_DELTA_CONTINUO_NEXT_CURSOR_NAO_GERA_SELF_GOAL");
+  if (deltaContinuo.self_goal_inherits_global_contract !== true) errors.push("CONTRATO_DELTA_CONTINUO_SELF_GOAL_SEM_HERANCA");
+  if (deltaContinuo.self_goal_may_change_root_goal !== false) errors.push("CONTRATO_DELTA_CONTINUO_SELF_GOAL_MUDA_ROOT");
+  if (deltaContinuo.self_goal_may_expand_scope_without_authority !== false) errors.push("CONTRATO_DELTA_CONTINUO_SELF_GOAL_EXPANDE_ESCOPO");
+
 
   const rules = contract.decision_rules ?? {};
   if (rules.new_component_requires_proved_gap !== true) errors.push("CONTRATO_RECONCILIACAO_GAP_NAO_OBRIGATORIO");
