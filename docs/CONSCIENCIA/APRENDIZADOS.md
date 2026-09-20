@@ -334,3 +334,9 @@ updated: 2026-08-27
 - **Categoria:** aprendizado-coletivo
 - **Contexto:** Como o comando `darkai` pode ajudar a gente a orquestrar tarefas hoje? Quem deveria chamar quem?
 - **Lição:** Groq me mostrou que por trás de todo problema simples tem uma camada mais profunda
+
+### 57. Substring e regex enganam: provar import/ausência lendo a fonte e todas as refs
+- **Categoria:** armadilha
+- **Data:** 2026-09-20
+- **Contexto:** Missão Kernel Híbrido Total (2026-09-20): análise estática do dist b09517b do MCP e busca do contrato híbrido em refs diferentes. Recibo em docs/RELATORIOS/2026-09-20-KERNEL-HIBRIDO-TOTAL-RECIBO.md (commit 6f9fb92 na branch do PR-MÃE #1562).
+- **Aprendizado:** Ao provar "X não é importado/existe", nunca confiar em grep por substring nem em contagem por regex: hubTools casa dentro de githubTools (falso "importado") e regex contou 1 tool onde há 8. Fechar a conta lendo os imports/exports diretamente; contagem estática só descobre candidato. Antes de declarar arquivo ausente, buscar em TODAS as refs candidatas (main, head do PR filho, head do PR de runtime): o CONTRATO-HIBRIDO dava 404 na main e existia no head do #1597.
