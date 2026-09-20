@@ -93,7 +93,7 @@ $State=[ordered]@{
 }
 
 function Write-CDLog([string]$Kind,[string]$Message){
-    "[{0}] [{1}] {2}" -f (Get-Date -Format o),$Kind,$Message | Add-Content -LiteralPath $wrapperLog -Encoding UTF8
+    "[{0}] [{1}] {2}" -f [DateTimeOffset]::UtcNow.ToString('o'),$Kind,$Message | Add-Content -LiteralPath $wrapperLog -Encoding UTF8
 }
 function Write-JsonAtomic([string]$Path,$Value){
     if ([string]::IsNullOrWhiteSpace($Path)) { return }
@@ -109,7 +109,7 @@ function Get-Fingerprint([string]$Text){
     finally { $sha.Dispose() }
 }
 function Emit-Event([string]$Kind,[hashtable]$Data=@{}){
-    $payload=[ordered]@{at=(Get-Date).ToString('o');kind=$Kind;phase=$State.Phase;sensor=$State.Sensor;data=$Data}
+    $payload=[ordered]@{at=[DateTimeOffset]::UtcNow.ToString('o');kind=$Kind;phase=$State.Phase;sensor=$State.Sensor;data=$Data}
     $line=$payload|ConvertTo-Json -Compress -Depth 10
     $fp=Get-Fingerprint $line
     if($fp -ne $State.LastEventFingerprint){
@@ -126,7 +126,7 @@ function Save-Receipt{
     $bridgeProcId=Get-OwnedPid $State.BridgeProcess
     $payload=[ordered]@{
         schema='centraldark.remote-tray.fixedpoint.canonical'
-        observed_at=(Get-Date).ToString('o')
+        observed_at=[DateTimeOffset]::UtcNow.ToString('o')
         device=$Config.DeviceLabel
         phase=$State.Phase
         sensor=$State.Sensor
