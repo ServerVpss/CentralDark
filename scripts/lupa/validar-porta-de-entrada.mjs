@@ -14,6 +14,7 @@ const ROOT = resolve(valueAfter("--repo-root", process.cwd()));
 const JSON_OUT = argv.includes("--json");
 const PORTA = "LEIA-ME-IA.md";
 const PORTA_VIVA = "docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md";
+const BOOT = "CENTRALDARK_AI_BOOT.yaml";
 const CONTRATO_DELTA = "docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md";
 const CONTRATO_RECONCILIACAO = "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json";
 const ESTRUTURA_VPS = "docs/CONSCIENCIA/04-ESTRUTURA-VPS.md";
@@ -158,6 +159,7 @@ const warnings = [];
 
 if (!existe(PORTA)) errors.push(`PORTA_AUSENTE:${PORTA}`);
 if (!existe(PORTA_VIVA)) errors.push(`PORTA_VIVA_AUSENTE:${PORTA_VIVA}`);
+if (!existe(BOOT)) errors.push(`BOOT_AUSENTE:${BOOT}`);
 if (!existe(CONTRATO_DELTA)) errors.push(`CONTRATO_DELTA_AUSENTE:${CONTRATO_DELTA}`);
 if (!existe(CONTRATO_RECONCILIACAO)) errors.push(`CONTRATO_RECONCILIACAO_AUSENTE:${CONTRATO_RECONCILIACAO}`);
 if (!existe(ESTRUTURA_VPS)) errors.push(`ESTRUTURA_VPS_AUSENTE:${ESTRUTURA_VPS}`);
@@ -177,6 +179,22 @@ for (const adapter of ADAPTADORES) {
 }
 
 const semanticRequirements = new Map([
+  [BOOT, [
+    "CENTRALDARK_TLC23_PDF_BOOT_GATE_REQUIRED",
+    'position: "BEFORE_FIRST_AGENT_ROUTING"',
+    'logical_reference: "tlc23.pdf"',
+    'measured_house_receipt: "PDF-CC2003-HORN-GATE-20260912-152444.log"',
+    "LOAD_TLC23_PDF_GATE",
+    "LOAD_GLOBAL_CONTRACT_ENFORCER",
+    "LOAD_DELTA_CONTINUO_GLOBAL",
+    "ALLOW_FIRST_AGENT_ROUTING",
+    "TLC23_PDF_GATE",
+    "GLOBAL_CONTRACT_BOOTSTRAP_GATE",
+    "pdf_is_runtime_authority: false",
+    "reality_is_judge: true",
+    'failure_policy: "FAIL_CLOSED"',
+    "preserve_existing_good: true",
+  ]],
   [PORTA, [
     "REUSE_BEFORE_CREATE_REQUIRED",
     CONTRATO_RECONCILIACAO,
@@ -226,6 +244,15 @@ for (const [source, tokens] of semanticRequirements) {
   for (const token of tokens) {
     if (!content.includes(token)) errors.push(`RECONCILIACAO_SEM_TOKEN:${source}:${token}`);
   }
+}
+
+const bootContent = ler(BOOT);
+const pdfGateIndex = bootContent.indexOf("initial_bootstrap_gate:");
+const routingIndex = bootContent.indexOf("unified_entry_pipeline:");
+if (pdfGateIndex < 0) errors.push("BOOT_TLC23_PDF_GATE_AUSENTE");
+if (routingIndex < 0) errors.push("BOOT_UNIFIED_ENTRY_PIPELINE_AUSENTE");
+if (pdfGateIndex >= 0 && routingIndex >= 0 && pdfGateIndex > routingIndex) {
+  errors.push("BOOT_TLC23_PDF_GATE_DEPOIS_DO_ROTEAMENTO");
 }
 
 const agentsContent = ler("AGENTS.md");
