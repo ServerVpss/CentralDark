@@ -139,49 +139,6 @@ Não tratar `downloadyoutubesubtitles.com` como API canônica sem contrato, lice
 e prova de acesso. Não commitar legenda bruta; persistir somente receipt sanitizado
 e aprendizado reutilizável após validação.
 
-
-## Runtime preflight obrigatório
-
-Antes de qualquer operação material que atravesse shell/runtime/host — especialmente multi-shell fan-out, deploy, kill, restart, sync de worktree dirty, cron/watchdog e claim de runtime verde — executar o owner existente:
-
-```text
-CONTRACT=docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RUNTIME-PREFLIGHT-LINT.yml
-CONSUMER=scripts/trigger-fabric/centraldark_full_trigger_boot.py preflight-lint
-```
-
-Fluxo obrigatório:
-
-```text
-COMMAND_OR_PROBE
-→ RUNTIME_PREFLIGHT_LINT
-→ PASS | FAIL_CLOSED
-→ somente PASS permite seguir para a ação material aplicável
-→ depois medir o alvo real separadamente
-```
-
-Regras:
-
-```text
-WRAPPER_PARSE_FAIL != TARGET_FAIL
-INVALID_PROBE_MUST_NOT_BECOME_FACT
-HOST_TEMPLATE_INTERPOLATION_RISK = FAIL_CLOSED
-POWERSHELL_PID_AUTOMATIC_VARIABLE_COLLISION = FAIL_CLOSED
-MISSING_REQUIRED_PATH = FAIL_CLOSED
-PREFLIGHT_PASS != RUNTIME_PASS
-NO_KILL_WITHOUT_HANDOFF_PROOF
-NO_DIRTY_SYNC_WITHOUT_PRESERVING_DELTA
-```
-
-O preflight não cria novo executor, não substitui MetaLupa, não substitui teste de runtime e não concede autoridade. Ele protege o executor existente contra falso-verde causado pelo próprio caminho de execução.
-
-Se o host externo não conseguir chamar o consumer automaticamente, o estado correto é:
-
-```text
-RUNTIME_PREFLIGHT_ENFORCEMENT=UNKNOWN
-```
-
-e não PASS.
-
 ## Gate de falsificação (MetaLupa)
 
 UNKNOWN, ANOMALY, ACHADO_PENDENTE, BLOCKED (incluindo reason: SKIPPED), timeout, ausência de log ou ausência de revisão nunca equivalem a PASS.
