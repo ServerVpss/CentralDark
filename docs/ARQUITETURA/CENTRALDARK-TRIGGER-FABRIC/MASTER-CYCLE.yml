@@ -238,6 +238,11 @@ global_contract_enforcer:
   owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
   mutation_gate: scripts/agent-call.mjs
   deploy_gate: scripts/vps/deploy-guards-dispatcher.sh
+  runtime_preflight_contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RUNTIME-PREFLIGHT-LINT.yml
+  runtime_preflight_consumer: scripts/trigger-fabric/centraldark_full_trigger_boot.py#cmd_preflight_lint
+  runtime_preflight_required_before: [MUTATION, DEPLOY, KILL, RESTART, DIRTY_SYNC, MULTI_SHELL_FANOUT, RUNTIME_GREEN_CLAIM]
+  runtime_preflight_unknown_or_fail: FAIL_CLOSED
+  runtime_preflight_does_not_replace_target_runtime_test: true
   read_only_can_observe_without_mutation_gate: true
   before_every_mutation:
     - RECOVER_RELEVANT_CONTEXT
@@ -247,6 +252,7 @@ global_contract_enforcer:
     - RECONCILE
     - OWNER_PROVEN
     - ONE_WRITER_PROVEN
+    - RUNTIME_PREFLIGHT_LINT_PASS_WHEN_APPLICABLE
     - PREFLIGHT_PASS
     - COUNTERPROOF_PLAN_READY
     - ROLLBACK_PREPARED_AND_IDENTIFIED
