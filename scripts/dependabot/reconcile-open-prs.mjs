@@ -5,6 +5,7 @@ const token = process.env.GITHUB_TOKEN || '';
 const repository = process.env.GITHUB_REPOSITORY || 'ServerVpss/CentralDark';
 const repoDir = process.env.REPO_DIR || '/root/CentralDark';
 const resolver = process.env.RESOLVER || '.ci-house/scripts/dependabot/resolve-conflicts.sh';
+const targetPr = Number(process.env.TARGET_PR || 0) || null;
 const protectedPrs = new Set(
   String(process.env.PROTECTED_PRS || '1562')
     .split(',')
@@ -86,7 +87,10 @@ if (!list.ok) {
   process.exit(2);
 }
 
-const prs = (list.data || []).filter(pr => pr.head?.repo?.full_name === repository);
+const prs = (list.data || []).filter(pr =>
+  pr.head?.repo?.full_name === repository &&
+  (!targetPr || Number(pr.number) === targetPr)
+);
 const summary = [];
 let blocked = 0;
 let acted = 0;
