@@ -38,6 +38,10 @@ const REQUIRED_CHAIN = [
 ];
 
 const REQUIRED_GLOBAL_INHERITANCE = [
+  'GLOBAL_CONTRACT_ENFORCER',
+  'DELTA_CONTINUO_GLOBAL',
+  'FIXED_HUD_LIVE_DATA',
+  'POMBO64_TRACE',
   'CENTRALDARK_MASTER_CYCLE',
   'DESTINATION_LOCK',
   'ACORDAR',
@@ -267,6 +271,15 @@ export function validateUniversalMethod() {
     'direct_canonical_mutation: false',
   ], 'TRIGGER_MAP_LEARNING');
 
+  requireTokens(triggers, [
+    'MUTATION_REQUIRES_GLOBAL_CONTRACT_ENTRY_EXIT',
+    'DELTA_CONTINUO',
+    'PERSIST_NEXT_CURSOR',
+    'global_enforcer: scripts/agent-call.mjs',
+    'mutation_gate: ENTRY_AND_EXIT_REQUIRED',
+    'BIND_GLOBAL_CONTRACT_ENFORCER',
+  ], 'TRIGGER_GLOBAL_ENFORCER_BINDING');
+
   requireTokens(bandScore, [
     '"learning_candidate_event": "AUREOLA_MATERIAL_DISCOVERY"',
     '"learning_ref_required_for_material_discovery": true',
@@ -285,6 +298,11 @@ export function validateUniversalMethod() {
     'same_failure_no_new_information: REUSE_CRYSTAL_NOT_RETHINK',
     'human_return_before_fixed_point: FORBIDDEN_UNLESS_HUMAN_FRONTIER',
     'CONTINUE_NEXT_CURSOR',
+    'global_contract_enforcer: scripts/agent-call.mjs',
+    'future_executor_requires_global_gate: true',
+    'mutation_without_global_entry_gate: FAIL_CLOSED',
+    'delta_continuo_required: true',
+    'hud_fixed_live_data_required: true',
   ], 'ENGINE_BINDING');
 
   requireTokens(agentCall, [
