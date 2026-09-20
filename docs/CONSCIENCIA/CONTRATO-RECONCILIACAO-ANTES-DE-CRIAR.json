@@ -87,7 +87,10 @@
       "REALITY_IS_JUDGE": true,
       "EVOLVE_SAME_OBJECT": true,
       "DOMAIN_EXPANSION_WITHOUT_PARALLEL_ARCHITECTURE": true,
-      "TEMP_ARTIFACTS_MUST_NOT_BECOME_OWNERS": true
+      "TEMP_ARTIFACTS_MUST_NOT_BECOME_OWNERS": true,
+      "LOG_ERROR_FANOUT_READ_ONLY": true,
+      "REMEDIATE_SERIAL_PER_SCOPE": true,
+      "CRYSTALLIZE_AFTER_GLOBAL_RESCAN": true
     },
     "material_scope": [
       "INPUT",
@@ -1064,7 +1067,8 @@
       "history": "PROVENANCE_NOT_CURRENT_TRUTH"
     },
     "hybrid_telemetry_contract_ref": "this_contract.hybrid_telemetry_contract",
-    "ephemeral_artifact_policy_ref": "this_contract.ephemeral_artifact_policy"
+    "ephemeral_artifact_policy_ref": "this_contract.ephemeral_artifact_policy",
+    "log_incident_crystallization_contract_ref": "this_contract.log_incident_crystallization_contract"
   },
   "fixed_hud_contract": {
     "marker": "CENTRALDARK_FIXED_HUD_REQUIRED",
@@ -1517,7 +1521,8 @@
       "expose_owner_binding": true,
       "expose_cross_surface_drift": true,
       "layout_remains_fixed": true
-    }
+    },
+    "log_incident_contract_ref": "this_contract.log_incident_crystallization_contract"
   },
   "ephemeral_artifact_policy": {
     "marker": "CENTRALDARK_EPHEMERAL_WORKSPACE_CLEAN_REQUIRED",
@@ -1599,6 +1604,197 @@
       "prefer_isolated_temp_or_worktree": true,
       "cleanup_must_not_delete_unclassified_runtime_evidence": true,
       "cleanliness_is_not_permission_for_reset_hard_or_git_clean": true
+    }
+  },
+  "log_incident_crystallization_contract": {
+    "marker": "CENTRALDARK_LOG_INCIDENT_FANOUT_CRYSTALLIZATION_REQUIRED",
+    "status": "MANDATORY_WHEN_MATERIAL_LOG_SIGNAL_EXISTS",
+    "primary_sensor": {
+      "endpoint": "/admin/api/logs",
+      "owner": "apps/modulos/mcp/src/admin.js",
+      "route_binding": "apps/modulos/mcp/src/index.js",
+      "role": "CONTROL_PLANE_SENSOR_NOT_GLOBAL_HEALTH",
+      "supports_filters": [
+        "rota",
+        "cid",
+        "level",
+        "q",
+        "limit"
+      ],
+      "correlation_fields": [
+        "cid",
+        "correlation_id",
+        "request_id",
+        "trace_id",
+        "span_id",
+        "path",
+        "status",
+        "level",
+        "msg",
+        "ms"
+      ],
+      "endpoint_http_200_is_global_pass": false
+    },
+    "companion_sensors": [
+      "/health",
+      "/health/deep",
+      "/admin/api/metricas",
+      "/admin/logs/stream",
+      "PM2_LOGS",
+      "SYSTEMD_JOURNAL",
+      "MCP_AUDIT",
+      "GITHUB_ACTIONS",
+      "BUILDKITE",
+      "CADDY_ROUTE",
+      "LISTENER_OWNER",
+      "CONFIG_AND_HASH"
+    ],
+    "material_signal_rules": {
+      "error_level": "ACTIVATE",
+      "http_5xx": "ACTIVATE",
+      "named_operational_error_signature": "ACTIVATE",
+      "health_deep_non_healthy_or_degraded": "ACTIVATE",
+      "repeated_4xx_or_warn": "ACTIVATE_WHEN_REPETITION_OR_CROSS_SENSOR_EVIDENCE_MAKES_IT_MATERIAL",
+      "single_expected_4xx": "CONTEXT_UNLESS_COUNTERPROOF_SHOWS_IMPACT",
+      "info_only": "CONTEXT_UNLESS_ASSOCIATED_WITH_FAILURE"
+    },
+    "fanout": {
+      "mode": "PARALLEL_READ_ONLY_DIAGNOSIS",
+      "fronts": {
+        "AUTH_OAUTH": [
+          "/authorize",
+          "mcp_unauthorized",
+          "mcp_authorization_missing",
+          "AUTH_HEADERS_REDACTED"
+        ],
+        "MCP_RUNTIME": [
+          "/mcp",
+          "/health",
+          "/health/deep",
+          "MCP_AUDIT",
+          "TOOL_CALLS"
+        ],
+        "HUB_DATABASE": [
+          "hub_mission_consumer_error",
+          "HUB_POSTGREST_*",
+          "DB_PROFILE",
+          "PROJECT_BINDING"
+        ],
+        "ROUTING_NETWORK": [
+          "CADDY",
+          "PROXY_TARGET",
+          "DNS",
+          "PORT",
+          "LISTENER_PID",
+          "ROUTE_STATUS"
+        ],
+        "PROCESS_RUNTIME": [
+          "PM2",
+          "SYSTEMD",
+          "DOCKER",
+          "PROCESS_TREE",
+          "PID_START_TIME"
+        ],
+        "GITHUB_CI": [
+          "PR_HEAD",
+          "MAIN_SHA",
+          "SAME_HEAD_CI",
+          "WORKFLOW_JOB_LOGS",
+          "BUILDKITE"
+        ],
+        "CONFIG_PROVENANCE": [
+          "GIT_BLOB_SHA",
+          "CONFIG_HASH",
+          "ENV_NAMES_NO_SECRET_VALUES",
+          "RUNTIME_FINGERPRINT"
+        ],
+        "SCREEN_OPTIONAL": [
+          "SCREENPIPE",
+          "DESKTOP_COMMANDER",
+          "WINDOW_FRAME"
+        ]
+      },
+      "all_fronts_share_target_and_trace_context": true,
+      "screen_unavailable_does_not_block_other_fronts": true,
+      "readers_may_run_in_parallel": true,
+      "readers_may_not_mutate": true
+    },
+    "rendezvous": {
+      "join_keys": [
+        "TARGET",
+        "OWNER_CANDIDATE",
+        "cid",
+        "correlation_id",
+        "trace_id",
+        "request_id",
+        "HEAD_OR_RUNTIME_FINGERPRINT"
+      ],
+      "dedupe_same_event": true,
+      "classify": [
+        "FACT",
+        "INFERENCE",
+        "HYPOTHESIS",
+        "UNKNOWN"
+      ],
+      "conflict": "DISCRIMINATING_TEST",
+      "no_majority_vote": true,
+      "same_symptom_different_owner": "KEEP_SEPARATE_FRONTS"
+    },
+    "remediation": {
+      "owner_existing_first": true,
+      "reuse_before_create": true,
+      "patch_minimal_causal": true,
+      "mutation_mode": "PARALLEL_ONLY_FOR_PROVEN_DISJOINT_SCOPES_SERIAL_WITHIN_EACH_SCOPE",
+      "same_scope_concurrent_writers": false,
+      "one_active_writer_per_mutable_scope": true,
+      "global_restart_forbidden": true,
+      "force_push_forbidden": true,
+      "reset_hard_forbidden": true,
+      "each_mutation_requires": [
+        "OWNER",
+        "CAUSE",
+        "PREFLIGHT",
+        "ROLLBACK",
+        "T0",
+        "COUNTERPROOF_PLAN"
+      ],
+      "after_each_mutation": [
+        "T1_SAME_TARGET",
+        "LOG_RESCAN",
+        "DEPENDENT_HEALTH_RECHECK",
+        "RECEIPT"
+      ]
+    },
+    "convergence_loop": {
+      "continue_until": "ALL_MATERIAL_INCIDENTS_RESOLVED_OR_EXACT_BLOCKER",
+      "each_round": [
+        "RESCAN_ADMIN_API_LOGS",
+        "COLLECT_NEW_DELTA_ONLY",
+        "FANOUT_AFFECTED_FRONTS",
+        "RENDEZVOUS",
+        "REMEDIATE_BY_OWNER",
+        "T1_AFFECTED_SCOPES",
+        "COUNTERPROOF",
+        "UPDATE_HUD",
+        "PERSIST_NEXT_CURSOR"
+      ],
+      "same_failure_no_new_information": "REUSE_EXISTING_CRYSTAL_OR_ESCALATE_DISCRIMINATING_TEST",
+      "new_error_during_fix": "NEW_DELTA_SAME_MISSION",
+      "unrelated_safe_scope_may_continue": true
+    },
+    "crystallization": {
+      "total_crystallization_requires": [
+        "NO_UNRESOLVED_MATERIAL_LOG_ERROR",
+        "NO_UNRESOLVED_CROSS_SENSOR_CONTRADICTION",
+        "AFFECTED_OWNERS_T1_PASS",
+        "SAME_HEAD_CI_WHEN_GIT_CHANGED",
+        "RUNTIME_PROOF_WHEN_RUNTIME_CHANGED",
+        "RECEIPTS_BOUND_TO_TIME_TARGET_AND_HEAD_OR_FINGERPRINT",
+        "NEXT_CURSOR_EMPTY_OR_ONLY_NONMATERIAL_OBSERVATION"
+      ],
+      "log_silence_alone_is_pass": false,
+      "endpoint_200_alone_is_pass": false,
+      "fixed_point_if_any_required_unknown": false
     }
   }
 }
