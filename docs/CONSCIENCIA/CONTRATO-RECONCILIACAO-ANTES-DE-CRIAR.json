@@ -517,23 +517,62 @@
     "hard_gate_id_must_be_registered_before_enforcement": true,
     "undeclared_hard_gate": "BLOCK_CONFIGURATION",
     "gate_enforcement_without_contract_declaration": "FORBIDDEN",
-    "formal_gate_declaration_scope": ["CENTRALDARK_AI_BOOT.yaml", "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json"],
-    "formal_gate_id_syntax": ["gate_id", "required_gate_ids"],
+    "formal_gate_declaration_scope": [
+      "CENTRALDARK_AI_BOOT.yaml",
+      "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json"
+    ],
+    "formal_gate_id_syntax": [
+      "gate_id",
+      "required_gate_ids"
+    ],
     "boot_required_gate_ids_must_be_subset_of_registry": true,
     "formal_gate_without_registry_entry": "FAIL_CLOSED",
     "nonformal_narrative_gate_mentions_are_not_formal_gate_ids": true,
     "gates": {
-      "TLC23_PDF_BOOT_GATE": {"owner": "CENTRALDARK_AI_BOOT.yaml#initial_bootstrap_gate", "stage": "BOOT"},
-      "GLOBAL_CONTRACT_BOOTSTRAP_GATE": {"owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json", "stage": "BOOT"},
-      "DELTA_CONTINUO_GLOBAL_GATE": {"owner": "docs/CONSCIENCIA/REGRA-COMITE-DELTA-CONTINUO.md", "stage": "BOOT"},
-      "ROOT_CHILD_CONTRACT_LINEAGE_GATE": {"owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json#centraldark_global_contract.child_contract_lineage", "stage": "BOOT"},
-      "POMBO64_TRACE_GATE": {"owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json#trace_pombo64_contract", "stage": "BOOT"},
-      "PRE_MUTATION_INTERVIEW_GATE": {"owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json#pre_mutation_interview_gate", "stage": "PRE_MUTATION"},
-      "FAIL_FAST_BLOCK_GATE": {"owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json#fail_fast_block_contract", "stage": "ALL_BLOCKS"},
-      "LOCAL_HOUSE_SENSOR_GATE": {"owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json#local_house_sensor_contract", "stage": "MEASUREMENT"},
-      "ONE_WRITER_PER_SCOPE_GATE": {"owner": "docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md", "stage": "MUTATION"},
-      "SAME_HEAD_CI_GATE": {"owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json#universal_operational_contract.cross_surface_convergence", "stage": "PROMOTION"},
-      "RUNTIME_PROOF_GATE": {"owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json#universal_operational_contract.counterproof", "stage": "RUNTIME"}
+      "TLC23_PDF_BOOT_GATE": {
+        "owner": "CENTRALDARK_AI_BOOT.yaml#initial_bootstrap_gate",
+        "stage": "BOOT"
+      },
+      "GLOBAL_CONTRACT_BOOTSTRAP_GATE": {
+        "owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json",
+        "stage": "BOOT"
+      },
+      "DELTA_CONTINUO_GLOBAL_GATE": {
+        "owner": "docs/CONSCIENCIA/REGRA-COMITE-DELTA-CONTINUO.md",
+        "stage": "BOOT"
+      },
+      "ROOT_CHILD_CONTRACT_LINEAGE_GATE": {
+        "owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json#centraldark_global_contract.child_contract_lineage",
+        "stage": "BOOT"
+      },
+      "POMBO64_TRACE_GATE": {
+        "owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json#trace_pombo64_contract",
+        "stage": "BOOT"
+      },
+      "PRE_MUTATION_INTERVIEW_GATE": {
+        "owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json#pre_mutation_interview_gate",
+        "stage": "PRE_MUTATION"
+      },
+      "FAIL_FAST_BLOCK_GATE": {
+        "owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json#fail_fast_block_contract",
+        "stage": "ALL_BLOCKS"
+      },
+      "LOCAL_HOUSE_SENSOR_GATE": {
+        "owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json#local_house_sensor_contract",
+        "stage": "MEASUREMENT"
+      },
+      "ONE_WRITER_PER_SCOPE_GATE": {
+        "owner": "docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md",
+        "stage": "MUTATION"
+      },
+      "SAME_HEAD_CI_GATE": {
+        "owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json#universal_operational_contract.cross_surface_convergence",
+        "stage": "PROMOTION"
+      },
+      "RUNTIME_PROOF_GATE": {
+        "owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json#universal_operational_contract.counterproof",
+        "stage": "RUNTIME"
+      }
     }
   },
   "pre_mutation_interview_gate": {
@@ -545,10 +584,23 @@
     "parallel_perception_runtime": "apps/modulos/HERMES-CORE/core/perception-orchestra.mjs",
     "external_grilling_skill_is_hard_dependency": false,
     "missing_external_grilling_policy": "USE_LOCAL_METAGRILL_PLUS_PERCEPTION_ORCHESTRA",
-    "sequence": ["GRILL_HOOK_FIND_WEAK_ASSUMPTION","META_GRILL_FIND_WOUND","FAN_OUT_FOUR_READ_ONLY_INTERVIEWS","RENDEZVOUS_EVIDENCE","RUN_DISCRIMINATING_TEST_IF_NEEDED","OPERATIONAL_METHOD_RECONCILE","ONE_WRITER_OR_NO_MUTATION"],
+    "sequence": [
+      "GRILL_HOOK_FIND_WEAK_ASSUMPTION",
+      "META_GRILL_FIND_WOUND",
+      "FAN_OUT_FOUR_READ_ONLY_INTERVIEWS",
+      "RENDEZVOUS_EVIDENCE",
+      "RUN_DISCRIMINATING_TEST_IF_NEEDED",
+      "OPERATIONAL_METHOD_RECONCILE",
+      "ONE_WRITER_OR_NO_MUTATION"
+    ],
     "parallel_interviews": {
       "mode": "READ_ONLY",
-      "roles": ["A_LOGIC","B_IMPLEMENTATION","C_REGRESSION_FALSE_GREEN","D_SIMPLIFICATION"],
+      "roles": [
+        "A_LOGIC",
+        "B_IMPLEMENTATION",
+        "C_REGRESSION_FALSE_GREEN",
+        "D_SIMPLIFICATION"
+      ],
       "all_four_required_for_writer_readiness": true,
       "model_vote_is_truth": false,
       "correlated_views_are_independent_proofs": false,
@@ -560,7 +612,14 @@
   "fail_fast_block_contract": {
     "marker": "CENTRALDARK_FAIL_FAST_BLOCK_REQUIRED",
     "status": "MANDATORY",
-    "material_failure_states": ["FAIL","BLOCKED","UNKNOWN_MATERIAL","TIMEOUT","ERROR","CANCELLED_APPLICABLE"],
+    "material_failure_states": [
+      "FAIL",
+      "BLOCKED",
+      "UNKNOWN_MATERIAL",
+      "TIMEOUT",
+      "ERROR",
+      "CANCELLED_APPLICABLE"
+    ],
     "on_any_material_failure": "ABORT_CURRENT_BLOCK",
     "continue_later_mutating_step_after_material_failure": false,
     "fixed_point_true_after_material_failure": "FORBIDDEN",
@@ -2285,6 +2344,44 @@
       "inventory_all_repository_branches": true,
       "inventory_does_not_equal_merge_or_close": true,
       "useful_branch_delta_requires_absorption_before_deletion": true
+    },
+    "continuous_reality_convergence": {
+      "marker": "CONTINUOUS_REALITY_FIXED_POINT_LOOP",
+      "status": "CANONICAL_GLOBAL",
+      "scope": "GLOBAL_CONTINUOUS",
+      "main_movement_is_internal_trigger_not_user_interrupt": true,
+      "do_not_stop_to_report_main_movement": true,
+      "do_not_restart_architecture_on_each_new_head": true,
+      "preserve_current_mission_across_head_changes": true,
+      "loop": [
+        "REMEASURE_HEAD",
+        "ABSORB_USEFUL_DELTA",
+        "FAST_FORWARD_VPS_WHEN_SAFE",
+        "MEASURE_RUNTIME",
+        "GRILL_ME",
+        "COUNTERPROOF",
+        "REPEAT_IF_SOURCE_OF_TRUTH_ADVANCES",
+        "STOP_ONLY_WHEN_REALITY_EQUALS_FIXED_POINT"
+      ],
+      "canonical_expression": "MAIN_MOVEU -> REMEDE_HEAD -> ABSORVE_DELTA_UTIL -> VPS_ACOMPANHA_POR_FF -> MEDE_RUNTIME -> GRILL -> CONTRAPROVA -> SE_MAIN_MOVER_DE_NOVO_REPETE -> SO_PARA_QUANDO_REALIDADE_EQUALS_FIXED_POINT",
+      "invariants": {
+        "UNKNOWN_IS_NOT_PASS": true,
+        "DOCUMENTED_IS_NOT_EXECUTED": true,
+        "COMMITTED_IS_NOT_DEPLOYED": true,
+        "MERGED_IS_NOT_DEPLOYED": true,
+        "ACTION_IS_NOT_PROOF": true,
+        "NO_BLIND_OVERWRITE": true,
+        "NO_PARALLEL_ARCHITECTURE": true,
+        "USEFUL_DELTA_BEFORE_CLEANUP": true,
+        "FIXED_POINT_IS_REALITY_JUDGMENT": true
+      },
+      "stopping_condition": {
+        "only": "REALITY_EQUALS_FIXED_POINT",
+        "chat_status_update_is_not_stop_condition": true,
+        "github_head_change_is_not_stop_condition": true,
+        "intermediate_green_is_not_stop_condition": true,
+        "partial_success_is_not_stop_condition": true
+      }
     }
   }
 }

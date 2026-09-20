@@ -12,6 +12,7 @@ import { log } from "./log.js";
 import { withCid } from "./correlation.js";
 import { config } from "./config.js";
 import { injectPatternAdmin } from "./admin-patterns-ui.js";
+import { getOperationalSnapshot } from "./operational-telemetry.js";
 
 const COOKIE = "cd_admin";
 const TTL_MS = 2 * 60 * 60 * 1000;
@@ -495,6 +496,27 @@ async function carregarHealth(){
   $('kpiSse').textContent = j.sseAtivas ?? '0';
 }
 
+async function carregarOperational(){
+  const box = $('operationalFlow');
+  if (!box) return;
+  try {
+    const r = await fetch('/admin/api/operational-snapshot');
+    const j = await r.json();
+    const flow = (j.deterministicFlow || []).join(' → ');
+    const fronts = (j.fronts || []).map(f =>
+      '<div class="row"><span>'+htmlEscape(f.id+' · '+f.source)+'</span><span class="'+(f.state === 'UNKNOWN' || f.state === 'STALE' ? 'warn' : 'ok')+'">'+htmlEscape(f.state)+'</span></div>'
+    ).join('');
+    box.innerHTML =
+      '<div class="row"><span>Contrato</span><span class="info">'+htmlEscape(j.schema || '-')+'</span></div>'+
+      '<div class="row"><span>Veredito</span><span class="'+(String(j.verdict||'').includes('UNKNOWN') ? 'warn' : 'ok')+'">'+htmlEscape(j.verdict || 'UNKNOWN')+'</span></div>'+
+      '<div class="row"><span>Fluxo</span><span>'+htmlEscape(flow)+'</span></div>'+
+      '<div class="row"><span>Forensic</span><span>'+htmlEscape(j.forensic?.status || 'UNKNOWN')+'</span></div>'+
+      fronts;
+  } catch (err) {
+    box.textContent = 'operational snapshot indisponível: '+String(err);
+  }
+}
+
 async function carregarMetricas(){
   const r = await fetch('/admin/api/metricas'); const j = await r.json();
   $('kpiErros').textContent = j.erros ?? '-';
@@ -574,10 +596,11 @@ async function rodarE2E(){
   }
 }
 
-function recarregar(){ carregarHealth(); carregarTools(); carregarMetricas(); }
+function recarregar(){ carregarHealth(); carregarTools(); carregarMetricas(); carregarOperational(); }
 recarregar();
 setInterval(carregarHealth, 15000);
 setInterval(carregarMetricas, 15000);
+setInterval(carregarOperational, 15000);
 conectarLogs();
 </script>
 </body></html>`;
@@ -653,6 +676,7 @@ export function adminRotas(req, res) {
             { metodo: "POST", path: "/admin/api/e2e", protegido: true },
             { metodo: "GET", path: "/admin/api/logs", protegido: true },
             { metodo: "GET", path: "/admin/api/metricas", protegido: true },
+            { metodo: "GET", path: "/admin/api/operational-snapshot", protegido: true },
         ],
     });
 }
@@ -678,6 +702,12 @@ export function adminTools(req, res) {
         (categorias[c] ||= []).push({ name: t.name, description: t.description });
     }
     res.json({ total: summary.toolCount, categorias });
+}
+
+export function adminOperationalSnapshot(req, res) {
+    if (!isAdmin(req)) { res.status(401).json({ ok: false }); return; }
+    res.setHeader("Cache-Control", "no-store");
+    res.json(getOperationalSnapshot());
 }
 
 // ─── Busca de logs (filtro por rota / cid / level / texto) ────────────

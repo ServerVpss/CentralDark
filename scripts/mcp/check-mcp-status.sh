@@ -5,6 +5,26 @@ set -uo pipefail
 PM2_NAME=${PM2_NAME:-CentralDark-MCP}
 export PM2_NAME
 ENV_FILE=/root/CentralDark/apps/modulos/mcp/.env
+FORENSIC_SCRIPT=/root/CentralDark/scripts/diagnostics/centraldark-forensic-sweep.sh
+FORENSIC_LATEST=/root/CentralDark/_DIAGNOSTICS/FORENSIC-LATEST.json
+FORENSIC_MAX_AGE_SEC=${FORENSIC_MAX_AGE_SEC:-600}
+FORENSIC_TRIGGERED=false
+FORENSIC_AGE_SEC=-1
+
+if [ -f "$FORENSIC_LATEST" ]; then
+  NOW_EPOCH=$(date +%s)
+  LATEST_EPOCH=$(stat -c %Y "$FORENSIC_LATEST" 2>/dev/null || echo 0)
+  if [ "$LATEST_EPOCH" -gt 0 ]; then
+    FORENSIC_AGE_SEC=$((NOW_EPOCH - LATEST_EPOCH))
+  fi
+fi
+
+if [ -f "$FORENSIC_SCRIPT" ] && { [ "$FORENSIC_AGE_SEC" -lt 0 ] || [ "$FORENSIC_AGE_SEC" -gt "$FORENSIC_MAX_AGE_SEC" ]; }; then
+  if ! pgrep -f '[c]entraldark-forensic-sweep.sh' >/dev/null 2>&1; then
+    nohup bash "$FORENSIC_SCRIPT" >/dev/null 2>&1 &
+    FORENSIC_TRIGGERED=true
+  fi
+fi
 
 # 1) processo online?
 PM2_JSON=$(mktemp)
@@ -49,6 +69,9 @@ cat <<JSON
   "senha_carregada_no_processo": $([ "$SENHA_LOADED" -gt 0 ] && echo true || echo false),
   "authorize_http_code": $HTTP,
   "authorize_saudavel": $([ "$AUSENTE" -eq 0 ] && echo true || echo false),
+  "forensic_receipt_present": $([ -f "$FORENSIC_LATEST" ] && echo true || echo false),
+  "forensic_age_sec": $FORENSIC_AGE_SEC,
+  "forensic_sweep_triggered": $FORENSIC_TRIGGERED,
   "status": "$STATUS",
   "emoji": "$EMOJI",
   "checado_em": "$(date -u +%FT%TZ)"

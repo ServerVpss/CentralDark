@@ -382,3 +382,10 @@ updated: 2026-08-27
 - **Contexto:** Outra IA registrou esse aprendizado: "💬 Gemini Flash — grupo evolução (2026-09-20)". Faz sentido? Como aplicamos isso a
 - **Lição:** Claude me fez perceber que conexões entre áreas diferentes geram insights mais ricos
 
+### 🔁 Reuse before create também vale para segredo e health runtime
+- **Categoria:** regra
+- **Data:** 2026-09-20
+- **Contexto:** O MCP marcou Telegram como ausente e o health caiu para 89, embora a Casa já tivesse a credencial em `/root/CentralDark/secrets/telegram-alerts.env`. A primeira busca olhou `/root/secrets`, caminho errado para este runtime. Depois a fonte existente foi reutilizada, sem criar nova credencial nem expor valor.
+- **Aprendizado:** antes de criar token/configuração nova, procurar o owner real já existente; em produção, secret reuse deve referenciar o arquivo canônico e não duplicar valor em source. Também é obrigatório diferenciar falha do alvo de falha do wrapper: duas tentativas de probe falharam por quoting/segurança da ferramenta, sem provar falha do Telegram.
+- **Prova:** `CentralDark-MCP` reiniciado com `telegram-alerts.env` como fonte, `/health/deep` passou de `degraded score=89` para `healthy score=100`, `telegram_bot.ok=true`, `hub_mission_consumer.ok=true`, `lastError=false`; valor do segredo não foi exibido. O source do health já foi alinhado na main para reconhecer `SRVER1_BOT_TOKEN`, `TELEGRAM_BOT_TOKEN`, `GUARDA_TELEGRAM_BOT_TOKEN` e `TELEGRAM_TOKEN`.
+
