@@ -1031,7 +1031,8 @@
       "LOGS",
       "RECEIPTS",
       "HUD",
-      "FUTURE_EXECUTORS"
+      "FUTURE_EXECUTORS",
+      "TELEMETRY_HYBRID"
     ],
     "authority": {
       "creator_owner": "SEGREDO/CHEFE",
@@ -1058,7 +1059,8 @@
       "pr_ledger": "PR_MOTHER_1562_RENDEZVOUS_NOT_AUTHORITY",
       "hud": "PROJECTION_NOT_AUTHORITY",
       "history": "PROVENANCE_NOT_CURRENT_TRUTH"
-    }
+    },
+    "hybrid_telemetry_contract_ref": "this_contract.hybrid_telemetry_contract"
   },
   "fixed_hud_contract": {
     "marker": "CENTRALDARK_FIXED_HUD_REQUIRED",
@@ -1100,7 +1102,14 @@
       "OWNER",
       "PORTS",
       "LABELS",
-      "RECEIPTS"
+      "RECEIPTS",
+      "SCREENPIPE",
+      "DESKTOP_COMMANDER",
+      "LOGS",
+      "SYSTEMD",
+      "DOCKER",
+      "HEARTBEAT",
+      "TELEMETRY"
     ],
     "state_vocabulary": [
       "PASS",
@@ -1357,5 +1366,154 @@
     "same_scope": "EVOLVE_SAME_OWNER_SAME_PR_WHEN_WRITER_SCOPE_MATCHES",
     "interruption": "RESUME_FROM_NEXT_CURSOR_AFTER_REMEASURE",
     "fixed_point_is_checkpoint_not_mission_amnesia": true
+  },
+  "hybrid_telemetry_contract": {
+    "marker": "CENTRALDARK_HYBRID_TELEMETRY_REQUIRED",
+    "status": "MANDATORY_WHEN_OBSERVABILITY_IS_MATERIAL",
+    "principle": "SCREEN_IS_OPTIONAL_SENSOR_NOT_SINGLE_POINT_OF_TRUTH",
+    "no_screen_does_not_block_other_observability": true,
+    "screen_unavailable_action": "CONTINUE_WITH_OTHER_AUTHORIZED_SENSORS_AND_MARK_SCREEN_UNKNOWN",
+    "sources": {
+      "github": [
+        "MAIN_SHA",
+        "PR_HEAD_SHA",
+        "DIFF",
+        "LABELS",
+        "WORKFLOWS",
+        "COMMITS",
+        "MERGEABLE"
+      ],
+      "vps_runtime": [
+        "ROOT_HEAD",
+        "CANONICAL_MAIN_HEAD",
+        "WORKTREES",
+        "PROCESSES",
+        "PM2",
+        "DOCKER",
+        "SYSTEMD",
+        "PORTS",
+        "CADDY",
+        "RUNTIME_OWNER"
+      ],
+      "api": [
+        "HEALTH",
+        "HEARTBEAT",
+        "DEEP_STATUS",
+        "ROUTE_RESPONSE",
+        "RESPONSE_TIMESTAMP"
+      ],
+      "logs": [
+        "PM2_LOGS",
+        "SYSTEMD_JOURNAL",
+        "APP_LOGS",
+        "AUDIT_LOGS",
+        "RUNNER_LOGS"
+      ],
+      "mcp": [
+        "TOOL_CALL_AUDIT",
+        "SSE_OR_LIVE_LOG",
+        "RECEIPTS",
+        "CORRELATION_IDS"
+      ],
+      "ci": [
+        "GITHUB_ACTIONS",
+        "BUILDKITE",
+        "JOB_STATUS",
+        "JOB_LOGS",
+        "FAILURE_SIGNATURE"
+      ],
+      "screen": [
+        "SCREENPIPE",
+        "DESKTOP_COMMANDER",
+        "WINDOW_FRAME",
+        "SCREENSHOT"
+      ],
+      "file_config": [
+        "GIT_BLOB_SHA",
+        "SHA256",
+        "CONFIG_FINGERPRINT",
+        "OWNER_PATH"
+      ],
+      "network": [
+        "LISTENER_PID",
+        "BIND_ADDRESS",
+        "PORT",
+        "ROUTE",
+        "PROXY_TARGET"
+      ],
+      "history": [
+        "RECEIPTS",
+        "PAST_LOGS",
+        "PAST_SCREENSHOTS",
+        "MEMORY"
+      ]
+    },
+    "source_semantics": {
+      "screen_is_required": false,
+      "screen_is_sensor": true,
+      "screenshot_is_hidden_runtime_proof": false,
+      "history_is_current_state": false,
+      "process_alive_is_result": false,
+      "http_200_is_global_pass": false,
+      "port_response_requires_owner_attribution": true,
+      "endpoint_response_requires_host_port_route_binding": true,
+      "sensor_failure_is_world_failure": false,
+      "connector_failure_is_provider_failure": false,
+      "correlated_views_are_independent_proofs": false,
+      "direct_target_measurement_preferred": true,
+      "global_current_claim_requires_cross_surface_reconciliation": true
+    },
+    "screenpipe": {
+      "owner": ".agents/skills/screenpipe-live-observer/SKILL.md",
+      "expected_local_api": "http://localhost:3030",
+      "expected_mcp": "http://localhost:3031/mcp",
+      "endpoint_must_be_attributed_to_screenpipe_process_before_use": true,
+      "same_port_other_owner_means_not_screenpipe": true,
+      "vps_3030_current_observation": "GRAPH_PANEL_NOT_SCREENPIPE",
+      "vps_3031_current_observation": "NO_LISTENER",
+      "windows_segredo_current_observation": "REMOTE_DEVICE_OFFLINE_AT_LAST_MEASUREMENT",
+      "stale_observation_is_runtime_truth": false
+    },
+    "fallback_flow": [
+      "TRY_DIRECT_TARGET_SENSOR",
+      "IF_SCREEN_AVAILABLE_BIND_HOST_PID_WINDOW_FRAME_TIMESTAMP",
+      "ELSE_MARK_SCREEN_UNKNOWN",
+      "MEASURE_PROCESSES_PORTS_AND_OWNER",
+      "MEASURE_APIS_AND_HEARTBEAT",
+      "MEASURE_LOGS_AND_AUDIT",
+      "MEASURE_GITHUB_AND_CI",
+      "MEASURE_CONFIG_HASHES_AND_ROUTES",
+      "RENDEZVOUS_CORRELATED_EVIDENCE",
+      "DISCRIMINATING_TEST_ON_CONTRADICTION",
+      "RECEIPT_WITH_PROVENANCE",
+      "REALITY_JUDGE"
+    ],
+    "evidence_envelope_required": [
+      "SOURCE_TYPE",
+      "SOURCE_ID",
+      "TARGET",
+      "HOST",
+      "OWNER",
+      "OBSERVED_AT",
+      "HEAD_OR_RUNTIME_FINGERPRINT",
+      "EVIDENCE_REF",
+      "CLAIM",
+      "CLASS"
+    ],
+    "contradiction_policy": {
+      "same_target_disagreement": "DO_NOT_VOTE_RUN_DISCRIMINATING_TEST",
+      "stale_vs_current": "CURRENT_WINS_IF_BOUND_TO_SAME_TARGET",
+      "unavailable_sensor": "UNKNOWN_ONLY_FOR_THAT_SENSOR",
+      "unavailable_screen": "DO_NOT_BLOCK_NON_VISUAL_MEASUREMENT",
+      "unresolved_material_contradiction": "FIXED_POINT_FALSE"
+    },
+    "hud": {
+      "expose_sensor_availability": true,
+      "expose_provenance": true,
+      "expose_last_observed_at": true,
+      "expose_owner_binding": true,
+      "expose_cross_surface_drift": true,
+      "layout_remains_fixed": true
+    }
   }
 }
