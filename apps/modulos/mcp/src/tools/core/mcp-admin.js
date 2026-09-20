@@ -13,7 +13,7 @@ import { cognitivoTools } from "../cognitivo/cognitivo.js";
 import { eliteGatewayTools } from "../elite/elite-gateway.js";
 import { geminiTools } from "../gemini/gemini.js";
 import { integrationsTools } from "../integrations.js";
-import { painelTools } from "../painel/painel.js";
+import { painelTools } from "../painel/painel.js";\nimport { operationalTelemetryTools } from "../observability/operational-telemetry.js";
 import { piveteTools } from "../pivete/pivete-tools.js";
 import { aprendizadoTools } from "../aprendizado/aprendizado.js";
 import { conscienciaTools } from "../consciencia/consciencia.js";
@@ -93,7 +93,7 @@ const runtimeTools = [
     ...eliteGatewayTools,
     ...geminiTools,
     ...integrationsTools,
-    ...painelTools,
+    ...painelTools,\n    ...operationalTelemetryTools,
     ...piveteTools,
     ...youtubeMediaTools,
 ];
