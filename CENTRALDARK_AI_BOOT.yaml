@@ -17,6 +17,45 @@ CENTRALDARK_AI_BOOT:
   frequency: "ADAPTIVE"
   fronts: "ADAPTIVE_1_TO_10"
 
+  # Cognitive BIOS = camada lógica de política do mesmo boot. Não é firmware, SO paralelo ou segundo cérebro.
+  cognitive_bios:
+    status: "CANONICAL_BOOT_POLICY_LAYER"
+    role: "ADAPTIVE_BOOT_POLICY_LAYER"
+    firmware_mutation: false
+    native_os_kernel_mutation: false
+    semantic_sources:
+      cognitive_capabilities: "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md"
+      operational_metacognition: "docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md"
+    behavior:
+      reflex_owner: "INSTINTO_SUPERIOR=OPERATIONAL_REFLEX"
+      metacognition_owner: "META_METACOGNICAO_OPERACIONAL"
+      adapt_frequency: true
+      adapt_fronts: true
+      reuse_proven_reflex: true
+      stop_reflex_on: [NOVELTY, BOUNDARY_CHANGED, MATERIAL_CONTRADICTION, HIGH_RISK, EVIDENCE_INSUFFICIENT]
+      may_change_authority: false
+      may_change_human_goal: false
+      may_relax_proof: false
+      unknown_is_pass: false
+      zero_silent_learning: true
+    hud:
+      required: true
+      phase_order: [HUD_FIRST, HUD_UPDATE]
+      fields:
+        - COGNITIVE_BIOS_STATUS
+        - COGNITIVE_MODE
+        - ACTIVE_FRONTS
+        - REFLEX_STATE
+        - CURRENT_OWNER
+        - WRITER
+        - EVIDENCE_STATE
+        - COGNITIVE_DEBT
+        - RUNTIME_TARGET
+        - NEXT_CURSOR
+        - FIXED_POINT_STATE
+      unknown_fields_remain_visible: true
+      source_of_truth: "CURRENT_RUNTIME_PLUS_CANONICAL_CONTRACT"
+
   # DELTA ÚTIL é parte explícita do BOOT, não nota solta de sessão.
   # Todo delta que sobreviver à escavação precisa ficar rastreável aqui E no owner canônico.
   delta_util_contract:
@@ -210,6 +249,8 @@ CENTRALDARK_AI_BOOT:
     invariant: "USER_TYPES_ONLY_!CENTRALDARK; ENGINE_RECOVERS_AND_EXECUTES_THE_CANONICAL_METHOD"
 
   canonical_contracts:
+    cognitive_method: "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md"
+    operational_metacognition: "docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md"
     soul: "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md"
     randolf: "docs/CONSCIENCIA/RANDOLF-CONTINUIDADE.md"
     knowledge_hub: "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/KNOWLEDGE-HUB.yml"
