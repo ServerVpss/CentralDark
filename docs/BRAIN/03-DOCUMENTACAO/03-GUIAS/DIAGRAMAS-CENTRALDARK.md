@@ -1,10 +1,15 @@
 ---
 title: "Diagramas do Sistema CentralDark"
 date: 2026-06-29
-updated: 2026-08-22
+updated: 2026-09-19T23:50:19-03:00
 status: "DERIVED_VIEW"
 tags: ["diagrama", "arquitetura", "fluxo", "mermaid", "sistema"]
+category: M-Mapa-Sistema
+sensitivity: INTERNAL
+source: LEIA-ME-IA.md + owners canônicos listados neste documento
+source_class: INTERNAL
 source_rule: "CANONICO -> ARTEFATO; artefato nao inventa canonico"
+owner: docs/BRAIN/03-DOCUMENTACAO/03-GUIAS/
 ---
 
 # Diagramas CentralDark — visão derivada do canônico
