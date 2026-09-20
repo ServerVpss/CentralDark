@@ -350,6 +350,20 @@ if (!contract) {
   if (gateRegistry.gate_enforcement_without_contract_declaration !== "FORBIDDEN") errors.push("CONTRATO_GATE_FANTASMA_PERMITIDO");
 
   const declaredGateIds = new Set(Object.keys(gateRegistry.gates ?? {}));
+  if (gateRegistry.boot_required_gate_ids_must_be_subset_of_registry !== true) errors.push("CONTRATO_GATE_BOOT_SUBSET_NAO_OBRIGATORIO");
+  if (gateRegistry.formal_gate_without_registry_entry !== "FAIL_CLOSED") errors.push("CONTRATO_GATE_FORMAL_SEM_FAIL_CLOSED");
+
+  const formalBootGateIds = new Set();
+  const requiredGateSection = bootContent.match(/required_gate_ids:\s*\n([\s\S]*?)\n\s*required_sequence:/);
+  if (requiredGateSection) {
+    for (const match of requiredGateSection[1].matchAll(/^\s*-\s*"([A-Z0-9_]+)"\s*$/gm)) formalBootGateIds.add(match[1]);
+  } else {
+    errors.push("BOOT_REQUIRED_GATE_IDS_AUSENTE");
+  }
+  for (const match of bootContent.matchAll(/^\s*gate_id:\s*"([A-Z0-9_]+)"\s*$/gm)) formalBootGateIds.add(match[1]);
+  for (const gateId of formalBootGateIds) {
+    if (!declaredGateIds.has(gateId)) errors.push(`BOOT_FORMAL_GATE_NAO_REGISTRADO:${gateId}`);
+  }
   for (const gateId of [
     "TLC23_PDF_BOOT_GATE",
     "GLOBAL_CONTRACT_BOOTSTRAP_GATE",

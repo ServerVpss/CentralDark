@@ -517,6 +517,11 @@
     "hard_gate_id_must_be_registered_before_enforcement": true,
     "undeclared_hard_gate": "BLOCK_CONFIGURATION",
     "gate_enforcement_without_contract_declaration": "FORBIDDEN",
+    "formal_gate_declaration_scope": ["CENTRALDARK_AI_BOOT.yaml", "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json"],
+    "formal_gate_id_syntax": ["gate_id", "required_gate_ids"],
+    "boot_required_gate_ids_must_be_subset_of_registry": true,
+    "formal_gate_without_registry_entry": "FAIL_CLOSED",
+    "nonformal_narrative_gate_mentions_are_not_formal_gate_ids": true,
     "gates": {
       "TLC23_PDF_BOOT_GATE": {"owner": "CENTRALDARK_AI_BOOT.yaml#initial_bootstrap_gate", "stage": "BOOT"},
       "GLOBAL_CONTRACT_BOOTSTRAP_GATE": {"owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json", "stage": "BOOT"},
