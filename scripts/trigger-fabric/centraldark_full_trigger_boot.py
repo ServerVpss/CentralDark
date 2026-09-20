@@ -27,7 +27,7 @@ TRIGGERS = FABRIC / "TRIGGERS.yml"
 MASTER = FABRIC / "MASTER-CYCLE.yml"
 ENGINE = FABRIC / "ENGINE_BINDING.yml"
 MEGAZORD = FABRIC / "MEGAZORD-CENTRALDARK.yml"
-LOCK_CONTRACT = FABRIC / "PROVEN-DETERMINISTIC-LOCK.yml"
+LOCK_CONTRACT = FABRIC / "PROVEN-DETERMINISTIC-LOCK.yml"\nRUNTIME_PREFLIGHT_LINT = FABRIC / "RUNTIME-PREFLIGHT-LINT.yml"
 BOOT = Path("CENTRALDARK_AI_BOOT.yaml")
 COGNITIVE_CAPABILITIES = Path("docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md")
 METACOGNITION = Path("docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md")
@@ -88,7 +88,7 @@ def classify_realtime_feedback(value: str) -> dict:
 
 def require_files(repo: Path) -> dict[str, str]:
     result = {}
-    for rel in (TRIGGERS, MASTER, ENGINE, MEGAZORD, LOCK_CONTRACT, BOOT, COGNITIVE_CAPABILITIES, METACOGNITION):
+    for rel in (TRIGGERS, MASTER, ENGINE, MEGAZORD, LOCK_CONTRACT, RUNTIME_PREFLIGHT_LINT, BOOT, COGNITIVE_CAPABILITIES, METACOGNITION):
         p = repo / rel
         if not p.exists():
             raise SystemExit(f"MISSING_CANONICAL_OWNER={rel.as_posix()}")
@@ -196,7 +196,7 @@ def cmd_boot(args: argparse.Namespace) -> int:
             "failed_candidate": "REFUTED_MINERAL",
             "one_writer_per_scope": True,
             "realtime_feedback_persistent_per_mission": True,
-            "realtime_feedback_user_repetition_required": False,
+            "realtime_feedback_user_repetition_required": False,\n            "runtime_preflight_lint_required": True,\n            "runtime_preflight_lint_owner": RUNTIME_PREFLIGHT_LINT.as_posix(),
         },
     }
     print(json.dumps(result, indent=2, ensure_ascii=False))
