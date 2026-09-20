@@ -732,7 +732,10 @@
     "SELF_GOAL_STATUS",
     "GOAL_DONE_CONDITION",
     "GOAL_EVIDENCE_REF",
-    "GOAL_COUNTERPROOF_REF"
+    "GOAL_COUNTERPROOF_REF",
+    "TLC23_PDF_SHA256",
+    "TLC23_HORN_GATE_RESULT",
+    "CHILD_CONTRACT_LINEAGE_RESULT"
   ],
   "receipt_visibility": "INTERNAL_BY_DEFAULT; SHOW_ONLY_ON_AUDIT_OR_BLOCKER",
   "universal_operational_contract": {
@@ -1153,6 +1156,24 @@
         "fixed_point_is_checkpoint": true,
         "heartbeat_continues_while_runtime_exists": true,
         "next_child_only_when_material_delta_or_new_evidence": true
+      },
+      "tlc23_horn_gate": {
+        "required": true,
+        "pdf_path": "docs/CONSCIENCIA/04-MCP-E-CONECTORES/tlc23.pdf",
+        "pdf_sha256": "b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1",
+        "semantics": "FACTS_TO_HORN_RULES_TO_DERIVATION_TO_CONTRADICTION_OR_FIXED_POINT",
+        "pass_requires": [
+          "PDF_HASH_MATCH",
+          "HORN_GATE_STATUS_PASS",
+          "EVIDENCE_REF_PRESENT",
+          "UNKNOWN_ZERO_FOR_MATERIAL_CHILD_GATE"
+        ],
+        "fail_closed_on": [
+          "PDF_HASH_MISMATCH",
+          "HORN_GATE_FAIL",
+          "HORN_GATE_UNKNOWN",
+          "MISSING_EVIDENCE_REF"
+        ]
       }
     }
   },
@@ -1291,7 +1312,12 @@
       "RECEIPT_SINK",
       "ROLLBACK_BOUNDARY",
       "NEXT_CURSOR",
-      "GLOBAL_MUTATION_GATE"
+      "GLOBAL_MUTATION_GATE",
+      "ROOT_CONTRACT_REF",
+      "ROOT_GOAL_ID",
+      "CHILD_CONTRACT_ID",
+      "SELF_GOAL_ID",
+      "TLC23_HORN_GATE"
     ],
     "adapter_is_new_brain": false,
     "provider_is_authority": false,
@@ -1378,7 +1404,9 @@
       "preflight": "PASS",
       "counterproof_plan_ready": true,
       "rollback_prepared_and_identified": true,
-      "next_cursor_present": true
+      "next_cursor_present": true,
+      "tlc23_horn_gate": "PASS",
+      "child_contract_lineage": "PASS"
     },
     "exit_requires": {
       "github_t1": "PASS",
@@ -1421,7 +1449,9 @@
         "COUNTERPROOF",
         "RECEIPT",
         "HUD_LIVE_STATE",
-        "HUMAN_DEPENDENCY_APPLICABLE"
+        "HUMAN_DEPENDENCY_APPLICABLE",
+        "TLC23_HORN_GATE",
+        "CHILD_CONTRACT_LINEAGE"
       ],
       "any_required_non_pass": "FIXED_POINT_FALSE",
       "unknown_never_green": true
