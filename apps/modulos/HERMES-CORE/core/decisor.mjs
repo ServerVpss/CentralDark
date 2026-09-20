@@ -10,26 +10,24 @@ import { dirname, join } from 'node:path';
 import { buscarContexto } from '../agents/GraphRAG-Master/agent.mjs';
 import { applyRoutingStrategy } from './routing-strategy.mjs';
 import { evaluatePerceptionGate } from './perception-policy.mjs';
+import { consultarContexto } from '../agents/Knowledge-Collector/agent.mjs';
 const pexec = promisify(execFile);
 const DIR = dirname(fileURLToPath(import.meta.url));
 
-const APRENDIZADOS_PATH = join(DIR, '../knowledge/aprendizados.json');
 
 function licoesRelevantes(missao, historico, erros_anteriores = []) {
   try {
-    const base = JSON.parse(readFileSync(APRENDIZADOS_PATH, 'utf8'));
-    const contexto = (
-      missao + ' ' +
-      JSON.stringify(historico?.slice(-3) ?? []) + ' ' +
-      JSON.stringify(erros_anteriores)
-    ).toLowerCase();
-    const linhas = [];
-    for (const [cat, dados] of Object.entries(base.categorias || {})) {
-      const bate = dados.sempre === true || (dados.gatilhos || []).some(g => g && contexto.includes(g.toLowerCase()));
-      if (bate) for (const l of dados.licoes || []) linhas.push(`- [${cat}] ${l}`);
-    }
-    return linhas.slice(0, 14).join('\n');
-  } catch { return ''; }
+    const contexto = [
+      String(missao || ''),
+      JSON.stringify(historico?.slice(-4) ?? []),
+      JSON.stringify(erros_anteriores ?? []),
+    ].join(' ');
+    return consultarContexto(contexto, 14)
+      .map((linha) => `- ${String(linha).replace(/^[- ]+/, '')}`)
+      .join('\n');
+  } catch {
+    return '';
+  }
 }
 
 const CADEIA_PATH = join(DIR, 'cadeia.json');
