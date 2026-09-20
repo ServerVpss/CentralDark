@@ -430,6 +430,17 @@ if (!contract) {
   if (tempPolicy.vps_cleanliness?.do_not_use_dirty_root_as_temp_workspace !== true) errors.push("CONTRATO_TEMP_USA_ROOT_DIRTY");
   if (tempPolicy.vps_cleanliness?.cleanliness_is_not_permission_for_reset_hard_or_git_clean !== true) errors.push("CONTRATO_LIMPEZA_AUTORIZA_RESET_CEGO");
 
+  const vpsKernelDelta = contract.vps_kernel_delta_stream_contract ?? {};
+  if (vpsKernelDelta.marker !== "CENTRALDARK_VPS_KERNEL_DELTA_STREAM_REQUIRED") errors.push("CONTRATO_VPS_KERNEL_DELTA_MARKER_AUSENTE");
+  if (vpsKernelDelta.new_parallel_service !== false) errors.push("CONTRATO_VPS_KERNEL_DELTA_SERVICO_PARALELO");
+  if (vpsKernelDelta.transport !== "FASTAPI") errors.push("CONTRATO_VPS_KERNEL_DELTA_TRANSPORTE_INVALIDO");
+  if (vpsKernelDelta.engine_owner !== "apps/modulos/elite-gateway/scripts/centraldark_omni_router.py") errors.push("CONTRATO_VPS_KERNEL_DELTA_OWNER_INVALIDO");
+  if (vpsKernelDelta.one_heart !== "https://api.centralldark.com/heartbeat") errors.push("CONTRATO_VPS_KERNEL_DELTA_CORACAO_INVALIDO");
+  if (vpsKernelDelta.raw_stream?.preserve !== true || vpsKernelDelta.raw_stream?.may_be_removed !== false) errors.push("CONTRATO_VPS_KERNEL_DELTA_REMOVE_STREAM_BRUTO");
+  if (vpsKernelDelta.delta_semantics?.derived_not_authority !== true) errors.push("CONTRATO_VPS_KERNEL_DELTA_VIROU_AUTORIDADE");
+  if (vpsKernelDelta.mutation_policy?.stream_never_mutates_directly !== true) errors.push("CONTRATO_VPS_KERNEL_DELTA_STREAM_MUTANTE");
+  if (vpsKernelDelta.mutation_policy?.global_contract_entry_exit_required_for_fix !== true) errors.push("CONTRATO_VPS_KERNEL_DELTA_SEM_GATE_GLOBAL");
+
   const logIncident = contract.log_incident_crystallization_contract ?? {};
   if (logIncident.marker !== "CENTRALDARK_LOG_INCIDENT_FANOUT_CRYSTALLIZATION_REQUIRED") errors.push("CONTRATO_LOG_INCIDENT_MARKER_AUSENTE");
   if (logIncident.primary_sensor?.endpoint !== "/admin/api/logs") errors.push("CONTRATO_LOG_INCIDENT_SENSOR_INVALIDO");
