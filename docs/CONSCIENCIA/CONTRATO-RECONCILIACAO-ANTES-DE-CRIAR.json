@@ -1469,10 +1469,8 @@
       "expected_mcp": "http://localhost:3031/mcp",
       "endpoint_must_be_attributed_to_screenpipe_process_before_use": true,
       "same_port_other_owner_means_not_screenpipe": true,
-      "vps_3030_current_observation": "GRAPH_PANEL_NOT_SCREENPIPE",
-      "vps_3031_current_observation": "NO_LISTENER",
-      "windows_segredo_current_observation": "REMOTE_DEVICE_OFFLINE_AT_LAST_MEASUREMENT",
-      "stale_observation_is_runtime_truth": false
+      "stale_observation_is_runtime_truth": false,
+      "live_observations_belong_in": "RECEIPT_AND_FIXED_HUD_NOT_CONTRACT"
     },
     "fallback_flow": [
       "TRY_DIRECT_TARGET_SENSOR",
