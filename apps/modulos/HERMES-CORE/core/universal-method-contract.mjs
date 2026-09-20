@@ -162,6 +162,13 @@ export function validateUniversalMethod() {
     'bounded_100_percent:',
     'requires_explicit_denominator: true',
     'calculation_only_global_runtime_claim: false',
+    'hybrid_telemetry_contract:',
+    'CENTRALDARK_HYBRID_TELEMETRY_REQUIRED',
+    'screen_is_optional_sensor_not_single_point_of_truth: true',
+    'no_screen_does_not_block_other_observability: true',
+    'sensor_failure_is_world_failure: false',
+    'endpoint_must_be_attributed_to_screenpipe_process_before_use: true',
+    'unresolved_material_contradiction: FIXED_POINT_FALSE',
   ], 'UNIVERSAL_CONTRACT');
 
   requireTokens(operationalMethod, [
@@ -403,6 +410,7 @@ export function validateUniversalMethod() {
     bounded_100_percent_requires_explicit_denominator: true,
     global_contract_enforcer: true,
     continuous_delta_global: true,
+    hybrid_telemetry_global: true,
   };
 }
 
