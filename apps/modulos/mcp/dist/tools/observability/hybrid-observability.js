@@ -144,6 +144,7 @@ export const hybridObservabilityTools = [
         handler: async () => {
             const vault = process.env.CENTRALDARK_OBSIDIAN_VAULT || process.env.OBSIDIAN_VAULT_PATH || "";
             return ok({
+                administraveis: administraveisSummary(),
                 hybrid_contract_present: existsSync(HYBRID_CONTRACT),
                 docs_brain_present: existsSync(join(REPO_ROOT, "docs/BRAIN")),
                 configured_vault: vault || null,
