@@ -9,7 +9,7 @@
  * Transporte (MCP/HTTP/CLI/Telegram/etc.) fica fora deste núcleo.
  */
 import { readFile } from "node:fs/promises";
-import { randomUUID } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 
 const PROTOCOL = "CENTRALDARK_AGENT_CALL_V1";
 const GLOBAL_CONTRACT_SCOPE_ID = "canon/centraldark-universal-contract-20260919";
@@ -213,6 +213,173 @@ function fail(reason, call, extra = {}) {
   };
 }
 
+
+const ROOT_CONTRACT_REF = "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json";
+const TLC23_CANONICAL_SHA256 = "b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1";
+
+function lineageStatus(reason, child = null, extra = {}) {
+  return {
+    protocol: PROTOCOL,
+    gate: "CHILD_CONTRACT_LINEAGE",
+    status: reason,
+    accepted: false,
+    root_goal_id: child?.root_goal_id || null,
+    child_contract_id: child?.child_contract_id || null,
+    self_goal_id: child?.self_goal_id || null,
+    ...extra,
+  };
+}
+
+export function validateChildContractLineage(child, state = null) {
+  if (!child || typeof child !== "object" || Array.isArray(child)) {
+    return lineageStatus("BLOCKED_CHILD_CONTRACT_MISSING", child);
+  }
+
+  const required = [
+    "root_contract_ref",
+    "root_contract_schema",
+    "root_goal_id",
+    "parent_contract_id",
+    "child_contract_id",
+    "self_goal_id",
+    "owner",
+    "scope",
+    "expected_delta",
+    "done_condition",
+    "evidence_required",
+    "counterproof",
+    "dependencies",
+    "next_cursor",
+    "status",
+    "root_authority",
+    "tlc23_horn_gate",
+  ];
+  const missing = required.filter((key) => child[key] === undefined || child[key] === null || child[key] === "");
+  if (missing.length) return lineageStatus("BLOCKED_CHILD_CONTRACT_FIELDS_MISSING", child, { missing });
+
+  if (child.root_contract_ref !== ROOT_CONTRACT_REF) {
+    return lineageStatus("BLOCKED_CHILD_ROOT_CONTRACT_MISMATCH", child);
+  }
+  if (!Number.isInteger(child.root_contract_schema) || child.root_contract_schema < GLOBAL_CONTRACT_SCHEMA_MIN) {
+    return lineageStatus("BLOCKED_CHILD_ROOT_SCHEMA_STALE", child);
+  }
+  if (child.root_authority !== "SEGREDO/CHEFE") {
+    return lineageStatus("BLOCKED_CHILD_AUTHORITY_EXPANSION", child);
+  }
+
+  const liveRootGoal = state?.root_goal;
+  if (liveRootGoal?.id && child.root_goal_id !== liveRootGoal.id) {
+    return lineageStatus("BLOCKED_CHILD_ROOT_GOAL_CHANGE", child, { expected_root_goal_id: liveRootGoal.id });
+  }
+  if (liveRootGoal?.authority && liveRootGoal.authority !== child.root_authority) {
+    return lineageStatus("BLOCKED_CHILD_ROOT_AUTHORITY_DRIFT", child);
+  }
+
+  const childScope = asScopeList(child.scope);
+  if (childScope.length === 0) return lineageStatus("BLOCKED_CHILD_SCOPE_MISSING", child);
+  const allowed = Array.isArray(state?.scope?.allowed) ? state.scope.allowed : [];
+  if (allowed.length && childScope.some((scope) => !allowed.includes(scope))) {
+    return lineageStatus("BLOCKED_CHILD_SCOPE_EXPANSION", child, { allowed_scope: allowed });
+  }
+  const parentScope = asScopeList(liveRootGoal?.scope);
+  if (parentScope.length && childScope.some((scope) => !parentScope.includes(scope))) {
+    return lineageStatus("BLOCKED_CHILD_PARENT_SCOPE_EXPANSION", child, { parent_scope: parentScope });
+  }
+
+  const tlc23 = child.tlc23_horn_gate;
+  if (!tlc23 || tlc23.status !== "PASS") {
+    return lineageStatus("BLOCKED_CHILD_TLC23_HORN_NOT_PASS", child);
+  }
+  if (tlc23.pdf_sha256 !== TLC23_CANONICAL_SHA256) {
+    return lineageStatus("BLOCKED_CHILD_TLC23_PDF_HASH_MISMATCH", child, {
+      expected_pdf_sha256: TLC23_CANONICAL_SHA256,
+    });
+  }
+  if (!nonEmpty(tlc23.evidence_ref)) {
+    return lineageStatus("BLOCKED_CHILD_TLC23_EVIDENCE_MISSING", child);
+  }
+
+  const prior = Array.isArray(state?.self_goal_receipts) ? state.self_goal_receipts : [];
+  if (prior.some((receipt) => receipt?.self_goal_id === child.self_goal_id && receipt?.status !== "SUPERSEDED")) {
+    return lineageStatus("BLOCKED_DUPLICATE_SELF_GOAL", child);
+  }
+
+  return {
+    protocol: PROTOCOL,
+    gate: "CHILD_CONTRACT_LINEAGE",
+    status: "PASS_CHILD_CONTRACT_LINEAGE",
+    accepted: true,
+    root_contract_ref: child.root_contract_ref,
+    root_contract_schema: child.root_contract_schema,
+    root_goal_id: child.root_goal_id,
+    parent_contract_id: child.parent_contract_id,
+    child_contract_id: child.child_contract_id,
+    self_goal_id: child.self_goal_id,
+    owner: child.owner,
+    scope: childScope,
+    next_cursor: child.next_cursor,
+    tlc23_pdf_sha256: tlc23.pdf_sha256,
+    tlc23_evidence_ref: tlc23.evidence_ref,
+  };
+}
+
+export function deriveSelfGoal(spec, state = null) {
+  if (!spec || typeof spec !== "object" || Array.isArray(spec)) {
+    return lineageStatus("BLOCKED_SELF_GOAL_SPEC_MISSING", spec);
+  }
+  const root = state?.root_goal;
+  if (!root?.id || root?.authority !== "SEGREDO/CHEFE") {
+    return lineageStatus("BLOCKED_ROOT_GOAL_UNPROVEN", spec);
+  }
+  if (spec.material_delta !== true) {
+    return {
+      protocol: PROTOCOL,
+      gate: "SELF_GOAL_DERIVATION",
+      status: "CHECKPOINT_CONTINUE",
+      accepted: true,
+      fixed_point_checkpoint: true,
+      heartbeat_continues: true,
+      root_goal_id: root.id,
+      next_cursor: spec.next_cursor || "HEARTBEAT_REMEASURE",
+    };
+  }
+
+  const scope = asScopeList(spec.scope);
+  const fingerprint = [
+    root.id,
+    spec.parent_contract_id || "ROOT",
+    spec.owner || "",
+    scope.join(","),
+    spec.expected_delta || "",
+    spec.done_condition || "",
+    spec.next_cursor || "",
+  ].join("|");
+  const id = createHash("sha256").update(fingerprint).digest("hex").slice(0, 24);
+  const child = {
+    root_contract_ref: ROOT_CONTRACT_REF,
+    root_contract_schema: GLOBAL_CONTRACT_SCHEMA_MIN,
+    root_goal_id: root.id,
+    parent_contract_id: spec.parent_contract_id || "ROOT",
+    child_contract_id: spec.child_contract_id || \`CC-\${id}\`,
+    self_goal_id: spec.self_goal_id || \`SG-\${id}\`,
+    owner: spec.owner,
+    scope,
+    expected_delta: spec.expected_delta,
+    done_condition: spec.done_condition,
+    evidence_required: spec.evidence_required,
+    counterproof: spec.counterproof,
+    dependencies: Array.isArray(spec.dependencies) ? spec.dependencies : [],
+    next_cursor: spec.next_cursor,
+    status: "PENDING",
+    root_authority: root.authority,
+    tlc23_horn_gate: spec.tlc23_horn_gate || state?.tlc23_horn_gate,
+  };
+  const validation = validateChildContractLineage(child, state);
+  return validation.accepted
+    ? { ...child, derivation_status: "PASS_SELF_GOAL_DERIVED", deterministic_fingerprint: id }
+    : validation;
+}
+
 export function validateGlobalContractGate(gate, state = null, expectedPhase = "ENTRY") {
   const phase = String(expectedPhase || gate?.phase || "").toUpperCase();
   const status = (reason, extra = {}) => ({
@@ -240,6 +407,9 @@ export function validateGlobalContractGate(gate, state = null, expectedPhase = "
 
   const pass = (obj) => obj && typeof obj === "object" && obj.status === "PASS";
   if (phase === "ENTRY") {
+    const childLineage = validateChildContractLineage(gate.child_contract, state);
+    if (childLineage.accepted !== true) return status(childLineage.status, { child_contract_lineage: childLineage });
+    if (!gate.tlc23_horn_gate || gate.tlc23_horn_gate.status !== "PASS" || gate.tlc23_horn_gate.pdf_sha256 !== TLC23_CANONICAL_SHA256 || !nonEmpty(gate.tlc23_horn_gate.evidence_ref)) return status("BLOCKED_GLOBAL_CONTRACT_TLC23_HORN_GATE");
     if (!pass(gate.github_t0) || !nonEmpty(gate.github_t0.head_sha)) return status("BLOCKED_GLOBAL_CONTRACT_GITHUB_T0");
     if (!pass(gate.vps_t0) || !nonEmpty(gate.vps_t0.head_sha)) return status("BLOCKED_GLOBAL_CONTRACT_VPS_T0");
     if (gate.cross_surface_drift_classified !== true) return status("BLOCKED_GLOBAL_CONTRACT_DRIFT_UNCLASSIFIED");
