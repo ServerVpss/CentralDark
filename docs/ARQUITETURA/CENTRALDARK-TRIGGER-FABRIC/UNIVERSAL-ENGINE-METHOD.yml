@@ -216,6 +216,23 @@ skin_contract:
   pressure_continuity: true
   abusive_or_degrading_language_is_not_required_by_skin: true
 
+global_convergence_coordination:
+  contract_marker: GLOBAL_CONVERGENCE_COORDINATION_REQUIRED
+  mandatory_when_material: true
+  coordinate_convergence: true
+  analyze_active_prs: true
+  compare_active_branches: true
+  register_convergence_in_principal_pr: true
+  principal_pr_is_authority: false
+  principal_pr_is_runtime_proof: false
+  validate_global_dna_current_head: true
+  validate_buildkite_funnel_end_to_end_when_material: true
+  failed_job_requires_investigation: true
+  failed_job_requires_failure_signature: true
+  failed_job_requires_reconciliation_plan: true
+  failed_job_unknown_root_cause_stays_unknown: true
+  skipped_phase_requires_reason: true
+
 operational_trace:
   visible_to_chefe: true
   private_chain_of_thought_required: false
