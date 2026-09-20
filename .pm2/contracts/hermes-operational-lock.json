@@ -1,106 +1,92 @@
 {
-  "name": "CentralDark-Hermes-acp",
-  "contract": {
-    "id": "hermes-protection-v1",
-    "title": "Hermes Agent Protection Contract",
-    "description": "Sistema operacional de proteção contra alterações não-autorizadas no Hermes",
-    "author": "SEGREDO/CHEFE",
-    "version": "1.0.0",
-    "created": "2026-09-20T12:00:00Z",
-    "status": "ACTIVE"
-  },
-  "security": {
-    "locked": true,
-    "lock_type": "OPERATIONAL",
-    "lock_reason": "Hermes é executor crítico. Requer autorização explícita antes de qualquer ação."
-  },
-  "authorization": {
-    "required": true,
-    "trigger_phrase": "PERMITO SEGREDO",
-    "context": [
-      "O SEGREDO/CHEFE é a única autoridade que pode modificar Hermes",
-      "Qualquer ação (restart, stop, update, config) requer frase mágica: 'PERMITO SEGREDO'",
-      "Sem essa frase, PM2 nega operação e loga como BLOQUEADO"
-    ],
-    "examples": {
-      "ALLOWED": [
-        "PERMITO SEGREDO: pm2 restart CentralDark-Hermes-acp",
-        "PERMITO SEGREDO, reinicia Hermes agora",
-        "Ativa: PERMITO SEGREDO para atualizar Hermes"
-      ],
-      "BLOCKED": [
-        "pm2 restart CentralDark-Hermes-acp (falta frase)",
-        "Restart Hermes (comando sem autorização)",
-        "pm2 stop CentralDark-Hermes-acp (falta PERMITO SEGREDO)"
-      ]
-    }
-  },
-  "process_config": {
-    "name": "CentralDark-Hermes-acp",
-    "script": "apps/agent-hermes/index.js",
-    "instances": "max",
-    "env": {
-      "NODE_ENV": "production",
-      "HERMES_PROTECTION": "ENABLED",
-      "REQUIRE_AUTH": "PERMITO_SEGREDO"
-    },
-    "error_file": "/var/log/hermes-error.log",
-    "out_file": "/var/log/hermes-out.log",
-    "watch": false,
-    "ignore_watch": ["node_modules", "logs"],
-    "max_memory_restart": "500M",
-    "restart_delay": 4000,
-    "max_restarts": 10,
-    "min_uptime": "10s"
-  },
+  "process_name": "CentralDark-Hermes-acp",
+  "locked": true,
+  "lock_type": "OPERATIONAL",
+  "lock_version": "2026.09.20",
+  "authorization_phrase": "PERMITO SEGREDO",
+  "authority": "SEGREDO/CHEFE",
+  "criticality": "CRITICAL",
+  "description": "User authentication gateway, API routing, session management",
+  "protected_operations": [
+    "restart",
+    "stop",
+    "update_config",
+    "delete_logs",
+    "scale",
+    "delete_process"
+  ],
   "rules": {
-    "restart": {
-      "allowed": "SEGREDO/CHEFE only",
-      "requires_auth": "PERMITO SEGREDO",
-      "cooldown_seconds": 30,
-      "max_restarts_per_day": 5
-    },
-    "stop": {
-      "allowed": "SEGREDO/CHEFE only",
-      "requires_auth": "PERMITO SEGREDO",
-      "log_reason": "required"
-    },
-    "update_config": {
-      "allowed": "SEGREDO/CHEFE only",
-      "requires_auth": "PERMITO SEGREDO",
-      "requires_backup": true,
-      "requires_test_run": true
-    },
-    "delete_logs": {
-      "allowed": "SEGREDO/CHEFE only",
-      "requires_auth": "PERMITO SEGREDO"
-    }
+    "cooldown_seconds": 30,
+    "max_restarts_per_day": 5,
+    "require_reason_on_stop": true,
+    "require_backup_on_config_update": true,
+    "require_test_on_config_update": true,
+    "zero_regression_enforced": true,
+    "one_writer_per_scope": true
   },
   "monitoring": {
-    "health_check_interval": 60,
-    "alert_on_crash": true,
-    "alert_channels": [
+    "health_check_interval_seconds": 60,
+    "auto_restart_on_crash": true,
+    "max_crash_restarts": 3,
+    "max_crash_restarts_window_hours": 24,
+    "failover_pool": [
+      "CentralDark-Hermes-acp-1",
+      "CentralDark-Hermes-acp-2",
+      "CentralDark-Hermes-acp-3"
+    ],
+    "failover_timeout_seconds": 10,
+    "graceful_shutdown_timeout_seconds": 15
+  },
+  "alerting": {
+    "channels": [
       "telegram:@srver1bot",
       "github:issues",
-      "logs:/var/log/hermes-alerts.log"
+      "logs:/var/log/centraldark-hermes-audit.log"
     ],
-    "auto_restart_on_crash": true,
-    "auto_restart_max_attempts": 3
+    "alert_on": [
+      "unauthorized_access_attempt",
+      "operation_requested",
+      "operation_authorized",
+      "operation_started",
+      "operation_completed",
+      "operation_failed",
+      "crash_detected",
+      "failover_triggered",
+      "health_check_failed"
+    ]
   },
   "audit": {
-    "log_all_operations": true,
-    "log_location": "/var/log/hermes-audit.log",
+    "log_file": "/var/log/centraldark-hermes-audit.log",
     "retention_days": 90,
-    "require_reason_on_changes": true
+    "rotation_policy": "daily",
+    "max_size_mb": 500,
+    "fields": [
+      "timestamp_utc",
+      "operator",
+      "operation_type",
+      "process_name",
+      "authorization_evidence",
+      "reason",
+      "status",
+      "result_code",
+      "duration_ms",
+      "notes"
+    ]
   },
-  "fallback": {
-    "if_hermes_fails": "Activate backup agent from pool",
-    "backup_strategy": "Multi-redundancy (Hermes-1, Hermes-2, Hermes-3)",
-    "failover_time": "< 10 seconds"
-  },
-  "signature": {
+  "metadata": {
     "created_by": "Claude Haiku 4.5",
+    "created_at": "2026-09-20T00:00:00Z",
     "authorized_by": "SEGREDO/CHEFE",
-    "session_id": "https://claude.ai/code/session_0133AjFLRV4v6EMRKDvMk9SJ"
+    "last_updated": "2026-09-20T00:00:00Z",
+    "policy_version": "2026.09.20",
+    "session_id": "session_0133AjFLRV4v6EMRKDvMk9SJ"
+  },
+  "seal": {
+    "status": "CANONICAL",
+    "authority": "SEGREDO/CHEFE",
+    "zero_regressao": "ENFORCED",
+    "human_safety_invariant": "PRESERVED",
+    "reuse_before_create": true,
+    "one_writer_per_scope": true
   }
 }
