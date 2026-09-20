@@ -75,6 +75,7 @@ mandatory_inheritance:
   - MEGAZORD_CENTRALDARK_AUTO_COMPOSITION
   - SPIRAL_TRAVERSAL_FORWARD_REVERSE
   - RUNTIME_PLUG_CONTRACT
+  - RUNTIME_PREFLIGHT_LINT
   - SIGNAL_TERRITORY_CRYSTALLIZATION
   - FIXED_POINT_10X12_ADVERSARIAL_WHEN_CRYSTALLIZING
   - ONE_WRITER_PER_SCOPE
@@ -120,6 +121,19 @@ megazord_binding:
   house_runtime_test_is_material_boundary: true
   main_is_consequence: true
   deploy_is_consequence: true
+
+
+runtime_preflight_binding:
+  contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RUNTIME-PREFLIGHT-LINT.yml
+  executable_consumer: scripts/trigger-fabric/centraldark_full_trigger_boot.py#cmd_preflight_lint
+  required_by_all_engines: true
+  creates_new_executor: false
+  applies_before: [MUTATION, DEPLOY, KILL, RESTART, DIRTY_SYNC, MULTI_SHELL_FANOUT, RUNTIME_GREEN_CLAIM]
+  fail_closed_on: [PREFLIGHT_CONTRACT_INVALID, HOST_TEMPLATE_INTERPOLATION_RISK, POWERSHELL_PID_AUTOMATIC_VARIABLE_COLLISION, MISSING_REQUIRED_PATH]
+  wrapper_parse_fail_is_not_target_fail: true
+  invalid_probe_must_not_become_fact: true
+  external_tool_host_must_invoke_when_applicable: true
+  runtime_executor_hard_enforcement: UNKNOWN_UNTIL_PROVEN
 
 runtime_plug_binding:
   contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RUNTIME-PLUG-CONTRACT.yml
