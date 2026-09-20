@@ -208,6 +208,25 @@ function validate(contract, extension, contractText, portaText, gateText, writer
   expect(policy?.enforcement?.counterproof_required === true, "CONTINUIDADE_GLOBAL_COUNTERPROOF_REQUIRED");
   expect(policy?.enforcement?.future_execution_required === true, "CONTINUIDADE_GLOBAL_FUTURE_REQUIRED");
   expect(policy?.enforcement?.single_global_owner === CONTRACT, "CONTINUIDADE_GLOBAL_OWNER");
+  const globalEverything = contract?.global_absorption_and_cockpit_policy;
+  expect(globalEverything?.marker === "GLOBAL_EVERYTHING_INTO_CENTRALDARK", "GLOBAL_EVERYTHING_MARKER");
+  expect(globalEverything?.scope === "GLOBAL", "GLOBAL_EVERYTHING_SCOPE");
+  expect(globalEverything?.origin_is_not_architecture === true, "GLOBAL_ORIGIN_NOT_ARCHITECTURE");
+  expect(globalEverything?.same_contract_regardless_of_origin === true, "GLOBAL_SAME_CONTRACT_ORIGIN");
+  expect(globalEverything?.ingestion?.single_character_is_valid_input === true, "GLOBAL_SINGLE_CHARACTER_INPUT");
+  expect(globalEverything?.ingestion?.whole_file_is_valid_input === true, "GLOBAL_WHOLE_FILE_INPUT");
+  expect(globalEverything?.ingestion?.whole_package_is_valid_input === true, "GLOBAL_WHOLE_PACKAGE_INPUT");
+  expect(globalEverything?.ingestion?.apply_into_existing_centraldark === true, "GLOBAL_APPLY_EXISTING_CENTRALDARK");
+  expect(globalEverything?.ingestion?.create_parallel_system_for_new_input === false, "GLOBAL_NO_PARALLEL_SYSTEM");
+  expect(globalEverything?.surfaces?.public_site?.canonical_host === "centralldark.com", "GLOBAL_PUBLIC_SITE_HOST");
+  expect(globalEverything?.surfaces?.private_admin_cockpit?.canonical_host === "admin.centralldark.com", "GLOBAL_ADMIN_HOST");
+  expect(globalEverything?.surfaces?.private_admin_cockpit?.access === "AUTHENTICATED_OWNER_ONLY", "GLOBAL_ADMIN_PRIVATE_ACCESS");
+  expect(globalEverything?.surfaces?.private_admin_cockpit?.one_cockpit === true, "GLOBAL_ONE_COCKPIT");
+  expect(globalEverything?.global_application?.all_current_components_inherit === true, "GLOBAL_CURRENT_COMPONENTS_INHERIT");
+  expect(globalEverything?.global_application?.all_future_components_inherit === true, "GLOBAL_FUTURE_COMPONENTS_INHERIT");
+  expect(globalEverything?.global_application?.every_addition_removal_update_uses_same_contract === true, "GLOBAL_MUTATIONS_SAME_CONTRACT");
+  expect(globalEverything?.pr_mother_projection?.pr === 1562, "GLOBAL_PR_MOTHER_1562");
+
 
   const markerCount = (contractText.match(/"marker"\s*:\s*"GLOBAL_CONTINUITY_HARD_GATE"/g) || []).length;
   expect(markerCount === 1, `CONTINUIDADE_GLOBAL_OWNER_COUNT:${markerCount}`);

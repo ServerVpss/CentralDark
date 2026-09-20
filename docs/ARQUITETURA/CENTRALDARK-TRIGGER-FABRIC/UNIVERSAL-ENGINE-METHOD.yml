@@ -71,6 +71,12 @@ execution_semantics:
   parallel_perception: true
   serialized_mutation: true
   reality_is_judge: true
+  universal_operational_contract_required: true
+  github_vps_parallel_measurement_required: true
+  cross_surface_rendezvous_before_mutation: true
+  causal_micro_deploy_when_applicable: true
+  post_mutation_parallel_remeasure_required: true
+  fixed_hud_layout_live_data_required: true
   same_head_proof_required_for_git_green: true
   next_cursor_required_when_not_fixed_point: true
   failure_returns_one_canonical_phase: true
@@ -210,6 +216,264 @@ skin_contract:
   pressure_continuity: true
   abusive_or_degrading_language_is_not_required_by_skin: true
 
+cross_surface_git_runtime_convergence:
+  marker: CROSS_SURFACE_GIT_RUNTIME_CONVERGENCE_REQUIRED
+  mandatory_when_operational: true
+  measure_github_main_pr_and_ci: true
+  measure_vps_root_canonical_main_runtime_and_dirty_state: true
+  compare_pr_head_against_current_main: true
+  divergent_pr_requires_no_force_update: true
+  dirty_root_requires_isolated_worktree_for_git_reconciliation: true
+  preserve_dirty_and_untracked_runtime_state: true
+  reset_hard_forbidden: true
+  force_push_forbidden: true
+  same_head_ci_required: true
+  cancelled_ci_is_pass: false
+  transient_remote_failure_class: BLOCKED_TRANSIENT
+  transient_failure_requires_partial_write_measurement: true
+  runtime_corrected_is_git_converged: false
+  git_current_is_runtime_current: false
+  process_alive_is_fixed_point: false
+  post_promotion_github_vps_remeasure_required: true
+  fixed_point_requires_dual_t1_reconciliation: true
+
+global_convergence_coordination:
+  contract_marker: GLOBAL_CONVERGENCE_COORDINATION_REQUIRED
+  mandatory_when_material: true
+  coordinate_convergence: true
+  analyze_active_prs: true
+  compare_active_branches: true
+  register_convergence_in_principal_pr: true
+  principal_pr_is_authority: false
+  principal_pr_is_runtime_proof: false
+  validate_global_dna_current_head: true
+  validate_buildkite_funnel_end_to_end_when_material: true
+  failed_job_requires_investigation: true
+  failed_job_requires_failure_signature: true
+  failed_job_requires_reconciliation_plan: true
+  failed_job_unknown_root_cause_stays_unknown: true
+  skipped_phase_requires_reason: true
+
+whole_house_universal_contract:
+  marker: CENTRALDARK_WHOLE_HOUSE_ONE_DIRECTION_REQUIRED
+  status: MANDATORY_GLOBAL
+  scope: ENTIRE_CENTRALDARK
+  scope_id: canon/centraldark-universal-contract-20260919
+  authority: SEGREDO/CHEFE
+  one_direction: true
+  no_parallel_contract: true
+  active_promotion_lane: canon/centraldark-universal-contract-20260919
+  after_promotion_authority: main
+  cards_on_table:
+    missing_piece_must_be_reported: true
+    exact_failure_location_required: true
+    exact_improvement_or_next_test_required: true
+    unknown_must_remain_visible: true
+    false_green_forbidden: true
+
+fixed_hud_contract:
+  marker: CENTRALDARK_FIXED_HUD_REQUIRED
+  always_show_on_centraldark_operational_response: true
+  layout: FIXED
+  data: LIVE_ONLY
+  sections_in_order: [AUREOLA_CANONICA, ACORDAR, CALIBRAR, MULTIBUSSOLA, META_LUPA, RECONCILIAR, CONTRAPROVA, T1_REMEDICAO, REALIDADE, REGISTRA, FIXED_POINT]
+  arbitrary_percent_forbidden: true
+  percent_requires_explicit_denominator: true
+  layout_change_requires_explicit_chefe_authorization: true
+
+trace_pombo64_contract:
+  marker: CENTRALDARK_HASH_TIME_POMBO64_TRACE_REQUIRED
+  observed_at_iso8601_with_offset: true
+  observed_at_utc: true
+  trace_id_formula: SHA256_OBSERVED_PHASE_DIRECTION_OBJECT_OWNER_HEAD_DEPENDENCY_24
+  event_id_format: CD-YYYYMMDDTHHMMSSO-TRACE24
+  pombo_mode: CHECKSUM_ON
+  pombo64_plus: BASE64URL_SANITIZED_ENVELOPE_PLUS_SHA256_PLAINTEXT
+  pombo64_is_proof: false
+  base64_is_security: false
+  secrets_forbidden: true
+  same_event_hash: DROP_DUPLICATE
+
+plug_and_play_inheritance:
+  marker: CENTRALDARK_PLUG_AND_PLAY_CONTRACT_INHERITANCE
+  future_executor_without_contract: FAIL_CLOSED
+  required_binding: [CONTRACT_REF, CONTRACT_SCHEMA, CONTRACT_HASH_OR_GIT_BLOB, OWNER, CAPABILITY, SCOPE, ENTRYPOINT, HEALTH_PROBE, RECEIPT_SINK, ROLLBACK_BOUNDARY, NEXT_CURSOR]
+  adapter_is_new_brain: false
+  engine_switch_is_reset: false
+  session_switch_is_reset: false
+  no_v2_v3_v4_for_same_capability: true
+
+hybrid_runtime_contract:
+  marker: CENTRALDARK_HYBRID_RUNTIME_DISCOVERY_REQUIRED
+  pm2_canonical_home: /root/.pm2
+  pm2_profile_homes_glob: /root/.centraldark/mcp-auth/profiles/*/home/.pm2
+  discover_all_pm2_homes_before_mutation: true
+  preserve_all_pm2_homes: true
+  act_only_where_owner_exists: true
+  cross_home_restart_forbidden: true
+  restart_all_forbidden: true
+  caddy_backup_before_mutation: true
+  caddy_validate_before_reload: true
+  caddy_reload_only_after_validate: true
+  caddy_rollback_on_validation_failure: true
+  t0_t1_pid_health_receipt_required: true
+
+desktop_agentic_kernel_contract:
+  marker: CENTRALDARK_DESKTOP_AGENTIC_KERNEL_REQUIRED
+  status: MANDATORY_WHEN_DESKTOP_TARGET_IS_MATERIAL
+  semantic_scope:
+    centraldark_core_is_logical_agentic_kernel: true
+    logical_kernel_is_centraldark_core_not_native_os_kernel: true
+    native_os_kernel_claim_requires_boot_evidence: true
+    native_os_kernel_state_without_boot_evidence: UNKNOWN
+  owner: apps/modulos/Bolt/source
+  entrypoint: CentralDark.exe
+  source_gate:
+    same_head_source_required: true
+    desktop_contract_test_required: true
+    source_present_is_runtime_pass: false
+    contract_test_pass_is_packaged_pass: false
+  package_gate:
+    packaged_runtime_required: true
+    installer_sha256_required: true
+    update_metadata_required: true
+    hermes_sidecar_required_for_fixed_point: true
+    hermes_bundle_unknown_blocks_fixed_point: true
+    exe_exists_is_fixed_point: false
+  launch_gate:
+    centraldark_exe_launch_required: true
+    renderer_visible_required: true
+    omni_router_health_required: true
+    hermes_health_required: true
+    mcp_health_required_for_fixed_point: true
+    process_exists_is_health: false
+    ui_visible_is_runtime_complete: false
+  provider_boundary:
+    optional_provider_failure_does_not_kill_core: true
+    selected_optional_provider_requires_fresh_health: true
+    desktop_commander_role: FALLBACK_AND_HUMAN_DESKTOP_BRIDGE
+    screenpipe_role: OPTIONAL_LOCAL_SENSOR
+    direct_api_mcp_primary: true
+  convergence:
+    github_casa_vps_api_rendezvous_required: true
+    casa_head_must_be_measured: true
+    vps_head_must_be_measured: true
+    api_health_must_be_measured: true
+    remote_bridge_online_is_global_fixed_point: false
+    fixed_point_requires: [SAME_HEAD_SOURCE, DESKTOP_CONTRACT_TEST, INSTALLER_SHA256, CENTRALDARK_EXE_LAUNCH, RENDERER_VISIBLE, OMNI_HEALTH, HERMES_SIDECAR_BUNDLED, MCP_HEALTH, T1, RECEIPT]
+  evidence:
+    secrets_forbidden_in_receipt: true
+    auth_material_is_telemetry: false
+    unknown_is_pass: false
+ephemeral_artifact_policy:
+  marker: CENTRALDARK_EPHEMERAL_WORKSPACE_CLEAN_REQUIRED
+  temporary_version_suffixes_allowed: true
+  temporary_suffixes_are_architecture: false
+  temporary_artifact_is_owner: false
+  allowed_locations: [/tmp, ephemeral_worktree, process_private_temp, ci_temp_directory]
+  cleanup_required_after_use: true
+  cleanup_on_success: true
+  cleanup_on_failure_when_safe: true
+  cleanup_on_cancel_or_timeout: true
+  stale_temp_requires_classification_before_delete: true
+  active_process_or_open_handle_blocks_blind_delete: true
+  final_temp_residue_target: ZERO_UNLESS_PROVEN_ACTIVE_OR_FORENSIC_KEEP
+  canonical_same_capability_version_suffix: FORBIDDEN
+  canonical_same_capability_names_forbidden: [v1, v2, v3, v4, novo, new, final, copy, backup-as-owner]
+  evolve_same_object: true
+  expand_domain_in_same_owner: true
+  create_parallel_architecture_for_domain_expansion: false
+  integrated_global_dedupe: true
+  duplicate_action: ABSORB_DELTA_INTO_EXISTING_OWNER_THEN_RETIRE_DUPLICATE
+  dirty_runtime_root_is_not_temp_workspace: true
+  cleanup_does_not_authorize_reset_hard_or_git_clean: true
+
+hybrid_telemetry_contract:
+  marker: CENTRALDARK_HYBRID_TELEMETRY_REQUIRED
+  status: MANDATORY_WHEN_OBSERVABILITY_IS_MATERIAL
+  screen_is_optional_sensor_not_single_point_of_truth: true
+  no_screen_does_not_block_other_observability: true
+  sensor_failure_is_world_failure: false
+  connector_failure_is_provider_failure: false
+  correlated_views_are_independent_proofs: false
+  global_current_claim_requires_cross_surface_reconciliation: true
+  sources: [GITHUB, VPS_RUNTIME, API, LOGS, MCP, GITHUB_ACTIONS, BUILDKITE, SCREENPIPE, DESKTOP_COMMANDER, FILE_CONFIG, NETWORK, HISTORY]
+  screen_fallback:
+    if_available: BIND_HOST_PID_WINDOW_FRAME_TIMESTAMP
+    if_unavailable: MARK_SCREEN_UNKNOWN_AND_CONTINUE_OTHER_SENSORS
+  port_attribution:
+    response_requires_owner_binding: true
+    same_port_other_owner_is_not_target: true
+  screenpipe:
+    owner: .agents/skills/screenpipe-live-observer/SKILL.md
+    expected_local_api: http://localhost:3030
+    expected_mcp: http://localhost:3031/mcp
+    endpoint_must_be_attributed_to_screenpipe_process_before_use: true
+  fallback_flow:
+    - TRY_DIRECT_TARGET_SENSOR
+    - MEASURE_PROCESSES_PORTS_OWNER
+    - MEASURE_APIS_HEARTBEAT
+    - MEASURE_LOGS_AUDIT
+    - MEASURE_GITHUB_CI
+    - MEASURE_CONFIG_HASHES_ROUTES
+    - RENDEZVOUS_EVIDENCE
+    - DISCRIMINATING_TEST_ON_CONTRADICTION
+    - RECEIPT_WITH_PROVENANCE
+    - REALITY_JUDGE
+  evidence_envelope_required: [SOURCE_TYPE, SOURCE_ID, TARGET, HOST, OWNER, OBSERVED_AT, HEAD_OR_RUNTIME_FINGERPRINT, EVIDENCE_REF, CLAIM, CLASS]
+  unresolved_material_contradiction: FIXED_POINT_FALSE
+
+log_incident_crystallization_contract:
+  marker: CENTRALDARK_LOG_INCIDENT_FANOUT_CRYSTALLIZATION_REQUIRED
+  sensor: /admin/api/logs
+  sensor_owner: apps/modulos/mcp/src/admin.js
+  deterministic_fanout_gate: scripts/agent-call.mjs --log-incident-fanout
+  sensor_is_global_health: false
+  correlation_fields: [cid, correlation_id, request_id, trace_id, span_id, path, status, level, msg, ms]
+  material_signal_activates_fanout: true
+  fanout_mode: PARALLEL_READ_ONLY_DIAGNOSIS
+  fronts: [AUTH_OAUTH, MCP_RUNTIME, HUB_DATABASE, ROUTING_NETWORK, PROCESS_RUNTIME, GITHUB_CI, CONFIG_PROVENANCE, SCREEN_OPTIONAL]
+  screen_unavailable_does_not_block_other_fronts: true
+  rendezvous_required_before_mutation: true
+  mutation_mode: PARALLEL_ONLY_FOR_PROVEN_DISJOINT_SCOPES_SERIAL_WITHIN_EACH_SCOPE
+  one_active_writer_per_mutable_scope: true
+  same_scope_concurrent_writers: false
+  each_mutation_requires: [OWNER, CAUSE, PREFLIGHT, ROLLBACK, T0, COUNTERPROOF_PLAN]
+  each_mutation_followed_by: [T1_SAME_TARGET, LOG_RESCAN, DEPENDENT_HEALTH_RECHECK, RECEIPT]
+  continue_until: ALL_MATERIAL_INCIDENTS_RESOLVED_OR_EXACT_BLOCKER
+  same_failure_no_new_information: REUSE_EXISTING_CRYSTAL_OR_ESCALATE_DISCRIMINATING_TEST
+  new_error_during_fix: NEW_DELTA_SAME_MISSION
+  log_silence_alone_is_pass: false
+  endpoint_200_alone_is_pass: false
+  unresolved_material_error_means_fixed_point: false
+
+global_contract_enforcer:
+  marker: CENTRALDARK_GLOBAL_CONTRACT_ENFORCER_REQUIRED
+  status: MANDATORY_FOR_MUTATION
+  owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
+  deterministic_gate: scripts/agent-call.mjs
+  deploy_gate: scripts/vps/deploy-guards-dispatcher.sh
+  creates_new_dispatcher: false
+  read_only_observation_may_bypass_mutation_gate: true
+  mutable_action_requires_entry_gate: true
+  entry_requires: [CONTRACT_SCOPE, OBSERVED_HEAD, GITHUB_T0, VPS_T0, DRIFT_CLASSIFIED, OWNER, WRITER_SCOPE, PREFLIGHT, COUNTERPROOF_PLAN, ROLLBACK_REF, NEXT_CURSOR]
+  exit_requires: [GITHUB_T1, VPS_T1, COUNTERPROOF, RECEIPT_REF, HUD_UPDATE, HUD_STATE_HASH, FIXED_POINT_OR_NEXT_CURSOR]
+  promotion_requires_same_head_ci: true
+  runtime_mutation_requires_runtime_proof: true
+  queued_pending_in_progress_cancelled_unknown_are_pass: false
+  skipped_without_proven_not_applicable_is_pass: false
+  machine_continues_until_real_human_frontier: true
+
+continuous_delta_global:
+  marker: CENTRALDARK_DELTA_CONTINUO_REQUIRED
+  active_while_master_session_active: true
+  new_material_is_delta_candidate: true
+  new_material_restarts_mission: false
+  process: [CAPTURE, LINK_TO_ACTIVE_GOAL, DEDUPE, CLASSIFY, MEASURE_IF_STATEFUL, ABSORB_ONLY_USEFUL_DELTA, UPDATE_BELIEF, RECONCILE, COUNTERPROVE, UPDATE_HUD, PERSIST_NEXT_CURSOR]
+  duplicate: DROP
+  no_information_gain: NO_CHANGE_KEEP_GOAL_KEEP_NEXT_CURSOR
+  interruption: RESUME_FROM_NEXT_CURSOR_AFTER_REMEASURE
+
 operational_trace:
   visible_to_chefe: true
   private_chain_of_thought_required: false
@@ -240,6 +504,8 @@ hermes_binding:
   validates_scope_temperature: true
 
 future_engine_gate:
+  universal_contract: docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json
+  new_engine_without_universal_operational_contract: FAIL
   registry: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml
   new_engine_without_trigger_fabric_inheritance: FAIL
   new_engine_without_universal_method_visibility: FAIL
