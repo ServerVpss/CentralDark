@@ -28,6 +28,9 @@ MASTER = FABRIC / "MASTER-CYCLE.yml"
 ENGINE = FABRIC / "ENGINE_BINDING.yml"
 MEGAZORD = FABRIC / "MEGAZORD-CENTRALDARK.yml"
 LOCK_CONTRACT = FABRIC / "PROVEN-DETERMINISTIC-LOCK.yml"
+BOOT = Path("CENTRALDARK_AI_BOOT.yaml")
+COGNITIVE_CAPABILITIES = Path("docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md")
+METACOGNITION = Path("docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md")
 DEFAULT_REGISTRY = FABRIC / "PROVEN-CLAIMS.lock.json"
 
 CANONICAL_CHAIN = [
@@ -85,12 +88,49 @@ def classify_realtime_feedback(value: str) -> dict:
 
 def require_files(repo: Path) -> dict[str, str]:
     result = {}
-    for rel in (TRIGGERS, MASTER, ENGINE, MEGAZORD, LOCK_CONTRACT):
+    for rel in (TRIGGERS, MASTER, ENGINE, MEGAZORD, LOCK_CONTRACT, BOOT, COGNITIVE_CAPABILITIES, METACOGNITION):
         p = repo / rel
         if not p.exists():
             raise SystemExit(f"MISSING_CANONICAL_OWNER={rel.as_posix()}")
         result[rel.as_posix()] = hashlib.sha256(p.read_bytes()).hexdigest()
     return result
+
+
+def cognitive_bios_state(repo: Path) -> dict:
+    boot_text = (repo / BOOT).read_text(encoding="utf-8")
+    capabilities_text = (repo / COGNITIVE_CAPABILITIES).read_text(encoding="utf-8")
+    metacognition_text = (repo / METACOGNITION).read_text(encoding="utf-8")
+
+    checks = {
+        "boot_block": "cognitive_bios:" in boot_text,
+        "adaptive_policy_role": 'role: "ADAPTIVE_BOOT_POLICY_LAYER"' in boot_text,
+        "firmware_mutation_forbidden": "firmware_mutation: false" in boot_text,
+        "native_os_kernel_mutation_forbidden": "native_os_kernel_mutation: false" in boot_text,
+        "hud_required": "COGNITIVE_BIOS_STATUS" in boot_text and "FIXED_POINT_STATE" in boot_text,
+        "operational_reflex_bound": "INSTINTO_SUPERIOR=OPERATIONAL_REFLEX" in capabilities_text,
+        "metacognition_bound": "META_METACOGNICAO_OPERACIONAL" in metacognition_text,
+        "zero_silent_learning_bound": "ZERO_SILENT_LEARNING=true" in metacognition_text,
+    }
+    loaded = all(checks.values())
+    return {
+        "status": "LOADED" if loaded else "INVALID",
+        "role": "ADAPTIVE_BOOT_POLICY_LAYER",
+        "checks": checks,
+        "hud": {
+            "COGNITIVE_BIOS_STATUS": "LOADED" if loaded else "INVALID",
+            "COGNITIVE_MODE": "ADAPTIVE",
+            "ACTIVE_FRONTS": "UNKNOWN_UNTIL_RUNTIME_CONTEXT",
+            "REFLEX_STATE": "READY_IF_EQUIVALENT_CONTEXT_ELSE_STOP_REFLEX",
+            "CURRENT_OWNER": "UNKNOWN_UNTIL_RECONCILIATION",
+            "WRITER": "UNKNOWN_UNTIL_WRITER_SCOPE_MEASURED",
+            "EVIDENCE_STATE": "CONTRACT_LOADED_NOT_RUNTIME_PROOF",
+            "COGNITIVE_DEBT": "UNKNOWN",
+            "RUNTIME_TARGET": "UNKNOWN_UNTIL_RUNTIME_CONTEXT",
+            "NEXT_CURSOR": "REMEASURE_CURRENT_REALITY",
+            "FIXED_POINT_STATE": "NOT_PROVEN",
+        },
+        "law": "ADAPT_INTENSITY_AND_ROUTE; NEVER_AUTHORITY_OR_HUMAN_GOAL",
+    }
 
 
 def discover_registry(repo: Path) -> dict:
@@ -132,6 +172,7 @@ def cmd_boot(args: argparse.Namespace) -> int:
     repo = Path(args.repo).resolve()
     source_hashes = require_files(repo)
     registry = discover_registry(repo)
+    bios = cognitive_bios_state(repo)
     active = explicit_command_context(args.input)
     normalized = normalize_command(args.input.splitlines()[0].split()[0]) if args.input.strip() else ""
     result = {
@@ -144,6 +185,8 @@ def cmd_boot(args: argparse.Namespace) -> int:
         "discovered": registry,
         "source_sha256": source_hashes,
         "feedback": classify_realtime_feedback(args.input),
+        "cognitive_bios": bios,
+        "hud": bios["hud"],
         "rules": {
             "case_insensitive": True,
             "bang_hash_equivalent_at_command_entry": True,
@@ -157,7 +200,9 @@ def cmd_boot(args: argparse.Namespace) -> int:
         },
     }
     print(json.dumps(result, indent=2, ensure_ascii=False))
-    return 0 if active else 4
+    if not active:
+        return 4
+    return 0 if bios["status"] == "LOADED" else 7
 
 
 def cmd_feedback(args: argparse.Namespace) -> int:
