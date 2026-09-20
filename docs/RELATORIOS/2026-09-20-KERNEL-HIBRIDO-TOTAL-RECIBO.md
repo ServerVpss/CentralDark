@@ -8,6 +8,7 @@ pr_mother: "#1562 (RENDEZVOUS_LEDGER_NOT_WRITER)"
 t0_observed_at: "2026-09-20T06:10Z"
 t1_observed_at: "2026-09-20T14:04Z"
 main_at_t1: 4ad248cf487b11fa1b787f9b3dc9f977e241cc98
+main_after_learning_57: fb3cc1e477acd53798d626d74109bc00b7c3b15f
 contract_owner_head_at_t1: "#1597 @ 360e4a30f91ebd36f3753635a1771a6854064ed2"
 unknown_is_not_pass: true
 ---
@@ -54,7 +55,8 @@ Gates PROPOSTOS (não são lei até virarem teste de CI): `CATALOG_HAS_NO_ORPHAN
 1. Inventariei 17 uploads (chats ChatGPT/Gemini/Grok, CPU-Z da Casa, mcp-dist-b09517b.zip, ~130 .md em 2 zips).
 2. Medi por 3 canais: análise estática do dist · GitHub vivo (PRs/commits/arquivos por ref) · MCP vivo (/health, mcp_admin_catalog, mcp_catalog_diff).
 3. NÃO escrevi na branch do #1597 (Writer = ChatGPT/SOL, ONE_WRITER_PER_SCOPE). Comentei no #1562.
-4. Por ordem direta do SEGREDO: este recibo é commitado na branch do #1562; aprendizados vão por registrar_aprendizado (owner do APRENDIZADOS.md), sem reescrever o arquivo de 55 KB.
+4. Por ordem direta do SEGREDO: este recibo é commitado na branch do #1562 (6f9fb92). O aprendizado #57 foi registrado por registrar_aprendizado,
+   que COMMITA DIRETO NA MAIN (fb3cc1e, docs-only, append em APRENDIZADOS.md) — eu esperava escrita só no working tree da VPS. Ver aprendizado 8.
 5. NÃO fiz deploy/restart/reset/limpeza; NÃO toquei na VPS dirty; NÃO li Gmail/Drive/Notion (escopo explícito exigido pelo contrato).
 ```
 
@@ -67,6 +69,7 @@ Gates PROPOSTOS (não são lei até virarem teste de CI): `CATALOG_HAS_NO_ORPHAN
 5. **`catalogVersion` é sensor barato de deploy.** Mesmo hash em duas medições espaçadas = nada mudou no ar. Usar como T0/T1 antes de qualquer conclusão sobre "está no ar".
 6. **Escrever num arquivo grande via API = regravar tudo.** APRENDIZADOS.md (55 KB) não se anexa com `create_or_update_file`; usar o owner (`registrar_aprendizado`) evita risco de corromper o ledger.
 7. **Precedente #1564** reverteu um "KERNEL PRÓPRIO": nada aqui cria kernel novo.
+8. **`registrar_aprendizado` não é "escrita local": ele commita direto na main.** A descrição da tool diz "anota em APRENDIZADOS.md" e não menciona destino. Antes de chamar uma tool de registro, medir o destino do commit (ou ler o código) — a regra "nunca push direto na main" vale também para tool que empurra em nome do agente. Rollback, se o SEGREDO quiser: reverter fb3cc1e via PR.
 
 ## 6. Fronteiras de prova
 
