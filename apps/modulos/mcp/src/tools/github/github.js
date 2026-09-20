@@ -55,7 +55,7 @@ export function canonicalLabels(labels = []) {
 
 
 export function normalizeRepoRef(owner, repo) {
-    const clean = (value) => String(value ?? "").trim().replace(/^\\/+|\\/+$/g, "");
+    const clean = (value) => String(value ?? "").trim().replace(/^\/+|\/+$/g, "");
     const explicitOwner = clean(owner);
     const repoInput = clean(repo);
     if (!repoInput) throw new Error("GitHub repo ausente");
