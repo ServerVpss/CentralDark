@@ -1,7 +1,5 @@
 # PR-MÃE #1562 — TODAS AS ISSUES ABERTAS (109)
 
-Toda issue aberta fica apontada ao funil #1562 até ser absorvida, resolvida, classificada como histórica/superseded ou bloqueada por causa real.
-
 | issue | título | labels | atualizado |
 |---:|---|---|---|
 | [#1575](https://github.com/ServerVpss/CentralDark/issues/1575) | [SENTINELA sentinela-96e5cc0303] Workflows: Workflow vermelho: PR Mother Pulse | 🧠 AGENTE-CODEX, 🟡 PRIORIDADE-MÉDIA, 🤖 AUTO, 🛡️ SENTINELA | 2026-09-18T10:58:51Z |
