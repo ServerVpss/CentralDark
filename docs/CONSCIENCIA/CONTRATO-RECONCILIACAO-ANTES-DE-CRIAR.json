@@ -722,7 +722,17 @@
     "RUNTIME_PROOF_RESULT",
     "HUMAN_BOUNDARY_STATE",
     "DELTA_CLASS",
-    "DELTA_INFORMATION_GAIN"
+    "DELTA_INFORMATION_GAIN",
+    "ROOT_CONTRACT_REF",
+    "ROOT_CONTRACT_SCHEMA",
+    "ROOT_GOAL_ID",
+    "PARENT_CONTRACT_ID",
+    "CHILD_CONTRACT_ID",
+    "SELF_GOAL_ID",
+    "SELF_GOAL_STATUS",
+    "GOAL_DONE_CONDITION",
+    "GOAL_EVIDENCE_REF",
+    "GOAL_COUNTERPROOF_REF"
   ],
   "receipt_visibility": "INTERNAL_BY_DEFAULT; SHOW_ONLY_ON_AUDIT_OR_BLOCKER",
   "universal_operational_contract": {
@@ -1069,7 +1079,82 @@
     },
     "hybrid_telemetry_contract_ref": "this_contract.hybrid_telemetry_contract",
     "ephemeral_artifact_policy_ref": "this_contract.ephemeral_artifact_policy",
-    "log_incident_crystallization_contract_ref": "this_contract.log_incident_crystallization_contract"
+    "log_incident_crystallization_contract_ref": "this_contract.log_incident_crystallization_contract",
+    "child_contract_lineage": {
+      "marker": "CENTRALDARK_ROOT_CHILD_CONTRACT_LINEAGE_REQUIRED",
+      "status": "MANDATORY",
+      "architecture": "ONE_GLOBAL_ROOT_MANY_SCOPED_CHILDREN",
+      "root_policy_owner": "AGENTS.md",
+      "machine_contract_owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json",
+      "runtime_enforcer": "scripts/agent-call.mjs",
+      "creates_new_control_plane": false,
+      "creates_new_runtime": false,
+      "creates_new_owner": false,
+      "root_goal": {
+        "authority": "SEGREDO/CHEFE",
+        "mutable_by_runtime": false,
+        "replaceable_by_self_goal": false,
+        "root_goal_id_required": true
+      },
+      "child_contract": {
+        "generated_by_runtime": true,
+        "must_reference_global_contract": true,
+        "must_have_parent": true,
+        "must_be_measurable": true,
+        "must_have_done_condition": true,
+        "must_have_evidence_requirement": true,
+        "must_have_counterproof": true,
+        "must_preserve_root_goal": true,
+        "must_preserve_authority": true,
+        "must_preserve_scope": true,
+        "owner_change_requires_explicit_handoff_proof": true,
+        "scope_expansion_without_authority": "BLOCK",
+        "authority_expansion": "BLOCK",
+        "root_goal_change": "BLOCK",
+        "duplicate_same_goal_same_evidence": "BLOCK",
+        "repeated_no_material_delta": "CHECKPOINT_CONTINUE"
+      },
+      "required_fields": [
+        "ROOT_CONTRACT_REF",
+        "ROOT_CONTRACT_SCHEMA",
+        "ROOT_GOAL_ID",
+        "PARENT_CONTRACT_ID",
+        "CHILD_CONTRACT_ID",
+        "SELF_GOAL_ID",
+        "OWNER",
+        "SCOPE",
+        "EXPECTED_DELTA",
+        "DONE_CONDITION",
+        "EVIDENCE_REQUIRED",
+        "COUNTERPROOF",
+        "DEPENDENCIES",
+        "NEXT_CURSOR",
+        "STATUS"
+      ],
+      "self_goal_states": [
+        "PENDING",
+        "RUNNING",
+        "PASS",
+        "FAIL",
+        "BLOCKED",
+        "SUPERSEDED",
+        "CHECKPOINT_CONTINUE"
+      ],
+      "derivation": {
+        "source": "NEXT_CURSOR_PLUS_MATERIAL_DELTA",
+        "material_delta_required": true,
+        "no_material_delta": "FIXED_POINT_CHECKPOINT_AND_HEARTBEAT_CONTINUES",
+        "deterministic_id_required": true,
+        "same_input_same_id": true,
+        "child_may_create_new_human_intent": false
+      },
+      "fixed_point": {
+        "child_pass_does_not_end_root_goal": true,
+        "fixed_point_is_checkpoint": true,
+        "heartbeat_continues_while_runtime_exists": true,
+        "next_child_only_when_material_delta_or_new_evidence": true
+      }
+    }
   },
   "fixed_hud_contract": {
     "marker": "CENTRALDARK_FIXED_HUD_REQUIRED",
@@ -1375,7 +1460,14 @@
     "same_scope": "EVOLVE_SAME_OWNER_SAME_PR_WHEN_WRITER_SCOPE_MATCHES",
     "interruption": "RESUME_FROM_NEXT_CURSOR_AFTER_REMEASURE",
     "fixed_point_is_checkpoint_not_mission_amnesia": true,
-    "domain_expansion": "EVOLVE_EXISTING_OWNER_CAPABILITY_SCOPE_WITH_MINIMUM_REQUIRED_DELTA"
+    "domain_expansion": "EVOLVE_EXISTING_OWNER_CAPABILITY_SCOPE_WITH_MINIMUM_REQUIRED_DELTA",
+    "next_cursor_materializes_self_goal": true,
+    "self_goal_inherits_global_contract": true,
+    "self_goal_root_authority": "SEGREDO/CHEFE",
+    "self_goal_may_change_root_goal": false,
+    "self_goal_may_expand_scope_without_authority": false,
+    "self_goal_duplicate_same_evidence": "BLOCK",
+    "no_material_delta_after_child": "FIXED_POINT_CHECKPOINT_KEEP_HEARTBEAT"
   },
   "hybrid_telemetry_contract": {
     "marker": "CENTRALDARK_HYBRID_TELEMETRY_REQUIRED",
