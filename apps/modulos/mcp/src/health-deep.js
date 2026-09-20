@@ -12,6 +12,7 @@ import { config } from "./config.js";
 import { log } from "./log.js";
 import { activeSseSubscribers, getSseDiagnostics } from "./admin.js";
 import { getHubMissionConsumerStatus } from "./hub-mission-consumer.js";
+import { getOperationalSnapshot } from "./operational-telemetry.js";
 
 const MCP_VERSION = "0.4.0-v2.2";
 const SERVICE_STARTED_AT = new Date().toISOString();
@@ -87,6 +88,7 @@ export async function healthDeep(req, res) {
         const sse = getSseDiagnostics();
         const sseAtivas = activeSseSubscribers();
         const hubConsumer = getHubMissionConsumerStatus();
+        const operational = getOperationalSnapshot();
 
         // Dependências externas (checagem leve — sem network)
         const telegram = await checkTelegramSubsystem();
@@ -161,6 +163,7 @@ export async function healthDeep(req, res) {
             sseAtivas,
             sse,
             hubMissionConsumer: hubConsumer,
+            operationalSnapshot: operational,
             dependencias,
             checks: dependencias.map(d => ({ key: d.nome, ok: d.ok, detail: d.detalhe })),
             elapsedMs: Math.round(performance.now() - t0),

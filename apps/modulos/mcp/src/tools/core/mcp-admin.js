@@ -14,6 +14,7 @@ import { eliteGatewayTools } from "../elite/elite-gateway.js";
 import { geminiTools } from "../gemini/gemini.js";
 import { integrationsTools } from "../integrations.js";
 import { painelTools } from "../painel/painel.js";
+import { operationalTelemetryTools } from "../observability/operational-telemetry.js";
 import { piveteTools } from "../pivete/pivete-tools.js";
 import { aprendizadoTools } from "../aprendizado/aprendizado.js";
 import { conscienciaTools } from "../consciencia/consciencia.js";
@@ -94,6 +95,7 @@ const runtimeTools = [
     ...geminiTools,
     ...integrationsTools,
     ...painelTools,
+    ...operationalTelemetryTools,
     ...piveteTools,
     ...youtubeMediaTools,
 ];
