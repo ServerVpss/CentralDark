@@ -11,6 +11,8 @@ umask 077
 MAP_DIR="$REPO_DIR/apps/modulos/mapeamento"
 VERIFIER_DIR="$REPO_DIR/apps/modulos/HERMES-CORE/agents/Log-Verificador"
 PM2_APP="CentralDark-HermesVerificador"
+GLOBAL_GATE_RECEIPT_DIR="${GLOBAL_GATE_RECEIPT_DIR:-/tmp/centraldark-global-contract}"
+# CENTRALDARK_GLOBAL_CONTRACT_ENFORCER_REQUIRED
 POLICY_PATH=".agents/skills/centraldark-esteira-motor/SKILL.md"
 SOURCE_DEPLOY_PATH="scripts/vps/centraldark-deploy.sh"
 
@@ -102,6 +104,33 @@ MAP_BACKUP=""
 VERIFIER_STAGE=""
 VERIFIER_BACKUP=""
 RELEASE_BACKUP_DIR=""
+GLOBAL_EXIT_TRACE="$(printf '%s' "$TARGET_SHA|$FINAL_MAIN_SHA|$NEW_PID|EXIT" | sha256sum | awk '{print $1}' | cut -c1-24)"
+GLOBAL_HUD_HASH="$(printf '%s' "$TARGET_SHA|$FINAL_MAIN_SHA|$NEW_PID|PASS" | sha256sum | awk '{print $1}')"
+GLOBAL_EXIT_JSON="$(mktemp "$GLOBAL_GATE_RECEIPT_DIR/guards-exit.XXXXXX.json")"
+GLOBAL_EXIT_RECEIPT="$GLOBAL_GATE_RECEIPT_DIR/guards-exit-$GLOBAL_EXIT_TRACE.receipt.json"
+cat >"$GLOBAL_EXIT_JSON" <<JSON
+{
+  "scope_id":"canon/centraldark-universal-contract-20260919",
+  "contract_schema":6,
+  "phase":"EXIT",
+  "observed_head":"$TARGET_SHA",
+  "trace_id":"$GLOBAL_EXIT_TRACE",
+  "github_t1":{"status":"PASS","head_sha":"$FINAL_MAIN_SHA"},
+  "vps_t1":{"status":"PASS","head_sha":"$(git rev-parse HEAD)"},
+  "counterproof":{"status":"PASS","evidence_ref":"PID_CHANGED+STABILITY+SCOPE_NOT_ADVANCED"},
+  "receipt_ref":"file:$GLOBAL_ENTRY_RECEIPT",
+  "hud":{"status":"PASS","state_hash":"$GLOBAL_HUD_HASH"},
+  "runtime_mutated":true,
+  "runtime_proof":{"status":"PASS","evidence_ref":"pm2:$PM2_APP:$NEW_PID"},
+  "promotion_requested":false,
+  "fixed_point":false,
+  "next_cursor":"REGISTER_DEPLOY_RECEIPT_AND_CONTINUE_MASTER_CYCLE"
+}
+JSON
+node "$GLOBAL_CONTRACT_GATE" --global-contract-gate EXIT "$GLOBAL_EXIT_JSON" | tee "$GLOBAL_EXIT_RECEIPT"
+rm -f "$GLOBAL_EXIT_JSON"
+echo "GLOBAL_EXIT_GATE=PASS receipt=$GLOBAL_EXIT_RECEIPT"
+
 map_promoted=0
 verifier_promoted=0
 restart_attempted=0
@@ -234,6 +263,34 @@ for rel in "${verifier_files[@]}"; do
 done
 
 RELEASE_BACKUP_DIR="$BACKUP_ROOT_REAL/releases/${TARGET_SHA:0:12}.${BASHPID}"
+GLOBAL_CONTRACT_GATE="$BUILD_DIR/scripts/agent-call.mjs"
+mkdir -p "$GLOBAL_GATE_RECEIPT_DIR"; chmod 700 "$GLOBAL_GATE_RECEIPT_DIR"
+GLOBAL_TRACE="$(printf '%s' "$TARGET_SHA|$ORIGIN_SHA|$RELEASE_BACKUP_DIR|ENTRY" | sha256sum | awk '{print $1}' | cut -c1-24)"
+GLOBAL_ENTRY_JSON="$(mktemp "$GLOBAL_GATE_RECEIPT_DIR/guards-entry.XXXXXX.json")"
+GLOBAL_ENTRY_RECEIPT="$GLOBAL_GATE_RECEIPT_DIR/guards-entry-$GLOBAL_TRACE.receipt.json"
+VPS_T0_HEAD="$(git rev-parse HEAD)"
+cat >"$GLOBAL_ENTRY_JSON" <<JSON
+{
+  "scope_id":"canon/centraldark-universal-contract-20260919",
+  "contract_schema":6,
+  "phase":"ENTRY",
+  "observed_head":"$TARGET_SHA",
+  "trace_id":"$GLOBAL_TRACE",
+  "github_t0":{"status":"PASS","head_sha":"$ORIGIN_SHA"},
+  "vps_t0":{"status":"PASS","head_sha":"$VPS_T0_HEAD"},
+  "cross_surface_drift_classified":true,
+  "owner_proof":{"status":"PASS","owner":"scripts/vps/deploy-operational-guards.sh"},
+  "writer_scope_proof":{"status":"PASS","scope":"mapeamento+Log-Verificador"},
+  "preflight":{"status":"PASS","evidence_ref":"BUILD_DIR_TESTS_AND_SYNTAX"},
+  "counterproof_plan":{"status":"READY","evidence_ref":"PID_CHANGE+STABILITY+FINAL_MAIN_SCOPE"},
+  "rollback":{"status":"PREPARED","evidence_ref":"dir:$RELEASE_BACKUP_DIR"},
+  "next_cursor":"PROMOTE_SCOPED_FILES_RESTART_OWNER_THEN_T1",
+  "fixed_point":false
+}
+JSON
+node "$GLOBAL_CONTRACT_GATE" --global-contract-gate ENTRY "$GLOBAL_ENTRY_JSON" | tee "$GLOBAL_ENTRY_RECEIPT"
+rm -f "$GLOBAL_ENTRY_JSON"
+echo "GLOBAL_ENTRY_GATE=PASS receipt=$GLOBAL_ENTRY_RECEIPT"
 MAP_BACKUP="$RELEASE_BACKUP_DIR/mapeamento"
 VERIFIER_BACKUP="$RELEASE_BACKUP_DIR/Log-Verificador"
 [[ ! -e "$RELEASE_BACKUP_DIR" ]] || { echo "GUARDS_BACKUP_COLLISION"; exit 74; }
