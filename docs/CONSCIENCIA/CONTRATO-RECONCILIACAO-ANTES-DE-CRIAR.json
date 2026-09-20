@@ -2173,6 +2173,7 @@
       "GLOBAL_CONTRACT_GATE_PASS"
     ],
     "last_reconciliation": "REMOTE_TRAY_HARNESS_SOURCE_GAP_CLOSED_RUNTIME_STILL_EXTERNAL"
+  },
   "global_absorption_and_cockpit_policy": {
     "marker": "GLOBAL_EVERYTHING_INTO_CENTRALDARK",
     "status": "CANONICAL",
