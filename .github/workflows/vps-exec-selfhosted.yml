@@ -7,6 +7,7 @@ on:
       - "apps/modulos/mcp/**"
       - "apps/modulos/mapeamento/**"
       - "apps/modulos/HERMES-CORE/agents/Log-Verificador/**"
+      - "apps/modulos/screenpipe-launcher.mjs"
       - "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/HERMES-AUTOCONFIG-RUNTIME.yml"
       - "apps/modulos/HERMES-CORE/prompts/hermes-core.md"
       - "apps/modulos/HERMES-CORE/core/universal-method-contract.mjs"
@@ -22,6 +23,7 @@ on:
       - "scripts/vps/deploy-operational-guards.sh"
       - ".github/workflows/vps-exec-selfhosted.yml"
       - "scripts/webhook/github-webhook-deploy.mjs"
+      - "ecosystem.config.cjs"
   workflow_dispatch:
 
 permissions:
@@ -39,12 +41,12 @@ jobs:
     runs-on: [self-hosted, Linux]
     timeout-minutes: 25
     env:
-      REPO_DIR: /root/CentralDark
-      MCP_DIR: /root/CentralDark/apps/modulos/mcp
+      REPO_DIR: <caminho-vps>
+      MCP_DIR: <caminho-vps>
       PM2_APP: CentralDark-MCP
       WEBHOOK_APP: CentralDark-WebhookDeploy
       HEALTH_URL: http://127.0.0.1:9100/health
-      AUDIT_DIR: /root/CentralDark/logs
+      AUDIT_DIR: <caminho-vps>
       BEFORE_SHA: ${{ github.event.before || '' }}
     steps:
       - name: Hydrate Cofre (GitHub secret → VPS secrets/, sem echo)
@@ -54,7 +56,7 @@ jobs:
           BUILDKITE_API_TOKEN: ${{ secrets.BUILDKITE_API_TOKEN }}
         run: |
           set -euo pipefail
-          bash /root/CentralDark/scripts/vps/hydrate-provider-secrets.sh
+          bash <caminho-vps>
 
       - name: Validar SHA, construir isolado, promover e comprovar
         id: deploy
@@ -93,7 +95,7 @@ jobs:
           from pathlib import Path
           import re
           import sys
-          denied = re.compile(r'(^|/)(\.env(?:\.|$)|secrets?(?:/|$)|tokens?(?:/|$)|sessions?(?:/|$)|\.ssh(?:/|$)|[^/]+\.(?:pem|key)$)', re.I)
+          denied = re.compile(r'(^|/)(\.\.env(?:\.|$)|secrets?(?:/|$)|tokens?(?:/|$)|sessions?(?:/|$)|\.ssh(?:/|$)|[^/]+\.(?:pem|key)$)', re.I)
           dependency_manifests = {
               'apps/modulos/mcp/package.json',
               'apps/modulos/mcp/package-lock.json',
@@ -196,7 +198,7 @@ jobs:
           # automaticamente. Nunca altera node_modules do processo vivo.
           git -C "$REPO_DIR" diff --quiet "$CURRENT_SHA" "$TARGET_SHA" -- \
             apps/modulos/mcp/package.json apps/modulos/mcp/package-lock.json || {
-              echo "MCP_DEPENDENCIES_CHANGED_RELEASE_DIR_REQUIRED"
+          echo "MCP_DEPENDENCIES_CHANGED_RELEASE_DIR_REQUIRED"
               exit 33
             }
 
@@ -219,8 +221,8 @@ jobs:
           PM2_BASELINE_RESTARTS="$(jq -r '.pm2_env.restart_time // 0' <<<"$MCP_JSON")"
           echo "PM2_BASELINE_RESTARTS=$PM2_BASELINE_RESTARTS"
           emit_pm2_diagnostic() {
-            pm2 jlist | jq -c --arg app "$PM2_APP" '
-              [.[] | select(.name == $app) | {
+            pm2 jlist | jq -c --arg app "$PM2_APP" '[
+              .[] | select(.name == $app) | {
                 status: .pm2_env.status,
                 pid: .pid,
                 restartTime: (.pm2_env.restart_time // 0),
@@ -371,7 +373,7 @@ jobs:
     runs-on: [self-hosted, Linux]
     timeout-minutes: 15
     env:
-      REPO_DIR: /root/CentralDark
+      REPO_DIR: <caminho-vps>
     steps:
       - name: Prepare isolated deploy script checkout
         shell: bash
@@ -428,8 +430,8 @@ jobs:
     runs-on: [self-hosted, Linux]
     timeout-minutes: 15
     env:
-      REPO_DIR: /root/CentralDark
-      REPORT_DIR: /root/CentralDark/logs/housekeeping
+      REPO_DIR: <caminho-vps>
+      REPORT_DIR: <caminho-vps>
     steps:
       - name: Checkout exact event SHA
         uses: actions/checkout@v7
@@ -482,7 +484,7 @@ jobs:
     runs-on: [self-hosted, Linux]
     timeout-minutes: 15
     env:
-      REPO_DIR: /root/CentralDark
+      REPO_DIR: <caminho-vps>
       HERMES_APP: CentralDark-Hermes
       RUNTIME_CONTRACT: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/HERMES-AUTOCONFIG-RUNTIME.yml
       VALIDATOR: apps/modulos/HERMES-CORE/core/universal-method-contract.mjs
@@ -536,7 +538,7 @@ jobs:
           }
 
           BUILD_DIR="$(mktemp -d "$RUNNER_TEMP/hermes-runtime-validate.XXXXXX")"
-          BACKUP_DIR="/root/CentralDark-Recovery/hermes-runtime/${TARGET_SHA:0:12}-$(date -u +%Y%m%dT%H%M%SZ)"
+          BACKUP_DIR="<caminho-vps>${TARGET_SHA:0:12}-$(date -u +%Y%m%dT%H%M%SZ)"
           mkdir -p "$BACKUP_DIR"
 
           copied=0
@@ -596,7 +598,6 @@ jobs:
 
           restart_attempted=1
           pm2 restart "$HERMES_APP" --update-env >/dev/null
-
           NEW_PID=0
           for _ in $(seq 1 20); do
             NEW_PID="$(pm2 pid "$HERMES_APP" | tail -n1)"
@@ -637,7 +638,21 @@ jobs:
 
           RECEIPT="$REPO_DIR/logs/hermes-runtime-last-known-good.json"
           mkdir -p "$(dirname "$RECEIPT")"
-          jq -n             --arg sha "$TARGET_SHA"             --arg contract "$RUNTIME_CONTRACT"             --arg runtime_hash "$LIVE_RUNTIME_HASH"             --arg contract_set_hash "$LIVE_CONTRACT_SET_HASH"             --arg owner "$SEMANTIC_OWNER"             --arg capability "$SEMANTIC_CAPABILITY"             --arg scope "$SEMANTIC_SCOPE"             --arg run_id "$GITHUB_RUN_ID"             --arg job_key "$GITHUB_JOB"             --arg workflow_ref "$GITHUB_WORKFLOW_REF"             --argjson old_pid "$OLD_PID"             --argjson new_pid "$NEW_PID"             --arg observed_at "$(date -u +%Y-%m-%dT%H:%M:%SZ)"             '{
+          jq -n \
+            --arg sha "$TARGET_SHA" \
+            --arg contract "$RUNTIME_CONTRACT" \
+            --arg runtime_hash "$LIVE_RUNTIME_HASH" \
+            --arg contract_set_hash "$LIVE_CONTRACT_SET_HASH" \
+            --arg owner "$SEMANTIC_OWNER" \
+            --arg capability "$SEMANTIC_CAPABILITY" \
+            --arg scope "$SEMANTIC_SCOPE" \
+            --arg run_id "$GITHUB_RUN_ID" \
+            --arg job_key "$GITHUB_JOB" \
+            --arg workflow_ref "$GITHUB_WORKFLOW_REF" \
+            --argjson old_pid "$OLD_PID" \
+            --argjson new_pid "$NEW_PID" \
+            --arg observed_at "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+            '{
               schema:"centraldark.hermes-runtime-deploy.v1",
               semanticIdentity:{owner:$owner,capability:$capability,scope:$scope},
               executionProvenance:{
