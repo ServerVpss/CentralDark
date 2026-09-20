@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import winston from "winston";
 import DailyRotateFile from "winston-daily-rotate-file";
+import { appendCentralEvent } from "./log-funnel.js";
 // MOTIVO  > este caminho hardcoded criou uma pasta paralela de logs
 //           (apps/mcp/logs) porque o PM2 define LOG_DIR, e nao MCP_LOG_DIR.
 //           O codigo lia so MCP_LOG_DIR, caia no default e escrevia fora do
@@ -9,7 +10,8 @@ import DailyRotateFile from "winston-daily-rotate-file";
 // ONDE    > apps/modulos/mcp/src/audit-logger.js linha 5.
 // RESOLVE > aceita MCP_LOG_DIR (preferido) e LOG_DIR (o que o PM2 ja define),
 //           e o default aponta para o diretorio canonico.
-const LOG_DIR = process.env.MCP_LOG_DIR || process.env.LOG_DIR || "/root/CentralDark/logs/mcp";
+const CENTRAL_LOG_ROOT = process.env.CENTRALDARK_LOG_ROOT || "/root/CentralDark/logs";
+const LOG_DIR = process.env.MCP_LOG_DIR || process.env.LOG_DIR || path.join(CENTRAL_LOG_ROOT, "mcp");
 if (!process.env.MCP_LOG_DIR && process.env.LOG_DIR) {
     // Aviso explicito: esta rodando pelo fallback, nao pela variavel oficial.
     console.warn("[audit-logger] MCP_LOG_DIR ausente; usando LOG_DIR como fallback:", LOG_DIR);
@@ -165,7 +167,20 @@ appLogger.on("error", () => { });
 auditLogger.on("error", () => { });
 export function logApp(level, event, meta) {
     try {
+        const safeMeta = sanitizeValue(meta ?? {});
         appLogger.log({ level, message: event, ...(meta ?? {}) });
+        appendCentralEvent({
+            sector: "mcp",
+            source: "CentralDark-MCP",
+            actor: "mcp-runtime",
+            kind: "app_log",
+            level,
+            key: `mcp-app:${event}`,
+            tags: ["mcp", "app", level],
+            correlation_id: safeMeta?.correlationId || safeMeta?.cid || null,
+            message: event,
+            data: safeMeta,
+        });
         secureExistingLogs();
     }
     catch {
@@ -174,7 +189,26 @@ export function logApp(level, event, meta) {
 }
 export function auditToolExecution(entry) {
     try {
+        const safeEntry = sanitizeValue(entry ?? {});
         auditLogger.info("mcp_tool_execution", entry);
+        appendCentralEvent({
+            sector: "mcp",
+            source: "CentralDark-MCP",
+            actor: safeEntry?.clientLabel || safeEntry?.callerUser || "mcp-client",
+            kind: "mcp_tool_call",
+            level: safeEntry?.ok === false ? "error" : "info",
+            key: `tool:${safeEntry?.toolName || "unknown"}`,
+            tags: [
+                "mcp",
+                "tool-call",
+                safeEntry?.endpointRole || "public",
+                safeEntry?.toolName || "unknown",
+                safeEntry?.ok === false ? "error" : "ok",
+            ],
+            correlation_id: safeEntry?.correlationId || null,
+            message: safeEntry?.toolName || "unknown",
+            data: safeEntry,
+        });
         secureExistingLogs();
     }
     catch {

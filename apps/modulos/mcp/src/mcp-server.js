@@ -123,6 +123,13 @@ function buildServer(options) {
         ? requestedCallableTools.filter((tool) => tool.annotations?.destructiveHint !== true || tool.name === "mcp_admin_call")
         : requestedCallableTools.filter((tool) => tool.annotations?.destructiveHint !== true);
     const semanticResourceEnabled = visibleTools.some((tool) => tool.name === "semantic_model_info");
+    const auditIdentity = Object.freeze({
+        callerUser: options.callerUser ?? null,
+        clientLabel: String(options.clientLabel || options.label || "mcp-client").slice(0, 160),
+        endpointRole: options.admin === true ? "admin" : "public",
+        oauthScope: String(options.oauthScope || ""),
+        correlationId: options.cid ?? null,
+    });
     const server = new Server({ name: options.label ?? "mcp-centraldark", version: `0.4.0+${CATALOG_VERSION}` }, { capabilities: { tools: {}, resources: {} }, instructions: PIVETE_BOOT_INSTRUCTIONS });
     server.setRequestHandler(ListToolsRequestSchema, async () => {
         const startedAt = Date.now();
@@ -139,6 +146,7 @@ function buildServer(options) {
             }),
         };
         auditToolExecution({
+            ...auditIdentity,
             method: "tools/list",
             toolName: "list_tools",
             input: {},
@@ -161,6 +169,7 @@ function buildServer(options) {
             }]
             : [];
         auditToolExecution({
+            ...auditIdentity,
             method: "resources/list",
             toolName: "list_resources",
             input: {},
@@ -176,6 +185,7 @@ function buildServer(options) {
         if (!semanticResourceEnabled || req.params.uri !== SEMANTIC_MANIFEST_URI) {
             const error = new Error(`Resource desconhecido: ${req.params.uri}`);
             auditToolExecution({
+            ...auditIdentity,
                 method: "resources/read",
                 toolName: "read_resource",
                 input: { uri: req.params.uri },
@@ -196,6 +206,7 @@ function buildServer(options) {
             }],
         };
         auditToolExecution({
+            ...auditIdentity,
             method: "resources/read",
             toolName: "semantic_manifest",
             input: { uri: req.params.uri },
@@ -215,6 +226,7 @@ function buildServer(options) {
                 content: [{ type: "text", text: `Tool desconhecida: ${req.params.name}` }],
             };
             auditToolExecution({
+            ...auditIdentity,
                 method: "tools/call",
                 toolName: req.params.name,
                 input: req.params.arguments ?? {},
@@ -234,6 +246,7 @@ function buildServer(options) {
                 ],
             };
             auditToolExecution({
+            ...auditIdentity,
                 method: "tools/call",
                 toolName: tool.name,
                 input: req.params.arguments ?? {},
@@ -255,6 +268,7 @@ function buildServer(options) {
             const raw = await tool.handler(parsed.data, toolContext);
             const result = sanitizeOutgoingDeep(raw);
             auditToolExecution({
+            ...auditIdentity,
                 method: "tools/call",
                 toolName: tool.name,
                 input: parsed.data,
@@ -277,6 +291,7 @@ function buildServer(options) {
                 content: [{ type: "text", text: `Erro ao executar ${tool.name}: ${String(err)}` }],
             };
             auditToolExecution({
+            ...auditIdentity,
                 method: "tools/call",
                 toolName: tool.name,
                 input: parsed.data,

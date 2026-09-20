@@ -379,6 +379,8 @@ O padrão observado no Grok CLI confirma o ganho operacional de combinar:
 
 A melhoria determinística é impedir o watcher focado de migrar para “qualquer run ativo”: ele deve encerrar no alvo exato e deixar o coração global escolher conscientemente o próximo alvo.
 Allowlist pública: `centralldark.com` · `admin.centralldark.com` · `api.centralldark.com` · `mcp.centralldark.com/mcp`.
+`mcp.centralldark.com/admin` = aba MCP na mesma Casa, **não** HUB.
+`hub.centralldark.com` = LEGADO (403). Não recriar subdomínio HUB.
 Domínio extra em Caddy/DNS = `LEGADO | NECESSÁRIO | RESÍDUO` — não remover sem prova de dependência.
 
 ### Base de comando — cavaleiros da VPS / cavaleiro do deploy

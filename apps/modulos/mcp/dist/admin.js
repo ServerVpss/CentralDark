@@ -12,6 +12,8 @@ import { log } from "./log.js";
 import { withCid } from "./correlation.js";
 import { config } from "./config.js";
 import { injectPatternAdmin } from "./admin-patterns-ui.js";
+import { getBuildkiteStatus } from "./buildkite-integration.js";
+import { getGrokControlDashboard, setGrokControlSelection } from "./grok-control.js";
 const COOKIE = "cd_admin";
 const TTL_MS = 2 * 60 * 60 * 1000;
 function secret() {
@@ -215,6 +217,8 @@ main{padding:24px 28px 40px;max-width:1400px;margin:0 auto}
 .filters{display:grid;grid-template-columns:repeat(4,1fr) auto auto;gap:8px;margin-bottom:12px}
 .filters input,.filters select{background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:8px 10px;border-radius:8px;font-size:12px;font-family:inherit}
 .filters input:focus,.filters select:focus{outline:none;border-color:var(--em)}
+#p-grok select{background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:8px 10px;border-radius:8px;font-size:12px;font-family:inherit}
+#p-grok label{color:var(--muted);font-size:11px}
 .btn{background:linear-gradient(135deg,var(--em),var(--em2));color:#052e2b;border:none;padding:9px 16px;border-radius:8px;cursor:pointer;font-weight:700;font-size:12px;letter-spacing:.3px;transition:transform .1s}
 .btn:hover{transform:translateY(-1px)}
 .btn.ghost{background:transparent;color:var(--em2);border:1px solid var(--border2)}
@@ -238,6 +242,8 @@ __PATTERN_ADMIN_STYLE__
   <div class="tab" data-p="tools">Ferramentas</div>
   __PATTERN_ADMIN_TAB__
   <div class="tab" data-p="audit">Auditoria</div>
+  <div class="tab" data-p="grok">Grok</div>
+  <div class="tab" data-p="buildkite">Buildkite</div>
   <div class="tab" data-p="conector">Conector</div>
   <div class="tab" data-p="diag">Diagnóstico</div>
 </nav>
@@ -301,6 +307,81 @@ __PATTERN_ADMIN_STYLE__
     </div>
     <div style="height:14px"></div>
     <div class="card"><h2>Stream bruto ao vivo <span class="badge">SSE /admin/logs/stream</span></h2><div id="log" class="log-box"></div></div>
+  </div>
+
+  <div class="pane" id="p-grok">
+    <div class="card">
+      <h2>🧠 Grok · modos do organismo <span class="badge" id="grokActivation">carregando…</span></h2>
+      <p style="color:var(--muted);font-size:12px;margin:0 0 14px">
+        Seleção = default das próximas invocações do adapter canônico. SELECTED != ACTIVE; log/runtime continua sendo o juiz.
+      </p>
+      <div class="delta-grid">
+        <div class="delta-kpi"><div class="lbl">Processo vivo</div><div class="val" id="grokRunning">-</div></div>
+        <div class="delta-kpi"><div class="lbl">Binário ativo</div><div class="val" id="grokActiveVersion">-</div></div>
+        <div class="delta-kpi"><div class="lbl">Instalado</div><div class="val" id="grokInstalledVersion">-</div></div>
+        <div class="delta-kpi"><div class="lbl">Seleção</div><div class="val" id="grokSelectedMode">-</div></div>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <h2>Seletor <span class="badge">GROK-BUILD-ADAPTER</span></h2>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <label>Invocação<select id="grokInvocation" style="width:100%;margin-top:4px"></select></label>
+            <label>Agente<select id="grokAgent" style="width:100%;margin-top:4px"></select></label>
+            <label>Permissão<select id="grokPermission" style="width:100%;margin-top:4px"></select></label>
+            <label>Modelo<select id="grokModel" style="width:100%;margin-top:4px"></select></label>
+            <label>Reasoning<select id="grokEffort" style="width:100%;margin-top:4px"></select></label>
+            <div style="display:flex;flex-direction:column;gap:7px;justify-content:center">
+              <label><input id="grokSubagents" type="checkbox"/> subagentes</label>
+              <label><input id="grokPlan" type="checkbox"/> plan mode disponível</label>
+            </div>
+          </div>
+          <div class="diag-actions" style="margin-top:14px;margin-bottom:0">
+            <button class="btn" onclick="salvarGrok()">💾 Salvar default Grok</button>
+            <button class="btn ghost" onclick="carregarGrok()">🔄 Remedir</button>
+          </div>
+          <div id="grokSaveStatus" style="margin-top:10px;color:var(--muted);font-size:12px"></div>
+        </div>
+        <div class="card">
+          <h2>Evidência <span class="badge">dump sanitizado</span></h2>
+          <div id="grokEvidence"></div>
+          <div style="height:10px"></div>
+          <h2>Permissões fortes <span class="badge">não selecionáveis no Admin</span></h2>
+          <div id="grokLockedPermissions"></div>
+        </div>
+      </div>
+      <div style="height:14px"></div>
+      <div class="card">
+        <h2>Padrão observado <span class="badge">console + events + unified</span></h2>
+        <div id="grokPattern"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pane" id="p-buildkite">
+    <div class="card">
+      <h2>Buildkite · setor observado <span class="badge">mesmo funil CentralDark</span></h2>
+      <div class="delta-grid">
+        <div class="delta-kpi"><div class="lbl">Receiver</div><div class="val" id="bkReceiver">-</div></div>
+        <div class="delta-kpi"><div class="lbl">Eventos</div><div class="val" id="bkEvents">0</div></div>
+        <div class="delta-kpi"><div class="lbl">Falhas</div><div class="val" id="bkFailures">0</div></div>
+        <div class="delta-kpi"><div class="lbl">Taxa medida</div><div class="val" id="bkRate">UNKNOWN</div></div>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <h2>Capacidades observadas <span class="badge">não inventa ativo</span></h2>
+          <div id="bkObserved"></div>
+        </div>
+        <div class="card">
+          <h2>Fronteira → Hermes <span class="badge">advice != action</span></h2>
+          <div id="bkRouting"></div>
+        </div>
+      </div>
+      <div style="height:14px"></div>
+      <div class="card">
+        <h2>Últimos eventos Buildkite <span class="badge">logs/sectors/buildkite</span></h2>
+        <div id="bkRecent" class="log-box" style="height:260px"></div>
+      </div>
+    </div>
   </div>
 
   <div class="pane" id="p-conector">
@@ -522,6 +603,148 @@ async function carregarTools(){
   ).join('');
 }
 
+let GROK_CONTROL = null;
+
+function preencherGrokSelect(id, items, selected){
+  const el=$(id); if(!el) return;
+  el.innerHTML='';
+  for(const item of items||[]){
+    if(item.admin_selectable === false) continue;
+    const opt=document.createElement('option');
+    opt.value=item.id;
+    const evidence=item.evidence ? ' · '+item.evidence : '';
+    opt.textContent=item.id+evidence;
+    if(item.id===selected) opt.selected=true;
+    el.appendChild(opt);
+  }
+}
+
+function renderGrokControl(j){
+  GROK_CONTROL=j;
+  const catalog=j.catalog||{}, state=j.state||{}, ev=catalog.evidence||{}, runtime=ev.runtime||{}, observed=ev.observed||{}, caps=ev.capabilities||{};
+  $('grokActivation').textContent=j.activation?.state||'UNKNOWN';
+  $('grokRunning').textContent=runtime.process_running?'RUNNING':'UNKNOWN';
+  $('grokActiveVersion').textContent=runtime.active_binary_version_from_path||'UNKNOWN';
+  $('grokInstalledVersion').textContent=runtime.installed_version||'UNKNOWN';
+  $('grokSelectedMode').textContent=(state.invocation_mode||'?')+' / '+(state.agent_profile||'?');
+
+  preencherGrokSelect('grokInvocation',catalog.invocation_modes,state.invocation_mode);
+  preencherGrokSelect('grokAgent',catalog.agent_profiles,state.agent_profile);
+  preencherGrokSelect('grokPermission',catalog.permission_modes,state.permission_mode);
+  preencherGrokSelect('grokModel',catalog.models,state.model);
+  preencherGrokSelect('grokEffort',catalog.reasoning_efforts,state.reasoning_effort);
+  $('grokSubagents').checked=state.subagents_enabled===true;
+  $('grokPlan').checked=state.plan_enabled===true;
+
+  const selected=j.selected_evidence||{};
+  $('grokEvidence').innerHTML=
+    '<div class="row"><span>Modo selecionado</span><span>'+htmlEscape(selected.invocation_mode||'UNKNOWN')+'</span></div>'+
+    '<div class="row"><span>Agente selecionado</span><span>'+htmlEscape(selected.agent_profile||'UNKNOWN')+'</span></div>'+
+    '<div class="row"><span>Modelo</span><span>'+htmlEscape(selected.model||'UNKNOWN')+'</span></div>'+
+    '<div class="row"><span>Snapshot</span><span>'+htmlEscape(ev.captured_at?dataHoraBr(ev.captured_at):'UNKNOWN')+'</span></div>'+
+    '<div class="row"><span>SELECTED = ACTIVE?</span><span class="warn">NÃO · requer log de execução</span></div>';
+
+  const locked=(catalog.permission_modes||[]).filter(x=>x.admin_selectable===false);
+  $('grokLockedPermissions').innerHTML=locked.length
+    ? locked.map(x=>'<span class="tag" title="exige missão explícita + writer scope">'+htmlEscape(x.id)+'</span>').join(' ')
+    : '<span class="ok">nenhuma</span>';
+
+  const sub=observed.subagents||{};
+  const tools=Object.entries(observed.tools||{}).slice(0,12);
+  const watcher=ev.watcher_pattern||{};
+  $('grokPattern').innerHTML=
+    '<div class="row"><span>Eventos capturados</span><span>'+String(observed.event_lines??0)+'</span></div>'+
+    '<div class="row"><span>Subagentes</span><span>'+String(sub.spawned??0)+' spawn · '+String(sub.completed??0)+' completos · '+String(sub.failed??0)+' falhas</span></div>'+
+    '<div class="row"><span>Tipos observados</span><span>'+htmlEscape(Object.keys(sub.types||{}).join(', ')||'UNKNOWN')+'</span></div>'+
+    '<div class="row"><span>Scheduler / monitor</span><span>'+String(observed.scheduler_create_calls??0)+' create · '+String(observed.monitor_calls??0)+' monitor</span></div>'+
+    '<div class="row"><span>Retries / falhas inference</span><span>'+String(observed.inference_retries??0)+' / '+String(observed.inference_failures??0)+'</span></div>'+
+    '<div class="row"><span>Watcher exato?</span><span class="'+(watcher.bounded_to_exact_run?'ok':'warn')+'">'+(watcher.bounded_to_exact_run?'SIM':'NÃO · risco cristalizado')+'</span></div>'+
+    '<div class="row"><span>Personas disponíveis</span><span>'+htmlEscape((caps.personas||[]).join(', ')||'UNKNOWN')+'</span></div>'+
+    '<div class="row"><span>Roles disponíveis</span><span>'+htmlEscape((caps.roles||[]).join(', ')||'UNKNOWN')+'</span></div>'+
+    '<div class="row"><span>Workflows</span><span>'+htmlEscape((caps.workflows||[]).join(', ')||'UNKNOWN')+'</span></div>'+
+    '<div class="row"><span>Tools top</span><span>'+htmlEscape(tools.map(([k,v])=>k+'='+v).join(' · ')||'UNKNOWN')+'</span></div>';
+}
+
+async function carregarGrok(){
+  const status=$('grokSaveStatus');
+  try{
+    const r=await fetch('/admin/api/grok/control');
+    const j=await r.json();
+    if(!r.ok) throw new Error(j.error||('HTTP '+r.status));
+    renderGrokControl(j);
+    if(status) status.textContent='Estado remedido. Seleção não é prova de execução.';
+  }catch(err){
+    if(status) status.textContent='❌ '+String(err);
+  }
+}
+
+async function salvarGrok(){
+  const status=$('grokSaveStatus');
+  const payload={
+    invocation_mode:$('grokInvocation').value,
+    agent_profile:$('grokAgent').value,
+    permission_mode:$('grokPermission').value,
+    model:$('grokModel').value,
+    reasoning_effort:$('grokEffort').value,
+    subagents_enabled:$('grokSubagents').checked,
+    plan_enabled:$('grokPlan').checked,
+  };
+  try{
+    if(status) status.textContent='salvando default operacional…';
+    const r=await fetch('/admin/api/grok/control',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(payload),
+    });
+    const j=await r.json();
+    if(!r.ok) throw new Error(j.error||('HTTP '+r.status));
+    renderGrokControl(j);
+    if(status) status.textContent='✅ Default salvo. Próxima invocação do adapter consome; execução ainda precisa ser observada.';
+  }catch(err){
+    if(status) status.textContent='❌ '+String(err);
+  }
+}
+
+async function carregarBuildkite(){
+  const box = $('bkRecent');
+  try {
+    const r = await fetch('/admin/api/buildkite/status');
+    const j = await r.json();
+    $('bkReceiver').textContent = j.receiver_ready ? 'READY' : 'BLOCKED';
+    $('bkEvents').textContent = String(j.events ?? 0);
+    $('bkFailures').textContent = String(j.failures ?? 0);
+    const rate = j.measured_failure_rate;
+    $('bkRate').textContent = rate
+      ? (rate.rate*100).toFixed(1)+'%'
+      : 'UNKNOWN';
+    const observed = j.observed || {};
+    $('bkObserved').innerHTML =
+      '<div class="row"><span>Webhook secret</span><span class="'+(j.webhook_secret_configured?'ok':'warn')+'">'+(j.webhook_secret_configured?'CONFIGURADO':'AUSENTE')+'</span></div>'+
+      '<div class="row"><span>API token</span><span class="'+(j.api_token_configured?'ok':'warn')+'">'+(j.api_token_configured?'CONFIGURADO':'OPCIONAL/AUSENTE')+'</span></div>'+
+      '<div class="row"><span>Pipelines observados</span><span>'+htmlEscape((observed.pipelines||[]).join(', ') || 'UNKNOWN')+'</span></div>'+
+      '<div class="row"><span>Agents observados</span><span>'+htmlEscape((observed.agents||[]).join(', ') || 'UNKNOWN')+'</span></div>'+
+      '<div class="row"><span>Queues observadas</span><span>'+htmlEscape((observed.queues||[]).join(', ') || 'UNKNOWN')+'</span></div>'+
+      '<div class="row"><span>IC95% falha</span><span>'+(rate ? ((rate.low*100).toFixed(1)+'–'+(rate.high*100).toFixed(1)+'% · n='+j.finished_sample) : 'UNKNOWN · sem amostra')+'</span></div>';
+    const h = j.hermes || {};
+    const advice = j.routing_advice || {};
+    $('bkRouting').innerHTML =
+      '<div class="row"><span>Conselho</span><span class="'+(advice.state==='ESCALATE_FRONTIER_FOR_REROUTE'?'warn':'ok')+'">'+htmlEscape(advice.state||'UNKNOWN')+'</span></div>'+
+      '<div class="row"><span>Motivo</span><span>'+htmlEscape(advice.reason||'UNKNOWN')+'</span></div>'+
+      '<div class="row"><span>Hermes amostra</span><span>'+String(h.sample??0)+'</span></div>'+
+      '<div class="row"><span>Hermes falha medida</span><span>'+(h.measured_failure_rate==null?'UNKNOWN':(h.measured_failure_rate*100).toFixed(1)+'%')+'</span></div>'+
+      '<div class="row"><span>Hermes p95</span><span>'+(h.p95_duration_ms==null?'UNKNOWN':Math.round(h.p95_duration_ms)+' ms')+'</span></div>'+
+      '<div class="row"><span>Ação automática</span><span class="warn">'+(advice.action_executed?'EXECUTADA':'NÃO EXECUTADA')+'</span></div>';
+    if (box) {
+      const rows=(j.recent_events||[]).slice().reverse();
+      box.innerHTML = rows.length ? rows.map(e =>
+        '<div class="'+htmlEscape(e.level||'info')+'">['+htmlEscape(horaBr(e.timestamp))+'] '+htmlEscape(e.badge||'')+' '+htmlEscape(e.data?.event||e.kind)+' · '+htmlEscape(e.message||'')+'</div>'
+      ).join('') : '<div class="warn">Nenhum evento Buildkite observado ainda. Receiver pronto != entrega externa provada.</div>';
+    }
+  } catch (err) {
+    if (box) box.innerHTML='<div class="err">Buildkite status: '+htmlEscape(String(err))+'</div>';
+  }
+}
+
 function conectarLogs(){
   const es = new EventSource('/admin/logs/stream');
   const box = $('log'); box.innerHTML = '';
@@ -583,7 +806,7 @@ async function rodarE2E(){
   }
 }
 
-function recarregar(){ carregarHealth(); carregarTools(); carregarMetricas(); }
+function recarregar(){ carregarHealth(); carregarTools(); carregarMetricas(); carregarGrok(); carregarBuildkite(); }
 recarregar();
 setInterval(carregarHealth, 15000);
 setInterval(carregarMetricas, 15000);
@@ -747,6 +970,44 @@ export function adminMetricas(req, res) {
             requests++;
     }
     res.json({ janelaMin: 5, erros, warns, requests, sseAtivas: subscribers.size });
+}
+export function adminGrokControlGet(req, res) {
+    if (!isAdmin(req)) {
+        res.status(401).json({ ok: false });
+        return;
+    }
+    res.setHeader("Cache-Control", "no-store");
+    res.json(getGrokControlDashboard());
+}
+export function adminGrokControlPost(req, res) {
+    if (!isAdmin(req)) {
+        res.status(401).json({ ok: false });
+        return;
+    }
+    const l = withCid(req.cid);
+    try {
+        const result = setGrokControlSelection(req.body || {}, "admin");
+        l.info("admin_grok_mode_selected", {
+            mode: result.state?.invocation_mode,
+            agent: result.state?.agent_profile,
+            model: result.state?.model,
+            selected_is_runtime_proof: false,
+        });
+        res.setHeader("Cache-Control", "no-store");
+        res.json(result);
+    }
+    catch (error) {
+        l.warn("admin_grok_mode_rejected", { error: String(error?.message || error).slice(0, 180) });
+        res.status(400).json({ ok: false, error: String(error?.message || error) });
+    }
+}
+export function adminBuildkiteStatus(req, res) {
+    if (!isAdmin(req)) {
+        res.status(401).json({ ok: false });
+        return;
+    }
+    const since = Math.min(Math.max(Number(req.query.since_minutes) || 1440, 1), 10080);
+    res.json(getBuildkiteStatus({ since_minutes: since, limit: 1200 }));
 }
 // ─── Teste E2E: DCR → authorize → token → tools/list ──────────────────
 async function fazerRequest(url, opts = {}) {
@@ -932,8 +1193,43 @@ async function rodarE2EInterno({ comAdmin, cid }) {
         ms: tools.ms,
         detalhe: typeof toolCount === "number" ? `${toolCount} tools listadas` : (toolsError || tools.erro || tools.texto),
     });
+    if (comAdmin) {
+        const grokStarted = performance.now();
+        const grok = getGrokControlDashboard();
+        const hasMode = Array.isArray(grok.catalog?.invocation_modes)
+            && grok.catalog.invocation_modes.some((item) => item.id === grok.state?.invocation_mode);
+        const hasAgent = Array.isArray(grok.catalog?.agent_profiles)
+            && grok.catalog.agent_profiles.some((item) => item.id === grok.state?.agent_profile);
+        etapas.push({
+            nome: "Grok mode control → adapter canônico",
+            ok: grok.status === "OK" && hasMode && hasAgent && grok.proof_boundary?.SELECTED_IS_NOT_ACTIVE === true,
+            status: 200,
+            ms: Math.round(performance.now() - grokStarted),
+            detalhe: [
+                "mode=" + (grok.state?.invocation_mode || "UNKNOWN"),
+                "agent=" + (grok.state?.agent_profile || "UNKNOWN"),
+                "activation=" + (grok.activation?.state || "UNKNOWN"),
+                "selected!=active",
+            ].join(" · "),
+        });
+    }
+    const bkStarted = performance.now();
+    const bk = getBuildkiteStatus({ since_minutes: 60, limit: 100 });
+    etapas.push({
+        nome: "Buildkite sensor → funil CentralDark",
+        ok: bk.receiver_ready === true,
+        status: 200,
+        ms: Math.round(performance.now() - bkStarted),
+        detalhe: [
+            "receiver=" + (bk.receiver_ready ? "READY" : "BLOCKED"),
+            "secret=" + (bk.webhook_secret_configured ? "CONFIGURED" : "NOT_CONFIGURED"),
+            "events=" + bk.events,
+            "external=" + bk.proof_boundary.external_buildkite_delivery,
+        ].join(" · "),
+    });
     const allOk = etapas.every(e => e.ok !== false);
-    return { ok: allOk, falhouEm: allOk ? null : "tools/list", etapas };
+    const firstFailed = etapas.find((e) => e.ok === false);
+    return { ok: allOk, falhouEm: allOk ? null : (firstFailed?.nome || "UNKNOWN"), etapas };
 }
 export async function adminE2E(req, res) {
     if (!isAdmin(req)) {

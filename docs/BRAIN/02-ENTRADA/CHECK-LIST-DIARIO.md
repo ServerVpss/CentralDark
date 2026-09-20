@@ -17,23 +17,36 @@ SESSÃO CRISTALIZA → commit+push main (docs)
 DIA ACABA → fechar autonomamente → atualizar este checklist → Telegram CHEFE
 ```
 
+## Superfícies oficiais (NÃO inventar HUB.*)
+
+| Superfície | URL | Papel |
+|------------|-----|--------|
+| SITE | https://centralldark.com | humano público |
+| ADMIN | https://admin.centralldark.com | **casca única de comando** |
+| CONTAS | https://admin.centralldark.com/contas | cofre/providers **dentro** da casca |
+| API | https://api.centralldark.com | estado / heartbeat |
+| MCP | https://mcp.centralldark.com/mcp | protocolo (máquina) |
+| MCP admin | https://mcp.centralldark.com/admin | aba MCP no **mesmo** organismo |
+
+`https://hub.centralldark.com/` = **403 / LEGADO**. HUB não é subdomínio. Clicar MCP/VPS/CF no admin **não** abre segundo cérebro.
+
 ## 2026-09-19
 
 - [x] Boot / identidade Grok CLI VPS
-- [x] Um coração `api.centralldark.com/heartbeat` (main `a76120905de` #1583)
-- [x] Compressão arquitetural EXTEND delta-útil (#1584 `eb94b0d89fd`)
-- [x] Locução 2 min + base cavaleiros
-- [x] GOAL PAI vive; Casa lembra pelo motor
-- [x] VPS limpa: porcelain 0; skip-worktree json vivo; quarentena `/root/_QUARANTINE-vps-20260919`
-- [ ] Deploy canônico do HEAD atual = DEPLOYED (MERGED ≠ DEPLOYED)
-- [ ] `hub_missions` 403 42501
-- [ ] Caddy leftover (elite/grafo/portal) classificado LEGADO — não remover sem prova
-- [ ] Heartbeat público vs local (janela SUSPECT/stale) — transporte ≠ morte
+- [x] Heartbeat `GET /heartbeat` (#1583)
+- [x] Compressão / complexidade absorvida (#1584–#1587)
+- [x] Tailscale no Cofre MCP (#1586)
+- [x] Deploy SHA `0dfb66b519f` **#1591 SUCCESS** (gate 42 + dist tsc + gitignore leftovers)
+- [x] PDF_GATE **na Casa** (receipt 2026-09-19 06:59, cadeia identity/policy/self-test/tamper PASS) — setor Casa
+- [ ] Cloudflare AUTH/API nesta VPS (`tokens/verify` + `zones.list`) — token no **admin/contas**, não no chat
+- [ ] Heartbeat **público** stale vs local alive
+- [ ] `hub_missions` 403
+- [ ] Caddy leftover (elite/grafo/portal) = LEGADO
+- [ ] Screenpipe captura ATIVA (config ≠ execução)
+- [ ] Tray Windows .exe
+- [ ] PDF_GATE **promovido na VPS/main** (Casa ≠ VPS)
 
-**HEAD:** `eb94b0d89fd` = `origin/main`  
-**Deploy vivo:** `35440165274` queued no mesmo SHA  
-**Coração:** MCP local health ok; público pode `stale`  
-**Fechamento Hermes:** job Daily Receipt → 23:00, notify CHEFE  
+**HEAD:** `0dfb66b519f` = `origin/main` = DEPLOYED run `35445742651`  
 
 ### Proibido no dia a dia
 `reset --hard` · `pm2 restart all` · `git add -A` · segundo painel/watchdog

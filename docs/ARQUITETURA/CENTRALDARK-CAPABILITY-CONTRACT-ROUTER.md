@@ -176,6 +176,51 @@ NO_CAPABILITY_MATCH
 → REMEDIA / ESCALA FRONTEIRA HUMANA
 ```
 
+## Buildkite como capability sensor, não segundo sistema
+
+O Buildkite entra na Casa como `SIGNAL_SURFACE + CAPABILITY_SENSOR`. Ele não recebe autoridade de intenção, não vira novo orquestrador e não executa remediação diretamente.
+
+```text
+GitHub / CI / hosted agents
+→ BUILDKITE
+→ webhook assinado
+→ /integrations/buildkite/webhook
+→ logs/sectors/buildkite
+→ CAPABILITY + FAILURE_RATE + LATENCY
+→ WATCHDOG / OMNI ROUTER
+→ HERMES quando saudável
+→ FRONTIER/REROUTE quando Hermes degrada
+→ REALITY_JUDGE
+```
+
+A direção `GitHub → Buildkite` e a direção `Buildkite → CentralDark` são contratos diferentes. Trigger aceito pelo Buildkite não prova ingestão pela CentralDark.
+
+O receptor é somente sensor:
+
+```text
+WEBHOOK_RECEIVED != ACTION_AUTHORIZED
+ADVICE != ACTION
+PROBABILITY != PROOF
+HOSTED_QUEUE_LISTED != AGENT_RUNNING
+TOKEN_CONFIGURED != API_OBSERVED
+```
+
+Métricas probabilísticas são permitidas para priorização e roteamento, com amostra e intervalo explícitos. A promoção de verdade continua determinística:
+
+```text
+MEASURED_FAILURE_RATE + CONFIDENCE_INTERVAL + P95_LATENCY
+→ ROUTING_ADVICE
+→ OWNER_EXISTENTE
+→ EXECUTION_IF_AUTHORIZED
+→ OBSERVED_EFFECT
+→ REALITY_JUDGE
+```
+
+Owner de ingestão/visualização: MCP CentralDark e seu funil canônico de logs.
+Owner de escolha de motor/modelo: `apps/modulos/elite-gateway/scripts/centraldark_omni_router.py`.
+Executor preferido quando medição o sustenta: Hermes.
+Fallback seguro: retornar ao owner de roteamento; nunca executar direto a partir do webhook.
+
 ## Cidades como locais semânticos
 
 A abstração útil de `Cidades` é dividir a Casa em territórios semânticos com função e contrato próprios, sem gerar sistemas independentes:
