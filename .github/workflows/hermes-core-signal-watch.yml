@@ -19,7 +19,7 @@ on:
   issue_comment:
     types: [created, edited]
   repository_dispatch:
-    types: [centraldark_review_signal]
+    types: [centraldark_review_signal, hermes_official_update_check]
   workflow_dispatch:
 
 permissions:
@@ -77,6 +77,163 @@ jobs:
           echo 'CANDIDATE_IS_NOT_PROVEN=1'
           echo 'UNKNOWN_IS_NOT_PASS=1'
 
+  official-update:
+    name: Hermes oficial → check → plan → backup → update → restart → prova
+    if: >-
+      github.event_name == 'schedule' ||
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'repository_dispatch' && github.event.action == 'hermes_official_update_check')
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 35
+    permissions:
+      contents: read
+    env:
+      HERMES_APP: CentralDark-Hermes
+    steps:
+      - name: Atualizar Hermes oficial somente quando houver delta
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          umask 077
+          mkdir -p "${HOME}/.hermes/logs/update_receipts"
+          RECEIPT="${HOME}/.hermes/logs/update_receipts/centraldark-official-update-last.json"
+          CHECK_LOG="${RUNNER_TEMP}/hermes-update-check.log"
+          PLAN_LOG="${RUNNER_TEMP}/hermes-update-plan.log"
+          UPDATE_LOG="${RUNNER_TEMP}/hermes-update-apply.log"
+          POSTCHECK_LOG="${RUNNER_TEMP}/hermes-update-postcheck.log"
+
+          loud_fail() {
+            local code="$1" step="$2" observed="$3"
+            printf '\n============================================================\n' >&2
+            printf '🚨 HERMES OFFICIAL UPDATE FALHOU\n' >&2
+            printf 'HOST=%s\n' "$(hostname)" >&2
+            printf 'STEP=%s\n' "$step" >&2
+            printf 'ERROR=%s\n' "$observed" >&2
+            printf 'WHO_CAN_RESOLVE=HERMES_UPSTREAM_OR_CENTRALDARK_RUNTIME_OWNER\n' >&2
+            printf 'NEXT_CURSOR=inspect_receipt_and_logs_then_retry_with_new_information\n' >&2
+            printf '============================================================\n' >&2
+            jq -n --arg state FAIL --arg step "$step" --arg error "$observed" --arg at "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+              '{schema:"centraldark.hermes-official-update.v1",state:$state,step:$step,error:$error,observed_at:$at,unknown_is_not_pass:true}' > "$RECEIPT" || true
+            exit "$code"
+          }
+
+          exec 9>/tmp/centraldark-hermes-official-update.lock
+          flock -w 10 9 || {
+            echo 'HERMES_OFFICIAL_UPDATE=NO_CHANGE_LOCK_BUSY'
+            exit 0
+          }
+
+          command -v hermes >/dev/null 2>&1 || loud_fail 31 PRECHECK 'hermes command not found'
+          BEFORE_VERSION="$(hermes --version 2>&1 | head -n1 || true)"
+          [[ -n "$BEFORE_VERSION" ]] || loud_fail 32 PRECHECK 'hermes --version returned empty output'
+
+          set +e
+          hermes update --check >"$CHECK_LOG" 2>&1
+          CHECK_RC=$?
+          set -e
+          cat "$CHECK_LOG"
+          [[ "$CHECK_RC" -eq 0 ]] || loud_fail 33 CHECK "$(tail -n 8 "$CHECK_LOG" | tr '\n' ' ' | cut -c1-700)"
+
+          if grep -Fq 'Already up to date' "$CHECK_LOG"; then
+            jq -n --arg state NO_CHANGE --arg version "$BEFORE_VERSION" --arg at "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+              '{schema:"centraldark.hermes-official-update.v1",state:$state,version:$version,observed_at:$at,check:"official_hermes_update_check",unknown_is_not_pass:true}' > "$RECEIPT"
+            echo 'HERMES_OFFICIAL_UPDATE=NO_CHANGE_ALREADY_CURRENT'
+            exit 0
+          fi
+
+          grep -Fq 'Update available' "$CHECK_LOG" || loud_fail 34 CHECK 'unclassified hermes update --check output'
+
+          hermes update --plan >"$PLAN_LOG" 2>&1 || loud_fail 35 PLAN "$(tail -n 12 "$PLAN_LOG" | tr '\n' ' ' | cut -c1-900)"
+          cat "$PLAN_LOG"
+
+          PM2_PRESENT=false
+          OLD_PM2_PID=0
+          if command -v pm2 >/dev/null 2>&1 && pm2 describe "$HERMES_APP" >/dev/null 2>&1; then
+            PM2_PRESENT=true
+            OLD_PM2_PID="$(pm2 pid "$HERMES_APP" | tail -n1)"
+          fi
+
+          START_EPOCH="$(date +%s)"
+          set +e
+          hermes update --backup --yes >"$UPDATE_LOG" 2>&1
+          UPDATE_RC=$?
+          set -e
+          cat "$UPDATE_LOG"
+          [[ "$UPDATE_RC" -eq 0 ]] || loud_fail 36 APPLY "$(tail -n 20 "$UPDATE_LOG" | tr '\n' ' ' | cut -c1-1200)"
+
+          GATEWAY_RESULT=NOT_APPLICABLE
+          if hermes gateway status >/dev/null 2>&1; then
+            if hermes gateway restart >/dev/null 2>&1; then
+              GATEWAY_RESULT=RESTARTED
+            else
+              hermes gateway stop >/dev/null 2>&1 || true
+              hermes gateway start >/dev/null 2>&1 || loud_fail 37 GATEWAY_RESTART 'restart and stop/start fallback both failed'
+              GATEWAY_RESULT=RESTARTED_BY_STOP_START_FALLBACK
+            fi
+            hermes gateway status >/dev/null 2>&1 || loud_fail 38 GATEWAY_VERIFY 'gateway status failed after restart'
+          fi
+
+          NEW_PM2_PID=0
+          PM2_RESULT=NOT_APPLICABLE
+          if [[ "$PM2_PRESENT" == true ]]; then
+            pm2 restart "$HERMES_APP" --update-env >/dev/null || loud_fail 39 PM2_RESTART 'CentralDark-Hermes restart failed'
+            for _ in $(seq 1 20); do
+              NEW_PM2_PID="$(pm2 pid "$HERMES_APP" | tail -n1)"
+              PM2_STATUS="$(pm2 jlist | jq -r --arg app "$HERMES_APP" '.[] | select(.name == $app) | .pm2_env.status' | head -n1)"
+              if [[ "$NEW_PM2_PID" =~ ^[0-9]+$ && "$NEW_PM2_PID" -gt 0 && "$PM2_STATUS" == online ]]; then
+                break
+              fi
+              sleep 1
+            done
+            [[ "$NEW_PM2_PID" =~ ^[0-9]+$ && "$NEW_PM2_PID" -gt 0 ]] || loud_fail 40 PM2_VERIFY 'CentralDark-Hermes has no live PID after restart'
+            [[ "$PM2_STATUS" == online ]] || loud_fail 41 PM2_VERIFY "CentralDark-Hermes status=$PM2_STATUS"
+            PM2_RESULT=RESTARTED_AND_ONLINE
+          fi
+
+          hermes update --check >"$POSTCHECK_LOG" 2>&1 || loud_fail 42 POSTCHECK 'post-update check command failed'
+          cat "$POSTCHECK_LOG"
+          grep -Fq 'Already up to date' "$POSTCHECK_LOG" || loud_fail 43 POSTCHECK 'Hermes still reports update available after apply'
+
+          AFTER_VERSION="$(hermes --version 2>&1 | head -n1 || true)"
+          [[ -n "$AFTER_VERSION" ]] || loud_fail 44 VERIFY 'post-update hermes --version returned empty output'
+
+          BUILD_RESULT=NOT_OBSERVED
+          if grep -Eq 'Web UI built|built in [0-9.]+s|Building web UI' "$UPDATE_LOG"; then
+            BUILD_RESULT=OBSERVED_IN_OFFICIAL_UPDATER
+          fi
+
+          jq -n \
+            --arg state PASS \
+            --arg before "$BEFORE_VERSION" \
+            --arg after "$AFTER_VERSION" \
+            --arg gateway "$GATEWAY_RESULT" \
+            --arg pm2 "$PM2_RESULT" \
+            --arg build "$BUILD_RESULT" \
+            --argjson old_pm2_pid "${OLD_PM2_PID:-0}" \
+            --argjson new_pm2_pid "${NEW_PM2_PID:-0}" \
+            --argjson started_epoch "$START_EPOCH" \
+            --arg at "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+            '{schema:"centraldark.hermes-official-update.v1",state:$state,before_version:$before,after_version:$after,gateway:$gateway,centraldark_pm2:$pm2,build:$build,old_pm2_pid:$old_pm2_pid,new_pm2_pid:$new_pm2_pid,started_epoch:$started_epoch,observed_at:$at,source:"NousResearch/hermes-agent official updater",check:"hermes update --check",plan:"hermes update --plan",apply:"hermes update --backup --yes",postcheck:"Already up to date",unknown_is_not_pass:true}' > "$RECEIPT"
+
+          echo 'HERMES_OFFICIAL_UPDATE=PASS'
+          echo "BEFORE_VERSION=$BEFORE_VERSION"
+          echo "AFTER_VERSION=$AFTER_VERSION"
+          echo "BUILD_RESULT=$BUILD_RESULT"
+          echo "GATEWAY_RESULT=$GATEWAY_RESULT"
+          echo "PM2_RESULT=$PM2_RESULT"
+          echo "RECEIPT=$RECEIPT"
+
+      - name: Receipt resumido
+        if: always()
+        shell: bash
+        run: |
+          echo 'REUSE_BEFORE_CREATE=true'
+          echo 'UPDATER_OWNER=.github/workflows/hermes-core-signal-watch.yml'
+          echo 'OFFICIAL_UPDATE_COMMAND=hermes update'
+          echo 'WEBHOOK_ACCELERATOR=repository_dispatch:hermes_official_update_check'
+          echo 'SCHEDULE_FALLBACK=existing_daily_signal_watch'
+          echo 'MICROCOMMAND_CHAIN_TO_HUMAN=false'
+          echo 'UNKNOWN_IS_NOT_PASS=1'
   review-signal:
     name: CodeRabbit webhook → Signal Watcher → API advisory → autonomia
     if: >-
