@@ -17,7 +17,7 @@ const PORTA_VIVA = "docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md";
 const CONTRATO_DELTA = "docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md";
 const CONTRATO_RECONCILIACAO = "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json";
 const ESTRUTURA_VPS = "docs/CONSCIENCIA/04-ESTRUTURA-VPS.md";
-const RECONCILIATION_SCHEMA_VERSION = 4;
+const RECONCILIATION_SCHEMA_VERSION = 5;
 const IDENTIDADE_LUPA = ".agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA";
 const BASE_SHA = valueAfter("--base-sha", process.env.BASE_SHA || "");
 const HEAD_SHA = valueAfter("--head-sha", process.env.HEAD_SHA || process.env.GITHUB_SHA || "");
@@ -363,9 +363,45 @@ if (!contract) {
   if (deploy.post_deploy_parallel_remeasure_required !== true) errors.push("DEPLOY_POLICY_SEM_REMEDICAO_GITHUB_VPS");
   if (deploy.runtime_receipt_required !== true) errors.push("DEPLOY_POLICY_SEM_RECEIPT_RUNTIME");
 
-  const requiredReceiptFields = ["GITHUB_T0","VPS_T0","CROSS_SURFACE_DRIFT","PREFLIGHT_RESULT","COUNTERPROOF_RESULT","MICRO_DEPLOY_SCOPE","GITHUB_T1","VPS_T1","RUNTIME_RECEIPT","FIXED_HUD_UPDATE","NEXT_CURSOR","ACTIVE_PRS","BRANCH_COMPARISON","PRINCIPAL_PR","CONVERGENCE_RECEIPT","GLOBAL_DNA_RESULT","BUILDKITE_FUNNEL_RESULT","FAILED_JOB_ID","FAILURE_SIGNATURE","FAILED_JOB_ROOT_CAUSE_STATE","RECONCILIATION_PLAN"];
+  const requiredReceiptFields = ["GITHUB_T0","VPS_T0","CROSS_SURFACE_DRIFT","PREFLIGHT_RESULT","COUNTERPROOF_RESULT","MICRO_DEPLOY_SCOPE","GITHUB_T1","VPS_T1","RUNTIME_RECEIPT","FIXED_HUD_UPDATE","NEXT_CURSOR","ACTIVE_PRS","BRANCH_COMPARISON","PRINCIPAL_PR","CONVERGENCE_RECEIPT","GLOBAL_DNA_RESULT","BUILDKITE_FUNNEL_RESULT","FAILED_JOB_ID","FAILURE_SIGNATURE","FAILED_JOB_ROOT_CAUSE_STATE","RECONCILIATION_PLAN","CONTRACT_SCOPE_ID","CONTRACT_SCHEMA","CONTRACT_BLOB_SHA","CONTRACT_COMMIT_SHA","OBSERVED_AT_LOCAL","OBSERVED_AT_UTC","TRACE_ID","EVENT_ID","POMBO64_PLUS","HEAD_SHA","ARTIFACT_OR_RESULT_SHA256","DEPENDENCY_FINGERPRINT","CARDS_ON_TABLE_GAPS","EXACT_FAILURE_LOCATION","EXACT_IMPROVEMENT","PM2_HOMES_DISCOVERED","OWNER_PM2_HOME","T0_PID","T1_PID","PID_CHANGED","CADDY_BACKUP","CADDY_VALIDATE","CADDY_RELOAD","ROLLBACK_USED","HUD_STATE_HASH"];
   const receiptFields = contract.internal_receipt_fields ?? [];
   for (const field of requiredReceiptFields) if (!receiptFields.includes(field)) errors.push(`CONTRATO_UNIVERSAL_RECEIPT_CAMPO_AUSENTE:${field}`);
+
+  const wholeHouse = contract.centraldark_global_contract ?? {};
+  if (wholeHouse.marker !== "CENTRALDARK_WHOLE_HOUSE_ONE_DIRECTION_REQUIRED") errors.push("CONTRATO_CASA_INTEIRA_MARKER_AUSENTE");
+  if (wholeHouse.status !== "MANDATORY_GLOBAL") errors.push("CONTRATO_CASA_INTEIRA_NAO_GLOBAL");
+  if (wholeHouse.scope !== "ENTIRE_CENTRALDARK") errors.push("CONTRATO_CASA_INTEIRA_ESCOPO_INVALIDO");
+  if (wholeHouse.scope_id !== "canon/centraldark-universal-contract-20260919") errors.push("CONTRATO_CASA_INTEIRA_SCOPE_ID_INVALIDO");
+  if (wholeHouse.one_direction !== true || wholeHouse.no_parallel_contract !== true) errors.push("CONTRATO_CASA_INTEIRA_DIRECAO_PARALELA");
+  if (wholeHouse.authority?.creator_owner !== "SEGREDO/CHEFE") errors.push("CONTRATO_CASA_INTEIRA_AUTORIDADE_INVALIDA");
+  if (wholeHouse.cards_on_table?.missing_piece_must_be_reported !== true) errors.push("CONTRATO_CARTAS_NA_MESA_LACUNA_OCULTA");
+  if (wholeHouse.cards_on_table?.exact_failure_location_required !== true) errors.push("CONTRATO_CARTAS_NA_MESA_SEM_LOCAL_FALHA");
+  if (wholeHouse.cards_on_table?.exact_improvement_or_next_test_required !== true) errors.push("CONTRATO_CARTAS_NA_MESA_SEM_MELHORIA_EXATA");
+
+  const fixedHud = contract.fixed_hud_contract ?? {};
+  if (fixedHud.marker !== "CENTRALDARK_FIXED_HUD_REQUIRED") errors.push("CONTRATO_HUD_FIXO_MARKER_AUSENTE");
+  if (fixedHud.always_show_on_centraldark_operational_response !== true) errors.push("CONTRATO_HUD_NAO_OBRIGATORIO");
+  if (fixedHud.layout !== "FIXED" || fixedHud.data !== "LIVE_ONLY") errors.push("CONTRATO_HUD_FIXO_DADOS_INVALIDO");
+  if (fixedHud.percent_policy?.arbitrary_percent_forbidden !== true || fixedHud.percent_policy?.requires_explicit_denominator !== true) errors.push("CONTRATO_HUD_PERCENTUAL_FALSO");
+
+  const trace = contract.trace_pombo64_contract ?? {};
+  if (trace.marker !== "CENTRALDARK_HASH_TIME_POMBO64_TRACE_REQUIRED") errors.push("CONTRATO_POMBO64_MARKER_AUSENTE");
+  if (trace.pombo64_plus?.pombo_mode !== "CHECKSUM_ON") errors.push("CONTRATO_POMBO64_CHECKSUM_OFF");
+  if (trace.pombo64_plus?.is_proof !== false || trace.pombo64_plus?.base64_is_security !== false) errors.push("CONTRATO_POMBO64_FALSA_PROVA_SEGURANCA");
+  if (trace.identity?.hash_binding_lives_in_receipt !== true) errors.push("CONTRATO_HASH_SEM_RECEIPT");
+
+  const plug = contract.plug_and_play_inheritance ?? {};
+  if (plug.marker !== "CENTRALDARK_PLUG_AND_PLAY_CONTRACT_INHERITANCE") errors.push("CONTRATO_PLUG_PLAY_MARKER_AUSENTE");
+  if (plug.future_executor_without_contract !== "FAIL_CLOSED") errors.push("CONTRATO_FUTURO_EXECUTOR_SEM_FAIL_CLOSED");
+  if (plug.no_v2_v3_v4_for_same_capability !== true) errors.push("CONTRATO_PLUG_PLAY_PERMITE_V2V3V4");
+
+  const hybrid = contract.hybrid_runtime_contract ?? {};
+  if (hybrid.marker !== "CENTRALDARK_HYBRID_RUNTIME_DISCOVERY_REQUIRED") errors.push("CONTRATO_RUNTIME_HIBRIDO_MARKER_AUSENTE");
+  if (hybrid.pm2?.discover_all_homes_before_mutation !== true) errors.push("CONTRATO_PM2_HIBRIDO_SEM_DISCOVERY");
+  if (hybrid.pm2?.act_only_where_owner_exists !== true) errors.push("CONTRATO_PM2_HIBRIDO_OWNER_INVALIDO");
+  if (hybrid.pm2?.cross_home_restart_forbidden !== true || hybrid.pm2?.restart_all_forbidden !== true) errors.push("CONTRATO_PM2_HIBRIDO_RESTART_AMPLO");
+  if (hybrid.caddy?.validate_before_reload !== true || hybrid.caddy?.backup_before_mutation !== true) errors.push("CONTRATO_CADDY_SEM_BACKUP_VALIDATE");
+  if (hybrid.microdeploy_runtime_proof?.t1_pid_and_health_required !== true) errors.push("CONTRATO_MICRODEPLOY_SEM_T1_PID_HEALTH");
 
   const rules = contract.decision_rules ?? {};
   if (rules.new_component_requires_proved_gap !== true) errors.push("CONTRATO_RECONCILIACAO_GAP_NAO_OBRIGATORIO");
