@@ -2068,7 +2068,21 @@
         ],
         "gap_proven": [
           "menu references harness/RUN-TESTS.ps1 while package does not contain harness"
-        ]
+        ],
+        "gap_status": "CLOSED_IN_CHILD_PR_SOURCE_LAYER",
+        "gap_closed_by": [
+          "scripts/remote-bridge/canonical/engine/CentralDark-Remote-Parser.psm1",
+          "scripts/remote-bridge/canonical/engine/CentralDark-Remote-Tray.ps1",
+          "scripts/remote-bridge/canonical/harness/RUN-TESTS.ps1",
+          "scripts/remote-bridge/canonical/harness/fixtures/auth-code-base-url.log",
+          "scripts/remote-bridge/canonical/harness/fixtures/stale-refresh-token.log",
+          "scripts/remote-bridge/canonical/harness/fixtures/authorized-online-claim.log",
+          "scripts/remote-bridge/canonical/harness/fixtures/local-mcp-failed.log"
+        ],
+        "runtime_proof": "REQUIRES_WINDOWS_CASA_OR_EXTERNAL_DEVICE_MEASUREMENT",
+        "exe_policy": "PACKAGE_ONLY_NOT_GIT",
+        "source_reuse": "PROVEN_ARTIFACT_SOURCE_ABSORBED_IN_PLACE",
+        "pr": "1597"
       }
     ],
     "promotion_rule": [
@@ -2079,6 +2093,7 @@
       "TEST_OR_COUNTERPROOF_PASS",
       "NO_PARALLEL_ARCHITECTURE",
       "GLOBAL_CONTRACT_GATE_PASS"
-    ]
+    ],
+    "last_reconciliation": "REMOTE_TRAY_HARNESS_SOURCE_GAP_CLOSED_RUNTIME_STILL_EXTERNAL"
   }
 }
