@@ -13,8 +13,8 @@ BASE_DIR = pathlib.Path(__file__).parent
 try:
     from dotenv import load_dotenv
     load_dotenv(BASE_DIR / ".env")
-except Exception:
-    pass
+except ImportError:
+    load_dotenv = None
 
 CONTAS_DIR = pathlib.Path("/root/CentralDark/contas")
 CONTAS_DIR.mkdir(parents=True, exist_ok=True)
