@@ -29,6 +29,8 @@ const FILES = {
   grillMe: '.agents/skills/grill-me/SKILL.md',
   metaGrill: '.agents/skills/meta-lupa/KITS/METAGRILL-METALUPA/KIT.md',
   perceptionOrchestra: 'apps/modulos/HERMES-CORE/core/perception-orchestra.mjs',
+  orchestrator: 'apps/modulos/HERMES-CORE/core/orchestrator.mjs',
+  knowledgeCollector: 'apps/modulos/HERMES-CORE/agents/Knowledge-Collector/agent.mjs',
 };
 
 const TLC23_CANONICAL_SHA256 = 'b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1';
@@ -123,6 +125,8 @@ export function validateUniversalMethod() {
   const grillMe = read(FILES.grillMe);
   const metaGrill = read(FILES.metaGrill);
   const perceptionOrchestra = read(FILES.perceptionOrchestra);
+  const orchestrator = read(FILES.orchestrator);
+  const knowledgeCollector = read(FILES.knowledgeCollector);
   const tlc23Hash = sha256(readBuffer(FILES.tlc23));
 
   if (tlc23Hash !== TLC23_CANONICAL_SHA256) {
@@ -320,6 +324,12 @@ export function validateUniversalMethod() {
     'PROVEN_RULE_BINDS_TO_RUNTIME: true',
     'contract_coverage_may_equal_100_percent_when_all_defined_conditions_verified: true',
     'external_reality_100_percent_from_calculation_only: false',
+    'continuous_capability_absorption:',
+    'fixed_point_is_learning_gate: false',
+    'approved_material_step_emits_learning_ref: true',
+    'proven_reusable_delta_binds_before_global_fixed_point: true',
+    'CONTINUOUS_HERMES_CAPABILITY_ABSORPTION: true',
+    'FIXED_POINT_IS_VERIFICATION_CHECKPOINT_NOT_LEARNING_GATE: true',
   ], 'AUTOCONFIG_RUNTIME');
 
   requireTokens(contract, [
@@ -517,7 +527,26 @@ export function validateUniversalMethod() {
     'DISCOVERY_AUTO_PROMOTES_TO_CANONICAL=false',
     'REUSE_PROVEN_CRYSTAL_BEFORE_REINVESTIGATE=true',
     'CALCULATION_SUPPORTS_DECISION_BUT_DOES_NOT_REPLACE_RUNTIME_OBSERVATION=true',
+    'CONTINUOUS_HERMES_CAPABILITY_ABSORPTION=true',
+    'FIXED_POINT_IS_VERIFICATION_CHECKPOINT_NOT_LEARNING_GATE=true',
+    'PROVEN_REUSABLE_DELTA_BINDS_TO_CORE_BEFORE_GLOBAL_FIXED_POINT=true',
+    'MATERIAL_APPROVED_STEP_EMITS_LEARNING_REF=true',
   ], 'HERMES_PROMPT');
+
+  requireTokens(orchestrator, [
+    "registrar as registrarAprendizado",
+    'function registrarAprendizadoMaterial',
+    'deveCapturarAprendizadoMaterial',
+    'entrada.learning_ref = aprendizagem.ref',
+    'FIXED_POINT é checkpoint de verificação, não gate para capacitação do Hermes',
+  ], 'HERMES_CONTINUOUS_LEARNING_RUNTIME');
+
+  requireTokens(knowledgeCollector, [
+    'export function consultarContexto',
+    'export function registrar',
+    'deduped: true',
+    "createHash('sha256')",
+  ], 'HERMES_KNOWLEDGE_COLLECTOR_RUNTIME');
 
   const engines = parseEngineNames(engine);
   return {
@@ -536,6 +565,9 @@ export function validateUniversalMethod() {
     persistent_operational_regime_contract: true,
     fixed_point_is_checkpoint: true,
     fixed_point_is_end: false,
+    fixed_point_is_learning_gate: false,
+    continuous_hermes_capability_absorption: true,
+    material_approved_step_emits_learning_ref: true,
     next_cycle_required_while_runtime_exists: true,
     self_correction_is_runtime_internal: true,
     measured_100_percent_or_exact_blocker: true,
