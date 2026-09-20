@@ -318,6 +318,41 @@ hybrid_runtime_contract:
   caddy_rollback_on_validation_failure: true
   t0_t1_pid_health_receipt_required: true
 
+hybrid_telemetry_contract:
+  marker: CENTRALDARK_HYBRID_TELEMETRY_REQUIRED
+  status: MANDATORY_WHEN_OBSERVABILITY_IS_MATERIAL
+  screen_is_optional_sensor_not_single_point_of_truth: true
+  no_screen_does_not_block_other_observability: true
+  sensor_failure_is_world_failure: false
+  connector_failure_is_provider_failure: false
+  correlated_views_are_independent_proofs: false
+  global_current_claim_requires_cross_surface_reconciliation: true
+  sources: [GITHUB, VPS_RUNTIME, API, LOGS, MCP, GITHUB_ACTIONS, BUILDKITE, SCREENPIPE, DESKTOP_COMMANDER, FILE_CONFIG, NETWORK, HISTORY]
+  screen_fallback:
+    if_available: BIND_HOST_PID_WINDOW_FRAME_TIMESTAMP
+    if_unavailable: MARK_SCREEN_UNKNOWN_AND_CONTINUE_OTHER_SENSORS
+  port_attribution:
+    response_requires_owner_binding: true
+    same_port_other_owner_is_not_target: true
+  screenpipe:
+    owner: .agents/skills/screenpipe-live-observer/SKILL.md
+    expected_local_api: http://localhost:3030
+    expected_mcp: http://localhost:3031/mcp
+    endpoint_must_be_attributed_to_screenpipe_process_before_use: true
+  fallback_flow:
+    - TRY_DIRECT_TARGET_SENSOR
+    - MEASURE_PROCESSES_PORTS_OWNER
+    - MEASURE_APIS_HEARTBEAT
+    - MEASURE_LOGS_AUDIT
+    - MEASURE_GITHUB_CI
+    - MEASURE_CONFIG_HASHES_ROUTES
+    - RENDEZVOUS_EVIDENCE
+    - DISCRIMINATING_TEST_ON_CONTRADICTION
+    - RECEIPT_WITH_PROVENANCE
+    - REALITY_JUDGE
+  evidence_envelope_required: [SOURCE_TYPE, SOURCE_ID, TARGET, HOST, OWNER, OBSERVED_AT, HEAD_OR_RUNTIME_FINGERPRINT, EVIDENCE_REF, CLAIM, CLASS]
+  unresolved_material_contradiction: FIXED_POINT_FALSE
+
 global_contract_enforcer:
   marker: CENTRALDARK_GLOBAL_CONTRACT_ENFORCER_REQUIRED
   status: MANDATORY_FOR_MUTATION
