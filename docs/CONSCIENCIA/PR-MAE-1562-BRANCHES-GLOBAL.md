@@ -1,6 +1,6 @@
-# PR-MÃE #1562 — TODAS AS BRANCHES (613)
+# PR-MÃE #1562 — TODAS AS BRANCHES (616)
 
-Snapshot vivo do repositório. Toda branch fica apontada ao funil #1562 até ter o delta útil absorvido ou ser provado que não há delta material.
+Snapshot vivo em 2026-09-20. Cada branch fica apontada ao funil #1562 até absorção/classificação do delta material.
 
 | branch | HEAD | protected | PR aberto |
 |---|---|---:|---|
@@ -19,7 +19,7 @@ Snapshot vivo do repositório. Toda branch fica apontada ao funil #1562 até ter
 | `auditoria/sessao-2026-07-27` | `1477cd44a7e1f3518985bc4000998a64a55c5348` | não | — |
 | `automation/mcp-deploy-main` | `9415eff9b3bf8a5b028f4b869cb520affd0fb09e` | não | — |
 | `canon/anthropic-cybersecurity-skills-20260913` | `1d09dc3e6f2137f6c94ad0488bc913f7079891b7` | não | — |
-| `canon/centraldark-universal-contract-20260919` | `6f731bc8d4b2935cd38d123f8c978fb34e915b24` | não | #1597 |
+| `canon/centraldark-universal-contract-20260919` | `cfd9c2a2afdc5678ca2717d889d8b2d0b4ac859c` | não | — |
 | `canon/cot17-all-sessions-20260913` | `c9d8f9d836f219619a0c12ee11d302062b7852fc` | não | — |
 | `canon/reuse-runtime-skill-20260913` | `53519e7e9ddac5ea431a1d9365e3b3a95ae139cc` | não | — |
 | `canon/same-sha-micro-deploy-20260913` | `1770d4f5df658d5306e521004997f99d427b34a4` | não | — |
@@ -293,6 +293,7 @@ Snapshot vivo do repositório. Toda branch fica apontada ao funil #1562 até ter
 | `fix/authority-owner-dedupe-20260818` | `75748e14eab563e7c496ff0061bdcd936fe371ee` | não | — |
 | `fix/authority-receipt-transport-20260817` | `66185f2a670300b76ebf0e4c4f57471e8b4924e8` | não | — |
 | `fix/authority-writers-block-preserve-20260817` | `f4d03e96c0657ac2032adb038928df10c805a0d4` | não | — |
+| `fix/auto-conflict-all-prs-20260920` | `a7e3e0d820abec4fc638b2e62fdb2d18089b38e7` | não | — |
 | `fix/autoload-resposta-pivete-20260729` | `d8b33b33ce47024f8e1ba6741749a3dd1a91d3f6` | não | — |
 | `fix/automation-recurrence-evidence-20260816` | `e2fcaab4c97e113bce7ae835c708cbcf0b5351c0` | não | — |
 | `fix/autonomia-artifact-empty-marker` | `ac7e30a7c4a212e2ecf5c45ba7377a2b03821b7a` | não | — |
@@ -343,6 +344,7 @@ Snapshot vivo do repositório. Toda branch fica apontada ao funil #1562 até ter
 | `fix/dependabot-live-score-bridge-receipts-20260915` | `12fe825a6a76fe2f06fac93298ec2f9a02f5210c` | não | — |
 | `fix/dependabot-radar-20260905` | `6f2aee7ebb492c060428d5910a63396c47cafdc6` | não | — |
 | `fix/dependabot-single-open-pr-proof-20260818` | `32f4ccf5ce6617b0f34558da71fea9371e6db013` | não | — |
+| `fix/dependabot-workflow-expression-20260920` | `e1b17f992ca80798c958d6379bad2168b36e3519` | não | #1600 |
 | `fix/desktop-commander-pid-census-20260916` | `552312c5acf0d9337b0ddc0faa3de28561585b03` | não | #1555 |
 | `fix/dispatcher-pr-permission-fallback-20260815` | `a0c254d199d830039e964c8bf3f92ff6a79c1a5a` | não | — |
 | `fix/docs-canonical-stable-nodes-20260910` | `f8936f04b82b5aaac2f9f75c6d4142cda1286eac` | não | — |
@@ -381,7 +383,7 @@ Snapshot vivo do repositório. Toda branch fica apontada ao funil #1562 até ter
 | `fix/hub-control-plane-execution-bridge-20260809` | `5573bf195c77ee22707a151ccc34810e1ddcc39e` | não | — |
 | `fix/hub-inventory-ledger-20260815` | `cecd1e2c15e2e3a3b2329b0b83472ced2ac5fc9a` | não | — |
 | `fix/hub-inventory-ledger-residual-20260815` | `7af8572ff00dfb6d5b3a120c6837ad9ac4ec7709` | não | — |
-| `fix/hub-postgrest-profile-20260918` | `d4c6780edf834b50ae8dc5de713cf3d38dace6cb` | não | #1580 |
+| `fix/hub-postgrest-profile-20260918` | `874b4c9efd35848276b917876696f41af9a16091` | não | — |
 | `fix/identidade-segredo-hermes-semantica-20260814` | `5a0a4d41ea9b4055a9be1414620638e5a1ac9546` | não | — |
 | `fix/identity-gate-syntax-20260815` | `a51716823e1af517c45cd361f567cf5907feed09` | não | — |
 | `fix/identity-validator-false-signals-20260815` | `31ba2403ab2b6409067c627d01242ddc28adfa9f` | não | — |
@@ -512,6 +514,7 @@ Snapshot vivo do repositório. Toda branch fica apontada ao funil #1562 até ter
 | `fix/varredura-runner-selfhosted` | `ddcf57b6f63b65e5a962e69aa084b42e3a53001c` | não | — |
 | `fix/vocabulario-original-chefe-20260822` | `9bc7fd2ae763fa44b4341e6fab9792f6b0a8dd21` | não | — |
 | `fix/vps-deploy-unbound-runtime-contract-20260919` | `e255c3a8e77f61036ef4f70ae77babbbdb9a4f4d` | não | — |
+| `fix/vps-exec-screenpipe-path-trigger` | `43e0a730f72d128931ef8052e036021ea1ba3fcb` | não | #1601 |
 | `fix/vps-reconcile-orfao-dependabot-thrash` | `f98697022e7fdebf9269e9d355423f872c7786f7` | não | — |
 | `fix/workflow-startup-failures-20260905` | `6c9ffd5f1a2a12a25dc8c7fe142dfa0d5fd639e7` | não | — |
 | `fix/writer-portavel-fallback-20260808` | `16cb861eced1b6cee5691722966c97a2cf7a58d4` | não | — |
@@ -532,7 +535,7 @@ Snapshot vivo do repositório. Toda branch fica apontada ao funil #1562 até ter
 | `lovable-sync-1783146779` | `dad4ac4f7a3f0db5ed96f7acb7223b2b5d16b7d1` | não | — |
 | `lovable-sync-1783160722` | `936a1462692c539d550b1990f89e242d386ef0fb` | não | — |
 | `lovable-sync-1783280748` | `2167c1396c4b2db770c7a48738e78b60bd4cfa4e` | não | — |
-| `main` | `de5e8cab08392d9887603b469121056fc3b28094` | não | — |
+| `main` | `64aa2cd2e21e7e16a16001d353ec3b9545e4cc06` | não | — |
 | `memory/viver-em-paz-recall-20260817` | `736f9b35ee351a5013a2804cbd70d144cce24070` | não | — |
 | `__noop_should_not_use__` | `3600185d279dd24c0e070b10ceb0922ebc5153da` | não | — |
 | `ops/memory-linker-inbox-20260913054341` | `836d00b6140b112100edad33cc1e0fab6470e9cf` | não | — |
@@ -584,7 +587,7 @@ Snapshot vivo do repositório. Toda branch fica apontada ao funil #1562 até ter
 | `sol/cristaliza-provider-access-lease-20260907` | `98d1580bce5851f08a416f8349b0c82bf406524e` | não | — |
 | `sol/generalizar-erros-comprovados-20260822` | `d4c61d05d79f3553e4fe35df39136a08a5948d37` | não | — |
 | `sol/global-continuity-root-crystal-20260909` | `5ad421771ba8796bed25e881716d9b4041c530d2` | não | — |
-| `sol/meta-lupa-corpo-operacional-20260917-current` | `b506e4279a5f21497269033c3583a9b6424d3b96` | não | #1562 |
+| `sol/meta-lupa-corpo-operacional-20260917-current` | `f6b63327564ead4f4227f9531905928e0cc69c79` | não | #1562 |
 | `sol/meta-lupa-corpo-operacional-20260917` | `e44564ac1e41b5999f8f79e2ae0de8123dcf340f` | não | — |
 | `sol/modelos-todos-tem-lugar-20260825` | `d024d0e1cd9c9f414f8d08e2a02dabe7b3ddb1e1` | não | — |
 | `sol/pdf-harness-self-healing-20260909b` | `eba288a229d4751f9bd17ae78825965169a2d0e2` | não | — |
