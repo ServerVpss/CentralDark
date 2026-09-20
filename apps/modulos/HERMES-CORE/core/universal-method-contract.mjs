@@ -238,6 +238,47 @@ export function validateUniversalMethod() {
     'CALCULATION != RUNTIME_OBSERVATION',
   ], 'OPERATIONAL_METHOD_LEARNING');
 
+  requireTokens(universal, [
+    'human_complexity_absorption_required: true',
+    'machine_discoverable_state_must_not_be_human_guesswork: true',
+    'machine_safe_fix_must_not_be_delegated_to_human: true',
+    'human_complexity_absorption_contract:',
+    'purpose: MACHINE_ABSORBS_TECHNICAL_COMPLEXITY_FOR_HUMANS',
+    'prefer_complete_execution_bundle_over_microcommands: true',
+    'unresolved_failure_must_be_loud_and_unambiguous: true',
+    'ask_one_exact_human_action_at_a_time: true',
+    'secrets_must_not_be_requested_in_chat: true',
+    'after_human_frontier_machine_auto_resumes: true',
+    'complexity_belongs_inside_system_not_on_user: true',
+  ], 'HUMAN_COMPLEXITY_ABSORPTION_UNIVERSAL');
+
+  requireTokens(contract, [
+    'human_complexity_must_be_absorbed_by_machine_when_safe: true',
+    'machine_discoverable_state_must_not_be_user_guesswork: true',
+    'machine_safe_fix_must_not_be_delegated_to_user: true',
+    'generic_error_without_location_and_next_action_is_invalid: true',
+    'marker: CENTRALDARK_HUMAN_COMPLEXITY_ABSORPTION_REQUIRED',
+    'prefer_one_complete_operation_over_microcommand_chain: true',
+    'automatic_resume_after_human_frontier: true',
+  ], 'HUMAN_COMPLEXITY_ABSORPTION_CONTRACT');
+
+  requireTokens(hermesPrompt, [
+    '## Contrato humano universal — absorver complexidade, não devolvê-la',
+    'COMPLEXITY_BELONGS_INSIDE_SYSTEM_NOT_ON_USER=true',
+    'HUMAN_SUPPLIES_GOAL_NOT_RUNBOOK=true',
+    'PREFER_COMPLETE_OPERATION_OVER_MICROCOMMAND_CHAIN=true',
+    'UNRESOLVED_FAILURE_MUST_BE_LOUD_EXACT_ACTIONABLE=true',
+    'ASK_ONE_EXACT_HUMAN_ACTION_AT_A_TIME=true',
+    'AUTO_RESUME_AFTER_HUMAN_FRONTIER=true',
+  ], 'HERMES_HUMAN_COMPLEXITY_PROMPT');
+
+  requireTokens(operationalMethod, [
+    '## Contrato humano de execução integral',
+    'microcomando não é padrão',
+    'se a máquina pode descobrir, o humano não deve adivinhar',
+    'erro genérico sem localização e próximo passo acionável é FAIL',
+  ], 'OPERATIONAL_HUMAN_COMPLEXITY_METHOD');
+
   let previous = -1;
   for (const token of REQUIRED_CHAIN) {
     const needle = `  - ${token}`;
@@ -607,6 +648,10 @@ export function validateUniversalMethod() {
     ephemeral_cleanup_contract: true,
     log_incident_crystallization_contract: true,
     log_incident_fanout_gate: true,
+    human_complexity_absorption_contract: true,
+    prefer_complete_operation_over_microcommands: true,
+    loud_actionable_failure_contract: true,
+    automatic_resume_after_human_frontier: true,
   };
 }
 
