@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import argparse
 import importlib.util
 import json
 import tempfile
@@ -174,6 +175,23 @@ def test_runtime_preflight_bridge_ownership_accepts_complete_evidence():
         assert field in result, field
 
 
+def test_runtime_preflight_cli_rejects_invalid_bridge_json():
+    base = dict(
+        repo=str(REPO),
+        shell="powershell",
+        host_mode="literal",
+        command="Get-Process",
+        required_path=[],
+        surface="desktop_bridge_ownership_claim",
+        command_class="desktop_bridge_ownership_claim",
+        observed_at="2026-09-20T09:55:00Z",
+    )
+    malformed = argparse.Namespace(**base, bridge_evidence_json="{not-json")
+    not_object = argparse.Namespace(**base, bridge_evidence_json="[]")
+    assert mod.cmd_preflight_lint(malformed) == 8
+    assert mod.cmd_preflight_lint(not_object) == 8
+
+
 def test_runtime_preflight_is_inherited_by_engine_master_and_method():
     engine = ENGINE_BINDING.read_text(encoding="utf-8")
     master = MASTER_CYCLE.read_text(encoding="utf-8")
@@ -235,6 +253,7 @@ if __name__ == "__main__":
         test_runtime_preflight_blocks_missing_required_path,
         test_runtime_preflight_bridge_ownership_requires_complete_evidence,
         test_runtime_preflight_bridge_ownership_accepts_complete_evidence,
+        test_runtime_preflight_cli_rejects_invalid_bridge_json,
         test_runtime_preflight_is_inherited_by_engine_master_and_method,
         test_lock_key_is_stable_and_owner_bound,
         test_registry_roundtrip,
