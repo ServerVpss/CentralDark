@@ -1,0 +1,89 @@
+# 🧾🔗 RECEIPT · SESSÃO COMPLETA CENTRALDARK · 2026-09-11
+
+```text
+ID=SESSION_CRYSTAL_CENTRALDARK_20260911
+AUTHORITY=SEGREDO/CHEFE
+OWNER=.agents/skills/meta-lupa/SKILL.md
+KIT=.agents/skills/meta-lupa/KITS/METAGRILL-METALUPA
+TARGET_BRANCH=main
+MODE=SESSION_CRYSTAL_NOT_PR_MOTHER
+STATUS=CRISTALIZADO_NA_MAIN
+```
+
+## 🧠 INTENÇÃO
+
+Cristalizar a sessão inteira como memória operacional da Casa, sem transformar PR-mãe em owner e sem criar arquitetura paralela.
+
+## 🧬 ARQUIVO CRISTALIZADO
+
+```text
+.agents/skills/meta-lupa/KITS/METAGRILL-METALUPA/SESSOES/2026-09-11-SESSAO-COMPLETA-CENTRALDARK.md
+```
+
+## 🔗 CONTEÚDO ABSORVIDO
+
+```text
+!CENTRALDARK + !># INTERLIGADOS + AURÉOLA CANÔNICA
+META-LUPA + METAGRILL-METALUPA + BLOCO 1
+META-GRILL + META-COGNIÇÃO + META-ORQUESTRAÇÃO + META-START-LINK
+skills-nó e mapa mental operacional
+padrões sobreviventes dos PRs
+Remote/Desktop Commander + sessão/device/presence/ping
+Screenpipe + WO Mic como sensores/arestas temporais
+OAuth/multi-conta como binding de identidade/sessão
+START LINK como guia de onda contextual
+multi-modelo como interseção + delta útil + medição
+gate/CI como juiz de contrato, não runtime
+formato visual com emoji + gancho semântico
+rodapé de prova com ID/link/hash/commit/rastro
+plano do CHEFE como intenção/direção/evolução/risco/peça/veredito
+```
+
+## 🔒 CADEADOS PRESERVADOS
+
+```text
+UNKNOWN != PASS
+ACTION != PROOF
+DOCUMENTED != EXECUTED
+MERGED != DEPLOYED
+EXISTS != RUNNING
+TOOL_LISTADO != TOOL_ATIVO
+HISTORY != CURRENT_STATE
+MODEL != AUTHORITY
+CAPABILITY != AUTHORITY
+SENSOR != JUDGE
+REALIDADE = JUIZ
+REUSE_BEFORE_CREATE
+ONE_SYSTEM_ONLY
+ONE_WRITER_PER_SCOPE
+SEM V1/V2/V3 PARALELO
+```
+
+## 🏠 FRONTEIRA DE REALIDADE
+
+Permanece para re-medição fora deste receipt:
+
+```text
+REMOTE_DEVICE_ONLINE_NOW
+SCREENPIPE_3030_LISTENING_NOW
+SCREENPIPE_AUDIO_INPUT_BOUND_NOW
+PHONE_TO_WO_MIC_MEDIA_FLOW_NOW
+VOICE_TO_INTENT_TO_ROUTER_TO_RECEIPT_NOW
+CENTRALDARK_EXE_RUNNING_NOW
+VPS_DEPLOYED_SHA_NOW
+APP_READY_END_TO_END
+VOICE_FOLLOWS_INTENT_END_TO_END
+PHONE_AUDIO_CONTENT_MATCHES_TRANSCRIPT_END_TO_END
+GLOBAL_FIXED_POINT
+```
+
+## ⚖️ VEREDITO
+
+```text
+SESSION_CRYSTAL=PROVED_IN_MAIN
+PR_MOTHER_USED_AS_OWNER=NO
+PARALLEL_ARCHITECTURE_CREATED=NO
+RUNTIME_PROVEN_BY_THIS_RECEIPT=NO
+GLOBAL_FIXED_POINT=NOT_PROVEN
+NEXT_CURSOR=REMEASURE_ONLY_TEMPORAL_EDGE_WHEN_NEEDED
+```

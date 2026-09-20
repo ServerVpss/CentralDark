@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Artifacts Builder · CentralDark</title>
+  <style>
+    :root { color-scheme: dark; --bg: #0a0f0d; --surface: #101a15; --line: #294235; --text: #eef8f1; --muted: #9fb8aa; --primary: #34d399; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); font-family: ui-sans-serif, system-ui, sans-serif; min-height: 100vh; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 2rem 1rem; }
+    h1 { font-size: 2rem; font-weight: 800; margin: 0 0 0.5rem; }
+    p { color: var(--muted); margin: 0 0 2rem; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; }
+    .card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 1.5rem; transition: transform 0.2s, border-color 0.2s; }
+    .card:hover { transform: translateY(-2px); border-color: var(--primary); }
+    .card h2 { margin: 0 0 0.5rem; font-size: 1.1rem; }
+    .card .tipo { color: var(--primary); font-size: 0.75rem; text-transform: uppercase; font-weight: 700; }
+    .card .desc { color: var(--muted); font-size: 0.875rem; margin: 0.5rem 0; }
+    .card .data { color: var(--muted); font-size: 0.75rem; }
+    a { color: var(--text); text-decoration: none; }
+    .status-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--surface); border-top: 1px solid var(--line); padding: 0.75rem 2rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.875rem; }
+    .status-bar .online { color: var(--primary); }
+    .badge { background: var(--primary); color: #0a0f0d; padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🏗️ Artifacts Builder</h1>
+    <p>Sistema autônomo de construção de artefatos · 13 artefato(s) construído(s)</p>
+    <div class="grid">
+      
+        <a href="/arsenal-council---painel-de-modelos/">
+          <div class="card">
+            <div class="tipo">react-spa</div>
+            <h2>Arsenal Council - Painel de Modelos</h2>
+            <div class="desc">Painel visual do Arsenal Council mostrando todos os modelos de IA disponíveis (Gemini 3 Flash, Gemini 3.1 Pro, GPT-5, GP</div>
+            <div class="data">04/07/2026, 21:50:51</div>
+          </div>
+        </a>
+      
+        <a href="/batalha-de-ias---arena/">
+          <div class="card">
+            <div class="tipo">react-spa</div>
+            <h2>Batalha de IAs - Arena</h2>
+            <div class="desc">Arena visual onde o usuário faz uma pergunta e vê Gemini, GPT-5.5, Claude Sonnet e Claude Opus respondendo em tempo real</div>
+            <div class="data">04/07/2026, 21:58:11</div>
+          </div>
+        </a>
+      
+        <a href="/conselho-de-tutores---visualiza-o/">
+          <div class="card">
+            <div class="tipo">react-spa</div>
+            <h2>Conselho de Tutores - Visualização</h2>
+            <div class="desc">Visualização dos 6 tutores do Arsenal Council (Fabler, GPT-5.5, Gemini 3 Flash, GPT-5.4, Gemini 2.5 Pro, GPT-5) com seus</div>
+            <div class="data">04/07/2026, 21:58:21</div>
+          </div>
+        </a>
+      
+        <a href="/dashboard-de-agentes-centraldark/">
+          <div class="card">
+            <div class="tipo">react-spa</div>
+            <h2>Dashboard de Agentes CentralDark</h2>
+            <div class="desc">Dashboard em tempo real mostrando todos os 24 agentes PM2 do ecossistema CentralDark com status online/offline, uptime, </div>
+            <div class="data">04/07/2026, 21:51:01</div>
+          </div>
+        </a>
+      
+        <a href="/debate-hist-rico---timeline/">
+          <div class="card">
+            <div class="tipo">react-spa</div>
+            <h2>Debate Histórico - Timeline</h2>
+            <div class="desc">Timeline visual de todos os debates já realizados pelo Arsenal Council. Cada debate é um card expansível com as rodadas,</div>
+            <div class="data">04/07/2026, 21:58:31</div>
+          </div>
+        </a>
+      
+        <a href="/gerenciador-de-processos-pm2/">
+          <div class="card">
+            <div class="tipo">react-spa</div>
+            <h2>Gerenciador de Processos PM2</h2>
+            <div class="desc">Interface web para gerenciar os 24 processos PM2: start/stop/restart, ver logs, monitorar CPU/memória por processo.</div>
+            <div class="data">04/07/2026, 21:58:41</div>
+          </div>
+        </a>
+      
+        <a href="/grafo-3d-interativo---explorer/">
+          <div class="card">
+            <div class="tipo">react-spa</div>
+            <h2>Grafo 3D Interativo - Explorer</h2>
+            <div class="desc">Visualização 3D do grafo completo da CentralDark com 315+ nós. Rotação automática, clique para focar, zoom, e painel de </div>
+            <div class="data">04/07/2026, 21:58:51</div>
+          </div>
+        </a>
+      
+        <a href="/healthcheck-vps---painel-de-recursos/">
+          <div class="card">
+            <div class="tipo">react-spa</div>
+            <h2>HealthCheck VPS - Painel de Recursos</h2>
+            <div class="desc">Painel de monitoramento da VPS: CPU, RAM, disco, processos, temperatura. Gráficos em tempo real com histórico das última</div>
+            <div class="data">04/07/2026, 21:59:01</div>
+          </div>
+        </a>
+      
+        <a href="/mapa-de-depend-ncias-do-sistema/">
+          <div class="card">
+            <div class="tipo">react-spa</div>
+            <h2>Mapa de Dependências do Sistema</h2>
+            <div class="desc">Mapa interativo mostrando todas as dependências entre módulos da CentralDark. Quem chama quem, portas, protocolos, e sta</div>
+            <div class="data">04/07/2026, 21:59:11</div>
+          </div>
+        </a>
+      
+        <a href="/monitor-de-logs-centraldark/">
+          <div class="card">
+            <div class="tipo">react-spa</div>
+            <h2>Monitor de Logs CentralDark</h2>
+            <div class="desc">Visualizador de logs em tempo real de todos os módulos PM2. Tail -f no browser com filtro por módulo, nível (info/warn/e</div>
+            <div class="data">04/07/2026, 21:59:21</div>
+          </div>
+        </a>
+      
+        <a href="/quadro-de-miss-es-do-hermes/">
+          <div class="card">
+            <div class="tipo">react-spa</div>
+            <h2>Quadro de Missões do Hermes</h2>
+            <div class="desc">Kanban board das missões do Hermes: Pendente → Em Andamento → Concluída. Cada card mostra prioridade, tempo, e detalhes </div>
+            <div class="data">04/07/2026, 21:59:31</div>
+          </div>
+        </a>
+      
+        <a href="/relat-rio-de-evolu-o---di-rio/">
+          <div class="card">
+            <div class="tipo">react-spa</div>
+            <h2>Relatório de Evolução - Diário</h2>
+            <div class="desc">Relatório diário de evolução do sistema: artefatos criados, debates realizados, missões concluídas, mudanças no grafo, e</div>
+            <div class="data">04/07/2026, 21:59:41</div>
+          </div>
+        </a>
+      
+        <a href="/site-centraldark---sistema-completo/">
+          <div class="card">
+            <div class="tipo">react-spa</div>
+            <h2>Site CentralDark - Sistema Completo</h2>
+            <div class="desc">Site completo do ecossistema CentralDark com dashboard de agentes, status dos módulos PM2, grafo vivo, arsenal council, </div>
+            <div class="data">04/07/2026, 21:50:11</div>
+          </div>
+        </a>
+      
+    </div>
+    
+  </div>
+  <div class="status-bar">
+    <span>🤖 <strong>Artifacts Builder</strong> · v1.0</span>
+    <span class="online">🟢 Online 24/7</span>
+    <span class="badge">13 artefatos</span>
+  </div>
+</body>
+</html>

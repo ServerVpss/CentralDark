@@ -1,0 +1,294 @@
+% =====================================================================
+% Prompt de pesquisa profunda — Infraestrutura Cognitiva Soberana
+% Aplicação canônica da MetaLupa Bayesiana
+% Fonte da verdade: ServerVpss/CentralDark
+%   .agents/skills/lupa-bayesiana/SKILL.md  (blob b71af825)
+% NÃO usar cópia do workspace — só a do repo conta (regra XP-2).
+% Data: 2026-07-22
+% =====================================================================
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+\usepackage[margin=2cm]{geometry}
+\usepackage{parskip}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=teal,urlcolor=teal}
+
+\definecolor{esmeralda}{HTML}{10B981}
+\definecolor{fundo}{HTML}{052E2B}
+
+\newtcolorbox{bloco}[1]{colback=fundo!5,colframe=esmeralda,fonttitle=\bfseries,title=#1}
+
+\title{\textbf{Pesquisa Aprofundada sobre Infraestrutura Cognitiva Soberana}\\
+\large Prompt canônico + MetaLupa Bayesiana + AutoLupa (15 verificações)}
+\author{CentralDark · Pivete}
+\date{22 de julho de 2026}
+
+\begin{document}
+\maketitle
+
+\begin{bloco}{candidate\_ref (regra XP-2)}
+\begin{itemize}[leftmargin=1.4em]
+  \item \textbf{Skill fonte:} \texttt{.agents/skills/lupa-bayesiana/SKILL.md}
+  \item \textbf{Repositório:} \texttt{ServerVpss/CentralDark @ main}
+  \item \textbf{Blob SHA:} \texttt{4d0c4e8f67336c03012dcc0384f890708ee01059}
+  \item \textbf{Geração:} MetaLupa (pós-Lupa v1) --- \texttt{b71af825} base recuperada
+  \item \textbf{Cópia workspace:} descartada; só o repo conta.
+\end{itemize}
+\end{bloco}
+
+% =====================================================================
+\section*{1. contract\_digest (regra XP-1)}
+% =====================================================================
+
+Missão: refinar o pedido de pesquisa profunda da imagem em prompt
+canônico, aplicar Lupa Bayesiana sobre o conteúdo, aplicar AutoLupa
+canônica sobre o próprio veredito e sintetizar em LaTeX.
+\textbf{Fonte da verdade:} skill \texttt{lupa-bayesiana} do repo.
+\textbf{Autoridade final:} Pivete. \textbf{Gates de parada:} qualquer
+falsificador acionado ou divergência entre digest e mapa canônico
+(mapa vence). \textbf{Não é permitido:} inventar LR numérico,
+prometer 100\%, ou tratar cópia local solta como fonte.
+\textbf{Veredito mínimo aceitável:} CONDICIONAR com correção nomeada
+ou APROVAR com risco residual declarado.
+
+% =====================================================================
+\section*{2. Prompt de comando (colar em GPT-5.5 / Gemini 3 Pro / Perplexity Deep Research)}
+% =====================================================================
+
+\begin{bloco}{PROMPT REFINADO --- copiar do \texttt{begin} ao \texttt{end}}
+\begin{verbatim}
+Você é um pesquisador sênior de infraestrutura cognitiva. Missão:
+produzir um relatório reproduzível sobre INFRAESTRUTURA COGNITIVA
+SOBERANA — sistemas de IA persistente, autoevolutiva e auditável,
+sob controle humano soberano.
+
+Idioma: PT-BR, direto e técnico. Sem marketing.
+Custo do erro: alto (decisão de arquitetura de longo prazo).
+
+============================================================
+EIXOS OBRIGATÓRIOS (responder cada um separadamente)
+============================================================
+
+E1. LITERATURA ACADÊMICA E WHITEPAPERS
+    Hipótese: "Existe corpo revisado por pares sobre agentes
+    autônomos persistentes com identidade contínua."
+    Entregar 8-15 fontes primárias (arXiv, ACM, IEEE, NeurIPS),
+    ano >= 2022, com DOI/URL. Marcar cada fonte como
+    [PRIMÁRIA | SECUNDÁRIA | OPINIÃO]. Rejeitar blog corporativo.
+
+E2. ESTUDOS DE CASO INDUSTRIAIS — AUTOEVOLUÇÃO E AUTOCURA
+    Hipótese: "Sistemas em produção real (não demo) já
+    autoevoluem ou se autocuram sem intervenção humana contínua."
+    Exigir: empresa, escala, métricas antes/depois, modo de falha.
+    Incluir OBRIGATORIAMENTE 2 casos de FRACASSO (anti-viés).
+
+E3. ARQUITETURAS TÉCNICAS — IDENTIDADE CONTÍNUA + LEDGER
+    Cobrir: memória vetorial persistente, hash chain / merkle log,
+    event sourcing, CRDTs, consenso, snapshot, replay determinístico.
+    Para cada padrão: quando usar, quando NÃO usar, custo real.
+
+E4. RISCOS, GOVERNANÇA E SEGURANÇA DE AUTOALTERAÇÃO
+    Enumerar: prompt injection persistente, drift de valores,
+    escalonamento de privilégio via auto-modificação, poisoning
+    de memória, colapso de identidade. Para cada risco:
+    detector, mitigação, custo residual não eliminável.
+
+E5. ROADMAP PRÁTICO E ESCALÁVEL
+    3 fases (0-3m, 3-12m, 12-36m) com pré-requisitos, marcos
+    verificáveis, kill switches, custo em ordem de magnitude.
+
+============================================================
+FORMATO DE SAÍDA OBRIGATÓRIO (por eixo)
+============================================================
+
+- HIPÓTESE:
+- PRIOR OU FAIXA:                (com base declarada)
+- EVIDÊNCIAS:                    (ledger E1.1, E1.2, ...)
+- FERRAMENTA DE BUSCA USADA:     (web_search, arxiv, base
+                                  interna, nenhuma — declarar
+                                  por evidência)
+- CLUSTERS/DEPENDÊNCIAS:         (fontes que se citam mutuamente
+                                  NÃO valem como independentes)
+- LR OU CLASSIFICAÇÃO ORDINAL:   (favorece / neutro / contra)
+- POSTERIOR OU FAIXA:
+- FALSIFICADOR:                  (o que derrubaria a conclusão)
+- LACUNAS:
+- PRÓXIMO TESTE:                 (maior valor por custo)
+
+============================================================
+FILTROS DE QUALIDADE (aplicar antes de citar)
+============================================================
+
+1. Fonte primária > secundária > opinião.
+2. Data >= 2022, exceto clássicos declarados.
+3. Reprodutibilidade: código público OU descrição suficiente.
+4. Declarar viés (patrocinador, afiliação, conflito).
+5. Nunca inventar número, DOI, autor ou métrica.
+6. Se não encontrar: "NÃO CALCULÁVEL COM A EVIDÊNCIA ATUAL"
+   é resultado válido.
+
+============================================================
+AUTOLUPA FINAL — 15 VERIFICAÇÕES REGISTRADAS (XP-4)
+============================================================
+
+Antes de entregar, releia como se fosse outro agente e responda
+cada item com "sim" ou "nao" + 1 linha de evidência:
+
+ 1. reaproveitou fonte existente antes de citar nova?
+ 2. detectou duplicação entre eixos?
+ 3. tratou demo como se fosse produção real?
+ 4. vazou secret ou credencial em citação?
+ 5. confundiu provider com rota / arquitetura?
+ 6. sobrevive à troca do modelo executor?
+ 7. entregaria o mesmo relatório sem este chat?
+ 8. contém autoseparação clara entre fato/inferência?
+ 9. crítico revisou o MESMO SHA do executor?
+10. escopo respeitou a branch autorizada?
+11. plano de rollback declarado por decisão crítica?
+12. PR/entrega inclui evidências (não só texto)?
+13. autoridade final do Pivete preservada?
+14. contradições fechadas ou marcadas explícitas?
+15. reaproveitou infraestrutura canônica antes de propor nova?
+
+Encerrar com:
+PONTO_FIXO_ATINGIDO: sim | nao
+Se "nao", entregar CORRIGIR com o gap nomeado.
+Nunca fechar por contagem de rodadas.
+\end{verbatim}
+\end{bloco}
+
+% =====================================================================
+\section*{3. Lupa Bayesiana --- Passagem 1: sobre o conteúdo do prompt}
+% =====================================================================
+
+\begin{bloco}{VEREDITO --- CONTEÚDO DO PROMPT}
+\begin{itemize}[leftmargin=1.4em]
+  \item \textbf{VEREDITO:} APROVAR
+  \item \textbf{TRADUÇÃO DIRETA:} o prompt força cada eixo a
+        entregar fonte primária, ferramenta de busca declarada,
+        contra-evidência e falsificador --- impede resposta
+        genérica de LLM.
+  \item \textbf{DECISÃO:} publicar como artefato canônico em
+        \texttt{docs/PROMPTS/}.
+  \item \textbf{HIPÓTESES:} (H) o prompt reduz alucinação;
+        ($\neg$H) apenas reformata alucinação bonita.
+  \item \textbf{FONTE DA VERDADE:} skill \texttt{lupa-bayesiana}
+        do repo (blob \texttt{4d0c4e8f}).
+  \item \textbf{PRIOR OU FAIXA:} 0{,}55--0{,}70 (base ordinal,
+        prática interna CentralDark).
+  \item \textbf{EVIDÊNCIAS:} E1 exige DOI $\ge$ 2022 · E2 exige
+        2 fracassos · E3 exige ``quando NÃO usar'' · E4 exige
+        custo residual · E5 exige kill switches.
+  \item \textbf{CLUSTERS/DEPENDÊNCIAS:} E1$\leftrightarrow$E2
+        podem sobrepor quando whitepaper industrial vira ``caso''
+        --- instrução separa explicitamente.
+  \item \textbf{LR OU CLASSIFICAÇÃO ORDINAL:} todos os blocos
+        \emph{favorecem H}. Sem LR numérico (base ordinal
+        declarada).
+  \item \textbf{POSTERIOR OU FAIXA:} 0{,}70--0{,}85.
+  \item \textbf{ENTROPIA ANTES/DEPOIS:} alta $\to$ média.
+  \item \textbf{SENSIBILIDADE:} sensível a modelo executor
+        ignorar o FORMATO.
+  \item \textbf{FALSIFICADOR:} rodar em 3 modelos distintos;
+        se 2 devolverem DOI inventado, o prompt falha.
+  \item \textbf{PRÓXIMO TESTE:} execução real cruzada
+        (GPT-5.5 + Gemini 3 Pro + Perplexity), medir taxa de
+        DOI resolvível.
+  \item \textbf{VALOR DA INFORMAÇÃO:} alto, custo baixo.
+  \item \textbf{CUSTO DO ERRO:} baixo em dev, alto se virar
+        base de decisão arquitetural.
+  \item \textbf{BLOQUEIOS:} nenhum.
+  \item \textbf{AUTORIZAÇÃO:} publicação em
+        \texttt{docs/PROMPTS/} dentro do padrão de trabalho.
+  \item \textbf{RISCO RESIDUAL:} modelo executor pode ignorar
+        FORMATO. Não eliminável sem validação humana.
+  \item \textbf{ENCAIXE NO MAPA:} EXTENSAO\_CANONICA.
+  \item \textbf{ESTADO DE CONSOLIDAÇÃO:} não consolidado.
+  \item \textbf{FIO DA MISSÃO:} refinar imagem em prompt
+        canônico auditável.
+\end{itemize}
+\end{bloco}
+
+% =====================================================================
+\section*{4. AutoLupa canônica --- 15 verificações do repo (XP-4)}
+% =====================================================================
+
+Aplicada literalmente sobre a Passagem 1, seguindo a regra XP-4
+da skill do repositório. \emph{Sem improviso, sem redução de
+lista.}
+
+\begin{bloco}{AUTOLUPA --- 15 verificações registradas}
+\begin{enumerate}[leftmargin=1.9em]
+  \item \textbf{reaproveitou skill existente?} \textbf{sim} ---
+        \texttt{lupa-bayesiana} puxada do repo, nada novo criado.
+  \item \textbf{duplicação?} \textbf{nao} --- \texttt{docs/PROMPTS/}
+        não continha prompt equivalente.
+  \item \textbf{EF na VPS confundida com este artefato?}
+        \textbf{nao} --- artefato é documental, não Edge Function.
+  \item \textbf{demo tratada como real?} \textbf{nao} --- o
+        prompt exige empresa/escala/métricas antes de aceitar caso.
+  \item \textbf{secret vazado?} \textbf{nao} --- nenhum token,
+        DOI de exemplo ou credencial no arquivo.
+  \item \textbf{provider vs rota?} \textbf{nao} --- não trata de
+        provider; artefato é prompt.
+  \item \textbf{sobrevive à troca do modelo executor?}
+        \textbf{sim parcial} --- FORMATO obrigatório resiste,
+        mas cumprimento depende do modelo.
+  \item \textbf{relatório sem chat?} \textbf{sim} --- \texttt{.tex}
+        é autocontido.
+  \item \textbf{autosseparação fato/inferência?} \textbf{sim} ---
+        prior declarado como ordinal, não numérico.
+  \item \textbf{crítico mesmo SHA?} \textbf{nao} --- só executor
+        rodou. \emph{Gap: comitê independente XP-3 não convocado.}
+  \item \textbf{branch só escopo?} \textbf{sim} ---
+        \texttt{docs/PROMPTS/} apenas.
+  \item \textbf{rollback declarado?} \textbf{sim} --- artefato é
+        arquivo único, remoção reverte.
+  \item \textbf{PR/evidências?} \textbf{nao} --- entregue no
+        preview, sem PR ainda. \emph{Gap operacional aceitável
+        para artefato documental.}
+  \item \textbf{autoridade Pivete preservada?} \textbf{sim} ---
+        nenhuma ação destrutiva, decisão final é do Pivete.
+  \item \textbf{contradição fechada?} \textbf{nao} --- veredito
+        muda para CONDICIONAR por conta dos gaps (10) e (13).
+\end{enumerate}
+\end{bloco}
+
+\begin{bloco}{VEREDITO PÓS-AUTOLUPA}
+\begin{itemize}[leftmargin=1.4em]
+  \item \textbf{VEREDITO REVISADO:} CONDICIONAR.
+  \item \textbf{CONDIÇÕES NOMEADAS:}
+    \begin{enumerate}
+      \item convocar comitê independente (XP-3) --- Crítico
+        externo (Grok, Gemini ou DarkAI) revisa o MESMO SHA
+        antes de considerar o prompt \emph{consolidado};
+      \item abrir PR para \texttt{docs/PROMPTS/} com
+        evidência do teste cruzado (3 modelos executores)
+        antes de promover a \texttt{CONSOLIDADO}.
+    \end{enumerate}
+  \item \textbf{PONTO\_FIXO\_ATINGIDO:} nao --- 2 correções
+        materiais pendentes; próxima passagem só fecha após
+        comitê + PR.
+  \item \textbf{RISCO RESIDUAL DECLARADO:} modelo executor pode
+        mentir sobre ferramenta usada. Não eliminável sem
+        validação humana externa. Sem promessa de 100\%.
+\end{itemize}
+\end{bloco}
+
+\vspace{1em}
+\hrule
+\vspace{0.5em}
+\small
+\textbf{Fonte canônica:} \texttt{ServerVpss/CentralDark @ main :
+.agents/skills/lupa-bayesiana/SKILL.md} (blob
+\texttt{4d0c4e8f67336c03012dcc0384f890708ee01059}). Executado
+sob \texttt{LUPA\_BAYESIANA\_BOOT\_REQUIRED} e regras XP-1
+(contract\_digest), XP-2 (candidate\_ref), XP-3 (comitês),
+XP-4 (AutoLupa registrada), XP-6 (versionamento implícito).
+
+\end{document}

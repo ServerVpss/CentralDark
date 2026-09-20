@@ -1,0 +1,57 @@
+{
+  "id": "drift-1783261804567",
+  "tema": "Drift detectado (12 mudanças)",
+  "contexto": {
+    "drift": [
+      {
+        "tipo": "pm2-novo",
+        "detalhe": "CentralDark-ArtifactsBuilder"
+      },
+      {
+        "tipo": "pm2-novo",
+        "detalhe": "CentralDark-ArsenalAdapter"
+      },
+      {
+        "tipo": "pm2-novo",
+        "detalhe": "CentralDark-Hermes"
+      },
+      {
+        "tipo": "pm2-novo",
+        "detalhe": "CentralDark-GraphPanel"
+      },
+      {
+        "tipo": "pm2-novo",
+        "detalhe": "CentralDark-GrafoVivo"
+      },
+      {
+        "tipo": "pm2-novo",
+        "detalhe": "MCP-CentralDark"
+      },
+      {
+        "tipo": "pm2-novo",
+        "detalhe": "CentralDark-HubBot"
+      },
+      {
+        "tipo": "pm2-novo",
+        "detalhe": "CentralDark-HermesThinker"
+      },
+      {
+        "tipo": "pm2-novo",
+        "detalhe": "CentralDark-Memoria"
+      },
+      {
+        "tipo": "pm2-novo",
+        "detalhe": "CentralDark-ArsenalProxy"
+      },
+      {
+        "tipo": "pm2-novo",
+        "detalhe": "CentralDark-EliteHTTP"
+      },
+      {
+        "tipo": "pm2-novo",
+        "detalhe": "CentralDark-PiveteSync"
+      }
+    ]
+  },
+  "origem": "cartografo"
+}

@@ -1,0 +1,13 @@
+{
+  "files": {
+    "contracts/conversor.schema.json": "dc32b8026d3adf593e9e91e2ef17aaff466ef8a5d1a85e161cb8b18ebc228dfd",
+    "contracts/observador.schema.json": "206704a03f575841916cdbcda68b6b3bc07bf23b1b2ba8000639204c686d434b",
+    "contracts/orquestrador.schema.json": "47333c5be0c7278e830db7da935021f238941d1661e848b4b1e668507b0101c0",
+    "tests/test_imutabilidade_contratos_testes.py": "efb6600c8f64c3f7f5997984410970c898bbc291a36a169f7533f6aea325d869",
+    "tests/test_precedencia_epistemologica.py": "2aae2a6aabbd5226ebf2c88f40f27fbd5c5b9231e8f9cf7b75543d54ba76a7cd",
+    "tests/test_pycache_baseline_isolation.py": "7612082b125528014775131b6c3cd712ad6225aa67a1e6c92c830230bc9cc227",
+    "tests/test_read_only_contract.py": "01212ec6441af3fddb0698f4955febb13d701b2257739257f002bd1b20765b37",
+    "tests/test_teatro_de_lupa.py": "2c9bbc33ab872910c52bf9e0c3cebdc5de300aa781a7be67d687e02a1fb3df19"
+  },
+  "policy": "contratos e testes imutaveis apos baseline VERMELHA (Turno A); Turno D corrigiu apenas o hash divergente de tests/test_read_only_contract.py (ver evidence/BASELINE-ERRATA.md)"
+}

@@ -1,0 +1,144 @@
+{
+  "version": 1,
+  "updatedAt": "2026-07-13T00:45:32.594Z",
+  "items": [
+    {
+      "name": "centraldark-cinema-director",
+      "kind": "agent",
+      "tier": "scout",
+      "blurb": ""
+    },
+    {
+      "name": "centraldark-cinema-dp",
+      "kind": "agent",
+      "tier": "builder",
+      "blurb": ""
+    },
+    {
+      "name": "centraldark-cinema-editor",
+      "kind": "agent",
+      "tier": "builder",
+      "blurb": ""
+    },
+    {
+      "name": "centraldark-cinema-sound",
+      "kind": "agent",
+      "tier": "builder",
+      "blurb": ""
+    },
+    {
+      "name": "centraldark-site-builder",
+      "kind": "agent",
+      "tier": "builder",
+      "blurb": ""
+    },
+    {
+      "name": "centraldark-site-creative",
+      "kind": "agent",
+      "tier": "scout",
+      "blurb": ""
+    },
+    {
+      "name": "centraldark-site-director",
+      "kind": "agent",
+      "tier": "scout",
+      "blurb": ""
+    },
+    {
+      "name": "centraldark-site-dp",
+      "kind": "agent",
+      "tier": "builder",
+      "blurb": ""
+    },
+    {
+      "name": "centraldark-site-editor",
+      "kind": "agent",
+      "tier": "builder",
+      "blurb": ""
+    },
+    {
+      "name": "centraldark-worker-copy",
+      "kind": "agent",
+      "tier": "scout",
+      "blurb": ""
+    },
+    {
+      "name": "centraldark-worker-design-extractor",
+      "kind": "agent",
+      "tier": "scout",
+      "blurb": ""
+    },
+    {
+      "name": "centraldark-worker-encode",
+      "kind": "agent",
+      "tier": "builder",
+      "blurb": ""
+    },
+    {
+      "name": "centraldark-worker-frontend",
+      "kind": "agent",
+      "tier": "builder",
+      "blurb": ""
+    },
+    {
+      "name": "centraldark-worker-media",
+      "kind": "agent",
+      "tier": "builder",
+      "blurb": ""
+    },
+    {
+      "name": "centraldark-worker-qa",
+      "kind": "agent",
+      "tier": "reviewer",
+      "blurb": ""
+    },
+    {
+      "name": "qa-navegador-visao",
+      "kind": "agent",
+      "tier": "reviewer",
+      "blurb": ""
+    },
+    {
+      "name": "qa-resolvedor",
+      "kind": "agent",
+      "tier": "builder",
+      "blurb": ""
+    },
+    {
+      "name": "qa-reviewer-estatico",
+      "kind": "agent",
+      "tier": "reviewer",
+      "blurb": ""
+    },
+    {
+      "name": "qa-swarm-builder",
+      "kind": "agent",
+      "tier": "builder",
+      "blurb": ""
+    },
+    {
+      "name": "qa-swarm-observer",
+      "kind": "agent",
+      "tier": "reviewer",
+      "blurb": ""
+    },
+    {
+      "name": "qa-swarm-reviewer",
+      "kind": "agent",
+      "tier": "reviewer",
+      "blurb": ""
+    },
+    {
+      "name": "qa-swarm-scout",
+      "kind": "agent",
+      "tier": "scout",
+      "blurb": ""
+    },
+    {
+      "name": "qa-swarm-worker",
+      "kind": "agent",
+      "tier": "builder",
+      "blurb": ""
+    }
+  ]
+}

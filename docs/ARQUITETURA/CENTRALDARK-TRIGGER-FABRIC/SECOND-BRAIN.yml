@@ -1,0 +1,176 @@
+schema: centraldark.second-brain.v1
+owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/
+status: CANONICAL_CONTRACT
+source_rule: "CANONICO -> ARTEFATO; artefato nao inventa canonico"
+
+# Intenção SEGREDO/CHEFE: dois papéis cognitivos complementares, um único
+# cérebro lógico da Casa e nenhuma segunda autoridade concorrente.
+second_brain:
+  logical: ONE
+  cognitive_roles: TWO_COMPLEMENTARY
+  parallel_authority_forbidden: true
+  operational_front:
+    role: MISSION_DECISION_EXECUTION_LOOP
+    description: "camada que recebe intenção, decide rota/capacidade, executa e produz efeito observável"
+    owners:
+      - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
+      - docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md
+      - apps/modulos/HERMES-CORE/
+    emits:
+      - TRACE
+      - EVIDENCE
+      - RECEIPT
+      - LEARNING_EVENT
+    is_second_authority: false
+  memory_rearguard:
+    role: DURABLE_MATTER_MEMORY_AND_FRAGMENT_RESERVOIR
+    description: "camada de memória que preserva minério, fragmentos, experiências e conhecimento para garimpo posterior"
+    stores:
+      - RAW_MATERIAL
+      - FRAGMENTS
+      - HISTORY
+      - CANDIDATE_KNOWLEDGE
+      - PROVENANCE
+    miners:
+      - scripts/memory-linker/
+      - scripts/memory-linker/dream-review.mjs
+      - scripts/memory-linker/pattern-discovery.mjs
+      - .agents/skills/session-intelligence-harvester/
+      - .agents/skills/knowledge-compiler/
+    miners_are_brain: false
+    miners_are_authority: false
+    direct_canonical_mutation: false
+    is_second_authority: false
+    garimpo:
+      local_workspace_example: 'E:\CentralDark\_MAPA_CASA\GARIMPO-CHEFE'
+      role: RAW_MATERIAL_RESERVOIR_NOT_AUTHORITY
+      always_evaluate_for_crystallization: true
+      blind_crystallize_everything: false
+      raw_source_policy: PRESERVE_PROVENANCE
+      sequence:
+        - RAW_MATERIAL
+        - NORMALIZE
+        - DEDUPE
+        - UNIQUE_DELTA
+        - GOLD
+        - ATOMIZE
+        - PROVENANCE
+        - EXISTING_OWNER
+        - META_LUPA_COUNTERPROOF
+        - AUTHORIZED_WRITER
+        - TEST_AND_REALITY_JUDGE
+        - CRYSTAL
+      retrieval_order:
+        - CRYSTAL
+        - GOLD_CANONICAL
+        - CANDIDATE_KNOWLEDGE
+        - RAW_MATERIAL_ON_DEMAND
+      rules:
+        crystal_is_summary_only: false
+        duplicate_is_promoted: false
+        raw_is_deleted_because_crystal_exists: false
+        history_overrides_current_state: false
+        runtime_observation_can_invalidate_candidate: true
+        runtime_observation_becomes_canonical_only_after_receipt_and_promotion: true
+  surfaces:
+    github_canonical:
+      role: SOURCE_OF_TRUTH_AND_MEMORY_LAYER
+      paths:
+        - docs/CONSCIENCIA/
+        - docs/ARQUITETURA/
+        - .agents/skills/
+        - AGENTS.md
+        - LEIA-ME-IA.md
+      is_authority: true
+    local_obsidian_files:
+      role: CAPTURE_WORK_AND_CONSULT_SURFACE
+      is_authority: false
+      is_parallel_brain: false
+      material_enters_mill: true
+    derived_graph_vector:
+      role: DERIVED_INDEX_ONLY
+      owners:
+        - apps/modulos/HERMES-CORE/agents/GraphRAG-Master/
+        - .agents/skills/vector-memory/
+      is_authority: false
+      rebuildable: true
+
+invariants:
+  SECOND_BRAIN_LOGICAL_ONE: true
+  TWO_COGNITIVE_ROLES_ONE_LOGICAL_BRAIN: true
+  OPERATIONAL_FRONT_EXECUTES_CURRENT_MISSION: true
+  MEMORY_REARGUARD_PRESERVES_MATTER: true
+  MEMORY_LINKER_IS_MINER_NOT_BRAIN: true
+  DREAM_REVIEW_IS_MINER_NOT_AUTHORITY: true
+  SECOND_BRAIN_IS_NOT_SECOND_AUTHORITY: true
+  GITHUB_IS_NOT_JUST_OUTPUT: true
+  LOCAL_IS_NOT_PARALLEL_BRAIN: true
+  GRAPH_VECTOR_ARE_DERIVED_INDEXES: true
+  GARIMPO_WORKSPACE_IS_RESERVOIR_NOT_AUTHORITY: true
+  ALWAYS_EVALUATE_FOR_CRYSTALLIZATION: true
+  BLIND_CRYSTALLIZE_ALL: false
+  DEDUPE_BEFORE_CRYSTAL: true
+  CRYSTAL_REQUIRES_UNIQUE_DELTA: true
+  CRYSTAL_REQUIRES_PROVENANCE: true
+  CRYSTAL_REQUIRES_OWNER: true
+  CRYSTAL_REQUIRES_COUNTERPROOF: true
+  RAW_SOURCE_PRESERVED_AS_PROVENANCE: true
+  CURRENT_STATE_BEATS_HISTORY: true
+  NEW_SECOND_BRAIN: false
+  NEW_AUTOBOT_V2: false
+  NEW_PARALLEL_RAG: false
+  NEW_PARALLEL_MCP: false
+
+flow:
+  operational_to_memory:
+    - CURRENT_MISSION
+    - EXECUTION
+    - OBSERVABLE_TRACE
+    - EVIDENCE_RECEIPT
+    - MEMORY_REARGUARD
+  memory_to_gold:
+    - RAW_MATERIAL_AND_FRAGMENTS
+    - NORMALIZE
+    - DEDUPE
+    - UNIQUE_DELTA
+    - MEMORY_LINKER
+    - DREAM_REVIEW
+    - PATTERN_DISCOVERY
+    - META_LUPA_COUNTERPROOF
+    - OWNER_RESOLUTION
+    - AUTHORIZED_WRITER
+    - TEST_AND_REALITY_JUDGE
+    - GOLD_CANONICAL
+  gold_to_next_mission:
+    - OWNER_CANONICAL
+    - CRYSTAL_ELIGIBILITY_GATE
+    - CRYSTAL_OR_FLASH_WHEN_ELIGIBLE
+    - NEXT_ACORDAR
+    - OPERATIONAL_FRONT
+
+pipeline:
+  matter_or_event:
+    - TRIGGER_FABRIC
+    - SESSION_INTELLIGENCE_HARVESTER
+    - MEMORY_LINKER
+    - KNOWLEDGE_COMPILER_FORJA
+    - OWNER_SKILL_CONSUMER_TEST_GATE
+    - GITHUB_CANONICAL_OR_CRYSTAL_BY_CLASSIFICATION
+    - VECTOR_MEMORY_DERIVED_INDEX
+    - GRAPH_RAG_HYBRID
+    - HERMES_FLASH
+    - MINIMAL_ACTION
+    - PROOF_COUNTERPROOF_REALITY
+    - LEARNING_EVENT
+
+promotion:
+  miner_writes_canonical: false
+  generative_is_candidate: true
+  garimpo_workspace_writes_canonical_directly: false
+  raw_material_is_authority: false
+  crystal_requires_unique_delta: true
+  crystal_requires_provenance: true
+  crystal_requires_existing_owner_or_proven_gap: true
+  crystal_requires_counterproof: true
+  flash_requires_crystal_complete: true
+  package_pass_is_runtime_pass: false

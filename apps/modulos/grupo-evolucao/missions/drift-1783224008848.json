@@ -1,0 +1,13 @@
+{
+  "id": "drift-1783224008848",
+  "tema": "Drift detectado (1 mudanças)",
+  "contexto": {
+    "drift": [
+      {
+        "tipo": "modulo-novo",
+        "detalhe": "hermes-thinker"
+      }
+    ]
+  },
+  "origem": "cartografo"
+}

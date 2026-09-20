@@ -1,0 +1,1 @@
+ALTER TABLE public.telegram_bots ADD COLUMN IF NOT EXISTS bot_photo_url text;

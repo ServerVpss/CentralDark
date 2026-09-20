@@ -1,0 +1,233 @@
+{
+  "schema_version": 2,
+  "contract_id": "CENTRALDARK_KNOWLEDGE_COMPILER",
+  "status": "CANONICAL_PROJECTION",
+  "house_wide": true,
+  "model_neutral": true,
+  "second_brain": false,
+  "source_is_provenance_not_authority": true,
+  "conceptual_owner": "docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md",
+  "execution_owner": "docs/CONSCIENCIA/PROTOCOLO-ORQUESTRACAO-PIVETE.md",
+  "skill": ".agents/skills/knowledge-compiler/SKILL.md",
+  "crystal_route": ".agents/skills/knowledge-compiler/crystal-route.json",
+  "consumer": ".agents/skills/knowledge-compiler/scripts/compiler.mjs",
+  "regression": ".agents/skills/knowledge-compiler/tests/compiler.test.mjs",
+  "gate": ".github/workflows/lupa-conformance.yml",
+  "supercommand": "COMPILE_THEN_APPLY",
+  "meta_forge": {
+    "alias": "FORGE_PLUS_EXISTING_CROSS_META",
+    "is_new_lens": false,
+    "meta_crystal_is_new_lens": false,
+    "output": "ONE_OPERATIONAL_CRYSTAL_ROUTE_PER_CAPABILITY_BOUNDARY"
+  },
+  "phases": [
+    "PLAN_ONLY",
+    "INGEST",
+    "AUTHORITY_NORMALIZE",
+    "EXTRACT",
+    "DEDUPE",
+    "COUNTERPROOF",
+    "ARBITRATE",
+    "COMPILE",
+    "APPLY",
+    "VERIFY",
+    "CRYSTALLIZE",
+    "FLASH_READY"
+  ],
+  "forge": {
+    "accepted_source_classes": [
+      "README",
+      "SKILL",
+      "OFFICIAL_DOC",
+      "ACADEMIC_PAPER",
+      "CODE",
+      "TEST",
+      "INCIDENT",
+      "GIT_HISTORY",
+      "COMMUNITY",
+      "RUNTIME",
+      "USER_PROVIDED"
+    ],
+    "dedupe_required": true,
+    "counterproof_required_for_material_claim": true,
+    "unresolved_conflict_blocks_flash": true,
+    "unproven_material": "CANDIDATE_OR_UNKNOWN",
+    "duplicate_material": "DROP_DUPLICATE_OR_REUSE",
+    "source_priority_is_claim_specific": true,
+    "prestige_is_authority": false
+  },
+  "external_source_policy": {
+    "source_pattern_is_house_policy": false,
+    "placeholder_test_is_behavior_proof": false,
+    "external_owner_name_is_canonical_owner": false,
+    "external_numeric_target_requires_local_fit_or_explicit_policy": true,
+    "source_guideline_as_hard_gate_requires_local_policy": true,
+    "slo_deploy_block_requires": [
+      "USER_RELEVANT_SLI",
+      "AGREED_TARGET",
+      "WINDOW",
+      "ERROR_BUDGET_POLICY",
+      "LIVE_MEASUREMENT"
+    ],
+    "toil": {
+      "deterministic_automation_first_when": [
+        "REPETITIVE",
+        "PREDICTABLE",
+        "MECHANICAL",
+        "KNOWN_RULE"
+      ],
+      "universal_percentage": false,
+      "measure_when_decision_depends_on_magnitude": true
+    },
+    "ci": {
+      "prefer": [
+        "SMALL_CHANGE",
+        "SELF_TESTING",
+        "FAST_FEEDBACK",
+        "MAINLINE_HEALTH",
+        "REVERSIBILITY"
+      ],
+      "external_time_guideline_is_global_gate": false
+    },
+    "agents": {
+      "perception_memory_action_are_conceptual_modules": true,
+      "module_requires_new_agent": false,
+      "multi_agent_default": false,
+      "multi_agent_requires_information_gain": true,
+      "deterministic_task_requires_agent": false
+    },
+    "retrieval": {
+      "context_load": "ON_DEMAND",
+      "planning_reflection_tool_use": "OPTIONAL_PATTERNS_FOR_COMPLEX_WORK",
+      "multi_agent_requires_benefit_over_coordination_cost": true
+    },
+    "engine": {
+      "model_name_is_authority": false,
+      "hard_pin_requires_observed_fitness": true,
+      "hard_pin_requires_runtime_availability": true,
+      "complexity_changes_frequency_before_identity": true
+    }
+  },
+  "skill_authoring": {
+    "mode": "DETERMINISTIC_SUBCAPABILITY",
+    "validator": ".agents/skills/knowledge-compiler/scripts/skill-authoring.mjs",
+    "regression": ".agents/skills/knowledge-compiler/tests/skill-authoring.test.mjs",
+    "canonical_root": ".agents/skills",
+    "reuse_before_create": true,
+    "existing_owner_fit_means_no_new_skill": true,
+    "create_when_any": [
+      "REPEATED_ACROSS_SESSIONS",
+      "COMPLEX_MULTI_STEP",
+      "STANDARDIZATION_NEEDED",
+      "PREVENTABLE_RECURRENT_ERROR"
+    ],
+    "frontmatter_allowed": [
+      "name",
+      "description"
+    ],
+    "name_rule": "LOWERCASE_HYPHENATED_MATCH_DIRECTORY",
+    "description_max_chars": 1024,
+    "skill_max_lines": 500,
+    "actionable_steps_required": true,
+    "generic_knowledge_becomes_skill": false,
+    "gerund_is_house_hard_gate": false,
+    "third_person_is_house_hard_gate": false,
+    "external_cli_is_house_dependency": false,
+    "external_skill_root_is_house_root": false,
+    "source_provenance": "https://github.com/mattnigh/skills_collection/blob/main/collection/BPSAI__paircoder__claude__skills__creating-skills__SKILL.md"
+  },
+  "operational_crystal": {
+    "required": [
+      "capability",
+      "boundary",
+      "canonical_owner",
+      "callable_skill",
+      "real_consumer",
+      "test_ref",
+      "gate_ref",
+      "provenance",
+      "counterproof",
+      "dependencies"
+    ],
+    "one_active_route_per_capability_boundary": true,
+    "route_ir_required": true,
+    "knowledge_without_consumer_is_operational": false,
+    "unknown_is_pass": false
+  },
+  "flash": {
+    "replay_full_ingestion": false,
+    "raw_corpus_load": "ON_DEMAND",
+    "minimum_runtime_load": [
+      "ROUTE_IR",
+      "CANONICAL_OWNER",
+      "CALLABLE_SKILL",
+      "LIVE_STATE",
+      "APPLICABLE_PROOF"
+    ],
+    "compile_once_reuse_many": true
+  },
+  "invalidation": {
+    "delta_affected_only": true,
+    "preserve_unaffected_routes": true,
+    "triggers": [
+      "NEW_SOURCE_RELEVANT_TO_CAPABILITY",
+      "OWNER_CHANGED",
+      "SKILL_CHANGED",
+      "CONSUMER_CHANGED",
+      "TEST_FAILED",
+      "GATE_CHANGED",
+      "BOUNDARY_CHANGED",
+      "EVIDENCE_STALE",
+      "RUNTIME_DRIFT"
+    ]
+  },
+  "authority": {
+    "plan_is_execution": false,
+    "compiled_route_is_authorization": false,
+    "apply_requires_existing_authority": true,
+    "human_authority": "SEGREDO/CHEFE"
+  },
+  "tick": {
+    "private_chain_of_thought_required": false,
+    "fields": [
+      "phase",
+      "delta",
+      "owner",
+      "route",
+      "blocker",
+      "next"
+    ],
+    "purpose": "COMPRESSED_OPERATIONAL_PROGRESS_RECEIPT"
+  },
+  "laws": [
+    "MANY_SOURCES_TO_ONE_OPERATIONAL_ROUTE_PER_DECLARED_CAPABILITY_BOUNDARY",
+    "MINING_COST_PAID_AT_CRYSTALLIZATION_NOT_EVERY_RUNTIME_CALL",
+    "MINERAR_UMA_VEZ_CRISTALIZAR_UMA_VEZ_REUTILIZAR_N_VEZES",
+    "NEW_INFORMATION_DOES_NOT_MEAN_REBUILD_ALL",
+    "DELTA_AFFECTED_ONLY",
+    "UNKNOWN_IS_NOT_PASS",
+    "SOURCE_IS_PROVENANCE_NOT_AUTHORITY",
+    "EXTERNAL_GUIDELINE_IS_NOT_HOUSE_POLICY",
+    "DETERMINISTIC_ROUTINE_BEFORE_AGENT",
+    "REUSE_EXISTING_SKILL_OWNER_BEFORE_CREATING_NEW_SKILL",
+    "ENGINE_BY_OBSERVED_FITNESS_NOT_NAME"
+  ],
+  "authority_normalize": {
+    "enabled": true,
+    "module": ".agents/skills/knowledge-compiler/scripts/authority-normalize.mjs",
+    "final_human_authority": "SEGREDO/CHEFE",
+    "capability_absorbed": true,
+    "source_authority_absorbed": false,
+    "source_classes": [
+      "CURRENT_CANONICAL",
+      "LEGACY_HISTORICAL",
+      "EXTERNAL_UPSTREAM"
+    ],
+    "finding_classes": [
+      "CURRENT_BUG",
+      "LEGACY_OK",
+      "EXTERNAL_ADAPTED",
+      "NO_ISSUE"
+    ]
+  }
+}

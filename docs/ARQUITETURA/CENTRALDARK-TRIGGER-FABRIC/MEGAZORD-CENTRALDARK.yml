@@ -1,0 +1,302 @@
+schema: centraldark.megazord.v1
+name: MEGAZORD-CENTRALDARK
+status: CANONICAL_COMPOSITE_ARCHITECTURE
+authority: SEGREDO/CHEFE
+system_owner: CENTRALDARK
+architecture_owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/
+capability_router: .agents/skills/capability-contract-router/SKILL.md
+engine_binding: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml
+runtime_plug: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RUNTIME-PLUG-CONTRACT.yml
+spiral_traversal: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SPIRAL-TRAVERSAL.yml
+
+semantics:
+  zord: OBSERVED_CAPABILITY_OR_RESOURCE
+  megazord: MINIMUM_SUFFICIENT_COMPOSITION_FOR_CURRENT_INTENT
+  new_agent: false
+  new_authority: false
+  second_orchestrator: false
+  second_brain: false
+  second_router: false
+  target_runtime_is_replaceable: true
+
+activation:
+  mode: AUTO
+  control_plane_required: true
+  target_runtime_may_be_absent_before_selection: true
+  when_all:
+    - CONTROL_PLANE_PRESENT
+    - CANONICAL_CONTEXT_DISCOVERABLE
+    - CAPABILITY_ROUTER_DISCOVERABLE
+  explicit_trigger_also_supported: true
+  explicit_triggers: ["!CENTRALDARK", "@@CentralDark", "MEGAZORD-CENTRALDARK"]
+  user_repetition_required: false
+
+resource_discovery:
+  mode: DISCOVER_MEASURE_ROUTE
+  search_where_available: true
+  sources:
+    - MCP
+    - CENTRALDARK_HUB
+    - CENTRALDARK_API
+    - GITHUB
+    - FILES
+    - MEMORY
+    - CONNECTORS
+    - RUNTIME
+    - CI
+    - TOOLS
+    - MODELS
+    - ADAPTERS
+    - SCREENPIPE
+    - [EXT_REDACTED]_DERIVED_CAPABILITIES
+    - FUTURE_DISCOVERED_CAPABILITIES
+  unknown_capability_is_available: false
+  configured_is_active: false
+  documented_is_executable: false
+  discovered_resource_requires_measurement: true
+
+screenpipe:
+  role: GLOBAL_LIVE_OBSERVATION_SENSOR
+  skill: .agents/skills/screenpipe-live-observer/SKILL.md
+  handoff_owner: docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md
+  auto_discover: true
+  selectable_by_any_authorized_actor: true
+  mutation_authority: false
+  capabilities:
+    - LIVE_DESKTOP_OBSERVATION
+    - SCREEN_HISTORY_SEARCH
+    - OCR_CONTEXT
+    - ACCESSIBILITY_CONTEXT
+    - AUDIO_TRANSCRIPT_CONTEXT
+    - INPUT_EVENT_CONTEXT
+    - CLIPBOARD_CONTEXT
+    - FRAME_CONTEXT
+    - WINDOW_APP_TIMELINE
+    - SCREENPIPE_ACTIVITY_SUMMARY
+    - SCREENPIPE_MEETING_CONTEXT
+    - SCREENPIPE_AUTOMATION_TARGETING_CONTEXT
+    - SCREENPIPE_VIDEO_EXPORT
+  availability_requires:
+    - HEALTH_OK
+    - RECENT_DATA_PRESENT
+    - TARGET_QUERY_RETURNS_USABLE_EVIDENCE
+  rules:
+    history_is_current_state: false
+    screenshot_is_live_state: false
+    screenpipe_is_authority: false
+    screenpipe_is_handoff: false
+    cross_surface_transport_requires_proven_channel: true
+    no_information_gain: DROP_DUPLICATE
+
+spiral:
+  alias: CARACOL
+  role: DERIVED_NAVIGATION_TRAVERSAL
+  contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SPIRAL-TRAVERSAL.yml
+  verifier: scripts/trigger-fabric/spiral_traversal.py
+  covers_all_catalogued_metadata: true
+  preload_all_bodies: false
+  semantic_edges_created: false
+  graph_topology_mutation: false
+  node_repositioning_required: false
+  forward_reverse_required: true
+  ten_front_rendezvous: true
+  no_fragment_drop: true
+  materialize_body_only_when_relevant: true
+
+composition:
+  discover_all_relevant: true
+  activate_all_discovered: false
+  selection_policy: MINIMUM_SUFFICIENT_SET
+  reuse_before_create: true
+  one_system_only: true
+  one_writer_per_scope: true
+  parallelize_read_only_perception: true
+  serialize_mutation: true
+  capability_gap: FAIL_CLOSED
+  no_information_gain: STOP_EXPANSION
+
+micro_deploy:
+  role: CAUSAL_PROMOTION_ZORD
+  policy_owner: docs/CONSCIENCIA/03-FLUXO-DEPLOY.md
+  script: scripts/micro_deploy.sh
+  auto_select_when_applicable: true
+  user_repetition_required: false
+  inherit_engine_binding: true
+  inherit_runtime_plug: true
+  inherit_current_intent: true
+  inherit_writer_scope: true
+  inherit_proof_target: true
+  inherit_evidence_refs: true
+  inherit_next_cursor: true
+  connection_policy: REUSE_MEASURED_AVAILABLE_CONNECTION
+  connection_must_be_measured: true
+  new_connection_when_equivalent_exists: false
+  full_deploy_by_default: false
+  prefer_when:
+    - OWNER_IDENTIFIABLE
+    - CAUSAL_SCOPE_ISOLATABLE
+    - AFFECTED_DEPENDENCIES_KNOWN
+    - ROLLBACK_TARGET_EXISTS
+    - SAME_SHA_RUNTIME_PROOF_POSSIBLE
+  escalate_when:
+    - SHARED_CONTRACT_CHANGED
+    - GLOBAL_SCHEMA_CHANGED
+    - ARTIFACT_MONOLITHIC
+    - COORDINATED_MIGRATION_REQUIRED
+    - PARTIAL_PROMOTION_WOULD_BREAK_COMPATIBILITY
+    - REALITY_JUDGE_EXPANDS_CAUSAL_CONE
+  dry_run_default: true
+  real_promotion_requires_existing_authorization: true
+  unknown_is_not_pass: true
+  receipt_required: true
+  receipt_chain: [SOURCE_SHA, ARTIFACT, DEPLOY_SCOPE, RUNTIME, NEXT_CURSOR]
+
+realtime_feedback:
+  role: LIVE_MISSION_FEEDBACK_SIGNAL
+  activation: WITH_ACTIVE_MISSION
+  persistent_per_mission: true
+  user_repetition_required: false
+  accepted_sources: [CHEFE_MESSAGE, SCREENSHOT, LOG, TERMINAL_OUTPUT, PR_STATE, COMMIT_STATE, CI_STATE, RUNTIME_OBSERVATION, TOOL_RESULT]
+  command_and_feedback_are_independent: true
+  feedback_is_authority: false
+  feedback_is_mutation_permission: false
+  evidence_scope_must_be_preserved: true
+  raw_evidence_ref_required_when_material: true
+  route_material_signal_to: PERSISTENT_GAP_SWEEP
+  process:
+    - INGEST_FEEDBACK
+    - CLASSIFY_SIGNAL_SCOPE
+    - COMPARE_LAST_PROVEN_STATE
+    - DEDUPE_SAME_SIGNAL
+    - REOPEN_AFFECTED_CONE_ONLY
+    - META_LUPA
+    - RECONCILE_CURRENT_REALITY
+    - CONTINUE_PERSISTENT_GAP_SWEEP
+  no_information_gain: REUSE_PROOF_OR_DROP_DUPLICATE
+  already_proven_without_reopen_cause: REUSE_PROOF
+  new_failure: OPEN_CAUSAL_CONE
+  repeated_failure_same_signature: REUSE_CRYSTAL_NOT_RETHINK
+  learning_output: [REFUTED_MINERAL, UNRESOLVED_MINERAL, CRYSTAL_GOLD]
+  silent_discard: FORBIDDEN
+  next_cursor_required: true
+
+persistent_gap_sweep:
+  role: AUTONOMOUS_SELF_HEALING_ZORD
+  activation: WITH_MEGAZORD
+  persistent_per_mission: true
+  user_repetition_required: false
+  inherit_current_configuration: true
+  scan_surfaces: [REALTIME_FEEDBACK, PR, COMMIT, CI, DEPENDABOT, WORKFLOW, JOB, RUNNER, TOOL_ERROR, TEST_FAILURE, RUNTIME_DRIFT, CAPABILITY_GAP, OPEN_RESIDUAL]
+  process:
+    - MEASURE_CURRENT_STATE
+    - CLASSIFY_FAILURE_SIGNATURE
+    - SEARCH_EXISTING_CRYSTAL
+    - DEDUPE_ALREADY_PROVEN
+    - IDENTIFY_CAUSE
+    - SELECT_MINIMUM_SUFFICIENT_CAPABILITIES
+    - EXECUTE_MINIMAL_SAFE_REMEDIATION
+    - RETEST
+    - COUNTERPROOF
+    - REALITY_JUDGE
+    - MICRO_DEPLOY_WHEN_CAUSAL_SCOPE_SUPPORTS
+    - VERIFY_RUNTIME_OR_LIVE_SOURCE
+    - CRYSTALLIZE_LEARNING
+    - WRITE_RECEIPT
+    - CONTINUE_NEXT_CURSOR
+  loop_until: FIXED_POINT_OR_PROVEN_HUMAN_FRONTIER
+  same_failure_no_new_information: REUSE_CRYSTAL_NOT_RETHINK
+  already_proven_without_reopen_cause: REUSE_PROOF
+  failed_candidate_becomes: REFUTED_MINERAL
+  unresolved_candidate_becomes: UNRESOLVED_MINERAL
+  proven_improvement_becomes: CRYSTAL_GOLD
+  silent_discard: FORBIDDEN
+  no_material_delta: NO_ARTIFICIAL_MUTATION
+  mutation_requires_single_writer: true
+  parallel_read_only_fronts_allowed: true
+  exact_head_remeasurement_before_promotion: true
+  next_cursor_required: true
+  human_return_before_fixed_point: FORBIDDEN_UNLESS_HUMAN_FRONTIER
+
+adapter_contract:
+  adapter: CAPABILITY_CONTRACT_ROUTER
+  input:
+    - CURRENT_INTENT
+    - LIVE_STATE
+    - CURRENT_CONTEXT
+    - REQUIRED_CAPABILITIES
+    - AVAILABLE_RESOURCES
+    - RISK
+    - SCOPE
+    - WRITER_SCOPE
+    - PROOF_TARGET
+  pipeline:
+    - DISCOVER
+    - SPIRAL_CATALOGUE_METADATA
+    - MEASURE
+    - CLASSIFY
+    - DEDUPE
+    - FILTER
+    - COVER
+    - SELECT_MINIMUM_SUFFICIENT_SET
+    - SELECT_OR_MATERIALIZE_RUNTIME
+    - ASSIGN
+    - EXECUTE
+    - OBSERVE
+    - COUNTERPROOF
+    - REALITY_JUDGE
+    - RECEIPT
+    - REMEASURE
+  missing_required_capability: BLOCKED_CAPABILITY_GAP
+
+context_contract:
+  catalogue_all_relevant_metadata: true
+  full_body_preload: false
+  body_context_policy: MINIMUM_SUFFICIENT_CONTEXT
+  retrieval_policy: PRECISE_RETRIEVAL_SMALL_CONTEXT
+  spiral_traversal_preserves_discoverability: true
+  github_when_relevant: true
+  mcp_when_relevant: true
+  files_when_relevant: true
+  memory_when_relevant: true
+  runtime_when_relevant: true
+  connectors_when_relevant: true
+  screenpipe_when_relevant: true
+  background_context_may_change_answer: true
+  background_context_may_not_expand_user_output_scope: true
+  no_information_gain: STOP_EXPANSION
+
+round_trip:
+  forward: OUTER_TO_NUCLEUS
+  reverse: NUCLEUS_TO_OUTER
+  adaptive_fronts_max: 10
+  fronts_are_read_only_until_rendezvous: true
+  require_same_discovered_set: true
+  divergence: META_LUPA_RECONCILE_RERUN
+
+proof:
+  reality_is_judge: true
+  unknown_is_not_pass: true
+  merged_is_not_deployed: true
+  documented_is_not_executed: true
+  action_is_not_proof: true
+  route_ready_is_not_task_done: true
+  graph_edge_is_not_causality: true
+  traversal_edge_is_not_semantic_edge: true
+
+fixed_point:
+  requires:
+    - REQUIRED_CAPABILITIES_COVERED
+    - SPIRAL_FORWARD_REVERSE_COVERAGE_PASS
+    - NO_FRAGMENT_DROP
+    - NO_MATERIAL_UNKNOWN
+    - NO_WRITER_CONFLICT
+    - NO_FORBIDDEN_CAPABILITY
+    - APPLICABLE_COUNTERPROOF_PASS
+    - REALITY_JUDGE_PASS
+  main_is_consequence_not_fixed_point: true
+  deploy_is_consequence_not_fixed_point: true
+  house_runtime_test_is_material_boundary: true
+
+invariant:
+  formula: "CATALOGUED_UNIVERSE + SPIRAL_TRAVERSAL + CURRENT_INTENT + CAPABILITY_ROUTER + SELECTED_RUNTIME -> MEGAZORD_CENTRALDARK"
+  slogan: "Zords=Megazord; todos os pontos alcançáveis, só o necessário materializado."

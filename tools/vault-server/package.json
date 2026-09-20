@@ -1,0 +1,13 @@
+{
+  "name": "vault-server",
+  "version": "1.0.0",
+  "description": "Servidor local do VAULT CentralDark (localhost:5174) — lê docs/CONSCIENCIA/VAULT/ ao vivo",
+  "type": "module",
+  "scripts": {
+    "vault": "node server.mjs",
+    "start": "node server.mjs"
+  },
+  "dependencies": {
+    "marked": "^12.0.0"
+  }
+}

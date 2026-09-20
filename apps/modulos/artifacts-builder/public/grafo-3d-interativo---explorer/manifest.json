@@ -1,0 +1,11 @@
+{
+  "nome": "Grafo 3D Interativo - Explorer",
+  "tipo": "react-spa",
+  "slug": "grafo-3d-interativo---explorer",
+  "tema": "dark",
+  "criado": "2026-07-05T00:58:51.557Z",
+  "rotas": [
+    "/"
+  ],
+  "descricao": "Visualização 3D do grafo completo da CentralDark com 315+ nós. Rotação automática, clique para focar, zoom, e painel de detalhes ao lado."
+}

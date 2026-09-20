@@ -1,0 +1,288 @@
+schema: centraldark.system-sentinel.v1
+name: SENTINELA_SISTEMA_INTEIRO
+seal: "🧿"
+status: ACTIVE_BASELINE_CONTRACT
+authority: SEGREDO/CHEFE
+owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
+second_brain_owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SECOND-BRAIN.yml
+note_stitch_owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/NOTE-STITCHING-CONTRACT.yml
+screen_observer_owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SCREENPIPE-BINDING.yml
+provider_router_owner: apps/modulos/elite-gateway/scripts/centraldark_omni_router.py
+
+purpose: >-
+  Vigiar o organismo CentralDark inteiro sem criar segundo cerebro, segundo grafo ou segundo router.
+  Qualquer delta material fora da linha do GOAL + ultimo cursor provado vira um unico evento de realidade,
+  entra no mesmo grafo, localiza a primeira aresta quebrada, aciona META_LUPA, retorna pelo CARACOL_REVERSO,
+  reconcilia somente o cone causal e preserva as provas independentes que continuam validas.
+
+laws:
+  ONE_SYSTEM_ONLY: true
+  ONE_LOGICAL_SECOND_BRAIN: true
+  ONE_GRAPH_PROJECTION: true
+  ONE_ROUTER_ENTRYPOINT: true
+  ONE_WRITER_PER_SCOPE: true
+  CURRENT_GT_HISTORY: true
+  UNKNOWN_IS_NOT_PASS: true
+  SCREEN_RED_IS_OBSERVATION_NOT_CAUSE_PROOF: true
+  LOCAL_ERROR_IS_NOT_GLOBAL_FAILURE: true
+  ERROR_EVENT_MUST_NOT_BE_SILENTLY_DROPPED: true
+  SAME_FAILURE_NO_NEW_INFORMATION_REUSES_CRYSTAL: true
+  AUTO_RECONCILE_MUST_STAY_INSIDE_PROVEN_AUTHORITY: true
+  AUTO_PROVIDER_FAILOVER_REQUIRES_PROVEN_FREE_OR_ALLOWED_ROUTE: true
+  PAID_OR_UNKNOWN_PRICE_ROUTE_IS_FORBIDDEN_WHEN_FREE_ONLY_POLICY_ACTIVE: true
+
+active_mission_spine:
+  - SEGREDO_CHEFE_INTENT
+  - GOAL_LOCK
+  - CENTRALDARK_AI_BOOT
+  - HISTORY_RENDEZVOUS
+  - CAPABILITY_LINEAGE
+  - SENSOR_DISCOVERY
+  - MINIMUM_SUFFICIENT_OBSERVATION
+  - NORMALIZE_DEDUPE
+  - SENTINEL_ALIGNMENT_CHECK
+  - EXISTING_OWNER
+  - SOL_COORDINATES
+  - MULTIBUSSOLA
+  - META_LUPA
+  - ONE_WRITER
+  - HERMES_EXECUTES_IF_AUTHORIZED
+  - COUNTERPROOF
+  - REMEASURE
+  - REALITY_JUDGE
+  - FIXED_POINT
+  - REGISTER_GRAPH_RECEIPT_CURSOR
+  - BOOT_CONTINUITY
+
+listens_to_existing_triggers:
+  - TOOL_ERROR
+  - TEST_FAILURE
+  - CI_RUNNER_ROUTE_FAILURE
+  - CONTRADICTION_FOUND
+  - POST_MUTATION
+  - RUNTIME_DRIFT
+  - ANY_PR_OR_COMMIT
+  - STATE_CHANGED
+  - WRITER_CONFLICT
+  - BOUNDARY_TOUCHED
+  - MATERIAL_UNKNOWN_AFFECTS_MUTATION
+  - PROOF_TARGET_MISMATCH
+  - EVIDENCE_CONFLICT
+  - MODEL_UNAVAILABLE
+  - DEPENDENCY_FAILURE
+  - PR_UPDATED_OR_MERGED
+
+surfaces:
+  - SITE
+  - CENTRALDARK_DESKTOP_EXE
+  - SOL_APP
+  - HERMES_APP
+  - TERMINAL
+  - IDE
+  - BROWSER
+  - SCREENPIPE_OR_OTHER_OBSERVER
+  - OBSIDIAN
+  - GITHUB
+  - MCP_HUB
+  - TELEGRAM
+  - API
+  - PROVIDER
+  - RUNTIME
+  - RECEIPT_LEDGER
+
+normalized_event:
+  schema: centraldark.sentinel-event.v1
+  required:
+    - observed_at
+    - source_surface
+    - event_class
+    - signature
+    - state
+    - evidence_ref
+    - goal_ref
+    - last_proven_cursor
+  optional:
+    - app_name
+    - window_name
+    - process_name
+    - url_or_route
+    - repo
+    - branch
+    - head_sha
+    - provider
+    - model
+    - http_status
+    - error_text_sanitized
+    - frame_id
+    - note_path
+    - note_sha256
+
+alignment_dimensions:
+  INTENT_GOAL:
+    compare: [ACTIVE_INTENT, GOAL_LOCK]
+  GRAPH:
+    compare: [OWNER, EDGES, LAST_PROVEN_CURSOR, PROVENANCE]
+  NOTES:
+    compare: [PATH, SHA256, OWNER_RESOLUTION, STITCH_RECEIPT]
+  GIT:
+    compare: [MAIN_HEAD, OWNER_HEAD, MERGE_BASE, AHEAD_BEHIND, MERGEABILITY]
+  RUNTIME:
+    compare: [PROCESS, PORT, HEALTH, BUILD_SHA, DEPLOY_SHA]
+  PROVIDER:
+    compare: [AVAILABILITY, CAPABILITY, PRICE_CLASS, LATENCY, FAILURE_SIGNATURE]
+  UI:
+    compare: [VISIBLE_ERROR, FRAME_TIMESTAMP, SOURCE_SURFACE, CAUSAL_CROSSCHECK]
+  HANDOFF:
+    compare: [SOURCE, TARGET, TRANSPORT_CHANNEL, ACK_OR_EFFECT, CHECKSUM]
+
+observed_error_signatures:
+  HTTP_403:
+    match: "HTTP 403|request was blocked|forbidden"
+    class: ACCESS_OR_POLICY_BLOCKED
+    severity: MATERIAL_LOCAL
+    next: [META_LUPA, IDENTIFY_BLOCKING_LAYER, RECONCILIAR]
+  PYTHON_LOCK_RELEASE:
+    match: "cannot release un-acquired lock"
+    class: LOCK_STATE_BUG
+    severity: MATERIAL_LOCAL
+    next: [META_LUPA, OWNER_RUNTIME, MINIMAL_REMEDIATION, RETEST]
+  TOOL_PROTOCOL_LEAK:
+    match: "<longcat_tool_call>|<longcat_arg_key>|<longcat_arg_value>"
+    class: TOOL_PROTOCOL_RENDER_LEAK
+    severity: MATERIAL_LOCAL
+    next: [BOUNDARY_TOUCHED, SANITIZE_RENDER_PATH, RETEST]
+  PROVIDER_TRANSIENT:
+    match: "429|rate limit|timeout|temporarily unavailable|5xx|model unavailable"
+    class: PROVIDER_TRANSIENT_FAILURE
+    severity: ROUTE_LOCAL
+    next: [MEASURE_LIVE_PROVIDER_SET, FAILOVER_ALLOWED_ROUTE, RETEST]
+  PROVIDER_AUTH_CONFIG:
+    match: "401|403 provider|auth error|token not configured|config error"
+    class: PROVIDER_ROUTE_BROKEN
+    severity: ROUTE_LOCAL
+    next: [MARK_ROUTE_BROKEN, DO_NOT_BLIND_RETRY, TRY_NEXT_PROVEN_ALLOWED_ROUTE]
+
+provider_failover_policy:
+  use_existing_router_only: true
+  default_when_free_only_goal: PROVEN_FREE_ONLY
+  same_model_max_attempts: 1
+  stop_on_first_success: true
+  cooldown_failed_route: true
+  retryable_classes:
+    - PROVIDER_TRANSIENT_FAILURE
+    - MODEL_UNAVAILABLE
+    - TIMEOUT
+    - HTTP_5XX
+    - RATE_LIMIT
+  non_retryable_same_route_classes:
+    - AUTH_ERROR
+    - CONFIG_ERROR
+    - UNKNOWN_PRICE
+    - PAID_ROUTE_WHEN_FREE_ONLY
+  selection:
+    require_live_availability: true
+    require_capability_match: true
+    require_free_when_free_only_goal: true
+    unknown_price_is_free: false
+    paid_route_allowed_when_free_only_goal: false
+  receipt_fields:
+    - original_provider
+    - original_model
+    - failure_signature
+    - attempted_routes
+    - selected_provider
+    - selected_model
+    - fallback_used
+    - final_result
+
+caracol_reverse:
+  trigger_when:
+    - MATERIAL_EDGE_DRIFT
+    - NOTE_OUT_OF_LINE
+    - PROVIDER_FAILURE
+    - RUNTIME_DRIFT
+    - UI_ERROR_WITH_MATERIAL_EVIDENCE
+    - GIT_TOPOLOGY_DRIFT
+    - HANDOFF_BREAK
+  route:
+    - FIND_FIRST_BROKEN_EDGE
+    - META_LUPA
+    - TRACE_TO_LAST_PROVEN_CURSOR
+    - INVALIDATE_DEPENDENT_CLAIMS_ONLY
+    - PRESERVE_INDEPENDENT_PROOFS
+    - REQUERY_FRESH_EVIDENCE
+    - RESOLVE_EXISTING_OWNER
+    - RECONCILIAR
+    - RETEST
+    - COUNTERPROOF
+    - REMEASURE
+    - REALITY_JUDGE
+    - UPDATE_GRAPH_RECEIPT_CURSOR
+  never:
+    - RESET_WHOLE_SYSTEM_FOR_LOCAL_FAILURE
+    - CREATE_PARALLEL_OWNER
+    - MARK_UNKNOWN_AS_PASS
+
+note_sentinel:
+  seal: "🪡🧿"
+  scanner: scripts/trigger-fabric/stitch_all_notes.py
+  sentinel_runtime: scripts/trigger-fabric/system_sentinel.py
+  expected_behavior:
+    - INVENTORY_ALL_CANONICAL_NOTE_ROOTS
+    - HASH_EACH_NOTE
+    - COMPARE_WITH_LAST_SNAPSHOT
+    - EMIT_NOTE_OUT_OF_LINE_ON_ADD_CHANGE_DELETE_OWNER_DRIFT
+    - REVALIDATE_STITCH
+    - ROUTE_TO_EXISTING_OWNER
+    - UPDATE_DERIVED_GRAPH
+  note_change_does_not_grant_content_authority: true
+  semantic_link_is_not_proof: true
+
+hud_projection:
+  seal: "🧿"
+  statuses:
+    PROVEN: GREEN
+    FAILURE: RED
+    UNKNOWN: YELLOW
+    PENDING: YELLOW
+    HISTORICAL: GRAY
+  local_flash:
+    enabled: true
+    flash_only_first_broken_or_unknown_edge: true
+    include: [SEAL, SOURCE, SIGNATURE, OWNER, EVIDENCE_REF, NEXT_CURSOR]
+  global_red_requires_global_failure_proof: true
+
+self_improvement:
+  meaning: >-
+    Aprimorar-se significa cristalizar uma falha comprovada em assinatura + teste discriminante +
+    remediacao minima + contraprova + receipt reutilizavel. Nao significa alterar codigo sem owner,
+    permissao ou prova.
+  flow:
+    - NEW_FAILURE_SIGNATURE
+    - SEARCH_EXISTING_CRYSTAL
+    - REUSE_IF_MATCH
+    - ELSE_META_LUPA
+    - DISCRIMINATING_TEST
+    - MINIMAL_REMEDIATION_IF_AUTHORIZED
+    - RETEST
+    - COUNTERPROOF
+    - CRYSTALIZE
+
+runtime:
+  executable: scripts/trigger-fabric/system_sentinel.py
+  note_watch: "python3 scripts/trigger-fabric/system_sentinel.py --watch-notes"
+  ingest_event: "python3 scripts/trigger-fabric/system_sentinel.py --event-json '<json>'"
+  self_test: "python3 scripts/trigger-fabric/system_sentinel.py --self-test"
+  runtime_started_on_main_commit: false
+
+fixed_point:
+  contract_on_main: true
+  runtime_requires_external_proof: true
+  requires:
+    - ALL_MATERIAL_EVENT_CLASSES_ROUTE_TO_EXISTING_OWNER
+    - NOTE_WATCH_PROVEN
+    - PROVIDER_FAILOVER_PROVEN_WHEN_CLAIMED
+    - UI_ERROR_INGEST_PROVEN_WHEN_CLAIMED
+    - CARACOL_REVERSE_PRESERVES_INDEPENDENT_PROOF
+    - MATERIAL_UNKNOWN_ZERO_FOR_DECLARED_SCOPE
+    - REALITY_JUDGE_PASS

@@ -1,0 +1,96 @@
+schema: centraldark.post-green-lock.v1
+status: CANONICAL_SOURCE_CONTRACT
+runtime_status: UNKNOWN_UNTIL_SAME_HEAD_CI
+owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
+authority: SEGREDO/CHEFE
+runtime_gate: apps/modulos/HERMES-CORE/core/scope-lock-gate.mjs
+
+purpose: >-
+  Transformar um escopo realmente provado em LAST_GOOD_STATE somente leitura.
+  Depois do verde real, nenhuma engine, agente, automacao ou modelo pode voltar
+  a mutar o mesmo escopo por inercia. Nova mutacao exige nova intencao explicita
+  do SEGREDO/CHEFE e um aviso visivel de que o alvo ja estava selado.
+
+lock_when_all:
+  - FIXED_POINT_PROVEN
+  - SEMANTIC_GREEN
+  - MULTIBUSSOLA_AXIS_ALIGNED
+  - COUNTERPROOF_PASS
+  - REALITY_JUDGE_PASS
+  - CI_SAME_HEAD_PASS
+  - DECISION_LINEAGE_RECONSTRUCTIBLE
+  - LAST_GOOD_STATE_RECORDED
+
+state_machine:
+  OPEN:
+    mutation: ALLOW_BY_NORMAL_GATES
+  LOCKED:
+    mutation_default: DENY
+    read: ALLOW
+    inspect: ALLOW
+    compare: ALLOW
+    reuse_as_baseline: ALLOW
+  WARN_EXPLICIT_OVERRIDE:
+    mutation: DENY_UNTIL_EXPLICIT_ACKNOWLEDGEMENT
+  UNLOCKED_CANDIDATE:
+    mutation: ALLOW_ONLY_AS_NEW_CANDIDATE_CYCLE
+    preserve_previous_last_good_state: true
+
+invariants:
+  CI_GREEN_ALONE_IS_NOT_LOCK: true
+  SEMANTIC_GREEN_ALONE_IS_NOT_LOCK: true
+  FIXED_POINT_WITHOUT_SAME_HEAD_IS_NOT_LOCK: true
+  LOCKED_IS_READ_ONLY_BY_DEFAULT: true
+  MODEL_CANNOT_SELF_UNLOCK: true
+  AGENT_CANNOT_SELF_UNLOCK: true
+  AUTOMATION_CANNOT_SELF_UNLOCK: true
+  TOOL_PERMISSION_IS_NOT_UNLOCK_AUTHORITY: true
+  NEW_MESSAGE_IS_NOT_UNLOCK: true
+  NEW_MODEL_IS_NOT_UNLOCK: true
+  NEW_SESSION_IS_NOT_UNLOCK: true
+  SAME_SCOPE_RETRY_WITHOUT_NEW_INTENT: DENY
+  LAST_GOOD_STATE_SURVIVES_UNLOCK: true
+  UNLOCK_CREATES_CANDIDATE_NOT_NEW_TRUTH: true
+  UNKNOWN_IS_NOT_PASS: true
+
+explicit_override:
+  authority: SEGREDO/CHEFE
+  requires:
+    - EXPLICIT_MUTATION_INTENT
+    - LOCK_WARNING_SHOWN
+    - CHEFE_ACKNOWLEDGED_LOCK_WARNING
+    - TARGET_SCOPE_MATCH
+    - LIVE_STATE_REMEASURED
+    - OWNER_RECONFIRMED
+    - WRITER_SCOPE_RECONFIRMED
+  warning_must_show:
+    - LOCKED_SCOPE
+    - LAST_GOOD_STATE
+    - PROOF_OR_RECEIPT_REF
+    - WHAT_THE_NEW_CHANGE_WOULD_REOPEN
+    - WHY_THE_SYSTEM_IS_WARNING
+  acknowledgement_can_be_same_message_when_unambiguous: true
+  repetitive_reask_after_clear_acknowledgement: false
+
+human_semantics:
+  default_message: "🔒 Esse pedaço já ficou verde e foi selado. Sem nova ordem tua eu só leio/comparo; não mexo."
+  override_warning: "⚠️ Tu tá mandando reabrir um pedaço que tu mesmo já tinha selado como bom. Vou preservar o LAST_GOOD_STATE e tratar a mudança como candidato novo."
+
+receipt:
+  lock_required_fields:
+    - scope
+    - last_good_state
+    - head_sha
+    - semantic_green_ref
+    - multibussola_axis
+    - counterproof_ref
+    - reality_judge_ref
+    - ci_same_head_ref
+    - locked_at
+  unlock_required_fields:
+    - scope
+    - previous_last_good_state
+    - explicit_chefe_intent_ref
+    - warning_ref
+    - acknowledgement_ref
+    - new_candidate_cursor

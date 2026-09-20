@@ -1,0 +1,61 @@
+pastas:
+  docs/CONSCIENCIA/00-ENTRADA:
+    nome_regex:
+      - "^00-"
+      - "leia-primeiro"
+      - "porta-de-entrada"
+      - "arquitetura"
+    palavras_chave: ["entrada", "leia", "primeiro"]
+  docs/CONSCIENCIA/01-IDENTIDADE:
+    nome_regex: ["identidade", "regras-da-equipe"]
+    palavras_chave: ["identidade", "regras"]
+  docs/CONSCIENCIA/02-PERMISSOES:
+    nome_regex: ["permiss", "handoff"]
+    palavras_chave: ["permissao", "handoff"]
+  docs/CONSCIENCIA/03-DEPLOY:
+    nome_regex: ["deploy", "fluxo-deploy"]
+    palavras_chave: ["deploy", "publish"]
+  docs/CONSCIENCIA/04-INFRA-VPS:
+    nome_regex: ["vps", "ssh", "estrutura-vps", "pm2"]
+    palavras_chave: ["vps", "ssh", "pm2", "caddy"]
+  docs/CONSCIENCIA/05-APRENDIZADOS:
+    nome_regex: ["aprendizado", "metodo", "diagnostico"]
+    palavras_chave: ["aprendizado", "aprendi", "metodo"]
+  docs/CONSCIENCIA/06-MCP:
+    nome_regex: ["mcp", "conector"]
+    palavras_chave: ["mcp", "conector"]
+  docs/CONSCIENCIA/07-PENDENCIAS:
+    nome_regex: ["pendencia", "horario"]
+    palavras_chave: ["pendencia", "horario"]
+
+ignorar:
+  pm2:
+    - whatsapp-server
+  docker: []
+
+anomalia:
+  pm2:
+    restart_loop_threshold: 3
+    restart_loop_janela_s: 300
+  docker:
+    cpu_limite_pct: 90.0
+    mem_limite_pct: 85.0
+    samples_necessarias: 3
+
+excluir:
+  padroes:
+    - ".env"
+    - ".key"
+    - ".pem"
+
+cache_propostas:
+  ttl_horas: 72
+  max_itens: 1000
+
+decisor:
+  wC: 0.3
+  wI: 0.7
+  wF: 0.0
+  faixa_propor: 70
+  faixa_agrupar: 50
+  faixa_ignorar: 35

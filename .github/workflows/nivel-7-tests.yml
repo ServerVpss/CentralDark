@@ -1,0 +1,195 @@
+name: nivel-7-tests
+
+on:
+  push:
+    branches:
+      - "feat/lupa-n7-**"
+  pull_request:
+    paths:
+      - ".agents/skills/meta-lupa/agents/nivel-7/**"
+      - "scripts/nivel-7/**"
+      - "scripts/agent-call.mjs"
+      - "scripts/agent-call.test.mjs"
+      - "public/downloads/lupa-bayesiana-nivel-7.zip"
+      - "public/downloads/nivel-7-manifest.json"
+      - ".github/workflows/nivel-7-tests.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nivel-7-tests-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  runner-e-imutabilidade:
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 20
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+      SOURCE_DATE_EPOCH: "1700000000"
+    steps:
+      - name: Checkout exact HEAD
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+          fetch-depth: 1
+
+      - name: Provar identidade do HEAD
+        env:
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$HEAD_SHA"
+
+      - name: Provar agent-call e esteira obrigatoria
+        run: |
+          set -euo pipefail
+          command -v node >/dev/null
+          node --check scripts/agent-call.mjs
+          node --check scripts/agent-call.test.mjs
+          node scripts/agent-call.test.mjs
+
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependencias minimas
+        run: python3 -m pip install --disable-pip-version-check pytest jsonschema
+
+      - name: Rodar runner isolado (agents read-only + testes)
+        working-directory: .agents/skills/meta-lupa/agents/nivel-7
+        run: python3 runner.py
+
+      - name: Auditar ausencia de __pycache__
+        working-directory: .agents/skills/meta-lupa/agents/nivel-7
+        run: |
+          set -euo pipefail
+          if find . -name "__pycache__" -o -name "*.pyc" | grep -q .; then
+            echo "cache detectado apos runner" >&2
+            find . -name "__pycache__" -o -name "*.pyc"
+            exit 1
+          fi
+          echo "sem cache"
+
+      - name: Receipt deterministico (sempre)
+        if: always()
+        env:
+          JOB_STATUS: ${{ job.status }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          echo "HEAD_SHA=${HEAD_SHA}"
+          echo "EXECUTOR=self-hosted"
+          echo "ROTA_PRIMARIA=self-hosted-linux"
+          echo "ROTA_FALLBACK=BLOCKED_NO_SELF_HOSTED"
+          echo "JOB_STATUS=${JOB_STATUS}"
+          case "${JOB_STATUS}" in
+            success) echo "RESULTADO=PASS" ;;
+            failure) echo "RESULTADO=FAIL" ;;
+            cancelled) echo "RESULTADO=BLOCKED"; echo "CAUSE=CANCELLED_OR_RUNNER_UNAVAILABLE" ;;
+            *) echo "RESULTADO=BLOCKED"; echo "CAUSE=UNKNOWN_STATUS_${JOB_STATUS}" ;;
+          esac
+
+  build-dupla-reprodutivel:
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 20
+    env:
+      SOURCE_DATE_EPOCH: "1700000000"
+    steps:
+      - name: Checkout exact HEAD
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+          fetch-depth: 1
+
+      - name: Provar identidade do HEAD
+        env:
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$HEAD_SHA"
+
+      - name: Verificar ferramentas do runner
+        run: |
+          set -euo pipefail
+          command -v zip >/dev/null
+          command -v rsync >/dev/null
+          command -v sha256sum >/dev/null
+
+      - name: Build 1
+        env:
+          B1: ${{ runner.temp }}/nivel-7-${{ github.run_id }}-${{ github.run_attempt }}-b1.zip
+        run: |
+          set -euo pipefail
+          rm -f "$B1"
+          bash scripts/nivel-7/build-deterministic.sh "$B1"
+          sha256sum "$B1"
+
+      - name: Build 2 (diretorio isolado)
+        env:
+          B2_DIR: ${{ runner.temp }}/nivel-7-${{ github.run_id }}-${{ github.run_attempt }}-repo-b2
+          B2: ${{ runner.temp }}/nivel-7-${{ github.run_id }}-${{ github.run_attempt }}-b2.zip
+        run: |
+          set -euo pipefail
+          rm -rf "$B2_DIR"
+          rm -f "$B2"
+          mkdir -p "$B2_DIR"
+          rsync -a --delete ./ "$B2_DIR/"
+          cd "$B2_DIR"
+          bash scripts/nivel-7/build-deterministic.sh "$B2"
+          sha256sum "$B2"
+
+      - name: Comparar SHA das duas builds (determinismo intra-ambiente)
+        env:
+          B1: ${{ runner.temp }}/nivel-7-${{ github.run_id }}-${{ github.run_attempt }}-b1.zip
+          B2: ${{ runner.temp }}/nivel-7-${{ github.run_id }}-${{ github.run_attempt }}-b2.zip
+        run: |
+          set -euo pipefail
+          SHA1=$(sha256sum "$B1" | awk '{print $1}')
+          SHA2=$(sha256sum "$B2" | awk '{print $1}')
+          echo "SHA1=$SHA1"
+          echo "SHA2=$SHA2"
+          test "$SHA1" = "$SHA2"
+          echo "reprodutibilidade intra-ambiente confirmada"
+
+      - name: Verificar coerencia local (manifest x zip commitado)
+        run: |
+          set -euo pipefail
+          COMMITTED_SHA=$(sha256sum public/downloads/lupa-bayesiana-nivel-7.zip | awk '{print $1}')
+          MSHA=$(python3 -c "import json;print(json.load(open('public/downloads/nivel-7-manifest.json'))['sha256'])")
+          echo "COMMITTED_SHA=$COMMITTED_SHA"
+          echo "MANIFEST_SHA=$MSHA"
+          test "$COMMITTED_SHA" = "$MSHA"
+          echo "manifest coerente com ZIP commitado"
+
+      - name: Publicar artefato CI (build reprodutivel do runner)
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: nivel-7-ci-build-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/nivel-7-${{ github.run_id }}-${{ github.run_attempt }}-b1.zip
+          if-no-files-found: error
+          retention-days: 2
+
+      - name: Receipt deterministico (sempre)
+        if: always()
+        env:
+          JOB_STATUS: ${{ job.status }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          echo "HEAD_SHA=${HEAD_SHA}"
+          echo "EXECUTOR=self-hosted"
+          echo "ROTA_PRIMARIA=self-hosted-linux"
+          echo "ROTA_FALLBACK=BLOCKED_NO_SELF_HOSTED"
+          echo "JOB_STATUS=${JOB_STATUS}"
+          case "${JOB_STATUS}" in
+            success) echo "RESULTADO=PASS" ;;
+            failure) echo "RESULTADO=FAIL" ;;
+            cancelled) echo "RESULTADO=BLOCKED"; echo "CAUSE=CANCELLED_OR_RUNNER_UNAVAILABLE" ;;
+            *) echo "RESULTADO=BLOCKED"; echo "CAUSE=UNKNOWN_STATUS_${JOB_STATUS}" ;;
+          esac

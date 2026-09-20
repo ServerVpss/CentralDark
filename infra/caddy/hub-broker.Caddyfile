@@ -1,0 +1,30 @@
+# ================================================================
+# hub.centralldark.com → hub-broker (127.0.0.1:8790)
+# Rotas OAuth + API keys do CentralDark
+# ================================================================
+
+hub.centralldark.com {
+    encode zstd gzip
+
+    log {
+        output file /var/log/caddy/hub-broker.log {
+            roll_size 10mb
+            roll_keep 5
+        }
+        format json
+    }
+
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains"
+        X-Content-Type-Options "nosniff"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        -Server
+    }
+
+    reverse_proxy 127.0.0.1:8790 {
+        header_up Host {host}
+        header_up X-Real-IP {remote_host}
+        header_up X-Forwarded-For {remote_host}
+        header_up X-Forwarded-Proto {scheme}
+    }
+}

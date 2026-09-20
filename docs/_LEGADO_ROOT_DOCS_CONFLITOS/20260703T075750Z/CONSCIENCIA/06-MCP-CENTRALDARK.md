@@ -1,0 +1,52 @@
+# 06 — MCP CentralDark
+
+O MCP (Model Context Protocol) é o que te dá acesso ao GitHub e à VPS direto do ChatGPT.
+
+## Onde tá o código
+
+- **No repo:** `CentralDark/apps/mcp/` (também referenciado em `apps/mcp/`)
+- **Na VPS:** `/root/CentralDark/APP/infra/mcp/`
+- **Secrets:** `/root/CentralDark/APP/secrets/mcp.env`
+
+## Servidor
+
+- **PM2:** `MCP-CentralDark` (porta 9100)
+- **Domínio:** `https://mcp.centralldark.com`
+- **Health:** `https://mcp.centralldark.com/health` (HTTP 200 = ok)
+- **Endpoint MCP:** `https://mcp.centralldark.com/mcp`
+- **OAuth:** via GitHub (Client ID já configurado)
+
+## O que o MCP enxerga
+
+- Repo `segredounlock/clone-deck` com permissão admin/maintain/push/triage/pull
+- Outros repos do `segredounlock` (leitura)
+- VPS via SSH interno (leitura ampla, escrita só onde permitido)
+- PM2 da VPS (ler estado de todos serviços)
+
+## Como conectar no ChatGPT
+
+1. Settings → Connectors → Add custom connector
+2. URL: `https://mcp.centralldark.com/mcp`
+3. Autorizar via GitHub (conta `segredounlock`)
+4. Em nova conversa, ativar conector "CentralDark"
+
+## Como testar que tá funcionando
+
+### 1. Servidor publicando catálogo novo
+- `https://mcp.centralldark.com/health` → deve mostrar `catalogVersion` + `toolCount`.
+- `https://mcp.centralldark.com/tools.json` → lista crua de todas as tools publicadas agora.
+- `https://mcp.centralldark.com/status.json` → mesmo `catalog` aparece dentro.
+
+Se as três URLs mostrarem `deploy_status`, `pendencias_list`, `pendencias_add`, `pendencias_close`,
+`github_rerun_workflow_run`, `github_dispatch_workflow`, `github_create_or_update_file` e
+`github_list_workflows` — o servidor está 100% atualizado.
+
+### 2. Cliente (ChatGPT) enxergando o catálogo novo
+Perguntas que devem responder com dados reais:
+1. "Lista os PM2 que estão online na VPS"
+2. "Lê o arquivo `docs/PENDENCIAS.md` do repo"
+3. "Mostra as últimas 50 linhas do log do `MultiZap-TelegramBot`"
+4. "Roda `deploy_status` e me dá o resumo"
+
+Se o ChatGPT diz que `deploy_status` não existe mas `/tools.json` mostra ele, é cache do cliente:
+desconectar, reconectar e abrir conversa NOVA.

@@ -1,0 +1,32 @@
+---
+title: "INDICE"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
+# Índice de Aprendizados do Hermes
+
+| # | Título | Categoria | Data | Aula relacionada |
+|---|---|---|---|---|
+| 001 | Token de bot ≠ sessão de usuário | regra | 2026-07-03 | AULA-003 |
+| 002 | Arsenal Council: portas e endpoints fixos | atalho | 2026-07-03 | AULA-001 |
+| 003 | Open WebUI: custom.css via volume mount | atalho | 2026-07-03 | AULA-002 |
+| 004 | Fallback de conselheiro quando Elite Anthropic offline | regra | 2026-07-03 | DEBATE-001 |
+| 008 | Canal público também usa `<pre>` monoespaçado | padrão-visual | 2026-07-03 | AULA-003 |
+| 009 | Nível + skills do Hermes só no privado do admin | padrão-visual | 2026-07-03 | AULA-003 |
+
+## Como adicionar novo aprendizado
+
+1. Copiar `TEMPLATE-APRENDIZADO.md` → `NNN-slug.md` (próximo número livre)
+2. Preencher
+3. Adicionar linha nesta tabela
+4. Se virou aula, apontar coluna "Aula relacionada"
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

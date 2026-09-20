@@ -1,0 +1,163 @@
+name: Hermes Core Signal Watch
+
+on:
+  pull_request:
+    paths:
+      - 'apps/modulos/HERMES-CORE/**'
+      - 'scripts/hermes/signal-watch-notify.mjs'
+      - 'scripts/webhook/lib/notify-telegram.mjs'
+  push:
+    branches: [main]
+    paths:
+      - 'apps/modulos/HERMES-CORE/**'
+      - 'scripts/hermes/signal-watch-notify.mjs'
+      - 'scripts/webhook/lib/notify-telegram.mjs'
+  schedule:
+    - cron: '17 7 * * *'
+  pull_request_review:
+    types: [submitted, edited]
+  issue_comment:
+    types: [created, edited]
+  repository_dispatch:
+    types: [centraldark_review_signal]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: hermes-core-signal-watch-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  scan:
+    if: github.event_name == 'pull_request' || github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 10
+    steps:
+      - name: Checkout same HEAD
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+          submodules: false
+
+      - name: Provar parser e classificador do Signal Watcher
+        run: |
+          set -euo pipefail
+          node --check apps/modulos/HERMES-CORE/agents/Signal-Watcher/agent.mjs
+          node --test apps/modulos/HERMES-CORE/agents/Signal-Watcher/agent.test.mjs
+
+      - name: Varrer HERMES-CORE byte/source aplicável
+        id: scan
+        run: |
+          set -euo pipefail
+          set +e
+          node apps/modulos/HERMES-CORE/agents/Signal-Watcher/agent.mjs --scan-core \
+            > "$RUNNER_TEMP/hermes-signal.json"
+          code=$?
+          set -e
+          cat "$RUNNER_TEMP/hermes-signal.json"
+          echo '## 🧿 Hermes Core Signal Watch' >> "$GITHUB_STEP_SUMMARY"
+          echo '```json' >> "$GITHUB_STEP_SUMMARY"
+          cat "$RUNNER_TEMP/hermes-signal.json" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          if [ "$code" -eq 2 ]; then
+            echo 'NODE_CHECK_FAIL=1' >> "$GITHUB_ENV"
+            exit 2
+          fi
+
+      - name: Receipt
+        if: always()
+        run: |
+          echo "HEAD_SHA=${GITHUB_SHA}"
+          echo "SIGNAL_WATCHER=apps/modulos/HERMES-CORE/agents/Signal-Watcher/agent.mjs"
+          echo "NODE_CHECK_FAIL=${NODE_CHECK_FAIL:-0}"
+          echo 'STATIC_FALLBACK_CANDIDATE_IS_NOT_RUNTIME_FAILURE=1'
+          echo 'CANDIDATE_IS_NOT_PROVEN=1'
+          echo 'UNKNOWN_IS_NOT_PASS=1'
+
+  review-signal:
+    name: CodeRabbit webhook → Signal Watcher → API advisory → autonomia
+    if: >-
+      (github.event_name == 'pull_request_review' && startsWith(github.actor, 'coderabbit')) ||
+      (github.event_name == 'issue_comment' && github.event.issue.pull_request && startsWith(github.actor, 'coderabbit')) ||
+      (github.event_name == 'repository_dispatch' && github.event.client_payload.source == 'coderabbit')
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 8
+    permissions:
+      contents: write
+      pull-requests: read
+      issues: read
+    steps:
+      - name: Checkout confiável da main
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          persist-credentials: false
+          fetch-depth: 1
+          submodules: false
+
+      - name: Normalizar review e executar bridge existente
+        id: bridge
+        shell: bash
+        env:
+          CENTRALDARK_GATEWAY_KEY: ${{ secrets.CENTRALDARK_GATEWAY_KEY }}
+          EVENT_NAME: ${{ github.event_name }}
+          ACTOR: ${{ github.actor }}
+          REVIEW_BODY: ${{ github.event.review.body || github.event.comment.body || github.event.client_payload.body || '' }}
+          REVIEW_URL: ${{ github.event.review.html_url || github.event.comment.html_url || github.event.client_payload.url || '' }}
+          PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number || github.event.client_payload.pr_number || '' }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.event.client_payload.head_sha || '' }}
+        run: |
+          set -euo pipefail
+          EVENT_B64="$(node - <<'NODE'
+          const event = {
+            source: 'coderabbit_github_webhook',
+            sender: process.env.ACTOR || 'coderabbit',
+            subject: `CodeRabbit review PR #${process.env.PR_NUMBER || 'UNKNOWN'}`,
+            body: process.env.REVIEW_BODY || '',
+            url: process.env.REVIEW_URL || '',
+            observed_at: new Date().toISOString(),
+            metadata: { event_name: process.env.EVENT_NAME, pr_number: process.env.PR_NUMBER || null, head_sha: process.env.HEAD_SHA || null },
+          };
+          process.stdout.write(Buffer.from(JSON.stringify(event), 'utf8').toString('base64url'));
+          NODE
+          )"
+          CENTRALDARK_API_URL='' node scripts/coderabbit-bridge.mjs --once --json-only --event-b64 "$EVENT_B64" > "$RUNNER_TEMP/coderabbit-receipt.json"
+          cat "$RUNNER_TEMP/coderabbit-receipt.json" >> "$GITHUB_STEP_SUMMARY"
+          SIGNAL_STATE="$(node -e "const r=require(process.argv[1]); process.stdout.write(r.signal_watcher?.receipt?.state || 'UNKNOWN')" "$RUNNER_TEMP/coderabbit-receipt.json")"
+          echo "signal_state=$SIGNAL_STATE" >> "$GITHUB_OUTPUT"
+          echo "pr_number=${PR_NUMBER}" >> "$GITHUB_OUTPUT"
+          echo "head_sha=${HEAD_SHA}" >> "$GITHUB_OUTPUT"
+
+      - name: Acionar recheck do owner canônico quando houver candidato material
+        if: steps.bridge.outputs.signal_state == 'CANDIDATE' && steps.bridge.outputs.pr_number != ''
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        env:
+          PR_NUMBER: ${{ steps.bridge.outputs.pr_number }}
+          HEAD_SHA: ${{ steps.bridge.outputs.head_sha }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            await github.request('POST /repos/{owner}/{repo}/dispatches', {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              event_type: 'centraldark_autonomia_recheck',
+              client_payload: {
+                pr_number: Number(process.env.PR_NUMBER),
+                head_sha: process.env.HEAD_SHA || null,
+                source: 'coderabbit_signal',
+              },
+            });
+            core.notice(`AUTONOMIA_RECHECK_DISPATCHED pr=${process.env.PR_NUMBER}`);
+
+      - name: Receipt
+        if: always()
+        run: |
+          echo 'CODERABBIT_ROLE=REVIEW_ONLY'
+          echo 'SIGNAL_WATCHER=CANONICAL_OWNER'
+          echo 'CENTRALDARK_API=ADVISORY_FALLBACK_ONLY'
+          echo 'MODEL_ADVISORY_IS_NOT_PROOF=1'
+          echo 'MUTATION_OWNER=AUTONOMIA_PROMOCAO_EXISTENTE'
+          echo 'UNKNOWN_IS_NOT_PASS=1'

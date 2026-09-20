@@ -1,0 +1,55 @@
+{
+  "at": "2026-06-11T10:03:31.078Z",
+  "endpoints": [
+    {
+      "name": "MCP health",
+      "url": "https://mcp.centralldark.com/health",
+      "bot": "grok",
+      "status": 200,
+      "latencyMs": 316,
+      "cors": null
+    },
+    {
+      "name": "MCP status",
+      "url": "https://mcp.centralldark.com/status.json",
+      "bot": "grok",
+      "status": 200,
+      "latencyMs": 373,
+      "cors": null
+    },
+    {
+      "name": "MCP tools",
+      "url": "https://mcp.centralldark.com/tools.json",
+      "bot": "codex",
+      "status": 200,
+      "latencyMs": 255,
+      "cors": null
+    },
+    {
+      "name": "Install status",
+      "url": "https://install.centralldark.com/status.json",
+      "bot": "lovable",
+      "status": 200,
+      "latencyMs": 265,
+      "cors": "*"
+    },
+    {
+      "name": "Painel",
+      "url": "https://status.centralldark.com/",
+      "bot": "lovable",
+      "status": 404,
+      "latencyMs": 248,
+      "cors": null
+    },
+    {
+      "name": "API",
+      "url": "https://api.centralldark.com/health",
+      "bot": "codex",
+      "status": 200,
+      "latencyMs": 357,
+      "cors": "*"
+    }
+  ],
+  "workflowsFailures24h": 20,
+  "divergencias": 24
+}

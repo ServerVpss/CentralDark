@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Elite Proxy — Status</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root {
+    --bg: #0b1120;
+    --card: #131c31;
+    --border: #1e2d4a;
+    --text: #e2e8f0;
+    --mut: #64748b;
+    --ok: #10b981;
+    --err: #ef4444;
+    --warn: #f59e0b;
+    --pri: #3b82f6;
+    --glow-ok: 0 0 20px rgba(16,185,129,.3);
+    --glow-err: 0 0 20px rgba(239,68,68,.3);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);padding:20px;min-height:100vh}
+  .container{max-width:900px;margin:0 auto}
+
+  /* Header */
+  .header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+  .header-left{display:flex;align-items:center;gap:12px}
+  .logo{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#3b82f6,#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:#fff}
+  .header h1{font-size:20px;margin:0;font-weight:600}
+  .header .sub{font-size:12px;color:var(--mut);margin-top:2px}
+
+  /* Status Badge */
+  .status-badge{display:flex;align-items:center;gap:8px;padding:8px 16px;border-radius:99px;font-size:13px;font-weight:600;transition:all .3s}
+  .status-badge.online{background:rgba(16,185,129,.15);color:var(--ok);border:1px solid rgba(16,185,129,.3);box-shadow:var(--glow-ok)}
+  .status-badge.offline{background:rgba(239,68,68,.15);color:var(--err);border:1px solid rgba(239,68,68,.3);box-shadow:var(--glow-err)}
+  .status-badge .dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+  .status-badge.online .dot{background:var(--ok);box-shadow:0 0 8px var(--ok);animation:pulse 2s infinite}
+  .status-badge.offline .dot{background:var(--err);box-shadow:0 0 8px var(--err)}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+  /* Cards Grid */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:20px}
+  .stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;transition:border-color .3s}
+  .stat-card .label{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--mut);margin-bottom:6px}
+  .stat-card .value{font-size:24px;font-weight:700;font-variant-numeric:tabular-nums}
+  .stat-card .value.ok{color:var(--ok)}.stat-card .value.err{color:var(--err)}.stat-card .value.warn{color:var(--warn)}.stat-card .value.pri{color:var(--pri)}
+
+  /* Logs */
+  .logs-section{margin-top:20px}
+  .logs-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+  .logs-header h3{margin:0;font-size:15px;font-weight:600}
+  .logs-controls{display:flex;gap:8px}
+  .logs-controls button,.btn-clear{background:var(--card);border:1px solid var(--border);color:var(--text);padding:6px 14px;border-radius:8px;cursor:pointer;font-size:12px;transition:all .2s}
+  .logs-controls button:hover,.btn-clear:hover{background:var(--border)}
+  .logs-controls button.active{background:var(--pri);border-color:var(--pri);color:#fff}
+  .log-container{background:#060a14;border:1px solid var(--border);border-radius:12px;padding:12px;height:320px;overflow-y:auto;font-family:'JetBrains Mono','Fira Code',monospace;font-size:12px;line-height:1.6}
+  .log-container::-webkit-scrollbar{width:6px}
+  .log-container::-webkit-scrollbar-track{background:transparent}
+  .log-container::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+  .log-line{padding:2px 8px;border-radius:4px;white-space:pre-wrap;word-break:break-all;transition:background .2s}
+  .log-line:hover{background:rgba(255,255,255,.03)}
+  .log-line .ts{color:var(--mut);margin-right:8px}
+  .log-line .level-INFO{color:var(--pri)}
+  .log-line .level-ERROR{color:var(--err);font-weight:600}
+  .log-line .level-WARN{color:var(--warn)}
+  .log-line .level-DEBUG{color:var(--mut)}
+  .log-line .highlight{background:rgba(59,130,246,.1);border-left:2px solid var(--pri)}
+  .log-line .highlight-err{background:rgba(239,68,68,.1);border-left:2px solid var(--err)}
+  .log-empty{color:var(--mut);text-align:center;padding:40px;font-size:13px}
+
+  /* Actions */
+  .actions{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+  .actions button{display:flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;border:0;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s}
+  .actions button:hover{transform:translateY(-1px)}
+  .btn-restart{background:var(--warn);color:#000}
+  .btn-restart:hover{box-shadow:0 4px 12px rgba(245,158,11,.3)}
+  .btn-stop{background:var(--err);color:#fff}
+  .btn-stop:hover{box-shadow:0 4px 12px rgba(239,68,68,.3)}
+  .btn-start{background:var(--ok);color:#000}
+  .btn-start:hover{box-shadow:0 4px 12px rgba(16,185,129,.3)}
+  .btn-refresh{background:var(--card);color:var(--text);border:1px solid var(--border)!important}
+  .btn-refresh:hover{background:var(--border)}
+
+  /* Toast */
+  .toast{position:fixed;bottom:24px;right:24px;padding:12px 20px;border-radius:10px;font-size:13px;font-weight:500;z-index:999;transform:translateY(100px);opacity:0;transition:all .4s cubic-bezier(.4,0,.2,1)}
+  .toast.show{transform:translateY(0);opacity:1}
+  .toast.success{background:rgba(16,185,129,.2);border:1px solid var(--ok);color:var(--ok)}
+  .toast.error{background:rgba(239,68,68,.2);border:1px solid var(--err);color:var(--err)}
+  .toast.info{background:rgba(59,130,246,.2);border:1px solid var(--pri);color:var(--pri)}
+
+  /* Animação de entrada */
+  .fade-in{animation:fadeIn .4s ease-out}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+  /* Responsivo */
+  @media(max-width:600px){.header{flex-direction:column;align-items:flex-start;gap:12px}.grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header fade-in">
+    <div class="header-left">
+      <div class="logo">⚡</div>
+      <div>
+        <h1>Elite Proxy</h1>
+        <div class="sub">Anthropic Proxy — porta 8082</div>
+      </div>
+    </div>
+    <div class="status-badge online" id="statusBadge">
+      <span class="dot"></span>
+      <span id="statusText">Online</span>
+    </div>
+  </div>
+
+  <div class="grid fade-in">
+    <div class="stat-card"><div class="label">Status</div><div class="value ok" id="statStatus">Online</div></div>
+    <div class="stat-card"><div class="label">Versão</div><div class="value pri" id="statVersion">—</div></div>
+    <div class="stat-card"><div class="label">Uptime</div><div class="value pri" id="statUptime">—</div></div>
+    <div class="stat-card"><div class="label">Requisições (24h)</div><div class="value warn" id="statReqs">0</div></div>
+    <div class="stat-card"><div class="label">Erros (24h)</div><div class="value" id="statErrors">0</div></div>
+    <div class="stat-card"><div class="label">Chaves</div><div class="value pri" id="statKeys">—</div></div>
+  </div>
+
+  <div class="actions fade-in">
+    <button class="btn-refresh" onclick="checkStatus()">🔄 Atualizar</button>
+    <button class="btn-restart" onclick="actionProxy('restart')">🔄 Reiniciar</button>
+    <button class="btn-stop" onclick="actionProxy('stop')">⏹ Parar</button>
+    <button class="btn-start" onclick="actionProxy('start')">▶ Iniciar</button>
+  </div>
+
+  <div class="logs-section fade-in">
+    <div class="logs-header">
+      <h3>📋 Logs em tempo real</h3>
+      <div class="logs-controls">
+        <button class="active" data-filter="all" onclick="setFilter('all',this)">Todos</button>
+        <button data-filter="ERROR" onclick="setFilter('ERROR',this)">Erros</button>
+        <button data-filter="INFO" onclick="setFilter('INFO',this)">Info</button>
+        <button class="btn-clear" onclick="clearLogs()">Limpar</button>
+      </div>
+    </div>
+    <div class="log-container" id="logContainer">
+      <div class="log-empty">🔄 Aguardando logs...</div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const LOG_URL = '/logs/elite-anthropic.log';
+const PROXY_PORT = 8082;
+let logFilter = 'all';
+let lastLogLength = 0;
+let pollInterval = null;
+
+function toast(msg, type = 'info') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `toast ${type} show`;
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+async function checkStatus() {
+  try {
+    const res = await fetch(`/health?t=${Date.now()}`);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    setOnline(true);
+    document.getElementById('statStatus').textContent = 'Online';
+    document.getElementById('statStatus').className = 'value ok';
+    document.getElementById('statVersion').textContent = data.version || '—';
+    document.getElementById('statKeys').textContent = data.keys ?? '—';
+    return true;
+  } catch(e) {
+    setOnline(false);
+    document.getElementById('statStatus').textContent = 'Offline';
+    document.getElementById('statStatus').className = 'value err';
+    return false;
+  }
+}
+
+function setOnline(online) {
+  const badge = document.getElementById('statusBadge');
+  const text = document.getElementById('statusText');
+  if (online) {
+    badge.className = 'status-badge online';
+    text.textContent = 'Online';
+  } else {
+    badge.className = 'status-badge offline';
+    text.textContent = 'Offline';
+  }
+}
+
+async function fetchLogs() {
+  try {
+    const res = await fetch(LOG_URL + '?t=' + Date.now());
+    if (!res.ok) return;
+    const text = await res.text();
+    const lines = text.split('\n').filter(Boolean);
+    if (lines.length === lastLogLength) return;
+    lastLogLength = lines.length;
+    renderLogs(lines);
+    updateStats(lines);
+  } catch(e) {
+    // silent
+  }
+}
+
+function renderLogs(lines) {
+  const container = document.getElementById('logContainer');
+  const filtered = logFilter === 'all' ? lines : lines.filter(l => l.includes(`"level":"${logFilter}"`));
+
+  if (!filtered.length) {
+    container.innerHTML = `<div class="log-empty">${logFilter === 'all' ? '📭 Nenhum log ainda' : '📭 Nenhum erro encontrado'}</div>`;
+    return;
+  }
+
+  container.innerHTML = filtered.map(line => {
+    try {
+      const parsed = JSON.parse(line);
+      const ts = parsed.ts || '';
+      const level = parsed.level || 'INFO';
+      const event = parsed.event || '';
+      const extra = Object.entries(parsed).filter(([k]) => !['ts','level','event'].includes(k)).map(([k,v]) => `${k}=${v}`).join(' ');
+      const isErr = level === 'ERROR';
+      return `<div class="log-line ${isErr ? 'highlight-err' : 'highlight'}">
+        <span class="ts">${ts}</span>
+        <span class="level-${level}">[${level}]</span>
+        <span>${event}</span>
+        ${extra ? `<span style="color:var(--mut)">${extra}</span>` : ''}
+      </div>`;
+    } catch {
+      return `<div class="log-line"><span style="color:var(--mut)">${line}</span></div>`;
+    }
+  }).join('');
+
+  container.scrollTop = container.scrollHeight;
+}
+
+function updateStats(lines) {
+  const last24h = lines.filter(l => {
+    try {
+      const p = JSON.parse(l);
+      return p.ts && Date.now() - new Date(p.ts).getTime() < 86400000;
+    } catch { return false; }
+  });
+  document.getElementById('statReqs').textContent = last24h.filter(l => l.includes('"event":"request"')).length;
+  document.getElementById('statErrors').textContent = last24h.filter(l => l.includes('"level":"ERROR"')).length;
+}
+
+function setFilter(filter, btn) {
+  logFilter = filter;
+  document.querySelectorAll('.logs-controls button[data-filter]').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  fetchLogs();
+}
+
+function clearLogs() {
+  document.getElementById('logContainer').innerHTML = '<div class="log-empty">📭 Logs limpos</div>';
+  lastLogLength = 0;
+}
+
+async function actionProxy(action) {
+  const btn = event.target;
+  const original = btn.textContent;
+  btn.textContent = '⏳...';
+  btn.disabled = true;
+
+  try {
+    const res = await fetch(`/proxy-action?action=${action}&t=${Date.now()}`);
+    const data = await res.json();
+    if (data.success) {
+      toast(`✅ Proxy ${action === 'restart' ? 'reiniciado' : action === 'stop' ? 'parado' : 'iniciado'} com sucesso!`, 'success');
+      setTimeout(checkStatus, 1500);
+    } else {
+      toast(`❌ ${data.error || 'Falha ao executar'}`, 'error');
+    }
+  } catch(e) {
+    toast(`❌ Erro de conexão: ${e.message}`, 'error');
+  }
+
+  btn.textContent = original;
+  btn.disabled = false;
+}
+
+// Polling
+checkStatus();
+fetchLogs();
+pollInterval = setInterval(() => {
+  checkStatus();
+  fetchLogs();
+}, 3000);
+
+// Cleanup on page unload
+window.addEventListener('beforeunload', () => {
+  if (pollInterval) clearInterval(pollInterval);
+});
+</script>
+</body>
+</html>

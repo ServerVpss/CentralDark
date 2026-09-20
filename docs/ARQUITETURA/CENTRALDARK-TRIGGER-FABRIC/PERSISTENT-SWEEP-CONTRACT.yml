@@ -1,0 +1,107 @@
+schema: centraldark.persistent-sweep.v1
+status: CANDIDATE_IN_ACTIVE_PR
+owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
+authority: SEGREDO/CHEFE
+scope: ONE_SYSTEM_ONLY
+
+invariants:
+  persistent_rules: true
+  one_shot_governance_forbidden: true
+  current_over_history: true
+  unknown_is_not_pass: true
+  action_is_not_proof: true
+  documented_is_not_executed: true
+  reuse_before_create: true
+  sealed_claim_reuse: true
+  reopen_requires_cause_ref: true
+  no_v1_v2_v3_parallel_system: true
+
+sweep:
+  mode: AUTONOMOUS_UNTIL_FIXED_POINT
+  scan:
+    - PRS
+    - COMMITS
+    - WORKFLOWS
+    - JOBS
+    - RUNNERS
+    - CONFLICTS
+    - DOCUMENTATION
+    - RECEIPTS
+    - CONNECTED_SURFACES
+  on_residual: VERTEX_INVERSO
+  on_new_causal_delta: META_LUPA
+  no_new_information: REUSE_PROOF_NO_REPEAT
+  exhaustion_requires:
+    - RESIDUALS_CLASSIFIED
+    - SEALED_CLAIMS_NOT_REPEATED
+    - CURRENT_HEAD_REMEASURED
+    - TEST_WHEN_APPLICABLE
+    - COUNTERPROOF_WHEN_APPLICABLE
+    - DOCUMENTATION_GATE
+    - RECEIPT
+    - NEXT_CURSOR
+
+composition:
+  megazord_is_existing_composition: true
+  new_capability_is_zord_or_capability: true
+  workflow_dedupe_classes: [UNIQUE, REUSE_CANDIDATE, INTENTIONAL_PARALLEL]
+  duplicate_equivalent_jobs_should_reuse_owner: true
+  parallelism_requires_distinct_information_isolation_or_proof: true
+
+review_chain:
+  codex:
+    role: REVIEW_ONLY
+    fallback: ZENDRIVE
+  zendrive:
+    role: REVIEW_ONLY
+    uses_authorized_local_profiles: true
+  coderabbit:
+    role: REVIEW_ONLY
+  signal_watcher:
+    role: FINDING_ORGANIZER_AND_MINERALIZER
+  hermes:
+    role: REPRODUCE_TEST_COUNTERPROVE
+  learning_states:
+    failed_solution: REFUTED_MINERAL
+    unresolved: UNRESOLVED_MINERAL
+    proven_useful: CRYSTAL_GOLD
+    discard_learning: false
+
+writer:
+  reader_first: true
+  self_declare_primary_forbidden: true
+  shared_lease_required: true
+  one_writer_per_mutable_scope: true
+  parallel_readers_allowed: true
+  handoff_requires: [RELEASE, RECEIPT, ACQUIRE]
+
+pombo:
+  transport_not_authority: true
+  stable_lineage_id: true
+  monotonic_revision: true
+  parent_hash_required: true
+  delta_hash_required: true
+  no_new_information_no_new_revision: true
+
+surfaces:
+  casa_local:
+    role: OWNER_WORKSHOP
+    multiple_authorized_profiles_allowed: true
+  published_client_platform:
+    role: DELIVERY_SURFACE
+    protection_and_promotion_gates: true
+
+hub:
+  one_hub_only: true
+  connectors_are_surfaces_not_authorities: true
+  vpc_mcp_is_transport_surface: true
+  required_receipt_fields: [source_ref, owner, health, timestamp, receipt, NEXT_CURSOR]
+  connector_failure_creates_second_hub: false
+
+boot:
+  chain: "!CENTRALDARK -> CENTRALDARK_AI_BOOT -> MASTER_CYCLE -> MEGAZORD_CAPABILITY_ROUTER -> META_LUPA -> VERTEX_INVERSO -> REALITY_JUDGE -> DOCUMENTATION_GATE -> GLOBAL_FIXED_POINT -> REGISTRA -> BOOT_REFRESH"
+
+promotion:
+  contract_file_is_runtime_proof: false
+  runtime_binding_must_be_observed: true
+  same_head_gates_required: true

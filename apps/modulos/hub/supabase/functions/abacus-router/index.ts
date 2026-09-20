@@ -1,0 +1,275 @@
+// Edge Function: abacus-router
+// HUB Supabase (lyoigsqluyktoclwdaft) — proxy OpenAI-compatible pra Abacus RouteLLM
+// Endpoints:
+//   GET  /abacus-router/status               -> saúde + se a chave tá configurada
+//   GET  /abacus-router/models               -> lista de modelos (via Abacus se tiver chave)
+//   GET  /abacus-router/logs?limit=100       -> logs do usuário logado
+//   POST /abacus-router/v1/chat/completions  -> proxy pro Abacus, grava log
+
+import { createClient } from "jsr:@supabase/supabase-js@2";
+
+const cors = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-correlation-id",
+  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+};
+
+const ABACUS_ENV_KEY = Deno.env.get("ABACUS_API_KEY") ?? "";
+const ABACUS_BASE = Deno.env.get("ABACUS_BASE_URL") ?? "https://routellm.abacus.ai/v1";
+const SUPA_URL = Deno.env.get("SUPABASE_URL")!;
+const SUPA_ANON = Deno.env.get("SUPABASE_ANON_KEY")!;
+const SUPA_SERVICE = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+
+// Cache curtinho pra não ir no banco toda request
+let keyCache: { key: string; hint: string; loadedAt: number } | null = null;
+const KEY_TTL_MS = 30_000;
+
+async function loadKey(): Promise<{ key: string; hint: string }> {
+  if (ABACUS_ENV_KEY) {
+    return { key: ABACUS_ENV_KEY, hint: ABACUS_ENV_KEY.slice(-4) };
+  }
+  if (keyCache && Date.now() - keyCache.loadedAt < KEY_TTL_MS) {
+    return { key: keyCache.key, hint: keyCache.hint };
+  }
+  const svc = createClient(SUPA_URL, SUPA_SERVICE);
+  const { data } = await svc.from("abacus_config").select("api_key, key_hint").eq("id", 1).maybeSingle();
+  const key = data?.api_key ?? "";
+  const hint = data?.key_hint ?? "";
+  keyCache = { key, hint, loadedAt: Date.now() };
+  return { key, hint };
+}
+
+function json(body: unknown, status = 200) {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { ...cors, "Content-Type": "application/json" },
+  });
+}
+
+async function authedUser(req: Request) {
+  const authHeader = req.headers.get("authorization") ?? "";
+  const token = authHeader.replace(/^Bearer\s+/i, "");
+  if (!token) return null;
+  const supa = createClient(SUPA_URL, SUPA_ANON, {
+    global: { headers: { Authorization: `Bearer ${token}` } },
+  });
+  const { data } = await supa.auth.getUser();
+  return data.user;
+}
+
+async function pingEndpoint(name: string, url: string) {
+  const t0 = performance.now();
+  try {
+    const r = await fetch(url, { method: "GET", signal: AbortSignal.timeout(8000) });
+    return {
+      name,
+      url,
+      status: r.status,
+      latencyMs: Math.round(performance.now() - t0),
+      ok: r.status < 500,
+    };
+  } catch (_e) {
+    return {
+      name,
+      url,
+      status: 0,
+      latencyMs: Math.round(performance.now() - t0),
+      ok: false,
+    };
+  }
+}
+
+async function handleStatus() {
+  const { key, hint } = await loadKey();
+  const endpoints = await Promise.all([
+    pingEndpoint("Abacus RouteLLM", `${ABACUS_BASE}/models`),
+    pingEndpoint("Abacus ChatLLM", "https://chatllm.abacus.ai/"),
+    pingEndpoint("Abacus API root", "https://api.abacus.ai/"),
+  ]);
+
+  let modelCount = 0;
+  if (key) {
+    try {
+      const r = await fetch(`${ABACUS_BASE}/models`, {
+        headers: { Authorization: `Bearer ${key}` },
+      });
+      if (r.ok) {
+        const j = await r.json();
+        modelCount = Array.isArray(j?.data) ? j.data.length : 0;
+      }
+    } catch { /* ignora */ }
+  }
+
+  return json({
+    keyConfigured: Boolean(key),
+    keyHint: key ? hint : null,   // só últimos 4 chars, nunca a chave inteira
+    endpoints,
+    modelCount,
+  });
+}
+
+async function handleSetKey(req: Request, userId: string) {
+  const body = await req.json().catch(() => ({}));
+  const apiKey = String(body?.apiKey ?? "").trim();
+  if (apiKey.length < 8) {
+    return json({ error: "chave curta demais" }, 400);
+  }
+  const svc = createClient(SUPA_URL, SUPA_SERVICE);
+  const { error } = await svc.from("abacus_config").upsert({
+    id: 1,
+    api_key: apiKey,
+    key_hint: apiKey.slice(-4),
+    updated_by: userId,
+    updated_at: new Date().toISOString(),
+  });
+  if (error) return json({ error: error.message }, 500);
+  keyCache = null;   // invalida cache
+  return json({ ok: true, keyHint: apiKey.slice(-4) });
+}
+
+async function handleModels() {
+  const { key } = await loadKey();
+  if (!key) return json({ models: [], reason: "no_key" });
+  try {
+    const r = await fetch(`${ABACUS_BASE}/models`, {
+      headers: { Authorization: `Bearer ${key}` },
+    });
+    if (!r.ok) return json({ models: [], reason: `upstream_${r.status}` });
+    const j = await r.json();
+    const models = (j?.data ?? []).map((m: any) => ({
+      id: m.id ?? m.name,
+      name: m.id ?? m.name,
+      active: true,
+    }));
+    return json({ models });
+  } catch (e) {
+    return json({ models: [], reason: String(e) });
+  }
+}
+
+async function handleLogs(req: Request, userId: string) {
+  const url = new URL(req.url);
+  const limit = Math.min(Number(url.searchParams.get("limit") ?? "100"), 500);
+  const svc = createClient(SUPA_URL, SUPA_SERVICE);
+  const { data, error } = await svc
+    .from("abacus_logs")
+    .select("*")
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false })
+    .limit(limit);
+  if (error) return json({ logs: [], error: error.message }, 500);
+  return json({ logs: data });
+}
+
+async function handleChat(req: Request, userId: string) {
+  const body = await req.json().catch(() => ({}));
+  const model = body?.model ?? "route-llm";
+  const t0 = performance.now();
+
+  const { key } = await loadKey();
+  if (!key) {
+    return json({
+      error: "ABACUS_API_KEY não configurada",
+      hint: "Configura pela aba Abacus do HUB (botão Configurar chave)",
+    }, 503);
+  }
+
+  let upstreamStatus = 0;
+  let errorSnippet: string | null = null;
+  let content = "";
+  let tokensIn: number | null = null;
+  let tokensOut: number | null = null;
+
+  try {
+    const r = await fetch(`${ABACUS_BASE}/chat/completions`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${key}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ...body, stream: false }),
+    });
+    upstreamStatus = r.status;
+    const raw = await r.text();
+    if (r.ok) {
+      try {
+        const j = JSON.parse(raw);
+        content = j?.choices?.[0]?.message?.content ?? raw;
+        tokensIn = j?.usage?.prompt_tokens ?? null;
+        tokensOut = j?.usage?.completion_tokens ?? null;
+      } catch {
+        content = raw;
+      }
+    } else {
+      errorSnippet = raw.slice(0, 500);
+    }
+
+    const latencyMs = Math.round(performance.now() - t0);
+    const svc = createClient(SUPA_URL, SUPA_SERVICE);
+    await svc.from("abacus_logs").insert({
+      user_id: userId,
+      model,
+      status: upstreamStatus,
+      latency_ms: latencyMs,
+      tokens_in: tokensIn,
+      tokens_out: tokensOut,
+      error_snippet: errorSnippet,
+    });
+
+    if (!r.ok) {
+      return json({
+        error: friendlyError(upstreamStatus),
+        upstream: errorSnippet,
+      }, upstreamStatus);
+    }
+    try {
+      return json(JSON.parse(raw));
+    } catch {
+      return json({ choices: [{ message: { role: "assistant", content } }] });
+    }
+  } catch (e) {
+    const latencyMs = Math.round(performance.now() - t0);
+    const svc = createClient(SUPA_URL, SUPA_SERVICE);
+    await svc.from("abacus_logs").insert({
+      user_id: userId,
+      model,
+      status: 0,
+      latency_ms: latencyMs,
+      error_snippet: String(e).slice(0, 500),
+    });
+    return json({ error: "falha de rede", detail: String(e) }, 502);
+  }
+}
+
+function friendlyError(status: number) {
+  if (status === 401) return "Chave Abacus inválida ou expirada";
+  if (status === 402) return "Créditos zerados no Abacus";
+  if (status === 404) return "Endpoint do Abacus não encontrado (URL morta)";
+  if (status === 429) return "Rate limit do Abacus";
+  return `Erro upstream ${status}`;
+}
+
+Deno.serve(async (req) => {
+  if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
+
+  const url = new URL(req.url);
+  const path = url.pathname.replace(/^\/abacus-router/, "") || "/";
+
+  try {
+    // Status é público (não gasta chave nem crédito)
+    if (path === "/status" && req.method === "GET") return await handleStatus();
+
+    // Daqui pra frente exige auth
+    const user = await authedUser(req);
+    if (!user) return json({ error: "unauthorized" }, 401);
+
+    if (path === "/models" && req.method === "GET") return await handleModels();
+    if (path === "/logs" && req.method === "GET") return await handleLogs(req, user.id);
+    if (path === "/set-key" && req.method === "POST") return await handleSetKey(req, user.id);
+    if (path === "/v1/chat/completions" && req.method === "POST") return await handleChat(req, user.id);
+
+    return json({ error: "not_found", path }, 404);
+  } catch (e) {
+    return json({ error: "internal", detail: String(e) }, 500);
+  }
+});

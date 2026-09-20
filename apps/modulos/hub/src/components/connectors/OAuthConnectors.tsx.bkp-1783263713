@@ -1,0 +1,431 @@
+import React, { useEffect, useMemo, useState } from 'react';
+import { hubClient as supabase } from '@/integrations/supabase/hub-client';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
+import { Button } from '@/shared/ui/button';
+import { Badge } from '@/shared/ui/badge';
+import { ApiKeyDialog } from './ApiKeyDialog';
+import { useToast } from '@/components/Toast';
+
+interface Provider {
+  id: string;
+  display_name: string;
+  color: string;
+  icon?: string;
+  scopes: string;
+  auth_type?: 'oauth' | 'api_key';
+  tier?: 1 | 2 | 3;
+}
+interface Connection {
+  id: string;
+  provider_id: string;
+  expires_at: string;
+  status: string;
+  account_label: string | null;
+  consent_at?: string;
+  scopes_granted?: string;
+}
+
+const BROKER_BASE = 'https://hub.centralldark.com';
+const DEV_USER_ID = 'dev-pivete';
+
+// 🎨 Ícones SVG oficiais via simpleicons.org (CDN) — sem CORS, sempre a cor original.
+// Alguns providers têm slug próprio; abaixo tá o mapa.
+const ICON_SLUG: Record<string, string> = {
+  openai: 'openai',
+  claude: 'anthropic',
+  gemini: 'googlegemini',
+  grok: 'x',
+  groq: 'groq',
+  notion: 'notion',
+  github: 'github',
+  gdrive: 'googledrive',
+  gdocs: 'googledocs',
+  google: 'google',
+  supabase: 'supabase',
+  telegram: 'telegram',
+};
+
+// Info leiga de cada provider
+const PROVIDER_INFO: Record<string, { desc: string; where: string; docUrl?: string }> = {
+  openai: { desc: 'ChatGPT / GPT-4 / GPT-5. Ideal pra conversas longas e código.', where: 'platform.openai.com/api-keys', docUrl: 'https://platform.openai.com/api-keys' },
+  claude: { desc: 'Claude da Anthropic. Excelente em raciocínio e textos grandes.', where: 'console.anthropic.com', docUrl: 'https://console.anthropic.com/settings/keys' },
+  gemini: { desc: 'Gemini do Google. Rápido, gratuito e multimodal.', where: 'aistudio.google.com/apikey', docUrl: 'https://aistudio.google.com/apikey' },
+  grok: { desc: 'Grok da xAI (Elon). Bom pra respostas atualizadas em tempo real.', where: 'console.x.ai', docUrl: 'https://console.x.ai' },
+  groq: { desc: 'Groq — inferência ultra-rápida de modelos open-source.', where: 'console.groq.com/keys', docUrl: 'https://console.groq.com/keys' },
+  notion: { desc: 'Suas páginas e bancos do Notion. Login via OAuth (multi-workspace).', where: 'login OAuth direto' },
+  github: { desc: 'Repositórios e código do GitHub. Login OAuth multi-conta.', where: 'login OAuth direto' },
+  gdrive: { desc: 'Google Drive — arquivos, docs e sheets. Login OAuth Google.', where: 'login OAuth direto' },
+  supabase: { desc: 'Chave de management dos seus projetos Supabase.', where: 'supabase.com/dashboard/account/tokens', docUrl: 'https://supabase.com/dashboard/account/tokens' },
+};
+
+const FALLBACK_PROVIDERS: Provider[] = [
+  { id: 'openai',   display_name: 'OpenAI (ChatGPT)', color: '#10a37f', scopes: 'chat completions',        auth_type: 'api_key', tier: 1 },
+  { id: 'claude',   display_name: 'Claude (Anthropic)', color: '#D97757', scopes: 'messages',              auth_type: 'api_key', tier: 1 },
+  { id: 'gemini',   display_name: 'Gemini (Google)',    color: '#4285f4', scopes: 'generateContent',       auth_type: 'api_key', tier: 1 },
+  { id: 'groq',     display_name: 'Groq',               color: '#F55036', scopes: 'chat completions',      auth_type: 'api_key', tier: 1 },
+  { id: 'grok',     display_name: 'Grok (xAI)',         color: '#000000', scopes: 'chat',                  auth_type: 'api_key', tier: 1 },
+  { id: 'notion',   display_name: 'Notion',             color: '#000000', scopes: 'read.content update',   auth_type: 'oauth',   tier: 1 },
+  { id: 'github',   display_name: 'GitHub',             color: '#24292f', scopes: 'repo read:user',        auth_type: 'oauth',   tier: 1 },
+  { id: 'gdrive',   display_name: 'Google Drive',       color: '#1a73e8', scopes: 'drive.file readonly',   auth_type: 'oauth',   tier: 1 },
+  { id: 'supabase', display_name: 'Supabase',           color: '#3ecf8e', scopes: 'management',            auth_type: 'api_key', tier: 1 },
+];
+
+function BrandIcon({ provider }: { provider: Provider }) {
+  const slug = ICON_SLUG[provider.id];
+  if (slug) {
+    return (
+      <img
+        src={`https://cdn.simpleicons.org/${slug}`}
+        alt={provider.display_name}
+        className="w-6 h-6 object-contain"
+        loading="lazy"
+        onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+      />
+    );
+  }
+  return <span className="text-base font-bold">{provider.display_name[0]}</span>;
+}
+
+export function OAuthConnectors() {
+  const [providers, setProviders] = useState<Provider[]>([]);
+  const [conns, setConns] = useState<Connection[]>([]);
+  const [userId, setUserId] = useState<string>(DEV_USER_ID);
+  const [isRealUser, setIsRealUser] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [usingFallback, setUsingFallback] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [openProvider, setOpenProvider] = useState<Provider | null>(null);
+  const [apiKeyFor, setApiKeyFor] = useState<Provider | null>(null);
+  const [apiKeyLabel, setApiKeyLabel] = useState<string>('');
+  const [testingId, setTestingId] = useState<string | null>(null);
+  const [testResults, setTestResults] = useState<Record<string,{ok:boolean;detail:string;at:number}>>({});
+  const toast = useToast();
+
+  async function load() {
+    setLoading(true); setLoadError(null);
+    let uid: string = DEV_USER_ID; let real = false;
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user?.id) { uid = user.id; real = true; }
+    } catch {}
+    setUserId(uid); setIsRealUser(real);
+
+    let p: Provider[] = []; let c: Connection[] = []; let fallback = false;
+    try {
+      const r = await fetch(`${BROKER_BASE}/api/providers`);
+      const j = await r.json();
+      if (!j.ok || !j.items?.length) throw new Error('empty');
+      p = j.items as Provider[];
+    } catch { p = FALLBACK_PROVIDERS; fallback = true; }
+    try {
+      const r = await fetch(`${BROKER_BASE}/api/keys/list?user_id=${encodeURIComponent(uid)}`);
+      const j = await r.json();
+      if (!j.ok) throw new Error(j.error || 'erro list');
+      c = j.items as Connection[];
+    } catch (e: any) { c = []; setLoadError(e?.message ?? 'erro'); }
+
+    setProviders(p); setConns(c); setUsingFallback(fallback); setLoading(false);
+  }
+
+  useEffect(() => {
+    load();
+    // detecta callback OAuth (?oauth_ok=github&label=xxx)
+    const url = new URL(window.location.href);
+    const ok = url.searchParams.get('oauth_ok');
+    if (ok) {
+      const label = url.searchParams.get('label');
+      toast.success(`${ok} conectado${label ? ` (${label})` : ''}`);
+      url.searchParams.delete('oauth_ok'); url.searchParams.delete('label');
+      window.history.replaceState({}, '', url.toString());
+    }
+  }, []);
+
+  function startOAuth(p: Provider) {
+    const back = window.location.href.split('?')[0];
+    window.location.href = `${BROKER_BASE}/oauth/${p.id}/start?user_id=${userId}&redirect_to=${encodeURIComponent(back)}`;
+  }
+
+  function addAccount(p: Provider) {
+    if (p.auth_type === 'oauth') { startOAuth(p); return; }
+    const providerConns = conns.filter(c => c.provider_id === p.id);
+    setApiKeyLabel(`conta-${providerConns.length + 1}`);
+    setApiKeyFor(p);
+  }
+
+  async function saveApiKey(p: Provider, key: string) {
+    try {
+      const res = await fetch(`${BROKER_BASE}/api/keys/store`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user_id: userId, provider_id: p.id, api_key: key, account_label: apiKeyLabel || undefined }),
+      });
+      const j = await res.json();
+      if (!res.ok || !j.ok) throw new Error(j.error || `HTTP ${res.status}`);
+      toast.success(`${p.display_name} · ${j.account_label} salvo`);
+      setApiKeyFor(null); setApiKeyLabel(''); await load();
+    } catch (e: any) {
+      toast.error(`Falha ao salvar: ${e?.message ?? e}`);
+    }
+  }
+
+  async function testConn(connId: string, name: string) {
+    setTestingId(connId);
+    try {
+      const r = await fetch(`${BROKER_BASE}/api/keys/${connId}/test`, { method: 'POST' });
+      const j = await r.json();
+      if (!j.ok) throw new Error(j.error || 'erro');
+      setTestResults(prev => ({ ...prev, [connId]: { ok: !!j.result_ok, detail: j.detail || '', at: Date.now() } }));
+      j.result_ok ? toast.success(`${name}: ${j.detail || 'ok'}`) : toast.error(`${name} falhou (HTTP ${j.http}): ${j.detail}`);
+    } catch (e: any) { toast.error(`Erro ao testar: ${e.message}`); }
+    finally { setTestingId(null); }
+  }
+
+
+  async function renameConn(connId: string, current: string) {
+    const nome = prompt('Nome dessa conta:', current || '')?.trim();
+    if (!nome || nome === current) return;
+    try {
+      const r = await fetch(`${BROKER_BASE}/api/keys/${connId}`, {
+        method: 'PATCH', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ account_label: nome }),
+      });
+      const j = await r.json();
+      if (!j.ok) throw new Error(j.error);
+      toast.success('renomeado'); load();
+    } catch (e: any) { toast.error(`erro: ${e.message}`); }
+  }
+
+  async function disconnect(connId: string, name: string) {
+    if (!confirm(`Remover a conta "${name}"?`)) return;
+    try {
+      const r = await fetch(`${BROKER_BASE}/api/keys/${connId}`, { method: 'DELETE' });
+      const j = await r.json();
+      if (!j.ok) throw new Error(j.error);
+      toast.success(`${name} removido`); load();
+    } catch (e: any) { toast.error(`Erro: ${e?.message ?? e}`); }
+  }
+
+  function statusInfo(c?: Connection) {
+    if (!c) return { txt: 'sem conta', tone: 'muted' as const };
+    const days = Math.floor((new Date(c.expires_at).getTime() - Date.now()) / 86400000);
+    if (c.status !== 'active') return { txt: c.status, tone: 'danger' as const };
+    if (days < 0) return { txt: 'expirado', tone: 'danger' as const };
+    if (days < 3) return { txt: `expira ${days}d`, tone: 'warning' as const };
+    return { txt: `ativo · ${days}d`, tone: 'success' as const };
+  }
+
+  const toneClass = {
+    muted:   'bg-muted text-muted-foreground border-border',
+    success: 'bg-primary/15 text-primary border-primary/40',
+    warning: 'bg-[hsl(var(--warning))]/15 text-[hsl(var(--warning))] border-[hsl(var(--warning))]/40',
+    danger:  'bg-destructive/15 text-destructive border-destructive/40',
+  };
+
+  const byProvider = useMemo(() => {
+    const m: Record<string, Connection[]> = {};
+    for (const c of conns) (m[c.provider_id] ||= []).push(c);
+    return m;
+  }, [conns]);
+
+  if (loading) {
+    return (
+      <Card className="card-premium border-border/60">
+        <CardHeader>
+          <div className="h-6 w-56 bg-muted/50 rounded animate-pulse" />
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div key={i} className="rounded-xl border border-border bg-card/60 p-4 h-32 animate-pulse" />
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  return (
+    <>
+      <Card className="card-premium border-border/60">
+        <CardHeader className="space-y-2">
+          <div className="flex items-start justify-between gap-3 flex-wrap">
+            <div>
+              <CardTitle className="text-2xl">
+                Suas contas conectadas <span className="text-gradient-emerald">OAuth & API</span>
+              </CardTitle>
+              <p className="text-sm text-muted-foreground mt-1">
+                Cada card guarda <b>quantas contas você quiser</b> — clica no card pra abrir, adicionar mais uma, renomear ou remover.
+                Tudo cifrado no HUB, expiração 365d, log auditado.
+              </p>
+            </div>
+            <div className="flex flex-col items-end gap-1">
+              {usingFallback && <Badge className={toneClass.warning}>🟡 catálogo local</Badge>}
+              {loadError && <Badge className={toneClass.danger}>🔴 {loadError}</Badge>}
+              {!isRealUser && <Badge className={toneClass.muted}>🧪 modo dev</Badge>}
+            </div>
+          </div>
+        </CardHeader>
+
+        <CardContent>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {providers.map(p => {
+              const list = byProvider[p.id] || [];
+              const primary = list[0];
+              const s = statusInfo(primary);
+              const info = PROVIDER_INFO[p.id];
+              return (
+                <button
+                  key={p.id}
+                  onClick={() => setOpenProvider(p)}
+                  className="group relative overflow-hidden rounded-xl border border-border bg-card/60 p-4 text-left transition-all hover:border-primary/50 hover:shadow-3d-primary hover:-translate-y-0.5"
+                >
+                  <div
+                    className="absolute inset-x-0 top-0 h-1 opacity-70 group-hover:opacity-100 transition-opacity"
+                    style={{ background: `linear-gradient(90deg, transparent, ${p.color}, transparent)` }}
+                  />
+                  <div className="absolute top-2 right-2 flex gap-1 items-center">
+                    {p.tier && <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-background/80 border border-border text-muted-foreground">T{p.tier}</span>}
+                  </div>
+
+                  <div className="flex items-start gap-3">
+                    <div
+                      className="w-12 h-12 shrink-0 rounded-xl flex items-center justify-center bg-white/95 shadow-3d border border-border/50"
+                      title={p.display_name}
+                    >
+                      <BrandIcon provider={p} />
+                    </div>
+                    <div className="flex-1 min-w-0 pt-0.5">
+                      <div className="font-semibold text-sm truncate pr-8">{p.display_name}</div>
+                      <div className="flex items-center gap-1.5 mt-1 flex-wrap">
+                        {p.auth_type === 'oauth'
+                          ? <Badge className="text-[10px] py-0 px-1.5 bg-primary/15 text-primary border-primary/40">🔐 OAUTH</Badge>
+                          : <Badge className="text-[10px] py-0 px-1.5 bg-secondary text-secondary-foreground border-border">🔑 API KEY</Badge>}
+                        <Badge className={`text-[10px] py-0 px-1.5 ${toneClass[s.tone]}`}>{s.txt}</Badge>
+                      </div>
+                    </div>
+                  </div>
+
+                  {info && (
+                    <p className="text-[11px] text-muted-foreground mt-3 line-clamp-2 leading-snug">{info.desc}</p>
+                  )}
+
+                  <div className="mt-3 flex items-center justify-between">
+                    <span className="text-xs font-semibold text-foreground/80">
+                      {list.length === 0 ? 'nenhuma conta' : `${list.length} ${list.length===1?'conta':'contas'}`}
+                    </span>
+                    <span className="text-[11px] text-primary group-hover:translate-x-0.5 transition-transform">
+                      abrir →
+                    </span>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Modal detalhes do provider */}
+      {openProvider && (
+        <div
+          className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm flex items-center justify-center p-4"
+          onClick={() => setOpenProvider(null)}
+        >
+          <div
+            className="bg-card border border-border rounded-2xl shadow-2xl max-w-2xl w-full max-h-[85vh] overflow-hidden flex flex-col"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div
+              className="p-5 border-b border-border flex items-center gap-4"
+              style={{ background: `linear-gradient(135deg, ${openProvider.color}22, transparent)` }}
+            >
+              <div className="w-14 h-14 rounded-xl bg-white/95 flex items-center justify-center shadow-3d border border-border/50">
+                <BrandIcon provider={openProvider} />
+              </div>
+              <div className="flex-1 min-w-0">
+                <h2 className="text-xl font-bold">{openProvider.display_name}</h2>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  {PROVIDER_INFO[openProvider.id]?.desc || openProvider.scopes}
+                </p>
+                {PROVIDER_INFO[openProvider.id]?.docUrl && (
+                  <a
+                    href={PROVIDER_INFO[openProvider.id]!.docUrl}
+                    target="_blank" rel="noopener noreferrer"
+                    className="text-[11px] text-primary hover:underline mt-1 inline-block"
+                  >
+                    📖 pegar chave em {PROVIDER_INFO[openProvider.id]!.where} ↗
+                  </a>
+                )}
+              </div>
+              <button
+                onClick={() => setOpenProvider(null)}
+                className="text-muted-foreground hover:text-foreground text-2xl leading-none w-8 h-8 rounded hover:bg-muted flex items-center justify-center"
+              >×</button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-5 space-y-3">
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-semibold">Contas cadastradas</h3>
+                <Button
+                  size="sm"
+                  onClick={() => addAccount(openProvider)}
+                  className="gradient-emerald text-primary-foreground border-0 hover:opacity-90"
+                >
+                  + Adicionar conta
+                </Button>
+              </div>
+
+              {(byProvider[openProvider.id] || []).length === 0 ? (
+                <div className="border border-dashed border-border rounded-lg p-8 text-center space-y-2">
+                  <div className="text-3xl">📭</div>
+                  <p className="text-sm text-muted-foreground">Nenhuma conta ainda.</p>
+                  <p className="text-xs text-muted-foreground">
+                    Clica em <b>+ Adicionar conta</b> pra {openProvider.auth_type === 'oauth' ? 'fazer login OAuth' : 'colar sua API key'}.
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  {(byProvider[openProvider.id] || []).map(c => {
+                    const s = statusInfo(c);
+                    return (
+                      <div key={c.id} className="rounded-lg border border-border bg-card/40 p-3 flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center text-xs font-bold text-primary">
+                          {(c.account_label || '?')[0]?.toUpperCase()}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="font-medium text-sm truncate">{c.account_label || '(sem nome)'}</div>
+                          <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
+                            <Badge className={`text-[9px] py-0 px-1.5 ${toneClass[s.tone]}`}>{s.txt}</Badge>
+                            <span className="text-[10px] text-muted-foreground">
+                              {c.scopes_granted?.slice(0,40)}
+                            </span>
+                            {testResults[c.id] && (<span className={`text-[10px] font-mono ${testResults[c.id].ok?'text-primary':'text-destructive'}`}>{testResults[c.id].ok?'✓':'✗'} {testResults[c.id].detail.slice(0,20)}</span>)}
+                          </div>
+                        </div>
+                        <div className="flex gap-1">
+                          <Button size="sm" variant="ghost" disabled={testingId===c.id} onClick={() => testConn(c.id, c.account_label || 'conta')} title="testar conexão">{testingId===c.id?'⏳':'🧪'}</Button><Button size="sm" variant="ghost" onClick={() => renameConn(c.id, c.account_label || '')} title="renomear">✏️</Button>
+                          <Button size="sm" variant="ghost" onClick={() => disconnect(c.id, c.account_label || 'conta')} className="text-destructive hover:bg-destructive/10" title="remover">🗑️</Button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+
+              <div className="text-[11px] text-muted-foreground border-l-2 border-primary/50 pl-3 mt-4">
+                💡 Dica: você pode ter <b>várias contas</b> aqui — perfeito pra alternar quando uma cai ou pra separar pessoal/trabalho.
+                Tokens ficam cifrados (AES-256-GCM) no HUB Supabase.
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <ApiKeyDialog
+        open={!!apiKeyFor}
+        providerName={apiKeyFor ? `${apiKeyFor.display_name} · ${apiKeyLabel}` : ''}
+        providerColor={apiKeyFor?.color ?? '#10b981'}
+        onClose={() => { setApiKeyFor(null); setApiKeyLabel(''); }}
+        onConfirm={(key) => apiKeyFor ? saveApiKey(apiKeyFor, key) : Promise.resolve()}
+      />
+    </>
+  );
+}

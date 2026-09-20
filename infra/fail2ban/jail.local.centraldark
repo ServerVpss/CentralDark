@@ -1,0 +1,38 @@
+# CentralDark — fail2ban jail.local (sshd)
+# Atualizado: 2026-07-14 · PERMITO Pivete (harden bantime / recidive)
+# Cópia oficial no repo; na VPS: /etc/fail2ban/jail.local
+# NÃO desliga PasswordAuthentication (outro PERMITO).
+
+[DEFAULT]
+# Ban base: 24h (antes era 1h = recycle dos bots)
+bantime  = 86400
+findtime = 900
+maxretry = 3
+backend  = systemd
+
+# Nunca banir localhost nem IP casa do Pivete (IPv4 conhecido)
+ignoreip = 127.0.0.1/8 ::1 187.15.72.86
+
+# Escalada se o IP voltar a ser banido (db do fail2ban)
+bantime.increment = true
+bantime.factor = 2
+bantime.maxtime = 5w
+bantime.overalljails = true
+
+[sshd]
+enabled  = true
+port     = ssh
+logpath  = %(sshd_log)s
+backend  = %(sshd_backend)s
+maxretry = 3
+findtime = 900
+bantime  = 86400
+
+# Quem já foi banido várias vezes no dia → ban 7 dias em todas as portas
+[recidive]
+enabled  = true
+logpath  = /var/log/fail2ban.log
+banaction = %(banaction_allports)s
+bantime  = 604800
+findtime = 86400
+maxretry = 3

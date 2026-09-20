@@ -1,0 +1,119 @@
+schema: centraldark.tlc23-runtime-gate.v1
+status: REQUIRED
+owner: .agents/skills/centraldark-operational-method
+pr_container: 1558
+
+purpose: >-
+  Impedir PASS narrativo. Toda operacao CentralDark/Hermes deve derivar conclusoes
+  de fatos medidos, aplicar o fechamento Horn/TLC23, executar a acao autorizada,
+  medir o resultado, contraprovar e somente entao permitir PASS.
+
+source:
+  path: docs/CONSCIENCIA/04-MCP-E-CONECTORES/tlc23.pdf
+  sha256: b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1
+  size_bytes: 206674
+  verifier: scripts/lupa/pdf-conformance-cc2003.mjs
+  method: HORN_FORWARD_CHAINING_TO_FIXED_POINT
+
+bindings:
+  repository: ServerVpss/CentralDark
+  main_commit: MEASURE_AT_RUNTIME
+  target_head: MEASURE_AT_RUNTIME
+  centraldark_boot: CENTRALDARK_AI_BOOT.yaml
+  centraldark_runtime: REQUIRE_LIVE_EVIDENCE
+  hermes_runtime: REQUIRE_LIVE_EVIDENCE
+  canonical_soul: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md
+  soul_tlc23_binding: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-TLC23-RUNTIME-BINDING.yml
+  operational_skill: .agents/skills/centraldark-operational-method/SKILL.md
+  runtime_gate: .agents/skills/centraldark-operational-method/scripts/tlc23_runtime_gate.py
+  mission_profile: docs/ARQUITETURA/CENTRALDARK-INSTINTO-SUPERIOR-OS/AGENTE-PREMIUM-TLC23.md
+
+profile_boundary:
+  authority_class: MISSION_PROFILE
+  authority_own: false
+  house_policy_over_profile_policy: true
+  inherits_canonical_hermes: true
+  inherits_tlc23: true
+  may_override_canonical: false
+  may_create_parallel_owner: false
+
+required_facts:
+  - TLC23_SOURCE_IDENTITY_PROVED
+  - MAIN_SHA_MEASURED
+  - TARGET_HEAD_MEASURED
+  - CENTRALDARK_RUNTIME_EVIDENCE_MEASURED
+  - HERMES_RUNTIME_EVIDENCE_MEASURED
+  - SOUL_BINDING_MEASURED
+  - OWNER_MEASURED
+  - ACTION_RESULT_MEASURED
+  - POST_PROBE_MEASURED
+  - COUNTERPROOF_MEASURED
+
+invariants:
+  UNKNOWN_IS_PASS: false
+  PLAN_IS_EXECUTION: false
+  FUTURE_TENSE_IS_PROOF: false
+  ACTION_IS_PROOF: false
+  DOCUMENTED_IS_EXECUTED: false
+  SOURCE_IS_RUNTIME: false
+  SERVICE_ACTIVE_IS_DEVICE_READY: false
+  SAME_TARGET_REQUIRED: true
+  SAME_HEAD_OR_RUNTIME_FINGERPRINT_REQUIRED: true
+  TLC23_CHECK_ALWAYS: true
+  FULL_CHAIN_EVERY_STEP: false
+  ONLY_MATERIALLY_APPLICABLE_GATES_EXECUTE: true
+
+pass_requires:
+  - source_identity_proved
+  - main_sha_measured
+  - target_head_measured
+  - centraldark_runtime_evidence_measured
+  - hermes_runtime_evidence_measured
+  - soul_binding_measured
+  - owner_measured
+  - action_executed
+  - post_probe_passed
+  - counterproof_regression_found_false
+  - fixed_point_reached
+
+anti_loop:
+  tlc23_check: ALWAYS
+  full_tlc23_chain: MATERIAL_APPLICABILITY_ONLY
+  no_new_information:
+    verdict: NO_CHANGE
+    action: REUSE_LAST_VALID_GATE_KEEP_GOAL_AND_NEXT_CURSOR
+  same_state_hash_without_delta:
+    verdict: NO_CHANGE
+    action: DROP_DUPLICATE_NARRATION_AND_TOOL_REPLAY
+  repeated_plan_without_new_evidence:
+    verdict: BLOCKED
+    action: EXECUTE_AUTHORIZED_MEASUREMENT_OR_RETURN_EXACT_BLOCKER
+  phrases_do_not_count_as_evidence:
+    - vou verificar
+    - vou executar
+    - vou procurar
+    - let me run the commands
+    - investigation plan
+  gate_pass_before_action_executed: FORBIDDEN
+
+fixed_point:
+  close_when: NO_NEW_MATERIAL_FACTS_AND_REQUIRED_FACTS_PROVED
+  contradiction: INVALIDATE_DEPENDENT_CONE_AND_REDERIVE
+  unknown: KEEP_VISIBLE_AND_BLOCK_ONLY_DEPENDENT_CLAIM
+  no_change: KEEP_MISSION_AND_NEXT_CURSOR_WITHOUT_RENARRATION
+
+receipt:
+  required:
+    - repository
+    - main_sha
+    - target_head
+    - centraldark_runtime_fingerprint
+    - hermes_runtime_fingerprint
+    - tlc23_sha256
+    - action
+    - action_result
+    - post_probe
+    - counterproof
+    - fixed_point
+    - verdict
+    - next_cursor

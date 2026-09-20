@@ -1,0 +1,15 @@
+{
+  "agent_id": "01-observador-de-padroes",
+  "input":  { "response_text": "string", "window": "array<string>" },
+  "output": {
+    "evidence_entry": "ref:contracts/evidence-schema.json",
+    "narrativa_mudou": "boolean",
+    "par_diverge": { "antes": "string", "depois": "string" }
+  },
+  "invariants": [
+    "ledger é append-only",
+    "hipotese não rebaixa fato do Pivete",
+    "correlacionadas contam uma vez",
+    "sem RETRAÇÃO explícita, mudança de narrativa é violação"
+  ]
+}

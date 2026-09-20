@@ -1,0 +1,76 @@
+{
+  "at": "2026-07-30T14:07:58.043Z",
+  "endpoints": [
+    {
+      "name": "MCP health",
+      "url": "https://mcp.centralldark.com/health",
+      "bot": "grok",
+      "status": 200,
+      "latencyMs": 297,
+      "cors": "*"
+    },
+    {
+      "name": "MCP status",
+      "url": "https://mcp.centralldark.com/status.json",
+      "bot": "grok",
+      "status": 200,
+      "latencyMs": 242,
+      "cors": "*"
+    },
+    {
+      "name": "MCP tools",
+      "url": "https://mcp.centralldark.com/tools.json",
+      "bot": "codex",
+      "status": 200,
+      "latencyMs": 124,
+      "cors": "*"
+    },
+    {
+      "name": "Install status",
+      "url": "https://install.centralldark.com/status.json",
+      "bot": "claude",
+      "status": 503,
+      "latencyMs": 117,
+      "cors": null
+    },
+    {
+      "name": "Painel",
+      "url": "https://status.centralldark.com/",
+      "bot": "claude",
+      "status": 200,
+      "latencyMs": 121,
+      "cors": "*"
+    },
+    {
+      "name": "API",
+      "url": "https://api.centralldark.com/health",
+      "bot": "codex",
+      "status": 200,
+      "latencyMs": 125,
+      "cors": "*"
+    }
+  ],
+  "workflowsFailures24h": 20,
+  "vpsDrift": {
+    "at": "2026-07-30T14:07:53.758Z",
+    "repository": "ServerVpss/CentralDark",
+    "path": "/root/CentralDark",
+    "branchLocal": "chore/gateway-providers-routes",
+    "shaLocal": "2845a0d60475a825e8bd29a24dbca8c2fc4aa5b4",
+    "shaOrigin": "660f8397222b4c1cc39383567166f27e4828f786",
+    "ahead": 45466,
+    "behind": 436,
+    "dirty": true,
+    "commitsFaltando": [
+      "660f839722 chore(painel): registrar push e73094b",
+      "6b58dbe81d chore(notion-sync): relatório + changelog [skip ci]",
+      "e73094b7e7 feat(governança): boot universal e método delta para qualquer IA (#553)",
+      "d3f90d794d chore(notion-sync): relatório + changelog [skip ci]",
+      "b7c7312849 chore(painel): registrar push f251e31"
+    ],
+    "status": "DRIFT",
+    "code": "BRANCH_DIVERGENTE",
+    "motivo": "checkout está em \"chore/gateway-providers-routes\", esperado \"main\""
+  },
+  "divergencias": 22
+}

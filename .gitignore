@@ -1,0 +1,146 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Python (venv + cache) — milhares de arquivos que inflam o git
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Lockfiles de outros gerenciadores — npm é o oficial (ver CONSCIENCIA)
+bun.lock
+bun.lockb
+yarn.lock
+pnpm-lock.yaml
+
+# Runtime do Guardião (estado vivo, não versionar)
+infra/guardiao/fila/*.jsonl
+infra/guardiao/fila/.offset
+infra/guardiao/fila/propostas_cache*.json
+infra/guardiao/logs/
+
+# GitHub Actions runner — não versionar (pesado)
+actions-runner/
+
+# Sessões de revisão antigas + quarentena (lixo acumulado)
+revisoes/
+quarantine/
+
+# Backups e temporários
+# Regra da Casa: IDENTIDADE FICA; CONTEUDO EVOLUI; HISTORICO = GIT.
+# Backup local é efêmero/rollback pontual, nunca árvore genealógica nem versão canônica.
+# O nome ativo permanece canônico; v2/v3/final/old não substitui o histórico do Git.
+*.bak
+*.bak-*
+*.bak.*
+*.backup
+*.backup-*
+*.backup.*
+*.tmp
+*.save
+*.orig
+
+# Segredos — NUNCA versionar tokens/keys/.env (proteção defensiva 28/06/2026)
+secrets/
+*.env
+!*.env.example
+.backups/
+
+# Dados de sistema / runtime que vazaram pra estrutura do repo (30/06/2026)
+apps/modulos/WebUI/var/
+apps/modulos/hub/*.tsbuildinfo
+root/
+
+# Arquivo com nome inválido (espaço)
+apps/modulos/elite-anthropic-proxy/leep*
+
+# Seguranca (30/06): nunca versionar keys e backups com segredo
+apps/modulos/elite-anthropic-proxy/keys.json
+apps/modulos/WebUI/*.bak*
+
+# Credenciais temporárias - NUNCA commitar
+CREDENCIAIS-TEMP.env
+**/CREDENCIAIS-TEMP*
+*.env.temp
+
+# Graphify — saída/cache regenerável do skill, vive só na VPS (02/07/2026)
+graphify-out/
+graphify-debug.log*
+
+# Graph-panel — snapshots de histórico são runtime, não versionar (02/07/2026)
+apps/modulos/graph-panel/data/history/*.json
+
+# Ecosystem PM2 gerado na VPS — contém segredos e paths absolutos (02/07/2026)
+ecosystem.config.js
+
+# Arquivos de estado runtime que vazam pro repo (02/07/2026)
+apps/bot-telegram/evolucao-state.json
+scripts/issues-agent/.next_run
+scripts/memory-linker/.next_run
+scripts/memory-linker/analyst-decision.json
+scripts/memory-linker/last-report.json
+scripts/memory-linker/pattern-library.json
+scripts/sync-loop.sh
+apps/modulos/elite-gateway/venv/
+apps/modulos/elite-gateway/config/
+
+# secrets locais (não versionar)
+.env
+.env.bak-*
+contas/
+
+# Lab de experimentos visuais — não versionar
+public/lab-jarvis/
+docs/BRAIN/.obsidian/
+_forense/
+.agents/contratos/
+
+# CentralDark build/cache artifacts
+.codex/
+.hermes/
+.obsidian/
+docs/.obsidian/
+docs/BRAIN/*.canvas
+NUL
+
+# Biblioteca offline local — conteúdo inteiro para estudo/RAG/treino fica só na Casa
+_BIBLIOTECA_OFFLINE/
+.local-corpus/
+local-corpus/
+docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/SETORES/ML-CIENCIA-DE-DADOS/LOCAL-CORPUS/
+
+# Recovery/pre-restore files
+**/*.pre-restore-*
+
+# Scratch/local experiments are transient. Do not track as gitlinks/submodules.
+scratch/
+
+# Node/Bun local cache
+node_modules/.cache
+.bun/
+.bunx/
+
+# PostHog setup session cache (local, not application source)
+.posthog-wizard-cache/

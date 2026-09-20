@@ -1,0 +1,51 @@
+{
+  "schema": "centraldark.skill.tests.v1",
+  "skill_id": "reality-follows-function",
+  "cases": [
+    {
+      "id": "NAME_MISS_DOES_NOT_PROVE_ABSENCE",
+      "given": "Literal label is absent",
+      "expect": "Search by function and observable effect before concluding absence"
+    },
+    {
+      "id": "GREEN_PANEL_DOES_NOT_PROVE_RUNTIME",
+      "given": "UI or panel is green",
+      "expect": "Require proof on applicable target for stronger runtime claim"
+    },
+    {
+      "id": "STALE_EVIDENCE_LOSES_TO_NEW_HEAD",
+      "given": "HEAD changes after finding",
+      "expect": "Reanchor and drop finding if it no longer survives"
+    },
+    {
+      "id": "CAUTION_WITHOUT_INFORMATION_GAIN_IS_NOT_SAFETY",
+      "given": "Extra ceremony adds no risk reduction or information",
+      "expect": "Prefer smaller safe path"
+    },
+    {
+      "id": "COMPRESSION_PRESERVES_GUARDRAILS",
+      "given": "Conclusion can be shortened",
+      "expect": "Keep cause, constraints, proof, material unknown and next discriminating test"
+    },
+    {
+      "id": "SAME_EFFECT_DIFFERENT_NAME",
+      "given": "Model or component name changed but responsibility and effect remain",
+      "expect": "Treat name as provenance and trace functional owner"
+    },
+    {
+      "id": "JUST_LESS_IS_NOT_LESS_IS_MORE",
+      "given": "A simplification removes capability, safety or proof",
+      "expect": "Reject it as just less, not Menos é Mais"
+    },
+    {
+      "id": "MODERATION_PRESERVES_ESSENCE",
+      "given": "A candidate removes weight that has no proven value",
+      "expect": "Prefer the smallest sufficient form that preserves essence, capability, safety and proof"
+    },
+    {
+      "id": "CHIEF_INPUT_MAY_BE_LARGE",
+      "given": "The chief expands context, hypotheses, tools or lenses",
+      "expect": "Allow exploration and consolidate only the final agent output and architecture"
+    }
+  ]
+}

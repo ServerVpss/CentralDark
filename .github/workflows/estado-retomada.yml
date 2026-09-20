@@ -1,0 +1,50 @@
+name: estado-retomada
+
+# Regenera docs/ESTADO-DA-RETOMADA.md a partir de evidencia real do checkout.
+# Ninguem edita o arquivo a mao; quem quiser mudar o que e medido muda o script.
+# Regra da Casa: executor padrao = self-hosted Linux. GitHub-hosted = proibido.
+
+on:
+  schedule:
+    - cron: "23 6 * * *"
+  push:
+    branches: [main]
+    paths:
+      - 'apps/modulos/mapeamento/config/mapa-canonico.json'
+      - 'scripts/estado/gerar-estado-retomada.mjs'
+      - '.github/workflows/estado-retomada.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: estado-retomada
+  cancel-in-progress: false
+
+jobs:
+  gerar:
+    name: Gerar ESTADO DA RETOMADA
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+
+      - name: Publicar estado com writer-safe-push
+        shell: bash
+        env:
+          WRITER_TAG: ESTADO_RETOMADA
+          PATHS: docs/ESTADO-DA-RETOMADA.md
+          REGENERATE_CMD: node scripts/estado/gerar-estado-retomada.mjs
+          COMMIT_MESSAGE: "chore(estado): regenerar ESTADO DA RETOMADA [skip ci]"
+          GIT_AUTHOR_NAME: github-actions[bot]
+          GIT_AUTHOR_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+          MAX_TRIES: "3"
+        run: bash scripts/lupa/writer-safe-push-main.sh

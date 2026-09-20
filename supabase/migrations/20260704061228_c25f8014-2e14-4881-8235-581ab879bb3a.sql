@@ -1,0 +1,1 @@
+GRANT SELECT, INSERT ON public.notifications_log TO service_role;

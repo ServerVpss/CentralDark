@@ -1,0 +1,13 @@
+## test/desafio-omega-autolupa-2026-07-22...origin/test/desafio-omega-autolupa-2026-07-22
+?? .agents/skills/lupa-bayesiana/AUTOLUPA_CANONICAL_SHA
+?? .agents/skills/lupa-bayesiana/testes/fixtures/
+?? .agents/skills/lupa-bayesiana/testes/test_autolupa_conformance.py
+?? .hermes/
+?? apps/modulos/hub/LEMBRANÇAS DE NOVO E UTIL.txt
+?? supabase/.temp/gotrue-version
+?? supabase/.temp/pooler-url
+?? supabase/.temp/postgres-version
+?? supabase/.temp/project-ref
+?? supabase/.temp/rest-version
+?? supabase/.temp/storage-migration
+?? supabase/.temp/storage-version

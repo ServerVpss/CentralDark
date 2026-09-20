@@ -1,0 +1,41 @@
+---
+title: CentralDark Architecture — Two Brains, Three Tools
+---
+
+flowchart TD
+    subgraph BRAIN1["🧠 CÉREBRO 1: BRAIN VAULT (memória)"]
+        BV["docs/BRAIN/\n• Notas de arquitetura\n• Aprendizados cristalizados\n• Decisões\n• Mapas de contexto"]
+    end
+
+    subgraph BRAIN2["🧠 CÉREBRO 2: TOOLS COGNITIVAS (raciocínio)"]
+        TL["MetaLupa\nAuditoria crítica e validação"]
+        KL["Kimetsu Legacy Breathing\n17 respirações operacionais"]
+        OM["Operational Method\nMétodo de operação"]
+        SP["Skills especializadas\nvps, github, forensics, etc."]
+    end
+
+    subgraph TOOLS["🔧 FERRAMENTAS DE ROTEAMENTO"]
+        OR["OMNI ROUTER :8099\n┌──────────┐\n│ Hermes   │\n│ Claude   │\n│ OpenAI   │\n│ Nous     │\n└──────────┘"]
+        SP2["SCREENPIPE :3030\nTela + Áudio + Browser\nPercepção da máquina"]
+        MCP["MCP CENTRALDARK :3100\n113 ferramentas\nAções da Casa"]
+    end
+
+    USUARIO["👤 SEGREDO/CHEFE\nAutoridade humana final"]
+
+    USUARIO --> HERMES
+    HERMES --> BRAIN1
+    HERMES --> BRAIN2
+    HERMES --> OR
+    HERMES --> SP2
+    HERMES --> MCP
+
+    BRAIN1 -.->|leitura/escrita| HERMES
+    BRAIN2 -.->|raciocínio sob demanda| HERMES
+
+    OR -->|HTTP OpenAI-compatible| HERMES
+    SP2 -.->|screenpipe-mcp| HERMES
+
+    style BRAIN1 fill:#1a3a2a,stroke:#2ecc71,stroke-width:2px
+    style BRAIN2 fill:#1a3a2a,stroke:#2ecc71,stroke-width:2px
+    style TOOLS fill:#1a2a3a,stroke:#3498db,stroke-width:2px
+    style HERMES fill:#2a1a1a,stroke:#e74c3c,stroke-width:2px

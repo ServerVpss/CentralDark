@@ -1,0 +1,17 @@
+{
+  "id": "drift-1783290607198",
+  "tema": "Drift detectado (2 mudanças)",
+  "contexto": {
+    "drift": [
+      {
+        "tipo": "pm2-novo",
+        "detalhe": "CentralDark-AiDiag"
+      },
+      {
+        "tipo": "commit-novo",
+        "detalhe": "4dc46aebd → 406d6f675"
+      }
+    ]
+  },
+  "origem": "cartografo"
+}

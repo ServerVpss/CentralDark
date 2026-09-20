@@ -1,0 +1,36 @@
+{
+  "manifest_version": 3,
+  "name": "CentralDark Voice — Ler em voz alta premium",
+  "version": "1.0.0",
+  "description": "Substitui a voz robótica do botão 'Ler em voz alta' do Claude pela voz premium em PT-BR nativo do bridge CentralDark.",
+  "permissions": ["storage"],
+  "host_permissions": [
+    "https://claude.ai/*",
+    "https://claude.com/*",
+    "https://bridge.centralldark.com/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "48": "icons/icon-48.png",
+      "128": "icons/icon-128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon-16.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://claude.ai/*", "https://claude.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ]
+}
