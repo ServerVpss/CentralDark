@@ -38,6 +38,23 @@ function jarvisState(overrides = {}) {
     writer: { agent: 'hermes-pivete', role: 'HERMES' },
     scope: { allowed: [TARGET], denied: [] },
     trail: { route_id: 'memory-pattern-route' },
+    global_contract_entry: {
+      scope_id: 'canon/centraldark-universal-contract-20260919',
+      contract_schema: 6,
+      phase: 'ENTRY',
+      observed_head: HEAD,
+      trace_id: 'dream-contract-entry',
+      github_t0: { status: 'PASS', head_sha: HEAD },
+      vps_t0: { status: 'PASS', head_sha: HEAD },
+      cross_surface_drift_classified: true,
+      owner_proof: { status: 'PASS', owner: TARGET },
+      writer_scope_proof: { status: 'PASS', scope: TARGET },
+      preflight: { status: 'PASS', evidence_ref: 'test:dream-preflight' },
+      counterproof_plan: { status: 'READY', evidence_ref: 'test:dream-counterproof-plan' },
+      rollback: { status: 'PREPARED', evidence_ref: 'git:dream-rollback' },
+      next_cursor: 'DREAM_WRITE_THEN_T1',
+      fixed_point: false,
+    },
     ...overrides,
   };
 }
