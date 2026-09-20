@@ -430,6 +430,20 @@ if (!contract) {
   if (tempPolicy.vps_cleanliness?.do_not_use_dirty_root_as_temp_workspace !== true) errors.push("CONTRATO_TEMP_USA_ROOT_DIRTY");
   if (tempPolicy.vps_cleanliness?.cleanliness_is_not_permission_for_reset_hard_or_git_clean !== true) errors.push("CONTRATO_LIMPEZA_AUTORIZA_RESET_CEGO");
 
+  const logIncident = contract.log_incident_crystallization_contract ?? {};
+  if (logIncident.marker !== "CENTRALDARK_LOG_INCIDENT_FANOUT_CRYSTALLIZATION_REQUIRED") errors.push("CONTRATO_LOG_INCIDENT_MARKER_AUSENTE");
+  if (logIncident.primary_sensor?.endpoint !== "/admin/api/logs") errors.push("CONTRATO_LOG_INCIDENT_SENSOR_INVALIDO");
+  if (logIncident.primary_sensor?.owner !== "apps/modulos/mcp/src/admin.js") errors.push("CONTRATO_LOG_INCIDENT_OWNER_INVALIDO");
+  if (logIncident.primary_sensor?.endpoint_http_200_is_global_pass !== false) errors.push("CONTRATO_LOG_INCIDENT_200_VIRA_PASS_GLOBAL");
+  if (logIncident.fanout?.mode !== "PARALLEL_READ_ONLY_DIAGNOSIS") errors.push("CONTRATO_LOG_INCIDENT_FANOUT_INVALIDO");
+  if (logIncident.fanout?.readers_may_run_in_parallel !== true || logIncident.fanout?.readers_may_not_mutate !== true) errors.push("CONTRATO_LOG_INCIDENT_READERS_MUTAM");
+  if (logIncident.remediation?.same_scope_concurrent_writers !== false) errors.push("CONTRATO_LOG_INCIDENT_WRITER_CONCORRENTE");
+  if (logIncident.remediation?.one_active_writer_per_mutable_scope !== true) errors.push("CONTRATO_LOG_INCIDENT_SEM_WRITER_POR_ESCOPO");
+  if (logIncident.remediation?.mutation_mode !== "PARALLEL_ONLY_FOR_PROVEN_DISJOINT_SCOPES_SERIAL_WITHIN_EACH_SCOPE") errors.push("CONTRATO_LOG_INCIDENT_MUTATION_MODE_INVALIDO");
+  if (logIncident.convergence_loop?.new_error_during_fix !== "NEW_DELTA_SAME_MISSION") errors.push("CONTRATO_LOG_INCIDENT_NOVO_ERRO_REINICIA_MISSAO");
+  if (logIncident.crystallization?.log_silence_alone_is_pass !== false || logIncident.crystallization?.endpoint_200_alone_is_pass !== false) errors.push("CONTRATO_LOG_INCIDENT_FALSO_VERDE");
+  if (logIncident.crystallization?.fixed_point_if_any_required_unknown !== false) errors.push("CONTRATO_LOG_INCIDENT_UNKNOWN_VIRA_FIXED_POINT");
+
   const enforcer = contract.global_contract_enforcer ?? {};
   if (enforcer.marker !== "CENTRALDARK_GLOBAL_CONTRACT_ENFORCER_REQUIRED") errors.push("CONTRATO_ENFORCER_GLOBAL_MARKER_AUSENTE");
   if (enforcer.status !== "MANDATORY_FOR_MUTATION") errors.push("CONTRATO_ENFORCER_GLOBAL_NAO_OBRIGATORIO");
