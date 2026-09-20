@@ -416,6 +416,20 @@ if (!contract) {
     if (!Array.isArray(telemetrySources[source]) || telemetrySources[source].length === 0) errors.push(`CONTRATO_TELEMETRIA_FONTE_AUSENTE:${source}`);
   }
 
+  const tempPolicy = contract.ephemeral_artifact_policy ?? {};
+  if (tempPolicy.marker !== "CENTRALDARK_EPHEMERAL_WORKSPACE_CLEAN_REQUIRED") errors.push("CONTRATO_TEMP_POLICY_MARKER_AUSENTE");
+  if (tempPolicy.temporary_suffixes_allowed !== true) errors.push("CONTRATO_TEMP_POLICY_NAO_PERMITE_COORDENACAO_EFEMERA");
+  if (tempPolicy.cleanup?.delete_after_use !== true) errors.push("CONTRATO_TEMP_POLICY_SEM_LIMPEZA_FINAL");
+  if (tempPolicy.cleanup?.final_temp_residue_target !== "ZERO_UNLESS_PROVEN_ACTIVE_OR_FORENSIC_KEEP") errors.push("CONTRATO_TEMP_POLICY_RESIDUO_SEM_ALVO_ZERO");
+  if (tempPolicy.canonical_architecture?.version_suffix_for_same_capability !== "FORBIDDEN") errors.push("CONTRATO_CANONICO_PERMITE_V1V2V3");
+  if (tempPolicy.canonical_architecture?.evolve_same_object !== true) errors.push("CONTRATO_CANONICO_NAO_EVOLVE_MESMO_OBJETO");
+  if (tempPolicy.canonical_architecture?.expand_domain_in_same_owner !== true) errors.push("CONTRATO_DOMINIO_NAO_EXPANDE_NO_OWNER");
+  if (tempPolicy.canonical_architecture?.create_parallel_architecture_for_domain_expansion !== false) errors.push("CONTRATO_DOMINIO_PERMITE_ARQUITETURA_PARALELA");
+  if (tempPolicy.duplicate_control?.integrated_global_dedupe !== true) errors.push("CONTRATO_SEM_DEDUPE_GLOBAL_INTEGRADO");
+  if (tempPolicy.duplicate_control?.duplicate_found !== "ABSORB_DELTA_INTO_EXISTING_OWNER_THEN_RETIRE_DUPLICATE") errors.push("CONTRATO_DUPLICATA_SEM_ABSORCAO");
+  if (tempPolicy.vps_cleanliness?.do_not_use_dirty_root_as_temp_workspace !== true) errors.push("CONTRATO_TEMP_USA_ROOT_DIRTY");
+  if (tempPolicy.vps_cleanliness?.cleanliness_is_not_permission_for_reset_hard_or_git_clean !== true) errors.push("CONTRATO_LIMPEZA_AUTORIZA_RESET_CEGO");
+
   const enforcer = contract.global_contract_enforcer ?? {};
   if (enforcer.marker !== "CENTRALDARK_GLOBAL_CONTRACT_ENFORCER_REQUIRED") errors.push("CONTRATO_ENFORCER_GLOBAL_MARKER_AUSENTE");
   if (enforcer.status !== "MANDATORY_FOR_MUTATION") errors.push("CONTRATO_ENFORCER_GLOBAL_NAO_OBRIGATORIO");
