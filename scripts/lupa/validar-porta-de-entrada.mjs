@@ -447,6 +447,22 @@ if (!contract) {
     errors.push("CONTRATO_REMOTE_TRAY_GAP_HARNESS_NAO_REGISTRADO");
   }
 
+  if (remoteTrayArtifact?.gap_status !== "CLOSED_IN_CHILD_PR_SOURCE_LAYER") errors.push("CONTRATO_REMOTE_TRAY_GAP_SOURCE_NAO_FECHADO");
+  if (remoteTrayArtifact?.runtime_proof !== "REQUIRES_WINDOWS_CASA_OR_EXTERNAL_DEVICE_MEASUREMENT") errors.push("CONTRATO_REMOTE_TRAY_RUNTIME_OVERCLAIM");
+  if (remoteTrayArtifact?.exe_policy !== "PACKAGE_ONLY_NOT_GIT") errors.push("CONTRATO_REMOTE_TRAY_EXE_POLICY_INVALIDA");
+  const remoteTraySourceFiles = [
+    "scripts/remote-bridge/canonical/engine/CentralDark-Remote-Parser.psm1",
+    "scripts/remote-bridge/canonical/engine/CentralDark-Remote-Tray.ps1",
+    "scripts/remote-bridge/canonical/harness/RUN-TESTS.ps1",
+    "scripts/remote-bridge/canonical/harness/fixtures/auth-code-base-url.log",
+    "scripts/remote-bridge/canonical/harness/fixtures/stale-refresh-token.log",
+    "scripts/remote-bridge/canonical/harness/fixtures/authorized-online-claim.log",
+    "scripts/remote-bridge/canonical/harness/fixtures/local-mcp-failed.log",
+  ];
+  for (const file of remoteTraySourceFiles) {
+    if (!existe(file)) errors.push(`CONTRATO_REMOTE_TRAY_SOURCE_AUSENTE:${file}`);
+  }
+
   const fixedHud = contract.fixed_hud_contract ?? {};
   if (fixedHud.marker !== "CENTRALDARK_FIXED_HUD_REQUIRED") errors.push("CONTRATO_HUD_FIXO_MARKER_AUSENTE");
   if (fixedHud.always_show_on_centraldark_operational_response !== true) errors.push("CONTRATO_HUD_NAO_OBRIGATORIO");
