@@ -334,3 +334,10 @@ updated: 2026-08-27
 - **Categoria:** aprendizado-coletivo
 - **Contexto:** Como o comando `darkai` pode ajudar a gente a orquestrar tarefas hoje? Quem deveria chamar quem?
 - **Lição:** Groq me mostrou que por trás de todo problema simples tem uma camada mais profunda
+
+### 🧠 Delta 2026-09-20 — incidentes e kernel no mesmo ciclo contínuo
+
+- **Categoria:** regra
+- **Data:** 2026-09-20
+- **Contexto:** `LOG_INCIDENT_MATERIAL` e `VPS_KERNEL_DELTA_MATERIAL` entram no mesmo ciclo contínuo já existente; logs e VPS são sensores, não novos cérebros nem novos writers.
+- **Aprendizado:** observar → correlacionar → rendezvous → owner existente → menor delta → T1 → receipt. `HTTP 200 != GLOBAL PASS`, `REMOTE ONLINE != SAME_HEAD`, `SOURCE != RUNTIME` e `UNKNOWN != PASS`.
