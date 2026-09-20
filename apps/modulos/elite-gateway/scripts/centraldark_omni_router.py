@@ -11,6 +11,8 @@ while another allowed route is available.
 from __future__ import annotations
 
 import argparse
+import glob
+import hashlib
 import json
 import os
 import re
@@ -27,7 +29,7 @@ from fastapi import FastAPI, Header, HTTPException, Request
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
-APP_VERSION = "0.3.0"
+APP_VERSION = "0.3.1"
 DEFAULT_ENGINE = os.getenv("CENTRALDARK_DEFAULT_ENGINE", "nous").strip().lower()
 ROUTER_TOKEN = os.getenv("CENTRALDARK_ROUTER_TOKEN", "").strip()
 REQUEST_TIMEOUT = float(os.getenv("CENTRALDARK_ROUTER_TIMEOUT", "180"))
@@ -119,6 +121,277 @@ def sanitize(text: Any) -> str:
     for pattern, replacement in _REDACTIONS:
         out = pattern.sub(replacement, out)
     return out[:2000]
+
+
+# CENTRALDARK_VPS_KERNEL_DELTA_STREAM
+# Read-only FastAPI traversal of bounded, allowlisted VPS log surfaces.
+# Raw logs stay available in the MCP Admin; this layer derives useful delta
+# without becoming authority, writer, or a second observability system.
+VPS_DELTA_ALLOWED_ROOTS = tuple(Path(p) for p in (
+    "/root/CentralDark",
+    "/root/.pm2/logs",
+    "/var/log",
+    "/var/lib/docker/containers",
+))
+VPS_DELTA_DEFAULT_GLOBS = (
+    "/root/CentralDark/logs/mcp/*.jsonl",
+    "/root/.pm2/logs/*.log",
+    "/var/log/caddy/*.log",
+    "/var/log/syslog",
+    "/var/log/messages",
+    "/var/lib/docker/containers/*/*-json.log",
+    "/root/CentralDark/apps/modulos/HERMES-CORE/missions/em-andamento/*/hermes.log",
+    "/root/CentralDark/actions-runner/_diag/*.log",
+)
+VPS_DELTA_MAX_FILES = max(1, min(128, int(os.getenv("CENTRALDARK_VPS_DELTA_MAX_FILES", "64"))))
+VPS_DELTA_MAX_BYTES_PER_FILE = max(4096, min(262144, int(os.getenv("CENTRALDARK_VPS_DELTA_MAX_BYTES_PER_FILE", "65536"))))
+VPS_DELTA_MAX_EVENTS = max(20, min(2000, int(os.getenv("CENTRALDARK_VPS_DELTA_MAX_EVENTS", "500"))))
+VPS_DELTA_STREAM_INTERVAL = max(1.0, min(30.0, float(os.getenv("CENTRALDARK_VPS_DELTA_STREAM_INTERVAL", "2"))))
+
+
+def _path_is_allowed(path: Path) -> bool:
+    try:
+        resolved = path.resolve(strict=False)
+    except OSError:
+        return False
+    for root in VPS_DELTA_ALLOWED_ROOTS:
+        try:
+            if resolved == root or root.resolve(strict=False) in resolved.parents:
+                return True
+        except OSError:
+            continue
+    return False
+
+
+def _vps_delta_globs() -> List[str]:
+    rows = list(VPS_DELTA_DEFAULT_GLOBS)
+    extra = os.getenv("CENTRALDARK_VPS_DELTA_EXTRA_GLOBS", "").strip()
+    if extra:
+        rows.extend(p.strip() for p in extra.split(";") if p.strip())
+    return rows
+
+
+def discover_vps_delta_sources() -> List[Path]:
+    found: Dict[str, Path] = {}
+    for pattern in _vps_delta_globs():
+        for raw in glob.glob(pattern):
+            path = Path(raw)
+            if not path.is_file() or not _path_is_allowed(path):
+                continue
+            found[str(path.resolve(strict=False))] = path
+    rows = list(found.values())
+    rows.sort(key=lambda p: p.stat().st_mtime_ns if p.exists() else 0, reverse=True)
+    return rows[:VPS_DELTA_MAX_FILES]
+
+
+def _tail_lines(path: Path, max_bytes: int = VPS_DELTA_MAX_BYTES_PER_FILE) -> List[str]:
+    try:
+        size = path.stat().st_size
+        with path.open("rb") as fh:
+            if size > max_bytes:
+                fh.seek(-max_bytes, os.SEEK_END)
+                fh.readline()  # discard partial line
+            data = fh.read(max_bytes)
+        return data.decode("utf-8", errors="replace").splitlines()
+    except (OSError, ValueError):
+        return []
+
+
+_UUID_RE = re.compile(r"\b[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\b", re.I)
+_HEX_RE = re.compile(r"\b[0-9a-f]{16,64}\b", re.I)
+_LONG_INT_RE = re.compile(r"\b\d{5,}\b")
+_ISO_TS_RE = re.compile(r"\b\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:?\d{2})?\b", re.I)
+
+
+def _normalize_delta_message(value: str) -> str:
+    text = sanitize(value).strip()
+    text = _UUID_RE.sub("<uuid>", text)
+    text = _HEX_RE.sub("<hex>", text)
+    text = _ISO_TS_RE.sub("<ts>", text)
+    text = _LONG_INT_RE.sub("<n>", text)
+    return re.sub(r"\s+", " ", text)[:500]
+
+
+def parse_vps_delta_line(source: Path, raw_line: str, line_index: int = 0, mtime_ns: int = 0) -> Dict[str, Any]:
+    safe_raw = sanitize(raw_line)
+    obj: Dict[str, Any] = {}
+    stripped = safe_raw.lstrip()
+    if stripped.startswith("{"):
+        try:
+            parsed = json.loads(stripped)
+            if isinstance(parsed, dict):
+                obj = parsed
+        except ValueError:
+            obj = {}
+
+    level = str(obj.get("level") or "").lower()
+    status_raw = obj.get("status")
+    try:
+        status = int(status_raw) if status_raw is not None else None
+    except (TypeError, ValueError):
+        status = None
+
+    message = str(obj.get("event") or obj.get("message") or obj.get("msg") or safe_raw)
+    lowered = message.lower()
+    if level in {"error", "fatal", "critical"} or (status is not None and status >= 500) or re.search(r"\b(error|failed|failure|exception|traceback|fatal)\b", lowered):
+        severity = "error"
+    elif level in {"warn", "warning"} or (status is not None and status >= 400) or re.search(r"\b(warn|degraded|timeout|retry|unauthorized|forbidden)\b", lowered):
+        severity = "warn"
+    else:
+        severity = "info"
+
+    route = str(obj.get("path") or obj.get("route") or obj.get("url") or "-")
+    service = str(obj.get("service") or obj.get("app") or source.stem)
+    normalized = _normalize_delta_message(message)
+    signature = "|".join((severity, service, route, normalized))
+    fingerprint = hashlib.sha256(signature.encode("utf-8", errors="replace")).hexdigest()[:24]
+    event_id = hashlib.sha256(
+        f"{source}:{mtime_ns}:{line_index}:{safe_raw}".encode("utf-8", errors="replace")
+    ).hexdigest()[:24]
+    timestamp = obj.get("timestamp") or obj.get("t") or obj.get("time")
+
+    return {
+        "event_id": event_id,
+        "fingerprint": fingerprint,
+        "severity": severity,
+        "service": sanitize(service)[:120],
+        "route": sanitize(route)[:200],
+        "message": normalized,
+        "status": status,
+        "timestamp": sanitize(timestamp)[:80] if timestamp else None,
+        "source": sanitize(str(source))[:500],
+        "raw": safe_raw[:2000],
+        "authority": False,
+        "proof": False,
+    }
+
+
+def aggregate_vps_delta_events(events: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    grouped: Dict[str, Dict[str, Any]] = {}
+    for event in events:
+        fp = str(event.get("fingerprint") or "")
+        if not fp:
+            continue
+        row = grouped.get(fp)
+        if row is None:
+            row = {
+                "fingerprint": fp,
+                "severity": event.get("severity", "info"),
+                "service": event.get("service", "unknown"),
+                "route": event.get("route", "-"),
+                "message": event.get("message", ""),
+                "count": 0,
+                "last_event_id": None,
+                "last_timestamp": None,
+                "source": event.get("source"),
+                "material": False,
+            }
+            grouped[fp] = row
+        row["count"] += 1
+        row["last_event_id"] = event.get("event_id")
+        row["last_timestamp"] = event.get("timestamp")
+        severity = str(row["severity"])
+        row["material"] = severity == "error" or (severity == "warn" and row["count"] >= 3)
+
+    rank = {"error": 0, "warn": 1, "info": 2}
+    return sorted(grouped.values(), key=lambda r: (rank.get(str(r["severity"]), 9), -int(r["count"])))[:200]
+
+
+def collect_vps_delta_snapshot(limit: int = VPS_DELTA_MAX_EVENTS) -> Dict[str, Any]:
+    limit = max(20, min(VPS_DELTA_MAX_EVENTS, int(limit)))
+    events: List[Dict[str, Any]] = []
+    sources = discover_vps_delta_sources()
+    source_errors: List[str] = []
+    for source in sources:
+        try:
+            mtime_ns = source.stat().st_mtime_ns
+        except OSError:
+            source_errors.append(sanitize(str(source)))
+            continue
+        lines = _tail_lines(source)
+        start = max(0, len(lines) - limit)
+        for index, line in enumerate(lines[start:], start=start):
+            if not line.strip():
+                continue
+            events.append(parse_vps_delta_line(source, line, index, mtime_ns))
+            if len(events) >= limit:
+                break
+        if len(events) >= limit:
+            break
+
+    groups = aggregate_vps_delta_events(events)
+    errors = sum(1 for e in events if e["severity"] == "error")
+    warns = sum(1 for e in events if e["severity"] == "warn")
+    try:
+        loadavg = list(os.getloadavg())
+    except (AttributeError, OSError):
+        loadavg = []
+    try:
+        disk = shutil.disk_usage("/")
+        disk_payload = {"total": disk.total, "used": disk.used, "free": disk.free}
+    except OSError:
+        disk_payload = None
+    process_count = 0
+    proc_root = Path("/proc")
+    if proc_root.exists():
+        try:
+            process_count = sum(1 for p in proc_root.iterdir() if p.name.isdigit())
+        except OSError:
+            process_count = 0
+
+    return {
+        "schema": "centraldark.vps-kernel-delta-stream.v1",
+        "ok": True,
+        "owner": "centraldark-omni-router",
+        "transport": "FASTAPI",
+        "mode": "READ_ONLY_DERIVED_DELTA",
+        "one_heart": "https://api.centralldark.com/heartbeat",
+        "raw_stream_preserved": True,
+        "raw_stream_owner": "apps/modulos/mcp/src/admin.js:/admin/logs/stream",
+        "delta_is_authority": False,
+        "delta_is_proof": False,
+        "source_count": len(sources),
+        "source_errors": source_errors,
+        "events_seen": len(events),
+        "error_events": errors,
+        "warn_events": warns,
+        "material_groups": sum(1 for g in groups if g["material"]),
+        "groups": groups,
+        "events": events[-limit:],
+        "runtime": {
+            "hostname": os.uname().nodename if hasattr(os, "uname") else "unknown",
+            "loadavg": loadavg,
+            "disk_root": disk_payload,
+            "process_count": process_count,
+        },
+    }
+
+
+def vps_delta_sse():
+    seen: set[str] = set()
+    while True:
+        snapshot = collect_vps_delta_snapshot(min(300, VPS_DELTA_MAX_EVENTS))
+        emitted = 0
+        for event in snapshot["events"]:
+            event_id = str(event.get("event_id") or "")
+            if not event_id or event_id in seen:
+                continue
+            seen.add(event_id)
+            emitted += 1
+            yield f"event: vps_delta\nid: {event_id}\ndata: {json.dumps(event, ensure_ascii=False)}\n\n"
+        if emitted == 0:
+            heartbeat = {
+                "event": "vps_delta_keepalive",
+                "ts": int(time.time()),
+                "source_count": snapshot["source_count"],
+                "material_groups": snapshot["material_groups"],
+                "authority": False,
+                "proof": False,
+            }
+            yield f"event: keepalive\ndata: {json.dumps(heartbeat, ensure_ascii=False)}\n\n"
+        if len(seen) > 5000:
+            seen = set(list(seen)[-2500:])
+        time.sleep(VPS_DELTA_STREAM_INTERVAL)
 
 
 def message_text(content: Any) -> str:
@@ -1059,6 +1332,55 @@ def zendrive_provider_simulate(
     messages = _zendrive_request_messages(request)
     return _zendrive_simulation_payload(messages, request.model)
 
+@app.get("/kernel/vps/delta/health")
+def vps_delta_health(authorization: str = Header(default=None)) -> Dict[str, Any]:
+    require_router_auth(authorization)
+    snapshot = collect_vps_delta_snapshot(50)
+    return {
+        "ok": True,
+        "service": "centraldark-vps-kernel-delta",
+        "transport": "FASTAPI",
+        "engine": "centraldark-omni-router",
+        "one_heart": snapshot["one_heart"],
+        "source_count": snapshot["source_count"],
+        "material_groups": snapshot["material_groups"],
+        "raw_stream_preserved": True,
+        "authority": False,
+        "proof": False,
+    }
+
+
+@app.get("/kernel/vps/delta")
+def vps_delta(limit: int = 300, authorization: str = Header(default=None)) -> Dict[str, Any]:
+    require_router_auth(authorization)
+    return collect_vps_delta_snapshot(limit)
+
+
+@app.get("/kernel/vps/delta/raw")
+def vps_delta_raw(limit: int = 300, authorization: str = Header(default=None)) -> Dict[str, Any]:
+    require_router_auth(authorization)
+    snapshot = collect_vps_delta_snapshot(limit)
+    return {
+        "schema": snapshot["schema"],
+        "ok": snapshot["ok"],
+        "mode": "RAW_SANITIZED_BOUNDED",
+        "raw_stream_preserved": True,
+        "events": snapshot["events"],
+        "authority": False,
+        "proof": False,
+    }
+
+
+@app.get("/kernel/vps/delta/stream")
+def vps_delta_stream(authorization: str = Header(default=None)) -> StreamingResponse:
+    require_router_auth(authorization)
+    return StreamingResponse(
+        vps_delta_sse(),
+        media_type="text/event-stream",
+        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+    )
+
+
 @app.get("/health")
 def health() -> Dict[str, Any]:
     providers = ["antigravity", "nous", "hermes", "google", "claude-code", "xai", "abacus", "openai", ZENDRIVE_MODEL_ALIAS]
@@ -1074,6 +1396,14 @@ def health() -> Dict[str, Any]:
         "wire_apis": ["chat_completions", "responses"],
         "legacy_zendriver_chatgpt": "FROZEN_NOT_ROUTED",
         "zendrive_provider": zendrive_provider_health_payload(),
+        "vps_kernel_delta_stream": {
+            "transport": "FASTAPI",
+            "endpoints": ["/kernel/vps/delta", "/kernel/vps/delta/raw", "/kernel/vps/delta/stream", "/kernel/vps/delta/health"],
+            "raw_stream_preserved": True,
+            "one_heart": "https://api.centralldark.com/heartbeat",
+            "authority": False,
+            "proof": False,
+        },
     }
 
 
@@ -1151,6 +1481,17 @@ def self_test() -> int:
         "chain_dedup": len(candidate_routes("auto")) == len(set(candidate_routes("auto"))),
         "zendrive_health_safe": zendrive_provider_health_payload().get("proof") is False,
         "zendrive_simulation_oi": _zendrive_simulation_payload([ChatMessage(role="user", content="oi")]).get("response_text") == "oi",
+        "vps_delta_error_class": parse_vps_delta_line(
+            Path("/root/CentralDark/logs/mcp/test.jsonl"),
+            '{"level":"error","service":"mcp","path":"/mcp","status":500,"event":"probe failed"}',
+            1,
+            1,
+        ).get("severity") == "error",
+        "vps_delta_dedupe": aggregate_vps_delta_events([
+            parse_vps_delta_line(Path("/root/CentralDark/logs/mcp/test.jsonl"), '{"level":"warn","event":"timeout 12345"}', 1, 1),
+            parse_vps_delta_line(Path("/root/CentralDark/logs/mcp/test.jsonl"), '{"level":"warn","event":"timeout 67890"}', 2, 1),
+            parse_vps_delta_line(Path("/root/CentralDark/logs/mcp/test.jsonl"), '{"level":"warn","event":"timeout 99999"}', 3, 1),
+        ])[0].get("count") == 3,
     }
     failed = [name for name, ok in checks.items() if not ok]
     print(json.dumps({"ok": not failed, "checks": checks, "failed": failed}, ensure_ascii=False))
