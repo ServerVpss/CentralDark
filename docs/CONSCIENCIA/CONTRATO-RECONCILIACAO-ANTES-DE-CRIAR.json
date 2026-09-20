@@ -1809,6 +1809,17 @@
       "prefer_isolated_temp_or_worktree": true,
       "cleanup_must_not_delete_unclassified_runtime_evidence": true,
       "cleanliness_is_not_permission_for_reset_hard_or_git_clean": true
+    },
+    "delivery_visibility": {
+      "marker": "CENTRALDARK_INTERNAL_WORK_ARTIFACT_IS_NOT_CHEFE_DELIVERY",
+      "internal_work_artifact_is_delivery": false,
+      "tool_materialization_is_delivery": false,
+      "downloaded_ci_artifact_default_visibility": "INTERNAL_WORKSPACE",
+      "show_raw_file_to_chefe_only_if_explicitly_requested_or_final_deliverable": true,
+      "pombo64_may_reference_hash_manifest_lineage_without_exposing_raw_artifact": true,
+      "pombo64_trace_is_delivery_by_itself": false,
+      "temporary_file_card_in_chat_is_not_proof_of_delivery_intent": true,
+      "final_delivery_must_be_intentional_and_named": true
     }
   },
   "log_incident_crystallization_contract": {
