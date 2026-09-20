@@ -318,6 +318,29 @@ hybrid_runtime_contract:
   caddy_rollback_on_validation_failure: true
   t0_t1_pid_health_receipt_required: true
 
+ephemeral_artifact_policy:
+  marker: CENTRALDARK_EPHEMERAL_WORKSPACE_CLEAN_REQUIRED
+  temporary_version_suffixes_allowed: true
+  temporary_suffixes_are_architecture: false
+  temporary_artifact_is_owner: false
+  allowed_locations: [/tmp, ephemeral_worktree, process_private_temp, ci_temp_directory]
+  cleanup_required_after_use: true
+  cleanup_on_success: true
+  cleanup_on_failure_when_safe: true
+  cleanup_on_cancel_or_timeout: true
+  stale_temp_requires_classification_before_delete: true
+  active_process_or_open_handle_blocks_blind_delete: true
+  final_temp_residue_target: ZERO_UNLESS_PROVEN_ACTIVE_OR_FORENSIC_KEEP
+  canonical_same_capability_version_suffix: FORBIDDEN
+  canonical_same_capability_names_forbidden: [v1, v2, v3, v4, novo, new, final, copy, backup-as-owner]
+  evolve_same_object: true
+  expand_domain_in_same_owner: true
+  create_parallel_architecture_for_domain_expansion: false
+  integrated_global_dedupe: true
+  duplicate_action: ABSORB_DELTA_INTO_EXISTING_OWNER_THEN_RETIRE_DUPLICATE
+  dirty_runtime_root_is_not_temp_workspace: true
+  cleanup_does_not_authorize_reset_hard_or_git_clean: true
+
 hybrid_telemetry_contract:
   marker: CENTRALDARK_HYBRID_TELEMETRY_REQUIRED
   status: MANDATORY_WHEN_OBSERVABILITY_IS_MATERIAL
