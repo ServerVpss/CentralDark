@@ -47,6 +47,15 @@ jobs:
       AUDIT_DIR: /root/CentralDark/logs
       BEFORE_SHA: ${{ github.event.before || '' }}
     steps:
+      - name: Hydrate Cofre (GitHub secret → VPS secrets/, sem echo)
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          BUILDKITE_API_TOKEN: ${{ secrets.BUILDKITE_API_TOKEN }}
+        run: |
+          set -euo pipefail
+          bash /root/CentralDark/scripts/vps/hydrate-provider-secrets.sh
+
       - name: Validar SHA, construir isolado, promover e comprovar
         id: deploy
         shell: bash
@@ -221,7 +230,16 @@ jobs:
             ' || echo "MCP_PM2_DIAGNOSTIC_UNAVAILABLE"
           }
           [[ "$(jq -r '.pm2_env.pm_cwd // ""' <<<"$MCP_JSON")" == "$MCP_DIR" ]] || { echo "MCP_PM2_CWD_MISMATCH"; exit 35; }
-          [[ "$(jq -r '.pm2_env.pm_exec_path // ""' <<<"$MCP_JSON")" == "$MCP_DIR/dist/index.js" ]] || { echo "MCP_PM2_EXEC_MISMATCH"; exit 36; }
+          MCP_EXEC="$(jq -r '.pm2_env.pm_exec_path // ""' <<<"$MCP_JSON")"
+          MCP_ARGS="$(jq -r '(.pm2_env.args // []) | join(" ")' <<<"$MCP_JSON")"
+          if [[ "$MCP_EXEC" == "$MCP_DIR/dist/index.js" ]]; then
+            :
+          elif [[ "$MCP_EXEC" == *bash && "$MCP_ARGS" == *"exec node $MCP_DIR/dist/index.js"* ]]; then
+            :
+          else
+            echo "MCP_PM2_EXEC_MISMATCH"
+            exit 36
+          fi
           curl -fsS --max-time 3 "$HEALTH_URL" | jq -e '.ok == true and .service == "mcp-centraldark"' >/dev/null || { echo "PRE_DEPLOY_HEALTH_FAILED"; exit 37; }
 
           RUNTIME_STAGE="$MCP_DIR/.dist-release.${TARGET_SHA:0:12}.${BASHPID}"
@@ -248,7 +266,19 @@ jobs:
           NEW_PID="$(pm2 pid "$PM2_APP" | tail -n1)"
           [[ "$NEW_PID" =~ ^[0-9]+$ && "$NEW_PID" -gt 0 && "$NEW_PID" != "$OLD_PID" ]] || { echo "MCP_PM2_PID_NOT_REPLACED"; exit 41; }
           pm2 jlist | jq -e --arg app "$PM2_APP" --arg cwd "$MCP_DIR" --arg exec "$MCP_DIR/dist/index.js" '
-            any(.[]; .name == $app and .pm2_env.status == "online" and .pm2_env.pm_cwd == $cwd and .pm2_env.pm_exec_path == $exec and (.pid | tonumber) > 0)
+            any(.[];
+              .name == $app
+              and .pm2_env.status == "online"
+              and .pm2_env.pm_cwd == $cwd
+              and ((.pid | tonumber) > 0)
+              and (
+                .pm2_env.pm_exec_path == $exec
+                or (
+                  (.pm2_env.pm_exec_path | test("bash$"))
+                  and ((.pm2_env.args // []) | join(" ") | contains("exec node " + $exec))
+                )
+              )
+            )
           ' >/dev/null || { echo "MCP_PM2_STATE_INVALID"; exit 42; }
 
           AUDIT_FILE="$AUDIT_DIR/mcp-admin-audit-$(date -u +%F).jsonl"

@@ -506,7 +506,7 @@ ensure_cf_env_file() {
 CF_API_TOKEN=
 CF_ZONE_NAME=centralldark.com
 CF_TARGET_IP=
-CF_SUBDOMAINS="@ www app api bot crm mcp gateway webhook status"
+CF_SUBDOMAINS="@ www api mcp admin"
 CF_PROXIED=true
 EOF
   fi
