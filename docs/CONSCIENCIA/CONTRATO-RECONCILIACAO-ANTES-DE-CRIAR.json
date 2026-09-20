@@ -594,5 +594,107 @@
     "MINIMAL_ACTION",
     "NO_CHANGE_REASON"
   ],
-  "receipt_visibility": "INTERNAL_BY_DEFAULT; SHOW_ONLY_ON_AUDIT_OR_BLOCKER"
+  "receipt_visibility": "INTERNAL_BY_DEFAULT; SHOW_ONLY_ON_AUDIT_OR_BLOCKER",
+  "global_absorption_and_cockpit_policy": {
+    "marker": "GLOBAL_EVERYTHING_INTO_CENTRALDARK",
+    "status": "CANONICAL",
+    "authority": "SEGREDO/CHEFE",
+    "scope": "GLOBAL",
+    "origin_is_not_architecture": true,
+    "same_contract_regardless_of_origin": true,
+    "accepted_origins": [
+      "human",
+      "chat",
+      "message",
+      "file",
+      "package",
+      "archive",
+      "image",
+      "audio",
+      "video",
+      "chatgpt",
+      "gpt",
+      "codex",
+      "claude",
+      "grok",
+      "gemini",
+      "copilot",
+      "cursor",
+      "windsurf",
+      "hermes",
+      "mcp",
+      "cli",
+      "vps",
+      "casa",
+      "github",
+      "future_agent",
+      "future_tool"
+    ],
+    "ingestion": {
+      "any_material_input_is_delta_candidate": true,
+      "single_character_is_valid_input": true,
+      "whole_file_is_valid_input": true,
+      "whole_package_is_valid_input": true,
+      "preserve_useful_delta": true,
+      "apply_into_existing_centraldark": true,
+      "create_parallel_system_for_new_input": false,
+      "source_identity_changes_contract": false
+    },
+    "mutation_semantics": {
+      "addition": "ABSORB_INTO_CENTRALDARK",
+      "removal": "REMOVE_FROM_CENTRALDARK_WHEN_EXPLICITLY_REQUESTED_AND_SAFE",
+      "update": "UPDATE_EXISTING_CENTRALDARK",
+      "replacement": "REPLACE_TARGET_WITH_REQUESTED_NEW_STATE",
+      "deployment": "PROMOTE_RESULTING_CENTRALDARK_STATE"
+    },
+    "surfaces": {
+      "public_site": {
+        "canonical_host": "centralldark.com",
+        "purpose": "PUBLIC_SITE"
+      },
+      "private_admin_cockpit": {
+        "canonical_host": "admin.centralldark.com",
+        "internet_reachable": true,
+        "access": "AUTHENTICATED_OWNER_ONLY",
+        "one_cockpit": true,
+        "must_integrate": [
+          "chat_and_ai_engines",
+          "hermes",
+          "grok_and_other_models",
+          "mcp_and_tools",
+          "capability_and_model_routing",
+          "omnirouter_capabilities",
+          "graph",
+          "brain_memory_and_docs",
+          "skills",
+          "github_main_prs_issues_branches",
+          "runtime_vps_and_casa",
+          "deploy",
+          "logs_raw_stream_and_classification",
+          "accounts_oauth",
+          "evidence_and_receipts",
+          "live_preview_and_missions"
+        ],
+        "parallel_admin_panels": "ABSORB_OR_ROUTE_INTO_ONE_COCKPIT"
+      }
+    },
+    "global_application": {
+      "all_current_components_inherit": true,
+      "all_future_components_inherit": true,
+      "all_current_agents_and_models_inherit": true,
+      "all_future_agents_and_models_inherit": true,
+      "every_addition_removal_update_uses_same_contract": true,
+      "no_actor_specific_contract": true,
+      "no_origin_specific_contract": true
+    },
+    "pr_mother_projection": {
+      "pr": 1562,
+      "role": "GLOBAL_RENDEZVOUS_LEDGER",
+      "inventory_all_open_prs": true,
+      "inventory_all_open_issues": true,
+      "inventory_all_repository_branches": true,
+      "inventory_does_not_equal_merge_or_close": true,
+      "useful_branch_delta_requires_absorption_before_deletion": true
+    }
+  }
 }
