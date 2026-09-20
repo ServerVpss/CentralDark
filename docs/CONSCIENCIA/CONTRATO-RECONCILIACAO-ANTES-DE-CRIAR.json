@@ -84,7 +84,10 @@
       "NO_NEW_INFORMATION_NO_CHANGE": true,
       "PARALLELIZE_PERCEPTION": true,
       "SERIALIZE_MUTATION": true,
-      "REALITY_IS_JUDGE": true
+      "REALITY_IS_JUDGE": true,
+      "EVOLVE_SAME_OBJECT": true,
+      "DOMAIN_EXPANSION_WITHOUT_PARALLEL_ARCHITECTURE": true,
+      "TEMP_ARTIFACTS_MUST_NOT_BECOME_OWNERS": true
     },
     "material_scope": [
       "INPUT",
@@ -1060,7 +1063,8 @@
       "hud": "PROJECTION_NOT_AUTHORITY",
       "history": "PROVENANCE_NOT_CURRENT_TRUTH"
     },
-    "hybrid_telemetry_contract_ref": "this_contract.hybrid_telemetry_contract"
+    "hybrid_telemetry_contract_ref": "this_contract.hybrid_telemetry_contract",
+    "ephemeral_artifact_policy_ref": "this_contract.ephemeral_artifact_policy"
   },
   "fixed_hud_contract": {
     "marker": "CENTRALDARK_FIXED_HUD_REQUIRED",
@@ -1365,7 +1369,8 @@
     "no_information_gain": "NO_CHANGE_KEEP_GOAL_KEEP_NEXT_CURSOR",
     "same_scope": "EVOLVE_SAME_OWNER_SAME_PR_WHEN_WRITER_SCOPE_MATCHES",
     "interruption": "RESUME_FROM_NEXT_CURSOR_AFTER_REMEASURE",
-    "fixed_point_is_checkpoint_not_mission_amnesia": true
+    "fixed_point_is_checkpoint_not_mission_amnesia": true,
+    "domain_expansion": "EVOLVE_EXISTING_OWNER_CAPABILITY_SCOPE_WITH_MINIMUM_REQUIRED_DELTA"
   },
   "hybrid_telemetry_contract": {
     "marker": "CENTRALDARK_HYBRID_TELEMETRY_REQUIRED",
@@ -1512,6 +1517,88 @@
       "expose_owner_binding": true,
       "expose_cross_surface_drift": true,
       "layout_remains_fixed": true
+    }
+  },
+  "ephemeral_artifact_policy": {
+    "marker": "CENTRALDARK_EPHEMERAL_WORKSPACE_CLEAN_REQUIRED",
+    "status": "MANDATORY",
+    "principle": "TEMPORARY_VERSION_SUFFIXES_ARE_EXECUTION_COORDINATION_ONLY_NOT_ARCHITECTURE",
+    "temporary_suffixes_allowed": true,
+    "examples_allowed": [
+      "/tmp/*-v1",
+      "/tmp/*-v2",
+      "/tmp/*-v3",
+      "*-last.json",
+      "*-candidate-*",
+      "isolated-worktree-*"
+    ],
+    "allowed_locations": [
+      "/tmp",
+      "ephemeral_worktree",
+      "process_private_temp",
+      "ci_temp_directory"
+    ],
+    "conditions": [
+      "NOT_CANONICAL_OWNER",
+      "NOT_RUNTIME_AUTHORITY",
+      "NOT_COMMITTED_AS_FINAL_ARCHITECTURE",
+      "BOUND_TO_ACTIVE_MISSION_OR_TEST",
+      "CLEANUP_OWNER_KNOWN",
+      "CLEANUP_AT_END_OR_TTL_REQUIRED"
+    ],
+    "cleanup": {
+      "delete_after_use": true,
+      "cleanup_on_success": true,
+      "cleanup_on_failure_when_safe": true,
+      "cleanup_on_cancel_or_timeout": true,
+      "stale_temp_requires_classification_before_delete": true,
+      "active_process_or_open_handle_blocks_blind_delete": true,
+      "receipt_required_for_material_temp_artifact": false,
+      "final_temp_residue_target": "ZERO_UNLESS_PROVEN_ACTIVE_OR_FORENSIC_KEEP"
+    },
+    "canonical_architecture": {
+      "version_suffix_for_same_capability": "FORBIDDEN",
+      "names_forbidden_when_same_owner_capability": [
+        "v1",
+        "v2",
+        "v3",
+        "v4",
+        "novo",
+        "new",
+        "final",
+        "copy",
+        "backup-as-owner"
+      ],
+      "evolve_same_object": true,
+      "expand_domain_in_same_owner": true,
+      "create_parallel_architecture_for_domain_expansion": false,
+      "create_new_only_when": "MATERIAL_BOUNDARY_OR_CAPABILITY_GAP_PROVEN",
+      "continuity_of_global_contract_required": true
+    },
+    "duplicate_control": {
+      "integrated_global_dedupe": true,
+      "dedupe_dimensions": [
+        "OWNER",
+        "CAPABILITY",
+        "SCOPE",
+        "RUNTIME",
+        "ROUTE",
+        "WORKFLOW",
+        "SERVICE",
+        "CONFIG"
+      ],
+      "before_create": "SEARCH_AND_RECONCILE",
+      "duplicate_found": "ABSORB_DELTA_INTO_EXISTING_OWNER_THEN_RETIRE_DUPLICATE",
+      "duplicate_runtime_must_be_stopped_only_after_owner_and_consumer_proof": true,
+      "historical_copy_is_not_owner": true,
+      "temporary_copy_is_not_owner": true
+    },
+    "vps_cleanliness": {
+      "operational_root_must_not_accumulate_temp_artifacts": true,
+      "do_not_use_dirty_root_as_temp_workspace": true,
+      "prefer_isolated_temp_or_worktree": true,
+      "cleanup_must_not_delete_unclassified_runtime_evidence": true,
+      "cleanliness_is_not_permission_for_reset_hard_or_git_clean": true
     }
   }
 }
