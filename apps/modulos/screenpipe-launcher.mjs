@@ -3,7 +3,6 @@ import { spawn } from 'child_process';
 
 const SCREENPIPE_PORT = parseInt(process.env.PORT || '3030', 10);
 const SCREENPIPE_DATA_DIR = process.env.SCREENPIPE_DATA_DIR || '/root/.screenpipe';
-const SCREENPIPE_BIN = process.env.SCREENPIPE_BIN || 'screenpipe';
 const LOG_LEVEL = process.env.LOG_LEVEL || 'info';
 
 let screenpipeProcess = null;
@@ -30,9 +29,13 @@ const healthServer = http.createServer((req, res) => {
 });
 
 function startScreenPipe() {
-  console.log(`[ScreenPipe] Starting screenpipe binary on port ${SCREENPIPE_PORT}...`);
+  console.log(`[ScreenPipe] Starting screenpipe via npx on port ${SCREENPIPE_PORT}...`);
   
-  screenpipeProcess = spawn(SCREENPIPE_BIN, [
+  // Use npx to run screenpipe@latest with --port and --data-dir flags
+  screenpipeProcess = spawn('npx', [
+    '-y',
+    'screenpipe@latest',
+    'record',
     '--port', String(SCREENPIPE_PORT),
     '--data-dir', SCREENPIPE_DATA_DIR,
   ], {
@@ -103,6 +106,6 @@ startScreenPipe();
 console.log(`[ScreenPipe] ===== BOOT =====`);
 console.log(`PORT: ${SCREENPIPE_PORT}`);
 console.log(`DATA_DIR: ${SCREENPIPE_DATA_DIR}`);
-console.log(`BIN: ${SCREENPIPE_BIN}`);
+console.log(`METHOD: npx screenpipe@latest record`);
 console.log(`LOG_LEVEL: ${LOG_LEVEL}`);
 console.log(`==================`);
