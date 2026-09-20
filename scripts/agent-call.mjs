@@ -21,6 +21,17 @@ const WRITE_ROLES = new Set(["EXECUTOR", "HERMES"]);
 const DELEGATION_ROLES = new Set(["DEBUGGER", "REVIEWER", "JUDGE", "READ_ONLY"]);
 const CLOSED_FRONTIER_STATES = new Set(["CLOSED", "DONE", "RESOLVED"]);
 const HEALING_LEVELS = ["WELD", "REBUILD_LOCAL", "JUMP_BRIDGE"];
+const LOG_INCIDENT_FRONTS = Object.freeze([
+  "AUTH_OAUTH",
+  "MCP_RUNTIME",
+  "HUB_DATABASE",
+  "ROUTING_NETWORK",
+  "PROCESS_RUNTIME",
+  "GITHUB_CI",
+  "CONFIG_PROVENANCE",
+  "SCREEN_OPTIONAL",
+]);
+const LOG_CORRELATION_FIELDS = Object.freeze(["cid", "correlation_id", "request_id", "trace_id", "span_id"]);
 export const SCOPE_HOT_MS = 60_000;
 export const SCOPE_WARM_MS = 120_000;
 
@@ -137,6 +148,56 @@ export function scopeTemperature(call, state, now = Date.now()) {
     retry_after_ms: 0,
     touched_at: latest.touched_at,
     source: latest.source,
+  };
+}
+
+export function validateLogIncidentFanout(event) {
+  const base = {
+    protocol: PROTOCOL,
+    gate: "LOG_INCIDENT_FANOUT",
+    sensor: "/admin/api/logs",
+    write_authorized: false,
+  };
+  if (!event || typeof event !== "object" || Array.isArray(event)) {
+    return { ...base, status: "BLOCKED_LOG_INCIDENT_EVENT_MISSING", accepted: false, fanout_required: false };
+  }
+  const endpoint = String(event?.source_endpoint || event?.endpoint || event?.source || "");
+  if (endpoint !== "/admin/api/logs") {
+    return { ...base, status: "BLOCKED_LOG_INCIDENT_SENSOR_MISMATCH", accepted: false, fanout_required: false, observed_sensor: endpoint || null };
+  }
+  if (event.material !== true) {
+    return { ...base, status: "NOT_APPLICABLE_LOG_SIGNAL_NOT_MATERIAL", accepted: true, fanout_required: false };
+  }
+  if (!nonEmpty(event.target)) {
+    return { ...base, status: "BLOCKED_LOG_INCIDENT_TARGET_MISSING", accepted: false, fanout_required: false };
+  }
+  const correlation = {};
+  for (const field of LOG_CORRELATION_FIELDS) {
+    if (nonEmpty(event[field])) correlation[field] = event[field];
+  }
+  if (Object.keys(correlation).length === 0) {
+    return { ...base, status: "BLOCKED_LOG_INCIDENT_CORRELATION_MISSING", accepted: false, fanout_required: false, target: event.target };
+  }
+  const fronts = LOG_INCIDENT_FRONTS.map((id) => ({
+    id,
+    mode: "READ_ONLY",
+    write_authorized: false,
+    target: event.target,
+    correlation,
+  }));
+  return {
+    ...base,
+    status: "PASS_LOG_INCIDENT_FANOUT_PLAN",
+    accepted: true,
+    fanout_required: true,
+    target: event.target,
+    correlation,
+    fronts,
+    rendezvous: "BY_TARGET_TRACE_OWNER",
+    mutation_policy: "PARALLEL_ONLY_FOR_PROVEN_DISJOINT_SCOPES_SERIAL_WITHIN_EACH_SCOPE",
+    same_scope_concurrent_writers: false,
+    one_active_writer_per_mutable_scope: true,
+    next_cursor: "RENDEZVOUS_THEN_REMEDIATE_BY_EXISTING_OWNER",
   };
 }
 
@@ -782,6 +843,18 @@ export function validateAgentCall(call, state, now = Date.now()) {
 
 async function main() {
   const args = process.argv.slice(2);
+
+  if (args[0] === "--log-incident-fanout") {
+    const eventPath = args[1];
+    if (!eventPath) {
+      console.error("uso: node scripts/agent-call.mjs --log-incident-fanout <event.json>");
+      process.exit(2);
+    }
+    const event = await readFile(eventPath, "utf8").then(JSON.parse);
+    const receipt = validateLogIncidentFanout(event);
+    process.stdout.write(`${JSON.stringify(receipt, null, 2)}\n`);
+    process.exit(receipt.accepted ? 0 : 13);
+  }
 
   if (args[0] === "--global-contract-gate") {
     const [phase, gatePath, statePath] = args.slice(1);
