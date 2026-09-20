@@ -8,6 +8,7 @@ import {
   validateHealingGate,
   validateHealingResult,
   validateGlobalContractGate,
+  validateLogIncidentFanout,
 } from "./agent-call.mjs";
 
 const state = {
@@ -63,6 +64,25 @@ function check(actual, expected) {
 }
 
 check(validateAgentCall(base, state).status, "ACCEPTED");
+const logIncident = {
+  source_endpoint: "/admin/api/logs",
+  material: true,
+  target: "apps/modulos/mcp",
+  cid: "cid-1",
+  trace_id: "trace-1",
+  level: "error",
+  msg: "hub_mission_consumer_error",
+};
+check(validateLogIncidentFanout(logIncident).status, "PASS_LOG_INCIDENT_FANOUT_PLAN");
+check(validateLogIncidentFanout({ ...logIncident, material: false }).status, "NOT_APPLICABLE_LOG_SIGNAL_NOT_MATERIAL");
+check(validateLogIncidentFanout({ ...logIncident, source_endpoint: "/other" }).status, "BLOCKED_LOG_INCIDENT_SENSOR_MISMATCH");
+check(validateLogIncidentFanout({ ...logIncident, cid: "", trace_id: "" }).status, "BLOCKED_LOG_INCIDENT_CORRELATION_MISSING");
+const logPlan = validateLogIncidentFanout(logIncident);
+check(logPlan.fronts.length, 8);
+check(logPlan.fronts.every((front) => front.mode === "READ_ONLY" && front.write_authorized === false), true);
+check(logPlan.same_scope_concurrent_writers, false);
+check(logPlan.one_active_writer_per_mutable_scope, true);
+
 check(validateGlobalContractGate(state.global_contract_entry, state, "ENTRY").status, "PASS_GLOBAL_CONTRACT_GATE");
 check(validateAgentCall({ ...base, to: "hermes", requested_role: "EXECUTOR", write_requested: true, global_contract_entry: undefined }, { ...state, global_contract_entry: undefined }).status, "BLOCKED_GLOBAL_CONTRACT_GATE_MISSING");
 check(validateAgentCall({ ...base, to: "hermes", requested_role: "EXECUTOR", write_requested: true }, { ...state, global_contract_entry: { ...state.global_contract_entry, github_t0: { status: "UNKNOWN", head_sha: "abc123" } } }).status, "BLOCKED_GLOBAL_CONTRACT_GITHUB_T0");
