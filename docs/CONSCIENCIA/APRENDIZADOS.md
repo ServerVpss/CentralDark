@@ -334,9 +334,3 @@ updated: 2026-08-27
 - **Categoria:** aprendizado-coletivo
 - **Contexto:** Como o comando `darkai` pode ajudar a gente a orquestrar tarefas hoje? Quem deveria chamar quem?
 - **Lição:** Groq me mostrou que por trás de todo problema simples tem uma camada mais profunda
-
-### Delta 2026-09-20 — LOG_INCIDENT_MATERIAL + VPS_KERNEL_DELTA_MATERIAL
-- **Categoria:** regra
-- **Data:** 2026-09-20
-- **Contexto:** O contrato global passou a tratar incidente material de logs e delta material do kernel/runtime VPS como gatilhos do mesmo ciclo contínuo. A descoberta não abre nova missão nem cria segundo cérebro: logs/stream e VPS são sensores; o fan-out de diagnóstico é read-only, o rendezvous encontra owner e Writer, e a mutação permanece serial por escopo. O delta do kernel VPS usa a espinha API/heartbeat já existente e não autoriza declarar Casa, VPS, GitHub e API no mesmo Fixed Point apenas porque um endpoint está online.
-- **Aprendizado:** LOG_INCIDENT_MATERIAL e VPS_KERNEL_DELTA_MATERIAL entram no mesmo DELTA_CONTINUO: observar → correlacionar → rendezvous → owner → correção mínima → T1 → receipt. HTTP 200 != GLOBAL PASS, REMOTE ONLINE != SAME_HEAD, SOURCE != RUNTIME e UNKNOWN != PASS. Nova matéria útil é absorvida pelo owner existente; ruído repetido sem ganho informacional é deduplicado.
