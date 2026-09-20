@@ -32,6 +32,7 @@ const { atualizarGrafo } = await import('../agents/GraphRAG-Master/agent.mjs'); 
 
 const BASE = dirname(dirname(fileURLToPath(import.meta.url))); // /root/CentralDark/apps/modulos/HERMES-CORE
 const PENDENTE  = `${BASE}/missions/pendente`;
+const LEGACY_PENDENTE = '/root/CentralDark/missoes/pendente'; // compat: produtores antigos convergem no mesmo Core
 const ANDAMENTO = `${BASE}/missions/em-andamento`;
 const CONCLUIDA = `${BASE}/missions/concluidas`;
 const NOTIFY    = `${BASE}/utils/notify.mjs`;
@@ -116,9 +117,14 @@ function slugify(s) {
 }
 
 async function pegarProximaMissao() {
-  if (!existsSync(PENDENTE)) return null;
-  const files = (await readdir(PENDENTE)).filter(f => f.endsWith('.md')).sort();
-  return files[0] ? join(PENDENTE, files[0]) : null;
+  // REUSE_BEFORE_CREATE: um único executor; aceita a fila canônica e a fila legada
+  // somente como portas de entrada. Toda execução converge para HERMES-CORE.
+  for (const inbox of [PENDENTE, LEGACY_PENDENTE]) {
+    if (!existsSync(inbox)) continue;
+    const files = (await readdir(inbox)).filter(f => f.endsWith('.md')).sort();
+    if (files[0]) return join(inbox, files[0]);
+  }
+  return null;
 }
 
 async function executarMissao(arquivoPendente) {
