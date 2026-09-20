@@ -27,7 +27,8 @@ TRIGGERS = FABRIC / "TRIGGERS.yml"
 MASTER = FABRIC / "MASTER-CYCLE.yml"
 ENGINE = FABRIC / "ENGINE_BINDING.yml"
 MEGAZORD = FABRIC / "MEGAZORD-CENTRALDARK.yml"
-LOCK_CONTRACT = FABRIC / "PROVEN-DETERMINISTIC-LOCK.yml"\nRUNTIME_PREFLIGHT_LINT = FABRIC / "RUNTIME-PREFLIGHT-LINT.yml"
+LOCK_CONTRACT = FABRIC / "PROVEN-DETERMINISTIC-LOCK.yml"
+RUNTIME_PREFLIGHT_LINT = FABRIC / "RUNTIME-PREFLIGHT-LINT.yml"
 BOOT = Path("CENTRALDARK_AI_BOOT.yaml")
 COGNITIVE_CAPABILITIES = Path("docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md")
 METACOGNITION = Path("docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md")
@@ -83,6 +84,85 @@ def classify_realtime_feedback(value: str) -> dict:
         "repeated_failure_same_signature": "REUSE_CRYSTAL_NOT_RETHINK",
         "learning_outputs": ["REFUTED_MINERAL", "UNRESOLVED_MINERAL", "CRYSTAL_GOLD"],
         "next_cursor_required": True,
+    }
+
+
+def runtime_preflight_contract_state(repo: Path) -> dict:
+    path = repo / RUNTIME_PREFLIGHT_LINT
+    if not path.is_file():
+        return {
+            "status": "INVALID",
+            "owner": RUNTIME_PREFLIGHT_LINT.as_posix(),
+            "checks": {"file_present": False},
+        }
+    text = path.read_text(encoding="utf-8")
+    required_tokens = (
+        "schema: centraldark.runtime-preflight-lint.v1",
+        "executable_consumer_required: true",
+        "wrapper_parse_fail_is_not_target_fail: true",
+        "invalid_probe_must_not_become_fact: true",
+        "cron_path_drift:",
+        "bridge_ownership:",
+    )
+    checks = {"file_present": True}
+    for token in required_tokens:
+        checks[token] = token in text
+    return {
+        "status": "BOUND" if all(checks.values()) else "INVALID",
+        "owner": RUNTIME_PREFLIGHT_LINT.as_posix(),
+        "checks": checks,
+    }
+
+
+def lint_runtime_command(
+    repo: Path,
+    command: str,
+    shell: str,
+    host_mode: str,
+    required_paths: list[str] | None = None,
+) -> dict:
+    contract = runtime_preflight_contract_state(repo)
+    reasons: list[str] = []
+    shell_norm = shell.strip().lower()
+    host_norm = host_mode.strip().lower()
+
+    if contract["status"] != "BOUND":
+        reasons.append("PREFLIGHT_CONTRACT_INVALID")
+
+    if host_norm in {"js_template", "javascript_template", "ts_template", "typescript_template"}:
+        if re.search(r"(?<!\\)\$\{[^}\n]+\}", command):
+            reasons.append("HOST_TEMPLATE_INTERPOLATION_RISK")
+
+    if shell_norm in {"powershell", "powershell.exe", "pwsh", "pwsh.exe"}:
+        pid_collision = re.search(
+            r"(?im)(^\s*\$pid\s*=|foreach\s*\(\s*\$pid\b|for\s*\([^)]*\$pid\s*=)",
+            command,
+        )
+        if pid_collision:
+            reasons.append("POWERSHELL_PID_AUTOMATIC_VARIABLE_COLLISION")
+
+    missing_paths: list[str] = []
+    for raw in required_paths or []:
+        raw = raw.strip()
+        if not raw:
+            continue
+        path = Path(raw)
+        if not path.is_absolute():
+            path = repo / path
+        if not path.exists():
+            missing_paths.append(raw)
+    if missing_paths:
+        reasons.append("MISSING_REQUIRED_PATH")
+
+    return {
+        "status": "PASS" if not reasons else "FAIL_CLOSED",
+        "owner": RUNTIME_PREFLIGHT_LINT.as_posix(),
+        "shell": shell_norm,
+        "host_mode": host_norm,
+        "reasons": reasons,
+        "missing_paths": missing_paths,
+        "wrapper_parse_fail_is_not_target_fail": True,
+        "invalid_probe_must_not_become_fact": True,
     }
 
 
@@ -173,6 +253,7 @@ def cmd_boot(args: argparse.Namespace) -> int:
     source_hashes = require_files(repo)
     registry = discover_registry(repo)
     bios = cognitive_bios_state(repo)
+    preflight_contract = runtime_preflight_contract_state(repo)
     active = explicit_command_context(args.input)
     normalized = normalize_command(args.input.splitlines()[0].split()[0]) if args.input.strip() else ""
     result = {
@@ -186,6 +267,7 @@ def cmd_boot(args: argparse.Namespace) -> int:
         "source_sha256": source_hashes,
         "feedback": classify_realtime_feedback(args.input),
         "cognitive_bios": bios,
+        "runtime_preflight_contract": preflight_contract,
         "hud": bios["hud"],
         "rules": {
             "case_insensitive": True,
@@ -196,13 +278,29 @@ def cmd_boot(args: argparse.Namespace) -> int:
             "failed_candidate": "REFUTED_MINERAL",
             "one_writer_per_scope": True,
             "realtime_feedback_persistent_per_mission": True,
-            "realtime_feedback_user_repetition_required": False,\n            "runtime_preflight_lint_required": True,\n            "runtime_preflight_lint_owner": RUNTIME_PREFLIGHT_LINT.as_posix(),
+            "realtime_feedback_user_repetition_required": False,
+            "runtime_preflight_lint_required": True,
+            "runtime_preflight_lint_owner": RUNTIME_PREFLIGHT_LINT.as_posix(),
         },
     }
     print(json.dumps(result, indent=2, ensure_ascii=False))
     if not active:
         return 4
-    return 0 if bios["status"] == "LOADED" else 7
+    return 0 if bios["status"] == "LOADED" and preflight_contract["status"] == "BOUND" else 7
+
+
+def cmd_preflight_lint(args: argparse.Namespace) -> int:
+    repo = Path(args.repo).resolve()
+    require_files(repo)
+    result = lint_runtime_command(
+        repo=repo,
+        command=args.command,
+        shell=args.shell,
+        host_mode=args.host_mode,
+        required_paths=args.required_path,
+    )
+    print(json.dumps(result, indent=2, ensure_ascii=False))
+    return 0 if result["status"] == "PASS" else 8
 
 
 def cmd_feedback(args: argparse.Namespace) -> int:
@@ -282,6 +380,14 @@ def build_parser() -> argparse.ArgumentParser:
     b.add_argument("--repo", default=".")
     b.add_argument("--input", required=True)
     b.set_defaults(func=cmd_boot)
+
+    pf = sub.add_parser("preflight-lint")
+    pf.add_argument("--repo", default=".")
+    pf.add_argument("--shell", required=True)
+    pf.add_argument("--host-mode", default="literal")
+    pf.add_argument("--command", required=True)
+    pf.add_argument("--required-path", action="append", default=[])
+    pf.set_defaults(func=cmd_preflight_lint)
 
     f = sub.add_parser("feedback")
     f.add_argument("--repo", default=".")
