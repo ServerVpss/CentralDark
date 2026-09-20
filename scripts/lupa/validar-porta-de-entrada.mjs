@@ -17,7 +17,7 @@ const PORTA_VIVA = "docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md";
 const CONTRATO_DELTA = "docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md";
 const CONTRATO_RECONCILIACAO = "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json";
 const ESTRUTURA_VPS = "docs/CONSCIENCIA/04-ESTRUTURA-VPS.md";
-const RECONCILIATION_SCHEMA_VERSION = 5;
+const RECONCILIATION_SCHEMA_VERSION = 6;
 const IDENTIDADE_LUPA = ".agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA";
 const BASE_SHA = valueAfter("--base-sha", process.env.BASE_SHA || "");
 const HEAD_SHA = valueAfter("--head-sha", process.env.HEAD_SHA || process.env.GITHUB_SHA || "");
@@ -363,7 +363,7 @@ if (!contract) {
   if (deploy.post_deploy_parallel_remeasure_required !== true) errors.push("DEPLOY_POLICY_SEM_REMEDICAO_GITHUB_VPS");
   if (deploy.runtime_receipt_required !== true) errors.push("DEPLOY_POLICY_SEM_RECEIPT_RUNTIME");
 
-  const requiredReceiptFields = ["GITHUB_T0","VPS_T0","CROSS_SURFACE_DRIFT","PREFLIGHT_RESULT","COUNTERPROOF_RESULT","MICRO_DEPLOY_SCOPE","GITHUB_T1","VPS_T1","RUNTIME_RECEIPT","FIXED_HUD_UPDATE","NEXT_CURSOR","ACTIVE_PRS","BRANCH_COMPARISON","PRINCIPAL_PR","CONVERGENCE_RECEIPT","GLOBAL_DNA_RESULT","BUILDKITE_FUNNEL_RESULT","FAILED_JOB_ID","FAILURE_SIGNATURE","FAILED_JOB_ROOT_CAUSE_STATE","RECONCILIATION_PLAN","CONTRACT_SCOPE_ID","CONTRACT_SCHEMA","CONTRACT_BLOB_SHA","CONTRACT_COMMIT_SHA","OBSERVED_AT_LOCAL","OBSERVED_AT_UTC","TRACE_ID","EVENT_ID","POMBO64_PLUS","HEAD_SHA","ARTIFACT_OR_RESULT_SHA256","DEPENDENCY_FINGERPRINT","CARDS_ON_TABLE_GAPS","EXACT_FAILURE_LOCATION","EXACT_IMPROVEMENT","PM2_HOMES_DISCOVERED","OWNER_PM2_HOME","T0_PID","T1_PID","PID_CHANGED","CADDY_BACKUP","CADDY_VALIDATE","CADDY_RELOAD","ROLLBACK_USED","HUD_STATE_HASH"];
+  const requiredReceiptFields = ["GITHUB_T0","VPS_T0","CROSS_SURFACE_DRIFT","PREFLIGHT_RESULT","COUNTERPROOF_RESULT","MICRO_DEPLOY_SCOPE","GITHUB_T1","VPS_T1","RUNTIME_RECEIPT","FIXED_HUD_UPDATE","NEXT_CURSOR","ACTIVE_PRS","BRANCH_COMPARISON","PRINCIPAL_PR","CONVERGENCE_RECEIPT","GLOBAL_DNA_RESULT","BUILDKITE_FUNNEL_RESULT","FAILED_JOB_ID","FAILURE_SIGNATURE","FAILED_JOB_ROOT_CAUSE_STATE","RECONCILIATION_PLAN","CONTRACT_SCOPE_ID","CONTRACT_SCHEMA","CONTRACT_BLOB_SHA","CONTRACT_COMMIT_SHA","OBSERVED_AT_LOCAL","OBSERVED_AT_UTC","TRACE_ID","EVENT_ID","POMBO64_PLUS","HEAD_SHA","ARTIFACT_OR_RESULT_SHA256","DEPENDENCY_FINGERPRINT","CARDS_ON_TABLE_GAPS","EXACT_FAILURE_LOCATION","EXACT_IMPROVEMENT","PM2_HOMES_DISCOVERED","OWNER_PM2_HOME","T0_PID","T1_PID","PID_CHANGED","CADDY_BACKUP","CADDY_VALIDATE","CADDY_RELOAD","ROLLBACK_USED","HUD_STATE_HASH","GLOBAL_GATE_PHASE","GLOBAL_GATE_STATUS","GLOBAL_GATE_TRACE_ID","GITHUB_T0_HEAD","VPS_T0_HEAD","DRIFT_CLASS","OWNER_PROOF","WRITER_SCOPE_PROOF","ROLLBACK_REF","COUNTERPROOF_PLAN_REF","GITHUB_T1_HEAD","VPS_T1_HEAD","COUNTERPROOF_REF","SAME_HEAD_CI_RESULT","RUNTIME_PROOF_RESULT","HUMAN_BOUNDARY_STATE","DELTA_CLASS","DELTA_INFORMATION_GAIN"];
   const receiptFields = contract.internal_receipt_fields ?? [];
   for (const field of requiredReceiptFields) if (!receiptFields.includes(field)) errors.push(`CONTRATO_UNIVERSAL_RECEIPT_CAMPO_AUSENTE:${field}`);
 
@@ -402,6 +402,25 @@ if (!contract) {
   if (hybrid.pm2?.cross_home_restart_forbidden !== true || hybrid.pm2?.restart_all_forbidden !== true) errors.push("CONTRATO_PM2_HIBRIDO_RESTART_AMPLO");
   if (hybrid.caddy?.validate_before_reload !== true || hybrid.caddy?.backup_before_mutation !== true) errors.push("CONTRATO_CADDY_SEM_BACKUP_VALIDATE");
   if (hybrid.microdeploy_runtime_proof?.t1_pid_and_health_required !== true) errors.push("CONTRATO_MICRODEPLOY_SEM_T1_PID_HEALTH");
+
+  const enforcer = contract.global_contract_enforcer ?? {};
+  if (enforcer.marker !== "CENTRALDARK_GLOBAL_CONTRACT_ENFORCER_REQUIRED") errors.push("CONTRATO_ENFORCER_GLOBAL_MARKER_AUSENTE");
+  if (enforcer.status !== "MANDATORY_FOR_MUTATION") errors.push("CONTRATO_ENFORCER_GLOBAL_NAO_OBRIGATORIO");
+  if (enforcer.creates_new_dispatcher !== false) errors.push("CONTRATO_ENFORCER_CRIANDO_DISPATCHER_PARALELO");
+  if (enforcer.deterministic_gate !== "scripts/agent-call.mjs") errors.push("CONTRATO_ENFORCER_GATE_INVALIDO");
+  if (enforcer.deploy_gate !== "scripts/vps/deploy-guards-dispatcher.sh") errors.push("CONTRATO_ENFORCER_DEPLOY_INVALIDO");
+  if (enforcer.any_mutable_action_requires_entry_gate !== true) errors.push("CONTRATO_ENFORCER_MUTACAO_SEM_ENTRY_GATE");
+  if (enforcer.mutation_without_entry_receipt !== "BLOCK") errors.push("CONTRATO_ENFORCER_MUTACAO_SEM_RECEIPT_NAO_BLOQUEIA");
+  if (enforcer.entry_requires?.github_t0 !== "PASS" || enforcer.entry_requires?.vps_t0 !== "PASS") errors.push("CONTRATO_ENFORCER_T0_DUAL_AUSENTE");
+  if (enforcer.entry_requires?.rollback_prepared_and_identified !== true) errors.push("CONTRATO_ENFORCER_ROLLBACK_AUSENTE");
+  if (enforcer.exit_requires?.github_t1 !== "PASS" || enforcer.exit_requires?.vps_t1 !== "PASS") errors.push("CONTRATO_ENFORCER_T1_DUAL_AUSENTE");
+  if (enforcer.fixed_point_aggregator?.unknown_never_green !== true) errors.push("CONTRATO_ENFORCER_UNKNOWN_GREEN");
+
+  const deltaContinuo = contract.continuous_delta_global ?? {};
+  if (deltaContinuo.marker !== "CENTRALDARK_DELTA_CONTINUO_REQUIRED") errors.push("CONTRATO_DELTA_CONTINUO_MARKER_AUSENTE");
+  if (deltaContinuo.every_new_material_is_delta_candidate !== true) errors.push("CONTRATO_DELTA_CONTINUO_NAO_CAPTURA");
+  if (deltaContinuo.new_material_does_not_restart_mission !== true) errors.push("CONTRATO_DELTA_CONTINUO_REINICIA_MISSAO");
+  if (deltaContinuo.interruption !== "RESUME_FROM_NEXT_CURSOR_AFTER_REMEASURE") errors.push("CONTRATO_DELTA_CONTINUO_SEM_RESUME");
 
   const rules = contract.decision_rules ?? {};
   if (rules.new_component_requires_proved_gap !== true) errors.push("CONTRATO_RECONCILIACAO_GAP_NAO_OBRIGATORIO");
