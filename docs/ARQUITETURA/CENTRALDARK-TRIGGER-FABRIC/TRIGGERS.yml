@@ -294,7 +294,9 @@ automatic_triggers:
     owner: "apps/modulos/mcp/src/admin.js + Trigger Fabric"
     sensor: /admin/api/logs
     fanout_gate: scripts/agent-call.mjs --log-incident-fanout
-    companion_sensors: [/health, /health/deep, /heartbeat, /admin/api/metricas, /admin/api/operational-snapshot, /admin/logs/stream]\n    shared_mcp_snapshot_tool: centraldark_operational_snapshot\n    forensic_receipt: _DIAGNOSTICS/FORENSIC-LATEST.json
+    companion_sensors: [/health, /health/deep, /heartbeat, /admin/api/metricas, /admin/api/operational-snapshot, /admin/logs/stream]
+    shared_mcp_snapshot_tool: centraldark_operational_snapshot
+    forensic_receipt: _DIAGNOSTICS/FORENSIC-LATEST.json
     correlation: [cid, correlation_id, request_id, trace_id, span_id]
     behavior: [CLASSIFY_MATERIALITY, FAN_OUT_PARALLEL_READ_ONLY_FRONTS, RENDEZVOUS_BY_TARGET_TRACE_OWNER, IDENTIFY_EXISTING_OWNER, QUEUE_CAUSAL_REMEDIATION, SERIALIZE_SAME_SCOPE_MUTATION, ALLOW_PROVEN_DISJOINT_SCOPE_PARALLELISM, T1_EACH_AFFECTED_SCOPE, RESCAN_LOGS, COUNTERPROOF, RECEIPT, CONTINUE_UNTIL_CRYSTALLIZED]
     fronts: [AUTH_OAUTH, MCP_RUNTIME, HUB_DATABASE, ROUTING_NETWORK, PROCESS_RUNTIME, GITHUB_CI, CONFIG_PROVENANCE, SCREEN_OPTIONAL]
