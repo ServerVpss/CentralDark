@@ -22,6 +22,8 @@ const FILES = {
   tlc23: 'docs/CONSCIENCIA/04-MCP-E-CONECTORES/tlc23.pdf',
   agentCall: 'scripts/agent-call.mjs',
   deployDispatcher: 'scripts/vps/deploy-guards-dispatcher.sh',
+  centralDeploy: 'scripts/vps/centraldark-deploy.sh',
+  operationalDeploy: 'scripts/vps/deploy-operational-guards.sh',
 };
 
 const TLC23_CANONICAL_SHA256 = 'b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1';
@@ -105,6 +107,8 @@ export function validateUniversalMethod() {
   const hermesPrompt = read(FILES.hermesPrompt);
   const agentCall = read(FILES.agentCall);
   const deployDispatcher = read(FILES.deployDispatcher);
+  const centralDeploy = read(FILES.centralDeploy);
+  const operationalDeploy = read(FILES.operationalDeploy);
   const tlc23Hash = sha256(readBuffer(FILES.tlc23));
 
   if (tlc23Hash !== TLC23_CANONICAL_SHA256) {
@@ -296,6 +300,28 @@ export function validateUniversalMethod() {
     'CentralDark — dispatcher condicional de scripts de deploy na VPS',
     'TLC23 / Universal Method: validar o SHA alvo antes de mutação',
   ], 'GLOBAL_CONTRACT_DEPLOY_OWNER');
+
+  requireTokens(deployDispatcher, [
+    'GLOBAL_CONTRACT_ENFORCER_TARGET=PASS',
+    'grep -q "GLOBAL_ENTRY_GATE=PASS" scripts/vps/centraldark-deploy.sh',
+    'grep -q "GLOBAL_EXIT_GATE=PASS" scripts/vps/centraldark-deploy.sh',
+  ], 'GLOBAL_CONTRACT_DEPLOY_DISPATCHER_BINDING');
+
+  requireTokens(centralDeploy, [
+    'CENTRALDARK_GLOBAL_CONTRACT_ENFORCER_REQUIRED',
+    '--global-contract-gate ENTRY',
+    '--global-contract-gate EXIT',
+    'GLOBAL_ENTRY_GATE=PASS',
+    'GLOBAL_EXIT_GATE=PASS',
+  ], 'GLOBAL_CONTRACT_CENTRAL_DEPLOY_BINDING');
+
+  requireTokens(operationalDeploy, [
+    'CENTRALDARK_GLOBAL_CONTRACT_ENFORCER_REQUIRED',
+    '--global-contract-gate ENTRY',
+    '--global-contract-gate EXIT',
+    'GLOBAL_ENTRY_GATE=PASS',
+    'GLOBAL_EXIT_GATE=PASS',
+  ], 'GLOBAL_CONTRACT_OPERATIONAL_DEPLOY_BINDING');
 
   requireTokens(hermesPrompt, [
     'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml',
