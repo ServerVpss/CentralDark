@@ -21,6 +21,7 @@ defaults Grok no mesmo painel Admin, sem criar segundo cérebro, segundo log ou 
 - `grok --help` e `grok agent --help`
 - agentes/personas/roles/workflows bundled em `/root/.grok/bundled`
 - watcher vivo `/tmp/watch-deploy.sh`
+
 ## Estado vivo observado
 
 ```text
@@ -58,6 +59,7 @@ subagents_failed=2
 inference_retries=10
 inference_failures=15
 ```
+
 ## Padrões provados
 
 - Subagente observado: `general-purpose`.
@@ -79,6 +81,7 @@ pode migrar para outro run quando o alvo termina
 
 Isso permanece uma ferida conhecida. Regra CentralDark: watcher focado deve seguir alvo exato
 `scope|target|sha|run_id`, ter deadline e encerrar no terminal/superseded.
+
 ## Modos incorporados no mesmo owner
 
 O adapter canônico continua sendo:

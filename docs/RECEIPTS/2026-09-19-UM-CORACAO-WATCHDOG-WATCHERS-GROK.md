@@ -1,8 +1,8 @@
 # Receipt — um coração + watchdog global + watchers focados
 
-Data: 2026-09-19  
-Owner humano: SEGREDO/CHEFE  
-Repo: `ServerVpss/CentralDark`  
+Data: 2026-09-19
+Owner humano: SEGREDO/CHEFE
+Repo: `ServerVpss/CentralDark`
 START_HEAD: `02136f7df8d0a6f6088a3d316aabdc966e9db6eb`
 
 ## Intenção

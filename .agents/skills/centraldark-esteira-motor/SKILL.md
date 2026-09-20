@@ -11,7 +11,7 @@ metadata:
 
 ## Regra central
 
-```
+```text
 MOTOR (Hermes PM2)  !=  ESTEIRA (GitHub Actions + runner)
 MERGED != DEPLOYED
 PM2_ONLINE != MOTOR_SAUDAVEL
@@ -23,7 +23,7 @@ ARQUIVO_CONGELADO_NA_VPS != ESTADO_CANONICO
 SINTOMA_SUMIU != CAUSA_RESOLVIDA
 ```
 
-PAPAGAIO_MODE = OFF.  
+PAPAGAIO_MODE = OFF.
 POMBO_MODE = CHECKSUM_ON.
 
 ## Lei da cristalização contínua + micro-deploy
@@ -31,7 +31,7 @@ POMBO_MODE = CHECKSUM_ON.
 Ferida comprovada não pode morrer em chat, comentário, sessão ou memória privada.
 Quando a correção estiver dentro da autoridade e houver owner canônico, o fechamento obrigatório é:
 
-```
+```text
 FERIDA_PROVADA
 → CAUSA_RAIZ
 → SOLUÇÃO_NO_OWNER_EXISTENTE
@@ -63,7 +63,7 @@ Regras:
 
 Princípio contínuo:
 
-```
+```text
 PEQUENO DELTA PROVADO
 → PEQUENO COMMIT
 → MAIN
@@ -143,12 +143,13 @@ SINAL/HEARTBEAT
 ```
 
 O objetivo é reduzir custo e ruído sem perder cobertura: **um coração para enxergar o todo; watchers curtos para ampliar uma ferida; um watchdog global para decidir quando reconciliar**.
+
 ## Dois mecanismos independentes (não confundir)
 
 Sobreviver a reboot e receber código novo são **problemas diferentes**. Um não
 substitui o outro, e provar um não prova o outro.
 
-```
+```text
 AUTOSTART  = resiliência a reboot   -> systemd/PM2 + restart policy, 0% GitHub
 DEPLOY     = push vira produção     -> Actions/SSH, disparado por commit
 ```
@@ -165,7 +166,7 @@ Prova de deploy é `git log -1` na VPS batendo com o SHA da main.
 
 Erro clássico: achar que uma chave resolve tudo.
 
-```
+```text
 chave SSH  -> o robô ENTRAR na VPS
 token/PAT  -> a VPS puxar do GitHub (git pull) DE DENTRO
 ```
@@ -225,7 +226,7 @@ Detalhe de SHA/run da sessão: `references/sessao-erros-reais.md`.
 
 ### 0. CRISTALIZAR FERIDA (quando houver delta comprovado)
 
-```
+```text
 FERIDA → CAUSA → OWNER → PATCH → TESTE → CONTRAPROVA
 → COMMIT → PUSH → MAIN → MICRO_DEPLOY APLICÁVEL
 → REMEDIÇÃO → RECEIPT
@@ -241,7 +242,7 @@ Nenhuma delas equivale a `DEPLOYED`.
 
 ### 1. ACORDAR (medir)
 
-```
+```text
 central_dark___deploy_status
 github___get_commit sha=main
 github___actions_list in_progress + queued (amostra)
@@ -265,13 +266,13 @@ Classificar — motor | esteira | ambos | UNKNOWN.
 
 ### 4. META_LUPA
 
-Hermes quebrado? só com prova funcional, não só Actions vermelho.  
-Fila serial? só se runner único online.  
+Hermes quebrado? só com prova funcional, não só Actions vermelho.
+Fila serial? só se runner único online.
 Cache miss de Node pode ser frio legítimo.
 
 ### 5. Saída + fechamento canônico
 
-```
+```text
 PROVADO=
 QUEBRADO=
 EVIDÊNCIA FALTANTE=
