@@ -423,6 +423,30 @@ if (!contract) {
   if (lineage.tlc23_horn_gate?.pdf_sha256 !== "b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1") errors.push("CONTRATO_CHILD_LINEAGE_TLC23_HASH_INVALIDO");
 
 
+
+  const artifactMatrix = contract.artifact_evidence_matrix ?? {};
+  if (artifactMatrix.marker !== "CENTRALDARK_ARTIFACT_EVIDENCE_MATRIX") errors.push("CONTRATO_ARTIFACT_MATRIX_MARKER_AUSENTE");
+  if (artifactMatrix.status !== "ACTIVE") errors.push("CONTRATO_ARTIFACT_MATRIX_INATIVA");
+  if (artifactMatrix.owner !== "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json") errors.push("CONTRATO_ARTIFACT_MATRIX_OWNER_INVALIDO");
+  if (artifactMatrix.policy?.artifact_is_owner !== false) errors.push("CONTRATO_ARTIFACT_VIROU_OWNER");
+  if (artifactMatrix.policy?.artifact_is_runtime_proof !== false) errors.push("CONTRATO_ARTIFACT_VIROU_RUNTIME_PROOF");
+  if (artifactMatrix.policy?.byte_identity_is_semantic_proof !== false) errors.push("CONTRATO_ARTIFACT_HASH_VIROU_PROVA_SEMANTICA");
+  if (artifactMatrix.policy?.newer_owner_must_not_be_overwritten_by_older_artifact !== true) errors.push("CONTRATO_ARTIFACT_PERMITE_DOWNGRADE");
+  if (artifactMatrix.policy?.extract_useful_delta_before_merge !== true) errors.push("CONTRATO_ARTIFACT_SEM_DELTA_UTIL");
+  if (artifactMatrix.policy?.deterministic_test_before_promotion !== true) errors.push("CONTRATO_ARTIFACT_SEM_TESTE_DETERMINISTICO");
+  if (artifactMatrix.policy?.global_contract_inheritance_required !== true) errors.push("CONTRATO_ARTIFACT_SEM_HERANCA_GLOBAL");
+
+  const artifactIds = new Set(Array.isArray(artifactMatrix.artifacts) ? artifactMatrix.artifacts.map((row) => row?.id) : []);
+  for (const id of ["PDF_HARNESS_CORE_20260909","UNIFIED_ONESHOT_REMEDIADO","REMOTE_TRAY_PACOTAO_FINAL"]) {
+    if (!artifactIds.has(id)) errors.push(\`CONTRATO_ARTIFACT_AUSENTE:\${id}\`);
+  }
+  const remoteTrayArtifact = Array.isArray(artifactMatrix.artifacts)
+    ? artifactMatrix.artifacts.find((row) => row?.id === "REMOTE_TRAY_PACOTAO_FINAL")
+    : null;
+  if (!remoteTrayArtifact || !Array.isArray(remoteTrayArtifact.gap_proven) || !remoteTrayArtifact.gap_proven.some((item) => String(item).includes("harness/RUN-TESTS.ps1"))) {
+    errors.push("CONTRATO_REMOTE_TRAY_GAP_HARNESS_NAO_REGISTRADO");
+  }
+
   const fixedHud = contract.fixed_hud_contract ?? {};
   if (fixedHud.marker !== "CENTRALDARK_FIXED_HUD_REQUIRED") errors.push("CONTRATO_HUD_FIXO_MARKER_AUSENTE");
   if (fixedHud.always_show_on_centraldark_operational_response !== true) errors.push("CONTRATO_HUD_NAO_OBRIGATORIO");
