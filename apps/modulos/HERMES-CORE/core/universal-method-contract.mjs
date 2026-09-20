@@ -323,6 +323,27 @@ export function validateUniversalMethod() {
     'allowed_when: ALL_DEFINED_SCOPE_CONDITIONS_ARE_DETERMINISTICALLY_VERIFIED',
   ], 'TRIGGER_CONTRACT_LEARNING');
 
+  requireTokens(contract, [
+    'global_contract_entry_policy:',
+    'marker: CENTRALDARK_GLOBAL_CONTRACT_ENTRY_REQUIRED',
+    'ALL_CURRENT_AND_FUTURE_MODEL_ADAPTERS',
+    'ALL_CURRENT_AND_FUTURE_AGENTS',
+    'ALL_CURRENT_AND_FUTURE_CLIS',
+    'contract_required_before_operational_mutation: true',
+    'model_or_tool_may_bypass_contract: false',
+    'outside_contract_mutation: FAIL_CLOSED',
+    'parallel_workaround_for_uncovered_case: FORBIDDEN',
+    'FIND_EXISTING_OWNER',
+    'IDENTIFY_MINIMAL_CONTRACT_DELTA',
+    'PATCH_EXISTING_OWNER',
+    'REVALIDATE_GLOBAL_CONTRACT',
+    'CONTINUE_CURRENT_MISSION',
+    'uncovered_case_may_create_parallel_architecture: false',
+    'uncovered_case_may_restart_mission: false',
+    'delta_must_preserve_human_intent: true',
+    'revalidation_required_before_continue: true',
+  ], 'GLOBAL_CONTRACT_ENTRY_POLICY');
+
   requireTokens(triggers, [
     'event: AUREOLA_MATERIAL_DISCOVERY',
     'every_material_discovery_is_learning_candidate: true',
@@ -477,6 +498,9 @@ export function validateUniversalMethod() {
     preventive_continuity_staff_contract: true,
     bounded_100_percent_requires_explicit_denominator: true,
     global_contract_enforcer: true,
+    global_contract_entry_policy: true,
+    outside_contract_mutation_fail_closed: true,
+    uncovered_case_minimal_contract_delta: true,
     continuous_delta_global: true,
     desktop_agentic_kernel_global: true,
     hybrid_telemetry_global: true,
