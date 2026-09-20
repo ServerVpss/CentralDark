@@ -104,33 +104,6 @@ MAP_BACKUP=""
 VERIFIER_STAGE=""
 VERIFIER_BACKUP=""
 RELEASE_BACKUP_DIR=""
-GLOBAL_EXIT_TRACE="$(printf '%s' "$TARGET_SHA|$FINAL_MAIN_SHA|$NEW_PID|EXIT" | sha256sum | awk '{print $1}' | cut -c1-24)"
-GLOBAL_HUD_HASH="$(printf '%s' "$TARGET_SHA|$FINAL_MAIN_SHA|$NEW_PID|PASS" | sha256sum | awk '{print $1}')"
-GLOBAL_EXIT_JSON="$(mktemp "$GLOBAL_GATE_RECEIPT_DIR/guards-exit.XXXXXX.json")"
-GLOBAL_EXIT_RECEIPT="$GLOBAL_GATE_RECEIPT_DIR/guards-exit-$GLOBAL_EXIT_TRACE.receipt.json"
-cat >"$GLOBAL_EXIT_JSON" <<JSON
-{
-  "scope_id":"canon/centraldark-universal-contract-20260919",
-  "contract_schema":6,
-  "phase":"EXIT",
-  "observed_head":"$TARGET_SHA",
-  "trace_id":"$GLOBAL_EXIT_TRACE",
-  "github_t1":{"status":"PASS","head_sha":"$FINAL_MAIN_SHA"},
-  "vps_t1":{"status":"PASS","head_sha":"$(git rev-parse HEAD)"},
-  "counterproof":{"status":"PASS","evidence_ref":"PID_CHANGED+STABILITY+SCOPE_NOT_ADVANCED"},
-  "receipt_ref":"file:$GLOBAL_ENTRY_RECEIPT",
-  "hud":{"status":"PASS","state_hash":"$GLOBAL_HUD_HASH"},
-  "runtime_mutated":true,
-  "runtime_proof":{"status":"PASS","evidence_ref":"pm2:$PM2_APP:$NEW_PID"},
-  "promotion_requested":false,
-  "fixed_point":false,
-  "next_cursor":"REGISTER_DEPLOY_RECEIPT_AND_CONTINUE_MASTER_CYCLE"
-}
-JSON
-node "$GLOBAL_CONTRACT_GATE" --global-contract-gate EXIT "$GLOBAL_EXIT_JSON" | tee "$GLOBAL_EXIT_RECEIPT"
-rm -f "$GLOBAL_EXIT_JSON"
-echo "GLOBAL_EXIT_GATE=PASS receipt=$GLOBAL_EXIT_RECEIPT"
-
 map_promoted=0
 verifier_promoted=0
 restart_attempted=0
@@ -340,6 +313,33 @@ git merge-base --is-ancestor "$TARGET_SHA" "$FINAL_MAIN_SHA" || { echo "VALIDATE
 git diff --quiet "$TARGET_SHA" "$FINAL_MAIN_SHA" -- \
   apps/modulos/mapeamento \
   apps/modulos/HERMES-CORE/agents/Log-Verificador || { echo "GUARDS_ADVANCED_DURING_DEPLOY"; exit 79; }
+
+GLOBAL_EXIT_TRACE="$(printf '%s' "$TARGET_SHA|$FINAL_MAIN_SHA|$NEW_PID|EXIT" | sha256sum | awk '{print $1}' | cut -c1-24)"
+GLOBAL_HUD_HASH="$(printf '%s' "$TARGET_SHA|$FINAL_MAIN_SHA|$NEW_PID|PASS" | sha256sum | awk '{print $1}')"
+GLOBAL_EXIT_JSON="$(mktemp "$GLOBAL_GATE_RECEIPT_DIR/guards-exit.XXXXXX.json")"
+GLOBAL_EXIT_RECEIPT="$GLOBAL_GATE_RECEIPT_DIR/guards-exit-$GLOBAL_EXIT_TRACE.receipt.json"
+cat >"$GLOBAL_EXIT_JSON" <<JSON
+{
+  "scope_id":"canon/centraldark-universal-contract-20260919",
+  "contract_schema":6,
+  "phase":"EXIT",
+  "observed_head":"$TARGET_SHA",
+  "trace_id":"$GLOBAL_EXIT_TRACE",
+  "github_t1":{"status":"PASS","head_sha":"$FINAL_MAIN_SHA"},
+  "vps_t1":{"status":"PASS","head_sha":"$(git rev-parse HEAD)"},
+  "counterproof":{"status":"PASS","evidence_ref":"PID_CHANGED+STABILITY+SCOPE_NOT_ADVANCED"},
+  "receipt_ref":"file:$GLOBAL_ENTRY_RECEIPT",
+  "hud":{"status":"PASS","state_hash":"$GLOBAL_HUD_HASH"},
+  "runtime_mutated":true,
+  "runtime_proof":{"status":"PASS","evidence_ref":"pm2:$PM2_APP:$NEW_PID"},
+  "promotion_requested":false,
+  "fixed_point":false,
+  "next_cursor":"REGISTER_DEPLOY_RECEIPT_AND_CONTINUE_MASTER_CYCLE"
+}
+JSON
+node "$GLOBAL_CONTRACT_GATE" --global-contract-gate EXIT "$GLOBAL_EXIT_JSON" | tee "$GLOBAL_EXIT_RECEIPT"
+rm -f "$GLOBAL_EXIT_JSON"
+echo "GLOBAL_EXIT_GATE=PASS receipt=$GLOBAL_EXIT_RECEIPT"
 
 map_promoted=0
 verifier_promoted=0
