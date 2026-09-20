@@ -46,6 +46,12 @@ PERSISTENCE_IS_PROMOTION=false
 OLD_COPY_IS_CURRENT_REALITY=false
 NO_BLIND_OVERWRITE=true
 DURABLE_CONTINUITY_REQUIRES_RECEIPT_AND_NEXT_CURSOR=true
+GLOBAL_CONTRACT_ENFORCER_REQUIRED=true
+DELTA_CONTINUO_REQUIRED=true
+FUTURE_EXECUTORS_INHERIT_SAME_CONTRACT=true
+MUTATION_WITHOUT_GLOBAL_ENTRY_EXIT_GATE=FAIL_CLOSED
+HUD_FIXED_LAYOUT_LIVE_DATA_REQUIRED=true
+POMBO64_TRACE_REQUIRED_FOR_MATERIAL_RECEIPTS=true
 ```
 
 ## 1. Boot universal
@@ -81,6 +87,7 @@ Documentos com `status: CANÔNICO` precisam permanecer alcançáveis a partir de
 - `docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/README.md` — compatibilidade/índice visual existente.
 - `docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md` — handoff entre corpos/modelos.
 - `docs/CONSCIENCIA/ADMINISTRAVEIS.md` — capacidades administráveis.
+- docs/CONSCIENCIA/CONTRATO-HIBRIDO-GRAFO-LOGS-LOCAL.md — contrato híbrido de Grafo Vivo, logs, Casa/VPS e capacidades locais.
 - `docs/CONSCIENCIA/BAIANES-E-RESENHA-REGIONAL.md` — registro de linguagem regional.
 - `docs/GOVERNANCA/CONTEXTO-PESSOAL-E-PROVENIENCIA-TEMPORAL.md` — proveniência e contexto temporal.
 - `.agents/skills/centraldark-operational-method/references/HUMAN-ACTION-DIRECT-LINK.md` — fronteira de ação humana direta.
