@@ -403,6 +403,19 @@ if (!contract) {
   if (hybrid.caddy?.validate_before_reload !== true || hybrid.caddy?.backup_before_mutation !== true) errors.push("CONTRATO_CADDY_SEM_BACKUP_VALIDATE");
   if (hybrid.microdeploy_runtime_proof?.t1_pid_and_health_required !== true) errors.push("CONTRATO_MICRODEPLOY_SEM_T1_PID_HEALTH");
 
+  const telemetry = contract.hybrid_telemetry_contract ?? {};
+  if (telemetry.marker !== "CENTRALDARK_HYBRID_TELEMETRY_REQUIRED") errors.push("CONTRATO_TELEMETRIA_HIBRIDA_MARKER_AUSENTE");
+  if (telemetry.no_screen_does_not_block_other_observability !== true) errors.push("CONTRATO_TELEMETRIA_HIBRIDA_TELA_VIROU_SPOF");
+  if (telemetry.source_semantics?.screen_is_required !== false) errors.push("CONTRATO_TELEMETRIA_HIBRIDA_TELA_OBRIGATORIA");
+  if (telemetry.source_semantics?.port_response_requires_owner_attribution !== true) errors.push("CONTRATO_TELEMETRIA_PORTA_SEM_OWNER");
+  if (telemetry.source_semantics?.global_current_claim_requires_cross_surface_reconciliation !== true) errors.push("CONTRATO_TELEMETRIA_SEM_RECONCILIACAO_GLOBAL");
+  if (telemetry.screenpipe?.endpoint_must_be_attributed_to_screenpipe_process_before_use !== true) errors.push("CONTRATO_SCREENPIPE_PORTA_SEM_PROCESSO");
+  if (telemetry.contradiction_policy?.unresolved_material_contradiction !== "FIXED_POINT_FALSE") errors.push("CONTRATO_TELEMETRIA_CONTRADICAO_PODE_VERDE");
+  const telemetrySources = telemetry.sources ?? {};
+  for (const source of ["github","vps_runtime","api","logs","mcp","ci","screen","file_config","network","history"]) {
+    if (!Array.isArray(telemetrySources[source]) || telemetrySources[source].length === 0) errors.push(`CONTRATO_TELEMETRIA_FONTE_AUSENTE:${source}`);
+  }
+
   const enforcer = contract.global_contract_enforcer ?? {};
   if (enforcer.marker !== "CENTRALDARK_GLOBAL_CONTRACT_ENFORCER_REQUIRED") errors.push("CONTRATO_ENFORCER_GLOBAL_MARKER_AUSENTE");
   if (enforcer.status !== "MANDATORY_FOR_MUTATION") errors.push("CONTRATO_ENFORCER_GLOBAL_NAO_OBRIGATORIO");
