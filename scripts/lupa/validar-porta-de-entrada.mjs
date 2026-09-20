@@ -441,7 +441,7 @@ if (!contract) {
   if (plug.no_v2_v3_v4_for_same_capability !== true) errors.push("CONTRATO_PLUG_PLAY_PERMITE_V2V3V4");
 
   for (const binding of ["ROOT_CONTRACT_REF","ROOT_GOAL_ID","CHILD_CONTRACT_ID","SELF_GOAL_ID","TLC23_HORN_GATE"]) {
-    if (!Array.isArray(plug.required_binding) || !plug.required_binding.includes(binding)) errors.push(\`CONTRATO_PLUG_PLAY_BINDING_AUSENTE:\${binding}\`);
+    if (!Array.isArray(plug.required_binding) || !plug.required_binding.includes(binding)) errors.push(`CONTRATO_PLUG_PLAY_BINDING_AUSENTE:${binding}`);
   }
 
 
