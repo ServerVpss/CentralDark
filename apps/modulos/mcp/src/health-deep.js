@@ -21,6 +21,61 @@ function checkSecret(name) {
     return { name, present: Boolean(v && v.trim() && !v.startsWith("__MISSING_")) };
 }
 
+const TELEGRAM_TOKEN_KEYS = ["SRVER1_BOT_TOKEN", "TELEGRAM_BOT_TOKEN", "GUARDA_TELEGRAM_BOT_TOKEN"];
+
+function hasConfiguredSecretInFile(file, names) {
+    try {
+        const lines = fs.readFileSync(file, "utf8").split(/\r?\n/);
+        for (const line of lines) {
+            const match = line.trim().match(/^([A-Z0-9_]+)\s*=\s*(.*)$/);
+            if (!match || !names.includes(match[1])) continue;
+            const value = match[2].trim().replace(/^[\"']|[\"']$/g, "");
+            if (value && !value.startsWith("__MISSING_")) return true;
+        }
+    } catch {
+        return false;
+    }
+    return false;
+}
+
+function pm2ProcessAlive(name, pm2Home) {
+    try {
+        const dir = `${pm2Home}/pids`;
+        for (const file of fs.readdirSync(dir)) {
+            if (!file.startsWith(`${name}-`) || !file.endsWith(".pid")) continue;
+            const pid = Number(fs.readFileSync(`${dir}/${file}`, "utf8").trim());
+            if (!Number.isInteger(pid) || pid <= 0) continue;
+            try {
+                process.kill(pid, 0);
+                return true;
+            } catch {
+                // stale pid file; keep looking for the same canonical owner
+            }
+        }
+    } catch {
+        return false;
+    }
+    return false;
+}
+
+export function checkTelegramOwner({
+    repoRoot = config.vps?.repoPath || "/root/CentralDark",
+    pm2Home = process.env.PM2_HOME || "/root/.pm2",
+} = {}) {
+    const tokenConfigured = [
+        `${repoRoot}/secrets/telegram-alerts.env`,
+        `${repoRoot}/secrets/.env`,
+        `${repoRoot}/apps/bot-telegram/.env`,
+    ].some((file) => hasConfiguredSecretInFile(file, TELEGRAM_TOKEN_KEYS));
+    const processAlive = pm2ProcessAlive("CentralDark-HubBot", pm2Home);
+    return {
+        ok: tokenConfigured && processAlive,
+        owner: "CentralDark-HubBot",
+        tokenConfigured,
+        processAlive,
+    };
+}
+
 function checkDisk(dir) {
     try {
         fs.accessSync(dir, fs.constants.W_OK);
@@ -51,9 +106,9 @@ export async function healthDeep(req, res) {
         const sseAtivas = activeSseSubscribers();
         const hubConsumer = getHubMissionConsumerStatus();
 
-        // Dependências externas (checagem leve — sem network)
-        const telegramTokenOk = checkSecret("TELEGRAM_BOT_TOKEN").present
-            || checkSecret("TELEGRAM_TOKEN").present;
+        // Dependências externas: Telegram é observado no owner real, sem copiar secret para o MCP.
+        const telegramOwner = checkTelegramOwner();
+        const telegramTokenOk = telegramOwner.ok;
         const oauthOk = checkSecret("MCP_SESSION_SECRET").present
             && checkSecret("MCP_ADMIN_PASSWORD").present;
         const githubOk = checkSecret("GITHUB_TOKEN").present
@@ -80,7 +135,12 @@ export async function healthDeep(req, res) {
         const dependencias = [
             checkDependencia("mcp_catalog", summary.toolCount > 0, { toolCount: summary.toolCount }),
             checkDependencia("oauth", oauthOk, { secretsPresentes: oauthOk }),
-            checkDependencia("telegram_bot", telegramTokenOk, { tokenPresente: telegramTokenOk }),
+            checkDependencia("telegram_bot", telegramTokenOk, {
+                owner: telegramOwner.owner,
+                processAlive: telegramOwner.processAlive,
+                tokenConfigured: telegramOwner.tokenConfigured,
+                tokenPresente: telegramOwner.tokenConfigured,
+            }),
             checkDependencia("github_api", githubOk, { tokenPresente: githubOk }),
             checkDependencia("hub_mission_consumer", hubConsumerOk, {
                 enabled: hubConsumer.enabled,
