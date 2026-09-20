@@ -10,6 +10,9 @@ HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[1]
 MODULE = HERE / "centraldark_full_trigger_boot.py"
 MEGAZORD = REPO / "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MEGAZORD-CENTRALDARK.yml"
+ENGINE_BINDING = REPO / "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml"
+MASTER_CYCLE = REPO / "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml"
+OPERATIONAL_METHOD = REPO / ".agents/skills/centraldark-operational-method/SKILL.md"
 spec = importlib.util.spec_from_file_location("centraldark_full_trigger_boot", MODULE)
 mod = importlib.util.module_from_spec(spec)
 assert spec.loader
@@ -114,6 +117,19 @@ def test_runtime_preflight_blocks_missing_required_path():
     assert "MISSING_REQUIRED_PATH" in result["reasons"]
 
 
+def test_runtime_preflight_is_inherited_by_engine_master_and_method():
+    engine = ENGINE_BINDING.read_text(encoding="utf-8")
+    master = MASTER_CYCLE.read_text(encoding="utf-8")
+    method = OPERATIONAL_METHOD.read_text(encoding="utf-8")
+
+    assert "RUNTIME_PREFLIGHT_LINT" in engine
+    assert "required_by_all_engines: true" in engine
+    assert "runtime_preflight_consumer: scripts/trigger-fabric/centraldark_full_trigger_boot.py#cmd_preflight_lint" in master
+    assert "RUNTIME_PREFLIGHT_LINT_PASS_WHEN_APPLICABLE" in master
+    assert "## Runtime preflight obrigatório" in method
+    assert "PREFLIGHT_PASS != RUNTIME_PASS" in method
+
+
 def test_lock_key_is_stable_and_owner_bound():
     a = mod.lock_key("CLAIM_X", "owner/a")
     b = mod.lock_key("CLAIM_X", "owner/a")
@@ -160,6 +176,7 @@ if __name__ == "__main__":
         test_runtime_preflight_blocks_js_template_shell_expansion,
         test_runtime_preflight_blocks_powershell_pid_collision,
         test_runtime_preflight_blocks_missing_required_path,
+        test_runtime_preflight_is_inherited_by_engine_master_and_method,
         test_lock_key_is_stable_and_owner_bound,
         test_registry_roundtrip,
         test_canonical_chain_contains_full_core_flow,
