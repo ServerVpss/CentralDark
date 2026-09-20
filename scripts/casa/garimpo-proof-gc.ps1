@@ -56,7 +56,7 @@ function Get-ReproducibleExtraction([System.IO.DirectoryInfo]$Dir, [string]$Root
   $zipCandidates = @(
     (Join-Path $RootPath $base),
     (Join-Path $RootPath ($base + '.zip'))
-  ) | Where-Object { Test-Path -LiteralPath $_ -PathType Leaf -and $_.ToLowerInvariant().EndsWith('.zip') }
+  ) | Where-Object { (Test-Path -LiteralPath $_ -PathType Leaf) -and $_.ToLowerInvariant().EndsWith('.zip') }
 
   if ($zipCandidates.Count -eq 0) { return $null }
   $zipPath = $zipCandidates[0]
