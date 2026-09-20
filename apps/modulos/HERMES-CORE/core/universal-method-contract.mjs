@@ -24,6 +24,11 @@ const FILES = {
   deployDispatcher: 'scripts/vps/deploy-guards-dispatcher.sh',
   centralDeploy: 'scripts/vps/centraldark-deploy.sh',
   operationalDeploy: 'scripts/vps/deploy-operational-guards.sh',
+  globalContract: 'docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json',
+  boot: 'CENTRALDARK_AI_BOOT.yaml',
+  grillMe: '.agents/skills/grill-me/SKILL.md',
+  metaGrill: '.agents/skills/meta-lupa/KITS/METAGRILL-METALUPA/KIT.md',
+  perceptionOrchestra: 'apps/modulos/HERMES-CORE/core/perception-orchestra.mjs',
 };
 
 const TLC23_CANONICAL_SHA256 = 'b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1';
@@ -113,6 +118,11 @@ export function validateUniversalMethod() {
   const deployDispatcher = read(FILES.deployDispatcher);
   const centralDeploy = read(FILES.centralDeploy);
   const operationalDeploy = read(FILES.operationalDeploy);
+  const globalContract = read(FILES.globalContract);
+  const boot = read(FILES.boot);
+  const grillMe = read(FILES.grillMe);
+  const metaGrill = read(FILES.metaGrill);
+  const perceptionOrchestra = read(FILES.perceptionOrchestra);
   const tlc23Hash = sha256(readBuffer(FILES.tlc23));
 
   if (tlc23Hash !== TLC23_CANONICAL_SHA256) {
@@ -322,6 +332,64 @@ export function validateUniversalMethod() {
     'calculation_is_not_runtime_observation: true',
     'allowed_when: ALL_DEFINED_SCOPE_CONDITIONS_ARE_DETERMINISTICALLY_VERIFIED',
   ], 'TRIGGER_CONTRACT_LEARNING');
+
+  requireTokens(globalContract, [
+    '"universal_gate_registry":',
+    '"marker": "CENTRALDARK_UNIVERSAL_GATE_REGISTRY"',
+    '"hard_gate_id_must_be_registered_before_enforcement": true',
+    '"gate_enforcement_without_contract_declaration": "FORBIDDEN"',
+    '"PRE_MUTATION_INTERVIEW_GATE"',
+    '"FAIL_FAST_BLOCK_GATE"',
+    '"LOCAL_HOUSE_SENSOR_GATE"',
+    '"pre_mutation_interview_gate":',
+    '"marker": "CENTRALDARK_GRILL_META_INTERVIEW_GATE"',
+    '"parallel_perception_runtime": "apps/modulos/HERMES-CORE/core/perception-orchestra.mjs"',
+    '"fail_fast_block_contract":',
+    '"on_any_material_failure": "ABORT_CURRENT_BLOCK"',
+    '"fixed_point_true_after_material_failure": "FORBIDDEN"',
+    '"local_house_sensor_contract":',
+    '"CASA_LOCAL": "DISCOVER_AT_RUNTIME_DO_NOT_ASSUME_PATH"',
+  ], 'UNIVERSAL_GATE_REGISTRY');
+
+  requireTokens(boot, [
+    'required_gate_ids:',
+    'LOAD_UNIVERSAL_GATE_REGISTRY',
+    'LOAD_ROOT_CHILD_CONTRACT_LINEAGE',
+    'LOAD_POMBO64_TRACE_CONTRACT',
+    'LOAD_PRE_MUTATION_INTERVIEW_GATE',
+    'LOAD_FAIL_FAST_BLOCK_GATE',
+    'LOAD_LOCAL_HOUSE_SENSOR_CONTRACT',
+    'ALLOW_FIRST_AGENT_ROUTING',
+  ], 'BOOT_UNIVERSAL_GATE_LOADING');
+
+  requireTokens(grillMe, [
+    'disable-model-invocation: true',
+    'Call the Skill tool with "grilling".',
+  ], 'GRILL_ME_HOOK');
+
+  requireTokens(metaGrill, [
+    'OWNER CANÔNICO:',
+    'META-GRILL acha a ferida',
+    'KIT_IS_SEMANTIC_HOOK=true',
+    'CHANGE_REQUIRES_SEGREDO_CHEFE=true',
+  ], 'METAGRILL_HOOK');
+
+  requireTokens(operationalMethod, [
+    'Leitores investigam em paralelo',
+    'Um Writer por escopo mutavel',
+    'UNKNOWN, ANOMALY, ACHADO_PENDENTE, BLOCKED',
+  ], 'OPERATIONAL_METHOD_INTERVIEW_BINDING');
+
+  requireTokens(perceptionOrchestra, [
+    "id: 'A_LOGIC'",
+    "id: 'B_IMPLEMENTATION'",
+    "id: 'C_REGRESSION_FALSE_GREEN'",
+    "id: 'D_SIMPLIFICATION'",
+    "mode: 'PARALLEL_PERCEPTION_SERIAL_MUTATION'",
+    'mutation_allowed: false',
+    'writer_required_for_mutation: true',
+    'reality_is_judge: true',
+  ], 'PERCEPTION_ORCHESTRA_INTERVIEW_RUNTIME');
 
   requireTokens(contract, [
     'global_contract_entry_policy:',

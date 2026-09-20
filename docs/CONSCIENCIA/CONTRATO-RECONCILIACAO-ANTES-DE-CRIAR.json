@@ -280,6 +280,7 @@
     "identify_existing_owner_and_writer_scope",
     "protect_dirty_runtime_root",
     "discover_hybrid_runtime_owners_when_material",
+    "run_pre_mutation_interview_gate_when_material",
     "preflight_minimal_patch",
     "counterproof_before_promotion",
     "causal_micro_deploy_when_applicable",
@@ -508,6 +509,78 @@
       "OBSERVE",
       "ABSORB_REUSABLE_DELTA_OR_NO_CHANGE"
     ]
+  },
+  "universal_gate_registry": {
+    "marker": "CENTRALDARK_UNIVERSAL_GATE_REGISTRY",
+    "status": "CANONICAL",
+    "rule": "ANY_HARD_GATE_MUST_BE_DECLARED_BEFORE_ENFORCEMENT",
+    "hard_gate_id_must_be_registered_before_enforcement": true,
+    "undeclared_hard_gate": "BLOCK_CONFIGURATION",
+    "gate_enforcement_without_contract_declaration": "FORBIDDEN",
+    "gates": {
+      "TLC23_PDF_BOOT_GATE": {"owner": "CENTRALDARK_AI_BOOT.yaml#initial_bootstrap_gate", "stage": "BOOT"},
+      "GLOBAL_CONTRACT_BOOTSTRAP_GATE": {"owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json", "stage": "BOOT"},
+      "DELTA_CONTINUO_GLOBAL_GATE": {"owner": "docs/CONSCIENCIA/REGRA-COMITE-DELTA-CONTINUO.md", "stage": "BOOT"},
+      "ROOT_CHILD_CONTRACT_LINEAGE_GATE": {"owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json#centraldark_global_contract.child_contract_lineage", "stage": "BOOT"},
+      "POMBO64_TRACE_GATE": {"owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json#trace_pombo64_contract", "stage": "BOOT"},
+      "PRE_MUTATION_INTERVIEW_GATE": {"owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json#pre_mutation_interview_gate", "stage": "PRE_MUTATION"},
+      "FAIL_FAST_BLOCK_GATE": {"owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json#fail_fast_block_contract", "stage": "ALL_BLOCKS"},
+      "LOCAL_HOUSE_SENSOR_GATE": {"owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json#local_house_sensor_contract", "stage": "MEASUREMENT"},
+      "ONE_WRITER_PER_SCOPE_GATE": {"owner": "docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md", "stage": "MUTATION"},
+      "SAME_HEAD_CI_GATE": {"owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json#universal_operational_contract.cross_surface_convergence", "stage": "PROMOTION"},
+      "RUNTIME_PROOF_GATE": {"owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json#universal_operational_contract.counterproof", "stage": "RUNTIME"}
+    }
+  },
+  "pre_mutation_interview_gate": {
+    "marker": "CENTRALDARK_GRILL_META_INTERVIEW_GATE",
+    "status": "MANDATORY_WHEN_MATERIAL_MUTATION_IS_PROPOSED",
+    "grill_hook": ".agents/skills/grill-me/SKILL.md",
+    "meta_grill_owner": ".agents/skills/meta-lupa/KITS/METAGRILL-METALUPA/KIT.md",
+    "operational_method_owner": ".agents/skills/centraldark-operational-method/SKILL.md",
+    "parallel_perception_runtime": "apps/modulos/HERMES-CORE/core/perception-orchestra.mjs",
+    "external_grilling_skill_is_hard_dependency": false,
+    "missing_external_grilling_policy": "USE_LOCAL_METAGRILL_PLUS_PERCEPTION_ORCHESTRA",
+    "sequence": ["GRILL_HOOK_FIND_WEAK_ASSUMPTION","META_GRILL_FIND_WOUND","FAN_OUT_FOUR_READ_ONLY_INTERVIEWS","RENDEZVOUS_EVIDENCE","RUN_DISCRIMINATING_TEST_IF_NEEDED","OPERATIONAL_METHOD_RECONCILE","ONE_WRITER_OR_NO_MUTATION"],
+    "parallel_interviews": {
+      "mode": "READ_ONLY",
+      "roles": ["A_LOGIC","B_IMPLEMENTATION","C_REGRESSION_FALSE_GREEN","D_SIMPLIFICATION"],
+      "all_four_required_for_writer_readiness": true,
+      "model_vote_is_truth": false,
+      "correlated_views_are_independent_proofs": false,
+      "ready_for_writer_required": true
+    },
+    "mutation_rule": "ONE_WRITER_PER_SCOPE",
+    "reality_is_judge": true
+  },
+  "fail_fast_block_contract": {
+    "marker": "CENTRALDARK_FAIL_FAST_BLOCK_REQUIRED",
+    "status": "MANDATORY",
+    "material_failure_states": ["FAIL","BLOCKED","UNKNOWN_MATERIAL","TIMEOUT","ERROR","CANCELLED_APPLICABLE"],
+    "on_any_material_failure": "ABORT_CURRENT_BLOCK",
+    "continue_later_mutating_step_after_material_failure": false,
+    "fixed_point_true_after_material_failure": "FORBIDDEN",
+    "fixed_point_requires_all_applicable_steps_measured_and_passed": true,
+    "empty_required_sensor_value": "INVALID_NOT_SUCCESS",
+    "shell_paste_line_by_line_after_failure": "NOT_VALID_BLOCK_EXECUTION",
+    "fixed_point_source_with_empty_sensors": "INVALID_FALSE_GREEN",
+    "action_after_abort": "PRESERVE_STATE_REGISTER_FAILURE_AND_RESUME_FROM_SAFE_CURSOR"
+  },
+  "local_house_sensor_contract": {
+    "marker": "CENTRALDARK_LOCAL_HOUSE_SENSOR_DISCOVERY_REQUIRED",
+    "status": "CANONICAL",
+    "sensors": {
+      "MAIN": "GITHUB_STRUCTURAL_SOURCE",
+      "VPS_RUNTIME": "RUNTIME_AND_LOCAL_DELTA_SENSOR",
+      "CASA_LOCAL": "DISCOVER_AT_RUNTIME_DO_NOT_ASSUME_PATH"
+    },
+    "forbidden_assumption": "CASA_LOCAL_PATH_WITHOUT_MEASUREMENT",
+    "path_not_found": "UNKNOWN_OR_BLOCKED",
+    "empty_path_value": "INVALID_SENSOR",
+    "empty_head_value": "INVALID_SENSOR",
+    "cross_surface_identity_requires_measurement": true,
+    "vps_dirty_blocks_blind_pull_reset_or_clean": true,
+    "identical_local_file_to_main": "ABSORBED_RESIDUE_NOT_NEW_DELTA",
+    "current_measured_state_beats_historical_path": true
   },
   "label_policy": {
     "marker": "CANONICAL_LABELS_REQUIRED",

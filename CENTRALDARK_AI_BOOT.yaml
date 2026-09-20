@@ -23,10 +23,25 @@ CENTRALDARK_AI_BOOT:
     gate_ref: "CENTRALDARK_AI_BOOT.tcl23_horn_gate"
     logical_reference: "tlc23.pdf"
     measured_house_receipt: "PDF-CC2003-HORN-GATE-20260912-152444.log"
+    required_gate_ids:
+      - "TLC23_PDF_BOOT_GATE"
+      - "GLOBAL_CONTRACT_BOOTSTRAP_GATE"
+      - "DELTA_CONTINUO_GLOBAL_GATE"
+      - "ROOT_CHILD_CONTRACT_LINEAGE_GATE"
+      - "POMBO64_TRACE_GATE"
+      - "PRE_MUTATION_INTERVIEW_GATE"
+      - "FAIL_FAST_BLOCK_GATE"
+      - "LOCAL_HOUSE_SENSOR_GATE"
     required_sequence:
       - "LOAD_TLC23_PDF_GATE"
       - "LOAD_GLOBAL_CONTRACT_ENFORCER"
+      - "LOAD_UNIVERSAL_GATE_REGISTRY"
       - "LOAD_DELTA_CONTINUO_GLOBAL"
+      - "LOAD_ROOT_CHILD_CONTRACT_LINEAGE"
+      - "LOAD_POMBO64_TRACE_CONTRACT"
+      - "LOAD_PRE_MUTATION_INTERVIEW_GATE"
+      - "LOAD_FAIL_FAST_BLOCK_GATE"
+      - "LOAD_LOCAL_HOUSE_SENSOR_CONTRACT"
       - "ALLOW_FIRST_AGENT_ROUTING"
     reuse_proven_receipt_when_fingerprint_unchanged: true
     reopen_pdf_on: [FINGERPRINT_CHANGED, RECEIPT_MISSING, MATERIAL_CONTRADICTION, EXPLICIT_REPROOF]
@@ -35,6 +50,33 @@ CENTRALDARK_AI_BOOT:
     failure_policy: "FAIL_CLOSED"
     preserve_existing_good: true
     must_not_replace: [GLOBAL_CONTRACT_ENFORCER, DELTA_CONTINUO_GLOBAL, REUSE_BEFORE_CREATE, ONE_WRITER_PER_SCOPE]
+
+  gate_registry_contract:
+    gate_id: "GLOBAL_CONTRACT_BOOTSTRAP_GATE"
+    registry_ref: "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json#universal_gate_registry"
+    undeclared_hard_gate: "BLOCK_CONFIGURATION"
+
+  pre_mutation_interview_contract:
+    gate_id: "PRE_MUTATION_INTERVIEW_GATE"
+    contract_ref: "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json#pre_mutation_interview_gate"
+    execute_when: "MATERIAL_MUTATION_PROPOSED"
+    grill_hook: ".agents/skills/grill-me/SKILL.md"
+    meta_grill_owner: ".agents/skills/meta-lupa/KITS/METAGRILL-METALUPA/KIT.md"
+    operational_method_owner: ".agents/skills/centraldark-operational-method/SKILL.md"
+    perception_runtime: "apps/modulos/HERMES-CORE/core/perception-orchestra.mjs"
+    external_grilling_skill_is_hard_dependency: false
+    mutation_after_gate: "ONE_WRITER_PER_SCOPE"
+
+  block_fail_fast_contract:
+    gate_id: "FAIL_FAST_BLOCK_GATE"
+    contract_ref: "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json#fail_fast_block_contract"
+    any_material_failure: "ABORT_CURRENT_BLOCK"
+    fixed_point_after_failure: "FORBIDDEN"
+
+  local_house_sensor_contract:
+    gate_id: "LOCAL_HOUSE_SENSOR_GATE"
+    contract_ref: "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json#local_house_sensor_contract"
+    casa_local: "DISCOVER_AT_RUNTIME_DO_NOT_ASSUME_PATH"
 
   # Cognitive BIOS = camada lógica de política do mesmo boot. Não é firmware, SO paralelo ou segundo cérebro.
   cognitive_bios:

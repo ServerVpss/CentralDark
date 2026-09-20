@@ -20,6 +20,10 @@ const CONTRATO_RECONCILIACAO = "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE
 const ESTRUTURA_VPS = "docs/CONSCIENCIA/04-ESTRUTURA-VPS.md";
 const RECONCILIATION_SCHEMA_VERSION = 6;
 const IDENTIDADE_LUPA = ".agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA";
+const GRILL_ME = ".agents/skills/grill-me/SKILL.md";
+const META_GRILL = ".agents/skills/meta-lupa/KITS/METAGRILL-METALUPA/KIT.md";
+const OPERATIONAL_METHOD = ".agents/skills/centraldark-operational-method/SKILL.md";
+const PERCEPTION_ORCHESTRA = "apps/modulos/HERMES-CORE/core/perception-orchestra.mjs";
 const BASE_SHA = valueAfter("--base-sha", process.env.BASE_SHA || "");
 const HEAD_SHA = valueAfter("--head-sha", process.env.HEAD_SHA || process.env.GITHUB_SHA || "");
 
@@ -164,6 +168,10 @@ if (!existe(CONTRATO_DELTA)) errors.push(`CONTRATO_DELTA_AUSENTE:${CONTRATO_DELT
 if (!existe(CONTRATO_RECONCILIACAO)) errors.push(`CONTRATO_RECONCILIACAO_AUSENTE:${CONTRATO_RECONCILIACAO}`);
 if (!existe(ESTRUTURA_VPS)) errors.push(`ESTRUTURA_VPS_AUSENTE:${ESTRUTURA_VPS}`);
 if (!existe(IDENTIDADE_LUPA)) errors.push(`IDENTIDADE_LUPA_AUSENTE:${IDENTIDADE_LUPA}`);
+if (!existe(GRILL_ME)) errors.push(`GRILL_ME_AUSENTE:${GRILL_ME}`);
+if (!existe(META_GRILL)) errors.push(`META_GRILL_AUSENTE:${META_GRILL}`);
+if (!existe(OPERATIONAL_METHOD)) errors.push(`OPERATIONAL_METHOD_AUSENTE:${OPERATIONAL_METHOD}`);
+if (!existe(PERCEPTION_ORCHESTRA)) errors.push(`PERCEPTION_ORCHESTRA_AUSENTE:${PERCEPTION_ORCHESTRA}`);
 
 for (const adapter of ADAPTADORES) {
   if (!existe(adapter)) {
@@ -186,7 +194,13 @@ const semanticRequirements = new Map([
     'measured_house_receipt: "PDF-CC2003-HORN-GATE-20260912-152444.log"',
     "LOAD_TLC23_PDF_GATE",
     "LOAD_GLOBAL_CONTRACT_ENFORCER",
+    "LOAD_UNIVERSAL_GATE_REGISTRY",
     "LOAD_DELTA_CONTINUO_GLOBAL",
+    "LOAD_ROOT_CHILD_CONTRACT_LINEAGE",
+    "LOAD_POMBO64_TRACE_CONTRACT",
+    "LOAD_PRE_MUTATION_INTERVIEW_GATE",
+    "LOAD_FAIL_FAST_BLOCK_GATE",
+    "LOAD_LOCAL_HOUSE_SENSOR_CONTRACT",
     "ALLOW_FIRST_AGENT_ROUTING",
     "TLC23_PDF_GATE",
     "GLOBAL_CONTRACT_BOOTSTRAP_GATE",
@@ -194,6 +208,31 @@ const semanticRequirements = new Map([
     "reality_is_judge: true",
     'failure_policy: "FAIL_CLOSED"',
     "preserve_existing_good: true",
+  ]],
+  [GRILL_ME, [
+    "disable-model-invocation: true",
+    'Call the Skill tool with "grilling".',
+  ]],
+  [META_GRILL, [
+    "OWNER CANÔNICO:",
+    "META-GRILL acha a ferida",
+    "KIT_IS_SEMANTIC_HOOK=true",
+    "CHANGE_REQUIRES_SEGREDO_CHEFE=true",
+  ]],
+  [OPERATIONAL_METHOD, [
+    "Leitores investigam em paralelo",
+    "Um Writer por escopo mutavel",
+    "Gate de falsificação (MetaLupa)",
+  ]],
+  [PERCEPTION_ORCHESTRA, [
+    "A_LOGIC",
+    "B_IMPLEMENTATION",
+    "C_REGRESSION_FALSE_GREEN",
+    "D_SIMPLIFICATION",
+    "PARALLEL_PERCEPTION_SERIAL_MUTATION",
+    "mutation_allowed: false",
+    "writer_required_for_mutation: true",
+    "reality_is_judge: true",
   ]],
   [PORTA, [
     "REUSE_BEFORE_CREATE_REQUIRED",
@@ -255,6 +294,34 @@ if (pdfGateIndex >= 0 && routingIndex >= 0 && pdfGateIndex > routingIndex) {
   errors.push("BOOT_TLC23_PDF_GATE_DEPOIS_DO_ROTEAMENTO");
 }
 
+const firstAgentRoutingIndex = bootContent.indexOf('      - "ALLOW_FIRST_AGENT_ROUTING"');
+const requiredPreRouting = [
+  "LOAD_TLC23_PDF_GATE",
+  "LOAD_GLOBAL_CONTRACT_ENFORCER",
+  "LOAD_UNIVERSAL_GATE_REGISTRY",
+  "LOAD_DELTA_CONTINUO_GLOBAL",
+  "LOAD_ROOT_CHILD_CONTRACT_LINEAGE",
+  "LOAD_POMBO64_TRACE_CONTRACT",
+  "LOAD_PRE_MUTATION_INTERVIEW_GATE",
+  "LOAD_FAIL_FAST_BLOCK_GATE",
+  "LOAD_LOCAL_HOUSE_SENSOR_CONTRACT",
+];
+let previousGateIndex = -1;
+for (const token of requiredPreRouting) {
+  const index = bootContent.indexOf(`      - "${token}"`);
+  if (index < 0) {
+    errors.push(`BOOT_GATE_PRE_ROUTING_AUSENTE:${token}`);
+    continue;
+  }
+  if (firstAgentRoutingIndex >= 0 && index > firstAgentRoutingIndex) {
+    errors.push(`BOOT_GATE_DEPOIS_DO_PRIMEIRO_ROTEAMENTO:${token}`);
+  }
+  if (previousGateIndex >= 0 && index <= previousGateIndex) {
+    errors.push(`BOOT_GATE_ORDEM_INVALIDA:${token}`);
+  }
+  previousGateIndex = index;
+}
+
 const agentsContent = ler("AGENTS.md");
 if (/META_LUPA_BOOT_REQUIRED\s*:\s*SIM/i.test(agentsContent)) {
   errors.push("CONTRADICAO_COMPLEXIDADE:AGENTS_META_LUPA_PARA_TODA_TAREFA");
@@ -276,6 +343,59 @@ if (!contract) {
   if (contract.status !== "CANONICAL") errors.push("CONTRATO_RECONCILIACAO_NAO_CANONICO");
   if (contract.marker !== "REUSE_BEFORE_CREATE_REQUIRED") errors.push("CONTRATO_RECONCILIACAO_MARKER_INVALIDO");
 
+  const gateRegistry = contract.universal_gate_registry ?? {};
+  if (gateRegistry.marker !== "CENTRALDARK_UNIVERSAL_GATE_REGISTRY") errors.push("CONTRATO_GATE_REGISTRY_MARKER_AUSENTE");
+  if (gateRegistry.status !== "CANONICAL") errors.push("CONTRATO_GATE_REGISTRY_NAO_CANONICO");
+  if (gateRegistry.hard_gate_id_must_be_registered_before_enforcement !== true) errors.push("CONTRATO_GATE_NAO_EXIGE_REGISTRO");
+  if (gateRegistry.gate_enforcement_without_contract_declaration !== "FORBIDDEN") errors.push("CONTRATO_GATE_FANTASMA_PERMITIDO");
+
+  const declaredGateIds = new Set(Object.keys(gateRegistry.gates ?? {}));
+  for (const gateId of [
+    "TLC23_PDF_BOOT_GATE",
+    "GLOBAL_CONTRACT_BOOTSTRAP_GATE",
+    "DELTA_CONTINUO_GLOBAL_GATE",
+    "ROOT_CHILD_CONTRACT_LINEAGE_GATE",
+    "POMBO64_TRACE_GATE",
+    "PRE_MUTATION_INTERVIEW_GATE",
+    "FAIL_FAST_BLOCK_GATE",
+    "LOCAL_HOUSE_SENSOR_GATE",
+    "ONE_WRITER_PER_SCOPE_GATE",
+    "SAME_HEAD_CI_GATE",
+    "RUNTIME_PROOF_GATE",
+  ]) {
+    if (!declaredGateIds.has(gateId)) errors.push(`CONTRATO_GATE_NAO_DECLARADO:${gateId}`);
+  }
+
+  const interviewGate = contract.pre_mutation_interview_gate ?? {};
+  if (interviewGate.marker !== "CENTRALDARK_GRILL_META_INTERVIEW_GATE") errors.push("CONTRATO_INTERVIEW_GATE_MARKER_AUSENTE");
+  if (interviewGate.grill_hook !== GRILL_ME) errors.push("CONTRATO_INTERVIEW_GRILL_OWNER_INVALIDO");
+  if (interviewGate.meta_grill_owner !== META_GRILL) errors.push("CONTRATO_INTERVIEW_METAGRILL_OWNER_INVALIDO");
+  if (interviewGate.operational_method_owner !== OPERATIONAL_METHOD) errors.push("CONTRATO_INTERVIEW_METHOD_OWNER_INVALIDO");
+  if (interviewGate.parallel_perception_runtime !== PERCEPTION_ORCHESTRA) errors.push("CONTRATO_INTERVIEW_RUNTIME_INVALIDO");
+  if (interviewGate.external_grilling_skill_is_hard_dependency !== false) errors.push("CONTRATO_INTERVIEW_EXTERNAL_SPOF");
+  const interviewRoles = interviewGate.parallel_interviews?.roles ?? [];
+  for (const role of ["A_LOGIC","B_IMPLEMENTATION","C_REGRESSION_FALSE_GREEN","D_SIMPLIFICATION"]) {
+    if (!interviewRoles.includes(role)) errors.push(`CONTRATO_INTERVIEW_ROLE_AUSENTE:${role}`);
+  }
+  if (interviewGate.parallel_interviews?.all_four_required_for_writer_readiness !== true) errors.push("CONTRATO_INTERVIEW_QUATRO_FRENTES_NAO_OBRIGATORIAS");
+  if (interviewGate.parallel_interviews?.ready_for_writer_required !== true) errors.push("CONTRATO_INTERVIEW_WRITER_SEM_READY");
+  if (interviewGate.mutation_rule !== "ONE_WRITER_PER_SCOPE") errors.push("CONTRATO_INTERVIEW_WRITER_RULE_INVALIDA");
+
+  const failFast = contract.fail_fast_block_contract ?? {};
+  if (failFast.marker !== "CENTRALDARK_FAIL_FAST_BLOCK_REQUIRED") errors.push("CONTRATO_FAIL_FAST_MARKER_AUSENTE");
+  if (failFast.on_any_material_failure !== "ABORT_CURRENT_BLOCK") errors.push("CONTRATO_FAIL_FAST_NAO_ABORTA");
+  if (failFast.continue_later_mutating_step_after_material_failure !== false) errors.push("CONTRATO_FAIL_FAST_PERMITE_CONTINUAR");
+  if (failFast.fixed_point_true_after_material_failure !== "FORBIDDEN") errors.push("CONTRATO_FAIL_FAST_PERMITE_FALSO_FIXED_POINT");
+  if (failFast.fixed_point_requires_all_applicable_steps_measured_and_passed !== true) errors.push("CONTRATO_FIXED_POINT_SEM_DENOMINADOR_COMPLETO");
+  if (failFast.empty_required_sensor_value !== "INVALID_NOT_SUCCESS") errors.push("CONTRATO_SENSOR_VAZIO_VIRA_SUCESSO");
+
+  const houseSensor = contract.local_house_sensor_contract ?? {};
+  if (houseSensor.marker !== "CENTRALDARK_LOCAL_HOUSE_SENSOR_DISCOVERY_REQUIRED") errors.push("CONTRATO_CASA_SENSOR_MARKER_AUSENTE");
+  if (houseSensor.sensors?.CASA_LOCAL !== "DISCOVER_AT_RUNTIME_DO_NOT_ASSUME_PATH") errors.push("CONTRATO_CASA_CAMINHO_PRESUMIDO");
+  if (houseSensor.path_not_found !== "UNKNOWN_OR_BLOCKED") errors.push("CONTRATO_CASA_PATH_MISSING_FALSO_VERDE");
+  if (houseSensor.empty_path_value !== "INVALID_SENSOR") errors.push("CONTRATO_CASA_PATH_VAZIO_VALIDO");
+  if (houseSensor.vps_dirty_blocks_blind_pull_reset_or_clean !== true) errors.push("CONTRATO_VPS_DIRTY_SEM_PROTECAO");
+
   const requiredSequence = [
     "resolve_user_intent",
     "recover_relevant_context",
@@ -290,6 +410,7 @@ if (!contract) {
     "arbitrate_conflict_by_discriminating_test_if_needed",
     "reuse_or_extend_before_create",
     "identify_existing_owner_and_writer_scope",
+    "run_pre_mutation_interview_gate_when_material",
     "preflight_minimal_patch",
     "counterproof_before_promotion",
     "causal_micro_deploy_when_applicable",
@@ -438,7 +559,7 @@ if (!contract) {
 
   const artifactIds = new Set(Array.isArray(artifactMatrix.artifacts) ? artifactMatrix.artifacts.map((row) => row?.id) : []);
   for (const id of ["PDF_HARNESS_CORE_20260909","UNIFIED_ONESHOT_REMEDIADO","REMOTE_TRAY_PACOTAO_FINAL"]) {
-    if (!artifactIds.has(id)) errors.push(\`CONTRATO_ARTIFACT_AUSENTE:\${id}\`);
+    if (!artifactIds.has(id)) errors.push(`CONTRATO_ARTIFACT_AUSENTE:${id}`);
   }
   const remoteTrayArtifact = Array.isArray(artifactMatrix.artifacts)
     ? artifactMatrix.artifacts.find((row) => row?.id === "REMOTE_TRAY_PACOTAO_FINAL")
