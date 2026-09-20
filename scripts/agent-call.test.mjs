@@ -9,11 +9,42 @@ import {
   validateHealingResult,
   validateGlobalContractGate,
   validateLogIncidentFanout,
+  validateChildContractLineage,
+  deriveSelfGoal,
 } from "./agent-call.mjs";
+
+
+const TLC23_SHA = "b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1";
+const tlc23HornPass = {
+  status: "PASS",
+  pdf_sha256: TLC23_SHA,
+  evidence_ref: "test:tlc23-horn:pass",
+};
+const childContract = {
+  root_contract_ref: "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json",
+  root_contract_schema: 6,
+  root_goal_id: "RG-1",
+  parent_contract_id: "ROOT",
+  child_contract_id: "CC-1",
+  self_goal_id: "SG-1",
+  owner: "scripts/agent-call.mjs",
+  scope: ["src:x"],
+  expected_delta: "enforce child lineage",
+  done_condition: "all lineage gates pass",
+  evidence_required: ["test:agent-call"],
+  counterproof: "negative lineage cases",
+  dependencies: [],
+  next_cursor: "RUN_COUNTERPROOF",
+  status: "PENDING",
+  root_authority: "SEGREDO/CHEFE",
+  tlc23_horn_gate: tlc23HornPass,
+};
 
 const state = {
   mission_id: "M-1",
   head: { sha: "abc123" },
+  root_goal: { id: "RG-1", authority: "SEGREDO/CHEFE", scope: ["src:x"] },
+  self_goal_receipts: [],
   trail: { route_id: "TRILHO-A", origin: "A", destination: "B" },
   scope: { allowed: ["repo:read", "src:x"], denied: ["prod"] },
   writer: { agent: "hermes" },
@@ -32,6 +63,8 @@ const state = {
     phase: "ENTRY",
     observed_head: "abc123",
     trace_id: "trace-entry-001",
+    child_contract: childContract,
+    tlc23_horn_gate: tlc23HornPass,
     github_t0: { status: "PASS", head_sha: "abc123" },
     vps_t0: { status: "PASS", head_sha: "vps123" },
     cross_surface_drift_classified: true,
@@ -83,7 +116,40 @@ check(logPlan.fronts.every((front) => front.mode === "READ_ONLY" && front.write_
 check(logPlan.same_scope_concurrent_writers, false);
 check(logPlan.one_active_writer_per_mutable_scope, true);
 
+
+check(validateChildContractLineage(childContract, state).status, "PASS_CHILD_CONTRACT_LINEAGE");
+check(validateChildContractLineage({ ...childContract, root_goal_id: "RG-X" }, state).status, "BLOCKED_CHILD_ROOT_GOAL_CHANGE");
+check(validateChildContractLineage({ ...childContract, root_authority: "MODEL" }, state).status, "BLOCKED_CHILD_AUTHORITY_EXPANSION");
+check(validateChildContractLineage({ ...childContract, scope: ["prod"] }, state).status, "BLOCKED_CHILD_SCOPE_EXPANSION");
+check(validateChildContractLineage({ ...childContract, tlc23_horn_gate: { ...tlc23HornPass, status: "UNKNOWN" } }, state).status, "BLOCKED_CHILD_TLC23_HORN_NOT_PASS");
+check(validateChildContractLineage({ ...childContract, tlc23_horn_gate: { ...tlc23HornPass, pdf_sha256: "0".repeat(64) } }, state).status, "BLOCKED_CHILD_TLC23_PDF_HASH_MISMATCH");
+check(validateChildContractLineage(childContract, { ...state, self_goal_receipts: [{ self_goal_id: "SG-1", status: "PASS" }] }).status, "BLOCKED_DUPLICATE_SELF_GOAL");
+
+const derivedSpec = {
+  material_delta: true,
+  parent_contract_id: "ROOT",
+  owner: "scripts/agent-call.mjs",
+  scope: ["src:x"],
+  expected_delta: "derive deterministic self goal",
+  done_condition: "derived lineage validates",
+  evidence_required: ["test:self-goal"],
+  counterproof: "derive twice and compare",
+  dependencies: [],
+  next_cursor: "NEXT_SELF_GOAL",
+  tlc23_horn_gate: tlc23HornPass,
+};
+const derivedA = deriveSelfGoal(derivedSpec, state);
+const derivedB = deriveSelfGoal(derivedSpec, state);
+check(derivedA.derivation_status, "PASS_SELF_GOAL_DERIVED");
+check(derivedA.self_goal_id, derivedB.self_goal_id);
+check(deriveSelfGoal({ ...derivedSpec, material_delta: false }, state).status, "CHECKPOINT_CONTINUE");
+check(deriveSelfGoal({ ...derivedSpec, scope: ["prod"] }, state).status, "BLOCKED_CHILD_SCOPE_EXPANSION");
+
 check(validateGlobalContractGate(state.global_contract_entry, state, "ENTRY").status, "PASS_GLOBAL_CONTRACT_GATE");
+
+check(validateGlobalContractGate({ ...state.global_contract_entry, child_contract: { ...childContract, root_goal_id: "RG-X" } }, state, "ENTRY").status, "BLOCKED_CHILD_ROOT_GOAL_CHANGE");
+check(validateGlobalContractGate({ ...state.global_contract_entry, tlc23_horn_gate: { ...tlc23HornPass, status: "UNKNOWN" } }, state, "ENTRY").status, "BLOCKED_GLOBAL_CONTRACT_TLC23_HORN_GATE");
+
 check(validateAgentCall({ ...base, to: "hermes", requested_role: "EXECUTOR", write_requested: true, global_contract_entry: undefined }, { ...state, global_contract_entry: undefined }).status, "BLOCKED_GLOBAL_CONTRACT_GATE_MISSING");
 check(validateAgentCall({ ...base, to: "hermes", requested_role: "EXECUTOR", write_requested: true }, { ...state, global_contract_entry: { ...state.global_contract_entry, github_t0: { status: "UNKNOWN", head_sha: "abc123" } } }).status, "BLOCKED_GLOBAL_CONTRACT_GITHUB_T0");
 const exitGate = {
