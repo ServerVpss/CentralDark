@@ -233,6 +233,12 @@
     "recover_relevant_context",
     "measure_github_and_vps_in_parallel_when_operational",
     "reconcile_cross_surface_state",
+    "coordinate_convergence_when_material",
+    "analyze_active_prs_and_compare_branches_when_material",
+    "register_convergence_in_principal_pr_when_material",
+    "validate_global_dna_when_material",
+    "validate_buildkite_funnel_end_to_end_when_material",
+    "investigate_failed_jobs_and_document_reconciliation_plan_when_material",
     "search_existing_capabilities",
     "open_primary_implementation_files",
     "cross_reference_capabilities_with_request",
@@ -617,7 +623,17 @@
     "VPS_T1",
     "RUNTIME_RECEIPT",
     "FIXED_HUD_UPDATE",
-    "NEXT_CURSOR"
+    "NEXT_CURSOR",
+    "ACTIVE_PRS",
+    "BRANCH_COMPARISON",
+    "PRINCIPAL_PR",
+    "CONVERGENCE_RECEIPT",
+    "GLOBAL_DNA_RESULT",
+    "BUILDKITE_FUNNEL_RESULT",
+    "FAILED_JOB_ID",
+    "FAILURE_SIGNATURE",
+    "FAILED_JOB_ROOT_CAUSE_STATE",
+    "RECONCILIATION_PLAN"
   ],
   "receipt_visibility": "INTERNAL_BY_DEFAULT; SHOW_ONLY_ON_AUDIT_OR_BLOCKER",
   "universal_operational_contract": {
@@ -643,6 +659,12 @@
       "RECOVER_RELEVANT_CONTEXT",
       "MEASURE_GITHUB_AND_VPS_IN_PARALLEL_T0",
       "RECONCILE_CROSS_SURFACE_STATE",
+      "COORDINATE_CONVERGENCE",
+      "ANALYZE_ACTIVE_PRS_AND_COMPARE_BRANCHES",
+      "REGISTER_CONVERGENCE_IN_PRINCIPAL_PR",
+      "VALIDATE_GLOBAL_DNA",
+      "VALIDATE_BUILDKITE_FUNNEL_END_TO_END_WHEN_MATERIAL",
+      "INVESTIGATE_FAILED_JOB_AND_DOCUMENT_RECONCILIATION_PLAN",
       "FIND_EXISTING_OWNER",
       "ACQUIRE_ONE_WRITER_SCOPE",
       "META_LUPA",
@@ -699,6 +721,49 @@
       "one_system_only": true,
       "no_force_push": true,
       "no_reset_hard_operational": true
+    },
+    "global_convergence_coordination": {
+      "marker": "GLOBAL_CONVERGENCE_COORDINATION_REQUIRED",
+      "status": "MANDATORY_WHEN_MATERIAL",
+      "coordinate_convergence": true,
+      "analyze_active_prs": true,
+      "compare_active_branches": true,
+      "principal_pr_resolution": "DISCOVER_ACTIVE_PR_MOTHER_OR_CANONICAL_PROMOTION_LEDGER",
+      "register_convergence_in_principal_pr": true,
+      "principal_pr_is_authority": false,
+      "principal_pr_is_runtime_proof": false,
+      "global_dna_validation": {
+        "required": true,
+        "owner": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/UNIVERSAL-ENGINE-METHOD.yml",
+        "must_bind_to_current_head_when_git_material": true
+      },
+      "buildkite_funnel": {
+        "validate_end_to_end_when_material": true,
+        "provider": "BUILDKITE",
+        "stages": [
+          "CREDENTIAL_BINDING",
+          "PIPELINE_DISCOVERY",
+          "BUILD_OR_JOB_DISCOVERY",
+          "JOB_STATUS",
+          "LOG_OR_FAILURE_EVIDENCE",
+          "RECONCILIATION_DECISION"
+        ],
+        "green_requires_end_to_end_evidence": true,
+        "credential_present_is_not_runtime_proof": true,
+        "skipped_requires_reason": true
+      },
+      "failed_job_reconciliation": {
+        "any_failed_job_requires_investigation": true,
+        "job_identifier_required": true,
+        "failure_signature_required": true,
+        "evidence_ref_required": true,
+        "root_cause_state_required": true,
+        "reconciliation_plan_required": true,
+        "plan_must_name_owner_scope_next_cursor": true,
+        "unknown_root_cause_stays_unknown": true
+      },
+      "skip_rule": "PHASE_MAY_SKIP_ONLY_IF_NOT_MATERIAL_WITH_REASON",
+      "same_finding_without_new_evidence": "DROP_DUPLICATE"
     }
   }
 }
