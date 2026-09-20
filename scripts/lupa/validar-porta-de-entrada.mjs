@@ -17,7 +17,7 @@ const PORTA_VIVA = "docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md";
 const CONTRATO_DELTA = "docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md";
 const CONTRATO_RECONCILIACAO = "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json";
 const ESTRUTURA_VPS = "docs/CONSCIENCIA/04-ESTRUTURA-VPS.md";
-const RECONCILIATION_SCHEMA_VERSION = 3;
+const RECONCILIATION_SCHEMA_VERSION = 4;
 const IDENTIDADE_LUPA = ".agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA";
 const BASE_SHA = valueAfter("--base-sha", process.env.BASE_SHA || "");
 const HEAD_SHA = valueAfter("--head-sha", process.env.HEAD_SHA || process.env.GITHUB_SHA || "");
@@ -251,13 +251,23 @@ if (!contract) {
 
   const requiredSequence = [
     "resolve_user_intent",
+    "recover_relevant_context",
+    "measure_github_and_vps_in_parallel_when_operational",
+    "reconcile_cross_surface_state",
     "search_existing_capabilities",
     "open_primary_implementation_files",
     "cross_reference_capabilities_with_request",
     "classify_authority_and_runtime_state",
+    "measure_available_tools",
     "normalize_evidence_scope_time_and_provenance",
     "arbitrate_conflict_by_discriminating_test_if_needed",
     "reuse_or_extend_before_create",
+    "identify_existing_owner_and_writer_scope",
+    "preflight_minimal_patch",
+    "counterproof_before_promotion",
+    "causal_micro_deploy_when_applicable",
+    "remeasure_github_and_vps_in_parallel",
+    "register_receipt_and_update_fixed_hud",
   ];
   const sequence = contract.mandatory_pre_solution_sequence;
   if (!Array.isArray(sequence)) {
@@ -267,6 +277,56 @@ if (!contract) {
       if (!sequence.includes(step)) errors.push(`CONTRATO_RECONCILIACAO_ETAPA_AUSENTE:${step}`);
     }
   }
+
+  const universal = contract.universal_operational_contract ?? {};
+  if (universal.marker !== "CENTRALDARK_UNIVERSAL_OPERATIONAL_CONTRACT_REQUIRED") errors.push("CONTRATO_UNIVERSAL_MARKER_AUSENTE");
+  if (universal.status !== "MANDATORY") errors.push("CONTRATO_UNIVERSAL_NAO_OBRIGATORIO");
+  if (universal.inheritance_required !== true) errors.push("CONTRATO_UNIVERSAL_SEM_HERANCA");
+
+  const parallel = universal.parallel_measurement ?? {};
+  if (!Array.isArray(parallel.required_sources) || !parallel.required_sources.includes("GITHUB") || !parallel.required_sources.includes("VPS")) errors.push("CONTRATO_UNIVERSAL_SEM_GITHUB_VPS");
+  if (parallel.mode !== "PARALLEL_READ_ONLY_T0_AND_T1") errors.push("CONTRATO_UNIVERSAL_MEDICAO_NAO_PARALELA");
+  if (parallel.rendezvous_before_mutation !== true) errors.push("CONTRATO_UNIVERSAL_SEM_RENDEZVOUS");
+  if (parallel.cross_surface_drift_must_be_explicit !== true) errors.push("CONTRATO_UNIVERSAL_DRIFT_OCULTO");
+
+  const requiredUniversalCycle = [
+    "RECOVER_RELEVANT_CONTEXT",
+    "MEASURE_GITHUB_AND_VPS_IN_PARALLEL_T0",
+    "RECONCILE_CROSS_SURFACE_STATE",
+    "FIND_EXISTING_OWNER",
+    "ACQUIRE_ONE_WRITER_SCOPE",
+    "META_LUPA",
+    "MINIMAL_CAUSAL_PATCH",
+    "PREFLIGHT",
+    "COUNTERPROOF",
+    "CAUSAL_MICRO_DEPLOY_IF_APPLICABLE",
+    "MEASURE_GITHUB_AND_VPS_IN_PARALLEL_T1",
+    "RUNTIME_PROOF",
+    "REGISTER_RECEIPT",
+    "UPDATE_FIXED_HUD_WITH_LIVE_DATA",
+    "CONTINUE_TO_FIXED_POINT_OR_HUMAN_FRONTIER",
+  ];
+  if (!Array.isArray(universal.canonical_cycle) || requiredUniversalCycle.some((step, index) => universal.canonical_cycle[index] !== step)) errors.push("CONTRATO_UNIVERSAL_CICLO_FORA_DE_ORDEM");
+
+  const micro = universal.micro_deploy ?? {};
+  if (micro.policy !== "CANONICAL_WHEN_CAUSALLY_APPLICABLE") errors.push("CONTRATO_UNIVERSAL_MICRO_DEPLOY_AUSENTE");
+  if (micro.scope_must_match_causal_scope !== true) errors.push("CONTRATO_UNIVERSAL_MICRO_DEPLOY_SEM_CONE_CAUSAL");
+  if (micro.restart_all_by_default !== false) errors.push("CONTRATO_UNIVERSAL_RESTART_ALL_DEFAULT");
+  if (micro.full_deploy_by_default !== false) errors.push("CONTRATO_UNIVERSAL_FULL_DEPLOY_DEFAULT");
+
+  const hud = universal.hud ?? {};
+  if (hud.layout !== "FIXED" || hud.data !== "LIVE") errors.push("CONTRATO_UNIVERSAL_HUD_INVALIDO");
+  if (hud.layout_changes_require_explicit_chefe_authorization !== true) errors.push("CONTRATO_UNIVERSAL_HUD_SEM_CADEADO");
+
+  const deploy = contract.deploy_policy ?? {};
+  if (deploy.micro_deploy_policy !== "CANONICAL_WHEN_CAUSALLY_APPLICABLE") errors.push("DEPLOY_POLICY_MICRO_DEPLOY_NAO_CANONICO");
+  if (deploy.deploy_scope_must_match_causal_scope !== true) errors.push("DEPLOY_POLICY_CONE_CAUSAL_AUSENTE");
+  if (deploy.post_deploy_parallel_remeasure_required !== true) errors.push("DEPLOY_POLICY_SEM_REMEDICAO_GITHUB_VPS");
+  if (deploy.runtime_receipt_required !== true) errors.push("DEPLOY_POLICY_SEM_RECEIPT_RUNTIME");
+
+  const requiredReceiptFields = ["GITHUB_T0","VPS_T0","CROSS_SURFACE_DRIFT","PREFLIGHT_RESULT","COUNTERPROOF_RESULT","MICRO_DEPLOY_SCOPE","GITHUB_T1","VPS_T1","RUNTIME_RECEIPT","FIXED_HUD_UPDATE","NEXT_CURSOR"];
+  const receiptFields = contract.internal_receipt_fields ?? [];
+  for (const field of requiredReceiptFields) if (!receiptFields.includes(field)) errors.push(`CONTRATO_UNIVERSAL_RECEIPT_CAMPO_AUSENTE:${field}`);
 
   const rules = contract.decision_rules ?? {};
   if (rules.new_component_requires_proved_gap !== true) errors.push("CONTRATO_RECONCILIACAO_GAP_NAO_OBRIGATORIO");
