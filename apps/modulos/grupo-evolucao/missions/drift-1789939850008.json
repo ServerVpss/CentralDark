@@ -1,0 +1,21 @@
+{
+  "id": "drift-1789939850008",
+  "tema": "Drift detectado (3 mudanças)",
+  "contexto": {
+    "drift": [
+      {
+        "tipo": "pm2-instavel",
+        "detalhe": "CentralDark-EliteAnthropic: +30 restarts"
+      },
+      {
+        "tipo": "pm2-novo",
+        "detalhe": "CentralDark-ScreenPipe"
+      },
+      {
+        "tipo": "commit-novo",
+        "detalhe": "6c50b694532 → 53d4d772bb9"
+      }
+    ]
+  },
+  "origem": "cartografo"
+}
