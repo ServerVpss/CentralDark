@@ -5,6 +5,31 @@ import { buildDreamReviewWithPatterns, routePatternAutonomy } from './dream-revi
 
 const HEAD = 'a'.repeat(40);
 const TARGET = 'docs/CONSCIENCIA/APRENDIZADOS.md';
+const TLC23_SHA = 'b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1';
+const TLC23_HORN_PASS = {
+  status: 'PASS',
+  pdf_sha256: TLC23_SHA,
+  evidence_ref: 'test:dream-tlc23-horn:pass',
+};
+const CHILD_CONTRACT = {
+  root_contract_ref: 'docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json',
+  root_contract_schema: 6,
+  root_goal_id: 'RG-DREAM',
+  parent_contract_id: 'ROOT',
+  child_contract_id: 'CC-DREAM',
+  self_goal_id: 'SG-DREAM',
+  owner: 'scripts/memory-linker/dream-review-run.mjs',
+  scope: [TARGET],
+  expected_delta: 'route proven memory pattern to the authorized writer',
+  done_condition: 'canonical writer call is accepted or fail-closed with exact cause',
+  evidence_required: ['test:dream-review-run'],
+  counterproof: 'negative writer/head/scope cases remain blocked',
+  dependencies: [],
+  next_cursor: 'DREAM_WRITE_THEN_T1',
+  status: 'PENDING',
+  root_authority: 'SEGREDO/CHEFE',
+  tlc23_horn_gate: TLC23_HORN_PASS,
+};
 
 function verified(type, ref) {
   return { type, ref, status: 'PASS', verified: true };
@@ -35,6 +60,8 @@ function jarvisState(overrides = {}) {
     mission_id: 'memory-pattern-autonomy',
     coordinator: 'SOL',
     head: { sha: HEAD },
+    root_goal: { id: 'RG-DREAM', authority: 'SEGREDO/CHEFE', scope: [TARGET] },
+    self_goal_receipts: [],
     writer: { agent: 'hermes-pivete', role: 'HERMES' },
     scope: { allowed: [TARGET], denied: [] },
     trail: { route_id: 'memory-pattern-route' },
@@ -44,6 +71,8 @@ function jarvisState(overrides = {}) {
       phase: 'ENTRY',
       observed_head: HEAD,
       trace_id: 'dream-contract-entry',
+      child_contract: CHILD_CONTRACT,
+      tlc23_horn_gate: TLC23_HORN_PASS,
       github_t0: { status: 'PASS', head_sha: HEAD },
       vps_t0: { status: 'PASS', head_sha: HEAD },
       cross_surface_drift_classified: true,
