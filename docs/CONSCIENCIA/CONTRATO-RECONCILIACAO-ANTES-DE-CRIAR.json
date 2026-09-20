@@ -1,5 +1,5 @@
 {
-  "schema_version": 5,
+  "schema_version": 6,
   "contract_id": "CENTRALDARK_RECONCILIATION_BEFORE_CREATION",
   "status": "CANONICAL",
   "marker": "REUSE_BEFORE_CREATE_REQUIRED",
@@ -698,7 +698,25 @@
     "CADDY_VALIDATE",
     "CADDY_RELOAD",
     "ROLLBACK_USED",
-    "HUD_STATE_HASH"
+    "HUD_STATE_HASH",
+    "GLOBAL_GATE_PHASE",
+    "GLOBAL_GATE_STATUS",
+    "GLOBAL_GATE_TRACE_ID",
+    "GITHUB_T0_HEAD",
+    "VPS_T0_HEAD",
+    "DRIFT_CLASS",
+    "OWNER_PROOF",
+    "WRITER_SCOPE_PROOF",
+    "ROLLBACK_REF",
+    "COUNTERPROOF_PLAN_REF",
+    "GITHUB_T1_HEAD",
+    "VPS_T1_HEAD",
+    "COUNTERPROOF_REF",
+    "SAME_HEAD_CI_RESULT",
+    "RUNTIME_PROOF_RESULT",
+    "HUMAN_BOUNDARY_STATE",
+    "DELTA_CLASS",
+    "DELTA_INFORMATION_GAIN"
   ],
   "receipt_visibility": "INTERNAL_BY_DEFAULT; SHOW_ONLY_ON_AUDIT_OR_BLOCKER",
   "universal_operational_contract": {
@@ -953,7 +971,9 @@
     "plug_and_play_inheritance_ref": "this_contract.plug_and_play_inheritance",
     "hybrid_runtime_contract_ref": "this_contract.hybrid_runtime_contract",
     "chefe_authority_ref": "this_contract.centraldark_global_contract.authority",
-    "cards_on_table_ref": "this_contract.centraldark_global_contract.cards_on_table"
+    "cards_on_table_ref": "this_contract.centraldark_global_contract.cards_on_table",
+    "global_contract_enforcer_ref": "this_contract.global_contract_enforcer",
+    "continuous_delta_global_ref": "this_contract.continuous_delta_global"
   },
   "centraldark_global_contract": {
     "marker": "CENTRALDARK_WHOLE_HOUSE_ONE_DIRECTION_REQUIRED",
@@ -975,6 +995,7 @@
       "COORDINATE_ACTIVE_PRS_BRANCHES_AND_LEDGER",
       "FIND_EXISTING_OWNER",
       "ONE_WRITER",
+      "GLOBAL_CONTRACT_ENFORCER_ENTRY",
       "MINIMAL_CAUSAL_PATCH",
       "PREFLIGHT",
       "COUNTERPROOF",
@@ -983,6 +1004,7 @@
       "SAME_HEAD_CI",
       "CANONICAL_PROMOTION_TO_MAIN",
       "RUNTIME_PROOF",
+      "GLOBAL_CONTRACT_ENFORCER_EXIT",
       "RECEIPT_AND_POMBO64",
       "FIXED_HUD_LIVE_DATA",
       "FIXED_POINT_OR_HUMAN_FRONTIER"
@@ -1165,7 +1187,8 @@
       "HEALTH_PROBE",
       "RECEIPT_SINK",
       "ROLLBACK_BOUNDARY",
-      "NEXT_CURSOR"
+      "NEXT_CURSOR",
+      "GLOBAL_MUTATION_GATE"
     ],
     "adapter_is_new_brain": false,
     "provider_is_authority": false,
@@ -1227,5 +1250,112 @@
       "runtime_proof_must_name_service": true,
       "restart_all_false_required": true
     }
+  },
+  "global_contract_enforcer": {
+    "marker": "CENTRALDARK_GLOBAL_CONTRACT_ENFORCER_REQUIRED",
+    "status": "MANDATORY_FOR_MUTATION",
+    "scope_id": "canon/centraldark-universal-contract-20260919",
+    "creates_new_dispatcher": false,
+    "owner": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml",
+    "deterministic_gate": "scripts/agent-call.mjs",
+    "deploy_gate": "scripts/vps/deploy-guards-dispatcher.sh",
+    "principle": "EXTEND_EXISTING_TRIGGER_FABRIC_NOT_SECOND_ARCHITECTURE",
+    "read_only_observation_may_bypass_mutation_gate": true,
+    "any_mutable_action_requires_entry_gate": true,
+    "mutation_without_entry_receipt": "BLOCK",
+    "entry_requires": {
+      "contract_scope_match": true,
+      "contract_schema_min": 6,
+      "observed_head_bound": true,
+      "github_t0": "PASS",
+      "vps_t0": "PASS",
+      "cross_surface_drift_classified": true,
+      "owner_proven": true,
+      "writer_scope_proven": true,
+      "preflight": "PASS",
+      "counterproof_plan_ready": true,
+      "rollback_prepared_and_identified": true,
+      "next_cursor_present": true
+    },
+    "exit_requires": {
+      "github_t1": "PASS",
+      "vps_t1": "PASS",
+      "counterproof": "PASS",
+      "receipt_ref": true,
+      "hud_update": "PASS",
+      "hud_state_hash": true,
+      "runtime_proof_when_runtime_mutated": "PASS",
+      "same_head_ci_when_promoting": "PASS",
+      "fixed_point_or_next_cursor": true
+    },
+    "fail_closed_states": [
+      "FAIL",
+      "UNKNOWN",
+      "BLOCKED",
+      "BLOCKED_TRANSIENT",
+      "QUEUED",
+      "PENDING",
+      "IN_PROGRESS",
+      "CANCELLED",
+      "SKIPPED_WITHOUT_PROVEN_NOT_APPLICABLE"
+    ],
+    "human_boundary": {
+      "machine_continues_until_real_human_frontier": true,
+      "allowed": [
+        "SECRET_MFA_OR_EXCLUSIVE_CONSENT",
+        "PHYSICAL_ACTION",
+        "IRREVERSIBLE_OUT_OF_SCOPE_AUTHORIZATION",
+        "NEW_HUMAN_INTENT_REQUIRED",
+        "EXACT_HARD_BLOCKER_AFTER_AUTHORIZED_ROUTES_EXHAUSTED"
+      ]
+    },
+    "fixed_point_aggregator": {
+      "requires": [
+        "GITHUB_T1",
+        "VPS_T1",
+        "RUNTIME_PROOF_APPLICABLE",
+        "SAME_HEAD_CI_APPLICABLE",
+        "COUNTERPROOF",
+        "RECEIPT",
+        "HUD_LIVE_STATE",
+        "HUMAN_DEPENDENCY_APPLICABLE"
+      ],
+      "any_required_non_pass": "FIXED_POINT_FALSE",
+      "unknown_never_green": true
+    }
+  },
+  "continuous_delta_global": {
+    "marker": "CENTRALDARK_DELTA_CONTINUO_REQUIRED",
+    "status": "MANDATORY_WHILE_MASTER_SESSION_ACTIVE",
+    "input_owner": "SEGREDO/CHEFE",
+    "every_new_material_is_delta_candidate": true,
+    "new_material_does_not_restart_mission": true,
+    "process": [
+      "CAPTURE",
+      "LINK_TO_ACTIVE_GOAL",
+      "DEDUPE",
+      "CLASSIFY",
+      "MEASURE_IF_STATEFUL",
+      "ABSORB_ONLY_USEFUL_DELTA",
+      "UPDATE_BELIEF",
+      "RECONCILE",
+      "COUNTERPROVE",
+      "UPDATE_HUD",
+      "PERSIST_NEXT_CURSOR"
+    ],
+    "useful_delta": [
+      "NEW_CAPABILITY",
+      "NEW_EVIDENCE",
+      "CORRECTION",
+      "NEWER_STATE",
+      "CONTRADICTION_WITH_INFORMATION_GAIN",
+      "BETTER_OWNER_BINDING",
+      "LOWER_COMPLEXITY_EQUAL_OR_GREATER_CAPABILITY"
+    ],
+    "duplicate": "DROP",
+    "no_information_gain": "NO_CHANGE_KEEP_GOAL_KEEP_NEXT_CURSOR",
+    "same_scope": "EVOLVE_SAME_OWNER_SAME_PR_WHEN_WRITER_SCOPE_MATCHES",
+    "interruption": "RESUME_FROM_NEXT_CURSOR_AFTER_REMEASURE",
+    "fixed_point_is_checkpoint_not_mission_amnesia": true
   }
 }
