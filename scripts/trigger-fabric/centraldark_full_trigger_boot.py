@@ -40,6 +40,25 @@ CANONICAL_CHAIN = [
     "SEMANTIC_GREEN", "FIXED_POINT", "POST_GREEN_LOCK", "REGISTRA", "BOOT",
 ]
 
+RUNTIME_PREFLIGHT_REQUIRED_RECEIPT_FIELDS = (
+    "observed_at",
+    "surface",
+    "command_class",
+    "wrapper_lint_result",
+    "target_runtime_result",
+    "invalidated_probe_if_any",
+    "unknowns_remaining",
+    "next_cursor",
+)
+
+BRIDGE_OWNERSHIP_REQUIRED_FIELDS = (
+    "pid_parent_tree",
+    "package_version",
+    "profile_or_session",
+    "socket_state",
+    "handoff_or_canary_before_kill",
+)
+
 
 def strip_accents(value: str) -> str:
     return "".join(c for c in unicodedata.normalize("NFKD", value) if not unicodedata.combining(c))
@@ -107,11 +126,27 @@ def runtime_preflight_contract_state(repo: Path) -> dict:
     checks = {"file_present": True}
     for token in required_tokens:
         checks[token] = token in text
+    checks["required_receipt_fields_complete"] = all(
+        f"  - {field}" in text for field in RUNTIME_PREFLIGHT_REQUIRED_RECEIPT_FIELDS
+    )
+    checks["bridge_ownership_fields_complete"] = all(
+        f"      - {field}" in text for field in BRIDGE_OWNERSHIP_REQUIRED_FIELDS
+    )
     return {
         "status": "BOUND" if all(checks.values()) else "INVALID",
         "owner": RUNTIME_PREFLIGHT_LINT.as_posix(),
         "checks": checks,
     }
+
+
+def _present_evidence(value: object) -> bool:
+    if isinstance(value, bool):
+        return value
+    if value is None:
+        return False
+    if isinstance(value, (list, tuple, dict, set)):
+        return bool(value)
+    return bool(str(value).strip())
 
 
 def lint_runtime_command(
@@ -120,11 +155,18 @@ def lint_runtime_command(
     shell: str,
     host_mode: str,
     required_paths: list[str] | None = None,
+    *,
+    surface: str = "runtime_probe",
+    command_class: str = "runtime_probe",
+    bridge_evidence: dict | None = None,
+    observed_at: str = "UNKNOWN",
 ) -> dict:
     contract = runtime_preflight_contract_state(repo)
     reasons: list[str] = []
     shell_norm = shell.strip().lower()
     host_norm = host_mode.strip().lower()
+    surface_norm = surface.strip() or "runtime_probe"
+    command_class_norm = command_class.strip() or "runtime_probe"
 
     if contract["status"] != "BOUND":
         reasons.append("PREFLIGHT_CONTRACT_INVALID")
@@ -154,13 +196,41 @@ def lint_runtime_command(
     if missing_paths:
         reasons.append("MISSING_REQUIRED_PATH")
 
+    bridge_claim = (
+        surface_norm == "desktop_bridge_ownership_claim"
+        or command_class_norm == "desktop_bridge_ownership_claim"
+    )
+    missing_bridge_evidence: list[str] = []
+    if bridge_claim:
+        evidence = bridge_evidence or {}
+        for field in BRIDGE_OWNERSHIP_REQUIRED_FIELDS:
+            if not _present_evidence(evidence.get(field)):
+                missing_bridge_evidence.append(field)
+        if missing_bridge_evidence:
+            reasons.append("BRIDGE_OWNERSHIP_EVIDENCE_INCOMPLETE")
+
+    wrapper_result = "PASS" if not reasons else "FAIL_CLOSED"
+    target_result = "UNKNOWN_UNTIL_TARGET_PROBE" if not reasons else "NOT_EXECUTED_INVALID_WRAPPER"
+    invalidated = [] if not reasons else list(reasons)
+    unknowns = ["TARGET_RUNTIME_RESULT"] if not reasons else []
+    next_cursor = "EXECUTE_TARGET_PROBE" if not reasons else "FIX_PREFLIGHT_AND_RETRY"
+
     return {
         "status": "PASS" if not reasons else "FAIL_CLOSED",
         "owner": RUNTIME_PREFLIGHT_LINT.as_posix(),
+        "observed_at": observed_at,
+        "surface": surface_norm,
+        "command_class": command_class_norm,
         "shell": shell_norm,
         "host_mode": host_norm,
+        "wrapper_lint_result": wrapper_result,
+        "target_runtime_result": target_result,
+        "invalidated_probe_if_any": invalidated,
+        "unknowns_remaining": unknowns,
+        "next_cursor": next_cursor,
         "reasons": reasons,
         "missing_paths": missing_paths,
+        "missing_bridge_evidence": missing_bridge_evidence,
         "wrapper_parse_fail_is_not_target_fail": True,
         "invalid_probe_must_not_become_fact": True,
     }
@@ -292,12 +362,34 @@ def cmd_boot(args: argparse.Namespace) -> int:
 def cmd_preflight_lint(args: argparse.Namespace) -> int:
     repo = Path(args.repo).resolve()
     require_files(repo)
+    try:
+        bridge_evidence = json.loads(args.bridge_evidence_json)
+    except json.JSONDecodeError:
+        print(json.dumps({
+            "status": "FAIL_CLOSED",
+            "reason": "INVALID_BRIDGE_EVIDENCE_JSON",
+            "wrapper_parse_fail_is_not_target_fail": True,
+            "invalid_probe_must_not_become_fact": True,
+        }, indent=2, ensure_ascii=False))
+        return 8
+    if not isinstance(bridge_evidence, dict):
+        print(json.dumps({
+            "status": "FAIL_CLOSED",
+            "reason": "BRIDGE_EVIDENCE_MUST_BE_OBJECT",
+            "wrapper_parse_fail_is_not_target_fail": True,
+            "invalid_probe_must_not_become_fact": True,
+        }, indent=2, ensure_ascii=False))
+        return 8
     result = lint_runtime_command(
         repo=repo,
         command=args.command,
         shell=args.shell,
         host_mode=args.host_mode,
         required_paths=args.required_path,
+        surface=args.surface,
+        command_class=args.command_class,
+        bridge_evidence=bridge_evidence,
+        observed_at=args.observed_at,
     )
     print(json.dumps(result, indent=2, ensure_ascii=False))
     return 0 if result["status"] == "PASS" else 8
@@ -387,6 +479,10 @@ def build_parser() -> argparse.ArgumentParser:
     pf.add_argument("--host-mode", default="literal")
     pf.add_argument("--command", required=True)
     pf.add_argument("--required-path", action="append", default=[])
+    pf.add_argument("--surface", default="runtime_probe")
+    pf.add_argument("--command-class", default="runtime_probe")
+    pf.add_argument("--bridge-evidence-json", default="{}")
+    pf.add_argument("--observed-at", default="UNKNOWN")
     pf.set_defaults(func=cmd_preflight_lint)
 
     f = sub.add_parser("feedback")
