@@ -57,6 +57,7 @@ _REDACTIONS = [
     (re.compile(r"(sk-[A-Za-z0-9_-]{8,})"), "[API_KEY_REDACTED]"),
     (re.compile(r"(authorization[\"'\s:=]+)[^\s,\"']+", re.I), r"\1[REDACTED]"),
     (re.compile(r"([A-Z0-9_]*API_KEY[\"'\s:=]+)[^\s,\"']+", re.I), r"\1[REDACTED]"),
+    (re.compile(r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b"), "[EMAIL_REDACTED]"),
 ]
 
 app = FastAPI(title="CentralDark Omni Router", version=APP_VERSION)
@@ -311,23 +312,37 @@ def aggregate_vps_delta_events(events: List[Dict[str, Any]]) -> List[Dict[str, A
 
 def collect_vps_delta_snapshot(limit: int = VPS_DELTA_MAX_EVENTS) -> Dict[str, Any]:
     limit = max(20, min(VPS_DELTA_MAX_EVENTS, int(limit)))
-    events: List[Dict[str, Any]] = []
     sources = discover_vps_delta_sources()
     source_errors: List[str] = []
+    per_source = max(2, min(50, (limit + max(1, len(sources)) - 1) // max(1, len(sources))))
+    source_batches: List[List[Dict[str, Any]]] = []
+
+    # Whole-VPS means no single hot file may starve all other sensors. Take a
+    # bounded newest slice from every allowlisted source, then interleave them.
     for source in sources:
         try:
             mtime_ns = source.stat().st_mtime_ns
         except OSError:
             source_errors.append(sanitize(str(source)))
             continue
-        lines = _tail_lines(source)
-        start = max(0, len(lines) - limit)
-        for index, line in enumerate(lines[start:], start=start):
-            if not line.strip():
-                continue
-            events.append(parse_vps_delta_line(source, line, index, mtime_ns))
-            if len(events) >= limit:
-                break
+        lines = [line for line in _tail_lines(source) if line.strip()]
+        selected = lines[-per_source:]
+        start = max(0, len(lines) - len(selected))
+        batch = [
+            parse_vps_delta_line(source, line, start + index, mtime_ns)
+            for index, line in enumerate(selected)
+        ]
+        if batch:
+            source_batches.append(list(reversed(batch)))  # newest first
+
+    events: List[Dict[str, Any]] = []
+    depth = max((len(batch) for batch in source_batches), default=0)
+    for index in range(depth):
+        for batch in source_batches:
+            if index < len(batch):
+                events.append(batch[index])
+                if len(events) >= limit:
+                    break
         if len(events) >= limit:
             break
 
@@ -363,6 +378,8 @@ def collect_vps_delta_snapshot(limit: int = VPS_DELTA_MAX_EVENTS) -> Dict[str, A
         "delta_is_authority": False,
         "delta_is_proof": False,
         "source_count": len(sources),
+        "sampled_source_count": len(source_batches),
+        "source_coverage_ratio": round(len(source_batches) / len(sources), 4) if sources else 0.0,
         "source_errors": source_errors,
         "events_seen": len(events),
         "error_events": errors,
@@ -1355,6 +1372,8 @@ def vps_delta_health(authorization: str = Header(default=None)) -> Dict[str, Any
         "engine": "centraldark-omni-router",
         "one_heart": snapshot["one_heart"],
         "source_count": snapshot["source_count"],
+        "sampled_source_count": snapshot["sampled_source_count"],
+        "source_coverage_ratio": snapshot["source_coverage_ratio"],
         "material_groups": snapshot["material_groups"],
         "raw_stream_preserved": True,
         "authority": False,
@@ -1490,6 +1509,7 @@ def self_test() -> int:
         "fallback_event": event["context"].get("fallback_used") is True and event["context"].get("attempt") == 2,
         "action_not_proof": event["context"].get("action_is_proof") is False,
         "redaction": "sekret" not in sanitize("Authorization: ***"),
+        "email_redaction": "user@example.com" not in sanitize("user@example.com") and "[EMAIL_REDACTED]" in sanitize("user@example.com"),
         "chain_dedup": len(candidate_routes("auto")) == len(set(candidate_routes("auto"))),
         "zendrive_health_safe": zendrive_provider_health_payload().get("proof") is False,
         "zendrive_simulation_oi": _zendrive_simulation_payload([ChatMessage(role="user", content="oi")]).get("response_text") == "oi",
