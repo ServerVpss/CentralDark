@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "contract_id": "CENTRALDARK_RECONCILIATION_BEFORE_CREATION",
   "status": "CANONICAL",
   "marker": "REUSE_BEFORE_CREATE_REQUIRED",
@@ -231,6 +231,8 @@
   "mandatory_pre_solution_sequence": [
     "resolve_user_intent",
     "recover_relevant_context",
+    "measure_github_and_vps_in_parallel_when_operational",
+    "reconcile_cross_surface_state",
     "search_existing_capabilities",
     "open_primary_implementation_files",
     "cross_reference_capabilities_with_request",
@@ -238,7 +240,13 @@
     "measure_available_tools",
     "normalize_evidence_scope_time_and_provenance",
     "arbitrate_conflict_by_discriminating_test_if_needed",
-    "reuse_or_extend_before_create"
+    "reuse_or_extend_before_create",
+    "identify_existing_owner_and_writer_scope",
+    "preflight_minimal_patch",
+    "counterproof_before_promotion",
+    "causal_micro_deploy_when_applicable",
+    "remeasure_github_and_vps_in_parallel",
+    "register_receipt_and_update_fixed_hud"
   ],
   "state_classes": [
     "CANONICAL",
@@ -546,7 +554,13 @@
     "causal_scope_first": true,
     "full_deploy_default": false,
     "live_requires_runtime_observation_not_green_status_only": true,
-    "full_adversarial_convergence_is_default_gate": false
+    "full_adversarial_convergence_is_default_gate": false,
+    "micro_deploy_policy": "CANONICAL_WHEN_CAUSALLY_APPLICABLE",
+    "micro_deploy_owner": "docs/CONSCIENCIA/03-FLUXO-DEPLOY.md",
+    "deploy_scope_must_match_causal_scope": true,
+    "restart_all_by_default": false,
+    "post_deploy_parallel_remeasure_required": true,
+    "runtime_receipt_required": true
   },
   "convergence_policy": {
     "minimal_internal_falsification_for_critical_scope": true,
@@ -592,7 +606,99 @@
     "REUSE_DECISION",
     "REAL_GAP",
     "MINIMAL_ACTION",
-    "NO_CHANGE_REASON"
+    "NO_CHANGE_REASON",
+    "GITHUB_T0",
+    "VPS_T0",
+    "CROSS_SURFACE_DRIFT",
+    "PREFLIGHT_RESULT",
+    "COUNTERPROOF_RESULT",
+    "MICRO_DEPLOY_SCOPE",
+    "GITHUB_T1",
+    "VPS_T1",
+    "RUNTIME_RECEIPT",
+    "FIXED_HUD_UPDATE",
+    "NEXT_CURSOR"
   ],
-  "receipt_visibility": "INTERNAL_BY_DEFAULT; SHOW_ONLY_ON_AUDIT_OR_BLOCKER"
+  "receipt_visibility": "INTERNAL_BY_DEFAULT; SHOW_ONLY_ON_AUDIT_OR_BLOCKER",
+  "universal_operational_contract": {
+    "marker": "CENTRALDARK_UNIVERSAL_OPERATIONAL_CONTRACT_REQUIRED",
+    "status": "MANDATORY",
+    "authority": "SEGREDO/CHEFE",
+    "owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json",
+    "applies_to": "ALL_CURRENT_AND_FUTURE_ENGINES_AGENTS_SURFACES_TOOLS_AND_OPERATIONAL_RESPONSES",
+    "inheritance_required": true,
+    "parallel_measurement": {
+      "required_sources": [
+        "GITHUB",
+        "VPS"
+      ],
+      "mode": "PARALLEL_READ_ONLY_T0_AND_T1",
+      "github_and_vps_are_independent_sensors": true,
+      "one_side_blocked": "MARK_BLOCKED_CONTINUE_OTHER_READ",
+      "rendezvous_before_mutation": true,
+      "cross_surface_drift_must_be_explicit": true,
+      "current_live_state_beats_stale_history": true
+    },
+    "canonical_cycle": [
+      "RECOVER_RELEVANT_CONTEXT",
+      "MEASURE_GITHUB_AND_VPS_IN_PARALLEL_T0",
+      "RECONCILE_CROSS_SURFACE_STATE",
+      "FIND_EXISTING_OWNER",
+      "ACQUIRE_ONE_WRITER_SCOPE",
+      "META_LUPA",
+      "MINIMAL_CAUSAL_PATCH",
+      "PREFLIGHT",
+      "COUNTERPROOF",
+      "CAUSAL_MICRO_DEPLOY_IF_APPLICABLE",
+      "MEASURE_GITHUB_AND_VPS_IN_PARALLEL_T1",
+      "RUNTIME_PROOF",
+      "REGISTER_RECEIPT",
+      "UPDATE_FIXED_HUD_WITH_LIVE_DATA",
+      "CONTINUE_TO_FIXED_POINT_OR_HUMAN_FRONTIER"
+    ],
+    "micro_deploy": {
+      "policy": "CANONICAL_WHEN_CAUSALLY_APPLICABLE",
+      "owner": "docs/CONSCIENCIA/03-FLUXO-DEPLOY.md",
+      "scope_must_match_causal_scope": true,
+      "patch_without_deploy": "CODED_NOT_RUNTIME_PROVEN",
+      "deploy_without_remeasure": "ACTION_NOT_PROOF",
+      "restart_all_by_default": false,
+      "full_deploy_by_default": false,
+      "rollback_scope_must_match_deploy_scope": true
+    },
+    "counterproof": {
+      "required_before_runtime_green": true,
+      "unknown_is_pass": false,
+      "merged_is_deployed": false,
+      "documented_is_executed": false,
+      "action_is_proof": false,
+      "process_is_result": false
+    },
+    "hud": {
+      "required_for_material_operational_status": true,
+      "layout": "FIXED",
+      "data": "LIVE",
+      "layout_changes_require_explicit_chefe_authorization": true,
+      "update_after_t1_and_receipt": true
+    },
+    "human_frontier": {
+      "machine_resolvable_work_continues_without_reask": true,
+      "stop_only_for": [
+        "SECRET_MFA_OR_EXCLUSIVE_CONSENT",
+        "PHYSICAL_ACTION",
+        "IRREVERSIBLE_OUT_OF_SCOPE_AUTHORIZATION",
+        "NEW_HUMAN_INTENT_REQUIRED",
+        "EXACT_HARD_BLOCKER_AFTER_AUTHORIZED_ROUTES_EXHAUSTED"
+      ]
+    },
+    "mutation": {
+      "perception_parallel": true,
+      "same_scope_mutation_parallel": false,
+      "one_writer_per_scope": true,
+      "reuse_before_create": true,
+      "one_system_only": true,
+      "no_force_push": true,
+      "no_reset_hard_operational": true
+    }
+  }
 }
