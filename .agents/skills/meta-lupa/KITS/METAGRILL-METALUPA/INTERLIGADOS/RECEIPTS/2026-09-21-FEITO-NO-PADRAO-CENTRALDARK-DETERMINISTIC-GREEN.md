@@ -1,0 +1,107 @@
+# 👑🪬 FEITO NO PADRÃO CENTRALDARK — deterministic green receipt
+
+PR_MOTHER=#1562
+PR_MOTHER_ROLE=RENDEZVOUS_LEDGER_NOT_WRITER
+DO_NOT_MERGE_THIS_PR=true
+OBSERVED_MAIN=70b49964f77288d80864b52e5d692580660e60a7
+OBSERVED_AT=2026-09-21
+REALITY_IS_JUDGE=true
+UNKNOWN_IS_NOT_PASS=true
+
+## Claim
+
+Quando intenção, evidência, owner e estado de ferramentas permanecem materialmente iguais e não existe informação nova, o sistema não deve redeliberar o mesmo claim.
+
+```text
+SAME_INTENT
++ SAME_EVIDENCE
++ SAME_OWNER
++ SAME_TOOL_STATE
++ NO_NEW_INFORMATION
+→ DO_NOT_REDELIBERATE
+→ EXECUTE_NEXT_DETERMINISTIC_STEP
+```
+
+## HUD verde — sem falso verde
+
+```text
+GREEN_IS_CLAIM_SCOPED=true
+GREEN_REQUIRES_VALID_EVIDENCE_BINDING=true
+GREEN_PERSISTS_WHILE_BINDING_REMAINS_VALID=true
+GREEN_IS_NOT_GLOBAL_ETERNAL_TRUTH=true
+```
+
+O claim sai do verde somente quando houver delta material:
+
+```text
+NEW_EVIDENCE
+| OBSERVED_FAILURE
+| CHEFE_INTENT_CHANGED
+| MATERIAL_STATE_CHANGED
+| PROVEN_CONTRADICTION
+→ REOPEN_ONLY_AFFECTED_DELTA
+→ REPROVE
+→ RESEAL
+```
+
+## CORE sobre IA
+
+```text
+MODEL=MOTOR_SUBSTITUIVEL
+CORE=STATE+PROOF+OWNERS+LOCKS+RECEIPTS+DETERMINISTIC_PATHS
+AI_WORKS_ON_TOP_OF_CORE=true
+CORE_DOES_NOT_DEPEND_ON_ONE_MODEL=true
+```
+
+## Plug-and-play evolutivo
+
+```text
+PACKAGE_ID=STABLE
+COMPONENT_ID=STABLE
+OWNER=STABLE
+REVISION=MONOTONIC
+PACKAGE_SHA256=RECOMPUTE_WHEN_BYTES_CHANGE
+PARENT_PACKAGE_SHA256=PREVIOUS_REVISION
+HASH_CHANGE!=NEW_IDENTITY
+SAME_PLUG+NEW_REVISION+NEW_HASH=VALID_UPGRADE_LINEAGE
+```
+
+## Owners medidos na main
+
+- `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md`
+  - blob: `5c84837cf924c8bc28eebc5bf6fcdc06a9703326`
+  - contém `MODELO=MOTOR_SUBSTITUIVEL`, `REUSE_BEFORE_CREATE=true`, `ONE_SYSTEM_ONLY=true`
+  - contém regra de não redeliberação e condições de reabertura por delta material
+
+- `docs/ARQUITETURA/CENTRALDARK-CRYSTALLIZED-PLUG-PLAY.yml`
+  - blob: `980ca00781bd18c0ab65489410753e84f676b8c5`
+  - contém identidade estável, revisão monotônica, hash por bytes exatos e parent hash de linhagem
+
+## Frase humana
+
+```text
+👑🪬 FEITO NO PADRÃO CENTRALDARK
+= claim já provado continua verde enquanto o mesmo vínculo de prova permanece válido;
+  a IA não rediscute o que o sistema já consolidou;
+  só o delta material reabre.
+```
+
+## Cadeados
+
+```text
+UNKNOWN != PASS
+ACTION != PROOF
+DOCUMENTED != EXECUTED
+MERGED != DEPLOYED
+HISTORY != CURRENT_STATE
+REALITY = JUDGE
+```
+
+## Resultado
+
+```text
+DETERMINISTIC_GREEN_POLICY=CRYSTALLIZED_IN_PR_MOTHER_LEDGER
+CODE_OWNER_MUTATION=NONE
+PR_MOTHER_MERGE=FORBIDDEN
+NEXT_CURSOR=USE_THIS_RECEIPT_AS_RENDEZVOUS_REFERENCE
+```
