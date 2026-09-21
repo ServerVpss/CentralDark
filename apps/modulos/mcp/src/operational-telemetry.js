@@ -89,10 +89,27 @@ function readTextSafe(file) {
 
 export const CENTRALDARK_PATTERN_RED_OUTSIDE_PCT = 80;
 
+function externalPatternDimensions(root) {
+  const file = path.join(root, "apps/modulos/status/centraldark-pattern-observation.json");
+  const payload = readJsonSafe(file);
+  const rows = Array.isArray(payload?.dimensions) ? payload.dimensions.slice(0, 100) : [];
+  return rows.map((row, index) => {
+    const rawState = String(row?.state || "UNKNOWN").toUpperCase();
+    const state = rawState === "PASS" || rawState === "FAIL" ? rawState : "UNKNOWN";
+    return {
+      id: String(row?.id || `EXTERNAL_${index + 1}`).slice(0, 120),
+      label: String(row?.label || row?.id || `observação externa ${index + 1}`).slice(0, 180),
+      state,
+      source: String(row?.source || "apps/modulos/status/centraldark-pattern-observation.json").slice(0, 220),
+      scoreEligible: row?.scoreEligible !== false,
+    };
+  });
+}
+
 function patternAlignmentSnapshot({ root, diagnostics, boundary, rules }) {
   const agents = readTextSafe(path.join(root, "AGENTS.md"));
   const contract = readTextSafe(path.join(root, "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml"));
-  const soulPresent = exists(path.join(root, "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md"));
+  const soulPath = path.join(root, "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md");
 
   const dimensions = [
     {
@@ -100,66 +117,78 @@ function patternAlignmentSnapshot({ root, diagnostics, boundary, rules }) {
       label: "UNKNOWN não vira PASS",
       state: rules.unknownIsNotPass === true ? "PASS" : "FAIL",
       source: "operational-telemetry.rules",
+      scoreEligible: false,
     },
     {
       id: "ONE_WRITER_PER_SCOPE",
       label: "um writer por escopo",
       state: rules.oneWriterPerScope === true ? "PASS" : "FAIL",
       source: "operational-telemetry.rules",
+      scoreEligible: false,
     },
     {
       id: "REUSE_BEFORE_CREATE",
       label: "reusar antes de criar",
       state: rules.reuseBeforeCreate === true ? "PASS" : "FAIL",
       source: "operational-telemetry.rules",
+      scoreEligible: false,
     },
     {
       id: "SECRET_BOUNDARY",
       label: "segredo não exposto",
       state: boundary.contentExposed === false && diagnostics.secretsContentCollected !== true ? "PASS" : "FAIL",
       source: "secret-boundary+forensic",
+      scoreEligible: true,
     },
     {
       id: "SOUL_CANONICA",
       label: "SOUL canônica presente",
-      state: soulPresent ? "PASS" : "UNKNOWN",
+      state: exists(soulPath) ? "PASS" : "FAIL",
       source: "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md",
+      scoreEligible: true,
     },
     {
       id: "FAST_PATH_CONTINUA",
       label: "não parar com PR elegível aberto",
-      state: agents.includes("RETURN_WITH_OPEN_ELIGIBLE_PR=FORBIDDEN") ? "PASS" : (agents ? "FAIL" : "UNKNOWN"),
+      state: agents.includes("RETURN_WITH_OPEN_ELIGIBLE_PR=FORBIDDEN") ? "PASS" : "FAIL",
       source: "AGENTS.md",
+      scoreEligible: true,
     },
     {
       id: "REMEASURE_PR_LIVE",
       label: "re-medida viva antes do retorno",
-      state: contract.includes("remeasure_live_mergeability_before_human_return: true") ? "PASS" : (contract ? "FAIL" : "UNKNOWN"),
+      state: contract.includes("remeasure_live_mergeability_before_human_return: true") ? "PASS" : "FAIL",
       source: "CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml",
+      scoreEligible: true,
     },
     {
       id: "AUXILIARY_YELLOW_NOT_BLOCKER",
       label: "amarelo auxiliar não vira bloqueio material",
-      state: contract.includes("queued_or_in_progress_auxiliary_is_material_blocker: false") ? "PASS" : (contract ? "FAIL" : "UNKNOWN"),
+      state: contract.includes("queued_or_in_progress_auxiliary_is_material_blocker: false") ? "PASS" : "FAIL",
       source: "CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml",
+      scoreEligible: true,
     },
     {
       id: "FORENSIC_FRESHNESS",
       label: "prova forense recente",
       state: diagnostics.status === "OBSERVED" ? "PASS" : (diagnostics.status === "STALE" ? "FAIL" : "UNKNOWN"),
       source: "_DIAGNOSTICS/FORENSIC-LATEST.json",
+      scoreEligible: true,
     },
     {
       id: "RECEIPT_PRESENT",
       label: "receipt observável",
       state: diagnostics.latestReceiptPresent ? "PASS" : "UNKNOWN",
       source: "_DIAGNOSTICS/FORENSIC-LATEST.json",
+      scoreEligible: true,
     },
+    ...externalPatternDimensions(root),
   ];
 
-  const passCount = dimensions.filter((item) => item.state === "PASS").length;
-  const failCount = dimensions.filter((item) => item.state === "FAIL").length;
-  const unknownCount = dimensions.filter((item) => item.state === "UNKNOWN").length;
+  const scored = dimensions.filter((item) => item.scoreEligible !== false);
+  const passCount = scored.filter((item) => item.state === "PASS").length;
+  const failCount = scored.filter((item) => item.state === "FAIL").length;
+  const unknownCount = scored.filter((item) => item.state === "UNKNOWN").length;
   const measurableCount = passCount + failCount;
   const outsidePct = measurableCount > 0 ? Math.round((failCount / measurableCount) * 100) : null;
   const alignmentPct = measurableCount > 0 ? 100 - outsidePct : null;
@@ -186,8 +215,10 @@ function patternAlignmentSnapshot({ root, diagnostics, boundary, rules }) {
     unknownCount,
     measurableCount,
     totalDimensions: dimensions.length,
+    scoredDimensions: scored.length,
     rule: "RED_IF_OUTSIDE_PCT_GTE_80",
     unknownSemantics: "UNKNOWN_NOT_COUNTED_AS_OUTSIDE_BUT_NEVER_GREEN",
+    externalObservationPath: "apps/modulos/status/centraldark-pattern-observation.json",
     dimensions,
   };
 }
