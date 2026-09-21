@@ -432,3 +432,23 @@ Este fluxo será reusado em cada novo PR crítico que necessite gates, merge e d
 **Cristalização:** 2026-09-20T21:30:00Z  
 **Versão:** 1.0  
 **Status:** CANONIZADO — regra permanente da Casa
+
+## 15. PR-MÃE #1562 — rendezvous permanente (“ponto turístico”)
+
+A PR-MÃE `#1562` é fixa e não deve ser mergeada.
+
+```text
+PR_MOTHER_1562_ROLE=PERMANENT_RENDEZVOUS_LEDGER
+PR_MOTHER_1562_DO_NOT_MERGE=true
+CHILD_PRS_ARE_PROMOTION_VEHICLES=true
+MAIN_IS_DESTINATION_OF_SURVIVING_DELTA=true
+RECEIPTS_RETURN_TO_MOTHER=true
+```
+
+Filhos podem carregar deltas em diferentes níveis de maturidade. O funil aceita qualquer peça útil para teste; a `main` recebe somente o delta que sobrevive aos gates aplicáveis. Não esperar perfeição antes de experimentar.
+
+```text
+MVP → PR_FILHA → TESTE → CORREÇÃO → REMEDIÇÃO → SQUASH_MAIN → RECEIPT_#1562
+```
+
+Quando o CHEFE disser `REGISTRA`, a operação padrão é completar `commit → push → PR filha → remeasure → squash main → readback → receipt`, salvo blocker material ou fronteira humana inevitável.

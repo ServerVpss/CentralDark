@@ -15,7 +15,7 @@ import { healthDeep } from "./health-deep.js";
 import { getOperationalSnapshot } from "./operational-telemetry.js";
 import { startHubMissionConsumer, getHubMissionConsumerStatus } from "./hub-mission-consumer.js";
 import { providerAdminBridge } from "./provider-admin-bridge.js";
-import { adminGet, adminLogin, adminLogout, adminRotas, adminTools, adminLogsStream, adminTestarSse, adminBuscarLogs, adminMetricas, adminOperationalSnapshot, adminLinear, adminE2E, adminE2EPublico, bootstrapAdminLogCapture, getSseDiagnostics, } from "./admin.js";
+import { adminGet, adminGraphProxy, adminLogin, adminLogout, adminRotas, adminTools, adminLogsStream, adminTestarSse, adminBuscarLogs, adminMetricas, adminOperationalSnapshot, adminLinear, adminE2E, adminE2EPublico, bootstrapAdminLogCapture, getSseDiagnostics, } from "./admin.js";
 import { getLinearPublicStatus } from "./tools/integrations.js";
 // ─────────────────────── Handlers globais de crash (v2.3) ───────────────────────
 // Captura QUALQUER erro não tratado com stack trace completo antes do PM2 matar.
@@ -201,6 +201,7 @@ app.get("/token", somentePost("/token"));
 app.get("/register", somentePost("/register"));
 
 // ───────────────────────────── Painel /admin (NOC do Dono) ─────────────
+app.use("/admin/grafo", adminGraphProxy);
 app.get("/admin", adminGet);
 app.post("/admin/login", adminLogin);
 app.get("/admin/logout", adminLogout);

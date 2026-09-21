@@ -218,6 +218,8 @@ pre.snippet{background:var(--bg2);border:1px solid var(--border);border-radius:1
 .etapa.ok{border-left:3px solid var(--em2)}
 .etapa.err{border-left:3px solid var(--err)}
 .diag-actions{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.graph-shell{height:calc(100vh - 190px);min-height:620px;border:1px solid var(--border);border-radius:14px;overflow:hidden;background:#02070c;box-shadow:inset 0 0 32px rgba(16,185,129,.08)}
+.graph-shell iframe{display:block;width:100%;height:100%;border:0;background:#02070c}
 __PATTERN_ADMIN_STYLE__
 @media(max-width:900px){.hero{grid-template-columns:1fr 1fr 1fr}.grid{grid-template-columns:1fr}.conector-grid{grid-template-columns:1fr}.filters{grid-template-columns:1fr 1fr}}
 </style></head>
@@ -230,6 +232,7 @@ __PATTERN_ADMIN_STYLE__
   <div class="tab active" data-p="visao">Visão Geral</div>
   <div class="tab" data-p="tools">Ferramentas</div>
   <div class="tab" data-p="linear">Linear</div>
+  <div class="tab" data-p="grafo">🌌 Grafo Celestial</div>
   __PATTERN_ADMIN_TAB__
   <div class="tab" data-p="audit">Auditoria</div>
   <div class="tab" data-p="conector">Conector</div>
@@ -295,6 +298,15 @@ __PATTERN_ADMIN_STYLE__
     <div class="card">
       <h2>Trabalho recente no Linear <span class="badge">atualiza a cada 30s</span></h2>
       <div id="linearIssues"><div class="delta-empty">carregando…</div></div>
+    </div>
+  </div>
+
+  <div class="pane" id="p-grafo">
+    <div class="card" style="padding:12px">
+      <h2>Grafo Celestial <span class="badge">mesmo painel · mesmo login · sem subdomínio próprio</span></h2>
+      <div class="graph-shell">
+        <iframe src="/admin/grafo/" title="Grafo Celestial CentralDark" loading="lazy" referrerpolicy="same-origin"></iframe>
+      </div>
     </div>
   </div>
 
@@ -715,6 +727,45 @@ export function adminGet(req, res) {
     res.type("text/html").send(injectPatternAdmin(NOC_HTML));
 }
 
+
+export async function adminGraphProxy(req, res) {
+    if (!isAdmin(req)) {
+        res.status(401).type("text/plain").send("Admin auth required.");
+        return;
+    }
+    if (req.method !== "GET" && req.method !== "HEAD") {
+        res.setHeader("Allow", "GET, HEAD");
+        res.status(405).type("text/plain").send("Somente leitura.");
+        return;
+    }
+    try {
+        const upstreamPath = req.url && req.url.startsWith("/") ? req.url : "/";
+        const upstream = await fetch(`http://127.0.0.1:3030${upstreamPath}`, {
+            method: req.method,
+            headers: { accept: req.headers.accept || "*/*" },
+        });
+        res.status(upstream.status);
+        for (const header of ["content-type", "cache-control", "etag", "last-modified", "location"]) {
+            const value = upstream.headers.get(header);
+            if (value) res.setHeader(header, value);
+        }
+        res.setHeader("X-Content-Type-Options", "nosniff");
+        if (req.method === "HEAD") {
+            res.end();
+            return;
+        }
+        const body = Buffer.from(await upstream.arrayBuffer());
+        res.end(body);
+    } catch (error) {
+        res.status(502).json({
+            ok: false,
+            error: "graph_panel_unavailable",
+            message: "Grafo Celestial indisponível no runtime local.",
+            detail: error?.message || String(error),
+        });
+    }
+}
+
 export function adminLogin(req, res) {
     const l = withCid(req.cid);
     const senha = String(req.body?.password || "");
@@ -762,6 +813,7 @@ export function adminRotas(req, res) {
             { metodo: "POST", path: "/token", protegido: true },
             { metodo: "POST", path: "/mcp", protegido: true },
             { metodo: "GET", path: "/admin", protegido: true },
+            { metodo: "GET", path: "/admin/grafo/*", protegido: true },
             { metodo: "GET", path: "/admin/logs/stream", protegido: true },
             { metodo: "POST", path: "/admin/api/e2e", protegido: true },
             { metodo: "GET", path: "/admin/api/logs", protegido: true },
