@@ -1961,3 +1961,54 @@ REGRA: se a direção se perder, TRAVAR ANTES DE MUTAR NO ESCURO, recarregar SOU
 Ferramentas, webhooks e bots que queiram executar acao CentralDark podem declarar
 `centraldark_gate_required=true` e anexar `centraldark_gate` com os fatos do gate.
 Sem os fatos obrigatorios, o receptor deve falhar fechado.
+
+## Gatilho REGISTRA — sequência completa, não anotação
+
+`REGISTRA` é comando operacional do CHEFE, não pedido para apenas escrever documentação.
+
+```text
+REGISTRA_MEANS_COMMIT_PUSH_PR_SQUASH_MAIN=true
+REGISTRA
+→ medir main/HEAD
+→ dedupe + owner existente
+→ menor MVP útil
+→ teste aplicável
+→ commit
+→ push em branch filha
+→ abrir PR filha vinculada à #1562
+→ remeasure live
+→ se mergeable e sem blocker material: squash main com expected_head_sha
+→ readback da main
+→ receipt no PR filho e na PR-mãe
+→ fixed point
+```
+
+A `#1562` permanece aberta como PR-MÃE permanente, rendezvous/ledger e `DO_NOT_MERGE`. Ela não é veículo de código para main; os filhos passam por ela e registram o que foi absorvido.
+
+### Lapidação progressiva
+
+Não esperar somente “ouro/diamante”. Toda peça útil pode entrar como candidato e melhorar por iteração:
+
+```text
+IDEIA_UTIL
+→ MVP_MINIMO
+→ EXECUTAR/ABRIR
+→ TESTAR
+→ MEDIR
+→ ERRO? APRENDER + CORRIGIR
+→ SOBREVIVEU? PROMOVER
+→ REPETIR
+```
+
+Metáfora permitida: pepita, bronze, prata, ouro, diamante, qualquer “joia” = nível de maturidade. Nenhum rótulo substitui prova.
+
+```text
+USEFUL_BEATS_PERFECT_WAITING=true
+MVP_FIRST=true
+ITERATIVE_LAPIDATION=true
+ERROR_IS_LEARNING_ONLY_WITH_EVIDENCE=true
+FAILED_GATE_STAYS_OFF_MAIN=true
+CHEFE_SEES_MATERIAL_DECISION_OR_RESULT=true
+```
+
+O sistema deve construir sem paralisia, mas não baixar gates de segurança, segredo, produção, destruição ou falso-verde.
