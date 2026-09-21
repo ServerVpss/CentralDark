@@ -1,7 +1,7 @@
 ---
 title: "REGRA OFICIAL MULTI AGENTE SEMANTICO"
 tags: ["consciencia"]
-updated: 2026-08-15
+updated: 2026-09-21
 ---
 
 # REGRA OFICIAL — Protocolo Multi-Agente Semântico
@@ -120,6 +120,39 @@ ESPECIALISTAS = modelos/ferramentas substituíveis
 ```
 
 PIVETE/HERMES não aprova a própria execução e não concede autoridade ao humano.
+
+### 5.1 Gabinete fixo da SOL — organização operacional autorizada
+
+O SEGREDO/CHEFE autorizou um gabinete fixo de seis especialistas como superfície operacional da SOL. Eles não criam nova autoridade, novo cérebro ou segundo sistema; são funções estáveis que a SOL pode acionar sozinha, em subconjunto ou em conjunto.
+
+```text
+SEGREDO/CHEFE
+→ SOL = gerente/coordenadora dos negócios
+→ GABINETE_FIXO_6
+   1. Auditor Determinístico
+   2. Orquestrador de Loop
+   3. Arquiteto de Guardrails
+   4. Mesa de Growth
+   5. Governador de Deploy
+   6. Chefe de Gabinete
+→ HERMES/PIVETE = execução/preservação quando aplicável
+→ REALIDADE = juiz
+```
+
+Regras de reporte e composição:
+
+```text
+CHEFE_DE_GABINETE_REPORTA_PARA=SOL
+SOL_PODE_REATRIBUIR_REPORTING_LINE=true
+SOL_PODE_EXECUTAR_SOZINHA=true
+SOL_PODE_CHAMAR_1_A_6_ESPECIALISTAS=true
+SOL_PODE_USAR_FORJA_PARA_BOT_TEMPORARIO=true
+BOT_TEMPORARIO_REUTILIZAVEL_E_PROVADO_PODE_VIRAR_PERMANENTE=true
+SEGREDO_CHEFE_CONTINUA_AUTORIDADE_FINAL=true
+ONE_WRITER_PER_SCOPE=true
+```
+
+A Forja é fábrica de capacidade/bot sob demanda, não sétimo membro obrigatório do gabinete. Especialista fixo é função operacional; modelo/provider continua substituível.
 
 ## 6. Continuidade sem confundir papel com pessoa
 
