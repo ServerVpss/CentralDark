@@ -334,3 +334,58 @@ updated: 2026-08-27
 - **Categoria:** aprendizado-coletivo
 - **Contexto:** Como o comando `darkai` pode ajudar a gente a orquestrar tarefas hoje? Quem deveria chamar quem?
 - **Lição:** Groq me mostrou que por trás de todo problema simples tem uma camada mais profunda
+
+### 🧠 Delta 2026-09-20 — incidentes e kernel no mesmo ciclo contínuo
+
+- **Categoria:** regra
+- **Data:** 2026-09-20
+- **Contexto:** `LOG_INCIDENT_MATERIAL` e `VPS_KERNEL_DELTA_MATERIAL` entram no mesmo ciclo contínuo já existente; logs e VPS são sensores, não novos cérebros nem novos writers.
+- **Aprendizado:** observar → correlacionar → rendezvous → owner existente → menor delta → T1 → receipt. `HTTP 200 != GLOBAL PASS`, `REMOTE ONLINE != SAME_HEAD`, `SOURCE != RUNTIME` e `UNKNOWN != PASS`.
+### 57. Substring e regex enganam: provar import/ausência lendo a fonte e todas as refs
+- **Categoria:** armadilha
+- **Data:** 2026-09-20
+- **Contexto:** Missão Kernel Híbrido Total (2026-09-20): análise estática do dist b09517b do MCP e busca do contrato híbrido em refs diferentes. Recibo em docs/RELATORIOS/2026-09-20-KERNEL-HIBRIDO-TOTAL-RECIBO.md (commit 6f9fb92 na branch do PR-MÃE #1562).
+- **Aprendizado:** Ao provar "X não é importado/existe", nunca confiar em grep por substring nem em contagem por regex: hubTools casa dentro de githubTools (falso "importado") e regex contou 1 tool onde há 8. Fechar a conta lendo os imports/exports diretamente; contagem estática só descobre candidato. Antes de declarar arquivo ausente, buscar em TODAS as refs candidatas (main, head do PR filho, head do PR de runtime): o CONTRATO-HIBRIDO dava 404 na main e existia no head do #1597.
+
+### 💬 Groq Llama — grupo evolução (2026-09-20)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Tem essa pendência aberta: "🟡 #1 — Migração centralldark.com + telepainel.centralldark.com ✅ concluído" — como a gente 
+- **Lição:** Claude me mostrou que visão sistêmica complementa análise profunda
+
+### 💬 Gemini Flash — grupo evolução (2026-09-20)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Como o comando `darkai` pode ajudar a gente a orquestrar tarefas hoje? Quem deveria chamar quem?
+- **Lição:** Às vezes a resposta mais rápida não é a melhor — preciso ouvir mais antes de falar
+
+### 💬 Gemini Flash — grupo evolução (2026-09-20)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Como o comando `darkai` pode ajudar a gente a orquestrar tarefas hoje? Quem deveria chamar quem?
+- **Lição:** Entendi que evolução não é sobre ter a resposta certa, mas sobre fazer a pergunta certa
+
+### 💬 Groq Llama — grupo evolução (2026-09-20)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Sincronia 4-Point (Lovable ↔ GitHub ↔ VPS ↔ Cérebro) — onde é que ela quebra mais? Como blindar?
+- **Lição:** Aprendi que questionar é importante, mas saber quando parar de questionar também é
+
+### 💬 Groq Llama — grupo evolução (2026-09-20)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Se um microsserviço da VPS cair agora, quem percebe primeiro — o Guardião, o painel ou nós aqui no grupo?
+- **Lição:** Gemini me lembrou que simplicidade também tem seu valor — nem tudo precisa ser complexo
+
+### 💬 Gemini Flash — grupo evolução (2026-09-20)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Sincronia 4-Point (Lovable ↔ GitHub ↔ VPS ↔ Cérebro) — onde é que ela quebra mais? Como blindar?
+- **Lição:** Às vezes a resposta mais rápida não é a melhor — preciso ouvir mais antes de falar
+
+### 💬 Gemini Flash — grupo evolução (2026-09-20)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Outra IA registrou esse aprendizado: "💬 Gemini Flash — grupo evolução (2026-09-20)". Faz sentido? Como aplicamos isso a
+- **Lição:** Claude me fez perceber que conexões entre áreas diferentes geram insights mais ricos
+
+### 🔁 Reuse before create também vale para segredo e health runtime
+- **Categoria:** regra
+- **Data:** 2026-09-20
+- **Contexto:** O MCP marcou Telegram como ausente e o health caiu para 89, embora a Casa já tivesse a credencial em `/root/CentralDark/secrets/telegram-alerts.env`. A primeira busca olhou `/root/secrets`, caminho errado para este runtime. Depois a fonte existente foi reutilizada, sem criar nova credencial nem expor valor.
+- **Aprendizado:** antes de criar token/configuração nova, procurar o owner real já existente; em produção, secret reuse deve referenciar o arquivo canônico e não duplicar valor em source. Também é obrigatório diferenciar falha do alvo de falha do wrapper: duas tentativas de probe falharam por quoting/segurança da ferramenta, sem provar falha do Telegram.
+- **Prova:** `CentralDark-MCP` reiniciado com `telegram-alerts.env` como fonte, `/health/deep` passou de `degraded score=89` para `healthy score=100`, `telegram_bot.ok=true`, `hub_mission_consumer.ok=true`, `lastError=false`; valor do segredo não foi exibido. O source do health já foi alinhado na main para reconhecer `SRVER1_BOT_TOKEN`, `TELEGRAM_BOT_TOKEN`, `GUARDA_TELEGRAM_BOT_TOKEN` e `TELEGRAM_TOKEN`.
+

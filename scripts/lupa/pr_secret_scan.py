@@ -39,6 +39,9 @@ SAFE_REFERENCE = re.compile(
 PLACEHOLDER = re.compile(
     r"(?i)^(?:example|changeme|replace_me|redacted|placeholder|dummy|test|x+)$"
 )
+EXECUTABLE_CALL_REFERENCE = re.compile(
+    r"^[A-Za-z_][A-Za-z0-9_.]*$"
+)
 
 
 def added_text(patch: str) -> str:
@@ -66,6 +69,11 @@ def has_literal_secret(text: str) -> bool:
         value = match.group(1)
         if SAFE_REFERENCE.match(value) or _is_placeholder(value):
             continue
+
+        tail = text[match.end():].lstrip()
+        if tail.startswith("(") and EXECUTABLE_CALL_REFERENCE.fullmatch(value):
+            continue
+
         return True
 
     return False
@@ -96,6 +104,13 @@ def self_test() -> None:
     ))
     assert scan([], safe_patch)["secret_suspect"] == "false"
 
+    function_ref_patch = "\n".join((
+        "+const token = loadSecretFromFiles(['TOKEN'], ['/run/secrets/token']);",
+        "+const token = loadTailscaleKey();",
+        "+const token = loadBuildkiteToken();",
+    ))
+    assert scan([], function_ref_patch)["secret_suspect"] == "false"
+
     telegram = "123456789:" + ("A" * 35)
     github_token = "gh" + "p_" + ("a" * 30)
     password_value = "0123456789" + ("a" * 16)
@@ -108,7 +123,7 @@ def self_test() -> None:
     assert scan(["scripts/lupa/pr_secret_scan.py"], _as_added_patch(Path(__file__)))["secret_suspect"] == "false"
     workflow = repo_root / ".github/workflows/pr-auto-review.yml"
     assert scan([".github/workflows/pr-auto-review.yml"], _as_added_patch(workflow))["secret_suspect"] == "false"
-    print("PR_SECRET_SCAN_SELF_TEST_OK cases=7")
+    print("PR_SECRET_SCAN_SELF_TEST_OK cases=8")
 
 
 def main() -> int:
