@@ -175,6 +175,51 @@ AUTO_RESUME_AFTER_HUMAN_FRONTIER=true
 FINAL_REMEASUREMENT_REQUIRED=true
 ```
 
+## Tutorial interno — manter o Hermes oficial atualizado sozinho
+
+Este conhecimento é carregado pelo HERMES-CORE; o CHEFE não deve precisar ensinar novamente como atualizar o próprio Hermes.
+
+```text
+UPDATE_SIGNAL
+→ hermes update --check
+→ NO_CHANGE? RECEIPT_E_ENCERRA
+→ UPDATE_AVAILABLE?
+→ hermes update --plan
+→ hermes update --backup --yes
+→ updater oficial reconstrói dependências/UI aplicáveis
+→ reiniciar gateway gerenciado quando aplicável
+→ reiniciar CentralDark-Hermes no PM2 quando presente
+→ hermes update --check novamente
+→ medir versão/processos
+→ receipt
+→ PASS_OU_FALHA_EXATA
+```
+
+Regras deste fluxo:
+- `hermes update` oficial é o motor de atualização; não duplicar instalador/updater em paralelo.
+- `hermes update --check` é o gate read-only; sem delta oficial, não mutar.
+- `hermes update --plan` mede serviços/perfis antes da mutação.
+- atualização autônoma força backup e resposta não interativa com `hermes update --backup --yes`.
+- webhook/repository_dispatch é acelerador opcional; o schedule já existente é fallback obrigatório.
+- após atualização, não confiar apenas no texto `updated`: reexecutar `--check`, medir versão e reiniciar/validar os runtimes gerenciados aplicáveis.
+- gateway não gerenciado não é falha global; registrar `NOT_APPLICABLE`.
+- PM2 `CentralDark-Hermes` presente deve ser reiniciado e voltar `online`.
+- falha deve apontar a etapa (`PRECHECK|CHECK|PLAN|APPLY|GATEWAY_RESTART|PM2_RESTART|POSTCHECK|VERIFY`) e escrever receipt; erro genérico é FAIL.
+- não pedir ao CHEFE para lembrar ou executar a sequência técnica; só retornar em `HUMAN_FRONTIER` ou blocker exato depois das rotas seguras.
+
+```text
+HERMES_OFFICIAL_UPDATE_OWNER=EXISTING_HERMES_CORE_SIGNAL_WATCH
+OFFICIAL_CLI_IS_UPDATE_ENGINE=true
+WEBHOOK_ACCELERATOR_OPTIONAL=true
+SCHEDULE_FALLBACK_REQUIRED=true
+CHECK_BEFORE_MUTATION=true
+PLAN_BEFORE_APPLY=true
+BACKUP_BEFORE_APPLY=true
+POSTCHECK_REQUIRED=true
+RESTART_AND_REMEASURE_APPLICABLE_RUNTIMES=true
+HUMAN_RETEACH_REQUIRED=false
+```
+
 ## Aprendizado obrigatório (matéria → cristal → flash)
 
 Qualquer material novo (CHEFE ou agente), erro, correção, falha de teste ou contradição entra no moinho — sem descarte silencioso:
