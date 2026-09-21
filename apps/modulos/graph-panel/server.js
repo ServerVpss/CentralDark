@@ -105,7 +105,7 @@ async function api(req, res, pathname, url) {
       ui: countGraph(ui),
       vivo: countGraph(vivo),
       full: countGraph(full),
-      plugin_url_recomendado: "https://grafo.centralldark.com/api/graph?mode=vivo",
+      plugin_url_recomendado: "https://admin.centralldark.com/admin/grafo/api/graph?mode=vivo",
       time: new Date().toISOString(),
     });
   }
@@ -160,6 +160,11 @@ async function servePublic(req, res, pathname) {
 const server = http.createServer(async (req, res) => {
   try {
     const url = new URL(req.url, `http://${req.headers.host}`);
+    if (["/2d.html", "/celestial.html", "/vault.html"].includes(url.pathname)) {
+      res.writeHead(308, { Location: "./", "Cache-Control": "no-store" });
+      res.end();
+      return;
+    }
     if (url.pathname.startsWith("/api/")) return await api(req, res, url.pathname, url);
     return await servePublic(req, res, url.pathname);
   } catch (error) {
