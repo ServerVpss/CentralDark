@@ -252,6 +252,11 @@ __PATTERN_ADMIN_STYLE__
       <div class="card"><h2>Dependências <span class="badge">health/deep</span></h2><div id="checks"></div></div>
       <div class="card"><h2>Processo <span class="badge">runtime</span></h2><div id="proc"></div></div>
     </div>
+    <div style="height:14px"></div>
+    <div class="card">
+      <h2>Fluxo determinístico <span class="badge">heartbeat · logs · MCP · forensic</span></h2>
+      <div id="operationalFlow" class="log-box" style="height:260px"></div>
+    </div>
   </div>
 
   <div class="pane" id="p-tools">
