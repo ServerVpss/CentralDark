@@ -283,6 +283,27 @@ export function validateUniversalMethod() {
     'erro genérico sem localização e próximo passo acionável é FAIL',
   ], 'OPERATIONAL_HUMAN_COMPLEXITY_METHOD');
 
+
+  requireTokens(autoconfigRuntime, [
+    'official_hermes_update_continuity:',
+    'owner: .github/workflows/hermes-core-signal-watch.yml',
+    'upstream: NousResearch/hermes-agent',
+    'new_parallel_updater: false',
+    'check: hermes update --check',
+    'plan: hermes update --plan',
+    'apply: hermes update --backup --yes',
+    'human_does_not_need_to_remember_update_command: true',
+    'tutorial_loaded_by_core_prompt: true',
+  ], 'HERMES_OFFICIAL_UPDATE_CONTINUITY');
+
+  requireTokens(hermesPrompt, [
+    '## Tutorial interno — manter o Hermes oficial atualizado sozinho',
+    'HERMES_OFFICIAL_UPDATE_OWNER=EXISTING_HERMES_CORE_SIGNAL_WATCH',
+    'OFFICIAL_CLI_IS_UPDATE_ENGINE=true',
+    'SCHEDULE_FALLBACK_REQUIRED=true',
+    'POSTCHECK_REQUIRED=true',
+    'HUMAN_RETEACH_REQUIRED=false',
+  ], 'HERMES_OFFICIAL_UPDATE_TUTORIAL');
   requireTokens(agentsGuide, [
     'CENTRALDARK_UNIVERSAL_DIRECT_MODE_V1=true',
     'PREFER_COMPLETE_OPERATION_OVER_MICROCOMMAND_CHAIN=true',
