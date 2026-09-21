@@ -48,6 +48,16 @@ test('a ponte Electron é estreita e o renderer não ganha Node', () => {
   assert.doesNotMatch(preload, /process\.env/);
 });
 
+test('cockpit projeta Linear pela rota segura do MCP sem secret no renderer', () => {
+  const cockpit = read(`${root}/app/components/centraldark/CentralDarkCockpitShell.client.tsx`);
+
+  assert.match(cockpit, /Linear \/ Coding/);
+  assert.match(cockpit, /https:\/\/mcp\.centralldark\.com\/linear\/status/);
+  assert.match(cockpit, /apps\/modulos\/mcp\/src\/tools\/integrations\.js/);
+  assert.match(cockpit, /Abrir Linear no Admin/);
+  assert.doesNotMatch(cockpit, /LINEAR_API_KEY\s*=/);
+});
+
 test('painel único projeta contas, Telegram e Cloudflare sem inventar runtime verde', () => {
   const cockpit = read(`${root}/app/components/centraldark/CentralDarkCockpitShell.client.tsx`);
 
