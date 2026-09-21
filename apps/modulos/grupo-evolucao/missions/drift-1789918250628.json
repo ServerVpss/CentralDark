@@ -1,0 +1,21 @@
+{
+  "id": "drift-1789918250628",
+  "tema": "Drift detectado (3 mudanças)",
+  "contexto": {
+    "drift": [
+      {
+        "tipo": "modulo-novo",
+        "detalhe": "telepainel"
+      },
+      {
+        "tipo": "pm2-status-mudou",
+        "detalhe": "CentralDark-WebhookDeploy: stopped → online"
+      },
+      {
+        "tipo": "commit-novo",
+        "detalhe": "f3c00f9c73c → d539bb47c44"
+      }
+    ]
+  },
+  "origem": "cartografo"
+}

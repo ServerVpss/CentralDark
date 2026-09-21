@@ -42,7 +42,9 @@ dele aceita automaticamente, sem revisão humana.
 | Caminho | Lado que vence | Por quê |
 |---|---|---|
 | `package.json`, `package-lock.json`, `pnpm-lock.yaml`, `yarn.lock` — em qualquer diretório | **PR** (`--ours`) | o PR **é** o bump; manter a main aqui apaga o motivo do PR |
-| **todo o resto** | **main** (`--theirs`) | fail-closed de verdade: PR não promove código canônico sozinho |
+| conflito conhecido não-manifesto | política registrada (normalmente **main**) | preserva owner canônico já provado |
+| conflito desconhecido textual (`.md/.txt/.mmd/.jsonl/.csv/.rst/.adoc`) | **ambos** | auto-review preserva os dois deltas; CI/contraprova julga a composição |
+| conflito desconhecido de código/config | **PR como candidato** | preserva o delta do PR, mas NÃO promove sem same-head CI/contraprova |
 
 Sem lista de exceções para core. O default já protege tudo que não é manifesto.
 
@@ -64,17 +66,34 @@ SOURCE_REF=<evidência>
 ```
 
 Depois aplica a mesma política única: manifestos/lockfiles preservam o PR;
-conflitos conhecidos não-manifesto preservam a `main` fail-closed; conflito
-desconhecido bloqueia como `UNKNOWN_CONFLICT_PATH` e exige review.
+conflitos conhecidos seguem o registry; conflito desconhecido entra em
+`AUTO_REVIEW`. Texto usa composição dos dois lados. Código/config preserva o
+lado do PR como **candidato**, nunca como PASS: `git diff --check`, validação
+sintática aplicável e SAME_HEAD CI/contraprova decidem a promoção.
+
+```text
+UNKNOWN_CONFLICT
+→ AUTO_REVIEW
+→ APPLY_CANDIDATE
+→ COUNTERPROOF
+→ SAME_HEAD_CI
+→ PASS | REMEDIATE
+```
+
+O CHEFE não escolhe manualmente `Accept current / incoming / both` quando a
+Casa consegue produzir e testar uma resolução reversível.
 
 ## Fluxo canônico
 
 ```text
-PR abre  ->  workflow dispara (ou humano roda o motor)
-         ->  motor alinha com main de forma determinística
-         ->  checks
-         ->  squash merge
-         ->  main avança
+PR abre/atualiza  ->  workflow dispara
+                  ->  Update branch contra main
+                  ->  conflito? motor único auto-revisa e resolve
+                  ->  commit + push na branch do PR
+                  ->  synchronize / same-head checks
+                  ->  rerun falho transitório uma vez quando aplicável
+                  ->  squash apenas pela política de promoção do PR
+                  ->  main avança
 ```
 
 Na mão, quando o runner estiver fora:
