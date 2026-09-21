@@ -113,6 +113,29 @@ phase_contracts:
         - APPLICABLE_GATES_PASS
         - NO_WRITER_CONFLICT
         - NO_MATERIAL_UNKNOWN
+      gate_classification:
+        MATERIAL_REQUIRED:
+          meaning: WORKFLOW_DECLARED_IN_PROMOTION_DENOMINATOR
+          queued_pending_blocks: true
+          skipped_without_explicit_not_applicable_proof_blocks: true
+          must_pass_on_current_head: true
+        INFORMATIONAL:
+          meaning: WORKFLOW_OUTSIDE_PROMOTION_DENOMINATOR
+          queued_pending_blocks: false
+          failure_blocks_by_itself: false
+        NOT_APPLICABLE_PROVEN:
+          meaning: EXPLICIT_SCOPE_PROOF_REQUIRED
+          skipped_alone_is_proof: false
+      invariants:
+        queued_is_not_pass: true
+        queued_is_not_automatic_blocker_when_informational: true
+        pending_is_not_automatic_blocker_when_informational: true
+        latest_run_wins_same_workflow: true
+        older_pass_must_not_mask_newer_skipped_failure_or_cancelled: true
+        conflict_resolution_is_not_approval: true
+        sync_is_not_approval: true
+        squash_is_promotion_not_conflict_remedy: true
+        head_change_invalidates_only_head_bound_proof: true
       no_reask_same_scope: true
   BOOT:
     meaning: RETURN_NEXT_CYCLE_RECOVERABLE
