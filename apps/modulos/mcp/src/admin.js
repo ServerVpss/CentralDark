@@ -511,11 +511,21 @@ async function carregarOperational(){
     const fronts = (j.fronts || []).map(f =>
       '<div class="row"><span>'+htmlEscape(f.id+' · '+f.source)+'</span><span class="'+(f.state === 'UNKNOWN' || f.state === 'STALE' ? 'warn' : 'ok')+'">'+htmlEscape(f.state)+'</span></div>'
     ).join('');
+    const rules = j.rules || {};
+    const policyRows = [
+      ['Reuso', rules.reuseProvenCrystalBeforeReinvestigate ? 'REUSE_PROOF · não medir de novo sem delta' : 'UNKNOWN'],
+      ['Offline', rules.sensorFailureIsWorldFailure === false ? 'sensor offline ≠ mundo quebrado' : 'UNKNOWN'],
+      ['Fixed Point', rules.fixedPointIsVerificationCheckpointNotLearningGate ? 'checkpoint de prova · não trava aprendizado' : 'UNKNOWN'],
+      ['Revalidação', rules.changedTargetRevalidatesAffectedChainOnly ? 'somente cadeia afetada' : 'UNKNOWN'],
+    ].map(([label,state]) =>
+      '<div class="row"><span>'+htmlEscape(label)+'</span><span class="'+(state === 'UNKNOWN' ? 'warn' : 'ok')+'">'+htmlEscape(state)+'</span></div>'
+    ).join('');
     box.innerHTML =
       '<div class="row"><span>Contrato</span><span class="info">'+htmlEscape(j.schema || '-')+'</span></div>'+
       '<div class="row"><span>Veredito</span><span class="'+(String(j.verdict||'').includes('UNKNOWN') ? 'warn' : 'ok')+'">'+htmlEscape(j.verdict || 'UNKNOWN')+'</span></div>'+
       '<div class="row"><span>Fluxo</span><span>'+htmlEscape(flow)+'</span></div>'+
       '<div class="row"><span>Forensic</span><span>'+htmlEscape(j.forensic?.status || 'UNKNOWN')+'</span></div>'+
+      policyRows+
       fronts;
   } catch (err) {
     box.textContent = 'operational snapshot indisponível: '+String(err);
