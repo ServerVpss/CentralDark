@@ -39,6 +39,15 @@ flowchart TD
     DOCSENSOR["Screenshot / Print-PDF"]
     LIVEOBS["runtime / logs / network / storage"]
   end
+
+  subgraph OLHO_BIONICO["OLHO BIÔNICO ANTI-FLASH"]
+    OBAF["OLHO BIÔNICO ANTI-FLASH<br/>profile visual; não é nova engine"]
+    DERIVED_OUT["DERIVED OUTPUT<br/>saída derivada; não é fonte da verdade"]
+    HOUSE_MONITORS["MONITORES DA CASA<br/>consumidores da saída derivada"]
+    OBAF --> DERIVED_OUT --> HOUSE_MONITORS
+  end
+  DOCSENSOR --> OBAF
+  HOUSE_MONITORS --> INGEST
   SCREENPIPE --> INGEST["MATERIAL INGEST<br/>provenance + sanitize + quarantine"]
   SAVED --> INGEST
   DOCSENSOR --> INGEST
