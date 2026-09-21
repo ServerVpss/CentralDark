@@ -245,9 +245,9 @@ export function scanPullFiles(files = []) {
   return [...new Set(findings)];
 }
 
-export function selectLatestNonSkipped(runs, workflowName) {
+export function selectLatestRun(runs, workflowName) {
   return [...runs]
-    .filter((run) => run.name === workflowName && run.conclusion !== "skipped")
+    .filter((run) => run.name === workflowName)
     .sort((a, b) => {
       const byNumber = Number(b.run_number || 0) - Number(a.run_number || 0);
       if (byNumber) return byNumber;
@@ -255,12 +255,19 @@ export function selectLatestNonSkipped(runs, workflowName) {
     })[0] || null;
 }
 
+// Compatibilidade de import antigo: a semântica canônica agora é "último run vence".
+// Nunca esconder skipped/failure novo atrás de success histórico.
+export function selectLatestNonSkipped(runs, workflowName) {
+  return selectLatestRun(runs, workflowName);
+}
+
 export function workflowVerdicts(runs, requiredWorkflows) {
   return requiredWorkflows.map((name) => {
-    const run = selectLatestNonSkipped(runs, name);
+    const run = selectLatestRun(runs, name);
     if (!run) return { name, state: "MISSING", run_id: null, conclusion: null };
     if (run.status !== "completed") return { name, state: "PENDING", run_id: run.id, conclusion: run.conclusion || null };
     if (run.conclusion === "success") return { name, state: "PASS", run_id: run.id, conclusion: run.conclusion };
+    if (run.conclusion === "skipped") return { name, state: "SKIPPED", run_id: run.id, conclusion: run.conclusion };
     return { name, state: "FAIL", run_id: run.id, conclusion: run.conclusion || "unknown" };
   });
 }
@@ -547,6 +554,7 @@ export function evaluateCandidate({
   const workflows = workflowVerdicts(workflowRuns, applicableWorkflows);
   for (const workflow of workflows) {
     if (workflow.state === "FAIL") reasons.push(`WORKFLOW_FAILED:${workflow.name}:${workflow.conclusion}`);
+    if (workflow.state === "SKIPPED") reasons.push(`WORKFLOW_SKIPPED_NOT_APPLICABLE_UNPROVEN:${workflow.name}`);
     if (workflow.state === "MISSING" || workflow.state === "PENDING") waits.push(`WORKFLOW_${workflow.state}:${workflow.name}`);
   }
 
