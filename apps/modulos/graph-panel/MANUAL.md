@@ -2,7 +2,7 @@
 
 ## Ver painel
 
-Acesse `https://grafo.centralldark.com`.
+Acesse `https://admin.centralldark.com/admin` e abra a aba `🌌 Grafo Celestial`.
 
 ## Atualizar dados
 
@@ -30,6 +30,6 @@ pm2 start ecosystem.config.cjs
 pm2 save
 ```
 
-## Caddy
+## Exposição
 
-Adicionar um bloco novo para `grafo.centralldark.com` apontando para `127.0.0.1:3030`.
+Não criar subdomínio próprio. O MCP Admin autentica e projeta o serviço local `127.0.0.1:3030` pela rota `/admin/grafo/` dentro do mesmo painel.
