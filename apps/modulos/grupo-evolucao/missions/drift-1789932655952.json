@@ -1,0 +1,13 @@
+{
+  "id": "drift-1789932655952",
+  "tema": "Drift detectado (1 mudanças)",
+  "contexto": {
+    "drift": [
+      {
+        "tipo": "pm2-status-mudou",
+        "detalhe": "CentralDark-WebhookDeploy: stopped → online"
+      }
+    ]
+  },
+  "origem": "cartografo"
+}

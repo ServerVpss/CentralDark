@@ -43,6 +43,10 @@
     "pattern_count": 150,
     "latest_pattern_sweep_base_main": "564e58b984d24b0966c9e94b01b2c243a394c571"
   },
+  "scan": {
+    "rule": "CRYSTALLIZE_SURVIVING_PATTERN_ONLY; DO_NOT_PROMOTE_UNPROVEN_IMPLEMENTATION",
+    "history_rule": "CURRENT > HISTORY"
+  },
   "patterns": [
     {
       "id": "ONE_SYSTEM_ONLY",
