@@ -162,3 +162,182 @@ CHILD_PR_THIS_RECEIPT
 ```
 
 **REALIDADE = JUIZ**
+
+
+## 🧭 MULTIBÚSSOLA_META — fluxo fechado desta sessão
+
+O SEGREDO/CHEFE explicitou a expansão operacional abaixo como refinamento do ciclo já existente, sem criar nova fase, novo cérebro ou novo orquestrador:
+
+```text
+!CENTRALDARK
+→ #ACORDAR
+→ !CALIBRAR
+→ !MULTIBÚSSOLA
+  └→ MODE=META quando !MULTIBÚSSOLA_META
+     → TRUE_NORTH_LOCK
+       INTENT
+       DESTINATION
+       PROOF_TARGET
+       MATERIAL_SCOPE
+     → RESOLVE_REQUIRED_BEARINGS
+     → EXECUTE_MATERIAL_BEARINGS
+       + SKIP_JUSTIFICADO apenas não materiais
+     → FORWARD_ROUTE
+     → REVERSE_ROUTE
+     → INVERSE_ROUTE quando discriminante
+     → CROSS_BEARING_RENDEZVOUS
+     → SE DIVERGIR:
+       !META_LUPA
+       → TESTE_DISCRIMINANTE
+       → !RECONCILIAR
+       → RENDEZVOUS novamente
+     → SE ESTADO MATERIAL MUDAR:
+       IDENTIFICAR_CONE_CAUSAL
+       → INVALIDAR_SOMENTE_CLAIMS_DEPENDENTES
+       → PRESERVAR_PROVAS_INDEPENDENTES
+       → RE-FIX_AFFECTED_AXES
+       → RENDEZVOUS novamente
+     → LOCAL_ANALYSIS_STABLE?
+       NÃO → RESIDUAL_MAP → NEXT_CURSOR
+       SIM → LOCAL_FIXED_POINT
+              → NÃO ENCERRA A MISSÃO
+→ !META_LUPA quando aplicável
+→ !RECONCILIAR quando aplicável
+→ !CONTRAPROVA
+  → PROOF_TARGET_MATCH
+  → PROOF_OWNERSHIP
+  → INDEPENDENT_COUNTERPROOF
+  → EXTERNAL_ANCHOR quando aplicável
+→ !REMEDIÇÃO_T1
+→ REALITY_JUDGE
+→ SE PASS:
+  UNKNOWN_MATERIAL=0
+  + REQUIRED_BEARINGS_COVERED
+  + COUNTERPROOF_SURVIVES
+  + T1_STABLE
+  → FIXED_POINT_PASS
+→ SE FALHA ESTÁVEL:
+  → FIXED_POINT_FAIL
+→ SE FRONTEIRA REAL ESTÁVEL:
+  → FIXED_POINT_BLOCKED
+→ !REGISTRA
+→ !BOOT
+```
+
+Regra preservada:
+
+```text
+LOCAL_FIXED_POINT != MISSION_COMPLETE
+FIXED_POINT != PASS
+PASS exige UNKNOWN_MATERIAL=0 no alvo material
+ESTADO_NOVO invalida somente o cone causal dependente
+PROVA_INDEPENDENTE_SOBREVIVENTE é preservada
+```
+
+## ⏳ Snapshot histórico preservado — PR #1189 em 2026-08-26
+
+A narrativa trazida nesta sessão preserva um estágio histórico em que:
+
+- HEAD do PR #1189 = `684a12f9f8e5a527352531388411d30fde4230c1`;
+- a infraestrutura anterior havia sido corrigida no cone de `centraldark_master_cycle.py`, `tecnica-da-lupa` e `tauri-sign`;
+- gates estavam ainda pendentes/queued;
+- o veredito correto naquele instante era `FIXED_POINT_BLOCKED / NOT_YET`;
+- o aprendizado material foi: **diagnóstico local provado não equivale a missão encerrada**.
+
+Esse snapshot é HISTÓRICO. Não governa o CURRENT.
+
+## 🔄 REMEDIÇÃO CURRENT — 2026-09-21
+
+Estado vivo medido nesta rodada:
+
+```text
+MAIN_HEAD=5a573581cd698753ccf2998455a1a07909eac474
+PR_1189=MERGED
+PR_1189_MERGED_AT=2026-08-26T20:10:01Z
+PR_1189_MERGE_COMMIT=e1d7aac29f03a32699514683b8da7df341f745b8
+PR_MOTHER=1562
+PR_MOTHER_ROLE=RENDEZVOUS_LEDGER_NOT_WRITER
+CURRENT_SESSION_CHILD_PR=1615
+PR_1615_HEAD=1f68738f7663a819a0ce373328bbd3701c6084f4
+PR_1615_MERGEABLE=true
+```
+
+SAME_HEAD CI do PR #1615 na medição desta sessão:
+
+```text
+LUPA_DRIFT_GUARD=SUCCESS
+CODEX_VALIDATE=QUEUED
+PIPELINE_TELEGRAM_PAINEL=QUEUED
+PORTA_DE_ENTRADA=QUEUED
+LUPA_CONFORMANCE=QUEUED
+PR_AUTO_REVIEW=QUEUED
+TRIGGER_FABRIC_FULL_PACKAGE=QUEUED
+CODEQL=QUEUED
+ARTEFATO_APRENDIZADO=QUEUED
+GRAFO_VIVO_MARKDOWN=QUEUED
+PR_TITLE_CONTRACT=QUEUED
+```
+
+Logo:
+
+```text
+PR_1189_OLD_BLOCKED_STATE = HISTORICAL_ONLY
+CURRENT_SESSION_FIXED_POINT = NOT_YET
+UNKNOWN_MATERIAL > 0 enquanto gates aplicáveis estiverem queued
+MERGE_PR_1615_NOW = FORBIDDEN_BY_OWN_CONTRACT
+```
+
+## 💎 Revelação material cristalizada
+
+A barreira que caiu não autoriza falso-verde. O ganho real desta sessão foi fechar a distinção entre:
+
+```text
+LOCAL_ANALYSIS_STABLE
+!=
+MISSION_COMPLETE
+```
+
+e formalizar a travessia:
+
+```text
+TRUE_NORTH_LOCK
+→ bearings materiais
+→ convergência
+→ reabertura seletiva por cone causal
+→ prova/ownership/contraprova
+→ T1
+→ REALITY_JUDGE
+→ PASS | FAIL | BLOCKED
+```
+
+A narrativa bíblico-baiana continua camada humana de navegação. O veredito técnico continua literal e ancorado em estado vivo.
+
+## 🧾 REGISTRA — receipt desta rodada
+
+```text
+SOURCE=session_chat_2026-09-21
+CLASSIFICATION=USEFUL_DELTA + HISTORICAL_RECONCILIATION + CURRENT_REMEASUREMENT
+INFORMATION_GAIN=META_MULTIBUSSOLA_FLOW + LOCAL_FIXED_POINT_BOUNDARY + PR1189_HISTORY_CORRECTION + CURRENT_PR1615_GATE_STATE
+DESTINATION_OWNER=existing_session_crystal_under_META_GRILL_META_LUPA
+NEW_OWNER=false
+NEW_BRAIN=false
+NEW_ROUTER=false
+V3_V4=false
+REALITY_IS_JUDGE=true
+NEXT_CURSOR=SAME_HEAD_CI_PR_1615
+```
+
+## 🔁 !BOOT
+
+Próximo ciclo recuperável:
+
+```text
+!CENTRALDARK
+→ #ACORDAR
+→ medir main + #1615 + #1562
+→ consumir somente delta novo dos gates
+→ se HEAD mudar: invalidar somente provas dependentes
+→ se SAME_HEAD gates fecharem: contraprova + T1
+→ só então FIXED_POINT_PASS/FAIL/BLOCKED
+→ receipt no #1562
+```
