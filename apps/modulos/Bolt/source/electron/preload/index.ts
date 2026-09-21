@@ -19,6 +19,10 @@ const centraldark = Object.freeze({
   // Alias legado preservado: agora mede a porta única da CentralDark, não Hermes direto.
   getHermesHealth: () => ipcRenderer.invoke('centraldark:omni:health'),
   getScreenpipeHealth: () => ipcRenderer.invoke('centraldark:screenpipe:health'),
+  getUpdateState: () => ipcRenderer.invoke('centraldark:update:state'),
+  checkUpdate: () => ipcRenderer.invoke('centraldark:update:check'),
+  downloadUpdate: () => ipcRenderer.invoke('centraldark:update:download'),
+  installUpdate: () => ipcRenderer.invoke('centraldark:update:install'),
   openIntent: (intent: string) => ipcRenderer.invoke('centraldark:intent:open', intent),
   showMain: () => ipcRenderer.invoke('centraldark:main:show'),
   toggleWidget: () => ipcRenderer.invoke('centraldark:widget:toggle'),
