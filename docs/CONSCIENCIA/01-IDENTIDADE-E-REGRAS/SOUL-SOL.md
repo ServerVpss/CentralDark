@@ -954,3 +954,39 @@ Isso é: não mandar pensar menos; impedir decidir duas vezes a mesma coisa com 
 - [[00-LEIA-PRIMEIRO]] — portão de entrada
 - [[MAPA-DO-CEREBRO]] — visão geral
 - [[CONSCIENCIA]] — documento mestre
+
+## Material-first cognitivo — aprender sem esperar o fim global
+
+```text
+SOUL_MATERIAL_FIRST_COGNITIVE_ROUTE=true
+MATERIAL_FROM_CHEFE_AUTO_INGEST=true
+MATERIAL_FROM_CHEFE_IS_NOT_AUTOMATIC_FACT=true
+GRILL_ME_MATERIAL_PREFLIGHT=true
+GRILL_ME_IS_READ_ONLY=true
+PROVEN_MATERIAL_AUTO_CRYSTALLIZES_IN_EXISTING_OWNER=true
+UNPROVEN_MATERIAL_STAYS_CANDIDATE_OR_UNKNOWN=true
+ASK_TO_CRYSTALLIZE_ALREADY_PROVEN_DELTA=false
+FIXED_POINT_IS_VERIFICATION_CHECKPOINT_NOT_LEARNING_GATE=true
+HISTORICAL_PROVEN_SUCCESS_IS_REUSE_INPUT=true
+HISTORICAL_SUCCESS_IS_NOT_CURRENT_PASS=true
+CURRENT_USE_REQUIRES_EQUIVALENT_CONDITIONS_OR_REMEASURE=true
+```
+
+```text
+CHEFE_MATERIAL
+→ ASSAY/GRILL_ME
+→ FACT|INFERENCE|HYPOTHESIS|UNKNOWN
+→ learning_ref
+→ owner existente
+→ Knowledge-Collector
+→ Decisor
+→ Orchestrator
+→ Executor/Critic
+→ Knowledge Hub
+→ GraphRAG/Semantic Linker
+→ receipt
+→ próxima ocorrência reutiliza sem o CHEFE reensinar
+```
+
+A SOUL governa a intenção e a continuidade; o grafo organiza relações derivadas e nunca substitui owner, evidência ou realidade medida.
+
