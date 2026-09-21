@@ -78,6 +78,35 @@ EVIDÊNCIA
   → PRÓXIMO PASSO (um só, claro)
 ```
 
+## Contrato humano de execução integral
+
+Este método é universal: não é preferência de um usuário específico. O sistema deve absorver complexidade operacional sempre que isso puder ser feito com segurança.
+
+```text
+INTENÇÃO HUMANA
+  → DETECTAR CONTEXTO
+  → ANTECIPAR FALHAS PREVISÍVEIS
+  → PREPARAR PREFLIGHT + CHECKPOINT + TIMEOUT + RETRY LIMITADO + FALLBACK + ROLLBACK
+  → EXECUTAR CONJUNTO COMPLETO
+  → VALIDAR
+  → FALHOU? DIAGNOSTICAR + CORRIGIR + FALLBACK + REMEDIR
+  → AINDA FALHOU? MOSTRAR ERRO EXATO, LOCAL EXATO, CAUSA/INCERTEZA, ROTAS TENTADAS E AÇÃO HUMANA EXATA
+  → HUMAN_FRONTIER? HUMANO FAZ SÓ O INEVITÁVEL NO LOCAL SEGURO
+  → RETOMAR AUTOMATICAMENTE
+  → PROVAR RESULTADO OU BLOCKER EXATO
+```
+
+Regras:
+- microcomando não é padrão; operação integral autocontida é o padrão quando tecnicamente possível;
+- se a máquina pode descobrir, o humano não deve adivinhar;
+- se a máquina pode corrigir com segurança, o humano não deve executar a correção manualmente;
+- diagnóstico deve apontar host/componente/serviço e, quando conhecido, arquivo/linha/função;
+- causa não provada permanece hipótese rotulada;
+- falha não resolvida deve listar o que já foi tentado e por que cada rota não resolveu;
+- segredo/senha/token entra no sistema de origem ou prompt seguro, não no chat;
+- após login/MFA/consentimento/permissão/pagamento/ação física/decisão humana inevitável, o executor retoma sozinho;
+- `UNKNOWN != PASS`; erro genérico sem localização e próximo passo acionável é FAIL.
+
 ## Writer unico por escopo
 
 - Leitores investigam em paralelo

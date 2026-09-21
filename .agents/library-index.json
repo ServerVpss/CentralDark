@@ -133,6 +133,20 @@
       "dependencies": ["library_index", "all_frequencies"],
       "critical": true,
       "version": "1.0.0"
+    },
+    {
+      "id": "pr-merge-autonomous",
+      "path": ".claude/skills/pr-merge-autonomous/SKILL.md",
+      "type": "orchestration",
+      "category": "deployment",
+      "owner": "SOL",
+      "frequency_required": "forte",
+      "dependencies": ["github_api", "polling", "pm2", "validation"],
+      "critical": true,
+      "version": "1.0.0",
+      "origin": "sessão 2026-09-20 cristalização PR-merge-deployment",
+      "related_doc": "docs/CONSCIENCIA/03-PR-MERGE-DEPLOYMENT.md",
+      "trigger_pattern": "PR.body.contains('Merge-Policy: SAME_HEAD_GATES_THEN_SQUASH')"
     }
   ],
 
@@ -157,6 +171,17 @@
       "rule": "FORCE_PUSH_REQUIRES_APPROVAL",
       "owner": "SEGREDO/CHEFE",
       "enforce": true
+    },
+    {
+      "id": "pr-merge-autonomous",
+      "applies_to": ["pr_gate", "merge", "deploy"],
+      "rule": "SAME_HEAD_GATES_REQUIRED",
+      "pattern_match": "Merge-Policy: SAME_HEAD_GATES_THEN_SQUASH",
+      "owner": "SOL",
+      "enforce": true,
+      "directive_path": ".agents/hermes/directives/pr-merge-autonomous.json",
+      "skill_id": "pr-merge-autonomous",
+      "version": "1.0.0"
     }
   ],
 
@@ -164,7 +189,12 @@
     "aprendizados_path": "docs/CONSCIENCIA/APRENDIZADOS/",
     "erros_path": "docs/CONSCIENCIA/ERROS-REGISTRADOS.json",
     "deltas_path": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/DELTA-CONTINUO.md",
-    "auto_propagate": true
+    "auto_propagate": true,
+    "consciousness_docs": [
+      "docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md",
+      "docs/CONSCIENCIA/01-IDENTIDADE.md",
+      "docs/CONSCIENCIA/03-PR-MERGE-DEPLOYMENT.md"
+    ]
   },
 
   "orchestra": {
@@ -172,6 +202,16 @@
     "conductor": "SOL",
     "musicians": ["all_agents"],
     "sync_frequency": "fixed",
-    "requires_calibration": false
+    "requires_calibration": false,
+    "orchestrations": [
+      {
+        "id": "pr-merge-autonomous-orch",
+        "skill": "pr-merge-autonomous",
+        "trigger": "PR.body contains 'Merge-Policy: SAME_HEAD_GATES_THEN_SQUASH'",
+        "sequence": ["status_check", "polling_gates", "merge_squash", "vps_sync", "reload_pm2", "validate_endpoints", "snapshot", "contraprova", "fixed_point"],
+        "owner": "SOL",
+        "critical": true
+      }
+    ]
   }
 }
