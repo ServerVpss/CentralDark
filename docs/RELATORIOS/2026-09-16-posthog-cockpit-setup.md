@@ -41,8 +41,10 @@ Login via GitHub e conexão de GitHub como fonte de dados são operações disti
 Não versionar o cache do assistente nem URLs de callback com códigos OAuth.
 Este commit registra preparação e continuidade, não integração concluída.
 
-## Preferência de comunicação solicitada
+## Padrão operacional de comunicação
 
-Explicar de forma clara e objetiva: o que existe agora, para que serve,
-onde fica, como usar e o que falta. Separar fatos verificados de possibilidades.
-Usar tabelas apenas quando ajudarem a comparar; evitar jargão desnecessário.
+Correção do usuário: aplica-se a todos os agentes da CentralDark, não apenas
+a esta sessão. A regra foi incorporada ao owner existente
+`docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md`, seção
+"Explicação operacional de capacidades", já referenciado pelo boot em `LEIA-ME-IA.md`.
+Este relatório registra a origem da correção; o contrato permanece no owner.

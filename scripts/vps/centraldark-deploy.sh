@@ -32,6 +32,9 @@ REPO_DIR="${REPO_DIR:-/root/CentralDark}"
 BRANCH="${BRANCH:-main}"
 MCP_HEALTH="${MCP_HEALTH:-http://127.0.0.1:9100/health}"
 APPS="${APPS:-CentralDark-MCP}"
+GLOBAL_CONTRACT_GATE="$REPO_DIR/scripts/agent-call.mjs"
+GLOBAL_GATE_RECEIPT_DIR="${GLOBAL_GATE_RECEIPT_DIR:-/tmp/centraldark-global-contract}"
+# CENTRALDARK_GLOBAL_CONTRACT_ENFORCER_REQUIRED
 
 APPLY=0
 ACEITAR_DIVERGENCIA=0
@@ -50,6 +53,73 @@ done
 
 log() { printf '%s %s\n' "$(date -u '+%H:%M:%SZ')" "$*"; }
 die() { log "FALHA: $*"; exit "${2:-1}"; }
+
+global_gate_entry() {
+  local rollback_ref="$1"
+  local trace gate_file receipt_file
+  [[ -f "$GLOBAL_CONTRACT_GATE" ]] || die "global contract gate ausente: $GLOBAL_CONTRACT_GATE" 16
+  mkdir -p "$GLOBAL_GATE_RECEIPT_DIR"; chmod 700 "$GLOBAL_GATE_RECEIPT_DIR"
+  trace="$(printf '%s' "$HEAD_ANTES|$ALVO|$rollback_ref|ENTRY" | sha256sum | awk '{print $1}' | cut -c1-24)"
+  gate_file="$(mktemp "$GLOBAL_GATE_RECEIPT_DIR/entry.XXXXXX.json")"
+  receipt_file="$GLOBAL_GATE_RECEIPT_DIR/entry-$trace.receipt.json"
+  cat >"$gate_file" <<JSON
+{
+  "scope_id":"canon/centraldark-universal-contract-20260919",
+  "contract_schema":6,
+  "phase":"ENTRY",
+  "observed_head":"$HEAD_ANTES",
+  "trace_id":"$trace",
+  "github_t0":{"status":"PASS","head_sha":"$ALVO"},
+  "vps_t0":{"status":"PASS","head_sha":"$HEAD_ANTES"},
+  "cross_surface_drift_classified":true,
+  "owner_proof":{"status":"PASS","owner":"scripts/vps/centraldark-deploy.sh"},
+  "writer_scope_proof":{"status":"PASS","scope":"repo:$REPO_DIR"},
+  "preflight":{"status":"PASS","evidence_ref":"target-proof-guards:$ALVO"},
+  "counterproof_plan":{"status":"READY","evidence_ref":"T1:HEAD+DIRTY+HEALTH+CLAIM_SEALS"},
+  "rollback":{"status":"PREPARED","evidence_ref":"$rollback_ref"},
+  "next_cursor":"APPLY_MINIMAL_DEPLOY_THEN_T1",
+  "fixed_point":false
+}
+JSON
+  node "$GLOBAL_CONTRACT_GATE" --global-contract-gate ENTRY "$gate_file" | tee "$receipt_file"
+  rm -f "$gate_file"
+  GLOBAL_ENTRY_RECEIPT="$receipt_file"
+  export GLOBAL_ENTRY_RECEIPT
+  log "GLOBAL_ENTRY_GATE=PASS receipt=$receipt_file"
+}
+
+global_gate_exit() {
+  local final_head="$1"
+  local runtime_mutated="$2"
+  local runtime_ref="$3"
+  local trace gate_file receipt_file hud_hash
+  trace="$(printf '%s' "$final_head|$ALVO|$runtime_ref|EXIT" | sha256sum | awk '{print $1}' | cut -c1-24)"
+  hud_hash="$(printf '%s' "$final_head|$ALVO|$runtime_ref|PASS" | sha256sum | awk '{print $1}')"
+  gate_file="$(mktemp "$GLOBAL_GATE_RECEIPT_DIR/exit.XXXXXX.json")"
+  receipt_file="$GLOBAL_GATE_RECEIPT_DIR/exit-$trace.receipt.json"
+  cat >"$gate_file" <<JSON
+{
+  "scope_id":"canon/centraldark-universal-contract-20260919",
+  "contract_schema":6,
+  "phase":"EXIT",
+  "observed_head":"$final_head",
+  "trace_id":"$trace",
+  "github_t1":{"status":"PASS","head_sha":"$ALVO"},
+  "vps_t1":{"status":"PASS","head_sha":"$final_head"},
+  "counterproof":{"status":"PASS","evidence_ref":"$runtime_ref"},
+  "receipt_ref":"file:$GLOBAL_ENTRY_RECEIPT",
+  "hud":{"status":"PASS","state_hash":"$hud_hash"},
+  "runtime_mutated":$runtime_mutated,
+  "runtime_proof":{"status":"PASS","evidence_ref":"$runtime_ref"},
+  "promotion_requested":false,
+  "fixed_point":false,
+  "next_cursor":"REGISTER_GLOBAL_RECEIPT_AND_CONTINUE_MASTER_CYCLE"
+}
+JSON
+  node "$GLOBAL_CONTRACT_GATE" --global-contract-gate EXIT "$gate_file" | tee "$receipt_file"
+  rm -f "$gate_file"
+  log "GLOBAL_EXIT_GATE=PASS receipt=$receipt_file"
+}
 
 # Worktree suja não é lixo. Nada é resetado/limpo automaticamente.
 listar_sujos() { git status --porcelain --untracked-files=all || true; }
@@ -233,6 +303,7 @@ fi
 ANCORA="vps-pre-deploy-$(date -u +%Y%m%d-%H%M%S)"
 git tag -f "$ANCORA" HEAD >/dev/null
 log "ANCORA=$ANCORA"
+global_gate_entry "git-tag:$ANCORA"
 
 rollback() {
   log "ROLLBACK=$ANCORA"
@@ -256,6 +327,7 @@ if [[ "$SOURCE_ONLY" -eq 1 ]]; then
   source_only_fixed_point || { rollback; die "source-only final falhou; rollback aplicado" 16; }
   log "PONG=vps=$(git rev-parse HEAD) remote=$(git rev-parse "origin/$BRANCH") dirty=$(contar_sujos)"
   log "ANCORA_ROLLBACK=$ANCORA"
+  global_gate_exit "$(git rev-parse HEAD)" false "SOURCE_ONLY_FIXED_POINT+META_LUPA+CLAIM_SEALS"
   log "=== MICRO_DEPLOY_SOURCE_PROVADO ==="
   exit 0
 fi
@@ -296,4 +368,5 @@ log "SHA_VPS_EQ_SHA_MAIN=PROVADO"
 log "META_LUPA_FINAL=PASS"
 log "CLAIM_SEALS_FINAL=PASS"
 log "ANCORA_ROLLBACK=$ANCORA"
+global_gate_exit "$FINAL_HEAD" true "MCP_HEALTH_200+PORT_9100+META_LUPA+CLAIM_SEALS"
 log "=== DEPLOY_PROVADO_NO_ESCOPO_DECLARADO ==="

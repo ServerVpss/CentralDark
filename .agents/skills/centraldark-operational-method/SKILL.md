@@ -78,6 +78,35 @@ EVIDÊNCIA
   → PRÓXIMO PASSO (um só, claro)
 ```
 
+## Contrato humano de execução integral
+
+Este método é universal: não é preferência de um usuário específico. O sistema deve absorver complexidade operacional sempre que isso puder ser feito com segurança.
+
+```text
+INTENÇÃO HUMANA
+  → DETECTAR CONTEXTO
+  → ANTECIPAR FALHAS PREVISÍVEIS
+  → PREPARAR PREFLIGHT + CHECKPOINT + TIMEOUT + RETRY LIMITADO + FALLBACK + ROLLBACK
+  → EXECUTAR CONJUNTO COMPLETO
+  → VALIDAR
+  → FALHOU? DIAGNOSTICAR + CORRIGIR + FALLBACK + REMEDIR
+  → AINDA FALHOU? MOSTRAR ERRO EXATO, LOCAL EXATO, CAUSA/INCERTEZA, ROTAS TENTADAS E AÇÃO HUMANA EXATA
+  → HUMAN_FRONTIER? HUMANO FAZ SÓ O INEVITÁVEL NO LOCAL SEGURO
+  → RETOMAR AUTOMATICAMENTE
+  → PROVAR RESULTADO OU BLOCKER EXATO
+```
+
+Regras:
+- microcomando não é padrão; operação integral autocontida é o padrão quando tecnicamente possível;
+- se a máquina pode descobrir, o humano não deve adivinhar;
+- se a máquina pode corrigir com segurança, o humano não deve executar a correção manualmente;
+- diagnóstico deve apontar host/componente/serviço e, quando conhecido, arquivo/linha/função;
+- causa não provada permanece hipótese rotulada;
+- falha não resolvida deve listar o que já foi tentado e por que cada rota não resolveu;
+- segredo/senha/token entra no sistema de origem ou prompt seguro, não no chat;
+- após login/MFA/consentimento/permissão/pagamento/ação física/decisão humana inevitável, o executor retoma sozinho;
+- `UNKNOWN != PASS`; erro genérico sem localização e próximo passo acionável é FAIL.
+
 ## Writer unico por escopo
 
 - Leitores investigam em paralelo
@@ -191,6 +220,66 @@ Se qualquer um faltar → nota tentativa em memória (marcada unverified) ou ski
 - Quem escreve over-reaches por default → boxed to skills dir only
 - Não duplicar — update existing
 - Capture procedures, not answers
+## AURÉOLA DISCOVERY HARVEST — SOL + HERMES
+
+Este método vale igualmente para **SOL, PIVETE/HERMES e qualquer executor atual** que herde o contrato CentralDark.
+
+Cada descoberta **material** feita durante a trilha visível da AURÉOLA deve gerar um `learning_ref` no mesmo ciclo, sem esperar o fim da sessão:
+
+```text
+AUREOLA_MATERIAL_DISCOVERY
+→ MATERIAL_OPERATIONAL_EVENT
+→ learning_ref
+→ FACT | INFERENCE | HYPOTHESIS | UNKNOWN
+→ evidence_ref + falsifier quando material
+→ DEDUPE
+→ SEARCH_EXISTING_CRYSTAL
+→ session-intelligence-harvester
+→ memory-linker
+→ Dream Review / Pattern Discovery
+→ knowledge-compiler
+→ EXISTING_OWNER
+→ REAL_CONSUMER
+→ TEST_OR_RUNTIME_BINDING
+→ COUNTERPROOF
+→ AUTHORIZED_WRITER
+→ REUSE_ON_NEXT_EQUIVALENT_EVENT
+```
+
+Regras:
+
+```text
+DISCOVERY != CANONICAL_FACT
+LEARNING_CANDIDATE != CRYSTAL
+SAME_FINDING_WITHOUT_NEW_EVIDENCE = DROP_DUPLICATE
+PROVEN_RULE = REUSE_BEFORE_REINVESTIGATE
+REPEATED_CHEFE_RETEACH_AFTER_PROMOTED_RULE = LEARNING_TRANSFER_FAIL
+SOL_AND_HERMES_SHARE_SAME_LEARNING_CONTRACT = true
+```
+
+A AURÉOLA é **rota visível + sensor de descoberta**, nunca prova em si. Verso/paráfrase apontam direção; a prova continua em runtime, teste, CI, arquivo, hash, health, receipt ou outra fonte observável aplicável.
+
+### Cálculo, confiança e o significado de 100%
+
+Usar cálculo, estatística, triangulação, repetição, intervalo de confiança e combinação de incerteza quando ajudarem a reduzir dúvida. Mas matemática não inventa observação ausente.
+
+```text
+MULTIPLE_VALID_ANGLES → MAY_REDUCE_UNCERTAINTY
+CORRELATED_VIEWS != INDEPENDENT_PROOFS
+MODEL_CONFIDENCE != REALITY
+CALCULATION != RUNTIME_OBSERVATION
+```
+
+`100%` só pode ser declarado com denominador explícito:
+
+```text
+CONTRACT_COVERAGE = PASSED_DEFINED_CHECKS / ALL_DEFINED_CHECKS
+IF numerator == denominator AND all checks measured on current scope:
+    CONTRACT_COVERAGE = 100%
+```
+
+Isso significa **100% do escopo definido e medido**, não certeza infalível sobre todo o ambiente externo. Para estado vivo, continua valendo `REALITY_IS_JUDGE`.
+
 ## Fable Loop (status experimental)
 
 Nao e roteamento padrao canonico enquanto MetaLupa o mantiver em EXPERIMENTAL_FAIL_CLOSED.
