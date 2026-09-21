@@ -100,6 +100,13 @@ check('AGENTS.md',[
  'MATERIAL_COGNITIVE_ROUTE=CHEFE_MATERIAL',
  'GRAPHRAG_SEMANTIC_LINKER',
 ], classification='MATERIAL_FIRST_AGENT_SEMANTICS')
+check('AGENTS.md',[
+ 'CREATE_PR_MERGEABLE_SNAPSHOT_IS_NOT_FINAL=true',
+ 'REMEASURE_PR_LIVE_BEFORE_HUMAN_RETURN=true',
+ 'QUEUED_OR_IN_PROGRESS_AUXILIARY_IS_NOT_MATERIAL_BLOCKER=true',
+ 'POST_PR_CONTINUE_UNTIL_MERGED_OR_MATERIAL_BLOCKER=true',
+ 'RETURN_WITH_OPEN_ELIGIBLE_PR=FORBIDDEN',
+], classification='POST_PR_FAST_PATH_CONTINUATION_GUARD')
 check('docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md',[
  'SOUL_MATERIAL_FIRST_COGNITIVE_ROUTE=true',
  'HISTORICAL_SUCCESS_IS_NOT_CURRENT_PASS=true',
@@ -221,6 +228,17 @@ check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml',[
  'mandatory_before_human_return: true',
  'no_new_workflow_when_owner_exists: true',
  'yellow_status_semantics: FORBIDDEN',
+ 'create_pr_mergeable_snapshot_is_final: false',
+ 'remeasure_live_mergeability_before_human_return: true',
+ 'queued_or_in_progress_auxiliary_is_material_blocker: false',
+ 'post_pr_continue_until_merged_or_material_blocker: true',
+ 'return_with_open_eligible_pr: FORBIDDEN',
+ 'centraldark_pattern_monitor:',
+ 'outside_percent_red_threshold: 80',
+ 'unknown_prevents_green: true',
+ 'metric_scope: OBSERVED_MEASURABLE_DIMENSIONS_ONLY',
+ 'global_behavior_claim_from_partial_telemetry: FORBIDDEN',
+ 'refresh_source: /admin/api/operational-snapshot',
  'github_hosted_runner: FORBIDDEN',
  'scope: ALL_ACTIVE_ROOT_GITHUB_WORKFLOWS',
  'scope: ALL_PR_COMMIT_AND_RUNTIME_ELIGIBLE_FAILURES',

@@ -19,6 +19,13 @@ type HealthSnapshot = {
   latency_ms?: number;
 };
 
+type LinearStatusSnapshot = {
+  ok?: boolean;
+  status?: 'AVAILABLE' | 'UNAVAILABLE' | 'ERROR' | 'UNKNOWN';
+  configured?: boolean;
+  checkedAt?: string;
+};
+
 type CentralDarkBridge = {
   getRuntime?: () => Promise<RuntimeSnapshot>;
   getHermesHealth?: () => Promise<HealthSnapshot>;
@@ -37,6 +44,7 @@ const navItems = [
   ['i-ph:house', 'Início'],
   ['i-ph:list-checks', 'Meu trabalho'],
   ['i-ph:calendar-check', 'Automações'],
+  ['i-ph:kanban', 'Linear'],
   ['i-ph:squares-four', 'Personalizar'],
 ] as const;
 
@@ -110,6 +118,13 @@ const integratedCapabilitySurfaces = [
     owner: 'apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js + apps/modulos/oauth-broker/server.mjs',
     detail: 'Hub/Broker/MCP Admin já existem para instâncias, snapshots e audits; ações destrutivas exigem gate + receipt; painel externo não vira capability API por inferência',
   },
+  {
+    key: 'LINEAR',
+    label: 'Linear / Coding',
+    icon: 'i-ph:kanban',
+    owner: 'apps/modulos/mcp/src/tools/integrations.js',
+    detail: 'GraphQL server-side via cofre; Cockpit lê somente /linear/status e o Admin mostra o snapshot vivo sem expor credencial',
+  },
 ] as const;
 
 const hypothesisStateDimensions = cognitiveTheoryChecks.length;
@@ -132,6 +147,40 @@ function ProgressBar({ value }: { value: number }) {
     </div>
   );
 }
+function LinearPanel({ linear }: { linear: LinearStatusSnapshot }) {
+  const state = linear.status ?? 'UNKNOWN';
+  const liveState: LiveState = state === 'AVAILABLE' ? 'ONLINE' : state === 'ERROR' ? 'OFFLINE' : 'UNKNOWN';
+
+  return (
+    <section className="cd-status-card" aria-label="Linear integrado ao Cockpit">
+      <div className="cd-status-line">
+        <span>Linear · rota CentralDark</span>
+        <strong><StatusDot state={liveState} /> {state}</strong>
+      </div>
+      <p className="cd-status-copy">
+        O Cockpit usa a rota segura <code>/linear/status</code>. Issues e detalhes ficam no Admin autenticado; token não vai para o renderer.
+      </p>
+      <div className="cd-chip-row">
+        <span className="cd-chip">OWNER: integrations.js</span>
+        <span className="cd-chip">SERVER-SIDE</span>
+        <span className="cd-chip">UNKNOWN != PASS</span>
+      </div>
+      <div className="cd-commandbar__group" style={{ marginTop: 14 }}>
+        <a className="cd-button cd-button--primary" href="https://mcp.centralldark.com/admin#linear" target="_blank" rel="noreferrer">
+          <span className="i-ph:gauge" /> Abrir Linear no Admin
+        </a>
+        <a className="cd-button" href="https://linear.app/segredo/team/SEG" target="_blank" rel="noreferrer">
+          <span className="i-ph:kanban" /> Board SEG
+        </a>
+        <a className="cd-button" href="https://linear.app/segredo/settings/ai/coding-sessions" target="_blank" rel="noreferrer">
+          <span className="i-ph:code" /> Coding sessions
+        </a>
+      </div>
+      <small className="cd-muted">Última leitura: {linear.checkedAt ?? 'UNKNOWN'}</small>
+    </section>
+  );
+}
+
 
 export function CentralDarkCockpitShell({ children }: { children: ReactNode }) {
   const [mode, setMode] = useState<HouseMode>('OPERAR');
@@ -139,6 +188,7 @@ export function CentralDarkCockpitShell({ children }: { children: ReactNode }) {
   const [runtime, setRuntime] = useState<RuntimeSnapshot | null>(null);
   const [hermes, setHermes] = useState<HealthSnapshot>({ status: 'UNKNOWN' });
   const [screenpipe, setScreenpipe] = useState<HealthSnapshot>({ status: 'UNKNOWN' });
+  const [linear, setLinear] = useState<LinearStatusSnapshot>({ status: 'UNKNOWN' });
 
   useEffect(() => {
     const api = getBridge();
@@ -147,6 +197,25 @@ export function CentralDarkCockpitShell({ children }: { children: ReactNode }) {
     api.getRuntime?.().then(setRuntime).catch(() => setRuntime(null));
     api.getHermesHealth?.().then(setHermes).catch(() => setHermes({ status: 'UNKNOWN' }));
     api.getScreenpipeHealth?.().then(setScreenpipe).catch(() => setScreenpipe({ status: 'UNKNOWN' }));
+  }, []);
+
+  useEffect(() => {
+    let active = true;
+    const probe = async () => {
+      try {
+        const response = await fetch('https://mcp.centralldark.com/linear/status', { cache: 'no-store' });
+        const payload = await response.json() as LinearStatusSnapshot;
+        if (active) setLinear(payload);
+      } catch {
+        if (active) setLinear({ status: 'UNKNOWN' });
+      }
+    };
+    probe();
+    const timer = window.setInterval(probe, 30000);
+    return () => {
+      active = false;
+      window.clearInterval(timer);
+    };
   }, []);
 
   const readiness = useMemo(() => {
@@ -234,7 +303,9 @@ export function CentralDarkCockpitShell({ children }: { children: ReactNode }) {
           </div>
         </div>
 
-        <main className="cd-workspace">{children}</main>
+        <main className="cd-workspace">
+          {activeNav === 'Linear' ? <LinearPanel linear={linear} /> : children}
+        </main>
       </section>
 
       <aside className="cd-status-panel">
@@ -254,6 +325,7 @@ export function CentralDarkCockpitShell({ children }: { children: ReactNode }) {
           <div className="cd-evidence"><span className="i-ph:lightning" /><div><strong>Hermes</strong><small>{hermes.status ?? 'UNKNOWN'}{typeof hermes.latency_ms === 'number' ? ` · ${hermes.latency_ms} ms` : ''}</small></div></div>
           <div className="cd-evidence"><span className="i-ph:eye" /><div><strong>Screenpipe</strong><small>{screenpipe.status ?? 'UNKNOWN'}{typeof screenpipe.latency_ms === 'number' ? ` · ${screenpipe.latency_ms} ms` : ''}</small></div></div>
           <div className="cd-evidence"><span className="i-ph:git-pull-request" /><div><strong>GitHub</strong><small>PR #1381 · referência operacional</small></div></div>
+          <div className="cd-evidence"><span className="i-ph:kanban" /><div><strong>Linear</strong><small>{linear.status ?? 'UNKNOWN'} · /linear/status</small></div></div>
         </section>
 
         <section className="cd-status-card cd-status-card--list" aria-label="Braços integrados no painel único">
