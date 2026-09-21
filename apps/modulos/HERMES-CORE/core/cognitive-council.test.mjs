@@ -9,6 +9,7 @@ import {
   createSourceProfile,
   evaluateUsefulCeiling,
   evaluateProofCounterproofClosure,
+  evaluateSurfaceConformance,
   validateCognitiveCouncilPlan,
   validateSourceProfile,
 } from './cognitive-council.mjs';
@@ -214,4 +215,50 @@ test('reconciliacao contraditoria falha fechado', () => {
   assert.equal(result.state, 'INVALID_RECEIPT');
   assert.equal(result.accepted, false);
   assert.ok(result.invalid_receipts.includes('RECONCILIATION_REF_BOTH_RETAINED_AND_DISCARDED:delta:same'));
+});
+
+test('superficie local pode provar contrato sem fingir paridade fisica de tools', () => {
+  const result = evaluateSurfaceConformance({
+    surface_id: 'jan-local',
+    model_id: 'Jan-v3.5-4B',
+    contract_markers: ['History Rendezvous', 'ONE_WRITER', 'REUSE_BEFORE_CREATE'],
+    required_contract_markers: ['History Rendezvous', 'ONE_WRITER', 'REUSE_BEFORE_CREATE'],
+  });
+  assert.equal(result.levels.L0_ATTACHED, true);
+  assert.equal(result.levels.L1_CONTRACT, true);
+  assert.equal(result.levels.L2_TOOL_CATALOG, false);
+  assert.equal(result.levels.L3_TOOL_EXECUTION, false);
+  assert.equal(result.semantic_portability_proven, true);
+  assert.equal(result.physical_tool_parity_proven, false);
+  assert.equal(result.proven_levels, 2);
+  assert.equal(result.applicable_levels, 5);
+  assert.equal(result.proof_percent, 40);
+});
+
+test('claim Hermes executa em Jan sem executor observado equivalente vira drift, nao falha do core', () => {
+  const result = evaluateSurfaceConformance({
+    surface_id: 'jan-local',
+    model_id: 'Jan-v3.5-4B',
+    contract_markers: ['History Rendezvous'],
+    required_contract_markers: ['History Rendezvous'],
+    claimed_executor: 'HERMES',
+    observed_executor: 'JAN_LOCAL',
+  });
+  assert.equal(result.semantic_portability_proven, true);
+  assert.equal(result.executor_attribution_drift, true);
+  assert.equal(result.next_rule, 'CORRECT_EXECUTOR_ATTRIBUTION_THEN_MEASURE_NEXT_LEVEL');
+});
+
+test('tool catalog sem chamada real nao promove L3', () => {
+  const result = evaluateSurfaceConformance({
+    surface_id: 'surface-x',
+    required_contract_markers: ['A'],
+    contract_markers: ['A'],
+    tool_catalog_receipt: true,
+    tool_call_receipts: [],
+    canonical_state_receipt: false,
+  });
+  assert.equal(result.levels.L2_TOOL_CATALOG, true);
+  assert.equal(result.levels.L3_TOOL_EXECUTION, false);
+  assert.equal(result.physical_tool_parity_proven, false);
 });

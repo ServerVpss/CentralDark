@@ -437,3 +437,64 @@ export function evaluateProofCounterproofClosure({
     next_rule: 'SEAL_ACCEPTED_CLAIM_THEN_FIXED_POINT_CHECK',
   });
 }
+
+export function evaluateSurfaceConformance({
+  surface_id = '',
+  model_id = '',
+  contract_markers = [],
+  required_contract_markers = [],
+  tool_catalog_receipt = false,
+  tool_call_receipts = [],
+  canonical_state_receipt = false,
+  mutation_required = false,
+  mutation_receipt = false,
+  claimed_executor = '',
+  observed_executor = '',
+} = {}) {
+  const surfaceId = normalize(surface_id);
+  const modelId = normalize(model_id);
+  const observedMarkers = new Set((Array.isArray(contract_markers) ? contract_markers : []).map(normalize).filter(Boolean));
+  const requiredMarkers = sortedUnique((Array.isArray(required_contract_markers) ? required_contract_markers : []).map(normalize).filter(Boolean));
+  const missingMarkers = requiredMarkers.filter((marker) => !observedMarkers.has(marker));
+  const calls = sortedUnique((Array.isArray(tool_call_receipts) ? tool_call_receipts : []).map(normalize).filter(Boolean));
+  const claimed = normalize(claimed_executor);
+  const observed = normalize(observed_executor);
+  const executorDrift = Boolean(claimed && observed && claimed !== observed);
+
+  const levels = Object.freeze({
+    L0_ATTACHED: Boolean(surfaceId || modelId),
+    L1_CONTRACT: requiredMarkers.length > 0 && missingMarkers.length === 0,
+    L2_TOOL_CATALOG: Boolean(tool_catalog_receipt),
+    L3_TOOL_EXECUTION: calls.length > 0,
+    L4_STATE_READ: Boolean(canonical_state_receipt),
+    L5_MUTATION: mutation_required ? Boolean(mutation_receipt) : null,
+  });
+
+  const applicable = Object.entries(levels).filter(([, value]) => value !== null);
+  const proven = applicable.filter(([, value]) => value === true).length;
+  const unknown = applicable.filter(([, value]) => value === false).length;
+  const proofPercent = applicable.length ? Math.round((proven / applicable.length) * 10000) / 100 : 0;
+
+  return Object.freeze({
+    schema_version: 1,
+    surface_id: surfaceId || null,
+    model_id: modelId || null,
+    levels,
+    applicable_levels: applicable.length,
+    proven_levels: proven,
+    unknown_levels: unknown,
+    proof_percent: proofPercent,
+    missing_contract_markers: Object.freeze(missingMarkers),
+    tool_call_receipts: Object.freeze(calls),
+    executor_attribution_drift: executorDrift,
+    claimed_executor: claimed || null,
+    observed_executor: observed || null,
+    semantic_portability_proven: levels.L0_ATTACHED && levels.L1_CONTRACT,
+    physical_tool_parity_proven: levels.L2_TOOL_CATALOG && levels.L3_TOOL_EXECUTION,
+    full_state_continuity_proven: levels.L4_STATE_READ,
+    mutation_proven: levels.L5_MUTATION,
+    next_rule: executorDrift
+      ? 'CORRECT_EXECUTOR_ATTRIBUTION_THEN_MEASURE_NEXT_LEVEL'
+      : unknown > 0 ? 'MEASURE_NEXT_UNPROVEN_LEVEL' : 'CONFORMANCE_FIXED_POINT',
+  });
+}
