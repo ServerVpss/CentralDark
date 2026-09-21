@@ -352,3 +352,20 @@ SABER QUAL NÓ EXISTE
 → QUAL OWNER RESPONDE
 → QUAL PROVA DEVE VOLTAR
 ```
+
+## 🧠 CORPO MENTAL EXPANDIDO
+
+```text
+🔎 META-LUPA
+├─ 🔥 META-GRILL ............. EXAME PROFUNDO
+├─ 💭 META-COGNIÇÃO ......... MENTE OBSERVADORA
+├─ 🎼 META-ORQUESTRAÇÃO ..... SISTEMA NERVOSO
+├─ 🔗 META-START-LINK ....... CONEXÃO NERVOSA
+├─ 🛡️ GUARDRAILS ............ SISTEMA IMUNOLÓGICO
+├─ 🧾 RECEIPTS .............. PRONTUÁRIO
+├─ 📚 LEDGER ................ MEMÓRIA CLÍNICA
+├─ 🏷️ CLAIM-SEALS ........... SELO DE VALIDAÇÃO
+└─ 🤖 AGENTS ................ ÓRGÃOS EXECUTORES
+```
+
+`GANCHO_MENTAL != NOVO_OWNER`. A anatomia é memória visual; a função continua nos owners e contratos existentes.

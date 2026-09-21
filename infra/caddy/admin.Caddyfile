@@ -1,0 +1,17 @@
+# Casca administrativa única — mesmo organismo do MCP (9100).
+# /contas → ContasAdmin (uvicorn). Sem subdomínio hub.
+admin.centralldark.com {
+	encode zstd gzip
+
+	@root path /
+	redir @root /admin 302
+
+	handle /contas* {
+		reverse_proxy 127.0.0.1:9077
+	}
+
+	reverse_proxy 127.0.0.1:9100 {
+		header_up Host {host}
+		header_up X-Real-IP {remote_host}
+	}
+}

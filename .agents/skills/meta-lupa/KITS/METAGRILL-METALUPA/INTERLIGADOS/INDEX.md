@@ -6,7 +6,7 @@
 🧪 10 LENTES          → ../BLOCOS/BLOCO-01.md
 📡 META-START-LINK    → ../META-START-LINK/GANCHO.md
 📜 PADRÕES-PR BASE    → PADROES-PR/REGISTRY.json
-🔥 DELTA PR ATUAL     → PADROES-PR/DELTA-PR-1493-1550.md
+🔥 DELTA PR ATUAL     → PADROES-PR/DELTA-PR-1551-1567.md
 ⚙️ REFRESH MÁQUINA    → PADROES-PR/REFRESH-2026-09-16.json
 🌳 ARQUITETURA        → PADROES-PR/ARVORE-VISUAL-CANONICA.md
 🧭 MAPA MENTAL        → SKILLS/MAPA-MENTAL-OPERACIONAL.md
@@ -130,3 +130,14 @@ REALIDADE = JUIZ
 ```
 
 🧠 **REGRA:** padrão estável pode subir para a `main`; estado vivo de Casa/VPS continua na fronteira de remedição. O INDEX aponta para owners e provas existentes; não cria engine, router, owner ou runtime paralelo.
+
+## 🧬 Cobertura atual das skills
+
+```text
+SKILLS_TOP_LEVEL=52
+SKILL_MD=52
+INTERLIGADOS_MD=52
+BRIDGE_COVERAGE=52/52
+```
+
+Cada `SKILL.md` mantém a função; cada `INTERLIGADOS.md` é somente ponte visual-operacional com gatilhos, emoji, entrada, retorno e cadeados.

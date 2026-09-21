@@ -144,3 +144,4 @@ node_modules/.cache
 
 # PostHog setup session cache (local, not application source)
 .posthog-wizard-cache/
+_DIAGNOSTICS/

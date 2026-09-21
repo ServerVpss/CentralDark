@@ -297,7 +297,7 @@ const GENERIC_EXTERNAL_RULES = (() => {
     },
     {
       code: "EXTERNAL_DELTA_UNICODE_CONTROL",
-      pattern: /[\u200B-\u200F\u202A-\u202E\u2066-\u2069\uFEFF]/u,
+      pattern: /[\u200B\u200C\u200E\u200F\u202A-\u202E\u2066-\u2069\uFEFF]/u,
     },
     {
       code: "EXTERNAL_DELTA_PROMPT_OVERRIDE",
