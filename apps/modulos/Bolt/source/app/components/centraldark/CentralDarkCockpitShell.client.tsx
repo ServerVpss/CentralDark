@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import './centraldark-cockpit.scss';
+import { OrganismPanel } from './OrganismPanel';
 
 type HouseMode = 'OPERAR' | 'PLANEJAR' | 'TAREFA' | 'DELEGAR';
 type LiveState = 'ONLINE' | 'OFFLINE' | 'UNKNOWN';
@@ -19,10 +20,22 @@ type HealthSnapshot = {
   latency_ms?: number;
 };
 
+type UpdateSnapshot = {
+  status: 'IDLE' | 'CHECKING' | 'UP_TO_DATE' | 'AVAILABLE' | 'DOWNLOADING' | 'DOWNLOADED' | 'ERROR';
+  currentVersion: string;
+  availableVersion?: string;
+  progress?: number;
+  error?: string;
+};
+
 type CentralDarkBridge = {
   getRuntime?: () => Promise<RuntimeSnapshot>;
   getHermesHealth?: () => Promise<HealthSnapshot>;
   getScreenpipeHealth?: () => Promise<HealthSnapshot>;
+  getUpdateState?: () => Promise<UpdateSnapshot>;
+  checkUpdate?: () => Promise<UpdateSnapshot>;
+  downloadUpdate?: () => Promise<UpdateSnapshot>;
+  installUpdate?: () => Promise<UpdateSnapshot>;
   toggleWidget?: () => Promise<unknown>;
 };
 
@@ -139,6 +152,7 @@ export function CentralDarkCockpitShell({ children }: { children: ReactNode }) {
   const [runtime, setRuntime] = useState<RuntimeSnapshot | null>(null);
   const [hermes, setHermes] = useState<HealthSnapshot>({ status: 'UNKNOWN' });
   const [screenpipe, setScreenpipe] = useState<HealthSnapshot>({ status: 'UNKNOWN' });
+  const [updateState, setUpdateState] = useState<UpdateSnapshot | null>(null);
 
   useEffect(() => {
     const api = getBridge();
@@ -147,6 +161,12 @@ export function CentralDarkCockpitShell({ children }: { children: ReactNode }) {
     api.getRuntime?.().then(setRuntime).catch(() => setRuntime(null));
     api.getHermesHealth?.().then(setHermes).catch(() => setHermes({ status: 'UNKNOWN' }));
     api.getScreenpipeHealth?.().then(setScreenpipe).catch(() => setScreenpipe({ status: 'UNKNOWN' }));
+    api.getUpdateState?.().then(setUpdateState).catch(() => setUpdateState(null));
+
+    const timer = window.setInterval(() => {
+      api.getUpdateState?.().then(setUpdateState).catch(() => undefined);
+    }, 5000);
+    return () => window.clearInterval(timer);
   }, []);
 
   const readiness = useMemo(() => {
@@ -156,6 +176,25 @@ export function CentralDarkCockpitShell({ children }: { children: ReactNode }) {
   }, [runtime, hermes.status, screenpipe.status]);
 
   const modeInfo = modes.find((item) => item.id === mode) ?? modes[0];
+
+  const updateLabel = updateState?.status === 'AVAILABLE'
+    ? `Atualizar para ${updateState.availableVersion ?? ''}`.trim()
+    : updateState?.status === 'DOWNLOADING'
+      ? `Baixando ${updateState.progress ?? 0}%`
+      : updateState?.status === 'DOWNLOADED'
+        ? 'Reiniciar e atualizar'
+        : updateState?.status === 'CHECKING'
+          ? 'Verificando…'
+          : 'Verificar atualização';
+
+  async function handleUpdate() {
+    const api = getBridge();
+    if (!api) return;
+    const current = await api.getUpdateState?.();
+    if (current?.status === 'AVAILABLE') setUpdateState(await api.downloadUpdate?.() ?? current);
+    else if (current?.status === 'DOWNLOADED') setUpdateState(await api.installUpdate?.() ?? current);
+    else setUpdateState(await api.checkUpdate?.() ?? current ?? null);
+  }
 
   return (
     <div className="cd-cockpit">
@@ -192,6 +231,7 @@ export function CentralDarkCockpitShell({ children }: { children: ReactNode }) {
           <div className="cd-project is-active"><span className="i-ph:folder-open" /><span>ServerVpss/CentralDark</span></div>
           <div className="cd-project"><span className="i-ph:desktop" /><span>CentralDark Desktop</span></div>
           <div className="cd-project"><span className="i-ph:waveform" /><span>SOL · voz e widget</span></div>
+          <div className="cd-project"><span className="i-ph:users-three" /><span>1 SOUL · 6 papéis · N capacidades</span></div>
         </section>
 
         <footer className="cd-sidebar__footer">
@@ -214,6 +254,17 @@ export function CentralDarkCockpitShell({ children }: { children: ReactNode }) {
           </div>
 
           <div className="cd-commandbar__group">
+            {getBridge()?.getUpdateState && (
+              <button
+                type="button"
+                className="cd-button"
+                onClick={() => void handleUpdate()}
+                disabled={updateState?.status === 'CHECKING' || updateState?.status === 'DOWNLOADING'}
+                title={updateState?.error || 'Atualização do app via feed CentralDark/GitHub'}
+              >
+                <span className="i-ph:arrow-circle-up" /> {updateLabel}
+              </button>
+            )}
             <button type="button" className="cd-button" onClick={() => getBridge()?.toggleWidget?.()}>
               <span className="i-ph:waveform" /> SOL
             </button>
@@ -234,7 +285,9 @@ export function CentralDarkCockpitShell({ children }: { children: ReactNode }) {
           </div>
         </div>
 
-        <main className="cd-workspace">{children}</main>
+        <main className="cd-workspace">
+          {activeNav === 'Personalizar' ? <OrganismPanel /> : children}
+        </main>
       </section>
 
       <aside className="cd-status-panel">
