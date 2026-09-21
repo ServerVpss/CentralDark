@@ -91,6 +91,79 @@ const WRITE = {
 // ─────────────────────────────────────────────────────────────────────────────
 // LINEAR — GraphQL
 // ─────────────────────────────────────────────────────────────────────────────
+export async function getLinearPublicStatus() {
+    const configured = Boolean(pick("LINEAR_API_KEY", "LINEAR_TOKEN", "LOVABLE_API_KEY"));
+    const checkedAt = new Date().toISOString();
+    if (!configured) {
+        return { ok: false, status: "UNAVAILABLE", configured: false, checkedAt };
+    }
+    try {
+        await linearGql(`query LinearCentralDarkProbe { viewer { id } }`);
+        return { ok: true, status: "AVAILABLE", configured: true, checkedAt };
+    }
+    catch {
+        return { ok: false, status: "ERROR", configured: true, checkedAt };
+    }
+}
+
+export async function getLinearAdminSnapshot(limit = 25) {
+    const checkedAt = new Date().toISOString();
+    const configured = Boolean(pick("LINEAR_API_KEY", "LINEAR_TOKEN", "LOVABLE_API_KEY"));
+    if (!configured) {
+        return {
+            ok: false,
+            status: "UNAVAILABLE",
+            configured: false,
+            checkedAt,
+            issues: [],
+        };
+    }
+    try {
+        const first = Math.max(1, Math.min(Number(limit) || 25, 100));
+        const data = await linearGql(`
+          query LinearCentralDarkAdmin($first: Int!) {
+            viewer { id name }
+            organization { id name urlKey }
+            issues(first: $first, orderBy: updatedAt) {
+              nodes {
+                id identifier title priority
+                state { name }
+                team { key name }
+                assignee { name }
+                url updatedAt
+              }
+            }
+          }
+        `, { first });
+        return {
+            ok: true,
+            status: "AVAILABLE",
+            configured: true,
+            checkedAt,
+            viewer: data.viewer ? { id: data.viewer.id, name: data.viewer.name } : null,
+            organization: data.organization ? {
+                id: data.organization.id,
+                name: data.organization.name,
+                urlKey: data.organization.urlKey,
+            } : null,
+            issues: data.issues?.nodes ?? [],
+            links: {
+                team: "https://linear.app/segredo/team/SEG",
+                codingSessions: "https://linear.app/segredo/settings/ai/coding-sessions",
+            },
+        };
+    }
+    catch {
+        return {
+            ok: false,
+            status: "ERROR",
+            configured: true,
+            checkedAt,
+            issues: [],
+        };
+    }
+}
+
 async function linearGql(query, variables = {}) {
     const direct = pick("LINEAR_API_KEY", "LINEAR_TOKEN");
     const lovable = pick("LOVABLE_API_KEY");

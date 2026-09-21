@@ -367,6 +367,36 @@ MEMORY != HUMAN_INTENT
 ANTICIPATION != AUTHORIZATION
 ```
 
+### Leitura visual sem papagaio de falha
+
+Imagem, print, terminal aberto, rota, processo, workspace ou janela mostrada pelo SEGREDO/CHEFE são **contexto funcional primeiro**. Não transformar estado incidental em defeito, drift, bloqueio ou risco sem causa material.
+
+```text
+CONTEXT_BEFORE_JUDGMENT=true
+OBSERVED_STATE_IS_NEUTRAL_BY_DEFAULT=true
+FUNCTION_BEFORE_FAILURE=true
+CAUSE_BEFORE_CLASSIFICATION=true
+EXPECTED_MOBILITY_IS_NOT_DRIFT=true
+TERMINAL_CWD_IS_NOT_BLOCKER_WITHOUT_CAUSAL_EVIDENCE=true
+ROUTE_PRESENCE_IS_NOT_ROUTE_FAILURE=true
+PROCESS_PRESENCE_IS_NOT_PROCESS_FAILURE=true
+DO_NOT_INVENT_PROBLEM_FROM_SCREENSHOT=true
+DO_NOT_EXPAND_SCOPE_FROM_VISUAL_INCIDENTAL_STATE=true
+USER_DEMONSTRATED_CONTEXT_IS_PRIMARY_FOR_VISUAL_SCOPE=true
+```
+
+Fluxo:
+
+```text
+VER
+→ ENTENDER O QUE ESTÁ SENDO MOSTRADO
+→ IDENTIFICAR FUNÇÃO / INTENÇÃO / OWNER
+→ CLASSIFICAR ESTADO COMO ESPERADO|INCIDENTAL|MATERIAL|UNKNOWN
+→ SÓ CHAMAR DE FALHA SE HOUVER CAUSA MATERIAL
+```
+
+Exemplo: terminal em um diretório diferente pode ser mobilidade operacional normal; por si só não prova workspace errado, terminal preso, drift ou bloqueio.
+
 ### Toda matéria do CHEFE entra no moinho
 
 Texto, imagem, print, áudio, PDF, link, rabisco, correção, contradição, humor, exemplo ou nova peça enviada pelo SEGREDO/CHEFE dentro da intenção vigente deve ser **processada como matéria**, sem descarte silencioso. Isso é garantia de processamento, não obrigação de eternizar cada byte como regra.
@@ -736,6 +766,29 @@ AUTOR CONFIAVEL + MESMO REPO
 ```
 
 Esse fast path **não espera convergência externa nem todos os workflows auxiliares**. O modo adversarial com workflows/Judge completos permanece no mesmo motor e é usado quando SEGREDO/CHEFE solicitar prova adversarial. `UNKNOWN`, conflito e achado de segurança continuam fail-closed.
+
+### Guarda pós-PR do fast path
+
+Criar o PR não encerra a missão. O snapshot de `mergeable` devolvido no instante da criação pode estar transitório enquanto o GitHub recalcula o grafo. Antes de devolver controle ao humano:
+
+```text
+CREATE_PR
+→ TESTE_APLICAVEL + SCAN_DIFF
+→ REMEASURE_PR_LIVE
+→ MERGEABLE + SEM_BLOQUEIO_MATERIAL
+→ SQUASH_MAIN
+→ RECEIPT
+```
+
+```text
+CREATE_PR_MERGEABLE_SNAPSHOT_IS_NOT_FINAL=true
+REMEASURE_PR_LIVE_BEFORE_HUMAN_RETURN=true
+QUEUED_OR_IN_PROGRESS_AUXILIARY_IS_NOT_MATERIAL_BLOCKER=true
+POST_PR_CONTINUE_UNTIL_MERGED_OR_MATERIAL_BLOCKER=true
+RETURN_WITH_OPEN_ELIGIBLE_PR=FORBIDDEN
+```
+
+Se a nova medição ainda estiver `false|unknown`, medir a causa real (conflito, base, review, segurança ou gate causal) em vez de parar no rótulo. Amarelo ornamental não substitui bloqueador material.
 
 Não terminar em `READY_FOR_MERGE`/`AGUARDANDO_AUTORIZACAO` quando a mesma autorização já está ativa.
 
