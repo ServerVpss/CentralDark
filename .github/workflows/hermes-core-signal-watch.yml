@@ -287,8 +287,29 @@ jobs:
           echo "pr_number=${PR_NUMBER}" >> "$GITHUB_OUTPUT"
           echo "head_sha=${HEAD_SHA}" >> "$GITHUB_OUTPUT"
 
-      - name: Acionar recheck do owner canônico quando houver candidato material
+      - name: ⚡ Provar fast-path do repositório
+        id: repo_merge_policy
         if: steps.bridge.outputs.signal_state == 'CANDIDATE' && steps.bridge.outputs.pr_number != ''
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const repoState = await github.rest.repos.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+            });
+            const autoMerge = repoState.data.allow_auto_merge === true;
+            const squash = repoState.data.allow_squash_merge === true;
+            core.setOutput('auto_merge', String(autoMerge));
+            core.setOutput('squash', String(squash));
+            core.notice(`CODERABBIT_FAST_POLICY auto_merge=${autoMerge} squash=${squash}`);
+
+      - name: ⚡ Webhook → API GitHub → autonomia canônica
+        if: >-
+          steps.bridge.outputs.signal_state == 'CANDIDATE' &&
+          steps.bridge.outputs.pr_number != '' &&
+          steps.repo_merge_policy.outputs.auto_merge == 'true' &&
+          steps.repo_merge_policy.outputs.squash == 'true'
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         env:
           PR_NUMBER: ${{ steps.bridge.outputs.pr_number }}
@@ -304,9 +325,13 @@ jobs:
                 pr_number: Number(process.env.PR_NUMBER),
                 head_sha: process.env.HEAD_SHA || null,
                 source: 'coderabbit_signal',
+                fast_path: true,
+                auto_merge: true,
+                squash: true,
+                merge_method: 'squash',
               },
             });
-            core.notice(`AUTONOMIA_RECHECK_DISPATCHED pr=${process.env.PR_NUMBER}`);
+            core.notice(`CODERABBIT_FAST_AUTONOMIA_DISPATCHED pr=${process.env.PR_NUMBER} method=squash`);
 
       - name: Receipt
         if: always()
