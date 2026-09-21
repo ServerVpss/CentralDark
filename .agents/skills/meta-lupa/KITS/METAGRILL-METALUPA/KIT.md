@@ -45,6 +45,34 @@ Entrada visual: `INTERLIGADOS/README.md`.
 
 O bloco `INTERLIGADOS/` guarda apenas a **costura semântica**: mapa mental das skills, padrões duráveis extraídos dos PRs e fronteiras que continuam exigindo Casa/VPS/runtime/CI aplicável. Implementação não provada não é promovida só porque o padrão foi preservado.
 
+## 🧮 TLC23 · META-GRILL · FABLE · META-LUPA
+
+O `tlc23.pdf` é referência lógica compartilhada do mesmo núcleo; não cria owner, engine ou cérebro paralelo.
+
+```text
+PREMISSA
+→ 🔥 META-GRILL tenta quebrar
+→ 🌀 FABLE_LOOP relê e estabiliza
+→ 🔎 META-LUPA procura falso-verde / contradição
+→ 🔄 RECONCILIAÇÃO DETERMINÍSTICA
+→ 🧮 TLC23 / HORN propaga consequências
+→ nenhuma consequência material nova?
+   ├─ SIM → REUSE_PROOF / ponto fixo aplicável
+   └─ NÃO → invalida só o cone afetado e repete
+→ ⚖️ REALIDADE
+```
+
+```text
+TLC23_SHARED_METHOD=true
+PROOF_REUSE_WHEN_FINGERPRINT_UNCHANGED=true
+ACCEPTANCE_IS_NOT_PROOF=true
+ACCEPTED_PROVEN_STEP_WITH_UNCHANGED_FINGERPRINT=REUSE_PROOF
+DETERMINISTIC_RECONCILIATION_BEFORE_NEW_ARCHITECTURE=true
+REUSE_BEFORE_CREATE_GLOBAL=true
+```
+
+O aceite do CHEFE autoriza intenção/mutação quando aplicável, mas não substitui prova. Se a prova já existe e o fingerprint causal não mudou, o aceite reutiliza essa prova em vez de reiniciar a investigação.
+
 ## 🪝 Lei do gancho
 
 ```text
