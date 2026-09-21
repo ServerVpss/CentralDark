@@ -189,6 +189,15 @@ test('imagem é sensor e nunca substitui medição viva', () => {
   assert.equal(image.image_is_sensor, true);
   assert.equal(image.screenshot_is_current_truth, false);
   assert.equal(image.screenshot_is_trigger_for_live_measurement, true);
+  assert.equal(image.context_before_judgment, true);
+  assert.equal(image.observed_state_is_neutral_by_default, true);
+  assert.equal(image.function_before_failure, true);
+  assert.equal(image.cause_before_classification, true);
+  assert.equal(image.expected_mobility_is_not_drift, true);
+  assert.equal(image.terminal_cwd_is_not_blocker_without_causal_evidence, true);
+  assert.equal(image.do_not_invent_problem_from_screenshot, true);
+  assert.equal(image.do_not_expand_scope_from_visual_incidental_state, true);
+  assert.equal(image.user_demonstrated_context_is_primary_for_visual_scope, true);
   assert.equal(image.live_state_required_before_mutation, true);
   assert.equal(image.material_visual_finding_action, 'REMEASURE_LIVE_SOURCE_THEN_ACT_MINIMALLY');
 });
