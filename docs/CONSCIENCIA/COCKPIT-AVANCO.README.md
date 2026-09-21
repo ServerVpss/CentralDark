@@ -47,6 +47,37 @@ Sem v1/v2/v3. Editar o JSON = painel reflete no próximo reload.
 
 Campo vazio = `"N/A"`. Nunca inventar. Campos novos (`area`, `severidade`, `palavras_chave`, `depende_de`) são opcionais e retrocompatíveis.
 
+## Squad da SOL no cockpit
+
+O cockpit existente é a casa visual do gabinete; não criar aplicativo paralelo.
+
+```text
+SOL NO CENTRO
+→ 6 ESPECIALISTAS FIXOS AO REDOR
+→ estado por especialista: parado | trabalhando | bloqueado | concluído
+→ clique no especialista abre sua mesa
+```
+
+A mesa de cada especialista mostra somente o necessário:
+
+```text
+O_QUE_ESTA_FAZENDO
+PROVA
+RESULTADO
+PROXIMO_TRABALHO
+```
+
+Cada um dos seis especialistas deve ter pet próprio, reaproveitando o padrão funcional já provado pelo `HermesMascote`/pet Hermes: identidade visual do cargo + animação reagindo ao trabalho. Pet é superfície; status real vem de telemetria/receipt, nunca da animação.
+
+```text
+PET_DO_FUNCIONARIO != PROVA_DE_RUNTIME
+STATUS_VISUAL_DEVE_DERIVAR_DE_ESTADO_MEDIDO
+HERMES_PET_PATTERN=REUSE
+NO_PARALLEL_PET_SYSTEM=true
+```
+
+A CentralDark existente continua sendo o produto único. Cockpit, CLI, Chromium/web, Hermes, SOL, gabinete, Forja e bots temporários são superfícies/capacidades do mesmo sistema.
+
 ## Busca, filtros e dependências no painel
 
 - Busca casa em título, id, palavras_chave e nos campos `onde/por_que/pra_que` do card.
