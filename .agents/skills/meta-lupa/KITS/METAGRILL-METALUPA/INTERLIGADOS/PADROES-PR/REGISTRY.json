@@ -2,6 +2,10 @@
   "schema": "centraldark.meta-lupa.interligados.pr-patterns.v1",
   "status": "CANONICAL_PATTERN_LAYER_ON_MAIN",
   "owner": ".agents/skills/meta-lupa/SKILL.md",
+  "scan": {
+    "rule": "CRYSTALLIZE_SURVIVING_PATTERN_ONLY; DO_NOT_PROMOTE_UNPROVEN_IMPLEMENTATION",
+    "history_rule": "CURRENT > HISTORY"
+  },
   "refresh": {
     "kind": "DEEP_RECENT_PR_PATTERN_SWEEP",
     "promotion_rule": "PROMOTE_STABLE_NON_TEMPORAL_PATTERN_ONLY; DEDUPE_SYNONYMS; KEEP_RUNTIME_SEPARATE",
@@ -38,6 +42,10 @@
     "full_registry_reconciled_at_main": "373c0f3f91280f5496a844813f836dc35c1f1a8d",
     "pattern_count": 150,
     "latest_pattern_sweep_base_main": "564e58b984d24b0966c9e94b01b2c243a394c571"
+  },
+  "scan": {
+    "rule": "CRYSTALLIZE_SURVIVING_PATTERN_ONLY; DO_NOT_PROMOTE_UNPROVEN_IMPLEMENTATION",
+    "history_rule": "CURRENT > HISTORY"
   },
   "patterns": [
     {
@@ -1659,5 +1667,5 @@
     "PR1566_ZENDRIVE_LIVE_CAPTURE_RUNTIME",
     "PR1567_UNIVERSAL_GATE_RUNTIME_BINDING"
   ],
-  "proof_boundary": "SOURCE_PATTERN_CRYSTALLIZED != IMPLEMENTATION_PROMOTED != CI_GREEN != RUNTIME_PROVEN != GLOBAL_FIXED_POINT"
+  "proof_boundary": "SOURCE_PATTERN_CRYSTALLIZED != CI_GREEN != RUNTIME_PROVEN != GLOBAL_FIXED_POINT"
 }
