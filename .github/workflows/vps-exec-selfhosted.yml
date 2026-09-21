@@ -643,7 +643,7 @@ jobs:
                 : 'deploy Hermes bloqueado em fail-closed; consultar job',
             });
 
-deploy-total-regeneration:
+  deploy-total-regeneration:
     name: SAME_HEAD verde → deploy total → regeneração
     needs: [deploy-mcp, deploy-operational-guards, vps-housekeeping, deploy-hermes-runtime]
     if: >-

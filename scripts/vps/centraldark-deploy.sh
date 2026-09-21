@@ -312,15 +312,23 @@ if [[ "$CANONICAL_CACHE" -eq 1 ]]; then
 fi
 
 if [[ "$SUJOS" -gt 0 ]]; then
-  if [[ "$TOTAL" -eq 1 ]]; then
-    log "BLOQUEADO_TRACKED_DIRTY_WORKTREE — estado rastreado não será sobrescrito"
+  if [[ "$TOTAL" -eq 1 ]] && git diff --quiet "origin/$BRANCH" -- .; then
+    # Jobs de promoção podem ter materializado arquivos do MESMO main antes
+    # deste fechamento total. Isso não é drift: é o alvo já presente no disco.
+    log "TRACKED_DIRTY_EQUALS_TARGET_MAIN=PASS"
+    log "TRACKED_DIRTY_CLASS=PREDEPLOYED_TARGET_STATE"
+    SUJOS=0
+  elif [[ "$TOTAL" -eq 1 ]]; then
+    log "BLOQUEADO_TRACKED_DIRTY_WORKTREE — conteúdo rastreado diverge do main provado"
     listar_sujos_rastreados | sed 's/^/  /'
+    log "NEXT=RECONCILIAR_TRABALHO_LOCAL_COM_OWNER_CANONICO"
+    die "DIRTY_WORKTREE" 17
   else
     log "BLOQUEADO_DIRTY_WORKTREE — nada será resetado/limpo automaticamente"
     listar_sujos | sed 's/^/  /'
+    log "NEXT=RECONCILIAR_TRABALHO_LOCAL_COM_OWNER_CANONICO"
+    die "DIRTY_WORKTREE" 17
   fi
-  log "NEXT=RECONCILIAR_TRABALHO_LOCAL_COM_OWNER_CANONICO"
-  die "DIRTY_WORKTREE" 17
 fi
 
 proteger_nao_rastreados_contra_alvo || die "UNTRACKED_CONFLICTS_WITH_TARGET_MAIN" 17

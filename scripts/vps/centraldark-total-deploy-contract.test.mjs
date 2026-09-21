@@ -14,7 +14,7 @@ test("main promovida dispara owner de deploy sem filtro parcial de paths", () =>
   const trigger = workflow.slice(0, workflow.indexOf("permissions:"));
   assert.match(trigger, /push:\n\s+branches: \[main\]/);
   assert.doesNotMatch(trigger, /\n\s+paths:/);
-  assert.match(workflow, /deploy-total-regeneration:/);
+  assert.match(workflow, /\n  deploy-total-regeneration:/);
   assert.match(workflow, /centraldark-deploy\.sh --apply --total/);
 });
 
@@ -29,6 +29,7 @@ test("total deploy regenera runtime já populado sem apagar estado untracked", (
   ]) assert.ok(deploy.includes(marker), `missing deploy marker: ${marker}`);
   assert.match(deploy, /listar_sujos_rastreados/);
   assert.match(deploy, /proteger_nao_rastreados_contra_alvo/);
+  assert.match(deploy, /TRACKED_DIRTY_EQUALS_TARGET_MAIN=PASS/);
 });
 
 test("contrato global fecha SAME_HEAD verde em deploy total sem reask", () => {
