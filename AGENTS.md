@@ -1023,3 +1023,41 @@ ORQUESTRA_TOTAL_CENTRALDARK=SIM
 - Skill só sob demanda: não carregar o leque inteiro; invocar quando o caso pede.
 - Toda ação amarrada no motor (`ESTEIRA_MOTOR`) e na consciência (`SOUL`/`META_LUPA`): orquestra total, não agente solto.
 - Violação de versão paralela (jarvis-lab-v2/v3/v4, Bolt duplicado, telepainel duplicado etc) é regressão e deve ser custurada, não ignorada.
+
+## !REGISTRA — promoção completa até main
+
+Quando o SEGREDO/CHEFE disser `registra` em contexto CentralDark, isso é autorização operacional para percorrer a sequência inteira dentro do escopo já autorizado, sem parar no commit intermediário:
+
+```text
+REGISTRA_TRIGGER_IS_FULL_PROMOTION_PIPELINE=true
+REGISTRA
+→ MEDIR_MAIN_VIVA
+→ RECONCILIAR_DELTA_E_OWNER
+→ IMPLEMENTAR_MVP_MINIMO_UTIL
+→ TESTAR_GATES_APLICAVEIS
+→ COMMIT
+→ PUSH_BRANCH_FILHA
+→ PR_FILHA_LINKADA_A_PR_MAE_1562
+→ REMEDIR_PR_LIVE
+→ SE_ELEGIVEL: SQUASH_MAIN
+→ READBACK_MAIN
+→ RECEIPT_FILHO_E_PR_MAE
+→ FIXED_POINT_OU_BLOCKER_MATERIAL
+```
+
+A PR-MÃE `#1562` é o rendezvous permanente/ledger (“ponto turístico”) e permanece `DO_NOT_MERGE`. PRs filhas passam por ela como veículos de promoção; peças sobreviventes seguem para `main`, e o receipt volta para a mãe.
+
+A Casa não espera “diamante” para construir. Qualquer delta útil mensurável pode entrar no funil — bronze, prata, ouro, diamante são apenas metáforas de maturidade. O critério é utilidade + owner correto + prova aplicável, não perfeição estética.
+
+```text
+USEFUL_DELTA_CAN_ENTER_FUNNEL=true
+PERFECTION_IS_NOT_PREREQUISITE_FOR_EXPERIMENT=true
+FAILING_OR_UNPROVEN_DELTA_MUST_NOT_BE_PROMOTED_TO_MAIN=true
+MVP_OPEN_TEST_MEASURE_LEARN=true
+ERROR_WITH_RECEIPT_CAN_BECOME_LEARNING=true
+MAIN_RECEIVES_ONLY_SURVIVING_DELTA=true
+PR_MOTHER_1562_PERMANENT_RENDEZVOUS=true
+PR_MOTHER_1562_DO_NOT_MERGE=true
+```
+
+Fluxo humano preferido: `MVP → abre → testa → mostra ao CHEFE quando houver decisão/materialidade`. Erro reversível e observado é dado de aprendizado; medo de errar não pode virar paralisia, mas UNKNOWN/falha material continuam impedindo falso-verde.
