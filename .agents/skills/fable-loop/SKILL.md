@@ -36,6 +36,31 @@ Cada volta deve reduzir pelo menos um `UNKNOWN` ou uma contradição material:
 8. REINDEXAR — atualizar índice/receipt existente, não fabricar novo contexto paralelo;
 9. REPETIR — parar no ponto fixo aplicável ou preservar a fronteira `UNKNOWN`.
 
+## TLC23 / Horn como método compartilhado
+
+```text
+EVIDÊNCIA
+→ 🔥 META-GRILL estressa premissas
+→ 🌀 FABLE_LOOP estabiliza a leitura
+→ 🔎 META-LUPA tenta falsificar
+→ 🔄 RECONCILIAÇÃO DETERMINÍSTICA
+→ TLC23 / HORN fecha somente quando não nasce fato material novo
+→ ⚖️ REALIDADE
+```
+
+Regras:
+
+```text
+TLC23_SHARED_METHOD=true
+TLC23_IS_NOT_SECOND_ROUTER=true
+PROOF_REUSE_WHEN_FINGERPRINT_UNCHANGED=true
+NO_NEW_MATERIAL_FACT=REUSE_PROOF_NO_REPEAT
+ACCEPTANCE_IS_NOT_PROOF=true
+DETERMINISTIC_RECONCILIATION_BEFORE_NEW_ARCHITECTURE=true
+```
+
+O PDF não precisa ser relido/reprovado do zero quando sua identidade e as premissas causais continuam iguais. Mudança material invalida somente o cone afetado; prova independente preservada continua reutilizável.
+
 ## Fixed point do método
 
 O método só pode encerrar a sua rodada quando:
