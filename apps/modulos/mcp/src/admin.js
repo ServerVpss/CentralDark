@@ -542,6 +542,7 @@ async function carregarOperational(){
   try {
     const r = await fetch('/admin/api/operational-snapshot');
     const j = await r.json();
+    if (typeof renderPatternAlignment === 'function') renderPatternAlignment(j);
     const flow = (j.deterministicFlow || []).join(' → ');
     const fronts = (j.fronts || []).map(f =>
       '<div class="row"><span>'+htmlEscape(f.id+' · '+f.source)+'</span><span class="'+(f.state === 'UNKNOWN' || f.state === 'STALE' ? 'warn' : 'ok')+'">'+htmlEscape(f.state)+'</span></div>'
