@@ -277,3 +277,256 @@ button.cd-nav__item { cursor: pointer; }
   .cd-pill--muted { display: none; }
   .cd-modebar { align-items: flex-start; flex-direction: column; }
 }
+
+
+/* ONE SOUL · MANY CAPABILITIES — mesma UI no site e no Desktop Chromium */
+.cd-organism {
+  height: 100%;
+  min-height: 0;
+  overflow: auto;
+  padding: 18px;
+  display: grid;
+  align-content: start;
+  gap: 14px;
+  background:
+    radial-gradient(circle at 12% 0%, color-mix(in srgb, var(--bolt-elements-item-contentAccent) 12%, transparent), transparent 32%),
+    var(--bolt-elements-bg-depth-1);
+}
+
+.cd-organism__hero,
+.cd-role-desk {
+  border: 1px solid var(--bolt-elements-borderColor);
+  border-radius: 14px;
+  background: var(--bolt-elements-bg-depth-2);
+}
+
+.cd-organism__hero {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: center;
+  padding: 16px;
+}
+
+.cd-organism__sol-pet,
+.cd-role-desk__pet {
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--bolt-elements-borderColor);
+  background: var(--bolt-elements-bg-depth-1);
+  box-shadow: 0 10px 34px color-mix(in srgb, var(--bolt-elements-item-contentAccent) 13%, transparent);
+  animation: cd-pet-float 2.8s ease-in-out infinite;
+}
+
+.cd-organism__sol-pet {
+  width: 62px;
+  height: 62px;
+  border-radius: 20px;
+}
+
+.cd-kicker {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--bolt-elements-textTertiary);
+  font: 700 10px/1.2 "Geist Mono", monospace;
+  letter-spacing: .12em;
+}
+
+.cd-organism__manager-name,
+.cd-role-desk input {
+  width: min(100%, 520px);
+  border: 0;
+  border-bottom: 1px solid var(--bolt-elements-borderColor);
+  outline: none;
+  color: var(--bolt-elements-textPrimary);
+  background: transparent;
+  font: 750 22px/1.2 "Geist", sans-serif;
+}
+
+.cd-role-desk input { font-size: 18px; }
+
+.cd-organism__hero p {
+  margin: 7px 0 0;
+  color: var(--bolt-elements-textSecondary);
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.cd-organism__hero code { color: var(--bolt-elements-item-contentAccent); }
+
+.cd-organism__numbers {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 2px 8px;
+  min-width: 150px;
+  font-family: "Geist Mono", monospace;
+}
+.cd-organism__numbers strong { font-size: 18px; color: var(--bolt-elements-item-contentAccent); }
+.cd-organism__numbers span { align-self: center; color: var(--bolt-elements-textTertiary); font-size: 10px; }
+
+.cd-organism__flow {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 9px 12px;
+  border: 1px solid var(--bolt-elements-borderColor);
+  border-radius: 10px;
+  color: var(--bolt-elements-textSecondary);
+  background: var(--bolt-elements-bg-depth-2);
+  font: 650 11px/1.3 "Geist Mono", monospace;
+}
+
+.cd-organism__flow b { color: var(--bolt-elements-item-contentAccent); }
+
+.cd-organism__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.cd-role-card {
+  min-width: 0;
+  min-height: 78px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid var(--bolt-elements-borderColor);
+  border-radius: 12px;
+  color: var(--bolt-elements-textPrimary);
+  background: var(--bolt-elements-bg-depth-2);
+  text-align: left;
+  cursor: pointer;
+}
+
+.cd-role-card:hover,
+.cd-role-card.is-selected {
+  border-color: var(--bolt-elements-borderColorActive);
+  background: var(--bolt-elements-item-backgroundActive);
+}
+
+.cd-role-pet {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: var(--bolt-elements-bg-depth-1);
+  border: 1px solid var(--bolt-elements-borderColor);
+}
+
+.cd-role-card__copy {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.cd-role-card__copy strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12px;
+}
+.cd-role-card__copy small { color: var(--bolt-elements-textTertiary); font-size: 10px; }
+.cd-role-card__state {
+  grid-column: 2;
+  color: var(--bolt-elements-item-contentAccent);
+  font: 700 9px/1 "Geist Mono", monospace;
+  letter-spacing: .08em;
+}
+
+.cd-role-desk {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
+  gap: 16px;
+  padding: 16px;
+}
+
+.cd-role-desk__pet {
+  width: 112px;
+  height: 112px;
+  border-radius: 28px;
+}
+
+.cd-role-desk__body { min-width: 0; }
+.cd-role-desk__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin-top: 9px;
+  color: var(--bolt-elements-textSecondary);
+  font-size: 10px;
+}
+.cd-role-desk__meta b { color: var(--bolt-elements-textPrimary); }
+.cd-chip-row--left { justify-content: flex-start; margin-top: 10px; }
+
+.cd-role-desk__columns {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+.cd-role-desk__columns > div {
+  min-height: 66px;
+  padding: 9px;
+  border: 1px solid var(--bolt-elements-borderColor);
+  border-radius: 9px;
+  background: var(--bolt-elements-bg-depth-1);
+}
+.cd-role-desk__columns strong,
+.cd-role-desk__columns span {
+  display: block;
+}
+.cd-role-desk__columns strong { font-size: 10px; }
+.cd-role-desk__columns span { margin-top: 5px; color: var(--bolt-elements-textTertiary); font-size: 9px; line-height: 1.35; }
+
+.cd-organism__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--bolt-elements-textSecondary);
+  font-size: 10px;
+}
+
+.cd-pet-svg {
+  width: 78%;
+  height: 78%;
+  overflow: visible;
+  color: var(--bolt-elements-item-contentAccent);
+  filter: drop-shadow(0 6px 10px color-mix(in srgb, currentColor 20%, transparent));
+}
+.cd-role-card .cd-pet-svg { width: 36px; height: 36px; }
+.cd-role-desk__pet .cd-pet-svg { width: 82px; height: 82px; }
+.cd-organism__sol-pet .cd-pet-svg { width: 46px; height: 46px; }
+
+.cd-pet-svg .pet-body {
+  fill: color-mix(in srgb, currentColor 24%, var(--bolt-elements-bg-depth-1));
+  stroke: currentColor;
+  stroke-width: 2;
+}
+.cd-pet-svg .pet-eye { fill: currentColor; }
+.cd-pet-svg .pet-line { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.cd-pet-svg .pet-accent { fill: currentColor; opacity: .85; }
+
+@keyframes cd-pet-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-4px) rotate(.7deg); }
+}
+
+@media (max-width: 980px) {
+  .cd-organism__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cd-role-desk__columns { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cd-organism__hero { grid-template-columns: auto minmax(0, 1fr); }
+  .cd-organism__numbers { grid-column: 1 / -1; grid-template-columns: repeat(6, auto); justify-content: start; }
+}
+
+@media (max-width: 640px) {
+  .cd-organism { padding: 10px; }
+  .cd-organism__grid { grid-template-columns: 1fr; }
+  .cd-role-desk { grid-template-columns: 1fr; }
+  .cd-role-desk__columns { grid-template-columns: 1fr; }
+  .cd-organism__footer { align-items: stretch; flex-direction: column; }
+}
