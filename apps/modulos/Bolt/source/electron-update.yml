@@ -1,5 +1,4 @@
-owner: ServerVpss
-repo: CentralDark
-provider: github
-private: true
-
+provider: generic
+url: https://mcp.centralldark.com/desktop-updates/
+channel: latest
+useMultipleRangeRequest: false
