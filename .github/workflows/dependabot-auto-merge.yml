@@ -40,7 +40,9 @@ permissions:
 
 concurrency:
   group: dependabot-${{ github.event_name }}-${{ github.event.pull_request.number || github.event.workflow_run.head_sha || github.event.client_payload.pr_number || 'radar' }}
-  cancel-in-progress: true
+  # Push de main é o gatilho repo-wide: o run em execução precisa terminar.
+  # Eventos por PR/workflow continuam deduplicando para evitar corrida.
+  cancel-in-progress: ${{ github.event_name != 'push' }}
 
 jobs:
   reconcile-dependabot:
