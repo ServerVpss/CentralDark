@@ -12,6 +12,7 @@ import { getCatalogSummary, CATALOG_VERSION } from "./tools/core/tools-catalog.j
 import { handleSkillsList, handleSkillManifest, handleSkillRaw, handleSkillInstaller, } from "./skills-public.js";
 import { correlationMiddleware, withCid } from "./correlation.js";
 import { healthDeep } from "./health-deep.js";
+import { desktopUpdateAsset, desktopUpdateHealth } from "./desktop-update-feed.js";
 import { getOperationalSnapshot } from "./operational-telemetry.js";
 import { startHubMissionConsumer, getHubMissionConsumerStatus } from "./hub-mission-consumer.js";
 import { providerAdminBridge } from "./provider-admin-bridge.js";
@@ -93,6 +94,9 @@ app.get("/health", (_req, res) => {
 });
 // V2: healthcheck profundo (Health Score consumido pelo painel /admin)
 app.get("/health/deep", healthDeep);
+// Feed público do Desktop: o cliente não recebe token do GitHub privado.
+app.get("/desktop-updates/health", desktopUpdateHealth);
+app.get("/desktop-updates/:asset", desktopUpdateAsset);
 // Um coração: heartbeat que monitora o próprio monitor. Público via api.centralldark.com.
 const HEART_FILE = "/root/CentralDark/logs/heartbeat-api.json";
 app.get("/heartbeat", (_req, res) => {
