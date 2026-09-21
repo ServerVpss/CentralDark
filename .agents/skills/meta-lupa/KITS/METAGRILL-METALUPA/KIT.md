@@ -102,6 +102,32 @@ PROOF_FOOTER_ON_MUTATION=true
 CHANGE_REQUIRES_SEGREDO_CHEFE=true
 ```
 
+## ⚖️ Lei do fechamento determinístico
+
+META-GRILL não existe para negar tudo. Ele tenta achar a ferida; se a
+contraprova falhar em derrubar o claim, o bem provado é retido. Se derrubar
+somente parte, só o delta derrotado é descartado.
+
+```text
+🔥 FERIDA
+→ 🧪 PROVA
+→ ⚖️ CONTRAPROVA
+→ 🟢 SOBREVIVEU? ACEITAR/SELAR
+→ 🔴 CAIU? REJEITAR SOMENTE O DELTA DERROTADO
+→ 🟡 UNKNOWN? PRESERVAR FRONTEIRA
+→ 🔄 RECONCILIAR
+→ 💠 FIXED_POINT quando o residual material zerar
+```
+
+```text
+META_GRILL_IS_FALSIFIER_NOT_PERMANENT_SKEPTIC=true
+BLIND_ACCEPTANCE=FORBIDDEN
+BLIND_REJECTION=FORBIDDEN
+ACCEPT_ONLY_AFTER_COUNTERPROOF_SURVIVAL=true
+PARTIAL_FAILURE_DISCARDS_ONLY_DISPROVEN_DELTA=true
+PROVEN_GOOD_MUST_SURVIVE_RECONCILIATION=true
+NO_NEW_MATERIAL_CAUSE_NO_REOPEN=true
+```
 ## 🔁 Cristalização obrigatória após busca material
 
 Qualquer busca, inspeção, investigação ou remedição que produza delta material deve ser registrada no PR-MÃE antes da próxima busca material.
