@@ -1,17 +1,17 @@
-# Bloco Caddy do graph-panel
+# Exposição do graph-panel
 
-Adicionar como bloco novo, sem alterar os subdomínios existentes:
+O `graph-panel` **não possui subdomínio público próprio**.
 
-```caddyfile
-grafo.centralldark.com {
-  encode gzip zstd
-  reverse_proxy 127.0.0.1:3030
-}
+## Rota canônica
+
+```text
+https://admin.centralldark.com/admin
+→ aba 🌌 Grafo Celestial
+→ /admin/grafo/*
+→ proxy autenticado do MCP Admin
+→ 127.0.0.1:3030
 ```
 
-Depois validar e recarregar:
+O Caddy continua expondo apenas a casca administrativa existente. Não criar bloco `grafo.centralldark.com`.
 
-```bash
-caddy validate --config /etc/caddy/Caddyfile
-systemctl reload caddy
-```
+O processo `graph-panel` permanece local na VPS em `127.0.0.1:3030`; autenticação e superfície externa pertencem ao Admin CentralDark.
