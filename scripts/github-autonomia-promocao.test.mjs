@@ -14,6 +14,7 @@ import {
   scanPullFiles,
   sealReceipt,
   selectLatestNonSkipped,
+  selectLatestRun,
   squashFixedPointProof,
   verifySealedReceipt,
   waitAgeMs,
@@ -427,13 +428,45 @@ test("hold explícito bloqueia sem apagar autorização", () => {
   assert.match(result.reasons.join(" "), /BLOCKING_LABEL:hold/);
 });
 
-test("seleção de workflow ignora skipped mais novo e usa execução real", () => {
-  const selected = selectLatestNonSkipped([
+test("último run vence: skipped novo nunca herda PASS histórico", () => {
+  const runs = [
     { id: 1, name: "gate", run_number: 20, status: "completed", conclusion: "skipped" },
     { id: 2, name: "gate", run_number: 19, status: "completed", conclusion: "success" },
-  ], "gate");
-  assert.equal(selected.id, 2);
-  assert.deepEqual(workflowVerdicts([], ["gate"]), [{ name: "gate", state: "MISSING", run_id: null, conclusion: null }]);
+  ];
+  assert.equal(selectLatestRun(runs, "gate").id, 1);
+  assert.equal(selectLatestNonSkipped(runs, "gate").id, 1);
+  assert.deepEqual(workflowVerdicts(runs, ["gate"]), [
+    { name: "gate", state: "SKIPPED", run_id: 1, conclusion: "skipped" },
+  ]);
+  assert.deepEqual(workflowVerdicts([], ["gate"]), [
+    { name: "gate", state: "MISSING", run_id: null, conclusion: null },
+  ]);
+});
+
+test("workflow informativo queued não bloqueia quando todos os gates obrigatórios passaram", () => {
+  const required = ["gate-a", "gate-b"];
+  const runs = [
+    ...successfulRuns(required),
+    { id: 999, name: "telemetria-decorativa", run_number: 999, status: "queued", conclusion: null },
+  ];
+  const verdicts = workflowVerdicts(runs, required);
+  assert.equal(verdicts.every((item) => item.state === "PASS"), true);
+
+  const result = evaluate(prFixture(), { requiredWorkflows: required, workflowRuns: runs });
+  assert.equal(result.decision, "READY");
+  assert.equal(result.waits.length, 0);
+  assert.equal(result.reasons.length, 0);
+});
+
+test("queued de gate obrigatório continua WAIT e nunca vira PASS", () => {
+  const required = ["gate-a"];
+  const runs = [
+    { id: 10, name: "gate-a", run_number: 10, status: "queued", conclusion: null },
+    { id: 11, name: "informativo", run_number: 11, status: "completed", conclusion: "success" },
+  ];
+  const result = evaluate(prFixture(), { requiredWorkflows: required, workflowRuns: runs });
+  assert.equal(result.decision, "WAIT");
+  assert.match(result.waits.join(" "), /WORKFLOW_PENDING:gate-a/);
 });
 
 test("recibo selado é preso ao hash e expira", () => {
