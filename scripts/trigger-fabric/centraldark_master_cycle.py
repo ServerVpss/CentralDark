@@ -24,6 +24,7 @@ CHAIN = [
 GUIDED_TELEMETRY_PHASES = [
     ("ACORDAR", "#ACORDAR"),
     ("CENTRALDARK", "!CENTRALDARK"),
+    ("TOOL_DISCOVERY", "TOOL DISCOVERY"),
     ("REMEASURE", "REMEASURE"),
     ("INTENT_SCOPE", "INTENÇÃO/ESCOPO"),
     ("RENDEZVOUS", "RENDEZVOUS"),
@@ -536,6 +537,8 @@ def resolve(
         "sensor_failure_is_world_failure": False,
         "transport_failure_requires_authorized_alternate_route": True,
         "alternate_route_must_remeasure_same_target": True,
+        "tool_discovery_required_before_access_claim": bool(master_cycle_active),
+        "claiming_no_access_before_tool_discovery_is_invalid": True,
         "remote_write_requires_proven_gate": True,
         "chat_only_knowledge": "FAIL",
         "session_memory_is_durable_state": False,
@@ -677,6 +680,12 @@ def self_test():
     r = resolve("!CENTRALDARK", chefe_source=True)
     add("master", r["explicit_match"] and r["expanded_chain"] == CHAIN)
     add(
+        "tool_discovery_gate_present",
+        any(step["phase"] == "TOOL_DISCOVERY" for step in r["guided_telemetry"]["steps"])
+        and r["tool_discovery_required_before_access_claim"]
+        and r["claiming_no_access_before_tool_discovery_is_invalid"],
+    )
+    add(
         "guided_telemetry_required",
         r["guided_telemetry"]["render_required"] and r["guided_telemetry"]["next_cursor"] == "ACORDAR",
     )
@@ -754,7 +763,8 @@ def self_test():
             r["master_cycle_active"]
             and r["activation_source"] in {"VOICE_TRIGGER", "VOICE_SUBTRIGGER_FUNNEL"}
             and r["session_provenance"]["profile_id"] == CANONICAL_SOL_PROFILE_ID
-            and r["master_funnel"]["voice_is_modality_not_second_trigger_system"],
+            and r["master_funnel"]["voice_is_modality_not_second_trigger_system"]
+            and r["tool_discovery_required_before_access_claim"],
         )
 
     r = resolve("centraldark", chefe_source=True, input_mode="text")
