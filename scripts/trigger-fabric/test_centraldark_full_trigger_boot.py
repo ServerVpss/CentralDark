@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import argparse
 import importlib.util
 import json
 import tempfile
@@ -10,6 +11,9 @@ HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[1]
 MODULE = HERE / "centraldark_full_trigger_boot.py"
 MEGAZORD = REPO / "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MEGAZORD-CENTRALDARK.yml"
+ENGINE_BINDING = REPO / "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml"
+MASTER_CYCLE = REPO / "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml"
+OPERATIONAL_METHOD = REPO / ".agents/skills/centraldark-operational-method/SKILL.md"
 spec = importlib.util.spec_from_file_location("centraldark_full_trigger_boot", MODULE)
 mod = importlib.util.module_from_spec(spec)
 assert spec.loader
@@ -62,6 +66,145 @@ def test_megazord_persists_realtime_feedback_binding():
         assert token in text, token
 
 
+def test_runtime_preflight_contract_is_bound():
+    state = mod.runtime_preflight_contract_state(REPO)
+    assert state["status"] == "BOUND"
+    assert state["checks"]["file_present"] is True
+
+
+def test_runtime_preflight_allows_safe_literal_command():
+    result = mod.lint_runtime_command(
+        repo=REPO,
+        command="echo ok",
+        shell="bash",
+        host_mode="literal",
+        required_paths=["CENTRALDARK_AI_BOOT.yaml"],
+    )
+    assert result["status"] == "PASS"
+    assert result["reasons"] == []
+    assert result["wrapper_lint_result"] == "PASS"
+    assert result["target_runtime_result"] == "UNKNOWN_UNTIL_TARGET_PROBE"
+    assert result["invalidated_probe_if_any"] == []
+    assert result["unknowns_remaining"] == ["TARGET_RUNTIME_RESULT"]
+    assert result["next_cursor"] == "EXECUTE_TARGET_PROBE"
+
+
+def test_runtime_preflight_blocks_js_template_shell_expansion():
+    result = mod.lint_runtime_command(
+        repo=REPO,
+        command='echo "${PIPESTATUS[0]}"',
+        shell="bash",
+        host_mode="js_template",
+    )
+    assert result["status"] == "FAIL_CLOSED"
+    assert "HOST_TEMPLATE_INTERPOLATION_RISK" in result["reasons"]
+    assert result["wrapper_lint_result"] == "FAIL_CLOSED"
+    assert result["target_runtime_result"] == "NOT_EXECUTED_INVALID_WRAPPER"
+    assert "HOST_TEMPLATE_INTERPOLATION_RISK" in result["invalidated_probe_if_any"]
+    assert result["next_cursor"] == "FIX_PREFLIGHT_AND_RETRY"
+
+
+def test_runtime_preflight_blocks_powershell_pid_collision():
+    result = mod.lint_runtime_command(
+        repo=REPO,
+        command="$pid = 123\\nWrite-Output $pid",
+        shell="powershell",
+        host_mode="literal",
+    )
+    assert result["status"] == "FAIL_CLOSED"
+    assert "POWERSHELL_PID_AUTOMATIC_VARIABLE_COLLISION" in result["reasons"]
+
+
+def test_runtime_preflight_blocks_missing_required_path():
+    result = mod.lint_runtime_command(
+        repo=REPO,
+        command="echo safe",
+        shell="bash",
+        host_mode="literal",
+        required_paths=["scripts/definitely-missing-centraldark-probe.sh"],
+    )
+    assert result["status"] == "FAIL_CLOSED"
+    assert "MISSING_REQUIRED_PATH" in result["reasons"]
+
+
+def test_runtime_preflight_bridge_ownership_requires_complete_evidence():
+    result = mod.lint_runtime_command(
+        repo=REPO,
+        command="Get-Process",
+        shell="powershell",
+        host_mode="literal",
+        surface="desktop_bridge_ownership_claim",
+        command_class="desktop_bridge_ownership_claim",
+        bridge_evidence={
+            "pid_parent_tree": "PID=100 PPID=50",
+            "package_version": "0.2.51",
+        },
+    )
+    assert result["status"] == "FAIL_CLOSED"
+    assert "BRIDGE_OWNERSHIP_EVIDENCE_INCOMPLETE" in result["reasons"]
+    assert set(result["missing_bridge_evidence"]) == {
+        "profile_or_session",
+        "socket_state",
+        "handoff_or_canary_before_kill",
+    }
+    assert result["target_runtime_result"] == "NOT_EXECUTED_INVALID_WRAPPER"
+
+
+def test_runtime_preflight_bridge_ownership_accepts_complete_evidence():
+    result = mod.lint_runtime_command(
+        repo=REPO,
+        command="Get-Process",
+        shell="powershell",
+        host_mode="literal",
+        surface="desktop_bridge_ownership_claim",
+        command_class="desktop_bridge_ownership_claim",
+        bridge_evidence={
+            "pid_parent_tree": "PID=100 PPID=50",
+            "package_version": "0.2.51",
+            "profile_or_session": "SEGREDO/session-A",
+            "socket_state": "ESTABLISHED",
+            "handoff_or_canary_before_kill": "CANARY_PASS",
+        },
+        observed_at="2026-09-20T09:50:00Z",
+    )
+    assert result["status"] == "PASS"
+    assert result["missing_bridge_evidence"] == []
+    assert result["surface"] == "desktop_bridge_ownership_claim"
+    assert result["observed_at"] == "2026-09-20T09:50:00Z"
+    for field in mod.RUNTIME_PREFLIGHT_REQUIRED_RECEIPT_FIELDS:
+        assert field in result, field
+
+
+def test_runtime_preflight_cli_rejects_invalid_bridge_json():
+    base = dict(
+        repo=str(REPO),
+        shell="powershell",
+        host_mode="literal",
+        command="Get-Process",
+        required_path=[],
+        surface="desktop_bridge_ownership_claim",
+        command_class="desktop_bridge_ownership_claim",
+        observed_at="2026-09-20T09:55:00Z",
+    )
+    malformed = argparse.Namespace(**base, bridge_evidence_json="{not-json")
+    not_object = argparse.Namespace(**base, bridge_evidence_json="[]")
+    assert mod.cmd_preflight_lint(malformed) == 8
+    assert mod.cmd_preflight_lint(not_object) == 8
+
+
+def test_runtime_preflight_is_inherited_by_engine_master_and_method():
+    engine = ENGINE_BINDING.read_text(encoding="utf-8")
+    master = MASTER_CYCLE.read_text(encoding="utf-8")
+    method = OPERATIONAL_METHOD.read_text(encoding="utf-8")
+
+    assert "RUNTIME_PREFLIGHT_LINT" in engine
+    assert "required_by_all_engines: true" in engine
+    assert "runtime_preflight_consumer: scripts/trigger-fabric/centraldark_full_trigger_boot.py#cmd_preflight_lint" in master
+    assert "RUNTIME_PREFLIGHT_LINT_PASS_WHEN_APPLICABLE" in master
+    assert "## Runtime preflight obrigatório" in method
+    assert "PREFLIGHT_PASS != RUNTIME_PASS" in method
+
+
 def test_lock_key_is_stable_and_owner_bound():
     a = mod.lock_key("CLAIM_X", "owner/a")
     b = mod.lock_key("CLAIM_X", "owner/a")
@@ -103,6 +246,15 @@ if __name__ == "__main__":
         test_realtime_feedback_routes_without_mutation_permission,
         test_empty_feedback_is_not_active,
         test_megazord_persists_realtime_feedback_binding,
+        test_runtime_preflight_contract_is_bound,
+        test_runtime_preflight_allows_safe_literal_command,
+        test_runtime_preflight_blocks_js_template_shell_expansion,
+        test_runtime_preflight_blocks_powershell_pid_collision,
+        test_runtime_preflight_blocks_missing_required_path,
+        test_runtime_preflight_bridge_ownership_requires_complete_evidence,
+        test_runtime_preflight_bridge_ownership_accepts_complete_evidence,
+        test_runtime_preflight_cli_rejects_invalid_bridge_json,
+        test_runtime_preflight_is_inherited_by_engine_master_and_method,
         test_lock_key_is_stable_and_owner_bound,
         test_registry_roundtrip,
         test_canonical_chain_contains_full_core_flow,

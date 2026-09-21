@@ -1489,7 +1489,7 @@ function startWebhookServer() {
     const server = http.createServer((req, res) => {
       if (req.method === 'GET' && req.url === '/bot/health') {
         res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ ok: true, mode: 'webhook', bot: '@srver1bot' }));
+        res.end(JSON.stringify(telegramHealthPayload('webhook')));
         return;
       }
       if (req.method === 'POST' && req.url === '/bot/webhook') {
@@ -1523,6 +1523,38 @@ function startWebhookServer() {
 // ── MODO POLLING ───────────────────────────────────────────────────────────
 let _running = true;
 let _offset  = 0;
+let _lastTelegramOkAt = null;
+let _lastTelegramError = null;
+
+function telegramHealthPayload(mode) {
+  const now = Date.now();
+  const ageMs = _lastTelegramOkAt ? Math.max(0, now - _lastTelegramOkAt) : null;
+  const fresh = ageMs !== null && ageMs < 90_000;
+  return {
+    ok: mode === 'polling' ? fresh : Boolean(_lastTelegramOkAt),
+    mode,
+    bot: '@srver1bot',
+    lastTelegramOkAt: _lastTelegramOkAt ? new Date(_lastTelegramOkAt).toISOString() : null,
+    lastTelegramOkAgeMs: ageMs,
+    lastErrorPresent: Boolean(_lastTelegramError),
+  };
+}
+
+function startPollingHealthServer() {
+  return new Promise((resolve, reject) => {
+    const server = http.createServer((req, res) => {
+      if (req.method === 'GET' && req.url === '/bot/health') {
+        const body = telegramHealthPayload('polling');
+        res.writeHead(body.ok ? 200 : 503, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(body));
+        return;
+      }
+      res.writeHead(404).end('Not found');
+    });
+    server.on('error', reject);
+    server.listen(WEBHOOK_PORT, '127.0.0.1', () => resolve(server));
+  });
+}
 
 async function pollingLoop() {
   while (_running) {
@@ -1531,6 +1563,8 @@ async function pollingLoop() {
         offset: _offset, timeout: 30,
         allowed_updates: ['message', 'callback_query'],
       });
+      _lastTelegramOkAt = Date.now();
+      _lastTelegramError = null;
       if (updates?.length) {
         for (const u of updates) {
           _offset = u.update_id + 1;
@@ -1539,6 +1573,7 @@ async function pollingLoop() {
         }
       }
     } catch (e) {
+      _lastTelegramError = String(e?.message || e || 'poll_error');
       console.error('[Poll] error:', e.message);
       await new Promise(r => setTimeout(r, 5000));
     }
@@ -1555,6 +1590,8 @@ async function main() {
     process.exit(1);
   }
 
+  _lastTelegramOkAt = Date.now();
+  _lastTelegramError = null;
   console.log(`🔮 @${me.username} online — CentralDark Hub Unificado v2 (Cockpit)`);
   if (ADMIN_ID) console.log(`[Bot] ✅ Admin reconhecido: ${ADMIN_ID}`);
   else          console.warn('[Bot] ⚠️  ADMIN_CHAT_ID não definido. Envie /start para descobrir seu chat_id.');
@@ -1611,8 +1648,19 @@ async function main() {
 
   _botMode = 'polling';
   console.log('[Bot] 🔄 MODO POLLING ativo');
-  process.on('SIGTERM', () => { _running = false; });
-  process.on('SIGINT',  () => { _running = false; });
+  let pollingHealthServer = null;
+  try {
+    pollingHealthServer = await startPollingHealthServer();
+    console.log(`[Bot] 🩺 Health polling ativo — porta ${WEBHOOK_PORT}`);
+  } catch (e) {
+    console.warn(`[Bot] ⚠️  Health polling indisponível (${e.message})`);
+  }
+  const shutdownPolling = () => {
+    _running = false;
+    if (pollingHealthServer) pollingHealthServer.close();
+  };
+  process.on('SIGTERM', shutdownPolling);
+  process.on('SIGINT', shutdownPolling);
   await pollingLoop();
 }
 

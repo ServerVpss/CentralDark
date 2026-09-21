@@ -65,8 +65,10 @@ continuous_delta_contract:
   correlated_views_are_independent_proofs: false
   screenshot_proves: VISIBLE_MANIFESTATION_ONLY
   runtime_claim_requires_runtime_evidence: true
+  DELTA_CONTINUO_REQUIRED: true
+  NEW_MATERIAL_RESTARTS_MISSION: false
   cross_chat_transport_requires_channel_evidence: true
-  process: [CAPTURE, LINK_DESTINATION, DEDUPE, CLASSIFY, FIND_OWNER, PROVE_OR_PRESERVE_UNKNOWN, ABSORB_MINIMAL_DELTA, COUNTERPROVE, REMEASURE]
+  process: [CAPTURE, LINK_DESTINATION, LINK_TO_ACTIVE_GOAL, DEDUPE, CLASSIFY, FIND_OWNER, PROVE_OR_PRESERVE_UNKNOWN, ABSORB_MINIMAL_DELTA, COUNTERPROVE, REMEASURE, UPDATE_HUD, PERSIST_NEXT_CURSOR]
   classifications: [DUPLICATE, PARTIAL, NEW, SUPERSEDED, CANDIDATE, UNKNOWN, PROVED]
 
 phase_contracts:
@@ -228,6 +230,59 @@ standard_flow:
   head_integrity: TESTED_HEAD_EQUALS_COMMITTED_HEAD_EQUALS_PUSHED_PR_HEAD
   failure_flow: [OBSERVED_FAILURE, FIND_OWNER, CREATE_FALSIFIER, PATCH_EXISTING_OWNER, ADD_NEGATIVE_TEST, RUN_EXISTING_TESTS, COUNTERPROVE, REGISTER_RECEIPT, GENERALIZE_IF_REUSABLE]
   scope_compression_failure: AGENT_REDUCED_HUMAN_OBJECTIVE_WITHOUT_AUTHORIZATION
+
+global_contract_enforcer:
+  marker: CENTRALDARK_GLOBAL_CONTRACT_ENFORCER_REQUIRED
+  creates_new_dispatcher: false
+  mode: EXTEND_EXISTING_TRIGGER_FABRIC_AND_AGENT_CALL
+  owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
+  mutation_gate: scripts/agent-call.mjs
+  deploy_gate: scripts/vps/deploy-guards-dispatcher.sh
+  runtime_preflight_contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RUNTIME-PREFLIGHT-LINT.yml
+  runtime_preflight_consumer: scripts/trigger-fabric/centraldark_full_trigger_boot.py#cmd_preflight_lint
+  runtime_preflight_required_before: [MUTATION, DEPLOY, KILL, RESTART, DIRTY_SYNC, MULTI_SHELL_FANOUT, RUNTIME_GREEN_CLAIM]
+  runtime_preflight_unknown_or_fail: FAIL_CLOSED
+  runtime_preflight_does_not_replace_target_runtime_test: true
+  read_only_can_observe_without_mutation_gate: true
+  before_every_mutation:
+    - RECOVER_RELEVANT_CONTEXT
+    - MEASURE_GITHUB_T0
+    - MEASURE_VPS_T0
+    - CLASSIFY_CROSS_SURFACE_DRIFT
+    - RECONCILE
+    - OWNER_PROVEN
+    - ONE_WRITER_PROVEN
+    - RUNTIME_PREFLIGHT_LINT_PASS_WHEN_APPLICABLE
+    - PREFLIGHT_PASS
+    - COUNTERPROOF_PLAN_READY
+    - ROLLBACK_PREPARED_AND_IDENTIFIED
+    - GLOBAL_ENTRY_GATE_PASS
+  after_every_mutation:
+    - MEASURE_GITHUB_T1
+    - MEASURE_VPS_T1
+    - COUNTERPROOF_PASS
+    - RUNTIME_PROOF_IF_APPLICABLE
+    - SAME_HEAD_CI_IF_PROMOTING
+    - RECEIPT_WRITTEN
+    - HUD_LIVE_DATA_UPDATED
+    - GLOBAL_EXIT_GATE_PASS
+    - FIXED_POINT_OR_NEXT_CURSOR
+  fail_closed:
+    - FAIL
+    - UNKNOWN
+    - BLOCKED
+    - BLOCKED_TRANSIENT
+    - QUEUED
+    - PENDING
+    - IN_PROGRESS
+    - CANCELLED
+    - SKIPPED_WITHOUT_PROVEN_NOT_APPLICABLE
+  human_boundary_only:
+    - SECRET_MFA_OR_EXCLUSIVE_CONSENT
+    - PHYSICAL_ACTION
+    - IRREVERSIBLE_OUT_OF_SCOPE_AUTHORIZATION
+    - NEW_HUMAN_INTENT_REQUIRED
+    - EXACT_HARD_BLOCKER_AFTER_AUTHORIZED_ROUTES_EXHAUSTED
 
 architecture_flow:
   - CHEFE_INTENT
@@ -442,6 +497,52 @@ communication_interface:
       - EXACTNESS
       - REQUIRED_WARNING_IF_MATERIAL
       - BLOCKED_OR_UNKNOWN_IF_MATERIAL
+
+log_incident_crystallization:
+  marker: CENTRALDARK_LOG_INCIDENT_FANOUT_CRYSTALLIZATION_REQUIRED
+  sensor: /admin/api/logs
+  sensor_owner: apps/modulos/mcp/src/admin.js
+  deterministic_fanout_gate: scripts/agent-call.mjs --log-incident-fanout
+  use_existing_trigger_fabric: true
+  creates_new_logger: false
+  creates_new_orchestrator: false
+  on_material_signal:
+    - CAPTURE_CORRELATION_CONTEXT
+    - FAN_OUT_PARALLEL_READ_ONLY
+    - AUTH_OAUTH
+    - MCP_RUNTIME
+    - HUB_DATABASE
+    - ROUTING_NETWORK
+    - PROCESS_RUNTIME
+    - GITHUB_CI
+    - CONFIG_PROVENANCE
+    - SCREEN_OPTIONAL
+    - RENDEZVOUS
+    - IDENTIFY_EXISTING_OWNER
+    - REMEDIATE_BY_SCOPE
+    - T1_AFFECTED_SCOPE
+    - RESCAN_ADMIN_API_LOGS
+    - COUNTERPROOF
+    - RECEIPT
+    - CONTINUE_TO_CRYSTALLIZATION
+  parallelism:
+    readers_parallel: true
+    same_scope_mutation_parallel: false
+    disjoint_scope_mutation_parallel_only_if_proven_independent: true
+    one_active_writer_per_mutable_scope: true
+  stop_condition:
+    all_material_log_incidents_resolved: true
+    all_affected_t1_pass: true
+    no_unresolved_cross_sensor_contradiction: true
+    same_head_ci_when_git_changed: true
+    runtime_proof_when_runtime_changed: true
+    exact_blocker_allowed: true
+  invariants:
+    ADMIN_API_LOGS_200_IS_NOT_GLOBAL_PASS: true
+    LOG_SILENCE_IS_NOT_GLOBAL_PASS: true
+    NEW_ERROR_DURING_FIX_IS_SAME_MISSION_DELTA: true
+    UNKNOWN_STAYS_UNKNOWN: true
+    UNRESOLVED_MATERIAL_ERROR_BLOCKS_FIXED_POINT: true
 
 delta_harvest:
   canonical_signal: "!DELTA UTILS"

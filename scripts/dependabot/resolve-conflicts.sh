@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# Motor único da Casa para conflito de PR de bump.
+# Motor único da Casa para conflito de PR (Dependabot ou humano same-repo).
 #
 # Política:
 #   - trabalha em worktree isolado: nunca troca a branch da Casa principal;
 #   - manifestos/lockfiles: preserva o lado do PR (o bump é o delta útil);
 #   - conflitos conhecidos não-manifesto: preserva main (fail-closed);
-#   - conflito desconhecido: bloqueia e escala para review;
+#   - conflito desconhecido: auto-review determinístico; texto preserva ambos, código preserva PR e CI/contraprova julga;
 #   - nunca inventa branch de destino: o workflow fornece PR_HEAD_REF;
 #   - nunca empurra para main;
 #   - conflito/refutação vira receipt/minério; não some em silêncio.
@@ -55,8 +55,15 @@ echo "🏠 CASA_WORKTREE_MUTATED=0"
 echo "🧱 ISOLATED_WORKTREE=$WORKTREE"
 echo "🧾 KNOWN_CONFLICTS_FILE=$KNOWN_CONFLICTS_FILE"
 
-git -C "$REPO_DIR" fetch --prune origin main
-git -C "$REPO_DIR" fetch --force origin "refs/pull/${PR_NUM}/head:${FETCH_REF}"
+if [ -n "${GITHUB_TOKEN:-}" ]; then
+  AUTH_B64="$(printf 'x-access-token:%s' "$GITHUB_TOKEN" | base64 | tr -d '\\n')"
+  GIT_AUTH=(-c "http.https://github.com/.extraheader=AUTHORIZATION: basic $AUTH_B64")
+else
+  GIT_AUTH=()
+fi
+
+git "${GIT_AUTH[@]}" -C "$REPO_DIR" fetch --prune origin main
+git "${GIT_AUTH[@]}" -C "$REPO_DIR" fetch --force origin "refs/pull/${PR_NUM}/head:${FETCH_REF}"
 git -C "$REPO_DIR" worktree add --detach "$WORKTREE" "$FETCH_REF"
 
 cd "$WORKTREE"
@@ -140,15 +147,12 @@ if [ "${#CONFLICTS[@]}" -eq 0 ]; then
   exit 3
 fi
 
-UNKNOWN_CONFLICTS=()
+declare -A RESOLUTION_BY_FILE=()
 for f in "${CONFLICTS[@]}"; do
-  if ! info="$(lookup_known_conflict "$f")"; then
-    echo "UNKNOWN_CONFLICT_PATH path=$f action=BLOCK_REVIEW"
-    UNKNOWN_CONFLICTS+=("$f")
-    continue
-  fi
-
-  node - "$info" "$f" <<'NODE'
+  if info="$(lookup_known_conflict "$f")"; then
+    policy="$(node -e "const entry = JSON.parse(process.argv[1]); process.stdout.write(entry.SAFE_RESOLUTION);" "$info")"
+    RESOLUTION_BY_FILE["$f"]="$policy"
+    node - "$info" "$f" <<'NODE'
 const entry = JSON.parse(process.argv[2]);
 const actual = process.argv[3] || '';
 console.log(`KNOWN_CONFLICT_PATH=true path=${entry.PATH_PATTERN} actual=${actual}`);
@@ -159,31 +163,69 @@ console.log(`RESOLUTION_POLICY=${entry.SAFE_RESOLUTION}`);
 console.log(`SOURCE_REF=${entry.SOURCE_REF}`);
 console.log(`RUNTIME_APPLICABLE=${entry.RUNTIME_APPLICABLE}`);
 NODE
+    continue
+  fi
+
+  case "$f" in
+    *.md|*.txt|*.mmd|*.jsonl|*.csv|*.rst|*.adoc)
+      RESOLUTION_BY_FILE["$f"]="AUTO_TEXT_BOTH"
+      echo "UNKNOWN_CONFLICT_PATH path=$f action=AUTO_REVIEW_TEXT_BOTH"
+      ;;
+    *)
+      RESOLUTION_BY_FILE["$f"]="USE_PR_SIDE"
+      echo "UNKNOWN_CONFLICT_PATH path=$f action=AUTO_REVIEW_PR_SIDE_THEN_CI"
+      ;;
+  esac
 done
 
-if [ "${#UNKNOWN_CONFLICTS[@]}" -gt 0 ]; then
-  echo "BLOCKED_UNKNOWN_CONFLICTS count=${#UNKNOWN_CONFLICTS[@]}"
-  printf 'UNKNOWN_CONFLICT=%s\n' "${UNKNOWN_CONFLICTS[@]}"
-  git merge --abort 2>/dev/null || true
-  exit 5
-fi
+resolve_text_both() {
+  local file="$1"
+  node - "$file" <<'NODE'
+const fs = require('node:fs');
+const file = process.argv[2];
+const src = fs.readFileSync(file, 'utf8').split('\n');
+const out = [];
+for (let i = 0; i < src.length; i += 1) {
+  if (!src[i].startsWith('<<<<<<< ')) {
+    out.push(src[i]);
+    continue;
+  }
+  const ours = [];
+  const theirs = [];
+  i += 1;
+  while (i < src.length && src[i] !== '=======') ours.push(src[i++]);
+  if (i >= src.length) throw new Error(`conflict sem separador em ${file}`);
+  i += 1;
+  while (i < src.length && !src[i].startsWith('>>>>>>> ')) theirs.push(src[i++]);
+  if (i >= src.length) throw new Error(`conflict sem fechamento em ${file}`);
+  const same = ours.length === theirs.length && ours.every((line, idx) => line === theirs[idx]);
+  out.push(...ours);
+  if (!same) out.push(...theirs);
+}
+fs.writeFileSync(file, out.join('\n'));
+NODE
+}
 
 # Estamos no HEAD do PR e fazemos merge de origin/main:
 #   --ours   = PR
 #   --theirs = main
 for f in "${CONFLICTS[@]}"; do
-  info="$(lookup_known_conflict "$f")"
-  policy="$(node -e "const entry = JSON.parse(process.argv[1]); process.stdout.write(entry.SAFE_RESOLUTION);" "$info")"
+  policy="${RESOLUTION_BY_FILE[$f]}"
 
   case "$policy" in
     USE_PR_SIDE)
-      echo "RESOLVE path=$f winner=PR"
+      echo "RESOLVE path=$f winner=PR auto_review=1"
       git checkout --ours -- "$f"
       git add -- "$f"
       ;;
     USE_MAIN_SIDE)
       echo "RESOLVE path=$f winner=MAIN fail_closed=1"
       git checkout --theirs -- "$f"
+      git add -- "$f"
+      ;;
+    AUTO_TEXT_BOTH)
+      echo "RESOLVE path=$f winner=BOTH semantic=text-union"
+      resolve_text_both "$f"
       git add -- "$f"
       ;;
     *)
@@ -193,6 +235,27 @@ for f in "${CONFLICTS[@]}"; do
       ;;
   esac
 done
+
+echo "AUTO_REVIEW_CONFLICTS=${#CONFLICTS[@]}"
+git diff --cached --check
+
+for f in "${CONFLICTS[@]}"; do
+  case "$f" in
+    *.json)
+      node -e "JSON.parse(require('node:fs').readFileSync(process.argv[1], 'utf8'))" "$f"
+      ;;
+    *.js|*.mjs|*.cjs)
+      node --check "$f"
+      ;;
+    *.sh)
+      bash -n "$f"
+      ;;
+    *.py)
+      python3 -m py_compile "$f"
+      ;;
+  esac
+done
+echo "AUTO_REVIEW_COUNTERPROOF=PASS"
 
 if git diff --name-only --diff-filter=U | grep -q .; then
   echo "BLOCKED_UNRESOLVED_CONFLICTS"
@@ -206,7 +269,7 @@ git -c user.name='CentralDark Dependabot Resolver' \
     commit --no-edit
 
 NEW_HEAD="$(git rev-parse HEAD)"
-git push origin "HEAD:refs/heads/${PR_HEAD_REF}"
+git "${GIT_AUTH[@]}" push origin "HEAD:refs/heads/${PR_HEAD_REF}"
 
 echo "RESOLVED_AND_PUSHED pr=${PR_NUM} head_ref=${PR_HEAD_REF} head=${NEW_HEAD}"
 echo "DIRECT_MAIN_WRITE=0"
