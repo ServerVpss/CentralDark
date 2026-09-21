@@ -114,7 +114,7 @@ test("lista padrão é exatamente a régua canônica de oito gates", () => {
     "codex-validate",
     "lupa-conformance",
     "Lupa Drift Guard",
-    "Trigger Fabric Full Package",
+    "🧠 Trigger Fabric Full Package — pacote e contraprova",
     "PR Title Contract",
     "PR auto-review (Codex + checklist)",
     "Pipeline — Telegram + Painel",
