@@ -306,6 +306,9 @@ jobs:
           node --test tests/admin-guard.test.mjs
           node --test tests/hub-mission-consumer.test.mjs
           node --test tests/provider-admin-bridge.test.mjs tests/provider-control-integration.test.mjs tests/provider-control.test.mjs tests/provider-secret-boundary.test.mjs
+          node --test tests/operational-telemetry.test.mjs
+          bash -n ../../scripts/diagnostics/centraldark-forensic-sweep.sh
+          bash -n ../../scripts/mcp/check-mcp-status.sh
 
       - name: Build runtime dist
         working-directory: apps/modulos/mcp

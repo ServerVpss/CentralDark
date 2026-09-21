@@ -122,6 +122,10 @@ git worktree add --detach "$GATE_TMP" "$ALVO" --quiet \
   python3 scripts/trigger-fabric/verify_repo_contract.py . | tee "$CONTRACT_RECEIPT"
   grep -q '^REPO_CONTRACT_VERIFY=PASS$' "$CONTRACT_RECEIPT"
   node apps/modulos/HERMES-CORE/core/universal-method-contract.mjs --self-test
+  node --check scripts/agent-call.mjs
+  grep -q "CENTRALDARK_GLOBAL_CONTRACT_ENFORCER_REQUIRED" scripts/agent-call.mjs
+  grep -q "GLOBAL_ENTRY_GATE=PASS" scripts/vps/centraldark-deploy.sh
+  grep -q "GLOBAL_EXIT_GATE=PASS" scripts/vps/centraldark-deploy.sh
   python3 scripts/lupa/validar_autolupa_hash.py
   python3 .agents/skills/meta-lupa/scripts/horn_caracol_gate.py --self-test
 ) || die "SHA alvo falhou Master/Universal/Meta-Lupa/Horn" 16
@@ -153,6 +157,7 @@ JSON
 log "TLC23_TARGET_SHA=$ALVO"
 log "UNIVERSAL_METHOD_TARGET=PASS"
 log "HORN_CARACOL_DEPLOY_GATE=PASS"
+log "GLOBAL_CONTRACT_ENFORCER_TARGET=PASS"
 
 # ─── Guarda: imutáveis ──────────────────────────────────────────────────
 IMUTAVEIS="$(git ls-files -z \

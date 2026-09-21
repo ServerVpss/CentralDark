@@ -208,6 +208,39 @@ function validate(contract, extension, contractText, portaText, gateText, writer
   expect(policy?.enforcement?.counterproof_required === true, "CONTINUIDADE_GLOBAL_COUNTERPROOF_REQUIRED");
   expect(policy?.enforcement?.future_execution_required === true, "CONTINUIDADE_GLOBAL_FUTURE_REQUIRED");
   expect(policy?.enforcement?.single_global_owner === CONTRACT, "CONTINUIDADE_GLOBAL_OWNER");
+  const globalEverything = contract?.global_absorption_and_cockpit_policy;
+  expect(globalEverything?.marker === "GLOBAL_EVERYTHING_INTO_CENTRALDARK", "GLOBAL_EVERYTHING_MARKER");
+  expect(globalEverything?.scope === "GLOBAL", "GLOBAL_EVERYTHING_SCOPE");
+  expect(globalEverything?.origin_is_not_architecture === true, "GLOBAL_ORIGIN_NOT_ARCHITECTURE");
+  expect(globalEverything?.same_contract_regardless_of_origin === true, "GLOBAL_SAME_CONTRACT_ORIGIN");
+  expect(globalEverything?.ingestion?.single_character_is_valid_input === true, "GLOBAL_SINGLE_CHARACTER_INPUT");
+  expect(globalEverything?.ingestion?.whole_file_is_valid_input === true, "GLOBAL_WHOLE_FILE_INPUT");
+  expect(globalEverything?.ingestion?.whole_package_is_valid_input === true, "GLOBAL_WHOLE_PACKAGE_INPUT");
+  expect(globalEverything?.ingestion?.apply_into_existing_centraldark === true, "GLOBAL_APPLY_EXISTING_CENTRALDARK");
+  expect(globalEverything?.ingestion?.create_parallel_system_for_new_input === false, "GLOBAL_NO_PARALLEL_SYSTEM");
+  expect(globalEverything?.surfaces?.public_site?.canonical_host === "centralldark.com", "GLOBAL_PUBLIC_SITE_HOST");
+  expect(globalEverything?.surfaces?.private_admin_cockpit?.canonical_host === "admin.centralldark.com", "GLOBAL_ADMIN_HOST");
+  expect(globalEverything?.surfaces?.private_admin_cockpit?.access === "AUTHENTICATED_OWNER_ONLY", "GLOBAL_ADMIN_PRIVATE_ACCESS");
+  expect(globalEverything?.surfaces?.private_admin_cockpit?.one_cockpit === true, "GLOBAL_ONE_COCKPIT");
+  expect(globalEverything?.global_application?.all_current_components_inherit === true, "GLOBAL_CURRENT_COMPONENTS_INHERIT");
+  expect(globalEverything?.global_application?.all_future_components_inherit === true, "GLOBAL_FUTURE_COMPONENTS_INHERIT");
+  expect(globalEverything?.global_application?.every_addition_removal_update_uses_same_contract === true, "GLOBAL_MUTATIONS_SAME_CONTRACT");
+  expect(globalEverything?.pr_mother_projection?.pr === 1562, "GLOBAL_PR_MOTHER_1562");
+  const continuousReality = globalEverything?.continuous_reality_convergence;
+  expect(continuousReality?.marker === "CONTINUOUS_REALITY_FIXED_POINT_LOOP", "GLOBAL_CONTINUOUS_LOOP_MARKER");
+  expect(continuousReality?.scope === "GLOBAL_CONTINUOUS", "GLOBAL_CONTINUOUS_LOOP_SCOPE");
+  expect(continuousReality?.main_movement_is_internal_trigger_not_user_interrupt === true, "GLOBAL_MAIN_MOVE_INTERNAL_TRIGGER");
+  expect(continuousReality?.do_not_stop_to_report_main_movement === true, "GLOBAL_DO_NOT_STOP_ON_MAIN_MOVE");
+  expect(continuousReality?.preserve_current_mission_across_head_changes === true, "GLOBAL_PRESERVE_MISSION_ACROSS_HEAD");
+  expect(Array.isArray(continuousReality?.loop) && continuousReality.loop.join(">").includes("REMEASURE_HEAD>ABSORB_USEFUL_DELTA>FAST_FORWARD_VPS_WHEN_SAFE>MEASURE_RUNTIME>GRILL_ME>COUNTERPROOF"), "GLOBAL_CONTINUOUS_LOOP_ORDER");
+  expect(continuousReality?.loop?.includes("REPEAT_IF_SOURCE_OF_TRUTH_ADVANCES"), "GLOBAL_CONTINUOUS_REPEAT");
+  expect(continuousReality?.loop?.at?.(-1) === "STOP_ONLY_WHEN_REALITY_EQUALS_FIXED_POINT", "GLOBAL_STOP_ONLY_FIXED_POINT");
+  expect(continuousReality?.stopping_condition?.only === "REALITY_EQUALS_FIXED_POINT", "GLOBAL_STOP_CONDITION_REALITY");
+  expect(continuousReality?.invariants?.UNKNOWN_IS_NOT_PASS === true, "GLOBAL_UNKNOWN_NOT_PASS");
+  expect(continuousReality?.invariants?.COMMITTED_IS_NOT_DEPLOYED === true, "GLOBAL_COMMITTED_NOT_DEPLOYED");
+  expect(continuousReality?.invariants?.NO_BLIND_OVERWRITE === true, "GLOBAL_NO_BLIND_OVERWRITE");
+
+
 
   const markerCount = (contractText.match(/"marker"\s*:\s*"GLOBAL_CONTINUITY_HARD_GATE"/g) || []).length;
   expect(markerCount === 1, `CONTINUIDADE_GLOBAL_OWNER_COUNT:${markerCount}`);
