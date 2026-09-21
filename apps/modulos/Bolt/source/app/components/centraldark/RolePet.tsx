@@ -1,10 +1,11 @@
+import type { ReactNode } from 'react';
 import type { CentralDarkRoleId } from '~/lib/centraldark/organism';
 
 type PetId = CentralDarkRoleId | 'sol';
 
 export function RolePet({ id, title }: { id: PetId; title?: string }) {
   const label = title ?? (id === 'sol' ? 'SOL' : id);
-  const common = (body: React.ReactNode) => (
+  const common = (body: ReactNode) => (
     <svg className="cd-pet-svg" viewBox="0 0 64 64" role="img" aria-label={label}>
       <title>{label}</title>
       {body}
