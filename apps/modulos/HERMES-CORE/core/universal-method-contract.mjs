@@ -31,6 +31,8 @@ const FILES = {
   perceptionOrchestra: 'apps/modulos/HERMES-CORE/core/perception-orchestra.mjs',
   orchestrator: 'apps/modulos/HERMES-CORE/core/orchestrator.mjs',
   knowledgeCollector: 'apps/modulos/HERMES-CORE/agents/Knowledge-Collector/agent.mjs',
+  agentsGuide: 'AGENTS.md',
+  portableEntry: 'LEIA-ME-IA.md',
 };
 
 const TLC23_CANONICAL_SHA256 = 'b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1';
@@ -127,6 +129,8 @@ export function validateUniversalMethod() {
   const perceptionOrchestra = read(FILES.perceptionOrchestra);
   const orchestrator = read(FILES.orchestrator);
   const knowledgeCollector = read(FILES.knowledgeCollector);
+  const agentsGuide = read(FILES.agentsGuide);
+  const portableEntry = read(FILES.portableEntry);
   const tlc23Hash = sha256(readBuffer(FILES.tlc23));
 
   if (tlc23Hash !== TLC23_CANONICAL_SHA256) {
@@ -278,6 +282,42 @@ export function validateUniversalMethod() {
     'se a máquina pode descobrir, o humano não deve adivinhar',
     'erro genérico sem localização e próximo passo acionável é FAIL',
   ], 'OPERATIONAL_HUMAN_COMPLEXITY_METHOD');
+
+  requireTokens(agentsGuide, [
+    'CENTRALDARK_UNIVERSAL_DIRECT_MODE_V1=true',
+    'PREFER_COMPLETE_OPERATION_OVER_MICROCOMMAND_CHAIN=true',
+    'HUD_LAYOUT_FIXED=true',
+    'UNCHANGED_FIELDS_SHOULD_NOT_BE_REWRITTEN=true',
+    'NUMERIC_METRIC_REQUIRES_PROVEN_DENOMINATOR=true',
+    'TOOL_ARGUMENT_LIMITS_MUST_BE_NORMALIZED_TO_SAFE_CAP=true',
+    'SOURCE_404_IS_SENSOR_MISS_NOT_WORLD_MISS=true',
+    'GITHUB_REF_MISS_DOES_NOT_PROVE_RUNTIME_FILE_ABSENT=true',
+    'ALTERNATE_AUTHORIZED_SENSOR_BEFORE_HUMAN_BLOCKER=true',
+    'GENERIC_ERROR_ONLY=FAIL',
+    'ASK_ONE_EXACT_HUMAN_ACTION_AT_A_TIME=true',
+    'AUTO_RESUME_AFTER_HUMAN_FRONTIER=true',
+  ], 'UNIVERSAL_DIRECT_MODE_AGENTS');
+
+  requireTokens(portableEntry, [
+    '## 0.1 Modo Direto universal — contrato portátil',
+    'CENTRALDARK_UNIVERSAL_DIRECT_MODE_V1=true',
+    'HUD_FIXED_FIELDS=',
+    'HUD_ONLY_MATERIAL_VALUES_CHANGE=true',
+    'TOOL_ARGUMENT_LIMITS_MUST_BE_NORMALIZED_TO_SAFE_CAP=true',
+    'SOURCE_404_IS_SENSOR_MISS_NOT_WORLD_MISS=true',
+    'FAILURE_MUST_SHOW=',
+    'NO_TOOL_ACCESS → EXECUTION_CAPABILITY=ADVISORY_ONLY',
+  ], 'UNIVERSAL_DIRECT_MODE_PORTABLE_ENTRY');
+
+  requireTokens(hermesPrompt, [
+    'UNIVERSAL_DIRECT_MODE_INHERITED=true',
+    'UNIVERSAL_DIRECT_MODE_OWNER=AGENTS.md',
+    'UNIVERSAL_DIRECT_PORTABLE_ENTRY=LEIA-ME-IA.md',
+    'HUD_LAYOUT_FIXED_ONLY_LIVE_VALUES_CHANGE=true',
+    'TOOL_ARGUMENT_LIMITS_MUST_BE_NORMALIZED_TO_SAFE_CAP=true',
+    'SOURCE_404_IS_SENSOR_MISS_NOT_WORLD_MISS=true',
+    'HUMAN_RETEACH_REQUIRED=false',
+  ], 'UNIVERSAL_DIRECT_MODE_HERMES');
 
   let previous = -1;
   for (const token of REQUIRED_CHAIN) {
@@ -652,6 +692,9 @@ export function validateUniversalMethod() {
     prefer_complete_operation_over_microcommands: true,
     loud_actionable_failure_contract: true,
     automatic_resume_after_human_frontier: true,
+    universal_direct_mode_contract: true,
+    fixed_hud_only_live_values_change: true,
+    numeric_metrics_require_proven_denominator: true,
   };
 }
 
