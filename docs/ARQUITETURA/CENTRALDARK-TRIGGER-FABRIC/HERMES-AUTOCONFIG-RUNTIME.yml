@@ -242,6 +242,56 @@ continuous_capability_absorption:
     SAME_LEARNING_WITHOUT_NEW_EVIDENCE: DEDUPE
     REUSE_BEFORE_CREATE: true
 
+official_hermes_update_continuity:
+  status: ACTIVE
+  owner: .github/workflows/hermes-core-signal-watch.yml
+  semantic_owner: apps/modulos/HERMES-CORE
+  upstream: NousResearch/hermes-agent
+  purpose: KEEP_OFFICIAL_HERMES_CURRENT_WITHOUT_HUMAN_MICROMANAGEMENT
+  reuse_before_create: true
+  new_parallel_updater: false
+  official_cli_is_update_engine: true
+  trigger_model:
+    webhook_accelerator:
+      event: repository_dispatch:hermes_official_update_check
+      optional: true
+    schedule_fallback:
+      owner: existing_hermes_core_signal_watch_schedule
+      required: true
+  deterministic_flow:
+    - HERMES_UPDATE_CHECK
+    - IF_NO_CHANGE_WRITE_RECEIPT_AND_STOP
+    - HERMES_UPDATE_PLAN
+    - HERMES_UPDATE_BACKUP_YES
+    - OFFICIAL_BUILD_AND_DEPENDENCY_REFRESH
+    - HERMES_GATEWAY_RESTART_WHEN_MANAGED
+    - CENTRALDARK_HERMES_PM2_RESTART_WHEN_PRESENT
+    - HERMES_UPDATE_POSTCHECK
+    - VERSION_REMEASURE
+    - RECEIPT
+  commands:
+    check: hermes update --check
+    plan: hermes update --plan
+    apply: hermes update --backup --yes
+    gateway_restart: hermes gateway restart
+  safety:
+    bounded_lock: true
+    update_only_when_official_check_reports_delta: true
+    full_backup_before_apply: true
+    official_updater_rollback_semantics_preserved: true
+    secret_output_forbidden: true
+    generic_failure_forbidden: true
+    exact_failure_step_required: true
+    post_update_check_must_report_current: true
+    unknown_is_not_pass: true
+  human_contract:
+    human_does_not_need_to_remember_update_command: true
+    human_does_not_receive_microcommand_chain: true
+    machine_handles_check_plan_backup_update_restart_and_verify: true
+    human_return_only_on_human_frontier_or_exact_hard_blocker: true
+  runtime_receipt: ~/.hermes/logs/update_receipts/centraldark-official-update-last.json
+  tutorial_loaded_by_core_prompt: true
+
 fixed_point:
   require:
     - INVENTORY_CURRENT
