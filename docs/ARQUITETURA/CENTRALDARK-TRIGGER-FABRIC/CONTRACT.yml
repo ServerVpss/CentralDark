@@ -449,6 +449,11 @@ ci_binding:
     wait_slow_self_hosted_auxiliary: false
     causal_gates_required: true
     false_green_forbidden: true
+    create_pr_mergeable_snapshot_is_final: false
+    remeasure_live_mergeability_before_human_return: true
+    queued_or_in_progress_auxiliary_is_material_blocker: false
+    post_pr_continue_until_merged_or_material_blocker: true
+    return_with_open_eligible_pr: FORBIDDEN
 self_healing:
   mandatory_for_operational_failure: true
   scope: ALL_PR_COMMIT_AND_RUNTIME_ELIGIBLE_FAILURES

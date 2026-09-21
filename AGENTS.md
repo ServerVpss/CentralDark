@@ -737,6 +737,29 @@ AUTOR CONFIAVEL + MESMO REPO
 
 Esse fast path **não espera convergência externa nem todos os workflows auxiliares**. O modo adversarial com workflows/Judge completos permanece no mesmo motor e é usado quando SEGREDO/CHEFE solicitar prova adversarial. `UNKNOWN`, conflito e achado de segurança continuam fail-closed.
 
+### Guarda pós-PR do fast path
+
+Criar o PR não encerra a missão. O snapshot de `mergeable` devolvido no instante da criação pode estar transitório enquanto o GitHub recalcula o grafo. Antes de devolver controle ao humano:
+
+```text
+CREATE_PR
+→ TESTE_APLICAVEL + SCAN_DIFF
+→ REMEASURE_PR_LIVE
+→ MERGEABLE + SEM_BLOQUEIO_MATERIAL
+→ SQUASH_MAIN
+→ RECEIPT
+```
+
+```text
+CREATE_PR_MERGEABLE_SNAPSHOT_IS_NOT_FINAL=true
+REMEASURE_PR_LIVE_BEFORE_HUMAN_RETURN=true
+QUEUED_OR_IN_PROGRESS_AUXILIARY_IS_NOT_MATERIAL_BLOCKER=true
+POST_PR_CONTINUE_UNTIL_MERGED_OR_MATERIAL_BLOCKER=true
+RETURN_WITH_OPEN_ELIGIBLE_PR=FORBIDDEN
+```
+
+Se a nova medição ainda estiver `false|unknown`, medir a causa real (conflito, base, review, segurança ou gate causal) em vez de parar no rótulo. Amarelo ornamental não substitui bloqueador material.
+
 Não terminar em `READY_FOR_MERGE`/`AGUARDANDO_AUTORIZACAO` quando a mesma autorização já está ativa.
 
 ## Production-first / deploy causal
