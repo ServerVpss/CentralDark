@@ -13,6 +13,7 @@ import { withCid } from "./correlation.js";
 import { config } from "./config.js";
 import { injectPatternAdmin } from "./admin-patterns-ui.js";
 import { getOperationalSnapshot } from "./operational-telemetry.js";
+import { getLinearAdminSnapshot } from "./tools/integrations.js";
 
 const COOKIE = "cd_admin";
 const TTL_MS = 2 * 60 * 60 * 1000;
@@ -228,6 +229,7 @@ __PATTERN_ADMIN_STYLE__
 <nav class="tabs">
   <div class="tab active" data-p="visao">Visão Geral</div>
   <div class="tab" data-p="tools">Ferramentas</div>
+  <div class="tab" data-p="linear">Linear</div>
   __PATTERN_ADMIN_TAB__
   <div class="tab" data-p="audit">Auditoria</div>
   <div class="tab" data-p="conector">Conector</div>
@@ -261,6 +263,39 @@ __PATTERN_ADMIN_STYLE__
 
   <div class="pane" id="p-tools">
     <div class="card"><h2>Catálogo de ferramentas MCP <span class="badge" id="toolCountBadge">carregando…</span></h2><div id="tools"></div></div>
+  </div>
+
+  <div class="pane" id="p-linear">
+    <div class="hero" style="grid-template-columns:2fr 1fr 1fr">
+      <div class="kpi hero-score">
+        <div class="lbl">Linear · rota CentralDark</div>
+        <div class="val" id="linearState">UNKNOWN</div>
+        <div class="bar"><div id="linearBar" style="width:0%"></div></div>
+      </div>
+      <div class="kpi"><div class="lbl">Issues visíveis</div><div class="val" id="linearIssueCount">-</div></div>
+      <div class="kpi"><div class="lbl">Última leitura</div><div class="val" id="linearCheckedAt" style="font-size:16px">-</div></div>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <h2>Rotas <span class="badge">server-side · segredo não vai pro browser</span></h2>
+        <div class="row"><span>Status seguro</span><span class="info">/linear/status</span></div>
+        <div class="row"><span>Snapshot admin</span><span class="info">/admin/api/linear</span></div>
+        <div class="row"><span>Owner</span><span>apps/modulos/mcp/src/tools/integrations.js</span></div>
+        <div class="diag-actions" style="margin-top:14px">
+          <a class="btn" href="https://linear.app/segredo/team/SEG" target="_blank" rel="noopener" style="text-decoration:none">📋 Abrir Board SEG</a>
+          <a class="btn ghost" href="https://linear.app/segredo/settings/ai/coding-sessions" target="_blank" rel="noopener" style="text-decoration:none">⚙ Coding sessions</a>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Conta / workspace <span class="badge">sem token exposto</span></h2>
+        <div id="linearMeta"><div class="row"><span>Estado</span><span class="warn">carregando…</span></div></div>
+      </div>
+    </div>
+    <div style="height:14px"></div>
+    <div class="card">
+      <h2>Trabalho recente no Linear <span class="badge">atualiza a cada 30s</span></h2>
+      <div id="linearIssues"><div class="delta-empty">carregando…</div></div>
+    </div>
   </div>
 
   __PATTERN_ADMIN_PANE__
@@ -550,6 +585,44 @@ async function carregarTools(){
   ).join('');
 }
 
+async function carregarLinear(){
+  const state = $('linearState');
+  const count = $('linearIssueCount');
+  const checked = $('linearCheckedAt');
+  const meta = $('linearMeta');
+  const box = $('linearIssues');
+  if (!state || !count || !checked || !meta || !box) return;
+  try {
+    const r = await fetch('/admin/api/linear?limit=25', { cache: 'no-store' });
+    const j = await r.json();
+    state.textContent = j.status || 'UNKNOWN';
+    $('linearBar').style.width = j.ok ? '100%' : (j.configured ? '50%' : '0%');
+    count.textContent = Array.isArray(j.issues) ? String(j.issues.length) : '0';
+    checked.textContent = j.checkedAt ? horaBr(j.checkedAt) : '-';
+    meta.innerHTML =
+      '<div class="row"><span>Conexão</span><span class="'+(j.ok?'ok':'warn')+'">'+htmlEscape(j.status || 'UNKNOWN')+'</span></div>'+
+      '<div class="row"><span>Workspace</span><span>'+htmlEscape(j.organization?.name || 'UNKNOWN')+'</span></div>'+
+      '<div class="row"><span>Operador</span><span>'+htmlEscape(j.viewer?.name || 'UNKNOWN')+'</span></div>';
+    if (!Array.isArray(j.issues) || !j.issues.length) {
+      box.innerHTML = '<div class="delta-empty">Nenhum item retornado. UNKNOWN não vira PASS.</div>';
+      return;
+    }
+    box.innerHTML = j.issues.map(issue =>
+      '<div class="row">'+
+        '<span><b>'+htmlEscape(issue.identifier || '-')+'</b> · '+htmlEscape(issue.title || '-')+
+          '<br><small>'+htmlEscape(issue.team?.key || '-')+' · '+htmlEscape(issue.state?.name || 'UNKNOWN')+'</small></span>'+
+        '<span><a class="btn ghost" style="text-decoration:none;padding:6px 10px" href="'+htmlEscape(issue.url || '#')+'" target="_blank" rel="noopener">abrir ↗</a></span>'+
+      '</div>'
+    ).join('');
+  } catch (err) {
+    state.textContent = 'UNKNOWN';
+    count.textContent = '-';
+    checked.textContent = '-';
+    meta.innerHTML = '<div class="row"><span>Estado</span><span class="warn">UNKNOWN</span></div>';
+    box.innerHTML = '<div class="delta-empty">Linear indisponível: '+htmlEscape(String(err))+'</div>';
+  }
+}
+
 function conectarLogs(){
   const es = new EventSource('/admin/logs/stream');
   const box = $('log'); box.innerHTML = '';
@@ -611,11 +684,12 @@ async function rodarE2E(){
   }
 }
 
-function recarregar(){ carregarHealth(); carregarTools(); carregarMetricas(); carregarOperational(); }
+function recarregar(){ carregarHealth(); carregarTools(); carregarMetricas(); carregarOperational(); carregarLinear(); }
 recarregar();
 setInterval(carregarHealth, 15000);
 setInterval(carregarMetricas, 15000);
 setInterval(carregarOperational, 15000);
+setInterval(carregarLinear, 30000);
 conectarLogs();
 </script>
 </body></html>`;
@@ -692,6 +766,8 @@ export function adminRotas(req, res) {
             { metodo: "GET", path: "/admin/api/logs", protegido: true },
             { metodo: "GET", path: "/admin/api/metricas", protegido: true },
             { metodo: "GET", path: "/admin/api/operational-snapshot", protegido: true },
+            { metodo: "GET", path: "/admin/api/linear", protegido: true },
+            { metodo: "GET", path: "/linear/status", protegido: false },
         ],
     });
 }
@@ -723,6 +799,14 @@ export function adminOperationalSnapshot(req, res) {
     if (!isAdmin(req)) { res.status(401).json({ ok: false }); return; }
     res.setHeader("Cache-Control", "no-store");
     res.json(getOperationalSnapshot());
+}
+
+export async function adminLinear(req, res) {
+    if (!isAdmin(req)) { res.status(401).json({ ok: false }); return; }
+    res.setHeader("Cache-Control", "no-store");
+    const limit = Math.max(1, Math.min(Number(req.query.limit) || 25, 100));
+    const snapshot = await getLinearAdminSnapshot(limit);
+    res.status(snapshot.ok ? 200 : 503).json(snapshot);
 }
 
 // ─── Busca de logs (filtro por rota / cid / level / texto) ────────────
