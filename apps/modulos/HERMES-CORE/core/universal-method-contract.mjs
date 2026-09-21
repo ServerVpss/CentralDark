@@ -28,6 +28,7 @@ const FILES = {
   boot: 'CENTRALDARK_AI_BOOT.yaml',
   grillMe: '.agents/skills/grill-me/SKILL.md',
   metaGrill: '.agents/skills/meta-lupa/KITS/METAGRILL-METALUPA/KIT.md',
+  fableLoop: '.agents/skills/fable-loop/SKILL.md',
   perceptionOrchestra: 'apps/modulos/HERMES-CORE/core/perception-orchestra.mjs',
   orchestrator: 'apps/modulos/HERMES-CORE/core/orchestrator.mjs',
   knowledgeCollector: 'apps/modulos/HERMES-CORE/agents/Knowledge-Collector/agent.mjs',
@@ -126,6 +127,7 @@ export function validateUniversalMethod() {
   const boot = read(FILES.boot);
   const grillMe = read(FILES.grillMe);
   const metaGrill = read(FILES.metaGrill);
+  const fableLoop = read(FILES.fableLoop);
   const perceptionOrchestra = read(FILES.perceptionOrchestra);
   const orchestrator = read(FILES.orchestrator);
   const knowledgeCollector = read(FILES.knowledgeCollector);
@@ -484,7 +486,19 @@ export function validateUniversalMethod() {
     'META-GRILL acha a ferida',
     'KIT_IS_SEMANTIC_HOOK=true',
     'CHANGE_REQUIRES_SEGREDO_CHEFE=true',
+    'TLC23_SHARED_METHOD=true',
+    'PROOF_REUSE_WHEN_FINGERPRINT_UNCHANGED=true',
+    'ACCEPTANCE_IS_NOT_PROOF=true',
+    'DETERMINISTIC_RECONCILIATION_BEFORE_NEW_ARCHITECTURE=true',
   ], 'METAGRILL_HOOK');
+
+  requireTokens(fableLoop, [
+    'TLC23_SHARED_METHOD=true',
+    'PROOF_REUSE_WHEN_FINGERPRINT_UNCHANGED=true',
+    'NO_NEW_MATERIAL_FACT=REUSE_PROOF_NO_REPEAT',
+    'ACCEPTANCE_IS_NOT_PROOF=true',
+    'DETERMINISTIC_RECONCILIATION_BEFORE_NEW_ARCHITECTURE=true',
+  ], 'FABLE_TLC23_SHARED_METHOD');
 
   requireTokens(operationalMethod, [
     'Leitores investigam em paralelo',
@@ -664,6 +678,11 @@ export function validateUniversalMethod() {
     tlc23_source: FILES.tlc23,
     tlc23_source_sha256: tlc23Hash,
     tlc23_source_gate: 'PASS',
+    tlc23_shared_core_method: true,
+    tlc23_fable_meta_lupa_meta_grill_binding: true,
+    proof_reuse_when_fingerprint_unchanged: true,
+    acceptance_is_proof: false,
+    deterministic_reconciliation_before_new_architecture: true,
     persistent_operational_regime_contract: true,
     fixed_point_is_checkpoint: true,
     fixed_point_is_end: false,
