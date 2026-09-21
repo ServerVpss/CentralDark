@@ -654,6 +654,15 @@ if (!contract) {
   if (tempPolicy.duplicate_control?.duplicate_found !== "ABSORB_DELTA_INTO_EXISTING_OWNER_THEN_RETIRE_DUPLICATE") errors.push("CONTRATO_DUPLICATA_SEM_ABSORCAO");
   if (tempPolicy.vps_cleanliness?.do_not_use_dirty_root_as_temp_workspace !== true) errors.push("CONTRATO_TEMP_USA_ROOT_DIRTY");
   if (tempPolicy.vps_cleanliness?.cleanliness_is_not_permission_for_reset_hard_or_git_clean !== true) errors.push("CONTRATO_LIMPEZA_AUTORIZA_RESET_CEGO");
+  if (tempPolicy.delivery_visibility?.marker !== "CENTRALDARK_INTERNAL_WORK_ARTIFACT_IS_NOT_CHEFE_DELIVERY") errors.push("CONTRATO_ARTEFATO_INTERNO_SEM_MARCADOR_DE_ENTREGA");
+  if (tempPolicy.delivery_visibility?.internal_work_artifact_is_delivery !== false) errors.push("CONTRATO_ARTEFATO_INTERNO_VIRA_ENTREGA");
+  if (tempPolicy.delivery_visibility?.tool_materialization_is_delivery !== false) errors.push("CONTRATO_MATERIALIZACAO_DE_TOOL_VIRA_ENTREGA");
+  if (tempPolicy.delivery_visibility?.downloaded_ci_artifact_default_visibility !== "INTERNAL_WORKSPACE") errors.push("CONTRATO_ARTEFATO_CI_NAO_FICA_INTERNO");
+  if (tempPolicy.delivery_visibility?.show_raw_file_to_chefe_only_if_explicitly_requested_or_final_deliverable !== true) errors.push("CONTRATO_ARQUIVO_BRUTO_PODE_VAZAR_SEM_PEDIDO");
+  if (tempPolicy.delivery_visibility?.pombo64_may_reference_hash_manifest_lineage_without_exposing_raw_artifact !== true) errors.push("CONTRATO_POMBO64_EXIGE_EXPOSICAO_DO_ARQUIVO_BRUTO");
+  if (tempPolicy.delivery_visibility?.pombo64_trace_is_delivery_by_itself !== false) errors.push("CONTRATO_POMBO64_TRACE_VIRA_ENTREGA");
+  if (tempPolicy.delivery_visibility?.temporary_file_card_in_chat_is_not_proof_of_delivery_intent !== true) errors.push("CONTRATO_CARD_TEMPORARIO_VIRA_INTENCAO_DE_ENTREGA");
+  if (tempPolicy.delivery_visibility?.final_delivery_must_be_intentional_and_named !== true) errors.push("CONTRATO_ENTREGA_FINAL_NAO_EXIGE_INTENCAO");
 
   const vpsKernelDelta = contract.vps_kernel_delta_stream_contract ?? {};
   if (vpsKernelDelta.marker !== "CENTRALDARK_VPS_KERNEL_DELTA_STREAM_REQUIRED") errors.push("CONTRATO_VPS_KERNEL_DELTA_MARKER_AUSENTE");
