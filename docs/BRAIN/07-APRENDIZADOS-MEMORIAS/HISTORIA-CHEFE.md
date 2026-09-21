@@ -1,8 +1,14 @@
 ---
 title: "História do CHEFE — mapa vivo de evolução"
-status: "CANONICAL_NAVIGATION"
-updated: 2026-09-16
+status: "CANONICO"
+source_rule: "PR_HEAD_AND_REPO_PROVENANCE"
+date: 2026-09-16
+updated: 2026-09-17T23:31:00-03:00
 tags: ["historia", "chefe", "memoria", "dream-review", "hermes", "obsidian", "interligados"]
+category: "BRAIN-MEMORIA"
+sensitivity: "INTERNAL"
+source: "PR #1549 + scripts/memory-linker/"
+source_class: "INTERNAL"
 owner: "scripts/memory-linker/"
 ---
 
