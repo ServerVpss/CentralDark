@@ -5,7 +5,7 @@ import log from 'electron-log';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 import * as pkg from '../../package.json';
-import { setupAutoUpdater } from './utils/auto-update';
+import { checkForUpdatesNow, downloadUpdateNow, getUpdateState, installDownloadedUpdate, setupAutoUpdater } from './utils/auto-update';
 import {
   CENTRALDARK_PUBLIC_API_URL,
   CENTRALDARK_PUBLIC_URL,
@@ -131,6 +131,11 @@ function registerBridge() {
   register('centraldark:hermes:health', async () => probeHealth(OMNI_ROUTER_BASE_URL, ['/health', '/v1/models']));
 
   register('centraldark:screenpipe:health', async () => probeHealth(SCREENPIPE_BASE_URL, ['/health']));
+
+  register('centraldark:update:state', async () => getUpdateState());
+  register('centraldark:update:check', async () => checkForUpdatesNow());
+  register('centraldark:update:download', async () => downloadUpdateNow());
+  register('centraldark:update:install', async () => installDownloadedUpdate());
 
   register('centraldark:main:show', async () => {
     const win = ensureMainWindow();
