@@ -20,6 +20,17 @@ on:
     types: [created, edited]
   repository_dispatch:
     types: [centraldark_review_signal, hermes_official_update_check]
+  workflow_run:
+    workflows:
+      - porta-de-entrada
+      - codex-validate
+      - lupa-conformance
+      - Lupa Drift Guard
+      - PR Title Contract
+      - PR auto-review (Codex + checklist)
+      - Pipeline — Telegram + Painel
+      - PR — artefato de aprendizado automático
+    types: [completed]
   workflow_dispatch:
 
 permissions:
@@ -30,6 +41,45 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  post-job-autonomy:
+    name: ⚡ Jobs concluídos → Hermes autonomia
+    if: github.event_name == 'workflow_run'
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    permissions:
+      actions: read
+      pull-requests: read
+      contents: read
+    steps:
+      - name: 🔗 Encaminhar conclusão ao promotor canônico
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        env:
+          WORKFLOW_NAME: ${{ github.event.workflow_run.name }}
+          WORKFLOW_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          PR_NUMBER: ${{ github.event.workflow_run.pull_requests[0].number || '' }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const prNumber = Number(process.env.PR_NUMBER || 0);
+            if (!prNumber) {
+              core.notice(`HERMES_POST_JOB=SKIP_NO_PR workflow=${process.env.WORKFLOW_NAME}`);
+              return;
+            }
+            await github.request('POST /repos/{owner}/{repo}/dispatches', {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              event_type: 'centraldark_autonomia_recheck',
+              client_payload: {
+                pr_number: prNumber,
+                head_sha: process.env.HEAD_SHA || null,
+                source: 'hermes_post_job',
+                workflow: process.env.WORKFLOW_NAME || null,
+                conclusion: process.env.WORKFLOW_CONCLUSION || null,
+              },
+            });
+            core.notice(`HERMES_POST_JOB_AUTONOMY=DISPATCHED pr=${prNumber} workflow=${process.env.WORKFLOW_NAME}`);
+
   scan:
     if: github.event_name == 'pull_request' || github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     runs-on: [self-hosted, Linux]
