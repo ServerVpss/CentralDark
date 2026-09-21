@@ -37,7 +37,8 @@ PROJETO_ANTIGO
 ### GitHub
 
 - repo: `ServerVpss/CentralDark`
-- main observada ao abrir esta auditoria: `1606e38d3d0e68845578590e6c13148bb7e4a19d`
+- main observada ao abrir esta auditoria: `ff0b62a3f92e7e3f5de26320400421865e852de9`
+- observação temporal: uma leitura imediatamente anterior retornou `1606e38d...`; a criação da branch e a comparação Git confirmaram `ff0b62a3...` como base CURRENT desta auditoria.
 - PR-mãe: `#1562` · rendezvous ledger · DO_NOT_MERGE
 
 ### Lovable · CentralDark Ascending
