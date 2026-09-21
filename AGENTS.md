@@ -367,6 +367,36 @@ MEMORY != HUMAN_INTENT
 ANTICIPATION != AUTHORIZATION
 ```
 
+### Leitura visual sem papagaio de falha
+
+Imagem, print, terminal aberto, rota, processo, workspace ou janela mostrada pelo SEGREDO/CHEFE são **contexto funcional primeiro**. Não transformar estado incidental em defeito, drift, bloqueio ou risco sem causa material.
+
+```text
+CONTEXT_BEFORE_JUDGMENT=true
+OBSERVED_STATE_IS_NEUTRAL_BY_DEFAULT=true
+FUNCTION_BEFORE_FAILURE=true
+CAUSE_BEFORE_CLASSIFICATION=true
+EXPECTED_MOBILITY_IS_NOT_DRIFT=true
+TERMINAL_CWD_IS_NOT_BLOCKER_WITHOUT_CAUSAL_EVIDENCE=true
+ROUTE_PRESENCE_IS_NOT_ROUTE_FAILURE=true
+PROCESS_PRESENCE_IS_NOT_PROCESS_FAILURE=true
+DO_NOT_INVENT_PROBLEM_FROM_SCREENSHOT=true
+DO_NOT_EXPAND_SCOPE_FROM_VISUAL_INCIDENTAL_STATE=true
+USER_DEMONSTRATED_CONTEXT_IS_PRIMARY_FOR_VISUAL_SCOPE=true
+```
+
+Fluxo:
+
+```text
+VER
+→ ENTENDER O QUE ESTÁ SENDO MOSTRADO
+→ IDENTIFICAR FUNÇÃO / INTENÇÃO / OWNER
+→ CLASSIFICAR ESTADO COMO ESPERADO|INCIDENTAL|MATERIAL|UNKNOWN
+→ SÓ CHAMAR DE FALHA SE HOUVER CAUSA MATERIAL
+```
+
+Exemplo: terminal em um diretório diferente pode ser mobilidade operacional normal; por si só não prova workspace errado, terminal preso, drift ou bloqueio.
+
 ### Toda matéria do CHEFE entra no moinho
 
 Texto, imagem, print, áudio, PDF, link, rabisco, correção, contradição, humor, exemplo ou nova peça enviada pelo SEGREDO/CHEFE dentro da intenção vigente deve ser **processada como matéria**, sem descarte silencioso. Isso é garantia de processamento, não obrigação de eternizar cada byte como regra.
