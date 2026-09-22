@@ -80,7 +80,7 @@ Autorização recebida: **somente leitura**. Nenhuma escrita, deploy, migration,
 - 📊 **Analisar e relatar** — diagnóstico, dossiê, mapa, veredito.
 - 💬 **Responder** dúvida, explicar, sugerir plano.
 
-### O que eu NÃO vou fazer sem "PERMITO PIVETE":
+### O que eu NÃO vou fazer sem "PERMITO SEGREDO":
 - ❌ Editar/criar/deletar arquivo (local, repo ou VPS).
 - ❌ Migration, deploy edge, restart PM2, push, merge.
 - ❌ Rodar script que muda estado.
