@@ -434,6 +434,8 @@ export function validateUniversalMethod() {
   }
 
   requireTokens(aureola, [
+    'header: "⭕ !AURÉOLA CANÔNICA"',
+    'opening_verse: "“Examinai tudo. Retende o bem.” — 1 Tessalonicenses 5:21"',
     'AUREOLA_IS_OPERATIONAL_TRACE_NOT_PRIVATE_CHAIN_OF_THOUGHT: true',
     'BIBLE_REFERENCE_IS_SEMANTIC_CUE_NOT_PROOF: true',
     'VERSE_DOES_NOT_REPLACE_EVIDENCE: true',
@@ -548,6 +550,9 @@ export function validateUniversalMethod() {
   ], 'UNIVERSAL_GATE_REGISTRY');
 
   requireTokens(boot, [
+    'mission_stop: "NEVER_BY_CHAT"',
+    'child_pr_only_promotion_vehicle: true',
+    'SQUASH_CHILD_ONLY',
     'required_gate_ids:',
     'LOAD_UNIVERSAL_GATE_REGISTRY',
     'LOAD_ROOT_CHILD_CONTRACT_LINEAGE',
