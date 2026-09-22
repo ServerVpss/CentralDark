@@ -1705,6 +1705,37 @@ filepath = os.path.join(destino_abs, base_name)
 - Em técnico copiável: bloco de código, PT-BR, comando completo
 - Em explicação: duas camadas (SIGNIFICA → NA PRÁTICA → NOME TÉCNICO → PROVA → PRÓXIMO PASSO)
 
+## Skills absorvidas via Kimetsu/17 Respirações (2026-09-22)
+
+Esta seção registra o delta de absorção de skills locais (`E:\CentralDark\Pivete\skills\`) na biblioteca canônica via `regenerative-self-refinement-engine.md` / método Kimetsu/17 Respirações. Regra de ouro: NÃO copiar pasta inteira por nome — comparar, absorver somente o delta útil, manter owner canônico existente.
+
+### `screenpipe-hermes-integration` → `screenpipe-live-observer` (status: ABSORVIDO)
+- Classe: UNIQUE_DELTA (canônico cobre sensor/OCR/handoff; local traz procedimento prático de integração Screenpipe+Hermes via Omni Router não coberto pelo canônico)
+- O que foi absorvido: gatilhos de ativação, pré-requisitos, 6 passos de configuração do Omni Router + Screenpipe Provider, pitfalls, monitoração in-the-job, investigação forense (READ_ONLY/zero-mutation), status codes, leis não-negociáveis, o que não prova, Hermes Screenpipe Tool Gap
+- Onde: nova seção "Integração prática com Screenpipe + Hermes via Omni Router" inserida antes de "# Screenpipe Live Observer — sensor global da Casa" no presente arquivo
+- Proveniência preservada: skill local permanece em `E:\CentralDark\Pivete\skills\screenpipe-hermes-integration\` como registro histórico; não deletado, não promovido a owner separado
+- Regra aplicada: ZERO_BLIND_COPY=true; SAME_NAME != SAME_ENTITY; delta checado antes de absorver
+
+### `fable-loop` → `fable-loop` canônico (status: NÃO_ABSORVIDO — deixar local)
+- Classe: DUPLICATE_DIVERGED (same name + same archetype, conteúdo paralelo não-overlapping: local = contract de autoload SKILL.md coreano/inglês; canônico = método centraldark de calibração contínua PT-BR, experimental, READ_ONLY)
+- Decisão: NÃO fundir. Manter ambos. Canônico mantém owner SEGREDO/CHEFE e status experimental-read-only. Local permanece em `E:\CentralDark\Pivete\skills\fable-loop\` como referência de autoload alternativo. Documentar divergência, não criar espaço paralelo.
+
+### `brain-vault-watcher` → `brain-memory` canônico (status: NÃO_ABSORVIDO — GAP_NAO_PROVADO)
+- Classe: NOVEL + GAP_A_PROVEAR (local = watcher de sync de MOCs/indexes do Obsidian vault, com triggers, deduplicação, cron; canônico = layer de prefs via `brain_feedback` + `apply-evidence`, read-only, owner SEGREDO/CHEFE)
+- Gap a provar antes de absorver: demonstrar que o canônico `brain-memory` NÃO cobre sync de índices/MOCs do vault. Enquanto não provado: NÃO criar memory owner paralelo, NÃO duplicar.
+- Decisão: deixar local com documentação cruzada. Se no futuro a Casa precisar de watcher de vault, escrever no dono canônico existente ou no novo owner apropriado — não importar skill inteira.
+
+### `operational/*` (6 sub-skills) → `centraldark-operational-method` canônico (status: PARTIAL — deltas absorvidos abaixo)
+- Classe MIXTA após leitura:
+  - `absolute-lock-protection-protocol`: NOVEL/delta (procedimento de lock de arquivo compartilhado com trap, sleep antes de unlock, falha se stale > 30s)
+  - `autonomous-execution-mode`: DELTA_MENOR (subcomando autocontido para container; canônico já cobre "execução integral autocontida")
+  - `hermes-platform-access-control`: NOVEL (conexão autenticada Hermes Desktop + resultado final escondido)
+  - `intention-driven-workflow`: DELTA_MENOR (2 clocks, clock registra, outro executa; já coberto pelo canônico)
+  - `multi-agent-rendezvous`: DELTA_MENOR (rendezvous, results.txt, post-run merge)
+  - `operational-incident-response`: DELTA_MENOR (PASS/FAIL/UNKNOWN triage, SQLite audit, 1 file < 100 lines)
+- Decisão: absorver content DOIS content de operational no canônico existente (não criar skill separado); deixar local com docs cruzadas
+- Regra aplicada: REUSE_BEFORE_CREATE=true; ONE_OWNER_PER_CAPABILITY=true
+
 ## Referências
 
 - references/jeito-correto-pivete.md — metodo completo
