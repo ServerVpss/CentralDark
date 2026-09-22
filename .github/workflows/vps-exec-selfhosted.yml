@@ -37,6 +37,15 @@ jobs:
           set -euo pipefail
           bash <caminho-vps>
 
+      - name: Prepare ephemeral Git auth
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          path: .ci-git-auth-mcp
+          fetch-depth: 1
+          submodules: false
+          persist-credentials: true
+
       - name: Install system dependencies
         run: bash scripts/vps/install-system-deps.sh
 
@@ -53,6 +62,13 @@ jobs:
           [[ "$TARGET_SHA" =~ ^[0-9a-f]{40}$ ]] || { echo "TARGET_SHA_INVALID"; exit 22; }
           [[ -d "$REPO_DIR/.git" ]] || { echo "REPO_DIR_INVALID"; exit 23; }
           cd "$REPO_DIR"
+          AUTH_REPO="$GITHUB_WORKSPACE/.ci-git-auth-mcp"
+          AUTH_HEADER="$(git -C "$AUTH_REPO" config --local --get http.https://github.com/.extraheader || true)"
+          [[ "$AUTH_HEADER" == AUTHORIZATION:* ]] || { echo "GIT_EPHEMERAL_AUTH_MISSING"; exit 26; }
+          export GIT_CONFIG_COUNT=1
+          export GIT_CONFIG_KEY_0='http.https://github.com/.extraheader'
+          export GIT_CONFIG_VALUE_0="$AUTH_HEADER"
+          unset AUTH_HEADER
           CURRENT_BRANCH="$(git symbolic-ref --quiet --short HEAD || true)"
           [[ -n "$CURRENT_BRANCH" ]] || CURRENT_BRANCH="DETACHED"
           ORIGIN_URL="$(git remote get-url origin)"
@@ -305,6 +321,7 @@ jobs:
           path: .ci-operational-guards
           fetch-depth: 1
           submodules: false
+          persist-credentials: true
 
       - name: Validate, promote, restart and prove
         id: guards
@@ -316,6 +333,13 @@ jobs:
           set -euo pipefail
           exec 9>/tmp/centraldark-repo-deploy.lock
           flock -w 90 9 || { echo "REPO_DEPLOY_LOCK_TIMEOUT"; exit 63; }
+          AUTH_REPO="$GITHUB_WORKSPACE/.ci-operational-guards"
+          AUTH_HEADER="$(git -C "$AUTH_REPO" config --local --get http.https://github.com/.extraheader || true)"
+          [[ "$AUTH_HEADER" == AUTHORIZATION:* ]] || { echo "GIT_EPHEMERAL_AUTH_MISSING"; exit 90; }
+          export GIT_CONFIG_COUNT=1
+          export GIT_CONFIG_KEY_0='http.https://github.com/.extraheader'
+          export GIT_CONFIG_VALUE_0="$AUTH_HEADER"
+          unset AUTH_HEADER
           bash "$GITHUB_WORKSPACE/.ci-operational-guards/scripts/vps/deploy-operational-guards.sh"
 
       - name: Publish sanitized operational guards status
@@ -416,6 +440,15 @@ jobs:
       SEMANTIC_CAPABILITY: HERMES_RUNTIME
       SEMANTIC_SCOPE: HERMES_RUNTIME
     steps:
+      - name: Prepare ephemeral Git auth
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          path: .ci-git-auth-hermes
+          fetch-depth: 1
+          submodules: false
+          persist-credentials: true
+
       - name: Validar, promover runtime Hermes, reiniciar e contraprovar
         shell: bash
         run: |
@@ -440,6 +473,13 @@ jobs:
           [[ -d "$REPO_DIR/.git" ]] || { echo "REPO_DIR_INVALID"; exit 72; }
 
           cd "$REPO_DIR"
+          AUTH_REPO="$GITHUB_WORKSPACE/.ci-git-auth-hermes"
+          AUTH_HEADER="$(git -C "$AUTH_REPO" config --local --get http.https://github.com/.extraheader || true)"
+          [[ "$AUTH_HEADER" == AUTHORIZATION:* ]] || { echo "GIT_EPHEMERAL_AUTH_MISSING"; exit 83; }
+          export GIT_CONFIG_COUNT=1
+          export GIT_CONFIG_KEY_0='http.https://github.com/.extraheader'
+          export GIT_CONFIG_VALUE_0="$AUTH_HEADER"
+          unset AUTH_HEADER
           ORIGIN_URL="$(git remote get-url origin)"
           [[ "$ORIGIN_URL" =~ github\.com[:/]ServerVpss/CentralDark(\.git)?$ ]] || {
             echo "ORIGIN_REPOSITORY_MISMATCH"
