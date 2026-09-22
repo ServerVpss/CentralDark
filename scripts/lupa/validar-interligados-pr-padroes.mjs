@@ -37,6 +37,16 @@ const REQUIRED_PATTERN_IDS = Object.freeze([
   "CURRENT_BINDING_CHAIN",
   "ERROR_IS_TELEMETRY_NOT_NEW_ARCHITECTURE",
   "PR_PATTERN_IS_NOT_IMPLEMENTATION_PROMOTED",
+  "MEASURE_BEFORE_CREATION",
+  "TRIGGER_SURFACE_IS_NOT_HISTORY_PROVENANCE",
+  "TECHNICAL_BLOCKER_AUTO_CONTINUES_UNTIL_HUMAN_FRONTIER",
+  "PR_IS_COMMUNICATION_LEDGER_NOT_AUTHORITY",
+  "TOOL_DISCOVERY_BEFORE_ACCESS_CLAIM",
+  "CONTEXT_BEFORE_JUDGMENT",
+  "POST_PR_CONTINUES_UNTIL_MERGED_OR_MATERIAL_BLOCKER",
+  "REGISTRA_PROMOTION_CHAIN",
+  "ACTION_REQUIRED_IS_WAIT_NOT_FAIL_NOT_PASS",
+  "SEMANTIC_ACCEPT_BOTH_IS_NOT_BLIND_ACCEPT_BOTH",
 ]);
 
 const REQUIRED_RUNTIME_EDGES = Object.freeze([
@@ -107,6 +117,8 @@ if (registry) {
 
   const patterns = Array.isArray(registry.patterns) ? registry.patterns : [];
   if (patterns.length === 0) errors.push("INTERLIGADOS_PATTERNS_EMPTY");
+  if (registry.refresh?.pattern_count !== patterns.length) errors.push(`INTERLIGADOS_PATTERN_COUNT_DRIFT:declared=${registry.refresh?.pattern_count ?? "missing"}:actual=${patterns.length}`);
+  if (!Array.isArray(registry.refresh?.latest_prs_reconciled) || !registry.refresh.latest_prs_reconciled.includes(1633)) errors.push("INTERLIGADOS_LATEST_SWEEP_DOES_NOT_REACH_PR1633");
 
   const ids = new Set();
   for (const pattern of patterns) {
@@ -122,9 +134,13 @@ if (registry) {
     if (!ids.has(id)) errors.push(`INTERLIGADOS_REQUIRED_PATTERN_MISSING:${id}`);
   }
 
-  const runtimeEdges = new Set(Array.isArray(registry.runtime_or_external_remeasurement_required)
-    ? registry.runtime_or_external_remeasurement_required
-    : []);
+  const activeRuntimeEdges = Array.isArray(registry.current_runtime_remeasurement_required)
+    ? registry.current_runtime_remeasurement_required
+    : registry.runtime_or_external_remeasurement_required;
+  const runtimeEdges = new Set(Array.isArray(activeRuntimeEdges) ? activeRuntimeEdges : []);
+  if (registry.runtime_remeasurement_semantics?.provenance_catalog_is_not_active_debt !== true) {
+    errors.push("INTERLIGADOS_RUNTIME_HISTORY_SEMANTICS_MISSING");
+  }
   for (const edge of REQUIRED_RUNTIME_EDGES) {
     if (!runtimeEdges.has(edge)) errors.push(`INTERLIGADOS_RUNTIME_EDGE_DEBT_MISSING:${edge}`);
   }
@@ -141,6 +157,8 @@ if (exists(MAPA)) {
   }
   if (!mapa.includes("INTERLIGADOS != CARREGAR TODAS AS SKILLS")) errors.push("INTERLIGADOS_LAZY_LOAD_RULE_MISSING");
   if (!mapa.includes("REALIDADE = JUIZ")) errors.push("INTERLIGADOS_REALITY_JUDGE_MISSING");
+  if (!mapa.includes("MEASURE_BEFORE_CREATION")) errors.push("INTERLIGADOS_MEASURE_BEFORE_CREATION_MISSING");
+  if (!mapa.includes("REUSE_BEFORE_CREATE")) errors.push("INTERLIGADOS_MEASURE_BEFORE_CREATION_FORMULA_MISSING");
 }
 
 if (triggers) {
@@ -180,8 +198,11 @@ const triggerTokens = ["!CENTRALDARK", "!># INTERLIGADOS", "#ACORDAR", "!CALIBRA
 for (const path of walkMarkdown(BASE)) {
   const text = read(path);
   if (!emojiRegex.test(text)) errors.push(`INTERLIGADOS_MD_WITHOUT_EMOJI:${path}`);
-  const isReceipt = path.startsWith(`${BASE}/RECEIPTS/`);
-  if (!isReceipt && !triggerTokens.some((token) => text.includes(token))) {
+  const isProvenanceSurface =
+    path.startsWith(`${BASE}/RECEIPTS/`) ||
+    path.startsWith(`${BASE}/PADROES-PR/DELTA-`) ||
+    path === `${BASE}/RUNTIME-REMEASURE-ONLY.md`;
+  if (!isProvenanceSurface && !triggerTokens.some((token) => text.includes(token))) {
     errors.push(`INTERLIGADOS_MD_WITHOUT_TRIGGER:${path}`);
   }
 }
@@ -191,7 +212,8 @@ const result = {
   gate: "INTERLIGADOS_PR_PATTERNS",
   owner: OWNER,
   registry: REGISTRY,
-  runtime_debt_explicit: registry?.runtime_or_external_remeasurement_required?.length ?? 0,
+  runtime_debt_explicit: registry?.current_runtime_remeasurement_required?.length ?? registry?.runtime_or_external_remeasurement_required?.length ?? 0,
+  runtime_provenance_catalog: registry?.runtime_or_external_remeasurement_required?.length ?? 0,
   errors,
   warnings,
 };

@@ -9,6 +9,9 @@
 ```text
 GOVERNANCE_BOOT_REQUIRED=SIM
 REUSE_BEFORE_CREATE_REQUIRED=SIM
+MEASURE_BEFORE_CREATION_REQUIRED=SIM
+MEASURE_BEFORE_CREATION_FORMULA="REUSE_BEFORE_CREATE + UNKNOWN != PASS + DOCUMENTED != EXECUTED + REALITY = JUDGE"
+REALITY_IS_JUDGE=true
 SOUL_REQUIRED=SIM
 SOUL_PATH=docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md
 SOL_FREQUENCY_CONTRACT=docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/FREQUENCIAS-OPERACIONAIS-SOL.md
@@ -1023,6 +1026,29 @@ ORQUESTRA_TOTAL_CENTRALDARK=SIM
 - Skill só sob demanda: não carregar o leque inteiro; invocar quando o caso pede.
 - Toda ação amarrada no motor (`ESTEIRA_MOTOR`) e na consciência (`SOUL`/`META_LUPA`): orquestra total, não agente solto.
 - Violação de versão paralela (jarvis-lab-v2/v3/v4, Bolt duplicado, telepainel duplicado etc) é regressão e deve ser custurada, não ignorada.
+
+## Medir antes de criar — melhorar o que já existe
+
+Antes de sugerir, criar, duplicar, versionar ou abrir uma nova frente, medir o que já existe no repositório, runtime, Casa, VPS, conectores e ferramentas realmente expostas. O agente deve revelar capacidade existente relevante **antes** de esperar o CHEFE tropeçar nela.
+
+```text
+MEASURE_BEFORE_CREATION=true
+REUSE_BEFORE_CREATE=true
+UNKNOWN != PASS
+DOCUMENTED != EXECUTED
+REALITY = JUDGE
+MEASURE_BEFORE_CREATION_FORMULA="REUSE_BEFORE_CREATE + UNKNOWN != PASS + DOCUMENTED != EXECUTED + REALITY = JUDGE"
+MEASURE_BEFORE_CREATION_SEMANTIC_REFERENCE="1Ts 5:21"
+MEASURE_BEFORE_CREATION_SEMANTIC_LINK="EXAMINAR_TUDO -> MEDIR_COMPARAR_CONTRAPROVAR -> RETER_O_BEM -> REUTILIZAR_MELHOR_EXISTENTE"
+MEASURE_BEFORE_CREATION_APPLIES_TO=ALL_CURRENT_AND_FUTURE_AGENTS
+VERSE_IS_SEMANTIC_CUE_NOT_PROOF=true
+IMPROVE_EXISTING_OWNER_BEFORE_NEW_OWNER=true
+SURFACE_EXISTING_GOLD_PROACTIVELY=true
+RECOVERABLE_ERROR_IS_MACHINE_WORK=true
+OPTION_MENU_FOR_ALREADY_AUTHORIZED_TECHNICAL_WORK=false
+```
+
+Erros recuperáveis não viram burocracia nem menu A/B/C: medir causa → corrigir → testar → continuar. Se uma capacidade existente é igual ou melhor que a proposta, preservar e melhorar o owner atual. Só criar algo novo quando a medição provar lacuna real.
 
 ## !REGISTRA — promoção completa até main
 
