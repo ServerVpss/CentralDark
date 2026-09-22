@@ -15,6 +15,7 @@ const PORT = Number(process.env.WEBHOOK_DEPLOY_PORT || 9300);
 const SECRET_FILE = process.env.WEBHOOK_ENV_FILE || path.join(ROOT, 'secrets/webhook.env');
 const LOCK_FILE = path.join(ROOT, 'revisoes/.webhook-deploy.lock');
 const DEPLOY_JOB = path.join(ROOT, 'scripts/webhook/deploy-job.sh');
+const REPO_DEPLOY_LOCK = process.env.CENTRALDARK_REPO_DEPLOY_LOCK || '/tmp/centraldark-repo-deploy.lock';
 const MAX_BODY = 2 * 1024 * 1024;
 
 function loadSecret() {
@@ -113,7 +114,7 @@ function runDeploy(ref, afterSha) {
       WEBHOOK_DEPLOY_REF: ref || '',
       WEBHOOK_DEPLOY_SHA: afterSha || '',
     };
-    const child = spawn('bash', [DEPLOY_JOB], {
+    const child = spawn('flock', ['-w', '90', REPO_DEPLOY_LOCK, 'bash', DEPLOY_JOB], {
       cwd: ROOT,
       env,
       stdio: ['ignore', 'pipe', 'pipe'],
@@ -158,7 +159,7 @@ async function handlePush(payload) {
     if (result.code === 0) {
       return {
         status: 200,
-        body: { status: 'deployed', sha: payload.after, mode: 'ff-only' },
+        body: { status: 'deployed', sha: payload.after, mode: 'ff-only+repo-flock' },
       };
     }
     return {
@@ -195,7 +196,7 @@ const server = http.createServer(async (req, res) => {
     json(res, 200, {
       status: 'ACTIVE',
       service: 'centraldark-webhook-deploy',
-      mode: 'hmac+ff-only+lock',
+      mode: 'hmac+ff-only+repo-flock',
       mutatesRepository: true,
       timestamp: new Date().toISOString(),
     });
