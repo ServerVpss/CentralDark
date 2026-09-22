@@ -49,9 +49,17 @@ test("pending, failure e cancelled nunca viram verde", () => {
     success("gate", 1, { status: "queued", conclusion: null }),
     success("gate", 2, { conclusion: "failure" }),
     success("gate", 3, { conclusion: "cancelled" }),
+    success("gate", 4, { conclusion: "action_required" }),
   ]) {
     assert.equal(greenDecision([run], required).green, false);
   }
+});
+
+test("action_required é ACTION_REQUIRED, não FAIL", () => {
+  const verdicts = greenVerdicts([
+    success("gate", 11, { conclusion: "action_required" }),
+  ], ["gate"]);
+  assert.deepEqual(verdicts, [{ name: "gate", state: "ACTION_REQUIRED", run_id: 11, conclusion: "action_required" }]);
 });
 
 test("latest skipped é não-PASS e nunca cai para success antigo", () => {
