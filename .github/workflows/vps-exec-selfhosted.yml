@@ -46,7 +46,7 @@ jobs:
         run: |
           set -Eeuo pipefail
           umask 077
-          exec 9>/tmp/centraldark-mcp-deploy.lock
+          exec 9>/tmp/centraldark-repo-deploy.lock
           flock -w 90 9 || { echo "DEPLOY_LOCK_TIMEOUT"; exit 21; }
 
           TARGET_SHA='${{ github.sha }}'
@@ -100,23 +100,18 @@ jobs:
             echo "TRACKED_DIRTY_TREE_PRESERVED_ATOMIC_DIST_ONLY"
           fi
 
-          # A porta 9300 só pode pertencer ao webhook legado conhecido. Ele é
-          # aposentado antes de qualquer mutação Git para eliminar a corrida.
+          # WebhookDeploy permanece como receptor persistente. A concorrência
+          # de mutação é contida pelo lock compartilhado centraldark-repo-deploy.
           WEBHOOK_JSON="$(pm2 jlist | jq -c --arg app "$WEBHOOK_APP" '.[] | select(.name == $app)' | head -n1)"
-          if [[ -n "$WEBHOOK_JSON" ]]; then
-            WEBHOOK_PID="$(jq -r '.pid // 0' <<<"$WEBHOOK_JSON")"
-            WEBHOOK_EXEC="$(jq -r '.pm2_env.pm_exec_path // ""' <<<"$WEBHOOK_JSON")"
-            [[ "$WEBHOOK_EXEC" == "$REPO_DIR/scripts/webhook/github-webhook-deploy.mjs" ]] || { echo "WEBHOOK_PM2_TARGET_MISMATCH"; exit 27; }
-            PORT_PID="$(ss -ltnp 'sport = :9300' 2>/dev/null | sed -n 's/.*pid=\([0-9][0-9]*\).*/\1/p' | head -n1)"
-            [[ -z "$PORT_PID" || "$PORT_PID" == "$WEBHOOK_PID" ]] || { echo "PORT_9300_OWNERSHIP_MISMATCH"; exit 28; }
-            pm2 stop "$WEBHOOK_APP" >/dev/null
-            pm2 save --force >/dev/null
-          fi
-          for _ in $(seq 1 20); do
-            ss -ltn 'sport = :9300' | grep -q LISTEN || break
-            sleep 1
-          done
-          ! ss -ltn 'sport = :9300' | grep -q LISTEN || { echo "PORT_9300_STILL_LISTENING"; exit 29; }
+          [[ -n "$WEBHOOK_JSON" ]] || { echo "WEBHOOK_PM2_APP_MISSING"; exit 27; }
+          WEBHOOK_PID="$(jq -r '.pid // 0' <<<"$WEBHOOK_JSON")"
+          WEBHOOK_EXEC="$(jq -r '.pm2_env.pm_exec_path // ""' <<<"$WEBHOOK_JSON")"
+          WEBHOOK_STATUS="$(jq -r '.pm2_env.status // ""' <<<"$WEBHOOK_JSON")"
+          [[ "$WEBHOOK_EXEC" == "$REPO_DIR/scripts/webhook/github-webhook-deploy.mjs" ]] || { echo "WEBHOOK_PM2_TARGET_MISMATCH"; exit 27; }
+          [[ "$WEBHOOK_PID" =~ ^[0-9]+$ && "$WEBHOOK_PID" -gt 0 && "$WEBHOOK_STATUS" == "online" ]] || { echo "WEBHOOK_PM2_NOT_ONLINE"; exit 28; }
+          PORT_PID="$(ss -ltnp 'sport = :9300' 2>/dev/null | sed -n 's/.*pid=\([0-9][0-9]*\).*/\1/p' | head -n1)"
+          [[ "$PORT_PID" == "$WEBHOOK_PID" ]] || { echo "PORT_9300_OWNERSHIP_MISMATCH"; exit 29; }
+          echo "WEBHOOK_LISTENER_PRESERVED=1"
 
           git fetch --prune origin main
           ORIGIN_SHA="$(git rev-parse origin/main)"
@@ -239,7 +234,7 @@ jobs:
           FINAL_MAIN_SHA="$(git rev-parse origin/main)"
           git merge-base --is-ancestor "$TARGET_SHA" "$FINAL_MAIN_SHA" || { echo "VALIDATED_SHA_LEFT_MAIN"; exit 44; }
           git diff --quiet "$TARGET_SHA" "$FINAL_MAIN_SHA" -- apps/modulos/mcp || { echo "MCP_ADVANCED_DURING_DEPLOY"; exit 45; }
-          ! ss -ltn 'sport = :9300' | grep -q LISTEN || { echo "PORT_9300_REOPENED"; exit 46; }
+          ss -ltn 'sport = :9300' | grep -q LISTEN || { echo "PORT_9300_LISTENER_LOST"; exit 46; }
 
           STATE_TMP="$AUDIT_DIR/.mcp-last-known-good.${BASHPID}"
           jq -n \
@@ -319,6 +314,8 @@ jobs:
           BEFORE_SHA: ${{ github.event.before || '' }}
         run: |
           set -euo pipefail
+          exec 9>/tmp/centraldark-repo-deploy.lock
+          flock -w 90 9 || { echo "REPO_DEPLOY_LOCK_TIMEOUT"; exit 63; }
           bash "$GITHUB_WORKSPACE/.ci-operational-guards/scripts/vps/deploy-operational-guards.sh"
 
       - name: Publish sanitized operational guards status
@@ -424,6 +421,8 @@ jobs:
         run: |
           set -Eeuo pipefail
           umask 077
+          exec 9>/tmp/centraldark-repo-deploy.lock
+          flock -w 90 9 || { echo "REPO_DEPLOY_LOCK_TIMEOUT"; exit 63; }
           RUNTIME_FILES=(
             "$RUNTIME_CONTRACT"
             "$VALIDATOR"
