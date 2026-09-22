@@ -316,6 +316,30 @@ export function validateUniversalMethod() {
     'HUMAN_RETEACH_REQUIRED=false',
   ], 'HERMES_OFFICIAL_UPDATE_TUTORIAL');
   requireTokens(agentsGuide, [
+    'MEASURE_BEFORE_CREATION_REQUIRED=SIM',
+    'MEASURE_BEFORE_CREATION_FORMULA="REUSE_BEFORE_CREATE + UNKNOWN != PASS + DOCUMENTED != EXECUTED + REALITY = JUDGE"',
+    'MEASURE_BEFORE_CREATION_SEMANTIC_REFERENCE="1Ts 5:21"',
+    'MEASURE_BEFORE_CREATION_APPLIES_TO=ALL_CURRENT_AND_FUTURE_AGENTS',
+    'VERSE_IS_SEMANTIC_CUE_NOT_PROOF=true',
+  ], 'MEASURE_BEFORE_CREATION_GLOBAL_AGENTS');
+
+  requireTokens(master, [
+    'measure_before_creation_semantic_binding:',
+    'verse_reference: "1Ts 5:21"',
+    'ALL_CURRENT_AND_FUTURE_AGENTS',
+    'MEASURE_EXISTING_REALITY',
+    'RETAIN_PROVEN_GOOD',
+    'verse_is_semantic_cue_not_proof: true',
+  ], 'MEASURE_BEFORE_CREATION_MASTER_BINDING');
+
+  requireTokens(hermesPrompt, [
+    'MEASURE_BEFORE_CREATION=true',
+    'MEASURE_BEFORE_CREATION_SEMANTIC_REFERENCE="1Ts 5:21"',
+    'MEASURE_BEFORE_CREATION_APPLIES_TO_ALL_AGENTS=true',
+    'VERSE_IS_SEMANTIC_CUE_NOT_PROOF=true',
+  ], 'MEASURE_BEFORE_CREATION_HERMES_BINDING');
+
+  requireTokens(agentsGuide, [
     'CENTRALDARK_UNIVERSAL_DIRECT_MODE_V1=true',
     'PREFER_COMPLETE_OPERATION_OVER_MICROCOMMAND_CHAIN=true',
     'HUD_LAYOUT_FIXED=true',
@@ -789,6 +813,10 @@ export function validateUniversalMethod() {
     loud_actionable_failure_contract: true,
     automatic_resume_after_human_frontier: true,
     universal_direct_mode_contract: true,
+    measure_before_creation_global: true,
+    measure_before_creation_semantic_reference: '1Ts 5:21',
+    measure_before_creation_all_agents: true,
+    verse_is_semantic_cue_not_proof: true,
     fixed_hud_only_live_values_change: true,
     numeric_metrics_require_proven_denominator: true,
   };
