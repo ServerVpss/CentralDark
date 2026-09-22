@@ -1,7 +1,7 @@
 # 🛡️ DOUTRINA DE PROTEÇÃO ESTRATÉGICA — CENTRALDARK
 
 > **Status:** SELADA 🔒 · **Última atualização:** 09/07/2026 · **Autoridade única:** Pivete
-> **Alteração deste documento requer autorização EXPLÍCITA do Pivete com a frase "PERMITO PIVETE".**
+> **Alteração deste documento requer autorização EXPLÍCITA do Pivete com a frase "PERMITO SEGREDO".**
 
 ---
 
@@ -50,7 +50,7 @@ Nenhuma IA pode alterar, refatorar, "otimizar", renomear, mover ou deletar qualq
 - Modelo de governança (este documento e o CLAUDE.md).
 - Padrões de notificação (Card Hermes v1.3).
 
-Se uma IA identificar oportunidade de melhoria em qualquer item acima, ela deve **propor em texto**, aguardar "PERMITO PIVETE" e só então executar.
+Se uma IA identificar oportunidade de melhoria em qualquer item acima, ela deve **propor em texto**, aguardar "PERMITO SEGREDO" e só então executar.
 
 ---
 
@@ -58,8 +58,8 @@ Se uma IA identificar oportunidade de melhoria em qualquer item acima, ela deve 
 
 | Palavra | Efeito |
 |---|---|
-| `PERMITO PIVETE` | Autoriza a ação descrita no plano imediatamente anterior. |
-| `PERMITO PIVETE <escopo>` | Autoriza apenas o escopo nomeado (ex.: "PERMITO PIVETE A+B"). |
+| `PERMITO SEGREDO` | Autoriza a ação descrita no plano imediatamente anterior. |
+| `PERMITO SEGREDO <escopo>` | Autoriza apenas o escopo nomeado (ex.: "PERMITO SEGREDO A+B"). |
 | `TRAVA` / `!CALIBRA` / `PARA` | Cancela a ação em curso e volta pra planejamento. |
 | Silêncio ou dúvida | **Padrão: NÃO agir.** Perguntar antes. |
 
@@ -113,7 +113,7 @@ Toda IA deve responder mentalmente **SIM** às 6 perguntas antes de executar:
 
 1. Li o CLAUDE.md e esta Doutrina?
 2. Meu plano foi apresentado em texto?
-3. Recebi autorização explícita ("PERMITO PIVETE" ou equivalente)?
+3. Recebi autorização explícita ("PERMITO SEGREDO" ou equivalente)?
 4. A ação respeita o Fluxo de Ouro (Pivete→IA→VPS→GitHub→Supabase→Gateway)?
 5. Áreas 🔒 permanecem intocadas (ou foram autorizadas nominalmente)?
 6. A ação é reversível (ou o Pivete foi avisado do risco)?
