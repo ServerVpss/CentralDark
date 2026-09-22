@@ -1,17 +1,21 @@
 import {
   Activity,
   AlertTriangle,
+  Bot,
   CheckCircle2,
   CircleDot,
   GitBranch,
   Server,
   ShieldCheck,
   TerminalSquare,
+  Zap,
 } from "lucide-react";
 import { Badge } from "@/shared/ui/badge";
 import { Card } from "@/shared/ui/card";
+import type { OperationalSnapshot } from "@/lib/api";
 
 type Tone = "ok" | "warn" | "info" | "unknown";
+type HermesState = "projection" | "measuring" | "active" | "warning" | "fixed-point";
 
 const toneClass: Record<Tone, string> = {
   ok: "border-emerald-500/30 bg-emerald-500/[0.04]",
@@ -20,29 +24,63 @@ const toneClass: Record<Tone, string> = {
   unknown: "border-violet-500/30 bg-violet-500/[0.04]",
 };
 
-const summary: Array<{ label: string; value: string; tone: Tone }> = [
-  { label: "MISSION_ID", value: "HUD-OPERATIONAL", tone: "info" },
-  { label: "MODE", value: "READ_ONLY", tone: "ok" },
-  { label: "WRITER", value: "NONE", tone: "ok" },
-  { label: "HEAD_SHA", value: "LIVE", tone: "info" },
-  { label: "PR_STATE", value: "MEASURE", tone: "info" },
-  { label: "RUNTIME_SHA", value: "UNKNOWN", tone: "unknown" },
-  { label: "LOCAL_HEALTH", value: "MEASURE", tone: "info" },
-  { label: "PUBLIC_HEALTH", value: "MEASURE", tone: "info" },
-  { label: "FIXED_POINT", value: "FALSE", tone: "warn" },
-  { label: "UNKNOWN", value: "VISIBLE", tone: "unknown" },
-];
+const hermesMotionClass: Record<HermesState, string> = {
+  projection: "animate-pulse",
+  measuring: "animate-[bounce_1.1s_ease-in-out_infinite]",
+  active: "translate-x-2 animate-[bounce_0.7s_ease-in-out_infinite]",
+  warning: "-translate-x-1 animate-pulse",
+  "fixed-point": "animate-[bounce_0.45s_ease-in-out_2]",
+};
 
-const evidence: Array<{ key: string; value: string; tone: Tone }> = [
-  { key: "VPS_SOURCE", value: "UNKNOWN", tone: "unknown" },
-  { key: "RUNTIME_OWNER", value: "UNKNOWN", tone: "unknown" },
-  { key: "LOCAL_HEALTH", value: "MEASURE", tone: "info" },
-  { key: "PUBLIC_HEALTH", value: "MEASURE", tone: "info" },
-  { key: "MICRODEPLOY", value: "NOT_PROVEN", tone: "warn" },
-  { key: "DEPLOYED_SHA", value: "UNKNOWN", tone: "unknown" },
-  { key: "RUNTIME_SHA", value: "UNKNOWN", tone: "unknown" },
-  { key: "FIXED_POINT", value: "FALSE", tone: "warn" },
-];
+function hermesState(snapshot: OperationalSnapshot | null): HermesState {
+  if (!snapshot) return "projection";
+  if (snapshot.verdict === "FIXED_POINT") return "fixed-point";
+
+  const marker = snapshot.patternAlignment?.marker;
+  if (
+    snapshot.verdict === "UNKNOWN_NOT_PASS" ||
+    marker === "RED" ||
+    marker === "ORANGE" ||
+    marker === "YELLOW"
+  ) {
+    return "warning";
+  }
+
+  if (snapshot.forensic?.status === "OBSERVED") return "active";
+  return "measuring";
+}
+
+function HermesOperationalSignal({ snapshot }: { snapshot: OperationalSnapshot | null }) {
+  const state = hermesState(snapshot);
+  const label: Record<HermesState, string> = {
+    projection: "PROJECTION",
+    measuring: "MEDINDO",
+    active: "ATIVO",
+    warning: "OBSERVANDO",
+    "fixed-point": "FIXED POINT",
+  };
+
+  return (
+    <div
+      className="flex min-w-[148px] items-center gap-3 rounded-xl border border-primary/20 bg-background/60 px-3 py-2"
+      title="MOVIMENTO != DECORAÇÃO · movimento representa estado operacional"
+    >
+      <div
+        className={`flex h-10 w-10 items-center justify-center rounded-xl border border-primary/30 bg-primary/10 text-primary transition-transform duration-300 ${hermesMotionClass[state]}`}
+      >
+        <Bot className="h-6 w-6" />
+      </div>
+      <div className="min-w-0">
+        <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-primary">
+          <Zap className="h-3 w-3" />
+          Hermes
+        </div>
+        <div className="truncate text-xs font-semibold">{label[state]}</div>
+        <div className="text-[9px] text-muted-foreground">movimento = estado</div>
+      </div>
+    </div>
+  );
+}
 
 const timeline = [
   ["github_list_commits", "GitHub", "HEAD e histórico canônico medidos."],
@@ -55,7 +93,62 @@ const timeline = [
   ["vps_read_file_safe", "Runtime", "Leitura segura antes de qualquer mutação."],
 ];
 
-export function OperationalHud() {
+export function OperationalHud({ snapshot }: { snapshot: OperationalSnapshot | null }) {
+  const observed = Boolean(snapshot);
+  const unknownCount = snapshot?.patternAlignment?.unknownCount;
+
+  const summary: Array<{ label: string; value: string; tone: Tone }> = [
+    { label: "MISSION_ID", value: "HUD-OPERATIONAL", tone: "info" },
+    { label: "MODE", value: snapshot?.forensic?.mode ?? "PROJECTION", tone: observed ? "ok" : "warn" },
+    { label: "WRITER", value: "NONE", tone: "ok" },
+    { label: "HEAD_SHA", value: "MEASURE_EXTERNALLY", tone: "unknown" },
+    { label: "PR_STATE", value: "MEASURE_EXTERNALLY", tone: "unknown" },
+    {
+      label: "RUNTIME_PID",
+      value: snapshot?.runtime?.pid ? String(snapshot.runtime.pid) : "UNKNOWN",
+      tone: snapshot?.runtime?.pid ? "ok" : "unknown",
+    },
+    {
+      label: "FORENSIC",
+      value: snapshot?.forensic?.status ?? "UNKNOWN",
+      tone: snapshot?.forensic?.status === "OBSERVED" ? "ok" : "unknown",
+    },
+    { label: "PUBLIC_HEALTH", value: "UNKNOWN", tone: "unknown" },
+    { label: "FIXED_POINT", value: snapshot?.verdict === "FIXED_POINT" ? "TRUE" : observed ? "FALSE" : "UNKNOWN", tone: snapshot?.verdict === "FIXED_POINT" ? "ok" : "warn" },
+    { label: "UNKNOWN", value: unknownCount == null ? "VISIBLE" : String(unknownCount), tone: "unknown" },
+  ];
+
+  const evidence: Array<{ key: string; value: string; tone: Tone }> = [
+    {
+      key: "OPERATIONAL_SNAPSHOT",
+      value: snapshot?.schema ?? "UNAVAILABLE",
+      tone: observed ? "ok" : "unknown",
+    },
+    {
+      key: "VERDICT",
+      value: snapshot?.verdict ?? "UNKNOWN",
+      tone: snapshot?.verdict === "OBSERVED_NOT_FIXED_POINT" ? "info" : "unknown",
+    },
+    {
+      key: "RUNTIME_PID",
+      value: snapshot?.runtime?.pid ? String(snapshot.runtime.pid) : "UNKNOWN",
+      tone: snapshot?.runtime?.pid ? "ok" : "unknown",
+    },
+    {
+      key: "PATTERN_ALIGNMENT",
+      value: snapshot?.patternAlignment?.marker ?? "UNKNOWN",
+      tone: snapshot?.patternAlignment?.marker === "GREEN" ? "ok" : "warn",
+    },
+    {
+      key: "FORENSIC",
+      value: snapshot?.forensic?.status ?? "UNKNOWN",
+      tone: snapshot?.forensic?.status === "OBSERVED" ? "ok" : "unknown",
+    },
+    { key: "PUBLIC_HEALTH", value: "UNKNOWN", tone: "unknown" },
+    { key: "DEPLOYED_SHA", value: "UNKNOWN", tone: "unknown" },
+    { key: "FIXED_POINT", value: snapshot?.verdict === "FIXED_POINT" ? "TRUE" : observed ? "FALSE" : "UNKNOWN", tone: snapshot?.verdict === "FIXED_POINT" ? "ok" : "warn" },
+  ];
+
   return (
     <section className="space-y-4">
       <div className="flex flex-col gap-3 rounded-2xl border border-primary/20 bg-card/70 p-4 shadow-sm backdrop-blur md:flex-row md:items-start md:justify-between">
@@ -79,10 +172,7 @@ export function OperationalHud() {
 
       <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-5">
         {summary.map((item) => (
-          <div
-            key={item.label}
-            className={`rounded-xl border p-3 ${toneClass[item.tone]}`}
-          >
+          <div key={item.label} className={`rounded-xl border p-3 ${toneClass[item.tone]}`}>
             <div className="text-[10px] font-semibold tracking-[0.12em] text-muted-foreground">
               {item.label}
             </div>
@@ -111,14 +201,9 @@ export function OperationalHud() {
             </div>
             <div className="divide-y divide-border/60">
               {evidence.map((item) => (
-                <div
-                  key={item.key}
-                  className="flex items-center justify-between gap-4 py-2 text-sm"
-                >
+                <div key={item.key} className="flex items-center justify-between gap-4 py-2 text-sm">
                   <span className="text-muted-foreground">{item.key}</span>
-                  <span
-                    className={`rounded-md border px-2 py-1 text-xs font-semibold ${toneClass[item.tone]}`}
-                  >
+                  <span className={`rounded-md border px-2 py-1 text-xs font-semibold ${toneClass[item.tone]}`}>
                     {item.value}
                   </span>
                 </div>
@@ -133,9 +218,9 @@ export function OperationalHud() {
                 Unknowns
               </div>
               <ul className="space-y-2 text-sm">
-                <li>• RUNTIME_SHA do processo vivo</li>
-                <li>• RUNTIME_OWNER material</li>
-                <li>• DEPLOYED_SHA no consumidor final</li>
+                <li>• HEAD_SHA e PR_STATE continuam sensores externos</li>
+                <li>• PUBLIC_HEALTH ainda exige sonda HTTP real</li>
+                <li>• DEPLOYED_SHA permanece UNKNOWN sem provenance</li>
               </ul>
             </Card>
 
@@ -145,8 +230,8 @@ export function OperationalHud() {
                 Next Cursor
               </div>
               <ol className="space-y-2 text-sm">
-                <li>1. Medir processo/runtime vivo</li>
-                <li>2. Vincular runtime ao SHA observado</li>
+                <li>1. Medir health público e deployed SHA</li>
+                <li>2. Correlacionar logs/tools ao mesmo snapshot</li>
                 <li>3. Revalidar Fixed Point após contraprova</li>
               </ol>
             </Card>
@@ -154,36 +239,38 @@ export function OperationalHud() {
         </div>
 
         <Card className="overflow-hidden">
-          <div className="flex items-center justify-between border-b border-border/70 p-4">
+          <div className="flex items-center justify-between gap-3 border-b border-border/70 p-4">
             <div>
               <div className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
                 Detalhes
               </div>
               <div className="mt-1 font-semibold">Linha do tempo</div>
             </div>
-            <Badge className="border-emerald-500/30 bg-emerald-500/10 text-emerald-300">
-              LIVE
-            </Badge>
+            <div className="flex items-center gap-2">
+              <HermesOperationalSignal snapshot={snapshot} />
+              <Badge
+                className={
+                  observed
+                    ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-300"
+                    : "border-amber-500/30 bg-amber-500/10 text-amber-300"
+                }
+              >
+                {observed ? "OBSERVED" : "PROJECTION"}
+              </Badge>
+            </div>
           </div>
 
           <div className="max-h-[580px] space-y-2 overflow-auto p-3">
             {timeline.map(([tool, scope, detail], index) => (
-              <div
-                key={tool}
-                className="flex gap-3 rounded-xl border border-border/70 bg-secondary/20 p-3"
-              >
+              <div key={tool} className="flex gap-3 rounded-xl border border-border/70 bg-secondary/20 p-3">
                 <div className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-primary shadow-[0_0_0_4px_hsl(var(--primary)/0.12)]" />
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center justify-between gap-3">
                     <span className="text-sm font-semibold">CENTRALDARK</span>
-                    <span className="text-[10px] text-muted-foreground">
-                      +{index + 1}
-                    </span>
+                    <span className="text-[10px] text-muted-foreground">+{index + 1}</span>
                   </div>
                   <div className="mt-2 flex flex-wrap items-center gap-2">
-                    <code className="rounded-md bg-background px-2 py-1 text-[11px]">
-                      {tool}
-                    </code>
+                    <code className="rounded-md bg-background px-2 py-1 text-[11px]">{tool}</code>
                     <span className="text-xs text-muted-foreground">{scope}</span>
                   </div>
                   <p className="mt-2 text-xs leading-5 text-muted-foreground">{detail}</p>
