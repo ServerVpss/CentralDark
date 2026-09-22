@@ -1163,10 +1163,11 @@
     {
       "id": "MISSION_CONTINUITY_SURVIVES_SESSION",
       "emoji": "🧵",
-      "anchor": "SESSÃO ACABA, MISSÃO NÃO",
-      "value": "AGENT_STOP != MISSION_STOP; SESSION_END != GOAL_END; MODEL_LIMIT != GOAL_END",
+      "anchor": "CENTRALDARK CONTINUA; FIXED POINT FECHA DELTA, NÃO A MISSÃO",
+      "value": "AGENT_STOP != MISSION_STOP; SESSION_END != GOAL_END; MODEL_LIMIT != GOAL_END; RENDEZVOUS=#1562; PROVEN=REUSE; OPEN_DELTA=RECONCILE; FIXED_POINT_CLOSES_CURRENT_DELTA_NOT_CENTRALDARK=true; MAIN_SHA=MEASURE_CURRENT",
       "pr_refs": [
-        1554
+        1554,
+        1562
       ],
       "runtime_required": false
     },

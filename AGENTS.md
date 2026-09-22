@@ -1125,6 +1125,22 @@ REGISTRA
 
 A PR-MÃE `#1562` é o rendezvous permanente/ledger (“ponto turístico”) e permanece `DO_NOT_MERGE`. PRs filhas passam por ela como veículos de promoção; peças sobreviventes seguem para `main`, e o receipt volta para a mãe.
 
+A missão da CentralDark é contínua. `FIXED_POINT` fecha o delta corrente; não encerra a CentralDark. Estado consolidado é reutilizado enquanto suas premissas materiais não mudarem. O boot não congela PR-filho: descobre no `#1562` quais deltas continuam abertos. O SHA é medido a cada ativação, porque hash histórico é proveniência, não CURRENT.
+
+```text
+⭕ !AURÉOLA → 👑🪬 !CENTRALDARK → #1562 → SHA:<CURRENT_MAIN_SHA> → CURRENT>HISTORY → REUSE_PROVEN → OPEN_DELTA_ONLY → TLC23 → META_LUPA → FABLE → META_GRILL → HERMES → PROVA → CONTRAPROVA → ACEITE → RECONCILIAR → SEMANTIC_ALL → SAME_HEAD → SQUASH → MAIN → DEPLOY_CAUSAL → T1 → RECEIPT → FIXED_POINT → #1562 → LOOP
+
+MISSION=CENTRALDARK_CONTINUA
+RENDEZVOUS=#1562
+PROVEN=REUSE
+OPEN_DELTA=RECONCILE
+MAIN_SHA=SHA:<CURRENT_MAIN_SHA>
+STATIC_SHA_IS_PROVENANCE_NOT_ETERNAL=true
+CHILD_PR_ID_IN_BOOT=FORBIDDEN
+FIXED_POINT_CLOSES_CURRENT_DELTA_NOT_CENTRALDARK=true
+REALITY=JUDGE
+```
+
 A Casa não espera “diamante” para construir. Qualquer delta útil mensurável pode entrar no funil — bronze, prata, ouro, diamante são apenas metáforas de maturidade. O critério é utilidade + owner correto + prova aplicável, não perfeição estética.
 
 ```text
