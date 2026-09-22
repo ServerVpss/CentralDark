@@ -65,22 +65,50 @@ function short(value: unknown, fallback = "-"): string {
   return (s || fallback).slice(0, 500);
 }
 
-function buildBody(input: NotifyInput): string {
+const HUMAN_STATUS: Record<Severity, { icon: string; fala: string }> = {
+  info: { icon: "ℹ️", fala: "CHEFE, chegou uma informação nova." },
+  sucesso: { icon: "🟢", fala: "CHEFE, funcionou no escopo informado e temos prova registrada." },
+  aviso: { icon: "🟡", fala: "CHEFE, tem coisa pra conferir antes de chamar de resolvido." },
+  erro: { icon: "🔴", fala: "CHEFE, deu problema e o rastro abaixo mostra onde olhar." },
+  critico: { icon: "🚨", fala: "CHEFE, apareceu uma bronca crítica que precisa de atenção." },
+};
+
+function buildBody(input: NotifyInput, severity: Severity): string {
   const p = input.payload ?? {};
+  const human = HUMAN_STATUS[severity];
+  const status = short(p.status, severity.toUpperCase());
+  const detalhe = short(input.body, "Sem detalhe adicional.");
+  const technical = [
+    p.source_surface ? `🌐 Superfície: ${short(p.source_surface)}` : "",
+    p.owner ? `👤 Owner: ${short(p.owner)}` : "",
+    p.head_sha ? `🧾 HEAD/SHA: ${short(p.head_sha)}` : "",
+    p.runtime ? `🫀 Runtime: ${short(p.runtime)}` : "",
+    p.session_id ? `🧵 Sessão: ${short(p.session_id)}` : "",
+    p.knowledge_event_id ? `🧠 Evento Hub: ${short(p.knowledge_event_id)}` : "",
+    p.next_cursor ? `🧭 Próximo passo: ${short(p.next_cursor)}` : "",
+  ].filter(Boolean);
+
   return [
-    `🤖 IA: ${short(p.ia)}`,
-    `🌐 Superfície: ${short(p.source_surface)}`,
-    `😎 Perfil: ${short(p.profile_display ?? p.profile_id)}`,
-    `🧵 Sessão: ${short(p.session_id)}`,
-    `🎯 Intenção/GOAL: ${short(p.intent_goal)}`,
-    `📁 Recurso: ${short(p.recurso)}`,
-    `⚙️ Ação: ${short(p.acao)}`,
-    `✅ Status: ${short(p.status)}`,
-    `🧭 Próximo cursor: ${short(p.next_cursor)}`,
-    `🧠 Evento Hub: ${short(p.knowledge_event_id)}`,
+    "⭕ !AURÉOLA CANÔNICA",
+    "📖 “Examinai tudo. Retende o bem.” — 1 Tessalonicenses 5:21",
+    "",
+    `${human.icon} ${human.fala}`,
+    `👉 O que aconteceu: ${detalhe}`,
+    `⚖️ Estado: ${status}`,
+    p.intent_goal ? `🎯 Intenção: ${short(p.intent_goal)}` : "",
+    p.recurso ? `📁 Onde: ${short(p.recurso)}` : "",
+    p.acao ? `⚙️ O que foi feito: ${short(p.acao)}` : "",
+    "",
+    "🔎 !CONTRAPROVA",
+    severity === "sucesso"
+      ? "🟢 PROVADO no escopo declarado. Verde não vira verdade eterna."
+      : "❓ O que ainda não foi provado continua UNKNOWN — UNKNOWN != PASS.",
+    technical.length ? "" : "",
+    ...technical,
     `🕒 Quando: ${nowSP()}`,
-    `📝 Detalhe: ${short(input.body)}`,
-  ].join("\n");
+    "",
+    "⚖️ REALIDADE É O JUIZ.",
+  ].filter((line, index, all) => line !== "" || (index > 0 && all[index - 1] !== "")).join("\n");
 }
 
 export async function registerEvent(def: EventDefinition): Promise<void> {
@@ -146,7 +174,7 @@ export async function notify(input: NotifyInput): Promise<void> {
     const evt = await loadEvent(input.event_key);
     const severity: Severity = input.severity ?? evt?.severity_default ?? "info";
     const titulo = (input.title ?? evt?.title_template ?? input.event_key).slice(0, 200);
-    const mensagem = buildBody(input);
+    const mensagem = buildBody(input, severity);
     const sb = getServiceClient();
 
     if (input.group_key && input.debounce_seconds && input.debounce_seconds > 0) {
