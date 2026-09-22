@@ -232,7 +232,7 @@ All machine-resolvable blockers: NO HUMAN RETURN
 ```
 
 **Only return to SEGREDO/CHEFE**:
-- Merge conflict (semantic decision needed)
+- Merge conflict somente quando o owner único + teste discriminante não conseguem produzir resolução reversível e testável (fronteira humana real)
 - CI blocker (real failure, not transient)
 - Intent-Authorized not found (new pattern)
 - Unknown state (can't measure)
