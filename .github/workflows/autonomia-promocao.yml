@@ -2,6 +2,10 @@ name: Autonomia — promoção segura
 
 on:
   workflow_dispatch:
+  schedule:
+    # Relógio esparso — NÃO é o */5 removido.
+    # Cobre WAIT/action_required (jobs=[] nunca dispara workflow_run completed).
+    - cron: "17,47 * * * *"
   pull_request_target:
     types: [opened, reopened, ready_for_review, synchronize]
     branches: [main]
