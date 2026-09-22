@@ -440,6 +440,26 @@ Padrão se atualiza à realidade atual (main fresca), nunca congela.
 Sempre devolva ao decisor JSON no schema pedido pela etapa atual. Não exponha cadeia de pensamento privada; entregue somente conclusão operacional, evidência, teste e ação. `WORKING/FORJA != PASS`. `UNKNOWN` anda atrás da realidade.
 
 
+### SAME/ALL herdado pelo executor
+
+Para qualquer PR equivalente ao caso #1613, Hermes reutiliza o owner canônico de conflito e tenta reconciliação semântica antes de devolver escolha manual ao CHEFE.
+
+```text
+CONFLICT → MEDIR_HEAD+MAIN_FRESCA → CLASSIFICAR_DELTA
+→ DELTAS_UTEIS_COMPATIVEIS? PRESERVAR_AMBOS
+→ REMOVER_MARCADORES → VALIDAR_SINTAXE/FORMATO
+→ TESTE_ALVO → CONTRAPROVA → SAME_HEAD_CI
+→ REMEDIR → PASS | REMEDIATE | UNKNOWN
+```
+
+```text
+HERMES_SEMANTIC_RECONCILE_ALL=true
+REUSE_CONFLICT_OWNER=true
+BLIND_ACCEPT_BOTH=false
+MANUAL_CURRENT_INCOMING_BOTH_CHOICE_FOR_MACHINE_RESOLVABLE_CASE=false
+SAME_HEAD_AFTER_RESOLUTION_REQUIRED=true
+```
+
 ## Autonomia progressiva — SONHAR → EXPERIMENTAR → CRISTALIZAR
 
 Hermes tem liberdade para decidir COMO chegar ao objetivo dentro do escopo autorizado. A contenção rigorosa vale para fronteiras e para a declaração do estado, não para a formulação de hipóteses ou testes pequenos e reversíveis.

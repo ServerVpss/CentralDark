@@ -30,6 +30,7 @@ const FILES = {
   metaGrill: '.agents/skills/meta-lupa/KITS/METAGRILL-METALUPA/KIT.md',
   metaLupa: '.agents/skills/meta-lupa/SKILL.md',
   fableLoop: '.agents/skills/fable-loop/SKILL.md',
+  conflictResolver: '.agents/skills/git-conflict-resolve-house-standard/SKILL.md',
   perceptionOrchestra: 'apps/modulos/HERMES-CORE/core/perception-orchestra.mjs',
   orchestrator: 'apps/modulos/HERMES-CORE/core/orchestrator.mjs',
   knowledgeCollector: 'apps/modulos/HERMES-CORE/agents/Knowledge-Collector/agent.mjs',
@@ -130,6 +131,7 @@ export function validateUniversalMethod() {
   const metaGrill = read(FILES.metaGrill);
   const metaLupa = read(FILES.metaLupa);
   const fableLoop = read(FILES.fableLoop);
+  const conflictResolver = read(FILES.conflictResolver);
   const perceptionOrchestra = read(FILES.perceptionOrchestra);
   const orchestrator = read(FILES.orchestrator);
   const knowledgeCollector = read(FILES.knowledgeCollector);
@@ -710,6 +712,24 @@ export function validateUniversalMethod() {
     'GLOBAL_ENTRY_GATE=PASS',
     'GLOBAL_EXIT_GATE=PASS',
   ], 'GLOBAL_CONTRACT_OPERATIONAL_DEPLOY_BINDING');
+
+  requireTokens(hermesPrompt, [
+    'HERMES_SEMANTIC_RECONCILE_ALL=true',
+    'REUSE_CONFLICT_OWNER=true',
+    'BLIND_ACCEPT_BOTH=false',
+    'MANUAL_CURRENT_INCOMING_BOTH_CHOICE_FOR_MACHINE_RESOLVABLE_CASE=false',
+    'SAME_HEAD_AFTER_RESOLUTION_REQUIRED=true',
+  ], 'HERMES_SEMANTIC_CONFLICT_RECONCILIATION');
+
+  requireTokens(conflictResolver, [
+    '## SAME/ALL — reconciliação semântica canônica',
+    'SAME_ALL_IS_DEFAULT_FOR_COMPATIBLE_USEFUL_DELTA=true',
+    'SAME_ALL_IS_NOT_BLIND_ACCEPT_BOTH=true',
+    'CONTRADICTORY_DELTA_REQUIRES_DISCRIMINANT_TEST=true',
+    'CONFLICT_MARKERS_AFTER_RESOLUTION=FAIL',
+    'SAME_HEAD_REQUIRED_AFTER_CONFLICT_RESOLUTION=true',
+    'REUSE_THIS_OWNER_FOR_ALL_EQUIVALENT_PRS=true',
+  ], 'HOUSE_SEMANTIC_CONFLICT_RECONCILIATION');
 
   requireTokens(hermesPrompt, [
     'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml',
