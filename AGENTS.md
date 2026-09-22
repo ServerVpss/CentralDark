@@ -813,14 +813,14 @@ AUTOR CONFIAVEL + MESMO REPO
 → RECIBO DE INTENCAO
 → SCAN DE CAMINHO/SECRET NO DIFF
 → CHANGES_REQUESTED? BLOQUEIA
-→ MERGE CONFLICT? BLOQUEIA
+→ MERGE CONFLICT? ROTEIA AO GIT_CONFLICT_SINGLE_STANDARD; BLOQUEIA SÓ O SQUASH ATÉ SAME_HEAD
 → BASE ATRASADA? ATUALIZA E REAVALIA
 → REVALIDA HEAD/BASE
 → SQUASH MAIN
 → RECEIPT
 ```
 
-Esse fast path **não espera convergência externa nem todos os workflows auxiliares**. O modo adversarial com workflows/Judge completos permanece no mesmo motor e é usado quando SEGREDO/CHEFE solicitar prova adversarial. `UNKNOWN`, conflito e achado de segurança continuam fail-closed.
+Esse fast path **não espera convergência externa nem todos os workflows auxiliares**. O modo adversarial com workflows/Judge completos permanece no mesmo motor e é usado quando SEGREDO/CHEFE solicitar prova adversarial. `UNKNOWN` e achado de segurança continuam fail-closed. Conflito de PR vai primeiro ao `GIT_CONFLICT_SINGLE_STANDARD`; somente resolução ainda não provada mantém o squash bloqueado.
 
 ### Guarda pós-PR do fast path
 
