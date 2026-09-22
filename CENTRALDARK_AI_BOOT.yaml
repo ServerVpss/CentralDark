@@ -241,7 +241,7 @@ CENTRALDARK_AI_BOOT:
     activation_scope: "CENTRALDARK_CONTINUOUS_ALL_MISSIONS_VIA_PR_MOTHER_1562"
     mission_model:
       mission: "CENTRALDARK_CONTINUA"
-      mission_stop: "NEVER_BY_CHAT"
+      mission_stop: "CONTINUE_ACROSS_CHAT_BOUNDARIES_UNLESS_CHEFE_EXPLICITLY_STOPS"
       rendezvous: "#1562"
       pr_mother_role: "PERMANENT_RENDEZVOUS_LEDGER_NOT_WRITER"
       pr_mother_merge_forbidden: true
@@ -327,6 +327,7 @@ CENTRALDARK_AI_BOOT:
       stop_only_when:
         - "NO_MATERIAL_FAILURES_REMAIN_IN_AUTHORIZED_SCOPE"
         - "PROVEN_HUMAN_FRONTIER"
+        - "CHEFE_EXPLICITLY_STOPS"
       human_return_before_stop_condition: FORBIDDEN
       destructive_or_irreversible_without_authority: BLOCKED
       unknown_is_pass: false
