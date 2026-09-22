@@ -128,8 +128,8 @@ async function notifyTelegram(severity, findings, issueUrl) {
   const icon = icons[severity] || "❓";
   const ts = new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
   const text = severity === "p3"
-    ? `✅ <b>VPS Healthcheck — Recuperado</b>\n\n🕐 ${ts}\nTodos os checks OK. VPS saudável.`
-    : `${icon} <b>VPS Healthcheck — ${severity.toUpperCase()}</b>\n\n${findings.slice(0, 3).map(f => `• ${f}`).join("\n")}\n\n🕐 ${ts}\n<a href="${issueUrl}">Ver Issue completa</a>`;
+    ? `⭕ <b>!AURÉOLA CANÔNICA</b>\n🟢 <b>CHEFE, a VPS voltou ao estado esperado nos checks medidos.</b>\n👉 O que aconteceu: os checks read-only desta rodada não encontraram sinal vermelho.\n🔎 <b>!CONTRAPROVA</b>: verde vale só para estes checks; não prova o sistema inteiro.\n🕐 ${ts}\n⚖️ <i>REALIDADE É O JUIZ.</i>`
+    : `⭕ <b>!AURÉOLA CANÔNICA</b>\n${icon} <b>CHEFE, apareceu uma bronca na VPS.</b>\n👉 O que aconteceu:\n${findings.slice(0, 3).map(f => `• ${f}`).join("\n")}\n⚖️ Estado técnico: <b>${severity.toUpperCase()}</b>\n🔎 <b>!CONTRAPROVA</b>: o alerta fica localizado no que foi medido; UNKNOWN != PASS.\n🕐 ${ts}\n<a href="${issueUrl}">Ver a prova completa</a>\n⚖️ <i>REALIDADE É O JUIZ.</i>`;
   try {
     const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: "POST",
