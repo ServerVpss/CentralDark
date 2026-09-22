@@ -32,7 +32,7 @@
     ],
     "failure_handling": {
       "gates_timeout": "Pausar, investigar logs CI, não forçar merge",
-      "merge_conflict": "Não fazer merge automático, pausar e notificar",
+      "merge_conflict": "Rotear para o owner único git-conflict-resolve-house-standard; resolver na branch do PR; bloquear somente o squash até SAME_HEAD/contraprova; retornar ao CHEFE apenas se restar fronteira humana material",
       "vps_sync_failed": "Investigar, possível rollback necessário",
       "endpoint_failure": "Rollback imediato, investigar PM2 logs",
       "contraprova_fail": "Revert + investigar divergência lógica"
