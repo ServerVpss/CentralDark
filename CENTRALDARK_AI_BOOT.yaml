@@ -25,6 +25,7 @@ CENTRALDARK_AI_BOOT:
     measured_house_receipt: "PDF-CC2003-HORN-GATE-20260912-152444.log"
     required_gate_ids:
       - "TLC23_PDF_BOOT_GATE"
+      - "HERMES_TRISMEGISTUS_CONTEXT_GATE"
       - "GLOBAL_CONTRACT_BOOTSTRAP_GATE"
       - "DELTA_CONTINUO_GLOBAL_GATE"
       - "ROOT_CHILD_CONTRACT_LINEAGE_GATE"
@@ -34,6 +35,7 @@ CENTRALDARK_AI_BOOT:
       - "LOCAL_HOUSE_SENSOR_GATE"
     required_sequence:
       - "LOAD_TLC23_PDF_GATE"
+      - "LOAD_HERMES_TRISMEGISTUS_CONTEXT"
       - "LOAD_GLOBAL_CONTRACT_ENFORCER"
       - "LOAD_UNIVERSAL_GATE_REGISTRY"
       - "LOAD_DELTA_CONTINUO_GLOBAL"
@@ -50,6 +52,41 @@ CENTRALDARK_AI_BOOT:
     failure_policy: "FAIL_CLOSED"
     preserve_existing_good: true
     must_not_replace: [GLOBAL_CONTRACT_ENFORCER, DELTA_CONTINUO_GLOBAL, REUSE_BEFORE_CREATE, ONE_WRITER_PER_SCOPE]
+
+  hermes_trismegistus_context_gate:
+    gate_id: "HERMES_TRISMEGISTUS_CONTEXT_GATE"
+    position: "AFTER_TLC23_BEFORE_AGENT_ROUTING"
+    source:
+      title: "The right way of Hermetism: disputes on Gnostic's, Pagan's and Christian's (re-)visions of the Hermetic phenomenon in late antiquity"
+      sha256: "d93505685db430a639ea3af067891217a00d4944926f839dbded3c5c1a9f37ef"
+      size_bytes: 247110
+    role: "CONTEXT_PROVENANCE_INTERPRETATION_GUARD"
+    rules:
+      source_is_authority: false
+      reception_is_origin: false
+      same_name_is_same_meaning: false
+      multiple_interpretations_must_remain_visible: true
+      symbolic_name_never_overrides_runtime_evidence: true
+      reality_is_judge: true
+    required_for:
+      - "HERMES_IDENTITY_OR_NAMING_CHANGE"
+      - "KERNEL_OR_CORE_SEMANTIC_CHANGE"
+      - "RUNTIME_INTERPRETATION_CHANGE"
+      - "HISTORICAL_OR_SYMBOLIC_SOURCE_ABSORPTION"
+    failure_policy: "FAIL_CLOSED_WHEN_REQUIRED_AND_NOT_LOADED"
+
+  hermes_trismegistus_identity:
+    canonical_display_family: "HERMES TRISMEGISTUS"
+    core_display_name: "HERMES TRISMEGISTUS CORE"
+    kernel_display_name: "HERMES TRISMEGISTUS KERNEL"
+    runtime_display_name: "HERMES TRISMEGISTUS RUNTIME"
+    technical_owner_core: "apps/modulos/HERMES-CORE"
+    technical_owner_runtime: "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/HERMES-AUTOCONFIG-RUNTIME.yml"
+    technical_paths_renamed: false
+    naming_is_semantic_alias_not_new_owner: true
+    reuse_existing_hermes_core: true
+    authority_unchanged: true
+    judge: "REALIDADE"
 
   gate_registry_contract:
     gate_id: "GLOBAL_CONTRACT_BOOTSTRAP_GATE"
