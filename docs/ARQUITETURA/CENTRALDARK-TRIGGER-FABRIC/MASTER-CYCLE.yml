@@ -142,6 +142,18 @@ supporting_methods:
     record_only: [DECISAO, EVIDENCIA, ACAO, RESULTADO, LACUNA, PROXIMO_TESTE]
     promotion_gate: META_LUPA_SAME_CONTROL
 
+measure_before_creation_semantic_binding:
+  owner: AGENTS.md#medir-antes-de-criar--melhorar-o-que-ja-existe
+  formula: "REUSE_BEFORE_CREATE + UNKNOWN != PASS + DOCUMENTED != EXECUTED + REALITY = JUDGE"
+  verse_reference: "1Ts 5:21"
+  verse_semantic: "EXAMINAR_TUDO_RETENDE_O_BEM"
+  meaning: "medir e comparar toda capacidade existente; preservar UNKNOWN; distinguir documentação de execução; reter somente o que a realidade provar útil"
+  applies_to: [ALL_CURRENT_AND_FUTURE_AGENTS, ALL_CURRENT_AND_FUTURE_ENGINES, ALL_CURRENT_AND_FUTURE_CLIS]
+  sequence: [MEASURE_EXISTING_REALITY, FIND_EXISTING_OWNER, REUSE_BEFORE_CREATE, PRESERVE_UNKNOWN, REQUIRE_EXECUTION_PROOF, COUNTERPROVE, RETAIN_PROVEN_GOOD]
+  verse_is_semantic_cue_not_proof: true
+  creates_new_owner: false
+  improves_existing_owner: true
+
 execution_model:
   human_intent_owner: SEGREDO/CHEFE
   coordinator: SOL
