@@ -8,6 +8,82 @@ boot_discoverable: true
 mutation_authority: false
 ---
 
+## Integração prática com Screenpipe + Hermes via Omni Router
+
+Esta seção é o delta absorvido da skill local `screenpipe-hermes-integration` (Pivete/skills/screenpipe-hermes-integration/SKILL.md) via Kimetsu/17 Respirações.
+
+### Gatilhos de ativação
+Use esta integração quando precisar que Screenpipe ou qualquer agente Screenpipe-enabled consulte o Hermes Agent via CentralDark Omni Router, mantendo o Hermes escondido atrás do router.
+
+### PRÉ-REQUISITOS
+- Screenpipe Desktop rodando localmente (`http://127.0.0.1:3030`)
+- Screenpipe Browser Bridge extension instalada e conectada/autenticada no Chrome/Chromium
+- CentralDark Omni Router instalado e escutando na porta `8099`
+- Hermes Agent disponível na mesma máquina (`hermes` command works)
+
+### PASSOS
+1. **Habilitar o motor Hermes no Omni Router** — editar `config.yaml` do router: `engines.hermes.configured: true`; deixar `base_url` e `api_key` vazios se usar transporte CLI padrão; salvar.
+2. **(Re)iniciar o Omni Router** para pegar a mudança.
+3. **Verificar** que o router reporta `hermes: {configured: true}` em `/health` e que `hermes/hermes` aparece em `/v1/models`.
+4. **Testar chamada direta** opcional: `POST /v1/chat/completions` com `model=hermes/hermes`, esperar chat.completion JSON válido.
+5. **Configurar Screenpipe para usar o Omni Router como Provider OpenAI-compatible**:
+   - Provider ID: `centraldark-hermes`
+   - Base URL: `http://127.0.0.1:8099/v1`
+   - Model Source URL: `http://127.0.0.1:8099/v1/models`
+   - Model: `auto` ou `hermes/hermes`
+   - API Key: deixar vazio (router local CLI não exige chave)
+   - Clicar Save & test → deve listar modelos disponíveis.
+6. **Usar**: Screenpipe/Screenpipe-enabled agent envia requisições para `http://127.0.0.1:8099/v1`; o router roteia para Hermes Agent.
+
+### PITFALLS & TROUBLESHOOTING
+- Router ainda mostra `hermes.configured: false`: editou arquivo errado ou esqueceu de salvar/restartar o processo exato na porta 8099.
+- `There was an error parsing the body`: payload JSON malformado (aspas simples) ou nome de modelo desconhecido. Verificar `model` contra `/v1/models`.
+- Teste de conexão do Screenpipe falha: garantir Screenpipe Desktop alcançável em `127.0.0.1:3030` e Base URL correto (sem trailing slash).
+- Hermes Agent não responde: se `base_url` vazio, o router usa CLI do Hermes; garantir `hermes` no PATH (`hermes --version`). Ou subir Hermes em servidor (`hermes server --port 11434`) e setar `base_url: "http://127.0.0.1:11434/v1"`.
+- Conflito de porta: se outro serviço usa 8099, mudar porta no config do router e atualizar provider no Screenpipe.
+
+### Monitoração in-the-job
+Ver `references/monitor-doctrine.md` para o contrato do monitor live, setup de cronjob e armadilhas bash neste ambiente.
+
+### Windows cron + bash pitfall (execvpe /bin/bash failed)
+Se script `.sh` do monitor falha em cron com `CreateProcessCommon:... execvpe(/bin/bash) failed: No such file or directory`, o problema é o contexto de execução do cron (sem `/bin/bash` alcançável), não o conteúdo do `.sh`. Alternativa resiliente: monitor Python-native (`.py`) que não dependa de bash/WSL. Ver `references/windows-cron-bash-execvpe-pitfall.md`.
+
+### Investigação & Forensics (READ_ONLY, ZERO_MUTATION)
+1. **Runtime** — `Get-NetTCPConnection -State Listen -LocalPort 3030` (Screenpipe) e `8099` (Omni). Registrar PID + exe. Não imprimir segredos.
+2. **Config refs (sem segredos)** — `search_files` com `file_glob` restrito (yaml/json); `grep -ivE ".env|token=|credential"`. Evitar grep amplo em `node_modules`/dist.
+3. **Screenpipe vivo** — `curl 127.0.0.1:3030/health` → 200 = alcançável; 403 root = auth ok (não é falha).
+4. **Omni vivo + invocação** — `POST /v1/chat/completions` com `model=hermes/hermes`. Se `hermes_stdio_turn_failed` → OMNI_RUNTIME PASS, OMNI→HERMES FAIL (engine não responde; não investigar env para evitar violação "do not tamper").
+5. **Ferramenta carregada na sessão?** — listar tools no system prompt. Se nenhum `screenpipe`/MCP → `HERMES_SCREENPIPE_TOOL_LOADED=UNKNOWN`; invocação impossível.
+6. **Teste causal (A vs B)** — A: query Screenpipe direto (fingerprint). B: via ferramenta Hermes (fingerprint). Comparar. Se B não executável (ferramenta ausente) → `SCREENPIPE_TO_HERMES_CAUSAL=UNKNOWN`. Não declarar PASS.
+7. **Traçar E2E** — propagar `TRACE_ID` através Screenpipe→Hermes→Omni→engine; buscar ID nos logs. Mesmo ID + timestamps consistentes = forte corrente causal.
+
+### Status codes
+- `PASS` — provado por medição (process/health/port).
+- `FAIL` — provado por evidência de falha (invoke error).
+- `UNKNOWN` — não provado, não negado (sem evidência em qualquer direção).
+- `CONFIGURED_NOT_PROVEN` — config existe mas instância não confirmada.
+
+### Leis (não-negociáveis)
+```
+CONFIGURED != ACTIVE
+ACTIVE != INVOCATION_PROVEN
+HEALTH != PROVIDER_INVOCATION_PROOF
+CORRELATION != CAUSE
+UNKNOWN != PASS
+ACTION != PROOF
+```
+
+### O que NÃO prova
+- Ferramenta existe ≠ ferramenta carregada na sessão
+- Processo roda ≠ Hermes consome
+- Health green ≠ invocação aconteceu
+- Screenpipe conectado ≠ Hermes recebe contexto
+
+O protocolo forense completo vive em `references/e2e-forensic-protocol.md`.
+
+### Hermes Screenpipe Tool Gap (limitação conhecida)
+Enquanto esta sessão, o Hermes Agent pode NÃO ter a ferramenta/MCP Screenpipe carregada mesmo quando Screenpipe e Omni estão rodando. Isso é um gap de instrumentação de sessão, não bug do pipeline. Para claim `HERMES_SCREENPIPE_INVOCATION=PASS` é MANDATÓRIO observar invocação real com request_id/trace. Não inferir a partir de Screenpipe rodando ou Omni roteando.
+
 # Screenpipe Live Observer — sensor global da Casa
 
 ## Finalidade
