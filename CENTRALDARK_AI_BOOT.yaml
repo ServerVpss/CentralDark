@@ -241,9 +241,11 @@ CENTRALDARK_AI_BOOT:
     activation_scope: "CENTRALDARK_CONTINUOUS_ALL_MISSIONS_VIA_PR_MOTHER_1562"
     mission_model:
       mission: "CENTRALDARK_CONTINUA"
+      mission_stop: "NEVER_BY_CHAT"
       rendezvous: "#1562"
       pr_mother_role: "PERMANENT_RENDEZVOUS_LEDGER_NOT_WRITER"
       pr_mother_merge_forbidden: true
+      child_pr_only_promotion_vehicle: true
       current_main_sha_binding: "SHA:<CURRENT_MAIN_SHA>"
       static_sha_is_provenance_not_eternal: true
       child_pr_id_in_boot_forbidden: true
@@ -251,7 +253,7 @@ CENTRALDARK_AI_BOOT:
       open_delta_policy: "RECONCILE_ONLY_OPEN_OR_REOPENED_MATERIAL_DELTA"
       fixed_point_semantics: "CLOSES_CURRENT_DELTA_NOT_CENTRALDARK"
       after_fixed_point: "RETURN_TO_PR_MOTHER_1562_AND_CONTINUE_OPEN_DELTA_SCAN"
-    canonical_arrow_command: "⭕ !AURÉOLA → 👑🪬 !CENTRALDARK → #1562 → SHA:<CURRENT_MAIN_SHA> → CURRENT>HISTORY → REUSE_PROVEN → OPEN_DELTA_ONLY → TLC23 → META_LUPA → FABLE → META_GRILL → HERMES → PROVA → CONTRAPROVA → ACEITE → RECONCILIAR → SEMANTIC_ALL → SAME_HEAD → SQUASH → MAIN → DEPLOY_CAUSAL → T1 → RECEIPT → FIXED_POINT → #1562 → LOOP"
+    canonical_arrow_command: "⭕ !AURÉOLA → 👑🪬 !CENTRALDARK → #1562 → SHA:<CURRENT_MAIN_SHA> → CURRENT>HISTORY → REUSE_PROVEN → OPEN_DELTA_ONLY → TLC23 → META_LUPA → FABLE → META_GRILL → HERMES → PROVA → CONTRAPROVA → ACEITE → RECONCILIAR → SEMANTIC_ALL → SAME_HEAD → SQUASH_CHILD_ONLY → MAIN → DEPLOY_CAUSAL → T1 → RECEIPT → FIXED_POINT → #1562 → LOOP"
     on_activation:
       - "MEASURE_AND_BIND_CURRENT_MAIN_SHA"
       - "ENTER_PR_MOTHER_1562_RENDEZVOUS"
