@@ -508,7 +508,7 @@ Quando você quiser revisar, abre item por item (5.1 → 5.21) e me fala "execut
 - **Problema:** prefixos numéricos duplicados — `00`, `01`, `02`, `11`, `12` (triplicado!), `21` — além de possíveis números fora de ordem / buracos na sequência. Bagunça visual que o Pivete quer eliminar (regra: pastas/arquivos organizados, sem número torto).
 - **Onde:** `docs/CONSCIENCIA/*.md`.
 - **Cuidado (por isso não foi feito de imediato):** é ÁREA PROTEGIDA (CLAUDE.md Seção 9) e renomear arquivo quebra os wikilinks `[[...]]` do Obsidian. Tem que **renumerar E corrigir todos os links** que apontam pra cada arquivo no mesmo passo, senão o grafo do Pivete fica com bolinhas quebradas.
-- **Decisão do Pivete (30/06):** "só deixa anotado" — não atacar agora; ir ajustando aos poucos pela regra do escoteiro ao passar por cada arquivo, ou em tarefa dedicada com plano quando ele autorizar (PERMITO PIVETE).
+- **Decisão do Pivete (30/06):** "só deixa anotado" — não atacar agora; ir ajustando aos poucos pela regra do escoteiro ao passar por cada arquivo, ou em tarefa dedicada com plano quando ele autorizar (PERMITO SEGREDO).
 
 ### 14. Claude Code via proxy nos 2 modos (terminal + extensão VSCode) — 🟡 ABERTO (30/06/2026)
 - **Objetivo:** quando a conta principal cair, o Pivete continua trabalhando via proxy `claude.ap7.site` — tanto no terminal quanto na extensão do VSCode.
@@ -780,4 +780,3 @@ Estabilidade: Plugin externo exige re-instalação manual pós-update. Ação: M
 - **Resumo do fechamento:** Remediado no commit 328dfb027: os 3 canvas vazios foram destrackeados do PR #1369 (git rm --cached, arquivos preservados no disco conforme DETECT != DELETE). A mensagem enganosa do 41f1f7e85 fica no histórico como registro do erro, com o commit corretivo explicando a divergência. Aprendizado #33 registra a lei extraída: mensagem de commit não é prova, conteúdo de commit é prova — rodar git diff --cached --stat antes de declarar recibo, nunca git add -A cego.
 - **Sintoma:** O commit 41f1f7e85 na branch reconciliacao/casa-20260829-consolidacao tem mensagem "docs(reconciliation): inventory of E:\CentralDark — SOBRA_BRAIN classification, proof of mirrors" mas contém apenas 3 arquivos canvas vazios (docs/BRAIN/Sem título*.canvas, 1 linha cada), pegos por um git add -A cego. O relatório de inventário citado na mensagem nunca entrou no repositório.
 - **Onde mexer:** PR #1369, branch reconciliacao/casa-20260829-consolidacao, commit 41f1f7e85, arquivos docs/BRAIN/Sem título*.canvas
-- **Critério pra fechar:** Os 3 canvas vazios removidos do PR #1369 (não pertencem ao escopo), e o commit reescrito ou seguido de commit corretivo cuja mensagem descreva o que realmente contém. Nenhum commit do PR anuncia prova que não esteja no diff.
