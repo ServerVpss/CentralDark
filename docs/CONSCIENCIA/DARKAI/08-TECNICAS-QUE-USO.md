@@ -116,7 +116,7 @@ Ferramenta: `pendencias_add`.
 
 ## 7. Áreas Protegidas
 
-Algumas pastas do projeto são "consolidadas" — eu não mexo sem autorização explícita ("PERMITO PIVETE"). Isso evita quebrar coisas que já funcionam.
+Algumas pastas do projeto são "consolidadas" — eu não mexo sem autorização explícita ("PERMITO SEGREDO"). Isso evita quebrar coisas que já funcionam.
 
 Exemplos: `apps/bot-telegram/`, `infra/caddy/`, `.github/workflows/`, `secrets/`.
 
