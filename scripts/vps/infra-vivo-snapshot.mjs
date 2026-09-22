@@ -9,7 +9,7 @@ import { execSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 
-const ROOT = "<caminho-vps>";
+const ROOT = "/root/CentralDark";
 const OUT = path.join(ROOT, "apps/modulos/status/infra-vivo.json");
 
 function sh(cmd, fallback = "") {
