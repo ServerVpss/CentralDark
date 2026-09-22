@@ -37,7 +37,7 @@ updated: 2026-06-29
 
 ## Área protegida
 
-`apps/bot-telegram/` exige **"PERMITO PIVETE"** antes de qualquer alteração estrutural.
+`apps/bot-telegram/` exige **"PERMITO SEGREDO"** antes de qualquer alteração estrutural.
 
 ## Conexões Rápidas
 
