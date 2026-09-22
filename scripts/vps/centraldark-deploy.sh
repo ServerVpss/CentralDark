@@ -2,21 +2,24 @@
 # ══════════════════════════════════════════════════════════════════════
 # CentralDark — deploy do repositório na VPS
 #
-# Escopo: levar /root/CentralDark ao SHA de origin/main e reiniciar os
+# Escopo: levar <caminho-vps> ao SHA de origin/main e reiniciar os
 # serviços declarados. NÃO substitui deploy-operational-guards.sh, que é
 # estreito (só HermesVerificador + mapeamento). Este cobre o repo.
 #
 # Leis:
 #   MERGED != DEPLOYED
+#   SAME_HEAD_GREEN => SQUASH_MAIN => TOTAL_DEPLOY
 #   AÇÃO != PROVA
 #   UNKNOWN != PASS
 #   DIRTY_WORKTREE != DESCARTAR
+#   UNTRACKED_RUNTIME_STATE != CODE_DRIFT
 #   HOUSE_VPS_REMOTE_SAME_PROTOCOL
 #   META_LUPA + CLAIM_SEALS acompanham a trajetória até o ponto fixo
 #
 # Uso:
 #   bash centraldark-deploy.sh                    # dry-run (padrão)
 #   bash centraldark-deploy.sh --apply            # executa + runtime declarado
+#   bash centraldark-deploy.sh --apply --total    # main provada -> regeneração total do runtime já populado
 #   bash centraldark-deploy.sh --apply --source-only # sincroniza fonte sem restart
 #   bash centraldark-deploy.sh --apply --aceitar-divergencia
 #   APPS="CentralDark-MCP CentralDark-Memoria" bash centraldark-deploy.sh --apply
@@ -28,10 +31,10 @@
 # ══════════════════════════════════════════════════════════════════════
 set -Eeuo pipefail
 
-REPO_DIR="${REPO_DIR:-/root/CentralDark}"
+REPO_DIR="${REPO_DIR:-<caminho-vps>}"
 BRANCH="${BRANCH:-main}"
 MCP_HEALTH="${MCP_HEALTH:-http://127.0.0.1:9100/health}"
-APPS="${APPS:-CentralDark-MCP}"
+APPS="${APPS:-}"
 GLOBAL_CONTRACT_GATE="$REPO_DIR/scripts/agent-call.mjs"
 GLOBAL_GATE_RECEIPT_DIR="${GLOBAL_GATE_RECEIPT_DIR:-/tmp/centraldark-global-contract}"
 # CENTRALDARK_GLOBAL_CONTRACT_ENFORCER_REQUIRED
@@ -39,6 +42,7 @@ GLOBAL_GATE_RECEIPT_DIR="${GLOBAL_GATE_RECEIPT_DIR:-/tmp/centraldark-global-cont
 APPLY=0
 ACEITAR_DIVERGENCIA=0
 SOURCE_ONLY=0
+TOTAL=0
 CANONICAL_CACHE=0
 CANONICAL_CACHE_DIR="${CANONICAL_CACHE_DIR:-/var/lib/centraldark/canonical-main}"
 for arg in "$@"; do
@@ -46,10 +50,13 @@ for arg in "$@"; do
     --apply)                APPLY=1 ;;
     --aceitar-divergencia)  ACEITAR_DIVERGENCIA=1 ;;
     --source-only)          SOURCE_ONLY=1 ;;
+    --total)                TOTAL=1 ;;
     --canonical-cache)      CANONICAL_CACHE=1 ;;
     *) echo "argumento desconhecido: $arg"; exit 2 ;;
   esac
 done
+
+[[ "$TOTAL" -eq 1 && "$SOURCE_ONLY" -eq 1 ]] && { echo "--total e --source-only são mutuamente exclusivos"; exit 2; }
 
 log() { printf '%s %s\n' "$(date -u '+%H:%M:%SZ')" "$*"; }
 die() { log "FALHA: $*"; exit "${2:-1}"; }
@@ -121,9 +128,71 @@ JSON
   log "GLOBAL_EXIT_GATE=PASS receipt=$receipt_file"
 }
 
-# Worktree suja não é lixo. Nada é resetado/limpo automaticamente.
+# Worktree suja não é lixo. Nada é limpo automaticamente.
 listar_sujos() { git status --porcelain --untracked-files=all || true; }
 contar_sujos() { listar_sujos | sed '/^$/d' | wc -l | tr -d ' '; }
+listar_sujos_rastreados() { git status --porcelain=v1 --untracked-files=no || true; }
+contar_sujos_rastreados() { listar_sujos_rastreados | sed '/^$/d' | wc -l | tr -d ' '; }
+contar_nao_rastreados() { git ls-files --others --exclude-standard -z | tr '\0' '\n' | sed '/^$/d' | wc -l | tr -d ' '; }
+
+contar_sujos_deploy() {
+  if [[ "$TOTAL" -eq 1 ]]; then contar_sujos_rastreados; else contar_sujos; fi
+}
+
+proteger_nao_rastreados_contra_alvo() {
+  [[ "$TOTAL" -eq 1 ]] || return 0
+  local conflict=0 path
+  while IFS= read -r -d '' path; do
+    if git cat-file -e "origin/$BRANCH:$path" 2>/dev/null; then
+      log "UNTRACKED_TARGET_CONFLICT=$path"
+      conflict=1
+    fi
+  done < <(git ls-files --others --exclude-standard -z)
+  [[ "$conflict" -eq 0 ]]
+}
+
+discover_total_apps() {
+  local raw
+  raw="$(pm2 jlist 2>/dev/null || true)"
+  jq -e 'type == "array"' >/dev/null 2>&1 <<<"$raw" || return 1
+  jq -r --arg repo "$REPO_DIR" '
+    .[]
+    | select(
+        (((.name // "") | startswith("CentralDark-")))
+        or (((.pm2_env.pm_cwd // "") | startswith($repo)))
+        or (((.pm2_env.pm_exec_path // "") | startswith($repo)))
+      )
+    | .name
+  ' <<<"$raw" | sed '/^$/d' | sort -u | xargs
+}
+
+resolve_runtime_apps() {
+  if [[ -n "$APPS" ]]; then return 0; fi
+  if [[ "$TOTAL" -eq 0 ]]; then
+    APPS="CentralDark-MCP"
+    return 0
+  fi
+  APPS="$(discover_total_apps || true)"
+  if [[ -z "$APPS" && "$APPLY" -eq 1 ]]; then
+    log "TOTAL_RUNTIME_INVENTORY_EMPTY=1"
+    log "REGEN_FALLBACK=PM2_RESURRECT_FROM_SAVED_POPULATED_STATE"
+    pm2 resurrect >/dev/null 2>&1 || true
+    sleep 3
+    APPS="$(discover_total_apps || true)"
+  fi
+  [[ -n "$APPS" ]] || return 1
+  log "TOTAL_RUNTIME_APPS=$APPS"
+}
+
+verify_runtime_apps() {
+  local app pid
+  for app in $APPS; do
+    pm2 describe "$app" >/dev/null 2>&1 || { log "PM2_VERIFY_MISSING=$app"; return 1; }
+    pid="$(pm2 pid "$app" | tail -n1)"
+    [[ "$pid" =~ ^[0-9]+$ && "$pid" -gt 0 ]] || { log "PM2_VERIFY_NO_PID=$app"; return 1; }
+    log "PM2_VERIFY=PASS app=$app pid=$pid"
+  done
+}
 
 proof_guard_paths_exist_on_ref() {
   local ref="$1"
@@ -188,6 +257,8 @@ log "=== T0 (antes) ==="
 log "SURFACE=VPS"
 log "PROTOCOL=BANDA_META_LUPA_CLAIM_SEAL_SYNC_V1"
 log "SOURCE_ONLY=$SOURCE_ONLY"
+log "TOTAL=$TOTAL"
+log "TOTAL_REGEN_SOURCE=PROVEN_ORIGIN_MAIN_PLUS_EXISTING_PM2_STATE"
 [[ -d "$REPO_DIR/.git" ]] || die "REPO_DIR sem .git: $REPO_DIR" 10
 cd "$REPO_DIR"
 
@@ -202,15 +273,16 @@ HEAD_ANTES="$(git rev-parse HEAD)"
 ALVO="$(git rev-parse "origin/$BRANCH")"
 ATRAS="$(git rev-list --count "HEAD..origin/$BRANCH")"
 AFRENTE="$(git rev-list --count "origin/$BRANCH..HEAD")"
-SUJOS="$(contar_sujos)"
+SUJOS="$(contar_sujos_deploy)"
+UNTRACKED="$(contar_nao_rastreados)"
 
 log "HEAD_ANTES=$HEAD_ANTES"
 log "ALVO=$ALVO"
-log "ATRAS=$ATRAS AFRENTE=$AFRENTE WORKTREE_DIRTY=$SUJOS"
+log "ATRAS=$ATRAS AFRENTE=$AFRENTE DEPLOY_DIRTY=$SUJOS UNTRACKED_PRESERVED=$UNTRACKED"
 
 # Cache canônico limpo para consumidores de SOUL/skills/runtime. Ele é uma
 # projeção descartável de origin/main e NÃO substitui o checkout operacional.
-# Isso permite reancoragem mesmo quando /root/CentralDark contém estado vivo
+# Isso permite reancoragem mesmo quando <caminho-vps> contém estado vivo
 # ainda não reconciliado. O fluxo reverso continua passando pelo writer
 # canônico; nunca promovemos a árvore suja por rsync/reset cego.
 if [[ "$CANONICAL_CACHE" -eq 1 ]]; then
@@ -240,18 +312,34 @@ if [[ "$CANONICAL_CACHE" -eq 1 ]]; then
 fi
 
 if [[ "$SUJOS" -gt 0 ]]; then
-  log "BLOQUEADO_DIRTY_WORKTREE — nada será resetado/limpo automaticamente"
-  listar_sujos | sed 's/^/  /'
-  log "NEXT=RECONCILIAR_TRABALHO_LOCAL_COM_OWNER_CANONICO"
-  die "DIRTY_WORKTREE" 17
+  if [[ "$TOTAL" -eq 1 ]] && git diff --quiet "origin/$BRANCH" -- .; then
+    # Jobs de promoção podem ter materializado arquivos do MESMO main antes
+    # deste fechamento total. Isso não é drift: é o alvo já presente no disco.
+    log "TRACKED_DIRTY_EQUALS_TARGET_MAIN=PASS"
+    log "TRACKED_DIRTY_CLASS=PREDEPLOYED_TARGET_STATE"
+    SUJOS=0
+  elif [[ "$TOTAL" -eq 1 ]]; then
+    log "BLOQUEADO_TRACKED_DIRTY_WORKTREE — conteúdo rastreado diverge do main provado"
+    listar_sujos_rastreados | sed 's/^/  /'
+    log "NEXT=RECONCILIAR_TRABALHO_LOCAL_COM_OWNER_CANONICO"
+    die "DIRTY_WORKTREE" 17
+  else
+    log "BLOQUEADO_DIRTY_WORKTREE — nada será resetado/limpo automaticamente"
+    listar_sujos | sed 's/^/  /'
+    log "NEXT=RECONCILIAR_TRABALHO_LOCAL_COM_OWNER_CANONICO"
+    die "DIRTY_WORKTREE" 17
+  fi
 fi
+
+proteger_nao_rastreados_contra_alvo || die "UNTRACKED_CONFLICTS_WITH_TARGET_MAIN" 17
+[[ "$TOTAL" -eq 1 ]] && log "UNTRACKED_RUNTIME_STATE=PRESERVED_NOT_CLEANED count=$UNTRACKED"
 
 # O alvo remoto precisa conter o protocolo antes de qualquer reset.
 proof_guard_paths_exist_on_ref "origin/$BRANCH" \
   || die "origin/$BRANCH não contém todos os elos do compasso" 16
 
 # Se já está sincronizado, prova apenas o escopo pedido.
-if [[ "$HEAD_ANTES" == "$ALVO" ]]; then
+if [[ "$HEAD_ANTES" == "$ALVO" && "$TOTAL" -eq 0 ]]; then
   if [[ "$SOURCE_ONLY" -eq 1 ]]; then
     source_only_fixed_point || die "source-only não atingiu ponto fixo" 16
     log "PONG=vps=$HEAD_ANTES remote=$ALVO dirty=0"
@@ -293,7 +381,10 @@ if [[ "$APPLY" -eq 0 ]]; then
   log "=== DRY-RUN — nada alterado. Use --apply para executar. ==="
   if [[ "$SOURCE_ONLY" -eq 1 ]]; then
     log "faria: âncora -> reset origin/$BRANCH -> proof guards -> SEM restart -> prova SHA/dirty"
+  elif [[ "$TOTAL" -eq 1 ]]; then
+    log "faria: main provada -> preservar untracked -> reset rastreado -> descobrir CentralDark-* -> restart total -> pm2 save -> health -> PONG"
   else
+    resolve_runtime_apps || die "RUNTIME_APPS_NOT_RESOLVED" 14
     log "faria: âncora -> reset origin/$BRANCH -> proof guards -> restart [$APPS] -> health -> PONG"
   fi
   exit 0
@@ -305,9 +396,14 @@ git tag -f "$ANCORA" HEAD >/dev/null
 log "ANCORA=$ANCORA"
 global_gate_entry "git-tag:$ANCORA"
 
+RESTART_STARTED=0
 rollback() {
   log "ROLLBACK=$ANCORA"
   git reset --hard "$ANCORA" --quiet || true
+  if [[ "$RESTART_STARTED" -eq 1 && -n "$APPS" ]]; then
+    log "ROLLBACK_RUNTIME_RESTART=$APPS"
+    for app in $APPS; do pm2 restart "$app" >/dev/null 2>&1 || true; done
+  fi
 }
 
 # ─── Aplicar ──────────────────────────────────────────────────────────
@@ -316,7 +412,7 @@ git reset --hard "origin/$BRANCH" --quiet || die "reset para origin/$BRANCH falh
 
 HEAD_DEPOIS="$(git rev-parse HEAD)"
 [[ "$HEAD_DEPOIS" == "$ALVO" ]] || { rollback; die "HEAD não chegou no alvo ($HEAD_DEPOIS != $ALVO)" 15; }
-[[ "$(contar_sujos)" -eq 0 ]] || { rollback; die "worktree ficou suja após sync" 17; }
+[[ "$(contar_sujos_deploy)" -eq 0 ]] || { rollback; die "worktree rastreada ficou suja após sync" 17; }
 log "HEAD_DEPOIS=$HEAD_DEPOIS == ALVO"
 
 # MetaLupa/lacres são catraca antes de qualquer runtime.
@@ -332,8 +428,10 @@ if [[ "$SOURCE_ONLY" -eq 1 ]]; then
   exit 0
 fi
 
-# ─── Reiniciar serviços declarados ───────────────────────────────────
+# ─── Reiniciar serviços declarados / runtime populado ────────────────
+resolve_runtime_apps || { rollback; die "RUNTIME_APPS_NOT_RESOLVED" 14; }
 log "=== reiniciando: $APPS ==="
+RESTART_STARTED=1
 for APP in $APPS; do
   if pm2 describe "$APP" >/dev/null 2>&1; then
     PID_ANTES="$(pm2 pid "$APP" | tail -n1)"
@@ -346,16 +444,26 @@ for APP in $APPS; do
     log "$APP ausente no PM2 — pulado"
   fi
 done
-log "NAO_REINICIADOS=demais apps seguem com código antigo em memória"
+
+if [[ "$TOTAL" -eq 1 ]]; then
+  pm2 save --force >/dev/null || { rollback; die "PM2_SAVE_FAILED" 14; }
+  verify_runtime_apps || { rollback; die "TOTAL_PM2_VERIFY_FAILED" 14; }
+  log "RUNTIME_SCOPE=ALL_EXISTING_PROVEN_CENTRALDARK_PM2_APPS"
+  log "NAO_REINICIADOS=NON_CENTRALDARK_PM2_ONLY"
+else
+  log "NAO_REINICIADOS=demais apps seguem com código antigo em memória"
+fi
 
 # ─── T1 / contraprova ─────────────────────────────────────────────────
 log "=== T1 (depois) ==="
 FINAL_HEAD="$(git rev-parse HEAD)"
 FINAL_REMOTE="$(git rev-parse "origin/$BRANCH")"
-FINAL_DIRTY="$(contar_sujos)"
+FINAL_DIRTY="$(contar_sujos_deploy)"
+FINAL_UNTRACKED="$(contar_nao_rastreados)"
 log "FINAL_HEAD=$FINAL_HEAD"
 log "FINAL_REMOTE=$FINAL_REMOTE"
 log "FINAL_DIRTY=$FINAL_DIRTY"
+log "FINAL_UNTRACKED_PRESERVED=$FINAL_UNTRACKED"
 [[ "$FINAL_HEAD" == "$FINAL_REMOTE" && "$FINAL_DIRTY" -eq 0 ]] \
   || { rollback; die "sync não atingiu ponto fixo source" 15; }
 
@@ -368,5 +476,10 @@ log "SHA_VPS_EQ_SHA_MAIN=PROVADO"
 log "META_LUPA_FINAL=PASS"
 log "CLAIM_SEALS_FINAL=PASS"
 log "ANCORA_ROLLBACK=$ANCORA"
-global_gate_exit "$FINAL_HEAD" true "MCP_HEALTH_200+PORT_9100+META_LUPA+CLAIM_SEALS"
+if [[ "$TOTAL" -eq 1 ]]; then
+  log "SAME_HEAD_GREEN_TO_TOTAL_DEPLOY=PASS"
+  log "TOTAL_DEPLOY_FIXED_POINT=PASS"
+  log "SYSTEM_REGENERATED_FROM_PROVEN_MAIN_AND_POPULATED_RUNTIME=PASS"
+fi
+global_gate_exit "$FINAL_HEAD" true "MCP_HEALTH_200+PORT_9100+META_LUPA+CLAIM_SEALS+PM2_RUNTIME"
 log "=== DEPLOY_PROVADO_NO_ESCOPO_DECLARADO ==="

@@ -85,6 +85,46 @@ check('LEIA-ME-IA.md',[
  'NO_BLIND_OVERWRITE=true',
  'DURABLE_CONTINUITY_REQUIRES_RECEIPT_AND_NEXT_CURSOR=true',
 ], classification='HUMAN_OBJECTIVE_AND_REMOTE_REALITY_BOUNDARY')
+check('LEIA-ME-IA.md',[
+ 'MATERIAL_FROM_CHEFE_AUTO_INGEST=true',
+ 'MATERIAL_FROM_CHEFE_IS_NOT_AUTOMATIC_FACT=true',
+ 'PROVEN_MATERIAL_AUTO_CRYSTALLIZES_IN_EXISTING_OWNER=true',
+ 'UNPROVEN_MATERIAL_STAYS_CANDIDATE_OR_UNKNOWN=true',
+ 'ASK_TO_CRYSTALLIZE_ALREADY_PROVEN_DELTA=false',
+ 'PRE_RESPONSE_MATERIAL_RECONCILIATION_REQUIRED=true',
+ 'GRILL_ME_MATERIAL_PREFLIGHT=true',
+ 'FIXED_POINT_IS_VERIFICATION_CHECKPOINT_NOT_LEARNING_GATE=true',
+], classification='MATERIAL_FIRST_COGNITIVE_ROUTE_CONTRACT')
+check('AGENTS.md',[
+ 'MATERIAL_FROM_CHEFE_AUTO_INGEST=true',
+ 'MATERIAL_COGNITIVE_ROUTE=CHEFE_MATERIAL',
+ 'GRAPHRAG_SEMANTIC_LINKER',
+], classification='MATERIAL_FIRST_AGENT_SEMANTICS')
+check('AGENTS.md',[
+ 'CREATE_PR_MERGEABLE_SNAPSHOT_IS_NOT_FINAL=true',
+ 'REMEASURE_PR_LIVE_BEFORE_HUMAN_RETURN=true',
+ 'QUEUED_OR_IN_PROGRESS_AUXILIARY_IS_NOT_MATERIAL_BLOCKER=true',
+ 'POST_PR_CONTINUE_UNTIL_MERGED_OR_MATERIAL_BLOCKER=true',
+ 'RETURN_WITH_OPEN_ELIGIBLE_PR=FORBIDDEN',
+], classification='POST_PR_FAST_PATH_CONTINUATION_GUARD')
+check('docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md',[
+ 'SOUL_MATERIAL_FIRST_COGNITIVE_ROUTE=true',
+ 'HISTORICAL_SUCCESS_IS_NOT_CURRENT_PASS=true',
+ 'CURRENT_USE_REQUIRES_EQUIVALENT_CONDITIONS_OR_REMEASURE=true',
+], classification='MATERIAL_FIRST_SOUL_BINDING')
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/KNOWLEDGE-HUB.yml',[
+ 'material_first_cognitive_route:',
+ 'KNOWLEDGE_COLLECTOR',
+ 'GRAPHRAG_MASTER',
+ 'SEMANTIC_LINKER',
+ 'ASK_TO_CRYSTALLIZE_ALREADY_PROVEN_DELTA: false',
+], classification='MATERIAL_FIRST_GRAPH_BINDING')
+check('scripts/lupa/portable-kernel.mjs',[
+ "id: 'MATERIAL_FIRST_COGNITIVE_CRYSTALLIZATION'",
+ 'MATERIAL_FROM_CHEFE_AUTO_INGEST=true',
+ 'MATERIAL_COGNITIVE_ROUTE=CHEFE_MATERIAL',
+], classification='MATERIAL_FIRST_PORTABLE_KERNEL_BINDING')
+
 check('CENTRALDARK_AI_BOOT.yaml',[
  'adaptive_payload: true',
  'observed_evidence: "MEASURE_AT_RUNTIME: branch, HEAD, PR, runtime, tools, owner, writer_scope"',
@@ -188,6 +228,17 @@ check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml',[
  'mandatory_before_human_return: true',
  'no_new_workflow_when_owner_exists: true',
  'yellow_status_semantics: FORBIDDEN',
+ 'create_pr_mergeable_snapshot_is_final: false',
+ 'remeasure_live_mergeability_before_human_return: true',
+ 'queued_or_in_progress_auxiliary_is_material_blocker: false',
+ 'post_pr_continue_until_merged_or_material_blocker: true',
+ 'return_with_open_eligible_pr: FORBIDDEN',
+ 'centraldark_pattern_monitor:',
+ 'outside_percent_red_threshold: 80',
+ 'unknown_prevents_green: true',
+ 'metric_scope: OBSERVED_MEASURABLE_DIMENSIONS_ONLY',
+ 'global_behavior_claim_from_partial_telemetry: FORBIDDEN',
+ 'refresh_source: /admin/api/operational-snapshot',
  'github_hosted_runner: FORBIDDEN',
  'scope: ALL_ACTIVE_ROOT_GITHUB_WORKFLOWS',
  'scope: ALL_PR_COMMIT_AND_RUNTIME_ELIGIBLE_FAILURES',

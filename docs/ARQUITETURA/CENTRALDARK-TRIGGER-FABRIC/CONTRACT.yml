@@ -33,6 +33,10 @@ principles:
   same_failure_without_new_information_reuses_crystal: true
   second_brain_logical_one: true
   second_brain_parallel_forbidden: true
+  human_complexity_must_be_absorbed_by_machine_when_safe: true
+  machine_discoverable_state_must_not_be_user_guesswork: true
+  machine_safe_fix_must_not_be_delegated_to_user: true
+  generic_error_without_location_and_next_action_is_invalid: true
 
 global_contract_entry_policy:
   marker: CENTRALDARK_GLOBAL_CONTRACT_ENTRY_REQUIRED
@@ -126,6 +130,28 @@ standard_flow:
     - COUNTERPROVE
     - REGISTER_RECEIPT
     - GENERALIZE_IF_REUSABLE
+  human_complexity_absorption:
+    marker: CENTRALDARK_HUMAN_COMPLEXITY_ABSORPTION_REQUIRED
+    applies_to: ALL_CURRENT_AND_FUTURE_EXECUTORS
+    human_input_default: GOAL_AND_AUTHORITY
+    technical_decomposition_owner: MACHINE
+    prefer_one_complete_operation_over_microcommand_chain: true
+    preflight_before_execution: REQUIRED
+    predictable_failure_preparation: REQUIRED
+    safe_fallbacks_before_human_return: REQUIRED
+    bounded_retry_only_with_information_gain: true
+    idempotent_reentry_when_possible: true
+    unresolved_failure_display: LOUD_EXACT_ACTIONABLE
+    exact_failure_location_required_when_available: true
+    proven_cause_or_labeled_hypothesis_required: true
+    attempted_routes_required: true
+    exact_human_action_required_at_human_frontier: true
+    one_human_action_at_a_time: true
+    secrets_enter_at_secure_source_not_chat: true
+    automatic_resume_after_human_frontier: true
+    machine_diagnostics_must_not_be_redelegated_to_human: true
+    final_remeasurement_required: true
+    final_unknown_must_remain_unknown: true
   scope_compression_failure:
     signature: AGENT_REDUCED_HUMAN_OBJECTIVE_WITHOUT_AUTHORIZATION
     remediation: RESTORE_FULL_HUMAN_OBJECTIVE_AND_RECONCILE_IN_AUTHORIZED_SCOPE
@@ -423,6 +449,22 @@ ci_binding:
     wait_slow_self_hosted_auxiliary: false
     causal_gates_required: true
     false_green_forbidden: true
+    create_pr_mergeable_snapshot_is_final: false
+    remeasure_live_mergeability_before_human_return: true
+    queued_or_in_progress_auxiliary_is_material_blocker: false
+    post_pr_continue_until_merged_or_material_blocker: true
+    return_with_open_eligible_pr: FORBIDDEN
+  centraldark_pattern_monitor:
+    owner: apps/modulos/mcp/src/operational-telemetry.js
+    admin_surface: apps/modulos/mcp/src/admin-patterns-ui.js
+    label: PADRAO_CENTRALDARK
+    outside_percent_red_threshold: 80
+    unknown_counts_as_pass: false
+    unknown_counts_as_outside: false
+    unknown_prevents_green: true
+    metric_scope: OBSERVED_MEASURABLE_DIMENSIONS_ONLY
+    global_behavior_claim_from_partial_telemetry: FORBIDDEN
+    refresh_source: /admin/api/operational-snapshot
 self_healing:
   mandatory_for_operational_failure: true
   scope: ALL_PR_COMMIT_AND_RUNTIME_ELIGIBLE_FAILURES

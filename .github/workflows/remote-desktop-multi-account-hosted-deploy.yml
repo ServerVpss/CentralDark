@@ -1,0 +1,118 @@
+name: Remote Desktop multi-account hosted deploy
+
+on:
+  push:
+    branches:
+      - fix/desktop-commander-pid-census-20260916
+    paths:
+      - 'infra/systemd/**'
+      - 'scripts/vps/deploy-desktop-commander-multi-account.sh'
+      - '.github/workflows/remote-desktop-multi-account-hosted-deploy.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact HEAD
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          fetch-depth: 1
+
+      - name: Prepare SSH key
+        env:
+          VPS_SSH_KEY_LOVABLE: ${{ secrets.VPS_SSH_KEY_LOVABLE }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "${VPS_SSH_KEY_LOVABLE:-}"
+          KEY="$RUNNER_TEMP/vps_key"
+          python3 - "$KEY" <<'PY'
+          import os, re, sys
+          raw = os.environ["VPS_SSH_KEY_LOVABLE"].strip()
+          m = re.search(
+              r"-----BEGIN ([A-Z0-9 ]+?) PRIVATE KEY-----(.*?)-----END \1 PRIVATE KEY-----",
+              raw,
+              re.S,
+          )
+          if not m:
+              sys.exit("PRIVATE_KEY_FORMAT_INVALID")
+          tipo, miolo = m.group(1), m.group(2)
+          b64 = re.sub(r"\s+", "", miolo)
+          linhas = [b64[i:i+70] for i in range(0, len(b64), 70)]
+          open(sys.argv[1], "w").write(
+              f"-----BEGIN {tipo} PRIVATE KEY-----\n"
+              + "\n".join(linhas)
+              + f"\n-----END {tipo} PRIVATE KEY-----\n"
+          )
+          PY
+          chmod 600 "$KEY"
+
+      - name: Resolve canonical VPS target
+        env:
+          VPS_HOST_LOVABLE: ${{ secrets.VPS_HOST_LOVABLE }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "${VPS_HOST_LOVABLE:-}"
+          target="$VPS_HOST_LOVABLE"
+          route="SECRET_HOST"
+          if ! getent ahostsv4 "$target" >/dev/null 2>&1; then
+            if [ "$target" = "vmi3256920" ]; then
+              target="89.117.78.124"
+              route="CANONICAL_IP_FALLBACK"
+            else
+              echo "VPS_TARGET_RESOLUTION=FAIL"
+              exit 68
+            fi
+          fi
+          echo "TARGET_HOST=$target" >> "$GITHUB_ENV"
+          echo "VPS_TARGET_ROUTE=$route" >> "$GITHUB_ENV"
+          echo "VPS_TARGET_RESOLUTION=PASS route=$route"
+
+      - name: Stream canonical files and mutate VPS
+        env:
+          VPS_USER_LOVABLE: ${{ secrets.VPS_USER_LOVABLE }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "${VPS_USER_LOVABLE:-}"
+          test -n "${TARGET_HOST:-}"
+          KEY="$RUNNER_TEMP/vps_key"
+          STAGE="/tmp/centraldark-remote-${GITHUB_SHA}"
+          SSH=(ssh -o StrictHostKeyChecking=accept-new -o BatchMode=yes -o ConnectTimeout=15 -i "$KEY" "${VPS_USER_LOVABLE}@${TARGET_HOST}")
+          "${SSH[@]}" 'hostname; id -u; printf "SSH_COMMAND_PATH=PASS\n"'
+          tar -czf - infra/systemd scripts/vps/deploy-desktop-commander-multi-account.sh \
+            | "${SSH[@]}" "set -euo pipefail; rm -rf '$STAGE'; mkdir -p '$STAGE'; tar -xzf - -C '$STAGE'; chmod +x '$STAGE/scripts/vps/deploy-desktop-commander-multi-account.sh' '$STAGE/infra/systemd/centraldark-desktop-commander-profile.sh' '$STAGE/infra/systemd/centraldark-desktop-commander-watchdog.sh'; SOURCE_HEAD='$GITHUB_SHA' bash '$STAGE/scripts/vps/deploy-desktop-commander-multi-account.sh' '$STAGE'"
+
+      - name: Counterproof VPS state and explicit receipt
+        env:
+          VPS_USER_LOVABLE: ${{ secrets.VPS_USER_LOVABLE }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          KEY="$RUNNER_TEMP/vps_key"
+          ssh -o StrictHostKeyChecking=accept-new -o BatchMode=yes -o ConnectTimeout=15 -i "$KEY" \
+            "${VPS_USER_LOVABLE}@${TARGET_HOST}" '
+              set -euo pipefail
+              test -s /run/centraldark-remote-multi-account.receipt
+              cat /run/centraldark-remote-multi-account.receipt
+              grep -qx "ACCOUNT_MODEL=MULTI_ACCOUNT_ISOLATED_HOME" /run/centraldark-remote-multi-account.receipt
+              grep -qx "PROFILE_HOMES_DISTINCT=true" /run/centraldark-remote-multi-account.receipt
+              grep -qx "PROFILE_SERVICES_DISTINCT=true" /run/centraldark-remote-multi-account.receipt
+              grep -qx "PROFILE_PROCESSES_DISTINCT=true" /run/centraldark-remote-multi-account.receipt
+              grep -qx "MULTI_ACCOUNT_CAPACITY=PASS" /run/centraldark-remote-multi-account.receipt
+              grep -qx "NULL_OPERATIONAL_FIELDS=false" /run/centraldark-remote-multi-account.receipt
+              echo "VPS_MULTI_ACCOUNT_COUNTERPROOF=PASS"
+            '
+
+      - name: Cleanup SSH material
+        if: always()
+        shell: bash
+        run: rm -f "$RUNNER_TEMP/vps_key"

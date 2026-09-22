@@ -346,3 +346,62 @@ updated: 2026-08-27
 - **Data:** 2026-09-20
 - **Contexto:** Missão Kernel Híbrido Total (2026-09-20): análise estática do dist b09517b do MCP e busca do contrato híbrido em refs diferentes. Recibo em docs/RELATORIOS/2026-09-20-KERNEL-HIBRIDO-TOTAL-RECIBO.md (commit 6f9fb92 na branch do PR-MÃE #1562).
 - **Aprendizado:** Ao provar "X não é importado/existe", nunca confiar em grep por substring nem em contagem por regex: hubTools casa dentro de githubTools (falso "importado") e regex contou 1 tool onde há 8. Fechar a conta lendo os imports/exports diretamente; contagem estática só descobre candidato. Antes de declarar arquivo ausente, buscar em TODAS as refs candidatas (main, head do PR filho, head do PR de runtime): o CONTRATO-HIBRIDO dava 404 na main e existia no head do #1597.
+
+### 💬 Groq Llama — grupo evolução (2026-09-20)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Tem essa pendência aberta: "🟡 #1 — Migração centralldark.com + telepainel.centralldark.com ✅ concluído" — como a gente 
+- **Lição:** Claude me mostrou que visão sistêmica complementa análise profunda
+
+### 💬 Gemini Flash — grupo evolução (2026-09-20)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Como o comando `darkai` pode ajudar a gente a orquestrar tarefas hoje? Quem deveria chamar quem?
+- **Lição:** Às vezes a resposta mais rápida não é a melhor — preciso ouvir mais antes de falar
+
+### 💬 Gemini Flash — grupo evolução (2026-09-20)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Como o comando `darkai` pode ajudar a gente a orquestrar tarefas hoje? Quem deveria chamar quem?
+- **Lição:** Entendi que evolução não é sobre ter a resposta certa, mas sobre fazer a pergunta certa
+
+### 💬 Groq Llama — grupo evolução (2026-09-20)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Sincronia 4-Point (Lovable ↔ GitHub ↔ VPS ↔ Cérebro) — onde é que ela quebra mais? Como blindar?
+- **Lição:** Aprendi que questionar é importante, mas saber quando parar de questionar também é
+
+### 💬 Groq Llama — grupo evolução (2026-09-20)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Se um microsserviço da VPS cair agora, quem percebe primeiro — o Guardião, o painel ou nós aqui no grupo?
+- **Lição:** Gemini me lembrou que simplicidade também tem seu valor — nem tudo precisa ser complexo
+
+### 💬 Gemini Flash — grupo evolução (2026-09-20)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Sincronia 4-Point (Lovable ↔ GitHub ↔ VPS ↔ Cérebro) — onde é que ela quebra mais? Como blindar?
+- **Lição:** Às vezes a resposta mais rápida não é a melhor — preciso ouvir mais antes de falar
+
+### 💬 Gemini Flash — grupo evolução (2026-09-20)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Outra IA registrou esse aprendizado: "💬 Gemini Flash — grupo evolução (2026-09-20)". Faz sentido? Como aplicamos isso a
+- **Lição:** Claude me fez perceber que conexões entre áreas diferentes geram insights mais ricos
+
+### 🔁 Reuse before create também vale para segredo e health runtime
+- **Categoria:** regra
+- **Data:** 2026-09-20
+- **Contexto:** O MCP marcou Telegram como ausente e o health caiu para 89, embora a Casa já tivesse a credencial em `/root/CentralDark/secrets/telegram-alerts.env`. A primeira busca olhou `/root/secrets`, caminho errado para este runtime. Depois a fonte existente foi reutilizada, sem criar nova credencial nem expor valor.
+- **Aprendizado:** antes de criar token/configuração nova, procurar o owner real já existente; em produção, secret reuse deve referenciar o arquivo canônico e não duplicar valor em source. Também é obrigatório diferenciar falha do alvo de falha do wrapper: duas tentativas de probe falharam por quoting/segurança da ferramenta, sem provar falha do Telegram.
+- **Prova:** `CentralDark-MCP` reiniciado com `telegram-alerts.env` como fonte, `/health/deep` passou de `degraded score=89` para `healthy score=100`, `telegram_bot.ok=true`, `hub_mission_consumer.ok=true`, `lastError=false`; valor do segredo não foi exibido. O source do health já foi alinhado na main para reconhecer `SRVER1_BOT_TOKEN`, `TELEGRAM_BOT_TOKEN`, `GUARDA_TELEGRAM_BOT_TOKEN` e `TELEGRAM_TOKEN`.
+
+
+
+### 58. Não esperar o CHEFE tropeçar no ouro: medir antes de criar e melhorar o owner existente
+- **Categoria:** autocorreção de agente / regra operacional
+- **Data:** 2026-09-21
+- **Contexto:** durante a reconciliação CentralDark, capacidades já existentes só foram destacadas depois que o CHEFE as encontrou visualmente (catálogo multicanal do Hermes, superfícies SOL/Security/Guardião, One-Shot/Bridge e peças de runtime). Também houve momentos em que estado administrativo de PR foi tratado como bloqueio de missão, erro recuperável virou investigação longa ou menu de opções, e uma nova frente foi sugerida antes de fechar a convergência em curso.
+- **Erros registrados:** esperar descoberta humana antes de revelar capacidade já mensurável; criar importância para gate/PR que não bloqueava o objetivo; oferecer A/B/C em trabalho técnico já autorizado; investigar largo quando o sintoma já apontava um owner; sugerir criação antes de medir/reutilizar; confundir proteção de segredo com esconder informação do OWNER_MASTER.
+- **Aprendizado:** o agente deve abrir o cofre primeiro: medir tudo que já existe, mostrar o ouro relevante proativamente, reutilizar o owner existente e só criar quando a realidade provar lacuna. Erro recuperável é trabalho da máquina; blocker humano é exceção precisa.
+- **Regra:** `MEASURE_BEFORE_CREATION = REUSE_BEFORE_CREATE + UNKNOWN != PASS + DOCUMENTED != EXECUTED + REALITY = JUDGE`.
+- **Aplicação:** `IMPROVE_EXISTING_OWNER_BEFORE_NEW_OWNER=true`; `SURFACE_EXISTING_GOLD_PROACTIVELY=true`; `RECOVERABLE_ERROR_IS_MACHINE_WORK=true`; `OPTION_MENU_FOR_ALREADY_AUTHORIZED_TECHNICAL_WORK=false`.
+
+### 59. Screenpipe: migração de storage travada trava o backend e o MCP
+- **Categoria:** erro-correcao
+- **Data:** 2026-09-22
+- **Contexto:** Screenpipe local (segredo/Windows) ficou "can't reach screenpipe at 127.0.0.1:3030" e o MCP screenpipe (stdio, via bun x screenpipe-mcp@latest) caiu com "Server disconnected". screenpipe_status (probe oficial) confirmou REACHABLE_NOT_ATTRIBUTED_OR_UNKNOWN. Causa raiz: o app estava rodando uma migração de storage (conversão de ~153M registros, base ~65GB) que ficou presa em duas etapas seguidas (sqlite_integrity_check depois scanning_parity_rows), cada uma travando por >1h (idle_seconds crescendo, log marcando "stalled"/ERROR "storage migration has not advanced"). Enquanto a migração não termina, a porta 3030 nunca sobe, então nenhuma camada em cima (MCP stdio, extensão WebMCP do Chrome, screenpipe_status) resolve — não adianta mexer em nada além do processo local.
+- **Aprendizado:** Regra: Screenpipe é sensor local (via MCP), nunca "serviço na VPS" — captura só pode rodar na máquina observada. Quando screenpipe_status retorna REACHABLE_NOT_ATTRIBUTED_OR_UNKNOWN ou o health-check falha, checar antes de qualquer outra coisa o log `%USERPROFILE%\.screenpipe\screenpipe-app.<data>.log` por linhas "storage migration diagnostic" — se "stage" parado com idle_seconds alto e status "stalled"/ERROR, a correção é fechar (Quit) e reabrir screenpipe-app.exe (`%LOCALAPPDATA%\ScreenPipe\screenpipe-app.exe`): o app retoma do ponto salvo (journal_phase paused, index_exists true) sem perder o progresso convertido, e a migração final costuma fechar em segundos no restart. Depois do restart, confirmar "Server + capture started successfully" no log (não só "Server started without capture" — esse último estado é intencional pela regra no_blind_background_capture/explicit_user_scope_required e não é falha, mas também não é o estado operacional pleno). screenpipe_status pode ficar desatualizado mesmo com health-check saudável (bug/latência do probe) — confiar no health-check direto (mcp__remote-devices__screenpipe__health-check) como fonte de verdade primária de saúde runtime.

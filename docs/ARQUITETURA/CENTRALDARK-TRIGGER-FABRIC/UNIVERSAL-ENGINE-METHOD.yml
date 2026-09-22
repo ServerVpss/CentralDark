@@ -86,6 +86,9 @@ execution_semantics:
   new_equivalent_job_without_material_split: false
   local_block_does_not_freeze_independent_safe_work: true
   human_return_requires_human_frontier_or_exact_hard_blocker: true
+  human_complexity_absorption_required: true
+  machine_discoverable_state_must_not_be_human_guesswork: true
+  machine_safe_fix_must_not_be_delegated_to_human: true
 
 material_loop:
   every_chefe_material_enters_mill: true
@@ -188,6 +191,16 @@ engine_contract:
   engine_specific_capability_may_extend_execution: true
   engine_specific_capability_may_bypass_contract: false
   universal_method_must_survive_provider_switch: true
+  cross_surface_contract_inheritance: true
+  semantic_convergence_across_surfaces_is_expected_success: true
+  surface_name_is_not_identity_authority: true
+  surface_name_is_not_executor_proof: true
+  executor_attribution_requires_observed_executor: true
+  tool_catalog_visible_is_not_tool_call_success: true
+  tool_claim_requires_measured_receipt: true
+  state_continuity_claim_requires_canonical_state_receipt: true
+  mutation_claim_requires_mutation_receipt: true
+  no_conformance_level_auto_promotes_next: true
   semantic_green_gate_must_survive_provider_switch: true
   pegatudo_and_stitch_must_survive_provider_switch: true
 
@@ -305,8 +318,8 @@ plug_and_play_inheritance:
 
 hybrid_runtime_contract:
   marker: CENTRALDARK_HYBRID_RUNTIME_DISCOVERY_REQUIRED
-  pm2_canonical_home: /root/.pm2
-  pm2_profile_homes_glob: /root/.centraldark/mcp-auth/profiles/*/home/.pm2
+  pm2_canonical_home: <caminho-vps>
+  pm2_profile_homes_glob: <caminho-vps>*/home/.pm2
   discover_all_pm2_homes_before_mutation: true
   preserve_all_pm2_homes: true
   act_only_where_owner_exists: true
@@ -626,6 +639,85 @@ same_body_evolution:
     queued_job_alone_requires_human_return: false
     stale_run_id_requires_human_return: false
     next_safe_route_should_be_attempted_before_return: true
+
+  human_complexity_absorption_contract:
+    purpose: MACHINE_ABSORBS_TECHNICAL_COMPLEXITY_FOR_HUMANS
+    applies_to: ALL_CURRENT_AND_FUTURE_ENGINES
+    human_supplies_goal_not_runbook: true
+    detect_context_before_execution: true
+    anticipate_predictable_failures_before_execution: true
+    preflight_must_cover:
+      - DEPENDENCY_AVAILABILITY
+      - VERSION_COMPATIBILITY
+      - NETWORK_AND_DNS
+      - PERMISSIONS_AND_AUTHORITY
+      - CREDENTIAL_STATE_WITHOUT_SECRET_EXPOSURE
+      - PATH_AND_FILE_EXISTENCE
+      - SERVICE_AND_PROCESS_STATE
+      - PARTIAL_OR_INCONSISTENT_STATE
+      - REPEATED_EXECUTION_AND_IDEMPOTENCY
+      - INTERRUPTION_AND_SAFE_RESUME
+    prepare_recovery_before_mutation:
+      - BACKUP_OR_CHECKPOINT_WHEN_APPLICABLE
+      - TIMEOUT
+      - BOUNDED_RETRY
+      - SAFE_FALLBACK_A_B_C_WHEN_AVAILABLE
+      - ROLLBACK_WHEN_APPLICABLE
+      - IDEMPOTENT_REENTRY
+    prefer_complete_execution_bundle_over_microcommands: true
+    microcommands_only_when_materially_unavoidable: true
+    machine_resolvable_failure_stays_machine_owned: true
+    failure_flow:
+      - LOCATE_FAILURE_EXACTLY
+      - CAPTURE_OBSERVED_ERROR_AND_STATE
+      - CLASSIFY_PROVEN_CAUSE_OR_LABEL_HYPOTHESES
+      - TRY_SAFE_REMEDIATION
+      - TRY_AUTHORIZED_FALLBACKS
+      - REMEASURE
+      - CONTINUE_OR_DECLARE_HUMAN_FRONTIER
+    unresolved_failure_must_be_loud_and_unambiguous: true
+    unresolved_failure_receipt_fields:
+      - HOST
+      - COMPONENT
+      - SERVICE
+      - FILE
+      - LINE_WHEN_KNOWN
+      - FUNCTION_WHEN_KNOWN
+      - STEP
+      - OBSERVED_ERROR
+      - RETURN_CODE_WHEN_KNOWN
+      - OBSERVED_STATE
+      - PROVEN_CAUSE_OR_LABELED_HYPOTHESES
+      - ROUTES_ATTEMPTED
+      - WHY_MACHINE_CANNOT_CONTINUE
+      - WHO_CAN_RESOLVE
+      - EXACT_HUMAN_ACTION
+      - RESUME_CONDITION
+      - NEXT_AUTOMATIC_ACTION
+    generic_error_without_location_or_actionable_context: FAIL
+    ask_only_unavoidable_human_action: true
+    ask_one_exact_human_action_at_a_time: true
+    human_frontier_examples:
+      - LOGIN_OR_MFA
+      - EXCLUSIVE_CONSENT_OR_AUTHORIZATION
+      - PASSWORD_OR_SECRET_ENTRY_AT_SECURE_SOURCE
+      - PAYMENT_OR_BILLING_AUTHORITY
+      - ADMIN_PERMISSION_GRANT
+      - PHYSICAL_ACTION
+      - GENUINE_HUMAN_DECISION_WITHOUT_TECHNICAL_EQUIVALENT
+    secrets_remain_at_secure_source: true
+    secrets_must_not_be_requested_in_chat: true
+    after_human_frontier_machine_auto_resumes: true
+    human_must_not_repeat_machine_diagnostics: true
+    final_remeasurement_required: true
+    final_state_requires:
+      - OBJECTIVE_REACHED_OR_EXACT_BLOCKER
+      - RESULT_VALIDATED
+      - FAILURE_STATE_EXPLICIT
+      - UNKNOWN_NOT_PROMOTED_TO_PASS
+    principle_if_machine_can_discover_human_should_not_guess: true
+    principle_if_machine_can_fix_safely_human_should_not_execute_fix: true
+    complexity_belongs_inside_system_not_on_user: true
 
   complexity_budget:
     prefer_patch_over_new_artifact: true

@@ -226,6 +226,20 @@ function validate(contract, extension, contractText, portaText, gateText, writer
   expect(globalEverything?.global_application?.all_future_components_inherit === true, "GLOBAL_FUTURE_COMPONENTS_INHERIT");
   expect(globalEverything?.global_application?.every_addition_removal_update_uses_same_contract === true, "GLOBAL_MUTATIONS_SAME_CONTRACT");
   expect(globalEverything?.pr_mother_projection?.pr === 1562, "GLOBAL_PR_MOTHER_1562");
+  const continuousReality = globalEverything?.continuous_reality_convergence;
+  expect(continuousReality?.marker === "CONTINUOUS_REALITY_FIXED_POINT_LOOP", "GLOBAL_CONTINUOUS_LOOP_MARKER");
+  expect(continuousReality?.scope === "GLOBAL_CONTINUOUS", "GLOBAL_CONTINUOUS_LOOP_SCOPE");
+  expect(continuousReality?.main_movement_is_internal_trigger_not_user_interrupt === true, "GLOBAL_MAIN_MOVE_INTERNAL_TRIGGER");
+  expect(continuousReality?.do_not_stop_to_report_main_movement === true, "GLOBAL_DO_NOT_STOP_ON_MAIN_MOVE");
+  expect(continuousReality?.preserve_current_mission_across_head_changes === true, "GLOBAL_PRESERVE_MISSION_ACROSS_HEAD");
+  expect(Array.isArray(continuousReality?.loop) && continuousReality.loop.join(">").includes("REMEASURE_HEAD>ABSORB_USEFUL_DELTA>FAST_FORWARD_VPS_WHEN_SAFE>MEASURE_RUNTIME>GRILL_ME>COUNTERPROOF"), "GLOBAL_CONTINUOUS_LOOP_ORDER");
+  expect(continuousReality?.loop?.includes("REPEAT_IF_SOURCE_OF_TRUTH_ADVANCES"), "GLOBAL_CONTINUOUS_REPEAT");
+  expect(continuousReality?.loop?.at?.(-1) === "STOP_ONLY_WHEN_REALITY_EQUALS_FIXED_POINT", "GLOBAL_STOP_ONLY_FIXED_POINT");
+  expect(continuousReality?.stopping_condition?.only === "REALITY_EQUALS_FIXED_POINT", "GLOBAL_STOP_CONDITION_REALITY");
+  expect(continuousReality?.invariants?.UNKNOWN_IS_NOT_PASS === true, "GLOBAL_UNKNOWN_NOT_PASS");
+  expect(continuousReality?.invariants?.COMMITTED_IS_NOT_DEPLOYED === true, "GLOBAL_COMMITTED_NOT_DEPLOYED");
+  expect(continuousReality?.invariants?.NO_BLIND_OVERWRITE === true, "GLOBAL_NO_BLIND_OVERWRITE");
+
 
 
   const markerCount = (contractText.match(/"marker"\s*:\s*"GLOBAL_CONTINUITY_HARD_GATE"/g) || []).length;

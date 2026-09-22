@@ -4,7 +4,7 @@
 module.exports = {
   apps: [{
     name: 'CentralDark-Hermes',
-    script: '/root/CentralDark/docs/CONSCIENCIA/ARSENAL/hermes-vivo/daemon.mjs',
+    script: '/root/CentralDark/apps/modulos/HERMES-CORE/core/orchestrator.mjs',
     cwd: '/root/CentralDark',
     interpreter: 'node',
     autorestart: true,

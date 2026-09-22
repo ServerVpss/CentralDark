@@ -6,8 +6,11 @@ admin.centralldark.com {
 	@root path /
 	redir @root /admin 302
 
-	handle /contas* {
-		reverse_proxy 127.0.0.1:9077
+	@contasRoot path /contas /contas/
+	redir @contasRoot /contas/ai-review.html 302
+
+	handle_path /contas* {
+		reverse_proxy 127.0.0.1:9400
 	}
 
 	reverse_proxy 127.0.0.1:9100 {

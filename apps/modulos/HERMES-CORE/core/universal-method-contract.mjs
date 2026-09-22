@@ -28,7 +28,14 @@ const FILES = {
   boot: 'CENTRALDARK_AI_BOOT.yaml',
   grillMe: '.agents/skills/grill-me/SKILL.md',
   metaGrill: '.agents/skills/meta-lupa/KITS/METAGRILL-METALUPA/KIT.md',
+  metaLupa: '.agents/skills/meta-lupa/SKILL.md',
+  fableLoop: '.agents/skills/fable-loop/SKILL.md',
+  conflictResolver: '.agents/skills/git-conflict-resolve-house-standard/SKILL.md',
   perceptionOrchestra: 'apps/modulos/HERMES-CORE/core/perception-orchestra.mjs',
+  orchestrator: 'apps/modulos/HERMES-CORE/core/orchestrator.mjs',
+  knowledgeCollector: 'apps/modulos/HERMES-CORE/agents/Knowledge-Collector/agent.mjs',
+  agentsGuide: 'AGENTS.md',
+  portableEntry: 'LEIA-ME-IA.md',
 };
 
 const TLC23_CANONICAL_SHA256 = 'b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1';
@@ -122,7 +129,14 @@ export function validateUniversalMethod() {
   const boot = read(FILES.boot);
   const grillMe = read(FILES.grillMe);
   const metaGrill = read(FILES.metaGrill);
+  const metaLupa = read(FILES.metaLupa);
+  const fableLoop = read(FILES.fableLoop);
+  const conflictResolver = read(FILES.conflictResolver);
   const perceptionOrchestra = read(FILES.perceptionOrchestra);
+  const orchestrator = read(FILES.orchestrator);
+  const knowledgeCollector = read(FILES.knowledgeCollector);
+  const agentsGuide = read(FILES.agentsGuide);
+  const portableEntry = read(FILES.portableEntry);
   const tlc23Hash = sha256(readBuffer(FILES.tlc23));
 
   if (tlc23Hash !== TLC23_CANONICAL_SHA256) {
@@ -132,6 +146,13 @@ export function validateUniversalMethod() {
   requireTokens(universal, [
     'applies_to: ALL_CURRENT_AND_FUTURE_ENGINES',
     'same_method_required_for_new_engine: true',
+    'cross_surface_contract_inheritance: true',
+    'semantic_convergence_across_surfaces_is_expected_success: true',
+    'surface_name_is_not_executor_proof: true',
+    'tool_catalog_visible_is_not_tool_call_success: true',
+    'tool_claim_requires_measured_receipt: true',
+    'executor_attribution_requires_observed_executor: true',
+    'no_conformance_level_auto_promotes_next: true',
     'engine_specific_capability_may_bypass_contract: false',
     'skin_is_presentation_adapter: true',
     'skin_must_not_change:',
@@ -234,6 +255,175 @@ export function validateUniversalMethod() {
     'CALCULATION != RUNTIME_OBSERVATION',
   ], 'OPERATIONAL_METHOD_LEARNING');
 
+  requireTokens(universal, [
+    'human_complexity_absorption_required: true',
+    'machine_discoverable_state_must_not_be_human_guesswork: true',
+    'machine_safe_fix_must_not_be_delegated_to_human: true',
+    'human_complexity_absorption_contract:',
+    'purpose: MACHINE_ABSORBS_TECHNICAL_COMPLEXITY_FOR_HUMANS',
+    'prefer_complete_execution_bundle_over_microcommands: true',
+    'unresolved_failure_must_be_loud_and_unambiguous: true',
+    'ask_one_exact_human_action_at_a_time: true',
+    'secrets_must_not_be_requested_in_chat: true',
+    'after_human_frontier_machine_auto_resumes: true',
+    'complexity_belongs_inside_system_not_on_user: true',
+  ], 'HUMAN_COMPLEXITY_ABSORPTION_UNIVERSAL');
+
+  requireTokens(contract, [
+    'human_complexity_must_be_absorbed_by_machine_when_safe: true',
+    'machine_discoverable_state_must_not_be_user_guesswork: true',
+    'machine_safe_fix_must_not_be_delegated_to_user: true',
+    'generic_error_without_location_and_next_action_is_invalid: true',
+    'marker: CENTRALDARK_HUMAN_COMPLEXITY_ABSORPTION_REQUIRED',
+    'prefer_one_complete_operation_over_microcommand_chain: true',
+    'automatic_resume_after_human_frontier: true',
+  ], 'HUMAN_COMPLEXITY_ABSORPTION_CONTRACT');
+
+  requireTokens(hermesPrompt, [
+    '## Contrato humano universal — absorver complexidade, não devolvê-la',
+    'COMPLEXITY_BELONGS_INSIDE_SYSTEM_NOT_ON_USER=true',
+    'HUMAN_SUPPLIES_GOAL_NOT_RUNBOOK=true',
+    'PREFER_COMPLETE_OPERATION_OVER_MICROCOMMAND_CHAIN=true',
+    'UNRESOLVED_FAILURE_MUST_BE_LOUD_EXACT_ACTIONABLE=true',
+    'ASK_ONE_EXACT_HUMAN_ACTION_AT_A_TIME=true',
+    'AUTO_RESUME_AFTER_HUMAN_FRONTIER=true',
+  ], 'HERMES_HUMAN_COMPLEXITY_PROMPT');
+
+  requireTokens(operationalMethod, [
+    '## Contrato humano de execução integral',
+    'microcomando não é padrão',
+    'se a máquina pode descobrir, o humano não deve adivinhar',
+    'erro genérico sem localização e próximo passo acionável é FAIL',
+  ], 'OPERATIONAL_HUMAN_COMPLEXITY_METHOD');
+
+
+  requireTokens(autoconfigRuntime, [
+    'official_hermes_update_continuity:',
+    'owner: .github/workflows/hermes-core-signal-watch.yml',
+    'upstream: NousResearch/hermes-agent',
+    'new_parallel_updater: false',
+    'check: hermes update --check',
+    'plan: hermes update --plan',
+    'apply: hermes update --backup --yes',
+    'human_does_not_need_to_remember_update_command: true',
+    'tutorial_loaded_by_core_prompt: true',
+  ], 'HERMES_OFFICIAL_UPDATE_CONTINUITY');
+
+  requireTokens(hermesPrompt, [
+    '## Tutorial interno — manter o Hermes oficial atualizado sozinho',
+    'HERMES_OFFICIAL_UPDATE_OWNER=EXISTING_HERMES_CORE_SIGNAL_WATCH',
+    'OFFICIAL_CLI_IS_UPDATE_ENGINE=true',
+    'SCHEDULE_FALLBACK_REQUIRED=true',
+    'POSTCHECK_REQUIRED=true',
+    'HUMAN_RETEACH_REQUIRED=false',
+  ], 'HERMES_OFFICIAL_UPDATE_TUTORIAL');
+  requireTokens(agentsGuide, [
+    'MEASURE_BEFORE_CREATION_REQUIRED=SIM',
+    'MEASURE_BEFORE_CREATION_FORMULA="REUSE_BEFORE_CREATE + UNKNOWN != PASS + DOCUMENTED != EXECUTED + REALITY = JUDGE"',
+    'MEASURE_BEFORE_CREATION_SEMANTIC_REFERENCE="1Ts 5:21"',
+    'MEASURE_BEFORE_CREATION_APPLIES_TO=ALL_CURRENT_AND_FUTURE_AGENTS',
+    'VERSE_IS_SEMANTIC_CUE_NOT_PROOF=true',
+  ], 'MEASURE_BEFORE_CREATION_GLOBAL_AGENTS');
+
+  requireTokens(master, [
+    'measure_before_creation_semantic_binding:',
+    'verse_reference: "1Ts 5:21"',
+    'ALL_CURRENT_AND_FUTURE_AGENTS',
+    'MEASURE_EXISTING_REALITY',
+    'RETAIN_PROVEN_GOOD',
+    'verse_is_semantic_cue_not_proof: true',
+  ], 'MEASURE_BEFORE_CREATION_MASTER_BINDING');
+
+  requireTokens(hermesPrompt, [
+    'MEASURE_BEFORE_CREATION=true',
+    'MEASURE_BEFORE_CREATION_SEMANTIC_REFERENCE="1Ts 5:21"',
+    'MEASURE_BEFORE_CREATION_APPLIES_TO_ALL_AGENTS=true',
+    'VERSE_IS_SEMANTIC_CUE_NOT_PROOF=true',
+  ], 'MEASURE_BEFORE_CREATION_HERMES_BINDING');
+
+  requireTokens(agentsGuide, [
+    'CENTRALDARK_UNIVERSAL_DIRECT_MODE_V1=true',
+    'PREFER_COMPLETE_OPERATION_OVER_MICROCOMMAND_CHAIN=true',
+    'HUD_LAYOUT_FIXED=true',
+    'UNCHANGED_FIELDS_SHOULD_NOT_BE_REWRITTEN=true',
+    'NUMERIC_METRIC_REQUIRES_PROVEN_DENOMINATOR=true',
+    'TOOL_ARGUMENT_LIMITS_MUST_BE_NORMALIZED_TO_SAFE_CAP=true',
+    'SOURCE_404_IS_SENSOR_MISS_NOT_WORLD_MISS=true',
+    'GITHUB_REF_MISS_DOES_NOT_PROVE_RUNTIME_FILE_ABSENT=true',
+    'ALTERNATE_AUTHORIZED_SENSOR_BEFORE_HUMAN_BLOCKER=true',
+    'SAME_HEAD_GREEN_PROMOTES_TO_TOTAL_DEPLOY=true',
+    'TOTAL_DEPLOY_REGENERATES_FROM_PROVEN_MAIN_AND_EXISTING_RUNTIME=true',
+    'DEPLOY_DOES_NOT_REASK_AFTER_AUTHORIZED_GREEN=true',
+    'UNTRACKED_RUNTIME_STATE_IS_PRESERVED_NOT_BLIND_CLEANED=true',
+    'PROOF_COUNTERPROOF_ACCEPT_RECONCILE_IS_DETERMINISTIC_CLOSURE=true',
+    'ACCEPTANCE_REQUIRES_PROOF_AND_COUNTERPROOF_SURVIVAL=true',
+    'COUNTERPROOF_FAILURE_REOPENS_OR_REJECTS_CLAIM=true',
+    'RECONCILIATION_PRESERVES_PROVEN_GOOD_AND_DISCARDS_ONLY_DISPROVEN_DELTA=true',
+    'SEALED_CLAIM_NO_REEXECUTE_WITHOUT_NEW_MATERIAL_CAUSE=true',
+    'NEW_MATERIAL_CAUSE_REOPENS_SEAL=true',
+    'GENERIC_ERROR_ONLY=FAIL',
+    'ASK_ONE_EXACT_HUMAN_ACTION_AT_A_TIME=true',
+    'AUTO_RESUME_AFTER_HUMAN_FRONTIER=true',
+  ], 'UNIVERSAL_DIRECT_MODE_AGENTS');
+
+  requireTokens(portableEntry, [
+    '## 0.1 Modo Direto universal — contrato portátil',
+    'CENTRALDARK_UNIVERSAL_DIRECT_MODE_V1=true',
+    'HUD_FIXED_FIELDS=',
+    'HUD_ONLY_MATERIAL_VALUES_CHANGE=true',
+    'TOOL_ARGUMENT_LIMITS_MUST_BE_NORMALIZED_TO_SAFE_CAP=true',
+    'SOURCE_404_IS_SENSOR_MISS_NOT_WORLD_MISS=true',
+    'FAILURE_MUST_SHOW=',
+    'NO_TOOL_ACCESS → EXECUTION_CAPABILITY=ADVISORY_ONLY',
+  ], 'UNIVERSAL_DIRECT_MODE_PORTABLE_ENTRY');
+
+  requireTokens(hermesPrompt, [
+    'UNIVERSAL_DIRECT_MODE_INHERITED=true',
+    'UNIVERSAL_DIRECT_MODE_OWNER=AGENTS.md',
+    'UNIVERSAL_DIRECT_PORTABLE_ENTRY=LEIA-ME-IA.md',
+    'HUD_LAYOUT_FIXED_ONLY_LIVE_VALUES_CHANGE=true',
+    'TOOL_ARGUMENT_LIMITS_MUST_BE_NORMALIZED_TO_SAFE_CAP=true',
+    'SOURCE_404_IS_SENSOR_MISS_NOT_WORLD_MISS=true',
+    'PROOF_COUNTERPROOF_ACCEPT_RECONCILE_IS_DETERMINISTIC_CLOSURE=true',
+    'ACCEPTANCE_REQUIRES_PROOF_AND_COUNTERPROOF_SURVIVAL=true',
+    'COUNTERPROOF_FAILURE_REOPENS_OR_REJECTS_CLAIM=true',
+    'RECONCILIATION_PRESERVES_PROVEN_GOOD_AND_DISCARDS_ONLY_DISPROVEN_DELTA=true',
+    'SEALED_CLAIM_NO_REEXECUTE_WITHOUT_NEW_MATERIAL_CAUSE=true',
+    'NEW_MATERIAL_CAUSE_REOPENS_SEAL=true',
+    'CROSS_SURFACE_CONTRACT_INHERITANCE=true',
+    'SEMANTIC_CONVERGENCE_ACROSS_SURFACES_IS_EXPECTED_SUCCESS=true',
+    'SURFACE_NAME_IS_NOT_EXECUTOR_PROOF=true',
+    'TOOL_CATALOG_VISIBLE_IS_NOT_TOOL_CALL_SUCCESS=true',
+    'TOOL_CLAIM_REQUIRES_MEASURED_RECEIPT=true',
+    'EXECUTOR_ATTRIBUTION_REQUIRES_OBSERVED_EXECUTOR=true',
+    'SAME_HEAD_GREEN_PROMOTES_TO_TOTAL_DEPLOY=true',
+    'TOTAL_DEPLOY_REGENERATES_FROM_PROVEN_MAIN_AND_EXISTING_RUNTIME=true',
+    'HUMAN_RETEACH_REQUIRED=false',
+  ], 'UNIVERSAL_DIRECT_MODE_HERMES');
+
+  requireTokens(metaLupa, [
+    '## Gate determinístico: prova → contraprova → aceite → reconciliação',
+    'PROOF_REQUIRED_BEFORE_ACCEPTANCE=true',
+    'COUNTERPROOF_REQUIRED_BEFORE_ACCEPTANCE=true',
+    'ACCEPTANCE_IS_COMPUTED_NOT_VOTED=true',
+    'NEW_MATERIAL_CAUSE_REQUIRES_REOPEN_WITH_CAUSE_REF=true',
+    'FIXED_POINT_REQUIRES_DETERMINISTIC_CLOSURE=true',
+  ], 'META_LUPA_DETERMINISTIC_CLOSURE');
+
+  requireTokens(metaGrill, [
+    '## ⚖️ Lei do fechamento determinístico',
+    'META_GRILL_IS_FALSIFIER_NOT_PERMANENT_SKEPTIC=true',
+    'ACCEPT_ONLY_AFTER_COUNTERPROOF_SURVIVAL=true',
+    'PROVEN_GOOD_MUST_SURVIVE_RECONCILIATION=true',
+  ], 'META_GRILL_DETERMINISTIC_CLOSURE');
+
+  requireTokens(fableLoop, [
+    '## Contrato de aceite e reconciliação',
+    'FABLE_PROOF_COUNTERPROOF_CLOSURE=true',
+    'FABLE_ACCEPT_ONLY_AFTER_COUNTERPROOF_SURVIVAL=true',
+    'FABLE_RECONCILE_PARTIAL_FAILURE=true',
+    'FABLE_SEALED_CLAIM_NO_RECHECK_WITHOUT_NEW_CAUSE=true',
+  ], 'FABLE_DETERMINISTIC_CLOSURE');
   let previous = -1;
   for (const token of REQUIRED_CHAIN) {
     const needle = `  - ${token}`;
@@ -320,6 +510,12 @@ export function validateUniversalMethod() {
     'PROVEN_RULE_BINDS_TO_RUNTIME: true',
     'contract_coverage_may_equal_100_percent_when_all_defined_conditions_verified: true',
     'external_reality_100_percent_from_calculation_only: false',
+    'continuous_capability_absorption:',
+    'fixed_point_is_learning_gate: false',
+    'approved_material_step_emits_learning_ref: true',
+    'proven_reusable_delta_binds_before_global_fixed_point: true',
+    'CONTINUOUS_HERMES_CAPABILITY_ABSORPTION: true',
+    'FIXED_POINT_IS_VERIFICATION_CHECKPOINT_NOT_LEARNING_GATE: true',
   ], 'AUTOCONFIG_RUNTIME');
 
   requireTokens(contract, [
@@ -372,7 +568,19 @@ export function validateUniversalMethod() {
     'META-GRILL acha a ferida',
     'KIT_IS_SEMANTIC_HOOK=true',
     'CHANGE_REQUIRES_SEGREDO_CHEFE=true',
+    'TLC23_SHARED_METHOD=true',
+    'PROOF_REUSE_WHEN_FINGERPRINT_UNCHANGED=true',
+    'ACCEPTANCE_IS_NOT_PROOF=true',
+    'DETERMINISTIC_RECONCILIATION_BEFORE_NEW_ARCHITECTURE=true',
   ], 'METAGRILL_HOOK');
+
+  requireTokens(fableLoop, [
+    'TLC23_SHARED_METHOD=true',
+    'PROOF_REUSE_WHEN_FINGERPRINT_UNCHANGED=true',
+    'NO_NEW_MATERIAL_FACT=REUSE_PROOF_NO_REPEAT',
+    'ACCEPTANCE_IS_NOT_PROOF=true',
+    'DETERMINISTIC_RECONCILIATION_BEFORE_NEW_ARCHITECTURE=true',
+  ], 'FABLE_TLC23_SHARED_METHOD');
 
   requireTokens(operationalMethod, [
     'Leitores investigam em paralelo',
@@ -506,6 +714,24 @@ export function validateUniversalMethod() {
   ], 'GLOBAL_CONTRACT_OPERATIONAL_DEPLOY_BINDING');
 
   requireTokens(hermesPrompt, [
+    'HERMES_SEMANTIC_RECONCILE_ALL=true',
+    'REUSE_CONFLICT_OWNER=true',
+    'BLIND_ACCEPT_BOTH=false',
+    'MANUAL_CURRENT_INCOMING_BOTH_CHOICE_FOR_MACHINE_RESOLVABLE_CASE=false',
+    'SAME_HEAD_AFTER_RESOLUTION_REQUIRED=true',
+  ], 'HERMES_SEMANTIC_CONFLICT_RECONCILIATION');
+
+  requireTokens(conflictResolver, [
+    '## SAME/ALL — reconciliação semântica canônica',
+    'SAME_ALL_IS_DEFAULT_FOR_COMPATIBLE_USEFUL_DELTA=true',
+    'SAME_ALL_IS_NOT_BLIND_ACCEPT_BOTH=true',
+    'CONTRADICTORY_DELTA_REQUIRES_DISCRIMINANT_TEST=true',
+    'CONFLICT_MARKERS_AFTER_RESOLUTION=FAIL',
+    'SAME_HEAD_REQUIRED_AFTER_CONFLICT_RESOLUTION=true',
+    'REUSE_THIS_OWNER_FOR_ALL_EQUIVALENT_PRS=true',
+  ], 'HOUSE_SEMANTIC_CONFLICT_RECONCILIATION');
+
+  requireTokens(hermesPrompt, [
     'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml',
     'ENGINE_IS_NOT_OWNER=true',
     'ONE_SYSTEM_ONLY=true',
@@ -517,7 +743,26 @@ export function validateUniversalMethod() {
     'DISCOVERY_AUTO_PROMOTES_TO_CANONICAL=false',
     'REUSE_PROVEN_CRYSTAL_BEFORE_REINVESTIGATE=true',
     'CALCULATION_SUPPORTS_DECISION_BUT_DOES_NOT_REPLACE_RUNTIME_OBSERVATION=true',
+    'CONTINUOUS_HERMES_CAPABILITY_ABSORPTION=true',
+    'FIXED_POINT_IS_VERIFICATION_CHECKPOINT_NOT_LEARNING_GATE=true',
+    'PROVEN_REUSABLE_DELTA_BINDS_TO_CORE_BEFORE_GLOBAL_FIXED_POINT=true',
+    'MATERIAL_APPROVED_STEP_EMITS_LEARNING_REF=true',
   ], 'HERMES_PROMPT');
+
+  requireTokens(orchestrator, [
+    "registrar as registrarAprendizado",
+    'function registrarAprendizadoMaterial',
+    'deveCapturarAprendizadoMaterial',
+    'entrada.learning_ref = aprendizagem.ref',
+    'FIXED_POINT é checkpoint de verificação, não gate para capacitação do Hermes',
+  ], 'HERMES_CONTINUOUS_LEARNING_RUNTIME');
+
+  requireTokens(knowledgeCollector, [
+    'export function consultarContexto',
+    'export function registrar',
+    'deduped: true',
+    "createHash('sha256')",
+  ], 'HERMES_KNOWLEDGE_COLLECTOR_RUNTIME');
 
   const engines = parseEngineNames(engine);
   return {
@@ -533,9 +778,17 @@ export function validateUniversalMethod() {
     tlc23_source: FILES.tlc23,
     tlc23_source_sha256: tlc23Hash,
     tlc23_source_gate: 'PASS',
+    tlc23_shared_core_method: true,
+    tlc23_fable_meta_lupa_meta_grill_binding: true,
+    proof_reuse_when_fingerprint_unchanged: true,
+    acceptance_is_proof: false,
+    deterministic_reconciliation_before_new_architecture: true,
     persistent_operational_regime_contract: true,
     fixed_point_is_checkpoint: true,
     fixed_point_is_end: false,
+    fixed_point_is_learning_gate: false,
+    continuous_hermes_capability_absorption: true,
+    material_approved_step_emits_learning_ref: true,
     next_cycle_required_while_runtime_exists: true,
     self_correction_is_runtime_internal: true,
     measured_100_percent_or_exact_blocker: true,
@@ -575,6 +828,17 @@ export function validateUniversalMethod() {
     ephemeral_cleanup_contract: true,
     log_incident_crystallization_contract: true,
     log_incident_fanout_gate: true,
+    human_complexity_absorption_contract: true,
+    prefer_complete_operation_over_microcommands: true,
+    loud_actionable_failure_contract: true,
+    automatic_resume_after_human_frontier: true,
+    universal_direct_mode_contract: true,
+    measure_before_creation_global: true,
+    measure_before_creation_semantic_reference: '1Ts 5:21',
+    measure_before_creation_all_agents: true,
+    verse_is_semantic_cue_not_proof: true,
+    fixed_hud_only_live_values_change: true,
+    numeric_metrics_require_proven_denominator: true,
   };
 }
 
