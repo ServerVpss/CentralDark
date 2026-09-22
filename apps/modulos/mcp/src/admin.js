@@ -13,6 +13,7 @@ import { withCid } from "./correlation.js";
 import { config } from "./config.js";
 import { injectPatternAdmin } from "./admin-patterns-ui.js";
 import { getOperationalSnapshot } from "./operational-telemetry.js";
+import { getLinearAdminSnapshot } from "./tools/integrations.js";
 
 const COOKIE = "cd_admin";
 const TTL_MS = 2 * 60 * 60 * 1000;
@@ -217,6 +218,8 @@ pre.snippet{background:var(--bg2);border:1px solid var(--border);border-radius:1
 .etapa.ok{border-left:3px solid var(--em2)}
 .etapa.err{border-left:3px solid var(--err)}
 .diag-actions{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.graph-shell{height:calc(100vh - 190px);min-height:620px;border:1px solid var(--border);border-radius:14px;overflow:hidden;background:#02070c;box-shadow:inset 0 0 32px rgba(16,185,129,.08)}
+.graph-shell iframe{display:block;width:100%;height:100%;border:0;background:#02070c}
 __PATTERN_ADMIN_STYLE__
 @media(max-width:900px){.hero{grid-template-columns:1fr 1fr 1fr}.grid{grid-template-columns:1fr}.conector-grid{grid-template-columns:1fr}.filters{grid-template-columns:1fr 1fr}}
 </style></head>
@@ -228,6 +231,8 @@ __PATTERN_ADMIN_STYLE__
 <nav class="tabs">
   <div class="tab active" data-p="visao">Visão Geral</div>
   <div class="tab" data-p="tools">Ferramentas</div>
+  <div class="tab" data-p="linear">Linear</div>
+  <div class="tab" data-p="grafo">🌌 Grafo Celestial</div>
   __PATTERN_ADMIN_TAB__
   <div class="tab" data-p="audit">Auditoria</div>
   <div class="tab" data-p="conector">Conector</div>
@@ -261,6 +266,48 @@ __PATTERN_ADMIN_STYLE__
 
   <div class="pane" id="p-tools">
     <div class="card"><h2>Catálogo de ferramentas MCP <span class="badge" id="toolCountBadge">carregando…</span></h2><div id="tools"></div></div>
+  </div>
+
+  <div class="pane" id="p-linear">
+    <div class="hero" style="grid-template-columns:2fr 1fr 1fr">
+      <div class="kpi hero-score">
+        <div class="lbl">Linear · rota CentralDark</div>
+        <div class="val" id="linearState">UNKNOWN</div>
+        <div class="bar"><div id="linearBar" style="width:0%"></div></div>
+      </div>
+      <div class="kpi"><div class="lbl">Issues visíveis</div><div class="val" id="linearIssueCount">-</div></div>
+      <div class="kpi"><div class="lbl">Última leitura</div><div class="val" id="linearCheckedAt" style="font-size:16px">-</div></div>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <h2>Rotas <span class="badge">server-side · segredo não vai pro browser</span></h2>
+        <div class="row"><span>Status seguro</span><span class="info">/linear/status</span></div>
+        <div class="row"><span>Snapshot admin</span><span class="info">/admin/api/linear</span></div>
+        <div class="row"><span>Owner</span><span>apps/modulos/mcp/src/tools/integrations.js</span></div>
+        <div class="diag-actions" style="margin-top:14px">
+          <a class="btn" href="https://linear.app/segredo/team/SEG" target="_blank" rel="noopener" style="text-decoration:none">📋 Abrir Board SEG</a>
+          <a class="btn ghost" href="https://linear.app/segredo/settings/ai/coding-sessions" target="_blank" rel="noopener" style="text-decoration:none">⚙ Coding sessions</a>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Conta / workspace <span class="badge">sem token exposto</span></h2>
+        <div id="linearMeta"><div class="row"><span>Estado</span><span class="warn">carregando…</span></div></div>
+      </div>
+    </div>
+    <div style="height:14px"></div>
+    <div class="card">
+      <h2>Trabalho recente no Linear <span class="badge">atualiza a cada 30s</span></h2>
+      <div id="linearIssues"><div class="delta-empty">carregando…</div></div>
+    </div>
+  </div>
+
+  <div class="pane" id="p-grafo">
+    <div class="card" style="padding:12px">
+      <h2>Grafo Celestial <span class="badge">mesmo painel · mesmo login · sem subdomínio próprio</span></h2>
+      <div class="graph-shell">
+        <iframe src="/admin/grafo/" title="Grafo Celestial CentralDark" loading="lazy" referrerpolicy="same-origin"></iframe>
+      </div>
+    </div>
   </div>
 
   __PATTERN_ADMIN_PANE__
@@ -507,6 +554,7 @@ async function carregarOperational(){
   try {
     const r = await fetch('/admin/api/operational-snapshot');
     const j = await r.json();
+    if (typeof renderPatternAlignment === 'function') renderPatternAlignment(j);
     const flow = (j.deterministicFlow || []).join(' → ');
     const fronts = (j.fronts || []).map(f =>
       '<div class="row"><span>'+htmlEscape(f.id+' · '+f.source)+'</span><span class="'+(f.state === 'UNKNOWN' || f.state === 'STALE' ? 'warn' : 'ok')+'">'+htmlEscape(f.state)+'</span></div>'
@@ -548,6 +596,44 @@ async function carregarTools(){
     list.map(t=>'<span class="tag" title="'+(t.description||'').replace(/"/g,'&quot;')+'">'+t.name+'</span>').join('')+
     '</div>'
   ).join('');
+}
+
+async function carregarLinear(){
+  const state = $('linearState');
+  const count = $('linearIssueCount');
+  const checked = $('linearCheckedAt');
+  const meta = $('linearMeta');
+  const box = $('linearIssues');
+  if (!state || !count || !checked || !meta || !box) return;
+  try {
+    const r = await fetch('/admin/api/linear?limit=25', { cache: 'no-store' });
+    const j = await r.json();
+    state.textContent = j.status || 'UNKNOWN';
+    $('linearBar').style.width = j.ok ? '100%' : (j.configured ? '50%' : '0%');
+    count.textContent = Array.isArray(j.issues) ? String(j.issues.length) : '0';
+    checked.textContent = j.checkedAt ? horaBr(j.checkedAt) : '-';
+    meta.innerHTML =
+      '<div class="row"><span>Conexão</span><span class="'+(j.ok?'ok':'warn')+'">'+htmlEscape(j.status || 'UNKNOWN')+'</span></div>'+
+      '<div class="row"><span>Workspace</span><span>'+htmlEscape(j.organization?.name || 'UNKNOWN')+'</span></div>'+
+      '<div class="row"><span>Operador</span><span>'+htmlEscape(j.viewer?.name || 'UNKNOWN')+'</span></div>';
+    if (!Array.isArray(j.issues) || !j.issues.length) {
+      box.innerHTML = '<div class="delta-empty">Nenhum item retornado. UNKNOWN não vira PASS.</div>';
+      return;
+    }
+    box.innerHTML = j.issues.map(issue =>
+      '<div class="row">'+
+        '<span><b>'+htmlEscape(issue.identifier || '-')+'</b> · '+htmlEscape(issue.title || '-')+
+          '<br><small>'+htmlEscape(issue.team?.key || '-')+' · '+htmlEscape(issue.state?.name || 'UNKNOWN')+'</small></span>'+
+        '<span><a class="btn ghost" style="text-decoration:none;padding:6px 10px" href="'+htmlEscape(issue.url || '#')+'" target="_blank" rel="noopener">abrir ↗</a></span>'+
+      '</div>'
+    ).join('');
+  } catch (err) {
+    state.textContent = 'UNKNOWN';
+    count.textContent = '-';
+    checked.textContent = '-';
+    meta.innerHTML = '<div class="row"><span>Estado</span><span class="warn">UNKNOWN</span></div>';
+    box.innerHTML = '<div class="delta-empty">Linear indisponível: '+htmlEscape(String(err))+'</div>';
+  }
 }
 
 function conectarLogs(){
@@ -611,11 +697,12 @@ async function rodarE2E(){
   }
 }
 
-function recarregar(){ carregarHealth(); carregarTools(); carregarMetricas(); carregarOperational(); }
+function recarregar(){ carregarHealth(); carregarTools(); carregarMetricas(); carregarOperational(); carregarLinear(); }
 recarregar();
 setInterval(carregarHealth, 15000);
 setInterval(carregarMetricas, 15000);
 setInterval(carregarOperational, 15000);
+setInterval(carregarLinear, 30000);
 conectarLogs();
 </script>
 </body></html>`;
@@ -638,6 +725,45 @@ export function adminGet(req, res) {
         return;
     }
     res.type("text/html").send(injectPatternAdmin(NOC_HTML));
+}
+
+
+export async function adminGraphProxy(req, res) {
+    if (!isAdmin(req)) {
+        res.status(401).type("text/plain").send("Admin auth required.");
+        return;
+    }
+    if (req.method !== "GET" && req.method !== "HEAD") {
+        res.setHeader("Allow", "GET, HEAD");
+        res.status(405).type("text/plain").send("Somente leitura.");
+        return;
+    }
+    try {
+        const upstreamPath = req.url && req.url.startsWith("/") ? req.url : "/";
+        const upstream = await fetch(`http://127.0.0.1:3030${upstreamPath}`, {
+            method: req.method,
+            headers: { accept: req.headers.accept || "*/*" },
+        });
+        res.status(upstream.status);
+        for (const header of ["content-type", "cache-control", "etag", "last-modified", "location"]) {
+            const value = upstream.headers.get(header);
+            if (value) res.setHeader(header, value);
+        }
+        res.setHeader("X-Content-Type-Options", "nosniff");
+        if (req.method === "HEAD") {
+            res.end();
+            return;
+        }
+        const body = Buffer.from(await upstream.arrayBuffer());
+        res.end(body);
+    } catch (error) {
+        res.status(502).json({
+            ok: false,
+            error: "graph_panel_unavailable",
+            message: "Grafo Celestial indisponível no runtime local.",
+            detail: error?.message || String(error),
+        });
+    }
 }
 
 export function adminLogin(req, res) {
@@ -687,11 +813,14 @@ export function adminRotas(req, res) {
             { metodo: "POST", path: "/token", protegido: true },
             { metodo: "POST", path: "/mcp", protegido: true },
             { metodo: "GET", path: "/admin", protegido: true },
+            { metodo: "GET", path: "/admin/grafo/*", protegido: true },
             { metodo: "GET", path: "/admin/logs/stream", protegido: true },
             { metodo: "POST", path: "/admin/api/e2e", protegido: true },
             { metodo: "GET", path: "/admin/api/logs", protegido: true },
             { metodo: "GET", path: "/admin/api/metricas", protegido: true },
             { metodo: "GET", path: "/admin/api/operational-snapshot", protegido: true },
+            { metodo: "GET", path: "/admin/api/linear", protegido: true },
+            { metodo: "GET", path: "/linear/status", protegido: false },
         ],
     });
 }
@@ -723,6 +852,14 @@ export function adminOperationalSnapshot(req, res) {
     if (!isAdmin(req)) { res.status(401).json({ ok: false }); return; }
     res.setHeader("Cache-Control", "no-store");
     res.json(getOperationalSnapshot());
+}
+
+export async function adminLinear(req, res) {
+    if (!isAdmin(req)) { res.status(401).json({ ok: false }); return; }
+    res.setHeader("Cache-Control", "no-store");
+    const limit = Math.max(1, Math.min(Number(req.query.limit) || 25, 100));
+    const snapshot = await getLinearAdminSnapshot(limit);
+    res.status(snapshot.ok ? 200 : 503).json(snapshot);
 }
 
 // ─── Busca de logs (filtro por rota / cid / level / texto) ────────────

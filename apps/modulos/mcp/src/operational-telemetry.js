@@ -83,6 +83,146 @@ function secretBoundary(root) {
   };
 }
 
+function readTextSafe(file) {
+  try { return fs.readFileSync(file, "utf8"); } catch { return ""; }
+}
+
+export const CENTRALDARK_PATTERN_RED_OUTSIDE_PCT = 80;
+
+function externalPatternDimensions(root) {
+  const file = path.join(root, "apps/modulos/status/centraldark-pattern-observation.json");
+  const payload = readJsonSafe(file);
+  const rows = Array.isArray(payload?.dimensions) ? payload.dimensions.slice(0, 100) : [];
+  return rows.map((row, index) => {
+    const rawState = String(row?.state || "UNKNOWN").toUpperCase();
+    const state = rawState === "PASS" || rawState === "FAIL" ? rawState : "UNKNOWN";
+    return {
+      id: String(row?.id || `EXTERNAL_${index + 1}`).slice(0, 120),
+      label: String(row?.label || row?.id || `observação externa ${index + 1}`).slice(0, 180),
+      state,
+      source: String(row?.source || "apps/modulos/status/centraldark-pattern-observation.json").slice(0, 220),
+      scoreEligible: row?.scoreEligible !== false,
+    };
+  });
+}
+
+function patternAlignmentSnapshot({ root, diagnostics, boundary, rules }) {
+  const agents = readTextSafe(path.join(root, "AGENTS.md"));
+  const contract = readTextSafe(path.join(root, "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml"));
+  const soulPath = path.join(root, "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md");
+
+  const dimensions = [
+    {
+      id: "UNKNOWN_IS_NOT_PASS",
+      label: "UNKNOWN não vira PASS",
+      state: rules.unknownIsNotPass === true ? "PASS" : "FAIL",
+      source: "operational-telemetry.rules",
+      scoreEligible: false,
+    },
+    {
+      id: "ONE_WRITER_PER_SCOPE",
+      label: "um writer por escopo",
+      state: rules.oneWriterPerScope === true ? "PASS" : "FAIL",
+      source: "operational-telemetry.rules",
+      scoreEligible: false,
+    },
+    {
+      id: "REUSE_BEFORE_CREATE",
+      label: "reusar antes de criar",
+      state: rules.reuseBeforeCreate === true ? "PASS" : "FAIL",
+      source: "operational-telemetry.rules",
+      scoreEligible: false,
+    },
+    {
+      id: "SECRET_BOUNDARY",
+      label: "segredo não exposto",
+      state: boundary.contentExposed === false && diagnostics.secretsContentCollected !== true ? "PASS" : "FAIL",
+      source: "secret-boundary+forensic",
+      scoreEligible: true,
+    },
+    {
+      id: "SOUL_CANONICA",
+      label: "SOUL canônica presente",
+      state: exists(soulPath) ? "PASS" : "FAIL",
+      source: "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md",
+      scoreEligible: true,
+    },
+    {
+      id: "FAST_PATH_CONTINUA",
+      label: "não parar com PR elegível aberto",
+      state: agents.includes("RETURN_WITH_OPEN_ELIGIBLE_PR=FORBIDDEN") ? "PASS" : "FAIL",
+      source: "AGENTS.md",
+      scoreEligible: true,
+    },
+    {
+      id: "REMEASURE_PR_LIVE",
+      label: "re-medida viva antes do retorno",
+      state: contract.includes("remeasure_live_mergeability_before_human_return: true") ? "PASS" : "FAIL",
+      source: "CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml",
+      scoreEligible: true,
+    },
+    {
+      id: "AUXILIARY_YELLOW_NOT_BLOCKER",
+      label: "amarelo auxiliar não vira bloqueio material",
+      state: contract.includes("queued_or_in_progress_auxiliary_is_material_blocker: false") ? "PASS" : "FAIL",
+      source: "CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml",
+      scoreEligible: true,
+    },
+    {
+      id: "FORENSIC_FRESHNESS",
+      label: "prova forense recente",
+      state: diagnostics.status === "OBSERVED" ? "PASS" : (diagnostics.status === "STALE" ? "FAIL" : "UNKNOWN"),
+      source: "_DIAGNOSTICS/FORENSIC-LATEST.json",
+      scoreEligible: true,
+    },
+    {
+      id: "RECEIPT_PRESENT",
+      label: "receipt observável",
+      state: diagnostics.latestReceiptPresent ? "PASS" : "UNKNOWN",
+      source: "_DIAGNOSTICS/FORENSIC-LATEST.json",
+      scoreEligible: true,
+    },
+    ...externalPatternDimensions(root),
+  ];
+
+  const scored = dimensions.filter((item) => item.scoreEligible !== false);
+  const passCount = scored.filter((item) => item.state === "PASS").length;
+  const failCount = scored.filter((item) => item.state === "FAIL").length;
+  const unknownCount = scored.filter((item) => item.state === "UNKNOWN").length;
+  const measurableCount = passCount + failCount;
+  const outsidePct = measurableCount > 0 ? Math.round((failCount / measurableCount) * 100) : null;
+  const alignmentPct = measurableCount > 0 ? 100 - outsidePct : null;
+
+  let marker = "UNKNOWN";
+  if (outsidePct !== null) {
+    if (outsidePct >= CENTRALDARK_PATTERN_RED_OUTSIDE_PCT) marker = "RED";
+    else if (outsidePct >= 50) marker = "ORANGE";
+    else if (outsidePct > 20) marker = "YELLOW";
+    else if (unknownCount > 0) marker = "WATCH";
+    else marker = "GREEN";
+  }
+
+  return {
+    schema: "centraldark.pattern-alignment.v1",
+    label: "PADRÃO CENTRALDARK",
+    observedAt: new Date().toISOString(),
+    redOutsidePct: CENTRALDARK_PATTERN_RED_OUTSIDE_PCT,
+    outsidePct,
+    alignmentPct,
+    marker,
+    passCount,
+    failCount,
+    unknownCount,
+    measurableCount,
+    totalDimensions: dimensions.length,
+    scoredDimensions: scored.length,
+    rule: "RED_IF_OUTSIDE_PCT_GTE_80",
+    unknownSemantics: "UNKNOWN_NOT_COUNTED_AS_OUTSIDE_BUT_NEVER_GREEN",
+    externalObservationPath: "apps/modulos/status/centraldark-pattern-observation.json",
+    dimensions,
+  };
+}
+
 export function getOperationalSnapshot({ root = DEFAULT_ROOT, heartbeat = null } = {}) {
   const diagnostics = latestForensic(root);
   const cpus = os.cpus()?.length || 0;
@@ -100,11 +240,7 @@ export function getOperationalSnapshot({ root = DEFAULT_ROOT, heartbeat = null }
     { id: "F10_RECEIPT", source: "receipt + next_cursor", state: diagnostics.latestReceiptPresent ? "PRESENT" : "UNKNOWN" },
   ];
 
-  return {
-    schema: "centraldark.operational.snapshot.v1",
-    observedAt: new Date().toISOString(),
-    deterministicFlow: FLOW,
-    rules: {
+  const rules = {
       unknownIsNotPass: true,
       processAliveIsNotFixedPoint: true,
       sourceIsNotRuntime: true,
@@ -119,7 +255,28 @@ export function getOperationalSnapshot({ root = DEFAULT_ROOT, heartbeat = null }
       sensorFailureIsWorldFailure: false,
       optionalSensorOfflineIsGlobalFailure: false,
       changedTargetRevalidatesAffectedChainOnly: true,
-    },
+  };
+  const boundary = secretBoundary(root);
+  const patternAlignment = patternAlignmentSnapshot({ root, diagnostics, boundary, rules });
+
+  return {
+    schema: "centraldark.operational.snapshot.v1",
+    observedAt: new Date().toISOString(),
+    deterministicFlow: FLOW,
+    rules,
+      unknownIsNotPass: true,
+      processAliveIsNotFixedPoint: true,
+      sourceIsNotRuntime: true,
+      badgeIsTelemetryNotProof: true,
+      oneWriterPerScope: true,
+      secretsContentExposed: false,
+      reuseBeforeCreate: true,
+      noNewInformation: "REUSE_PROOF",
+      sameFindingWithoutNewEvidence: "DROP_DUPLICATE",
+      reuseProvenCrystalBeforeReinvestigate: true,
+      fixedPointIsVerificationCheckpointNotLearningGate: true,
+      sensorFailureIsWorldFailure: false,
+      optionalSensorOfflineIsGlobalFailure: false,
     runtime: {
       pid: process.pid,
       uptimeSec: Math.round(process.uptime()),
@@ -129,7 +286,8 @@ export function getOperationalSnapshot({ root = DEFAULT_ROOT, heartbeat = null }
     },
     heartbeat: heartbeat || { self: "UNKNOWN" },
     forensic: diagnostics,
-    secretBoundary: secretBoundary(root),
+    secretBoundary: boundary,
+    patternAlignment,
     statusFiles: statusFileSnapshot(root),
     fronts,
     verdict: diagnostics.status === "OBSERVED" ? "OBSERVED_NOT_FIXED_POINT" : "UNKNOWN_NOT_PASS",

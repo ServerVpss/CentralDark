@@ -75,6 +75,15 @@ function validateContract(value) {
   if (image.image_is_sensor !== true) errors.push('IMAGE_NOT_SENSOR');
   if (image.screenshot_is_current_truth !== false) errors.push('SCREENSHOT_MUST_NOT_BE_CURRENT_TRUTH');
   if (image.screenshot_is_trigger_for_live_measurement !== true) errors.push('SCREENSHOT_MUST_TRIGGER_LIVE_MEASUREMENT');
+  if (image.context_before_judgment !== true) errors.push('CONTEXT_BEFORE_JUDGMENT_REQUIRED');
+  if (image.observed_state_is_neutral_by_default !== true) errors.push('OBSERVED_STATE_MUST_START_NEUTRAL');
+  if (image.function_before_failure !== true) errors.push('FUNCTION_BEFORE_FAILURE_REQUIRED');
+  if (image.cause_before_classification !== true) errors.push('CAUSE_BEFORE_CLASSIFICATION_REQUIRED');
+  if (image.expected_mobility_is_not_drift !== true) errors.push('EXPECTED_MOBILITY_MUST_NOT_BE_DRIFT');
+  if (image.terminal_cwd_is_not_blocker_without_causal_evidence !== true) errors.push('TERMINAL_CWD_FALSE_BLOCKER_GUARD_REQUIRED');
+  if (image.do_not_invent_problem_from_screenshot !== true) errors.push('SCREENSHOT_FALSE_PROBLEM_GUARD_REQUIRED');
+  if (image.do_not_expand_scope_from_visual_incidental_state !== true) errors.push('VISUAL_SCOPE_EXPANSION_GUARD_REQUIRED');
+  if (image.user_demonstrated_context_is_primary_for_visual_scope !== true) errors.push('USER_VISUAL_SCOPE_REQUIRED');
   if (image.live_state_required_before_mutation !== true) errors.push('LIVE_REMEASURE_REQUIRED');
   if (image.material_visual_finding_action !== 'REMEASURE_LIVE_SOURCE_THEN_ACT_MINIMALLY') errors.push('IMAGE_ACTION_INVALID');
 
