@@ -227,3 +227,20 @@ SOURCE_PATTERN_CRYSTALLIZED != RUNTIME_PROVEN
 HISTORY/RECEIPT != TRIGGER_SURFACE
 REALIDADE = JUIZ
 ```
+
+
+## 👁️ Follow-up CURRENT · PR #1634
+
+A `main` avançou depois da varredura #1576→#1633. O #1634 foi medido e absorvido no **mesmo padrão**, sem criar regra concorrente:
+
+```text
+👁️ MEASURE_BEFORE_CREATION
+→ mede o existente
+→ prova gap real
+→ descobre owner atual
+→ reutiliza
+→ corrige menor delta
+→ cria somente se a lacuna sobreviver
+```
+
+#1634 reforça o owner `centraldark-operational-method`; portanto atualiza proveniência de `MEASURE_BEFORE_CREATION` e `REUSE_BEFORE_CREATE`, sem aumentar o número de padrões.

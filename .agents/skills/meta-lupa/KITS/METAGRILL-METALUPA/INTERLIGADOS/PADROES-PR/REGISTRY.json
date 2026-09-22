@@ -65,20 +65,21 @@
       1630,
       1631,
       1632,
-      1633
+      1633,
+      1634
     ],
-    "latest_window": "PR_1576_TO_1633_EXISTING_PRS",
+    "latest_window": "PR_1576_TO_1634_EXISTING_PRS",
     "missing_numbers_not_pull_requests": [
       1603,
       1612,
       1626,
       1627
     ],
-    "refreshed_from_main": "8c5e62393ff095bfb90b38a079d0744cbf78bd08",
-    "all_stable_pattern_delta_files_absorbed_through": "DELTA-PR-1576-1633.md",
+    "refreshed_from_main": "f5160c865e5642bc767ec432e01d608eee2c937c",
+    "all_stable_pattern_delta_files_absorbed_through": "DELTA-PR-1634.md",
     "full_registry_reconciled_at_main": "373c0f3f91280f5496a844813f836dc35c1f1a8d",
     "pattern_count": 182,
-    "latest_pattern_sweep_base_main": "8c5e62393ff095bfb90b38a079d0744cbf78bd08"
+    "latest_pattern_sweep_base_main": "f5160c865e5642bc767ec432e01d608eee2c937c"
   },
   "patterns": [
     {
@@ -112,7 +113,8 @@
         1482,
         1483,
         1632,
-        1633
+        1633,
+        1634
       ],
       "runtime_required": false
     },
@@ -1693,7 +1695,8 @@
       "anchor": "MEDE ANTES DE CRIAR",
       "pr_refs": [
         1632,
-        1633
+        1633,
+        1634
       ],
       "value": "REUSE_BEFORE_CREATE + UNKNOWN != PASS + DOCUMENTED != EXECUTED + REALITY = JUDGE",
       "runtime_required": false
