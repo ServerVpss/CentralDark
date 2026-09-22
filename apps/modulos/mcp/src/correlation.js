@@ -3,6 +3,7 @@
 // request, correlation, trace e span para permitir round-trip causal.
 import { randomBytes, randomUUID } from "node:crypto";
 import { log } from "./log.js";
+import { runWithAuditContext } from "./audit-logger.js";
 
 const TRACEPARENT_RE = /^00-([a-f0-9]{32})-([a-f0-9]{16})-([a-f0-9]{2})$/i;
 const SAFE_ID_RE = /^[A-Za-z0-9._:@/-]+$/;
@@ -91,67 +92,69 @@ export function traceLogMeta(trace, meta = {}) {
 
 export function correlationMiddleware(req, res, next) {
     const trace = resolveTraceContext(req.headers ?? {});
-    req.trace = trace;
-    req.cid = trace.correlation_id; // compatibilidade com consumidores existentes
+    return runWithAuditContext(trace, () => {
+        req.trace = trace;
+        req.cid = trace.correlation_id;
 
-    for (const [name, value] of Object.entries(traceHeaders(trace))) {
-        res.setHeader(name, value);
-    }
+        for (const [name, value] of Object.entries(traceHeaders(trace))) {
+            res.setHeader(name, value);
+        }
 
-    const originalJson = res.json.bind(res);
-    res.json = (body) => {
-        if (body && typeof body === "object" && !Array.isArray(body)) {
-            if (body.jsonrpc === "2.0") {
-                body.cid = body.cid || trace.correlation_id;
-                body.traceId = body.traceId || trace.trace_id;
-                body.spanId = body.spanId || trace.span_id;
-                if (body.error && typeof body.error === "object") {
-                    body.error.data = {
-                        ...(body.error.data || {}),
-                        cid: body.error.data?.cid || trace.correlation_id,
-                        traceId: body.error.data?.traceId || trace.trace_id,
-                        spanId: body.error.data?.spanId || trace.span_id,
-                    };
+        const originalJson = res.json.bind(res);
+        res.json = (body) => {
+            if (body && typeof body === "object" && !Array.isArray(body)) {
+                if (body.jsonrpc === "2.0") {
+                    body.cid = body.cid || trace.correlation_id;
+                    body.traceId = body.traceId || trace.trace_id;
+                    body.spanId = body.spanId || trace.span_id;
+                    if (body.error && typeof body.error === "object") {
+                        body.error.data = {
+                            ...(body.error.data || {}),
+                            cid: body.error.data?.cid || trace.correlation_id,
+                            traceId: body.error.data?.traceId || trace.trace_id,
+                            spanId: body.error.data?.spanId || trace.span_id,
+                        };
+                    }
+                }
+                else {
+                    body.cid = body.cid || trace.correlation_id;
+                    body.requestId = body.requestId || trace.request_id;
+                    body.traceId = body.traceId || trace.trace_id;
+                    body.spanId = body.spanId || trace.span_id;
                 }
             }
-            else {
-                body.cid = body.cid || trace.correlation_id;
-                body.requestId = body.requestId || trace.request_id;
-                body.traceId = body.traceId || trace.trace_id;
-                body.spanId = body.spanId || trace.span_id;
-            }
-        }
-        return originalJson(body);
-    };
+            return originalJson(body);
+        };
 
-    const started = Date.now();
-    log.info("http_request_start", traceLogMeta(trace, {
-        method: req.method,
-        path: req.path,
-        ua: (req.headers["user-agent"] || "").slice(0, 120),
-        ip: req.ip || req.socket?.remoteAddress || "?",
-    }));
-
-    res.on("finish", () => {
-        log.info("http_request_end", traceLogMeta(trace, {
+        const started = Date.now();
+        log.info("http_request_start", traceLogMeta(trace, {
             method: req.method,
             path: req.path,
-            status: res.statusCode,
-            ms: Date.now() - started,
-            bytes: Number(res.getHeader("content-length")) || undefined,
+            ua: (req.headers["user-agent"] || "").slice(0, 120),
+            ip: req.ip || req.socket?.remoteAddress || "?",
         }));
-    });
-    res.on("close", () => {
-        if (!res.writableEnded) {
-            log.warn("http_request_aborted", traceLogMeta(trace, {
+
+        res.on("finish", () => {
+            log.info("http_request_end", traceLogMeta(trace, {
                 method: req.method,
                 path: req.path,
                 status: res.statusCode,
                 ms: Date.now() - started,
+                bytes: Number(res.getHeader("content-length")) || undefined,
             }));
-        }
+        });
+        res.on("close", () => {
+            if (!res.writableEnded) {
+                log.warn("http_request_aborted", traceLogMeta(trace, {
+                    method: req.method,
+                    path: req.path,
+                    status: res.statusCode,
+                    ms: Date.now() - started,
+                }));
+            }
+        });
+        next();
     });
-    next();
 }
 
 export function withTrace(trace) {
@@ -163,7 +166,6 @@ export function withTrace(trace) {
     };
 }
 
-// Helper legado: continua válido para consumidores que só conhecem CID.
 export function withCid(cid) {
     return {
         debug: (msg, meta = {}) => log.debug(msg, { cid, ...meta }),
