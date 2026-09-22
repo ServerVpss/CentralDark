@@ -5,6 +5,7 @@ import {
   DEFAULT_WAIT_TIMEOUT_MS,
   FAST_MERGE_POLICY,
   CANONICAL_MAP_PATH,
+  PR_MOTHER_NUMBER,
   SQUASH_FIXED_POINT_GOAL,
   actionRequiredRunIds,
   authorizationFor,
@@ -378,6 +379,12 @@ test("fast path continua fail-closed para conflito, fork e autor externo", () =>
   assert.equal(external.decision, "BLOCKED");
   assert.match(external.reasons.join(" "), /AUTHOR_NOT_TRUSTED/);
   assert.match(external.reasons.join(" "), /HEAD_EXTERNAL_REPOSITORY/);
+});
+
+test("PR-mãe permanente #1562 nunca entra no veículo de squash", () => {
+  const mother = evaluate(prFixture({ number: PR_MOTHER_NUMBER }));
+  assert.equal(mother.decision, "BLOCKED");
+  assert.match(mother.reasons.join(" "), /PR_MOTHER_MERGE_FORBIDDEN/);
 });
 
 test("scanner bloqueia caminho sensível e segredo literal, não documentação comum", () => {
