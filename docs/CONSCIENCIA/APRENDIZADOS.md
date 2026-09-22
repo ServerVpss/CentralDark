@@ -389,3 +389,13 @@ updated: 2026-08-27
 - **Aprendizado:** antes de criar token/configuração nova, procurar o owner real já existente; em produção, secret reuse deve referenciar o arquivo canônico e não duplicar valor em source. Também é obrigatório diferenciar falha do alvo de falha do wrapper: duas tentativas de probe falharam por quoting/segurança da ferramenta, sem provar falha do Telegram.
 - **Prova:** `CentralDark-MCP` reiniciado com `telegram-alerts.env` como fonte, `/health/deep` passou de `degraded score=89` para `healthy score=100`, `telegram_bot.ok=true`, `hub_mission_consumer.ok=true`, `lastError=false`; valor do segredo não foi exibido. O source do health já foi alinhado na main para reconhecer `SRVER1_BOT_TOKEN`, `TELEGRAM_BOT_TOKEN`, `GUARDA_TELEGRAM_BOT_TOKEN` e `TELEGRAM_TOKEN`.
 
+
+
+### 58. Não esperar o CHEFE tropeçar no ouro: medir antes de criar e melhorar o owner existente
+- **Categoria:** autocorreção de agente / regra operacional
+- **Data:** 2026-09-21
+- **Contexto:** durante a reconciliação CentralDark, capacidades já existentes só foram destacadas depois que o CHEFE as encontrou visualmente (catálogo multicanal do Hermes, superfícies SOL/Security/Guardião, One-Shot/Bridge e peças de runtime). Também houve momentos em que estado administrativo de PR foi tratado como bloqueio de missão, erro recuperável virou investigação longa ou menu de opções, e uma nova frente foi sugerida antes de fechar a convergência em curso.
+- **Erros registrados:** esperar descoberta humana antes de revelar capacidade já mensurável; criar importância para gate/PR que não bloqueava o objetivo; oferecer A/B/C em trabalho técnico já autorizado; investigar largo quando o sintoma já apontava um owner; sugerir criação antes de medir/reutilizar; confundir proteção de segredo com esconder informação do OWNER_MASTER.
+- **Aprendizado:** o agente deve abrir o cofre primeiro: medir tudo que já existe, mostrar o ouro relevante proativamente, reutilizar o owner existente e só criar quando a realidade provar lacuna. Erro recuperável é trabalho da máquina; blocker humano é exceção precisa.
+- **Regra:** `MEASURE_BEFORE_CREATION = REUSE_BEFORE_CREATE + UNKNOWN != PASS + DOCUMENTED != EXECUTED + REALITY = JUDGE`.
+- **Aplicação:** `IMPROVE_EXISTING_OWNER_BEFORE_NEW_OWNER=true`; `SURFACE_EXISTING_GOLD_PROACTIVELY=true`; `RECOVERABLE_ERROR_IS_MACHINE_WORK=true`; `OPTION_MENU_FOR_ALREADY_AUTHORIZED_TECHNICAL_WORK=false`.
