@@ -1,5 +1,5 @@
 # CentralDark — fail2ban jail.local (sshd)
-# Atualizado: 2026-07-14 · PERMITO Pivete (harden bantime / recidive)
+# Atualizado: 2026-07-14 · PERMITO Segredo (harden bantime / recidive)
 # Cópia oficial no repo; na VPS: /etc/fail2ban/jail.local
 # NÃO desliga PasswordAuthentication (outro PERMITO).
 
@@ -11,7 +11,7 @@ maxretry = 3
 backend  = systemd
 
 # Nunca banir localhost nem IP casa do Pivete (IPv4 conhecido)
-ignoreip = 127.0.0.1/8 ::1 187.15.72.86
+ignoreip = 127.0.0.1/8 ::1 <servidor-publico>
 
 # Escalada se o IP voltar a ser banido (db do fail2ban)
 bantime.increment = true
