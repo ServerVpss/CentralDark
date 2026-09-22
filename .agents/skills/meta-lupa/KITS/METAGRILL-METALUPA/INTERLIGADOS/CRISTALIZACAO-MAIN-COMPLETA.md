@@ -179,3 +179,51 @@ VISUAL_OPERATIONAL_BRIDGES=52
 ```
 
 Cada skill curada em `.agents/skills/<skill>/` deve possuir `SKILL.md` + `INTERLIGADOS.md`. A ponte carrega emoji, gatilho material, estrada, retorno e cadeados; não altera o owner funcional nem converte documentação em execução.
+
+
+## 👁️ Varredura atual · PR #1576 → #1633
+
+Base medida antes desta cristalização: `8c5e62393ff095bfb90b38a079d0744cbf78bd08`.
+
+```text
+MEASURE_BEFORE_CREATION
+= REUSE_BEFORE_CREATE
++ UNKNOWN != PASS
++ DOCUMENTED != EXECUTED
++ REALITY = JUDGE
+```
+
+A varredura recente foi absorvida como **padrão estável**, não como promoção cega das implementações dos PRs. A camada mental continua em MAIÚSCULAS + emoji; os paths físicos das skills permanecem inalterados.
+
+Ganchos incorporados no mesmo organismo:
+
+```text
+👁️ MEDE ANTES DE CRIAR
+🧿 CONTEXTO ANTES DO JULGAMENTO
+🔎 TOOL DISCOVERY ANTES DE “SEM ACESSO”
+🤖 BLOQUEIO TÉCNICO CONTINUA ATÉ HUMAN_FRONTIER
+✍️ WRITERS MÚLTIPLOS SOMENTE EM ESCOPOS DISJUNTOS
+🔐 UM FINALIZADOR ATIVO NA PROMOÇÃO
+🧭 PR ELEGÍVEL CONTINUA ATÉ MERGE OU BLOCKER MATERIAL
+🧾 PR É LEDGER DE COMUNICAÇÃO, NÃO AUTORIDADE
+🐦 ARTEFATO DE TRABALHO NÃO É ENTREGA AO CHEFE
+🫀 UM SNAPSHOT OPERACIONAL, MUITAS PROJEÇÕES
+📦 IDENTIDADE ESTÁVEL + REVISÃO MONOTÔNICA + HASH DOS BYTES
+🎙️ INTENÇÃO NÃO É NOME DA TOOL
+⚡ AUTO-SQUASH EXIGE REMEDIÇÃO LIVE
+⏳ ACTION_REQUIRED = WAIT, NUNCA PASS/FAIL AUTOMÁTICO
+🪢 SEMANTIC ACCEPT BOTH != BLIND ACCEPT BOTH
+```
+
+A referência humana de 1Ts 5:21 permanece **pista semântica de memória**, nunca gate, autoridade ou prova.
+
+### 🏠 Único resto que não pode ser pintado de verde por source
+
+Os itens adicionados em `runtime_or_external_remeasurement_required` permanecem dívida viva: onload/endpoint Casa, autenticação E2E, serviços/ports, deploy, runtime de painéis/bots, updater, action_required real, conflito semantic-all real e microdeploy. Eles só fecham com medição no ambiente aplicável.
+
+```text
+PATTERN_ON_MAIN != IMPLEMENTATION_ON_MAIN
+SOURCE_PATTERN_CRYSTALLIZED != RUNTIME_PROVEN
+HISTORY/RECEIPT != TRIGGER_SURFACE
+REALIDADE = JUIZ
+```
