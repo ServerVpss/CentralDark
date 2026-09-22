@@ -141,3 +141,40 @@ REALIDADE = JUIZ
 ```
 
 🧠 Toda skill do inventário atual possui gatilho/emoji/entrada/retorno explícitos por baixo da mesma fórmula. O bridge nunca substitui o `SKILL.md` e nunca expõe raciocínio privado.
+
+
+## 👁️ MEASURE_BEFORE_CREATION · LEI ANTES DE CRIAR
+
+```text
+👁️ MEASURE_BEFORE_CREATION
+= ♻️ REUSE_BEFORE_CREATE
++ ❓ UNKNOWN != PASS
++ 📄 DOCUMENTED != EXECUTED
++ ⚖️ REALITY = JUDGE
+```
+
+Antes de abrir owner, skill, router, workflow, painel, serviço ou superfície nova:
+
+```text
+🧿 MEDIR O QUE JÁ EXISTE
+→ ♻️ LOCALIZAR OWNER/CAPACIDADE/DECISÃO EXISTENTE
+→ 🔎 SEPARAR FATO / CLAIM / UNKNOWN
+→ 🧩 CLASSIFICAR GAP MATERIAL
+→ 🌱 ESTENDER O MESMO CORPO
+→ 🆕 CRIAR SOMENTE SE A LACUNA SOBREVIVER À CONTRAPROVA
+```
+
+## 🪝 DESENCADEADORES RECENTES · MESMO CORPO
+
+| Sinal | Gancho visual | Decisão operacional |
+|---|---|---|
+| criação sugerida | 👁️ **MEDE ANTES DE CRIAR** | medir/reusar antes de abrir peça nova |
+| “sem acesso” | 🔎 **DESCOBRIR TOOLS** | medir ferramentas aplicáveis antes do claim |
+| screenshot/estado incidental | 🧿 **CONTEXTO ANTES DO JULGAMENTO** | função → causa → classificação |
+| blocker técnico resolvível | 🤖 **MÁQUINA CONTINUA** | remediar no mesmo fio até HUMAN_FRONTIER real |
+| PR recém-criado/elegível | 🧭 **NÃO PARA NO AMARELO** | remedir até merge ou blocker material exato |
+| promoção | 🧾 **REGISTRA** | commit → push → PR filha → remedição → squash main → readback → receipt |
+| conflito textual | 🪢 **SEMANTIC ALL** | preservar ambos só quando composição for resolvível; nunca blind accept |
+| action_required | ⏳ **WAIT, NÃO FAIL/PASS** | aprovar quando autorizado e remedir |
+
+> 📖 1Ts 5:21 funciona aqui como **gancho humano de memória**: examinar/por à prova e reter o bom. Não é gate nem prova técnica.

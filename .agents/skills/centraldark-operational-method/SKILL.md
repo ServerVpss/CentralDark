@@ -132,6 +132,40 @@ INTENÇÃO
 
 Proibido: v2, v3, novo, final, copy, backup como fuga de reconciliação.
 
+### Measure Before Creation — medir antes de criar
+
+Generalização nomeada pelo CHEFE: antes de criar arquitetura, bot, rota, skill, memória, scheduler, workflow, app ou owner novo, medir o que já existe e provar se o gap é real.
+
+```text
+MEASURE_BEFORE_CREATION
+  → medir o que já existe
+  → provar se está vivo
+  → descobrir owner atual
+  → reutilizar antes de inventar
+  → corrigir o menor delta
+  → criar somente se o gap for real
+```
+
+```text
+REUSE_BEFORE_CREATE
++ UNKNOWN != PASS
++ DOCUMENTED != EXECUTED
++ REALITY = JUDGE
+= MEASURE_BEFORE_CREATION
+```
+
+Vínculo semântico compartilhado: `1Ts 5:21` → examinar tudo → medir/comparar/contraprovar → reter o que a realidade provar bom → melhorar o owner existente antes de criar outro.
+
+```text
+MEASURE_BEFORE_CREATION_SEMANTIC_REFERENCE="1Ts 5:21"
+MEASURE_BEFORE_CREATION_APPLIES_TO=ALL_CURRENT_AND_FUTURE_AGENTS
+VERSE_IS_SEMANTIC_CUE_NOT_PROOF=true
+IMPROVE_EXISTING_OWNER_BEFORE_NEW_OWNER=true
+```
+
+Exemplo provado: no Telegram, não criar bot novo; medir o owner existente; provar o estado real; preservar canal válido; corrigir somente o delta causal.
+
+
 ## Risco e autorização (fail-closed proporcional)
 
 | Nível | Natureza | Conduta |
