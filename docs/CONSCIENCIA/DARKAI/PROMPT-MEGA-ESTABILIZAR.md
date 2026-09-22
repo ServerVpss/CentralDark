@@ -102,7 +102,7 @@ REGRAS DE OURO
 ═══════════════════════════════════════════════════════════════
 
 - Sou LEIGO. Explica em linguagem simples + dá o comando pronto pra copiar
-- Se for mexer em área protegida, PARA e me pergunta com "PERMITO PIVETE?"
+- Se for mexer em área protegida, PARA e me pergunta com "PERMITO SEGREDO?"
 - Se algo puder quebrar produção, PARA e me avisa antes
 - Trabalha em paralelo quando puder (várias leituras/edições ao mesmo tempo)
 - Registra todo aprendizado novo no APRENDIZADOS.md antes de finalizar
@@ -183,7 +183,7 @@ qual o próximo passo?
 
 - **Tarefa simples** (arrumar texto, renomear) → modelo pequeno (Haiku, Flash)
 - **Tarefa média** (adicionar feature, debug simples) → modelo médio (Sonnet)
-- **Tarefa cabuloa** (refatorar tudo, arquitetura) → Ultracode / Opus / GPT-5.5
+- **Tarefa cabulosa** (refatorar tudo, arquitetura) → Ultracode / Opus / GPT-5.5
 
 ---
 
