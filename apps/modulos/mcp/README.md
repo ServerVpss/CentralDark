@@ -5,7 +5,7 @@
 > seu jeito — tudo de forma segura e com login.
 
 🔒 **PASTA TRANCADA** — consolidada e testada (30/06/2026). Outra IA só mexe aqui com
-autorização **"PERMITO PIVETE"** (ver `CLAUDE.md` Seção 9).
+autorização **"PERMITO SEGREDO"** (ver `CLAUDE.md` Seção 9).
 
 ---
 
