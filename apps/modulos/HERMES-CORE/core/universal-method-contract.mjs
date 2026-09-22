@@ -28,6 +28,7 @@ const FILES = {
   boot: 'CENTRALDARK_AI_BOOT.yaml',
   grillMe: '.agents/skills/grill-me/SKILL.md',
   metaGrill: '.agents/skills/meta-lupa/KITS/METAGRILL-METALUPA/KIT.md',
+  metaLupa: '.agents/skills/meta-lupa/SKILL.md',
   fableLoop: '.agents/skills/fable-loop/SKILL.md',
   conflictResolver: '.agents/skills/git-conflict-resolve-house-standard/SKILL.md',
   perceptionOrchestra: 'apps/modulos/HERMES-CORE/core/perception-orchestra.mjs',
@@ -128,6 +129,7 @@ export function validateUniversalMethod() {
   const boot = read(FILES.boot);
   const grillMe = read(FILES.grillMe);
   const metaGrill = read(FILES.metaGrill);
+  const metaLupa = read(FILES.metaLupa);
   const fableLoop = read(FILES.fableLoop);
   const conflictResolver = read(FILES.conflictResolver);
   const perceptionOrchestra = read(FILES.perceptionOrchestra);
@@ -144,6 +146,13 @@ export function validateUniversalMethod() {
   requireTokens(universal, [
     'applies_to: ALL_CURRENT_AND_FUTURE_ENGINES',
     'same_method_required_for_new_engine: true',
+    'cross_surface_contract_inheritance: true',
+    'semantic_convergence_across_surfaces_is_expected_success: true',
+    'surface_name_is_not_executor_proof: true',
+    'tool_catalog_visible_is_not_tool_call_success: true',
+    'tool_claim_requires_measured_receipt: true',
+    'executor_attribution_requires_observed_executor: true',
+    'no_conformance_level_auto_promotes_next: true',
     'engine_specific_capability_may_bypass_contract: false',
     'skin_is_presentation_adapter: true',
     'skin_must_not_change:',
@@ -342,6 +351,16 @@ export function validateUniversalMethod() {
     'SOURCE_404_IS_SENSOR_MISS_NOT_WORLD_MISS=true',
     'GITHUB_REF_MISS_DOES_NOT_PROVE_RUNTIME_FILE_ABSENT=true',
     'ALTERNATE_AUTHORIZED_SENSOR_BEFORE_HUMAN_BLOCKER=true',
+    'SAME_HEAD_GREEN_PROMOTES_TO_TOTAL_DEPLOY=true',
+    'TOTAL_DEPLOY_REGENERATES_FROM_PROVEN_MAIN_AND_EXISTING_RUNTIME=true',
+    'DEPLOY_DOES_NOT_REASK_AFTER_AUTHORIZED_GREEN=true',
+    'UNTRACKED_RUNTIME_STATE_IS_PRESERVED_NOT_BLIND_CLEANED=true',
+    'PROOF_COUNTERPROOF_ACCEPT_RECONCILE_IS_DETERMINISTIC_CLOSURE=true',
+    'ACCEPTANCE_REQUIRES_PROOF_AND_COUNTERPROOF_SURVIVAL=true',
+    'COUNTERPROOF_FAILURE_REOPENS_OR_REJECTS_CLAIM=true',
+    'RECONCILIATION_PRESERVES_PROVEN_GOOD_AND_DISCARDS_ONLY_DISPROVEN_DELTA=true',
+    'SEALED_CLAIM_NO_REEXECUTE_WITHOUT_NEW_MATERIAL_CAUSE=true',
+    'NEW_MATERIAL_CAUSE_REOPENS_SEAL=true',
     'GENERIC_ERROR_ONLY=FAIL',
     'ASK_ONE_EXACT_HUMAN_ACTION_AT_A_TIME=true',
     'AUTO_RESUME_AFTER_HUMAN_FRONTIER=true',
@@ -365,9 +384,46 @@ export function validateUniversalMethod() {
     'HUD_LAYOUT_FIXED_ONLY_LIVE_VALUES_CHANGE=true',
     'TOOL_ARGUMENT_LIMITS_MUST_BE_NORMALIZED_TO_SAFE_CAP=true',
     'SOURCE_404_IS_SENSOR_MISS_NOT_WORLD_MISS=true',
+    'PROOF_COUNTERPROOF_ACCEPT_RECONCILE_IS_DETERMINISTIC_CLOSURE=true',
+    'ACCEPTANCE_REQUIRES_PROOF_AND_COUNTERPROOF_SURVIVAL=true',
+    'COUNTERPROOF_FAILURE_REOPENS_OR_REJECTS_CLAIM=true',
+    'RECONCILIATION_PRESERVES_PROVEN_GOOD_AND_DISCARDS_ONLY_DISPROVEN_DELTA=true',
+    'SEALED_CLAIM_NO_REEXECUTE_WITHOUT_NEW_MATERIAL_CAUSE=true',
+    'NEW_MATERIAL_CAUSE_REOPENS_SEAL=true',
+    'CROSS_SURFACE_CONTRACT_INHERITANCE=true',
+    'SEMANTIC_CONVERGENCE_ACROSS_SURFACES_IS_EXPECTED_SUCCESS=true',
+    'SURFACE_NAME_IS_NOT_EXECUTOR_PROOF=true',
+    'TOOL_CATALOG_VISIBLE_IS_NOT_TOOL_CALL_SUCCESS=true',
+    'TOOL_CLAIM_REQUIRES_MEASURED_RECEIPT=true',
+    'EXECUTOR_ATTRIBUTION_REQUIRES_OBSERVED_EXECUTOR=true',
+    'SAME_HEAD_GREEN_PROMOTES_TO_TOTAL_DEPLOY=true',
+    'TOTAL_DEPLOY_REGENERATES_FROM_PROVEN_MAIN_AND_EXISTING_RUNTIME=true',
     'HUMAN_RETEACH_REQUIRED=false',
   ], 'UNIVERSAL_DIRECT_MODE_HERMES');
 
+  requireTokens(metaLupa, [
+    '## Gate determinístico: prova → contraprova → aceite → reconciliação',
+    'PROOF_REQUIRED_BEFORE_ACCEPTANCE=true',
+    'COUNTERPROOF_REQUIRED_BEFORE_ACCEPTANCE=true',
+    'ACCEPTANCE_IS_COMPUTED_NOT_VOTED=true',
+    'NEW_MATERIAL_CAUSE_REQUIRES_REOPEN_WITH_CAUSE_REF=true',
+    'FIXED_POINT_REQUIRES_DETERMINISTIC_CLOSURE=true',
+  ], 'META_LUPA_DETERMINISTIC_CLOSURE');
+
+  requireTokens(metaGrill, [
+    '## ⚖️ Lei do fechamento determinístico',
+    'META_GRILL_IS_FALSIFIER_NOT_PERMANENT_SKEPTIC=true',
+    'ACCEPT_ONLY_AFTER_COUNTERPROOF_SURVIVAL=true',
+    'PROVEN_GOOD_MUST_SURVIVE_RECONCILIATION=true',
+  ], 'META_GRILL_DETERMINISTIC_CLOSURE');
+
+  requireTokens(fableLoop, [
+    '## Contrato de aceite e reconciliação',
+    'FABLE_PROOF_COUNTERPROOF_CLOSURE=true',
+    'FABLE_ACCEPT_ONLY_AFTER_COUNTERPROOF_SURVIVAL=true',
+    'FABLE_RECONCILE_PARTIAL_FAILURE=true',
+    'FABLE_SEALED_CLAIM_NO_RECHECK_WITHOUT_NEW_CAUSE=true',
+  ], 'FABLE_DETERMINISTIC_CLOSURE');
   let previous = -1;
   for (const token of REQUIRED_CHAIN) {
     const needle = `  - ${token}`;

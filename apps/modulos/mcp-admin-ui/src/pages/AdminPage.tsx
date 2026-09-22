@@ -9,7 +9,7 @@ import { AuditTab } from "@/components/AuditTab";
 import { OAuthClientsTab } from "@/components/OAuthClientsTab";
 import { ConnectorTab } from "@/components/ConnectorTab";
 import { KeysTab } from "@/components/KeysTab";
-import { api, type ToolsResponse, type HealthResponse, type HealthDeepResponse } from "@/lib/api";
+import { api, type ToolsResponse, type HealthResponse, type HealthDeepResponse, type OperationalSnapshot } from "@/lib/api";
 
 // Página principal do painel — header + 6 cards de métrica + abas.
 // Métricas reais consumidas de /admin/api/tools, /health e /health/deep
@@ -18,14 +18,21 @@ export default function AdminPage({ onLogout }: { onLogout: () => void }) {
   const [tools, setTools] = useState<ToolsResponse | null>(null);
   const [health, setHealth] = useState<HealthResponse | null>(null);
   const [healthDeep, setHealthDeep] = useState<HealthDeepResponse | null>(null);
+  const [operationalSnapshot, setOperationalSnapshot] = useState<OperationalSnapshot | null>(null);
   const [refreshing, setRefreshing] = useState(false);
 
   const carregar = useCallback(async () => {
     setRefreshing(true);
-    const [t, h, hd] = await Promise.allSettled([api.tools(), api.health(), api.healthDeep()]);
+    const [t, h, hd, op] = await Promise.allSettled([
+      api.tools(),
+      api.health(),
+      api.healthDeep(),
+      api.operationalSnapshot(),
+    ]);
     if (t.status === "fulfilled") setTools(t.value);
     if (h.status === "fulfilled") setHealth(h.value);
     if (hd.status === "fulfilled") setHealthDeep(hd.value);
+    if (op.status === "fulfilled") setOperationalSnapshot(op.value);
     setRefreshing(false);
   }, []);
 
@@ -91,7 +98,9 @@ export default function AdminPage({ onLogout }: { onLogout: () => void }) {
             <TabsTrigger value="keys">Chaves</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="overview"><OverviewTab toolCount={toolCount} /></TabsContent>
+          <TabsContent value="overview">
+            <OverviewTab toolCount={toolCount} operationalSnapshot={operationalSnapshot} />
+          </TabsContent>
           <TabsContent value="tools"><ToolsTab /></TabsContent>
           <TabsContent value="audit"><AuditTab /></TabsContent>
           <TabsContent value="oauth"><OAuthClientsTab /></TabsContent>

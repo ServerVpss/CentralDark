@@ -59,6 +59,9 @@ export function greenVerdicts(runs, requiredWorkflows) {
   return requiredWorkflows.map((name) => {
     const run = selectLatestRun(runs, name);
     if (!run) return { name, state: "MISSING", run_id: null, conclusion: null };
+    if (run.conclusion === "action_required") {
+      return { name, state: "ACTION_REQUIRED", run_id: run.id, conclusion: "action_required" };
+    }
     if (run.status !== "completed") return { name, state: "PENDING", run_id: run.id, conclusion: run.conclusion || null };
     if (run.conclusion === "success") return { name, state: "PASS", run_id: run.id, conclusion: "success" };
     if (run.conclusion === "skipped") return { name, state: "SKIPPED", run_id: run.id, conclusion: "skipped" };

@@ -2,7 +2,7 @@
 # ------------------------------------------------------------
 # popular-webui.sh — script idempotente que garante o estado
 # oficial do Open WebUI CentralDark (ui.centralldark.com):
-#   - 3 personas (pivete, hermes, fabler) na tabela `model`
+#   - 4 perfis (SOL, pivete, hermes, fabler) na tabela `model`
 #   - Web Search ligado com DuckDuckGo
 #   - MCPO já apontado via TOOL_SERVER_CONNECTIONS (env do container)
 #
@@ -26,15 +26,20 @@ admin_id=list(c.execute("SELECT id FROM user WHERE role='admin' ORDER BY created
 # Prompts vivem em apps/modulos/WebUI/personas/*.md
 # Aqui inline pra o script ser standalone. Update via git edita este bloco.
 PROMPTS = {
+# SOL reutiliza diretamente a SOUL canônica; não cria segundo prompt/identidade.
+'sol': open('/root/CentralDark/docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md').read(),
 'pivete': open('/root/CentralDark/apps/modulos/WebUI/personas/pivete-system.md').read(),
 'hermes': open('/root/CentralDark/apps/modulos/WebUI/personas/hermes-system.md').read(),
 'fabler': open('/root/CentralDark/apps/modulos/WebUI/personas/fabler-system.md').read(),
 }
-BASE = {'pivete':'claude-opus-4-5','hermes':'claude-opus-4-5','fabler':'claude-sonnet-4-5'}
+BASE = {'sol':'claude-opus-4-5','pivete':'claude-opus-4-5','hermes':'claude-opus-4-5','fabler':'claude-sonnet-4-5'}
 
 for pid, base in BASE.items():
-    meta={'profile_image_url':'/static/favicon.png','description':f'Persona CentralDark: {pid}',
-          'suggestion_prompts':[],'tags':[{'name':'centraldark'},{'name':'pivete-ia'}],
+    display_name = 'SOL' if pid == 'sol' else pid
+    description = 'SOL — identidade operacional/coordenadora canônica' if pid == 'sol' else f'Persona CentralDark: {pid}'
+    tags = [{'name':'centraldark'},{'name':'sol'}] if pid == 'sol' else [{'name':'centraldark'},{'name':'pivete-ia'}]
+    meta={'profile_image_url':'/static/favicon.png','description':description,
+          'suggestion_prompts':[],'tags':tags,
           'capabilities':{'vision':True,'file_upload':True,'web_search':True,
                           'image_generation':False,'code_interpreter':True,'citations':True,'usage':True},
           'toolIds':[]}
@@ -42,9 +47,9 @@ for pid, base in BASE.items():
     c.execute("""INSERT OR REPLACE INTO model
         (id,user_id,base_model_id,name,params,meta,updated_at,created_at,is_active)
         VALUES (?,?,?,?,?,?,?,?,1)""",
-        (pid, admin_id, base, pid, json.dumps(params, ensure_ascii=False),
+        (pid, admin_id, base, display_name, json.dumps(params, ensure_ascii=False),
          json.dumps(meta, ensure_ascii=False), now, now))
-    print(f' ✅ persona: {pid} (base={base})')
+    print(f' ✅ perfil: {display_name} (id={pid}, base={base})')
 
 for k,v in [('web.search.enable','true'),
             ('web.search.engine','"duckduckgo"'),

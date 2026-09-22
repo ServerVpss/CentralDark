@@ -115,6 +115,8 @@ const LENS_IDS = Object.freeze(Object.keys(COGNITIVE_LENSES));
 const CANDIDATE_BY_ID = new Map(CANDIDATE_POOL_PR_1104.map((item) => [item.id, item]));
 const TERMINAL_SUCCESS = new Set(['RESOLVED', 'NOT_APPLICABLE']);
 const GAP_STATES = new Set(['OPEN', 'UNKNOWN', 'RESOLVED', 'BLOCKED', 'NOT_APPLICABLE']);
+const COUNTERPROOF_RESULTS = new Set(['SURVIVED', 'DEFEATED', 'UNKNOWN']);
+const CLAIM_SEAL_STATES = new Set(['UNSEEN', 'SEALED', 'REOPENED']);
 
 function normalize(value) {
   return String(value ?? '').trim();
@@ -358,5 +360,141 @@ export function evaluateUsefulCeiling({
     invalid_receipts: Object.freeze(invalid),
     gaps: Object.freeze(normalizedGaps.map((gap) => Object.freeze(gap))),
     next_rule: nextRule,
+  });
+}
+
+export function evaluateProofCounterproofClosure({
+  proof_refs = [],
+  counterproof_refs = [],
+  counterproof_result = 'UNKNOWN',
+  retained_refs = [],
+  discarded_refs = [],
+  unresolved_refs = [],
+  prior_seal_state = 'UNSEEN',
+  material_cause_ref = '',
+} = {}) {
+  const proofRefs = sortedUnique((Array.isArray(proof_refs) ? proof_refs : []).map(normalize).filter(Boolean));
+  const counterproofRefs = sortedUnique((Array.isArray(counterproof_refs) ? counterproof_refs : []).map(normalize).filter(Boolean));
+  const retainedRefs = sortedUnique((Array.isArray(retained_refs) ? retained_refs : []).map(normalize).filter(Boolean));
+  const discardedRefs = sortedUnique((Array.isArray(discarded_refs) ? discarded_refs : []).map(normalize).filter(Boolean));
+  const unresolvedRefs = sortedUnique((Array.isArray(unresolved_refs) ? unresolved_refs : []).map(normalize).filter(Boolean));
+  const counterproofResult = normalize(counterproof_result).toUpperCase() || 'UNKNOWN';
+  const priorSealState = normalize(prior_seal_state).toUpperCase() || 'UNSEEN';
+  const materialCauseRef = normalize(material_cause_ref);
+
+  const invalid = [];
+  if (!COUNTERPROOF_RESULTS.has(counterproofResult)) invalid.push('COUNTERPROOF_RESULT_INVALID');
+  if (!CLAIM_SEAL_STATES.has(priorSealState)) invalid.push('PRIOR_SEAL_STATE_INVALID');
+  const discardedSet = new Set(discardedRefs);
+  const overlap = retainedRefs.filter((ref) => discardedSet.has(ref));
+  if (overlap.length) invalid.push(...overlap.map((ref) => `RECONCILIATION_REF_BOTH_RETAINED_AND_DISCARDED:${ref}`));
+
+  const base = {
+    schema_version: 1,
+    proof_refs: Object.freeze(proofRefs),
+    counterproof_refs: Object.freeze(counterproofRefs),
+    counterproof_result: counterproofResult,
+    retained_refs: Object.freeze(retainedRefs),
+    discarded_refs: Object.freeze(discardedRefs),
+    unresolved_refs: Object.freeze(unresolvedRefs),
+    prior_seal_state: priorSealState,
+    material_cause_ref: materialCauseRef || null,
+    invalid_receipts: Object.freeze(invalid),
+  };
+
+  const finish = ({ state, accepted = false, reconciled = false, seal_action = 'NONE', fixed_point_eligible = false, next_rule }) => Object.freeze({
+    ...base, state, accepted, reconciled, seal_action, fixed_point_eligible, next_rule,
+  });
+
+  if (invalid.length) return finish({ state: 'INVALID_RECEIPT', next_rule: 'FIX_RECEIPT_BEFORE_CLOSURE' });
+
+  if (priorSealState === 'SEALED') {
+    if (!materialCauseRef) return finish({
+      state: 'SEALED_NO_RECHECK', accepted: true, reconciled: true, fixed_point_eligible: true, next_rule: 'STOP_NO_NEW_MATERIAL_CAUSE',
+    });
+    return finish({ state: 'REOPEN_REQUIRED', seal_action: 'REOPEN', next_rule: 'REOPEN_WITH_CAUSE_REF_THEN_REEVALUATE' });
+  }
+
+  if (proofRefs.length === 0) return finish({ state: 'NEED_PROOF', next_rule: 'PRODUCE_REPRODUCIBLE_PROOF' });
+  if (counterproofRefs.length === 0) return finish({ state: 'NEED_COUNTERPROOF', next_rule: 'RUN_INDEPENDENT_COUNTERPROOF' });
+  if (counterproofResult === 'UNKNOWN') return finish({ state: 'COUNTERPROOF_UNKNOWN', next_rule: 'KEEP_UNKNOWN_AND_RUN_DISCRIMINATING_TEST' });
+
+  if (counterproofResult === 'DEFEATED') {
+    if (unresolvedRefs.length > 0 || discardedRefs.length === 0) return finish({
+      state: 'COUNTERPROOF_DEFEATED_NEEDS_RECONCILIATION', next_rule: 'DISCARD_ONLY_DISPROVEN_DELTA_AND_RESOLVE_RESIDUAL',
+    });
+    return finish({
+      state: 'REJECTED_RECONCILED', reconciled: true, fixed_point_eligible: true, next_rule: 'KEEP_PROVEN_GOOD_AND_CLOSE_REJECTED_DELTA',
+    });
+  }
+
+  if (unresolvedRefs.length > 0 || retainedRefs.length === 0) return finish({
+    state: 'SURVIVED_NEEDS_RECONCILIATION', next_rule: 'RETAIN_PROVEN_GOOD_AND_RESOLVE_RESIDUAL',
+  });
+
+  return finish({
+    state: 'ACCEPTED_RECONCILED', accepted: true, reconciled: true, seal_action: 'SEAL', fixed_point_eligible: true,
+    next_rule: 'SEAL_ACCEPTED_CLAIM_THEN_FIXED_POINT_CHECK',
+  });
+}
+
+export function evaluateSurfaceConformance({
+  surface_id = '',
+  model_id = '',
+  contract_markers = [],
+  required_contract_markers = [],
+  tool_catalog_receipt = false,
+  tool_call_receipts = [],
+  canonical_state_receipt = false,
+  mutation_required = false,
+  mutation_receipt = false,
+  claimed_executor = '',
+  observed_executor = '',
+} = {}) {
+  const surfaceId = normalize(surface_id);
+  const modelId = normalize(model_id);
+  const observedMarkers = new Set((Array.isArray(contract_markers) ? contract_markers : []).map(normalize).filter(Boolean));
+  const requiredMarkers = sortedUnique((Array.isArray(required_contract_markers) ? required_contract_markers : []).map(normalize).filter(Boolean));
+  const missingMarkers = requiredMarkers.filter((marker) => !observedMarkers.has(marker));
+  const calls = sortedUnique((Array.isArray(tool_call_receipts) ? tool_call_receipts : []).map(normalize).filter(Boolean));
+  const claimed = normalize(claimed_executor);
+  const observed = normalize(observed_executor);
+  const executorDrift = Boolean(claimed && observed && claimed !== observed);
+
+  const levels = Object.freeze({
+    L0_ATTACHED: Boolean(surfaceId || modelId),
+    L1_CONTRACT: requiredMarkers.length > 0 && missingMarkers.length === 0,
+    L2_TOOL_CATALOG: Boolean(tool_catalog_receipt),
+    L3_TOOL_EXECUTION: calls.length > 0,
+    L4_STATE_READ: Boolean(canonical_state_receipt),
+    L5_MUTATION: mutation_required ? Boolean(mutation_receipt) : null,
+  });
+
+  const applicable = Object.entries(levels).filter(([, value]) => value !== null);
+  const proven = applicable.filter(([, value]) => value === true).length;
+  const unknown = applicable.filter(([, value]) => value === false).length;
+  const proofPercent = applicable.length ? Math.round((proven / applicable.length) * 10000) / 100 : 0;
+
+  return Object.freeze({
+    schema_version: 1,
+    surface_id: surfaceId || null,
+    model_id: modelId || null,
+    levels,
+    applicable_levels: applicable.length,
+    proven_levels: proven,
+    unknown_levels: unknown,
+    proof_percent: proofPercent,
+    missing_contract_markers: Object.freeze(missingMarkers),
+    tool_call_receipts: Object.freeze(calls),
+    executor_attribution_drift: executorDrift,
+    claimed_executor: claimed || null,
+    observed_executor: observed || null,
+    semantic_portability_proven: levels.L0_ATTACHED && levels.L1_CONTRACT,
+    physical_tool_parity_proven: levels.L2_TOOL_CATALOG && levels.L3_TOOL_EXECUTION,
+    full_state_continuity_proven: levels.L4_STATE_READ,
+    mutation_proven: levels.L5_MUTATION,
+    next_rule: executorDrift
+      ? 'CORRECT_EXECUTOR_ATTRIBUTION_THEN_MEASURE_NEXT_LEVEL'
+      : unknown > 0 ? 'MEASURE_NEXT_UNPROVEN_LEVEL' : 'CONFORMANCE_FIXED_POINT',
   });
 }
