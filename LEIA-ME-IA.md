@@ -81,6 +81,10 @@ TOOL_ARGUMENT_LIMITS_MUST_BE_NORMALIZED_TO_SAFE_CAP=true
 SOURCE_404_IS_SENSOR_MISS_NOT_WORLD_MISS=true
 GITHUB_REF_MISS_DOES_NOT_PROVE_RUNTIME_FILE_ABSENT=true
 ALTERNATE_AUTHORIZED_SENSOR_BEFORE_HUMAN_BLOCKER=true
+SAME_HEAD_GREEN_PROMOTES_TO_TOTAL_DEPLOY=true
+TOTAL_DEPLOY_REGENERATES_FROM_PROVEN_MAIN_AND_EXISTING_RUNTIME=true
+DEPLOY_DOES_NOT_REASK_AFTER_AUTHORIZED_GREEN=true
+UNTRACKED_RUNTIME_STATE_IS_PRESERVED_NOT_BLIND_CLEANED=true
 UNKNOWN_IS_NOT_PASS=true
 
 INTENT
@@ -148,6 +152,26 @@ GRAPH_IS_DERIVED_NOT_AUTHORITY=true
 FIXED_POINT_IS_VERIFICATION_CHECKPOINT_NOT_LEARNING_GATE=true
 ```
 
+## 0.3 Prova de portabilidade entre modelos/superfícies
+
+O mesmo contrato pode aparecer em Jan local, Hermes, ChatGPT ou outro corpo.
+Isso é sucesso de portabilidade quando a gramática canônica converge; não é
+prova de que todas as capacidades físicas daquele corpo estão ativas.
+
+```text
+CROSS_SURFACE_CONTRACT_INHERITANCE=true
+SEMANTIC_CONVERGENCE_ACROSS_SURFACES_IS_EXPECTED_SUCCESS=true
+TOOL_CATALOG_VISIBLE_IS_NOT_TOOL_CALL_SUCCESS=true
+TOOL_CLAIM_REQUIRES_MEASURED_RECEIPT=true
+EXECUTOR_ATTRIBUTION_REQUIRES_OBSERVED_EXECUTOR=true
+CONFORMANCE_LADDER=L0_ATTACHED|L1_CONTRACT|L2_TOOL_CATALOG|L3_TOOL_EXECUTION|L4_STATE_READ|L5_MUTATION
+NO_LEVEL_AUTO_PROMOTES_NEXT=true
+```
+
+Exemplo correto: `Jan-v3.5-4B` pode carregar a SOL/contrato e responder com
+`History Rendezvous`, `ONE_WRITER`, `REUSE_BEFORE_CREATE` etc. Isso prova
+herança semântica do contrato (L1). Só receipt de tool prova L3; só leitura
+do HEAD/runtime prova L4; só mutação + receipt prova L5.
 ## 1. Boot universal
 
 Carregue nesta ordem:

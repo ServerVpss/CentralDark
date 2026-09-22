@@ -6,6 +6,7 @@ import {
   FAST_MERGE_POLICY,
   CANONICAL_MAP_PATH,
   SQUASH_FIXED_POINT_GOAL,
+  actionRequiredRunIds,
   authorizationFor,
   deriveHornFixedPoint,
   evaluateCandidate,
@@ -434,6 +435,23 @@ test("seleção de workflow ignora skipped mais novo e usa execução real", () 
   ], "gate");
   assert.equal(selected.id, 2);
   assert.deepEqual(workflowVerdicts([], ["gate"]), [{ name: "gate", state: "MISSING", run_id: null, conclusion: null }]);
+});
+
+test("action_required não é FAIL: WAIT + run_id para approve", () => {
+  const result = evaluate(prFixture(), {
+    requiredWorkflows: ["porta-de-entrada"],
+    workflowRuns: [{
+      id: 35589535285,
+      name: "porta-de-entrada",
+      run_number: 90,
+      status: "completed",
+      conclusion: "action_required",
+    }],
+  });
+  assert.equal(result.decision, "WAIT");
+  assert.equal(result.reasons.includes("WORKFLOW_FAILED:porta-de-entrada:action_required"), false);
+  assert.match(result.waits.join(" "), /WORKFLOW_ACTION_REQUIRED:porta-de-entrada:35589535285/);
+  assert.deepEqual(actionRequiredRunIds(result.workflows), [35589535285]);
 });
 
 test("recibo selado é preso ao hash e expira", () => {
