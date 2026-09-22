@@ -191,6 +191,16 @@ engine_contract:
   engine_specific_capability_may_extend_execution: true
   engine_specific_capability_may_bypass_contract: false
   universal_method_must_survive_provider_switch: true
+  cross_surface_contract_inheritance: true
+  semantic_convergence_across_surfaces_is_expected_success: true
+  surface_name_is_not_identity_authority: true
+  surface_name_is_not_executor_proof: true
+  executor_attribution_requires_observed_executor: true
+  tool_catalog_visible_is_not_tool_call_success: true
+  tool_claim_requires_measured_receipt: true
+  state_continuity_claim_requires_canonical_state_receipt: true
+  mutation_claim_requires_mutation_receipt: true
+  no_conformance_level_auto_promotes_next: true
   semantic_green_gate_must_survive_provider_switch: true
   pegatudo_and_stitch_must_survive_provider_switch: true
 
@@ -308,8 +318,8 @@ plug_and_play_inheritance:
 
 hybrid_runtime_contract:
   marker: CENTRALDARK_HYBRID_RUNTIME_DISCOVERY_REQUIRED
-  pm2_canonical_home: /root/.pm2
-  pm2_profile_homes_glob: /root/.centraldark/mcp-auth/profiles/*/home/.pm2
+  pm2_canonical_home: <caminho-vps>
+  pm2_profile_homes_glob: <caminho-vps>*/home/.pm2
   discover_all_pm2_homes_before_mutation: true
   preserve_all_pm2_homes: true
   act_only_where_owner_exists: true
