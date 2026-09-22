@@ -3,13 +3,13 @@
  * Infra vivo — snapshot só leitura do estado da VPS (sem secrets).
  * Escreve: apps/modulos/status/infra-vivo.json
  * Uso: node scripts/vps/infra-vivo-snapshot.mjs
- * Missão: PERMITO Pivete 2026-07-14 visão simples
+ * Missão: PERMITO Segredo 2026-07-14 visão simples
  */
 import { execSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 
-const ROOT = "/root/CentralDark";
+const ROOT = "<caminho-vps>";
 const OUT = path.join(ROOT, "apps/modulos/status/infra-vivo.json");
 
 function sh(cmd, fallback = "") {
