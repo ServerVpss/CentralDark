@@ -84,10 +84,13 @@ async function sendTelegramHtml(text, chatOverride = '') {
 export async function notifyVpsUpdated({ sha, msg }) {
   const shortSha = (sha || '').slice(0, 7);
   const text =
-    `🚀 <b>VPS ATUALIZADA</b> — CentralDark\n` +
-    `🔄 <b>${escapeHtml(msg)}</b>\n` +
-    `🧾 <code>${shortSha}</code>\n` +
-    `✅ <i>Deploy automático concluído via webhook</i>`;
+    `⭕ <b>!AURÉOLA CANÔNICA</b>\n` +
+    `🟢 <b>CHEFE, a VPS recebeu a atualização.</b>\n` +
+    `👉 O que aconteceu: ${escapeHtml(msg)}\n` +
+    `🧾 HEAD/SHA: <code>${shortSha}</code>\n` +
+    `⚙️ O que foi feito: deploy automático concluído via webhook.\n` +
+    `🔎 <b>!CONTRAPROVA</b>: este recibo prova o deploy observado; não amplia o escopo.\n` +
+    `⚖️ <i>REALIDADE É O JUIZ.</i>`;
   return sendTelegramHtml(text);
 }
 
@@ -102,13 +105,23 @@ export async function notifyCentralDarkSignal({ state = 'UNKNOWN', title = 'Sign
           : '⚪';
   const safeCard = String(card || '').slice(0, 3200);
   const text = [
-    `🧿 <b>CENTRALDARK</b> · ${escapeHtml(title)}`,
-    `${icon} <b>STATE=${escapeHtml(normalized)}</b>`,
+    `⭕ <b>!AURÉOLA CANÔNICA</b> · 🧿 <b>!CENTRALDARK</b>`,
+    `${icon} <b>CHEFE, ${humanState(normalized)}</b>`,
+    `⚖️ Estado técnico: <b>${escapeHtml(normalized)}</b> · ${escapeHtml(title)}`,
     source ? `🎯 SOURCE=<code>${escapeHtml(source)}</code>` : '',
     safeCard ? `<pre>${escapeHtml(safeCard)}</pre>` : '',
-    '<i>CANDIDATE != PROVEN · UNKNOWN != PASS · DOCUMENTED != EXECUTED</i>',
+    '🔎 <b>!CONTRAPROVA</b>: CANDIDATE != PROVEN · UNKNOWN != PASS · DOCUMENTED != EXECUTED',
+    '<i>⚖️ REALIDADE É O JUIZ.</i>',
   ].filter(Boolean).join('\n');
   return sendTelegramHtml(text, process.env.NOTIFY_CHAT_ID || '');
+}
+
+function humanState(state) {
+  if (state === 'PROVEN') return 'funcionou no escopo medido e temos prova.';
+  if (state === 'FAIL') return 'deu problema; o rastro abaixo mostra a falha medida.';
+  if (state === 'BLOCKED') return 'a passagem está bloqueada; ainda não dá pra chamar de resolvida.';
+  if (state === 'CANDIDATE') return 'achamos um candidato, mas ele ainda precisa de prova.';
+  return 'ainda não sabemos o bastante — UNKNOWN continua UNKNOWN.';
 }
 
 function escapeHtml(s) {
