@@ -134,9 +134,13 @@ if (registry) {
     if (!ids.has(id)) errors.push(`INTERLIGADOS_REQUIRED_PATTERN_MISSING:${id}`);
   }
 
-  const runtimeEdges = new Set(Array.isArray(registry.runtime_or_external_remeasurement_required)
-    ? registry.runtime_or_external_remeasurement_required
-    : []);
+  const activeRuntimeEdges = Array.isArray(registry.current_runtime_remeasurement_required)
+    ? registry.current_runtime_remeasurement_required
+    : registry.runtime_or_external_remeasurement_required;
+  const runtimeEdges = new Set(Array.isArray(activeRuntimeEdges) ? activeRuntimeEdges : []);
+  if (registry.runtime_remeasurement_semantics?.provenance_catalog_is_not_active_debt !== true) {
+    errors.push("INTERLIGADOS_RUNTIME_HISTORY_SEMANTICS_MISSING");
+  }
   for (const edge of REQUIRED_RUNTIME_EDGES) {
     if (!runtimeEdges.has(edge)) errors.push(`INTERLIGADOS_RUNTIME_EDGE_DEBT_MISSING:${edge}`);
   }
@@ -208,7 +212,8 @@ const result = {
   gate: "INTERLIGADOS_PR_PATTERNS",
   owner: OWNER,
   registry: REGISTRY,
-  runtime_debt_explicit: registry?.runtime_or_external_remeasurement_required?.length ?? 0,
+  runtime_debt_explicit: registry?.current_runtime_remeasurement_required?.length ?? registry?.runtime_or_external_remeasurement_required?.length ?? 0,
+  runtime_provenance_catalog: registry?.runtime_or_external_remeasurement_required?.length ?? 0,
   errors,
   warnings,
 };

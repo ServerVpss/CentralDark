@@ -244,3 +244,18 @@ A `main` avançou depois da varredura #1576→#1633. O #1634 foi medido e absorv
 ```
 
 #1634 reforça o owner `centraldark-operational-method`; portanto atualiza proveniência de `MEASURE_BEFORE_CREATION` e `REUSE_BEFORE_CREATE`, sem aumentar o número de padrões.
+
+
+## 🫀 CURRENT runtime debt ≠ catálogo histórico
+
+A lista grande de receipts/PRs antigos continua preservada como **proveniência**, não como fila ativa.
+
+```text
+CURRENT_RUNTIME_REMEASUREMENT_REQUIRED = 11 arestas vivas
+RUNTIME_OR_EXTERNAL_REMEASUREMENT_REQUIRED = catálogo histórico/proveniência
+CATÁLOGO_HISTÓRICO != DÍVIDA ATIVA
+OPEN_PR_IMPLEMENTATION != RUNTIME_DEBT_UNTIL_PROMOTED
+CURRENT > HISTORY
+```
+
+As 11 arestas ativas são as que realmente dependem da Casa/VPS/device/process/service agora: device remoto, Screenpipe/áudio, fluxo voz→intent→router→receipt, CentralDark.exe, SHA deployada na VPS, APP E2E e GLOBAL_FIXED_POINT.

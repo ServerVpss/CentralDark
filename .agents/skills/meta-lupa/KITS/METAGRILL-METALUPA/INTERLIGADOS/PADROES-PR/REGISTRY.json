@@ -75,7 +75,7 @@
       1626,
       1627
     ],
-    "refreshed_from_main": "f5160c865e5642bc767ec432e01d608eee2c937c",
+    "refreshed_from_main": "325bff5340c22c9eb4768a1c7e016257df350665",
     "all_stable_pattern_delta_files_absorbed_through": "DELTA-PR-1634.md",
     "full_registry_reconciled_at_main": "373c0f3f91280f5496a844813f836dc35c1f1a8d",
     "pattern_count": 185,
@@ -2098,5 +2098,25 @@
     "PR1614_CORE_METHOD_RUNTIME_BINDING",
     "PR1616_VOICE_CLASSIFIER_RUNTIME"
   ],
-  "proof_boundary": "SOURCE_PATTERN_CRYSTALLIZED != CI_GREEN != RUNTIME_PROVEN != GLOBAL_FIXED_POINT"
+  "proof_boundary": "SOURCE_PATTERN_CRYSTALLIZED != CI_GREEN != RUNTIME_PROVEN != GLOBAL_FIXED_POINT",
+  "current_runtime_remeasurement_required": [
+    "REMOTE_DEVICE_ONLINE_NOW",
+    "SCREENPIPE_3030_LISTENING_NOW",
+    "SCREENPIPE_AUDIO_INPUT_BOUND_NOW",
+    "PHONE_TO_WO_MIC_MEDIA_FLOW_NOW",
+    "VOICE_TO_INTENT_TO_ROUTER_TO_RECEIPT_NOW",
+    "CENTRALDARK_EXE_RUNNING_NOW",
+    "VPS_DEPLOYED_SHA_NOW",
+    "APP_READY_END_TO_END",
+    "VOICE_FOLLOWS_INTENT_END_TO_END",
+    "PHONE_AUDIO_CONTENT_MATCHES_TRANSCRIPT_END_TO_END",
+    "GLOBAL_FIXED_POINT"
+  ],
+  "runtime_remeasurement_semantics": {
+    "active_field": "current_runtime_remeasurement_required",
+    "provenance_catalog_field": "runtime_or_external_remeasurement_required",
+    "provenance_catalog_is_not_active_debt": true,
+    "open_pr_implementation_is_not_runtime_debt_until_promoted": true,
+    "current_rule": "CURRENT > HISTORY; REMEASURE ONLY LIVE EDGES THAT MATERIALIZE THE CURRENT CLAIM"
+  }
 }
