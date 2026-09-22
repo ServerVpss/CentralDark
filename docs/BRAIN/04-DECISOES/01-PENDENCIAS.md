@@ -12,11 +12,11 @@ updated: 2026-06-29
 
 ---
 
-## 🔴 Grandes Tarefas (aguardam "PERMITO PIVETE")
+## 🔴 Grandes Tarefas (aguardam "PERMITO SEGREDO")
 
 | # | Tarefa | O que é | Por onde começa |
 |---|--------|---------|----------------|
-| G1 | **Novo MCP + Hub** | Reconstrução completa do servidor MCP e Hub de controle. É o maior projeto pendente. | Pivete diz "PERMITO PIVETE — iniciar MCP+Hub" |
+| G1 | **Novo MCP + Hub** | Reconstrução completa do servidor MCP e Hub de controle. É o maior projeto pendente. | Pivete diz "PERMITO SEGREDO — iniciar MCP+Hub" |
 | G2 | **WhatsApp para gravar ideias** | Conectar o WhatsApp ao sistema para o Pivete poder gravar pensamentos de qualquer lugar, não só pelo Telegram | Verificar WuzAPI e MultiZap-Gateway |
 | G3 | **MCP universal — conectar ao Lovable** | O MCP do CentralDark pode ser conectado a qualquer IA (Lovable, Cursor, Claude.ai). Expor via HTTPS pelo Caddy e registrar como conector | Configurar endpoint público do MCP |
 
@@ -54,11 +54,11 @@ updated: 2026-06-29
 
 | Área | Senha necessária |
 |------|----------------|
-| `apps/bot-telegram/` estrutural | PERMITO PIVETE |
-| `scripts/webhook/` | PERMITO PIVETE |
-| `infra/caddy/` | PERMITO PIVETE |
+| `apps/bot-telegram/` estrutural | PERMITO SEGREDO |
+| `scripts/webhook/` | PERMITO SEGREDO |
+| `infra/caddy/` | PERMITO SEGREDO |
 | `secrets/` | NUNCA |
-| Novo MCP + Hub | PERMITO PIVETE + plano aprovado |
+| Novo MCP + Hub | PERMITO SEGREDO + plano aprovado |
 
 ---
 
@@ -99,7 +99,7 @@ Se já existir algo parecido → atualizar a entrada existente, não criar nova.
 
 ---
 
-## 🔐 Aguardando "PERMITO PIVETE" (29/06/2026)
+## 🔐 Aguardando "PERMITO SEGREDO" (29/06/2026)
 
 | # | Feature | O que é |
 |---|---------|---------|
