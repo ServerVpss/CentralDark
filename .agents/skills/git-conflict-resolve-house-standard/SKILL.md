@@ -83,6 +83,40 @@ UNKNOWN_CONFLICT
 O CHEFE não escolhe manualmente `Accept current / incoming / both` quando a
 Casa consegue produzir e testar uma resolução reversível.
 
+## SAME/ALL — reconciliação semântica canônica
+
+O caso provado no PR #1613 vira regra reutilizável do mesmo owner, não um resolvedor novo.
+
+```text
+CONFLICTING_PR
+→ MEASURE_CURRENT_PR_HEAD_AND_FRESH_MAIN
+→ CLASSIFY_EACH_CONFLICT
+→ BOTH_SIDES_HAVE_USEFUL_COMPATIBLE_DELTA?
+   → YES: SEMANTIC_ALL / PRESERVE_BOTH
+   → NO: APPLY_EXISTING_PATH_POLICY_OR_TEST_DISCRIMINANT
+→ REMOVE_CONFLICT_MARKERS
+→ SYNTAX_OR_FORMAT_VALIDATION
+→ TARGETED_TESTS
+→ COUNTERPROOF
+→ SAME_HEAD_CI
+→ REMEASURE_PR_HEAD
+→ PASS | REMEDIATE | UNKNOWN
+```
+
+```text
+SAME_ALL_IS_DEFAULT_FOR_COMPATIBLE_USEFUL_DELTA=true
+SAME_ALL_IS_NOT_BLIND_ACCEPT_BOTH=true
+CONTRADICTORY_DELTA_REQUIRES_DISCRIMINANT_TEST=true
+CONFLICT_MARKERS_AFTER_RESOLUTION=FAIL
+RESOLUTION_WITHOUT_TARGETED_TEST=NOT_PROVEN
+SAME_HEAD_REQUIRED_AFTER_CONFLICT_RESOLUTION=true
+CURRENT_MAIN_MUST_BE_REMEASURED=true
+UNKNOWN_REMAINS_UNKNOWN=true
+REUSE_THIS_OWNER_FOR_ALL_EQUIVALENT_PRS=true
+```
+
+`SEMANTIC_ALL` preserva ambos somente quando os deltas coexistem sem contradição material. Código/config nunca vira PASS só porque a composição foi possível: sintaxe, teste aplicável, contraprova e SAME_HEAD continuam obrigatórios.
+
 ## Fluxo canônico
 
 ```text

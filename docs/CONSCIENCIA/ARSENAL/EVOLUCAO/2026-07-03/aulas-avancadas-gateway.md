@@ -10,7 +10,7 @@ updated: 2026-07-05
 │  🎓 AULAS AVANÇADAS — HERMES ESPECIALISTA EM GATEWAY · 03/07/2026 │
 │  4 aulas: criar conta · manter · corrigir multi-conta · zentinel  │
 │  Base: aula-elite-gateway.md · Ferramenta: gateway_admin.py       │
-└──────────────────────────────────────────────────────────────────┘
+└────────────────────────────────────────────────────────────────────┘
 ```
 
 # 🎓 Hermes Especialista em Gateway — 4 aulas avançadas
@@ -86,7 +86,7 @@ python3 scripts/gateway_admin.py list                # confere estado atual
 python3 scripts/gateway_admin.py add conta_02        # perfil e token próprios
 # (login pela Aula 1) — agora existem 2 contas REAIS, sem tocar na antiga
 ```
-**Regra de ouro:** adicionar é seguro (não mexe no que existe); renomear/remover é cirúrgico e precisa de "PERMITO PIVETE".
+**Regra de ouro:** adicionar é seguro (não mexe no que existe); renomear/remover é cirúrgico e precisa de "PERMITO SEGREDO".
 
 ---
 
@@ -112,7 +112,6 @@ pm2 describe CentralDark-Zentinel | grep -E 'status|restarts'   # o vigia está 
 | Conta nova | 🧠 Hermes + 👤 Pivete (login, Aula 1) |
 | Gateway morto (processo) | 🧠 Hermes (`pm2 restart` + `save`) |
 | Zentinel morto | 🧠 Hermes (`pm2 restart CentralDark-Zentinel`) |
-```
 
 ---
 
