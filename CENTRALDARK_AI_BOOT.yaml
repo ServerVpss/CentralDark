@@ -238,8 +238,25 @@ CENTRALDARK_AI_BOOT:
     same_rules_every_activation: true
     new_tab_is_new_mission: false
     model_change_is_reset: false
-    activation_scope: "CURRENT_MISSION_UNTIL_FIXED_POINT_OR_HUMAN_FRONTIER"
+    activation_scope: "CENTRALDARK_CONTINUOUS_ALL_MISSIONS_VIA_PR_MOTHER_1562"
+    mission_model:
+      mission: "CENTRALDARK_CONTINUA"
+      rendezvous: "#1562"
+      pr_mother_role: "PERMANENT_RENDEZVOUS_LEDGER_NOT_WRITER"
+      pr_mother_merge_forbidden: true
+      current_main_sha_binding: "SHA:<CURRENT_MAIN_SHA>"
+      static_sha_is_provenance_not_eternal: true
+      child_pr_id_in_boot_forbidden: true
+      proven_state_policy: "REUSE_UNLESS_MATERIAL_CAUSE_INVALIDATES_DEPENDENT_CLAIM"
+      open_delta_policy: "RECONCILE_ONLY_OPEN_OR_REOPENED_MATERIAL_DELTA"
+      fixed_point_semantics: "CLOSES_CURRENT_DELTA_NOT_CENTRALDARK"
+      after_fixed_point: "RETURN_TO_PR_MOTHER_1562_AND_CONTINUE_OPEN_DELTA_SCAN"
+    canonical_arrow_command: "⭕ !AURÉOLA → 👑🪬 !CENTRALDARK → #1562 → SHA:<CURRENT_MAIN_SHA> → CURRENT>HISTORY → REUSE_PROVEN → OPEN_DELTA_ONLY → TLC23 → META_LUPA → FABLE → META_GRILL → HERMES → PROVA → CONTRAPROVA → ACEITE → RECONCILIAR → SEMANTIC_ALL → SAME_HEAD → SQUASH → MAIN → DEPLOY_CAUSAL → T1 → RECEIPT → FIXED_POINT → #1562 → LOOP"
     on_activation:
+      - "MEASURE_AND_BIND_CURRENT_MAIN_SHA"
+      - "ENTER_PR_MOTHER_1562_RENDEZVOUS"
+      - "RECOVER_ALL_OPEN_MATERIAL_DELTAS"
+      - "REUSE_CONSOLIDATED_PROOF_WITH_UNCHANGED_PREMISES"
       - "RECOVER_CURRENT_INTENT"
       - "RECOVER_CURRENT_MISSION"
       - "RECOVER_LAST_GOOD_STATE_AND_NEXT_CURSOR"
@@ -262,7 +279,9 @@ CENTRALDARK_AI_BOOT:
       - "RUN_TLC23_HORN_CLOSURE_UNTIL_NO_NEW_MATERIAL_FACT"
       - "WRITE_SURVIVING_DELTA_UTIL_TO_BOOT_AND_OWNER"
       - "REGISTER_RECEIPT_AND_NEXT_CURSOR"
-      - "CONTINUE_UNTIL_FIXED_POINT_OR_HUMAN_FRONTIER"
+      - "FIXED_POINT_CLOSES_CURRENT_DELTA_NOT_GLOBAL_MISSION"
+      - "RETURN_TO_PR_MOTHER_1562_AND_SCAN_NEXT_OPEN_DELTA"
+      - "CONTINUE_UNTIL_NO_OPEN_MATERIAL_DELTA_OR_PROVEN_HUMAN_FRONTIER"
     shared_writer:
       self_declare_primary: FORBIDDEN
       default_new_window_role: READER_FIRST
@@ -503,15 +522,21 @@ CENTRALDARK_AI_BOOT:
     # dizia "mantém main" e usava --ours, que aceita o PR — deixando um PR
     # sobrescrever .github/, docs/ e scripts/trigger-fabric/ sem revisão.
     policy:
-      manifests_and_lockfiles: "LADO_DO_PR (--ours) quando o conflito é o bump. Merge inteligente futuro deve atualizar o motor e este contrato juntos; contrato escrito não pode divergir do runtime."
-      todo_o_resto: "LADO_DA_MAIN (--theirs) — fail-closed de verdade, sem lista de exceções"
+      manifests_and_lockfiles: "LADO_DO_PR (--ours) quando o conflito é o bump."
+      known_non_manifest_conflict: "POLITICA_REGISTRADA_NO_KNOWN_CONFLICT_REGISTRY"
+      unknown_textual_conflict: "SEMANTIC_ALL / PRESERVE_BOTH quando os deltas úteis forem compatíveis"
+      unknown_code_or_config_conflict: "PR COMO CANDIDATO; SINTAXE + TESTE + CONTRAPROVA + SAME_HEAD DECIDEM"
+      contradictory_delta: "DISCRIMINATING_TEST_THEN_EVIDENCE_THEN_REALITY"
+      blind_accept_both: false
     invariants:
       - "OURS_E_THEIRS_SAO_CONTRAINTUITIVOS_NO_MERGE"
       - "FAIL_CLOSED_ESCRITO != FAIL_CLOSED_IMPLEMENTADO"
       - "NO_CONFLICT_AGORA != NO_CONFLICT_DEPOIS"
+      - "SEMANTIC_ALL != BLIND_ACCEPT_BOTH"
+      - "RESOLUTION_WITHOUT_TARGETED_TEST != PROVEN"
+      - "SAME_HEAD_REQUIRED_AFTER_CONFLICT_RESOLUTION"
       - "MERGED != CI_PASS"
       - "KNOWN_CONFLICT_REGISTRY != SECOND_RESOLVER"
-      - "UNKNOWN_CONFLICT_PATH_BLOCKS_AUTOMERGE"
     lockfile_unico: "Vários bumps no mesmo lockfile conflitam em cadeia; @dependabot rebase não resolve. A cura é agrupar em .github/dependabot.yml — e groups sem applies-to cobre só version-updates."
 
   language:

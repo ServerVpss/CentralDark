@@ -728,7 +728,7 @@
       "validate_intent_receipt",
       "scan_changed_paths_and_patch_for_high_confidence_secrets",
       "block_explicit_changes_requested",
-      "block_merge_conflict",
+      "route_merge_conflict_to_single_resolver_and_block_squash_until_same_head",
       "update_branch_if_base_moved",
       "revalidate_live_head_and_base",
       "squash_merge",

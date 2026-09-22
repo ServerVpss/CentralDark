@@ -813,14 +813,14 @@ AUTOR CONFIAVEL + MESMO REPO
 → RECIBO DE INTENCAO
 → SCAN DE CAMINHO/SECRET NO DIFF
 → CHANGES_REQUESTED? BLOQUEIA
-→ MERGE CONFLICT? BLOQUEIA
+→ MERGE CONFLICT? ROTEIA AO GIT_CONFLICT_SINGLE_STANDARD; BLOQUEIA SÓ O SQUASH ATÉ SAME_HEAD
 → BASE ATRASADA? ATUALIZA E REAVALIA
 → REVALIDA HEAD/BASE
 → SQUASH MAIN
 → RECEIPT
 ```
 
-Esse fast path **não espera convergência externa nem todos os workflows auxiliares**. O modo adversarial com workflows/Judge completos permanece no mesmo motor e é usado quando SEGREDO/CHEFE solicitar prova adversarial. `UNKNOWN`, conflito e achado de segurança continuam fail-closed.
+Esse fast path **não espera convergência externa nem todos os workflows auxiliares**. O modo adversarial com workflows/Judge completos permanece no mesmo motor e é usado quando SEGREDO/CHEFE solicitar prova adversarial. `UNKNOWN` e achado de segurança continuam fail-closed. Conflito de PR vai primeiro ao `GIT_CONFLICT_SINGLE_STANDARD`; somente resolução ainda não provada mantém o squash bloqueado.
 
 ### Guarda pós-PR do fast path
 
@@ -1124,6 +1124,22 @@ REGISTRA
 ```
 
 A PR-MÃE `#1562` é o rendezvous permanente/ledger (“ponto turístico”) e permanece `DO_NOT_MERGE`. PRs filhas passam por ela como veículos de promoção; peças sobreviventes seguem para `main`, e o receipt volta para a mãe.
+
+A missão da CentralDark é contínua. `FIXED_POINT` fecha o delta corrente; não encerra a CentralDark. Estado consolidado é reutilizado enquanto suas premissas materiais não mudarem. O boot não congela PR-filho: descobre no `#1562` quais deltas continuam abertos. O SHA é medido a cada ativação, porque hash histórico é proveniência, não CURRENT.
+
+```text
+⭕ !AURÉOLA → 👑🪬 !CENTRALDARK → #1562 → SHA:<CURRENT_MAIN_SHA> → CURRENT>HISTORY → REUSE_PROVEN → OPEN_DELTA_ONLY → TLC23 → META_LUPA → FABLE → META_GRILL → HERMES → PROVA → CONTRAPROVA → ACEITE → RECONCILIAR → SEMANTIC_ALL → SAME_HEAD → SQUASH → MAIN → DEPLOY_CAUSAL → T1 → RECEIPT → FIXED_POINT → #1562 → LOOP
+
+MISSION=CENTRALDARK_CONTINUA
+RENDEZVOUS=#1562
+PROVEN=REUSE
+OPEN_DELTA=RECONCILE
+MAIN_SHA=SHA:<CURRENT_MAIN_SHA>
+STATIC_SHA_IS_PROVENANCE_NOT_ETERNAL=true
+CHILD_PR_ID_IN_BOOT=FORBIDDEN
+FIXED_POINT_CLOSES_CURRENT_DELTA_NOT_CENTRALDARK=true
+REALITY=JUDGE
+```
 
 A Casa não espera “diamante” para construir. Qualquer delta útil mensurável pode entrar no funil — bronze, prata, ouro, diamante são apenas metáforas de maturidade. O critério é utilidade + owner correto + prova aplicável, não perfeição estética.
 
