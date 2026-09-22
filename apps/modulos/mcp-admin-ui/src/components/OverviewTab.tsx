@@ -3,10 +3,17 @@ import { Card } from "@/shared/ui/card";
 import { Button } from "@/shared/ui/button";
 import { Badge } from "@/shared/ui/badge";
 import { OperationalHud } from "./OperationalHud";
+import type { OperationalSnapshot } from "@/lib/api";
 
 // Aba "Visão geral" — mantém os cards da Ponte MCP e incorpora o HUD operacional
 // no mesmo owner existente. HUD é projeção, não nova autoridade nem segundo sistema.
-export function OverviewTab({ toolCount }: { toolCount: number }) {
+export function OverviewTab({
+  toolCount,
+  operationalSnapshot,
+}: {
+  toolCount: number;
+  operationalSnapshot: OperationalSnapshot | null;
+}) {
   return (
     <div className="space-y-4">
       <div className="grid gap-4 md:grid-cols-2">
@@ -57,7 +64,7 @@ export function OverviewTab({ toolCount }: { toolCount: number }) {
         </Card>
       </div>
 
-      <OperationalHud />
+      <OperationalHud snapshot={operationalSnapshot} />
     </div>
   );
 }

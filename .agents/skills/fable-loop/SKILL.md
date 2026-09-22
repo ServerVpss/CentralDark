@@ -32,10 +32,25 @@ Cada volta deve reduzir pelo menos um `UNKNOWN` ou uma contradição material:
 4. BUSCAR CONTRADIÇÃO — inspecionar o lado independente;
 5. TESTAR CRENÇA — executar teste discriminante, medir e registrar hash/receipt quando aplicável;
 6. CORRIGIR — atualizar somente a menor interpretação ou delta sustentado pela prova;
-7. CONSOLIDAR — preservar somente o que sobreviveu à contraprova;
-8. REINDEXAR — atualizar índice/receipt existente, não fabricar novo contexto paralelo;
-9. REPETIR — parar no ponto fixo aplicável ou preservar a fronteira `UNKNOWN`.
+7. ACEITAR — somente quando a prova sobreviveu à contraprova independente;
+8. RECONCILIAR — reter o bem provado, descartar somente o delta derrotado e manter UNKNOWN explícito;
+9. SELAR/REABRIR — reutilizar claim seal; selar aceite e reabrir somente com causa material nova;
+10. REINDEXAR — atualizar índice/receipt existente, não fabricar novo contexto paralelo;
+11. REPETIR — parar no ponto fixo aplicável ou preservar a fronteira `UNKNOWN`.
 
+## Contrato de aceite e reconciliação
+
+```text
+FABLE_PROOF_COUNTERPROOF_CLOSURE=true
+FABLE_ACCEPT_ONLY_AFTER_COUNTERPROOF_SURVIVAL=true
+FABLE_RECONCILE_PARTIAL_FAILURE=true
+FABLE_PRESERVE_PROVEN_GOOD=true
+FABLE_UNKNOWN_IS_NOT_ACCEPTED=true
+FABLE_SEALED_CLAIM_NO_RECHECK_WITHOUT_NEW_CAUSE=true
+```
+
+Fable é método de calibração: não ganha autoridade para aceitar por voto. O
+aceite é consequência do mesmo gate determinístico do HERMES/Meta-Lupa.
 ## TLC23 / Horn como método compartilhado
 
 ```text

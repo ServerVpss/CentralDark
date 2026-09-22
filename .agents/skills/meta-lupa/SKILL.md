@@ -129,6 +129,55 @@ Depois da promoção:
 
 Áreas ainda não consolidadas permanecem operáveis dentro da autorização vigente, mas continuam submetidas a mapa, prova, rollback e ausência de regressão.
 
+## Gate determinístico: prova → contraprova → aceite → reconciliação
+
+O fechamento não escolhe entre acreditar em tudo ou rejeitar tudo. Ele examina,
+tenta quebrar, retém somente o que sobrevive e reconcilia o restante sem
+apagar prova boa.
+
+```text
+CANDIDATO
+→ PROVA
+→ CONTRAPROVA_INDEPENDENTE
+→ RESULTADO
+   ├── SURVIVED
+   │   → RETER_BEM_PROVADO
+   │   → ACEITE_DETERMINISTICO
+   │   → SEAL_NO_LEDGER_EXISTENTE
+   │
+   ├── DEFEATED
+   │   → REJEITAR_DELTA_DERROTADO
+   │   → PRESERVAR_BEM_INDEPENDENTE
+   │   → RECONCILIAR
+   │
+   └── UNKNOWN
+       → NÃO_ACEITAR
+       → NÃO_REJEITAR_GLOBALMENTE
+       → NEXT_TEST
+→ AUTOLUPA
+→ FIXED_POINT somente quando não existe residual material
+```
+
+Contrato:
+
+```text
+PROOF_REQUIRED_BEFORE_ACCEPTANCE=true
+COUNTERPROOF_REQUIRED_BEFORE_ACCEPTANCE=true
+ACCEPTANCE_IS_COMPUTED_NOT_VOTED=true
+SURVIVED_COUNTERPROOF_CAN_SEAL=true
+DEFEATED_COUNTERPROOF_MUST_NOT_SEAL=true
+UNKNOWN_COUNTERPROOF_MUST_NOT_SEAL=true
+RECONCILIATION_PRESERVES_PROVEN_GOOD=true
+RECONCILIATION_DISCARDS_ONLY_DISPROVEN_DELTA=true
+SEALED_CLAIM_NO_REEXECUTE_WITHOUT_NEW_MATERIAL_CAUSE=true
+NEW_MATERIAL_CAUSE_REQUIRES_REOPEN_WITH_CAUSE_REF=true
+FIXED_POINT_REQUIRES_DETERMINISTIC_CLOSURE=true
+```
+
+O aceite reutiliza o ledger já existente de claim seals. `SEAL` representa
+aceite determinístico do claim no escopo provado; `REOPEN` exige `cause_ref`
+material. Troca de agente, nova conversa, repetição da mesma discussão ou
+curiosidade sem evidência nova não reabre claim selado.
 ## Camada de tradução obrigatória
 
 Antes de apresentar qualquer equação:
