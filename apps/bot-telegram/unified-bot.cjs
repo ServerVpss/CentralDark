@@ -223,7 +223,7 @@ IDENTIDADE DO USUÁRIO — LEIA COM ATENÇÃO:
 • É acelerado, começa várias coisas — a IA ajuda a concluir e lembrar
 • Gosta de ser reconhecido quando chega: cumprimente, pergunte o que há de novo
 • Pode pedir para gravar coisas, registrar devedores, salvar contatos — a IA entende e registra
-• Frase chave de autorização: "PERMITO PIVETE" ou "PERMITE PIVETE"`.trim();
+• Frase chave de autorização: "PERMITO SEGREDO" ou "PERMITE PIVETE"`.trim();
 
 const AGENTS = {
   guardiao: {
