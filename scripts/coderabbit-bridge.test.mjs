@@ -41,7 +41,7 @@ test('intenção estruturada pode ser extraída do corpo do PR', () => {
     source: 'coderabbit_github_webhook',
     body: 'review',
     metadata: {
-      pr_body: '## Referência da história AIOX\nID da história: STORY-42\n\n### Critérios de aceitação abordados\n- [x] AC-1: prova atual\n- [ ] AC-2: contraprova',
+      pr_body: '## Referência da história CentralDark\nID da história: STORY-42\n\n### Critérios de aceitação abordados\n- [x] AC-1: prova atual\n- [ ] AC-2: contraprova',
     },
   });
   assert.equal(finding.intent.story_id, 'STORY-42');
