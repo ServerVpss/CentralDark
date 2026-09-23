@@ -9,9 +9,9 @@
 
 ## Estratégia de Consolidação
 
-### Estrutura Final em `/root/secrets/`
+### Estrutura Final em `/root/CentralDark/secrets/`
 ```
-/root/secrets/
+/root/CentralDark/secrets/
 ├── github/           # GITHUB_TOKEN, GH_PAT
 ├── supabase/         # SUPABASE_URL, SUPABASE_KEY, SUPABASE_ANON_KEY, DATABASE_URL, DATABASE_PASSWORD
 ├── telegram/         # TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, TELEGRAM_WEBHOOK_SECRET
@@ -22,14 +22,14 @@
 └── README.md         # Este arquivo
 ```
 
-**Permissões**: `chmod 700` para `/root/secrets/` e todas as subpastas (apenas root, sem leitura para outros)
+**Permissões**: `chmod 700` para `/root/CentralDark/secrets/` e todas as subpastas (apenas root, sem leitura para outros)
 
-### Sincronização: GitHub → `/root/secrets/`
+### Sincronização: GitHub → `/root/CentralDark/secrets/`
 
 Script `sync-from-github.sh`:
 1. **Lê secrets de GitHub Actions settings** via API autenticado
 2. **Valida formato** sem expor valores (apenas fingerprint SHA256)
-3. **Copia metadados + template vazio** para `/root/secrets/github/`
+3. **Copia metadados + template vazio** para `/root/CentralDark/secrets/github/`
 4. **Backup automático** de versão anterior antes de sobrescrever
 
 ### Arquivo `.env` na VPS
@@ -72,12 +72,12 @@ WUZAPI_TOKEN=[token]
 ## ZERO REGRESSÃO
 
 ✅ Todas as operações mantêm sistemas online:
-1. Criar estrutura `/root/secrets/` — apenas mkdir, zero impacto
+1. Criar estrutura `/root/CentralDark/secrets/` — apenas mkdir, zero impacto
 2. Sincronizar GitHub secrets — cópia, backup automático
 3. Gerar `.env` VPS — escreve novo arquivo, não toca em aplicações
 4. Ativar cron de rotação — agendamento, executa offline-hours
 
-**Rollback**: Restaurar `/root/.env` de backup (mantido em `/root/secrets/.backup/`) — 10 segundos, sem restart necessário
+**Rollback**: Restaurar `/root/.env` de backup (mantido em `/root/CentralDark/secrets/.backup/`) — 10 segundos, sem restart necessário
 
 ## Autoria
 

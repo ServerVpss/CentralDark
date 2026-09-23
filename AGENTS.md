@@ -24,6 +24,11 @@ GIT_CONFLICT_SINGLE_STANDARD=SIM
 GIT_CONFLICT_STANDARD_PATH=.agents/skills/git-conflict-resolve-house-standard/SKILL.md
 GIT_CONFLICT_ENGINE_PATH=scripts/dependabot/resolve-conflicts.sh
 RECONCILIATION_CONTRACT=docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json
+GLOBAL_SECRET_REUSE_REQUIRED=SIM
+GLOBAL_SECRET_OWNER=/root/CentralDark/secrets
+REPOSITORY_SECRETS_POLICY=REUSE_ALL_EXISTING_AND_FUTURE
+NEW_SECRET_ONLY_IF_NO_EQUIVALENT=true
+ROOT_SECRETS_ROLE=COMPATIBILITY_INPUT_NOT_SECOND_VAULT
 ```
 
 Antes de responder ou agir:
@@ -41,6 +46,53 @@ Antes de responder ou agir:
 11. Ler `.agents/skills/git-conflict-resolve-house-standard/SKILL.md` quando houver PR em conflito, main avançando sob PR aberto, ou dependabot travado. É o **único** padrão de resolução — não abrir segundo resolvedor nem resolver na mão fora dele.
 12. Medir branch, HEAD, PR, runtime, writer e tools aplicáveis.
 13. Emitir uma vez o `CENTRALDARK_AI_BOOT` de `LEIA-ME-IA.md`.
+
+## Secrets globais — REUSE_BEFORE_CREATION
+
+Toda superfície atual ou futura da CentralDark herda o contrato global de secrets do mesmo CORE.
+
+```text
+NEED_SECRET
+→ MEASURE_EXISTING_OWNER
+→ SEARCH_REPOSITORY_SECRETS
+→ SEARCH_/root/CentralDark/secrets
+→ SEARCH_RUNTIME_BINDINGS
+→ REUSE_MATCHING_EXISTING
+→ BIND_EXISTING_OWNER
+→ TEST
+→ RECEIPT
+
+NO_EQUIVALENT
+→ CREATE_MINIMUM_SECRET
+```
+
+`/root/CentralDark/secrets` é o cofre canônico. `/root/secrets` pode existir como entrada de compatibilidade/credencial operacional, mas não vira segundo cofre. Repository Secrets existentes e futuros são capacidades reutilizáveis por nome/owner; valores nunca entram no Git.
+
+## Telegram — transporte direto único
+
+```text
+TELEGRAM_BOT_TRANSPORT=TELEGRAM_BOT_API_DIRECT
+TELEGRAM_BOT_API_BASE=https://api.telegram.org
+TELEGRAM_BOT_UPDATE_MODE=LONG_POLLING_ONLY
+TELEGRAM_WEBHOOK_TRANSPORT=FORBIDDEN
+CENTRALDARK_SUBDOMAIN_AS_TELEGRAM_TRANSPORT=FORBIDDEN
+TELEGRAM_USER_TRANSPORT=TELEGRAM_MTPROTO_DIRECT
+TELEGRAM_ADMIN_UI_CONTROL_PATH=/api/telegram/mtproto
+ONE_TRANSPORT_OWNER_PER_IDENTITY=true
+```
+
+Subdomínio/painel CentralDark pode exibir estado, mas nunca vira transporte Telegram. Bot fala direto com a Bot API oficial; conta de usuário fala direto por MTProto. A UI administrativa usa caminho interno/same-origin para controlar o owner MTProto; esse caminho não transporta mensagens Telegram.
+
+```text
+SEGREDO/CHEFE
+→ SOL (coordena/orquestra)
+→ capability router / agentes existentes
+→ PIVETE/HERMES + MCP/tools (executa)
+→ REALIDADE/JUDGE
+→ SOL devolve receipt/resumo ao CHEFE
+```
+
+Não criar agente só para preencher número. As seis lentes funcionais já mapeadas não exigem seis processos permanentes; `REUSE_BEFORE_CREATE` decide.
 
 ## Modo atual de evolução — main direta, segurança mínima e histórico no PR-mãe
 
@@ -1160,11 +1212,28 @@ A missão da CentralDark é contínua. `FIXED_POINT` fecha o delta corrente; nã
 → SEMANTIC_ALL → SAME_HEAD → SQUASH_CHILD_ONLY → MAIN
 → DEPLOY_CAUSAL → T1 → RECEIPT → FIXED_POINT → #1562 → LOOP
 
+MISSION=CENTRALDARK_CONTINUA
+RENDEZVOUS=#1562
+PR_MOTHER_MERGE_FORBIDDEN=true
+CHILD_PR_ONLY_PROMOTION_VEHICLE=true
+PROVEN=REUSE
+OPEN_DELTA=RECONCILE
+CURRENT_MAIN_SHA=MEASURE_ON_EACH_ACTIVATION
+STATIC_SHA_IS_PROVENANCE_NOT_ETERNAL=true
+CHILD_PR_ID_IN_BOOT=FORBIDDEN
+REALITY=JUDGE
+```
+
+Gates complementares já cristalizados:
+
+```text
 HERMES_TRISMEGISTUS_CONTEXT_GATE_REQUIRED=true
 HERMES_TRISMEGISTUS_IS_SEMANTIC_IDENTITY_NOT_NEW_AUTHORITY=true
 TLC23_IS_FORMAL_LOGIC_GATE=true
 HERMES_CONTEXT_IS_PROVENANCE_INTERPRETATION_GUARD=true
 REALITY_REMAINS_JUDGE=true
+FIXED_POINT_CLOSES_CURRENT_DELTA_NOT_CENTRALDARK=true
+
 
 MISSION=CENTRALDARK_CONTINUA
 RENDEZVOUS=#1562
