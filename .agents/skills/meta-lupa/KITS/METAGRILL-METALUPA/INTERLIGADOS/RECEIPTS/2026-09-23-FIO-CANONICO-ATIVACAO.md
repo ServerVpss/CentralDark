@@ -54,3 +54,18 @@ CHAT_DELTA
 Regra operacional: não deixar o delta morrer no chat. Sempre que houver mudança material no fio, atualizar este mesmo receipt e o comentário-handoff vivo da #1562, sem criar outro ledger paralelo.
 
 CURRENT_MAIN_AT_UPDATE=74ec206a11cd16a97b02951af98b9790cf09dfd7
+
+## Delta vivo — notificações Gmail / Contas Hub
+
+```text
+CURRENT_MAIN_SHA=f3206e5aa3af6988989a8357d831b53e2460648b
+ACTIVE_CHILD=#1660
+OWNER_ACCOUNT=apps/modulos/oauth-broker/server.mjs
+SURFACE=Contas / Hub
+NEW_MAIL_HUB=false
+NEW_NOTIFICATION_ARCHITECTURE=false
+UNKNOWN_CAPABILITY != SUPPORT_REQUIRED
+NAO_EXPLICITO_REQUIRED_CAPABILITY => SUPPORT_REQUIRED
+```
+
+Correção em andamento: comentários de PR que viram e-mail passam a falar humano primeiro e deixam receipt técnico abaixo. Gmail permanece capability do owner existente Contas / Hub, sem V1/V2/V3 paralelo.
