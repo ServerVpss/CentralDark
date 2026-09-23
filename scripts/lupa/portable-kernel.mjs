@@ -559,6 +559,7 @@ const receipt = {
   capabilities: capabilities.length,
   source_bytes: sourceBytes,
   condensed_dna_bytes: condensedDnaBytes,
+  condensed_dna: condensedDna,
   capability_dna_sha256: capabilityDnaSha256,
   source_fingerprint_sha256: sourceFingerprintSha256,
   package_sha256: packageSha256,
