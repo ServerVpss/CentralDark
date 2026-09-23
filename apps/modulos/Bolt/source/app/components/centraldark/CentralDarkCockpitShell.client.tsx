@@ -95,7 +95,7 @@ const integratedCapabilitySurfaces = [
     label: 'Contas / Hub',
     icon: 'i-ph:key',
     owner: 'apps/modulos/oauth-broker/server.mjs',
-    detail: 'providers + connections + OAuth/API-key; saúde viva ainda não medida pelo bridge do Cockpit',
+    detail: 'providers + connections + OAuth/API-key; Gmail e sua capacidade de leitura/envio/notificação ficam neste owner existente; saúde viva ainda precisa de probe do Cockpit',
   },
   {
     key: 'TELEGRAM',

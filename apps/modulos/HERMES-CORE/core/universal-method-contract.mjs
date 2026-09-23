@@ -556,8 +556,11 @@ export function validateUniversalMethod() {
   requireTokens(boot, [
     'mission_stop: "CONTINUE_ACROSS_CHAT_BOUNDARIES_UNLESS_CHEFE_EXPLICITLY_STOPS"',
     '- "CHEFE_EXPLICITLY_STOPS"',
-    'child_pr_only_promotion_vehicle: true',
-    'SQUASH_CHILD_ONLY',
+    'child_pr_only_promotion_vehicle: false',
+    'promotion_mode: "DIRECT_MAIN_SOFT_EVOLUTION"',
+    'MIN_SECURITY_CHECKS',
+    'DIRECT_MAIN_COMMIT',
+    'MAIN_READBACK',
     'required_gate_ids:',
     'LOAD_UNIVERSAL_GATE_REGISTRY',
     'LOAD_ROOT_CHILD_CONTRACT_LINEAGE',

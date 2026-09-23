@@ -132,6 +132,7 @@ export const hubCapabilities: HubCapability[] = [
 ];
 
 export const accountSurfaces: AccountSurface[] = [
+  { id: 'GMAIL', label: 'Gmail', accountModel: 'OAuth no Contas / Hub existente', quota: 'NOT_APPLICABLE', detail: 'Conta Gmail já pertence ao oauth-broker canônico; leitura/envio autorizado e notificações humanas reutilizam esse owner, sem criar mail-hub paralelo.' },
   { id: 'CHATGPT', label: 'ChatGPT', accountModel: 'multi-account desejado', quota: 'ADAPTER_REQUIRED', detail: 'Plano, uso restante, reset e capacidades precisam de fonte autorizada.' },
   { id: 'CLAUDE_CODE', label: 'Claude Code', accountModel: 'harness por sessão', quota: 'ADAPTER_REQUIRED', detail: 'Unificar sessão, capacidades e limites sem raspar UI.' },
   { id: 'GEMINI', label: 'Gemini', accountModel: 'provider/account', quota: 'ADAPTER_REQUIRED', detail: 'Provider existe; conta e quota ainda não entram no cockpit.' },
@@ -142,7 +143,7 @@ export const accountSurfaces: AccountSurface[] = [
 
 export const hubGaps: HubCapability[] = [
   { id: 'PROVIDER_USAGE_ADAPTERS', label: 'Adapters de uso/limites por provedor', state: 'GAP', owner: 'a definir por capability-contract-router', detail: 'Necessário para mostrar plano, uso restante, reset e rate limits sem inferência.' },
-  { id: 'UNIFIED_ACCOUNT_REGISTRY', label: 'Registro unificado de contas', state: 'GAP', owner: 'estender oauth-broker; não criar segundo auth', detail: 'Precisa ligar identidades, sessões e capabilities em um catálogo único.' },
+  { id: 'UNIFIED_ACCOUNT_REGISTRY', label: 'Registro unificado de contas', state: 'GAP', owner: 'estender oauth-broker; não criar segundo auth', detail: 'Precisa ligar identidades, sessões e capabilities em um catálogo único. Gmail permanece neste owner existente; não criar segundo auth/mail hub.' },
   { id: 'CLAUDE_CODE_HARNESS', label: 'Harness Claude Code', state: 'GAP', owner: 'capability-contract-router', detail: 'Adapter explícito para sessão/capabilities; não substituir provider Anthropic existente.' },
   { id: 'CODEX_HARNESS', label: 'Harness Codex / VS Code', state: 'GAP', owner: 'capability-contract-router', detail: 'Adapter explícito para workspace, sessão e telemetria.' },
   { id: 'MCP_LIVE_SNAPSHOT', label: 'Snapshot MCP vivo no desktop', state: 'GAP', owner: 'Electron bridge estreito', detail: 'Expor health/toolCount/version por IPC tipado, sem liberar Node ao renderer.' },
