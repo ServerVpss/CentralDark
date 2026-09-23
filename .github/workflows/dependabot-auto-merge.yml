@@ -13,8 +13,6 @@
 name: 🤖 Dependabot — radar, compatibilidade e squash seguro
 
 on:
-  push:
-    branches: [main]
   pull_request_target:
     types: [opened, reopened, synchronize, ready_for_review]
   workflow_dispatch:
@@ -40,9 +38,8 @@ permissions:
 
 concurrency:
   group: dependabot-${{ github.event_name }}-${{ github.event.pull_request.number || github.event.workflow_run.head_sha || github.event.client_payload.pr_number || 'radar' }}
-  # Push de main é o gatilho repo-wide: o run em execução precisa terminar.
-  # Eventos por PR/workflow continuam deduplicando para evitar corrida.
-  cancel-in-progress: ${{ github.event_name != 'push' }}
+  # Sweeps repo-wide ficam em schedule/dispatch; eventos equivalentes deduplicam para evitar fila e corrida.
+  cancel-in-progress: true
 
 jobs:
   reconcile-dependabot:
@@ -573,7 +570,6 @@ jobs:
     if: >-
       github.repository == 'ServerVpss/CentralDark' &&
       (
-        github.event_name == 'push' ||
         github.event_name == 'schedule' ||
         github.event_name == 'workflow_dispatch' ||
         github.event_name == 'repository_dispatch'
