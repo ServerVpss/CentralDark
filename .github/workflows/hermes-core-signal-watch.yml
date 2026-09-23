@@ -22,14 +22,14 @@ on:
     types: [centraldark_review_signal, hermes_official_update_check]
   workflow_run:
     workflows:
-      - porta-de-entrada
-      - codex-validate
-      - lupa-conformance
-      - Lupa Drift Guard
+      - ⚙️ porta-de-entrada
+      - ⚙️ codex-validate
+      - ⚙️ lupa-conformance
+      - ⚙️ Lupa Drift Guard
       - 🧠 Trigger Fabric Full Package — pacote e contraprova
-      - PR Title Contract
-      - PR auto-review (Codex + checklist)
-      - Pipeline — Telegram + Painel
+      - ⚙️ PR Title Contract
+      - ⚙️ PR auto-review (Codex + checklist)
+      - ⚙️ Pipeline — Telegram + Painel
       - PR — artefato de aprendizado automático
     types: [completed]
   workflow_dispatch:

@@ -18,11 +18,11 @@ on:
   workflow_dispatch:
   workflow_run:
     workflows:
-      - porta-de-entrada
-      - PR auto-review (Codex + checklist)
-      - codex-validate
-      - lupa-conformance
-      - Lupa Drift Guard
+      - ⚙️ porta-de-entrada
+      - ⚙️ PR auto-review (Codex + checklist)
+      - ⚙️ codex-validate
+      - ⚙️ lupa-conformance
+      - ⚙️ Lupa Drift Guard
     types: [completed]
   repository_dispatch:
     types: [centraldark_dependabot_reconcile]
