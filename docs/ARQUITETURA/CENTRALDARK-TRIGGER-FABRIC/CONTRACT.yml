@@ -24,9 +24,54 @@ principles:
   artifact_never_invents_canonical: true
   operational_failure_must_be_generalized: true
   proven_operational_rule_must_bind_to_runtime: true
+  aureola_material_discovery_is_learning_candidate: true
+  every_material_discovery_gets_learning_ref: true
+  material_discovery_auto_promotes_to_canonical: false
+  confidence_math_cannot_replace_runtime_observation: true
+  package_scope_may_reach_100_percent_when_contract_fully_verified: true
+  external_reality_100_percent_requires_observation: true
   same_failure_without_new_information_reuses_crystal: true
   second_brain_logical_one: true
   second_brain_parallel_forbidden: true
+  human_complexity_must_be_absorbed_by_machine_when_safe: true
+  machine_discoverable_state_must_not_be_user_guesswork: true
+  machine_safe_fix_must_not_be_delegated_to_user: true
+  generic_error_without_location_and_next_action_is_invalid: true
+  chefe_alignment_filter_required: true
+  useless_complexity_must_be_reduced_before_human_output: true
+  chief_receives_decision_not_internal_topology: true
+
+global_contract_entry_policy:
+  marker: CENTRALDARK_GLOBAL_CONTRACT_ENTRY_REQUIRED
+  applies_to:
+    - CHATGPT
+    - GEMINI
+    - CLAUDE
+    - GROK
+    - ALL_CURRENT_AND_FUTURE_MODEL_ADAPTERS
+    - ALL_CURRENT_AND_FUTURE_AGENTS
+    - ALL_CURRENT_AND_FUTURE_CLIS
+    - HERMES
+    - PIVETE
+    - MCP_WORKERS
+    - NEW_TAB
+    - MODEL_CHANGE
+    - AGENT_HANDOFF
+  contract_required_before_operational_mutation: true
+  model_or_tool_may_bypass_contract: false
+  outside_contract_mutation: FAIL_CLOSED
+  parallel_workaround_for_uncovered_case: FORBIDDEN
+  uncovered_case_flow:
+    - FIND_EXISTING_OWNER
+    - IDENTIFY_MINIMAL_CONTRACT_DELTA
+    - PATCH_EXISTING_OWNER
+    - REVALIDATE_GLOBAL_CONTRACT
+    - CONTINUE_CURRENT_MISSION
+  uncovered_case_may_create_parallel_architecture: false
+  uncovered_case_may_restart_mission: false
+  delta_must_preserve_human_intent: true
+  revalidation_required_before_continue: true
+
 standard_flow:
   canonical_entry: CENTRALDARK
   accepted_entries: ["!CENTRALDARK", "#CENTRALDARK"]
@@ -88,6 +133,39 @@ standard_flow:
     - COUNTERPROVE
     - REGISTER_RECEIPT
     - GENERALIZE_IF_REUSABLE
+  human_complexity_absorption:
+    marker: CENTRALDARK_HUMAN_COMPLEXITY_ABSORPTION_REQUIRED
+    applies_to: ALL_CURRENT_AND_FUTURE_EXECUTORS
+    human_input_default: GOAL_AND_AUTHORITY
+    technical_decomposition_owner: MACHINE
+    prefer_one_complete_operation_over_microcommand_chain: true
+    preflight_before_execution: REQUIRED
+    predictable_failure_preparation: REQUIRED
+    safe_fallbacks_before_human_return: REQUIRED
+    bounded_retry_only_with_information_gain: true
+    idempotent_reentry_when_possible: true
+    unresolved_failure_display: LOUD_EXACT_ACTIONABLE
+    exact_failure_location_required_when_available: true
+    proven_cause_or_labeled_hypothesis_required: true
+    attempted_routes_required: true
+    exact_human_action_required_at_human_frontier: true
+    one_human_action_at_a_time: true
+    secrets_enter_at_secure_source_not_chat: true
+    automatic_resume_after_human_frontier: true
+    machine_diagnostics_must_not_be_redelegated_to_human: true
+    final_remeasurement_required: true
+    final_unknown_must_remain_unknown: true
+  chefe_alignment_simplifier:
+    marker: CENTRALDARK_CHEFE_ALIGNMENT_SIMPLIFIER
+    purpose: REDUCE_USELESS_COMPLEXITY_FOR_SEGREDO_CHEFE
+    machine_internal_complexity_allowed: ONLY_WHEN_IT_REDUCES_HUMAN_COMPLEXITY_OR_PROVES_STATE
+    human_output_default: RESULT_EVIDENCE_PENDING_NEXT_CURSOR
+    forbidden_human_output: [MICROSTEP_MENU, TOOL_MENU, INTERNAL_DEBATE_DUMP, DUPLICATE_OPTIONS]
+    ask_user_to_choose_order_for_authorized_technical_work: false
+    chief_receives_decision_not_internal_topology: true
+    exact_human_action_only_at_true_human_frontier: true
+    no_new_parallel_owner_for_alignment: true
+    preserve_proof_unknown_and_blockers: true
   scope_compression_failure:
     signature: AGENT_REDUCED_HUMAN_OBJECTIVE_WITHOUT_AUTHORIZATION
     remediation: RESTORE_FULL_HUMAN_OBJECTIVE_AND_RECONCILE_IN_AUTHORIZED_SCOPE
@@ -224,9 +302,10 @@ artifact_properties:
   missing_required: NOT_FLASH_READY
 operational_rule_learning:
   mandatory: true
-  applies_to: [HUMAN_CORRECTION, TOOL_ERROR, TEST_FAILURE, CI_FAILURE, RUNTIME_DRIFT, REPEATED_MANUAL_FIX, NEW_INVARIANT]
+  applies_to: [HUMAN_CORRECTION, TOOL_ERROR, TEST_FAILURE, CI_FAILURE, RUNTIME_DRIFT, REPEATED_MANUAL_FIX, NEW_INVARIANT, AUREOLA_MATERIAL_DISCOVERY]
   lifecycle:
     - OBSERVE_EVENT
+    - EMIT_LEARNING_REF
     - MEASURE_LIVE_STATE
     - EXTRACT_FAILURE_OR_RULE_SIGNATURE
     - IDENTIFY_CAUSE_OR_INVARIANT
@@ -384,6 +463,22 @@ ci_binding:
     wait_slow_self_hosted_auxiliary: false
     causal_gates_required: true
     false_green_forbidden: true
+    create_pr_mergeable_snapshot_is_final: false
+    remeasure_live_mergeability_before_human_return: true
+    queued_or_in_progress_auxiliary_is_material_blocker: false
+    post_pr_continue_until_merged_or_material_blocker: true
+    return_with_open_eligible_pr: FORBIDDEN
+  centraldark_pattern_monitor:
+    owner: apps/modulos/mcp/src/operational-telemetry.js
+    admin_surface: apps/modulos/mcp/src/admin-patterns-ui.js
+    label: PADRAO_CENTRALDARK
+    outside_percent_red_threshold: 80
+    unknown_counts_as_pass: false
+    unknown_counts_as_outside: false
+    unknown_prevents_green: true
+    metric_scope: OBSERVED_MEASURABLE_DIMENSIONS_ONLY
+    global_behavior_claim_from_partial_telemetry: FORBIDDEN
+    refresh_source: /admin/api/operational-snapshot
 self_healing:
   mandatory_for_operational_failure: true
   scope: ALL_PR_COMMIT_AND_RUNTIME_ELIGIBLE_FAILURES
@@ -434,3 +529,34 @@ claims:
 return_rule:
   - DESTINATION_PROVED
   - HUMAN_FRONTIER_PROVED
+
+
+measurement_confidence:
+  purpose: >-
+    Usar multiplos angulos quantitativos para reduzir incerteza sem converter
+    inferencia em fato nem substituir medicao direta do alvo.
+  principles:
+    independent_evidence_preferred: true
+    correlated_views_are_not_independent_proofs: true
+    confidence_interval_may_quantify_estimation_uncertainty: true
+    combined_uncertainty_may_combine_valid_components: true
+    bayesian_update_may_update_belief_not_world_state: true
+    repeated_measurements_may_reduce_uncertainty_when_model_assumptions_hold: true
+    calculation_is_not_runtime_observation: true
+    model_confidence_is_not_reality: true
+  allowed_claims:
+    - CONTRACT_COVERAGE_PERCENT
+    - TEST_COVERAGE_PERCENT
+    - OBSERVED_SAMPLE_RATE
+    - MEASURED_LATENCY
+    - MEASURED_ERROR_RATE
+    - CONFIDENCE_INTERVAL_WITH_ASSUMPTIONS
+    - COMBINED_UNCERTAINTY_WITH_COMPONENTS
+  forbidden_claims:
+    - GLOBAL_REALITY_100_PERCENT_FROM_CALCULATION_ONLY
+    - PASS_FROM_MODEL_CONFIDENCE_ONLY
+    - INDEPENDENCE_ASSUMED_FOR_CORRELATED_EVIDENCE
+  hundred_percent_semantics:
+    allowed_when: ALL_DEFINED_SCOPE_CONDITIONS_ARE_DETERMINISTICALLY_VERIFIED
+    means: DEFINED_SCOPE_CONTRACT_COMPLETE
+    does_not_mean: EXTERNAL_WORLD_INFALLIBLE

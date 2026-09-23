@@ -3,21 +3,11 @@
   "device_label": "SEGREDO",
   "workdir": "E:\\CentralDark\\_MAPA_CASA\\GARIMPO-CHEFE",
   "package": "@wonderwhy-er/desktop-commander@0.2.48",
-  "remote_mcp": "https://mcp.desktopcommander.app/mcp",
+  "primary_control_plane": "centraldark_mcp",
   "centraldark_mcp": "https://mcp.centralldark.com/mcp",
-  "centraldark_oauth": {
-    "protected_resource_metadata": "https://mcp.centralldark.com/.well-known/oauth-protected-resource",
-    "authorization_server_metadata": "https://mcp.centralldark.com/.well-known/oauth-authorization-server",
-    "scope": "mcp",
-    "pkce_method": "S256",
-    "redirect_uri": "http://127.0.0.1:62607/",
-    "token_storage": "desktop-commander-native-secure-store"
-  },
-  "centraldark_headers": {
-    "X-CentralDark-Scope": "all",
-    "X-CentralDark-Client": "centraldark-universal-mcp-client",
-    "X-CentralDark-Origin": "composio-custom-mcp"
-  },
+  "centraldark_mcp_auth": "oauth2_pkce_admin_password_or_persisted_bearer",
+  "remote_mcp": "https://mcp.desktopcommander.app/mcp",
+  "legacy_remote_enabled_by_default": false,
   "github_default": "ServerVpss/CentralDark",
   "screenpipe_url": "http://127.0.0.1:3030",
   "screenpipe_context_file": "context\\screenpipe-latest.json",

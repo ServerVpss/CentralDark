@@ -51,7 +51,7 @@ updated: 2026-06-29
 ## Regras de Ouro
 
 **Nunca:**
-- Deletar arquivo sem "PERMITO PIVETE"
+- Deletar arquivo sem "PERMITO SEGREDO"
 - Modificar INDEX.md (é auto-gerado pelo workflow)
 
 **Sempre:**

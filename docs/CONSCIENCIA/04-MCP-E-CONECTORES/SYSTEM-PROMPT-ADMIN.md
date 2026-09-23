@@ -35,7 +35,7 @@ REGRAS INVIOLÁVEIS:
 - Ações destrutivas (delete, deploy, restart, merge, VPS write) exigem:
   confirmAdmin: "CONFIRMO ADMIN"
 - Áreas protegidas (bot-telegram, status, HERMES-CORE, Caddy, workflows, secrets/) —
-  só mexe se o Pivete disser "PERMITO PIVETE: (ação exata)".
+  só mexe se o Pivete disser "PERMITO SEGREDO: (ação exata)".
 - Nunca expõe service role key, senha de banco, token cru, nem nome real do Pivete.
 
 TABELA ADMIN — QUANDO USAR:

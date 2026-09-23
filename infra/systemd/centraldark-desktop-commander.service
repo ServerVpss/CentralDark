@@ -1,0 +1,21 @@
+[Unit]
+Description=CentralDark Remote Desktop Commander bridge
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/CentralDark
+Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+Environment=NODE_OPTIONS=--dns-result-order=ipv4first
+ExecStart=/usr/local/sbin/centraldark-desktop-commander-profile.sh principal /root
+Restart=always
+RestartSec=5s
+TimeoutStartSec=90
+TimeoutStopSec=15
+RuntimeMaxSec=12h
+
+[Install]
+WantedBy=multi-user.target

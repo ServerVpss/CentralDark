@@ -47,16 +47,6 @@ export const youtubeMediaTools = [
                 return textBlock(JSON.stringify({
                     ...result,
                     source_url: url,
-                    learning_packet: result.ok ? {
-                        status: "CANDIDATE",
-                        source_class: "USER_PROVIDED_YOUTUBE",
-                        source_url: url,
-                        source_ref: `youtube:${result.video_id}`,
-                        transcript_sha256: result.transcript_sha256,
-                        evidence: ["public_caption_track", "timestamped_segments"],
-                        promotion_rule: "EXTRACT_DELTA + COUNTERPROOF + REGISTRAR_APRENDIZADO",
-                        raw_transcript_persisted: false,
-                    } : null,
                     learning_route: result.ok ? "CONSUMIR_TRANSCRIPT_E_ENVIAR_DELTA_PROVADO_A_REGISTRAR_APRENDIZADO" : "NAO_PROMOVER_UNKNOWN",
                     audio_fallback: "EXPLICITO_SEM_DOWNLOAD_AUTOMATICO",
                 }, null, 2));

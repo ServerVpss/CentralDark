@@ -9,8 +9,13 @@ HUB_DIR="${HUB_DIR:-/root/CentralDark/apps/modulos/hub}"
 echo "🔨 [deploy-hub] entrando em $HUB_DIR"
 cd "$HUB_DIR"
 
-echo "📦 [deploy-hub] npm install (silencioso)"
-npm install --silent --no-audit --no-fund
+if [ -f package-lock.json ]; then
+  echo "📦 [deploy-hub] npm ci (lock preservado)"
+  npm ci --silent --no-audit --no-fund
+else
+  echo "📦 [deploy-hub] npm install (sem lockfile)"
+  npm install --silent --no-audit --no-fund
+fi
 
 echo "⚙️  [deploy-hub] npm run build"
 npm run build

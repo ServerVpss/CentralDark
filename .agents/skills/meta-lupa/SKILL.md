@@ -82,7 +82,7 @@ Escalonamento: comece FRIA; contradição escala para MÉDIA; criticidade, recor
 13. Tratar área consolidada como bloqueada por padrão; confiança alta não desfaz trava.
 14. Executar AutoLupa sobre o próprio veredito até atingir ponto fixo evidencial, sem limite artificial de iterações e sem prometer certeza absoluta.
 15. Nenhuma promessa de alinhamento, aprendizado ou comportamento permanente pode exceder a capacidade observável do agente. Sem mecanismo persistente comprovado, rebaixar `sempre`, `nunca mais`, `garanto`, `não repetirei` ou equivalente para uma alegação testável no escopo atual.
-15. Tratar confronto útil como fonte de informação: sobreviver, cair ou permanecer UNKNOWN só vira aprendizado quando existe evidência nova e delta reutilizável de crença/regra/teste.
+16. Tratar confronto útil como fonte de informação: sobreviver, cair ou permanecer UNKNOWN só vira aprendizado quando existe evidência nova e delta reutilizável de crença/regra/teste.
 
 ## Gate de Mapa Único
 
@@ -129,6 +129,60 @@ Depois da promoção:
 
 Áreas ainda não consolidadas permanecem operáveis dentro da autorização vigente, mas continuam submetidas a mapa, prova, rollback e ausência de regressão.
 
+## Gate determinístico: prova → contraprova → aceite → reconciliação
+
+O fechamento não escolhe entre acreditar em tudo ou rejeitar tudo. Ele examina,
+tenta quebrar, retém somente o que sobrevive e reconcilia o restante sem
+apagar prova boa.
+
+```text
+CANDIDATO
+→ PROVA
+→ CONTRAPROVA_INDEPENDENTE
+→ RESULTADO
+   ├── SURVIVED
+   │   → RETER_BEM_PROVADO
+   │   → ACEITE_DETERMINISTICO
+   │   → SEAL_NO_LEDGER_EXISTENTE
+   │
+   ├── DEFEATED
+   │   → REJEITAR_DELTA_DERROTADO
+   │   → PRESERVAR_BEM_INDEPENDENTE
+   │   → RECONCILIAR
+   │
+   └── UNKNOWN
+       → NÃO_ACEITAR
+       → NÃO_REJEITAR_GLOBALMENTE
+       → NEXT_TEST
+→ AUTOLUPA
+→ FIXED_POINT somente quando não existe residual material
+```
+
+Contrato:
+
+```text
+PROOF_REQUIRED_BEFORE_ACCEPTANCE=true
+COUNTERPROOF_REQUIRED_BEFORE_ACCEPTANCE=true
+ACCEPTANCE_IS_COMPUTED_NOT_VOTED=true
+ACCEPTANCE_RESULT_ENUM=ACCEPTED|PARTIAL|REJECTED|UNKNOWN
+ACCEPTED=PROOF_SURVIVED_COUNTERPROOF_AND_NO_MATERIAL_RESIDUAL
+PARTIAL=ONLY_PROVEN_GOOD_SURVIVES_AND_RESIDUAL_RETURNS_TO_RECONCILIATION
+REJECTED=COUNTERPROOF_DEFEATED_THE_CANDIDATE
+UNKNOWN=INSUFFICIENT_EVIDENCE_NO_PASS
+SURVIVED_COUNTERPROOF_CAN_SEAL=true
+DEFEATED_COUNTERPROOF_MUST_NOT_SEAL=true
+UNKNOWN_COUNTERPROOF_MUST_NOT_SEAL=true
+RECONCILIATION_PRESERVES_PROVEN_GOOD=true
+RECONCILIATION_DISCARDS_ONLY_DISPROVEN_DELTA=true
+SEALED_CLAIM_NO_REEXECUTE_WITHOUT_NEW_MATERIAL_CAUSE=true
+NEW_MATERIAL_CAUSE_REQUIRES_REOPEN_WITH_CAUSE_REF=true
+FIXED_POINT_REQUIRES_DETERMINISTIC_CLOSURE=true
+```
+
+O aceite reutiliza o ledger já existente de claim seals. `SEAL` representa
+aceite determinístico do claim no escopo provado; `REOPEN` exige `cause_ref`
+material. Troca de agente, nova conversa, repetição da mesma discussão ou
+curiosidade sem evidência nova não reabre claim selado.
 ## Camada de tradução obrigatória
 
 Antes de apresentar qualquer equação:

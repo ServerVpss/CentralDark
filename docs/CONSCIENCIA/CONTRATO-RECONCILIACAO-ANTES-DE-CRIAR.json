@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 6,
   "contract_id": "CENTRALDARK_RECONCILIATION_BEFORE_CREATION",
   "status": "CANONICAL",
   "marker": "REUSE_BEFORE_CREATE_REQUIRED",
@@ -24,7 +24,31 @@
     "cd",
     "telegram",
     "multimodal_input",
-    "portable_package"
+    "portable_package",
+    "future_executors",
+    "github",
+    "vps",
+    "casa",
+    "google_drive",
+    "api",
+    "admin_ui",
+    "oauth",
+    "pm2",
+    "docker",
+    "systemd",
+    "caddy",
+    "buildkite",
+    "github_actions",
+    "screenpipe",
+    "desktop_commander",
+    "obsidian",
+    "logs",
+    "receipts",
+    "hud",
+    "repository_secrets",
+    "credentials",
+    "secret_vault",
+    "environment_secrets"
   ],
   "same_operating_contract": true,
   "physical_tool_parity_guaranteed": false,
@@ -64,7 +88,16 @@
       "NO_NEW_INFORMATION_NO_CHANGE": true,
       "PARALLELIZE_PERCEPTION": true,
       "SERIALIZE_MUTATION": true,
-      "REALITY_IS_JUDGE": true
+      "REALITY_IS_JUDGE": true,
+      "EVOLVE_SAME_OBJECT": true,
+      "DOMAIN_EXPANSION_WITHOUT_PARALLEL_ARCHITECTURE": true,
+      "TEMP_ARTIFACTS_MUST_NOT_BECOME_OWNERS": true,
+      "LOG_ERROR_FANOUT_READ_ONLY": true,
+      "REMEDIATE_SERIAL_PER_SCOPE": true,
+      "CRYSTALLIZE_AFTER_GLOBAL_RESCAN": true,
+      "ARTIFACT_IS_NOT_OWNER": true,
+      "ARTIFACT_TEST_BEFORE_PROMOTION": true,
+      "NO_ARTIFACT_DOWNGRADE": true
     },
     "material_scope": [
       "INPUT",
@@ -290,13 +323,35 @@
     "resolve_user_intent",
     "recover_relevant_context",
     "search_existing_capabilities",
+    "measure_github_and_vps_in_parallel_when_operational",
+    "measure_cross_surface_drift",
+    "reconcile_cross_surface_state",
+    "coordinate_convergence_when_material",
+    "analyze_active_prs_and_compare_branches_when_material",
+    "register_convergence_in_principal_pr_when_material",
     "open_primary_implementation_files",
     "cross_reference_capabilities_with_request",
     "classify_authority_and_runtime_state",
     "measure_available_tools",
     "normalize_evidence_scope_time_and_provenance",
+    "validate_global_dna_when_material",
+    "validate_buildkite_funnel_end_to_end_when_material",
+    "investigate_failed_jobs_and_document_reconciliation_plan_when_material",
     "arbitrate_conflict_by_discriminating_test_if_needed",
-    "reuse_or_extend_before_create"
+    "reuse_or_extend_before_create",
+    "identify_existing_owner_and_writer_scope",
+    "protect_dirty_runtime_root",
+    "discover_hybrid_runtime_owners_when_material",
+    "run_pre_mutation_interview_gate_when_material",
+    "preflight_minimal_patch",
+    "counterproof_before_promotion",
+    "causal_micro_deploy_when_applicable",
+    "reconcile_diverged_pr_without_force_in_isolated_worktree_when_needed",
+    "require_same_head_ci_before_promotion",
+    "remeasure_github_and_vps_in_parallel",
+    "remeasure_promoted_sha_on_github_and_vps",
+    "register_hash_time_pombo64_receipt",
+    "register_receipt_and_update_fixed_hud"
   ],
   "state_classes": [
     "CANONICAL",
@@ -362,6 +417,17 @@
     "image_is_sensor": true,
     "screenshot_is_current_truth": false,
     "screenshot_is_trigger_for_live_measurement": true,
+    "observed_state_is_neutral_by_default": true,
+    "context_before_judgment": true,
+    "function_before_failure": true,
+    "cause_before_classification": true,
+    "expected_mobility_is_not_drift": true,
+    "terminal_cwd_is_not_blocker_without_causal_evidence": true,
+    "route_presence_is_not_route_failure": true,
+    "process_presence_is_not_process_failure": true,
+    "do_not_invent_problem_from_screenshot": true,
+    "do_not_expand_scope_from_visual_incidental_state": true,
+    "user_demonstrated_context_is_primary_for_visual_scope": true,
     "material_visual_finding_action": "REMEASURE_LIVE_SOURCE_THEN_ACT_MINIMALLY",
     "live_state_required_before_mutation": true,
     "stale_image_action": "USE_AS_HISTORICAL_DELTA_ONLY",
@@ -517,6 +583,149 @@
       "ABSORB_REUSABLE_DELTA_OR_NO_CHANGE"
     ]
   },
+  "universal_gate_registry": {
+    "marker": "CENTRALDARK_UNIVERSAL_GATE_REGISTRY",
+    "status": "CANONICAL",
+    "rule": "ANY_HARD_GATE_MUST_BE_DECLARED_BEFORE_ENFORCEMENT",
+    "hard_gate_id_must_be_registered_before_enforcement": true,
+    "undeclared_hard_gate": "BLOCK_CONFIGURATION",
+    "gate_enforcement_without_contract_declaration": "FORBIDDEN",
+    "formal_gate_declaration_scope": [
+      "CENTRALDARK_AI_BOOT.yaml",
+      "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json"
+    ],
+    "formal_gate_id_syntax": [
+      "gate_id",
+      "required_gate_ids"
+    ],
+    "boot_required_gate_ids_must_be_subset_of_registry": true,
+    "formal_gate_without_registry_entry": "FAIL_CLOSED",
+    "nonformal_narrative_gate_mentions_are_not_formal_gate_ids": true,
+    "gates": {
+      "TLC23_PDF_BOOT_GATE": {
+        "owner": "CENTRALDARK_AI_BOOT.yaml#initial_bootstrap_gate",
+        "stage": "BOOT"
+      },
+      "HERMES_TRISMEGISTUS_CONTEXT_GATE": {
+        "owner": "CENTRALDARK_AI_BOOT.yaml#hermes_trismegistus_context_gate",
+        "stage": "BOOT",
+        "role": "CONTEXT_PROVENANCE_INTERPRETATION_GUARD",
+        "source_is_authority": false,
+        "reality_is_judge": true
+      },
+      "GLOBAL_CONTRACT_BOOTSTRAP_GATE": {
+        "owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json",
+        "stage": "BOOT"
+      },
+      "DELTA_CONTINUO_GLOBAL_GATE": {
+        "owner": "docs/CONSCIENCIA/REGRA-COMITE-DELTA-CONTINUO.md",
+        "stage": "BOOT"
+      },
+      "ROOT_CHILD_CONTRACT_LINEAGE_GATE": {
+        "owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json#centraldark_global_contract.child_contract_lineage",
+        "stage": "BOOT"
+      },
+      "POMBO64_TRACE_GATE": {
+        "owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json#trace_pombo64_contract",
+        "stage": "BOOT"
+      },
+      "PRE_MUTATION_INTERVIEW_GATE": {
+        "owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json#pre_mutation_interview_gate",
+        "stage": "PRE_MUTATION"
+      },
+      "FAIL_FAST_BLOCK_GATE": {
+        "owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json#fail_fast_block_contract",
+        "stage": "ALL_BLOCKS"
+      },
+      "LOCAL_HOUSE_SENSOR_GATE": {
+        "owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json#local_house_sensor_contract",
+        "stage": "MEASUREMENT"
+      },
+      "ONE_WRITER_PER_SCOPE_GATE": {
+        "owner": "docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md",
+        "stage": "MUTATION"
+      },
+      "SAME_HEAD_CI_GATE": {
+        "owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json#universal_operational_contract.cross_surface_convergence",
+        "stage": "PROMOTION"
+      },
+      "RUNTIME_PROOF_GATE": {
+        "owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json#universal_operational_contract.counterproof",
+        "stage": "RUNTIME"
+      }
+    }
+  },
+  "pre_mutation_interview_gate": {
+    "marker": "CENTRALDARK_GRILL_META_INTERVIEW_GATE",
+    "status": "MANDATORY_WHEN_MATERIAL_MUTATION_IS_PROPOSED",
+    "grill_hook": ".agents/skills/grill-me/SKILL.md",
+    "meta_grill_owner": ".agents/skills/meta-lupa/KITS/METAGRILL-METALUPA/KIT.md",
+    "operational_method_owner": ".agents/skills/centraldark-operational-method/SKILL.md",
+    "parallel_perception_runtime": "apps/modulos/HERMES-CORE/core/perception-orchestra.mjs",
+    "external_grilling_skill_is_hard_dependency": false,
+    "missing_external_grilling_policy": "USE_LOCAL_METAGRILL_PLUS_PERCEPTION_ORCHESTRA",
+    "sequence": [
+      "GRILL_HOOK_FIND_WEAK_ASSUMPTION",
+      "META_GRILL_FIND_WOUND",
+      "FAN_OUT_FOUR_READ_ONLY_INTERVIEWS",
+      "RENDEZVOUS_EVIDENCE",
+      "RUN_DISCRIMINATING_TEST_IF_NEEDED",
+      "OPERATIONAL_METHOD_RECONCILE",
+      "ONE_WRITER_OR_NO_MUTATION"
+    ],
+    "parallel_interviews": {
+      "mode": "READ_ONLY",
+      "roles": [
+        "A_LOGIC",
+        "B_IMPLEMENTATION",
+        "C_REGRESSION_FALSE_GREEN",
+        "D_SIMPLIFICATION"
+      ],
+      "all_four_required_for_writer_readiness": true,
+      "model_vote_is_truth": false,
+      "correlated_views_are_independent_proofs": false,
+      "ready_for_writer_required": true
+    },
+    "mutation_rule": "ONE_WRITER_PER_SCOPE",
+    "reality_is_judge": true
+  },
+  "fail_fast_block_contract": {
+    "marker": "CENTRALDARK_FAIL_FAST_BLOCK_REQUIRED",
+    "status": "MANDATORY",
+    "material_failure_states": [
+      "FAIL",
+      "BLOCKED",
+      "UNKNOWN_MATERIAL",
+      "TIMEOUT",
+      "ERROR",
+      "CANCELLED_APPLICABLE"
+    ],
+    "on_any_material_failure": "ABORT_CURRENT_BLOCK",
+    "continue_later_mutating_step_after_material_failure": false,
+    "fixed_point_true_after_material_failure": "FORBIDDEN",
+    "fixed_point_requires_all_applicable_steps_measured_and_passed": true,
+    "empty_required_sensor_value": "INVALID_NOT_SUCCESS",
+    "shell_paste_line_by_line_after_failure": "NOT_VALID_BLOCK_EXECUTION",
+    "fixed_point_source_with_empty_sensors": "INVALID_FALSE_GREEN",
+    "action_after_abort": "PRESERVE_STATE_REGISTER_FAILURE_AND_RESUME_FROM_SAFE_CURSOR"
+  },
+  "local_house_sensor_contract": {
+    "marker": "CENTRALDARK_LOCAL_HOUSE_SENSOR_DISCOVERY_REQUIRED",
+    "status": "CANONICAL",
+    "sensors": {
+      "MAIN": "GITHUB_STRUCTURAL_SOURCE",
+      "VPS_RUNTIME": "RUNTIME_AND_LOCAL_DELTA_SENSOR",
+      "CASA_LOCAL": "DISCOVER_AT_RUNTIME_DO_NOT_ASSUME_PATH"
+    },
+    "forbidden_assumption": "CASA_LOCAL_PATH_WITHOUT_MEASUREMENT",
+    "path_not_found": "UNKNOWN_OR_BLOCKED",
+    "empty_path_value": "INVALID_SENSOR",
+    "empty_head_value": "INVALID_SENSOR",
+    "cross_surface_identity_requires_measurement": true,
+    "vps_dirty_blocks_blind_pull_reset_or_clean": true,
+    "identical_local_file_to_main": "ABSORBED_RESIDUE_NOT_NEW_DELTA",
+    "current_measured_state_beats_historical_path": true
+  },
   "label_policy": {
     "marker": "CANONICAL_LABELS_REQUIRED",
     "catalog_source": ".github/workflows/bots-labels-seed.yml",
@@ -588,7 +797,7 @@
       "validate_intent_receipt",
       "scan_changed_paths_and_patch_for_high_confidence_secrets",
       "block_explicit_changes_requested",
-      "block_merge_conflict",
+      "route_merge_conflict_to_single_resolver_and_block_squash_until_same_head",
       "update_branch_if_base_moved",
       "revalidate_live_head_and_base",
       "squash_merge",
@@ -604,7 +813,13 @@
     "causal_scope_first": true,
     "full_deploy_default": false,
     "live_requires_runtime_observation_not_green_status_only": true,
-    "full_adversarial_convergence_is_default_gate": false
+    "full_adversarial_convergence_is_default_gate": false,
+    "micro_deploy_policy": "CANONICAL_WHEN_CAUSALLY_APPLICABLE",
+    "micro_deploy_owner": "docs/CONSCIENCIA/03-FLUXO-DEPLOY.md",
+    "deploy_scope_must_match_causal_scope": true,
+    "restart_all_by_default": false,
+    "post_deploy_parallel_remeasure_required": true,
+    "runtime_receipt_required": true
   },
   "convergence_policy": {
     "minimal_internal_falsification_for_critical_scope": true,
@@ -650,7 +865,1680 @@
     "REUSE_DECISION",
     "REAL_GAP",
     "MINIMAL_ACTION",
-    "NO_CHANGE_REASON"
+    "NO_CHANGE_REASON",
+    "GITHUB_T0",
+    "VPS_T0",
+    "CROSS_SURFACE_DRIFT",
+    "PREFLIGHT_RESULT",
+    "COUNTERPROOF_RESULT",
+    "MICRO_DEPLOY_SCOPE",
+    "GITHUB_T1",
+    "VPS_T1",
+    "RUNTIME_RECEIPT",
+    "FIXED_HUD_UPDATE",
+    "NEXT_CURSOR",
+    "ACTIVE_PRS",
+    "BRANCH_COMPARISON",
+    "PRINCIPAL_PR",
+    "CONVERGENCE_RECEIPT",
+    "GLOBAL_DNA_RESULT",
+    "BUILDKITE_FUNNEL_RESULT",
+    "FAILED_JOB_ID",
+    "FAILURE_SIGNATURE",
+    "FAILED_JOB_ROOT_CAUSE_STATE",
+    "RECONCILIATION_PLAN",
+    "GITHUB_MAIN_SHA",
+    "VPS_CANONICAL_MAIN_SHA",
+    "VPS_ROOT_HEAD",
+    "VPS_ROOT_DIRTY_STATE",
+    "PR_AHEAD",
+    "PR_BEHIND",
+    "PR_TOPOLOGY",
+    "CI_SAME_HEAD_STATE",
+    "BRANCH_UPDATE_MODE",
+    "ISOLATED_WORKTREE",
+    "PARTIAL_WRITE",
+    "BLOCK_CLASS",
+    "FIXED_POINT_STATE",
+    "CONTRACT_SCOPE_ID",
+    "CONTRACT_SCHEMA",
+    "CONTRACT_BLOB_SHA",
+    "CONTRACT_COMMIT_SHA",
+    "OBSERVED_AT_LOCAL",
+    "OBSERVED_AT_UTC",
+    "TRACE_ID",
+    "EVENT_ID",
+    "POMBO64_PLUS",
+    "HEAD_SHA",
+    "ARTIFACT_OR_RESULT_SHA256",
+    "DEPENDENCY_FINGERPRINT",
+    "CARDS_ON_TABLE_GAPS",
+    "EXACT_FAILURE_LOCATION",
+    "EXACT_IMPROVEMENT",
+    "PM2_HOMES_DISCOVERED",
+    "OWNER_PM2_HOME",
+    "T0_PID",
+    "T1_PID",
+    "PID_CHANGED",
+    "CADDY_BACKUP",
+    "CADDY_VALIDATE",
+    "CADDY_RELOAD",
+    "ROLLBACK_USED",
+    "HUD_STATE_HASH",
+    "GLOBAL_GATE_PHASE",
+    "GLOBAL_GATE_STATUS",
+    "GLOBAL_GATE_TRACE_ID",
+    "GITHUB_T0_HEAD",
+    "VPS_T0_HEAD",
+    "DRIFT_CLASS",
+    "OWNER_PROOF",
+    "WRITER_SCOPE_PROOF",
+    "ROLLBACK_REF",
+    "COUNTERPROOF_PLAN_REF",
+    "GITHUB_T1_HEAD",
+    "VPS_T1_HEAD",
+    "COUNTERPROOF_REF",
+    "SAME_HEAD_CI_RESULT",
+    "RUNTIME_PROOF_RESULT",
+    "HUMAN_BOUNDARY_STATE",
+    "DELTA_CLASS",
+    "DELTA_INFORMATION_GAIN",
+    "ROOT_CONTRACT_REF",
+    "ROOT_CONTRACT_SCHEMA",
+    "ROOT_GOAL_ID",
+    "PARENT_CONTRACT_ID",
+    "CHILD_CONTRACT_ID",
+    "SELF_GOAL_ID",
+    "SELF_GOAL_STATUS",
+    "GOAL_DONE_CONDITION",
+    "GOAL_EVIDENCE_REF",
+    "GOAL_COUNTERPROOF_REF",
+    "TLC23_PDF_SHA256",
+    "TLC23_HORN_GATE_RESULT",
+    "HERMES_TRISMEGISTUS_CONTEXT_GATE_RESULT",
+    "CHILD_CONTRACT_LINEAGE_RESULT"
   ],
-  "receipt_visibility": "INTERNAL_BY_DEFAULT; SHOW_ONLY_ON_AUDIT_OR_BLOCKER"
+  "receipt_visibility": "INTERNAL_BY_DEFAULT; SHOW_ONLY_ON_AUDIT_OR_BLOCKER",
+  "universal_operational_contract": {
+    "marker": "CENTRALDARK_UNIVERSAL_OPERATIONAL_CONTRACT_REQUIRED",
+    "status": "MANDATORY",
+    "authority": "SEGREDO/CHEFE",
+    "owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json",
+    "applies_to": "ALL_CURRENT_AND_FUTURE_ENGINES_AGENTS_SURFACES_TOOLS_AND_OPERATIONAL_RESPONSES",
+    "inheritance_required": true,
+    "parallel_measurement": {
+      "required_sources": [
+        "GITHUB",
+        "VPS"
+      ],
+      "mode": "PARALLEL_READ_ONLY_T0_AND_T1",
+      "github_and_vps_are_independent_sensors": true,
+      "one_side_blocked": "MARK_BLOCKED_CONTINUE_OTHER_READ",
+      "rendezvous_before_mutation": true,
+      "cross_surface_drift_must_be_explicit": true,
+      "current_live_state_beats_stale_history": true
+    },
+    "canonical_cycle": [
+      "RECOVER_RELEVANT_CONTEXT",
+      "MEASURE_GITHUB_AND_VPS_IN_PARALLEL_T0",
+      "RECONCILE_CROSS_SURFACE_STATE",
+      "COORDINATE_CONVERGENCE",
+      "ANALYZE_ACTIVE_PRS_AND_COMPARE_BRANCHES",
+      "REGISTER_CONVERGENCE_IN_PRINCIPAL_PR",
+      "VALIDATE_GLOBAL_DNA",
+      "VALIDATE_BUILDKITE_FUNNEL_END_TO_END_WHEN_MATERIAL",
+      "INVESTIGATE_FAILED_JOB_AND_DOCUMENT_RECONCILIATION_PLAN",
+      "FIND_EXISTING_OWNER",
+      "ACQUIRE_ONE_WRITER_SCOPE",
+      "META_LUPA",
+      "MINIMAL_CAUSAL_PATCH",
+      "PREFLIGHT",
+      "COUNTERPROOF",
+      "CAUSAL_MICRO_DEPLOY_IF_APPLICABLE",
+      "MEASURE_GITHUB_AND_VPS_IN_PARALLEL_T1",
+      "MEASURE_CROSS_SURFACE_DRIFT",
+      "PROTECT_DIRTY_RUNTIME_ROOT",
+      "RECONCILE_DIVERGED_BRANCH_NO_FORCE_IN_ISOLATED_WORKTREE",
+      "RUN_SAME_HEAD_CI",
+      "PROMOTE_CANONICALLY",
+      "REMEASURE_PROMOTED_SHA_ON_GITHUB_AND_VPS",
+      "RUNTIME_PROOF",
+      "REGISTER_RECEIPT",
+      "UPDATE_FIXED_HUD_WITH_LIVE_DATA",
+      "CONTINUE_TO_FIXED_POINT_OR_HUMAN_FRONTIER"
+    ],
+    "micro_deploy": {
+      "policy": "CANONICAL_WHEN_CAUSALLY_APPLICABLE",
+      "owner": "docs/CONSCIENCIA/03-FLUXO-DEPLOY.md",
+      "scope_must_match_causal_scope": true,
+      "patch_without_deploy": "CODED_NOT_RUNTIME_PROVEN",
+      "deploy_without_remeasure": "ACTION_NOT_PROOF",
+      "restart_all_by_default": false,
+      "full_deploy_by_default": false,
+      "rollback_scope_must_match_deploy_scope": true,
+      "hybrid_runtime_discovery_required": true,
+      "pm2_discover_all_homes_before_mutation": true,
+      "caddy_validate_before_reload": true,
+      "t0_t1_pid_health_receipt_required": true
+    },
+    "counterproof": {
+      "required_before_runtime_green": true,
+      "unknown_is_pass": false,
+      "merged_is_deployed": false,
+      "documented_is_executed": false,
+      "action_is_proof": false,
+      "process_is_result": false
+    },
+    "hud": {
+      "required_for_material_operational_status": true,
+      "layout": "FIXED",
+      "data": "LIVE",
+      "layout_changes_require_explicit_chefe_authorization": true,
+      "update_after_t1_and_receipt": true,
+      "always_show_on_centraldark_operational_response": true,
+      "sections_in_order": [
+        "AUREOLA_CANONICA",
+        "ACORDAR",
+        "CALIBRAR",
+        "MULTIBUSSOLA",
+        "META_LUPA",
+        "RECONCILIAR",
+        "CONTRAPROVA",
+        "T1_REMEDICAO",
+        "REALIDADE",
+        "REGISTRA",
+        "FIXED_POINT"
+      ],
+      "arbitrary_percent_forbidden": true,
+      "progress_requires_explicit_denominator": true
+    },
+    "human_frontier": {
+      "machine_resolvable_work_continues_without_reask": true,
+      "stop_only_for": [
+        "SECRET_MFA_OR_EXCLUSIVE_CONSENT",
+        "PHYSICAL_ACTION",
+        "IRREVERSIBLE_OUT_OF_SCOPE_AUTHORIZATION",
+        "NEW_HUMAN_INTENT_REQUIRED",
+        "EXACT_HARD_BLOCKER_AFTER_AUTHORIZED_ROUTES_EXHAUSTED"
+      ]
+    },
+    "mutation": {
+      "perception_parallel": true,
+      "same_scope_mutation_parallel": false,
+      "one_writer_per_scope": true,
+      "reuse_before_create": true,
+      "one_system_only": true,
+      "no_force_push": true,
+      "no_reset_hard_operational": true
+    },
+    "global_convergence_coordination": {
+      "marker": "GLOBAL_CONVERGENCE_COORDINATION_REQUIRED",
+      "status": "MANDATORY_WHEN_MATERIAL",
+      "coordinate_convergence": true,
+      "analyze_active_prs": true,
+      "compare_active_branches": true,
+      "principal_pr_resolution": "DISCOVER_ACTIVE_PR_MOTHER_OR_CANONICAL_PROMOTION_LEDGER",
+      "register_convergence_in_principal_pr": true,
+      "principal_pr_is_authority": false,
+      "principal_pr_is_runtime_proof": false,
+      "global_dna_validation": {
+        "required": true,
+        "owner": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/UNIVERSAL-ENGINE-METHOD.yml",
+        "must_bind_to_current_head_when_git_material": true
+      },
+      "buildkite_funnel": {
+        "validate_end_to_end_when_material": true,
+        "provider": "BUILDKITE",
+        "stages": [
+          "CREDENTIAL_BINDING",
+          "PIPELINE_DISCOVERY",
+          "BUILD_OR_JOB_DISCOVERY",
+          "JOB_STATUS",
+          "LOG_OR_FAILURE_EVIDENCE",
+          "RECONCILIATION_DECISION"
+        ],
+        "green_requires_end_to_end_evidence": true,
+        "credential_present_is_not_runtime_proof": true,
+        "skipped_requires_reason": true
+      },
+      "failed_job_reconciliation": {
+        "any_failed_job_requires_investigation": true,
+        "job_identifier_required": true,
+        "failure_signature_required": true,
+        "evidence_ref_required": true,
+        "root_cause_state_required": true,
+        "reconciliation_plan_required": true,
+        "plan_must_name_owner_scope_next_cursor": true,
+        "unknown_root_cause_stays_unknown": true
+      },
+      "skip_rule": "PHASE_MAY_SKIP_ONLY_IF_NOT_MATERIAL_WITH_REASON",
+      "same_finding_without_new_evidence": "DROP_DUPLICATE"
+    },
+    "cross_surface_convergence": {
+      "marker": "CROSS_SURFACE_GIT_RUNTIME_CONVERGENCE_REQUIRED",
+      "status": "MANDATORY_WHEN_OPERATIONAL",
+      "state_equations": [
+        "RUNTIME_CORRECTED_DOES_NOT_IMPLY_GIT_CONVERGED",
+        "GIT_CURRENT_DOES_NOT_IMPLY_VPS_RUNTIME_CURRENT",
+        "PROCESS_ALIVE_DOES_NOT_IMPLY_FIXED_POINT",
+        "MERGED_DOES_NOT_IMPLY_DEPLOYED",
+        "CANCELLED_CI_DOES_NOT_IMPLY_PASS"
+      ],
+      "required_measurements": {
+        "github": [
+          "MAIN_SHA",
+          "PR_HEAD_SHA",
+          "BASE_SHA",
+          "AHEAD",
+          "BEHIND",
+          "MERGEABLE",
+          "CI_SAME_HEAD"
+        ],
+        "vps": [
+          "ROOT_HEAD",
+          "CANONICAL_MAIN_HEAD",
+          "DIRTY_STATE",
+          "RUNTIME_OWNER",
+          "LISTENERS",
+          "HEALTH"
+        ],
+        "compare": [
+          "GITHUB_MAIN_VS_VPS_CANONICAL_MAIN",
+          "GITHUB_MAIN_VS_VPS_ROOT_HEAD",
+          "PR_HEAD_VS_CURRENT_MAIN"
+        ]
+      },
+      "branch_reconciliation": {
+        "divergent_pr_requires_update_before_promotion": true,
+        "update_mode": "NO_FORCE",
+        "dirty_root_must_not_be_used_for_reconciliation": true,
+        "isolated_worktree_required_when_root_dirty": true,
+        "reset_hard_forbidden": true,
+        "force_push_forbidden": true,
+        "preserve_untracked_runtime_evidence": true,
+        "preflight_after_update": true,
+        "same_head_ci_after_update": true
+      },
+      "runtime_root_safety": {
+        "dirty_root_is_live_state": true,
+        "dirty_root_is_not_disposable": true,
+        "mutation_requires_classified_scope": true,
+        "untracked_file_may_be_runtime_dependency": true,
+        "delete_or_clean_without_proof": "FORBIDDEN"
+      },
+      "transient_channel_failure": {
+        "classify_as": "BLOCKED_TRANSIENT",
+        "partial_write_must_be_measured": true,
+        "partial_write_false_when_no_write_observed": true,
+        "does_not_authorize_false_green": true,
+        "human_frontier_only_if_authorized_machine_routes_exhausted": true,
+        "resume_from_next_cursor_when_channel_returns": true
+      },
+      "ci_semantics": {
+        "same_head_required": true,
+        "queued": "WAIT",
+        "pending": "WAIT",
+        "in_progress": "WAIT",
+        "cancelled": "NOT_PASS",
+        "skipped": "PASS_ONLY_IF_PROVEN_NOT_APPLICABLE",
+        "failure": "FAIL",
+        "success": "PASS"
+      },
+      "fixed_point_requires": [
+        "GITHUB_AND_VPS_T1_RECONCILED",
+        "PR_OR_MAIN_CURRENT",
+        "SAME_HEAD_CI_CLOSED",
+        "RUNTIME_PROOF_BOUND_TO_PROMOTED_SHA_WHEN_APPLICABLE",
+        "NO_UNCLASSIFIED_MATERIAL_DRIFT",
+        "RECEIPT_REGISTERED",
+        "NEXT_CURSOR_EMPTY_OR_GLOBAL_OBJECTIVE_CLOSED"
+      ],
+      "next_cursor_default": [
+        "REMOTE_CHANNEL_ONLINE",
+        "UPDATE_DIVERGED_PR_AGAINST_CURRENT_MAIN_NO_FORCE",
+        "PREFLIGHT",
+        "SAME_HEAD_CI",
+        "CANONICAL_PROMOTION",
+        "T1_GITHUB_VPS",
+        "FIXED_POINT"
+      ]
+    },
+    "applies_to_entire_centraldark": true,
+    "scope_id": "canon/centraldark-universal-contract-20260919",
+    "one_direction_spine_required": true,
+    "fixed_hud_contract_ref": "this_contract.fixed_hud_contract",
+    "trace_pombo64_contract_ref": "this_contract.trace_pombo64_contract",
+    "plug_and_play_inheritance_ref": "this_contract.plug_and_play_inheritance",
+    "hybrid_runtime_contract_ref": "this_contract.hybrid_runtime_contract",
+    "chefe_authority_ref": "this_contract.centraldark_global_contract.authority",
+    "cards_on_table_ref": "this_contract.centraldark_global_contract.cards_on_table",
+    "global_contract_enforcer_ref": "this_contract.global_contract_enforcer",
+    "continuous_delta_global_ref": "this_contract.continuous_delta_global",
+    "vps_kernel_delta_stream_ref": "this_contract.vps_kernel_delta_stream_contract"
+  },
+  "centraldark_global_contract": {
+    "marker": "CENTRALDARK_WHOLE_HOUSE_ONE_DIRECTION_REQUIRED",
+    "status": "MANDATORY_GLOBAL",
+    "scope": "ENTIRE_CENTRALDARK",
+    "scope_id": "canon/centraldark-universal-contract-20260919",
+    "canonical_owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json",
+    "active_promotion_lane": "canon/centraldark-universal-contract-20260919",
+    "after_promotion_authority": "main",
+    "branch_name_is_authority": false,
+    "contract_evolves_in_same_owner_and_scope": true,
+    "no_parallel_contract": true,
+    "one_direction": true,
+    "one_direction_flow": [
+      "SEGREDO_CHEFE_INTENT",
+      "RECOVER_HISTORY_AND_CONTEXT",
+      "GITHUB_AND_VPS_PARALLEL_T0",
+      "RECONCILE_ALL_MATERIAL_SURFACES",
+      "COORDINATE_ACTIVE_PRS_BRANCHES_AND_LEDGER",
+      "FIND_EXISTING_OWNER",
+      "ONE_WRITER",
+      "GLOBAL_CONTRACT_ENFORCER_ENTRY",
+      "MINIMAL_CAUSAL_PATCH",
+      "PREFLIGHT",
+      "COUNTERPROOF",
+      "MICRO_DEPLOY_CAUSAL_IF_APPLICABLE",
+      "GITHUB_AND_VPS_PARALLEL_T1",
+      "SAME_HEAD_CI",
+      "CANONICAL_PROMOTION_TO_MAIN",
+      "RUNTIME_PROOF",
+      "GLOBAL_CONTRACT_ENFORCER_EXIT",
+      "RECEIPT_AND_POMBO64",
+      "FIXED_HUD_LIVE_DATA",
+      "FIXED_POINT_OR_HUMAN_FRONTIER"
+    ],
+    "convergence_surfaces": [
+      "GITHUB",
+      "VPS",
+      "CASA",
+      "GOOGLE_DRIVE",
+      "MCP",
+      "API",
+      "ADMIN",
+      "OAUTH",
+      "PM2",
+      "DOCKER",
+      "SYSTEMD",
+      "CADDY",
+      "BUILDKITE",
+      "GITHUB_ACTIONS",
+      "SCREENPIPE",
+      "DESKTOP_COMMANDER",
+      "OBSIDIAN",
+      "TELEGRAM",
+      "LOGS",
+      "RECEIPTS",
+      "HUD",
+      "FUTURE_EXECUTORS",
+      "TELEMETRY_HYBRID"
+    ],
+    "authority": {
+      "creator_owner": "SEGREDO/CHEFE",
+      "human_intent_authority": "SEGREDO/CHEFE",
+      "ai_role": "EXECUTE_RECONCILE_MEASURE_PROVE_UNDER_CONTRACT",
+      "ai_may_invent_human_intent": false,
+      "ai_may_hide_gap": false,
+      "ai_must_preserve_human_agency": true
+    },
+    "cards_on_table": {
+      "enabled": true,
+      "missing_piece_must_be_reported": true,
+      "exact_failure_location_required": true,
+      "fact_inference_hypothesis_unknown_must_be_distinguished": true,
+      "exact_improvement_or_next_test_required": true,
+      "false_green_forbidden": true,
+      "beautiful_narrative_may_not_cover_unknown": true,
+      "if_no_access_mark_blocked_and_continue_other_safe_reads": true
+    },
+    "source_of_truth_model": {
+      "structural": "GITHUB_MAIN_PLUS_CANONICAL_OWNERS",
+      "operational_now": "CURRENT_RUNTIME_MEASUREMENT",
+      "human_intent": "SEGREDO/CHEFE",
+      "pr_ledger": "PR_MOTHER_1562_RENDEZVOUS_NOT_AUTHORITY",
+      "hud": "PROJECTION_NOT_AUTHORITY",
+      "history": "PROVENANCE_NOT_CURRENT_TRUTH"
+    },
+    "hybrid_telemetry_contract_ref": "this_contract.hybrid_telemetry_contract",
+    "ephemeral_artifact_policy_ref": "this_contract.ephemeral_artifact_policy",
+    "log_incident_crystallization_contract_ref": "this_contract.log_incident_crystallization_contract",
+    "child_contract_lineage": {
+      "marker": "CENTRALDARK_ROOT_CHILD_CONTRACT_LINEAGE_REQUIRED",
+      "status": "MANDATORY",
+      "architecture": "ONE_GLOBAL_ROOT_MANY_SCOPED_CHILDREN",
+      "root_policy_owner": "AGENTS.md",
+      "machine_contract_owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json",
+      "runtime_enforcer": "scripts/agent-call.mjs",
+      "creates_new_control_plane": false,
+      "creates_new_runtime": false,
+      "creates_new_owner": false,
+      "root_goal": {
+        "authority": "SEGREDO/CHEFE",
+        "mutable_by_runtime": false,
+        "replaceable_by_self_goal": false,
+        "root_goal_id_required": true
+      },
+      "child_contract": {
+        "generated_by_runtime": true,
+        "must_reference_global_contract": true,
+        "must_have_parent": true,
+        "must_be_measurable": true,
+        "must_have_done_condition": true,
+        "must_have_evidence_requirement": true,
+        "must_have_counterproof": true,
+        "must_preserve_root_goal": true,
+        "must_preserve_authority": true,
+        "must_preserve_scope": true,
+        "owner_change_requires_explicit_handoff_proof": true,
+        "scope_expansion_without_authority": "BLOCK",
+        "authority_expansion": "BLOCK",
+        "root_goal_change": "BLOCK",
+        "duplicate_same_goal_same_evidence": "BLOCK",
+        "repeated_no_material_delta": "CHECKPOINT_CONTINUE"
+      },
+      "required_fields": [
+        "ROOT_CONTRACT_REF",
+        "ROOT_CONTRACT_SCHEMA",
+        "ROOT_GOAL_ID",
+        "PARENT_CONTRACT_ID",
+        "CHILD_CONTRACT_ID",
+        "SELF_GOAL_ID",
+        "OWNER",
+        "SCOPE",
+        "EXPECTED_DELTA",
+        "DONE_CONDITION",
+        "EVIDENCE_REQUIRED",
+        "COUNTERPROOF",
+        "DEPENDENCIES",
+        "NEXT_CURSOR",
+        "STATUS"
+      ],
+      "self_goal_states": [
+        "PENDING",
+        "RUNNING",
+        "PASS",
+        "FAIL",
+        "BLOCKED",
+        "SUPERSEDED",
+        "CHECKPOINT_CONTINUE"
+      ],
+      "derivation": {
+        "source": "NEXT_CURSOR_PLUS_MATERIAL_DELTA",
+        "material_delta_required": true,
+        "no_material_delta": "FIXED_POINT_CHECKPOINT_AND_HEARTBEAT_CONTINUES",
+        "deterministic_id_required": true,
+        "same_input_same_id": true,
+        "child_may_create_new_human_intent": false
+      },
+      "fixed_point": {
+        "child_pass_does_not_end_root_goal": true,
+        "fixed_point_is_checkpoint": true,
+        "heartbeat_continues_while_runtime_exists": true,
+        "next_child_only_when_material_delta_or_new_evidence": true
+      },
+      "tlc23_horn_gate": {
+        "required": true,
+        "pdf_path": "docs/CONSCIENCIA/04-MCP-E-CONECTORES/tlc23.pdf",
+        "pdf_sha256": "b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1",
+        "semantics": "FACTS_TO_HORN_RULES_TO_DERIVATION_TO_CONTRADICTION_OR_FIXED_POINT",
+        "pass_requires": [
+          "PDF_HASH_MATCH",
+          "HORN_GATE_STATUS_PASS",
+          "EVIDENCE_REF_PRESENT",
+          "UNKNOWN_ZERO_FOR_MATERIAL_CHILD_GATE"
+        ],
+        "fail_closed_on": [
+          "PDF_HASH_MISMATCH",
+          "HORN_GATE_FAIL",
+          "HORN_GATE_UNKNOWN",
+          "MISSING_EVIDENCE_REF"
+        ]
+      }
+    }
+  },
+  "fixed_hud_contract": {
+    "marker": "CENTRALDARK_FIXED_HUD_REQUIRED",
+    "status": "MANDATORY_FOR_CENTRALDARK_OPERATIONAL_RESPONSES",
+    "always_show_on_centraldark_operational_response": true,
+    "layout": "FIXED",
+    "data": "LIVE_ONLY",
+    "layout_change_requires_explicit_chefe_authorization": true,
+    "sections_in_order": [
+      "AUREOLA_CANONICA",
+      "ACORDAR",
+      "CALIBRAR",
+      "MULTIBUSSOLA",
+      "META_LUPA",
+      "RECONCILIAR",
+      "CONTRAPROVA",
+      "T1_REMEDICAO",
+      "REALIDADE",
+      "REGISTRA",
+      "FIXED_POINT"
+    ],
+    "top_fields": [
+      "HEAD",
+      "SOURCE",
+      "RUNTIME",
+      "FIXED_POINT"
+    ],
+    "live_domains": [
+      "CASA",
+      "VPS",
+      "GITHUB",
+      "MCP",
+      "ADMIN",
+      "OAUTH",
+      "PM2",
+      "CADDY",
+      "BUILDKITE",
+      "CI",
+      "OWNER",
+      "PORTS",
+      "LABELS",
+      "RECEIPTS",
+      "SCREENPIPE",
+      "DESKTOP_COMMANDER",
+      "LOGS",
+      "SYSTEMD",
+      "DOCKER",
+      "HEARTBEAT",
+      "TELEMETRY"
+    ],
+    "state_vocabulary": [
+      "PASS",
+      "FAIL",
+      "WAIT",
+      "UNKNOWN",
+      "BLOCKED",
+      "BLOCKED_TRANSIENT",
+      "NOT_APPLICABLE"
+    ],
+    "percent_policy": {
+      "arbitrary_percent_forbidden": true,
+      "requires_explicit_denominator": true,
+      "formula": "PASSED_DEFINED_CHECKS/ALL_DEFINED_CHECKS",
+      "denominator_and_scope_must_be_visible": true
+    },
+    "label_trace_fields": [
+      "REQUIRED_LABELS",
+      "PRESENT_LABELS",
+      "MISSING_LABELS",
+      "APPLIED_BY",
+      "APPLIED_FROM",
+      "LABEL_SOURCE",
+      "LABEL_FORCED",
+      "RECEIPT_REF"
+    ]
+  },
+  "trace_pombo64_contract": {
+    "marker": "CENTRALDARK_HASH_TIME_POMBO64_TRACE_REQUIRED",
+    "status": "MANDATORY_FOR_MATERIAL_RECEIPTS",
+    "timestamp": {
+      "observed_at_iso8601_with_offset": true,
+      "observed_at_utc": true,
+      "include_components": [
+        "YEAR",
+        "MONTH",
+        "DAY",
+        "HOUR",
+        "MINUTE",
+        "SECOND",
+        "UTC_OFFSET"
+      ],
+      "clock_claim_requires_observed_source": true
+    },
+    "identity": {
+      "trace_id_formula": "SHA256(OBSERVED_AT|PHASE|DIRECTION|OBJECT_ID|OWNER|HEAD|DEPENDENCY_FINGERPRINT)[0:24]",
+      "event_id_format": "CD-YYYYMMDDTHHMMSSO-TRACE24",
+      "required_hashes": [
+        "HEAD_SHA",
+        "ARTIFACT_OR_RESULT_SHA256",
+        "DEPENDENCY_FINGERPRINT"
+      ],
+      "git_blob_sha_and_commit_sha_recorded_when_git_material": true,
+      "self_referential_hash_inside_contract": false,
+      "hash_binding_lives_in_receipt": true
+    },
+    "pombo64_plus": {
+      "papagaio_mode": "OFF",
+      "pombo_mode": "CHECKSUM_ON",
+      "formula": "BASE64URL(SANITIZED_EVIDENCE_ENVELOPE_UTF8)+SHA256(PLAINTEXT)",
+      "checksum_mismatch": "BLOCK",
+      "is_proof": false,
+      "base64_is_security": false,
+      "secrets_forbidden": true
+    },
+    "dedupe": {
+      "event_fingerprint": "MISSION_ID|PR_NUMBER|HEAD_SHA|GATE_ID|GATE_STATE",
+      "same_event_hash": "DROP_DUPLICATE",
+      "same_state_hash": "DO_NOT_REWRITE_HUD_KEEP_GOAL_KEEP_NEXT_CURSOR"
+    }
+  },
+  "plug_and_play_inheritance": {
+    "marker": "CENTRALDARK_PLUG_AND_PLAY_CONTRACT_INHERITANCE",
+    "status": "MANDATORY_FOR_CURRENT_AND_FUTURE_EXECUTORS",
+    "future_executor_without_contract": "FAIL_CLOSED",
+    "required_binding": [
+      "CONTRACT_REF",
+      "CONTRACT_SCHEMA",
+      "CONTRACT_HASH_OR_GIT_BLOB",
+      "OWNER",
+      "CAPABILITY",
+      "SCOPE",
+      "ENTRYPOINT",
+      "HEALTH_PROBE",
+      "RECEIPT_SINK",
+      "ROLLBACK_BOUNDARY",
+      "NEXT_CURSOR",
+      "GLOBAL_MUTATION_GATE",
+      "ROOT_CONTRACT_REF",
+      "ROOT_GOAL_ID",
+      "CHILD_CONTRACT_ID",
+      "SELF_GOAL_ID",
+      "TLC23_HORN_GATE"
+    ],
+    "adapter_is_new_brain": false,
+    "provider_is_authority": false,
+    "model_name_is_authority": false,
+    "engine_switch_is_reset": false,
+    "session_switch_is_reset": false,
+    "portable_kernel_inherits_contract": true,
+    "package_is_cache_not_authority": true,
+    "no_v2_v3_v4_for_same_capability": true
+  },
+  "hybrid_runtime_contract": {
+    "marker": "CENTRALDARK_HYBRID_RUNTIME_DISCOVERY_REQUIRED",
+    "status": "MANDATORY_WHEN_RUNTIME_MANAGER_IS_MATERIAL",
+    "environments": [
+      "PM2",
+      "DOCKER",
+      "SYSTEMD",
+      "CADDY",
+      "DIRECT_PROCESS"
+    ],
+    "pm2": {
+      "canonical_home": "/root/.pm2",
+      "additional_homes_glob": "/root/.centraldark/mcp-auth/profiles/*/home/.pm2",
+      "discover_all_homes_before_mutation": true,
+      "preserve_all_homes": true,
+      "owner_lookup_across_homes": true,
+      "act_only_where_owner_exists": true,
+      "missing_owner_in_one_home_does_not_imply_global_absence": true,
+      "cross_home_restart_forbidden": true,
+      "restart_all_forbidden": true,
+      "receipt_fields": [
+        "PM2_HOMES_DISCOVERED",
+        "OWNER_PM2_HOME",
+        "T0_PID",
+        "T1_PID",
+        "PID_CHANGED",
+        "OWNER_STATUS"
+      ]
+    },
+    "caddy": {
+      "backup_before_mutation": true,
+      "validate_before_reload": true,
+      "reload_only_if_validation_passes": true,
+      "scoped_reload_preferred": true,
+      "full_restart_default": false,
+      "rollback_on_validation_failure": true,
+      "receipt_fields": [
+        "CADDY_BACKUP",
+        "CADDY_VALIDATE",
+        "CADDY_RELOAD",
+        "ROLLBACK_USED"
+      ]
+    },
+    "microdeploy_runtime_proof": {
+      "t0_owner_and_pid_required": true,
+      "targeted_restart_only": true,
+      "t1_pid_and_health_required": true,
+      "listener_and_route_probe_required_when_material": true,
+      "runtime_proof_must_name_service": true,
+      "restart_all_false_required": true
+    }
+  },
+  "global_contract_enforcer": {
+    "marker": "CENTRALDARK_GLOBAL_CONTRACT_ENFORCER_REQUIRED",
+    "status": "MANDATORY_FOR_MUTATION",
+    "scope_id": "canon/centraldark-universal-contract-20260919",
+    "creates_new_dispatcher": false,
+    "owner": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml",
+    "deterministic_gate": "scripts/agent-call.mjs",
+    "deploy_gate": "scripts/vps/deploy-guards-dispatcher.sh",
+    "principle": "EXTEND_EXISTING_TRIGGER_FABRIC_NOT_SECOND_ARCHITECTURE",
+    "read_only_observation_may_bypass_mutation_gate": true,
+    "any_mutable_action_requires_entry_gate": true,
+    "mutation_without_entry_receipt": "BLOCK",
+    "entry_requires": {
+      "contract_scope_match": true,
+      "contract_schema_min": 6,
+      "observed_head_bound": true,
+      "github_t0": "PASS",
+      "vps_t0": "PASS",
+      "cross_surface_drift_classified": true,
+      "owner_proven": true,
+      "writer_scope_proven": true,
+      "preflight": "PASS",
+      "counterproof_plan_ready": true,
+      "rollback_prepared_and_identified": true,
+      "next_cursor_present": true,
+      "tlc23_horn_gate": "PASS",
+      "child_contract_lineage": "PASS"
+    },
+    "exit_requires": {
+      "github_t1": "PASS",
+      "vps_t1": "PASS",
+      "counterproof": "PASS",
+      "receipt_ref": true,
+      "hud_update": "PASS",
+      "hud_state_hash": true,
+      "runtime_proof_when_runtime_mutated": "PASS",
+      "same_head_ci_when_promoting": "PASS",
+      "fixed_point_or_next_cursor": true
+    },
+    "fail_closed_states": [
+      "FAIL",
+      "UNKNOWN",
+      "BLOCKED",
+      "BLOCKED_TRANSIENT",
+      "QUEUED",
+      "PENDING",
+      "IN_PROGRESS",
+      "CANCELLED",
+      "SKIPPED_WITHOUT_PROVEN_NOT_APPLICABLE"
+    ],
+    "human_boundary": {
+      "machine_continues_until_real_human_frontier": true,
+      "allowed": [
+        "SECRET_MFA_OR_EXCLUSIVE_CONSENT",
+        "PHYSICAL_ACTION",
+        "IRREVERSIBLE_OUT_OF_SCOPE_AUTHORIZATION",
+        "NEW_HUMAN_INTENT_REQUIRED",
+        "EXACT_HARD_BLOCKER_AFTER_AUTHORIZED_ROUTES_EXHAUSTED"
+      ]
+    },
+    "fixed_point_aggregator": {
+      "requires": [
+        "GITHUB_T1",
+        "VPS_T1",
+        "RUNTIME_PROOF_APPLICABLE",
+        "SAME_HEAD_CI_APPLICABLE",
+        "COUNTERPROOF",
+        "RECEIPT",
+        "HUD_LIVE_STATE",
+        "HUMAN_DEPENDENCY_APPLICABLE",
+        "TLC23_HORN_GATE",
+        "CHILD_CONTRACT_LINEAGE"
+      ],
+      "any_required_non_pass": "FIXED_POINT_FALSE",
+      "unknown_never_green": true
+    }
+  },
+  "continuous_delta_global": {
+    "marker": "CENTRALDARK_DELTA_CONTINUO_REQUIRED",
+    "status": "MANDATORY_WHILE_MASTER_SESSION_ACTIVE",
+    "input_owner": "SEGREDO/CHEFE",
+    "every_new_material_is_delta_candidate": true,
+    "new_material_does_not_restart_mission": true,
+    "process": [
+      "CAPTURE",
+      "LINK_TO_ACTIVE_GOAL",
+      "DEDUPE",
+      "CLASSIFY",
+      "MEASURE_IF_STATEFUL",
+      "ABSORB_ONLY_USEFUL_DELTA",
+      "UPDATE_BELIEF",
+      "RECONCILE",
+      "COUNTERPROVE",
+      "UPDATE_HUD",
+      "PERSIST_NEXT_CURSOR"
+    ],
+    "useful_delta": [
+      "NEW_CAPABILITY",
+      "NEW_EVIDENCE",
+      "CORRECTION",
+      "NEWER_STATE",
+      "CONTRADICTION_WITH_INFORMATION_GAIN",
+      "BETTER_OWNER_BINDING",
+      "LOWER_COMPLEXITY_EQUAL_OR_GREATER_CAPABILITY"
+    ],
+    "duplicate": "DROP",
+    "no_information_gain": "NO_CHANGE_KEEP_GOAL_KEEP_NEXT_CURSOR",
+    "same_scope": "EVOLVE_SAME_OWNER_SAME_PR_WHEN_WRITER_SCOPE_MATCHES",
+    "interruption": "RESUME_FROM_NEXT_CURSOR_AFTER_REMEASURE",
+    "fixed_point_is_checkpoint_not_mission_amnesia": true,
+    "domain_expansion": "EVOLVE_EXISTING_OWNER_CAPABILITY_SCOPE_WITH_MINIMUM_REQUIRED_DELTA",
+    "next_cursor_materializes_self_goal": true,
+    "self_goal_inherits_global_contract": true,
+    "self_goal_root_authority": "SEGREDO/CHEFE",
+    "self_goal_may_change_root_goal": false,
+    "self_goal_may_expand_scope_without_authority": false,
+    "self_goal_duplicate_same_evidence": "BLOCK",
+    "no_material_delta_after_child": "FIXED_POINT_CHECKPOINT_KEEP_HEARTBEAT"
+  },
+  "hybrid_telemetry_contract": {
+    "marker": "CENTRALDARK_HYBRID_TELEMETRY_REQUIRED",
+    "status": "MANDATORY_WHEN_OBSERVABILITY_IS_MATERIAL",
+    "principle": "SCREEN_IS_OPTIONAL_SENSOR_NOT_SINGLE_POINT_OF_TRUTH",
+    "no_screen_does_not_block_other_observability": true,
+    "screen_unavailable_action": "CONTINUE_WITH_OTHER_AUTHORIZED_SENSORS_AND_MARK_SCREEN_UNKNOWN",
+    "sources": {
+      "github": [
+        "MAIN_SHA",
+        "PR_HEAD_SHA",
+        "DIFF",
+        "LABELS",
+        "WORKFLOWS",
+        "COMMITS",
+        "MERGEABLE"
+      ],
+      "vps_runtime": [
+        "ROOT_HEAD",
+        "CANONICAL_MAIN_HEAD",
+        "WORKTREES",
+        "PROCESSES",
+        "PM2",
+        "DOCKER",
+        "SYSTEMD",
+        "PORTS",
+        "CADDY",
+        "RUNTIME_OWNER"
+      ],
+      "api": [
+        "HEALTH",
+        "HEARTBEAT",
+        "DEEP_STATUS",
+        "ROUTE_RESPONSE",
+        "RESPONSE_TIMESTAMP"
+      ],
+      "logs": [
+        "PM2_LOGS",
+        "SYSTEMD_JOURNAL",
+        "APP_LOGS",
+        "AUDIT_LOGS",
+        "RUNNER_LOGS"
+      ],
+      "mcp": [
+        "TOOL_CALL_AUDIT",
+        "SSE_OR_LIVE_LOG",
+        "RECEIPTS",
+        "CORRELATION_IDS"
+      ],
+      "ci": [
+        "GITHUB_ACTIONS",
+        "BUILDKITE",
+        "JOB_STATUS",
+        "JOB_LOGS",
+        "FAILURE_SIGNATURE"
+      ],
+      "screen": [
+        "SCREENPIPE",
+        "DESKTOP_COMMANDER",
+        "WINDOW_FRAME",
+        "SCREENSHOT"
+      ],
+      "file_config": [
+        "GIT_BLOB_SHA",
+        "SHA256",
+        "CONFIG_FINGERPRINT",
+        "OWNER_PATH"
+      ],
+      "network": [
+        "LISTENER_PID",
+        "BIND_ADDRESS",
+        "PORT",
+        "ROUTE",
+        "PROXY_TARGET"
+      ],
+      "history": [
+        "RECEIPTS",
+        "PAST_LOGS",
+        "PAST_SCREENSHOTS",
+        "MEMORY"
+      ]
+    },
+    "source_semantics": {
+      "screen_is_required": false,
+      "screen_is_sensor": true,
+      "screenshot_is_hidden_runtime_proof": false,
+      "history_is_current_state": false,
+      "process_alive_is_result": false,
+      "http_200_is_global_pass": false,
+      "port_response_requires_owner_attribution": true,
+      "endpoint_response_requires_host_port_route_binding": true,
+      "sensor_failure_is_world_failure": false,
+      "connector_failure_is_provider_failure": false,
+      "correlated_views_are_independent_proofs": false,
+      "direct_target_measurement_preferred": true,
+      "global_current_claim_requires_cross_surface_reconciliation": true
+    },
+    "screenpipe": {
+      "owner": ".agents/skills/screenpipe-live-observer/SKILL.md",
+      "expected_local_api": "http://localhost:3030",
+      "expected_mcp": "http://localhost:3031/mcp",
+      "endpoint_must_be_attributed_to_screenpipe_process_before_use": true,
+      "same_port_other_owner_means_not_screenpipe": true,
+      "stale_observation_is_runtime_truth": false,
+      "live_observations_belong_in": "RECEIPT_AND_FIXED_HUD_NOT_CONTRACT"
+    },
+    "fallback_flow": [
+      "TRY_DIRECT_TARGET_SENSOR",
+      "IF_SCREEN_AVAILABLE_BIND_HOST_PID_WINDOW_FRAME_TIMESTAMP",
+      "ELSE_MARK_SCREEN_UNKNOWN",
+      "MEASURE_PROCESSES_PORTS_AND_OWNER",
+      "MEASURE_APIS_AND_HEARTBEAT",
+      "MEASURE_LOGS_AND_AUDIT",
+      "MEASURE_GITHUB_AND_CI",
+      "MEASURE_CONFIG_HASHES_AND_ROUTES",
+      "RENDEZVOUS_CORRELATED_EVIDENCE",
+      "DISCRIMINATING_TEST_ON_CONTRADICTION",
+      "RECEIPT_WITH_PROVENANCE",
+      "REALITY_JUDGE"
+    ],
+    "evidence_envelope_required": [
+      "SOURCE_TYPE",
+      "SOURCE_ID",
+      "TARGET",
+      "HOST",
+      "OWNER",
+      "OBSERVED_AT",
+      "HEAD_OR_RUNTIME_FINGERPRINT",
+      "EVIDENCE_REF",
+      "CLAIM",
+      "CLASS"
+    ],
+    "contradiction_policy": {
+      "same_target_disagreement": "DO_NOT_VOTE_RUN_DISCRIMINATING_TEST",
+      "stale_vs_current": "CURRENT_WINS_IF_BOUND_TO_SAME_TARGET",
+      "unavailable_sensor": "UNKNOWN_ONLY_FOR_THAT_SENSOR",
+      "unavailable_screen": "DO_NOT_BLOCK_NON_VISUAL_MEASUREMENT",
+      "unresolved_material_contradiction": "FIXED_POINT_FALSE"
+    },
+    "hud": {
+      "expose_sensor_availability": true,
+      "expose_provenance": true,
+      "expose_last_observed_at": true,
+      "expose_owner_binding": true,
+      "expose_cross_surface_drift": true,
+      "layout_remains_fixed": true
+    },
+    "log_incident_contract_ref": "this_contract.log_incident_crystallization_contract",
+    "vps_kernel_delta_stream_ref": "this_contract.vps_kernel_delta_stream_contract"
+  },
+  "ephemeral_artifact_policy": {
+    "marker": "CENTRALDARK_EPHEMERAL_WORKSPACE_CLEAN_REQUIRED",
+    "status": "MANDATORY",
+    "principle": "TEMPORARY_VERSION_SUFFIXES_ARE_EXECUTION_COORDINATION_ONLY_NOT_ARCHITECTURE",
+    "temporary_suffixes_allowed": true,
+    "examples_allowed": [
+      "/tmp/*-v1",
+      "/tmp/*-v2",
+      "/tmp/*-v3",
+      "*-last.json",
+      "*-candidate-*",
+      "isolated-worktree-*"
+    ],
+    "allowed_locations": [
+      "/tmp",
+      "ephemeral_worktree",
+      "process_private_temp",
+      "ci_temp_directory"
+    ],
+    "conditions": [
+      "NOT_CANONICAL_OWNER",
+      "NOT_RUNTIME_AUTHORITY",
+      "NOT_COMMITTED_AS_FINAL_ARCHITECTURE",
+      "BOUND_TO_ACTIVE_MISSION_OR_TEST",
+      "CLEANUP_OWNER_KNOWN",
+      "CLEANUP_AT_END_OR_TTL_REQUIRED"
+    ],
+    "cleanup": {
+      "delete_after_use": true,
+      "cleanup_on_success": true,
+      "cleanup_on_failure_when_safe": true,
+      "cleanup_on_cancel_or_timeout": true,
+      "stale_temp_requires_classification_before_delete": true,
+      "active_process_or_open_handle_blocks_blind_delete": true,
+      "receipt_required_for_material_temp_artifact": false,
+      "final_temp_residue_target": "ZERO_UNLESS_PROVEN_ACTIVE_OR_FORENSIC_KEEP"
+    },
+    "canonical_architecture": {
+      "version_suffix_for_same_capability": "FORBIDDEN",
+      "names_forbidden_when_same_owner_capability": [
+        "v1",
+        "v2",
+        "v3",
+        "v4",
+        "novo",
+        "new",
+        "final",
+        "copy",
+        "backup-as-owner"
+      ],
+      "evolve_same_object": true,
+      "expand_domain_in_same_owner": true,
+      "create_parallel_architecture_for_domain_expansion": false,
+      "create_new_only_when": "MATERIAL_BOUNDARY_OR_CAPABILITY_GAP_PROVEN",
+      "continuity_of_global_contract_required": true
+    },
+    "duplicate_control": {
+      "integrated_global_dedupe": true,
+      "dedupe_dimensions": [
+        "OWNER",
+        "CAPABILITY",
+        "SCOPE",
+        "RUNTIME",
+        "ROUTE",
+        "WORKFLOW",
+        "SERVICE",
+        "CONFIG"
+      ],
+      "before_create": "SEARCH_AND_RECONCILE",
+      "duplicate_found": "ABSORB_DELTA_INTO_EXISTING_OWNER_THEN_RETIRE_DUPLICATE",
+      "duplicate_runtime_must_be_stopped_only_after_owner_and_consumer_proof": true,
+      "historical_copy_is_not_owner": true,
+      "temporary_copy_is_not_owner": true
+    },
+    "vps_cleanliness": {
+      "operational_root_must_not_accumulate_temp_artifacts": true,
+      "do_not_use_dirty_root_as_temp_workspace": true,
+      "prefer_isolated_temp_or_worktree": true,
+      "cleanup_must_not_delete_unclassified_runtime_evidence": true,
+      "cleanliness_is_not_permission_for_reset_hard_or_git_clean": true
+    },
+    "delivery_visibility": {
+      "marker": "CENTRALDARK_INTERNAL_WORK_ARTIFACT_IS_NOT_CHEFE_DELIVERY",
+      "internal_work_artifact_is_delivery": false,
+      "tool_materialization_is_delivery": false,
+      "downloaded_ci_artifact_default_visibility": "INTERNAL_WORKSPACE",
+      "show_raw_file_to_chefe_only_if_explicitly_requested_or_final_deliverable": true,
+      "pombo64_may_reference_hash_manifest_lineage_without_exposing_raw_artifact": true,
+      "pombo64_trace_is_delivery_by_itself": false,
+      "temporary_file_card_in_chat_is_not_proof_of_delivery_intent": true,
+      "final_delivery_must_be_intentional_and_named": true
+    }
+  },
+  "log_incident_crystallization_contract": {
+    "marker": "CENTRALDARK_LOG_INCIDENT_FANOUT_CRYSTALLIZATION_REQUIRED",
+    "status": "MANDATORY_WHEN_MATERIAL_LOG_SIGNAL_EXISTS",
+    "primary_sensor": {
+      "endpoint": "/admin/api/logs",
+      "owner": "apps/modulos/mcp/src/admin.js",
+      "route_binding": "apps/modulos/mcp/src/index.js",
+      "role": "CONTROL_PLANE_SENSOR_NOT_GLOBAL_HEALTH",
+      "supports_filters": [
+        "rota",
+        "cid",
+        "level",
+        "q",
+        "limit"
+      ],
+      "correlation_fields": [
+        "cid",
+        "correlation_id",
+        "request_id",
+        "trace_id",
+        "span_id",
+        "path",
+        "status",
+        "level",
+        "msg",
+        "ms"
+      ],
+      "endpoint_http_200_is_global_pass": false
+    },
+    "companion_sensors": [
+      "/health",
+      "/health/deep",
+      "/admin/api/metricas",
+      "/admin/logs/stream",
+      "PM2_LOGS",
+      "SYSTEMD_JOURNAL",
+      "MCP_AUDIT",
+      "GITHUB_ACTIONS",
+      "BUILDKITE",
+      "CADDY_ROUTE",
+      "LISTENER_OWNER",
+      "CONFIG_AND_HASH"
+    ],
+    "material_signal_rules": {
+      "error_level": "ACTIVATE",
+      "http_5xx": "ACTIVATE",
+      "named_operational_error_signature": "ACTIVATE",
+      "health_deep_non_healthy_or_degraded": "ACTIVATE",
+      "repeated_4xx_or_warn": "ACTIVATE_WHEN_REPETITION_OR_CROSS_SENSOR_EVIDENCE_MAKES_IT_MATERIAL",
+      "single_expected_4xx": "CONTEXT_UNLESS_COUNTERPROOF_SHOWS_IMPACT",
+      "info_only": "CONTEXT_UNLESS_ASSOCIATED_WITH_FAILURE"
+    },
+    "fanout": {
+      "mode": "PARALLEL_READ_ONLY_DIAGNOSIS",
+      "fronts": {
+        "AUTH_OAUTH": [
+          "/authorize",
+          "mcp_unauthorized",
+          "mcp_authorization_missing",
+          "AUTH_HEADERS_REDACTED"
+        ],
+        "MCP_RUNTIME": [
+          "/mcp",
+          "/health",
+          "/health/deep",
+          "MCP_AUDIT",
+          "TOOL_CALLS"
+        ],
+        "HUB_DATABASE": [
+          "hub_mission_consumer_error",
+          "HUB_POSTGREST_*",
+          "DB_PROFILE",
+          "PROJECT_BINDING"
+        ],
+        "ROUTING_NETWORK": [
+          "CADDY",
+          "PROXY_TARGET",
+          "DNS",
+          "PORT",
+          "LISTENER_PID",
+          "ROUTE_STATUS"
+        ],
+        "PROCESS_RUNTIME": [
+          "PM2",
+          "SYSTEMD",
+          "DOCKER",
+          "PROCESS_TREE",
+          "PID_START_TIME"
+        ],
+        "GITHUB_CI": [
+          "PR_HEAD",
+          "MAIN_SHA",
+          "SAME_HEAD_CI",
+          "WORKFLOW_JOB_LOGS",
+          "BUILDKITE"
+        ],
+        "CONFIG_PROVENANCE": [
+          "GIT_BLOB_SHA",
+          "CONFIG_HASH",
+          "ENV_NAMES_NO_SECRET_VALUES",
+          "RUNTIME_FINGERPRINT"
+        ],
+        "SCREEN_OPTIONAL": [
+          "SCREENPIPE",
+          "DESKTOP_COMMANDER",
+          "WINDOW_FRAME"
+        ]
+      },
+      "all_fronts_share_target_and_trace_context": true,
+      "screen_unavailable_does_not_block_other_fronts": true,
+      "readers_may_run_in_parallel": true,
+      "readers_may_not_mutate": true
+    },
+    "rendezvous": {
+      "join_keys": [
+        "TARGET",
+        "OWNER_CANDIDATE",
+        "cid",
+        "correlation_id",
+        "trace_id",
+        "request_id",
+        "HEAD_OR_RUNTIME_FINGERPRINT"
+      ],
+      "dedupe_same_event": true,
+      "classify": [
+        "FACT",
+        "INFERENCE",
+        "HYPOTHESIS",
+        "UNKNOWN"
+      ],
+      "conflict": "DISCRIMINATING_TEST",
+      "no_majority_vote": true,
+      "same_symptom_different_owner": "KEEP_SEPARATE_FRONTS"
+    },
+    "remediation": {
+      "owner_existing_first": true,
+      "reuse_before_create": true,
+      "patch_minimal_causal": true,
+      "mutation_mode": "PARALLEL_ONLY_FOR_PROVEN_DISJOINT_SCOPES_SERIAL_WITHIN_EACH_SCOPE",
+      "same_scope_concurrent_writers": false,
+      "one_active_writer_per_mutable_scope": true,
+      "global_restart_forbidden": true,
+      "force_push_forbidden": true,
+      "reset_hard_forbidden": true,
+      "each_mutation_requires": [
+        "OWNER",
+        "CAUSE",
+        "PREFLIGHT",
+        "ROLLBACK",
+        "T0",
+        "COUNTERPROOF_PLAN"
+      ],
+      "after_each_mutation": [
+        "T1_SAME_TARGET",
+        "LOG_RESCAN",
+        "DEPENDENT_HEALTH_RECHECK",
+        "RECEIPT"
+      ]
+    },
+    "convergence_loop": {
+      "continue_until": "ALL_MATERIAL_INCIDENTS_RESOLVED_OR_EXACT_BLOCKER",
+      "each_round": [
+        "RESCAN_ADMIN_API_LOGS",
+        "COLLECT_NEW_DELTA_ONLY",
+        "FANOUT_AFFECTED_FRONTS",
+        "RENDEZVOUS",
+        "REMEDIATE_BY_OWNER",
+        "T1_AFFECTED_SCOPES",
+        "COUNTERPROOF",
+        "UPDATE_HUD",
+        "PERSIST_NEXT_CURSOR"
+      ],
+      "same_failure_no_new_information": "REUSE_EXISTING_CRYSTAL_OR_ESCALATE_DISCRIMINATING_TEST",
+      "new_error_during_fix": "NEW_DELTA_SAME_MISSION",
+      "unrelated_safe_scope_may_continue": true
+    },
+    "crystallization": {
+      "total_crystallization_requires": [
+        "NO_UNRESOLVED_MATERIAL_LOG_ERROR",
+        "NO_UNRESOLVED_CROSS_SENSOR_CONTRADICTION",
+        "AFFECTED_OWNERS_T1_PASS",
+        "SAME_HEAD_CI_WHEN_GIT_CHANGED",
+        "RUNTIME_PROOF_WHEN_RUNTIME_CHANGED",
+        "RECEIPTS_BOUND_TO_TIME_TARGET_AND_HEAD_OR_FINGERPRINT",
+        "NEXT_CURSOR_EMPTY_OR_ONLY_NONMATERIAL_OBSERVATION"
+      ],
+      "log_silence_alone_is_pass": false,
+      "endpoint_200_alone_is_pass": false,
+      "fixed_point_if_any_required_unknown": false
+    }
+  },
+  "vps_kernel_delta_stream_contract": {
+    "marker": "CENTRALDARK_VPS_KERNEL_DELTA_STREAM_REQUIRED",
+    "status": "MANDATORY_FOR_VPS_OBSERVABILITY",
+    "intent": "DELTA_UTIL_DO_STREAM_PERCORRE_VPS_PELO_MOTOR_FASTAPI_SEM_REMOVER_STREAM_BRUTO",
+    "new_parallel_service": false,
+    "engine_owner": "apps/modulos/elite-gateway/scripts/centraldark_omni_router.py",
+    "transport": "FASTAPI",
+    "public_control_api": "https://api.centralldark.com",
+    "one_heart": "https://api.centralldark.com/heartbeat",
+    "endpoints": [
+      "/kernel/vps/delta",
+      "/kernel/vps/delta/raw",
+      "/kernel/vps/delta/stream",
+      "/kernel/vps/delta/health"
+    ],
+    "source_classes": [
+      "MCP_JSONL",
+      "PM2_LOGS",
+      "CADDY_LOGS",
+      "DOCKER_JSON_LOGS",
+      "HERMES_MISSION_LOGS",
+      "RUNNER_DIAGNOSTIC_LOGS"
+    ],
+    "source_roots_allowlisted": true,
+    "bounded_tail_reads": true,
+    "raw_stream": {
+      "preserve": true,
+      "canonical_human_surface": "apps/modulos/mcp/src/admin.js:/admin/logs/stream",
+      "may_be_removed": false,
+      "derived_delta_replaces_raw": false
+    },
+    "delta_semantics": {
+      "derived_not_authority": true,
+      "action_is_proof": false,
+      "http_200_is_global_pass": false,
+      "sanitize_before_expose": true,
+      "dedupe_by_fingerprint": true,
+      "error_material": true,
+      "repeated_warn_material_threshold": 3,
+      "info_is_context_unless_cross_sensor_material": true
+    },
+    "flow": [
+      "VPS_ALLOWLISTED_SENSORS",
+      "FASTAPI_OMNI_ROUTER",
+      "SANITIZE_AND_NORMALIZE",
+      "DELTA_USEFUL_DEDUPE",
+      "TRIGGER_FABRIC_MATERIALITY",
+      "LOG_INCIDENT_FANOUT",
+      "OWNER_RENDEZVOUS",
+      "HUD_AND_RECEIPT",
+      "ONE_HEART_OBSERVABILITY"
+    ],
+    "whole_vps_rule": {
+      "read_only_first": true,
+      "no_recursive_filesystem_crawl": true,
+      "max_files_bounded": true,
+      "max_bytes_per_file_bounded": true,
+      "process_load_disk_inventory_read_only": true,
+      "unknown_source_is_not_pass": true
+    },
+    "mutation_policy": {
+      "stream_never_mutates_directly": true,
+      "material_delta_routes_to_existing_owner": true,
+      "one_writer_per_scope": true,
+      "global_contract_entry_exit_required_for_fix": true
+    },
+    "runtime_proof_required": [
+      "FASTAPI_PROCESS_OWNER",
+      "LISTENER_PORT",
+      "ROUTE_BINDING",
+      "AUTH_BOUNDARY",
+      "RAW_STREAM_STILL_AVAILABLE",
+      "DELTA_ENDPOINT_RESPONDS",
+      "SSE_STREAM_EMITS",
+      "ONE_HEART_STILL_RESPONDS"
+    ]
+  },
+  "artifact_evidence_matrix": {
+    "marker": "CENTRALDARK_ARTIFACT_EVIDENCE_MATRIX",
+    "status": "ACTIVE",
+    "owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json",
+    "policy": {
+      "artifact_is_owner": false,
+      "artifact_is_runtime_proof": false,
+      "byte_identity_is_semantic_proof": false,
+      "newer_owner_must_not_be_overwritten_by_older_artifact": true,
+      "extract_useful_delta_before_merge": true,
+      "reuse_before_create": true,
+      "provenance_required": true,
+      "deterministic_test_before_promotion": true,
+      "global_contract_inheritance_required": true
+    },
+    "artifacts": [
+      {
+        "id": "PDF_HARNESS_CORE_20260909",
+        "source_name": "CentralDark-PDF-Harness-Core-20260909(1).zip",
+        "sha256": "2c626995644b09505c9fd12ceccffc7e7326e899f9e2f4ea22f9dd856d2ae381",
+        "size_bytes": 901983,
+        "canonical_owner": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PDF-HARNESS-BRIDGE.md",
+        "disposition": "EVIDENCE_SOURCE_REUSE_ONLY",
+        "reason": "main already contains a newer PDF harness lineage; uploaded package was tested as a historical deterministic source and must not regress the current owner",
+        "observed_tests": {
+          "zip_crc": "PASS",
+          "node_tests": "3/3 PASS",
+          "self_test": "8/8 PASS",
+          "exe_sha256_match": "PASS"
+        }
+      },
+      {
+        "id": "UNIFIED_ONESHOT_REMEDIADO",
+        "source_name": "CentralDark-Unified-OneShot-REMEDIADO(1).zip",
+        "sha256": "67c136162a901eca6e39cbc3c69323209bc5e8bcc92a28279ef334ff98455a61",
+        "size_bytes": 102163526,
+        "canonical_owner": "CentralDark-Unified-OneShot existing lineage",
+        "disposition": "DELTA_SOURCE",
+        "useful_delta": [
+          "remote-tray parser",
+          "remote-tray supervisor engine",
+          "remote-tray harness and fixtures",
+          "DPAPI profile auth reuse",
+          "UnifiedRuntime receipt layout"
+        ],
+        "rejected_delta": [
+          "nested duplicate package tree",
+          "parallel runtime creation",
+          "new owner creation"
+        ]
+      },
+      {
+        "id": "REMOTE_TRAY_PACOTAO_FINAL",
+        "source_name": "CentralDark-Remote-Tray-PACOTAO-FINAL(1).zip",
+        "sha256": "fea317f44d13dadbc91274a7db153398cc20e682b34aeed0a832c2a65953f238",
+        "size_bytes": 9633,
+        "canonical_owner": "scripts/remote-bridge/canonical",
+        "disposition": "CANONICAL_PACKAGE_BASE",
+        "useful_delta": [
+          "status contract",
+          "menu",
+          "VPS installer",
+          "base receipt",
+          "SHA256SUMS"
+        ],
+        "gap_proven": [
+          "menu references harness/RUN-TESTS.ps1 while package does not contain harness"
+        ],
+        "gap_status": "CLOSED_IN_CHILD_PR_SOURCE_LAYER",
+        "gap_closed_by": [
+          "scripts/remote-bridge/canonical/engine/CentralDark-Remote-Parser.psm1",
+          "scripts/remote-bridge/canonical/engine/CentralDark-Remote-Tray.ps1",
+          "scripts/remote-bridge/canonical/harness/RUN-TESTS.ps1",
+          "scripts/remote-bridge/canonical/harness/fixtures/auth-code-base-url.log",
+          "scripts/remote-bridge/canonical/harness/fixtures/stale-refresh-token.log",
+          "scripts/remote-bridge/canonical/harness/fixtures/authorized-online-claim.log",
+          "scripts/remote-bridge/canonical/harness/fixtures/local-mcp-failed.log"
+        ],
+        "runtime_proof": "REQUIRES_WINDOWS_CASA_OR_EXTERNAL_DEVICE_MEASUREMENT",
+        "exe_policy": "PACKAGE_ONLY_NOT_GIT",
+        "source_reuse": "PROVEN_ARTIFACT_SOURCE_ABSORBED_IN_PLACE",
+        "pr": "1597"
+      }
+    ],
+    "promotion_rule": [
+      "ARTIFACT_HASH_RECORDED",
+      "OWNER_RESOLVED",
+      "USEFUL_DELTA_CLASSIFIED",
+      "OLDER_ARTIFACT_CANNOT_DOWNGRADE_NEWER_OWNER",
+      "TEST_OR_COUNTERPROOF_PASS",
+      "NO_PARALLEL_ARCHITECTURE",
+      "GLOBAL_CONTRACT_GATE_PASS"
+    ],
+    "last_reconciliation": "REMOTE_TRAY_HARNESS_SOURCE_GAP_CLOSED_RUNTIME_STILL_EXTERNAL"
+  },
+  "global_absorption_and_cockpit_policy": {
+    "marker": "GLOBAL_EVERYTHING_INTO_CENTRALDARK",
+    "status": "CANONICAL",
+    "authority": "SEGREDO/CHEFE",
+    "scope": "GLOBAL",
+    "origin_is_not_architecture": true,
+    "same_contract_regardless_of_origin": true,
+    "accepted_origins": [
+      "human",
+      "chat",
+      "message",
+      "file",
+      "package",
+      "archive",
+      "image",
+      "audio",
+      "video",
+      "chatgpt",
+      "gpt",
+      "codex",
+      "claude",
+      "grok",
+      "gemini",
+      "copilot",
+      "cursor",
+      "windsurf",
+      "hermes",
+      "mcp",
+      "cli",
+      "vps",
+      "casa",
+      "github",
+      "future_agent",
+      "future_tool"
+    ],
+    "ingestion": {
+      "any_material_input_is_delta_candidate": true,
+      "single_character_is_valid_input": true,
+      "whole_file_is_valid_input": true,
+      "whole_package_is_valid_input": true,
+      "preserve_useful_delta": true,
+      "apply_into_existing_centraldark": true,
+      "create_parallel_system_for_new_input": false,
+      "source_identity_changes_contract": false
+    },
+    "mutation_semantics": {
+      "addition": "ABSORB_INTO_CENTRALDARK",
+      "removal": "REMOVE_FROM_CENTRALDARK_WHEN_EXPLICITLY_REQUESTED_AND_SAFE",
+      "update": "UPDATE_EXISTING_CENTRALDARK",
+      "replacement": "REPLACE_TARGET_WITH_REQUESTED_NEW_STATE",
+      "deployment": "PROMOTE_RESULTING_CENTRALDARK_STATE"
+    },
+    "surfaces": {
+      "public_site": {
+        "canonical_host": "centralldark.com",
+        "purpose": "PUBLIC_SITE"
+      },
+      "private_admin_cockpit": {
+        "canonical_host": "admin.centralldark.com",
+        "internet_reachable": true,
+        "access": "AUTHENTICATED_OWNER_ONLY",
+        "one_cockpit": true,
+        "must_integrate": [
+          "chat_and_ai_engines",
+          "hermes",
+          "grok_and_other_models",
+          "mcp_and_tools",
+          "capability_and_model_routing",
+          "omnirouter_capabilities",
+          "graph",
+          "brain_memory_and_docs",
+          "skills",
+          "github_main_prs_issues_branches",
+          "runtime_vps_and_casa",
+          "deploy",
+          "logs_raw_stream_and_classification",
+          "accounts_oauth",
+          "evidence_and_receipts",
+          "live_preview_and_missions"
+        ],
+        "parallel_admin_panels": "ABSORB_OR_ROUTE_INTO_ONE_COCKPIT"
+      }
+    },
+    "global_application": {
+      "all_current_components_inherit": true,
+      "all_future_components_inherit": true,
+      "all_current_agents_and_models_inherit": true,
+      "all_future_agents_and_models_inherit": true,
+      "every_addition_removal_update_uses_same_contract": true,
+      "no_actor_specific_contract": true,
+      "no_origin_specific_contract": true
+    },
+    "pr_mother_projection": {
+      "pr": 1562,
+      "role": "GLOBAL_RENDEZVOUS_LEDGER",
+      "inventory_all_open_prs": true,
+      "inventory_all_open_issues": true,
+      "inventory_all_repository_branches": true,
+      "inventory_does_not_equal_merge_or_close": true,
+      "useful_branch_delta_requires_absorption_before_deletion": true
+    },
+    "continuous_reality_convergence": {
+      "marker": "CONTINUOUS_REALITY_FIXED_POINT_LOOP",
+      "status": "CANONICAL_GLOBAL",
+      "scope": "GLOBAL_CONTINUOUS",
+      "main_movement_is_internal_trigger_not_user_interrupt": true,
+      "do_not_stop_to_report_main_movement": true,
+      "do_not_restart_architecture_on_each_new_head": true,
+      "preserve_current_mission_across_head_changes": true,
+      "loop": [
+        "REMEASURE_HEAD",
+        "ABSORB_USEFUL_DELTA",
+        "FAST_FORWARD_VPS_WHEN_SAFE",
+        "MEASURE_RUNTIME",
+        "GRILL_ME",
+        "COUNTERPROOF",
+        "REPEAT_IF_SOURCE_OF_TRUTH_ADVANCES",
+        "STOP_ONLY_WHEN_REALITY_EQUALS_FIXED_POINT"
+      ],
+      "canonical_expression": "MAIN_MOVEU -> REMEDE_HEAD -> ABSORVE_DELTA_UTIL -> VPS_ACOMPANHA_POR_FF -> MEDE_RUNTIME -> GRILL -> CONTRAPROVA -> SE_MAIN_MOVER_DE_NOVO_REPETE -> SO_PARA_QUANDO_REALIDADE_EQUALS_FIXED_POINT",
+      "invariants": {
+        "UNKNOWN_IS_NOT_PASS": true,
+        "DOCUMENTED_IS_NOT_EXECUTED": true,
+        "COMMITTED_IS_NOT_DEPLOYED": true,
+        "MERGED_IS_NOT_DEPLOYED": true,
+        "ACTION_IS_NOT_PROOF": true,
+        "NO_BLIND_OVERWRITE": true,
+        "NO_PARALLEL_ARCHITECTURE": true,
+        "USEFUL_DELTA_BEFORE_CLEANUP": true,
+        "FIXED_POINT_IS_REALITY_JUDGMENT": true
+      },
+      "stopping_condition": {
+        "only": "REALITY_EQUALS_FIXED_POINT",
+        "chat_status_update_is_not_stop_condition": true,
+        "github_head_change_is_not_stop_condition": true,
+        "intermediate_green_is_not_stop_condition": true,
+        "partial_success_is_not_stop_condition": true
+      }
+    }
+  },
+  "global_secret_reuse_contract": {
+    "marker": "CENTRALDARK_GLOBAL_SECRET_REUSE",
+    "status": "CANONICAL",
+    "scope": "GLOBAL_ALL_CURRENT_AND_FUTURE_SECRET_CONSUMERS",
+    "owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json",
+    "canonical_vault": "/root/CentralDark/secrets",
+    "repository_secrets": "REUSE_ALL_EXISTING_AND_FUTURE",
+    "repository_secret_inventory_role": "CAPABILITY_CATALOG_BY_NAME_AND_METADATA",
+    "secret_values_in_git": "FORBIDDEN",
+    "secret_names_and_metadata_in_ledger": "ALLOWED",
+    "create_new_secret_only_if": "NO_EQUIVALENT_AFTER_MEASURE",
+    "compatibility_inputs": [
+      "/root/secrets",
+      "GitHub Actions Repository Secrets",
+      "runtime environment",
+      "PM2",
+      "systemd",
+      "CI/CD"
+    ],
+    "resolution_order": [
+      "MEASURE_EXISTING_OWNER",
+      "SEARCH_REPOSITORY_SECRETS",
+      "SEARCH_CANONICAL_VAULT",
+      "SEARCH_RUNTIME_BINDINGS",
+      "REUSE_MATCHING_EXISTING",
+      "CREATE_ONLY_IF_MATERIAL_GAP_PROVEN"
+    ],
+    "invariants": {
+      "REUSE_BEFORE_CREATION": true,
+      "NO_PARALLEL_VAULT": true,
+      "ONE_SECRET_OWNER_PER_CAPABILITY": true,
+      "UNKNOWN_SECRET_VALUE_IS_NOT_MISSING_SECRET": true,
+      "DOCUMENTED_SECRET_IS_NOT_RUNTIME_BOUND": true,
+      "SAME_SECRET_MAY_FEED_MULTIPLE_CONSUMERS_WHEN_CHEFE_INTENT_REQUIRES": true,
+      "REALITY_IS_JUDGE": true
+    },
+    "compatibility_policy": {
+      "legacy_root_secrets_role": "COMPATIBILITY_INPUT_NOT_CANONICAL_OWNER",
+      "do_not_break_live_consumers": true,
+      "migrate_incrementally_with_readback": true
+    }
+  },
+  "telegram_transport_contract": {
+    "marker": "CENTRALDARK_TELEGRAM_DIRECT_TRANSPORT",
+    "status": "CANONICAL",
+    "scope": "ALL_TELEGRAM_BOT_AND_USER_CONNECTIONS",
+    "bot_transport": "TELEGRAM_BOT_API_DIRECT",
+    "bot_api_base": "https://api.telegram.org",
+    "bot_update_mode": "LONG_POLLING_ONLY",
+    "bot_webhook_transport": "FORBIDDEN",
+    "centraldark_subdomain_as_telegram_transport": "FORBIDDEN",
+    "user_transport": "TELEGRAM_MTPROTO_DIRECT",
+    "mtproto_owner": "scripts/telegram-mtproto/server.js",
+    "mtproto_library": "gramjs",
+    "admin_ui_control_path": "/api/telegram/mtproto",
+    "admin_ui_control_path_role": "CENTRALDARK_CONTROL_PLANE_NOT_TELEGRAM_TRANSPORT",
+    "one_transport_owner_per_identity": true,
+    "stale_webhook_must_be_deleted_on_bot_boot": true,
+    "reality_is_judge": true
+  },
+  "telegram_orchestrator_contract": {
+    "marker": "CENTRALDARK_TELEGRAM_ORCHESTRATOR",
+    "authority": "SEGREDO/CHEFE",
+    "coordinator": "SOL",
+    "executor": "PIVETE/HERMES",
+    "control_plane": "CENTRALDARK",
+    "bot_identities_are_interfaces_not_authority": true,
+    "user_mtproto_identity_is_interface_not_second_brain": true,
+    "sol_may_route_all_existing_capabilities": true,
+    "sol_secret_access": "CANONICAL_SECRET_RESOLVER",
+    "create_new_agent_only_if": "NO_EXISTING_CAPABILITY_MATCH",
+    "six_functional_lenses_are_not_six_mandatory_permanent_agents": true,
+    "preserve_one_writer_per_mutable_scope": true,
+    "sol_self_approval": false,
+    "reality_is_judge": true
+  }
 }

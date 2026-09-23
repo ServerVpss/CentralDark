@@ -1,4 +1,4 @@
-42691e008ba50ee55646ca81113bf0abfde87af2  .agents/skills/meta-lupa/SKILL.md
+622d7d07e42ba1cfe7e19983dac1c9da8beb418f  .agents/skills/meta-lupa/SKILL.md
 # O_QUE_E=Arquivo de identidade da Meta Lupa canônica. A primeira linha prende o conteúdo versionado do SKILL.md ao git-blob SHA1 esperado.
 # COMO_LER=campo_1: git-blob SHA1 esperado | campo_2: caminho exato protegido.
 # CAMINHO_PROTEGIDO=.agents/skills/meta-lupa/SKILL.md

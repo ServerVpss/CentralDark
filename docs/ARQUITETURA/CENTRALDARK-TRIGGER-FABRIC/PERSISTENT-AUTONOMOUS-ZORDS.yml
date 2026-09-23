@@ -103,6 +103,11 @@ zords:
       role: REVIEW_ONLY
       config_owner: .coderabbit.yaml
       bridge: scripts/coderabbit-bridge.mjs
+      event_owner: .github/workflows/hermes-core-signal-watch.yml
+      event_sources: [pull_request_review, issue_comment, repository_dispatch]
+      centraldark_api_fallback: ADVISORY_ONLY_ON_CANDIDATE
+      model_output_is_proof: false
+      material_candidate_next: centraldark_autonomia_recheck
       no_merge_authority: true
     signal_watcher:
       owner: apps/modulos/HERMES-CORE/agents/Signal-Watcher/agent.mjs
@@ -145,6 +150,18 @@ learning:
   silent_drop: FORBIDDEN
   same_refuted_finding_without_new_information: REUSE_MINERAL_NO_RETRY
   mineral_may_reenter_meta_lupa_when: NEW_CAUSAL_EVIDENCE
+
+dependabot_event_loop:
+  owner: .github/workflows/dependabot-auto-merge.yml
+  deterministic_conflict_engine: scripts/dependabot/resolve-conflicts.sh
+  triggers: [pull_request_target, workflow_run, repository_dispatch, schedule, workflow_dispatch]
+  update_branch_is_sync_not_approval: true
+  checks_pending_block_update_branch: false
+  same_head_green_required_before_squash: true
+  workflow_gate_failure_is_red: true
+  api_model_fallback_owner: .github/workflows/pr-auto-review.yml
+  api_model_role: ADVISORY_ONLY
+  model_output_is_merge_authority: false
 
 persistent_failure_sweep:
   enabled: true

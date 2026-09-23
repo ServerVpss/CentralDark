@@ -366,6 +366,19 @@ CLAIM|NARRATIVE|FRAMEWORK|LEGACY|VENDOR|MODEL_OUTPUT
 
 Essas regras valem para arqueologia de repo, aliases, migração de sistemas, frameworks, modelos, providers, narrativas de produto e qualquer cadeia de autoridade. A fonte preserva proveniência; a capacidade generalizada fica independente dela.
 
+A segunda fonte recebida pelo CHEFE, _The “right way” of Hermetism: disputes on Gnostic’s, Pagan’s and Christian’s (re-)visions of the Hermetic phenomenon in late antiquity_ (Ronaldo G. G. Pereira), reforça o mesmo guardrail por outro caminho: não existia uma interpretação canônica única dos Hermetica; grupos receptores diferentes produziram leituras diferentes e até contraditórias. Fingerprint recebido: `SHA256=d93505685db430a639ea3af067891217a00d4944926f839dbded3c5c1a9f37ef`, `SIZE=247110`.
+
+```text
+ONE_SOURCE_NAME != ONE_INTERPRETATION
+RECEIVER_CONTEXT_CAN_CHANGE_INTERPRETATION=true
+INTERPRETATION_CONSENSUS != ORIGIN_TRUTH
+SYMBOLIC_LINEAGE != RUNTIME_AUTHORITY
+HERMES_TRISMEGISTUS_NAME = SEMANTIC_PROVENANCE + DESIGN_IDENTITY
+REALITY_REMAINS_JUDGE=true
+```
+
+Na Casa, isso permite reutilizar `Hermes Trismegistus` como identidade semântica do mesmo Hermes já existente — CORE, KERNEL e RUNTIME — sem criar outro owner, outro runtime ou outro cérebro. O nome organiza proveniência e intenção; comportamento técnico continua preso a owners, testes, HEAD, runtime e contraprova.
+
 ### 8.3 Exposição mediada, efeito residual e reutilização contida — padrão Medusa
 
 A página de Medusa foi usada como **mapa de navegação**, e o núcleo foi contraverificado em fonte antiga (Pseudo-Apolodoro) e em evidência/curadoria do Metropolitan Museum of Art. A mitologia é proveniência da descoberta, não autoridade técnica da Casa.

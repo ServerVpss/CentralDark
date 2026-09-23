@@ -1,0 +1,617 @@
+{
+  "schema": "centraldark.meta-lupa.interligados.pr-pattern-sweep.v1",
+  "status": "FULL_RANGE_CLASSIFIED_ON_MAIN",
+  "owner": ".agents/skills/meta-lupa/SKILL.md",
+  "range": {
+    "from_pr": 1576,
+    "to_pr": 1634,
+    "existing_pr_count": 55,
+    "non_pr_numbers": [
+      1603,
+      1612,
+      1626,
+      1627
+    ]
+  },
+  "parent_main_observed": "ebf93c80aa1e0779883aa9b88d56cea980dc31e6",
+  "laws": [
+    "MEASURE_BEFORE_CREATION",
+    "REUSE_BEFORE_CREATE",
+    "UNKNOWN != PASS",
+    "DOCUMENTED != EXECUTED",
+    "REALITY = JUDGE",
+    "CURRENT > HISTORY"
+  ],
+  "classification_rule": "EVERY_EXISTING_PR_IN_RANGE_IS_CLASSIFIED; ONLY_STABLE_NON_TEMPORAL_PATTERN_PROMOTED; IMPLEMENTATION_AND_RUNTIME_REMAIN_SEPARATE",
+  "records": [
+    {
+      "pr": 1576,
+      "state": "open",
+      "merged": false,
+      "classification": "NEW_PATTERN+RUNTIME",
+      "patterns": [
+        "TRIGGER_SURFACE_IS_NOT_HISTORY_PROVENANCE",
+        "SERVICE_REGISTERED_IS_NOT_HEALTHY_INSTALL",
+        "PLATFORM_CAPABILITY_REQUIRES_PLATFORM_MATCH",
+        "VISUAL_PROJECTION_IS_NOT_AUTHORITY"
+      ],
+      "runtime_remeasure_required": true
+    },
+    {
+      "pr": 1577,
+      "state": "open",
+      "merged": false,
+      "classification": "NEW_PATTERN+RUNTIME",
+      "patterns": [
+        "HISTORY_RESILIENCE_REQUIRES_TEMPORAL_BOUNDARY",
+        "CURRENT_OVER_HISTORY"
+      ],
+      "runtime_remeasure_required": true
+    },
+    {
+      "pr": 1578,
+      "state": "open",
+      "merged": false,
+      "classification": "NEW_PATTERN+RUNTIME",
+      "patterns": [
+        "PRIMARY_ROUTE_CHANGE_REUSES_EXISTING_OWNER"
+      ],
+      "runtime_remeasure_required": true
+    },
+    {
+      "pr": 1579,
+      "state": "open",
+      "merged": false,
+      "classification": "NEW_PATTERN+RUNTIME",
+      "patterns": [
+        "PR_IS_COMMUNICATION_LEDGER_NOT_AUTHORITY",
+        "MULTIPLE_WRITERS_REQUIRE_DISJOINT_SCOPES",
+        "ONE_ACTIVE_FINALIZER_LEASE",
+        "TECHNICAL_BLOCKER_AUTO_CONTINUES_UNTIL_HUMAN_FRONTIER",
+        "DAILY_FRESHNESS_USES_COMMIT_DATE_NOT_RUNNER_CLOCK"
+      ],
+      "runtime_remeasure_required": true
+    },
+    {
+      "pr": 1580,
+      "state": "closed",
+      "merged": true,
+      "classification": "REUSE_EXISTING+RUNTIME_REGRESSION",
+      "patterns": [
+        "CURRENT_OVER_HISTORY",
+        "LIVE_STATE_MUST_BE_MEASURED_AT_RUNTIME"
+      ],
+      "runtime_remeasure_required": true
+    },
+    {
+      "pr": 1581,
+      "state": "open",
+      "merged": false,
+      "classification": "REUSE_EXISTING+RUNTIME",
+      "patterns": [
+        "REUSE_BEFORE_CREATE",
+        "ONE_SYSTEM_ONLY"
+      ],
+      "runtime_remeasure_required": true
+    },
+    {
+      "pr": 1582,
+      "state": "closed",
+      "merged": true,
+      "classification": "IMPLEMENTATION_SPECIFIC+RUNTIME",
+      "patterns": [
+        "MERGED_IS_NOT_DEPLOYED"
+      ],
+      "runtime_remeasure_required": true
+    },
+    {
+      "pr": 1583,
+      "state": "closed",
+      "merged": true,
+      "classification": "REUSE_EXISTING+RUNTIME",
+      "patterns": [
+        "ONE_SYSTEM_ONLY"
+      ],
+      "runtime_remeasure_required": true
+    },
+    {
+      "pr": 1584,
+      "state": "closed",
+      "merged": true,
+      "classification": "DOCS_ONLY_REUSE",
+      "patterns": [
+        "DOCUMENTED_IS_NOT_EXECUTED"
+      ],
+      "runtime_remeasure_required": false
+    },
+    {
+      "pr": 1585,
+      "state": "closed",
+      "merged": true,
+      "classification": "DOCS_ONLY_REUSE",
+      "patterns": [
+        "REGISTER_BEFORE_REPORT"
+      ],
+      "runtime_remeasure_required": false
+    },
+    {
+      "pr": 1586,
+      "state": "closed",
+      "merged": true,
+      "classification": "REUSE_EXISTING",
+      "patterns": [
+        "REUSE_BEFORE_CREATE"
+      ],
+      "runtime_remeasure_required": false
+    },
+    {
+      "pr": 1587,
+      "state": "closed",
+      "merged": true,
+      "classification": "REUSE_EXISTING",
+      "patterns": [
+        "REUSE_BEFORE_CREATE",
+        "MACHINE_OUTPUT_IS_DELTA_UTIL"
+      ],
+      "runtime_remeasure_required": false
+    },
+    {
+      "pr": 1588,
+      "state": "closed",
+      "merged": true,
+      "classification": "REUSE_EXISTING+RUNTIME",
+      "patterns": [
+        "GENERATED_ARTIFACT_MUST_MATCH_SOURCE"
+      ],
+      "runtime_remeasure_required": true
+    },
+    {
+      "pr": 1589,
+      "state": "closed",
+      "merged": true,
+      "classification": "IMPLEMENTATION_SPECIFIC+RUNTIME",
+      "patterns": [
+        "RUNNER_DECLARATION_MUST_MATCH_CANONICAL_RUNNER_POLICY"
+      ],
+      "runtime_remeasure_required": true
+    },
+    {
+      "pr": 1590,
+      "state": "open",
+      "merged": false,
+      "classification": "REUSE_EXISTING+RUNTIME",
+      "patterns": [
+        "ONE_SYSTEM_ONLY",
+        "ONE_OPERATIONAL_SNAPSHOT_MANY_PROJECTIONS"
+      ],
+      "runtime_remeasure_required": true
+    },
+    {
+      "pr": 1591,
+      "state": "closed",
+      "merged": true,
+      "classification": "IMPLEMENTATION_SPECIFIC",
+      "patterns": [
+        "GENERATED_ARTIFACT_MUST_MATCH_SOURCE"
+      ],
+      "runtime_remeasure_required": false
+    },
+    {
+      "pr": 1592,
+      "state": "closed",
+      "merged": true,
+      "classification": "NEW_PATTERN_REUSED",
+      "patterns": [
+        "SINGLE_SURFACE_EMBED_BEFORE_NEW_SURFACE",
+        "ONE_SYSTEM_ONLY"
+      ],
+      "runtime_remeasure_required": false
+    },
+    {
+      "pr": 1593,
+      "state": "closed",
+      "merged": true,
+      "classification": "NEW_PATTERN_REUSED",
+      "patterns": [
+        "SECRET_VALUE_NEVER_IN_RENDERER"
+      ],
+      "runtime_remeasure_required": false
+    },
+    {
+      "pr": 1594,
+      "state": "closed",
+      "merged": true,
+      "classification": "NEW_PATTERN_REUSED",
+      "patterns": [
+        "SECRET_VALUE_NEVER_IN_RENDERER"
+      ],
+      "runtime_remeasure_required": false
+    },
+    {
+      "pr": 1595,
+      "state": "closed",
+      "merged": true,
+      "classification": "REUSE_EXISTING",
+      "patterns": [
+        "MINIMUM_SCOPE_FIRST",
+        "FAILURE_ATTRIBUTION_REQUIRES_CAUSAL_EVIDENCE"
+      ],
+      "runtime_remeasure_required": false
+    },
+    {
+      "pr": 1596,
+      "state": "closed",
+      "merged": true,
+      "classification": "REUSE_EXISTING+RUNTIME",
+      "patterns": [
+        "ONE_SYSTEM_ONLY",
+        "REUSE_BEFORE_CREATE",
+        "SINGLE_SURFACE_EMBED_BEFORE_NEW_SURFACE"
+      ],
+      "runtime_remeasure_required": true
+    },
+    {
+      "pr": 1597,
+      "state": "closed",
+      "merged": true,
+      "classification": "NEW_PATTERN+RUNTIME",
+      "patterns": [
+        "ROOT_DIRTY_MUST_BE_PRESERVED_UNTIL_RECONCILED",
+        "GIT_CURRENT_IS_NOT_RUNTIME_CURRENT",
+        "LIVE_STATE_MUST_BE_MEASURED_AT_RUNTIME"
+      ],
+      "runtime_remeasure_required": true
+    },
+    {
+      "pr": 1598,
+      "state": "open",
+      "merged": false,
+      "classification": "NEW_PATTERN+RUNTIME",
+      "patterns": [
+        "OBSERVER_ENV_IS_NOT_OWNER_HEALTH"
+      ],
+      "runtime_remeasure_required": true
+    },
+    {
+      "pr": 1599,
+      "state": "closed",
+      "merged": true,
+      "classification": "NEW_PATTERN+RUNTIME",
+      "patterns": [
+        "ONE_CONFLICT_RESOLVER_PER_CONTRACT",
+        "ONE_WORKFLOW_PER_CONTRACT"
+      ],
+      "runtime_remeasure_required": true
+    },
+    {
+      "pr": 1600,
+      "state": "closed",
+      "merged": false,
+      "classification": "CLOSED_UNMERGED_SUPERSEDED",
+      "patterns": [
+        "HISTORICAL_ERROR_IS_NOT_CURRENT_FAILURE"
+      ],
+      "runtime_remeasure_required": false
+    },
+    {
+      "pr": 1601,
+      "state": "open",
+      "merged": false,
+      "classification": "NEW_PATTERN+RUNTIME",
+      "patterns": [
+        "DEPLOY_TRIGGER_MUST_COVER_CAUSAL_PATH"
+      ],
+      "runtime_remeasure_required": true
+    },
+    {
+      "pr": 1602,
+      "state": "closed",
+      "merged": true,
+      "classification": "NEW_PATTERN",
+      "patterns": [
+        "WORK_ARTIFACT_IS_NOT_USER_DELIVERY"
+      ],
+      "runtime_remeasure_required": false
+    },
+    {
+      "pr": 1604,
+      "state": "closed",
+      "merged": true,
+      "classification": "NEW_PATTERN+RUNTIME",
+      "patterns": [
+        "ONE_OPERATIONAL_SNAPSHOT_MANY_PROJECTIONS",
+        "ONE_SYSTEM_ONLY"
+      ],
+      "runtime_remeasure_required": true
+    },
+    {
+      "pr": 1605,
+      "state": "closed",
+      "merged": true,
+      "classification": "REUSE_EXISTING",
+      "patterns": [
+        "ONE_OPERATIONAL_SNAPSHOT_MANY_PROJECTIONS"
+      ],
+      "runtime_remeasure_required": false
+    },
+    {
+      "pr": 1606,
+      "state": "open",
+      "merged": false,
+      "classification": "BODY_TEMPLATE_NO_STABLE_DELTA_PROMOTED",
+      "patterns": [],
+      "runtime_remeasure_required": true
+    },
+    {
+      "pr": 1607,
+      "state": "closed",
+      "merged": true,
+      "classification": "NEW_PATTERN",
+      "patterns": [
+        "TECHNICAL_BLOCKER_AUTO_CONTINUES_UNTIL_HUMAN_FRONTIER"
+      ],
+      "runtime_remeasure_required": false
+    },
+    {
+      "pr": 1608,
+      "state": "closed",
+      "merged": true,
+      "classification": "NEW_PATTERN+RUNTIME",
+      "patterns": [
+        "OFFICIAL_UPDATER_REUSE_BEFORE_CUSTOM_UPDATE"
+      ],
+      "runtime_remeasure_required": true
+    },
+    {
+      "pr": 1609,
+      "state": "closed",
+      "merged": true,
+      "classification": "REUSE_EXISTING",
+      "patterns": [
+        "TECHNICAL_BLOCKER_AUTO_CONTINUES_UNTIL_HUMAN_FRONTIER",
+        "PROGRESS_REQUIRES_CLOSED_DENOMINATOR",
+        "VISUAL_PROJECTION_IS_NOT_AUTHORITY"
+      ],
+      "runtime_remeasure_required": false
+    },
+    {
+      "pr": 1610,
+      "state": "closed",
+      "merged": true,
+      "classification": "REUSE_EXISTING",
+      "patterns": [
+        "COMPONENT_PROOF_IS_NOT_INTEGRATION_PROOF"
+      ],
+      "runtime_remeasure_required": false
+    },
+    {
+      "pr": 1611,
+      "state": "closed",
+      "merged": true,
+      "classification": "NEW_PATTERN",
+      "patterns": [
+        "TOOL_DISCOVERY_BEFORE_ACCESS_CLAIM"
+      ],
+      "runtime_remeasure_required": false
+    },
+    {
+      "pr": 1613,
+      "state": "open",
+      "merged": false,
+      "classification": "REUSE_EXISTING+RUNTIME",
+      "patterns": [
+        "EXPLICIT_DELIVERY_USES_SAME_SHA",
+        "SAME_HEAD_PROOF"
+      ],
+      "runtime_remeasure_required": true
+    },
+    {
+      "pr": 1614,
+      "state": "closed",
+      "merged": true,
+      "classification": "NEW_PATTERN+RUNTIME",
+      "patterns": [
+        "HUMAN_ACCEPTANCE_IS_NOT_PROOF",
+        "IMMUTABLE_PROOF_REUSES_FINGERPRINT",
+        "CALIBRATE_EXECUTE_FALSIFY"
+      ],
+      "runtime_remeasure_required": true
+    },
+    {
+      "pr": 1615,
+      "state": "closed",
+      "merged": false,
+      "classification": "CLOSED_UNMERGED_ABSORBED",
+      "patterns": [
+        "HISTORICAL_ERROR_IS_NOT_CURRENT_FAILURE"
+      ],
+      "runtime_remeasure_required": false
+    },
+    {
+      "pr": 1616,
+      "state": "closed",
+      "merged": true,
+      "classification": "NEW_PATTERN+RUNTIME",
+      "patterns": [
+        "INTENT_IS_NOT_TOOL_IMPLEMENTATION",
+        "TECHNICAL_BLOCKER_AUTO_CONTINUES_UNTIL_HUMAN_FRONTIER"
+      ],
+      "runtime_remeasure_required": true
+    },
+    {
+      "pr": 1617,
+      "state": "closed",
+      "merged": true,
+      "classification": "REUSE_EXISTING",
+      "patterns": [
+        "ONE_SYSTEM_ONLY",
+        "REUSE_BEFORE_CREATE"
+      ],
+      "runtime_remeasure_required": false
+    },
+    {
+      "pr": 1618,
+      "state": "closed",
+      "merged": true,
+      "classification": "NEW_PATTERN",
+      "patterns": [
+        "STABLE_COMPONENT_IDENTITY_MONOTONIC_REVISION"
+      ],
+      "runtime_remeasure_required": false
+    },
+    {
+      "pr": 1619,
+      "state": "closed",
+      "merged": true,
+      "classification": "NEW_PATTERN+RUNTIME",
+      "patterns": [
+        "SECRET_VALUE_NEVER_IN_RENDERER",
+        "REUSE_BEFORE_CREATE"
+      ],
+      "runtime_remeasure_required": true
+    },
+    {
+      "pr": 1620,
+      "state": "closed",
+      "merged": true,
+      "classification": "NEW_PATTERN",
+      "patterns": [
+        "POST_PR_CONTINUES_UNTIL_MERGED_OR_MATERIAL_BLOCKER",
+        "SAME_HEAD_PROOF"
+      ],
+      "runtime_remeasure_required": false
+    },
+    {
+      "pr": 1621,
+      "state": "closed",
+      "merged": true,
+      "classification": "NEW_PATTERN+RUNTIME",
+      "patterns": [
+        "UNKNOWN_PREVENTS_GREEN_BUT_IS_NOT_AUTOMATIC_DRIFT",
+        "PROGRESS_REQUIRES_CLOSED_DENOMINATOR"
+      ],
+      "runtime_remeasure_required": true
+    },
+    {
+      "pr": 1622,
+      "state": "closed",
+      "merged": true,
+      "classification": "NEW_PATTERN",
+      "patterns": [
+        "CONTEXT_BEFORE_JUDGMENT"
+      ],
+      "runtime_remeasure_required": false
+    },
+    {
+      "pr": 1623,
+      "state": "closed",
+      "merged": true,
+      "classification": "NEW_PATTERN",
+      "patterns": [
+        "REGISTRA_PROMOTION_CHAIN",
+        "PR_MOTHER_IS_SINGLE_RENDEZVOUS"
+      ],
+      "runtime_remeasure_required": false
+    },
+    {
+      "pr": 1624,
+      "state": "closed",
+      "merged": true,
+      "classification": "NEW_PATTERN+RUNTIME",
+      "patterns": [
+        "SINGLE_SURFACE_EMBED_BEFORE_NEW_SURFACE",
+        "ONE_SYSTEM_ONLY"
+      ],
+      "runtime_remeasure_required": true
+    },
+    {
+      "pr": 1625,
+      "state": "closed",
+      "merged": true,
+      "classification": "NEW_PATTERN",
+      "patterns": [
+        "EXTERNAL_PROJECT_IS_CANDIDATE_DELTA_NOT_TRANSPLANT",
+        "BLIND_CODE_COPY_FALSE"
+      ],
+      "runtime_remeasure_required": false
+    },
+    {
+      "pr": 1628,
+      "state": "closed",
+      "merged": true,
+      "classification": "NEW_PATTERN",
+      "patterns": [
+        "FAST_AUTOMERGE_REQUIRES_LIVE_REVALIDATION",
+        "POST_PR_CONTINUES_UNTIL_MERGED_OR_MATERIAL_BLOCKER",
+        "SAME_HEAD_PROOF"
+      ],
+      "runtime_remeasure_required": false
+    },
+    {
+      "pr": 1629,
+      "state": "open",
+      "merged": false,
+      "classification": "NEW_PATTERN+RUNTIME",
+      "patterns": [
+        "PERSONA_USES_CANONICAL_SOUL_MODEL_REPLACEABLE",
+        "MODEL_IS_REPLACEABLE_ENGINE"
+      ],
+      "runtime_remeasure_required": true
+    },
+    {
+      "pr": 1630,
+      "state": "open",
+      "merged": false,
+      "classification": "NEW_PATTERN+EXTERNAL_RUNTIME",
+      "patterns": [
+        "ACTION_REQUIRED_IS_WAIT_NOT_FAIL_NOT_PASS"
+      ],
+      "runtime_remeasure_required": true
+    },
+    {
+      "pr": 1631,
+      "state": "open",
+      "merged": false,
+      "classification": "NEW_PATTERN+EXTERNAL_RUNTIME",
+      "patterns": [
+        "SEMANTIC_ACCEPT_BOTH_IS_NOT_BLIND_ACCEPT_BOTH",
+        "ONE_CONFLICT_RESOLVER_PER_CONTRACT",
+        "SAME_HEAD_PROOF"
+      ],
+      "runtime_remeasure_required": true
+    },
+    {
+      "pr": 1632,
+      "state": "closed",
+      "merged": true,
+      "classification": "NEW_PATTERN",
+      "patterns": [
+        "MEASURE_BEFORE_CREATION",
+        "REUSE_BEFORE_CREATE"
+      ],
+      "runtime_remeasure_required": false
+    },
+    {
+      "pr": 1633,
+      "state": "closed",
+      "merged": true,
+      "classification": "NEW_PATTERN+RUNTIME",
+      "patterns": [
+        "MEASURE_BEFORE_CREATION",
+        "REUSE_BEFORE_CREATE"
+      ],
+      "runtime_remeasure_required": true
+    },
+    {
+      "pr": 1634,
+      "state": "closed",
+      "merged": true,
+      "classification": "REUSE_EXISTING",
+      "patterns": [
+        "MEASURE_BEFORE_CREATION",
+        "REUSE_BEFORE_CREATE"
+      ],
+      "runtime_remeasure_required": false
+    }
+  ]
+}

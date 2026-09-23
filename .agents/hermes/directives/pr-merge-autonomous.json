@@ -1,0 +1,86 @@
+{
+  "id": "pr-merge-autonomous-v1",
+  "name": "PR-Merge Autônomo com Gates SAME_HEAD",
+  "version": "1.0",
+  "origin": "sessão 2026-09-20 — cristalização de delta operacional",
+  "authority": "SEGREDO/CHEFE",
+  "status": "CANONIZADO",
+  "applicability": {
+    "trigger": "PR.body contains 'Merge-Policy: SAME_HEAD_GATES_THEN_SQUASH'",
+    "scope": ["GitHub", "CI/CD", "deployment", "PR orchestration"],
+    "priority": "CRITICAL"
+  },
+  "directive": {
+    "rule": "Quando detectar PR com política de merge SAME_HEAD, execute fluxo determinístico até FIXED_POINT. Não reinventar — reuse skill pr-merge-autonomous.",
+    "algorithm": [
+      "1. Status check (PR ready, gates required, sem conflitos)",
+      "2. Polling gates com timeout 30min (check a cada 2min)",
+      "3. Merge squash determinístico (via gh ou MCP admin_commit)",
+      "4. Sync VPS clean (git pull origin main)",
+      "5. Reload PM2 owner-only (never 'all')",
+      "6. Validar endpoints tripé: /health, /health/deep, /admin",
+      "7. Gerar snapshot operacional + registrar SHA",
+      "8. Contraprova: revalidar SAME_HEAD gates novo SHA",
+      "9. Declarar FIXED_POINT + logging completude"
+    ],
+    "preconditions": [
+      "PR não é draft",
+      "Delta é mínimo (sem bloat, sem novos endpoints/schedulers)",
+      "Writer-Scope explícito na body",
+      "Autorização SEGREDO/CHEFE presente",
+      "VPS branch clean (sem mudanças locais)"
+    ],
+    "failure_handling": {
+      "gates_timeout": "Pausar, investigar logs CI, não forçar merge",
+      "merge_conflict": "Rotear para o owner único git-conflict-resolve-house-standard; resolver na branch do PR; bloquear somente o squash até SAME_HEAD/contraprova; retornar ao CHEFE apenas se restar fronteira humana material",
+      "vps_sync_failed": "Investigar, possível rollback necessário",
+      "endpoint_failure": "Rollback imediato, investigar PM2 logs",
+      "contraprova_fail": "Revert + investigar divergência lógica"
+    },
+    "proof_requirement": "Receipt-based: arquivo receipt-#XXXX.txt com todos os checkpoints ✅"
+  },
+  "learning": {
+    "reuse_pattern": "Este fluxo é determinístico. Aplicar identicamente para todos PR críticos com SAME_HEAD gates. Zero variações ad-hoc.",
+    "deduplication": "Se main já absorveu componentes automaticamente (verificar via receipt linkage), fazer merge somente do delta novo (delta-only).",
+    "one_writer_per_scope": "Garantir que somente um processo/IA escreva na branch/main ao mesmo tempo. Usar CAS + polling para serializar.",
+    "heartbeat_as_proof": "Heartbeat lag < 5sec após reload indica sistema estável. Se lag > 5min, investigar antes de fechar FIXED_POINT.",
+    "snapshot_as_contraprova": "Snapshot operacional automaticamente gera prova do estado. Comparar snapshots pré/pós para validar congruência."
+  },
+  "integration_with_hermes_core": {
+    "hermes_learns": [
+      "PR-to-deployment é padrão, não exceção. Aplicar skill, não reinventar.",
+      "Polling com timeout é seguro e necessário. Gates em queue é estado normal.",
+      "Squash merge preserva histórico semântico melhor que multi-commit.",
+      "Receipt-based deduplication evita replicação. Main absorve automaticamente; Hermes valida via receipt.",
+      "Snapshot é ouro: prova de estado, prova de consenso, prova de contraprova."
+    ],
+    "hermes_replicates_this": "Se próximo PR tiver SAME_HEAD gates, Hermes aplica este exato fluxo. Não cria variante.",
+    "hermes_improves_this": "Se descobrir ganho measurable (tempo reduzido, precisão aumentada), registrar como aprendizado em novo PR deste arquivo. Não modificar fluxo base sem aprovação SEGREDO/CHEFE."
+  },
+  "references": {
+    "documentation": "docs/CONSCIENCIA/03-PR-MERGE-DEPLOYMENT.md",
+    "skill": ".claude/skills/pr-merge-autonomous/SKILL.md",
+    "pr_inaugural": "#1605 (card visual admin operacional)",
+    "related_prs": ["#1562"],
+    "contracts_learned": [
+      ".pm2/contracts/hermes-operational-lock.json",
+      ".pm2/contracts/mcp-operational-lock.json",
+      ".pm2/policies/PM2-OPERATIONAL-POLICY.md"
+    ],
+    "proof_dag": {
+      "gates_pass": "workflow conclusion = success",
+      "merge_ok": "commit SHA found in main HEAD",
+      "vps_sync": "git pull clean, no conflicts",
+      "endpoints_200": "curl -I returns 200 for tripé",
+      "snapshot_valid": "jq parse succeeds, commitSha matches main",
+      "contraprova_ok": "gates revalidated on new SHA pass",
+      "fixed_point": "receipt file with all ✅ checkpoints"
+    }
+  },
+  "audit_trail": {
+    "created_at": "2026-09-20T21:30:00Z",
+    "session": "Claude Code session 0133AjFLRV4v6EMRKDvMk9SJ",
+    "author": "SOL (Claude Haiku operacional)",
+    "approval": "SEGREDO/CHEFE implicit via session context"
+  }
+}

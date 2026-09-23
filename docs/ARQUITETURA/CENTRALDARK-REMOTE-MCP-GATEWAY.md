@@ -4,15 +4,55 @@ owner: CENTRALDARK
 
 ## Rota operacional
 
-- MCP da Casa: `https://mcp.centralldark.com/mcp`
-- Remote Desktop Commander: `https://mcp.desktopcommander.app/mcp`
-- Screenpipe local: `http://127.0.0.1:3030`
-- Device: `SEGREDO`
+- **Control plane primário:** `https://mcp.centralldark.com/mcp`
+- **OAuth CentralDark:** `https://mcp.centralldark.com/authorize` → authorization code + PKCE S256 → `/token`
+- **Remote Desktop Commander:** `https://mcp.desktopcommander.app/mcp` — legado/fallback opcional
+- **Screenpipe local:** `http://127.0.0.1:3030`
+- **Device:** `SEGREDO`
 
 ## Regra
 
-Desktop Commander e transporte/capacidade local. CentralDark continua owner/control plane.
-Nao expor token do Screenpipe, shell irrestrito ou secrets no repo.
+CentralDark MCP é o control plane oficial e o fluxo padrão da Casa. O Bridge/Tray local autentica
+diretamente no MCP CentralDark; Desktop Commander remoto deixa de ser requisito do fluxo normal e
+permanece como capability/fallback quando explicitamente necessário.
+
+```text
+PRIMARY_CONTROL_PLANE=CENTRALDARK_MCP
+DIRECT_MCP_AUTH=OAUTH2_PKCE
+OWNER_CONSENT=ADMIN_PASSWORD_ON_CENTRALDARK_AUTHORIZE
+TOKEN_EXCHANGE=AUTHORIZATION_CODE_PKCE
+LOCAL_TOKEN_STORE=DPAPI_PER_PROFILE
+LEGACY_REMOTE_ENABLED_BY_DEFAULT=false
+REMOTE_DESKTOP_COMMANDER=OPTIONAL_FALLBACK
+NPX_EBUSY_DOES_NOT_BLOCK_DIRECT_MCP=true
+```
+
+O fluxo chamado de “senha ou código” deve preservar a semântica real do OAuth atual: a senha é o
+consentimento humano no `/authorize`; o servidor emite um authorization code ligado ao PKCE; depois
+o cliente troca o code por access/refresh token e persiste localmente de forma protegida. O MCP
+CentralDark **não declara device-code grant próprio** enquanto esse grant não existir na metadata e no
+runtime vivo.
+
+Nao expor senha, access token, refresh token, Authorization header, cookie ou secret no repo/log/receipt.
+
+## Fluxo direto do Bridge da Casa
+
+```text
+CHEFE
+→ CentralDarkBridge.exe (mesmo UI + Tray)
+→ perfil Segredo/Fulano
+→ cache/refresh DPAPI, se válido
+→ senão https://mcp.centralldark.com/authorize
+→ senha admin digitada na página CentralDark
+→ authorization code + state
+→ PKCE S256 /token
+→ access + refresh protegidos por DPAPI
+→ /admin/mcp initialize
+→ tools/list
+→ tool call real
+→ receipt
+→ Reality Judge
+```
 
 ## Contexto local pelo MCP remoto
 
@@ -20,8 +60,15 @@ Nao expor token do Screenpipe, shell irrestrito ou secrets no repo.
 `GARIMPO-CHEFE/context/screenpipe-latest.json`. O Desktop Commander remoto pode ler esse arquivo
 quando o agente precisar de contexto recente de tela/navegador, mantendo o dado na Casa.
 
-`CentralDark-Remote-Bridge.ps1` sobe o sidecar e mantem `@wonderwhy-er/desktop-commander@latest remote`
-reconectando sempre pela rota oficial do Desktop Commander.
+`CentralDark-Remote-Bridge.ps1` sobe o sidecar e deve manter o pin provado
+`@wonderwhy-er/desktop-commander@0.2.48 remote` até nova versão ser remensurada.
+O pacote da Casa `CentralDark-Remote-Tray-NPX-ATUAL-FIX-20260909` preserva o mesmo owner,
+login URL e parser de device code, mas `latest` ali é evidência histórica/operacional,
+não substitui automaticamente o pin canônico.
+
+Para mais de uma conta, o modelo canônico é `MULTI_ACCOUNT_ISOLATED_HOME`: cada conta
+usa um `HOME` próprio, um `device.json` próprio e um serviço/watchdog próprio, todos
+passando pelo mesmo corredor Remote MCP/Desktop Commander.
 
 Config canônica: `scripts/remote-bridge/CENTRALDARK-REMOTE-BRIDGE.config.json`.
 

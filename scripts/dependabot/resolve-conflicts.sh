@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
-# Motor único da Casa para conflito de PR de bump.
+# Motor único da Casa para conflito de PR (Dependabot ou humano same-repo).
 #
-# Política:
+# PADRÃO SAME/ALL:
+#   - funciona no self-hosted Linux da VPS;
 #   - trabalha em worktree isolado: nunca troca a branch da Casa principal;
-#   - manifestos/lockfiles: preserva o lado do PR (o bump é o delta útil);
-#   - qualquer outro conflito: preserva main (fail-closed);
-#   - nunca inventa branch de destino: o workflow fornece PR_HEAD_REF;
-#   - nunca empurra para main;
-#   - conflito/refutação vira receipt/minério; não some em silêncio.
+#   - faz o equivalente ao botão GitHub "Accept both changes" para blocos textuais;
+#   - ALL não é PASS: depois remove marcadores, valida sintaxe/formato aplicável,
+#     contraprova e deixa SAME_HEAD CI julgar;
+#   - conflito binário ou composição inválida falha fechado;
+#   - nunca empurra para main.
 
 set -euo pipefail
 
@@ -17,6 +18,7 @@ REPO_DIR="${REPO_DIR:-/root/CentralDark}"
 FETCH_REF="refs/centraldark/pr/${PR_NUM}"
 WORKTREE_ROOT="${CENTRALDARK_DEPENDABOT_WORKTREES:-${TMPDIR:-/tmp}/centraldark-dependabot}"
 WORKTREE="${WORKTREE_ROOT}/pr-${PR_NUM}-$$"
+SEMANTIC_ALL_HELPER="${SEMANTIC_ALL_HELPER:-scripts/dependabot/semantic-all-resolver.mjs}"
 
 if [ -z "$PR_HEAD_REF" ]; then
   echo "BLOCKED_MISSING_PR_HEAD_REF"
@@ -51,9 +53,19 @@ echo "🧭 RESOLVER_PR=$PR_NUM"
 echo "🔄 PR_HEAD_REF=$PR_HEAD_REF"
 echo "🏠 CASA_WORKTREE_MUTATED=0"
 echo "🧱 ISOLATED_WORKTREE=$WORKTREE"
+echo "🪬 SEMANTIC_ALL_DEFAULT=1"
+echo "🔘 GITHUB_UI_EQUIVALENT=ACCEPT_BOTH_ALL_BLOCKS_THEN_MARK_RESOLVED"
+echo "⚖️ BLIND_ACCEPT_BOTH=0"
 
-git -C "$REPO_DIR" fetch --prune origin main
-git -C "$REPO_DIR" fetch --force origin "refs/pull/${PR_NUM}/head:${FETCH_REF}"
+if [ -n "${GITHUB_TOKEN:-}" ]; then
+  AUTH_B64="$(printf 'x-access-token:%s' "$GITHUB_TOKEN" | base64 | tr -d '\n')"
+  GIT_AUTH=(-c "http.https://github.com/.extraheader=AUTHORIZATION: basic $AUTH_B64")
+else
+  GIT_AUTH=()
+fi
+
+git "${GIT_AUTH[@]}" -C "$REPO_DIR" fetch --prune origin main
+git "${GIT_AUTH[@]}" -C "$REPO_DIR" fetch --force origin "refs/pull/${PR_NUM}/head:${FETCH_REF}"
 git -C "$REPO_DIR" worktree add --detach "$WORKTREE" "$FETCH_REF"
 
 cd "$WORKTREE"
@@ -85,39 +97,67 @@ if [ "${#CONFLICTS[@]}" -eq 0 ]; then
   exit 3
 fi
 
-# Estamos no HEAD do PR e fazemos merge de origin/main:
-#   --ours   = PR
-#   --theirs = main
+if [ ! -f "$SEMANTIC_ALL_HELPER" ]; then
+  echo "BLOCKED_SEMANTIC_ALL_HELPER_MISSING=$SEMANTIC_ALL_HELPER"
+  git merge --abort 2>/dev/null || true
+  exit 5
+fi
+
 for f in "${CONFLICTS[@]}"; do
-  case "$f" in
-    package.json|package-lock.json|pnpm-lock.yaml|yarn.lock|\
-    */package.json|*/package-lock.json|*/pnpm-lock.yaml|*/yarn.lock)
-      echo "RESOLVE path=$f winner=PR"
-      git checkout --ours -- "$f"
-      git add -- "$f"
-      ;;
-    *)
-      echo "RESOLVE path=$f winner=MAIN fail_closed=1"
-      git checkout --theirs -- "$f"
-      git add -- "$f"
-      ;;
-  esac
+  echo "RESOLVE path=$f policy=SEMANTIC_ALL_ACCEPT_BOTH_THEN_VALIDATE"
+  node "$SEMANTIC_ALL_HELPER" "$f"
+  git add -- "$f"
 done
 
-if git diff --name-only --diff-filter=U | grep -q .; then
-  echo "BLOCKED_UNRESOLVED_CONFLICTS"
-  git diff --name-only --diff-filter=U
+echo "AUTO_REVIEW_CONFLICTS=${#CONFLICTS[@]}"
+echo "SEMANTIC_ALL_APPLIED=1"
+
+git diff --cached --check
+
+if git grep -n -E '^(<<<<<<< |=======|>>>>>>> )' -- "${CONFLICTS[@]}"; then
+  echo "BLOCKED_CONFLICT_MARKERS_LEFT"
   git merge --abort 2>/dev/null || true
   exit 4
 fi
 
-git -c user.name='CentralDark Dependabot Resolver' \
+for f in "${CONFLICTS[@]}"; do
+  case "$f" in
+    *.json)
+      node -e "JSON.parse(require('node:fs').readFileSync(process.argv[1], 'utf8'))" "$f"
+      ;;
+    *.js|*.mjs|*.cjs)
+      node --check "$f"
+      ;;
+    *.sh)
+      bash -n "$f"
+      ;;
+    *.py)
+      python3 -m py_compile "$f"
+      ;;
+    *.yml|*.yaml)
+      python3 - <<'PY' "$f"
+import sys
+from pathlib import Path
+text = Path(sys.argv[1]).read_text()
+for marker in ('<<<<<<< ', '=======', '>>>>>>> '):
+    if marker in text:
+        raise SystemExit(f'YAML_CONFLICT_MARKER_LEFT:{sys.argv[1]}')
+PY
+      ;;
+  esac
+done
+
+echo "AUTO_REVIEW_COUNTERPROOF=PASS"
+
+git -c user.name='CentralDark Semantic ALL Resolver' \
     -c user.email='actions@users.noreply.github.com' \
     commit --no-edit
 
 NEW_HEAD="$(git rev-parse HEAD)"
-git push origin "HEAD:refs/heads/${PR_HEAD_REF}"
+git "${GIT_AUTH[@]}" push origin "HEAD:refs/heads/${PR_HEAD_REF}"
 
 echo "RESOLVED_AND_PUSHED pr=${PR_NUM} head_ref=${PR_HEAD_REF} head=${NEW_HEAD}"
 echo "DIRECT_MAIN_WRITE=0"
 echo "CASA_WORKTREE_MUTATED=0"
+echo "SAME_HEAD_CI_REQUIRED=1"
+echo "UNKNOWN_IS_PASS=0"

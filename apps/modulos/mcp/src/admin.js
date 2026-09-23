@@ -12,6 +12,8 @@ import { log } from "./log.js";
 import { withCid } from "./correlation.js";
 import { config } from "./config.js";
 import { injectPatternAdmin } from "./admin-patterns-ui.js";
+import { getOperationalSnapshot } from "./operational-telemetry.js";
+import { getLinearAdminSnapshot } from "./tools/integrations.js";
 
 const COOKIE = "cd_admin";
 const TTL_MS = 2 * 60 * 60 * 1000;
@@ -179,6 +181,30 @@ main{padding:24px 28px 40px;max-width:1400px;margin:0 auto}
 .log-box .warn{color:var(--warn)}
 .log-box .info{color:var(--info)}
 .log-box .debug{color:var(--muted)}
+.delta-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
+.delta-kpi{background:rgba(3,31,29,.55);border:1px solid var(--border);border-radius:12px;padding:11px 12px}
+.delta-kpi .lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;font-weight:700}
+.delta-kpi .val{font-size:22px;font-weight:800;margin-top:3px;color:var(--em2);font-family:ui-monospace,'SF Mono',monospace}
+.delta-toolbar{display:flex;gap:8px;align-items:center;justify-content:space-between;margin:0 0 10px;flex-wrap:wrap}
+.delta-toolbar .left{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.delta-pill{border:1px solid var(--border);background:rgba(3,31,29,.55);border-radius:999px;color:var(--muted);padding:6px 10px;font-size:11px;font-weight:700;letter-spacing:.2px}
+.delta-pill.hot{border-color:rgba(248,113,113,.5);color:#fecaca;background:rgba(248,113,113,.12)}
+.delta-table{display:grid;gap:8px;max-height:310px;overflow-y:auto;padding-right:4px}
+.delta-row{display:grid;grid-template-columns:80px minmax(160px,1.4fr) 80px minmax(220px,2fr) 125px;gap:10px;align-items:start;background:rgba(3,31,29,.58);border:1px solid var(--border);border-left:4px solid var(--info);border-radius:10px;padding:10px 12px;font-size:12px}
+.delta-row.error{border-left-color:var(--err)}
+.delta-row.warn{border-left-color:var(--warn)}
+.delta-row.info{border-left-color:var(--info)}
+.delta-sev{font-weight:800;text-transform:uppercase;font-family:ui-monospace,'SF Mono',monospace}
+.delta-row.error .delta-sev{color:var(--err)}
+.delta-row.warn .delta-sev{color:var(--warn)}
+.delta-row.info .delta-sev{color:var(--info)}
+.delta-code{color:var(--text);font-family:ui-monospace,'SF Mono',monospace;word-break:break-word}
+.delta-route{color:var(--muted);font-family:ui-monospace,'SF Mono',monospace;word-break:break-word}
+.delta-hint{color:#c8f5eb;line-height:1.45}
+.delta-last{color:var(--muted);text-align:right;font-family:ui-monospace,'SF Mono',monospace}
+.delta-empty{border:1px dashed var(--border);border-radius:10px;color:var(--muted);padding:14px;text-align:center;font-size:12px}
+.delta-raw{color:var(--muted);font-size:11px;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+@media(max-width:900px){.delta-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.delta-row{grid-template-columns:70px minmax(0,1fr)}.delta-last{text-align:left}}
 .filters{display:grid;grid-template-columns:repeat(4,1fr) auto auto;gap:8px;margin-bottom:12px}
 .filters input,.filters select{background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:8px 10px;border-radius:8px;font-size:12px;font-family:inherit}
 .filters input:focus,.filters select:focus{outline:none;border-color:var(--em)}
@@ -192,6 +218,8 @@ pre.snippet{background:var(--bg2);border:1px solid var(--border);border-radius:1
 .etapa.ok{border-left:3px solid var(--em2)}
 .etapa.err{border-left:3px solid var(--err)}
 .diag-actions{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.graph-shell{height:calc(100vh - 190px);min-height:620px;border:1px solid var(--border);border-radius:14px;overflow:hidden;background:#02070c;box-shadow:inset 0 0 32px rgba(16,185,129,.08)}
+.graph-shell iframe{display:block;width:100%;height:100%;border:0;background:#02070c}
 __PATTERN_ADMIN_STYLE__
 @media(max-width:900px){.hero{grid-template-columns:1fr 1fr 1fr}.grid{grid-template-columns:1fr}.conector-grid{grid-template-columns:1fr}.filters{grid-template-columns:1fr 1fr}}
 </style></head>
@@ -203,6 +231,8 @@ __PATTERN_ADMIN_STYLE__
 <nav class="tabs">
   <div class="tab active" data-p="visao">Visão Geral</div>
   <div class="tab" data-p="tools">Ferramentas</div>
+  <div class="tab" data-p="linear">Linear</div>
+  <div class="tab" data-p="grafo">🌌 Grafo Celestial</div>
   __PATTERN_ADMIN_TAB__
   <div class="tab" data-p="audit">Auditoria</div>
   <div class="tab" data-p="conector">Conector</div>
@@ -227,10 +257,57 @@ __PATTERN_ADMIN_STYLE__
       <div class="card"><h2>Dependências <span class="badge">health/deep</span></h2><div id="checks"></div></div>
       <div class="card"><h2>Processo <span class="badge">runtime</span></h2><div id="proc"></div></div>
     </div>
+    <div style="height:14px"></div>
+    <div class="card">
+      <h2>Fluxo determinístico <span class="badge">heartbeat · logs · MCP · forensic</span></h2>
+      <div id="operationalFlow" class="log-box" style="height:260px"></div>
+    </div>
   </div>
 
   <div class="pane" id="p-tools">
     <div class="card"><h2>Catálogo de ferramentas MCP <span class="badge" id="toolCountBadge">carregando…</span></h2><div id="tools"></div></div>
+  </div>
+
+  <div class="pane" id="p-linear">
+    <div class="hero" style="grid-template-columns:2fr 1fr 1fr">
+      <div class="kpi hero-score">
+        <div class="lbl">Linear · rota CentralDark</div>
+        <div class="val" id="linearState">UNKNOWN</div>
+        <div class="bar"><div id="linearBar" style="width:0%"></div></div>
+      </div>
+      <div class="kpi"><div class="lbl">Issues visíveis</div><div class="val" id="linearIssueCount">-</div></div>
+      <div class="kpi"><div class="lbl">Última leitura</div><div class="val" id="linearCheckedAt" style="font-size:16px">-</div></div>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <h2>Rotas <span class="badge">server-side · segredo não vai pro browser</span></h2>
+        <div class="row"><span>Status seguro</span><span class="info">/linear/status</span></div>
+        <div class="row"><span>Snapshot admin</span><span class="info">/admin/api/linear</span></div>
+        <div class="row"><span>Owner</span><span>apps/modulos/mcp/src/tools/integrations.js</span></div>
+        <div class="diag-actions" style="margin-top:14px">
+          <a class="btn" href="https://linear.app/segredo/team/SEG" target="_blank" rel="noopener" style="text-decoration:none">📋 Abrir Board SEG</a>
+          <a class="btn ghost" href="https://linear.app/segredo/settings/ai/coding-sessions" target="_blank" rel="noopener" style="text-decoration:none">⚙ Coding sessions</a>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Conta / workspace <span class="badge">sem token exposto</span></h2>
+        <div id="linearMeta"><div class="row"><span>Estado</span><span class="warn">carregando…</span></div></div>
+      </div>
+    </div>
+    <div style="height:14px"></div>
+    <div class="card">
+      <h2>Trabalho recente no Linear <span class="badge">atualiza a cada 30s</span></h2>
+      <div id="linearIssues"><div class="delta-empty">carregando…</div></div>
+    </div>
+  </div>
+
+  <div class="pane" id="p-grafo">
+    <div class="card" style="padding:12px">
+      <h2>Grafo Celestial <span class="badge">mesmo painel · mesmo login · sem subdomínio próprio</span></h2>
+      <div class="graph-shell">
+        <iframe src="/admin/grafo/" title="Grafo Celestial CentralDark" loading="lazy" referrerpolicy="same-origin"></iframe>
+      </div>
+    </div>
   </div>
 
   __PATTERN_ADMIN_PANE__
@@ -249,7 +326,25 @@ __PATTERN_ADMIN_STYLE__
       <div id="resultBusca" class="log-box" style="height:220px"></div>
     </div>
     <div style="height:14px"></div>
-    <div class="card"><h2>Stream ao vivo <span class="badge">SSE /admin/logs/stream</span></h2><div id="log" class="log-box"></div></div>
+    <div class="card">
+      <h2>Delta útil do stream <span class="badge">até 200 grupos recentes · resumo da sessão</span></h2>
+      <div class="delta-grid">
+        <div class="delta-kpi"><div class="lbl">Eventos vistos</div><div class="val" id="deltaTotal">0</div></div>
+        <div class="delta-kpi"><div class="lbl">Erros únicos</div><div class="val" id="deltaErrors">0</div></div>
+        <div class="delta-kpi"><div class="lbl">Top repetição</div><div class="val" id="deltaTop">0×</div></div>
+        <div class="delta-kpi"><div class="lbl">Último delta</div><div class="val" id="deltaLast">--:--</div></div>
+      </div>
+      <div class="delta-toolbar">
+        <div class="left">
+          <span class="delta-pill" id="deltaMode">agrupando por código/rota/mensagem</span>
+          <span class="delta-pill hot" id="deltaHot" style="display:none">🔥 repetição crítica</span>
+        </div>
+        <button class="btn ghost" onclick="limparDeltaUtil()">Limpar delta</button>
+      </div>
+      <div id="deltaRows" class="delta-table"><div class="delta-empty">Aguardando eventos SSE para separar ruído de ação.</div></div>
+    </div>
+    <div style="height:14px"></div>
+    <div class="card"><h2>Stream bruto ao vivo <span class="badge">SSE /admin/logs/stream</span></h2><div id="log" class="log-box"></div></div>
   </div>
 
   <div class="pane" id="p-conector">
@@ -333,6 +428,106 @@ document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
 
 __PATTERN_ADMIN_SCRIPT__
 
+const deltaState = { total: 0, groups: new Map(), lastAt: null };
+function htmlEscape(valor){
+  return String(valor ?? '').replace(/[&<>"']/g, (ch) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+function compactarTexto(valor, limite=190){
+  const texto = String(valor ?? '').replace(/\\s+/g, ' ').trim();
+  return texto.length > limite ? texto.slice(0, limite - 1) + '…' : texto;
+}
+function metaTexto(meta){
+  if (!meta) return '';
+  if (typeof meta === 'string') return meta;
+  try { return JSON.stringify(meta); } catch { return String(meta); }
+}
+function extrairRotaDelta(evento){
+  const meta = evento?.meta || {};
+  return meta.path || meta.rota || meta.route || meta.url || '-';
+}
+function extrairCodigoDelta(evento){
+  const bruto = [evento?.msg, metaTexto(evento?.meta)].join(' ');
+  const conhecidos = ['HUB_POSTGREST_401','HUB_POSTGREST_403','HUB_POSTGREST_404','HUB_POSTGREST_500','ECONNREFUSED','ETIMEDOUT','SIGTERM'];
+  for (const codigo of conhecidos) if (bruto.includes(codigo)) return codigo;
+  const http = bruto.match(/\\bHTTP[_\\s-]?(\\d{3})\\b/i) || bruto.match(/\\bstatus["':\\s]+(\\d{3})\\b/i);
+  if (http) return 'HTTP_' + http[1];
+  const erro = bruto.match(/\\b([A-Z][A-Z0-9_]{4,})\\b/);
+  return erro ? erro[1] : (evento?.msg || 'EVENTO').slice(0, 42);
+}
+function hintDelta(codigo, evento){
+  const bruto = [evento?.msg, metaTexto(evento?.meta)].join(' ');
+  if (codigo === 'HUB_POSTGREST_401' || /Invalid API key/i.test(bruto)) {
+    return 'O servidor rejeitou a credencial. Verificar se a chave pertence ao projeto Supabase configurado. Esta hipótese requer validação no serviço.';
+  }
+  if (/SIGTERM|Device shutdown|offline/i.test(bruto)) {
+    return 'Queda controlada de processo/dispositivo. Validar política de restart, heartbeat e reconexão antes de marcar runtime verde.';
+  }
+  if (/ECONNREFUSED|ETIMEDOUT/i.test(bruto)) {
+    return 'Falha de conectividade. Medir alvo, porta, tunnel e serviço antes de retentar deploy.';
+  }
+  if (String(evento?.level).toLowerCase() === 'error') return 'Erro novo/repetido: preservar evento, medir owner e abrir próximo cursor com evidência.';
+  if (String(evento?.level).toLowerCase() === 'warn') return 'Aviso operacional: observar repetição antes de promover para incidente.';
+  return 'Evento informativo: manter como contexto, sem ação se não houver repetição ou falha associada.';
+}
+function chaveDelta(evento){
+  const codigo = extrairCodigoDelta(evento);
+  const rota = extrairRotaDelta(evento);
+  const msg = compactarTexto(evento?.msg || '-', 80);
+  return { codigo, rota, msg, key: [String(evento?.level || 'info').toLowerCase(), codigo, rota, msg].join('|') };
+}
+function registrarDeltaUtil(evento){
+  if (!evento || typeof evento !== 'object' || Array.isArray(evento)) return;
+  deltaState.total += 1;
+  deltaState.lastAt = evento?.t || new Date().toISOString();
+  const dados = chaveDelta(evento);
+  const severity = String(evento?.level || 'info').toLowerCase();
+  const atual = deltaState.groups.get(dados.key) || {
+    severity, codigo: dados.codigo, rota: dados.rota, msg: dados.msg,
+    count: 0, firstAt: evento?.t || deltaState.lastAt, lastAt: evento?.t || deltaState.lastAt,
+    hint: hintDelta(dados.codigo, evento), raw: compactarTexto(metaTexto(evento?.meta), 220)
+  };
+  atual.count += 1;
+  atual.lastAt = evento?.t || deltaState.lastAt;
+  atual.raw = compactarTexto(metaTexto(evento?.meta), 220);
+  atual.hint = hintDelta(dados.codigo, evento);
+  deltaState.groups.delete(dados.key);
+  deltaState.groups.set(dados.key, atual);
+  if (deltaState.groups.size > 200) deltaState.groups.delete(deltaState.groups.keys().next().value);
+  renderDeltaUtil();
+}
+function renderDeltaUtil(){
+  const todos = [...deltaState.groups.values()];
+  const prioridade = g => g.severity === 'error' || /_(401|403|5[0-9]{2})$/.test(g.codigo) ? 2 : g.severity === 'warn' ? 1 : 0;
+  const grupos = todos.sort((a,b) => prioridade(b) - prioridade(a) || (b.count - a.count) || String(b.lastAt).localeCompare(String(a.lastAt))).slice(0, 12);
+  const errosUnicos = todos.filter(g => prioridade(g) === 2).length;
+  const top = Math.max(0, ...todos.map(g => g.count));
+  $('deltaTotal').textContent = String(deltaState.total);
+  $('deltaErrors').textContent = String(errosUnicos);
+  $('deltaTop').textContent = top + '×';
+  $('deltaLast').textContent = deltaState.lastAt ? horaBr(deltaState.lastAt).slice(0,5) : '--:--';
+  $('deltaHot').style.display = todos.some(g => prioridade(g) === 2 && g.count >= 5) ? 'inline-block' : 'none';
+  const box = $('deltaRows');
+  if (!grupos.length) {
+    box.innerHTML = '<div class="delta-empty">Aguardando eventos SSE para separar ruído de ação.</div>';
+    return;
+  }
+  box.innerHTML = grupos.map(g =>
+    '<div class="delta-row '+htmlEscape(g.severity)+'">'+
+      '<div class="delta-sev">'+htmlEscape(g.severity)+'<br><span class="delta-pill">'+g.count+'×</span></div>'+
+      '<div><div class="delta-code">'+htmlEscape(g.codigo)+'</div><div class="delta-raw">'+htmlEscape(g.msg)+'</div></div>'+
+      '<div class="delta-route">'+htmlEscape(g.rota)+'</div>'+
+      '<div class="delta-hint">'+htmlEscape(g.hint)+'<details><summary>Detalhes do evento</summary><div class="delta-code">'+htmlEscape(g.raw)+'</div><div>Primeiro: '+htmlEscape(horaBr(g.firstAt))+'</div></details></div>'+
+      '<div class="delta-last">último<br>'+htmlEscape(horaBr(g.lastAt))+'</div>'+
+    '</div>'
+  ).join('');
+}
+function limparDeltaUtil(){
+  deltaState.total = 0;
+  deltaState.groups.clear();
+  deltaState.lastAt = null;
+  renderDeltaUtil();
+}
+
 async function carregarHealth(){
   const r = await fetch('/health/deep'); const j = await r.json();
   $('ver').textContent = j.versao || j.version || '?';
@@ -353,6 +548,38 @@ async function carregarHealth(){
   $('kpiSse').textContent = j.sseAtivas ?? '0';
 }
 
+async function carregarOperational(){
+  const box = $('operationalFlow');
+  if (!box) return;
+  try {
+    const r = await fetch('/admin/api/operational-snapshot');
+    const j = await r.json();
+    if (typeof renderPatternAlignment === 'function') renderPatternAlignment(j);
+    const flow = (j.deterministicFlow || []).join(' → ');
+    const fronts = (j.fronts || []).map(f =>
+      '<div class="row"><span>'+htmlEscape(f.id+' · '+f.source)+'</span><span class="'+(f.state === 'UNKNOWN' || f.state === 'STALE' ? 'warn' : 'ok')+'">'+htmlEscape(f.state)+'</span></div>'
+    ).join('');
+    const rules = j.rules || {};
+    const policyRows = [
+      ['Reuso', rules.reuseProvenCrystalBeforeReinvestigate ? 'REUSE_PROOF · não medir de novo sem delta' : 'UNKNOWN'],
+      ['Offline', rules.sensorFailureIsWorldFailure === false ? 'sensor offline ≠ mundo quebrado' : 'UNKNOWN'],
+      ['Fixed Point', rules.fixedPointIsVerificationCheckpointNotLearningGate ? 'checkpoint de prova · não trava aprendizado' : 'UNKNOWN'],
+      ['Revalidação', rules.changedTargetRevalidatesAffectedChainOnly ? 'somente cadeia afetada' : 'UNKNOWN'],
+    ].map(([label,state]) =>
+      '<div class="row"><span>'+htmlEscape(label)+'</span><span class="'+(state === 'UNKNOWN' ? 'warn' : 'ok')+'">'+htmlEscape(state)+'</span></div>'
+    ).join('');
+    box.innerHTML =
+      '<div class="row"><span>Contrato</span><span class="info">'+htmlEscape(j.schema || '-')+'</span></div>'+
+      '<div class="row"><span>Veredito</span><span class="'+(String(j.verdict||'').includes('UNKNOWN') ? 'warn' : 'ok')+'">'+htmlEscape(j.verdict || 'UNKNOWN')+'</span></div>'+
+      '<div class="row"><span>Fluxo</span><span>'+htmlEscape(flow)+'</span></div>'+
+      '<div class="row"><span>Forensic</span><span>'+htmlEscape(j.forensic?.status || 'UNKNOWN')+'</span></div>'+
+      policyRows+
+      fronts;
+  } catch (err) {
+    box.textContent = 'operational snapshot indisponível: '+String(err);
+  }
+}
+
 async function carregarMetricas(){
   const r = await fetch('/admin/api/metricas'); const j = await r.json();
   $('kpiErros').textContent = j.erros ?? '-';
@@ -371,11 +598,50 @@ async function carregarTools(){
   ).join('');
 }
 
+async function carregarLinear(){
+  const state = $('linearState');
+  const count = $('linearIssueCount');
+  const checked = $('linearCheckedAt');
+  const meta = $('linearMeta');
+  const box = $('linearIssues');
+  if (!state || !count || !checked || !meta || !box) return;
+  try {
+    const r = await fetch('/admin/api/linear?limit=25', { cache: 'no-store' });
+    const j = await r.json();
+    state.textContent = j.status || 'UNKNOWN';
+    $('linearBar').style.width = j.ok ? '100%' : (j.configured ? '50%' : '0%');
+    count.textContent = Array.isArray(j.issues) ? String(j.issues.length) : '0';
+    checked.textContent = j.checkedAt ? horaBr(j.checkedAt) : '-';
+    meta.innerHTML =
+      '<div class="row"><span>Conexão</span><span class="'+(j.ok?'ok':'warn')+'">'+htmlEscape(j.status || 'UNKNOWN')+'</span></div>'+
+      '<div class="row"><span>Workspace</span><span>'+htmlEscape(j.organization?.name || 'UNKNOWN')+'</span></div>'+
+      '<div class="row"><span>Operador</span><span>'+htmlEscape(j.viewer?.name || 'UNKNOWN')+'</span></div>';
+    if (!Array.isArray(j.issues) || !j.issues.length) {
+      box.innerHTML = '<div class="delta-empty">Nenhum item retornado. UNKNOWN não vira PASS.</div>';
+      return;
+    }
+    box.innerHTML = j.issues.map(issue =>
+      '<div class="row">'+
+        '<span><b>'+htmlEscape(issue.identifier || '-')+'</b> · '+htmlEscape(issue.title || '-')+
+          '<br><small>'+htmlEscape(issue.team?.key || '-')+' · '+htmlEscape(issue.state?.name || 'UNKNOWN')+'</small></span>'+
+        '<span><a class="btn ghost" style="text-decoration:none;padding:6px 10px" href="'+htmlEscape(issue.url || '#')+'" target="_blank" rel="noopener">abrir ↗</a></span>'+
+      '</div>'
+    ).join('');
+  } catch (err) {
+    state.textContent = 'UNKNOWN';
+    count.textContent = '-';
+    checked.textContent = '-';
+    meta.innerHTML = '<div class="row"><span>Estado</span><span class="warn">UNKNOWN</span></div>';
+    box.innerHTML = '<div class="delta-empty">Linear indisponível: '+htmlEscape(String(err))+'</div>';
+  }
+}
+
 function conectarLogs(){
   const es = new EventSource('/admin/logs/stream');
   const box = $('log'); box.innerHTML = '';
   es.onmessage = (ev) => {
     const d = JSON.parse(ev.data);
+    registrarDeltaUtil(d);
     const el = document.createElement('div');
     el.className = d.level;
     el.textContent = '['+horaBr(d.t)+'] ['+d.level.toUpperCase()+'] '+d.msg+(d.meta?' '+JSON.stringify(d.meta):'');
@@ -431,10 +697,12 @@ async function rodarE2E(){
   }
 }
 
-function recarregar(){ carregarHealth(); carregarTools(); carregarMetricas(); }
+function recarregar(){ carregarHealth(); carregarTools(); carregarMetricas(); carregarOperational(); carregarLinear(); }
 recarregar();
 setInterval(carregarHealth, 15000);
 setInterval(carregarMetricas, 15000);
+setInterval(carregarOperational, 15000);
+setInterval(carregarLinear, 30000);
 conectarLogs();
 </script>
 </body></html>`;
@@ -457,6 +725,45 @@ export function adminGet(req, res) {
         return;
     }
     res.type("text/html").send(injectPatternAdmin(NOC_HTML));
+}
+
+
+export async function adminGraphProxy(req, res) {
+    if (!isAdmin(req)) {
+        res.status(401).type("text/plain").send("Admin auth required.");
+        return;
+    }
+    if (req.method !== "GET" && req.method !== "HEAD") {
+        res.setHeader("Allow", "GET, HEAD");
+        res.status(405).type("text/plain").send("Somente leitura.");
+        return;
+    }
+    try {
+        const upstreamPath = req.url && req.url.startsWith("/") ? req.url : "/";
+        const upstream = await fetch(`http://127.0.0.1:3030${upstreamPath}`, {
+            method: req.method,
+            headers: { accept: req.headers.accept || "*/*" },
+        });
+        res.status(upstream.status);
+        for (const header of ["content-type", "cache-control", "etag", "last-modified", "location"]) {
+            const value = upstream.headers.get(header);
+            if (value) res.setHeader(header, value);
+        }
+        res.setHeader("X-Content-Type-Options", "nosniff");
+        if (req.method === "HEAD") {
+            res.end();
+            return;
+        }
+        const body = Buffer.from(await upstream.arrayBuffer());
+        res.end(body);
+    } catch (error) {
+        res.status(502).json({
+            ok: false,
+            error: "graph_panel_unavailable",
+            message: "Grafo Celestial indisponível no runtime local.",
+            detail: error?.message || String(error),
+        });
+    }
 }
 
 export function adminLogin(req, res) {
@@ -506,10 +813,14 @@ export function adminRotas(req, res) {
             { metodo: "POST", path: "/token", protegido: true },
             { metodo: "POST", path: "/mcp", protegido: true },
             { metodo: "GET", path: "/admin", protegido: true },
+            { metodo: "GET", path: "/admin/grafo/*", protegido: true },
             { metodo: "GET", path: "/admin/logs/stream", protegido: true },
             { metodo: "POST", path: "/admin/api/e2e", protegido: true },
             { metodo: "GET", path: "/admin/api/logs", protegido: true },
             { metodo: "GET", path: "/admin/api/metricas", protegido: true },
+            { metodo: "GET", path: "/admin/api/operational-snapshot", protegido: true },
+            { metodo: "GET", path: "/admin/api/linear", protegido: true },
+            { metodo: "GET", path: "/linear/status", protegido: false },
         ],
     });
 }
@@ -535,6 +846,20 @@ export function adminTools(req, res) {
         (categorias[c] ||= []).push({ name: t.name, description: t.description });
     }
     res.json({ total: summary.toolCount, categorias });
+}
+
+export function adminOperationalSnapshot(req, res) {
+    if (!isAdmin(req)) { res.status(401).json({ ok: false }); return; }
+    res.setHeader("Cache-Control", "no-store");
+    res.json(getOperationalSnapshot());
+}
+
+export async function adminLinear(req, res) {
+    if (!isAdmin(req)) { res.status(401).json({ ok: false }); return; }
+    res.setHeader("Cache-Control", "no-store");
+    const limit = Math.max(1, Math.min(Number(req.query.limit) || 25, 100));
+    const snapshot = await getLinearAdminSnapshot(limit);
+    res.status(snapshot.ok ? 200 : 503).json(snapshot);
 }
 
 // ─── Busca de logs (filtro por rota / cid / level / texto) ────────────

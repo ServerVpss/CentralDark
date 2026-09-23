@@ -7,8 +7,8 @@ human_triggers:
     explicit_marker_required: true
     plain_word_does_not_trigger: true
     expands_to: [ACORDAR, CALIBRAR, MULTIBUSSOLA, META_LUPA, RECONCILIAR, DELTA_UTIL, CONTRAPROVA, REMEDICAO, FIXED_POINT, REGISTRA, BOOT]
-    session_behavior: [ACTIVATE_ON_EXPLICIT_TRIGGER_OR_BOT_ENTRY, REMAIN_ACTIVE_FOR_SESSION, PROCESS_EVERY_CHEFE_MATERIAL_AS_DELTA_CANDIDATE]
-    behavior: [CONSIDER_ALL_PHASES, SKIP_ONLY_IF_JUSTIFIED, UNKNOWN_NEVER_PASS, NO_AUTHORITY_EXPANSION, NO_AUTO_MUTATION]
+    session_behavior: [ACTIVATE_ON_EXPLICIT_TRIGGER_OR_BOT_ENTRY, REMAIN_ACTIVE_FOR_SESSION, PROCESS_EVERY_CHEFE_MATERIAL_AS_DELTA_CANDIDATE, DELTA_CONTINUO, PERSIST_NEXT_CURSOR]
+    behavior: [CONSIDER_ALL_PHASES, SKIP_ONLY_IF_JUSTIFIED, UNKNOWN_NEVER_PASS, NO_AUTHORITY_EXPANSION, NO_AUTO_MUTATION, MUTATION_REQUIRES_GLOBAL_CONTRACT_ENTRY_EXIT]
   - id: DELTA_UTILS
     token: "!DELTA UTILS"
     aliases: ["!DELTAUTILS", "DELTAUTILS", "!DELTA UTIL", "!DELTAUTIL", "DELTAUTIL", "!DELTAÚTIL", "DELTA ÚTIL", "DELTA UTIL", "DELTA UTILS", "DELTA DE AGORA", "TOMA ESSE DELTA", "PEGA O DELTA"]
@@ -81,6 +81,10 @@ semantic_trigger_resolution:
     resolver: scripts/trigger-fabric/centraldark_master_cycle.py
     explicit_triggers: ["!CENTRALDARK", "#CENTRALDARK"]
     receipt_schema: centraldark.master-cycle-receipt.v1
+    global_contract: docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json
+    global_enforcer: scripts/agent-call.mjs
+    mutation_gate: ENTRY_AND_EXIT_REQUIRED
+    hud_schema: FIXED_LAYOUT_LIVE_DATA
   delta_harvest:
     contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml#delta_harvest
     semantic_family: DELTA_HARVEST
@@ -110,7 +114,7 @@ semantic_trigger_resolution:
 entry_triggers:
   - event: BOT_ENTRY
     owner: "LEIA-ME-IA.md + AGENTS.md + docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md + Trigger Fabric"
-    behavior: [LOAD_CANONICAL_BOOT, ACTIVATE_AND_INHERIT_MASTER_SESSION, PROCESS_CHEFE_MATERIAL_AS_DELTA_CANDIDATE, MEASURE_ENGINE_AND_TOOLS, DESTINATION_LOCK, OUTPUT_GUARD_REQUIRED]
+    behavior: [LOAD_CANONICAL_BOOT, ACTIVATE_AND_INHERIT_MASTER_SESSION, PROCESS_CHEFE_MATERIAL_AS_DELTA_CANDIDATE, DELTA_CONTINUO, BIND_GLOBAL_CONTRACT_ENFORCER, MEASURE_ENGINE_AND_TOOLS, DESTINATION_LOCK, OUTPUT_GUARD_REQUIRED]
     status: CONTRACT_AND_CI_ENFORCED_RUNTIME_ACTIVATION_MUST_BE_OBSERVED
   - event: PRE_HUMAN_RETURN
     owner: "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml"
@@ -122,6 +126,15 @@ entry_triggers:
     status: CONTRACT_ENFORCED_RUNTIME_PERSISTENCE_MUST_BE_OBSERVED
 
 learning_triggers:
+  - event: AUREOLA_MATERIAL_DISCOVERY
+    owner: ".agents/skills/session-intelligence-harvester/ + scripts/memory-linker/"
+    source_contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml
+    behavior: [EMIT_MATERIAL_OPERATIONAL_EVENT, REQUIRE_LEARNING_REF, CLASSIFY_FACT_INFERENCE_HYPOTHESIS_UNKNOWN, DEDUPE, SEARCH_EXISTING_CRYSTAL, ROUTE_TO_EXISTING_OWNER, DREAM_REVIEW, PATTERN_DISCOVERY, HANDOFF_TO_AUTHORIZED_WRITER_WHEN_ELIGIBLE]
+    direct_canonical_mutation: false
+    same_finding_without_new_evidence: DROP_DUPLICATE
+    every_material_discovery_is_learning_candidate: true
+    every_material_discovery_is_canonical_fact: false
+    status: ACTIVE_CONTRACT
   - event: MATERIAL_INGEST
     owner: ".agents/skills/session-intelligence-harvester/"
     pipeline: [INVENTORY, HASH, SECRET_SCAN, SOURCE_CLASS_CLAMP, DEDUPE, NORMALIZE, HAND_OFF_MEMORY_LINKER]
@@ -203,6 +216,17 @@ learning_triggers:
     status: DECLARED_HOOK_NOT_PROVEN
 
 automatic_triggers:
+  - event: VPS_KERNEL_DELTA_MATERIAL
+    owner: "apps/modulos/elite-gateway/scripts/centraldark_omni_router.py + Trigger Fabric"
+    sensor: /kernel/vps/delta/stream
+    companion_sensors: [/kernel/vps/delta, /kernel/vps/delta/health, /admin/logs/stream, /admin/api/logs, /health/deep, /heartbeat]
+    transport: FASTAPI
+    behavior: [CAPTURE_READ_ONLY, SANITIZE, NORMALIZE, DEDUPE, CLASSIFY_MATERIALITY, ROUTE_TO_LOG_INCIDENT_MATERIAL, RENDEZVOUS_EXISTING_OWNER, NO_DIRECT_MUTATION, HUD_RECEIPT, CONTINUE_DELTA_CONTINUO]
+    raw_stream_preserved: true
+    one_heart: https://api.centralldark.com/heartbeat
+    may_write_canonical: false
+    runtime_green_requires: [FASTAPI_PROCESS_OWNER, LISTENER_PORT, ROUTE_BINDING, AUTH_BOUNDARY, RAW_STREAM_STILL_AVAILABLE, DELTA_ENDPOINT_RESPONDS, SSE_STREAM_EMITS, ONE_HEART_STILL_RESPONDS]
+    status: SOURCE_IMPLEMENTED_RUNTIME_PROOF_PENDING
   - event: ANY_PR_OR_COMMIT
     owner: "porta-de-entrada + autonomia-promocao + Trigger Fabric"
     behavior: [REMEASURE_HEAD, ENFORCE_CANONICAL_RUNNER_POLICY, ENFORCE_WORKFLOW_REUSE, RUN_GATES, COLLECT_FAILURE_SIGNATURE, SELF_HEAL_IF_SAFE, COUNTERPROOF, RECEIPT, CONTINUE_TO_FIXED_POINT]
@@ -266,6 +290,22 @@ automatic_triggers:
     owner: apps/modulos/HERMES-CORE/core/orchestrator.mjs
     observed_interval: 6h
     status: IMPLEMENTED_REQUIRES_SAFETY_RECONCILIATION
+  - event: LOG_INCIDENT_MATERIAL
+    owner: "apps/modulos/mcp/src/admin.js + Trigger Fabric"
+    sensor: /admin/api/logs
+    fanout_gate: scripts/agent-call.mjs --log-incident-fanout
+    companion_sensors: [/health, /health/deep, /heartbeat, /admin/api/metricas, /admin/api/operational-snapshot, /admin/logs/stream]
+    shared_mcp_snapshot_tool: centraldark_operational_snapshot
+    forensic_receipt: _DIAGNOSTICS/FORENSIC-LATEST.json
+    correlation: [cid, correlation_id, request_id, trace_id, span_id]
+    behavior: [CLASSIFY_MATERIALITY, FAN_OUT_PARALLEL_READ_ONLY_FRONTS, RENDEZVOUS_BY_TARGET_TRACE_OWNER, IDENTIFY_EXISTING_OWNER, QUEUE_CAUSAL_REMEDIATION, SERIALIZE_SAME_SCOPE_MUTATION, ALLOW_PROVEN_DISJOINT_SCOPE_PARALLELISM, T1_EACH_AFFECTED_SCOPE, RESCAN_LOGS, COUNTERPROOF, RECEIPT, CONTINUE_UNTIL_CRYSTALLIZED]
+    fronts: [AUTH_OAUTH, MCP_RUNTIME, HUB_DATABASE, ROUTING_NETWORK, PROCESS_RUNTIME, GITHUB_CI, CONFIG_PROVENANCE, SCREEN_OPTIONAL]
+    endpoint_200_is_global_pass: false
+    log_silence_is_global_pass: false
+    unresolved_material_error_fixed_point: false
+    may_write_canonical: scope_authorized_only
+    status: CONTRACT_DECLARED_EXISTING_LOG_OWNER
+
   - event: PR_UPDATED_OR_MERGED
     owner: existing_workflows
     behavior: [REVALIDATE_HEAD, GATES, DERIVED_INDEX_OF_CANONICAL_CORPUS]
@@ -311,3 +351,6 @@ routing_rules:
   - "CROSS_CHAT -> CONTEXT_NOT_CURRENT_STATE_RECOVER_BEFORE_REASK"
   - "SEMANTIC_LINK -> NAVIGATION_NOT_PROOF"
   - "PAST_PR_DELTA -> ABSORB_USEFUL_ONLY_PRESERVE_PROVENANCE"
+  - "LOG_INCIDENT_MATERIAL -> PARALLEL_READ_ONLY_DIAGNOSIS + RENDEZVOUS + OWNER_REMEDIATION + T1_RESCAN"
+  - "SAME_SCOPE_LOG_FIX -> SERIALIZE_WRITER; DISJOINT_PROVEN_SCOPES -> MAY_PROGRESS_IN_PARALLEL"
+  - "ADMIN_API_LOGS_200 != GLOBAL_HEALTH_PASS"

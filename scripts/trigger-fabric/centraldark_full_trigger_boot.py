@@ -28,6 +28,10 @@ MASTER = FABRIC / "MASTER-CYCLE.yml"
 ENGINE = FABRIC / "ENGINE_BINDING.yml"
 MEGAZORD = FABRIC / "MEGAZORD-CENTRALDARK.yml"
 LOCK_CONTRACT = FABRIC / "PROVEN-DETERMINISTIC-LOCK.yml"
+RUNTIME_PREFLIGHT_LINT = FABRIC / "RUNTIME-PREFLIGHT-LINT.yml"
+BOOT = Path("CENTRALDARK_AI_BOOT.yaml")
+COGNITIVE_CAPABILITIES = Path("docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md")
+METACOGNITION = Path("docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md")
 DEFAULT_REGISTRY = FABRIC / "PROVEN-CLAIMS.lock.json"
 
 CANONICAL_CHAIN = [
@@ -35,6 +39,25 @@ CANONICAL_CHAIN = [
     "RECONCILIAR", "DELTA_UTIL", "CONTRAPROVA", "REMEDICAO",
     "SEMANTIC_GREEN", "FIXED_POINT", "POST_GREEN_LOCK", "REGISTRA", "BOOT",
 ]
+
+RUNTIME_PREFLIGHT_REQUIRED_RECEIPT_FIELDS = (
+    "observed_at",
+    "surface",
+    "command_class",
+    "wrapper_lint_result",
+    "target_runtime_result",
+    "invalidated_probe_if_any",
+    "unknowns_remaining",
+    "next_cursor",
+)
+
+BRIDGE_OWNERSHIP_REQUIRED_FIELDS = (
+    "pid_parent_tree",
+    "package_version",
+    "profile_or_session",
+    "socket_state",
+    "handoff_or_canary_before_kill",
+)
 
 
 def strip_accents(value: str) -> str:
@@ -83,14 +106,181 @@ def classify_realtime_feedback(value: str) -> dict:
     }
 
 
+def runtime_preflight_contract_state(repo: Path) -> dict:
+    path = repo / RUNTIME_PREFLIGHT_LINT
+    if not path.is_file():
+        return {
+            "status": "INVALID",
+            "owner": RUNTIME_PREFLIGHT_LINT.as_posix(),
+            "checks": {"file_present": False},
+        }
+    text = path.read_text(encoding="utf-8")
+    required_tokens = (
+        "schema: centraldark.runtime-preflight-lint.v1",
+        "executable_consumer_required: true",
+        "wrapper_parse_fail_is_not_target_fail: true",
+        "invalid_probe_must_not_become_fact: true",
+        "cron_path_drift:",
+        "bridge_ownership:",
+    )
+    checks = {"file_present": True}
+    for token in required_tokens:
+        checks[token] = token in text
+    checks["required_receipt_fields_complete"] = all(
+        f"  - {field}" in text for field in RUNTIME_PREFLIGHT_REQUIRED_RECEIPT_FIELDS
+    )
+    checks["bridge_ownership_fields_complete"] = all(
+        f"      - {field}" in text for field in BRIDGE_OWNERSHIP_REQUIRED_FIELDS
+    )
+    return {
+        "status": "BOUND" if all(checks.values()) else "INVALID",
+        "owner": RUNTIME_PREFLIGHT_LINT.as_posix(),
+        "checks": checks,
+    }
+
+
+def _present_evidence(value: object) -> bool:
+    if isinstance(value, bool):
+        return value
+    if value is None:
+        return False
+    if isinstance(value, (list, tuple, dict, set)):
+        return bool(value)
+    return bool(str(value).strip())
+
+
+def lint_runtime_command(
+    repo: Path,
+    command: str,
+    shell: str,
+    host_mode: str,
+    required_paths: list[str] | None = None,
+    *,
+    surface: str = "runtime_probe",
+    command_class: str = "runtime_probe",
+    bridge_evidence: dict | None = None,
+    observed_at: str = "UNKNOWN",
+) -> dict:
+    contract = runtime_preflight_contract_state(repo)
+    reasons: list[str] = []
+    shell_norm = shell.strip().lower()
+    host_norm = host_mode.strip().lower()
+    surface_norm = surface.strip() or "runtime_probe"
+    command_class_norm = command_class.strip() or "runtime_probe"
+
+    if contract["status"] != "BOUND":
+        reasons.append("PREFLIGHT_CONTRACT_INVALID")
+
+    if host_norm in {"js_template", "javascript_template", "ts_template", "typescript_template"}:
+        if re.search(r"(?<!\\)\$\{[^}\n]+\}", command):
+            reasons.append("HOST_TEMPLATE_INTERPOLATION_RISK")
+
+    if shell_norm in {"powershell", "powershell.exe", "pwsh", "pwsh.exe"}:
+        pid_collision = re.search(
+            r"(?im)(^\s*\$pid\s*=|foreach\s*\(\s*\$pid\b|for\s*\([^)]*\$pid\s*=)",
+            command,
+        )
+        if pid_collision:
+            reasons.append("POWERSHELL_PID_AUTOMATIC_VARIABLE_COLLISION")
+
+    missing_paths: list[str] = []
+    for raw in required_paths or []:
+        raw = raw.strip()
+        if not raw:
+            continue
+        path = Path(raw)
+        if not path.is_absolute():
+            path = repo / path
+        if not path.exists():
+            missing_paths.append(raw)
+    if missing_paths:
+        reasons.append("MISSING_REQUIRED_PATH")
+
+    bridge_claim = (
+        surface_norm == "desktop_bridge_ownership_claim"
+        or command_class_norm == "desktop_bridge_ownership_claim"
+    )
+    missing_bridge_evidence: list[str] = []
+    if bridge_claim:
+        evidence = bridge_evidence or {}
+        for field in BRIDGE_OWNERSHIP_REQUIRED_FIELDS:
+            if not _present_evidence(evidence.get(field)):
+                missing_bridge_evidence.append(field)
+        if missing_bridge_evidence:
+            reasons.append("BRIDGE_OWNERSHIP_EVIDENCE_INCOMPLETE")
+
+    wrapper_result = "PASS" if not reasons else "FAIL_CLOSED"
+    target_result = "UNKNOWN_UNTIL_TARGET_PROBE" if not reasons else "NOT_EXECUTED_INVALID_WRAPPER"
+    invalidated = [] if not reasons else list(reasons)
+    unknowns = ["TARGET_RUNTIME_RESULT"] if not reasons else []
+    next_cursor = "EXECUTE_TARGET_PROBE" if not reasons else "FIX_PREFLIGHT_AND_RETRY"
+
+    return {
+        "status": "PASS" if not reasons else "FAIL_CLOSED",
+        "owner": RUNTIME_PREFLIGHT_LINT.as_posix(),
+        "observed_at": observed_at,
+        "surface": surface_norm,
+        "command_class": command_class_norm,
+        "shell": shell_norm,
+        "host_mode": host_norm,
+        "wrapper_lint_result": wrapper_result,
+        "target_runtime_result": target_result,
+        "invalidated_probe_if_any": invalidated,
+        "unknowns_remaining": unknowns,
+        "next_cursor": next_cursor,
+        "reasons": reasons,
+        "missing_paths": missing_paths,
+        "missing_bridge_evidence": missing_bridge_evidence,
+        "wrapper_parse_fail_is_not_target_fail": True,
+        "invalid_probe_must_not_become_fact": True,
+    }
+
+
 def require_files(repo: Path) -> dict[str, str]:
     result = {}
-    for rel in (TRIGGERS, MASTER, ENGINE, MEGAZORD, LOCK_CONTRACT):
+    for rel in (TRIGGERS, MASTER, ENGINE, MEGAZORD, LOCK_CONTRACT, RUNTIME_PREFLIGHT_LINT, BOOT, COGNITIVE_CAPABILITIES, METACOGNITION):
         p = repo / rel
         if not p.exists():
             raise SystemExit(f"MISSING_CANONICAL_OWNER={rel.as_posix()}")
         result[rel.as_posix()] = hashlib.sha256(p.read_bytes()).hexdigest()
     return result
+
+
+def cognitive_bios_state(repo: Path) -> dict:
+    boot_text = (repo / BOOT).read_text(encoding="utf-8")
+    capabilities_text = (repo / COGNITIVE_CAPABILITIES).read_text(encoding="utf-8")
+    metacognition_text = (repo / METACOGNITION).read_text(encoding="utf-8")
+
+    checks = {
+        "boot_block": "cognitive_bios:" in boot_text,
+        "adaptive_policy_role": 'role: "ADAPTIVE_BOOT_POLICY_LAYER"' in boot_text,
+        "firmware_mutation_forbidden": "firmware_mutation: false" in boot_text,
+        "native_os_kernel_mutation_forbidden": "native_os_kernel_mutation: false" in boot_text,
+        "hud_required": "COGNITIVE_BIOS_STATUS" in boot_text and "FIXED_POINT_STATE" in boot_text,
+        "operational_reflex_bound": "INSTINTO_SUPERIOR=OPERATIONAL_REFLEX" in capabilities_text,
+        "metacognition_bound": "META_METACOGNICAO_OPERACIONAL" in metacognition_text,
+        "zero_silent_learning_bound": "ZERO_SILENT_LEARNING=true" in metacognition_text,
+    }
+    loaded = all(checks.values())
+    return {
+        "status": "LOADED" if loaded else "INVALID",
+        "role": "ADAPTIVE_BOOT_POLICY_LAYER",
+        "checks": checks,
+        "hud": {
+            "COGNITIVE_BIOS_STATUS": "LOADED" if loaded else "INVALID",
+            "COGNITIVE_MODE": "ADAPTIVE",
+            "ACTIVE_FRONTS": "UNKNOWN_UNTIL_RUNTIME_CONTEXT",
+            "REFLEX_STATE": "READY_IF_EQUIVALENT_CONTEXT_ELSE_STOP_REFLEX",
+            "CURRENT_OWNER": "UNKNOWN_UNTIL_RECONCILIATION",
+            "WRITER": "UNKNOWN_UNTIL_WRITER_SCOPE_MEASURED",
+            "EVIDENCE_STATE": "CONTRACT_LOADED_NOT_RUNTIME_PROOF",
+            "COGNITIVE_DEBT": "UNKNOWN",
+            "RUNTIME_TARGET": "UNKNOWN_UNTIL_RUNTIME_CONTEXT",
+            "NEXT_CURSOR": "REMEASURE_CURRENT_REALITY",
+            "FIXED_POINT_STATE": "NOT_PROVEN",
+        },
+        "law": "ADAPT_INTENSITY_AND_ROUTE; NEVER_AUTHORITY_OR_HUMAN_GOAL",
+    }
 
 
 def discover_registry(repo: Path) -> dict:
@@ -132,6 +322,8 @@ def cmd_boot(args: argparse.Namespace) -> int:
     repo = Path(args.repo).resolve()
     source_hashes = require_files(repo)
     registry = discover_registry(repo)
+    bios = cognitive_bios_state(repo)
+    preflight_contract = runtime_preflight_contract_state(repo)
     active = explicit_command_context(args.input)
     normalized = normalize_command(args.input.splitlines()[0].split()[0]) if args.input.strip() else ""
     result = {
@@ -144,6 +336,9 @@ def cmd_boot(args: argparse.Namespace) -> int:
         "discovered": registry,
         "source_sha256": source_hashes,
         "feedback": classify_realtime_feedback(args.input),
+        "cognitive_bios": bios,
+        "runtime_preflight_contract": preflight_contract,
+        "hud": bios["hud"],
         "rules": {
             "case_insensitive": True,
             "bang_hash_equivalent_at_command_entry": True,
@@ -154,10 +349,50 @@ def cmd_boot(args: argparse.Namespace) -> int:
             "one_writer_per_scope": True,
             "realtime_feedback_persistent_per_mission": True,
             "realtime_feedback_user_repetition_required": False,
+            "runtime_preflight_lint_required": True,
+            "runtime_preflight_lint_owner": RUNTIME_PREFLIGHT_LINT.as_posix(),
         },
     }
     print(json.dumps(result, indent=2, ensure_ascii=False))
-    return 0 if active else 4
+    if not active:
+        return 4
+    return 0 if bios["status"] == "LOADED" and preflight_contract["status"] == "BOUND" else 7
+
+
+def cmd_preflight_lint(args: argparse.Namespace) -> int:
+    repo = Path(args.repo).resolve()
+    require_files(repo)
+    try:
+        bridge_evidence = json.loads(args.bridge_evidence_json)
+    except json.JSONDecodeError:
+        print(json.dumps({
+            "status": "FAIL_CLOSED",
+            "reason": "INVALID_BRIDGE_EVIDENCE_JSON",
+            "wrapper_parse_fail_is_not_target_fail": True,
+            "invalid_probe_must_not_become_fact": True,
+        }, indent=2, ensure_ascii=False))
+        return 8
+    if not isinstance(bridge_evidence, dict):
+        print(json.dumps({
+            "status": "FAIL_CLOSED",
+            "reason": "BRIDGE_EVIDENCE_MUST_BE_OBJECT",
+            "wrapper_parse_fail_is_not_target_fail": True,
+            "invalid_probe_must_not_become_fact": True,
+        }, indent=2, ensure_ascii=False))
+        return 8
+    result = lint_runtime_command(
+        repo=repo,
+        command=args.command,
+        shell=args.shell,
+        host_mode=args.host_mode,
+        required_paths=args.required_path,
+        surface=args.surface,
+        command_class=args.command_class,
+        bridge_evidence=bridge_evidence,
+        observed_at=args.observed_at,
+    )
+    print(json.dumps(result, indent=2, ensure_ascii=False))
+    return 0 if result["status"] == "PASS" else 8
 
 
 def cmd_feedback(args: argparse.Namespace) -> int:
@@ -237,6 +472,18 @@ def build_parser() -> argparse.ArgumentParser:
     b.add_argument("--repo", default=".")
     b.add_argument("--input", required=True)
     b.set_defaults(func=cmd_boot)
+
+    pf = sub.add_parser("preflight-lint")
+    pf.add_argument("--repo", default=".")
+    pf.add_argument("--shell", required=True)
+    pf.add_argument("--host-mode", default="literal")
+    pf.add_argument("--command", required=True)
+    pf.add_argument("--required-path", action="append", default=[])
+    pf.add_argument("--surface", default="runtime_probe")
+    pf.add_argument("--command-class", default="runtime_probe")
+    pf.add_argument("--bridge-evidence-json", default="{}")
+    pf.add_argument("--observed-at", default="UNKNOWN")
+    pf.set_defaults(func=cmd_preflight_lint)
 
     f = sub.add_parser("feedback")
     f.add_argument("--repo", default=".")

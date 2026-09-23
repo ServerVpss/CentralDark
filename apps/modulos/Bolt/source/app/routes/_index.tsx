@@ -3,6 +3,7 @@ import { ClientOnly } from 'remix-utils/client-only';
 import { BaseChat } from '~/components/chat/BaseChat';
 import { Chat } from '~/components/chat/Chat.client';
 import { CentralDarkCockpitShell } from '~/components/centraldark/CentralDarkCockpitShell.client';
+import { CentralDarkUnifiedHud } from '~/components/centraldark/CentralDarkUnifiedHud.client';
 import { Header } from '~/components/header/Header';
 import BackgroundRays from '~/components/ui/BackgroundRays';
 
@@ -25,5 +26,10 @@ export default function Index() {
     </div>
   );
 
-  return <CentralDarkCockpitShell>{workspace}</CentralDarkCockpitShell>;
+  return (
+    <>
+      <CentralDarkCockpitShell>{workspace}</CentralDarkCockpitShell>
+      <ClientOnly>{() => <CentralDarkUnifiedHud />}</ClientOnly>
+    </>
+  );
 }

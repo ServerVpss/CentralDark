@@ -174,7 +174,7 @@ Não chamar sucesso de deploy Hermes um run que só tocou MCP/Verificador.
 1. Hermes PM2 online + deploy pending = motor ≠ esteira.
 2. `setup-node` longo ≠ zumbi automático — exigir idade vs timeout + log parado antes de cancelar.
 3. VPS atrasada + dirty = preservar `.env`; sem `reset --hard` sem prova.
-4. WebhookDeploy stopped = intencional no deploy (porta 9300).
+4. WebhookDeploy online = receptor persistente esperado; deploys concorrentes serializam no lock canônico `/tmp/centraldark-repo-deploy.lock`. Listener vivo != mutação concorrente.
 5. AiDiag stopped = residual opcional.
 6. Deploy keys Disabled = política org; não causa a fila.
 7. Limite de tool é **desta sessão** — remedir antes de bloquear.

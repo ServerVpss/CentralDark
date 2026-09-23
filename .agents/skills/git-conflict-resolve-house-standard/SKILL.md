@@ -11,6 +11,7 @@ metadata:
 
 Owner do motor: `scripts/dependabot/resolve-conflicts.sh`
 Gatilho: `.github/workflows/dependabot-auto-merge.yml`
+Registry estruturado de padrões recorrentes: `scripts/dependabot/known-conflict-patterns.json`
 
 Se aparecer um segundo resolvedor, ele é o errado. Este se **atualiza**; não se
 duplica.
@@ -41,18 +42,92 @@ dele aceita automaticamente, sem revisão humana.
 | Caminho | Lado que vence | Por quê |
 |---|---|---|
 | `package.json`, `package-lock.json`, `pnpm-lock.yaml`, `yarn.lock` — em qualquer diretório | **PR** (`--ours`) | o PR **é** o bump; manter a main aqui apaga o motivo do PR |
-| **todo o resto** | **main** (`--theirs`) | fail-closed de verdade: PR não promove código canônico sozinho |
+| conflito conhecido não-manifesto | política registrada (normalmente **main**) | preserva owner canônico já provado |
+| conflito desconhecido textual (`.md/.txt/.mmd/.jsonl/.csv/.rst/.adoc`) | **ambos** | auto-review preserva os dois deltas; CI/contraprova julga a composição |
+| conflito desconhecido de código/config | **PR como candidato** | preserva o delta do PR, mas NÃO promove sem same-head CI/contraprova |
 
 Sem lista de exceções para core. O default já protege tudo que não é manifesto.
+
+## Conflitos recorrentes conhecidos
+
+Os caminhos que já apareceram como feridas operacionais recorrentes ficam
+registrados em `scripts/dependabot/known-conflict-patterns.json`. Esse registry
+machine-readable é **telemetria/roteamento**, não autorização para um resolvedor
+paralelo e não muda a tabela `--ours`/`--theirs`.
+
+Quando um conflito tocar um caminho registrado, o motor emite receipt:
+
+```text
+KNOWN_CONFLICT_PATH=true
+CONFLICT_ID=<id>
+OWNER=<owner>
+RESOLUTION_POLICY=<policy>
+SOURCE_REF=<evidência>
+```
+
+Depois aplica a mesma política única: manifestos/lockfiles preservam o PR;
+conflitos conhecidos seguem o registry; conflito desconhecido entra em
+`AUTO_REVIEW`. Texto usa composição dos dois lados. Código/config preserva o
+lado do PR como **candidato**, nunca como PASS: `git diff --check`, validação
+sintática aplicável e SAME_HEAD CI/contraprova decidem a promoção.
+
+```text
+UNKNOWN_CONFLICT
+→ AUTO_REVIEW
+→ APPLY_CANDIDATE
+→ COUNTERPROOF
+→ SAME_HEAD_CI
+→ PASS | REMEDIATE
+```
+
+O CHEFE não escolhe manualmente `Accept current / incoming / both` quando a
+Casa consegue produzir e testar uma resolução reversível.
+
+## SAME/ALL — reconciliação semântica canônica
+
+O caso provado no PR #1613 vira regra reutilizável do mesmo owner, não um resolvedor novo.
+
+```text
+CONFLICTING_PR
+→ MEASURE_CURRENT_PR_HEAD_AND_FRESH_MAIN
+→ CLASSIFY_EACH_CONFLICT
+→ BOTH_SIDES_HAVE_USEFUL_COMPATIBLE_DELTA?
+   → YES: SEMANTIC_ALL / PRESERVE_BOTH
+   → NO: APPLY_EXISTING_PATH_POLICY_OR_TEST_DISCRIMINANT
+→ REMOVE_CONFLICT_MARKERS
+→ SYNTAX_OR_FORMAT_VALIDATION
+→ TARGETED_TESTS
+→ COUNTERPROOF
+→ SAME_HEAD_CI
+→ REMEASURE_PR_HEAD
+→ PASS | REMEDIATE | UNKNOWN
+```
+
+```text
+SAME_ALL_IS_DEFAULT_FOR_COMPATIBLE_USEFUL_DELTA=true
+SAME_ALL_IS_NOT_BLIND_ACCEPT_BOTH=true
+CONTRADICTORY_DELTA_REQUIRES_DISCRIMINANT_TEST=true
+CONFLICT_MARKERS_AFTER_RESOLUTION=FAIL
+RESOLUTION_WITHOUT_TARGETED_TEST=NOT_PROVEN
+SAME_HEAD_REQUIRED_AFTER_CONFLICT_RESOLUTION=true
+CURRENT_MAIN_MUST_BE_REMEASURED=true
+UNKNOWN_REMAINS_UNKNOWN=true
+REUSE_THIS_OWNER_FOR_ALL_EQUIVALENT_PRS=true
+```
+
+`SEMANTIC_ALL` preserva ambos somente quando os deltas coexistem sem contradição material. Código/config nunca vira PASS só porque a composição foi possível: sintaxe, teste aplicável, contraprova e SAME_HEAD continuam obrigatórios.
 
 ## Fluxo canônico
 
 ```text
-PR abre  ->  workflow dispara (ou humano roda o motor)
-         ->  motor alinha com main de forma determinística
-         ->  checks
-         ->  squash merge
-         ->  main avança
+PR abre/atualiza  ->  workflow dispara
+                  ->  Update branch contra main
+                  ->  conflito? motor único auto-revisa e resolve
+                  ->  commit + push na branch do PR
+                  ->  synchronize / same-head checks
+                  ->  rerun falho transitório uma vez quando aplicável
+                  ->  squash apenas pela política de promoção do PR
+                  ->  main avança
 ```
 
 Na mão, quando o runner estiver fora:

@@ -50,6 +50,10 @@ engines:
     inherits: [LEIA-ME-IA.md, AGENTS.md, Trigger Fabric]
 
 mandatory_inheritance:
+  - GLOBAL_CONTRACT_ENFORCER
+  - DELTA_CONTINUO_GLOBAL
+  - FIXED_HUD_LIVE_DATA
+  - POMBO64_TRACE
   - DESTINATION_LOCK
   - CENTRALDARK_MASTER_CYCLE
   - ACORDAR
@@ -71,6 +75,7 @@ mandatory_inheritance:
   - MEGAZORD_CENTRALDARK_AUTO_COMPOSITION
   - SPIRAL_TRAVERSAL_FORWARD_REVERSE
   - RUNTIME_PLUG_CONTRACT
+  - RUNTIME_PREFLIGHT_LINT
   - SIGNAL_TERRITORY_CRYSTALLIZATION
   - FIXED_POINT_10X12_ADVERSARIAL_WHEN_CRYSTALLIZING
   - ONE_WRITER_PER_SCOPE
@@ -117,6 +122,19 @@ megazord_binding:
   main_is_consequence: true
   deploy_is_consequence: true
 
+
+runtime_preflight_binding:
+  contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RUNTIME-PREFLIGHT-LINT.yml
+  executable_consumer: scripts/trigger-fabric/centraldark_full_trigger_boot.py#cmd_preflight_lint
+  required_by_all_engines: true
+  creates_new_executor: false
+  applies_before: [MUTATION, DEPLOY, KILL, RESTART, DIRTY_SYNC, MULTI_SHELL_FANOUT, RUNTIME_GREEN_CLAIM]
+  fail_closed_on: [PREFLIGHT_CONTRACT_INVALID, HOST_TEMPLATE_INTERPOLATION_RISK, POWERSHELL_PID_AUTOMATIC_VARIABLE_COLLISION, MISSING_REQUIRED_PATH]
+  wrapper_parse_fail_is_not_target_fail: true
+  invalid_probe_must_not_become_fact: true
+  external_tool_host_must_invoke_when_applicable: true
+  runtime_executor_hard_enforcement: UNKNOWN_UNTIL_PROVEN
+
 runtime_plug_binding:
   contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RUNTIME-PLUG-CONTRACT.yml
   conformance: scripts/trigger-fabric/runtime_plug_conformance.py
@@ -126,7 +144,7 @@ runtime_plug_binding:
   transport_adapter_required: true
   shared_heavy_runtime_consumer_lease: true
   unload_only_when_consumer_count_zero: true
-  swap_preserves: [INTENT, STATE, EVIDENCE_REFS, WRITER_SCOPE, PROOF_TARGET, RECEIPT, NEXT_CURSOR, SPIRAL_CURSOR, UNRESOLVED_SET]
+  swap_preserves: [INTENT, STATE, EVIDENCE_REFS, WRITER_SCOPE, PROOF_TARGET, RECEIPT, GLOBAL_GATE_RECEIPT, HUD_STATE_HASH, NEXT_CURSOR, SPIRAL_CURSOR, UNRESOLVED_SET]
   forward_reverse_swap_conformance_required: true
 
 spiral_binding:
@@ -144,6 +162,13 @@ spiral_binding:
 master_cycle_binding:
   contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
   resolver: scripts/trigger-fabric/centraldark_master_cycle.py
+  global_contract: docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json
+  global_contract_enforcer: scripts/agent-call.mjs
+  deploy_gate: scripts/vps/deploy-guards-dispatcher.sh
+  future_executor_requires_global_gate: true
+  mutation_without_global_entry_gate: FAIL_CLOSED
+  delta_continuo_required: true
+  hud_fixed_live_data_required: true
   explicit_trigger: "!CENTRALDARK"
   plain_word_centraldark_does_not_trigger: true
   expands_to: [ACORDAR, CALIBRAR, MULTIBUSSOLA, AUREOLA_BAHIA_BIBLICA, META_LUPA, RECONCILIAR, DELTA_UTIL, CONTRAPROVA, REMEDICAO, SEMANTIC_GREEN, FIXED_POINT, POST_GREEN_LOCK, REGISTRA, BOOT]
