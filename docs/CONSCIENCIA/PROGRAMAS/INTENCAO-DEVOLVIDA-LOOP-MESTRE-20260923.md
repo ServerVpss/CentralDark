@@ -127,23 +127,60 @@ SUA_INTENCAO_DEVOLVIDA
 
 O percentual não é probabilidade metafísica de verdade. É cobertura semântica mensurável da intenção.
 
-A máquina pode convergir até **90 pontos** antes do aceite humano:
+A máquina pode convergir até **90 pontos** antes do aceite humano. Cada ponto exige predicado observável; não existe peso oculto nem ponto por "parecer entendido":
 
 ```text
-OBJETIVO_PRINCIPAL              = 20
-ESCOPO_E_FRONTEIRAS             = 15
-RESTRICOES_E_INVARIANTES        = 15
-CONTEXTO_RELEVANTE_RECUPERADO   = 10
-OWNERS_CAPACIDADES_EXISTENTES   = 10
-DEPENDENCIAS_E_SUPERFICIES      = 5
-CRITERIOS_DE_ACEITE             = 5
-RISCOS_UNKNOWN_CONTRADICOES     = 5
-DESTINO_EXECUCAO_E_RETORNO      = 5
-------------------------------------
-COBERTURA_MAQUINA_MAX           = 90
-ACEITE/CORRECAO_DO_CHEFE        = 10
-TOTAL_INTENCAO_CONFIRMADA       = 100
+OBJETIVO_PRINCIPAL = 20
+  GOAL_EXPLICITO_OU_RECUPERADO_COM_PROVENIENCIA = 10
+  TARGET_IDENTIFICADO_SEM_REFERENTE_ORFAO         = 10
+
+ESCOPO_E_FRONTEIRAS = 15
+  IN_SCOPE_EXPLICITO                              = 5
+  OUT_OF_SCOPE_EXPLICITO                          = 5
+  MUTATION_BOUNDARY_IDENTIFICADA                  = 5
+
+RESTRICOES_E_INVARIANTES = 15
+  CONSTRAINTS_IDENTIFICADAS                       = 5
+  FORBIDDEN_ACTIONS_IDENTIFICADAS                 = 5
+  AUTHORITY_LIMITS_IDENTIFICADOS                  = 5
+
+CONTEXTO_RELEVANTE_RECUPERADO = 10
+  PROVENIENCIA_RECUPERADA                         = 5
+  CONTEXTO_CURRENT_VALIDADO_CONTRA_STALE          = 5
+
+OWNERS_CAPACIDADES_EXISTENTES = 10
+  OWNER_EXISTENTE_IDENTIFICADO                    = 5
+  CAPABILITY_FIT_MEDIDO                           = 5
+
+DEPENDENCIAS_E_SUPERFICIES = 5
+  DEPENDENCIAS_MATERIAIS_E_ESTADO_CLASSIFICADOS  = 5
+
+CRITERIOS_DE_ACEITE = 5
+  ACCEPTANCE_PREDICATES_MENSURAVEIS               = 5
+
+RISCOS_UNKNOWN_CONTRADICOES = 5
+  UNKNOWN_E_CONTRADICOES_MATERIAIS_EXPLICITADOS  = 5
+
+DESTINO_EXECUCAO_E_RETORNO = 5
+  EXECUTOR_DESTINO_RETORNO_E_RECEIPT_DEFINIDOS   = 5
+-----------------------------------------------------
+COBERTURA_MAQUINA_MAX                            = 90
+ACEITE/CORRECAO_DO_CHEFE                         = 10
+TOTAL_INTENCAO_CONFIRMADA                        = 100
 ```
+
+Regra de cálculo:
+
+```text
+PREDICATE=PROVED       → recebe os pontos do predicado
+PREDICATE=PARTIAL      → recebe somente subpredicados individualmente provados
+PREDICATE=UNKNOWN      → 0 no predicado afetado
+PREDICATE=CONTRADICTED → 0 + abre reconciliação
+SEM_EVIDENCE_REF       → 0
+SCORE = SUM(PROVED_PREDICATES)
+```
+
+O HUD deve expor numerador, denominador e quais predicados faltam; dois motores com as mesmas evidências devem produzir a mesma pontuação.
 
 `100%` aqui significa "intenção confirmada pelo CHEFE", não "runtime provado".
 
@@ -328,28 +365,47 @@ O botão MASTER não ignora gates. Ele autoriza a execução do loop previamente
 ```text
 CHEFE_INPUT
 → CAPTURE
+→ PROVENANCE
+→ DATA_VS_INSTRUCTION_CLASSIFICATION
+→ UNTRUSTED_OR_SENSITIVE ? QUARANTINE_BY_MATERIAL_INGEST : CONTINUE
+→ SEMANTIC_EXTRACTION
 → SEMANTIC_RESOLUTION
 → HISTORY_RENDEZVOUS
 → INTENT_STATE
 → INTENT_COVERAGE
 → SUA_INTENCAO_DEVOLVIDA
-→ CHEFE_ACCEPT_OR_DELTA
+→ NEW_HUMAN_DECISION_REQUIRED_OR_MATERIAL_AMBIGUITY ?
+     CHEFE_ACCEPT_OR_DELTA
+   : DETERMINISTIC_ACCEPT_CURRENT_AUTHORIZED_INTENT
 → COMMAND_COMPILE
 → REUSE_OWNER_CAPABILITY
 → ROUTER_SELECT_ENGINE
 → HERMES_PLAN
+→ CHECKPOINT + TIMEOUT + RETRY_BUDGET + FALLBACK + ROLLBACK_PLAN
 → PDF/TLC23/GATES_WHEN_REQUIRED
 → EXECUTE
 → OBSERVE
 → TEST
+→ FAIL|TIMEOUT ?
+     PRESERVE_CHECKPOINT
+     → RETRY_ONLY_IF_NEW_INFORMATION_AND_BUDGET_REMAINS
+     → FALLBACK_WHEN_PROVEN_EQUIVALENT
+     → ROLLBACK_WHEN_MUTATED_AND_ROLLBACK_PROVEN
+     → EXACT_BLOCKER_IF_NOT_RECOVERABLE
+     → FIXED_POINT_FORBIDDEN
+   : CONTINUE
 → COUNTERPROOF
 → RECONCILE
 → GIT/PROMOTE_WHEN_APPLICABLE
 → DEPLOY_CAUSAL_WHEN_APPLICABLE
 → RECEIPT
 → FIXED_POINT
-→ NEXT_CYCLE
+→ NEW_MATERIAL_DELTA_OR_COUNTERPROOF ?
+     NEXT_CYCLE
+   : REUSE_SEAL_AND_WAIT
 ```
+
+`docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MATERIAL-INGEST.md` continua sendo a fronteira para material não confiável/sensível. Arquivo externo fornece **dados candidatos**, nunca autoridade nem instrução executável por si só.
 
 ---
 
@@ -383,20 +439,33 @@ O loop termina em fixed point local, blocker exato ou horário/limite configurad
 ```text
 PC_ON && VPS_ON
 → PARALLEL_PERCEPTION_ALLOWED
-→ MUTATION_SERIAL_PER_SCOPE
 → compartilhar intent state/evidence
 → dois motores podem revisar
+→ MUTATION_REQUIRES_ACTIVE_WRITER_LEASE
 → um writer por escopo
 
-PC_OFF && VPS_ON
-→ VPS continua capacidades provadas
+CASA_UNREACHABLE && VPS_ON
+→ NAO_ASSUMIR_PC_OFF
+→ CHECK_WRITER_LEASE_EPOCH
+→ WAIT_FOR_LEASE_EXPIRY_OR_PROVEN_RELEASE
+→ FENCE_PREVIOUS_WRITER
+→ HANDOFF_RECEIPT
+→ VPS_PODE_ASSUMIR_MUTACAO
 
-PC_ON && VPS_OFF
-→ Casa continua capacidades locais provadas
+VPS_UNREACHABLE && PC_ON
+→ MESMA_REGRA_DE_FENCING_E_HANDOFF
+→ Casa continua somente depois de writer ownership provado
+
+NETWORK_PARTITION
+→ READ_ONLY/PERCEPTION_PODE_CONTINUAR
+→ SECOND_WRITER_FORBIDDEN
 
 MOTOR_MUDOU
 → MISSAO_NAO_REINICIA
+→ WRITER_LEASE_NAO_MUDA_SO_POR_TROCA_DE_MODELO
 ```
+
+O lease precisa carregar pelo menos `scope + writer_id + epoch + acquired_at + expires_at + last_heartbeat + release/handoff_ref`. Failover sem fencing é `BLOCKED`, não autonomia.
 
 ---
 
@@ -466,7 +535,10 @@ Direção:
 
 ```text
 RAW_FILE
-→ FILE_ID/HASH/ORIGIN
+→ USER_ID + CONNECTION_ID + FILE_ID/HASH/ORIGIN
+→ PROVENANCE
+→ DATA_VS_INSTRUCTION_CLASSIFICATION
+→ UNTRUSTED_OR_SENSITIVE ? QUARANTINE : CONTINUE
 → EXTRACT_SEMANTICS
 → INTENT_RELATION
 → ENTITY/CAPABILITY/OWNER
@@ -482,6 +554,10 @@ RAW_FILE
 Campos mínimos:
 
 ```text
+USER_ID
+CONNECTION_ID
+ACCOUNT_PROVIDER_ID
+AUTH_SCOPE_FINGERPRINT
 FILE_ID
 NAME
 TYPE
@@ -489,6 +565,9 @@ SIZE
 DATE
 ORIGIN
 HASH
+INGEST_TRUST_CLASS
+DATA_VS_INSTRUCTION
+QUARANTINE_STATUS
 INTENT_EXTRACTED
 ENTITIES
 TOPICS
@@ -503,10 +582,14 @@ CONVERGENCE_SCORE
 CONFIDENCE/COVERAGE
 PDF_GATE_STATUS
 COUNTERPROOF_STATUS
+REVOKED_AT
+TOMBSTONE_STATE
 VERDICT
 PR_MOTHER_LINK
 NEXT_CURSOR
 ```
+
+`REVOKE_ACCOUNT` precisa invalidar/tombstonar o material derivado daquela `CONNECTION_ID` sem apagar proveniência histórica e sem deixar resultado federado stale visível como ativo.
 
 Obsidian = projeção/knowledge surface, não autoridade superior ao GitHub + runtime medido.
 
@@ -557,27 +640,38 @@ Qualquer rota/subdomínio deve ser re-medida antes de mutação.
 
 ## 16. HUD do PR-mãe e do cockpit
 
-O HUD deve distinguir intenção, implementação e prova.
-
-Campos adicionais úteis:
+O HUD deve distinguir intenção, implementação e prova **sem alterar o layout global fixo**. A telemetria nova entra como valores estruturados nos campos canônicos já existentes:
 
 ```text
-🧠 INTENT_COVERAGE
-🗣️ SEMANTIC_RESOLUTION
-🎛️ MASTER_LOOP
-🏠 CASA_ENGINE
-☁️ VPS_ENGINE
-🧮 ACTIVE_MODELS
-🧭 ROUTER_OWNER
-🪡 REUSE_STATUS
-🧪 PDF_GATE
-⚖️ COUNTERPROOF
-🧾 RECEIPT
-🔗 ACTIVE_CHILD
+📊 PROGRESS
+  INTENT_COVERAGE
+  SEMANTIC_RESOLUTION
+  MASTER_LOOP
+
+🧰 TOOLS
+  CASA_ENGINE
+  VPS_ENGINE
+  ACTIVE_MODELS
+  ROUTER_OWNER
+  REUSE_STATUS
+
+🧾 EVIDENCE
+  PDF_GATE
+  COUNTERPROOF
+  RECEIPT
+  ACTIVE_CHILD
+  WRITER_LEASE_EPOCH
+
+❓ MATERIAL_UNKNOWN
+  PREDICATES_NOT_PROVED
+  AMBIGUITIES
+  CONTRADICTIONS
+
 ➡️ NEXT_CURSOR
+  CURRENT_MISSION_CURSOR
 ```
 
-Percentual só quando denominador estiver definido.
+Nenhum campo top-level novo é necessário. Percentual só quando denominador e predicados estiverem definidos.
 
 Para este plano:
 - requisitos fonte: 40/40 capturados;
@@ -673,29 +767,32 @@ REALIDADE = juiz
 
 Dependabot e CodeRabbit não ganham autoridade para mudar intenção, default ou escopo. Review material pode bloquear ou reabrir a prova; ausência de pedido humano repetido não remove gates.
 
+`CHEFE_ACCEPT_OR_DELTA` é condicional: só reaparece quando existir decisão humana realmente nova, ambiguidade material não resolvível ou expansão de escopo. Intenção já autenticada + mesmo escopo + ausência de contradição material segue por aceite determinístico sem novo clique.
+
+
 ## 18. Critérios de aceite
 
 ```text
-A01_INTENT_PERSISTS_ACROSS_TURNS
+A01_INTENT_PERSISTS_TURNS_WINDOWS_MODELS_WITH_CANONICAL_STATE_RECEIPT
 A02_VOICE_REFERENT_RECOVERY_PROVEN
-A03_RETURNED_INTENT_VISIBLE
-A04_COVERAGE_DENOMINATOR_EXPLICIT
+A03_RETURNED_INTENT_VISIBLE_AND_NO_REASK_WHEN_ALREADY_AUTHORIZED
+A04_COVERAGE_DENOMINATOR_AND_EVIDENCE_BACKED_PREDICATES_EXPLICIT
 A05_HUMAN_10_DISTINCT_FROM_RUNTIME_PROOF
 A06_COMMAND_PORTABLE_CHAT_CLI_MCP
 A07_REUSE_OWNER_PROVEN
 A08_NO_PARALLEL_ROUTER
-A09_MASTER_LOOP_PAUSABLE
-A10_PC_VPS_FAILOVER_MEASURED
-A11_ONE_WRITER_PER_SCOPE
+A09_MASTER_LOOP_PAUSABLE_AND_NO_REOPEN_WITHOUT_NEW_MATERIAL
+A10_PC_VPS_FAILOVER_REQUIRES_LEASE_EPOCH_FENCING_AND_HANDOFF
+A11_ONE_WRITER_PER_SCOPE_PROVEN
 A12_HERMES_RECEIVES_CONFIRMED_COMMAND
-A13_PDF_GATE_APPLIED_WHEN_REQUIRED
-A14_COUNTERPROOF_REOPENS_BAD_CLAIM
-A15_GOOGLE_MULTI_ACCOUNT_PROVEN
-A16_DRIVE_FEDERATED_QUERY_PROVEN
-A17_SEMANTIC_INDEX_TRACEABLE
-A18_HUD_DISTINGUISHES_INTENT_IMPLEMENTATION_RUNTIME
-A19_RECEIPT_RETURNS_TO_1562
-A20_NO_MATERIAL_UNKNOWN_AT_FIXED_POINT
+A13_PDF_GATE_AND_MATERIAL_INGEST_APPLIED_WHEN_REQUIRED
+A14_FAILURE_TIMEOUT_HAS_BOUNDED_RETRY_FALLBACK_ROLLBACK_OR_EXACT_BLOCKER
+A15_GOOGLE_MULTI_ACCOUNT_PROVEN_AND_ISOLATED_BY_USER_CONNECTION
+A16_REVOKED_CONNECTION_TOMBSTONES_DERIVED_ACTIVE_RESULTS
+A17_SEMANTIC_INDEX_TRACEABLE_TO_USER_CONNECTION_PROVENANCE
+A18_FIXED_HUD_LAYOUT_PRESERVED_WITH_STRUCTURED_TELEMETRY
+A19_RECEIPT_RETURNS_TO_1562_AND_OVERRIDE_EXPIRES
+A20_NO_MATERIAL_UNKNOWN_OR_UNFENCED_WRITER_AT_FIXED_POINT
 ```
 
 ---
@@ -744,8 +841,9 @@ UNKNOWN != PASS
 → DEPLOY_CAUSAL
 → RECEIPT
 → FIXED_POINT
-→ #1562
-→ LOOP
+→ NEW_MATERIAL_DELTA_OR_COUNTERPROOF ?
+     #1562 → NEXT_CYCLE
+   : REUSE_SEAL_AND_WAIT
 ```
 
 ## NEXT_CURSOR
