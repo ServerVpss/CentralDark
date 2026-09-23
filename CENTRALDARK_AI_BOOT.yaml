@@ -115,6 +115,42 @@ CENTRALDARK_AI_BOOT:
     contract_ref: "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json#local_house_sensor_contract"
     casa_local: "DISCOVER_AT_RUNTIME_DO_NOT_ASSUME_PATH"
 
+  global_secret_reuse_contract:
+    contract_ref: "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json#global_secret_reuse_contract"
+    scope: "GLOBAL_ALL_CURRENT_AND_FUTURE_SECRET_CONSUMERS"
+    canonical_vault: "/root/CentralDark/secrets"
+    repository_secrets: "REUSE_ALL_EXISTING_AND_FUTURE"
+    create_new_secret_only_if: "NO_EQUIVALENT_AFTER_MEASURE"
+    compatibility_root_secrets: "INPUT_NOT_SECOND_VAULT"
+    secret_values_in_git: false
+    secret_names_and_metadata_in_ledger: true
+    same_secret_multi_consumer_when_chefe_intent_requires: true
+    no_parallel_vault: true
+    reality_is_judge: true
+
+  telegram_transport_contract:
+    contract_ref: "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json#telegram_transport_contract"
+    bot_transport: "TELEGRAM_BOT_API_DIRECT"
+    bot_api_base: "https://api.telegram.org"
+    bot_update_mode: "LONG_POLLING_ONLY"
+    bot_webhook_transport: "FORBIDDEN"
+    centraldark_subdomain_as_telegram_transport: "FORBIDDEN"
+    user_transport: "TELEGRAM_MTPROTO_DIRECT"
+    admin_ui_control_path: "/api/telegram/mtproto"
+    one_transport_owner_per_identity: true
+    stale_webhook_must_be_deleted_on_bot_boot: true
+
+  telegram_orchestrator_contract:
+    authority: "SEGREDO/CHEFE"
+    coordinator: "SOL"
+    executor: "PIVETE/HERMES"
+    control_plane: "CENTRALDARK"
+    sol_may_route_all_existing_capabilities: true
+    sol_secret_access: "CANONICAL_SECRET_RESOLVER"
+    create_new_agent_only_if: "NO_EXISTING_CAPABILITY_MATCH"
+    six_functional_lenses_are_not_six_mandatory_permanent_agents: true
+    sol_self_approval: false
+    reality_is_judge: true
   # Cognitive BIOS = camada lógica de política do mesmo boot. Não é firmware, SO paralelo ou segundo cérebro.
   cognitive_bios:
     status: "CANONICAL_BOOT_POLICY_LAYER"
@@ -157,6 +193,18 @@ CENTRALDARK_AI_BOOT:
         - FIXED_POINT_STATE
       unknown_fields_remain_visible: true
       source_of_truth: "CURRENT_RUNTIME_PLUS_CANONICAL_CONTRACT"
+
+  allow_first_agent_routing:
+    marker: "ALL_GATES_PASSED | BOOTSTRAP_COMPLETE"
+    status: "READY_FOR_FIRST_DECISION"
+    next_step: "Route first user message/intent → SOL → appropriate SPECIALIST/PIVETE"
+    state_inventory:
+      - "MISSION_ID: <assigned by first user intent>"
+      - "SESSION_ID: <current session UUID>"
+      - "WRITER_SCOPE: <measured and locked>"
+      - "INTENT: <parsed from user message>"
+      - "STATE_VIVO: <measured at bootstrap completion>"
+      - "PROOF_MANIFEST: <what will prove success>"
 
   # DELTA ÚTIL é parte explícita do BOOT, não nota solta de sessão.
   # Todo delta que sobreviver à escavação precisa ficar rastreável aqui E no owner canônico.
