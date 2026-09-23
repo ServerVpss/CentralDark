@@ -289,6 +289,34 @@ export function validateUniversalMethod() {
     'AUTO_RESUME_AFTER_HUMAN_FRONTIER=true',
   ], 'HERMES_HUMAN_COMPLEXITY_PROMPT');
 
+  requireTokens(universal, [
+    'chefe_alignment_filter_required: true',
+    'useless_complexity_must_be_reduced_before_human_output: true',
+    'chief_receives_decision_not_internal_topology: true',
+    'CENTRALDARK_CHEFE_ALIGNMENT_SIMPLIFIER',
+    'REDUCE_USELESS_COMPLEXITY_FOR_SEGREDO_CHEFE',
+    'DROP_DUPLICATE_OR_COSMETIC_WORK',
+    'asks_user_to_choose_order_for_authorized_technical_work',
+  ], 'CHEFE_ALIGNMENT_SIMPLIFIER_UNIVERSAL');
+
+  requireTokens(contract, [
+    'chefe_alignment_filter_required: true',
+    'CENTRALDARK_CHEFE_ALIGNMENT_SIMPLIFIER',
+    'REDUCE_USELESS_COMPLEXITY_FOR_SEGREDO_CHEFE',
+    'human_output_default: RESULT_EVIDENCE_PENDING_NEXT_CURSOR',
+    'ask_user_to_choose_order_for_authorized_technical_work: false',
+    'preserve_proof_unknown_and_blockers: true',
+  ], 'CHEFE_ALIGNMENT_SIMPLIFIER_CONTRACT');
+
+  requireTokens(hermesPrompt, [
+    '## Filtro de alinhamento do Chefe — reduzir complexidade inútil',
+    'CENTRALDARK_CHEFE_ALIGNMENT_SIMPLIFIER=true',
+    'REDUCE_USELESS_COMPLEXITY_FOR_SEGREDO_CHEFE=true',
+    'CHIEF_RECEIVES_DECISION_NOT_INTERNAL_TOPOLOGY=true',
+    'NO_MICROSTEP_MENU_FOR_AUTHORIZED_TECHNICAL_WORK=true',
+    'HUMAN_OUTPUT_DEFAULT=RESULTADO_EVIDENCIA_PENDENCIA_REAL_PROXIMO_CURSOR',
+  ], 'CHEFE_ALIGNMENT_SIMPLIFIER_PROMPT');
+
   requireTokens(operationalMethod, [
     '## Contrato humano de execução integral',
     'microcomando não é padrão',

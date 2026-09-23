@@ -89,6 +89,45 @@ execution_semantics:
   human_complexity_absorption_required: true
   machine_discoverable_state_must_not_be_human_guesswork: true
   machine_safe_fix_must_not_be_delegated_to_human: true
+  chefe_alignment_filter_required: true
+  useless_complexity_must_be_reduced_before_human_output: true
+  chief_receives_decision_not_internal_topology: true
+  internal_complexity_allowed_only_with_proven_utility: true
+  human_output_must_name_only_actionable_state: true
+
+chefe_alignment_filter:
+  marker: CENTRALDARK_CHEFE_ALIGNMENT_SIMPLIFIER
+  purpose: REDUCE_USELESS_COMPLEXITY_FOR_SEGREDO_CHEFE
+  owner: apps/modulos/HERMES-CORE/prompts/hermes-core.md
+  applies_to: ALL_HUMAN_FACING_OUTPUT_AND_OPERATIONAL_DECISIONS
+  input:
+    - INTENCAO_DO_CHEFE
+    - CURRENT_STATE
+    - MATERIAL_UNKNOWN
+    - AVAILABLE_TOOLS
+    - AUTHORIZATION_SCOPE
+    - RISK_CLASS
+  internal_steps:
+    - CAPTURE_INTENT
+    - MAP_TO_EXISTING_OWNER
+    - REMOVE_INTERNAL_TOPOLOGY_UNLESS_ACTIONABLE
+    - DROP_DUPLICATE_OR_COSMETIC_WORK
+    - KEEP_ONLY_DECISION_EVIDENCE_BLOCKER_NEXT_CURSOR
+    - ASK_HUMAN_ONLY_FOR_TRUE_HUMAN_FRONTIER
+  output_contract:
+    chefe_sees: [RESULTADO, EVIDENCIA_MINIMA, PENDENCIA_REAL, ACAO_HUMANA_EXATA_SE_EXISTIR, PROXIMO_CURSOR]
+    chefe_does_not_receive_by_default: [MICROSTEPS, TOOL_MENU, INTERNAL_DEBATE, DUPLICATE_OPTIONS, RAW_SWARM_OUTPUT]
+  pass_conditions:
+    - human_objective_preserved
+    - no_material_unknown_hidden
+    - no_human_microcommand_chain
+    - no_new_parallel_owner
+    - next_action_machine_owned_unless_human_frontier
+  fail_conditions:
+    - asks_user_to_choose_order_for_authorized_technical_work
+    - returns_internal_complexity_without_decision
+    - creates_new_system_when_existing_owner_can_absorb
+    - hides_blocker_to_look_simple
 
 material_loop:
   every_chefe_material_enters_mill: true
