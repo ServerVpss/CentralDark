@@ -554,7 +554,8 @@ export function validateUniversalMethod() {
   ], 'UNIVERSAL_GATE_REGISTRY');
 
   requireTokens(boot, [
-    'mission_stop: "NEVER_BY_CHAT"',
+    'mission_stop: "CONTINUE_ACROSS_CHAT_BOUNDARIES_UNLESS_CHEFE_EXPLICITLY_STOPS"',
+    '- "CHEFE_EXPLICITLY_STOPS"',
     'child_pr_only_promotion_vehicle: true',
     'SQUASH_CHILD_ONLY',
     'required_gate_ids:',
