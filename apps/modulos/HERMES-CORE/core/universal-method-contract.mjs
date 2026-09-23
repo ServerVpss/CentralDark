@@ -406,6 +406,8 @@ export function validateUniversalMethod() {
     'PROOF_REQUIRED_BEFORE_ACCEPTANCE=true',
     'COUNTERPROOF_REQUIRED_BEFORE_ACCEPTANCE=true',
     'ACCEPTANCE_IS_COMPUTED_NOT_VOTED=true',
+    'ACCEPTANCE_RESULT_ENUM=ACCEPTED|PARTIAL|REJECTED|UNKNOWN',
+    'UNKNOWN=INSUFFICIENT_EVIDENCE_NO_PASS',
     'NEW_MATERIAL_CAUSE_REQUIRES_REOPEN_WITH_CAUSE_REF=true',
     'FIXED_POINT_REQUIRES_DETERMINISTIC_CLOSURE=true',
   ], 'META_LUPA_DETERMINISTIC_CLOSURE');
@@ -413,6 +415,7 @@ export function validateUniversalMethod() {
   requireTokens(metaGrill, [
     '## ⚖️ Lei do fechamento determinístico',
     'META_GRILL_IS_FALSIFIER_NOT_PERMANENT_SKEPTIC=true',
+    'ACCEPTANCE_RESULT_ENUM=ACCEPTED|PARTIAL|REJECTED|UNKNOWN',
     'ACCEPT_ONLY_AFTER_COUNTERPROOF_SURVIVAL=true',
     'PROVEN_GOOD_MUST_SURVIVE_RECONCILIATION=true',
   ], 'META_GRILL_DETERMINISTIC_CLOSURE');
@@ -420,6 +423,7 @@ export function validateUniversalMethod() {
   requireTokens(fableLoop, [
     '## Contrato de aceite e reconciliação',
     'FABLE_PROOF_COUNTERPROOF_CLOSURE=true',
+    'ACCEPTANCE_RESULT_ENUM=ACCEPTED|PARTIAL|REJECTED|UNKNOWN',
     'FABLE_ACCEPT_ONLY_AFTER_COUNTERPROOF_SURVIVAL=true',
     'FABLE_RECONCILE_PARTIAL_FAILURE=true',
     'FABLE_SEALED_CLAIM_NO_RECHECK_WITHOUT_NEW_CAUSE=true',
@@ -434,6 +438,8 @@ export function validateUniversalMethod() {
   }
 
   requireTokens(aureola, [
+    'header: "⭕ !AURÉOLA CANÔNICA"',
+    'opening_verse: "“Examinai tudo. Retende o bem.” — 1 Tessalonicenses 5:21"',
     'AUREOLA_IS_OPERATIONAL_TRACE_NOT_PRIVATE_CHAIN_OF_THOUGHT: true',
     'BIBLE_REFERENCE_IS_SEMANTIC_CUE_NOT_PROOF: true',
     'VERSE_DOES_NOT_REPLACE_EVIDENCE: true',
@@ -548,6 +554,10 @@ export function validateUniversalMethod() {
   ], 'UNIVERSAL_GATE_REGISTRY');
 
   requireTokens(boot, [
+    'mission_stop: "CONTINUE_ACROSS_CHAT_BOUNDARIES_UNLESS_CHEFE_EXPLICITLY_STOPS"',
+    '- "CHEFE_EXPLICITLY_STOPS"',
+    'child_pr_only_promotion_vehicle: true',
+    'SQUASH_CHILD_ONLY',
     'required_gate_ids:',
     'LOAD_UNIVERSAL_GATE_REGISTRY',
     'LOAD_ROOT_CHILD_CONTRACT_LINEAGE',

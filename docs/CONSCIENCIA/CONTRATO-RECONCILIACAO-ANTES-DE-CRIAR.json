@@ -544,6 +544,13 @@
         "owner": "CENTRALDARK_AI_BOOT.yaml#initial_bootstrap_gate",
         "stage": "BOOT"
       },
+      "HERMES_TRISMEGISTUS_CONTEXT_GATE": {
+        "owner": "CENTRALDARK_AI_BOOT.yaml#hermes_trismegistus_context_gate",
+        "stage": "BOOT",
+        "role": "CONTEXT_PROVENANCE_INTERPRETATION_GUARD",
+        "source_is_authority": false,
+        "reality_is_judge": true
+      },
       "GLOBAL_CONTRACT_BOOTSTRAP_GATE": {
         "owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json",
         "stage": "BOOT"
@@ -886,6 +893,7 @@
     "GOAL_COUNTERPROOF_REF",
     "TLC23_PDF_SHA256",
     "TLC23_HORN_GATE_RESULT",
+    "HERMES_TRISMEGISTUS_CONTEXT_GATE_RESULT",
     "CHILD_CONTRACT_LINEAGE_RESULT"
   ],
   "receipt_visibility": "INTERNAL_BY_DEFAULT; SHOW_ONLY_ON_AUDIT_OR_BLOCKER",

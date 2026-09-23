@@ -816,11 +816,12 @@ AUTOR CONFIAVEL + MESMO REPO
 → MERGE CONFLICT? ROTEIA AO GIT_CONFLICT_SINGLE_STANDARD; BLOQUEIA SÓ O SQUASH ATÉ SAME_HEAD
 → BASE ATRASADA? ATUALIZA E REAVALIA
 → REVALIDA HEAD/BASE
-→ SQUASH MAIN
+→ SAME_HEAD gates fechados no HEAD atual
+→ SQUASH_CHILD_ONLY
 → RECEIPT
 ```
 
-Esse fast path **não espera convergência externa nem todos os workflows auxiliares**. O modo adversarial com workflows/Judge completos permanece no mesmo motor e é usado quando SEGREDO/CHEFE solicitar prova adversarial. `UNKNOWN` e achado de segurança continuam fail-closed. Conflito de PR vai primeiro ao `GIT_CONFLICT_SINGLE_STANDARD`; somente resolução ainda não provada mantém o squash bloqueado.
+Esse fast path não exige convergência ornamental fora dos gates materiais, mas **SQUASH_CHILD_ONLY exige SAME_HEAD gates fechados no HEAD atual**. `PENDING`, `QUEUED`, `SKIPPED` e `UNKNOWN` não são PASS. O modo adversarial com workflows/Judge completos permanece no mesmo motor quando solicitado. Conflito de PR vai primeiro ao `GIT_CONFLICT_SINGLE_STANDARD`; somente resolução ainda não provada mantém o squash bloqueado.
 
 ### Guarda pós-PR do fast path
 
@@ -838,7 +839,8 @@ CREATE_PR
 ```text
 CREATE_PR_MERGEABLE_SNAPSHOT_IS_NOT_FINAL=true
 REMEASURE_PR_LIVE_BEFORE_HUMAN_RETURN=true
-QUEUED_OR_IN_PROGRESS_AUXILIARY_IS_NOT_MATERIAL_BLOCKER=true
+SAME_HEAD_GATES_CLOSED_ON_CURRENT_HEAD_REQUIRED=true
+PENDING_QUEUED_SKIPPED_UNKNOWN_ARE_NOT_PASS=true
 POST_PR_CONTINUE_UNTIL_MERGED_OR_MATERIAL_BLOCKER=true
 RETURN_WITH_OPEN_ELIGIBLE_PR=FORBIDDEN
 ```
@@ -1128,7 +1130,13 @@ A PR-MÃE `#1562` é o rendezvous permanente/ledger (“ponto turístico”) e p
 A missão da CentralDark é contínua. `FIXED_POINT` fecha o delta corrente; não encerra a CentralDark. Estado consolidado é reutilizado enquanto suas premissas materiais não mudarem. O boot não congela PR-filho: descobre no `#1562` quais deltas continuam abertos. O SHA é medido a cada ativação, porque hash histórico é proveniência, não CURRENT.
 
 ```text
-⭕ !AURÉOLA → 👑🪬 !CENTRALDARK → #1562 → SHA:<CURRENT_MAIN_SHA> → CURRENT>HISTORY → REUSE_PROVEN → OPEN_DELTA_ONLY → TLC23 → META_LUPA → FABLE → META_GRILL → HERMES → PROVA → CONTRAPROVA → ACEITE → RECONCILIAR → SEMANTIC_ALL → SAME_HEAD → SQUASH → MAIN → DEPLOY_CAUSAL → T1 → RECEIPT → FIXED_POINT → #1562 → LOOP
+⭕ !AURÉOLA → 👑🪬 !CENTRALDARK → #1562 → SHA:<CURRENT_MAIN_SHA> → CURRENT>HISTORY → REUSE_PROVEN → OPEN_DELTA_ONLY → TLC23 → HERMES_TRISMEGISTUS_CONTEXT → META_LUPA → FABLE → META_GRILL → HERMES → PROVA → CONTRAPROVA → ACEITE → RECONCILIAR → SEMANTIC_ALL → SAME_HEAD → SQUASH → MAIN → DEPLOY_CAUSAL → T1 → RECEIPT → FIXED_POINT → #1562 → LOOP
+
+HERMES_TRISMEGISTUS_CONTEXT_GATE_REQUIRED=true
+HERMES_TRISMEGISTUS_IS_SEMANTIC_IDENTITY_NOT_NEW_AUTHORITY=true
+TLC23_IS_FORMAL_LOGIC_GATE=true
+HERMES_CONTEXT_IS_PROVENANCE_INTERPRETATION_GUARD=true
+REALITY_REMAINS_JUDGE=true
 
 MISSION=CENTRALDARK_CONTINUA
 RENDEZVOUS=#1562

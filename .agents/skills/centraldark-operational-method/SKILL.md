@@ -2034,18 +2034,24 @@ Sem os fatos obrigatorios, o receptor deve falhar fechado.
 ```text
 REGISTRA_MEANS_COMMIT_PUSH_PR_SQUASH_MAIN=true
 REGISTRA
-→ medir main/HEAD
+→ medir CURRENT_MAIN_SHA/HEAD
 → dedupe + owner existente
 → menor MVP útil
-→ teste aplicável
+→ teste aplicável + contraprova
 → commit
 → push em branch filha
 → abrir PR filha vinculada à #1562
 → remeasure live
-→ se mergeable e sem blocker material: squash main com expected_head_sha
-→ readback da main
+→ blocker técnico recuperável: continuar até HUMAN_FRONTIER real
+→ conflito: usar git-conflict-resolve-house-standard
+→ SAME_HEAD gates fechados no HEAD atual
+→ SQUASH_CHILD_ONLY com expected_head_sha
+→ readback da main + novo CURRENT_MAIN_SHA
+→ DEPLOY_CAUSAL somente se o delta exigir runtime
+→ T1 quando houver deploy causal
 → receipt no PR filho e na PR-mãe
-→ fixed point
+→ fixed point do delta
+→ voltar ao #1562
 ```
 
 A `#1562` permanece aberta como PR-MÃE permanente, rendezvous/ledger e `DO_NOT_MERGE`. Ela não é veículo de código para main; os filhos passam por ela e registram o que foi absorvido.

@@ -1,3 +1,16 @@
+semantic_identity:
+  canonical_display_family: HERMES_TRISMEGISTUS
+  display_name: HERMES_TRISMEGISTUS_RUNTIME
+  core_display_name: HERMES_TRISMEGISTUS_CORE
+  kernel_display_name: HERMES_TRISMEGISTUS_KERNEL
+  technical_owner_unchanged: true
+  creates_new_runtime: false
+  creates_new_kernel: false
+  creates_new_core: false
+  source_guard: CENTRALDARK_AI_BOOT.yaml#hermes_trismegistus_context_gate
+  formal_truth_gate: CENTRALDARK_AI_BOOT.yaml#tcl23_horn_gate
+  judge: REALIDADE
+
 schema: centraldark.hermes-autoconfig-runtime.v1
 status: CANONICAL_RUNTIME_CONTRACT
 authority: SEGREDO/CHEFE
