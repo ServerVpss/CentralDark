@@ -128,6 +128,30 @@ CENTRALDARK_AI_BOOT:
     no_parallel_vault: true
     reality_is_judge: true
 
+  telegram_transport_contract:
+    contract_ref: "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json#telegram_transport_contract"
+    bot_transport: "TELEGRAM_BOT_API_DIRECT"
+    bot_api_base: "https://api.telegram.org"
+    bot_update_mode: "LONG_POLLING_ONLY"
+    bot_webhook_transport: "FORBIDDEN"
+    centraldark_subdomain_as_telegram_transport: "FORBIDDEN"
+    user_transport: "TELEGRAM_MTPROTO_DIRECT"
+    admin_ui_control_path: "/api/telegram/mtproto"
+    one_transport_owner_per_identity: true
+    stale_webhook_must_be_deleted_on_bot_boot: true
+
+  telegram_orchestrator_contract:
+    authority: "SEGREDO/CHEFE"
+    coordinator: "SOL"
+    executor: "PIVETE/HERMES"
+    control_plane: "CENTRALDARK"
+    sol_may_route_all_existing_capabilities: true
+    sol_secret_access: "CANONICAL_SECRET_RESOLVER"
+    create_new_agent_only_if: "NO_EXISTING_CAPABILITY_MATCH"
+    six_functional_lenses_are_not_six_mandatory_permanent_agents: true
+    sol_self_approval: false
+    reality_is_judge: true
+
   # Cognitive BIOS = camada lógica de política do mesmo boot. Não é firmware, SO paralelo ou segundo cérebro.
   cognitive_bios:
     status: "CANONICAL_BOOT_POLICY_LAYER"
