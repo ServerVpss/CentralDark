@@ -25,6 +25,7 @@ CENTRALDARK_AI_BOOT:
     measured_house_receipt: "PDF-CC2003-HORN-GATE-20260912-152444.log"
     required_gate_ids:
       - "TLC23_PDF_BOOT_GATE"
+      - "HERMES_TRISMEGISTUS_CONTEXT_GATE"
       - "GLOBAL_CONTRACT_BOOTSTRAP_GATE"
       - "DELTA_CONTINUO_GLOBAL_GATE"
       - "ROOT_CHILD_CONTRACT_LINEAGE_GATE"
@@ -34,6 +35,7 @@ CENTRALDARK_AI_BOOT:
       - "LOCAL_HOUSE_SENSOR_GATE"
     required_sequence:
       - "LOAD_TLC23_PDF_GATE"
+      - "LOAD_HERMES_TRISMEGISTUS_CONTEXT"
       - "LOAD_GLOBAL_CONTRACT_ENFORCER"
       - "LOAD_UNIVERSAL_GATE_REGISTRY"
       - "LOAD_DELTA_CONTINUO_GLOBAL"
@@ -50,6 +52,41 @@ CENTRALDARK_AI_BOOT:
     failure_policy: "FAIL_CLOSED"
     preserve_existing_good: true
     must_not_replace: [GLOBAL_CONTRACT_ENFORCER, DELTA_CONTINUO_GLOBAL, REUSE_BEFORE_CREATE, ONE_WRITER_PER_SCOPE]
+
+  hermes_trismegistus_context_gate:
+    gate_id: "HERMES_TRISMEGISTUS_CONTEXT_GATE"
+    position: "AFTER_TLC23_BEFORE_AGENT_ROUTING"
+    source:
+      title: "The right way of Hermetism: disputes on Gnostic's, Pagan's and Christian's (re-)visions of the Hermetic phenomenon in late antiquity"
+      sha256: "d93505685db430a639ea3af067891217a00d4944926f839dbded3c5c1a9f37ef"
+      size_bytes: 247110
+    role: "CONTEXT_PROVENANCE_INTERPRETATION_GUARD"
+    rules:
+      source_is_authority: false
+      reception_is_origin: false
+      same_name_is_same_meaning: false
+      multiple_interpretations_must_remain_visible: true
+      symbolic_name_never_overrides_runtime_evidence: true
+      reality_is_judge: true
+    required_for:
+      - "HERMES_IDENTITY_OR_NAMING_CHANGE"
+      - "KERNEL_OR_CORE_SEMANTIC_CHANGE"
+      - "RUNTIME_INTERPRETATION_CHANGE"
+      - "HISTORICAL_OR_SYMBOLIC_SOURCE_ABSORPTION"
+    failure_policy: "FAIL_CLOSED_WHEN_REQUIRED_AND_NOT_LOADED"
+
+  hermes_trismegistus_identity:
+    canonical_display_family: "HERMES TRISMEGISTUS"
+    core_display_name: "HERMES TRISMEGISTUS CORE"
+    kernel_display_name: "HERMES TRISMEGISTUS KERNEL"
+    runtime_display_name: "HERMES TRISMEGISTUS RUNTIME"
+    technical_owner_core: "apps/modulos/HERMES-CORE"
+    technical_owner_runtime: "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/HERMES-AUTOCONFIG-RUNTIME.yml"
+    technical_paths_renamed: false
+    naming_is_semantic_alias_not_new_owner: true
+    reuse_existing_hermes_core: true
+    authority_unchanged: true
+    judge: "REALIDADE"
 
   gate_registry_contract:
     gate_id: "GLOBAL_CONTRACT_BOOTSTRAP_GATE"
@@ -241,9 +278,11 @@ CENTRALDARK_AI_BOOT:
     activation_scope: "CENTRALDARK_CONTINUOUS_ALL_MISSIONS_VIA_PR_MOTHER_1562"
     mission_model:
       mission: "CENTRALDARK_CONTINUA"
+      mission_stop: "CONTINUE_ACROSS_CHAT_BOUNDARIES_UNLESS_CHEFE_EXPLICITLY_STOPS"
       rendezvous: "#1562"
       pr_mother_role: "PERMANENT_RENDEZVOUS_LEDGER_NOT_WRITER"
       pr_mother_merge_forbidden: true
+      child_pr_only_promotion_vehicle: true
       current_main_sha_binding: "SHA:<CURRENT_MAIN_SHA>"
       static_sha_is_provenance_not_eternal: true
       child_pr_id_in_boot_forbidden: true
@@ -251,7 +290,7 @@ CENTRALDARK_AI_BOOT:
       open_delta_policy: "RECONCILE_ONLY_OPEN_OR_REOPENED_MATERIAL_DELTA"
       fixed_point_semantics: "CLOSES_CURRENT_DELTA_NOT_CENTRALDARK"
       after_fixed_point: "RETURN_TO_PR_MOTHER_1562_AND_CONTINUE_OPEN_DELTA_SCAN"
-    canonical_arrow_command: "⭕ !AURÉOLA → 👑🪬 !CENTRALDARK → #1562 → SHA:<CURRENT_MAIN_SHA> → CURRENT>HISTORY → REUSE_PROVEN → OPEN_DELTA_ONLY → TLC23 → META_LUPA → FABLE → META_GRILL → HERMES → PROVA → CONTRAPROVA → ACEITE → RECONCILIAR → SEMANTIC_ALL → SAME_HEAD → SQUASH → MAIN → DEPLOY_CAUSAL → T1 → RECEIPT → FIXED_POINT → #1562 → LOOP"
+    canonical_arrow_command: "⭕ !AURÉOLA → 👑🪬 !CENTRALDARK → #1562 → SHA:<CURRENT_MAIN_SHA> → CURRENT>HISTORY → REUSE_PROVEN → OPEN_DELTA_ONLY → TLC23 → HERMES_TRISMEGISTUS_CONTEXT → META_LUPA → FABLE → META_GRILL → HERMES → PROVA → CONTRAPROVA → ACEITE → RECONCILIAR → SEMANTIC_ALL → SAME_HEAD → SQUASH_CHILD_ONLY → MAIN → DEPLOY_CAUSAL → T1 → RECEIPT → FIXED_POINT → #1562 → LOOP"
     on_activation:
       - "MEASURE_AND_BIND_CURRENT_MAIN_SHA"
       - "ENTER_PR_MOTHER_1562_RENDEZVOUS"
@@ -325,6 +364,7 @@ CENTRALDARK_AI_BOOT:
       stop_only_when:
         - "NO_MATERIAL_FAILURES_REMAIN_IN_AUTHORIZED_SCOPE"
         - "PROVEN_HUMAN_FRONTIER"
+        - "CHEFE_EXPLICITLY_STOPS"
       human_return_before_stop_condition: FORBIDDEN
       destructive_or_irreversible_without_authority: BLOCKED
       unknown_is_pass: false
