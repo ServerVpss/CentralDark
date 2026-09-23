@@ -69,3 +69,57 @@ NAO_EXPLICITO_REQUIRED_CAPABILITY => SUPPORT_REQUIRED
 ```
 
 Correção em andamento: comentários de PR que viram e-mail passam a falar humano primeiro e deixam receipt técnico abaixo. Gmail permanece capability do owner existente Contas / Hub, sem V1/V2/V3 paralelo.
+
+## Modo CURRENT — main direta / PR-mãe como histórico
+
+```text
+CURRENT_MAIN_SHA=b40dbdbbaab6d830349cfe3456fe2c15a15ddd73
+PROMOTION_MODE=DIRECT_MAIN_SOFT_EVOLUTION
+NEW_PR_DEFAULT=false
+EXISTING_OPEN_PRS_REMAIN_VALID=true
+PR_MOTHER=#1562
+PR_MOTHER_ROLE=HISTORY_HANDOFF_LEDGER
+PR_MOTHER_MERGE_FORBIDDEN=true
+HARD_PR_GATES=DEFERRED
+MIN_SECURITY_ONLY=true
+NO_PARALLEL_ARCHITECTURE=true
+NO_V1_V2_V3_OWNER_FORK=true
+```
+
+Fluxo vigente:
+
+```text
+⭕ !AURÉOLA
+→ 👑🪬 !CENTRALDARK
+→ #1562
+→ CURRENT_MAIN_SHA
+→ CURRENT>HISTORY
+→ REUSE_PROVEN
+→ OPEN_DELTA_ONLY
+→ TLC23
+→ HERMES_TRISMEGISTUS_CONTEXT
+→ META_LUPA
+→ FABLE
+→ META_GRILL
+→ HERMES
+→ PROVA
+→ CONTRAPROVA
+→ ACEITE
+→ RECONCILIAR
+→ SEMANTIC_ALL
+→ MIN_SECURITY_CHECKS
+→ DIRECT_MAIN_COMMIT
+→ MAIN_READBACK
+→ DEPLOY_CAUSAL
+→ T1
+→ RECEIPT
+→ FIXED_POINT
+→ #1562
+→ LOOP
+```
+
+PRs já existentes continuam válidos como fonte histórica/delta útil. Nenhum PR novo é requisito por rotina até nova decisão do CHEFE. O caminho SAME_HEAD/SQUASH_CHILD_ONLY permanece disponível para trabalho já aberto ou futuro endurecimento.
+
+A classificação em 10 frentes está em:
+`.agents/skills/meta-lupa/KITS/METAGRILL-METALUPA/INTERLIGADOS/RECEIPTS/2026-09-23-MAIN-DIRETA-10-FRENTES.md`.
+
