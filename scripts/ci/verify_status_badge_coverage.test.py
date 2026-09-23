@@ -47,6 +47,22 @@ class BadgeCoverageTests(unittest.TestCase):
         self.assertNotEqual(p.returncode, 0)
         self.assertIn('MISSING_WORKFLOWS=b.yml', p.stdout)
 
+    def test_generator_regeneration_closes_missing_badge(self):
+        shutil.copy2(ROOT / 'scripts' / 'ci' / 'generate_status_badges.py', self.tmp / 'scripts' / 'ci' / 'generate_status_badges.py')
+        (self.tmp / '.github' / 'workflows' / 'new-workflow.yml').write_text('name: new\n', encoding='utf-8')
+        missing = self.run_verify()
+        self.assertNotEqual(missing.returncode, 0)
+        env = dict(__import__('os').environ)
+        env['BADGE_FABRIC_LOCAL_ONLY'] = '1'
+        generated = subprocess.run(
+            ['python3', str(self.tmp / 'scripts' / 'ci' / 'generate_status_badges.py')],
+            cwd=self.tmp, text=True, capture_output=True, env=env
+        )
+        self.assertEqual(generated.returncode, 0, generated.stdout + generated.stderr)
+        closed = self.run_verify()
+        self.assertEqual(closed.returncode, 0, closed.stdout + closed.stderr)
+        self.assertIn('STATUS_BADGE_COVERAGE=PASS', closed.stdout)
+
     def test_complete_index_passes(self):
         for name in ['a.yml', 'b.yaml']:
             (self.tmp / '.github' / 'workflows' / name).write_text('name: x\n', encoding='utf-8')
