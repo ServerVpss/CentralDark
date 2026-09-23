@@ -45,7 +45,7 @@
         "tipo": "arquivo_grande",
         "arquivo": "docs/CONSCIENCIA/APRENDIZADOS.md",
         "tamanho_bytes": 259530,
-        "status": "PENDENTE — aguarda PERMITO PIVETE para divisão"
+        "status": "PENDENTE — aguarda PERMITO SEGREDO para divisão"
       },
       {
         "tipo": "baixa_linkagem_consciencia",
@@ -86,7 +86,7 @@
   },
   "proxima_acao_recomendada": [
     "Criar notas MOC para wikilinks cinzas do BRAIN.md: [[MCP]], [[PM2]], [[GitHub]], [[Skills]]",
-    "Dividir APRENDIZADOS.md (259KB) em 3 arquivos por tema — aguarda PERMITO PIVETE",
+    "Dividir APRENDIZADOS.md (259KB) em 3 arquivos por tema — aguarda PERMITO SEGREDO",
     "Remover ou popular pasta docs/BRAIN/06 - Decisoes (vazia)"
   ]
 }

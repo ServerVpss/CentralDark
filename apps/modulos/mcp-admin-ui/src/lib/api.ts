@@ -44,6 +44,34 @@ export interface HealthResponse {
   time: string;
 }
 
+export interface OperationalSnapshot {
+  schema: string;
+  observedAt?: string;
+  verdict?: string;
+  runtime?: {
+    pid?: number;
+    uptimeSec?: number;
+    cpuCount?: number;
+    loadavg?: number[];
+    rssMb?: number;
+  };
+  forensic?: {
+    status?: string;
+    latestReceiptPresent?: boolean;
+    observedAt?: string | null;
+    ageMs?: number | null;
+    mode?: string;
+  };
+  patternAlignment?: {
+    marker?: string;
+    alignmentPct?: number | null;
+    outsidePct?: number | null;
+    unknownCount?: number;
+  };
+  fronts?: Array<{ id: string; source: string; state: string }>;
+  rules?: Record<string, unknown>;
+}
+
 export interface HealthDeepResponse {
   score?: number;
   status?: string;
@@ -101,6 +129,7 @@ export const api = {
   },
   health: () => req<HealthResponse>("/health"),
   healthDeep: () => req<HealthDeepResponse>("/health/deep"),
+  operationalSnapshot: () => req<OperationalSnapshot>("/admin/api/operational-snapshot"),
 };
 
 export { ApiError };

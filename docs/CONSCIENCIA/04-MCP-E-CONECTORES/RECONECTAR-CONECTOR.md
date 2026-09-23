@@ -176,7 +176,7 @@ Destrutiva exige confirmação literal:
 mcp_admin_call({
   tool: "admin_vault_write",
   input: { name: "x", content: "y", overwrite: true },
-  confirmAdmin: "PERMITO PIVETE"      // ou "CONFIRMO ADMIN"
+  confirmAdmin: "PERMITO SEGREDO"      // ou "CONFIRMO ADMIN"
 })
 ```
 

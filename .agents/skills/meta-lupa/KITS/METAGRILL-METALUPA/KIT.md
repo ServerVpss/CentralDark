@@ -113,6 +113,34 @@ Entrada visual: `INTERLIGADOS/README.md`.
 
 O bloco `INTERLIGADOS/` guarda apenas a **costura semântica**: mapa mental das skills, padrões duráveis extraídos dos PRs e fronteiras que continuam exigindo Casa/VPS/runtime/CI aplicável. Implementação não provada não é promovida só porque o padrão foi preservado.
 
+## 🧮 TLC23 · META-GRILL · FABLE · META-LUPA
+
+O `tlc23.pdf` é referência lógica compartilhada do mesmo núcleo; não cria owner, engine ou cérebro paralelo.
+
+```text
+PREMISSA
+→ 🔥 META-GRILL tenta quebrar
+→ 🌀 FABLE_LOOP relê e estabiliza
+→ 🔎 META-LUPA procura falso-verde / contradição
+→ 🔄 RECONCILIAÇÃO DETERMINÍSTICA
+→ 🧮 TLC23 / HORN propaga consequências
+→ nenhuma consequência material nova?
+   ├─ SIM → REUSE_PROOF / ponto fixo aplicável
+   └─ NÃO → invalida só o cone afetado e repete
+→ ⚖️ REALIDADE
+```
+
+```text
+TLC23_SHARED_METHOD=true
+PROOF_REUSE_WHEN_FINGERPRINT_UNCHANGED=true
+ACCEPTANCE_IS_NOT_PROOF=true
+ACCEPTED_PROVEN_STEP_WITH_UNCHANGED_FINGERPRINT=REUSE_PROOF
+DETERMINISTIC_RECONCILIATION_BEFORE_NEW_ARCHITECTURE=true
+REUSE_BEFORE_CREATE_GLOBAL=true
+```
+
+O aceite do CHEFE autoriza intenção/mutação quando aplicável, mas não substitui prova. Se a prova já existe e o fingerprint causal não mudou, o aceite reutiliza essa prova em vez de reiniciar a investigação.
+
 ## 🪝 Lei do gancho
 
 ```text
@@ -171,6 +199,34 @@ CHANGE_REQUIRES_SEGREDO_CHEFE=true
 SEMANTIC_BODY_DOES_NOT_CREATE_PARALLEL_OWNER=true
 ```
 
+## ⚖️ Lei do fechamento determinístico
+
+META-GRILL não existe para negar tudo. Ele tenta achar a ferida; se a
+contraprova falhar em derrubar o claim, o bem provado é retido. Se derrubar
+somente parte, só o delta derrotado é descartado.
+
+```text
+🔥 FERIDA
+→ 🧪 PROVA
+→ ⚖️ CONTRAPROVA
+→ 🟢 SOBREVIVEU? ACEITAR/SELAR
+→ 🔴 CAIU? REJEITAR SOMENTE O DELTA DERROTADO
+→ 🟡 UNKNOWN? PRESERVAR FRONTEIRA
+→ 🔄 RECONCILIAR
+→ 💠 FIXED_POINT quando o residual material zerar
+```
+
+```text
+META_GRILL_IS_FALSIFIER_NOT_PERMANENT_SKEPTIC=true
+BLIND_ACCEPTANCE=FORBIDDEN
+BLIND_REJECTION=FORBIDDEN
+ACCEPTANCE_RESULT_ENUM=ACCEPTED|PARTIAL|REJECTED|UNKNOWN
+ACCEPT_ONLY_AFTER_COUNTERPROOF_SURVIVAL=true
+PARTIAL_FAILURE_DISCARDS_ONLY_DISPROVEN_DELTA=true
+UNKNOWN_IS_NOT_PASS=true
+PROVEN_GOOD_MUST_SURVIVE_RECONCILIATION=true
+NO_NEW_MATERIAL_CAUSE_NO_REOPEN=true
+```
 ## 🔁 Cristalização obrigatória após busca material
 
 Qualquer busca, inspeção, investigação ou remedição que produza delta material deve ser registrada no PR-MÃE antes da próxima busca material.
