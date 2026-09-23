@@ -41,10 +41,12 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          a="$(systemctl is-active centraldark-desktop-commander.service || true)"
-          b="$(systemctl is-active centraldark-desktop-commander-conta2.service || true)"
-          p1="$(systemctl show -p MainPID --value centraldark-desktop-commander.service || true)"
-          p2="$(systemctl show -p MainPID --value centraldark-desktop-commander-conta2.service || true)"
+          set +e
+          a="$(systemctl is-active centraldark-desktop-commander.service)"
+          b="$(systemctl is-active centraldark-desktop-commander-conta2.service)"
+          p1="$(systemctl show -p MainPID --value centraldark-desktop-commander.service)"
+          p2="$(systemctl show -p MainPID --value centraldark-desktop-commander-conta2.service)"
+          set -e
           echo "PRINCIPAL_ACTIVE=$a MAINPID=$p1"
           echo "CONTA2_ACTIVE=$b MAINPID=$p2"
           test "$a" = active
@@ -52,7 +54,9 @@ jobs:
           test -n "$p1" && test "$p1" != 0
           test -n "$p2" && test "$p2" != 0
           test "$p1" != "$p2"
-          test "$(systemctl show -p Environment --value centraldark-desktop-commander.service)" != "$(systemctl show -p Environment --value centraldark-desktop-commander-conta2.service)" || true
+          env1="$(systemctl show -p Environment --value centraldark-desktop-commander.service)"
+          env2="$(systemctl show -p Environment --value centraldark-desktop-commander-conta2.service)"
+          test "$env1" != "$env2"
           echo "TWO_ISOLATED_REMOTE_PROCESSES=PASS"
 
       - name: Emit live receipts without secrets

@@ -3,27 +3,6 @@ name: VPS Deploy canônico (self-hosted)
 on:
   push:
     branches: [main]
-    paths:
-      - "apps/modulos/mcp/**"
-      - "apps/modulos/mapeamento/**"
-      - "apps/modulos/HERMES-CORE/agents/Log-Verificador/**"
-      - "apps/modulos/screenpipe-launcher.mjs"
-      - "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/HERMES-AUTOCONFIG-RUNTIME.yml"
-      - "apps/modulos/HERMES-CORE/prompts/hermes-core.md"
-      - "apps/modulos/HERMES-CORE/core/universal-method-contract.mjs"
-      - "docs/BRAIN/01-CONCEITOS/02-BANDA/BANDA_COMPASSO_GLOBAL.json"
-      - "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml"
-      - "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml"
-      - "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml"
-      - "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/UNIVERSAL-ENGINE-METHOD.yml"
-      - ".agents/skills/centraldark-operational-method/**"
-      - ".agents/skills/centraldark-esteira-motor/**"
-      - "scripts/vps/centraldark-deploy.sh"
-      - "scripts/vps/deploy-guards-dispatcher.sh"
-      - "scripts/vps/deploy-operational-guards.sh"
-      - ".github/workflows/vps-exec-selfhosted.yml"
-      - "scripts/webhook/github-webhook-deploy.mjs"
-      - "ecosystem.config.cjs"
   workflow_dispatch:
 
 permissions:
