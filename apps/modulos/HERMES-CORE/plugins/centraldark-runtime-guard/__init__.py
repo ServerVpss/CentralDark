@@ -34,6 +34,7 @@ LOGICAL_EXACT = {
 MUTATING_TOOLS = {"write_file", "patch", "skill_manage", "terminal", "browser_exec"}
 HARVEST_OWNER = ".agents/skills/session-intelligence-harvester/SKILL.md"
 DEFAULT_MEMORIA_INGEST_URL = "http://127.0.0.1:3101/memoria/ingest"
+DEFAULT_MEMORIA_INGEST_TOKEN_FILE = Path("/root/CentralDark/secrets/memoria-ingest.token")
 SESSION: dict[str, Any] = {
     "started_at": None,
     "last_anchor_hash": None,
@@ -238,6 +239,19 @@ def _last_harvest_fingerprint_path() -> Path:
     return receipt_path().parent / "last-session-harvest.sha256"
 
 
+def load_memoria_ingest_token() -> str:
+    token = str(os.environ.get("MEMORIA_INGEST_TOKEN", "")).strip()
+    if token:
+        return token
+    token_file = Path(
+        os.environ.get("MEMORIA_INGEST_TOKEN_FILE", str(DEFAULT_MEMORIA_INGEST_TOKEN_FILE))
+    ).expanduser()
+    try:
+        return token_file.read_text(encoding="utf-8").strip()
+    except OSError:
+        return ""
+
+
 def emit_session_harvest_candidate() -> dict[str, Any]:
     records = _session_receipt_delta()
     snapshot = git_snapshot(repo_root())
@@ -252,7 +266,7 @@ def emit_session_harvest_candidate() -> dict[str, Any]:
     except OSError:
         pass
 
-    token = str(os.environ.get("MEMORIA_INGEST_TOKEN", "")).strip()
+    token = load_memoria_ingest_token()
     if not token:
         return {"status": "BLOCKED", "reason": "MEMORIA_INGEST_TOKEN_UNCONFIGURED", "fingerprint": fingerprint}
 
@@ -419,7 +433,8 @@ def self_test() -> dict[str, Any]:
     assert payload_a["kind"] == "session.harvest"
     assert payload_a["head_sha"] == "a" * 40
     assert "Authorization" not in json.dumps(payload_a)
-    return {"status": "PASS", "plugin": PLUGIN_NAME, "checks": 13}
+    assert DEFAULT_MEMORIA_INGEST_TOKEN_FILE.name == "memoria-ingest.token"
+    return {"status": "PASS", "plugin": PLUGIN_NAME, "checks": 14}
 
 
 if __name__ == "__main__":
