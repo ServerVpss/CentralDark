@@ -68,6 +68,32 @@ NO_EQUIVALENT
 
 `/root/CentralDark/secrets` é o cofre canônico. `/root/secrets` pode existir como entrada de compatibilidade/credencial operacional, mas não vira segundo cofre. Repository Secrets existentes e futuros são capacidades reutilizáveis por nome/owner; valores nunca entram no Git.
 
+## Telegram — transporte direto único
+
+```text
+TELEGRAM_BOT_TRANSPORT=TELEGRAM_BOT_API_DIRECT
+TELEGRAM_BOT_API_BASE=https://api.telegram.org
+TELEGRAM_BOT_UPDATE_MODE=LONG_POLLING_ONLY
+TELEGRAM_WEBHOOK_TRANSPORT=FORBIDDEN
+CENTRALDARK_SUBDOMAIN_AS_TELEGRAM_TRANSPORT=FORBIDDEN
+TELEGRAM_USER_TRANSPORT=TELEGRAM_MTPROTO_DIRECT
+TELEGRAM_ADMIN_UI_CONTROL_PATH=/api/telegram/mtproto
+ONE_TRANSPORT_OWNER_PER_IDENTITY=true
+```
+
+Subdomínio/painel CentralDark pode exibir estado, mas nunca vira transporte Telegram. Bot fala direto com a Bot API oficial; conta de usuário fala direto por MTProto. A UI administrativa usa caminho interno/same-origin para controlar o owner MTProto; esse caminho não transporta mensagens Telegram.
+
+```text
+SEGREDO/CHEFE
+→ SOL (coordena/orquestra)
+→ capability router / agentes existentes
+→ PIVETE/HERMES + MCP/tools (executa)
+→ REALIDADE/JUDGE
+→ SOL devolve receipt/resumo ao CHEFE
+```
+
+Não criar agente só para preencher número. As seis lentes funcionais já mapeadas não exigem seis processos permanentes; `REUSE_BEFORE_CREATE` decide.
+
 ## Identidade
 
 ```text
