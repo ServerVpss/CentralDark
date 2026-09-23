@@ -39,3 +39,18 @@ DOCUMENTED != EXECUTED
 MERGED != DEPLOYED
 REALIDADE = JUIZ
 ```
+
+## Continuidade de conversa → PR-mãe
+
+```text
+CHAT_DELTA
+→ UPDATE_SAME_PR_MOTHER_COMMENT
+→ UPDATE_SAME_RECEIPT_FILE
+→ COMMIT_ON_PR_MOTHER_BRANCH
+→ CURRENT_MAIN_REMEASURE
+→ CONTINUE_NEXT_CURSOR
+```
+
+Regra operacional: não deixar o delta morrer no chat. Sempre que houver mudança material no fio, atualizar este mesmo receipt e o comentário-handoff vivo da #1562, sem criar outro ledger paralelo.
+
+CURRENT_MAIN_AT_UPDATE=74ec206a11cd16a97b02951af98b9790cf09dfd7
