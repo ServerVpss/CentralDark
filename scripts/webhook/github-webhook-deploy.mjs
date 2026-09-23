@@ -113,6 +113,9 @@ function runDeploy(ref, afterSha) {
       WEBHOOK_DEPLOY_GIT_PULL: '1',
       WEBHOOK_DEPLOY_REF: ref || '',
       WEBHOOK_DEPLOY_SHA: afterSha || '',
+      GIT_TERMINAL_PROMPT: '0',
+      GIT_ASKPASS: process.env.CENTRALDARK_GIT_ASKPASS || path.join(ROOT, 'secrets/github-read-askpass.sh'),
+      CENTRALDARK_GITHUB_TOKEN_FILE: process.env.CENTRALDARK_GITHUB_TOKEN_FILE || '/root/secrets/GITHUB_TOKEN',
     };
     const child = spawn('flock', ['-w', '90', REPO_DEPLOY_LOCK, 'bash', DEPLOY_JOB], {
       cwd: ROOT,
