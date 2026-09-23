@@ -551,6 +551,11 @@ export function validateUniversalMethod() {
     '"fixed_point_true_after_material_failure": "FORBIDDEN"',
     '"local_house_sensor_contract":',
     '"CASA_LOCAL": "DISCOVER_AT_RUNTIME_DO_NOT_ASSUME_PATH"',
+    '"explicit_intent_override_policy":',
+    '"marker": "CENTRALDARK_EXPLICIT_INTENT_TEMPORARY_OVERRIDE"',
+    '"EXPLICIT_OVERRIDE_DOES_NOT_MUTATE_DEFAULT": true',
+    '"REASK_WHEN_SAME_INTENT_SCOPE_ALREADY_AUTHORIZED": false',
+    '"promotion": "VALID_INTENT_RECEIPT + SAME_HEAD_GREEN -> AUTO_SQUASH_IF_CLEAN_WITHOUT_REASK"',
   ], 'UNIVERSAL_GATE_REGISTRY');
 
   requireTokens(boot, [
