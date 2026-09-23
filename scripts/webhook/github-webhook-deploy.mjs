@@ -2,7 +2,7 @@
 /**
  * CentralDark Webhook Deploy — ATIVO
  * HMAC SHA256, so push em refs/heads/main, git pull --ff-only,
- * bloqueia tree dirty, lock anti-duplo. Secret so de arquivo local.
+ * deploy-job classifica tree dirty, lock anti-duplo. Secret so de arquivo local.
  */
 import http from 'node:http';
 import crypto from 'node:crypto';
@@ -113,6 +113,9 @@ function runDeploy(ref, afterSha) {
       WEBHOOK_DEPLOY_GIT_PULL: '1',
       WEBHOOK_DEPLOY_REF: ref || '',
       WEBHOOK_DEPLOY_SHA: afterSha || '',
+      GIT_TERMINAL_PROMPT: '0',
+      GIT_ASKPASS: process.env.CENTRALDARK_GIT_ASKPASS || path.join(ROOT, 'secrets/github-read-askpass.sh'),
+      CENTRALDARK_GITHUB_TOKEN_FILE: process.env.CENTRALDARK_GITHUB_TOKEN_FILE || '/root/secrets/GITHUB_TOKEN',
     };
     const child = spawn('flock', ['-w', '90', REPO_DEPLOY_LOCK, 'bash', DEPLOY_JOB], {
       cwd: ROOT,
@@ -142,33 +145,27 @@ async function handlePush(payload) {
     return { status: 409, body: { status: 'busy', reason: 'lock_held' } };
   }
 
-  try {
-    const { execSync } = await import('node:child_process');
-    const dirty = execSync('git status --porcelain=v1 --untracked-files=no', {
-      cwd: ROOT,
-      encoding: 'utf8',
-    }).trim();
-    if (dirty) {
-      return {
-        status: 409,
-        body: { status: 'blocked', reason: 'local_dirty' },
-      };
-    }
+  const afterSha = payload.after || '';
 
-    const result = await runDeploy(ref, payload.after);
-    if (result.code === 0) {
-      return {
-        status: 200,
-        body: { status: 'deployed', sha: payload.after, mode: 'ff-only+repo-flock' },
-      };
-    }
-    return {
-      status: 500,
-      body: { status: 'failed', code: result.code },
-    };
-  } finally {
-    releaseLock();
-  }
+  // O webhook só autentica/enfileira. O deploy-job é o único juiz do estado
+  // local e distingue churn gerado de dirty material antes do git pull.
+  void runDeploy(ref, afterSha)
+    .then((result) => {
+      const status = result.code === 0 ? 'PASS' : 'FAIL';
+      const log = result.code === 0 ? console.log : console.error;
+      log(`[deploy] WORKER_RESULT status=${status} sha=${afterSha} code=${result.code}`);
+    })
+    .catch((error) => {
+      console.error(`[deploy] WORKER_RESULT status=FAIL sha=${afterSha} error=${error?.code || error?.name || 'UNKNOWN'}`);
+    })
+    .finally(() => {
+      releaseLock();
+    });
+
+  return {
+    status: 202,
+    body: { status: 'accepted', sha: afterSha, mode: 'hmac+async+ff-only+repo-flock' },
+  };
 }
 
 function readBody(req) {
@@ -196,7 +193,7 @@ const server = http.createServer(async (req, res) => {
     json(res, 200, {
       status: 'ACTIVE',
       service: 'centraldark-webhook-deploy',
-      mode: 'hmac+ff-only+repo-flock',
+      mode: 'hmac+async+ff-only+repo-flock',
       mutatesRepository: true,
       timestamp: new Date().toISOString(),
     });

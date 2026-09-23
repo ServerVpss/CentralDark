@@ -41,6 +41,33 @@ log_run() {
   "$@" >>"$FULL_LOG" 2>&1
 }
 
+is_runtime_generated_dirty() {
+  case "$1" in
+    apps/modulos/status/graph-data.json|\
+    apps/modulos/graph-panel/data/graph.json|\
+    apps/modulos/hub/src/generated/houseInventory.ts|\
+    apps/bot-telegram/skills/config/memory.json)
+      return 0
+      ;;
+    *)
+      return 1
+      ;;
+  esac
+}
+
+material_dirty_from_status() {
+  local line path
+  while IFS= read -r line; do
+    [ -n "$line" ] || continue
+    path="${line:3}"
+    if is_runtime_generated_dirty "$path"; then
+      printf 'generated_dirty_allowed=%s\n' "$path" >>"$SUMMARY_FILE"
+      continue
+    fi
+    printf '%s\n' "$line"
+  done
+}
+
 write_summary() {
   {
     printf 'webhook-deploy resumo\n'
@@ -78,10 +105,13 @@ if [ -d "$ROOT/.git" ]; then
   printf 'branch=%s\n' "$CURRENT_BRANCH" >>"$SUMMARY_FILE"
   if [ "${WEBHOOK_DEPLOY_GIT_PULL:-0}" = "1" ]; then
     DIRTY_TRACKED="$(git -C "$ROOT" status --porcelain=v1 --untracked-files=no)"
-    if [ -n "$DIRTY_TRACKED" ]; then
+    MATERIAL_DIRTY="$(printf '%s\n' "$DIRTY_TRACKED" | material_dirty_from_status)"
+    if [ -n "$MATERIAL_DIRTY" ]; then
+      printf '%s\n' "$MATERIAL_DIRTY" >>"$FULL_LOG"
       netflix_error "BLOCKED_LOCAL_DIRTY"
       exit 22
     fi
+    [ -z "$DIRTY_TRACKED" ] || netflix_warning "dirty rastreado apenas em churn gerado; seguindo fail-closed no git pull"
     log_run git -C "$ROOT" pull --ff-only origin main
   else
     netflix_warning "git pull desativado; workflow canônico controla sincronização"

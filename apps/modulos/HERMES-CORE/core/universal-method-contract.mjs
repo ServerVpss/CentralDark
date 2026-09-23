@@ -571,6 +571,7 @@ export function validateUniversalMethod() {
 
   requireTokens(boot, [
     'mission_stop: "CONTINUE_ACROSS_CHAT_BOUNDARIES_UNLESS_CHEFE_EXPLICITLY_STOPS"',
+    '- "CHEFE_EXPLICITLY_STOPS"',
     'child_pr_only_promotion_vehicle: true',
     'global_secret_reuse_contract:',
     'canonical_vault: "/root/CentralDark/secrets"',
