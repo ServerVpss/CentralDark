@@ -71,39 +71,48 @@ def workflow_link(workflow_file: str) -> str:
     return f"https://github.com/{REPO}/actions/workflows/{quote(workflow_file)}"
 
 
+def local_only() -> bool:
+    return os.environ.get("BADGE_FABRIC_LOCAL_ONLY", "").strip().lower() in {"1", "true", "yes"}
+
 def main() -> int:
     workflows = sorted(
         p.name for p in (ROOT / ".github" / "workflows").glob("*.y*ml") if p.is_file()
     )
 
-    branches = flatten_pages(gh_json(f"repos/{REPO}/branches?per_page=100"))
-    branch_names = sorted({b["name"] for b in branches if isinstance(b, dict) and b.get("name")})
+    if local_only():
+        branch_names = []
+        pr_rows = []
+        runs = []
+    else:
+        branches = flatten_pages(gh_json(f"repos/{REPO}/branches?per_page=100"))
+        branch_names = sorted({b["name"] for b in branches if isinstance(b, dict) and b.get("name")})
 
-    prs = flatten_pages(gh_json(f"repos/{REPO}/pulls?state=all&per_page=100"))
-    pr_rows = []
-    for pr in prs:
-        head = ((pr.get("head") or {}).get("ref"))
-        pr_rows.append(
-            {
-                "number": pr.get("number"),
-                "state": "MERGED" if pr.get("merged_at") else str(pr.get("state", "UNKNOWN")).upper(),
-                "head": head or "UNKNOWN",
-                "base": ((pr.get("base") or {}).get("ref")) or "UNKNOWN",
-                "url": pr.get("html_url") or "",
-            }
-        )
+        prs = flatten_pages(gh_json(f"repos/{REPO}/pulls?state=all&per_page=100"))
+        pr_rows = []
+        for pr in prs:
+            head = ((pr.get("head") or {}).get("ref"))
+            pr_rows.append(
+                {
+                    "number": pr.get("number"),
+                    "state": "MERGED" if pr.get("merged_at") else str(pr.get("state", "UNKNOWN")).upper(),
+                    "head": head or "UNKNOWN",
+                    "base": ((pr.get("base") or {}).get("ref")) or "UNKNOWN",
+                    "url": pr.get("html_url") or "",
+                }
+            )
 
     # Badge é telemetria, não ledger. Paginar dezenas de milhares de runs
     # monopolizava o runner self-hosted sem aumentar a força da prova.
     # A janela recente é explícita e suficiente para mostrar atividade observada;
     # branches sem run nessa janela permanecem NO_OBSERVED_WORKFLOW_RUN.
-    runs = flatten_pages(
-        gh_json(
-            f"repos/{REPO}/actions/runs?per_page={RECENT_RUN_LIMIT}&exclude_pull_requests=false",
-            paginate=False,
-        ),
-        "workflow_runs",
-    )
+    if not local_only():
+        runs = flatten_pages(
+            gh_json(
+                f"repos/{REPO}/actions/runs?per_page={RECENT_RUN_LIMIT}&exclude_pull_requests=false",
+                paginate=False,
+            ),
+            "workflow_runs",
+        )
 
     observed = defaultdict(set)
     for run in runs:
