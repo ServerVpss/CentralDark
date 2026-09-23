@@ -24,6 +24,11 @@ GIT_CONFLICT_SINGLE_STANDARD=SIM
 GIT_CONFLICT_STANDARD_PATH=.agents/skills/git-conflict-resolve-house-standard/SKILL.md
 GIT_CONFLICT_ENGINE_PATH=scripts/dependabot/resolve-conflicts.sh
 RECONCILIATION_CONTRACT=docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json
+GLOBAL_SECRET_REUSE_REQUIRED=SIM
+GLOBAL_SECRET_OWNER=/root/CentralDark/secrets
+REPOSITORY_SECRETS_POLICY=REUSE_ALL_EXISTING_AND_FUTURE
+NEW_SECRET_ONLY_IF_NO_EQUIVALENT=true
+ROOT_SECRETS_ROLE=COMPATIBILITY_INPUT_NOT_SECOND_VAULT
 ```
 
 Antes de responder ou agir:
@@ -41,6 +46,27 @@ Antes de responder ou agir:
 11. Ler `.agents/skills/git-conflict-resolve-house-standard/SKILL.md` quando houver PR em conflito, main avançando sob PR aberto, ou dependabot travado. É o **único** padrão de resolução — não abrir segundo resolvedor nem resolver na mão fora dele.
 12. Medir branch, HEAD, PR, runtime, writer e tools aplicáveis.
 13. Emitir uma vez o `CENTRALDARK_AI_BOOT` de `LEIA-ME-IA.md`.
+
+## Secrets globais — REUSE_BEFORE_CREATION
+
+Toda superfície atual ou futura da CentralDark herda o contrato global de secrets do mesmo CORE.
+
+```text
+NEED_SECRET
+→ MEASURE_EXISTING_OWNER
+→ SEARCH_REPOSITORY_SECRETS
+→ SEARCH_/root/CentralDark/secrets
+→ SEARCH_RUNTIME_BINDINGS
+→ REUSE_MATCHING_EXISTING
+→ BIND_EXISTING_OWNER
+→ TEST
+→ RECEIPT
+
+NO_EQUIVALENT
+→ CREATE_MINIMUM_SECRET
+```
+
+`/root/CentralDark/secrets` é o cofre canônico. `/root/secrets` pode existir como entrada de compatibilidade/credencial operacional, mas não vira segundo cofre. Repository Secrets existentes e futuros são capacidades reutilizáveis por nome/owner; valores nunca entram no Git.
 
 ## Identidade
 
