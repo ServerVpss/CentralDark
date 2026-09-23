@@ -1,4 +1,4 @@
-name: Remote Desktop multi-account live reconcile
+name: ⚙️ Remote Desktop multi-account live reconcile
 
 on:
   push:
@@ -18,14 +18,14 @@ jobs:
     runs-on: [self-hosted, Linux]
     timeout-minutes: 10
     steps:
-      - name: Checkout exact branch HEAD
+      - name: 🔹 Checkout exact branch HEAD
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           ref: ${{ github.sha }}
           persist-credentials: false
           fetch-depth: 1
 
-      - name: Prove target and deploy canonical multi-account bridge
+      - name: 🔹 Prove target and deploy canonical multi-account bridge
         shell: bash
         run: |
           set -euo pipefail
@@ -37,7 +37,7 @@ jobs:
           bash -n infra/systemd/centraldark-desktop-commander-watchdog.sh
           bash scripts/vps/deploy-desktop-commander-multi-account.sh "$GITHUB_WORKSPACE"
 
-      - name: Counterproof two isolated services
+      - name: 🔹 Counterproof two isolated services
         shell: bash
         run: |
           set -euo pipefail
@@ -59,7 +59,7 @@ jobs:
           test "$env1" != "$env2"
           echo "TWO_ISOLATED_REMOTE_PROCESSES=PASS"
 
-      - name: Emit live receipts without secrets
+      - name: 🔹 Emit live receipts without secrets
         if: always()
         shell: bash
         run: |

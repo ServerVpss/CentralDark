@@ -1,4 +1,4 @@
-name: PR Review — Multi-IA (paralelo)
+name: ⚙️ PR Review — Multi-IA (paralelo)
 
 # 3 IAs revisam o mesmo PR em paralelo — cada uma posta seu review independente.
 # Secrets necessários: GROQ_API_KEY · GEMINI_API_KEY · ANTHROPIC_API_KEY
