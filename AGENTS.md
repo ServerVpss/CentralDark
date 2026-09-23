@@ -798,6 +798,36 @@ CORPO_A_INDISPONIVEL
 
 Indisponibilidade de instrumento não revoga intenção humana nem prova indisponibilidade do organismo inteiro.
 
+## Override temporário por intenção explícita
+
+```text
+DEFAULT_BEHAVIOR_REMAINS_CANONICAL=true
+EXPLICIT_CHEFE_INTENT_MAY_OVERRIDE_DEFAULT_FOR_CURRENT_SCOPE=true
+EXPLICIT_OVERRIDE_IS_TEMPORARY=true
+EXPLICIT_OVERRIDE_IS_SCOPED=true
+EXPLICIT_OVERRIDE_IS_TRACEABLE=true
+EXPLICIT_OVERRIDE_DOES_NOT_MUTATE_DEFAULT=true
+EXPLICIT_OVERRIDE_DOES_NOT_CREATE_NEW_AUTHORITY=true
+REASK_WHEN_SAME_INTENT_SCOPE_ALREADY_AUTHORIZED=false
+UNKNOWN_AUTHORITY_OR_SCOPE_IS_NOT_PASS=true
+```
+
+Fórmula:
+
+```text
+DEFAULT
++ CURRENT_EXPLICIT_CHEFE_INTENT
++ TARGET
++ SCOPE
++ LIMITS
++ CURRENT_REALITY
+→ EFFECTIVE_BEHAVIOR_FOR_CURRENT_MISSION
+```
+
+Exemplo: `NEW_PR_DEFAULT=false` continua falso. Se o CHEFE pedir explicitamente um PR-filho para a missão atual, cria-se **aquele** PR-filho, registra-se a intenção no receipt e o default permanece falso para as próximas missões.
+
+Quando uma ação de PR/promoção estiver explicitamente autorizada, o criador do PR deve materializar o receipt canônico no corpo do PR; não deve devolver ao CHEFE um pedido redundante para autorizar workflows que já estão dentro do mesmo escopo.
+
 ## Intenção autorizada → squash main
 
 Quando SEGREDO/CHEFE já deu a intenção e a autorização vigente cobre promoção para `main`, o merge é consequência operacional, não nova decisão humana.
