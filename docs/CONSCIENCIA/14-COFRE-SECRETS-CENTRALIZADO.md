@@ -15,6 +15,20 @@ O cofre existe para concentrar armazenamento e governança de segredos do projet
 
 - `/root/CentralDark/secrets/`
 
+## Contrato global de reuso
+
+```text
+GLOBAL_SECRET_REUSE=true
+CANONICAL_VAULT=/root/CentralDark/secrets
+REPOSITORY_SECRETS=REUSE_ALL_EXISTING_AND_FUTURE
+CREATE_NEW_SECRET_ONLY_IF=NO_EQUIVALENT_AFTER_MEASURE
+ROOT_SECRETS_ROLE=COMPATIBILITY_INPUT_NOT_SECOND_VAULT
+SECRET_VALUES_IN_GIT=FORBIDDEN
+SECRET_NAMES_AND_METADATA_IN_LEDGER=ALLOWED
+SAME_SECRET_MULTI_CONSUMER_WHEN_CHEFE_INTENT_REQUIRES=true
+```
+
+Repository Secrets, ambiente runtime, PM2, systemd e entradas legadas são fontes que devem ser medidas e reconciliadas com este cofre antes de qualquer criação. O mesmo segredo pode alimentar múltiplos consumidores quando isso fizer parte da intenção explícita do CHEFE; isso não cria outro owner.
 ## O que pode ficar no cofre
 
 - arquivos de ambiente protegidos;
@@ -41,9 +55,7 @@ O cofre existe para concentrar armazenamento e governança de segredos do projet
 
 ## Convenção de arquivos
 
-Cada integração deve ter um arquivo próprio no cofre.
-Não criar vários arquivos para a mesma integração.
-Sempre atualizar o arquivo existente.
+Cada capability reutiliza primeiro o owner/arquivo existente no cofre. Não criar vários arquivos ou raízes para a mesma capability. Repository Secrets podem ser ligados ao mesmo owner sem duplicar valor em Git. Sempre atualizar/reutilizar o owner existente.
 
 Exemplos (nomes ilustrativos):
 

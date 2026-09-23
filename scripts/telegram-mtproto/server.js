@@ -1,4 +1,5 @@
-// Servico MTProto — login do Telegram como usuario (gramjs)
+// Servico MTProto — conta de usuario via Telegram API/MTProto direto (gramjs)
+// Nenhum subdominio CentralDark participa do transporte Telegram.
 const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
@@ -10,7 +11,7 @@ const { Api } = require('telegram');
 const API_ID = parseInt(process.env.TELEGRAM_APP_API_ID || '0', 10);
 const API_HASH = process.env.TELEGRAM_APP_API_HASH || '';
 const PORT = parseInt(process.env.PORT || '8790', 10);
-const DATA_DIR = process.env.MTPROTO_DATA_DIR || '/root/CentralDark/data/telegram-mtproto';
+const DATA_DIR = process.env.MTPROTO_DATA_DIR || '/root/CentralDark/secrets/telegram-mtproto';
 const SESSION_FILE = path.join(DATA_DIR, 'session.txt');
 
 if (!API_ID || !API_HASH) {
@@ -38,7 +39,7 @@ async function newClient(sessionString = '') {
   return client;
 }
 
-app.get('/health', (_req, res) => res.json({ ok: true, service: 'telegram-mtproto', hasSession: fs.existsSync(SESSION_FILE) }));
+app.get('/health', (_req, res) => res.json({ ok: true, service: 'telegram-mtproto', transport: 'TELEGRAM_MTPROTO_DIRECT', hasSession: fs.existsSync(SESSION_FILE) }));
 
 app.get('/status', async (_req, res) => {
   try {
@@ -113,7 +114,7 @@ app.post('/confirm', async (req, res) => {
     const me = { id: String(u.id), firstName: u.firstName, username: u.username, phone: u.phone };
     await client.disconnect();
     pending.delete(phone);
-    res.json({ ok: true, sessionString, me });
+    res.json({ ok: true, sessionSaved: true, me });
   } catch (e) {
     res.status(500).json({ ok: false, error: String(e && (e.errorMessage || e.message) || e) });
   }

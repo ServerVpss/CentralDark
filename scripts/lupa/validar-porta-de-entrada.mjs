@@ -254,6 +254,8 @@ const semanticRequirements = new Map([
     "tarefa simples não vira swarm",
     "HERMES_TRISMEGISTUS_CONTEXT_GATE_REQUIRED=true",
     "HERMES_TRISMEGISTUS_IS_SEMANTIC_IDENTITY_NOT_NEW_AUTHORITY=true",
+    "GLOBAL_SECRET_REUSE_REQUIRED=SIM",
+    "REPOSITORY_SECRETS_POLICY=REUSE_ALL_EXISTING_AND_FUTURE",
   ]],
   [PORTA_VIVA, [
     "REUSE_BEFORE_CREATE_REQUIRED",
@@ -351,6 +353,14 @@ if (!contract) {
   }
   if (contract.status !== "CANONICAL") errors.push("CONTRATO_RECONCILIACAO_NAO_CANONICO");
   if (contract.marker !== "REUSE_BEFORE_CREATE_REQUIRED") errors.push("CONTRATO_RECONCILIACAO_MARKER_INVALIDO");
+
+  const secretReuse = contract.global_secret_reuse_contract ?? {};
+  if (secretReuse.marker !== "CENTRALDARK_GLOBAL_SECRET_REUSE") errors.push("CONTRATO_SECRET_REUSE_MARKER_AUSENTE");
+  if (secretReuse.status !== "CANONICAL") errors.push("CONTRATO_SECRET_REUSE_NAO_CANONICO");
+  if (secretReuse.canonical_vault !== "/root/CentralDark/secrets") errors.push("CONTRATO_SECRET_VAULT_CANONICO_INVALIDO");
+  if (secretReuse.repository_secrets !== "REUSE_ALL_EXISTING_AND_FUTURE") errors.push("CONTRATO_REPOSITORY_SECRETS_REUSE_AUSENTE");
+  if (secretReuse.secret_values_in_git !== "FORBIDDEN") errors.push("CONTRATO_SECRET_VALUE_IN_GIT_PERMITIDO");
+  if (secretReuse.create_new_secret_only_if !== "NO_EQUIVALENT_AFTER_MEASURE") errors.push("CONTRATO_SECRET_CREATE_SEM_REUSE_GATE");
 
   const gateRegistry = contract.universal_gate_registry ?? {};
   if (gateRegistry.marker !== "CENTRALDARK_UNIVERSAL_GATE_REGISTRY") errors.push("CONTRATO_GATE_REGISTRY_MARKER_AUSENTE");
