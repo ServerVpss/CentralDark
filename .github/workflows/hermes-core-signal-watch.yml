@@ -1,4 +1,4 @@
-name: Hermes Core Signal Watch
+name: ⚙️ Hermes Core Signal Watch
 
 on:
   pull_request:
@@ -86,20 +86,20 @@ jobs:
     runs-on: [self-hosted, Linux]
     timeout-minutes: 10
     steps:
-      - name: Checkout same HEAD
+      - name: 🔹 Checkout same HEAD
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
           fetch-depth: 1
           submodules: false
 
-      - name: Provar parser e classificador do Signal Watcher
+      - name: 🔹 Provar parser e classificador do Signal Watcher
         run: |
           set -euo pipefail
           node --check apps/modulos/HERMES-CORE/agents/Signal-Watcher/agent.mjs
           node --test apps/modulos/HERMES-CORE/agents/Signal-Watcher/agent.test.mjs
 
-      - name: Varrer HERMES-CORE byte/source aplicável
+      - name: 🔹 Varrer HERMES-CORE byte/source aplicável
         id: scan
         run: |
           set -euo pipefail
@@ -118,7 +118,7 @@ jobs:
             exit 2
           fi
 
-      - name: Receipt
+      - name: 🔹 Receipt
         if: always()
         run: |
           echo "HEAD_SHA=${GITHUB_SHA}"
@@ -129,7 +129,7 @@ jobs:
           echo 'UNKNOWN_IS_NOT_PASS=1'
 
   official-update:
-    name: Hermes oficial → check → plan → backup → update → restart → prova
+    name: 🧩 Hermes oficial → check → plan → backup → update → restart → prova
     if: >-
       github.event_name == 'schedule' ||
       github.event_name == 'workflow_dispatch' ||
@@ -141,7 +141,7 @@ jobs:
     env:
       HERMES_APP: CentralDark-Hermes
     steps:
-      - name: Atualizar Hermes oficial somente quando houver delta
+      - name: 🔹 Atualizar Hermes oficial somente quando houver delta
         shell: bash
         run: |
           set -Eeuo pipefail
@@ -273,7 +273,7 @@ jobs:
           echo "PM2_RESULT=$PM2_RESULT"
           echo "RECEIPT=$RECEIPT"
 
-      - name: Receipt resumido
+      - name: 🔹 Receipt resumido
         if: always()
         shell: bash
         run: |
@@ -285,7 +285,7 @@ jobs:
           echo 'MICROCOMMAND_CHAIN_TO_HUMAN=false'
           echo 'UNKNOWN_IS_NOT_PASS=1'
   review-signal:
-    name: CodeRabbit webhook → Signal Watcher → API advisory → autonomia
+    name: 🧩 CodeRabbit webhook → Signal Watcher → API advisory → autonomia
     if: >-
       (github.event_name == 'pull_request_review' && startsWith(github.actor, 'coderabbit')) ||
       (github.event_name == 'issue_comment' && github.event.issue.pull_request && startsWith(github.actor, 'coderabbit')) ||
@@ -297,7 +297,7 @@ jobs:
       pull-requests: read
       issues: read
     steps:
-      - name: Checkout confiável da main
+      - name: 🔹 Checkout confiável da main
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: main
@@ -305,7 +305,7 @@ jobs:
           fetch-depth: 1
           submodules: false
 
-      - name: Normalizar review e executar bridge existente
+      - name: 🔹 Normalizar review e executar bridge existente
         id: bridge
         shell: bash
         env:
@@ -404,7 +404,7 @@ jobs:
             });
             core.notice(`CODERABBIT_FAST_AUTONOMIA_DISPATCHED pr=${process.env.PR_NUMBER} method=squash`);
 
-      - name: Receipt
+      - name: 🔹 Receipt
         if: always()
         run: |
           echo 'CODERABBIT_ROLE=REVIEW_ONLY'

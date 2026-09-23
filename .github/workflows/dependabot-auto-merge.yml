@@ -84,7 +84,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 🇧🇷 Padronizar título em PT-BR com selo semântico
+      - name: 🔹 🇧🇷 Padronizar título em PT-BR com selo semântico
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         env:
           DEPENDENCY_NAMES: ${{ steps.meta.outputs.dependency-names }}
