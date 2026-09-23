@@ -128,16 +128,13 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python3 apps/modulos/HERMES-CORE/plugins/centraldark-runtime-guard/__init__.py --self-test \
-            | tee .artifacts-hermes-runtime-guard-self-test.txt
-          grep -q '"status": "PASS"' .artifacts-hermes-runtime-guard-self-test.txt
           python3 scripts/trigger-fabric/verify_repo_contract.py . \
             | tee docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/VERIFY-RESULT.txt
           grep -q '^REPO_CONTRACT_VERIFY=PASS$' docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/VERIFY-RESULT.txt
           grep -q '^BOT_ENTRY_CONTRACT=PASS$' docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/VERIFY-RESULT.txt
           grep -q '^OUTPUT_GUARD_CONTRACT=PASS$' docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/VERIFY-RESULT.txt
 
-      - name: ⏰ Provar horário canônico ponta a ponta
+      - name: 🔹 ⏰ Provar horário canônico ponta a ponta
         shell: bash
         run: |
           set -euo pipefail

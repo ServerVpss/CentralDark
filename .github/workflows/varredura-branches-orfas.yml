@@ -1,4 +1,4 @@
-name: Varredura — branches órfãs (inventário determinístico)
+name: ⚙️ Varredura — branches órfãs (inventário determinístico)
 
 # Objetivo (intenção do SEGREDO/CHEFE):
 # "Nada pode ficar pra trás." Este workflow NÃO faz merge, NÃO faz deploy,
@@ -27,18 +27,18 @@ permissions:
 
 jobs:
   inventario:
-    name: Inventário de branches não convergidas
+    name: 🧩 Inventário de branches não convergidas
     runs-on: [self-hosted, Linux]
     timeout-minutes: 10
 
     steps:
-      - name: Checkout completo (histórico inteiro)
+      - name: 🔹 Checkout completo (histórico inteiro)
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Medir cada branch contra a main
+      - name: 🔹 Medir cada branch contra a main
         shell: bash
         run: |
           set -euo pipefail
@@ -140,7 +140,7 @@ jobs:
           
           cat "$REL" >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Publicar relatório como artefato
+      - name: 🔹 Publicar relatório como artefato
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:

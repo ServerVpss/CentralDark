@@ -20,23 +20,23 @@ concurrency:
 
 jobs:
   regenerate:
-    name: Regenerar índice total de badges
+    name: 🧩 Regenerar índice total de badges
     runs-on: [self-hosted, Linux]
     timeout-minutes: 15
     env:
       GH_TOKEN: ${{ github.token }}
       GITHUB_REPOSITORY: ${{ github.repository }}
     steps:
-      - name: Checkout confiável da main
+      - name: 🔹 Checkout confiável da main
         uses: actions/checkout@v4
         with:
           ref: main
           fetch-depth: 0
 
-      - name: Gerar Badge Fabric determinística
+      - name: 🔹 Gerar Badge Fabric determinística
         run: python3 scripts/ci/generate_status_badges.py
 
-      - name: Validar invariantes anti-falso-verde
+      - name: 🔹 Validar invariantes anti-falso-verde
         shell: bash
         run: |
           set -euo pipefail
@@ -44,7 +44,7 @@ jobs:
           grep -Fq 'UNKNOWN_IS_NOT_PASS=true' docs/STATUS-BADGES.md
           grep -Fq 'SAME_HEAD_PROOF_REQUIRED_FOR_CI_CLAIM=true' docs/STATUS-BADGES.md
 
-      - name: Detectar delta
+      - name: 🔹 Detectar delta
         id: delta
         shell: bash
         run: |
@@ -56,7 +56,7 @@ jobs:
             echo 'BADGE_FABRIC=DELTA_MATERIAL'
           fi
 
-      - name: Criar ou atualizar branch determinística
+      - name: 🔹 Criar ou atualizar branch determinística
         if: steps.delta.outputs.changed == 'true'
         shell: bash
         run: |
@@ -69,7 +69,7 @@ jobs:
           git commit -m '🏷️ docs: sincronizar Status Badge Fabric'
           git push --force-with-lease origin "$BRANCH"
 
-      - name: Abrir ou reutilizar PR da Badge Fabric
+      - name: 🔹 Abrir ou reutilizar PR da Badge Fabric
         if: steps.delta.outputs.changed == 'true'
         shell: bash
         run: |
@@ -86,7 +86,7 @@ jobs:
               --body $'Atualização determinística do índice canônico de status badges.\n\nBADGE != PROOF. UNKNOWN != PASS. SAME_HEAD continua obrigatório.'
           fi
 
-      - name: Receipt
+      - name: 🔹 Receipt
         shell: bash
         run: |
           echo "BADGE_FABRIC_HEAD=$(git rev-parse HEAD)"
