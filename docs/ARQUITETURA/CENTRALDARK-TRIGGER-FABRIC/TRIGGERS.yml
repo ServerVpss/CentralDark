@@ -212,8 +212,10 @@ learning_triggers:
   - event: SESSION_END
     owner: .agents/skills/session-intelligence-harvester/SKILL.md
     behavior: [HARVEST_NEW_DELTA_ONLY, CHECKPOINT, NEXT_CURSOR]
+    runtime_bridge: apps/modulos/HERMES-CORE/plugins/centraldark-runtime-guard/__init__.py
+    ingress: apps/modulos/memoria-api/index.mjs#/memoria/ingest
     may_write_canonical: false
-    status: DECLARED_HOOK_NOT_PROVEN
+    status: IMPLEMENTED_RUNTIME_PROOF_PENDING
 
 automatic_triggers:
   - event: VPS_KERNEL_DELTA_MATERIAL
