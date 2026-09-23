@@ -550,12 +550,21 @@ export function validateUniversalMethod() {
     '"on_any_material_failure": "ABORT_CURRENT_BLOCK"',
     '"fixed_point_true_after_material_failure": "FORBIDDEN"',
     '"local_house_sensor_contract":',
+    '"global_secret_reuse_contract":',
+    '"marker": "CENTRALDARK_GLOBAL_SECRET_REUSE"',
+    '"canonical_vault": "/root/CentralDark/secrets"',
+    '"repository_secrets": "REUSE_ALL_EXISTING_AND_FUTURE"',
+    '"create_new_secret_only_if": "NO_EQUIVALENT_AFTER_MEASURE"',
     '"CASA_LOCAL": "DISCOVER_AT_RUNTIME_DO_NOT_ASSUME_PATH"',
   ], 'UNIVERSAL_GATE_REGISTRY');
 
   requireTokens(boot, [
-    'mission_stop: "NEVER_BY_CHAT"',
+    'mission_stop: "CONTINUE_ACROSS_CHAT_BOUNDARIES_UNLESS_CHEFE_EXPLICITLY_STOPS"',
     'child_pr_only_promotion_vehicle: true',
+    'global_secret_reuse_contract:',
+    'canonical_vault: "/root/CentralDark/secrets"',
+    'repository_secrets: "REUSE_ALL_EXISTING_AND_FUTURE"',
+    'no_parallel_vault: true',
     'SQUASH_CHILD_ONLY',
     'required_gate_ids:',
     'LOAD_UNIVERSAL_GATE_REGISTRY',
