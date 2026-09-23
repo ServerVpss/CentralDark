@@ -115,6 +115,19 @@ CENTRALDARK_AI_BOOT:
     contract_ref: "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json#local_house_sensor_contract"
     casa_local: "DISCOVER_AT_RUNTIME_DO_NOT_ASSUME_PATH"
 
+  global_secret_reuse_contract:
+    contract_ref: "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json#global_secret_reuse_contract"
+    scope: "GLOBAL_ALL_CURRENT_AND_FUTURE_SECRET_CONSUMERS"
+    canonical_vault: "/root/CentralDark/secrets"
+    repository_secrets: "REUSE_ALL_EXISTING_AND_FUTURE"
+    create_new_secret_only_if: "NO_EQUIVALENT_AFTER_MEASURE"
+    compatibility_root_secrets: "INPUT_NOT_SECOND_VAULT"
+    secret_values_in_git: false
+    secret_names_and_metadata_in_ledger: true
+    same_secret_multi_consumer_when_chefe_intent_requires: true
+    no_parallel_vault: true
+    reality_is_judge: true
+
   # Cognitive BIOS = camada lógica de política do mesmo boot. Não é firmware, SO paralelo ou segundo cérebro.
   cognitive_bios:
     status: "CANONICAL_BOOT_POLICY_LAYER"
