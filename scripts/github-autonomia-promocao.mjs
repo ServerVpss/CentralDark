@@ -27,7 +27,7 @@ export const DEFAULT_REQUIRED_WORKFLOWS = Object.freeze([
   "codex-validate",
   "lupa-conformance",
   "Lupa Drift Guard",
-  "Trigger Fabric Full Package",
+  "🧠 Trigger Fabric Full Package — pacote e contraprova",
   "PR Title Contract",
   "PR auto-review (Codex + checklist)",
   "Pipeline — Telegram + Painel",
