@@ -26,7 +26,7 @@ export function TelegramMTProtoCard({ onReconnect, onDisconnect }: TelegramMTPro
 
   const fetchStatus = useCallback(async () => {
     try {
-      const res = await fetch('https://status.centralldark.com/mtproto/status');
+      const res = await fetch('/api/telegram/mtproto/status');
       if (!res.ok) throw new Error('Falha ao obter status');
       const data = await res.json();
       setStatus(data);
