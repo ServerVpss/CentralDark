@@ -1,5 +1,5 @@
 #!/bin/bash
-# sync-secrets-github.sh — Sincronizar GitHub secrets → /root/secrets/github/
+# sync-secrets-github.sh — Inventariar Repository Secrets → cofre canônico /root/CentralDark/secrets/github/
 # Uso: ./sync-secrets-github.sh [GITHUB_TOKEN]
 # SEGURANÇA: Lê apenas metadados + fingerprints, NUNCA expõe valores
 
@@ -8,8 +8,8 @@ set -euo pipefail
 GITHUB_TOKEN="${1:-${GITHUB_TOKEN:-}}"
 REPO_OWNER="ServerVpss"
 REPO_NAME="CentralDark"
-SECRETS_DIR="/root/secrets/github"
-BACKUP_DIR="/root/secrets/.backup"
+SECRETS_DIR="/root/CentralDark/secrets/github"
+BACKUP_DIR="/root/CentralDark/secrets/.backup"
 LOG_FILE="/var/log/centraldark-secrets-sync.log"
 
 # Validação
@@ -23,7 +23,7 @@ fi
 mkdir -p "$SECRETS_DIR" "$BACKUP_DIR"
 chmod 700 "$SECRETS_DIR" "$BACKUP_DIR"
 
-echo "🔄 Iniciando sincronização GitHub → /root/secrets/github/" | tee -a "$LOG_FILE"
+echo "🔄 Inventariando Repository Secrets no cofre canônico (metadados; valores não são retornados pela API)" | tee -a "$LOG_FILE"
 echo "Timestamp: $(date -u +'%Y-%m-%dT%H:%M:%SZ')" | tee -a "$LOG_FILE"
 
 # Backup anterior

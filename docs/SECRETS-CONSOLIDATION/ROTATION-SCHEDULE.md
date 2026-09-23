@@ -9,10 +9,10 @@ Cada secret tem intervalo diferente baseado em **risco + impacto**:
 - **Impacto**: BAIXO (fácil regenerar, sem downtime)
 - **Procedimento**:
   1. Gerar novo token em https://t.me/BotFather
-  2. Copiar para `/root/secrets/telegram/TELEGRAM_BOT_TOKEN`
+  2. Copiar para `/root/CentralDark/secrets/telegram/TELEGRAM_BOT_TOKEN`
   3. Atualizar em PM2 env: `pm2 restart unified-bot` (id 27)
   4. Testar: `curl -s https://api.telegram.org/bot[TOKEN]/getMe`
-  5. Arquivar token antigo em `/root/secrets/.archive/TELEGRAM_BOT_TOKEN.old-[date]`
+  5. Arquivar token antigo em `/root/CentralDark/secrets/.archive/TELEGRAM_BOT_TOKEN.old-[date]`
 
 ### 90 DIAS — GitHub + Cloudflare + MCP + WuzAPI ⏰⏰
 Tokens com acesso limitado a APIs externas:
@@ -23,7 +23,7 @@ Tokens com acesso limitado a APIs externas:
 - **Procedimento**:
   1. Gerar novo token em GitHub > Settings > Developer settings > Personal access tokens
   2. Testar scopo: `repo, workflow, read:org`
-  3. Copiar para `/root/secrets/github/GITHUB_TOKEN`
+  3. Copiar para `/root/CentralDark/secrets/github/GITHUB_TOKEN`
   4. Atualizar GitHub Secrets: `gh secret set GITHUB_TOKEN -R ServerVpss/CentralDark -b [NEW_TOKEN]`
   5. Aguardar próximo workflow run
   6. Validar em logs do GitHub
@@ -35,7 +35,7 @@ Tokens com acesso limitado a APIs externas:
   1. Gerar novo token em Cloudflare > Account > API Tokens
   2. Testar scopo: `Zone.DNS:Edit, Zone.Zone:Read`
   3. Validar: `curl -X GET "https://api.cloudflare.com/client/v4/user/tokens/verify" -H "Authorization: Bearer [TOKEN]"`
-  4. Copiar para `/root/secrets/cloudflare/CF_API_TOKEN`
+  4. Copiar para `/root/CentralDark/secrets/cloudflare/CF_API_TOKEN`
   5. Atualizar PM2 env (se usado em scripts)
   6. Revogar token antigo em Cloudflare
 
@@ -45,7 +45,7 @@ Tokens com acesso limitado a APIs externas:
 - **Procedimento**:
   1. Gerar novo key em https://mcp.centralldark.com/admin/keys
   2. Validar acesso: `curl -H "Authorization: $NEW_KEY" https://mcp.centralldark.com/admin/status`
-  3. Copiar para `/root/secrets/mcp/MCP_ADMIN_KEY`
+  3. Copiar para `/root/CentralDark/secrets/mcp/MCP_ADMIN_KEY`
   4. Atualizar PM2: `pm2 set-env MCP_ADMIN_KEY $NEW_KEY` + restart
   5. Revogar key antiga
 
@@ -55,7 +55,7 @@ Tokens com acesso limitado a APIs externas:
 - **Procedimento**:
   1. Gerar novo token no WuzAPI dashboard
   2. Validar: `curl -H "Authorization: $NEW_TOKEN" http://127.0.0.1:8081/api/health`
-  3. Copiar para `/root/secrets/wuzapi/WUZAPI_TOKEN`
+  3. Copiar para `/root/CentralDark/secrets/wuzapi/WUZAPI_TOKEN`
   4. Atualizar `scripts/sync-connections.sh`
 
 ### 180 DIAS — Supabase + Database ⏰⏰⏰
@@ -68,7 +68,7 @@ Credentials críticas com impacto **MUITO ALTO**:
   1. ⚠️ **WINDOW de manutenção necessário** (2-3 hrs, notificar usuários)
   2. Backup do banco: `pg_dump $DATABASE_URL > backup-$(date +%s).sql`
   3. Regenerar keys em Supabase > Project > Settings > API
-  4. Copiar SUPABASE_URL (mesma) + SUPABASE_KEY (novo) para `/root/secrets/supabase/`
+  4. Copiar SUPABASE_URL (mesma) + SUPABASE_KEY (novo) para `/root/CentralDark/secrets/supabase/`
   5. Atualizar `/root/.env`
   6. Restart PM2: `pm2 restart all`
   7. Validar: `psql $DATABASE_URL -c "SELECT version();"`
@@ -82,7 +82,7 @@ Credentials críticas com impacto **MUITO ALTO**:
   2. `pm2 stop all`
   3. Trocar senha em PostgreSQL: `ALTER USER postgres WITH PASSWORD 'new-password';`
   4. Gerar novo DATABASE_URL: `postgresql://postgres:new-password@host:5432/db`
-  5. Copiar para `/root/secrets/supabase/DATABASE_URL`
+  5. Copiar para `/root/CentralDark/secrets/supabase/DATABASE_URL`
   6. Atualizar `/root/.env`
   7. `pm2 start all`
   8. Aguardar 5 mins para estabilização
@@ -112,14 +112,14 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 
 - **Log centralizado**: `/var/log/centraldark-rotation.log`
 - **Alertas**: Cada rotação envia notificação via Telegram (@srver1bot)
-- **Histórico**: `/root/secrets/.archive/` com timestamps
+- **Histórico**: `/root/CentralDark/secrets/.archive/` com timestamps
 
 ## ZERO REGRESSÃO
 
 ✅ Todas as rotações seguem:
 - Backup automático do valor anterior
 - Teste de conectividade ANTES de desativar valor antigo
-- Rollback via `/root/secrets/.backup/` se necessário
+- Rollback via `/root/CentralDark/secrets/.backup/` se necessário
 - Nenhuma rotação é forçada se não houver changelog explícito
 
 ## Responsabilidade

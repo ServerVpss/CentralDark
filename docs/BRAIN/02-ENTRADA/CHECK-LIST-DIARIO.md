@@ -5,7 +5,7 @@ vault_windows: "E:\\CentralDark\\Pivete\\CASA-VAULT\\🧾CHECK-LIST DIARIO🤖.m
 owner: docs/BRAIN/02-ENTRADA/CHECK-LIST-DIARIO.md
 sync: CASA-VAULT/00-CANONICO via scripts/casa/sync-hermes-obsidian.ps1
 status: OPERATIONAL
-updated: 2026-09-19
+updated: 2026-09-23
 ---
 
 # 🧾 CHECK-LIST DIARIO 🤖
@@ -46,7 +46,24 @@ DIA ACABA → fechar autonomamente → atualizar este checklist → Telegram CHE
 - [ ] Tray Windows .exe
 - [ ] PDF_GATE **promovido na VPS/main** (Casa ≠ VPS)
 
-**HEAD:** `0dfb66b519f` = `origin/main` = DEPLOYED run `35445742651`  
+**HEAD:** `0dfb66b519f` = `origin/main` = DEPLOYED run `35445742651`
+
+## 2026-09-23 — RECONCILIAÇÃO CASA→GIT + FUSÃO HUD (delta resumido)
+
+**Incidente cristalizado:** sessão inteira de reconciliação foi feita só na Casa (Obsidian CASA-VAULT + Hermes Desktop local) sem commit/push — main não teve histórico do dia até este commit. Log verboso completo fica no vault (`🧾CHECK-LIST DIARIO🤖.md`, CASA-VAULT), não duplicado aqui.
+
+- [x] Fundido `CentralDark Index` (Downloads\index.html, 3 peles/busca/MAPA/FORJA) com o HUD simples → `HUD.html` único no vault `🪬Centraldark -HUD🪬` (3 abas: HUD/MAPA/FORJA). Downloads original preservado como backup.
+- [x] `deploy_status` medido = **ERRO**: VPS 3 commits atrás de `main` (GitHub HEAD `43c369c`, VPS em `d20de1a7cb9`); `vps_pm2` retornou JSON corrompido (status PM2 = `UNKNOWN`).
+- [x] VPS com working tree suja: **este mesmo arquivo** (`docs/BRAIN/02-ENTRADA/CHECK-LIST-DIARIO.md`) estava modificado e não commitado na VPS antes deste commit; mais `apps/bot-telegram/skills/config/memory.json`, `apps/modulos/graph-panel/data/graph.json`, `apps/modulos/hub/src/generated/houseInventory.ts`, `apps/modulos/status/graph-data.json`, `docs/CONSCIENCIA/APRENDIZADOS.md`; 38 arquivos `drift-*.json` não rastreados em `apps/modulos/grupo-evolucao/missions/` acumulando desde a noite de 22/09.
+- [x] 8 PRs abertos novos desde #1578: #1579, #1581, #1590, #1598, #1657, #1662 (`ACTIVE_CHILD` atual do #1562), #1663 (🚨 alerta explícito "NÃO EXECUTAR"), #1664.
+- [x] `docs/PENDENCIAS.md` parado desde 29/08 — itens #54/#55 ainda abertos, sem movimento.
+- [x] Wikilinks quebrados no `related:` do checklist do vault (`BANDA_INTENCAO_UNICA_COMPASSO`, `BANDA_COMPASSO_GLOBAL`, `SEMANTIC-LINKER`, `INTENT_SYNC_STATE`, `LACUNA_BANDA_INTENCAO_UNICA`, `GRAPH-INVESTIGATOR`) — stubs criados no CASA-VAULT.
+- [x] Skill nova no Hermes Desktop: `skills/devops/reconciliacao-diaria-centraldark/SKILL.md` — generaliza este procedimento pra qualquer motor rodando sob o contrato SOL, não só Claude.
+- [x] Cron job registrado no Hermes (`hermes cron create`, job `f052f0dc37ed`, diário 08:00) rodando a skill acima.
+- [ ] **Gateway do Hermes não está rodando** — cron criado mas não dispara sozinho até `hermes gateway install` ser autorizado pelo Chefe.
+- [ ] VPS ainda não sincronizada com este commit; VPS dirty ainda não resolvida.
+
+**Regra corrigida:** `LOCAL_EDIT != COMMIT` — trabalho na Casa só conta pro histórico quando sobe pra `main`. Skill do Hermes atualizada pra nunca mais deixar isso implícito.
 
 ### Proibido no dia a dia
 `reset --hard` · `pm2 restart all` · `git add -A` · segundo painel/watchdog

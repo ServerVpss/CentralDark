@@ -112,11 +112,18 @@ jobs:
               '`UNKNOWN_IS_NOT_PASS=true`',
             ].join('\n');
 
-            await github.rest.issues.createComment({
-              owner,
-              repo,
-              issue_number: motherNumber,
-              body,
-            });
+            try {
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number: motherNumber,
+                body,
+              });
+              core.notice(`PR_MOTHER_PULSE_COMMENT=PASS mother=#${motherNumber} source=#${sourceNumber}`);
+            } catch (error) {
+              core.warning(`PR_MOTHER_COMMENT_NON_FATAL: ${error.message}`);
+              core.notice('PR_MOTHER_COMMENT_IS_TELEMETRY_NOT_PROOF=true');
+              core.notice('PR_MOTHER_COMMENT_FAILURE_DOES_NOT_INVALIDATE_SOURCE_PR=true');
+            }
 
             core.notice(`PR_MOTHER_PULSE mother=#${motherNumber} source=#${sourceNumber} actor=${actor} action=${action} reaction=${reaction} head=${head}`);

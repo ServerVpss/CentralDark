@@ -27,8 +27,8 @@
 ```
 GitHub (ServerVpss/CentralDark):
 ├── scripts/
-│   ├── setup-secrets-structure.sh       (criar /root/secrets/)
-│   ├── sync-secrets-github.sh            (sincronizar GitHub → /root/secrets/)
+│   ├── setup-secrets-structure.sh       (criar /root/CentralDark/secrets/)
+│   ├── sync-secrets-github.sh            (sincronizar GitHub → /root/CentralDark/secrets/)
 │   ├── install-supabase-cli.sh          (instalar CLI)
 │   └── extract-supabase-credentials.sh  (extrair credenciais + .env)
 └── docs/SECRETS-CONSOLIDATION/
@@ -82,7 +82,7 @@ sudo -E ./scripts/extract-supabase-credentials.sh
 
 ✅ **Esperado**:
 ```
-✅ /root/secrets/supabase/ populado
+✅ /root/CentralDark/secrets/supabase/ populado
 ✅ /root/.env gerado
 ✅ PostgreSQL conectável
 ```
@@ -108,8 +108,8 @@ pm2 logs unified-bot  # Deve parar de hard-exit!
 ✅ **Nenhum secret exposto em GitHub**
 - Scripts contêm PLACEHOLDERS, não valores reais
 - Extração ocorre LOCAL na VPS
-- Credenciais ficam apenas em `/root/.env` (chmod 600) + `/root/secrets/` (chmod 700)
-- Backups automáticos em `/root/secrets/.backup/`
+- Credenciais ficam apenas em `/root/.env` (chmod 600) + `/root/CentralDark/secrets/` (chmod 700)
+- Backups automáticos em `/root/CentralDark/secrets/.backup/`
 
 ✅ **Sincronização bidirecional segura**
 - GitHub → VPS: Scripts + documentação

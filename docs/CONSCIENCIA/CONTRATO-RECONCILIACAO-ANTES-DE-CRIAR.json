@@ -44,7 +44,11 @@
     "obsidian",
     "logs",
     "receipts",
-    "hud"
+    "hud",
+    "repository_secrets",
+    "credentials",
+    "secret_vault",
+    "environment_secrets"
   ],
   "same_operating_contract": true,
   "physical_tool_parity_guaranteed": false,
@@ -2402,5 +2406,81 @@
         "partial_success_is_not_stop_condition": true
       }
     }
+  },
+  "global_secret_reuse_contract": {
+    "marker": "CENTRALDARK_GLOBAL_SECRET_REUSE",
+    "status": "CANONICAL",
+    "scope": "GLOBAL_ALL_CURRENT_AND_FUTURE_SECRET_CONSUMERS",
+    "owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json",
+    "canonical_vault": "/root/CentralDark/secrets",
+    "repository_secrets": "REUSE_ALL_EXISTING_AND_FUTURE",
+    "repository_secret_inventory_role": "CAPABILITY_CATALOG_BY_NAME_AND_METADATA",
+    "secret_values_in_git": "FORBIDDEN",
+    "secret_names_and_metadata_in_ledger": "ALLOWED",
+    "create_new_secret_only_if": "NO_EQUIVALENT_AFTER_MEASURE",
+    "compatibility_inputs": [
+      "/root/secrets",
+      "GitHub Actions Repository Secrets",
+      "runtime environment",
+      "PM2",
+      "systemd",
+      "CI/CD"
+    ],
+    "resolution_order": [
+      "MEASURE_EXISTING_OWNER",
+      "SEARCH_REPOSITORY_SECRETS",
+      "SEARCH_CANONICAL_VAULT",
+      "SEARCH_RUNTIME_BINDINGS",
+      "REUSE_MATCHING_EXISTING",
+      "CREATE_ONLY_IF_MATERIAL_GAP_PROVEN"
+    ],
+    "invariants": {
+      "REUSE_BEFORE_CREATION": true,
+      "NO_PARALLEL_VAULT": true,
+      "ONE_SECRET_OWNER_PER_CAPABILITY": true,
+      "UNKNOWN_SECRET_VALUE_IS_NOT_MISSING_SECRET": true,
+      "DOCUMENTED_SECRET_IS_NOT_RUNTIME_BOUND": true,
+      "SAME_SECRET_MAY_FEED_MULTIPLE_CONSUMERS_WHEN_CHEFE_INTENT_REQUIRES": true,
+      "REALITY_IS_JUDGE": true
+    },
+    "compatibility_policy": {
+      "legacy_root_secrets_role": "COMPATIBILITY_INPUT_NOT_CANONICAL_OWNER",
+      "do_not_break_live_consumers": true,
+      "migrate_incrementally_with_readback": true
+    }
+  },
+  "telegram_transport_contract": {
+    "marker": "CENTRALDARK_TELEGRAM_DIRECT_TRANSPORT",
+    "status": "CANONICAL",
+    "scope": "ALL_TELEGRAM_BOT_AND_USER_CONNECTIONS",
+    "bot_transport": "TELEGRAM_BOT_API_DIRECT",
+    "bot_api_base": "https://api.telegram.org",
+    "bot_update_mode": "LONG_POLLING_ONLY",
+    "bot_webhook_transport": "FORBIDDEN",
+    "centraldark_subdomain_as_telegram_transport": "FORBIDDEN",
+    "user_transport": "TELEGRAM_MTPROTO_DIRECT",
+    "mtproto_owner": "scripts/telegram-mtproto/server.js",
+    "mtproto_library": "gramjs",
+    "admin_ui_control_path": "/api/telegram/mtproto",
+    "admin_ui_control_path_role": "CENTRALDARK_CONTROL_PLANE_NOT_TELEGRAM_TRANSPORT",
+    "one_transport_owner_per_identity": true,
+    "stale_webhook_must_be_deleted_on_bot_boot": true,
+    "reality_is_judge": true
+  },
+  "telegram_orchestrator_contract": {
+    "marker": "CENTRALDARK_TELEGRAM_ORCHESTRATOR",
+    "authority": "SEGREDO/CHEFE",
+    "coordinator": "SOL",
+    "executor": "PIVETE/HERMES",
+    "control_plane": "CENTRALDARK",
+    "bot_identities_are_interfaces_not_authority": true,
+    "user_mtproto_identity_is_interface_not_second_brain": true,
+    "sol_may_route_all_existing_capabilities": true,
+    "sol_secret_access": "CANONICAL_SECRET_RESOLVER",
+    "create_new_agent_only_if": "NO_EXISTING_CAPABILITY_MATCH",
+    "six_functional_lenses_are_not_six_mandatory_permanent_agents": true,
+    "preserve_one_writer_per_mutable_scope": true,
+    "sol_self_approval": false,
+    "reality_is_judge": true
   }
 }

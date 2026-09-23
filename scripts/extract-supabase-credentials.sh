@@ -7,7 +7,7 @@ set -euo pipefail
 
 SUPABASE_ACCESS_TOKEN="${SUPABASE_ACCESS_TOKEN:-}"
 PROJECT_ID="kagejpghnwdfymddwxuf"
-SECRETS_DIR="/root/secrets/supabase"
+SECRETS_DIR="/root/CentralDark/secrets/supabase"
 ENV_FILE="/root/.env"
 LOG_FILE="/var/log/centraldark-supabase-extract.log"
 
@@ -90,9 +90,9 @@ else
   log "  ✅ DATABASE_URL configurado"
 fi
 
-# ============ SALVAR EM /root/secrets/ ============
+# ============ SALVAR EM /root/CentralDark/secrets/ ============
 
-log "💾 Salvando em /root/secrets/supabase/..."
+log "💾 Salvando em /root/CentralDark/secrets/supabase/..."
 
 mkdir -p "$SECRETS_DIR"
 chmod 700 "$SECRETS_DIR"
@@ -163,7 +163,7 @@ log ""
 log "📊 RESUMO:"
 log "  ✅ Supabase CLI autenticado"
 log "  ✅ Credenciais extraídas"
-log "  ✅ /root/secrets/supabase/ populado"
+log "  ✅ /root/CentralDark/secrets/supabase/ populado"
 log "  ✅ /root/.env gerado"
 log ""
 log "🚀 Próximos passos:"
