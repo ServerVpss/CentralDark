@@ -5,6 +5,18 @@ status: "CHILD_PR_PLAN"
 pr_mother: 1562
 source_main_sha: "b40dbdbbaab6d830349cfe3456fe2c15a15ddd73"
 authority: "SEGREDO/CHEFE"
+owner: "docs/CONSCIENCIA/PROGRAMAS/ + apps/modulos/HERMES-CORE/ + scripts/github-autonomia-promocao.mjs"
+truth_scope: "PLAN_AND_CANONICAL_INTENT_CONTRACT; RUNTIME_REQUIRES_LIVE_PROOF"
+canonical: true
+tags: [centraldark, intencao, cockpit, hermes, autonomia, squash, router, casa, vps]
+related:
+  - "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json"
+  - "CENTRALDARK_AI_BOOT.yaml"
+  - "scripts/github-autonomia-promocao.mjs"
+  - "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/POST-GREEN-LOCK.yml"
+links:
+  - "PR-MOTHER:#1562"
+  - "CHILD-PR:#1662"
 truth_rule: "REALITY_IS_JUDGE"
 ---
 
@@ -203,63 +215,83 @@ Não zerar entendimento a cada turno.
 ## 6. Cristalização 40 → 20 capacidades
 
 ### C01 — Intent Inbox Multimodal
+
 Recebe linguagem natural, voz, arquivos e fontes conectadas.
 
 ### C02 — Semantic Referent Resolver
+
 Corrige ruído de voz, nomes, abreviações e referentes com contexto recuperável.
 
 ### C03 — Intent State
+
 Mantém a intenção acumulada da missão sem reset por turno, janela ou modelo.
 
 ### C04 — Sua Intenção Devolvida
+
 Mostra ao CHEFE a leitura atual antes de promoção material quando a semântica for relevante.
 
 ### C05 — Intent Coverage Engine
+
 Calcula 0→90 de cobertura semântica com denominador explícito.
 
 ### C06 — Human Final 10
+
 Aceite/correção do CHEFE completa a intenção confirmada sem virar prova técnica.
 
 ### C07 — Command Compiler
+
 Transforma intenção confirmada em comando portátil para chat, CLI, MCP ou Hermes.
 
 ### C08 — Capability/Owner Resolver
+
 Executa `REUSE_BEFORE_CREATE`, encontra owner e capability existentes antes de propor componente.
 
 ### C09 — Master Loop
+
 Executa o ciclo 1→20 até fixed point, blocker material ou parada explícita.
 
 ### C10 — Model Pool
+
 Inventaria motores locais Casa, locais VPS, cloud/frontier e tiers disponíveis; modelo é motor substituível.
 
 ### C11 — Hybrid Scheduler
+
 Casa e VPS podem cooperar; ausência de Casa não paralisa VPS quando a capability equivalente está provada.
 
 ### C12 — CentralDark Router
+
 Evolução por absorção do owner existente Omni/Capability Router. Não criar segundo router. Nome/display pode convergir depois de prova sem perder capacidades.
 
 ### C13 — Hermes Execution Plane
+
 Hermes recebe missão compilada, decompõe microsteps internos e executa pelo owner correto.
 
 ### C14 — Proof / Counterproof / PDF Gate
+
 Toda mutação lógica material passa pelos gates existentes antes de promoção.
 
 ### C15 — Git Promotion
+
 Commit/PR/main/deploy seguem o modo vigente e o comando explícito do CHEFE. Este documento usa PR-filho por ordem explícita.
 
 ### C16 — Live HUD
+
 Exibe estado, cobertura de intenção, fases, owners, ferramentas, unknowns, blockers e next cursor.
 
 ### C17 — Federated Google Accounts
+
 HUB permite N contas Google por provider, mantendo credenciais separadas e consulta federada autorizada.
 
 ### C18 — Semantic Storage Intake
+
 Drive/OneDrive/Obsidian/local podem fornecer matéria bruta; índice semântico aponta origem, hash, hipótese, owner, gate e receipt.
 
 ### C19 — Surface/Cockpit Projection
+
 Cockpit é superfície administrativa. Hipótese de Desktop Shell/Surface Registry permanece hipótese até prova; não cria OS paralelo.
 
 ### C20 — Learning Closure
+
 Resultado real volta ao histórico, receipt, memória/projeções e próxima intenção sem transformar erro em falso verde.
 
 ---
@@ -558,36 +590,88 @@ Para este plano:
 ## 17. Dez fases de implementação
 
 ### F1 — Reconcile Owners
+
 Mapear cockpit, HERMES, Router, HUB OAuth, memory/Drive e owners atuais.
 
 ### F2 — Intent State Schema
+
 Definir schema semântico e persistência da intenção acumulada.
 
 ### F3 — Semantic Resolver
+
 Resolver voz/referentes e produzir "Sua Intenção Devolvida".
 
 ### F4 — Coverage Engine
+
 Implementar score 0..90 + 10 humano.
 
 ### F5 — Command Compiler
+
 Gerar comando portátil e editável.
 
 ### F6 — Master Loop UI
+
 Botão CHEFE, controles, toggles, modelos e HUD.
 
 ### F7 — Hybrid Router
+
 Casa/VPS/cloud via owner existente do router.
 
 ### F8 — Hermes Binding
+
 Enviar command candidate confirmado ao executor e coletar eventos.
 
 ### F9 — Federated Accounts + Semantic Intake
+
 Multi-conta Google + indexação Drive/armazenamentos autorizados.
 
 ### F10 — Proof / Promotion / Receipt
+
 Gates, testes, contraprova, Git, deploy causal e receipt #1562.
 
 ---
+
+## 17.1 Autonomia por intenção — autorização uma vez, execução até o verde
+
+A ordem explícita do CHEFE é convertida em receipt de intenção no PR aplicável. Esse receipt não altera defaults globais; autoriza somente o escopo declarado.
+
+```text
+DEFAULT
++ EXPLICIT_CHEFE_INTENT
++ INTENT_SCOPE
++ WRITER
++ WRITER_SCOPE
+→ TEMPORARY_SCOPED_OVERRIDE
+→ SAME_HEAD_GATES
+→ GREEN
+→ AUTO_SQUASH_IF_CLEAN
+→ MAIN
+→ RECEIPT
+→ OVERRIDE_EXPIRES
+→ DEFAULT_INTACT
+```
+
+Receipt canônico de promoção:
+
+```text
+Intent-Authorized: SEGREDO/CHEFE
+Merge-Policy: AUTO_SQUASH_IF_CLEAN
+Intent-Scope: INTENCAO_DEVOLVIDA_LOOP_MESTRE
+Writer: SOL/HERMES
+Writer-Scope: PR#1662
+```
+
+Papéis:
+
+```text
+AUTONOMIA_PROMOCAO = autoridade mecânica de promoção após receipt + verde
+DEPENDABOT = sensor especializado de dependências
+CODERABBIT = sensor/revisor consultivo
+HERMES = executor
+REALIDADE = juiz
+```
+
+Dependabot e CodeRabbit não ganham autoridade para mudar intenção, default ou escopo. Review material pode bloquear ou reabrir a prova; ausência de pedido humano repetido não remove gates.
 
 ## 18. Critérios de aceite
 
