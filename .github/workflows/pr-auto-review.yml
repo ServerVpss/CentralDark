@@ -89,17 +89,35 @@ jobs:
             const issue_number = context.payload.pull_request.number;
             const marker = '<!-- pr-auto-review-checklist -->';
             const secretOk = process.env.SECRET_SUSPECT === 'false';
+            const touchedSensitive = process.env.TOUCHED_SENSITIVE === 'true';
+            const head = context.payload.pull_request.head.sha;
             const body = [
               marker,
-              '## Revisão automática — gates determinísticos',
+              `## 🧭 PR #${issue_number} — revisão automática`,
               '',
+              `**Estado da mensagem:** snapshot deste PR no HEAD \`${head}\`; não é estado eterno da main.`,
+              `**O que aconteceu:** ${process.env.CHANGED_COUNT || '0'} arquivo(s) foram analisados pelos gates determinísticos.`,
+              `**Segurança:** ${secretOk ? 'nenhum segredo suspeito detectado pelo scanner.' : 'segredo suspeito detectado; este gate falha fechado.'}`,
+              '**Código:** `git diff --check` passou.',
+              `**Path operacional:** ${touchedSensitive ? 'TOCADO — exige revisão/autorização do escopo.' : 'não tocado.'}`,
+              `**Bloqueia agora?** ${!secretOk ? 'SIM — scanner de segredo.' : touchedSensitive ? 'DEPENDE — revisão/autorização do path operacional.' : 'NÃO por este checklist; os demais gates do HEAD continuam valendo.'}`,
+              '**O que falta:** revisão consultiva final, quando disponível. Ausência dessa revisão não vira falha do código nem PASS.',
+              '',
+              '<details>',
+              '<summary>🔧 Detalhes técnicos</summary>',
+              '',
+              '### Gates determinísticos',
               `- [${secretOk ? 'x' : ' '}] Scanner de paths e valores sensíveis`,
               '- [x] `git diff --check`',
-              '- [x] Gates determinísticos no self-hosted; scanner roda sobre diff (revisar trust do checkout); nenhum script do PR foi executado na VPS',
-              `- [x] Classificação de path operacional: ${process.env.TOUCHED_SENSITIVE === 'true' ? 'TOCADO — revisão e autorização obrigatórias' : 'não tocado'}`,
+              '- [x] Scanner no self-hosted sobre o diff; nenhum script do PR foi executado na VPS por este passo',
+              `- [x] Classificação de path operacional: ${touchedSensitive ? 'TOCADO' : 'não tocado'}`,
               '- [ ] Revisão final Codex visível',
               '',
-              `Arquivos alterados: ${process.env.CHANGED_COUNT || '0'}. HEAD: ${context.payload.pull_request.head.sha}.`,
+              `HEAD: ${head}`,
+              '',
+              '</details>',
+              '',
+              '> UNKNOWN != PASS. Este comentário organiza contexto; não aprova merge nem substitui os gates do mesmo HEAD.',
             ].join('\n');
             const comments = await github.paginate(github.rest.issues.listComments, { owner, repo, issue_number, per_page: 100 });
             const existing = comments.find(c => c.body && c.body.includes(marker));

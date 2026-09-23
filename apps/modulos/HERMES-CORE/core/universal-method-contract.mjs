@@ -587,6 +587,12 @@ export function validateUniversalMethod() {
     'coordinator: "SOL"',
     'executor: "PIVETE/HERMES"',
     'SQUASH_CHILD_ONLY',
+
+    'child_pr_only_promotion_vehicle: false',
+    'promotion_mode: "DIRECT_MAIN_SOFT_EVOLUTION"',
+    'MIN_SECURITY_CHECKS',
+    'DIRECT_MAIN_COMMIT',
+    'MAIN_READBACK',
     'required_gate_ids:',
     'LOAD_UNIVERSAL_GATE_REGISTRY',
     'LOAD_ROOT_CHILD_CONTRACT_LINEAGE',

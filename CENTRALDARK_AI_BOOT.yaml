@@ -48,170 +48,72 @@ CENTRALDARK_AI_BOOT:
     reuse_proven_receipt_when_fingerprint_unchanged: true
     reopen_pdf_on: [FINGERPRINT_CHANGED, RECEIPT_MISSING, MATERIAL_CONTRADICTION, EXPLICIT_REPROOF]
     pdf_is_runtime_authority: false
+    reality_is_judge: true
+    failure_policy: "FAIL_CLOSED"
+    preserve_existing_good: true
+    must_not_replace: [GLOBAL_CONTRACT_ENFORCER, DELTA_CONTINUO_GLOBAL, REUSE_BEFORE_CREATE, ONE_WRITER_PER_SCOPE]
 
   hermes_trismegistus_context_gate:
-    marker: "HERMES_TRISMEGISTUS_CONTEXT_LOADED"
-    aliases: ["CONTEXTO_PRESERVAÇÃO", "CONTINUIDADE_TEMPORAL", "MEMÓRIA_EXECUTIVA"]
-    requirements:
-      - "Carregar contratos de todos os fronts ANTES de sair do gate"
-      - "Validar Writer Scope contra entendimento anterior"
-      - "Reconciliar branch, HEAD, PR, runtime antes de rotear"
-      - "Registrar fingerprint exato (commit SHA, branch, timestamp UTC)"
-      - "Se mudou, re-abrir PDF TLC23; se não mudou, reuse_proven_receipt"
-    roles_required:
-      - SEGREDO_CHEFE
-      - SOL_OPERATIONAL
-      - PIVETE_EXECUTOR
-      - ESPECIALISTA_FRONTEIRA
-    on_entry:
-      - action: "LOG_CONTEXT_SNAPSHOT"
-        detail: "SHA, branch, HEAD, writer, tools, runtime estado"
-      - action: "VALIDATE_WRITER_SCOPE"
-        detail: "Confirmar ONE_WRITER_PER_SCOPE; se houver conflito, READ_ONLY ou INDEPENDENT_FRONT"
-      - action: "LOAD_UNIVERSAL_GATE_REGISTRY"
-        detail: "Registrar todos os gates que vão ser passados nesta sessão"
-    on_exit:
-      - action: "SIGN_OFF_CONTEXT"
-        detail: "Assinar contrato dizendo 'estado vivo reconciliado, pronto para ação'"
+    gate_id: "HERMES_TRISMEGISTUS_CONTEXT_GATE"
+    position: "AFTER_TLC23_BEFORE_AGENT_ROUTING"
+    source:
+      title: "The right way of Hermetism: disputes on Gnostic's, Pagan's and Christian's (re-)visions of the Hermetic phenomenon in late antiquity"
+      sha256: "d93505685db430a639ea3af067891217a00d4944926f839dbded3c5c1a9f37ef"
+      size_bytes: 247110
+    role: "CONTEXT_PROVENANCE_INTERPRETATION_GUARD"
+    rules:
+      source_is_authority: false
+      reception_is_origin: false
+      same_name_is_same_meaning: false
+      multiple_interpretations_must_remain_visible: true
+      symbolic_name_never_overrides_runtime_evidence: true
+      reality_is_judge: true
+    required_for:
+      - "HERMES_IDENTITY_OR_NAMING_CHANGE"
+      - "KERNEL_OR_CORE_SEMANTIC_CHANGE"
+      - "RUNTIME_INTERPRETATION_CHANGE"
+      - "HISTORICAL_OR_SYMBOLIC_SOURCE_ABSORPTION"
+    failure_policy: "FAIL_CLOSED_WHEN_REQUIRED_AND_NOT_LOADED"
 
-  global_contract_bootstrap_gate:
-    marker: "GLOBAL_CONTRACT_BOOTSTRAP_COMPLETE"
-    position: "AFTER_CONTEXT, BEFORE_FIRST_DECISION"
-    gate_type: "ENFORCEMENT_PERIMETER"
-    purpose: "Garantir que contratos globais (REUSE_BEFORE_CREATE, ONE_SYSTEM_ONLY, REASONING != PROOF, etc.) foram carregados e are ACTIVE no runtime"
-    enforcement_items:
-      - contract: "REUSE_BEFORE_CREATE"
-        meaning: "Search/measure antes de fazer. Não recrie se existe e funciona."
-        active: true
-      - contract: "ONE_SYSTEM_ONLY"
-        meaning: "NUNCA .v1/.v2/.v3 sem gap material comprovado. Preserve o que funciona."
-        active: true
-      - contract: "REASONING != PROOF"
-        meaning: "Planejar é barato; REALITY verifica. Ação != Prova; só evidência final conta."
-        active: true
-      - contract: "WRITER != JUDGE"
-        meaning: "Quem escreveu não julga à aprovação própria. Resultado é julgado por REALITY."
-        active: true
-      - contract: "UNKNOWN != PASS"
-        meaning: "Estado desconhecido, pulado, pendente, em fila: TUDO vira FAIL_CLOSED até prova do contrário."
-        active: true
-    prerequisites:
-      - "HERMES_TRISMEGISTUS_CONTEXT_GATE cleared"
-      - "All gate IDs from initial_bootstrap_gate registered and not yet failed"
-    on_violation:
-      - severity: "CRITICAL"
-        action: "ABORT_MISSION"
-        reason: "Violação de contrato global = falha de segurança estrutural"
+  hermes_trismegistus_identity:
+    canonical_display_family: "HERMES TRISMEGISTUS"
+    core_display_name: "HERMES TRISMEGISTUS CORE"
+    kernel_display_name: "HERMES TRISMEGISTUS KERNEL"
+    runtime_display_name: "HERMES TRISMEGISTUS RUNTIME"
+    technical_owner_core: "apps/modulos/HERMES-CORE"
+    technical_owner_runtime: "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/HERMES-AUTOCONFIG-RUNTIME.yml"
+    technical_paths_renamed: false
+    naming_is_semantic_alias_not_new_owner: true
+    reuse_existing_hermes_core: true
+    authority_unchanged: true
+    judge: "REALIDADE"
 
-  delta_continuo_global_gate:
-    marker: "DELTA_CONTINUO_RECONCILED"
-    meaning: |
-      Não use estado antigo contra intenção nova.
-      Não use intenção para fabricar fato técnico.
-      Se há CONTRASTE (velho != novo), reconcile com EVIDÊNCIA PRESENTE.
-      Se não há mudança material, SILENCE.
-    checks:
-      - "INTENTION_CURRENT_vs_PAST": "Intenção mudou? Medir e ajustar."
-      - "STATE_LIVE_vs_RECORDED": "Estado vivo contradiz memória? LIVE WINS."
-      - "DELTA_PRESERVATION": "Só o DELTA novo é executado; resto é REUSE."
-      - "NO_DOUBLE_WORK": "Mesma tarefa 2x com novo comando = executa 1x, registra, cumpre 2x."
+  gate_registry_contract:
+    gate_id: "GLOBAL_CONTRACT_BOOTSTRAP_GATE"
+    registry_ref: "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json#universal_gate_registry"
+    undeclared_hard_gate: "BLOCK_CONFIGURATION"
 
-  root_child_contract_lineage_gate:
-    marker: "ROOT_CHILD_CONTRACT_LINEAGE_ACTIVE"
-    purpose: "Rastrear quem escreve o quê, de onde veio a intenção, o que é autorizado"
-    root_contract: "SEGREDO/CHEFE"
-    child_contracts:
-      - authority: "SOL"
-        scope: "OPERATIONAL_COORDINATION"
-        can_authorize: ["PIVETE", "ESPECIALISTAS"]
-        cannot_do: ["OVERRIDE_CHEFE", "CHANGE_INTENÇÃO_WITHOUT_CHEFE"]
-      - authority: "PIVETE/HERMES"
-        scope: "EXECUTION_PRESERVATION_CONTINUITY"
-        can_authorize: []
-        must_receive_from: ["SOL", "CHEFE"]
-      - authority: "ESPECIALISTA"
-        scope: "FRONT_SPECIFIC_SKILLS"
-        can_authorize: []
-        must_receive_from: ["SOL"]
-    lineage_proof:
-      - "Toda ação deve ter origem rastreável: (CHEFE → SOL → EXECUTOR) ou (CHEFE → EXECUTOR)"
-      - "Se origem desconhecida ou conflitante: ABORT e reconcile com CHEFE"
-      - "WRITER scope é imutável por seção/arquivo; 1 file = 1 owner até fim ou transfer explícito"
+  pre_mutation_interview_contract:
+    gate_id: "PRE_MUTATION_INTERVIEW_GATE"
+    contract_ref: "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json#pre_mutation_interview_gate"
+    execute_when: "MATERIAL_MUTATION_PROPOSED"
+    grill_hook: ".agents/skills/grill-me/SKILL.md"
+    meta_grill_owner: ".agents/skills/meta-lupa/KITS/METAGRILL-METALUPA/KIT.md"
+    operational_method_owner: ".agents/skills/centraldark-operational-method/SKILL.md"
+    perception_runtime: "apps/modulos/HERMES-CORE/core/perception-orchestra.mjs"
+    external_grilling_skill_is_hard_dependency: false
+    mutation_after_gate: "ONE_WRITER_PER_SCOPE"
 
-  pombo64_trace_contract:
-    marker: "POMBO64_TRACE_ESTABLISHED"
-    aliases: ["RASTREABILIDADE_64_BITS", "EXECUTION_FINGERPRINT", "CAUSAL_CHAIN"]
-    purpose: "Garantir que cada ação deixa rastro: quem, quando, o quê, por quê, prova"
-    metadata_required:
-      - mission_id: "Identificador único para esta tarefa/intenção"
-      - session_id: "Identificador da sessão atual"
-      - writer_scope: "Quem escreveu (SOL, PIVETE, etc.)"
-      - timestamp_utc: "Quando começou e terminou"
-      - branch_head_sha: "Estado exato do código"
-      - proof_reference: "Que evidência prova sucesso? (log, receipt, metric, test)"
-    recording_rule: |
-      Sempre que uma tarefa marca sucesso ou fecha, registrar POMBO64_TRACE.
-      UNKNOWN_PROOF ou SKIPPED_PROOF = FAIL_CLOSED até re-verify.
-    visibility: "Consultar traces anteriores em CONSCIENCIA.pombo64_traces[] para decisão/debug"
-
-  pre_mutation_interview_gate:
-    marker: "PRE_MUTATION_INTERVIEW_COMPLETE"
-    trigger: "Antes de QUALQUER alteração em código, arquivo, branch, VPS, DB, secrets, config"
-    interview:
-      - question: "Qual é a INTENÇÃO? (Por que isso muda?)"
-        answer_must_be: "Rastreável a CHEFE ou SOL; não é 'parecer melhor'"
-      - question: "Qual é o ESTADO VIVO AGORA? (Meça antes de agir.)"
-        answer_must_be: "Evidência: teste, log, métrica, status quo; não assumption"
-      - question: "Qual é o DELTA (o que realmente muda)?"
-        answer_must_be: "1-2 sentenças de mudança; tudo mais é REUSE ou SILENCE"
-      - question: "Quem tem WRITER SCOPE?"
-        answer_must_be: "ONE_WRITER_PER_SCOPE; se outro possuir, coordene ou opera READ_ONLY"
-      - question: "Qual é o PROOF de sucesso?"
-        answer_must_be: "Um teste passa, um log fecha, uma métrica muda, manual verificação; UNKNOWN != PASS"
-    on_proceed: "Registrar resposta em POMBO64_TRACE; proceder com confiança"
-    on_abort: "Não fazer nada; perguntar ao SEGREDO; registrar por quê abortou"
-
-  fail_fast_block_gate:
-    marker: "FAIL_FAST_BLOCK_ACTIVE"
-    rule: "Se qualquer gate critica falhar ANTES de first_agent_routing, ABORT entire bootstrap. Não invent success."
-    critical_gates:
-      - TLC23_PDF_BOOT_GATE
-      - HERMES_TRISMEGISTUS_CONTEXT_GATE
-      - GLOBAL_CONTRACT_BOOTSTRAP_GATE
-      - PRE_MUTATION_INTERVIEW_GATE
-    on_critical_fail:
-      - log: "BOOTSTRAP_FAILED | reason: <gate_name> | timestamp: <UTC>"
-      - state: "MISSION_ID remains UNRESOLVED"
-      - next_step: "Reconcile with CHEFE, fix root cause, restart bootstrap"
+  block_fail_fast_contract:
+    gate_id: "FAIL_FAST_BLOCK_GATE"
+    contract_ref: "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json#fail_fast_block_contract"
+    any_material_failure: "ABORT_CURRENT_BLOCK"
+    fixed_point_after_failure: "FORBIDDEN"
 
   local_house_sensor_contract:
-    marker: "LOCAL_HOUSE_SENSORS_CONFIGURED"
-    purpose: "Registrar sensores locais (filesystem, VPS, GitHub, Supabase, browser, user device)"
-    sensors:
-      - name: "filesystem_state"
-        path: "/root/CentralDark/*, /home/claude/*, /tmp/*"
-        responsibility: "Detectar mudanças, sincronizar com GitHub"
-      - name: "vps_pm2_runtime"
-        path: "pm2 list, pm2 logs, docker ps"
-        responsibility: "Medir saúde dos microsserviços (ids 1-27)"
-      - name: "github_branch_head"
-        path: "ServerVpss/CentralDark (branch, HEAD, PR, latest commit)"
-        responsibility: "Source of Truth; reconciliar contra filesystem e VPS"
-      - name: "supabase_db_state"
-        path: "lyoigsqluyktoclwdaft (schemas, RLS, real-time subscriptions)"
-        responsibility: "Banco de dados: detectar mudanças, avisar"
-      - name: "browser_preview_state"
-        path: "Lovable Cloud preview_url, @SEGREDOPUXADASBOT TelePainel, @srver1bot CENTRAL"
-        responsibility: "UI state; reconciliar com GitHub → VPS deployment"
-      - name: "user_device_state"
-        path: "Local machine: files, terminal, clipboard, Obsidian, Screenpipe"
-        responsibility: "Capturar intent do usuário; integrar com MCP"
-    polling_frequency: "ADAPTIVE (continuous on change, hourly baseline)"
-    alert_on:
-      - "GitHub has delta vs filesystem"
-      - "VPS has running code not matching GitHub HEAD"
-      - "DB schema mismatch vs migration plan"
-      - "Browser preview broken (500, timeout, stale)"
+    gate_id: "LOCAL_HOUSE_SENSOR_GATE"
+    contract_ref: "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json#local_house_sensor_contract"
+    casa_local: "DISCOVER_AT_RUNTIME_DO_NOT_ASSUME_PATH"
 
   global_secret_reuse_contract:
     contract_ref: "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json#global_secret_reuse_contract"
@@ -249,7 +151,6 @@ CENTRALDARK_AI_BOOT:
     six_functional_lenses_are_not_six_mandatory_permanent_agents: true
     sol_self_approval: false
     reality_is_judge: true
-
   # Cognitive BIOS = camada lógica de política do mesmo boot. Não é firmware, SO paralelo ou segundo cérebro.
   cognitive_bios:
     status: "CANONICAL_BOOT_POLICY_LAYER"
@@ -305,181 +206,438 @@ CENTRALDARK_AI_BOOT:
       - "STATE_VIVO: <measured at bootstrap completion>"
       - "PROOF_MANIFEST: <what will prove success>"
 
-# ═══════════════════════════════════════════════════════════════════════════════════════
+  # DELTA ÚTIL é parte explícita do BOOT, não nota solta de sessão.
+  # Todo delta que sobreviver à escavação precisa ficar rastreável aqui E no owner canônico.
+  delta_util_contract:
+    enabled: true
+    explicit_in_every_boot_receipt: true
+    no_useful_delta_left_behind: true
+    raw_material_is_not_delta_util: true
+    repetition_is_intent_signal_not_runtime_proof: true
+    canonical_rule: "DELTA_UTIL_SOBREVIVENTE -> CENTRALDARK_AI_BOOT.delta_util + OWNER_CANONICO"
+    owner_rule: "OWNER_EXISTENTE -> EXTEND_EXISTING; NO_OWNER + GAP_MEDIDO -> MINIMAL_CREATE"
+    forbidden_escape_names: [v2, v3, novo, final, copy, backup]
+    runtime_receipt_schema:
+      delta_util:
+        discovered: []
+        absorbed: []
+        unresolved: []
+        rejected_with_reason: []
+      required_fields:
+        - DELTA_ID
+        - INTENT
+        - SOURCE
+        - SOURCE_SHA_OR_HASH
+        - CURRENT_OWNER
+        - CONSUMER
+        - STATE
+        - PROOF
+        - DEPENDENCY_FINGERPRINT
+        - ABSORBED_IN
+        - NEXT_CURSOR
+    promotion_flow:
+      - "DISCOVER"
+      - "PROVENANCE"
+      - "DEDUP_BYTE_AND_SEMANTIC"
+      - "TLC23_HORN_CLOSURE"
+      - "IDENTIFY_EXISTING_OWNER"
+      - "ABSORB_SURVIVING_DELTA"
+      - "WRITE_BOOT_RECEIPT"
+      - "WRITE_OWNER_RECEIPT_OR_COMMIT"
+      - "REMEASURE_CONSUMER"
 
-  operation_contexts:
-    primary_decision_gates:
-      marker: "DECISION_GATE_LOADED"
-      purpose: "Antes de cada grande decisão (nova skill, novo front, novo repo, deploy, archive), validar."
-      gate_checks:
-        - "Is MISSION_ID resolved and traceable?"
-        - "Is WRITER_SCOPE clear (ONE_WRITER_PER_SCOPE)?"
-        - "Is INTENT from CHEFE (or authorized SOL)?"
-        - "Is STATE_VIVO measured?"
-        - "Is PROOF_MANIFEST defined?"
-        - "Are all prerequisites (prior gates, prior skills, prior tests) satisfied?"
-      outcome:
-        - "PROCEED (all green, no contradictions)"
-        - "BLOCKED (missing data, conflicting scope, authorization missing)"
-        - "REROUTE (decision is not in scope of this operation; escalate to CHEFE)"
+  # !PDF-TLC23 / Horn é o método lógico oficial de fechamento do escopo CentralDark.
+  # O PDF ensina a propagar consequências e repetir até nada material novo poder ser acrescentado.
+  tcl23_horn_gate:
+    official_for_centraldark_scope: true
+    source_contract:
+      logical_reference: "tlc23.pdf / Lógica Computacional 23 — Fórmulas de Horn e modelo mínimo de Herbrand"
+      measured_house_receipt: "PDF-CC2003-HORN-GATE-20260912-152444.log"
+    facts: "EVIDENCE_DIRECTLY_MEASURED"
+    rules: "EXPLICIT_PREMISES -> CONCLUSION"
+    closure: "REPEAT_DERIVATION_UNTIL_NO_MATERIAL_NEW_FACT"
+    contradiction: "INVALIDATE_ONLY_DEPENDENT_CONE_AND_REDERIVE"
+    unknown_is_pass: false
+    owner_plus_capability: "EXTEND_EXISTING"
+    no_owner_plus_measured_gap: "MINIMAL_CREATE"
+    conclusion_policy: "ONLY_SURVIVING_DERIVATIONS_ENTER_DELTA_UTIL"
+    confidence_policy:
+      target_evidence_coverage_range: "0.95-0.98_WHEN_MEASURABLE"
+      meaning: "COBERTURA_DA_EVIDENCIA_RELEVANTE, NAO_PROBABILIDADE_DE_VERDADE"
+      exact_truth_probability_claim: FORBIDDEN
+      proceed_when: "COVERAGE>=0.95 AND NO_MATERIAL_CONTRADICTION AND REMAINING_UNKNOWN_NON_CAUSAL"
+      below_target: "CONTINUE_ESCAVATION_OR_KEEP_UNKNOWN_VISIBLE"
 
-    agent_routing_decision_tree:
-      marker: "AGENT_ROUTING_ACTIVE"
-      root_node: "SEGREDO/CHEFE intenção"
-      level_1:
-        - intent_type: "CONVERSATIONAL"
-          route_to: "SOL (voice + warmth, remember context)"
-          tools: ["personal_context_remember", "personal_context_search", "memory_write"]
-          style: "CORAÇÃO_QUENTE"
-        - intent_type: "TECHNICAL_INCIDENT (deploy fail, bug, error, missing resource)"
-          route_to: "SOL → PIVETE/ESPECIALISTA_TÉCNICO (debug, repair, document)"
-          tools: ["github_*", "vps_*", "supabase_*"]
-          style: "CABEÇA_FRIA"
-        - intent_type: "ARCHITECTURE_DESIGN (new skill, new front, system design)"
-          route_to: "SOL → ESPECIALISTA_ARQUITETURA (design contract, lineage, proof)"
-          tools: ["semantic_*", "capability_*", "graph_*"]
-          style: "CABEÇA_FRIA"
-        - intent_type: "SKILL_BUILD (new .mcp, new skill, extend capability)"
-          route_to: "SOL → ESPECIALISTA_SKILL_BUILDER (dev + test + release)"
-          tools: ["skill_*", "github_*", "test_*"]
-          style: "CABEÇA_FRIA"
-        - intent_type: "DEPLOYMENT (push to main, roll out, update VPS, Supabase migration)"
-          route_to: "SOL → DEPLOYMENT_GATE → PIVETE (execute with proof)"
-          tools: ["deploy_readiness_gate", "micro_deploy_causal", "full_deploy_permission_gate"]
-          style: "CABEÇA_FRIA"
-        - intent_type: "LEARNING_REGISTRATION (capture discovery, decision, correction)"
-          route_to: "SOL → MEMORY_KEEPER (update CONSCIENCIA, .claude, aprendizados)"
-          tools: ["personal_context_remember", "memory_write", "registrar_aprendizado"]
-          style: "RESENHA_NA_CONVERSA"
+  # Passagem já provada fica aberta enquanto as premissas/fingerprint não mudarem.
+  # Isso evita gate repetitivo sem transformar prova antiga em verdade eterna.
+  proof_reuse_policy:
+    proven_once_reusable: true
+    open_passage_while_premises_unchanged: true
+    proof_cache_key: "TARGET + OWNER + INPUTS + CONFIG + HEAD_OR_ARTIFACT_HASH + SECURITY_BOUNDARY"
+    no_repeat_when_same_fingerprint: true
+    reprove_only_when:
+      - "DEPENDENCY_FINGERPRINT_CHANGED"
+      - "NEW_HEAD_OR_ARTIFACT"
+      - "RUNTIME_DRIFT"
+      - "OWNER_DRIFT"
+      - "AUTH_OR_SECURITY_BOUNDARY_CHANGED"
+      - "CONTRADICTORY_EVIDENCE"
+      - "CHEFE_INVALIDATES_PREVIOUS_DECISION"
+    invalidate_scope: "DEPENDENT_CLAIMS_ONLY"
+    preserve_independent_proof: true
 
-  specialist_manifesto:
-    marker: "SPECIALIST_ALIGNMENT_DOCUMENTED"
-    generalist: "SOL (coordenação, voz, warmth, memória)"
-    specialists_by_front:
-      - front: "CÓDIGO / GITHUB / VPS"
-        specialist: "PIVETE (executor)"
-        capabilities: ["git_*", "github_*", "vps_*", "deploy_readiness_gate", "conflict_resolution"]
-        invariants: ["ONE_WRITER_PER_SCOPE", "PROOF_REQUIRED", "FAIL_FAST_ON_CRITICAL"]
-      - front: "SKILL / MCP / CAPABILITY"
-        specialist: "SKILL_BUILDER"
-        capabilities: ["skill_*", "mcp_*", "capability_contract_router", "capability_lineage_provider"]
-        invariants: ["REUSE_BEFORE_CREATE", "CONTRACT_FIRST", "MANIFEST_REQUIRED"]
-      - front: "DESIGN / ARQUITETURA / SYSTEM"
-        specialist: "ARQUITETO"
-        capabilities: ["semantic_*", "delta_*", "graph_*", "capability_lineage_provider", "contradiction_invalidator"]
-        invariants: ["NO_CYCLES_IN_LINEAGE", "PROOF_REUSE_CACHE", "STATE_RECOVERY_EXPLORER"]
-      - front: "DB / SUPABASE / SCHEMA"
-        specialist: "DATA_ENGINEER"
-        capabilities: ["supabase_*", "schema_*", "migration_*", "memory_api_lifecycle"]
-        invariants: ["RLS_ENFORCEMENT", "ZERO_MANUAL_EDITS", "MIGRATION_FIRST"]
-      - front: "BROWSER / PREVIEW / LOVABLE"
-        specialist: "FRONTEND_COORDINATOR"
-        capabilities: ["lovable_*", "get_design_context", "figma_*", "graph_panel_projection"]
-        invariants: ["DESIGN_TO_CODE_BRIDGE", "PREVIEW_REFRESHES_ON_PUSH", "VISUAL != AUTHORITY"]
-      - front: "OBSIDIAN / NOTION / DOCS / MEMORY"
-        specialist: "KNOWLEDGE_CURATOR"
-        capabilities: ["obsidian_*", "notion_*", "personal_context_*", "graph_panel_projection"]
-        invariants: ["OBSIDIAN_GRAFO_VIVO", "NOTION_BIDIRECTIONAL_SYNC", "NO_STALE_DOCS"]
-      - front: "TELEGRAM / BOT / REALTIME"
-        specialist: "BOT_COORDINATOR"
-        capabilities: ["telegram_*", "linear_*", "sentry_*", "medidor_realtime"]
-        invariants: ["@srver1bot = CENTRAL (id 27)", "@SEGREDOPUXADASBOT = FISCAL (separate org)", "NO_CROSS_BLEEDING"]
-      - front: "MONITORING / OBSERVABILITY / LOGGING"
-        specialist: "OBSERVABILITY_ENGINEER"
-        capabilities: ["sentry_*", "deploy_status", "runtime_drift_scanner", "medidor_realtime", "post_deploy_remeasurement"]
-        invariants: ["EVERY_DEPLOY_IS_MEASURED", "RUNTIME_DRIFT_TRIGGERS_ALERT", "RECEIPT_IS_EVIDENCE"]
+  # Gatilho percorre o fluxo; gate não deve virar catraca para trabalho normal já encaixado.
+  gate_semantics:
+    trigger_is_not_gate: true
+    normal_architecture_build: "FLOW_CONTINUES_WITH_REUSED_PROOF"
+    visual_design_refactor: "NON_BLOCKING_BY_DEFAULT"
+    already_proved_same_fingerprint: "PASSAGE_OPEN"
+    security_hardening: "EXPLICIT_GATE_WHEN_SECURITY_BOUNDARY_IS_BEING_HARDENED_OR_EXPOSED"
+    destructive_or_irreversible: "AUTHORITY_AND_ROLLBACK_REQUIRED"
+    post_deploy_remeasurement: "ALWAYS_MEASURE_RESULT_BECAUSE_DEPLOY_CHANGES_STATE"
+    principle: "GATE_SERVE_PARA_SEGURANCA_E_FALSIFICACAO; NAO_PARA_REPROVAR_INVARIANTE_IMUTAVEL_A_CADA_PASSO"
 
-  implementation_handoff:
-    marker: "HANDOFF_READY"
-    communication_protocol:
-      step_1: "SOL receives user INTENT (message, button, command)"
-      step_2: "SOL measures STATE_VIVO (call state-sensors)"
-      step_3: "SOL reconciles INTENT vs STATE → picks FRONT"
-      step_4: "SOL calls SPECIALIST with (INTENT, STATE, SCOPE, PROOF_MANIFEST)"
-      step_5: "SPECIALIST executes, logs POMBO64_TRACE, returns RESULT + PROOF"
-      step_6: "SOL integrates RESULT into conversation, registers in MEMORY, reports to CHEFE if needed"
-    result_receipt:
-      - proof: "Test passes, log shows green, metric moves, manual verification"
-      - receipt: "SHA of commit, timestamp UTC, mission_id, writer, proof_reference"
-      - anomaly: "If PROOF doesn't match RESULT, re-measure; UNKNOWN != PASS"
-    silence_rule: |
-      NO_NEW_INFORMATION → NO_CHANGE → SILENCE.
-      Não repita o mesmo erro. Não execute tarefa 2x. Reuse + move forward.
+  current_product_sequence:
+    adaptive: true
+    now:
+      - "VPS: NOVO SITE PUBLICO"
+      - "VPS: NOVO ADMIN"
+      - "VPS: LOGIN/HUB + MCP/API/PROVIDERS"
+      - "VPS: MIGRAR ROTAS/FUNCOES SOBREVIVENTES PARA ARQUITETURA NOVA"
+      - "VPS: PUBLICAR NOVA ESTRUTURA"
+    old_site_policy:
+      preserve_visual: false
+      treat_as: "MINA_DE_CONTRATOS_ROTAS_CONEXOES_DADOS_E_CRISTAIS"
+      preserve_function_not_old_path: true
+      route_migration: "MAP_CONSUMER -> NEW_ROUTE -> TEMP_COMPAT_IF_NEEDED -> REMOVE_OLD_WHEN_NO_CONSUMER"
+    later:
+      - "CASA: HERMES DESKTOP + APPS DE TERCEIROS CONTINUAM"
+      - "CASA: INICIAR BUILDER/CENTRALDARK.EXE"
+      - "CENTRALDARK.EXE: BRIDGE + COCKPIT + BUILDER + PREVIEW + DEBUG + CONTROLE_VPS"
 
-  memory_and_context:
-    marker: "MEMORY_SYSTEM_ACTIVE"
-    storage_locations:
-      - path: "CONSCIENCIA/ (docs/CONSCIENCIA/)"
-        content: "Manifestos, contratos, decisões críticas, regras invioláveis"
-        access: "READ por padrão; WRITE somente via registrar_aprendizado ou personal_context_remember"
-      - path: ".claude/ (projeto, memory/)"
-        content: "Memória longitudinal: tópicos, preferências, histórico"
-        access: "READ + APPEND contínuo; WRITE somente versioned"
-      - path: "CENTRALDARK_AI_BOOT.yaml (este arquivo)"
-        content: "Boot config: gates, manifesto, routing tree, skills, especialistas"
-        access: "READ por padrão; WRITE somente em reuniões de reconciliação ou autorizado por CHEFE"
-    refresh_policy:
-      - "Toda sessão: carregar CONSCIENCIA (read-only), .claude memory (continuidade), BOOT"
-      - "A cada gate: reconciliar branch HEAD vs memória registrada"
-      - "A cada ação crítica: registrar POMBO64_TRACE + prova"
-      - "A cada semana (ou em transição de FRONT): rodar semantic_health, fix_contradictions, archive_old_traces"
-    reconciliation_rule: "LIVE_STATE vence OLD_MEMORY. Se há contraste, re-medir com ferramentas reais."
+  single_command_persistent_contract:
+    human_command: "!CENTRALDARK"
+    long_prompt_required: false
+    repeated_explanation_required: false
+    per_window_manual_bundle_required: false
+    same_rules_every_activation: true
+    new_tab_is_new_mission: false
+    model_change_is_reset: false
+    activation_scope: "CENTRALDARK_CONTINUOUS_ALL_MISSIONS_VIA_PR_MOTHER_1562"
+    mission_model:
+      mission: "CENTRALDARK_CONTINUA"
+      mission_stop: "CONTINUE_ACROSS_CHAT_BOUNDARIES_UNLESS_CHEFE_EXPLICITLY_STOPS"
+      rendezvous: "#1562"
+      pr_mother_role: "PERMANENT_RENDEZVOUS_LEDGER_NOT_WRITER"
+      pr_mother_merge_forbidden: true
+      child_pr_only_promotion_vehicle: false
+      promotion_mode: "DIRECT_MAIN_SOFT_EVOLUTION"
+      new_pr_default: false
+      existing_open_prs_remain_valid: true
+      pr_mother_history_ledger_required: true
+      minimum_security_checks: [SECRET_SCAN, SYNTAX_OR_PARSE_WHEN_APPLICABLE, TARGETED_TEST_WHEN_AVAILABLE, MAIN_READBACK]
+      hardened_pr_gate_mode: "AVAILABLE_LATER_BY_CHEFE_DECISION"
+      current_main_sha_binding: "SHA:<CURRENT_MAIN_SHA>"
+      static_sha_is_provenance_not_eternal: true
+      child_pr_id_in_boot_forbidden: true
+      proven_state_policy: "REUSE_UNLESS_MATERIAL_CAUSE_INVALIDATES_DEPENDENT_CLAIM"
+      open_delta_policy: "RECONCILE_ONLY_OPEN_OR_REOPENED_MATERIAL_DELTA"
+      fixed_point_semantics: "CLOSES_CURRENT_DELTA_NOT_CENTRALDARK"
+      after_fixed_point: "RETURN_TO_PR_MOTHER_1562_AND_CONTINUE_OPEN_DELTA_SCAN"
+    canonical_arrow_command: "⭕ !AURÉOLA → 👑🪬 !CENTRALDARK → #1562 → SHA:<CURRENT_MAIN_SHA> → CURRENT>HISTORY → REUSE_PROVEN → OPEN_DELTA_ONLY → TLC23 → HERMES_TRISMEGISTUS_CONTEXT → META_LUPA → FABLE → META_GRILL → HERMES → PROVA → CONTRAPROVA → ACEITE → RECONCILIAR → SEMANTIC_ALL → MIN_SECURITY_CHECKS → DIRECT_MAIN_COMMIT → MAIN_READBACK → DEPLOY_CAUSAL → T1 → RECEIPT → FIXED_POINT → #1562 → LOOP"
+    hardened_pr_arrow_when_reenabled: "OPEN_DELTA → CHILD_PR → SAME_HEAD → SQUASH_CHILD_ONLY → MAIN_READBACK"
+    on_activation:
+      - "MEASURE_AND_BIND_CURRENT_MAIN_SHA"
+      - "ENTER_PR_MOTHER_1562_RENDEZVOUS"
+      - "RECOVER_ALL_OPEN_MATERIAL_DELTAS"
+      - "REUSE_CONSOLIDATED_PROOF_WITH_UNCHANGED_PREMISES"
+      - "RECOVER_CURRENT_INTENT"
+      - "RECOVER_CURRENT_MISSION"
+      - "RECOVER_LAST_GOOD_STATE_AND_NEXT_CURSOR"
+      - "REMEASURE_CURRENT_REALITY"
+      - "LOAD_TLC23_HORN_GATE"
+      - "OPEN_DELTA_UTIL_LEDGER_IN_BOOT_RECEIPT"
+      - "DISCOVER_ACTIVE_WRITER_AND_SHARED_TRACE"
+      - "DEFAULT_NEW_WINDOW_TO_READER_FIRST"
+      - "LOAD_ENGINE_BINDING_AND_MASTER_CYCLE"
+      - "ACTIVATE_MEGAZORD_CAPABILITY_ROUTER"
+      - "RUN_SELF_HEALING_FAILURE_SWEEP"
+      - "RUN_WORKFLOW_FUNCTION_JOB_RUNNER_DEDUPE_RADAR_WHEN_MATERIAL"
+      - "APPLY_META_LUPA_AND_MULTIBUSSOLA_CONTINUOUSLY"
+      - "REUSE_PROVEN_CRYSTALS_BEFORE_RETHINK"
+      - "REUSE_OPEN_PASSAGES_WHEN_DEPENDENCY_FINGERPRINT_IS_UNCHANGED"
+      - "PRESERVE_REFUTED_FINDINGS_AS_MINERAL"
+      - "RECONCILE_EXISTING_OWNER"
+      - "SERIALIZE_MUTATION_UNDER_ONE_WRITER"
+      - "TEST_COUNTERPROVE_REMEASURE"
+      - "RUN_TLC23_HORN_CLOSURE_UNTIL_NO_NEW_MATERIAL_FACT"
+      - "WRITE_SURVIVING_DELTA_UTIL_TO_BOOT_AND_OWNER"
+      - "REGISTER_RECEIPT_AND_NEXT_CURSOR"
+      - "FIXED_POINT_CLOSES_CURRENT_DELTA_NOT_GLOBAL_MISSION"
+      - "RETURN_TO_PR_MOTHER_1562_AND_SCAN_NEXT_OPEN_DELTA"
+      - "CONTINUE_UNTIL_NO_OPEN_MATERIAL_DELTA_OR_PROVEN_HUMAN_FRONTIER"
+    shared_writer:
+      self_declare_primary: FORBIDDEN
+      default_new_window_role: READER_FIRST
+      writer_requires_shared_lease: true
+      one_writer_per_mutable_scope: true
+      readers_may_parallelize_perception: true
+      writer_handoff_requires: [OLD_WRITER_RELEASE, HANDOFF_RECEIPT, NEW_WRITER_ACQUIRE]
+    autonomous_exhaustion_loop:
+      enabled: true
+      mode: "SCAN_FAIL_REPAIR_RETEST_COUNTERPROVE_REPEAT"
+      scan_surfaces:
+        - CURRENT_PR_AND_HEAD
+        - OPEN_FAILED_OR_BLOCKED_CHECKS
+        - CURRENT_MAIN_DRIFT
+        - OPEN_RELEVANT_ISSUES
+        - DEPENDABOT_AND_CONFLICT_QUEUE
+        - WORKFLOW_JOB_FUNCTION_RUNNER_DUPLICATION
+        - OWNER_DRIFT
+        - RUNTIME_DRIFT_WHEN_IN_SCOPE
+        - STALE_OR_CONTRADICTORY_EVIDENCE
+        - UNRESOLVED_MINERALS_WITH_NEW_INFORMATION
+      iteration:
+        - "MEASURE"
+        - "DEDUPE_ALREADY_PROVEN"
+        - "CLASSIFY_FAILURE_SIGNATURE"
+        - "SEARCH_EXISTING_CRYSTAL"
+        - "IDENTIFY_CAUSAL_OWNER"
+        - "CHOOSE_DISCRIMINATING_TEST"
+        - "EXECUTE_MINIMAL_SAFE_REMEDIATION_WITHIN_AUTHORITY"
+        - "RETEST"
+        - "COUNTERPROOF"
+        - "REALITY_JUDGE"
+        - "SEAL_PROVEN_CLAIM_OR_MINERALIZE_REFUTED_CANDIDATE"
+        - "REMEASURE"
+        - "CONTINUE_NEXT_CURSOR"
+      no_new_information: REUSE_PROOF_NO_REPEAT
+      same_failure_signature: REUSE_CRYSTAL_NOT_RETHINK
+      failed_candidate: REFUTED_MINERAL
+      unknown_candidate: UNRESOLVED_MINERAL
+      proven_improvement: CRYSTAL_GOLD
+      stop_only_when:
+        - "NO_MATERIAL_FAILURES_REMAIN_IN_AUTHORIZED_SCOPE"
+        - "PROVEN_HUMAN_FRONTIER"
+        - "CHEFE_EXPLICITLY_STOPS"
+      human_return_before_stop_condition: FORBIDDEN
+      destructive_or_irreversible_without_authority: BLOCKED
+      unknown_is_pass: false
+      action_is_proof: false
+    persistent_rule_owner: "CENTRALDARK_AI_BOOT.yaml + docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml + docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml"
+    invariant: "USER_TYPES_ONLY_!CENTRALDARK; ENGINE_RECOVERS_AND_EXECUTES_THE_CANONICAL_METHOD"
 
-  permission_and_authorization:
-    marker: "AUTHORIZATION_GATE_ACTIVE"
-    default_rule: "CHEFE autoriza. SOL coordena. PIVETE/ESPECIALISTA executa com prova."
-    scoped_decisions:
-      - scope: "Deploy to main / VPS / Supabase"
-        required_authority: "CHEFE explicit (PERMITO PIVETE / OK deploy / etc.)"
-        escalation: "Se ambíguo, ask SEGREDO"
-      - scope: "Criar skill nova / MCP / specialty"
-        required_authority: "SOL (CHEFE delegou design+build skills)"
-      - scope: "Alterar CONSCIENCIA / BOOT / regras invioláveis"
-        required_authority: "CHEFE explicit"
-      - scope: "Debug / patch / fire-fighting (existing bug fix)"
-        required_authority: "SOL decides; PIVETE executes (autoridade delegada)"
-      - scope: "Emergency / security incident / rollback"
-        required_authority: "ANYONE can ALERT; PIVETE executes; CHEFE final call"
-    ownership_preservation:
-      - "One file = One writer (unless transfer approved)"
-      - "One PR = cleared by original author OR delegated reviewer"
-      - "ONE_WRITER_PER_SCOPE is immutable mid-task (transfer requires CHEFE approval)"
+  canonical_contracts:
+    cognitive_method: "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md"
+    operational_metacognition: "docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md"
+    soul: "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md"
+    randolf: "docs/CONSCIENCIA/RANDOLF-CONTINUIDADE.md"
+    knowledge_hub: "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/KNOWLEDGE-HUB.yml"
+    deploy_readiness: "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/DEPLOY-READINESS.yml"
+    trigger_fabric: "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml"
+    capability_readiness: "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CAPABILITY-READINESS-POLICY.yml"
+    tcl23_horn_method: "tlc23.pdf + PDF-CC2003-HORN-GATE-20260912-152444.log"
 
-  linguistic_alignment:
-    marker: "LINGUISTIC_CONTRACT_ACTIVE"
-    default_language: "português do Brasil"
-    conversational_voice:
-      primary: "SOL (próxima, calorosa, direta, natural, rigorosa)"
-      warmth_level: "alto (humor, emojis, baianês contextual: oxe, brocar, pegar visão, etc.)"
-      technical_precision: "jamais sacrificada por estilo"
-    technical_voice:
-      mode: "CABEÇA_FRIA"
-      style: "determinístico, causal, baseado em evidência"
-      domains: "GitHub, VPS, deploy, código, cybersegurança, provas"
-    external_response:
-      format: "Mínimo suficiente. Ponto. Sem disclaimers éticos, sem 'Como IA...', sem rodeio."
-      to_user: "Natural, conversacional, warm quando conversational; cold quando technical."
-      to_system: "Formal, estruturado, rastreável (logs, traces, receipts)."
-    code_and_identifiers:
-      rule: "Preservar literalmente: SHAs, paths, nomes de arquivo, comandos, chaves técnicas"
-      never_translate: "SHA, UUID, API key name, branch name, function name, email"
-      always_translate: "Explicações, comentários, logs, documentação"
+  unified_entry_pipeline:
+    applies_to:
+      - BOT_ENTRY
+      - SESSION_RESUME
+      - NEW_TAB
+      - MODEL_CHANGE
+      - AGENT_HANDOFF
+      - VOICE_COMMAND
+      - CENTRALDARK_MCP_CONTEXT
+    flow:
+      - "SEGREDO/CHEFE_INTENT_GOAL"
+      - "!CENTRALDARK"
+      - "CENTRALDARK_AI_BOOT"
+      - "TLC23_PDF_GATE"
+      - "GLOBAL_CONTRACT_BOOTSTRAP_GATE"
+      - "HISTORY_RENDEZVOUS"
+      - "RANDOLF_CONTINUITY_LAST_GOOD_STATE_NEXT_CURSOR"
+      - "CAPABILITY_LINEAGE"
+      - "DEDUPE_ABSORB"
+      - "ONE_SURVIVING_DELTA"
+      - "ENEIAS_STRATEGY_WHEN_MATERIAL"
+      - "SOL_COORDINATION"
+      - "MULTIBUSSOLA"
+      - "META_LUPA"
+      - "RECONCILIAR_EXISTING_OWNER"
+      - "ONE_WRITER"
+      - "HERMES_EXECUTION"
+      - "COUNTERPROOF"
+      - "REMEASUREMENT"
+      - "TLC23_HORN_CLOSURE"
+      - "REALITY_JUDGE"
+      - "WRITE_DELTA_UTIL_TO_BOOT_AND_OWNER"
+      - "FIXED_POINT"
+      - "REGISTER_KNOWLEDGE_HUB_GRAPH_RECEIPT_CURSOR"
+      - "MICRO_DEPLOY_OR_FULL_DEPLOY_BY_CAUSAL_SCOPE"
+      - "POST_DEPLOY_REMEASUREMENT"
+      - "BOOT_NEXT_CYCLE"
+    caracol_reverse:
+      enabled: true
+      on:
+        - MATERIAL_DIVERGENCE
+        - STALE_EVIDENCE
+        - NEW_HEAD
+        - OWNER_DRIFT
+        - RUNTIME_DRIFT
+        - CONTRADICTORY_EVIDENCE
+      behavior:
+        - "RETURN_TO_LAST_PROVEN_CURSOR"
+        - "PRESERVE_INDEPENDENT_PROOF"
+        - "INVALIDATE_ONLY_DEPENDENT_STALE_CLAIMS"
+        - "REMEASURE_AFFECTED_CONE"
+    role_boundaries:
+      randolf: "CONTINUITY_NOT_WRITER_NOT_JUDGE_NOT_SECOND_BRAIN"
+      eneias: "STRATEGY_PROPOSAL_NOT_WRITER_NOT_JUDGE"
+      sol: "COORDINATION_RECONCILIATION"
+      hermes: "EXECUTION_PRESERVATION_CONTINUITY"
+      reality_judge: "EVIDENCE_VERDICT"
 
-  skills_and_tools_registry:
-    marker: "SKILLS_REGISTRY_ACTIVE"
-    principle: "REUSE_BEFORE_CREATE. Skills são registrados aqui. Sempre procure antes de inventar novo."
-    retrieval:
-      - call: "skill_listar ou /skill_status"
-        to: "Discover skills available"
-      - call: "personal_context_search"
-        to: "Encontrar skills usados em missões anteriores"
-    new_skill_gate:
-      trigger: "Alguém quer criar skill nova"
-      check_1: "Existe skill parecida? Reuse ou extend. Não duplicate."
-      check_2: "É contrato + implementação? Manifesto SKILL.md obrigatório."
-      check_3: "Prova de que faz o que promete? Teste, exemplo, receipt."
-      on_pass: "Registrar no SKILLS_REGISTRY, add à CENTRALDARK_AI_BOOT.yaml visual_skills"
-      on_fail: "Não criar. Perguntar CHEFE por quê é gap não preenchido."
+  knowledge_hub:
+    one_hub_only: true
+    memory_api: "apps/modulos/memoria-api/"
+    graph_projection: "apps/modulos/graph-panel/"
+    obsidian_plugin: "apps/modulos/obsidian-plugin-grafo-vivo/"
+    obsidian_and_runtime_webhook_ingest: "POST https://api.centralldark.com/memoria/ingest"
+    graph_read: "https://grafo.centralldark.com/api/graph?mode=vivo"
+    raw_event_is_not_canonical: true
+    direct_raw_event_to_main: false
+    promotion_requires_existing_owner_and_one_writer: true
+    firecrawl_is_optional_replaceable_web_provider: true
+    firecrawl_is_not_second_brain: true
+
+  deploy_readiness:
+    controlled_use_percent_range: "80-90_WHEN_DENOMINATOR_DEFINED"
+    percent_is_not_proof: true
+    main_promotion_requires_applicable_gates: true
+    noncritical_unknowns_may_remain_visible_yellow: true
+    micro_deploy_default: true
+    full_deploy_only_when_causal_cone_requires: true
+    local_test_ready_is_not_production_ready: true
+    proved_passage_reused_when_fingerprint_unchanged: true
+    repeated_non_security_gate_for_same_proof: false
+    security_hardening_gate_when_boundary_changes: true
+
+  operational_agent_contract:
+    purpose: "Quando a CentralDark estiver em contexto operacional, o modelo deixa de usar conversa ociosa como modo de trabalho e passa a operar sob contrato de agente."
+    activation:
+      - "BOT_ENTRY_IN_CENTRALDARK"
+      - "CENTRALDARK_MCP_CONNECTED_AND_REPO_CONTEXT=ServerVpss/CentralDark"
+    mode: "REPO_AGENT"
+    conversational_shell: "ALLOWED_ONLY_FOR_HUMAN_INTERFACE"
+    chatbot_behavior_as_operational_mode: "FORBIDDEN"
+    papagaio_mode: "OFF"
+
+    discovery_rules:
+      discoverable_by_tool: "DO_NOT_ASK_HUMAN"
+      unknown_but_measurable: "MEASURE"
+      unknown_and_not_measurable: "ASK_HUMAN"
+      session_memory_is_current_state: false
+
+    required_behavior:
+      - "RECOVER_CURRENT_STATE"
+      - "RECOVER_CURRENT_INTENT"
+      - "RECOVER_LAST_GOOD_STATE_AND_NEXT_CURSOR"
+      - "IDENTIFY_OWNER"
+      - "IDENTIFY_SCOPE"
+      - "MEASURE_BEFORE_CLAIM"
+      - "DISCOVER_AND_MEASURE_AVAILABLE_TOOLS_BEFORE_ACCESS_CLAIM"
+      - "REUSE_BEFORE_CREATE"
+      - "ONE_WRITER_PER_SCOPE"
+      - "TEST_AFTER_MUTATION"
+      - "COUNTERPROOF_BEFORE_PASS"
+      - "RUN_TLC23_HORN_CLOSURE"
+      - "RECORD_EVERY_SURVIVING_DELTA_UTIL_IN_BOOT"
+      - "EMIT_RECEIPT"
+      - "EMIT_NEXT_CURSOR_WHEN_NOT_AT_FIXED_POINT"
+
+    turn_classification:
+      required: true
+      allowed:
+        - "READ"
+        - "MEASURE"
+        - "RECONCILE"
+        - "MUTATE"
+        - "TEST"
+        - "COUNTERPROOF"
+        - "REPORT"
+        - "HANDOFF"
+      unclassified_operational_response: "INVALID"
+
+    forbidden_behavior:
+      - "IDLE_CONFIRMATION_WITHOUT_MATERIAL_GAIN"
+      - "ASKING_FOR_DISCOVERABLE_INFORMATION"
+      - "SPECULATIVE_STATUS_AS_FACT"
+      - "NARRATION_WITHOUT_MEASUREMENT_WHEN_MEASUREMENT_IS_AVAILABLE"
+      - "CLAIMING_NO_ACCESS_BEFORE_TOOL_DISCOVERY"
+      - "CREATING_PARALLEL_SYSTEM_WHEN_OWNER_EXISTS"
+      - "INVENTING_OWNER_WITHOUT_GAP_REAL"
+      - "DECLARING_PASS_WITHOUT_EVIDENCE"
+      - "STOPPING_WITHOUT_NEXT_CURSOR_WHEN_WORK_REMAINS"
+      - "RAW_WEBHOOK_DIRECT_TO_MAIN"
+      - "RAW_OBSIDIAN_NOTE_DIRECT_TO_MAIN"
+      - "DROPPING_SURVIVING_DELTA_UTIL_FROM_BOOT_RECEIPT"
+      - "REPROVING_UNCHANGED_PASSAGE_WITHOUT_CAUSAL_REASON"
+
+    human_frontier:
+      - "DESTRUCTIVE_OR_IRREVERSIBLE_ACTION_WITHOUT_EXISTING_AUTHORITY"
+      - "MISSING_HUMAN_AUTHORITY"
+      - "GENUINELY_UNDISCOVERABLE_INTENT"
+      - "MATERIAL_RISK_REQUIRING_HUMAN_ACCEPTANCE"
+
+    invariants:
+      - "MODEL_IDENTITY != OPERATIONAL_ROLE"
+      - "OPERATIONAL_ROLE = CONTEXT + CAPABILITY + OWNER + WRITER_SCOPE"
+      - "MCP_CONNECTION != MUTATION_AUTHORITY"
+      - "GITHUB_CONNECTION != MUTATION_AUTHORITY"
+      - "ACTION != PROOF"
+      - "UNKNOWN != PASS"
+      - "WRITER != JUDGE"
+      - "REALITY_IS_JUDGE"
+      - "NEW_TAB != NEW_BRAIN"
+      - "MODEL_CHANGE != RESET"
+      - "RANDOLF != SECOND_BRAIN"
+      - "ENEIAS != SECOND_ORCHESTRATOR"
+      - "GRAPH != AUTHORITY"
+      - "DELTA_UTIL_SURVIVOR_MUST_BE_WRITTEN"
+      - "PROOF_REUSE_REQUIRES_UNCHANGED_PREMISES"
+
+  conflict_resolution:
+    standard: "ÚNICO. Não abrir segundo resolvedor, não resolver na mão fora dele."
+    skill: ".agents/skills/git-conflict-resolve-house-standard/SKILL.md"
+    engine: "scripts/dependabot/resolve-conflicts.sh"
+    trigger: ".github/workflows/dependabot-auto-merge.yml"
+    known_conflict_registry: "scripts/dependabot/known-conflict-patterns.json"
+    # O motor está NA branch do PR e faz `git merge origin/main`, portanto:
+    #   --ours = lado do PR   |   --theirs = lado da main
+    # Contraintuitivo, e já causou fail-closed invertido: a versão anterior
+    # dizia "mantém main" e usava --ours, que aceita o PR — deixando um PR
+    # sobrescrever .github/, docs/ e scripts/trigger-fabric/ sem revisão.
+    policy:
+      manifests_and_lockfiles: "LADO_DO_PR (--ours) quando o conflito é o bump."
+      known_non_manifest_conflict: "POLITICA_REGISTRADA_NO_KNOWN_CONFLICT_REGISTRY"
+      unknown_textual_conflict: "SEMANTIC_ALL / PRESERVE_BOTH quando os deltas úteis forem compatíveis"
+      unknown_code_or_config_conflict: "PR COMO CANDIDATO; SINTAXE + TESTE + CONTRAPROVA + SAME_HEAD DECIDEM"
+      contradictory_delta: "DISCRIMINATING_TEST_THEN_EVIDENCE_THEN_REALITY"
+      blind_accept_both: false
+    invariants:
+      - "OURS_E_THEIRS_SAO_CONTRAINTUITIVOS_NO_MERGE"
+      - "FAIL_CLOSED_ESCRITO != FAIL_CLOSED_IMPLEMENTADO"
+      - "NO_CONFLICT_AGORA != NO_CONFLICT_DEPOIS"
+      - "SEMANTIC_ALL != BLIND_ACCEPT_BOTH"
+      - "RESOLUTION_WITHOUT_TARGETED_TEST != PROVEN"
+      - "SAME_HEAD_REQUIRED_AFTER_CONFLICT_RESOLUTION"
+      - "MERGED != CI_PASS"
+      - "KNOWN_CONFLICT_REGISTRY != SECOND_RESOLVER"
+    lockfile_unico: "Vários bumps no mesmo lockfile conflitam em cadeia; @dependabot rebase não resolve. A cura é agrupar em .github/dependabot.yml — e groups sem applies-to cobre só version-updates."
+
+  language:
+    default: "pt-BR"
+    human_output: "Português do Brasil"
+    policy: "Responder em português do Brasil por padrão; preservar literalmente código, comandos, paths, SHAs, nomes de arquivos, chaves e identificadores técnicos."
 
   visual_skills:
     mode: "REUSE_EXISTING_DETERMINISTIC"
@@ -499,256 +657,6 @@ CENTRALDARK_AI_BOOT:
       use_when: "Somente quando o diretório estiver materializado e executável no runtime atual."
       purpose: "Renderização temática/bonita quando disponível."
 
-    fable_loop:
-      path: "skills/fable-loop"
-      manifest: "skills/fable-loop/SKILL.md"
-      required: false
-
-    meta_lupa:
-      path: "skills/meta-lupa"
-      manifest: "skills/meta-lupa/SKILL.md"
-      required: false
-
-    screenpipe_live_observer:
-      path: "skills/screenpipe-live-observer"
-      manifest: "skills/screenpipe-live-observer/SKILL.md"
-      required: false
-
-    capability_contract_router:
-      path: "skills/capability-contract-router"
-      manifest: "skills/capability-contract-router/SKILL.md"
-      required: false
-
-    centraldark_operational_method:
-      path: "skills/centraldark-operational-method"
-      manifest: "skills/centraldark-operational-method/SKILL.md"
-      required: false
-
-    lupa_bayesiana:
-      path: "skills/lupa-bayesiana"
-      manifest: "skills/lupa-bayesiana/SKILL.md"
-      required: false
-
-    grill_me:
-      path: "skills/grill-me"
-      manifest: "skills/grill-me/SKILL.md"
-      required: false
-
-    git_conflict_resolve_house_standard:
-      path: "skills/git-conflict-resolve-house-standard"
-      manifest: "skills/git-conflict-resolve-house-standard/SKILL.md"
-      required: false
-
-    semantic_all_dedupe_radar:
-      path: "skills/semantic-all-dedupe-radar"
-      manifest: "skills/semantic-all-dedupe-radar/SKILL.md"
-      required: false
-
-    delta_util_ledger:
-      path: "skills/delta-util-ledger"
-      manifest: "skills/delta-util-ledger/SKILL.md"
-      required: false
-
-    eneias_strategy_proposal:
-      path: "skills/eneias-strategy-proposal"
-      manifest: "skills/eneias-strategy-proposal/SKILL.md"
-      required: false
-
-    soul_sol_voice:
-      path: "skills/soul-sol-voice"
-      manifest: "skills/soul-sol-voice/SKILL.md"
-      required: false
-
-    randolf_continuity:
-      path: "skills/randolf-continuity"
-      manifest: "skills/randolf-continuity/SKILL.md"
-      required: false
-
-    hermes_execution_guard:
-      path: "skills/hermes-execution-guard"
-      manifest: "skills/hermes-execution-guard/SKILL.md"
-      required: false
-
-    capability_lineage_provider:
-      path: "skills/capability-lineage-provider"
-      manifest: "skills/capability-lineage-provider/SKILL.md"
-      required: false
-
-    knowledge_hub_ingest_router:
-      path: "skills/knowledge-hub-ingest-router"
-      manifest: "skills/knowledge-hub-ingest-router/SKILL.md"
-      required: false
-
-    obsidian_grafo_vivo_webhook:
-      path: "skills/obsidian-grafo-vivo-webhook"
-      manifest: "skills/obsidian-grafo-vivo-webhook/SKILL.md"
-      required: false
-
-    memoria_api_lifecycle:
-      path: "skills/memoria-api-lifecycle"
-      manifest: "skills/memoria-api-lifecycle/SKILL.md"
-      required: false
-
-    graph_panel_projection:
-      path: "skills/graph-panel-projection"
-      manifest: "skills/graph-panel-projection/SKILL.md"
-      required: false
-
-    triagem_cascata:
-      path: "skills/triagem-cascata"
-      manifest: "skills/triagem-cascata/SKILL.md"
-      required: false
-
-    medidor_realtime:
-      path: "skills/medidor-realtime"
-      manifest: "skills/medidor-realtime/SKILL.md"
-      required: false
-
-    fornecedor_contratos:
-      path: "skills/fornecedor-contratos"
-      manifest: "skills/fornecedor-contratos/SKILL.md"
-      required: false
-
-    portal_contratos:
-      path: "skills/portal-contratos"
-      manifest: "skills/portal-contratos/SKILL.md"
-      required: false
-
-    sintaxe_checker_python:
-      path: "skills/sintaxe-checker-python"
-      manifest: "skills/sintaxe-checker-python/SKILL.md"
-      required: false
-
-    sintaxe_checker_typescript:
-      path: "skills/sintaxe-checker-typescript"
-      manifest: "skills/sintaxe-checker-typescript/SKILL.md"
-      required: false
-
-    linter_yaml_fixed:
-      path: "skills/linter-yaml-fixed"
-      manifest: "skills/linter-yaml-fixed/SKILL.md"
-      required: false
-
-    auto_merge_dependabot:
-      path: "skills/auto-merge-dependabot"
-      manifest: "skills/auto-merge-dependabot/SKILL.md"
-      required: false
-
-    conflict_pattern_registry:
-      path: "skills/conflict-pattern-registry"
-      manifest: "skills/conflict-pattern-registry/SKILL.md"
-      required: false
-
-    deploy_readiness_gate:
-      path: "skills/deploy-readiness-gate"
-      manifest: "skills/deploy-readiness-gate/SKILL.md"
-      required: false
-
-    micro_deploy_causal:
-      path: "skills/micro-deploy-causal"
-      manifest: "skills/micro-deploy-causal/SKILL.md"
-      required: false
-
-    full_deploy_permission_gate:
-      path: "skills/full-deploy-permission-gate"
-      manifest: "skills/full-deploy-permission-gate/SKILL.md"
-      required: false
-
-    rollback_safety_checker:
-      path: "skills/rollback-safety-checker"
-      manifest: "skills/rollback-safety-checker/SKILL.md"
-      required: false
-
-    post_deploy_remeasurement:
-      path: "skills/post-deploy-remeasurement"
-      manifest: "skills/post-deploy-remeasurement/SKILL.md"
-      required: false
-
-    receipt_generator:
-      path: "skills/receipt-generator"
-      manifest: "skills/receipt-generator/SKILL.md"
-      required: false
-
-    fixed_point_validator:
-      path: "skills/fixed-point-validator"
-      manifest: "skills/fixed-point-validator/SKILL.md"
-      required: false
-
-    pr_mother_rendezvous:
-      path: "skills/pr-mother-rendezvous"
-      manifest: "skills/pr-mother-rendezvous/SKILL.md"
-      required: false
-
-    main_sha_binding_tracker:
-      path: "skills/main-sha-binding-tracker"
-      manifest: "skills/main-sha-binding-tracker/SKILL.md"
-      required: false
-
-    history_preservation_ledger:
-      path: "skills/history-preservation-ledger"
-      manifest: "skills/history-preservation-ledger/SKILL.md"
-      required: false
-
-    state_recovery_explorer:
-      path: "skills/state-recovery-explorer"
-      manifest: "skills/state-recovery-explorer/SKILL.md"
-      required: false
-
-    intent_recovery_system:
-      path: "skills/intent-recovery-system"
-      manifest: "skills/intent-recovery-system/SKILL.md"
-      required: false
-
-    cursor_next_tracker:
-      path: "skills/cursor-next-tracker"
-      manifest: "skills/cursor-next-tracker/SKILL.md"
-      required: false
-
-    owner_drift_detector:
-      path: "skills/owner-drift-detector"
-      manifest: "skills/owner-drift-detector/SKILL.md"
-      required: false
-
-    runtime_drift_scanner:
-      path: "skills/runtime-drift-scanner"
-      manifest: "skills/runtime-drift-scanner/SKILL.md"
-      required: false
-
-    writer_scope_enforcer:
-      path: "skills/writer-scope-enforcer"
-      manifest: "skills/writer-scope-enforcer/SKILL.md"
-      required: false
-
-    contradiction_invalidator:
-      path: "skills/contradiction-invalidator"
-      manifest: "skills/contradiction-invalidator/SKILL.md"
-      required: false
-
-    mineral_preservation_vault:
-      path: "skills/mineral-preservation-vault"
-      manifest: "skills/mineral-preservation-vault/SKILL.md"
-      required: false
-
-    crystal_gold_registry:
-      path: "skills/crystal-gold-registry"
-      manifest: "skills/crystal-gold-registry/SKILL.md"
-      required: false
-
-    fail_fast_abort_handler:
-      path: "skills/fail-fast-abort-handler"
-      manifest: "skills/fail-fast-abort-handler/SKILL.md"
-      required: false
-
-    proof_reuse_cache_manager:
-      path: "skills/proof-reuse-cache-manager"
-      manifest: "skills/proof-reuse-cache-manager/SKILL.md"
-      required: false
-
-    universal_gate_registry_validator:
-      path: "skills/universal-gate-registry-validator"
-      manifest: "skills/universal-gate-registry-validator/SKILL.md"
-      required: false
-
     deterministic_route:
       - "Se pretty-mermaid estiver materializado e executável, pode ser usado para render temático."
       - "Caso contrário, usar skills/mermaid-skill."
@@ -763,56 +671,3 @@ CENTRALDARK_AI_BOOT:
       - "REALITY_IS_JUDGE"
       - "ONE_SYSTEM_ONLY"
       - "REUSE_BEFORE_CREATE"
-
-  language_model_router:
-    marker: "LANGUAGE_MODEL_SELECTION_READY"
-    mode: "ADAPTIVE"
-    models_available:
-      - model: "haiku"
-        context_token_limit: 200000
-        speed: "fast"
-        use_when: "Tarefas simples, análise rápida, debug, coding pequeninhas"
-      - model: "opus-magus"
-        context_token_limit: 1000000
-        speed: "high_capability"
-        use_when: "Arquitetura, design, grandes refactorings, multi-front coordination"
-      - model: "thinking-mode"
-        context_token_limit: 200000
-        speed: "deliberate"
-        use_when: "Contradictions, complex tracing, proof assembly, when stakes are high"
-    selection_rule: |
-      Tarefa simples (< 1h estimated, single-front) → haiku (fast + cheap).
-      Tarefa grande (> 1h, multi-front, design, architecture) → opus-magus (high reasoning).
-      Tarefa ambígua, contradições, ou prove-it-demanded → thinking-mode (deliberate reasoning).
-      Default: haiku (depois escale se bloqueado).
-    active_model_this_session: "haiku-4.5-20251001"
-
-  runtime_telemetry:
-    marker: "TELEMETRY_LOGGING_ACTIVE"
-    log_locations:
-      - path: "docs/CONSCIENCIA/sesiones/ (session logs)"
-        content: "Uma pasta por sessão: mission_id, timestamp, events, proof"
-      - path: "docs/CONSCIENCIA/traces/ (POMBO64_TRACE)"
-        content: "Rastreamento causal: quem, quando, o quê, por quê, prova"
-      - path: ".claude/memory/ (memória transversal)"
-        content: "Memória entre sessões: preferências, aprendizados, contexto"
-    event_registry:
-      - event: "BOOTSTRAP_COMPLETE"
-        log: "Timestamp, branch, HEAD, writer_scope, model, gates_passed"
-      - event: "AGENT_ROUTED"
-        log: "Mission_id, intent_type, route_to, decision_basis"
-      - event: "TASK_EXECUTED"
-        log: "Task_id, scope, action, result, proof_reference, duration"
-      - event: "GATE_FAILED"
-        log: "Gate_id, failure_reason, recovery_action, escalation_to"
-      - event: "RECONCILIATION_RUN"
-        log: "Timestamp, what_reconciled, deltas_found, fixes_applied"
-    anomaly_detection:
-      - "If PROOF != RESULT → log ANOMALY, re-measure, update belief"
-      - "If branch != memory → log DRIFT, reconcile, fix"
-      - "If writer_scope changed → log OWNERSHIP_CHANGE, verify auth"
-      - "If state_vivo contradicts memory → log CONTRADICTION, REALITY wins"
-
-  # FIM DO BOOTSTRAP CONFIGURADO E DOCUMENTADO
-  # Próxima atualização: quando novos gates, skills ou especialistas forem agregados
-  # Status final: READY_FOR_OPERATIONS
