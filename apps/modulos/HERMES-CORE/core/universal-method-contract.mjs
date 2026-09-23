@@ -559,6 +559,7 @@ export function validateUniversalMethod() {
     'child_pr_only_promotion_vehicle: true',
     'SQUASH_CHILD_ONLY',
     'required_gate_ids:',
+    'HERMES_TRISMEGISTUS_CONTEXT_GATE',
     'LOAD_UNIVERSAL_GATE_REGISTRY',
     'LOAD_ROOT_CHILD_CONTRACT_LINEAGE',
     'LOAD_POMBO64_TRACE_CONTRACT',
