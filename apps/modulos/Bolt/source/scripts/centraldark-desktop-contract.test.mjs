@@ -60,9 +60,13 @@ test('cockpit projeta Linear pela rota segura do MCP sem secret no renderer', ()
 
 test('painel único projeta contas, Telegram e Cloudflare sem inventar runtime verde', () => {
   const cockpit = read(`${root}/app/components/centraldark/CentralDarkCockpitShell.client.tsx`);
+  const inventory = read(`${root}/app/components/centraldark/centraldark-hub-inventory.ts`);
 
   assert.match(cockpit, /Contas \/ Hub/);
   assert.match(cockpit, /apps\/modulos\/oauth-broker\/server\.mjs/);
+  assert.match(cockpit, /Gmail/);
+  assert.match(inventory, /id: 'GMAIL'/);
+  assert.match(inventory, /oauth-broker canônico/);
   assert.match(cockpit, /Bot Telegram/);
   assert.match(cockpit, /apps\/bot-telegram\/ \+ checker existente/);
   assert.match(cockpit, /Cloudflare \/ DNS/);
