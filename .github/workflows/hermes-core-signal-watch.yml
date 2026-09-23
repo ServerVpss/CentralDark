@@ -26,6 +26,7 @@ on:
       - codex-validate
       - lupa-conformance
       - Lupa Drift Guard
+      - 🧠 Trigger Fabric Full Package — pacote e contraprova
       - PR Title Contract
       - PR auto-review (Codex + checklist)
       - Pipeline — Telegram + Painel
@@ -44,7 +45,7 @@ jobs:
   post-job-autonomy:
     name: ⚡ Jobs concluídos → Hermes autonomia
     if: github.event_name == 'workflow_run'
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux]
     timeout-minutes: 2
     permissions:
       actions: read
@@ -367,17 +368,17 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
             });
-            const autoMerge = repoState.data.allow_auto_merge === true;
+            const nativeAutoMerge = repoState.data.allow_auto_merge === true;
             const squash = repoState.data.allow_squash_merge === true;
-            core.setOutput('auto_merge', String(autoMerge));
+            core.setOutput('native_auto_merge', String(nativeAutoMerge));
             core.setOutput('squash', String(squash));
-            core.notice(`CODERABBIT_FAST_POLICY auto_merge=${autoMerge} squash=${squash}`);
+            core.setOutput('custom_promoter', 'true');
+            core.notice(`CODERABBIT_FAST_POLICY native_auto_merge=${nativeAutoMerge} squash=${squash} custom_promoter=true`);
 
       - name: ⚡ Webhook → API GitHub → autonomia canônica
         if: >-
           steps.bridge.outputs.signal_state == 'CANDIDATE' &&
           steps.bridge.outputs.pr_number != '' &&
-          steps.repo_merge_policy.outputs.auto_merge == 'true' &&
           steps.repo_merge_policy.outputs.squash == 'true'
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         env:
@@ -395,7 +396,8 @@ jobs:
                 head_sha: process.env.HEAD_SHA || null,
                 source: 'coderabbit_signal',
                 fast_path: true,
-                auto_merge: true,
+                custom_promoter: true,
+                github_native_auto_merge_required: false,
                 squash: true,
                 merge_method: 'squash',
               },
@@ -410,4 +412,6 @@ jobs:
           echo 'CENTRALDARK_API=ADVISORY_FALLBACK_ONLY'
           echo 'MODEL_ADVISORY_IS_NOT_PROOF=1'
           echo 'MUTATION_OWNER=AUTONOMIA_PROMOCAO_EXISTENTE'
+          echo 'GITHUB_NATIVE_AUTO_MERGE_REQUIRED=0'
+          echo 'SQUASH_CAPABILITY_REQUIRED=1'
           echo 'UNKNOWN_IS_NOT_PASS=1'

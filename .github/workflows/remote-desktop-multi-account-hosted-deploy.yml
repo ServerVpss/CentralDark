@@ -1,4 +1,4 @@
-name: Remote Desktop multi-account hosted deploy
+name: Remote Desktop multi-account deploy
 
 on:
   push:
@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux]
     timeout-minutes: 10
     steps:
       - name: Checkout exact HEAD
