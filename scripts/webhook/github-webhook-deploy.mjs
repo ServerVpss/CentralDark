@@ -2,7 +2,7 @@
 /**
  * CentralDark Webhook Deploy — ATIVO
  * HMAC SHA256, so push em refs/heads/main, git pull --ff-only,
- * bloqueia tree dirty, lock anti-duplo. Secret so de arquivo local.
+ * deploy-job classifica tree dirty, lock anti-duplo. Secret so de arquivo local.
  */
 import http from 'node:http';
 import crypto from 'node:crypto';
@@ -146,27 +146,9 @@ async function handlePush(payload) {
   }
 
   const afterSha = payload.after || '';
-  try {
-    const { execSync } = await import('node:child_process');
-    const dirty = execSync('git status --porcelain=v1 --untracked-files=no', {
-      cwd: ROOT,
-      encoding: 'utf8',
-    }).trim();
-    if (dirty) {
-      releaseLock();
-      return {
-        status: 409,
-        body: { status: 'blocked', reason: 'local_dirty' },
-      };
-    }
-  } catch {
-    releaseLock();
-    return {
-      status: 500,
-      body: { status: 'failed', reason: 'preflight_error' },
-    };
-  }
 
+  // O webhook só autentica/enfileira. O deploy-job é o único juiz do estado
+  // local e distingue churn gerado de dirty material antes do git pull.
   void runDeploy(ref, afterSha)
     .then((result) => {
       const status = result.code === 0 ? 'PASS' : 'FAIL';
