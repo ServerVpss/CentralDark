@@ -1,0 +1,65 @@
+# 🧾 HERMES RUNTIME MICRODEPLOY — FIXED POINT
+
+STATUS: PROVED_IN_SCOPE
+PR_MOTHER: #1562
+MERGE_POLICY: DO_NOT_MERGE_PR_MOTHER
+REALITY_JUDGE: VPS_RUNTIME + PID + HASH + SELF_TEST
+
+## INTENÇÃO
+
+Fechar o corredor causal:
+
+main → canonical cache → Hermes runtime → restart mínimo → PID novo → estabilidade → hash read-back → receipt
+
+Sem resetar a árvore operacional, sem restart global e sem criar owner novo.
+
+## EVIDÊNCIA
+
+MAIN_READBACK=f068224eeca17210d975d9711458bb0379034e4a
+
+CANONICAL_CACHE_HEAD=6a8736b0aeb35ae5e529a60fb02a8898d1a200e0
+CANONICAL_CACHE_DIRTY=0
+
+HERMES_APP=CentralDark-Hermes
+
+OLD_PID=2653298
+NEW_PID=1500297
+STATUS=online
+STABILITY=5/5
+
+UNIVERSAL_ENGINE_METHOD_SELF_TEST=PASS
+
+LIVE_SET_HASH=79c11e0aa5f21dd050b4ceeb6c89943d9e97c47a3ba65735721d6a404c9198cf
+CACHE_SET_HASH=79c11e0aa5f21dd050b4ceeb6c89943d9e97c47a3ba65735721d6a404c9198cf
+CONTRACT_SET_HASH_MATCH=PASS
+
+OPERATIONAL_WORKTREE_RESET=false
+GLOBAL_RESTART=false
+
+## ESCOPO
+
+O conjunto de runtime Hermes validado inclui os owners canônicos já existentes:
+
+- docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/HERMES-AUTOCONFIG-RUNTIME.yml
+- apps/modulos/HERMES-CORE/core/universal-method-contract.mjs
+- apps/modulos/HERMES-CORE/prompts/hermes-core.md
+- .agents/skills/centraldark-operational-method/SKILL.md
+- docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/UNIVERSAL-ENGINE-METHOD.yml
+- docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml
+- docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml
+- docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml
+- docs/BRAIN/01-CONCEITOS/02-BANDA/BANDA_COMPASSO_GLOBAL.json
+
+## RESULTADO
+
+HERMES_RUNTIME_MICRODEPLOY=PROVED
+HERMES_RUNTIME_FIXED_POINT=TRUE
+GLOBAL_SYSTEM_FIXED_POINT=NOT_CLAIMED
+
+MERGED != DEPLOYED foi fechado neste escopo do runtime Hermes por:
+
+PID novo + estabilidade + self-test + hash do conjunto canônico.
+
+UNKNOWN != PASS
+ACTION != PROOF
+REALITY = JUDGE
