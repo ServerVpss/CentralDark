@@ -45,7 +45,8 @@ is_runtime_generated_dirty() {
   case "$1" in
     apps/modulos/status/graph-data.json|\
     apps/modulos/graph-panel/data/graph.json|\
-    apps/modulos/hub/src/generated/houseInventory.ts)
+    apps/modulos/hub/src/generated/houseInventory.ts|\
+    apps/bot-telegram/skills/config/memory.json)
       return 0
       ;;
     *)
