@@ -1,4 +1,5 @@
-// Servico MTProto — login do Telegram como usuario (gramjs)
+// Servico MTProto — conta de usuario via Telegram API/MTProto direto (gramjs)
+// Nenhum subdominio CentralDark participa do transporte Telegram.
 const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
@@ -38,7 +39,7 @@ async function newClient(sessionString = '') {
   return client;
 }
 
-app.get('/health', (_req, res) => res.json({ ok: true, service: 'telegram-mtproto', hasSession: fs.existsSync(SESSION_FILE) }));
+app.get('/health', (_req, res) => res.json({ ok: true, service: 'telegram-mtproto', transport: 'TELEGRAM_MTPROTO_DIRECT', hasSession: fs.existsSync(SESSION_FILE) }));
 
 app.get('/status', async (_req, res) => {
   try {
