@@ -2402,5 +2402,37 @@
         "partial_success_is_not_stop_condition": true
       }
     }
+  },
+  "explicit_intent_override_policy": {
+    "marker": "CENTRALDARK_EXPLICIT_INTENT_TEMPORARY_OVERRIDE",
+    "status": "CANONICAL",
+    "authority": "SEGREDO/CHEFE",
+    "purpose": "Aplicar a ordem explícita vigente sem reescrever o comportamento default persistente.",
+    "rules": {
+      "DEFAULT_BEHAVIOR_REMAINS_CANONICAL": true,
+      "EXPLICIT_CHEFE_INTENT_MAY_OVERRIDE_DEFAULT_FOR_CURRENT_SCOPE": true,
+      "EXPLICIT_OVERRIDE_IS_TEMPORARY": true,
+      "EXPLICIT_OVERRIDE_IS_SCOPED": true,
+      "EXPLICIT_OVERRIDE_IS_TRACEABLE": true,
+      "EXPLICIT_OVERRIDE_DOES_NOT_MUTATE_DEFAULT": true,
+      "EXPLICIT_OVERRIDE_DOES_NOT_CREATE_NEW_AUTHORITY": true,
+      "REASK_WHEN_SAME_INTENT_SCOPE_ALREADY_AUTHORIZED": false,
+      "NEW_INTENT_OR_SCOPE_EXPANSION_REQUIRES_NEW_AUTHORITY_EVALUATION": true,
+      "UNKNOWN_AUTHORITY_OR_SCOPE_IS_NOT_PASS": true,
+      "REALITY_IS_JUDGE": true
+    },
+    "effective_behavior_formula": "DEFAULT + CURRENT_EXPLICIT_CHEFE_INTENT + TARGET + SCOPE + LIMITS + CURRENT_REALITY -> EFFECTIVE_BEHAVIOR_FOR_CURRENT_MISSION",
+    "expires_on": [
+      "FIXED_POINT_OF_AUTHORIZED_DELTA",
+      "MISSION_SCOPE_CLOSED",
+      "CHEFE_EXPLICITLY_REVOKES",
+      "MATERIAL_SCOPE_OR_AUTHORITY_CHANGE"
+    ],
+    "examples": {
+      "new_pr_default_false": "DEFAULT_FALSE + EXPLICIT_CHILD_PR_ORDER -> CREATE_THIS_CHILD_PR_ONLY; DEFAULT_REMAINS_FALSE",
+      "mission_continuity": "CONTINUE_BY_DEFAULT + CHEFE_EXPLICITLY_STOPS -> STOP_THIS_MISSION",
+      "post_green_lock": "LOCKED_BY_DEFAULT + EXPLICIT_MUTATION_INTENT + REQUIRED_ACKS -> NEW_CANDIDATE_CYCLE; LAST_GOOD_STATE_PRESERVED",
+      "promotion": "VALID_INTENT_RECEIPT + SAME_HEAD_GREEN -> AUTO_SQUASH_IF_CLEAN_WITHOUT_REASK"
+    }
   }
 }
