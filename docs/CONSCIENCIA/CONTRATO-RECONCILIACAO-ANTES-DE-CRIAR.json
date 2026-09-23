@@ -44,7 +44,11 @@
     "obsidian",
     "logs",
     "receipts",
-    "hud"
+    "hud",
+    "repository_secrets",
+    "credentials",
+    "secret_vault",
+    "environment_secrets"
   ],
   "same_operating_contract": true,
   "physical_tool_parity_guaranteed": false,
@@ -2401,6 +2405,48 @@
         "intermediate_green_is_not_stop_condition": true,
         "partial_success_is_not_stop_condition": true
       }
+    }
+  },
+  "global_secret_reuse_contract": {
+    "marker": "CENTRALDARK_GLOBAL_SECRET_REUSE",
+    "status": "CANONICAL",
+    "scope": "GLOBAL_ALL_CURRENT_AND_FUTURE_SECRET_CONSUMERS",
+    "owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json",
+    "canonical_vault": "/root/CentralDark/secrets",
+    "repository_secrets": "REUSE_ALL_EXISTING_AND_FUTURE",
+    "repository_secret_inventory_role": "CAPABILITY_CATALOG_BY_NAME_AND_METADATA",
+    "secret_values_in_git": "FORBIDDEN",
+    "secret_names_and_metadata_in_ledger": "ALLOWED",
+    "create_new_secret_only_if": "NO_EQUIVALENT_AFTER_MEASURE",
+    "compatibility_inputs": [
+      "/root/secrets",
+      "GitHub Actions Repository Secrets",
+      "runtime environment",
+      "PM2",
+      "systemd",
+      "CI/CD"
+    ],
+    "resolution_order": [
+      "MEASURE_EXISTING_OWNER",
+      "SEARCH_REPOSITORY_SECRETS",
+      "SEARCH_CANONICAL_VAULT",
+      "SEARCH_RUNTIME_BINDINGS",
+      "REUSE_MATCHING_EXISTING",
+      "CREATE_ONLY_IF_MATERIAL_GAP_PROVEN"
+    ],
+    "invariants": {
+      "REUSE_BEFORE_CREATION": true,
+      "NO_PARALLEL_VAULT": true,
+      "ONE_SECRET_OWNER_PER_CAPABILITY": true,
+      "UNKNOWN_SECRET_VALUE_IS_NOT_MISSING_SECRET": true,
+      "DOCUMENTED_SECRET_IS_NOT_RUNTIME_BOUND": true,
+      "SAME_SECRET_MAY_FEED_MULTIPLE_CONSUMERS_WHEN_CHEFE_INTENT_REQUIRES": true,
+      "REALITY_IS_JUDGE": true
+    },
+    "compatibility_policy": {
+      "legacy_root_secrets_role": "COMPATIBILITY_INPUT_NOT_CANONICAL_OWNER",
+      "do_not_break_live_consumers": true,
+      "migrate_incrementally_with_readback": true
     }
   }
 }
