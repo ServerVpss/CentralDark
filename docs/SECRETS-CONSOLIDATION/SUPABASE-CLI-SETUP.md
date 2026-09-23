@@ -52,7 +52,7 @@ sudo -E ./scripts/extract-supabase-credentials.sh
 # Output esperado:
 # ✅ Supabase CLI autenticado
 # ✅ Credenciais extraídas
-# ✅ /root/secrets/supabase/ populado
+# ✅ /root/CentralDark/secrets/supabase/ populado
 # ✅ /root/.env gerado
 ```
 
@@ -63,7 +63,7 @@ sudo -E ./scripts/extract-supabase-credentials.sh
 ### 1. Verificar estrutura de secrets
 
 ```bash
-ls -la /root/secrets/supabase/
+ls -la /root/CentralDark/secrets/supabase/
 
 # Esperado:
 # -rw------- SUPABASE_URL
@@ -187,7 +187,7 @@ sudo ./scripts/install-supabase-cli.sh
 
 ### VPS → GitHub (Secrets)
 
-Se você adicionar novos secrets em `/root/secrets/`, sincronize com GitHub:
+Se você adicionar novos secrets em `/root/CentralDark/secrets/`, sincronize com GitHub:
 
 ```bash
 # (Será feito via script sync-secrets-github.sh em próximo passo)
@@ -293,7 +293,7 @@ GitHub (ServerVpss/CentralDark):
 
 Após validação bem-sucedida:
 
-1. ✅ **FRENTE 1 CONCLUÍDA**: Secrets consolidados em `/root/secrets/` + `/root/.env`
+1. ✅ **FRENTE 1 CONCLUÍDA**: owner canônico em `/root/CentralDark/secrets/`; `/root/.env` permanece apenas compatibilidade para consumidores legados
 2. 🟡 **FRENTE 2**: Google Drive OAuth + Hub Integration
 3. 🟡 **FRENTE 3**: Builder Audit + Contract Review
 

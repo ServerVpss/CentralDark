@@ -1,5 +1,5 @@
 #!/bin/bash
-# setup-secrets-structure.sh — Criar e popular /root/secrets/ + /root/.env
+# setup-secrets-structure.sh — Preparar cofre canônico /root/CentralDark/secrets/ + export legado /root/.env
 # Uso: GITHUB_TOKEN=xxx ./setup-secrets-structure.sh
 # Requer: GITHUB_TOKEN com acesso a secrets de ServerVpss/CentralDark
 # SEGURANÇA: Valores reais são sensíveis; executar como root em ambiente seguro
@@ -9,7 +9,7 @@ set -euo pipefail
 GITHUB_TOKEN="${GITHUB_TOKEN:-}"
 REPO_OWNER="ServerVpss"
 REPO_NAME="CentralDark"
-SECRETS_ROOT="/root/secrets"
+SECRETS_ROOT="/root/CentralDark/secrets"
 BACKUP_DIR="$SECRETS_ROOT/.backup"
 LOG_FILE="/var/log/centraldark-secrets-setup.log"
 ENV_FILE="/root/.env"
@@ -97,7 +97,7 @@ declare -A SECRET_PATHS=(
 
 # ============ EXTRAIR E SALVAR SECRETS ============
 
-log "💾 Salvando secrets em /root/secrets/..."
+log "💾 Salvando secrets em /root/CentralDark/secrets/..."
 
 # Criar arquivo .env temporário
 ENV_TEMP=$(mktemp)
@@ -151,10 +151,10 @@ log ""
 
 log "📊 Setup de estrutura completo. Aguardando valores em /root/.env"
 
-# ============ CRIAR README NO /root/secrets/ ============
+# ============ CRIAR README NO /root/CentralDark/secrets/ ============
 
 cat > "$SECRETS_ROOT/README.md" << 'EOF'
-# /root/secrets/ — Consolidação de Secrets CentralDark
+# /root/CentralDark/secrets/ — Cofre canônico de Secrets CentralDark
 
 ## Estrutura
 - `github/` — GitHub Actions tokens
@@ -168,13 +168,13 @@ cat > "$SECRETS_ROOT/README.md" << 'EOF'
 
 ## Permissões
 ```bash
-chmod 700 /root/secrets
-chmod 600 /root/secrets/*
+chmod 700 /root/CentralDark/secrets
+chmod 600 /root/CentralDark/secrets/*
 chmod 600 /root/.env
 ```
 
 ## Uso
-- Valores reais vão em `/root/.env` (não versionado)
+- Owner canônico: `/root/CentralDark/secrets/`; `/root/.env` é somente export de compatibilidade quando algum consumidor legado exigir
 - Este diretório é apenas armazenamento estruturado
 - Sincronização via `sync-secrets-github.sh` (metadados apenas)
 
