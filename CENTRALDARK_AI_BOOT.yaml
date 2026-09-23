@@ -379,6 +379,35 @@ CENTRALDARK_AI_BOOT:
     persistent_rule_owner: "CENTRALDARK_AI_BOOT.yaml + docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml + docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml"
     invariant: "USER_TYPES_ONLY_!CENTRALDARK; ENGINE_RECOVERS_AND_EXECUTES_THE_CANONICAL_METHOD"
 
+  explicit_intent_override_policy:
+    marker: "CENTRALDARK_EXPLICIT_INTENT_TEMPORARY_OVERRIDE"
+    authority: "SEGREDO/CHEFE"
+    default_behavior_remains_canonical: true
+    explicit_chefe_intent_may_override_default_for_current_scope: true
+    explicit_override_is_temporary: true
+    explicit_override_is_scoped: true
+    explicit_override_is_traceable: true
+    explicit_override_does_not_mutate_default: true
+    explicit_override_does_not_create_new_authority: true
+    reask_when_same_intent_scope_already_authorized: false
+    new_intent_or_scope_expansion_requires_new_authority_evaluation: true
+    unknown_authority_or_scope_is_not_pass: true
+    reality_is_judge: true
+    effective_behavior_formula: "DEFAULT + CURRENT_EXPLICIT_CHEFE_INTENT + TARGET + SCOPE + LIMITS + CURRENT_REALITY -> EFFECTIVE_BEHAVIOR_FOR_CURRENT_MISSION"
+    expires_on:
+      - "FIXED_POINT_OF_AUTHORIZED_DELTA"
+      - "MISSION_SCOPE_CLOSED"
+      - "CHEFE_EXPLICITLY_REVOKES"
+      - "MATERIAL_SCOPE_OR_AUTHORITY_CHANGE"
+    promotion_binding:
+      intent_receipt_required: true
+      valid_same_scope_receipt_means_reask: false
+      same_head_green_action: "AUTO_SQUASH_IF_CLEAN"
+      promoter_owner: "scripts/github-autonomia-promocao.mjs"
+      workflow_owner: ".github/workflows/autonomia-promocao.yml"
+      dependabot_role: "SPECIALIZED_DEPENDENCY_SENSOR_NOT_AUTHORITY"
+      coderabbit_role: "CONSULTATIVE_REVIEW_SENSOR_NOT_AUTHORITY"
+
   canonical_contracts:
     cognitive_method: "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md"
     operational_metacognition: "docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md"
