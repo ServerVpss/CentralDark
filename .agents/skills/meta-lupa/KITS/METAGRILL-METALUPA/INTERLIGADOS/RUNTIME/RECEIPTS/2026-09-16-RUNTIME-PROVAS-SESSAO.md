@@ -3,7 +3,8 @@
 **OWNER:** `.agents/skills/meta-lupa/SKILL.md`  
 **PR:** `#1550 · NARRATED_TOOL_CALL_TRACE`  
 **ADAPTER:** `../TOOL-CALL-RECEIPT-ADAPTER.md`  
-**STATUS:** receipt source para cristalização runtime. Runtime real só é PASS quando escrito/medido em `/root/CentralDark`.
+**STATUS:** receipt source para cristalização runtime. Runtime real só é PASS quando escrito/medido em `/root/CentralDark`.  
+**TRIGGER:** `!CENTRALDARK`
 
 ---
 
