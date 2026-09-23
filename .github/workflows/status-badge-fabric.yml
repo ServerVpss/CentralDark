@@ -36,6 +36,13 @@ jobs:
       - name: Gerar Badge Fabric determinística
         run: python3 scripts/ci/generate_status_badges.py
 
+      - name: Validar cobertura total de workflows
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/ci/verify_status_badge_coverage.test.py
+          python3 scripts/ci/verify_status_badge_coverage.py
+
       - name: Validar invariantes anti-falso-verde
         shell: bash
         run: |
