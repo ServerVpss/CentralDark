@@ -145,6 +145,7 @@ async function handlePush(payload) {
     return { status: 409, body: { status: 'busy', reason: 'lock_held' } };
   }
 
+  const afterSha = payload.after || '';
   try {
     const { execSync } = await import('node:child_process');
     const dirty = execSync('git status --porcelain=v1 --untracked-files=no', {
@@ -152,26 +153,37 @@ async function handlePush(payload) {
       encoding: 'utf8',
     }).trim();
     if (dirty) {
+      releaseLock();
       return {
         status: 409,
         body: { status: 'blocked', reason: 'local_dirty' },
       };
     }
-
-    const result = await runDeploy(ref, payload.after);
-    if (result.code === 0) {
-      return {
-        status: 200,
-        body: { status: 'deployed', sha: payload.after, mode: 'ff-only+repo-flock' },
-      };
-    }
+  } catch {
+    releaseLock();
     return {
       status: 500,
-      body: { status: 'failed', code: result.code },
+      body: { status: 'failed', reason: 'preflight_error' },
     };
-  } finally {
-    releaseLock();
   }
+
+  void runDeploy(ref, afterSha)
+    .then((result) => {
+      const status = result.code === 0 ? 'PASS' : 'FAIL';
+      const log = result.code === 0 ? console.log : console.error;
+      log(`[deploy] WORKER_RESULT status=${status} sha=${afterSha} code=${result.code}`);
+    })
+    .catch((error) => {
+      console.error(`[deploy] WORKER_RESULT status=FAIL sha=${afterSha} error=${error?.code || error?.name || 'UNKNOWN'}`);
+    })
+    .finally(() => {
+      releaseLock();
+    });
+
+  return {
+    status: 202,
+    body: { status: 'accepted', sha: afterSha, mode: 'hmac+async+ff-only+repo-flock' },
+  };
 }
 
 function readBody(req) {
@@ -199,7 +211,7 @@ const server = http.createServer(async (req, res) => {
     json(res, 200, {
       status: 'ACTIVE',
       service: 'centraldark-webhook-deploy',
-      mode: 'hmac+ff-only+repo-flock',
+      mode: 'hmac+async+ff-only+repo-flock',
       mutatesRepository: true,
       timestamp: new Date().toISOString(),
     });
