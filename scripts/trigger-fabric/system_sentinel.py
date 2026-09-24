@@ -213,7 +213,22 @@ def build_fixed_route_receipt(
     fingerprint = None if missing else sha256_text(
         json.dumps(identity, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
     )
-    previous = current_state.get("fixed_route") if isinstance(current_state.get("fixed_route"), dict) else {}
+    route_scope_key = sha256_text(json.dumps(
+        {
+            "target": identity.get("target", ""),
+            "owner": identity.get("owner", ""),
+            "security_boundary": identity.get("security_boundary", ""),
+        },
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    ))[:24]
+    fixed_routes = current_state.get("fixed_routes")
+    if not isinstance(fixed_routes, dict):
+        fixed_routes = {}
+    previous = fixed_routes.get(route_scope_key)
+    if not isinstance(previous, dict):
+        previous = {}
     previous_fingerprint = previous.get("dependency_fingerprint")
     requested_state = str(raw.get("state") or "STATE_CHANGED").upper()
     local_fixed_point = requested_state in {"FIXED_POINT", "FIXED_POINT_LOCAL", "PASS"}
@@ -253,6 +268,7 @@ def build_fixed_route_receipt(
         "route_is_authority": False,
         "same_fingerprint_no_full_replay": True,
         "minimal_liveness_remeasure_still_required": True,
+        "route_scope_key": route_scope_key,
         "dependency_fingerprint": fingerprint,
         "fingerprint_identity": identity,
         "fingerprint_missing": missing,
@@ -272,13 +288,18 @@ def build_fixed_route_receipt(
         current_state["updated_at"] = now_utc()
         current_state["last_route_receipt"] = receipt
         if proof_ready:
-            current_state["fixed_route"] = {
+            fixed_routes[route_scope_key] = {
                 "proof_state": "PROVEN",
                 "dependency_fingerprint": fingerprint,
                 "identity": identity,
                 "evidence_ref": raw.get("evidence_ref"),
                 "next_cursor": receipt["next_cursor"],
                 "sealed_at": now_utc(),
+            }
+            current_state["fixed_routes"] = fixed_routes
+            current_state["fixed_route"] = {
+                "route_scope_key": route_scope_key,
+                **fixed_routes[route_scope_key],
             }
         atomic_write_json(STATE_PATH, current_state)
     return receipt
@@ -405,24 +426,22 @@ def self_test() -> int:
         "next_cursor": "WAIT_FOR_MATERIAL_DELTA",
     }
     sealed = build_fixed_route_receipt(route_base, state={}, persist=False)
-    reused = build_fixed_route_receipt(
-        {**route_base, "state": "STATE_CHANGED"},
-        state={
-            "fixed_route": {
+    sealed_state = {
+        "fixed_routes": {
+            sealed["route_scope_key"]: {
                 "proof_state": "PROVEN",
                 "dependency_fingerprint": sealed["dependency_fingerprint"],
             }
-        },
+        }
+    }
+    reused = build_fixed_route_receipt(
+        {**route_base, "state": "STATE_CHANGED"},
+        state=sealed_state,
         persist=False,
     )
     changed = build_fixed_route_receipt(
         {**route_base, "inputs_hash": "e" * 64, "state": "STATE_CHANGED"},
-        state={
-            "fixed_route": {
-                "proof_state": "PROVEN",
-                "dependency_fingerprint": sealed["dependency_fingerprint"],
-            }
-        },
+        state=sealed_state,
         persist=False,
     )
     cases["fixed_route_order"] = sealed["route"] == FIXED_ROUTE
