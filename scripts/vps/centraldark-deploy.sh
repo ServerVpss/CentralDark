@@ -289,6 +289,23 @@ normalize_runtime_churn() {
   find apps/modulos/grupo-evolucao/missions -maxdepth 1 -type f -name "drift-*.json" -delete 2>/dev/null || true
   log "RUNTIME_CHURN_NORMALIZED=PASS"
 }
+settle_runtime_churn() {
+  local attempt material
+  for attempt in 1 2 3 4 5; do
+    normalize_runtime_churn || return 1
+    sleep 2
+    material="$(contar_sujos_rastreados_material)"
+    log "RUNTIME_SETTLE_ATTEMPT=$attempt MATERIAL_DIRTY=$material KNOWN_CHURN=$(contar_runtime_churn)"
+    if [[ "$material" -eq 0 ]]; then
+      log "RUNTIME_SETTLE=PASS attempts=$attempt"
+      return 0
+    fi
+    log "RUNTIME_SETTLE_MATERIAL_PATHS_BEGIN"
+    listar_sujos_rastreados_material | sed "s/^/  /"
+    log "RUNTIME_SETTLE_MATERIAL_PATHS_END"
+  done
+  return 1
+}
 proof_guard_paths_exist_on_ref() {
   local ref="$1"
   local required=(
@@ -550,7 +567,7 @@ else
 fi
 
 # ─── T1 / contraprova ─────────────────────────────────────────────────
-normalize_runtime_churn || { rollback; die "RUNTIME_CHURN_NORMALIZE_FAILED" 17; }
+settle_runtime_churn || { rollback; die "RUNTIME_CHURN_SETTLE_FAILED" 17; }
 log "=== T1 (depois) ==="
 FINAL_HEAD="$(git rev-parse HEAD)"
 FINAL_REMOTE="$(git rev-parse "origin/$BRANCH")"
