@@ -12,6 +12,7 @@ owners:
   - "apps/bot-telegram/skills/core/consciousness.cjs"
   - "apps/bot-telegram/unified-bot.cjs"
   - "apps/modulos/hub"
+  - "apps/modulos/obsidian-plugin-grafo-vivo"
   - "docs/BRAIN/08-ARTEFATOS-VISUAIS"
   - "docs/BRAIN/09-ARTEFATOS"
 ---
@@ -112,6 +113,9 @@ Links: [[CentralDark]], [[BRAIN]], [[Artifact Ingest]]
 - Telegram: documentos, fotos, vídeos, textos e arquivos devem cair no mesmo pipeline.
 - Hub/API: upload e ingestão devem chamar o mesmo owner, sem rota paralela.
 - Google Drive: arquivos vindos do Drive entram como `source=google-drive` quando o conector autorizado fornecer bytes/metadata.
+- Obsidian/Grafo Vivo: notas e artefatos entram como candidatos pelo Hub; o plugin reflete manifest/graph e pode fazer auto-sync.
+- Local REST API/MCP do Obsidian: ponte local autenticada para abrir, buscar e patchar notas, nunca autoridade de promoção sozinha.
+- Kanban: interface de fluxo; mover card não equivale a deploy nem green.
 - CI/CD: artefatos promovidos viram conhecimento versionado apenas depois de gates.
 - VPS: mantém a cópia viva, indexável e consultável.
 
@@ -125,6 +129,8 @@ NO_AUTO_EXECUTION=true
 HUB_ROUTE_REUSES_ARTIFACT_INGEST=true
 BOT_ROUTE_REUSES_ARTIFACT_INGEST=true
 GOOGLE_DRIVE_ROUTE_REUSES_ARTIFACT_INGEST=true
+OBSIDIAN_PLUGIN_REUSES_MEMORIA_INGEST=true
+LOCAL_REST_API_TOKEN_LOCAL_ONLY=true
 CI_CD_DECIDES_PROMOTION=true
 ```
 
@@ -133,3 +139,47 @@ CI_CD_DECIDES_PROMOTION=true
 > O que a humanidade aprende não pode morrer na janela de uma IA.
 
 > Tudo que entra é preservado, indexado, provado e ligado. Nada executa sem autorização. Nada vira verdade sem prova.
+
+## 10. Rota Obsidian + Kanban + CI/CD
+
+```text
+Telegram/Bot/Drive/API/Obsidian
+→ /memoria/ingest
+→ CANDIDATE_EVENT
+→ hash + metadata + horário BRT + horário VPS
+→ BRAIN manifest
+→ CI/CD valida contrato
+→ receipt
+→ plugin Obsidian/Grafo Vivo reflete estado
+→ Local REST API/MCP pode abrir/buscar/patchar nota localmente
+→ alteração local volta por autosync
+→ novo CANDIDATE_EVENT
+```
+
+Cadeados:
+
+```text
+LOCAL_REST_API_IS_LOCAL_BRIDGE=true
+LOCAL_REST_API_TOKEN_LOCAL_ONLY=true
+NO_TOKEN_IN_REPO=true
+NO_PUBLIC_EXPOSED_OBSIDIAN_API=true
+PATCH_NOTE != PROMOTE_TRUTH
+KANBAN_MOVE != DEPLOY
+KANBAN_CARD != CI_GREEN
+OBSIDIAN_LOCAL_STATE != VPS_RUNTIME_STATE
+```
+
+## 11. Estado atual
+
+```text
+SOURCE_UPDATED=true
+GITHUB_CI_STATUS=QUEUED_OR_PENDING
+LOCAL_VPS_BUILD=BLOCKED_GIT_AUTH_ROUTE
+RUNTIME_GREEN=false
+```
+
+## 12. NEXT_CURSOR
+
+```text
+CI_EVENT → REMEASURE_HEAD_7c786a745fad55644a7542ae295c81ffa7a3ab51 → GREG_VERDICT → DEX_GATE → RUNTIME_BUILD_WITH_AUTHORIZED_FETCH_OR_CONNECTOR_MATERIALIZATION
+```
