@@ -171,8 +171,38 @@ listar_sujos_rastreados() { git status --porcelain=v1 --untracked-files=no || tr
 contar_sujos_rastreados() { listar_sujos_rastreados | sed '/^$/d' | wc -l | tr -d ' '; }
 contar_nao_rastreados() { git ls-files --others --exclude-standard -z | tr '\0' '\n' | sed '/^$/d' | wc -l | tr -d ' '; }
 
+is_runtime_churn_path() {
+  local candidate="$1" allowed
+  for allowed in "${RUNTIME_CHURN_ALLOWLIST[@]}"; do
+    [[ "$candidate" == "$allowed" ]] && return 0
+  done
+  return 1
+}
+
+listar_sujos_rastreados_material() {
+  local path
+  while IFS= read -r path; do
+    [[ -n "$path" ]] || continue
+    is_runtime_churn_path "$path" && continue
+    printf '%s\n' "$path"
+  done < <(git diff --name-only HEAD --)
+}
+
+contar_sujos_rastreados_material() {
+  listar_sujos_rastreados_material | sed '/^$/d' | wc -l | tr -d ' '
+}
+
+contar_runtime_churn() {
+  local path count=0
+  while IFS= read -r path; do
+    [[ -n "$path" ]] || continue
+    is_runtime_churn_path "$path" && count=$((count + 1))
+  done < <(git diff --name-only HEAD --)
+  printf '%s\n' "$count"
+}
+
 contar_sujos_deploy() {
-  if [[ "$TOTAL" -eq 1 ]]; then contar_sujos_rastreados; else contar_sujos; fi
+  if [[ "$TOTAL" -eq 1 ]]; then contar_sujos_rastreados_material; else contar_sujos; fi
 }
 
 proteger_nao_rastreados_contra_alvo() {
@@ -529,6 +559,7 @@ FINAL_UNTRACKED="$(contar_nao_rastreados)"
 log "FINAL_HEAD=$FINAL_HEAD"
 log "FINAL_REMOTE=$FINAL_REMOTE"
 log "FINAL_DIRTY=$FINAL_DIRTY"
+[[ "$TOTAL" -eq 1 ]] && log "FINAL_RUNTIME_CHURN_CLASSIFIED=$(contar_runtime_churn)"
 log "FINAL_UNTRACKED_PRESERVED=$FINAL_UNTRACKED"
 [[ "$FINAL_HEAD" == "$FINAL_REMOTE" && "$FINAL_DIRTY" -eq 0 ]] \
   || { rollback; die "sync não atingiu ponto fixo source" 15; }
