@@ -179,7 +179,20 @@ CENTRALDARK_AI_BOOT:
     hud:
       required: true
       phase_order: [HUD_FIRST, HUD_UPDATE]
+      mental_compass:
+        🎯_RUMO: "objetivo vigente + intenção do CHEFE"
+        📍_AGORA: "estado atual medido (GitHub + Casa + VPS + runtime)"
+        🧵_FIO: "missão principal aberta"
+        🌿_RAMO: "investigação lateral ou delta útil em progresso"
+        ↩️_VOLTA: "retorno explícito ao fio principal após ramo"
+        ➡️_NEXT: "próximo passo causal determinístico"
       fields:
+        - "🎯 RUMO"
+        - "📍 AGORA"
+        - "🧵 FIO"
+        - "🌿 RAMO"
+        - "↩️ VOLTA"
+        - "➡️ NEXT"
         - COGNITIVE_BIOS_STATUS
         - COGNITIVE_MODE
         - ACTIVE_FRONTS
@@ -193,6 +206,8 @@ CENTRALDARK_AI_BOOT:
         - FIXED_POINT_STATE
       unknown_fields_remain_visible: true
       source_of_truth: "CURRENT_RUNTIME_PLUS_CANONICAL_CONTRACT"
+      inheritance_rule: "HERMES + CASA + VPS + todos_agentes herdam este contrato ao carregar CENTRALDARK_AI_BOOT"
+      no_parallel_hud: "HUD_V2 ou SECOND_HUD_OWNER = FORBIDDEN"
 
   allow_first_agent_routing:
     marker: "ALL_GATES_PASSED | BOOTSTRAP_COMPLETE"
