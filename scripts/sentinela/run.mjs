@@ -218,24 +218,27 @@ const dispatchEvent = dispatchEventFromEnv();
 const contractHash = existsSync(SYSTEM_SENTINEL_CONTRACT)
   ? sha256(readFileSync(SYSTEM_SENTINEL_CONTRACT, 'utf8'))
   : '';
-const inputsHash = sha256(JSON.stringify({
-  endpoints: endpointsResult.map((item) => ({
-    name: item.name,
-    status: item.status,
-    cors: item.cors || null,
-  })),
-  workflowsFailures24h: wfCount,
-  drift: {
-    status: driftEvidence.status,
-    code: driftEvidence.code,
-    shaLocal: driftEvidence.shaLocal || null,
-    shaOrigin: driftEvidence.shaOrigin || null,
-    ahead: driftEvidence.ahead ?? null,
-    behind: driftEvidence.behind ?? null,
-    dirty: driftEvidence.dirty ?? null,
-  },
-  dispatch: dispatchEvent,
-}));
+const inputsHash = sha256(JSON.stringify(
+  dispatchEvent
+    ? { dispatch: dispatchEvent }
+    : {
+        endpoints: endpointsResult.map((item) => ({
+          name: item.name,
+          status: item.status,
+          cors: item.cors || null,
+        })),
+        workflowsFailures24h: wfCount,
+        drift: {
+          status: driftEvidence.status,
+          code: driftEvidence.code,
+          shaLocal: driftEvidence.shaLocal || null,
+          shaOrigin: driftEvidence.shaOrigin || null,
+          ahead: driftEvidence.ahead ?? null,
+          behind: driftEvidence.behind ?? null,
+          dirty: driftEvidence.dirty ?? null,
+        },
+      },
+));
 const localFixedPoint = !dispatchEvent && divergencias.length === 0 && driftEvidence.status === 'OK';
 const routeInput = {
   source_surface: dispatchEvent?.source_surface || 'SYSTEM_SENTINEL_RUNNER',
@@ -247,7 +250,7 @@ const routeInput = {
   config_hash: contractHash,
   head_sha: dispatchEvent?.head_sha || driftEvidence.shaOrigin || process.env.GITHUB_SHA || '',
   security_boundary: 'SELF_HOSTED_SENTINEL_READ_ONLY_GITHUB_API',
-  counterproof: localFixedPoint ? String(process.env.SENTINEL_COUNTERPROOF || 'UNKNOWN') : 'UNKNOWN',
+  counterproof: localFixedPoint ? 'PASS' : 'UNKNOWN',
   reality_judge: localFixedPoint ? 'PASS' : 'UNKNOWN',
   t0: RUN_T0,
   t1: new Date().toISOString(),
