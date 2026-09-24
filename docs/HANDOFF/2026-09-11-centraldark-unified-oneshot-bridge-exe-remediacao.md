@@ -256,3 +256,79 @@ EXISTING_OWNER_REUSED=true
 TLS_PROBE_REMEDIATION_FIXED_POINT=false
 GLOBAL_FIXED_POINT=false
 ```
+
+
+## 🧾 T1 ADICIONAL — 2026-09-24 · Bridge → Painel Admin público
+
+Fonte: observação visual do CHEFE na mesma Casa/Bridge após o T1 OAuth acima.
+
+### Cadeia observada
+
+```text
+CentralDark Bridge · One Shot
+→ [CASA] OPENED=E:\CentralDark
+→ [OPEN_URL] https://mcp.centralldark.com/admin
+→ MCP CentralDark · Painel Admin carregado
+```
+
+No painel público carregado foram observados, naquele instante:
+
+```text
+ADMIN_PANEL_PUBLIC_ROUTE=PASS_OBSERVED
+ADMIN_PANEL_URL=https://mcp.centralldark.com/admin
+ADMIN_PANEL_HEALTH_DISPLAY=100_PERCENT_HEALTHY
+ADMIN_PANEL_ERRORS_DISPLAY=0
+ADMIN_PANEL_WARNS_DISPLAY=0
+ADMIN_PANEL_REQUESTS_DISPLAY=41
+ADMIN_PANEL_TOOLS_DISPLAY=125
+
+DEPENDENCY_mcp_catalog=OK_DISPLAYED
+DEPENDENCY_oauth=OK_DISPLAYED
+DEPENDENCY_telegram_bot=OK_DISPLAYED
+DEPENDENCY_github_api=OK_DISPLAYED
+DEPENDENCY_hub_mission_consumer=OK_DISPLAYED
+DEPENDENCY_sse=OK_DISPLAYED
+DEPENDENCY_disk_logs=OK_DISPLAYED
+DEPENDENCY_memoria=OK_DISPLAYED
+DEPENDENCY_loadavg=OK_DISPLAYED
+```
+
+### Contraprova / escopo
+
+Os números do painel são **estado exibido pela superfície Admin naquele instante**. Eles não substituem medição independente de cada dependência e não transformam UI em autoridade absoluta.
+
+A mesma execução do Bridge continuou exibindo:
+
+```text
+BRIDGE_SIMPLE_TLS_PROBE=FAIL_OBSERVED
+```
+
+Portanto:
+
+```text
+ADMIN_PANEL_PUBLIC_ROUTE=PASS_OBSERVED
+MCP_ADMIN_SURFACE_REACHABLE=true_by_observation
+BRIDGE_SIMPLE_TLS_PROBE=FAIL_OBSERVED
+TLS_PROBE_ROOT_CAUSE=UNKNOWN
+TLS_PROBE_FAIL_DOES_NOT_IMPLY_ADMIN_OFFLINE=true
+```
+
+O valor `TOOLS=125` exibido no Painel Admin e o `MCP_TOOL_COUNT=112` retornado no `tools/list` autenticado são métricas/superfícies diferentes até prova de equivalência. Não reconciliar por inferência.
+
+### Estado acumulado do mesmo Bridge/owner
+
+```text
+OAUTH_SEGREDO_CURRENT_E2E=PASS
+OAUTH_FULANO_HISTORICAL_T1=PASS
+DPAPI_CURRENT_USER_OBSERVED=true
+MCP_AUTHENTICATED_E2E=PASS
+MCP_TOOL_COUNT_AUTHENTICATED_SEGREDO=112
+ADMIN_PANEL_PUBLIC_ROUTE=PASS_OBSERVED
+ADMIN_PANEL_TOOLS_DISPLAY=125
+CASA_E_DRIVE_OPENED=true
+NO_PARALLEL_RUNTIME_CREATED=true
+TLS_PROBE_REMEDIATION_FIXED_POINT=false
+GLOBAL_FIXED_POINT=false
+```
+
+`UNKNOWN != PASS`.
