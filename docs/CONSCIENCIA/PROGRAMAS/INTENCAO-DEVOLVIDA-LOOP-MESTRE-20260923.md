@@ -431,17 +431,18 @@ INTENCAO_AUTORIZADA_DO_CHEFE
 Papéis no TIK-TAK:
 
 ```text
-GEOFF = IMPLEMENTAÇÃO_ESTRATÉGICA + SIMPLIFICAÇÃO
+GEOFF → AUTOMATION_FACTORY
+        = IMPLEMENTAÇÃO_ESTRATÉGICA + SIMPLIFICAÇÃO
         → encontra menor implementação e owner reutilizável; não é novo executor/authority
-IAN   = CETICISMO_ESTRUTURAL
+IAN   → STRUCTURAL_SKEPTIC
         → procura falhas, invariantes e edge cases
-GREG  = OBSERVABILIDADE + PROVA
+GREG  → OBSERVABILITY_PROOF
         → GREG_VERDICT_REQUIRED_BEFORE_GREEN
-DEX   = GOVERNANÇA_DE_ESTADO
+DEX   → HUMAN_AGENT_COORDINATION
         → DEX_APPROVAL_REQUIRED_FOR_CRITICAL_DELTA
-        → aprovação de estado, não expansão de autoridade humana
-HERMES = EXECUTOR
-REALIDADE = JUIZ
+        → valida escopo, Writer, handoff e coordenação; não expande autoridade humana
+HERMES → EXECUTION_ROLE
+REALIDADE → REALITY_JUDGE
 ```
 
 Cadeados:
