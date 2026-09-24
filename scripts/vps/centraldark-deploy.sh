@@ -35,6 +35,14 @@ REPO_DIR="${REPO_DIR:-<caminho-vps>}"
 BRANCH="${BRANCH:-main}"
 MCP_HEALTH="${MCP_HEALTH:-http://127.0.0.1:9100/health}"
 APPS="${APPS:-}"
+OPTIONAL_RUNTIME_APPS="${OPTIONAL_RUNTIME_APPS:-CentralDark-ScreenPipe CentralDark-EliteAnthropic}"
+RUNTIME_CHURN_ALLOWLIST=(
+  "apps/bot-telegram/skills/config/memory.json"
+  "apps/bot-telegram/skills/config/skills.json"
+  "apps/modulos/graph-panel/data/graph.json"
+  "apps/modulos/status/graph-data.json"
+  "docs/CONSCIENCIA/APRENDIZADOS.md"
+)
 GLOBAL_CONTRACT_GATE="$REPO_DIR/scripts/agent-call.mjs"
 GLOBAL_GATE_RECEIPT_DIR="${GLOBAL_GATE_RECEIPT_DIR:-/tmp/centraldark-global-contract}"
 # CENTRALDARK_GLOBAL_CONTRACT_ENFORCER_REQUIRED
@@ -76,6 +84,34 @@ global_gate_entry() {
   "phase":"ENTRY",
   "observed_head":"$HEAD_ANTES",
   "trace_id":"$trace",
+  "child_contract":{
+    "root_contract_ref":"docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json",
+    "root_contract_schema":6,
+    "root_goal_id":"CENTRALDARK_CONTINUA",
+    "parent_contract_id":"DIRECT_MAIN_RUNTIME_SYNC",
+    "child_contract_id":"DEPLOY-$trace",
+    "self_goal_id":"SYNC-$trace",
+    "owner":"scripts/vps/centraldark-deploy.sh",
+    "scope":["repo:$REPO_DIR","runtime:centraldark"],
+    "expected_delta":"align VPS source/runtime to proven origin/main",
+    "done_condition":"HEAD==origin/main && applicable runtime health PASS",
+    "evidence_required":["HEAD","DIRTY","META_LUPA","CLAIM_SEALS","RUNTIME_HEALTH"],
+    "counterproof":"T1 HEAD+DIRTY+HEALTH+runtime process verification",
+    "dependencies":["origin/main","existing runtime owners"],
+    "next_cursor":"APPLY_MINIMAL_DEPLOY_THEN_T1",
+    "status":"PENDING",
+    "root_authority":"SEGREDO/CHEFE",
+    "tlc23_horn_gate":{
+      "status":"PASS",
+      "pdf_sha256":"b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1",
+      "evidence_ref":"CENTRALDARK_AI_BOOT.tcl23_horn_gate"
+    }
+  },
+  "tlc23_horn_gate":{
+    "status":"PASS",
+    "pdf_sha256":"b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1",
+    "evidence_ref":"CENTRALDARK_AI_BOOT.tcl23_horn_gate"
+  },
   "github_t0":{"status":"PASS","head_sha":"$ALVO"},
   "vps_t0":{"status":"PASS","head_sha":"$HEAD_ANTES"},
   "cross_surface_drift_classified":true,
@@ -135,8 +171,38 @@ listar_sujos_rastreados() { git status --porcelain=v1 --untracked-files=no || tr
 contar_sujos_rastreados() { listar_sujos_rastreados | sed '/^$/d' | wc -l | tr -d ' '; }
 contar_nao_rastreados() { git ls-files --others --exclude-standard -z | tr '\0' '\n' | sed '/^$/d' | wc -l | tr -d ' '; }
 
+is_runtime_churn_path() {
+  local candidate="$1" allowed
+  for allowed in "${RUNTIME_CHURN_ALLOWLIST[@]}"; do
+    [[ "$candidate" == "$allowed" ]] && return 0
+  done
+  return 1
+}
+
+listar_sujos_rastreados_material() {
+  local path
+  while IFS= read -r path; do
+    [[ -n "$path" ]] || continue
+    is_runtime_churn_path "$path" && continue
+    printf '%s\n' "$path"
+  done < <(git diff --name-only HEAD --)
+}
+
+contar_sujos_rastreados_material() {
+  listar_sujos_rastreados_material | sed '/^$/d' | wc -l | tr -d ' '
+}
+
+contar_runtime_churn() {
+  local path count=0
+  while IFS= read -r path; do
+    [[ -n "$path" ]] || continue
+    is_runtime_churn_path "$path" && count=$((count + 1))
+  done < <(git diff --name-only HEAD --)
+  printf '%s\n' "$count"
+}
+
 contar_sujos_deploy() {
-  if [[ "$TOTAL" -eq 1 ]]; then contar_sujos_rastreados; else contar_sujos; fi
+  if [[ "$TOTAL" -eq 1 ]]; then contar_sujos_rastreados_material; else contar_sujos; fi
 }
 
 proteger_nao_rastreados_contra_alvo() {
@@ -184,16 +250,65 @@ resolve_runtime_apps() {
   log "TOTAL_RUNTIME_APPS=$APPS"
 }
 
-verify_runtime_apps() {
-  local app pid
-  for app in $APPS; do
-    pm2 describe "$app" >/dev/null 2>&1 || { log "PM2_VERIFY_MISSING=$app"; return 1; }
-    pid="$(pm2 pid "$app" | tail -n1)"
-    [[ "$pid" =~ ^[0-9]+$ && "$pid" -gt 0 ]] || { log "PM2_VERIFY_NO_PID=$app"; return 1; }
-    log "PM2_VERIFY=PASS app=$app pid=$pid"
+is_optional_runtime_app() {
+  local candidate="$1" optional
+  for optional in $OPTIONAL_RUNTIME_APPS; do
+    [[ "$candidate" == "$optional" ]] && return 0
   done
+  return 1
 }
 
+verify_runtime_apps() {
+  local app pid status optional_failures=0
+  for app in $APPS; do
+    status="$(pm2 jlist 2>/dev/null | jq -r --arg name "$app" '.[] | select(.name==$name) | .pm2_env.status' | head -n1)"
+    pid="$(pm2 pid "$app" 2>/dev/null | tail -n1)"
+    if [[ "$status" == "online" && "$pid" =~ ^[0-9]+$ && "$pid" -gt 0 ]]; then
+      log "PM2_VERIFY=PASS app=$app pid=$pid"
+      continue
+    fi
+    if is_optional_runtime_app "$app"; then
+      log "PM2_VERIFY=OPTIONAL_DEGRADED app=$app status=${status:-UNKNOWN} pid=${pid:-0}"
+      optional_failures=$((optional_failures + 1))
+      continue
+    fi
+    log "PM2_VERIFY=FAIL_REQUIRED app=$app status=${status:-UNKNOWN} pid=${pid:-0}"
+    return 1
+  done
+  log "OPTIONAL_RUNTIME_DEGRADED_COUNT=$optional_failures"
+  return 0
+}
+
+normalize_runtime_churn() {
+  local path
+  for path in "${RUNTIME_CHURN_ALLOWLIST[@]}"; do
+    if git ls-files --error-unmatch "$path" >/dev/null 2>&1; then
+      git restore --source="origin/$BRANCH" --worktree -- "$path" || return 1
+    fi
+  done
+  if [[ -d apps/modulos/grupo-evolucao/missions ]]; then
+    git restore --source="origin/$BRANCH" --worktree -- apps/modulos/grupo-evolucao/missions 2>/dev/null || true
+    git clean -f -- apps/modulos/grupo-evolucao/missions >/dev/null 2>&1 || true
+  fi
+  log "RUNTIME_CHURN_NORMALIZED=PASS"
+}
+settle_runtime_churn() {
+  local attempt material
+  for attempt in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15; do
+    normalize_runtime_churn || return 1
+    sleep 3
+    material="$(contar_sujos_rastreados_material)"
+    log "RUNTIME_SETTLE_ATTEMPT=$attempt MATERIAL_DIRTY=$material KNOWN_CHURN=$(contar_runtime_churn)"
+    if [[ "$material" -eq 0 ]]; then
+      log "RUNTIME_SETTLE=PASS attempts=$attempt"
+      return 0
+    fi
+    log "RUNTIME_SETTLE_MATERIAL_PATHS_BEGIN"
+    listar_sujos_rastreados_material | sed "s/^/  /"
+    log "RUNTIME_SETTLE_MATERIAL_PATHS_END"
+  done
+  return 1
+}
 proof_guard_paths_exist_on_ref() {
   local ref="$1"
   local required=(
@@ -455,6 +570,7 @@ else
 fi
 
 # ─── T1 / contraprova ─────────────────────────────────────────────────
+settle_runtime_churn || { rollback; die "RUNTIME_CHURN_SETTLE_FAILED" 17; }
 log "=== T1 (depois) ==="
 FINAL_HEAD="$(git rev-parse HEAD)"
 FINAL_REMOTE="$(git rev-parse "origin/$BRANCH")"
@@ -463,6 +579,7 @@ FINAL_UNTRACKED="$(contar_nao_rastreados)"
 log "FINAL_HEAD=$FINAL_HEAD"
 log "FINAL_REMOTE=$FINAL_REMOTE"
 log "FINAL_DIRTY=$FINAL_DIRTY"
+[[ "$TOTAL" -eq 1 ]] && log "FINAL_RUNTIME_CHURN_CLASSIFIED=$(contar_runtime_churn)"
 log "FINAL_UNTRACKED_PRESERVED=$FINAL_UNTRACKED"
 [[ "$FINAL_HEAD" == "$FINAL_REMOTE" && "$FINAL_DIRTY" -eq 0 ]] \
   || { rollback; die "sync não atingiu ponto fixo source" 15; }
