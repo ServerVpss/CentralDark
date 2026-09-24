@@ -587,6 +587,19 @@
         "owner": "docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md",
         "stage": "MUTATION"
       },
+      "GREG_VERDICT_REQUIRED_BEFORE_GREEN": {
+        "owner": "docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md#81-tik-tak--automation-factory--outer-loop",
+        "stage": "VERDICT",
+        "role": "OBSERVABILITY_PROOF_LENS",
+        "does_not_override_reality_judge": true
+      },
+      "DEX_APPROVAL_REQUIRED_FOR_CRITICAL_DELTA": {
+        "owner": "docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md#81-tik-tak--automation-factory--outer-loop",
+        "stage": "PRE_CRITICAL_EXECUTION",
+        "role": "STATE_GOVERNANCE_LENS",
+        "approval_is_not_human_authority": true,
+        "cannot_expand_chefe_scope": true
+      },
       "SAME_HEAD_CI_GATE": {
         "owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json#universal_operational_contract.cross_surface_convergence",
         "stage": "PROMOTION"
