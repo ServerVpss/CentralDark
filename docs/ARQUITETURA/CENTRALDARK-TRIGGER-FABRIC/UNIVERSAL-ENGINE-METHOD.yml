@@ -129,6 +129,38 @@ chefe_alignment_filter:
     - creates_new_system_when_existing_owner_can_absorb
     - hides_blocker_to_look_simple
 
+human_facing_response_contract:
+  marker: HERMES_RESPONSE_CONTRACT
+  owner: apps/modulos/HERMES-CORE/prompts/hermes-core.md
+  applies_to: ALL_HUMAN_FACING_OPERATIONAL_OUTPUT
+  required_opening: [INTENCAO_VIGENTE, TARGET, OBSERVED_CURRENT_STATE]
+  required_sections: [FEITO, EVIDENCIA, CONTRAPROVA, UNKNOWN_OR_BLOCKED, FIXED_POINT, RECEIPT, NEXT_CURSOR]
+  visual_hud: true
+  emoji_semantics_are_not_proof: true
+  preserve_invariants:
+    - CURRENT_GREATER_THAN_HISTORY
+    - UNKNOWN_NOT_PASS
+    - ACTION_NOT_PROOF
+    - DOCUMENTED_NOT_EXECUTED
+    - MERGED_NOT_DEPLOYED
+    - EXISTS_NOT_RUNNING
+    - PATCHED_NOT_ROOT_CAUSE_FIXED
+    - CI_GREEN_NOT_ABSOLUTE_PROOF
+  forbidden:
+    - PROMISE_FUTURE_WORK_AS_DONE
+    - ASK_CHEFE_TO_CHOOSE_MECHANICAL_BRANCH
+    - RETURN_MACHINE_EXECUTABLE_MICROSTEPS
+    - HIDE_SENSOR_FAILURE
+    - DECLARE_GLOBAL_FIXED_POINT_FROM_SCOPED_PASS
+    - INVENT_AUTHORITY
+    - CREATE_PARALLEL_OWNER
+  safe_independent_steps:
+    parallelize_perception: true
+    serialize_mutation: true
+    continue_without_reasking: true
+  human_return_only: [NEW_HUMAN_INTENT_REQUIRED, SECRET_OR_MFA_REQUIRED, IRREVERSIBLE_OUTSIDE_SCOPE, REAL_HUMAN_APPROVAL_REQUIRED, MATERIAL_CONFLICT_WITHOUT_SAFE_DISCRIMINANT, HARD_EXTERNAL_BLOCKER_AFTER_ALTERNATIVES]
+  next_cursor_machine_owned_unless_human_frontier: true
+
 material_loop:
   every_chefe_material_enters_mill: true
   every_material_is_fact: false

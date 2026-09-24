@@ -245,6 +245,12 @@ export function validateUniversalMethod() {
     'continue_until: ALL_MATERIAL_INCIDENTS_RESOLVED_OR_EXACT_BLOCKER',
     'endpoint_200_alone_is_pass: false',
     'unresolved_material_error_means_fixed_point: false',
+    'human_facing_response_contract:',
+    'marker: HERMES_RESPONSE_CONTRACT',
+    'required_opening: [INTENCAO_VIGENTE, TARGET, OBSERVED_CURRENT_STATE]',
+    'required_sections: [FEITO, EVIDENCIA, CONTRAPROVA, UNKNOWN_OR_BLOCKED, FIXED_POINT, RECEIPT, NEXT_CURSOR]',
+    '- ASK_CHEFE_TO_CHOOSE_MECHANICAL_BRANCH',
+    'next_cursor_machine_owned_unless_human_frontier: true',
   ], 'UNIVERSAL_CONTRACT');
 
   requireTokens(operationalMethod, [
@@ -316,6 +322,19 @@ export function validateUniversalMethod() {
     'NO_MICROSTEP_MENU_FOR_AUTHORIZED_TECHNICAL_WORK=true',
     'HUMAN_OUTPUT_DEFAULT=RESULTADO_EVIDENCIA_PENDENCIA_REAL_PROXIMO_CURSOR',
   ], 'CHEFE_ALIGNMENT_SIMPLIFIER_PROMPT');
+
+  requireTokens(hermesPrompt, [
+    'HERMES_RESPONSE_CONTRACT=true',
+    'RESPONSE_REQUIRED_OPENING=INTENCAO_VIGENTE|TARGET|OBSERVED_CURRENT_STATE',
+    'RESPONSE_REQUIRED_SECTIONS=FEITO|EVIDENCIA|CONTRAPROVA|UNKNOWN_OR_BLOCKED|FIXED_POINT|RECEIPT|NEXT_CURSOR',
+    'NO_PROMISE_FUTURE_WORK_AS_DONE=true',
+    'NO_ASK_CHEFE_TO_CHOOSE_MECHANICAL_BRANCH=true',
+    'NO_RETURN_MACHINE_EXECUTABLE_MICROSTEPS=true',
+    'PARALLELIZE_PERCEPTION=true',
+    'SERIALIZE_MUTATION=true',
+    'CONTINUE_WITHOUT_REASKING=true',
+    'NEXT_CURSOR_MACHINE_OWNED_UNLESS_HUMAN_FRONTIER=true',
+  ], 'HERMES_RESPONSE_CONTRACT_PROMPT');
 
   requireTokens(operationalMethod, [
     '## Contrato humano de execução integral',
@@ -605,7 +624,6 @@ export function validateUniversalMethod() {
   requireTokens(boot, [
     'mission_stop: "CONTINUE_ACROSS_CHAT_BOUNDARIES_UNLESS_CHEFE_EXPLICITLY_STOPS"',
     '- "CHEFE_EXPLICITLY_STOPS"',
-    'child_pr_only_promotion_vehicle: true',
     'global_secret_reuse_contract:',
     'canonical_vault: "/root/CentralDark/secrets"',
     'repository_secrets: "REUSE_ALL_EXISTING_AND_FUTURE"',
