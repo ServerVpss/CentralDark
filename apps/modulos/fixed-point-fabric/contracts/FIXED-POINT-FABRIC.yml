@@ -17,6 +17,19 @@ method_bindings:
   meta_lupa:
     owner: .agents/skills/meta-lupa/SKILL.md
     role: FALSIFIER
+  meta_grill:
+    owner: .agents/skills/meta-lupa/KITS/METAGRILL-METALUPA/KIT.md
+    role: PREMISE_STRESS_TEST
+  tlc23_horn:
+    owner: docs/CONSCIENCIA/04-MCP-E-CONECTORES/tlc23.pdf
+    role: DETERMINISTIC_LEAST_FIXED_POINT
+    source_sha256: b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1
+    shared_with: [fable_loop, meta_lupa, meta_grill]
+    reuse_when_fingerprint_unchanged: true
+    no_new_material_fact_action: REUSE_PROOF_NO_REPEAT
+    changed_premise_action: REVALIDATE_AFFECTED_CONE_ONLY
+    acceptance_is_proof: false
+    deterministic_reconciliation_before_new_architecture: true
   meta_multibussola:
     owner: docs/CONSCIENCIA/MULTIBUSSOLA.md
     aliases: ["Meta Bússola", "Meta Bussola", "META_MULTIBUSSOLA"]

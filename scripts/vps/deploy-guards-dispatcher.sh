@@ -1,5 +1,37 @@
 #!/usr/bin/env bash
-# CentralDark — dispatcher canônico de deploy / TLC23 fail-closed
+# ══════════════════════════════════════════════════════════════════════
+# CentralDark — dispatcher condicional de scripts de deploy na VPS
+# ══════════════════════════════════════════════════════════════════════
+#
+# Decide QUAL script de deploy executar (ou nenhum) com base no que
+# está sendo commitado, nos recursos existentes e nos riscos detectados.
+#
+# Leis (.agents/skills/centraldark-esteira-motor):
+#   MERGED != DEPLOYED   → deploy é idenficado pelo SHA do evento, não pelo PR
+#   AÇÃO != PROVA        → pré-flight antes de qualquer decisão; T1 só se --apply
+#   NO_FORCE_PUSH        → nunca modifica o remoto
+#   NO_BLIND_OVERWRITE   → divergência de histórico exige flag explícita
+#   REUSE_BEFORE_CREATE  → reutiliza os dois scripts existentes; não duplica
+#   ONE_WRITER_PER_SCOPE → trava única por tipo de deploy
+#   FAIL_HIGH            → falha alto em vez de promover no escuro
+#   TLC23/HORN            → corpo incompleto nunca fabrica cabeça PASS
+#
+# Uso:
+#   ./deploy-guards-dispatcher.sh                          # pré-flight (idem)
+#   ./deploy-guards-dispatcher.sh --apply                  # executa a decisão
+#   ./deploy-guards-dispatcher.sh --apply --aceitar-divergencia
+#
+# Variáveis de ambiente (opcionais):
+#   REPO_DIR             default: /root/CentralDark
+#   SSH_KEY              default: ~/.ssh/deploy_centraldark
+#
+# Saídas:
+#   0 ok sem alterações necessárias
+#   1 uso | 2 argumento | 10 repo inválido | 11 sem rede/fetch
+#   12 imutável | 13 divergência | 14 sem privilégio | 15 hook bloqueia
+#   16 TLC23/universal proof gate | 21 operational | 22 repo-wide
+#
+# ══════════════════════════════════════════════════════════════════════
 set -Eeuo pipefail
 
 REPO_DIR="${REPO_DIR:-/root/CentralDark}"
@@ -14,53 +46,81 @@ HOOK_PREPARE="$REPO_DIR/.github/hooks/prepare-commit-msg-prevencao-push-sujo"
 
 APPLY=0
 GATE_ONLY=0
+SOURCE_ONLY=0
+TOTAL=0
 ACEITAR_DIVERGENCIA=0
 for arg in "$@"; do
   case "$arg" in
-    --apply) APPLY=1 ;;
-    --gate-only) GATE_ONLY=1 ;;
-    --aceitar-divergencia) ACEITAR_DIVERGENCIA=1 ;;
+    --apply)                APPLY=1 ;;
+    --gate-only)            GATE_ONLY=1 ;;
+    --source-only)          SOURCE_ONLY=1 ;;
+    --total)                TOTAL=1 ;;
+    --aceitar-divergencia)  ACEITAR_DIVERGENCIA=1 ;;
     *) echo "argumento desconhecido: $arg"; exit 2 ;;
   esac
 done
 [[ "$APPLY" -eq 0 || "$GATE_ONLY" -eq 0 ]] || { echo "--apply e --gate-only são mutuamente exclusivos"; exit 2; }
+[[ "$SOURCE_ONLY" -eq 0 || "$TOTAL" -eq 0 ]] || { echo "--source-only e --total são mutuamente exclusivos"; exit 2; }
+[[ "$GATE_ONLY" -eq 0 || ( "$SOURCE_ONLY" -eq 0 && "$TOTAL" -eq 0 ) ]] || { echo "--gate-only não aceita modo de apply"; exit 2; }
 
 log() { printf '%s %s\n' "$(date -u '+%H:%M:%SZ')" "$*"; }
 die() { log "FALHA: $*"; exit "${2:-1}"; }
 info() { log "INFO: $*"; }
-contar_sujos_todos() { git status --porcelain --untracked-files=all | sed '/^$/d' | wc -l | tr -d ' '; }
 
+contar_sujos() {
+  git status --porcelain | grep -cE '^([MARCD ][MARCD]|[MARCD] )' || true
+}
+contar_sujos_todos() {
+  git status --porcelain --untracked-files=all | sed '/^$/d' | wc -l | tr -d ' '
+}
+
+# ─── Lock única por dispatcher (não conflita com os locks dos scripts) ─
 exec 9>/tmp/centraldark-dispatcher.lock
 flock -w 90 9 || die "outro dispatcher segurando a trava" 63
 
-log "=== T0 ==="
+# ─── T0 ────────────────────────────────────────────────────────────────
+log "=== T0 (antes) ==="
 [[ -d "$REPO_DIR/.git" ]] || die "REPO_DIR sem .git: $REPO_DIR" 10
 cd "$REPO_DIR"
+
 ORIGIN_URL="$(git remote get-url origin 2>/dev/null || echo '')"
-[[ "$ORIGIN_URL" =~ github\.com[:/]ServerVpss/CentralDark(\.git)?$ ]] || die "origin não é ServerVpss/CentralDark" 64
+[[ "$ORIGIN_URL" =~ github\.com[:/]ServerVpss/CentralDark(\.git)?$ ]] \
+  || die "origin não é ServerVpss/CentralDark: $ORIGIN_URL" 64
 
 git fetch --prune origin "$BRANCH" --quiet || die "fetch de origin/$BRANCH falhou" 11
-ORIGIN_SHA="$(git rev-parse "origin/$BRANCH")"
-HEAD_ANTES="$(git rev-parse HEAD)"
-ATRAS="$(git rev-list --count "HEAD..origin/$BRANCH")"
-AFRENTE="$(git rev-list --count "origin/$BRANCH..HEAD")"
-SUJOS_ALL="$(contar_sujos_todos)"
 
+HEAD_ANTES="$(git rev-parse HEAD)"
+ORIGIN_SHA="$(git rev-parse "origin/$BRANCH")"
 if [[ -n "$TARGET_SHA_INPUT" ]]; then
-  [[ "$TARGET_SHA_INPUT" =~ ^[0-9a-f]{40}$ ]] || die "TARGET_SHA inválido" 16
-  git cat-file -e "$TARGET_SHA_INPUT^{commit}" 2>/dev/null || die "TARGET_SHA não existe localmente após fetch" 16
+  [[ "$TARGET_SHA_INPUT" =~ ^[0-9a-f]{40}$ ]] || die "TARGET_SHA inválido: $TARGET_SHA_INPUT" 16
+  git cat-file -e "$TARGET_SHA_INPUT^{commit}" 2>/dev/null || die "TARGET_SHA não materializado após fetch" 16
   git merge-base --is-ancestor "$TARGET_SHA_INPUT" "$ORIGIN_SHA" || die "TARGET_SHA não pertence a origin/$BRANCH" 16
   ALVO="$TARGET_SHA_INPUT"
 else
   ALVO="$ORIGIN_SHA"
 fi
+ATRAS="$(git rev-list --count "HEAD..origin/$BRANCH")"
+AFRENTE="$(git rev-list --count "origin/$BRANCH..HEAD")"
+SUJOS="$(contar_sujos)"
+SUJOS_ALL="$(contar_sujos_todos)"
 
 log "HEAD_ANTES=$HEAD_ANTES"
-log "ORIGIN_SHA=$ORIGIN_SHA"
 log "ALVO=$ALVO"
-log "ATRAS=$ATRAS AFRENTE=$AFRENTE WORKTREE_DIRTY=$SUJOS_ALL GATE_ONLY=$GATE_ONLY APPLY=$APPLY"
+log "ORIGIN_SHA=$ORIGIN_SHA"
+log "ATRAS=$ATRAS  AFRENTE=$AFRENTE  RASTREADOS_SUJOS=$SUJOS  WORKTREE_DIRTY=$SUJOS_ALL"
 
-# Materializa o SHA exato sem reutilizar diretório já existente.
+# ─── Guarda: ssh deploy ─────────────────────────────────────────────────
+if [[ ! -f "$SSH_KEY" && "$APPLY" -eq 1 ]]; then
+  die "chave de deploy ausente em $SSH_KEY (SSH_KEY)" 14
+fi
+info "chave de deploy: $([[ -f "$SSH_KEY" ]] && echo "presente" || echo "ausente (não aplicando)")"
+
+# ─── Guarda: scripts existentes ─────────────────────────────────────────
+[[ -x "$CENTRALDARK_DEPLOY" ]] || die "centraldark-deploy.sh ausente ou não executável" 10
+[[ -x "$OPERATIONAL_GUARDS" ]] || die "deploy-operational-guards.sh ausente ou não executável" 10
+
+# ─── TLC23 / Universal Method: validar o SHA alvo antes de mutação ──────
+log "=== TLC23 / UNIVERSAL PRE-FLIGHT ==="
 GATE_ROOT="$(mktemp -d /tmp/centraldark-tlc23-deploy.XXXXXX)"
 GATE_TMP="$GATE_ROOT/worktree"
 CONTRACT_RECEIPT="$GATE_ROOT/repo-contract.txt"
@@ -70,9 +130,9 @@ cleanup_gate_tmp() {
 }
 trap cleanup_gate_tmp EXIT
 
-git worktree add --detach "$GATE_TMP" "$ALVO" --quiet || die "não foi possível materializar SHA alvo" 16
+git worktree add --detach "$GATE_TMP" "$ALVO" --quiet \
+  || die "não foi possível materializar SHA alvo para contraprova" 16
 
-log "=== TLC23 / UNIVERSAL / META-LUPA SOURCE GATE ==="
 (
   set -euo pipefail
   cd "$GATE_TMP"
@@ -81,12 +141,16 @@ log "=== TLC23 / UNIVERSAL / META-LUPA SOURCE GATE ==="
   python3 scripts/trigger-fabric/verify_repo_contract.py . | tee "$CONTRACT_RECEIPT"
   grep -q '^REPO_CONTRACT_VERIFY=PASS$' "$CONTRACT_RECEIPT"
   node apps/modulos/HERMES-CORE/core/universal-method-contract.mjs --self-test
+  node --check scripts/agent-call.mjs
+  grep -q "CENTRALDARK_GLOBAL_CONTRACT_ENFORCER_REQUIRED" scripts/agent-call.mjs
+  grep -q "GLOBAL_ENTRY_GATE=PASS" scripts/vps/centraldark-deploy.sh
+  grep -q "GLOBAL_EXIT_GATE=PASS" scripts/vps/centraldark-deploy.sh
   python3 scripts/lupa/validar_autolupa_hash.py
   python3 .agents/skills/meta-lupa/scripts/horn_caracol_gate.py --self-test
   python3 .agents/skills/centraldark-operational-method/scripts/tlc23_runtime_gate.py --self-test
-) || die "SHA alvo falhou gate canônico de source" 16
+) || die "SHA alvo falhou Master/Universal/Meta-Lupa/Horn" 16
 
-# GATE_ONLY é usado por deploys específicos: não toca no checkout/runtime.
+# Gate-only prova o SHA e sai sem tocar checkout/runtime.
 if [[ "$GATE_ONLY" -eq 1 ]]; then
   cat >"$GATE_ROOT/tlc23-deploy-facts.json" <<'JSON'
 {
@@ -103,33 +167,20 @@ if [[ "$GATE_ONLY" -eq 1 ]]; then
   }
 }
 JSON
-  (cd "$GATE_TMP" && python3 .agents/skills/meta-lupa/scripts/horn_caracol_gate.py --facts-file "$GATE_ROOT/tlc23-deploy-facts.json") \
-    || die "HORN_CARACOL_GATE_ONLY=BLOCK" 16
+  (cd "$GATE_TMP" && python3 .agents/skills/meta-lupa/scripts/horn_caracol_gate.py --facts-file "$GATE_ROOT/tlc23-deploy-facts.json") || die "HORN_CARACOL_GATE_ONLY=BLOCK" 16
   log "TLC23_DEPLOY_GATE_ONLY=PASS TARGET_SHA=$ALVO"
   exit 0
 fi
 
-# A partir daqui existe intenção de validar uma futura mutação do checkout vivo.
-[[ -x "$CENTRALDARK_DEPLOY" ]] || die "centraldark-deploy.sh ausente ou não executável" 10
-[[ -x "$OPERATIONAL_GUARDS" ]] || die "deploy-operational-guards.sh ausente ou não executável" 10
+if [[ "$APPLY" -eq 1 && "$ALVO" != "$ORIGIN_SHA" ]]; then
+  die "APPLY_TARGET_MUST_EQUAL_ORIGIN_MAIN gated=$ALVO origin=$ORIGIN_SHA" 16
+fi
+
+# Os fatos abaixo só são materializados depois das medições acima.
+# Divergência local ou worktree suja impede no_destructive_bypass.
 [[ "$SUJOS_ALL" -eq 0 ]] || die "TLC23 bloqueou worktree suja" 16
 [[ "$AFRENTE" -eq 0 ]] || die "TLC23 bloqueou histórico local à frente; reconciliar antes" 16
-if [[ "$ACEITAR_DIVERGENCIA" -eq 1 ]]; then
-  info "--aceitar-divergencia mantido por compatibilidade; TLC23 não permite bypass de AFRENTE>0"
-fi
 
-if [[ ! -f "$SSH_KEY" && "$APPLY" -eq 1 ]]; then
-  die "chave de deploy ausente em $SSH_KEY" 14
-fi
-
-IMUTAVEIS="$(git ls-files -z | xargs -0 -r lsattr -d 2>/dev/null | awk '$1 ~ /^[-aAcCdDeEFijImNPsStTux]+$/ && $1 ~ /i/ { $1=""; sub(/^ +/, ""); print }' || true)"
-[[ -z "$IMUTAVEIS" ]] || die "IMUTAVEL_BLOQUEIA_DEPLOY" 12
-
-if [[ -x "$HOOK_PREPARE" ]]; then
-  info "hook de push sujo presente"
-fi
-
-# Só agora, depois das contraprovas destrutivas, materializa no_destructive_bypass=true.
 cat >"$GATE_ROOT/tlc23-deploy-facts.json" <<'JSON'
 {
   "centraldark_gate": {
@@ -145,32 +196,85 @@ cat >"$GATE_ROOT/tlc23-deploy-facts.json" <<'JSON'
   }
 }
 JSON
-(cd "$GATE_TMP" && python3 .agents/skills/meta-lupa/scripts/horn_caracol_gate.py --facts-file "$GATE_ROOT/tlc23-deploy-facts.json") \
-  || die "HORN_CARACOL_DEPLOY_GATE=BLOCK" 16
-
+(
+  cd "$GATE_TMP"
+  python3 .agents/skills/meta-lupa/scripts/horn_caracol_gate.py --facts-file "$GATE_ROOT/tlc23-deploy-facts.json"
+) || die "HORN_CARACOL_DEPLOY_GATE=BLOCK" 16
 log "TLC23_TARGET_SHA=$ALVO"
 log "UNIVERSAL_METHOD_TARGET=PASS"
 log "HORN_CARACOL_DEPLOY_GATE=PASS"
+log "GLOBAL_CONTRACT_ENFORCER_TARGET=PASS"
 
-if [[ "$HEAD_ANTES" == "$ORIGIN_SHA" && "$SUJOS_ALL" -eq 0 ]]; then
-  log "JA_SINCRONIZADO — source já está no alvo; gate revalidado"
+# ─── Guarda: imutáveis ──────────────────────────────────────────────────
+IMUTAVEIS="$(git ls-files -z \
+  | xargs -0 -r lsattr -d 2>/dev/null \
+  | awk '$1 ~ /^[-aAcCdDeEFijImNPsStTux]+$/ && $1 ~ /i/ { $1=""; sub(/^ +/,""); print }' \
+  || true)"
+
+if [[ -n "$IMUTAVEIS" ]]; then
+  log "BLOQUEADO — arquivos rastreados com chattr +i:"
+  while IFS= read -r f; do printf '  %s\n' "$f"; done <<< "$IMUTAVEIS"
+  log "Para liberar (reversível com chattr +i):"
+  log "  cd $REPO_DIR && git ls-files -z | xargs -0 -r chattr -i 2>/dev/null"
+  die "IMUTAVEL_BLOQUEIA_DEPLOY" 12
+fi
+info "nenhum rastreado imutável — ok"
+
+# ─── Guarda: histórico divergente ───────────────────────────────────────
+if [[ "$AFRENTE" -gt 0 && "$ACEITAR_DIVERGENCIA" -eq 0 ]]; then
+  log "O dispatcher bloqueia divergência de histórico."
+  die "HISTORICO_DIVERGENTE" 13
+fi
+
+# ─── Guarda: hook de push sujo ──────────────────────────────────────────
+if [[ -x "$HOOK_PREPARE" ]]; then
+  log "=== guarda: hook prepare-commit-msg ==="
+  log "presente em $HOOK_PREPARE"
+fi
+
+# ─── Decisão: nada a fazer ──────────────────────────────────────────────
+if [[ "$HEAD_ANTES" == "$ALVO" && "$SUJOS_ALL" -eq 0 ]]; then
+  log "JA_SINCRONIZADO — source já está no alvo; gate TLC23 foi revalidado"
   exit 0
 fi
 
+# ─── Dry-run para aqui ──────────────────────────────────────────────────
 if [[ "$APPLY" -eq 0 ]]; then
-  log "PRE_FLIGHT=PASS MUTATION_PERFORMED=false"
+  log "=== PRÉ-FLIGHT — nada alterado. Use --apply para executar. ==="
+  log "ATRAS=$ATRAS  AFRENTE=$AFRENTE  WORKTREE_DIRTY=$SUJOS_ALL"
+  log "caminho para origem: $ORIGIN_URL ($BRANCH)"
+  log "alvo: origin/$BRANCH"
+  log "scripts disponíveis: centraldark-deploy.sh, deploy-operational-guards.sh"
+  log "TLC23/HORN/UNIVERSAL=PASS no SHA alvo"
   exit 0
 fi
 
+# ─── Aplicar ────────────────────────────────────────────────────────────
 log "=== APLICANDO ==="
-"$CENTRALDARK_DEPLOY" --apply || die "centraldark-deploy.sh falhou" 13
 
-log "=== T1 ==="
+# Repo-wide com guards de imutabilidade; só alcançável após TLC23 PASS.
+DEPLOY_ARGS=(--apply)
+[[ "$SOURCE_ONLY" -eq 1 ]] && DEPLOY_ARGS+=(--source-only)
+[[ "$TOTAL" -eq 1 ]] && DEPLOY_ARGS+=(--total)
+[[ "$ACEITAR_DIVERGENCIA" -eq 1 ]] && DEPLOY_ARGS+=(--aceitar-divergencia)
+log "executando centraldark-deploy.sh ${DEPLOY_ARGS[*]} via gate canônico"
+CENTRALDARK_CANONICAL_DEPLOY_GATE=PASS \
+CENTRALDARK_CANONICAL_DEPLOY_TARGET="$ALVO" \
+  "$CENTRALDARK_DEPLOY" "${DEPLOY_ARGS[@]}" \
+  || die "centraldark-deploy.sh falhou" 13
+
+# ─── T1 (contraprova) ──────────────────────────────────────────────────
+log "=== T1 (depois) ==="
+log "SHA_VPS == SHA_MAIN ................ PROVADO (pelo centraldark-deploy)"
+
 HTTP="$(curl -s -o /dev/null -w '%{http_code}' --max-time 10 "$MCP_HEALTH" 2>/dev/null || true)"
 [[ -n "$HTTP" ]] || HTTP=000
-[[ "$HTTP" == "200" ]] || die "health do MCP != 200" 14
-ss -tlnp 2>/dev/null | grep -q ':9100' || die "porta 9100 sem listener" 14
+log "MCP_HEALTH=$HTTP"
+[[ "$HTTP" == "200" ]] || die "health do MCP != 200 (rollback: git reset --hard vps-pre-deploy-<timestamp>)" 14
 
-log "DEPLOY_PROVADO=PASS"
+ss -tlnp 2>/dev/null | grep -q ':9100' \
+  || die "porta 9100 sem listener (rollback: git reset --hard vps-pre-deploy-<timestamp>)" 14
+
+log "=== DEPLOY_PROVADO ==="
 log "TLC23/HORN/UNIVERSAL=PASS"
-log "MCP_HEALTH=200 PORTA_9100=LISTENING"
+log "MCP_HEALTH=200  PORTA_9100=LISTENING"

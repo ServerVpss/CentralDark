@@ -1,0 +1,192 @@
+name: 📊 PR HUD — Live Remeasure & Update Body
+
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize, ready_for_review]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'PR específico para remeasure (deixar vazio para todos abertos)'
+        required: false
+        type: string
+  schedule:
+    - cron: '*/30 * * * *'  # A cada 30 minutos
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: read
+
+concurrency:
+  group: pr-hud-remeasure-${{ github.event.pull_request.number || inputs.pr_number || 'all' }}
+  cancel-in-progress: true
+
+jobs:
+  remeasure-pr:
+    name: 📏 Remeasure commits, files, e status
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 10
+    
+    steps:
+      - name: 📥 Checkout base (HEAD confiável)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: 🔍 Listar todos os PRs abertos (ou filtrar um)
+        id: list_prs
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const targetPr = context.payload.pull_request?.number || 
+                            (context.payload.inputs?.pr_number || '').trim() || 
+                            null;
+            
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            
+            let prs;
+            if (targetPr && Number.isInteger(Number(targetPr))) {
+              // Um PR específico
+              const pr = await github.rest.pulls.get({
+                owner, repo, pull_number: Number(targetPr)
+              });
+              prs = [pr.data];
+            } else {
+              // Todos os PRs abertos
+              const response = await github.paginate(github.rest.pulls.list, {
+                owner, repo, state: 'open', per_page: 100
+              });
+              prs = response;
+            }
+            
+            console.log(`🔍 Encontrados ${prs.length} PRs para remeasure`);
+            core.setOutput('pr_count', String(prs.length));
+            
+            // Salvar IDs para próximo step
+            const prNumbers = prs.map(p => p.number);
+            core.setOutput('pr_numbers', JSON.stringify(prNumbers));
+
+      - name: 📊 Remeasure cada PR e atualizar body
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        env:
+          PR_NUMBERS: ${{ steps.list_prs.outputs.pr_numbers }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const prNumbers = JSON.parse(process.env.PR_NUMBERS || '[]');
+            const marker = '<!-- centraldark-pr-hud-live-remeasure -->';
+            
+            for (const prNumber of prNumbers) {
+              try {
+                const pr = await github.rest.pulls.get({
+                  owner, repo, pull_number: prNumber
+                });
+                
+                // Remeasure: contar commits e arquivos alterados
+                const commits = await github.paginate(github.rest.pulls.listCommits, {
+                  owner, repo, pull_number: prNumber, per_page: 100
+                });
+                const files = await github.paginate(github.rest.pulls.listFiles, {
+                  owner, repo, pull_number: prNumber, per_page: 100
+                });
+                
+                const commitCount = commits.length;
+                const fileCount = files.length;
+                const addedLines = files.reduce((sum, f) => sum + (f.additions || 0), 0);
+                const deletedLines = files.reduce((sum, f) => sum + (f.deletions || 0), 0);
+                
+                // Comparar com main
+                const comparison = await github.rest.repos.compareCommits({
+                  owner, repo,
+                  base: pr.data.base.sha,
+                  head: pr.data.head.sha
+                });
+                const aheadBy = comparison.data.ahead_by || 0;
+                const behindBy = comparison.data.behind_by || 0;
+                
+                // Verificar mergeability
+                const mergeable = pr.data.mergeable;
+                const mergeableState = pr.data.mergeable_state;
+                
+                // Verificar CI status
+                const statuses = await github.rest.repos.getCombinedStatusForRef({
+                  owner, repo, ref: pr.data.head.sha
+                });
+                const ciState = statuses.data.state; // 'pending', 'success', 'failure'
+                
+                // Extrair metadata antiga do body
+                const oldBody = pr.data.body || '';
+                const hudMatch = oldBody.match(
+                  /###.*?HUD.*?Commits:?\s*(\d+).*?Files:?\s*(\d+)/is
+                );
+                
+                // Construir HUD novo
+                const hudBlock = [
+                  marker,
+                  '### 📊 HUD — Live Status',
+                  '',
+                  `- **Commits:** \`${commitCount}\``,
+                  `- **Files changed:** \`${fileCount}\``,
+                  `- **Additions:** \`+${addedLines}\``,
+                  `- **Deletions:** \`-${deletedLines}\``,
+                  `- **Ahead of base:** \`${aheadBy}\``,
+                  `- **Behind base:** \`${behindBy}\``,
+                  `- **Mergeable:** \`${mergeable === null ? 'UNKNOWN' : mergeable ? 'YES' : 'NO'}\` (\`${mergeableState}\`)`,
+                  `- **CI Status:** \`${ciState}\``,
+                  `- **Last updated:** \`${new Date().toISOString()}\``,
+                  '',
+                  '> ℹ️ Atualizado automaticamente pelo workflow **PR HUD Live Remeasure**',
+                ].join('\\n');
+                
+                // Atualizar body (preservar conteúdo antigo, substituir apenas o HUD)
+                let newBody = oldBody;
+                
+                if (oldBody.includes(marker)) {
+                  // Remover HUD antigo
+                  newBody = newBody.replace(
+                    new RegExp(`${marker.replace(/[.*+?^${}()|\\[\\]\\\\]/g, '\\\\$&')}[^]*?(?=\\n##|$)`, 'i'),
+                    ''
+                  );
+                }
+                
+                newBody = hudBlock + '\\n\\n' + newBody;
+                
+                // Atualizar PR somente se o HUD mudou
+                if (!oldBody.includes(hudBlock)) {
+                  await github.rest.pulls.update({
+                    owner, repo, pull_number: prNumber,
+                    body: newBody
+                  });
+                  
+                  console.log(
+                    `✅ PR #${prNumber}: ${commitCount} commits, ${fileCount} files, CI=${ciState}`
+                  );
+                } else {
+                  console.log(
+                    `⏭️ PR #${prNumber}: HUD já atualizado, sem mudanças`
+                  );
+                }
+                
+              } catch (error) {
+                console.error(`❌ Erro ao processar PR #${prNumber}: ${error.message}`);
+              }
+            }
+
+      - name: 📝 Receipt do remeasure
+        if: always()
+        shell: bash
+        env:
+          PR_COUNT: ${{ steps.list_prs.outputs.pr_count }}
+        run: |
+          echo "🎯 PR HUD REMEASURE COMPLETED"
+          echo "📊 Total PRs processados: ${PR_COUNT}"
+          echo "⏰ Timestamp: $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+          echo ""
+          echo "✅ HUD atualizado em tempo real"
+          echo "📊 Commits, files, CI status — medidos e exibidos"
+          echo "🔄 Próxima atualização: cada 30 minutos"

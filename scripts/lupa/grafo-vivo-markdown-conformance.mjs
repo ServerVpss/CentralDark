@@ -132,6 +132,31 @@ function changedMarkdownFiles(baseSha) {
   return [...new Set(output.split('\n').map((file) => file.trim()).filter(isGlobalMarkdownPath))].sort();
 }
 
+function changedMarkdownLineMap(baseSha) {
+  const byFile = new Map();
+  if (!/^[0-9a-f]{40}$/i.test(baseSha) || /^0{40}$/i.test(baseSha)) return byFile;
+  const diff = execFileSync(
+    'git',
+    ['diff', '--unified=0', '--no-ext-diff', `${baseSha}...HEAD`, '--'],
+    { cwd: ROOT, encoding: 'utf8' },
+  );
+  let current = null;
+  for (const line of diff.split('\n')) {
+    if (line.startsWith('+++ b/')) {
+      current = line.slice(6);
+      if (isGlobalMarkdownPath(current) && !byFile.has(current)) byFile.set(current, new Set());
+      continue;
+    }
+    if (!current || !byFile.has(current) || !line.startsWith('@@')) continue;
+    const match = line.match(/\+(\d+)(?:,(\d+))?/);
+    if (!match) continue;
+    const start = Number(match[1]);
+    const count = match[2] === undefined ? 1 : Number(match[2]);
+    for (let offset = 0; offset < count; offset += 1) byFile.get(current).add(start + offset);
+  }
+  return byFile;
+}
+
 function markdownHygieneErrors(file, text) {
   const findings = [];
   const lines = text.split('\n');
@@ -147,26 +172,30 @@ function markdownHygieneErrors(file, text) {
     if (/\t/.test(line)) findings.push(`MD010:tab:${lineNo}`);
     if (/[ \t]+$/.test(line)) findings.push(`MD009:trailing-space:${lineNo}`);
     if (line === '' && lines[index + 1] === '' && lines[index + 2] === '') findings.push(`MD012:multiple-blank-lines:${lineNo}`);
-    if (/^\s*(?:[-+*](?![-+*])|\d+[.)])\S/.test(line)) findings.push(`MD030:marker-space:${lineNo}`);
+    const insideFence = fences.length > 0;
 
-    const heading = line.match(/^(#{1,6})\s+(.+?)\s*#*\s*$/);
-    if (heading) {
-      const normalized = heading[2].trim().toLowerCase();
-      if (headings.has(normalized)) findings.push(`MD024:duplicate-heading:${lineNo}`);
-      else headings.set(normalized, lineNo);
-      if (index > 0 && lines[index - 1] !== '') findings.push(`MD022:heading-before-blank:${lineNo}`);
-      if (index + 1 < lines.length && lines[index + 1] !== '') findings.push(`MD022:heading-after-blank:${lineNo}`);
-    }
+    if (!insideFence) {
+      if (/^\s*(?:[-+*](?![-+*])|\d+[.)])\S/.test(line)) findings.push(`MD030:marker-space:${lineNo}`);
 
-    const orderedMatch = line.match(/^(\s*)(\d+)\.\s+/);
-    if (orderedMatch) {
-      const indent = orderedMatch[1].length;
-      const number = Number(orderedMatch[2]);
-      const prior = ordered.get(indent);
-      if (prior !== undefined && number !== prior + 1) findings.push(`MD029:ordered-list:${lineNo}`);
-      ordered.set(indent, number);
-    } else if (line.trim() && !/^\s*(?:[-+*]|\d+[.)])\s+/.test(line)) {
-      ordered.clear();
+      const heading = line.match(/^(#{1,6})\s+(.+?)\s*#*\s*$/);
+      if (heading) {
+        const normalized = heading[2].trim().toLowerCase();
+        if (headings.has(normalized)) findings.push(`MD024:duplicate-heading:${lineNo}`);
+        else headings.set(normalized, lineNo);
+        if (index > 0 && lines[index - 1] !== '') findings.push(`MD022:heading-before-blank:${lineNo}`);
+        if (index + 1 < lines.length && lines[index + 1] !== '') findings.push(`MD022:heading-after-blank:${lineNo}`);
+      }
+
+      const orderedMatch = line.match(/^(\s*)(\d+)\.\s+/);
+      if (orderedMatch) {
+        const indent = orderedMatch[1].length;
+        const number = Number(orderedMatch[2]);
+        const prior = ordered.get(indent);
+        if (prior !== undefined && number !== prior + 1) findings.push(`MD029:ordered-list:${lineNo}`);
+        ordered.set(indent, number);
+      } else if (line.trim() && !/^\s*(?:[-+*]|\d+[.)])\s+/.test(line)) {
+        ordered.clear();
+      }
     }
 
     const fence = line.match(/^\s*(```+|~~~+)(.*)$/);
@@ -188,10 +217,13 @@ function markdownHygieneErrors(file, text) {
 function runSelfTest() {
   const good = '# Título\n\n1. Um\n2. Dois\n\n```text\nok\n```\n';
   const bad = '# Título\n1. Um\n15. Dois\n15. Três\n\n```\nsem linguagem\n```';
+  const fenced = '# Título\n\n```bash\n# shell comment\n# shell comment\n-item\n1.bad\n15. bad\n```\n';
   const goodPasses = markdownHygieneErrors('good.md', good).length === 0;
   const badFindings = markdownHygieneErrors('bad.md', bad);
+  const fencedFindings = markdownHygieneErrors('fenced.md', fenced);
   const badCovers = ['MD022', 'MD029', 'MD040', 'MD047'].every((code) => badFindings.some((item) => item.startsWith(code)));
-  const ok = goodPasses && badCovers;
+  const fencedSemanticsIgnored = !fencedFindings.some((item) => ['MD022', 'MD024', 'MD029', 'MD030'].some((code) => item.startsWith(code)));
+  const ok = goodPasses && badCovers && fencedSemanticsIgnored;
   console.log(`GLOBAL_MARKDOWN_CONFORMANCE_SELF_TEST=${ok ? 'PASS' : 'FAIL'}`);
   if (!ok) process.exit(1);
 }
@@ -285,10 +317,16 @@ for (const file of docs) {
 }
 
 const changedMarkdown = changedMarkdownFiles(changedFrom);
+const changedMarkdownLines = changedMarkdownLineMap(changedFrom);
 const markdownHygiene = [];
 for (const file of changedMarkdown) {
   if (!exists(file)) continue;
-  const findings = markdownHygieneErrors(file, read(file));
+  const changedLines = changedMarkdownLines.get(file) || new Set();
+  const findings = markdownHygieneErrors(file, read(file)).filter((finding) => {
+    const match = finding.match(/:(\d+)$/);
+    if (!match) return true;
+    return changedLines.has(Number(match[1]));
+  });
   if (findings.length) {
     markdownHygiene.push({ file, findings });
     errors.push(`${file}: global-markdown-conformance ${findings.join(',')}`);

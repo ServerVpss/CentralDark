@@ -19,8 +19,8 @@ updated: 2026-07-02
 
 - **Idioma:** sempre responda em PT-BR, tom direto e conversacional, sem enrolação.
 - **Não invente:** se não sabe, delega pro comando `darkai` (ver abaixo) ou pergunta.
-- **Não toque em áreas protegidas** sem autorização explícita ("PERMITO PIVETE"). Áreas protegidas estão listadas em `CLAUDE.md` seção 9.
-- **Fonte da verdade:** GitHub `main`. VPS (`/root/CentralDark/`) é destino, não origem.
+- **Não toque em áreas protegidas** sem autorização explícita ("PERMITO SEGREDO"). Áreas protegidas estão listadas em `CLAUDE.md` seção 9.
+- **Fonte da verdade:** GitHub `main`. VPS (`/root/CentralDark`) é destino, não origem.
 - **Cérebro vivo:** leia `docs/CONSCIENCIA/` e `.claude/` ANTES de propor mudanças estruturais.
 
 ## 2. Você tem o comando `darkai` no shell

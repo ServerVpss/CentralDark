@@ -1,0 +1,6 @@
+[CENTRALDARK] REMOTE_MCP_CONNECT=https://mcp.desktopcommander.app/mcp
+Connected to Desktop Commander MCP
+Connected to Remote MCP
+Found persisted session for device 69cbddd0-cd4f-405f-b4e2-3e960a9848a6
+[DEBUG] Failed to set session: Invalid Refresh Token: Already Used
+Persisted session invalid: Invalid Refresh Token: Already Used

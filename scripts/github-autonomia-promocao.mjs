@@ -20,16 +20,17 @@ import {
 
 export const FAST_MERGE_POLICY = "AUTO_SQUASH_IF_CLEAN";
 export const CANONICAL_MAP_PATH = "apps/modulos/mapeamento/config/mapa-canonico.json";
+export const PR_MOTHER_NUMBER = 1562;
 
 export const DEFAULT_REQUIRED_WORKFLOWS = Object.freeze([
-  "porta-de-entrada",
-  "codex-validate",
-  "lupa-conformance",
-  "Lupa Drift Guard",
-  "Trigger Fabric Full Package",
-  "PR Title Contract",
-  "PR auto-review (Codex + checklist)",
-  "Pipeline — Telegram + Painel",
+  "⚙️ porta-de-entrada",
+  "⚙️ codex-validate",
+  "⚙️ lupa-conformance",
+  "⚙️ Lupa Drift Guard",
+  "🧠 Trigger Fabric Full Package — pacote e contraprova",
+  "⚙️ PR Title Contract",
+  "⚙️ PR auto-review (Codex + checklist)",
+  "⚙️ Pipeline — Telegram + Painel",
 ]);
 
 export const BLOCKING_LABELS = Object.freeze([
@@ -255,14 +256,30 @@ export function selectLatestNonSkipped(runs, workflowName) {
     })[0] || null;
 }
 
+export function isActionRequiredRun(run) {
+  return String(run?.conclusion || "") === "action_required";
+}
+
 export function workflowVerdicts(runs, requiredWorkflows) {
   return requiredWorkflows.map((name) => {
     const run = selectLatestNonSkipped(runs, name);
     if (!run) return { name, state: "MISSING", run_id: null, conclusion: null };
+    if (isActionRequiredRun(run)) {
+      return { name, state: "ACTION_REQUIRED", run_id: run.id, conclusion: "action_required" };
+    }
     if (run.status !== "completed") return { name, state: "PENDING", run_id: run.id, conclusion: run.conclusion || null };
     if (run.conclusion === "success") return { name, state: "PASS", run_id: run.id, conclusion: run.conclusion };
     return { name, state: "FAIL", run_id: run.id, conclusion: run.conclusion || "unknown" };
   });
+}
+
+export function actionRequiredRunIds(workflows = []) {
+  return [...new Set(
+    workflows
+      .filter((item) => item?.state === "ACTION_REQUIRED" && item?.run_id)
+      .map((item) => Number(item.run_id))
+      .filter((id) => Number.isInteger(id) && id > 0),
+  )];
 }
 
 function parseIdentityRecord(text) {
@@ -517,6 +534,7 @@ export function evaluateCandidate({
 
   if (pr.state !== "open") reasons.push("PR_NOT_OPEN");
   if (pr.base?.ref !== "main") reasons.push("BASE_NOT_MAIN");
+  if (Number(pr.number) === PR_MOTHER_NUMBER) reasons.push("PR_MOTHER_MERGE_FORBIDDEN");
   if (pr.draft) reasons.push("PR_IS_DRAFT");
   if (!sameRepository) reasons.push("HEAD_EXTERNAL_REPOSITORY");
   if (!trusted) reasons.push("AUTHOR_NOT_TRUSTED");
@@ -548,6 +566,7 @@ export function evaluateCandidate({
   for (const workflow of workflows) {
     if (workflow.state === "FAIL") reasons.push(`WORKFLOW_FAILED:${workflow.name}:${workflow.conclusion}`);
     if (workflow.state === "MISSING" || workflow.state === "PENDING") waits.push(`WORKFLOW_${workflow.state}:${workflow.name}`);
+    if (workflow.state === "ACTION_REQUIRED") waits.push(`WORKFLOW_ACTION_REQUIRED:${workflow.name}:${workflow.run_id}`);
   }
 
   const stalledFor = waitAgeMs(pr, now);
@@ -685,6 +704,19 @@ async function fetchWorkflowRuns(client, repository, sha) {
   return (data.workflow_runs || []).filter((run) => run.head_sha === sha);
 }
 
+export async function approveActionRequiredRuns(client, repository, runIds = []) {
+  const approved = [];
+  for (const runId of runIds) {
+    try {
+      await client.request("POST", `/repos/${repository}/actions/runs/${runId}/approve`, undefined, { allow: [201, 204, 409] });
+      approved.push(runId);
+    } catch (error) {
+      console.log(`ACTION_REQUIRED_APPROVE_FAILED run=${runId} ${String(error.message || error).slice(0, 200)}`);
+    }
+  }
+  return approved;
+}
+
 async function fetchPullFiles(client, repository, number) {
   const files = [];
   for (let page = 1; page <= 10; page += 1) {
@@ -780,14 +812,12 @@ async function inspectCandidate(client, repository, number, trustedAuthors, requ
   const securityFindings = scanPullFiles(changed.files);
   if (changed.overflow) securityFindings.push("CHANGED_FILES_OVERFLOW");
 
-  let workflowRuns = [];
-  let threadState = { unresolved: 0, overflow: false };
-  if (!fastPath) {
-    [workflowRuns, threadState] = await Promise.all([
-      fetchWorkflowRuns(client, repository, pr.head.sha),
-      fetchReviewThreadState(client, repository, number),
-    ]);
-  }
+  const [workflowRuns, threadState] = await Promise.all([
+    fetchWorkflowRuns(client, repository, pr.head.sha),
+    fastPath
+      ? Promise.resolve({ unresolved: 0, overflow: false })
+      : fetchReviewThreadState(client, repository, number),
+  ]);
 
   return evaluateCandidate({
     pr,
@@ -912,7 +942,17 @@ async function runPromote() {
       await upsertBlockComment(client, repository, candidate);
       continue;
     }
-    if (candidate.decision === "WAIT") continue;
+    if (candidate.decision === "WAIT") {
+      const approved = await approveActionRequiredRuns(client, repository, actionRequiredRunIds(candidate.workflows));
+      if (approved.length) {
+        console.log(`PR=${pr.number} ACTION_REQUIRED_APPROVED runs=${approved.join(",")}`);
+        await client.request("POST", `/repos/${repository}/dispatches`, {
+          event_type: "centraldark_autonomia_recheck",
+          client_payload: { pr_number: pr.number, reason: "action_required_approved", head: pr.head.sha, run_ids: approved },
+        });
+      }
+      continue;
+    }
 
     if (candidate.decision === "UPDATE_REQUIRED") {
       const result = await client.request("PUT", `/repos/${repository}/pulls/${pr.number}/update-branch`, { expected_head_sha: pr.head.sha }, { allow: [202] });

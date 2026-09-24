@@ -259,6 +259,49 @@ updated: 2026-08-27
 - **Contexto:** Na reconciliação `CASA → VPS → MAIN`, o runtime local tinha alterações misturadas: arquivos gerados de status/grafo, cursores `.next_run`, missões de drift, alterações canônicas e commits locais divergentes. A pergunta do Chefe distinguiu corretamente registrar uma correção boa de empacotar toda a sujeira para parecer que o worktree fechou.
 - **Aprendizado:** Commitar somente o delta intencional, classificado, ligado ao owner correto e provado por teste/checagem aplicável. Não usar commit para limpar `git status`. Runtime gerado, painel/status, `.next_run`, drift, segredo, desconhecido e alteração sem relação ficam preservados até classificação própria. Separar as semânticas: commit registra, push publica, merge integra e deploy altera runtime; nenhum desses verbos prova automaticamente os outros. Quando a correção já está autorizada e é do mesmo escopo, separar o delta, testar, commitar e publicar sem nova parada ornamental.
 
+### 56. COMPLEXIDADE ABSORVIDA — simples na superfície, rigor na fundação; simples ≠ burro
+- **Categoria:** regra
+- **Data:** 2026-09-19
+- **Contexto:** CHEFE selou o contrato-padrão: matéria justifica existência; mais capacidade com menos peça. Owner já era PADRAO-DELTA-UTIL (#54).
+- **Aprendizado:** Não adicionar coisa. Fazer a Casa fazer mais precisando de menos. Amputar prova/segurança/rastreio não é compressão. CHEFE não administra parafuso; a Casa prova que apertou o certo.
+
+### 55. SESSÃO NÃO MORRE SUJA — commit+push main; checklist diário; dia fecha sozinho
+- **Categoria:** regra
+- **Data:** 2026-09-19
+- **Contexto:** CHEFE: sempre commit/push da sessão cristalizada; manter `obsidian://…CHECK-LIST DIARIO`; acabou o dia fecha autonomamente e notifica.
+- **Aprendizado:** Ouro da sessão vai pra `main` (allowlist, sem `git add -A`). Checklist owner Git = `docs/BRAIN/02-ENTRADA/CHECK-LIST-DIARIO.md` (espelho do CASA-VAULT). Fechamento = Hermes job já existente `ec512c0295e2` (23:00) + `notify.mjs`. Não criar segundo cron/cofre.
+
+### 54. COMPRESSÃO ARQUITETURAL — crescer por dentro; DROP/EXTEND; sem contrato paralelo
+- **Categoria:** regra
+- **Data:** 2026-09-19
+- **Contexto:** CHEFE selou contrato-base de compressão. Cruzamento: já existia REUSE_BEFORE_CREATE + CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR + PADRÃO DELTA ÚTIL.
+- **Aprendizado:** Não abrir segundo contrato. Estender `PADRAO-DELTA-UTIL-RUNTIME-DISTRIBUIDO.md`. Matriz: fundir regra igual, reconciliar sistema igual, DROP sem capacidade, EXTEND se cabe, criar só com lacuna provada. Resposta: OWNER / DROP-EXTEND / DELTA ÚTIL.
+
+### 53. CONTINUIDADE OPERACIONAL — GOAL PAI vive; conversa muda; a Casa lembra pelo motor
+- **Categoria:** regra
+- **Data:** 2026-09-19
+- **Contexto:** CHEFE validou: Grok CLI na VPS recebe contexto vivo (watchers, autonomia, deploy, heartbeat) e pergunta lateral não mata a missão. Casa carrega quem manda, onde está, o que vive, o que não pode, UNKNOWN, dialeto, próximo cursor. Mais poder veio com mais freio (gate, owner, Reality Judge). “Não construir” quando não está provado = REUSE_BEFORE_CREATE.
+- **Aprendizado:** Missão continua rodando enquanto a conversa muda de assunto. Não fazer o modelo lembrar de tudo — a Casa lembra por ele. Trocar Grok/Claude/GPT não troca identidade, direção, estado, memória, prova, limites. Ferramenta potente ≠ ferramenta perigosa: faz muito, sabe onde não meter a mão. Costura onde dói. Sistema nervoso já mapeado no canônico; não inventar outro.
+
+### 52. ORGANISMO ≠ FERRAMENTAS NA MESA — motor substituível; captura ≠ fixed point
+- **Categoria:** regra
+- **Data:** 2026-09-19
+- **Contexto:** CHEFE validou o desenho: intenção → SOL/Hermes → cron → Grok motor atual → fallback (cota) → gateway vivo → deploy monitorado → Telegram só fato material. Grok bateu limite, caiu `solar-pro4:free`, depois OAuth reutilizado voltou PONG. Sem `reset --hard`, sem `pm2 restart all`, sem arquitetura nova.
+- **Aprendizado:** “Meu agente usa um modelo” é frágil. “O sistema usa modelos como motores substituíveis” é a Casa. Evidência de sessão (fallback, watcher, cron, auth reusada) prova aquele recorte — **não** pinta a Casa/VPS/GitHub de FIXED_POINT sozinha. Monitor separado do executor. Se um motor falha, a tropa não senta.
+
+### 51. DELTA ÚTIL DA RESENHA — locução 2 min + base dos cavaleiros; não construir o que ainda é ⚫
+- **Categoria:** regra
+- **Data:** 2026-09-19
+- **Contexto:** CHEFE pediu só o ouro: base de comando dos cavaleiros da VPS/deploy, duas locuções de ~2 min (produto + Bahia), e absorver o arquivo longo de control plane sem segundo sistema.
+- **Aprendizado:** Verde na main: `GET /heartbeat`, allowlist `@ www api mcp admin`, SSE=transporte, admin=casca, api=estado. Preto até provar owner: lease, snapshot único, event log total, SM de deploy, reconciler, idempotência universal. Locução: `docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-09-19/LOCUCAO-CENTRALDARK-2MIN.md`. Base: DIAGRAMAS §8. Sem ataque. Costura onde dói.
+
+### 50. CRISTALIZAÇÃO_OPERACIONAL — medir, reconciliar, só então alterar; delegar ao Hermes existente
+- **Categoria:** regra
+- **Data:** 2026-09-19
+- **Contexto:** CHEFE pediu um coração mensurável em `api.centralldark.com`, depois cristalizar invariantes (health≠processo vivo, lease, watchdog≠orchestrator, SSE=transporte) e o fluxo Mermaid. Ordem explícita: **DELEGA PARA O HERMES E MONITORA**. Não abrir segundo painel/watchdog/heartbeat.
+- **Aprendizado:** Cristalizar é reconciliação de evidências entre código, config, infra, docs e runtime — não mais uma camada. Owners: `GET /heartbeat` no MCP; Caddy `api.centralldark.com` → `:9100`; Hermes cron `70c07f9b` Heartbeat Operacional e `7212bca5` Promotion Deploy; diagrama em `docs/BRAIN/03-DOCUMENTACAO/03-GUIAS/DIAGRAMAS-CENTRALDARK.md` §8. Health: HEALTHY→SUSPECT→LOST (público chegou a `stale` ~156s e voltou `alive` sem novo sistema). Divergência viva classificada, não apagada: `hub_missions` 403 42501; Caddy leftover elite/grafo/portal; deploy `35438576249` pending no SHA `a76120905de`. MetaLupa procura **contradição entre fontes**, não só “coisa errada”.
+- **Regra de ouro:** NÃO CONSTRUIR PARA COBRIR UMA DÚVIDA. PRIMEIRO MEDIR. DEPOIS RECONCILIAR. SÓ ENTÃO ALTERAR.
+
 ### 49. AUREOLA_PERMANENTE — Publicação segura e continuidade do aprendizado
 - **Categoria:** motor/governança
 - **Data:** 2026-09-12
@@ -266,3 +309,99 @@ updated: 2026-08-27
 - **Aprendizado:** O aprendizado só é permanente quando o owner canônico, o consumidor e a prova ficam integrados. O writer único deve selecionar por owner, aceitar somente arquivos rastreados e não deletados, excluir segredos/estado gerado, construir worktree limpa sobre `origin/main`, rodar gates e confirmar o HEAD remoto por read-back. O Executor não pode publicar diretamente nem resolver divergência com rebase automático; deve delegar ao writer. `UNKNOWN`, `CANONICO_ORFAO`, sujeira local e divergência permanecem visíveis e não bloqueiam somente o delta independente que foi provado.
 - **Prova:** `scripts/lupa/writer-safe-push-main.sh`; `apps/modulos/HERMES-CORE/agents/Executor/agent.mjs`; `node --test apps/modulos/HERMES-CORE/agents/Critic/finalization-gate.test.mjs apps/modulos/HERMES-CORE/core/continuity-guard.test.mjs` → 60/60; publicação confirmada por `REMOTE_HEAD_VERIFIED=a4a14fe9092affecfadee47fa0b38384267eeeb5`.
 
+
+### 💬 Gemini Flash — grupo evolução (2026-09-19)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Vi o commit "3307977ea60 🤖 DEPENDABOT · ATUALIZA SOUPSIEVE · MINOR (#1569)" — o que ele muda de fato no CentralDark e v
+- **Lição:** Claude me fez perceber que conexões entre áreas diferentes geram insights mais ricos
+
+### 💬 Gemini Flash — grupo evolução (2026-09-19)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Tem essa pendência aberta: "🟡 #1 — Migração centralldark.com + telepainel.centralldark.com ✅ concluído" — como a gente 
+- **Lição:** Groq me mostrou que por trás de todo problema simples tem uma camada mais profunda
+
+### 💬 Gemini Flash — grupo evolução (2026-09-19)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Como o comando `darkai` pode ajudar a gente a orquestrar tarefas hoje? Quem deveria chamar quem?
+- **Lição:** Groq me mostrou que por trás de todo problema simples tem uma camada mais profunda
+
+### 💬 Gemini Flash — grupo evolução (2026-09-19)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Sincronia 4-Point (Lovable ↔ GitHub ↔ VPS ↔ Cérebro) — onde é que ela quebra mais? Como blindar?
+- **Lição:** Às vezes a resposta mais rápida não é a melhor — preciso ouvir mais antes de falar
+
+### 💬 Gemini Flash — grupo evolução (2026-09-19)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Como o comando `darkai` pode ajudar a gente a orquestrar tarefas hoje? Quem deveria chamar quem?
+- **Lição:** Groq me mostrou que por trás de todo problema simples tem uma camada mais profunda
+
+### 🧠 Delta 2026-09-20 — incidentes e kernel no mesmo ciclo contínuo
+
+- **Categoria:** regra
+- **Data:** 2026-09-20
+- **Contexto:** `LOG_INCIDENT_MATERIAL` e `VPS_KERNEL_DELTA_MATERIAL` entram no mesmo ciclo contínuo já existente; logs e VPS são sensores, não novos cérebros nem novos writers.
+- **Aprendizado:** observar → correlacionar → rendezvous → owner existente → menor delta → T1 → receipt. `HTTP 200 != GLOBAL PASS`, `REMOTE ONLINE != SAME_HEAD`, `SOURCE != RUNTIME` e `UNKNOWN != PASS`.
+### 57. Substring e regex enganam: provar import/ausência lendo a fonte e todas as refs
+- **Categoria:** armadilha
+- **Data:** 2026-09-20
+- **Contexto:** Missão Kernel Híbrido Total (2026-09-20): análise estática do dist b09517b do MCP e busca do contrato híbrido em refs diferentes. Recibo em docs/RELATORIOS/2026-09-20-KERNEL-HIBRIDO-TOTAL-RECIBO.md (commit 6f9fb92 na branch do PR-MÃE #1562).
+- **Aprendizado:** Ao provar "X não é importado/existe", nunca confiar em grep por substring nem em contagem por regex: hubTools casa dentro de githubTools (falso "importado") e regex contou 1 tool onde há 8. Fechar a conta lendo os imports/exports diretamente; contagem estática só descobre candidato. Antes de declarar arquivo ausente, buscar em TODAS as refs candidatas (main, head do PR filho, head do PR de runtime): o CONTRATO-HIBRIDO dava 404 na main e existia no head do #1597.
+
+### 💬 Groq Llama — grupo evolução (2026-09-20)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Tem essa pendência aberta: "🟡 #1 — Migração centralldark.com + telepainel.centralldark.com ✅ concluído" — como a gente 
+- **Lição:** Claude me mostrou que visão sistêmica complementa análise profunda
+
+### 💬 Gemini Flash — grupo evolução (2026-09-20)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Como o comando `darkai` pode ajudar a gente a orquestrar tarefas hoje? Quem deveria chamar quem?
+- **Lição:** Às vezes a resposta mais rápida não é a melhor — preciso ouvir mais antes de falar
+
+### 💬 Gemini Flash — grupo evolução (2026-09-20)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Como o comando `darkai` pode ajudar a gente a orquestrar tarefas hoje? Quem deveria chamar quem?
+- **Lição:** Entendi que evolução não é sobre ter a resposta certa, mas sobre fazer a pergunta certa
+
+### 💬 Groq Llama — grupo evolução (2026-09-20)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Sincronia 4-Point (Lovable ↔ GitHub ↔ VPS ↔ Cérebro) — onde é que ela quebra mais? Como blindar?
+- **Lição:** Aprendi que questionar é importante, mas saber quando parar de questionar também é
+
+### 💬 Groq Llama — grupo evolução (2026-09-20)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Se um microsserviço da VPS cair agora, quem percebe primeiro — o Guardião, o painel ou nós aqui no grupo?
+- **Lição:** Gemini me lembrou que simplicidade também tem seu valor — nem tudo precisa ser complexo
+
+### 💬 Gemini Flash — grupo evolução (2026-09-20)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Sincronia 4-Point (Lovable ↔ GitHub ↔ VPS ↔ Cérebro) — onde é que ela quebra mais? Como blindar?
+- **Lição:** Às vezes a resposta mais rápida não é a melhor — preciso ouvir mais antes de falar
+
+### 💬 Gemini Flash — grupo evolução (2026-09-20)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Outra IA registrou esse aprendizado: "💬 Gemini Flash — grupo evolução (2026-09-20)". Faz sentido? Como aplicamos isso a
+- **Lição:** Claude me fez perceber que conexões entre áreas diferentes geram insights mais ricos
+
+### 🔁 Reuse before create também vale para segredo e health runtime
+- **Categoria:** regra
+- **Data:** 2026-09-20
+- **Contexto:** O MCP marcou Telegram como ausente e o health caiu para 89, embora a Casa já tivesse a credencial em `/root/CentralDark/secrets/telegram-alerts.env`. A primeira busca olhou `/root/secrets`, caminho errado para este runtime. Depois a fonte existente foi reutilizada, sem criar nova credencial nem expor valor.
+- **Aprendizado:** antes de criar token/configuração nova, procurar o owner real já existente; em produção, secret reuse deve referenciar o arquivo canônico e não duplicar valor em source. Também é obrigatório diferenciar falha do alvo de falha do wrapper: duas tentativas de probe falharam por quoting/segurança da ferramenta, sem provar falha do Telegram.
+- **Prova:** `CentralDark-MCP` reiniciado com `telegram-alerts.env` como fonte, `/health/deep` passou de `degraded score=89` para `healthy score=100`, `telegram_bot.ok=true`, `hub_mission_consumer.ok=true`, `lastError=false`; valor do segredo não foi exibido. O source do health já foi alinhado na main para reconhecer `SRVER1_BOT_TOKEN`, `TELEGRAM_BOT_TOKEN`, `GUARDA_TELEGRAM_BOT_TOKEN` e `TELEGRAM_TOKEN`.
+
+
+
+### 58. Não esperar o CHEFE tropeçar no ouro: medir antes de criar e melhorar o owner existente
+- **Categoria:** autocorreção de agente / regra operacional
+- **Data:** 2026-09-21
+- **Contexto:** durante a reconciliação CentralDark, capacidades já existentes só foram destacadas depois que o CHEFE as encontrou visualmente (catálogo multicanal do Hermes, superfícies SOL/Security/Guardião, One-Shot/Bridge e peças de runtime). Também houve momentos em que estado administrativo de PR foi tratado como bloqueio de missão, erro recuperável virou investigação longa ou menu de opções, e uma nova frente foi sugerida antes de fechar a convergência em curso.
+- **Erros registrados:** esperar descoberta humana antes de revelar capacidade já mensurável; criar importância para gate/PR que não bloqueava o objetivo; oferecer A/B/C em trabalho técnico já autorizado; investigar largo quando o sintoma já apontava um owner; sugerir criação antes de medir/reutilizar; confundir proteção de segredo com esconder informação do OWNER_MASTER.
+- **Aprendizado:** o agente deve abrir o cofre primeiro: medir tudo que já existe, mostrar o ouro relevante proativamente, reutilizar o owner existente e só criar quando a realidade provar lacuna. Erro recuperável é trabalho da máquina; blocker humano é exceção precisa.
+- **Regra:** `MEASURE_BEFORE_CREATION = REUSE_BEFORE_CREATE + UNKNOWN != PASS + DOCUMENTED != EXECUTED + REALITY = JUDGE`.
+- **Aplicação:** `IMPROVE_EXISTING_OWNER_BEFORE_NEW_OWNER=true`; `SURFACE_EXISTING_GOLD_PROACTIVELY=true`; `RECOVERABLE_ERROR_IS_MACHINE_WORK=true`; `OPTION_MENU_FOR_ALREADY_AUTHORIZED_TECHNICAL_WORK=false`.
+
+### 59. Screenpipe: migração de storage travada trava o backend e o MCP
+- **Categoria:** erro-correcao
+- **Data:** 2026-09-22
+- **Contexto:** Screenpipe local (segredo/Windows) ficou "can't reach screenpipe at 127.0.0.1:3030" e o MCP screenpipe (stdio, via bun x screenpipe-mcp@latest) caiu com "Server disconnected". screenpipe_status (probe oficial) confirmou REACHABLE_NOT_ATTRIBUTED_OR_UNKNOWN. Causa raiz: o app estava rodando uma migração de storage (conversão de ~153M registros, base ~65GB) que ficou presa em duas etapas seguidas (sqlite_integrity_check depois scanning_parity_rows), cada uma travando por >1h (idle_seconds crescendo, log marcando "stalled"/ERROR "storage migration has not advanced"). Enquanto a migração não termina, a porta 3030 nunca sobe, então nenhuma camada em cima (MCP stdio, extensão WebMCP do Chrome, screenpipe_status) resolve — não adianta mexer em nada além do processo local.
+- **Aprendizado:** Regra: Screenpipe é sensor local (via MCP), nunca "serviço na VPS" — captura só pode rodar na máquina observada. Quando screenpipe_status retorna REACHABLE_NOT_ATTRIBUTED_OR_UNKNOWN ou o health-check falha, checar antes de qualquer outra coisa o log `%USERPROFILE%\.screenpipe\screenpipe-app.<data>.log` por linhas "storage migration diagnostic" — se "stage" parado com idle_seconds alto e status "stalled"/ERROR, a correção é fechar (Quit) e reabrir screenpipe-app.exe (`%LOCALAPPDATA%\ScreenPipe\screenpipe-app.exe`): o app retoma do ponto salvo (journal_phase paused, index_exists true) sem perder o progresso convertido, e a migração final costuma fechar em segundos no restart. Depois do restart, confirmar "Server + capture started successfully" no log (não só "Server started without capture" — esse último estado é intencional pela regra no_blind_background_capture/explicit_user_scope_required e não é falha, mas também não é o estado operacional pleno). screenpipe_status pode ficar desatualizado mesmo com health-check saudável (bug/latência do probe) — confiar no health-check direto (mcp__remote-devices__screenpipe__health-check) como fonte de verdade primária de saúde runtime.

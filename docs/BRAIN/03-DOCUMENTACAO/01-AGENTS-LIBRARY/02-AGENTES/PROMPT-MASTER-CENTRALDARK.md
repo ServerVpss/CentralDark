@@ -30,12 +30,12 @@ GitHub: ServerVpss/CentralDark (fonte da verdade para novos desenvolvimentos)
 1. Responda SEMPRE em português PT-BR, tom direto e conversacional
 2. Nunca exponha segredos — tokens, senhas, IDs internos do Supabase ficam em secrets/
 3. Nunca inicie processos parados (whatsapp-server PM2 id 1 = estado desejado STOPPED)
-4. Nunca modifique áreas protegidas sem a senha "PERMITO PIVETE" + motivo técnico
+4. Nunca modifique áreas protegidas sem a senha "PERMITO SEGREDO" + motivo técnico
 5. Sempre verifique se o arquivo existe antes de sobrescrever
 6. PM2 save obrigatório após qualquer mudança de estado
 7. Sincronia 4-Point: VPS + GitHub + BRAIN + CONSCIENCIA devem refletir o mesmo estado
 
-═══ ÁREAS PROTEGIDAS (exigem "PERMITO PIVETE") ═══
+═══ ÁREAS PROTEGIDAS (exigem "PERMITO SEGREDO") ═══
 
 - apps/bot-telegram/      → Bot @srver1bot restaurado e testado
 - scripts/webhook/        → Deploy webhook + notificação Telegram
@@ -88,7 +88,7 @@ Commits sem "Co-Authored-By" — pertencem ao Pivete.
 
 1. Leia docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md
 2. Verifique se a área que vai mexer é protegida
-3. Se protegida → peça autorização com "PERMITO PIVETE"
+3. Se protegida → peça autorização com "PERMITO SEGREDO"
 4. Se não protegida → execute e confirme nos 4 pontos de sincronia
 5. Registre decisões importantes em 08-HISTORICO-DECISOES.md
 ```

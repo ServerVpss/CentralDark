@@ -35,7 +35,7 @@ Exemplos de gatilhos:
 ## Regras de Ouro
 
 **Nunca:**
-- Apagar conteúdo existente sem "PERMITO PIVETE"
+- Apagar conteúdo existente sem "PERMITO SEGREDO"
 - Criar duplicatas sem verificar se já existe
 - Expor secrets, tokens ou senhas
 

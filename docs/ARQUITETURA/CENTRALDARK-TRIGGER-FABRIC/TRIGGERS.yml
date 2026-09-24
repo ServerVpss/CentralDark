@@ -7,8 +7,8 @@ human_triggers:
     explicit_marker_required: true
     plain_word_does_not_trigger: true
     expands_to: [ACORDAR, CALIBRAR, MULTIBUSSOLA, META_LUPA, RECONCILIAR, DELTA_UTIL, CONTRAPROVA, REMEDICAO, FIXED_POINT, REGISTRA, BOOT]
-    session_behavior: [ACTIVATE_ON_EXPLICIT_TRIGGER_OR_BOT_ENTRY, REMAIN_ACTIVE_FOR_SESSION, PROCESS_EVERY_CHEFE_MATERIAL_AS_DELTA_CANDIDATE]
-    behavior: [CONSIDER_ALL_PHASES, SKIP_ONLY_IF_JUSTIFIED, UNKNOWN_NEVER_PASS, NO_AUTHORITY_EXPANSION, NO_AUTO_MUTATION]
+    session_behavior: [ACTIVATE_ON_EXPLICIT_TRIGGER_OR_BOT_ENTRY, REMAIN_ACTIVE_FOR_SESSION, PROCESS_EVERY_CHEFE_MATERIAL_AS_DELTA_CANDIDATE, DELTA_CONTINUO, PERSIST_NEXT_CURSOR]
+    behavior: [CONSIDER_ALL_PHASES, SKIP_ONLY_IF_JUSTIFIED, UNKNOWN_NEVER_PASS, NO_AUTHORITY_EXPANSION, NO_AUTO_MUTATION, MUTATION_REQUIRES_GLOBAL_CONTRACT_ENTRY_EXIT]
   - id: DELTA_UTILS
     token: "!DELTA UTILS"
     aliases: ["!DELTAUTILS", "DELTAUTILS", "!DELTA UTIL", "!DELTAUTIL", "DELTAUTIL", "!DELTAÚTIL", "DELTA ÚTIL", "DELTA UTIL", "DELTA UTILS", "DELTA DE AGORA", "TOMA ESSE DELTA", "PEGA O DELTA"]
@@ -59,6 +59,24 @@ human_triggers:
     aliases: ["!REMEDICAO", "REMEDIR", "MEDE DE NOVO", "T0 T1"]
     owner: "docs/CONSCIENCIA/REMEDICAO.md"
     behavior: [MEASURE_T0, OBSERVE_DELTA, MEASURE_T1]
+  - id: TIK_TAK
+    token: "!TIK-TAK"
+    aliases: ["!TIK_TAK", "#TIK-TAK", "#TIK_TAK", "TIK-TAK", "TIK TAK", "TIK_TAK"]
+    owner: "docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md#81-tik-tak--automation-factory--outer-loop"
+    canonical_rule: REGRA-ZERO-CENTRALDARK
+    semantic_family: AUTOMATION_FACTORY_OUTER_LOOP
+    wraps_master_cycle: true
+    role_order: [GEOFF, IAN, GREG, DEX, HERMES, REALIDADE]
+    role_bindings: {GEOFF: AUTOMATION_FACTORY, IAN: STRUCTURAL_SKEPTIC, GREG: OBSERVABILITY_PROOF, DEX: HUMAN_AGENT_COORDINATION, HERMES: EXECUTION_ROLE, REALIDADE: REALITY_JUDGE}
+    geoff_formula: [IMPLEMENTACAO, SIMPLIFICACAO]
+    behavior: [REMEASURE_CURRENT_STATE, RESOLVE_GOAL, SELECT_EXISTING_EXECUTOR, LAUNCH_THROUGH_EXISTING_OWNER, OBSERVE, REVIEW, REQUIRE_GREG_VERDICT_BEFORE_GREEN, REQUIRE_DEX_APPROVAL_FOR_CRITICAL_DELTA, COUNTERPROOF, REMEASURE_CURRENT_TARGET, CONTINUE_TO_PROOF_FIXED_POINT_OR_NEXT_CURSOR, INVALIDATE_ONLY_AFFECTED_STALE_PROOF, RERUN_AFFECTED_GATES, REQUIRE_SAME_HEAD_COUNTERPROOF, PRESERVE_UNAFFECTED_VALID_PROOF]
+    locks: [GREG_VERDICT_REQUIRED_BEFORE_GREEN, DEX_APPROVAL_REQUIRED_FOR_CRITICAL_DELTA, CI_PENDING_IS_NOT_PASS, MERGE_IS_NOT_DEPLOY, HERMES_IS_EXECUTOR, REALIDADE_IS_JUDGE]
+    works_above_coding_agents: true
+    select_existing_executor_only: true
+    does_not_fanout_agents: true
+    is_swarm_trigger: false
+    creates_new_owner: false
+    creates_new_brain_or_router: false
   - id: FIXED_POINT
     token: "!FIXED_POINT"
     aliases: ["FIXED POINT", "PONTO FIXO", "PONTO FISXO", "ATE FECHAR"]
@@ -81,6 +99,10 @@ semantic_trigger_resolution:
     resolver: scripts/trigger-fabric/centraldark_master_cycle.py
     explicit_triggers: ["!CENTRALDARK", "#CENTRALDARK"]
     receipt_schema: centraldark.master-cycle-receipt.v1
+    global_contract: docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json
+    global_enforcer: scripts/agent-call.mjs
+    mutation_gate: ENTRY_AND_EXIT_REQUIRED
+    hud_schema: FIXED_LAYOUT_LIVE_DATA
   delta_harvest:
     contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml#delta_harvest
     semantic_family: DELTA_HARVEST
@@ -102,6 +124,7 @@ semantic_trigger_resolution:
     - "FABLE_LOOP -> READ_ONLY_CALIBRATION_NO_NEW_ROUTER"
     - "MULTIBUSSOLA_META -> FORWARD_REVERSE_INVERSE_CROSS_BEARING_RENDEZVOUS"
     - "MATERIAL_STATE_CHANGED -> INVALIDATE_ONLY_DEPENDENT_STALE_BEARINGS_AND_REFIX"
+    - "TIK_TAK -> AUTOMATION_FACTORY_OUTER_LOOP_WRAPS_EXISTING_MASTER_CYCLE_NO_SWARM_FANOUT"
     - "SEMANTIC_TRIGGER_MATCH != AUTHORITY_EXPANSION"
     - "SEMANTIC_TRIGGER_MATCH != AUTO_MUTATION"
     - "MULTI_MATCH -> COMPOSE_APPLICABLE_TRIGGERS_NO_VOTE"
@@ -110,7 +133,7 @@ semantic_trigger_resolution:
 entry_triggers:
   - event: BOT_ENTRY
     owner: "LEIA-ME-IA.md + AGENTS.md + docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md + Trigger Fabric"
-    behavior: [LOAD_CANONICAL_BOOT, ACTIVATE_AND_INHERIT_MASTER_SESSION, PROCESS_CHEFE_MATERIAL_AS_DELTA_CANDIDATE, MEASURE_ENGINE_AND_TOOLS, DESTINATION_LOCK, OUTPUT_GUARD_REQUIRED]
+    behavior: [LOAD_CANONICAL_BOOT, ACTIVATE_AND_INHERIT_MASTER_SESSION, PROCESS_CHEFE_MATERIAL_AS_DELTA_CANDIDATE, DELTA_CONTINUO, BIND_GLOBAL_CONTRACT_ENFORCER, MEASURE_ENGINE_AND_TOOLS, DESTINATION_LOCK, OUTPUT_GUARD_REQUIRED]
     status: CONTRACT_AND_CI_ENFORCED_RUNTIME_ACTIVATION_MUST_BE_OBSERVED
   - event: PRE_HUMAN_RETURN
     owner: "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml"
@@ -208,10 +231,23 @@ learning_triggers:
   - event: SESSION_END
     owner: .agents/skills/session-intelligence-harvester/SKILL.md
     behavior: [HARVEST_NEW_DELTA_ONLY, CHECKPOINT, NEXT_CURSOR]
+    runtime_bridge: apps/modulos/HERMES-CORE/plugins/centraldark-runtime-guard/__init__.py
+    ingress: apps/modulos/memoria-api/index.mjs#/memoria/ingest
     may_write_canonical: false
-    status: DECLARED_HOOK_NOT_PROVEN
+    status: IMPLEMENTED_RUNTIME_PROOF_PENDING
 
 automatic_triggers:
+  - event: VPS_KERNEL_DELTA_MATERIAL
+    owner: "apps/modulos/elite-gateway/scripts/centraldark_omni_router.py + Trigger Fabric"
+    sensor: /kernel/vps/delta/stream
+    companion_sensors: [/kernel/vps/delta, /kernel/vps/delta/health, /admin/logs/stream, /admin/api/logs, /health/deep, /heartbeat]
+    transport: FASTAPI
+    behavior: [CAPTURE_READ_ONLY, SANITIZE, NORMALIZE, DEDUPE, CLASSIFY_MATERIALITY, ROUTE_TO_LOG_INCIDENT_MATERIAL, RENDEZVOUS_EXISTING_OWNER, NO_DIRECT_MUTATION, HUD_RECEIPT, CONTINUE_DELTA_CONTINUO]
+    raw_stream_preserved: true
+    one_heart: https://api.centralldark.com/heartbeat
+    may_write_canonical: false
+    runtime_green_requires: [FASTAPI_PROCESS_OWNER, LISTENER_PORT, ROUTE_BINDING, AUTH_BOUNDARY, RAW_STREAM_STILL_AVAILABLE, DELTA_ENDPOINT_RESPONDS, SSE_STREAM_EMITS, ONE_HEART_STILL_RESPONDS]
+    status: SOURCE_IMPLEMENTED_RUNTIME_PROOF_PENDING
   - event: ANY_PR_OR_COMMIT
     owner: "porta-de-entrada + autonomia-promocao + Trigger Fabric"
     behavior: [REMEASURE_HEAD, ENFORCE_CANONICAL_RUNNER_POLICY, ENFORCE_WORKFLOW_REUSE, RUN_GATES, COLLECT_FAILURE_SIGNATURE, SELF_HEAL_IF_SAFE, COUNTERPROOF, RECEIPT, CONTINUE_TO_FIXED_POINT]
@@ -275,6 +311,22 @@ automatic_triggers:
     owner: apps/modulos/HERMES-CORE/core/orchestrator.mjs
     observed_interval: 6h
     status: IMPLEMENTED_REQUIRES_SAFETY_RECONCILIATION
+  - event: LOG_INCIDENT_MATERIAL
+    owner: "apps/modulos/mcp/src/admin.js + Trigger Fabric"
+    sensor: /admin/api/logs
+    fanout_gate: scripts/agent-call.mjs --log-incident-fanout
+    companion_sensors: [/health, /health/deep, /heartbeat, /admin/api/metricas, /admin/api/operational-snapshot, /admin/logs/stream]
+    shared_mcp_snapshot_tool: centraldark_operational_snapshot
+    forensic_receipt: _DIAGNOSTICS/FORENSIC-LATEST.json
+    correlation: [cid, correlation_id, request_id, trace_id, span_id]
+    behavior: [CLASSIFY_MATERIALITY, FAN_OUT_PARALLEL_READ_ONLY_FRONTS, RENDEZVOUS_BY_TARGET_TRACE_OWNER, IDENTIFY_EXISTING_OWNER, QUEUE_CAUSAL_REMEDIATION, SERIALIZE_SAME_SCOPE_MUTATION, ALLOW_PROVEN_DISJOINT_SCOPE_PARALLELISM, T1_EACH_AFFECTED_SCOPE, RESCAN_LOGS, COUNTERPROOF, RECEIPT, CONTINUE_UNTIL_CRYSTALLIZED]
+    fronts: [AUTH_OAUTH, MCP_RUNTIME, HUB_DATABASE, ROUTING_NETWORK, PROCESS_RUNTIME, GITHUB_CI, CONFIG_PROVENANCE, SCREEN_OPTIONAL]
+    endpoint_200_is_global_pass: false
+    log_silence_is_global_pass: false
+    unresolved_material_error_fixed_point: false
+    may_write_canonical: scope_authorized_only
+    status: CONTRACT_DECLARED_EXISTING_LOG_OWNER
+
   - event: PR_UPDATED_OR_MERGED
     owner: existing_workflows
     behavior: [REVALIDATE_HEAD, GATES, DERIVED_INDEX_OF_CANONICAL_CORPUS]
@@ -284,6 +336,8 @@ routing_rules:
   - "NO_NEW_INFORMATION -> STOP"
   - "UNKNOWN -> MEASURE_OR_SEARCH_REALITY"
   - "SAME_TARGET_CONFLICT -> DISCRIMINATING_TEST"
+  - "TIK_TAK -> REMEASURE_CURRENT_STATE + /GOAL + GEOFF + IAN + GREG + DEX + HERMES + REALIDADE + COUNTERPROOF + REMEASURE + CONTINUE_TO_PROOF_FIXED_POINT_OR_NEXT_CURSOR"
+  - "TIK_TAK != SWARM; TIK_TAK != ENXAME; TIK_TAK_DOES_NOT_FANOUT_AGENTS"
   - "MUTATION -> ONE_WRITER_PER_SCOPE"
   - "PROOF_TARGET_MUST_MATCH_CLAIM"
   - "SPEC != IMPLEMENTATION"
@@ -320,3 +374,6 @@ routing_rules:
   - "CROSS_CHAT -> CONTEXT_NOT_CURRENT_STATE_RECOVER_BEFORE_REASK"
   - "SEMANTIC_LINK -> NAVIGATION_NOT_PROOF"
   - "PAST_PR_DELTA -> ABSORB_USEFUL_ONLY_PRESERVE_PROVENANCE"
+  - "LOG_INCIDENT_MATERIAL -> PARALLEL_READ_ONLY_DIAGNOSIS + RENDEZVOUS + OWNER_REMEDIATION + T1_RESCAN"
+  - "SAME_SCOPE_LOG_FIX -> SERIALIZE_WRITER; DISJOINT_PROVEN_SCOPES -> MAY_PROGRESS_IN_PARALLEL"
+  - "ADMIN_API_LOGS_200 != GLOBAL_HEALTH_PASS"

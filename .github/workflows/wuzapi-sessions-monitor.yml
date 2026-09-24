@@ -1,7 +1,7 @@
 # DESATIVADO — reativar quando voltar a mexer com WhatsApp/WuzAPI.
 # Schedule e dispatch removidos pra parar de gritar erro no repositório.
 # Ver pendência em docs/PENDENCIAS.md.
-name: wuzapi-sessions-monitor
+name: ⚙️ wuzapi-sessions-monitor
 
 on:
   workflow_dispatch:
@@ -20,10 +20,10 @@ jobs:
     runs-on: [self-hosted, Linux]
     timeout-minutes: 5
     steps:
-      - name: Baixar repo
+      - name: 🔹 Baixar repo
         uses: actions/checkout@v7
 
-      - name: Preparar chave SSH
+      - name: 🔹 Preparar chave SSH
         id: ssh
         env:
           VPS_SSH_KEY_LOVABLE: ${{ secrets.VPS_SSH_KEY_LOVABLE }}
@@ -39,7 +39,7 @@ jobs:
           echo "skip=false" >> "$GITHUB_OUTPUT"
           echo "key=$KEY" >> "$GITHUB_OUTPUT"
 
-      - name: Rodar monitor
+      - name: 🔹 Rodar monitor
         if: steps.ssh.outputs.skip != 'true'
         env:
           VPS_HOST_LOVABLE: ${{ secrets.VPS_HOST_LOVABLE }}
@@ -53,7 +53,7 @@ jobs:
         run: node scripts/bots/wuzapi-sessions-monitor.mjs
 
 
-      - name: Commitar JSON se mudou
+      - name: 🔹 Commitar JSON se mudou
         if: steps.ssh.outputs.skip != 'true'
         run: |
           FILE=CentralDark/apps/projeto-dashboard/wuzapi-sessions.json
@@ -71,6 +71,6 @@ jobs:
           done
           echo "⚠️ push falhou (não bloqueia o monitor)"
 
-      - name: Limpar chave
+      - name: 🔹 Limpar chave
         if: always()
         run: rm -f /tmp/vps_lovable_key
