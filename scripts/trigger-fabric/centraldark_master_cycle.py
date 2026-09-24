@@ -84,6 +84,7 @@ MASTER_INGRESS_ALIASES = {
     "DELTA_UTIL": ("!delta utils", "!deltautils", "!delta util", "!deltautil", "!delta útil", "!centralutil"),
     "CONTRAPROVA": ("!contraprova",),
     "REMEDICAO": ("!remedição", "!remedicao"),
+    "TIK_TAK": ("!tik-tak", "!tik_tak", "#tik-tak", "#tik_tak"),
     "FIXED_POINT": ("!fixed_point",),
     "REGISTRA": ("!registra",),
     "BOOT": ("!boot",),
@@ -422,6 +423,7 @@ def resolve(
     chefe_material = bool(chefe_source and master_cycle_active and not ambiguous_ingress)
     delta_match, delta_active, delta_ambiguous = _resolve_delta(normalized)
     harvest_active = bool(delta_active or chefe_material)
+    tik_tak_active = "TIK_TAK" in ids
     meta_match = next((a for a in MULTIBUSSOLA_META_ALIASES if _phrase_match(normalized, a)), None)
     meta_active = meta_match is not None
 
@@ -496,6 +498,20 @@ def resolve(
             "screen_is_runtime_proof": False,
             "repetition_is_independent_proof": False,
             "temporal_label_is_authority": False,
+        },
+        "tik_tak": {
+            "canonical_signal": "!TIK-TAK",
+            "active": tik_tak_active,
+            "semantic_family": "EVIDENCE_FRESHNESS_REMEASUREMENT" if tik_tak_active else None,
+            "owner": "docs/CONSCIENCIA/REMEDICAO.md" if tik_tak_active else None,
+            "invalidate_only_affected_stale_proof": tik_tak_active,
+            "remeasure_current_target": tik_tak_active,
+            "rerun_affected_gates": tik_tak_active,
+            "same_head_counterproof_required": tik_tak_active,
+            "preserve_unaffected_valid_proof": tik_tak_active,
+            "fanout_agents": False,
+            "is_swarm_trigger": False,
+            "creates_new_owner": False,
         },
         "identity_naming_guard": {
             "canonical_identity_is_single": True,
@@ -665,6 +681,7 @@ def self_test():
         ("!CENTRALUTIL", "DELTA_UTIL"),
         ("!CONTRAPROVA", "CONTRAPROVA"),
         ("!REMEDICAO", "REMEDICAO"),
+        ("!TIK-TAK", "TIK_TAK"),
         ("!FIXED_POINT", "FIXED_POINT"),
         ("!REGISTRA", "REGISTRA"),
         ("!BOOT", "BOOT"),
@@ -676,6 +693,16 @@ def self_test():
             and r["activation_source"] == "SUBTRIGGER_FUNNEL"
             and phase in r["master_funnel"]["matched_trigger_ids"],
         )
+
+    r = resolve("!TIK-TAK", chefe_source=True)
+    add(
+        "tik_tak_is_remeasurement_not_swarm",
+        r["tik_tak"]["active"]
+        and r["tik_tak"]["invalidate_only_affected_stale_proof"]
+        and r["tik_tak"]["same_head_counterproof_required"]
+        and not r["tik_tak"]["fanout_agents"]
+        and not r["tik_tak"]["is_swarm_trigger"],
+    )
 
     r = resolve("!CENTRALDARK", chefe_source=True)
     add("master", r["explicit_match"] and r["expanded_chain"] == CHAIN)
