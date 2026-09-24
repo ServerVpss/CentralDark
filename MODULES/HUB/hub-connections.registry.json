@@ -1,0 +1,103 @@
+{
+  "schema": "centraldark.modules.hub.connections.v1",
+  "updated_at": "2026-09-24T11:45:00-03:00",
+  "purpose": "Mapa visivel/editavel dos bracos e pernas do Megazord CentralDark. Nao contem segredo e nao cria runtime paralelo.",
+  "canonical_runtime_owner": "apps/modulos/hub",
+  "rules": {
+    "one_system_only": true,
+    "reuse_before_create": true,
+    "reality_is_judge": true,
+    "notification_is_not_pass": true,
+    "secrets_in_git": false
+  },
+  "connections": [
+    {
+      "id": "telegram-bot-api-security-sol",
+      "label": "Telegram Bot API — Security/SOL",
+      "type": "telegram_bot_api",
+      "owner": "apps/bot-telegram/unified-bot.cjs",
+      "enabled": true,
+      "status_surface": "status.centraldark.telegram.bot",
+      "events": ["message", "button", "note_created", "panel_status", "feedback_text"],
+      "proof_state": "PASS_PARTIAL",
+      "notes": "Bot vivo e registra notas/memoria. Feedback '+1 ponto' ainda nao alimenta XP/posterior."
+    },
+    {
+      "id": "telegram-mtproto-user-bridge",
+      "label": "Telegram MTProto — conta pessoal/user bridge",
+      "type": "telegram_mtproto",
+      "owner": "scripts/telegram-mtproto/server.js",
+      "enabled": true,
+      "status_surface": "status.centraldark.telegram.mtproto",
+      "events": ["health", "status", "start_code", "confirm_login", "logout"],
+      "proof_state": "CONFIG_BLOCKED",
+      "notes": "Source e health mode foram versionados. Conta pessoal continua UNKNOWN ate login confirmado."
+    },
+    {
+      "id": "github-actions-email-signal",
+      "label": "GitHub Actions via Gmail/iPhone",
+      "type": "event_notification_signal",
+      "owner": "GitHub Actions + Gmail notification surface",
+      "enabled": true,
+      "status_surface": "status.centraldark.github.email_signal",
+      "events": ["commit_email", "workflow_email", "merge_email", "failure_email"],
+      "proof_state": "VISUAL_PASS_EVENT_ONLY",
+      "notes": "E-mail/notificacao prova evento observado, nao PASS tecnico. Exige consulta GitHub antes de score."
+    },
+    {
+      "id": "github-repository-canonical",
+      "label": "GitHub — registro canonico",
+      "type": "git_repository",
+      "owner": "ServerVpss/CentralDark",
+      "enabled": true,
+      "status_surface": "status.centraldark.github.head",
+      "events": ["commit", "pull_request", "workflow", "status", "review"],
+      "proof_state": "PASS_CANONICAL_RECORD",
+      "notes": "Registro canonico de codigo/documentacao. MERGED != DEPLOYED."
+    },
+    {
+      "id": "vps-runtime",
+      "label": "VPS Runtime",
+      "type": "runtime_host",
+      "owner": "/root/CentralDark + PM2 owners",
+      "enabled": true,
+      "status_surface": "status.centraldark.vps.runtime",
+      "events": ["pm2", "health", "logs", "git_head", "dirty_files"],
+      "proof_state": "PASS_PARTIAL",
+      "notes": "Executa corpo vivo. Checkout pode divergir da main; sempre medir HEAD, dirty e PM2_HOME."
+    },
+    {
+      "id": "mcp-centraldark",
+      "label": "MCP CentralDark",
+      "type": "mcp_gateway",
+      "owner": "apps/modulos/mcp",
+      "enabled": true,
+      "status_surface": "status.centraldark.mcp.health",
+      "events": ["health", "health_deep", "tools", "admin"],
+      "proof_state": "PASS_PARTIAL",
+      "notes": "Health/deep pode provar MCP; tela admin/login nao e health."
+    },
+    {
+      "id": "meta-lupa-reward-engine",
+      "label": "Meta-Lupa — XP/posterior/reward",
+      "type": "scoring_engine",
+      "owner": ".agents/skills/meta-lupa/scripts/meta_lupa.py",
+      "enabled": true,
+      "status_surface": "status.centraldark.meta_lupa.score",
+      "events": ["xp_award", "penalty", "posterior_update", "receipt_validated"],
+      "proof_state": "ENGINE_EXISTS_NOT_BOUND_TO_TELEGRAM_FEEDBACK",
+      "notes": "Motor existe. Falta adaptador Telegram/Gmail/GitHub event -> reward ledger."
+    },
+    {
+      "id": "hub-visual-runtime",
+      "label": "Hub visual/status.centraldark",
+      "type": "web_hub",
+      "owner": "apps/modulos/hub",
+      "enabled": true,
+      "status_surface": "status.centraldark.hub",
+      "events": ["dashboard", "connectors", "status_cards", "controls"],
+      "proof_state": "OWNER_EXISTS",
+      "notes": "MODULES/HUB deve alimentar este owner, nao substitui-lo."
+    }
+  ]
+}
