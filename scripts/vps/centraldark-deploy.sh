@@ -36,6 +36,13 @@ BRANCH="${BRANCH:-main}"
 MCP_HEALTH="${MCP_HEALTH:-http://127.0.0.1:9100/health}"
 APPS="${APPS:-}"
 OPTIONAL_RUNTIME_APPS="${OPTIONAL_RUNTIME_APPS:-CentralDark-ScreenPipe CentralDark-EliteAnthropic}"
+RUNTIME_CHURN_ALLOWLIST=(
+  "apps/bot-telegram/skills/config/memory.json"
+  "apps/bot-telegram/skills/config/skills.json"
+  "apps/modulos/graph-panel/data/graph.json"
+  "apps/modulos/status/graph-data.json"
+  "docs/CONSCIENCIA/APRENDIZADOS.md"
+)
 GLOBAL_CONTRACT_GATE="$REPO_DIR/scripts/agent-call.mjs"
 GLOBAL_GATE_RECEIPT_DIR="${GLOBAL_GATE_RECEIPT_DIR:-/tmp/centraldark-global-contract}"
 # CENTRALDARK_GLOBAL_CONTRACT_ENFORCER_REQUIRED
@@ -164,8 +171,38 @@ listar_sujos_rastreados() { git status --porcelain=v1 --untracked-files=no || tr
 contar_sujos_rastreados() { listar_sujos_rastreados | sed '/^$/d' | wc -l | tr -d ' '; }
 contar_nao_rastreados() { git ls-files --others --exclude-standard -z | tr '\0' '\n' | sed '/^$/d' | wc -l | tr -d ' '; }
 
+is_runtime_churn_path() {
+  local candidate="$1" allowed
+  for allowed in "${RUNTIME_CHURN_ALLOWLIST[@]}"; do
+    [[ "$candidate" == "$allowed" ]] && return 0
+  done
+  return 1
+}
+
+listar_sujos_rastreados_material() {
+  local path
+  while IFS= read -r path; do
+    [[ -n "$path" ]] || continue
+    is_runtime_churn_path "$path" && continue
+    printf '%s\n' "$path"
+  done < <(git diff --name-only HEAD --)
+}
+
+contar_sujos_rastreados_material() {
+  listar_sujos_rastreados_material | sed '/^$/d' | wc -l | tr -d ' '
+}
+
+contar_runtime_churn() {
+  local path count=0
+  while IFS= read -r path; do
+    [[ -n "$path" ]] || continue
+    is_runtime_churn_path "$path" && count=$((count + 1))
+  done < <(git diff --name-only HEAD --)
+  printf '%s\n' "$count"
+}
+
 contar_sujos_deploy() {
-  if [[ "$TOTAL" -eq 1 ]]; then contar_sujos_rastreados; else contar_sujos; fi
+  if [[ "$TOTAL" -eq 1 ]]; then contar_sujos_rastreados_material; else contar_sujos; fi
 }
 
 proteger_nao_rastreados_contra_alvo() {
@@ -242,6 +279,36 @@ verify_runtime_apps() {
   return 0
 }
 
+normalize_runtime_churn() {
+  local path
+  for path in "${RUNTIME_CHURN_ALLOWLIST[@]}"; do
+    if git ls-files --error-unmatch "$path" >/dev/null 2>&1; then
+      git restore --source="origin/$BRANCH" --worktree -- "$path" || return 1
+    fi
+  done
+  if [[ -d apps/modulos/grupo-evolucao/missions ]]; then
+    git restore --source="origin/$BRANCH" --worktree -- apps/modulos/grupo-evolucao/missions 2>/dev/null || true
+    git clean -f -- apps/modulos/grupo-evolucao/missions >/dev/null 2>&1 || true
+  fi
+  log "RUNTIME_CHURN_NORMALIZED=PASS"
+}
+settle_runtime_churn() {
+  local attempt material
+  for attempt in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15; do
+    normalize_runtime_churn || return 1
+    sleep 3
+    material="$(contar_sujos_rastreados_material)"
+    log "RUNTIME_SETTLE_ATTEMPT=$attempt MATERIAL_DIRTY=$material KNOWN_CHURN=$(contar_runtime_churn)"
+    if [[ "$material" -eq 0 ]]; then
+      log "RUNTIME_SETTLE=PASS attempts=$attempt"
+      return 0
+    fi
+    log "RUNTIME_SETTLE_MATERIAL_PATHS_BEGIN"
+    listar_sujos_rastreados_material | sed "s/^/  /"
+    log "RUNTIME_SETTLE_MATERIAL_PATHS_END"
+  done
+  return 1
+}
 proof_guard_paths_exist_on_ref() {
   local ref="$1"
   local required=(
@@ -503,6 +570,7 @@ else
 fi
 
 # ─── T1 / contraprova ─────────────────────────────────────────────────
+settle_runtime_churn || { rollback; die "RUNTIME_CHURN_SETTLE_FAILED" 17; }
 log "=== T1 (depois) ==="
 FINAL_HEAD="$(git rev-parse HEAD)"
 FINAL_REMOTE="$(git rev-parse "origin/$BRANCH")"
@@ -511,6 +579,7 @@ FINAL_UNTRACKED="$(contar_nao_rastreados)"
 log "FINAL_HEAD=$FINAL_HEAD"
 log "FINAL_REMOTE=$FINAL_REMOTE"
 log "FINAL_DIRTY=$FINAL_DIRTY"
+[[ "$TOTAL" -eq 1 ]] && log "FINAL_RUNTIME_CHURN_CLASSIFIED=$(contar_runtime_churn)"
 log "FINAL_UNTRACKED_PRESERVED=$FINAL_UNTRACKED"
 [[ "$FINAL_HEAD" == "$FINAL_REMOTE" && "$FINAL_DIRTY" -eq 0 ]] \
   || { rollback; die "sync não atingiu ponto fixo source" 15; }
