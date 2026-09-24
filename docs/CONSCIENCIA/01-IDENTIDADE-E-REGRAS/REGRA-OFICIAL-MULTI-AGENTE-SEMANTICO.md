@@ -154,6 +154,51 @@ ONE_WRITER_PER_SCOPE=true
 
 A Forja é fábrica de capacidade/bot sob demanda, não sétimo membro obrigatório do gabinete. Especialista fixo é função operacional; modelo/provider continua substituível.
 
+### 5.2 Núcleo único — uma CentralDark, múltiplas superfícies e papéis
+
+```text
+CENTRALDARK = ONE_AGENT
+ONE_AGENT_ONLY=true
+ONE_SYSTEM_ONLY=true
+MULTI_ROLE=true
+MULTI_SURFACE=true
+ROLE_ON_DEMAND=true
+
+TELA != AGENTE
+TERMINAL != AGENTE
+SESSAO != AGENTE
+PAPEL != AGENTE
+MODELO != AGENTE
+```
+
+O gabinete fixo, SOL, HERMES/PIVETE e demais nomes funcionais são papéis/capacidades da mesma CentralDark quando operam sob este canônico. Abrir outra tela, terminal, sessão, modelo ou runtime não cria outra inteligência, outro cérebro ou outra autoridade.
+
+```text
+Auditor Determinístico = PAPEL
+Orquestrador de Loop = PAPEL
+Arquiteto de Guardrails = PAPEL
+Mesa de Growth = PAPEL
+Governador de Deploy = PAPEL
+Chefe de Gabinete = PAPEL
+SOL = PAPEL_DE_COORDENACAO
+HERMES/PIVETE = PAPEL_EXECUTOR
+
+TODOS_SOB_O_CANONICO = CENTRALDARK
+```
+
+O comando global deve transportar a intenção vigente, o estado CURRENT, o fio, os papéis necessários e o próximo cursor para que superfícies diferentes convirjam sem microgerenciamento do CHEFE. Isso não prova transporte entre superfícies: cada claim de transporte continua exigindo canal causal medido.
+
+```text
+CHEFE_INTENT
+→ CENTRALDARK
+→ PAPEL_NECESSARIO
+→ EXECUCAO
+→ REALIDADE
+→ CONTINUAR_ATE_FIXED_POINT_OU_BLOCKER_REAL
+```
+
+A VPS/runtime é corpo de execução e prova, não segunda CentralDark. GitHub registra o canônico; runtime mede o estado vivo; REALIDADE julga o claim.
+
 ## 6. Continuidade sem confundir papel com pessoa
 
 `#ACORDAR` recupera estado real antes de continuar. `!CALIBRAR` reconcilia e deposita checkpoint. `!RELOAD` relê em read-only.
