@@ -5,7 +5,7 @@ vault_windows: "E:\\CentralDark\\Pivete\\CASA-VAULT\\🧾CHECK-LIST DIARIO🤖.m
 owner: docs/BRAIN/02-ENTRADA/CHECK-LIST-DIARIO.md
 sync: CASA-VAULT/00-CANONICO via scripts/casa/sync-hermes-obsidian.ps1
 status: OPERATIONAL
-updated: 2026-09-23
+updated: 2026-09-24T00:56:31-03:00
 ---
 
 # 🧾 CHECK-LIST DIARIO 🤖
@@ -64,6 +64,22 @@ DIA ACABA → fechar autonomamente → atualizar este checklist → Telegram CHE
 - [ ] VPS ainda não sincronizada com este commit; VPS dirty ainda não resolvida.
 
 **Regra corrigida:** `LOCAL_EDIT != COMMIT` — trabalho na Casa só conta pro histórico quando sobe pra `main`. Skill do Hermes atualizada pra nunca mais deixar isso implícito.
+
+## 2026-09-24 — RECONCILIAÇÃO CRON HERMES (delta resumido)
+
+**Medição real:** cron Hermes existente executou esta skill; GitHub, VPS, PM2, pendências e espelhos foram medidos novamente. `UNKNOWN != PASS` preservado.
+
+- [x] GitHub `main` atual medido: `c29528379df64b0eedcb471a8e9f1a6728036c00` (`docs(bridge): cristalizar T1 do painel admin público`, commit date `2026-09-24T03:25:12Z`).
+- [x] Cron/Gateway Hermes: `hermes cron status` retornou **Gateway running**, PID `36908`, heartbeat `48s`, `2 active job(s)`, próxima execução `2026-09-24T08:00:00-02:00`. A pendência anterior “Gateway não está rodando” virou resolvida na medição atual.
+- [x] VPS medida via SSH: `/var/lib/centraldark/canonical-main` e `origin/main` estão no mesmo SHA `c29528379df64b0eedcb471a8e9f1a6728036c00`; `/root/CentralDark` runtime checkout continua em `0357579d389de84f8aabe000b2e7f080c9ac7b58` (sync drift, não outage por si só).
+- [x] Health endpoints medidos: `http://127.0.0.1:9400/health` = 200; `https://admin.centralldark.com/contas/health` = 200; `https://api.centralldark.com/heartbeat` = 200; `https://mcp.centralldark.com/admin` = 200.
+- [x] PM2 respondeu JSON válido nesta rodada: processos principais online, mas **não é PASS global** porque `CentralDark-EliteAnthropic` está `errored` (pid `0`, restarts `46`) e `CentralDark-ScreenPipe` está `errored` (pid `0`, restarts `20`).
+- [x] Dirty VPS mudou: agora são 3 modificados (`apps/modulos/graph-panel/data/graph.json`, `apps/modulos/status/graph-data.json`, `docs/CONSCIENCIA/APRENDIZADOS.md`) + 3 não rastreados (`2026-09-17`, `drift-1790218839823.json`, `drift-1790220670185.json`). O checklist Git não apareceu mais como dirty na VPS; os 38 drifts anteriores não foram observados nesta medição.
+- [x] PRs abertos medidos: 19. Não apareceu PR novo acima de #1664. #1657 está **MERGED** (`2026-09-23T18:33:47Z`). #1662 segue OPEN/MERGEABLE com HEAD `1996e034543d711142735b410531c691b3148e54`. #1663 segue draft “NÃO EXECUTAR”. #1664 segue OPEN/MERGEABLE com HEAD `d03a5670e88ccc4d54919eaf92e42bd640325c3e`.
+- [x] `docs/PENDENCIAS.md` Git continua com itens #54 e #55 abertos, sem item novo #57 observado nesta leitura.
+- [x] Espelho HUD local (`HUD.html`) ainda mostra `7 abertas`; `Pendências.md` local do HUD ainda tem as mesmas 5 pendências do Chefe + 3 do agente. Não foi criada pendência nova nesta rodada; portanto não houve mutação HUD/Pendências.md.
+
+**UNKNOWN / não fechado:** MCP CentralDark específico da skill (`deploy_status`, `vps_git_status`, `pendencias_list`) não estava disponível como tool direta neste corpo; substituído por sensores autorizados equivalentes (`gh`, SSH, PM2, curl, leitura Git). Causalidade de por que `EliteAnthropic` e `ScreenPipe` estão `errored` não foi diagnosticada nesta reconciliação diária; status registrado, não tratado como PASS.
 
 ### Proibido no dia a dia
 `reset --hard` · `pm2 restart all` · `git add -A` · segundo painel/watchdog
