@@ -72,6 +72,14 @@ MULTIBUSSOLA_PROOF_GATES = [
     "REALITY_JUDGE",
 ]
 TIK_TAK_ROLE_ORDER = ["GEOFF", "IAN", "GREG", "DEX", "HERMES", "REALIDADE"]
+TIK_TAK_ROLE_BINDINGS = {
+    "GEOFF": "AUTOMATION_FACTORY",
+    "IAN": "STRUCTURAL_SKEPTIC",
+    "GREG": "OBSERVABILITY_PROOF",
+    "DEX": "HUMAN_AGENT_COORDINATION",
+    "HERMES": "EXECUTION_ROLE",
+    "REALIDADE": "REALITY_JUDGE",
+}
 TIK_TAK_OUTER_LOOP = [
     "REMEASURE_CURRENT_STATE",
     "/goal",
@@ -528,6 +536,7 @@ def resolve(
             "wraps_master_cycle": tik_tak_active,
             "goal_step": "/goal" if tik_tak_active else None,
             "role_order": TIK_TAK_ROLE_ORDER if tik_tak_active else [],
+            "role_bindings": TIK_TAK_ROLE_BINDINGS if tik_tak_active else {},
             "geoff_formula": ["IMPLEMENTACAO", "SIMPLIFICACAO"] if tik_tak_active else [],
             "outer_loop_sequence": TIK_TAK_OUTER_LOOP if tik_tak_active else [],
             "locks": TIK_TAK_LOCKS if tik_tak_active else [],
@@ -738,6 +747,7 @@ def self_test():
         and r["tik_tak"]["canonical_rule"] == "REGRA-ZERO-CENTRALDARK"
         and r["tik_tak"]["semantic_family"] == "AUTOMATION_FACTORY_OUTER_LOOP"
         and r["tik_tak"]["role_order"] == TIK_TAK_ROLE_ORDER
+        and r["tik_tak"]["role_bindings"] == TIK_TAK_ROLE_BINDINGS
         and r["tik_tak"]["outer_loop_sequence"] == TIK_TAK_OUTER_LOOP
         and r["tik_tak"]["greg_verdict_required_before_green"]
         and r["tik_tak"]["dex_approval_required_for_critical_delta"]
