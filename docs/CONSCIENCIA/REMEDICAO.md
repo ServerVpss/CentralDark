@@ -120,16 +120,65 @@ REGISTRA_REQUIRED_FOR_MATERIAL_DELTA=true
 REGISTRA_REQUIRED_FOR_ALL_CENTRALDARK_AGENTS_AND_SURFACES=true
 NO_MATERIAL_DELTA_NO_COMMIT_REQUIRED=true
 COMMIT_PER_MESSAGE=false
-SAME_SCOPE_ACTIVE_PR_REUSED=true
-ONE_ACTIVE_PROMOTION_PR_PER_SCOPE=true
-MANY_COMMITS_PER_ACTIVE_PR_ALLOWED=true
-NEW_PR_PER_CHAT=false
-NEW_PR_PER_COMMIT=false
-NEW_PR_ONLY_AFTER_PREVIOUS_SCOPE_PR_CLOSED_OR_MERGED=true
-NEW_PR_REQUIRES_REAL_MATERIAL_DELTA=true
-NEXT_PR_STARTS_FROM_CURRENT_MAIN=true
-DIRECT_MAIN_WRITE=false
+
+PROMOTION_MODE=DIRECT_MAIN_SOFT_EVOLUTION
+NEW_PR_DEFAULT=false
+EXISTING_OPEN_PRS_REMAIN_VALID=true
+PR_MOTHER=#1562
+PR_MOTHER_ROLE=HISTORY_HANDOFF_LEDGER
+PR_MOTHER_MERGE_FORBIDDEN=true
+
+DIRECT_MAIN_WRITE=true
+DIRECT_MAIN_COMMIT_REQUIRES_CURRENT_MAIN_REMEASURE=true
+DIRECT_MAIN_COMMIT_REQUIRES_RECEIPT_IN_PR_MOTHER=true
+PR_GATE_HARDENING=DEFERRED_UNTIL_CHEFE_REENABLES
+MIN_SECURITY_ONLY=true
+MIN_SECURITY_CHECKS=SECRET_SCAN|SYNTAX_OR_PARSE_WHEN_APPLICABLE|TARGETED_TEST_WHEN_AVAILABLE|MAIN_READBACK
+
+SIMPLE_LOW_RISK_MCP_DELTA_CAN_USE_DIRECT_MAIN=true
+FULL_CI_REQUIRED_FOR_SIMPLE_LOW_RISK_MCP_DELTA=false
+SIMPLE_MCP_REQUIRES_CAUSAL_DEPLOY_WHEN_RUNTIME_AFFECTED=true
+SIMPLE_MCP_REQUIRES_T1_REMEASURE=true
+
+PR_PATH_REMAINS_OPTIONAL_FOR_EXISTING_OR_EXPLICIT_SCOPE=true
+PR_AUTOMATION_MUST_NOT_BYPASS_ITS_OWN_BRANCH_BOUNDARY=true
+ONE_WRITER_PER_SCOPE=true
+REUSE_BEFORE_CREATE=true
+UNKNOWN_IS_NOT_PASS=true
+NEXT_CURSOR_REQUIRED=true
 ```
+
+
+
+### 5.1. Exceção operacional atual — main direta suave
+
+A política CURRENT da Casa é `DIRECT_MAIN_SOFT_EVOLUTION`. Ela não apaga o histórico nem transforma o PR-mãe em Writer. O #1562 continua sendo o ledger/handoff permanente; a escrita material normal pode ir direto à `main` quando o SEGREDO/CHEFE concede a caneta e o escopo está reconciliado.
+
+Para delta MCP simples e de baixo risco, CI pesado não é pré-condição. A exigência é menor e causal: remedir a `main`, reutilizar owner existente, aplicar delta mínimo, executar segurança mínima aplicável, ler de volta a `main`, fazer deploy causal quando houver runtime afetado, remedir T1 e registrar receipt no #1562.
+
+```text
+CHEFE_EXPLICIT_WRITER_AUTHORITY
+→ CURRENT_MAIN_REMEASURE
+→ OWNER_EXISTENTE
+→ DELTA_MÍNIMO
+→ MIN_SECURITY_CHECKS
+→ DIRECT_MAIN_COMMIT
+→ MAIN_READBACK
+→ DEPLOY_CAUSAL_IF_APPLICABLE
+→ T1_REMEASURE
+→ RECEIPT_PR_MOTHER_1562
+→ NEXT_CURSOR
+
+SIMPLE_LOW_RISK_MCP_DELTA
+→ FULL_CI_NOT_REQUIRED
+→ TARGETED_TEST_WHEN_AVAILABLE
+→ MAIN_READBACK_REQUIRED
+→ RUNTIME_T1_REQUIRED_IF_DEPLOYED
+```
+
+O caminho suave **não** reclassifica como "simples" mudanças de autenticação, segredos, permissões, política de segurança, migração destrutiva, schema persistente, proteção de branch, workflow privilegiado ou qualquer delta cujo blast radius esteja UNKNOWN. Esses casos continuam exigindo o caminho de prova proporcional ao risco.
+
+PR já aberto continua válido para o trabalho que nasceu nele. Dentro de automação/escopo explicitamente PR-bound, o Writer permanece na branch do PR; `DIRECT_MAIN_SOFT_EVOLUTION` não autoriza um bot de PR a saltar sua própria fronteira silenciosamente.
 
 `!REGISTRA` grava fato reconstruível — intenção, escopo, owner, HEAD/estado, delta, evidência, contraprova, status e próximo cursor. Não grava raciocínio privado nem segredos.
 
