@@ -363,7 +363,16 @@ ${divergencias.length === 0 ? '_Nenhuma divergência. Tudo verde._' : divergenci
 - Status: \`${driftEvidence.status}\` (${driftEvidence.code})
 - ${driftEvidence.motivo}
 ${recoveryNote ? `- ${recoveryNote}` : ''}
+
+## Rota determinística / TIK-TAK
+
+- Decisão: \`${deterministicRoute.decision || 'UNKNOWN'}\`
+- Proof state: \`${deterministicRoute.proof_state || 'UNKNOWN'}\`
+- Motivo: \`${deterministicRoute.reason || 'UNKNOWN'}\`
+- Fingerprint: \`${deterministicRoute.dependency_fingerprint || 'UNKNOWN'}\`
+- NEXT_CURSOR: \`${deterministicRoute.next_cursor || 'UNKNOWN'}\`
+- API transport: \`${deterministicRoute.api_transport || 'UNKNOWN'}\`
 `;
 writeFileSync(REPORT_FILE, report);
 
-console.log(`Sentinela rodou. Divergências: ${divergencias.length}. Issues novas: ${abertas.filter((a) => a.nova).length}.`);
+console.log(`Sentinela rodou. Divergências: ${divergencias.length}. Issues novas: ${abertas.filter((a) => a.nova).length}. Rota: ${deterministicRoute.decision || 'UNKNOWN'}.`);
