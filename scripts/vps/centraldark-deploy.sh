@@ -286,7 +286,10 @@ normalize_runtime_churn() {
       git restore --source="origin/$BRANCH" --worktree -- "$path" || return 1
     fi
   done
-  find apps/modulos/grupo-evolucao/missions -maxdepth 1 -type f -name "drift-*.json" -delete 2>/dev/null || true
+  if [[ -d apps/modulos/grupo-evolucao/missions ]]; then
+    git restore --source="origin/$BRANCH" --worktree -- apps/modulos/grupo-evolucao/missions 2>/dev/null || true
+    git clean -f -- apps/modulos/grupo-evolucao/missions >/dev/null 2>&1 || true
+  fi
   log "RUNTIME_CHURN_NORMALIZED=PASS"
 }
 settle_runtime_churn() {
