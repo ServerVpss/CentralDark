@@ -291,9 +291,9 @@ normalize_runtime_churn() {
 }
 settle_runtime_churn() {
   local attempt material
-  for attempt in 1 2 3 4 5; do
+  for attempt in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15; do
     normalize_runtime_churn || return 1
-    sleep 2
+    sleep 3
     material="$(contar_sujos_rastreados_material)"
     log "RUNTIME_SETTLE_ATTEMPT=$attempt MATERIAL_DIRTY=$material KNOWN_CHURN=$(contar_runtime_churn)"
     if [[ "$material" -eq 0 ]]; then
