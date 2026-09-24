@@ -94,7 +94,7 @@ ORIGIN_SHA="$(git rev-parse "origin/$BRANCH")"
 if [[ -n "$TARGET_SHA_INPUT" ]]; then
   [[ "$TARGET_SHA_INPUT" =~ ^[0-9a-f]{40}$ ]] || die "TARGET_SHA inválido: $TARGET_SHA_INPUT" 16
   git cat-file -e "$TARGET_SHA_INPUT^{commit}" 2>/dev/null || die "TARGET_SHA não materializado após fetch" 16
-  git merge-base --is-ancestor "$TARGET_SHA_INPUT" "$ORIGIN_SHA" || die "TARGET_SHA não pertence a origin/$BRANCH" 16
+  [[ "$TARGET_SHA_INPUT" == "$ORIGIN_SHA" ]] || die "TARGET_SHA_STALE gated=$TARGET_SHA_INPUT current=$ORIGIN_SHA" 16
   ALVO="$TARGET_SHA_INPUT"
 else
   ALVO="$ORIGIN_SHA"

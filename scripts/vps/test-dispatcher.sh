@@ -82,6 +82,7 @@ fi
 log "=== 6. Gate canônico e handoff obrigatório ==="
 if grep -q -- '--gate-only' "$DISPATCHER" \
   && grep -q 'TARGET_SHA_INPUT=' "$DISPATCHER" \
+  && grep -q 'TARGET_SHA_STALE' "$DISPATCHER" \
   && grep -q 'tlc23_runtime_gate.py --self-test' "$DISPATCHER"; then
   pass "dispatcher suporta gate-only exact-SHA com TLC23 runtime self-test"
 else
