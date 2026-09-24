@@ -5,5 +5,5 @@
 - Decisão REUSE_BEFORE_CREATE: `EXTEND_EXISTING`
 - Owner visual encontrado: `src/admin/cockpit/HermesMascote.tsx`
 - Estado inicial: o owner possui poses e reações do cockpit, mas não possui deslocamento pela tela nem compartilhamento com as superfícies pública e autenticada.
+- Consolidação: a implementação material seguirá na branch única `agent/centraldark-cockpit-vivo`; esta branch permanece apenas como receipt de descoberta para evitar dois writers no mesmo escopo.
 - Segurança: nenhuma credencial será incorporada ao cliente ou aos assets.
-- Prova pendente: build, captura pública, captura da landing do cockpit e captura autenticada.
