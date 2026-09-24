@@ -145,6 +145,14 @@ class ContinuousDeltaContractTest(unittest.TestCase):
         self.assertTrue(contract["wraps_master_cycle"])
         self.assertEqual("/goal", contract["goal_step"])
         self.assertEqual(["GEOFF", "IAN", "GREG", "DEX", "HERMES", "REALIDADE"], contract["role_order"])
+        self.assertEqual({
+            "GEOFF": "AUTOMATION_FACTORY",
+            "IAN": "STRUCTURAL_SKEPTIC",
+            "GREG": "OBSERVABILITY_PROOF",
+            "DEX": "HUMAN_AGENT_COORDINATION",
+            "HERMES": "EXECUTION_ROLE",
+            "REALIDADE": "REALITY_JUDGE",
+        }, contract["role_bindings"])
         self.assertEqual(["IMPLEMENTACAO", "SIMPLIFICACAO"], contract["geoff_formula"])
         self.assertTrue(contract["greg_verdict_required_before_green"])
         self.assertTrue(contract["dex_approval_required_for_critical_delta"])
