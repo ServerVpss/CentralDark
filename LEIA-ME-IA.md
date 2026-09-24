@@ -3,7 +3,7 @@ title: "LEIA-ME-IA"
 status: "CANÔNICO"
 scope: "Porta de entrada única para qualquer IA que conectar no CentralDark"
 source_of_truth: "Este arquivo + SOUL canônica + estado real medido"
-updated: 2026-09-20
+updated: 2026-09-24
 ---
 
 # LEIA-ME-IA — comece por aqui
@@ -314,6 +314,13 @@ CENTRALDARK_AI_BOOT:
   writer: "NONE|nome-do-escritor-atual"
   frequency: "LEVE|RAPIDA|MEDIA|PROFUNDA|FORTE|AVANCADA|FRIA|ORQUESTRA|ADAPTIVE"
   fronts: "ADAPTIVE_1_TO_10"
+  hud:
+    🎯_RUMO: "objetivo vigente + intenção do CHEFE"
+    📍_AGORA: "estado atual medido"
+    🧵_FIO: "missão principal aberta"
+    🌿_RAMO: "investigação lateral ou delta útil em progresso"
+    ↩️_VOLTA: "retorno explícito ao fio principal"
+    ➡️_NEXT: "próximo passo causal determinístico"
   conflict_resolution: "git-conflict-resolve-house-standard (motor: scripts/dependabot/resolve-conflicts.sh; registry: scripts/dependabot/known-conflict-patterns.json)"
 ```
 
@@ -461,6 +468,70 @@ GIRIA + METAFORA + ABREVIACAO + DIGITACAO_RAPIDA
 ```
 
 Se a IA interpretou errado, corrige a própria interpretação; não apresenta isso como “correção” do humano.
+
+## 3.1 Nomenclatura operacional exata — nome real antes do apelido
+
+Quando o componente real é conhecido, a Casa deve nomeá-lo pelo nome técnico/canônico antes de qualquer categoria genérica. Termos como `sensor`, `ponte`, `módulo`, `serviço`, `motor` ou `coisa` podem aparecer como explicação secundária, mas não podem substituir a identidade concreta do componente.
+
+Esta regra vale para toda saída humana e operacional da CentralDark: Telegram, ChatGPT, outros chats de IA, HUB, site, CLI, receipts, status e relatórios.
+
+```text
+EXACT_COMPONENT_NAMING_REQUIRED=true
+GENERIC_ALIAS_CANNOT_REPLACE_KNOWN_COMPONENT=true
+GENERIC_SENSOR_WORD_AS_STANDALONE=FORBIDDEN
+SENSOR_TERM_ALLOWED_ONLY_FOR_LITERAL_SENSOR_OR_EXPLICIT_TELEMETRY_ROLE=true
+GLOBAL_COMMUNICATION_SURFACES=TELEGRAM_BOT|CHATGPT|AI_CHATS|HUB|WEBSITE|CLI|RECEIPTS|STATUS_MESSAGES
+SAME_NAMING_CONTRACT_ACROSS_SURFACES=true
+NAME_BEFORE_CATEGORY=true
+FAILURE_REPORT_MUST_NAME_OBSERVED_COMPONENT=true
+TRANSPORT_FAILURE_MUST_NOT_BE_RENAMED_AS_WORLD_FAILURE=true
+UNKNOWN_COMPONENT_MUST_BE_CALLED_UNKNOWN_NOT_SENSOR=true
+HUMAN_FACING_UI_MUST_PREFER_CANONICAL_COMPONENT_NAME=true
+SHORT_UI_LABEL_REQUIRES_CANONICAL_DETAIL=true
+```
+
+Ordem obrigatória quando houver falha, indisponibilidade ou estado:
+
+```text
+COMPONENTE_EXATO
+→ ALVO_EXATO (device|service|process|endpoint|path, quando conhecido)
+→ ESTADO_OBSERVADO
+→ IMPACTO_REAL
+→ CAUSA_MEDIDA ou UNKNOWN
+```
+
+Exemplos canônicos:
+
+```text
+ERRADO: "sensor VPS caiu"
+CERTO:  "Remote Desktop Commander perdeu acesso ao dispositivo vmi3256920; isso não prova que a VPS caiu."
+
+ERRADO: "sensor MCP falhou"
+CERTO:  "O endpoint /health do MCP não respondeu no alvo medido."
+
+ERRADO: "sensor Tailscale caiu"
+CERTO:  "O dispositivo/serviço Tailscale do alvo medido ficou indisponível."
+
+ERRADO: "sensor Windows offline"
+CERTO:  "O dispositivo SEGREDO no Remote Desktop Commander ficou offline."
+```
+
+Se o nome concreto ainda não estiver medido, usar `componente não identificado = UNKNOWN`; não inventar um apelido técnico para preencher a lacuna.
+
+A tradução humana vem **depois** do nome real, no mesmo referente:
+
+```text
+Remote Desktop Commander
+→ ponte usada para entrar/executar comandos no computador autorizado
+
+MCP /health
+→ endpoint que informa a saúde do serviço MCP
+
+Tailscale
+→ rede privada usada para alcançar o dispositivo/serviço autorizado
+```
+
+`DISPLAY_SHORT_LABEL != TECHNICAL_IDENTITY`: a interface pode mostrar um rótulo curto por espaço, mas tooltip, detalhe, status expandido ou resposta técnica deve preservar o nome canônico do componente.
 
 ## 4. Reconciliação antes de criar
 

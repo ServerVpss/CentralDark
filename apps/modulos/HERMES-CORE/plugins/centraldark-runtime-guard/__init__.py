@@ -11,7 +11,10 @@ import os
 import re
 import subprocess
 import sys
+from collections import Counter
 from datetime import datetime, timezone
+from urllib import error as urllib_error
+from urllib import request as urllib_request
 from pathlib import Path
 from typing import Any
 
@@ -29,7 +32,15 @@ LOGICAL_EXACT = {
     ".agents/skills/meta-lupa/SKILL.md",
 }
 MUTATING_TOOLS = {"write_file", "patch", "skill_manage", "terminal", "browser_exec"}
-SESSION: dict[str, Any] = {"started_at": None, "last_anchor_hash": None, "events": 0}
+HARVEST_OWNER = ".agents/skills/session-intelligence-harvester/SKILL.md"
+DEFAULT_MEMORIA_INGEST_URL = "http://127.0.0.1:3101/memoria/ingest"
+DEFAULT_MEMORIA_INGEST_TOKEN_FILE = Path("/root/CentralDark/secrets/memoria-ingest.token")
+SESSION: dict[str, Any] = {
+    "started_at": None,
+    "last_anchor_hash": None,
+    "events": 0,
+    "receipt_start_size": 0,
+}
 
 
 def now() -> str:
@@ -146,6 +157,158 @@ def append_receipt(event: dict[str, Any]) -> None:
         handle.write(json.dumps(safe, ensure_ascii=False) + "\n")
 
 
+def _stable_receipt_view(record: dict[str, Any]) -> dict[str, Any]:
+    """Keep only already-sanitized, causally useful fields; timestamps never create fake delta."""
+    return {
+        "schema": str(record.get("schema", "")),
+        "plugin": str(record.get("plugin", "")),
+        "tool": str(record.get("tool", "UNKNOWN"))[:100],
+        "phase": str(record.get("phase", "UNKNOWN"))[:40],
+        "logical_scope": bool(record.get("logical_scope")),
+        "verdict": str(record.get("verdict", "UNKNOWN"))[:80],
+        "argument_fingerprint": str(record.get("argument_fingerprint", ""))[:128],
+    }
+
+
+def _session_receipt_delta() -> list[dict[str, Any]]:
+    path = receipt_path()
+    start = int(SESSION.get("receipt_start_size") or 0)
+    try:
+        raw = path.read_bytes()
+    except OSError:
+        return []
+    if start < 0 or start > len(raw):
+        start = 0
+    records: list[dict[str, Any]] = []
+    for line in raw[start:].decode("utf-8", errors="replace").splitlines():
+        try:
+            item = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if isinstance(item, dict) and item.get("phase") != "SESSION_END":
+            records.append(_stable_receipt_view(item))
+    return records
+
+
+def build_session_harvest_candidate(
+    records: list[dict[str, Any]],
+    snapshot: dict[str, Any],
+) -> tuple[dict[str, Any] | None, str | None]:
+    stable_records = [_stable_receipt_view(item) for item in records if isinstance(item, dict)]
+    if not stable_records:
+        return None, None
+
+    fingerprint = stable_hash(stable_records)
+    tools = Counter(item["tool"] for item in stable_records)
+    verdicts = Counter(item["verdict"] for item in stable_records)
+    session_id = "hermes-" + stable_hash({
+        "started_at": SESSION.get("started_at"),
+        "fingerprint": fingerprint,
+    })[:24]
+    tool_summary = ",".join(f"{key}:{tools[key]}" for key in sorted(tools))
+    verdict_summary = ",".join(f"{key}:{verdicts[key]}" for key in sorted(verdicts))
+
+    payload = {
+        "source": PLUGIN_NAME,
+        "kind": "session.harvest",
+        "title": "Hermes session operational delta",
+        "text": (
+            f"sanitized_receipts={len(stable_records)}; "
+            f"tools={tool_summary or 'NONE'}; verdicts={verdict_summary or 'NONE'}; "
+            f"fingerprint={fingerprint}"
+        ),
+        "path": str(receipt_path()),
+        "intent_goal": "preserve only new session delta in the existing CentralDark learning pipeline",
+        "owner": HARVEST_OWNER,
+        "provenance": "centraldark-runtime-guard:on_session_end",
+        "source_surface": "HERMES",
+        "session_id": session_id,
+        "head_sha": snapshot.get("head_sha") or "",
+        "next_cursor": "scripts/memory-linker -> knowledge-compiler -> existing owner",
+        "metadata": {
+            "component": PLUGIN_NAME,
+            "runtime": "HERMES",
+            "owner": HARVEST_OWNER,
+            "status": "CANDIDATE",
+        },
+    }
+    return payload, fingerprint
+
+
+def _last_harvest_fingerprint_path() -> Path:
+    return receipt_path().parent / "last-session-harvest.sha256"
+
+
+def load_memoria_ingest_token() -> str:
+    token = str(os.environ.get("MEMORIA_INGEST_TOKEN", "")).strip()
+    if token:
+        return token
+    token_file = Path(
+        os.environ.get("MEMORIA_INGEST_TOKEN_FILE", str(DEFAULT_MEMORIA_INGEST_TOKEN_FILE))
+    ).expanduser()
+    try:
+        return token_file.read_text(encoding="utf-8").strip()
+    except OSError:
+        return ""
+
+
+def emit_session_harvest_candidate() -> dict[str, Any]:
+    records = _session_receipt_delta()
+    snapshot = git_snapshot(repo_root())
+    payload, fingerprint = build_session_harvest_candidate(records, snapshot)
+    if not payload or not fingerprint:
+        return {"status": "NO_CHANGE", "reason": "NO_SANITIZED_SESSION_DELTA"}
+
+    fingerprint_path = _last_harvest_fingerprint_path()
+    try:
+        if fingerprint_path.read_text(encoding="utf-8").strip() == fingerprint:
+            return {"status": "NO_CHANGE", "reason": "SAME_SESSION_DELTA_FINGERPRINT", "fingerprint": fingerprint}
+    except OSError:
+        pass
+
+    token = load_memoria_ingest_token()
+    if not token:
+        return {"status": "BLOCKED", "reason": "MEMORIA_INGEST_TOKEN_UNCONFIGURED", "fingerprint": fingerprint}
+
+    url = str(os.environ.get("CENTRALDARK_MEMORIA_INGEST_URL", DEFAULT_MEMORIA_INGEST_URL)).strip()
+    data = json.dumps(payload, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
+    req = urllib_request.Request(
+        url,
+        data=data,
+        method="POST",
+        headers={
+            "Authorization": f"Bearer {token}",
+            "Content-Type": "application/json",
+            "User-Agent": "CentralDark-Hermes-Runtime-Guard/1",
+        },
+    )
+    try:
+        with urllib_request.urlopen(req, timeout=3) as response:
+            code = int(response.getcode() or 0)
+            body = response.read(4096).decode("utf-8", errors="replace")
+        if not 200 <= code < 300:
+            return {"status": "BLOCKED", "reason": f"MEMORIA_INGEST_HTTP_{code}", "fingerprint": fingerprint}
+        accepted = json.loads(body or "{}")
+        if accepted.get("accepted") is not True or accepted.get("canonical") is not False:
+            return {"status": "BLOCKED", "reason": "MEMORIA_INGEST_RECEIPT_INVALID", "fingerprint": fingerprint}
+        fingerprint_path.write_text(fingerprint + "\n", encoding="utf-8")
+        return {
+            "status": "ACCEPTED",
+            "reason": "CANDIDATE_INGESTED",
+            "fingerprint": fingerprint,
+            "event_id": accepted.get("event_id"),
+            "receipt_path": accepted.get("receipt_path"),
+            "next_route": accepted.get("next_route"),
+        }
+    except (urllib_error.URLError, TimeoutError, OSError, json.JSONDecodeError) as error:
+        return {
+            "status": "BLOCKED",
+            "reason": "MEMORIA_INGEST_UNAVAILABLE",
+            "fingerprint": fingerprint,
+            "error_type": type(error).__name__,
+        }
+
+
 def _tool_parts(*args: Any, **kwargs: Any) -> tuple[str, dict[str, Any]]:
     data = kwargs.get("tool_args") or kwargs.get("args") or {}
     name = kwargs.get("tool_name") or kwargs.get("name") or ""
@@ -159,7 +322,16 @@ def _tool_parts(*args: Any, **kwargs: Any) -> tuple[str, dict[str, Any]]:
 
 
 def on_session_start(*_args: Any, **_kwargs: Any) -> None:
-    SESSION.update({"started_at": now(), "last_anchor_hash": None, "events": 0})
+    try:
+        start_size = receipt_path().stat().st_size
+    except OSError:
+        start_size = 0
+    SESSION.update({
+        "started_at": now(),
+        "last_anchor_hash": None,
+        "events": 0,
+        "receipt_start_size": start_size,
+    })
 
 
 def pre_llm_call(*_args: Any, **_kwargs: Any) -> dict[str, str] | None:
@@ -198,7 +370,19 @@ def post_tool_call(*args: Any, **kwargs: Any) -> None:
 
 
 def on_session_end(*_args: Any, **_kwargs: Any) -> None:
-    append_receipt({"tool": "SESSION", "args": {"events": SESSION.get("events", 0)}, "phase": "SESSION_END", "logical_scope": False, "verdict": "CLOSED"})
+    harvest = emit_session_harvest_candidate()
+    append_receipt({
+        "tool": "SESSION",
+        "args": {
+            "events": SESSION.get("events", 0),
+            "harvest_status": harvest.get("status"),
+            "harvest_reason": harvest.get("reason"),
+            "harvest_fingerprint": harvest.get("fingerprint"),
+        },
+        "phase": "SESSION_END",
+        "logical_scope": False,
+        "verdict": f"HARVEST_{harvest.get('status', 'UNKNOWN')}",
+    })
 
 
 def pre_verify(*_args: Any, **_kwargs: Any) -> dict[str, str] | None:
@@ -230,7 +414,27 @@ def self_test() -> dict[str, Any]:
     assert not is_mutating("terminal", {"command": "git status --short"})
     assert logical_mutation("write_file", {"path": "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/X.md"})
     assert not logical_mutation("write_file", {"path": "README.md"})
-    return {"status": "PASS", "plugin": PLUGIN_NAME, "checks": 7}
+    sample_a = [{
+        "schema": "centraldark.hermes-runtime-guard-receipt.v1",
+        "at": "2026-09-23T00:00:00+00:00",
+        "plugin": PLUGIN_NAME,
+        "tool": "git",
+        "phase": "POST_TOOL",
+        "logical_scope": False,
+        "verdict": "OBSERVED",
+        "argument_fingerprint": "abc",
+    }]
+    sample_b = [{**sample_a[0], "at": "2026-09-23T00:00:01+00:00"}]
+    payload_a, fingerprint_a = build_session_harvest_candidate(sample_a, {"head_sha": "a" * 40})
+    payload_b, fingerprint_b = build_session_harvest_candidate(sample_b, {"head_sha": "a" * 40})
+    assert fingerprint_a == fingerprint_b
+    assert payload_a and payload_b
+    assert payload_a["owner"] == HARVEST_OWNER
+    assert payload_a["kind"] == "session.harvest"
+    assert payload_a["head_sha"] == "a" * 40
+    assert "Authorization" not in json.dumps(payload_a)
+    assert DEFAULT_MEMORIA_INGEST_TOKEN_FILE.name == "memoria-ingest.token"
+    return {"status": "PASS", "plugin": PLUGIN_NAME, "checks": 14}
 
 
 if __name__ == "__main__":

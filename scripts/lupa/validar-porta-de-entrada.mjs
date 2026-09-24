@@ -66,6 +66,19 @@ const BOUNDARY_ENFORCED_FILES = [
   "scripts/webhook/deploy-job.sh",
 ];
 
+
+const CANONICAL_DEPLOY_GATE = "scripts/vps/deploy-guards-dispatcher.sh";
+const DEPLOY_GATE_ENFORCED_FILES = [
+  ".github/workflows/vps-exec-selfhosted.yml",
+  "scripts/vps/deploy-operational-guards.sh",
+  "scripts/vps-deploy.sh",
+  "scripts/webhook/deploy-job.sh",
+  "scripts/clone-deck-gh-pull-with-deploy.sh",
+  "scripts/webhook/telepainel-deploy.mjs",
+  "scripts/remote-bridge/canonical/CENTRALDARK-VPS-UPDATE.ps1",
+  "apps/modulos/hub/scripts/deploy-abacus-router.sh",
+  "apps/modulos/hub/scripts/deploy-hermes-coletivo.sh",
+];
 const existe = (relativePath) => existsSync(join(ROOT, relativePath));
 const ler = (relativePath) => {
   try {
@@ -860,6 +873,24 @@ for (const file of BOUNDARY_ENFORCED_FILES) {
   }
   if (ler(file).includes("/root/Multizap")) errors.push(`BOUNDARY_EXTERNAL_PATH_ATIVO:${file}`);
   if (ler(file).includes("CK_MULTIZAP_ROOT")) errors.push(`BOUNDARY_LEGACY_ROOT_ATIVO:${file}`);
+}
+
+
+for (const file of DEPLOY_GATE_ENFORCED_FILES) {
+  if (!existe(file)) {
+    errors.push("DEPLOY_GATE_ENTRYPOINT_AUSENTE:" + file);
+    continue;
+  }
+  if (!ler(file).includes(CANONICAL_DEPLOY_GATE)) {
+    errors.push("DEPLOY_GATE_BYPASS:" + file + ":esperado=" + CANONICAL_DEPLOY_GATE);
+  }
+}
+
+const centralDeployGateOwner = ler("scripts/vps/centraldark-deploy.sh");
+if (!centralDeployGateOwner.includes("CENTRALDARK_CANONICAL_DEPLOY_GATE") ||
+    !centralDeployGateOwner.includes("DIRECT_DEPLOY_BYPASS_BLOCKED") ||
+    !centralDeployGateOwner.includes("CENTRALDARK_CANONICAL_DEPLOY_TARGET")) {
+  errors.push("DEPLOY_GATE_MUTATION_OWNER_SEM_HANDOFF_CANONICO:scripts/vps/centraldark-deploy.sh");
 }
 
 // Não criar workflow paralelo. Em PRs com BASE/HEAD conhecidos, qualquer novo

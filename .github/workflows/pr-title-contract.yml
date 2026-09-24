@@ -1,4 +1,4 @@
-name: PR Title Contract
+name: ⚙️ PR Title Contract
 
 on:
   pull_request:
@@ -16,7 +16,7 @@ jobs:
     runs-on: [self-hosted, Linux]
     timeout-minutes: 5
     steps:
-      - name: Normalize current or all open PR titles
+      - name: 🔹 Normalize current or all open PR titles
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPOSITORY: ${{ github.repository }}

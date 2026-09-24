@@ -1,4 +1,4 @@
-name: installer-deterministic
+name: ⚙️ installer-deterministic
 
 on:
   push:
@@ -31,18 +31,18 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
-      - name: Bash syntax
+      - name: 🔹 Bash syntax
         run: |
           bash -n scripts/installer/centraldark-installer-deterministic-beta1.sh
           bash -n scripts/installer/centraldark-installer-deterministic-beta1.test.sh
-      - name: Providerless tokenless and Horn contract
+      - name: 🔹 Providerless tokenless and Horn contract
         env:
           OPENAI_API_KEY: ''
           ANTHROPIC_API_KEY: ''
           OPENROUTER_API_KEY: ''
           NVIDIA_API_KEY: ''
         run: bash scripts/installer/centraldark-installer-deterministic-beta1.test.sh
-      - name: Validate full package manifest
+      - name: 🔹 Validate full package manifest
         run: |
           jq -e '.one_system_only == true' scripts/installer/full-package.manifest.json
           jq -e '.reuse_before_create == true' scripts/installer/full-package.manifest.json

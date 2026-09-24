@@ -1,4 +1,4 @@
-name: PR auto-review (Codex + checklist)
+name: ⚙️ PR auto-review (Codex + checklist)
 
 on:
   pull_request:
@@ -17,7 +17,7 @@ concurrency:
 
 jobs:
   triage:
-    name: Gates determinísticos em runner self-hosted
+    name: 🧩 Gates determinísticos em runner self-hosted
     if: github.event_name == 'pull_request' && github.repository == 'ServerVpss/CentralDark' && !github.event.pull_request.draft
     runs-on: [self-hosted, Linux]
     timeout-minutes: 10
@@ -27,7 +27,7 @@ jobs:
       issues: write
     steps:
 
-      - name: Bloquear HEAD de fork no runner persistente
+      - name: 🔹 Bloquear HEAD de fork no runner persistente
         id: fork_guard
         if: github.event_name == 'pull_request' || github.event_name == 'pull_request_target'
         shell: bash
@@ -45,17 +45,17 @@ jobs:
           echo "blocked=false" >> "$GITHUB_OUTPUT"
           echo "FORK_GUARD_OK ${HEAD_REPO}"
 
-      - name: Checkout exato do PR
+      - name: 🔹 Checkout exato do PR
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha }}
 
-      - name: Testar scanner de segredo
+      - name: 🔹 Testar scanner de segredo
         run: python3 scripts/lupa/pr_secret_scan.py --self-test
 
-      - name: Analisar diff sem executar código do PR
+      - name: 🔹 Analisar diff sem executar código do PR
         id: scan
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
@@ -76,7 +76,7 @@ jobs:
             --patch-file "$PATCH_FILE" \
             --github-output "$GITHUB_OUTPUT"
 
-      - name: Publicar checklist auditável
+      - name: 🔹 Publicar checklist auditável
         uses: actions/github-script@v9
         env:
           SECRET_SUSPECT: ${{ steps.scan.outputs.secret_suspect }}
@@ -124,14 +124,14 @@ jobs:
             if (existing) await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
             else await github.rest.issues.createComment({ owner, repo, issue_number, body });
 
-      - name: Bloquear segredo suspeito
+      - name: 🔹 Bloquear segredo suspeito
         if: steps.scan.outputs.secret_suspect == 'true'
         run: |
           echo "SECRET_SUSPECT_BLOCKED"
           exit 1
 
 
-      - name: Receipt determinístico (sempre)
+      - name: 🔹 Receipt determinístico (sempre)
         if: always()
         shell: bash
         env:
@@ -164,7 +164,7 @@ jobs:
           fi
           # UNKNOWN/SKIPPED/empty never promoted as PASS by this receipt alone
   gemini-advisory:
-    name: IA consultiva via API CentralDark + darkai
+    name: 🧩 IA consultiva via API CentralDark + darkai
     if: >-
       github.event_name == 'pull_request_target' &&
       github.repository == 'ServerVpss/CentralDark' &&
@@ -178,7 +178,7 @@ jobs:
       issues: write
     steps:
 
-      - name: Bloquear HEAD de fork no runner persistente
+      - name: 🔹 Bloquear HEAD de fork no runner persistente
         id: fork_guard
         if: github.event_name == 'pull_request' || github.event_name == 'pull_request_target'
         shell: bash
@@ -196,7 +196,7 @@ jobs:
           echo "blocked=false" >> "$GITHUB_OUTPUT"
           echo "FORK_GUARD_OK ${HEAD_REPO}"
 
-      - name: Preparar diff sanitizado pela API, sem checkout
+      - name: 🔹 Preparar diff sanitizado pela API, sem checkout
         id: prepare
         uses: actions/github-script@v9
         with:
@@ -240,7 +240,7 @@ jobs:
             fs.writeFileSync(diffPath, text, { encoding: 'utf8', mode: 0o600 });
             core.setOutput('status', status);
 
-      - name: Consultar IA sem poder de gate
+      - name: 🔹 Consultar IA sem poder de gate
         id: darkai
         shell: bash
         env:
@@ -347,7 +347,7 @@ jobs:
           fi
           rm -f "$RAW_FILE" "$REQUEST_FILE"
 
-      - name: Publicar evidência IA
+      - name: 🔹 Publicar evidência IA
         uses: actions/github-script@v9
         with:
           script: |
@@ -368,7 +368,7 @@ jobs:
             if (existing) await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
             else await github.rest.issues.createComment({ owner, repo, issue_number, body });
 
-      - name: Receipt determinístico (sempre)
+      - name: 🔹 Receipt determinístico (sempre)
         if: always()
         shell: bash
         env:
