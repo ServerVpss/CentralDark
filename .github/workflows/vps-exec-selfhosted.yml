@@ -792,6 +792,7 @@ jobs:
     needs: [deploy-universal-gate, deploy-mcp, deploy-operational-guards, vps-housekeeping, deploy-hermes-runtime]
     if: >-
       always() &&
+      needs.deploy-universal-gate.result == 'success' &&
       github.event_name == 'push' &&
       github.ref == 'refs/heads/main' &&
       needs.deploy-mcp.result != 'failure' &&

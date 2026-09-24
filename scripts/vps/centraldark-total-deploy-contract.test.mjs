@@ -18,6 +18,7 @@ test("main promovida dispara owner de deploy sem filtro parcial de paths", () =>
   assert.match(workflow, /deploy-guards-dispatcher\.sh --apply --total/);
   assert.doesNotMatch(workflow, /centraldark-deploy\.sh --apply --total/);
   assert.match(workflow, /\n  deploy-universal-gate:/);
+  assert.match(workflow, /needs\.deploy-universal-gate\.result == 'success'/);
 });
 
 test("total deploy regenera runtime já populado sem apagar estado untracked", () => {

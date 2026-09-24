@@ -69,6 +69,12 @@ done
 CANONICAL_DEPLOY_GATE="${CENTRALDARK_CANONICAL_DEPLOY_GATE:-}"
 CANONICAL_DEPLOY_TARGET="${CENTRALDARK_CANONICAL_DEPLOY_TARGET:-}"
 
+# Fail-closed antes de qualquer fetch/cache/backup/runtime mutation.
+if [[ "$APPLY" -eq 1 && "$CANONICAL_DEPLOY_GATE" != "PASS" ]]; then
+  printf 'DIRECT_DEPLOY_BYPASS_BLOCKED use scripts/vps/deploy-guards-dispatcher.sh\n' >&2
+  exit 16
+fi
+
 log() { printf '%s %s\n' "$(date -u '+%H:%M:%SZ')" "$*"; }
 die() { log "FALHA: $*"; exit "${2:-1}"; }
 

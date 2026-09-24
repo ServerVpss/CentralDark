@@ -97,6 +97,7 @@ fi
 
 if grep -q '^  deploy-universal-gate:' "$WORKFLOW" \
   && grep -q 'needs: deploy-universal-gate' "$WORKFLOW" \
+  && grep -q "needs.deploy-universal-gate.result == 'success'" "$WORKFLOW" \
   && grep -q 'deploy-guards-dispatcher.sh --apply --total' "$WORKFLOW"; then
   pass "workflow converge jobs mutantes e total deploy no dispatcher"
 else
