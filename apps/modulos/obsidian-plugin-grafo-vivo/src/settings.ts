@@ -8,8 +8,11 @@ export interface GrafoVivoSettings {
   intervaloSegundos: number;
   abrirNotaAoClicar: boolean;
   knowledgeHubPublishEnabled: boolean;
+  knowledgeHubAutoSyncEnabled: boolean;
+  knowledgeHubAutoSyncDelaySeconds: number;
   knowledgeHubUrl: string;
   knowledgeHubToken: string;
+  brainManifestUrl: string;
   autoUpdateAtivo: boolean;
   autoUpdateBaseUrl: string;
   autoUpdateIntervaloMinutos: number;
@@ -24,8 +27,11 @@ export const DEFAULT_SETTINGS: GrafoVivoSettings = {
   intervaloSegundos: 15,
   abrirNotaAoClicar: true,
   knowledgeHubPublishEnabled: true,
+  knowledgeHubAutoSyncEnabled: true,
+  knowledgeHubAutoSyncDelaySeconds: 12,
   knowledgeHubUrl: "https://api.centralldark.com/memoria/ingest",
   knowledgeHubToken: "",
+  brainManifestUrl: "https://api.centralldark.com/memoria/manifest?scope=brain&mode=vivo",
   autoUpdateAtivo: true,
   autoUpdateBaseUrl: "https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/plugin-release",
   autoUpdateIntervaloMinutos: 10,
@@ -90,6 +96,26 @@ export class GrafoVivoSettingTab extends PluginSettingTab {
       );
 
     new Setting(containerEl)
+      .setName("Auto-sync de notas para o Hub")
+      .setDesc("Ao criar/modificar nota Markdown, envia snapshot candidato pela API. Não executa anexos nem promove verdade sem CI/receipt.")
+      .addToggle((tg) =>
+        tg.setValue(this.plugin.settings.knowledgeHubAutoSyncEnabled).onChange(async (v) => {
+          this.plugin.settings.knowledgeHubAutoSyncEnabled = v;
+          await this.plugin.saveSettings();
+        }),
+      );
+
+    new Setting(containerEl)
+      .setName("Atraso do auto-sync (segundos)")
+      .setDesc("Debounce para não enviar a cada tecla. Mínimo: 2 s.")
+      .addText((txt) =>
+        txt.setValue(String(this.plugin.settings.knowledgeHubAutoSyncDelaySeconds)).onChange(async (v) => {
+          this.plugin.settings.knowledgeHubAutoSyncDelaySeconds = Math.max(2, parseInt(v, 10) || 12);
+          await this.plugin.saveSettings();
+        }),
+      );
+
+    new Setting(containerEl)
       .setName("URL de ingestão do Hub")
       .setDesc("Endpoint único de ingestão da Memória API.")
       .addText((txt) =>
@@ -98,6 +124,19 @@ export class GrafoVivoSettingTab extends PluginSettingTab {
           .setValue(this.plugin.settings.knowledgeHubUrl)
           .onChange(async (v) => {
             this.plugin.settings.knowledgeHubUrl = v.trim();
+            await this.plugin.saveSettings();
+          }),
+      );
+
+    new Setting(containerEl)
+      .setName("URL do manifesto BRAIN")
+      .setDesc("Leitura do índice vivo que a API gera a partir de BRAIN/Git/CI/CD/VPS.")
+      .addText((txt) =>
+        txt
+          .setPlaceholder("https://api.centralldark.com/memoria/manifest?scope=brain&mode=vivo")
+          .setValue(this.plugin.settings.brainManifestUrl)
+          .onChange(async (v) => {
+            this.plugin.settings.brainManifestUrl = v.trim();
             await this.plugin.saveSettings();
           }),
       );

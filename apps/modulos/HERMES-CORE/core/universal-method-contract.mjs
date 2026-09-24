@@ -614,6 +614,11 @@ export function validateUniversalMethod() {
     '"repository_secrets": "REUSE_ALL_EXISTING_AND_FUTURE"',
     '"create_new_secret_only_if": "NO_EQUIVALENT_AFTER_MEASURE"',
     '"CASA_LOCAL": "DISCOVER_AT_RUNTIME_DO_NOT_ASSUME_PATH"',
+    '"explicit_intent_override_policy":',
+    '"marker": "CENTRALDARK_EXPLICIT_INTENT_TEMPORARY_OVERRIDE"',
+    '"EXPLICIT_OVERRIDE_DOES_NOT_MUTATE_DEFAULT": true',
+    '"REASK_WHEN_SAME_INTENT_SCOPE_ALREADY_AUTHORIZED": false',
+    '"promotion": "VALID_INTENT_RECEIPT + SAME_HEAD_GREEN -> AUTO_SQUASH_IF_CLEAN_WITHOUT_REASK"',
   ], 'UNIVERSAL_GATE_REGISTRY');
 
   requireTokens(boot, [

@@ -13,7 +13,7 @@ type Stage = {
 const stages: Stage[] = [
   { title: 'Intenção recebida', detail: 'Comando curto vira uma missão rastreável.', state: 'ready', icon: <Activity className="h-4 w-4" /> },
   { title: 'Estado reconciliado', detail: 'Hub, GitHub, VPS e evidências entram no mesmo snapshot.', state: 'ready', icon: <CheckCircle2 className="h-4 w-4" /> },
-  { title: 'Sensores e executor local', detail: 'Screenpipe e Desktop Commander rodam no Windows e mantêm a captura/ponte local.', state: 'ready', icon: <TerminalSquare className="h-4 w-4" /> },
+  { title: 'Screenpipe + Remote Desktop Commander', detail: 'Screenpipe faz a captura local; Remote Desktop Commander mantém a ponte de execução autorizada no Windows.', state: 'ready', icon: <TerminalSquare className="h-4 w-4" /> },
   { title: 'Execução remota', detail: 'Acesso SSH da VPS disponível pelo alias configurado.', state: 'ready', icon: <Server className="h-4 w-4" /> },
   { title: 'Ações protegidas', detail: 'Segredos, MFA e ações irreversíveis permanecem com gate explícito.', state: 'protected', icon: <LockKeyhole className="h-4 w-4" /> },
 ];

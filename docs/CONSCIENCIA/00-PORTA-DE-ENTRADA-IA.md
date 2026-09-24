@@ -82,6 +82,7 @@ Todos os eixos são considerados; somente os eixos materiais são executados. Ei
 6. Ler `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md`.
 7. Quando outro Writer já estiver ativo ou houver colaboração multiagente, carregar `docs/ARQUITETURA/PADRAO-PARCEIRO-DELTA-JUDGE.md`.
 8. Ler `docs/CONSCIENCIA/MAPA-DO-CEREBRO.md`, `docs/CONSCIENCIA/APRENDIZADOS.md` e `docs/PENDENCIAS.md` quando relevantes; o mapa contém o registro de provas reutilizáveis e seus critérios de invalidação.
+   - Memória contextual canônica alcançável: `docs/BRAIN/07-APRENDIZADOS-MEMORIAS/HISTORIA-CHEFE.md` e `docs/BRAIN/07-APRENDIZADOS-MEMORIAS/PONTOS-E-NIVEIS-CHEFE.md`; narrativa/XP não substituem prova de runtime.
 9. Quando a missão projetar contexto + ferramentas + observabilidade para um ambiente delimitado, carregar `docs/CONSCIENCIA/EXPANSAO-DE-DOMINIO.md`.
 10. Quando `!MULTIBUSSOLA` for invocado, carregar `docs/CONSCIENCIA/MULTIBUSSOLA.md`.
 11. Consultar GitHub Actions quando envolver CI/PR/merge/deploy.

@@ -23,7 +23,7 @@
 const http             = require('http');
 const fs               = require('fs');
 const path             = require('path');
-const { execSync, execFileSync } = require('child_process');
+const { execSync, spawn } = require('child_process');
 
 // ── Carrega arquivos .env ──────────────────────────────────────────────────
 function loadEnv(p) {
@@ -58,33 +58,156 @@ const TG_API       = 'https://api.telegram.org';
 const USE_HERMES_PRIMARY = process.env.BOT_USE_HERMES === '1';
 const HEALTH_PORT  = Number(process.env.BOT_HEALTH_PORT || process.env.BOT_HEALTH_PORT || '9500');
 const TELEGRAM_TRANSPORT = 'BOT_API_DIRECT_LONG_POLLING';
+const HERMES_TIMEOUT_MS = Math.min(
+  Math.max(Number(process.env.HERMES_EXECUTOR_TIMEOUT_MS || 60_000), 15_000),
+  300_000,
+);
+const CENTRALDARK_GATEWAY_BASE = (process.env.CENTRALDARK_GATEWAY_URL || 'http://127.0.0.1:8090').replace(/\/$/, '');
+const CENTRALDARK_GATEWAY_KEY = process.env.CENTRALLDARK_API_KEY
+  || process.env.CENTRALDARK_API_KEY
+  || process.env.ARSENAL_ADAPTER_KEY
+  || '';
+const CENTRALDARK_GATEWAY_TIMEOUT_MS = Math.min(
+  Math.max(Number(process.env.CENTRALDARK_GATEWAY_TIMEOUT_MS || 60_000), 10_000),
+  180_000,
+);
 
-function callHermesExecutor(history, systemPrompt, motivo = 'fallback') {
+async function callCentralDarkGateway(history, systemPrompt, motivo = 'fallback') {
+  if (!CENTRALDARK_GATEWAY_KEY) {
+    return { ok: false, error: 'credencial CENTRALDARK gateway ausente' };
+  }
+
+  const model = USE_HERMES_PRIMARY
+    ? (process.env.CENTRALDARK_GATEWAY_HERMES_MODEL || 'arsenal-hermes')
+    : (process.env.CENTRALDARK_GATEWAY_MODEL || 'arsenal-router');
+  const messages = history.slice(-20).map(m => ({
+    role: m.role || 'user',
+    content: typeof m.content === 'string' ? m.content : JSON.stringify(m.content),
+  }));
+
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), CENTRALDARK_GATEWAY_TIMEOUT_MS);
+  timer.unref?.();
+
+  try {
+    const r = await fetch(`${CENTRALDARK_GATEWAY_BASE}/v1/messages`, {
+      method: 'POST',
+      signal: controller.signal,
+      headers: {
+        'content-type': 'application/json',
+        'x-api-key': CENTRALDARK_GATEWAY_KEY,
+        'anthropic-version': '2023-06-01',
+      },
+      body: JSON.stringify({
+        model,
+        max_tokens: 4096,
+        system: `${systemPrompt}\n\nMotivo da rota: ${motivo}. Responda somente em PT-BR.`,
+        messages,
+      }),
+    });
+    const raw = await r.text();
+    let d = {};
+    try { d = JSON.parse(raw); } catch {}
+
+    if (!r.ok) {
+      return { ok: false, error: `HTTP ${r.status}: ${String(d?.error?.message || d?.error || raw).slice(0, 240)}` };
+    }
+
+    const text = Array.isArray(d.content)
+      ? d.content.find(b => b?.type === 'text')?.text
+      : null;
+    if (!text) return { ok: false, error: 'gateway sem conteúdo de texto' };
+    return { ok: true, text };
+  } catch (e) {
+    const kind = e?.name === 'AbortError' ? 'timeout' : String(e?.message || e);
+    return { ok: false, error: kind };
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+async function callHermesExecutor(history, systemPrompt, motivo = 'fallback') {
   const prompt = [
     systemPrompt,
     '',
     'Contexto recente:',
     ...history.slice(-12).map(m => `${m.role}: ${typeof m.content === 'string' ? m.content : JSON.stringify(m.content)}`),
     '',
-    `Responda em PT-BR. Motivo do fallback: ${motivo}.`,
+    `Motivo do fallback: ${motivo}.`,
+    'Responda SOMENTE em PT-BR.',
+    'Entregue apenas a resposta final útil; não exponha raciocínio interno, rascunho, chain-of-thought, tags de ferramenta ou mensagens de controle.',
+    'Se uma prova estiver ausente, diga UNKNOWN em vez de inventar.',
   ].join('\n');
-  try {
-    const hermesBin = '/usr/local/lib/hermes-agent/venv/bin/hermes';
-    const out = execFileSync(hermesBin, ['--in', '/root/CentralDark', '-z', prompt], {
-      encoding: 'utf8',
-      timeout: 180_000,
-      maxBuffer: 1024 * 1024,
-      env: {
-        HOME: '/root',
-        PATH: '/root/.local/bin:/usr/local/bin:/usr/bin:/bin',
-        TMPDIR: process.env.TMPDIR || '/root/.hermes/cache/scratch',
-        HERMES_QUIET: '1',
-      },
-    }).trim();
-    return out || '⚠️ Hermes executou, mas não retornou texto.';
-  } catch (e) {
-    return `❌ Hermes executor falhou: ${String(e.message || e).slice(0, 400)}`;
-  }
+
+  const hermesBin = fs.existsSync('/usr/local/bin/hermes')
+    ? '/usr/local/bin/hermes'
+    : '/usr/local/lib/hermes-agent/venv/bin/hermes';
+
+  const env = {
+    ...process.env,
+    HOME: '/root',
+    PATH: '/root/.local/bin:/usr/local/bin:/usr/bin:/bin',
+    TMPDIR: process.env.TMPDIR || '/root/.hermes/cache/scratch',
+    HERMES_QUIET: '1',
+  };
+
+  return new Promise((resolve) => {
+    let settled = false;
+    let timedOut = false;
+    let stdout = '';
+    let stderr = '';
+
+    const finish = (value) => {
+      if (settled) return;
+      settled = true;
+      resolve(value);
+    };
+
+    const child = spawn(hermesBin, ['--in', '/root/CentralDark', '-z', prompt], {
+      env,
+      stdio: ['ignore', 'pipe', 'pipe'],
+    });
+
+    const limit = setTimeout(() => {
+      timedOut = true;
+      child.kill('SIGTERM');
+      setTimeout(() => {
+        if (child.exitCode === null && !child.killed) child.kill('SIGKILL');
+      }, 2_000).unref();
+    }, HERMES_TIMEOUT_MS);
+    limit.unref();
+
+    child.stdout.setEncoding('utf8');
+    child.stderr.setEncoding('utf8');
+    child.stdout.on('data', chunk => {
+      stdout += chunk;
+      if (stdout.length > 1024 * 1024) stdout = stdout.slice(-1024 * 1024);
+    });
+    child.stderr.on('data', chunk => {
+      stderr += chunk;
+      if (stderr.length > 64 * 1024) stderr = stderr.slice(-64 * 1024);
+    });
+
+    child.on('error', (e) => {
+      clearTimeout(limit);
+      finish(`❌ Hermes executor não iniciou: ${String(e.message || e).slice(0, 400)}`);
+    });
+
+    child.on('close', (code, signal) => {
+      clearTimeout(limit);
+      if (timedOut) {
+        return finish(`⚠️ A chamada Hermes excedeu ${Math.round(HERMES_TIMEOUT_MS / 1000)}s e foi interrompida sem bloquear o bot. Estado: BLOCKED/UNKNOWN.`);
+      }
+      const out = stdout.trim();
+      if (out) return finish(out);
+      const err = stderr.trim();
+      if (/not connected to any AI provider|no AI provider|configure.*provider/i.test(err)) {
+        return finish('⚠️ Hermes CLI está vivo, mas sem provedor de IA configurado. Estado: BLOCKED/UNKNOWN.');
+      }
+      if (err) return finish(`❌ Hermes executor falhou (${signal || code || 'sem-codigo'}): ${err.slice(0, 400)}`);
+      finish('⚠️ Hermes executou, mas não retornou texto. Estado: UNKNOWN.');
+    });
+  });
 }
 
 
@@ -243,6 +366,11 @@ IDENTIDADE DO USUÁRIO — LEIA COM ATENÇÃO:
 • Nome: Pivete (também chamado de Segredo pelo próprio)
 • É o administrador e dono absoluto do CentralDark e de toda esta infraestrutura
 • Fala de forma informal, às vezes por voz, nem sempre escreve certo — interprete o contexto, nunca corrija
+• NOMENCLATURA EXATA: quando o nome real da peça for conhecido, use esse nome antes de qualquer apelido genérico
+• Não diga "sensor VPS", "sensor MCP" ou "sensor Tailscale" como identidade; diga Remote Desktop Commander/dispositivo, MCP/endpoint, Tailscale/dispositivo ou o nome real do alvo
+• A palavra "sensor" só vale quando for literalmente um sensor ou uma função de telemetria explicitamente nomeada
+• Se a peça concreta não estiver identificada, diga UNKNOWN/componente não identificado; não invente nome técnico
+• Uma falha do Remote Desktop Commander não significa, sozinha, que a VPS caiu
 • Aprende conversando, gosta de bater papo e conversar sobre ideias
 • É acelerado, começa várias coisas — a IA ajuda a concluir e lembrar
 • Gosta de ser reconhecido quando chega: cumprimente, pergunte o que há de novo
@@ -281,32 +409,28 @@ const COG_MODES = {
   sistema2: {
     emoji: '🔬', nome: 'Sistema 2',
     desc: 'Raciocínio lento e deliberado — cada etapa explícita.',
-    prompt: 'Você opera no modo Sistema 2: raciocínio lento e explícito. ' +
-            'Antes de responder, escreva cada etapa numerada do seu pensamento. ' +
-            'Nunca pule para conclusão sem mostrar o caminho. Responda em PT-BR.',
+    prompt: 'Você opera no modo Sistema 2: faça raciocínio cuidadoso internamente. ' +
+            'Na resposta, entregue somente fatos, evidências, ações verificáveis e conclusão. ' +
+            'Não exponha raciocínio privado ou rascunho. Responda em PT-BR.',
   },
   cot: {
     emoji: '🔗', nome: 'Chain of Thought',
     desc: 'Pensa passo a passo antes de responder.',
-    prompt: 'Você usa Chain of Thought. Formato obrigatório: ' +
-            'Passo 1: ... Passo 2: ... Conclusão: ... ' +
-            'Cada passo deve ser explícito e verificável. Responda em PT-BR.',
+    prompt: 'Você faz decomposição técnica internamente. ' +
+            'Não exponha chain-of-thought privado. Mostre somente evidências, decisões e passos executáveis verificáveis. ' +
+            'Responda em PT-BR.',
   },
   react: {
     emoji: '⚛️',  nome: 'ReAct',
     desc: 'Age → observa → raciocina → age de novo.',
-    prompt: 'Você usa ReAct. Formato: ' +
-            'Pensamento: ... Ação: ... Observação: ... (repita) Resposta Final: ... ' +
-            'Explicite cada ciclo antes de concluir. Responda em PT-BR.',
+    prompt: 'Você usa ReAct internamente. Na saída ao usuário mostre somente Ação, Observação verificável e Resposta Final. ' +
+            'Não exponha pensamento privado nem mensagens internas de ferramenta. Responda em PT-BR.',
   },
   reflexao: {
     emoji: '🪞', nome: 'Auto-Crítica',
     desc: 'Gera → critica → refina. Dupla checagem interna.',
-    prompt: 'Você usa auto-crítica reflexiva. Formato obrigatório: ' +
-            '🔷 RASCUNHO: (resposta inicial) ' +
-            '🔶 CRÍTICA: (aponte falhas e lacunas) ' +
-            '✅ RESPOSTA FINAL: (versão refinada) ' +
-            'Responda em PT-BR.',
+    prompt: 'Você usa auto-crítica reflexiva internamente. ' +
+            'Entregue somente a versão final refinada, sem rascunho nem crítica interna. Responda em PT-BR.',
   },
 };
 
@@ -335,9 +459,21 @@ function esc(s) {
  * Converte Markdown do LLM para HTML do Telegram.
  * O Telegram aceita apenas: <b> <i> <code> <pre> <a href> <s> <u>
  */
+function sanitizeModelOutput(text) {
+  return String(text || '')
+    // Wrappers que o modelo/CLI pode vazar e que não pertencem à resposta ao usuário.
+    .replace(/<\/?(?:details|summary|parameter|tool|tool_call|tool_result|thinking|analysis)(?:\s[^>]*)?>/gi, '')
+    // Blockquote pode aparecer cru em fallback/saída intermediária; preserva conteúdo, remove wrapper.
+    .replace(/<\/?blockquote(?:\s[^>]*)?>/gi, '')
+    // Remove tags XML/HTML desconhecidas sem apagar o texto interno.
+    .replace(/<(?!\/?(?:b|i|u|s|code|pre|a)(?:\s|>|\/))[^>\n]{1,120}>/g, '')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
 function mdToHtml(text) {
   if (!text) return '';
-  let s = text;
+  let s = sanitizeModelOutput(text);
 
   // 1. Blocos de código: ```lang\n...\n``` → <pre>...</pre>
   s = s.replace(/```[\w]*\n?([\s\S]*?)```/g, (_, code) =>
@@ -377,7 +513,7 @@ function mdToHtml(text) {
 }
 
 function telegramPlainText(text) {
-  return String(text || '')
+  return sanitizeModelOutput(text)
     .replace(/<br\s*\/?\s*>/gi, '\n')
     .replace(/<\/?(?:b|i|u|s|code|pre)>/gi, '')
     .replace(/<a\s+href=["'][^"']+["']\s*>/gi, '')
@@ -532,12 +668,14 @@ async function executeTool(toolName, toolInput) {
       return { ok: true, path: p, bytes: Buffer.byteLength(toolInput.content || '') };
     }
     if (toolName === 'call_mcp_tool') {
-      const mcpUrl = `http://localhost:${MCP_PORT}/mcp-public`;
+      const mcpUrl = `http://localhost:${MCP_PORT}/mcp`;
       try {
         const r = await fetch(mcpUrl, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'Accept': 'application/json, text/event-stream',
+            'MCP-Protocol-Version': '2025-06-18',
             ...(MCP_TOKEN ? { 'Authorization': `Bearer ${MCP_TOKEN}` } : {}),
           },
           body: JSON.stringify({
@@ -562,8 +700,27 @@ async function executeTool(toolName, toolInput) {
 }
 
 async function callLLMWithTools(history, systemPrompt) {
-  if (USE_HERMES_PRIMARY) return callHermesExecutor(history, systemPrompt, 'BOT_USE_HERMES=1');
-  if (!LLM_KEY) return callHermesExecutor(history, systemPrompt, 'ANTHROPIC_AUTH_TOKEN ausente');
+  const gatewayThenHermes = async (motivo) => {
+    const gw = await callCentralDarkGateway(history, systemPrompt, motivo);
+    if (gw.ok) return gw.text;
+
+    const providerBlocked = /HTTP\s+(402|429)\b|payment|subscription|credit|crédito|quota|billing/i.test(gw.error || '');
+    console.warn(`[Bot] ⚠️  Gateway CentralDark indisponível: ${gw.error}`);
+
+    if (providerBlocked) {
+      return '⚠️ A rota de IA chegou ao provider, mas ele bloqueou a inferência por limite/crédito/assinatura. Estado: BLOCKED/UNKNOWN. O Telegram e o Gateway continuam vivos; nenhuma resposta foi inventada.';
+    }
+
+    return callHermesExecutor(history, systemPrompt, `${motivo}; gateway=${gw.error}`);
+  };
+
+  if (USE_HERMES_PRIMARY) {
+    return gatewayThenHermes('BOT_USE_HERMES=1');
+  }
+  if (!LLM_KEY) {
+    return gatewayThenHermes('ANTHROPIC_AUTH_TOKEN ausente');
+  }
+
   const url = LLM_BASE.endsWith('/v1') ? `${LLM_BASE}/messages` : `${LLM_BASE}/v1/messages`;
   let messages = history.slice(-20);
 
@@ -576,14 +733,20 @@ async function callLLMWithTools(history, systemPrompt) {
         body: JSON.stringify({ model: LLM_MODEL, max_tokens: 4096, system: systemPrompt, tools: BOT_TOOLS, messages }),
       });
       d = await r.json().catch(() => ({}));
-    } catch (e) { return `❌ LLM: ${e.message}`; }
+    } catch (e) {
+      return gatewayThenHermes(`API Anthropic fetch: ${e.message}`);
+    }
 
-    if (d.error) return callHermesExecutor(history, systemPrompt, `API Anthropic: ${d.error.message || JSON.stringify(d.error)}`);
-    if (!d.content) return callHermesExecutor(history, systemPrompt, `API vazia/status ${r?.status || 'desconhecido'}`);
+    if (d.error) {
+      return gatewayThenHermes(`API Anthropic: ${d.error.message || JSON.stringify(d.error)}`);
+    }
+    if (!d.content) {
+      return gatewayThenHermes(`API vazia/status ${r?.status || 'desconhecido'}`);
+    }
 
     if (d.stop_reason !== 'tool_use') {
       const text = d.content.find(b => b.type === 'text');
-      return text?.text || '❌ Sem texto na resposta.';
+      return text?.text || gatewayThenHermes('API sem texto');
     }
 
     messages.push({ role: 'assistant', content: d.content });
@@ -1551,17 +1714,32 @@ function telegramHealthPayload(mode = 'api-direta') {
 
 function startPollingHealthServer() {
   return new Promise((resolve, reject) => {
-    const server = http.createServer((req, res) => {
-      if (req.method === 'GET' && req.url === '/bot/health') {
-        const body = telegramHealthPayload('api-direta');
-        res.writeHead(body.ok ? 200 : 503, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify(body));
-        return;
-      }
-      res.writeHead(404).end('Not found');
-    });
-    server.on('error', reject);
-    server.listen(HEALTH_PORT, '127.0.0.1', () => resolve(server));
+    const maxOffset = 5;
+
+    const tryListen = (port, offset = 0) => {
+      const server = http.createServer((req, res) => {
+        if (req.method === 'GET' && req.url === '/bot/health') {
+          const body = { ...telegramHealthPayload('api-direta'), healthPort: port };
+          res.writeHead(body.ok ? 200 : 503, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify(body));
+          return;
+        }
+        res.writeHead(404).end('Not found');
+      });
+
+      server.once('error', (err) => {
+        if (err?.code === 'EADDRINUSE' && offset < maxOffset) {
+          const nextPort = HEALTH_PORT + offset + 1;
+          console.warn(`[Bot] ⚠️  Porta health ${port} ocupada; tentando ${nextPort}`);
+          return tryListen(nextPort, offset + 1);
+        }
+        reject(err);
+      });
+
+      server.listen(port, '127.0.0.1', () => resolve({ server, port }));
+    };
+
+    tryListen(HEALTH_PORT);
   });
 }
 
@@ -1633,16 +1811,16 @@ async function main() {
   console.log('[Bot] 🔄 Transporte canônico: Telegram Bot API oficial via long polling direto');
   _botMode = 'api-direta';
   console.log('[Bot] ✅ BOT_API_DIRECT_LONG_POLLING ativo');
-  let pollingHealthServer = null;
+  let pollingHealth = null;
   try {
-    pollingHealthServer = await startPollingHealthServer();
-    console.log(`[Bot] 🩺 Health polling ativo — porta ${HEALTH_PORT}`);
+    pollingHealth = await startPollingHealthServer();
+    console.log(`[Bot] 🩺 Health polling ativo — porta ${pollingHealth.port}`);
   } catch (e) {
     console.warn(`[Bot] ⚠️  Health polling indisponível (${e.message})`);
   }
   const shutdownPolling = () => {
     _running = false;
-    if (pollingHealthServer) pollingHealthServer.close();
+    if (pollingHealth?.server) pollingHealth.server.close();
   };
   process.on('SIGTERM', shutdownPolling);
   process.on('SIGINT', shutdownPolling);
