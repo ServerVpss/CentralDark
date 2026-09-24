@@ -16,8 +16,18 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[2]
 STITCHER = ROOT / "scripts/trigger-fabric/stitch_all_notes.py"
 CONTRACT = ROOT / "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SYSTEM-SENTINEL.yml"
-STATE_PATH = ROOT / ".artifacts/system-sentinel/state.json"
-EVENT_LOG = ROOT / ".artifacts/system-sentinel/events.jsonl"
+STATE_PATH = Path(
+    os.environ.get(
+        "CENTRALDARK_SENTINEL_STATE_PATH",
+        str(ROOT / ".artifacts/system-sentinel/state.json"),
+    )
+).expanduser()
+EVENT_LOG = Path(
+    os.environ.get(
+        "CENTRALDARK_SENTINEL_EVENT_LOG_PATH",
+        str(ROOT / ".artifacts/system-sentinel/events.jsonl"),
+    )
+).expanduser()
 DEFAULT_INTERVAL = 5.0
 SEAL = "🧿"
 NOTE_SEAL = "🪡🧿"
