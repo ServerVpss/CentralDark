@@ -1,6 +1,6 @@
 {
   "schema": "centraldark.modules.hub.status_routes.v1",
-  "updated_at": "2026-09-24T11:47:00-03:00",
+  "updated_at": "2026-09-24T12:12:00-03:00",
   "purpose": "Mapa das superficies que devem aparecer em status.centraldark ou no Hub visual. Este arquivo nao executa chamadas; ele declara rotas e invariantes.",
   "runtime_owner": "apps/modulos/hub",
   "routes": [
@@ -12,6 +12,15 @@
       "card_hint": "GitHubHeadCard",
       "must_show": ["head_sha", "branch", "commit_message", "checks_state", "last_verified_at"],
       "pass_rule": "HEAD medido + checks/status conclusivos. Sem checks = PENDING/UNKNOWN."
+    },
+    {
+      "id": "status.hub.domain_expansion",
+      "label": "EXPANSAO DE DOMINIO / Trigger Fabric",
+      "source_connection": "hub-domain-expansion-trigger",
+      "route": "/status/hub/domain-expansion",
+      "card_hint": "DomainExpansionTriggerCard",
+      "must_show": ["enabled", "canonical_phrase", "last_expansion_commit", "ci_state", "next_sector", "blocked_reason"],
+      "pass_rule": "So PASS quando trigger existe, owner foi medido, delta passou por CI/receipt e NEXT_CURSOR foi registrado."
     },
     {
       "id": "status.github.email_signal",
@@ -71,6 +80,8 @@
   "ui_controls": {
     "config_source": "MODULES/HUB/controls/notifications-and-sensors.json",
     "registry_source": "MODULES/HUB/hub-connections.registry.json",
+    "trigger_source": "MODULES/HUB/triggers/domain-expansion.trigger.json",
+    "playbook_source": "MODULES/HUB/playbooks/EXPANSAO-DE-DOMINIO.md",
     "allow_toggle_in_ui": true,
     "write_back_mode": "planned",
     "write_back_requires_receipt": true
