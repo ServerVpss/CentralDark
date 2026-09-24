@@ -59,7 +59,7 @@ const USE_HERMES_PRIMARY = process.env.BOT_USE_HERMES === '1';
 const HEALTH_PORT  = Number(process.env.BOT_HEALTH_PORT || process.env.BOT_HEALTH_PORT || '9500');
 const TELEGRAM_TRANSPORT = 'BOT_API_DIRECT_LONG_POLLING';
 const HERMES_TIMEOUT_MS = Math.min(
-  Math.max(Number(process.env.HERMES_EXECUTOR_TIMEOUT_MS || 180_000), 15_000),
+  Math.max(Number(process.env.HERMES_EXECUTOR_TIMEOUT_MS || 60_000), 15_000),
   300_000,
 );
 const CENTRALDARK_GATEWAY_BASE = (process.env.CENTRALDARK_GATEWAY_URL || 'http://127.0.0.1:8090').replace(/\/$/, '');
@@ -201,6 +201,9 @@ async function callHermesExecutor(history, systemPrompt, motivo = 'fallback') {
       const out = stdout.trim();
       if (out) return finish(out);
       const err = stderr.trim();
+      if (/not connected to any AI provider|no AI provider|configure.*provider/i.test(err)) {
+        return finish('⚠️ Hermes CLI está vivo, mas sem provedor de IA configurado. Estado: BLOCKED/UNKNOWN.');
+      }
       if (err) return finish(`❌ Hermes executor falhou (${signal || code || 'sem-codigo'}): ${err.slice(0, 400)}`);
       finish('⚠️ Hermes executou, mas não retornou texto. Estado: UNKNOWN.');
     });
@@ -665,12 +668,14 @@ async function executeTool(toolName, toolInput) {
       return { ok: true, path: p, bytes: Buffer.byteLength(toolInput.content || '') };
     }
     if (toolName === 'call_mcp_tool') {
-      const mcpUrl = `http://localhost:${MCP_PORT}/mcp-public`;
+      const mcpUrl = `http://localhost:${MCP_PORT}/mcp`;
       try {
         const r = await fetch(mcpUrl, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'Accept': 'application/json, text/event-stream',
+            'MCP-Protocol-Version': '2025-06-18',
             ...(MCP_TOKEN ? { 'Authorization': `Bearer ${MCP_TOKEN}` } : {}),
           },
           body: JSON.stringify({
@@ -698,7 +703,14 @@ async function callLLMWithTools(history, systemPrompt) {
   const gatewayThenHermes = async (motivo) => {
     const gw = await callCentralDarkGateway(history, systemPrompt, motivo);
     if (gw.ok) return gw.text;
+
+    const providerBlocked = /HTTP\s+(402|429)\b|payment|subscription|credit|crédito|quota|billing/i.test(gw.error || '');
     console.warn(`[Bot] ⚠️  Gateway CentralDark indisponível: ${gw.error}`);
+
+    if (providerBlocked) {
+      return '⚠️ A rota de IA chegou ao provider, mas ele bloqueou a inferência por limite/crédito/assinatura. Estado: BLOCKED/UNKNOWN. O Telegram e o Gateway continuam vivos; nenhuma resposta foi inventada.';
+    }
+
     return callHermesExecutor(history, systemPrompt, `${motivo}; gateway=${gw.error}`);
   };
 
