@@ -63,7 +63,6 @@ jobs:
           VPS_REPO_PATH: ${{ secrets.CENTRALDARK_ROOT }}
           CENTRALDARK_SENTINEL_STATE_PATH: ${{ secrets.CENTRALDARK_ROOT }}/.artifacts/system-sentinel/state.json
           CENTRALDARK_SENTINEL_EVENT_LOG_PATH: ${{ secrets.CENTRALDARK_ROOT }}/.artifacts/system-sentinel/events.jsonl
-          SENTINEL_COUNTERPROOF: PASS
           SENTINEL_API_SOURCE: ${{ github.event.client_payload.source || '' }}
           SENTINEL_API_EVENT_CLASS: ${{ github.event.client_payload.event_class || '' }}
           SENTINEL_API_STATE: ${{ github.event.client_payload.state || '' }}
