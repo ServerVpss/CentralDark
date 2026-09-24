@@ -15,7 +15,16 @@ export const COGNITIVE_LENSES = Object.freeze({
   }),
   OBSERVABILITY_PROOF: Object.freeze({
     id: 'OBSERVABILITY_PROOF',
-    purpose: 'Exigir estado observavel, runtime, receipts, denominador, teste discriminante e bloquear falso verde.',
+    display_name: 'Greg Pstrucha — Auditor Determinístico',
+    canonical_rule: 'REGRA-ZERO-CENTRALDARK',
+    purpose: 'Validar diff, AST, testes, invariantes, contratos e recibos com prova deterministica; bloquear regressao e falso verde.',
+    verdicts: Object.freeze(['PROVADO', 'QUEBRADO', 'EVIDÊNCIA FALTANTE']),
+    formula: 'REGRESSÃO/FALSO-VERDE + PROVA_DETERMINÍSTICA + OBSERVABILIDADE',
+    action_requires_proof: true,
+    ci_pending_is_pass: false,
+    narrative_is_proof: false,
+    isolated_screenshot_is_proof: false,
+    conflict_policy: 'PRESERVE_LEGACY_THEN_RECONCILE_THEN_ALTER',
   }),
   SYNTHESIS_RECONCILIATION: Object.freeze({
     id: 'SYNTHESIS_RECONCILIATION',
@@ -124,6 +133,59 @@ function normalize(value) {
 
 function sortedUnique(values) {
   return [...new Set(values)].sort();
+}
+
+const GREG_REQUIRED = Object.freeze(['diff', 'ast', 'tests', 'invariants', 'contracts', 'receipts']);
+const GREG_PASS = new Set(['PASS', 'NOT_APPLICABLE']);
+const GREG_FAIL = new Set(['FAIL', 'FAILURE', 'FAILED', 'ERROR']);
+const GREG_CI_PENDING = new Set(['PENDING', 'QUEUED', 'IN_PROGRESS', 'WAITING', 'REQUESTED']);
+
+export function evaluateGregDeterministicAudit({
+  diff = 'UNKNOWN',
+  ast = 'UNKNOWN',
+  tests = 'UNKNOWN',
+  invariants = 'UNKNOWN',
+  contracts = 'UNKNOWN',
+  receipts = 'UNKNOWN',
+  ci_state = 'UNKNOWN',
+  evidence_refs = [],
+  conflict_detected = false,
+  legacy_preserved = false,
+  reconciled = false,
+  action_performed = false,
+  narrative_only = false,
+  isolated_screenshot = false,
+} = {}) {
+  const states = { diff, ast, tests, invariants, contracts, receipts };
+  const normalized = Object.fromEntries(
+    Object.entries(states).map(([key, value]) => [key, normalize(value).toUpperCase() || 'UNKNOWN']),
+  );
+  const broken = GREG_REQUIRED.filter((key) => GREG_FAIL.has(normalized[key]));
+  const missing = GREG_REQUIRED.filter((key) => !GREG_PASS.has(normalized[key]) && !GREG_FAIL.has(normalized[key]));
+  const ci = normalize(ci_state).toUpperCase() || 'UNKNOWN';
+  const refs = sortedUnique((Array.isArray(evidence_refs) ? evidence_refs : []).map(normalize).filter(Boolean));
+  const conflictUnreconciled = Boolean(conflict_detected && (!legacy_preserved || !reconciled));
+  const weakOnly = Boolean(narrative_only || isolated_screenshot || refs.length === 0);
+  const ciProven = ci === 'SUCCESS' || ci === 'PASS' || ci === 'NOT_APPLICABLE';
+
+  if (broken.length > 0 || GREG_FAIL.has(ci)) {
+    return Object.freeze({ verdict: 'QUEBRADO', broken: Object.freeze(broken), missing: Object.freeze(missing), evidence_refs: Object.freeze(refs) });
+  }
+
+  if (action_performed && (missing.length > 0 || conflictUnreconciled || weakOnly || !ciProven)) {
+    return Object.freeze({
+      verdict: 'QUEBRADO',
+      broken: Object.freeze(['ACTION_WITHOUT_COMPLETE_PROOF']),
+      missing: Object.freeze(missing),
+      evidence_refs: Object.freeze(refs),
+    });
+  }
+
+  if (missing.length > 0 || conflictUnreconciled || weakOnly || GREG_CI_PENDING.has(ci) || !ciProven) {
+    return Object.freeze({ verdict: 'EVIDÊNCIA FALTANTE', broken: Object.freeze([]), missing: Object.freeze(missing), evidence_refs: Object.freeze(refs) });
+  }
+
+  return Object.freeze({ verdict: 'PROVADO', broken: Object.freeze([]), missing: Object.freeze([]), evidence_refs: Object.freeze(refs) });
 }
 
 function assertKnownLens(lens) {
