@@ -197,6 +197,47 @@ NO_BLIND_BACKGROUND_CAPTURE=true
 LOCAL_JOB_TO_VPS_RECEIPT_REQUIRED=true
 ```
 
+## Intenção explícita do CHEFE vira registro executável
+
+Quando o SEGREDO/CHEFE deixa claro que a direção discutida é a direção que quer para a CentralDark, isso não deve morrer como entendimento de chat nem exigir uma frase mágica adicional como `comita isso` para existir como padrão.
+
+```text
+CHEFE_EXPLICIT_INTENT
+→ SANITIZE
+→ CLASSIFY_PATTERN
+→ OWNER_LOOKUP
+→ REUSE_EXISTING_OWNER
+→ COMMIT_IN_CHILD_PR
+→ PR_MOTHER_1562_HANDOFF
+→ DREAM_REVIEW
+→ PATTERN_DISCOVERY
+→ PATTERN_LIBRARY
+→ MCP_ADMIN_PATTERNS
+→ HERMES/AGENTS_CONSUME
+→ RECEIPT
+```
+
+Regras:
+
+```text
+CHEFE_EXPLICIT_INTENT_CAN_TRIGGER_PATTERN_REGISTRATION=true
+MAGIC_PHRASE_REQUIRED=false
+CHAT_UNDERSTANDING_ALONE_IS_NOT_GLOBAL_PATTERN=true
+EXPLICIT_DIRECTION_FROM_CHEFE_IS_EXECUTABLE_INTENT=true
+REGISTER_ONLY_SANITIZED_OPERATIONAL_DELTA=true
+REUSE_EXISTING_PATTERN_PIPELINE=true
+NO_PATTERN_CENTER_V2=true
+NO_SECOND_MEMORY=true
+NO_SECRET_IN_PATTERN=true
+COMMIT_VIA_CHILD_PR=true
+PR_MOTHER_1562_IS_LEDGER_NOT_WRITER=true
+PATTERN_LIBRARY_IS_DERIVED_NOT_SOURCE_OF_TRUTH=true
+PATTERN_APPLIES_ONLY_WHERE_OWNER_AND_SCOPE_MATCH=true
+UNKNOWN_NEVER_PASS=true
+REALITY_IS_JUDGE=true
+```
+
+Aplicação: cockpit, builder, criação de site, MCP Admin, bots, workflows, PRs e agentes podem reutilizar o mesmo padrão quando o owner/escopo correspondente provar aderência. O padrão não autoriza mutação fora do escopo e não transforma conversa vaga em ordem.
 ## Padrões do CHEFE e fluxo contínuo
 
 Toda aprendizagem operacional aprovada pelo CHEFE vira padrão consumível, não memória solta de um chat:

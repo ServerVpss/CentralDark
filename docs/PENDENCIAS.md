@@ -780,3 +780,54 @@ Estabilidade: Plugin externo exige re-instalação manual pós-update. Ação: M
 - **Resumo do fechamento:** Remediado no commit 328dfb027: os 3 canvas vazios foram destrackeados do PR #1369 (git rm --cached, arquivos preservados no disco conforme DETECT != DELETE). A mensagem enganosa do 41f1f7e85 fica no histórico como registro do erro, com o commit corretivo explicando a divergência. Aprendizado #33 registra a lei extraída: mensagem de commit não é prova, conteúdo de commit é prova — rodar git diff --cached --stat antes de declarar recibo, nunca git add -A cego.
 - **Sintoma:** O commit 41f1f7e85 na branch reconciliacao/casa-20260829-consolidacao tem mensagem "docs(reconciliation): inventory of E:\CentralDark — SOBRA_BRAIN classification, proof of mirrors" mas contém apenas 3 arquivos canvas vazios (docs/BRAIN/Sem título*.canvas, 1 linha cada), pegos por um git add -A cego. O relatório de inventário citado na mensagem nunca entrou no repositório.
 - **Onde mexer:** PR #1369, branch reconciliacao/casa-20260829-consolidacao, commit 41f1f7e85, arquivos docs/BRAIN/Sem título*.canvas
+
+---
+
+### 🚨🔴🔒 PENDÊNCIA CRÍTICA FUTURA — PASSO 2 · WORKSPACE HERMES EM DISCO DEDICADO
+
+**Status:** 🔴 **FUTURO / BLOQUEADO / NÃO EXECUTAR AGORA**  
+**Data:** 23/09/2026  
+**Ordem explícita do SEGREDO/CHEFE:** este é o **SEGUNDO PASSO**. O passo atual é somente sanear/remover duplicatas comprovadas. **Não mexer no perfil/pasta Pivete nesta etapa.**
+
+```text
+PR_ROLE=FUTURE_CRITICAL_PENDING
+DO_NOT_EXECUTE_NOW=true
+LOCKED=true
+STEP=2
+STEP_1=REMOVE_ONLY_PROVEN_DUPLICATES_AND_LEAVE_CURRENT_CASA_CLEAN
+STEP_1_TOUCH_PIVETE_PROFILE=false
+UNLOCK_CONDITION=STEP_1_FIXED_POINT_AND_EXPLICIT_CHEFE_REOPEN
+ONE_SYSTEM_ONLY=true
+REUSE_BEFORE_CREATE=true
+CURRENT > HISTORY
+UNKNOWN != PASS
+REALITY = JUDGE
+```
+
+**Intenção futura preservada, sem implantação:** estudar a promoção de um disco dedicado mais rápido para ser a fronteira integral de trabalho do HERMES — workspace, worktrees, build, temp, cache, logs, artifacts e tools — mantendo os demais discos como capacidades do mesmo sistema (por exemplo, garimpo/entrada bruta/arquivo) e preparando futura contenção Docker sem criar uma segunda CentralDark.
+
+**Evidência de hardware fornecida pelo CHEFE em 23/09/2026:**
+- `C:` = XPG GAMMIX S70 BLADE, NVMe PCIe x4 — fast lane atual; não decidir seu papel futuro neste PR.
+- `D:` = KINGSTON SA400S37480G, SSD 447.1 GB — **candidato forte** a workspace dedicado, ainda não promovido.
+- `E:`, `F:` e `J:` = partições do mesmo Hitachi HDS5C1010CLA382, HDD 5700 RPM — trocar E→F não constitui ganho de disco físico.
+
+**Guardrail:** modelo, letra de unidade ou path candidato **não viram decisão arquitetural sem benchmark/medição CURRENT + consumidores + rollback**. A futura migração deve fazer path virar configuração, não espalhar hardcode novo.
+
+**Não fazer neste PR / agora:**
+- não mover `E:\CentralDark`;
+- não promover `D:` a workspace;
+- não alterar `Pivete`/perfil/pastas por causa desta pendência;
+- não criar Docker/containers;
+- não mudar C:/E:/D: em runtime;
+- não apagar dados;
+- não iniciar garimpo automático.
+
+**Critério para destravar futuramente:**
+1. saneamento de duplicatas do passo 1 chega a FIXED_POINT;
+2. topologia C:/D:/E:/F:/J: é remedida ao vivo;
+3. benchmark compatível com carga Git/Node/build/arquivos pequenos discrimina o disco alvo;
+4. todos os consumidores de paths são inventariados;
+5. rollback e migração reversível são provados;
+6. SEGREDO/CHEFE reabre explicitamente o passo 2.
+
+**NEXT_CURSOR futuro:** `STEP1_DUPLICATE_CLEANUP_FIXED_POINT → REMEASURE_STORAGE → BENCHMARK → PATH_CONSUMERS → MIGRATION_PLAN → DOCKER_BOUNDARY_PLAN`.

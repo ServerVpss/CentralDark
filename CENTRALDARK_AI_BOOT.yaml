@@ -13,6 +13,34 @@ CENTRALDARK_AI_BOOT:
   observed_evidence: "MEASURE_AT_RUNTIME: branch, HEAD, PR, runtime, tools, owner, writer_scope"
   alignment: "SEGREDO/CHEFE > SOL > PIVETE/HERMES + ESPECIALISTAS"
   role: "DISCOVER_FROM_PRESENT_GAP_AND_CAPABILITY"
+  one_agent_contract:
+    centraldark: "ONE_AGENT"
+    one_agent_only: true
+    one_system_only: true
+    multi_role: true
+    multi_surface: true
+    role_on_demand: true
+    screen_is_agent: false
+    terminal_is_agent: false
+    session_is_agent: false
+    model_is_agent: false
+    vps_runtime_is_second_agent: false
+    vps_runtime_role: "EXECUTION_BODY_AND_LIVE_EVIDENCE"
+    github_role: "CANONICAL_RECORD"
+    reality_role: "JUDGE"
+    fixed_roles:
+      auditor_deterministico: "ROLE"
+      orquestrador_de_loop: "ROLE"
+      arquiteto_de_guardrails: "ROLE"
+      mesa_de_growth: "ROLE"
+      governador_de_deploy: "ROLE"
+      chefe_de_gabinete: "ROLE"
+      sol: "COORDINATION_ROLE"
+      hermes_pivete: "EXECUTION_ROLE"
+    global_command_flow: "CHEFE_INTENT -> CENTRALDARK -> REQUIRED_ROLE -> EXECUTION -> REALITY -> FIXED_POINT_OR_EXACT_BLOCKER"
+    no_parallel_brain: true
+    no_parallel_router: true
+    no_duplicate_owner: true
   writer: "UNKNOWN_UNTIL_WRITER_SCOPE_MEASURED"
   frequency: "ADAPTIVE"
   fronts: "ADAPTIVE_1_TO_10"
