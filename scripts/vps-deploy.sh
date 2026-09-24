@@ -4,6 +4,13 @@
 
 set -euo pipefail
 
+REPO_DIR="${CENTRALDARK_ROOT:-/root/CentralDark}"
+DISPATCHER="$REPO_DIR/scripts/vps/deploy-guards-dispatcher.sh"
+[[ -x "$DISPATCHER" ]] || { echo "CANONICAL_DEPLOY_GATE_MISSING"; exit 16; }
+REPO_DIR="$REPO_DIR" BRANCH=main bash "$DISPATCHER" --gate-only
+GATED_SHA="$(git -C "$REPO_DIR" rev-parse origin/main)"
+cd "$REPO_DIR"
+
 TS=$(date +%Y%m%dT%H%M%S)
 LOGDIR="/root/CentralDark/logs/deploy"
 mkdir -p "$LOGDIR"
@@ -18,10 +25,9 @@ echo "SHA: ${2:-$(git rev-parse HEAD)}"
 cd /root/CentralDark
 
 # 1. Git sync
-echo "[1/6] Git pull main..."
-git fetch origin
+echo "[1/6] Git sync do SHA previamente gateado..."
 git checkout main
-git pull origin main
+git merge --ff-only "$GATED_SHA"
 
 # 2. Install deps (root + workspaces)
 echo "[2/6] npm install..."

@@ -1,4 +1,4 @@
-name: Pipeline — Telegram + Painel
+name: ⚙️ Pipeline — Telegram + Painel
 
 # Notifica Telegram e atualiza o Mega Painel em cada estágio do ciclo de vida.
 # Estágios cobertos:
@@ -38,7 +38,7 @@ concurrency:
 
 jobs:
   pipeline:
-    name: Notificar + Atualizar Painel
+    name: 🧩 Notificar + Atualizar Painel
     runs-on: [self-hosted, Linux]
     if: github.repository == 'ServerVpss/CentralDark'
     steps:
@@ -47,7 +47,7 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Determinar estágio
+      - name: 🔹 Determinar estágio
         id: stage
         env:
           EVENT:        ${{ github.event_name }}
@@ -109,7 +109,7 @@ jobs:
               ;;
           esac
 
-      - name: Notificar Telegram
+      - name: 🔹 Notificar Telegram
         env:
           BOT:     ${{ secrets.SRVER1_BOT_TOKEN }}
           CHAT:    ${{ secrets.TELEGRAM_CHANNEL_ID }}

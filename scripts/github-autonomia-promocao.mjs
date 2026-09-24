@@ -23,14 +23,14 @@ export const CANONICAL_MAP_PATH = "apps/modulos/mapeamento/config/mapa-canonico.
 export const PR_MOTHER_NUMBER = 1562;
 
 export const DEFAULT_REQUIRED_WORKFLOWS = Object.freeze([
-  "porta-de-entrada",
-  "codex-validate",
-  "lupa-conformance",
-  "Lupa Drift Guard",
+  "⚙️ porta-de-entrada",
+  "⚙️ codex-validate",
+  "⚙️ lupa-conformance",
+  "⚙️ Lupa Drift Guard",
   "🧠 Trigger Fabric Full Package — pacote e contraprova",
-  "PR Title Contract",
-  "PR auto-review (Codex + checklist)",
-  "Pipeline — Telegram + Painel",
+  "⚙️ PR Title Contract",
+  "⚙️ PR auto-review (Codex + checklist)",
+  "⚙️ Pipeline — Telegram + Painel",
 ]);
 
 export const BLOCKING_LABELS = Object.freeze([

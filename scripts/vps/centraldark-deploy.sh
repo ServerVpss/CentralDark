@@ -66,6 +66,15 @@ done
 
 [[ "$TOTAL" -eq 1 && "$SOURCE_ONLY" -eq 1 ]] && { echo "--total e --source-only são mutuamente exclusivos"; exit 2; }
 
+CANONICAL_DEPLOY_GATE="${CENTRALDARK_CANONICAL_DEPLOY_GATE:-}"
+CANONICAL_DEPLOY_TARGET="${CENTRALDARK_CANONICAL_DEPLOY_TARGET:-}"
+
+# Fail-closed antes de qualquer fetch/cache/backup/runtime mutation.
+if [[ "$APPLY" -eq 1 && "$CANONICAL_DEPLOY_GATE" != "PASS" ]]; then
+  printf 'DIRECT_DEPLOY_BYPASS_BLOCKED use scripts/vps/deploy-guards-dispatcher.sh\n' >&2
+  exit 16
+fi
+
 log() { printf '%s %s\n' "$(date -u '+%H:%M:%SZ')" "$*"; }
 die() { log "FALHA: $*"; exit "${2:-1}"; }
 
@@ -386,6 +395,11 @@ git fetch --prune origin "$BRANCH" --quiet || die "fetch de origin/$BRANCH falho
 
 HEAD_ANTES="$(git rev-parse HEAD)"
 ALVO="$(git rev-parse "origin/$BRANCH")"
+if [[ "$APPLY" -eq 1 ]]; then
+  [[ "$CANONICAL_DEPLOY_GATE" == "PASS" ]] || die "DIRECT_DEPLOY_BYPASS_BLOCKED use scripts/vps/deploy-guards-dispatcher.sh" 16
+  [[ "$CANONICAL_DEPLOY_TARGET" =~ ^[0-9a-f]{40}$ ]] || die "CANONICAL_DEPLOY_TARGET_INVALID" 16
+  [[ "$CANONICAL_DEPLOY_TARGET" == "$ALVO" ]] || die "CANONICAL_DEPLOY_TARGET_DRIFT gated=$CANONICAL_DEPLOY_TARGET origin=$ALVO" 16
+fi
 ATRAS="$(git rev-list --count "HEAD..origin/$BRANCH")"
 AFRENTE="$(git rev-list --count "origin/$BRANCH..HEAD")"
 SUJOS="$(contar_sujos_deploy)"

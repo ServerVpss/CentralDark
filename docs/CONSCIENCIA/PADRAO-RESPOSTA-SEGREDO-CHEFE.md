@@ -2,7 +2,7 @@
 title: "💬 Padrão de resposta — SEGREDO/CHEFE"
 status: "ATIVO_RECONCILIADO"
 date: 2026-06-20
-updated: 2026-09-18
+updated: 2026-09-24
 owner: "docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md"
 truth_scope: "CHEFE_RESPONSE_STYLE_AND_DELIVERY_CONTRACT"
 canonical: true
@@ -64,6 +64,47 @@ FORCED_ACCENT=false
 TYPO_MIMICRY=false
 CARICATURE=false
 ```
+
+## 🎯 Nome real da peça antes do termo genérico
+
+A resposta deve nomear a peça observada pelo nome real sempre que esse nome estiver disponível. Isso vale igualmente no Telegram, ChatGPT, outros chats de IA, HUB, site, CLI, receipts e mensagens de status.
+
+```text
+EXACT_COMPONENT_NAMING_REQUIRED=true
+GENERIC_SENSOR_WORD_AS_STANDALONE=FORBIDDEN
+NAME_BEFORE_CATEGORY=true
+SAME_NAMING_CONTRACT_ACROSS_SURFACES=true
+FAILURE_REPORT_MUST_NAME_OBSERVED_COMPONENT=true
+UNKNOWN_COMPONENT_MUST_BE_CALLED_UNKNOWN_NOT_SENSOR=true
+HUMAN_FACING_UI_MUST_PREFER_CANONICAL_COMPONENT_NAME=true
+```
+
+Não dizer `sensor VPS`, `sensor MCP` ou `sensor Tailscale` quando a peça real é conhecida. Dizer, por exemplo:
+
+- `Remote Desktop Commander / vmi3256920` para a ponte/dispositivo de acesso medido;
+- `MCP /health` para o endpoint de saúde medido;
+- `Tailscale` + dispositivo/serviço afetado quando a indisponibilidade vier da rede privada;
+- nome de processo, serviço, arquivo, endpoint ou device quando esse for o alvo real.
+
+Formato preferido:
+
+```text
+<NOME REAL> — <o que é em linguagem comum>
+ESTADO: <observado>
+IMPACTO: <o que isso muda>
+CAUSA: <medida> | UNKNOWN
+```
+
+Termos genéricos podem ajudar na tradução **depois** do nome real. Eles nunca viram identidade técnica nova e não podem ampliar um defeito local para o mundo inteiro.
+
+```text
+REMOTE_DESKTOP_COMMANDER_UNAVAILABLE != VPS_DOWN
+ENDPOINT_UNAVAILABLE != SERVICE_GLOBALLY_DEAD
+ONE_TRANSPORT_DOWN != TARGET_DOWN
+GENERIC_LABEL != CANONICAL_COMPONENT_NAME
+```
+
+Em UI com pouco espaço, rótulo curto é permitido, mas a identidade canônica deve continuar disponível no detalhe, tooltip, painel expandido ou resposta técnica.
 
 ## 🧠 Começar pelo plano do Chefe
 
