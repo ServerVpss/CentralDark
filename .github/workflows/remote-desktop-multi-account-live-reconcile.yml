@@ -1,4 +1,4 @@
-name: Remote Desktop multi-account live reconcile
+name: ⚙️ Remote Desktop multi-account live reconcile
 
 on:
   push:
@@ -18,14 +18,22 @@ jobs:
     runs-on: [self-hosted, Linux]
     timeout-minutes: 10
     steps:
-      - name: Checkout exact branch HEAD
+      - name: 🔹 Checkout exact branch HEAD
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           ref: ${{ github.sha }}
           persist-credentials: false
           fetch-depth: 1
 
-      - name: Prove target and deploy canonical multi-account bridge
+      - name: 🧿 TLC23 · Universal · Meta-Lupa · Horn
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          TARGET_SHA="$GITHUB_SHA" REPO_DIR=/root/CentralDark BRANCH=main \
+            bash scripts/vps/deploy-guards-dispatcher.sh --gate-only
+          echo "CANONICAL_DEPLOY_GATE=PASS TARGET_SHA=$GITHUB_SHA"
+
+      - name: 🔹 Prove target and deploy canonical multi-account bridge
         shell: bash
         run: |
           set -euo pipefail
@@ -35,16 +43,18 @@ jobs:
           bash -n scripts/vps/deploy-desktop-commander-multi-account.sh
           bash -n infra/systemd/centraldark-desktop-commander-profile.sh
           bash -n infra/systemd/centraldark-desktop-commander-watchdog.sh
-          bash scripts/vps/deploy-desktop-commander-multi-account.sh "$GITHUB_WORKSPACE"
+          SOURCE_HEAD="$GITHUB_SHA" bash scripts/vps/deploy-desktop-commander-multi-account.sh "$GITHUB_WORKSPACE"
 
-      - name: Counterproof two isolated services
+      - name: 🔹 Counterproof two isolated services
         shell: bash
         run: |
           set -euo pipefail
-          a="$(systemctl is-active centraldark-desktop-commander.service || true)"
-          b="$(systemctl is-active centraldark-desktop-commander-conta2.service || true)"
-          p1="$(systemctl show -p MainPID --value centraldark-desktop-commander.service || true)"
-          p2="$(systemctl show -p MainPID --value centraldark-desktop-commander-conta2.service || true)"
+          set +e
+          a="$(systemctl is-active centraldark-desktop-commander.service)"
+          b="$(systemctl is-active centraldark-desktop-commander-conta2.service)"
+          p1="$(systemctl show -p MainPID --value centraldark-desktop-commander.service)"
+          p2="$(systemctl show -p MainPID --value centraldark-desktop-commander-conta2.service)"
+          set -e
           echo "PRINCIPAL_ACTIVE=$a MAINPID=$p1"
           echo "CONTA2_ACTIVE=$b MAINPID=$p2"
           test "$a" = active
@@ -52,10 +62,12 @@ jobs:
           test -n "$p1" && test "$p1" != 0
           test -n "$p2" && test "$p2" != 0
           test "$p1" != "$p2"
-          test "$(systemctl show -p Environment --value centraldark-desktop-commander.service)" != "$(systemctl show -p Environment --value centraldark-desktop-commander-conta2.service)" || true
+          env1="$(systemctl show -p Environment --value centraldark-desktop-commander.service)"
+          env2="$(systemctl show -p Environment --value centraldark-desktop-commander-conta2.service)"
+          test "$env1" != "$env2"
           echo "TWO_ISOLATED_REMOTE_PROCESSES=PASS"
 
-      - name: Emit live receipts without secrets
+      - name: 🔹 Emit live receipts without secrets
         if: always()
         shell: bash
         run: |

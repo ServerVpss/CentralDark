@@ -12,6 +12,7 @@ import { config } from "./config.js";
 import { log } from "./log.js";
 import { activeSseSubscribers, getSseDiagnostics } from "./admin.js";
 import { getHubMissionConsumerStatus } from "./hub-mission-consumer.js";
+import { getOperationalSnapshot } from "./operational-telemetry.js";
 const MCP_VERSION = "0.4.0-v2.2";
 const SERVICE_STARTED_AT = new Date().toISOString();
 function checkSecret(name) {
@@ -35,7 +36,6 @@ function pct(ok, total) {
 function checkDependencia(nome, ok, detalhe) {
     return { nome, ok, detalhe };
 }
-
 async function checkTelegramSubsystem() {
     const tokenPresent = checkSecret("SRVER1_BOT_TOKEN").present
         || checkSecret("TELEGRAM_BOT_TOKEN").present
@@ -60,7 +60,8 @@ async function checkTelegramSubsystem() {
                 localTokenPresent: tokenPresent,
             },
         };
-    } catch {
+    }
+    catch {
         return {
             ok: tokenPresent,
             detalhe: {
@@ -83,6 +84,7 @@ export async function healthDeep(req, res) {
         const sse = getSseDiagnostics();
         const sseAtivas = activeSseSubscribers();
         const hubConsumer = getHubMissionConsumerStatus();
+        const operational = getOperationalSnapshot();
         // Dependências externas (checagem leve — sem network)
         const telegram = await checkTelegramSubsystem();
         const oauthOk = checkSecret("MCP_SESSION_SECRET").present
@@ -150,6 +152,7 @@ export async function healthDeep(req, res) {
             sseAtivas,
             sse,
             hubMissionConsumer: hubConsumer,
+            operationalSnapshot: operational,
             dependencias,
             checks: dependencias.map(d => ({ key: d.nome, ok: d.ok, detail: d.detalhe })),
             elapsedMs: Math.round(performance.now() - t0),
