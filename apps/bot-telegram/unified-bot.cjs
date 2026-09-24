@@ -1621,17 +1621,32 @@ function telegramHealthPayload(mode = 'api-direta') {
 
 function startPollingHealthServer() {
   return new Promise((resolve, reject) => {
-    const server = http.createServer((req, res) => {
-      if (req.method === 'GET' && req.url === '/bot/health') {
-        const body = telegramHealthPayload('api-direta');
-        res.writeHead(body.ok ? 200 : 503, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify(body));
-        return;
-      }
-      res.writeHead(404).end('Not found');
-    });
-    server.on('error', reject);
-    server.listen(HEALTH_PORT, '127.0.0.1', () => resolve(server));
+    const maxOffset = 5;
+
+    const tryListen = (port, offset = 0) => {
+      const server = http.createServer((req, res) => {
+        if (req.method === 'GET' && req.url === '/bot/health') {
+          const body = { ...telegramHealthPayload('api-direta'), healthPort: port };
+          res.writeHead(body.ok ? 200 : 503, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify(body));
+          return;
+        }
+        res.writeHead(404).end('Not found');
+      });
+
+      server.once('error', (err) => {
+        if (err?.code === 'EADDRINUSE' && offset < maxOffset) {
+          const nextPort = HEALTH_PORT + offset + 1;
+          console.warn(`[Bot] ⚠️  Porta health ${port} ocupada; tentando ${nextPort}`);
+          return tryListen(nextPort, offset + 1);
+        }
+        reject(err);
+      });
+
+      server.listen(port, '127.0.0.1', () => resolve({ server, port }));
+    };
+
+    tryListen(HEALTH_PORT);
   });
 }
 
@@ -1703,16 +1718,16 @@ async function main() {
   console.log('[Bot] 🔄 Transporte canônico: Telegram Bot API oficial via long polling direto');
   _botMode = 'api-direta';
   console.log('[Bot] ✅ BOT_API_DIRECT_LONG_POLLING ativo');
-  let pollingHealthServer = null;
+  let pollingHealth = null;
   try {
-    pollingHealthServer = await startPollingHealthServer();
-    console.log(`[Bot] 🩺 Health polling ativo — porta ${HEALTH_PORT}`);
+    pollingHealth = await startPollingHealthServer();
+    console.log(`[Bot] 🩺 Health polling ativo — porta ${pollingHealth.port}`);
   } catch (e) {
     console.warn(`[Bot] ⚠️  Health polling indisponível (${e.message})`);
   }
   const shutdownPolling = () => {
     _running = false;
-    if (pollingHealthServer) pollingHealthServer.close();
+    if (pollingHealth?.server) pollingHealth.server.close();
   };
   process.on('SIGTERM', shutdownPolling);
   process.on('SIGINT', shutdownPolling);
