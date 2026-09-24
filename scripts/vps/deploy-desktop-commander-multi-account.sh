@@ -2,8 +2,14 @@
 set -euo pipefail
 
 ROOT="${1:-/root/CentralDark}"
-SOURCE_HEAD="${SOURCE_HEAD:-UNKNOWN}"
+CANONICAL_ROOT="${CENTRALDARK_ROOT:-/root/CentralDark}"
+SOURCE_HEAD="${SOURCE_HEAD:-$(git -C "$CANONICAL_ROOT" rev-parse HEAD 2>/dev/null || true)}"
 RECEIPT="/run/centraldark-remote-multi-account.receipt"
+DISPATCHER="${CENTRALDARK_DEPLOY_GATE_SCRIPT:-$CANONICAL_ROOT/scripts/vps/deploy-guards-dispatcher.sh}"
+[[ "$SOURCE_HEAD" =~ ^[0-9a-f]{40}$ ]] || { echo "SOURCE_HEAD_INVALID"; exit 16; }
+[[ -x "$DISPATCHER" ]] || { echo "CANONICAL_DEPLOY_GATE_MISSING"; exit 16; }
+TARGET_SHA="$SOURCE_HEAD" REPO_DIR="$CANONICAL_ROOT" BRANCH=main bash "$DISPATCHER" --gate-only
+echo "CANONICAL_DEPLOY_GATE=PASS TARGET_SHA=$SOURCE_HEAD"
 cd "$ROOT"
 
 install -m 0755 infra/systemd/centraldark-desktop-commander-profile.sh /usr/local/sbin/centraldark-desktop-commander-profile.sh
