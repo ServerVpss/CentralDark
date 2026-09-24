@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { spawnSync } from 'node:child_process';
+import { houseSquashFixedPointProof } from './fixed-point.mjs';
 
 const token = process.env.GITHUB_TOKEN || '';
 const repository = process.env.GITHUB_REPOSITORY || 'ServerVpss/CentralDark';
@@ -79,6 +80,109 @@ async function remeasureMergeability(number) {
     await wait(1500);
   }
   return pr;
+}
+
+async function listAll(path, key) {
+  const out = [];
+  for (let page = 1; page <= 10; page += 1) {
+    const sep = path.includes('?') ? '&' : '?';
+    const response = await api(`${path}${sep}per_page=100&page=${page}`);
+    if (!response.ok) return { ok: false, status: response.status, items: out };
+    const batch = Array.isArray(response.data?.[key]) ? response.data[key]
+      : Array.isArray(response.data) ? response.data : [];
+    out.push(...batch);
+    if (batch.length < 100) return { ok: true, status: response.status, items: out };
+  }
+  return { ok: false, status: 508, items: out };
+}
+
+function latestChecksByName(checks) {
+  const latest = new Map();
+  for (const check of [...checks].sort((a, b) => Number(b.id || 0) - Number(a.id || 0))) {
+    const name = String(check.name || '');
+    if (name && !latest.has(name)) latest.set(name, check);
+  }
+  return [...latest.values()];
+}
+
+async function realitySquashProbe(number, expectedHead) {
+  const observed = await remeasureMergeability(number);
+  if (!observed) return { proof: houseSquashFixedPointProof({ prNumber: number }), observed: null };
+
+  const checksResult = await listAll(`/commits/${encodeURIComponent(observed.head.sha)}/check-runs`, 'check_runs');
+  const checks = latestChecksByName(checksResult.items);
+  const pendingChecks = checks.filter((check) => check.status !== 'completed');
+  const nonGreenChecks = checks.filter((check) =>
+    check.status === 'completed' && String(check.conclusion || '').toLowerCase() !== 'success'
+  );
+
+  const statusResult = await api(`/commits/${encodeURIComponent(observed.head.sha)}/status`);
+  const statuses = statusResult.ok && Array.isArray(statusResult.data?.statuses) ? statusResult.data.statuses : [];
+  const badStatuses = statuses.filter((status) => String(status.state || '').toLowerCase() !== 'success');
+
+  const reviewsResult = await listAll(`/pulls/${number}/reviews`, '__array__');
+  const latestReviewByUser = new Map();
+  for (const review of reviewsResult.items) {
+    latestReviewByUser.set(review.user?.login || String(review.id), review);
+  }
+  const changesRequested = [...latestReviewByUser.values()].some((review) => review.state === 'CHANGES_REQUESTED');
+
+  const labels = (observed.labels || []).map((label) => label.name || label);
+  const blockers = [];
+  if (!checksResult.ok) blockers.push(`CHECKS_HTTP_${checksResult.status}`);
+  if (!statusResult.ok) blockers.push(`STATUSES_HTTP_${statusResult.status}`);
+  if (!reviewsResult.ok) blockers.push(`REVIEWS_HTTP_${reviewsResult.status}`);
+
+  const proof = houseSquashFixedPointProof({
+    prNumber: number,
+    state: observed.state,
+    draft: observed.draft,
+    labels,
+    protectedPrs: [...protectedPrs],
+    mergeable: observed.mergeable,
+    mergeState: observed.mergeable_state,
+    headSha: expectedHead,
+    observedHeadSha: observed.head.sha,
+    pendingChecks: pendingChecks.length,
+    nonGreenChecks: nonGreenChecks.length,
+    badStatuses: badStatuses.length,
+    successChecks: checks.filter((check) => check.status === 'completed' && check.conclusion === 'success').length,
+    changesRequested,
+    blockers,
+  });
+
+  return {
+    proof,
+    observed,
+    evidence: {
+      checks_total: checks.length,
+      checks_pending: pendingChecks.length,
+      checks_non_green: nonGreenChecks.length,
+      statuses_bad: badStatuses.length,
+      changes_requested: changesRequested,
+    },
+  };
+}
+
+async function squashIfRealityGreen(number, expectedHead, title) {
+  const probe = await realitySquashProbe(number, expectedHead);
+  if (!probe.proof.ready) return { merged: false, reason: probe.proof.verdict, ...probe };
+
+  const merge = await api(`/pulls/${number}/merge`, {
+    method: 'PUT',
+    body: {
+      sha: expectedHead,
+      merge_method: 'squash',
+      commit_title: `${title} (#${number})`,
+      commit_message: 'CentralDark REALITY deterministic green squash: exact HEAD + all CI green + no policy blockers.',
+    },
+  });
+  return {
+    merged: Boolean(merge.ok && merge.data?.merged),
+    reason: merge.ok && merge.data?.merged ? 'SQUASH_MERGED' : `MERGE_HTTP_${merge.status}`,
+    merge_sha: merge.data?.sha || null,
+    ...probe,
+  };
 }
 
 const list = await api('/pulls?state=open&per_page=100');
@@ -188,10 +292,27 @@ for (const item of prs) {
   }
 
   const rerun = await rerunFailedOnce(pr.head.sha);
-  receipt.action = rerun.requested > 0 ? 'RERUN_FAILED_JOBS' : 'UP_TO_DATE_NO_RERUN';
-  receipt.state = pr.mergeable ? 'MERGEABLE' : 'NOT_MERGEABLE';
   receipt.reruns = rerun.requested;
-  if (rerun.requested > 0) acted += 1;
+  if (rerun.requested > 0) {
+    receipt.action = 'RERUN_FAILED_JOBS';
+    receipt.state = 'WAIT_NEW_RESULT';
+    acted += 1;
+    summary.push(receipt);
+    continue;
+  }
+
+  const squash = await squashIfRealityGreen(number, pr.head.sha, pr.title || `PR #${number}`);
+  receipt.squash_proof = squash.proof;
+  receipt.squash_evidence = squash.evidence || null;
+  receipt.action = squash.merged ? 'SQUASH_MERGED' : 'GREEN_SQUASH_BLOCKED';
+  receipt.state = squash.merged ? 'MERGED' : squash.reason;
+  receipt.merge_sha = squash.merge_sha || null;
+  if (squash.merged) {
+    acted += 1;
+    console.log(`PR #${number} REALITY_SQUASH=PASS head=${pr.head.sha} merge=${squash.merge_sha}`);
+  } else {
+    console.log(`PR #${number} REALITY_SQUASH=BLOCKED verdict=${squash.proof?.verdict || 'UNKNOWN'}`);
+  }
   summary.push(receipt);
 }
 
