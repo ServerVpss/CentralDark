@@ -71,6 +71,26 @@ MULTIBUSSOLA_PROOF_GATES = [
     "REMEDICAO_T1",
     "REALITY_JUDGE",
 ]
+TIK_TAK_ROLE_ORDER = ["GEOFF", "IAN", "GREG", "DEX", "HERMES", "REALIDADE"]
+TIK_TAK_OUTER_LOOP = [
+    "REMEASURE_CURRENT_STATE",
+    "/goal",
+    "SELECT_EXISTING_EXECUTOR",
+    "LAUNCH_THROUGH_EXISTING_OWNER",
+    "OBSERVE",
+    "REVIEW",
+    "COUNTERPROOF",
+    "REMEASURE",
+    "CONTINUE_TO_PROOF_FIXED_POINT_OR_NEXT_CURSOR",
+]
+TIK_TAK_LOCKS = [
+    "GREG_VERDICT_REQUIRED_BEFORE_GREEN",
+    "DEX_APPROVAL_REQUIRED_FOR_CRITICAL_DELTA",
+    "CI_PENDING_IS_NOT_PASS",
+    "MERGE_IS_NOT_DEPLOY",
+    "HERMES_IS_EXECUTOR",
+    "REALIDADE_IS_JUDGE",
+]
 NEGATION_TOKENS = {"nao", "nunca", "sem"}
 
 MASTER_INGRESS_ALIASES = {
@@ -502,16 +522,33 @@ def resolve(
         "tik_tak": {
             "canonical_signal": "!TIK-TAK",
             "active": tik_tak_active,
-            "semantic_family": "EVIDENCE_FRESHNESS_REMEASUREMENT" if tik_tak_active else None,
-            "owner": "docs/CONSCIENCIA/REMEDICAO.md" if tik_tak_active else None,
+            "canonical_rule": "REGRA-ZERO-CENTRALDARK" if tik_tak_active else None,
+            "semantic_family": "AUTOMATION_FACTORY_OUTER_LOOP" if tik_tak_active else None,
+            "owner": "docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md" if tik_tak_active else None,
+            "wraps_master_cycle": tik_tak_active,
+            "goal_step": "/goal" if tik_tak_active else None,
+            "role_order": TIK_TAK_ROLE_ORDER if tik_tak_active else [],
+            "geoff_formula": ["IMPLEMENTACAO", "SIMPLIFICACAO"] if tik_tak_active else [],
+            "outer_loop_sequence": TIK_TAK_OUTER_LOOP if tik_tak_active else [],
+            "locks": TIK_TAK_LOCKS if tik_tak_active else [],
+            "greg_verdict_required_before_green": tik_tak_active,
+            "dex_approval_required_for_critical_delta": tik_tak_active,
+            "ci_pending_is_not_pass": tik_tak_active,
+            "merge_is_not_deploy": tik_tak_active,
+            "hermes_is_executor": tik_tak_active,
+            "reality_is_judge": tik_tak_active,
+            "select_existing_executor_only": tik_tak_active,
+            "works_above_coding_agents": tik_tak_active,
             "invalidate_only_affected_stale_proof": tik_tak_active,
             "remeasure_current_target": tik_tak_active,
             "rerun_affected_gates": tik_tak_active,
             "same_head_counterproof_required": tik_tak_active,
             "preserve_unaffected_valid_proof": tik_tak_active,
+            "continue_until": "PROOF_OR_FIXED_POINT_OR_NEXT_CURSOR" if tik_tak_active else None,
             "fanout_agents": False,
             "is_swarm_trigger": False,
             "creates_new_owner": False,
+            "creates_new_brain_or_router": False,
         },
         "identity_naming_guard": {
             "canonical_identity_is_single": True,
@@ -696,12 +733,19 @@ def self_test():
 
     r = resolve("!TIK-TAK", chefe_source=True)
     add(
-        "tik_tak_is_remeasurement_not_swarm",
+        "tik_tak_outer_loop_preserves_remeasurement_without_swarm",
         r["tik_tak"]["active"]
+        and r["tik_tak"]["canonical_rule"] == "REGRA-ZERO-CENTRALDARK"
+        and r["tik_tak"]["semantic_family"] == "AUTOMATION_FACTORY_OUTER_LOOP"
+        and r["tik_tak"]["role_order"] == TIK_TAK_ROLE_ORDER
+        and r["tik_tak"]["outer_loop_sequence"] == TIK_TAK_OUTER_LOOP
+        and r["tik_tak"]["greg_verdict_required_before_green"]
+        and r["tik_tak"]["dex_approval_required_for_critical_delta"]
         and r["tik_tak"]["invalidate_only_affected_stale_proof"]
         and r["tik_tak"]["same_head_counterproof_required"]
         and not r["tik_tak"]["fanout_agents"]
-        and not r["tik_tak"]["is_swarm_trigger"],
+        and not r["tik_tak"]["is_swarm_trigger"]
+        and not r["tik_tak"]["creates_new_brain_or_router"],
     )
 
     r = resolve("!CENTRALDARK", chefe_source=True)
