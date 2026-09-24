@@ -186,3 +186,73 @@ GLOBAL_FIXED_POINT=false
 O objetivo material desta sessão — **corrigir o build e fazer o programa único abrir mantendo OAuth/MCP/perfis/runtime existentes** — chegou ao T1 provado.
 
 Próximo agente não deve voltar ao `Add-Type`/`BUILD_OUTPUT_ABSENT` sem regressão nova. O próximo delta útil do mesmo app pode partir da UI já aberta, preservando o produto, o runtime e os fatos acima.
+
+
+## 🧾 T1 ADICIONAL — 2026-09-24 · OAuth Segredo + MCP 112 tools
+
+Fonte: execução observada pelo CHEFE na Casa e receipt textual do mesmo fluxo.
+
+```text
+2026-09-24T00:17:22.2814789-03:00 PROFILE=Segredo OAUTH_FLOW=START
+2026-09-24T00:17:22.2982305-03:00 PROFILE=Segredo RESOURCE=https://mcp.centralldark.com/admin/mcp
+2026-09-24T00:17:23.6362078-03:00 PROFILE=Segredo DCR=PASS
+2026-09-24T00:17:23.7057059-03:00 PROFILE=Segredo AUTHORIZE_BROWSER=OPENING
+2026-09-24T00:17:41.8595459-03:00 PROFILE=Segredo AUTHORIZE=PASS
+2026-09-24T00:17:42.1620584-03:00 PROFILE=Segredo TOKEN=PASS TYPE=Bearer EXPIRES_IN=3599
+2026-09-24T00:17:42.1690554-03:00 PROFILE=Segredo TOKEN_STORE=DPAPI_CURRENT_USER
+2026-09-24T00:17:43.4385288-03:00 PROFILE=Segredo MCP_TOOLS_LIST=PASS TOOL_COUNT=112
+2026-09-24T00:17:43.4490462-03:00 PROFILE=Segredo MCP_AUTHENTICATED_E2E=PASS
+2026-09-24T00:17:43.4562665-03:00 PROFILE=Segredo OAUTH_RECEIPT=C:\Users\Administrador\AppData\Local\CentralDark\UnifiedRuntime\profiles\Segredo\logs\oauth-20260924-001722.log
+2026-09-24T00:17:43.4633315-03:00 PROFILE=Segredo OAUTH_FLOW=END
+```
+
+### Estado promovido por esta prova
+
+```text
+PROFILE=Segredo
+RESOURCE=https://mcp.centralldark.com/admin/mcp
+DCR=PASS
+AUTHORIZE=PASS
+TOKEN=PASS
+TOKEN_TYPE=Bearer
+TOKEN_EXPIRES_IN=3599
+TOKEN_STORE=DPAPI_CURRENT_USER
+MCP_TOOLS_LIST=PASS
+MCP_TOOL_COUNT=112
+MCP_AUTHENTICATED_E2E=PASS
+OAUTH_FLOW=END
+```
+
+O T1 anterior deste mesmo owner registrava `TOOL_COUNT=100`. Esta observação mais recente registra `TOOL_COUNT=112`; para esta execução/perfil, CURRENT observado substitui o valor histórico sem reescrever a evidência antiga.
+
+### Contraprova e limites
+
+Na mesma sessão visual, o probe simples do Bridge para `https://mcp.centralldark.com/mcp` exibiu falha de canal SSL/TLS. Isso **não** autoriza classificar o MCP público como offline, porque a execução autenticada acima concluiu `DCR`, autorização, token e `tools/list` com 112 ferramentas.
+
+Classificação preservada:
+
+```text
+OAUTH_SEGREDO_E2E=PASS
+MCP_AUTHENTICATED_E2E=PASS
+MCP_TOOLS_LIST=PASS
+MCP_TOOL_COUNT=112
+BRIDGE_SIMPLE_TLS_PROBE=FAIL_OBSERVED
+PUBLIC_MCP_OFFLINE=false_by_this_failure
+TLS_PROBE_ROOT_CAUSE=UNKNOWN
+```
+
+Este T1 não promove, por si só, `SINGLE_INSTANCE`, `TRAY_SAME_PROCESS`, estado do Desktop Commander Remote, nem desativação efetiva de endpoints remotos. Declaração de UI/configuração continua diferente de execução provada.
+
+`UNKNOWN != PASS`.
+
+### Fixed point deste delta
+
+```text
+OAUTH_SEGREDO_CURRENT_PROOF_CRYSTALLIZED=true
+DPAPI_CURRENT_USER_OBSERVED=true
+MCP_112_TOOLS_OBSERVED=true
+NO_V2_V3_CREATED=true
+EXISTING_OWNER_REUSED=true
+TLS_PROBE_REMEDIATION_FIXED_POINT=false
+GLOBAL_FIXED_POINT=false
+```
