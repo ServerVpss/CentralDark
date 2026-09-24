@@ -1,4 +1,4 @@
-name: grafo-vivo-markdown
+name: ⚙️ grafo-vivo-markdown
 
 on:
   pull_request:
@@ -26,15 +26,15 @@ permissions:
 
 jobs:
   grafo-vivo-markdown:
-    name: GATE_GRAFO_VIVO_MARKDOWN
+    name: 🧩 GATE_GRAFO_VIVO_MARKDOWN
     runs-on: [self-hosted, Linux]
     steps:
-      - name: Checkout
+      - name: 🔹 Checkout
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           fetch-depth: 0
 
-      - name: Validate global changed Markdown + live docs graph
+      - name: 🔹 Validate global changed Markdown + live docs graph
         shell: bash
         env:
           EVENT_BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}

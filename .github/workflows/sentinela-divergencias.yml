@@ -1,4 +1,4 @@
-name: sentinela-divergencias
+name: ⚙️ sentinela-divergencias
 
 # Sentinela 24/7 — varre divergências no repo, workflows, endpoints públicos,
 # PM2/MCP e drift de commit GitHub<->VPS, e abre Issue automática (com dedupe
@@ -36,10 +36,10 @@ jobs:
         with:
           node-version: '24'
 
-      - name: Rodar testes determinísticos do drift GitHub<->VPS
+      - name: 🔹 Rodar testes determinísticos do drift GitHub<->VPS
         run: node --test scripts/sentinela/drift.test.mjs
 
-      - name: Validar CENTRALDARK_ROOT (fail-closed, sem imprimir valor)
+      - name: 🔹 Validar CENTRALDARK_ROOT (fail-closed, sem imprimir valor)
         env:
           CENTRALDARK_ROOT: ${{ secrets.CENTRALDARK_ROOT }}
         run: |
@@ -49,7 +49,7 @@ jobs:
             exit 1
           }
 
-      - name: Rodar sentinela
+      - name: 🔹 Rodar sentinela
         id: run
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -58,7 +58,7 @@ jobs:
           VPS_REPO_PATH: ${{ secrets.CENTRALDARK_ROOT }}
         run: node scripts/sentinela/run.mjs
 
-      - name: Publicar snapshot como artifact imutável
+      - name: 🔹 Publicar snapshot como artifact imutável
         if: success()
         uses: actions/upload-artifact@v7
         with:

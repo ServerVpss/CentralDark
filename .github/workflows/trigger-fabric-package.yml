@@ -134,7 +134,7 @@ jobs:
           grep -q '^BOT_ENTRY_CONTRACT=PASS$' docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/VERIFY-RESULT.txt
           grep -q '^OUTPUT_GUARD_CONTRACT=PASS$' docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/VERIFY-RESULT.txt
 
-      - name: ⏰ Provar horário canônico ponta a ponta
+      - name: 🔹 ⏰ Provar horário canônico ponta a ponta
         shell: bash
         run: |
           set -euo pipefail

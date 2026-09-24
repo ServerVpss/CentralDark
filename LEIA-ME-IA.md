@@ -314,6 +314,13 @@ CENTRALDARK_AI_BOOT:
   writer: "NONE|nome-do-escritor-atual"
   frequency: "LEVE|RAPIDA|MEDIA|PROFUNDA|FORTE|AVANCADA|FRIA|ORQUESTRA|ADAPTIVE"
   fronts: "ADAPTIVE_1_TO_10"
+  hud:
+    🎯_RUMO: "objetivo vigente + intenção do CHEFE"
+    📍_AGORA: "estado atual medido"
+    🧵_FIO: "missão principal aberta"
+    🌿_RAMO: "investigação lateral ou delta útil em progresso"
+    ↩️_VOLTA: "retorno explícito ao fio principal"
+    ➡️_NEXT: "próximo passo causal determinístico"
   conflict_resolution: "git-conflict-resolve-house-standard (motor: scripts/dependabot/resolve-conflicts.sh; registry: scripts/dependabot/known-conflict-patterns.json)"
 ```
 

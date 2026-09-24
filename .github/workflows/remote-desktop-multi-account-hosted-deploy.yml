@@ -1,4 +1,4 @@
-name: Remote Desktop multi-account deploy
+name: ⚙️ Remote Desktop multi-account deploy
 
 on:
   push:
@@ -18,14 +18,14 @@ jobs:
     runs-on: [self-hosted, Linux]
     timeout-minutes: 10
     steps:
-      - name: Checkout exact HEAD
+      - name: 🔹 Checkout exact HEAD
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           ref: ${{ github.sha }}
           persist-credentials: false
           fetch-depth: 1
 
-      - name: Prepare SSH key
+      - name: 🔹 Prepare SSH key
         env:
           VPS_SSH_KEY_LOVABLE: ${{ secrets.VPS_SSH_KEY_LOVABLE }}
         shell: bash
@@ -54,7 +54,7 @@ jobs:
           PY
           chmod 600 "$KEY"
 
-      - name: Resolve canonical VPS target
+      - name: 🔹 Resolve canonical VPS target
         env:
           VPS_HOST_LOVABLE: ${{ secrets.VPS_HOST_LOVABLE }}
         shell: bash
@@ -76,7 +76,7 @@ jobs:
           echo "VPS_TARGET_ROUTE=$route" >> "$GITHUB_ENV"
           echo "VPS_TARGET_RESOLUTION=PASS route=$route"
 
-      - name: Stream canonical files and mutate VPS
+      - name: 🔹 Stream canonical files and mutate VPS
         env:
           VPS_USER_LOVABLE: ${{ secrets.VPS_USER_LOVABLE }}
         shell: bash
@@ -91,7 +91,7 @@ jobs:
           tar -czf - infra/systemd scripts/vps/deploy-desktop-commander-multi-account.sh \
             | "${SSH[@]}" "set -euo pipefail; rm -rf '$STAGE'; mkdir -p '$STAGE'; tar -xzf - -C '$STAGE'; chmod +x '$STAGE/scripts/vps/deploy-desktop-commander-multi-account.sh' '$STAGE/infra/systemd/centraldark-desktop-commander-profile.sh' '$STAGE/infra/systemd/centraldark-desktop-commander-watchdog.sh'; SOURCE_HEAD='$GITHUB_SHA' bash '$STAGE/scripts/vps/deploy-desktop-commander-multi-account.sh' '$STAGE'"
 
-      - name: Counterproof VPS state and explicit receipt
+      - name: 🔹 Counterproof VPS state and explicit receipt
         env:
           VPS_USER_LOVABLE: ${{ secrets.VPS_USER_LOVABLE }}
         shell: bash
@@ -112,7 +112,7 @@ jobs:
               echo "VPS_MULTI_ACCOUNT_COUNTERPROOF=PASS"
             '
 
-      - name: Cleanup SSH material
+      - name: 🔹 Cleanup SSH material
         if: always()
         shell: bash
         run: rm -f "$RUNNER_TEMP/vps_key"
