@@ -8,11 +8,93 @@ import {
   buildCognitiveCouncilPlan,
   createSourceProfile,
   evaluateUsefulCeiling,
+  evaluateGregDeterministicAudit,
   evaluateProofCounterproofClosure,
   evaluateSurfaceConformance,
   validateCognitiveCouncilPlan,
   validateSourceProfile,
 } from './cognitive-council.mjs';
+
+test('Greg/OBSERVABILITY_PROOF exige prova deterministica e tres vereditos', () => {
+  const proved = evaluateGregDeterministicAudit({
+    diff: 'PASS',
+    ast: 'PASS',
+    tests: 'PASS',
+    invariants: 'PASS',
+    contracts: 'PASS',
+    receipts: 'PASS',
+    ci_state: 'SUCCESS',
+    evidence_refs: ['diff:1', 'ast:1', 'tests:1', 'receipt:1'],
+  });
+  assert.equal(proved.verdict, 'PROVADO');
+
+  const broken = evaluateGregDeterministicAudit({
+    diff: 'PASS',
+    ast: 'FAIL',
+    tests: 'PASS',
+    invariants: 'PASS',
+    contracts: 'PASS',
+    receipts: 'PASS',
+    ci_state: 'SUCCESS',
+    evidence_refs: ['ast:failure'],
+  });
+  assert.equal(broken.verdict, 'QUEBRADO');
+
+  const pending = evaluateGregDeterministicAudit({
+    diff: 'PASS',
+    ast: 'PASS',
+    tests: 'PASS',
+    invariants: 'PASS',
+    contracts: 'PASS',
+    receipts: 'PASS',
+    ci_state: 'PENDING',
+    evidence_refs: ['sha:current'],
+  });
+  assert.equal(pending.verdict, 'EVIDÊNCIA FALTANTE');
+});
+
+test('Greg barra print isolado, narrativa e ACTION antes da prova/reconciliacao', () => {
+  const printOnly = evaluateGregDeterministicAudit({
+    diff: 'PASS',
+    ast: 'PASS',
+    tests: 'PASS',
+    invariants: 'PASS',
+    contracts: 'PASS',
+    receipts: 'PASS',
+    ci_state: 'SUCCESS',
+    evidence_refs: ['screenshot:isolated'],
+    isolated_screenshot: true,
+  });
+  assert.equal(printOnly.verdict, 'EVIDÊNCIA FALTANTE');
+
+  const conflict = evaluateGregDeterministicAudit({
+    diff: 'PASS',
+    ast: 'PASS',
+    tests: 'PASS',
+    invariants: 'PASS',
+    contracts: 'PASS',
+    receipts: 'PASS',
+    ci_state: 'SUCCESS',
+    evidence_refs: ['proof:all'],
+    conflict_detected: true,
+    legacy_preserved: true,
+    reconciled: false,
+  });
+  assert.equal(conflict.verdict, 'EVIDÊNCIA FALTANTE');
+
+  const actionWithoutProof = evaluateGregDeterministicAudit({
+    diff: 'PASS',
+    ast: 'PASS',
+    tests: 'UNKNOWN',
+    invariants: 'PASS',
+    contracts: 'PASS',
+    receipts: 'PASS',
+    ci_state: 'PENDING',
+    evidence_refs: ['diff:1'],
+    action_performed: true,
+  });
+  assert.equal(actionWithoutProof.verdict, 'QUEBRADO');
+});
 
 test('seis lentes funcionais cabem nos quatro ataques existentes sem novo writer', () => {
   const plan = buildCognitiveCouncilPlan();
