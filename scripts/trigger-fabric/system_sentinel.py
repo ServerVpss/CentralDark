@@ -248,12 +248,12 @@ def build_fixed_route_receipt(
     elif previous_fingerprint == fingerprint and previous.get("proof_state") == "PROVEN":
         decision = "REUSE_PROOF_NO_REPEAT"
         reason = "UNCHANGED_DEPENDENCY_FINGERPRINT"
-    elif previous_fingerprint and previous_fingerprint != fingerprint:
-        decision = "REVALIDATE_AFFECTED_CHAIN_ONLY"
-        reason = "DEPENDENCY_FINGERPRINT_CHANGED"
     elif proof_ready:
         decision = "FIXED_POINT_SEALED"
         reason = "COUNTERPROOF_AND_REALITY_JUDGE_PASS"
+    elif previous_fingerprint and previous_fingerprint != fingerprint:
+        decision = "REVALIDATE_AFFECTED_CHAIN_ONLY"
+        reason = "DEPENDENCY_FINGERPRINT_CHANGED"
     else:
         decision = "RUN_DETERMINISTIC_ROUTE"
         reason = "NO_REUSABLE_FIXED_POINT"
