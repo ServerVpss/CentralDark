@@ -120,6 +120,7 @@ class ContinuousDeltaContractTest(unittest.TestCase):
             "!CENTRALUTIL": "DELTA_UTIL",
             "!CONTRAPROVA": "CONTRAPROVA",
             "!REMEDICAO": "REMEDICAO",
+            "!TIK-TAK": "TIK_TAK",
             "!FIXED_POINT": "FIXED_POINT",
             "!REGISTRA": "REGISTRA",
             "!BOOT": "BOOT",
@@ -132,6 +133,21 @@ class ContinuousDeltaContractTest(unittest.TestCase):
                 self.assertEqual("!CENTRALDARK", receipt["master_funnel"]["canonical_entry"])
                 self.assertIn(expected, receipt["master_funnel"]["matched_trigger_ids"])
                 self.assertTrue(receipt["master_funnel"]["all_explicit_human_triggers_enter_master_once"])
+
+    def test_tik_tak_invalidates_stale_proof_without_swarm_fanout(self):
+        receipt = MODULE.resolve("!TIK-TAK", chefe_source=True)
+        contract = receipt["tik_tak"]
+        self.assertTrue(receipt["master_cycle_active"])
+        self.assertIn("TIK_TAK", receipt["master_funnel"]["requested_phases"])
+        self.assertTrue(contract["active"])
+        self.assertTrue(contract["invalidate_only_affected_stale_proof"])
+        self.assertTrue(contract["remeasure_current_target"])
+        self.assertTrue(contract["rerun_affected_gates"])
+        self.assertTrue(contract["same_head_counterproof_required"])
+        self.assertTrue(contract["preserve_unaffected_valid_proof"])
+        self.assertFalse(contract["fanout_agents"])
+        self.assertFalse(contract["is_swarm_trigger"])
+        self.assertFalse(contract["creates_new_owner"])
 
     def test_active_master_does_not_reenter_on_subtrigger(self):
         receipt = MODULE.resolve("#ACORDAR", master_active=True, chefe_source=True)
