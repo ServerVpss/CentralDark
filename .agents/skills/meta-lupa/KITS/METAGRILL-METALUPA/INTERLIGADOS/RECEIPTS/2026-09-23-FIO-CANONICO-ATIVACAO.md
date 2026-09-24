@@ -123,3 +123,44 @@ PRs já existentes continuam válidos como fonte histórica/delta útil. Nenhum 
 A classificação em 10 frentes está em:
 `.agents/skills/meta-lupa/KITS/METAGRILL-METALUPA/INTERLIGADOS/RECEIPTS/2026-09-23-MAIN-DIRETA-10-FRENTES.md`.
 
+
+## Runtime aplicado — fixed point total 2026-09-24
+
+```text
+CURRENT_MAIN_SHA=ec52fad88be4e06421ab5ddb075668d2a7c14064
+VPS_HEAD=ec52fad88be4e06421ab5ddb075668d2a7c14064
+VPS_ORIGIN_MAIN=ec52fad88be4e06421ab5ddb075668d2a7c14064
+FINAL_DIRTY=0
+FINAL_UNTRACKED_PRESERVED=0
+MCP_HEALTH=200
+GRAPH_HEALTH=200
+ELITE_ANTHROPIC_HEALTH=200
+GLOBAL_ENTRY_GATE=PASS
+GLOBAL_EXIT_GATE=PASS
+PONTO_FIXO_SYNC=PASS
+SHA_VPS_EQ_SHA_MAIN=PROVADO
+TOTAL_DEPLOY_FIXED_POINT=PASS
+SYSTEM_REGENERATED_FROM_PROVEN_MAIN_AND_POPULATED_RUNTIME=PASS
+```
+
+Correções causais aplicadas até o fechamento:
+
+- deploy direto passou a carregar linhagem interna do contrato sem depender de PR-filho;
+- EliteAnthropic reutiliza o venv local existente e voltou a runtime saudável;
+- Hermes-Verificador foi recriado no PM2 com cwd real `/root/CentralDark`;
+- churn conhecido de runtime é normalizado antes do T1 sem apagar mission rastreada;
+- `apps/modulos/grupo-evolucao/missions` rastreado é restaurado da main; somente drift efêmero não rastreado é limpo;
+- ScreenPipe foi removido do PM2 da VPS porque o contrato o classifica como sensor local opcional, não core obrigatório da VPS.
+
+Estado PM2 final: **19 processos CentralDark online**, nenhum CentralDark obrigatório em erro. ScreenPipe VPS deixou de existir como processo PM2 incorreto; o sensor continua pertencendo ao host local quando aplicável.
+
+Receipt global EXIT:
+`/tmp/centraldark-global-contract/exit-51188656a925c401cc579241.receipt.json`
+
+```text
+UNKNOWN != PASS
+OPTIONAL_SENSOR_OFF != CORE_FAILURE
+RUNTIME_CHURN != SOURCE_DRIFT
+REALIDADE=JUIZ
+```
+
