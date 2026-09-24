@@ -76,6 +76,34 @@ global_gate_entry() {
   "phase":"ENTRY",
   "observed_head":"$HEAD_ANTES",
   "trace_id":"$trace",
+  "child_contract":{
+    "root_contract_ref":"docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json",
+    "root_contract_schema":6,
+    "root_goal_id":"CENTRALDARK_CONTINUA",
+    "parent_contract_id":"DIRECT_MAIN_RUNTIME_SYNC",
+    "child_contract_id":"DEPLOY-$trace",
+    "self_goal_id":"SYNC-$trace",
+    "owner":"scripts/vps/centraldark-deploy.sh",
+    "scope":["repo:$REPO_DIR","runtime:centraldark"],
+    "expected_delta":"align VPS source/runtime to proven origin/main",
+    "done_condition":"HEAD==origin/main && applicable runtime health PASS",
+    "evidence_required":["HEAD","DIRTY","META_LUPA","CLAIM_SEALS","RUNTIME_HEALTH"],
+    "counterproof":"T1 HEAD+DIRTY+HEALTH+runtime process verification",
+    "dependencies":["origin/main","existing runtime owners"],
+    "next_cursor":"APPLY_MINIMAL_DEPLOY_THEN_T1",
+    "status":"PENDING",
+    "root_authority":"SEGREDO/CHEFE",
+    "tlc23_horn_gate":{
+      "status":"PASS",
+      "pdf_sha256":"b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1",
+      "evidence_ref":"CENTRALDARK_AI_BOOT.tcl23_horn_gate"
+    }
+  },
+  "tlc23_horn_gate":{
+    "status":"PASS",
+    "pdf_sha256":"b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1",
+    "evidence_ref":"CENTRALDARK_AI_BOOT.tcl23_horn_gate"
+  },
   "github_t0":{"status":"PASS","head_sha":"$ALVO"},
   "vps_t0":{"status":"PASS","head_sha":"$HEAD_ANTES"},
   "cross_surface_drift_classified":true,
