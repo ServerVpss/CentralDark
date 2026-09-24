@@ -14,6 +14,9 @@ const REPO = process.env.REPO_ALVO || 'ServerVpss/CentralDark';
 const SNAPSHOT_DIR = 'docs/sentinela';
 const SNAPSHOT_FILE = path.join(SNAPSHOT_DIR, 'last-snapshot.json');
 const REPORT_FILE = path.join(SNAPSHOT_DIR, 'last-report.md');
+const SYSTEM_SENTINEL = path.resolve('scripts/trigger-fabric/system_sentinel.py');
+const SYSTEM_SENTINEL_CONTRACT = path.resolve('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SYSTEM-SENTINEL.yml');
+const RUN_T0 = new Date().toISOString();
 
 const CANONICAL = Object.freeze({
   sentinela: '🛡️ SENTINELA',
@@ -71,6 +74,39 @@ async function checkEndpoint(ep) {
 
 function hash(s) {
   return createHash('sha1').update(s).digest('hex').slice(0, 10);
+}
+
+function sha256(s) {
+  return createHash('sha256').update(String(s)).digest('hex');
+}
+
+function dispatchEventFromEnv() {
+  const source = String(process.env.SENTINEL_API_SOURCE || '').trim();
+  if (!source) return null;
+  return {
+    source_surface: source,
+    event_class: String(process.env.SENTINEL_API_EVENT_CLASS || 'STATE_CHANGED').trim(),
+    state: String(process.env.SENTINEL_API_STATE || 'STATE_CHANGED').trim(),
+    target: String(process.env.SENTINEL_API_TARGET || '').trim(),
+    owner: String(process.env.SENTINEL_API_OWNER || '').trim(),
+    head_sha: String(process.env.SENTINEL_API_HEAD_SHA || '').trim(),
+    evidence_ref: String(process.env.SENTINEL_API_EVIDENCE_REF || '').trim(),
+    next_cursor: String(process.env.SENTINEL_API_NEXT_CURSOR || '').trim(),
+  };
+}
+
+function runFixedRoute(payload) {
+  const stdout = execFileSync(
+    'python3',
+    [SYSTEM_SENTINEL, '--route-json', JSON.stringify(payload)],
+    {
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'pipe'],
+      env: process.env,
+      maxBuffer: 2 * 1024 * 1024,
+    },
+  );
+  return JSON.parse(stdout);
 }
 
 function ghIssueExists(titleHash) {
