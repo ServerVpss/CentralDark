@@ -20,6 +20,14 @@ MSG
   exit 1
 fi
 
+CANONICAL_ROOT="${CENTRALDARK_ROOT:-/root/CentralDark}"
+DISPATCHER="$CANONICAL_ROOT/scripts/vps/deploy-guards-dispatcher.sh"
+SOURCE_HEAD="${SOURCE_HEAD:-$(git -C "$CANONICAL_ROOT" rev-parse HEAD 2>/dev/null || true)}"
+[[ "$SOURCE_HEAD" =~ ^[0-9a-f]{40}$ ]] || { echo "SOURCE_HEAD_INVALID" >&2; exit 16; }
+[[ -x "$DISPATCHER" ]] || { echo "CANONICAL_DEPLOY_GATE_MISSING" >&2; exit 16; }
+TARGET_SHA="$SOURCE_HEAD" REPO_DIR="$CANONICAL_ROOT" BRANCH=main bash "$DISPATCHER" --gate-only
+echo "CANONICAL_DEPLOY_GATE=PASS TARGET_SHA=$SOURCE_HEAD"
+
 echo "==> 1/5 Atualizando código"
 if [ ! -d "$APP_DIR" ]; then
   echo "❌ $APP_DIR não existe — rode git pull primeiro." >&2

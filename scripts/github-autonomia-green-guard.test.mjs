@@ -91,9 +91,9 @@ test("run manual ou de outro PR no mesmo SHA não conta", () => {
 test("paginação encontra gate válido depois da primeira página sem aceitar contexto errado", async () => {
   const page1 = Array.from({ length: 100 }, (_, index) => success("outro", index + 1, { pull_requests: prLink(99) }));
   const page2 = [
-    success("porta-de-entrada", 201, { pull_requests: prLink(99) }),
-    success("codex-validate", 202, { pull_requests: prLink(100) }),
-    success("lupa-conformance", 203, { event: "workflow_dispatch", pull_requests: prLink(99) }),
+    success("⚙️ porta-de-entrada", 201, { pull_requests: prLink(99) }),
+    success("⚙️ codex-validate", 202, { pull_requests: prLink(100) }),
+    success("⚙️ lupa-conformance", 203, { event: "workflow_dispatch", pull_requests: prLink(99) }),
   ];
   const seen = [];
   const request = async (_token, _method, path) => {
@@ -102,9 +102,9 @@ test("paginação encontra gate válido depois da primeira página sem aceitar c
   };
   const runs = await runsForPullHead("token", "ServerVpss/CentralDark", HEAD, 99, request);
   assert.equal(seen.length, 2);
-  assert.deepEqual(runs.map((run) => run.name), ["outro", ...Array(99).fill("outro"), "porta-de-entrada"]);
-  assert.equal(runs.some((run) => run.name === "codex-validate"), false);
-  assert.equal(runs.some((run) => run.name === "lupa-conformance"), false);
+  assert.deepEqual(runs.map((run) => run.name), ["outro", ...Array(99).fill("outro"), "⚙️ porta-de-entrada"]);
+  assert.equal(runs.some((run) => run.name === "⚙️ codex-validate"), false);
+  assert.equal(runs.some((run) => run.name === "⚙️ lupa-conformance"), false);
 });
 
 test("FAST e ADVERSARIAL revalidam green-first; estado não READY não promove", () => {
@@ -118,14 +118,14 @@ test("FAST e ADVERSARIAL revalidam green-first; estado não READY não promove",
 
 test("lista padrão é exatamente a régua canônica de oito gates", () => {
   assert.deepEqual(DEFAULT_REQUIRED_WORKFLOWS, [
-    "porta-de-entrada",
-    "codex-validate",
-    "lupa-conformance",
-    "Lupa Drift Guard",
+    "⚙️ porta-de-entrada",
+    "⚙️ codex-validate",
+    "⚙️ lupa-conformance",
+    "⚙️ Lupa Drift Guard",
     "🧠 Trigger Fabric Full Package — pacote e contraprova",
-    "PR Title Contract",
-    "PR auto-review (Codex + checklist)",
-    "Pipeline — Telegram + Painel",
+    "⚙️ PR Title Contract",
+    "⚙️ PR auto-review (Codex + checklist)",
+    "⚙️ Pipeline — Telegram + Painel",
   ]);
   assert.deepEqual(parseCsv("a,b"), ["a", "b"]);
 });

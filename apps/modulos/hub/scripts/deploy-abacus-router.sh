@@ -16,6 +16,14 @@ MODULO="$(cd "$AQUI/.." && pwd)"
 
 cd "$RAIZ"
 
+DISPATCHER="$RAIZ/scripts/vps/deploy-guards-dispatcher.sh"
+[ -x "$DISPATCHER" ] || { echo "❌ gate canônico de deploy ausente"; exit 16; }
+REPO_DIR="$RAIZ" BRANCH=main bash "$DISPATCHER" --gate-only
+GATED_SHA="$(git -C "$RAIZ" rev-parse origin/main)"
+HEAD_SHA="$(git -C "$RAIZ" rev-parse HEAD)"
+[ "$HEAD_SHA" = "$GATED_SHA" ] || { echo "❌ HEAD não é o SHA gateado: $HEAD_SHA != $GATED_SHA"; exit 17; }
+echo "[gate] TLC23/Universal/Meta-Lupa/Horn PASS em $GATED_SHA"
+
 # shellcheck disable=SC1091
 . "$AQUI/carregar-env.sh"
 

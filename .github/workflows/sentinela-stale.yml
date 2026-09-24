@@ -1,4 +1,4 @@
-name: sentinela-stale
+name: ⚙️ sentinela-stale
 
 # Varre Issues abertas com label `sentinela` que passaram do TTL (7 dias)
 # sem PR linkado. Marca como `stale` e escala severidade.
@@ -20,7 +20,7 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: '24'
-      - name: Marcar stale e escalar
+      - name: 🔹 Marcar stale e escalar
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO_ALVO: ${{ github.repository }}

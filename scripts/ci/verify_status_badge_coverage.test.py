@@ -2,6 +2,7 @@
 from pathlib import Path
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 
@@ -21,7 +22,7 @@ class BadgeCoverageTests(unittest.TestCase):
 
     def run_verify(self):
         return subprocess.run(
-            ['python3', str(self.tmp / 'scripts' / 'ci' / VERIFY.name)],
+            [sys.executable, str(self.tmp / 'scripts' / 'ci' / VERIFY.name)],
             cwd=self.tmp, text=True, capture_output=True
         )
 
@@ -55,7 +56,7 @@ class BadgeCoverageTests(unittest.TestCase):
         env = dict(__import__('os').environ)
         env['BADGE_FABRIC_LOCAL_ONLY'] = '1'
         generated = subprocess.run(
-            ['python3', str(self.tmp / 'scripts' / 'ci' / 'generate_status_badges.py')],
+            [sys.executable, str(self.tmp / 'scripts' / 'ci' / 'generate_status_badges.py')],
             cwd=self.tmp, text=True, capture_output=True, env=env
         )
         self.assertEqual(generated.returncode, 0, generated.stdout + generated.stderr)

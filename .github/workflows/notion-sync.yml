@@ -42,7 +42,7 @@ concurrency:
 
 jobs:
   sync:
-    name: Espelhar para o Notion (best-effort)
+    name: 🧩 Espelhar para o Notion (best-effort)
     runs-on: [self-hosted, Linux, X64]
     timeout-minutes: 20
     continue-on-error: true

@@ -43,7 +43,7 @@ function result({ ok, reason = null, changed = false, localSha = null, remoteSha
  * @param {(msg:string)=>void} o.log função de log
  * @returns {Promise<{ok:boolean,reason:string|null,changed:boolean,localSha:string|null,remoteSha:string|null,repoRoot:string|null}>}
  */
-export async function safeUpdateFromOrigin({ repoPath, branch = 'main', log = () => {} }) {
+export async function safeUpdateFromOrigin({ repoPath, branch = 'main', expectedRemoteSha = null, log = () => {} }) {
   const branchCheck = await git(['check-ref-format', '--branch', branch], repoPath);
   if (branchCheck.code !== 0) {
     log(`[safe-git] BLOCKED invalid branch: ${sanitizeGitOutput(branch)}`);
@@ -89,6 +89,17 @@ export async function safeUpdateFromOrigin({ repoPath, branch = 'main', log = ()
     return result({ ok: false, reason: 'REMOTE_REF_RESOLUTION_FAILED', repoRoot });
   }
   const remoteSha = fetchedHead.stdout;
+
+  if (expectedRemoteSha) {
+    if (!/^[0-9a-f]{40}$/i.test(String(expectedRemoteSha))) {
+      log('[safe-git] BLOCKED expectedRemoteSha inválido');
+      return result({ ok: false, reason: 'INVALID_EXPECTED_REMOTE_SHA', remoteSha, repoRoot });
+    }
+    if (remoteSha !== expectedRemoteSha) {
+      log(`[safe-git] BLOCKED target avançou após gate expected=${String(expectedRemoteSha).slice(0, 12)} observed=${remoteSha.slice(0, 12)}`);
+      return result({ ok: false, reason: 'REMOTE_ADVANCED_AFTER_GATE', remoteSha, repoRoot });
+    }
+  }
 
   if (remoteBeforeSha && remoteBeforeSha !== remoteSha) {
     const remoteLineage = await git(['merge-base', '--is-ancestor', remoteBeforeSha, remoteSha], repoRoot);

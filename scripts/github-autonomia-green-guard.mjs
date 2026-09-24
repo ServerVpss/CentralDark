@@ -16,14 +16,14 @@ const API = "https://api.github.com";
 export const MAX_RUN_PAGES = 20;
 
 export const DEFAULT_REQUIRED_WORKFLOWS = Object.freeze([
-  "porta-de-entrada",
-  "codex-validate",
-  "lupa-conformance",
-  "Lupa Drift Guard",
+  "⚙️ porta-de-entrada",
+  "⚙️ codex-validate",
+  "⚙️ lupa-conformance",
+  "⚙️ Lupa Drift Guard",
   "🧠 Trigger Fabric Full Package — pacote e contraprova",
-  "PR Title Contract",
-  "PR auto-review (Codex + checklist)",
-  "Pipeline — Telegram + Painel",
+  "⚙️ PR Title Contract",
+  "⚙️ PR auto-review (Codex + checklist)",
+  "⚙️ Pipeline — Telegram + Painel",
 ]);
 
 export function parseCsv(value, fallback = []) {
