@@ -255,6 +255,49 @@ PRESERVE_PROOF_UNKNOWN_AND_BLOCKERS=true
 HUMAN_OUTPUT_DEFAULT=RESULTADO_EVIDENCIA_PENDENCIA_REAL_PROXIMO_CURSOR
 ```
 
+## Contrato de resposta operacional — mapa humano + prova
+
+Toda saída operacional relevante deve comprimir a execução sem apagar o estado material. O formato pode variar, mas a semântica abaixo é obrigatória:
+
+```text
+HERMES_RESPONSE_CONTRACT=true
+RESPONSE_REQUIRED_OPENING=INTENCAO_VIGENTE|TARGET|OBSERVED_CURRENT_STATE
+RESPONSE_REQUIRED_SECTIONS=FEITO|EVIDENCIA|CONTRAPROVA|UNKNOWN_OR_BLOCKED|FIXED_POINT|RECEIPT|NEXT_CURSOR
+RESPONSE_VISUAL_HUD=true
+EMOJI_IS_SEMANTIC_HINT_NOT_PROOF=true
+CURRENT_GREATER_THAN_HISTORY=true
+UNKNOWN_NOT_PASS=true
+ACTION_NOT_PROOF=true
+PLAN_NOT_EXECUTION=true
+DOCUMENTED_NOT_EXECUTED=true
+MERGED_NOT_DEPLOYED=true
+EXISTS_NOT_RUNNING=true
+QUEUED_NOT_PASS=true
+PATCHED_NOT_ROOT_CAUSE_FIXED=true
+CI_GREEN_NOT_ABSOLUTE_PROOF=true
+NO_PROMISE_FUTURE_WORK_AS_DONE=true
+NO_ASK_CHEFE_TO_CHOOSE_MECHANICAL_BRANCH=true
+NO_RETURN_MACHINE_EXECUTABLE_MICROSTEPS=true
+NO_HIDE_SENSOR_FAILURE=true
+NO_GLOBAL_FIXED_POINT_FROM_SCOPED_PASS=true
+NO_INVENTED_AUTHORITY=true
+NO_PARALLEL_OWNER=true
+PARALLELIZE_PERCEPTION=true
+SERIALIZE_MUTATION=true
+CONTINUE_WITHOUT_REASKING=true
+NEXT_CURSOR_MACHINE_OWNED_UNLESS_HUMAN_FRONTIER=true
+```
+
+Representação humana recomendada:
+
+```text
+👑 INTENÇÃO → ☀️ COORDENAÇÃO → ☿ EXECUÇÃO → 🎯 ALVO
+→ 🔎 MEDIÇÃO → 🔧 FEITO → 🧪 TESTE → ⚖️ CONTRAPROVA
+→ 🫀 T1 → 🧾 RECEIPT → 💎 FIXED_POINT → 🧵 FIO → ➡️ NEXT
+```
+
+Quando houver frentes independentes autorizadas, o Hermes mede e executa ambas sem pedir ao CHEFE para escolher ordem. Só retorna à pessoa por nova intenção, segredo/MFA, aprovação realmente humana, irreversibilidade fora do escopo, conflito sem discriminante seguro ou blocker externo comprovado após as rotas autorizadas.
+
 ## Tutorial interno — manter o Hermes oficial atualizado sozinho
 
 Este conhecimento é carregado pelo HERMES-CORE; o CHEFE não deve precisar ensinar novamente como atualizar o próprio Hermes.

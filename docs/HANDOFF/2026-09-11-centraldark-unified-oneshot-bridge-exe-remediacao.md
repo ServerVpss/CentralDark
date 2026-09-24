@@ -186,3 +186,149 @@ GLOBAL_FIXED_POINT=false
 O objetivo material desta sessão — **corrigir o build e fazer o programa único abrir mantendo OAuth/MCP/perfis/runtime existentes** — chegou ao T1 provado.
 
 Próximo agente não deve voltar ao `Add-Type`/`BUILD_OUTPUT_ABSENT` sem regressão nova. O próximo delta útil do mesmo app pode partir da UI já aberta, preservando o produto, o runtime e os fatos acima.
+
+
+## 🧾 T1 ADICIONAL — 2026-09-24 · OAuth Segredo + MCP 112 tools
+
+Fonte: execução observada pelo CHEFE na Casa e receipt textual do mesmo fluxo.
+
+```text
+2026-09-24T00:17:22.2814789-03:00 PROFILE=Segredo OAUTH_FLOW=START
+2026-09-24T00:17:22.2982305-03:00 PROFILE=Segredo RESOURCE=https://mcp.centralldark.com/admin/mcp
+2026-09-24T00:17:23.6362078-03:00 PROFILE=Segredo DCR=PASS
+2026-09-24T00:17:23.7057059-03:00 PROFILE=Segredo AUTHORIZE_BROWSER=OPENING
+2026-09-24T00:17:41.8595459-03:00 PROFILE=Segredo AUTHORIZE=PASS
+2026-09-24T00:17:42.1620584-03:00 PROFILE=Segredo TOKEN=PASS TYPE=Bearer EXPIRES_IN=3599
+2026-09-24T00:17:42.1690554-03:00 PROFILE=Segredo TOKEN_STORE=DPAPI_CURRENT_USER
+2026-09-24T00:17:43.4385288-03:00 PROFILE=Segredo MCP_TOOLS_LIST=PASS TOOL_COUNT=112
+2026-09-24T00:17:43.4490462-03:00 PROFILE=Segredo MCP_AUTHENTICATED_E2E=PASS
+2026-09-24T00:17:43.4562665-03:00 PROFILE=Segredo OAUTH_RECEIPT=C:\Users\Administrador\AppData\Local\CentralDark\UnifiedRuntime\profiles\Segredo\logs\oauth-20260924-001722.log
+2026-09-24T00:17:43.4633315-03:00 PROFILE=Segredo OAUTH_FLOW=END
+```
+
+### Estado promovido por esta prova
+
+```text
+PROFILE=Segredo
+RESOURCE=https://mcp.centralldark.com/admin/mcp
+DCR=PASS
+AUTHORIZE=PASS
+TOKEN=PASS
+TOKEN_TYPE=Bearer
+TOKEN_EXPIRES_IN=3599
+TOKEN_STORE=DPAPI_CURRENT_USER
+MCP_TOOLS_LIST=PASS
+MCP_TOOL_COUNT=112
+MCP_AUTHENTICATED_E2E=PASS
+OAUTH_FLOW=END
+```
+
+O T1 anterior deste mesmo owner registrava `TOOL_COUNT=100`. Esta observação mais recente registra `TOOL_COUNT=112`; para esta execução/perfil, CURRENT observado substitui o valor histórico sem reescrever a evidência antiga.
+
+### Contraprova e limites
+
+Na mesma sessão visual, o probe simples do Bridge para `https://mcp.centralldark.com/mcp` exibiu falha de canal SSL/TLS. Isso **não** autoriza classificar o MCP público como offline, porque a execução autenticada acima concluiu `DCR`, autorização, token e `tools/list` com 112 ferramentas.
+
+Classificação preservada:
+
+```text
+OAUTH_SEGREDO_E2E=PASS
+MCP_AUTHENTICATED_E2E=PASS
+MCP_TOOLS_LIST=PASS
+MCP_TOOL_COUNT=112
+BRIDGE_SIMPLE_TLS_PROBE=FAIL_OBSERVED
+PUBLIC_MCP_OFFLINE=false_by_this_failure
+TLS_PROBE_ROOT_CAUSE=UNKNOWN
+```
+
+Este T1 não promove, por si só, `SINGLE_INSTANCE`, `TRAY_SAME_PROCESS`, estado do Desktop Commander Remote, nem desativação efetiva de endpoints remotos. Declaração de UI/configuração continua diferente de execução provada.
+
+`UNKNOWN != PASS`.
+
+### Fixed point deste delta
+
+```text
+OAUTH_SEGREDO_CURRENT_PROOF_CRYSTALLIZED=true
+DPAPI_CURRENT_USER_OBSERVED=true
+MCP_112_TOOLS_OBSERVED=true
+NO_V2_V3_CREATED=true
+EXISTING_OWNER_REUSED=true
+TLS_PROBE_REMEDIATION_FIXED_POINT=false
+GLOBAL_FIXED_POINT=false
+```
+
+
+## 🧾 T1 ADICIONAL — 2026-09-24 · Bridge → Painel Admin público
+
+Fonte: observação visual do CHEFE na mesma Casa/Bridge após o T1 OAuth acima.
+
+### Cadeia observada
+
+```text
+CentralDark Bridge · One Shot
+→ [CASA] OPENED=E:\CentralDark
+→ [OPEN_URL] https://mcp.centralldark.com/admin
+→ MCP CentralDark · Painel Admin carregado
+```
+
+No painel público carregado foram observados, naquele instante:
+
+```text
+ADMIN_PANEL_PUBLIC_ROUTE=PASS_OBSERVED
+ADMIN_PANEL_URL=https://mcp.centralldark.com/admin
+ADMIN_PANEL_HEALTH_DISPLAY=100_PERCENT_HEALTHY
+ADMIN_PANEL_ERRORS_DISPLAY=0
+ADMIN_PANEL_WARNS_DISPLAY=0
+ADMIN_PANEL_REQUESTS_DISPLAY=41
+ADMIN_PANEL_TOOLS_DISPLAY=125
+
+DEPENDENCY_mcp_catalog=OK_DISPLAYED
+DEPENDENCY_oauth=OK_DISPLAYED
+DEPENDENCY_telegram_bot=OK_DISPLAYED
+DEPENDENCY_github_api=OK_DISPLAYED
+DEPENDENCY_hub_mission_consumer=OK_DISPLAYED
+DEPENDENCY_sse=OK_DISPLAYED
+DEPENDENCY_disk_logs=OK_DISPLAYED
+DEPENDENCY_memoria=OK_DISPLAYED
+DEPENDENCY_loadavg=OK_DISPLAYED
+```
+
+### Contraprova / escopo
+
+Os números do painel são **estado exibido pela superfície Admin naquele instante**. Eles não substituem medição independente de cada dependência e não transformam UI em autoridade absoluta.
+
+A mesma execução do Bridge continuou exibindo:
+
+```text
+BRIDGE_SIMPLE_TLS_PROBE=FAIL_OBSERVED
+```
+
+Portanto:
+
+```text
+ADMIN_PANEL_PUBLIC_ROUTE=PASS_OBSERVED
+MCP_ADMIN_SURFACE_REACHABLE=true_by_observation
+BRIDGE_SIMPLE_TLS_PROBE=FAIL_OBSERVED
+TLS_PROBE_ROOT_CAUSE=UNKNOWN
+TLS_PROBE_FAIL_DOES_NOT_IMPLY_ADMIN_OFFLINE=true
+```
+
+O valor `TOOLS=125` exibido no Painel Admin e o `MCP_TOOL_COUNT=112` retornado no `tools/list` autenticado são métricas/superfícies diferentes até prova de equivalência. Não reconciliar por inferência.
+
+### Estado acumulado do mesmo Bridge/owner
+
+```text
+OAUTH_SEGREDO_CURRENT_E2E=PASS
+OAUTH_FULANO_HISTORICAL_T1=PASS
+DPAPI_CURRENT_USER_OBSERVED=true
+MCP_AUTHENTICATED_E2E=PASS
+MCP_TOOL_COUNT_AUTHENTICATED_SEGREDO=112
+ADMIN_PANEL_PUBLIC_ROUTE=PASS_OBSERVED
+ADMIN_PANEL_TOOLS_DISPLAY=125
+CASA_E_DRIVE_OPENED=true
+NO_PARALLEL_RUNTIME_CREATED=true
+TLS_PROBE_REMEDIATION_FIXED_POINT=false
+GLOBAL_FIXED_POINT=false
+```
+
+`UNKNOWN != PASS`.
