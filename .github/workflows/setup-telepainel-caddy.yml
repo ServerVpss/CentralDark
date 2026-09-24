@@ -10,6 +10,20 @@ jobs:
   caddy:
     runs-on: [self-hosted, Linux]
     steps:
+      - name: 🔹 Checkout exato
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+
+      - name: 🧿 TLC23 · Universal · Meta-Lupa · Horn
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          TARGET_SHA="$GITHUB_SHA" REPO_DIR=/root/CentralDark BRANCH=main \
+            bash scripts/vps/deploy-guards-dispatcher.sh --gate-only
+          echo "CANONICAL_DEPLOY_GATE=PASS TARGET_SHA=$GITHUB_SHA"
+
       - name: 🔹 Diagnostico
         shell: bash
         run: |

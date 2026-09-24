@@ -14,7 +14,41 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  deploy-universal-gate:
+    name: 🧿 TLC23 · Universal · Meta-Lupa · Horn
+    if: github.repository == 'ServerVpss/CentralDark'
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 10
+    env:
+      REPO_DIR: <caminho-vps>
+      BRANCH: main
+    steps:
+      - name: 🔹 Checkout exato do gate
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          path: .ci-deploy-gate
+          fetch-depth: 1
+          submodules: false
+          persist-credentials: true
+      - name: 🔹 Provar SHA antes de qualquer job mutante
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          TARGET_SHA='${{ github.sha }}'
+          AUTH_REPO="$GITHUB_WORKSPACE/.ci-deploy-gate"
+          AUTH_HEADER="$(git -C "$AUTH_REPO" config --local --get http.https://github.com/.extraheader || true)"
+          [[ "$AUTH_HEADER" == AUTHORIZATION:* ]] || { echo "GIT_EPHEMERAL_AUTH_MISSING"; exit 26; }
+          export GIT_CONFIG_COUNT=1
+          export GIT_CONFIG_KEY_0='http.https://github.com/.extraheader'
+          export GIT_CONFIG_VALUE_0="$AUTH_HEADER"
+          unset AUTH_HEADER
+          TARGET_SHA="$TARGET_SHA" REPO_DIR="$REPO_DIR" BRANCH="$BRANCH" bash "$AUTH_REPO/scripts/vps/deploy-guards-dispatcher.sh" --gate-only
+          echo "CANONICAL_DEPLOY_GATE=PASS"
+          echo "GATED_SHA=$TARGET_SHA"
+
   deploy-mcp:
+    needs: deploy-universal-gate
     name: 🧩 Deploy canônico do CentralDark-MCP
     if: github.repository == 'ServerVpss/CentralDark'
     runs-on: [self-hosted, Linux]
@@ -359,6 +393,7 @@ jobs:
             });
 
   deploy-operational-guards:
+    needs: deploy-universal-gate
     name: 🧩 Deploy atômico do mapa e Hermes-Verificador
     if: github.repository == 'ServerVpss/CentralDark'
     runs-on: [self-hosted, Linux]
@@ -480,6 +515,7 @@ jobs:
             });
 
   deploy-hermes-runtime:
+    needs: deploy-universal-gate
     name: 🧩 Deploy canônico do runtime Hermes
     if: github.repository == 'ServerVpss/CentralDark'
     runs-on: [self-hosted, Linux]
@@ -753,9 +789,10 @@ jobs:
 
   deploy-total-regeneration:
     name: 🧩 SAME_HEAD verde → deploy total → regeneração
-    needs: [deploy-mcp, deploy-operational-guards, vps-housekeeping, deploy-hermes-runtime]
+    needs: [deploy-universal-gate, deploy-mcp, deploy-operational-guards, vps-housekeeping, deploy-hermes-runtime]
     if: >-
       always() &&
+      needs.deploy-universal-gate.result == 'success' &&
       github.event_name == 'push' &&
       github.ref == 'refs/heads/main' &&
       needs.deploy-mcp.result != 'failure' &&
@@ -786,9 +823,9 @@ jobs:
         shell: bash
         run: |
           set -Eeuo pipefail
-          bash -n scripts/vps/centraldark-deploy.sh
+          bash -n scripts/vps/deploy-guards-dispatcher.sh
           REPO_DIR="$REPO_DIR" BRANCH="$BRANCH" \
-            bash scripts/vps/centraldark-deploy.sh --apply --total
+            bash scripts/vps/deploy-guards-dispatcher.sh --apply --total
 
       - name: 🔹 Contraprova do SHA implantado
         shell: bash

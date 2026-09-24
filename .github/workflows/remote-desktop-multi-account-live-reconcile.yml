@@ -25,6 +25,14 @@ jobs:
           persist-credentials: false
           fetch-depth: 1
 
+      - name: 🧿 TLC23 · Universal · Meta-Lupa · Horn
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          TARGET_SHA="$GITHUB_SHA" REPO_DIR=/root/CentralDark BRANCH=main \
+            bash scripts/vps/deploy-guards-dispatcher.sh --gate-only
+          echo "CANONICAL_DEPLOY_GATE=PASS TARGET_SHA=$GITHUB_SHA"
+
       - name: 🔹 Prove target and deploy canonical multi-account bridge
         shell: bash
         run: |
@@ -35,7 +43,7 @@ jobs:
           bash -n scripts/vps/deploy-desktop-commander-multi-account.sh
           bash -n infra/systemd/centraldark-desktop-commander-profile.sh
           bash -n infra/systemd/centraldark-desktop-commander-watchdog.sh
-          bash scripts/vps/deploy-desktop-commander-multi-account.sh "$GITHUB_WORKSPACE"
+          SOURCE_HEAD="$GITHUB_SHA" bash scripts/vps/deploy-desktop-commander-multi-account.sh "$GITHUB_WORKSPACE"
 
       - name: 🔹 Counterproof two isolated services
         shell: bash
