@@ -596,7 +596,7 @@
       "DEX_APPROVAL_REQUIRED_FOR_CRITICAL_DELTA": {
         "owner": "docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md#81-tik-tak--automation-factory--outer-loop",
         "stage": "PRE_CRITICAL_EXECUTION",
-        "role": "STATE_GOVERNANCE_LENS",
+        "role": "HUMAN_AGENT_COORDINATION_LENS",
         "approval_is_not_human_authority": true,
         "cannot_expand_chefe_scope": true
       },
