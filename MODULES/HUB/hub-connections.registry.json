@@ -1,6 +1,6 @@
 {
   "schema": "centraldark.modules.hub.connections.v1",
-  "updated_at": "2026-09-24T11:45:00-03:00",
+  "updated_at": "2026-09-24T12:13:00-03:00",
   "purpose": "Mapa visivel/editavel dos bracos e pernas do Megazord CentralDark. Nao contem segredo e nao cria runtime paralelo.",
   "canonical_runtime_owner": "apps/modulos/hub",
   "rules": {
@@ -11,6 +11,17 @@
     "secrets_in_git": false
   },
   "connections": [
+    {
+      "id": "hub-domain-expansion-trigger",
+      "label": "EXPANSAO DE DOMINIO — Trigger Fabric do Megazord",
+      "type": "deterministic_trigger",
+      "owner": "MODULES/HUB/triggers/domain-expansion.trigger.json",
+      "enabled": true,
+      "status_surface": "status.centraldark.hub.domain_expansion",
+      "events": ["phrase_detected", "owner_lookup", "micro_delta", "ci_state", "receipt", "next_cursor"],
+      "proof_state": "CONFIGURED_NOT_RUNTIME_PROVEN",
+      "notes": "Quando o CHEFE disser EXPANSAO DE DOMINIO, expandir por setores com owner existente, micro-commits, CI/receipt e UNKNOWN separado de PASS."
+    },
     {
       "id": "telegram-bot-api-security-sol",
       "label": "Telegram Bot API — Security/SOL",
