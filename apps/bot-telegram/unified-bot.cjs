@@ -400,7 +400,7 @@ function sanitizeModelOutput(text) {
     // Blockquote pode aparecer cru em fallback/saída intermediária; preserva conteúdo, remove wrapper.
     .replace(/<\/?blockquote(?:\s[^>]*)?>/gi, '')
     // Remove tags XML/HTML desconhecidas sem apagar o texto interno.
-    .replace(/<(?!\/?(?:b|i|u|s|code|pre|a)(?:\s|>|\/))\/?[a-zA-Z][^>]{0,120}>/g, '')
+    .replace(/<(?!\/?(?:b|i|u|s|code|pre|a)(?:\s|>|\/))[^>\n]{1,120}>/g, '')
     .replace(/\n{3,}/g, '\n\n')
     .trim();
 }
