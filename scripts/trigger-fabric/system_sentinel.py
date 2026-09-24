@@ -21,6 +21,30 @@ EVENT_LOG = ROOT / ".artifacts/system-sentinel/events.jsonl"
 DEFAULT_INTERVAL = 5.0
 SEAL = "🧿"
 NOTE_SEAL = "🪡🧿"
+FIXED_ROUTE = [
+    "INTENT",
+    "CONTRACT_CURRENT",
+    "SENSOR",
+    "T0",
+    "CURRENT_STATE",
+    "EXISTING_OWNER",
+    "COUNTERPROOF",
+    "PROBES",
+    "RECONCILIATION",
+    "T1",
+    "REALITY_JUDGE",
+    "HUD",
+    "NEXT_CURSOR",
+]
+FIXED_ROUTE_IDENTITY_FIELDS = (
+    "target",
+    "owner",
+    "inputs_hash",
+    "config_hash",
+    "head_or_artifact_hash",
+    "security_boundary",
+)
+FIXED_ROUTE_API_EVENT = "centraldark_sentinel_route"
 
 TRIGGER_SEALS = {
     "TOOL_ERROR": "🛠️",
@@ -155,6 +179,101 @@ def normalize_event(raw: dict[str, Any]) -> dict[str, Any]:
     return event
 
 
+def fixed_route_identity(raw: dict[str, Any]) -> tuple[dict[str, str], list[str]]:
+    identity = {
+        "target": str(raw.get("target") or "").strip(),
+        "owner": str(raw.get("owner") or "").strip(),
+        "inputs_hash": str(raw.get("inputs_hash") or "").strip(),
+        "config_hash": str(raw.get("config_hash") or "").strip(),
+        "head_or_artifact_hash": str(raw.get("head_sha") or raw.get("artifact_hash") or "").strip(),
+        "security_boundary": str(raw.get("security_boundary") or "").strip(),
+    }
+    missing = [key for key in FIXED_ROUTE_IDENTITY_FIELDS if not identity.get(key)]
+    return identity, missing
+
+
+def build_fixed_route_receipt(
+    raw: dict[str, Any],
+    *,
+    state: dict[str, Any] | None = None,
+    persist: bool = True,
+) -> dict[str, Any]:
+    current_state = state if isinstance(state, dict) else load_state()
+    identity, missing = fixed_route_identity(raw)
+    fingerprint = None if missing else sha256_text(
+        json.dumps(identity, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    )
+    previous = current_state.get("fixed_route") if isinstance(current_state.get("fixed_route"), dict) else {}
+    previous_fingerprint = previous.get("dependency_fingerprint")
+    requested_state = str(raw.get("state") or "STATE_CHANGED").upper()
+    local_fixed_point = requested_state in {"FIXED_POINT", "FIXED_POINT_LOCAL", "PASS"}
+    proof_ready = bool(
+        local_fixed_point
+        and fingerprint
+        and str(raw.get("counterproof") or "").upper() == "PASS"
+        and str(raw.get("reality_judge") or "").upper() == "PASS"
+        and raw.get("t0")
+        and raw.get("t1")
+        and raw.get("evidence_ref")
+    )
+
+    if missing:
+        decision = "RUN_DETERMINISTIC_ROUTE"
+        reason = "FINGERPRINT_INCOMPLETE"
+    elif previous_fingerprint == fingerprint and previous.get("proof_state") == "PROVEN":
+        decision = "REUSE_PROOF_NO_REPEAT"
+        reason = "UNCHANGED_DEPENDENCY_FINGERPRINT"
+    elif previous_fingerprint and previous_fingerprint != fingerprint:
+        decision = "REVALIDATE_AFFECTED_CHAIN_ONLY"
+        reason = "DEPENDENCY_FINGERPRINT_CHANGED"
+    elif proof_ready:
+        decision = "FIXED_POINT_SEALED"
+        reason = "COUNTERPROOF_AND_REALITY_JUDGE_PASS"
+    else:
+        decision = "RUN_DETERMINISTIC_ROUTE"
+        reason = "NO_REUSABLE_FIXED_POINT"
+
+    receipt = {
+        "schema": "centraldark.sentinel-fixed-route.v1",
+        "seal": SEAL,
+        "api_transport": "GITHUB_REPOSITORY_DISPATCH",
+        "api_event": FIXED_ROUTE_API_EVENT,
+        "route": FIXED_ROUTE,
+        "route_is_deterministic": True,
+        "route_is_authority": False,
+        "same_fingerprint_no_full_replay": True,
+        "minimal_liveness_remeasure_still_required": True,
+        "dependency_fingerprint": fingerprint,
+        "fingerprint_identity": identity,
+        "fingerprint_missing": missing,
+        "proof_state": "PROVEN" if proof_ready else ("REUSED" if decision == "REUSE_PROOF_NO_REPEAT" else "NOT_PROVEN"),
+        "decision": decision,
+        "reason": reason,
+        "source_surface": str(raw.get("source_surface") or "UNKNOWN"),
+        "event_class": str(raw.get("event_class") or "STATE_CHANGED"),
+        "evidence_ref": raw.get("evidence_ref"),
+        "next_cursor": raw.get("next_cursor") or "REMEASURE_CURRENT_STATE",
+        "fixed_point_scope": str(raw.get("fixed_point_scope") or "SENTINEL_ROUTE_LOCAL"),
+        "auto_mutation_authority": False,
+        "unknown_is_pass": False,
+    }
+
+    if persist:
+        current_state["updated_at"] = now_utc()
+        current_state["last_route_receipt"] = receipt
+        if proof_ready:
+            current_state["fixed_route"] = {
+                "proof_state": "PROVEN",
+                "dependency_fingerprint": fingerprint,
+                "identity": identity,
+                "evidence_ref": raw.get("evidence_ref"),
+                "next_cursor": receipt["next_cursor"],
+                "sealed_at": now_utc(),
+            }
+        atomic_write_json(STATE_PATH, current_state)
+    return receipt
+
+
 def run_stitch_inventory() -> dict[str, Any]:
     proc = subprocess.run(
         [sys.executable, str(STITCHER), "--inventory"],
@@ -258,6 +377,48 @@ def self_test() -> int:
     cases["no_auto_authority"] = sample["auto_mutation_authority"] is False
     cases["contract_exists"] = CONTRACT.exists()
     cases["stitcher_exists"] = STITCHER.exists()
+    route_base = {
+        "source_surface": "SELF_TEST",
+        "event_class": "FIXED_POINT",
+        "state": "FIXED_POINT_LOCAL",
+        "target": "CENTRALDARK_SENTINELA",
+        "owner": "scripts/sentinela/run.mjs",
+        "inputs_hash": "a" * 64,
+        "config_hash": "b" * 64,
+        "head_sha": "c" * 40,
+        "security_boundary": "SELF_HOSTED_READ_ONLY",
+        "counterproof": "PASS",
+        "reality_judge": "PASS",
+        "t0": "2026-09-24T00:00:00Z",
+        "t1": "2026-09-24T00:00:01Z",
+        "evidence_ref": "sha256:" + ("d" * 64),
+        "next_cursor": "WAIT_FOR_MATERIAL_DELTA",
+    }
+    sealed = build_fixed_route_receipt(route_base, state={}, persist=False)
+    reused = build_fixed_route_receipt(
+        {**route_base, "state": "STATE_CHANGED"},
+        state={
+            "fixed_route": {
+                "proof_state": "PROVEN",
+                "dependency_fingerprint": sealed["dependency_fingerprint"],
+            }
+        },
+        persist=False,
+    )
+    changed = build_fixed_route_receipt(
+        {**route_base, "inputs_hash": "e" * 64, "state": "STATE_CHANGED"},
+        state={
+            "fixed_route": {
+                "proof_state": "PROVEN",
+                "dependency_fingerprint": sealed["dependency_fingerprint"],
+            }
+        },
+        persist=False,
+    )
+    cases["fixed_route_order"] = sealed["route"] == FIXED_ROUTE
+    cases["fixed_point_seals"] = sealed["decision"] == "FIXED_POINT_SEALED" and sealed["proof_state"] == "PROVEN"
+    cases["same_fingerprint_reuses"] = reused["decision"] == "REUSE_PROOF_NO_REPEAT"
+    cases["changed_fingerprint_revalidates"] = changed["decision"] == "REVALIDATE_AFFECTED_CHAIN_ONLY"
     failed = [name for name, ok in cases.items() if not ok]
     print(json.dumps({"ok": not failed, "checks": cases, "failed": failed}, ensure_ascii=False))
     return 1 if failed else 0
@@ -270,12 +431,19 @@ def main() -> int:
     parser.add_argument("--watch-notes", action="store_true")
     parser.add_argument("--interval", type=float, default=DEFAULT_INTERVAL)
     parser.add_argument("--event-json", type=str, default="")
+    parser.add_argument("--route-json", type=str, default="")
     args = parser.parse_args()
 
     if args.self_test:
         return self_test()
     if args.event_json:
         print(json.dumps(ingest_event_json(args.event_json), ensure_ascii=False, indent=2))
+        return 0
+    if args.route_json:
+        raw = json.loads(args.route_json)
+        if not isinstance(raw, dict):
+            raise ValueError("ROUTE_JSON_MUST_BE_OBJECT")
+        print(json.dumps(build_fixed_route_receipt(raw), ensure_ascii=False, indent=2))
         return 0
     if args.scan_notes:
         print(json.dumps(scan_notes_once(), ensure_ascii=False, indent=2))
