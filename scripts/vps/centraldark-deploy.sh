@@ -36,6 +36,13 @@ BRANCH="${BRANCH:-main}"
 MCP_HEALTH="${MCP_HEALTH:-http://127.0.0.1:9100/health}"
 APPS="${APPS:-}"
 OPTIONAL_RUNTIME_APPS="${OPTIONAL_RUNTIME_APPS:-CentralDark-ScreenPipe CentralDark-EliteAnthropic}"
+RUNTIME_CHURN_ALLOWLIST=(
+  "apps/bot-telegram/skills/config/memory.json"
+  "apps/bot-telegram/skills/config/skills.json"
+  "apps/modulos/graph-panel/data/graph.json"
+  "apps/modulos/status/graph-data.json"
+  "docs/CONSCIENCIA/APRENDIZADOS.md"
+)
 GLOBAL_CONTRACT_GATE="$REPO_DIR/scripts/agent-call.mjs"
 GLOBAL_GATE_RECEIPT_DIR="${GLOBAL_GATE_RECEIPT_DIR:-/tmp/centraldark-global-contract}"
 # CENTRALDARK_GLOBAL_CONTRACT_ENFORCER_REQUIRED
@@ -242,6 +249,16 @@ verify_runtime_apps() {
   return 0
 }
 
+normalize_runtime_churn() {
+  local path
+  for path in "${RUNTIME_CHURN_ALLOWLIST[@]}"; do
+    if git ls-files --error-unmatch "$path" >/dev/null 2>&1; then
+      git restore --source="origin/$BRANCH" --worktree -- "$path" || return 1
+    fi
+  done
+  find apps/modulos/grupo-evolucao/missions -maxdepth 1 -type f -name "drift-*.json" -delete 2>/dev/null || true
+  log "RUNTIME_CHURN_NORMALIZED=PASS"
+}
 proof_guard_paths_exist_on_ref() {
   local ref="$1"
   local required=(
@@ -503,6 +520,7 @@ else
 fi
 
 # ─── T1 / contraprova ─────────────────────────────────────────────────
+normalize_runtime_churn || { rollback; die "RUNTIME_CHURN_NORMALIZE_FAILED" 17; }
 log "=== T1 (depois) ==="
 FINAL_HEAD="$(git rev-parse HEAD)"
 FINAL_REMOTE="$(git rev-parse "origin/$BRANCH")"
