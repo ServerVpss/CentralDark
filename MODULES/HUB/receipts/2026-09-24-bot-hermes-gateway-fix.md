@@ -94,3 +94,33 @@ MERGED_EQUALS_DEPLOYED=FALSE
 - TOOL_LISTADO != TOOL_ATIVO
 - ONE_SYSTEM_ONLY=true
 - REUSE_BEFORE_CREATE=true
+
+
+## Delta posterior — anti-falso-verde e failovers
+
+- `cc6a53a1a0466e5805db5c88284b722e87036068` — `CentralDark-EvolucaoIAs` deixa de publicar fallback sintético como se fosse resposta de Gemini/Groq/Claude.
+- Runtime `CentralDark-EvolucaoIAs` reiniciado com `node --check=PASS`, PM2 ONLINE, restart 15.
+- Primeiro ciclo pós-restart: `BLOCKED/UNKNOWN: nenhuma API de IA configurada; ciclo encerrado sem publicar conteúdo sintético.`
+- OpenRouter já configurado no WebUI foi testado sem expor credencial: HTTP 401 `User not found`.
+- Groq já configurado no WebUI: HTTP 401 `Invalid API Key`.
+- Gemini já configurado no WebUI: HTTP 401.
+- Abacus/RouteLLM: HTTP 402 por crédito/assinatura.
+- Lovable arsenal-proxy: host Supabase não resolveu no runtime observado.
+- Portanto nenhum provider remoto já configurado entregou inferência válida no T1.
+- Hermes CLI oferece seleção interativa de provider via `hermes model`; o comando exige TTY. A tentativa de abrir o fluxo interativo ficou pendente porque o canal Remote Desktop Commander ficou offline antes do teste.
+- `HERMES_FREE_NOUS_ACTIVATION` permanece `UNKNOWN`, não PASS nem FAIL.
+
+## Estado adicional
+
+```text
+EVOLUCAO_IAS_SYNTHETIC_FALLBACK=DISABLED
+EVOLUCAO_IAS_FALSE_GREEN=FIXED
+OPENROUTER_EXISTING_CONFIG=FAIL_401
+GROQ_EXISTING_CONFIG=FAIL_401
+GEMINI_EXISTING_CONFIG=FAIL_401
+ABACUS_EXISTING_CONFIG=BLOCKED_402
+LOVABLE_PROXY_RUNTIME=BLOCKED_DNS
+HERMES_FREE_NOUS_ACTIVATION=UNKNOWN_TTY_NOT_TESTED
+RDC_CURRENT_CHANNEL=OFFLINE_AT_LAST_OBSERVATION
+RDC_OFFLINE_DOES_NOT_MEAN_VPS_DOWN=true
+```
