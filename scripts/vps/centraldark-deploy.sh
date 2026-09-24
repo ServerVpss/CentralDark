@@ -35,6 +35,7 @@ REPO_DIR="${REPO_DIR:-<caminho-vps>}"
 BRANCH="${BRANCH:-main}"
 MCP_HEALTH="${MCP_HEALTH:-http://127.0.0.1:9100/health}"
 APPS="${APPS:-}"
+OPTIONAL_RUNTIME_APPS="${OPTIONAL_RUNTIME_APPS:-CentralDark-ScreenPipe CentralDark-EliteAnthropic}"
 GLOBAL_CONTRACT_GATE="$REPO_DIR/scripts/agent-call.mjs"
 GLOBAL_GATE_RECEIPT_DIR="${GLOBAL_GATE_RECEIPT_DIR:-/tmp/centraldark-global-contract}"
 # CENTRALDARK_GLOBAL_CONTRACT_ENFORCER_REQUIRED
@@ -212,14 +213,33 @@ resolve_runtime_apps() {
   log "TOTAL_RUNTIME_APPS=$APPS"
 }
 
-verify_runtime_apps() {
-  local app pid
-  for app in $APPS; do
-    pm2 describe "$app" >/dev/null 2>&1 || { log "PM2_VERIFY_MISSING=$app"; return 1; }
-    pid="$(pm2 pid "$app" | tail -n1)"
-    [[ "$pid" =~ ^[0-9]+$ && "$pid" -gt 0 ]] || { log "PM2_VERIFY_NO_PID=$app"; return 1; }
-    log "PM2_VERIFY=PASS app=$app pid=$pid"
+is_optional_runtime_app() {
+  local candidate="$1" optional
+  for optional in $OPTIONAL_RUNTIME_APPS; do
+    [[ "$candidate" == "$optional" ]] && return 0
   done
+  return 1
+}
+
+verify_runtime_apps() {
+  local app pid status optional_failures=0
+  for app in $APPS; do
+    status="$(pm2 jlist 2>/dev/null | jq -r --arg name "$app" '.[] | select(.name==$name) | .pm2_env.status' | head -n1)"
+    pid="$(pm2 pid "$app" 2>/dev/null | tail -n1)"
+    if [[ "$status" == "online" && "$pid" =~ ^[0-9]+$ && "$pid" -gt 0 ]]; then
+      log "PM2_VERIFY=PASS app=$app pid=$pid"
+      continue
+    fi
+    if is_optional_runtime_app "$app"; then
+      log "PM2_VERIFY=OPTIONAL_DEGRADED app=$app status=${status:-UNKNOWN} pid=${pid:-0}"
+      optional_failures=$((optional_failures + 1))
+      continue
+    fi
+    log "PM2_VERIFY=FAIL_REQUIRED app=$app status=${status:-UNKNOWN} pid=${pid:-0}"
+    return 1
+  done
+  log "OPTIONAL_RUNTIME_DEGRADED_COUNT=$optional_failures"
+  return 0
 }
 
 proof_guard_paths_exist_on_ref() {
