@@ -23,7 +23,7 @@
 const http             = require('http');
 const fs               = require('fs');
 const path             = require('path');
-const { execSync, execFileSync } = require('child_process');
+const { execSync, spawn } = require('child_process');
 
 // ── Carrega arquivos .env ──────────────────────────────────────────────────
 function loadEnv(p) {
@@ -58,33 +58,90 @@ const TG_API       = 'https://api.telegram.org';
 const USE_HERMES_PRIMARY = process.env.BOT_USE_HERMES === '1';
 const HEALTH_PORT  = Number(process.env.BOT_HEALTH_PORT || process.env.BOT_HEALTH_PORT || '9500');
 const TELEGRAM_TRANSPORT = 'BOT_API_DIRECT_LONG_POLLING';
+const HERMES_TIMEOUT_MS = Math.min(
+  Math.max(Number(process.env.HERMES_EXECUTOR_TIMEOUT_MS || 180_000), 15_000),
+  300_000,
+);
 
-function callHermesExecutor(history, systemPrompt, motivo = 'fallback') {
+async function callHermesExecutor(history, systemPrompt, motivo = 'fallback') {
   const prompt = [
     systemPrompt,
     '',
     'Contexto recente:',
     ...history.slice(-12).map(m => `${m.role}: ${typeof m.content === 'string' ? m.content : JSON.stringify(m.content)}`),
     '',
-    `Responda em PT-BR. Motivo do fallback: ${motivo}.`,
+    `Motivo do fallback: ${motivo}.`,
+    'Responda SOMENTE em PT-BR.',
+    'Entregue apenas a resposta final útil; não exponha raciocínio interno, rascunho, chain-of-thought, tags de ferramenta ou mensagens de controle.',
+    'Se uma prova estiver ausente, diga UNKNOWN em vez de inventar.',
   ].join('\n');
-  try {
-    const hermesBin = '/usr/local/lib/hermes-agent/venv/bin/hermes';
-    const out = execFileSync(hermesBin, ['--in', '/root/CentralDark', '-z', prompt], {
-      encoding: 'utf8',
-      timeout: 180_000,
-      maxBuffer: 1024 * 1024,
-      env: {
-        HOME: '/root',
-        PATH: '/root/.local/bin:/usr/local/bin:/usr/bin:/bin',
-        TMPDIR: process.env.TMPDIR || '/root/.hermes/cache/scratch',
-        HERMES_QUIET: '1',
-      },
-    }).trim();
-    return out || '⚠️ Hermes executou, mas não retornou texto.';
-  } catch (e) {
-    return `❌ Hermes executor falhou: ${String(e.message || e).slice(0, 400)}`;
-  }
+
+  const hermesBin = fs.existsSync('/usr/local/bin/hermes')
+    ? '/usr/local/bin/hermes'
+    : '/usr/local/lib/hermes-agent/venv/bin/hermes';
+
+  const env = {
+    ...process.env,
+    HOME: '/root',
+    PATH: '/root/.local/bin:/usr/local/bin:/usr/bin:/bin',
+    TMPDIR: process.env.TMPDIR || '/root/.hermes/cache/scratch',
+    HERMES_QUIET: '1',
+  };
+
+  return new Promise((resolve) => {
+    let settled = false;
+    let timedOut = false;
+    let stdout = '';
+    let stderr = '';
+
+    const finish = (value) => {
+      if (settled) return;
+      settled = true;
+      resolve(value);
+    };
+
+    const child = spawn(hermesBin, ['--in', '/root/CentralDark', '-z', prompt], {
+      env,
+      stdio: ['ignore', 'pipe', 'pipe'],
+    });
+
+    const limit = setTimeout(() => {
+      timedOut = true;
+      child.kill('SIGTERM');
+      setTimeout(() => {
+        if (child.exitCode === null && !child.killed) child.kill('SIGKILL');
+      }, 2_000).unref();
+    }, HERMES_TIMEOUT_MS);
+    limit.unref();
+
+    child.stdout.setEncoding('utf8');
+    child.stderr.setEncoding('utf8');
+    child.stdout.on('data', chunk => {
+      stdout += chunk;
+      if (stdout.length > 1024 * 1024) stdout = stdout.slice(-1024 * 1024);
+    });
+    child.stderr.on('data', chunk => {
+      stderr += chunk;
+      if (stderr.length > 64 * 1024) stderr = stderr.slice(-64 * 1024);
+    });
+
+    child.on('error', (e) => {
+      clearTimeout(limit);
+      finish(`❌ Hermes executor não iniciou: ${String(e.message || e).slice(0, 400)}`);
+    });
+
+    child.on('close', (code, signal) => {
+      clearTimeout(limit);
+      if (timedOut) {
+        return finish(`⚠️ A chamada Hermes excedeu ${Math.round(HERMES_TIMEOUT_MS / 1000)}s e foi interrompida sem bloquear o bot. Estado: BLOCKED/UNKNOWN.`);
+      }
+      const out = stdout.trim();
+      if (out) return finish(out);
+      const err = stderr.trim();
+      if (err) return finish(`❌ Hermes executor falhou (${signal || code || 'sem-codigo'}): ${err.slice(0, 400)}`);
+      finish('⚠️ Hermes executou, mas não retornou texto. Estado: UNKNOWN.');
+    });
+  });
 }
 
 
@@ -281,32 +338,28 @@ const COG_MODES = {
   sistema2: {
     emoji: '🔬', nome: 'Sistema 2',
     desc: 'Raciocínio lento e deliberado — cada etapa explícita.',
-    prompt: 'Você opera no modo Sistema 2: raciocínio lento e explícito. ' +
-            'Antes de responder, escreva cada etapa numerada do seu pensamento. ' +
-            'Nunca pule para conclusão sem mostrar o caminho. Responda em PT-BR.',
+    prompt: 'Você opera no modo Sistema 2: faça raciocínio cuidadoso internamente. ' +
+            'Na resposta, entregue somente fatos, evidências, ações verificáveis e conclusão. ' +
+            'Não exponha raciocínio privado ou rascunho. Responda em PT-BR.',
   },
   cot: {
     emoji: '🔗', nome: 'Chain of Thought',
     desc: 'Pensa passo a passo antes de responder.',
-    prompt: 'Você usa Chain of Thought. Formato obrigatório: ' +
-            'Passo 1: ... Passo 2: ... Conclusão: ... ' +
-            'Cada passo deve ser explícito e verificável. Responda em PT-BR.',
+    prompt: 'Você faz decomposição técnica internamente. ' +
+            'Não exponha chain-of-thought privado. Mostre somente evidências, decisões e passos executáveis verificáveis. ' +
+            'Responda em PT-BR.',
   },
   react: {
     emoji: '⚛️',  nome: 'ReAct',
     desc: 'Age → observa → raciocina → age de novo.',
-    prompt: 'Você usa ReAct. Formato: ' +
-            'Pensamento: ... Ação: ... Observação: ... (repita) Resposta Final: ... ' +
-            'Explicite cada ciclo antes de concluir. Responda em PT-BR.',
+    prompt: 'Você usa ReAct internamente. Na saída ao usuário mostre somente Ação, Observação verificável e Resposta Final. ' +
+            'Não exponha pensamento privado nem mensagens internas de ferramenta. Responda em PT-BR.',
   },
   reflexao: {
     emoji: '🪞', nome: 'Auto-Crítica',
     desc: 'Gera → critica → refina. Dupla checagem interna.',
-    prompt: 'Você usa auto-crítica reflexiva. Formato obrigatório: ' +
-            '🔷 RASCUNHO: (resposta inicial) ' +
-            '🔶 CRÍTICA: (aponte falhas e lacunas) ' +
-            '✅ RESPOSTA FINAL: (versão refinada) ' +
-            'Responda em PT-BR.',
+    prompt: 'Você usa auto-crítica reflexiva internamente. ' +
+            'Entregue somente a versão final refinada, sem rascunho nem crítica interna. Responda em PT-BR.',
   },
 };
 
@@ -335,9 +388,21 @@ function esc(s) {
  * Converte Markdown do LLM para HTML do Telegram.
  * O Telegram aceita apenas: <b> <i> <code> <pre> <a href> <s> <u>
  */
+function sanitizeModelOutput(text) {
+  return String(text || '')
+    // Wrappers que o modelo/CLI pode vazar e que não pertencem à resposta ao usuário.
+    .replace(/<\/?(?:details|summary|parameter|tool|tool_call|tool_result|thinking|analysis)(?:\s[^>]*)?>/gi, '')
+    // Blockquote pode aparecer cru em fallback/saída intermediária; preserva conteúdo, remove wrapper.
+    .replace(/<\/?blockquote(?:\s[^>]*)?>/gi, '')
+    // Remove tags XML/HTML desconhecidas sem apagar o texto interno.
+    .replace(/<(?!\/?(?:b|i|u|s|code|pre|a)(?:\s|>|\/))\/?[a-zA-Z][^>]{0,120}>/g, '')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
 function mdToHtml(text) {
   if (!text) return '';
-  let s = text;
+  let s = sanitizeModelOutput(text);
 
   // 1. Blocos de código: ```lang\n...\n``` → <pre>...</pre>
   s = s.replace(/```[\w]*\n?([\s\S]*?)```/g, (_, code) =>
@@ -377,7 +442,7 @@ function mdToHtml(text) {
 }
 
 function telegramPlainText(text) {
-  return String(text || '')
+  return sanitizeModelOutput(text)
     .replace(/<br\s*\/?\s*>/gi, '\n')
     .replace(/<\/?(?:b|i|u|s|code|pre)>/gi, '')
     .replace(/<a\s+href=["'][^"']+["']\s*>/gi, '')
