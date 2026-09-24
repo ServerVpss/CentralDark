@@ -59,9 +59,72 @@ const USE_HERMES_PRIMARY = process.env.BOT_USE_HERMES === '1';
 const HEALTH_PORT  = Number(process.env.BOT_HEALTH_PORT || process.env.BOT_HEALTH_PORT || '9500');
 const TELEGRAM_TRANSPORT = 'BOT_API_DIRECT_LONG_POLLING';
 const HERMES_TIMEOUT_MS = Math.min(
-  Math.max(Number(process.env.HERMES_EXECUTOR_TIMEOUT_MS || 180_000), 15_000),
+  Math.max(Number(process.env.HERMES_EXECUTOR_TIMEOUT_MS || 60_000), 15_000),
   300_000,
 );
+const CENTRALDARK_GATEWAY_BASE = (process.env.CENTRALDARK_GATEWAY_URL || 'http://127.0.0.1:8090').replace(/\/$/, '');
+const CENTRALDARK_GATEWAY_KEY = process.env.CENTRALLDARK_API_KEY
+  || process.env.CENTRALDARK_API_KEY
+  || process.env.ARSENAL_ADAPTER_KEY
+  || '';
+const CENTRALDARK_GATEWAY_TIMEOUT_MS = Math.min(
+  Math.max(Number(process.env.CENTRALDARK_GATEWAY_TIMEOUT_MS || 60_000), 10_000),
+  180_000,
+);
+
+async function callCentralDarkGateway(history, systemPrompt, motivo = 'fallback') {
+  if (!CENTRALDARK_GATEWAY_KEY) {
+    return { ok: false, error: 'credencial CENTRALDARK gateway ausente' };
+  }
+
+  const model = USE_HERMES_PRIMARY
+    ? (process.env.CENTRALDARK_GATEWAY_HERMES_MODEL || 'arsenal-hermes')
+    : (process.env.CENTRALDARK_GATEWAY_MODEL || 'arsenal-router');
+  const messages = history.slice(-20).map(m => ({
+    role: m.role || 'user',
+    content: typeof m.content === 'string' ? m.content : JSON.stringify(m.content),
+  }));
+
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), CENTRALDARK_GATEWAY_TIMEOUT_MS);
+  timer.unref?.();
+
+  try {
+    const r = await fetch(`${CENTRALDARK_GATEWAY_BASE}/v1/messages`, {
+      method: 'POST',
+      signal: controller.signal,
+      headers: {
+        'content-type': 'application/json',
+        'x-api-key': CENTRALDARK_GATEWAY_KEY,
+        'anthropic-version': '2023-06-01',
+      },
+      body: JSON.stringify({
+        model,
+        max_tokens: 4096,
+        system: `${systemPrompt}\n\nMotivo da rota: ${motivo}. Responda somente em PT-BR.`,
+        messages,
+      }),
+    });
+    const raw = await r.text();
+    let d = {};
+    try { d = JSON.parse(raw); } catch {}
+
+    if (!r.ok) {
+      return { ok: false, error: `HTTP ${r.status}: ${String(d?.error?.message || d?.error || raw).slice(0, 240)}` };
+    }
+
+    const text = Array.isArray(d.content)
+      ? d.content.find(b => b?.type === 'text')?.text
+      : null;
+    if (!text) return { ok: false, error: 'gateway sem conteúdo de texto' };
+    return { ok: true, text };
+  } catch (e) {
+    const kind = e?.name === 'AbortError' ? 'timeout' : String(e?.message || e);
+    return { ok: false, error: kind };
+  } finally {
+    clearTimeout(timer);
+  }
+}
 
 async function callHermesExecutor(history, systemPrompt, motivo = 'fallback') {
   const prompt = [
@@ -138,6 +201,9 @@ async function callHermesExecutor(history, systemPrompt, motivo = 'fallback') {
       const out = stdout.trim();
       if (out) return finish(out);
       const err = stderr.trim();
+      if (/not connected to any AI provider|no AI provider|configure.*provider/i.test(err)) {
+        return finish('⚠️ Hermes CLI está vivo, mas sem provedor de IA configurado. Estado: BLOCKED/UNKNOWN.');
+      }
       if (err) return finish(`❌ Hermes executor falhou (${signal || code || 'sem-codigo'}): ${err.slice(0, 400)}`);
       finish('⚠️ Hermes executou, mas não retornou texto. Estado: UNKNOWN.');
     });
@@ -602,12 +668,14 @@ async function executeTool(toolName, toolInput) {
       return { ok: true, path: p, bytes: Buffer.byteLength(toolInput.content || '') };
     }
     if (toolName === 'call_mcp_tool') {
-      const mcpUrl = `http://localhost:${MCP_PORT}/mcp-public`;
+      const mcpUrl = `http://localhost:${MCP_PORT}/mcp`;
       try {
         const r = await fetch(mcpUrl, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'Accept': 'application/json, text/event-stream',
+            'MCP-Protocol-Version': '2025-06-18',
             ...(MCP_TOKEN ? { 'Authorization': `Bearer ${MCP_TOKEN}` } : {}),
           },
           body: JSON.stringify({
@@ -632,8 +700,27 @@ async function executeTool(toolName, toolInput) {
 }
 
 async function callLLMWithTools(history, systemPrompt) {
-  if (USE_HERMES_PRIMARY) return callHermesExecutor(history, systemPrompt, 'BOT_USE_HERMES=1');
-  if (!LLM_KEY) return callHermesExecutor(history, systemPrompt, 'ANTHROPIC_AUTH_TOKEN ausente');
+  const gatewayThenHermes = async (motivo) => {
+    const gw = await callCentralDarkGateway(history, systemPrompt, motivo);
+    if (gw.ok) return gw.text;
+
+    const providerBlocked = /HTTP\s+(402|429)\b|payment|subscription|credit|crédito|quota|billing/i.test(gw.error || '');
+    console.warn(`[Bot] ⚠️  Gateway CentralDark indisponível: ${gw.error}`);
+
+    if (providerBlocked) {
+      return '⚠️ A rota de IA chegou ao provider, mas ele bloqueou a inferência por limite/crédito/assinatura. Estado: BLOCKED/UNKNOWN. O Telegram e o Gateway continuam vivos; nenhuma resposta foi inventada.';
+    }
+
+    return callHermesExecutor(history, systemPrompt, `${motivo}; gateway=${gw.error}`);
+  };
+
+  if (USE_HERMES_PRIMARY) {
+    return gatewayThenHermes('BOT_USE_HERMES=1');
+  }
+  if (!LLM_KEY) {
+    return gatewayThenHermes('ANTHROPIC_AUTH_TOKEN ausente');
+  }
+
   const url = LLM_BASE.endsWith('/v1') ? `${LLM_BASE}/messages` : `${LLM_BASE}/v1/messages`;
   let messages = history.slice(-20);
 
@@ -646,14 +733,20 @@ async function callLLMWithTools(history, systemPrompt) {
         body: JSON.stringify({ model: LLM_MODEL, max_tokens: 4096, system: systemPrompt, tools: BOT_TOOLS, messages }),
       });
       d = await r.json().catch(() => ({}));
-    } catch (e) { return `❌ LLM: ${e.message}`; }
+    } catch (e) {
+      return gatewayThenHermes(`API Anthropic fetch: ${e.message}`);
+    }
 
-    if (d.error) return callHermesExecutor(history, systemPrompt, `API Anthropic: ${d.error.message || JSON.stringify(d.error)}`);
-    if (!d.content) return callHermesExecutor(history, systemPrompt, `API vazia/status ${r?.status || 'desconhecido'}`);
+    if (d.error) {
+      return gatewayThenHermes(`API Anthropic: ${d.error.message || JSON.stringify(d.error)}`);
+    }
+    if (!d.content) {
+      return gatewayThenHermes(`API vazia/status ${r?.status || 'desconhecido'}`);
+    }
 
     if (d.stop_reason !== 'tool_use') {
       const text = d.content.find(b => b.type === 'text');
-      return text?.text || '❌ Sem texto na resposta.';
+      return text?.text || gatewayThenHermes('API sem texto');
     }
 
     messages.push({ role: 'assistant', content: d.content });
