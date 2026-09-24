@@ -71,12 +71,12 @@ apply_profile() {
   # MPRVA - Medir -> Provar -> Reconhecer -> Validar -> Aplicar
   local me
   me="$(curl -s --max-time 8 "$API/bot${token}/getMe")"
-  if ! printf '%s' "$me" | grep -q '"\"ok\":true"'; then
+  if ! printf '%s' "$me" | grep -q '"ok":true'; then
     echo "MEASURE_FAIL ${label}: getMe nao-ok"
     return 1
   fi
   local uname
-  uname="$(printf '%s' "$me" | sed -n 's/.*"\"username\":\""\([^"\"]*\)"\".*/\1/p')"
+  uname="$(printf '%s' "$me" | sed -n 's/.*"username":"\([^"]*\)".*/\1/p')"
   echo "MEASURED ${label} = @${uname}"
 
   if [ "$DRY" = "1" ]; then
