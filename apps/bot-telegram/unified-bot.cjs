@@ -1,31 +1,29 @@
 /**
  * CentralDark — Bot Unificado @srver1bot  v2 — Cockpit Operacional
  *
- * Arquitetura dual-mode (Webhook-first, Polling-fallback):
- *   1. Se TELEGRAM_WEBHOOK_URL estiver definido → webhook via HTTPS/Caddy.
- *   2. Fallback → polling clássico.
+ * Transporte canônico: Telegram Bot API oficial, direto, via long polling.
+ * Nenhum subdomínio CentralDark participa do transporte de updates.
  *
  * Admin (ADMIN_CHAT_ID) → Hub ADM + Agentes LLM + Ferramentas + Cognição + Relatório
  * Outros                → Skills system (consciousness)
  *
  * Token:        SRVER1_BOT_TOKEN || TELEGRAM_BOT_TOKEN || GUARDA_TELEGRAM_BOT_TOKEN
- * Webhook URL:  TELEGRAM_WEBHOOK_URL   (ex: https://status.centralldark.com/bot/webhook)
+ * Bot API:      https://api.telegram.org (direto)
  *
  * PADRAO UNICO DE RESOLUCAO DE CONFLITO: este bot NÃO implementa lógica própria
  * de merge/conflito. Se um PR/preview precisar resolver conflito, aponta para
  * `.agents/skills/git-conflict-resolve-house-standard/SKILL.md` + `scripts/dependabot/resolve-conflicts.sh`.
  * Não criar segundo padrão, não V2/V3. Padrão se adapta à realidade atual.
- * Webhook Port: BOT_WEBHOOK_PORT       (padrão: 9500)
+ * Webhook Port: BOT_HEALTH_PORT       (padrão: 9500)
  * PM2:          CentralDark-HubBot  (hub.ecosystem.config.cjs)
  */
 
 'use strict';
 
 const http             = require('http');
-const crypto           = require('crypto');
 const fs               = require('fs');
 const path             = require('path');
-const { execSync }     = require('child_process');
+const { execSync, execFileSync } = require('child_process');
 
 // ── Carrega arquivos .env ──────────────────────────────────────────────────
 function loadEnv(p) {
@@ -57,12 +55,38 @@ const GH_TOKEN     = process.env.GITHUB_TOKEN || process.env.GH_TOKEN || '';
 const MCP_PORT     = process.env.MCP_PORT || '9100';
 const MCP_TOKEN    = process.env.MCP_CENTRALDARK_TOKEN || process.env.MCP_TOKEN || '';
 const TG_API       = 'https://api.telegram.org';
-const WEBHOOK_URL  = (process.env.TELEGRAM_WEBHOOK_URL || '').trim();
-const WEBHOOK_PORT = Number(process.env.BOT_WEBHOOK_PORT || '9500');
+const USE_HERMES_PRIMARY = process.env.BOT_USE_HERMES === '1';
+const HEALTH_PORT  = Number(process.env.BOT_HEALTH_PORT || process.env.BOT_HEALTH_PORT || '9500');
+const TELEGRAM_TRANSPORT = 'BOT_API_DIRECT_LONG_POLLING';
 
-// Secret derivado do token — estável entre restarts
-const WEBHOOK_SECRET = process.env.BOT_WEBHOOK_SECRET
-  || crypto.createHash('sha256').update(TOKEN + 'centraldark').digest('hex').slice(0, 32);
+function callHermesExecutor(history, systemPrompt, motivo = 'fallback') {
+  const prompt = [
+    systemPrompt,
+    '',
+    'Contexto recente:',
+    ...history.slice(-12).map(m => `${m.role}: ${typeof m.content === 'string' ? m.content : JSON.stringify(m.content)}`),
+    '',
+    `Responda em PT-BR. Motivo do fallback: ${motivo}.`,
+  ].join('\n');
+  try {
+    const hermesBin = '/usr/local/lib/hermes-agent/venv/bin/hermes';
+    const out = execFileSync(hermesBin, ['--in', '/root/CentralDark', '-z', prompt], {
+      encoding: 'utf8',
+      timeout: 180_000,
+      maxBuffer: 1024 * 1024,
+      env: {
+        HOME: '/root',
+        PATH: '/root/.local/bin:/usr/local/bin:/usr/bin:/bin',
+        TMPDIR: process.env.TMPDIR || '/root/.hermes/cache/scratch',
+        HERMES_QUIET: '1',
+      },
+    }).trim();
+    return out || '⚠️ Hermes executou, mas não retornou texto.';
+  } catch (e) {
+    return `❌ Hermes executor falhou: ${String(e.message || e).slice(0, 400)}`;
+  }
+}
+
 
 if (!TOKEN) {
   console.error('[Bot] ❌ TOKEN ausente. Configure SRVER1_BOT_TOKEN em secrets/telegram-alerts.env');
@@ -223,7 +247,7 @@ IDENTIDADE DO USUÁRIO — LEIA COM ATENÇÃO:
 • É acelerado, começa várias coisas — a IA ajuda a concluir e lembrar
 • Gosta de ser reconhecido quando chega: cumprimente, pergunte o que há de novo
 • Pode pedir para gravar coisas, registrar devedores, salvar contatos — a IA entende e registra
-• Frase chave de autorização: "PERMITO PIVETE" ou "PERMITE PIVETE"`.trim();
+• Frase chave de autorização: "PERMITO SEGREDO" ou "PERMITE PIVETE"`.trim();
 
 const AGENTS = {
   guardiao: {
@@ -352,16 +376,35 @@ function mdToHtml(text) {
   return s.trim();
 }
 
+function telegramPlainText(text) {
+  return String(text || '')
+    .replace(/<br\s*\/?\s*>/gi, '\n')
+    .replace(/<\/?(?:b|i|u|s|code|pre)>/gi, '')
+    .replace(/<a\s+href=["'][^"']+["']\s*>/gi, '')
+    .replace(/<\/a>/gi, '')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&amp;/g, '&');
+}
+
 async function send(chatId, text, buttons) {
   const body = { chat_id: chatId, text, parse_mode: 'HTML', disable_web_page_preview: true };
   if (buttons) body.reply_markup = { inline_keyboard: buttons };
-  return tg('sendMessage', body);
+  const sent = await tg('sendMessage', body);
+  if (sent) return sent;
+  const fallback = { chat_id: chatId, text: telegramPlainText(text), disable_web_page_preview: true };
+  if (buttons) fallback.reply_markup = { inline_keyboard: buttons };
+  return tg('sendMessage', fallback);
 }
 
 async function edit(chatId, msgId, text, buttons) {
   const body = { chat_id: chatId, message_id: msgId, text, parse_mode: 'HTML', disable_web_page_preview: true };
   if (buttons) body.reply_markup = { inline_keyboard: buttons };
-  return tg('editMessageText', body);
+  const edited = await tg('editMessageText', body);
+  if (edited) return edited;
+  const fallback = { chat_id: chatId, message_id: msgId, text: telegramPlainText(text), disable_web_page_preview: true };
+  if (buttons) fallback.reply_markup = { inline_keyboard: buttons };
+  return tg('editMessageText', fallback);
 }
 
 async function typing(chatId) {
@@ -519,7 +562,8 @@ async function executeTool(toolName, toolInput) {
 }
 
 async function callLLMWithTools(history, systemPrompt) {
-  if (!LLM_KEY) return '❌ ANTHROPIC_AUTH_TOKEN não configurado em secrets/anthropic.env.';
+  if (USE_HERMES_PRIMARY) return callHermesExecutor(history, systemPrompt, 'BOT_USE_HERMES=1');
+  if (!LLM_KEY) return callHermesExecutor(history, systemPrompt, 'ANTHROPIC_AUTH_TOKEN ausente');
   const url = LLM_BASE.endsWith('/v1') ? `${LLM_BASE}/messages` : `${LLM_BASE}/v1/messages`;
   let messages = history.slice(-20);
 
@@ -534,8 +578,8 @@ async function callLLMWithTools(history, systemPrompt) {
       d = await r.json().catch(() => ({}));
     } catch (e) { return `❌ LLM: ${e.message}`; }
 
-    if (d.error) return `❌ API: ${d.error.message || JSON.stringify(d.error)}`;
-    if (!d.content) return '❌ Resposta vazia da API.';
+    if (d.error) return callHermesExecutor(history, systemPrompt, `API Anthropic: ${d.error.message || JSON.stringify(d.error)}`);
+    if (!d.content) return callHermesExecutor(history, systemPrompt, `API vazia/status ${r?.status || 'desconhecido'}`);
 
     if (d.stop_reason !== 'tool_use') {
       const text = d.content.find(b => b.type === 'text');
@@ -557,7 +601,7 @@ async function callLLMWithTools(history, systemPrompt) {
 }
 
 // ── Painel ADM ─────────────────────────────────────────────────────────────
-let _botMode = 'iniciando';
+let _botMode = 'api-direta';
 
 function buildPanel(chatId) {
   const sess = getSession(chatId);
@@ -565,9 +609,7 @@ function buildPanel(chatId) {
   const cog  = sess.cogOverride ? COG_MODES[sess.cogOverride] : null;
   const ts   = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
 
-  const modeTag = _botMode === 'webhook'
-    ? '🔗 WEBHOOK ativo          '
-    : '🔄 POLLING ativo          ';
+  const modeTag = '🔄 API OFICIAL · POLLING    ';
 
   const cogLine = cog
     ? `  COG      ${cog.emoji} ${cog.nome.padEnd(21)}\n`
@@ -892,7 +934,8 @@ async function callLLMWithVision(history, systemPrompt, imageData, caption) {
 
 // ── LLM (Anthropic) ────────────────────────────────────────────────────────
 async function callLLM(history, systemPrompt) {
-  if (!LLM_KEY) return '❌ ANTHROPIC_AUTH_TOKEN não configurado em secrets/anthropic.env.';
+  if (USE_HERMES_PRIMARY) return callHermesExecutor(history, systemPrompt, 'BOT_USE_HERMES=1');
+  if (!LLM_KEY) return callHermesExecutor(history, systemPrompt, 'ANTHROPIC_AUTH_TOKEN ausente');
   const url = LLM_BASE.endsWith('/v1') ? `${LLM_BASE}/messages` : `${LLM_BASE}/v1/messages`;
   try {
     const r = await fetch(url, {
@@ -910,8 +953,8 @@ async function callLLM(history, systemPrompt) {
       }),
     });
     const d = await r.json().catch(() => ({}));
-    if (d.error) return `❌ API: ${d.error.message || JSON.stringify(d.error)}`;
-    return d.content?.[0]?.text || '❌ Resposta vazia da API';
+    if (d.error) return callHermesExecutor(history, systemPrompt, `API Anthropic: ${d.error.message || JSON.stringify(d.error)}`);
+    return d.content?.[0]?.text || callHermesExecutor(history, systemPrompt, `API vazia/status ${r?.status || 'desconhecido'}`);
   } catch (e) {
     return `❌ LLM: ${e.message}`;
   }
@@ -1201,7 +1244,7 @@ async function handleCallback(cq) {
   Cognição   ${cog ? cog.emoji + ' ' + cog.nome : '⬜ Padrão'}
   Histórico  ${sess.history.length} msgs
   Skills     ${skillsOk ? '✅ online' : '⚠️  offline'}
-  Webhook    ${WEBHOOK_URL || '— (polling ativo)'}
+  Transporte ${TELEGRAM_TRANSPORT}
 </pre>`,
         [[{ text: '🔙 Painel', callback_data: 'hub:main' }]]);
     }
@@ -1483,46 +1526,44 @@ async function processUpdate(u) {
   else if (u.message) await handleMessage(u.message);
 }
 
-// ── MODO WEBHOOK ───────────────────────────────────────────────────────────
-function startWebhookServer() {
+// ── MODO POLLING ───────────────────────────────────────────────────────────
+let _running = true;
+let _offset  = 0;
+let _lastTelegramOkAt = null;
+let _lastTelegramError = null;
+let _botUsername = null;
+
+function telegramHealthPayload(mode = 'api-direta') {
+  const now = Date.now();
+  const ageMs = _lastTelegramOkAt ? Math.max(0, now - _lastTelegramOkAt) : null;
+  const fresh = ageMs !== null && ageMs < 90_000;
+  return {
+    ok: fresh,
+    mode,
+    transport: TELEGRAM_TRANSPORT,
+    apiBase: TG_API,
+    bot: _botUsername ? `@${_botUsername}` : 'UNKNOWN',
+    lastTelegramOkAt: _lastTelegramOkAt ? new Date(_lastTelegramOkAt).toISOString() : null,
+    lastTelegramOkAgeMs: ageMs,
+    lastErrorPresent: Boolean(_lastTelegramError),
+  };
+}
+
+function startPollingHealthServer() {
   return new Promise((resolve, reject) => {
     const server = http.createServer((req, res) => {
       if (req.method === 'GET' && req.url === '/bot/health') {
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ ok: true, mode: 'webhook', bot: '@srver1bot' }));
-        return;
-      }
-      if (req.method === 'POST' && req.url === '/bot/webhook') {
-        const secret = req.headers['x-telegram-bot-api-secret-token'];
-        if (secret !== WEBHOOK_SECRET) {
-          console.warn('[Webhook] Token inválido — possível requisição não-Telegram');
-          res.writeHead(403).end('Forbidden');
-          return;
-        }
-        let body = '';
-        req.on('data', chunk => { body += chunk; });
-        req.on('end', async () => {
-          res.writeHead(200, { 'Content-Type': 'application/json' });
-          res.end('{"ok":true}');
-          try {
-            const update = JSON.parse(body);
-            await processUpdate(update);
-          } catch (e) {
-            console.error('[Webhook] Erro ao processar update:', e.message);
-          }
-        });
+        const body = telegramHealthPayload('api-direta');
+        res.writeHead(body.ok ? 200 : 503, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(body));
         return;
       }
       res.writeHead(404).end('Not found');
     });
     server.on('error', reject);
-    server.listen(WEBHOOK_PORT, '127.0.0.1', () => resolve(server));
+    server.listen(HEALTH_PORT, '127.0.0.1', () => resolve(server));
   });
 }
-
-// ── MODO POLLING ───────────────────────────────────────────────────────────
-let _running = true;
-let _offset  = 0;
 
 async function pollingLoop() {
   while (_running) {
@@ -1531,6 +1572,8 @@ async function pollingLoop() {
         offset: _offset, timeout: 30,
         allowed_updates: ['message', 'callback_query'],
       });
+      _lastTelegramOkAt = Date.now();
+      _lastTelegramError = null;
       if (updates?.length) {
         for (const u of updates) {
           _offset = u.update_id + 1;
@@ -1539,6 +1582,7 @@ async function pollingLoop() {
         }
       }
     } catch (e) {
+      _lastTelegramError = String(e?.message || e || 'poll_error');
       console.error('[Poll] error:', e.message);
       await new Promise(r => setTimeout(r, 5000));
     }
@@ -1555,6 +1599,9 @@ async function main() {
     process.exit(1);
   }
 
+  _lastTelegramOkAt = Date.now();
+  _lastTelegramError = null;
+  _botUsername = me.username || null;
   console.log(`🔮 @${me.username} online — CentralDark Hub Unificado v2 (Cockpit)`);
   if (ADMIN_ID) console.log(`[Bot] ✅ Admin reconhecido: ${ADMIN_ID}`);
   else          console.warn('[Bot] ⚠️  ADMIN_CHAT_ID não definido. Envie /start para descobrir seu chat_id.');
@@ -1583,36 +1630,22 @@ async function main() {
     }
   }
 
-  if (WEBHOOK_URL) {
-    console.log(`[Bot] 🔗 Tentando registrar webhook: ${WEBHOOK_URL}`);
-    try {
-      const ok = await tg('setWebhook', {
-        url: WEBHOOK_URL, secret_token: WEBHOOK_SECRET,
-        allowed_updates: ['message', 'callback_query'],
-        drop_pending_updates: false, max_connections: 40,
-      });
-      if (ok) {
-        const server = await startWebhookServer();
-        _botMode = 'webhook';
-        console.log(`[Bot] ✅ MODO WEBHOOK ativo — porta ${WEBHOOK_PORT} · URL: ${WEBHOOK_URL}`);
-        const shutdown = () => { _running = false; server.close(); process.exit(0); };
-        process.on('SIGTERM', shutdown);
-        process.on('SIGINT',  shutdown);
-        return;
-      }
-      console.warn('[Bot] ⚠️  setWebhook retornou falha — ativando fallback polling');
-    } catch (e) {
-      console.warn(`[Bot] ⚠️  Webhook falhou (${e.message}) — ativando fallback polling`);
-    }
-    await tg('deleteWebhook', { drop_pending_updates: false });
-  } else {
-    console.log('[Bot] ℹ️  TELEGRAM_WEBHOOK_URL não definida — modo polling direto');
+  console.log('[Bot] 🔄 Transporte canônico: Telegram Bot API oficial via long polling direto');
+  _botMode = 'api-direta';
+  console.log('[Bot] ✅ BOT_API_DIRECT_LONG_POLLING ativo');
+  let pollingHealthServer = null;
+  try {
+    pollingHealthServer = await startPollingHealthServer();
+    console.log(`[Bot] 🩺 Health polling ativo — porta ${HEALTH_PORT}`);
+  } catch (e) {
+    console.warn(`[Bot] ⚠️  Health polling indisponível (${e.message})`);
   }
-
-  _botMode = 'polling';
-  console.log('[Bot] 🔄 MODO POLLING ativo');
-  process.on('SIGTERM', () => { _running = false; });
-  process.on('SIGINT',  () => { _running = false; });
+  const shutdownPolling = () => {
+    _running = false;
+    if (pollingHealthServer) pollingHealthServer.close();
+  };
+  process.on('SIGTERM', shutdownPolling);
+  process.on('SIGINT', shutdownPolling);
   await pollingLoop();
 }
 

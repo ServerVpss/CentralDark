@@ -78,6 +78,35 @@ EVIDÊNCIA
   → PRÓXIMO PASSO (um só, claro)
 ```
 
+## Contrato humano de execução integral
+
+Este método é universal: não é preferência de um usuário específico. O sistema deve absorver complexidade operacional sempre que isso puder ser feito com segurança.
+
+```text
+INTENÇÃO HUMANA
+  → DETECTAR CONTEXTO
+  → ANTECIPAR FALHAS PREVISÍVEIS
+  → PREPARAR PREFLIGHT + CHECKPOINT + TIMEOUT + RETRY LIMITADO + FALLBACK + ROLLBACK
+  → EXECUTAR CONJUNTO COMPLETO
+  → VALIDAR
+  → FALHOU? DIAGNOSTICAR + CORRIGIR + FALLBACK + REMEDIR
+  → AINDA FALHOU? MOSTRAR ERRO EXATO, LOCAL EXATO, CAUSA/INCERTEZA, ROTAS TENTADAS E AÇÃO HUMANA EXATA
+  → HUMAN_FRONTIER? HUMANO FAZ SÓ O INEVITÁVEL NO LOCAL SEGURO
+  → RETOMAR AUTOMATICAMENTE
+  → PROVAR RESULTADO OU BLOCKER EXATO
+```
+
+Regras:
+- microcomando não é padrão; operação integral autocontida é o padrão quando tecnicamente possível;
+- se a máquina pode descobrir, o humano não deve adivinhar;
+- se a máquina pode corrigir com segurança, o humano não deve executar a correção manualmente;
+- diagnóstico deve apontar host/componente/serviço e, quando conhecido, arquivo/linha/função;
+- causa não provada permanece hipótese rotulada;
+- falha não resolvida deve listar o que já foi tentado e por que cada rota não resolveu;
+- segredo/senha/token entra no sistema de origem ou prompt seguro, não no chat;
+- após login/MFA/consentimento/permissão/pagamento/ação física/decisão humana inevitável, o executor retoma sozinho;
+- `UNKNOWN != PASS`; erro genérico sem localização e próximo passo acionável é FAIL.
+
 ## Writer unico por escopo
 
 - Leitores investigam em paralelo
@@ -102,6 +131,40 @@ INTENÇÃO
 ```
 
 Proibido: v2, v3, novo, final, copy, backup como fuga de reconciliação.
+
+### Measure Before Creation — medir antes de criar
+
+Generalização nomeada pelo CHEFE: antes de criar arquitetura, bot, rota, skill, memória, scheduler, workflow, app ou owner novo, medir o que já existe e provar se o gap é real.
+
+```text
+MEASURE_BEFORE_CREATION
+  → medir o que já existe
+  → provar se está vivo
+  → descobrir owner atual
+  → reutilizar antes de inventar
+  → corrigir o menor delta
+  → criar somente se o gap for real
+```
+
+```text
+REUSE_BEFORE_CREATE
++ UNKNOWN != PASS
++ DOCUMENTED != EXECUTED
++ REALITY = JUDGE
+= MEASURE_BEFORE_CREATION
+```
+
+Vínculo semântico compartilhado: `1Ts 5:21` → examinar tudo → medir/comparar/contraprovar → reter o que a realidade provar bom → melhorar o owner existente antes de criar outro.
+
+```text
+MEASURE_BEFORE_CREATION_SEMANTIC_REFERENCE="1Ts 5:21"
+MEASURE_BEFORE_CREATION_APPLIES_TO=ALL_CURRENT_AND_FUTURE_AGENTS
+VERSE_IS_SEMANTIC_CUE_NOT_PROOF=true
+IMPROVE_EXISTING_OWNER_BEFORE_NEW_OWNER=true
+```
+
+Exemplo provado: no Telegram, não criar bot novo; medir o owner existente; provar o estado real; preservar canal válido; corrigir somente o delta causal.
+
 
 ## Risco e autorização (fail-closed proporcional)
 
@@ -1642,6 +1705,37 @@ filepath = os.path.join(destino_abs, base_name)
 - Em técnico copiável: bloco de código, PT-BR, comando completo
 - Em explicação: duas camadas (SIGNIFICA → NA PRÁTICA → NOME TÉCNICO → PROVA → PRÓXIMO PASSO)
 
+## Skills absorvidas via Kimetsu/17 Respirações (2026-09-22)
+
+Esta seção registra o delta de absorção de skills locais (`E:\CentralDark\Pivete\skills\`) na biblioteca canônica via `regenerative-self-refinement-engine.md` / método Kimetsu/17 Respirações. Regra de ouro: NÃO copiar pasta inteira por nome — comparar, absorver somente o delta útil, manter owner canônico existente.
+
+### `screenpipe-hermes-integration` → `screenpipe-live-observer` (status: ABSORVIDO)
+- Classe: UNIQUE_DELTA (canônico cobre sensor/OCR/handoff; local traz procedimento prático de integração Screenpipe+Hermes via Omni Router não coberto pelo canônico)
+- O que foi absorvido: gatilhos de ativação, pré-requisitos, 6 passos de configuração do Omni Router + Screenpipe Provider, pitfalls, monitoração in-the-job, investigação forense (READ_ONLY/zero-mutation), status codes, leis não-negociáveis, o que não prova, Hermes Screenpipe Tool Gap
+- Onde: nova seção "Integração prática com Screenpipe + Hermes via Omni Router" inserida antes de "# Screenpipe Live Observer — sensor global da Casa" no presente arquivo
+- Proveniência preservada: skill local permanece em `E:\CentralDark\Pivete\skills\screenpipe-hermes-integration\` como registro histórico; não deletado, não promovido a owner separado
+- Regra aplicada: ZERO_BLIND_COPY=true; SAME_NAME != SAME_ENTITY; delta checado antes de absorver
+
+### `fable-loop` → `fable-loop` canônico (status: NÃO_ABSORVIDO — deixar local)
+- Classe: DUPLICATE_DIVERGED (same name + same archetype, conteúdo paralelo não-overlapping: local = contract de autoload SKILL.md coreano/inglês; canônico = método centraldark de calibração contínua PT-BR, experimental, READ_ONLY)
+- Decisão: NÃO fundir. Manter ambos. Canônico mantém owner SEGREDO/CHEFE e status experimental-read-only. Local permanece em `E:\CentralDark\Pivete\skills\fable-loop\` como referência de autoload alternativo. Documentar divergência, não criar espaço paralelo.
+
+### `brain-vault-watcher` → `brain-memory` canônico (status: NÃO_ABSORVIDO — GAP_NAO_PROVADO)
+- Classe: NOVEL + GAP_A_PROVEAR (local = watcher de sync de MOCs/indexes do Obsidian vault, com triggers, deduplicação, cron; canônico = layer de prefs via `brain_feedback` + `apply-evidence`, read-only, owner SEGREDO/CHEFE)
+- Gap a provar antes de absorver: demonstrar que o canônico `brain-memory` NÃO cobre sync de índices/MOCs do vault. Enquanto não provado: NÃO criar memory owner paralelo, NÃO duplicar.
+- Decisão: deixar local com documentação cruzada. Se no futuro a Casa precisar de watcher de vault, escrever no dono canônico existente ou no novo owner apropriado — não importar skill inteira.
+
+### `operational/*` (6 sub-skills) → `centraldark-operational-method` canônico (status: PARTIAL — deltas absorvidos abaixo)
+- Classe MIXTA após leitura:
+  - `absolute-lock-protection-protocol`: NOVEL/delta (procedimento de lock de arquivo compartilhado com trap, sleep antes de unlock, falha se stale > 30s)
+  - `autonomous-execution-mode`: DELTA_MENOR (subcomando autocontido para container; canônico já cobre "execução integral autocontida")
+  - `hermes-platform-access-control`: NOVEL (conexão autenticada Hermes Desktop + resultado final escondido)
+  - `intention-driven-workflow`: DELTA_MENOR (2 clocks, clock registra, outro executa; já coberto pelo canônico)
+  - `multi-agent-rendezvous`: DELTA_MENOR (rendezvous, results.txt, post-run merge)
+  - `operational-incident-response`: DELTA_MENOR (PASS/FAIL/UNKNOWN triage, SQLite audit, 1 file < 100 lines)
+- Decisão: absorver content DOIS content de operational no canônico existente (não criar skill separado); deixar local com docs cruzadas
+- Regra aplicada: REUSE_BEFORE_CREATE=true; ONE_OWNER_PER_CAPABILITY=true
+
 ## Referências
 
 - references/jeito-correto-pivete.md — metodo completo
@@ -1932,3 +2026,60 @@ REGRA: se a direção se perder, TRAVAR ANTES DE MUTAR NO ESCURO, recarregar SOU
 Ferramentas, webhooks e bots que queiram executar acao CentralDark podem declarar
 `centraldark_gate_required=true` e anexar `centraldark_gate` com os fatos do gate.
 Sem os fatos obrigatorios, o receptor deve falhar fechado.
+
+## Gatilho REGISTRA — sequência completa, não anotação
+
+`REGISTRA` é comando operacional do CHEFE, não pedido para apenas escrever documentação.
+
+```text
+REGISTRA_MEANS_COMMIT_PUSH_PR_SQUASH_MAIN=true
+REGISTRA
+→ medir CURRENT_MAIN_SHA/HEAD
+→ dedupe + owner existente
+→ menor MVP útil
+→ teste aplicável + contraprova
+→ commit
+→ push em branch filha
+→ abrir PR filha vinculada à #1562
+→ remeasure live
+→ blocker técnico recuperável: continuar até HUMAN_FRONTIER real
+→ conflito: usar git-conflict-resolve-house-standard
+→ SAME_HEAD gates fechados no HEAD atual
+→ SQUASH_CHILD_ONLY com expected_head_sha
+→ readback da main + novo CURRENT_MAIN_SHA
+→ DEPLOY_CAUSAL somente se o delta exigir runtime
+→ T1 quando houver deploy causal
+→ receipt no PR filho e na PR-mãe
+→ fixed point do delta
+→ voltar ao #1562
+```
+
+A `#1562` permanece aberta como PR-MÃE permanente, rendezvous/ledger e `DO_NOT_MERGE`. Ela não é veículo de código para main; os filhos passam por ela e registram o que foi absorvido.
+
+### Lapidação progressiva
+
+Não esperar somente “ouro/diamante”. Toda peça útil pode entrar como candidato e melhorar por iteração:
+
+```text
+IDEIA_UTIL
+→ MVP_MINIMO
+→ EXECUTAR/ABRIR
+→ TESTAR
+→ MEDIR
+→ ERRO? APRENDER + CORRIGIR
+→ SOBREVIVEU? PROMOVER
+→ REPETIR
+```
+
+Metáfora permitida: pepita, bronze, prata, ouro, diamante, qualquer “joia” = nível de maturidade. Nenhum rótulo substitui prova.
+
+```text
+USEFUL_BEATS_PERFECT_WAITING=true
+MVP_FIRST=true
+ITERATIVE_LAPIDATION=true
+ERROR_IS_LEARNING_ONLY_WITH_EVIDENCE=true
+FAILED_GATE_STAYS_OFF_MAIN=true
+CHEFE_SEES_MATERIAL_DECISION_OR_RESULT=true
+```
+
+O sistema deve construir sem paralisia, mas não baixar gates de segurança, segredo, produção, destruição ou falso-verde.

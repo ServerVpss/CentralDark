@@ -13,8 +13,8 @@ BASE_DIR = pathlib.Path(__file__).parent
 try:
     from dotenv import load_dotenv
     load_dotenv(BASE_DIR / ".env")
-except Exception:
-    pass
+except ImportError:
+    load_dotenv = None
 
 CONTAS_DIR = pathlib.Path("/root/CentralDark/contas")
 CONTAS_DIR.mkdir(parents=True, exist_ok=True)
@@ -26,7 +26,7 @@ GH_ID = os.environ.get("GITHUB_CLIENT_ID", "")
 GH_SECRET = os.environ.get("GITHUB_CLIENT_SECRET", "")
 GOOGLE_ID = os.environ.get("GOOGLE_CLIENT_ID", "")
 GOOGLE_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", "")
-PUBLIC_BASE = os.environ.get("CONTAS_PUBLIC_BASE", "https://status.centralldark.com")
+PUBLIC_BASE = os.environ.get("CONTAS_PUBLIC_BASE", "https://admin.centralldark.com/contas")
 
 if not TOKEN:
     raise RuntimeError("CONTAS_ADMIN_TOKEN ausente")

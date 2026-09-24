@@ -12,9 +12,11 @@ import { getCatalogSummary, CATALOG_VERSION } from "./tools/core/tools-catalog.j
 import { handleSkillsList, handleSkillManifest, handleSkillRaw, handleSkillInstaller, } from "./skills-public.js";
 import { correlationMiddleware, withCid } from "./correlation.js";
 import { healthDeep } from "./health-deep.js";
+import { getOperationalSnapshot } from "./operational-telemetry.js";
 import { startHubMissionConsumer, getHubMissionConsumerStatus } from "./hub-mission-consumer.js";
 import { providerAdminBridge } from "./provider-admin-bridge.js";
-import { adminGet, adminLogin, adminLogout, adminRotas, adminTools, adminLogsStream, adminTestarSse, adminBuscarLogs, adminMetricas, adminE2E, adminE2EPublico, bootstrapAdminLogCapture, getSseDiagnostics, } from "./admin.js";
+import { adminGet, adminGraphProxy, adminLogin, adminLogout, adminRotas, adminTools, adminLogsStream, adminTestarSse, adminBuscarLogs, adminMetricas, adminOperationalSnapshot, adminLinear, adminE2E, adminE2EPublico, bootstrapAdminLogCapture, getSseDiagnostics, } from "./admin.js";
+import { getLinearPublicStatus } from "./tools/integrations.js";
 // ─────────────────────── Handlers globais de crash (v2.3) ───────────────────────
 // Captura QUALQUER erro não tratado com stack trace completo antes do PM2 matar.
 process.on("uncaughtException", (err) => {
@@ -92,6 +94,11 @@ app.get("/health", (_req, res) => {
 });
 // V2: healthcheck profundo (Health Score consumido pelo painel /admin)
 app.get("/health/deep", healthDeep);
+app.get("/linear/status", async (_req, res) => {
+    res.setHeader("Cache-Control", "no-store");
+    const status = await getLinearPublicStatus();
+    res.status(status.ok ? 200 : 503).json(status);
+});
 // Um coração: heartbeat que monitora o próprio monitor. Público via api.centralldark.com.
 const HEART_FILE = "/root/CentralDark/logs/heartbeat-api.json";
 app.get("/heartbeat", (_req, res) => {
@@ -127,6 +134,7 @@ app.get("/heartbeat", (_req, res) => {
             eventosPorMinuto: sse.eventosPorMinuto,
             ultimoEventoHaMs: sse.ultimoEventoHaMs,
         },
+        operational,
         status_key: {
             source: "mcp-heartbeat",
             scope: "heart",
@@ -193,6 +201,7 @@ app.get("/token", somentePost("/token"));
 app.get("/register", somentePost("/register"));
 
 // ───────────────────────────── Painel /admin (NOC do Dono) ─────────────
+app.use("/admin/grafo", adminGraphProxy);
 app.get("/admin", adminGet);
 app.post("/admin/login", adminLogin);
 app.get("/admin/logout", adminLogout);
@@ -200,6 +209,8 @@ app.get("/admin/api/rotas", adminRotas);
 app.get("/admin/api/tools", adminTools);
 app.get("/admin/api/logs", adminBuscarLogs);
 app.get("/admin/api/metricas", adminMetricas);
+app.get("/admin/api/operational-snapshot", adminOperationalSnapshot);
+app.get("/admin/api/linear", adminLinear);
 app.post("/admin/api/e2e", adminE2E);
 app.get("/admin/api/e2e/publico", adminE2EPublico);
 app.get("/admin/logs/stream", adminLogsStream);
@@ -275,6 +286,8 @@ app.get("/openapi.json", (_req, res) => {
         "/tools.json": { get: { summary: "Manifesto publico do catalogo de tools", operationId: "toolsCatalog", responses: respostaJson } },
         "/health": { get: { summary: "Healthcheck", operationId: "health", responses: respostaJson } },
         "/health/deep": { get: { summary: "Healthcheck profundo", operationId: "healthDeep", responses: respostaJson } },
+        "/linear/status": { get: { summary: "Status seguro da integração Linear", operationId: "linearStatus", responses: respostaJson } },
+        "/heartbeat": { get: { summary: "Heartbeat + snapshot operacional determinístico", operationId: "heartbeat", responses: respostaJson } },
         "/status.json": { get: { summary: "Status dos conectores", operationId: "statusJson", responses: respostaJson } },
         "/register": { post: { summary: "OAuth 2.1 Dynamic Client Registration", operationId: "oauthRegister", responses: respostaJson } },
         "/authorize": { get: { summary: "OAuth 2.1 authorize (PKCE S256)", operationId: "oauthAuthorize", responses: { "200": { description: "Tela de consentimento" }, "302": { description: "Redirect com code" } } } },

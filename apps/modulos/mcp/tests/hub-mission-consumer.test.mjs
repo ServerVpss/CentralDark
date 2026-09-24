@@ -46,10 +46,19 @@ test("consumer reutiliza sanitizador canônico", () => {
 
 test("PostgREST é fail-closed, com timeout e sem project ref silencioso", () => {
   assert.match(consumer, /HUB_SUPABASE_SERVICE_ROLE_KEY/);
+  assert.match(consumer, /HUB_SUPABASE_PROJECT_REF/);
   assert.match(consumer, /HUB_MISSION_SUPABASE_URL_MISSING/);
+  assert.match(consumer, /HUB_MISSION_SUPABASE_URL_INVALID/);
+  assert.match(consumer, /HUB_MISSION_SUPABASE_PROJECT_MISMATCH/);
   assert.match(consumer, /AbortSignal\.timeout\(requestTimeoutMs\(\)\)/);
   assert.doesNotMatch(consumer, /DEFAULT_PROJECT_REF/);
   assert.doesNotMatch(consumer, /lyoigsqluyktoclwdaft/);
+});
+
+test("consumer server-side prende PostgREST ao schema public já autorizado", () => {
+  assert.match(consumer, /"Accept-Profile":\s*"public"/);
+  assert.match(consumer, /headers\["Content-Profile"\]\s*=\s*"public"/);
+  assert.match(consumer, /method\s*!==\s*"GET"\s*&&\s*method\s*!==\s*"HEAD"/);
 });
 
 test("revisão da missão é presa ao HEAD real do runtime antes do dispatch", () => {

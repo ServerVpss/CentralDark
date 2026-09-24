@@ -12,6 +12,7 @@ import { config } from "./config.js";
 import { log } from "./log.js";
 import { activeSseSubscribers, getSseDiagnostics } from "./admin.js";
 import { getHubMissionConsumerStatus } from "./hub-mission-consumer.js";
+import { getOperationalSnapshot } from "./operational-telemetry.js";
 
 const MCP_VERSION = "0.4.0-v2.2";
 const SERVICE_STARTED_AT = new Date().toISOString();
@@ -19,61 +20,6 @@ const SERVICE_STARTED_AT = new Date().toISOString();
 function checkSecret(name) {
     const v = process.env[name];
     return { name, present: Boolean(v && v.trim() && !v.startsWith("__MISSING_")) };
-}
-
-const TELEGRAM_TOKEN_KEYS = ["SRVER1_BOT_TOKEN", "TELEGRAM_BOT_TOKEN", "GUARDA_TELEGRAM_BOT_TOKEN"];
-
-function hasConfiguredSecretInFile(file, names) {
-    try {
-        const lines = fs.readFileSync(file, "utf8").split(/\r?\n/);
-        for (const line of lines) {
-            const match = line.trim().match(/^([A-Z0-9_]+)\s*=\s*(.*)$/);
-            if (!match || !names.includes(match[1])) continue;
-            const value = match[2].trim().replace(/^[\"']|[\"']$/g, "");
-            if (value && !value.startsWith("__MISSING_")) return true;
-        }
-    } catch {
-        return false;
-    }
-    return false;
-}
-
-function pm2ProcessAlive(name, pm2Home) {
-    try {
-        const dir = `${pm2Home}/pids`;
-        for (const file of fs.readdirSync(dir)) {
-            if (!file.startsWith(`${name}-`) || !file.endsWith(".pid")) continue;
-            const pid = Number(fs.readFileSync(`${dir}/${file}`, "utf8").trim());
-            if (!Number.isInteger(pid) || pid <= 0) continue;
-            try {
-                process.kill(pid, 0);
-                return true;
-            } catch {
-                // stale pid file; keep looking for the same canonical owner
-            }
-        }
-    } catch {
-        return false;
-    }
-    return false;
-}
-
-export function checkTelegramOwner({
-    repoRoot = config.vps?.repoPath || "/root/CentralDark",
-    pm2Home = process.env.PM2_HOME || "/root/.pm2",
-} = {}) {
-    const tokenConfigured = [
-        `${repoRoot}/secrets/telegram-alerts.env`,
-        `${repoRoot}/secrets/.env`,
-        `${repoRoot}/apps/bot-telegram/.env`,
-    ].some((file) => hasConfiguredSecretInFile(file, TELEGRAM_TOKEN_KEYS));
-    const processAlive = pm2ProcessAlive("CentralDark-HubBot", pm2Home);
-    return {
-        ok: tokenConfigured && processAlive,
-        owner: "CentralDark-HubBot",
-        tokenConfigured,
-        processAlive,
-    };
 }
 
 function checkDisk(dir) {
@@ -94,6 +40,43 @@ function checkDependencia(nome, ok, detalhe) {
     return { nome, ok, detalhe };
 }
 
+async function checkTelegramSubsystem() {
+    const tokenPresent = checkSecret("SRVER1_BOT_TOKEN").present
+        || checkSecret("TELEGRAM_BOT_TOKEN").present
+        || checkSecret("GUARDA_TELEGRAM_BOT_TOKEN").present
+        || checkSecret("TELEGRAM_TOKEN").present;
+    try {
+        const response = await fetch("http://127.0.0.1:9500/bot/health", {
+            signal: AbortSignal.timeout(1_500),
+        });
+        const payload = await response.json().catch(() => ({}));
+        const ok = response.ok && payload?.ok === true;
+        return {
+            ok,
+            detalhe: {
+                endpoint: "http://127.0.0.1:9500/bot/health",
+                reachable: true,
+                mode: payload?.mode || null,
+                bot: payload?.bot || null,
+                lastTelegramOkAt: payload?.lastTelegramOkAt || null,
+                lastTelegramOkAgeMs: payload?.lastTelegramOkAgeMs ?? null,
+                lastErrorPresent: payload?.lastErrorPresent === true,
+                localTokenPresent: tokenPresent,
+            },
+        };
+    } catch {
+        return {
+            ok: tokenPresent,
+            detalhe: {
+                endpoint: "http://127.0.0.1:9500/bot/health",
+                reachable: false,
+                mode: tokenPresent ? "local-token-fallback" : null,
+                localTokenPresent: tokenPresent,
+            },
+        };
+    }
+}
+
 export async function healthDeep(req, res) {
     const t0 = performance.now();
     try {
@@ -105,10 +88,10 @@ export async function healthDeep(req, res) {
         const sse = getSseDiagnostics();
         const sseAtivas = activeSseSubscribers();
         const hubConsumer = getHubMissionConsumerStatus();
+        const operational = getOperationalSnapshot();
 
-        // Dependências externas: Telegram é observado no owner real, sem copiar secret para o MCP.
-        const telegramOwner = checkTelegramOwner();
-        const telegramTokenOk = telegramOwner.ok;
+        // Dependências externas (checagem leve — sem network)
+        const telegram = await checkTelegramSubsystem();
         const oauthOk = checkSecret("MCP_SESSION_SECRET").present
             && checkSecret("MCP_ADMIN_PASSWORD").present;
         const githubOk = checkSecret("GITHUB_TOKEN").present
@@ -135,12 +118,7 @@ export async function healthDeep(req, res) {
         const dependencias = [
             checkDependencia("mcp_catalog", summary.toolCount > 0, { toolCount: summary.toolCount }),
             checkDependencia("oauth", oauthOk, { secretsPresentes: oauthOk }),
-            checkDependencia("telegram_bot", telegramTokenOk, {
-                owner: telegramOwner.owner,
-                processAlive: telegramOwner.processAlive,
-                tokenConfigured: telegramOwner.tokenConfigured,
-                tokenPresente: telegramOwner.tokenConfigured,
-            }),
+            checkDependencia("telegram_bot", telegram.ok, telegram.detalhe),
             checkDependencia("github_api", githubOk, { tokenPresente: githubOk }),
             checkDependencia("hub_mission_consumer", hubConsumerOk, {
                 enabled: hubConsumer.enabled,
@@ -185,6 +163,7 @@ export async function healthDeep(req, res) {
             sseAtivas,
             sse,
             hubMissionConsumer: hubConsumer,
+            operationalSnapshot: operational,
             dependencias,
             checks: dependencias.map(d => ({ key: d.nome, ok: d.ok, detail: d.detalhe })),
             elapsedMs: Math.round(performance.now() - t0),

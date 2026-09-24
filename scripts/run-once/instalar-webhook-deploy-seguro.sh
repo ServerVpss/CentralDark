@@ -36,20 +36,47 @@ netflix_success "Node encontrado"
 netflix_step 2 6 "Preparando secret local fora do repo"
 mkdir -p "$(dirname "$SECRET_FILE")"
 chmod 700 "$(dirname "$SECRET_FILE")" 2>/dev/null || true
+resolve_reusable_webhook_secret() {
+  for name in GITHUB_WEBHOOK_SECRET CENTRALDARK_WEBHOOK_HMAC DEPLOY_CENTRALDARK; do
+    value="${!name:-}"
+    if [ -n "$value" ]; then
+      printf '%s' "$value"
+      return 0
+    fi
+  done
+  return 1
+}
+
+REUSABLE_SECRET="$(resolve_reusable_webhook_secret || true)"
+
 if [ ! -f "$SECRET_FILE" ]; then
   {
     printf '# CentralDark webhook deploy - arquivo local fora do repo\n'
-    printf 'GITHUB_WEBHOOK_SECRET=%s\n' "$(openssl rand -hex 32)"
+    if [ -n "$REUSABLE_SECRET" ]; then
+      printf 'GITHUB_WEBHOOK_SECRET=%s\n' "$REUSABLE_SECRET"
+    else
+      printf 'GITHUB_WEBHOOK_SECRET=%s\n' "$(openssl rand -hex 32)"
+    fi
   } >"$SECRET_FILE"
   chmod 600 "$SECRET_FILE" 2>/dev/null || true
-  netflix_success "Secret local criado sem imprimir valor"
+  if [ -n "$REUSABLE_SECRET" ]; then
+    netflix_success "Secret existente reutilizado sem imprimir valor"
+  else
+    netflix_success "Secret criado somente apos nenhum equivalente ser encontrado"
+  fi
 elif ! grep -q '^GITHUB_WEBHOOK_SECRET=' "$SECRET_FILE"; then
-  printf 'GITHUB_WEBHOOK_SECRET=%s\n' "$(openssl rand -hex 32)" >>"$SECRET_FILE"
+  if [ -n "$REUSABLE_SECRET" ]; then
+    printf 'GITHUB_WEBHOOK_SECRET=%s\n' "$REUSABLE_SECRET" >>"$SECRET_FILE"
+    netflix_success "Secret existente reutilizado e ligado ao webhook"
+  else
+    printf 'GITHUB_WEBHOOK_SECRET=%s\n' "$(openssl rand -hex 32)" >>"$SECRET_FILE"
+    netflix_success "Secret criado somente apos nenhum equivalente ser encontrado"
+  fi
   chmod 600 "$SECRET_FILE" 2>/dev/null || true
-  netflix_success "Secret local adicionado sem imprimir valor"
 else
-  netflix_success "Secret local ja existe"
+  netflix_success "Secret local ja existe; REUSE_BEFORE_CREATION"
 fi
+unset REUSABLE_SECRET
 
 netflix_step 3 6 "Instalando dependencias se necessario"
 if [ -f "${ROOT}/package-lock.json" ]; then
