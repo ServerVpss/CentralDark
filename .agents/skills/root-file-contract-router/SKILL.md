@@ -82,3 +82,16 @@ ONE_REGISTRY_ONLY=true (não criar segundo registro paralelo)
 ## Integração com library-index.json
 
 O `library-index.json` em `.agents/` referencia este skill e o ROOT-FILE-REGISTRY.json como canonical_source. Qualquer extensão do registro deve ser refletida em ambos.
+
+## Gate mensurável das 5 superfícies
+
+Exigir antes de declarar íntegro:
+
+ROOT_FILE_REGISTRY_MD=PASS
+ROOT_FILE_REGISTRY_JSON=PASS
+ROOT_FILE_BINDING_YAML=PASS
+ROOT_FILE_ROUTER_SKILL=PASS
+ROOT_FILE_PRECOMMIT_HOOK=PASS
+LIBRARY_INDEX_V1_2_0=PASS
+
+Falhou qualquer linha: corrigir a própria superfície; não criar registro paralelo; ONE_REGISTRY_ONLY=true.

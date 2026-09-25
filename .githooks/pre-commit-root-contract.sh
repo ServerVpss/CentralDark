@@ -1,75 +1,86 @@
 #!/usr/bin/env bash
-# .githooks/pre-commit-root-contract.sh
-# Superfície 5 de 5: Git hook que impede arquivo raiz fora do contrato.
-# Instalar: git config core.hooksPath .githooks
-#
-# Owner: SOL | Autoridade: SEGREDO/CHEFE
-# Regra: NEW_ROOT_FILE_REQUIRES_REGISTRY=true
-
 set -euo pipefail
 
-REGISTRY="ROOT-FILE-REGISTRY.json"
+MD="ROOT-FILE-REGISTRY.md"
+JSON_REG="ROOT-FILE-REGISTRY.json"
+YAML_BINDING="root-file-binding.yaml"
+SKILL=".agents/skills/root-file-contract-router/SKILL.md"
+HOOK=".githooks/pre-commit-root-contract.sh"
+LIBRARY=".agents/library-index.json"
 
-# Só checar se o registry existe (pode estar sendo criado neste commit)
-if [ ! -f "$REGISTRY" ]; then
-  exit 0
-fi
+fail() {
+  echo "$1=FAIL" >&2
+  echo "ROOT_FILE_CONTRACT=FAIL_CLOSED" >&2
+  exit 1
+}
 
-# Pegar arquivos staged que estão na raiz (sem / no path)
-ROOT_FILES=$(git diff --cached --name-only --diff-filter=A | grep -v '/' || true)
+[ -f "$MD" ] || fail ROOT_FILE_REGISTRY_MD
+echo "ROOT_FILE_REGISTRY_MD=PASS"
 
-if [ -z "$ROOT_FILES" ]; then
-  exit 0
-fi
+[ -f "$JSON_REG" ] || fail ROOT_FILE_REGISTRY_JSON
+python3 -m json.tool "$JSON_REG" >/dev/null 2>&1 || fail ROOT_FILE_REGISTRY_JSON
+echo "ROOT_FILE_REGISTRY_JSON=PASS"
 
-# Arquivos que não precisam de registro (dotfiles padrão, diretórios git)
-EXEMPT_PATTERNS=(
-  '^\.'           # dotfiles (.gitignore, .env, etc)
-  '^package'      # package.json, package-lock.json
-  '^node_modules' # should be gitignored but just in case
-)
+[ -f "$YAML_BINDING" ] || fail ROOT_FILE_BINDING_YAML
+python3 - "$YAML_BINDING" <<'PY' >/dev/null 2>&1 || exit 41
+import sys,yaml
+y=yaml.safe_load(open(sys.argv[1],encoding='utf-8'))
+assert y['enforcement']['json_registry']=='ROOT-FILE-REGISTRY.json'
+assert y['enforcement']['markdown_doc']=='ROOT-FILE-REGISTRY.md'
+assert y['enforcement']['skill']=='.agents/skills/root-file-contract-router/SKILL.md'
+assert y['enforcement']['git_hook']=='.githooks/pre-commit-root-contract.sh'
+PY
+rc=$?
+[ "$rc" -eq 0 ] || fail ROOT_FILE_BINDING_YAML
+echo "ROOT_FILE_BINDING_YAML=PASS"
 
-ERRORS=0
+[ -f "$SKILL" ] || fail ROOT_FILE_ROUTER_SKILL
+grep -q 'REGISTRY_JSON=ROOT-FILE-REGISTRY.json' "$SKILL" || fail ROOT_FILE_ROUTER_SKILL
+grep -q 'YAML_BINDING=root-file-binding.yaml' "$SKILL" || fail ROOT_FILE_ROUTER_SKILL
+grep -q 'GIT_HOOK=.githooks/pre-commit-root-contract.sh' "$SKILL" || fail ROOT_FILE_ROUTER_SKILL
+echo "ROOT_FILE_ROUTER_SKILL=PASS"
 
-for FILE in $ROOT_FILES; do
-  # Pular exempts
-  SKIP=false
-  for PATTERN in "${EXEMPT_PATTERNS[@]}"; do
-    if echo "$FILE" | grep -qE "$PATTERN"; then
-      SKIP=true
-      break
+[ -x "$HOOK" ] || fail ROOT_FILE_PRECOMMIT_HOOK
+grep -q 'NEW_ROOT_FILE_REQUIRES_REGISTRY=true' "$SKILL" || fail ROOT_FILE_PRECOMMIT_HOOK
+echo "ROOT_FILE_PRECOMMIT_HOOK=PASS"
+
+[ -f "$LIBRARY" ] || fail LIBRARY_INDEX_V1_2_0
+python3 - "$LIBRARY" <<'PY' >/dev/null 2>&1 || exit 42
+import json,sys
+lib=json.load(open(sys.argv[1],encoding='utf-8'))
+assert lib.get('version')=='1.2.0'
+paths={x.get('path') for x in lib.get('canonical_sources',[])}
+for p in ['ROOT-FILE-REGISTRY.md','ROOT-FILE-REGISTRY.json','root-file-binding.yaml']:
+    assert p in paths
+skills={x.get('id'):x.get('path') for x in lib.get('skills',[])}
+assert skills.get('root-file-contract-router')=='.agents/skills/root-file-contract-router/SKILL.md'
+contract=lib.get('root_file_contract',{})
+assert contract.get('version')=='1.2.0'
+assert contract.get('surfaces',{}).get('hook')=='.githooks/pre-commit-root-contract.sh'
+PY
+rc=$?
+[ "$rc" -eq 0 ] || fail LIBRARY_INDEX_V1_2_0
+echo "LIBRARY_INDEX_V1_2_0=PASS"
+
+ROOT_FILES="$(git diff --cached --name-only --diff-filter=A | grep -v '/' || true)"
+if [ -n "$ROOT_FILES" ]; then
+  ERRORS=0
+  for FILE in $ROOT_FILES; do
+    case "$FILE" in .*|package*) continue ;; esac
+    if ! python3 - "$JSON_REG" "$FILE" <<'PY' >/dev/null 2>&1
+import json,sys
+reg=json.load(open(sys.argv[1],encoding='utf-8'))
+target=sys.argv[2]
+for cat in reg.get('categories',{}).values():
+    if target in cat.get('files',{}): raise SystemExit(0)
+raise SystemExit(1)
+PY
+    then
+      echo "BLOCKED: root file não registrado: $FILE" >&2
+      ERRORS=$((ERRORS+1))
     fi
   done
-
-  if [ "$SKIP" = true ]; then
-    continue
-  fi
-
-  # Verificar se o arquivo está no registry
-  if ! python3 -c "
-import json, sys
-with open('$REGISTRY') as f:
-    reg = json.load(f)
-target = '$FILE'
-for cat in reg.get('categories', {}).values():
-    files = cat.get('files', {})
-    if target in files:
-        sys.exit(0)
-sys.exit(1)
-" 2>/dev/null; then
-    echo "❌ BLOQUEADO: '$FILE' não está registrado em ROOT-FILE-REGISTRY.json"
-    echo "   → Adicione uma entrada antes de commitar."
-    echo "   → Skill: .agents/skills/root-file-contract-router/SKILL.md"
-    ERRORS=$((ERRORS + 1))
-  fi
-done
-
-if [ "$ERRORS" -gt 0 ]; then
-  echo ""
-  echo "🛑 $ERRORS arquivo(s) raiz sem registro no contrato."
-  echo "   Registre no ROOT-FILE-REGISTRY.json + ROOT-FILE-REGISTRY.md"
-  echo "   antes de commitar."
-  exit 1
+  [ "$ERRORS" -eq 0 ] || exit 1
 fi
 
-exit 0
+echo "ROOT_FILE_CONTRACT=PASS"

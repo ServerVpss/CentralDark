@@ -111,3 +111,17 @@ Cada router aponta para `LEIA-ME-IA.md` como core. NÃO define identidade, autor
 3. **Core files** → imutáveis sem aprovação do SEGREDO/CHEFE
 4. **Legacy files** → scheduled para limpeza; não devem receber código novo
 5. **Pre-commit hook** → bloqueia arquivo raiz não registrado
+
+## Gate de integridade cruzada — 5 superfícies + Library Index
+
+Estado esperado:
+
+ROOT_FILE_REGISTRY_MD=PASS
+ROOT_FILE_REGISTRY_JSON=PASS
+ROOT_FILE_BINDING_YAML=PASS
+ROOT_FILE_ROUTER_SKILL=PASS
+ROOT_FILE_PRECOMMIT_HOOK=PASS
+LIBRARY_INDEX_V1_2_0=PASS
+
+O juiz executável é `.githooks/pre-commit-root-contract.sh`.
+Ele valida presença, parse, referências cruzadas, library-index v1.2.0 e bloqueia novo arquivo raiz não registrado.

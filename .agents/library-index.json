@@ -564,5 +564,26 @@
         "critical": true
       }
     ]
+  },
+  "root_file_contract": {
+    "schema": "centraldark.root-file-registry-integrity.v1",
+    "version": "1.2.0",
+    "status": "ACTIVE",
+    "surfaces": {
+      "markdown": "ROOT-FILE-REGISTRY.md",
+      "json": "ROOT-FILE-REGISTRY.json",
+      "yaml": "root-file-binding.yaml",
+      "skill": ".agents/skills/root-file-contract-router/SKILL.md",
+      "hook": ".githooks/pre-commit-root-contract.sh"
+    },
+    "expected_receipt": [
+      "ROOT_FILE_REGISTRY_MD=PASS",
+      "ROOT_FILE_REGISTRY_JSON=PASS",
+      "ROOT_FILE_BINDING_YAML=PASS",
+      "ROOT_FILE_ROUTER_SKILL=PASS",
+      "ROOT_FILE_PRECOMMIT_HOOK=PASS",
+      "LIBRARY_INDEX_V1_2_0=PASS"
+    ],
+    "fail_closed": true
   }
 }
