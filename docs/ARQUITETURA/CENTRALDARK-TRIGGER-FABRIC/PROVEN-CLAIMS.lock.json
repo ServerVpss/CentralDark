@@ -297,6 +297,66 @@
         "result_match_policy": "RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH",
         "raw_output_byte_equality_required": false
       }
+    },
+    "META_LUPA_PR410_SCOPE_AND_POINT_FIXED_GUARD_PATH": {
+      "claim_key": "META_LUPA_PR410_SCOPE_AND_POINT_FIXED_GUARD_PATH",
+      "owner": ".agents/skills/meta-lupa",
+      "state": "SEALED_PROVEN",
+      "proof_target": "PR410_SCOPE_PROVENANCE_AND_POINT_FIXED_AUTOLUPA_GUARD",
+      "evidence_ref": "PR_410_MERGE_061b6822 + CORRECTION_33793caf + LUPA_CONFORMANCE_RUN_36125690934",
+      "observed_at": "2026-09-25T10:45:24Z",
+      "counterproof": "PASS",
+      "receipt_ref": "docs/CONSCIENCIA/APRENDIZADOS.md#4-auditoria-nao-vale-sem-head_sha-declarado-4-escopos-3-lacunas-falsas-no-pr-410",
+      "residual_risk": [
+        "META_LUPA_ENGINE_STILL_ACCEPTS_POINT_FIXED_WITHOUT_AUTOLUPA_AT_WRITE_TIME",
+        "CI_GUARDRAIL_IS_CURRENT_ENFORCEMENT_OWNER",
+        "TWO_LEGACY_FINALS_REMAIN_APPEND_ONLY_WITH_50_XP_DEBT_EXPOSED"
+      ],
+      "proven_path_replay": {
+        "marker": "PROVEN_PATH_REPLAY_LOCK",
+        "dependency_fingerprint": "d644c8f4ef5ca2ee596a6c87d423b0a80197572df9db90d6de9ae4e8176a4411",
+        "execution_commands": [
+          "measure current main SHA and bind every absence/existence claim to the same ref",
+          "fetch PR #410 metadata and confirm merged=true with merge commit 061b6822e06c2bd81186f8dbaf982724f01fd8e0",
+          "verify Meta-Lupa resources relative to .agents/skills/meta-lupa at the bound ref",
+          "run python testes/test_selo_ponto_fixo.py",
+          "run python guardrails/validar_selo_ponto_fixo.py",
+          "verify lupa-conformance executes test_lupa.py, guardrail and discriminating regression on the same HEAD",
+          "compare result schema and enforcement effect without rewriting append-only ledger history"
+        ],
+        "proof_commands": [
+          "resource existence is checked with explicit ref/HEAD instead of unscoped find",
+          "PR #410 receipt exposure fix remains reachable",
+          "13 discriminating regression cases pass",
+          "new point-fixed claim without AutoLupa fails closed",
+          "current ledger reports no new violations while two legacy violations remain visible",
+          "same-head lupa-conformance completes successfully"
+        ],
+        "expected_results": [
+          "PR410_MERGED=true",
+          "FALSE_ABSENCE_FINDINGS=REJECTED_BY_REF_SCOPING",
+          "RECEIPT_EXPOSURE_FIX=PASS",
+          "POINT_FIXED_WITHOUT_AUTOLUPA=BLOCKED_BY_CI_GUARDRAIL",
+          "REGRESSION_TOTAL=13",
+          "LEGACY_VIOLATIONS=2",
+          "LEGACY_XP_DEBT=50",
+          "NEW_VIOLATIONS=0",
+          "LUPA_CONFORMANCE_SAME_HEAD=PASS",
+          "LEDGER_HISTORY_REWRITTEN=false"
+        ],
+        "environment_bindings": [
+          "CURRENT_MAIN_SHA",
+          "META_LUPA_SKILL_ROOT",
+          "META_LUPA_LEDGER_PATH",
+          "PR_410_REF",
+          "LUPA_CONFORMANCE_RUN_ID"
+        ],
+        "self_test_command": "same-ref PR #410 metadata + Meta-Lupa guardrail/regression + same-head lupa-conformance",
+        "self_test_result": "PASS_MAIN_18f64e59_RUN_36125690934_STEPS_GUARDRAIL_AND_REGRESSION",
+        "result_match_policy": "RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH",
+        "raw_output_byte_equality_required": false
+      },
+      "lock_key": "fc0298741abdb39d8b02e2712fdc2359575139a4f28d4c567e2c47d0c8436f82"
     }
   }
 }
