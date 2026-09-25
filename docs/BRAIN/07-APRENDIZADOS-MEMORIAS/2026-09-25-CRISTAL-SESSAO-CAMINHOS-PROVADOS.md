@@ -271,3 +271,63 @@ CONNECTOR_DOWN_ONCE
 ```
 
 Conclusão: `LOCAL_ONLY_CHANGE_FORBIDDEN=true`; mudança material deve terminar em commit/push/receipt no #1562 ou PR filho equivalente, salvo blocker localizado.
+
+## T4 — fixed point vivo da Casa via Tailscale + RDC online
+
+Observed at: `2026-09-25T18:34-03:00`
+
+CURRENT medido por dois sensores independentes:
+
+```text
+REMOTE_DESKTOP_COMMANDER_DEVICE=SEGREDO
+RDC_STATUS=ONLINE
+TAILSCALE_SEGREDO_IP=100.123.93.25
+VPS_TAILSCALE_PING=PASS
+VPS_TO_SEGREDO_TCP_3389=OPEN
+VPS_TO_SEGREDO_TCP_22=CLOSED_OR_FILTERED
+VPS_TO_SEGREDO_TCP_9100=CLOSED_OR_FILTERED
+VPS_TO_SEGREDO_TCP_8098=CLOSED_OR_FILTERED
+VPS_TO_SEGREDO_TCP_3030=CLOSED_OR_FILTERED
+VPS_TO_SEGREDO_TCP_3000=CLOSED_OR_FILTERED
+VPS_TO_SEGREDO_TCP_8080=CLOSED_OR_FILTERED
+VPS_TO_SEGREDO_TCP_8787=CLOSED_OR_FILTERED
+VPS_TO_SEGREDO_TCP_9000=CLOSED_OR_FILTERED
+```
+
+Contraprova aplicada:
+
+```text
+RDP_OPEN != HOST_FULLY_EXPOSED
+CLOSED_OR_FILTERED != SERVICE_STOPPED
+RDC_ONLINE + TAILSCALE_PING_PASS + TCP_3389_OPEN
+→ CASA_ACESSIVEL_PELA_VPS=PASS
+→ CORREDOR_PROVADO=VPS → TAILSCALE → SEGREDO → RDP/RDC
+```
+
+Delta material em relação ao cristal anterior:
+
+```text
+ANTES: Windows Remote Desktop Commander = OFFLINE/UNKNOWN
+AGORA: SEGREDO RDC = ONLINE
+DIVERGENCE=RDC_RUNTIME_STATE_CHANGED
+ACTION=REVALIDATE_AFFECTED_CONE_ONLY
+RESULT=PASS
+```
+
+Receita executável para replay:
+
+```text
+1. tailscale ping 100.123.93.25
+2. provar pelo menos um canal real de entrada da Casa
+3. medir portas relevantes a partir da VPS
+4. não inferir serviço parado a partir de CLOSED_OR_FILTERED
+5. confirmar RDC/agent local como segundo sensor quando disponível
+6. comparar resultado/formato/efeito com este T4
+7. se iguais → REUTILIZA_CRISTAL
+8. se divergirem → DELTA_NOVO e revalidar somente o cone afetado
+```
+
+NEXT_CURSOR:
+
+`preservar Tailscale como espinha; evoluir serviços/bridges por cima; não reabrir arquitetura-base enquanto fingerprint e provas deste T4 permanecerem equivalentes`.
+
