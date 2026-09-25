@@ -498,3 +498,15 @@ test("Dependabot workflow_run não faz fan-out em main ou PR humano", async () =
     /^\s*github\.event_name == 'workflow_run' \|\|$/m,
   );
 });
+
+
+test("Trigger Fabric obrigatório dispara em todo PR para main", async () => {
+  const workflow = await readFile(
+    new URL("../.github/workflows/trigger-fabric-package.yml", import.meta.url),
+    "utf8",
+  );
+  const pullBlock = workflow.match(/\n  pull_request:\n([\s\S]*?)\n  push:\n/);
+  assert.ok(pullBlock, "pull_request block ausente");
+  assert.match(pullBlock[1], /branches:\s*\[main\]/);
+  assert.doesNotMatch(pullBlock[1], /\bpaths:/);
+});
