@@ -421,7 +421,13 @@ def proven_path_replay_decision(entry: dict, current_fingerprint: str | None) ->
             "action": "NO_PROVEN_PATH_RECIPE",
             "reinterpret_from_zero": False,
         }
-    if current_fingerprint and sealed_fingerprint and current_fingerprint != sealed_fingerprint:
+    if not sealed_fingerprint or sealed_fingerprint == "UNKNOWN" or not current_fingerprint:
+        return {
+            "verdict": "UNKNOWN",
+            "action": "FINGERPRINT_REQUIRED",
+            "reinterpret_from_zero": False,
+        }
+    if current_fingerprint != sealed_fingerprint:
         return {
             "verdict": "REVALIDATE",
             "action": "REVALIDATE_AFFECTED_CONE_ONLY",
@@ -525,15 +531,20 @@ def cmd_self_test(args: argparse.Namespace) -> int:
     same = proven_path_replay_decision(good_entry, "fp-1")
     changed = proven_path_replay_decision(good_entry, "fp-2")
     missing = proven_path_replay_decision({"owner": "owner"}, "fp-1")
+    absent_current = proven_path_replay_decision(good_entry, None)
+    absent_seal = proven_path_replay_decision({"proven_path_replay": {"marker": "PROVEN_PATH_REPLAY_LOCK"}}, "fp-1")
     assert same["verdict"] == "PASS"
     assert same["action"] == "REUSE_PROVEN_PATH_NO_RETHINK"
     assert same["reinterpret_from_zero"] is False
     assert changed["verdict"] == "REVALIDATE"
     assert changed["action"] == "REVALIDATE_AFFECTED_CONE_ONLY"
     assert missing["verdict"] == "UNKNOWN"
+    assert absent_current["verdict"] == "UNKNOWN"
+    assert absent_current["action"] == "FINGERPRINT_REQUIRED"
+    assert absent_seal["verdict"] == "UNKNOWN"
     print(json.dumps({
         "status": "PASS",
-        "tests": 6,
+        "tests": 9,
         "marker": "PROVEN_PATH_REPLAY_LOCK",
         "same_fingerprint": same["action"],
         "changed_fingerprint": changed["action"],
