@@ -7,6 +7,8 @@ ROOT="${CENTRALDARK_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)}"
 GH_BIN="${GH_BIN:-gh}"
 GIT_BIN="${GIT_BIN:-git}"
 HOME_DIR="${HOME:-/root}"
+CANONICAL_HOME="${CENTRALDARK_CANONICAL_HOME:-/root}"
+CANONICAL_GH_CONFIG_DIR="${CENTRALDARK_GH_CONFIG_DIR:-${CANONICAL_HOME}/.config/gh}"
 
 echo "CENTRALDARK_OPERATOR_PREFLIGHT=v1"
 echo "ROOT=${ROOT}"
@@ -15,15 +17,28 @@ echo "ROOT=${ROOT}"
 if command -v "${GH_BIN}" >/dev/null 2>&1 || [ -x "${GH_BIN}" ]; then
   if "${GH_BIN}" auth status --hostname github.com >/dev/null 2>&1; then
     GH_LOGIN="$("${GH_BIN}" api user -q .login 2>/dev/null || true)"
+    GH_AUTH="PASS"
     echo "GH_AUTH=PASS"
+    echo "GH_AUTH_CONTEXT=CURRENT_HOME"
     echo "GH_LOGIN=${GH_LOGIN:-UNKNOWN}"
     echo "GH_LOGIN_ACTION=SKIP_ALREADY_AUTHENTICATED"
+  elif [ -f "${CANONICAL_GH_CONFIG_DIR}/hosts.yml" ]     && GH_CONFIG_DIR="${CANONICAL_GH_CONFIG_DIR}" "${GH_BIN}" auth status --hostname github.com >/dev/null 2>&1; then
+    GH_LOGIN="$(GH_CONFIG_DIR="${CANONICAL_GH_CONFIG_DIR}" "${GH_BIN}" api user -q .login 2>/dev/null || true)"
+    GH_AUTH="PASS"
+    echo "GH_AUTH=PASS"
+    echo "GH_AUTH_CONTEXT=CANONICAL_GH_CONFIG_DIR"
+    echo "GH_CONTEXT_MISMATCH=CURRENT_HOME_DIFFERS_FROM_CANONICAL"
+    echo "GH_LOGIN=${GH_LOGIN:-UNKNOWN}"
+    echo "GH_LOGIN_ACTION=USE_GH_CONFIG_DIR"
   else
+    GH_AUTH="UNKNOWN_OR_FAIL"
     echo "GH_AUTH=UNKNOWN_OR_FAIL"
+    echo "GH_AUTH_CONTEXT=NONE_PROVEN"
     echo "GH_LOGIN=UNKNOWN"
     echo "GH_LOGIN_ACTION=AUTH_REQUIRED"
   fi
 else
+  GH_AUTH="UNKNOWN"
   echo "GH_AUTH=UNKNOWN"
   echo "GH_LOGIN=UNKNOWN"
   echo "GH_LOGIN_ACTION=GH_NOT_FOUND"
@@ -32,13 +47,13 @@ fi
 # Git HTTPS usa uma ponte própria. gh autenticado não prova que git fetch/pull está pronto.
 git_helper=""
 if command -v "${GIT_BIN}" >/dev/null 2>&1 || [ -x "${GIT_BIN}" ]; then
-  git_helper="$("${GIT_BIN}" config --global --get-all credential.https://github.com.helper 2>/dev/null || true)"
-  [ -n "${git_helper}" ] || git_helper="$("${GIT_BIN}" config --global --get-all credential.helper 2>/dev/null || true)"
+  git_helper="$(HOME="${CANONICAL_HOME}" "${GIT_BIN}" config --global --get-all credential.https://github.com.helper 2>/dev/null || true)"
+  [ -n "${git_helper}" ] || git_helper="$(HOME="${CANONICAL_HOME}" "${GIT_BIN}" config --global --get-all credential.helper 2>/dev/null || true)"
 fi
 if printf '%s' "${git_helper}" | grep -qi 'gh auth git-credential'; then
   echo "GIT_HTTPS_CREDENTIAL_HELPER=PASS"
   echo "GIT_AUTH_ACTION=NONE"
-elif [ "${GH_LOGIN_ACTION:-}" = "SKIP_ALREADY_AUTHENTICATED" ]; then
+elif [ "${GH_AUTH:-}" = "PASS" ] || [ "${GH_LOGIN_ACTION:-}" = "SKIP_ALREADY_AUTHENTICATED" ] || [ "${GH_LOGIN_ACTION:-}" = "USE_GH_CONFIG_DIR" ]; then
   echo "GIT_HTTPS_CREDENTIAL_HELPER=NOT_CONFIGURED"
   echo "GIT_AUTH_ACTION=gh auth setup-git"
 else
