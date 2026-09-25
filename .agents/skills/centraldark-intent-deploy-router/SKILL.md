@@ -1,9 +1,9 @@
 ---
 name: centraldark-intent-deploy-router
-description: Router obrigatório de intenção, gatilhos e deploy vivo para agentes CentralDark. Use antes de escolher skill, subagente, escrita, microdeploy, CI profundo, HUB, provider ou segredo temporário.
+description: Router obrigatório de intenção, gatilhos, Capability HUD e deploy vivo para agentes CentralDark. Use antes de escolher skill, subagente, escrita, microdeploy, CI profundo, HUB, provider, segredo temporário ou antes de alegar limitação de ferramenta.
 metadata:
   type: routing
-  version: "1.0"
+  version: "1.1"
   owner: SEGREDO/CHEFE
 ---
 
@@ -22,7 +22,38 @@ PERTINENCE_FIRST=true
 MINIMUM_SUFFICIENT_LOOP=true
 TRIGGERS_ARE_CONDITIONAL_NOT_RITUAL=true
 ALIGN_THOUGHT_NOT_WORDING=true
+INTENT_CONFIDENCE_GTE_95_EXECUTES_IF_SCOPE_AND_TOOL_ARE_CLEAR=true
 ```
+
+## Capability HUD obrigatório
+
+Antes de responder "não consigo", "não tenho ferramenta", "preciso do link" ou voltar cedo, carregue:
+
+```text
+.agents/CAPABILITY-HUD-BOOT.json
+.agents/skills/centraldark-capability-hud/SKILL.md
+```
+
+Regra:
+
+```text
+TOOL_UNKNOWN
+→ PROBE_RELEVANT_TOOL
+→ IF_FAIL, REPORT REAL BLOCKER
+→ ASK ONLY MINIMUM IDENTIFIER
+```
+
+Exemplo GitHub/CI:
+
+```text
+SHA/commit
+→ workflow runs
+→ jobs
+→ logs
+→ erro exato ou PASS
+```
+
+Nao parar em leitura de commit quando a intenção for workflow, CI ou log.
 
 ## Gatilhos por pertinência
 
@@ -31,10 +62,10 @@ ALIGN_THOUGHT_NOT_WORDING=true
 → recuperar CURRENT, owner, escopo, runtime, PR/receipt e estado vivo.
 
 🌅 #ACORDAR
-→ medir HEAD/branch/worktree/runtime/PM2/MCP/HUB/Casa/VPS antes de afirmar ou mutar.
+→ medir HEAD/branch/worktree/runtime/PM2/MCP/HUB/Casa/VPS e Capability HUD antes de afirmar ou mutar.
 
 🎯 !CALIBRAR
-→ calcular intenção, confiança, autoridade, writer, risco, frequência e gatilho mínimo.
+→ calcular intenção, confiança, autoridade, writer, risco, frequência, capacidade disponível e gatilho mínimo.
 
 ⭕ !AURÉOLA CANÔNICA
 → mostrar rota operacional quando material: FASE, EIXO, OWNER, DESTINO, NEXT_GATE, PROVA, FERIDA, NEXT_CURSOR.
@@ -67,6 +98,10 @@ ALIGN_THOUGHT_NOT_WORDING=true
 SE INTENCAO_CLARA && ESCOPO_AUTORIZADO
 → EXECUTE_MINIMUM_COMPLETE_PATH
 
+SE TOOL/ROTA_INCERTA || AGENTE_QUER_DIZER_NAO_CONSIGO
+→ .agents/skills/centraldark-capability-hud/SKILL.md
+→ PROBE_RELEVANT_TOOL_FIRST
+
 SE AMBIGUIDADE_MATERIAL
 → ASK_MINIMUM_QUESTION
 
@@ -96,6 +131,10 @@ HUB_CONNECTED != PROVIDER_RUNTIME_PASS
 OAUTH_ACTIVE != TOOL_CALL_PASS
 MODEL_COUNT != MODEL_ROUTE_PASS
 TOOL_LISTED != TOOL_ACTIVE
+OAUTH_CONNECTED != DEVICE_USABLE
+SEARCHED != VERIFIED
+COMMIT_EXISTS != CI_PASS
+PATCHED != ROOT_CAUSE_FIXED
 RUNTIME_IS_NOT_SCRATCH
 CASA_IS_NOT_SCRATCH
 NO_PARALLEL_ARCHITECTURE
@@ -117,4 +156,13 @@ ROTATE_OR_DISCARD_AFTER_USE=true
 
 ## Resultado esperado
 
-O agente não escolhe ritual completo. Ele calcula intenção, escolhe o gatilho mínimo pertinente, usa os cristais corretos, executa o menor caminho completo, prova efeito, registra receipt e deixa NEXT_CURSOR.
+O agente não escolhe ritual completo. Ele calcula intenção, mede capacidade real da sessão, escolhe o gatilho mínimo pertinente, usa os cristais corretos, executa o menor caminho completo, prova efeito, registra receipt e deixa NEXT_CURSOR.
+
+Se travar, responde somente:
+
+```text
+PAREI_EM=
+BLOQUEIO_REAL=
+JA_TENTEI=
+IDENTIFICADOR_MINIMO_PARA_CONTINUAR=
+```
