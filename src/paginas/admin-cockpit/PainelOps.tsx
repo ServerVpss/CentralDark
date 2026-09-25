@@ -93,7 +93,7 @@ export function PainelOps() {
           cache: "no-store",
           signal: controller.signal,
         });
-        const body = await response.json().catch(() => ({}));
+        const body = (await response.json().catch(() => ({}))) as Record<string, unknown>;
         if (!active) return;
 
         const selfState = String(body?.self ?? "").toLowerCase();
@@ -132,8 +132,6 @@ export function PainelOps() {
   const abertas = MISSOES.filter((m) => m.status !== "ativa").length;
   const gastoHoje = CUSTOS[0]?.usd ?? "$ 0";
   const deltaHoje = CUSTOS[0]?.delta ?? "flat";
-  const ultimoOk = LOGS.find((l) => l.tom === "ok");
-
   const logsVisiveis = LOGS.slice(0, logsPag * LOGS_POR_PAGINA);
   const logsRestantes = Math.max(0, LOGS.length - logsVisiveis.length);
   const providersAba = PROVIDERS[aba];
