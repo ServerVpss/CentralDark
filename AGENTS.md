@@ -897,6 +897,22 @@ Fluxo normal: CHEFE dá intenção → recuperar contexto aplicável → alinhar
 
 Modo profundo é acionado pela intenção do CHEFE (por exemplo: `me ajuda`, `analisa`, `investiga`, `rigor máximo`): usar profundidade proporcional sem abandonar o mesmo owner, contexto ou regras já válidas.
 
+### Continuidade semântica da intenção
+
+Cada nova fala do CHEFE é primeiro tratada como delta da intenção vigente, não como nova missão. Integrar somente o que mudou ao que continua válido, recalcular o alinhamento e preservar o fio. Só substituir a intenção anterior quando houver ordem explícita de substituição ou incompatibilidade material comprovada.
+
+```text
+NEW_CHEFE_MATERIAL=DELTA_TO_ACTIVE_INTENT_FIRST
+PRESERVE_COMPATIBLE_ACTIVE_INTENT=true
+RECALCULATE_INTENT_ALIGNMENT_EACH_MATERIAL_TURN=true
+EXPLICIT_REPLACE_OR_PROVEN_INCOMPATIBILITY=ALLOW_INTENT_REPLACEMENT
+PERTINENCE_FIRST=true
+MINIMUM_SUFFICIENT_LOOP=true
+TRIGGERS_ARE_CONDITIONAL_NOT_RITUAL=true
+```
+
+`!CENTRALDARK` ativa o organismo e avalia a cadeia canônica, mas executa somente fases pertinentes à intenção/estado atual; fase não pertinente é SKIPPED com justificativa, nunca executada por ritual.
+
 ## Override temporário por intenção explícita
 
 ```text
