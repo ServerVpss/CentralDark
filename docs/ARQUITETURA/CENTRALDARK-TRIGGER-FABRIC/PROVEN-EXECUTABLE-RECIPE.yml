@@ -33,6 +33,33 @@ one_system_binding:
   existing_api_transport: GITHUB_REPOSITORY_DISPATCH
   api_event_type: centraldark_sentinel_route
 
+persistence_policy:
+  crystal_lives_in_machine_state: true
+  human_loop_required: false
+  do_not_return_full_crystal_block_to_human_by_default: true
+  human_output_role: HUD_STATUS_AND_BLOCKER_ONLY
+  canonical_storage:
+    - repo_child_pr: 1681
+    - repo_recipe: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-EXECUTABLE-RECIPE.yml
+    - repo_lock: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml
+    - vps_runtime_receipt: /root/CentralDark/.artifacts/system-sentinel/receipts/proven-executable-recipe-session-current.json
+    - vps_runtime_receipt_sha256: /root/CentralDark/.artifacts/system-sentinel/receipts/proven-executable-recipe-session-current.sha256
+  forbidden_handoff:
+    - ASK_CHEFE_TO_COPY_CRYSTAL_BLOCK
+    - MAKE_HUMAN_CARRY_MACHINE_RECEIPT
+    - DELIVER_THIS_EXACT_BLOCK_TO_HUMAN_AS_REQUIRED_LOOP
+    - STORE_SESSION_CRYSTAL_ONLY_IN_CHAT
+  allowed_handoff_to_human:
+    - RESULT_HUD
+    - MATERIAL_BLOCKER
+    - APPROVAL_FRONTIER
+    - SHORT_NEXT_CURSOR
+  machine_handoff_rule: >-
+    Quando uma janela, agente ou executor terminar, ele persiste o receipt e o
+    fingerprint no storage da VPS/Sentinela e no PR-filho quando houver delta de
+    codigo. O CHEFE nao vira muleque de pombo-correio do cristal; o humano recebe
+    somente estado, bloqueio real e proximo cursor curto.
+
 recipe:
   name: CAMINHO_JA_PROVADO_EXECUTAVEL
   version: 1
@@ -113,6 +140,8 @@ load_contract:
     - CHANGE_PROOF_TO_FORCE_PASS
     - TREAT_UNKNOWN_AS_PASS
     - TREAT_BINDING_DRIFT_AS_ARCHITECTURE_DRIFT_WITHOUT_PROOF
+    - ASK_HUMAN_TO_CARRY_THE_CRYSTAL_BLOCK
+    - REQUIRE_HUMAN_PARTICIPATION_IN_MACHINE_LOOP
 
 proof_plan:
   same_sequence_required: true
@@ -189,6 +218,8 @@ known_session_proof:
   node_check_runner: PASS
   yaml_parse: PASS_4_OF_4
   persistence_test: FIXED_POINT_SEALED_TO_REUSE_PROOF_NO_REPEAT_TO_REVALIDATE_AFFECTED_CHAIN_ONLY
+  vps_runtime_receipt: /root/CentralDark/.artifacts/system-sentinel/receipts/proven-executable-recipe-session-current.json
+  vps_runtime_receipt_sha256: f3284c33ded0227c3caec31deaaf2de2a93f39398b447c34bd817495f09f9843
   github_pr: 1681
   ci_same_head: UNKNOWN_UNTIL_COMPLETED
   runtime_deployed: false
@@ -205,5 +236,7 @@ invariants:
   merged_is_not_deployed: true
   api_transport_is_not_authority: true
   binding_change_is_not_architecture_change_without_effect_divergence: true
+  human_is_not_crystal_transport: true
+  machine_receipt_must_persist_in_vps_or_repo_owner: true
 
 next_cursor: CI_SAME_HEAD_THEN_RUNTIME_TIK_TAK_REPLAY_RECIPE
