@@ -1,0 +1,60 @@
+{
+  "schema": "centraldark.agents.capability-hud-boot.v1",
+  "status": "CANONICAL_SESSION_CAPABILITY_BOOT",
+  "owner": "SEGREDO/CHEFE",
+  "source_of_truth": "ServerVpss/CentralDark@main",
+  "purpose": "Antes de responder 'nao consigo' ou voltar cedo, medir as capacidades realmente carregadas na sessao e separar capacidade de raciocinio de capacidade de execucao.",
+  "core_problem": {
+    "thinking_capacity": "usually_available",
+    "acting_capacity": "session_and_tool_dependent",
+    "failure_mode": "agent claims limitation before probing available tools or before finding a real blocker"
+  },
+  "mandatory_boot": {
+    "before_execution": true,
+    "before_claiming_unavailable": true,
+    "before_asking_for_missing_identifier": true,
+    "probe_relevant_tools_first": true,
+    "record_where_it_stopped": true
+  },
+  "capability_classes": {
+    "github": {
+      "minimum_probe": ["fetch current main", "fetch target file or commit", "if CI is involved try workflow-run lookup by SHA, then jobs, then logs"],
+      "expected_route": "commit_or_sha -> workflow_run -> jobs -> logs -> exact failure or PASS",
+      "if_missing": "ask only for exact missing identifier: run_id, job_id, commit_sha or workflow link",
+      "do_not_stop_at": "single commit read"
+    },
+    "remote_desktop_commander": {
+      "minimum_probe": ["discover available devices", "confirm auth context", "try harmless read/status before declaring unavailable"],
+      "expected_route": "device -> shell/filesystem -> stdout/stderr -> proof",
+      "if_missing": "state auth_context/device visibility gap"
+    },
+    "google_drive": {
+      "minimum_probe": ["discover mounted/connector source", "search/list requested folder", "read exact artifact when available"],
+      "if_missing": "state missing file/folder id or connector visibility gap"
+    },
+    "runtime_local_or_vps": {
+      "minimum_probe": ["identify bridge", "run harmless pwd/git status/health when allowed", "separate Casa from VPS"],
+      "if_missing": "state bridge/tool gap, not world failure"
+    }
+  },
+  "hud_fields": [
+    "TOOL_OR_ROUTE",
+    "DISCOVERED_CAPABILITY",
+    "PROBE_ATTEMPTED",
+    "RESULT",
+    "BLOCKER_IF_ANY",
+    "NEXT_REQUIRED_IDENTIFIER",
+    "CONFIDENCE_ACTING_PERCENT"
+  ],
+  "execution_contract": {
+    "intent_confidence_gte_95_and_scope_clear": "execute first, explain after",
+    "tool_unknown": "probe relevant tool before claiming limitation",
+    "blocker": "only after concrete tool error, missing auth, missing identifier, missing permission or unsupported action",
+    "minimum_question": "ask only the missing identifier/action needed to continue",
+    "unknown_is_not_pass": true,
+    "searched_is_not_verified": true,
+    "tool_listed_is_not_tool_active": true
+  },
+  "canonical_skill": ".agents/skills/centraldark-capability-hud/SKILL.md",
+  "receipts": "#1562 or equivalent child when material"
+}

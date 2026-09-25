@@ -1,0 +1,22 @@
+name: CENTRALDARK EXECUTION CONTRACT
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  contract:
+    runs-on: [self-hosted, Linux]
+    steps:
+      - uses: actions/checkout@v7
+      - name: Validate mandatory execution contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q 'CENTRALDARK_EXECUTION_CONTRACT=MANDATORY' AGENTS.md
+          grep -q 'EVERY_CHANGE_REQUIRES_GIT_RECEIPT=true' AGENTS.md
+          grep -q 'NO_UNRECORDED_LOCAL_CHANGE=true' AGENTS.md
+          test -x scripts/hooks/pre-commit.centraldark-execution-contract.sh
+          grep -q 'PR-mãe #1562' docs/CONSCIENCIA/EXECUCAO/CENTRALDARK-EXECUTION-CONTRACT.md
+          grep -q 'CONNECTOR_DOWN_ONCE' AGENTS.md

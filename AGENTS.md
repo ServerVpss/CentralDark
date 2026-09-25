@@ -862,6 +862,70 @@ CORPO_A_INDISPONIVEL
 
 Indisponibilidade de instrumento não revoga intenção humana nem prova indisponibilidade do organismo inteiro.
 
+## Execução sem confirmação redundante — alinhamento da intenção do CHEFE
+
+A máquina não repete a fala do CHEFE nem substitui regras anteriores por cada novo ensinamento. Ela recupera contexto aplicável, combina intenção atual + cânone + aprendizados compatíveis, calcula a confiança de alinhamento e absorve somente o menor delta útil no owner existente. Novo ensinamento é REMIX do comportamento anterior, não reset.
+
+```text
+INTENT_ALIGNMENT_CONFIDENCE =
+  CURRENT_EXPLICIT_INTENT
+  + RECOVERED_APPLICABLE_CONTEXT
+  + CANONICAL_RULES
+  + CURRENT_REALITY
+  - MATERIAL_AMBIGUITY
+  - MATERIAL_CONTRADICTION
+```
+
+A porcentagem expressa confiança de que a interpretação corresponde à intenção humana; não é prova de runtime e nunca transforma UNKNOWN em PASS.
+
+```text
+CHEFE_EXECUTION_CONFIDENCE_THRESHOLD=80
+CONFIDENCE_80_TO_100_AND_SCOPE_AUTHORIZED=EXECUTE_MINIMUM_COMPLETE_PATH
+NEW_TEACHING=REMIX_MINIMUM_DELTA_IN_EXISTING_RULE
+DO_NOT_REPLACE_COMPATIBLE_PRIOR_LEARNING=true
+DO_NOT_PARROT_CHEFE=true
+ALIGN_THOUGHT_NOT_WORDING=true
+NO_REDUNDANT_CONFIRMATION=true
+PLAN_IS_NOT_SUBSTITUTE_FOR_AVAILABLE_ACTION=true
+IRREVERSIBLE_OR_NEW_AUTHORITY_STILL_REQUIRES_EXPLICIT_SCOPE=true
+UNKNOWN_IS_NOT_PASS=true
+```
+
+Quando útil para confirmar entendimento antes de uma ação material, responder em uma frase curta: `Sua intenção (~N%) é: <interpretação refinada>`. Não transformar isso em cerimônia quando a execução já é segura e autorizada.
+
+Fluxo normal: CHEFE dá intenção → recuperar contexto aplicável → alinhar por confiança → medir → executar o mínimo → provar → se houver bloqueio corrigível, corrigir e continuar → devolver resultado curto → parar.
+
+Modo profundo é acionado pela intenção do CHEFE (por exemplo: `me ajuda`, `analisa`, `investiga`, `rigor máximo`): usar profundidade proporcional sem abandonar o mesmo owner, contexto ou regras já válidas.
+
+### Continuidade semântica da intenção
+
+Cada nova fala do CHEFE é primeiro tratada como delta da intenção vigente, não como nova missão. Integrar somente o que mudou ao que continua válido, recalcular o alinhamento e preservar o fio. Só substituir a intenção anterior quando houver ordem explícita de substituição ou incompatibilidade material comprovada.
+
+```text
+NEW_CHEFE_MATERIAL=DELTA_TO_ACTIVE_INTENT_FIRST
+PRESERVE_COMPATIBLE_ACTIVE_INTENT=true
+RECALCULATE_INTENT_ALIGNMENT_EACH_MATERIAL_TURN=true
+EXPLICIT_REPLACE_OR_PROVEN_INCOMPATIBILITY=ALLOW_INTENT_REPLACEMENT
+PERTINENCE_FIRST=true
+MINIMUM_SUFFICIENT_LOOP=true
+TRIGGERS_ARE_CONDITIONAL_NOT_RITUAL=true
+```
+
+`!CENTRALDARK` ativa o organismo e avalia a cadeia canônica, mas executa somente fases pertinentes à intenção/estado atual; fase não pertinente é SKIPPED com justificativa, nunca executada por ritual.
+
+### ⭕ !AURÉOLA CANÔNICA — HUD da rota operacional
+
+A Auréola não é decoração nem prova técnica. É o depurador visual da rota do `!CENTRALDARK`: torna visíveis fase atual, eixo material da MULTIBÚSSOLA, owner/destino, próximo gate e, quando material, ação/prova/ferida/NEXT_CURSOR. Deve comparar `INTENT_ROUTE` com `ACTUAL_ROUTE`; divergência não pode virar verde e exige reconciliação. Referência bíblica e baianês são pistas semânticas de direção, nunca autoridade ou evidência de runtime.
+
+```text
+AUREOLA_IS_VISIBLE_ROUTE_DEBUGGER=true
+AUREOLA_IS_OPERATIONAL_TRACE_NOT_PRIVATE_CHAIN_OF_THOUGHT=true
+INTENT_ROUTE_NE_ACTUAL_ROUTE=STOP_AND_RECONCILE
+BIBLE_REFERENCE_IS_SEMANTIC_CUE_NOT_PROOF=true
+AUREOLA_MATERIAL_DISCOVERY=LEARNING_CANDIDATE_NOT_CANONICAL_FACT
+```
+
+
 ## Override temporário por intenção explícita
 
 ```text
@@ -1333,6 +1397,13 @@ ADAPT_ENVIRONMENT_BINDINGS_ONLY=true
 RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH=true
 DIVERGENCE_REOPENS_AFFECTED_CONE_ONLY=true
 HUMAN_RETEACH_REQUIRED_FOR_SAME_PROVEN_PATH=false
+EVOLVE_EXISTING_BEFORE_CREATE=true
+EDIT_AND_RETURN_SAME_ARTIFACT_WHEN_CHEFE_PROVIDES_ONE=true
+NO_FRAGMENTED_PATCH_INSTRUCTIONS_WHEN_FULL_EVOLVED_ARTIFACT_IS_REQUESTED=true
+RECIPE_MUST_LIVE_IN_REPOSITORY=true
+RECIPE_MUST_BE_MACHINE_CONSUMABLE=true
+REPLAY_BEFORE_REDISCOVERY=true
+PR_MOTHER_OR_EQUIVALENT_CHILD_RECEIPT_REQUIRED=true
 ```
 
 Um agente/modelo novo não ganha licença para redesenhar um caminho já selado.
@@ -1341,3 +1412,60 @@ Ele carrega a receita comprovada, adapta apenas bindings de ambiente
 prova. Divergência observada é informação nova e reabre somente o cone causal
 afetado.
 
+Quando o CHEFE fornecer um artefato existente para evoluir, editar e devolver o
+mesmo artefato consolidado; não cuspir fragmentos ou alternativas paralelas se a
+intenção estiver suficientemente alinhada. Caminho comprovado deve deixar no
+repositório receita executável/machine-consumable + fingerprint + prova +
+contraprova + resultado/efeito esperado + bindings + NEXT_CURSOR, com receipt no
+PR-mãe #1562 ou PR-filho equivalente por OWNER+SCOPE+CAPABILITY.
+
+
+
+## Contrato obrigatório — execução com receipt GitHub
+
+Este bloco transforma o cristal em regra operacional. Regra escrita em chat, VPS ou runtime sem registro GitHub não basta.
+
+```text
+CENTRALDARK_EXECUTION_CONTRACT=MANDATORY
+EVERY_CHANGE_ON_E_MUST_BE_MEASURED=true
+EVERY_CHANGE_REQUIRES_TEST=true
+EVERY_CHANGE_REQUIRES_COUNTERPROOF=true
+EVERY_CHANGE_REQUIRES_GIT_RECEIPT=true
+NO_UNRECORDED_LOCAL_CHANGE=true
+NO_CLAIM_WITHOUT_EVIDENCE=true
+NO_PUSH_WITHOUT_VALIDATION=true
+NO_SECRET_IN_GIT=true
+FAILURE_MUST_BE_LOCALIZED=true
+```
+
+Fluxo obrigatório:
+
+```text
+MEDIR ESTADO
+→ EXECUTAR MENOR DELTA
+→ TESTAR
+→ CONTRAPROVAR
+→ COMMIT
+→ PUSH
+→ RECEIPT NO PR-MÃE #1562 OU PR FILHO EQUIVALENTE
+→ SÓ ENTÃO DECLARAR CONCLUÍDO
+```
+
+Queda de conector não encerra missão automaticamente:
+
+```text
+CONNECTOR_DOWN_ONCE
+→ RETENTAR
+→ RELOGIN/HELPER QUANDO APLICÁVEL
+→ TENTAR SENSOR/TÚNEL AUTORIZADO EXISTENTE COMO TAILSCALE/RDC/SSH/MCP
+→ SE AINDA FALHAR: BLOCKED COM HOST, CAUSA, ROTAS TENTADAS E PRÓXIMA AÇÃO
+```
+
+Casa local do CHEFE (`E:\CentralDark`) herda o mesmo contrato. Mudança local importante não fica só em disco: mede, testa, contraprove, commita, sobe para branch/PR/main conforme autorização vigente e registra receipt.
+
+```text
+LOCAL_ONLY_CHANGE_FORBIDDEN=true
+IMPORTANT_UNTRACKED_ALERT_NOT_DELETE=true
+DIRECT_MAIN_REQUIRES_EXPLICIT_AUTH=true
+PR_MOTHER_OR_CHILD_RECEIPT_REQUIRED=true
+```

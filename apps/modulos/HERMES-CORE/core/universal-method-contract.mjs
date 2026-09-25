@@ -661,9 +661,9 @@ export function validateUniversalMethod() {
     'SQUASH_CHILD_ONLY',
 
     'child_pr_only_promotion_vehicle: false',
-    'promotion_mode: "DIRECT_MAIN_SOFT_EVOLUTION"',
-    'MIN_SECURITY_CHECKS',
-    'DIRECT_MAIN_COMMIT',
+    'promotion_mode: "DIRECT_MAIN_SOFT_EVOLUTION_WITH_EXISTING_CHILD_TRACE"',
+    'minimum_security_checks:',
+    'direct_main_forbidden_when_compatible_child_is_healthy: true',
     'MAIN_READBACK',
     'required_gate_ids:',
     'LOAD_UNIVERSAL_GATE_REGISTRY',

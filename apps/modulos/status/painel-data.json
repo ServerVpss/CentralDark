@@ -4,10 +4,10 @@
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
-    "phase": "UNKNOWN — não medido neste push",
-    "currentTask": "UNKNOWN — não medido neste push",
+    "phase": "Micro-deploy / Bot / Trigger Fabric",
+    "currentTask": "Cristalizar fallback MAIN-PINNED + single reusable worktree em 5 superfícies",
     "branch": "main",
-    "lastCommit": "🔒 shared: cristalizar contraprova do writer e exigir lease real",
+    "lastCommit": "aa49e167cb8df4aecf69e77d6c374bb6aef835c5",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -523,7 +523,7 @@
     "MultiZap-BOT errored — não crítico",
     "Pendência A9: executar tela Arsenal de Skills no Lovable"
   ],
-  "nextIA": "Pivete ajusta URL do conector Lovable para `/mcp` e clica em Adicionar novamente.",
+  "nextIA": "Reusar a skill main-pinned-runtime-fast-path quando o deploy canônico estiver FAIL/BLOCKED; scratch único com LOCK e cleanup obrigatório",
   "linearSync": {
     "statusConexao": "ok",
     "statusConexaoDetalhe": "Conectado — workspace Segredo (SEG) configurado em português",
@@ -598,6 +598,30 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-09-25T21:58:31Z",
+      "titulo": "Fallback oficial MAIN-PINNED cristalizado",
+      "detalhe": "Fallback oficial cristalizado em Markdown, JSON, YAML, Skill e Hooks; bot CentralDark agora carrega o contrato canônico no runtime prompt.",
+      "area": "Micro-deploy / Bot / Trigger Fabric",
+      "sha": "aa49e16",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-09-25T21:43:48Z",
+      "titulo": "Menu Admin ganhou emojis e rota-base Tailscale foi corrigida",
+      "detalhe": "Todas as abas receberam ícones; estado da rota-base passa a usar o runtime Tailscale. MCP /health=200.",
+      "area": "MCP Admin / Tailscale",
+      "sha": "cccf53e",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-09-25T20:43:41Z",
+      "titulo": "Tailscale Hub/Admin PROVADO",
+      "detalhe": "Hub 200; status Tailscale 200; login humano reconciliado; Admin protegido; Caddy validado; receipt no PR #1562.",
+      "area": "Tailscale / Hub / Admin",
+      "sha": "144e0b7",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-09-05T19:02:51.511Z",
       "titulo": "Push na main · b8504ba0b6913facaa3396ed5e5838ff6ee19877",
@@ -972,30 +996,6 @@
       "detalhe": "Auto PR: feat/coderabbit-bridge (#1406)",
       "area": "Repositório",
       "sha": "eb81697",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-09-02T04:42:11.704Z",
-      "titulo": "Push na main · b5f821359484f260304d96d04fe439820e0e3877",
-      "detalhe": "fix(health): get_proc_mem soma KB e retorna int; adiciona teste unitário",
-      "area": "Repositório",
-      "sha": "b5f8213",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-09-01T00:44:53.753Z",
-      "titulo": "Push na main · dce8a91f60781879bebb205f054bef45c9dab946",
-      "detalhe": "☀️ FIX(CORE): HERDAR EMOJIS EM TODO MODELO (#1390)",
-      "area": "Repositório",
-      "sha": "dce8a91",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-31T11:58:33.628Z",
-      "titulo": "Push na main · 8ff68f74d33e399f5b6f76ddbeff2f7a4c3af5f3",
-      "detalhe": "Merge PR #1389: fix/close-external-source-gate-20260831 - funnel gate implementation",
-      "area": "Repositório",
-      "sha": "8ff68f7",
       "actor": "segredounlock"
     }
   ],

@@ -1,0 +1,96 @@
+{
+  "schema": "centraldark.agents.intent-deploy-binding.v1",
+  "status": "CANONICAL_AGENT_ROUTING_BINDING",
+  "owner": "SEGREDO/CHEFE",
+  "source_of_truth": "ServerVpss/CentralDark@main",
+  "purpose": "Amarrar no root .agents o sistema de intenção, gatilhos obrigatórios e método de deploy vivo da CentralDark.",
+  "intent_system": {
+    "new_chefe_material": "DELTA_TO_ACTIVE_INTENT_FIRST",
+    "preserve_compatible_active_intent": true,
+    "recalculate_intent_alignment_each_material_turn": true,
+    "explicit_replace_or_proven_incompatibility_allows_replacement": true,
+    "pertinence_first": true,
+    "minimum_sufficient_loop": true,
+    "triggers_are_conditional_not_ritual": true,
+    "align_thought_not_wording": true
+  },
+  "mandatory_triggers": {
+    "centraldark": "recover CURRENT, owner, scope, runtime, PR/receipt and live state",
+    "acordar": "measure HEAD, branch, worktree, runtime, PM2, MCP, HUB, Casa, VPS before claiming or mutating",
+    "calibrar": "calculate intent, confidence, authority, writer, risk, frequency and minimum trigger",
+    "aureola_canonica": "show operational route when material: phase, axis, owner, destination, next gate, proof, wound, next cursor",
+    "meta_lupa": "find gaps, false green, wrong owner, duplication, drift or weak proof",
+    "deltatil": "turn discovery into minimum delta in existing owner",
+    "contraprova": "try to falsify conclusion before PASS",
+    "remedicao": "compare T0 -> action -> T1 and prove effect",
+    "fixed_point": "only declare when no new material error remains in measured scope",
+    "registra": "receipt in #1562 or equivalent child without secret values",
+    "boot": "preserve continuity for next executor"
+  },
+  "route_selection": [
+    {
+      "when": "intent_clear_and_scope_authorized",
+      "then": "EXECUTE_MINIMUM_COMPLETE_PATH"
+    },
+    {
+      "when": "delta_involves_runtime_site_panel_feature",
+      "then": [
+        ".agents/skills/centraldark-live-editing-fabric/SKILL.md",
+        ".agents/skills/main-pinned-runtime-fast-path/SKILL.md"
+      ]
+    },
+    {
+      "when": "delta_involves_hub_provider_secret_oauth_model",
+      "then": [
+        ".agents/skills/centraldark-hub-credential-control-plane/SKILL.md"
+      ]
+    },
+    {
+      "when": "delta_involves_doc_canon_contract",
+      "then": "EDIT_OWNER_EXISTING + RECEIPT"
+    },
+    {
+      "when": "pass_comprovado",
+      "then": "MICRO_DEPLOY_DO_ESCOPO_AFETADO + HEALTH/PROVA + RECEIPT + NEXT_TIK_TAK"
+    }
+  ],
+  "canonical_skills": [
+    ".agents/skills/centraldark-intent-deploy-router/SKILL.md",
+    ".agents/skills/centraldark-live-editing-fabric/SKILL.md",
+    ".agents/skills/main-pinned-runtime-fast-path/SKILL.md",
+    ".agents/skills/centraldark-hub-credential-control-plane/SKILL.md",
+    ".agents/skills/centraldark-operational-method/SKILL.md"
+  ],
+  "scratch": {
+    "canonical_path": "/root/CentralDark/_worktrees/main-pinned-runtime-fastpath",
+    "single_reusable_worktree": true,
+    "lock_required": true,
+    "reset_before_use": true,
+    "reset_after_use": true,
+    "runtime_is_not_scratch": true,
+    "casa_is_not_scratch": true
+  },
+  "secret_transit": {
+    "ephemeral_as_transit": true,
+    "use_secret_only_for_requested_owner": true,
+    "no_secret_echo": true,
+    "no_secret_commit": true,
+    "no_secret_receipt_value": true,
+    "no_secret_memory": true,
+    "no_secret_log_value": true,
+    "scrub_controlled_logs_after_use": true,
+    "rotate_or_discard_after_use": true
+  },
+  "locks": {
+    "unknown_is_not_pass": true,
+    "action_is_not_proof": true,
+    "merged_is_not_deployed": true,
+    "documented_is_not_executed": true,
+    "health_200_is_not_feature_ready": true,
+    "hub_connected_is_not_provider_runtime_pass": true,
+    "oauth_active_is_not_tool_call_pass": true,
+    "model_count_is_not_model_route_pass": true,
+    "tool_listed_is_not_tool_active": true,
+    "no_parallel_architecture": true
+  }
+}

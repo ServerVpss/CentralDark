@@ -20,7 +20,7 @@ jobs:
     runs-on: [self-hosted, Linux]
     timeout-minutes: 10
     env:
-      REPO_DIR: <caminho-vps>
+      REPO_DIR: /root/CentralDark
       BRANCH: main
     steps:
       - name: 🔹 Checkout exato do gate
@@ -37,7 +37,7 @@ jobs:
           set -Eeuo pipefail
           TARGET_SHA='${{ github.sha }}'
           AUTH_REPO="$GITHUB_WORKSPACE/.ci-deploy-gate"
-          AUTH_HEADER="$(git -C "$AUTH_REPO" config --local --get http.https://github.com/.extraheader || true)"
+          AUTH_HEADER="$(git -C "$AUTH_REPO" config --get http.https://github.com/.extraheader || true)"
           [[ "$AUTH_HEADER" == AUTHORIZATION:* ]] || { echo "GIT_EPHEMERAL_AUTH_MISSING"; exit 26; }
           export GIT_CONFIG_COUNT=1
           export GIT_CONFIG_KEY_0='http.https://github.com/.extraheader'
