@@ -23,6 +23,18 @@ Regra canônica operacional:
 
 Micro-deploy é por escopo afetado. Falha em rota separada, como `:8099`, não bloqueia rotas independentes já provadas, mas também não vira verde.
 
+## Padrão oficial — CENTRALDARK LIVE EDITING FABRIC
+
+O modo normal da CentralDark é editar, colocar vivo, medir, refinar, comprimir e repetir até ponto fixo.
+
+- humano: `CENTRALDARK-LIVE-EDITING-FABRIC.md`
+- máquina: `CENTRALDARK-LIVE-EDITING-FABRIC.json`
+- binding: `CENTRALDARK-LIVE-EDITING-FABRIC.yml`
+- skill: `.agents/skills/centraldark-live-editing-fabric/SKILL.md`
+- hook: `scripts/hooks/pre-push.main-pinned-runtime-fast-path.sh`
+
+Regra: `MVP_FAST_LOOP` é padrão de trabalho. CI profundo é prensa/contraprova prolongada quando o CHEFE mandar, não freio padrão para colocar delta vivo.
+
 ## Fallback oficial — MAIN-PINNED RUNTIME FAST-PATH
 
 Quando o deploy canônico estiver `FAIL` ou `BLOCKED` antes da promoção, usar a receita já provada:

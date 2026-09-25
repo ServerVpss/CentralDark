@@ -89,12 +89,37 @@ consumers:
   claude: CLAUDE.md
   readme: README.md
   memory: docs/CONSCIENCIA/05-APRENDIZADOS/MICRO-DEPLOY-CONTINUO-POR-PASS-COMPROVADO.md
+  live_editing_skill: .agents/skills/centraldark-live-editing-fabric/SKILL.md
 non_goals:
 - criar segundo motor
 - reiniciar tudo
 - promover UNKNOWN para PASS
 - tratar merge como deploy
 - tratar documento como runtime executado
+live_editing_default:
+  official: true
+  mode: CENTRALDARK_LIVE_EDITING_FABRIC
+  human_contract: docs/CONSCIENCIA/MICRO-DEPLOY/CENTRALDARK-LIVE-EDITING-FABRIC.md
+  machine_contract: docs/CONSCIENCIA/MICRO-DEPLOY/CENTRALDARK-LIVE-EDITING-FABRIC.json
+  binding: docs/CONSCIENCIA/MICRO-DEPLOY/CENTRALDARK-LIVE-EDITING-FABRIC.yml
+  skill: .agents/skills/centraldark-live-editing-fabric/SKILL.md
+  operational_default: true
+  ci_policy:
+    MVP_FAST_LOOP_IS_DEFAULT: true
+    CI_DEEP_LOOP_IS_PRESS_MODE: true
+    CI_DEEP_LOOP_REQUIRES_CHEFE_INTENT: true
+  secret_transit:
+    EPHEMERAL_AS_TRANSIT: true
+    NO_SECRET_ECHO: true
+    NO_SECRET_COMMIT: true
+    NO_SECRET_RECEIPT_VALUE: true
+    SCRUB_CONTROLLED_LOGS_AFTER_USE: true
+  scratch_worktree:
+    canonical_path: /root/CentralDark/_worktrees/main-pinned-runtime-fastpath
+    single_reusable: true
+    lock_required: true
+    reset_before_use: true
+    reset_after_use: true
 fallback:
   official: true
   mode: MAIN_PINNED_RUNTIME_FAST_PATH

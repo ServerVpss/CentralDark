@@ -28,6 +28,45 @@ mandatory_rules:
       EXACT_REPEAT_MAY_DEDUPE: true
       NO_SECRET_LEAK: true
       PR_MOTHER_IS_LEDGER_NOT_WRITER: true
+  centraldark_live_editing_fabric_default:
+    required: true
+    mode: CENTRALDARK_LIVE_EDITING_FABRIC
+    canonical_human: docs/CONSCIENCIA/MICRO-DEPLOY/CENTRALDARK-LIVE-EDITING-FABRIC.md
+    canonical_machine: docs/CONSCIENCIA/MICRO-DEPLOY/CENTRALDARK-LIVE-EDITING-FABRIC.json
+    canonical_binding: docs/CONSCIENCIA/MICRO-DEPLOY/CENTRALDARK-LIVE-EDITING-FABRIC.yml
+    agent_skill: .agents/skills/centraldark-live-editing-fabric/SKILL.md
+    operational_default: true
+    formula:
+    - CHEFE_EDITA
+    - MAIN_OU_DELTA_RASTREAVEL
+    - SINGLE_REUSABLE_WORKTREE
+    - OWNER_EXATO
+    - TESTE_MINIMO_APLICAVEL
+    - MICRODEPLOY_CAUSAL
+    - RUNTIME_VIVO
+    - PROVA_DO_EFEITO
+    - RECEIPT
+    - REFINA
+    - COMPRIME
+    - PONTO_FIXO
+    ci_policy:
+      MVP_FAST_LOOP_IS_DEFAULT: true
+      CI_DEEP_LOOP_IS_PRESS_MODE: true
+      CI_DEEP_LOOP_REQUIRES_CHEFE_INTENT: true
+    secret_transit:
+      EPHEMERAL_AS_TRANSIT: true
+      NO_SECRET_ECHO: true
+      NO_SECRET_COMMIT: true
+      NO_SECRET_RECEIPT_VALUE: true
+      SCRUB_CONTROLLED_LOGS_AFTER_USE: true
+      ROTATE_OR_DISCARD_AFTER_USE: true
+    locks:
+      UNKNOWN_IS_NOT_PASS: true
+      ACTION_IS_NOT_PROOF: true
+      MERGED_IS_NOT_DEPLOYED: true
+      DOCUMENTED_IS_NOT_EXECUTED: true
+      RUNTIME_EFFECT_REQUIRED_FOR_RUNTIME_CLAIM: true
+      NO_PARALLEL_ARCHITECTURE: true
   micro_deploy_continuo_por_pass_comprovado:
     required: true
     canonical_rule: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/REGRA-MICRO-DEPLOY-CONTINUO-POR-PASS-COMPROVADO.md
