@@ -152,6 +152,19 @@ test('branch errada ou HEAD destacado: fail-closed sem troca automática', async
   assert.equal(detached.reason, 'DETACHED_HEAD');
 });
 
+test('validador global aceita consumidor seguro com expectedRemoteSha adicional', () => {
+  const output = execFileSync(
+    process.execPath,
+    ['.agents/skills/git-state-safety/scripts/validate.mjs'],
+    {
+      cwd: new URL('../../../..', import.meta.url),
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'pipe'],
+    },
+  );
+  assert.match(output, /GIT_STATE_SAFETY=PASS/);
+});
+
 test('contrato estático: consumidor não volta a reset --hard/force e exige ff-only', async () => {
   const source = await readFile(new URL('./safe-git-deploy.mjs', import.meta.url), 'utf8');
   assert.match(source, /merge['"],\s*['"]--ff-only/);
