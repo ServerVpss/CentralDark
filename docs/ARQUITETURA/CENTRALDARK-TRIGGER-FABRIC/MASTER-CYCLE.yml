@@ -55,7 +55,17 @@ expands_to:
 canonical_human_chain: "#CENTRALDARK -> #ACORDAR -> !CALIBRAR -> !MULTIBUSSOLA -> !META_LUPA -> !RECONCILIAR -> !DELTAUTIL -> !CONTRAPROVA -> !REMEDICAO -> !FIXED_POINT -> !REGISTRA -> !BOOT"
 canonical_machine_chain: "!CENTRALDARK -> #ACORDAR -> !CALIBRAR -> !MULTIBUSSOLA -> !META_LUPA -> !RECONCILIAR -> !DELTAUTIL -> !CONTRAPROVA -> !REMEDICAO -> !FIXED_POINT -> !REGISTRA -> !BOOT"
 canonical_chain: "!CENTRALDARK -> #ACORDAR -> !CALIBRAR -> !MULTIBUSSOLA -> !META_LUPA -> !RECONCILIAR -> !DELTAUTIL -> !CONTRAPROVA -> !REMEDICAO -> !FIXED_POINT -> !REGISTRA -> !BOOT"
-canonical_visual_chain: "👑 !CENTRALDARK → 🌅 #ACORDAR → 🎯 !CALIBRAR → 🧭 !MULTIBUSSOLA → 🔎 !META_LUPA → 🔄 !RECONCILIAR → 💎 !DELTAUTIL → 🧪 !CONTRAPROVA → 📏 !REMEDICAO → 📍 !FIXED_POINT → 🧾 !REGISTRA → 🚀 !BOOT"
+canonical_visual_chain: "⭕ !AURÉOLA CANÔNICA → 👑 !CENTRALDARK → 🌅 #ACORDAR → 🎯 !CALIBRAR → 🧭 !MULTIBUSSOLA → 🔎 !META_LUPA → 🔄 !RECONCILIAR → 💎 !DELTAUTIL → 🧪 !CONTRAPROVA → 📏 !REMEDICAO → 📍 !FIXED_POINT → 🧾 !REGISTRA → 🚀 !BOOT"
+aureola_visible_route_debugger:
+  contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml
+  visible_fields: [CURRENT_PHASE, MULTIBUSSOLA_AXIS, DESTINATION_OWNER, NEXT_GATE]
+  material_fields: [ACTION, PROOF, WOUND, NEXT_CURSOR]
+  compare: [INTENT_ROUTE, ACTUAL_ROUTE]
+  mismatch_action: STOP_AND_RECONCILE
+  route_trace_is_private_reasoning: false
+  route_trace_is_technical_proof: false
+  bible_reference_is_semantic_cue_not_proof: true
+  material_discovery_is_learning_candidate_not_fact: true
 
 continuous_delta_contract:
   scope: ACTIVE_MASTER_SESSION
