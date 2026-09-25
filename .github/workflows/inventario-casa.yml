@@ -1,0 +1,37 @@
+name: Inventario Casa
+
+on:
+  pull_request:
+    paths:
+      - '**/*'
+  push:
+    branches: [ main ]
+
+jobs:
+  inventario-casa:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate deterministic inventory
+        run: |
+          python scripts/generate_centraldark_inventory.py --write --output docs/CONSCIENCIA/INVENTARIO-CASA.json
+
+      - name: Show inventory summary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          data = json.loads(Path('docs/CONSCIENCIA/INVENTARIO-CASA.json').read_text())
+          print('schema=', data['schema'])
+          print('counts=', data['counts'])
+          print('items=', len(data['items']))
+          PY
+
+      - name: Upload inventory artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: centraldark-inventario-casa
+          path: docs/CONSCIENCIA/INVENTARIO-CASA.json
