@@ -357,6 +357,170 @@
         "raw_output_byte_equality_required": false
       },
       "lock_key": "1a76880eefb428d5b7e61f4e8571985f715ec84233e765c39b1405cab2870509"
+    },
+    "PROVEN_REPLAY_EXECUTOR_PATH": {
+      "claim_key": "PROVEN_REPLAY_EXECUTOR_PATH",
+      "owner": "scripts/trigger-fabric/centraldark_full_trigger_boot.py",
+      "lock_key": "650b355d88d3054d7febc6f0718691cc2f4adbcc4ded6353354952a21546ed93",
+      "state": "SEALED_PROVEN",
+      "proof_target": "EXECUTABLE_SEAL_FINGERPRINT_REPLAY_COMPARE_RECEIPT",
+      "evidence_ref": "27_TESTS_PASS+SELF_TEST_PASS+REPLAY_REVALIDATION",
+      "observed_at": "2026-09-25T11:06:23Z",
+      "counterproof": "PASS",
+      "receipt_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml",
+      "proven_path_replay": {
+        "marker": "PROVEN_PATH_REPLAY_LOCK",
+        "dependency_fingerprint": "74c7c98d6fee33d967f2dd016dbdc7d0ef1af16f76a584295bbc95925c10a356",
+        "fingerprint_material_count": 3,
+        "execution_commands": [
+          "python3 scripts/trigger-fabric/test_centraldark_full_trigger_boot.py",
+          "python3 scripts/trigger-fabric/centraldark_full_trigger_boot.py self-test --repo ."
+        ],
+        "proof_commands": [
+          "python3 -m py_compile scripts/trigger-fabric/centraldark_full_trigger_boot.py scripts/trigger-fabric/test_centraldark_full_trigger_boot.py",
+          "python3 scripts/trigger-fabric/centraldark_full_trigger_boot.py fingerprint --material OWNER=replay --material VERSION=1 >/dev/null"
+        ],
+        "expected_results": [
+          "PASS"
+        ],
+        "expected_effect": "UNIT_SELFTEST_AND_FINGERPRINT_PASS",
+        "result_schema": "centraldark.proven-replay.result.v1",
+        "environment_bindings": [],
+        "commands_executable": true,
+        "execution_policy": "READ_ONLY",
+        "proof_commands_read_only": true,
+        "self_test_command": "python3 scripts/trigger-fabric/centraldark_full_trigger_boot.py self-test --repo .",
+        "self_test_result": "PASS",
+        "result_match_policy": "RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH",
+        "raw_output_byte_equality_required": false
+      },
+      "reopen_history": [
+        {
+          "cause_ref": "MAIN_ef43f073_FAIL_CLOSED_MISSING_FINGERPRINT_PLUS_RESEAL_RUNTIME",
+          "observed_at": "2026-09-25T11:06:23Z",
+          "old_dependency_fingerprint": "375b7ed5728143790eb9b358ae5e7e31ee2a313ccb1c6da481d3e4a62431215a",
+          "new_dependency_fingerprint": "74c7c98d6fee33d967f2dd016dbdc7d0ef1af16f76a584295bbc95925c10a356",
+          "counterproof": "PASS",
+          "current_target_remeasured": true,
+          "scope": "AFFECTED_CONE_ONLY"
+        }
+      ]
+    },
+    "CASA_GARIMPO_REMOTE_BRIDGE_SOURCE_PATH": {
+      "claim_key": "CASA_GARIMPO_REMOTE_BRIDGE_SOURCE_PATH",
+      "owner": "scripts/remote-bridge/CENTRALDARK-REMOTE-BRIDGE.config.json",
+      "lock_key": "8da41b44a49e2bc5f1e777ede81a9c0cd35e3c760ea4e502631e3dd3552eaf78",
+      "state": "SEALED_PROVEN",
+      "proof_target": "SOURCE_CONFIG_DEVICE_LABEL_WORKDIR_REMOTE_MCP",
+      "evidence_ref": "SESSION_RECEIPTS_PLUS_CURRENT_MAIN_SOURCE_2026-09-25",
+      "observed_at": "2026-09-25T10:50:00Z",
+      "counterproof": "PASS",
+      "receipt_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml",
+      "proven_path_replay": {
+        "marker": "PROVEN_PATH_REPLAY_LOCK",
+        "dependency_fingerprint": "5d2f3585c6611b6132b6c4aabc8f2c184dd2ac02bfe2b43f5b228e1ea8f75c69",
+        "fingerprint_material_count": 2,
+        "execution_commands": [
+          "python3 -c 'import json; j=json.load(open(\"scripts/remote-bridge/CENTRALDARK-REMOTE-BRIDGE.config.json\")); assert j[\"device_label\"]==\"SEGREDO\"; assert j[\"workdir\"].endswith(\"GARIMPO-CHEFE\"); assert \"desktopcommander.app\" in j.get(\"remote_mcp\",\"\")'"
+        ],
+        "proof_commands": [
+          "python3 -c 'from pathlib import Path; t=Path(\"scripts/remote-bridge/CentralDark-Remote-One.go\").read_text(); assert \"GARIMPO-CHEFE\" in t and \"desktop-commander\" in t'"
+        ],
+        "expected_results": [
+          "SOURCE_PATH_PASS"
+        ],
+        "expected_effect": "SOURCE_PROVES_GARIMPO_WORKDIR_AND_SEGREDO_LABEL_NOT_IDENTITY_CAUSE",
+        "result_schema": "centraldark.proven-replay.result.v1",
+        "environment_bindings": [],
+        "commands_executable": true,
+        "execution_policy": "READ_ONLY",
+        "proof_commands_read_only": true,
+        "self_test_command": "source-readback",
+        "self_test_result": "PASS",
+        "result_match_policy": "RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH",
+        "raw_output_byte_equality_required": false
+      }
+    },
+    "GH_AUTH_CONTEXT_RESOLUTION_PATH": {
+      "claim_key": "GH_AUTH_CONTEXT_RESOLUTION_PATH",
+      "owner": "GH_CLI_AUTH_CONTEXT",
+      "lock_key": "003a810447d1cc7fd9610b2c463527bcbcd9882cd1194bc3d3307b64eb4ce645",
+      "state": "SEALED_PROVEN",
+      "proof_target": "CANONICAL_GH_CONFIG_CONTEXT_WITHOUT_REAUTH",
+      "evidence_ref": "VPS_RUNTIME_CURRENT_HOME_ISOLATION_AND_CANONICAL_GH_CONFIG_PASS_2026-09-25",
+      "observed_at": "2026-09-25T10:50:00Z",
+      "counterproof": "PASS",
+      "receipt_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml",
+      "proven_path_replay": {
+        "marker": "PROVEN_PATH_REPLAY_LOCK",
+        "dependency_fingerprint": "9c4c046144d9f9a87fd7cae855e732daa08e6ff5d0d43f553294f1661e328850",
+        "fingerprint_material_count": 2,
+        "execution_commands": [
+          "test -f \"$CANONICAL_GH_CONFIG_DIR/hosts.yml\"",
+          "GH_CONFIG_DIR=\"$CANONICAL_GH_CONFIG_DIR\" gh auth status --hostname github.com >/dev/null"
+        ],
+        "proof_commands": [
+          "GH_CONFIG_DIR=\"$CANONICAL_GH_CONFIG_DIR\" gh api user -q .login | grep -Eq \".+\""
+        ],
+        "expected_results": [
+          "AUTH_CONTEXT_PASS"
+        ],
+        "expected_effect": "CANONICAL_CONTEXT_AUTHENTICATES_WITHOUT_NEW_LOGIN",
+        "result_schema": "centraldark.proven-replay.result.v1",
+        "environment_bindings": [
+          "CANONICAL_GH_CONFIG_DIR"
+        ],
+        "commands_executable": true,
+        "execution_policy": "READ_ONLY",
+        "proof_commands_read_only": true,
+        "self_test_command": "canonical-gh-config-probe",
+        "self_test_result": "PASS",
+        "result_match_policy": "RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH",
+        "raw_output_byte_equality_required": false
+      }
+    },
+    "SELF_HOSTED_RUNNER_CAPACITY_DIAGNOSIS_PATH": {
+      "claim_key": "SELF_HOSTED_RUNNER_CAPACITY_DIAGNOSIS_PATH",
+      "owner": "GITHUB_ACTIONS_SELF_HOSTED_RUNNERS",
+      "lock_key": "9f57de5f0d4d408c6368d6b6746c81da4d9532ca6ae792ba83d5f9455e260e7a",
+      "state": "SEALED_PROVEN",
+      "proof_target": "RUNNER_AND_HOST_CAPACITY_SENSOR_SEQUENCE",
+      "evidence_ref": "VPS_8CPU_LOAD_SWAP_DISK_RUNNERS_MEASURED_2026-09-25",
+      "observed_at": "2026-09-25T10:50:00Z",
+      "counterproof": "PASS",
+      "receipt_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml",
+      "proven_path_replay": {
+        "marker": "PROVEN_PATH_REPLAY_LOCK",
+        "dependency_fingerprint": "9567d027a227e1959c06045b342b94c5b028b885248c5a9a5403e9366b43b637",
+        "fingerprint_material_count": 4,
+        "execution_commands": [
+          "nproc >/dev/null",
+          "uptime >/dev/null",
+          "free -b >/dev/null",
+          "df -P / >/dev/null",
+          "GH_CONFIG_DIR=\"$CANONICAL_GH_CONFIG_DIR\" gh api \"repos/$REPO_SLUG/actions/runners\" >/dev/null"
+        ],
+        "proof_commands": [
+          "command -v systemctl >/dev/null && command -v gh >/dev/null",
+          "test -f \"$CANONICAL_GH_CONFIG_DIR/hosts.yml\""
+        ],
+        "expected_results": [
+          "CAPACITY_SENSORS_EXECUTABLE"
+        ],
+        "expected_effect": "CAPACITY_CAN_BE_REMEASURED_WITH_DECLARED_GH_AUTH_CONTEXT_AND_WITHOUT_AUTO_START",
+        "result_schema": "centraldark.proven-replay.result.v1",
+        "environment_bindings": [
+          "REPO_SLUG",
+          "CANONICAL_GH_CONFIG_DIR"
+        ],
+        "commands_executable": true,
+        "execution_policy": "READ_ONLY",
+        "proof_commands_read_only": true,
+        "self_test_command": "capacity-sensor-probe",
+        "self_test_result": "PASS",
+        "result_match_policy": "RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH",
+        "raw_output_byte_equality_required": false
+      }
     }
   }
 }
