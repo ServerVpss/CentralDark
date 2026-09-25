@@ -4,6 +4,10 @@
 
 `ServerVpss/CentralDark` é o repositório oficial e fonte estrutural da verdade. Runtime é medido no ambiente correspondente.
 
+## Contrato bruto de mudança — obrigatório em E:\CentralDark
+
+Toda alteração feita dentro de `E:\CentralDark` segue esta sequência: medir estado → executar menor mudança → testar → contraprovocar → registrar receipt → commit → push → confirmar GitHub. Nenhuma mudança de código, configuração ou documentação pode ser publicada sem receipt em `docs/CONSCIENCIA/RECEIPTS/<id>.md`. O hook local `.githooks` e o workflow `.github/workflows/change-contract.yml` bloqueiam segredo, receipt ausente ou receipt incompleto. Mudança local sem registro é `FAIL`; desconhecido não é `PASS`.
+
 ## Boot obrigatório
 
 ```text
