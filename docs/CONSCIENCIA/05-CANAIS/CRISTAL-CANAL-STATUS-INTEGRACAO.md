@@ -29,6 +29,8 @@ BANCADA_EXTERNA → conector Telegram → @Guardiaodopivete_bot → canal Centra
 | Permissão decisiva | `can_post_messages: true` |
 | Assinatura da postagem | `GuardiaoCasa` |
 | Primeira prova | `message_id 6652` — `ok:true` |
+| Segunda prova | `message_id 6653` — `ok:true` |
+| Ledger | PR-mãe `#1562` recebeu comentário `submitted successfully` |
 
 ## 2. Fronteira honesta
 
@@ -43,34 +45,36 @@ conector conectado. O disparo em cadência depende do Hermes, no PM2, via cron.
 
 Declarar o canal automático sem o processo vivo do lado da VPS é `ACTION != PROOF`.
 
-## 3. Receita — como o Hermes cristaliza isso
-
-Sequência executável para o Hermes assumir a notificação do canal:
+## 3. Receita preenchida — pronta para o Hermes
 
 ```yaml
 CRYSTAL_ID: CANAL_CENTRALDARK_STATUS_VIA_GUARDIAOCASA
 
 CAUSE:
-  o canal oficial precisa receber estado da Casa sem o CHEFE abrir chat
+  O canal oficial CentralDark — Status precisa receber estado da Casa sem o
+  CHEFE abrir chat. A bancada externa só posta quando chamada; quem tem cron
+  é o Hermes, residente no PM2.
 
 OWNER:
   scripts/ — mesmo owner da rota de notify-telegram
-  (não criar owner paralelo)
+  (não criar owner paralelo — REUSE_BEFORE_CREATE)
 
 SCOPE:
   affects:
-    - notificação de status no canal CentralDark — Status
-    - recibos semanais no molde canônico
+    - notificação de status no canal CentralDark — Status (-1003669176367)
+    - recibos semanais no molde de REGRA-NOTIFICACAO-E-RESUMO-SEMANAL.md
   does_not_affect:
     - canal privado do CHEFE (1901426549)
     - bot @Guardiaonotify_bot
+    - bot @srver1bot
     - arquitetura do Live Fabric
 
 FINGERPRINT:
   include:
-    - TELEGRAM_BOT_TOKEN do GuardiaoCasa no cofre
+    - GUARDA_PRINCIPAL_BOT_TOKEN presente no cofre da VPS
     - CANAL_STATUS_CHAT_ID = -1003669176367
-    - bot permanece administrator com can_post_messages
+    - bot permanece administrator com can_post_messages true
+    - molde de resumo inalterado
   exclude:
     - timestamp_noise
     - cosmetic_ui_noise
@@ -78,23 +82,26 @@ FINGERPRINT:
 RECIPE:
   - carregar token do cofre (nunca do chat, nunca do repo)
   - medir getMe do GuardiaoCasa
-  - montar mensagem no molde de REGRA-NOTIFICACAO-E-RESUMO-SEMANAL.md
-  - chamar sendMessage com chat_id -1003669176367
+  - medir estado vivo (git, fila, serviços)
+  - montar mensagem no molde canônico (8 blocos)
+  - chamar sendMessage no chat_id -1003669176367
   - exigir ok:true na resposta
   - gravar receipt com message_id
 
 EXPECTED_RESULT:
   mensagem publicada no canal com author_signature GuardiaoCasa
+  e receipt registrado com o message_id
 
 PROOF:
   command_or_test:
-    sendMessage no canal + leitura de ok:true e message_id
+    curl POST /bot<TOKEN>/sendMessage com chat_id -1003669176367
   pass_condition:
-    ok == true AND message_id presente
+    ok == true AND message_id presente na resposta
 
 COUNTERPROOF:
-  publicar com token inválido deve retornar 401
-  publicar com bot sem admin no canal deve retornar 403
+  - token inválido deve retornar 401
+  - bot sem admin no canal deve retornar 403
+  - chat_id errado deve retornar 400 chat not found
 
 REPLAY:
   same_fingerprint:
@@ -109,8 +116,13 @@ DIVERGENCE:
 RECEIPT:
   required: true
 
+FIXED_POINT_TEST:
+  nova rodada com mesmo fingerprint não pode criar delta material
+  a mensagem deve ser idêntica em estrutura (conteúdo pode variar por fato novo)
+  dedupe: repetição idêntica em menos de 24h não gera novo post
+
 NEXT_CURSOR:
-  ligar o cron do Hermes para postar neste canal
+  Ligar o cron do Hermes para postar no canal -1003669176367
 ```
 
 ### Comando de referência (segredo nunca no repo)
@@ -146,7 +158,7 @@ Falta apenas:
 ```text
 1. ler o molde de REGRA-NOTIFICACAO-E-RESUMO-SEMANAL.md
 2. medir o estado vivo
-3. montar a mensagem
+3. montar a mensagem no molde de 8 blocos
 4. postar no canal -1003669176367
 5. gravar receipt
 ```
@@ -158,7 +170,7 @@ notificação. É a mesma rota, só automatizada.
 
 ```text
 A. Cron do Hermes para o canal — NÃO LIGADO
-B. Dedupe de postagem repetida — não implementado
+B. Dedupe de postagem repetida — especificado no FIXED_POINT_TEST, não implementado
 C. Inventário CASA baseline — não materializado
 D. Verificador de recibo não cobra o rodapé canônico
 ```
@@ -169,9 +181,9 @@ D. Verificador de recibo não cobra o rodapé canônico
 
 ```text
 canal:    CentralDark — Status · -1003669176367
-post:     message_id 6652 · author_signature GuardiaoCasa
-prova:    TELEGRAM_SEND_MESSAGE → ok:true
-commit:   (este commit)
+posts:    message_id 6652 e 6653 · author_signature GuardiaoCasa
+prova:    TELEGRAM_SEND_MESSAGE → ok:true em ambos
+ledger:   PR-mãe #1562 — submitted successfully
 ```
 
 ```text
