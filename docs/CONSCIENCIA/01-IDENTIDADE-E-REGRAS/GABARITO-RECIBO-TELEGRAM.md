@@ -6,6 +6,8 @@ owner: "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/"
 authority: "SEGREDO/CHEFE"
 complements: "REGRA-EMOJI-RICO-GRAMATICA-LIMPA.md"
 truth_rule: "DOCUMENTED != EXECUTED"
+anti_papagaio: true
+verifier: "scripts/verify_recibo_telegram_gabarito.py"
 ---
 
 # Gabarito Determinístico do Recibo Telegram
@@ -23,6 +25,7 @@ preenche não escolhe, só coloca o texto.
 ```text
 DOCUMENTED != EXECUTED
 REGRA_SEM_GABARITO = REGRA_QUE_ESQUECE
+PAPAGAIO_OFF = TRUE
 ```
 
 ## 1. O molde — blocos fixos, emoji fixo
@@ -57,7 +60,7 @@ REGRA_SEM_GABARITO = REGRA_QUE_ESQUECE
 | Pendências | ⚠️ | SIM | — |
 | Porcentagem | 📊 | **SIM** | se houver número |
 | Próximo passo | 🎯 | SIM | — |
-| Âncora de prova | 📌 | SIM | se houver commit/arquivo |
+| Âncora de prova | 📌 | SIM | se houver commit/arquivo/message_id/endpoint |
 | Rodapé | 🧾 ou itálico | SIM | — |
 
 **Bloco sem o emoji certo = recibo inválido.** Não existe "saiu sem" — existe
@@ -76,6 +79,7 @@ Quando o bloco tiver itens, o emoji de estado entra **no item**, não no bloco:
 💎 achado novo
 🔄 divergência entre fontes
 ⚖️ contraprova aplicada
+🔒 segredo/bloqueio/limite de segurança
 ```
 
 Dentro dos blocos de **Feito** e **Pendência**, cada item pode carregar seu próprio
@@ -97,14 +101,50 @@ estado. Fora deles, o emoji é do bloco.
 2. Tem emoji de estado no bloco principal? → se não, corrigir
 3. Tem 📊 se há número?                    → se não, corrigir
 4. Tem 🎯 no fecho?                        → se não, corrigir
-5. Tem 📌 se há commit/arquivo?            → se não, corrigir
+5. Tem 📌 se há commit/arquivo/message_id? → se não, corrigir
 6. Algum emoji fora da paleta?             → remover
 7. Apago os emojis: o texto continua claro? → se não, reescrever texto
 ```
 
-## 6. Frase canônica
+## 6. Anti-papagaio: diferença entre repetir e executar
+
+Um recibo vira `PAPAGAIO` quando ele repete o contrato sem aplicar o molde.
+
+```text
+REPETIR_REGRA != APLICAR_REGRA
+CITAR_GABARITO != PASSAR_NO_GABARITO
+PROMETER_RECIBO != ENTREGAR_RECIBO
+```
+
+O recibo só é canônico quando passa no verificador ou quando, manualmente, contém
+os blocos obrigatórios do §1.
+
+## 7. Subgoal e nota de sessão
+
+Quando a conversa gerar subgoal, decisão ou nota de sessão, o recibo deve conter:
+
+```text
+📣 escopo do subgoal
+🟢 decisão/nota criada ou atualizada
+⚠️ pendência viva separada de PASS
+📊 contagem ou porcentagem honesta se existir
+🎯 próximo cursor único
+📌 arquivo, commit, message_id ou endpoint
+```
+
+Se o subgoal menciona inventário, Hermes autônomo, Telegram ou workflow, o recibo
+não pode terminar só em texto: precisa ancorar o estado em arquivo, commit,
+endpoint, PR ou `UNKNOWN` explícito.
+
+## 8. Frase canônica
 
 > A regra diz o que pode. O gabarito diz o que **tem que** ter. Sem o segundo,
 > o primeiro vira promessa.
 
 > Recibo sem âncora é texto solto. Recibo com âncora é mapa.
+
+```text
+UNKNOWN != PASS
+REALIDADE = JUIZ
+PAPAGAIO_OFF
+```
