@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 import {
@@ -480,4 +481,32 @@ test("janela adversarial de espera continua configurável", () => {
   assert.equal(waitAgeMs(prFixture({ updated_at: "2026-08-14T02:00:00.000Z" })), null);
   assert.equal(waitTimeoutMsFromEnv({}), DEFAULT_WAIT_TIMEOUT_MS);
   assert.equal(waitTimeoutMsFromEnv({ BOT_WAIT_TIMEOUT_MINUTES: "10" }), 600000);
+});
+
+
+test("Dependabot workflow_run não faz fan-out em main ou PR humano", async () => {
+  const workflow = await readFile(
+    new URL("../.github/workflows/dependabot-auto-merge.yml", import.meta.url),
+    "utf8",
+  );
+  assert.match(
+    workflow,
+    /github\.event_name == 'workflow_run' && startsWith\(github\.event\.workflow_run\.head_branch, 'dependabot\/'\)/,
+  );
+  assert.doesNotMatch(
+    workflow,
+    /^\s*github\.event_name == 'workflow_run' \|\|$/m,
+  );
+});
+
+
+test("Trigger Fabric obrigatório dispara em todo PR para main", async () => {
+  const workflow = await readFile(
+    new URL("../.github/workflows/trigger-fabric-package.yml", import.meta.url),
+    "utf8",
+  );
+  const pullBlock = workflow.match(/\n  pull_request:\n([\s\S]*?)\n  push:\n/);
+  assert.ok(pullBlock, "pull_request block ausente");
+  assert.match(pullBlock[1], /branches:\s*\[main\]/);
+  assert.doesNotMatch(pullBlock[1], /\bpaths:/);
 });

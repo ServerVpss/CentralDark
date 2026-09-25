@@ -1,0 +1,51 @@
+schema: centraldark.bot-mandatory-rules.v1
+updated: 2026-09-25
+owner: apps/bot-telegram/
+authority: SEGREDO/CHEFE
+runtime_consumer: apps/bot-telegram/unified-bot.cjs
+status: CANONICAL_BINDING
+
+mandatory_rules:
+  micro_deploy_continuo_por_pass_comprovado:
+    required: true
+    canonical_rule: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/REGRA-MICRO-DEPLOY-CONTINUO-POR-PASS-COMPROVADO.md
+    trigger_fabric_binding: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MICRO-DEPLOY-CONTINUO-BINDING.yml
+    memory_anchor: docs/CONSCIENCIA/05-APRENDIZADOS/MICRO-DEPLOY-CONTINUO-POR-PASS-COMPROVADO.md
+    formula:
+      - QUALQUER_PASS_COMPROVADO
+      - MICRO_DEPLOY_DO_ESCOPO_AFETADO
+      - HEALTH_OU_PROVA_RUNTIME
+      - RECEIPT_PR_MAE
+      - NEXT_TIK_TAK
+    bot_obligation:
+      status_panel_must_expose_rule: true
+      ai_prompt_must_inherit_rule: true
+      free_text_agent_must_respect_rule: true
+      admin_commands_must_not_treat_unknown_as_pass: true
+      bot_scope_pass_requires_bot_runtime_health: true
+    locks:
+      PASS_VISUAL_BADGE_ONLY: false
+      ACTION_REQUIRED_IS_NOT_PASS: true
+      UNKNOWN_IS_NOT_PASS: true
+      LOCAL_PROOF_WITH_RUNTIME_SCOPE_REQUIRES_RUNTIME_PROOF: true
+      MERGED_IS_NOT_DEPLOYED: true
+      DOCUMENTED_IS_NOT_EXECUTED: true
+      NO_SECRET_LEAK: true
+      NO_BLIND_RESET: true
+      NO_BLIND_PULL_OVER_DIRTY_RUNTIME: true
+    receipt_required:
+      - START_HEAD
+      - SOURCE_REF
+      - COMMIT_SHA
+      - MAIN_HEAD
+      - SCOPE
+      - DEPLOY_ACTION
+      - RUNTIME_HEALTH
+      - RUNTIME_SHA_OR_RUNTIME_VERSION
+      - SECRET_EXPOSED=false
+      - RESULT
+      - NEXT_CURSOR
+
+runtime_note: >-
+  Este arquivo amarra a regra no escopo do bot CentralDark sem criar arquitetura paralela.
+  O bot continua consumidor do contrato canônico; ele não vira autoridade, juiz ou owner novo.

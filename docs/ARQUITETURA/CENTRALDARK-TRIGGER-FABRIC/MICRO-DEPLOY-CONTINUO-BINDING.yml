@@ -1,0 +1,85 @@
+schema: centraldark.micro-deploy-continuo-binding.v1
+updated: 2026-09-25
+status: CANONICAL_TRIGGER_FABRIC_BINDING
+authority: SEGREDO/CHEFE
+owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/
+canonical_rule: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/REGRA-MICRO-DEPLOY-CONTINUO-POR-PASS-COMPROVADO.md
+truth_rule: REALIDADE_IS_JUDGE
+
+purpose: >-
+  Amarrar a regra global de micro-deploy continuo no plano operacional do Trigger Fabric
+  para que qualquer PASS comprovado avance no menor escopo material sem esperar
+  perfeicao global e sem liberar falso-verde.
+
+activation:
+  on_pass_comprovado: true
+  on_unknown: false
+  on_visual_badge_only: false
+  on_action_required: false
+  on_documentation_only_with_runtime_scope: false
+
+formula:
+  - QUALQUER_PASS_COMPROVADO
+  - MICRO_DEPLOY_DO_ESCOPO_AFETADO
+  - HEALTH_OU_PROVA_RUNTIME
+  - RECEIPT_PR_MAE
+  - NEXT_TIK_TAK
+
+scope_routes:
+  PASS_COMPROVADO_MCP: MICRO_DEPLOY_MCP
+  PASS_COMPROVADO_BOT: MICRO_DEPLOY_BOT
+  PASS_COMPROVADO_HERMES: MICRO_DEPLOY_HERMES
+  PASS_COMPROVADO_PLUGIN: MICRO_DEPLOY_PLUGIN
+  PASS_COMPROVADO_DOC_ONLY: DEPLOY_NOT_APPLICABLE_WITH_RECEIPT
+
+required_chain:
+  - PR_FILHO_CHECK_DETERMINISTICO_PASS
+  - MERGE_SQUASH_OU_PROMOCAO_AUTORIZADA
+  - MAIN
+  - MICRO_DEPLOY_VPS_DO_ESCOPO
+  - HEALTH_OU_PROVA_RUNTIME
+  - RECEIPT_PR_MAE
+  - NEXT_TIK_TAK
+
+locks:
+  CI_DOES_NOT_REQUIRE_GLOBAL_PERFECTION: true
+  UNRELATED_UNKNOWN_DOES_NOT_BLOCK_PROVEN_SCOPE: true
+  FAILED_CHECK_BLOCKS_ONLY_ITS_SCOPE: true
+  PROVEN_SCOPE_CAN_PROGRESS: true
+  REFINE_AFTER_MICRO_DEPLOY: true
+  PASS_VISUAL_BADGE_ONLY: false
+  ACTION_REQUIRED_IS_NOT_PASS: true
+  UNKNOWN_IS_NOT_PASS: true
+  LOCAL_PROOF_WITH_RUNTIME_SCOPE_REQUIRES_RUNTIME_PROOF: true
+  NO_SECRET_LEAK: true
+  NO_BLIND_RESET: true
+  NO_BLIND_PULL_OVER_DIRTY_RUNTIME: true
+  MERGED_IS_NOT_DEPLOYED: true
+  ACTION_IS_NOT_PROOF: true
+  DOCUMENTED_IS_NOT_EXECUTED: true
+
+receipt_minimum_fields:
+  - START_HEAD
+  - SOURCE_REF
+  - COMMIT_SHA
+  - MAIN_HEAD
+  - SCOPE
+  - DEPLOY_ACTION
+  - RUNTIME_HEALTH
+  - RUNTIME_SHA_OR_RUNTIME_VERSION
+  - SECRET_EXPOSED=false
+  - RESULT
+  - NEXT_CURSOR
+
+consumers:
+  bot: apps/bot-telegram/CENTRALDARK-MANDATORY-RULES.yml
+  claude: CLAUDE.md
+  readme: README.md
+  memory: docs/CONSCIENCIA/05-APRENDIZADOS/MICRO-DEPLOY-CONTINUO-POR-PASS-COMPROVADO.md
+
+non_goals:
+  - criar segundo motor
+  - reiniciar tudo
+  - promover UNKNOWN para PASS
+  - tratar merge como deploy
+  - tratar documento como runtime executado
