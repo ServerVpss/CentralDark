@@ -239,15 +239,15 @@ jobs:
 
           # Dependências novas exigem release-dir atômico; código puro segue
           # automaticamente. Nunca altera node_modules do processo vivo.
-          git -C "$REPO_DIR" diff --quiet "$CURRENT_SHA" "$TARGET_SHA" -- \
-            apps/modulos/mcp/package.json apps/modulos/mcp/package-lock.json || {
+          if git -C "$REPO_DIR" diff --quiet "$CURRENT_SHA" "$TARGET_SHA" -- \
+            apps/modulos/mcp/package.json apps/modulos/mcp/package-lock.json; then
+            echo "darkai_consult=unavailable_script_gates_used"
+          else
             echo "MCP_DEPENDENCY_MANIFEST_CHANGED"
             DEPENDENCY_BACKUP="$MCP_DIR/.backup-depmanifest-$CURRENT_SHA.tar.gz"
             if [[ ! -e "$DEPENDENCY_BACKUP" ]]; then
               tar -czf "$DEPENDENCY_BACKUP" -C "$MCP_DIR" . 2>/dev/null || true
             fi
-          else
-            echo "darkai_consult=unavailable_script_gates_used"
           fi
 
           MCP_JSON="$(pm2 jlist | jq -c --arg app "$PM2_APP" '.[] | select(.name == $app)' | head -n1)"
