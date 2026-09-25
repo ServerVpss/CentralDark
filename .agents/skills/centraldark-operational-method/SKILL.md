@@ -165,6 +165,37 @@ IMPROVE_EXISTING_OWNER_BEFORE_NEW_OWNER=true
 
 Exemplo provado: no Telegram, não criar bot novo; medir o owner existente; provar o estado real; preservar canal válido; corrigir somente o delta causal.
 
+### Remeasure Before Create — remedir o mesmo alvo antes de criar
+
+REMEASURE_BEFORE_CREATE é uma especialização de MEASURE_BEFORE_CREATION no mesmo owner, não uma regra/arquitetura paralela. Aplica-se quando o alvo é vivo, mutável, temporal, externo ou quando a última observação pode ter envelhecido.
+
+\`\`\`text
+REMEASURE_BEFORE_CREATE=true
+REMEASURE_BEFORE_CREATE_EXTENDS=MEASURE_BEFORE_CREATION
+SAME_TARGET_FRESH_OBSERVATION_REQUIRED=true
+HISTORY_IS_INPUT_NOT_CURRENT_PROOF=true
+STALE_MEASUREMENT_CANNOT_AUTHORIZE_CREATION=true
+SENSOR_FAILURE_IS_NOT_WORLD_FAILURE=true
+ALTERNATE_AUTHORIZED_ROUTE_BEFORE_BLOCKER=true
+CONFLICTING_SENSORS_REQUIRE_DISCRIMINATING_TEST=true
+UNKNOWN_OR_BLOCKED_IF_FRESH_REMEASUREMENT_UNAVAILABLE=true
+\`\`\`
+
+Fluxo obrigatório quando houver possibilidade de drift:
+
+\`\`\`text
+PEDIDO DE CRIAÇÃO/CORREÇÃO
+  → IDENTIFICAR O MESMO ALVO
+  → REMEDIR O ESTADO VIVO
+  → CRUZAR COM OWNER + HEAD/FINGERPRINT + RUNTIME
+  → SE CONFLITAR, TESTE DISCRIMINANTE
+  → REUTILIZAR/ESTENDER OWNER EXISTENTE
+  → CRIAR SOMENTE SE O GAP SOBREVIVER À REMEDIÇÃO
+  → T1 NO MESMO ALVO
+\`\`\`
+
+Regra temporal: PROVADO_ANTES != PROVADO_AGORA. Receipt e memória servem como proveniência e hipótese de reutilização; não substituem uma leitura CURRENT quando o fato pode ter mudado.
+
 
 ## Risco e autorização (fail-closed proporcional)
 
