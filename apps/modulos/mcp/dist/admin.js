@@ -998,7 +998,6 @@ async function rodarE2EInterno({ comAdmin, cid }) {
     }
     // 2) Discovery
     const disc = await fazerRequest(`${base}/.well-known/oauth-authorization-server`, { headers: baseHeaders });
-
     etapas.push({ nome: "Discovery /.well-known", ok: disc.ok, status: disc.status, ms: disc.ms, detalhe: disc.json?.issuer || disc.erro });
     if (!disc.ok) {
         falhouEm = "Discovery";
