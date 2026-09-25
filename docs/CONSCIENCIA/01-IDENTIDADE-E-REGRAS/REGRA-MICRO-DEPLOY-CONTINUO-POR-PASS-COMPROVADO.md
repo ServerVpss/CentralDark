@@ -143,6 +143,51 @@ RECEIPT_PR_MAE_REQUIRED=true
 NEXT_TIK_TAK_REQUIRED=true
 ```
 
-## 9. Frase canônica
+## 9. Ledger contínuo de toda novidade no PR-mãe #1562
 
-> Qualquer PASS comprovado vira micro-deploy do escopo afetado. Atualização é constante; falso-verde continua proibido.
+A atualização do PR-mãe não depende de PASS. **Toda e qualquer novidade real do sistema** deve alimentar o ledger no mesmo ciclo em que for observada, antes de o executor seguir adiante.
+
+```text
+EVERY_NOVELTY_FEEDS_PR_MOTHER=true
+PR_MOTHER=#1562
+PR_MOTHER_APPEND_ONLY=true
+NOVELTY_DOES_NOT_WAIT_FOR_PASS=true
+NOVELTY_DOES_NOT_WAIT_FOR_MERGE=true
+NOVELTY_DOES_NOT_WAIT_FOR_DEPLOY=true
+PR_MOTHER_RECORDS_PASS_FAIL_UNKNOWN_BLOCKED_STALE=true
+EXACT_REPEAT_MAY_DEDUPE=true
+NO_SECRET_IN_PR_MOTHER_LEDGER=true
+```
+
+Conta como novidade, sem limitar a lista:
+
+- descoberta, correção de diagnóstico ou contraprova nova;
+- PASS, FAIL, UNKNOWN, BLOCKED ou STALE novo;
+- novo repo/projeto, owner, rota, endpoint, adapter, ferramenta ou conector;
+- novo acesso/permissão ou mudança de autenticação;
+- commit, PR, merge, deploy, rollback ou mudança de HEAD;
+- mudança de runtime, health, processo, porta, cardinalidade ou versão;
+- nova integração entre superfícies já existentes;
+- nova decisão canônica, trava, regra, receipt, evidência ou NEXT_CURSOR;
+- qualquer mudança material que altere o entendimento CURRENT.
+
+Registro mínimo da novidade:
+
+```text
+OBSERVED_AT=
+SOURCE_REF=
+SCOPE=
+NOVELTY=
+STATE=PASS|FAIL|UNKNOWN|BLOCKED|STALE|NO_CHANGE
+EVIDENCE=
+IMPACT=
+ACTION_TAKEN=
+SECRET_EXPOSED=false
+NEXT_CURSOR=
+```
+
+NO_CHANGE só pode aparecer como resultado de uma remedição explícita; repetição literal sem delta pode ser deduplicada. O PR-mãe continua sendo ledger/rendezvous e **não vira writer nem veículo de merge**.
+
+## 10. Frase canônica
+
+> Qualquer PASS comprovado vira micro-deploy do escopo afetado. Toda novidade alimenta o PR-mãe #1562. Atualização é constante; falso-verde continua proibido.

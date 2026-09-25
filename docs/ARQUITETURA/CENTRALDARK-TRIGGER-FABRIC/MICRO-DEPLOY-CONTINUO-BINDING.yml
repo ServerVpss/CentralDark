@@ -12,11 +12,34 @@ purpose: >-
   perfeicao global e sem liberar falso-verde.
 
 activation:
+  on_any_new_material_delta: true
+  novelty_feeds_pr_mother_1562: true
+  novelty_waits_for_pass: false
+  novelty_waits_for_merge: false
+  novelty_waits_for_deploy: false
   on_pass_comprovado: true
   on_unknown: false
   on_visual_badge_only: false
   on_action_required: false
   on_documentation_only_with_runtime_scope: false
+
+novelty_ledger:
+  target: PR_MAE_1562
+  mode: APPEND_ONLY
+  states:
+    - PASS
+    - FAIL
+    - UNKNOWN
+    - BLOCKED
+    - STALE
+  exact_repeat_may_dedupe: true
+  no_secret_leak: true
+  chain:
+    - QUALQUER_NOVIDADE_REAL
+    - CLASSIFICAR_ESTADO
+    - ANEXAR_EVIDENCIA
+    - RECEIPT_PR_MAE
+    - NEXT_CURSOR
 
 formula:
   - QUALQUER_PASS_COMPROVADO

@@ -6,6 +6,29 @@ runtime_consumer: apps/bot-telegram/unified-bot.cjs
 status: CANONICAL_BINDING
 
 mandatory_rules:
+  pr_mae_1562_toda_novidade:
+    required: true
+    canonical_rule: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/REGRA-MICRO-DEPLOY-CONTINUO-POR-PASS-COMPROVADO.md
+    target: PR_MAE_1562
+    mode: APPEND_ONLY
+    register_on:
+      - PASS
+      - FAIL
+      - UNKNOWN
+      - BLOCKED
+      - STALE
+      - NOVA_DESCOBERTA
+      - NOVA_INTEGRACAO
+      - NOVO_ACESSO
+      - NOVA_ROTA
+      - NOVO_COMMIT_PR_MERGE_DEPLOY
+      - NOVA_CONTRAPROVA
+      - NOVA_DECISAO_CANONICA
+    locks:
+      NOVELTY_DOES_NOT_WAIT_FOR_PASS: true
+      EXACT_REPEAT_MAY_DEDUPE: true
+      NO_SECRET_LEAK: true
+      PR_MOTHER_IS_LEDGER_NOT_WRITER: true
   micro_deploy_continuo_por_pass_comprovado:
     required: true
     canonical_rule: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/REGRA-MICRO-DEPLOY-CONTINUO-POR-PASS-COMPROVADO.md

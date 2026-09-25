@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 import { spawnSync } from 'node:child_process';
-import { houseSquashFixedPointProof } from './fixed-point.mjs';
 
 const token = process.env.GITHUB_TOKEN || '';
 const repository = process.env.GITHUB_REPOSITORY || 'ServerVpss/CentralDark';
@@ -96,95 +95,32 @@ async function listAll(path, key) {
   return { ok: false, status: 508, items: out };
 }
 
-function latestChecksByName(checks) {
-  const latest = new Map();
-  for (const check of [...checks].sort((a, b) => Number(b.id || 0) - Number(a.id || 0))) {
-    const name = String(check.name || '');
-    if (name && !latest.has(name)) latest.set(name, check);
-  }
-  return [...latest.values()];
-}
-
-async function realitySquashProbe(number, expectedHead) {
-  const observed = await remeasureMergeability(number);
-  if (!observed) return { proof: houseSquashFixedPointProof({ prNumber: number }), observed: null };
-
-  const checksResult = await listAll(`/commits/${encodeURIComponent(observed.head.sha)}/check-runs`, 'check_runs');
-  const checks = latestChecksByName(checksResult.items);
-  const pendingChecks = checks.filter((check) => check.status !== 'completed');
-  const nonGreenChecks = checks.filter((check) =>
-    check.status === 'completed' && String(check.conclusion || '').toLowerCase() !== 'success'
-  );
-
-  const statusResult = await api(`/commits/${encodeURIComponent(observed.head.sha)}/status`);
-  const statuses = statusResult.ok && Array.isArray(statusResult.data?.statuses) ? statusResult.data.statuses : [];
-  const badStatuses = statuses.filter((status) => String(status.state || '').toLowerCase() !== 'success');
-
-  const reviewsResult = await listAll(`/pulls/${number}/reviews`, '__array__');
-  const latestReviewByUser = new Map();
-  for (const review of reviewsResult.items) {
-    latestReviewByUser.set(review.user?.login || String(review.id), review);
-  }
-  const changesRequested = [...latestReviewByUser.values()].some((review) => review.state === 'CHANGES_REQUESTED');
-
-  const labels = (observed.labels || []).map((label) => label.name || label);
-  const blockers = [];
-  if (!checksResult.ok) blockers.push(`CHECKS_HTTP_${checksResult.status}`);
-  if (!statusResult.ok) blockers.push(`STATUSES_HTTP_${statusResult.status}`);
-  if (!reviewsResult.ok) blockers.push(`REVIEWS_HTTP_${reviewsResult.status}`);
-
-  const proof = houseSquashFixedPointProof({
-    prNumber: number,
-    state: observed.state,
-    draft: observed.draft,
-    labels,
-    protectedPrs: [...protectedPrs],
-    mergeable: observed.mergeable,
-    mergeState: observed.mergeable_state,
-    headSha: expectedHead,
-    observedHeadSha: observed.head.sha,
-    pendingChecks: pendingChecks.length,
-    nonGreenChecks: nonGreenChecks.length,
-    badStatuses: badStatuses.length,
-    successChecks: checks.filter((check) => check.status === 'completed' && check.conclusion === 'success').length,
-    changesRequested,
-    blockers,
-  });
-
-  return {
-    proof,
-    observed,
-    evidence: {
-      checks_total: checks.length,
-      checks_pending: pendingChecks.length,
-      checks_non_green: nonGreenChecks.length,
-      statuses_bad: badStatuses.length,
-      changes_requested: changesRequested,
-    },
-  };
-}
-
-async function squashIfRealityGreen(number, expectedHead, title) {
-  const probe = await realitySquashProbe(number, expectedHead);
-  if (!probe.proof.ready) return { merged: false, reason: probe.proof.verdict, ...probe };
-
-  const merge = await api(`/pulls/${number}/merge`, {
-    method: 'PUT',
+async function dispatchCanonicalOwner(pr) {
+  const author = String(pr?.user?.login || '');
+  const dependabot = author === 'dependabot[bot]';
+  const eventType = dependabot ? 'centraldark_dependabot_reconcile' : 'centraldark_autonomia_recheck';
+  const response = await api('/dispatches', {
+    method: 'POST',
     body: {
-      sha: expectedHead,
-      merge_method: 'squash',
-      commit_title: `${title} (#${number})`,
-      commit_message: 'CentralDark REALITY deterministic green squash: exact HEAD + all CI green + no policy blockers.',
+      event_type: eventType,
+      client_payload: {
+        pr_number: Number(pr?.number || 0),
+        head_sha: pr?.head?.sha || null,
+        source: 'house_pr_reconciler',
+        reconciliation_only: true,
+        canonical_promotion_owner: dependabot
+          ? '.github/workflows/dependabot-auto-merge.yml'
+          : '.github/workflows/autonomia-promocao.yml',
+      },
     },
   });
   return {
-    merged: Boolean(merge.ok && merge.data?.merged),
-    reason: merge.ok && merge.data?.merged ? 'SQUASH_MERGED' : `MERGE_HTTP_${merge.status}`,
-    merge_sha: merge.data?.sha || null,
-    ...probe,
+    ok: response.ok,
+    status: response.status,
+    event_type: eventType,
+    dependabot,
   };
 }
-
 const list = await api('/pulls?state=open&per_page=100');
 if (!list.ok) {
   console.error(`BLOCKED_LIST_PRS status=${list.status}`);
@@ -301,17 +237,19 @@ for (const item of prs) {
     continue;
   }
 
-  const squash = await squashIfRealityGreen(number, pr.head.sha, pr.title || `PR #${number}`);
-  receipt.squash_proof = squash.proof;
-  receipt.squash_evidence = squash.evidence || null;
-  receipt.action = squash.merged ? 'SQUASH_MERGED' : 'GREEN_SQUASH_BLOCKED';
-  receipt.state = squash.merged ? 'MERGED' : squash.reason;
-  receipt.merge_sha = squash.merge_sha || null;
-  if (squash.merged) {
+  const routed = await dispatchCanonicalOwner(pr);
+  receipt.action = routed.ok
+    ? (routed.dependabot ? 'ROUTED_TO_DEPENDABOT_CANONICAL_OWNER' : 'ROUTED_TO_AUTONOMIA_PROMOTER')
+    : 'CANONICAL_PROMOTION_DISPATCH_FAILED';
+  receipt.state = routed.ok ? 'WAIT_CANONICAL_OWNER' : `HTTP_${routed.status}`;
+  receipt.canonical_event = routed.event_type;
+  receipt.merge_sha = null;
+  if (routed.ok) {
     acted += 1;
-    console.log(`PR #${number} REALITY_SQUASH=PASS head=${pr.head.sha} merge=${squash.merge_sha}`);
+    console.log(`PR #${number} RECONCILIATION_COMPLETE route=${routed.event_type} head=${pr.head.sha} direct_merge=0`);
   } else {
-    console.log(`PR #${number} REALITY_SQUASH=BLOCKED verdict=${squash.proof?.verdict || 'UNKNOWN'}`);
+    blocked += 1;
+    console.error(`PR #${number} CANONICAL_DISPATCH_FAILED event=${routed.event_type} status=${routed.status}`);
   }
   summary.push(receipt);
 }
