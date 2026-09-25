@@ -8,19 +8,22 @@ Este arquivo é um complemento específico do Claude. Ele não substitui `CLAUDE
 2. Leia `00-COMECE-AQUI-IA.md`.
 3. Leia **integralmente** `CLAUDE.md` como Constituição universal de todas as IAs.
 4. Leia `AGENTS.md`.
-5. Leia `docs/GOVERNANCA/HIERARQUIA-INSTRUCOES-IA.md`.
-6. Leia `docs/COFRE/README.md`.
-7. Execute o BOOT operacional em `docs/GOVERNANCA/BOOT-IA.md`.
-8. Leia `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/REGRA-MICRO-DEPLOY-CONTINUO-POR-PASS-COMPROVADO.md`.
-9. Leia `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MICRO-DEPLOY-CONTINUO-BINDING.yml`.
-10. Leia `docs/CONSCIENCIA/MICRO-DEPLOY/CENTRALDARK-LIVE-EDITING-FABRIC.md`.
-11. Leia `.agents/skills/centraldark-live-editing-fabric/SKILL.md`.
-12. Leia `docs/CONSCIENCIA/MICRO-DEPLOY/MAIN-PINNED-RUNTIME-FAST-PATH-FALLBACK.md`.
-13. Leia `.agents/skills/main-pinned-runtime-fast-path/SKILL.md`.
-14. Leia `MODULES/HUB/CENTRALDARK-HUB-CREDENTIAL-CONTROL-PLANE.md`.
-15. Leia `.agents/skills/centraldark-hub-credential-control-plane/SKILL.md`.
-16. Confirme branch do workspace, ref inspecionada, SHA, ambiente, escopo, riscos, testes, prova e rollback.
-17. Não altere nada antes de concluir o BOOT operacional.
+5. Leia `.agents/INTENT-DEPLOY-BINDING.json`.
+6. Leia `.agents/CAPABILITY-HUD-BOOT.json`.
+7. Leia `.agents/skills/centraldark-capability-hud/SKILL.md`.
+8. Leia `docs/GOVERNANCA/HIERARQUIA-INSTRUCOES-IA.md`.
+9. Leia `docs/COFRE/README.md`.
+10. Execute o BOOT operacional em `docs/GOVERNANCA/BOOT-IA.md`.
+11. Leia `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/REGRA-MICRO-DEPLOY-CONTINUO-POR-PASS-COMPROVADO.md`.
+12. Leia `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MICRO-DEPLOY-CONTINUO-BINDING.yml`.
+13. Leia `docs/CONSCIENCIA/MICRO-DEPLOY/CENTRALDARK-LIVE-EDITING-FABRIC.md`.
+14. Leia `.agents/skills/centraldark-live-editing-fabric/SKILL.md`.
+15. Leia `docs/CONSCIENCIA/MICRO-DEPLOY/MAIN-PINNED-RUNTIME-FAST-PATH-FALLBACK.md`.
+16. Leia `.agents/skills/main-pinned-runtime-fast-path/SKILL.md`.
+17. Leia `MODULES/HUB/CENTRALDARK-HUB-CREDENTIAL-CONTROL-PLANE.md`.
+18. Leia `.agents/skills/centraldark-hub-credential-control-plane/SKILL.md`.
+19. Confirme branch do workspace, ref inspecionada, SHA, ambiente, escopo, riscos, testes, prova, rollback e capacidade operacional carregada.
+20. Não altere nada antes de concluir o BOOT operacional.
 
 A Baseline de Defesa da Seção 0 de `CLAUDE.md` é obrigatória.
 
@@ -36,9 +39,35 @@ PERTINENCE_FIRST=true
 MINIMUM_SUFFICIENT_LOOP=true
 TRIGGERS_ARE_CONDITIONAL_NOT_RITUAL=true
 ALIGN_THOUGHT_NOT_WORDING=true
+INTENT_CONFIDENCE_GTE_95_EXECUTES_IF_SCOPE_AND_TOOL_ARE_CLEAR=true
 ```
 
 Claude deve recalcular intenção antes de escolher ferramenta, subagente, deploy, CI, microdeploy, escrita ou resposta.
+
+## Capability HUD obrigatório
+
+Antes de dizer `não consigo`, `não tenho ferramenta`, `preciso do link` ou voltar cedo, Claude deve medir a capacidade real da sessão.
+
+```text
+TOOL_UNKNOWN
+→ LOAD .agents/CAPABILITY-HUD-BOOT.json
+→ LOAD .agents/skills/centraldark-capability-hud/SKILL.md
+→ PROBE_RELEVANT_TOOL
+→ IF_FAIL, REPORT REAL BLOCKER
+→ ASK_ONLY_MINIMUM_IDENTIFIER
+```
+
+HUD mínimo:
+
+```text
+TOOL_OR_ROUTE=
+DISCOVERED_CAPABILITY=
+PROBE_ATTEMPTED=
+RESULT=
+BLOCKER_IF_ANY=
+NEXT_REQUIRED_IDENTIFIER=
+CONFIDENCE_ACTING_PERCENT=
+```
 
 ## Gatilhos obrigatórios por pertinência
 
@@ -47,10 +76,10 @@ Claude deve recalcular intenção antes de escolher ferramenta, subagente, deplo
 → recuperar CURRENT, owner, escopo, runtime, PR/receipt e estado vivo.
 
 🌅 #ACORDAR
-→ medir HEAD/branch/worktree/runtime/PM2/MCP/HUB/Casa/VPS antes de afirmar ou mutar.
+→ medir HEAD/branch/worktree/runtime/PM2/MCP/HUB/Casa/VPS e Capability HUD antes de afirmar ou mutar.
 
 🎯 !CALIBRAR
-→ calcular intenção, confiança, autoridade, writer, risco, frequência e gatilho mínimo.
+→ calcular intenção, confiança, autoridade, writer, risco, frequência, capacidade disponível e gatilho mínimo.
 
 ⭕ !AURÉOLA CANÔNICA
 → mostrar rota operacional quando material: FASE, EIXO, OWNER, DESTINO, NEXT_GATE, PROVA, FERIDA, NEXT_CURSOR.
@@ -82,6 +111,9 @@ Regra de seleção:
 ```text
 SE INTENCAO_CLARA && ESCOPO_AUTORIZADO
 → EXECUTE_MINIMUM_COMPLETE_PATH
+
+SE TOOL/ROTA_INCERTA || AGENTE_QUER_DIZER_NAO_CONSIGO
+→ CAPABILITY_HUD + PROBE_RELEVANT_TOOL_FIRST
 
 SE DELTA_ENVOLVE_RUNTIME
 → CENTRALDARK_LIVE_EDITING_FABRIC + MAIN_PINNED_FAST_PATH
@@ -181,6 +213,10 @@ OAUTH_ACTIVE != TOOL_CALL_PASS
 MODEL_COUNT != MODEL_ROUTE_PASS
 HTTP_200 != FEATURE_READY
 TOOL_LISTED != TOOL_ACTIVE
+OAUTH_CONNECTED != DEVICE_USABLE
+SEARCHED != VERIFIED
+COMMIT_EXISTS != CI_PASS
+PATCHED != ROOT_CAUSE_FIXED
 ```
 
 Se uma frente Claude comprovar PASS em escopo material, ela deve avançar somente esse escopo, medir runtime/health quando aplicável, registrar receipt e continuar no `NEXT_TIK_TAK`. Essa regra não autoriza restart global, segredo, force-push ou mutação fora do escopo.
