@@ -132,3 +132,123 @@ WORKDIR != DEVICE_IDENTITY
 HISTORICAL_DEVICE != CURRENT_ROUTABLE_DEVICE
 TOOL_FAILURE != WORLD_FAILURE
 ```
+
+
+## Registro durável — Execução determinística sem IA — 2026-09-25
+
+HEAD_VERIFIED=f4d3130e9d5f842165b2a6327b2d505e67ddfd5a
+PR_CHILD=#1684
+PR_MOTHER=#1562
+AI_REQUIRED_FOR_STATUS=false
+SAME_HEAD_BUILD=PASS
+TESTS=15_PASS_0_FAIL
+
+### Frente 1 — MCP / topologia de execução
+
+Owner reutilizado: `apps/modulos/mcp/src/operational-telemetry.js`.
+
+O snapshot `centraldark_operational_snapshot` agora inclui `executionTopology` determinístico, baseado em:
+
+- `/proc/*/cmdline` para presença de runtimes;
+- `logs/mcp-audit-*.jsonl*` para atividade recente real de `tools/call`;
+- sem LLM para classificar quem está vivo/executando.
+
+Leis:
+
+```text
+UI_LOOP_PAUSED != GLOBAL_EXECUTION_PAUSED
+PLANNER != EXECUTOR
+MONITOR != EXECUTOR
+PROCESS_PRESENT != EXECUTION_PROOF
+RECENT_MCP_TOOL_CALL = EXECUTION_EVIDENCE
+UNKNOWN != PASS
+```
+
+Lanes medidas: MCP, Telegram Bot, Hermes runtime, Hermes cron/external worker, GitHub runner, Remote Desktop e Guardião.
+
+### Frente 2 — Telegram /status sem IA
+
+Owner reutilizado: `apps/bot-telegram/unified-bot.cjs`.
+
+`/status` consome `/health/deep -> operationalSnapshot.executionTopology` e exibe:
+
+- verdict de execução;
+- idade da última tool-call MCP;
+- multiplicidade do unified-bot;
+- lanes RUNNING/NOT_OBSERVED.
+
+Se `/health/deep` não provar topologia, retorna `UNKNOWN`. Nenhum fallback LLM é usado para esse status.
+
+### Frente 3 — GuardiaoCasa / perfil
+
+Owner preservado: `scripts/set-bot-profile.sh`.
+
+Contrato testável:
+
+```text
+GUARDA_PRINCIPAL_BOT_TOKEN -> GuardiaoCasa
+ONLY_GUARDIAO=1 -> não toca srver1bot
+MPRVA = getMe -> setMyShortDescription -> setMyDescription -> getMyDescription
+```
+
+O teste impede regressão para `TOK_GUARDA`/owner antigo.
+
+### Frente 4 — Shell / operador / contexto de auth
+
+Novo diagnóstico dentro do owner de diagnostics existente:
+`scripts/diagnostics/centraldark-operator-preflight.sh`.
+
+Ele é read-only e classifica deterministicamente:
+
+- `gh STATUS` -> `gh status`;
+- path `.cjs/.mjs/.js/.ts/.tsx` digitado como comando -> SOURCE_PATH_NOT_SHELL_COMMAND;
+- placeholder com `...` -> PLACEHOLDER_NOT_EXECUTABLE;
+- `~/.cargo/env` ausente -> ruído opcional/guard necessário;
+- auth `gh` do HOME atual vs config canônica;
+- helper Git HTTPS separado do auth do GitHub CLI;
+- caminhos reais de consciousness, hub-mission-consumer e orchestrator.
+
+Prova viva via Remote Desktop:
+
+```text
+WHOAMI=root
+HOME=/root/.centraldark/mcp-auth/profiles/conta2/home
+/root/.config/gh/hosts.yml=PRESENT
+GH_AUTH(current profile)=FAIL
+GH_AUTH(GH_CONFIG_DIR=/root/.config/gh)=PASS
+GH_LOGIN=segredounlock
+GIT_HTTPS_CREDENTIAL_HELPER=PASS
+ORCHESTRATOR_PATH=apps/modulos/HERMES-CORE/core/orchestrator.mjs
+```
+
+Novas invariantes:
+
+```text
+SAME_USER != SAME_AUTH_CONTEXT
+GH_AUTH_FAIL_IN_PROFILE != ROOT_GH_AUTH_FAIL
+GH_AUTH_PASS != GIT_HTTPS_CREDENTIAL_HELPER_READY
+SOURCE_PATH != SHELL_COMMAND
+PLACEHOLDER != EXECUTABLE_PATH
+```
+
+### Contraprova SAME_HEAD
+
+No HEAD `f4d3130e9d5f842165b2a6327b2d505e67ddfd5a`:
+
+- operational telemetry tests: 6/6 PASS;
+- bot deterministic status tests: 2/2 PASS;
+- GuardiaoCasa profile tests: 3/3 PASS;
+- operator preflight tests: 4/4 PASS;
+- shell syntax: PASS;
+- MCP typecheck: PASS;
+- MCP build: PASS;
+- segundo build após commit do `dist`: `git diff --exit-code -- apps/modulos/mcp/dist` PASS.
+
+Conclusão:
+
+```text
+DETERMINISTIC_EXECUTION_STATUS = IMPLEMENTED_IN_SOURCE
+AI_DEPENDENCY_FOR_STATUS = REMOVED
+BUILD_REPRODUCIBILITY = SAME_HEAD_PASS
+DEPLOYED_RUNTIME = UNKNOWN_UNTIL_PROMOTION
+```
