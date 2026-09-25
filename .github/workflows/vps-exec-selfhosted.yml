@@ -55,12 +55,12 @@ jobs:
     runs-on: [self-hosted, Linux]
     timeout-minutes: 25
     env:
-      REPO_DIR: <caminho-vps>
-      MCP_DIR: <caminho-vps>
+      REPO_DIR: /root/CentralDark
+      MCP_DIR: /root/CentralDark/apps/modulos/mcp
       PM2_APP: CentralDark-MCP
       WEBHOOK_APP: CentralDark-WebhookDeploy
       HEALTH_URL: http://127.0.0.1:9100/health
-      AUDIT_DIR: <caminho-vps>
+      AUDIT_DIR: /root/CentralDark/logs
       BEFORE_SHA: ${{ github.event.before || '' }}
     steps:
       - name: 🔹 Hydrate Cofre (GitHub secret → VPS secrets/, sem echo)
@@ -70,7 +70,7 @@ jobs:
           BUILDKITE_API_TOKEN: ${{ secrets.BUILDKITE_API_TOKEN }}
         run: |
           set -euo pipefail
-          bash <caminho-vps>
+          bash /root/CentralDark/scripts/vps/hydrate-provider-secrets.sh
 
       - name: 🔹 Prepare ephemeral Git auth
         uses: actions/checkout@v7
@@ -400,7 +400,7 @@ jobs:
     runs-on: [self-hosted, Linux]
     timeout-minutes: 15
     env:
-      REPO_DIR: <caminho-vps>
+      REPO_DIR: /root/CentralDark
     steps:
       - name: 🔹 Prepare isolated deploy script checkout
         shell: bash
@@ -467,8 +467,8 @@ jobs:
     runs-on: [self-hosted, Linux]
     timeout-minutes: 15
     env:
-      REPO_DIR: <caminho-vps>
-      REPORT_DIR: <caminho-vps>
+      REPO_DIR: /root/CentralDark
+      REPORT_DIR: /root/CentralDark/logs/housekeeping
     steps:
       - name: 🔹 Checkout exact event SHA
         uses: actions/checkout@v7
@@ -522,7 +522,7 @@ jobs:
     runs-on: [self-hosted, Linux]
     timeout-minutes: 15
     env:
-      REPO_DIR: <caminho-vps>
+      REPO_DIR: /root/CentralDark
       HERMES_APP: CentralDark-Hermes
       RUNTIME_CONTRACT: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/HERMES-AUTOCONFIG-RUNTIME.yml
       VALIDATOR: apps/modulos/HERMES-CORE/core/universal-method-contract.mjs
@@ -605,7 +605,7 @@ jobs:
           }
 
           BUILD_DIR="$(mktemp -d "$RUNNER_TEMP/hermes-runtime-validate.XXXXXX")"
-          BACKUP_DIR="<caminho-vps>${TARGET_SHA:0:12}-$(date -u +%Y%m%dT%H%M%SZ)"
+          BACKUP_DIR="/root/CentralDark-Recovery/hermes-runtime/${TARGET_SHA:0:12}-$(date -u +%Y%m%dT%H%M%SZ)"
           mkdir -p "$BACKUP_DIR"
 
           copied=0
@@ -810,7 +810,7 @@ jobs:
       contents: read
       statuses: write
     env:
-      REPO_DIR: <caminho-vps>
+      REPO_DIR: /root/CentralDark
       BRANCH: main
     steps:
       - name: 🔹 Checkout do SHA promovido
