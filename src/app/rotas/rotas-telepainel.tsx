@@ -30,7 +30,8 @@ import MegaPainel from "@/funcionalidades/telepainel/pages/MegaPainel";
 import Cofre from "@/funcionalidades/telepainel/pages/Cofre";
 import MapaSite from "@/funcionalidades/telepainel/pages/MapaSite";
 import AiProxyConfig from "@/funcionalidades/telepainel/pages/AiProxyConfig";
-import HermesPanel from "@/funcionalidades/hermes-panel/pages/HermesPanel";
+import HermesPanel from "@/funcionalidades/hermes/pages/HermesPanel";
+import GuardiaoBootPanel from "@/funcionalidades/hermes/pages/GuardiaoBootPanel";
 
 type RotaTP = { path: string; element: JSX.Element; adminOnly?: boolean };
 
@@ -59,6 +60,7 @@ const rotas: RotaTP[] = [
   { path: "mapa", element: <MapaSite />, adminOnly: true },
   { path: "consciencia", element: <ConscienciaViva />, adminOnly: true },
   { path: "hermes", element: <HermesPanel />, adminOnly: true },
+  { path: "guardiao", element: <GuardiaoBootPanel />, adminOnly: true },
   { path: "ai-proxy", element: <AiProxyConfig />, adminOnly: true },
 ];
 
