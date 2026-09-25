@@ -46,3 +46,20 @@ pivete/dev → PR → pivete/auditoria → PR → main
 ```
 
 GitHub é a fonte da verdade. VPS DEV/AUDIT é ambiente remoto autorizado. Produção executa apenas SHA aprovado. Nada entra cru.
+
+
+## HUD/RUDY — retorno obrigatório em cada nova conversa
+
+Depois do BOOT e antes de apresentar um novo placar, recuperar no PR-mãe #1562 o HUD/RUDY mais recente e revalidar CURRENT. Não recriar o HUD.
+
+```text
+HUD_RUDY_BOOT_REQUIRED=true
+HUD_RUDY_RETURN_ON_EVERY_NEW_CENTRALDARK_CONVERSATION=true
+HUD_RUDY_REMEASURE_CURRENT_BEFORE_RENDER=true
+HUD_RUDY_FIXED_CARD_IDS=H01..H16
+HUD_RUDY_ONLY_STATUS_EVIDENCE_PERCENT_CHANGE=true
+UNKNOWN_IS_NOT_GREEN=true
+EVERY_HUD_NOVELTY_FEEDS_PR_MOTHER_1562=true
+```
+
+H01..H16 mantêm identidade e ordem. Uma pesquisa muda somente cor/status, prova e porcentagem; classe material realmente nova deve ser registrada antes de ganhar novo ID. O percentual global é recalculado sobre o CURRENT, nunca herdado como PASS.

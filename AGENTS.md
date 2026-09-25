@@ -1315,3 +1315,27 @@ PR_MOTHER_1562_DO_NOT_MERGE=true
 ```
 
 Fluxo humano preferido: `MVP → abre → testa → mostra ao CHEFE quando houver decisão/materialidade`. Erro reversível e observado é dado de aprendizado; medo de errar não pode virar paralisia, mas UNKNOWN/falha material continuam impedindo falso-verde.
+
+
+## HUD/RUDY fixo em toda nova conversa CentralDark
+
+Ao iniciar ou reancorar qualquer conversa sobre CentralDark, recuperar o HUD/RUDY canônico da sessão antes de inventar outro placar. A estrutura é estável: os cartões existentes preservam ID, nome, objetivo e ordem; pesquisa nova altera somente estado, evidência e percentual. Não apagar um problema porque outra frente ficou verde.
+
+```text
+HUD_RUDY_BOOT_REQUIRED=true
+HUD_RUDY_RETURN_ON_EVERY_NEW_CENTRALDARK_CONVERSATION=true
+HUD_RUDY_REMEASURE_CURRENT_BEFORE_RENDER=true
+HUD_RUDY_FIXED_CARD_IDS=H01..H16
+HUD_RUDY_CARD_ID_NAME_ORDER_IMMUTABLE=true
+HUD_RUDY_ONLY_STATUS_EVIDENCE_PERCENT_CHANGE=true
+HUD_RUDY_NEW_MATERIAL_CLASS_REQUIRES_REGISTER_BEFORE_NEW_ID=true
+HUD_RUDY_COLORS=GREEN_PASS|YELLOW_PARTIAL|RED_BLOCKED_OR_FAIL
+UNKNOWN_IS_NOT_GREEN=true
+OVERALL_PERCENT_RECOMPUTE_FROM_CURRENT_CARDS=true
+EVERY_HUD_NOVELTY_FEEDS_PR_MOTHER_1562=true
+PR_MOTHER_1562_IS_DURABLE_HUD_LEDGER=true
+```
+
+Baseline atual dos cartões: H01 Public Edge/DNS; H02 Live Execution Fabric; H03 MCP/Lovable; H04 Emergent Mind; H05 Runners Linux; H06 Micro-deploy autônomo; H07 VPN/Tailscale; H08 Windows CASA/RDC; H09 Windows Runner; H10 VPS↔GitHub; H11 frescor HUD/telemetria; H12 PR #1690 MCP; H13 Actions/capacidade; H14 dependências HIGH; H15 TLS/Caddy; H16 FIXED_POINT_GLOBAL.
+
+Os percentuais e cores históricos são apenas ponto de partida; **CURRENT deve ser medido de novo**. Se um cartão mudar de vermelho para amarelo/verde ou regredir, atualizar o mesmo cartão. O PR-mãe #1562 recebe toda novidade do HUD conforme `EVERY_NOVELTY_FEEDS_PR_MOTHER=true`.
