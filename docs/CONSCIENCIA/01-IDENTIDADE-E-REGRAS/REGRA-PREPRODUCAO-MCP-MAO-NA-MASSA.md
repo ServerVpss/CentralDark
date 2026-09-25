@@ -90,7 +90,38 @@ DIRECT_MAIN_ALLOWED_ONLY_WHEN_EXPLICIT_OR_GLOBAL_RULE=true
 
 Mudanças globais de regra podem ir direto ao `main` quando o CHEFE pedir explicitamente tornar global. Mudanças de implementação em andamento devem preferir o PR-filho adequado. O PR-mãe recebe receipt/handoff e não deve ser usado como veículo de merge.
 
-## 6. Forma correta de resposta operacional
+## 6. CI determinístico aberto
+
+O CI de pré-produção deve permanecer aberto para progresso incremental. Ele não precisa provar perfeição global para aceitar um delta operacional, mas só pode marcar como `PASS` aquilo que foi medido e provado de forma determinística.
+
+```text
+CI_DETERMINISTICO_ABERTO=true
+CI_PASS_ONLY_PROVEN_DETERMINISTIC_ROUTES=true
+CI_DOES_NOT_REQUIRE_GLOBAL_PERFECTION=true
+UNPROVEN_CHECK_STAYS_UNKNOWN_OR_PENDING=true
+UNKNOWN_CHECK_DOES_NOT_BLOCK_UNRELATED_PROVEN_DELTA=true
+FAILED_DETERMINISTIC_CHECK_BLOCKS_ONLY_ITS_SCOPE=true
+PROVEN_HOTPATCH_CAN_BE_COMMITTED_WITH_RECEIPT=true
+IMPERFECT_BUT_PROVEN_DELTA_CAN_PROGRESS=true
+REFINE_AFTER_PASSING_MINIMUM=true
+```
+
+Fluxo padrão:
+
+```text
+VPS_PREPROD_HOTPATCH
+→ PROVA_LOCAL_MINIMA
+→ COMMIT_MAIN_OU_PR_FILHO
+→ RECEIPT_PR_MAE
+→ MICRO_DEPLOY_VPS_QUANDO_APLICAVEL
+→ CI_CD_REFINA
+→ SOMENTE_ROTAS_PROVADAS_PASSAM
+→ UNKNOWN_PERMANECE_ABERTO
+```
+
+Isso acelera sem falso-verde: o que passou, passou porque provou; o que não provou fica aberto para próximo TIK-TAK.
+
+## 7. Forma correta de resposta operacional
 
 Quando uma ordem operacional for executável, o padrão é:
 
@@ -105,7 +136,7 @@ MEDIÇÃO
 
 Não devolver uma cadeia de comandos para o CHEFE executar quando o executor possui ferramenta viva para fazer com segurança.
 
-## 7. Falha ou bloqueio
+## 8. Falha ou bloqueio
 
 Se não der para executar, o executor deve mostrar o bloqueio exato:
 
@@ -122,6 +153,8 @@ NEXT_SAFE_ACTION=
 
 Erro genérico, conselho solto ou pedido para o humano adivinhar é `FAIL`.
 
-## 8. Frase canônica
+## 9. Frase canônica
 
 > Pré-produção MCP é mão na massa: executa, adapta e faz funcionar; segredo não vaza; realidade continua julgando.
+
+> CI aberto não é CI frouxo: só passa o que provou, e deixa o resto vivo para o próximo TIK-TAK.

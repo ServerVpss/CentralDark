@@ -1,7 +1,7 @@
 ---
 title: "CLAUDE.md"
 date: 2026-08-24
-updated: 2026-08-29T17:10:00-03:00
+updated: 2026-09-25T01:25:00-03:00
 status: DERIVED_VIEW
 tags: [boot, contrato, claude, ponte]
 category: "A-Agentes"
@@ -98,6 +98,42 @@ UNKNOWN_IS_NOT_PASS: true
 4. `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json` — reúso obrigatório
 
 Emitir uma vez `CENTRALDARK_AI_BOOT` de `LEIA-ME-IA.md` (linhas 112–128).
+
+## Micro-deploy obrigatório por PASS comprovado
+
+Claude, subagentes Claude e qualquer ponte Claude Code devem herdar a regra canônica abaixo antes de declarar sucesso, sugerir parada ou devolver controle humano.
+
+```text
+CANONICAL_RULE=docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/REGRA-MICRO-DEPLOY-CONTINUO-POR-PASS-COMPROVADO.md
+TRIGGER_FABRIC_BINDING=docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MICRO-DEPLOY-CONTINUO-BINDING.yml
+BOT_BINDING=apps/bot-telegram/CENTRALDARK-MANDATORY-RULES.yml
+MEMORY_ANCHOR=docs/CONSCIENCIA/05-APRENDIZADOS/MICRO-DEPLOY-CONTINUO-POR-PASS-COMPROVADO.md
+
+QUALQUER_PASS_COMPROVADO
+→ MICRO_DEPLOY_DO_ESCOPO_AFETADO
+→ HEALTH_OU_PROVA_RUNTIME
+→ RECEIPT_PR_MAE
+→ NEXT_TIK_TAK
+```
+
+Aplicação obrigatória:
+
+```text
+PASS_COMPROVADO=true
+PROVEN_SCOPE_CAN_PROGRESS=true
+UNRELATED_UNKNOWN_DOES_NOT_BLOCK_PROVEN_SCOPE=true
+PASS_VISUAL_BADGE_ONLY=false
+ACTION_REQUIRED_IS_NOT_PASS=true
+UNKNOWN_IS_NOT_PASS=true
+LOCAL_PROOF_WITH_RUNTIME_SCOPE_REQUIRES_RUNTIME_PROOF=true
+MERGED != DEPLOYED
+DOCUMENTED != EXECUTED
+NO_SECRET_LEAK=true
+NO_BLIND_RESET=true
+NO_BLIND_PULL_OVER_DIRTY_RUNTIME=true
+```
+
+Se o escopo comprovado for runtime, Claude deve exigir health/prova runtime e receipt. Se for doc-only, registrar `DEPLOY_NOT_APPLICABLE_WITH_RECEIPT`. Esta regra não autoriza restart global, force-push, blind reset, segredo ou mutação fora do escopo.
 
 ## MCP Servidores & Conectores
 
@@ -268,7 +304,7 @@ Nunca expor secrets ou service_role_key em logs/mensagens.
 
 ---
 
-**Última atualização:** 2026-08-31 | **Versão:** Canônica Multi-Agente v1.2.0
+**Última atualização:** 2026-09-25 | **Versão:** Canônica Multi-Agente v1.3.0
 **Aplicável a:** Claude Code, Hermes, CLI, MCP, GitHub Actions, Telegram, WebUI, futuros motores
 docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md
 .agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA
