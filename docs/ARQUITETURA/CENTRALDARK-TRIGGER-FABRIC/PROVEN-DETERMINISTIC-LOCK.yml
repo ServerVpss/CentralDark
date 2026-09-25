@@ -23,6 +23,8 @@ invariants:
   no_new_information: REUSE_PROOF
   failed_candidate: REFUTED_MINERAL
   unresolved_candidate: UNRESOLVED_MINERAL
+  human_is_not_crystal_transport: true
+  machine_receipt_must_persist_in_vps_or_repo_owner: true
 
 lock_identity:
   key_material: [CLAIM_KEY, OWNER]
@@ -115,6 +117,9 @@ executable_recipe_binding:
   same_fingerprint_same_effect_reuses_crystal: true
   changed_effect_creates_targeted_delta: true
   unknown_difference_is_not_pass: true
+  human_handoff_block_forbidden: true
+  runtime_storage_required: true
+  runtime_storage_owner: /root/CentralDark/.artifacts/system-sentinel/receipts
 
 promotion:
   proven_learning_flow:
