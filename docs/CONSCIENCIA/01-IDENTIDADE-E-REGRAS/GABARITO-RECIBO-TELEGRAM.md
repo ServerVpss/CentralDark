@@ -48,7 +48,7 @@ PAPAGAIO_OFF = TRUE
 
 📌 <commit / arquivo / message_id>
 
-<i>UNKNOWN != PASS · REALIDADE = JUIZ</i>
+<i>rodapé canônico — ver §7</i>
 ```
 
 ## 2. Tabela de obrigatoriedade
@@ -61,7 +61,7 @@ PAPAGAIO_OFF = TRUE
 | Porcentagem | 📊 | **SIM** | se houver número |
 | Próximo passo | 🎯 | SIM | — |
 | Âncora de prova | 📌 | SIM | se houver commit/arquivo/message_id/endpoint |
-| Rodapé | 🧾 ou itálico | SIM | — |
+| Rodapé canônico | ver §7 | SIM | sempre |
 
 **Bloco sem o emoji certo = recibo inválido.** Não existe "saiu sem" — existe
 "saiu errado".
@@ -104,6 +104,7 @@ estado. Fora deles, o emoji é do bloco.
 5. Tem 📌 se há commit/arquivo/message_id? → se não, corrigir
 6. Algum emoji fora da paleta?             → remover
 7. Apago os emojis: o texto continua claro? → se não, reescrever texto
+8. Fecha com o rodapé canônico do §7?      → se não, corrigir
 ```
 
 ## 6. Anti-papagaio: diferença entre repetir e executar
@@ -116,10 +117,36 @@ CITAR_GABARITO != PASSAR_NO_GABARITO
 PROMETER_RECIBO != ENTREGAR_RECIBO
 ```
 
-O recibo só é canônico quando passa no verificador ou quando, manualmente, contém
-os blocos obrigatórios do §1.
+Um recibo que declara `UNKNOWN = PASS`, `ACTION = PROOF` ou
+`DOCUMENTED = EXECUTED` como verdade é **inválido por definição**, mesmo com
+todos os emojis no lugar. O verificador detecta isso e reprova.
 
-## 7. Subgoal e nota de sessão
+## 7. Rodapé canônico (assim escolhido pelo CHEFE)
+
+Todo recibo fecha com a **equação visual**, não com frase solta:
+
+```text
+🟡 UNKNOWN ≠ 🟢 PASS · ⚖️ REALIDADE = 👑 JUIZ · 🦜🚫 PAPAGAIO_OFF
+```
+
+Leitura direta:
+
+| Símbolo | Significa |
+|---|---|
+| 🟡 UNKNOWN | ainda não provado |
+| 🟢 PASS | comprovado |
+| ≠ | nunca se confundem |
+| ⚖️ REALIDADE | quem decide |
+| 👑 JUIZ | é o dono (SEGREDO/CHEFE) |
+| 🦜🚫 PAPAGAIO_OFF | sem repetir bonito sem executar |
+
+Variantes aceitas (mesmo sentido, menos glifo):
+
+```text
+🟡 UNKNOWN ≠ PASS · ⚖️ REALIDADE = JUIZ · 🦜🚫 PAPAGAIO_OFF
+```
+
+## 8. Subgoal e nota de sessão
 
 Quando a conversa gerar subgoal, decisão ou nota de sessão, o recibo deve conter:
 
@@ -136,15 +163,16 @@ Se o subgoal menciona inventário, Hermes autônomo, Telegram ou workflow, o rec
 não pode terminar só em texto: precisa ancorar o estado em arquivo, commit,
 endpoint, PR ou `UNKNOWN` explícito.
 
-## 8. Frase canônica
+## 9. Frase canônica
 
 > A regra diz o que pode. O gabarito diz o que **tem que** ter. Sem o segundo,
 > o primeiro vira promessa.
 
 > Recibo sem âncora é texto solto. Recibo com âncora é mapa.
 
+> O rodapé não é assinatura: é invariante. Quem lê o rodapé sabe o que o recibo
+> NÃO pode ter dito.
+
 ```text
-UNKNOWN != PASS
-REALIDADE = JUIZ
-PAPAGAIO_OFF
+🟡 UNKNOWN ≠ 🟢 PASS · ⚖️ REALIDADE = 👑 JUIZ · 🦜🚫 PAPAGAIO_OFF
 ```
