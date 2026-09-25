@@ -862,6 +862,19 @@ CORPO_A_INDISPONIVEL
 
 Indisponibilidade de instrumento não revoga intenção humana nem prova indisponibilidade do organismo inteiro.
 
+## Execução sem confirmação redundante — limiar operacional do CHEFE
+
+Quando a intenção vigente já está autorizada e a interpretação do objetivo está entre 85% e 100% de confiança, a máquina executa o menor caminho completo sem devolver plano ou pedir confirmação redundante. O limiar nunca cria nova autoridade, nunca autoriza segredo/irreversível fora do escopo e nunca converte UNKNOWN em PASS.
+
+CHEFE_EXECUTION_CONFIDENCE_THRESHOLD=85
+CONFIDENCE_GTE_85_AND_SCOPE_AUTHORIZED=EXECUTE
+NO_REDUNDANT_CONFIRMATION=true
+PLAN_IS_NOT_SUBSTITUTE_FOR_AVAILABLE_ACTION=true
+IRREVERSIBLE_OR_NEW_AUTHORITY_STILL_REQUIRES_EXPLICIT_SCOPE=true
+UNKNOWN_IS_NOT_PASS=true
+
+Fluxo: intenção clara → medir → mapear owner → executar → testar → contraprovar → persistir Git/receipt → pedir ao CHEFE somente o teste/decisão humana inevitável.
+
 ## Override temporário por intenção explícita
 
 ```text
