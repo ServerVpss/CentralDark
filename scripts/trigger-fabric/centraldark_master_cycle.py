@@ -7,6 +7,22 @@ import unicodedata
 from pathlib import Path
 
 MASTER = "!CENTRALDARK"
+TRIGGER_EMOJIS = {
+    "CENTRALDARK": "👑",
+    "ACORDAR": "🌅",
+    "CALIBRAR": "🎯",
+    "MULTIBUSSOLA": "🧭",
+    "META_LUPA": "🔎",
+    "RECONCILIAR": "🔄",
+    "DELTA_UTIL": "💎",
+    "CONTRAPROVA": "🧪",
+    "REMEDICAO": "📏",
+    "FIXED_POINT": "📍",
+    "REGISTRA": "🧾",
+    "BOOT": "🚀",
+}
+INTENT_ALIGNMENT_THRESHOLD_PERCENT = 80
+
 CHAIN = [
     "ACORDAR",
     "CALIBRAR",
@@ -484,6 +500,42 @@ def resolve(
         "activation_source": activation_source,
         "next_master_active": master_cycle_active,
         "expanded_chain": CHAIN if master_cycle_active else [],
+        "visual_trigger_chain": (
+            " → ".join([
+                "⭕ !AURÉOLA CANÔNICA",
+                f"{TRIGGER_EMOJIS['CENTRALDARK']} !CENTRALDARK",
+                *[f"{TRIGGER_EMOJIS[x]} {x}" for x in CHAIN],
+            ]) if master_cycle_active else ""
+        ),
+        "aureola": {
+            "role": "VISIBLE_ROUTE_DEBUGGER",
+            "contract": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml",
+            "visible_fields": ["CURRENT_PHASE", "MULTIBUSSOLA_AXIS", "DESTINATION_OWNER", "NEXT_GATE"],
+            "compare": ["INTENT_ROUTE", "ACTUAL_ROUTE"],
+            "mismatch_action": "STOP_AND_RECONCILE",
+            "route_trace_is_private_reasoning": False,
+            "route_trace_is_technical_proof": False,
+            "bible_reference_is_semantic_cue_not_proof": True,
+            "material_discovery_is_learning_candidate_not_fact": True,
+        },
+        "intent_alignment": {
+            "phase": "CALIBRAR",
+            "emoji": TRIGGER_EMOJIS["CALIBRAR"],
+            "threshold_percent": INTENT_ALIGNMENT_THRESHOLD_PERCENT,
+            "percentage_means": "INTERPRETATION_ALIGNMENT_NOT_RUNTIME_PASS",
+            "continuous_recalibration": True,
+            "new_chefe_material": "DELTA_TO_ACTIVE_INTENT_FIRST",
+            "preserve_compatible_active_intent": True,
+            "replacement_requires": "EXPLICIT_REPLACE_OR_PROVEN_MATERIAL_INCOMPATIBILITY",
+            "pertinence_first": True,
+            "minimum_sufficient_loop": True,
+            "triggers_are_conditional_not_ritual": True,
+            "new_teaching": "REMIX_MINIMUM_DELTA_IN_EXISTING_RULE",
+            "do_not_parrot_chefe": True,
+            "align_thought_not_wording": True,
+            "execute_when_gte_threshold_and_scope_authorized": True,
+            "below_threshold_or_material_contradiction": "ASK_ONLY_INDISPENSABLE_GAP",
+        },
         "guided_telemetry": guided_telemetry,
         "session_provenance": {
             "session_id": session_ref,
