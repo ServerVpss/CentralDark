@@ -502,10 +502,22 @@ def resolve(
         "expanded_chain": CHAIN if master_cycle_active else [],
         "visual_trigger_chain": (
             " → ".join([
+                "⭕ !AURÉOLA CANÔNICA",
                 f"{TRIGGER_EMOJIS['CENTRALDARK']} !CENTRALDARK",
                 *[f"{TRIGGER_EMOJIS[x]} {x}" for x in CHAIN],
             ]) if master_cycle_active else ""
         ),
+        "aureola": {
+            "role": "VISIBLE_ROUTE_DEBUGGER",
+            "contract": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml",
+            "visible_fields": ["CURRENT_PHASE", "MULTIBUSSOLA_AXIS", "DESTINATION_OWNER", "NEXT_GATE"],
+            "compare": ["INTENT_ROUTE", "ACTUAL_ROUTE"],
+            "mismatch_action": "STOP_AND_RECONCILE",
+            "route_trace_is_private_reasoning": False,
+            "route_trace_is_technical_proof": False,
+            "bible_reference_is_semantic_cue_not_proof": True,
+            "material_discovery_is_learning_candidate_not_fact": True,
+        },
         "intent_alignment": {
             "phase": "CALIBRAR",
             "emoji": TRIGGER_EMOJIS["CALIBRAR"],
