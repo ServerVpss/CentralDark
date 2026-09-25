@@ -246,6 +246,7 @@ __PATTERN_ADMIN_STYLE__
   <div class="tab" data-p="audit">Auditoria</div>
   <div class="tab" data-p="conector">Conector</div>
   <div class="tab" data-p="diag">Diagnóstico</div>
+  <div class="tab" data-p="omni">🌀 Omni</div>
 </nav>
 <main>
 
@@ -412,6 +413,39 @@ auth: bearer &lt;TOKEN&gt;  (opcional)</pre>
     </div>
   </div>
 
+  <div class="pane" id="p-omni">
+    <div class="hero">
+      <div class="kpi hero-score">
+        <div class="lbl">Omni Router</div>
+        <div class="val" id="omniHealth">medindo...</div>
+        <div class="bar"><div id="omniHealthBar" style="width:0%"></div></div>
+      </div>
+      <div class="kpi"><div class="lbl">Live Fabric</div><div class="val" id="omniFabric">-</div></div>
+      <div class="kpi"><div class="lbl">Git Head</div><div class="val" id="omniHead" style="font-size:14px">UNKNOWN</div></div>
+      <div class="kpi"><div class="lbl">Dirty</div><div class="val" id="omniDirty">UNKNOWN</div></div>
+      <div class="kpi"><div class="lbl">Receipts</div><div class="val" id="omniReceipts">UNKNOWN</div></div>
+      <div class="kpi"><div class="lbl">NEXT_CURSOR</div><div class="val" id="omniCursor" style="font-size:14px">UNKNOWN</div></div>
+    </div>
+
+    <div class="card">
+      <h2>Live Execution Fabric <span class="badge">mesmo admin · mesmo design · Omni :8099</span></h2>
+      <div class="diag-actions">
+        <button class="btn" onclick="startOmniFabric()">🌀 Iniciar job medido</button>
+        <button class="btn ghost" onclick="loadOmniPanel()">🔎 Remedir agora</button>
+      </div>
+      <div class="grid">
+        <div>
+          <h2>Grafo vivo <span class="badge">/api/live-fabric/graph</span></h2>
+          <div id="omniGraph" class="log-box" style="height:360px">aguardando...</div>
+        </div>
+        <div>
+          <h2>Prova runtime <span class="badge">status + models + fabric</span></h2>
+          <div id="omniRaw" class="log-box" style="height:360px">aguardando...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </main>
 <script>
 const $ = (id) => document.getElementById(id);
@@ -428,14 +462,80 @@ function dataHoraBr(valor){
 function ts(){return horaBr()}
 setInterval(()=>$('clock').textContent=ts(),1000);
 
-document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
+function activateAdminTab(name){
+  const t = document.querySelector('.tab[data-p="'+name+'"]');
+  const pane = $('p-'+name);
+  if(!t || !pane) return false;
   document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
   document.querySelectorAll('.pane').forEach(x=>x.classList.remove('active'));
   t.classList.add('active');
-  $('p-'+t.dataset.p).classList.add('active');
-}));
+  pane.classList.add('active');
+  if(name === 'omni') loadOmniPanel();
+  return true;
+}
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>activateAdminTab(t.dataset.p)));
+const requestedAdminTab = new URLSearchParams(location.search).get('tab');
+if(requestedAdminTab) activateAdminTab(requestedAdminTab);
 
 __PATTERN_ADMIN_SCRIPT__
+
+async function omniJson(url, opts){
+  const r = await fetch(url, Object.assign({cache:'no-store'}, opts || {}));
+  const text = await r.text();
+  let body = text;
+  try { body = JSON.parse(text); } catch {}
+  return { ok:r.ok, status:r.status, data:body };
+}
+function omniPretty(value){
+  try { return JSON.stringify(value, null, 2); } catch { return String(value); }
+}
+async function loadOmniPanel(){
+  const raw = $('omniRaw');
+  const graph = $('omniGraph');
+  if(!raw || !graph) return;
+  try {
+    const [health, models, fabric, graphResp] = await Promise.all([
+      omniJson('/api/omni/status'),
+      omniJson('/api/omni/models'),
+      omniJson('/api/live-fabric/status'),
+      omniJson('/api/live-fabric/graph')
+    ]);
+    const healthPass = Boolean(health.ok && health.data && health.data.ok);
+    const fabricPass = Boolean(fabric.ok && fabric.data && fabric.data.ok);
+    $('omniHealth').textContent = healthPass ? 'PASS / '+health.status : 'DEGRADED / '+health.status;
+    $('omniHealth').className = 'val '+(healthPass ? 'ok' : 'err');
+    $('omniHealthBar').style.width = healthPass ? '100%' : '25%';
+    $('omniFabric').textContent = fabricPass ? 'PASS / '+fabric.status : 'UNKNOWN / '+fabric.status;
+    $('omniFabric').className = 'val '+(fabricPass ? 'ok' : 'warn');
+    $('omniHead').textContent = fabric.data?.git?.head || 'UNKNOWN';
+    $('omniDirty').textContent = String(fabric.data?.git?.dirty_count ?? 'UNKNOWN');
+    $('omniReceipts').textContent = String(fabric.data?.receipts?.count ?? 'UNKNOWN');
+    $('omniCursor').textContent = fabric.data?.next_cursor || 'UNKNOWN';
+    graph.textContent = omniPretty(graphResp.data);
+    raw.textContent = omniPretty({omni:health.data, models:models.data, liveFabric:fabric.data});
+  } catch (err) {
+    $('omniHealth').textContent = 'OFFLINE / UNKNOWN';
+    $('omniHealth').className = 'val err';
+    $('omniHealthBar').style.width = '0%';
+    raw.textContent = String(err);
+  }
+}
+async function startOmniFabric(){
+  const raw = $('omniRaw');
+  if(!raw) return;
+  try {
+    const r = await omniJson('/api/live-fabric/start', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({scope:'VPS_DIRTY_TREE', entrypoint:'admin_panel', dry_run:true})
+    });
+    raw.textContent = omniPretty(r.data);
+  } catch (err) {
+    raw.textContent = String(err);
+  }
+  await loadOmniPanel();
+}
+
 
 const deltaState = { total: 0, groups: new Map(), lastAt: null };
 function htmlEscape(valor){
@@ -998,7 +1098,6 @@ async function rodarE2EInterno({ comAdmin, cid }) {
     }
     // 2) Discovery
     const disc = await fazerRequest(`${base}/.well-known/oauth-authorization-server`, { headers: baseHeaders });
-
     etapas.push({ nome: "Discovery /.well-known", ok: disc.ok, status: disc.status, ms: disc.ms, detalhe: disc.json?.issuer || disc.erro });
     if (!disc.ok) {
         falhouEm = "Discovery";
