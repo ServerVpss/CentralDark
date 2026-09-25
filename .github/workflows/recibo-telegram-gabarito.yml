@@ -1,0 +1,69 @@
+name: Recibo Telegram Gabarito
+
+on:
+  pull_request:
+    paths:
+      - 'docs/**/*.md'
+      - 'scripts/verify_recibo_telegram_gabarito.py'
+      - '.github/workflows/recibo-telegram-gabarito.yml'
+  push:
+    branches: [ main ]
+    paths:
+      - 'docs/**/*.md'
+      - 'scripts/verify_recibo_telegram_gabarito.py'
+      - '.github/workflows/recibo-telegram-gabarito.yml'
+
+jobs:
+  verify-recibos:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Select changed receipt-like markdown files
+        id: changed
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            BASE="origin/${{ github.base_ref }}"
+            git fetch origin "${{ github.base_ref }}" --depth=1
+            git diff --name-only "$BASE"...HEAD > /tmp/changed.txt
+          else
+            git diff --name-only HEAD~1 HEAD > /tmp/changed.txt
+          fi
+          python - <<'PY'
+          from pathlib import Path
+          candidates = []
+          for line in Path('/tmp/changed.txt').read_text().splitlines():
+              p = Path(line)
+              if p.suffix.lower() != '.md' or not p.exists():
+                  continue
+              s = str(p)
+              if not (s.startswith('docs/CONSCIENCIA/') or s.startswith('docs/NOTAS-SESSAO/')):
+                  continue
+              text = p.read_text(encoding='utf-8', errors='ignore')
+              hay = (s + '\n' + text).lower()
+              if any(k in hay for k in ['recibo', 'telegram', 'message_id', 'receipt']):
+                  candidates.append(s)
+          Path('/tmp/receipt_candidates.txt').write_text('\n'.join(candidates), encoding='utf-8')
+          print(f'candidates={len(candidates)}')
+          for item in candidates:
+              print(item)
+          PY
+
+      - name: Verify receipt template
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ ! -s /tmp/receipt_candidates.txt ]]; then
+            echo "No changed receipt-like markdown files."
+            exit 0
+          fi
+          while IFS= read -r file; do
+            echo "Verifying $file"
+            python scripts/verify_recibo_telegram_gabarito.py "$file"
+          done < /tmp/receipt_candidates.txt
