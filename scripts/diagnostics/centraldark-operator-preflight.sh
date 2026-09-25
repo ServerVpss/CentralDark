@@ -5,6 +5,7 @@ set -uo pipefail
 
 ROOT="${CENTRALDARK_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)}"
 GH_BIN="${GH_BIN:-gh}"
+GIT_BIN="${GIT_BIN:-git}"
 HOME_DIR="${HOME:-/root}"
 
 echo "CENTRALDARK_OPERATOR_PREFLIGHT=v1"
@@ -26,6 +27,23 @@ else
   echo "GH_AUTH=UNKNOWN"
   echo "GH_LOGIN=UNKNOWN"
   echo "GH_LOGIN_ACTION=GH_NOT_FOUND"
+fi
+
+# Git HTTPS usa uma ponte própria. gh autenticado não prova que git fetch/pull está pronto.
+git_helper=""
+if command -v "${GIT_BIN}" >/dev/null 2>&1 || [ -x "${GIT_BIN}" ]; then
+  git_helper="$("${GIT_BIN}" config --global --get-all credential.https://github.com.helper 2>/dev/null || true)"
+  [ -n "${git_helper}" ] || git_helper="$("${GIT_BIN}" config --global --get-all credential.helper 2>/dev/null || true)"
+fi
+if printf '%s' "${git_helper}" | grep -qi 'gh auth git-credential'; then
+  echo "GIT_HTTPS_CREDENTIAL_HELPER=PASS"
+  echo "GIT_AUTH_ACTION=NONE"
+elif [ "${GH_LOGIN_ACTION:-}" = "SKIP_ALREADY_AUTHENTICATED" ]; then
+  echo "GIT_HTTPS_CREDENTIAL_HELPER=NOT_CONFIGURED"
+  echo "GIT_AUTH_ACTION=gh auth setup-git"
+else
+  echo "GIT_HTTPS_CREDENTIAL_HELPER=UNKNOWN"
+  echo "GIT_AUTH_ACTION=WAIT_FOR_GH_AUTH"
 fi
 
 # 2) Bash startup: ausência de ~/.cargo/env não derruba a CentralDark.
