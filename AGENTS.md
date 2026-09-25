@@ -1397,6 +1397,13 @@ ADAPT_ENVIRONMENT_BINDINGS_ONLY=true
 RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH=true
 DIVERGENCE_REOPENS_AFFECTED_CONE_ONLY=true
 HUMAN_RETEACH_REQUIRED_FOR_SAME_PROVEN_PATH=false
+EVOLVE_EXISTING_BEFORE_CREATE=true
+EDIT_AND_RETURN_SAME_ARTIFACT_WHEN_CHEFE_PROVIDES_ONE=true
+NO_FRAGMENTED_PATCH_INSTRUCTIONS_WHEN_FULL_EVOLVED_ARTIFACT_IS_REQUESTED=true
+RECIPE_MUST_LIVE_IN_REPOSITORY=true
+RECIPE_MUST_BE_MACHINE_CONSUMABLE=true
+REPLAY_BEFORE_REDISCOVERY=true
+PR_MOTHER_OR_EQUIVALENT_CHILD_RECEIPT_REQUIRED=true
 ```
 
 Um agente/modelo novo não ganha licença para redesenhar um caminho já selado.
@@ -1404,6 +1411,13 @@ Ele carrega a receita comprovada, adapta apenas bindings de ambiente
 (path/host/runtime/auth-ref/tool-entrypoint), repete a mesma sequência e a mesma
 prova. Divergência observada é informação nova e reabre somente o cone causal
 afetado.
+
+Quando o CHEFE fornecer um artefato existente para evoluir, editar e devolver o
+mesmo artefato consolidado; não cuspir fragmentos ou alternativas paralelas se a
+intenção estiver suficientemente alinhada. Caminho comprovado deve deixar no
+repositório receita executável/machine-consumable + fingerprint + prova +
+contraprova + resultado/efeito esperado + bindings + NEXT_CURSOR, com receipt no
+PR-mãe #1562 ou PR-filho equivalente por OWNER+SCOPE+CAPABILITY.
 
 
 
