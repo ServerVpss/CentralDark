@@ -1,12 +1,18 @@
 // Painel OPS — grid 2×2 denso, estilo Overclock 1.1.0 fundido com SalaControle.
 // Cada pane tem header colorido próprio + badge de custo. Dados mock por enquanto;
 // o plug real (Hermes-Core, Gateway, HUB) entra na Fase 3.
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const LOGS_POR_PAGINA = 4;
 const PROVIDERS_POR_PAGINA = 4;
 
 type MissaoStatus = "ativa" | "pendente" | "travada";
+type LiveState = "PASS" | "UNKNOWN" | "FAIL";
+interface HeartbeatSnapshot {
+  state: LiveState;
+  detail: string;
+  measuredAt: string | null;
+}
 interface Missao {
   id: string;
   titulo: string;
@@ -67,8 +73,59 @@ function dotClass(s: MissaoStatus | "ok" | "warn" | "err") {
 
 export function PainelOps() {
   const [aba, setAba] = useState<ProviderTab>("lovable");
+  const [heartbeat, setHeartbeat] = useState<HeartbeatSnapshot>({
+    state: "UNKNOWN",
+    detail: "heartbeat ainda não medido",
+    measuredAt: null,
+  });
   const [logsPag, setLogsPag] = useState(1);
   const [provPag, setProvPag] = useState(1);
+
+
+  useEffect(() => {
+    let active = true;
+
+    async function medirHeartbeat() {
+      const controller = new AbortController();
+      const timeout = window.setTimeout(() => controller.abort(), 5000);
+      try {
+        const response = await fetch("https://api.centralldark.com/heartbeat", {
+          cache: "no-store",
+          signal: controller.signal,
+        });
+        const body = await response.json().catch(() => ({}));
+        if (!active) return;
+
+        const selfState = String(body?.self ?? "").toLowerCase();
+        const explicitlyAlive = ["alive", "healthy", "ok", "pass"].includes(selfState);
+        const explicitlyBad = ["lost", "down", "failed", "fail", "error"].includes(selfState);
+
+        setHeartbeat({
+          state: response.ok && explicitlyAlive ? "PASS" : explicitlyBad ? "FAIL" : "UNKNOWN",
+          detail: response.ok
+            ? `heartbeat HTTP ${response.status} · self=${selfState || "UNKNOWN"}`
+            : `heartbeat HTTP ${response.status}`,
+          measuredAt: new Date().toISOString(),
+        });
+      } catch (error) {
+        if (!active) return;
+        setHeartbeat({
+          state: "UNKNOWN",
+          detail: error instanceof Error ? `heartbeat sem prova: ${error.message}` : "heartbeat sem prova",
+          measuredAt: new Date().toISOString(),
+        });
+      } finally {
+        window.clearTimeout(timeout);
+      }
+    }
+
+    void medirHeartbeat();
+    const interval = window.setInterval(() => void medirHeartbeat(), 15000);
+    return () => {
+      active = false;
+      window.clearInterval(interval);
+    };
+  }, []);
 
   // RCD — Hero pane: UMA resposta ("está tudo rodando?") + gancho Zeigarnik.
   const totalMissoes = MISSOES.length;
@@ -89,8 +146,12 @@ export function PainelOps() {
       <section className="ops-hero">
         <div className="ops-hero-main">
           <span className="ops-hero-label">SISTEMA</span>
-          <span className="ops-hero-value">Rodando</span>
-          <span className="ops-hero-sub">{ultimoOk ? `${ultimoOk.tag} · ${ultimoOk.msg}` : "aguardando"}</span>
+          <span className="ops-hero-value">
+            {heartbeat.state === "PASS" ? "Rodando" : heartbeat.state === "FAIL" ? "Falha medida" : "UNKNOWN"}
+          </span>
+          <span className="ops-hero-sub" title={heartbeat.measuredAt ?? undefined}>
+            {heartbeat.detail}
+          </span>
         </div>
         <div className="ops-hero-stats">
           <div className="ops-hero-stat">
