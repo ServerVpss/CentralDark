@@ -75,8 +75,11 @@ CONFIDENCE_ACTING_PERCENT=
 👑🪬 !CENTRALDARK
 → recuperar CURRENT, owner, escopo, runtime, PR/receipt e estado vivo.
 
-🌅 #ACORDAR
-→ medir HEAD/branch/worktree/runtime/PM2/MCP/HUB/Casa/VPS e Capability HUD antes de afirmar ou mutar.
+🌅 #ACORDAR / !ACORDAR
+→ medir HEAD/branch/worktree/runtime/PM2/MCP/HUB/Casa/VPS.
+→ carregar Capability HUD.
+→ probe seguro da rota pertinente antes de afirmar, perguntar, recusar ou mutar.
+→ voltar só com PASS, causa raiz, bloqueio real ou identificador mínimo faltante.
 
 🎯 !CALIBRAR
 → calcular intenção, confiança, autoridade, writer, risco, frequência, capacidade disponível e gatilho mínimo.
@@ -111,6 +114,9 @@ Regra de seleção:
 ```text
 SE INTENCAO_CLARA && ESCOPO_AUTORIZADO
 → EXECUTE_MINIMUM_COMPLETE_PATH
+
+SE TRIGGER == #ACORDAR || TRIGGER == !ACORDAR
+→ CAPABILITY_HUD + PROBE_RELEVANT_TOOL_FIRST
 
 SE TOOL/ROTA_INCERTA || AGENTE_QUER_DIZER_NAO_CONSIGO
 → CAPABILITY_HUD + PROBE_RELEVANT_TOOL_FIRST
