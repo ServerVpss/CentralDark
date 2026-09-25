@@ -20,7 +20,7 @@ jobs:
     runs-on: [self-hosted, Linux]
     timeout-minutes: 10
     env:
-      REPO_DIR: <caminho-vps>
+      REPO_DIR: /root/CentralDark
       BRANCH: main
     steps:
       - name: 🔹 Checkout exato do gate
