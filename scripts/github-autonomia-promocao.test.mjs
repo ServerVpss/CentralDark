@@ -510,3 +510,16 @@ test("Trigger Fabric obrigatório dispara em todo PR para main", async () => {
   assert.match(pullBlock[1], /branches:\s*\[main\]/);
   assert.doesNotMatch(pullBlock[1], /\bpaths:/);
 });
+
+
+test("reconciliador da Casa não vira segundo promotor", async () => {
+  const source = await readFile(
+    new URL("./dependabot/reconcile-open-prs.mjs", import.meta.url),
+    "utf8",
+  );
+  assert.doesNotMatch(source, /\/pulls\/\$\{number\}\/merge/);
+  assert.doesNotMatch(source, /merge_method:\s*['"]squash['"]/);
+  assert.match(source, /centraldark_autonomia_recheck/);
+  assert.match(source, /centraldark_dependabot_reconcile/);
+  assert.match(source, /direct_merge=0/);
+});
