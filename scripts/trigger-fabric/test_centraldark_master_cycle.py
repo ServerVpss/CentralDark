@@ -29,6 +29,12 @@ class ContinuousDeltaContractTest(unittest.TestCase):
         self.assertTrue(alignment["continuous_recalibration"])
         self.assertTrue(alignment["do_not_parrot_chefe"])
         self.assertTrue(alignment["align_thought_not_wording"])
+        self.assertEqual("DELTA_TO_ACTIVE_INTENT_FIRST", alignment["new_chefe_material"])
+        self.assertTrue(alignment["preserve_compatible_active_intent"])
+        self.assertEqual("EXPLICIT_REPLACE_OR_PROVEN_MATERIAL_INCOMPATIBILITY", alignment["replacement_requires"])
+        self.assertTrue(alignment["pertinence_first"])
+        self.assertTrue(alignment["minimum_sufficient_loop"])
+        self.assertTrue(alignment["triggers_are_conditional_not_ritual"])
 
     def test_bot_entry_activates_without_plain_word_guess(self):
         receipt = MODULE.resolve("fala normal", bot_entry=True, chefe_source=True)
