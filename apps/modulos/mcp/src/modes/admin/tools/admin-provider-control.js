@@ -287,6 +287,11 @@ export const PROVIDER_CAPABILITY_MATRIX = Object.freeze([
     permission: "DNS Read", evidenceRef: "https://tailscale.com/api#tag/dns",
     requiredParams: ["tailnet"],
   }),
+  capability("tailscale", "network.logs", {
+    status: "READ_SUPPORTED", method: "GET", path: "/tailnet/{tailnet}/logging/network",
+    permission: "logs:network:read", evidenceRef: "https://tailscale.com/docs/features/logging/network-flow-logs",
+    requiredParams: ["tailnet"], queryParams: ["start", "end"],
+  }),
   capability("tailscale", "keys.list", {
     status: "READ_SUPPORTED", method: "GET", path: "/tailnet/{tailnet}/keys",
     permission: "Keys Read", evidenceRef: "https://tailscale.com/api#tag/keys",
@@ -573,6 +578,94 @@ async function callProvider(provider, request, { requestId } = {}) {
   return { httpStatus: response.status, data: redacted };
 }
 
+export function summarizeTailscaleNetworkLogs(payload) {
+  const logs = Array.isArray(payload?.logs)
+    ? payload.logs
+    : Array.isArray(payload?.records)
+      ? payload.records.flatMap((record) => Array.isArray(record?.logs) ? record.logs : [record])
+      : [];
+  const nodes = new Set();
+  let virtualFlows = 0;
+  let subnetFlows = 0;
+  let exitFlows = 0;
+  let physicalFlows = 0;
+  let txBytes = 0;
+  let rxBytes = 0;
+  let txPackets = 0;
+  let rxPackets = 0;
+  let lastLoggedAt = null;
+  const countTraffic = (items) => {
+    if (!Array.isArray(items)) return 0;
+    for (const flow of items) {
+      txBytes += Number(flow?.txBytes || 0);
+      rxBytes += Number(flow?.rxBytes || 0);
+      txPackets += Number(flow?.txPkts || flow?.txPackets || 0);
+      rxPackets += Number(flow?.rxPkts || flow?.rxPackets || 0);
+    }
+    return items.length;
+  };
+  for (const logItem of logs) {
+    if (logItem?.nodeId) nodes.add(String(logItem.nodeId));
+    if (logItem?.srcNode?.nodeId) nodes.add(String(logItem.srcNode.nodeId));
+    for (const dst of Array.isArray(logItem?.dstNodes) ? logItem.dstNodes : []) {
+      if (dst?.nodeId) nodes.add(String(dst.nodeId));
+    }
+    virtualFlows += countTraffic(logItem?.virtualTraffic);
+    subnetFlows += countTraffic(logItem?.subnetTraffic);
+    exitFlows += countTraffic(logItem?.exitTraffic);
+    physicalFlows += countTraffic(logItem?.physicalTraffic);
+    if (logItem?.logged && (!lastLoggedAt || String(logItem.logged) > lastLoggedAt)) lastLoggedAt = String(logItem.logged);
+  }
+  return {
+    logMessages: logs.length,
+    nodeCount: nodes.size,
+    virtualFlows,
+    subnetFlows,
+    exitFlows,
+    physicalFlows,
+    txBytes,
+    rxBytes,
+    txPackets,
+    rxPackets,
+    lastLoggedAt,
+  };
+}
+
+export async function readTailscaleNetworkLogs({ start, end, tailnet = "-", limit = 200 } = {}) {
+  const endDate = end ? new Date(end) : new Date();
+  const startDate = start ? new Date(start) : new Date(endDate.getTime() - 15 * 60_000);
+  if (!Number.isFinite(startDate.getTime()) || !Number.isFinite(endDate.getTime())) throw new Error("TAILSCALE_LOG_WINDOW_INVALID");
+  if (startDate >= endDate) throw new Error("TAILSCALE_LOG_WINDOW_INVALID");
+  if (endDate.getTime() - startDate.getTime() > 24 * 60 * 60_000) throw new Error("TAILSCALE_LOG_WINDOW_TOO_LARGE");
+  const safeLimit = Math.max(1, Math.min(500, Number(limit) || 200));
+  const request = buildProviderRequest("tailscale", "network.logs", {
+    tailnet,
+    query: { start: startDate.toISOString(), end: endDate.toISOString() },
+  });
+  const result = await callProvider("tailscale", request);
+  const payload = result.data && typeof result.data === "object" ? result.data : {};
+  const allLogs = Array.isArray(payload.logs)
+    ? payload.logs
+    : Array.isArray(payload.records)
+      ? payload.records.flatMap((record) => Array.isArray(record?.logs) ? record.logs : [record])
+      : [];
+  const logs = allLogs.slice(Math.max(0, allLogs.length - safeLimit));
+  return {
+    ok: true,
+    status: "PASS",
+    provider: "tailscale",
+    capability: "network.logs",
+    httpStatus: result.httpStatus,
+    window: { start: startDate.toISOString(), end: endDate.toISOString() },
+    summary: summarizeTailscaleNetworkLogs({ logs: allLogs }),
+    logs: deepRedact(logs),
+    truncated: allLogs.length > logs.length,
+    totalKnown: allLogs.length,
+    returned: logs.length,
+    source: "TAILSCALE_API_LOGGING_NETWORK",
+  };
+}
+
 function operationFingerprint(input) {
   return createHash("sha256").update(JSON.stringify(input)).digest("hex");
 }
@@ -701,6 +794,24 @@ export const adminProviderControlTools = [
           capability: input.capability,
           data: deepRedact(error?.providerPayload ?? null),
         });
+      }
+    },
+  },
+  {
+    name: "tailscale_network_logs",
+    description: "Le os Network Flow Logs do Tailscale pela API oficial usando o cofre existente. Janela padrao 15 min, maximo 24h, sem expor credencial.",
+    annotations: { ...READ, title: "Tailscale — Network Flow Logs" },
+    inputSchema: z.object({
+      start: z.string().optional(),
+      end: z.string().optional(),
+      tailnet: z.string().max(160).optional().default("-"),
+      limit: z.number().int().min(1).max(500).optional().default(200),
+    }),
+    handler: async (input) => {
+      try {
+        return jsonBlock(await readTailscaleNetworkLogs(input));
+      } catch (error) {
+        return jsonBlock({ ok: false, status: sanitizeError(error), provider: "tailscale", capability: "network.logs" });
       }
     },
   },

@@ -17,6 +17,7 @@ import { startHubMissionConsumer, getHubMissionConsumerStatus } from "./hub-miss
 import { providerAdminBridge } from "./provider-admin-bridge.js";
 import { adminGet, adminGraphProxy, adminLogin, adminLogout, adminRotas, adminTools, adminLogsStream, adminTestarSse, adminBuscarLogs, adminMetricas, adminOperationalSnapshot, adminLinear, adminE2E, adminE2EPublico, bootstrapAdminLogCapture, getSseDiagnostics, } from "./admin.js";
 import { getLinearPublicStatus } from "./tools/integrations.js";
+import { readTailscaleNetworkLogs } from "./modes/admin/tools/admin-provider-control.js";
 // ─────────────────────── Handlers globais de crash (v2.3) ───────────────────────
 // Captura QUALQUER erro não tratado com stack trace completo antes do PM2 matar.
 process.on("uncaughtException", (err) => {
@@ -611,6 +612,41 @@ app.post("/admin/mcp", (req, res) => {
 app.get("/admin/mcp", (req, res) => {
     unauthorizedAdmin(req, res, "Authorization Bearer com escopo admin ausente.");
 });
+
+// ───────── Tailscale Network Flow Logs — mesmo owner MCP/provider ─────────
+// API publica deve chegar aqui com Bearer admin. O alias /tailscaale existe
+// apenas para compatibilidade com a rota pedida pelo CHEFE; ambos usam o mesmo handler.
+async function tailscaleLogsHttp(req, res) {
+    const auth = requireAdminScope(req, res);
+    if (!auth) return;
+    const minutes = Math.max(1, Math.min(1440, Number(req.query.minutes || 15)));
+    const end = req.query.end ? String(req.query.end) : new Date().toISOString();
+    const endDate = new Date(end);
+    if (!Number.isFinite(endDate.getTime())) {
+        res.status(400).json({ ok: false, status: "TAILSCALE_LOG_WINDOW_INVALID" });
+        return;
+    }
+    const start = req.query.start
+        ? String(req.query.start)
+        : new Date(endDate.getTime() - minutes * 60_000).toISOString();
+    try {
+        const result = await readTailscaleNetworkLogs({
+            start,
+            end: endDate.toISOString(),
+            tailnet: String(req.query.tailnet || "-"),
+            limit: Math.max(1, Math.min(500, Number(req.query.limit || 200))),
+        });
+        res.json(result);
+    }
+    catch (error) {
+        log.warn("tailscale_network_logs_http_failed", { cid: req.cid, error: String(error?.message || error) });
+        res.status(502).json({ ok: false, status: String(error?.message || "TAILSCALE_LOGS_FAILED").slice(0, 160) });
+    }
+}
+app.get("/tailscale", tailscaleLogsHttp);
+app.get("/tailscale/logs", tailscaleLogsHttp);
+app.get("/tailscaale", tailscaleLogsHttp);
+app.get("/tailscaale/logs", tailscaleLogsHttp);
 // /mcp-public removido em 30/06/2026 — expunha vps_write_file_safe sem Bearer
 // (pendência #8). Toda chamada ao MCP agora exige OAuth via /mcp.
 // ─────────────────────── Telemetria VPS (vps-reporter) ───────────────────────

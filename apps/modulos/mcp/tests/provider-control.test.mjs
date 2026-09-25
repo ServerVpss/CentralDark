@@ -95,6 +95,16 @@ test("tailscale devices.list monta path oficial", () => {
   assert.equal(req.path, "/tailnet/-/devices");
 });
 
+test("tailscale network.logs monta endpoint oficial e exige janela allowlisted", () => {
+  const req = buildProviderRequest("tailscale", "network.logs", {
+    tailnet: "-",
+    query: { start: "2026-09-25T08:00:00.000Z", end: "2026-09-25T08:15:00.000Z" },
+  });
+  assert.equal(req.method, "GET");
+  assert.equal(req.path, "/tailnet/-/logging/network?start=2026-09-25T08%3A00%3A00.000Z&end=2026-09-25T08%3A15%3A00.000Z");
+  assert.equal(matrix("tailscale", "network.logs").permission, "logs:network:read");
+});
+
 test("redaction remove token senha e material de pagamento", () => {
   const redacted = deepRedact({
     token: "abc",
