@@ -3,6 +3,8 @@ human_triggers:
   - id: CENTRALDARK_MASTER
     token: "!CENTRALDARK"
     emoji: "👑"
+    visible_route_debugger: "⭕ !AURÉOLA CANÔNICA"
+    aureola_contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml
     aliases: ["#CENTRALDARK", "!CENTRAL-DARK", "#CENTRAL-DARK", "!CDARK", "#CDARK"]
     owner: "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml"
     explicit_marker_required: true
