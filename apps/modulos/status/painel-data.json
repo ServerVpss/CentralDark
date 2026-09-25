@@ -4,10 +4,10 @@
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
-    "phase": "UNKNOWN — não medido neste push",
-    "currentTask": "UNKNOWN — não medido neste push",
+    "phase": "Tailscale como rota-base Casa ↔ VPS",
+    "currentTask": "Tailscale integrado como rota-base permanente Casa ↔ VPS no Hub e Admin",
     "branch": "main",
-    "lastCommit": "🔒 shared: cristalizar contraprova do writer e exigir lease real",
+    "lastCommit": "144e0b71b7f — sela permissões do Hub e prova Tailscale",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -523,7 +523,7 @@
     "MultiZap-BOT errored — não crítico",
     "Pendência A9: executar tela Arsenal de Skills no Lovable"
   ],
-  "nextIA": "Pivete ajusta URL do conector Lovable para `/mcp` e clica em Adicionar novamente.",
+  "nextIA": "Testar pelo browser do CHEFE o botão Tailscale no Hub/Admin; SSH 22 da Casa permanece CLOSED_OR_FILTERED",
   "linearSync": {
     "statusConexao": "ok",
     "statusConexaoDetalhe": "Conectado — workspace Segredo (SEG) configurado em português",
@@ -598,6 +598,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-09-25T20:43:41Z",
+      "titulo": "Tailscale Hub/Admin PROVADO",
+      "detalhe": "Hub 200; status Tailscale 200; login humano reconciliado; Admin protegido; Caddy validado; receipt no PR #1562.",
+      "area": "Tailscale / Hub / Admin",
+      "sha": "144e0b7",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-09-05T19:02:51.511Z",
       "titulo": "Push na main · b8504ba0b6913facaa3396ed5e5838ff6ee19877",
@@ -988,14 +996,6 @@
       "detalhe": "☀️ FIX(CORE): HERDAR EMOJIS EM TODO MODELO (#1390)",
       "area": "Repositório",
       "sha": "dce8a91",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-08-31T11:58:33.628Z",
-      "titulo": "Push na main · 8ff68f74d33e399f5b6f76ddbeff2f7a4c3af5f3",
-      "detalhe": "Merge PR #1389: fix/close-external-source-gate-20260831 - funnel gate implementation",
-      "area": "Repositório",
-      "sha": "8ff68f7",
       "actor": "segredounlock"
     }
   ],
