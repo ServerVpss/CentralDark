@@ -48,6 +48,7 @@ expands_to:
 canonical_human_chain: "#CENTRALDARK -> #ACORDAR -> !CALIBRAR -> !MULTIBUSSOLA -> !META_LUPA -> !RECONCILIAR -> !DELTAUTIL -> !CONTRAPROVA -> !REMEDICAO -> !FIXED_POINT -> !REGISTRA -> !BOOT"
 canonical_machine_chain: "!CENTRALDARK -> #ACORDAR -> !CALIBRAR -> !MULTIBUSSOLA -> !META_LUPA -> !RECONCILIAR -> !DELTAUTIL -> !CONTRAPROVA -> !REMEDICAO -> !FIXED_POINT -> !REGISTRA -> !BOOT"
 canonical_chain: "!CENTRALDARK -> #ACORDAR -> !CALIBRAR -> !MULTIBUSSOLA -> !META_LUPA -> !RECONCILIAR -> !DELTAUTIL -> !CONTRAPROVA -> !REMEDICAO -> !FIXED_POINT -> !REGISTRA -> !BOOT"
+canonical_visual_chain: "👑 !CENTRALDARK → 🌅 #ACORDAR → 🎯 !CALIBRAR → 🧭 !MULTIBUSSOLA → 🔎 !META_LUPA → 🔄 !RECONCILIAR → 💎 !DELTAUTIL → 🧪 !CONTRAPROVA → 📏 !REMEDICAO → 📍 !FIXED_POINT → 🧾 !REGISTRA → 🚀 !BOOT"
 
 continuous_delta_contract:
   scope: ACTIVE_MASTER_SESSION
@@ -80,6 +81,19 @@ phase_contracts:
   CALIBRAR:
     meaning: ALIGN_INTENT_ROLE_SCOPE_TOOLS_PROOF
     owner: "LEIA-ME-IA.md + AGENTS.md"
+    emoji: "🎯"
+    intent_alignment:
+      threshold_percent: 80
+      percentage_means: INTERPRETATION_ALIGNMENT_NOT_RUNTIME_PASS
+      inputs: [CURRENT_EXPLICIT_INTENT, RECOVERED_APPLICABLE_CONTEXT, COMPATIBLE_PRIOR_LEARNING, CANONICAL_RULES, CURRENT_REALITY]
+      subtract: [MATERIAL_AMBIGUITY, MATERIAL_CONTRADICTION]
+      new_teaching: REMIX_MINIMUM_DELTA_IN_EXISTING_RULE
+      output: [REFINED_INTENT, INTENT_ALIGNMENT_CONFIDENCE_PERCENT]
+      gte_threshold_and_scope_authorized: EXECUTE_MINIMUM_COMPLETE_PATH
+      below_threshold_or_material_contradiction: ASK_ONLY_INDISPENSABLE_GAP
+      continuous_recalibration: true
+      do_not_parrot_chefe: true
+      align_thought_not_wording: true
   MULTIBUSSOLA:
     meaning: MULTIAXIS_MATERIAL_PERCEPTION
     owner: docs/CONSCIENCIA/MULTIBUSSOLA.md
