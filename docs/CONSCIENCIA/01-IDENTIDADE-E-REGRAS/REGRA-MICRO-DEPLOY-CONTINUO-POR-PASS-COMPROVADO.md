@@ -9,6 +9,11 @@ truth_rule: "REALIDADE_IS_JUDGE"
 related:
   - docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/REGRA-PREPRODUCAO-MCP-MAO-NA-MASSA.md
   - .agents/skills/centraldark-esteira-motor/SKILL.md
+  - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MICRO-DEPLOY-CONTINUO-BINDING.yml
+  - apps/bot-telegram/CENTRALDARK-MANDATORY-RULES.yml
+  - docs/CONSCIENCIA/05-APRENDIZADOS/MICRO-DEPLOY-CONTINUO-POR-PASS-COMPROVADO.md
+  - README.md
+  - CLAUDE.md
 ---
 
 # Regra Global — Micro-deploy Contínuo por PASS Comprovado
@@ -115,6 +120,29 @@ UNKNOWN != PASS
 REALIDADE_IS_JUDGE=true
 ```
 
-## 8. Frase canônica
+## 8. Amarrações obrigatórias
+
+Esta regra deve ser consumida por todos os pontos canônicos abaixo. Nenhum deles vira autoridade nova; todos apenas herdam o contrato.
+
+```text
+BOT_BINDING=apps/bot-telegram/CENTRALDARK-MANDATORY-RULES.yml
+TRIGGER_FABRIC_BINDING=docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MICRO-DEPLOY-CONTINUO-BINDING.yml
+MEMORY_ANCHOR=docs/CONSCIENCIA/05-APRENDIZADOS/MICRO-DEPLOY-CONTINUO-POR-PASS-COMPROVADO.md
+README_BINDING=README.md
+CLAUDE_BINDING=CLAUDE.md
+```
+
+Obrigatório para esses consumidores:
+
+```text
+MICRO_DEPLOY_RULE_REQUIRED=true
+PASS_COMPROVADO_ADVANCES_SCOPE=true
+UNRELATED_UNKNOWN_DOES_NOT_BLOCK_PROVEN_SCOPE=true
+RUNTIME_SCOPE_REQUIRES_RUNTIME_HEALTH=true
+RECEIPT_PR_MAE_REQUIRED=true
+NEXT_TIK_TAK_REQUIRED=true
+```
+
+## 9. Frase canônica
 
 > Qualquer PASS comprovado vira micro-deploy do escopo afetado. Atualização é constante; falso-verde continua proibido.
