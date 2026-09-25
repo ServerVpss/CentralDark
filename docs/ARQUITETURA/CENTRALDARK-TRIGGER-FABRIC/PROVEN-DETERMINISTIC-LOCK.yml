@@ -115,6 +115,64 @@ promotion:
     - NEW_RECEIPT
     - RESEAL_SAME_CLAIM
 
+
+executable_recipe:
+  principle: PROVEN_PATH_BECOMES_REPLAYABLE_RECIPE
+  formula:
+    - CAMINHO_JA_PROVADO
+    - SELAR_RECEITA_EXECUTAVEL
+    - GUARDAR_FINGERPRINT
+    - PROXIMO_EXECUTOR_CARREGA_A_RECEITA
+    - ADAPTA_SOMENTE_BINDINGS_DO_AMBIENTE
+    - EXECUTA_A_MESMA_SEQUENCIA
+    - RODA_A_MESMA_PROVA
+    - COMPARA_RESULTADO_FORMATO_EFEITO
+    - DIVERGIU_DELTA_NOVO
+    - NAO_DIVERGIU_REUTILIZA_CRISTAL
+  recipe_identity:
+    key_material:
+      - CLAIM_KEY
+      - OWNER
+      - PROOF_TARGET
+      - SEQUENCE
+      - PROBE_OR_TEST_CONTRACT
+      - EXPECTED_RESULT_SHAPE
+      - EXPECTED_EFFECT
+      - SECURITY_BOUNDARY
+    algorithm: SHA256
+    environment_bindings_excluded_from_recipe_identity_when_semantics_unchanged: true
+  seal_requires:
+    - RECIPE_ID
+    - RECIPE_FINGERPRINT
+    - CLAIM_LOCK_KEY
+    - OWNER
+    - PROOF_TARGET
+    - SEQUENCE
+    - ENVIRONMENT_BINDING_SCHEMA
+    - PROBE_OR_TEST_CONTRACT
+    - EXPECTED_RESULT_SHAPE
+    - EXPECTED_EFFECT
+    - EVIDENCE_REF
+    - RECEIPT_REF
+    - OBSERVED_AT
+  replay:
+    next_executor_loads_recipe_before_reasoning_from_zero: true
+    adapt_only_environment_bindings: true
+    preserve_sequence: true
+    preserve_proof_contract: true
+    compare_dimensions: [RESULT, FORMAT, EFFECT]
+    same_fingerprint_same_result_format_effect: REUSE_CRYSTAL
+    divergence: NEW_DELTA
+    divergence_invalidates_only_dependent_claims: true
+    no_divergence_means_no_repeat_investigation: true
+    current_reality_still_required_for_environment_bindings: true
+  forbidden:
+    - REASON_FROM_ZERO_WHEN_RECIPE_MATCHES
+    - CHANGE_SEQUENCE_WITHOUT_NEW_DELTA
+    - CHANGE_PROOF_TO_FORCE_PASS
+    - TREAT_ENVIRONMENT_BINDING_AS_CANONICAL_CONSTANT
+    - PROMOTE_DIVERGENCE_TO_PASS_WITHOUT_RECONCILIATION
+
 fixed_point:
   stop_when:
     - NO_NEW_INFORMATION
