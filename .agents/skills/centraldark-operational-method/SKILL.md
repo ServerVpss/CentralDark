@@ -2157,3 +2157,30 @@ Isso estende `REUSE_BEFORE_CREATE`, `REUSE_PROOF_NO_REPEAT` e
 `REUSE_CRYSTAL_NOT_RETHINK`; não cria segunda memória, segundo método ou
 segundo cérebro.
 
+
+
+## Runtime preflight obrigatório
+
+Antes de qualquer probe/comando de runtime que possa gerar fato operacional, validar primeiro o wrapper, shell, host-mode, paths requeridos e evidência de ownership quando aplicável pelo consumer canônico `scripts/trigger-fabric/centraldark_full_trigger_boot.py preflight-lint`.
+
+```text
+WRAPPER_PREFLIGHT
+→ PASS
+→ EXECUTE_TARGET_PROBE
+→ OBSERVE_TARGET
+→ PROOF
+→ COUNTERPROOF
+→ REALITY_JUDGE
+
+WRAPPER_PREFLIGHT_FAIL
+→ TARGET_NOT_EXECUTED
+→ INVALIDATED_PROBE
+→ FIX_PREFLIGHT_AND_RETRY
+```
+
+`PREFLIGHT_PASS != RUNTIME_PASS`.
+`WRAPPER_PARSE_FAIL != TARGET_FAIL`.
+`INVALID_PROBE_MUST_NOT_BECOME_FACT=true`.
+`BRIDGE_OWNERSHIP_CLAIM_REQUIRES_COMPLETE_EVIDENCE=true`.
+
+Este preflight é extensão do método existente, não segundo gate/owner. Falha do wrapper impede promover conclusão sobre o alvo; PASS do wrapper apenas autoriza executar a prova real.
