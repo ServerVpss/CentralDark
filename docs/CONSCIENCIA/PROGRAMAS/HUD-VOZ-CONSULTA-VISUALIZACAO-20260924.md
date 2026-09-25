@@ -73,3 +73,62 @@ NO_SECOND_ROUTER=true
 2. observar CI do filho
 3. medir runtime atual de heartbeat/VPS
 4. somente depois atualizar PASS/UNKNOWN no ledger #1562
+
+
+## Registro durável — CASA / GARIMPO / Remote Desktop — 2026-09-25
+
+EVIDENCE_SOURCE=CHEFE_UPLOADS+REPO_MAIN
+EVIDENCE_CLASS=RECEIPT+SOURCE_CODE+SCREENSHOT
+CURRENT_ROUTE_PROOF=PARTIAL_STRONG
+
+### Cadeia provada
+
+```text
+E:\CentralDark\_MAPA_CASA\GARIMPO-CHEFE
+→ CentralDark Remote Tray / Remote Bridge
+→ npx @wonderwhy-er/desktop-commander remote
+→ https://mcp.desktopcommander.app/mcp
+→ autorização por device code
+→ Device ID atribuído
+→ Channel subscribed
+→ Device marked as online
+→ Device ready
+→ Device Name = SEGREDO
+```
+
+### Evidências locais recebidas do CHEFE
+
+- receipts de `remote-bridge` registram repetidamente `device_label/device = SEGREDO`;
+- os mesmos receipts registram `workdir = E:\\CentralDark\\_MAPA_CASA\\GARIMPO-CHEFE`;
+- logs `centraldark-remote-tray-*.log` registram `WORKDIR=...GARIMPO-CHEFE`, `REMOTE_MCP_CONNECT=https://mcp.desktopcommander.app/mcp` e inicialização do owner Remote MCP para `SEGREDO`;
+- logs `desktop-commander-*.log` registram conexão ao Remote MCP e `Device Name: SEGREDO`;
+- receipt antigo preserva um Device ID estável em múltiplas sessões antes das recriações posteriores;
+- screenshot de nova autorização mostra explicitamente `Device Name: SEGREDO` após `Device ID assigned`, `Channel subscribed`, `Device marked as online` e `Device ready`.
+
+### Fonte canônica já existente
+
+- `scripts/remote-bridge/CentralDark-Remote-Bridge.ps1` usa `GARIMPO-CHEFE` como `Workdir` padrão e executa dali o owner Remote MCP;
+- `scripts/remote-bridge/CentralDark-Remote-One.go` usa o mesmo `defaultWorkdir`, grava receipts em `GARIMPO-CHEFE\\receipts\\remote-bridge` e registra `Device: SEGREDO`;
+- `docs/RELATORIOS/2026-09-16-casa-garimpo-reconciliation.md` já registra que o pacote Remote Tray/NPX do GARIMPO foi absorvido pelo contrato canônico.
+
+### Conclusão
+
+```text
+GARIMPO_CHEFE_WAS_REMOTE_BRIDGE_WORKDIR = PROVEN
+REMOTE_MCP_ROUTE_FROM_GARIMPO = PROVEN
+DEVICE_NAME_SEGREDO_OBSERVED_AFTER_AUTH = PROVEN
+GARIMPO_PATH_ITSELF_GENERATES_DEVICE_NAME = NOT_PROVEN
+EXACT_DEVICE_NAME_SOURCE = UNKNOWN
+```
+
+Não inferir que o caminho da pasta cria o nome do device. O próximo teste discriminante deve localizar se `SEGREDO` vem de hostname Windows, estado local do Desktop Commander, wrapper/bridge, variável/configuração ou registro persistente de autenticação.
+
+### Invariantes cristalizadas
+
+```text
+UI_CONNECTED != REMOTE_COMMANDER_ROUTABLE
+DEVICE_REGISTERED != DEVICE_ONLINE
+WORKDIR != DEVICE_IDENTITY
+HISTORICAL_DEVICE != CURRENT_ROUTABLE_DEVICE
+TOOL_FAILURE != WORLD_FAILURE
+```
