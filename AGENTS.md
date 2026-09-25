@@ -94,12 +94,17 @@ SEGREDO/CHEFE
 
 Não criar agente só para preencher número. As seis lentes funcionais já mapeadas não exigem seis processos permanentes; `REUSE_BEFORE_CREATE` decide.
 
-## Modo atual de evolução — main direta, segurança mínima e histórico no PR-mãe
+## Modo atual de evolução — filho compatível obrigatório quando já existe
 
 ```text
-PROMOTION_MODE=DIRECT_MAIN_SOFT_EVOLUTION
+PROMOTION_MODE=DIRECT_MAIN_SOFT_EVOLUTION_WITH_EXISTING_CHILD_TRACE
 NEW_PR_DEFAULT=false
 EXISTING_OPEN_PRS_REMAIN_VALID=true
+EXISTING_COMPATIBLE_CHILD_PR_IS_MANDATORY_LANE=true
+CHILD_MATCH_KEY=OWNER+SCOPE+CAPABILITY
+DIRECT_MAIN_FORBIDDEN_WHEN_COMPATIBLE_CHILD_IS_HEALTHY=true
+STALE_OR_CONFLICTING_CHILD_REQUIRES_RECEIPT_BEFORE_BYPASS=true
+MAIN_READBACK_MUST_RETURN_TO_CHILD_AND_PR_MOTHER=true
 PR_MOTHER=#1562
 PR_MOTHER_ROLE=HISTORY_HANDOFF_LEDGER
 PR_MOTHER_MERGE_FORBIDDEN=true
@@ -118,11 +123,11 @@ NO_V1_V2_V3_PARALLEL_OWNER=true
 REALITY_IS_JUDGE=true
 ```
 
-Fluxo CURRENT: `CURRENT_MAIN → REUSE_PROVEN → OWNER_EXISTENTE → DELTA_MÍNIMO → META/PROVA/CONTRAPROVA → SEGURANÇA MÍNIMA → COMMIT DIRETO MAIN → MAIN_READBACK → DEPLOY_CAUSAL → T1 → CLASSIFICAR_NOVIDADE → RECEIPT #1562 → NEXT_CURSOR → FIXED_POINT`.
+Fluxo CURRENT: CURRENT_MAIN -> REUSE_PROVEN -> OWNER_EXISTENTE -> FIND_MATCHING_CHILD(OWNER+SCOPE+CAPABILITY) -> CHILD_HEALTHY?CHILD_REQUIRED:CHILD_STALE?CHILD_TRACE_BLOCKED:NO_CHILD -> DELTA_MINIMO -> PROVA -> CONTRAPROVA -> CHILD_SAME_HEAD_SQUASH_OR_ALLOWED_DIRECT_MAIN -> MAIN_READBACK -> RECEIPT_EXISTING_CHILD_IF_ANY -> RECEIPT_1562 -> FIXED_POINT.
 
 Toda novidade real do sistema alimenta o PR-mãe #1562 no mesmo ciclo em que for observada. Isso inclui PASS, FAIL, UNKNOWN, BLOCKED, STALE, nova integração, novo acesso, nova rota, commit/PR/merge/deploy, mudança de runtime, contraprova, correção de diagnóstico, descoberta de owner, ferramenta/conector e decisão canônica. Repetição exata pode ser deduplicada; novidade não pode esperar PASS para ser registrada. Segredos nunca entram no ledger.
 
-PRs já existentes continuam válidos como história, fonte de delta e veículo opcional do trabalho iniciado. Não criar PR novo por rotina enquanto este modo estiver ativo. O caminho `SAME_HEAD → SQUASH_CHILD_ONLY` fica disponível para PR existente e volta a ser obrigatório quando o CHEFE endurecer novamente a política.
+PR existente compatível por OWNER+SCOPE+CAPABILITY não é opcional: é a promotion lane obrigatória enquanto saudável/reconciliável. Se estiver STALE ou CONFLICTING, registrar receipt no próprio filho antes de qualquer bypass; direct-main só ocorre por autorização aplicável ou regra global, e MAIN_READBACK volta ao filho e ao #1562. PR_STALE != IGNORAR_PR.
 
 ## Identidade
 

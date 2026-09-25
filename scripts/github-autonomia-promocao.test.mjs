@@ -14,6 +14,7 @@ import {
   evaluateCandidate,
   executionProvenance,
   intentReceipt,
+  promotionLaneDecision,
   scanPullFiles,
   sealReceipt,
   selectLatestNonSkipped,
@@ -68,6 +69,27 @@ function successfulRuns(required) {
   }));
 }
 
+
+test("child compatible healthy is mandatory lane", () => {
+  const lane = promotionLaneDecision({ matchingChild: { number: 1579, state: "open", draft: false, mergeable: true, mergeable_state: "clean" } });
+  assert.equal(lane.decision, "CHILD_REQUIRED");
+  assert.equal(lane.child_trace_required, true);
+});
+
+test("stale child requires trace before global bypass", () => {
+  const blocked = promotionLaneDecision({ matchingChild: { number: 1579, state: "open", draft: false, mergeable: false, mergeable_state: "dirty" } });
+  assert.equal(blocked.decision, "CHILD_STALE_BLOCKED");
+  assert.equal(blocked.child_blocked_receipt, "CHILD_LANE_STALE_BLOCKED");
+  const bypass = promotionLaneDecision({ matchingChild: { number: 1579, state: "open", draft: false, mergeable: false, mergeable_state: "dirty" }, globalRule: true });
+  assert.equal(bypass.decision, "DIRECT_MAIN_ALLOWED_AFTER_CHILD_TRACE");
+  assert.equal(bypass.post_main_child_receipt_required, true);
+});
+
+test("no child keeps direct main without creating pr", () => {
+  const lane = promotionLaneDecision();
+  assert.equal(lane.decision, "DIRECT_MAIN_ALLOWED");
+  assert.equal(lane.child_trace_required, false);
+});
 
 test("Horn forward chaining converge quando nenhum fato novo pode ser acrescentado", () => {
   const proof = deriveHornFixedPoint(["A"], [
