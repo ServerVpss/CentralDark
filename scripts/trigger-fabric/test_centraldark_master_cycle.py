@@ -17,6 +17,19 @@ class ContinuousDeltaContractTest(unittest.TestCase):
         self.assertTrue(receipt["next_master_active"])
         self.assertIn("DELTA_UTIL", receipt["expanded_chain"])
 
+    def test_master_exposes_visual_trigger_chain_and_intent_alignment(self):
+        receipt = MODULE.resolve("!CENTRALDARK", chefe_source=True)
+        self.assertTrue(receipt["visual_trigger_chain"].startswith("👑 !CENTRALDARK → 🌅 ACORDAR → 🎯 CALIBRAR"))
+        self.assertIn("🧾 REGISTRA → 🚀 BOOT", receipt["visual_trigger_chain"])
+        alignment = receipt["intent_alignment"]
+        self.assertEqual("CALIBRAR", alignment["phase"])
+        self.assertEqual("🎯", alignment["emoji"])
+        self.assertEqual(80, alignment["threshold_percent"])
+        self.assertEqual("INTERPRETATION_ALIGNMENT_NOT_RUNTIME_PASS", alignment["percentage_means"])
+        self.assertTrue(alignment["continuous_recalibration"])
+        self.assertTrue(alignment["do_not_parrot_chefe"])
+        self.assertTrue(alignment["align_thought_not_wording"])
+
     def test_bot_entry_activates_without_plain_word_guess(self):
         receipt = MODULE.resolve("fala normal", bot_entry=True, chefe_source=True)
         self.assertEqual("BOT_ENTRY", receipt["activation_source"])
