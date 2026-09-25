@@ -302,6 +302,30 @@ def lock_key(claim_key: str, owner: str) -> str:
     return hashlib.sha256(payload).hexdigest()
 
 
+def recipe_fingerprint(
+    claim_key: str,
+    owner: str,
+    proof_target: str,
+    sequence: list[str],
+    proof_contract: str,
+    expected_result_shape: str,
+    expected_effect: str,
+    security_boundary: str,
+) -> str:
+    canonical = {
+        "claim_key": claim_key.strip(),
+        "owner": owner.strip(),
+        "proof_target": proof_target.strip(),
+        "sequence": [step.strip() for step in sequence if step.strip()],
+        "proof_contract": proof_contract.strip(),
+        "expected_result_shape": expected_result_shape.strip(),
+        "expected_effect": expected_effect.strip(),
+        "security_boundary": security_boundary.strip(),
+    }
+    payload = json.dumps(canonical, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+    return hashlib.sha256(payload).hexdigest()
+
+
 def load_registry(path: Path) -> dict:
     if not path.exists():
         return {"schema": "centraldark.proven-claims-lock.v1", "claims": {}}
@@ -417,6 +441,18 @@ def cmd_seal(args: argparse.Namespace) -> int:
     if existing and existing.get("lock_key") == key and existing.get("state") == "SEALED_PROVEN":
         print(json.dumps({"action": "REUSE_PROOF", "claim": args.claim, "lock_key": key}, indent=2))
         return 0
+    sequence = list(args.sequence or [])
+    recipe_id = args.recipe_id.strip() or args.claim.strip()
+    recipe_fp = recipe_fingerprint(
+        args.claim,
+        args.owner,
+        args.proof_target,
+        sequence,
+        args.proof_contract,
+        args.expected_result_shape,
+        args.expected_effect,
+        args.security_boundary,
+    )
     entry = {
         "claim_key": args.claim,
         "owner": args.owner,
@@ -427,6 +463,19 @@ def cmd_seal(args: argparse.Namespace) -> int:
         "observed_at": args.observed_at,
         "counterproof": "PASS",
         "receipt_ref": args.receipt,
+        "recipe": {
+            "recipe_id": recipe_id,
+            "fingerprint": recipe_fp,
+            "sequence": sequence,
+            "proof_contract": args.proof_contract,
+            "expected_result_shape": args.expected_result_shape,
+            "expected_effect": args.expected_effect,
+            "security_boundary": args.security_boundary,
+            "environment_binding_schema": list(args.environment_binding or []),
+            "next_executor": "LOAD_RECIPE_BEFORE_REASONING_FROM_ZERO",
+            "same_result_format_effect": "REUSE_CRYSTAL",
+            "divergence": "NEW_DELTA",
+        },
     }
     data["claims"][args.claim] = entry
     atomic_write_json(path, data)
@@ -499,6 +548,13 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--evidence", required=True)
     s.add_argument("--observed-at", required=True)
     s.add_argument("--receipt", required=True)
+    s.add_argument("--recipe-id", default="")
+    s.add_argument("--sequence", action="append", default=[])
+    s.add_argument("--proof-contract", default="")
+    s.add_argument("--expected-result-shape", default="")
+    s.add_argument("--expected-effect", default="")
+    s.add_argument("--security-boundary", default="")
+    s.add_argument("--environment-binding", action="append", default=[])
     s.set_defaults(func=cmd_seal)
 
     r = sub.add_parser("reopen-check")
