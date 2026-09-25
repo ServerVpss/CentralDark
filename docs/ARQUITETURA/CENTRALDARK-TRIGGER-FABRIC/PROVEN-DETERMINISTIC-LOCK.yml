@@ -173,3 +173,194 @@ proven_path_replay:
     action: REVALIDATE_AFFECTED_CONE_ONLY
   fingerprint_unchanged:
     action: REUSE_PROVEN_PATH_NO_RETHINK
+
+session_crystallization_2026_09_25:
+  authority: SEGREDO/CHEFE
+  intent: CRYSTALLIZE_ALL_PROVEN_SESSION_PATHS_WITHOUT_REOPENING_SETTLED_EVIDENCE
+  rule: CURRENT_OVER_HISTORY
+  criteria:
+    human_supplies_goal_not_runbook: true
+    machine_decomposes_technical_work: true
+    machine_resolvable_blocker_auto_continue: true
+    human_micromanagement_required: false
+    search_before_ask: true
+    measure_before_assume: true
+    reuse_before_create: true
+    one_system_only: true
+    one_writer_per_mutable_scope: true
+    parallelize_perception_serialize_mutation: true
+    unknown_is_not_pass: true
+    action_is_not_proof: true
+    documented_is_not_executed: true
+    merged_is_not_deployed: true
+    queued_is_not_pass: true
+    exists_is_not_running: true
+    session_memory_is_not_current_state: true
+    sensor_failure_is_not_world_failure: true
+    no_blind_pull_over_dirty_runtime: true
+    no_blind_reset_or_clean: true
+    secrets_never_enter_receipt_or_git: true
+    preserve_running_runtime_deltas_before_reconciliation: true
+    same_fingerprint_reuses_proven_recipe: true
+    fingerprint_change_revalidates_affected_cone_only: true
+    no_new_information_reuses_proof: true
+    divergence_is_delta_new: true
+    raw_byte_equality_required: false
+    result_schema_and_expected_effect_must_match: true
+    every_material_novelty_feeds_pr_mother_1562: true
+    fixed_point_requires_proof_counterproof_and_reality_judge: true
+
+  recipe_registry:
+    CURRENT_STATE_RENDEZVOUS:
+      status: PROVEN_REUSABLE
+      goal: RECOVER_CURRENT_WITHOUT_RESTARTING_MISSION
+      fingerprint_material:
+        - CANONICAL_OWNER
+        - GITHUB_MAIN_SHA
+        - RUNTIME_SHA_OR_ARTIFACT_HASH
+        - WORKTREE_DIRTY_FINGERPRINT
+        - SERVICE_OR_ENDPOINT_IDENTITY
+        - SECURITY_BOUNDARY
+      execution_sequence:
+        - RECOVER_INTENT_AND_LAST_VALID_ANCHOR
+        - MEASURE_CURRENT_GITHUB_AND_RUNTIME_AS_INDEPENDENT_SENSORS
+        - CLASSIFY_PASS_FAIL_UNKNOWN_BLOCKED_STALE
+        - RECONCILE_DIVERGENCES
+        - PRESERVE_PROVEN_GOOD
+        - SELECT_ONE_SURVIVING_DELTA
+        - EXECUTE_ONLY_IF_MUTATION_IS_AUTHORIZED_AND_OWNER_IS_PROVEN
+        - RUN_TARGETED_PROOF
+        - RUN_COUNTERPROOF
+        - REALITY_JUDGE
+        - RECEIPT_AND_NEXT_CURSOR
+      expected_effect: SAME_CURRENT_STATE_CLASSIFICATION_FOR_EQUIVALENT_INPUTS
+
+    LIVE_FABRIC_JOB_PATH:
+      status: PROVEN_REUSABLE
+      owner: centraldark-omni-router
+      environment_bindings:
+        public_status: /api/live-fabric/status
+        public_graph: /api/live-fabric/graph
+        admin_panel: https://admin.centralldark.com/omni
+        runtime_root: /root/CentralDark
+        local_workspace: "E:\\CentralDark"
+      execution_sequence:
+        - ADMIN_OR_HERMES_STARTS_JOB
+        - CENTRALDARK_API_CREATES_JOB
+        - MCP_OR_ADAPTER_EXECUTES_REAL_TOOLCALL
+        - TARGET_RETURNS_REAL_OUTPUT
+        - API_WRITES_RECEIPT
+        - GRAPH_VIVO_UPDATES
+        - HUD_PANEL_EXPLAINS_STATE
+        - NEXT_TIK_TAK
+      proof_sequence:
+        - READ_LIVE_FABRIC_STATUS
+        - READ_LIVE_FABRIC_GRAPH
+        - VERIFY_RECEIPT_EXISTS_FOR_JOB
+        - VERIFY_GRAPH_REFLECTS_JOB
+        - CLASSIFY_RESULT_WITHOUT_PROMOTING_UNKNOWN
+      expected_result_schema:
+        status_ok: boolean
+        owner: string
+        transport: string
+        receipt_ref: string
+        next_cursor: string
+      expected_effect: REAL_TOOLCALL_TO_RECEIPT_TO_GRAPH_TO_HUD
+      last_session_proof:
+        status_endpoint: PASS_200
+        graph_endpoint: PASS_200
+        owner: centraldark-omni-router
+        transport: FASTAPI
+      replay_rule: SAME_FINGERPRINT_REUSE_RECIPE
+
+    MCP_HEALTH_AND_AUTH_BOUNDARY:
+      status: PROVEN_REUSABLE
+      owner: CentralDark-MCP
+      environment_bindings:
+        health: /health
+        deep_health: /health/deep
+        canonical_admin_resource: /admin/mcp
+        compatibility_admin_alias: /mcp/admin
+      execution_sequence:
+        - PROBE_HEALTH
+        - PROBE_DEEP_HEALTH
+        - PROBE_CANONICAL_ADMIN_RESOURCE_WITHOUT_EXPOSING_SECRET
+        - PROBE_COMPATIBILITY_ALIAS
+        - COMPARE_AUTH_BOUNDARY_AND_HANDLER_BEHAVIOR
+      proof_sequence:
+        - REQUIRE_HTTP_HEALTH_PASS
+        - REQUIRE_DEEP_HEALTH_NO_CRITICAL_FAILURE
+        - REQUIRE_ADMIN_RESOURCE_AUTH_BOUNDARY
+        - REQUIRE_ALIAS_CONVERGES_TO_CANONICAL_OWNER
+      expected_effect: ONE_MCP_OWNER_WITH_COMPATIBILITY_ALIAS_NOT_SECOND_ARCHITECTURE
+      last_session_proof:
+        health: PASS_200
+        deep_health: PASS_HEALTHY_SCORE_100
+        tool_count: 126
+        admin_alias: PASS_AUTH_BOUNDARY
+      replay_rule: SAME_FINGERPRINT_REUSE_RECIPE
+
+    SAFE_GIT_RUNTIME_RECONCILIATION:
+      status: PROVEN_REUSABLE
+      goal: PRESERVE_LIVE_RUNTIME_WHILE_RECONCILING_WITH_MAIN
+      execution_sequence:
+        - MEASURE_MAIN_SHA
+        - MEASURE_RUNTIME_SHA
+        - MEASURE_DIRTY_FINGERPRINT
+        - IF_DIRTY_SNAPSHOT_DIFF
+        - PRESERVE_RUNTIME_ONLY_DELTA
+        - RECONCILE_WITHOUT_RESET_OR_CLEAN
+        - REAPPLY_ONLY_SURVIVING_DELTA
+        - REMEASURE
+        - COUNTERPROVE
+        - RECEIPT
+      expected_effect: NO_LOSS_OF_LIVE_DELTA_AND_NO_FALSE_MAIN_EQUALS_RUNTIME
+      replay_rule: SAME_FINGERPRINT_REUSE_RECIPE
+
+    PROVEN_PASS_TO_SCOPED_MICRO_DEPLOY:
+      status: PROVEN_REUSABLE
+      execution_sequence:
+        - REQUIRE_PROVEN_PASS
+        - MICRO_DEPLOY_AFFECTED_SCOPE_ONLY
+        - RUN_RUNTIME_HEALTH_OR_EQUIVALENT_PROOF
+        - WRITE_RECEIPT_TO_PR_MOTHER_1562
+        - ADVANCE_NEXT_TIK_TAK
+      reject_as_pass:
+        - UNKNOWN
+        - ACTION_ONLY
+        - DOCUMENTED_ONLY
+        - VISUAL_BADGE_ONLY
+        - QUEUED
+        - MERGED_WITHOUT_DEPLOY_PROOF
+      expected_effect: ONLY_PROVEN_SCOPE_ADVANCES
+
+  not_sealed_as_final_from_transient_session_evidence:
+    SCREENPIPE_CURRENT_FINAL: UNKNOWN
+    HERMES_DESKTOP_CURRENT_FINAL: UNKNOWN
+    HEALTH_CHECK_SH_CURRENT_FINAL: UNKNOWN
+    POST_MERGE_HOOK_CURRENT_FINAL: UNKNOWN
+    SCREENPIPE_CRON_MONITOR_CURRENT_FINAL: UNKNOWN
+    reason: >-
+      Earlier screenshots and intermediate diagnostics are retained as history,
+      but the latest reconciled evidence did not independently prove these
+      surfaces as final PASS. They must not be promoted into a sealed executable
+      recipe until remeasured.
+
+  executor_contract:
+    on_load:
+      - LOAD_RECIPE_REGISTRY
+      - MATCH_GOAL_OWNER_AND_DEPENDENCY_FINGERPRINT
+      - IF_MATCH_REUSE_WITHOUT_REINTERPRETATION
+      - ADAPT_ONLY_DECLARED_ENVIRONMENT_BINDINGS
+      - EXECUTE_SAME_SEQUENCE
+      - RUN_SAME_PROOF
+      - COMPARE_RESULT_SCHEMA_AND_EXPECTED_EFFECT
+    on_divergence:
+      - RECORD_DELTA_NEW
+      - INVALIDATE_AFFECTED_CONE_ONLY
+      - REVALIDATE
+      - RESEAL_IF_PROVEN
+    on_no_divergence:
+      - REUSE_CRYSTAL
+      - DO_NOT_ASK_CHEFE_TO_RETEACH
+
