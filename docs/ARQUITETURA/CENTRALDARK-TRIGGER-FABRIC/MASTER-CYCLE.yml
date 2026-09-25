@@ -13,6 +13,13 @@ bot_entry_activates_master_session: true
 explicit_trigger_activates_master_session: true
 master_session_remains_active: true
 subsequent_chefe_material_is_delta_candidate: true
+subsequent_chefe_material_is_active_intent_delta_first: true
+preserve_compatible_active_intent: true
+recalculate_intent_alignment_each_material_turn: true
+intent_replacement_requires: EXPLICIT_REPLACE_OR_PROVEN_MATERIAL_INCOMPATIBILITY
+pertinence_first: true
+minimum_sufficient_loop: true
+triggers_are_conditional_not_ritual: true
 
 master_precedence:
   human_notation: "#CENTRALDARK > #ACORDAR"
@@ -92,6 +99,12 @@ phase_contracts:
       gte_threshold_and_scope_authorized: EXECUTE_MINIMUM_COMPLETE_PATH
       below_threshold_or_material_contradiction: ASK_ONLY_INDISPENSABLE_GAP
       continuous_recalibration: true
+      new_chefe_material: DELTA_TO_ACTIVE_INTENT_FIRST
+      preserve_compatible_active_intent: true
+      replacement_requires: EXPLICIT_REPLACE_OR_PROVEN_MATERIAL_INCOMPATIBILITY
+      pertinence_first: true
+      minimum_sufficient_loop: true
+      triggers_are_conditional_not_ritual: true
       do_not_parrot_chefe: true
       align_thought_not_wording: true
   MULTIBUSSOLA:
