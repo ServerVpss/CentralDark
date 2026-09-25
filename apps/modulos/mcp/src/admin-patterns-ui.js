@@ -52,7 +52,7 @@ export const PATTERN_ADMIN_STYLE = `
 @media(max-width:900px){.pattern-office,.admin-grid,.pattern-monitor{grid-template-columns:1fr}.pattern-head,.admin-kpis,.pattern-monitor-grid{grid-template-columns:1fr 1fr}}
 `;
 
-export const PATTERN_ADMIN_TAB = `<div class="tab" data-p="patterns">Padrões</div><div class="tab" data-p="commands">Comandos</div>`;
+export const PATTERN_ADMIN_TAB = `<div class="tab" data-p="patterns">🧩 Padrões</div><div class="tab" data-p="commands">🎛️ Comandos</div>`;
 
 export const PATTERN_ADMIN_PANE = `
   <div class="pane" id="p-patterns">

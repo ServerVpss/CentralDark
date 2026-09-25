@@ -229,14 +229,14 @@ __PATTERN_ADMIN_STYLE__
   <div class="meta"><span>versão <b id="ver">?</b></span><span id="clock">--:--:--</span><a href="/admin/logout" class="btn ghost" style="text-decoration:none;padding:6px 12px">sair</a></div>
 </header>
 <nav class="tabs">
-  <div class="tab active" data-p="visao">Visão Geral</div>
-  <div class="tab" data-p="tools">Ferramentas</div>
-  <div class="tab" data-p="linear">Linear</div>
+  <div class="tab active" data-p="visao">👁️ Visão Geral</div>
+  <div class="tab" data-p="tools">🧰 Ferramentas</div>
+  <div class="tab" data-p="linear">📋 Linear</div>
   <div class="tab" data-p="grafo">🌌 Grafo Celestial</div>
   __PATTERN_ADMIN_TAB__
-  <div class="tab" data-p="audit">Auditoria</div>
-  <div class="tab" data-p="conector">Conector</div>
-  <div class="tab" data-p="diag">Diagnóstico</div>
+  <div class="tab" data-p="audit">🧾 Auditoria</div>
+  <div class="tab" data-p="conector">🔌 Conector</div>
+  <div class="tab" data-p="diag">🩺 Diagnóstico</div>
   <div class="tab" data-p="omni">🌀 Omni</div>
   <div class="tab" data-p="tailscale">🌐 Tailscale</div>
 </nav>
@@ -502,7 +502,7 @@ async function loadTailscalePanel(){
   try{
     const r=await fetch('/admin/api/tailscale',{cache:'no-store'});
     const j=await r.json();
-    const pass=Boolean(r.ok && j.ok);
+    const pass=Boolean(j.ok && j.backend_state==='Running' && j.self?.online && (j.home?.online !== false));
     if(state){ state.textContent=pass?'CONNECTED':'UNKNOWN'; state.className='val '+(pass?'ok':'warn'); }
     if(bar) bar.style.width=pass?'100%':'25%';
     if(vps) vps.textContent=(j.self?.host||'VPS')+' '+(j.self?.ips?.[0]||'');
