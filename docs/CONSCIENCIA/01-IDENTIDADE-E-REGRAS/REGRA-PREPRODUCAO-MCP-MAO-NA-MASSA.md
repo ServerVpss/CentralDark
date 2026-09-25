@@ -84,11 +84,15 @@ PR_MOTHER=#1562
 PR_MOTHER_ROLE=LEDGER_RENDEZVOUS_NOT_WRITER
 PR_CHILD_OR_MAIN_WRITES_DELTA=true
 RECEIPT_RETURNS_TO_PR_MOTHER=true
-USE_CHILD_PR_WHEN_SCOPE_IS_ALREADY_IN_CHILD=true
-DIRECT_MAIN_ALLOWED_ONLY_WHEN_EXPLICIT_OR_GLOBAL_RULE=true
+CHILD_MATCH_KEY=OWNER+SCOPE+CAPABILITY
+EXISTING_COMPATIBLE_CHILD_PR_IS_MANDATORY_LANE=true
+DIRECT_MAIN_FORBIDDEN_WHEN_COMPATIBLE_CHILD_IS_HEALTHY=true
+STALE_OR_CONFLICTING_CHILD_REQUIRES_RECEIPT_BEFORE_BYPASS=true
+DIRECT_MAIN_ALLOWED_WITHOUT_CHILD_OR_EXPLICIT_BYPASS=true
+MAIN_READBACK_MUST_RETURN_TO_CHILD_AND_PR_MOTHER=true
 ```
 
-Mudanças globais de regra podem ir direto ao `main` quando o CHEFE pedir explicitamente tornar global. Mudanças de implementação em andamento devem preferir o PR-filho adequado. O PR-mãe recebe receipt/handoff e não deve ser usado como veículo de merge.
+Antes de escrever, medir PRs-filhos por OWNER+SCOPE+CAPABILITY. Filho compatível saudável é obrigatório e promove por SAME_HEAD -> SQUASH -> MAIN. Filho stale/conflicting recebe CHILD_LANE_STALE_BLOCKED antes de bypass. Após MAIN_READBACK, o SHA final retorna ao filho existente e ao PR-mãe.
 
 ## 6. CI determinístico aberto
 

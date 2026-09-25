@@ -100,3 +100,45 @@ FINGERPRINT DIFERENTE
 ## NEXT_CURSOR
 
 `REPLAY_REGISTRY_SELF_TEST → REGISTER_RECEIPT_#1562 → TIK_TAK_CURRENT → resolver somente blockers atuais sem reabrir cristais equivalentes`.
+
+
+## T1 runtime — tentativa de replay na VPS após cristalização
+
+Observed at: `2026-09-25T10:40Z`  
+Surface: `vmi3256920:/root/CentralDark`
+
+A primeira tentativa de carregar/revalidar a receita no corpo vivo da VPS foi executada sem mutar o worktree.
+
+```text
+LOCAL_HEAD=1df94e30ac0f0313edcc760db9e4789104772342
+DIRTY_COUNT=104
+GITHUB_MAIN=95db8435602506026eef9214ef35e4716a473b23
+FETCH_ORIGIN_MAIN=BLOCKED
+ERROR=could not read Username for 'https://github.com'
+```
+
+Classificação:
+
+```text
+CURRENT_MAIN_CRYSTAL=PROVED_IN_GITHUB
+VPS_CURRENT_RECIPE_LOAD=BLOCKED_GIT_AUTH
+VPS_WORKTREE_DIRTY=true
+BLIND_PULL_RESET_CLEAN=FORBIDDEN
+RUNTIME_REPLAY_PASS=NOT_CLAIMED
+GLOBAL_FIXED_POINT=NOT_CLAIMED
+```
+
+Aplicação da própria lei do cristal:
+
+```text
+DIVERGIU
+→ DELTA_NOVO=VPS_GIT_AUTH_BINDING
+→ INVALIDAR SOMENTE O CONE DEPENDENTE
+→ PRESERVAR O CRISTAL E OS 104 DELTAS LOCAIS
+→ REPARAR/REUTILIZAR BINDING DE AUTENTICAÇÃO EXISTENTE
+→ CARREGAR A MESMA RECEITA EM WORKTREE ISOLADO
+→ RODAR O MESMO SELF-TEST
+→ COMPARAR SCHEMA/EFEITO
+```
+
+Este blocker é de **binding do ambiente**, não motivo para reabrir ou reinterpretar os caminhos já selados.
