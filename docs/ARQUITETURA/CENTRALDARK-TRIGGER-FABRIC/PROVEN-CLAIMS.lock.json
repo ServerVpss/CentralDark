@@ -327,7 +327,7 @@
         "proof_commands": [
           "resource existence is checked with explicit ref/HEAD instead of unscoped find",
           "PR #410 receipt exposure fix remains reachable",
-          "13 discriminating regression cases pass",
+          "14 discriminating regression cases pass",
           "new point-fixed claim without AutoLupa fails closed",
           "current ledger reports no new violations while two legacy violations remain visible",
           "same-head lupa-conformance completes successfully"
@@ -337,7 +337,7 @@
           "FALSE_ABSENCE_FINDINGS=REJECTED_BY_REF_SCOPING",
           "RECEIPT_EXPOSURE_FIX=PASS",
           "POINT_FIXED_WITHOUT_AUTOLUPA=BLOCKED_BY_CI_GUARDRAIL",
-          "REGRESSION_TOTAL=13",
+          "REGRESSION_TOTAL=14",
           "LEGACY_VIOLATIONS=2",
           "LEGACY_XP_DEBT=50",
           "NEW_VIOLATIONS=0",
@@ -352,11 +352,11 @@
           "LUPA_CONFORMANCE_RUN_ID"
         ],
         "self_test_command": "same-ref PR #410 metadata + Meta-Lupa guardrail/regression + same-head lupa-conformance",
-        "self_test_result": "PASS_MAIN_18f64e59_RUN_36125690934_STEPS_GUARDRAIL_AND_REGRESSION",
+        "self_test_result": "PASS_MAIN_3a8e0113_RUN_36126342593_REGRESSION_14_OF_14",
         "result_match_policy": "RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH",
         "raw_output_byte_equality_required": false
       },
-      "lock_key": "fc0298741abdb39d8b02e2712fdc2359575139a4f28d4c567e2c47d0c8436f82"
+      "lock_key": "1a76880eefb428d5b7e61f4e8571985f715ec84233e765c39b1405cab2870509"
     }
   }
 }
