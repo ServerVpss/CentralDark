@@ -23,14 +23,19 @@ test("ONLY_GUARDIAO preserva execução isolada da porta oficial", () => {
 });
 
 test("perfil mede antes de mutar e fecha com receipt", () => {
-  const measure = script.indexOf("/getMe");
-  const shortDescription = script.indexOf("/setMyShortDescription");
-  const fullDescription = script.indexOf("/setMyDescription");
-  const receipt = script.indexOf("/getMyDescription");
+  const start = script.indexOf("apply_profile() {");
+  const end = script.indexOf('echo "=== set-bot-profile', start);
+  assert.ok(start >= 0 && end > start);
+  const body = script.slice(start, end);
+
+  const measure = body.indexOf("/getMe");
+  const shortDescription = body.indexOf("/setMyShortDescription");
+  const fullDescription = body.indexOf("/setMyDescription");
+  const receipt = body.indexOf("/getMyDescription");
 
   assert.ok(measure >= 0);
   assert.ok(shortDescription > measure);
   assert.ok(fullDescription > shortDescription);
   assert.ok(receipt > fullDescription);
-  assert.match(script, /DRY_RUN .* getMe OK, sem mutacao/);
+  assert.match(body, /DRY_RUN .* getMe OK, sem mutacao/);
 });
