@@ -19,8 +19,11 @@ class ContinuousDeltaContractTest(unittest.TestCase):
 
     def test_master_exposes_visual_trigger_chain_and_intent_alignment(self):
         receipt = MODULE.resolve("!CENTRALDARK", chefe_source=True)
-        self.assertTrue(receipt["visual_trigger_chain"].startswith("👑 !CENTRALDARK → 🌅 ACORDAR → 🎯 CALIBRAR"))
+        self.assertTrue(receipt["visual_trigger_chain"].startswith("⭕ !AURÉOLA CANÔNICA → 👑 !CENTRALDARK → 🌅 ACORDAR → 🎯 CALIBRAR"))
         self.assertIn("🧾 REGISTRA → 🚀 BOOT", receipt["visual_trigger_chain"])
+        self.assertEqual("VISIBLE_ROUTE_DEBUGGER", receipt["aureola"]["role"])
+        self.assertEqual("STOP_AND_RECONCILE", receipt["aureola"]["mismatch_action"])
+        self.assertFalse(receipt["aureola"]["route_trace_is_technical_proof"])
         alignment = receipt["intent_alignment"]
         self.assertEqual("CALIBRAR", alignment["phase"])
         self.assertEqual("🎯", alignment["emoji"])
