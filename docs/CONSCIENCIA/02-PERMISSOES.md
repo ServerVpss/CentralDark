@@ -70,7 +70,7 @@ Writer: <agente>
 Writer-Scope: <escopo>
 ```
 
-O fluxo canônico já existente `.github/workflows/autonomia-promocao.yml` consome esse recibo. No modo `AUTO_SQUASH_IF_CLEAN`, usa validação determinística mínima, não espera convergência externa, revalida o HEAD vivo e conclui squash quando o PR está elegível. O modo adversarial permanece disponível sob solicitação explícita do SEGREDO/CHEFE.
+O fluxo canônico já existente `.github/workflows/autonomia-promocao.yml` consome esse recibo. No modo `AUTO_SQUASH_IF_CLEAN`, separa intenção de prontidão técnica e exige `PASS` dos seis gates obrigatórios no mesmo HEAD antes do promotor. `MISSING|PENDING|FAIL|CANCELLED|SKIPPED` vira `DEFERRED` e não executa merge naquela rodada. Isso não exige convergência adversarial total, que permanece disponível sob solicitação explícita do SEGREDO/CHEFE.
 
 Essa autorização não concede carta branca para recurso externo não relacionado, segredo, gasto novo, exclusão irreversível sem mapa ou mudança de intenção de negócio.
 

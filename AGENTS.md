@@ -527,12 +527,13 @@ AUTOR CONFIAVEL + MESMO REPO
 → CHANGES_REQUESTED? BLOQUEIA
 → MERGE CONFLICT? BLOQUEIA
 → BASE ATRASADA? ATUALIZA E REAVALIA
+→ 6 GATES OBRIGATORIOS NO MESMO HEAD? TODOS PASS
 → REVALIDA HEAD/BASE
 → SQUASH MAIN
 → RECEIPT
 ```
 
-Esse fast path **não espera convergência externa nem todos os workflows auxiliares**. O modo adversarial com workflows/Judge completos permanece no mesmo motor e é usado quando SEGREDO/CHEFE solicitar prova adversarial. `UNKNOWN`, conflito e achado de segurança continuam fail-closed.
+Esse fast path não exige convergência adversarial total, mas espera os seis gates técnicos obrigatórios do mesmo HEAD: `porta-de-entrada`, `codex-validate`, `lupa-conformance`, `Lupa Drift Guard`, `PR auto-review (Codex + checklist)` e `Pipeline — Telegram + Painel`. `MISSING|PENDING|FAIL|CANCELLED|SKIPPED` vira `DEFERRED` e produz zero merge naquela rodada. O modo adversarial completo permanece no mesmo motor quando solicitado. `UNKNOWN`, conflito e achado de segurança continuam fail-closed.
 
 Não terminar em `READY_FOR_MERGE`/`AGUARDANDO_AUTORIZACAO` quando a mesma autorização já está ativa.
 

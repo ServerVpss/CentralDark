@@ -3,7 +3,7 @@
  * Promoção autônoma e fail-closed de pull requests do CentralDark.
  *
  * Um único motor, dois modos:
- * - FAST: intenção já autorizada pelo SEGREDO/CHEFE → validação determinística mínima → squash main;
+ * - FAST: intenção já autorizada + seis gates obrigatórios verdes no mesmo HEAD → squash main;
  * - ADVERSARIAL: quando solicitado → workflows/Judge/contraprova completos.
  *
  * O código do PR nunca é executado aqui. O workflow faz checkout apenas da main confiável.
@@ -143,9 +143,9 @@ export function scanPullFiles(files = []) {
   return [...new Set(findings)];
 }
 
-export function selectLatestNonSkipped(runs, workflowName) {
+export function selectLatestWorkflowRun(runs, workflowName) {
   return [...runs]
-    .filter((run) => run.name === workflowName && run.conclusion !== "skipped")
+    .filter((run) => run.name === workflowName)
     .sort((a, b) => {
       const byNumber = Number(b.run_number || 0) - Number(a.run_number || 0);
       if (byNumber) return byNumber;
@@ -155,7 +155,7 @@ export function selectLatestNonSkipped(runs, workflowName) {
 
 export function workflowVerdicts(runs, requiredWorkflows) {
   return requiredWorkflows.map((name) => {
-    const run = selectLatestNonSkipped(runs, name);
+    const run = selectLatestWorkflowRun(runs, name);
     if (!run) return { name, state: "MISSING", run_id: null, conclusion: null };
     if (run.status !== "completed") return { name, state: "PENDING", run_id: run.id, conclusion: run.conclusion || null };
     if (run.conclusion === "success") return { name, state: "PASS", run_id: run.id, conclusion: run.conclusion };
@@ -216,20 +216,23 @@ export function evaluateCandidate({
   if (pr.mergeable === false || pr.mergeable_state === "dirty") reasons.push("MERGE_CONFLICT");
   if (pr.mergeable == null || pr.mergeable_state === "unknown") waits.push("MERGEABILITY_PENDING");
 
-  const applicableWorkflows = fastPath ? [] : requiredWorkflows;
-  const workflows = workflowVerdicts(workflowRuns, applicableWorkflows);
+  const workflows = workflowVerdicts(workflowRuns, requiredWorkflows);
+  let technicalGateNotGreen = false;
   for (const workflow of workflows) {
-    if (workflow.state === "FAIL") reasons.push(`WORKFLOW_FAILED:${workflow.name}:${workflow.conclusion}`);
+    if (workflow.state !== "PASS") technicalGateNotGreen = true;
+    if (workflow.state === "FAIL") waits.push(`WORKFLOW_FAILED:${workflow.name}:${workflow.conclusion}`);
     if (workflow.state === "MISSING" || workflow.state === "PENDING") waits.push(`WORKFLOW_${workflow.state}:${workflow.name}`);
   }
 
   const stalledFor = waitAgeMs(pr, now);
-  const waitExpired = waits.length > 0 && stalledFor !== null && stalledFor > waitTimeoutMs;
+  const operationalWaits = waits.filter((wait) => !wait.startsWith("WORKFLOW_"));
+  const waitExpired = operationalWaits.length > 0 && stalledFor !== null && stalledFor > waitTimeoutMs;
   if (waitExpired) reasons.push(`WAIT_TIMEOUT:${Math.round(stalledFor / 60000)}min:${waits.join("|")}`);
 
   let decision = "READY";
   if (reasons.length) decision = "BLOCKED";
   else if (baseUpdateRequired) decision = "UPDATE_REQUIRED";
+  else if (technicalGateNotGreen) decision = "DEFERRED";
   else if (waits.length) decision = "WAIT";
 
   return {
@@ -412,13 +415,10 @@ async function inspectCandidate(client, repository, number, trustedAuthors, requ
   const securityFindings = scanPullFiles(changed.files);
   if (changed.overflow) securityFindings.push("CHANGED_FILES_OVERFLOW");
 
-  let workflowRuns = [];
   let threadState = { unresolved: 0, overflow: false };
+  const workflowRuns = await fetchWorkflowRuns(client, repository, pr.head.sha);
   if (!fastPath) {
-    [workflowRuns, threadState] = await Promise.all([
-      fetchWorkflowRuns(client, repository, pr.head.sha),
-      fetchReviewThreadState(client, repository, number),
-    ]);
+    threadState = await fetchReviewThreadState(client, repository, number);
   }
 
   return evaluateCandidate({
@@ -492,7 +492,7 @@ async function runJudge() {
     repository,
     event_name: process.env.GITHUB_EVENT_NAME || "unknown",
     run_id: process.env.GITHUB_RUN_ID || null,
-    required_workflows_adversarial: requiredWorkflows,
+    required_workflows_green_first: requiredWorkflows,
     candidates,
   };
   const sealed = sealReceipt(receipt);
@@ -525,7 +525,7 @@ async function runPromote() {
       await upsertBlockComment(client, repository, candidate);
       continue;
     }
-    if (candidate.decision === "WAIT") continue;
+    if (candidate.decision === "WAIT" || candidate.decision === "DEFERRED") continue;
 
     if (candidate.decision === "UPDATE_REQUIRED") {
       const result = await client.request("PUT", `/repos/${repository}/pulls/${pr.number}/update-branch`, { expected_head_sha: pr.head.sha }, { allow: [202] });

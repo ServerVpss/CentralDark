@@ -132,6 +132,11 @@ jobs:
           name: autonomia-judge-${{ github.run_id }}
           path: ${{ runner.temp }}/centraldark-autonomia
 
+      - name: Deferir recibos sem os seis gates verdes no mesmo HEAD
+        env:
+          BOT_SWEEP_DIR: ${{ runner.temp }}/centraldark-autonomia
+        run: node scripts/github-autonomia-varredura.mjs guard
+
       - name: Promover somente recibos válidos e estado vivo idêntico
         env:
           BOT_SWEEP_DIR: ${{ runner.temp }}/centraldark-autonomia

@@ -9,7 +9,7 @@ import {
   intentReceipt,
   scanPullFiles,
   sealReceipt,
-  selectLatestNonSkipped,
+  selectLatestWorkflowRun,
   verifySealedReceipt,
   waitAgeMs,
   waitTimeoutMsFromEnv,
@@ -61,7 +61,7 @@ function evaluate(pr = prFixture(), overrides = {}) {
     repository: "ServerVpss/CentralDark",
     trustedAuthors: ["segredounlock"],
     requiredWorkflows: ["gate-a", "gate-b"],
-    workflowRuns: [],
+    workflowRuns: successfulRuns(["gate-a", "gate-b"]),
     unresolvedThreads: 0,
     securityFindings: [],
     ...overrides,
@@ -117,12 +117,32 @@ test("PERMITO SEGREDO/PIVETE no body é histórico e não autoriza", () => {
   assert.equal(legacyLabel.legacy, true);
 });
 
-test("fast path não espera convergência/workflows externos", () => {
+test("fast path só fica READY com todos os workflows obrigatórios verdes", () => {
   const result = evaluate();
   assert.equal(result.mode, "FAST");
   assert.equal(result.decision, "READY");
-  assert.deepEqual(result.workflows, []);
+  assert.equal(result.workflows.length, 2);
+  assert.equal(result.workflows.every((workflow) => workflow.state === "PASS"), true);
   assert.deepEqual(result.waits, []);
+});
+
+test("fast path defere missing pending failure cancelled e skipped", () => {
+  const cases = [
+    ["missing", []],
+    ["pending", [{ id: 1, name: "gate-a", run_number: 1, status: "queued", conclusion: null }]],
+    ["failure", [{ id: 1, name: "gate-a", run_number: 1, status: "completed", conclusion: "failure" }]],
+    ["cancelled", [{ id: 1, name: "gate-a", run_number: 1, status: "completed", conclusion: "cancelled" }]],
+    ["skipped", [{ id: 1, name: "gate-a", run_number: 1, status: "completed", conclusion: "skipped" }]],
+  ];
+  for (const [label, workflowRuns] of cases) {
+    const result = evaluate(prFixture({ updated_at: "2026-08-16T00:00:00.000Z" }), {
+      requiredWorkflows: ["gate-a"],
+      workflowRuns,
+      now: Date.parse("2026-08-16T12:00:00.000Z"),
+    });
+    assert.equal(result.decision, "DEFERRED", label);
+    assert.notEqual(result.workflows[0].state, "PASS", label);
+  }
 });
 
 test("fast path ignora thread comum mas não CHANGES_REQUESTED explícito", () => {
@@ -179,9 +199,9 @@ test("mergeability pendente espera; conflito nunca vira WAIT verde", () => {
 
 test("modo adversarial por label visual preserva workflows e contraprova completos", () => {
   const pr = prFixture({ body: "sem recibo", labels: [{ name: "👑 PERMITO-SEGREDO" }] });
-  const missing = evaluate(pr);
+  const missing = evaluate(pr, { workflowRuns: [] });
   assert.equal(missing.mode, "ADVERSARIAL");
-  assert.equal(missing.decision, "WAIT");
+  assert.equal(missing.decision, "DEFERRED");
   assert.match(missing.waits.join(" "), /WORKFLOW_MISSING/);
 
   const ready = evaluate(pr, { workflowRuns: successfulRuns(["gate-a", "gate-b"]) });
@@ -196,12 +216,13 @@ test("hold explícito bloqueia sem apagar autorização", () => {
   assert.match(result.reasons.join(" "), /BLOCKING_LABEL:hold/);
 });
 
-test("seleção de workflow ignora skipped mais novo e usa execução real", () => {
-  const selected = selectLatestNonSkipped([
+test("execução mais nova vence PASS antigo inclusive quando falhou ou foi skipped", () => {
+  const selected = selectLatestWorkflowRun([
     { id: 1, name: "gate", run_number: 20, status: "completed", conclusion: "skipped" },
     { id: 2, name: "gate", run_number: 19, status: "completed", conclusion: "success" },
   ], "gate");
-  assert.equal(selected.id, 2);
+  assert.equal(selected.id, 1);
+  assert.equal(workflowVerdicts([selected], ["gate"])[0].state, "FAIL");
   assert.deepEqual(workflowVerdicts([], ["gate"]), [{ name: "gate", state: "MISSING", run_id: null, conclusion: null }]);
 });
 

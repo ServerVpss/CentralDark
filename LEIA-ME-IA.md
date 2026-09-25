@@ -333,12 +333,13 @@ AUTOR CONFIAVEL + MESMO REPO
 → SEM CHANGES_REQUESTED
 → SEM CONFLITO
 → BASE ATUALIZADA
+→ SEIS GATES OBRIGATORIOS PASS NO MESMO HEAD
 → REVALIDAR HEAD/BASE
 → SQUASH MAIN
 → RECEIPT
 ```
 
-O fast path não espera convergência externa nem todos os workflows auxiliares. Conflito, segredo, mudança de escopo ou `UNKNOWN` material bloqueiam fail-closed. Não criar segundo workflow para a mesma promoção.
+O fast path não espera convergência adversarial total, mas só alcança o promotor quando os seis gates técnicos obrigatórios estão `PASS` no mesmo HEAD. `MISSING|PENDING|FAIL|CANCELLED|SKIPPED` vira `DEFERRED`, sem merge na rodada. Conflito, segredo, mudança de escopo ou `UNKNOWN` material bloqueiam fail-closed. Não criar segundo workflow para a mesma promoção.
 
 ## 9. Convergência ≠ validação mínima
 
@@ -465,6 +466,7 @@ TASKS_SECRETAS
 | aprendizados | `docs/CONSCIENCIA/APRENDIZADOS.md` |
 | metacognição / coevolução operacional | `docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md` |
 | ontologia de evidência / causalidade | `docs/GOVERNANCA/ONTOLOGIA-DE-EVIDENCIA-E-CAUSALIDADE.md` |
+| contexto pessoal / proveniência temporal | `docs/GOVERNANCA/CONTEXTO-PESSOAL-E-PROVENIENCIA-TEMPORAL.md` |
 | pendências | `docs/PENDENCIAS.md` |
 | coordenação/escritor único | `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` |
 | MetaLupa | `.agents/skills/meta-lupa/SKILL.md` |

@@ -1,13 +1,18 @@
 import assert from "node:assert/strict";
+import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import os from "node:os";
+import path from "node:path";
 import test from "node:test";
 
 import {
   classifyFailure,
   eligibleSummary,
+  guardSweep,
   noticeTargets,
   sanitizeNotice,
   shouldMaterializeAuthority,
 } from "./github-autonomia-varredura.mjs";
+import { DEFAULT_REQUIRED_WORKFLOWS, sealReceipt } from "./github-autonomia-promocao.mjs";
 
 const INTENT_BODY = [
   "Intent-Authorized: SEGREDO/CHEFE",
@@ -98,4 +103,26 @@ test("ausência de segredo de notificação é reportada, nunca assumida", () =>
     noticeTargets({ TELEGRAM_BOT_TOKEN: "x", TELEGRAM_CHAT_ID: "y" }),
     { telegram: true, webhook: false },
   );
+});
+
+test("guard mantém somente recibo 6/6 verde e move os demais para deferred", async () => {
+  const dir = await mkdtemp(path.join(os.tmpdir(), "centraldark-green-first-"));
+  const workflows = DEFAULT_REQUIRED_WORKFLOWS.map((name) => ({ name, state: "PASS" }));
+  const receipt = (decision, items = workflows) => sealReceipt({
+    schema: "centraldark.autonomia-promocao.v2",
+    generated_at: new Date().toISOString(),
+    repository: "ServerVpss/CentralDark",
+    candidates: [{ decision, head_sha: "a".repeat(40), workflows: items }],
+  });
+  try {
+    await writeFile(path.join(dir, "receipt-pr-1.json"), JSON.stringify(receipt("READY")));
+    await writeFile(path.join(dir, "receipt-pr-2.json"), JSON.stringify(receipt("DEFERRED", workflows)));
+    await writeFile(path.join(dir, "receipt-pr-3.json"), JSON.stringify(receipt("READY", workflows.slice(0, 5))));
+    assert.deepEqual(await guardSweep(dir), ["receipt-pr-2.json", "receipt-pr-3.json"]);
+    assert.doesNotReject(() => readFile(path.join(dir, "receipt-pr-1.json")));
+    assert.doesNotReject(() => readFile(path.join(dir, "deferred", "receipt-pr-2.json")));
+    assert.doesNotReject(() => readFile(path.join(dir, "deferred", "receipt-pr-3.json")));
+  } finally {
+    await rm(dir, { recursive: true, force: true });
+  }
 });
