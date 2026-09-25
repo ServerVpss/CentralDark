@@ -165,6 +165,37 @@ IMPROVE_EXISTING_OWNER_BEFORE_NEW_OWNER=true
 
 Exemplo provado: no Telegram, não criar bot novo; medir o owner existente; provar o estado real; preservar canal válido; corrigir somente o delta causal.
 
+### Remeasure Before Create — remedir o mesmo alvo antes de criar
+
+REMEASURE_BEFORE_CREATE é uma especialização de MEASURE_BEFORE_CREATION no mesmo owner, não uma regra/arquitetura paralela. Aplica-se quando o alvo é vivo, mutável, temporal, externo ou quando a última observação pode ter envelhecido.
+
+\`\`\`text
+REMEASURE_BEFORE_CREATE=true
+REMEASURE_BEFORE_CREATE_EXTENDS=MEASURE_BEFORE_CREATION
+SAME_TARGET_FRESH_OBSERVATION_REQUIRED=true
+HISTORY_IS_INPUT_NOT_CURRENT_PROOF=true
+STALE_MEASUREMENT_CANNOT_AUTHORIZE_CREATION=true
+SENSOR_FAILURE_IS_NOT_WORLD_FAILURE=true
+ALTERNATE_AUTHORIZED_ROUTE_BEFORE_BLOCKER=true
+CONFLICTING_SENSORS_REQUIRE_DISCRIMINATING_TEST=true
+UNKNOWN_OR_BLOCKED_IF_FRESH_REMEASUREMENT_UNAVAILABLE=true
+\`\`\`
+
+Fluxo obrigatório quando houver possibilidade de drift:
+
+\`\`\`text
+PEDIDO DE CRIAÇÃO/CORREÇÃO
+  → IDENTIFICAR O MESMO ALVO
+  → REMEDIR O ESTADO VIVO
+  → CRUZAR COM OWNER + HEAD/FINGERPRINT + RUNTIME
+  → SE CONFLITAR, TESTE DISCRIMINANTE
+  → REUTILIZAR/ESTENDER OWNER EXISTENTE
+  → CRIAR SOMENTE SE O GAP SOBREVIVER À REMEDIÇÃO
+  → T1 NO MESMO ALVO
+\`\`\`
+
+Regra temporal: PROVADO_ANTES != PROVADO_AGORA. Receipt e memória servem como proveniência e hipótese de reutilização; não substituem uma leitura CURRENT quando o fato pode ter mudado.
+
 
 ## Risco e autorização (fail-closed proporcional)
 
@@ -2083,3 +2114,73 @@ CHEFE_SEES_MATERIAL_DECISION_OR_RESULT=true
 ```
 
 O sistema deve construir sem paralisia, mas não baixar gates de segurança, segredo, produção, destruição ou falso-verde.
+
+### 53. PROVEN_PATH_REPLAY_LOCK — caminho provado vira receita reutilizável
+
+**Regra cristalizada:** quando uma sequência já produziu resultado reproduzível,
+sobreviveu à contraprova e foi selada, o próximo executor não redesenha a solução
+do zero. Ele reutiliza a mesma receita e adapta apenas os bindings inevitáveis do
+ambiente.
+
+```text
+CAMINHO_JA_PROVADO
+→ SELAR_RECEITA_EXECUTAVEL
+→ GUARDAR_FINGERPRINT
+→ PROXIMO_EXECUTOR_CARREGA_RECEITA
+→ ADAPTAR_SOMENTE_AMBIENTE
+→ EXECUTAR_MESMA_SEQUENCIA
+→ RODAR_MESMA_PROVA
+→ COMPARAR_RESULTADO
+→ DIVERGIU? DELTA_NOVO + REVALIDAR_CONE_AFETADO
+→ NAO_DIVERGIU? REUTILIZAR_CRISTAL
+```
+
+```text
+PROVEN_PATH_REPLAY_LOCK=true
+PROVEN_PATH_MUST_NOT_BE_REINTERPRETED_FROM_ZERO=true
+SAME_FINGERPRINT_REUSES_PROVEN_RECIPE=true
+ENVIRONMENT_ADAPTATION_MUST_NOT_CHANGE_GOAL=true
+ENVIRONMENT_ADAPTATION_MUST_NOT_CHANGE_PROOF_LOGIC=true
+RAW_OUTPUT_BYTE_EQUALITY_REQUIRED=false
+RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH=true
+HUMAN_RETEACH_REQUIRED_FOR_SAME_PROVEN_PATH=false
+NO_NEW_SYSTEM_FOR_PROVEN_PATH_REUSE=true
+```
+
+Owner existente:
+`docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml`.
+
+Runtime consumidor:
+`scripts/trigger-fabric/centraldark_full_trigger_boot.py`.
+
+Isso estende `REUSE_BEFORE_CREATE`, `REUSE_PROOF_NO_REPEAT` e
+`REUSE_CRYSTAL_NOT_RETHINK`; não cria segunda memória, segundo método ou
+segundo cérebro.
+
+
+
+## Runtime preflight obrigatório
+
+Antes de qualquer probe/comando de runtime que possa gerar fato operacional, validar primeiro o wrapper, shell, host-mode, paths requeridos e evidência de ownership quando aplicável pelo consumer canônico `scripts/trigger-fabric/centraldark_full_trigger_boot.py preflight-lint`.
+
+```text
+WRAPPER_PREFLIGHT
+→ PASS
+→ EXECUTE_TARGET_PROBE
+→ OBSERVE_TARGET
+→ PROOF
+→ COUNTERPROOF
+→ REALITY_JUDGE
+
+WRAPPER_PREFLIGHT_FAIL
+→ TARGET_NOT_EXECUTED
+→ INVALIDATED_PROBE
+→ FIX_PREFLIGHT_AND_RETRY
+```
+
+`PREFLIGHT_PASS != RUNTIME_PASS`.
+`WRAPPER_PARSE_FAIL != TARGET_FAIL`.
+`INVALID_PROBE_MUST_NOT_BECOME_FACT=true`.
+`BRIDGE_OWNERSHIP_CLAIM_REQUIRES_COMPLETE_EVIDENCE=true`.
+
+Este preflight é extensão do método existente, não segundo gate/owner. Falha do wrapper impede promover conclusão sobre o alvo; PASS do wrapper apenas autoriza executar a prova real.

@@ -629,3 +629,37 @@ aureola_learning_loop:
     correlated_views_are_independent_proofs: false
     contract_coverage_may_equal_100_percent_when_all_defined_conditions_verified: true
     external_reality_100_percent_from_calculation_only: false
+
+proven_path_replay:
+  marker: PROVEN_PATH_REPLAY_LOCK
+  owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml
+  runtime_consumer: scripts/trigger-fabric/centraldark_full_trigger_boot.py
+  enabled: true
+  human_reteach_same_proven_path: false
+  agent_reinterpret_same_proven_path: false
+  PROVEN_PATH_MUST_NOT_BE_REINTERPRETED_FROM_ZERO: true
+  same_dependency_fingerprint: REUSE_PROVEN_PATH_NO_RETHINK
+  changed_dependency_fingerprint: REVALIDATE_AFFECTED_CONE_ONLY
+  adaptation_scope:
+    allowed:
+      - WORKSPACE_PATH
+      - HOST
+      - RUNTIME_BINDING
+      - AUTH_REFERENCE
+      - TOOL_ENTRYPOINT
+    forbidden:
+      - HUMAN_GOAL
+      - PROOF_LOGIC
+      - EXPECTED_EFFECT
+      - CANONICAL_OWNER
+  loop:
+    - LOAD_SEALED_RECIPE
+    - ADAPT_ENVIRONMENT_BINDINGS_ONLY
+    - EXECUTE_SAME_SEQUENCE
+    - RUN_SAME_PROOF
+    - COMPARE_EXPECTED_EFFECT
+    - DIVERGENCE_TO_DELTA
+    - COUNTERPROOF
+    - REALITY_JUDGE
+    - RECEIPT
+

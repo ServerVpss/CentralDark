@@ -108,12 +108,19 @@ MIN_SECURITY_ONLY=true
 MIN_SECURITY_CHECKS=SECRET_SCAN|SYNTAX_OR_PARSE_WHEN_APPLICABLE|TARGETED_TEST_WHEN_AVAILABLE|MAIN_READBACK
 DIRECT_MAIN_COMMIT_REQUIRES_CURRENT_MAIN_REMEASURE=true
 DIRECT_MAIN_COMMIT_REQUIRES_RECEIPT_IN_PR_MOTHER=true
+EVERY_NOVELTY_FEEDS_PR_MOTHER=true
+PR_MOTHER_APPEND_ONLY=true
+PR_MOTHER_RECORDS_PASS_FAIL_UNKNOWN_BLOCKED_STALE=true
+EXACT_REPEAT_MAY_DEDUPE=true
+NO_SECRET_IN_PR_MOTHER_LEDGER=true
 REUSE_BEFORE_CREATE=true
 NO_V1_V2_V3_PARALLEL_OWNER=true
 REALITY_IS_JUDGE=true
 ```
 
-Fluxo CURRENT: `CURRENT_MAIN → REUSE_PROVEN → OWNER_EXISTENTE → DELTA_MÍNIMO → META/PROVA/CONTRAPROVA → SEGURANÇA MÍNIMA → COMMIT DIRETO MAIN → MAIN_READBACK → DEPLOY_CAUSAL → T1 → RECEIPT #1562 → FIXED_POINT`.
+Fluxo CURRENT: `CURRENT_MAIN → REUSE_PROVEN → OWNER_EXISTENTE → DELTA_MÍNIMO → META/PROVA/CONTRAPROVA → SEGURANÇA MÍNIMA → COMMIT DIRETO MAIN → MAIN_READBACK → DEPLOY_CAUSAL → T1 → CLASSIFICAR_NOVIDADE → RECEIPT #1562 → NEXT_CURSOR → FIXED_POINT`.
+
+Toda novidade real do sistema alimenta o PR-mãe #1562 no mesmo ciclo em que for observada. Isso inclui PASS, FAIL, UNKNOWN, BLOCKED, STALE, nova integração, novo acesso, nova rota, commit/PR/merge/deploy, mudança de runtime, contraprova, correção de diagnóstico, descoberta de owner, ferramenta/conector e decisão canônica. Repetição exata pode ser deduplicada; novidade não pode esperar PASS para ser registrada. Segredos nunca entram no ledger.
 
 PRs já existentes continuam válidos como história, fonte de delta e veículo opcional do trabalho iniciado. Não criar PR novo por rotina enquanto este modo estiver ativo. O caminho `SAME_HEAD → SQUASH_CHILD_ONLY` fica disponível para PR existente e volta a ser obrigatório quando o CHEFE endurecer novamente a política.
 
@@ -1308,3 +1315,24 @@ PR_MOTHER_1562_DO_NOT_MERGE=true
 ```
 
 Fluxo humano preferido: `MVP → abre → testa → mostra ao CHEFE quando houver decisão/materialidade`. Erro reversível e observado é dado de aprendizado; medo de errar não pode virar paralisia, mas UNKNOWN/falha material continuam impedindo falso-verde.
+
+## Caminho provado é receita reutilizável
+
+```text
+PROVEN_PATH_REPLAY_LOCK=true
+PROVEN_PATH_OWNER=docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml
+PROVEN_PATH_RUNTIME=scripts/trigger-fabric/centraldark_full_trigger_boot.py
+PROVEN_PATH_MUST_NOT_BE_REINTERPRETED_FROM_ZERO=true
+SAME_FINGERPRINT_REUSES_PROVEN_RECIPE=true
+ADAPT_ENVIRONMENT_BINDINGS_ONLY=true
+RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH=true
+DIVERGENCE_REOPENS_AFFECTED_CONE_ONLY=true
+HUMAN_RETEACH_REQUIRED_FOR_SAME_PROVEN_PATH=false
+```
+
+Um agente/modelo novo não ganha licença para redesenhar um caminho já selado.
+Ele carrega a receita comprovada, adapta apenas bindings de ambiente
+(path/host/runtime/auth-ref/tool-entrypoint), repete a mesma sequência e a mesma
+prova. Divergência observada é informação nova e reabre somente o cone causal
+afetado.
+

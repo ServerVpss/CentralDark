@@ -1,5 +1,302 @@
 {
   "schema": "centraldark.proven-claims-lock.v1",
   "owner": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml",
-  "claims": {}
+  "claims": {
+    "TAILSCALE_WINDOWS_CONNECTIVITY_PATH": {
+      "claim_key": "TAILSCALE_WINDOWS_CONNECTIVITY_PATH",
+      "owner": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/HERMES-AUTOCONFIG-RUNTIME.yml",
+      "lock_key": "9fec03a4990e29c22aa5455d60ccd80dda1768ed2230b131870558f6d564e68b",
+      "state": "SEALED_PROVEN",
+      "proof_target": "VPS_TAILSCALE_TO_WINDOWS_SEGREDO_CONNECTIVITY",
+      "evidence_ref": "PR_MOTHER_1562_COMMENT_5829464147 + CURRENT_REMEASURE_2026-09-25T09:35Z",
+      "observed_at": "2026-09-25T09:35:00Z",
+      "counterproof": "PASS",
+      "receipt_ref": "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-25-CRISTAL-SESSAO-CAMINHOS-PROVADOS.md",
+      "proven_path_replay": {
+        "marker": "PROVEN_PATH_REPLAY_LOCK",
+        "dependency_fingerprint": "f9f598483810e5d5681e5c61790e6f5aa524072585d481a85e24a40b8eb685d4",
+        "execution_commands": [
+          "systemctl is-active tailscaled",
+          "tailscale status",
+          "tailscale ping -c 3 --timeout 5s ${TAILSCALE_PEER_NAME}",
+          "TCP_PROBE ${TAILSCALE_PEER_IP}:${RDP_PORT}"
+        ],
+        "proof_commands": [
+          "tailscaled == active",
+          "peer name resolves in tailscale status",
+          "3/3 ping returns",
+          "TCP/3389 opens"
+        ],
+        "expected_results": [
+          "TAILSCALE_DAEMON=ACTIVE",
+          "PEER_SEGREDO=PRESENT",
+          "PING=PASS",
+          "RDP_PORT=OPEN",
+          "DIRECT_P2P_NOT_REQUIRED_FOR_CONNECTIVITY_PASS"
+        ],
+        "environment_bindings": [
+          "TAILSCALE_PEER_NAME",
+          "TAILSCALE_PEER_IP_DISCOVERED_AT_RUNTIME",
+          "RDP_PORT"
+        ],
+        "self_test_command": "remeasure same path from VPS without hardcoding peer IP",
+        "self_test_result": "PASS_3_OF_3_VIA_DERP_SAO_AND_TCP3389_OPEN",
+        "result_match_policy": "RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH",
+        "raw_output_byte_equality_required": false
+      }
+    },
+    "TAILSCALE_NETWORK_LOGS_API_READ_PATH": {
+      "claim_key": "TAILSCALE_NETWORK_LOGS_API_READ_PATH",
+      "owner": "apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js",
+      "lock_key": "5e645acaac30dca25af0af3ae3ebd7ace72bad90c2157f5dcc4d47c7d7d38229",
+      "state": "SEALED_PROVEN",
+      "proof_target": "TAILSCALE_NETWORK_FLOW_LOGS_READ_WITH_EXISTING_VAULT_CREDENTIAL",
+      "evidence_ref": "PR_MOTHER_1562_COMMENT_5829524277 + CURRENT_REMEASURE_2026-09-25T09:42Z",
+      "observed_at": "2026-09-25T09:42:00Z",
+      "counterproof": "PASS",
+      "receipt_ref": "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-25-CRISTAL-SESSAO-CAMINHOS-PROVADOS.md",
+      "proven_path_replay": {
+        "marker": "PROVEN_PATH_REPLAY_LOCK",
+        "dependency_fingerprint": "69a0e14a67e8ab98e9aacf696bda98601d1af903bf3c57c6bf60090a97413a03",
+        "execution_commands": [
+          "resolve existing TAILSCALE_API_KEY reference without printing value",
+          "GET /api/v2/tailnet/-/logging/network?start=${START}&end=${END}",
+          "parse JSON/NDJSON envelope without exposing secrets"
+        ],
+        "proof_commands": [
+          "credential reference present",
+          "HTTP status == 200",
+          "response parses and exposes logs envelope"
+        ],
+        "expected_results": [
+          "CREDENTIAL_REF=PRESENT",
+          "HTTP=200",
+          "PARSE=PASS",
+          "SECRET_EXPOSED=false"
+        ],
+        "environment_bindings": [
+          "TAILSCALE_CREDENTIAL_REFERENCE",
+          "START",
+          "END",
+          "TAILNET"
+        ],
+        "self_test_command": "15 minute current window read",
+        "self_test_result": "PASS_HTTP_200_LOGS_ENVELOPE",
+        "result_match_policy": "RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH",
+        "raw_output_byte_equality_required": false
+      }
+    },
+    "TAILSCALE_MCP_TOOL_SOURCE_PROOF_PR1691": {
+      "claim_key": "TAILSCALE_MCP_TOOL_SOURCE_PROOF_PR1691",
+      "owner": "apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js",
+      "lock_key": "563a362f726e2393f01553891f23a6a31a25b672128393636355d1c9f6591d4b",
+      "state": "SEALED_PROVEN",
+      "proof_target": "SOURCE_ONLY_PR1691_HEAD_3a07f200ad03972500ebce42d4b5107fafab69b6",
+      "evidence_ref": "PR_MOTHER_1562_COMMENT_5829640719",
+      "observed_at": "2026-09-25T08:43:00Z",
+      "counterproof": "PASS",
+      "receipt_ref": "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-25-CRISTAL-SESSAO-CAMINHOS-PROVADOS.md",
+      "proven_path_replay": {
+        "marker": "PROVEN_PATH_REPLAY_LOCK",
+        "dependency_fingerprint": "7600d6e0ef127c14bd0b55fbeae8736c53da9e616d0c9769c162c62984d39881",
+        "execution_commands": [
+          "checkout exact PR #1691 head",
+          "node --check provider-control/admin catalog files",
+          "run provider-control + secret-boundary tests",
+          "build catalog summary",
+          "call four Tailscale read-only tools against live provider"
+        ],
+        "proof_commands": [
+          "syntax PASS",
+          "16/16 targeted tests PASS",
+          "catalog has exactly four tailscale_* tools",
+          "duplicateNames=0",
+          "all four readOnly=true destructive=false",
+          "live provider calls return HTTP 200"
+        ],
+        "expected_results": [
+          "SOURCE_PROOF=PASS",
+          "CATALOG_SOURCE_TOOL_COUNT=130",
+          "TAILSCALE_TOOLS=4",
+          "RUNTIME_DEPLOYED=NOT_CLAIMED"
+        ],
+        "environment_bindings": [
+          "PR_HEAD",
+          "TAILSCALE_CREDENTIAL_REFERENCE",
+          "TAILNET"
+        ],
+        "self_test_command": "exact-head isolated catalog and live provider proof",
+        "self_test_result": "PASS_SOURCE_ONLY_NOT_DEPLOYED",
+        "result_match_policy": "RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH",
+        "raw_output_byte_equality_required": false
+      }
+    },
+    "MICRODEPLOY_AUTONOMOUS_DIAGNOSIS_PATH": {
+      "claim_key": "MICRODEPLOY_AUTONOMOUS_DIAGNOSIS_PATH",
+      "owner": ".github/workflows/vps-exec-selfhosted.yml",
+      "lock_key": "91e59acad1e6d906ff901152bfbc58af6ef569022d4a272a6d3c37b795f11616",
+      "state": "SEALED_PROVEN",
+      "proof_target": "AUTONOMOUS_MICRODEPLOY_TRIGGER_QUEUE_GATE_DIAGNOSIS",
+      "evidence_ref": "PR_MOTHER_1562_COMMENT_5828750835 + CURRENT_RUN_36119747877",
+      "observed_at": "2026-09-25T09:43:00Z",
+      "counterproof": "PASS",
+      "receipt_ref": "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-25-CRISTAL-SESSAO-CAMINHOS-PROVADOS.md",
+      "proven_path_replay": {
+        "marker": "PROVEN_PATH_REPLAY_LOCK",
+        "dependency_fingerprint": "5f0121cbbe1c79e7218ae53fe194358cf4988084e817a257a27e68fc42828d0b",
+        "execution_commands": [
+          "measure current main SHA",
+          "find canonical VPS deploy run for exact SHA",
+          "classify trigger event/status",
+          "measure self-hosted runner services and queued sample",
+          "if gate ran inspect exact failed job log",
+          "separate AUTO_TRIGGER from RUNTIME_DEPLOY_COMPLETION"
+        ],
+        "proof_commands": [
+          "exact SHA run identified",
+          "queue/capacity classified",
+          "gate result extracted when available",
+          "downstream deploy not called PASS unless runtime proof exists"
+        ],
+        "expected_results": [
+          "AUTO_TRIGGER_CLASSIFIED",
+          "RUNNER_QUEUE_CLASSIFIED",
+          "GATE_CLASSIFIED_OR_QUEUED",
+          "NO_FALSE_RUNTIME_PASS"
+        ],
+        "environment_bindings": [
+          "MAIN_SHA",
+          "WORKFLOW_RUN_ID",
+          "JOB_ID",
+          "RUNNER_NAME"
+        ],
+        "self_test_command": "current main deploy run and queue sample remeasurement",
+        "self_test_result": "PASS_DIAGNOSTIC_PATH_CURRENT_RUN_QUEUED_SAMPLE_42",
+        "result_match_policy": "RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH",
+        "raw_output_byte_equality_required": false
+      }
+    },
+    "HUD_RUDY_SOURCE_CONTRACT_PR1691": {
+      "claim_key": "HUD_RUDY_SOURCE_CONTRACT_PR1691",
+      "owner": "AGENTS.md",
+      "lock_key": "de8d5c8b84dc100b645325c98531840e8643df34e5573cbc1dcb23bd4c852a2f",
+      "state": "SEALED_PROVEN",
+      "proof_target": "SOURCE_ONLY_PR1691_HUD_RUDY_HYBRID_CONTRACT",
+      "evidence_ref": "PR_MOTHER_1562_COMMENTS_5829403379_5829464147",
+      "observed_at": "2026-09-25T08:36:00Z",
+      "counterproof": "PASS",
+      "receipt_ref": "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-25-CRISTAL-SESSAO-CAMINHOS-PROVADOS.md",
+      "proven_path_replay": {
+        "marker": "PROVEN_PATH_REPLAY_LOCK",
+        "dependency_fingerprint": "12ad2de57043c205e9b1298f05f3c39ccc52d06371e88b65f11cc2a316334cde",
+        "execution_commands": [
+          "checkout exact PR #1691 head",
+          "parse AGENTS/BOOT/AI_BOOT/bot mandatory rules",
+          "node --check MCP server",
+          "verify H01..H16 identity/order and MCP_OR_REPO binding"
+        ],
+        "proof_commands": [
+          "syntax/parse PASS",
+          "H01..H16 fixed identity present",
+          "MCP connection OR repo context sufficient in source contract",
+          "UNKNOWN_IS_NOT_GREEN present"
+        ],
+        "expected_results": [
+          "SOURCE_CONTRACT=PASS",
+          "RUNTIME_HANDSHAKE=NOT_CLAIMED",
+          "MAIN_PROMOTION=NOT_CLAIMED"
+        ],
+        "environment_bindings": [
+          "PR_HEAD",
+          "CLIENT_SURFACE",
+          "MCP_CONNECTION",
+          "REPO_CONTEXT"
+        ],
+        "self_test_command": "exact-head source contract parse/readback",
+        "self_test_result": "PASS_SOURCE_ONLY_CI_AND_DEPLOY_NOT_PROVEN",
+        "result_match_policy": "RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH",
+        "raw_output_byte_equality_required": false
+      }
+    },
+    "LIVE_FABRIC_PUBLIC_STATUS_GRAPH_PATH": {
+      "claim_key": "LIVE_FABRIC_PUBLIC_STATUS_GRAPH_PATH",
+      "owner": "docs/ARQUITETURA/CENTRALDARK-LIVE-EXECUTION-FABRIC.md",
+      "lock_key": "7c09647325030c5ab3a343e723ec9466a57aefbf6e6f9151d581b09c091110bf",
+      "state": "SEALED_PROVEN",
+      "proof_target": "PUBLIC_LIVE_FABRIC_STATUS_AND_GRAPH",
+      "evidence_ref": "CURRENT_REMEASURE_2026-09-25T09:41Z",
+      "observed_at": "2026-09-25T09:41:00Z",
+      "counterproof": "PASS",
+      "receipt_ref": "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-25-CRISTAL-SESSAO-CAMINHOS-PROVADOS.md",
+      "proven_path_replay": {
+        "marker": "PROVEN_PATH_REPLAY_LOCK",
+        "dependency_fingerprint": "be70e6a443e9204a4ce03cc27bebc9d1f0d2b8d9beb8af330fdd618580c9e8ca",
+        "execution_commands": [
+          "GET api.centralldark.com/api/live-fabric/status",
+          "GET api.centralldark.com/api/live-fabric/graph",
+          "GET admin.centralldark.com/api/live-fabric/status",
+          "GET admin.centralldark.com/api/live-fabric/graph"
+        ],
+        "proof_commands": [
+          "all four endpoints return HTTP 200",
+          "response bodies non-empty"
+        ],
+        "expected_results": [
+          "API_STATUS=200",
+          "API_GRAPH=200",
+          "ADMIN_STATUS=200",
+          "ADMIN_GRAPH=200"
+        ],
+        "environment_bindings": [
+          "PUBLIC_API_HOST",
+          "ADMIN_HOST"
+        ],
+        "self_test_command": "four-endpoint current probe",
+        "self_test_result": "PASS_ALL_4_HTTP_200",
+        "result_match_policy": "RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH",
+        "raw_output_byte_equality_required": false
+      }
+    },
+    "MCP_HEALTH_DEEP_TOOLS_PATH": {
+      "claim_key": "MCP_HEALTH_DEEP_TOOLS_PATH",
+      "owner": "apps/modulos/mcp/src/index.js",
+      "lock_key": "3c1dfb0f6ff76e6f4b12a83aefcca85f2dc95e653b19b7c49ac248683b3772a3",
+      "state": "SEALED_PROVEN",
+      "proof_target": "CURRENT_MCP_RUNTIME_HEALTH_DEEP_AND_TOOL_CATALOG",
+      "evidence_ref": "CURRENT_REMEASURE_2026-09-25T09:41Z",
+      "observed_at": "2026-09-25T09:41:00Z",
+      "counterproof": "PASS",
+      "receipt_ref": "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-25-CRISTAL-SESSAO-CAMINHOS-PROVADOS.md",
+      "proven_path_replay": {
+        "marker": "PROVEN_PATH_REPLAY_LOCK",
+        "dependency_fingerprint": "5a6ec574d21224c9c389027098b04e97d042788ecd1a69cfe076bed6d2ad13be",
+        "execution_commands": [
+          "GET 127.0.0.1:9100/health",
+          "GET 127.0.0.1:9100/health/deep",
+          "GET 127.0.0.1:9100/tools.json"
+        ],
+        "proof_commands": [
+          "all endpoints HTTP 200",
+          "health version observed",
+          "deep status healthy score 100",
+          "tools catalog count matches health"
+        ],
+        "expected_results": [
+          "HTTP=200",
+          "VERSION=0.4.0",
+          "TOOL_COUNT=126",
+          "DEEP_STATUS=healthy",
+          "DEEP_SCORE=100"
+        ],
+        "environment_bindings": [
+          "MCP_HOST",
+          "MCP_PORT"
+        ],
+        "self_test_command": "local runtime triple probe",
+        "self_test_result": "PASS_126_TOOLS_DEEP_SCORE_100",
+        "result_match_policy": "RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH",
+        "raw_output_byte_equality_required": false
+      }
+    }
+  }
 }

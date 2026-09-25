@@ -33,6 +33,7 @@ BOOT = Path("CENTRALDARK_AI_BOOT.yaml")
 COGNITIVE_CAPABILITIES = Path("docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md")
 METACOGNITION = Path("docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md")
 DEFAULT_REGISTRY = FABRIC / "PROVEN-CLAIMS.lock.json"
+PROVEN_PATH_MUST_NOT_BE_REINTERPRETED_FROM_ZERO = True
 
 CANONICAL_CHAIN = [
     "DESTINATION_LOCK", "ACORDAR", "CALIBRAR", "MULTIBUSSOLA", "META_LUPA",
@@ -351,6 +352,10 @@ def cmd_boot(args: argparse.Namespace) -> int:
             "realtime_feedback_user_repetition_required": False,
             "runtime_preflight_lint_required": True,
             "runtime_preflight_lint_owner": RUNTIME_PREFLIGHT_LINT.as_posix(),
+            "proven_path_replay_lock": True,
+            "proven_path_must_not_be_reinterpreted_from_zero": PROVEN_PATH_MUST_NOT_BE_REINTERPRETED_FROM_ZERO,
+            "same_fingerprint_reuses_proven_recipe": True,
+            "proven_path_runtime_action": "REUSE_PROVEN_PATH_NO_RETHINK",
         },
     }
     print(json.dumps(result, indent=2, ensure_ascii=False))
@@ -407,6 +412,32 @@ def cmd_feedback(args: argparse.Namespace) -> int:
     return 0 if result["feedback"]["active"] else 4
 
 
+def proven_path_replay_decision(entry: dict, current_fingerprint: str | None) -> dict:
+    recipe = entry.get("proven_path_replay") or {}
+    sealed_fingerprint = recipe.get("dependency_fingerprint")
+    if not recipe:
+        return {
+            "verdict": "UNKNOWN",
+            "action": "NO_PROVEN_PATH_RECIPE",
+            "reinterpret_from_zero": False,
+        }
+    if current_fingerprint and sealed_fingerprint and current_fingerprint != sealed_fingerprint:
+        return {
+            "verdict": "REVALIDATE",
+            "action": "REVALIDATE_AFFECTED_CONE_ONLY",
+            "sealed_fingerprint": sealed_fingerprint,
+            "current_fingerprint": current_fingerprint,
+            "reinterpret_from_zero": False,
+        }
+    return {
+        "verdict": "PASS",
+        "action": "REUSE_PROVEN_PATH_NO_RETHINK",
+        "recipe": recipe,
+        "adapt_environment_bindings_only": True,
+        "reinterpret_from_zero": False,
+    }
+
+
 def cmd_seal(args: argparse.Namespace) -> int:
     repo = Path(args.repo).resolve()
     require_files(repo)
@@ -427,10 +458,86 @@ def cmd_seal(args: argparse.Namespace) -> int:
         "observed_at": args.observed_at,
         "counterproof": "PASS",
         "receipt_ref": args.receipt,
+        "proven_path_replay": {
+            "marker": "PROVEN_PATH_REPLAY_LOCK",
+            "dependency_fingerprint": args.dependency_fingerprint,
+            "execution_commands": args.recipe_command,
+            "proof_commands": args.proof_command,
+            "expected_results": args.expected_result,
+            "environment_bindings": args.environment_binding,
+            "self_test_command": args.self_test_command,
+            "self_test_result": args.self_test_result,
+            "result_match_policy": "RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH",
+            "raw_output_byte_equality_required": False,
+        },
     }
     data["claims"][args.claim] = entry
     atomic_write_json(path, data)
     print(json.dumps({"action": "SEALED", **entry}, indent=2, ensure_ascii=False))
+    return 0
+
+
+def cmd_replay(args: argparse.Namespace) -> int:
+    repo = Path(args.repo).resolve()
+    require_files(repo)
+    data = load_registry(repo / args.registry)
+    entry = data["claims"].get(args.claim)
+    if not entry:
+        print(json.dumps({
+            "verdict": "DENY",
+            "reason": "CLAIM_NOT_SEALED",
+            "reinterpret_from_zero": False,
+        }, indent=2, ensure_ascii=False))
+        return 5
+    if args.owner and entry.get("owner") != args.owner:
+        print(json.dumps({
+            "verdict": "DENY",
+            "reason": "OWNER_MISMATCH",
+            "expected_owner": entry.get("owner"),
+            "supplied_owner": args.owner,
+            "reinterpret_from_zero": False,
+        }, indent=2, ensure_ascii=False))
+        return 6
+    result = proven_path_replay_decision(entry, args.dependency_fingerprint)
+    result.update({
+        "claim": args.claim,
+        "owner": entry.get("owner"),
+        "lock_key": entry.get("lock_key"),
+    })
+    print(json.dumps(result, indent=2, ensure_ascii=False))
+    return 0 if result["verdict"] == "PASS" else 7
+
+
+def cmd_self_test(args: argparse.Namespace) -> int:
+    good_entry = {
+        "owner": "owner",
+        "proven_path_replay": {
+            "marker": "PROVEN_PATH_REPLAY_LOCK",
+            "dependency_fingerprint": "fp-1",
+            "execution_commands": ["echo deterministic"],
+            "proof_commands": ["test -n deterministic"],
+            "expected_results": ["PASS"],
+            "environment_bindings": ["WORKSPACE"],
+            "self_test_command": "self-test",
+            "self_test_result": "PASS",
+        },
+    }
+    same = proven_path_replay_decision(good_entry, "fp-1")
+    changed = proven_path_replay_decision(good_entry, "fp-2")
+    missing = proven_path_replay_decision({"owner": "owner"}, "fp-1")
+    assert same["verdict"] == "PASS"
+    assert same["action"] == "REUSE_PROVEN_PATH_NO_RETHINK"
+    assert same["reinterpret_from_zero"] is False
+    assert changed["verdict"] == "REVALIDATE"
+    assert changed["action"] == "REVALIDATE_AFFECTED_CONE_ONLY"
+    assert missing["verdict"] == "UNKNOWN"
+    print(json.dumps({
+        "status": "PASS",
+        "tests": 6,
+        "marker": "PROVEN_PATH_REPLAY_LOCK",
+        "same_fingerprint": same["action"],
+        "changed_fingerprint": changed["action"],
+    }, indent=2, ensure_ascii=False))
     return 0
 
 
@@ -499,7 +606,26 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--evidence", required=True)
     s.add_argument("--observed-at", required=True)
     s.add_argument("--receipt", required=True)
+    s.add_argument("--dependency-fingerprint", default="UNKNOWN")
+    s.add_argument("--recipe-command", action="append", default=[])
+    s.add_argument("--proof-command", action="append", default=[])
+    s.add_argument("--expected-result", action="append", default=[])
+    s.add_argument("--environment-binding", action="append", default=[])
+    s.add_argument("--self-test-command", default="")
+    s.add_argument("--self-test-result", default="")
     s.set_defaults(func=cmd_seal)
+
+    rp = sub.add_parser("replay")
+    rp.add_argument("--repo", default=".")
+    rp.add_argument("--registry", default=DEFAULT_REGISTRY.as_posix())
+    rp.add_argument("--claim", required=True)
+    rp.add_argument("--owner")
+    rp.add_argument("--dependency-fingerprint")
+    rp.set_defaults(func=cmd_replay)
+
+    st = sub.add_parser("self-test")
+    st.add_argument("--repo", default=".")
+    st.set_defaults(func=cmd_self_test)
 
     r = sub.add_parser("reopen-check")
     r.add_argument("--repo", default=".")
