@@ -38,7 +38,7 @@ permissions:
 
 concurrency:
   group: notion-sync
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   sync:
@@ -70,7 +70,7 @@ jobs:
           TARGET: ${{ github.event.inputs.target || 'all' }}
           GITHUB_COMMIT: ${{ github.sha }}
           GITHUB_ACTOR: ${{ github.actor }}
-        run: node scripts/notion-sync/sync.mjs
+        run: timeout --signal=TERM --kill-after=30s 10m node scripts/notion-sync/sync.mjs
 
       - name: 🧹 Cleanup de órfãos (opcional)
         continue-on-error: true
