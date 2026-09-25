@@ -2,6 +2,7 @@ schema: centraldark.trigger-map.v1
 human_triggers:
   - id: CENTRALDARK_MASTER
     token: "!CENTRALDARK"
+    emoji: "👑"
     aliases: ["#CENTRALDARK", "!CENTRAL-DARK", "#CENTRAL-DARK", "!CDARK", "#CDARK"]
     owner: "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml"
     explicit_marker_required: true
@@ -11,6 +12,7 @@ human_triggers:
     behavior: [CONSIDER_ALL_PHASES, SKIP_ONLY_IF_JUSTIFIED, UNKNOWN_NEVER_PASS, NO_AUTHORITY_EXPANSION, NO_AUTO_MUTATION, MUTATION_REQUIRES_GLOBAL_CONTRACT_ENTRY_EXIT]
   - id: DELTA_UTILS
     token: "!DELTA UTILS"
+    emoji: "💎"
     aliases: ["!DELTAUTILS", "DELTAUTILS", "!DELTA UTIL", "!DELTAUTIL", "DELTAUTIL", "!DELTAÚTIL", "DELTA ÚTIL", "DELTA UTIL", "DELTA UTILS", "DELTA DE AGORA", "TOMA ESSE DELTA", "PEGA O DELTA"]
     owner: "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml#delta_harvest"
     semantic_family: DELTA_HARVEST
@@ -20,16 +22,22 @@ human_triggers:
     match_is_unrelated_mutation_permission: false
   - id: ACORDAR
     token: "#ACORDAR"
+    emoji: "🌅"
     aliases: ["#ACORDA", "ACORDAR", "ACORDA", "ACORD"]
     owner: "LEIA-ME-IA.md + AGENTS.md"
     fronts: [A1_HISTORY_SOUL, A2_LIVE_REPOSITORY, A3_WRITERS_OWNERS_LOCKS, A4_RUNTIME_TOOLS_CONNECTIONS, A5_CONTINUITY_DELTA_REPLAY]
   - id: CALIBRAR
     token: "!CALIBRAR"
+    emoji: "🎯"
     aliases: ["#CALIBRAR", "CALIBRAR", "CALIBAR", "CALIBRE", "CALIBR"]
     owner: "LEIA-ME-IA.md + AGENTS.md"
     fronts: [C1_INTENT_LANGUAGE, C2_AUTHORITY_SCOPE_PERMISSION, C3_CAPABILITIES_OWNERS_REUSE, C4_PROOF_RISK_COUNTERPROOF, C5_FREQUENCY_ENGINE_COST_LATENCY]
+    intent_alignment: [CURRENT_EXPLICIT_INTENT, RECOVERED_APPLICABLE_CONTEXT, COMPATIBLE_PRIOR_LEARNING, CANONICAL_RULES, CURRENT_REALITY, MATERIAL_AMBIGUITY, MATERIAL_CONTRADICTION]
+    confidence_threshold_percent: 80
+    behavior: [ALIGN_THOUGHT_NOT_WORDING, REMIX_MINIMUM_DELTA, DO_NOT_PARROT_CHEFE, EXECUTE_WHEN_CONFIDENCE_GTE_THRESHOLD_AND_SCOPE_AUTHORIZED, ASK_ONLY_INDISPENSABLE_GAP_BELOW_THRESHOLD]
   - id: MULTIBUSSOLA
     token: "!MULTIBUSSOLA"
+    emoji: "🧭"
     aliases: ["!MULTIBÚSSOLA", "!MULTI-BUSSOLA", "MULTIBUSSOLA", "MULTI BUSSOLA", "MULTIBUSS", "BUSSOLA", "!MULTIBUSSOLA_META", "!MULTIBÚSSOLA_META", "MULTIBUSSOLA_META", "MULTIBÚSSOLA_META"]
     owner: "docs/CONSCIENCIA/MULTIBUSSOLA.md"
     modes: [STANDARD, META]
@@ -40,27 +48,32 @@ human_triggers:
     meta_alias_creates_new_owner: false
   - id: META_LUPA
     token: "!META_LUPA"
+    emoji: "🔎"
     aliases: ["!METALUPA", "META LUPA", "META-LUPA", "META LUPE", "LUPA META"]
     owner: ".agents/skills/meta-lupa/"
     mode: adaptive
     temperatures: [FRIA, MEDIA, QUENTE]
   - id: RECONCILIAR
     token: "!RECONCILIAR"
+    emoji: "🔄"
     aliases: ["RECONCILIAR", "RECONCILIA", "SINCRONIZAR PASSADO FUTURO"]
     owner: "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json"
     behavior: [REUSE_BEFORE_CREATE, ABSORB_USEFUL_DELTA, PRESERVE_PROVENANCE, REJECT_PARALLEL_OWNER]
   - id: CONTRAPROVA
     token: "!CONTRAPROVA"
+    emoji: "🧪"
     aliases: ["CONTRAPROVA", "CONTRA PROVA", "TENTA DERRUBAR", "PROVA AO CONTRARIO"]
     owner: "docs/CONSCIENCIA/PROOF-OWNERSHIP.json"
     behavior: [INDEPENDENT_WHEN_MATERIAL, DISCRIMINATING_TEST, NO_CIRCULAR_PROOF]
   - id: REMEDICAO
     token: "!REMEDIÇÃO"
+    emoji: "📏"
     aliases: ["!REMEDICAO", "REMEDIR", "MEDE DE NOVO", "T0 T1"]
     owner: "docs/CONSCIENCIA/REMEDICAO.md"
     behavior: [MEASURE_T0, OBSERVE_DELTA, MEASURE_T1]
   - id: TIK_TAK
     token: "!TIK-TAK"
+    emoji: "⏱️"
     aliases: ["!TIK_TAK", "#TIK-TAK", "#TIK_TAK", "TIK-TAK", "TIK TAK", "TIK_TAK"]
     owner: "docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md#81-tik-tak--automation-factory--outer-loop"
     canonical_rule: REGRA-ZERO-CENTRALDARK
@@ -79,16 +92,19 @@ human_triggers:
     creates_new_brain_or_router: false
   - id: FIXED_POINT
     token: "!FIXED_POINT"
+    emoji: "📍"
     aliases: ["FIXED POINT", "PONTO FIXO", "PONTO FISXO", "ATE FECHAR"]
     owner: "Trigger Fabric"
     behavior: [NO_FALSE_GREEN, CONTINUE_WHILE_INFORMATION_GAIN, STOP_AT_FIXED_POINT_OR_PROVEN_FRONTIER]
   - id: REGISTRA
     token: "!REGISTRA"
+    emoji: "🧾"
     aliases: ["REGISTRA", "REGISTRAR", "GRAVA RECEIPT", "SALVA O OURO"]
     owner: "continuity + learning owners"
     behavior: [WRITE_RECEIPT, PRESERVE_PROVENANCE, LEARNING_DELTA, NEXT_CURSOR, PROMOTE_MAIN_WHEN_SAME_SCOPE_AUTHORIZED_AND_GATES_PASS]
   - id: BOOT
     token: "!BOOT"
+    emoji: "🚀"
     aliases: ["BOOT", "REBOOT LOGICO", "PROXIMO CICLO"]
     owner: "LEIA-ME-IA.md"
     behavior: [RETURN_RECOVERABLE_STATE, NEXT_ACORDAR, NO_IMPLICIT_RUNTIME_RESTART]
