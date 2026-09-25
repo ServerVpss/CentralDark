@@ -27,7 +27,14 @@ if [ "\$1" = "api" ] && [ "\$2" = "user" ]; then echo segredounlock; exit 0; fi
 exit 1
 `);
   fs.chmodSync(fakeGh, 0o755);
-  return { root, home, fakeGh };
+
+  const fakeGit = path.join(base, "git");
+  fs.writeFileSync(fakeGit, `#!/usr/bin/env bash
+if [ "\$1" = "config" ]; then exit 1; fi
+exit 0
+`);
+  fs.chmodSync(fakeGit, 0o755);
+  return { root, home, fakeGh, fakeGit };
 }
 
 function run(args = []) {
@@ -39,6 +46,7 @@ function run(args = []) {
       CENTRALDARK_ROOT: fx.root,
       HOME: fx.home,
       GH_BIN: fx.fakeGh,
+      GIT_BIN: fx.fakeGit,
     },
   });
 }
@@ -49,6 +57,8 @@ test("preflight mede auth existente e cargo startup sem pedir IA", () => {
   assert.match(r.stdout, /GH_AUTH=PASS/);
   assert.match(r.stdout, /GH_LOGIN=segredounlock/);
   assert.match(r.stdout, /GH_LOGIN_ACTION=SKIP_ALREADY_AUTHENTICATED/);
+  assert.match(r.stdout, /GIT_HTTPS_CREDENTIAL_HELPER=NOT_CONFIGURED/);
+  assert.match(r.stdout, /GIT_AUTH_ACTION=gh auth setup-git/);
   assert.match(r.stdout, /CARGO_ENV=ABSENT_OPTIONAL/);
   assert.match(r.stdout, /CARGO_STARTUP=GUARD_NEEDED/);
   assert.match(r.stdout, /consciousness\.cjs:PRESENT/);
