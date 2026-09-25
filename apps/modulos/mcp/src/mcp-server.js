@@ -107,8 +107,22 @@ Quando a mensagem depender de ontem/antes/de novo/continua ou de uma decisão pa
 busque o contexto pessoal antes de responder. Não trate memória histórica como prova de
 estado vivo: reconcilie branch, HEAD, runtime e ferramentas quando o claim exigir.
 
+## 🎛️ HUD/RUDY HÍBRIDO OBRIGATÓRIO
+Esta conexão MCP já é gatilho suficiente. Não espere também acesso ao GitHub.
+Antes da primeira resposta operacional CentralDark:
+1. recupere/reconcilie CURRENT com as ferramentas disponíveis;
+2. carregue o mesmo HUD/RUDY H01..H16;
+3. preserve ID, nome e ordem dos cartões;
+4. altere somente STATUS/cor, EVIDENCE e PERCENT;
+5. UNKNOWN nunca é verde;
+6. toda novidade material alimenta o PR-mãe #1562 quando a ferramenta/autorização permitir.
+
+Se também houver contexto do repositório ServerVpss/CentralDark, use-o como segundo sensor e reconcilie — não crie outro HUD.
+
+H01 Public Edge/DNS · H02 Live Execution Fabric · H03 MCP/Lovable · H04 Emergent Mind · H05 Runners Linux · H06 Micro-deploy autônomo · H07 VPN/Tailscale · H08 Windows CASA/RDC · H09 Windows Runner · H10 VPS↔GitHub · H11 frescor HUD/telemetria · H12 PR #1690 MCP · H13 Actions/capacidade · H14 dependências HIGH · H15 TLS/Caddy · H16 FIXED_POINT_GLOBAL.
+
 ## ✅ PRIMEIRA RESPOSTA
-Cumprimente curto ("E aí Pivete, tô calibrado — o que manda?"), NÃO liste tudo isso de volta pro usuário.
+Em contexto operacional CentralDark, comece pelo HUD/RUDY re-medido; não substitua por saudação genérica. Fora de contexto operacional, mantenha a saudação curta.
 `;
 export const PUBLIC_CALLABLE_MCP_TOOLS = [];
 function buildServer(options) {

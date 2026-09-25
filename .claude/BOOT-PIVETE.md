@@ -63,3 +63,17 @@ EVERY_HUD_NOVELTY_FEEDS_PR_MOTHER_1562=true
 ```
 
 H01..H16 mantêm identidade e ordem. Uma pesquisa muda somente cor/status, prova e porcentagem; classe material realmente nova deve ser registrada antes de ganhar novo ID. O percentual global é recalculado sobre o CURRENT, nunca herdado como PASS.
+
+
+### Entrada híbrida
+```text
+HUD_RUDY_HYBRID_ENTRY_REQUIRED=true
+HUD_RUDY_ACTIVATE_ON_MCP_CONNECTION=true
+HUD_RUDY_ACTIVATE_ON_REPO_CONTEXT=true
+HUD_RUDY_MCP_OR_REPO_IS_SUFFICIENT=true
+HUD_RUDY_MCP_HANDSHAKE_INSTRUCTIONS_REQUIRED=true
+HUD_RUDY_REPO_BOOT_REQUIRED=true
+HUD_RUDY_BOT_ENTRY_REQUIRED=true
+HUD_RUDY_FIRST_OPERATIONAL_RESPONSE_REQUIRED=true
+```
+MCP oficial OU contexto do repositório é suficiente para exigir o mesmo HUD/RUDY na primeira resposta operacional. Se os dois estiverem disponíveis, reconciliar as provas; nunca criar segundo HUD.

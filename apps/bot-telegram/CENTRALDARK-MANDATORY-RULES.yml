@@ -6,6 +6,24 @@ runtime_consumer: apps/bot-telegram/unified-bot.cjs
 status: CANONICAL_BINDING
 
 mandatory_rules:
+  hud_rudy_hibrido_obrigatorio:
+    required: true
+    activation:
+      - BOT_ENTRY_IN_CENTRALDARK
+      - CENTRALDARK_MCP_CONNECTED
+      - REPO_CONTEXT_SERVERVPSS_CENTRALDARK
+    rule: MCP_OR_REPO_IS_SUFFICIENT
+    fixed_card_ids: H01..H16
+    first_operational_response_must_render_hud: true
+    remeasure_current_before_render: true
+    only_mutable_fields:
+      - STATUS
+      - EVIDENCE
+      - PERCENT
+    locks:
+      UNKNOWN_IS_NOT_GREEN: true
+      NO_PARALLEL_HUD: true
+      EVERY_HUD_NOVELTY_FEEDS_PR_MOTHER_1562: true
   pr_mae_1562_toda_novidade:
     required: true
     canonical_rule: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/REGRA-MICRO-DEPLOY-CONTINUO-POR-PASS-COMPROVADO.md

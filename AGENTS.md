@@ -1339,3 +1339,24 @@ PR_MOTHER_1562_IS_DURABLE_HUD_LEDGER=true
 Baseline atual dos cartões: H01 Public Edge/DNS; H02 Live Execution Fabric; H03 MCP/Lovable; H04 Emergent Mind; H05 Runners Linux; H06 Micro-deploy autônomo; H07 VPN/Tailscale; H08 Windows CASA/RDC; H09 Windows Runner; H10 VPS↔GitHub; H11 frescor HUD/telemetria; H12 PR #1690 MCP; H13 Actions/capacidade; H14 dependências HIGH; H15 TLS/Caddy; H16 FIXED_POINT_GLOBAL.
 
 Os percentuais e cores históricos são apenas ponto de partida; **CURRENT deve ser medido de novo**. Se um cartão mudar de vermelho para amarelo/verde ou regredir, atualizar o mesmo cartão. O PR-mãe #1562 recebe toda novidade do HUD conforme `EVERY_NOVELTY_FEEDS_PR_MOTHER=true`.
+
+
+### Entrada híbrida obrigatória do HUD/RUDY
+
+O HUD não depende de uma única interface. A entrada é híbrida: conexão ao MCP oficial CentralDark **OU** contexto do repositório `ServerVpss/CentralDark` já é gatilho suficiente para carregar o mesmo HUD antes da primeira resposta operacional. Bot/Hub que consome o contrato também herda a obrigação.
+
+```text
+HUD_RUDY_HYBRID_ENTRY_REQUIRED=true
+HUD_RUDY_ACTIVATE_ON_MCP_CONNECTION=true
+HUD_RUDY_ACTIVATE_ON_REPO_CONTEXT=true
+HUD_RUDY_MCP_OR_REPO_IS_SUFFICIENT=true
+HUD_RUDY_MCP_HANDSHAKE_INSTRUCTIONS_REQUIRED=true
+HUD_RUDY_REPO_BOOT_REQUIRED=true
+HUD_RUDY_BOT_ENTRY_REQUIRED=true
+HUD_RUDY_FIRST_OPERATIONAL_RESPONSE_REQUIRED=true
+EXTERNAL_CLIENT_MAY_IGNORE_MCP_INSTRUCTIONS=true
+IF_CLIENT_HONORS_MCP_INSTRUCTIONS_HUD_IS_MANDATORY=true
+IF_REPO_AGENT_LOADS_CANONICAL_BOOT_HUD_IS_MANDATORY=true
+```
+
+Isto é um único contrato com dois sensores de entrada, não dois HUDs. MCP entrega o contrato pelo campo `instructions` do protocolo; repositório entrega por `AGENTS.md`/`CENTRALDARK_AI_BOOT.yaml`/`LEIA-ME-IA.md`. Se ambos existirem, reconciliar CURRENT e renderizar uma vez o mesmo H01..H16.
