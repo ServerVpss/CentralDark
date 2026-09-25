@@ -49,7 +49,7 @@ export const PATTERN_ADMIN_STYLE = `
 .admin-toast{position:fixed;right:20px;bottom:20px;z-index:99;background:var(--surf2);border:1px solid var(--border2);color:var(--text);padding:10px 14px;border-radius:10px;box-shadow:0 16px 40px rgba(0,0,0,.35);font-size:12px;display:none}.admin-toast.show{display:block}.admin-hidden-note{font-size:11px;color:var(--muted)}
 @media(max-width:900px){.pattern-office,.admin-grid,.pattern-monitor{grid-template-columns:1fr}.pattern-head,.admin-kpis,.pattern-monitor-grid{grid-template-columns:1fr 1fr}}
 `;
-export const PATTERN_ADMIN_TAB = `<div class="tab" data-p="patterns">Padrões</div><div class="tab" data-p="commands">Comandos</div>`;
+export const PATTERN_ADMIN_TAB = `<div class="tab" data-p="patterns">🧩 Padrões</div><div class="tab" data-p="commands">🎛️ Comandos</div>`;
 export const PATTERN_ADMIN_PANE = `
   <div class="pane" id="p-patterns">
     <div class="pattern-monitor unknown" id="centraldarkPatternMonitor">

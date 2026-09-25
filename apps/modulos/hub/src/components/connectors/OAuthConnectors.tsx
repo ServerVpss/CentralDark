@@ -34,7 +34,7 @@ const API_KEY_HELP: Record<string, { text: string; url?: string }> = {
 };
 
 const WEB_OAUTH_IDS = new Set(['openai', 'claude', 'gemini', 'grok']);
-const REAL_OAUTH_IDS = new Set(['github', 'notion', 'gdrive', 'gmail', 'lovable']);
+const REAL_OAUTH_IDS = new Set(['github', 'notion', 'gdrive', 'gmail', 'lovable', 'tailscale']);
 
 interface Connection {
   id: string;
@@ -76,6 +76,7 @@ const FALLBACK_PROVIDERS: Provider[] = [
   { id: 'cloudflare',   display_name: 'Cloudflare',        color: '#f38020', icon: 'CF', scopes: 'zone dns workers', auth_type: 'api_key', tier: 1 },
   { id: 'contabo',      display_name: 'Contabo VPS',       color: '#00a0e3', icon: 'CB', scopes: 'instances:read', auth_type: 'api_key', tier: 1 },
   { id: 'telegram',     display_name: 'Telegram Bot',      color: '#229ed9', icon: 'TG', scopes: 'bot',           auth_type: 'api_key', tier: 1 },
+  { id: 'tailscale',    display_name: 'Tailscale',          color: '#242424', icon: 'TS', scopes: 'tailnet route + human login', auth_type: 'oauth', tier: 1 },
   { id: 'lovable',      display_name: 'Lovable',           color: '#10b981', icon: 'L',  scopes: 'projects',      auth_type: 'oauth',   tier: 1 },
   { id: 'efi',          display_name: 'EFI Pay',           color: '#00a868', icon: 'E',  scopes: 'pix cobranças', auth_type: 'api_key', tier: 2 },
 ];
@@ -135,6 +136,27 @@ export function OAuthConnectors() {
       }
     }
 
+    try {
+      const tsRes = await fetch(BROKER_BASE + '/api/tailscale/status', { cache: 'no-store' });
+      const ts = await tsRes.json().catch(() => null);
+      if (!p.some((x) => x.id === 'tailscale')) {
+        p = [...p, { id: 'tailscale', display_name: 'Tailscale', color: '#242424', icon: 'TS', scopes: 'tailnet route + human login', auth_type: 'oauth', tier: 1 }];
+      }
+      if (tsRes.ok && ts?.ok && !c.some((x) => x.provider_id === 'tailscale')) {
+        c = [...c, {
+          id: 'runtime-tailscale',
+          provider_id: 'tailscale',
+          expires_at: '',
+          status: 'active',
+          account_label: ts.tailnet || 'tailnet',
+        }];
+      }
+    } catch {
+      if (!p.some((x) => x.id === 'tailscale')) {
+        p = [...p, { id: 'tailscale', display_name: 'Tailscale', color: '#242424', icon: 'TS', scopes: 'tailnet route + human login', auth_type: 'oauth', tier: 1 }];
+      }
+    }
+    // TAILSCALE_RUNTIME_PROVIDER: rota-base observada pelo broker, sem token no browser.
     setTableMissing(missing);
     setProviders(p);
     setConns(c);
@@ -179,7 +201,23 @@ export function OAuthConnectors() {
     }
   }
 
-  async function disconnect(connId: string, name: string) {
+  async function disconnect(connId: string, name: string, providerId?: string) {
+    if (providerId === 'tailscale') {
+      const typed = prompt('Isto derruba a rota-base Tailscale da VPS. Digite DESCONECTAR para confirmar.');
+      if (typed !== 'DESCONECTAR') return;
+      const res = await fetch(BROKER_BASE + '/api/tailscale/logout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ confirm: 'DISCONNECT_TAILSCALE_ROUTE' }),
+      });
+      if (!res.ok) {
+        toast.error('Falha ao desconectar Tailscale: HTTP ' + res.status);
+        return;
+      }
+      toast.success('Tailscale desconectado');
+      await load();
+      return;
+    }
     if (!confirm(`Desconectar ${name}?`)) return;
     const { error } = await supabase.from('oauth_connections').delete().eq('id', connId);
     if (error) {
@@ -297,7 +335,7 @@ export function OAuthConnectors() {
                       </Button>
                       {conn && (
                         <Button
-                          onClick={() => disconnect(conn.id, p.display_name)}
+                          onClick={() => disconnect(conn.id, p.display_name, p.id)}
                           size="sm"
                           variant="outline"
                           className="text-destructive hover:bg-destructive/10 border-destructive/40"
