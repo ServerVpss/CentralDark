@@ -7,6 +7,22 @@ import unicodedata
 from pathlib import Path
 
 MASTER = "!CENTRALDARK"
+TRIGGER_EMOJIS = {
+    "CENTRALDARK": "👑",
+    "ACORDAR": "🌅",
+    "CALIBRAR": "🎯",
+    "MULTIBUSSOLA": "🧭",
+    "META_LUPA": "🔎",
+    "RECONCILIAR": "🔄",
+    "DELTA_UTIL": "💎",
+    "CONTRAPROVA": "🧪",
+    "REMEDICAO": "📏",
+    "FIXED_POINT": "📍",
+    "REGISTRA": "🧾",
+    "BOOT": "🚀",
+}
+INTENT_ALIGNMENT_THRESHOLD_PERCENT = 80
+
 CHAIN = [
     "ACORDAR",
     "CALIBRAR",
@@ -484,6 +500,24 @@ def resolve(
         "activation_source": activation_source,
         "next_master_active": master_cycle_active,
         "expanded_chain": CHAIN if master_cycle_active else [],
+        "visual_trigger_chain": (
+            " → ".join([
+                f"{TRIGGER_EMOJIS['CENTRALDARK']} !CENTRALDARK",
+                *[f"{TRIGGER_EMOJIS[x]} {x}" for x in CHAIN],
+            ]) if master_cycle_active else ""
+        ),
+        "intent_alignment": {
+            "phase": "CALIBRAR",
+            "emoji": TRIGGER_EMOJIS["CALIBRAR"],
+            "threshold_percent": INTENT_ALIGNMENT_THRESHOLD_PERCENT,
+            "percentage_means": "INTERPRETATION_ALIGNMENT_NOT_RUNTIME_PASS",
+            "continuous_recalibration": True,
+            "new_teaching": "REMIX_MINIMUM_DELTA_IN_EXISTING_RULE",
+            "do_not_parrot_chefe": True,
+            "align_thought_not_wording": True,
+            "execute_when_gte_threshold_and_scope_authorized": True,
+            "below_threshold_or_material_contradiction": "ASK_ONLY_INDISPENSABLE_GAP",
+        },
         "guided_telemetry": guided_telemetry,
         "session_provenance": {
             "session_id": session_ref,
