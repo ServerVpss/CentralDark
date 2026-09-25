@@ -329,6 +329,37 @@ CENTRALDARK_AI_BOOT:
     invalidate_scope: "DEPENDENT_CLAIMS_ONLY"
     preserve_independent_proof: true
 
+  proven_executable_recipe_policy:
+    principle: "CAMINHO_JA_PROVADO_VIRA_RECEITA_EXECUTAVEL"
+    owner: "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml"
+    runtime_owner: "scripts/trigger-fabric/centraldark_full_trigger_boot.py"
+    registry_owner: "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json"
+    sequence:
+      - "CAMINHO_JA_PROVADO"
+      - "SELAR_RECEITA_EXECUTAVEL"
+      - "GUARDAR_FINGERPRINT"
+      - "PROXIMO_EXECUTOR_CARREGA_A_RECEITA"
+      - "ADAPTA_SOMENTE_BINDINGS_DO_AMBIENTE"
+      - "EXECUTA_A_MESMA_SEQUENCIA"
+      - "RODA_A_MESMA_PROVA"
+      - "COMPARA_RESULTADO_FORMATO_EFEITO"
+      - "DIVERGIU=DELTA_NOVO"
+      - "NAO_DIVERGIU=REUTILIZA_CRISTAL"
+    fingerprint_dimensions:
+      - "CLAIM_KEY"
+      - "OWNER"
+      - "PROOF_TARGET"
+      - "SEQUENCE"
+      - "PROBE_OR_TEST_CONTRACT"
+      - "EXPECTED_RESULT_SHAPE"
+      - "EXPECTED_EFFECT"
+      - "SECURITY_BOUNDARY"
+    environment_binding_policy: "ADAPT_ONLY_BINDINGS_WITHOUT_CHANGING_RECIPE_SEMANTICS"
+    same_fingerprint_same_result_format_effect: "REUSE_CRYSTAL"
+    divergence: "NEW_DELTA_INVALIDATE_DEPENDENT_CONE_ONLY"
+    no_divergence: "REUSE_PROOF_NO_REPEAT"
+    next_executor_rule: "LOAD_RECIPE_BEFORE_REASONING_FROM_ZERO"
+
   # Gatilho percorre o fluxo; gate não deve virar catraca para trabalho normal já encaixado.
   gate_semantics:
     trigger_is_not_gate: true
