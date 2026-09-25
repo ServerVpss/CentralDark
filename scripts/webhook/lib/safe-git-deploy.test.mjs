@@ -157,7 +157,7 @@ test('validador global aceita consumidor seguro com expectedRemoteSha adicional'
     process.execPath,
     ['.agents/skills/git-state-safety/scripts/validate.mjs'],
     {
-      cwd: new URL('../../../..', import.meta.url),
+      cwd: new URL('../../..', import.meta.url),
       encoding: 'utf8',
       stdio: ['ignore', 'pipe', 'pipe'],
     },
