@@ -3,6 +3,10 @@
 
 The script turns one-off repository scans into a repeatable film: every PR/push can
 re-measure the house and classify files without creating a parallel system.
+
+Important invariant: when writing the canonical baseline, the output file itself
+is excluded from the scan. Otherwise the inventory would hash its own changing
+content and never reach a fixed point.
 """
 from __future__ import annotations
 
@@ -23,6 +27,7 @@ CRYSTAL_PREFIXES = (
     'apps/', 'src/', 'supabase/functions/'
 )
 TRASH_NAMES = {'.DS_Store', 'Thumbs.db'}
+DETERMINISTIC_TIMESTAMP = '1970-01-01T00:00:00+00:00'
 
 
 def sha256_file(path: Path) -> str:
@@ -45,22 +50,22 @@ def classify(rel: str) -> str:
     return 'neutro'
 
 
-def iter_files(root: Path):
+def iter_files(root: Path, excluded: set[str]):
     for dirpath, dirnames, filenames in os.walk(root):
         dirnames[:] = [d for d in dirnames if d not in SKIP_DIRS]
         base = Path(dirpath)
         for filename in sorted(filenames):
             path = base / filename
             rel = path.relative_to(root).as_posix()
-            if rel.startswith('.git/'):
+            if rel.startswith('.git/') or rel in excluded:
                 continue
             yield path, rel
 
 
-def build_inventory(root: Path) -> dict:
+def build_inventory(root: Path, *, excluded: set[str], deterministic: bool) -> dict:
     items = []
     counts = {'cristal': 0, 'suspeito': 0, 'lixo': 0, 'neutro': 0}
-    for path, rel in iter_files(root):
+    for path, rel in iter_files(root, excluded):
         try:
             stat = path.stat()
             kind = classify(rel)
@@ -73,10 +78,14 @@ def build_inventory(root: Path) -> dict:
             })
         except OSError as exc:
             items.append({'path': rel, 'class': 'erro', 'error': str(exc)})
+
+    generated_at = DETERMINISTIC_TIMESTAMP if deterministic else datetime.now(timezone.utc).isoformat()
     return {
         'schema': 'centraldark.inventory.v1',
-        'generated_at_utc': datetime.now(timezone.utc).isoformat(),
+        'generated_at_utc': generated_at,
+        'generation_mode': 'deterministic-baseline' if deterministic else 'runtime-snapshot',
         'root': str(root),
+        'excluded_paths': sorted(excluded),
         'counts': counts,
         'items': sorted(items, key=lambda item: item['path']),
         'truth_rules': [
@@ -84,6 +93,7 @@ def build_inventory(root: Path) -> dict:
             'UNKNOWN != PASS',
             'DOCUMENTED != EXECUTED',
             'REUSE_BEFORE_CREATE',
+            'INVENTORY_OUTPUT_DOES_NOT_HASH_ITSELF',
         ],
     }
 
@@ -93,10 +103,13 @@ def main() -> int:
     parser.add_argument('--root', default='.', help='repository root')
     parser.add_argument('--output', default='docs/CONSCIENCIA/INVENTARIO-CASA.json')
     parser.add_argument('--write', action='store_true', help='write output file')
+    parser.add_argument('--deterministic-baseline', action='store_true', help='stable output suitable for committing')
     args = parser.parse_args()
 
     root = Path(args.root).resolve()
-    inventory = build_inventory(root)
+    output_rel = Path(args.output).as_posix()
+    excluded = {output_rel}
+    inventory = build_inventory(root, excluded=excluded, deterministic=args.deterministic_baseline)
     payload = json.dumps(inventory, ensure_ascii=False, indent=2, sort_keys=True) + '\n'
 
     if args.write:
@@ -107,6 +120,8 @@ def main() -> int:
     else:
         print(payload)
     print('COUNTS', inventory['counts'])
+    print('EXCLUDED', sorted(excluded))
+    print('MODE', inventory['generation_mode'])
     return 0
 
 if __name__ == '__main__':
