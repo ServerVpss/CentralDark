@@ -142,3 +142,84 @@ DIVERGIU
 ```
 
 Este blocker é de **binding do ambiente**, não motivo para reabrir ou reinterpretar os caminhos já selados.
+
+## T2 runtime — replay corrigido, commit mínimo e receipt obrigatório
+
+Observed at: `2026-09-25T16:39-03:00`  
+Surface: `vmi3256920:/root/CentralDark`  
+Linked ledger: `#1562`  
+Commit provado: `e3ff925e6b27c0583af30f65b505c386663732b5`
+
+A divergência T1 foi confirmada como **binding Git do ambiente**, não falha da receita nem motivo para redesenhar arquitetura.
+
+```text
+BLOCKER_T1=git/https sem credential helper no shell remoto
+FIX_BINDING=gh auth setup-git
+NO_BLIND_PULL_ON_DIRTY_TREE=true
+NO_FORCE_PUSH=true
+WORKTREE_CLEAN_FROM=origin/main
+MUTATION_SCOPE=apps/modulos/mcp/src/admin.js + apps/modulos/mcp/dist/admin.js
+COMMIT=e3ff925e6b27c0583af30f65b505c386663732b5
+PUSH=main
+```
+
+Sequência executável obrigatória para repetir este caminho:
+
+```text
+CAMINHO_JA_PROVADO
+→ medir auth/remoto/main/local/dirty
+→ se conector cair, tentar reconectar/relogin/helper/túnel antes de declarar bloqueado
+→ se VPS estiver suja ou atrás da main, NÃO dar pull cego
+→ criar worktree limpa de origin/main
+→ copiar somente owners afetados já provados no runtime
+→ rodar sintaxe/prova aplicável
+→ commit mínimo
+→ push normal sem force
+→ receipt no GitHub (#1562 ou PR filho equivalente)
+→ reexecutar a mesma prova HTTP/API/UI
+→ comparar resultado/formato/efeito
+→ divergiu = delta novo
+→ não divergiu = reutiliza cristal
+```
+
+Prova pós-push:
+
+```text
+/omni → HTTP 302 → /admin?tab=omni
+/admin?tab=omni → HTTP 200
+/api/omni/status → HTTP 200
+SECRET_EXPOSED=false
+FORCE_PUSH=false
+VPS_DIRTY_TREE_CARRIED=false
+```
+
+Contrato operacional obrigatório para E:/CentralDark e VPS:
+
+```ini
+CENTRALDARK_EXECUTION_CONTRACT=MANDATORY
+EVERY_CHANGE_ON_E_MUST_BE_MEASURED=true
+EVERY_CHANGE_REQUIRES_TEST=true
+EVERY_CHANGE_REQUIRES_COUNTERPROOF=true
+EVERY_CHANGE_REQUIRES_GIT_RECEIPT=true
+NO_UNRECORDED_LOCAL_CHANGE=true
+NO_CLAIM_WITHOUT_EVIDENCE=true
+NO_PUSH_WITHOUT_VALIDATION=true
+NO_SECRET_IN_GIT=true
+FAILURE_MUST_BE_LOCALIZED=true
+NO_DIRECT_MAIN_WITHOUT_EXPLICIT_AUTHORIZATION=true
+PR_MOTHER_OR_CHILD_RECEIPT_REQUIRED=true
+CONNECTOR_DROP_RETRY_RELOGIN_OR_TUNNEL_BEFORE_BLOCKED=true
+UNTRACKED_IMPORTANT_GENERATES_ALERT_NOT_DELETE=true
+```
+
+Classificação:
+
+```text
+DIVERGIU_ANTES=DELTA_NOVO:VPS_GIT_AUTH_BINDING
+FIX_APLICADO=PASS
+REPLAY_WORKTREE_LIMPA=PASS
+GIT_RECEIPT=PASS
+RUNTIME_PROOF=PASS
+NÃO_DIVERGIU_DEPOIS=REUTILIZA_CRISTAL
+```
+
