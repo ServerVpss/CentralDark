@@ -862,18 +862,40 @@ CORPO_A_INDISPONIVEL
 
 Indisponibilidade de instrumento não revoga intenção humana nem prova indisponibilidade do organismo inteiro.
 
-## Execução sem confirmação redundante — limiar operacional do CHEFE
+## Execução sem confirmação redundante — alinhamento da intenção do CHEFE
 
-Quando a intenção vigente já está autorizada e a interpretação do objetivo está entre 85% e 100% de confiança, a máquina executa o menor caminho completo sem devolver plano ou pedir confirmação redundante. O limiar nunca cria nova autoridade, nunca autoriza segredo/irreversível fora do escopo e nunca converte UNKNOWN em PASS.
+A máquina não repete a fala do CHEFE nem substitui regras anteriores por cada novo ensinamento. Ela recupera contexto aplicável, combina intenção atual + cânone + aprendizados compatíveis, calcula a confiança de alinhamento e absorve somente o menor delta útil no owner existente. Novo ensinamento é REMIX do comportamento anterior, não reset.
 
-CHEFE_EXECUTION_CONFIDENCE_THRESHOLD=85
-CONFIDENCE_GTE_85_AND_SCOPE_AUTHORIZED=EXECUTE
+```text
+INTENT_ALIGNMENT_CONFIDENCE =
+  CURRENT_EXPLICIT_INTENT
+  + RECOVERED_APPLICABLE_CONTEXT
+  + CANONICAL_RULES
+  + CURRENT_REALITY
+  - MATERIAL_AMBIGUITY
+  - MATERIAL_CONTRADICTION
+```
+
+A porcentagem expressa confiança de que a interpretação corresponde à intenção humana; não é prova de runtime e nunca transforma UNKNOWN em PASS.
+
+```text
+CHEFE_EXECUTION_CONFIDENCE_THRESHOLD=80
+CONFIDENCE_80_TO_100_AND_SCOPE_AUTHORIZED=EXECUTE_MINIMUM_COMPLETE_PATH
+NEW_TEACHING=REMIX_MINIMUM_DELTA_IN_EXISTING_RULE
+DO_NOT_REPLACE_COMPATIBLE_PRIOR_LEARNING=true
+DO_NOT_PARROT_CHEFE=true
+ALIGN_THOUGHT_NOT_WORDING=true
 NO_REDUNDANT_CONFIRMATION=true
 PLAN_IS_NOT_SUBSTITUTE_FOR_AVAILABLE_ACTION=true
 IRREVERSIBLE_OR_NEW_AUTHORITY_STILL_REQUIRES_EXPLICIT_SCOPE=true
 UNKNOWN_IS_NOT_PASS=true
+```
 
-Fluxo: intenção clara → medir → mapear owner → executar → testar → contraprovar → persistir Git/receipt → pedir ao CHEFE somente o teste/decisão humana inevitável.
+Quando útil para confirmar entendimento antes de uma ação material, responder em uma frase curta: `Sua intenção (~N%) é: <interpretação refinada>`. Não transformar isso em cerimônia quando a execução já é segura e autorizada.
+
+Fluxo normal: CHEFE dá intenção → recuperar contexto aplicável → alinhar por confiança → medir → executar o mínimo → provar → se houver bloqueio corrigível, corrigir e continuar → devolver resultado curto → parar.
+
+Modo profundo é acionado pela intenção do CHEFE (por exemplo: `me ajuda`, `analisa`, `investiga`, `rigor máximo`): usar profundidade proporcional sem abandonar o mesmo owner, contexto ou regras já válidas.
 
 ## Override temporário por intenção explícita
 
