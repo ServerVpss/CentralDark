@@ -684,6 +684,23 @@ export function validateUniversalMethod() {
     'UNKNOWN, ANOMALY, ACHADO_PENDENTE, BLOCKED',
   ], 'OPERATIONAL_METHOD_INTERVIEW_BINDING');
 
+  requireAll(bootText, [
+    'proven_executable_recipe_policy:',
+    'principle: "CAMINHO_JA_PROVADO_VIRA_RECEITA_EXECUTAVEL"',
+    '"SELAR_RECEITA_EXECUTAVEL"',
+    '"GUARDAR_FINGERPRINT"',
+    '"PROXIMO_EXECUTOR_CARREGA_A_RECEITA"',
+    '"ADAPTA_SOMENTE_BINDINGS_DO_AMBIENTE"',
+    '"EXECUTA_A_MESMA_SEQUENCIA"',
+    '"RODA_A_MESMA_PROVA"',
+    '"COMPARA_RESULTADO_FORMATO_EFEITO"',
+    '"DIVERGIU=DELTA_NOVO"',
+    '"NAO_DIVERGIU=REUTILIZA_CRISTAL"',
+    'same_fingerprint_same_result_format_effect: "REUSE_CRYSTAL"',
+    'next_executor_rule: "LOAD_RECIPE_BEFORE_REASONING_FROM_ZERO"',
+  ], 'PROVEN_EXECUTABLE_RECIPE_BINDING');
+
+
   requireTokens(perceptionOrchestra, [
     "id: 'A_LOGIC'",
     "id: 'B_IMPLEMENTATION'",
