@@ -631,6 +631,26 @@ export function summarizeTailscaleNetworkLogs(payload) {
   };
 }
 
+export async function readTailscaleCapability(capabilityName, params = {}) {
+  const request = buildProviderRequest("tailscale", capabilityName, params);
+  if (!["READ_SUPPORTED", "FINANCIAL_READ_SUPPORTED", "DEPRECATED"].includes(request.item.status)) {
+    throw new Error("TAILSCALE_READ_CAPABILITY_REQUIRED");
+  }
+  if (request.item.secretBearing === true) {
+    throw new Error("BLOCKED_SECRET_BEARING_RESPONSE");
+  }
+  const result = await callProvider("tailscale", request);
+  return {
+    ok: true,
+    status: "PASS",
+    provider: "tailscale",
+    capability: capabilityName,
+    httpStatus: result.httpStatus,
+    evidenceRef: request.item.evidenceRef,
+    data: result.data,
+  };
+}
+
 export async function readTailscaleNetworkLogs({ start, end, tailnet = "-", limit = 200 } = {}) {
   const endDate = end ? new Date(end) : new Date();
   const startDate = start ? new Date(start) : new Date(endDate.getTime() - 15 * 60_000);
@@ -730,7 +750,107 @@ const providerInputSchema = z.object({
   params: z.record(z.string(), z.unknown()).optional().default({}),
 });
 
+export const tailscaleTools = [
+  {
+    name: "tailscale_status",
+    description: "Prova conectividade read-only com a API Tailscale pelo cofre existente e resume quantidade de devices e capacidades permitidas, sem expor credencial.",
+    annotations: { ...READ, title: "Tailscale — status vivo" },
+    inputSchema: z.object({
+      tailnet: z.string().max(160).optional().default("-"),
+    }),
+    handler: async (input) => {
+      try {
+        const configured = Boolean(loadTailscaleKey());
+        if (!configured) {
+          return jsonBlock({ ok: false, status: "TAILSCALE_CREDENTIALS_MISSING", configured: false });
+        }
+        const live = await readTailscaleCapability("devices.list", { tailnet: input.tailnet });
+        const devices = Array.isArray(live.data?.devices)
+          ? live.data.devices
+          : Array.isArray(live.data)
+            ? live.data
+            : [];
+        return jsonBlock({
+          ok: true,
+          status: "PASS",
+          provider: "tailscale",
+          configured: true,
+          httpStatus: live.httpStatus,
+          tailnet: input.tailnet,
+          deviceCount: devices.length,
+          capabilities: PROVIDER_CAPABILITY_MATRIX
+            .filter((item) => item.provider === "tailscale" && item.secretBearing !== true)
+            .map((item) => ({
+              capability: item.capability,
+              status: item.status,
+              permission: item.permission,
+              controlPlaneStatus: item.controlPlaneStatus,
+            })),
+          secretExposed: false,
+        });
+      } catch (error) {
+        return jsonBlock({
+          ok: false,
+          status: sanitizeError(error),
+          provider: "tailscale",
+          configured: Boolean(loadTailscaleKey()),
+          secretExposed: false,
+        });
+      }
+    },
+  },
+  {
+    name: "tailscale_devices_list",
+    description: "Lista devices do tailnet pela capability allowlisted existente devices.list. Somente leitura e resposta redigida.",
+    annotations: { ...READ, title: "Tailscale — devices" },
+    inputSchema: z.object({
+      tailnet: z.string().max(160).optional().default("-"),
+    }),
+    handler: async (input) => {
+      try {
+        return jsonBlock(await readTailscaleCapability("devices.list", { tailnet: input.tailnet }));
+      } catch (error) {
+        return jsonBlock({ ok: false, status: sanitizeError(error), provider: "tailscale", capability: "devices.list" });
+      }
+    },
+  },
+  {
+    name: "tailscale_dns_nameservers",
+    description: "Le os nameservers DNS do tailnet pela capability allowlisted existente dns.nameservers. Somente leitura.",
+    annotations: { ...READ, title: "Tailscale — DNS nameservers" },
+    inputSchema: z.object({
+      tailnet: z.string().max(160).optional().default("-"),
+    }),
+    handler: async (input) => {
+      try {
+        return jsonBlock(await readTailscaleCapability("dns.nameservers", { tailnet: input.tailnet }));
+      } catch (error) {
+        return jsonBlock({ ok: false, status: sanitizeError(error), provider: "tailscale", capability: "dns.nameservers" });
+      }
+    },
+  },
+  {
+    name: "tailscale_network_logs",
+    description: "Le Network Flow Logs do Tailscale pela API oficial usando o cofre existente. Janela padrao 15 min, maximo 24h, sem expor credencial.",
+    annotations: { ...READ, title: "Tailscale — Network Flow Logs" },
+    inputSchema: z.object({
+      start: z.string().optional(),
+      end: z.string().optional(),
+      tailnet: z.string().max(160).optional().default("-"),
+      limit: z.number().int().min(1).max(500).optional().default(200),
+    }),
+    handler: async (input) => {
+      try {
+        return jsonBlock(await readTailscaleNetworkLogs(input));
+      } catch (error) {
+        return jsonBlock({ ok: false, status: sanitizeError(error), provider: "tailscale", capability: "network.logs" });
+      }
+    },
+  },
+];
+
 export const adminProviderControlTools = [
+  ...tailscaleTools,
   {
     name: "provider_capabilities",
     description: "Matriz canônica de capacidades oficiais Contabo/Cloudflare/Tailscale usadas pelo cockpit Admin. Não executa ação externa.",
@@ -794,24 +914,6 @@ export const adminProviderControlTools = [
           capability: input.capability,
           data: deepRedact(error?.providerPayload ?? null),
         });
-      }
-    },
-  },
-  {
-    name: "tailscale_network_logs",
-    description: "Le os Network Flow Logs do Tailscale pela API oficial usando o cofre existente. Janela padrao 15 min, maximo 24h, sem expor credencial.",
-    annotations: { ...READ, title: "Tailscale — Network Flow Logs" },
-    inputSchema: z.object({
-      start: z.string().optional(),
-      end: z.string().optional(),
-      tailnet: z.string().max(160).optional().default("-"),
-      limit: z.number().int().min(1).max(500).optional().default(200),
-    }),
-    handler: async (input) => {
-      try {
-        return jsonBlock(await readTailscaleNetworkLogs(input));
-      } catch (error) {
-        return jsonBlock({ ok: false, status: sanitizeError(error), provider: "tailscale", capability: "network.logs" });
       }
     },
   },

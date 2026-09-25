@@ -8,6 +8,7 @@ import {
   buildProviderRequest,
   deepRedact,
   providerCredentialStatus,
+  tailscaleTools,
   validateFinancialGuard,
 } from "../src/modes/admin/tools/admin-provider-control.js";
 
@@ -182,4 +183,15 @@ test("fingerprints nao carregam ator bruto", () => {
   const fingerprint = __test.actorFingerprint(actor);
   assert.equal(fingerprint.includes(actor), false);
   assert.match(fingerprint, /^[0-9a-f]{24}$/);
+});
+
+
+test("tools dedicadas Tailscale reutilizam provider-control e ficam read-only", () => {
+  assert.deepEqual(
+    tailscaleTools.map((tool) => tool.name),
+    ["tailscale_status", "tailscale_devices_list", "tailscale_dns_nameservers", "tailscale_network_logs"],
+  );
+  assert.ok(tailscaleTools.every((tool) => tool.annotations.readOnlyHint === true));
+  assert.ok(tailscaleTools.every((tool) => tool.annotations.destructiveHint === false));
+  assert.equal(new Set(tailscaleTools.map((tool) => tool.name)).size, tailscaleTools.length);
 });
