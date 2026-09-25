@@ -129,10 +129,18 @@ export const hubCapabilities: HubCapability[] = [
     owner: 'Electron + renderer',
     detail: 'Superfície web existe; painel único de permissões/sessões/cookies ainda não foi consolidado no CentralDark.exe.',
   },
+  {
+    id: 'FIGMA',
+    label: 'Figma / FigJam',
+    state: 'SOURCE_PROVED',
+    owner: 'apps/modulos/mcp/src/tools/integrations.js + apps/modulos/oauth-broker',
+    detail: 'Conector read-only registrado no HUB; credencial fica no cofre canônico. Runtime só vira PASS quando /figma/status autenticar e um arquivo/node real for lido.',
+  },
 ];
 
 export const accountSurfaces: AccountSurface[] = [
   { id: 'GMAIL', label: 'Gmail', accountModel: 'OAuth no Contas / Hub existente', quota: 'NOT_APPLICABLE', detail: 'Conta Gmail já pertence ao oauth-broker canônico; leitura/envio autorizado e notificações humanas reutilizam esse owner, sem criar mail-hub paralelo.' },
+  { id: 'FIGMA', label: 'Figma / FigJam', accountModel: 'API token no Hub/cofre existente', quota: 'NOT_APPLICABLE', detail: 'Read-only via MCP CentralDark. Token nunca vai para Git; status e leitura de board/node são medidos em runtime.' },
   { id: 'CHATGPT', label: 'ChatGPT', accountModel: 'multi-account desejado', quota: 'ADAPTER_REQUIRED', detail: 'Plano, uso restante, reset e capacidades precisam de fonte autorizada.' },
   { id: 'CLAUDE_CODE', label: 'Claude Code', accountModel: 'harness por sessão', quota: 'ADAPTER_REQUIRED', detail: 'Unificar sessão, capacidades e limites sem raspar UI.' },
   { id: 'GEMINI', label: 'Gemini', accountModel: 'provider/account', quota: 'ADAPTER_REQUIRED', detail: 'Provider existe; conta e quota ainda não entram no cockpit.' },
