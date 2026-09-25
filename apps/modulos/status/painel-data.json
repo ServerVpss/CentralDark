@@ -4,10 +4,10 @@
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
-    "phase": "Tailscale como rota-base Casa ↔ VPS",
-    "currentTask": "Tailscale integrado como rota-base permanente Casa ↔ VPS no Hub e Admin",
+    "phase": "MCP Admin / Tailscale",
+    "currentTask": "Admin: emojis no menu + rota-base Tailscale corrigida",
     "branch": "main",
-    "lastCommit": "144e0b71b7f — sela permissões do Hub e prova Tailscale",
+    "lastCommit": "cccf53ef74e45cd6759e650b4889c239378f5a77",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -523,7 +523,7 @@
     "MultiZap-BOT errored — não crítico",
     "Pendência A9: executar tela Arsenal de Skills no Lovable"
   ],
-  "nextIA": "Testar pelo browser do CHEFE o botão Tailscale no Hub/Admin; SSH 22 da Casa permanece CLOSED_OR_FILTERED",
+  "nextIA": "CHEFE recarrega /admin?tab=tailscale e confirma visual CONNECTED + menu com ícones",
   "linearSync": {
     "statusConexao": "ok",
     "statusConexaoDetalhe": "Conectado — workspace Segredo (SEG) configurado em português",
@@ -598,6 +598,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-09-25T21:43:48Z",
+      "titulo": "Menu Admin ganhou emojis e rota-base Tailscale foi corrigida",
+      "detalhe": "Todas as abas receberam ícones; estado da rota-base passa a usar o runtime Tailscale. MCP /health=200.",
+      "area": "MCP Admin / Tailscale",
+      "sha": "cccf53e",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-09-25T20:43:41Z",
       "titulo": "Tailscale Hub/Admin PROVADO",
@@ -988,14 +996,6 @@
       "detalhe": "fix(health): get_proc_mem soma KB e retorna int; adiciona teste unitário",
       "area": "Repositório",
       "sha": "b5f8213",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-09-01T00:44:53.753Z",
-      "titulo": "Push na main · dce8a91f60781879bebb205f054bef45c9dab946",
-      "detalhe": "☀️ FIX(CORE): HERDAR EMOJIS EM TODO MODELO (#1390)",
-      "area": "Repositório",
-      "sha": "dce8a91",
       "actor": "segredounlock"
     }
   ],
