@@ -4,10 +4,10 @@
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
-    "phase": "MCP Admin / Tailscale",
-    "currentTask": "Admin: emojis no menu + rota-base Tailscale corrigida",
+    "phase": "Micro-deploy / Bot / Trigger Fabric",
+    "currentTask": "Cristalizar fallback MAIN-PINNED + single reusable worktree em 5 superfícies",
     "branch": "main",
-    "lastCommit": "cccf53ef74e45cd6759e650b4889c239378f5a77",
+    "lastCommit": "aa49e167cb8df4aecf69e77d6c374bb6aef835c5",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -523,7 +523,7 @@
     "MultiZap-BOT errored — não crítico",
     "Pendência A9: executar tela Arsenal de Skills no Lovable"
   ],
-  "nextIA": "CHEFE recarrega /admin?tab=tailscale e confirma visual CONNECTED + menu com ícones",
+  "nextIA": "Reusar a skill main-pinned-runtime-fast-path quando o deploy canônico estiver FAIL/BLOCKED; scratch único com LOCK e cleanup obrigatório",
   "linearSync": {
     "statusConexao": "ok",
     "statusConexaoDetalhe": "Conectado — workspace Segredo (SEG) configurado em português",
@@ -598,6 +598,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-09-25T21:58:31Z",
+      "titulo": "Fallback oficial MAIN-PINNED cristalizado",
+      "detalhe": "Fallback oficial cristalizado em Markdown, JSON, YAML, Skill e Hooks; bot CentralDark agora carrega o contrato canônico no runtime prompt.",
+      "area": "Micro-deploy / Bot / Trigger Fabric",
+      "sha": "aa49e16",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-09-25T21:43:48Z",
       "titulo": "Menu Admin ganhou emojis e rota-base Tailscale foi corrigida",
@@ -988,14 +996,6 @@
       "detalhe": "Auto PR: feat/coderabbit-bridge (#1406)",
       "area": "Repositório",
       "sha": "eb81697",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-09-02T04:42:11.704Z",
-      "titulo": "Push na main · b5f821359484f260304d96d04fe439820e0e3877",
-      "detalhe": "fix(health): get_proc_mem soma KB e retorna int; adiciona teste unitário",
-      "area": "Repositório",
-      "sha": "b5f8213",
       "actor": "segredounlock"
     }
   ],
