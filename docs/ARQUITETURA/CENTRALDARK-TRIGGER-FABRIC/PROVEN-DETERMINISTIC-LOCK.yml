@@ -91,6 +91,31 @@ canonical_flow:
   - REGISTRA
   - BOOT
 
+executable_recipe_binding:
+  recipe_projection: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-EXECUTABLE-RECIPE.yml
+  status: MACHINE_PROJECTION_OF_THIS_OWNER
+  creates_new_owner: false
+  purpose: >-
+    Guardar a receita executavel do caminho ja provado para o proximo executor
+    carregar a mesma sequencia, adaptar somente bindings de ambiente, rodar a
+    mesma prova e comparar resultado/formato/efeito antes de decidir entre
+    DELTA_NOVO e REUTILIZA_CRISTAL.
+  required_chain:
+    - CAMINHO_JA_PROVADO
+    - SELAR_RECEITA_EXECUTAVEL
+    - GUARDAR_FINGERPRINT
+    - PROXIMO_EXECUTOR_CARREGA_A_RECEITA
+    - ADAPTA_SOMENTE_BINDINGS_DO_AMBIENTE
+    - EXECUTA_A_MESMA_SEQUENCIA
+    - RODA_A_MESMA_PROVA
+    - COMPARA_RESULTADO_FORMATO_EFEITO
+    - DIVERGIU_DELTA_NOVO
+    - NAO_DIVERGIU_REUTILIZA_CRISTAL
+  environment_bindings_are_not_canonical_semantics: true
+  same_fingerprint_same_effect_reuses_crystal: true
+  changed_effect_creates_targeted_delta: true
+  unknown_difference_is_not_pass: true
+
 promotion:
   proven_learning_flow:
     - MATERIAL
