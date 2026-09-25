@@ -483,6 +483,52 @@ def cmd_seal(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_recipe_check(args: argparse.Namespace) -> int:
+    repo = Path(args.repo).resolve()
+    path = repo / args.registry
+    data = load_registry(path)
+    entry = data["claims"].get(args.claim)
+    if not entry or entry.get("state") != "SEALED_PROVEN":
+        print(json.dumps({"verdict": "UNKNOWN", "reason": "CLAIM_NOT_SEALED"}, indent=2))
+        return 5
+    recipe = entry.get("recipe")
+    if not isinstance(recipe, dict):
+        print(json.dumps({"verdict": "UNKNOWN", "reason": "RECIPE_NOT_SEALED"}, indent=2))
+        return 5
+    actual_fp = recipe_fingerprint(
+        args.claim,
+        entry.get("owner", ""),
+        entry.get("proof_target", ""),
+        list(args.sequence or []),
+        args.proof_contract,
+        args.expected_result_shape,
+        args.expected_effect,
+        args.security_boundary,
+    )
+    fingerprint_match = actual_fp == recipe.get("fingerprint")
+    result_match = args.result == args.expected_result
+    format_match = args.format == args.expected_format
+    effect_match = args.effect == args.expected_effect_observed
+    divergence = not (fingerprint_match and result_match and format_match and effect_match)
+    verdict = "NEW_DELTA" if divergence else "REUSE_CRYSTAL"
+    print(json.dumps({
+        "verdict": verdict,
+        "claim": args.claim,
+        "recipe_id": recipe.get("recipe_id"),
+        "sealed_fingerprint": recipe.get("fingerprint"),
+        "current_fingerprint": actual_fp,
+        "fingerprint_match": fingerprint_match,
+        "comparison": {
+            "result_match": result_match,
+            "format_match": format_match,
+            "effect_match": effect_match,
+        },
+        "environment_bindings": list(args.environment_binding or []),
+        "rule": "DIVERGED_NEW_DELTA_ELSE_REUSE_CRYSTAL",
+    }, indent=2, ensure_ascii=False))
+    return 9 if divergence else 0
+
+
 def cmd_reopen_check(args: argparse.Namespace) -> int:
     repo = Path(args.repo).resolve()
     path = repo / args.registry
@@ -556,6 +602,24 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--security-boundary", default="")
     s.add_argument("--environment-binding", action="append", default=[])
     s.set_defaults(func=cmd_seal)
+
+    rc = sub.add_parser("recipe-check")
+    rc.add_argument("--repo", default=".")
+    rc.add_argument("--registry", default=DEFAULT_REGISTRY.as_posix())
+    rc.add_argument("--claim", required=True)
+    rc.add_argument("--sequence", action="append", default=[])
+    rc.add_argument("--proof-contract", default="")
+    rc.add_argument("--expected-result-shape", default="")
+    rc.add_argument("--expected-effect", default="")
+    rc.add_argument("--security-boundary", default="")
+    rc.add_argument("--environment-binding", action="append", default=[])
+    rc.add_argument("--result", required=True)
+    rc.add_argument("--expected-result", required=True)
+    rc.add_argument("--format", required=True)
+    rc.add_argument("--expected-format", required=True)
+    rc.add_argument("--effect", required=True)
+    rc.add_argument("--expected-effect-observed", required=True)
+    rc.set_defaults(func=cmd_recipe_check)
 
     r = sub.add_parser("reopen-check")
     r.add_argument("--repo", default=".")
