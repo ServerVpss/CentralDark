@@ -351,6 +351,10 @@ def cmd_boot(args: argparse.Namespace) -> int:
             "realtime_feedback_user_repetition_required": False,
             "runtime_preflight_lint_required": True,
             "runtime_preflight_lint_owner": RUNTIME_PREFLIGHT_LINT.as_posix(),
+            "proven_path_replay_lock": True,
+            "proven_path_must_not_be_reinterpreted_from_zero": True,
+            "same_fingerprint_reuses_proven_recipe": True,
+            "proven_path_runtime_action": "REUSE_PROVEN_PATH_NO_RETHINK",
         },
     }
     print(json.dumps(result, indent=2, ensure_ascii=False))
