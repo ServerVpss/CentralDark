@@ -278,22 +278,6 @@ jobs:
           fi
           curl -fsS --max-time 3 "$HEALTH_URL" | jq -e '.ok == true and .service == "mcp-centraldark"' >/dev/null || { echo "PRE_DEPLOY_HEALTH_FAILED"; exit 37; }
 
-          RUNTIME_STAGE="$MCP_DIR/.dist-release.${TARGET_SHA:0:12}.${BASHPID}"
-          RUNTIME_BACKUP="$MCP_DIR/.dist-backup.${CURRENT_SHA:0:12}.${BASHPID}"
-          [[ ! -e "$RUNTIME_STAGE" && ! -e "$RUNTIME_BACKUP" ]] || { echo "RUNTIME_RELEASE_PATH_COLLISION"; exit 54; }
-          [[ -d "$MCP_DIR/dist" && -f "$MCP_DIR/dist/index.js" ]] || { echo "RUNTIME_DIST_INVALID"; exit 55; }
-          cp -a -- "$BUILD_MCP/dist" "$RUNTIME_STAGE"
-          diff -qr "$BUILD_MCP/dist" "$RUNTIME_STAGE" >/dev/null || { echo "RUNTIME_STAGE_MISMATCH"; exit 56; }
-          mv -- "$MCP_DIR/dist" "$RUNTIME_BACKUP"
-          artifact_promoted=1
-          mv -- "$RUNTIME_STAGE" "$MCP_DIR/dist"
-
-          OLD_PID="$(pm2 pid "$PM2_APP" | tail -n1)"
-          RESTART_AT="$(date -u +%Y-%m-%dT%H:%M:%S.000Z)"
-          restart_attempted=1
-          pm2 restart "$PM2_APP" >/dev/null
-          }
-
           # Preparar release (dist). Se package*.json mudou, node_modules será
           # reconstruído após o git worktree desaparecer, no processo vivo.
           RELEASE_DIR="$MCP_DIR/.release-staged-$TARGET_SHA"
