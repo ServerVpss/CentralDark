@@ -1341,3 +1341,53 @@ Ele carrega a receita comprovada, adapta apenas bindings de ambiente
 prova. Divergência observada é informação nova e reabre somente o cone causal
 afetado.
 
+
+
+## Contrato obrigatório — execução com receipt GitHub
+
+Este bloco transforma o cristal em regra operacional. Regra escrita em chat, VPS ou runtime sem registro GitHub não basta.
+
+```text
+CENTRALDARK_EXECUTION_CONTRACT=MANDATORY
+EVERY_CHANGE_ON_E_MUST_BE_MEASURED=true
+EVERY_CHANGE_REQUIRES_TEST=true
+EVERY_CHANGE_REQUIRES_COUNTERPROOF=true
+EVERY_CHANGE_REQUIRES_GIT_RECEIPT=true
+NO_UNRECORDED_LOCAL_CHANGE=true
+NO_CLAIM_WITHOUT_EVIDENCE=true
+NO_PUSH_WITHOUT_VALIDATION=true
+NO_SECRET_IN_GIT=true
+FAILURE_MUST_BE_LOCALIZED=true
+```
+
+Fluxo obrigatório:
+
+```text
+MEDIR ESTADO
+→ EXECUTAR MENOR DELTA
+→ TESTAR
+→ CONTRAPROVAR
+→ COMMIT
+→ PUSH
+→ RECEIPT NO PR-MÃE #1562 OU PR FILHO EQUIVALENTE
+→ SÓ ENTÃO DECLARAR CONCLUÍDO
+```
+
+Queda de conector não encerra missão automaticamente:
+
+```text
+CONNECTOR_DOWN_ONCE
+→ RETENTAR
+→ RELOGIN/HELPER QUANDO APLICÁVEL
+→ TENTAR SENSOR/TÚNEL AUTORIZADO EXISTENTE COMO TAILSCALE/RDC/SSH/MCP
+→ SE AINDA FALHAR: BLOCKED COM HOST, CAUSA, ROTAS TENTADAS E PRÓXIMA AÇÃO
+```
+
+Casa local do CHEFE (`E:\CentralDark`) herda o mesmo contrato. Mudança local importante não fica só em disco: mede, testa, contraprove, commita, sobe para branch/PR/main conforme autorização vigente e registra receipt.
+
+```text
+LOCAL_ONLY_CHANGE_FORBIDDEN=true
+IMPORTANT_UNTRACKED_ALERT_NOT_DELETE=true
+DIRECT_MAIN_REQUIRES_EXPLICIT_AUTH=true
+PR_MOTHER_OR_CHILD_RECEIPT_REQUIRED=true
+```

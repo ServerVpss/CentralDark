@@ -223,3 +223,51 @@ RUNTIME_PROOF=PASS
 NÃO_DIVERGIU_DEPOIS=REUTILIZA_CRISTAL
 ```
 
+
+
+## T3 — contrato obrigatório levado ao runtime de governança
+
+Observed at: `2026-09-25T16:45-03:00`
+
+O cristal deixou de ser somente memória/receipt e passou a ter superfícies de enforcement no GitHub:
+
+```text
+AGENTS.md
+→ regra obrigatória da Casa
+
+scripts/hooks/pre-commit.centraldark-execution-contract.sh
+→ hook local instalável para E:\CentralDark e clones autorizados
+
+.github/workflows/centraldark-execution-contract.yml
+→ CI que bloqueia remoção/acidente do contrato
+
+docs/CONSCIENCIA/EXECUCAO/CENTRALDARK-EXECUTION-CONTRACT.md
+→ receita executável e auditável
+```
+
+Regra selada:
+
+```text
+CAMINHO_JA_PROVADO
+→ SELAR_RECEITA_EXECUTÁVEL
+→ GUARDAR FINGERPRINT
+→ PRÓXIMO EXECUTOR CARREGA A RECEITA
+→ ADAPTA SOMENTE BINDINGS DO AMBIENTE
+→ EXECUTA A MESMA SEQUÊNCIA
+→ RODA A MESMA PROVA
+→ COMPARA RESULTADO/FORMATO/EFEITO
+→ DIVERGIU = DELTA NOVO
+→ NÃO DIVERGIU = REUTILIZA CRISTAL
+```
+
+Queda de conector vira tentativa de recuperação, não abandono:
+
+```text
+CONNECTOR_DOWN_ONCE
+→ RETENTAR
+→ RELOGIN/HELPER
+→ TUNEL/SENSOR AUTORIZADO EXISTENTE QUANDO APLICÁVEL
+→ BLOCKED SOMENTE COM CAUSA LOCALIZADA
+```
+
+Conclusão: `LOCAL_ONLY_CHANGE_FORBIDDEN=true`; mudança material deve terminar em commit/push/receipt no #1562 ou PR filho equivalente, salvo blocker localizado.
