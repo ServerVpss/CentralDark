@@ -637,6 +637,7 @@ proven_path_replay:
   enabled: true
   human_reteach_same_proven_path: false
   agent_reinterpret_same_proven_path: false
+  PROVEN_PATH_MUST_NOT_BE_REINTERPRETED_FROM_ZERO: true
   same_dependency_fingerprint: REUSE_PROVEN_PATH_NO_RETHINK
   changed_dependency_fingerprint: REVALIDATE_AFFECTED_CONE_ONLY
   adaptation_scope:
