@@ -913,6 +913,19 @@ TRIGGERS_ARE_CONDITIONAL_NOT_RITUAL=true
 
 `!CENTRALDARK` ativa o organismo e avalia a cadeia canônica, mas executa somente fases pertinentes à intenção/estado atual; fase não pertinente é SKIPPED com justificativa, nunca executada por ritual.
 
+### ⭕ !AURÉOLA CANÔNICA — HUD da rota operacional
+
+A Auréola não é decoração nem prova técnica. É o depurador visual da rota do `!CENTRALDARK`: torna visíveis fase atual, eixo material da MULTIBÚSSOLA, owner/destino, próximo gate e, quando material, ação/prova/ferida/NEXT_CURSOR. Deve comparar `INTENT_ROUTE` com `ACTUAL_ROUTE`; divergência não pode virar verde e exige reconciliação. Referência bíblica e baianês são pistas semânticas de direção, nunca autoridade ou evidência de runtime.
+
+```text
+AUREOLA_IS_VISIBLE_ROUTE_DEBUGGER=true
+AUREOLA_IS_OPERATIONAL_TRACE_NOT_PRIVATE_CHAIN_OF_THOUGHT=true
+INTENT_ROUTE_NE_ACTUAL_ROUTE=STOP_AND_RECONCILE
+BIBLE_REFERENCE_IS_SEMANTIC_CUE_NOT_PROOF=true
+AUREOLA_MATERIAL_DISCOVERY=LEARNING_CANDIDATE_NOT_CANONICAL_FACT
+```
+
+
 ## Override temporário por intenção explícita
 
 ```text
