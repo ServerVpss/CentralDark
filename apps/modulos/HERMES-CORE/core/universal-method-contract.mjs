@@ -952,6 +952,8 @@ export function validateUniversalMethod() {
     loud_actionable_failure_contract: true,
     automatic_resume_after_human_frontier: true,
     universal_direct_mode_contract: true,
+    proven_path_replay_lock: true,
+    proven_path_reinterpret_from_zero: false,
     measure_before_creation_global: true,
     measure_before_creation_semantic_reference: '1Ts 5:21',
     measure_before_creation_all_agents: true,
