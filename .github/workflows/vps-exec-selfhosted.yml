@@ -55,6 +55,7 @@ jobs:
     runs-on: [self-hosted, Linux]
     timeout-minutes: 25
     env:
+      HOME: /root
       REPO_DIR: /root/CentralDark
       MCP_DIR: /root/CentralDark/apps/modulos/mcp
       PM2_APP: CentralDark-MCP
@@ -155,8 +156,8 @@ jobs:
           # de mutação é contida pelo lock compartilhado centraldark-repo-deploy.
           WEBHOOK_JSON="$(pm2 jlist | jq -c --arg app "$WEBHOOK_APP" '.[] | select(.name == $app)' | head -n1)"
           if [[ -n "$WEBHOOK_JSON" ]]; then
-            WEBHOOK_PID="$(jq -r '.pid // 0' <<<<"$WEBHOOK_JSON")"
-            WEBHOOK_EXEC="$(jq -r '.pm2_env.pm_exec_path // ""' <<<<"$WEBHOOK_JSON")"
+            WEBHOOK_PID="$(jq -r '.pid // 0' <<<"$WEBHOOK_JSON")"
+            WEBHOOK_EXEC="$(jq -r '.pm2_env.pm_exec_path // ""' <<<"$WEBHOOK_JSON")"
             [[ "$WEBHOOK_EXEC" == "$REPO_DIR/scripts/webhook/github-webhook-deploy.mjs" ]] || { echo "WEBHOOK_PM2_TARGET_MISMATCH"; exit 27; }
             PORT_PID="$(ss -ltnp 'sport = :9300' 2>/dev/null | sed -n 's/.*pid=\([0-9][0-9]*\).*/\1/p' | head -n1)"
             [[ -z "$PORT_PID" || "$PORT_PID" == "$WEBHOOK_PID" ]] || { echo "PORT_9300_OWNERSHIP_MISMATCH"; exit 28; }
@@ -251,7 +252,7 @@ jobs:
 
           MCP_JSON="$(pm2 jlist | jq -c --arg app "$PM2_APP" '.[] | select(.name == $app)' | head -n1)"
           [[ -n "$MCP_JSON" ]] || { echo "MCP_PM2_APP_NOT_FOUND"; exit 34; }
-          PM2_BASELINE_RESTARTS="$(jq -r '.pm2_env.restart_time // 0' <<<<"$MCP_JSON")"
+          PM2_BASELINE_RESTARTS="$(jq -r '.pm2_env.restart_time // 0' <<<"$MCP_JSON")"
           echo "PM2_BASELINE_RESTARTS=$PM2_BASELINE_RESTARTS"
           emit_pm2_diagnostic() {
             pm2 jlist | jq -c --arg app "$PM2_APP" '[
@@ -264,9 +265,9 @@ jobs:
               }] | first
             ' || echo "MCP_PM2_DIAGNOSTIC_UNAVAILABLE"
           }
-          [[ "$(jq -r '.pm2_env.pm_cwd // ""' <<<<"$MCP_JSON")" == "$MCP_DIR" ]] || { echo "MCP_PM2_CWD_MISMATCH"; exit 35; }
-          MCP_EXEC="$(jq -r '.pm2_env.pm_exec_path // ""' <<<<"$MCP_JSON")"
-          MCP_ARGS="$(jq -r '(.pm2_env.args // []) | join(" ")' <<<<"$MCP_JSON")"
+          [[ "$(jq -r '.pm2_env.pm_cwd // ""' <<<"$MCP_JSON")" == "$MCP_DIR" ]] || { echo "MCP_PM2_CWD_MISMATCH"; exit 35; }
+          MCP_EXEC="$(jq -r '.pm2_env.pm_exec_path // ""' <<<"$MCP_JSON")"
+          MCP_ARGS="$(jq -r '(.pm2_env.args // []) | join(" ")' <<<"$MCP_JSON")"
           if [[ "$MCP_EXEC" == "$MCP_DIR/dist/index.js" ]]; then
             :
           elif [[ "$MCP_EXEC" == *bash && "$MCP_ARGS" == *"exec node $MCP_DIR/dist/index.js"* ]]; then
@@ -400,6 +401,7 @@ jobs:
     runs-on: [self-hosted, Linux]
     timeout-minutes: 15
     env:
+      HOME: /root
       REPO_DIR: /root/CentralDark
     steps:
       - name: 🔹 Prepare isolated deploy script checkout
@@ -522,6 +524,7 @@ jobs:
     runs-on: [self-hosted, Linux]
     timeout-minutes: 15
     env:
+      HOME: /root
       REPO_DIR: /root/CentralDark
       HERMES_APP: CentralDark-Hermes
       RUNTIME_CONTRACT: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/HERMES-AUTOCONFIG-RUNTIME.yml
@@ -660,7 +663,7 @@ jobs:
 
           HERMES_JSON="$(pm2 jlist | jq -c --arg app "$HERMES_APP" '.[] | select(.name == $app)' | head -n1)"
           [[ -n "$HERMES_JSON" ]] || { echo "HERMES_PM2_APP_NOT_FOUND"; exit 77; }
-          OLD_PID="$(jq -r '.pid // 0' <<<<"$HERMES_JSON")"
+          OLD_PID="$(jq -r '.pid // 0' <<<"$HERMES_JSON")"
           [[ "$OLD_PID" =~ ^[0-9]+$ && "$OLD_PID" -gt 0 ]] || { echo "HERMES_OLD_PID_INVALID"; exit 78; }
 
           restart_attempted=1
@@ -729,6 +732,7 @@ jobs:
                 headSha:$sha,
                 canonicalIdentity:false,
                 discoveredAtRuntime:true
+              },
               schema: "centraldark.hermes-runtime-deploy.v1",
               semantic_identity: {owner: $owner, capability: $capability, scope: $scope},
               execution_provenance: {
@@ -810,6 +814,7 @@ jobs:
       contents: read
       statuses: write
     env:
+      HOME: /root
       REPO_DIR: /root/CentralDark
       BRANCH: main
     steps:
