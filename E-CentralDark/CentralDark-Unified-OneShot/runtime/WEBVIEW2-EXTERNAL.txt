@@ -1,0 +1,9 @@
+CENTRALDARK WEBVIEW2 · REUSE EXTERNO
+
+Arquivo pesado nao duplicado no pacote final:
+Microsoft.WebView2.FixedVersionRuntime.150.0.4078.105.x64.7z
+
+Fonte original recebida: CentralDark.zip
+SHA256=689e3c59573a8cd9dc09d6c3707ea7f3398f0d621fda62fdca04277d7947e09a
+
+O fluxo atual do Unified OneShot nao depende deste arquivo para OAuth/MCP/Remote/Screenpipe.

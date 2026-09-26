@@ -1,0 +1,15 @@
+{
+  "package": "CentralDark-Unified-OneShot",
+  "files": 313,
+  "bytes": 56011761,
+  "profiles": [
+    "Segredo",
+    "Fulano"
+  ],
+  "runtime": "%LOCALAPPDATA%\\\\CentralDark\\\\UnifiedRuntime",
+  "entrypoint": "INSTALL-AND-RUN.cmd",
+  "direct_run": "RUN-ALL-PROFILES.cmd",
+  "structural_pass": true,
+  "webview2_fixed_archive": "external_reuse_deduplicated",
+  "legacy_remote_duplicate": "removed"
+}

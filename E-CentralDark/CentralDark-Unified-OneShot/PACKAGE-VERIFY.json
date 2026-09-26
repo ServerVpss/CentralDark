@@ -1,0 +1,15 @@
+{
+  "schema": "centraldark.unified.oneshot.package.remediation",
+  "id": "BRIDGE_EXE_PRESENT_REMEDIATION",
+  "changed": [
+    "src/CentralDarkBridge.cs",
+    "INTEGRATION-RECEIPT.md"
+  ],
+  "checks": {
+    "NO_LITERAL_BACKSLASH_N_IN_RUNAUTH": false,
+    "NO_CSHARP_EXPRESSION_BODIED_PROPERTY": true,
+    "PRODUCT_UNIQUE": "CentralDark-Unified-OneShot",
+    "NO_VERSIONED_FIX_NAME": true
+  },
+  "unknown_is_not_pass": true
+}
