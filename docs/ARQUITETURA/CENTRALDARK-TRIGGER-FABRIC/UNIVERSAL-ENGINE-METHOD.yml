@@ -389,8 +389,8 @@ plug_and_play_inheritance:
 
 hybrid_runtime_contract:
   marker: CENTRALDARK_HYBRID_RUNTIME_DISCOVERY_REQUIRED
-  pm2_canonical_home: <caminho-vps>
-  pm2_profile_homes_glob: <caminho-vps>*/home/.pm2
+  pm2_canonical_home: /root/.pm2
+  pm2_profile_homes_glob: /root/.centraldark/mcp-auth/profiles/*/home/.pm2
   discover_all_pm2_homes_before_mutation: true
   preserve_all_pm2_homes: true
   act_only_where_owner_exists: true

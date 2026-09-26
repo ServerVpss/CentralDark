@@ -3,7 +3,7 @@
   "status": "CANONICAL_AGENT_ROUTING_BINDING",
   "owner": "SEGREDO/CHEFE",
   "source_of_truth": "ServerVpss/CentralDark@main",
-  "purpose": "Amarrar no root .agents o sistema de intenção, gatilhos obrigatórios e método de deploy vivo da CentralDark.",
+  "purpose": "Amarrar no root .agents o sistema de intenção, gatilhos obrigatórios, Capability HUD, #ACORDAR e método de deploy vivo da CentralDark.",
   "intent_system": {
     "new_chefe_material": "DELTA_TO_ACTIVE_INTENT_FIRST",
     "preserve_compatible_active_intent": true,
@@ -12,12 +12,22 @@
     "pertinence_first": true,
     "minimum_sufficient_loop": true,
     "triggers_are_conditional_not_ritual": true,
-    "align_thought_not_wording": true
+    "align_thought_not_wording": true,
+    "intent_confidence_gte_95_executes_if_scope_and_tool_are_clear": true
+  },
+  "capability_hud_boot": {
+    "canonical": ".agents/CAPABILITY-HUD-BOOT.json",
+    "skill": ".agents/skills/centraldark-capability-hud/SKILL.md",
+    "required_before_claiming_tool_limitation": true,
+    "required_before_returning_early": true,
+    "probe_relevant_tool_before_asking": true,
+    "called_by_acordar": true,
+    "goal": "separar capacidade de pensar de capacidade real de agir na sessão atual"
   },
   "mandatory_triggers": {
     "centraldark": "recover CURRENT, owner, scope, runtime, PR/receipt and live state",
-    "acordar": "measure HEAD, branch, worktree, runtime, PM2, MCP, HUB, Casa, VPS before claiming or mutating",
-    "calibrar": "calculate intent, confidence, authority, writer, risk, frequency and minimum trigger",
+    "acordar": "measure HEAD, branch, worktree, runtime, PM2, MCP, HUB, Casa, VPS and capability HUD before claiming, asking or mutating",
+    "calibrar": "calculate intent, confidence, authority, writer, risk, frequency, available capability and minimum trigger",
     "aureola_canonica": "show operational route when material: phase, axis, owner, destination, next gate, proof, wound, next cursor",
     "meta_lupa": "find gaps, false green, wrong owner, duplication, drift or weak proof",
     "deltatil": "turn discovery into minimum delta in existing owner",
@@ -31,6 +41,21 @@
     {
       "when": "intent_clear_and_scope_authorized",
       "then": "EXECUTE_MINIMUM_COMPLETE_PATH"
+    },
+    {
+      "when": "trigger_is_acordar",
+      "then": [
+        ".agents/CAPABILITY-HUD-BOOT.json",
+        ".agents/skills/centraldark-capability-hud/SKILL.md",
+        "PROBE_RELEVANT_TOOL_FIRST"
+      ]
+    },
+    {
+      "when": "tool_or_route_uncertain_or_claiming_cannot",
+      "then": [
+        ".agents/skills/centraldark-capability-hud/SKILL.md",
+        "PROBE_RELEVANT_TOOL_FIRST"
+      ]
     },
     {
       "when": "delta_involves_runtime_site_panel_feature",
@@ -55,12 +80,19 @@
     }
   ],
   "canonical_skills": [
+    ".agents/skills/centraldark-capability-hud/SKILL.md",
     ".agents/skills/centraldark-intent-deploy-router/SKILL.md",
     ".agents/skills/centraldark-live-editing-fabric/SKILL.md",
     ".agents/skills/main-pinned-runtime-fast-path/SKILL.md",
     ".agents/skills/centraldark-hub-credential-control-plane/SKILL.md",
     ".agents/skills/centraldark-operational-method/SKILL.md"
   ],
+  "minimum_probe_contract": {
+    "github_ci": "commit_or_sha -> workflow_run -> jobs -> logs -> exact failure or PASS",
+    "desktop_commander": "discover devices -> confirm auth context -> harmless read/command -> stdout/stderr or blocker",
+    "google_drive": "discover/list/search -> read exact artifact -> blocker only after connector/file/folder failure",
+    "runtime": "separate Casa/VPS -> identify bridge -> harmless pwd/git status/health -> proof on correct target"
+  },
   "scratch": {
     "canonical_path": "/root/CentralDark/_worktrees/main-pinned-runtime-fastpath",
     "single_reusable_worktree": true,
@@ -91,6 +123,10 @@
     "oauth_active_is_not_tool_call_pass": true,
     "model_count_is_not_model_route_pass": true,
     "tool_listed_is_not_tool_active": true,
+    "oauth_connected_is_not_device_usable": true,
+    "searched_is_not_verified": true,
+    "commit_exists_is_not_ci_pass": true,
+    "patched_is_not_root_cause_fixed": true,
     "no_parallel_architecture": true
   }
 }
