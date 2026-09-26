@@ -70,7 +70,7 @@ Aguardando autorização para editar: SIM
 Se `pivete/dev`, `CLAUDE.md`, `AGENTS.md` ou a hierarquia oficial não estiverem disponíveis, pare e informe ao Pivete. Não improvise regras e não use a `main` como área de desenvolvimento.
 
 
-## 🧾 LEI DO RASTRO (gatilho obrigatório · owner: `AGENTS.md`)
+## 🔏 !RASTRO — LEI DO RASTRO (cadeado obrigatório · owner: `AGENTS.md`)
 
 ```text
 RESPONSE_WITHOUT_TRACE=INVALID

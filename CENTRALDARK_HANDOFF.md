@@ -136,7 +136,7 @@ Este handoff foi preparado para ser entregue manualmente quando o CHEFE decidir.
 === END HANDOFF ===
 
 
-## 🧾 LEI DO RASTRO (gatilho obrigatório · owner: `AGENTS.md`)
+## 🔏 !RASTRO — LEI DO RASTRO (cadeado obrigatório · owner: `AGENTS.md`)
 
 ```text
 RESPONSE_WITHOUT_TRACE=INVALID

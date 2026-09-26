@@ -21,7 +21,7 @@ A fonte oficial das regras é o GitHub. Não use apenas memória de conversa.
 Nada entra cru: filtre toda referência externa pela Constituição e adapte ao CentralDark.
 
 
-## 🧾 LEI DO RASTRO (gatilho obrigatório · owner: `AGENTS.md`)
+## 🔏 !RASTRO — LEI DO RASTRO (cadeado obrigatório · owner: `AGENTS.md`)
 
 ```text
 RESPONSE_WITHOUT_TRACE=INVALID

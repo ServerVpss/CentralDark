@@ -912,7 +912,7 @@ FLUXO FUNCIONAL → 🔴 DESVIO → ↩️ 1 CASA ATRÁS → MESMO OWNER
 
 No jeito do CHEFE: **a vela mostra a intenção, o astrolábio mede a realidade, o meridiano prende o owner certo e a carta do GitHub registra onde a embarcação realmente está.** O título mostra essa rota antes da resposta, sem inventar costa verde no mapa.
 
-## 🧾 LEI DO RASTRO (gatilho obrigatório · owner: `AGENTS.md`)
+## 🔏 !RASTRO — LEI DO RASTRO (cadeado obrigatório · owner: `AGENTS.md`)
 
 ```text
 RESPONSE_WITHOUT_TRACE=INVALID

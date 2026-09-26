@@ -127,7 +127,7 @@ Proibido: `text-white`, `bg-black`, `bg-[#...]`, gradientes roxo/índigo genéri
 - **Painel de status**: https://status.centralldark.com
 - **Repositório**: `ServerVpss/CentralDark` (sincroniza automaticamente com a VPS em `/root/CentralDark/`)
 
-## 🧾 LEI DO RASTRO (gatilho obrigatório · owner: `AGENTS.md`)
+## 🔏 !RASTRO — LEI DO RASTRO (cadeado obrigatório · owner: `AGENTS.md`)
 
 ```text
 RESPONSE_WITHOUT_TRACE=INVALID

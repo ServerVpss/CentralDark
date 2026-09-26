@@ -157,6 +157,9 @@ ALIGN_THOUGHT_NOT_WORDING=true
 🧾 !REGISTRA
 → receipt no #1562 ou PR-filho equivalente, sem segredo, com NEXT_CURSOR.
 
+🔏 !RASTRO
+→ toda escrita/memória declarada ao CHEFE traz SHA + caminho + link + readback; sem isso, não aconteceu.
+
 🚀 !BOOT
 → preservar continuidade e entregar próximo executor no mesmo fio.
 ```
@@ -514,7 +517,7 @@ Nunca expor secrets ou service_role_key em logs/mensagens.
 docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md
 .agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA
 
-## 🧾 LEI DO RASTRO (gatilho obrigatório · owner: `AGENTS.md`)
+## 🔏 !RASTRO — LEI DO RASTRO (cadeado obrigatório · owner: `AGENTS.md`)
 
 ```text
 RESPONSE_WITHOUT_TRACE=INVALID
